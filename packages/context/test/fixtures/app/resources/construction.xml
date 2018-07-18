@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects path="lib/ctor" direct="true" autowire="true">
+  <!-- with default constructor -->
+  <object id="ctor:obj1" path="obj1">
+    <constructor-arg>
+      <json>
+        <![CDATA[
+        {
+          "foo": "{{foo.bar}}"
+        }
+        ]]>
+      </json>
+      <!-- object as ref -->
+      <ref object="ctor:obj4"></ref>
+      <!-- new object as param -->
+      <object id="ctor:obj5" path="obj5"></object>
+    </constructor-arg>
+  </object>
+
+  <!-- call static method -->
+  <object id="ctor:obj2" path="obj2" init-method="getInstance">
+  </object>
+
+  <!-- directly require -->
+  <object id="ctor:obj3" path="obj3" direct="true">
+  </object>
+
+  <object id="ctor:async" path="async" async="true" construct-method="getInstance">
+  </object>
+
+  <object id="ctor:hello" path="hello" external="true" autowire="false">
+  </object>
+
+  <!-- plain object -->
+  <object id="ctor:obj4" path="obj4">
+    <property name="k1" value="v1"></property>
+    <property name="num" value="1" type="number" />
+    <property name="things">
+      <list>
+        <value>asdfa</value>
+        <value>123</value>
+      </list>
+    </property>
+
+    <property name="things1">
+      <list>
+        <map>
+          <entry key="foo" value="bar" />
+          <entry key="foo">
+            <object>
+              <property name="a" value="b" />
+            </object>
+          </entry>
+        </map>
+        <map>
+          <entry key="bar" value="foo" />
+        </map>
+      </list>
+    </property>
+
+    <property name="things2">
+      <set>
+        <ref object="obj:foo"></ref>
+        <ref object="obj:bar"></ref>
+      </set>
+    </property>
+
+    <property name="addressProp">
+      <props>
+        <prop key="one">INDIA</prop>
+        <prop key="two">Pakistan</prop>
+        <prop key="three">USA</prop>
+        <prop key="four">USA</prop>
+      </props>
+    </property>
+  </object>
+<!--
+  <aspect path="aspect">
+    <around expression="ctor:obj1.say;ctor:obj2.say1" execute="aroundSay" />
+    <around expression="ctor:obj2.say2" execute="asyncAroundSay" />
+  </aspect> -->
+</objects>

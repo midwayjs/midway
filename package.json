@@ -1,0 +1,51 @@
+{
+  "name": "midway",
+  "version": "1.0.0",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "lerna": "^2.11.0",
+    "lerna-relinker": "^1.4.0",
+    "mocha": "^3.5.0",
+    "nyc": "^11.2.1",
+    "ts-node": "^4.1.0",
+    "tslint": "^5.9.1",
+    "typedoc": "^0.11.0",
+    "typescript": "^2.8.0"
+  },
+  "scripts": {
+    "test": "lerna run test",
+    "cov": "sh scripts/cov.sh",
+    "ci": "npm run build && npm run cov",
+    "purge": "npm run clean && rm -rf node_modules",
+    "reset": "npm run purge && npm i && npm run ci",
+    "canary": "sh scripts/publish.sh --canary",
+    "beta": "sh scripts/publish.sh --npm-tag beta --force-publish=*",
+    "next": "sh scripts/publish.sh --npm-tag next",
+    "publish": "rm -f ./packages/.DS*; sh scripts/publish.sh",
+    "bootstrap": "rm -f ./packages/.DS*; lerna bootstrap --hoist",
+    "clean": "lerna clean --yes; rm -rf ./packages/**/package-lock.json",
+    "updated": "lerna updated",
+    "li": "lerna init",
+    "build": "sh scripts/build.sh",
+    "gen-api-ref": "lerna run gen-api-ref",
+    "gen-site": "pt build && npm run gen-api-ref",
+    "authors": "git log --format='%aN <%aE>' | sort -u > AUTHORS"
+  },
+  "keywords": [
+    "container",
+    "runtime",
+    "cluster",
+    "service",
+    "application",
+    "webframework"
+  ],
+  "homepage": "http://github.com/midwayjs/midway",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/midwayjs/midway.git"
+  },
+  "engines": {
+    "node": ">= 8.2.1"
+  },
+  "license": "MIT"
+}

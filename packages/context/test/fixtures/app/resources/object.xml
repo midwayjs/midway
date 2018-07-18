@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects path="lib/object">
+  <!-- object with pre-defined members -->
+  <object id="obj:foo">
+    <property name="abc" value="bcd" />
+    <property name="num" value="1" type="number" />
+    <property name="int" value="12" type="int" />
+    <property name="date" value="2018-05-23T09:50:46.019Z" type="date" />
+    <property name="unknow" value="aaa" type="unknow" />
+  </object>
+  <!-- object at path -->
+  <object id="cowboy">
+    <property name="name" value="Spike" />
+    <property name="weapons" value="guns" />
+  </object>
+  <!-- autowire -->
+  <object id="obj:bar" path="bar"></object>
+  <object id="obj:bcd" path="bcd" autowire="false"></object>
+</objects>

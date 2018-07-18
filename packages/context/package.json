@@ -1,0 +1,70 @@
+{
+  "name": "midway-context",
+  "version": "1.0.0",
+  "description": "Midway Context For Everyone",
+  "main": "dist/index",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "npm run lint && rm -rf ./dist && ../../node_modules/.bin/tsc",
+    "start": "npm run build && node dist/index",
+    "lint": "../../node_modules/.bin/tslint --format prose -c ../../tslint.json src/**/*.ts test/**/*.ts",
+    "test": "midway-bin test --ts",
+    "cov": "midway-bin cov --ts",
+    "ci": "npm run test"
+  },
+  "keywords": [
+    "midway",
+    "IoC"
+  ],
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@types/chai": "^3.5.2",
+    "@types/lodash": "^4.14.109",
+    "@types/mocha": "^2.2.41",
+    "chai": "^4.1.2",
+    "mm": "^2.1.0",
+    "mocha": "^3.5.0",
+    "nyc": "^8.4.0",
+    "sdk-base": "^3.4.0",
+    "sinon": "^3.2.1",
+    "supertest": "^3.0.0",
+    "midway-bin": "^1.0.0"
+  },
+  "dependencies": {
+    "camelcase": "^5.0.0",
+    "co": "^4.6.0",
+    "debug": "^2.6.0",
+    "fs-promise": "^1.0.0",
+    "is-type-of": "^1.2.0",
+    "lodash": "^4.17.10",
+    "reflect-metadata": "^0.1.12",
+    "uuid": "^3.2.1",
+    "xmldom": "^0.1.27"
+  },
+  "nyc": {
+    "include": [
+      "src/*.ts",
+      "src/**/*.ts"
+    ],
+    "exclude": [
+      "typings",
+      "**/*.d.ts",
+      "src/index.ts"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "reporter": [
+      "text-summary",
+      "json",
+      "html"
+    ],
+    "all": true
+  }
+}

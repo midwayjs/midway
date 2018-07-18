@@ -1,0 +1,38 @@
+{
+  "name": "midway-bin",
+  "version": "1.0.0",
+  "description": "Midway Command Tools",
+  "main": "index.js",
+  "bin": {
+    "midway-bin": "bin/midway-bin.js",
+    "mocha": "bin/mocha.js"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "pkgfiles": "node bin/midway-bin.js pkgfiles",
+    "test": "npm run lint -- --fix && npm run test-local",
+    "test-local": "node bin/midway-bin.js test -t 3600000",
+    "cov": "nyc -r lcov -r text-summary npm run test-local",
+    "ci-test-only": "TESTS=test/lib/cmd/cov.test.js npm run test-local",
+    "ci": "npm run lint && npm run pkgfiles -- --check && npm run ci-test-only && npm run cov",
+    "autod": "node bin/midway-bin.js autod"
+  },
+  "keywords": [
+    "midway",
+    "bin"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "coffee": "^4.1.0",
+    "egg-bin": "^4.7.1",
+    "fs-extra": "^6.0.1"
+  },
+  "devDependencies": {
+    "co-mocha": "^1.2.2",
+    "eslint": "^4.12.1",
+    "eslint-config-egg": "^7.0.0"
+  },
+  "engines": {
+    "node": ">= 8.0.0"
+  }
+}

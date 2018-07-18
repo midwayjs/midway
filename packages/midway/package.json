@@ -1,0 +1,63 @@
+{
+  "name": "midway",
+  "version": "1.0.0",
+  "description": "Midway Main Package",
+  "main": "dist/index",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "npm run lint && rm -rf ./dist && ../../node_modules/.bin/tsc",
+    "lint": "../../node_modules/.bin/tslint --format prose -c ../../tslint.json src/**/*.ts test/**/*.ts",
+    "test": "midway-bin test --ts",
+    "cov": "midway-bin cov --ts",
+    "ci": "npm run test"
+  },
+  "keywords": [
+    "midway",
+    "IoC",
+    "webframework"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@types/chai": "^3.5.2",
+    "@types/mocha": "^2.2.41",
+    "@types/node": "^8.10.0",
+    "mm": "^2.1.0",
+    "mocha": "^3.5.0",
+    "supertest": "^3.1.0",
+    "midway-bin": "^1.0.0"
+  },
+  "dependencies": {
+    "egg-logger": "^1.6.2",
+    "midway-context": "^1.0.0",
+    "midway-web": "^1.0.0",
+    "cfork": "^1.7.1",
+    "debug": "^3.1.0",
+    "egg-cluster": "^1.17.0",
+    "graceful-process": "^1.2.0"
+  },
+  "engines": {
+    "node": ">= 8.0.0"
+  },
+  "nyc": {
+    "include": [
+      "src/*.ts",
+      "src/**/*.ts"
+    ],
+    "exclude": [
+      "typings",
+      "**/*.d.ts"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "reporter": [
+      "text-summary",
+      "json",
+      "html"
+    ],
+    "all": true
+  }
+}
