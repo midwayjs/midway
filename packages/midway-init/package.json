@@ -1,0 +1,44 @@
+{
+  "name": "midway-init",
+  "version": "0.0.1",
+  "dependencies": {
+    "egg-init": "^1.14.0"
+  },
+  "main": "lib/command.js",
+  "devDependencies": {
+    "autod": "^3.0.1",
+    "coffee": "^3.3.0",
+    "midway-bin": "^0.0.1",
+    "eslint": "^4.13.1",
+    "eslint-config-egg": "^5.1.1",
+    "intelli-espower-loader": "^1.0.1",
+    "power-assert": "^1.4.4",
+    "rimraf": "^2.6.1",
+    "mm": "^2.2.0",
+    "proxy": "^0.2.4",
+    "webstorm-disable-index": "^1.0.11"
+  },
+  "keywords": [
+    "midway",
+    "midway-init"
+  ],
+  "preferGlobal": true,
+  "bin": {
+    "midway-init": "bin/midway-init.js"
+  },
+  "files": [
+    "bin",
+    "lib"
+  ],
+  "scripts": {
+    "lint": "eslint bin lib test",
+    "test": "npm run lint -- --fix && midway-bin test",
+    "cov": "midway-bin cov",
+    "ci": "npm run lint && midway-bin cov",
+    "autod": "autod"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "author": "Harry Chen <czy88840616@gmail.com>"
+}

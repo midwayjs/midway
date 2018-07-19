@@ -1,6 +1,6 @@
 {
   "name": "midway",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Midway Main Package",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -24,12 +24,12 @@
     "mm": "^2.1.0",
     "mocha": "^3.5.0",
     "supertest": "^3.1.0",
-    "midway-bin": "^1.0.0"
+    "midway-bin": "^0.0.1"
   },
   "dependencies": {
     "egg-logger": "^1.6.2",
-    "midway-context": "^1.0.0",
-    "midway-web": "^1.0.0",
+    "midway-context": "^0.0.1",
+    "midway-web": "^0.0.1",
     "cfork": "^1.7.1",
     "debug": "^3.1.0",
     "egg-cluster": "^1.17.0",
