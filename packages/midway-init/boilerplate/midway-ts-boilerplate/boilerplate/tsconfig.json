@@ -1,0 +1,34 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "allowJs": false,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "charset": "utf8",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "inlineSourceMap": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noEmitOnError": false,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "pretty": true,
+    "skipDefaultLibCheck": true,
+    "skipLibCheck": true,
+    "target": "es2017"
+  },
+  "exclude": [
+    "app/public",
+    "app/views"
+  ],
+  "include": [
+    "app.ts",
+    "app/**/*.ts",
+    "config/**/*.ts",
+    "test/**/*.ts"
+  ]
+}

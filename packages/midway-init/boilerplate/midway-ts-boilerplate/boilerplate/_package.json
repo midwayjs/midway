@@ -1,0 +1,40 @@
+{
+  "name": "{{name}}",
+  "version": "1.0.0",
+  "description": "{{description}}",
+  "private": true,
+  "dependencies": {
+    "midway": "^2.2.1",
+    "tslib": "^1.8.1",
+    "typescript": "^2.8.0"
+  },
+  "devDependencies": {
+    "midway-bin": "^1.0.0",
+    "egg-ci": "^1.8.0",
+    "egg-mock": "^3.14.0",
+    "webstorm-disable-index": "^1.2.0"
+  },
+  "engines": {
+    "node": ">=8.9.0"
+  },
+  "scripts": {
+    "start": "egg-scripts start --daemon --title=egg-server-{{name}}",
+    "stop": "egg-scripts stop --title=egg-server-{{name}}",
+    "dev": "midway-bin dev",
+    "debug": "midway-bin debug",
+    "test": "npm run lint -- --fix && npm run test-local",
+    "test-local": "midway-bin test",
+    "cov": "midway-bin cov",
+    "lint": "tslint -c tslint.json --project .",
+    "ci": "midway-bin run cov"
+  },
+  "ci": {
+    "version": "8, 9"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "{{author}}",
+  "license": "MIT"
+}
