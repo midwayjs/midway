@@ -1,8 +1,9 @@
 {
   "name": "midway",
+  "description": "a web framework for complex Node.js application",
   "version": "1.0.0",
   "devDependencies": {
-    "chai": "^3.5.0",
+    "chai": "^4.1.2",
     "lerna": "^2.11.0",
     "lerna-relinker": "^1.4.0",
     "mocha": "^3.5.0",

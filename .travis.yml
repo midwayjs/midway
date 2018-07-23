@@ -1,14 +1,10 @@
+sudo: false
 language: node_js
 node_js:
-  - "8"
-  - "9"
+  - '6'
 install:
-  - npm i
-  - npm i codecov
-before_script:
-  - npm run bootstrap
-  - npm run build
+  - npm i npminstall && npminstall
 script:
-  - npm run cov
+  - npm run ci
 after_script:
-  - codecov
+  - npminstall codecov && codecov

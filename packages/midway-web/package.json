@@ -29,12 +29,8 @@
     "@types/lodash": "^4.14.109",
     "@types/mocha": "^2.2.41",
     "@types/node": "^8.10.0",
-    "co-sleep": "^0.0.1",
     "egg-mock": "^3.17.2",
-    "midway-bin": "^0.0.1",
-    "mm": "^2.1.0",
-    "mocha": "^3.5.0",
-    "supertest": "^3.1.0"
+    "midway-bin": "^0.0.1"
   },
   "dependencies": {
     "egg": "^2.9.1",

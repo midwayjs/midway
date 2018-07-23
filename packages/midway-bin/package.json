@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "co-mocha": "^1.2.2",
-    "eslint": "^4.12.1",
+    "eslint": "^4.13.1",
     "eslint-config-egg": "^7.0.0"
   },
   "engines": {
