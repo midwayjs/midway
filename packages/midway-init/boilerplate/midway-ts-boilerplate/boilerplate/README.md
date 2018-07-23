@@ -6,7 +6,7 @@
 
 <!-- add docs here for user -->
 
-see [egg docs][egg] for more detail.
+see [midway docs][midway] for more detail.
 
 ### Development
 
@@ -30,4 +30,4 @@ $ npm stop
 - Use `npm run autod` to auto detect dependencies upgrade, see [autod](https://www.npmjs.com/package/autod) for more detail.
 
 
-[egg]: https://eggjs.org
+[midway]: https://midwayjs.org

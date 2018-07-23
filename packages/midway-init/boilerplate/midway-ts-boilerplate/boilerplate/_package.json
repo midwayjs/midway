@@ -4,7 +4,7 @@
   "description": "{{description}}",
   "private": true,
   "dependencies": {
-    "midway": "^2.2.1",
+    "midway": "^1.0.0",
     "tslib": "^1.8.1",
     "typescript": "^2.8.0"
   },

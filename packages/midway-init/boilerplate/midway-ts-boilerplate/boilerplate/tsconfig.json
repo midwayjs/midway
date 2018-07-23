@@ -26,9 +26,7 @@
     "app/views"
   ],
   "include": [
-    "app.ts",
-    "app/**/*.ts",
-    "config/**/*.ts",
+    "src/**/*.ts",
     "test/**/*.ts"
   ]
 }

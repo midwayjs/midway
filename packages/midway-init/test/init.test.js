@@ -10,7 +10,7 @@ const tmp = path.join(__dirname, '../.tmp');
 
 const Command = require('../lib/command');
 
-describe('test/init-midway.test.js', () => {
+describe('test/init.test.js', () => {
   let command;
   let helper;
   before(function* () {
