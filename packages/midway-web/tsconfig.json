@@ -10,7 +10,6 @@
     "stripInternal": true,
     "pretty": true,
     "declaration": true,
-    "sourceMap": true,
     "outDir": "dist",
     "lib": ["es2017", "dom"],
     "sourceRoot": "."
