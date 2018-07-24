@@ -8,3 +8,9 @@ export const RequestMethod = {
   OPTIONS: 'options',
   HEAD: 'head',
 };
+
+export const MidwayHandlerKey = {
+  CONFIG: 'config',
+  PLUGIN: 'plugin',
+  LOGGER: 'logger',
+};

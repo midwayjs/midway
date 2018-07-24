@@ -1,6 +1,3 @@
-export const WEB_ROUTER_CLS = 'midway:web_router_class';
-export const WEB_ROUTER_PROP = 'midway:web_router_props';
-export const WEB_ROUTER_PREFIX_CLS = 'midway:web_router_prefix_class';
 export const CONFIG_KEY_CLZ = 'midway:config_key_class';
 export const CONFIG_KEY_PROP = 'midway:config_key_props';
 export const PLUGIN_KEY_CLZ = 'midway:plugin_key_class';

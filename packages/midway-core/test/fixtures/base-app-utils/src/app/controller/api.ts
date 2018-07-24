@@ -1,31 +1,13 @@
-'use strict';
+import {BaseService} from '../../lib/service';
+const Controller = require('egg').Controller;
 
-import {provide, inject} from 'midway-context';
-import {controller, get, config, logger} from '../../../../../../src/';
+class ApiController extends Controller {
 
-
-@provide()
-export class BaseApi {
-  async index(ctx) {
-    ctx.body = 'index';
+  async index() {
+    const context = this.ctx.app.applicationContext;
+    const service = await context.getAsync(BaseService);
+    this.ctx.body = await service.getData();
   }
 }
 
-@provide()
-@controller('/api')
-export class Api {
-
-  @inject('is')
-  isModule;
-
-  @config('hello')
-  config;
-
-  @logger()
-  logger;
-
-  @get('/test')
-  async index(ctx) {
-    ctx.body = this.isModule.function('hello').toString() + this.config.c;
-  }
-}
+module.exports = ApiController;

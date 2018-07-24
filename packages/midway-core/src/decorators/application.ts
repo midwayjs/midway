@@ -2,10 +2,10 @@ import 'reflect-metadata';
 import {
   CONFIG_KEY_CLZ,
   CONFIG_KEY_PROP,
-  LOGGER_KEY_CLZ, LOGGER_KEY_PROP,
+  LOGGER_KEY_CLZ,
+  LOGGER_KEY_PROP,
   PLUGIN_KEY_CLZ,
   PLUGIN_KEY_PROP,
-  WEB_ROUTER_PREFIX_CLS
 } from './metaKeys';
 import {attachConstructorDataOnClass, attachMetaDataOnClass} from '../utils';
 
@@ -48,11 +48,5 @@ export function logger(identifier?: string) {
       attachMetaDataOnClass(target, LOGGER_KEY_CLZ, targetKey);
       Reflect.defineMetadata(LOGGER_KEY_PROP, identifier, target, targetKey);
     }
-  };
-}
-
-export function controller(routerPrefix: string) {
-  return function (target: any): void {
-    Reflect.defineMetadata(WEB_ROUTER_PREFIX_CLS, routerPrefix, target);
   };
 }

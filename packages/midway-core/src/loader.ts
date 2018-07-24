@@ -2,12 +2,11 @@ import {isTypeScriptEnvironment, isPluginName} from './utils';
 import * as path from 'path';
 import * as fs from 'fs';
 import {MidwayContainer} from './container';
-import {loading} from './loading';
+import {MidwayHandlerKey} from './constants';
 
 const EggLoader = require('egg-core').EggLoader;
 const TS_SRC_DIR = 'src';
 const TS_TARGET_DIR = 'dist';
-const is = require('is-type-of');
 const debug = require('debug')('midway:loader');
 
 export class MidwayLoader extends EggLoader {
@@ -30,39 +29,6 @@ export class MidwayLoader extends EggLoader {
   loadConfig() {
     this.loadPlugin();
     super.loadConfig();
-  }
-
-  protected async preloadController(): Promise<void> {
-    const appDir = path.join(this.options.baseDir, 'app');
-    const results = loading(this.getFileExtension(['controllers/**/*', 'controller/**/*']), {
-      loadDirs: appDir,
-      call: false,
-    });
-
-    for (let exports of results) {
-      if (is.class(exports)) {
-        await this.preInitController(exports);
-      } else {
-        for (let m in exports) {
-          const module = exports[m];
-          if (is.class(module)) {
-            await this.preInitController(module);
-          }
-        }
-      }
-    }
-  }
-
-  /**
-   * init controller in ApplicationContext
-   * @param module
-   */
-  private async preInitController(module): Promise<void> {
-    let cid = this.getModuleIdentifier(module);
-    if (cid) {
-      const controller = await this.applicationContext.getAsync(cid);
-      this.preRegisterRouter(module, controller);
-    }
   }
 
   async refreshContext(): Promise<void> {
@@ -108,18 +74,6 @@ export class MidwayLoader extends EggLoader {
     throw new Error(`Can not find plugin ${name} in "${lookupDirs.join(', ')}"`);
   }
 
-  private getFileExtension(names: string | string[]): string[] {
-    if (typeof names === 'string') {
-      return [names + '.ts', names + '.js', '!**/**.d.ts'];
-    } else {
-      let arr = [];
-      names.forEach((name) => {
-        arr = arr.concat([name + '.ts', name + '.js']);
-      });
-      return arr.concat(['!**/**.d.ts']);
-    }
-  }
-
   private registerTypescriptDirectory() {
     const app = this.app;
     // 处理 ts 的初始路径
@@ -157,8 +111,26 @@ export class MidwayLoader extends EggLoader {
     this.applicationContext.load({
       loadDir: this.options.baseDir,
     });
+
+    // register handler for container
+    this.applicationContext.registerDataHandler(MidwayHandlerKey.CONFIG, (configKey) => {
+      return this.config[configKey];
+    });
+
+    this.applicationContext.registerDataHandler(MidwayHandlerKey.PLUGIN, (configKey) => {
+      return this.pluginContext.get(configKey);
+    });
+
+    this.applicationContext.registerDataHandler(MidwayHandlerKey.LOGGER, (loggerKey) => {
+      return this.app.getLogger(loggerKey);
+    });
   }
 
+  /**
+   * intercept plugin when it set value to app
+   * @param fileName
+   * @returns {boolean}
+   */
   protected interceptLoadCustomApplication(fileName) {
     const self = this;
     const pluginContainerProps = Object.getOwnPropertyNames(this);

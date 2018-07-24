@@ -25,8 +25,6 @@ export class AppWorkerLoader extends MidwayLoader {
 
     this.app.beforeStart(async () => {
       await this.refreshContext();
-      // get and ready
-      await this.preloadController();
       // app
       this.loadController();
       // app
@@ -64,6 +62,10 @@ class MidwayApplication extends (<{
   get [Symbol.for('egg#eggPath')]() {
     return __dirname;
   }
+
+  get applicationContext() {
+    return this.loader.applicationContext;
+  }
 }
 
 class MidwayAgent extends (<{
@@ -78,6 +80,9 @@ class MidwayAgent extends (<{
     return __dirname;
   }
 
+  get applicationContext() {
+    return this.loader.applicationContext;
+  }
 }
 
 export {

@@ -10,6 +10,7 @@ import {
   PLUGIN_KEY_CLZ,
   PLUGIN_KEY_PROP
 } from './decorators/metaKeys';
+import {MidwayHandlerKey} from './constants';
 
 const globby = require('globby');
 const path = require('path');
@@ -19,9 +20,7 @@ const debug = require('debug')('midway:container');
 
 export class MidwayContainer extends Container implements IContainer {
 
-  configStore = {};
-  pluginStore = {};
-  loggerStore = {};
+  handlerMap: Map<string, (handlerKey: string) => any> = new Map();
 
   /**
    * load directory and traverse file to find bind class
@@ -102,13 +101,13 @@ export class MidwayContainer extends Container implements IContainer {
 
           switch (propertyMeta.type) {
             case 'config':
-              result = this.getConfig(propertyMeta.key);
+              result = this.handlerMap.get(MidwayHandlerKey.CONFIG)(propertyMeta.key);
               break;
             case 'logger':
-              result = this.getLogger(propertyMeta.key);
+              result = this.handlerMap.get(MidwayHandlerKey.LOGGER)(propertyMeta.key);
               break;
             case 'plugin':
-              result = this.getPlugin(propertyMeta.key);
+              result = this.handlerMap.get(MidwayHandlerKey.PLUGIN)(propertyMeta.key);
               break;
           }
           constructorArgs[index] = result;
@@ -121,15 +120,15 @@ export class MidwayContainer extends Container implements IContainer {
 
       // 处理配置装饰器
       const configSetterProps = this.getClzSetterProps(CONFIG_KEY_CLZ, instance);
-      this.defineGetterPropertyValue(configSetterProps, CONFIG_KEY_PROP, instance, this.getConfig);
+      this.defineGetterPropertyValue(configSetterProps, CONFIG_KEY_PROP, instance, this.handlerMap.get(MidwayHandlerKey.CONFIG));
 
       // 处理插件装饰器
       const pluginSetterProps = this.getClzSetterProps(PLUGIN_KEY_CLZ, instance);
-      this.defineGetterPropertyValue(pluginSetterProps, PLUGIN_KEY_PROP, instance, this.getPlugin);
+      this.defineGetterPropertyValue(pluginSetterProps, PLUGIN_KEY_PROP, instance, this.handlerMap.get(MidwayHandlerKey.PLUGIN));
 
       // 处理日志装饰器
       const loggerSetterProps = this.getClzSetterProps(LOGGER_KEY_CLZ, instance);
-      this.defineGetterPropertyValue(loggerSetterProps, LOGGER_KEY_PROP, instance, this.getLogger);
+      this.defineGetterPropertyValue(loggerSetterProps, LOGGER_KEY_PROP, instance, this.handlerMap.get(MidwayHandlerKey.LOGGER));
     });
 
     await super.ready();
@@ -169,15 +168,8 @@ export class MidwayContainer extends Container implements IContainer {
     }
   }
 
-  getConfig(configKey: string) {
-    return this.configStore[configKey];
+  registerDataHandler(handlerType: string, handler: (handlerKey) => any) {
+    this.handlerMap.set(handlerType, handler);
   }
 
-  getPlugin(pluginName: string) {
-    return this.pluginStore[pluginName];
-  }
-
-  getLogger(loggerName: string) {
-    return this.loggerStore[loggerName];
-  }
 }
