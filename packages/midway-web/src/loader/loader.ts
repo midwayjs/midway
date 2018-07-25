@@ -1,14 +1,9 @@
-import {MidwayLoader} from './midwayLoader';
+import {MidwayWebLoader} from './webLoader';
 
-const path = require('path');
 const APP_NAME = 'app';
 const AGENT_NAME = 'agent';
 
-function isPluginName(name) {
-  return typeof name === 'string' && !/^_/.test(name);
-}
-
-export class AppWorkerLoader extends MidwayLoader {
+export class AppWorkerLoader extends MidwayWebLoader {
 
   /**
    * load app.js
@@ -27,31 +22,7 @@ export class AppWorkerLoader extends MidwayLoader {
    * @since 1.0.0
    */
   loadCustomApp() {
-    const self = this;
-    const pluginContainerProps = Object.getOwnPropertyNames(this);
-    this.app = new Proxy(this.app, {
-      set(obj, prop, value) {
-        if (!self.pluginLoaded && isPluginName(prop) && !(prop in pluginContainerProps)) {
-          // save to context when called app.xxx = xxx
-          // now we can get plugin from context
-          self.pluginContext.registerObject(prop, value);
-        }
-        return Reflect.set(obj, prop, value);
-      }
-    });
-
-    this.getLoadUnits()
-      .forEach(unit => {
-        // 兼容旧插件加载方式
-        let ret = this.loadFile(this.resolveModule(path.join(unit.path, APP_NAME)));
-        if (ret) {
-          // midway 的插件会返回对象
-          this.pluginContext.registerObject(unit.name, ret);
-        }
-      });
-
-    // 插件加载完毕
-    this.pluginLoaded = true;
+    this.interceptLoadCustomApplication(APP_NAME);
   }
 
   /**
@@ -66,6 +37,7 @@ export class AppWorkerLoader extends MidwayLoader {
     this.loadContextExtend();
     this.loadHelperExtend();
 
+    this.loadApplicationContext();
     // app > plugin
     this.loadCustomApp();
     // app > plugin
@@ -86,41 +58,18 @@ export class AppWorkerLoader extends MidwayLoader {
 
 }
 
-export class AgentWorkerLoader extends MidwayLoader {
+export class AgentWorkerLoader extends MidwayWebLoader {
 
   /**
    * Load agent.js, same as {@link EggLoader#loadCustomApp}
    */
   loadCustomAgent() {
-    const self = this;
-    const pluginContainerProps = Object.getOwnPropertyNames(this);
-    this.app = new Proxy(this.app, {
-      set(obj, prop, value) {
-        if (!self.pluginLoaded && isPluginName(prop) && !(prop in pluginContainerProps)) {
-          // save to context when called app.xxx = xxx
-          // now we can get plugin from context
-          self.pluginContext.registerObject(prop, value);
-        }
-        return Reflect.set(obj, prop, value);
-      }
-    });
-
-    this.getLoadUnits()
-      .forEach(unit => {
-        // 兼容旧插件加载方式
-        let ret = this.loadFile(this.resolveModule(path.join(unit.path, AGENT_NAME)));
-        if (ret) {
-          // midway 的插件会返回对象
-          this.pluginContext.registerObject(unit.name, ret);
-        }
-      });
-
-    // 插件加载完毕
-    this.pluginLoaded = true;
+    this.interceptLoadCustomApplication(AGENT_NAME);
   }
 
   load() {
     this.loadAgentExtend();
+    this.loadApplicationContext();
     this.loadCustomAgent();
     this.app.beforeStart(async () => {
       await this.refreshContext();

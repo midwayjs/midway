@@ -22,5 +22,20 @@ module.exports = (appInfo) => {
     }
   };
 
+  exports.container = {
+    configuration: [
+      'config/configuration.xml'
+    ],
+    ignore: [
+      '**/node_modules/**',
+      '**/logs/**',
+      '**/run/**',
+      '**/public/**',
+      '**/view/**',
+      '**/views/**',
+      '**/config/**'
+    ]
+  };
+
   return exports;
 };

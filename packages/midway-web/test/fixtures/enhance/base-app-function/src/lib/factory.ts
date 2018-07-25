@@ -1,4 +1,4 @@
-import {providerWrapper} from '../../../../../../src/decorators';
+import {providerWrapper} from 'midway-core';
 import {IApplicationContext} from 'midway-context';
 
 export function adapterFactory(context: IApplicationContext) {

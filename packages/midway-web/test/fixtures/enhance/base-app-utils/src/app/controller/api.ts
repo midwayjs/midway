@@ -1,7 +1,8 @@
 'use strict';
 
 import {provide, inject} from 'midway-context';
-import {controller, get, config, logger} from '../../../../../../../src/';
+import {controller, get} from '../../../../../../../src/';
+import { config, logger} from 'midway-core';
 
 
 @provide()

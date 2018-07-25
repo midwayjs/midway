@@ -1,28 +1,49 @@
 import {MidwayLoader} from 'midway-core';
+import {Application} from 'egg';
 
-export class MidwayMockLoader extends MidwayLoader {
+class MidwayMockLoader extends MidwayLoader {
 
   loadCustomApp() {
     this.interceptLoadCustomApplication('app');
   }
 
-  loadAll() {
-    this.loadConfig();
+  load() {
     this.loadApplicationContext();
+    // app > plugin
     this.loadCustomApp();
-    this.refreshContext();
+    this.app.beforeStart(async () => {
+      await this.refreshContext();
+    });
+  }
+
+}
+
+class MidwayApplication extends (<{
+  new(...x)
+}> Application) {
+
+  get [Symbol.for('egg#loader')]() {
+    return MidwayMockLoader;
+  }
+
+  get [Symbol.for('egg#eggPath')]() {
+    return __dirname;
+  }
+
+  get applicationContext() {
+    return this.loader.applicationContext;
   }
 }
 
-
 export function mockContainer(options: {
   baseDir: string,
-  framework
 }) {
-  const loader = new MidwayMockLoader({
+  const app = new MidwayApplication({
     baseDir: options.baseDir,
-    app: {},
-    logger: console,
   });
-  return loader.applicationContext;
+  return {
+    async ready() {
+      await app.ready();
+    }
+  };
 }

@@ -10,7 +10,7 @@
   "scripts": {
     "build": "npm run lint && midway-bin build -c",
     "lint": "../../node_modules/.bin/tslint --format prose -c ../../tslint.json src/**/*.ts test/**/*.ts",
-    "test": "npm run lint && npm run clean && midway-bin test --ts",
+    "test": "npm run lint && midway-bin clean && midway-bin test --ts",
     "cov": "midway-bin cov --ts",
     "ci": "midway-bin test"
   },

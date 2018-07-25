@@ -1,5 +1,5 @@
+import {async, init, provide} from 'midway-context';
 import {config, plugin} from 'midway-core';
-import {provide, async, init} from 'midway-context';
 
 @async()
 @provide()
@@ -19,6 +19,10 @@ export class BaseService {
         resolve();
       }, 100);
     });
+  }
+
+  getData() {
+    return this.plugin2.text + this.config.c;
   }
 
 }

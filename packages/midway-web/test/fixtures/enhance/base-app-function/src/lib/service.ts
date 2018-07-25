@@ -1,4 +1,4 @@
-import {config, plugin} from '../../../../../../src/decorators';
+import {config, plugin} from 'midway-core';
 import {provide, async, init, inject} from 'midway-context';
 
 
