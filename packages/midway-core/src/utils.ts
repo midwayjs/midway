@@ -4,7 +4,7 @@ import {CLASS_KEY_CONSTRUCTOR} from './decorators/metaKeys';
 export function attachMetaDataOnClass(clz, key, value) {
   // save method name on class
   let classMetaValue = Reflect.getMetadata(key, clz);
-  if(classMetaValue) {
+  if (classMetaValue) {
     classMetaValue = classMetaValue.concat(value);
   } else {
     classMetaValue = [value];
@@ -23,7 +23,7 @@ export function attachConstructorDataOnClass(identifier, clz, type, index) {
 
   // save constructor index on class
   let constructorMetaValue = Reflect.getOwnMetadata(CLASS_KEY_CONSTRUCTOR, clz);
-  if(!constructorMetaValue) {
+  if (!constructorMetaValue) {
     constructorMetaValue = {};
   }
   constructorMetaValue[index] = {

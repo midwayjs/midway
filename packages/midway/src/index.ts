@@ -1,4 +1,5 @@
 export * from 'midway-context';
+export * from 'midway-core';
 export * from 'midway-web';
 import {Application, Agent} from 'midway-web';
 import {ApplicationContext} from 'midway-context';
