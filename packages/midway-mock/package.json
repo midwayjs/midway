@@ -8,7 +8,7 @@
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "scripts": {
-    "build": "npm run lint && rm -rf ./dist && ../../node_modules/.bin/tsc",
+    "build": "npm run lint && midway-bin build -c",
     "lint": "../../node_modules/.bin/tslint --format prose -c ../../tslint.json src/**/*.ts test/**/*.ts",
     "test": "npm run lint && npm run clean && midway-bin test --ts",
     "cov": "midway-bin cov --ts",
@@ -32,13 +32,11 @@
     "midway-bin": "^0.0.1"
   },
   "dependencies": {
-    "egg-mock": "^3.17.3",
-    "midway-context": "^0.0.1",
     "debug": "^3.1.0",
-    "inflection": "^1.12.0",
+    "egg-mock": "^3.17.3",
     "is-type-of": "^1.2.0",
-    "globby": "^8.0.0",
-    "extend": "^3.0.0"
+    "midway-context": "^0.0.1",
+    "midway-core": "^0.0.1"
   },
   "nyc": {
     "include": [

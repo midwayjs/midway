@@ -5,7 +5,7 @@
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "scripts": {
-    "build": "npm run lint && rm -rf ./dist && ../../node_modules/.bin/tsc",
+    "build": "npm run lint && midway-bin build -c",
     "start": "npm run build && node dist/index",
     "lint": "../../node_modules/.bin/tslint --format prose -c ../../tslint.json src/**/*.ts test/**/*.ts",
     "test": "midway-bin test --ts",

@@ -1,14 +1,28 @@
-import {Container} from 'midway-context';
+import {MidwayLoader} from 'midway-core';
 
-export class MidwayMockContainer extends Container {
+export class MidwayMockLoader extends MidwayLoader {
 
+  loadCustomApp() {
+    this.interceptLoadCustomApplication('app');
+  }
 
+  loadAll() {
+    this.loadConfig();
+    this.loadApplicationContext();
+    this.loadCustomApp();
+    this.refreshContext();
+  }
 }
 
 
 export function mockContainer(options: {
-  load: () => void
+  baseDir: string,
+  framework
 }) {
-  const container =  new MidwayMockContainer(options);
-  container.load();
+  const loader = new MidwayMockLoader({
+    baseDir: options.baseDir,
+    app: {},
+    logger: console,
+  });
+  return loader.applicationContext;
 }

@@ -1,8 +1,9 @@
-import {isTypeScriptEnvironment, isPluginName} from './utils';
+import {isPluginName, isTypeScriptEnvironment} from './utils';
 import * as path from 'path';
 import * as fs from 'fs';
 import {MidwayContainer} from './container';
 import {MidwayHandlerKey} from './constants';
+import {MidwayLoaderOptions} from './interface';
 
 const EggLoader = require('egg-core').EggLoader;
 const TS_SRC_DIR = 'src';
@@ -20,12 +21,12 @@ export class MidwayLoader extends EggLoader {
   dirs;
   appInfo;
 
-  constructor(options: { baseDir?, typescript?, srcDir?, targetDir? } = {}) {
+  constructor(options: MidwayLoaderOptions) {
     super(options);
     this.pluginContext = new MidwayContainer();
   }
 
-  // loadPlugin -> loadAntx -> loadConfig -> afterLoadConfig
+  // loadPlugin -> loadConfig -> afterLoadConfig
   loadConfig() {
     this.loadPlugin();
     super.loadConfig();
@@ -95,7 +96,7 @@ export class MidwayLoader extends EggLoader {
   }
 
   getAppInfo() {
-    if(!this.appInfo) {
+    if (!this.appInfo) {
       this.registerTypescriptDirectory();
       const appInfo = super.getAppInfo();
       this.appInfo = Object.assign(appInfo, {
