@@ -20,6 +20,6 @@ describe('test/mock_container.test.ts', () => {
 
   it('should mock service success', async () => {
     const service = await container.getAsync(BaseService);
-    assert(service.getData(), 100);
+    assert(service.getData() === 't10');
   });
 });
