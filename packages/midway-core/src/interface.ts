@@ -1,4 +1,5 @@
 import {EggLoaderOptions} from 'egg-core';
+import {IApplicationContext} from 'injection';
 
 export interface MidwayLoaderOptions extends EggLoaderOptions {
   logger: any;
@@ -8,4 +9,5 @@ export interface MidwayLoaderOptions extends EggLoaderOptions {
   typescript?: boolean;
   srcDir?: string;
   targetDir?: string;
+  container?: IApplicationContext;
 }

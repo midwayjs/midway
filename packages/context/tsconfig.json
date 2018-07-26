@@ -13,7 +13,7 @@
     "declaration": true,
     "outDir": "dist",
     "lib": ["es2017", "dom"],
-    "sourceRoot": "."
+    "sourceRoot": "src"
   },
   "exclude": [
     "dist",

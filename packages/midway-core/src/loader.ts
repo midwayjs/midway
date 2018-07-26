@@ -114,16 +114,16 @@ export class MidwayLoader extends EggLoader {
     });
 
     // register handler for container
-    this.applicationContext.registerDataHandler(MidwayHandlerKey.CONFIG, (configKey) => {
-      return this.config[configKey];
+    this.applicationContext.registerDataHandler(MidwayHandlerKey.CONFIG, (key) => {
+      return this.config[key];
     });
 
-    this.applicationContext.registerDataHandler(MidwayHandlerKey.PLUGIN, (configKey) => {
-      return this.pluginContext.get(configKey);
+    this.applicationContext.registerDataHandler(MidwayHandlerKey.PLUGIN, (key) => {
+      return this.pluginContext.get(key);
     });
 
-    this.applicationContext.registerDataHandler(MidwayHandlerKey.LOGGER, (loggerKey) => {
-      return this.app.getLogger(loggerKey);
+    this.applicationContext.registerDataHandler(MidwayHandlerKey.LOGGER, (key) => {
+      return this.app.getLogger(key);
     });
   }
 
