@@ -1,49 +1,38 @@
-import {MidwayLoader} from 'midway-core';
-import {Application} from 'egg';
+import {MidwayMockApplication} from './application';
+import {MidwayMockLoader} from './loader';
+import {MidwayContainer} from 'midway-core';
 
-class MidwayMockLoader extends MidwayLoader {
 
-  loadCustomApp() {
-    this.interceptLoadCustomApplication('app');
+export class MidwayMockContainer extends MidwayContainer {
+
+  options;
+  loader;
+
+  constructor(options) {
+    super();
+    this.options = options;
+    this.loader = new MidwayMockLoader(Object.assign(options, {
+      container: this
+    }));
+    this.loader.load();
   }
 
-  load() {
-    this.loadApplicationContext();
-    // app > plugin
-    this.loadCustomApp();
-    this.app.beforeStart(async () => {
-      await this.refreshContext();
+  async ready() {
+    this.load({
+      loadDir: this.options.baseDir
     });
+    await super.ready();
   }
 
-}
-
-class MidwayApplication extends (<{
-  new(...x)
-}> Application) {
-
-  get [Symbol.for('egg#loader')]() {
-    return MidwayMockLoader;
-  }
-
-  get [Symbol.for('egg#eggPath')]() {
-    return __dirname;
-  }
-
-  get applicationContext() {
-    return this.loader.applicationContext;
-  }
 }
 
 export function mockContainer(options: {
   baseDir: string,
 }) {
-  const app = new MidwayApplication({
+  const app = new MidwayMockApplication(options);
+  return new MidwayMockContainer({
     baseDir: options.baseDir,
+    app,
+    logger: console
   });
-  return {
-    async ready() {
-      await app.ready();
-    }
-  };
 }

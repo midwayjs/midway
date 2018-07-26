@@ -32,11 +32,13 @@
     "midway-bin": "^0.0.1"
   },
   "dependencies": {
+    "co": "^4.6.0",
     "debug": "^3.1.0",
     "egg-mock": "^3.17.3",
-    "is-type-of": "^1.2.0",
     "injection": "^0.0.1",
-    "midway-core": "^0.0.1"
+    "is-type-of": "^1.2.0",
+    "midway-core": "^0.0.1",
+    "ready-callback": "^2.0.1"
   },
   "nyc": {
     "include": [

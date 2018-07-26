@@ -11,6 +11,7 @@ describe('test/mock_container.test.ts', () => {
   before(() => {
     container = mm.container({
       baseDir: path.join(fixtures, 'base-app-decorator'),
+      typescript: true,
     });
     return container.ready();
   });
