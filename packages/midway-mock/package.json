@@ -35,7 +35,7 @@
     "debug": "^3.1.0",
     "egg-mock": "^3.17.3",
     "is-type-of": "^1.2.0",
-    "midway-context": "^0.0.1",
+    "injection": "^0.0.1",
     "midway-core": "^0.0.1"
   },
   "nyc": {

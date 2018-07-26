@@ -1,6 +1,6 @@
 import {Router} from '../router';
 import * as path from 'path';
-import {TagClsMetadata, TAGGED_CLS} from 'midway-context';
+import {TagClsMetadata, TAGGED_CLS} from 'injection';
 import {loading} from '../loading';
 import 'reflect-metadata';
 import {WEB_ROUTER_CLS, WEB_ROUTER_PREFIX_CLS, WEB_ROUTER_PROP} from '../decorators/metaKeys';

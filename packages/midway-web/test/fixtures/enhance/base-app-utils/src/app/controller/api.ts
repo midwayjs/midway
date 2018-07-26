@@ -1,6 +1,6 @@
 'use strict';
 
-import {provide, inject} from 'midway-context';
+import {provide, inject} from 'injection';
 import {controller, get} from '../../../../../../../src/';
 import { config, logger} from 'midway-core';
 

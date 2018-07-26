@@ -1,4 +1,4 @@
-import {async, init, provide} from 'midway-context';
+import {async, init, provide} from 'injection';
 import {config, plugin} from 'midway-core';
 
 @async()

@@ -1,5 +1,5 @@
 import {config, plugin} from '../../../../../src/decorators';
-import {provide} from 'midway-context';
+import {provide} from 'injection';
 import {get, logger} from '../../../../../src';
 import {inject} from '../../../../../../context/dist';
 

@@ -1,7 +1,7 @@
 {
-  "name": "midway-context",
+  "name": "injection",
   "version": "0.0.1",
-  "description": "Midway Context For Everyone",
+  "description": "A New IoC Container For All Node.js Application",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "scripts": {

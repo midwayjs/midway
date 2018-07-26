@@ -1,5 +1,5 @@
 import {providerWrapper} from '../../../../../src/decorators';
-import {IApplicationContext} from 'midway-context';
+import {IApplicationContext} from 'injection';
 
 export function adapterFactory(context: IApplicationContext) {
   return async (adapterName: string) => {

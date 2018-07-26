@@ -1,5 +1,5 @@
 import {config, plugin} from 'midway-core';
-import {provide} from 'midway-context';
+import {provide} from 'injection';
 
 @provide()
 export class BaseService {

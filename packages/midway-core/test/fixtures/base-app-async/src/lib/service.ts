@@ -1,5 +1,5 @@
 import {config, plugin} from '../../../../../src/decorators';
-import {provide, async, init} from 'midway-context';
+import {provide, async, init} from 'injection';
 
 @async()
 @provide()

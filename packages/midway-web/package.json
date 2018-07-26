@@ -39,7 +39,7 @@
     "globby": "^8.0.0",
     "inflection": "^1.12.0",
     "is-type-of": "^1.2.0",
-    "midway-context": "^0.0.1",
+    "injection": "^0.0.1",
     "midway-core": "^0.0.1"
   },
   "nyc": {

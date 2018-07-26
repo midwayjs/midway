@@ -1,4 +1,4 @@
-import {IApplicationContext, ObjectIdentifier} from 'midway-context';
+import {IApplicationContext, ObjectIdentifier} from 'injection';
 import {FUNCTION_INJECT_KEY} from './metaKeys';
 
 export function providerWrapper(wrapperInfo: Array<{

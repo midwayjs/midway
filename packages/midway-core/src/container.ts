@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import {Container, IContainer, TagClsMetadata, TAGGED_CLS} from 'midway-context';
+import {Container, IContainer, TagClsMetadata, TAGGED_CLS} from 'injection';
 import {
   CLASS_KEY_CONSTRUCTOR,
   CONFIG_KEY_CLZ,

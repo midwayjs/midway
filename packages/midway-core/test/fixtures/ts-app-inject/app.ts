@@ -1,6 +1,6 @@
 import {Loader} from './loader';
-import {provide} from 'midway-context';
-import {inject} from 'midway-context';
+import {provide} from 'injection';
+import {inject} from 'injection';
 
 @provide()
 export class App {

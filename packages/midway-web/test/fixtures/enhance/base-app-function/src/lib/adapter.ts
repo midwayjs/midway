@@ -1,4 +1,4 @@
-import {provide} from 'midway-context';
+import {provide} from 'injection';
 
 @provide()
 export class GoogleAdapter {
