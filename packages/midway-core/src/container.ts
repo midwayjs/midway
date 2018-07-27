@@ -182,17 +182,30 @@ export class MidwayContainer extends Container implements IContainer {
       // 处理配置装饰器
       const configSetterProps = this.getClzSetterProps(CONFIG_KEY_CLZ, instance);
       this.defineGetterPropertyValue(configSetterProps, CONFIG_KEY_PROP, instance, this.handlerMap.get(MidwayHandlerKey.CONFIG));
-
       // 处理插件装饰器
       const pluginSetterProps = this.getClzSetterProps(PLUGIN_KEY_CLZ, instance);
       this.defineGetterPropertyValue(pluginSetterProps, PLUGIN_KEY_PROP, instance, this.handlerMap.get(MidwayHandlerKey.PLUGIN));
-      // 表示非ts annotation模式
-      if (!pluginSetterProps) {
-        Autowire.patchDollar(instance, context, this.handlerMap.get(MidwayHandlerKey.PLUGIN));
-      }
       // 处理日志装饰器
       const loggerSetterProps = this.getClzSetterProps(LOGGER_KEY_CLZ, instance);
       this.defineGetterPropertyValue(loggerSetterProps, LOGGER_KEY_PROP, instance, this.handlerMap.get(MidwayHandlerKey.LOGGER));
+
+      // 表示非ts annotation模式
+      if (!pluginSetterProps && !loggerSetterProps) {
+        // this.$$xxx = null; 用来注入config
+        // this.$xxx = null; 用来注入 logger 或者 插件
+        Autowire.patchDollar(instance, context, (key: string) => {
+          if (key[0] === '$') {
+            return this.handlerMap.get(MidwayHandlerKey.CONFIG)(key.slice(1));
+          }
+          try {
+            const v = this.handlerMap.get(MidwayHandlerKey.PLUGIN)(key);
+            if (v) {
+              return v;
+            }
+          } catch (e) { }
+          return this.handlerMap.get(MidwayHandlerKey.LOGGER)(key);
+        });
+      }
     });
 
     await super.ready();

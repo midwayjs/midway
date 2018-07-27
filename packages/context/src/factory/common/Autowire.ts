@@ -38,7 +38,7 @@ export class Autowire {
             try {
               value = context.get(v.id || k);
             } catch (e) {
-              if (e.message.indexOf('should be an known identifier') === -1) {
+              if (e.message.indexOf('is not valid in current context') === -1) {
                 throw e;
               }
             }
@@ -89,6 +89,7 @@ export class Autowire {
   }
   /**
    * 自动装配 this.$xxx = null
+   * 插件、logger
    * @param instance 实例对象
    * @param context ApplicationContext
    * @param fn handle function

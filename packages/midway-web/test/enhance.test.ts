@@ -191,5 +191,19 @@ describe('/test/enhance.test.ts', () => {
         .expect(200)
         .expect('plugin2 is not null t', done);
     });
+
+    it('js-app-xml get config should be ok', done => {
+      request(app.callback())
+        .get('/my_test')
+        .expect(200)
+        .expect('this is my test', done);
+    });
+
+    it('js-app-xml get logger should be ok', done => {
+      request(app.callback())
+        .get('/my_logger')
+        .expect(200)
+        .expect('not null', done);
+    });
   });
 });
