@@ -8,5 +8,6 @@ module.exports = {
   mytest: 'this is my test',
   plugins: {
     plugin2: true
-  }
+  },
+  hhh: 'this is config hhh'
 };

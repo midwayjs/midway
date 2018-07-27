@@ -6,6 +6,7 @@ module.exports = class MyController extends BaseController {
     super();
 
     this.$$mytest = null;
+    this.$$hhh = null;
     this.$plugin2 = null;
     this.hello = null;
     this.$logger = null;
@@ -17,6 +18,9 @@ module.exports = class MyController extends BaseController {
       ctx.body = this.$logger ? 'not null' : 'null';
     });
     this.route('get', '/my', async (ctx) => {
+      if (this.hello.hhh !== this.$$hhh) {
+        throw new Error(`${this.hello.hhh} is not eq ${this.$$hhh}`);
+      }
       ctx.body = this.hello.say('test');
     });
 

@@ -108,6 +108,7 @@ export class MidwayWebLoader extends MidwayLoader {
     if (Array.isArray(this.config.configLocations)) {
       this.applicationContext.configLocations = this.config.configLocations;
     }
+    this.applicationContext.props.putObject(this.config);
 
     await super.refreshContext();
 

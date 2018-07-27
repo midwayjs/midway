@@ -20,7 +20,7 @@ export class XmlApplicationContext extends BaseApplicationContext {
         this.loadResource(new Resource(this.baseDir, configLocations[i]));
       }
 
-      this.props = this.parser.configuration;
+      this.props.putAll(this.parser.configuration);
     }
   }
 
