@@ -1,10 +1,11 @@
-import {MidwayLoader, MidwayHandlerKey} from 'midway-core';
+import {MidwayHandlerKey, MidwayLoader} from 'midway-core';
+import * as path from 'path';
 
 export class MidwayMockLoader extends MidwayLoader {
 
   constructor(options) {
     super(options);
-    this.applicationContext = this.options.container;
+    this.applicationContext = this.options.app.applicationContext;
   }
 
   loadCustomApp() {
@@ -12,7 +13,6 @@ export class MidwayMockLoader extends MidwayLoader {
   }
 
   load() {
-    this.loadPlugin();
     this.loadConfig();
     this.loadApplicationContext();
     // app > plugin

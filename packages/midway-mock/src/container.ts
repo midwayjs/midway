@@ -1,5 +1,4 @@
 import {MidwayMockApplication} from './application';
-import {MidwayMockLoader} from './loader';
 import {MidwayContainer} from 'midway-core';
 
 
@@ -7,20 +6,22 @@ export class MidwayMockContainer extends MidwayContainer {
 
   options;
   loader;
+  app;
 
   constructor(options) {
     super();
     this.options = options;
-    this.loader = new MidwayMockLoader(Object.assign(options, {
-      container: this
+    this.app = new MidwayMockApplication(Object.assign(options, {
+      applicationContext: this
     }));
-    this.loader.load();
+    this.app.loader.load();
   }
 
   async ready() {
     this.load({
       loadDir: this.options.baseDir
     });
+    await this.app.ready();
     await super.ready();
   }
 
@@ -29,10 +30,5 @@ export class MidwayMockContainer extends MidwayContainer {
 export function mockContainer(options: {
   baseDir: string,
 }) {
-  const app = new MidwayMockApplication(options);
-  return new MidwayMockContainer({
-    baseDir: options.baseDir,
-    app,
-    logger: console
-  });
+  return new MidwayMockContainer(options);
 }

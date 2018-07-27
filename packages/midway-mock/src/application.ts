@@ -1,36 +1,20 @@
-import {getCalleeFromStack, callFn} from './utils';
+import {EggCore} from 'egg-core';
+import {MidwayMockLoader} from './loader';
 
-export class MidwayMockApplication {
+export class MidwayMockApplication extends EggCore {
 
   options;
-  readyCallback: (time) => any;
-
-  constructor(options) {
-    this.options = options;
-    require('ready-callback')({ timeout: 10000 }).mixin(this);
-  }
-
-  beforeStart(scope) {
-    // get filename from stack
-    const name = getCalleeFromStack(true);
-    const done = this.readyCallback(name);
-
-    // ensure scope executes after load completed
-    process.nextTick(() => {
-      callFn(scope).then(() => {
-        done();
-      }, err => {
-        done(err);
-      });
-    });
-  }
 
   get [Symbol.for('egg#loader')]() {
-    return __dirname;
+    return MidwayMockLoader;
   }
 
   get [Symbol.for('egg#eggPath')]() {
     return __dirname;
+  }
+
+  get applicationContext() {
+    return this.options.applicationContext;
   }
 
 }

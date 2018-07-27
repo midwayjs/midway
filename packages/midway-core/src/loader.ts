@@ -18,7 +18,6 @@ export class MidwayLoader extends EggLoader {
   baseDir;
   appDir;
   options;
-  dirs;
   appInfo;
 
   constructor(options: MidwayLoaderOptions) {
