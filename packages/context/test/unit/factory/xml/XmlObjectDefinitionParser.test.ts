@@ -17,7 +17,7 @@ describe('/test/unit/factory/xml/XmlObjectDefinitionParser', () => {
 
   it('load fixture app should ok', async () => {
     const res = new Resource(baseDir, 'resources/context.xml');
-    await parser.load(res);
+    parser.load(res);
     expect(parser.registry.hasDefinition('ctor:obj1')).true;
     const definition = parser.registry.getDefinition('ctor:obj1');
     expect(definition).not.null;
@@ -31,7 +31,7 @@ describe('/test/unit/factory/xml/XmlObjectDefinitionParser', () => {
     const res = new Resource(baseDir, 'resources/mixin.xml');
     const mixin = new MixinDefinitionParser();
     parser.registerParser(mixin);
-    await parser.load(res);
+    parser.load(res);
 
     const definition = registry.getDefinition('mixin1');
     expect(definition).not.null;

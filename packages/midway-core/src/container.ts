@@ -1,5 +1,12 @@
 import 'reflect-metadata';
-import {Container, IContainer, TagClsMetadata, TAGGED_CLS} from 'injection';
+import {Container,
+  IContainer,
+  TagClsMetadata, TAGGED_CLS,
+  IObjectDefinitionParser,
+  IParserContext,
+  IObjectDefinition,
+  XmlObjectDefinition,
+  Autowire} from 'injection';
 import {
   CLASS_KEY_CONSTRUCTOR,
   CONFIG_KEY_CLZ,
@@ -17,10 +24,59 @@ const path = require('path');
 const camelcase = require('camelcase');
 const is = require('is-type-of');
 const debug = require('debug')('midway:container');
+const CONTROLLERS = 'controllers';
+const MIDDLEWARES = 'middlewares';
+
+class BaseParser {
+  container: MidwayContainer;
+  constructor(container: MidwayContainer) {
+    this.container = container;
+  }
+}
+/**
+ * 用于xml解析扩展
+ * <controllers />
+ */
+class ControllerDefinitionParser extends BaseParser implements IObjectDefinitionParser {
+  readonly name: string = CONTROLLERS;
+
+  parse(ele: Element, context: IParserContext): IObjectDefinition {
+    const definition = new XmlObjectDefinition(ele);
+
+    context.parser.parseElementNodes(definition, ele, context);
+    this.container.controllersIds.push(definition.id);
+    return definition;
+  }
+}
+/**
+ * 用于xml解析扩展
+ * <middlewares />
+ */
+class MiddlewareDefinitionParser extends BaseParser implements IObjectDefinitionParser {
+  readonly name: string = MIDDLEWARES;
+
+  parse(ele: Element, context: IParserContext): IObjectDefinition {
+    const definition = new XmlObjectDefinition(ele);
+
+    context.parser.parseElementNodes(definition, ele, context);
+    this.container.middlewaresIds.push(definition.id);
+    return definition;
+  }
+}
 
 export class MidwayContainer extends Container implements IContainer {
+  controllersIds: Array<string> = [];
+  middlewaresIds: Array<string> = [];
 
   handlerMap: Map<string, (handlerKey: string) => any> = new Map();
+
+  init(): void {
+    super.init();
+
+    this.parser.registerParser(new ControllerDefinitionParser(this));
+    this.parser.registerParser(new MiddlewareDefinitionParser(this));
+  }
+
 
   /**
    * load directory and traverse file to find bind class
@@ -91,11 +147,16 @@ export class MidwayContainer extends Container implements IContainer {
   async ready() {
     // register constructor inject
     this.beforeEachCreated((target, constructorArgs, context) => {
-      let constructorMetaData = Reflect.getOwnMetadata(CLASS_KEY_CONSTRUCTOR, target);
+      let constructorMetaData;
+      try {
+        constructorMetaData = Reflect.getOwnMetadata(CLASS_KEY_CONSTRUCTOR, target);
+      } catch (e) {
+        debug(`beforeEachCreated error ${e.stack}`);
+      }
       // lack of field
       if (constructorMetaData && constructorArgs) {
         for (let idx in constructorMetaData) {
-          let index = parseInt(idx);
+          let index = parseInt(idx, 10);
           const propertyMeta = constructorMetaData[index];
           let result;
 
@@ -125,7 +186,10 @@ export class MidwayContainer extends Container implements IContainer {
       // 处理插件装饰器
       const pluginSetterProps = this.getClzSetterProps(PLUGIN_KEY_CLZ, instance);
       this.defineGetterPropertyValue(pluginSetterProps, PLUGIN_KEY_PROP, instance, this.handlerMap.get(MidwayHandlerKey.PLUGIN));
-
+      // 表示非ts annotation模式
+      if (!pluginSetterProps) {
+        Autowire.patchDollar(instance, context, this.handlerMap.get(MidwayHandlerKey.PLUGIN));
+      }
       // 处理日志装饰器
       const loggerSetterProps = this.getClzSetterProps(LOGGER_KEY_CLZ, instance);
       this.defineGetterPropertyValue(loggerSetterProps, LOGGER_KEY_PROP, instance, this.handlerMap.get(MidwayHandlerKey.LOGGER));

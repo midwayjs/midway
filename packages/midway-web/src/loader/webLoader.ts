@@ -31,7 +31,29 @@ export class MidwayWebLoader extends MidwayLoader {
       }
     }
   }
+  /**
+   * 从xml加载controller
+   */
+  async preloadControllerFromXml(): Promise<void> {
+    const ids = this.applicationContext.controllersIds;
+    if (Array.isArray(ids) && ids.length > 0) {
+      for (let i = 0; i < ids.length; i++) {
+        const controllers = await this.applicationContext.getAsync(ids[i]);
+        const app = this.app;
+        if (Array.isArray(controllers.list)) {
+          controllers.list.forEach(c => {
+            let newRouter = new Router({
+              sensitive: true,
+              logger: this.options.logger,
+            }, app);
+            c.expose(newRouter);
 
+            app.use(newRouter.middleware());
+          });
+        }
+      }
+    }
+  }
   /**
    * init controller in ApplicationContext
    * @param module
@@ -81,4 +103,14 @@ export class MidwayWebLoader extends MidwayLoader {
     }
   }
 
+  async refreshContext(): Promise<void> {
+    // 虽然有点hack，但是将就着用吧
+    if (Array.isArray(this.config.configLocations)) {
+      this.applicationContext.configLocations = this.config.configLocations;
+    }
+
+    await super.refreshContext();
+
+    await this.preloadControllerFromXml();
+  }
 }

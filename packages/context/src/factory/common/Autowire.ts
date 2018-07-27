@@ -23,10 +23,15 @@ export class InjectionPoint {
 }
 
 export class Autowire {
-  patch(instance: any, context: IApplicationContext) {
+  static patchInject(instance: any, context: IApplicationContext) {
+    if (instance.__patched_inject__) {
+      return;
+    }
     // 遍历 this.xxx = inject('xxx') 这样的属性
+    let patched = false;
     _.forOwn(instance, (v, k) => {
       if (v instanceof InjectionPoint) {
+        patched = true;
         Object.defineProperty(instance, k, {
           get: () => {
             let value = v.defaultValue;
@@ -44,14 +49,75 @@ export class Autowire {
         });
         return;
       }
-      // 遍历 this.xx = null; 这样的属性
-      if (v === null) {
+    });
+
+    if (patched) {
+      instance.__patched_inject__ = true;
+    }
+  }
+  /**
+   * 自动装配 this.xxx = null;
+   * @param instance 实例对象
+   * @param context ApplicationContext
+   * @param fn handle function
+   */
+  static patchNoDollar(instance: any, context: IApplicationContext, fn?: any) {
+    if (instance.__patched_no_dollar__) {
+      return;
+    }
+
+    let patched = false;
+    _.forOwn(instance, (v, k) => {
+      if (v === null && k[0] !== '$') {
+        patched = true;
         Object.defineProperty(instance, k, {
-          get: () => context.get(k),
+          get: () => {
+            if (fn && typeof fn === 'function') {
+              return fn(k);
+            }
+            return context.get(k);
+          },
           configurable: false,
           enumerable: true
         });
       }
     });
+
+    if (patched) {
+      instance.__patched_no_dollar__ = true;
+    }
+  }
+  /**
+   * 自动装配 this.$xxx = null
+   * @param instance 实例对象
+   * @param context ApplicationContext
+   * @param fn handle function
+   */
+  static patchDollar(instance: any, context: IApplicationContext, fn?: any) {
+    if (instance.__patched_dollar__) {
+      return;
+    }
+
+    let patched = false;
+    _.forOwn(instance, (v, k) => {
+      if (v === null && k[0] === '$') {
+        patched = true;
+        Object.defineProperty(instance, k, {
+          get: () => {
+            let kk = k.slice(1);
+            if (fn && typeof fn === 'function') {
+              return fn(kk);
+            }
+            return context.get(kk);
+          },
+          configurable: false,
+          enumerable: true
+        });
+      }
+    });
+
+    if (patched) {
+      instance.__patched_dollar__ = true;
+    }
   }
 }

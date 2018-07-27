@@ -1,22 +1,22 @@
 import 'reflect-metadata';
 import {IContainer, ObjectDefinitionOptions, ObjectIdentifier} from '../interfaces';
-import {BaseApplicationContext} from './ApplicationContext';
 import {OBJ_DEF_CLS, ObjectDefinition, TAGGED, TAGGED_CLS, TAGGED_PROP} from '..';
-import * as _ from 'lodash';
 import {ManagedReference, ManagedValue} from './common/managed';
 import {FunctionDefinition} from '../base/FunctionDefinition';
 import {ScopeEnum} from '../base/Scope';
+import { XmlApplicationContext } from './xml/XmlApplicationContext';
+import { Autowire } from '../../../midway-core/node_modules/injection/src/factory/common/Autowire';
 
 const uuidv1 = require('uuid/v1');
 const is = require('is-type-of');
 const camelcase = require('camelcase');
 
-export class Container extends BaseApplicationContext implements IContainer {
-
+export class Container extends XmlApplicationContext implements IContainer {
   protected id: string = uuidv1();
 
-  constructor() {
-    super();
+  init(): void {
+    super.init();
+
     this.registerObjectPropertyParser();
   }
 
@@ -63,10 +63,9 @@ export class Container extends BaseApplicationContext implements IContainer {
     if (metaData) {
       for (let metaKey in metaData) {
         for (let propertyMeta of metaData[metaKey]) {
-          definition.properties.set(metaKey, {
-            type: 'ref',
-            name: propertyMeta.value
-          });
+          const refManaged = new ManagedReference();
+          refManaged.name = propertyMeta.value;
+          definition.properties.set(metaKey, refManaged);
         }
       }
     }
@@ -115,24 +114,13 @@ export class Container extends BaseApplicationContext implements IContainer {
     }
   }
 
-  createChild(): IContainer {
-    const child = new Container();
-    child.parent = this;
-    return child;
+  createChild(baseDir?: string): IContainer {
+    return new Container(baseDir || this.baseDir, this);
   }
 
   protected registerObjectPropertyParser() {
     this.afterEachCreated((instance, context) => {
-      _.forOwn(instance, (v, k) => {
-        // 遍历 this.xx = null; 这样的属性
-        if (v === null && k[0] === '$') {
-          Object.defineProperty(instance, k, {
-            get: () => context.get(k.slice(1)),
-            configurable: false,
-            enumerable: true
-          });
-        }
-      });
+      Autowire.patchNoDollar(instance, context);
     });
   }
 

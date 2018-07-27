@@ -282,7 +282,6 @@ class ObjectResolver extends BaseManagedResolver {
  */
 export class ManagedResolverFactory {
   private resolvers = new Map<string, IManagedResolver>();
-  private autowire: Autowire = null;
   private _props = null;
   singletonCache = new Map<ObjectIdentifier, any>();
   context: IApplicationContext;
@@ -291,7 +290,6 @@ export class ManagedResolverFactory {
 
   constructor(context: IApplicationContext) {
     this.context = context;
-    this.autowire = new Autowire();
 
     // 初始化解析器
     this.registerResolver(new JSONResolver(this));
@@ -374,7 +372,8 @@ export class ManagedResolverFactory {
     }
 
     if (definition.isAutowire()) {
-      this.autowire.patch(inst, this.context);
+      Autowire.patchInject(inst, this.context);
+      Autowire.patchNoDollar(inst, this.context);
     }
 
     for(let handler of this.afterCreateHandler) {
@@ -439,7 +438,8 @@ export class ManagedResolverFactory {
     }
 
     if (definition.isAutowire()) {
-      this.autowire.patch(inst, this.context);
+      Autowire.patchInject(inst, this.context);
+      Autowire.patchNoDollar(inst, this.context);
     }
 
     for(let handler of this.afterCreateHandler) {

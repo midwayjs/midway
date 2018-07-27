@@ -18,7 +18,7 @@ import {
 import { XmlObjectDefinition } from './XmlObjectDefinition';
 import { IParserContext, IManagedParser } from './interface';
 
-class ManagedParser implements IManagedParser {
+export class ManagedParser implements IManagedParser {
   protected factory: XmlObjectElementParser;
 
   constructor(factory: XmlObjectElementParser) {

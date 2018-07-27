@@ -50,7 +50,7 @@ describe('/test/unit/factory/ApplicationContext', () => {
   describe('BaseApplicationContext', () => {
     it('context event should be ok', () => {
       const callback = sinon.spy();
-      const app = new BaseApplicationContext(__dirname, []);
+      const app = new BaseApplicationContext(__dirname);
 
       const listen = {
         key: 'hello world',
