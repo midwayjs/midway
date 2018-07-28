@@ -1,11 +1,11 @@
 class App {
 
   constructor() {
-    this.$loader = null;
+    this.loader = null;
   }
 
   getConfig() {
-    return this.$loader.getConfig();
+    return this.loader.getConfig();
   }
 }
 

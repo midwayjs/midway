@@ -45,6 +45,7 @@ export interface IObjectFactory {
 export interface IObjectDefinition {
   creator: IObjectCreator;
   id: string;
+  name: string;
   initMethod: string;
   destroyMethod: string;
   constructMethod: string;
@@ -83,6 +84,7 @@ export interface IObjectDefinitionRegistry {
   registerDefinition(identifier: ObjectIdentifier, definition: IObjectDefinition);
   getDefinition(identifier: ObjectIdentifier): IObjectDefinition;
   getDefinitionByPath(path: string): IObjectDefinition;
+  getDefinitionByName(name: string): IObjectDefinition[];
   removeDefinition(identifier: ObjectIdentifier): void;
   hasDefinition(identifier: ObjectIdentifier): boolean;
   clearAll(): void;
@@ -123,9 +125,9 @@ export interface IResource {
   isURL(): boolean;
   getURL(): any;
   getPath(): string;
-  getContent(): Promise<Buffer>;
-  getContentAsJSON(): Promise<Object>;
-  getSubResources(): Promise<IResource[]>;
+  getContent(): Buffer;
+  getContentAsJSON(): Object;
+  getSubResources(): IResource[];
   createRelative(path: string): IResource;
 }
 /**

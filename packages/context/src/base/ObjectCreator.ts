@@ -45,15 +45,14 @@ export class ObjectCreator implements IObjectCreator {
       return Object.create(null);
     }
 
-    let inst;
     if (this.definition.isDirect()) {
-      inst = Clzz;
+      return Clzz;
+    }
+    let inst;
+    if (this.definition.constructMethod) {
+      inst = Clzz[this.definition.constructMethod].apply(Clzz, args);
     } else {
-      if (this.definition.constructMethod) {
-        inst = Clzz[this.definition.constructMethod].apply(Clzz, args);
-      } else {
-        inst = Reflect.construct(Clzz, args);
-      }
+      inst = Reflect.construct(Clzz, args);
     }
     return inst;
   }
@@ -65,7 +64,10 @@ export class ObjectCreator implements IObjectCreator {
    */
   async doConstructAsync(Clzz: any, args?: any): Promise<any> {
     if (!Clzz) {
-      return null;
+      return Object.create(null);
+    }
+    if (this.definition.isDirect()) {
+      return Clzz;
     }
     let inst;
     if (this.definition.constructMethod) {
