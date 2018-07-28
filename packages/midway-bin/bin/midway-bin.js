@@ -2,5 +2,5 @@
 
 'use strict';
 
-const Command = require('..');
+const Command = require('../');
 new Command().start();

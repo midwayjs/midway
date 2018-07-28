@@ -1,6 +1,6 @@
 {
   "name": "midway-bin",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Midway Command Tools",
   "main": "index.js",
   "bin": {
@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "co-mocha": "^1.2.2",
-    "eslint": "^4.12.1",
+    "eslint": "^4.13.1",
     "eslint-config-egg": "^7.0.0"
   },
   "engines": {

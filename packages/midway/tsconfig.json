@@ -4,15 +4,18 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "experimentalDecorators": true,
+    "inlineSourceMap": true,
     "noImplicitThis": true,
     "noUnusedLocals": true,
     "stripInternal": true,
     "pretty": true,
     "declaration": true,
-    "sourceMap": true,
     "outDir": "dist",
-    "lib": ["es2017", "dom"],
-    "sourceRoot": "."
+    "lib": [
+      "es2017",
+      "dom"
+    ],
+    "sourceRoot": "src"
   },
   "exclude": [
     "dist",

@@ -1,0 +1,66 @@
+{
+  "name": "midway-mock",
+  "version": "0.1.0",
+  "eggPlugin": {
+    "name": "midway-mock"
+  },
+  "description": "mock server for midway",
+  "main": "dist/index",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "npm run lint && midway-bin build -c",
+    "lint": "../../node_modules/.bin/tslint --format prose -c ../../tslint.json src/**/*.ts test/**/*.ts",
+    "test": "npm run lint && midway-bin clean && midway-bin test --ts",
+    "cov": "midway-bin cov --ts",
+    "ci": "midway-bin test"
+  },
+  "keywords": [
+    "midway",
+    "IoC",
+    "mock",
+    "plugin"
+  ],
+  "files": [
+    "dist",
+    "d.ts"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@types/chai": "^3.5.2",
+    "@types/mocha": "^2.2.41",
+    "@types/node": "^8.10.0",
+    "midway-bin": "^0.1.0"
+  },
+  "dependencies": {
+    "co": "^4.6.0",
+    "debug": "^3.1.0",
+    "egg-mock": "^3.17.3",
+    "injection": "^0.1.0",
+    "is-type-of": "^1.2.0",
+    "midway-core": "^0.1.0",
+    "ready-callback": "^2.0.1"
+  },
+  "nyc": {
+    "include": [
+      "src/*.ts",
+      "src/**/*.ts"
+    ],
+    "exclude": [
+      "typings",
+      "**/*.d.ts"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "reporter": [
+      "text",
+      "json",
+      "html",
+      "lcovonly"
+    ],
+    "all": true
+  }
+}

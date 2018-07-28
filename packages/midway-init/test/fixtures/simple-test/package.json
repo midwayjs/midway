@@ -1,0 +1,10 @@
+{
+  "name": "egg-boilerplate-simple-test",
+  "version": "1.0.0",
+  "description": "boilerplate for egg-init test fixtures",
+  "homepage": "https://github.com/eggjs/egg-init.git",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:eggjs/egg-init.git"
+  }
+}

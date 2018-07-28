@@ -1,7 +1,8 @@
-export * from 'midway-context';
+export * from 'injection';
+export * from 'midway-core';
 export * from 'midway-web';
 import {Application, Agent} from 'midway-web';
-import {ApplicationContext} from 'midway-context';
+import {ApplicationContext} from 'injection';
 let app, agent = null;
 
 /**

@@ -19,3 +19,4 @@ exports.DevCommand = require('./lib/cmd/dev');
 exports.TestCommand = require('./lib/cmd/test');
 exports.DebugCommand = require('./lib/cmd/debug');
 exports.PkgfilesCommand = require('./lib/cmd/pkgfiles');
+exports.CleanCommand = require('./lib/cmd/clean');
