@@ -13,6 +13,7 @@ class MidwayBin extends Command {
 }
 
 module.exports = exports = MidwayBin;
+exports.AutodCommand = require('./lib/cmd/autod');
 exports.BuildCommand = require('./lib/cmd/build');
 exports.CovCommand = require('./lib/cmd/cov');
 exports.DevCommand = require('./lib/cmd/dev');

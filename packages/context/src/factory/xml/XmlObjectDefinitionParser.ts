@@ -61,21 +61,42 @@ export class XmlObjectDefinitionParser implements IXmlParser {
     this.registry.registerDefinition(definition.id, definition);
   }
 
-  async parse(root: Element, context: IParserContext): Promise<void> {
+  parse(root: Element, context: IParserContext): void {
     if (utils.nodeNameEq(root, KEYS.OBJECTS_ELEMENT)) {
-      await this.parseObjectsElement(root, context);
+      this.parseObjectsElement(root, context);
     } else if (utils.nodeNameEq(root, KEYS.IMPORT_ELEMENT)) {
-      await this.parseImportElement(root, context);
+      this.parseImportElement(root, context);
     } else if (utils.nodeNameEq(root, KEYS.CONFIGURATION_ELEMENT)) {
-      await this.parseConfigurationElement(root, context);
+      this.parseConfigurationElement(root, context);
     } else if (utils.nodeNameEq(root, KEYS.OBJECT_ELEMENT)) {
-      await this.parseObjectElement(root, context);
+      this.parseObjectElement(root, context);
     } else {
-      await this.parseCustomElement(root, context);
+      this.parseCustomElement(root, context);
     }
   }
 
-  async parseObjectsElement(ele: Element, context: IParserContext): Promise<void> {
+  /**
+   * 用于外部继承实现parse custom element内部使用
+   * @param definition 当前definition
+   * @param ele xml elemnt
+   * @param context see ParserContext
+   */
+  parseElementNodes(definition: IObjectDefinition, ele: Element, context: IParserContext): void {
+    utils.eachSubElementSync(ele, (node: Element) => {
+      if (utils.nodeNameEq(node, KEYS.CONSTRUCTORARG_ELEMENT)) {
+        utils.eachSubElementSync(node, (sele: Element) => {
+          const managed = this.objectElementParser.parseElement(sele, context);
+          definition.constructorArgs.push(managed);
+        });
+      } else if (utils.nodeNameEq(node, KEYS.PROPERTY_ELEMENT)) {
+        const name = utils.nodeAttr(node, KEYS.NAME_ATTRIBUTE);
+        const managed = this.objectElementParser.parseElement(node, context);
+        definition.properties.addProperty(name, managed);
+      }
+    });
+  }
+
+  parseObjectsElement(ele: Element, context: IParserContext): void {
     context.defaults = new XmlObjectDefinition(ele);
     // 需要拼上当前路径
     if (context.defaults.path) {
@@ -84,50 +105,50 @@ export class XmlObjectDefinitionParser implements IXmlParser {
       context.defaults.path = this.baseDir;
     }
 
-    await utils.eachSubElement(ele, async (node: Element) => {
-      await this.parse(node, context);
+    utils.eachSubElementSync(ele, (node: Element) => {
+      this.parse(node, context);
     });
   }
 
-  async parseObjectElement(ele: Element, context: IParserContext): Promise<void> {
-    const definition = await this.objectElementParser.parse(ele, context);
+  parseObjectElement(ele: Element, context: IParserContext): void {
+    const definition = this.objectElementParser.parse(ele, context);
     this.registerDefinition(definition);
   }
 
-  async parseImportElement(ele: Element, context: IParserContext): Promise<void> {
+  parseImportElement(ele: Element, context: IParserContext): void {
     const rpath = utils.nodeAttr(ele, KEYS.RESOURCE_ATTRIBUTE);
     const external = utils.nodeAttr(ele, KEYS.EXTERNAL_ATTRIBUTE) === 'true';
     let res = this._createResource(rpath, external, context);
-    await this.load(res);
+    this.load(res);
   }
 
-  async parseConfigurationElement(ele: Element, context: IParserContext): Promise<void> {
+  parseConfigurationElement(ele: Element, context: IParserContext): void {
     const str = utils.nodeAttr(ele, KEYS.PATH_ATTRIBUTE);
     const paths = str.split(',');
     const external = utils.nodeAttr(ele, KEYS.EXTERNAL_ATTRIBUTE) === 'true';
     let res = this._createResource('.', external, context);
 
     for (let i = 0; i < paths.length; i++) {
-      const cfg = await res.createRelative(paths[i]).getContentAsJSON();
+      const cfg = res.createRelative(paths[i]).getContentAsJSON();
       this.configuration.putObject(cfg);
     }
   }
 
-  async parseCustomElement(ele: Element, context: IParserContext): Promise<void> {
+  parseCustomElement(ele: Element, context: IParserContext): void {
     const name = utils.nodeName(ele);
     if (this.hasParser(name)) {
       const parser = this.getParser(name);
-      const definition = await parser.parse(ele, context);
+      const definition = parser.parse(ele, context);
       this.registerDefinition(definition);
     }
   }
 
-  async load(res: IResource): Promise<void> {
-    const buf = await res.getContent();
+  load(res: IResource): void {
+    const buf = res.getContent();
     const doc: Document = new DOMParser().parseFromString(buf.toString(res.encoding));
     const context = new ParserContext(null, this);
     context.currentResource = res;
-    await this.parse(doc.documentElement, context);
+    this.parse(doc.documentElement, context);
   }
 
   _createResource(path: string, external: boolean, context: IParserContext): IResource {

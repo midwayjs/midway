@@ -40,6 +40,17 @@ export class ObjectDefinitionRegistry extends Map implements IObjectDefinitionRe
     return this.size;
   }
 
+  getDefinitionByName(name: string): IObjectDefinition[] {
+    const definitions = [];
+    for (let v of this.values()) {
+      const definition = <IObjectDefinition>v;
+      if (definition.name === name) {
+        definitions.push(definition);
+      }
+    }
+    return definitions;
+  }
+
   registerDefinition(identifier: ObjectIdentifier, definition: IObjectDefinition) {
     this.set(identifier, definition);
   }
@@ -92,17 +103,23 @@ export class BaseApplicationContext extends EventEmitter implements IApplication
   registry: IObjectDefinitionRegistry;
   parent: IApplicationContext;
   props: ObjectConfiguration = new ObjectConfiguration();
-  configLocations: string[];
+  configLocations: string[] = [];
   messageSource: IMessageSource;
 
-  constructor(baseDir: string = process.cwd(), configLocations: string[] = [], parent?: IApplicationContext) {
+  constructor(baseDir: string = process.cwd(), parent?: IApplicationContext) {
     super();
-    this.configLocations = configLocations;
     this.parent = parent;
     this.baseDir = baseDir;
 
     this.registry = new ObjectDefinitionRegistry();
     this.resolverFactory = new ManagedResolverFactory(this);
+
+    this.init();
+  }
+  /**
+   * 继承实现时需要调用super
+   */
+  protected init(): void {
   }
 
   async stop(): Promise<void> {
@@ -128,7 +145,7 @@ export class BaseApplicationContext extends EventEmitter implements IApplication
     this.emit(ContextEvent.READY);
   }
 
-  protected async loadDefinitions(configLocations?: string[]): Promise<void> {
+  protected loadDefinitions(configLocations?: string[]): void {
     // throw new Error('BaseApplicationContext not implement _loadDefinitions');
   }
 

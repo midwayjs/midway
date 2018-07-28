@@ -2,8 +2,8 @@ import { URL } from 'url'; // tslint:disable-line
 import { existsSync,
   readFileSync,
   lstatSync,
+  readdirSync
 } from 'fs';
-import * as fsp from 'fs-promise';
 import { resolve, parse, dirname, join } from 'path';
 import * as _ from 'lodash';
 import { IResource } from '../interfaces';
@@ -64,9 +64,9 @@ export class Resource implements IResource {
     return new Resource(this._baseDir, path);
   }
 
-  async getSubResources(): Promise<IResource[]> {
+  getSubResources(): IResource[] {
     if (this.isDir()) {
-      const files: string[] = await fsp.readdir(this.getPath());
+      const files: string[] = readdirSync(this.getPath());
       const arr = _.map(files, file => {
         return new Resource(this.getPath(), file);
       });
@@ -76,17 +76,17 @@ export class Resource implements IResource {
     return [];
   }
 
-  async getContent(): Promise<Buffer> {
+  getContent(): Buffer {
     if (!this.exists()) {
       throw new Error(`${this.getPath()} not found!`);
     }
     if (!this.isFile()) {
       throw new Error(`${this.getPath()} is not a file!`);
     }
-    return await fsp.readFile(this.getPath());
+    return readFileSync(this.getPath());
   }
 
-  async getContentAsJSON(): Promise<Object> {
+  getContentAsJSON(): Object {
     if (!this.exists()) {
       throw new Error(`${this.getPath()} not found!`);
     }
@@ -94,7 +94,7 @@ export class Resource implements IResource {
       throw new Error(`${this.getPath()} is not a file!`);
     }
     if (parse(this.getPath()).ext === '.json') {
-      const buf = await fsp.readFile(this.getPath());
+      const buf = readFileSync(this.getPath());
       try {
         return JSON.parse(buf.toString());
       } catch (e) {}

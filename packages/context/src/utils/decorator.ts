@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import {DUPLICATED_METADATA, INVALID_DECORATOR_OPERATION} from './errMsg';
 import {TAGGED, TAGGED_PROP} from './metaKeys';
 import {TagPropsMetadata, ReflectResult} from '../interfaces';
