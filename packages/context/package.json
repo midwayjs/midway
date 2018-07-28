@@ -1,6 +1,6 @@
 {
   "name": "injection",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A New IoC Container For All Node.js Application",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -24,7 +24,7 @@
     "@types/chai": "^3.5.2",
     "@types/lodash": "^4.14.109",
     "chai": "^4.1.2",
-    "midway-bin": "^0.1.1",
+    "midway-bin": "^0.1.2",
     "mocha": "^3.5.0",
     "nyc": "^11.2.1",
     "sdk-base": "^3.4.0",
