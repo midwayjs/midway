@@ -20,13 +20,12 @@
   "scripts": {
     "start": "egg-scripts start --daemon --title=egg-server-{{name}}",
     "stop": "egg-scripts stop --title=egg-server-{{name}}",
-    "dev": "midway-bin dev",
-    "debug": "midway-bin debug",
-    "test": "npm run lint -- --fix && npm run test-local",
-    "test-local": "midway-bin test",
-    "cov": "midway-bin cov",
+    "dev": "NODE_ENV=local midway-bin dev --ts",
+    "debug": "NODE_ENV=local midway-bin debug --ts",
+    "test": "npm run lint -- --fix && midway-bin test --ts",
+    "cov": "midway-bin cov --ts",
     "lint": "tslint -c tslint.json --project .",
-    "ci": "midway-bin run cov"
+    "ci": "midway-bin cov --ts"
   },
   "ci": {
     "version": "8, 9"
