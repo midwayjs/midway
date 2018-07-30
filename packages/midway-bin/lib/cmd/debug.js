@@ -7,6 +7,9 @@ class DebugCommand extends require('egg-bin').DebugCommand {
   }
 
   * run(context) {
+    if (process.env.NODE_ENV) {
+      process.env.NODE_ENV = 'local';
+    }
     context.argv.framework = 'midway';
     yield super.run(context);
   }
