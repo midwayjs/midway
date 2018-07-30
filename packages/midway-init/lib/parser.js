@@ -2,15 +2,6 @@
 
 const yargs = require('yargs');
 
-const getParser = () => {
-  return yargs
-    .usage('Initializing midway project from boilerplate.\nUsage: $0 [dir] --type=simple')
-    .options(getParserOptions())
-    .alias('h', 'help')
-    .version()
-    .help();
-}
-
 const getParserOptions = () => {
   return {
     type: {
@@ -44,6 +35,15 @@ const getParserOptions = () => {
       description: 'don\'t ask, just use default value',
     },
   };
-}
+};
+
+const getParser = () => {
+  return yargs
+    .usage('Initializing midway project from boilerplate.\nUsage: $0 [dir] --type=simple')
+    .options(getParserOptions())
+    .alias('h', 'help')
+    .version()
+    .help();
+};
 
 module.exports = { getParser, getParserOptions };
