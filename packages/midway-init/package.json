@@ -28,7 +28,8 @@
   },
   "files": [
     "bin",
-    "lib"
+    "lib",
+    "boilerplate"
   ],
   "scripts": {
     "lint": "eslint bin lib test",

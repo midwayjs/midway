@@ -18,9 +18,9 @@
     "scene"
   ],
   "files": [
+    "config",
     "dist",
-    "d.ts",
-    "config"
+    "d.ts"
   ],
   "license": "MIT",
   "devDependencies": {
