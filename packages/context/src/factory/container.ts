@@ -5,7 +5,7 @@ import {ManagedReference, ManagedValue} from './common/managed';
 import {FunctionDefinition} from '../base/FunctionDefinition';
 import {ScopeEnum} from '../base/Scope';
 import { XmlApplicationContext } from './xml/XmlApplicationContext';
-import { Autowire } from '../../../midway-core/node_modules/injection/src/factory/common/Autowire';
+import { Autowire } from './common/Autowire';
 
 const uuidv1 = require('uuid/v1');
 const is = require('is-type-of');
