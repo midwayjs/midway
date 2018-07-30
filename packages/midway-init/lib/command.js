@@ -3,9 +3,14 @@
 const Command = require('egg-init');
 const path = require('path');
 const fs = require('fs');
+const Parser = require('./parser');
 const templateDir = path.join(__dirname, '../boilerplate/');
 
 class MidwayInitCommand extends Command {
+
+  constructor(options = {}) {
+    super(Object.assign({}, options));
+  }
 
   * fetchBoilerplateMapping(pkgName) {
     const mapping = yield super.fetchBoilerplateMapping(pkgName);
@@ -19,6 +24,14 @@ class MidwayInitCommand extends Command {
     } else {
       return yield super.downloadBoilerplate(pkgName);
     }
+  }
+
+  getParser() {
+    return Parser.getParser();
+  }
+
+  getParserOptions() {
+    return Parser.getParserOptions();
   }
 }
 
