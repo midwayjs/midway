@@ -49,6 +49,7 @@ export class FunctionDefinition implements IObjectDefinition {
   destroyMethod: string;
   export: string;
   id: string;
+  name: string;
   initMethod: string;
   path: any;
   properties: IConfiguration;

@@ -107,7 +107,7 @@ export class MidwayLoader extends EggLoader {
 
   protected loadApplicationContext() {
     // const containerConfig = this.config['container'];
-    this.applicationContext = new MidwayContainer();
+    this.applicationContext = new MidwayContainer(this.options.baseDir);
     this.applicationContext.load({
       loadDir: this.options.baseDir,
     });

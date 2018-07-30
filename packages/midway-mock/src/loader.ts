@@ -1,5 +1,4 @@
 import {MidwayHandlerKey, MidwayLoader} from 'midway-core';
-import * as path from 'path';
 
 export class MidwayMockLoader extends MidwayLoader {
 

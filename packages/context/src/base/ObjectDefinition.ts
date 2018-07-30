@@ -16,6 +16,7 @@ export class ObjectDefinition implements IObjectDefinition {
   protected _scope: Scope = ScopeEnum.Singleton;
   creator: IObjectCreator = null;
   id: string = null;
+  name: string = null;
   initMethod: string = null;
   destroyMethod: string = null;
   constructMethod: string = null;

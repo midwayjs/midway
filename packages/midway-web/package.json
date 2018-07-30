@@ -1,6 +1,6 @@
 {
   "name": "midway-web",
-  "version": "0.0.1",
+  "version": "0.1.2",
   "description": "Midway Web Scene",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -29,7 +29,7 @@
     "@types/mocha": "^2.2.41",
     "@types/node": "^8.10.0",
     "egg-mock": "^3.17.2",
-    "midway-bin": "^0.0.1"
+    "midway-bin": "^0.1.2"
   },
   "dependencies": {
     "camelcase": "^5.0.0",
@@ -38,9 +38,9 @@
     "extend": "^3.0.0",
     "globby": "^8.0.0",
     "inflection": "^1.12.0",
+    "injection": "^0.1.2",
     "is-type-of": "^1.2.0",
-    "injection": "^0.0.1",
-    "midway-core": "^0.0.1"
+    "midway-core": "^0.1.2"
   },
   "nyc": {
     "include": [

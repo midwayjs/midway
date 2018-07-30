@@ -1,6 +1,7 @@
 import { ObjectIdentifier } from '../../interfaces';
 import { ScopeEnum } from '../../base/Scope';
 import { ObjectDefinition } from '../../base/ObjectDefinition';
+import * as utils from './utils';
 
 export class XmlObjectDefinition extends ObjectDefinition {
   private _ele: Element;
@@ -23,6 +24,7 @@ export class XmlObjectDefinition extends ObjectDefinition {
     this._direct = this.getAttr('direct') === 'true';
     this.path = this.getAttr('path');
     this.id = this.getAttr('id');
+    this.name = utils.nodeName(this._ele);
 
     if (this.hasAttr('export')) {
       this.export = this.getAttr('export');

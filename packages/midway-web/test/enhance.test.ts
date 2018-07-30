@@ -1,5 +1,6 @@
 const assert = require('assert');
 const request = require('supertest');
+const path = require('path');
 const utils = require('./utils');
 const mm = require('mm');
 
@@ -164,6 +165,45 @@ describe('/test/enhance.test.ts', () => {
         .get('/api')
         .expect(200)
         .expect('63t', done);
+    });
+  });
+
+  describe('auto load js-app-xml test', () => {
+    let app;
+    before(() => {
+      app = utils.app('enhance/js-app-xml',
+        {baseDir: path.join(__dirname, 'fixtures/enhance/js-app-xml')});
+      return app.ready();
+    });
+
+    after(() => app.close());
+
+    it('js-app-xml get my should be ok', done => {
+      request(app.callback())
+        .get('/my')
+        .expect(200)
+        .expect('hello test', done);
+    });
+
+    it('js-app-xml get my plugin2 should be ok', done => {
+      request(app.callback())
+        .get('/my_plugin2')
+        .expect(200)
+        .expect('plugin2 is not null t', done);
+    });
+
+    it('js-app-xml get config should be ok', done => {
+      request(app.callback())
+        .get('/my_test')
+        .expect(200)
+        .expect('this is my test', done);
+    });
+
+    it('js-app-xml get logger should be ok', done => {
+      request(app.callback())
+        .get('/my_logger')
+        .expect(200)
+        .expect('not null', done);
     });
   });
 });

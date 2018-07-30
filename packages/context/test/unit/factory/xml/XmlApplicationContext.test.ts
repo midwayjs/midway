@@ -9,16 +9,17 @@ let ctx1: XmlApplicationContext;
 
 describe('/test/unit/factory/xml/XmlApplicationContext', () => {
   before(async () => {
-    context = new XmlApplicationContext(baseDir,
-      ['resources/context.xml']);
+    context = new XmlApplicationContext(baseDir);
+    context.configLocations = ['resources/context.xml'];
     await context.ready();
 
-    ctx1 = new XmlApplicationContext(baseDir,
-      ['resources/list.xml', 'resources/object.xml']);
+    ctx1 = new XmlApplicationContext(baseDir);
+    ctx1.configLocations = ['resources/list.xml', 'resources/object.xml'];
     await ctx1.ready();
   });
   it('context load dir should be ok', async () => {
-    const ctx2 = new XmlApplicationContext(baseDir, ['resources']);
+    const ctx2 = new XmlApplicationContext(baseDir);
+    ctx2.configLocations = ['resources'];
     await ctx2.ready();
     expect(context.isReady).true;
     expect(context.parser).not.null;
@@ -32,7 +33,6 @@ describe('/test/unit/factory/xml/XmlApplicationContext', () => {
     expect(obj1).not.null;
     expect(obj1.say()).eq('say hello');
 
-
     const casync: any = await context.getAsync('ctor:async');
     const rt = await casync.hello('mf'); // tslint:disable-line
     expect(rt).eq('hello mf');
@@ -43,7 +43,11 @@ describe('/test/unit/factory/xml/XmlApplicationContext', () => {
     expect(context.props.size).greaterThan(0);
     expect(context.props.get('foo')).deep.eq({bar: '123'});
 
+    const cowboy = context.get('cowboy');
+    console.log('---- cowboy', cowboy);
+
     const obj3: any = context.get('ctor:obj3');
+    console.log('---- obj3 111', obj3, obj3.say(), obj3.cowboy);
     expect(obj3).not.null;
     expect(obj3.cowboy).not.null;
     expect(obj3.cowboy.name).eq('Spike');
@@ -68,12 +72,18 @@ describe('/test/unit/factory/xml/XmlApplicationContext', () => {
   it('context should be exception ok', async () => {
     const callback = sinon.spy();
     try {
-      const ctx = new XmlApplicationContext(baseDir, <any>'hello');
+      const ctx = new XmlApplicationContext(baseDir);
+      ctx.configLocations = <any>'hello';
       await ctx.ready();
     } catch(e) {
       callback(e.message);
     }
     expect(callback.called).true;
     expect(callback.withArgs('loadDefinitions fail configLocations is not array!').calledOnce).true;
+  });
+  it('context registry getDefinitionByName should be ok', () => {
+    const arr = context.registry.getDefinitionByName('object');
+    expect(arr).is.not.null;
+    expect(arr.length).greaterThan(0);
   });
 });

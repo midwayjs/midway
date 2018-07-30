@@ -6,7 +6,8 @@ import { IObjectDefinition, IResource, IManagedInstance } from '../../interfaces
 
 export interface IXmlParser {
   baseDir: string;
-  parse(root: Element, context: IParserContext): Promise<void>;
+  parse(root: Element, context: IParserContext): void;
+  parseElementNodes(definition: IObjectDefinition, ele: Element, context: IParserContext): void;
   registerDefinition(definition: IObjectDefinition);
 }
 
