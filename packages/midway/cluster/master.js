@@ -2,7 +2,6 @@ const EggMaster = require('egg-cluster/lib/master');
 const path = require('path');
 const isTypeScriptEnvironment = require('./utils').isTypeScriptEnvironment;
 
-
 class Master extends EggMaster {
 
   constructor(options) {

@@ -36,6 +36,12 @@
     "midway-core": "^0.1.3",
     "midway-web": "^0.1.3"
   },
+  "files": [
+    "bin",
+    "cluster",
+    "dist",
+    "server.js"
+  ],
   "engines": {
     "node": ">= 8.0.0"
   },
