@@ -91,7 +91,7 @@ export class MidwayWebLoader extends MidwayLoader {
     }
   }
 
-  private getFileExtension(names: string | string[]): string[] {
+  protected getFileExtension(names: string | string[]): string[] {
     if (typeof names === 'string') {
       return [names + '.ts', names + '.js', '!**/**.d.ts'];
     } else {
