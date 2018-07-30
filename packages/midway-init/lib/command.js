@@ -21,9 +21,8 @@ class MidwayInitCommand extends Command {
     const p = path.join(templateDir, pkgName);
     if (fs.existsSync(p)) {
       return p;
-    } else {
-      return yield super.downloadBoilerplate(pkgName);
     }
+    return yield super.downloadBoilerplate(pkgName);
   }
 
   getParser() {

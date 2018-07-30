@@ -1,4 +1,4 @@
-egg-init
+midway-init
 =======
 
 [![NPM version][npm-image]][npm-url]
@@ -26,40 +26,42 @@ Init egg app helper tools.
 ## Install
 
 ```bash
-$ npm i egg-init -g
-$ egg-init -h
+$ npm i midway-init -g
+$ midway-init -h
 ```
 
 ## Create a `simple` type application
 
 ```bash
-$ egg-init --type simple [dest]
+$ midway-init --type simple [destination directory]
 ```
 
 ## Or select a boilerplate by yourself
 
 ```bash
-$ egg-init dest
+$ midway-init dest
 ? Please select a boilerplate type (Use arrow keys)
-❯ simple - Simple egg app
-  plugin - egg plugin
+❯ simple - Simple midway app
+  plugin - midway plugin
 ```
 
 ## Command
 
 ```
-Usage: egg-init [dir] --type=simple
+Initializing midway project from boilerplate.
+Usage: midway-init [dir] --type=simple
 
 Options:
-  --type          boilerplate type                                                [string]
-  --dir           target directory                                                [string]
-  --force, -f     force to override directory                                     [boolean]
-  --template      local path to boilerplate                                       [string]
-  --package       boilerplate package name                                        [string]
-  --registry, -r  npm registry, support china/npm/custom, default to auto detect  [string]
-  --silent        don't ask, just use default value                               [boolean]
-  --version       Show version number                                             [boolean]
-  -h, --help      Show help                                                       [boolean]
+  --type          boilerplate type                                      [string]
+  --dir           target directory                                      [string]
+  --force, -f     force to override directory                          [boolean]
+  --template      local path to boilerplate                             [string]
+  --package       boilerplate package name                              [string]
+  --registry, -r  npm registry, support china/npm/custom, default to auto detect
+                                                                        [string]
+  --silent        don't ask, just use default value                    [boolean]
+  --version       Show version number                                  [boolean]
+  -h, --help      Show help                                            [boolean]
 ```
 
 ## Custom a boilerplate
@@ -68,7 +70,7 @@ We use npm package to manager boilerplate, you can follow this steps:
 
 - Create a new repo like [egg-boilerplate-plugin](https://github.com/eggjs/egg-boilerplate-plugin)
 - Put all files under `boilerplate` dir
-- Use `egg-init --template=PATH` to check
+- Use `midway-init --template=PATH` to check
 - `index.js` can define variables which can be useed on template, like `{{name}}`, but `\{{name}}` will ignore.
 
     ```js
