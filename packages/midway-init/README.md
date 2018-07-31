@@ -21,7 +21,7 @@ midway-init
 [download-image]: https://img.shields.io/npm/dm/egg-init.svg?style=flat-square
 [download-url]: https://npmjs.org/package/egg-init
 
-Initializing midway app helper tools and it based on egg-init to build.
+Initializing midway app helper tools and it's building based on egg-init.
 
 ## Install
 
