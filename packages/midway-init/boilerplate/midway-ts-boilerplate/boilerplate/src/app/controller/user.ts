@@ -5,7 +5,7 @@ type nextDefinition = () => void;
 
 @controller('/user/')
 export class UserController {
-  @inject('UserService')
+  @inject('userService')
   service: IUserAbstract;
 
   @get('/:id')
