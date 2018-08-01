@@ -118,4 +118,22 @@ describe('/test/loader.test.ts', () => {
         .expect('63t', done);
     });
   });
+
+  describe('auto js app loader', () => {
+    let app;
+    before(() => {
+      app = utils.app('js-app-loader', {});
+      return app.ready();
+    });
+
+    after(() => app.close());
+
+    it('should js app loader should be ok', async () => {
+      const a = await app.applicationContext.getAsync('app');
+      const c = a.loader.getConfig();
+
+      const cc = {a: 1, b: 2};
+      assert.deepEqual(c, cc);
+    });
+  });
 });

@@ -68,6 +68,13 @@ describe('/test/enhance.test.ts', () => {
         .expect(200)
         .expect(/3t/, done);
     });
+
+    it('should hello controller be ok', done => {
+      request(app.callback())
+        .get('/hello/say')
+        .expect(200)
+        .expect('service,hello,a,b', done);
+    });
   });
 
   describe('load ts file and use third party module', () => {

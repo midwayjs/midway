@@ -23,9 +23,7 @@ module.exports = (appInfo) => {
   };
 
   exports.container = {
-    configuration: [
-      'config/configuration.xml'
-    ],
+    loadDir: ['app', 'lib'],
     ignore: [
       '**/node_modules/**',
       '**/logs/**',
