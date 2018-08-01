@@ -136,4 +136,31 @@ describe('/test/loader.test.ts', () => {
       assert.deepEqual(c, cc);
     });
   });
+
+  describe('disable auto app loader', () => {
+    let app;
+    before(() => {
+      app = utils.app('js-app-loader', {container: {disableAutoLoad: true}});
+      return app.ready();
+    });
+
+    after(() => app.close());
+
+    it('disable js app loader should be ok', async () => {
+      let called = false;
+      try {
+        const a = await app.applicationContext.getAsync('app');
+        const c = a.loader.getConfig();
+
+        const cc = {a: 1, b: 2};
+        assert.deepEqual(c, cc);
+        console.log('------', c, a);
+      } catch (e) {
+        console.error(e);
+        called = true;
+      }
+
+      assert.ok(called);
+    });
+  });
 });

@@ -120,11 +120,14 @@ export class MidwayLoader extends EggLoader {
     // 如果是typescript会加上 dist 或者 src 目录
     const baseDir = this.baseDir;
     this.applicationContext = new MidwayContainer(baseDir);
-    this.applicationContext.load({
-      loadDir: this._buildLoadDir(baseDir, containerConfig.loadDir || []),
-      pattern: containerConfig.pattern,
-      ignore: containerConfig.ignore
-    });
+    // 如果没有关闭autoLoad 则进行load
+    if (!containerConfig.disableAutoLoad) {
+      this.applicationContext.load({
+        loadDir: this._buildLoadDir(baseDir, containerConfig.loadDir || []),
+        pattern: containerConfig.pattern,
+        ignore: containerConfig.ignore
+      });
+    }
 
     // register handler for container
     this.applicationContext.registerDataHandler(MidwayHandlerKey.CONFIG, (key) => {

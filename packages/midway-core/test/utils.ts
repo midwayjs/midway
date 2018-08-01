@@ -14,9 +14,15 @@ if (!fs.existsSync(logDir)) {
 export function app(name, options) {
   options = formatOptions(name, options);
   // mm.consoleLevel(options.consoleLevel || 'NONE');
-  options.container = {
-    loadDir: ['app', 'lib']
-  };
+  if (options.container) {
+    Object.assign(options.container,
+      {loadDir: ['app', 'lib']}
+    );
+  } else {
+    options.container = {
+      loadDir: ['app', 'lib']
+    };
+  }
   const app =  mm.app(options);
   app.close = () => {
     fs.rmdirSync(path.join(app.baseDir, 'run'));
