@@ -1,6 +1,6 @@
 {
   "name": "midway-web",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "description": "Midway Web Scene",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -38,9 +38,9 @@
     "extend": "^3.0.0",
     "globby": "^8.0.0",
     "inflection": "^1.12.0",
-    "injection": "^0.1.6",
+    "injection": "^0.2.0",
     "is-type-of": "^1.2.0",
-    "midway-core": "^0.1.6"
+    "midway-core": "^0.2.0"
   },
   "nyc": {
     "include": [

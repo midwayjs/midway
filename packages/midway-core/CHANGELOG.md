@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.2.0"></a>
+# [0.2.0](https://github.com/midwayjs/midway/compare/v0.1.6...v0.2.0) (2018-08-01)
+
+
+### Bug Fixes
+
+* any ([1ec5900](https://github.com/midwayjs/midway/commit/1ec5900))
+* chai not add ([e9c3342](https://github.com/midwayjs/midway/commit/e9c3342))
+
+
+### Features
+
+* add container disableAutoLoad, disable auto scan and load class ([9c1357a](https://github.com/midwayjs/midway/commit/9c1357a))
+* custom loadDir ignore pattern from config file & add test case ([5a49928](https://github.com/midwayjs/midway/commit/5a49928))
+
+
+
+
 <a name="0.1.6"></a>
 ## [0.1.6](https://github.com/midwayjs/midway/compare/v0.1.5...v0.1.6) (2018-07-30)
 
