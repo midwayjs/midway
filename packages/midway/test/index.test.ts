@@ -1,5 +1,7 @@
 import {expect, should} from 'chai';
 import * as midway from '../src';
+const path = require('path');
+const _ROOT = path.join(__dirname, '../');
 
 describe('/test/index.test.ts', () => {
   it('should get framework version', function () {
