@@ -4,14 +4,17 @@
   "description": "{{description}}",
   "private": true,
   "dependencies": {
-    "midway": "^1.0.0",
+    "midway": "*",
     "tslib": "^1.8.1",
     "typescript": "^2.8.0"
   },
   "devDependencies": {
-    "midway-bin": "^1.0.0",
+    "@types/node": "^10.5.5",
     "egg-ci": "^1.8.0",
-    "egg-mock": "^3.14.0",
+    "midway-bin": "*",
+    "midway-mock": "*",
+    "ts-node": "^4.1.0",
+    "tslint": "^5.9.1",
     "webstorm-disable-index": "^1.2.0"
   },
   "engines": {
@@ -25,7 +28,8 @@
     "test": "npm run lint -- --fix && midway-bin test --ts",
     "cov": "midway-bin cov --ts",
     "lint": "tslint -c tslint.json --project .",
-    "ci": "midway-bin cov --ts"
+    "ci": "midway-bin cov --ts",
+    "build": "midway-bin build -c"
   },
   "ci": {
     "version": "8, 9"

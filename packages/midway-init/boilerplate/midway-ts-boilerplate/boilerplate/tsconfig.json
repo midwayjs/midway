@@ -1,32 +1,26 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
-    "allowJs": false,
-    "allowUnreachableCode": false,
-    "allowUnusedLabels": false,
-    "charset": "utf8",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "importHelpers": true,
-    "inlineSourceMap": true,
+    "target": "ES2017",
     "module": "commonjs",
     "moduleResolution": "node",
-    "noEmitOnError": false,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": false,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "inlineSourceMap":true,
+    "noImplicitThis": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "stripInternal": true,
     "pretty": true,
-    "skipDefaultLibCheck": true,
-    "skipLibCheck": true,
-    "target": "es2017"
+    "declaration": true,
+    "outDir": "dist",
+    "lib": ["es2017", "dom"],
+    "sourceRoot": "src"
   },
   "exclude": [
     "app/public",
-    "app/views"
-  ],
-  "include": [
-    "src/**/*.ts",
-    "test/**/*.ts"
+    "app/views",
+    "dist",
+    "node_modules",
+    "test"
   ]
 }
