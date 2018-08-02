@@ -1,5 +1,5 @@
 import { controller, get, inject } from 'midway';
-import { IUserAbstract, IUserResult } from '../../lib/User';
+import { IUserAbstract, IUserResult } from '../../lib/interfaces/user.abstract';
 
 type nextDefinition = () => void;
 
