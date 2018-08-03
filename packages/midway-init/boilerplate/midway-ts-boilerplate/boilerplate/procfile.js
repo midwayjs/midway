@@ -9,7 +9,7 @@ module.exports = pandora => {
    * default is fork mode
    */
   pandora
-    .fork('midway-sandbox', require('midway/server')({
+    .fork('{{name}}', require('midway/server')({
       typescript: true,
     }));
 

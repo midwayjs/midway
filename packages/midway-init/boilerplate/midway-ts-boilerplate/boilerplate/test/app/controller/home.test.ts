@@ -1,5 +1,5 @@
 /* tslint:disable */
-const { app, assert } = require('egg-mock/bootstrap');
+const { app, assert } = require('midway-mock/bootstrap');
 /* tslint:enable */
 
 declare var describe;
