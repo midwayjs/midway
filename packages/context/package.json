@@ -40,28 +40,5 @@
     "reflect-metadata": "^0.1.12",
     "uuid": "^3.2.1",
     "xmldom": "^0.1.27"
-  },
-  "nyc": {
-    "include": [
-      "src/*.ts",
-      "src/**/*.ts"
-    ],
-    "exclude": [
-      "typings",
-      "**/*.d.ts",
-      "src/index.ts"
-    ],
-    "extension": [
-      ".ts"
-    ],
-    "require": [
-      "ts-node/register"
-    ],
-    "reporter": [
-      "text-summary",
-      "json",
-      "html"
-    ],
-    "all": true
   }
 }

@@ -41,28 +41,5 @@
     "injection": "^0.2.2",
     "is-type-of": "^1.2.0",
     "midway-core": "^0.2.2"
-  },
-  "nyc": {
-    "include": [
-      "src/*.ts",
-      "src/**/*.ts"
-    ],
-    "exclude": [
-      "typings",
-      "**/*.d.ts"
-    ],
-    "extension": [
-      ".ts"
-    ],
-    "require": [
-      "ts-node/register"
-    ],
-    "reporter": [
-      "text",
-      "json",
-      "html",
-      "lcovonly"
-    ],
-    "all": true
   }
 }
