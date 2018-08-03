@@ -7,9 +7,9 @@
   "main": "lib/command.js",
   "devDependencies": {
     "autod": "^3.0.1",
-    "coffee": "^3.3.0",
+    "coffee": "^4.1.0",
     "eslint": "^4.13.1",
-    "eslint-config-egg": "^5.1.1",
+    "eslint-config-egg": "^7.0.0",
     "intelli-espower-loader": "^1.0.1",
     "midway-bin": "^0.2.1",
     "mm": "^2.2.0",

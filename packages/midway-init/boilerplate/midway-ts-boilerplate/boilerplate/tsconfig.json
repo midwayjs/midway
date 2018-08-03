@@ -13,8 +13,7 @@
     "pretty": true,
     "declaration": true,
     "outDir": "dist",
-    "lib": ["es2017", "dom"],
-    "sourceRoot": "src"
+    "lib": ["es2017", "dom"]
   },
   "exclude": [
     "app/public",

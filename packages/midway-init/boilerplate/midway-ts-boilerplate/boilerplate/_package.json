@@ -13,7 +13,7 @@
     "egg-ci": "^1.8.0",
     "midway-bin": "*",
     "midway-mock": "*",
-    "ts-node": "^4.1.0",
+    "ts-node": "^7.0.0",
     "tslint": "^5.9.1",
     "webstorm-disable-index": "^1.2.0"
   },
