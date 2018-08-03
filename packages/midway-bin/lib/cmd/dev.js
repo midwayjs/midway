@@ -1,6 +1,6 @@
 'use strict';
 
-class DevCommand extends require('egg-bin').DevCommand {
+class DevCommand extends require('egg-bin/lib/cmd/dev') {
   constructor(rawArgv) {
     super(rawArgv);
     this.usage = 'Usage: midway-bin dev [dir] [options]';
@@ -9,7 +9,7 @@ class DevCommand extends require('egg-bin').DevCommand {
 
   * run(context) {
     context.argv.framework = 'midway';
-    yield this.run(context);
+    yield super.run(context);
   }
 }
 
