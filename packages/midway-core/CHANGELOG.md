@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.2.2"></a>
+## [0.2.2](https://github.com/midwayjs/midway/compare/v0.2.1...v0.2.2) (2018-08-03)
+
+
+### Bug Fixes
+
+* source map include local path ([a8acb01](https://github.com/midwayjs/midway/commit/a8acb01))
+
+
+
+
 <a name="0.2.1"></a>
 ## [0.2.1](https://github.com/midwayjs/midway/compare/v0.2.0...v0.2.1) (2018-08-03)
 
