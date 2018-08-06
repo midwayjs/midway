@@ -1,6 +1,6 @@
 {
   "name": "midway-core",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "midway core",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -25,7 +25,7 @@
     "@types/mocha": "^2.2.41",
     "@types/node": "^8.10.0",
     "chai": "^4.1.2",
-    "midway-bin": "^0.2.1"
+    "midway-bin": "^0.2.4"
   },
   "dependencies": {
     "camelcase": "^5.0.0",
@@ -35,7 +35,7 @@
     "extend": "^3.0.0",
     "globby": "^8.0.1",
     "inflection": "^1.12.0",
-    "injection": "^0.2.3",
+    "injection": "^0.2.4",
     "is-type-of": "^1.2.0"
   }
 }
