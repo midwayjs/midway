@@ -12,7 +12,7 @@ $ npm i midway-bin --save-dev
 
 ## Usage
 
-Add `midway-bin` to `package.json` scripts:
+Add `midway-bin` to `package.json` scripts like [egg-bin], but just replace command by `midway-bin:
 
 ```json
 {
@@ -32,14 +32,10 @@ Add `midway-bin` to `package.json` scripts:
 
 ## Command
 
-All the commands extends from egg-bin
+`midway-bin` add new command
 
-- dev
-- test
-- debug
-- cov
-- autod
-- pkgfiles
+- build
+- clean
  
 add `build` command for new midway.
 
@@ -72,6 +68,14 @@ we can copy static file when ts file compiling.
 it will be copy `src/app/public` to `${outDir}/app/public`.
 
 The `outDir` field is configured in the `tsconfig.json` File, see [compiler-options](https://www.typescriptlang.org/docs/handbook/compiler-options.html).
+
+### clean
+
+clean a dist directory by build
+
+```bash
+$ midway-bin clean
+```
 
 ## License
 
