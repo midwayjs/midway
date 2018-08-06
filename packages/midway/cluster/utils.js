@@ -6,7 +6,7 @@
  */
 exports.isNeedCompile = options => {
   let need = options.typescript && options.isTsEnv;
-  if (need) {
+  if (need && !exports.isTypeScriptEnvironment()) {
     try {
       require('ts-node/register');
     } catch (e) {
