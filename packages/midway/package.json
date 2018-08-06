@@ -1,6 +1,6 @@
 {
   "name": "midway",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Midway Main Package",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -34,7 +34,7 @@
     "graceful-process": "^1.2.0",
     "injection": "^0.2.4",
     "midway-core": "^0.2.4",
-    "midway-web": "^0.2.4"
+    "midway-web": "^0.2.5"
   },
   "files": [
     "bin",

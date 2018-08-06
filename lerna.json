@@ -1,9 +1,8 @@
 {
-  "lerna": "2.11.0",
   "packages": [
     "packages/*"
   ],
-  "version": "0.2.4",
+  "version": "0.2.5",
   "registry": "https://registry.npmjs.org/",
   "npmClient": "npm"
 }

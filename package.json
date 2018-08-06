@@ -5,7 +5,7 @@
   "devDependencies": {
     "chai": "^4.1.2",
     "git-hooks": "^1.1.10",
-    "lerna": "^2.11.0",
+    "lerna": "^3.0.0-rc.0",
     "lerna-relinker": "^1.4.0",
     "mocha": "^3.5.0",
     "nyc": "^11.2.1",
