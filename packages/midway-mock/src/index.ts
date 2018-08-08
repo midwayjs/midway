@@ -5,6 +5,7 @@ const mm = require('egg-mock');
 interface MidwayMock extends EggMock {
   container: typeof mockContainer;
 }
+
 const mm2: MidwayMock = {
   ...mm,
   mockContainer
@@ -12,3 +13,5 @@ const mm2: MidwayMock = {
 
 mm2.container = mockContainer;
 module.exports = mm2;
+
+export default mm2;
