@@ -5,7 +5,7 @@ const {
   app,
   mock,
   mm
-} = require('egg-mock/boostrap');
+} = require('egg-mock/bootstrap');
 module.exports = require('egg-mock/bootstrap');
 
 exports.assert = assert;
