@@ -7,4 +7,3 @@ export {
 export declare const app: MockApplication;
 export declare const mock: EggMock;
 export declare const mm: EggMock;
-
