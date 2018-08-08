@@ -22,7 +22,9 @@
   ],
   "files": [
     "dist",
-    "d.ts"
+    "d.ts",
+    "bootstrap.d.ts",
+    "bootstrap.js"
   ],
   "license": "MIT",
   "devDependencies": {
