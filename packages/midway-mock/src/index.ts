@@ -11,6 +11,11 @@ const mm2: MidwayMock = {
   mockContainer
 };
 
+mm2.app = (options) => {
+  return mm2.app(Object.assign({
+    framework: 'midway'
+  }, options));
+};
 mm2.container = mockContainer;
 module.exports = mm2;
 exports.mm = mm2;

@@ -40,6 +40,7 @@
     "injection": "^0.2.4",
     "is-type-of": "^1.2.0",
     "midway-core": "^0.2.4",
+    "power-assert": "^1.6.0",
     "ready-callback": "^2.0.1"
   }
 }
