@@ -20,7 +20,8 @@ export class Container extends XmlApplicationContext implements IContainer {
     this.registerObjectPropertyParser();
   }
 
-  bind<T>(target: T, options?: ObjectDefinitionOptions): void ;
+  bind<T>(target: T, options?: ObjectDefinitionOptions): void;
+  bind<T>(identifier: ObjectIdentifier, target: T, options?: ObjectDefinitionOptions): void;
   bind<T>(identifier: ObjectIdentifier, target: T, options?: ObjectDefinitionOptions): void {
     let definition;
     // definition.autowire = true;
