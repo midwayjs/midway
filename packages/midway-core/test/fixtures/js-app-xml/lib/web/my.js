@@ -1,10 +1,7 @@
 'use strict';
-const {BaseController} = require('../../../../../../');
 
-module.exports = class MyController extends BaseController {
+module.exports = class MyController {
   constructor() {
-    super();
-
     this.$$mytest = null;
     this.$$hhh = null;
     this.$plugin2 = null;

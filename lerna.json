@@ -4,5 +4,6 @@
   ],
   "version": "0.2.7",
   "registry": "https://registry.npmjs.org/",
-  "npmClient": "npm"
+  "npmClient": "npm",
+  "lerna": "2.9.0"
 }
