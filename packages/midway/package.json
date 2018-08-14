@@ -27,11 +27,7 @@
     "supertest": "^3.1.0"
   },
   "dependencies": {
-    "cfork": "^1.7.1",
-    "debug": "^3.1.0",
     "egg-cluster": "^1.17.0",
-    "egg-logger": "^1.6.2",
-    "graceful-process": "^1.2.0",
     "injection": "^0.2.7",
     "midway-core": "^0.2.7",
     "midway-web": "^0.2.7"

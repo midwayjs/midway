@@ -4,17 +4,17 @@
   "description": "{{description}}",
   "private": true,
   "dependencies": {
-    "midway": "*",
-    "tslib": "^1.8.1",
-    "typescript": "^2.8.0"
+    "midway": "*"
   },
   "devDependencies": {
     "@types/node": "^10.5.5",
     "egg-ci": "^1.8.0",
     "midway-bin": "*",
     "midway-mock": "*",
+    "tslib": "^1.8.1",
     "ts-node": "^7.0.0",
     "tslint": "^5.9.1",
+    "typescript": "^2.8.0",
     "webstorm-disable-index": "^1.2.0"
   },
   "engines": {

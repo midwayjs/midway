@@ -2,5 +2,5 @@
 
 const utils = require('./utils');
 const options = JSON.parse(process.argv[2]);
-utils.isNeedCompile(options);
+utils.registerTypescriptEnvironment(options);
 require('egg-cluster/lib/agent_worker');
