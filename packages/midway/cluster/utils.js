@@ -40,6 +40,9 @@ exports.formatOptions = (options) => {
       options.typescript = true;
     } else {
       const pkg = require(path.join(options.baseDir, 'package.json'));
+      if(pkg['dependencies'] && pkg['dependencies']['typescript']) {
+        options.typescript = true;
+      }
       if(pkg['devDependencies'] && pkg['devDependencies']['typescript']) {
         options.typescript = true;
       }
