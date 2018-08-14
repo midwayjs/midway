@@ -1,13 +1,10 @@
 'use strict';
 
 const assert = require('power-assert');
-const mock = require('./dist').default;
+const mock = require('./dist');
 
-const options = {
-  framework: 'midway'
-};
-
-if (process.env.EGG_BASE_DIR) options.baseDir = process.env.EGG_BASE_DIR;
+const options = {};
+if (process.env.MIDWAY_BASE_DIR) options.baseDir = process.env.MIDWAY_BASE_DIR;
 const app = mock.app(options);
 
 before(() => app.ready());
@@ -23,4 +20,4 @@ module.exports = {
 exports.assert = assert;
 exports.app = app;
 exports.mock = mock;
-exports.mm = mm;
+exports.mm = mock;

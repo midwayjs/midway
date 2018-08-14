@@ -18,5 +18,3 @@ mm2.app = (options) => {
 };
 mm2.container = mockContainer;
 module.exports = mm2;
-exports.mm = mm2;
-export default mm2;

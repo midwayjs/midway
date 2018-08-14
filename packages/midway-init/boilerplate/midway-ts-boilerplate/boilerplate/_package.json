@@ -23,6 +23,7 @@
   "scripts": {
     "start": "egg-scripts start --daemon --title=egg-server-{{name}}",
     "stop": "egg-scripts stop --title=egg-server-{{name}}",
+    "start_build": "npm run build && NODE_ENV=local midway-bin dev",
     "dev": "NODE_ENV=local midway-bin dev --ts",
     "debug": "NODE_ENV=local midway-bin debug --ts",
     "test": "npm run lint -- --fix && midway-bin test --ts",
