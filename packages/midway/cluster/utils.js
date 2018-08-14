@@ -30,6 +30,7 @@ exports.isTypeScriptEnvironment = () => {
  * @returns {*}
  */
 exports.formatOptions = (options) => {
+  options.framework = 'midway';
   if(!options.baseDir) {
     options.baseDir = process.cwd();
   }

@@ -12,7 +12,19 @@
  * @param callback {Function} 启动完成的回调
  */
 const Master = require('./cluster/master');
-
-module.exports = (options, callback) => {
-  new Master(options).ready(callback);
-};
+const path = require('path');
+let options = {};
+try {
+  const pkg = require(path.join(process.cwd(), 'package.json'));
+  const serverOpts = pkg['midway-server-options'];
+  if(serverOpts) {
+    if(typeof serverOpts === 'string') {
+      options = require(path.join(process.cwd(), serverOpts));
+    } else {
+      options = serverOpts;
+    }
+  }
+} catch (err) {
+  console.error('[midway]: load server config error ', err);
+}
+new Master(options);
