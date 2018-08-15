@@ -12,7 +12,7 @@ const mm2: MidwayMock = {
 };
 
 mm2.app = (options) => {
-  return mm2.app(Object.assign({
+  return mock.app(Object.assign({
     framework: 'midway',
     typescript: !!require.extensions['.ts']
   }, options));
