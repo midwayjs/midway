@@ -1,9 +1,35 @@
 import {EggMock} from 'egg-mock';
-import {mockContainer} from './container';
+import {MidwayContainer} from 'midway-core';
 const mock = require('egg-mock');
+
+const DEFAULT_CONTAINER = {
+  disableAutoLoad: false,
+  loadDir: ['app', 'lib'],
+  ignore: [
+    '**/node_modules/**',
+    '**/logs/**',
+    '**/run/**',
+    '**/public/**',
+    '**/view/**',
+    '**/views/**',
+    '**/config/**'
+  ]
+};
 
 interface MidwayMock extends EggMock {
   container: typeof mockContainer;
+}
+
+function mockContainer(options: {
+  baseDir: string,
+  container: any
+}) {
+  const container = new MidwayContainer(options.baseDir);
+  const config = Object.assign(options.container || {},
+    DEFAULT_CONTAINER);
+
+  container.configLocations = config.configLocations || [];
+
 }
 
 const mm2: MidwayMock = {
@@ -13,7 +39,7 @@ const mm2: MidwayMock = {
 
 mm2.app = (options) => {
   return mm2.app(Object.assign({
-    framework: 'midway'
+    framework: options.framework || 'midway'
   }, options));
 };
 mm2.container = mockContainer;

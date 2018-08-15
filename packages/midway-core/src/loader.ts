@@ -105,7 +105,7 @@ export class MidwayLoader extends EggLoader {
     return this.appInfo;
   }
 
-  private _buildLoadDir(baseDir, loadDir) {
+  protected _buildLoadDir(baseDir, loadDir) {
     const dirs = [];
     for (let dir of loadDir) {
       dirs.push(path.join(baseDir, dir));
