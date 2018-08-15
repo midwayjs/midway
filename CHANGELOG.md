@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.2.8"></a>
+## [0.2.8](https://github.com/midwayjs/midway/compare/v0.2.7...v0.2.8) (2018-08-15)
+
+
+### Bug Fixes
+
+* fix framework name and support load server options from pkg ([b8b4c7d](https://github.com/midwayjs/midway/commit/b8b4c7d))
+* fix template and modify ts register method ([1857c08](https://github.com/midwayjs/midway/commit/1857c08))
+* support typescript in dependencies ([b532a90](https://github.com/midwayjs/midway/commit/b532a90))
+
+
+
+
+
 <a name="0.2.7"></a>
 ## [0.2.7](https://github.com/midwayjs/midway/compare/v0.2.6...v0.2.7) (2018-08-10)
 
