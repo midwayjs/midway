@@ -27,7 +27,7 @@
     "@types/chai": "^3.5.2",
     "@types/lodash": "^4.14.109",
     "@types/mocha": "^2.2.41",
-    "@types/node": "^8.10.0",
+    "@types/node": "^10.5.5",
     "egg-mock": "^3.17.3",
     "midway-bin": "^0.2.4"
   },

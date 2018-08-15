@@ -13,7 +13,7 @@
     "intelli-espower-loader": "^1.0.1",
     "midway-bin": "^0.2.4",
     "mm": "^2.2.0",
-    "power-assert": "^1.4.4",
+    "power-assert": "^1.6.0",
     "proxy": "^0.2.4",
     "rimraf": "^2.6.1",
     "webstorm-disable-index": "^1.0.11"
