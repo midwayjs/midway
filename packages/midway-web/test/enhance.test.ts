@@ -132,7 +132,6 @@ describe('/test/enhance.test.ts', () => {
       const appInfo = app.loader.getAppInfo();
       assert(appInfo['name'] === app.name);
       assert(appInfo['baseDir'] === app.baseDir);
-      assert(appInfo['root'] === app.appDir);
       assert(appInfo['baseDir'] === app.appDir + '/src');
     });
   });
