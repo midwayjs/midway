@@ -32,6 +32,12 @@ export class MidwayLoader extends EggLoader {
   }
 
   async refreshContext(): Promise<void> {
+    // 虽然有点hack，但是将就着用吧
+    if (Array.isArray(this.config.configLocations)) {
+      this.applicationContext.configLocations = this.config.configLocations;
+    }
+    this.applicationContext.props.putObject(this.config);
+
     await this.pluginContext.ready();
     await this.applicationContext.ready();
   }
@@ -139,7 +145,10 @@ export class MidwayLoader extends EggLoader {
     });
 
     this.applicationContext.registerDataHandler(MidwayHandlerKey.LOGGER, (key) => {
-      return this.app.getLogger(key);
+      if (this.app.getLogger) {
+        return this.app.getLogger(key);
+      }
+      return this.options.logger;
     });
   }
 

@@ -164,6 +164,8 @@ export class MidwayContainer extends Container implements IContainer {
 
     this.parser.registerParser(new ControllerDefinitionParser(this));
     this.parser.registerParser(new MiddlewareDefinitionParser(this));
+
+    this._registerEachCreatedHook();
   }
 
 
@@ -233,7 +235,7 @@ export class MidwayContainer extends Container implements IContainer {
     return child;
   }
 
-  async ready() {
+  private _registerEachCreatedHook() {
     // register constructor inject
     this.beforeEachCreated((target, constructorArgs, context) => {
       let constructorMetaData;
@@ -296,8 +298,6 @@ export class MidwayContainer extends Container implements IContainer {
         });
       }
     });
-
-    await super.ready();
   }
 
   /**

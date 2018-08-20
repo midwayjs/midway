@@ -1,6 +1,6 @@
 {
   "name": "midway-mock",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "eggPlugin": {
     "name": "midway-mock"
   },
@@ -30,7 +30,7 @@
   "devDependencies": {
     "@types/chai": "^3.5.2",
     "@types/mocha": "^2.2.41",
-    "@types/node": "^8.10.0",
+    "@types/node": "^10.5.5",
     "midway-bin": "^0.2.4"
   },
   "dependencies": {
@@ -39,7 +39,7 @@
     "egg-mock": "^3.17.3",
     "injection": "^0.2.7",
     "is-type-of": "^1.2.0",
-    "midway-core": "^0.2.7",
+    "midway-core": "^0.2.8",
     "power-assert": "^1.6.0",
     "ready-callback": "^2.0.1"
   }

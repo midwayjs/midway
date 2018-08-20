@@ -9,9 +9,7 @@ module.exports = pandora => {
    * default is fork mode
    */
   pandora
-    .fork('{{name}}', require('midway/server')({
-      typescript: true,
-    }));
+    .fork('{{name}}', require.resolve('midway/server'));
 
   /**
    * you can use cluster mode to start application

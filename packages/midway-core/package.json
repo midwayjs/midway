@@ -1,6 +1,6 @@
 {
   "name": "midway-core",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "midway core",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -23,7 +23,7 @@
   "devDependencies": {
     "@types/chai": "^3.5.2",
     "@types/mocha": "^2.2.41",
-    "@types/node": "^8.10.0",
+    "@types/node": "^10.5.5",
     "chai": "^4.1.2",
     "midway-bin": "^0.2.4"
   },

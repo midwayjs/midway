@@ -41,6 +41,13 @@ describe('/test/loader.test.ts', () => {
         .expect(200)
         .expect(/3t/, done);
     });
+
+    it('should load ts directory 2', done => {
+      request(app.callback())
+        .get('/api/baseService')
+        .expect(200)
+        .expect(/3t/, done);
+    });
   });
 
   describe('load ts file and use third party module', () => {

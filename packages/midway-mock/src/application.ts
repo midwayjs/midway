@@ -5,6 +5,8 @@ export class MidwayMockApplication extends EggCore {
 
   options;
   loader: MidwayMockLoader;
+  ready: () => Promise<void>;
+  beforeStart: (fn: any) => void;
 
   get [Symbol.for('egg#loader')]() {
     return MidwayMockLoader;

@@ -2,9 +2,6 @@
 const { app, assert } = require('midway-mock/bootstrap');
 /* tslint:enable */
 
-declare var describe;
-declare var it;
-
 describe('test/app/controller/home.test.ts', () => {
 
   it('should assert', function* () {

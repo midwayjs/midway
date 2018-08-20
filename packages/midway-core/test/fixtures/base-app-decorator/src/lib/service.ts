@@ -1,6 +1,6 @@
 import {config, plugin} from '../../../../../src/decorators';
-import {provide} from 'injection';
-
+import {provide, async} from 'injection';
+@async()
 @provide()
 export class BaseService {
 
