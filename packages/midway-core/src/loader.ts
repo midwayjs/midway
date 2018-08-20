@@ -18,7 +18,6 @@ export class MidwayLoader extends EggLoader {
   baseDir;
   appDir;
   options;
-  appInfo;
 
   constructor(options: MidwayLoaderOptions) {
     super(options);
@@ -100,15 +99,31 @@ export class MidwayLoader extends EggLoader {
     }
   }
 
-  getAppInfo() {
-    if (!this.appInfo) {
+  getEggPaths() {
+    if(!this.appDir) {
+      // register appDir here
       this.registerTypescriptDirectory();
-      const appInfo = super.getAppInfo();
-      this.appInfo = Object.assign(appInfo, {
-        root: this.appDir
-      });
     }
-    return this.appInfo;
+    return super.getEggPaths();
+  }
+
+  getServerEnv() {
+    let serverEnv;
+
+    const envPath = path.join(this.appDir, 'config/env');
+    if (fs.existsSync(envPath)) {
+      serverEnv = fs.readFileSync(envPath, 'utf8').trim();
+    }
+
+    if (!serverEnv) {
+      serverEnv = process.env.EGG_SERVER_ENV || process.env.MIDWAY_SERVER_ENV;
+    }
+
+    if (!serverEnv) {
+      serverEnv = super.getServerEnv();
+    }
+
+    return serverEnv;
   }
 
   protected _buildLoadDir(baseDir, loadDir) {
