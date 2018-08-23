@@ -68,6 +68,13 @@ describe('/test/enhance.test.ts', () => {
         .expect(200)
         .expect(/3t/, done);
     });
+
+    it('should hello controller be ok', done => {
+      request(app.callback())
+        .get('/hello/say')
+        .expect(200)
+        .expect('service,hello,a,b', done);
+    });
   });
 
   describe('load ts file and use third party module', () => {
@@ -125,7 +132,6 @@ describe('/test/enhance.test.ts', () => {
       const appInfo = app.loader.getAppInfo();
       assert(appInfo['name'] === app.name);
       assert(appInfo['baseDir'] === app.baseDir);
-      assert(appInfo['root'] === app.appDir);
       assert(appInfo['baseDir'] === app.appDir + '/src');
     });
   });
@@ -204,6 +210,20 @@ describe('/test/enhance.test.ts', () => {
         .get('/my_logger')
         .expect(200)
         .expect('not null', done);
+    });
+
+    it('js-app-xml get loggertest should be ok', done => {
+      request(app.callback())
+        .get('/my_loggertest')
+        .expect(200)
+        .expect('loggertest is not null', done);
+    });
+
+    it('js-app-xml get plugintest should be ok', done => {
+      request(app.callback())
+        .get('/my_plugintest')
+        .expect(200)
+        .expect('plugintest is not null t', done);
     });
   });
 });

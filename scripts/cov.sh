@@ -18,11 +18,11 @@ do
         rm -rf ".nyc_output"
       fi
       echo "*****************************************"
-      echo "********** Pandora Coverage ******* X ***"
+      echo "********** Midway Coverage ******* X ***"
       echo "*****************************************"
       echo ">>>>>>" $pkg
       echo "*****************************************"
-      echo "************************ © Pandora.js **"
+      echo "************************ © Midway.js **"
       npm run cov
       if [ -d ".nyc_output" ]; then
         cp .nyc_output/* $cwd/.nyc_output/

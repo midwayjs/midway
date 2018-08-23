@@ -1,15 +1,11 @@
 const EggMaster = require('egg-cluster/lib/master');
 const path = require('path');
-const isTypeScriptEnvironment = require('./utils').isTypeScriptEnvironment;
-
+const formatOptions = require('./utils').formatOptions;
 
 class Master extends EggMaster {
 
   constructor(options) {
-    if(isTypeScriptEnvironment()) {
-      options.isTsEnv = true;
-    }
-
+    options = formatOptions(options);
     super(options);
     this.log('[master] egg version %s, egg-core version %s',
       require('egg/package').version,

@@ -18,9 +18,12 @@ export class MidwayMockContainer extends MidwayContainer {
   }
 
   async ready() {
-    this.load({
-      loadDir: this.options.baseDir
-    });
+    const container = this.options.container;
+    if (!container.disableAutoLoad) {
+      this.load({
+        loadDir: this.options.baseDir
+      });
+    }
     await this.app.ready();
     await super.ready();
   }

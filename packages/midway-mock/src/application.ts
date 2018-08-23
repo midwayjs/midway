@@ -4,6 +4,9 @@ import {MidwayMockLoader} from './loader';
 export class MidwayMockApplication extends EggCore {
 
   options;
+  loader: MidwayMockLoader;
+  ready: () => Promise<void>;
+  beforeStart: (fn: any) => void;
 
   get [Symbol.for('egg#loader')]() {
     return MidwayMockLoader;
@@ -13,8 +16,15 @@ export class MidwayMockApplication extends EggCore {
     return __dirname;
   }
 
-  get applicationContext() {
-    return this.options.applicationContext;
+  getPlugin(pluginName) {
+    return this.getPluginContext().get(pluginName);
   }
 
+  getPluginContext() {
+    return this.loader.pluginContext;
+  }
+
+  getApplicationContext() {
+    return this.loader.applicationContext;
+  }
 }

@@ -6,7 +6,11 @@ import {Container,
   IParserContext,
   IObjectDefinition,
   XmlObjectDefinition,
-  Autowire} from 'injection';
+  Autowire,
+  IManagedParser,
+  IManagedResolver,
+  IManagedInstance
+} from 'injection';
 import {
   CLASS_KEY_CONSTRUCTOR,
   CONFIG_KEY_CLZ,
@@ -26,6 +30,8 @@ const is = require('is-type-of');
 const debug = require('debug')('midway:container');
 const CONTROLLERS = 'controllers';
 const MIDDLEWARES = 'middlewares';
+const TYPE_LOGGER = 'logger';
+const TYPE_PLUGIN = 'plugin';
 
 class BaseParser {
   container: MidwayContainer;
@@ -64,6 +70,83 @@ class MiddlewareDefinitionParser extends BaseParser implements IObjectDefinition
   }
 }
 
+class ManagedLogger implements IManagedInstance {
+  type = TYPE_LOGGER;
+  name: string;
+}
+
+class LoggerParser implements IManagedParser {
+  get name(): string {
+    return TYPE_LOGGER;
+  }
+
+  parse(ele: Element, context: IParserContext): IManagedInstance {
+    const log = new ManagedLogger();
+    log.name = ele.getAttribute('name').trim();
+    return log;
+  }
+}
+
+class LoggerResolver implements IManagedResolver {
+  private container: MidwayContainer;
+  constructor(container: MidwayContainer) {
+    this.container = container;
+  }
+
+  get type(): string {
+    return TYPE_LOGGER;
+  }
+
+  resolve(managed: IManagedInstance, props: any): any {
+    const log: ManagedLogger = <ManagedLogger>managed;
+    if (log.name) {
+      return this.container.handlerMap.get(MidwayHandlerKey.LOGGER)(log.name);
+    }
+    return this.container.handlerMap.get(MidwayHandlerKey.LOGGER)(log.type);
+  }
+
+  async resolveAsync(managed: IManagedInstance, props: any): Promise<any> {
+    return this.resolve(managed, props);
+  }
+}
+
+class ManagedPlugin implements IManagedInstance {
+  type = TYPE_PLUGIN;
+  name: string;
+}
+
+class PluginParser implements IManagedParser {
+  get name(): string {
+    return TYPE_PLUGIN;
+  }
+
+  parse(ele: Element, context: IParserContext): IManagedInstance {
+    const plugin = new ManagedPlugin();
+    plugin.name = ele.getAttribute('name').trim();
+    return plugin;
+  }
+}
+
+class PluginResolver implements IManagedResolver {
+  private container: MidwayContainer;
+  constructor(container: MidwayContainer) {
+    this.container = container;
+  }
+
+  get type(): string {
+    return TYPE_PLUGIN;
+  }
+
+  resolve(managed: IManagedInstance, props: any): any {
+    const p = <ManagedPlugin>managed;
+    return this.container.handlerMap.get(MidwayHandlerKey.PLUGIN)(p.name);
+  }
+
+  async resolveAsync(managed: IManagedInstance, props: any): Promise<any> {
+    return this.resolve(managed, props);
+  }
+}
+
 export class MidwayContainer extends Container implements IContainer {
   controllersIds: Array<string> = [];
   middlewaresIds: Array<string> = [];
@@ -73,8 +156,16 @@ export class MidwayContainer extends Container implements IContainer {
   init(): void {
     super.init();
 
+    // xml扩展 <logger name=""/> <plugin name="hsfclient"/>
+    this.parser.objectElementParser.registerParser(new LoggerParser());
+    this.resolverFactory.registerResolver(new LoggerResolver(this));
+    this.parser.objectElementParser.registerParser(new PluginParser());
+    this.resolverFactory.registerResolver(new PluginResolver(this));
+
     this.parser.registerParser(new ControllerDefinitionParser(this));
     this.parser.registerParser(new MiddlewareDefinitionParser(this));
+
+    this._registerEachCreatedHook();
   }
 
 
@@ -87,7 +178,7 @@ export class MidwayContainer extends Container implements IContainer {
     pattern?: string[];
     ignore?: string[];
   }) {
-    const loadDirs = [].concat(opts.loadDir);
+    const loadDirs = [].concat(opts.loadDir || []);
 
     for (let dir of loadDirs) {
       let fileResults = globby.sync(['**/**.ts', '**/**.js', '!**/**.d.ts'].concat(opts.pattern || []), {
@@ -144,7 +235,7 @@ export class MidwayContainer extends Container implements IContainer {
     return child;
   }
 
-  async ready() {
+  private _registerEachCreatedHook() {
     // register constructor inject
     this.beforeEachCreated((target, constructorArgs, context) => {
       let constructorMetaData;
@@ -207,8 +298,6 @@ export class MidwayContainer extends Container implements IContainer {
         });
       }
     });
-
-    await super.ready();
   }
 
   /**

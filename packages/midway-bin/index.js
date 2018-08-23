@@ -1,6 +1,6 @@
 'use strict';
 
-const Command = require('egg-bin');
+const Command = require('egg-bin/lib/command');
 const path = require('path');
 
 class MidwayBin extends Command {

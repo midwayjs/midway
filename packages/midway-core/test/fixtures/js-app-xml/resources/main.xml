@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects>
+  <object id="hello" path="lib/hello">
+    <constructor-arg>
+      <ref object="plugin"/>
+    </constructor-arg>
+    <property name="hhh" value="{{hhh}}"/>
+  </object>
+  <object id="plugin" path="lib/plugin">
+  </object>
+  <import resource="web.xml" />
+</objects>

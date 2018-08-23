@@ -18,7 +18,6 @@ export class MidwayLoader extends EggLoader {
   baseDir;
   appDir;
   options;
-  appInfo;
 
   constructor(options: MidwayLoaderOptions) {
     super(options);
@@ -32,6 +31,12 @@ export class MidwayLoader extends EggLoader {
   }
 
   async refreshContext(): Promise<void> {
+    // 虽然有点hack，但是将就着用吧
+    if (Array.isArray(this.config.configLocations)) {
+      this.applicationContext.configLocations = this.config.configLocations;
+    }
+    this.applicationContext.props.putObject(this.config);
+
     await this.pluginContext.ready();
     await this.applicationContext.ready();
   }
@@ -94,23 +99,56 @@ export class MidwayLoader extends EggLoader {
     }
   }
 
-  getAppInfo() {
-    if (!this.appInfo) {
+  getEggPaths() {
+    if(!this.appDir) {
+      // register appDir here
       this.registerTypescriptDirectory();
-      const appInfo = super.getAppInfo();
-      this.appInfo = Object.assign(appInfo, {
-        root: this.appDir
-      });
     }
-    return this.appInfo;
+    return super.getEggPaths();
+  }
+
+  getServerEnv() {
+    let serverEnv;
+
+    const envPath = path.join(this.appDir, 'config/env');
+    if (fs.existsSync(envPath)) {
+      serverEnv = fs.readFileSync(envPath, 'utf8').trim();
+    }
+
+    if (!serverEnv) {
+      serverEnv = process.env.EGG_SERVER_ENV || process.env.MIDWAY_SERVER_ENV;
+    }
+
+    if (!serverEnv) {
+      serverEnv = super.getServerEnv();
+    }
+
+    return serverEnv;
+  }
+
+  protected _buildLoadDir(baseDir, loadDir) {
+    const dirs = [];
+    for (let dir of loadDir) {
+      dirs.push(path.join(baseDir, dir));
+    }
+    return dirs;
   }
 
   protected loadApplicationContext() {
-    // const containerConfig = this.config['container'];
-    this.applicationContext = new MidwayContainer(this.options.baseDir);
-    this.applicationContext.load({
-      loadDir: this.options.baseDir,
-    });
+    // this.app.options.container 测试用例编写方便点
+    let containerConfig = this.config.container || this.app.options.container || {};
+    // 在 super contructor 中会调用到getAppInfo，之后会被赋值
+    // 如果是typescript会加上 dist 或者 src 目录
+    const baseDir = this.baseDir;
+    this.applicationContext = new MidwayContainer(baseDir);
+    // 如果没有关闭autoLoad 则进行load
+    if (!containerConfig.disableAutoLoad) {
+      this.applicationContext.load({
+        loadDir: this._buildLoadDir(baseDir, containerConfig.loadDir || []),
+        pattern: containerConfig.pattern,
+        ignore: containerConfig.ignore
+      });
+    }
 
     // register handler for container
     this.applicationContext.registerDataHandler(MidwayHandlerKey.CONFIG, (key) => {
@@ -122,7 +160,10 @@ export class MidwayLoader extends EggLoader {
     });
 
     this.applicationContext.registerDataHandler(MidwayHandlerKey.LOGGER, (key) => {
-      return this.app.getLogger(key);
+      if (this.app.getLogger) {
+        return this.app.getLogger(key);
+      }
+      return this.options.logger;
     });
   }
 
@@ -158,5 +199,4 @@ export class MidwayLoader extends EggLoader {
     // 插件加载完毕
     this.pluginLoaded = true;
   }
-
 }

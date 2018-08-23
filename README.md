@@ -9,7 +9,7 @@ Node.js >= 8.0.0 required.
 ## Features
 
 - ✔︎ Sophisticated group Middleware Architecture and compatibility
-- ✔ Scalable plug-in capabilities and group plug-in Ecology
+- ✔︎ Scalable plug-in capabilities and group plug-in Ecology
 - ✔︎ Good application layering and decoupling capability
 - ✔︎ A good development experience for the future
 

@@ -23,6 +23,15 @@ export class InjectionPoint {
 }
 
 export class Autowire {
+  /**
+   * 创建注入点，类似alias功能，用于注入其他id对象
+   * @param id 替换id
+   * @param defaultValue 默认值，可选
+   */
+  static createInject(id: string, defaultValue?: any) {
+    return new InjectionPoint(id, defaultValue);
+  }
+
   static patchInject(instance: any, context: IApplicationContext) {
     if (instance.__patched_inject__) {
       return;

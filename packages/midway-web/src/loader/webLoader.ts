@@ -104,12 +104,6 @@ export class MidwayWebLoader extends MidwayLoader {
   }
 
   async refreshContext(): Promise<void> {
-    // 虽然有点hack，但是将就着用吧
-    if (Array.isArray(this.config.configLocations)) {
-      this.applicationContext.configLocations = this.config.configLocations;
-    }
-    this.applicationContext.props.putObject(this.config);
-
     await super.refreshContext();
 
     await this.preloadControllerFromXml();

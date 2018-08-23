@@ -31,5 +31,18 @@ module.exports = class MyController extends BaseController {
     this.route('get', '/my_test', async ctx => {
       ctx.body = this.$$mytest;
     });
+
+    this.route('get', '/my_loggertest', async ctx => {
+      try {
+        this.loggertest.warn('my_loggertest output test!');
+      } catch (error) {
+        this.$logger.error(error.stack);
+      }
+      ctx.body = this.loggertest ? `loggertest is not null` : `loggertest is null`;
+    });
+
+    this.route('get', '/my_plugintest', async ctx => {
+      ctx.body = this.plugintest ? `plugintest is not null ${this.plugintest.text}` : `plugintest is null`;
+    });
   }
 }

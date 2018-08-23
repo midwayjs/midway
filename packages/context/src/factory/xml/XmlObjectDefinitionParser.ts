@@ -29,7 +29,7 @@ export class ParserContext extends Map implements IParserContext {
 
 export class XmlObjectDefinitionParser implements IXmlParser {
   private parsers = new Map<string, IObjectDefinitionParser>();
-  private objectElementParser = new XmlObjectElementParser();
+  objectElementParser = new XmlObjectElementParser();
   baseDir: string;
   registry: IObjectDefinitionRegistry;
   configuration: ObjectConfiguration;
