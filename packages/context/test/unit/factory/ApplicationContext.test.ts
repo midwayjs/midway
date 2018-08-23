@@ -1,5 +1,5 @@
 import { ObjectDefinition } from '../../../src/base/ObjectDefinition';
-import { ObjectDefinitionRegistry, BaseApplicationContext, ContextEvent } from '../../../src/factory/ApplicationContext';
+import { ObjectDefinitionRegistry, BaseApplicationContext, ContextEvent } from '../../../src/factory/applicationContext';
 import * as sinon from 'sinon';
 import { expect } from 'chai';
 

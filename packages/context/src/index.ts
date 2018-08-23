@@ -1,7 +1,7 @@
 export * from './interfaces';
 export {ScopeEnum} from './base/Scope';
 export {MessageSource} from './base/MessageSource';
-export {BaseApplicationContext as ApplicationContext} from './factory/ApplicationContext';
+export {BaseApplicationContext as ApplicationContext} from './factory/applicationContext';
 export {ObjectDefinition} from './base/ObjectDefinition';
 export {BaseConfiguration, ObjectConfiguration} from './base/Configuration';
 export {ObjectCreator} from './base/ObjectCreator';
@@ -15,3 +15,4 @@ export {XmlObjectDefinition} from './factory/xml/XmlObjectDefinition';
 export {XmlObjectDefinitionParser} from './factory/xml/XmlObjectDefinitionParser';
 export {XmlObjectElementParser} from './factory/xml/XmlObjectElementParser';
 export {Autowire} from './factory/common/Autowire';
+export {RequestContainer} from './factory/requestContainer';

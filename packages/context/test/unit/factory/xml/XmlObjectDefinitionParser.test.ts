@@ -1,7 +1,7 @@
 import * as path from 'path';
 import { expect } from 'chai';
 import { XmlObjectDefinitionParser } from '../../../../src/factory/xml/XmlObjectDefinitionParser';
-import { ObjectDefinitionRegistry } from '../../../../src/factory/ApplicationContext';
+import { ObjectDefinitionRegistry } from '../../../../src/factory/applicationContext';
 import { Resource } from '../../../../src/base/Resource';
 import { MixinDefinitionParser } from './MixinDefinitionParser';
 

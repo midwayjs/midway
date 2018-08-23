@@ -1,5 +1,7 @@
 import 'reflect-metadata';
 import {OBJ_DEF_CLS} from '../utils/metaKeys';
+import {Scope} from '../interfaces';
+import {ScopeEnum} from '..';
 
 const debug = require('debug')('midway:context:obj_def');
 
@@ -35,9 +37,9 @@ export function destroy() {
   };
 }
 
-export function singleton(isSingleton: boolean = true) {
+export function scope(scope: Scope = ScopeEnum.Singleton) {
   return function (target: any): void {
     debug(`set [destroy] property in [${target.name}]`);
-    return attachObjectDefProps(target, {isSingleton: isSingleton});
+    return attachObjectDefProps(target, {scope});
   };
 }

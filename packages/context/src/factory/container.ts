@@ -3,7 +3,6 @@ import {IContainer, ObjectDefinitionOptions, ObjectIdentifier} from '../interfac
 import {OBJ_DEF_CLS, ObjectDefinition, TAGGED, TAGGED_CLS, TAGGED_PROP} from '..';
 import {ManagedReference, ManagedValue} from './common/managed';
 import {FunctionDefinition} from '../base/FunctionDefinition';
-import {ScopeEnum} from '../base/Scope';
 import { XmlApplicationContext } from './xml/XmlApplicationContext';
 import { Autowire } from './common/Autowire';
 
@@ -107,10 +106,8 @@ export class Container extends XmlApplicationContext implements IContainer {
         objectDefinition.destroyMethod = objDefOptions.destroyMethod;
       }
 
-      if (objDefOptions.isSingleton !== undefined) {
-        if (!objDefOptions.isSingleton) {
-          objectDefinition.scope = ScopeEnum.Application;
-        }
+      if (objDefOptions.scope) {
+        objectDefinition.scope = objDefOptions.scope;
       }
     }
   }

@@ -1,11 +1,10 @@
 export type ObjectIdentifier = string;
-export type Scope = 'Singleton' | 'Request' | 'Session' | 'Application';
+export type Scope = 'Singleton' | 'Request' | 'Prototype';
 
 export interface IScopeEnum {
   Singleton: Scope;
   Request: Scope;
-  Session: Scope;
-  Application: Scope;
+  Prototype: Scope;
 }
 /**
  * 生命周期定义
@@ -165,7 +164,7 @@ export interface ObjectDefinitionOptions {
   isAsync?: boolean;
   initMethod?: string;
   destroyMethod?: string;
-  isSingleton?: boolean;
+  scope?: Scope;
 }
 
 /**
