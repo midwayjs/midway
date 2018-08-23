@@ -165,7 +165,7 @@ export class MidwayContainer extends Container implements IContainer {
     this.parser.registerParser(new ControllerDefinitionParser(this));
     this.parser.registerParser(new MiddlewareDefinitionParser(this));
 
-    this._registerEachCreatedHook();
+    this.registerEachCreatedHook();
   }
 
 
@@ -235,7 +235,7 @@ export class MidwayContainer extends Container implements IContainer {
     return child;
   }
 
-  private _registerEachCreatedHook() {
+  private registerEachCreatedHook() {
     // register constructor inject
     this.beforeEachCreated((target, constructorArgs, context) => {
       let constructorMetaData;

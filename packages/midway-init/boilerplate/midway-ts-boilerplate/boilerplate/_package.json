@@ -13,7 +13,7 @@
     "midway-bin": "*",
     "midway-mock": "*",
     "tslib": "^1.8.1",
-    "ts-node": "^7.0.0",
+    "ts-node": "^7.0.1",
     "tslint": "^5.9.1",
     "typescript": "^2.8.0",
     "webstorm-disable-index": "^1.2.0"

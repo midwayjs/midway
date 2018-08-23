@@ -88,7 +88,7 @@ describe('/test/enhance.test.ts', () => {
 
     after(() => app.close());
 
-    it('should load ts directory and inject module', (done) => {
+    it.only('should load ts directory and inject module', (done) => {
       request(app.callback())
         .get('/api/test')
         .expect(200)

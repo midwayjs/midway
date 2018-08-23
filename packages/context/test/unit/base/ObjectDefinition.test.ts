@@ -12,7 +12,7 @@ describe('/test/unit/base/ObjectDefinition', () => {
     definition.autowire = true;
     expect(definition.isAutowire()).true;
 
-    definition.scope = ScopeEnum.Application;
+    definition.scope = ScopeEnum.Prototype;
     expect(definition.isRequestScope()).false;
     expect(definition.isSingletonScope()).false;
 

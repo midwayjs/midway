@@ -11,11 +11,10 @@ const is = require('is-type-of');
 const camelcase = require('camelcase');
 
 export class Container extends XmlApplicationContext implements IContainer {
-  protected id: string = uuidv1();
+  id: string = uuidv1();
 
   init(): void {
     super.init();
-
     this.registerObjectPropertyParser();
   }
 
@@ -42,12 +41,12 @@ export class Container extends XmlApplicationContext implements IContainer {
 
     // inject constructArgs
     let constructorMetaData = Reflect.getMetadata(TAGGED, target);
-    if (constructorMetaData && target['length']) {
-      for (let i = 0; i < target['length']; i++) {
-        const propertyMeta = constructorMetaData[i];
-        if (propertyMeta) {
+    if (constructorMetaData && constructorMetaData[0]['length']) {
+      for (let i = 0; i < constructorMetaData[0]['length']; i++) {
+        const propertyMeta = constructorMetaData[0][i];
+        if (propertyMeta && propertyMeta.value) {
           const refManagedIns = new ManagedReference();
-          refManagedIns.name = propertyMeta[0].value;
+          refManagedIns.name = propertyMeta.value;
           definition.constructorArgs.push(refManagedIns);
         } else {
           // inject empty value

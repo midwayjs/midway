@@ -1,8 +1,8 @@
+import 'reflect-metadata';
 import {Router} from '../router';
 import * as path from 'path';
 import {TagClsMetadata, TAGGED_CLS} from 'injection';
 import {loading} from '../loading';
-import 'reflect-metadata';
 import {WEB_ROUTER_CLS, WEB_ROUTER_PREFIX_CLS, WEB_ROUTER_PROP} from '../decorators/metaKeys';
 import {MidwayLoader} from 'midway-core';
 
@@ -61,8 +61,7 @@ export class MidwayWebLoader extends MidwayLoader {
   private async preInitController(module): Promise<void> {
     let cid = this.getModuleIdentifier(module);
     if (cid) {
-      const controller = await this.applicationContext.getAsync(cid);
-      this.preRegisterRouter(module, controller);
+      this.preRegisterRouter(module, cid);
     }
   }
 
@@ -73,7 +72,7 @@ export class MidwayWebLoader extends MidwayLoader {
     }
   }
 
-  private preRegisterRouter(target, controller) {
+  private preRegisterRouter(target, controllerId) {
     const app = this.app;
     const controllerPrefix = Reflect.getMetadata(WEB_ROUTER_PREFIX_CLS, target);
     if (controllerPrefix) {
@@ -85,7 +84,10 @@ export class MidwayWebLoader extends MidwayLoader {
       const methodNames = Reflect.getMetadata(WEB_ROUTER_CLS, target);
       for (let methodName of methodNames) {
         const mappingInfo = Reflect.getMetadata(WEB_ROUTER_PROP, target, methodName);
-        newRouter[mappingInfo.requestMethod].call(newRouter, mappingInfo.routerName, mappingInfo.path, controller[methodName].bind(controller));
+        newRouter[mappingInfo.requestMethod].call(newRouter, mappingInfo.routerName, mappingInfo.path, async (ctx, next) => {
+          const controller = await ctx.requestContext.getAsync(controllerId);
+          return controller[methodName].call(controller);
+        });
       }
       app.use(newRouter.middleware());
     }
@@ -105,7 +107,6 @@ export class MidwayWebLoader extends MidwayLoader {
 
   async refreshContext(): Promise<void> {
     await super.refreshContext();
-
     await this.preloadControllerFromXml();
   }
 }

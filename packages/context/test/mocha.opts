@@ -1,3 +1,4 @@
 -t 0
+--require espower-typescript/guess
 --require ts-node/register
 test/**/*.test.ts

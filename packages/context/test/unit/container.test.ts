@@ -20,7 +20,7 @@ describe('/test/unit/container.test.ts', () => {
   it('Should be able to store bindings', () => {
     const ninjaId = 'Ninja';
     const container = new Container();
-    container.bind<Ninja>(ninjaId, Ninja);
+    container.bind<Ninja>(ninjaId, <any>Ninja);
     const ninja = container.get(ninjaId);
     expect(ninja instanceof Ninja).to.be.true;
   });
@@ -36,10 +36,10 @@ describe('/test/unit/container.test.ts', () => {
 
   it('should inject property', () => {
     const container = new Container();
-    container.bind<Warrior>('warrior', Samurai);
-    container.bind<Warrior>('katana1', Katana);
-    container.bind<Warrior>('katana2', Katana);
-    const warrior = container.get('warrior');
+    container.bind<Warrior>('warrior', <any>Samurai);
+    container.bind<Warrior>('katana1', <any>Katana);
+    container.bind<Warrior>('katana2', <any>Katana);
+    const warrior = container.get<Warrior>('c');
     expect(warrior instanceof Samurai).to.be.true;
     expect(warrior.katana1).not.to.be.undefined;
     expect(warrior.katana2).not.to.be.undefined;
@@ -49,7 +49,7 @@ describe('/test/unit/container.test.ts', () => {
     const container = new Container();
     container.bind('app', require(path.join(__dirname, '../fixtures/js-app-inject', 'app.js')));
     container.bind('loader', require(path.join(__dirname, '../fixtures/js-app-inject', 'loader.js')).Loader);
-    const app = container.get('app');
+    const app: any = container.get('app');
     expect(app.getConfig().a).to.equal(1);
   });
 
@@ -91,7 +91,7 @@ describe('/test/unit/container.test.ts', () => {
     expect(ins.foodNumber).to.equal(20);
   });
 
-  it('should support constructor inject', async () => {
+  it.only('should support constructor inject', async () => {
     const container = new Container();
     container.bind('engine', Turbo);
     container.bind('fuel', Gas);
