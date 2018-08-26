@@ -26,7 +26,6 @@ describe('/test/unit/container.test.ts', () => {
   });
 
   it('Should have an unique identifier', () => {
-
     const container1 = new Container();
     const container2 = new Container();
     expect(container1.id.length).eql(36);
@@ -39,7 +38,7 @@ describe('/test/unit/container.test.ts', () => {
     container.bind<Warrior>('warrior', <any>Samurai);
     container.bind<Warrior>('katana1', <any>Katana);
     container.bind<Warrior>('katana2', <any>Katana);
-    const warrior = container.get<Warrior>('c');
+    const warrior = container.get<Warrior>('warrior');
     expect(warrior instanceof Samurai).to.be.true;
     expect(warrior.katana1).not.to.be.undefined;
     expect(warrior.katana2).not.to.be.undefined;
@@ -91,14 +90,11 @@ describe('/test/unit/container.test.ts', () => {
     expect(ins.foodNumber).to.equal(20);
   });
 
-  it.only('should support constructor inject', async () => {
+  it('should support constructor inject', async () => {
     const container = new Container();
     container.bind('engine', Turbo);
     container.bind('fuel', Gas);
     container.bind(Car);
-
-    const aa = await container.getAsync('fuel');
-    console.log('---', aa);
 
     const car = <Car>await container.getAsync(Car);
     car.run();

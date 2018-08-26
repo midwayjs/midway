@@ -53,7 +53,6 @@ export class Car {
   ) {
     this.engine = engine;
     this.fuel = fuel;
-    console.log('----', fuel, engine);
     this.fuel.add(40);
   }
 

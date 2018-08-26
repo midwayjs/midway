@@ -41,12 +41,12 @@ export class Container extends XmlApplicationContext implements IContainer {
 
     // inject constructArgs
     let constructorMetaData = Reflect.getMetadata(TAGGED, target);
-    if (constructorMetaData && constructorMetaData[0]['length']) {
-      for (let i = 0; i < constructorMetaData[0]['length']; i++) {
-        const propertyMeta = constructorMetaData[0][i];
-        if (propertyMeta && propertyMeta.value) {
+    if (constructorMetaData && target['length']) {
+      for (let i = 0; i < target['length']; i++) {
+        const propertyMeta = constructorMetaData[i];
+        if (propertyMeta) {
           const refManagedIns = new ManagedReference();
-          refManagedIns.name = propertyMeta.value;
+          refManagedIns.name = propertyMeta[0].value;
           definition.constructorArgs.push(refManagedIns);
         } else {
           // inject empty value
