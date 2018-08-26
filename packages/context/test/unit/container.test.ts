@@ -97,6 +97,9 @@ describe('/test/unit/container.test.ts', () => {
     container.bind('fuel', Gas);
     container.bind(Car);
 
+    const aa = await container.getAsync('fuel');
+    console.log('---', aa);
+
     const car = <Car>await container.getAsync(Car);
     car.run();
     expect(car.getFuelCapacity()).to.equal(35);

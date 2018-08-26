@@ -1,4 +1,4 @@
-import {async, destroy, init, inject} from '../../src';
+import {inject} from '../../src';
 
 export interface Engine {
   start(fuel: Fuel);
@@ -45,7 +45,7 @@ export class Electricity implements Fuel {
 export class Car {
 
   private engine: Engine;
-  private fuel: Fuel;
+  protected fuel: Fuel;
 
   public constructor(
     @inject('engine') engine: Engine,
@@ -53,6 +53,7 @@ export class Car {
   ) {
     this.engine = engine;
     this.fuel = fuel;
+    console.log('----', fuel, engine);
     this.fuel.add(40);
   }
 
@@ -67,9 +68,6 @@ export class Car {
 }
 
 export class Tesla extends Car {
-
-  private engine: Engine;
-  private fuel: Fuel;
   private computer;
 
   public constructor(
@@ -80,5 +78,9 @@ export class Tesla extends Car {
     super(engine, fuel);
     this.computer = computer;
     this.fuel.add(40);
+  }
+
+  getComputer() {
+    return this.computer;
   }
 }

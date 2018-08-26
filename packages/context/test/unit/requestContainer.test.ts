@@ -2,13 +2,13 @@ import {expect} from 'chai';
 import {Container, inject, provide, RequestContainer, scope, ScopeEnum} from '../../src';
 // const path = require('path');
 
-function sleep(t) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve();
-    }, t);
-  });
-}
+// function sleep(t) {
+//   return new Promise((resolve) => {
+//     setTimeout(() => {
+//       resolve();
+//     }, t);
+//   });
+// }
 
 class Tracer {
 
@@ -59,7 +59,7 @@ describe('/test/unit/requestContainer.test.ts', () => {
     const reqCtx1 = new RequestContainer({}, appCtx);
     const reqCtx2 = new RequestContainer({}, appCtx);
     expect(<Tracer>reqCtx1.get(Tracer).parentId).to.equal(<Tracer>reqCtx2.get(Tracer).parentId);
-    expect(await reqCtx1.getAsync(Tracer).parentId).to.equal(await reqCtx2.getAsync(Tracer).parentId);
+    expect((await reqCtx1.getAsync(Tracer)).parentId).to.equal((await reqCtx2.getAsync(Tracer)).parentId);
   });
 
   it('should get different property value in different request context', async () => {
