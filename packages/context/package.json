@@ -23,6 +23,7 @@
   "devDependencies": {
     "@types/chai": "^3.5.2",
     "@types/lodash": "^4.14.109",
+    "benchmark": "^2.1.4",
     "chai": "^4.1.2",
     "midway-bin": "^0.2.4",
     "mocha": "^3.5.0",
