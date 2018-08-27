@@ -1,9 +1,9 @@
-import {isPluginName, isTypeScriptEnvironment} from './utils';
+import { isPluginName, isTypeScriptEnvironment } from './utils';
 import * as path from 'path';
 import * as fs from 'fs';
-import {MidwayContainer} from './container';
-import {MidwayHandlerKey} from './constants';
-import {MidwayLoaderOptions} from './interface';
+import { MidwayContainer } from './container';
+import { MidwayHandlerKey } from './constants';
+import { MidwayLoaderOptions } from './interface';
 
 const EggLoader = require('egg-core').EggLoader;
 const TS_SRC_DIR = 'src';
@@ -100,7 +100,7 @@ export class MidwayLoader extends EggLoader {
   }
 
   getEggPaths() {
-    if(!this.appDir) {
+    if (!this.appDir) {
       // register appDir here
       this.registerTypescriptDirectory();
     }

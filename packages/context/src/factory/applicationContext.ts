@@ -3,17 +3,15 @@
  */
 import { EventEmitter } from 'events';
 import {
-  IObjectFactory,
+  IApplicationContext,
+  ILifeCycle,
+  IMessageSource,
   IObjectDefinition,
   IObjectDefinitionRegistry,
-  IApplicationContext,
-  ObjectIdentifier,
-  IMessageSource,
-  ILifeCycle
+  IObjectFactory,
+  ObjectIdentifier
 } from '../interfaces';
-import {
-  ObjectConfiguration
-} from '../base/Configuration';
+import { ObjectConfiguration } from '../base/Configuration';
 import { ManagedResolverFactory } from './common/ManagedResolverFactory';
 
 export const ContextEvent = {
@@ -112,10 +110,15 @@ export class BaseApplicationContext extends EventEmitter implements IApplication
     this.baseDir = baseDir;
 
     this.registry = new ObjectDefinitionRegistry();
-    this.resolverFactory = new ManagedResolverFactory(this);
+    this.resolverFactory = this.getManagedResolverFactory();
 
     this.init();
   }
+
+  protected getManagedResolverFactory() {
+    return new ManagedResolverFactory(this);
+  }
+
   /**
    * 继承实现时需要调用super
    */

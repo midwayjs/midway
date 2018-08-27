@@ -47,7 +47,7 @@ export class Car {
   private engine: Engine;
   protected fuel: Fuel;
 
-  public constructor(
+  constructor(
     @inject('engine') engine: Engine,
     @inject() fuel: Fuel
   ) {
@@ -64,12 +64,14 @@ export class Car {
     return this.fuel.capacity;
   }
 
+  getBrand() {
+  }
 }
 
 export class Tesla extends Car {
   private computer;
 
-  public constructor(
+  constructor(
     @inject('engine') engine: Engine,
     computer,
     @inject() fuel: Fuel
@@ -81,5 +83,15 @@ export class Tesla extends Car {
 
   getComputer() {
     return this.computer;
+  }
+
+  getBrand() {
+    return 'tesla';
+  }
+}
+
+export class BMWX1 extends Car {
+  getBrand() {
+    return 'bmw';
   }
 }

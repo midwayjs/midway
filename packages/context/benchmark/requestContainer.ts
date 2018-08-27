@@ -1,6 +1,5 @@
 import 'reflect-metadata';
-import { Container } from './container';
-import { IContainer } from '../interfaces';
+import {Container, IContainer} from '../src';
 
 export class RequestContainer extends Container {
 
@@ -21,7 +20,7 @@ export class RequestContainer extends Container {
       return this.registry.getObject(identifier);
     }
     const definition = this.applicationContext.registry.getDefinition(identifier);
-    if (definition && definition.isRequestScope()) {
+    if(definition && definition.isRequestScope()) {
       // create object from applicationContext definition for requestScope
       return this.resolverFactory.create(definition, args);
     }
@@ -40,7 +39,7 @@ export class RequestContainer extends Container {
     }
 
     const definition = this.applicationContext.registry.getDefinition(identifier);
-    if (definition && definition.isRequestScope()) {
+    if(definition && definition.isRequestScope()) {
       // create object from applicationContext definition for requestScope
       return await this.resolverFactory.createAsync(definition, args);
     }

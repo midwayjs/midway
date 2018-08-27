@@ -1,16 +1,34 @@
-import 'reflect-metadata';
-import { Container } from './container';
-import { IContainer } from '../interfaces';
+import { MidwayHandlerKey } from './constants';
+import { MidwayContainer } from './container';
 
-export class RequestContainer extends Container {
+export class MidwayRequestContainer extends MidwayContainer {
 
-  applicationContext: IContainer;
+  applicationContext: MidwayContainer;
+  ctx;
 
   constructor(ctx, applicationContext) {
     super();
+    this.ctx = ctx;
     this.registerObject('ctx', ctx);
     this.parent = applicationContext;
     this.applicationContext = applicationContext;
+  }
+
+  registerEachCreatedHook() {
+    // register handler for container
+    this.registerDataHandler(MidwayHandlerKey.CONFIG, (key) => {
+      return this.ctx.app.config[key];
+    });
+
+    this.registerDataHandler(MidwayHandlerKey.PLUGIN, (key) => {
+      return this.ctx.app.pluginContext.get(key);
+    });
+
+    this.registerDataHandler(MidwayHandlerKey.LOGGER, (key) => {
+      return this.ctx.app.getLogger(key);
+    });
+
+    super.registerEachCreatedHook();
   }
 
   get<T>(identifier: any, args?: any) {
@@ -49,5 +67,4 @@ export class RequestContainer extends Container {
       return await this.parent.getAsync<T>(identifier, args);
     }
   }
-
 }

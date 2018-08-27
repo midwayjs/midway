@@ -1,3 +1,0 @@
--t 0
---require espower-typescript/guess
-test/**/*.test.ts

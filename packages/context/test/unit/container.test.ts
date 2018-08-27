@@ -11,7 +11,7 @@ import {
   Warrior
 } from '../fixtures/class_sample';
 
-import {Car, Electricity, Gas, Tesla, Turbo} from '../fixtures/class_sample_car';
+import { BMWX1, Car, Electricity, Gas, Tesla, Turbo } from '../fixtures/class_sample_car';
 import {childAsyncFunction, childFunction, testInjectAsyncFunction, testInjectFunction} from '../fixtures/fun_sample';
 import {DieselCar, DieselEngine, engineFactory, PetrolEngine} from '../fixtures/mix_sample';
 
@@ -99,6 +99,18 @@ describe('/test/unit/container.test.ts', () => {
     const car = <Car>await container.getAsync(Car);
     car.run();
     expect(car.getFuelCapacity()).to.equal(35);
+  });
+
+  it('should support constructor inject from parent', async () => {
+    const container = new Container();
+    container.bind('engine', Turbo);
+    container.bind('fuel', Gas);
+    container.bind(BMWX1);
+
+    const car = <Car>await container.getAsync(BMWX1);
+    car.run();
+    expect(car.getFuelCapacity()).to.equal(35);
+    expect(car.getBrand()).to.equal('bmw');
   });
 
   it('should inject constructor parameter in order', async () => {

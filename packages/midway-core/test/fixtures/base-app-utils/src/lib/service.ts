@@ -1,6 +1,6 @@
 import {config, plugin} from '../../../../../src/decorators';
 import {provide} from 'injection';
-import {get, logger} from '../../../../../src';
+import {logger} from '../../../../../src';
 import {inject} from '../../../../../../context/dist';
 
 @provide()

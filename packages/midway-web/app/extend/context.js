@@ -1,12 +1,12 @@
 'use strict';
 
-const {RequestContainer} = require('injection');
+const {MidwayRequestContainer} = require('midway-core');
 const rc = Symbol('Context#RequestContext');
 
 module.exports = {
   get requestContext() {
     if (!this[rc]) {
-      this[rc] = new RequestContainer(this, this.app.applicationContext);
+      this[rc] = new MidwayRequestContainer(this, this.app.applicationContext);
     }
     return this[rc];
   },

@@ -1,15 +1,17 @@
 import 'reflect-metadata';
-import {Container,
-  IContainer,
-  TagClsMetadata, TAGGED_CLS,
-  IObjectDefinitionParser,
-  IParserContext,
-  IObjectDefinition,
-  XmlObjectDefinition,
+import {
   Autowire,
+  Container,
+  IContainer,
+  IManagedInstance,
   IManagedParser,
   IManagedResolver,
-  IManagedInstance
+  IObjectDefinition,
+  IObjectDefinitionParser,
+  IParserContext,
+  TagClsMetadata,
+  TAGGED_CLS,
+  XmlObjectDefinition
 } from 'injection';
 import {
   CLASS_KEY_CONSTRUCTOR,
@@ -21,7 +23,7 @@ import {
   PLUGIN_KEY_CLZ,
   PLUGIN_KEY_PROP
 } from './decorators/metaKeys';
-import {MidwayHandlerKey} from './constants';
+import { MidwayHandlerKey } from './constants';
 
 const globby = require('globby');
 const path = require('path');
@@ -150,10 +152,10 @@ class PluginResolver implements IManagedResolver {
 export class MidwayContainer extends Container implements IContainer {
   controllersIds: Array<string> = [];
   middlewaresIds: Array<string> = [];
-
-  handlerMap: Map<string, (handlerKey: string) => any> = new Map();
+  handlerMap: Map<string, (handlerKey: string) => any>;
 
   init(): void {
+    this.handlerMap = new Map();
     super.init();
 
     // xml扩展 <logger name=""/> <plugin name="hsfclient"/>
@@ -235,7 +237,7 @@ export class MidwayContainer extends Container implements IContainer {
     return child;
   }
 
-  private registerEachCreatedHook() {
+  protected registerEachCreatedHook() {
     // register constructor inject
     this.beforeEachCreated((target, constructorArgs, context) => {
       let constructorMetaData;
@@ -320,7 +322,7 @@ export class MidwayContainer extends Container implements IContainer {
    * @param getterHandler
    */
   private defineGetterPropertyValue(setterProps, metadataKey, instance, getterHandler) {
-    if (setterProps) {
+    if (setterProps && getterHandler) {
       for (let prop of setterProps) {
         let propertyKey = Reflect.getMetadata(metadataKey, instance, prop);
         if (propertyKey) {
