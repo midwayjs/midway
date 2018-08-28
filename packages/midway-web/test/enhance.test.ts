@@ -36,7 +36,7 @@ describe('/test/enhance.test.ts', () => {
 
     after(() => app.close());
 
-    it('should load controller from applicationContext', (done) => {
+    it('should load controller from requestContext', (done) => {
       request(app.callback())
         .get('/api/index')
         .expect(200)

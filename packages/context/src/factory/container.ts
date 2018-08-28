@@ -99,7 +99,7 @@ export class Container extends XmlApplicationContext implements IContainer {
   }
 
   registerCustomBinding(objectDefinition: ObjectDefinition, target: any) {
-    // @async, @init, @destroy
+    // @async, @init, @destroy @scope
     let objDefOptions: ObjectDefinitionOptions = Reflect.getMetadata(OBJ_DEF_CLS, target);
 
     if (objDefOptions) {

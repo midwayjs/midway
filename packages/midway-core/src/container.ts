@@ -9,6 +9,9 @@ import {
   IObjectDefinition,
   IObjectDefinitionParser,
   IParserContext,
+  OBJ_DEF_CLS,
+  ObjectDefinitionOptions,
+  ScopeEnum,
   TagClsMetadata,
   TAGGED_CLS,
   XmlObjectDefinition
@@ -22,7 +25,7 @@ import {
   LOGGER_KEY_PROP,
   PLUGIN_KEY_CLZ,
   PLUGIN_KEY_PROP
-} from './decorators/metaKeys';
+} from './decorators';
 import { MidwayHandlerKey } from './constants';
 
 const globby = require('globby');
@@ -37,10 +40,12 @@ const TYPE_PLUGIN = 'plugin';
 
 class BaseParser {
   container: MidwayContainer;
+
   constructor(container: MidwayContainer) {
     this.container = container;
   }
 }
+
 /**
  * 用于xml解析扩展
  * <controllers />
@@ -56,6 +61,7 @@ class ControllerDefinitionParser extends BaseParser implements IObjectDefinition
     return definition;
   }
 }
+
 /**
  * 用于xml解析扩展
  * <middlewares />
@@ -91,6 +97,7 @@ class LoggerParser implements IManagedParser {
 
 class LoggerResolver implements IManagedResolver {
   private container: MidwayContainer;
+
   constructor(container: MidwayContainer) {
     this.container = container;
   }
@@ -131,6 +138,7 @@ class PluginParser implements IManagedParser {
 
 class PluginResolver implements IManagedResolver {
   private container: MidwayContainer;
+
   constructor(container: MidwayContainer) {
     this.container = container;
   }
@@ -170,10 +178,9 @@ export class MidwayContainer extends Container implements IContainer {
     this.registerEachCreatedHook();
   }
 
-
   /**
    * load directory and traverse file to find bind class
-   * @param {{loadDir: string | string[]; pattern?: string[]; ignore?: string[]}} opts
+   * @param opts
    */
   load(opts: {
     loadDir: string | string[];
@@ -295,7 +302,8 @@ export class MidwayContainer extends Container implements IContainer {
             if (v) {
               return v;
             }
-          } catch (e) { }
+          } catch (e) {
+          }
           return this.handlerMap.get(MidwayHandlerKey.LOGGER)(key);
         });
       }
@@ -338,6 +346,17 @@ export class MidwayContainer extends Container implements IContainer {
 
   registerDataHandler(handlerType: string, handler: (handlerKey) => any) {
     this.handlerMap.set(handlerType, handler);
+  }
+
+  registerCustomBinding(objectDefinition, target) {
+    super.registerCustomBinding(objectDefinition, target);
+
+    // Override the default scope to request
+    let objDefOptions: ObjectDefinitionOptions = Reflect.getMetadata(OBJ_DEF_CLS, target);
+    if (objDefOptions && !objDefOptions.scope) {
+      debug(`register @scope to default value(request), id=${objectDefinition.id}`);
+      objectDefinition.scope = ScopeEnum.Request;
+    }
   }
 
 }
