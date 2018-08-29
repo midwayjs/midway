@@ -1,5 +1,5 @@
-import {config, plugin} from 'midway-core';
-import {provide, async, init, inject} from 'injection';
+import { config, plugin } from 'midway-core';
+import { async, init, inject, provide } from 'injection';
 
 
 @provide()
@@ -29,6 +29,9 @@ export class BaseService {
   @inject('adapterFactory')
   factory;
 
+  @inject()
+  contextHandler: () => boolean;
+
   adapter;
 
   constructor(
@@ -46,6 +49,8 @@ export class BaseService {
   @init()
   async init() {
     this.adapter = await this.factory(this.adapterName);
+    const data = await this.contextHandler();
+    this.config.d = data ? 1 : 2;
   }
 
 }

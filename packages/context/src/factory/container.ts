@@ -92,6 +92,16 @@ export class Container extends XmlApplicationContext implements IContainer {
         debug(`register from options add destroyMethod, id=${definition.id}, method=${definition.destroyMethod}`);
         definition.destroyMethod = options.destroyMethod;
       }
+
+      if (options.scope) {
+        debug(`register from options add scope, id=${definition.id}, scope=${definition.scope}`);
+        definition.scope = options.scope;
+      }
+
+      if (options.constructorArgs) {
+        debug(`register from options add scope, id=${definition.id}, constructorArgs=${options.constructorArgs}`);
+        definition.constructorArgs = options.constructorArgs;
+      }
     }
 
     this.registry.registerDefinition(identifier, definition);

@@ -1,4 +1,4 @@
-import { controller, get, provide, Controller } from 'midway';
+import { controller, get, provide, Controller } from '../../../../../../packages/midway';
 
 @provide()
 @controller('/')

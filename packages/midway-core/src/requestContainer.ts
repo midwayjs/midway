@@ -1,5 +1,6 @@
 import { MidwayHandlerKey } from './constants';
 import { MidwayContainer } from './container';
+import { ManagedValue, VALUE_TYPE } from 'injection';
 
 export class MidwayRequestContainer extends MidwayContainer {
 
@@ -59,6 +60,10 @@ export class MidwayRequestContainer extends MidwayContainer {
 
     const definition = this.applicationContext.registry.getDefinition(identifier);
     if (definition && definition.isRequestScope()) {
+      if(definition.creator.constructor.name === 'FunctionWrapperCreator') {
+        const valueManagedIns = new ManagedValue(this, VALUE_TYPE.OBJECT);
+        definition.constructorArgs = [valueManagedIns];
+      }
       // create object from applicationContext definition for requestScope
       return await this.resolverFactory.createAsync(definition, args);
     }

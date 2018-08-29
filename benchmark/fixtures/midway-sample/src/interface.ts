@@ -18,6 +18,6 @@ export interface IUserResult {
 /**
  * @description User-Service abstractions
  */
-export interface IUserAbstract {
+export interface IUserService {
   getUser(options: IUserOptions): Promise<IUserResult>;
 }

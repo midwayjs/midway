@@ -1,0 +1,35 @@
+{
+  "name": "egg-test",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "dependencies": {
+    "egg": "^2.2.1",
+    "egg-scripts": "^2.5.0"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=8.9.0"
+  },
+  "scripts": {
+    "start": "npm i --production && egg-scripts start --daemon --title=egg-server-egg-test",
+    "stop": "egg-scripts stop --title=egg-server-egg-test",
+    "dev": "egg-bin dev",
+    "debug": "egg-bin debug",
+    "test": "npm run lint -- --fix && npm run test-local",
+    "test-local": "egg-bin test",
+    "cov": "egg-bin cov",
+    "lint": "eslint .",
+    "ci": "npm run lint && npm run cov",
+    "autod": "autod"
+  },
+  "ci": {
+    "version": "8"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "",
+  "license": "MIT"
+}

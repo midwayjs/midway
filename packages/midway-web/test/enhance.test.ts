@@ -51,6 +51,32 @@ describe('/test/enhance.test.ts', () => {
     });
   });
 
+  describe('load ts class and use default scope', () => {
+    let app;
+    before(() => {
+      app = utils.app('enhance/base-app-default-scope', {
+        typescript: true
+      });
+      return app.ready();
+    });
+
+    after(() => app.close());
+
+    it('should load controller from requestContext', (done) => {
+      request(app.callback())
+        .get('/api/index')
+        .expect(200)
+        .expect('index', done);
+    });
+
+    it('should load controller use controller decorator', (done) => {
+      request(app.callback())
+        .get('/api/test')
+        .expect(200)
+        .expect('hello', done);
+    });
+  });
+
   describe('load ts file and use config, plugin decorator', () => {
     let app;
     before(() => {
@@ -170,7 +196,7 @@ describe('/test/enhance.test.ts', () => {
       request(app.callback())
         .get('/api')
         .expect(200)
-        .expect('63t', done);
+        .expect('64t', done);
     });
   });
 

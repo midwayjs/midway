@@ -165,6 +165,7 @@ export interface ObjectDefinitionOptions {
   initMethod?: string;
   destroyMethod?: string;
   scope?: Scope;
+  constructorArgs?: Array<IManagedInstance>;
 }
 
 /**

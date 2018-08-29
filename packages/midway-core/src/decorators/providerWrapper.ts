@@ -1,13 +1,14 @@
-import {IApplicationContext, ObjectIdentifier} from 'injection';
+import { IApplicationContext, Scope, ObjectIdentifier } from 'injection';
 import {FUNCTION_INJECT_KEY} from './metaKeys';
 
 export function providerWrapper(wrapperInfo: Array<{
   id: ObjectIdentifier,
-  provider: (context?: IApplicationContext) => any
+  provider: (context?: IApplicationContext) => any,
+  scope?: Scope
 }>): void {
   for(let info of wrapperInfo) {
     Object.defineProperty(info.provider, FUNCTION_INJECT_KEY, {
-      value: info.id,
+      value: info,
       writable: false
     });
   }

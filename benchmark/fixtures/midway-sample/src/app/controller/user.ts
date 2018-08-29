@@ -1,4 +1,4 @@
-import { controller, get, inject, Controller } from 'midway';
+import { controller, get, inject, Controller } from '../../../../../../packages/midway';
 import { IUserService, IUserResult } from '../../interface';
 
 @controller('/user/')

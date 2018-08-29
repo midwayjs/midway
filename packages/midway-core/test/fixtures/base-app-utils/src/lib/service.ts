@@ -1,7 +1,5 @@
-import {config, plugin} from '../../../../../src/decorators';
-import {provide} from 'injection';
-import {logger} from '../../../../../src';
-import {inject} from '../../../../../../context/dist';
+import {config, plugin, logger} from '../../../../../src/decorators';
+import {provide, inject} from 'injection';
 
 @provide()
 export class BaseService {

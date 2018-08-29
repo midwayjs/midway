@@ -1,0 +1,22 @@
+{
+  "apps": [
+    {
+      "name": "Egg 3",
+      "cwd": "fixtures/egg-sample",
+      "command": "npm start",
+      "port": 7001,
+      "exit": "npm stop",
+      "url": "/",
+      "skip": false
+    },
+    {
+      "name": "Midway 6",
+      "cwd": "fixtures/midway-sample",
+      "command": "npm start",
+      "port": 7001,
+      "exit": "npm stop",
+      "url": "/",
+      "skip": false
+    }
+  ]
+}

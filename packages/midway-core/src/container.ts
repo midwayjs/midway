@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import {
   Autowire,
   Container,
+  IApplicationContext,
   IContainer,
   IManagedInstance,
   IManagedParser,
@@ -11,6 +12,8 @@ import {
   IParserContext,
   OBJ_DEF_CLS,
   ObjectDefinitionOptions,
+  ObjectIdentifier,
+  Scope,
   ScopeEnum,
   TagClsMetadata,
   TAGGED_CLS,
@@ -231,9 +234,18 @@ export class MidwayContainer extends Container implements IContainer {
         this.bind(camelcase(module.name), module);
       }
     } else {
-      let id = module[FUNCTION_INJECT_KEY];
-      if (id) {
-        this.bind(id, module);
+      let info: {
+        id: ObjectIdentifier,
+        provider: (context?: IApplicationContext) => any,
+        scope?: Scope
+      } = module[FUNCTION_INJECT_KEY];
+      if (info && info.id) {
+        if (!info.scope) {
+          info.scope = ScopeEnum.Request;
+        }
+        this.bind(info.id, module, {
+          scope: info.scope,
+        });
       }
     }
   }
