@@ -15,7 +15,7 @@
     "node": ">=8.9.0"
   },
   "scripts": {
-    "start": "npm i --production && pandora start",
+    "start": "pandora start",
     "stop": "pandora exit",
     "dev": "egg-bin dev",
     "debug": "egg-bin debug",
@@ -24,7 +24,8 @@
     "cov": "egg-bin cov",
     "lint": "eslint .",
     "ci": "npm run lint && npm run cov",
-    "autod": "autod"
+    "autod": "autod",
+    "ready": "npm -v"
   },
   "ci": {
     "version": "8"

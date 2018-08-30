@@ -6,26 +6,23 @@
   "dependencies": {
     "cls-hooked": "^4.2.2",
     "egg-scripts": "^2.5.0",
-    "midway": "~0.2.10",
+    "midway": "^0.2.11",
     "midway-bin": "*",
     "pandora": "^1.8.27"
   },
   "devDependencies": {
     "@types/mocha": "^5.2.5",
     "@types/node": "^10.5.5",
-    "egg-ci": "^1.8.0",
-    "midway-mock": "*",
     "ts-node": "^7.0.1",
     "tslib": "^1.8.1",
     "tslint": "^5.9.1",
-    "typescript": "^2.8.0",
-    "webstorm-disable-index": "^1.2.0"
+    "typescript": "^2.8.0"
   },
   "engines": {
     "node": ">=8.9.0"
   },
   "scripts": {
-    "start": "npm i --production && npm run build && NODE_ENV=production pandora start .",
+    "start": "NODE_ENV=production pandora start .",
     "stop": "pandora exit",
     "start_build": "npm run build && NODE_ENV=production midway-bin dev",
     "pdev": "pandora dev",
@@ -35,7 +32,8 @@
     "cov": "midway-bin cov --ts",
     "lint": "tslint -c tslint.json --project .",
     "ci": "midway-bin cov --ts",
-    "build": "midway-bin build -c"
+    "build": "midway-bin build -c",
+    "ready": "npm run build"
   },
   "ci": {
     "version": "8, 9"

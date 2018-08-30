@@ -10,17 +10,8 @@
       "skip": false
     },
     {
-      "name": "Midway 6 with async_hooks in singleton",
-      "cwd": "fixtures/midway-single-hooks",
-      "command": "npm start",
-      "port": 7001,
-      "exit": "npm stop",
-      "url": "/user/1",
-      "skip": false
-    },
-    {
       "name": "Midway 6 with request context",
-      "cwd": "fixtures/midway-sample",
+      "cwd": "fixtures/midway-request-scope",
       "command": "npm start",
       "port": 7001,
       "exit": "npm stop",
