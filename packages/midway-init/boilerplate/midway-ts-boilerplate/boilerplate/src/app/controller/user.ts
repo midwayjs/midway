@@ -1,19 +1,16 @@
-import { controller, get, inject } from 'midway';
-import { IUserAbstract, IUserResult } from '../../lib/interfaces/user.abstract';
+import { controller, get, inject, Controller, provide } from 'midway';
+import { IUserService, IUserResult } from '../../interface';
 
-type nextDefinition = () => void;
-
+@provide()
 @controller('/user/')
-export class UserController {
+export class UserController extends Controller {
   @inject('userService')
-  service: IUserAbstract;
+  service: IUserService;
 
   @get('/:id')
-  async getUser(ctx: any, next: nextDefinition): Promise<void> {
-    const id: number = ctx.request.params('id');
+  async getUser(): Promise<void> {
+    const id: number = this.ctx.params.id;
     const user: IUserResult = await this.service.getUser({id});
-    ctx.body = {success: true, message: 'OK', data: user};
-    // do not response again
-    await next();
+    this.ctx.body = {success: true, message: 'OK', data: user};
   }
 }

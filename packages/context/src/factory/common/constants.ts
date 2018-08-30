@@ -68,5 +68,6 @@ export const VALUE_TYPE = {
   NUMBER: 'number',
   INTEGER: 'int',
   TEMPLATE: 'template',
-  MANAGED: 'managed'  // 仅仅在解析时使用
+  MANAGED: 'managed',
+  OBJECT: 'object', // 仅仅在解析时使用
 };

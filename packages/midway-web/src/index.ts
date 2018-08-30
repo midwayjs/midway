@@ -1,7 +1,8 @@
 export {AgentWorkerLoader, AppWorkerLoader} from './loader/loader';
 export {Application, Agent} from './midway';
-export {BaseController} from './controller';
+export {BaseController} from './baseController';
 export * from './decorators';
 export {MidwayWebLoader} from './loader/webLoader';
 export * from './constants';
 export {loading} from './loading';
+export {Controller} from './controller';

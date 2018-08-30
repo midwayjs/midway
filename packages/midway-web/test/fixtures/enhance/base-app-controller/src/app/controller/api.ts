@@ -1,22 +1,24 @@
 'use strict';
 
-import {provide} from 'injection';
-import {controller, get} from '../../../../../../../src/';
+import { provide, ScopeEnum, scope } from 'injection';
+import { Controller, controller, get } from '../../../../../../../src/';
 
 
 @provide()
-export class BaseApi {
-  async index(ctx) {
-    ctx.body = 'index';
+@scope(ScopeEnum.Request)
+export class BaseApi extends Controller {
+  async index() {
+    this.ctx.body = 'index';
   }
 }
 
 @provide()
 @controller('/api')
-export class Api {
+export class Api extends Controller {
 
   @get('/test')
-  async index(ctx) {
+  async index() {
+    const {ctx} = this;
     ctx.body = 'hello';
   }
 }

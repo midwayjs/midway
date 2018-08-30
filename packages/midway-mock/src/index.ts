@@ -1,4 +1,4 @@
-import {EggMock} from 'egg-mock';
+import { EggMock } from 'egg-mock';
 const mock = require('egg-mock');
 import {MidwayMockApplication} from './application';
 

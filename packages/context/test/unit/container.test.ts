@@ -11,7 +11,7 @@ import {
   Warrior
 } from '../fixtures/class_sample';
 
-import {Car, Electricity, Gas, Tesla, Turbo} from '../fixtures/class_sample_car';
+import { BMWX1, Car, Electricity, Gas, Tesla, Turbo } from '../fixtures/class_sample_car';
 import {childAsyncFunction, childFunction, testInjectAsyncFunction, testInjectFunction} from '../fixtures/fun_sample';
 import {DieselCar, DieselEngine, engineFactory, PetrolEngine} from '../fixtures/mix_sample';
 
@@ -20,13 +20,12 @@ describe('/test/unit/container.test.ts', () => {
   it('Should be able to store bindings', () => {
     const ninjaId = 'Ninja';
     const container = new Container();
-    container.bind<Ninja>(ninjaId, Ninja);
+    container.bind<Ninja>(ninjaId, <any>Ninja);
     const ninja = container.get(ninjaId);
     expect(ninja instanceof Ninja).to.be.true;
   });
 
   it('Should have an unique identifier', () => {
-
     const container1 = new Container();
     const container2 = new Container();
     expect(container1.id.length).eql(36);
@@ -36,10 +35,10 @@ describe('/test/unit/container.test.ts', () => {
 
   it('should inject property', () => {
     const container = new Container();
-    container.bind<Warrior>('warrior', Samurai);
-    container.bind<Warrior>('katana1', Katana);
-    container.bind<Warrior>('katana2', Katana);
-    const warrior = container.get('warrior');
+    container.bind<Warrior>('warrior', <any>Samurai);
+    container.bind<Warrior>('katana1', <any>Katana);
+    container.bind<Warrior>('katana2', <any>Katana);
+    const warrior = container.get<Warrior>('warrior');
     expect(warrior instanceof Samurai).to.be.true;
     expect(warrior.katana1).not.to.be.undefined;
     expect(warrior.katana2).not.to.be.undefined;
@@ -49,7 +48,7 @@ describe('/test/unit/container.test.ts', () => {
     const container = new Container();
     container.bind('app', require(path.join(__dirname, '../fixtures/js-app-inject', 'app.js')));
     container.bind('loader', require(path.join(__dirname, '../fixtures/js-app-inject', 'loader.js')).Loader);
-    const app = container.get('app');
+    const app: any = container.get('app');
     expect(app.getConfig().a).to.equal(1);
   });
 
@@ -100,6 +99,18 @@ describe('/test/unit/container.test.ts', () => {
     const car = <Car>await container.getAsync(Car);
     car.run();
     expect(car.getFuelCapacity()).to.equal(35);
+  });
+
+  it('should support constructor inject from parent', async () => {
+    const container = new Container();
+    container.bind('engine', Turbo);
+    container.bind('fuel', Gas);
+    container.bind(BMWX1);
+
+    const car = <Car>await container.getAsync(BMWX1);
+    car.run();
+    expect(car.getFuelCapacity()).to.equal(35);
+    expect(car.getBrand()).to.equal('bmw');
   });
 
   it('should inject constructor parameter in order', async () => {

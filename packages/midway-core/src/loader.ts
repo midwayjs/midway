@@ -1,9 +1,10 @@
-import {isPluginName, isTypeScriptEnvironment} from './utils';
+import { isPluginName, isTypeScriptEnvironment } from './utils';
 import * as path from 'path';
 import * as fs from 'fs';
-import {MidwayContainer} from './container';
-import {MidwayHandlerKey} from './constants';
-import {MidwayLoaderOptions} from './interface';
+import { MidwayContainer } from './container';
+import { MidwayHandlerKey } from './constants';
+import { MidwayLoaderOptions } from './interface';
+import { MidwayRequestContainer } from './requestContainer';
 
 const EggLoader = require('egg-core').EggLoader;
 const TS_SRC_DIR = 'src';
@@ -100,7 +101,7 @@ export class MidwayLoader extends EggLoader {
   }
 
   getEggPaths() {
-    if(!this.appDir) {
+    if (!this.appDir) {
       // register appDir here
       this.registerTypescriptDirectory();
     }
@@ -126,10 +127,10 @@ export class MidwayLoader extends EggLoader {
     return serverEnv;
   }
 
-  protected _buildLoadDir(baseDir, loadDir) {
+  private buildLoadDir(loadDir) {
     const dirs = [];
     for (let dir of loadDir) {
-      dirs.push(path.join(baseDir, dir));
+      dirs.push(path.join(this.baseDir, dir));
     }
     return dirs;
   }
@@ -139,12 +140,14 @@ export class MidwayLoader extends EggLoader {
     let containerConfig = this.config.container || this.app.options.container || {};
     // 在 super contructor 中会调用到getAppInfo，之后会被赋值
     // 如果是typescript会加上 dist 或者 src 目录
-    const baseDir = this.baseDir;
-    this.applicationContext = new MidwayContainer(baseDir);
+    this.applicationContext = new MidwayContainer(this.baseDir);
+    const requestContext = new MidwayRequestContainer(this.applicationContext);
+    // put requestContext to applicationContext
+    this.applicationContext.registerObject('requestContext', requestContext);
     // 如果没有关闭autoLoad 则进行load
     if (!containerConfig.disableAutoLoad) {
       this.applicationContext.load({
-        loadDir: this._buildLoadDir(baseDir, containerConfig.loadDir || []),
+        loadDir: this.buildLoadDir(containerConfig.loadDir || []),
         pattern: containerConfig.pattern,
         ignore: containerConfig.ignore
       });

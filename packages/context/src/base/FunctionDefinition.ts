@@ -1,12 +1,15 @@
-import {ObjectCreator} from './ObjectCreator';
+import { ObjectCreator } from './ObjectCreator';
 import {
   IApplicationContext,
   IConfiguration,
   IManagedInstance,
   IObjectCreator,
   IObjectDefinition,
-  ObjectIdentifier
+  ObjectIdentifier,
+  Scope
 } from '../interfaces';
+import { ScopeEnum } from './Scope';
+import { ManagedValue } from '..';
 
 class FunctionWrapperCreator extends ObjectCreator {
 
@@ -17,19 +20,27 @@ class FunctionWrapperCreator extends ObjectCreator {
     this.context = context;
   }
 
-  doConstruct(Clzz: any, args?: any): any {
+  doConstruct(Clzz: any, args: Array<IManagedInstance> = []): any {
     if (!Clzz) {
       return null;
     }
 
-    return Clzz(this.context);
+    if (args.length) {
+      return Clzz((<ManagedValue>args[0]).value);
+    } else {
+      return Clzz(this.context);
+    }
   }
 
-  async doConstructAsync(Clzz: any, args?: any): Promise<any> {
+  async doConstructAsync(Clzz: any, args: Array<IApplicationContext> = []): Promise<any> {
     if (!Clzz) {
       return null;
     }
-    return await Clzz(this.context);
+    if (args.length) {
+      return await Clzz(args[0]);
+    } else {
+      return await Clzz(this.context);
+    }
   }
 }
 
@@ -53,6 +64,7 @@ export class FunctionDefinition implements IObjectDefinition {
   initMethod: string;
   path: any;
   properties: IConfiguration;
+  protected _scope: Scope = ScopeEnum.Singleton;
 
   getAttr(key: ObjectIdentifier): any {
   }
@@ -70,7 +82,7 @@ export class FunctionDefinition implements IObjectDefinition {
   }
 
   isAsync(): boolean {
-    return false;
+    return true;
   }
 
   isAutowire(): boolean {
@@ -85,12 +97,16 @@ export class FunctionDefinition implements IObjectDefinition {
     return false;
   }
 
-  isRequestScope(): boolean {
-    return false;
+  set scope(scope: Scope) {
+    this._scope = scope;
   }
 
   isSingletonScope(): boolean {
-    return false;
+    return this._scope === ScopeEnum.Singleton;
+  }
+
+  isRequestScope(): boolean {
+    return this._scope === ScopeEnum.Request;
   }
 
   setAttr(key: ObjectIdentifier, value: any): void {

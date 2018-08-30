@@ -1,4 +1,4 @@
-import { XmlObjectDefinition }  from '../../../../src/factory/xml/XmlObjectDefinition';
+import { XmlObjectDefinition }  from '../../../../src';
 import * as utils from '../../../../src/factory/xml/utils';
 import { DOMParser } from 'xmldom';
 import { expect } from 'chai';
@@ -9,7 +9,7 @@ function parseStr(str: string): Element {
   return ele;
 }
 
-describe('/test/unit/factory/xml/XmlObjectDefinition', () => {
+describe('/test/unit/factory/xml/XmlObjectDefinition.test.ts', () => {
   it('xml object should ok', () => {
     const s = `
     <object id="ctor:obj2" path="obj2" init-method="getInstance" destroy-method="close">
@@ -53,7 +53,7 @@ describe('/test/unit/factory/xml/XmlObjectDefinition', () => {
     expect(oo1.isRequestScope()).true;
 
     const s2 = `
-    <object id="ctor:obj2" path="obj1" export="hello" construct-method="getInstance" destroy-method="close" scope="session" autowire="true">
+    <object id="ctor:obj2" path="obj1" export="hello" construct-method="getInstance" destroy-method="close" scope="prototype" autowire="true">
     </object>
     `;
 

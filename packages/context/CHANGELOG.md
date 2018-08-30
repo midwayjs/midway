@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.3.2"></a>
+## [0.3.2](https://github.com/midwayjs/midway/compare/v0.3.1...v0.3.2) (2018-08-30)
+
+
+
+
+**Note:** Version bump only for package injection
+
+<a name="0.3.1"></a>
+## [0.3.1](https://github.com/midwayjs/midway/compare/v0.3.0...v0.3.1) (2018-08-30)
+
+
+
+
+**Note:** Version bump only for package injection
+
+<a name="0.3.0"></a>
+# [0.3.0](https://github.com/midwayjs/midway/compare/v0.2.10...v0.3.0) (2018-08-29)
+
+
+### Features
+
+* add request scope for injection ([50782ed](https://github.com/midwayjs/midway/commit/50782ed))
+
+
+
+
 <a name="0.2.10"></a>
 ## [0.2.10](https://github.com/midwayjs/midway/compare/v0.2.9...v0.2.10) (2018-08-20)
 

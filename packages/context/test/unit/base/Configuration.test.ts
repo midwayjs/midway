@@ -1,9 +1,5 @@
-
-import { BasicConfiguration,
-  ObjectConfiguration } from '../../../src/base/Configuration';
-
-import { expect } from 'chai';
-
+import {BasicConfiguration, ObjectConfiguration} from '../../../src/base/Configuration';
+import {expect} from 'chai';
 
 describe('/test/unit/base/Configuration', () => {
   describe('#BasicConfiguration', () => {

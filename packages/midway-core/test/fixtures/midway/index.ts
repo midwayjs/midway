@@ -1,4 +1,4 @@
-import {Agent, Application, Logger} from 'egg';
+import {Agent, Application} from 'egg';
 import {MidwayLoader} from '../../../src';
 
 export class AppWorkerLoader extends MidwayLoader {

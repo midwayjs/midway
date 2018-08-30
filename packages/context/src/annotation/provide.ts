@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import {DUPLICATED_INJECTABLE_DECORATOR} from '../utils/errMsg';
-import {TAGGED_CLS} from '..';
+import { initOrGetObjectDefProps, TAGGED_CLS } from '..';
 import {ObjectIdentifier, TagClsMetadata} from '../interfaces';
 
 const camelCase = require('camelcase');
@@ -19,6 +19,9 @@ function provide(identifier?: ObjectIdentifier) {
       id: identifier,
       originName: target.name,
     }, target);
+
+    // init property here
+    initOrGetObjectDefProps(target);
 
     return target;
   };

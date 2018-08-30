@@ -1,11 +1,11 @@
 import {provide, inject} from 'injection';
-import {controller, get} from '../../../../../../../src';
+import { Controller, controller, get } from '../../../../../../../src';
 import { BaseService } from '../../lib/service';
 import { HelloService } from '../../lib/HelloService';
 
 @provide()
 @controller('/hello')
-export class HelloController {
+export class HelloController extends Controller {
   name: Array<string> = ['a', 'b'];
 
   xxx: string = 'hjjj';
@@ -19,7 +19,7 @@ export class HelloController {
   service: BaseService;
 
   @get('/say')
-  async say(ctx) {
+  async say() {
     console.log('----', this.name, this.xxx, this.aaaa);
     const arr = [];
     if (this.service) {
@@ -30,6 +30,6 @@ export class HelloController {
       arr.push(await this.helloService.say());
     }
     // service,hello,a,b
-    ctx.body = arr.join(',');
+    this.ctx.body = arr.join(',');
   }
 }

@@ -1,9 +1,8 @@
 'use strict';
 
-import {provide, inject} from 'injection';
-import {controller, get} from '../../../../../../../src/';
-import { config, logger} from 'midway-core';
-
+import {inject, provide} from 'injection';
+import {Controller, controller, get} from '../../../../../../../src/';
+import {config} from 'midway-core';
 
 @provide()
 export class BaseApi {
@@ -14,19 +13,16 @@ export class BaseApi {
 
 @provide()
 @controller('/api')
-export class Api {
+export class Api extends Controller {
 
   @inject('is')
   isModule;
 
   @config('hello')
-  config;
-
-  @logger()
-  logger;
+  config1;
 
   @get('/test')
-  async index(ctx) {
-    ctx.body = this.isModule.function('hello').toString() + this.config.c;
+  async index() {
+    this.ctx.body = this.isModule.function('hello').toString() + this.config1.c;
   }
 }

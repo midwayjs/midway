@@ -1,15 +1,23 @@
 import 'reflect-metadata';
-import {Container,
-  IContainer,
-  TagClsMetadata, TAGGED_CLS,
-  IObjectDefinitionParser,
-  IParserContext,
-  IObjectDefinition,
-  XmlObjectDefinition,
+import {
   Autowire,
+  Container,
+  IApplicationContext,
+  IContainer,
+  IManagedInstance,
   IManagedParser,
   IManagedResolver,
-  IManagedInstance
+  IObjectDefinition,
+  IObjectDefinitionParser,
+  IParserContext,
+  OBJ_DEF_CLS,
+  ObjectDefinitionOptions,
+  ObjectIdentifier,
+  Scope,
+  ScopeEnum,
+  TagClsMetadata,
+  TAGGED_CLS,
+  XmlObjectDefinition
 } from 'injection';
 import {
   CLASS_KEY_CONSTRUCTOR,
@@ -20,8 +28,8 @@ import {
   LOGGER_KEY_PROP,
   PLUGIN_KEY_CLZ,
   PLUGIN_KEY_PROP
-} from './decorators/metaKeys';
-import {MidwayHandlerKey} from './constants';
+} from './decorators';
+import { MidwayHandlerKey } from './constants';
 
 const globby = require('globby');
 const path = require('path');
@@ -35,10 +43,12 @@ const TYPE_PLUGIN = 'plugin';
 
 class BaseParser {
   container: MidwayContainer;
+
   constructor(container: MidwayContainer) {
     this.container = container;
   }
 }
+
 /**
  * 用于xml解析扩展
  * <controllers />
@@ -54,6 +64,7 @@ class ControllerDefinitionParser extends BaseParser implements IObjectDefinition
     return definition;
   }
 }
+
 /**
  * 用于xml解析扩展
  * <middlewares />
@@ -89,6 +100,7 @@ class LoggerParser implements IManagedParser {
 
 class LoggerResolver implements IManagedResolver {
   private container: MidwayContainer;
+
   constructor(container: MidwayContainer) {
     this.container = container;
   }
@@ -129,6 +141,7 @@ class PluginParser implements IManagedParser {
 
 class PluginResolver implements IManagedResolver {
   private container: MidwayContainer;
+
   constructor(container: MidwayContainer) {
     this.container = container;
   }
@@ -150,10 +163,10 @@ class PluginResolver implements IManagedResolver {
 export class MidwayContainer extends Container implements IContainer {
   controllersIds: Array<string> = [];
   middlewaresIds: Array<string> = [];
-
-  handlerMap: Map<string, (handlerKey: string) => any> = new Map();
+  handlerMap: Map<string, (handlerKey: string) => any>;
 
   init(): void {
+    this.handlerMap = new Map();
     super.init();
 
     // xml扩展 <logger name=""/> <plugin name="hsfclient"/>
@@ -165,13 +178,12 @@ export class MidwayContainer extends Container implements IContainer {
     this.parser.registerParser(new ControllerDefinitionParser(this));
     this.parser.registerParser(new MiddlewareDefinitionParser(this));
 
-    this._registerEachCreatedHook();
+    this.registerEachCreatedHook();
   }
-
 
   /**
    * load directory and traverse file to find bind class
-   * @param {{loadDir: string | string[]; pattern?: string[]; ignore?: string[]}} opts
+   * @param opts
    */
   load(opts: {
     loadDir: string | string[];
@@ -222,9 +234,18 @@ export class MidwayContainer extends Container implements IContainer {
         this.bind(camelcase(module.name), module);
       }
     } else {
-      let id = module[FUNCTION_INJECT_KEY];
-      if (id) {
-        this.bind(id, module);
+      let info: {
+        id: ObjectIdentifier,
+        provider: (context?: IApplicationContext) => any,
+        scope?: Scope
+      } = module[FUNCTION_INJECT_KEY];
+      if (info && info.id) {
+        if (!info.scope) {
+          info.scope = ScopeEnum.Request;
+        }
+        this.bind(info.id, module, {
+          scope: info.scope,
+        });
       }
     }
   }
@@ -235,7 +256,7 @@ export class MidwayContainer extends Container implements IContainer {
     return child;
   }
 
-  private _registerEachCreatedHook() {
+  protected registerEachCreatedHook() {
     // register constructor inject
     this.beforeEachCreated((target, constructorArgs, context) => {
       let constructorMetaData;
@@ -293,7 +314,8 @@ export class MidwayContainer extends Container implements IContainer {
             if (v) {
               return v;
             }
-          } catch (e) { }
+          } catch (e) {
+          }
           return this.handlerMap.get(MidwayHandlerKey.LOGGER)(key);
         });
       }
@@ -320,7 +342,7 @@ export class MidwayContainer extends Container implements IContainer {
    * @param getterHandler
    */
   private defineGetterPropertyValue(setterProps, metadataKey, instance, getterHandler) {
-    if (setterProps) {
+    if (setterProps && getterHandler) {
       for (let prop of setterProps) {
         let propertyKey = Reflect.getMetadata(metadataKey, instance, prop);
         if (propertyKey) {
@@ -336,6 +358,17 @@ export class MidwayContainer extends Container implements IContainer {
 
   registerDataHandler(handlerType: string, handler: (handlerKey) => any) {
     this.handlerMap.set(handlerType, handler);
+  }
+
+  registerCustomBinding(objectDefinition, target) {
+    super.registerCustomBinding(objectDefinition, target);
+
+    // Override the default scope to request
+    let objDefOptions: ObjectDefinitionOptions = Reflect.getMetadata(OBJ_DEF_CLS, target);
+    if (objDefOptions && !objDefOptions.scope) {
+      debug(`register @scope to default value(request), id=${objectDefinition.id}`);
+      objectDefinition.scope = ScopeEnum.Request;
+    }
   }
 
 }

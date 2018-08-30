@@ -24,7 +24,7 @@ describe('/test/loader.test.ts', () => {
     });
   });
 
-  describe('load ts file and use config, plugin decorator', () => {
+  describe.only('load ts file and use config, plugin decorator', () => {
     let app;
     before(() => {
       app = utils.app('base-app-decorator', {

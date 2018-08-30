@@ -1,5 +1,5 @@
 import { IResource } from '../../interfaces';
-import { BaseApplicationContext } from '../ApplicationContext';
+import { BaseApplicationContext } from '../applicationContext';
 import { XmlObjectDefinitionParser } from './XmlObjectDefinitionParser';
 import { Resource } from '../../base/Resource';
 

@@ -1,17 +1,19 @@
-import {Router} from '../router';
-import * as path from 'path';
-import {TagClsMetadata, TAGGED_CLS} from 'injection';
-import {loading} from '../loading';
 import 'reflect-metadata';
-import {WEB_ROUTER_CLS, WEB_ROUTER_PREFIX_CLS, WEB_ROUTER_PROP} from '../decorators/metaKeys';
-import {MidwayLoader} from 'midway-core';
+import { Router } from '../router';
+import * as path from 'path';
+import { TagClsMetadata, TAGGED_CLS } from 'injection';
+import { loading } from '../loading';
+import { WEB_ROUTER_CLS, WEB_ROUTER_PREFIX_CLS, WEB_ROUTER_PROP } from '../decorators/metaKeys';
+import { MidwayLoader } from 'midway-core';
 
 const is = require('is-type-of');
+
 // const debug = require('debug')('midway:web-loader');
 
 export class MidwayWebLoader extends MidwayLoader {
 
-  protected async preloadController(): Promise<void> {
+  async loadController(opt?): Promise<void> {
+    // load midway controller to binding router
     const appDir = path.join(this.options.baseDir, 'app');
     const results = loading(this.getFileExtension(['controllers/**/*', 'controller/**/*']), {
       loadDirs: appDir,
@@ -30,7 +32,10 @@ export class MidwayWebLoader extends MidwayLoader {
         }
       }
     }
+    // Call the parent class
+    super.loadController(opt);
   }
+
   /**
    * 从xml加载controller
    */
@@ -44,7 +49,6 @@ export class MidwayWebLoader extends MidwayLoader {
           controllers.list.forEach(c => {
             let newRouter = new Router({
               sensitive: true,
-              logger: this.options.logger,
             }, app);
             c.expose(newRouter);
 
@@ -54,41 +58,53 @@ export class MidwayWebLoader extends MidwayLoader {
       }
     }
   }
+
   /**
-   * init controller in ApplicationContext
+   * register controller when it has @controller decorator
    * @param module
    */
   private async preInitController(module): Promise<void> {
-    let cid = this.getModuleIdentifier(module);
-    if (cid) {
-      const controller = await this.applicationContext.getAsync(cid);
-      this.preRegisterRouter(module, controller);
-    }
-  }
-
-  private getModuleIdentifier(module) {
     let metaData = <TagClsMetadata>Reflect.getMetadata(TAGGED_CLS, module);
-    if (metaData) {
-      return metaData.id;
+    if (metaData && metaData.id) {
+      this.preRegisterRouter(module, metaData.id);
     }
   }
 
-  private preRegisterRouter(target, controller) {
+  private preRegisterRouter(target, controllerId) {
     const app = this.app;
     const controllerPrefix = Reflect.getMetadata(WEB_ROUTER_PREFIX_CLS, target);
     if (controllerPrefix) {
       let newRouter = new Router({
         sensitive: true,
-        logger: this.options.logger,
       }, app);
       newRouter.prefix(controllerPrefix);
       const methodNames = Reflect.getMetadata(WEB_ROUTER_CLS, target);
       for (let methodName of methodNames) {
         const mappingInfo = Reflect.getMetadata(WEB_ROUTER_PROP, target, methodName);
-        newRouter[mappingInfo.requestMethod].call(newRouter, mappingInfo.routerName, mappingInfo.path, controller[methodName].bind(controller));
+        const routerArgs = [
+          mappingInfo.routerName,
+          mappingInfo.path,
+          this.generateController(`${controllerId}.${methodName}`)
+        ];
+        // apply controller from request context
+        newRouter[mappingInfo.requestMethod].apply(newRouter, routerArgs);
       }
       app.use(newRouter.middleware());
     }
+  }
+
+  /**
+   * wrap controller string to middleware function
+   * @param controllerMapping like xxxController.index
+   */
+  generateController(controllerMapping: string) {
+    const mappingSplit = controllerMapping.split('.');
+    const controllerId = mappingSplit[0],
+      methodName = mappingSplit[1];
+    return async (ctx, next) => {
+      const controller = await ctx.requestContext.getAsync(controllerId);
+      return controller[methodName].call(controller);
+    };
   }
 
   protected getFileExtension(names: string | string[]): string[] {
@@ -105,7 +121,6 @@ export class MidwayWebLoader extends MidwayLoader {
 
   async refreshContext(): Promise<void> {
     await super.refreshContext();
-
     await this.preloadControllerFromXml();
   }
 }

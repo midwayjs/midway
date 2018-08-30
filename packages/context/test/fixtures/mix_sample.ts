@@ -1,16 +1,17 @@
-import {inject, provide, singleton} from '../../src/annotation';
+import {inject, provide, scope} from '../../src/annotation';
+import {ScopeEnum} from '../../src';
 
 interface Engine {
   capacity;
 }
 
-@singleton(false)
+@scope(ScopeEnum.Prototype)
 @provide('petrol')
 export class PetrolEngine implements Engine {
   capacity = 10;
 }
 
-@singleton(false)
+@scope(ScopeEnum.Prototype)
 @provide('diesel')
 export class DieselEngine implements Engine {
   capacity = 20;

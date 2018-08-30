@@ -45,11 +45,11 @@ export class XmlObjectDefinition extends ObjectDefinition {
     if (this.getAttr('scope') === 'request') {
       this._scope = ScopeEnum.Request;
     }
-    if (this.getAttr('scope') === 'session') {
-      this._scope = ScopeEnum.Session;
+    if (this.getAttr('scope') === 'prototype') {
+      this._scope = ScopeEnum.Prototype;
     }
-    if (this.getAttr('scope') === 'application') {
-      this._scope = ScopeEnum.Application;
+    if (this.getAttr('scope') === 'singleton') {
+      this._scope = ScopeEnum.Singleton;
     }
 
   }

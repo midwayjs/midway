@@ -1,5 +1,7 @@
 'use strict';
 
+const path = require('path');
+
 /**
  * register ts env
  * @param {Object} options {env: NODE_ENV, typescript: true}

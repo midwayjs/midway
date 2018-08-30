@@ -13,7 +13,7 @@
     "midway-bin": "*",
     "midway-mock": "*",
     "tslib": "^1.8.1",
-    "ts-node": "^7.0.0",
+    "ts-node": "^7.0.1",
     "tslint": "^5.9.1",
     "typescript": "^2.8.0",
     "webstorm-disable-index": "^1.2.0"
@@ -22,9 +22,9 @@
     "node": ">=8.9.0"
   },
   "scripts": {
-    "start": "egg-scripts start --daemon --title=egg-server-{{name}}",
+    "start": "egg-scripts start --daemon --title=egg-server-{{name}} --framework=midway",
     "stop": "egg-scripts stop --title=egg-server-{{name}}",
-    "start_build": "npm run build && NODE_ENV=local midway-bin dev",
+    "start_build": "npm run build && NODE_ENV=development midway-bin dev",
     "dev": "NODE_ENV=local midway-bin dev --ts",
     "debug": "NODE_ENV=local midway-bin debug --ts",
     "test": "npm run lint -- --fix && midway-bin test --ts",

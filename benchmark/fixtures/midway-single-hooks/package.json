@@ -1,0 +1,47 @@
+{
+  "name": "midway-single-hooks",
+  "version": "1.0.0",
+  "description": "midway-sample",
+  "private": true,
+  "dependencies": {
+    "midway": "^0.2.11",
+    "midway-bin": "*",
+    "pandora": "^1.8.27"
+  },
+  "devDependencies": {
+    "@types/mocha": "^5.2.5",
+    "@types/node": "^10.5.5",
+    "ts-node": "^7.0.1",
+    "tslib": "^1.8.1",
+    "tslint": "^5.9.1",
+    "typescript": "^2.8.0"
+  },
+  "engines": {
+    "node": ">=8.9.0"
+  },
+  "scripts": {
+    "start": "NODE_ENV=production pandora start .",
+    "stop": "pandora exit",
+    "start_build": "npm run build && NODE_ENV=production midway-bin dev",
+    "pdev": "pandora dev",
+    "dev": "NODE_ENV=local midway-bin dev --ts",
+    "debug": "NODE_ENV=local midway-bin debug --ts",
+    "test": "npm run lint -- --fix && midway-bin test --ts",
+    "cov": "midway-bin cov --ts",
+    "lint": "tslint -c tslint.json --project .",
+    "ci": "midway-bin cov --ts",
+    "build": "midway-bin build -c",
+    "ready": "npm run build"
+  },
+  "ci": {
+    "version": "8, 9"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "license": "MIT",
+  "midway-server-options": {
+    "workers": 1
+  }
+}

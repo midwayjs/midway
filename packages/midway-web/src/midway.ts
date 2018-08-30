@@ -40,6 +40,10 @@ class MidwayApplication extends (<{
     return (<AppWorkerLoader>this.loader).applicationContext;
   }
 
+  generateController(controllerMapping: string) {
+    return (<AppWorkerLoader>this.loader).generateController(controllerMapping);
+  }
+
   /**
    * The current code base directory of application
    * in typescript mode is include src
