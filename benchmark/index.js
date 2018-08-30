@@ -70,7 +70,7 @@ const cannon = (port, url) => {
     });
 
     console.log(`Waiting for ${name} to initialize...`);
-    await wait(delay || 5000); // wait for workers to properly initialize
+    await wait(delay || 10000); // wait for workers to properly initialize
     console.log(`Running benchmark on ${name}...`);
     let results = await cannon(port, url);
     console.log(chalk.whiteBright.bold(`${name} QPS:  ${results.requests.average}`));

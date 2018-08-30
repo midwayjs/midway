@@ -4,17 +4,17 @@
   "description": "midway-sample",
   "private": true,
   "dependencies": {
-    "midway": "*",
+    "midway": "beta",
+    "midway-bin": "beta",
     "egg-scripts": "^2.5.0"
   },
   "devDependencies": {
     "@types/mocha": "^5.2.5",
     "@types/node": "^10.5.5",
     "egg-ci": "^1.8.0",
-    "midway-bin": "*",
     "midway-mock": "*",
-    "tslib": "^1.8.1",
     "ts-node": "^7.0.1",
+    "tslib": "^1.8.1",
     "tslint": "^5.9.1",
     "typescript": "^2.8.0",
     "webstorm-disable-index": "^1.2.0"
@@ -23,16 +23,16 @@
     "node": ">=8.9.0"
   },
   "scripts": {
-    "start": "npm i --production && egg-scripts start --daemon --title=midway-server-sample",
+    "start": "npm i --production && npm run build && egg-scripts start --daemon --title=midway-server-sample --framework=midway",
     "stop": "egg-scripts stop --title=midway-server-sample",
-    "start_build": "npm run build && NODE_ENV=local ../../../packages/midway/node_modules/.bin/midway-bin dev",
-    "dev": "NODE_ENV=local ../../../packages/midway/node_modules/.bin/midway-bin dev --ts",
+    "start_build": "npm run build && NODE_ENV=development midway-bin dev",
+    "dev": "NODE_ENV=local midway-bin dev --ts",
     "debug": "NODE_ENV=local midway-bin debug --ts",
     "test": "npm run lint -- --fix && midway-bin test --ts",
     "cov": "midway-bin cov --ts",
     "lint": "tslint -c tslint.json --project .",
     "ci": "midway-bin cov --ts",
-    "build": "../../../packages/midway/node_modules/.bin/midway-bin build -c"
+    "build": "midway-bin build -c"
   },
   "ci": {
     "version": "8, 9"
@@ -41,6 +41,5 @@
     "type": "git",
     "url": ""
   },
-  "author": "{{author}}",
   "license": "MIT"
 }

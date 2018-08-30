@@ -1,6 +1,7 @@
-import { controller, get, inject, Controller } from 'midway';
+import { controller, get, inject, Controller, provide } from 'midway';
 import { IUserService, IUserResult } from '../../interface';
 
+@provide()
 @controller('/user/')
 export class UserController extends Controller {
   @inject('userService')
@@ -8,7 +9,7 @@ export class UserController extends Controller {
 
   @get('/:id')
   async getUser(): Promise<void> {
-    const id: number = this.ctx.request.params('id');
+    const id: number = this.ctx.params.id;
     const user: IUserResult = await this.service.getUser({id});
     this.ctx.body = {success: true, message: 'OK', data: user};
   }

@@ -9,7 +9,7 @@ module.exports = pandora => {
    * default is fork mode
    */
   pandora
-    .fork('{{name}}', require.resolve('midway/server'));
+    .fork('egg-hooks-sample', require.resolve('midway/server'));
 
   /**
    * you can use cluster mode to start application

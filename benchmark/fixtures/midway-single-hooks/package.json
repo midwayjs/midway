@@ -1,19 +1,22 @@
 {
-  "name": "{{name}}",
+  "name": "midway-single-hooks",
   "version": "1.0.0",
-  "description": "{{description}}",
+  "description": "midway-sample",
   "private": true,
   "dependencies": {
-    "midway": "*"
+    "cls-hooked": "^4.2.2",
+    "egg-scripts": "^2.5.0",
+    "midway": "~0.2.10",
+    "midway-bin": "*",
+    "pandora": "^1.8.27"
   },
   "devDependencies": {
     "@types/mocha": "^5.2.5",
     "@types/node": "^10.5.5",
     "egg-ci": "^1.8.0",
-    "midway-bin": "*",
     "midway-mock": "*",
-    "tslib": "^1.8.1",
     "ts-node": "^7.0.1",
+    "tslib": "^1.8.1",
     "tslint": "^5.9.1",
     "typescript": "^2.8.0",
     "webstorm-disable-index": "^1.2.0"
@@ -22,9 +25,10 @@
     "node": ">=8.9.0"
   },
   "scripts": {
-    "start": "egg-scripts start --daemon --title=egg-server-{{name}} --framework=midway",
-    "stop": "egg-scripts stop --title=egg-server-{{name}}",
-    "start_build": "npm run build && NODE_ENV=development midway-bin dev",
+    "start": "npm i --production && npm run build && NODE_ENV=production pandora start .",
+    "stop": "pandora exit",
+    "start_build": "npm run build && NODE_ENV=production midway-bin dev",
+    "pdev": "pandora dev",
     "dev": "NODE_ENV=local midway-bin dev --ts",
     "debug": "NODE_ENV=local midway-bin debug --ts",
     "test": "npm run lint -- --fix && midway-bin test --ts",
@@ -40,6 +44,8 @@
     "type": "git",
     "url": ""
   },
-  "author": "{{author}}",
-  "license": "MIT"
+  "license": "MIT",
+  "midway-server-options": {
+    "workers": 1
+  }
 }

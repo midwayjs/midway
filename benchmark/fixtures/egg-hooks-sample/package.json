@@ -1,20 +1,22 @@
 {
-  "name": "egg-test",
+  "name": "egg-hooks-sample",
   "version": "1.0.0",
   "description": "",
   "private": true,
   "dependencies": {
+    "cls-hooked": "^4.2.2",
     "egg": "^2.2.1",
     "egg-bin": "^4.8.3",
-    "egg-scripts": "^2.5.0"
+    "egg-scripts": "^2.5.0",
+    "pandora": "^1.8.27"
   },
   "devDependencies": {},
   "engines": {
     "node": ">=8.9.0"
   },
   "scripts": {
-    "start": "npm i --production && egg-scripts start --daemon --title=egg-server-egg-test",
-    "stop": "egg-scripts stop --title=egg-server-egg-test",
+    "start": "npm i --production && pandora start",
+    "stop": "pandora exit",
     "dev": "egg-bin dev",
     "debug": "egg-bin debug",
     "test": "npm run lint -- --fix && npm run test-local",

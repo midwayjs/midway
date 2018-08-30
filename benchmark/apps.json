@@ -1,21 +1,48 @@
 {
   "apps": [
     {
+      "name": "Midway 6 with singleton context",
+      "cwd": "fixtures/midway-single-sample",
+      "command": "npm start",
+      "port": 7001,
+      "exit": "npm stop",
+      "url": "/user/1",
+      "skip": false
+    },
+    {
+      "name": "Midway 6 with async_hooks in singleton",
+      "cwd": "fixtures/midway-single-hooks",
+      "command": "npm start",
+      "port": 7001,
+      "exit": "npm stop",
+      "url": "/user/1",
+      "skip": false
+    },
+    {
+      "name": "Midway 6 with request context",
+      "cwd": "fixtures/midway-sample",
+      "command": "npm start",
+      "port": 7001,
+      "exit": "npm stop",
+      "url": "/user/1",
+      "skip": false
+    },
+    {
       "name": "Egg 3",
       "cwd": "fixtures/egg-sample",
       "command": "npm start",
       "port": 7001,
       "exit": "npm stop",
-      "url": "/",
+      "url": "/user/1",
       "skip": false
     },
     {
-      "name": "Midway 6",
-      "cwd": "fixtures/midway-sample",
+      "name": "Egg 3 with async_hooks",
+      "cwd": "fixtures/egg-hooks-sample",
       "command": "npm start",
       "port": 7001,
       "exit": "npm stop",
-      "url": "/",
+      "url": "/user/1",
       "skip": false
     }
   ]

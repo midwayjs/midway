@@ -18,6 +18,7 @@
     "scene"
   ],
   "files": [
+    "app",
     "config",
     "dist",
     "d.ts"
