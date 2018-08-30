@@ -35,7 +35,7 @@ const cannon = (port, url) => {
   const apps = require('./apps').apps;
   console.log('----------------------------------------');
   console.log('Waiting for run npm install in every sample');
-  // execSync('./ready.sh', {cwd: __dirname, stdio: 'inherit'});
+  execSync('./ready.sh', {cwd: __dirname, stdio: 'inherit'});
   console.log('Run npm install in every sample Complete');
   console.log('----------------------------------------');
 
