@@ -1,5 +1,6 @@
 # Midway
 
+为企业级应用开发的 Web 全栈框架，基于 typescript，面向未来领域，提供良好的装饰器支持，让应用维护变的更加简单。
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/midwayjs/midway/blob/master/LICENSE)
 [![GitHub tag](https://img.shields.io/github/tag/midwayjs/midway.svg)]()
@@ -11,22 +12,23 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/midwayjs/midway/pulls)
 
 
-## Installation
+## 安装
 
 ```bash
 $ npm install midway --save
 ```
-Node.js >= 8.0.0 required.
+需要 Node.js >= 8.0.0。
 
-## Features
+## 特性
 
-- ✔︎ Sophisticated group Middleware Architecture and compatibility
-- ✔︎ Scalable plug-in capabilities and group plug-in Ecology
-- ✔︎ Good application layering and decoupling capability
-- ✔︎ A good development experience for the future
+- ✔︎ 精致的中间件分组架构和兼容性
+- ✔︎ 可扩展的插件体系生态
+- ✔︎ 良好的应用分层和解耦能力
+- ✔︎ 面向未来的开发体验
 
-## Getting Started
-Follow the commands listed below.
+## 快速开始
+
+使用以下命令
 
 ```bash
 $ npm install midway-init -g
@@ -36,11 +38,12 @@ $ npm run dev
 $ open http://localhost:7001
 ```
 
-## How to Contribute
+## 贡献
 
-Please let us know how can we help. Do check out [issues](http://github.com/midwayjs/midway/issues) for bug reports or suggestions first.
 
-To become a contributor, please follow our contributing guide.
+请告知我们可以为你做些什么，不过在此之前，请检查一下是否有 [已经存在的Bug或者意见](http://github.com/midwayjs/midway/issues)。
+
+如果你是一个代码贡献者，请参考代码贡献规范。
 
 ## License
 
