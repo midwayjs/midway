@@ -85,5 +85,6 @@ const cannon = (port, url) => {
     } else {
       kill(child.pid);
     }
+    await wait(delay || 5000);
   }
 })().catch(e => console.error(e));
