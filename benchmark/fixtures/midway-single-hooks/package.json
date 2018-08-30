@@ -4,8 +4,6 @@
   "description": "midway-sample",
   "private": true,
   "dependencies": {
-    "cls-hooked": "^4.2.2",
-    "egg-scripts": "^2.5.0",
     "midway": "^0.2.11",
     "midway-bin": "*",
     "pandora": "^1.8.27"

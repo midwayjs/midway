@@ -3,13 +3,15 @@
 
 'use strict';
 
+const path = require('path');
+
 module.exports = pandora => {
 
   /**
    * default is fork mode
    */
   pandora
-    .fork('egg-hooks-sample', require.resolve('midway/server'));
+    .fork('egg-hooks-sample', path.join(__dirname, './server.js'));
 
   /**
    * you can use cluster mode to start application

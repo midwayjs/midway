@@ -4,10 +4,8 @@
   "description": "",
   "private": true,
   "dependencies": {
-    "cls-hooked": "^4.2.2",
     "egg": "^2.2.1",
     "egg-bin": "^4.8.3",
-    "egg-scripts": "^2.5.0",
     "pandora": "^1.8.27"
   },
   "devDependencies": {},
@@ -15,7 +13,7 @@
     "node": ">=8.9.0"
   },
   "scripts": {
-    "start": "pandora start",
+    "start": "pandora start .",
     "stop": "pandora exit",
     "dev": "egg-bin dev",
     "debug": "egg-bin debug",

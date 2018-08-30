@@ -18,8 +18,8 @@ const cannon = (port, url) => {
   return new Promise((resolve, reject) => {
     autocannon({
       url: `http://127.0.0.1:${port}${url}`,
-      connections: 8,
-      pipelining: 1,
+      connections: 5000,
+      pipelining: 2,
       duration: 10
     }, (err, results) => {
       if (err) {
@@ -35,7 +35,7 @@ const cannon = (port, url) => {
   const apps = require('./apps').apps;
   console.log('----------------------------------------');
   console.log('Waiting for run npm install in every sample');
-  execSync('./ready.sh', {cwd: __dirname, stdio: 'inherit'});
+  // execSync('./ready.sh', {cwd: __dirname, stdio: 'inherit'});
   console.log('Run npm install in every sample Complete');
   console.log('----------------------------------------');
 
