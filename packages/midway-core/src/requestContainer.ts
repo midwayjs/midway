@@ -7,12 +7,16 @@ export class MidwayRequestContainer extends MidwayContainer {
   applicationContext: MidwayContainer;
   ctx;
 
-  constructor(ctx, applicationContext) {
+  constructor(applicationContext) {
     super();
-    this.ctx = ctx;
-    this.registerObject('ctx', ctx);
     this.parent = applicationContext;
     this.applicationContext = applicationContext;
+  }
+
+  updateContext(ctx) {
+    this.registry.clearAll();
+    this.ctx = ctx;
+    this.registerObject('ctx', ctx);
   }
 
   registerEachCreatedHook() {

@@ -4,6 +4,7 @@ import * as fs from 'fs';
 import { MidwayContainer } from './container';
 import { MidwayHandlerKey } from './constants';
 import { MidwayLoaderOptions } from './interface';
+import { MidwayRequestContainer } from './requestContainer';
 
 const EggLoader = require('egg-core').EggLoader;
 const TS_SRC_DIR = 'src';
@@ -140,6 +141,9 @@ export class MidwayLoader extends EggLoader {
     // 在 super contructor 中会调用到getAppInfo，之后会被赋值
     // 如果是typescript会加上 dist 或者 src 目录
     this.applicationContext = new MidwayContainer(this.baseDir);
+    const requestContext = new MidwayRequestContainer(this.applicationContext);
+    // put requestContext to applicationContext
+    this.applicationContext.registerObject('requestContext', requestContext);
     // 如果没有关闭autoLoad 则进行load
     if (!containerConfig.disableAutoLoad) {
       this.applicationContext.load({
