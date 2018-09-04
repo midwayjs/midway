@@ -34,8 +34,6 @@
     "updated": "lerna updated",
     "li": "lerna init",
     "build": "sh scripts/build.sh",
-    "gen-api-ref": "lerna run gen-api-ref",
-    "gen-site": "pt build && npm run gen-api-ref",
     "authors": "git log --format='%aN <%aE>' | sort -u > AUTHORS"
   },
   "keywords": [
