@@ -1,7 +1,8 @@
 import { EggMock } from 'egg-mock';
 import { MidwayMockApplication } from './application';
 import { MidwayApplicationOptions } from './interface';
-import { EggCoreOptions } from 'egg-core';
+import * as path from 'path';
+import * as fs from 'fs';
 
 const mock = require('egg-mock');
 
@@ -16,6 +17,13 @@ interface MidwayMock extends EggMock {
  * @param options 参数
  */
 function mockContainer(options: MidwayApplicationOptions) {
+  if (!process.env.MIDWAY_PATH) {
+    process.env.MIDWAY_PATH = JSON.stringify([
+      fs.existsSync(path.join(__dirname, '../src')) ?
+        path.join(__dirname, '../../midway-web') :
+        path.join(require.resolve('midway-web'), '../../'),
+    ]);
+  }
   options.container = Object.assign({
     loadDir: ['app', 'lib'],
     ignore: [
@@ -28,7 +36,7 @@ function mockContainer(options: MidwayApplicationOptions) {
       '**/config/**'
     ]
   }, options.container || {});
-  const app = new MidwayMockApplication(<EggCoreOptions><any>options);
+  const app = new MidwayMockApplication(options);
   app.loader.load();
   let container = app.getApplicationContext();
   const oldReady = container.ready;

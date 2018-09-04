@@ -1,4 +1,5 @@
 import {MidwayLoader} from 'midway-core';
+import * as path from 'path';
 
 export class MidwayMockLoader extends MidwayLoader {
 
@@ -14,5 +15,13 @@ export class MidwayMockLoader extends MidwayLoader {
     this.app.beforeStart(async () => {
       await this.refreshContext();
     });
+  }
+
+  getEggPaths() {
+    const paths = super.getEggPaths();
+    const defaultPaths = JSON.parse(process.env.MIDWAY_PATH);
+    return paths.concat(defaultPaths).concat([
+      path.dirname(__dirname),
+    ]);
   }
 }
