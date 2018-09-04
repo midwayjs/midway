@@ -6,7 +6,7 @@ import * as fs from 'fs';
 
 const mock = require('egg-mock');
 
-interface MidwayMock extends EggMock {
+export interface MidwayMock extends EggMock {
   container: typeof mockContainer;
   default: typeof mock;
 }
