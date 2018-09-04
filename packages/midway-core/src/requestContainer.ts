@@ -16,7 +16,10 @@ export class MidwayRequestContainer extends MidwayContainer {
   updateContext(ctx) {
     this.registry.clearAll();
     this.ctx = ctx;
+    // register ctx
     this.registerObject('ctx', ctx);
+    // register contextLogger
+    this.registerObject('logger', ctx.logger);
   }
 
   registerEachCreatedHook() {
@@ -64,7 +67,7 @@ export class MidwayRequestContainer extends MidwayContainer {
 
     const definition = this.applicationContext.registry.getDefinition(identifier);
     if (definition && definition.isRequestScope()) {
-      if(definition.creator.constructor.name === 'FunctionWrapperCreator') {
+      if (definition.creator.constructor.name === 'FunctionWrapperCreator') {
         const valueManagedIns = new ManagedValue(this, VALUE_TYPE.OBJECT);
         definition.constructorArgs = [valueManagedIns];
       }
