@@ -5,4 +5,3 @@ export * from './decorators';
 export {MidwayWebLoader} from './loader/webLoader';
 export * from './constants';
 export {loading} from './loading';
-export {Controller} from './controller';

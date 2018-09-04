@@ -1,23 +1,22 @@
 'use strict';
 
 import { provide } from 'injection';
-import { Controller, controller, get } from '../../../../../../../src/';
+import { controller, get } from '../../../../../../../src/';
 
 
 @provide()
-export class BaseApi extends Controller {
-  async index() {
-    this.ctx.body = 'index';
+export class BaseApi {
+  async index(ctx) {
+    ctx.body = 'index';
   }
 }
 
 @provide()
 @controller('/api')
-export class Api extends Controller {
+export class Api {
 
   @get('/test')
-  async index() {
-    const {ctx} = this;
+  async index(ctx) {
     ctx.body = 'hello';
   }
 }

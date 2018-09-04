@@ -103,7 +103,7 @@ export class MidwayWebLoader extends MidwayLoader {
       methodName = mappingSplit[1];
     return async (ctx, next) => {
       const controller = await ctx.requestContext.getAsync(controllerId);
-      return controller[methodName].call(controller);
+      return controller[methodName].call(controller, ctx, next);
     };
   }
 

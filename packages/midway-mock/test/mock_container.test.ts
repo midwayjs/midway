@@ -1,8 +1,8 @@
-import {BaseService} from './fixtures/base-app-decorator/src/lib/service';
+import { BaseService } from './fixtures/base-app-decorator/src/lib/service';
+import { mm } from '../src';
 
 const path = require('path');
 const assert = require('assert');
-const mm = require('../src');
 const fixtures = path.join(__dirname, 'fixtures');
 
 describe('test/mock_container.test.ts', () => {

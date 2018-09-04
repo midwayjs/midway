@@ -1,22 +1,29 @@
 import { EggMock } from 'egg-mock';
+import { MidwayMockApplication } from './application';
+import { MidwayApplicationOptions } from './interface';
+import * as path from 'path';
+import * as fs from 'fs';
+
 const mock = require('egg-mock');
-import {MidwayMockApplication} from './application';
 
 interface MidwayMock extends EggMock {
   container: typeof mockContainer;
+  default: typeof mock;
 }
+
 /**
  * 只初始化app级别的container
  * agent相关的逻辑使用mm2.app
  * @param options 参数
  */
-function mockContainer(options: {
-  baseDir: string;
-  framework: string;
-  type: 'application' | 'agent';
-  plugins?: any;
-  container: any;
-}) {
+function mockContainer(options: MidwayApplicationOptions) {
+  if (!process.env.MIDWAY_PATH) {
+    process.env.MIDWAY_PATH = JSON.stringify([
+      fs.existsSync(path.join(__dirname, '../src')) ?
+        path.join(__dirname, '../../midway-web') :
+        path.join(require.resolve('midway-web'), '../../'),
+    ]);
+  }
   options.container = Object.assign({
     loadDir: ['app', 'lib'],
     ignore: [
@@ -58,4 +65,4 @@ mm2.app = (options) => {
   }, options));
 };
 mm2.container = mockContainer;
-module.exports = mm2;
+export { mm2 as mm };

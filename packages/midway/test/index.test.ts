@@ -1,5 +1,6 @@
-import {expect, should} from 'chai';
+import { expect } from 'chai';
 import * as midway from '../src';
+
 const path = require('path');
 const _ROOT = path.join(__dirname, '../');
 

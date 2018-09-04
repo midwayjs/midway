@@ -1,12 +1,11 @@
-import {EggCore} from 'egg-core';
-import {MidwayMockLoader} from './loader';
+import { Application } from 'egg';
+import { MidwayMockLoader } from './loader';
 
-export class MidwayMockApplication extends EggCore {
+export class MidwayMockApplication  extends (<{
+  new(...x)
+}> Application) {
 
-  options;
   loader: MidwayMockLoader;
-  ready: () => Promise<void>;
-  beforeStart: (fn: any) => void;
 
   get [Symbol.for('egg#loader')]() {
     return MidwayMockLoader;
