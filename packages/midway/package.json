@@ -1,6 +1,6 @@
 {
   "name": "midway",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Midway Main Package",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -29,8 +29,8 @@
   "dependencies": {
     "egg-cluster": "^1.17.0",
     "injection": "^0.3.2",
-    "midway-core": "^0.3.2",
-    "midway-web": "^0.3.2"
+    "midway-core": "^0.3.3",
+    "midway-web": "^0.3.3"
   },
   "files": [
     "bin",
