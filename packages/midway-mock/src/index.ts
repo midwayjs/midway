@@ -1,8 +1,10 @@
 import { EggMock } from 'egg-mock';
 import { MidwayMockApplication } from './application';
 import { MidwayApplicationOptions } from './interface';
+import { MidwayMockLoader } from './loader';
 import * as path from 'path';
 import * as fs from 'fs';
+import { MidwayMockContainer } from './container';
 
 const mock = require('egg-mock');
 
@@ -63,4 +65,11 @@ mm2.app = (options) => {
     typescript: !!require.extensions['.ts']
   }, options));
 };
-export { mm2 as mm };
+
+export * from './interface';
+export {
+  mm2 as mm,
+  MidwayMockApplication,
+  MidwayMockLoader,
+  MidwayMockContainer
+};
