@@ -1,7 +1,6 @@
 import {MidwayMockApplication} from './application';
 import {MidwayContainer} from 'midway-core';
 
-
 export class MidwayMockContainer extends MidwayContainer {
 
   options;
