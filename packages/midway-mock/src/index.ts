@@ -53,16 +53,14 @@ function mockContainer(options: MidwayApplicationOptions) {
   return container;
 }
 
-const mm2: MidwayMock = {
-  ...mock,
-  mockContainer
-};
+const mm2: MidwayMock = Object.assign({}, mock, {
+  container: mockContainer
+});
 
 mm2.app = (options) => {
-  return mm2.app(Object.assign({
+  return mock.app(Object.assign({
     framework: options.framework || 'midway',
     typescript: !!require.extensions['.ts']
   }, options));
 };
-mm2.container = mockContainer;
 export { mm2 as mm };
