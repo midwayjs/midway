@@ -35,8 +35,8 @@ export class MidwayLoader extends EggLoader {
     // 虽然有点hack，但是将就着用吧
     if (Array.isArray(this.config.configLocations)) {
       this.applicationContext.configLocations = this.config.configLocations;
+      this.applicationContext.props.putObject(this.config);
     }
-    this.applicationContext.props.putObject(this.config);
 
     await this.pluginContext.ready();
     await this.applicationContext.ready();
