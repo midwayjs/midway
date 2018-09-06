@@ -1,5 +1,3 @@
-'use strict';
-
 exports.index = async (ctx) => {
   const context = ctx.requestContext;
   const baseService = await context.getAsync('baseService');
