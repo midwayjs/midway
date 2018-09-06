@@ -1,11 +1,11 @@
-import { controller, get, provide, Controller } from 'midway';
+import { controller, get, provide } from 'midway';
 
 @provide()
 @controller('/')
-export class HomeController extends Controller {
+export class HomeController {
 
   @get('/')
-  async index() {
-    this.ctx.body = `Welcome to midwayjs!`;
+  async index(ctx) {
+    ctx.body = `Welcome to midwayjs!`;
   }
 }
