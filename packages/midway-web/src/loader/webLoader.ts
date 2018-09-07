@@ -11,6 +11,7 @@ const is = require('is-type-of');
 // const debug = require('debug')('midway:web-loader');
 
 export class MidwayWebLoader extends MidwayLoader {
+  private controllerIds: Array<string> = [];
 
   async loadController(opt?): Promise<void> {
     // load midway controller to binding router
@@ -66,6 +67,11 @@ export class MidwayWebLoader extends MidwayLoader {
   private async preInitController(module): Promise<void> {
     let metaData = <TagClsMetadata>Reflect.getMetadata(TAGGED_CLS, module);
     if (metaData && metaData.id) {
+      if (this.controllerIds.indexOf(metaData.id) > -1) {
+        throw new Error(`controller identifier [${metaData.id}] is exists!`);
+      }
+      this.controllerIds.push(metaData.id);
+
       this.preRegisterRouter(module, metaData.id);
     }
   }

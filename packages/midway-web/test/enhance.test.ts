@@ -45,9 +45,32 @@ describe('/test/enhance.test.ts', () => {
 
     it('should load controller use controller decorator', (done) => {
       request(app.callback())
-        .get('/api/test')
+        .get('/components/')
         .expect(200)
         .expect('hello', done);
+    });
+
+    it('should load controller use controller decorator prefix /', done => {
+      request(app.callback())
+        .get('/')
+        .expect(200)
+        .expect('root_test', done);
+    });
+  });
+
+  describe('load ts class controller use decorator conflicts', () => {
+    let app;
+    it('should load controller conflicts', async () => {
+      let suc = false;
+      try {
+        app = utils.app('enhance/base-app-controller-conflicts', {
+          typescript: true
+        });
+        await app.ready();
+      } catch(e) {
+        suc = true;
+      }
+      assert.ok(suc);
     });
   });
 

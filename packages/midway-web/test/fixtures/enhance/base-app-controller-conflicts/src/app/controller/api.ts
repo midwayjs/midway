@@ -16,7 +16,7 @@ export class BaseApi {
 
 @provide()
 @controller('/components/')
-export class Api {
+export class My {
 
   @inject()
   logger;
