@@ -39,9 +39,10 @@ describe('test/mock_container.test.ts', () => {
     });
   });
 
-  describe.only('test js app xml', () => {
+  describe('test js app xml', () => {
     let container;
     before(() => {
+      process.env.MIDWAY_BASE_DIR = '';
       container = mm.container({
         baseDir: path.join(fixtures, 'js-app-xml'),
         typescript: false,

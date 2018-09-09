@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <objects path="lib/web">
-  <controllers id="myctrltest">
+  <!-- <controllers id="myctrltest">
     <property name="list">
       <list>
         <ref object="my"></ref>
       </list>
     </property>
-  </controllers>
+  </controllers> -->
 
   <object id="my" path="my">
     <property name="loggertest">
