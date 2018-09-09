@@ -96,4 +96,4 @@ export function loading(files, options) {
   });
 
   return results;
-};
+}
