@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.3.7"></a>
+## [0.3.7](https://github.com/midwayjs/midway/compare/v0.3.6...v0.3.7) (2018-09-10)
+
+
+### Bug Fixes
+
+* import dist 目录错误 ([f5df1de](https://github.com/midwayjs/midway/commit/f5df1de))
+* mm.container test case bug ([ec491a3](https://github.com/midwayjs/midway/commit/ec491a3))
+
+
+
+
 <a name="0.3.6"></a>
 ## [0.3.6](https://github.com/midwayjs/midway/compare/v0.3.5...v0.3.6) (2018-09-06)
 
