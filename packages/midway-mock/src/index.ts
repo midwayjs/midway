@@ -1,10 +1,5 @@
 import { EggMock } from 'egg-mock';
-import { MidwayMockApplication } from './application';
 import { MidwayApplicationOptions } from './interface';
-import { MidwayMockLoader } from './loader';
-import * as path from 'path';
-import * as fs from 'fs';
-import { MidwayMockContainer } from './container';
 
 const mock = require('egg-mock');
 
@@ -19,40 +14,7 @@ export interface MidwayMock extends EggMock {
  * @param options 参数
  */
 function mockContainer(options: MidwayApplicationOptions) {
-  if (!process.env.MIDWAY_PATH) {
-    process.env.MIDWAY_PATH = JSON.stringify([
-      fs.existsSync(path.join(__dirname, '../src')) ?
-        path.join(__dirname, '../../midway-web') :
-        path.join(require.resolve('midway-web'), '../../'),
-    ]);
-  }
-  options.container = Object.assign({
-    loadDir: ['app', 'lib'],
-    ignore: [
-      '**/node_modules/**',
-      '**/logs/**',
-      '**/run/**',
-      '**/public/**',
-      '**/view/**',
-      '**/views/**',
-      '**/config/**'
-    ]
-  }, options.container || {});
-  const app = new MidwayMockApplication(options);
-  app.loader.load();
-  let container = app.getApplicationContext();
-  const oldReady = container.ready;
-  container.ready = async () => {
-    // hack处理，防止重复ready导致逻辑无法执行
-    if (container.__ready__) {
-      return;
-    }
-    container.__ready__ = true;
-    await app.ready();
-    return await oldReady.call(container);
-  };
-
-  return container;
+  return new MockContainer(options);
 }
 
 const mm2: MidwayMock = Object.assign({}, mock, {
@@ -60,16 +22,38 @@ const mm2: MidwayMock = Object.assign({}, mock, {
 });
 
 mm2.app = (options) => {
+  if (process.env.MIDWAY_BASE_DIR && !options.baseDir) options.baseDir = process.env.MIDWAY_BASE_DIR;
+  if (process.env.MIDWAY_FRAMEWORK_PATH && !options.framework) options.framework = process.env.MIDWAY_FRAMEWORK_PATH;
   return mock.app(Object.assign({
     framework: options.framework || 'midway',
     typescript: !!require.extensions['.ts']
   }, options));
 };
 
+
+class MockContainer {
+
+  app;
+
+  constructor(options: MidwayApplicationOptions) {
+    this.app = mm2.app(options);
+  }
+
+  async ready() {
+    await this.app.ready();
+  }
+
+  async getAsync(id) {
+    return this.app.applicationContext.getAsync(id);
+  }
+
+  get(id) {
+    return this.app.applicationContext.get(id);
+  }
+}
+
 export * from './interface';
 export {
   mm2 as mm,
-  MidwayMockApplication,
-  MidwayMockLoader,
-  MidwayMockContainer
+  MockContainer,
 };

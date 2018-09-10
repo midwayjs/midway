@@ -6,6 +6,12 @@ const assert = require('assert');
 const fixtures = path.join(__dirname, 'fixtures');
 
 describe('test/mock_container.test.ts', () => {
+
+  before(() => {
+    // midway dir
+    process.env.MIDWAY_FRAMEWORK_PATH = path.join(__dirname, '../../midway');
+  });
+
   describe('test base app decorator', () => {
     let container;
     before(() => {
@@ -14,7 +20,6 @@ describe('test/mock_container.test.ts', () => {
         typescript: true
       });
     });
-    after(() => container.stop());
     afterEach(mm.restore);
 
     it('should mock service success', async () => {
@@ -47,7 +52,6 @@ describe('test/mock_container.test.ts', () => {
 
       return container.ready();
     });
-    after(() => container.stop());
     afterEach(mm.restore);
 
     it('should test js app load success', async () => {

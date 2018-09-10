@@ -4,5 +4,4 @@ export interface MidwayApplicationOptions {
   plugins?: any;
   container?: any;
   typescript?: boolean;
-  type?: 'application' | 'agent';
 }

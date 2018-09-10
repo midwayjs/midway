@@ -8,7 +8,6 @@ process.env.MIDWAY_FRAMEWORK_PATH = path.join(__dirname, '../../midway');
 import { app, mm } from '../bootstrap';
 
 describe('test/index.test.ts', () => {
-
   afterEach(mm.restore);
 
   it('should use bootstrap to get app', () => {

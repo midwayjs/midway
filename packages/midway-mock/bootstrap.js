@@ -4,8 +4,6 @@ const assert = require('power-assert');
 const mock = require('./dist').mm;
 
 const options = {};
-if (process.env.MIDWAY_BASE_DIR) options.baseDir = process.env.MIDWAY_BASE_DIR;
-if (process.env.MIDWAY_FRAMEWORK_PATH) options.framework = process.env.MIDWAY_FRAMEWORK_PATH;
 const app = mock.app(options);
 
 before(() => app.ready());
