@@ -6,7 +6,6 @@ module.exports = (appInfo: any) => {
 
   // add your config here
   config.middleware = [
-    'trace',
   ];
 
   return config;
