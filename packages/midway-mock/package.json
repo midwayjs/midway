@@ -43,5 +43,10 @@
     "midway-core": "^0.3.5",
     "power-assert": "^1.6.0",
     "ready-callback": "^2.0.1"
+  },
+  "author": "Harry Chen <czy88840616@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/midwayjs/midway.git"
   }
 }
