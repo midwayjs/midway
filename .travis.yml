@@ -17,4 +17,3 @@ after_script:
 env:
   global:
   - ENCRYPTION_LABEL: 99ac90ea56e6
-  - COMMIT_AUTHOR_EMAIL: "czy88840616@gmail.com"
