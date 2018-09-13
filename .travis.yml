@@ -13,3 +13,4 @@ script:
   - npm run cov
 after_script:
   - codecov
+  - npm run deploy
