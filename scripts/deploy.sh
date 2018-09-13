@@ -3,13 +3,13 @@
 # https://gist.github.com/domenic/ec8b0fc8ab45f39403dd#sign-up-for-travis-and-add-your-project
 
 # Only deply on master branch
-SOURCE_BRANCH="add_doc"
+# SOURCE_BRANCH="master"
 
 # Pull requests and commits to other branches shouldn't try to deploy, just build to verify
-if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_BRANCH" != "$SOURCE_BRANCH" -o "$TRAVIS_EVENT_TYPE" = "cron" ]; then
-  echo "Skip deploy, TRAVIS_PULL_REQUEST=$TRAVIS_PULL_REQUEST, TRAVIS_BRANCH=$TRAVIS_BRANCH"
-  exit 0
-fi
+#if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_BRANCH" != "$SOURCE_BRANCH" -o "$TRAVIS_EVENT_TYPE" = "cron" ]; then
+#  echo "Skip deploy, TRAVIS_PULL_REQUEST=$TRAVIS_PULL_REQUEST, TRAVIS_BRANCH=$TRAVIS_BRANCH"
+#  exit 0
+#fi
 
 # Get the deploy key by using Travis's stored variables to decrypt deploy_key.enc
 ENCRYPTED_KEY_VAR="encrypted_${ENCRYPTION_LABEL}_key"
@@ -44,5 +44,3 @@ echo 'Done.'
 ssh-agent -k
 
 cd -
-
-
