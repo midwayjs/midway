@@ -37,8 +37,7 @@
     "build": "sh scripts/build.sh",
     "authors": "git log --format='%aN <%aE>' | sort -u > AUTHORS",
     "docs:dev": "vuepress dev docs",
-    "docs:build": "vuepress build docs",
-    "docs:deploy": "./scripts/deploy.sh"
+    "docs:build": "vuepress build docs"
   },
   "keywords": [
     "container",
