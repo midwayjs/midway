@@ -7,7 +7,6 @@
     "chai": "^4.1.2",
     "chalk": "^2.4.1",
     "debug": "^3.1.0",
-    "docute-cli": "^0.6.0",
     "git-hooks": "^1.1.10",
     "lerna": "^2.9.0",
     "lerna-relinker": "^1.4.0",
@@ -18,7 +17,8 @@
     "ts-node": "^7.0.1",
     "tslint": "^5.9.1",
     "typedoc": "^0.11.0",
-    "typescript": "^2.8.0"
+    "typescript": "^2.8.0",
+    "vuepress": "^0.14.2"
   },
   "scripts": {
     "test": "lerna run test",
@@ -36,7 +36,9 @@
     "li": "lerna init",
     "build": "sh scripts/build.sh",
     "authors": "git log --format='%aN <%aE>' | sort -u > AUTHORS",
-    "preview": "docute ./docs"
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs",
+    "docs:deploy": "./scripts/deploy.sh"
   },
   "keywords": [
     "container",

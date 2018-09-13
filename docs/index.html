@@ -2,21 +2,59 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
-  <title>./docs</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+  <title>Midway Framework</title>
   <link rel="stylesheet" href="./assets/docute.css">
 </head>
 <body>
-  <div id="app"></div>
-  <script src="./assets/docute.js"></script>
-  <script>
-    docute.init({
-      nav: [
-        // homepage
-        {title: 'Home', path: '/'},
+<div id="app"></div>
+<script src="./assets/docute.js"></script>
+<script src="https://unpkg.com/prismjs/components/prism-typescript.js"></script>
+<script src="https://unpkg.com/docute/plugins/docsearch.js"></script>
+<script>
+  docute.init({
+    // use a markdown file from url directly
+    // landing: {
+    //   source: 'language/cn/index.html'
+    // },
+    disableSidebarToggle: true,
+    tocVisibleDepth: 3,
+    // slug for your github repo
+    repo: 'midwayjs/midway',
+    // the link to source file of current page
+    'edit-link': 'https://github.com/midwayjs/midway/blob/master/docs',
+    nav: {
+      default: [
+        {title: 'Guide', path: '/language/en/guide'},
+        {
+          title: 'Languages', type: 'dropdown', items: [
+            {title: 'English', path: '/language/en/guide', matchPath: /^\/language\/en[\/$]/},
+            {title: '简体中文', path: '/language/cn/guide'}
+          ]
+        }
       ],
-    });
-  </script>
+      chinese: [
+        {title: '开发指南', path: '/language/cn/guide'},
+        {
+          title: '语言切换', type: 'dropdown', items: [
+            {title: 'English', path: '/language/en/guide'},
+            {title: '简体中文', path: '/language/cn/guide', matchPath: /^\/language\/cn[\/$]/}
+          ]
+        }
+      ]
+    },
+    // plugins: [
+    //   // the docsearch variable is provided by docsearch plugin
+    //   docsearch({
+    //     apiKey: 'You API Key',
+    //     indexName: 'Your Index Name',
+    //     // this plugin requires a url too
+    //     // it indicates where docsearch fetches contents
+    //     url: 'https://docute.js.org'
+    //   })
+    // ]
+  });
+</script>
 </body>
 </html>
