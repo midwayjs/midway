@@ -6,13 +6,13 @@ module.exports = {
     '/': {
       lang: 'zh-CN',
       title: 'Midway',
-      description: '面向未来的全栈应用开发框架'
+      description: '面向未来的 Web 全栈应用开发框架'
     },
   },
   themeConfig: {
     lang: 'zh-CN',
     title: 'Midway',
-    description: '面向未来的全栈应用开发框架',
+    description: '面向未来的 Web 全栈应用开发框架',
     repo: 'midwayjs/midway',
     docsDir: 'docs',
     editLinks: true,
@@ -28,7 +28,7 @@ module.exports = {
           {
             text: '框架',
             items: [
-              {text: 'Midway - 面向未来的全栈框架', link: '/'},
+              {text: 'Midway - 面向未来的 Web 全栈框架', link: '/'},
             ]
           },
           {
