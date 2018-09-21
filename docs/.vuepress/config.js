@@ -21,6 +21,7 @@ module.exports = {
     },
     nav: [
       {text: '首页', link: '/'},
+      {text: 'TS 新手指南', link: '/upgrade'},
       {text: '使用指南', link: '/guide'},
       {
         text: 'MidwayJs 系列产品',
