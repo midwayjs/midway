@@ -3,15 +3,26 @@ import { Router } from '../router';
 import * as path from 'path';
 import { TagClsMetadata, TAGGED_CLS } from 'injection';
 import { loading } from '../loading';
-import { WEB_ROUTER_CLS, WEB_ROUTER_PREFIX_CLS, WEB_ROUTER_PROP } from '../decorators/metaKeys';
+import { WEB_ROUTER_CLS, WEB_ROUTER_PREFIX_CLS, WEB_ROUTER_PRIORITY, WEB_ROUTER_PROP } from '../decorators/metaKeys';
 import { MidwayLoader } from 'midway-core';
 
 const is = require('is-type-of');
+
+interface MappingInfo {
+  path: string;
+  requestMethod: string;
+  routerName: string;
+  priority?: number;
+}
 
 // const debug = require('debug')('midway:web-loader');
 
 export class MidwayWebLoader extends MidwayLoader {
   private controllerIds: Array<string> = [];
+  private prioritySortRouters: Array<{
+    priority: number,
+    router: Router
+  }> = [];
 
   async loadController(opt?): Promise<void> {
     // load midway controller to binding router
@@ -33,6 +44,18 @@ export class MidwayWebLoader extends MidwayLoader {
         }
       }
     }
+
+    // must sort by priority
+    if (this.prioritySortRouters.length) {
+      this.prioritySortRouters = this.prioritySortRouters.sort((routerA, routerB) => {
+        return routerB.priority - routerA.priority;
+      });
+
+      this.prioritySortRouters.forEach((prioritySortRouter) => {
+        this.app.use(prioritySortRouter.router.middleware());
+      });
+    }
+
     // Call the parent class
     super.loadController(opt);
   }
@@ -79,15 +102,16 @@ export class MidwayWebLoader extends MidwayLoader {
   private preRegisterRouter(target, controllerId) {
     const app = this.app;
     const controllerPrefix = Reflect.getMetadata(WEB_ROUTER_PREFIX_CLS, target);
+    let newRouter;
     if (controllerPrefix) {
-      let newRouter = new Router({
+      newRouter = new Router({
         sensitive: true,
       }, app);
       newRouter.prefix(controllerPrefix);
       const methodNames = Reflect.getMetadata(WEB_ROUTER_CLS, target);
       for (let methodName of methodNames) {
-        const mappingInfos: Array<{ path: string; requestMethod: string; routerName: string; }> = Reflect.getMetadata(WEB_ROUTER_PROP, target, methodName);
-        if(mappingInfos && mappingInfos.length) {
+        const mappingInfos: Array<MappingInfo> = Reflect.getMetadata(WEB_ROUTER_PROP, target, methodName);
+        if (mappingInfos && mappingInfos.length) {
           for (let mappingInfo of mappingInfos) {
             const routerArgs = [
               mappingInfo.routerName,
@@ -99,7 +123,15 @@ export class MidwayWebLoader extends MidwayLoader {
           }
         }
       }
-      app.use(newRouter.middleware());
+    }
+
+    // sort for priority
+    if (newRouter) {
+      const priority = Reflect.getMetadata(WEB_ROUTER_PRIORITY, target);
+      this.prioritySortRouters.push({
+        priority: priority || 0,
+        router: newRouter
+      });
     }
   }
 
