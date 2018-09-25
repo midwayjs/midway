@@ -2,9 +2,9 @@
  * 'HEAD', 'OPTIONS', 'GET', 'PUT', 'PATCH', 'POST', 'DELETE' 封装
  */
 import 'reflect-metadata';
-import {RequestMethod} from '../constants';
-import {WEB_ROUTER_CLS, WEB_ROUTER_PROP} from './metaKeys';
-import {attachMetaDataOnClass} from '../utils';
+import { RequestMethod } from '../constants';
+import { WEB_ROUTER_CLS, WEB_ROUTER_PROP } from './metaKeys';
+import { attachMetaDataOnClass } from '../utils';
 
 const PATH_METADATA = 'PATH_METADATA';
 const METHOD_METADATA = 'METHOD_METADATA';
@@ -32,9 +32,13 @@ export const RequestMapping = (
   return (target, key, descriptor: PropertyDescriptor) => {
     // save method name on class
     attachMetaDataOnClass(target.constructor, WEB_ROUTER_CLS, key);
-
+    let props = Reflect.getMetadata(WEB_ROUTER_PROP, target.constructor, key);
+    if (!props) {
+      props = [];
+    }
+    props.push({path, requestMethod, routerName});
     // save metadata on method
-    Reflect.defineMetadata(WEB_ROUTER_PROP, {path, requestMethod, routerName}, target.constructor, key);
+    Reflect.defineMetadata(WEB_ROUTER_PROP, props, target.constructor, key);
     return descriptor;
   };
 };

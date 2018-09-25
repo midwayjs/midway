@@ -86,14 +86,18 @@ export class MidwayWebLoader extends MidwayLoader {
       newRouter.prefix(controllerPrefix);
       const methodNames = Reflect.getMetadata(WEB_ROUTER_CLS, target);
       for (let methodName of methodNames) {
-        const mappingInfo = Reflect.getMetadata(WEB_ROUTER_PROP, target, methodName);
-        const routerArgs = [
-          mappingInfo.routerName,
-          mappingInfo.path,
-          this.generateController(`${controllerId}.${methodName}`)
-        ];
-        // apply controller from request context
-        newRouter[mappingInfo.requestMethod].apply(newRouter, routerArgs);
+        const mappingInfos: Array<{ path: string; requestMethod: string; routerName: string; }> = Reflect.getMetadata(WEB_ROUTER_PROP, target, methodName);
+        if(mappingInfos && mappingInfos.length) {
+          for (let mappingInfo of mappingInfos) {
+            const routerArgs = [
+              mappingInfo.routerName,
+              mappingInfo.path,
+              this.generateController(`${controllerId}.${methodName}`)
+            ];
+            // apply controller from request context
+            newRouter[mappingInfo.requestMethod].apply(newRouter, routerArgs);
+          }
+        }
       }
       app.use(newRouter.middleware());
     }

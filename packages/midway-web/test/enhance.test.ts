@@ -3,6 +3,7 @@ const request = require('supertest');
 const path = require('path');
 const utils = require('./utils');
 const mm = require('mm');
+const pedding = require('pedding');
 
 describe('/test/enhance.test.ts', () => {
 
@@ -67,7 +68,7 @@ describe('/test/enhance.test.ts', () => {
           typescript: true
         });
         await app.ready();
-      } catch(e) {
+      } catch (e) {
         suc = true;
       }
       assert.ok(suc);
@@ -220,6 +221,36 @@ describe('/test/enhance.test.ts', () => {
         .get('/api')
         .expect(200)
         .expect('64t', done);
+    });
+  });
+
+  describe('should support multi router in one function', () => {
+    let app;
+    before(() => {
+      app = utils.app('enhance/base-app-router', {
+        typescript: true
+      });
+      return app.ready();
+    });
+
+    after(() => app.close());
+
+    it('should invoke different router and get same result', (done) => {
+      done = pedding(3, done);
+      request(app.callback())
+        .get('/')
+        .expect(200)
+        .expect('hello', done);
+
+      request(app.callback())
+        .get('/home')
+        .expect(200)
+        .expect('hello', done);
+
+      request(app.callback())
+        .get('/poster')
+        .expect(200)
+        .expect('hello', done);
     });
   });
 
