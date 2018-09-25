@@ -30,7 +30,8 @@
     "@types/mocha": "^2.2.41",
     "@types/node": "^10.5.5",
     "egg-mock": "^3.17.3",
-    "midway-bin": "^0.3.2"
+    "midway-bin": "^0.3.2",
+    "pedding": "^1.1.0"
   },
   "dependencies": {
     "camelcase": "^5.0.0",
