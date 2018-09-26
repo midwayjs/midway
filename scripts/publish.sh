@@ -12,9 +12,9 @@ sed 's/"name": "midway"/"name": "midway-mirror"/g' _package.json > package.json
 if [ -z $2 ]
 then
     echo "tag is [latest] and will publish to npmjs"
-    npm run publish --tag $2
+    npm publish --tag $2
 else
     echo "tag is [$2] and will publish to npmjs"
-    npm run publish
+    npm publish
 fi
 mv _package.json package.json
