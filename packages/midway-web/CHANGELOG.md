@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="0.4.0"></a>
+# [0.4.0](https://github.com/midwayjs/midway/compare/v0.3.8...v0.4.0) (2018-09-26)
+
+
+### Features
+
+* support route_priority ([e3cc736](https://github.com/midwayjs/midway/commit/e3cc736))
+
+
+
+
 <a name="0.3.8"></a>
 ## [0.3.8](https://github.com/midwayjs/midway/compare/v0.3.7...v0.3.8) (2018-09-25)
 
