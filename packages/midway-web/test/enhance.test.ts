@@ -254,6 +254,36 @@ describe('/test/enhance.test.ts', () => {
     });
   });
 
+  describe('should support change route priority', () => {
+    let app;
+    before(() => {
+      app = utils.app('enhance/base-app-router-priority', {
+        typescript: true
+      });
+      return app.ready();
+    });
+
+    after(() => app.close());
+
+    it('should invoke different router and get same result', (done) => {
+      done = pedding(3, done);
+      request(app.callback())
+        .get('/hello')
+        .expect(200)
+        .expect('hello', done);
+
+      request(app.callback())
+        .get('/world')
+        .expect(200)
+        .expect('world', done);
+
+      request(app.callback())
+        .get('/api/hello')
+        .expect(200)
+        .expect('api', done);
+    });
+  });
+
   describe('auto load js-app-xml test', () => {
     let app;
     before(() => {
