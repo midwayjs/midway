@@ -136,6 +136,10 @@ export const config = { a: 1 };
 module.exports = {
   a: 1
 };
+
+module.exports = () => {
+  console.log(111);
+}
 ```
 
 ```ts
@@ -143,12 +147,44 @@ module.exports = {
 export = {
   a: 1
 };
+
+export = () => {
+  console.log(111);
+}
 ```
 
 ::: warning 注意
 两种写法无法并存，请尽量使用 `export` 进行导出。
 :::
 
+### default 导出
+
+在很多时候，在代码中会有做 `default 导出的支持`，比如在 `egg-core` 中的加载部分:
+
+```js
+// require js module
+const obj = require(filepath);
+if (!obj) return obj;
+// it's es module
+if (obj.__esModule) return 'default' in obj ? obj.default : obj;
+```
+
+这个时候我们将代码写成如下也是可以支持的。
+
+```ts
+export default {
+
+}
+```
+
+编译成 js，则会变成
+
+```js
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = {
+  
+}
+```
 
 ### 一般导入
 
