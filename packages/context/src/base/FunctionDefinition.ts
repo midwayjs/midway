@@ -64,7 +64,13 @@ export class FunctionDefinition implements IObjectDefinition {
   initMethod: string;
   path: any;
   properties: IConfiguration;
+  // 函数工厂创建的对象默认不需要自动装配
+  protected _autowire: boolean = false;
   protected _scope: Scope = ScopeEnum.Singleton;
+
+  set autowire(autowire: boolean) {
+    this._autowire = autowire;
+  }
 
   getAttr(key: ObjectIdentifier): any {
   }
@@ -86,7 +92,7 @@ export class FunctionDefinition implements IObjectDefinition {
   }
 
   isAutowire(): boolean {
-    return false;
+    return this._autowire;
   }
 
   isDirect(): boolean {

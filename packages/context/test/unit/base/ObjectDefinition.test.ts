@@ -8,7 +8,7 @@ describe('/test/unit/base/ObjectDefinition', () => {
     expect(definition.isAsync()).false;
     definition.asynchronous = true;
     expect(definition.isAsync()).true;
-    expect(definition.isAutowire()).false;
+    expect(definition.isAutowire()).true;
     definition.autowire = true;
     expect(definition.isAutowire()).true;
 

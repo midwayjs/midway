@@ -29,6 +29,12 @@ export class BaseService {
   @inject('adapterFactory')
   factory;
 
+  @inject('otherFactory')
+  other;
+
+  @inject('otherFactory1')
+  other1;
+
   adapter;
 
   constructor(
@@ -48,4 +54,13 @@ export class BaseService {
     this.adapter = await this.factory(this.adapterName);
   }
 
+  async say() {
+    const o = await this.other(this.adapterName);
+    return o.say();
+  }
+
+  async sayError() {
+    const o = await this.other1(this.adapterName);
+    return o.say();
+  }
 }

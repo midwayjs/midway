@@ -10,7 +10,8 @@ import {ObjectCreator} from './ObjectCreator';
 export class ObjectDefinition implements IObjectDefinition {
   protected _attrs = new Map<ObjectIdentifier, any>();
   protected _asynchronous: boolean = false;
-  protected _autowire: boolean = false;
+  // 对象定义默认需要自动装配
+  protected _autowire: boolean = true;
   protected _external: boolean = false;
   protected _direct: boolean = false;
   protected _scope: Scope = ScopeEnum.Singleton;

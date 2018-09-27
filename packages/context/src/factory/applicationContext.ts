@@ -256,7 +256,7 @@ export class BaseApplicationContext extends EventEmitter implements IApplication
    * register handler after instance create
    * @param fn
    */
-  afterEachCreated(fn: (ins: any, context: IApplicationContext) => void) {
+  afterEachCreated(fn: (ins: any, context: IApplicationContext, definition?: IObjectDefinition) => void) {
     this.resolverFactory.afterEachCreated(fn);
   }
 

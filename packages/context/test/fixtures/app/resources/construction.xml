@@ -28,6 +28,9 @@
   <object id="ctor:async" path="async" async="true" construct-method="getInstance">
   </object>
 
+  <object id="ctor:obj6" path="obj6" construct-method="getData">
+  </object>
+
   <object id="ctor:hello" path="hello" external="true" autowire="false">
   </object>
 

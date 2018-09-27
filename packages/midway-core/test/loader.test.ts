@@ -24,7 +24,7 @@ describe('/test/loader.test.ts', () => {
     });
   });
 
-  describe.only('load ts file and use config, plugin decorator', () => {
+  describe('load ts file and use config, plugin decorator', () => {
     let app;
     before(() => {
       app = utils.app('base-app-decorator', {
@@ -123,6 +123,13 @@ describe('/test/loader.test.ts', () => {
         .get('/api')
         .expect(200)
         .expect('63t', done);
+    });
+
+    it('should load ts directory and inject in constructor with error', done => {
+      request(app.callback())
+        .get('/api/error')
+        .expect(200)
+        .expect('error', done);
     });
   });
 

@@ -237,7 +237,8 @@ export class MidwayContainer extends Container implements IContainer {
       let info: {
         id: ObjectIdentifier,
         provider: (context?: IApplicationContext) => any,
-        scope?: Scope
+        scope?: Scope,
+        isAutowire?: boolean
       } = module[FUNCTION_INJECT_KEY];
       if (info && info.id) {
         if (!info.scope) {
@@ -245,6 +246,7 @@ export class MidwayContainer extends Container implements IContainer {
         }
         this.bind(info.id, module, {
           scope: info.scope,
+          isAutowire: info.isAutowire
         });
       }
     }
@@ -289,7 +291,7 @@ export class MidwayContainer extends Container implements IContainer {
     });
 
     // register property inject
-    this.afterEachCreated((instance, context) => {
+    this.afterEachCreated((instance, context, definition) => {
 
       // 处理配置装饰器
       const configSetterProps = this.getClzSetterProps(CONFIG_KEY_CLZ, instance);
@@ -302,7 +304,7 @@ export class MidwayContainer extends Container implements IContainer {
       this.defineGetterPropertyValue(loggerSetterProps, LOGGER_KEY_PROP, instance, this.handlerMap.get(MidwayHandlerKey.LOGGER));
 
       // 表示非ts annotation模式
-      if (!pluginSetterProps && !loggerSetterProps) {
+      if (!pluginSetterProps && !loggerSetterProps && definition.isAutowire()) {
         // this.$$xxx = null; 用来注入config
         // this.$xxx = null; 用来注入 logger 或者 插件
         Autowire.patchDollar(instance, context, (key: string) => {

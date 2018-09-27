@@ -358,7 +358,7 @@ export class ManagedResolverFactory {
     }
 
     for(let handler of this.beforeCreateHandler) {
-      handler.call(this, Clzz, definition, this.context);
+      handler.call(this, Clzz, constructorArgs, this.context);
     }
 
     const inst = definition.creator.doConstruct(Clzz, constructorArgs);
@@ -377,7 +377,7 @@ export class ManagedResolverFactory {
     }
 
     for(let handler of this.afterCreateHandler) {
-      handler.call(this, inst, this.context);
+      handler.call(this, inst, this.context, definition);
     }
 
     // after properties set then do init
@@ -443,7 +443,7 @@ export class ManagedResolverFactory {
     }
 
     for(let handler of this.afterCreateHandler) {
-      handler.call(this, inst, this.context);
+      handler.call(this, inst, this.context, definition);
     }
 
     // after properties set then do init
@@ -470,7 +470,7 @@ export class ManagedResolverFactory {
     this.beforeCreateHandler.push(fn);
   }
 
-  afterEachCreated(fn: (ins: any, context: IApplicationContext) => void) {
+  afterEachCreated(fn: (ins: any, context: IApplicationContext, definition?: IObjectDefinition) => void) {
     this.afterCreateHandler.push(fn);
   }
 }

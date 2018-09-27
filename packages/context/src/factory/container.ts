@@ -75,34 +75,9 @@ export class Container extends XmlApplicationContext implements IContainer {
       }
     }
 
+    this.convertOptionsToDefinition(options, definition);
+    // 对象自定义的annotations可以覆盖默认的属性
     this.registerCustomBinding(definition, target);
-
-    if (options) {
-      if (options.isAsync) {
-        debug(`register from options add isAsync, id=${definition.id}`);
-        definition.asynchronous = true;
-      }
-
-      if (options.initMethod) {
-        debug(`register from options add initMethod, id=${definition.id}, method=${definition.initMethod}`);
-        definition.initMethod = options.initMethod;
-      }
-
-      if (options.destroyMethod) {
-        debug(`register from options add destroyMethod, id=${definition.id}, method=${definition.destroyMethod}`);
-        definition.destroyMethod = options.destroyMethod;
-      }
-
-      if (options.scope) {
-        debug(`register from options add scope, id=${definition.id}, scope=${definition.scope}`);
-        definition.scope = options.scope;
-      }
-
-      if (options.constructorArgs) {
-        debug(`register from options add scope, id=${definition.id}, constructorArgs=${options.constructorArgs}`);
-        definition.constructorArgs = options.constructorArgs;
-      }
-    }
 
     this.registry.registerDefinition(identifier, definition);
     debug(`bind and build definition complete, id=${definition.id}`);
@@ -112,27 +87,46 @@ export class Container extends XmlApplicationContext implements IContainer {
     // @async, @init, @destroy @scope
     let objDefOptions: ObjectDefinitionOptions = Reflect.getMetadata(OBJ_DEF_CLS, target);
 
-    if (objDefOptions) {
-      if (objDefOptions.isAsync) {
-        debug(`register @async, id=${objectDefinition.id}`);
-        objectDefinition.asynchronous = true;
+    this.convertOptionsToDefinition(objDefOptions, objectDefinition);
+  }
+
+  private convertOptionsToDefinition(options: ObjectDefinitionOptions, definition: ObjectDefinition): ObjectDefinition {
+    if (options) {
+      if (options.isAsync) {
+        debug(`register isAsync, id=${definition.id}`);
+        definition.asynchronous = true;
       }
 
-      if (objDefOptions.initMethod) {
-        debug(`register @init, id=${objectDefinition.id}, method=${objDefOptions.initMethod}`);
-        objectDefinition.initMethod = objDefOptions.initMethod;
+      if (options.initMethod) {
+        debug(`register initMethod, id=${definition.id}, method=${definition.initMethod}`);
+        definition.initMethod = options.initMethod;
       }
 
-      if (objDefOptions.destroyMethod) {
-        debug(`register @destroy, id=${objectDefinition.id}, method=${objDefOptions.destroyMethod}`);
-        objectDefinition.destroyMethod = objDefOptions.destroyMethod;
+      if (options.destroyMethod) {
+        debug(`register destroyMethod, id=${definition.id}, method=${definition.destroyMethod}`);
+        definition.destroyMethod = options.destroyMethod;
       }
 
-      if (objDefOptions.scope) {
-        debug(`register @scope, id=${objectDefinition.id}, scope=${objDefOptions.scope}`);
-        objectDefinition.scope = objDefOptions.scope;
+      if (options.scope) {
+        debug(`register scope, id=${definition.id}, scope=${definition.scope}`);
+        definition.scope = options.scope;
+      }
+
+      if (options.constructorArgs) {
+        debug(`register constructorArgs, id=${definition.id}, constructorArgs=${options.constructorArgs}`);
+        definition.constructorArgs = options.constructorArgs;
+      }
+
+      if (options.isAutowire === false) {
+        debug(`register autowire, id=${definition.id}, autowire=${options.isAutowire}`);
+        definition.autowire = false;
+      } else if (options.isAutowire === true) {
+        debug(`register autowire, id=${definition.id}, autowire=${options.isAutowire}`);
+        definition.autowire = true;
       }
     }
+
+    return definition;
   }
 
   createChild(baseDir?: string): IContainer {
@@ -140,8 +134,10 @@ export class Container extends XmlApplicationContext implements IContainer {
   }
 
   protected registerObjectPropertyParser() {
-    this.afterEachCreated((instance, context) => {
-      Autowire.patchNoDollar(instance, context);
+    this.afterEachCreated((instance, context, definition) => {
+      if (definition.isAutowire()) {
+        Autowire.patchNoDollar(instance, context);
+      }
     });
   }
 
@@ -174,5 +170,4 @@ export class Container extends XmlApplicationContext implements IContainer {
       return camelcase(target.name);
     }
   }
-
 }
