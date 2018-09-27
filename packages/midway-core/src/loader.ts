@@ -144,6 +144,8 @@ export class MidwayLoader extends EggLoader {
     const requestContext = new MidwayRequestContainer(this.applicationContext);
     // put requestContext to applicationContext
     this.applicationContext.registerObject('requestContext', requestContext);
+    this.applicationContext.registerObject('baseDir', this.baseDir);
+    this.applicationContext.registerObject('appDir', this.appDir);
     // 如果没有关闭autoLoad 则进行load
     if (!containerConfig.disableAutoLoad) {
       this.applicationContext.load({
