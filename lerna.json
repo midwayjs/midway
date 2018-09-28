@@ -2,7 +2,7 @@
   "packages": [
     "packages/*"
   ],
-  "version": "0.4.0",
+  "version": "0.4.1",
   "registry": "https://registry.npmjs.org/",
   "npmClient": "npm",
   "lerna": "2.9.0"

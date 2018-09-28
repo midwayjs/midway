@@ -1,6 +1,6 @@
 {
   "name": "midway-web",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Midway Web Scene",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -40,9 +40,9 @@
     "extend": "^3.0.0",
     "globby": "^8.0.1",
     "inflection": "^1.12.0",
-    "injection": "^0.3.8",
+    "injection": "^0.4.1",
     "is-type-of": "^1.2.0",
-    "midway-core": "^0.3.8"
+    "midway-core": "^0.4.1"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
   "repository": {
