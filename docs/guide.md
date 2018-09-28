@@ -534,7 +534,6 @@ export class BaseService {
   config;   // 1
 
 }
-
 ```
 
 通过这样，我们可以把 config 中的值直接注入到业务逻辑中。
@@ -763,6 +762,48 @@ export class BaseService {
 ::: tip
 这个函数可以是异步的 (async)。
 :::
+
+比如如果应用希望自己使用 sequelize， 而 sequelize 的创建 model 的过程是个异步操作。
+
+```ts
+import { providerWrapper, IApplicationContext } from 'midway';
+import * as Sequelize from 'sequelize';
+import { Sequelize as SequelizeInstance } from 'sequelize';
+
+// 可以直接写 async 方法
+export async function factory(context: IApplicationContext) {
+
+  const instance = await context.getAsync<SequelizeInstance>('coreDB');
+
+  const UiKeyTraceModel = instance.define(name, {
+    gmtCreate: {
+      type: Sequelize.DATE,
+      allowNull: true,
+      field: 'gmt_create',
+    },
+    gmtModified: {
+      type: Sequelize.DATE,
+      allowNull: true,
+      field: 'gmt_modified',
+    }
+  }, {
+    timestamps: true,
+    createdAt: 'gmt_create',
+    updatedAt: 'gmt_modified',
+    freezeTableName: true,
+    tableName: 'xxxx'
+  });
+
+  return UiKeyTraceModel;
+}
+
+providerWrapper([
+  {
+    id: 'keyTraceModel',
+    provider: factory
+  }
+]);
+```
 
 ## 应用测试
 
