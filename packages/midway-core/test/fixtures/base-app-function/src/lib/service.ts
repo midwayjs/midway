@@ -34,7 +34,10 @@ export class BaseService {
 
   @inject('otherFactory1')
   other1;
-
+  @inject('otherFactory2')
+  other2;
+  @inject('otherFactory3')
+  other3;
   adapter;
 
   constructor(
@@ -59,8 +62,18 @@ export class BaseService {
     return o.say();
   }
 
-  async sayError() {
-    const o = await this.other1(this.adapterName);
-    return o.say();
+  async sayAuto() {
+    try {
+      const o2 = await this.other2('ttt');
+      await o2.say();
+    } catch (e) {
+      console.log('function inject is not support!', e.stack);
+    }
+
+    const o3 = await this.other3;
+    await o3.say();
+
+    const o = await this.other1.say();
+    return o;
   }
 }
