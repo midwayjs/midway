@@ -86,4 +86,16 @@ describe('/test/unit/factory/xml/XmlApplicationContext', () => {
     expect(arr).is.not.null;
     expect(arr.length).greaterThan(0);
   });
+  it('context construct-method should be only once', () => {
+    const obj6 = context.get('ctor:obj6');
+
+    const obj62 = context.get('ctor:obj6');
+
+    expect(obj6).deep.eq(obj62);
+
+    const obj63 = context.get('ctor:obj6');
+
+    expect(obj62).deep.eq(obj63);
+    expect(obj6).deep.eq(obj63);
+  });
 });

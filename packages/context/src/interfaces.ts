@@ -166,6 +166,8 @@ export interface ObjectDefinitionOptions {
   destroyMethod?: string;
   scope?: Scope;
   constructorArgs?: Array<IManagedInstance>;
+  // 是否自动装配
+  isAutowire?: boolean;
 }
 
 /**

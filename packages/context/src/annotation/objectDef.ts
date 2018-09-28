@@ -42,7 +42,14 @@ export function destroy() {
 
 export function scope(scope: Scope = ScopeEnum.Singleton) {
   return function (target: any): void {
-    debug(`set [destroy] property in [${target.name}]`);
+    debug(`set [scope] property in [${target.name}]`);
     return attachObjectDefProps(target, {scope});
+  };
+}
+
+export function autowire(isAutowire: boolean = true) {
+  return function (target: any): void {
+    debug(`set [autowire] property in [${target.name}]`);
+    return attachObjectDefProps(target, {isAutowire});
   };
 }
