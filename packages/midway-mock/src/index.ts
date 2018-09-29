@@ -30,6 +30,14 @@ mm2.app = (options) => {
   }, options));
 };
 
+mm2.cluster = (options) => {
+  if (process.env.MIDWAY_BASE_DIR && !options.baseDir) options.baseDir = process.env.MIDWAY_BASE_DIR;
+  if (process.env.MIDWAY_FRAMEWORK_PATH && !options.framework) options.framework = process.env.MIDWAY_FRAMEWORK_PATH;
+  return mock.cluster(Object.assign({
+    framework: options.framework || 'midway',
+    typescript: !!require.extensions['.ts']
+  }, options));
+};
 
 class MockContainer {
 

@@ -272,7 +272,7 @@ const userService = await applicationContext.getAsync('user');
 
 midway 使用 koa-router 作为路由的承载着，同时在 ts 的语法上做了一些简化，我们将路由和控制器放在了一起，使用装饰器来标注路由。
 
-### 使用装饰器
+### 路由装饰器
 
 在新的 ts 体系中，我们的控制器目录为 `app/controller` ，我们在其中编写 `*.ts` 文件。例如下面的 `userController.ts` ，我们提供了一个获取用户的接口。
 
@@ -479,11 +479,13 @@ midway 默认使用 [injection](http://web.npm.alibaba-inc.com/package/injection
 
 #### 注入插件
 
-midway 可以使用 egg 和 midway 两者的插件，以往，我们通过 `midway.getPlugin` 或者 `app.xxx` 的方式来获取插件，而在新的情况下，我们可以通过 `@plugin` 装饰器来注入插件。
+midway 除了支持 eggjs 原本的 app.xx 的插件用法，同时，也可以通过 `@plugin` 装饰器来注入插件。
 
 比如我们提供了一个名字叫 `plugin2` 的插件，就可以通过属性注入的方式来修饰插件。
 
-> 注意，由于在 midway 内部插件未放在 applicationContext 中，所以不能使用 @inject 来注入
+:::warning 注意
+注意，由于在 midway 内部插件未放在 applicationContext 中，所以不能使用 @inject 来注入
+:::
 
 ```typescript
 @provide()
@@ -496,7 +498,23 @@ export class BaseService {
 
 ```
 
-这个时候我们就需要拿到插件的名字，我们会不断增加插件的 key 列表，请查看 [插件key](plugin_key)。
+这个时候我们就需要拿到插件的名字。
+
+#### 查找插件名
+
+这个插件的名字和普通的插件名字，他是根据插件代码中的返回而定的。
+
+midway 会将挂载到 app 上的属性名作为基础 key。
+
+```js
+module.exports = (app) => {
+  // egg 插件经常这么做
+  app.plugin1 = xxxx;
+}
+```
+
+那么 plugin1 就是插件key，midway 会在给 app 赋值时自动将返回的对象挂载到插件上下文中，供 `@plugin` 装饰器调用。
+
 
 #### 注入配置
 
@@ -516,7 +534,6 @@ export class BaseService {
   config;   // 1
 
 }
-
 ```
 
 通过这样，我们可以把 config 中的值直接注入到业务逻辑中。
@@ -740,6 +757,52 @@ export class BaseService {
 
 }
 
+```
+
+::: tip
+这个函数可以是异步的 (async)。
+:::
+
+比如如果应用希望自己使用 sequelize， 而 sequelize 的创建 model 的过程是个异步操作。
+
+```ts
+import { providerWrapper, IApplicationContext } from 'midway';
+import * as Sequelize from 'sequelize';
+import { Sequelize as SequelizeInstance } from 'sequelize';
+
+// 可以直接写 async 方法
+export async function factory(context: IApplicationContext) {
+
+  const instance = await context.getAsync<SequelizeInstance>('coreDB');
+
+  const UiKeyTraceModel = instance.define(name, {
+    gmtCreate: {
+      type: Sequelize.DATE,
+      allowNull: true,
+      field: 'gmt_create',
+    },
+    gmtModified: {
+      type: Sequelize.DATE,
+      allowNull: true,
+      field: 'gmt_modified',
+    }
+  }, {
+    timestamps: true,
+    createdAt: 'gmt_create',
+    updatedAt: 'gmt_modified',
+    freezeTableName: true,
+    tableName: 'xxxx'
+  });
+
+  return UiKeyTraceModel;
+}
+
+providerWrapper([
+  {
+    id: 'keyTraceModel',
+    provider: factory
+  }
+]);
 ```
 
 ## 应用测试
