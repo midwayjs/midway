@@ -88,7 +88,7 @@ Typescript 和 Javascript 既相似又有着许多不同，以往的 Node.js 应
 
 ```
 
-`experimentalDecorators` 就是用来表示是否启用装饰器，`noUnusedLocals` 表示是否在有没有使用的本地变量编译时报错，这些配置信息都可以在 [这里](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html) 查询到。
+`experimentalDecorators` 就是用来表示是否启用装饰器，`noUnusedLocals` 表示是否存在没有使用的本地变量编译时报错，这些配置信息都可以在 [这里](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html) 查询到。
 
 
 ### tslint.json
