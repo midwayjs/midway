@@ -37,7 +37,6 @@
     "camelcase": "^5.0.0",
     "debug": "^3.1.0",
     "egg": "^2.9.1",
-    "egg-scripts": "^2.9.1",
     "extend": "^3.0.0",
     "globby": "^8.0.1",
     "inflection": "^1.12.0",
