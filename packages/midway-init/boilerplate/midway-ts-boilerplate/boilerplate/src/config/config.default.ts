@@ -8,5 +8,18 @@ module.exports = (appInfo: any) => {
   config.middleware = [
   ];
 
+  // watch default file state
+  config.development = {
+    watchDirs: [
+      'app',
+      'lib',
+      'config',
+      'app.ts',
+      'agent.ts',
+      'interface.ts'
+    ],
+    overrideDefault: true
+  };
+
   return config;
 };
