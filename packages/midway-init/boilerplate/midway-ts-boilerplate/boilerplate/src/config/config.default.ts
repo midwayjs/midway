@@ -1,4 +1,4 @@
-module.exports = (appInfo: any) => {
+export = (appInfo: any) => {
   const config: any = exports = {};
 
   // use for cookie sign key, should change to your own and keep security

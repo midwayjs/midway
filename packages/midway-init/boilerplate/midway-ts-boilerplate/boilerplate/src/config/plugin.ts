@@ -1,2 +1,4 @@
 // had enabled by midway
-// exports.static = true;
+// export = {
+//   static: true,
+// };

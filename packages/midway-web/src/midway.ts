@@ -1,4 +1,5 @@
-import {Agent, Application, Logger} from 'egg';
+import {Agent, Application} from 'egg';
+import {Logger} from 'egg-logger';
 import {AgentWorkerLoader, AppWorkerLoader} from './loader/loader';
 
 const path = require('path');
