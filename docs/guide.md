@@ -863,7 +863,7 @@ npm test
 ```
 
 
-### 测试完整应用
+### 开始测试
 
 在测试运行之前，我们首先要创建应用的一个 app 实例， 通过它来访问需要被测试的 Controller、Middleware、Service 等应用层代码。
 
@@ -892,7 +892,7 @@ describe('test/controller/home.test.ts', () => {
 
 ```typescript
 // test/controller/home.test.ts
-const { app, mock, assert } = require('midway-mock/bootstrap');
+import { app, mock, assert } from 'midway-mock/bootstrap';
 
 describe('test/controller/home.test.ts', () => {
   // test cases
@@ -900,3 +900,90 @@ describe('test/controller/home.test.ts', () => {
 
 ```
 
+### Controller 测试
+
+我们可以通过 app.httpRequest() [SuperTest](https://github.com/visionmedia/supertest) 发起一个真实的 HTTP 请求来进行测试。app.httpRequest() 是 midway-mock 封装的 SuperTest 请求实例。
+
+例如我们要给 `app/controller/home.ts`：
+
+```typescript
+import { controller, get, provide } from 'midway';
+
+@provide()
+@controller('/')
+export class HomeController {
+  @get('/')
+  async index(ctx) {
+    ctx.body = `Welcome to midwayjs!`;
+  }
+}
+```
+
+写一个完整的单元测试，它的测试代码 `test/controller/home.test.ts` 如下：
+
+```typescript
+import { app, assert } from 'midway-mock/bootstrap';
+
+describe('test/controller/home.test.ts', () => {
+  it('should GET /', () => {
+    // 对 app 发起 `GET /` 请求
+    return app
+      .httpRequest()
+      .get('/')
+      .expect('Welcome to midwayjs!') // 期望 body 是 hello world
+      .expect(200); // 期望返回 status 200
+  });
+});
+```
+
+通过基于 SuperTest 的 app.httpRequest() 可以轻松发起 GET、POST、PUT 等 HTTP 请求，并且它有非常丰富的请求数据构造接口，请查看 [SuperTest](https://github.com/visionmedia/supertest#getting-started) 文档。
+
+### Service 测试
+
+由于 midway 提倡使用 IoC 的方式来定义 service，所以编码与测试都与 eggjs 有明显的区别。
+
+例如 `src/lib/service/user.ts`:
+
+```typescript
+import { provide } from 'midway';
+import { IUserService, IUserOptions, IUserResult } from '../../interface';
+
+// 装载 service 到 IoC 容器
+@provide('userService')
+export class UserService implements IUserService {
+  async getUser(options: IUserOptions): Promise<IUserResult> {
+    return new Promise<IUserResult>((resolve) => {
+      // 10ms 之后返回用户数据
+      setTimeout(() => {
+        resolve({
+          id: options.id,
+          username: 'mockedName',
+          phone: '12345678901',
+          email: 'xxx.xxx@xxx.com',
+        });
+      }, 10);
+    });
+  }
+}
+
+```
+
+编写单元测试 `test/service/user.test.ts`：
+
+```typescript
+import { app, assert } from 'midway-mock/bootstrap';
+import { IUserService } from '../../src/interface';
+
+describe('test/service/user.test.ts', () => {
+  it('#getUser', async () => {
+    // 取出 userService
+    const user = await app.applicationContext.getAsync<IUserService>('userService');
+    const data = await user.getUser({ id: 1 });
+    assert(data.id === 1);
+    assert(data.username === 'mockedName');
+  });
+});
+
+```
+
+app.applicationContext 是 IoC 容器的应用上下文, 通过它可以异步取出注入的 service，并使用 service 进行测试。完整 demo 可以参见 [midway-test-demo](https://github.com/Lellansin/midway-test-demo)。
