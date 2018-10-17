@@ -4,11 +4,11 @@ const { app, assert } = require('midway-mock/bootstrap');
 
 describe('test/app/controller/home.test.ts', () => {
 
-  it('should assert', function* () {
+  it('should assert', async () =>{
     const pkg = require('../../../package.json');
     assert(app.config.keys.startsWith(pkg.name));
     // const ctx = app.mockContext({});
-    // yield ctx.service.xx();
+    // await ctx.service.xx();
   });
 
   it('should GET /', () => {
