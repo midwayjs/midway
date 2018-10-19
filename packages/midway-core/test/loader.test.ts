@@ -177,4 +177,25 @@ describe('/test/loader.test.ts', () => {
       assert.ok(called);
     });
   });
+
+  describe('disable auto app loader', () => {
+    let app;
+    before(() => {
+      app = utils.app('base-app', {container: {disableAutoLoad: true}});
+      return app.ready();
+    });
+
+    after(() => app.close());
+
+    it('disable js app loader should be ok', async () => {
+      try {
+        const reqCtx = await app.applicationContext.getAsync('requestContext');
+        reqCtx.updateContext({ logger: new Console });
+        reqCtx.get('ctx');
+        reqCtx.getAsync('logger');
+      } catch (e) {
+        console.error(e);
+      }
+    });
+  });
 });
