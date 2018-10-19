@@ -6,7 +6,7 @@ process.env.MIDWAY_BASE_DIR = path.join(fixtures, 'base-app-decorator');
 process.env.MIDWAY_FRAMEWORK_PATH = path.join(__dirname, '../../midway');
 
 import { app, mm } from '../bootstrap';
-import { mm as mock } from '../src/';
+import { mm as mock, MockContainer } from '../src/';
 
 describe('test/index.test.ts', () => {
   afterEach(mm.restore);
@@ -17,8 +17,32 @@ describe('test/index.test.ts', () => {
       .expect(200);
   });
 
-  it('should use bootstrap to get app', () => {
+  it('should use mm.cluster to get app', () => {
+    const app = mock.app({
+      baseDir: process.env.MIDWAY_BASE_DIR,
+      framework: process.env.MIDWAY_FRAMEWORK_PATH,
+    });
+    return app.ready();
+  });
+
+  it('should use mm.cluster to get app', () => {
     const app = mock.cluster({});
+    return app.ready();
+  });
+
+  it('should use mm.cluster to get app', () => {
+    const app = mock.cluster({
+      baseDir: process.env.MIDWAY_BASE_DIR,
+      framework: process.env.MIDWAY_FRAMEWORK_PATH,
+    });
+    return app.ready();
+  });
+
+  it('should use mm.cluster to get app', async () => {
+    const app = new MockContainer({
+      baseDir: process.env.MIDWAY_BASE_DIR,
+      framework: process.env.MIDWAY_FRAMEWORK_PATH,
+    });
     return app.ready();
   });
 });
