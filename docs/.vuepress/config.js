@@ -23,6 +23,7 @@ module.exports = {
       {text: '首页', link: '/'},
       {text: 'TS 新手指南', link: '/ts_start'},
       {text: '使用指南', link: '/guide'},
+      {text: 'API', link: '/api-reference'},
       {
         text: 'MidwayJs 系列产品',
         items: [
