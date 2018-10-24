@@ -24,6 +24,7 @@ eval `ssh-agent -s`
 ssh-add deploy_key
 
 npm run docs:build
+npm run gen-api-ref
 npm run docs:deploy
 
 echo 'Done.'
