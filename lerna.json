@@ -2,8 +2,15 @@
   "packages": [
     "packages/*"
   ],
-  "version": "0.4.4",
-  "registry": "https://registry.npmjs.org/",
-  "npmClient": "npm",
-  "lerna": "2.9.0"
+  "command": {
+    "publish": {
+      "ignoreChanges": [
+        "*.md"
+      ]
+    },
+    "bootstrap": {
+      "npmClientArgs": ["--no-package-lock"]
+    }
+  },
+  "version": "0.4.4"
 }
