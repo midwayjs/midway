@@ -17,7 +17,7 @@
     "tree-kill": "^1.2.0",
     "ts-node": "^7.0.1",
     "tslint": "^5.9.1",
-    "typedoc": "^0.11.0",
+    "typedoc": "^0.11.1",
     "typescript": "^2.8.0",
     "vuepress": "^0.14.2"
   },
@@ -39,7 +39,8 @@
     "authors": "git log --format='%aN <%aE>' | sort -u > AUTHORS",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
-    "docs:deploy": "node ./scripts/deploy_doc.js"
+    "docs:deploy": "node ./scripts/deploy_doc.js",
+    "gen-api-ref": "typedoc --options typedoc.js"
   },
   "keywords": [
     "container",
