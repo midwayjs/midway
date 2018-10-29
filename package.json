@@ -33,7 +33,7 @@
     "publish": "rm -f ./packages/.DS*; sh scripts/publish.sh",
     "bootstrap": "rm -f ./packages/.DS*; lerna bootstrap --hoist",
     "clean": "lerna clean --yes; rm -rf ./packages/**/package-lock.json",
-    "build": "npm run authors && lerna run build",
+    "build": "sh scripts/build.sh",
     "authors": "git log --format='%aN <%aE>' | sort -u > AUTHORS",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
