@@ -1,4 +1,4 @@
-import { expect, assert } from 'chai';
+import * as assert from 'assert';
 import { isDev, formatOptions } from '../cluster/utils';
 
 describe('/test/utils.test.js', () => {
@@ -6,7 +6,7 @@ describe('/test/utils.test.js', () => {
     const bak = process.env.NODE_ENV;
     process.env.NODE_ENV = 'unittest';
     const res = isDev();
-    expect(res).equal(true);
+    assert(res);
     process.env.NODE_ENV = bak;
     done();
   });
