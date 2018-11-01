@@ -1,4 +1,4 @@
-import { cluster } from './utils';
+import { cluster } from './util';
 
 describe('/test/master.test.js', () => {
   let app;
