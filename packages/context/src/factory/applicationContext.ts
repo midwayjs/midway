@@ -9,10 +9,16 @@ import {
   IObjectDefinition,
   IObjectDefinitionRegistry,
   IObjectFactory,
+  ObjectDependencyTree,
   ObjectIdentifier
 } from '../interfaces';
 import { ObjectConfiguration } from '../base/Configuration';
 import { ManagedResolverFactory } from './common/ManagedResolverFactory';
+
+const path = require('path');
+// const fs = require('fs');
+
+const graphviz = require('graphviz');
 
 export const ContextEvent = {
   START: 'start',
@@ -103,6 +109,7 @@ export class BaseApplicationContext extends EventEmitter implements IApplication
   props: ObjectConfiguration = new ObjectConfiguration();
   configLocations: string[] = [];
   messageSource: IMessageSource;
+  dependencyMap: Map<string, ObjectDependencyTree> = new Map();
 
   constructor(baseDir: string = process.cwd(), parent?: IApplicationContext) {
     super();
@@ -268,4 +275,83 @@ export class BaseApplicationContext extends EventEmitter implements IApplication
     this.resolverFactory.beforeEachCreated(fn);
   }
 
+  async dumpDependency(imagePath = path.join(process.cwd(), 'dependency.svg')) {
+    const options: any = this.createGraphvizOptions({
+      baseDir: null,
+      excludeRegExp: false,
+      fileExtensions: ['js'],
+      includeNpm: false,
+      requireConfig: null,
+      webpackConfig: null,
+      rankdir: 'LR',
+      layout: 'dot',
+      fontName: 'Arial',
+      fontSize: '14px',
+      backgroundColor: '#111111',
+      nodeColor: '#c6c5fe',
+      nodeShape: 'box',
+      nodeStyle: 'rounded',
+      noDependencyColor: '#cfffac',
+      cyclicNodeColor: '#ff6c60',
+      edgeColor: '#757575',
+      graphVizOptions: false,
+      graphVizPath: false,
+      dependencyFilter: false
+    });
+    const g = graphviz.digraph('G');
+
+    options.type = path.extname(imagePath).replace('.', '') || 'png';
+
+    for (let [id, module] of this.dependencyMap.entries()) {
+
+      g.addNode(module.name, {label: `${id}\nscope:${module.scope}\nasync:${module.isAsync}`});
+
+      module.properties.forEach((depId) => {
+        g.addEdge(module.name, depId, {label: `properties`});
+      });
+
+      module.constructorArgs.forEach((depId) => {
+        g.addEdge(module.name, depId, {label: 'constructor'});
+      });
+    }
+
+    try {
+      console.log(g.to_dot());
+      // fs.writeSync(imagePath, g.to_dot());
+    } catch (err) {
+      console.error('generate injection dependency tree fail, err = ', err.message);
+    }
+  }
+
+  private createGraphvizOptions(config) {
+    const graphVizOptions = config.graphVizOptions || {};
+
+    return {
+      G: Object.assign({
+        overlap: false,
+        pad: 0.3,
+        rankdir: config.rankdir,
+        layout: config.layout,
+        bgcolor: config.backgroundColor
+      }, graphVizOptions.G),
+      E: Object.assign({
+        color: config.edgeColor
+      }, graphVizOptions.E),
+      N: Object.assign({
+        fontname: config.fontName,
+        fontsize: config.fontSize,
+        color: config.nodeColor,
+        shape: config.nodeShape,
+        style: config.nodeStyle,
+        height: 0,
+        fontcolor: config.nodeColor
+      }, graphVizOptions.N)
+    };
+  }
+
+  // private setNodeColor(node, color) {
+  //   node.set('color', color);
+  //   node.set('fontcolor', color);
+  // }
 }
+

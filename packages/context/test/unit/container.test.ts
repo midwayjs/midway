@@ -143,18 +143,23 @@ describe('/test/unit/container.test.ts', () => {
     });
   });
 
-  describe('mix suit', () => {
+  describe.only('mix suit', () => {
+
+    const container = new Container();
 
     it('should use factory dynamic create object', () => {
-      const container = new Container();
-      container.bind(DieselCar);
       container.bind('engineFactory', engineFactory);
+      container.bind(DieselCar);
       container.bind(PetrolEngine);
       container.bind(DieselEngine);
       const result = <DieselCar>container.get(DieselCar);
       result.run();
       expect(result.dieselEngine.capacity).to.equal(15);
       expect(result.backUpDieselEngine.capacity).to.equal(20);
+    });
+
+    it('should generate dependency svg', async () => {
+      await container.dumpDependency();
     });
   });
 });

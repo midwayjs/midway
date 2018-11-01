@@ -6,20 +6,22 @@ import * as _ from 'lodash';
 import { KEYS, VALUE_TYPE } from './constants';
 import {
   ManagedJSON,
-  ManagedValue,
-  ManagedReference,
-  ManagedObject,
-  ManagedProperty,
-  ManagedProperties,
   ManagedList,
+  ManagedMap,
+  ManagedObject,
+  ManagedProperties,
+  ManagedProperty,
+  ManagedReference,
   ManagedSet,
-  ManagedMap
+  ManagedValue
 } from './managed';
-import { IObjectDefinition,
+import {
   IApplicationContext,
+  IManagedInstance,
   IManagedResolver,
-  ObjectIdentifier,
-  IManagedInstance} from '../../interfaces';
+  IObjectDefinition,
+  ObjectIdentifier
+} from '../../interfaces';
 import { ObjectConfiguration } from '../../base/Configuration';
 import { Autowire } from './Autowire';
 
@@ -30,11 +32,13 @@ function tpl(s: string, props: any): string {
     interpolate: /{{([\s\S]+?)}}/g
   })(props);
 }
+
 /**
  * 所有解析器基类
  */
 class BaseManagedResolver implements IManagedResolver {
   protected _factory: ManagedResolverFactory;
+
   constructor(factory: ManagedResolverFactory) {
     this._factory = factory;
   }
@@ -51,6 +55,7 @@ class BaseManagedResolver implements IManagedResolver {
     throw new Error('not implement');
   }
 }
+
 /**
  * 解析json
  */
@@ -68,6 +73,7 @@ class JSONResolver extends BaseManagedResolver {
     return this.resolve(managed, props);
   }
 }
+
 /**
  * 解析值
  */
@@ -75,6 +81,7 @@ class ValueResolver extends BaseManagedResolver {
   get type(): string {
     return KEYS.VALUE_ELEMENT;
   }
+
   /**
    * 解析不通类型的值
    * @param managed 类型接口
@@ -82,7 +89,7 @@ class ValueResolver extends BaseManagedResolver {
    */
   _resolveCommon(managed: IManagedInstance, props: any): any {
     const mv = <ManagedValue>managed;
-    switch(mv.valueType) {
+    switch (mv.valueType) {
       case VALUE_TYPE.STRING:
       case VALUE_TYPE.TEMPLATE:
         return tpl(mv.value, props);
@@ -115,6 +122,7 @@ class ValueResolver extends BaseManagedResolver {
     }
   }
 }
+
 /**
  * 解析ref
  */
@@ -133,6 +141,7 @@ class RefResolver extends BaseManagedResolver {
     return await this._factory.context.getAsync(mr.name, null);
   }
 }
+
 /**
  * 解析 list
  */
@@ -159,6 +168,7 @@ class ListResolver extends BaseManagedResolver {
     return arr;
   }
 }
+
 /**
  * 解析set
  */
@@ -185,6 +195,7 @@ class SetResolver extends BaseManagedResolver {
     return s;
   }
 }
+
 /**
  * 解析map
  */
@@ -211,6 +222,7 @@ class MapResolver extends BaseManagedResolver {
     return m;
   }
 }
+
 /**
  * 解析properties
  */
@@ -241,6 +253,7 @@ class PropertiesResolver extends BaseManagedResolver {
     return cfg;
   }
 }
+
 /**
  * 解析property
  */
@@ -259,6 +272,7 @@ class PropertyResolver extends BaseManagedResolver {
     return await this._factory.resolveManagedAsync(mp.value);
   }
 }
+
 /**
  * 解析 object
  */
@@ -277,6 +291,7 @@ class ObjectResolver extends BaseManagedResolver {
     return await this._factory.createAsync(mo.definition, null);
   }
 }
+
 /**
  * 解析工厂
  */
@@ -327,6 +342,7 @@ export class ManagedResolverFactory {
     }
     return await this.resolvers.get(managed.type).resolveAsync(managed, this.props);
   }
+
   /**
    * 同步创建对象
    * @param definition 对象定义
@@ -337,6 +353,8 @@ export class ManagedResolverFactory {
       this.singletonCache.has(definition.id)) {
       return this.singletonCache.get(definition.id);
     }
+
+    this.createObjectDependencyTree(definition);
     // 预先初始化依赖
     if (definition.hasDependsOn()) {
       for (let i = 0; i < definition.dependsOn.length; i++) {
@@ -357,13 +375,13 @@ export class ManagedResolverFactory {
       }
     }
 
-    for(let handler of this.beforeCreateHandler) {
+    for (let handler of this.beforeCreateHandler) {
       handler.call(this, Clzz, constructorArgs, this.context);
     }
 
     const inst = definition.creator.doConstruct(Clzz, constructorArgs);
 
-    if(definition.properties) {
+    if (definition.properties) {
       const keys = definition.properties.keys();
       for (let i = 0; i < keys.length; i++) {
         const key = keys[i];
@@ -376,7 +394,7 @@ export class ManagedResolverFactory {
       Autowire.patchNoDollar(inst, this.context);
     }
 
-    for(let handler of this.afterCreateHandler) {
+    for (let handler of this.afterCreateHandler) {
       handler.call(this, inst, this.context, definition);
     }
 
@@ -389,6 +407,7 @@ export class ManagedResolverFactory {
 
     return inst;
   }
+
   /**
    * 异步创建对象
    * @param definition 对象定义
@@ -399,6 +418,8 @@ export class ManagedResolverFactory {
       this.singletonCache.has(definition.id)) {
       return this.singletonCache.get(definition.id);
     }
+
+    this.createObjectDependencyTree(definition);
 
     // 预先初始化依赖
     if (definition.hasDependsOn()) {
@@ -413,14 +434,14 @@ export class ManagedResolverFactory {
       constructorArgs = args;
     } else {
       constructorArgs = [];
-      if(definition.constructorArgs) {
+      if (definition.constructorArgs) {
         for (let i = 0; i < definition.constructorArgs.length; i++) {
           constructorArgs.push(await this.resolveManagedAsync(definition.constructorArgs[i]));
         }
       }
     }
 
-    for(let handler of this.beforeCreateHandler) {
+    for (let handler of this.beforeCreateHandler) {
       handler.call(this, Clzz, constructorArgs, this.context);
     }
 
@@ -429,7 +450,7 @@ export class ManagedResolverFactory {
       throw new Error(`${definition.id} config no valid path`);
     }
 
-    if(definition.properties) {
+    if (definition.properties) {
       const keys = definition.properties.keys();
       for (let i = 0; i < keys.length; i++) {
         const key = keys[i];
@@ -442,7 +463,7 @@ export class ManagedResolverFactory {
       Autowire.patchNoDollar(inst, this.context);
     }
 
-    for(let handler of this.afterCreateHandler) {
+    for (let handler of this.afterCreateHandler) {
       handler.call(this, inst, this.context, definition);
     }
 
@@ -473,4 +494,26 @@ export class ManagedResolverFactory {
   afterEachCreated(fn: (ins: any, context: IApplicationContext, definition?: IObjectDefinition) => void) {
     this.afterCreateHandler.push(fn);
   }
+
+  private createObjectDependencyTree(definition) {
+    if (!this.context.dependencyMap.has(definition.id)) {
+
+      let constructorArgs = definition.constructorArgs || [];
+      constructorArgs = constructorArgs.map((ref) => {
+        return ref.name;
+      });
+
+      const properties = (definition.properties && definition.properties.keys()) || [];
+
+      this.context.dependencyMap.set(definition.id, {
+        name: definition.path,
+        isAsync: definition.isAsync(),
+        scope: definition.scope,
+        constructorArgs: constructorArgs,
+        properties: properties,
+        type: definition.constructor.name === 'ObjectConfiguration' ? 'C' : 'f'
+      });
+    }
+  }
+
 }

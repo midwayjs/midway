@@ -138,11 +138,13 @@ export interface IApplicationContext extends IObjectFactory {
   props: IConfiguration;
   configLocations: string[];
   messageSource: IMessageSource;
+  dependencyMap: Map<string, ObjectDependencyTree>;
   refreshAsync(): Promise<void>;
   ready(): Promise<void>;
   addLifeCycle(lifeCycle: ILifeCycle): void;
   removeLifeCycle(lifeCycle: ILifeCycle): void;
   stop(): Promise<void>;
+  dumpDependency(imagePath?: string): Promise<void>;
 }
 /**
  * 内部管理的属性、json、ref等解析实例存储
@@ -193,4 +195,12 @@ export interface TagClsMetadata {
 
 export interface ReflectResult {
   [key: string]: TagPropsMetadata[];
+}
+
+export interface ObjectDependencyTree {
+  scope: IScopeEnum;
+  name: string;
+  isAsync: boolean;
+  constructorArgs: string[];
+  properties: string[];
 }
