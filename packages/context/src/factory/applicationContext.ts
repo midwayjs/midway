@@ -272,7 +272,7 @@ export class BaseApplicationContext extends EventEmitter implements IApplication
     this.resolverFactory.beforeEachCreated(fn);
   }
 
-  async dumpDependency() {
+  dumpDependency() {
     const g = graphviz.digraph('G');
 
     for (let [id, module] of this.getDependencyMap().entries()) {

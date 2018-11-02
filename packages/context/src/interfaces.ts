@@ -144,7 +144,7 @@ export interface IApplicationContext extends IObjectFactory {
   addLifeCycle(lifeCycle: ILifeCycle): void;
   removeLifeCycle(lifeCycle: ILifeCycle): void;
   stop(): Promise<void>;
-  dumpDependency(imagePath?: string): Promise<void>;
+  dumpDependency(): void;
 }
 /**
  * 内部管理的属性、json、ref等解析实例存储
