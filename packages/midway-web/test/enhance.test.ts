@@ -335,5 +335,16 @@ describe('/test/enhance.test.ts', () => {
         .expect(200)
         .expect('plugintest is not null t', done);
     });
+
+    it('should check plugin get & pluginContext.get', () => {
+      const name = 'plugin2';
+      const plugins = app.enablePlugins;
+      assert(app.getPlugin(name), plugins[name]);
+    });
+
+    it('should get config', () => {
+      const cfg = app.getConfig();
+      assert(cfg.env, 'unittest');
+    });
   });
 });

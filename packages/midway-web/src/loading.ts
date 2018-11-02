@@ -8,19 +8,6 @@ const extend = require('extend');
 const assert = require('assert');
 const path = require('path');
 
-function inject(obj, properties, result) {
-  if (!properties || properties.length === 0) {
-    return;
-  }
-  const property = properties.shift();
-  if (properties.length === 0) {
-    obj[property] = result;
-    return;
-  }
-  obj[property] || (obj[property] = {});
-  inject(obj[property], properties, result);
-}
-
 export function loading(files, options) {
   assert(options.loadDirs, `options.loadDirs is required`);
 
@@ -39,8 +26,6 @@ export function loading(files, options) {
 
   files = [].concat(files);
 
-  const into = is.object(options.into) && options.into;
-  const flatten = !!options.flatten;
   let results = [];
   let loadDirs = [].concat(options.loadDirs);
 
@@ -60,33 +45,6 @@ export function loading(files, options) {
       }
       result = options.resultHandler(result, file, dir, exports);
       results.push(result);
-
-      if (into) {
-        // 文件名校验规则考虑操作系统兼容性
-        // 参考 http://superuser.com/questions/358855/what-characters-are-safe-in-cross-platform-file-names-for-linux-windows-and-os
-        const reg = /^[a-z][\.a-z0-9_-]*$/i;  // 不支持 comma(,)
-        let properties = name.replace(/\.js$/, '')
-          .split('/')
-          .map( property => {
-            if (!reg.test(property)) {
-              throw new Error(`${property} does not match ${reg} in ${name}`);
-            }
-            const result = property.replace(/[_-][a-z]/ig, function (s) {
-              return s.substring(1).toUpperCase();
-            });
-            return result;
-          });
-
-        properties = options.propertyHandler(properties, name, file);
-
-        if (properties && properties.length) {
-          if (flatten) {
-            into[properties.join('.')] = result;
-          } else {
-            inject(into, properties, result);
-          }
-        }
-      }
 
       debug(`LoadFiles => [${file}]: load success`);
       if (options.target) {
