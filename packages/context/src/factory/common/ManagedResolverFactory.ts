@@ -495,7 +495,7 @@ export class ManagedResolverFactory {
     this.afterCreateHandler.push(fn);
   }
 
-  private createObjectDependencyTree(definition) {
+  protected createObjectDependencyTree(definition) {
     if (!this.context.dependencyMap.has(definition.id)) {
 
       let constructorArgs = definition.constructorArgs || [];
@@ -503,15 +503,15 @@ export class ManagedResolverFactory {
         return ref.name;
       });
 
-      const properties = (definition.properties && definition.properties.keys()) || [];
+      const properties = (definition.properties && definition.properties.keys().map((key) => {
+        return definition.properties.get(key).name;
+      })) || [];
 
       this.context.dependencyMap.set(definition.id, {
-        name: definition.path,
-        isAsync: definition.isAsync(),
+        name: typeof definition.path !== 'string' ? definition.path.name : definition.id,
         scope: definition.scope,
         constructorArgs: constructorArgs,
         properties: properties,
-        type: definition.constructor.name === 'ObjectConfiguration' ? 'C' : 'f'
       });
     }
   }

@@ -200,7 +200,6 @@ export interface ReflectResult {
 export interface ObjectDependencyTree {
   scope: IScopeEnum;
   name: string;
-  isAsync: boolean;
   constructorArgs: string[];
   properties: string[];
 }

@@ -50,4 +50,13 @@ export class RequestContainer extends Container {
     }
   }
 
+  protected getDependencyMap() {
+    for(let [key, value] of this.applicationContext.dependencyMap.entries()) {
+      if(!this.dependencyMap.has(key)) {
+        this.dependencyMap.set(key, value);
+      }
+    }
+    return this.dependencyMap;
+  }
+
 }
