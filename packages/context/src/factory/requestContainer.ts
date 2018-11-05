@@ -23,7 +23,9 @@ export class RequestContainer extends Container {
     const definition = this.applicationContext.registry.getDefinition(identifier);
     if (definition && definition.isRequestScope()) {
       // create object from applicationContext definition for requestScope
-      return this.resolverFactory.create(definition, args);
+      const obj = this.resolverFactory.create(definition, args);
+      this.attachDependencyMap();
+      return obj;
     }
 
     if (this.parent) {
@@ -42,7 +44,9 @@ export class RequestContainer extends Container {
     const definition = this.applicationContext.registry.getDefinition(identifier);
     if (definition && definition.isRequestScope()) {
       // create object from applicationContext definition for requestScope
-      return await this.resolverFactory.createAsync(definition, args);
+      const obj = await this.resolverFactory.createAsync(definition, args);
+      this.attachDependencyMap();
+      return obj;
     }
 
     if (this.parent) {
@@ -50,13 +54,12 @@ export class RequestContainer extends Container {
     }
   }
 
-  protected getDependencyMap() {
-    for(let [key, value] of this.applicationContext.dependencyMap.entries()) {
-      if(!this.dependencyMap.has(key)) {
-        this.dependencyMap.set(key, value);
+  protected attachDependencyMap() {
+    for(let [key, value] of this.dependencyMap.entries()) {
+      if(!this.applicationContext.dependencyMap.has(key)) {
+        this.applicationContext.dependencyMap.set(key, value);
       }
     }
-    return this.dependencyMap;
   }
 
 }

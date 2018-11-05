@@ -275,7 +275,7 @@ export class BaseApplicationContext extends EventEmitter implements IApplication
   dumpDependency() {
     const g = graphviz.digraph('G');
 
-    for (let [id, module] of this.getDependencyMap().entries()) {
+    for (let [id, module] of this.dependencyMap.entries()) {
 
       g.addNode(id, {label: `${id}(${module.name})\nscope:${module.scope}`, fontsize: '10'});
 
@@ -296,8 +296,5 @@ export class BaseApplicationContext extends EventEmitter implements IApplication
     }
   }
 
-  protected getDependencyMap() {
-    return this.dependencyMap;
-  }
 }
 

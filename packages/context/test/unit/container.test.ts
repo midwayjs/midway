@@ -165,7 +165,7 @@ describe('/test/unit/container.test.ts', () => {
 
   describe('dependency tree', () => {
 
-    it('should generate dependency svg', async () => {
+    it.only('should generate dependency dot in requestContainer', async () => {
       const applicationContext = new Container();
       applicationContext.bind(UserService);
       applicationContext.bind(UserController);
@@ -174,6 +174,10 @@ describe('/test/unit/container.test.ts', () => {
       await requestContext.getAsync(UserController);
       const tree = await requestContext.dumpDependency();
       expect(/userController/.test(tree)).to.be.true;
+      expect(/newKey\(DbAPI\)/.test(tree)).to.be.false;
+      const newTree = await applicationContext.dumpDependency();
+      expect(/userController/.test(newTree)).to.be.true;
+      expect(/newKey\(DbAPI\)/.test(newTree)).to.be.true;
     });
 
   });
