@@ -165,7 +165,7 @@ describe('/test/unit/container.test.ts', () => {
 
   describe('dependency tree', () => {
 
-    it.only('should generate dependency dot in requestContainer', async () => {
+    it('should generate dependency dot in requestContainer', async () => {
       const applicationContext = new Container();
       applicationContext.bind(UserService);
       applicationContext.bind(UserController);
