@@ -290,7 +290,6 @@ export class BaseApplicationContext extends EventEmitter implements IApplication
 
     try {
       return g.to_dot();
-      // fs.writeSync(imagePath, g.to_dot());
     } catch (err) {
       console.error('generate injection dependency tree fail, err = ', err.message);
     }
