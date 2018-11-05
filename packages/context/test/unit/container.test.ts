@@ -1,6 +1,5 @@
-import { Container, RequestContainer } from '../../src/index';
-import {expect} from 'chai';
-const path = require('path');
+import { Container } from '../../src/index';
+import { expect } from 'chai';
 import {
   BaseService,
   BaseServiceAsync,
@@ -12,11 +11,13 @@ import {
 } from '../fixtures/class_sample';
 
 import { BMWX1, Car, Electricity, Gas, Tesla, Turbo } from '../fixtures/class_sample_car';
-import {childAsyncFunction, childFunction, testInjectAsyncFunction, testInjectFunction} from '../fixtures/fun_sample';
-import {DieselCar, DieselEngine, engineFactory, PetrolEngine} from '../fixtures/mix_sample';
+import { childAsyncFunction, childFunction, testInjectAsyncFunction, testInjectFunction } from '../fixtures/fun_sample';
+import { DieselCar, DieselEngine, engineFactory, PetrolEngine } from '../fixtures/mix_sample';
 import { UserService } from '../fixtures/complex_injection/userService';
 import { UserController } from '../fixtures/complex_injection/userController';
 import { DbAPI } from '../fixtures/complex_injection/dbAPI';
+
+const path = require('path');
 
 describe('/test/unit/container.test.ts', () => {
 
@@ -170,11 +171,6 @@ describe('/test/unit/container.test.ts', () => {
       applicationContext.bind(UserService);
       applicationContext.bind(UserController);
       applicationContext.bind(DbAPI);
-      const requestContext = new RequestContainer({}, applicationContext);
-      await requestContext.getAsync(UserController);
-      const tree = await requestContext.dumpDependency();
-      expect(/userController/.test(tree)).to.be.true;
-      expect(/newKey\(DbAPI\)/.test(tree)).to.be.false;
       const newTree = await applicationContext.dumpDependency();
       expect(/userController/.test(newTree)).to.be.true;
       expect(/newKey\(DbAPI\)/.test(newTree)).to.be.true;

@@ -354,7 +354,6 @@ export class ManagedResolverFactory {
       return this.singletonCache.get(definition.id);
     }
 
-    this.createObjectDependencyTree(definition);
     // 预先初始化依赖
     if (definition.hasDependsOn()) {
       for (let i = 0; i < definition.dependsOn.length; i++) {
@@ -418,8 +417,6 @@ export class ManagedResolverFactory {
       this.singletonCache.has(definition.id)) {
       return this.singletonCache.get(definition.id);
     }
-
-    this.createObjectDependencyTree(definition);
 
     // 预先初始化依赖
     if (definition.hasDependsOn()) {
@@ -493,27 +490,6 @@ export class ManagedResolverFactory {
 
   afterEachCreated(fn: (ins: any, context: IApplicationContext, definition?: IObjectDefinition) => void) {
     this.afterCreateHandler.push(fn);
-  }
-
-  protected createObjectDependencyTree(definition) {
-    if (!this.context.dependencyMap.has(definition.id)) {
-
-      let constructorArgs = definition.constructorArgs || [];
-      constructorArgs = constructorArgs.map((ref) => {
-        return ref.name;
-      });
-
-      const properties = (definition.properties && definition.properties.keys().map((key) => {
-        return definition.properties.get(key).name;
-      })) || [];
-
-      this.context.dependencyMap.set(definition.id, {
-        name: typeof definition.path !== 'string' ? definition.path.name : definition.id,
-        scope: definition.scope,
-        constructorArgs: constructorArgs,
-        properties: properties,
-      });
-    }
   }
 
 }

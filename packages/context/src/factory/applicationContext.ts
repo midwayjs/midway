@@ -245,6 +245,7 @@ export class BaseApplicationContext extends EventEmitter implements IApplication
    */
   registerDefinition(identifier: ObjectIdentifier, definition: IObjectDefinition) {
     this.registry.registerDefinition(identifier, definition);
+    this.createObjectDependencyTree(identifier, definition);
   }
 
   /**
@@ -270,6 +271,27 @@ export class BaseApplicationContext extends EventEmitter implements IApplication
    */
   beforeEachCreated(fn: (Clzz: any, constructorArgs: Array<any>, context: IApplicationContext) => void) {
     this.resolverFactory.beforeEachCreated(fn);
+  }
+
+  protected createObjectDependencyTree(identifier, definition) {
+    if (!this.dependencyMap.has(identifier)) {
+
+      let constructorArgs = definition.constructorArgs || [];
+      constructorArgs = constructorArgs.map((ref) => {
+        return ref.name;
+      });
+
+      const properties = (definition.properties && definition.properties.keys().map((key) => {
+        return definition.properties.get(key).name;
+      })) || [];
+
+      this.dependencyMap.set(identifier, {
+        name: typeof definition.path !== 'string' ? definition.path.name : identifier,
+        scope: definition.scope,
+        constructorArgs: constructorArgs,
+        properties: properties,
+      });
+    }
   }
 
   dumpDependency() {
