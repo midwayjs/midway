@@ -79,7 +79,7 @@ export class Container extends XmlApplicationContext implements IContainer {
     // 对象自定义的annotations可以覆盖默认的属性
     this.registerCustomBinding(definition, target);
 
-    this.registry.registerDefinition(identifier, definition);
+    this.registerDefinition(identifier, definition);
     debug(`bind and build definition complete, id=${definition.id}`);
   }
 

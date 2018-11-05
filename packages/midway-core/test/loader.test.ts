@@ -1,7 +1,7 @@
 const assert = require('assert');
 const request = require('supertest');
 const utils = require('./utils');
-const mm = require('mm');
+import * as path from 'path';
 
 describe('/test/loader.test.ts', () => {
 
@@ -15,6 +15,10 @@ describe('/test/loader.test.ts', () => {
     });
 
     after(() => app.close());
+
+    it('should get config merge', () => {
+      assert(app.config.rundir, path.join(__dirname, './fixtures/enhance/base-app/run'));
+    });
 
     it('should load ts directory', (done) => {
       request(app.callback())
@@ -190,7 +194,7 @@ describe('/test/loader.test.ts', () => {
     it('disable js app loader should be ok', async () => {
       try {
         const reqCtx = await app.applicationContext.getAsync('requestContext');
-        reqCtx.updateContext({ logger: new Console });
+        reqCtx.updateContext({ logger: console });
         reqCtx.get('ctx');
         reqCtx.getAsync('logger');
       } catch (e) {

@@ -41,15 +41,15 @@ export class XmlObjectDefinition extends ObjectDefinition {
     }
 
     // default scope is singleton
-    this._scope = ScopeEnum.Singleton;
+    this.scope = ScopeEnum.Singleton;
     if (this.getAttr('scope') === 'request') {
-      this._scope = ScopeEnum.Request;
+      this.scope = ScopeEnum.Request;
     }
     if (this.getAttr('scope') === 'prototype') {
-      this._scope = ScopeEnum.Prototype;
+      this.scope = ScopeEnum.Prototype;
     }
     if (this.getAttr('scope') === 'singleton') {
-      this._scope = ScopeEnum.Singleton;
+      this.scope = ScopeEnum.Singleton;
     }
 
   }

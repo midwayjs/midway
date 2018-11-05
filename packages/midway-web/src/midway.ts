@@ -1,8 +1,9 @@
-import {Agent, Application} from 'egg';
-import {Logger} from 'egg-logger';
-import {AgentWorkerLoader, AppWorkerLoader} from './loader/loader';
+import { Agent, Application } from 'egg';
+import { Logger } from 'egg-logger';
+import { AgentWorkerLoader, AppWorkerLoader } from './loader/loader';
+import * as fs from 'fs';
+import * as path from 'path';
 
-const path = require('path');
 const MIDWAY_PATH = path.dirname(__dirname);
 
 class MidwayApplication extends (<{
@@ -75,6 +76,18 @@ class MidwayApplication extends (<{
   get pluginContext() {
     return this.loader.pluginContext;
   }
+
+  dumpConfig() {
+    super.dumpConfig();
+    try {
+      const tree = this.applicationContext.dumpDependency();
+      const rundir = this.config.rundir;
+      const dumpFile = path.join(rundir, `${this.type}_dependency_${process.pid}`);
+      fs.writeFileSync(dumpFile, tree);
+    } catch (err) {
+      this.coreLogger.warn(`dump dependency dot error: ${err.message}`);
+    }
+  }
 }
 
 class MidwayAgent extends (<{
@@ -138,6 +151,18 @@ class MidwayAgent extends (<{
    */
   get pluginContext() {
     return this.loader.pluginContext;
+  }
+
+  dumpConfig() {
+    super.dumpConfig();
+    try {
+      const tree = this.applicationContext.dumpDependency();
+      const rundir = this.config.rundir;
+      const dumpFile = path.join(rundir, `${this.type}_dependency_${process.pid}`);
+      fs.writeFileSync(dumpFile, tree);
+    } catch (err) {
+      this.coreLogger.warn(`dump dependency dot error: ${err.message}`);
+    }
   }
 }
 

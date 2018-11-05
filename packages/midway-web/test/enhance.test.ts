@@ -18,6 +18,10 @@ describe('/test/enhance.test.ts', () => {
 
     after(() => app.close());
 
+    it('should get config merge', () => {
+      assert(app.config.rundir, path.join(__dirname, './fixtures/enhance/base-app/run'));
+    });
+
     it('should load ts directory', (done) => {
       request(app.callback())
         .get('/api')

@@ -1,6 +1,5 @@
-import {Container} from '../../src/index';
-import {expect} from 'chai';
-const path = require('path');
+import { Container } from '../../src/index';
+import { expect } from 'chai';
 import {
   BaseService,
   BaseServiceAsync,
@@ -12,8 +11,13 @@ import {
 } from '../fixtures/class_sample';
 
 import { BMWX1, Car, Electricity, Gas, Tesla, Turbo } from '../fixtures/class_sample_car';
-import {childAsyncFunction, childFunction, testInjectAsyncFunction, testInjectFunction} from '../fixtures/fun_sample';
-import {DieselCar, DieselEngine, engineFactory, PetrolEngine} from '../fixtures/mix_sample';
+import { childAsyncFunction, childFunction, testInjectAsyncFunction, testInjectFunction } from '../fixtures/fun_sample';
+import { DieselCar, DieselEngine, engineFactory, PetrolEngine } from '../fixtures/mix_sample';
+import { UserService } from '../fixtures/complex_injection/userService';
+import { UserController } from '../fixtures/complex_injection/userController';
+import { DbAPI } from '../fixtures/complex_injection/dbAPI';
+
+const path = require('path');
 
 describe('/test/unit/container.test.ts', () => {
 
@@ -145,10 +149,11 @@ describe('/test/unit/container.test.ts', () => {
 
   describe('mix suit', () => {
 
+    const container = new Container();
+
     it('should use factory dynamic create object', () => {
-      const container = new Container();
-      container.bind(DieselCar);
       container.bind('engineFactory', engineFactory);
+      container.bind(DieselCar);
       container.bind(PetrolEngine);
       container.bind(DieselEngine);
       const result = <DieselCar>container.get(DieselCar);
@@ -156,5 +161,20 @@ describe('/test/unit/container.test.ts', () => {
       expect(result.dieselEngine.capacity).to.equal(15);
       expect(result.backUpDieselEngine.capacity).to.equal(20);
     });
+
+  });
+
+  describe('dependency tree', () => {
+
+    it('should generate dependency dot in requestContainer', async () => {
+      const applicationContext = new Container();
+      applicationContext.bind(UserService);
+      applicationContext.bind(UserController);
+      applicationContext.bind(DbAPI);
+      const newTree = await applicationContext.dumpDependency();
+      expect(/userController/.test(newTree)).to.be.true;
+      expect(/newKey\(DbAPI\)/.test(newTree)).to.be.true;
+    });
+
   });
 });

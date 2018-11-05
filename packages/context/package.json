@@ -36,6 +36,7 @@
     "camelcase": "^5.0.0",
     "co": "^4.6.0",
     "debug": "^3.1.0",
+    "graphviz": "0.0.8",
     "is-type-of": "^1.2.0",
     "lodash": "^4.17.10",
     "reflect-metadata": "^0.1.12",

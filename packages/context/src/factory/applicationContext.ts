@@ -9,10 +9,13 @@ import {
   IObjectDefinition,
   IObjectDefinitionRegistry,
   IObjectFactory,
+  ObjectDependencyTree,
   ObjectIdentifier
 } from '../interfaces';
 import { ObjectConfiguration } from '../base/Configuration';
 import { ManagedResolverFactory } from './common/ManagedResolverFactory';
+
+const graphviz = require('graphviz');
 
 export const ContextEvent = {
   START: 'start',
@@ -103,6 +106,7 @@ export class BaseApplicationContext extends EventEmitter implements IApplication
   props: ObjectConfiguration = new ObjectConfiguration();
   configLocations: string[] = [];
   messageSource: IMessageSource;
+  dependencyMap: Map<string, ObjectDependencyTree> = new Map();
 
   constructor(baseDir: string = process.cwd(), parent?: IApplicationContext) {
     super();
@@ -241,6 +245,7 @@ export class BaseApplicationContext extends EventEmitter implements IApplication
    */
   registerDefinition(identifier: ObjectIdentifier, definition: IObjectDefinition) {
     this.registry.registerDefinition(identifier, definition);
+    this.createObjectDependencyTree(identifier, definition);
   }
 
   /**
@@ -268,4 +273,49 @@ export class BaseApplicationContext extends EventEmitter implements IApplication
     this.resolverFactory.beforeEachCreated(fn);
   }
 
+  protected createObjectDependencyTree(identifier, definition) {
+    if (!this.dependencyMap.has(identifier)) {
+
+      let constructorArgs = definition.constructorArgs || [];
+      constructorArgs = constructorArgs.map((ref) => {
+        return ref.name;
+      });
+
+      const properties = (definition.properties && definition.properties.keys().map((key) => {
+        return definition.properties.get(key).name;
+      })) || [];
+
+      this.dependencyMap.set(identifier, {
+        name: typeof definition.path !== 'string' ? definition.path.name : identifier,
+        scope: definition.scope,
+        constructorArgs: constructorArgs,
+        properties: properties,
+      });
+    }
+  }
+
+  dumpDependency() {
+    const g = graphviz.digraph('G');
+
+    for (let [id, module] of this.dependencyMap.entries()) {
+
+      g.addNode(id, {label: `${id}(${module.name})\nscope:${module.scope}`, fontsize: '10'});
+
+      module.properties.forEach((depId) => {
+        g.addEdge(id, depId, {label: `properties`, fontsize: '8'});
+      });
+
+      module.constructorArgs.forEach((depId) => {
+        g.addEdge(id, depId, {label: 'constructor', fontsize: '8'});
+      });
+    }
+
+    try {
+      return g.to_dot();
+    } catch (err) {
+      console.error('generate injection dependency tree fail, err = ', err.message);
+    }
+  }
+
 }
+
