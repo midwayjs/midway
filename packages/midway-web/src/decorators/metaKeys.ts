@@ -12,3 +12,8 @@ export const WEB_ROUTER_PREFIX_CLS = 'midway:web_router_prefix_class';
  * for @priority
  */
 export const WEB_ROUTER_PRIORITY = 'midway:web_router_priority';
+
+/**
+ * for @schedule
+ */
+export const SCHEDULE_CLASS = 'midway:schedule_class';
