@@ -1,5 +1,5 @@
 export interface MidwayApplicationOptions {
-  baseDir: string;
+  baseDir?: string;
   framework?: string;
   plugins?: any;
   container?: any;

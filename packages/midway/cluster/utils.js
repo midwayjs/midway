@@ -9,6 +9,7 @@ const path = require('path');
 exports.registerTypescriptEnvironment = options => {
   let tsFlag = options.typescript;
   // 只有是 ts 应用，并且在本地环境才判断是否加载 ts-node
+  /* istanbul ignore if*/
   if (tsFlag && !exports.isTypeScriptEnvironment() && exports.isDev()) {
     try {
       require('ts-node/register');
@@ -38,6 +39,7 @@ exports.formatOptions = (options) => {
   }
 
   if(options.typescript === undefined) {
+    /* istanbul ignore else*/
     if(exports.isTypeScriptEnvironment()) {
       options.typescript = true;
     } else {

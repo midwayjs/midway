@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.5](https://github.com/midwayjs/midway/compare/v0.4.4...v0.4.5) (2018-11-05)
+
+
+### Bug Fixes
+
+* fix app.root ([33d730c](https://github.com/midwayjs/midway/commit/33d730c))
+
+
+
+
+
 <a name="0.4.4"></a>
 ## [0.4.4](https://github.com/midwayjs/midway/compare/v0.4.3...v0.4.4) (2018-10-23)
 

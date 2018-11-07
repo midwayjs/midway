@@ -1,4 +1,4 @@
-const path = require('path');
+import * as path from 'path';
 
 module.exports = {
   // 默认开启的插件

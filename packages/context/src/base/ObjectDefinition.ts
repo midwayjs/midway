@@ -1,11 +1,7 @@
-import { ObjectIdentifier,
-  Scope,
-  IObjectDefinition,
-  IObjectCreator
-} from '../interfaces';
+import { IObjectCreator, IObjectDefinition, ObjectIdentifier, Scope } from '../interfaces';
 import { ScopeEnum } from './Scope';
 import { ObjectConfiguration } from './Configuration';
-import {ObjectCreator} from './ObjectCreator';
+import { ObjectCreator } from './ObjectCreator';
 
 export class ObjectDefinition implements IObjectDefinition {
   protected _attrs = new Map<ObjectIdentifier, any>();
@@ -14,7 +10,7 @@ export class ObjectDefinition implements IObjectDefinition {
   protected _autowire: boolean = true;
   protected _external: boolean = false;
   protected _direct: boolean = false;
-  protected _scope: Scope = ScopeEnum.Singleton;
+  scope: Scope = ScopeEnum.Singleton;
   creator: IObjectCreator = null;
   id: string = null;
   name: string = null;
@@ -47,16 +43,12 @@ export class ObjectDefinition implements IObjectDefinition {
     return this._asynchronous;
   }
 
-  set scope(scope: Scope) {
-    this._scope = scope;
-  }
-
   isSingletonScope(): boolean {
-    return this._scope === ScopeEnum.Singleton;
+    return this.scope === ScopeEnum.Singleton;
   }
 
   isRequestScope(): boolean {
-    return this._scope === ScopeEnum.Request;
+    return this.scope === ScopeEnum.Request;
   }
 
   set external(external: boolean) {

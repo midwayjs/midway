@@ -1,6 +1,6 @@
 {
   "name": "midway-mock",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "eggPlugin": {
     "name": "midway-mock"
   },
@@ -38,9 +38,9 @@
     "co": "^4.6.0",
     "debug": "^3.1.0",
     "egg-mock": "^3.17.3",
-    "injection": "^0.4.1",
+    "injection": "^0.4.5",
     "is-type-of": "^1.2.0",
-    "midway-core": "^0.4.4",
+    "midway-core": "^0.4.5",
     "power-assert": "^1.6.0",
     "ready-callback": "^2.0.1"
   },

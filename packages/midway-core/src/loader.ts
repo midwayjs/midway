@@ -204,4 +204,14 @@ export class MidwayLoader extends EggLoader {
     // 插件加载完毕
     this.pluginLoaded = true;
   }
+
+  getAppInfo() {
+    if (!this.appInfo) {
+      const appInfo = super.getAppInfo();
+      this.appInfo = Object.assign(appInfo, {
+        root: appInfo.env === 'local' || appInfo.env === 'unittest' ? this.appDir : appInfo.root
+      });
+    }
+    return this.appInfo;
+  }
 }

@@ -18,6 +18,10 @@ describe('/test/enhance.test.ts', () => {
 
     after(() => app.close());
 
+    it('should get config merge', () => {
+      assert(app.config.rundir, path.join(__dirname, './fixtures/enhance/base-app/run'));
+    });
+
     it('should load ts directory', (done) => {
       request(app.callback())
         .get('/api')
@@ -334,6 +338,17 @@ describe('/test/enhance.test.ts', () => {
         .get('/my_plugintest')
         .expect(200)
         .expect('plugintest is not null t', done);
+    });
+
+    it('should check plugin get & pluginContext.get', () => {
+      const name = 'plugin2';
+      const plugins = app.enablePlugins;
+      assert(app.getPlugin(name), plugins[name]);
+    });
+
+    it('should get config', () => {
+      const cfg = app.getConfig();
+      assert(cfg.env, 'unittest');
     });
   });
 });
