@@ -14,7 +14,7 @@ export default (app) => {
     .getLoadUnits()
     .map((unit) => require('path').join(unit.path, 'lib/schedule'));
   const Loader = getScheduleLoader(app);
-  const schedules = (app.schedules = {});
+  const schedules = app.schedules;
   new Loader({
     directory: dirs,
     target: schedules,
