@@ -18,6 +18,7 @@ describe('test/schedule.test.js', () => {
       // app.debug();
       await app.ready();
       console.log(app.schedules);
+      await sleep(5000);
     });
   });
 });

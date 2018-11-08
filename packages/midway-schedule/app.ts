@@ -4,11 +4,16 @@ import * as qs from 'querystring';
 import * as path from 'path';
 import loadSchedule from './lib/load_schedule';
 
+const loadEggSchedule = require('egg-schedule/lib/load_schedule');
+
 module.exports = (app) => {
   // don't redirect scheduleLogger
   // app.loggers.scheduleLogger.unredirect('error');
 
-  const schedules = loadSchedule(app);
+  // 'app/schedule' load egg-schedule (spec for egg-logxx rotate)
+  const schedules = loadEggSchedule(app);
+  // 'lib/schedule' load midway-schedule (class only with decorator support)
+  loadSchedule(app);
 
   // for test purpose
   app.runSchedule = (schedulePath) => {
@@ -52,7 +57,6 @@ module.exports = (app) => {
 
   // register schedule event
   app.messenger.on('egg-schedule', (data) => {
-    throw new Error('hahaha');
     const id = data.id;
     const key = data.key;
     const schedule = schedules[key];
@@ -75,8 +79,6 @@ module.exports = (app) => {
     const start = Date.now();
     const task = schedule.task;
     logger.info(`[${id}] ${key} executing by app`);
-    console.log('hi ctx', ctx);
-    console.log('hi ctx.logger', ctx.logger);
     // execute
     task(ctx, ...data.args)
       .then(() => true) // succeed
