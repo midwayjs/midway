@@ -33,7 +33,8 @@
   ],
   "scripts": {
     "lint": "eslint bin lib test",
-    "test": "npm run lint -- --fix && midway-bin test",
+    "lint-fix": "npm run lint -- --fix",
+    "test": "npm run lint && midway-bin test",
     "cov": "midway-bin cov",
     "ci": "npm run lint && midway-bin cov",
     "autod": "autod"
