@@ -16,9 +16,9 @@ export = (appInfo: any) => {
       'config',
       'app.ts',
       'agent.ts',
-      'interface.ts'
+      'interface.ts',
     ],
-    overrideDefault: true
+    overrideDefault: true,
   };
 
   return config;

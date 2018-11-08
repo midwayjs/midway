@@ -14,7 +14,7 @@ describe('test/app/controller/home.test.ts', () => {
   it('should GET /', () => {
     return app.httpRequest()
       .get('/')
-      .expect('hi, midway')
+      .expect('Welcome to midwayjs!')
       .expect(200);
   });
 });
