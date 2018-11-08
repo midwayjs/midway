@@ -8,7 +8,7 @@ const loadEggSchedule = require('egg-schedule/lib/load_schedule');
 
 module.exports = (app) => {
   // don't redirect scheduleLogger
-  // app.loggers.scheduleLogger.unredirect('error');
+  app.loggers.scheduleLogger.unredirect('error');
 
   // 'app/schedule' load egg-schedule (spec for egg-logxx rotate)
   const schedules = loadEggSchedule(app);
