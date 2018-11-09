@@ -17,6 +17,11 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "devDependencies": {
+    "@types/mocha": "^2.2.41",
+    "@types/node": "^10.5.5",
+    "midway-bin": "^0.3.8"
+  },
   "dependencies": {
     "egg-schedule": "^3.4.0",
     "reflect-metadata": "^0.1.12"
