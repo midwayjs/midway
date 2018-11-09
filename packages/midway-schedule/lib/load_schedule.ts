@@ -14,7 +14,7 @@ export default (app) => {
     .getLoadUnits()
     .map((unit) => require('path').join(unit.path, 'lib/schedule'));
   const Loader = getScheduleLoader(app);
-  const schedules = app.schedules;
+  const schedules = app.schedules ? app.schedules : app.schedules = {};
   new Loader({
     directory: dirs,
     target: schedules,
@@ -43,10 +43,11 @@ function getScheduleLoader(app) {
         );
         assert(opts, `schedule(${fullpath}): must use @schedule to setup.`);
 
-        const task = (ctx, data) => {
-          const ins = ctx.getAsync(schedule);
+        const task = async (ctx, data) => {
+          const ins = await ctx.requestContext.getAsync(schedule);
+          // throw new Error('emmmmm ' + ins);
           ins.exec = app.toAsyncFunction(ins.exec);
-          return ins.exec(data);
+          return ins.exec(ctx, data);
         };
 
         const env = app.config.env;
