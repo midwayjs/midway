@@ -19,13 +19,10 @@ module.exports = class Schedule extends BaseSchedule {
    * @param {Strategy} clz - Strategy class
    */
   use(type, clz) {
-    super.use(type, clz);
     this[M_STRATEGY].set(type, clz);
   }
 
   init() {
-    // load egg-schedule (inside 'app/schedule')
-    super.init();
     // load midway-schedule (inside 'lib/schedule')
     this.loadSchedule();
   }
@@ -51,9 +48,7 @@ module.exports = class Schedule extends BaseSchedule {
   }
 
   start() {
-    // start egg-schedule
-    super.start();
-    // start midway-schedule
+    this.closed = false;
     for (const instance of this[M_STRATEGY_INSTANCE].values()) {
       instance.start();
     }

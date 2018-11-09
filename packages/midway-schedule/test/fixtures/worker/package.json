@@ -1,3 +1,6 @@
 {
-  "name": "worker"
+  "name": "worker",
+	"scripts": {
+		"build": "midway-bin build -c"
+	}
 }
