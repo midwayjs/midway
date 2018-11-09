@@ -2,6 +2,7 @@
 
 import loadSchedule from './load_schedule';
 const BaseSchedule = require('egg-schedule/lib/schedule');
+const loadEggSchedule = require('egg-schedule/lib/load_schedule');
 
 const M_STRATEGY: string = Symbol('strategy') as any;
 const M_STRATEGY_INSTANCE: string = Symbol('strategy_instance') as any;
@@ -28,7 +29,8 @@ module.exports = class Schedule extends BaseSchedule {
   }
 
   loadSchedule() {
-    const scheduleItems = loadSchedule(this.agent);
+    const scheduleItems = loadEggSchedule(this.agent);
+    loadSchedule(this.agent);
 
     for (const k of Object.keys(scheduleItems)) {
       const { key, schedule } = scheduleItems[k];
