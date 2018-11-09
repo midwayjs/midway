@@ -8,6 +8,6 @@ import { schedule } from '../../../../../../../midway';
 })
 export default class IntervalCron {
   async exec(ctx) {
-    ctx.logger.info(process.pid, 'interval');
+    ctx.logger.info(process.pid, 'hello decorator');
   }
 }

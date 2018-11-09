@@ -38,7 +38,19 @@ describe('test/schedule.test.ts', () => {
       assert.deepEqual(item.schedule, { type: 'worker', interval: 1000 });
     });
 
-    it('should support interval with @schedule decorator', async () => {
+    it('should support exec app/schedule/*.js (for egg)', async () => {
+      const name = 'worker-egg-schedule';
+      application = cluster(name, {
+        typescript: false,
+        worker: 2,
+      });
+      await application.ready();
+      await sleep(5000);
+      const log = getLogContent(name);
+      assert(contains(log, 'hehehehe') === 4, '未正确执行 4 次');
+    });
+
+    it('should support interval with @schedule decorator (both app/schedule & lib/schedule)', async () => {
       const name = 'worker';
       application = cluster(name, {
         typescript: true,
@@ -47,7 +59,7 @@ describe('test/schedule.test.ts', () => {
       await application.ready();
       await sleep(5000);
       const log = getLogContent(name);
-      assert(contains(log, 'interval') === 4, '未正确执行 4 次');
+      assert(contains(log, 'hello decorator') === 4, '未正确执行 4 次');
     });
   });
 });
