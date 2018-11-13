@@ -9,7 +9,7 @@ import { Autowire } from './common/Autowire';
 const uuidv1 = require('uuid/v1');
 const is = require('is-type-of');
 const camelcase = require('camelcase');
-const debug = require('debug')('injection:Container');
+const debug = require('debug')(`injection:Container:${process.pid}`);
 
 export class Container extends XmlApplicationContext implements IContainer {
   id: string = uuidv1();
@@ -45,7 +45,7 @@ export class Container extends XmlApplicationContext implements IContainer {
     // inject constructArgs
     let constructorMetaData = Reflect.getMetadata(TAGGED, target);
     if (constructorMetaData) {
-      debug(`    register inject constructor length = ${target['length']}`);
+      debug(`   register inject constructor length = ${target['length']}`);
       const maxLength = Math.max.apply(null, Object.keys(constructorMetaData));
       for (let i = 0; i < maxLength + 1; i++) {
         const propertyMeta = constructorMetaData[i];
@@ -65,7 +65,7 @@ export class Container extends XmlApplicationContext implements IContainer {
     // inject properties
     let metaData = Reflect.getMetadata(TAGGED_PROP, target);
     if (metaData) {
-      debug(`    register inject properties = ${Object.keys(metaData)}`);
+      debug(`   register inject properties = [${Object.keys(metaData)}]`);
       for (let metaKey in metaData) {
         for (let propertyMeta of metaData[metaKey]) {
           const refManaged = new ManagedReference();
@@ -80,7 +80,7 @@ export class Container extends XmlApplicationContext implements IContainer {
     this.registerCustomBinding(definition, target);
 
     this.registerDefinition(identifier, definition);
-    debug(`    bind and build definition complete, id = ${definition.id}`);
+    debug(`   bind and build definition complete, id = [${definition.id}]`);
   }
 
   registerCustomBinding(objectDefinition: ObjectDefinition, target: any) {
@@ -93,35 +93,35 @@ export class Container extends XmlApplicationContext implements IContainer {
   private convertOptionsToDefinition(options: ObjectDefinitionOptions, definition: ObjectDefinition): ObjectDefinition {
     if (options) {
       if (options.isAsync) {
-        debug(`    register isAsync = true`);
+        debug(`   register isAsync = true`);
         definition.asynchronous = true;
       }
 
       if (options.initMethod) {
-        debug(`    register initMethod = ${definition.initMethod}`);
+        debug(`   register initMethod = ${definition.initMethod}`);
         definition.initMethod = options.initMethod;
       }
 
       if (options.destroyMethod) {
-        debug(`    register destroyMethod = ${definition.destroyMethod}`);
+        debug(`   register destroyMethod = ${definition.destroyMethod}`);
         definition.destroyMethod = options.destroyMethod;
       }
 
       if (options.scope) {
-        debug(`    register scope = ${definition.scope}`);
+        debug(`   register scope = ${definition.scope}`);
         definition.scope = options.scope;
       }
 
       if (options.constructorArgs) {
-        debug(`    register constructorArgs = ${options.constructorArgs}`);
+        debug(`   register constructorArgs = ${options.constructorArgs}`);
         definition.constructorArgs = options.constructorArgs;
       }
 
       if (options.isAutowire === false) {
-        debug(`    register autowire = ${options.isAutowire}`);
+        debug(`   register autowire = ${options.isAutowire}`);
         definition.autowire = false;
       } else if (options.isAutowire === true) {
-        debug(`    register autowire = ${options.isAutowire}`);
+        debug(`   register autowire = ${options.isAutowire}`);
         definition.autowire = true;
       }
     }
