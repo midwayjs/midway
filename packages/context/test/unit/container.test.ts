@@ -15,7 +15,7 @@ import { childAsyncFunction, childFunction, testInjectAsyncFunction, testInjectF
 import { DieselCar, DieselEngine, engineFactory, PetrolEngine } from '../fixtures/mix_sample';
 import { UserService } from '../fixtures/complex_injection/userService';
 import { UserController } from '../fixtures/complex_injection/userController';
-import { DbAPI } from '../fixtures/complex_injection/dbAPI';
+import { A, B, DbAPI } from '../fixtures/complex_injection/dbAPI';
 
 const path = require('path');
 
@@ -174,6 +174,19 @@ describe('/test/unit/container.test.ts', () => {
       const newTree = await applicationContext.dumpDependency();
       expect(/userController/.test(newTree)).to.be.true;
       expect(/newKey\(DbAPI\)/.test(newTree)).to.be.true;
+    });
+
+    it('should skip empty properties', async () => {
+      const applicationContext = new Container();
+      applicationContext.bind(UserService);
+      applicationContext.bind(UserController);
+      applicationContext.bind(DbAPI);
+      applicationContext.bind(A);
+      applicationContext.bind(B);
+      const newTree = await applicationContext.dumpDependency();
+      expect(/userController/.test(newTree)).to.be.true;
+      expect(/newKey\(DbAPI\)/.test(newTree)).to.be.true;
+      expect(/"newKey" -> "b"/.test(newTree)).to.be.true;
     });
 
   });

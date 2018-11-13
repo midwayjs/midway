@@ -23,7 +23,7 @@ module.exports = (appInfo) => {
   };
 
   exports.container = {
-    loadDir: ['app', 'lib'],
+    loadDir: ['src'],
     ignore: [
       '**/node_modules/**',
       '**/logs/**',
