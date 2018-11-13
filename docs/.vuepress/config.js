@@ -21,8 +21,9 @@ module.exports = {
     },
     nav: [
       { text: '首页', link: '/' },
+      { text: '使用文档', link: '/guide' },
+      { text: '依赖注入手册', link: '/ioc' },
       { text: 'TS 新手指南', link: '/ts_start' },
-      { text: '使用指南', link: '/guide' },
       { text: 'API', link: 'http://www.midwayjs.org/midway/api-reference/globals.html' },
       {
         text: 'MidwayJs 系列产品',
