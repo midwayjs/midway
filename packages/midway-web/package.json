@@ -18,6 +18,7 @@
     "scene"
   ],
   "files": [
+    "src",
     "app",
     "config",
     "dist",

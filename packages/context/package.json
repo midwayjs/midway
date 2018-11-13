@@ -17,7 +17,8 @@
     "IoC"
   ],
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
   "license": "MIT",
   "devDependencies": {
