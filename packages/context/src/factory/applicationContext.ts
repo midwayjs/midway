@@ -279,6 +279,8 @@ export class BaseApplicationContext extends EventEmitter implements IApplication
       let constructorArgs = definition.constructorArgs || [];
       constructorArgs = constructorArgs.map((ref) => {
         return ref.name;
+      }).filter(name => {
+        return !!name;
       });
 
       const properties = (definition.properties && definition.properties.keys().map((key) => {

@@ -16,6 +16,7 @@
     "core"
   ],
   "files": [
+    "src",
     "dist",
     "d.ts"
   ],

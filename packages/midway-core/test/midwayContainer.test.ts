@@ -4,7 +4,7 @@ import {App} from './fixtures/ts-app-inject/app';
 import { MidwayHandlerKey } from '../src/constants';
 const path = require('path');
 
-describe('/test/unit/midwayContainer.test.ts', () => {
+describe('/test/midwayContainer.test.ts', () => {
 
   it('should scan app dir and inject automatic', () => {
     const container = new MidwayContainer();

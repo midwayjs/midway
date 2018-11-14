@@ -36,7 +36,8 @@
     "bin",
     "cluster",
     "dist",
-    "server.js"
+    "server.js",
+    "src"
   ],
   "engines": {
     "node": ">= 8.0.0"

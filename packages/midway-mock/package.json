@@ -21,6 +21,7 @@
     "plugin"
   ],
   "files": [
+    "src",
     "dist",
     "d.ts",
     "bootstrap.d.ts",

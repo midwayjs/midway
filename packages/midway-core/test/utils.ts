@@ -16,11 +16,11 @@ export function app(name, options) {
   // mm.consoleLevel(options.consoleLevel || 'NONE');
   if (options.container) {
     Object.assign(options.container,
-      {loadDir: ['app', 'lib']}
+      {loadDir: ['src', 'app', 'lib']}
     );
   } else {
     options.container = {
-      loadDir: ['app', 'lib']
+      loadDir: ['src', 'app', 'lib']
     };
   }
   const app =  mm.app(options);

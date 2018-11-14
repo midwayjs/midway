@@ -9,7 +9,7 @@ import { MidwayRequestContainer } from './requestContainer';
 const EggLoader = require('egg-core').EggLoader;
 const TS_SRC_DIR = 'src';
 const TS_TARGET_DIR = 'dist';
-const debug = require('debug')('midway:loader');
+const debug = require('debug')(`midway:loader:${process.pid}`);
 
 export class MidwayLoader extends EggLoader {
 
@@ -130,7 +130,7 @@ export class MidwayLoader extends EggLoader {
   private buildLoadDir(loadDir) {
     const dirs = [];
     for (let dir of loadDir) {
-      dirs.push(path.join(this.baseDir, dir));
+      dirs.push(path.join(this.appDir, dir));
     }
     return dirs;
   }
@@ -181,13 +181,14 @@ export class MidwayLoader extends EggLoader {
     const self = this;
     const pluginContainerProps = Object.getOwnPropertyNames(this);
     this.app = new Proxy(this.app, {
-      set(obj, prop, value) {
+      defineProperty(target, prop, attributes) {
         if (!self.pluginLoaded && isPluginName(prop) && !(prop in pluginContainerProps)) {
           // save to context when called app.xxx = xxx
           // now we can get plugin from context
-          self.pluginContext.registerObject(prop, value);
+          debug(`pluginContext register [${<string>prop}]`);
+          self.pluginContext.registerObject(prop, attributes.value);
         }
-        return Reflect.set(obj, prop, value);
+        return Object.defineProperty(target, prop, attributes);
       }
     });
 
@@ -197,6 +198,7 @@ export class MidwayLoader extends EggLoader {
         let ret = this.loadFile(this.resolveModule(path.join(unit.path, fileName)));
         if (ret) {
           // midway 的插件会返回对象
+          debug(`pluginContext register [${unit.name}]`);
           this.pluginContext.registerObject(unit.name, ret);
         }
       });
