@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.6](https://github.com/midwayjs/midway/compare/v0.4.5...v0.4.6) (2018-11-14)
+
+
+### Bug Fixes
+
+* lint & test failed ([0a3fb74](https://github.com/midwayjs/midway/commit/0a3fb74))
+
+
+
+
+
 <a name="0.4.4"></a>
 ## [0.4.4](https://github.com/midwayjs/midway/compare/v0.4.3...v0.4.4) (2018-10-23)
 
