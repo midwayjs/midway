@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.5.1](https://github.com/midwayjs/midway/compare/v0.5.0...v0.5.1) (2018-11-15)
+
+
+### Bug Fixes
+
+* schedule build file not published ([4150ce2](https://github.com/midwayjs/midway/commit/4150ce2))
+
+
+
+
+
 # [0.5.0](https://github.com/midwayjs/midway/compare/v0.4.5...v0.5.0) (2018-11-15)
 
 
