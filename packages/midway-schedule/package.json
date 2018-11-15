@@ -1,0 +1,29 @@
+{
+  "name": "midway-schedule",
+  "version": "0.5.1",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "eggPlugin": {
+    "name": "schedule"
+  },
+  "scripts": {
+    "build": "npm run lint && midway-bin build -c",
+    "lint": "../../node_modules/.bin/tslint --format prose -c ../../tslint.json src/**/*.ts test/**/*.ts",
+    "test": "npm run lint && midway-bin clean && NODE_ENV=test midway-bin test --ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/mocha": "^2.2.41",
+    "@types/node": "^10.5.5",
+    "midway-bin": "^0.5.0"
+  },
+  "dependencies": {
+    "egg-schedule": "^3.4.0",
+    "reflect-metadata": "^0.1.12"
+  }
+}

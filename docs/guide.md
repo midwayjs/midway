@@ -305,6 +305,28 @@ export class BaseService {
 
 通过这样，我们可以把 config 中的值直接注入到业务逻辑中。
 
+### 注册定时任务
+
+midawy 的定时任务是基于 [egg 定时任务](https://eggjs.org/zh-cn/basics/schedule.html)提供了更多 typescript 以及装饰器方面的支持。将定时任务都统一存放在 lib/schedule 目录下，每一个文件都是一个独立的定时任务，可以配置定时任务的属性和要执行的方法。例如：
+
+```typescript
+// src/lib/schedule/hello.ts
+'use strict';
+
+import { schedule } from 'midway';
+
+@schedule({
+  interval: 2333, // 2.333s 间隔
+  type: 'worker', // 指定某一个 worker 执行
+})
+export default class HelloCron {
+  // 定时执行的具体任务
+  async exec(ctx) {
+    ctx.logger.info(process.pid, 'hello');
+  }
+}
+```
+
 ### 注入日志对象
 
 在原有逻辑中，日志对象也都挂载在 app.loggers 中，通过在 config 中配置的 key 来生成不同的日志实例对象，比如插件的日志，链路的日志等。
