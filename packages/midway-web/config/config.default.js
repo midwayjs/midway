@@ -24,7 +24,6 @@ module.exports = (appInfo) => {
 
   exports.container = {
     loadDir: [
-      'src', // for ts
       'app', // for js
       'lib'  // for js
     ],
