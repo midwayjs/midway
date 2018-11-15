@@ -25,6 +25,13 @@ export class MidwayLoader extends EggLoader {
     this.pluginContext = new MidwayContainer();
   }
 
+  /**
+   * 判断是否是 ts 模式，在构造器内就会被执行
+   */
+  get isTsMode() {
+    return this.app.options.typescript;
+  }
+
   // loadPlugin -> loadConfig -> afterLoadConfig
   loadConfig() {
     this.loadPlugin();
@@ -84,7 +91,7 @@ export class MidwayLoader extends EggLoader {
     const app = this.app;
     // 处理 ts 的初始路径
     this.appDir = this.baseDir = app.options.baseDir;
-    if (this.app.options.typescript) {
+    if (this.isTsMode) {
       let dirSuffix = app.options.targetDir || TS_TARGET_DIR;
       if (isTypeScriptEnvironment()) {
         dirSuffix = app.options.srcDir || TS_SRC_DIR;
@@ -146,10 +153,11 @@ export class MidwayLoader extends EggLoader {
     this.applicationContext.registerObject('requestContext', requestContext);
     this.applicationContext.registerObject('baseDir', this.baseDir);
     this.applicationContext.registerObject('appDir', this.appDir);
+    this.applicationContext.registerObject('isTsMode', this.isTsMode);
     // 如果没有关闭autoLoad 则进行load
     if (!containerConfig.disableAutoLoad) {
       this.applicationContext.load({
-        loadDir: this.buildLoadDir(containerConfig.loadDir || []),
+        loadDir: (this.isTsMode ? [this.baseDir] : []).concat(this.buildLoadDir(containerConfig.loadDir || [])),
         pattern: containerConfig.pattern,
         ignore: containerConfig.ignore
       });
