@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.6.0](https://github.com/midwayjs/midway/compare/v0.4.7...v0.6.0) (2018-11-15)
+
+
+### Bug Fixes
+
+* agent not work ([f43c553](https://github.com/midwayjs/midway/commit/f43c553))
+* agent startup become compatible between egg&midway ([47f46c3](https://github.com/midwayjs/midway/commit/47f46c3))
+* build not midway-bin ([f16b9db](https://github.com/midwayjs/midway/commit/f16b9db))
+* egg-schedule plugin retrieve dir ([6a94e01](https://github.com/midwayjs/midway/commit/6a94e01))
+* logger & build scripts ([c2e29aa](https://github.com/midwayjs/midway/commit/c2e29aa))
+* run task with wront ctx & fill tests ([94d95c3](https://github.com/midwayjs/midway/commit/94d95c3))
+* schedule build file not published ([e14be5b](https://github.com/midwayjs/midway/commit/e14be5b))
+
+
+### Features
+
+* init midway-schedule ([4442bd1](https://github.com/midwayjs/midway/commit/4442bd1))
+
+
+
+
+
 ## [0.5.1](https://github.com/midwayjs/midway/compare/v0.5.0...v0.5.1) (2018-11-15)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "midway-init",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "dependencies": {
     "egg-init": "^1.14.0"
   },
@@ -11,7 +11,7 @@
     "eslint": "^4.13.1",
     "eslint-config-egg": "^7.0.0",
     "intelli-espower-loader": "^1.0.1",
-    "midway-bin": "^0.5.0",
+    "midway-bin": "^0.6.0",
     "mm": "^2.2.0",
     "power-assert": "^1.6.0",
     "proxy": "^0.2.4",
