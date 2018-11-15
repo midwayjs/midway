@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0](https://github.com/midwayjs/midway/compare/v0.4.5...v0.5.0) (2018-11-15)
+
+
+### Features
+
+* init midway-schedule ([82cc9e1](https://github.com/midwayjs/midway/commit/82cc9e1))
+
 ## [0.4.7](https://github.com/midwayjs/midway/compare/v0.4.6...v0.4.7) (2018-11-15)
 
 
@@ -21,6 +28,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 * add ts autoload directory ([a6668fb](https://github.com/midwayjs/midway/commit/a6668fb))
 * fix dep map generator err in constructor inject ([9d7abe6](https://github.com/midwayjs/midway/commit/9d7abe6))
+
 
 
 
