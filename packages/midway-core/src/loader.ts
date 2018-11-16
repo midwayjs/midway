@@ -157,7 +157,7 @@ export class MidwayLoader extends EggLoader {
     // 如果没有关闭autoLoad 则进行load
     if (!containerConfig.disableAutoLoad) {
       this.applicationContext.load({
-        loadDir: (this.isTsMode ? [this.baseDir] : []).concat(this.buildLoadDir(containerConfig.loadDir || [])),
+        loadDir: this.buildLoadDir(containerConfig.loadDir || []).concat(this.isTsMode ? [this.baseDir] : []),
         pattern: containerConfig.pattern,
         ignore: containerConfig.ignore
       });
