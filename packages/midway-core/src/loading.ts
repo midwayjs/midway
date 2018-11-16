@@ -4,7 +4,7 @@
 const debug = require('debug')('midway:loading');
 const is = require('is-type-of');
 const globby = require('globby');
-const extend = require('extend');
+const extend = require('extend2');
 const assert = require('assert');
 const path = require('path');
 
