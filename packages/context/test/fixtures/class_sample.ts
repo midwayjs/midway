@@ -61,3 +61,19 @@ export class BaseServiceGenerator {
   }
 }
 
+
+export class Parent {
+  @inject('katana1')
+  katana1: Katana;
+}
+
+export class Child extends Parent {
+  @inject('katana2')
+  katana2: Katana;
+}
+
+export class Grandson extends Child {
+  @inject('katana3')
+  katana3: Katana;
+}
+

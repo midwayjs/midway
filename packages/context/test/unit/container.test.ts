@@ -1,6 +1,9 @@
 import { Container } from '../../src/index';
 import { expect } from 'chai';
 import {
+  Grandson,
+  Child,
+  Parent,
   BaseService,
   BaseServiceAsync,
   BaseServiceGenerator,
@@ -9,6 +12,9 @@ import {
   Samurai,
   Warrior
 } from '../fixtures/class_sample';
+import { recursiveGetMetadata } from '../../src/utils/reflectTool';
+import { TAGGED_PROP } from '../../src/index';
+import 'reflect-metadata';
 
 import { BMWX1, Car, Electricity, Gas, Tesla, Turbo } from '../fixtures/class_sample_car';
 import { childAsyncFunction, childFunction, testInjectAsyncFunction, testInjectFunction } from '../fixtures/fun_sample';
@@ -46,6 +52,66 @@ describe('/test/unit/container.test.ts', () => {
     expect(warrior instanceof Samurai).to.be.true;
     expect(warrior.katana1).not.to.be.undefined;
     expect(warrior.katana2).not.to.be.undefined;
+  });
+
+  it('should inject attributes that on the prototype chain and property', () => {
+    const container = new Container();
+    container.bind<Grandson>('grandson', <any>Grandson);
+    container.bind<Grandson>('katana1', <any>Katana);
+    container.bind<Grandson>('katana2', <any>Katana);
+    container.bind<Grandson>('katana3', <any>Katana);
+    const grandson = container.get<Grandson>('grandson');
+    expect(grandson instanceof Child).to.be.true;
+    expect(grandson instanceof Parent).to.be.true;
+    expect(grandson.katana1).not.to.be.undefined;
+    expect(grandson.katana2).not.to.be.undefined;
+    expect(grandson.katana3).not.to.be.undefined;
+  });
+
+  it('should get all metaDatas that on the prototype chain and property', () => {
+    const container = new Container();
+    container.bind<Grandson>('grandson', <any>Grandson);
+    container.bind<Grandson>('child', <any>Child);
+    container.bind<Grandson>('parent', <any>Parent);
+    container.bind<Grandson>('katana1', <any>Katana);
+    container.bind<Grandson>('katana2', <any>Katana);
+    container.bind<Grandson>('katana3', <any>Katana);
+    const metadatas = ['grandson', 'child', 'parent'].map(function (identifier) {
+      const defition = container.registry.getDefinition(identifier);
+      const tareget = defition.path;
+      return {
+        recursiveMetadata: recursiveGetMetadata(TAGGED_PROP, tareget),
+        ownMetadata: Reflect.getOwnMetadata(TAGGED_PROP, tareget),
+      };
+    });
+    const grandsonMetadata = metadatas[0];
+    const childMetadata = metadatas[1];
+    const parentMetadata = metadatas[2];
+
+    expect(grandsonMetadata.recursiveMetadata)
+      .to.have.lengthOf(3)
+      .include(grandsonMetadata.ownMetadata);
+    expect(childMetadata.recursiveMetadata)
+      .to.have.lengthOf(2)
+      .include(childMetadata.ownMetadata);
+    expect(parentMetadata.recursiveMetadata)
+      .to.have.lengthOf(1)
+      .include(parentMetadata.ownMetadata);
+
+    expect(grandsonMetadata.recursiveMetadata).to.deep.equal([
+      grandsonMetadata.ownMetadata,
+      childMetadata.ownMetadata,
+      parentMetadata.ownMetadata
+    ]);
+    expect(grandsonMetadata.recursiveMetadata).to.deep.equal([
+      grandsonMetadata.ownMetadata,
+      ...childMetadata.recursiveMetadata,
+    ]);
+    expect(grandsonMetadata.recursiveMetadata).to.deep.equal([
+      grandsonMetadata.ownMetadata,
+      childMetadata.ownMetadata,
+      ...parentMetadata.recursiveMetadata
+    ]);
   });
 
   it('should load js dir and inject with $', () => {
@@ -149,7 +215,7 @@ describe('/test/unit/container.test.ts', () => {
 
   describe('mix suit', () => {
 
-    const container = new Container();
+   const container = new Container();
 
     it('should use factory dynamic create object', () => {
       container.bind('engineFactory', engineFactory);
