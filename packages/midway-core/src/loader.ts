@@ -134,12 +134,11 @@ export class MidwayLoader extends EggLoader {
     return serverEnv;
   }
 
-  private buildLoadDir(loadDir) {
-    const dirs = [];
-    for (let dir of loadDir) {
-      dirs.push(path.join(this.appDir, dir));
+  private buildLoadDir(dir) {
+    if (!path.isAbsolute(dir)) {
+      return path.join(this.appDir, dir);
     }
-    return dirs;
+    return dir;
   }
 
   protected loadApplicationContext() {
@@ -156,8 +155,11 @@ export class MidwayLoader extends EggLoader {
     this.applicationContext.registerObject('isTsMode', this.isTsMode);
     // 如果没有关闭autoLoad 则进行load
     if (!containerConfig.disableAutoLoad) {
+      const defaultLoadDir = this.isTsMode ? [this.baseDir] : ['app', 'lib'];
       this.applicationContext.load({
-        loadDir: (this.isTsMode ? [this.baseDir] : []).concat(this.buildLoadDir(containerConfig.loadDir || [])),
+        loadDir: (containerConfig.loadDir || defaultLoadDir).map(dir => {
+          return this.buildLoadDir(dir);
+        }),
         pattern: containerConfig.pattern,
         ignore: containerConfig.ignore
       });
