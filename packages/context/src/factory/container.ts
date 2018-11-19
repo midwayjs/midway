@@ -65,7 +65,6 @@ export class Container extends XmlApplicationContext implements IContainer {
 
     // inject properties
     let metaDatas = recursiveGetMetadata(TAGGED_PROP, target);
-    // console.log(TAGGED_PROP, target, metaDatas);
     for (const metaData of metaDatas) {
       debug(`   register inject properties = [${Object.keys(metaData)}]`);
       for (let metaKey in metaData) {
@@ -82,7 +81,7 @@ export class Container extends XmlApplicationContext implements IContainer {
     this.registerCustomBinding(definition, target);
 
     this.registerDefinition(identifier, definition);
-    debug(`   bind and build definition complete, id = [${definition.id}] ${definition}`);
+    debug(`   bind and build definition complete, id = [${definition.id}]`);
   }
 
   registerCustomBinding(objectDefinition: ObjectDefinition, target: any) {
