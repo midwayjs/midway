@@ -4,6 +4,7 @@ import { OBJ_DEF_CLS, ObjectDefinition, TAGGED, TAGGED_CLS, TAGGED_PROP } from '
 import { ManagedReference, ManagedValue } from './common/managed';
 import { FunctionDefinition } from '../base/FunctionDefinition';
 import { XmlApplicationContext } from './xml/XmlApplicationContext';
+import { recursiveGetMetadata } from '../utils/reflectTool';
 import { Autowire } from './common/Autowire';
 
 const uuidv1 = require('uuid/v1');
@@ -63,8 +64,8 @@ export class Container extends XmlApplicationContext implements IContainer {
     }
 
     // inject properties
-    let metaData = Reflect.getMetadata(TAGGED_PROP, target);
-    if (metaData) {
+    let metaDatas = recursiveGetMetadata(TAGGED_PROP, target);
+    for (const metaData of metaDatas) {
       debug(`   register inject properties = [${Object.keys(metaData)}]`);
       for (let metaKey in metaData) {
         for (let propertyMeta of metaData[metaKey]) {

@@ -73,7 +73,7 @@ export class ObjectCreator implements IObjectCreator {
     if (this.definition.constructMethod) {
       const fn = Clzz[this.definition.constructMethod];
       if (is.generatorFunction(fn)) {
-        inst = await co.wrap(fn).apply(null, args);
+        inst = await co.wrap(fn).apply(Clzz, args);
       } else if (is.asyncFunction(fn)) {
         inst = await fn.apply(Clzz, args);
       } else {
@@ -148,16 +148,16 @@ export class ObjectCreator implements IObjectCreator {
     if (this.definition.destroyMethod && obj[this.definition.destroyMethod]) {
       const fn = obj[this.definition.destroyMethod];
       if (is.generatorFunction(fn)) {
-        await co.wrap(fn)();
+        await co.wrap(fn).call(obj);
       } else if (is.asyncFunction(fn)) {
-        await fn();
+        await fn.call(obj);
       } else {
         if (fn.length === 1) {
           await new Promise(resolve => {
-            fn(resolve);
+            fn.call(obj, resolve);
           });
         } else {
-          fn();
+          fn.call(obj);
         }
       }
     }

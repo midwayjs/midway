@@ -193,6 +193,44 @@ export class UserService {
 注入的时机为构造器（new）之后，所以在构造方法(constructor)中是无法获取注入的属性的，如果要获取注入的内容，可以使用 [构造器注入](#构造器注入)。
 :::
 
+父类的属性使用 `@inject()` 装饰器装饰，子类实例会得到装饰后的属性。
+
+```typescript
+class Parent {
+  @inject()
+  katana1;
+}
+
+class Child extends Parent {
+  @inject()
+  katana2;
+}
+
+class Grandson extends Child {
+  @inject()
+  katana3;
+}
+```
+
+`Grandson` 的实例 `gradson` 拥有 `@inject()` 装饰器注入的
+`grandson.katana3`, `grandson.katana2`, `grandson.katana1` 属性。
+
+实现时，会查找 `Gradson` 的原型链，遍历原型链上所有用 `@inject()` 装饰的属性，运行装饰器，注入相应的属性。
+
+查找类的原型使用 [reflect-metadata](https://github.com/rbuckton/reflect-metadata) 仓库的 [OrdinaryGetPrototypeOf](https://github.com/rbuckton/reflect-metadata/blob/c2dbe1d02ceb9987f9002eedf0cdb21d74de0019/Reflect.ts#L1553-L1583) 方法，使用 `recursiveGetPrototypeOf` 方法以数组形式返回该类的所有原型。
+
+``` typescript
+function recursiveGetPrototypeOf(target: any): any[] {
+  const properties = [];
+  let parent = ordinaryGetPrototypeOf(target);
+  while (parent !== null) {
+    properties.push(parent);
+    parent = ordinaryGetPrototypeOf(parent);
+  }
+  return properties;
+}
+```
+
 ## 对象 id
 
 在默认情况下，injection 会将类名变为 `驼峰` 形式作为对象 id，这样你可以通过容器获取实例。
