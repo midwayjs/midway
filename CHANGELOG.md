@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.3](https://github.com/midwayjs/midway/compare/v0.6.2...v0.6.3) (2018-11-20)
+
+
+### Bug Fixes
+
+* fix invoke loadController repeatedly ([8342649](https://github.com/midwayjs/midway/commit/8342649))
+
+
+
+
+
 ## [0.6.2](https://github.com/midwayjs/midway/compare/v0.6.1...v0.6.2) (2018-11-20)
 
 
