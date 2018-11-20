@@ -24,11 +24,11 @@ export class MidwayWebLoader extends MidwayLoader {
     router: Router
   }> = [];
 
-  async loadController(opt?): Promise<void> {
+  async loadController(opt: { directory? } = {}): Promise<void> {
     // load midway controller to binding router
     const appDir = path.join(this.options.baseDir, 'app');
     const results = loading(this.getFileExtension(['controllers/**/*', 'controller/**/*']), {
-      loadDirs: appDir,
+      loadDirs: opt.directory || appDir,
       call: false,
     });
 

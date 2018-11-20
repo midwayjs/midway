@@ -351,4 +351,23 @@ describe('/test/enhance.test.ts', () => {
       assert(cfg.env, 'unittest');
     });
   });
+
+  describe('plugin can load controller directory directly', () => {
+    let app;
+    before(() => {
+      app = utils.app('enhance/loader-duplicate', {
+        typescript: true
+      });
+      return app.ready();
+    });
+
+    after(() => app.close());
+
+    it('should fix egg-socket.io load controller directory', (done) => {
+      request(app.callback())
+        .get('/')
+        .expect(200)
+        .expect('root_test', done);
+    });
+  });
 });
