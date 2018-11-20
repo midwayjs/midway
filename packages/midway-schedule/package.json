@@ -1,6 +1,6 @@
 {
   "name": "midway-schedule",
-  "version": "0.6.0",
+  "version": "0.6.2",
   "description": "",
   "main": "index.js",
   "directories": {
@@ -20,7 +20,7 @@
   "devDependencies": {
     "@types/mocha": "^2.2.41",
     "@types/node": "^10.5.5",
-    "midway-bin": "^0.6.0"
+    "midway-bin": "^0.6.2"
   },
   "dependencies": {
     "egg-schedule": "^3.4.0",

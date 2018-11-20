@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.2](https://github.com/midwayjs/midway/compare/v0.6.1...v0.6.2) (2018-11-20)
+
+
+### Bug Fixes
+
+* Increase cron and interval and other parameter expansion ([#62](https://github.com/midwayjs/midway/issues/62)) ([ccd0114](https://github.com/midwayjs/midway/commit/ccd0114))
+* not only inject properties that declared on the property ([b1fe4e2](https://github.com/midwayjs/midway/commit/b1fe4e2))
+
+
+
+
+
 ## [0.6.1](https://github.com/midwayjs/midway/compare/v0.6.0...v0.6.1) (2018-11-19)
 
 

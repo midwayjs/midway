@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.2](https://github.com/midwayjs/midway/compare/v0.6.1...v0.6.2) (2018-11-20)
+
+
+### Bug Fixes
+
+* not only inject properties that declared on the property ([b1fe4e2](https://github.com/midwayjs/midway/commit/b1fe4e2))
+
+
+
+
+
 # [0.6.0](https://github.com/midwayjs/midway/compare/v0.4.7...v0.6.0) (2018-11-15)
 
 **Note:** Version bump only for package injection
