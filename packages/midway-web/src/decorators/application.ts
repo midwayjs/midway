@@ -16,8 +16,16 @@ export function priority(priority: number) {
 }
 
 interface SchedueOpts {
-  interval: number;
   type: string;
+  cron?: string;
+  interval?: number | string;
+  immediate?: boolean;
+  disable?: boolean;
+  env?: [string];
+  cronOptions?: {
+    currentDate: string,
+    endDate: string
+  };
 }
 
 export function schedule (scheduleOpts: SchedueOpts | string) {
