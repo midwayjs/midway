@@ -25,7 +25,7 @@ interface SchedueOpts {
   cronOptions?: {
     currentDate: string,
     endDate: string
-  }
+  };
 }
 
 export function schedule (scheduleOpts: SchedueOpts | string) {
