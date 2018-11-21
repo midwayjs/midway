@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.4](https://github.com/midwayjs/midway/compare/v0.6.3...v0.6.4) (2018-11-21)
+
+
+### Bug Fixes
+
+* change default search directory ([ae189df](https://github.com/midwayjs/midway/commit/ae189df))
+
+
+
+
+
 ## [0.6.3](https://github.com/midwayjs/midway/compare/v0.6.2...v0.6.3) (2018-11-20)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "midway-web",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "description": "Midway Web Scene",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -31,7 +31,7 @@
     "@types/mocha": "^2.2.41",
     "@types/node": "^10.5.5",
     "egg-mock": "^3.17.3",
-    "midway-bin": "^0.6.3",
+    "midway-bin": "^0.6.4",
     "pedding": "^1.1.0"
   },
   "dependencies": {
@@ -41,10 +41,10 @@
     "extend2": "^1.0.0",
     "globby": "^8.0.1",
     "inflection": "^1.12.0",
-    "injection": "^0.6.3",
+    "injection": "^0.6.4",
     "is-type-of": "^1.2.0",
-    "midway-core": "^0.6.3",
-    "midway-schedule": "^0.6.3"
+    "midway-core": "^0.6.4",
+    "midway-schedule": "^0.6.4"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
   "repository": {
