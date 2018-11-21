@@ -151,14 +151,14 @@ export class MidwayWebLoader extends MidwayLoader {
 
   protected getFileExtension(names: string | string[]): string[] {
     if (typeof names === 'string') {
-      return [names + '.ts', names + '.js', '!**/**.d.ts'];
-    } else {
-      let arr = [];
-      names.forEach((name) => {
-        arr = arr.concat([name + '.ts', name + '.js']);
-      });
-      return arr.concat(['!**/**.d.ts']);
+      names = [names];
     }
+
+    let arr = [];
+    names.forEach((name) => {
+      arr = arr.concat([name + '.ts', name + '.js']);
+    });
+    return arr.concat(['!**/**.d.ts']);
   }
 
   async refreshContext(): Promise<void> {

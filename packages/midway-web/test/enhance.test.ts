@@ -63,6 +63,26 @@ describe('/test/enhance.test.ts', () => {
     });
   });
 
+  describe('load ts class when controller has default export', () => {
+    let app;
+    before(() => {
+      app = utils.app('enhance/base-app-controller-default-export', {
+        typescript: true
+      });
+      return app.ready();
+    });
+
+    after(() => app.close());
+
+    it('should load controller', (done) => {
+      request(app.callback())
+        .get('/')
+        .expect(200)
+        .expect('root_test', done);
+    });
+
+  });
+
   describe('load ts class controller use decorator conflicts', () => {
     let app;
     it('should load controller conflicts', async () => {

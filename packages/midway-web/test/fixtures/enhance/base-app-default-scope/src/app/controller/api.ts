@@ -2,11 +2,13 @@
 
 import { provide } from 'injection';
 import { controller, get } from '../../../../../../../src/';
-
+import * as assert from 'assert';
 
 @provide()
 export class BaseApi {
   async index(ctx) {
+    const baseApi = await ctx.requestContext.getAsync('baseApi');
+    assert(baseApi);
     ctx.body = 'index';
   }
 }
