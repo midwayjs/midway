@@ -26,8 +26,8 @@ export class MidwayWebLoader extends MidwayLoader {
 
   async loadController(opt: { directory? } = {}): Promise<void> {
     // load midway controller to binding router
-    const appDir = path.join(this.options.baseDir, 'app');
-    const results = loading(this.getFileExtension(['controllers/**/*', 'controller/**/*']), {
+    const appDir = path.join(this.options.baseDir, 'app/controller');
+    const results = loading(this.getFileExtension('**/*'), {
       loadDirs: opt.directory || appDir,
       call: false,
     });
