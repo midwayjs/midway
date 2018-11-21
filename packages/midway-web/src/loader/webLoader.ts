@@ -26,8 +26,8 @@ export class MidwayWebLoader extends MidwayLoader {
 
   async loadController(opt: { directory? } = {}): Promise<void> {
     // load midway controller to binding router
-    const appDir = path.join(this.options.baseDir, 'app');
-    const results = loading(this.getFileExtension(['controllers/**/*', 'controller/**/*']), {
+    const appDir = path.join(this.options.baseDir, 'app/controller');
+    const results = loading(this.getFileExtension('**/*'), {
       loadDirs: opt.directory || appDir,
       call: false,
     });
@@ -151,14 +151,14 @@ export class MidwayWebLoader extends MidwayLoader {
 
   protected getFileExtension(names: string | string[]): string[] {
     if (typeof names === 'string') {
-      return [names + '.ts', names + '.js', '!**/**.d.ts'];
-    } else {
-      let arr = [];
-      names.forEach((name) => {
-        arr = arr.concat([name + '.ts', name + '.js']);
-      });
-      return arr.concat(['!**/**.d.ts']);
+      names = [names];
     }
+
+    let arr = [];
+    names.forEach((name) => {
+      arr = arr.concat([name + '.ts', name + '.js']);
+    });
+    return arr.concat(['!**/**.d.ts']);
   }
 
   async refreshContext(): Promise<void> {
