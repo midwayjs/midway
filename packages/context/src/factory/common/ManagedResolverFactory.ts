@@ -24,8 +24,8 @@ import {
 } from '../../interfaces';
 import { ObjectConfiguration } from '../../base/Configuration';
 import { Autowire } from './Autowire';
+import { NotFoundError } from '../../utils/errorFactory';
 
-const is = require('is-type-of');
 
 // 基础模版，用于 {{xxx.xx}} 这种形式的属性注入
 function tpl(s: string, props: any): string {
@@ -386,17 +386,13 @@ export class ManagedResolverFactory {
       const keys = definition.properties.keys();
       for (let i = 0; i < keys.length; i++) {
         const key = keys[i];
-        if (!is.nullOrUndefined(inst) && is.function(inst.hasOwnProperty) && inst.hasOwnProperty(key)) {
-          console.warn(`${inst}\'s own property ${key} will be overwritten by the same name property on the prototype chain`);
-        }
         const identifier = definition.properties.getProperty(key);
         try {
           inst[key] = this.resolveManaged(identifier);
         } catch (error) {
-          const errorWithGetRegExp = new RegExp(`^${identifier.name}`);
-          if(error.message.match(errorWithGetRegExp)) {
+          if(NotFoundError.isClosePrototypeOf(error)) {
             const className = definition.path.name;
-            error.message = `${identifier.name} in class ${className} is not valid in context`;
+            error.updateErrorMsg(className);
           }
           throw error;
         }
@@ -466,17 +462,13 @@ export class ManagedResolverFactory {
       const keys = definition.properties.keys();
       for (let i = 0; i < keys.length; i++) {
         const key = keys[i];
-        if (!is.nullOrUndefined(inst) && is.function(inst.hasOwnProperty) && inst.hasOwnProperty(key)) {
-          console.warn(`${inst}\'s own property ${key} will be overwritten by the same name property on the prototype chain`);
-        }
         const identifier = definition.properties.getProperty(key);
         try {
           inst[key] = await this.resolveManagedAsync(identifier);
         } catch (error) {
-          const errorWithGetRegExp = new RegExp(`^${identifier.name}`);
-          if(error.message.match(errorWithGetRegExp)) {
+          if(NotFoundError.isClosePrototypeOf(error)) {
             const className = definition.path.name;
-            error.message = `${identifier.name} in class ${className} is not valid in context`;
+            error.updateErrorMsg(className);
           }
           throw error;
         }

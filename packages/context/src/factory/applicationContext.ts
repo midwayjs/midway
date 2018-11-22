@@ -14,6 +14,7 @@ import {
 } from '../interfaces';
 import { ObjectConfiguration } from '../base/Configuration';
 import { ManagedResolverFactory } from './common/ManagedResolverFactory';
+import { NotFoundError } from '../utils/errorFactory';
 
 const graphviz = require('graphviz');
 
@@ -164,8 +165,7 @@ export class BaseApplicationContext extends EventEmitter implements IApplication
   }
 
   get<T>(identifier: ObjectIdentifier, args?: any): T {
-    // 以 ${identifier} 开头的 Error 信息将被增加详细的类名，在 ManagedResolverFactory.ts create 方法中
-    // 因为在这里拿不到类名
+    // 因为在这里拿不到类名, NotFoundError 类的错误信息在 ManagedResolverFactory.ts createAsync 方法中增加错误类名
 
     if (this.registry.hasObject(identifier)) {
       return this.registry.getObject(identifier);
@@ -184,14 +184,13 @@ export class BaseApplicationContext extends EventEmitter implements IApplication
       return this.parent.get<T>(identifier, args);
     }
     if (!definition) {
-      throw new Error(`${identifier} is not valid in current context`);
+      throw new NotFoundError(identifier);
     }
     return this.resolverFactory.create(definition, args);
   }
 
   async getAsync<T>(identifier: ObjectIdentifier, args?: any): Promise<T> {
-    // 以 ${identifier} 开头的 Error 信息将被增加详细的类名，在 ManagedResolverFactory.ts createAsync 方法中
-    // 因为在这里拿不到类名
+    // 因为在这里拿不到类名, NotFoundError 类的错误信息在 ManagedResolverFactory.ts createAsync 方法中增加错误类名
 
     if (this.registry.hasObject(identifier)) {
       return this.registry.getObject(identifier);
@@ -203,7 +202,7 @@ export class BaseApplicationContext extends EventEmitter implements IApplication
     }
 
     if (!definition) {
-      throw new Error(`${identifier} is not valid in current context`);
+      throw new NotFoundError(identifier);
     }
     return await this.resolverFactory.createAsync(definition, args);
   }

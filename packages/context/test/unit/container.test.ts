@@ -150,13 +150,19 @@ describe('/test/unit/container.test.ts', () => {
     expect(ins1).to.equal(ins2);
   });
 
-  it('should resolve instance', () => {
+  it('should resolve instance', async() => {
     const container = new Container();
     const ins1 = container.resolve(Katana);
     expect(ins1 instanceof Katana).to.be.true;
     expect(() => {
       container.get(Katana);
     }).to.throw(/is not valid in current context/);
+
+    try {
+      await container.getAsync(Katana);
+    } catch (error) {
+      expect(function () { throw error; }).to.throw(/is not valid in current context/);
+    }
   });
 
   it('should use get async method replace get', async () => {
