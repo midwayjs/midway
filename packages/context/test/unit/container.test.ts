@@ -114,6 +114,26 @@ describe('/test/unit/container.test.ts', () => {
     ]);
   });
 
+  it('should throw error with class name when injected property error', async () => {
+    const container = new Container();
+    container.bind<Grandson>('grandson', <any>Grandson);
+
+    expect(function () { container.get('grandson'); }).to.throw(Error, /Grandson/);
+    expect(function () { container.get('nograndson'); }).to.throw(Error, /nograndson/);
+
+    try {
+      await container.getAsync('grandson');
+    } catch (error) {
+      expect(function () { throw error; }).to.throw(Error, /Grandson/);
+    }
+    try {
+      await container.getAsync('nograndson');
+    } catch (error) {
+      expect(function () { throw error; }).to.throw(Error, /nograndson/);
+    }
+  });
+
+
   it('should load js dir and inject with $', () => {
     const container = new Container();
     container.bind('app', require(path.join(__dirname, '../fixtures/js-app-inject', 'app.js')));
