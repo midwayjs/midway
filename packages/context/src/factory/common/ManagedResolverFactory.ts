@@ -25,6 +25,8 @@ import {
 import { ObjectConfiguration } from '../../base/Configuration';
 import { Autowire } from './Autowire';
 
+const is = require('is-type-of');
+
 // 基础模版，用于 {{xxx.xx}} 这种形式的属性注入
 function tpl(s: string, props: any): string {
   return _.template(s, {
@@ -384,7 +386,20 @@ export class ManagedResolverFactory {
       const keys = definition.properties.keys();
       for (let i = 0; i < keys.length; i++) {
         const key = keys[i];
-        inst[key] = this.resolveManaged(definition.properties.getProperty(key));
+        if (!is.nullOrUndefined(inst) && is.function(inst.hasOwnProperty) && inst.hasOwnProperty(key)) {
+          console.warn(`${inst}\'s own property ${key} will be overwritten by the same name property on the prototype chain`);
+        }
+        const identifier = definition.properties.getProperty(key);
+        try {
+          inst[key] = this.resolveManaged(identifier);
+        } catch (error) {
+          const errorWithGetRegExp = new RegExp(`^${identifier.name}`);
+          if(error.message.match(errorWithGetRegExp)) {
+            const className = definition.path.name;
+            error.message = `${identifier.name} in class ${className} is not valid in context`;
+          }
+          throw error;
+        }
       }
     }
 
@@ -451,7 +466,20 @@ export class ManagedResolverFactory {
       const keys = definition.properties.keys();
       for (let i = 0; i < keys.length; i++) {
         const key = keys[i];
-        inst[key] = await this.resolveManagedAsync(definition.properties.getProperty(key));
+        if (!is.nullOrUndefined(inst) && is.function(inst.hasOwnProperty) && inst.hasOwnProperty(key)) {
+          console.warn(`${inst}\'s own property ${key} will be overwritten by the same name property on the prototype chain`);
+        }
+        const identifier = definition.properties.getProperty(key);
+        try {
+          inst[key] = await this.resolveManagedAsync(identifier);
+        } catch (error) {
+          const errorWithGetRegExp = new RegExp(`^${identifier.name}`);
+          if(error.message.match(errorWithGetRegExp)) {
+            const className = definition.path.name;
+            error.message = `${identifier.name} in class ${className} is not valid in context`;
+          }
+          throw error;
+        }
       }
     }
 

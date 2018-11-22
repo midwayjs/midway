@@ -164,6 +164,9 @@ export class BaseApplicationContext extends EventEmitter implements IApplication
   }
 
   get<T>(identifier: ObjectIdentifier, args?: any): T {
+    // 以 ${identifier} 开头的 Error 信息将被增加详细的类名，在 ManagedResolverFactory.ts create 方法中
+    // 因为在这里拿不到类名
+
     if (this.registry.hasObject(identifier)) {
       return this.registry.getObject(identifier);
     }
@@ -187,6 +190,9 @@ export class BaseApplicationContext extends EventEmitter implements IApplication
   }
 
   async getAsync<T>(identifier: ObjectIdentifier, args?: any): Promise<T> {
+    // 以 ${identifier} 开头的 Error 信息将被增加详细的类名，在 ManagedResolverFactory.ts createAsync 方法中
+    // 因为在这里拿不到类名
+
     if (this.registry.hasObject(identifier)) {
       return this.registry.getObject(identifier);
     }
