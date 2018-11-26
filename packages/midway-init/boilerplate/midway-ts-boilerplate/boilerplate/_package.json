@@ -10,6 +10,7 @@
     "@types/mocha": "^5.2.5",
     "@types/node": "^10.5.5",
     "egg-ci": "^1.8.0",
+    "egg-scripts": "^2.10.0",
     "midway-bin": "*",
     "midway-mock": "*",
     "tslib": "^1.8.1",
