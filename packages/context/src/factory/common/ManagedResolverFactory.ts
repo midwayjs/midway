@@ -24,6 +24,8 @@ import {
 } from '../../interfaces';
 import { ObjectConfiguration } from '../../base/Configuration';
 import { Autowire } from './Autowire';
+import { NotFoundError } from '../../utils/errorFactory';
+
 
 // 基础模版，用于 {{xxx.xx}} 这种形式的属性注入
 function tpl(s: string, props: any): string {
@@ -384,7 +386,16 @@ export class ManagedResolverFactory {
       const keys = definition.properties.keys();
       for (let i = 0; i < keys.length; i++) {
         const key = keys[i];
-        inst[key] = this.resolveManaged(definition.properties.getProperty(key));
+        const identifier = definition.properties.getProperty(key);
+        try {
+          inst[key] = this.resolveManaged(identifier);
+        } catch (error) {
+          if(NotFoundError.isClosePrototypeOf(error)) {
+            const className = definition.path.name;
+            error.updateErrorMsg(className);
+          }
+          throw error;
+        }
       }
     }
 
@@ -451,7 +462,16 @@ export class ManagedResolverFactory {
       const keys = definition.properties.keys();
       for (let i = 0; i < keys.length; i++) {
         const key = keys[i];
-        inst[key] = await this.resolveManagedAsync(definition.properties.getProperty(key));
+        const identifier = definition.properties.getProperty(key);
+        try {
+          inst[key] = await this.resolveManagedAsync(identifier);
+        } catch (error) {
+          if(NotFoundError.isClosePrototypeOf(error)) {
+            const className = definition.path.name;
+            error.updateErrorMsg(className);
+          }
+          throw error;
+        }
       }
     }
 

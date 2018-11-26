@@ -114,6 +114,26 @@ describe('/test/unit/container.test.ts', () => {
     ]);
   });
 
+  it('should throw error with class name when injected property error', async () => {
+    const container = new Container();
+    container.bind<Grandson>('grandson', <any>Grandson);
+
+    expect(function () { container.get('grandson'); }).to.throw(Error, /Grandson/);
+    expect(function () { container.get('nograndson'); }).to.throw(Error, /nograndson/);
+
+    try {
+      await container.getAsync('grandson');
+    } catch (error) {
+      expect(function () { throw error; }).to.throw(Error, /Grandson/);
+    }
+    try {
+      await container.getAsync('nograndson');
+    } catch (error) {
+      expect(function () { throw error; }).to.throw(Error, /nograndson/);
+    }
+  });
+
+
   it('should load js dir and inject with $', () => {
     const container = new Container();
     container.bind('app', require(path.join(__dirname, '../fixtures/js-app-inject', 'app.js')));
@@ -130,13 +150,19 @@ describe('/test/unit/container.test.ts', () => {
     expect(ins1).to.equal(ins2);
   });
 
-  it('should resolve instance', () => {
+  it('should resolve instance', async() => {
     const container = new Container();
     const ins1 = container.resolve(Katana);
     expect(ins1 instanceof Katana).to.be.true;
     expect(() => {
       container.get(Katana);
     }).to.throw(/is not valid in current context/);
+
+    try {
+      await container.getAsync(Katana);
+    } catch (error) {
+      expect(function () { throw error; }).to.throw(/is not valid in current context/);
+    }
   });
 
   it('should use get async method replace get', async () => {
