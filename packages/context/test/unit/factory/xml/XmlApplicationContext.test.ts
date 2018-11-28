@@ -98,4 +98,11 @@ describe('/test/unit/factory/xml/XmlApplicationContext', () => {
     expect(obj62).deep.eq(obj63);
     expect(obj6).deep.eq(obj63);
   });
+  it('context constructor-arg object should be ok', () => {
+    const aa: any = context.get('ctor:obj7');
+    expect(aa.getHello()).eq('hello');
+
+    const aa1: any = context.get('ctor:obj8');
+    expect(aa1.getHello()).eq('hello8');
+  });
 });
