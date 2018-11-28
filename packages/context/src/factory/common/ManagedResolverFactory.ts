@@ -411,7 +411,7 @@ export class ManagedResolverFactory {
     // after properties set then do init
     definition.creator.doInit(inst);
 
-    if (definition.isSingletonScope()) {
+    if (definition.isSingletonScope() && definition.id) {
       this.singletonCache.set(definition.id, inst);
     }
 
@@ -487,7 +487,7 @@ export class ManagedResolverFactory {
     // after properties set then do init
     await definition.creator.doInitAsync(inst);
 
-    if (definition.isSingletonScope()) {
+    if (definition.isSingletonScope() && definition.id) {
       this.singletonCache.set(definition.id, inst);
     }
 

@@ -25,6 +25,28 @@
   <object id="ctor:obj3" path="obj3" direct="true">
   </object>
 
+  <object id="ctor:obj7" path="obj7">
+    <constructor-arg>
+      <object>
+        <property name="hello" value="hello" />
+        <property name="reff">
+          <ref object="ctor:obj2"></ref>
+        </property>
+      </object>
+    </constructor-arg>
+  </object>
+
+  <object id="ctor:obj8" path="obj7">
+    <constructor-arg>
+      <object>
+        <property name="hello" value="hello8" />
+        <property name="reff">
+          <ref object="ctor:obj2"></ref>
+        </property>
+      </object>
+    </constructor-arg>
+  </object>
+
   <object id="ctor:async" path="async" async="true" construct-method="getInstance">
   </object>
 
