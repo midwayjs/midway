@@ -70,9 +70,11 @@ class BuildCommand extends Command {
               const cwdDir = path.join(cwd, srcDir.substring(0, getPath))
               const paths = globby.sync(cwdDir, {expandDirectories: { files: [src]}});
               paths.forEach(item => {
-                const targetDir = path.join(outDir, item.substring(item.lastIndexOf(files)));
-                fse.copySync(path.join(item), path.join(cwd, targetDir));
-              })
+                const fileName = item.substring(item.lastIndexOf('/')+1,item.length);// get file name
+                const filePath = item.substring(item.indexOf(files), item.lastIndexOf('/'));// get file path
+                const targetDir = path.join(cwd, outDir, filePath, fileName);
+                fse.copySync(item, targetDir);
+              });
             } else {
               fse.copySync(path.join(cwd, srcDir), path.join(cwd, targetDir));
               console.log(`[midway-bin] copy ${srcDir} to ${targetDir} success!`);
