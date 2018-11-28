@@ -62,7 +62,7 @@ class BuildCommand extends Command {
           for (const file of pkg['midway-bin-build'].include) {
             const srcDir = path.join('src', file);
             const targetDir = path.join(outDir, file);
-            const isSrcDir = (srcDir.indexOf('*') !== -1) || (srcDir.indexOf('?') !== -1);
+            const isSrcDir = (srcDir.indexOf('*') !== -1) || (srcDir.indexOf('?') !== -1) || (srcDir.replace(/.+\./,"") !== srcDir);
             if(isSrcDir) {
               const getPath = srcDir.lastIndexOf('/');
               const files = srcDir.substring(4, getPath); // remove src
