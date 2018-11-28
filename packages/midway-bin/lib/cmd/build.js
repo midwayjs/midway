@@ -62,18 +62,16 @@ class BuildCommand extends Command {
           for (const file of pkg['midway-bin-build'].include) {
             const srcDir = path.join('src', file);
             const targetDir = path.join(outDir, file);
-            const isSrcDir = srcDir.indexOf('*');
-            if(isSrcDir !== -1) {
-              const srcPath = srcDir.substring(0, isSrcDir -1);
-              const fileExtensionName = srcDir.replace(/.+\./,"");// 拓展名
-
-              this.travel(path.join(cwd, srcPath), pathname => {
-                if(pathname.replace(/.+\./,"") === fileExtensionName) {
-                  const srcPathName = pathname.lastIndexOf(srcPath);
-                  const outFile = pathname.substr(srcPathName +4);// 去掉/src
-                  const targetDir = path.join(outDir, outFile);
-                  fse.copySync(path.join(pathname), path.join(cwd, targetDir));
-                }
+            const isSrcDir = (srcDir.indexOf('*') !== -1) || (srcDir.indexOf('?') !== -1);
+            if(isSrcDir) {
+              const getPath = srcDir.lastIndexOf('/');
+              const files = srcDir.substring(4, getPath); // remove src
+              const src = srcDir.substring(getPath + 1); // extension name
+              const cwdDir = path.join(cwd, srcDir.substring(0, getPath))
+              const paths = globby.sync(cwdDir, {expandDirectories: { files: [src]}});
+              paths.forEach(item => {
+                const targetDir = path.join(outDir, item.substring(item.lastIndexOf(files)));
+                fse.copySync(path.join(item), path.join(cwd, targetDir));
               })
             } else {
               fse.copySync(path.join(cwd, srcDir), path.join(cwd, targetDir));
@@ -83,17 +81,6 @@ class BuildCommand extends Command {
         }
       }
     }
-  }
-  
-  travel(dir, callback) {
-    fs.readdirSync(dir).forEach(file => {
-      let pathname = path.join(dir, file);
-      if (fs.statSync(pathname).isDirectory()) {
-        this.travel(pathname, callback);
-      } else {
-        callback(pathname);
-      }
-    });
   }
 }
 
