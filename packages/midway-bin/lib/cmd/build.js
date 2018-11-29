@@ -67,7 +67,7 @@ class BuildCommand extends Command {
               const getPath = srcDir.lastIndexOf('/');
               const files = srcDir.substring(4, getPath); // remove src
               const src = srcDir.substring(getPath + 1); // extension name
-              const cwdDir = path.join(cwd, srcDir.substring(0, getPath))
+              const cwdDir = path.join(cwd, srcDir.substring(0, getPath));
               const paths = globby.sync(cwdDir, {expandDirectories: { files: [src]}});
               paths.forEach(item => {
                 const fileName = item.substring(item.lastIndexOf('/')+1,item.length);// get file name
