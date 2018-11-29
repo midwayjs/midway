@@ -62,16 +62,16 @@ class BuildCommand extends Command {
           for (const file of pkg['midway-bin-build'].include) {
             const srcDir = path.join('src', file);
             const targetDir = path.join(outDir, file);
-            const isSrcDir = (srcDir.indexOf('*') !== -1) || (srcDir.indexOf('?') !== -1) || (srcDir.replace(/.+\./,"") !== srcDir);
-            if(isSrcDir) {
+            const isSrcDir = (srcDir.indexOf('*') !== -1) || (srcDir.indexOf('?') !== -1) || (srcDir.replace(/.+\./, '') !== srcDir);
+            if (isSrcDir) {
               const getPath = srcDir.lastIndexOf('/');
               const files = srcDir.substring(4, getPath); // remove src
               const src = srcDir.substring(getPath + 1); // extension name
               const cwdDir = path.join(cwd, srcDir.substring(0, getPath));
-              const paths = globby.sync(cwdDir, {expandDirectories: { files: [src]}});
+              const paths = globby.sync(cwdDir, { expandDirectories: { files: [ src ] } });
               paths.forEach(item => {
-                const fileName = item.substring(item.lastIndexOf('/')+1,item.length);// get file name
-                const filePath = item.substring(item.indexOf(files), item.lastIndexOf('/'));// get file path
+                const fileName = item.substring(item.lastIndexOf('/') + 1, item.length); // get file name
+                const filePath = item.substring(item.indexOf(files), item.lastIndexOf('/')); // get file path
                 const targetDir = path.join(cwd, outDir, filePath, fileName);
                 fse.copySync(item, targetDir);
               });
