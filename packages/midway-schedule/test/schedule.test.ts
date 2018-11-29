@@ -61,6 +61,19 @@ describe('test/schedule.test.ts', () => {
       const log = getLogContent(name);
       assert(contains(log, 'hello decorator') === 4, '未正确执行 4 次');
     });
+
+    it('should support non-default class with @schedule decorator', async () => {
+      const name = 'worker-non-default-class';
+      application = cluster(name, {
+        typescript: true,
+        worker: 2,
+      });
+      await application.ready();
+      await sleep(5000);
+      const log = getLogContent(name);
+      assert(contains(log, 'hello decorator') === 4, '未正确执行 4 次');
+      assert(contains(log, 'hello other functions') === 4, '未正确执行 4 次');
+    });
   });
 });
 
