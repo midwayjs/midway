@@ -38,7 +38,8 @@
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
     "docs:deploy": "node ./scripts/deploy_doc.js",
-    "gen-api-ref": "typedoc --options typedoc.js"
+    "gen-api-ref": "typedoc --options typedoc.js",
+    "postinstall": "opencollective-postinstall"
   },
   "keywords": [
     "container",
@@ -56,5 +57,13 @@
   "engines": {
     "node": ">= 8.2.1"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "opencollective-postinstall": "^2.0.1",
+    "opencollective": "^1.0.3"
+  },
+  "collective": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/midway"
+  }
 }
