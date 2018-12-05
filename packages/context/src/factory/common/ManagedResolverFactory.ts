@@ -101,6 +101,8 @@ class ValueResolver extends BaseManagedResolver {
         return parseInt(tpl(mv.value, props), 10);
       case VALUE_TYPE.DATE:
         return new Date(tpl(mv.value, props));
+      case VALUE_TYPE.BOOLEAN:
+        return mv.value === 'true';
     }
 
     return mv.value;

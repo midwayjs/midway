@@ -62,6 +62,7 @@ describe('/test/unit/factory/xml/XmlApplicationContext', () => {
     expect(foo.int === 12).true;
     expect(foo.date.getTime()).eq(1527069046019);
     expect(foo.unknow).eq('aaa');
+    expect(foo.boolean).eq(true);
   });
   it('injectionpoint should be ok', () => {
     const bar: any = ctx1.get('obj:bar');
