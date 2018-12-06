@@ -31,21 +31,30 @@ function getScheduleLoader(app) {
 
     load() {
       const target = this.options.target;
-      const items = this.parse();
-      for (const item of items) {
-        const schedule = item.exports;
-        const fullpath = item.fullpath;
+      const files = this.parse();
+      for (const file of files) {
+        const item = file.exports;
+        const fullpath = file.fullpath;
+        if (is.class(item)) {
+          collectTask(item, 'default', fullpath);
+          continue;
+        }
+        Object.keys(item)
+          .filter((key) => !key.startsWith('__'))
+          .filter((key) => is.class(item[key]))
+          .map((key) => collectTask(item[key], key, fullpath));
+      }
+      return;
 
-        assert(is.class(schedule), `schedule(${fullpath}: should be class`);
+      function collectTask(cls, name, fullpath) {
+        const key = fullpath + '#' + name;
         const opts: SchedueOpts | string = Reflect.getMetadata(
           SCHEDULE_CLASS,
-          schedule,
+          cls,
         );
-        assert(opts, `schedule(${fullpath}): must use @schedule to setup.`);
-
+        assert(opts, `schedule(${key}): must use @schedule to setup.`);
         const task = async (ctx, data) => {
-          const ins = await ctx.requestContext.getAsync(schedule);
-          // throw new Error('emmmmm ' + ins);
+          const ins = await ctx.requestContext.getAsync(cls);
           ins.exec = app.toAsyncFunction(ins.exec);
           return ins.exec(ctx, data);
         };
@@ -54,15 +63,14 @@ function getScheduleLoader(app) {
         const envList = (opts as SchedueOpts).env;
         if (is.array(envList) && !envList.includes(env)) {
           app.coreLogger.info(
-            `[egg-schedule]: ignore schedule ${fullpath} due to \`schedule.env\` not match`,
+            `[egg-schedule]: ignore schedule ${key} due to \`schedule.env\` not match`,
           );
-          continue;
+          return;
         }
-
-        target[fullpath] = {
+        target[key] = {
           schedule: opts,
           task,
-          key: fullpath,
+          key,
         };
       }
     }

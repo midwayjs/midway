@@ -319,13 +319,15 @@ import { schedule } from 'midway';
   interval: 2333, // 2.333s 间隔
   type: 'worker', // 指定某一个 worker 执行
 })
-export default class HelloCron {
+export class HelloCron {
   // 定时执行的具体任务
   async exec(ctx) {
     ctx.logger.info(process.pid, 'hello');
   }
 }
 ```
+
+PS: 定时任务类需 `export` 导出才会被加载，并且一个 `.ts` 文件可以 `export` 多个定时任务类，但是如果 `export default` 了，则只会读取 `default` 的类。
 
 ### 注入日志对象
 
