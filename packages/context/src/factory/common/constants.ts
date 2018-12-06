@@ -70,4 +70,5 @@ export const VALUE_TYPE = {
   TEMPLATE: 'template',
   MANAGED: 'managed',
   OBJECT: 'object', // 仅仅在解析时使用
+  BOOLEAN: 'boolean'
 };

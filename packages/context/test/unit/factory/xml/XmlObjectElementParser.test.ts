@@ -186,6 +186,16 @@ describe('/test/unit/factory/xml/XmlObjectElementParser', () => {
     expect(mp3.value.type).eq(KEYS.VALUE_ELEMENT);
     expect(mp3.value.value).eq('10');
     expect(mp3.value.valueType).eq('int');
+
+    const s4 = `
+    <property name="a">
+      <value type="boolean">true</value>
+    </property>
+    `;
+    const mp4 = <ManagedProperty>parseStr(s4);
+    expect(mp4.value.type).eq(KEYS.VALUE_ELEMENT);
+    expect(mp4.value.value).eq('true');
+    expect(mp4.value.valueType).eq('boolean');
   });
   it('props parser should ok', () => {
     const s = `
