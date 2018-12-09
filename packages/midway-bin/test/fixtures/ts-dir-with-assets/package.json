@@ -8,7 +8,10 @@
     "include": [
       "public",
       "view",
-      "resource.json"
+      "resource.json",
+      "lib/*.json",
+      "lib/*.text",
+      ["pattern/**", "!pattern/**/*.js"]
     ]
   }
 }

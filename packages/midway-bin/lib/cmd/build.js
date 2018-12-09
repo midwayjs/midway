@@ -5,6 +5,7 @@ const path = require('path');
 const fs = require('fs');
 const rimraf = require('mz-modules/rimraf');
 const fse = require('fs-extra');
+const globby = require('globby');
 
 class BuildCommand extends Command {
   constructor(rawArgv) {
@@ -37,9 +38,9 @@ class BuildCommand extends Command {
       yield this.cleanDir(cwd);
     }
 
-    this.copyFiles(cwd);
+    yield this.copyFiles(cwd);
 
-    yield this.helper.forkNode(tscCli, [ ], { cwd });
+    yield this.helper.forkNode(tscCli, [], { cwd });
   }
 
   * cleanDir(cwd) {
@@ -52,7 +53,7 @@ class BuildCommand extends Command {
     }
   }
 
-  copyFiles(cwd) {
+  * copyFiles(cwd) {
     const tsConfig = require(path.join(cwd, 'tsconfig.json'));
     if (tsConfig && tsConfig.compilerOptions) {
       const outDir = tsConfig.compilerOptions.outDir;
@@ -60,15 +61,27 @@ class BuildCommand extends Command {
         const pkg = require(path.join(cwd, 'package.json'));
         if (pkg['midway-bin-build'] && pkg['midway-bin-build'].include) {
           for (const file of pkg['midway-bin-build'].include) {
-            const srcDir = path.join('src', file);
-            const targetDir = path.join(outDir, file);
-            fse.copySync(path.join(cwd, srcDir), path.join(cwd, targetDir));
-            console.log(`[midway-bin] copy ${srcDir} to ${targetDir} success!`);
+            if (typeof file === 'string' && !/\*/.test(file)) {
+              const srcDir = path.join('src', file);
+              const targetDir = path.join(outDir, file);
+              // 目录，或者不含通配符的普通文件
+              this.copyFile(srcDir, targetDir, cwd);
+            } else {
+              // 通配符的情况
+              const paths = yield globby([].concat(file), { cwd: path.join(cwd, 'src') });
+              for (const p of paths) {
+                this.copyFile(path.join('src', p), path.join(outDir, p), cwd);
+              }
+            }
           }
         }
       }
     }
+  }
 
+  copyFile(srcFile, targetFile, cwd) {
+    fse.copySync(path.join(cwd, srcFile), path.join(cwd, targetFile));
+    console.log(`[midway-bin] copy ${srcFile} to ${targetFile} success!`);
   }
 }
 

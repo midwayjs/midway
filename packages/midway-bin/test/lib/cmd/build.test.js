@@ -46,6 +46,10 @@ describe('test/lib/cmd/build.test.js', () => {
     assert(fs.existsSync(path.join(cwd, 'dist/public/test.css')));
     assert(fs.existsSync(path.join(cwd, 'dist/public/test.js')));
     assert(fs.existsSync(path.join(cwd, 'dist/resource.json')));
+    assert(fs.existsSync(path.join(cwd, 'dist/lib/b.json')));
+    assert(fs.existsSync(path.join(cwd, 'dist/lib/a.text')));
+    assert(fs.existsSync(path.join(cwd, 'dist/pattern/ignore.css')));
+    assert(fs.existsSync(path.join(cwd, 'dist/pattern/sub/sub_ignore.css')));
     yield rimraf(path.join(cwd, 'dist'));
   });
 
