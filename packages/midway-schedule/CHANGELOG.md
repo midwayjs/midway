@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.7.0](https://github.com/midwayjs/midway/compare/v0.6.5...v0.7.0) (2018-12-09)
+
+
+### Features
+
+* support non-default class for midway-schedule ([74e51e9](https://github.com/midwayjs/midway/commit/74e51e9))
+
+
+
+
+
 ## [0.6.5](https://github.com/midwayjs/midway/compare/v0.6.4...v0.6.5) (2018-11-27)
 
 **Note:** Version bump only for package midway-schedule
