@@ -566,3 +566,38 @@ describe('test/service/user.test.ts', () => {
 ```
 
 app.applicationContext 是 IoC 容器的应用上下文, 通过它可以异步取出注入的 service，并使用 service 进行测试。完整 demo 可以参见 [midway-test-demo](https://github.com/Lellansin/midway-test-demo)。
+
+## 部署
+
+### 构建打包
+
+由于 typescript 的特殊性，本地开发可以有 ts-node 等类似的工具进行开发，而在服务器端运行的时候，我们希望可以通过 js 来运行，这中间就需要编译工具。
+
+幸好 Typescript 官方提供了 tsc 工具来帮助这个过程，而编译时会自动调用 `tsconfig.json` 来做一些编译时处理，midway 默认提供了一份该文件，用户也可以进行自定义。
+
+同时，在脚手架中，我们提供了 `build` 命令帮助用户更好的生成文件。
+
+> 推荐在发布前本地进行 build，并通过 npm run start_build 进行启动尝试，减少服务器端构建错误。
+
+### 自定义编译需求
+
+由于 typescript 编译无法拷贝非 *.ts 文件，我们特定在 midway-bin 中增加了一个 build 命令以增强这个功能。
+
+在执行 midway-bin build 命令中，会自动调用 package.json 的 midway-bin-build 端落，配置如下：
+
+```json
+"midway-bin-build": {
+  "include": [
+    "app/public",
+    "app/view",
+    "lib/platform/aone/api.json",
+    "lib/*.json",
+    "lib/*.text",
+    ["pattern/**", "!pattern/**/*.js"]
+  }
+```
+
+你可以在其中使用相对路径或者通配符，乃至任意符合 [glob 语法](https://github.com/isaacs/minimatch#usage) 的 pattern 数组。
+
+这样在打包时会自动将相应的目录或者文件从 src 目录拷贝到对应的 dist 目录中。
+

@@ -38,9 +38,9 @@ class BuildCommand extends Command {
       yield this.cleanDir(cwd);
     }
 
-    this.copyFiles(cwd);
+    yield this.copyFiles(cwd);
 
-    yield this.helper.forkNode(tscCli, [ ], { cwd });
+    yield this.helper.forkNode(tscCli, [], { cwd });
   }
 
   * cleanDir(cwd) {
@@ -53,7 +53,7 @@ class BuildCommand extends Command {
     }
   }
 
-  copyFiles(cwd) {
+  * copyFiles(cwd) {
     const tsConfig = require(path.join(cwd, 'tsconfig.json'));
     if (tsConfig && tsConfig.compilerOptions) {
       const outDir = tsConfig.compilerOptions.outDir;
@@ -61,29 +61,27 @@ class BuildCommand extends Command {
         const pkg = require(path.join(cwd, 'package.json'));
         if (pkg['midway-bin-build'] && pkg['midway-bin-build'].include) {
           for (const file of pkg['midway-bin-build'].include) {
-            const srcDir = path.join('src', file);
-            const targetDir = path.join(outDir, file);
-            const isSrcDir = (srcDir.indexOf('*') !== -1) || (srcDir.indexOf('?') !== -1) || (srcDir.replace(/.+\./, '') !== srcDir);
-            if (isSrcDir) {
-              const getPath = srcDir.lastIndexOf('/');
-              const files = srcDir.substring(4, getPath); // remove src
-              const src = srcDir.substring(getPath + 1); // extension name
-              const cwdDir = path.join(cwd, srcDir.substring(0, getPath));
-              const paths = globby.sync(cwdDir, { expandDirectories: { files: [ src ] } });
-              paths.forEach(item => {
-                const fileName = item.substring(item.lastIndexOf('/') + 1, item.length); // get file name
-                const filePath = item.substring(item.indexOf(files), item.lastIndexOf('/')); // get file path
-                const targetDir = path.join(cwd, outDir, filePath, fileName);
-                fse.copySync(item, targetDir);
-              });
+            if (typeof file === 'string' && !/\*/.test(file)) {
+              const srcDir = path.join('src', file);
+              const targetDir = path.join(outDir, file);
+              // 目录，或者不含通配符的普通文件
+              this.copyFile(srcDir, targetDir, cwd);
             } else {
-              fse.copySync(path.join(cwd, srcDir), path.join(cwd, targetDir));
-              console.log(`[midway-bin] copy ${srcDir} to ${targetDir} success!`);
+              // 通配符的情况
+              const paths = yield globby([].concat(file), { cwd: path.join(cwd, 'src') });
+              for (const p of paths) {
+                this.copyFile(path.join('src', p), path.join(outDir, p), cwd);
+              }
             }
           }
         }
       }
     }
+  }
+
+  copyFile(srcFile, targetFile, cwd) {
+    fse.copySync(path.join(cwd, srcFile), path.join(cwd, targetFile));
+    console.log(`[midway-bin] copy ${srcFile} to ${targetFile} success!`);
   }
 }
 
