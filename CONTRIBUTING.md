@@ -9,7 +9,7 @@ or make any change as you wish and submit an [PR](https://github.com/midwayjs/mi
 - Before you report an issue, please search for related issues. Make sure you are not going to open a duplicate issue.
 - Explain your purpose clearly in tags(see **Useful Tags**), title, or content.
 
-Egg group members will confirm the purpose of the issue, replace more accurate tags for it, identify related milestone, and assign developers working on it.
+MidwayJs group members will confirm the purpose of the issue, replace more accurate tags for it, identify related milestone, and assign developers working on it.
 Tags can be divided into two groups, `type` and `scope`.
 
 - type: What kind of issue, e.g. `feature`, `bug`, `documentation`, `performance`, `support` ...
@@ -17,7 +17,7 @@ Tags can be divided into two groups, `type` and `scope`.
 
 ### Useful Tags
 
-- `support`: the issue asks helps from developers of our group. If you need helps to locate and handle problems or have any idea to improve Egg, mark it as `support`.
+- `support`: the issue asks helps from developers of our group. If you need helps to locate and handle problems or have any idea to improve MidwayJs, mark it as `support`.
 - `bug`: if you find a problem which possiblly could be a bug, please tag it as `bug`. Then our group members will review that issue. If it is confirmed as a bug by our group member, this issue will be tagged as `confirmed`.
   - A confirmed bug will be resolved prior.
   - If the bug has negative impact on running online application, it will be tagged as `critical`, which refers to top priority, and will be fixed ASAP!
@@ -40,7 +40,7 @@ All demos should be compiled at [midwayjs/examples](https://github.com/midwayjs/
 
 ### Pull Request Guide
 
-If you are developer of egg repo and you are willing to contribute, feel free to create a new branch, finish your modification and submit a PR. Egg group will review your work and merge it to master branch.
+If you are developer of midway repo and you are willing to contribute, feel free to create a new branch, finish your modification and submit a PR. MidwayJs group will review your work and merge it to master branch.
 
 ```bash
 # Create a new branch for development. The name of branch should be semantic, avoiding words like 'update' or 'tmp'. We suggest to use feature/xxx, if the modification is about to implement a new feature.
@@ -55,14 +55,14 @@ $ git commit -m "fix(role): role.use must xxx"
 $ git push origin branch-name
 ```
 
-Then you can create a Pull Request at [egg](https://github.com/midwayjs/midway/pulls)
+Then you can create a Pull Request at [midway](https://github.com/midwayjs/midway/pulls)
 
 No one can garantee how much will be remembered about certain PR after some time. To make sure we can easily recap what happened previously, please provide the following information in your PR.
 
 1. Need: What function you want to achieve (Generally, please point out which issue is related).
 2. Updating Reason: Different with issue. Briefly describe your reason and logic about why you need to make such modification.
 3. Related Testing: Briefly descirbe what part of testing is relevant to your modification.
-4. User Tips: Notice for Egg users. You can skip this part, if the PR is not about update in API or potential compatibility problem.
+4. User Tips: Notice for MidwayJs users. You can skip this part, if the PR is not about update in API or potential compatibility problem.
 
 ### Style Guide
 
@@ -134,7 +134,7 @@ Look at [these files](https://docs.google.com/document/d/1QrDFcIiPjSLDn3EL15IJyg
 
 ## Release
 
-egg uses semantic versioning in release process based on [semver].
+midway uses semantic versioning in release process based on [semver].
 
 ### Branch Strategy
 
@@ -143,8 +143,8 @@ egg uses semantic versioning in release process based on [semver].
 - All new features will be added into `master` or `next` branch as well as all bug-fix except security issues. In such way, we can motivate developers to update to the latest stable version.
 - If any API is discarded, it should be noted with `deprecate` in current stable version. The old version of API should be compatiable until the release of next stable version.
 - `master` branch doesn't have publish tag. High-level framework can work with stable versions defined by semantic versioning.
-- `next` branch is labelled with `next` tag, high-level framework can use `egg@next` to test the in-progress version.
-- The LTS versions of Egg determined by Milestone. If a version is listed in Milestone, then it is a LTS version. We will patch it if there is any problem with it.
+- `next` branch is labelled with `next` tag, high-level framework can use `midway@next` to test the in-progress version.
+- The LTS versions of MidwayJs determined by Milestone. If a version is listed in Milestone, then it is a LTS version. We will patch it if there is any problem with it.
 
 ### Release Strategy
 
