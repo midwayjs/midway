@@ -6,6 +6,7 @@
     "autocannon": "^2.4.1",
     "chai": "^4.1.2",
     "chalk": "^2.4.1",
+    "contributors": "^0.5.1",
     "debug": "^3.1.0",
     "gh-pages": "^1.2.0",
     "git-hooks": "^1.1.10",
@@ -14,8 +15,8 @@
     "mocha": "^3.5.0",
     "node-ab": "0.0.6",
     "nyc": "^11.2.1",
-    "opencollective-postinstall": "^2.0.1",
     "opencollective": "^1.0.3",
+    "opencollective-postinstall": "^2.0.1",
     "tree-kill": "^1.2.0",
     "ts-node": "^7.0.1",
     "tslint": "^5.9.1",
@@ -41,7 +42,8 @@
     "docs:build": "vuepress build docs",
     "docs:deploy": "node ./scripts/deploy_doc.js",
     "gen-api-ref": "typedoc --options typedoc.js",
-    "postinstall": "opencollective-postinstall"
+    "postinstall": "opencollective-postinstall",
+    "contributors": "contributors -f plain -o AUTHORS"
   },
   "keywords": [
     "container",
