@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.7.1](https://github.com/midwayjs/midway/compare/v0.7.0...v0.7.1) (2018-12-18)
+
+
+### Bug Fixes
+
+* lock egg-schedule version ([668a4b3](https://github.com/midwayjs/midway/commit/668a4b3))
+
+
+
+
+
 # [0.7.0](https://github.com/midwayjs/midway/compare/v0.6.5...v0.7.0) (2018-12-09)
 
 
