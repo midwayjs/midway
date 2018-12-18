@@ -23,7 +23,7 @@
     "midway-bin": "^0.7.0"
   },
   "dependencies": {
-    "egg-schedule": "^3.4.0",
+    "egg-schedule": "3.4.0",
     "reflect-metadata": "^0.1.12"
   }
 }
