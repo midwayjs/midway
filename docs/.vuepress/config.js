@@ -23,6 +23,7 @@ module.exports = {
       { text: '首页', link: '/' },
       { text: '使用文档', link: '/guide' },
       { text: '依赖注入手册', link: '/ioc' },
+      { text: '工具集', link: '/tool_set' },
       { text: 'TS 新手指南', link: '/ts_start' },
       { text: 'API', link: 'http://www.midwayjs.org/midway/api-reference/globals.html' },
       {
