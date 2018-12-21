@@ -438,6 +438,51 @@ export class BaseService {
 }
 ```
 
+## 框架扩展方法
+
+抛开 eggjs 对 koa 的 application/context/request/response 的扩展点，midway 在 IoC 方面也做了一些扩展。
+
+### Application 扩展
+
+具体接口见 [API 文档](https://midwayjs.org/midway/api-reference/classes/midwayapplication.html)
+
+**baseDir**
+
+由于 typescript 的关系，midway 的 app.baseDir 在开发时期指向了 `/src` 目录，而在构建之后部署阶段指向了 `/dist` 目录。
+
+**appDir**
+
+针对 baseDir 修改的情况，我们引入了一个新的 `app.appDir` 属性，用于指向应用根目录。
+
+**applicationContext**
+
+`app.applicationContext` 用于全局作用域的 IoC 容器，所有的单例对象都存放于该属性，可以从中获取到单例对象。
+
+```ts
+await app.applicationContext.getAsync('xxx')
+```
+
+**pluginContext**
+
+插件容器，用于存在现有的所有挂载在 app 上的插件实例。
+
+```ts
+await app.pluginContext.getAsync('插件名')
+```
+
+### Context 扩展
+
+**requestContext**
+
+针对请求作用域的情况，我们在 context 对象上扩展了一个 `requestContext` 属性。
+
+和 `applicationContext` 相同，也是 IoC 容器，用于存放一次请求链路上的对象，当请求结束后，该容器会被清空。
+
+```ts
+await ctx.requestContext.getAsync('xxx')
+```
+
+
 ## 应用测试
 
 经过大量的实践，我们沉淀出了一套标准的测试工具集。
