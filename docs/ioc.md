@@ -86,7 +86,18 @@ IoC 容器就像是一个对象池，管理这每个对象实例的信息（Clas
 
 ## 获取 IoC 容器
 
-所谓的容器就是一个对象池，它会在应用初始化的时候自动处理类的依赖，并将类进行实例化。比如上边的 `UserService` 类，在经过容器初始化之后，会自动实例化，并且对 `userModel` 进行赋值。
+所谓的容器就是一个对象池，它会在应用初始化的时候自动处理类的依赖，并将类进行实例化。比如下面的 `UserService` 类，在经过容器初始化之后，会自动实例化，并且对 `userModel` 进行赋值，看不到实例化的过程。
+
+```ts
+class UserService {
+  
+  private userModel;
+  
+  async getUser(uid) {
+    // TODO
+  }
+}
+```
 
 Midway 内部使用了自动扫描的机制，在应用初始化之前，会扫描所有的文件，包含装饰器的文件会 **自动绑定** 到容器。
 
@@ -105,7 +116,7 @@ const container = new Container();
 
 ## 对象定义
 
-所谓的对象定义指的是一个对象的基本行为，以及将这些行为描述出来。
+一个对象的基本元信息，比如名字，是否异步，有哪些属性，依赖等等，我们把这些信息组合到一起，形成一个对象定义。
 
 对象定义往往表现在他的基础类型上， injection 内置了名为 `ObjectDefinition` 的对象定义类，它包含一系列属性，比如：
 
@@ -119,10 +130,9 @@ const container = new Container();
 
 ## 绑定对象定义
 
-我们在创建容器之后，将会往这个容器中添加一些对象定义，这样容器才能将这些对象创建出来。
+我们在创建容器之后，将会往这个容器中添加一些对象定义，这样容器才能将对应对象创建出来。
 
-```typescript
-
+```ts
 class UserService {
   
   private userModel;
@@ -136,8 +146,15 @@ class UserService {
 // 内部代码
 const container = new Container();  // 创建容器
 container.bind('userService', UserService); // 可以在绑定的时候传一个名字作为 key
+container.bind(UserService); // 也可以直接传入 Class，自动分析对象的元信息生成对象定义
+```
 
-//... 省略逻辑
+`bind` 方法通过传入类型，自动分析类型上面包含的元信息，具体的 API 参数可以查看[这里](https://midwayjs.org/midway/api-reference/classes/container.html#bind)。
+
+## 普通情况下获取对象
+
+```ts
+//... 省略绑定逻辑
 
 const userService = await container.getAsync('userService');  // 这里根据 key 获取对象
 const user = await userService.getUser('123');
@@ -149,7 +166,8 @@ const user = await userService.getUser('123');
 
 如果一个对象依赖了另一个对象，那么在创建的时候，依赖的对象都会被自动创建并且在容器中管理起来。
 
-## 使用装饰器
+
+## 使用装饰器注入
 
 如果每次代码都需要手动绑定，然后通过 `get/getAsync` 方法拿到对应的对象，那将会非常繁琐，由于 Midway 6 基于 ts，参考了业界的 IoC 实现，完成了属于自己的依赖注入能力，主要是通过 `@provide` 和 `@inject` 两个装饰器来完成绑定定义和自动注入属性，大大简化了代码量。
 
@@ -265,6 +283,51 @@ const userService = await container.getAsync('user');
 ```
 
 同理，在使用 `@inject` 的时候也可以使用不同的 id。
+
+## 构造器注入
+
+除了标准的属性注入方法之外，midway 在一定程度上支持了构造器注入的方式，来让一些应用或者三方包平稳过度。
+
+同样还是使用 `@inject` 装饰器。
+
+```ts
+@provide()
+export class A {
+  config = {
+    c: 20
+  };
+}
+
+
+@provide()
+export class B {
+  config = {
+    c: 40
+  };
+}
+
+@provide()
+export class BaseService {
+
+  config;
+  plugin2;
+
+  constructor(
+    @inject() a,
+    @config('hello') config,
+    @inject() b,
+    @plugin('plugin2') plugin2
+  ) {
+    this.config = Object.assign(config, {
+      c: a.config.c + b.config.c + config.c
+    });
+    this.plugin2 = plugin2;
+  }
+
+} 
+```
+
+在一个类的构造器中，我们可以还可以使用其他的类似 `@config`, `@plugin`, `@logger` 等装饰器。只要是通过 IoC 管理的对象，都能够被自动依赖和注入。
 
 
 ## 配置作用域
