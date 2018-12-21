@@ -88,9 +88,9 @@ midway 的目录和 eggjs 目录非常接近，但也有所区别，不同的地
 │   │   ├── config.prod.ts
 │   │   ├── config.unittest.ts
 │   │   └── plugin.ts
-│   └── lib                             ---- 业务逻辑层目录
-│   │   ├── interface.ts                ---- 接口定义文件
-│   │   └── service                     ---- 业务逻辑层，目录根据业务自己定义
+│   └── lib                             ---- 业务逻辑层目录，自由定义
+│   │   ├── interface.ts                ---- 接口定义文件，自由定义
+│   │   └── service                     ---- 业务逻辑层，自由定义
 │   │       └── user.ts   
 │   ├── app.ts                          ---- 应用扩展文件，可选
 │   └── agent.ts                        ---- agent 扩展文件，可选
@@ -118,11 +118,65 @@ midway 的目录和 eggjs 目录非常接近，但也有所区别，不同的地
 * `app/public/**` 用于放置静态资源，可选，具体参见内置插件 [egg-static](https://github.com/eggjs/egg-static)。
 * `app/view/**` 用于放置模板文件，可选，由模板插件约定，具体参见[模板渲染](https://eggjs.org/zh-cn/core/view.html)。
 
-而除了 app 目录以外的其他目录，在 midway 体系下并没有严格的规定，而是按照逻辑分层，比如按照传统的 `web, biz, manager, dao` 等进行分层进行创建目录就非常不错。
+而除了 app 目录以外的其他目录，在 midway 体系下并没有严格的规定，而是按照逻辑分层，比如按照传统的 `web, biz, service, manager, dao` 等进行分层进行创建目录就非常不错。
 
 ::: tip
 由于 Midway 采用了自动扫描装配，依赖注入等特性，无需在特定的目录下受到限制，使得在全栈应用开发的时候，保持了不错的开发体验。
 :::
+
+## 和 Egg 体系一样的部分
+
+这部分的内容和 Egg 体系基本是相同的，大体不同的是后缀的区别 `*.ts`，以及根目录（midway 的根目录在 src)。
+
+### 运行环境
+
+目前没有做特殊处理，完全一样，查看[运行环境文档](https://eggjs.org/zh-cn/basics/env.html)。
+
+### 配置
+
+框架支持根据环境来加载配置，定义多个环境的配置文件，唯一不同的是后缀的区别，具体环境请查看[运行环境配置](https://eggjs.org/zh-cn/basics/env.html)
+
+```
+src/config
+|- config.default.ts
+|- config.prod.ts
+|- config.unittest.ts
+`- config.local.ts
+```
+
+### Web 中间件
+
+除了目录在 `src/app/middleware` 以及后缀名为 `*.ts` ，其余完全一样，查看[中间件文档](https://eggjs.org/zh-cn/basics/middleware.html)。
+
+### Router 路由
+
+`src/app/router.ts` 文件依旧可用，推荐使用 midway 体系的 [路由装饰器](#路由装饰器)，egg 的路由文档在[这里](https://eggjs.org/zh-cn/basics/router.html)。
+
+### 框架扩展
+
+针对框架自身的扩展点，依旧保留可用，目录变为 `src/app/*.ts`，文档查看 [框架扩展](https://eggjs.org/zh-cn/basics/extend.html)。
+
+### 启动自定义
+
+启动自动以依旧保留可用，目录变为 `src/app.ts`，文档查看 [框架扩展](https://eggjs.org/zh-cn/basics/app-start.html)。
+
+如果想在 `app.ts` 中调用 IoC 中的对象，可以通过以下方法。
+
+```ts
+// app.js
+module.exports = app => {
+  app.beforeStart(async () => {
+    
+    // 从全局作用域拿单例对象
+    const obj = await app.applicationContext.getAsync('xxx');
+    
+    // 从请求作用域拿对象
+    const ctx = app.createAnonymousContext();
+    const obj = await ctx.requestContext.getAsync('xxx');
+        
+  });
+};
+```
 
 ## 路由和控制器
 
@@ -365,7 +419,7 @@ export class BaseService {
 midway 在新版本中默认对所有对象开启了请求作用域，处于该作用域下的对象，都会包含一个默认的日志对象。
 
 ::: tip
-该 logger 对象是在请求链路开始就埋入到 IoC 容器中，所以可以通过 @inject 可以获取该对象，  key 就为 logger，如果和属性同名则可以不填。
+该 logger 对象是在请求链路开始就埋入到 IoC 容器中，所以可以通过 @inject 可以获取该对象， key 就为 logger，如果和属性同名则可以不填。
 :::
 
 
@@ -577,7 +631,9 @@ app.applicationContext 是 IoC 容器的应用上下文, 通过它可以异步�
 
 同时，在脚手架中，我们提供了 `build` 命令帮助用户更好的生成文件。
 
-> 推荐在发布前本地进行 build，并通过 npm run start_build 进行启动尝试，减少服务器端构建错误。
+::: tip
+推荐在发布前本地进行 build，并通过 npm run start_build 进行启动尝试，减少服务器端构建错误。
+:::
 
 ### 自定义编译需求
 

@@ -369,12 +369,11 @@ assert(container.getAsync('diesel') === container.getAsync('diesel'))  // true
 
 在某些情况下，我们需要一个实例在被其他依赖调用前需要初始化，如果这个初始化只是读取某个文件，那么可以写成同步方式，而如果这个初始化是从远端拿取数据或者连接某个服务，这个情况下，普通的同步代码就非常的难写。
 
-midway 提供了异步初始化的能力，通过 `@async`  和  `@init` 标签来管理初始化方法。
+midway 提供了异步初始化的能力，通过 `@init` 标签来管理初始化方法。
 
 `@init` 方法目前只能是一个。
 
 ```typescript
-@async()
 @provide()
 export class BaseService {
 
@@ -398,7 +397,11 @@ export class BaseService {
 
 ```
 
-只要在类上标记 `@async` 装饰器之后，就代表了这个类会有异步初始化的情况，这个时候会自动通过异步的情况来调用 `@init`  标记的方法。
+::: warning 注意
+@async 装饰器已废弃，所有的 init 方法默认都会异步，同步初始化可以直接在构造器执行，此装饰器没有意义。
+:::
+
+只要在方法上标记 `@init` 装饰器之后，这个时候会自动在实例化之后，通过异步的来调用 `@init`  标记的方法。
 
 ## 动态函数注入
 
@@ -468,7 +471,6 @@ providerWrapper([
 
 ```typescript
 
-@async()
 @provide()
 export class BaseService {
 
