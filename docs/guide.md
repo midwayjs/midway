@@ -89,9 +89,9 @@ midway 的目录和 eggjs 目录非常接近，但也有所区别，不同的地
 │   │   ├── config.unittest.ts
 │   │   └── plugin.ts
 │   └── lib                             ---- 业务逻辑层目录，自由定义
-│   │   ├── interface.ts                ---- 接口定义文件，自由定义
 │   │   └── service                     ---- 业务逻辑层，自由定义
 │   │       └── user.ts   
+│   ├── interface.ts                    ---- 接口定义文件，自由定义
 │   ├── app.ts                          ---- 应用扩展文件，可选
 │   └── agent.ts                        ---- agent 扩展文件，可选
 ├── test
@@ -104,25 +104,37 @@ midway 的目录和 eggjs 目录非常接近，但也有所区别，不同的地
 
 如上，由框架约定的目录，Midway 使用 EggJs 作为 Web 层容器，承载请求控制器和传统 MVC 层的工作，这一块由于受到限制，有着一定的目录约定：
 
-* `app/router.ts` 可选，用于配置 URL 路由规则，具体参见 [Router](https://eggjs.org/zh-cn/basics/router.html)。
-* `app/controller/**` 用于解析用户的输入，处理后返回相应的结果，具体参见 [Controller](hController)。
-* `app/middleware/**` 可选，用于编写中间件，具体参见 [Middleware](https://eggjs.org/zh-cn/basics/middleware.html)。
-* `app/extend/**` 可选，用于框架的扩展，具体参见[框架扩展](https://eggjs.org/zh-cn/basics/extend.html)。
-* `config/config.{env}.ts` 用于编写配置文件，具体参见[配置](https://eggjs.org/zh-cn/basics/config.html)。
-* `config/plugin.ts` 用于配置需要加载的插件，具体参见[插件](https://eggjs.org/zh-cn/basics/plugin.html)。
+* `src/app/router.ts` 可选，用于配置 URL 路由规则，具体参见 [Router](https://eggjs.org/zh-cn/basics/router.html)。
+* `src/app/controller/**` 用于解析用户的输入，处理后返回相应的结果，具体参见 [Controller](hController)。
+* `src/app/middleware/**` 可选，用于编写中间件，具体参见 [Middleware](https://eggjs.org/zh-cn/basics/middleware.html)。
+* `src/app/extend/**` 可选，用于框架的扩展，具体参见[框架扩展](https://eggjs.org/zh-cn/basics/extend.html)。
+* `src/config/config.{env}.ts` 用于编写配置文件，具体参见[配置](https://eggjs.org/zh-cn/basics/config.html)。
+* `src/config/plugin.ts` 用于配置需要加载的插件，具体参见[插件](https://eggjs.org/zh-cn/basics/plugin.html)。
 * `test/**` 用于单元测试，具体参见[单元测试](https://eggjs.org/zh-cn/core/unittest.html)。
-* `app.ts` 和 `agent.ts` 用于自定义启动时的初始化工作，可选，具体参见[启动自定义](https://eggjs.org/zh-cn/basics/app-start.html)。关于`agent.js`的作用参见[Agent机制](https://eggjs.org/zh-cn/core/cluster-and-ipc.html#agent-%E6%9C%BA%E5%88%B6)。
+* `src/app.ts` 和 `agent.ts` 用于自定义启动时的初始化工作，可选，具体参见[启动自定义](https://eggjs.org/zh-cn/basics/app-start.html)。关于`agent.js`的作用参见[Agent机制](https://eggjs.org/zh-cn/core/cluster-and-ipc.html#agent-%E6%9C%BA%E5%88%B6)。
 
 而其他由于 Egg 插件的限制，可能有些目录也会有相应的约定，比如：
 
-* `app/public/**` 用于放置静态资源，可选，具体参见内置插件 [egg-static](https://github.com/eggjs/egg-static)。
-* `app/view/**` 用于放置模板文件，可选，由模板插件约定，具体参见[模板渲染](https://eggjs.org/zh-cn/core/view.html)。
+* `src/app/public/**` 用于放置静态资源，可选，具体参见内置插件 [egg-static](https://github.com/eggjs/egg-static)。
+* `src/app/view/**` 用于放置模板文件，可选，由模板插件约定，具体参见[模板渲染](https://eggjs.org/zh-cn/core/view.html)。
 
-而除了 app 目录以外的其他目录，在 midway 体系下并没有严格的规定，而是按照逻辑分层，比如按照传统的 `web, biz, service, manager, dao` 等进行分层进行创建目录就非常不错。
+我们会发现常见的代码都会存放于 `/src` 目录下，由于 ts 的特殊性，在服务器上会通过打包构建为 `*.js` 文件存放于 `/dist` 目录。将源文件和编译后文件分开是我们最开始的初衷。
+
+而除了 app 目录以外的其他目录，在 midway 体系下并没有严格的规定，大体可以按照逻辑分层，比如按照传统的 `web, biz, service, manager, dao` 等进行分层进行创建目录就非常不错。
 
 ::: tip
 由于 Midway 采用了自动扫描装配，依赖注入等特性，无需在特定的目录下受到限制，使得在全栈应用开发的时候，保持了不错的开发体验。
 :::
+
+## 快速开发引导
+
+想要快速上手 midway，除了需要了解一些基础的东西：
+
+- 虽然可以直接用 js 的语法书写，但是你最好了解 Typescript，这里有个 [快速介绍](ts_start.md)。
+- 尽可能使用面向对象的思想来编码，它的经久不衰是有道理的，使用 class 机制能够方便的融入我们的新特性。
+- 了解 midway 的依赖注入体系，以及常用的装饰器，这里做了 [依赖注入的介绍](ioc.md)。
+- 如果你在 midway 的文档中没有找到你想要的东西，记住可以去 [Egg 的文档找找](https://eggjs.org/zh-cn/intro/)，或者 [向我们提 Issue](https://github.com/midwayjs/midway/issues)。
+
 
 ## 和 Egg 体系相同的部分
 
