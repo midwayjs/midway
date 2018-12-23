@@ -4,15 +4,15 @@
   "description": "{{description}}",
   "private": true,
   "dependencies": {
-    "midway": "*",
+    "midway": "^1.0.0",
     "egg-scripts": "^2.10.0"
   },
   "devDependencies": {
     "@types/mocha": "^5.2.5",
     "@types/node": "^10.5.5",
     "egg-ci": "^1.8.0",
-    "midway-bin": "*",
-    "midway-mock": "*",
+    "midway-bin": "1",
+    "midway-mock": "1",
     "tslib": "^1.8.1",
     "ts-node": "^7.0.1",
     "tslint": "^5.9.1",
