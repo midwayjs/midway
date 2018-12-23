@@ -1,6 +1,6 @@
 {
   "name": "midway",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Midway Main Package",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -21,16 +21,16 @@
     "@types/chai": "^3.5.2",
     "@types/mocha": "^2.2.41",
     "@types/node": "^10.5.5",
-    "midway-bin": "^1.0.0",
+    "midway-bin": "^1.0.1",
     "mm": "^2.2.0",
     "mocha": "^3.5.0",
     "supertest": "^3.1.0"
   },
   "dependencies": {
     "egg-cluster": "^1.17.0",
-    "injection": "^1.0.0",
-    "midway-core": "^1.0.0",
-    "midway-web": "^1.0.0"
+    "injection": "^1.0.1",
+    "midway-core": "^1.0.1",
+    "midway-web": "^1.0.1"
   },
   "files": [
     "bin",
