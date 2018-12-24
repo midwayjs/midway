@@ -9,7 +9,8 @@
     "lint": "../../node_modules/.bin/tslint --format prose -c ../../tslint.json src/**/*.ts test/**/*.ts",
     "test": "midway-bin test --ts",
     "cov": "midway-bin cov --ts",
-    "ci": "npm run test"
+    "ci": "npm run test",
+    "autod": "midway-bin autod"
   },
   "keywords": [
     "midway",
@@ -18,19 +19,14 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@types/chai": "^3.5.2",
-    "@types/mocha": "^2.2.41",
-    "@types/node": "^10.5.5",
-    "midway-bin": "^1.0.1",
-    "mm": "^2.2.0",
-    "mocha": "^3.5.0",
-    "supertest": "^3.1.0"
+    "midway-bin": "^1.0.1"
   },
   "dependencies": {
-    "egg-cluster": "^1.17.0",
+    "egg-cluster": "^1.22.2",
     "injection": "^1.0.1",
     "midway-core": "^1.0.1",
-    "midway-web": "^1.0.1"
+    "midway-web": "^1.0.1",
+    "ts-node": "^7.0.1"
   },
   "files": [
     "bin",

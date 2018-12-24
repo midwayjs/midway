@@ -12,7 +12,8 @@
     "lint": "../../node_modules/.bin/tslint --format prose -c ../../tslint.json src/**/*.ts test/**/*.ts",
     "test": "npm run lint && midway-bin clean && midway-bin test --ts",
     "cov": "midway-bin cov --ts",
-    "ci": "midway-bin test"
+    "ci": "midway-bin test",
+    "autod": "midway-bin autod"
   },
   "keywords": [
     "midway",
@@ -30,20 +31,13 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@types/chai": "^3.5.2",
-    "@types/mocha": "^2.2.41",
-    "@types/node": "^10.5.5",
-    "midway-bin": "^1.0.1"
+    "injection": "^1.0.1",
+    "midway-bin": "^1.0.1",
+    "midway-core": "^1.0.1"
   },
   "dependencies": {
-    "co": "^4.6.0",
-    "debug": "^3.1.0",
-    "egg-mock": "^3.17.3",
-    "injection": "^1.0.1",
-    "is-type-of": "^1.2.0",
-    "midway-core": "^1.0.1",
-    "power-assert": "^1.6.0",
-    "ready-callback": "^2.0.1"
+    "egg-mock": "^3.20.1",
+    "power-assert": "^1.6.1"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
   "repository": {
