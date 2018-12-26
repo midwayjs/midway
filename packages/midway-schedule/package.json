@@ -1,6 +1,6 @@
 {
   "name": "midway-schedule",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
   "main": "index.js",
   "directories": {
@@ -18,7 +18,7 @@
   "keywords": [],
   "license": "MIT",
   "devDependencies": {
-    "midway-bin": "^1.0.1"
+    "midway-bin": "^1.0.2"
   },
   "dependencies": {
     "egg-schedule": "3.4.0",
