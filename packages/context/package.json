@@ -10,7 +10,8 @@
     "lint": "../../node_modules/.bin/tslint --format prose -c ../../tslint.json src/**/*.ts test/**/*.ts",
     "test": "midway-bin test --ts",
     "cov": "midway-bin cov --ts",
-    "ci": "npm run test"
+    "ci": "npm run test",
+    "autod": "midway-bin autod"
   },
   "keywords": [
     "midway",
@@ -22,8 +23,6 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@types/chai": "^3.5.2",
-    "@types/lodash": "^4.14.109",
     "benchmark": "^2.1.4",
     "chai": "^4.1.2",
     "midway-bin": "^1.0.1",
@@ -36,12 +35,12 @@
   "dependencies": {
     "camelcase": "^5.0.0",
     "co": "^4.6.0",
-    "debug": "^3.1.0",
-    "graphviz": "0.0.8",
-    "is-type-of": "^1.2.0",
-    "lodash": "^4.17.10",
+    "debug": "^4.1.1",
+    "graphviz": "^0.0.8",
+    "is-type-of": "^1.2.1",
+    "lodash": "^4.17.11",
     "reflect-metadata": "^0.1.12",
-    "uuid": "^3.2.1",
+    "uuid": "^3.3.2",
     "xmldom": "^0.1.27"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",

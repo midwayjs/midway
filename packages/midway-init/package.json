@@ -2,21 +2,22 @@
   "name": "midway-init",
   "version": "1.0.1",
   "dependencies": {
-    "egg-init": "^1.14.0"
+    "co": "^4.6.0",
+    "egg-init": "^1.15.0",
+    "yargs": "^12.0.5"
   },
   "main": "lib/command.js",
   "devDependencies": {
-    "autod": "^3.0.1",
-    "coffee": "^4.1.0",
+    "coffee": "^5.2.0",
     "eslint": "^4.13.1",
     "eslint-config-egg": "^7.0.0",
     "intelli-espower-loader": "^1.0.1",
     "midway-bin": "^1.0.1",
-    "mm": "^2.2.0",
-    "power-assert": "^1.6.0",
+    "mm": "^2.4.1",
+    "mz-modules": "^2.1.0",
+    "power-assert": "^1.6.1",
     "proxy": "^0.2.4",
-    "rimraf": "^2.6.1",
-    "webstorm-disable-index": "^1.0.11"
+    "rimraf": "^2.6.1"
   },
   "keywords": [
     "midway",
@@ -37,7 +38,7 @@
     "test": "npm run lint && midway-bin test",
     "cov": "midway-bin cov",
     "ci": "npm run lint && midway-bin cov",
-    "autod": "autod"
+    "autod": "midway-bin autod"
   },
   "engines": {
     "node": ">=8.0.0"
