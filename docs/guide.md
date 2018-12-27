@@ -767,3 +767,23 @@ module.exports = {
   workers: 1
 }
 ```
+
+## 其他一些情况
+
+### windows 支持
+
+由于在 windows 上开发体验不是特别友好，以及一些库缺乏支持，在大部分情况下，我们优先推荐在 mac/linux 下开发 Node.js 应用。
+
+经过我们的测试，在 windows 10 ， nodejs 官网下载的 v10 版本的 node 下运行 midway 程序通过，但是无法确保在其他的 windows 版本上能够正常。
+
+推荐使用类似 [Hyper](https://hyper.is/) 等相对友好的命令行工具来替换原生的命令行。
+
+需要注意的是，由于 windows 对设置环境变量的同步，默认生成的脚手架可能需要调整，主要是环境变量的部分。
+
+比如开发命令，在设置环境的时候需要使用 `set` 以及中间需要增加 `&&` 以连接命令。
+
+```json
+{
+  "dev": "set NODE_ENV=local && midway-bin dev --ts"
+}
+```

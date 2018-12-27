@@ -5,6 +5,7 @@ const path = require('path');
 const fs = require('fs');
 const Parser = require('./parser');
 const templateDir = path.join(__dirname, '../boilerplate/');
+const os = require('os');
 
 class MidwayInitCommand extends Command {
 
@@ -12,9 +13,8 @@ class MidwayInitCommand extends Command {
     super(Object.assign({}, options));
   }
 
-  * fetchBoilerplateMapping(pkgName) {
-    const mapping = yield super.fetchBoilerplateMapping(pkgName);
-    return Object.assign(require('../boilerplate/boilerplate.json'), mapping);
+  * fetchBoilerplateMapping() {
+    return require('../boilerplate/boilerplate.json');
   }
 
   * downloadBoilerplate(pkgName) {
@@ -31,6 +31,15 @@ class MidwayInitCommand extends Command {
 
   getParserOptions() {
     return Parser.getParserOptions();
+  }
+
+  printUsage() {
+    super.printUsage();
+    if (os.platform() === 'win32') {
+      this.log(`Since it is windows system, please review this note.
+      https://midwayjs.org/midway/guide.html#%E5%90%AF%E5%8A%A8%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92
+      `);
+    }
   }
 }
 
