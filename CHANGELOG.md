@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.3](https://github.com/midwayjs/midway/compare/v1.0.2...v1.0.3) (2018-12-27)
+
+
+### Bug Fixes
+
+* remove pull template from github and add doc for windows ([3ac69ef](https://github.com/midwayjs/midway/commit/3ac69ef))
+
+
+
+
+
 ## [1.0.2](https://github.com/midwayjs/midway/compare/v1.0.1...v1.0.2) (2018-12-26)
 
 **Note:** Version bump only for package midway
