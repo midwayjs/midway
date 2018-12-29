@@ -548,7 +548,43 @@ providerWrapper([
 
 通过 `providerWrapper` 我们将一个原本的函数写法进行了包裹，和现有的依赖注入体系可以融合到一起，让容器能够统一管理。
 
-## 依赖树生成
+## 注入已有对象
+
+有时候，应用已经有现有的实例，而不是类，比如引入了一个第三库，这个时候如果希望对象能够被其他 IoC 容器中的实例引用，也可以通过增加对象的方式进行处理。
+
+我们拿常见的 http 请求库 [urllib](https://www.npmjs.com/package/urllib) 来举例。
+
+假如我们希望在不同的类中来使用，并且不通过 require 的方式，你需要在容器的入口通过 [registerobject](https://midwayjs.org/midway/api-reference/classes/container.html#registerobject) 方法添加这个对象。
+
+在添加的时候需要给出一个 key，方便其他类中注入。
+
+```ts
+// in global file
+import * as urllib from 'urllib';
+container.registerobject('httpclient', urllib);
+```
+
+这个时候就可以在任意的类中通过 `@inject` 来使用了。
+
+```ts
+@provide()
+export class BaseService {
+
+  @inject()
+  httpclient;
+
+  async getUser() {
+    return await this.httpclient.request('/api/getuser');
+  }
+} 
+```
+
+::: tip
+在 midway 中可以在 src/app.ts 中进行添加。
+:::
+
+
+## 通过依赖图排错
 
 在业务代码中，我们可能会碰到依赖注入不生效或者作用域配置错误的问题，这个时候由于容器管理的问题显得不透明，用户也不太清楚容器里有哪些东西，分别依赖了什么。
 
