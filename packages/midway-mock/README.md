@@ -1,6 +1,6 @@
-# midway-init
+# midway-mock
 
-[![Package Quality](http://npm.packagequality.com/shield/midway-init.svg)](http://packagequality.com/#?package=midway-init)
+[![Package Quality](http://npm.packagequality.com/shield/midway-mock.svg)](http://packagequality.com/#?package=midway-mock)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/midwayjs/midway/pulls)
 
 this is a sub package for midway.
