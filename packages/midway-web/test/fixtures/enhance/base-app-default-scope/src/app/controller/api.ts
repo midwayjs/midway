@@ -7,6 +7,7 @@ import * as assert from 'assert';
 @provide()
 export class BaseApi {
   async index(ctx) {
+    assert(ctx.proxy.baseApi);
     const baseApi = await ctx.requestContext.getAsync('baseApi');
     assert(baseApi);
     ctx.body = 'index';
