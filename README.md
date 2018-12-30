@@ -5,7 +5,7 @@
 [![GitHub tag](https://img.shields.io/github/tag/midwayjs/midway.svg)]()
 [![Build Status](https://travis-ci.org/midwayjs/midway.svg?branch=develop)](https://travis-ci.org/midwayjs/midway)
 [![Test Coverage](https://img.shields.io/codecov/c/github/midwayjs/midway/master.svg)](https://codecov.io/gh/midwayjs/midway/branch/master)
-[![Package Quality](http://npm.packagequality.com/shield/midway.svg)](http://packagequality.com/#?package=midway)
+[![Package Quality](http://npm.packagequality.com/badge/midway.png)](http://packagequality.com/#?package=midway)
 [![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lernajs.io/)
 [![Known Vulnerabilities](https://snyk.io/test/npm/midway/badge.svg)](https://snyk.io/test/npm/midway)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/midwayjs/midway/pulls)
