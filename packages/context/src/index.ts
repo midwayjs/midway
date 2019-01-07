@@ -5,6 +5,7 @@ export { BaseApplicationContext as ApplicationContext } from './factory/applicat
 export { ObjectDefinition } from './base/ObjectDefinition';
 export { BaseConfiguration, ObjectConfiguration } from './base/Configuration';
 export { ObjectCreator } from './base/ObjectCreator';
+export { decorators } from './base/Manager';
 export * from './factory/common/managed';
 export { Container } from './factory/container';
 export * from './annotation/index';

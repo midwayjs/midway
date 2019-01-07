@@ -20,6 +20,6 @@
     "test"
   ],
   "files": [
-    "src/index"
+    "src/index.ts"
   ]
 }
