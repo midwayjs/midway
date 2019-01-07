@@ -47,7 +47,7 @@ export class AppWorkerLoader extends MidwayWebLoader {
 
     this.app.beforeStart(async () => {
       await this.refreshContext();
-      // get controlloer
+      // get controller
       await this.loadController();
       // app
       this.loadRouter(); // 依赖 controller

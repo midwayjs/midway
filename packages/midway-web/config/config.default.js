@@ -34,5 +34,16 @@ module.exports = (appInfo) => {
     ]
   };
 
+  exports.alinode = {
+    logdir: path.join(appInfo.root, 'logs/alinode'),
+    error_log: [
+      path.join(appInfo.root, `logs/${appInfo.pkg.name}/common-error.log`),
+      path.join(appInfo.root, 'logs/stderr.log'),
+    ],
+    packages: [
+      path.join(appInfo.appDir, 'package.json'),
+    ]
+  };
+
   return exports;
 };
