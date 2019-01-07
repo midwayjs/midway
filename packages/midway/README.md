@@ -27,6 +27,7 @@ Node.js >= 8.0.0 required.
 - ✔︎ Scalable plug-in capabilities and group plug-in Ecology
 - ✔︎ Good application layering and decoupling capability
 - ✔︎ A good development experience for the future
+- ✔︎ Support Egg plugins and koa middleware
 
 
 ## Getting Started
@@ -43,8 +44,8 @@ $ open http://localhost:7001
 
 ## Docs & Community
 
-[Website && Documentations](https://midwayjs.org/midway/)
-[All Egg Plugins](https://github.com/search?q=topic%3Aegg-plugin&type=Repositories)
+- [Website && Documentations](https://midwayjs.org/midway/)
+- [All Egg Plugins](https://github.com/search?q=topic%3Aegg-plugin&type=Repositories)
 
 ## Examples
 

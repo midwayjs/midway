@@ -5,6 +5,7 @@ import { MidwayContainer } from './container';
 import { MidwayHandlerKey } from './constants';
 import { MidwayLoaderOptions } from './interface';
 import { MidwayRequestContainer } from './requestContainer';
+import * as extend from 'extend2';
 
 const EggLoader = require('egg-core').EggLoader;
 const TS_SRC_DIR = 'src';
@@ -220,8 +221,10 @@ export class MidwayLoader extends EggLoader {
   getAppInfo() {
     if (!this.appInfo) {
       const appInfo = super.getAppInfo();
-      this.appInfo = Object.assign(appInfo, {
-        root: appInfo.env === 'local' || appInfo.env === 'unittest' ? this.appDir : appInfo.root
+      // ROOT == HOME in prod env
+      this.appInfo = extend(true, appInfo, {
+        root: appInfo.env === 'local' || appInfo.env === 'unittest' ? this.appDir : appInfo.root,
+        appDir: this.appDir,
       });
     }
     return this.appInfo;
