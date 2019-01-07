@@ -30,6 +30,7 @@ import {
   PLUGIN_KEY_PROP
 } from './decorators';
 import { MidwayHandlerKey } from './constants';
+export { decorators } from 'injection';
 
 const globby = require('globby');
 const path = require('path');

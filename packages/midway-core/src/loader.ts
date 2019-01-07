@@ -1,7 +1,7 @@
 import { isPluginName, isTypeScriptEnvironment } from './utils';
 import * as path from 'path';
 import * as fs from 'fs';
-import { MidwayContainer } from './container';
+import { MidwayContainer, decorators } from './container';
 import { MidwayHandlerKey } from './constants';
 import { MidwayLoaderOptions } from './interface';
 import { MidwayRequestContainer } from './requestContainer';
@@ -143,6 +143,7 @@ export class MidwayLoader extends EggLoader {
   }
 
   protected loadApplicationContext() {
+    this.app.decorators = decorators;
     // this.app.options.container 测试用例编写方便点
     let containerConfig = this.config.container || this.app.options.container || {};
     // 在 super contructor 中会调用到getAppInfo，之后会被赋值
