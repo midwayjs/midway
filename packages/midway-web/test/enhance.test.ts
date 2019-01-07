@@ -30,6 +30,32 @@ describe('/test/enhance.test.ts', () => {
     });
   });
 
+  describe.only('load ts class controller use decorator manager', () => {
+    let app;
+    before(() => {
+      app = utils.app('enhance/base-decorators', {
+        typescript: true,
+      });
+      return app.ready();
+    });
+
+    after(() => app.close());
+
+    it('should load controller from requestContext', (done) => {
+      request(app.callback())
+        .get('/api/index')
+        .expect(200)
+        .expect('index', done);
+    });
+
+    it('should load controller from requestContext', (done) => {
+      request(app.callback())
+        .get('/api/index')
+        .expect(200)
+        .expect('index', done);
+    });
+  });
+
   describe('load ts class controller use decorator', () => {
     let app;
     before(() => {
