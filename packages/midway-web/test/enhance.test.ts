@@ -30,7 +30,7 @@ describe('/test/enhance.test.ts', () => {
     });
   });
 
-  describe.only('load ts class controller use decorator manager', () => {
+  describe('load ts class controller use decorator manager', () => {
     let app;
     before(() => {
       app = utils.app('enhance/base-decorators', {
