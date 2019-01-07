@@ -34,5 +34,17 @@ module.exports = (appInfo) => {
     ]
   };
 
+  const appRoot = appInfo.env === 'local' || appInfo.env === 'unittest' ? appInfo.appDir : appInfo.HOME;
+  exports.alinode = {
+    logdir: path.join(appRoot, 'logs/alinode'),
+    error_log: [
+      path.join(appRoot, `logs/${appInfo.pkg.name}/common-error.log`),
+      path.join(appRoot, 'logs/stderr.log'),
+    ],
+    packages: [
+      path.join(appInfo.appDir, 'package.json'),
+    ]
+  };
+
   return exports;
 };
