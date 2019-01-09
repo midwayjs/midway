@@ -79,4 +79,4 @@ This project exists thanks to all the people who contribute. [[Contribute](CONTR
 
 ## License
 
-[MIT]((http://github.com/midwayjs/midway/blob/master/LICENSE))
+[MIT](http://github.com/midwayjs/midway/blob/master/LICENSE)
