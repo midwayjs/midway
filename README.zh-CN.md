@@ -48,4 +48,4 @@ $ open http://localhost:7001
 
 ## License
 
-[MIT]((http://github.com/midwayjs/midway/blob/master/LICENSE))
+[MIT](http://github.com/midwayjs/midway/blob/master/LICENSE)
