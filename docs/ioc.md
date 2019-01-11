@@ -39,7 +39,7 @@ import {B} from './B';
 class C {
   consturctor() {
     this.a = new A();
-    this.b = new B(a);
+    this.b = new B(this.a);
   }
 }
 ```
@@ -66,6 +66,8 @@ npm i injection --save
 ```ts
 // 使用 IoC
 import {Container} from 'injection';
+import {A} from './A';
+import {B} from './B';
 const container = new Container();
 container.bind(A);
 container.bind(B);
