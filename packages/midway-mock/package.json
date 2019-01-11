@@ -36,7 +36,7 @@
     "midway-core": "^1.0.5"
   },
   "dependencies": {
-    "egg-mock": "^3.20.1",
+    "egg-mock": "^3.21.0",
     "power-assert": "^1.6.1"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
