@@ -18,7 +18,7 @@ Tags can be divided into two groups, `type` and `scope`.
 ### Useful Tags
 
 - `support`: the issue asks helps from developers of our group. If you need helps to locate and handle problems or have any idea to improve MidwayJs, mark it as `support`.
-- `bug`: if you find a problem which possiblly could be a bug, please tag it as `bug`. Then our group members will review that issue. If it is confirmed as a bug by our group member, this issue will be tagged as `confirmed`.
+- `bug`: if you find a problem which possibly could be a bug, please tag it as `bug`. Then our group members will review that issue. If it is confirmed as a bug by our group member, this issue will be tagged as `confirmed`.
   - A confirmed bug will be resolved prior.
   - If the bug has negative impact on running online application, it will be tagged as `critical`, which refers to top priority, and will be fixed ASAP!
   - A bug will be fixed from lowest necessary version, e.g. A bug needs to be fixed from 0.9.x, then this issue will be tagged as `0.9`, `0.10`, `1.0`, `1.1`, referring that the bug is required to be fixed in those versions.
@@ -29,27 +29,27 @@ Tags can be divided into two groups, `type` and `scope`.
 
 ## Documentation
 
-All features must be submitted along with documentations. The documentations should satify several requirements.
+All features must be submitted along with documentation. The documentation should satisfy several requirements.
 
-- Documentations must clarify one or more aspects of the feature, depending on the nature of feature: what it is, why it happens and how it works.
-- It's better to include a series of procedues to explain how to fix the problem. You are also encourgaed to provide **simple, but self-explanatory** demo.
+- Documentations must clarify one or more aspects of the feature, depending on the nature of the feature: what it is, why it happens and how it works.
+- It's better to include a series of procedures to explain how to fix the problem. You are also encouraged to provide **simple, but self-explanatory** demo.
 All demos should be compiled at [midwayjs/examples](https://github.com/midwayjs/midway-examples) repository.
-- Please provide essential urls, such as application process, terminology explainations and references.
+- Please provide essential URLs, such as the application process, terminology explanations and references.
 
 ## Submitting Code
 
 ### Pull Request Guide
 
-If you are developer of midway repo and you are willing to contribute, feel free to create a new branch, finish your modification and submit a PR. MidwayJs group will review your work and merge it to master branch.
+If you are a developer of midway repo and you are willing to contribute, feel free to create a new branch, finish your modification and submit a PR. MidwayJs group will review your work and merge it to master branch.
 
 ```bash
-# Create a new branch for development. The name of branch should be semantic, avoiding words like 'update' or 'tmp'. We suggest to use feature/xxx, if the modification is about to implement a new feature.
+# Create a new branch for development. The name of the branch should be semantic, avoiding words like 'update' or 'tmp'. We suggest using feature/xxx, if the modification is about to implement a new feature.
 $ git checkout -b branch-name
 
 # Run the test after you finish your modification. Add new test cases or change old ones if you feel necessary
 $ npm test
 
-# If your modification pass the tests, congradulations it's time to push your work back to us. Notice that the commit message should be wirtten in the following format.
+# If your modification passes the tests, congratulations it's time to push your work back to us. Notice that the commit message should be written in the following format.
 $ git add . # git add -u to delete files
 $ git commit -m "fix(role): role.use must xxx"
 $ git push origin branch-name
@@ -57,12 +57,12 @@ $ git push origin branch-name
 
 Then you can create a Pull Request at [midway](https://github.com/midwayjs/midway/pulls)
 
-No one can garantee how much will be remembered about certain PR after some time. To make sure we can easily recap what happened previously, please provide the following information in your PR.
+No one can guarantee how much will be remembered about certain PR after some time. To make sure we can easily recap what happened previously, please provide the following information in your PR.
 
 1. Need: What function you want to achieve (Generally, please point out which issue is related).
-2. Updating Reason: Different with issue. Briefly describe your reason and logic about why you need to make such modification.
-3. Related Testing: Briefly descirbe what part of testing is relevant to your modification.
-4. User Tips: Notice for MidwayJs users. You can skip this part, if the PR is not about update in API or potential compatibility problem.
+2. Updating Reason: Different with issue. Briefly describe your reason and logic about why you need to make such a modification.
+3. Related Testing: Briefly describe what part of testing is relevant to your modification.
+4. User Tips: Notice for MidwayJs users. You can skip this part if the PR is not about an update in API or potential compatibility problem.
 
 ### Style Guide
 
@@ -96,7 +96,7 @@ Must be one of the following:
 
 （2）scope
 
-The scope could be anything specifying place of the commit change. For example $location, $browser, $compile, $rootScope, ngHref, ngClick, ngView, etc...
+The scope could be anything specifying a place of the commit change. For example $location, $browser, $compile, $rootScope, ngHref, ngClick, ngView, etc...
 
 （3）subject
 
@@ -104,13 +104,13 @@ Use succinct words to describe what did you do in the commit change.
 
 （4）body
 
-Feel free to add more content in the body, if you think subject is not self-explanatory enough, such as what it is the purpose or reasone of you commit.
+Feel free to add more content in the body, if you think the subject is not self-explanatory enough, such as what it is the purpose or reason of you commit.
 
 （5）footer
 
 - **If the commit is a Breaking Change, please note it clearly in this part.**
 - related issues, like `Closes #1, Closes #2, #3`
-- If there is a change about an old feaure or a new feature, please associate `doc` and `midway-init`, like `midwayjs/midway-bin#123`
+- If there is a change about an old feature or a new feature, please associate `doc` and `midway-init`, like `midwayjs/midway-bin#123`
 
 e.g.
 
@@ -118,7 +118,7 @@ e.g.
 fix($compile): [BREAKING_CHANGE] couple of unit tests for IE9
 
 Older IEs serialize html uppercased, but IE9 does not...
-Would be better to expect case insensitive, unfortunately jasmine does
+Would be better to expect case insensitive, unfortunately, jasmine does
 not allow to user regexps for throw expectations.
 
 Document change on midwayjs/midway#123
@@ -140,10 +140,10 @@ midway uses semantic versioning in release process based on [semver].
 
 `master` branch is the latest stable version. `next` branch is the next stable version working in progress.
 
-- All new features will be added into `master` or `next` branch as well as all bug-fix except security issues. In such way, we can motivate developers to update to the latest stable version.
-- If any API is discarded, it should be noted with `deprecate` in current stable version. The old version of API should be compatiable until the release of next stable version.
-- `master` branch doesn't have publish tag. High-level framework can work with stable versions defined by semantic versioning.
-- `next` branch is labelled with `next` tag, high-level framework can use `midway@next` to test the in-progress version.
+- All new features will be added to `master` or `next` branch as well as all bug-fix except security issues. In such way, we can motivate developers to update to the latest stable version.
+- If any API is discarded, it should be noted with `deprecate` in the current stable version. The old version of API should be compatible until the release of next stable version.
+- `master` branch doesn't have publish tag. A high-level framework can work with stable versions defined by semantic versioning.
+- `next` branch is labeled with `next` tag. A high-level framework can use `midway@next` to test the in-progress version.
 - The LTS versions of MidwayJs determined by Milestone. If a version is listed in Milestone, then it is a LTS version. We will patch it if there is any problem with it.
 
 ### Release Strategy
@@ -158,7 +158,7 @@ In the release of every stable version, there will be a PM who has the following
 #### Before Release
 
 - Confirm that performance test is passed and all issues in current Milestone are either closed or can be delayed to later versions.
-- Open a new [Release Proposal MR], and write `History` as [node CHANGELOG]. Don't forget to correct content in documentation which is related to the releasing version. Commits can be generated automatically.
+- Open a new [Release Proposal MR], and write `History` as [node CHANGELOG]. Don't forget to correct content in the documentation which is related to the releasing version. Commits can be generated automatically.
     ```
     $ npm run commits
     ```
@@ -166,7 +166,7 @@ In the release of every stable version, there will be a PM who has the following
 
 #### During Release
 
-All tags mentioned above refere to adding tags from npm in `package.json`.
+All tags mentioned above refer to adding tags from npm in `package.json`.
 
 ```json
 "publishConfig": {
