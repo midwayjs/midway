@@ -13,9 +13,5 @@ module.exports = {
   dep: [
   ],
   devdep: [
-  ],
-  keep: [
-    "egg",
-    "egg-core"
   ]
 };

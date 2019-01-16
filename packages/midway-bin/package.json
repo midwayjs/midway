@@ -23,14 +23,14 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "egg-bin": "^4.9.0",
+    "egg-bin": "^4.10.0",
     "fs-extra": "^7.0.1",
-    "globby": "^8.0.1",
+    "globby": "^9.0.0",
     "mz-modules": "^2.1.0"
   },
   "devDependencies": {
     "co-mocha": "^1.2.2",
-    "coffee": "^5.2.0",
+    "coffee": "^5.2.1",
     "eslint": "^4.13.1",
     "eslint-config-egg": "^7.0.0",
     "mm": "^2.4.1"

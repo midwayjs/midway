@@ -26,10 +26,8 @@
     "benchmark": "^2.1.4",
     "chai": "^4.1.2",
     "midway-bin": "^1.0.2",
-    "mocha": "^3.5.0",
-    "nyc": "^11.2.1",
     "sdk-base": "^3.4.0",
-    "sinon": "^3.2.1",
+    "sinon": "^7.2.2",
     "supertest": "^3.1.0"
   },
   "dependencies": {
