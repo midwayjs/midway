@@ -1,0 +1,28 @@
+{
+  "version": "1.0.0",
+  "compilerOptions": {
+    "alwaysStrict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strict": true,
+    "declaration": true,
+    "skipLibCheck": true,
+
+    "lib": ["es6", "es7", "dom", "scripthost"],
+    "sourceMap": true,
+    "removeComments": true,
+    "module": "commonjs",
+    "target": "es5",
+    "rootDir": ".",
+    "outDir": "build"
+  },
+  "include": [
+    "src/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
