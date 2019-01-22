@@ -4,6 +4,7 @@
   "dependencies": {
     "co": "^4.6.0",
     "egg-init": "^1.15.0",
+    "enquirer": "^2.3.0",
     "yargs": "^12.0.5"
   },
   "main": "lib/command.js",
