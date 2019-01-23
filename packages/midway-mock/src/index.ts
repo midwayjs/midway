@@ -1,5 +1,5 @@
 import { EggMock } from 'egg-mock';
-import { MidwayApplicationOptions } from './interface';
+import { MidwayApplicationOptions, MidwayMockApplication } from './interface';
 
 const mock = require('egg-mock');
 
@@ -21,7 +21,7 @@ const mm2: MidwayMock = Object.assign({}, mock, {
   container: mockContainer
 });
 
-mm2.app = (options) => {
+mm2.app = (options): MidwayMockApplication => {
   if (process.env.MIDWAY_BASE_DIR && !options.baseDir) options.baseDir = process.env.MIDWAY_BASE_DIR;
   if (process.env.MIDWAY_FRAMEWORK_PATH && !options.framework) options.framework = process.env.MIDWAY_FRAMEWORK_PATH;
   return mock.app(Object.assign({

@@ -26,7 +26,7 @@ Node.js >= 8.0.0 required.
 - ✔︎ Sophisticated group Middleware Architecture and compatibility
 - ✔︎ Scalable plug-in capabilities and group plug-in Ecology
 - ✔︎ Good application layering and decoupling capability
-- ✔︎ A good development experience for the future
+- ✔︎ Good development experience for the future
 - ✔︎ Support Egg plugins and koa middleware
 
 
@@ -79,4 +79,4 @@ This project exists thanks to all the people who contribute. [[Contribute](CONTR
 
 ## License
 
-[MIT]((http://github.com/midwayjs/midway/blob/master/LICENSE))
+[MIT](http://github.com/midwayjs/midway/blob/master/LICENSE)
