@@ -27,8 +27,8 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "egg-mock": "^3.20.1",
     "midway-bin": "^1.0.2",
+    "midway-mock": "^1.0.5",
     "pedding": "^1.1.0"
   },
   "dependencies": {

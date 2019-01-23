@@ -311,8 +311,10 @@ describe('/test/enhance.test.ts', () => {
   describe('auto load js-app-xml test', () => {
     let app;
     before(() => {
-      app = utils.app('enhance/js-app-xml',
-        {baseDir: path.join(__dirname, 'fixtures/enhance/js-app-xml')});
+      app = utils.app('enhance/js-app-xml', {
+        baseDir: path.join(__dirname, 'fixtures/enhance/js-app-xml'),
+        typescript: false,
+      });
       return app.ready();
     });
 

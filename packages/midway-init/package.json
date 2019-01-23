@@ -9,7 +9,7 @@
   },
   "main": "lib/command.js",
   "devDependencies": {
-    "coffee": "^5.2.0",
+    "coffee": "^5.2.1",
     "eslint": "^4.13.1",
     "eslint-config-egg": "^7.0.0",
     "intelli-espower-loader": "^1.0.1",

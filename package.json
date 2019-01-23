@@ -26,7 +26,7 @@
   "scripts": {
     "autod": "lerna run autod",
     "test": "lerna run test",
-    "cov": "sh scripts/cov.sh",
+    "cov": "nyc lerna run cov --concurrency=1",
     "ci": "npm run build && npm run cov",
     "purge": "npm run clean && rm -rf node_modules",
     "reset": "npm run purge && npm i && npm run ci",
@@ -64,5 +64,31 @@
   "collective": {
     "type": "opencollective",
     "url": "https://opencollective.com/midway"
+  },
+  "nyc": {
+    "include": [
+      "packages/**/src/*.ts",
+      "packages/**/src/**/*.ts",
+      "packages/midway-bin/bin/*.js",
+      "packages/midway-bin/lib/*.js",
+      "packages/midway-init/bin/*.js",
+      "packages/midway-init/lib/*.js"
+    ],
+    "exclude": [
+      "**/typings",
+      "**/*.d.ts",
+      "**/dist",
+      "**/src/domain.ts",
+      "**/src/interface.ts"
+    ],
+    "extension": [
+      ".ts",
+      ".js"
+    ],
+    "reporter": [
+      "json",
+      "html"
+    ],
+    "all": true
   }
 }

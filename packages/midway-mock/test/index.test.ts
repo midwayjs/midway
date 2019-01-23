@@ -2,8 +2,6 @@ import * as path from 'path';
 const fixtures = path.join(__dirname, 'fixtures');
 // app dir
 process.env.MIDWAY_BASE_DIR = path.join(fixtures, 'base-app-decorator');
-// midway dir
-process.env.MIDWAY_FRAMEWORK_PATH = path.join(__dirname, '../../midway');
 
 import { app, mm } from '../bootstrap';
 const assert = require('assert');
@@ -31,7 +29,7 @@ describe('test/index.test.ts', () => {
     assert(service.getData() !== 'hello' + ts);
   });
 
-  it('should use mm.cluster to get app', () => {
+  it('should use mm.app to get app', () => {
     const app = mock.app({
       baseDir: process.env.MIDWAY_BASE_DIR,
       framework: process.env.MIDWAY_FRAMEWORK_PATH,
@@ -39,12 +37,13 @@ describe('test/index.test.ts', () => {
     return app.ready();
   });
 
-  it('should use mm.cluster to get app', () => {
+  xit('should use mm.cluster to get app by default options', () => {
+    mm(process.env, 'MIDWAY_FRAMEWORK_PATH', path.join(__dirname, '../../midway'));
     const app = mock.cluster({});
     return app.ready();
   });
 
-  it('should use mm.cluster to get app', () => {
+  xit('should use mm.cluster to get app', () => {
     const app = mock.cluster({
       baseDir: process.env.MIDWAY_BASE_DIR,
       framework: process.env.MIDWAY_FRAMEWORK_PATH,
@@ -52,7 +51,7 @@ describe('test/index.test.ts', () => {
     return app.ready();
   });
 
-  it('should use mm.cluster to get app', async () => {
+  it('should init container from app', async () => {
     const app = new MockContainer({
       baseDir: process.env.MIDWAY_BASE_DIR,
       framework: process.env.MIDWAY_FRAMEWORK_PATH,

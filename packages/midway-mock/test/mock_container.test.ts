@@ -7,11 +7,6 @@ const fixtures = path.join(__dirname, 'fixtures');
 
 describe('test/mock_container.test.ts', () => {
 
-  before(() => {
-    // midway dir
-    process.env.MIDWAY_FRAMEWORK_PATH = path.join(__dirname, '../../midway');
-  });
-
   describe('test base app decorator', () => {
     let container;
     before(() => {
