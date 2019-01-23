@@ -1,6 +1,6 @@
 {
   "name": "midway-web",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Midway Web Scene",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -28,7 +28,7 @@
   "license": "MIT",
   "devDependencies": {
     "midway-bin": "^1.1.0",
-    "midway-mock": "^1.1.0",
+    "midway-mock": "^1.1.1",
     "pedding": "^1.1.0"
   },
   "dependencies": {
