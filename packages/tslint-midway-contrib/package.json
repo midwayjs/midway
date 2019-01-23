@@ -1,5 +1,5 @@
 {
-  "name": "tslint-config-midway",
+  "name": "tslint-midway-contrib",
   "version": "1.1.0",
   "description": "tslint default rule for midway",
   "main": "tslint.json",

@@ -11,7 +11,6 @@ export {
   EggAppConfig,
   FileStream,
   IApplicationLocals,
-  Application,
   EggApplication,
   EggAppInfo,
   EggHttpClient,
