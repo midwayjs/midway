@@ -78,6 +78,7 @@
       "**/typings",
       "**/*.d.ts",
       "**/dist",
+      "**/test",
       "**/src/domain.ts",
       "**/src/interface.ts"
     ],
