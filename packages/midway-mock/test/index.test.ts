@@ -37,13 +37,13 @@ describe('test/index.test.ts', () => {
     return app.ready();
   });
 
-  xit('should use mm.cluster to get app by default options', () => {
+  it('should use mm.cluster to get app by default options', () => {
     mm(process.env, 'MIDWAY_FRAMEWORK_PATH', path.join(__dirname, '../../midway'));
     const app = mock.cluster({});
     return app.ready();
   });
 
-  xit('should use mm.cluster to get app', () => {
+  it('should use mm.cluster to get app', () => {
     const app = mock.cluster({
       baseDir: process.env.MIDWAY_BASE_DIR,
       framework: process.env.MIDWAY_FRAMEWORK_PATH,
