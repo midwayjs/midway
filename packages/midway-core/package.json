@@ -1,6 +1,6 @@
 {
   "name": "midway-core",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "midway core",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -23,7 +23,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "midway-bin": "^1.0.2"
+    "midway-bin": "^1.1.0"
   },
   "dependencies": {
     "camelcase": "^5.0.0",
@@ -32,7 +32,7 @@
     "extend2": "^1.0.0",
     "globby": "^9.0.0",
     "inflection": "^1.12.0",
-    "injection": "^1.0.2",
+    "injection": "^1.1.0",
     "is-type-of": "^1.2.1",
     "reflect-metadata": "^0.1.12"
   },

@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/midwayjs/midway/compare/v1.0.5...v1.1.0) (2019-01-23)
+
+
+### Bug Fixes
+
+* fix test case ([de70efa](https://github.com/midwayjs/midway/commit/de70efa))
+
+
+### Features
+
+* 用户执行 init 时判断环境 ([142e0e2](https://github.com/midwayjs/midway/commit/142e0e2))
+
+
+
+
+
 ## [1.0.5](https://github.com/midwayjs/midway/compare/v1.0.4...v1.0.5) (2019-01-07)
 
 

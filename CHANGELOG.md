@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/midwayjs/midway/compare/v1.0.5...v1.1.0) (2019-01-23)
+
+
+### Bug Fixes
+
+* check whether methodNames is iterable ([d8c08d7](https://github.com/midwayjs/midway/commit/d8c08d7))
+* fix test case ([de70efa](https://github.com/midwayjs/midway/commit/de70efa))
+
+
+### Features
+
+* add tslint rules ([73ff338](https://github.com/midwayjs/midway/commit/73ff338))
+* 用户执行 init 时判断环境 ([142e0e2](https://github.com/midwayjs/midway/commit/142e0e2))
+
+
+
+
+
 ## [1.0.5](https://github.com/midwayjs/midway/compare/v1.0.4...v1.0.5) (2019-01-07)
 
 
