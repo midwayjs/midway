@@ -26,15 +26,6 @@ import { ObjectConfiguration } from '../../base/Configuration';
 import { Autowire } from './Autowire';
 import { NotFoundError } from '../../utils/errorFactory';
 
-
-// 基础模版，用于 {{xxx.xx}} 这种形式的属性注入
-function tpl(s: string, props: any): string {
-  return _.template(s, {
-    // use `{{` and `}}` as delimiters
-    interpolate: /{{([\s\S]+?)}}/g
-  })(props);
-}
-
 /**
  * 所有解析器基类
  */
@@ -49,11 +40,11 @@ class BaseManagedResolver implements IManagedResolver {
     throw new Error('not implement');
   }
 
-  resolve(managed: IManagedInstance, props: any): any {
+  resolve(managed: IManagedInstance): any {
     throw new Error('not implement');
   }
 
-  async resolveAsync(managed: IManagedInstance, props: any): Promise<any> {
+  async resolveAsync(managed: IManagedInstance): Promise<any> {
     throw new Error('not implement');
   }
 }
@@ -66,13 +57,13 @@ class JSONResolver extends BaseManagedResolver {
     return KEYS.JSON_ELEMENT;
   }
 
-  resolve(managed: IManagedInstance, props: any): any {
+  resolve(managed: IManagedInstance): any {
     const mjson = <ManagedJSON>managed;
-    return JSON.parse(tpl(mjson.value, props));
+    return JSON.parse(this._factory.tpl(mjson.value));
   }
 
-  async resolveAsync(managed: IManagedInstance, props: any): Promise<any> {
-    return this.resolve(managed, props);
+  async resolveAsync(managed: IManagedInstance): Promise<any> {
+    return this.resolve(managed);
   }
 }
 
@@ -89,18 +80,18 @@ class ValueResolver extends BaseManagedResolver {
    * @param managed 类型接口
    * @param props 注入的属性值
    */
-  _resolveCommon(managed: IManagedInstance, props: any): any {
+  _resolveCommon(managed: IManagedInstance): any {
     const mv = <ManagedValue>managed;
     switch (mv.valueType) {
       case VALUE_TYPE.STRING:
       case VALUE_TYPE.TEMPLATE:
-        return tpl(mv.value, props);
+        return this._factory.tpl(mv.value);
       case VALUE_TYPE.NUMBER:
-        return Number(tpl(mv.value, props));
+        return Number(this._factory.tpl(mv.value));
       case VALUE_TYPE.INTEGER:
-        return parseInt(tpl(mv.value, props), 10);
+        return parseInt(this._factory.tpl(mv.value), 10);
       case VALUE_TYPE.DATE:
-        return new Date(tpl(mv.value, props));
+        return new Date(this._factory.tpl(mv.value));
       case VALUE_TYPE.BOOLEAN:
         return mv.value === 'true';
     }
@@ -108,21 +99,21 @@ class ValueResolver extends BaseManagedResolver {
     return mv.value;
   }
 
-  resolve(managed: IManagedInstance, props: any): any {
+  resolve(managed: IManagedInstance): any {
     const mv = <ManagedValue>managed;
     if (mv.valueType === VALUE_TYPE.MANAGED) {
       return this._factory.resolveManaged(mv.value);
     } else {
-      return this._resolveCommon(managed, props);
+      return this._resolveCommon(managed);
     }
   }
 
-  async resolveAsync(managed: IManagedInstance, props: any): Promise<any> {
+  async resolveAsync(managed: IManagedInstance): Promise<any> {
     const mv = <ManagedValue>managed;
     if (mv.valueType === VALUE_TYPE.MANAGED) {
       return await this._factory.resolveManagedAsync(mv.value);
     } else {
-      return this._resolveCommon(managed, props);
+      return this._resolveCommon(managed);
     }
   }
 }
@@ -135,14 +126,14 @@ class RefResolver extends BaseManagedResolver {
     return KEYS.REF_ELEMENT;
   }
 
-  resolve(managed: IManagedInstance, props: any): any {
+  resolve(managed: IManagedInstance): any {
     const mr = <ManagedReference>managed;
-    return this._factory.context.get(mr.name, null);
+    return this._factory.context.get(mr.name);
   }
 
-  async resolveAsync(managed: IManagedInstance, props: any): Promise<any> {
+  async resolveAsync(managed: IManagedInstance): Promise<any> {
     const mr = <ManagedReference>managed;
-    return await this._factory.context.getAsync(mr.name, null);
+    return await this._factory.context.getAsync(mr.name);
   }
 }
 
@@ -154,7 +145,7 @@ class ListResolver extends BaseManagedResolver {
     return KEYS.LIST_ELEMENT;
   }
 
-  resolve(managed: IManagedInstance, props: any): any {
+  resolve(managed: IManagedInstance): any {
     const ml = <ManagedList>managed;
     const arr = [];
     for (let i = 0; i < ml.length; i++) {
@@ -163,7 +154,7 @@ class ListResolver extends BaseManagedResolver {
     return arr;
   }
 
-  async resolveAsync(managed: IManagedInstance, props: any): Promise<any> {
+  async resolveAsync(managed: IManagedInstance): Promise<any> {
     const ml = <ManagedList>managed;
     const arr = [];
     for (let i = 0; i < ml.length; i++) {
@@ -181,7 +172,7 @@ class SetResolver extends BaseManagedResolver {
     return KEYS.SET_ELEMENT;
   }
 
-  resolve(managed: IManagedInstance, props: any): any {
+  resolve(managed: IManagedInstance): any {
     const ms = <ManagedSet>managed;
     const s = new Set();
     for (let item of ms) {
@@ -190,7 +181,7 @@ class SetResolver extends BaseManagedResolver {
     return s;
   }
 
-  async resolveAsync(managed: IManagedInstance, props: any): Promise<any> {
+  async resolveAsync(managed: IManagedInstance): Promise<any> {
     const ms = <ManagedSet>managed;
     const s = new Set();
     for (let item of ms) {
@@ -208,7 +199,7 @@ class MapResolver extends BaseManagedResolver {
     return KEYS.MAP_ELEMENT;
   }
 
-  resolve(managed: IManagedInstance, props: any): any {
+  resolve(managed: IManagedInstance): any {
     const mm = <ManagedMap>managed;
     const m = new Map();
     for (let key of mm.keys()) {
@@ -217,7 +208,7 @@ class MapResolver extends BaseManagedResolver {
     return m;
   }
 
-  async resolveAsync(managed: IManagedInstance, props: any): Promise<any> {
+  async resolveAsync(managed: IManagedInstance): Promise<any> {
     const mm = <ManagedMap>managed;
     const m = new Map();
     for (let key of mm.keys()) {
@@ -235,7 +226,7 @@ class PropertiesResolver extends BaseManagedResolver {
     return KEYS.PROPS_ELEMENT;
   }
 
-  resolve(managed: IManagedInstance, props: any): any {
+  resolve(managed: IManagedInstance): any {
     const m = <ManagedProperties>managed;
     const cfg = new ObjectConfiguration();
     const keys = m.keys();
@@ -246,7 +237,7 @@ class PropertiesResolver extends BaseManagedResolver {
     return cfg;
   }
 
-  async resolveAsync(managed: IManagedInstance, props: any): Promise<any> {
+  async resolveAsync(managed: IManagedInstance): Promise<any> {
     const m = <ManagedProperties>managed;
     const cfg = new ObjectConfiguration();
     const keys = m.keys();
@@ -266,12 +257,12 @@ class PropertyResolver extends BaseManagedResolver {
     return KEYS.PROPERTY_ELEMENT;
   }
 
-  resolve(managed: IManagedInstance, props: any): any {
+  resolve(managed: IManagedInstance): any {
     const mp = <ManagedProperty>managed;
     return this._factory.resolveManaged(mp.value);
   }
 
-  async resolveAsync(managed: IManagedInstance, props: any): Promise<any> {
+  async resolveAsync(managed: IManagedInstance): Promise<any> {
     const mp = <ManagedProperty>managed;
     return await this._factory.resolveManagedAsync(mp.value);
   }
@@ -285,12 +276,12 @@ class ObjectResolver extends BaseManagedResolver {
     return KEYS.OBJECT_ELEMENT;
   }
 
-  resolve(managed: IManagedInstance, props: any): any {
+  resolve(managed: IManagedInstance): any {
     const mo = <ManagedObject>managed;
     return this._factory.create(mo.definition, null);
   }
 
-  async resolveAsync(managed: IManagedInstance, props: any): Promise<any> {
+  async resolveAsync(managed: IManagedInstance): Promise<any> {
     const mo = <ManagedObject>managed;
     return await this._factory.createAsync(mo.definition, null);
   }
@@ -328,6 +319,20 @@ export class ManagedResolverFactory {
     }
     return this._props;
   }
+  /**
+   * 用于解析模版化的值
+   * example: {{aaa.bbb.ccc}}
+   * @param value 配置的模版值
+   */
+  tpl(value) {
+    if (value && value.indexOf('{{') > -1) {
+      return _.template(value, {
+        // use `{{` and `}}` as delimiters
+        interpolate: /{{([\s\S]+?)}}/g
+      })(this.props);
+    }
+    return value;
+  }
 
   registerResolver(resolver: IManagedResolver) {
     this.resolvers.set(resolver.type, resolver);
@@ -337,14 +342,14 @@ export class ManagedResolverFactory {
     if (!this.resolvers.has(managed.type)) {
       throw new Error(`${managed.type} resolver is not exists!`);
     }
-    return this.resolvers.get(managed.type).resolve(managed, this.props);
+    return this.resolvers.get(managed.type).resolve(managed);
   }
 
   async resolveManagedAsync(managed: IManagedInstance): Promise<any> {
     if (!this.resolvers.has(managed.type)) {
       throw new Error(`${managed.type} resolver is not exists!`);
     }
-    return await this.resolvers.get(managed.type).resolveAsync(managed, this.props);
+    return await this.resolvers.get(managed.type).resolveAsync(managed);
   }
 
   /**

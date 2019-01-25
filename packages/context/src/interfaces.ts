@@ -158,8 +158,8 @@ export interface IManagedInstance {
  */
 export interface IManagedResolver {
   type: string;
-  resolve(managed: IManagedInstance, props: any): any;
-  resolveAsync(managed: IManagedInstance, props: any): Promise<any>;
+  resolve(managed: IManagedInstance): any;
+  resolveAsync(managed: IManagedInstance): Promise<any>;
 }
 
 export interface ObjectDefinitionOptions {

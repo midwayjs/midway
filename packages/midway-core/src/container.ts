@@ -109,7 +109,7 @@ class LoggerResolver implements IManagedResolver {
     return TYPE_LOGGER;
   }
 
-  resolve(managed: IManagedInstance, props: any): any {
+  resolve(managed: IManagedInstance): any {
     const log: ManagedLogger = <ManagedLogger>managed;
     if (log.name) {
       return this.container.handlerMap.get(MidwayHandlerKey.LOGGER)(log.name);
@@ -117,8 +117,8 @@ class LoggerResolver implements IManagedResolver {
     return this.container.handlerMap.get(MidwayHandlerKey.LOGGER)(log.type);
   }
 
-  async resolveAsync(managed: IManagedInstance, props: any): Promise<any> {
-    return this.resolve(managed, props);
+  async resolveAsync(managed: IManagedInstance): Promise<any> {
+    return this.resolve(managed);
   }
 }
 
@@ -150,13 +150,13 @@ class PluginResolver implements IManagedResolver {
     return TYPE_PLUGIN;
   }
 
-  resolve(managed: IManagedInstance, props: any): any {
+  resolve(managed: IManagedInstance): any {
     const p = <ManagedPlugin>managed;
     return this.container.handlerMap.get(MidwayHandlerKey.PLUGIN)(p.name);
   }
 
-  async resolveAsync(managed: IManagedInstance, props: any): Promise<any> {
-    return this.resolve(managed, props);
+  async resolveAsync(managed: IManagedInstance): Promise<any> {
+    return this.resolve(managed);
   }
 }
 
@@ -164,6 +164,8 @@ export class MidwayContainer extends Container implements IContainer {
   controllersIds: Array<string> = [];
   middlewaresIds: Array<string> = [];
   handlerMap: Map<string, (handlerKey: string) => any>;
+  // 仅仅用于兼容requestContainer的ctx
+  ctx = {};
 
   init(): void {
     this.handlerMap = new Map();
@@ -179,6 +181,18 @@ export class MidwayContainer extends Container implements IContainer {
     this.parser.registerParser(new MiddlewareDefinitionParser(this));
 
     this.registerEachCreatedHook();
+
+    // 防止直接从applicationContext.getAsync or get对象实例时依赖当前上下文信息出错
+    // ctx is in requestContainer
+    this.registerObject('ctx', this.ctx);
+  }
+  /**
+   * update current context in applicationContext
+   * for mock and other case
+   * @param ctx ctx
+   */
+  updateContext(ctx) {
+    this.ctx = Object.assign({}, ctx || {});
   }
 
   /**
