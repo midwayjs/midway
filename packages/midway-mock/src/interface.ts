@@ -12,4 +12,13 @@ export interface MidwayApplicationOptions extends MockOption {
 
 export interface MidwayMockApplication extends MockApplication {
   applicationContext: IApplicationContext;
+  pluginContext: IApplicationContext;
+  appDir: string;
+  baseDir: string;
+  enablePlugins: any;
+  getApplicationContext(): IApplicationContext;
+  getPluginContext(): IApplicationContext;
+  getPlugin(pluginName: string): any;
+  getLogger(name?: string): any;
+  getConfig(key?: string): any;
 }
