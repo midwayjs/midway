@@ -80,7 +80,9 @@
       "**/dist",
       "**/test",
       "**/src/domain.ts",
-      "**/src/interface.ts"
+      "**/src/interface.ts",
+      "packages/midway-web/src/baseController.ts",
+      "packages/midway-web/src/decorators/babel.ts"
     ],
     "extension": [
       ".ts",
