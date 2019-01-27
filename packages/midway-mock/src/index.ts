@@ -1,11 +1,14 @@
 import { EggMock } from 'egg-mock';
 import { MidwayApplicationOptions, MidwayMockApplication } from './interface';
+export * from 'egg-mock';
 
 const mock = require('egg-mock');
 
 export interface MidwayMock extends EggMock {
   container: typeof mockContainer;
   default: typeof mock;
+  app: (option?: MidwayApplicationOptions) => MidwayMockApplication;
+  cluster: (option?: MidwayApplicationOptions) => MidwayMockApplication;
 }
 
 /**

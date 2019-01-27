@@ -1,14 +1,9 @@
 import * as assert from 'power-assert';
-import { MockApplication, EggMock } from 'egg-mock';
-import { IApplicationContext } from 'injection';
-
-interface MMockApplication extends MockApplication {
-  applicationContext: IApplicationContext;
-}
+import { MidwayMock, MidwayMockApplication } from './src';
 
 export {
   assert
 };
-export declare const app: MMockApplication;
-export declare const mock: EggMock;
-export declare const mm: EggMock;
+export declare const app: MidwayMockApplication;
+export declare const mock: MidwayMock;
+export declare const mm: MidwayMock;
