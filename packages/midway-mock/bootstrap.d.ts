@@ -4,6 +4,10 @@ import { IApplicationContext } from 'injection';
 
 interface MMockApplication extends MockApplication {
   applicationContext: IApplicationContext;
+  /**
+   * Mock class function
+   */
+  mockClassFunction(className: string, methodName: string, fn: any): any;
 }
 
 export {

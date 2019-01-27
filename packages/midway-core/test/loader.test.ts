@@ -65,6 +65,10 @@ describe('/test/loader.test.ts', () => {
 
     after(() => app.close());
 
+    it('should inject ctx be ok', async () => {
+      assert.ok(await app.applicationContext.getAsync('baseService'));
+    });
+
     it('should load ts directory and inject module', (done) => {
       request(app.callback())
         .get('/api/test')

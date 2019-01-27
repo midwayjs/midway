@@ -9,8 +9,4 @@ export interface MidwayApplicationOptions {
 }
 
 export interface MidwayMockApplication extends MockApplication {
-  /**
-   * Mock class function
-   */
-  mockClassFunction(className: string, methodName: string, fn: any): any;
 }
