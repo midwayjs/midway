@@ -3,11 +3,11 @@
 import * as qs from 'querystring';
 import * as path from 'path';
 import loadSchedule from './lib/load_schedule';
-import * as fs from 'fs';
 
 const loadEggSchedule = require('egg-schedule/lib/load_schedule');
 
 module.exports = (app) => {
+  const logger = app.getLogger('scheduleLogger');
   // don't redirect scheduleLogger
   app.loggers.scheduleLogger.unredirect('error');
 
@@ -16,29 +16,41 @@ module.exports = (app) => {
   // 'lib/schedule' load midway-schedule (class only with decorator support)
   loadSchedule(app);
 
+  // log schedule list
+  for (const s in schedules) {
+    const schedule = schedules[s];
+    if (!schedule.schedule.disable) {
+      logger.info('[egg-schedule]: register schedule %s', schedule.key);
+    }
+  }
+
   // for test purpose
+  const directory = [].concat(
+    path.join(app.config.baseDir, 'app/schedule'),
+    path.join(app.config.baseDir, 'lib/schedule'),
+    app.config.schedule.directory || [],
+  );
   app.runSchedule = (schedulePath, key = 'default') => {
-    if (!path.isAbsolute(schedulePath)) {
-      schedulePath = path.join(
-        app.config.baseDir,
-        'app/schedule',
-        schedulePath,
-      );
-      if (!fs.existsSync(schedulePath)) {
-        schedulePath = path.join(
-          app.config.baseDir,
-          'lib/schedule',
-          schedulePath,
-        );
+    // resolve real path
+    if (path.isAbsolute(schedulePath)) {
+      schedulePath = require.resolve(schedulePath);
+    } else {
+      for (const dir of directory) {
+        try {
+          schedulePath = require.resolve(path.join(dir, schedulePath));
+          break;
+        } catch (_) {
+          /* istanbul ignore next */
+        }
       }
     }
-    schedulePath = require.resolve(schedulePath);
+
     let schedule;
 
     try {
-      schedule = schedules[schedulePath] || schedules[schedulePath + '#' + key];
+      schedule = schedules[schedulePath] || schedules[schedulePath + `#${key}`];
       if (!schedule) {
-        throw new Error(`Cannot find schedule ${schedulePath}`);
+        throw new Error(`Cannot find schedule ${schedulePath}#${key}`);
       }
     } catch (err) {
       err.message = `[egg-schedule] ${err.message}`;
@@ -64,19 +76,24 @@ module.exports = (app) => {
   }
 
   // register schedule event
-  app.messenger.on('egg-schedule', (data) => {
-    const id = data.id;
-    const key = data.key;
+  app.messenger.on('egg-schedule', (info) => {
+    const { id, key } = info;
     const schedule = schedules[key];
-    const logger = app.loggers.scheduleLogger;
-    logger.info(`[${id}] ${key} task received by app`);
+
+    logger.info(`[Job#${id}] ${key} task received by app`);
 
     if (!schedule) {
-      logger.warn(`[${id}] ${key} unknown task`);
+      logger.warn(`[Job#${id}] ${key} unknown task`);
       return;
     }
+
     /* istanbul ignore next */
-    if (schedule.schedule.disable) return;
+    if (schedule.schedule.disable) {
+      logger.warn(`[Job#${id}] ${key} disable`);
+      return;
+    }
+
+    logger.info(`[Job#${id}] ${key} executing by app`);
 
     // run with anonymous context
     const ctx = app.createAnonymousContext({
@@ -85,26 +102,33 @@ module.exports = (app) => {
     });
 
     const start = Date.now();
-    const task = schedule.task;
-    logger.info(`[${id}] ${key} executing by app`);
+
     // execute
-    task(ctx, ...data.args)
-      .then(() => true) // succeed
+    return schedule
+      .task(ctx, ...info.args)
       .catch((err) => {
-        logger.error(`[${id}] ${key} execute error.`, err);
-        err.message = `[egg-schedule] ${key} execute error. ${err.message}`;
-        app.logger.error(err);
-        return false; // failed
+        logger.error(`[Job#${id}] ${key} execute error.`, err);
+        return err;
       })
-      .then((success) => {
+      .then((err) => {
+        const success = !err;
         const rt = Date.now() - start;
-        const status = success ? 'succeed' : 'failed';
-        ctx.coreLogger.info(
-          `[egg-schedule] ${key} execute ${status}, used ${rt}ms`,
-        );
+
         logger[success ? 'info' : 'error'](
-          `[${id}] ${key} execute ${status}, used ${rt}ms`,
+          `[Job#${id}] ${key} execute ${
+            success ? 'succeed' : 'failed'
+          }, used ${rt}ms`,
         );
+
+        Object.assign(info, {
+          success,
+          workerId: process.pid,
+          rt,
+          message: err && err.message,
+        });
+
+        // notify agent job finish
+        app.messenger.sendToAgent('egg-schedule', info);
       });
   });
 };
