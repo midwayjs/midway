@@ -21,7 +21,7 @@
     "midway-bin": "^1.1.0"
   },
   "dependencies": {
-    "egg-schedule": "3.4.0",
+    "egg-schedule": "^3.6.0",
     "is-type-of": "^1.2.1",
     "reflect-metadata": "^0.1.12"
   }
