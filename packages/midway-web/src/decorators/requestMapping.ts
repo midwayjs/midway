@@ -13,7 +13,7 @@ const ROUTER_NAME_METADATA = 'ROUTER_NAME_METADATA';
 const defaultMetadata = {
   [PATH_METADATA]: '/',
   [METHOD_METADATA]: RequestMethod.GET,
-  [ROUTER_NAME_METADATA]: null
+  [ROUTER_NAME_METADATA]: null,
 };
 
 export interface RequestMappingMetadata {

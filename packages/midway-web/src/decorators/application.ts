@@ -24,7 +24,7 @@ interface SchedueOpts {
   env?: [string];
   cronOptions?: {
     currentDate: string,
-    endDate: string
+    endDate: string,
   };
 }
 

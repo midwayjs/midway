@@ -21,24 +21,24 @@ function mockContainer(options: MidwayApplicationOptions) {
 }
 
 const mm2: MidwayMock = Object.assign({}, mock, {
-  container: mockContainer
+  container: mockContainer,
 });
 
 mm2.app = (options): MidwayMockApplication => {
-  if (process.env.MIDWAY_BASE_DIR && !options.baseDir) options.baseDir = process.env.MIDWAY_BASE_DIR;
-  if (process.env.MIDWAY_FRAMEWORK_PATH && !options.framework) options.framework = process.env.MIDWAY_FRAMEWORK_PATH;
+  if (process.env.MIDWAY_BASE_DIR && !options.baseDir) { options.baseDir = process.env.MIDWAY_BASE_DIR; }
+  if (process.env.MIDWAY_FRAMEWORK_PATH && !options.framework) { options.framework = process.env.MIDWAY_FRAMEWORK_PATH; }
   return mock.app(Object.assign({
     framework: options.framework || 'midway',
-    typescript: !!require.extensions['.ts']
+    typescript: !!require.extensions['.ts'],
   }, options));
 };
 
 mm2.cluster = (options) => {
-  if (process.env.MIDWAY_BASE_DIR && !options.baseDir) options.baseDir = process.env.MIDWAY_BASE_DIR;
-  if (process.env.MIDWAY_FRAMEWORK_PATH && !options.framework) options.framework = process.env.MIDWAY_FRAMEWORK_PATH;
+  if (process.env.MIDWAY_BASE_DIR && !options.baseDir) { options.baseDir = process.env.MIDWAY_BASE_DIR; }
+  if (process.env.MIDWAY_FRAMEWORK_PATH && !options.framework) { options.framework = process.env.MIDWAY_FRAMEWORK_PATH; }
   return mock.cluster(Object.assign({
     framework: options.framework || 'midway',
-    typescript: !!require.extensions['.ts']
+    typescript: !!require.extensions['.ts'],
   }, options));
 };
 
