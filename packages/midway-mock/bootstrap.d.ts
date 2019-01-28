@@ -7,3 +7,4 @@ export {
 };
 export declare const app: MidwayMockApplication;
 export declare const mock: MidwayMock;
+export declare const mm: MidwayMock;

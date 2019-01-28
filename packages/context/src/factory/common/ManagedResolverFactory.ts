@@ -29,7 +29,7 @@ import { NotFoundError } from '../../utils/errorFactory';
 /**
  * 所有解析器基类
  */
-class BaseManagedResolver implements IManagedResolver {
+export class BaseManagedResolver implements IManagedResolver {
   protected _factory: ManagedResolverFactory;
 
   constructor(factory: ManagedResolverFactory) {
