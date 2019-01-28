@@ -1,11 +1,10 @@
 'use strict';
 
 const Strategy = require('egg-schedule/lib/strategy/base');
-const Timer = require('egg-schedule/lib/timer');
+const Timer = require('egg-schedule/lib/strategy/timer');
 const Schedule = require('../../lib/schedule');
 
 const SCHEDULE = Symbol('agent#schedule');
-const TIMER = Symbol('agent#scheduleTimer');
 
 module.exports = {
   /**
@@ -24,18 +23,5 @@ module.exports = {
       });
     }
     return this[SCHEDULE];
-  },
-
-  /**
-   * @member agent#scheduleTimer
-   */
-  get scheduleTimer() {
-    if (!this[TIMER]) {
-      this[TIMER] = new Timer(this);
-      this.beforeClose(() => {
-        return this[TIMER].close();
-      });
-    }
-    return this[TIMER];
   },
 };

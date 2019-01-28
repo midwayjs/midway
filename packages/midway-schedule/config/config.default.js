@@ -17,5 +17,9 @@ module.exports = (appInfo) => {
     },
   };
 
+  config.schedule = {
+    directory: [],
+  };
+
   return config;
 };
