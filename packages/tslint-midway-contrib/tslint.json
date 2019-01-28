@@ -13,7 +13,6 @@
       true,
       "allow-declarations"
     ],
-
     "no-non-null-assertion": true,
     "no-parameter-reassignment": true,
     "no-unnecessary-type-assertion": false,
@@ -49,17 +48,26 @@
     "forin": false,
     "only-arrow-functions": false,
     "member-ordering": false,
-    "prefer-object-spread": null,
     "no-parameter-reassignment": null,
     "no-this-assignment": [
       true,
       {
-        "allowed-names": ["^self$"],
+        "allowed-names": [
+          "^self$"
+        ],
         "allow-destructuring": true
       }
     ],
     "no-object-literal-type-assertion": null,
-    "prefer-conditional-expression": false,
-    "interface-name": false
+    "interface-name": false,
+    "variable-name": false,
+    "switch-final-break": false,
+    "return-undefined": false,
+    "prefer-while": false,
+    "prefer-template": false,
+    "prefer-method-signature": false,
+    "prefer-object-spread": false,
+    "prefer-function-over-method": false,
+    "prefer-conditional-expression": false
   }
 }
