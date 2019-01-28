@@ -5,7 +5,6 @@ import { existsSync,
   readdirSync
 } from 'fs';
 import { resolve, parse, dirname, join } from 'path';
-import * as _ from 'lodash';
 import { IResource } from '../interfaces';
 
 export class Resource implements IResource {
@@ -67,7 +66,7 @@ export class Resource implements IResource {
   getSubResources(): IResource[] {
     if (this.isDir()) {
       const files: string[] = readdirSync(this.getPath());
-      const arr = _.map(files, file => {
+      const arr = files.map(file => {
         return new Resource(this.getPath(), file);
       });
 

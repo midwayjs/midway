@@ -1,3 +1,4 @@
+
 import * as assert from 'power-assert';
 import { MidwayMock, MidwayMockApplication } from './src';
 

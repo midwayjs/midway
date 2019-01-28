@@ -1,9 +1,11 @@
-import {async, init, provide} from 'injection';
+import {async, init, provide, inject} from 'injection';
 import {config, plugin} from 'midway-core';
 
 @async()
 @provide()
 export class BaseService {
+  @inject()
+  ctx;
 
   @config('hello')
   config;
