@@ -69,9 +69,7 @@
     "include": [
       "packages/**/src/*.ts",
       "packages/**/src/**/*.ts",
-      "packages/midway-bin/bin/*.js",
       "packages/midway-bin/lib/*.js",
-      "packages/midway-init/bin/*.js",
       "packages/midway-init/lib/*.js"
     ],
     "exclude": [

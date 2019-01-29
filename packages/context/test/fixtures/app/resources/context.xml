@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<objects>
-  <import resource="construction.xml" />
-  <import resource="list.xml" />
-  <import resource="object.xml" />
-
-  <configuration path="../config/config.js">
-  </configuration>
-</objects>
