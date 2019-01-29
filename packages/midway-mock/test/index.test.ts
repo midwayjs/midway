@@ -10,6 +10,22 @@ import { mm as mock, MockContainer } from '../src/';
 describe('test/index.test.ts', () => {
   afterEach(mm.restore);
 
+  it('should app has mockClassFunction', async () => {
+    assert.ok(app.mockClassFunction && typeof app.mockClassFunction === 'function');
+
+    const ts = Date.now();
+    app.mockClassFunction('baseService', 'getData', () => {
+      return 'mock_test' + ts;
+    });
+    const service: any = await app.applicationContext.getAsync('baseService');
+    assert(service.getData() === ('mock_test' + ts));
+
+    mm.restore();
+    assert(service.getData() !== ('mock_test' + ts));
+    const service1: any = await app.applicationContext.getAsync('baseService');
+    assert(service1.getData() !== ('mock_test' + ts));
+  });
+
   it('should use bootstrap to get app', () => {
     return app.httpRequest()
       .get('/api/index')

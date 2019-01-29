@@ -1,7 +1,7 @@
-import {expect} from 'chai';
-import {MidwayContainer} from '../src/container';
-import {App} from './fixtures/ts-app-inject/app';
-import { MidwayHandlerKey } from '../src/constants';
+import { expect } from 'chai';
+import { MidwayContainer, MidwayHandlerKey } from '../src';
+import { App } from './fixtures/ts-app-inject/app';
+
 const path = require('path');
 
 describe('/test/midwayContainer.test.ts', () => {
@@ -12,7 +12,7 @@ describe('/test/midwayContainer.test.ts', () => {
       loadDir: path.join(__dirname, './fixtures/ts-app-inject')
     });
 
-    const app = <App>container.get('app');
+    const app = <App> container.get('app');
     expect(app.loader).not.to.be.undefined;
     expect(app.getConfig().a).to.equal(3);
     // 其实这里循环依赖了
@@ -25,7 +25,7 @@ describe('/test/midwayContainer.test.ts', () => {
       loadDir: path.join(__dirname, './fixtures/js-app-inject')
     });
 
-    const app = <App>container.get('app');
+    const app = <App> container.get('app');
     expect(app.getConfig().a).to.equal(1);
   });
 

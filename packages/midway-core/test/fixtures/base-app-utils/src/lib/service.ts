@@ -3,6 +3,8 @@ import {provide, inject} from 'injection';
 
 @provide()
 export class BaseService {
+  @inject()
+  ctx;
 
   @config('hello')
   config;

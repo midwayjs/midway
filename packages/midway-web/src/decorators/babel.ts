@@ -6,13 +6,13 @@
  * @copyright(c) 2018-2019 Alibaba Group.
  */
 
-import {RequestMethod} from '../constants';
+import { RequestMethod } from '../constants';
 
 function route(method: string, pattern: string) {
   return (target, key, descriptor: PropertyDescriptor) => {
     descriptor.value.route = {
-      method: method,
-      pattern: pattern
+      method,
+      pattern,
     };
     return descriptor;
   };
@@ -67,5 +67,5 @@ export const babel = {
   patch,
   options,
   head,
-  all
+  all,
 };

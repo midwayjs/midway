@@ -21,4 +21,8 @@ export interface MidwayMockApplication extends MockApplication {
   getPlugin(pluginName: string): any;
   getLogger(name?: string): any;
   getConfig(key?: string): any;
+  /**
+   * Mock class function
+   */
+  mockClassFunction(className: string, methodName: string, fn: any): any;
 }

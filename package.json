@@ -8,20 +8,20 @@
     "@types/mocha": "^5.2.5",
     "@types/node": "^10.12.18",
     "autocannon": "^2.4.1",
-    "chalk": "^2.4.1",
+    "chalk": "^2.4.2",
     "debug": "^4.1.1",
     "gh-pages": "^1.2.0",
     "git-hooks": "^1.1.10",
-    "lerna": "^3.4.3",
+    "lerna": "^3.10.7",
     "lerna-relinker": "^1.4.0",
     "node-ab": "0.0.6",
-    "opencollective-postinstall": "^2.0.1",
     "opencollective": "^1.0.3",
+    "opencollective-postinstall": "^2.0.1",
     "tree-kill": "^1.2.0",
     "tslint": "^5.12.0",
     "typedoc": "^0.11.1",
     "typescript": "^3.2.0",
-    "vuepress": "^0.14.2"
+    "vuepress": "^0.14.8"
   },
   "scripts": {
     "autod": "lerna run autod",
@@ -69,9 +69,7 @@
     "include": [
       "packages/**/src/*.ts",
       "packages/**/src/**/*.ts",
-      "packages/midway-bin/bin/*.js",
       "packages/midway-bin/lib/*.js",
-      "packages/midway-init/bin/*.js",
       "packages/midway-init/lib/*.js"
     ],
     "exclude": [

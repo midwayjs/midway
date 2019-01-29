@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import { attachConstructorDataOnClass, attachMetaDataOnClass } from '../utils';
 import {
   CONFIG_KEY_CLZ,
   CONFIG_KEY_PROP,
@@ -7,14 +8,13 @@ import {
   PLUGIN_KEY_CLZ,
   PLUGIN_KEY_PROP,
 } from './metaKeys';
-import {attachConstructorDataOnClass, attachMetaDataOnClass} from '../utils';
 
 export function config(identifier?: string) {
   return function (target: any, targetKey: string, index?: number): void {
     if (typeof index === 'number') {
       attachConstructorDataOnClass(identifier, target, 'config', index);
     } else {
-      if(!identifier) {
+      if (!identifier) {
         identifier = targetKey;
       }
       attachMetaDataOnClass(target, CONFIG_KEY_CLZ, targetKey);
@@ -28,7 +28,7 @@ export function plugin(identifier?: string) {
     if (typeof index === 'number') {
       attachConstructorDataOnClass(identifier, target, 'plugin', index);
     } else {
-      if(!identifier) {
+      if (!identifier) {
         identifier = targetKey;
       }
       attachMetaDataOnClass(target, PLUGIN_KEY_CLZ, targetKey);
@@ -42,7 +42,7 @@ export function logger(identifier?: string) {
     if (typeof index === 'number') {
       attachConstructorDataOnClass(identifier, target, 'logger', index);
     } else {
-      if(!identifier) {
+      if (!identifier) {
         identifier = targetKey;
       }
       attachMetaDataOnClass(target, LOGGER_KEY_CLZ, targetKey);
