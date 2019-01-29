@@ -3,6 +3,7 @@
 import * as qs from 'querystring';
 import * as path from 'path';
 import loadSchedule from './lib/load_schedule';
+import * as fs from 'fs';
 
 const loadEggSchedule = require('egg-schedule/lib/load_schedule');
 
@@ -16,19 +17,26 @@ module.exports = (app) => {
   loadSchedule(app);
 
   // for test purpose
-  app.runSchedule = (schedulePath) => {
+  app.runSchedule = (schedulePath, key = 'default') => {
     if (!path.isAbsolute(schedulePath)) {
       schedulePath = path.join(
         app.config.baseDir,
         'app/schedule',
         schedulePath,
       );
+      if (!fs.existsSync(schedulePath)) {
+        schedulePath = path.join(
+          app.config.baseDir,
+          'lib/schedule',
+          schedulePath,
+        );
+      }
     }
     schedulePath = require.resolve(schedulePath);
     let schedule;
 
     try {
-      schedule = schedules[schedulePath];
+      schedule = schedules[schedulePath] || schedules[schedulePath + '#' + key];
       if (!schedule) {
         throw new Error(`Cannot find schedule ${schedulePath}`);
       }
