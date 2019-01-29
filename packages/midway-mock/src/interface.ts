@@ -8,6 +8,7 @@ export interface MidwayApplicationOptions extends MockOption {
   plugins?: any;
   container?: any;
   typescript?: boolean;
+  worker?: number;
 }
 
 export interface MidwayMockApplication extends MockApplication {

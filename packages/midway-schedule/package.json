@@ -13,12 +13,14 @@
     "build": "npm run lint && midway-bin build -c",
     "lint": "../../node_modules/.bin/tslint --format prose -c ../../tslint.json src/**/*.ts test/**/*.ts",
     "test": "npm run lint && midway-bin clean && NODE_ENV=unittest midway-bin test --ts",
-    "autod": "midway-bin autod"
+    "autod": "midway-bin autod",
+    "cov": "midway-bin cov --ts"
   },
   "keywords": [],
   "license": "MIT",
   "devDependencies": {
-    "midway-bin": "^1.1.0"
+    "midway-bin": "^1.1.0",
+    "midway-mock": "^1.1.2"
   },
   "dependencies": {
     "egg-schedule": "^3.6.0",
