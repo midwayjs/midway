@@ -26,21 +26,6 @@ describe('test/schedule.test.ts', () => {
       assert.deepEqual(item.schedule, {type: 'worker', interval: 2333});
     });
 
-    it('should be compatible with egg-schedule', async () => {
-      const name = 'egg-schedule';
-      application = mm.app({
-        baseDir: join(__dirname, `./fixtures/${name}`),
-        typescript: true,
-      });
-      await application.ready();
-      const list = Object.keys(application.schedules).filter((key) =>
-        key.includes('midway-schedule/test/fixtures/' + name),
-      );
-      assert(list.length === 1);
-      const item = application.schedules[list[0]];
-      assert.deepEqual(item.schedule, {type: 'worker', interval: 1000});
-    });
-
     it('should support exec app/schedule/*.js (for egg)', async () => {
       const name = 'worker-egg-schedule';
       application = mm.cluster({
@@ -65,6 +50,21 @@ describe('test/schedule.test.ts', () => {
       await sleep(5000);
       const log = getLogContent(name);
       assert(contains(log, 'hello decorator') === 4, '未正确执行 4 次');
+    });
+
+    it('should support egg & midway schedule at same time', async () => {
+      const name = 'worker-egg-midway';
+      application = mm.cluster({
+        baseDir: join(__dirname, `./fixtures/${name}`),
+        typescript: true,
+        worker: 2,
+      });
+      await application.ready();
+      await sleep(5000);
+      const log = getLogContent(name);
+      assert(contains(log, 'hehehehe') === 4, '未正确执行 4 次');
+      assert(contains(log, 'hello decorator') === 4, '未正确执行 4 次');
+      assert(contains(log, 'hello other functions') === 4, '未正确执行 4 次');
     });
 
     it('should support non-default class with @schedule decorator', async () => {
