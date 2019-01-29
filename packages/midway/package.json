@@ -1,6 +1,6 @@
 {
   "name": "midway",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "Midway Main Package",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -19,15 +19,15 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "midway-bin": "^1.1.0"
+    "midway-bin": "^1.2.0"
   },
   "dependencies": {
     "egg": "^2.14.2",
     "egg-cluster": "^1.22.2",
     "egg-core": "^4.13.1",
     "injection": "^1.1.0",
-    "midway-core": "^1.1.0",
-    "midway-web": "^1.1.2",
+    "midway-core": "^1.2.0",
+    "midway-web": "^1.2.0",
     "ts-node": "^7.0.1"
   },
   "files": [

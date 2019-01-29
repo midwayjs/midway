@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/midwayjs/midway/compare/v1.1.2...v1.2.0) (2019-01-29)
+
+
+### Bug Fixes
+
+* app.runSchedule task key ([29249e9](https://github.com/midwayjs/midway/commit/29249e9))
+
+
+### Features
+
+* midway-mock支持applicationContext获取ctx依赖注入，支持mock IoC容器中的对象方法 ([4f07c6d](https://github.com/midwayjs/midway/commit/4f07c6d))
+* transform injection to another github repo ([5f39ea9](https://github.com/midwayjs/midway/commit/5f39ea9))
+
+
+
+
+
 ## [1.1.2](https://github.com/midwayjs/midway/compare/v1.1.1...v1.1.2) (2019-01-27)
 
 **Note:** Version bump only for package midway
