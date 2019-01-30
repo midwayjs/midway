@@ -34,7 +34,7 @@
   "dependencies": {
     "debug": "^4.1.1",
     "egg": "^2.14.2",
-    "egg-core": "^4.13.1",
+    "egg-core": "4.13.1",
     "extend2": "^1.0.0",
     "globby": "^9.0.0",
     "inflection": "^1.12.0",

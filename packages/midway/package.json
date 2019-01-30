@@ -24,7 +24,7 @@
   "dependencies": {
     "egg": "^2.14.2",
     "egg-cluster": "^1.22.2",
-    "egg-core": "^4.13.1",
+    "egg-core": "4.13.1",
     "injection": "^1.1.0",
     "midway-core": "^1.2.0",
     "midway-web": "^1.2.0",
