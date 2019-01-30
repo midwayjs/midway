@@ -59,6 +59,14 @@
       }
     ],
     "no-object-literal-type-assertion": null,
+    "trailing-comma": [
+      true,
+      {
+        "multiline": {
+          "imports": "ignore"
+        }
+      }
+    ],
     "interface-name": false,
     "variable-name": false,
     "switch-final-break": false,
