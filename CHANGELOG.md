@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.2](https://github.com/midwayjs/midway/compare/v1.2.1...v1.2.2) (2019-01-30)
+
+
+### Bug Fixes
+
+* import router in base controller ([1a0b890](https://github.com/midwayjs/midway/commit/1a0b890))
+* import router to fix core ([71a2f61](https://github.com/midwayjs/midway/commit/71a2f61))
+
+
+
+
+
 ## [1.2.1](https://github.com/midwayjs/midway/compare/v1.2.0...v1.2.1) (2019-01-30)
 
 **Note:** Version bump only for package midway
