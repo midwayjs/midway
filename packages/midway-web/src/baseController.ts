@@ -1,4 +1,4 @@
-import { Router } from './router';
+import { EggRouter as Router } from '@eggjs/router';
 import {getMethodNames} from './utils';
 
 const debug = require('debug')('midway:controller');

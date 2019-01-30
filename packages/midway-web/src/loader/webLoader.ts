@@ -1,10 +1,10 @@
+import { EggRouter as Router } from '@eggjs/router';
 import { TagClsMetadata, TAGGED_CLS } from 'injection';
 import { MidwayLoader } from 'midway-core';
 import * as path from 'path';
 import 'reflect-metadata';
 import { WEB_ROUTER_CLS, WEB_ROUTER_PREFIX_CLS, WEB_ROUTER_PRIORITY, WEB_ROUTER_PROP } from '../decorators/metaKeys';
 import { loading } from '../loading';
-import { Router } from '../router';
 
 const is = require('is-type-of');
 
