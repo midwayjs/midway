@@ -1,8 +1,6 @@
 {
-  "extends": "./packages/tslint-midway-contrib/tslint.json",
-  "linterOptions": {
-    "exclude": [
-      "**/test/**"
-    ]
-  }
+  "extends": [
+    "./packages/tslint-midway-contrib/tslint.json",
+    "tslint-no-unused-expression-chai"
+  ]
 }

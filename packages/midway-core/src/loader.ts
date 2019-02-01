@@ -57,7 +57,7 @@ export class MidwayLoader extends EggLoader {
     }
 
     const name = plugin.package || plugin.name;
-    let lookupDirs = [];
+    const lookupDirs = [];
 
     // 尝试在以下目录找到匹配的插件
     //  -> {APP_PATH}/node_modules
@@ -144,7 +144,7 @@ export class MidwayLoader extends EggLoader {
 
   protected loadApplicationContext() {
     // this.app.options.container 测试用例编写方便点
-    let containerConfig = this.config.container || this.app.options.container || {};
+    const containerConfig = this.config.container || this.app.options.container || {};
     // 在 super contructor 中会调用到getAppInfo，之后会被赋值
     // 如果是typescript会加上 dist 或者 src 目录
     this.applicationContext = new MidwayContainer(this.baseDir);
@@ -196,7 +196,7 @@ export class MidwayLoader extends EggLoader {
         if (!self.pluginLoaded && isPluginName(prop) && !(prop in pluginContainerProps)) {
           // save to context when called app.xxx = xxx
           // now we can get plugin from context
-          debug(`pluginContext register [${<string>prop}]`);
+          debug(`pluginContext register [${prop as string}]`);
           self.pluginContext.registerObject(prop, attributes.value);
         }
         return Object.defineProperty(target, prop, attributes);
@@ -206,7 +206,7 @@ export class MidwayLoader extends EggLoader {
     this.getLoadUnits()
       .forEach(unit => {
         // 兼容旧插件加载方式
-        let ret = this.loadFile(this.resolveModule(path.join(unit.path, fileName)));
+        const ret = this.loadFile(this.resolveModule(path.join(unit.path, fileName)));
         if (ret) {
           // midway 的插件会返回对象
           debug(`pluginContext register [${unit.name}]`);

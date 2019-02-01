@@ -16,7 +16,7 @@ class Route {
 }
 
 export class BaseController {
-  routes: Array<Route> = [];
+  routes: Route[] = [];
 
   constructor() {
     this.init();

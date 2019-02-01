@@ -72,11 +72,11 @@ export class MidwayRequestContainer extends MidwayContainer {
         definition.constructorArgs = [valueManagedIns];
       }
       // create object from applicationContext definition for requestScope
-      return await this.resolverFactory.createAsync(definition, args);
+      return this.resolverFactory.createAsync(definition, args);
     }
 
     if (this.parent) {
-      return await this.parent.getAsync<T>(identifier, args);
+      return this.parent.getAsync<T>(identifier, args);
     }
   }
 }

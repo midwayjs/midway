@@ -49,7 +49,6 @@ export function otherFactory3(context: IApplicationContext) {
   return new MyTestAuto('test');
 }
 
-
 providerWrapper([
   {
     id: 'otherFactory',

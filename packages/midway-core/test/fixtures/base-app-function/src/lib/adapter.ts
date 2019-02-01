@@ -1,5 +1,4 @@
-import {provide} from 'injection';
-import { autowire } from 'injection';
+import { autowire, provide } from 'injection';
 
 @provide()
 @autowire(false)
@@ -10,4 +9,3 @@ export class GoogleAdapter {
 @provide()
 export class BaiduAdapter {
 }
-

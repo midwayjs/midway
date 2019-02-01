@@ -4,7 +4,7 @@ import * as extend2 from 'extend2';
 describe('/test/base.test.ts', () => {
   it('should proxy app when set property', () => {
     let app = {};
-    let pluginContext = {};
+    const pluginContext = {};
 
     app = new Proxy<any>(app, {
       defineProperty(target, prop, attributes) {

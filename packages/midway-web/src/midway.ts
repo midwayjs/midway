@@ -6,9 +6,9 @@ import * as path from 'path';
 
 const MIDWAY_PATH = path.dirname(__dirname);
 
-class MidwayApplication extends (<{
+class MidwayApplication extends (Application as {
   new(...x)
-}> Application) {
+}) {
 
   get [Symbol.for('egg#loader')]() {
     return AppWorkerLoader;
@@ -35,15 +35,15 @@ class MidwayApplication extends (<{
   }
 
   getPluginContext() {
-    return (<AppWorkerLoader>this.loader).pluginContext;
+    return (this.loader as AppWorkerLoader).pluginContext;
   }
 
   getApplicationContext() {
-    return (<AppWorkerLoader>this.loader).applicationContext;
+    return (this.loader as AppWorkerLoader).applicationContext;
   }
 
   generateController(controllerMapping: string) {
-    return (<AppWorkerLoader>this.loader).generateController(controllerMapping);
+    return (this.loader as AppWorkerLoader).generateController(controllerMapping);
   }
 
   /**
@@ -90,9 +90,9 @@ class MidwayApplication extends (<{
   }
 }
 
-class MidwayAgent extends (<{
+class MidwayAgent extends (Agent as {
   new(...x)
-}> Agent) {
+}) {
 
   get [Symbol.for('egg#loader')]() {
     return AgentWorkerLoader;
@@ -115,11 +115,11 @@ class MidwayAgent extends (<{
   }
 
   getPluginContext() {
-    return (<AgentWorkerLoader>this.loader).pluginContext;
+    return (this.loader as AgentWorkerLoader).pluginContext;
   }
 
   getApplicationContext() {
-    return (<AgentWorkerLoader>this.loader).applicationContext;
+    return (this.loader as AgentWorkerLoader).applicationContext;
   }
 
   /**

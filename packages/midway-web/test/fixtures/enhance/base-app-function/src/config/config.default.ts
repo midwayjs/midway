@@ -11,5 +11,4 @@ export const plugins = {
   plugin2: true
 };
 
-
 export const adapterName = 'google';

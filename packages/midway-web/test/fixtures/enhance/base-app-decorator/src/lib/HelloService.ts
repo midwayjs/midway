@@ -1,10 +1,9 @@
 import {provide, inject} from 'injection';
 import { BaseService } from './service';
 
-
 @provide()
 export class HelloService {
-  xxx: Array<string> = ['a', 'b'];
+  xxx: string[] = ['a', 'b'];
 
   name: string;
 

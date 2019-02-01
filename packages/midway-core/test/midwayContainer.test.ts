@@ -12,7 +12,7 @@ describe('/test/midwayContainer.test.ts', () => {
       loadDir: path.join(__dirname, './fixtures/ts-app-inject')
     });
 
-    const app = <App> container.get('app');
+    const app = container.get('app') as App;
     expect(app.loader).not.to.be.undefined;
     expect(app.getConfig().a).to.equal(3);
     // 其实这里循环依赖了
@@ -25,7 +25,7 @@ describe('/test/midwayContainer.test.ts', () => {
       loadDir: path.join(__dirname, './fixtures/js-app-inject')
     });
 
-    const app = <App> container.get('app');
+    const app = container.get('app') as App;
     expect(app.getConfig().a).to.equal(1);
   });
 

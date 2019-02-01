@@ -1,6 +1,5 @@
-import {Loader} from './loader';
-import {provide} from 'injection';
-import {inject} from 'injection';
+import { inject, provide } from 'injection';
+import { Loader } from './loader';
 
 @provide()
 export class App {
