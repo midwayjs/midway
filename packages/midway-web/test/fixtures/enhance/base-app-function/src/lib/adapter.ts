@@ -9,4 +9,3 @@ export class GoogleAdapter {
 export class BaiduAdapter {
 
 }
-

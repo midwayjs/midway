@@ -1,7 +1,6 @@
 import {config, plugin} from 'midway-core';
 import {provide, async, init, inject} from 'injection';
 
-
 @provide()
 export class A {
   config = {

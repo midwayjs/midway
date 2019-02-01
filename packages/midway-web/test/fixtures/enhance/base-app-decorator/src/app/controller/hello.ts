@@ -6,9 +6,9 @@ import { HelloService } from '../../lib/HelloService';
 @provide()
 @controller('/hello')
 export class HelloController {
-  name: Array<string> = ['a', 'b'];
+  name: string[] = ['a', 'b'];
 
-  xxx: string = 'hjjj';
+  xxx = 'hjjj';
 
   aaaa;
 

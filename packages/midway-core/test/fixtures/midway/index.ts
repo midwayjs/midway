@@ -51,9 +51,9 @@ export class AgentWorkerLoader extends MidwayLoader {
 
 }
 
-class MidwayApplication extends (<{
+class MidwayApplication extends (Application as {
   new(...x)
-}> Application) {
+}) {
 
   get [Symbol.for('egg#loader')]() {
     return AppWorkerLoader;
@@ -68,9 +68,9 @@ class MidwayApplication extends (<{
   }
 }
 
-class MidwayAgent extends (<{
+class MidwayAgent extends (Agent as {
   new(...x)
-}> Agent) {
+}) {
 
   get [Symbol.for('egg#loader')]() {
     return AgentWorkerLoader;

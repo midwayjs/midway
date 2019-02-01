@@ -1,7 +1,6 @@
 /**
  * Midway Loading 文件加载
  */
-/* tslint:disable:no-unused-expression */
 const debug = require('debug')('midway:loading');
 const is = require('is-type-of');
 const globby = require('globby');
@@ -18,7 +17,7 @@ function inject(obj, properties, result) {
     obj[property] = result;
     return;
   }
-  obj[property] || (obj[property] = {});
+  obj[property] = obj[property] || {};
   inject(obj[property], properties, result);
 }
 
@@ -98,4 +97,3 @@ export function loading(files, options) {
 
   return results;
 }
-/* tslint:enable:no-unused-expression */
