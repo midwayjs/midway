@@ -1,4 +1,4 @@
-/**!
+/**
  * Midway Loading 文件加载
  */
 const debug = require('debug')('midway:loading');
@@ -13,29 +13,29 @@ export function loading(files, options) {
 
   options = Object.assign({
     call: true,
-    ignore: function(exports, file, dir) {
+    ignore(exports, file, dir) {
       return false;
     },
-    resultHandler: function(result, file, dir, exports) {
+    resultHandler(result, file, dir, exports) {
       return result;
     },
-    propertyHandler: function(properties, name, file) {
+    propertyHandler(properties, name, file) {
       return properties;
     }
   }, options);
 
   files = [].concat(files);
 
-  let results = [];
-  let loadDirs = [].concat(options.loadDirs);
+  const results = [];
+  const loadDirs = [].concat(options.loadDirs);
 
   loadDirs.forEach((dir) => {
-    let fileResults = globby.sync(files, {cwd: dir});
+    const fileResults = globby.sync(files, {cwd: dir});
 
     fileResults.forEach((name) => {
       const file = path.join(dir, name);
       debug(`LoadFiles => [${file}]: will load`);
-      let exports = require(file);
+      const exports = require(file);
       if (options.ignore(exports, file, dir)) {
         return;
       }

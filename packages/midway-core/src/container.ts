@@ -110,7 +110,7 @@ class LoggerResolver implements IManagedResolver {
   }
 
   resolve(managed: IManagedInstance): any {
-    const log: ManagedLogger = <ManagedLogger>managed;
+    const log: ManagedLogger = managed as ManagedLogger;
     if (log.name) {
       return this.container.handlerMap.get(MidwayHandlerKey.LOGGER)(log.name);
     }
@@ -151,7 +151,7 @@ class PluginResolver implements IManagedResolver {
   }
 
   resolve(managed: IManagedInstance): any {
-    const p = <ManagedPlugin>managed;
+    const p = managed as ManagedPlugin;
     return this.container.handlerMap.get(MidwayHandlerKey.PLUGIN)(p.name);
   }
 
@@ -161,8 +161,8 @@ class PluginResolver implements IManagedResolver {
 }
 
 export class MidwayContainer extends Container implements IContainer {
-  controllersIds: Array<string> = [];
-  middlewaresIds: Array<string> = [];
+  controllersIds: string[] = [];
+  middlewaresIds: string[] = [];
   handlerMap: Map<string, (handlerKey: string) => any>;
   // 仅仅用于兼容requestContainer的ctx
   ctx = {};
@@ -206,8 +206,8 @@ export class MidwayContainer extends Container implements IContainer {
   }) {
     const loadDirs = [].concat(opts.loadDir || []);
 
-    for (let dir of loadDirs) {
-      let fileResults = globby.sync(['**/**.ts', '**/**.js', '!**/**.d.ts'].concat(opts.pattern || []), {
+    for (const dir of loadDirs) {
+      const fileResults = globby.sync(['**/**.ts', '**/**.js', '!**/**.d.ts'].concat(opts.pattern || []), {
         cwd: dir,
         ignore: [
           '**/node_modules/**',
@@ -219,15 +219,15 @@ export class MidwayContainer extends Container implements IContainer {
         ].concat(opts.ignore || []),
       });
 
-      for (let name of fileResults) {
+      for (const name of fileResults) {
         const file = path.join(dir, name);
         debug(`binding file => ${file}`);
-        let exports = require(file);
+        const exports = require(file);
 
         if (is.class(exports) || is.function(exports)) {
           this.bindClass(exports);
         } else {
-          for (let m in exports) {
+          for (const m in exports) {
             const module = exports[m];
             if (is.class(module) || is.function(module)) {
               this.bindClass(module);
@@ -238,9 +238,9 @@ export class MidwayContainer extends Container implements IContainer {
     }
   }
 
-  private bindClass(module) {
+  protected bindClass(module) {
     if (is.class(module)) {
-      let metaData = <TagClsMetadata>Reflect.getMetadata(TAGGED_CLS, module);
+      const metaData = Reflect.getMetadata(TAGGED_CLS, module) as TagClsMetadata;
       if (metaData) {
         this.bind(metaData.id, module);
       } else {
@@ -248,7 +248,7 @@ export class MidwayContainer extends Container implements IContainer {
         this.bind(camelcase(module.name), module);
       }
     } else {
-      let info: {
+      const info: {
         id: ObjectIdentifier,
         provider: (context?: IApplicationContext) => any,
         scope?: Scope,
@@ -283,8 +283,8 @@ export class MidwayContainer extends Container implements IContainer {
       }
       // lack of field
       if (constructorMetaData && constructorArgs) {
-        for (let idx in constructorMetaData) {
-          let index = parseInt(idx, 10);
+        for (const idx in constructorMetaData) {
+          const index = parseInt(idx, 10);
           const propertyMeta = constructorMetaData[index];
           let result;
 
@@ -345,7 +345,7 @@ export class MidwayContainer extends Container implements IContainer {
    * @param target
    * @returns {Array<string>}
    */
-  private getClzSetterProps(setterClzKey, target): Array<string> {
+  private getClzSetterProps(setterClzKey, target): string[] {
     return Reflect.getMetadata(setterClzKey, target);
   }
 
@@ -359,8 +359,8 @@ export class MidwayContainer extends Container implements IContainer {
    */
   private defineGetterPropertyValue(setterProps, metadataKey, instance, getterHandler) {
     if (setterProps && getterHandler) {
-      for (let prop of setterProps) {
-        let propertyKey = Reflect.getMetadata(metadataKey, instance, prop);
+      for (const prop of setterProps) {
+        const propertyKey = Reflect.getMetadata(metadataKey, instance, prop);
         if (propertyKey) {
           Object.defineProperty(instance, prop, {
             get: () => getterHandler(propertyKey),
@@ -380,7 +380,7 @@ export class MidwayContainer extends Container implements IContainer {
     super.registerCustomBinding(objectDefinition, target);
 
     // Override the default scope to request
-    let objDefOptions: ObjectDefinitionOptions = Reflect.getMetadata(OBJ_DEF_CLS, target);
+    const objDefOptions: ObjectDefinitionOptions = Reflect.getMetadata(OBJ_DEF_CLS, target);
     if (objDefOptions && !objDefOptions.scope) {
       debug(`register @scope to default value(request), id=${objectDefinition.id}`);
       objectDefinition.scope = ScopeEnum.Request;

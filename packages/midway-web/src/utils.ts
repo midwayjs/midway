@@ -3,7 +3,7 @@ import 'reflect-metadata';
 export function attachMetaDataOnClass(clz, key, value) {
   // save method name on class
   let classMetaValue = Reflect.getMetadata(key, clz);
-  if(classMetaValue) {
+  if (classMetaValue) {
     classMetaValue = classMetaValue.concat(value);
   } else {
     classMetaValue = [value];
@@ -42,12 +42,12 @@ export function getMethodNames(obj) {
     const allOwnKeysOnPrototype = Object.getOwnPropertyNames(proto);
     // get methods from es6 class
     allOwnKeysOnPrototype.forEach(k => {
-      if(typeof obj[k] === 'function' && k !== 'constructor') {
+      if (typeof obj[k] === 'function' && k !== 'constructor') {
         result.push(k);
       }
     });
   }
-  while(proto && proto !== Object.prototype);
+  while (proto && proto !== Object.prototype);
 
   // leave out those methods on Object's prototype
   return result.filter(k => {

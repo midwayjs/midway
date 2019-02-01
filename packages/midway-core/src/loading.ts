@@ -1,6 +1,7 @@
-/**!
+/**
  * Midway Loading 文件加载
  */
+/* tslint:disable:no-unused-expression */
 const debug = require('debug')('midway:loading');
 const is = require('is-type-of');
 const globby = require('globby');
@@ -26,13 +27,13 @@ export function loading(files, options) {
 
   options = Object.assign({
     call: true,
-    ignore: function(exports, file, dir) {
+    ignore(exports, file, dir) {
       return false;
     },
-    resultHandler: function(result, file, dir, exports) {
+    resultHandler(result, file, dir, exports) {
       return result;
     },
-    propertyHandler: function(properties, name, file) {
+    propertyHandler(properties, name, file) {
       return properties;
     }
   }, options);
@@ -41,16 +42,16 @@ export function loading(files, options) {
 
   const into = is.object(options.into) && options.into;
   const flatten = !!options.flatten;
-  let results = [];
-  let loadDirs = [].concat(options.loadDirs);
+  const results = [];
+  const loadDirs = [].concat(options.loadDirs);
 
   loadDirs.forEach((dir) => {
-    let fileResults = globby.sync(files, {cwd: dir});
+    const fileResults = globby.sync(files, {cwd: dir});
 
     fileResults.forEach((name) => {
       const file = path.join(dir, name);
       debug(`LoadFiles => [${file}]: will load`);
-      let exports = require(file);
+      const exports = require(file);
       if (options.ignore(exports, file, dir)) {
         return;
       }
@@ -67,7 +68,7 @@ export function loading(files, options) {
         const reg = /^[a-z][\.a-z0-9_-]*$/i;  // 不支持 comma(,)
         let properties = name.replace(/\.js$/, '')
           .split('/')
-          .map( property => {
+          .map(property => {
             if (!reg.test(property)) {
               throw new Error(`${property} does not match ${reg} in ${name}`);
             }
@@ -97,3 +98,4 @@ export function loading(files, options) {
 
   return results;
 }
+/* tslint:enable:no-unused-expression */
