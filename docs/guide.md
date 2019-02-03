@@ -199,6 +199,8 @@ midway 使用 koa-router 作为路由的承载者，同时在 ts 的语法上做
 在新的 ts 体系中，我们的控制器目录为 `app/controller` ，我们在其中编写 `*.ts` 文件。例如下面的 `userController.ts` ，我们提供了一个获取用户的接口。
 
 ```typescript
+import { provide, controller, inject, get } from 'midway';
+
 @provide()
 @controller('/user')
 export class UserController {
@@ -317,6 +319,8 @@ midway 除了支持 eggjs 原本的 app.xx 的插件用法，同时，也可以�
 :::
 
 ```typescript
+import { provide, plugin } from 'midway';
+
 @provide()
 export class BaseService {
 
@@ -360,6 +364,8 @@ export const hello = 1;
 ```
 
 ```typescript
+import { provide, config } from 'midway';
+
 @provide()
 export class BaseService {
 
@@ -379,8 +385,9 @@ midawy 的定时任务是基于 [egg 定时任务](https://eggjs.org/zh-cn/basic
 // src/lib/schedule/hello.ts
 'use strict';
 
-import { schedule } from 'midway';
+import { provide, schedule } from 'midway';
 
+@provide()
 @schedule({
   interval: 2333, // 2.333s 间隔
   type: 'worker', // 指定某一个 worker 执行
@@ -416,6 +423,8 @@ module.exports = appInfo => {
 这个时候可以用 `@logger` 来获取日志实例。
 
 ```typescript
+import { provide, logger } from 'midway';
+
 @provide()
 export class BaseService {
 
@@ -532,7 +541,7 @@ test
 {
   "scripts": {
     "test": "midway-bin test --ts",
-    "cov": "midway-bin cov --ts",
+    "cov": "midway-bin cov --ts"
   }
 }
 ```
@@ -561,7 +570,6 @@ npm test
 
 ```typescript
 // test/controller/home.test.js
-const assert = require('assert');
 import { mm } from 'midway-mock';
 
 describe('test/controller/home.test.ts', () => {
