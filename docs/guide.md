@@ -237,7 +237,7 @@ midway 针对 web 请求，提供了和 koa-router 对应的方法装饰器，�
 
 ```typescript
 @get('/:id')
-async getUser(ctx, next): Promise<void> {
+async getUser(ctx): Promise<void> {
     // TODO ctx...
 }
 ```
