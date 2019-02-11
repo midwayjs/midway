@@ -170,7 +170,7 @@ src/config
 
 ### 启动自定义
 
-启动自动以依旧保留可用，目录变为 `src/app.ts`，文档查看 [框架扩展](https://eggjs.org/zh-cn/basics/app-start.html)。
+启动自定义依旧保留可用，目录变为 `src/app.ts`，文档查看 [启动自定义](https://eggjs.org/zh-cn/basics/app-start.html)。
 
 如果想在 `app.ts` 中调用 IoC 中的对象，可以通过以下方法。
 
