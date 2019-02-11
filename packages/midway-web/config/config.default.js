@@ -1,6 +1,7 @@
 'use strict';
 
 const path = require('path');
+const mkdirp = require('mkdirp');
 
 module.exports = (appInfo) => {
   const exports = {};
@@ -39,6 +40,7 @@ module.exports = (appInfo) => {
   if (process.env.NODE_LOG_DIR) {
     alinodeLogdir = process.env.NODE_LOG_DIR;
   }
+  mkdirp.sync(alinodeLogdir);
 
   exports.alinode = {
     logdir: alinodeLogdir,
