@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.4](https://github.com/midwayjs/midway/compare/v1.2.3...v1.2.4) (2019-02-11)
+
+
+### Bug Fixes
+
+* fix default logdir for alinode plugin ([1f737f7](https://github.com/midwayjs/midway/commit/1f737f7))
+
+
+
+
+
 ## [1.2.3](https://github.com/midwayjs/midway/compare/v1.2.2...v1.2.3) (2019-02-01)
 
 

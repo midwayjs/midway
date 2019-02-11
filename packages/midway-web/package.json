@@ -1,6 +1,6 @@
 {
   "name": "midway-web",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "Midway Web Scene",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -43,6 +43,7 @@
     "is-type-of": "^1.2.1",
     "midway-core": "^1.2.3",
     "midway-schedule": "^1.2.0",
+    "mkdirp": "^0.5.1",
     "reflect-metadata": "^0.1.12"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
