@@ -8,7 +8,7 @@ nav: default
 
 Since 2013, Midway has kept upgrading almost every year, from Express to Koa1/2 without absence of trend.
 
-Nowadays, Node.js goes ahead of the simple SLA, not only in the Alibaba Group but also the Community, and turn toward to the full-stack. With this trending, the MidwayJs Team come with the responsibility of supporting the Alibaba Group's Node.js Applications, and we also provide some kind of forms like `Pandora.js`, `Sandbox` to help Applications become more stable and reliable.
+Nowadays, Node.js goes ahead of the simple single-page application, not only in the Alibaba Group but also the Community, and go toward to the full-stack. With this trending, the MidwayJs Team come with the responsibility of supporting the Alibaba Group's Node.js Applications, and we also provide tools like `Pandora.js`, `Sandbox` to help Applications become more stable and reliable.
 
 During 2017, we upgraded the Midway core to Koa2 to support async/await by Midway v5.3 inside the Alibaba Group.
 ''
@@ -48,7 +48,7 @@ $ npm run dev
 
 The structure of Midway is similar to Eggjs, but there are still differences:
 
-* TypeScript code is located in `src/`, and built out `dist/`.
+* TypeScript code is located in `src/`, and built out `dist/`.
 * The original `app/` is moved to `src/app/`.
 * It is suggested that write your business logic to the `lib/`, such as `lib/service`.
 
@@ -122,7 +122,7 @@ With the Midway features like automatic scanner and IoC, we don't need to use fi
 
 ## Quick Guide
 
-To quickly use the Midway, you need for things like:
+To quickly use the Midway, you need more things like:
 
 * Learn basic Typescript, there is [quick start](ts_start.md).
 * Object oriented is recommended, you will feel free if you like `class`.
@@ -175,7 +175,6 @@ module.exports = app => {
     // Get singleton object by global scope
     const obj = await app.applicationContext.getAsync('xxx');
 
-    // 从请求作用域拿对象
     // Get object by current request scope
     const ctx = app.createAnonymousContext();
     const obj = await ctx.requestContext.getAsync('xxx');
@@ -186,7 +185,7 @@ module.exports = app => {
 
 ## Router & Controller
 
-Midway use the koa-router as router solution, and provide more syntactic sugar that users can easyly declare router and controller with decorators by TypeScript.
+Midway use the `koa-router` as router solution, and provide more syntactic sugar that users can easyly declare router and controller with decorators by TypeScript.
 
 ### Router decorator
 
@@ -207,7 +206,6 @@ export class UserController {
     ctx.body = {success: true, message: 'OK', data: user};
   }
 }
-
 ```
 
 We can use `@controller` decorator to declare this class as a Controller. And there is function decorator for different request types.
@@ -377,7 +375,7 @@ export class HelloCron {
 }
 ```
 
-PS: The schedule class need `export` to be loadedable. And the `.ts` file can `export` multi schedule class except `default class`.
+PS: The schedule class need `export` to be loadable. And the `.ts` file can `export` multi schedule class except `default class`.
 
 ### Logger inject
 
@@ -480,7 +478,7 @@ After a lot of practice, we have a standard set of test tools.
 * Assert library: assert/chai
 * Mock: [midway-mock](https://www.npmjs.com/package/midway-mock)
 
-### 测试目录结构
+### Directory Structure
 
 Test code is demand to be put in `test/` directory, include `fixtures/` and assistant scripts.
 
@@ -656,7 +654,7 @@ app.applicationContext is the application context of IoC Container, we can async
 
 ### Building
 
-Because Typescript is a language that need to compile, so we could using tools like `ts-node` to develop locally. But in server side, we hope using the compiled JavaScript code to run for better performance.
+Because Typescript is a language that need to compile, so we could using tools like `ts-node` to develop locally. In server side, we hope using the compiled JavaScript code to run for better performance.
 
 Thanks to the tool `tsc` which provided by Typescript office to do this job. It will auto load the `tsconfig.json` to do some compiler setups, and Midway has provide a template setup in default, but it can be edited by us freely. And, we provide `build` command to help user simply using it.
 
