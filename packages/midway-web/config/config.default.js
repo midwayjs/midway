@@ -34,8 +34,14 @@ module.exports = (appInfo) => {
     ]
   };
 
+  let alinodeLogdir = path.join(appInfo.root, 'logs/alinode');
+  // try to use NODE_LOG_DIR first
+  if (process.env.NODE_LOG_DIR) {
+    alinodeLogdir = process.env.NODE_LOG_DIR;
+  }
+
   exports.alinode = {
-    logdir: path.join(appInfo.root, 'logs/alinode'),
+    logdir: alinodeLogdir,
     error_log: [
       path.join(appInfo.root, `logs/${appInfo.pkg.name}/common-error.log`),
       path.join(appInfo.root, 'logs/stderr.log'),
