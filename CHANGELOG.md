@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://github.com/midwayjs/midway/compare/v1.2.4...v1.3.0) (2019-02-12)
+
+
+### Bug Fixes
+
+* remove inject api generator ([203478e](https://github.com/midwayjs/midway/commit/203478e))
+
+
+### Features
+
+* add new doc command ([972db71](https://github.com/midwayjs/midway/commit/972db71))
+* support process.env.PORT in dev command ([0756f0e](https://github.com/midwayjs/midway/commit/0756f0e))
+
+
+
+
+
 ## [1.2.4](https://github.com/midwayjs/midway/compare/v1.2.3...v1.2.4) (2019-02-11)
 
 
