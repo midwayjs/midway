@@ -5,7 +5,6 @@ module.exports = {
   target: 'ES2015',
   moduleResolution: 'node',
   src: [
-    'packages/context/src',
     'packages/midway/src',
     'packages/midway-core/src',
     'packages/midway-mock/src',

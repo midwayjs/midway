@@ -14,7 +14,7 @@
     "midway-bin": "1",
     "midway-mock": "1",
     "tslib": "^1.8.1",
-    "ts-node": "^7.0.1",
+    "ts-node": "^8.0.2",
     "tslint": "^5.9.1",
     "typescript": "^3.2.0"
   },
