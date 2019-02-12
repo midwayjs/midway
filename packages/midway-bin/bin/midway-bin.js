@@ -2,5 +2,5 @@
 
 'use strict';
 
-const Command = require('../');
+const Command = require('../').MidwayBin;
 new Command().start();

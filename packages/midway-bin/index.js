@@ -12,7 +12,7 @@ class MidwayBin extends Command {
   }
 }
 
-module.exports = exports = MidwayBin;
+exports.MidwayBin = MidwayBin;
 exports.AutodCommand = require('./lib/cmd/autod');
 exports.BuildCommand = require('./lib/cmd/build');
 exports.CovCommand = require('./lib/cmd/cov');
@@ -21,3 +21,4 @@ exports.TestCommand = require('./lib/cmd/test');
 exports.DebugCommand = require('./lib/cmd/debug');
 exports.PkgfilesCommand = require('./lib/cmd/pkgfiles');
 exports.CleanCommand = require('./lib/cmd/clean');
+exports.DocCommand = require('./lib/cmd/doc');
