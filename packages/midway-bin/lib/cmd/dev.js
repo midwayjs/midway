@@ -4,7 +4,7 @@ class DevCommand extends require('egg-bin/lib/cmd/dev') {
   constructor(rawArgv) {
     super(rawArgv);
     this.usage = 'Usage: midway-bin dev [dir] [options]';
-    this.defaultPort = 7001;
+    this.defaultPort = process.env.PORT || 7001;
   }
 
   * run(context) {
