@@ -100,6 +100,30 @@ midway-bin clean
 这里的路径相对于应用的根目录。
 :::
 
+### doc 命令
+
+midway-bin doc 命令用于通过 typedoc 生成文档，比如 midway 的 api 就是通过此命令生成的。
+
+```bash
+midway-bin doc
+```
+
+使用的[命令参数](https://typedoc.org/guides/arguments/)和 typedoc 一致。
+
+直接可使用的参数包括以下这些，有些已经指定了默认值。
+
+- `--options [typedoc.js]` Specify a js option file that should be loaded.
+- `--out -o [outPath]` Specifies the location the documentation should be written to.
+- `--mode -m` default value is `file`, Specifies the output mode the project is used to be compiled with.
+- `--exclude` Exclude files by the given pattern when a path is provided as source.
+- `--theme` default value is `default` Specify the path to the theme that should be used.
+- `--excludeExternals` default value is `true` Prevent externally resolved TypeScript files from being documented.
+- `--ignoreCompilerErrors` default value is `true` Generates documentation, even if the project does not TypeScript compile.
+- `--hideGenerator` default value is `true` Do not print the TypeDoc link at the end of the page.
+
+::: tip
+如果指定了 `--options` 参数，那么其他的参数都会失效，请都在 `--options` 参数指定的文件中进行处理。
+:::
 
 ## midway-init
 

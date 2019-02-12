@@ -26,7 +26,8 @@
     "egg-bin": "^4.10.0",
     "fs-extra": "^7.0.1",
     "globby": "^9.0.0",
-    "mz-modules": "^2.1.0"
+    "mz-modules": "^2.1.0",
+    "typedoc": "^0.14.2"
   },
   "devDependencies": {
     "co-mocha": "^1.2.2",

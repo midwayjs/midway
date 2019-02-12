@@ -41,9 +41,8 @@ Add `midway-bin` to `package.json` scripts like [egg-bin], but just replace comm
 
 - build
 - clean
+- doc
  
-add `build` command for new midway.
-
 ### build
 
 build typescript source file to dist directory like `tsc`  and copy js/css/html file to same place.
@@ -81,6 +80,29 @@ clean a dist directory by build
 ```bash
 $ midway-bin clean
 ```
+
+### doc
+
+generate application document by typedoc
+
+```bash
+$ midway-bin doc
+```
+
+#### options
+
+like typedoc, see [link](https://typedoc.org/guides/arguments/)
+
+- `--options [typedoc.js]` Specify a js option file that should be loaded.
+- `--out -o [outPath]` Specifies the location the documentation should be written to.
+- `--mode -m` default value is `file`, Specifies the output mode the project is used to be compiled with.
+- `--exclude` Exclude files by the given pattern when a path is provided as source.
+- `--theme` default value is `default` Specify the path to the theme that should be used.
+- `--excludeExternals` default value is `true` Prevent externally resolved TypeScript files from being documented.
+- `--ignoreCompilerErrors` default value is `true` Generates documentation, even if the project does not TypeScript compile.
+- `--hideGenerator` default value is `true` Do not print the TypeDoc link at the end of the page.
+
+> Tips: If the options parameter is supplied, the other default parameters are invalid
 
 ## License
 

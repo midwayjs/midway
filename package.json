@@ -20,7 +20,6 @@
     "tree-kill": "^1.2.0",
     "tslint": "^5.12.0",
     "tslint-no-unused-expression-chai": "^0.1.4",
-    "typedoc": "^0.14.2",
     "typescript": "^3.2.0",
     "vuepress": "^0.14.8"
   },
@@ -42,7 +41,7 @@
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
     "docs:deploy": "node ./scripts/deploy_doc.js",
-    "gen-api-ref": "typedoc --options typedoc.js",
+    "gen-api-ref": "node ./packages/midway-bin/bin/midway-bin.js doc --options typedoc.js",
     "postinstall": "opencollective-postinstall"
   },
   "keywords": [
