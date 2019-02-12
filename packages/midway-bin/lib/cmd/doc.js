@@ -12,11 +12,13 @@ class DocCommand extends Command {
         description: 'Specifies the location the documentation should be written to.',
         type: 'string',
         default: 'doc',
+        alias: 'o',
       },
       mode: {
         description: 'Specifies the output mode the project is used to be compiled with.',
         type: 'string',
         default: 'file',
+        alias: 'm',
       },
       options: {
         description: 'Specify a js option file that should be loaded. If not specified TypeDoc will look for ‘typedoc.json’ in the current directory.',

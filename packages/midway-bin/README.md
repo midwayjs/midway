@@ -94,8 +94,8 @@ $ midway-bin doc
 like typedoc, see [link](https://typedoc.org/guides/arguments/)
 
 - `--options [typedoc.js]` Specify a js option file that should be loaded.
-- `--out [outPath]` Specifies the location the documentation should be written to.
-- `--mode` default value is `file`, Specifies the output mode the project is used to be compiled with.
+- `--out -o [outPath]` Specifies the location the documentation should be written to.
+- `--mode -m` default value is `file`, Specifies the output mode the project is used to be compiled with.
 - `--exclude` Exclude files by the given pattern when a path is provided as source.
 - `--theme` default value is `default` Specify the path to the theme that should be used.
 - `--excludeExternals` default value is `true` Prevent externally resolved TypeScript files from being documented.
