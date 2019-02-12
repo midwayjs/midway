@@ -1,5 +1,6 @@
 ---
 nav: default
+sidebar: auto
 ---
 
 # Midway Development Guide
@@ -8,7 +9,7 @@ nav: default
 
 Since 2013, Midway has kept upgrading almost every year, from Express to Koa1/2 without absence of trend.
 
-Nowadays, Node.js goes ahead of the simple single-page application, not only in the Alibaba Group but also the Community, and go toward to the full-stack. With this trending, the MidwayJs Team come with the responsibility of supporting the Alibaba Group's Node.js Applications, and we also provide tools like `Pandora.js`, `Sandbox` to help Applications become more stable and reliable.
+Nowadays, Node.js goes ahead of the simple single-page application, not only in the Alibaba Group but also the Community, and go toward to the full-stack. With this trending, the MidwayJs Team come with the responsibility of supporting the Alibaba Group's Node.js Applications, and we also provide tools like [`Pandora.js`](https://midwayjs.org/pandora/), [`Sandbox`](https://github.com/midwayjs/sandbox) to help Applications become more stable and reliable.
 
 During 2017, we upgraded the Midway core to Koa2 to support async/await by Midway v5.3 inside the Alibaba Group.
 ''
@@ -26,7 +27,7 @@ The Midway is a full-stack development solution which developed by the frontend 
 
 ### Install Node.js
 
-Visit the office website of Node.js or using the tools like nvm.
+To download from the [office website](https://nodejs.org/en/) of Node.js or using the tools like [nvm](https://github.com/creationix/nvm).
 
 ### New project
 
