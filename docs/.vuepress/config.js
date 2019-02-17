@@ -34,7 +34,7 @@ module.exports = {
           { text: 'TS 新手指南', link: '/ts_start' },
           {
             text: 'API',
-            link: 'http://www.midwayjs.org/midway/api-reference/globals.html',
+            link: 'http://midwayjs.org/midway/api-reference/globals.html',
           },
           {
             text: 'MidwayJs 系列产品',
@@ -60,6 +60,12 @@ module.exports = {
                   { text: 'Sandbox - 私有化 Node.js 监控产品', link: '#' },
                 ],
               },
+              {
+                text: 'Node.js 依赖注入模块',
+                items: [
+                  { text: 'Injection - 让你的应用用上 IoC，体验依赖注入的感觉', link: 'http://midwayjs.org/injection' },
+                ]
+              }
             ],
           },
         ],
@@ -82,7 +88,7 @@ module.exports = {
           { text: 'TS Guide', link: '/en/ts_start' },
           {
             text: 'API',
-            link: 'http://www.midwayjs.org/midway/api-reference/globals.html',
+            link: 'http://midwayjs.org/midway/api-reference/globals.html',
           },
           {
             text: 'MidwayJs Team',
@@ -109,6 +115,12 @@ module.exports = {
                 text: 'Monitoring',
                 items: [{ text: 'Sandbox - Private Node.js APM', link: '#' }],
               },
+              {
+                text: 'Node.js Injection Module',
+                items: [
+                  { text: 'Injection - Use IoC in your Node.js application', link: 'http://midwayjs.org/injection' },
+                ]
+              }
             ],
           },
         ],
