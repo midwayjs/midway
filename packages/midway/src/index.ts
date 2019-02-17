@@ -18,9 +18,14 @@ export {
   Request,
   Response,
   ContextView,
-  LoggerLevel,
   Router,
 } from 'egg';
+export {
+  LoggerLevel as EggLoggerLevel,
+  EggLogger,
+  EggLoggers,
+  EggContextLogger,
+} from 'egg-logger';
 const Master = require('../cluster/master');
 
 /**
