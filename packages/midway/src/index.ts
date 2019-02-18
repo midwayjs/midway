@@ -17,7 +17,6 @@ export {
   EggContextHttpClient,
   Request,
   Response,
-  ContextView,
   Router,
 } from 'egg';
 export {
