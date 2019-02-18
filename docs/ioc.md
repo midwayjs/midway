@@ -4,6 +4,10 @@ sidebar: auto
 
 # 依赖注入手册
 
+::: warning
+本文档已迁移至 [新地址](https://midwayjs.org/injection/guide.html)，此处内容不再继续更新。
+:::
+
 Midway 中使用了非常多的依赖注入的特性，通过装饰器的轻量特性，让依赖注入变的优雅，从而让开发过程变的便捷有趣。
 
 ## 背景
@@ -130,7 +134,7 @@ const container = new Container();
 
 以上只是列举了一小部分，通过这个定义，容器就可以将一个对象简单的创建出来。
 
-`ObjectDefinition` 的具体属性文档，可以在 [这里看到](https://midwayjs.org/midway/api-reference/classes/objectdefinition.html)
+`ObjectDefinition` 的具体属性文档，可以在 [这里看到](https://midwayjs.org/injection/api-reference/classes/objectdefinition.html)
 
 ## 绑定对象定义
 
@@ -153,7 +157,7 @@ container.bind('userService', UserService); // 可以在绑定的时候传一个
 container.bind(UserService); // 也可以直接传入 Class，自动分析对象的元信息生成对象定义
 ```
 
-`bind` 方法通过传入类型，自动分析类型上面包含的元信息，具体的 API 参数可以查看[这里](https://midwayjs.org/midway/api-reference/classes/container.html#bind)。
+`bind` 方法通过传入类型，自动分析类型上面包含的元信息，具体的 API 参数可以查看[这里](https://midwayjs.org/injection/api-reference/classes/container.html#bind)。
 
 ## 普通情况下获取对象
 
@@ -556,7 +560,7 @@ providerWrapper([
 
 我们拿常见的 http 请求库 [urllib](https://www.npmjs.com/package/urllib) 来举例。
 
-假如我们希望在不同的类中来使用，并且不通过 require 的方式，你需要在容器的入口通过 [registerobject](https://midwayjs.org/midway/api-reference/classes/container.html#registerobject) 方法添加这个对象。
+假如我们希望在不同的类中来使用，并且不通过 require 的方式，你需要在容器的入口通过 [registerobject](https://midwayjs.org/injection/api-reference/classes/container.html#registerobject) 方法添加这个对象。
 
 在添加的时候需要给出一个 key，方便其他类中注入。
 
