@@ -11,7 +11,7 @@ if (!fs.existsSync(logDir)) {
   fs.mkdirSync(logDir);
 }
 
-export function app(name, options) {
+exports.app = function app(name, options) {
   options = formatOptions(name, options);
   // mm.consoleLevel(options.consoleLevel || 'NONE');
   const app = mm.app(options);
@@ -20,14 +20,14 @@ export function app(name, options) {
     return app.close;
   };
   return app;
-}
+};
 
-export function cluster(name, options) {
+exports.cluster = function cluster(name, options) {
   options = formatOptions(name, options);
   return mm.cluster(options);
-}
+};
 
-export function formatOptions(name, options = {}) {
+function formatOptions(name, options = {}) {
   return Object.assign(
     {},
     {

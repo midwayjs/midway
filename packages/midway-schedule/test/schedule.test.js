@@ -5,14 +5,14 @@ const path = require('path');
 const fs = require('fs');
 const assert = require('assert');
 
-import { app, cluster } from './utils';
+const { app, cluster } = require('./utils');
 
 describe('test/schedule.test.ts', () => {
   let application;
   afterEach(() => application.close());
 
   describe('schedule type worker', () => {
-    it('should load schedules', async () => {
+    it.skip('should load schedules', async () => {
       const name = 'app-load-schedule';
       application = app(name, {
         typescript: true,
