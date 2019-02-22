@@ -159,7 +159,7 @@ export class MidwayWebLoader extends MidwayLoader {
 
     let arr = [];
     names.forEach((name) => {
-      arr = arr.concat([name + '.ts', name + '.js']);
+      arr = arr.concat([name + '.ts', name + '.tsx', name + '.js']);
     });
     return arr.concat(['!**/**.d.ts']);
   }

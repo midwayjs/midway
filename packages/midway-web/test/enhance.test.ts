@@ -392,4 +392,24 @@ describe('/test/enhance.test.ts', () => {
         .expect('root_test', done);
     });
   });
+
+  describe('load tsx file', () => {
+    let app;
+    before(() => {
+      app = utils.app('enhance/base-app-controller-tsx', {
+        typescript: true
+      });
+      return app.ready();
+    });
+
+    after(() => app.close());
+
+    it('should load tsx controller', (done) => {
+      request(app.callback())
+        .get('/')
+        .expect(200)
+        .expect(/react/, done);
+    });
+
+  });
 });
