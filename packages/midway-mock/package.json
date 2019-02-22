@@ -1,6 +1,6 @@
 {
   "name": "midway-mock",
-  "version": "1.3.0",
+  "version": "1.3.2",
   "eggPlugin": {
     "name": "midway-mock"
   },
@@ -33,7 +33,7 @@
   "devDependencies": {
     "injection": "^1.1.0",
     "midway-bin": "^1.3.0",
-    "midway-core": "^1.3.0"
+    "midway-core": "^1.3.2"
   },
   "dependencies": {
     "egg-mock": "^3.21.0",
