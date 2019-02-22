@@ -27,9 +27,13 @@
   ],
   "license": "MIT",
   "devDependencies": {
+    "@types/react": "^16.0.38",
+    "@types/react-dom": "^16.0.4",
     "midway-bin": "^1.3.0",
     "midway-mock": "^1.3.0",
-    "pedding": "^1.1.0"
+    "pedding": "^1.1.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
   },
   "dependencies": {
     "@eggjs/router": "^1.1.0",

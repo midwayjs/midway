@@ -11,7 +11,8 @@
     "declaration": true,
     "outDir": "dist",
     "lib": ["es2017", "dom"],
-    "sourceMap": true
+    "sourceMap": true,
+    "jsx": "react"
   },
   "exclude": [
     "dist",
