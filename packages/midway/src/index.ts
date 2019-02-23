@@ -1,30 +1,6 @@
 export * from 'injection';
 export * from 'midway-core';
 export * from 'midway-web';
-export {
-  Context,
-  IContextLocals,
-  EggEnvType,
-  IEggPluginItem,
-  EggPlugin,
-  PowerPartial,
-  EggAppConfig,
-  FileStream,
-  IApplicationLocals,
-  EggApplication,
-  EggAppInfo,
-  EggHttpClient,
-  EggContextHttpClient,
-  Request,
-  Response,
-  Router,
-} from 'egg';
-export {
-  LoggerLevel as EggLoggerLevel,
-  EggLogger,
-  EggLoggers,
-  EggContextLogger,
-} from 'egg-logger';
 const Master = require('../cluster/master');
 
 /**
