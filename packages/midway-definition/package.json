@@ -24,5 +24,9 @@
   "repository": {
     "type": "git",
     "url": "http://github.com/midwayjs/midway.git"
-  }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "4393fb22237a0e54ec8330f65475ee8d6a9c823b"
 }
