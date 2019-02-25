@@ -23,7 +23,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "egg-bin": "^4.10.0",
+    "egg-bin": "^4.11.0",
     "fs-extra": "^7.0.1",
     "globby": "^9.0.0",
     "mz-modules": "^2.1.0",
