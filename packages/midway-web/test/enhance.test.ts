@@ -417,7 +417,7 @@ describe('/test/enhance.test.ts', () => {
 
   });
 
-  describe('support middleare parameter', () => {
+  describe('support middleware parameter', () => {
     let app;
     before(() => {
       app = utils.app('enhance/base-app-middleware', {
@@ -428,11 +428,18 @@ describe('/test/enhance.test.ts', () => {
 
     after(() => app.close());
 
-    it('should load middleares in controller and router', (done) => {
+    it('should load middleware in controller and router', (done) => {
       request(app.callback())
         .get('/')
         .expect(200)
-        .expect(/1111222/, done);
+        .expect('11112224', done);
+    });
+
+    it('should support multi-router in one method', (done) => {
+      request(app.callback())
+        .post('/api/data')
+        .expect(200)
+        .expect('1111', done);
     });
 
   });

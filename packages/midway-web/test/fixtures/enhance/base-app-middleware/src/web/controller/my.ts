@@ -1,5 +1,5 @@
 import { inject, provide } from 'injection';
-import { controller, get } from '../../../../../../../src/';
+import { controller, get, post } from '../../../../../../../src/';
 
 @provide()
 @controller('/', {middleware: ['homeMiddleware']})
@@ -9,7 +9,8 @@ export class My {
   ctx;
 
   @get('/', {middleware: ['apiMiddleware']})
+  @post('/api/data')
   async index() {
-    this.ctx.body = this.ctx.home + this.ctx.api;
+    this.ctx.body = this.ctx.home + (this.ctx.api || '');
   }
 }

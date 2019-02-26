@@ -10,3 +10,7 @@ export const hello = {
 export const plugins = {
   bucLogin: false,
 };
+
+export const security = {
+  csrf: false,
+};
