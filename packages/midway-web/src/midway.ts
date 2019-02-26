@@ -97,8 +97,6 @@ class MidwayAgent extends (Agent as {
   new(...x)
 }) {
 
-  Router = Router;
-
   get [Symbol.for('egg#loader')]() {
     return AgentWorkerLoader;
   }

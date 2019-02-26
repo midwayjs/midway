@@ -1,21 +1,11 @@
 import { EggRouter as Router } from '@eggjs/router';
-import { CONTROLLER_KEY, MIDDLEWARE_KEY, PRIORITY_KEY, WEB_ROUTER_KEY } from '@midwayjs/decorator';
-import { getClassMetaData, getMethodDataFromClass, listModule, TagClsMetadata, TAGGED_CLS } from 'injection';
+import { CONTROLLER_KEY, RouterOption, PRIORITY_KEY, WEB_ROUTER_KEY, ControllerOption, WebMiddleware } from '@midwayjs/decorator';
+import { getClassMetaData, listModule, TagClsMetadata, TAGGED_CLS } from 'injection';
 import { MidwayLoader } from 'midway-core';
 import 'reflect-metadata';
-import { WebMiddleware } from '../interface';
-
-interface MappingInfo {
-  path: string;
-  requestMethod: string;
-  routerName: string;
-  priority?: number;
-  method: string;
-}
-
-// const debug = require('debug')('midway:web-loader');
 
 export class MidwayWebLoader extends MidwayLoader {
+  private controllerIds: string[] = [];
   private prioritySortRouters: Array<{
     priority: number,
     router: Router,
@@ -24,14 +14,19 @@ export class MidwayWebLoader extends MidwayLoader {
   protected async loadMidwayController(): Promise<void> {
     const controllerModules = listModule(CONTROLLER_KEY);
 
-    for (const module in controllerModules) {
+    // implement @controller
+    for (const module of controllerModules) {
       const metaData = Reflect.getMetadata(TAGGED_CLS, module) as TagClsMetadata;
       if (metaData && metaData.id) {
+        if (this.controllerIds.indexOf(metaData.id) > -1) {
+          throw new Error(`controller identifier [${metaData.id}] is exists!`);
+        }
+        this.controllerIds.push(metaData.id);
         await this.preRegisterRouter(module, metaData.id);
       }
     }
 
-    // must sort by priority
+    // implement @priority
     if (this.prioritySortRouters.length) {
       this.prioritySortRouters = this.prioritySortRouters.sort((routerA, routerB) => {
         return routerB.priority - routerA.priority;
@@ -68,32 +63,37 @@ export class MidwayWebLoader extends MidwayLoader {
 
   protected async preRegisterRouter(target, controllerId) {
     const app = this.app;
-    const controllerPrefix = getClassMetaData(CONTROLLER_KEY, target);
+    const controllerOption: ControllerOption = getClassMetaData(CONTROLLER_KEY, target);
     let newRouter;
-    if (controllerPrefix) {
+    if (controllerOption.prefix) {
       newRouter = new Router({
         sensitive: true,
       }, app);
-      newRouter.prefix(controllerPrefix);
-      // get middleware
-      const middlewares = getClassMetaData(MIDDLEWARE_KEY, target);
+      newRouter.prefix(controllerOption.prefix);
+      // implement @middleware
+      const middlewares = controllerOption.routerOptions.middleware;
       if (middlewares && middlewares.length) {
         for (const middleware of middlewares) {
-          const middlewareCls: WebMiddleware = await this.applicationContext.getAsync(middleware);
-          newRouter.use(middlewareCls.resolve());
+          const middlewareImpl: WebMiddleware = await this.applicationContext.getAsync(middleware);
+          if (middlewareImpl && middlewareImpl.resolve) {
+            newRouter.use(middlewareImpl.resolve());
+          }
         }
       }
 
-      const webRouterInfo: MappingInfo[] = getClassMetaData(WEB_ROUTER_KEY, target);
+      // implement @get @post
+      const webRouterInfo: RouterOption[] = getClassMetaData(WEB_ROUTER_KEY, target);
       if (webRouterInfo && typeof webRouterInfo[Symbol.iterator] === 'function') {
         for (const webRouter of webRouterInfo) {
           // get middleware
-          const middlewares = getMethodDataFromClass(MIDDLEWARE_KEY, target, webRouter.method);
+          const middlewares = webRouter.middleware;
           const methodMiddlwares = [];
           if (middlewares && middlewares.length) {
             for (const middleware of middlewares) {
-              const middlewareCls: WebMiddleware = await this.applicationContext.getAsync(middleware);
-              methodMiddlwares.push(middlewareCls.resolve());
+              const middlewareImpl: WebMiddleware = await this.applicationContext.getAsync(middleware);
+              if (middlewareImpl && middlewareImpl.resolve) {
+                methodMiddlwares.push(middlewareImpl.resolve());
+              }
             }
           }
 

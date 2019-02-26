@@ -5,7 +5,11 @@ const utils = require('./utils');
 const mm = require('mm');
 const pedding = require('pedding');
 
+import { clearAllModule } from 'injection';
+
 describe('/test/enhance.test.ts', () => {
+
+  afterEach(clearAllModule);
 
   describe('load ts file', () => {
     let app;
@@ -409,6 +413,26 @@ describe('/test/enhance.test.ts', () => {
         .get('/')
         .expect(200)
         .expect(/react/, done);
+    });
+
+  });
+
+  describe('support middleare parameter', () => {
+    let app;
+    before(() => {
+      app = utils.app('enhance/base-app-middleware', {
+        typescript: true
+      });
+      return app.ready();
+    });
+
+    after(() => app.close());
+
+    it('should load middleares in controller and router', (done) => {
+      request(app.callback())
+        .get('/')
+        .expect(200)
+        .expect(/1111222/, done);
     });
 
   });

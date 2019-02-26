@@ -3,6 +3,15 @@
  */
 import { attachClassMetaData } from 'injection';
 import { WEB_ROUTER_KEY } from '../constant';
+import { WebMiddleware } from '../interface';
+
+export interface RouterOption {
+  path?: string;
+  requestMethod: string;
+  routerName?: string;
+  method: string;
+  middleware?: Array<string | WebMiddleware>;
+}
 
 export const RequestMethod = {
   GET: 'get',
@@ -18,17 +27,20 @@ export const RequestMethod = {
 const PATH_METADATA = 'PATH_METADATA';
 const METHOD_METADATA = 'METHOD_METADATA';
 const ROUTER_NAME_METADATA = 'ROUTER_NAME_METADATA';
+const ROUTER_MIDDLEWARE = 'ROUTER_MIDDLEWARE';
 
 const defaultMetadata = {
   [PATH_METADATA]: '/',
   [METHOD_METADATA]: RequestMethod.GET,
   [ROUTER_NAME_METADATA]: null,
+  [ROUTER_MIDDLEWARE]: []
 };
 
 export interface RequestMappingMetadata {
   [PATH_METADATA]?: string;
   [METHOD_METADATA]: string;
   [ROUTER_NAME_METADATA]?: string;
+  [ROUTER_MIDDLEWARE]?: Array<string | WebMiddleware>;
 }
 
 export const RequestMapping = (
@@ -37,14 +49,16 @@ export const RequestMapping = (
   const path = metadata[PATH_METADATA] || '/';
   const requestMethod = metadata[METHOD_METADATA] || RequestMethod.GET;
   const routerName = metadata[ROUTER_NAME_METADATA];
+  const middleware = metadata[ROUTER_MIDDLEWARE];
 
   return (target, key, descriptor: PropertyDescriptor) => {
     attachClassMetaData(WEB_ROUTER_KEY, {
       path,
       requestMethod,
       routerName,
-      method: key
-    }, target);
+      method: key,
+      middleware
+    } as RouterOption, target);
 
     return descriptor;
   };
@@ -52,12 +66,16 @@ export const RequestMapping = (
 
 const createMappingDecorator = (method: string) => (
   path?: string,
-  routerName?: string,
+  routerOptions: {
+    routerName?: string;
+    middleware?: Array<string | WebMiddleware>;
+  } = {middleware: []}
 ): MethodDecorator => {
   return RequestMapping({
     [PATH_METADATA]: path,
     [METHOD_METADATA]: method,
-    [ROUTER_NAME_METADATA]: routerName,
+    [ROUTER_NAME_METADATA]: routerOptions.routerName,
+    [ROUTER_MIDDLEWARE]: routerOptions.middleware,
   });
 };
 

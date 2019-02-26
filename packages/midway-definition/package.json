@@ -2,6 +2,7 @@
   "name": "@midwayjs/definition",
   "version": "1.4.0",
   "description": "declare all midway dependencies by typescript definition",
+  "typings": "dist/index.d.ts",
   "scripts": {
     "build": "npm run lint && midway-bin build -c",
     "lint": "../../node_modules/.bin/tslint --format prose -c ../../tslint.json --fix 'src/**/*.ts' 'test/**/*.ts'",

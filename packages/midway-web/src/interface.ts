@@ -11,7 +11,3 @@ export interface MidwayLoaderOptions extends EggLoaderOptions {
   targetDir?: string;
   container?: IApplicationContext;
 }
-
-export interface WebMiddleware {
-  resolve(): (ctx, next) => void;
-}
