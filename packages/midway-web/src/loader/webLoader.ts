@@ -1,21 +1,8 @@
 import { EggRouter as Router } from '@eggjs/router';
-import { TagClsMetadata, TAGGED_CLS } from 'injection';
+import { CONTROLLER_KEY, RouterOption, PRIORITY_KEY, WEB_ROUTER_KEY, ControllerOption, WebMiddleware } from '@midwayjs/decorator';
+import { getClassMetaData, listModule, TagClsMetadata, TAGGED_CLS } from 'injection';
 import { MidwayLoader } from 'midway-core';
-import * as path from 'path';
 import 'reflect-metadata';
-import { WEB_ROUTER_CLS, WEB_ROUTER_PREFIX_CLS, WEB_ROUTER_PRIORITY, WEB_ROUTER_PROP } from '../decorators/metaKeys';
-import { loading } from '../loading';
-
-const is = require('is-type-of');
-
-interface MappingInfo {
-  path: string;
-  requestMethod: string;
-  routerName: string;
-  priority?: number;
-}
-
-// const debug = require('debug')('midway:web-loader');
 
 export class MidwayWebLoader extends MidwayLoader {
   private controllerIds: string[] = [];
@@ -24,28 +11,22 @@ export class MidwayWebLoader extends MidwayLoader {
     router: Router,
   }> = [];
 
-  async loadController(opt: { directory? } = {}): Promise<void> {
-    // load midway controller to binding router
-    const appDir = path.join(this.options.baseDir, 'app/controller');
-    const results = loading(this.getFileExtension('**/*'), {
-      loadDirs: opt.directory || appDir,
-      call: false,
-    });
+  protected async loadMidwayController(): Promise<void> {
+    const controllerModules = listModule(CONTROLLER_KEY);
 
-    for (const exports of results) {
-      if (is.class(exports)) {
-        await this.preInitController(exports);
-      } else {
-        for (const m in exports) {
-          const module = exports[m];
-          if (is.class(module)) {
-            await this.preInitController(module);
-          }
+    // implement @controller
+    for (const module of controllerModules) {
+      const metaData = Reflect.getMetadata(TAGGED_CLS, module) as TagClsMetadata;
+      if (metaData && metaData.id) {
+        if (this.controllerIds.indexOf(metaData.id) > -1) {
+          throw new Error(`controller identifier [${metaData.id}] is exists!`);
         }
+        this.controllerIds.push(metaData.id);
+        await this.preRegisterRouter(module, metaData.id);
       }
     }
 
-    // must sort by priority
+    // implement @priority
     if (this.prioritySortRouters.length) {
       this.prioritySortRouters = this.prioritySortRouters.sort((routerA, routerB) => {
         return routerB.priority - routerA.priority;
@@ -55,15 +36,12 @@ export class MidwayWebLoader extends MidwayLoader {
         this.app.use(prioritySortRouter.router.middleware());
       });
     }
-
-    // Call the parent class
-    super.loadController(opt);
   }
 
   /**
    * 从xml加载controller
    */
-  async preloadControllerFromXml(): Promise<void> {
+  protected async preloadControllerFromXml(): Promise<void> {
     const ids = this.applicationContext.controllersIds;
     if (Array.isArray(ids) && ids.length > 0) {
       for (const id of ids) {
@@ -83,54 +61,58 @@ export class MidwayWebLoader extends MidwayLoader {
     }
   }
 
-  /**
-   * register controller when it has @controller decorator
-   * @param module
-   */
-  private async preInitController(module): Promise<void> {
-    const metaData = Reflect.getMetadata(TAGGED_CLS, module) as TagClsMetadata;
-    if (metaData && metaData.id) {
-      if (this.controllerIds.indexOf(metaData.id) > -1) {
-        throw new Error(`controller identifier [${metaData.id}] is exists!`);
-      }
-      this.controllerIds.push(metaData.id);
-
-      this.preRegisterRouter(module, metaData.id);
-    }
-  }
-
-  private preRegisterRouter(target, controllerId) {
+  protected async preRegisterRouter(target, controllerId) {
     const app = this.app;
-    const controllerPrefix = Reflect.getMetadata(WEB_ROUTER_PREFIX_CLS, target);
+    const controllerOption: ControllerOption = getClassMetaData(CONTROLLER_KEY, target);
     let newRouter;
-    if (controllerPrefix) {
+    if (controllerOption.prefix) {
       newRouter = new Router({
         sensitive: true,
       }, app);
-      newRouter.prefix(controllerPrefix);
-      const methodNames = Reflect.getMetadata(WEB_ROUTER_CLS, target);
+      newRouter.prefix(controllerOption.prefix);
+      // implement @middleware
+      const middlewares = controllerOption.routerOptions.middleware;
+      if (middlewares && middlewares.length) {
+        for (const middleware of middlewares) {
+          const middlewareImpl: WebMiddleware = await this.applicationContext.getAsync(middleware);
+          if (middlewareImpl && middlewareImpl.resolve) {
+            newRouter.use(middlewareImpl.resolve());
+          }
+        }
+      }
 
-      if (methodNames && typeof methodNames[Symbol.iterator] === 'function') {
-        for (const methodName of methodNames) {
-          const mappingInfos: MappingInfo[] = Reflect.getMetadata(WEB_ROUTER_PROP, target, methodName);
-          if (mappingInfos && mappingInfos.length) {
-            for (const mappingInfo of mappingInfos) {
-              const routerArgs = [
-                mappingInfo.routerName,
-                mappingInfo.path,
-                this.generateController(`${controllerId}.${methodName}`),
-              ];
-              // apply controller from request context
-              newRouter[mappingInfo.requestMethod].apply(newRouter, routerArgs);
+      // implement @get @post
+      const webRouterInfo: RouterOption[] = getClassMetaData(WEB_ROUTER_KEY, target);
+      if (webRouterInfo && typeof webRouterInfo[Symbol.iterator] === 'function') {
+        for (const webRouter of webRouterInfo) {
+          // get middleware
+          const middlewares = webRouter.middleware;
+          const methodMiddlwares = [];
+          if (middlewares && middlewares.length) {
+            for (const middleware of middlewares) {
+              const middlewareImpl: WebMiddleware = await this.applicationContext.getAsync(middleware);
+              if (middlewareImpl && middlewareImpl.resolve) {
+                methodMiddlwares.push(middlewareImpl.resolve());
+              }
             }
           }
+
+          const routerArgs = [
+            webRouter.routerName,
+            webRouter.path,
+            ...methodMiddlwares,
+            this.generateController(`${controllerId}.${webRouter.method}`)
+          ].concat(methodMiddlwares);
+
+          // apply controller from request context
+          newRouter[webRouter.requestMethod].apply(newRouter, routerArgs);
         }
       }
     }
 
     // sort for priority
     if (newRouter) {
-      const priority = Reflect.getMetadata(WEB_ROUTER_PRIORITY, target);
+      const priority = getClassMetaData(PRIORITY_KEY, target);
       this.prioritySortRouters.push({
         priority: priority || 0,
         router: newRouter,
@@ -142,7 +124,7 @@ export class MidwayWebLoader extends MidwayLoader {
    * wrap controller string to middleware function
    * @param controllerMapping like xxxController.index
    */
-  generateController(controllerMapping: string) {
+  public generateController(controllerMapping: string) {
     const mappingSplit = controllerMapping.split('.');
     const controllerId = mappingSplit[0];
     const methodName = mappingSplit[1];
@@ -152,19 +134,7 @@ export class MidwayWebLoader extends MidwayLoader {
     };
   }
 
-  protected getFileExtension(names: string | string[]): string[] {
-    if (typeof names === 'string') {
-      names = [names];
-    }
-
-    let arr = [];
-    names.forEach((name) => {
-      arr = arr.concat([name + '.ts', name + '.tsx', name + '.js']);
-    });
-    return arr.concat(['!**/**.d.ts']);
-  }
-
-  async refreshContext(): Promise<void> {
+  public async refreshContext(): Promise<void> {
     await super.refreshContext();
     await this.preloadControllerFromXml();
   }

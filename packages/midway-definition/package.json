@@ -2,15 +2,21 @@
   "name": "@midwayjs/definition",
   "version": "1.4.0",
   "description": "declare all midway dependencies by typescript definition",
+  "typings": "dist/index.d.ts",
   "scripts": {
-    "lint": "../../node_modules/.bin/tslint --format prose -c ../../tslint.json *.ts",
-    "test-local": "midway-bin test",
-    "test": "npm run lint && midway-bin test",
-    "ci": "npm run lint && midway-bin cov"
+    "build": "npm run lint && midway-bin build -c",
+    "lint": "../../node_modules/.bin/tslint --format prose -c ../../tslint.json --fix 'src/**/*.ts' 'test/**/*.ts'",
+    "test": "npm run lint && midway-bin clean && NODE_ENV=test midway-bin test --ts",
+    "cov": "midway-bin cov --ts",
+    "ci": "npm run test",
+    "autod": "midway-bin autod"
   },
   "dependencies": {
-    "egg": "^2.14.2",
+    "egg": "^2.17.0",
     "egg-logger": "^2.3.1"
+  },
+  "devDependencies": {
+    "midway-bin": "^1.3.0"
   },
   "keywords": [
     "midway",

@@ -1,45 +1,36 @@
 {
-  "name": "midway-core",
-  "version": "1.3.2",
-  "description": "midway core",
+  "name": "@midwayjs/decorator",
+  "version": "1.4.0",
+  "description": "definition decorator for midway project",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "npm run lint && midway-bin build -c",
     "lint": "../../node_modules/.bin/tslint --format prose -c ../../tslint.json --fix 'src/**/*.ts' 'test/**/*.ts'",
     "test": "npm run lint && midway-bin clean && NODE_ENV=test midway-bin test --ts",
-    "cov": "midway-bin clean && midway-bin cov --ts",
+    "cov": "midway-bin cov --ts",
+    "ci": "npm run test",
     "autod": "midway-bin autod"
+  },
+  "dependencies": {
+    "injection": "^1.3.1"
+  },
+  "devDependencies": {
+    "midway-bin": "^1.3.0"
   },
   "keywords": [
     "midway",
-    "IoC",
-    "core"
+    "decorator"
   ],
-  "files": [
-    "src",
-    "dist",
-    "d.ts"
-  ],
-  "license": "MIT",
-  "devDependencies": {
-    "chai": "^4.2.0",
-    "midway-bin": "^1.3.0"
-  },
-  "dependencies": {
-    "camelcase": "^5.0.0",
-    "debug": "^4.1.1",
-    "egg-core": "^4.14.1",
-    "extend2": "^1.0.0",
-    "globby": "^9.0.0",
-    "inflection": "^1.12.0",
-    "injection": "^1.3.1",
-    "is-type-of": "^1.2.1",
-    "reflect-metadata": "^0.1.13"
+  "engines": {
+    "node": ">= 8.0.0"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
   "repository": {
     "type": "git",
     "url": "http://github.com/midwayjs/midway.git"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

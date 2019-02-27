@@ -1,26 +1,9 @@
-import {MidwayWebLoader} from './webLoader';
+import { MidwayWebLoader } from './webLoader';
 
 const APP_NAME = 'app';
 const AGENT_NAME = 'agent';
 
 export class AppWorkerLoader extends MidwayWebLoader {
-
-  /**
-   * load app.js
-   *
-   * @example
-   * ```js
-   * module.exports = function(app) {
-   *   // can do everything
-   *   do();
-   *
-   *   // if you will invoke asynchronous, you can use readyCallback
-   *   const done = app.readyCallback();
-   *   doAsync(done);
-   * }
-   * ```
-   * @since 1.0.0
-   */
   loadCustomApp() {
     this.interceptLoadCustomApplication(APP_NAME);
   }
@@ -36,7 +19,6 @@ export class AppWorkerLoader extends MidwayWebLoader {
     this.loadResponseExtend();
     this.loadContextExtend();
     this.loadHelperExtend();
-
     this.loadApplicationContext();
     // app > plugin
     this.loadCustomApp();
@@ -44,13 +26,15 @@ export class AppWorkerLoader extends MidwayWebLoader {
     this.loadService();
     // app > plugin > core
     this.loadMiddleware();
+    // app
+    this.loadController();
+    // app
+    this.loadRouter(); // Dependent on controllers
 
+    // midway logic
     this.app.beforeStart(async () => {
       await this.refreshContext();
-      // get controller
-      await this.loadController();
-      // app
-      this.loadRouter(); // 依赖 controller
+      await this.loadMidwayController();
     });
   }
 

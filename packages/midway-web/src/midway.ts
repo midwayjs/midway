@@ -3,12 +3,15 @@ import { Logger } from 'egg-logger';
 import { AgentWorkerLoader, AppWorkerLoader } from './loader/loader';
 import * as fs from 'fs';
 import * as path from 'path';
+import { EggRouter as Router } from '@eggjs/router';
 
 const MIDWAY_PATH = path.dirname(__dirname);
 
 class MidwayApplication extends (Application as {
   new(...x)
 }) {
+
+  Router = Router;
 
   get [Symbol.for('egg#loader')]() {
     return AppWorkerLoader;

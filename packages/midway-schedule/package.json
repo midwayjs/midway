@@ -23,6 +23,6 @@
   "dependencies": {
     "egg-schedule": "3.4.0",
     "is-type-of": "^1.2.1",
-    "reflect-metadata": "^0.1.12"
+    "reflect-metadata": "^0.1.13"
   }
 }
