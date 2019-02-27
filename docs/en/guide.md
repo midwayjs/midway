@@ -186,7 +186,13 @@ module.exports = app => {
 
 ## Router & Controller
 
-Midway use the `koa-router` as router solution, and provide more syntactic sugar that users can easyly declare router and controller with decorators by TypeScript.
+Midway use the `koa-router` as router solution, and provide more syntactic sugar that users can easily declare router and controller with decorators by TypeScript.
+
+Midway adopts the IoC self-scanning mechanism, it weakens the directory structure convention to a certain extent. Through the mechanism of the decorator, it can be easily decoupled, split according to business logic, and so on.
+
+You can create controllers in any directory, no longer restricting the app/controller directory. Similarly, other decorators are not limited.
+
+Now you can do it like `src/web/controller`, or you can divide it by business dimension, such as `user` directory, which contains all the controller/service/dao related to the user, and is friendly to microservices or serverless.
 
 ### Router decorator
 
@@ -288,6 +294,76 @@ export class HomeController {
 }
 
 ```
+
+### Web middleware in router
+
+Sometimes we have the need to load middleware on a specific route. In previous versions, we could only solve some of the requirements by defining the `router.ts` file. In the new version, we extended the capabilities of the decorator to make it You can add web middleware to specific scenarios.
+
+Now you can provide a middleware in you application (any directory)，such as `src/app/middleware/api.ts`.
+
+```ts
+import { WebMiddleware } from 'midway';
+
+@provide()
+export class ApiMiddleware implements WebMiddleware {
+
+  @config('hello')
+  helloConfig;
+
+  resolve() {
+    return async (ctx, next) => {
+      ctx.api = '222' + this.helloConfig.b;
+      await next();
+    };
+  }
+
+}
+```
+
+Since it is a class, it can still be decorated with a decorator such as inject/plugin/config.
+
+:::tip
+It is recommended to use `WebMiddleware` interface to standardize your web middleware.
+:::
+
+```ts
+@provide()
+@controller('/', {middleware: ['homeMiddleware']})
+export class My {
+
+  @inject()
+  ctx;
+
+  @get('/', {middleware: ['apiMiddleware']})
+  async index() {
+    this.ctx.body = this.ctx.home + this.ctx.api;
+  }
+}
+```
+
+The middleware parameter is provided on route decorators such as `@controller` and `@get/post`.
+
+### Mount multiple routes in one method
+
+The new version implements the ability to mount multiple routes on the same method.
+
+```ts
+@provide()
+@controller('/', {middleware: ['homeMiddleware']})
+export class My {
+
+  @inject()
+  ctx;
+
+  @get('/', {middleware: ['apiMiddleware']})
+  @post('/api/data')
+  async index() {
+    this.ctx.body = this.ctx.home + (this.ctx.api || '');
+  }
+}
+```
+
+The result of the post and get method are different (get request to mount additional middleware).
 
 ## Enhanced injection
 
@@ -432,7 +508,7 @@ export class BaseService {
 
 Eggjs provide extensible application/context/request/response. based on it, Midway do some extending on IoC.
 
-### Application 扩展
+### Application Extend
 
 see [API doc](https://midwayjs.org/midway/api-reference/classes/midwayapplication.html) for more.
 

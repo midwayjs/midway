@@ -135,7 +135,6 @@ midway 的目录和 eggjs 目录非常接近，但也有所区别，不同的地
 - 了解 midway 的依赖注入体系，以及常用的装饰器，这里做了 [依赖注入的介绍](ioc.md)。
 - 如果你在 midway 的文档中没有找到你想要的东西，记住可以去 [Egg 的文档找找](https://eggjs.org/zh-cn/intro/)，或者 [向我们提 Issue](https://github.com/midwayjs/midway/issues)。
 
-
 ## 和 Egg 体系相同的部分
 
 这部分的内容和 Egg 体系基本是相同的，大体不同的是后缀的区别 `*.ts`，以及根目录（midway 的根目录在 src)。
@@ -193,6 +192,12 @@ module.exports = app => {
 ## 路由和控制器
 
 midway 使用 koa-router 作为路由的承载者，同时在 ts 的语法上做了一些简化，我们将路由和控制器放在了一起，使用装饰器来标注路由。
+
+由于 midway 采用了 IoC 自扫描机制，使得在一定程度上弱化了目录结构约定，通过装饰器的机制，可以非常方便的进行解耦，按业务逻辑拆分等。
+
+现在可以在任意目录下创建 controller，不再限定 app/controller 目录，同理，其他装饰器也不限定。
+
+现在可以做到比如 `src/web/controller` 下放 controller，也可以按业务维度分，比如 `user` 目录，包含跟用户相关所有的 controller/service/dao 等，对微服务或者 serverless 比较友好。
 
 ### 路由装饰器
 
@@ -303,6 +308,76 @@ export class HomeController {
 
 ```
 
+### 路由中间件
+
+有时候我们会有在特定路由上加载中间件的需求，在之前的版本只能通过定义 `router.ts` 文件来解决部分需求，而在新版本中，我们扩展了装饰器的能力，使之可以在特定场景下增加 web 中间件。
+
+现在可以提供一个 middleware（任意目录），比如 `src/app/middleware/api.ts`。
+
+```ts
+import { WebMiddleware } from 'midway';
+
+@provide()
+export class ApiMiddleware implements WebMiddleware {
+
+  @config('hello')
+  helloConfig;
+
+  resolve() {
+    return async (ctx, next) => {
+      ctx.api = '222' + this.helloConfig.b;
+      await next();
+    };
+  }
+
+}
+```
+
+由于是 class，依旧可以使用 inject/plugin/config 等装饰器修饰。
+
+:::tip
+推荐使用 `WebMiddleware` 接口来规范你的 web 中间件。
+:::
+
+```ts
+@provide()
+@controller('/', {middleware: ['homeMiddleware']})
+export class My {
+
+  @inject()
+  ctx;
+
+  @get('/', {middleware: ['apiMiddleware']})
+  async index() {
+    this.ctx.body = this.ctx.home + this.ctx.api;
+  }
+}
+```
+
+
+在 `@controller` 和 `@get/post` 等路由装饰器上都提供了 middleware 参数。
+
+### 一个方法挂载多个路由
+
+新版本实现了在同一方法上可以挂载多个路由的能力。
+
+```ts
+@provide()
+@controller('/', {middleware: ['homeMiddleware']})
+export class My {
+
+  @inject()
+  ctx;
+
+  @get('/', {middleware: ['apiMiddleware']})
+  @post('/api/data')
+  async index() {
+    this.ctx.body = this.ctx.home + (this.ctx.api || '');
+  }
+}
+```
+
+这样请求进来， post 和 get 拿到的结果是不一样的（get请求挂载了额外的中间件）。
 
 ## 框架增强注入
 
