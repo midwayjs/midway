@@ -473,6 +473,10 @@ export class HelloCron implements CommonSchedule {
 }
 ```
 
+:::tip
+推荐使用 `CommonSchedule` 接口来规范你的计划任务类。
+:::
+
 ### 注入日志对象
 
 在原有逻辑中，日志对象也都挂载在 app.loggers 中，通过在 config 中配置的 key 来生成不同的日志实例对象，比如插件的日志，链路的日志等。

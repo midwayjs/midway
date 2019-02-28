@@ -432,7 +432,7 @@ So that we can inject the config values into the business logic without coupling
 
 ### Schedule task
 
-The schedule of midawy is based on [egg schedule](https://eggjs.org/en/basics/schedule.html), and provide more typescript and decorator support. The task can store in any file like `src/schedule`, it can be configured the properties and specify jobs. For example:
+The schedule of midway is based on [egg schedule](https://eggjs.org/en/basics/schedule.html), and provide more typescript and decorator support. The task can store in any file like `src/schedule`, it can be configured the properties and specify jobs. For example:
 
 ```typescript
 // src/schedule/hello.ts
@@ -450,6 +450,10 @@ export class HelloCron implements CommonSchedule {
   }
 }
 ```
+
+:::tip
+It is recommended to use `CommonSchedule` interface to standardize your schedule class.
+:::
 
 ### Logger inject
 
