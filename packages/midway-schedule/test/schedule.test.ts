@@ -1,58 +1,38 @@
 'use strict';
 
-// const { mm } = require('../../midway-mock/dist');
+import { clearAllModule } from 'injection';
+import { mm } from 'midway-mock';
+
 const path = require('path');
 const fs = require('fs');
 const assert = require('assert');
 
-import { app, cluster } from './utils';
-
 describe('test/schedule.test.ts', () => {
   let application;
-  afterEach(() => application.close());
+  afterEach(() => {
+    application.close();
+    clearAllModule();
+  });
 
   describe('schedule type worker', () => {
     it('should load schedules', async () => {
-      const name = 'app-load-schedule';
-      application = app(name, {
+      application = mm.app({
+        baseDir: 'app-load-schedule',
         typescript: true,
       });
       await application.ready();
       const list = Object.keys(application.schedules).filter((key) =>
-        key.includes('midway-schedule/test/fixtures/' + name),
+        key.includes('HelloCron'),
       );
       assert(list.length === 1);
       const item = application.schedules[list[0]];
-      assert.deepEqual(item.schedule, { type: 'worker', interval: 2333 });
-    });
-
-    it('should be compatible with egg-schedule', async () => {
-      const name = 'egg-schedule';
-      application = app(name, {});
-      await application.ready();
-      const list = Object.keys(application.schedules).filter((key) =>
-        key.includes('midway-schedule/test/fixtures/' + name),
-      );
-      assert(list.length === 1);
-      const item = application.schedules[list[0]];
-      assert.deepEqual(item.schedule, { type: 'worker', interval: 1000 });
-    });
-
-    it('should support exec app/schedule/*.js (for egg)', async () => {
-      const name = 'worker-egg-schedule';
-      application = cluster(name, {
-        typescript: false,
-        worker: 2,
-      });
-      await application.ready();
-      await sleep(5000);
-      const log = getLogContent(name);
-      assert(contains(log, 'hehehehe') === 4, '未正确执行 4 次');
+      assert.deepEqual(item.schedule, {type: 'worker', interval: 2333});
     });
 
     it('should support interval with @schedule decorator (both app/schedule & lib/schedule)', async () => {
       const name = 'worker';
-      application = cluster(name, {
+      application = mm.cluster({
+        baseDir: name,
         typescript: true,
         worker: 2,
       });
@@ -64,7 +44,8 @@ describe('test/schedule.test.ts', () => {
 
     it('should support non-default class with @schedule decorator', async () => {
       const name = 'worker-non-default-class';
-      application = cluster(name, {
+      application = mm.cluster({
+        baseDir: name,
         typescript: true,
         worker: 2,
       });
@@ -75,6 +56,18 @@ describe('test/schedule.test.ts', () => {
       assert(contains(log, 'hello other functions') === 4, '未正确执行 4 次');
     });
   });
+
+  describe('app.runSchedule', () => {
+    it('should run schedule not exist throw error', async () => {
+      application = mm.app({ baseDir: 'worker', typescript: true, });
+      await application.ready();
+      await application.runSchedule('intervalCron#IntervalCron');
+      await sleep(1000);
+      const log = getLogContent('worker');
+      // console.log(log);
+      assert(contains(log, 'hello decorator') === 1);
+    });
+  });
 });
 
 function sleep(time) {
@@ -82,18 +75,6 @@ function sleep(time) {
     setTimeout(resolve, time);
   });
 }
-
-// function getCoreLogContent(name) {
-//   const logPath = path.join(
-//     __dirname,
-//     'fixtures',
-//     name,
-//     'logs',
-//     name,
-//     'egg-web.log',
-//   );
-//   return fs.readFileSync(logPath, 'utf8');
-// }
 
 function getLogContent(name) {
   const logPath = path.join(
@@ -106,42 +87,6 @@ function getLogContent(name) {
   );
   return fs.readFileSync(logPath, 'utf8');
 }
-
-// function getErrorLogContent(name) {
-//   const logPath = path.join(
-//     __dirname,
-//     'fixtures',
-//     name,
-//     'logs',
-//     name,
-//     'common-error.log',
-//   );
-//   return fs.readFileSync(logPath, 'utf8');
-// }
-
-// function getAgentLogContent(name) {
-//   const logPath = path.join(
-//     __dirname,
-//     'fixtures',
-//     name,
-//     'logs',
-//     name,
-//     'egg-agent.log',
-//   );
-//   return fs.readFileSync(logPath, 'utf8');
-// }
-
-// function getScheduleLogContent(name) {
-//   const logPath = path.join(
-//     __dirname,
-//     'fixtures',
-//     name,
-//     'logs',
-//     name,
-//     'egg-schedule.log',
-//   );
-//   return fs.readFileSync(logPath, 'utf8');
-// }
 
 function contains(content, match) {
   return content.split('\n').filter((line) => line.indexOf(match) >= 0).length;

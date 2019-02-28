@@ -432,19 +432,18 @@ So that we can inject the config values into the business logic without coupling
 
 ### Schedule task
 
-The schedule of midawy is based on [egg schedule](https://eggjs.org/en/basics/schedule.html), and provide more typescript and decorator support. The task all store in `lib/schedule`, every file is single schedule task which can be configured the properties and specify jobs. For example:
+The schedule of midway is based on [egg schedule](https://eggjs.org/en/basics/schedule.html), and provide more typescript and decorator support. The task can store in any file like `src/schedule`, it can be configured the properties and specify jobs. For example:
 
 ```typescript
-// src/lib/schedule/hello.ts
-'use strict';
+// src/schedule/hello.ts
+import { provide, schedule, CommonSchedule } from 'midway';
 
-import { schedule } from 'midway';
-
+@provide()
 @schedule({
   interval: 2333, // 2.333s interval
   type: 'worker', // only run in certain worker
 })
-export class HelloCron {
+export class HelloCron implements CommonSchedule {
   // The detail job while times up
   async exec(ctx) {
     ctx.logger.info(process.pid, 'hello');
@@ -452,7 +451,9 @@ export class HelloCron {
 }
 ```
 
-PS: The schedule class need `export` to be loadable. And the `.ts` file can `export` multi schedule class except `default class`.
+:::tip
+It is recommended to use `CommonSchedule` interface to standardize your schedule class.
+:::
 
 ### Logger inject
 
