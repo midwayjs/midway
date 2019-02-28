@@ -1,10 +1,11 @@
 'use strict';
 
+import { clearAllModule } from 'injection';
 import { mm } from 'midway-mock';
+
 const path = require('path');
 const fs = require('fs');
 const assert = require('assert');
-import { clearAllModule } from 'injection';
 
 describe('test/schedule.test.ts', () => {
   let application;
@@ -25,7 +26,7 @@ describe('test/schedule.test.ts', () => {
       );
       assert(list.length === 1);
       const item = application.schedules[list[0]];
-      assert.deepEqual(item.schedule, { type: 'worker', interval: 2333 });
+      assert.deepEqual(item.schedule, {type: 'worker', interval: 2333});
     });
 
     it('should support interval with @schedule decorator (both app/schedule & lib/schedule)', async () => {
@@ -53,6 +54,18 @@ describe('test/schedule.test.ts', () => {
       const log = getLogContent(name);
       assert(contains(log, 'hello decorator') === 4, '未正确执行 4 次');
       assert(contains(log, 'hello other functions') === 4, '未正确执行 4 次');
+    });
+  });
+
+  describe('app.runSchedule', () => {
+    it('should run schedule not exist throw error', async () => {
+      application = mm.app({ baseDir: 'worker', typescript: true, });
+      await application.ready();
+      await application.runSchedule('intervalCron#IntervalCron');
+      await sleep(1000);
+      const log = getLogContent('worker');
+      // console.log(log);
+      assert(contains(log, 'hello decorator') === 1);
     });
   });
 });
