@@ -1,7 +1,9 @@
 'use strict';
 
-import { schedule } from '../../../../../../../midway';
+import { provide } from 'injection';
+import { schedule } from '@midwayjs/decorator';
 
+@provide()
 @schedule({
   type: 'worker',
   interval: 1000,

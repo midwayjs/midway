@@ -1,58 +1,37 @@
 'use strict';
 
-// const { mm } = require('../../midway-mock/dist');
+import { mm } from 'midway-mock';
 const path = require('path');
 const fs = require('fs');
 const assert = require('assert');
-
-import { app, cluster } from './utils';
+import { clearAllModule } from 'injection';
 
 describe('test/schedule.test.ts', () => {
   let application;
-  afterEach(() => application.close());
+  afterEach(() => {
+    application.close();
+    clearAllModule();
+  });
 
   describe('schedule type worker', () => {
     it('should load schedules', async () => {
-      const name = 'app-load-schedule';
-      application = app(name, {
+      application = mm.app({
+        baseDir: 'app-load-schedule',
         typescript: true,
       });
       await application.ready();
       const list = Object.keys(application.schedules).filter((key) =>
-        key.includes('midway-schedule/test/fixtures/' + name),
+        key.includes('HelloCron'),
       );
       assert(list.length === 1);
       const item = application.schedules[list[0]];
       assert.deepEqual(item.schedule, { type: 'worker', interval: 2333 });
     });
 
-    it('should be compatible with egg-schedule', async () => {
-      const name = 'egg-schedule';
-      application = app(name, {});
-      await application.ready();
-      const list = Object.keys(application.schedules).filter((key) =>
-        key.includes('midway-schedule/test/fixtures/' + name),
-      );
-      assert(list.length === 1);
-      const item = application.schedules[list[0]];
-      assert.deepEqual(item.schedule, { type: 'worker', interval: 1000 });
-    });
-
-    it('should support exec app/schedule/*.js (for egg)', async () => {
-      const name = 'worker-egg-schedule';
-      application = cluster(name, {
-        typescript: false,
-        worker: 2,
-      });
-      await application.ready();
-      await sleep(5000);
-      const log = getLogContent(name);
-      assert(contains(log, 'hehehehe') === 4, '未正确执行 4 次');
-    });
-
     it('should support interval with @schedule decorator (both app/schedule & lib/schedule)', async () => {
       const name = 'worker';
-      application = cluster(name, {
+      application = mm.cluster({
+        baseDir: name,
         typescript: true,
         worker: 2,
       });
@@ -64,7 +43,8 @@ describe('test/schedule.test.ts', () => {
 
     it('should support non-default class with @schedule decorator', async () => {
       const name = 'worker-non-default-class';
-      application = cluster(name, {
+      application = mm.cluster({
+        baseDir: name,
         typescript: true,
         worker: 2,
       });

@@ -1,5 +1,5 @@
 module.exports = {
-  schedule: {
+  schedulePlus: {
     enable: true,
     package: 'midway-schedule',
   },
