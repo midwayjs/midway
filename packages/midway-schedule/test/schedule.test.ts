@@ -63,18 +63,6 @@ function sleep(time) {
   });
 }
 
-// function getCoreLogContent(name) {
-//   const logPath = path.join(
-//     __dirname,
-//     'fixtures',
-//     name,
-//     'logs',
-//     name,
-//     'egg-web.log',
-//   );
-//   return fs.readFileSync(logPath, 'utf8');
-// }
-
 function getLogContent(name) {
   const logPath = path.join(
     __dirname,
@@ -86,42 +74,6 @@ function getLogContent(name) {
   );
   return fs.readFileSync(logPath, 'utf8');
 }
-
-// function getErrorLogContent(name) {
-//   const logPath = path.join(
-//     __dirname,
-//     'fixtures',
-//     name,
-//     'logs',
-//     name,
-//     'common-error.log',
-//   );
-//   return fs.readFileSync(logPath, 'utf8');
-// }
-
-// function getAgentLogContent(name) {
-//   const logPath = path.join(
-//     __dirname,
-//     'fixtures',
-//     name,
-//     'logs',
-//     name,
-//     'egg-agent.log',
-//   );
-//   return fs.readFileSync(logPath, 'utf8');
-// }
-
-// function getScheduleLogContent(name) {
-//   const logPath = path.join(
-//     __dirname,
-//     'fixtures',
-//     name,
-//     'logs',
-//     name,
-//     'egg-schedule.log',
-//   );
-//   return fs.readFileSync(logPath, 'utf8');
-// }
 
 function contains(content, match) {
   return content.split('\n').filter((line) => line.indexOf(match) >= 0).length;

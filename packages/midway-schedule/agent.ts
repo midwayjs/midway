@@ -1,4 +1,4 @@
-import { SchedueOpts, SCHEDULE_KEY } from '@midwayjs/decorator';
+import { ScheduleOpts, SCHEDULE_KEY } from '@midwayjs/decorator';
 import { getClassMetaData, listModule, TagClsMetadata, TAGGED_CLS } from 'injection';
 import 'reflect-metadata';
 
@@ -25,7 +25,7 @@ export = (agent) => {
     const schedules: any[] = listModule(SCHEDULE_KEY);
     for (const scheduleModule of schedules) {
       const metaData = Reflect.getMetadata(TAGGED_CLS, scheduleModule) as TagClsMetadata;
-      const opts: SchedueOpts = getClassMetaData(SCHEDULE_KEY, scheduleModule);
+      const opts: ScheduleOpts = getClassMetaData(SCHEDULE_KEY, scheduleModule);
       const type = opts.type;
       if (opts.disable) {
         continue;

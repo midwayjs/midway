@@ -454,28 +454,24 @@ export class BaseService {
 
 ### 注册定时任务
 
-midawy 的定时任务是基于 [egg 定时任务](https://eggjs.org/zh-cn/basics/schedule.html)提供了更多 typescript 以及装饰器方面的支持。将定时任务都统一存放在 lib/schedule 目录下，每一个文件都是一个独立的定时任务，可以配置定时任务的属性和要执行的方法。例如：
+midawy 的定时任务是基于 [egg 定时任务](https://eggjs.org/zh-cn/basics/schedule.html)提供了更多 typescript 以及装饰器方面的支持。定时任务可以存放在任意目录，例如 src/schedule 目录下，可以配置定时任务的属性和要执行的方法。例如：
 
 ```typescript
-// src/lib/schedule/hello.ts
-'use strict';
-
-import { provide, schedule } from 'midway';
+// src/schedule/hello.ts
+import { provide, schedule, CommonSchedule } from 'midway';
 
 @provide()
 @schedule({
   interval: 2333, // 2.333s 间隔
   type: 'worker', // 指定某一个 worker 执行
 })
-export class HelloCron {
+export class HelloCron implements CommonSchedule {
   // 定时执行的具体任务
   async exec(ctx) {
     ctx.logger.info(process.pid, 'hello');
   }
 }
 ```
-
-PS: 定时任务类需 `export` 导出才会被加载，并且一个 `.ts` 文件可以 `export` 多个定时任务类，但是如果 `export default` 了，则只会读取 `default` 的类。
 
 ### 注入日志对象
 

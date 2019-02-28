@@ -1,4 +1,4 @@
-import { SchedueOpts, SCHEDULE_KEY } from '@midwayjs/decorator';
+import { ScheduleOpts, SCHEDULE_KEY } from '@midwayjs/decorator';
 import { getClassMetaData, listModule, TagClsMetadata, TAGGED_CLS } from 'injection';
 import * as is from 'is-type-of';
 import 'reflect-metadata';
@@ -7,11 +7,9 @@ export = (app) => {
   const schedules: any[] = listModule(SCHEDULE_KEY);
   for (const scheduleModule of schedules) {
     const metaData = Reflect.getMetadata(TAGGED_CLS, scheduleModule) as TagClsMetadata;
-    app.loggers.coreLogger.info('-----module=' + scheduleModule);
     if (metaData) {
       const key = metaData.id + '#' + scheduleModule.name;
-      const opts: SchedueOpts = getClassMetaData(SCHEDULE_KEY, scheduleModule);
-      app.loggers.coreLogger.info('-----key=' + key);
+      const opts: ScheduleOpts = getClassMetaData(SCHEDULE_KEY, scheduleModule);
       const task = async (ctx, data) => {
         const ins = await ctx.requestContext.getAsync(scheduleModule);
         ins.exec = app.toAsyncFunction(ins.exec);
