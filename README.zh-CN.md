@@ -6,7 +6,6 @@
 [![GitHub tag](https://img.shields.io/github/tag/midwayjs/midway.svg)]()
 [![Build Status](https://travis-ci.org/midwayjs/midway.svg?branch=develop)](https://travis-ci.org/midwayjs/midway)
 [![Test Coverage](https://img.shields.io/codecov/c/github/midwayjs/midway/master.svg)](https://codecov.io/gh/midwayjs/midway/branch/master)
-[![Package Quality](http://npm.packagequality.com/shield/midway.svg)](http://packagequality.com/#?package=midway)
 [![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lernajs.io/)
 [![Known Vulnerabilities](https://snyk.io/test/npm/midway/badge.svg)](https://snyk.io/test/npm/midway)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/midwayjs/midway/pulls)
@@ -38,6 +37,16 @@ $ npm install
 $ npm run dev
 $ open http://localhost:7001
 ```
+
+## 文档和社区
+
+- [官网和文档](https://midwayjs.org/midway/)
+- [所有的 Egg 插件](https://github.com/search?q=topic%3Aegg-plugin&type=Repositories)
+
+## 示例
+
+请访问 [midway-examples](https://github.com/midwayjs/midway-examples).
+
 
 ## 贡献
 

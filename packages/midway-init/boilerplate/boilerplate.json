@@ -2,6 +2,11 @@
   "midway-ts": {
     "package": "midway-ts-boilerplate",
     "description": "Simple midway application boilerplate by ts",
-    "name": "midway ts"
+    "name": "midway typescript template"
+  },
+  "midway-demo": {
+    "package": "midway-demo-boilerplate",
+    "description": "Simple boilerplate for create a midway demo",
+    "name": "midway demo template"
   }
 }

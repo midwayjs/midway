@@ -1,16 +1,3 @@
-import 'reflect-metadata';
-
-export function attachMetaDataOnClass(clz, key, value) {
-  // save method name on class
-  let classMetaValue = Reflect.getMetadata(key, clz);
-  if (classMetaValue) {
-    classMetaValue = classMetaValue.concat(value);
-  } else {
-    classMetaValue = [value];
-  }
-  Reflect.defineMetadata(key, classMetaValue, clz);
-}
-
 const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
 const ARGUMENT_NAMES = /([^\s,]+)/g;
 

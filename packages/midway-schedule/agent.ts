@@ -1,8 +1,11 @@
-import { ScheduleOpts, SCHEDULE_KEY } from '@midwayjs/decorator';
-import { getClassMetaData, listModule, TagClsMetadata, TAGGED_CLS } from 'injection';
-import 'reflect-metadata';
+import { SCHEDULE_KEY, ScheduleOpts } from '@midwayjs/decorator';
+import { getClassMetaData, getProviderId, listModule } from 'injection';
 
 export = (agent) => {
+
+  if (!agent.schedule) {
+    return;
+  }
 
   // ugly!! just support all and worker strategy
   class AllStrategy extends agent['TimerScheduleStrategy'] {
@@ -24,13 +27,13 @@ export = (agent) => {
   agent.messenger.once('egg-ready', () => {
     const schedules: any[] = listModule(SCHEDULE_KEY);
     for (const scheduleModule of schedules) {
-      const metaData = Reflect.getMetadata(TAGGED_CLS, scheduleModule) as TagClsMetadata;
+      const provideId = getProviderId(scheduleModule);
       const opts: ScheduleOpts = getClassMetaData(SCHEDULE_KEY, scheduleModule);
       const type = opts.type;
       if (opts.disable) {
         continue;
       }
-      const key = metaData.id + '#' + scheduleModule.name;
+      const key = provideId + '#' + scheduleModule.name;
       const Strategy = strategyMap.get(type);
       if (!Strategy) {
         const err = new Error(`schedule type [${type}] is not defined`);
