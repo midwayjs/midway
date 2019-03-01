@@ -26,7 +26,7 @@
   "scripts": {
     "autod": "lerna run autod",
     "test": "lerna run test",
-    "cov": "nyc lerna run cov --concurrency=1",
+    "cov": "lerna run cov --concurrency=1",
     "ci": "npm run build && npm run cov",
     "purge": "npm run clean && rm -rf node_modules",
     "reset": "npm run purge && npm i && npm run ci",
