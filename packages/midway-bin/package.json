@@ -32,7 +32,7 @@
   "devDependencies": {
     "co-mocha": "^1.2.2",
     "coffee": "^5.2.1",
-    "eslint": "^4.13.1",
+    "eslint": "^5.14.1",
     "eslint-config-egg": "^7.0.0",
     "mm": "^2.4.1"
   },

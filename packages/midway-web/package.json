@@ -40,16 +40,14 @@
     "@midwayjs/decorator": "^1.4.2",
     "debug": "^4.1.1",
     "egg": "^2.17.0",
-    "egg-core": "^4.14.1",
     "extend2": "^1.0.0",
     "globby": "^9.0.0",
     "inflection": "^1.12.0",
-    "injection": "^1.3.1",
+    "injection": "^1.3.2",
     "is-type-of": "^1.2.1",
     "midway-core": "^1.4.1",
     "midway-schedule": "^1.4.2",
-    "mkdirp": "^0.5.1",
-    "reflect-metadata": "^0.1.13"
+    "mkdirp": "^0.5.1"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
   "repository": {

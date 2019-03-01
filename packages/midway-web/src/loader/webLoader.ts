@@ -1,8 +1,7 @@
 import { EggRouter as Router } from '@eggjs/router';
 import { CONTROLLER_KEY, RouterOption, PRIORITY_KEY, WEB_ROUTER_KEY, ControllerOption, WebMiddleware } from '@midwayjs/decorator';
-import { getClassMetaData, listModule, TagClsMetadata, TAGGED_CLS } from 'injection';
+import { getClassMetaData, listModule, getProviderId } from 'injection';
 import { MidwayLoader } from 'midway-core';
-import 'reflect-metadata';
 
 export class MidwayWebLoader extends MidwayLoader {
   private controllerIds: string[] = [];
@@ -16,13 +15,13 @@ export class MidwayWebLoader extends MidwayLoader {
 
     // implement @controller
     for (const module of controllerModules) {
-      const metaData = Reflect.getMetadata(TAGGED_CLS, module) as TagClsMetadata;
-      if (metaData && metaData.id) {
-        if (this.controllerIds.indexOf(metaData.id) > -1) {
-          throw new Error(`controller identifier [${metaData.id}] is exists!`);
+      const providerId = getProviderId(module);
+      if (providerId) {
+        if (this.controllerIds.indexOf(providerId) > -1) {
+          throw new Error(`controller identifier [${providerId}] is exists!`);
         }
-        this.controllerIds.push(metaData.id);
-        await this.preRegisterRouter(module, metaData.id);
+        this.controllerIds.push(providerId);
+        await this.preRegisterRouter(module, providerId);
       }
     }
 
