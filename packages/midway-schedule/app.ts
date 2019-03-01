@@ -1,14 +1,19 @@
 import { ScheduleOpts, SCHEDULE_KEY } from '@midwayjs/decorator';
-import { getClassMetaData, listModule, TagClsMetadata, TAGGED_CLS } from 'injection';
+import { getClassMetaData, listModule, getProviderId } from 'injection';
 import * as is from 'is-type-of';
-import 'reflect-metadata';
 
 export = (app) => {
+
+  // egg-schedule 的 app 里没有 schedule
+  if (!app.runSchedule) {
+    return;
+  }
+
   const schedules: any[] = listModule(SCHEDULE_KEY);
   for (const scheduleModule of schedules) {
-    const metaData = Reflect.getMetadata(TAGGED_CLS, scheduleModule) as TagClsMetadata;
-    if (metaData) {
-      const key = metaData.id + '#' + scheduleModule.name;
+    const providerId = getProviderId(scheduleModule);
+    if (providerId) {
+      const key = providerId + '#' + scheduleModule.name;
       const opts: ScheduleOpts = getClassMetaData(SCHEDULE_KEY, scheduleModule);
       const task = async (ctx, data) => {
         const ins = await ctx.requestContext.getAsync(scheduleModule);
