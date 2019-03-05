@@ -39,6 +39,7 @@ export class AgentWorkerLoader extends MidwayWebLoader {
   load() {
     this.loadAgentExtend();
     this.loadApplicationContext();
+    this.loadContextExtend();
     this.loadCustomAgent();
     this.app.beforeStart(async () => {
       await this.refreshContext();
