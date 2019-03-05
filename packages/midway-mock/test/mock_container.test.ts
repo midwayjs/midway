@@ -50,7 +50,8 @@ describe('test/mock_container.test.ts', () => {
     afterEach(mm.restore);
 
     it('should test js app load success', async () => {
-      const my: any = await container.getAsync('my');
+      // use camelcase class name as provider id in js version
+      const my: any = await container.getAsync('myController');
       assert(my);
       assert(my.$$mytest);
       assert(my.$$mytest === 'this is my test');
