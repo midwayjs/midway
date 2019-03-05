@@ -1,4 +1,4 @@
-import {config, plugin} from '../../../../../src/decorators';
+import {config, plugin, logger} from '@midwayjs/decorator';
 import {provide, async, init, inject} from 'injection';
 
 @provide()
@@ -21,17 +21,20 @@ export class BaseService {
 
   config;
   plugin2;
+  logger;
 
   constructor(
     @inject() a,
     @config('hello') config,
     @inject() b,
-    @plugin('plugin2') plugin2
+    @plugin('plugin2') plugin2,
+    @logger() logger
   ) {
     this.config = Object.assign(config, {
       c: a.config.c + b.config.c + config.c
     });
     this.plugin2 = plugin2;
+    this.logger = logger;
   }
 
   @init()

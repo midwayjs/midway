@@ -1,5 +1,5 @@
 import { IApplicationContext, ObjectIdentifier, Scope } from 'injection';
-import { FUNCTION_INJECT_KEY } from './metaKeys';
+import { FUNCTION_INJECT_KEY } from './constant';
 
 export function providerWrapper(wrapperInfo: Array<{
   id: ObjectIdentifier;

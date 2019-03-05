@@ -1,7 +1,10 @@
-import 'reflect-metadata';
+import { CLASS_KEY_CONSTRUCTOR, CONFIG_KEY, LOGGER_KEY, PLUGIN_KEY } from '@midwayjs/decorator';
 import {
   Autowire,
   Container,
+  getClassMetadata,
+  getObjectDefinition,
+  getProviderId,
   IApplicationContext,
   IContainer,
   IManagedInstance,
@@ -10,26 +13,13 @@ import {
   IObjectDefinition,
   IObjectDefinitionParser,
   IParserContext,
-  OBJ_DEF_CLS,
   ObjectDefinitionOptions,
   ObjectIdentifier,
   Scope,
   ScopeEnum,
-  TagClsMetadata,
-  TAGGED_CLS,
   XmlObjectDefinition
 } from 'injection';
-import {
-  CLASS_KEY_CONSTRUCTOR,
-  CONFIG_KEY_CLZ,
-  CONFIG_KEY_PROP,
-  FUNCTION_INJECT_KEY,
-  LOGGER_KEY_CLZ,
-  LOGGER_KEY_PROP,
-  PLUGIN_KEY_CLZ,
-  PLUGIN_KEY_PROP
-} from './decorators';
-import { MidwayHandlerKey } from './constants';
+import { FUNCTION_INJECT_KEY, MidwayHandlerKey } from './constant';
 
 const globby = require('globby');
 const path = require('path');
@@ -40,6 +30,11 @@ const CONTROLLERS = 'controllers';
 const MIDDLEWARES = 'middlewares';
 const TYPE_LOGGER = 'logger';
 const TYPE_PLUGIN = 'plugin';
+
+interface FrameworkDecoratorMetadata {
+  key: string;
+  propertyName: string;
+}
 
 class BaseParser {
   container: MidwayContainer;
@@ -186,6 +181,7 @@ export class MidwayContainer extends Container implements IContainer {
     // ctx is in requestContainer
     this.registerObject('ctx', this.ctx);
   }
+
   /**
    * update current context in applicationContext
    * for mock and other case
@@ -240,9 +236,9 @@ export class MidwayContainer extends Container implements IContainer {
 
   protected bindClass(module) {
     if (is.class(module)) {
-      const metaData = Reflect.getMetadata(TAGGED_CLS, module) as TagClsMetadata;
-      if (metaData) {
-        this.bind(metaData.id, module);
+      const providerId = getProviderId(module);
+      if (providerId) {
+        this.bind(providerId, module);
       } else {
         // inject by name in js
         this.bind(camelcase(module.name), module);
@@ -277,7 +273,7 @@ export class MidwayContainer extends Container implements IContainer {
     this.beforeEachCreated((target, constructorArgs, context) => {
       let constructorMetaData;
       try {
-        constructorMetaData = Reflect.getOwnMetadata(CLASS_KEY_CONSTRUCTOR, target);
+        constructorMetaData = getClassMetadata(CLASS_KEY_CONSTRUCTOR, target);
       } catch (e) {
         debug(`beforeEachCreated error ${e.stack}`);
       }
@@ -308,14 +304,14 @@ export class MidwayContainer extends Container implements IContainer {
     this.afterEachCreated((instance, context, definition) => {
 
       // 处理配置装饰器
-      const configSetterProps = this.getClzSetterProps(CONFIG_KEY_CLZ, instance);
-      this.defineGetterPropertyValue(configSetterProps, CONFIG_KEY_PROP, instance, this.handlerMap.get(MidwayHandlerKey.CONFIG));
+      const configSetterProps: FrameworkDecoratorMetadata[] = getClassMetadata(CONFIG_KEY, instance);
+      this.defineGetterPropertyValue(configSetterProps, instance, this.handlerMap.get(MidwayHandlerKey.CONFIG));
       // 处理插件装饰器
-      const pluginSetterProps = this.getClzSetterProps(PLUGIN_KEY_CLZ, instance);
-      this.defineGetterPropertyValue(pluginSetterProps, PLUGIN_KEY_PROP, instance, this.handlerMap.get(MidwayHandlerKey.PLUGIN));
+      const pluginSetterProps: FrameworkDecoratorMetadata[] = getClassMetadata(PLUGIN_KEY, instance);
+      this.defineGetterPropertyValue(pluginSetterProps, instance, this.handlerMap.get(MidwayHandlerKey.PLUGIN));
       // 处理日志装饰器
-      const loggerSetterProps = this.getClzSetterProps(LOGGER_KEY_CLZ, instance);
-      this.defineGetterPropertyValue(loggerSetterProps, LOGGER_KEY_PROP, instance, this.handlerMap.get(MidwayHandlerKey.LOGGER));
+      const loggerSetterProps: FrameworkDecoratorMetadata[] = getClassMetadata(LOGGER_KEY, instance);
+      this.defineGetterPropertyValue(loggerSetterProps, instance, this.handlerMap.get(MidwayHandlerKey.LOGGER));
 
       // 表示非ts annotation模式
       if (!pluginSetterProps && !loggerSetterProps && definition.isAutowire()) {
@@ -339,31 +335,18 @@ export class MidwayContainer extends Container implements IContainer {
   }
 
   /**
-   * get method name for decorator
-   *
-   * @param setterClzKey
-   * @param target
-   * @returns {Array<string>}
-   */
-  private getClzSetterProps(setterClzKey, target): string[] {
-    return Reflect.getMetadata(setterClzKey, target);
-  }
-
-  /**
    * binding getter method for decorator
    *
    * @param setterProps
-   * @param metadataKey
    * @param instance
    * @param getterHandler
    */
-  private defineGetterPropertyValue(setterProps, metadataKey, instance, getterHandler) {
+  private defineGetterPropertyValue(setterProps: FrameworkDecoratorMetadata[], instance, getterHandler) {
     if (setterProps && getterHandler) {
       for (const prop of setterProps) {
-        const propertyKey = Reflect.getMetadata(metadataKey, instance, prop);
-        if (propertyKey) {
-          Object.defineProperty(instance, prop, {
-            get: () => getterHandler(propertyKey),
+        if (prop.propertyName) {
+          Object.defineProperty(instance, prop.propertyName, {
+            get: () => getterHandler(prop.key),
             configurable: false,
             enumerable: true
           });
@@ -380,7 +363,7 @@ export class MidwayContainer extends Container implements IContainer {
     super.registerCustomBinding(objectDefinition, target);
 
     // Override the default scope to request
-    const objDefOptions: ObjectDefinitionOptions = Reflect.getMetadata(OBJ_DEF_CLS, target);
+    const objDefOptions: ObjectDefinitionOptions = getObjectDefinition(target);
     if (objDefOptions && !objDefOptions.scope) {
       debug(`register @scope to default value(request), id=${objectDefinition.id}`);
       objectDefinition.scope = ScopeEnum.Request;

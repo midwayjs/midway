@@ -31,7 +31,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "injection": "^1.3.2",
+    "injection": "^1.4.1",
     "midway-bin": "^1.4.3",
     "midway-core": "^1.4.3"
   },

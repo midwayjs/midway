@@ -41,3 +41,11 @@ export function getMethodNames(obj) {
     return ownKeysOnObjectPrototype.indexOf(k) === -1;
   });
 }
+
+export function isTypeScriptEnvironment() {
+  return !!require.extensions['.ts'];
+}
+
+export function isPluginName(name) {
+  return typeof name === 'string' && !/^_/.test(name);
+}

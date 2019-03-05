@@ -1,5 +1,5 @@
 import { SCHEDULE_KEY, ScheduleOpts } from '@midwayjs/decorator';
-import { getClassMetaData, getProviderId, listModule } from 'injection';
+import { getClassMetadata, getProviderId, listModule } from 'injection';
 
 export = (agent) => {
 
@@ -28,7 +28,7 @@ export = (agent) => {
     const schedules: any[] = listModule(SCHEDULE_KEY);
     for (const scheduleModule of schedules) {
       const provideId = getProviderId(scheduleModule);
-      const opts: ScheduleOpts = getClassMetaData(SCHEDULE_KEY, scheduleModule);
+      const opts: ScheduleOpts = getClassMetadata(SCHEDULE_KEY, scheduleModule);
       const type = opts.type;
       if (opts.disable) {
         continue;

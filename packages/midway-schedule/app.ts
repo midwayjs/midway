@@ -1,5 +1,5 @@
 import { ScheduleOpts, SCHEDULE_KEY } from '@midwayjs/decorator';
-import { getClassMetaData, listModule, getProviderId } from 'injection';
+import { getClassMetadata, listModule, getProviderId } from 'injection';
 import * as is from 'is-type-of';
 
 export = (app) => {
@@ -14,7 +14,7 @@ export = (app) => {
     const providerId = getProviderId(scheduleModule);
     if (providerId) {
       const key = providerId + '#' + scheduleModule.name;
-      const opts: ScheduleOpts = getClassMetaData(SCHEDULE_KEY, scheduleModule);
+      const opts: ScheduleOpts = getClassMetadata(SCHEDULE_KEY, scheduleModule);
       const task = async (ctx, data) => {
         const ins = await ctx.requestContext.getAsync(scheduleModule);
         ins.exec = app.toAsyncFunction(ins.exec);
