@@ -6,7 +6,6 @@ export {Application, Agent} from './midway';
 export {BaseController} from './baseController';
 export {MidwayWebLoader} from './loader/webLoader';
 
-export * from 'injection';
 export {
   Context,
   IContextLocals,
