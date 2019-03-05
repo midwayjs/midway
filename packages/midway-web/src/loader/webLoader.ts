@@ -305,7 +305,7 @@ export class MidwayWebLoader extends EggLoader {
     });
 
     this.containerLoader.registerAllHook(MidwayHandlerKey.PLUGIN, (key) => {
-      return this.app[key];
+      return this.app[key] || this.pluginContext.get(key);
     });
 
     this.containerLoader.registerAllHook(MidwayHandlerKey.LOGGER, (key) => {
