@@ -31,9 +31,9 @@
   ],
   "license": "MIT",
   "devDependencies": {
+    "@midwayjs/decorator": "^1.4.3",
     "injection": "^1.4.1",
-    "midway-bin": "^1.4.3",
-    "midway-core": "^1.4.3"
+    "midway-bin": "^1.4.3"
   },
   "dependencies": {
     "egg-mock": "^3.21.0",

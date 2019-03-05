@@ -20,7 +20,7 @@ describe('test/mock_container.test.ts', () => {
     it('should mock service success', async () => {
       const service = await container.getAsync(BaseService);
       mm.default(service, 'getData', async name => {
-        return await new Promise(resolve => {
+        return new Promise(resolve => {
           setTimeout(() => {
             resolve(`hello ${name}`);
           }, 100);

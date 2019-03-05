@@ -1,5 +1,5 @@
 import {async, init, provide, inject} from 'injection';
-import {config, plugin} from 'midway-core';
+import {config, plugin} from '@midwayjs/decorator';
 
 @async()
 @provide()
