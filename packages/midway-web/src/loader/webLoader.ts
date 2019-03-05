@@ -13,7 +13,7 @@ import { getClassMetadata, getProviderId, listModule } from 'injection';
 import { ContainerLoader, MidwayHandlerKey } from 'midway-core';
 import * as path from 'path';
 import { MidwayLoaderOptions } from '../interface';
-import { isPluginName, isTypeScriptEnvironment } from '../utils';
+import { isTypeScriptEnvironment } from '../utils';
 
 const debug = require('debug')(`midway:loader:${process.pid}`);
 const EggLoader = require('egg-core').EggLoader;
@@ -265,41 +265,6 @@ export class MidwayWebLoader extends EggLoader {
     return serverEnv;
   }
 
-  /**
-   * intercept plugin when it set value to app
-   * @param fileName
-   * @returns {boolean}
-   */
-  protected interceptLoadCustomApplication(fileName) {
-    const self = this;
-    const pluginContainerProps = Object.getOwnPropertyNames(this);
-    this.app = new Proxy(this.app, {
-      defineProperty(target, prop, attributes) {
-        if (!self.pluginLoaded && isPluginName(prop) && !(prop in pluginContainerProps)) {
-          // save to context when called app.xxx = xxx
-          // now we can get plugin from context
-          debug(`pluginContext register [${prop as string}]`);
-          self.pluginContext.registerObject(prop, attributes.value);
-        }
-        return Object.defineProperty(target, prop, attributes);
-      }
-    });
-
-    this.getLoadUnits()
-      .forEach(unit => {
-        // 兼容旧插件加载方式
-        const ret = this.loadFile(this.resolveModule(path.join(unit.path, fileName)));
-        if (ret) {
-          // midway 的插件会返回对象
-          debug(`pluginContext register [${unit.name}]`);
-          this.pluginContext.registerObject(unit.name, ret);
-        }
-      });
-
-    // 插件加载完毕
-    this.pluginLoaded = true;
-  }
-
   getAppInfo() {
     if (!this.appInfo) {
       const appInfo = super.getAppInfo();
@@ -340,7 +305,7 @@ export class MidwayWebLoader extends EggLoader {
     });
 
     this.containerLoader.registerAllHook(MidwayHandlerKey.PLUGIN, (key) => {
-      return this.pluginContext.get(key);
+      return this.app[key];
     });
 
     this.containerLoader.registerAllHook(MidwayHandlerKey.LOGGER, (key) => {

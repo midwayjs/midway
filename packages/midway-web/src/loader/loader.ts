@@ -1,12 +1,6 @@
 import { MidwayWebLoader } from './webLoader';
 
-const APP_NAME = 'app';
-const AGENT_NAME = 'agent';
-
 export class AppWorkerLoader extends MidwayWebLoader {
-  loadCustomApp() {
-    this.interceptLoadCustomApplication(APP_NAME);
-  }
 
   /**
    * Load all directories in convention
@@ -41,13 +35,6 @@ export class AppWorkerLoader extends MidwayWebLoader {
 }
 
 export class AgentWorkerLoader extends MidwayWebLoader {
-
-  /**
-   * Load agent.js, same as {@link EggLoader#loadCustomApp}
-   */
-  loadCustomAgent() {
-    this.interceptLoadCustomApplication(AGENT_NAME);
-  }
 
   load() {
     this.loadAgentExtend();
