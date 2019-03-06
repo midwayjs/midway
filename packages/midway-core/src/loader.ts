@@ -57,6 +57,11 @@ export class ContainerLoader {
     ignore?: string;
     configLocations?: string[];
   } = {}) {
+    if (!this.isTsMode && loadOpts.disableAutoLoad === undefined) {
+      // disable auto load in js mode by default
+      loadOpts.disableAutoLoad = true;
+    }
+
     // 如果没有关闭autoLoad 则进行load
     if (!loadOpts.disableAutoLoad) {
       const defaultLoadDir = this.isTsMode ? [this.baseDir] : ['app', 'lib'];
