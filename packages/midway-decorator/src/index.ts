@@ -5,3 +5,6 @@ export * from './common/priority';
 export * from './faas/fun';
 export * from './web/requestMapping';
 export * from './web/controller';
+export * from './framework/config';
+export * from './framework/logger';
+export * from './framework/plugin';

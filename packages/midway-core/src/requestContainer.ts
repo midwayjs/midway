@@ -1,4 +1,3 @@
-import { MidwayHandlerKey } from './constants';
 import { MidwayContainer } from './container';
 import { ManagedValue, VALUE_TYPE } from 'injection';
 
@@ -20,23 +19,6 @@ export class MidwayRequestContainer extends MidwayContainer {
     this.registerObject('ctx', ctx);
     // register contextLogger
     this.registerObject('logger', ctx.logger);
-  }
-
-  registerEachCreatedHook() {
-    // register handler for container
-    this.registerDataHandler(MidwayHandlerKey.CONFIG, (key) => {
-      return this.ctx.app.config[key];
-    });
-
-    this.registerDataHandler(MidwayHandlerKey.PLUGIN, (key) => {
-      return this.ctx.app.pluginContext.get(key);
-    });
-
-    this.registerDataHandler(MidwayHandlerKey.LOGGER, (key) => {
-      return this.ctx.app.getLogger(key);
-    });
-
-    super.registerEachCreatedHook();
   }
 
   get<T>(identifier: any, args?: any) {

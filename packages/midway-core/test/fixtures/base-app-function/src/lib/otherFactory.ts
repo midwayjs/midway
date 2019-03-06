@@ -1,4 +1,4 @@
-import {providerWrapper} from '../../../../../src/decorators';
+import {providerWrapper} from '../../../../../src/';
 import {IApplicationContext} from 'injection';
 
 class MyTestObj {

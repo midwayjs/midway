@@ -20,7 +20,7 @@ describe('test/mock_container.test.ts', () => {
     it('should mock service success', async () => {
       const service = await container.getAsync(BaseService);
       mm.default(service, 'getData', async name => {
-        return await new Promise(resolve => {
+        return new Promise(resolve => {
           setTimeout(() => {
             resolve(`hello ${name}`);
           }, 100);
@@ -34,27 +34,4 @@ describe('test/mock_container.test.ts', () => {
     });
   });
 
-  describe('test js app xml', () => {
-    let container;
-    before(() => {
-      container = mm.container({
-        baseDir: path.join(fixtures, 'js-app-xml'),
-        typescript: false,
-        container: {
-          disableAutoLoad: true
-        }
-      });
-
-      return container.ready();
-    });
-    afterEach(mm.restore);
-
-    it('should test js app load success', async () => {
-      const my: any = await container.getAsync('my');
-      assert(my);
-      assert(my.$$mytest);
-      assert(my.$$mytest === 'this is my test');
-      assert(my.$plugin2.text === 't');
-    });
-  });
 });

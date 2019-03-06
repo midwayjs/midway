@@ -1,7 +1,7 @@
 /**
  * 'HEAD', 'OPTIONS', 'GET', 'PUT', 'PATCH', 'POST', 'DELETE' 封装
  */
-import { attachClassMetaData } from 'injection';
+import { attachClassMetadata } from 'injection';
 import { WEB_ROUTER_KEY } from '../constant';
 import { WebMiddleware } from '../interface';
 
@@ -52,7 +52,7 @@ export const RequestMapping = (
   const middleware = metadata[ROUTER_MIDDLEWARE];
 
   return (target, key, descriptor: PropertyDescriptor) => {
-    attachClassMetaData(WEB_ROUTER_KEY, {
+    attachClassMetadata(WEB_ROUTER_KEY, {
       path,
       requestMethod,
       routerName,

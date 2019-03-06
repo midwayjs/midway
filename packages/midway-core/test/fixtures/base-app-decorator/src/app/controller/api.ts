@@ -1,4 +1,3 @@
-'use strict';
 import {BaseService} from '../../lib/service';
 
 exports.index = async (ctx, next) => {

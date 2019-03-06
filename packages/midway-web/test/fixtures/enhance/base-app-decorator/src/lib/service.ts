@@ -1,4 +1,4 @@
-import {config, plugin} from 'midway-core';
+import {config, plugin} from '@midwayjs/decorator';
 import {provide} from 'injection';
 
 @provide()

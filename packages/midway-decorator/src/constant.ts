@@ -9,3 +9,11 @@ export const HANDLER_KEY = 'handler';
 // web
 export const CONTROLLER_KEY = 'controller';
 export const WEB_ROUTER_KEY = 'web_router';
+
+// framework
+export const CONFIG_KEY = 'config';
+export const PLUGIN_KEY = 'plugin';
+export const LOGGER_KEY = 'logger';
+
+// constructor key
+export const CLASS_KEY_CONSTRUCTOR = 'midway:class_key_constructor';
