@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.4.4](https://github.com/midwayjs/midway/compare/v1.4.3...v1.4.4) (2019-03-06)
+
+
+### Bug Fixes
+
+* fix decorator i midway-mock ([60367fb](https://github.com/midwayjs/midway/commit/60367fb))
+* js-app-xml test case ([1298195](https://github.com/midwayjs/midway/commit/1298195))
+
+
+
+
+
 ## [1.4.3](https://github.com/midwayjs/midway/compare/v1.4.2...v1.4.3) (2019-03-01)
 
 **Note:** Version bump only for package midway-mock
