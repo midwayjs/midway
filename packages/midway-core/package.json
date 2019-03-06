@@ -1,6 +1,6 @@
 {
   "name": "midway-core",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "description": "midway core",
   "main": "dist/index",
   "typings": "dist/index.d.ts",

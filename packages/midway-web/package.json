@@ -1,6 +1,6 @@
 {
   "name": "midway-web",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "description": "Midway Web Scene",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -45,7 +45,7 @@
     "globby": "^9.0.0",
     "injection": "^1.4.1",
     "is-type-of": "^1.2.1",
-    "midway-core": "^1.4.4",
+    "midway-core": "^1.4.5",
     "midway-schedule": "^1.4.4",
     "mkdirp": "^0.5.1"
   },
