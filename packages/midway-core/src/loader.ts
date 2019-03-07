@@ -39,14 +39,14 @@ export class ContainerLoader {
 
   registerAllHook(hookKey, hookHandler) {
     this.registerApplicationHook(hookKey, hookHandler);
-    this.registerRequeastHook(hookKey, hookHandler);
+    this.registerRequestHook(hookKey, hookHandler);
   }
 
   registerApplicationHook(hookKey, hookHandler) {
     this.applicationContext.registerDataHandler(hookKey, hookHandler);
   }
 
-  registerRequeastHook(hookKey, hookHandler) {
+  registerRequestHook(hookKey, hookHandler) {
     this.requestContext.registerDataHandler(hookKey, hookHandler);
   }
 
