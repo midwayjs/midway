@@ -45,7 +45,3 @@ export function getMethodNames(obj) {
 export function isTypeScriptEnvironment() {
   return !!require.extensions['.ts'];
 }
-
-export function isPluginName(name) {
-  return typeof name === 'string' && !/^_/.test(name);
-}
