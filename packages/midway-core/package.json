@@ -1,6 +1,6 @@
 {
   "name": "midway-core",
-  "version": "1.4.5",
+  "version": "1.4.6",
   "description": "midway core",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -27,7 +27,7 @@
     "midway-bin": "^1.4.3"
   },
   "dependencies": {
-    "@midwayjs/decorator": "^1.4.4",
+    "@midwayjs/decorator": "^1.4.6",
     "camelcase": "^5.0.0",
     "debug": "^4.1.1",
     "globby": "^9.0.0",
