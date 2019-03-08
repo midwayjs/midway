@@ -22,10 +22,9 @@
     "midway-bin": "^1.4.3"
   },
   "dependencies": {
-    "egg-cluster": "^1.22.2",
-    "midway-core": "^1.4.6",
+    "egg-cluster": "^1.23.0",
     "midway-web": "^1.4.6",
-    "ts-node": "^8.0.2"
+    "ts-node": "^8.0.3"
   },
   "files": [
     "bin",

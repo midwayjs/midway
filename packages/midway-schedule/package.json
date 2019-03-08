@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@midwayjs/decorator": "^1.4.6",
-    "injection": "^1.4.1",
+    "injection": "^1.4.2",
     "is-type-of": "^1.2.1"
   }
 }

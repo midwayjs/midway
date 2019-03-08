@@ -14,7 +14,6 @@ module.exports = {
   ],
   devdep: [
     "injection",
-    "midway-core"
   ],
   keep: [
   ]

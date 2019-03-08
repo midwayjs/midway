@@ -5,7 +5,7 @@
     "co": "^4.6.0",
     "egg-init": "^1.15.1",
     "enquirer": "^2.3.0",
-    "yargs": "^13.2.1"
+    "yargs": "^13.2.2"
   },
   "main": "lib/command.js",
   "devDependencies": {
