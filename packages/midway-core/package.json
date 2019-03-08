@@ -28,10 +28,10 @@
   },
   "dependencies": {
     "@midwayjs/decorator": "^1.4.6",
-    "camelcase": "^5.0.0",
+    "camelcase": "^5.2.0",
     "debug": "^4.1.1",
-    "globby": "^9.0.0",
-    "injection": "^1.4.1",
+    "globby": "^9.1.0",
+    "injection": "^1.4.2",
     "is-type-of": "^1.2.1"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
