@@ -1,3 +1,1 @@
-export interface WebMiddleware {
-  resolve(): (ctx, next?) => void;
-}
+export type KoaMiddleware = (context: any, next: () => Promise<any>) => any;

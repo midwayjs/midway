@@ -1,5 +1,5 @@
 import { provide } from 'injection';
-import { WebMiddleware } from '@midwayjs/decorator';
+import { WebMiddleware } from '../../../../../../../src/interface';
 
 @provide()
 export class HomeMiddleware implements WebMiddleware {

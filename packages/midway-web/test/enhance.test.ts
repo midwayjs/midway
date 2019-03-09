@@ -366,14 +366,14 @@ describe('/test/enhance.test.ts', () => {
       request(app.callback())
         .get('/')
         .expect(200)
-        .expect('11112224', done);
+        .expect('1111444455552224', done);
     });
 
     it('should support multi-router in one method', (done) => {
       request(app.callback())
         .post('/api/data')
         .expect(200)
-        .expect('1111', done);
+        .expect('11114444', done);
     });
 
   });
