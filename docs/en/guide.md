@@ -343,6 +343,40 @@ export class My {
 
 The middleware parameter is provided on route decorators such as `@controller` and `@get/post`.
 
+The middleware parameter here is an array that can pass multiple strings or `koa middleware`. 
+
+If it is a string, it will get the result of the `resolve` method of the corresponding `WebMiddleware` interface instance from the IoC container.
+
+You can also set `koa middleware` directly.
+
+```ts
+const mw = async (ctx, next) => {
+  ctx.home = '4444';
+  await next();
+};
+
+const newMiddleware = (data) => {
+  return async (ctx, next) => {
+    ctx.api = data;
+    await next();
+  };
+};
+
+@provide()
+@controller('/', {middleware: ['homeMiddleware', mw]})
+export class My {
+
+  @inject()
+  ctx;
+
+  @get('/api', {middleware: ['apiMiddleware', newMiddleware('5555')]})
+  async index() {
+    this.ctx.body = this.ctx.home + this.ctx.api;
+  }
+}
+
+```
+
 ### Mount multiple routes in one method
 
 The new version implements the ability to mount multiple routes on the same method.
@@ -371,40 +405,24 @@ Midway use [injection](http://web.npm.alibaba-inc.com/package/injection) as defa
 
 ### Plugin inject
 
-Except the `app.xxx` plugin usage which supported by eggjs, Midway support we to inject a plugin by `@plugin`. If we have a plugin named `plugin2`, we could try the new way:
+Except the `app.xxx` plugin usage which supported by eggjs, Midway support we to inject a plugin by `@plugin`.
 
-:::warning Warning
-Cause the midway inner plugin is not store in applicationContext, we couldn't use `@inject` for plugin.
-:::
+Let's take the `egg-jwt` plugin as an example. This plugin provides the `app.jwt` object, and the `@plugin` decorator is similar to taking properties directly from the app object.
+
+For example, `@plugin('jwt')` is actually `app['jwt']`, which can be decoupled from the app object.
 
 ```typescript
+import { provide, plugin } from 'midway';
+
 @provide()
 export class BaseService {
 
-  @plugin('plugin2')
-  plugin;
+  @plugin()
+  jwt;
 
 }
+
 ```
-
-So that we got `this.plugin` in BaseService with `@plugin` by it's name.
-
-::: tip
-Plugin is singleton in Midway.
-:::
-
-### Get plugin name
-
-A plugin name to retrieve from pluginContext is depending on the plugin implement. Midway would use the property name, which was mounted by plugin, as the basic key.
-
-```js
-module.exports = (app) => {
-  // what egg plugins usually do
-  app.plugin1 = xxxx;
-}
-```
-
-Then `plugin1` is the plugin key, Midway will automatically store the object to pluginContext while plugin call app.\[#setter\], so that we can inject it to some property in a class by `@plugin`.
 
 ### Config inject
 

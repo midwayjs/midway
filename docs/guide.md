@@ -357,6 +357,38 @@ export class My {
 
 在 `@controller` 和 `@get/post` 等路由装饰器上都提供了 middleware 参数。
 
+这里的 middleware 参数是一个数组，可以传多个字符串或者 `koa middleware`，如果是字符串，会从 IoC 容器中获取对应的 `WebMiddleware` 接口实例的 `resolve` 方法的结果。
+
+也可以直接传递 `koa middleware`。
+
+```ts
+const mw = async (ctx, next) => {
+  ctx.home = '4444';
+  await next();
+};
+
+const newMiddleware = (data) => {
+  return async (ctx, next) => {
+    ctx.api = data;
+    await next();
+  };
+};
+
+@provide()
+@controller('/', {middleware: ['homeMiddleware', mw]})
+export class My {
+
+  @inject()
+  ctx;
+
+  @get('/api', {middleware: ['apiMiddleware', newMiddleware('5555')]})
+  async index() {
+    this.ctx.body = this.ctx.home + this.ctx.api;
+  }
+}
+
+```
+
 ### 一个方法挂载多个路由
 
 新版本实现了在同一方法上可以挂载多个路由的能力。
@@ -385,13 +417,12 @@ midway 默认使用 [injection](http://web.npm.alibaba-inc.com/package/injection
 
 ### 注入插件
 
-midway 除了支持 eggjs 原本的 app.xx 的插件用法，同时，也可以通过 `@plugin` 装饰器来注入插件。
+midway 除了支持 eggjs 原本的 app.xx 的插件用法，为了和框架解耦，同时，也可以通过 `@plugin` 装饰器来注入插件。
 
-比如我们提供了一个名字叫 `plugin2` 的插件，就可以通过属性注入的方式来修饰插件。
+我们以 `egg-jwt` 插件为例，这个插件提供了 `app.jwt` 对象，而 `@plugin` 装饰器，则是类似于直接从 app 对象上拿属性。
 
-:::warning 注意
-由于在 midway 内部插件未放在 applicationContext 中，所以不能使用 @inject 来注入
-:::
+比如 `@plugin('jwt')`，其实就是 `app['jwt']`，这样的写法，就可以和 app 对象进行解耦。
+
 
 ```typescript
 import { provide, plugin } from 'midway';
@@ -399,34 +430,12 @@ import { provide, plugin } from 'midway';
 @provide()
 export class BaseService {
 
-  @plugin('plugin2')
-  plugin;
+  @plugin()
+  jwt;
 
 }
 
 ```
-
-这个时候我们就需要拿到插件的名字。
-
-::: tip
-插件，在 midway 中为单例，不可配置。
-:::
-
-### 查找插件名
-
-这个插件的名字和普通的插件名字，他是根据插件代码中的返回而定的。
-
-midway 会将挂载到 app 上的属性名作为基础 key。
-
-```js
-module.exports = (app) => {
-  // egg 插件经常这么做
-  app.plugin1 = xxxx;
-}
-```
-
-那么 plugin1 就是插件key，midway 会在给 app 赋值时自动将返回的对象挂载到插件上下文中，供 `@plugin` 装饰器调用。
-
 
 ### 注入配置
 
@@ -466,6 +475,7 @@ import { provide, schedule, CommonSchedule } from 'midway';
   type: 'worker', // 指定某一个 worker 执行
 })
 export class HelloCron implements CommonSchedule {
+  
   // 定时执行的具体任务
   async exec(ctx) {
     ctx.logger.info(process.pid, 'hello');
