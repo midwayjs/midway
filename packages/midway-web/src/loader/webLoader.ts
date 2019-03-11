@@ -2,10 +2,10 @@ import { EggRouter as Router } from '@eggjs/router';
 import {
   CONTROLLER_KEY,
   ControllerOption,
+  KoaMiddleware,
   PRIORITY_KEY,
   RouterOption,
-  WEB_ROUTER_KEY,
-  KoaMiddleware
+  WEB_ROUTER_KEY
 } from '@midwayjs/decorator';
 import * as extend from 'extend2';
 import * as fs from 'fs';
@@ -53,6 +53,7 @@ export class MidwayWebLoader extends EggLoader {
     this.loadPlugin();
     super.loadConfig();
   }
+
   // Get the real plugin path
   protected getPluginPath(plugin) {
     if (plugin.path) {
@@ -149,10 +150,14 @@ export class MidwayWebLoader extends EggLoader {
   protected loadApplicationContext() {
     // this.app.options.container 测试用例编写方便点
     const containerConfig = this.config.container || this.app.options.container || {};
+    if (!containerConfig.loadDir) {
+      // 如果没有配置，默认就把扫描目录改到 /src or /dist
+      containerConfig.baseDir = this.baseDir;
+    }
     // 在 super constructor 中会调用到getAppInfo，之后会被赋值
     // 如果是typescript会加上 dist 或者 src 目录
     this.containerLoader = new ContainerLoader({
-      baseDir: this.baseDir,
+      baseDir: this.appDir,
       isTsMode: this.isTsMode
     });
     this.containerLoader.initialize();
@@ -246,6 +251,7 @@ export class MidwayWebLoader extends EggLoader {
   protected async refreshContext(): Promise<void> {
     await this.containerLoader.refresh();
   }
+
   /**
    * wrap controller string to middleware function
    * @param controllerMapping like xxxController.index

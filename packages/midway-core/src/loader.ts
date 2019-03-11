@@ -2,6 +2,13 @@ import * as path from 'path';
 import { MidwayContainer } from './container';
 import { MidwayRequestContainer } from './requestContainer';
 
+function buildLoadDir(baseDir, dir) {
+  if (!path.isAbsolute(dir)) {
+    return path.join(baseDir, dir);
+  }
+  return dir;
+}
+
 export class ContainerLoader {
 
   baseDir;
@@ -51,6 +58,7 @@ export class ContainerLoader {
   }
 
   loadDirectory(loadOpts: {
+    baseDir?: string;
     loadDir?: string[];
     disableAutoLoad?: boolean;
     pattern?: string;
@@ -62,12 +70,14 @@ export class ContainerLoader {
       loadOpts.disableAutoLoad = true;
     }
 
-    // 如果没有关闭autoLoad 则进行load
+    // if not disable auto load
     if (!loadOpts.disableAutoLoad) {
-      const defaultLoadDir = this.isTsMode ? [this.baseDir] : ['app', 'lib'];
+      // use baseDir in parameter first
+      const baseDir = loadOpts.baseDir || this.baseDir;
+      const defaultLoadDir = this.isTsMode ? [baseDir] : ['app', 'lib'];
       this.applicationContext.load({
         loadDir: (loadOpts.loadDir || defaultLoadDir).map(dir => {
-          return this.buildLoadDir(dir);
+          return buildLoadDir(baseDir, dir);
         }),
         pattern: loadOpts.pattern,
         ignore: loadOpts.ignore
@@ -79,13 +89,6 @@ export class ContainerLoader {
     await this.pluginContext.ready();
     await this.applicationContext.ready();
     await this.requestContext.ready();
-  }
-
-  private buildLoadDir(dir) {
-    if (!path.isAbsolute(dir)) {
-      return path.join(this.baseDir, dir);
-    }
-    return dir;
   }
 
 }
