@@ -133,3 +133,23 @@ midway-bin doc
 npm install -g midway-init
 midway-init
 ```
+
+## tslint-midway-contrib
+
+midway 对 Typescript 应用提供了简单的 tslint 规则包，只需要在 tslint.json 中做简单的继承，如果有其他的需求
+
+```json
+// package.json
+  "devDependencies": {
+    "tslint-midway-contrib": "1",
+  }
+```
+
+```json
+// tslint.json
+{
+  "extends": [
+    "tslint-midway-contrib"
+  ]
+}
+```

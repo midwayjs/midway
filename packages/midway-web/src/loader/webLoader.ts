@@ -5,14 +5,14 @@ import {
   PRIORITY_KEY,
   RouterOption,
   WEB_ROUTER_KEY,
-  WebMiddleware
+  KoaMiddleware
 } from '@midwayjs/decorator';
 import * as extend from 'extend2';
 import * as fs from 'fs';
 import { getClassMetadata, getProviderId, listModule } from 'injection';
 import { ContainerLoader, MidwayHandlerKey } from 'midway-core';
 import * as path from 'path';
-import { MidwayLoaderOptions } from '../interface';
+import { MidwayLoaderOptions, WebMiddleware } from '../interface';
 import { isTypeScriptEnvironment } from '../utils';
 
 const debug = require('debug')(`midway:loader:${process.pid}`);
@@ -186,16 +186,11 @@ export class MidwayWebLoader extends EggLoader {
         sensitive: true,
       }, app);
       newRouter.prefix(controllerOption.prefix);
-      // implement @middleware
+      // implement middleware in controller
       const middlewares = controllerOption.routerOptions.middleware;
-      if (middlewares && middlewares.length) {
-        for (const middleware of middlewares) {
-          const middlewareImpl: WebMiddleware = await this.applicationContext.getAsync(middleware);
-          if (middlewareImpl && middlewareImpl.resolve) {
-            newRouter.use(middlewareImpl.resolve());
-          }
-        }
-      }
+      await this.handlerWebMiddleware(middlewares, (middlewareImpl: KoaMiddleware) => {
+        newRouter.use(middlewareImpl);
+      });
 
       // implement @get @post
       const webRouterInfo: RouterOption[] = getClassMetadata(WEB_ROUTER_KEY, target);
@@ -204,14 +199,10 @@ export class MidwayWebLoader extends EggLoader {
           // get middleware
           const middlewares = webRouter.middleware;
           const methodMiddlwares = [];
-          if (middlewares && middlewares.length) {
-            for (const middleware of middlewares) {
-              const middlewareImpl: WebMiddleware = await this.applicationContext.getAsync(middleware);
-              if (middlewareImpl && middlewareImpl.resolve) {
-                methodMiddlwares.push(middlewareImpl.resolve());
-              }
-            }
-          }
+
+          await this.handlerWebMiddleware(middlewares, (middlewareImpl: KoaMiddleware) => {
+            methodMiddlwares.push(middlewareImpl);
+          });
 
           const routerArgs = [
             webRouter.routerName,
@@ -233,6 +224,22 @@ export class MidwayWebLoader extends EggLoader {
         priority: priority || 0,
         router: newRouter,
       });
+    }
+  }
+
+  private async handlerWebMiddleware(middlewares, handlerCallback) {
+    if (middlewares && middlewares.length) {
+      for (const middleware of middlewares) {
+        if (typeof middleware === 'function') {
+          // web function middleware
+          handlerCallback(middleware);
+        } else {
+          const middlewareImpl: WebMiddleware = await this.applicationContext.getAsync(middleware);
+          if (middlewareImpl && middlewareImpl.resolve) {
+            handlerCallback(middlewareImpl.resolve());
+          }
+        }
+      }
     }
   }
 

@@ -1,5 +1,6 @@
-import { WebMiddleware, config } from '@midwayjs/decorator';
+import { config } from '@midwayjs/decorator';
 import { provide } from 'injection';
+import { WebMiddleware } from '../../../../../../../src/interface';
 
 @provide()
 export class ApiMiddleware implements WebMiddleware {
