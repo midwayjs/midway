@@ -43,5 +43,5 @@ export function getMethodNames(obj) {
 }
 
 export function isTypeScriptEnvironment() {
-  return process.env['TS_NODE_FILES'] === 'true';
+  return !!require.extensions['.ts'];
 }
