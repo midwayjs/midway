@@ -1,5 +1,5 @@
 import { provide } from 'injection';
-import { WebMiddleware } from '../../../../../../../src/interface';
+import { WebMiddleware } from '../../../../../../../src';
 
 @provide()
 export class HomeMiddleware implements WebMiddleware {
