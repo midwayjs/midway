@@ -1,6 +1,6 @@
 const assert = require('assert');
 const request = require('supertest');
-const path = require('path');
+import * as path from 'path';
 const utils = require('./utils');
 const mm = require('mm');
 const pedding = require('pedding');

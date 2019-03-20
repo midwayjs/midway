@@ -3,7 +3,7 @@
 import { clearAllModule } from 'injection';
 import { mm } from 'midway-mock';
 
-const path = require('path');
+import * as path from 'path';
 const fs = require('fs');
 const assert = require('assert');
 
