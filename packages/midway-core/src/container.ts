@@ -22,9 +22,9 @@ import {
 import { FUNCTION_INJECT_KEY, MidwayHandlerKey } from './constant';
 import * as path from 'path';
 import * as globby from 'globby';
-import * as camelcase from 'camelcase';
 import * as is from 'is-type-of';
 
+const camelcase = require('camelcase');
 const debug = require('debug')('midway:container');
 const CONTROLLERS = 'controllers';
 const MIDDLEWARES = 'middlewares';
