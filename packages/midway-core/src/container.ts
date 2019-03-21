@@ -20,11 +20,11 @@ import {
   XmlObjectDefinition
 } from 'injection';
 import { FUNCTION_INJECT_KEY, MidwayHandlerKey } from './constant';
+import * as path from 'path';
+import * as globby from 'globby';
+import * as is from 'is-type-of';
 
-const globby = require('globby');
-const path = require('path');
 const camelcase = require('camelcase');
-const is = require('is-type-of');
 const debug = require('debug')('midway:container');
 const CONTROLLERS = 'controllers';
 const MIDDLEWARES = 'middlewares';

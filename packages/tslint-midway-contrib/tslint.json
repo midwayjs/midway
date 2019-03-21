@@ -49,6 +49,7 @@
     "only-arrow-functions": false,
     "member-ordering": false,
     "no-parameter-reassignment": null,
+    "no-unnecessary-initializer": false,
     "no-this-assignment": [
       true,
       {

@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { MidwayContainer, MidwayHandlerKey } from '../src';
 import { App } from './fixtures/ts-app-inject/app';
 
-const path = require('path');
+import * as path from 'path';
 
 describe('/test/midwayContainer.test.ts', () => {
 

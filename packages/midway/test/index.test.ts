@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import * as midway from '../src';
 
-const path = require('path');
+import * as path from 'path';
 const _ROOT = path.join(__dirname, '../');
 
 describe('/test/index.test.ts', () => {

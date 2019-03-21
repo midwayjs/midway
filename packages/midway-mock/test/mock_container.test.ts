@@ -1,7 +1,7 @@
 import { BaseService } from './fixtures/base-app-decorator/src/lib/service';
 import { mm } from '../src';
 
-const path = require('path');
+import * as path from 'path';
 const assert = require('assert');
 const fixtures = path.join(__dirname, 'fixtures');
 
