@@ -1,0 +1,17 @@
+{
+  "name": "ts-dir-with-assets",
+  "version": "0.0.1",
+  "dependencies": {
+    
+  },
+  "midway-bin-build": {
+    "include": [
+      "public",
+      "view",
+      "resource.json",
+      "lib/*.json",
+      "lib/*.text",
+      ["pattern/**", "!pattern/**/*.js"]
+    ]
+  }
+}
