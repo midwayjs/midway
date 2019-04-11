@@ -3,9 +3,9 @@
   "version": "1.4.8",
   "dependencies": {
     "co": "^4.6.0",
-    "egg-init": "^1.15.1",
+    "egg-init": "^1.16.1",
     "enquirer": "^2.3.0",
-    "yargs": "^13.2.2"
+    "yargs": "^11.1.0"
   },
   "main": "lib/command.js",
   "devDependencies": {
