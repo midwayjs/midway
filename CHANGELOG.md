@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.5.0](https://github.com/midwayjs/midway/compare/v1.4.10...v1.5.0) (2019-04-11)
+
+
+### Bug Fixes
+
+* fix midway-init ci error ([8f32dcb](https://github.com/midwayjs/midway/commit/8f32dcb))
+
+
+### Features
+
+* add project options in midway-bin ([c635057](https://github.com/midwayjs/midway/commit/c635057))
+
+
+
+
+
 ## [1.4.10](https://github.com/midwayjs/midway/compare/v1.4.9...v1.4.10) (2019-03-12)
 
 **Note:** Version bump only for package midway
