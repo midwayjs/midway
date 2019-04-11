@@ -15,6 +15,7 @@ module.exports = {
   devdep: [
   ],
   keep: [
-    "midway"
+    "midway",
+    "yargs",
   ]
 };
