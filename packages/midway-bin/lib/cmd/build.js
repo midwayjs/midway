@@ -18,6 +18,12 @@ class BuildCommand extends Command {
         type: 'boolean',
         alias: 'c',
       },
+      project: {
+        description: 'project file location',
+        type: 'string',
+        alias: 'p',
+        default: 'tsconfig.json',
+      },
     };
   }
 
@@ -29,22 +35,41 @@ class BuildCommand extends Command {
     const { cwd, argv } = context;
 
     const tscCli = require.resolve('typescript/bin/tsc');
-    if (!fs.existsSync(path.join(cwd, 'tsconfig.json'))) {
+    if (!fs.existsSync(path.join(cwd, argv.project))) {
       console.log(`[midway-bin] tsconfig.json not found in ${cwd}\n`);
       return;
     }
 
     if (argv.clean) {
-      yield this.cleanDir(cwd);
+      yield this.cleanDir(cwd, argv.project);
     }
 
-    yield this.copyFiles(cwd);
+    yield this.copyFiles(cwd, argv.project);
 
-    yield this.helper.forkNode(tscCli, [], { cwd });
+    const args = [];
+
+    if (argv.project) {
+      args.push('-p');
+      args.push(argv.project);
+    }
+    yield this.helper.forkNode(tscCli, args, { cwd });
   }
 
-  * cleanDir(cwd) {
-    const tsConfig = require(path.join(cwd, 'tsconfig.json'));
+  * cleanDir(cwd, projectFile) {
+    const tsConfig = require(path.join(cwd, projectFile));
+
+    // if projectFile extended and without outDir,
+    // get setting from its parent
+    if (tsConfig && tsConfig.extends) {
+      if (
+        !tsConfig.compilerOptions ||
+        (tsConfig.compilerOptions && !tsConfig.compilerOptions.outDir)
+      ) {
+        yield this.cleanDir(cwd, tsConfig.extends);
+        return;
+      }
+    }
+
     if (tsConfig && tsConfig.compilerOptions) {
       const outDir = tsConfig.compilerOptions.outDir;
       if (outDir) {
@@ -53,8 +78,21 @@ class BuildCommand extends Command {
     }
   }
 
-  * copyFiles(cwd) {
-    const tsConfig = require(path.join(cwd, 'tsconfig.json'));
+  * copyFiles(cwd, projectFile) {
+    const tsConfig = require(path.join(cwd, projectFile));
+
+    // if projectFile extended and without outDir,
+    // get setting from its parent
+    if (tsConfig && tsConfig.extends) {
+      if (
+        !tsConfig.compilerOptions ||
+        (tsConfig.compilerOptions && !tsConfig.compilerOptions.outDir)
+      ) {
+        yield this.copyFiles(cwd, tsConfig.extends);
+        return;
+      }
+    }
+
     if (tsConfig && tsConfig.compilerOptions) {
       const outDir = tsConfig.compilerOptions.outDir;
       if (outDir && fs.existsSync(path.join(cwd, 'package.json'))) {

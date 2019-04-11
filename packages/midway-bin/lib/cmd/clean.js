@@ -32,7 +32,7 @@ class CleanCommand extends Command {
       }, error => {
         if (error) {
           console.error(`[midway-bin] exec error: ${error}`);
-          reject();
+          reject(error);
           return;
         }
         console.log('[midway-bin] clean midway temporary files complete!');
