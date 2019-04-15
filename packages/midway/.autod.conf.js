@@ -13,7 +13,6 @@ module.exports = {
   ],
   dep: [
     "egg-cluster",
-    "ts-node"
   ],
   devdep: [
   ]
