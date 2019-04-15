@@ -1,15 +1,7 @@
 import * as assert from 'assert';
-import { isDev, formatOptions } from '../cluster/utils';
+import { formatOptions } from '../cluster/utils';
 
 describe('/test/utils.test.js', () => {
-  it('#isDev', (done) => {
-    const bak = process.env.NODE_ENV;
-    process.env.NODE_ENV = 'unittest';
-    const res = isDev();
-    assert(res);
-    process.env.NODE_ENV = bak;
-    done();
-  });
 
   it('#formatOptions', (done) => {
     const res = formatOptions({});

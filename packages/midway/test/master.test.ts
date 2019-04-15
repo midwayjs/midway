@@ -1,11 +1,12 @@
 import { cluster } from './util';
+import { join } from 'path';
 
 describe('/test/master.test.js', () => {
   let app;
 
   it('should start cluster', (done) => {
     const bak = process.env.PLUGIN_PATH;
-    process.env.PLUGIN_PATH = require('path').join(__dirname, '../../../../');
+    process.env.PLUGIN_PATH = join(__dirname, '../../../../');
     app = cluster('apps/master-worker-started');
     app
       .expect('stdout', /midway start/)
