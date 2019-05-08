@@ -48,8 +48,6 @@ $ open http://localhost:7001/
 │   │   ├── app
 │   │   ├── config
 │   │   ├── lib
-│   │   ├── run
-│   │   └── server
 │   ├── package.json
 │   ├── tsconfig.json
 │   └── tslint.json
