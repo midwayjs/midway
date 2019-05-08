@@ -8,5 +8,10 @@
     "package": "midway-demo-boilerplate",
     "description": "Simple boilerplate for create a midway demo",
     "name": "midway demo template"
+  },
+  "midway-ts-ant-design-pro": {
+    "package": "midway-ts-ant-design-pro-boilerplate",
+    "description": "A front-end and back-end separation project includes midway(ts) and ant-design-pro.",
+    "name": "midway typescript and ant-design-pro template"
   }
 }
