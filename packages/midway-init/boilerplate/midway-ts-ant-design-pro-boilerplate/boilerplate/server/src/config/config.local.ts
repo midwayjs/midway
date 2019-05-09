@@ -10,7 +10,7 @@ module.exports = (appInfo: any) => {
       command: 'cross-env umi dev --port={port}',
       env: {
         APP_ROOT: path.join(__dirname, '../../../client'),
-        portPath: path.join(appInfo.appDir, 'run/assetsPort'),
+        portPath: path.join(appInfo.baseDir, '../run/assetsPort'),
         BROWSER: 'none',
         SOCKET_SERVER: 'http://127.0.0.1:{port}'
       },
