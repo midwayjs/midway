@@ -18,11 +18,6 @@
     "tslint": "npm run tslint:fix",
     "tslint:fix": "tslint --fix 'src/**/*.ts*'"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint-staged"
-    }
-  },
   "lint-staged": {
     "**/*.less": "stylelint --syntax less",
     "**/*.{js,jsx}": "npm run lint-staged:js",

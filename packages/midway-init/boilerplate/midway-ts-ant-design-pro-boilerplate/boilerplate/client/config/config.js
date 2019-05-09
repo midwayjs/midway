@@ -119,7 +119,7 @@ export default {
   history: 'hash',
   outputPath: '../server/src/app/public',
   manifest: {
-    fileName: '../../server/src/config/manifest.json',
+    fileName: '../../config/manifest.json',
     publicPath: '',
   },
 };

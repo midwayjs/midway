@@ -16,22 +16,11 @@
     "clientLint": "cd client && npm run lint",
     "serverLint": "cd server && npm run lint"
   },
-  "engines": {
-    "node": ">=9.11.2"
-  },
   "keywords": [
     "node",
     "react",
     "midway",
     "typeScript",
     "ant-design-pro"
-  ],
-  "config": {
-    "build": {
-      "deps": "isolation"
-    },
-    "docker": {
-      "os": 7
-    }
-  }
+  ]
 }
