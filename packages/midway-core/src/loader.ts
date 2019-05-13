@@ -13,13 +13,15 @@ export class ContainerLoader {
 
   baseDir;
   pluginContext;
-  applicationContext;
+  applicationContext: MidwayContainer;
   requestContext;
   isTsMode;
+  preloadModules;
 
-  constructor({baseDir, isTsMode = true}) {
+  constructor({baseDir, isTsMode = true, preloadModules = []}) {
     this.baseDir = baseDir;
     this.isTsMode = isTsMode;
+    this.preloadModules = preloadModules;
   }
 
   initialize() {
@@ -82,6 +84,12 @@ export class ContainerLoader {
         pattern: loadOpts.pattern,
         ignore: loadOpts.ignore
       });
+    }
+
+    if (this.preloadModules && this.preloadModules.length) {
+      for (const preloadModule of this.preloadModules) {
+        this.applicationContext.bindClass(preloadModule);
+      }
     }
   }
 
