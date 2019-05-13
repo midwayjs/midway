@@ -24,6 +24,11 @@ class BuildCommand extends Command {
         alias: 'p',
         default: 'tsconfig.json',
       },
+      srcDir: {
+        description: 'source code path',
+        type: 'string',
+        default: 'src',
+      },
     };
   }
 
@@ -44,7 +49,7 @@ class BuildCommand extends Command {
       yield this.cleanDir(cwd, argv.project);
     }
 
-    yield this.copyFiles(cwd, argv.project);
+    yield this.copyFiles(cwd, argv.project, argv);
 
     const args = [];
 
@@ -78,7 +83,7 @@ class BuildCommand extends Command {
     }
   }
 
-  * copyFiles(cwd, projectFile) {
+  * copyFiles(cwd, projectFile, argv) {
     const tsConfig = require(path.join(cwd, projectFile));
 
     // if projectFile extended and without outDir,
@@ -88,7 +93,7 @@ class BuildCommand extends Command {
         !tsConfig.compilerOptions ||
         (tsConfig.compilerOptions && !tsConfig.compilerOptions.outDir)
       ) {
-        yield this.copyFiles(cwd, tsConfig.extends);
+        yield this.copyFiles(cwd, tsConfig.extends, argv);
         return;
       }
     }
@@ -100,15 +105,15 @@ class BuildCommand extends Command {
         if (pkg['midway-bin-build'] && pkg['midway-bin-build'].include) {
           for (const file of pkg['midway-bin-build'].include) {
             if (typeof file === 'string' && !/\*/.test(file)) {
-              const srcDir = path.join('src', file);
+              const srcDir = path.join(argv.srcDir, file);
               const targetDir = path.join(outDir, file);
               // 目录，或者不含通配符的普通文件
               this.copyFile(srcDir, targetDir, cwd);
             } else {
               // 通配符的情况
-              const paths = yield globby([].concat(file), { cwd: path.join(cwd, 'src') });
+              const paths = yield globby([].concat(file), { cwd: path.join(cwd, argv.srcDir) });
               for (const p of paths) {
-                this.copyFile(path.join('src', p), path.join(outDir, p), cwd);
+                this.copyFile(path.join(argv.srcDir, p), path.join(outDir, p), cwd);
               }
             }
           }
