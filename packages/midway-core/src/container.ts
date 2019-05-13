@@ -197,8 +197,8 @@ export class MidwayContainer extends Container implements IContainer {
    */
   load(opts: {
     loadDir: string | string[];
-    pattern?: string[];
-    ignore?: string[];
+    pattern?: string | string[];
+    ignore?: string | string[];
   }) {
     const loadDirs = [].concat(opts.loadDir || []);
 
@@ -219,22 +219,25 @@ export class MidwayContainer extends Container implements IContainer {
         const file = path.join(dir, name);
         debug(`binding file => ${file}`);
         const exports = require(file);
+        this.bindClass(exports);
+      }
+    }
+  }
 
-        if (is.class(exports) || is.function(exports)) {
-          this.bindClass(exports);
-        } else {
-          for (const m in exports) {
-            const module = exports[m];
-            if (is.class(module) || is.function(module)) {
-              this.bindClass(module);
-            }
-          }
+  bindClass(exports) {
+    if (is.class(exports) || is.function(exports)) {
+      this.bindModule(exports);
+    } else {
+      for (const m in exports) {
+        const module = exports[m];
+        if (is.class(module) || is.function(module)) {
+          this.bindModule(module);
         }
       }
     }
   }
 
-  protected bindClass(module) {
+  protected bindModule(module) {
     if (is.class(module)) {
       const providerId = getProviderId(module);
       if (providerId) {

@@ -43,7 +43,7 @@ describe('/test/loader.test.ts', () => {
     });
 
     const appCtx = loader.getApplicationContext();
-    const baseService = await appCtx.getAsync('baseService');
+    const baseService: any = await appCtx.getAsync('baseService');
     assert(baseService.config === 'hello');
     assert(baseService.logger === console);
     assert(baseService.plugin2.b === 2);
@@ -144,6 +144,26 @@ describe('/test/loader.test.ts', () => {
     } catch (err) {
       assert(err);
     }
+  });
+
+  it('should load preload module', async () => {
+    const loader = new ContainerLoader({
+      baseDir: path.join(__dirname, './fixtures/base-app/src'),
+      preloadModules: [
+        class TestModule {
+          test() {
+            return 'hello';
+          }
+        }
+      ]
+    });
+    loader.initialize();
+    loader.loadDirectory();
+    await loader.refresh();
+
+    const appCtx = loader.getApplicationContext();
+    const module: any = await appCtx.getAsync('testModule');
+    assert(module.test() === 'hello');
   });
 
 });
