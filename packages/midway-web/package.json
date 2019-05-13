@@ -1,6 +1,6 @@
 {
   "name": "midway-web",
-  "version": "1.5.2",
+  "version": "1.5.5",
   "description": "Midway Web Scene",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -45,7 +45,7 @@
     "egg-logger": "^2.3.2",
     "extend2": "^1.0.0",
     "injection": "^1.4.2",
-    "midway-core": "^1.5.2",
+    "midway-core": "^1.5.5",
     "midway-schedule": "^1.5.2",
     "mkdirp": "^0.5.1"
   },
