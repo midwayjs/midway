@@ -1,4 +1,4 @@
-import { Context, controller, provide, controller, get, post, inject } from 'midway';
+import { Context, controller, provide, get, post, inject } from 'midway';
 import { IUserService } from '../../lib/interface';
 
 @provide()
