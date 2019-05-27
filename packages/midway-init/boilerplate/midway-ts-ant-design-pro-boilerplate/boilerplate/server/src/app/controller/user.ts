@@ -1,4 +1,4 @@
-import { provide, controller, get, post, inject } from 'midway';
+import { Context, controller, provide, get, post, inject } from 'midway';
 import { IUserService } from '../../lib/interface';
 
 @provide()
@@ -11,7 +11,7 @@ export class UserController {
    * GET /user/profile
    */
   @get('/profile')
-  async profile(ctx) {
+  async profile(ctx: Context) {
     const res = await this.service.profile();
     ctx.body = res.data;
   }
@@ -20,7 +20,7 @@ export class UserController {
    * POST /user/login
    */
   @post('/login')
-  async login(ctx) {
+  async login(ctx: Context) {
     const { username, password } = ctx.query;
 
     if (username === 'admin' && password === 'admin') {
@@ -48,7 +48,7 @@ export class UserController {
    * POST /user/register
    */
   @post('/register')
-  async register(ctx) {
+  async register(ctx: Context) {
     ctx.body = {
       status: 200,
       statusText: 'ok',
@@ -60,7 +60,7 @@ export class UserController {
    * POST /user/logout
    */
   @post('/logout')
-  async logout(ctx) {
+  async logout(ctx: Context) {
     ctx.body = {
       status: 200,
       statusText: 'ok',
