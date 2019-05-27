@@ -1,0 +1,46 @@
+{
+  "files.insertFinalNewline": true,
+  "files.eol": "\n",
+  "files.exclude": {
+    "USE_GITIGNORE": true,
+    "**/*.js": {
+      "when": "$(basename).ts"
+    },
+    "**/*.map": true,
+    "**/*.swp": true,
+    "**/.git": true,
+    "**/.DS_Store": true,
+    ".vscode": true,
+    ".git": true,
+    ".build": true,
+    ".githooks": true,
+    ".sourcemaps": true,
+    "run": true,
+    "logs": true,
+    "out": true,
+    "node_modules": true,
+    "node_modules*": true,
+    "coverage": true,
+    "dist": true,
+    "platforms": true
+  },
+  "files.watcherExclude": {
+      "**/.git/objects/**": true,
+      "**/node_modules/**": true,
+      "**/node_modules*/**": true,
+      "coverage/**": true,
+      "dist/**": true
+  },
+  "files.trimTrailingWhitespace": true,
+  "search.exclude": {
+    "**/node_modules": true,
+    ".vscode/**": true,
+    ".build/**": true,
+    "out/**": true,
+    "i18n/**": true
+  },
+  "[markdown]": {
+    "files.trimTrailingWhitespace": false
+  },
+  "tslint.configFile": "./tslint.json"
+}
