@@ -9,6 +9,9 @@
       "type": "node",
       "autoAttachChildProcesses": true,
       "console": "integratedTerminal",
+      "env": {
+        "NODE_ENV": "local"
+      },
       "port": 9229,
       "protocol": "auto",
       "request": "launch",
