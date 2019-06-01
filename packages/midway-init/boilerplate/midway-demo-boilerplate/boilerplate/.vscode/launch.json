@@ -19,7 +19,12 @@
         "--",
         "--inspect-brk"
       ],
-      "runtimeExecutable": "npm"
+      "runtimeExecutable": "npm",
+      "skipFiles": [
+        // "${workspaceFolder}/node_modules/**/*.js",
+        "${workspaceFolder}/node_modules/rxjs/**/*.js",
+        "<node_internals>/**/*.js"
+      ]
     }
   ]
 }
