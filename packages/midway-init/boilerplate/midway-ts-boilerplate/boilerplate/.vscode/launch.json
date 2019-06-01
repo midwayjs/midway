@@ -7,19 +7,19 @@
     {
       "name": "Egg/Midway Debug",
       "type": "node",
+      "autoAttachChildProcesses": true,
+      "console": "integratedTerminal",
+      "port": 9229,
+      "protocol": "auto",
       "request": "launch",
-      "runtimeExecutable": "npm",
+      "restart": true,
       "runtimeArgs": [
         "run",
         "debug",
         "--",
         "--inspect-brk"
       ],
-      "console": "integratedTerminal",
-      "restart": true,
-      "protocol": "auto",
-      "port": 9229,
-      "autoAttachChildProcesses": true
+      "runtimeExecutable": "npm"
     }
   ]
 }
