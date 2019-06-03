@@ -17,6 +17,7 @@
     "outDir": "dist",
     "pretty": true,
     "skipLibCheck": true,
+    "strict": true,
     "stripInternal": true,
     "target": "ES2017"
   },
