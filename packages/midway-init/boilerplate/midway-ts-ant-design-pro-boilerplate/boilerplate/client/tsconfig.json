@@ -6,7 +6,6 @@
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
     "jsx": "react",
-    "lib": ["es6", "dom"],
     "module": "esnext",
     "moduleResolution": "node",
     "noImplicitReturns": true,

@@ -6,7 +6,6 @@
     "declaration": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "lib": ["es2017", "dom"],
     "inlineSourceMap": true,
     "module": "commonjs",
     "newLine": "lf",
