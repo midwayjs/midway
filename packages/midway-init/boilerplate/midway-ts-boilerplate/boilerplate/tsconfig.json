@@ -1,19 +1,19 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
-    "target": "ES2017",
+    "declaration": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "lib": ["es2017", "dom"],
+    "inlineSourceMap":true,
     "module": "commonjs",
     "moduleResolution": "node",
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "inlineSourceMap":true,
     "noImplicitThis": true,
     "noUnusedLocals": true,
-    "stripInternal": true,
-    "pretty": true,
-    "declaration": true,
     "outDir": "dist",
-    "lib": ["es2017", "dom"]
+    "pretty": true,
+    "stripInternal": true,
+    "target": "ES2017"
   },
   "exclude": [
     "app/public",
