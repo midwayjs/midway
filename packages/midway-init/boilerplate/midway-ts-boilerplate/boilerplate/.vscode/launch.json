@@ -5,21 +5,30 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Egg/Midway Debug",
+      "name": "Midway Debug",
       "type": "node",
+      "autoAttachChildProcesses": true,
+      "console": "integratedTerminal",
+      "env": {
+        "NODE_ENV": "local"
+      },
+      "port": 9229,
+      "preLaunchTask": "TypeScript compile",
+      "protocol": "auto",
       "request": "launch",
-      "runtimeExecutable": "npm",
+      "restart": true,
       "runtimeArgs": [
         "run",
         "debug",
         "--",
         "--inspect-brk"
       ],
-      "console": "integratedTerminal",
-      "restart": true,
-      "protocol": "auto",
-      "port": 9229,
-      "autoAttachChildProcesses": true
+      "runtimeExecutable": "npm",
+      "skipFiles": [
+        // "${workspaceFolder}/node_modules/**/*.js",
+        "${workspaceFolder}/node_modules/rxjs/**/*.js",
+        "<node_internals>/**/*.js"
+      ]
     }
   ]
 }
