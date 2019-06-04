@@ -14,6 +14,7 @@ import { ContainerLoader, MidwayHandlerKey } from 'midway-core';
 import * as path from 'path';
 import { MidwayLoaderOptions, WebMiddleware } from '../interface';
 import { isTypeScriptEnvironment } from '../utils';
+import { EggAppInfo } from 'egg';
 
 const debug = require('debug')(`midway:loader:${process.pid}`);
 const EggLoader = require('egg-core').EggLoader;
@@ -22,6 +23,9 @@ const TS_SRC_DIR = 'src';
 const TS_TARGET_DIR = 'dist';
 
 export class MidwayWebLoader extends EggLoader {
+  private baseDir: string;
+  private appDir: string;
+  private appInfo: EggAppInfo;
   private controllerIds: string[] = [];
   private prioritySortRouters: Array<{
     priority: number,

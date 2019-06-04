@@ -12,16 +12,16 @@
     "debug": "^4.1.1",
     "gh-pages": "^1.2.0",
     "git-hooks": "^1.1.10",
-    "lerna": "^3.10.7",
+    "lerna": "^3.14.1",
     "lerna-relinker": "^1.4.0",
     "node-ab": "0.0.6",
     "opencollective": "^1.0.3",
-    "opencollective-postinstall": "^2.0.1",
+    "opencollective-postinstall": "^2.0.2",
     "tree-kill": "^1.2.0",
-    "tslint": "^5.12.0",
+    "tslint": "^5.17.0",
     "tslint-no-unused-expression-chai": "^0.1.4",
-    "typescript": "^3.2.0",
-    "vuepress": "^0.14.8"
+    "typescript": "^3.5.1",
+    "vuepress": "^0.14.11"
   },
   "scripts": {
     "autod": "lerna run autod",
