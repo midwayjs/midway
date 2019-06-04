@@ -1,35 +1,34 @@
 {
   "compilerOptions": {
-    "outDir": "build/dist",
-    "module": "esnext",
-    "target": "es2016",
-    "lib": ["es6", "dom"],
-    "sourceMap": true,
-    "baseUrl": ".",
-    "jsx": "react",
-    "allowSyntheticDefaultImports": true,
-    "moduleResolution": "node",
-    "rootDirs": ["/src", "/test", "/mock", "./typings"],
-    "forceConsistentCasingInFileNames": true,
-    "noImplicitReturns": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "noUnusedLocals": true,
     "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
     "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "jsx": "react",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "outDir": "build/dist",
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "rootDirs": ["/src", "/test", "/mock", "./typings"],
+    "sourceMap": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "target": "es2016"
   },
   "include": ["./src"],
   "exclude": [
-    "node_modules",
-    "build",
-    "scripts",
     "acceptance-tests",
-    "webpack",
+    "build",
     "jest",
+    "node_modules",
+    "scripts",
     "src/setupTests.ts",
     "tslint:latest",
-    "tslint-config-prettier"
+    "tslint-config-prettier",
+    "webpack"
   ]
 }
