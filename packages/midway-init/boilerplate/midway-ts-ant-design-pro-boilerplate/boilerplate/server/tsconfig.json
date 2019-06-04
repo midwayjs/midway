@@ -1,25 +1,32 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
-    "target": "ES2017",
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "experimentalDecorators": true,
+    "alwaysStrict": true,
+    "charset": "utf8",
+    "declaration": false,
     "emitDecoratorMetadata": true,
-    "inlineSourceMap":true,
+    "experimentalDecorators": true,
+    "inlineSourceMap": true,
+    "module": "commonjs",
+    "newLine": "lf",
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
     "noImplicitThis": true,
     "noUnusedLocals": true,
-    "stripInternal": true,
-    "pretty": true,
-    "declaration": true,
     "outDir": "dist",
-    "lib": ["es2017", "dom"]
+    "pretty": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "stripInternal": true,
+    "target": "ES2017"
   },
   "exclude": [
     "app/public",
     "app/views",
     "dist",
     "node_modules",
-    "test"
+    "test",
+    "**/*.d.ts",
+    "**/*.spec.ts"
   ]
 }
