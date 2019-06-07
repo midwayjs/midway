@@ -24,7 +24,7 @@
   },
   "scripts": {
     "debug": "NODE_ENV=local midway-bin debug --ts",
-    "lint": "tslint -c tslint.json --project .",
+    "lint": "tslint --fix -p tsconfig.json -t stylish",
     "cov": "midway-bin cov --ts",
     "ci": "midway-bin cov --ts",
     "build": "midway-bin build -c",
