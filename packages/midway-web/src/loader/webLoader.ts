@@ -23,9 +23,9 @@ const TS_SRC_DIR = 'src';
 const TS_TARGET_DIR = 'dist';
 
 export class MidwayWebLoader extends EggLoader {
-  private baseDir: string;
-  private appDir: string;
-  private appInfo: EggAppInfo;
+  public baseDir: string;
+  public appDir: string;
+  public appInfo: EggAppInfo;
   private controllerIds: string[] = [];
   private prioritySortRouters: Array<{
     priority: number,
