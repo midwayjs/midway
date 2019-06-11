@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0](https://github.com/midwayjs/midway/compare/v1.5.6...v1.6.0) (2019-06-11)
+
+
+### Bug Fixes
+
+* **types:** duplicate import of the controller ([2b4600a](https://github.com/midwayjs/midway/commit/2b4600a))
+
+
+### Features
+
+* **types:** import and use Context for boilerplate ([d183196](https://github.com/midwayjs/midway/commit/d183196))
+* **vscode:** add launch.json for vscode debug ([9741a53](https://github.com/midwayjs/midway/commit/9741a53))
+* **vscode:** add settings.json for vscode ([f7d178b](https://github.com/midwayjs/midway/commit/f7d178b))
+
+
+
+
+
 ## [1.5.6](https://github.com/midwayjs/midway/compare/v1.5.5...v1.5.6) (2019-05-13)
 
 
