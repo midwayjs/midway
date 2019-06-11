@@ -23,12 +23,12 @@
     "node": ">=9.11.2"
   },
   "scripts": {
-    "debug": "NODE_ENV=local midway-bin debug --ts",
+    "debug": "cross-env NODE_ENV=local midway-bin debug --ts",
     "lint": "tslint --fix -p tsconfig.json -t stylish",
     "cov": "midway-bin cov --ts",
     "ci": "midway-bin cov --ts",
     "build": "midway-bin build -c",
-    "start": "NODE_ENV=local midway-bin dev --ts"
+    "start": "cross-env NODE_ENV=local midway-bin dev --ts"
   },
   "config": {
     "build": {
