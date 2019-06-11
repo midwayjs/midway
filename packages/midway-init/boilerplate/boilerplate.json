@@ -2,12 +2,12 @@
   "midway-ts": {
     "package": "midway-ts-boilerplate",
     "description": "Simple midway application boilerplate by ts",
-    "name": "midway typescript template"
+    "name": "midway standard typescript template"
   },
   "midway-demo": {
     "package": "midway-demo-boilerplate",
-    "description": "Simple boilerplate for create a midway demo",
-    "name": "midway demo template"
+    "description": "Simple example boilerplate for find bug or submit to midway-examples",
+    "name": "midway mini example template"
   },
   "midway-ts-ant-design-pro": {
     "package": "midway-ts-ant-design-pro-boilerplate",

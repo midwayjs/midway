@@ -17,6 +17,7 @@
     "pretty": true,
     "skipLibCheck": true,
     "strict": true,
+    "strictPropertyInitialization": false,
     "stripInternal": true,
     "target": "ES2017"
   },
