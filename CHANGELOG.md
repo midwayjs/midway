@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.2](https://github.com/midwayjs/midway/compare/v1.6.1...v1.6.2) (2019-06-12)
+
+
+### Bug Fixes
+
+* fix tsconfig in template ([1680d29](https://github.com/midwayjs/midway/commit/1680d29))
+
+
+
+
+
 ## [1.6.1](https://github.com/midwayjs/midway/compare/v1.6.0...v1.6.1) (2019-06-11)
 
 **Note:** Version bump only for package midway
