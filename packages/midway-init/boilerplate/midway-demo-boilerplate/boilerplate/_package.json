@@ -6,6 +6,7 @@
     "midway": "^1.0.0"
   },
   "devDependencies": {
+    "cross-env": "^5.2.0",
     "midway-bin": "1",
     "midway-demo-lib": "1"
   },
@@ -13,8 +14,8 @@
     "node": ">=8.9.0"
   },
   "scripts": {
-    "dev": "NODE_ENV=local midway-bin dev --ts",
-    "debug": "NODE_ENV=local midway-bin debug --ts",
+    "dev": "cross-env NODE_ENV=local midway-bin dev --ts",
+    "debug": "cross-env NODE_ENV=local midway-bin debug --ts",
     "test": "midway-bin test --ts",
     "cov": "midway-bin cov --ts",
     "ci": "midway-bin cov --ts",

@@ -4,6 +4,10 @@ import { IUserService } from '../../lib/interface';
 @provide()
 @controller('/user')
 export class UserController {
+
+  @inject()
+  ctx: Context;
+
   @inject('userService')
   service: IUserService;
 
@@ -11,32 +15,32 @@ export class UserController {
    * GET /user/profile
    */
   @get('/profile')
-  async profile(ctx: Context) {
+  async profile() {
     const res = await this.service.profile();
-    ctx.body = res.data;
+    this.ctx.body = res.data;
   }
 
   /**
    * POST /user/login
    */
   @post('/login')
-  async login(ctx: Context) {
-    const { username, password } = ctx.query;
+  async login() {
+    const { username, password } = this.ctx.query;
 
     if (username === 'admin' && password === 'admin') {
-      ctx.body = {
+      this.ctx.body = {
         status: 200,
         statusText: 'ok',
         currentAuthority: 'admin',
       };
     } else if (username === 'user' && password === 'user') {
-      ctx.body = {
+      this.ctx.body = {
         status: 200,
         statusText: 'ok',
         currentAuthority: 'user',
       };
     } else {
-      ctx.body = {
+      this.ctx.body = {
         status: 401,
         statusText: 'unauthorized',
         currentAuthority: 'guest',
@@ -48,8 +52,8 @@ export class UserController {
    * POST /user/register
    */
   @post('/register')
-  async register(ctx: Context) {
-    ctx.body = {
+  async register() {
+    this.ctx.body = {
       status: 200,
       statusText: 'ok',
       currentAuthority: 'user',
@@ -60,8 +64,8 @@ export class UserController {
    * POST /user/logout
    */
   @post('/logout')
-  async logout(ctx: Context) {
-    ctx.body = {
+  async logout() {
+    this.ctx.body = {
       status: 200,
       statusText: 'ok',
       currentAuthority: 'guest',

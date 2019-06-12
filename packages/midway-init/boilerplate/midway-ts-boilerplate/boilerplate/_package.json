@@ -10,6 +10,7 @@
   "devDependencies": {
     "@types/mocha": "^5.2.5",
     "@types/node": "^10.5.5",
+    "cross-env": "^5.2.0",
     "egg-ci": "^1.8.0",
     "midway-bin": "1",
     "midway-mock": "1",
@@ -25,9 +26,9 @@
   "scripts": {
     "start": "egg-scripts start --daemon --title=egg-server-{{name}} --framework=midway",
     "stop": "egg-scripts stop --title=egg-server-{{name}}",
-    "start_build": "npm run build && NODE_ENV=development midway-bin dev",
-    "dev": "NODE_ENV=local midway-bin dev --ts",
-    "debug": "NODE_ENV=local midway-bin debug --ts",
+    "start_build": "npm run build && cross-env NODE_ENV=development midway-bin dev",
+    "dev": "cross-env NODE_ENV=local midway-bin dev --ts",
+    "debug": "cross-env NODE_ENV=local midway-bin debug --ts",
     "test": "npm run lint && midway-bin test --ts",
     "cov": "midway-bin cov --ts",
     "lint": "tslint --fix -p tsconfig.json -t stylish",
