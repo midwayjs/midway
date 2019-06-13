@@ -26,7 +26,7 @@ export class ContainerLoader {
 
   initialize() {
     this.pluginContext = new MidwayContainer();
-    this.applicationContext = new MidwayContainer(this.baseDir);
+    this.applicationContext = new MidwayContainer(this.baseDir, undefined, this.isTsMode);
     this.requestContext = new MidwayRequestContainer(this.applicationContext);
     // put requestContext to applicationContext
     this.applicationContext.registerObject('requestContext', this.requestContext);
