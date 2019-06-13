@@ -1,8 +1,8 @@
 import { expect } from 'chai';
-import { MidwayContainer, MidwayHandlerKey } from '../src';
-import { App } from './fixtures/ts-app-inject/app';
 
 import * as path from 'path';
+import { MidwayContainer, MidwayHandlerKey } from '../src';
+import { App } from './fixtures/ts-app-inject/app';
 
 describe('/test/midwayContainer.test.ts', () => {
 
@@ -20,7 +20,7 @@ describe('/test/midwayContainer.test.ts', () => {
   });
 
   it('should load js dir and inject with $', () => {
-    const container = new MidwayContainer();
+    const container = new MidwayContainer(undefined, undefined, false);
     container.load({
       loadDir: path.join(__dirname, './fixtures/js-app-inject')
     });
@@ -30,7 +30,7 @@ describe('/test/midwayContainer.test.ts', () => {
   });
 
   it('should load js app with xml', async () => {
-    const container = new MidwayContainer(path.join(__dirname, './fixtures/js-app-xml'));
+    const container = new MidwayContainer(path.join(__dirname, './fixtures/js-app-xml'), undefined, false);
     container.configLocations = ['resources/main.xml'];
 
     container.props.putObject(require('./fixtures/js-app-xml/config/config.default'));

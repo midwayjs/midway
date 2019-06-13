@@ -2,6 +2,14 @@ import { CONFIG_KEY, LOGGER_KEY, PLUGIN_KEY } from '@midwayjs/decorator';
 import * as assert from 'assert';
 import * as path from 'path';
 import { ContainerLoader } from '../src';
+import { provide } from 'injection';
+
+@provide()
+class TestModule {
+  test() {
+    return 'hello';
+  }
+}
 
 describe('/test/loader.test.ts', () => {
 
@@ -30,15 +38,16 @@ describe('/test/loader.test.ts', () => {
     await loader.refresh();
 
     // register handler for container
-    loader.registerAllHook(CONFIG_KEY, (key) => {
+    loader.registerAllHook(CONFIG_KEY, (key, target) => {
+      assert(target instanceof require('./fixtures/base-app-decorator/src/lib/service')['BaseService']);
       return 'hello';
     });
 
-    loader.registerAllHook(PLUGIN_KEY, (key) => {
+    loader.registerAllHook(PLUGIN_KEY, (key, target) => {
       return {b: 2};
     });
 
-    loader.registerAllHook(LOGGER_KEY, (key) => {
+    loader.registerAllHook(LOGGER_KEY, (key, target) => {
       return console;
     });
 
@@ -150,11 +159,7 @@ describe('/test/loader.test.ts', () => {
     const loader = new ContainerLoader({
       baseDir: path.join(__dirname, './fixtures/base-app/src'),
       preloadModules: [
-        class TestModule {
-          test() {
-            return 'hello';
-          }
-        }
+        TestModule
       ]
     });
     loader.initialize();

@@ -161,19 +161,27 @@ export class MidwayContainer extends Container implements IContainer {
   handlerMap: Map<string, (handlerKey: string) => any>;
   // 仅仅用于兼容requestContainer的ctx
   ctx = {};
+  isTsMode;
+
+  constructor(baseDir: string = process.cwd(), parent: IApplicationContext = undefined, isTsMode = true) {
+    super(baseDir, parent);
+    this.isTsMode = isTsMode;
+  }
 
   init(): void {
     this.handlerMap = new Map();
     super.init();
 
-    // xml扩展 <logger name=""/> <plugin name="hsfclient"/>
-    this.parser.objectElementParser.registerParser(new LoggerParser());
-    this.resolverFactory.registerResolver(new LoggerResolver(this));
-    this.parser.objectElementParser.registerParser(new PluginParser());
-    this.resolverFactory.registerResolver(new PluginResolver(this));
+    if (!this.isTsMode) {
+      // xml扩展 <logger name=""/> <plugin name="hsfclient"/>
+      this.parser.objectElementParser.registerParser(new LoggerParser());
+      this.resolverFactory.registerResolver(new LoggerResolver(this));
+      this.parser.objectElementParser.registerParser(new PluginParser());
+      this.resolverFactory.registerResolver(new PluginResolver(this));
 
-    this.parser.registerParser(new ControllerDefinitionParser(this));
-    this.parser.registerParser(new MiddlewareDefinitionParser(this));
+      this.parser.registerParser(new ControllerDefinitionParser(this));
+      this.parser.registerParser(new MiddlewareDefinitionParser(this));
+    }
 
     this.registerEachCreatedHook();
 
@@ -243,8 +251,10 @@ export class MidwayContainer extends Container implements IContainer {
       if (providerId) {
         this.bind(providerId, module);
       } else {
-        // inject by name in js
-        this.bind(camelcase(module.name), module);
+        if (!this.isTsMode) {
+          // inject by name in js
+          this.bind(camelcase(module.name), module);
+        }
       }
     } else {
       const info: {
@@ -317,7 +327,7 @@ export class MidwayContainer extends Container implements IContainer {
       this.defineGetterPropertyValue(loggerSetterProps, instance, this.handlerMap.get(MidwayHandlerKey.LOGGER));
 
       // 表示非ts annotation模式
-      if (!pluginSetterProps && !loggerSetterProps && definition.isAutowire()) {
+      if (!this.isTsMode && !pluginSetterProps && !loggerSetterProps && definition.isAutowire()) {
         // this.$$xxx = null; 用来注入config
         // this.$xxx = null; 用来注入 logger 或者 插件
         Autowire.patchDollar(instance, context, (key: string) => {
@@ -349,7 +359,7 @@ export class MidwayContainer extends Container implements IContainer {
       for (const prop of setterProps) {
         if (prop.propertyName) {
           Object.defineProperty(instance, prop.propertyName, {
-            get: () => getterHandler(prop.key),
+            get: () => getterHandler(prop.key, instance),
             configurable: false,
             enumerable: true
           });
