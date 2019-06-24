@@ -187,14 +187,10 @@ export class MidwayWebLoader extends EggLoader {
   }
 
   protected async preRegisterRouter(target, controllerId) {
-    const app = this.app;
     const controllerOption: ControllerOption = getClassMetadata(CONTROLLER_KEY, target);
-    let newRouter;
-    if (controllerOption.prefix) {
-      newRouter = new Router({
-        sensitive: true,
-      }, app);
-      newRouter.prefix(controllerOption.prefix);
+    const newRouter = this.createEggRouter(controllerOption);
+
+    if (newRouter) {
       // implement middleware in controller
       const middlewares = controllerOption.routerOptions.middleware;
       await this.handlerWebMiddleware(middlewares, (middlewareImpl: KoaMiddleware) => {
@@ -224,16 +220,15 @@ export class MidwayWebLoader extends EggLoader {
           newRouter[webRouter.requestMethod].apply(newRouter, routerArgs);
         }
       }
-    }
 
     // sort for priority
-    if (newRouter) {
       const priority = getClassMetadata(PRIORITY_KEY, target);
       this.prioritySortRouters.push({
         priority: priority || 0,
         router: newRouter,
       });
     }
+
   }
 
   private async handlerWebMiddleware(middlewares, handlerCallback) {
@@ -250,6 +245,19 @@ export class MidwayWebLoader extends EggLoader {
         }
       }
     }
+  }
+
+  /**
+   * @param controllerOption
+   */
+  private createEggRouter(controllerOption: ControllerOption) {
+    const { prefix , routerOptions: { sensitive }}  = controllerOption;
+    if (prefix) {
+      const router = new Router({ sensitive }, this.app);
+      router.prefix(prefix);
+      return router;
+    }
+    return null;
   }
 
   protected async refreshContext(): Promise<void> {
