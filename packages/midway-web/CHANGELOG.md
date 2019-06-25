@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.7.0](https://github.com/midwayjs/midway/compare/v1.6.3...v1.7.0) (2019-06-25)
+
+
+### Bug Fixes
+
+* **webloader:** remove routerArgs concat ([9feb872](https://github.com/midwayjs/midway/commit/9feb872))
+
+
+### Features
+
+* controller opt support sensitive opt ([780f5d7](https://github.com/midwayjs/midway/commit/780f5d7))
+
+
+
+
+
 ## [1.6.3](https://github.com/midwayjs/midway/compare/v1.6.2...v1.6.3) (2019-06-13)
 
 **Note:** Version bump only for package midway-web
