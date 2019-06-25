@@ -214,7 +214,7 @@ export class MidwayWebLoader extends EggLoader {
             webRouter.path,
             ...methodMiddlwares,
             this.generateController(`${controllerId}.${webRouter.method}`)
-          ].concat(methodMiddlwares);
+          ];
 
           // apply controller from request context
           newRouter[webRouter.requestMethod].apply(newRouter, routerArgs);
@@ -269,9 +269,7 @@ export class MidwayWebLoader extends EggLoader {
    * @param controllerMapping like xxxController.index
    */
   public generateController(controllerMapping: string) {
-    const mappingSplit = controllerMapping.split('.');
-    const controllerId = mappingSplit[0];
-    const methodName = mappingSplit[1];
+    const [controllerId, methodName] = controllerMapping.split('.');
     return async (ctx, next) => {
       const controller = await ctx.requestContext.getAsync(controllerId);
       return controller[methodName].call(controller, ctx, next);
