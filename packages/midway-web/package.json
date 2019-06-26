@@ -34,7 +34,8 @@
     "midway-mock": "^1.7.0",
     "pedding": "^1.1.0",
     "react": "^16.2.0",
-    "react-dom": "^16.2.0"
+    "react-dom": "^16.2.0",
+    "mz-modules": "^2.1.0"
   },
   "dependencies": {
     "@eggjs/router": "^2.0.0",
@@ -46,8 +47,7 @@
     "extend2": "^1.0.0",
     "injection": "^1.4.2",
     "midway-core": "^1.7.0",
-    "midway-schedule": "^1.7.0",
-    "mkdirp": "^0.5.1"
+    "midway-schedule": "^1.7.0"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
   "repository": {

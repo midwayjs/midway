@@ -5,11 +5,13 @@ import {
   KoaMiddleware,
   PRIORITY_KEY,
   RouterOption,
-  WEB_ROUTER_KEY
+  WEB_ROUTER_KEY,
+  ROUTE_ARGS_METADATA,
+  RouterParamValue
 } from '@midwayjs/decorator';
 import * as extend from 'extend2';
 import * as fs from 'fs';
-import { getClassMetadata, getProviderId, listModule } from 'injection';
+import { getClassMetadata, getMethodDataFromClass, getProviderId, listModule } from 'injection';
 import { ContainerLoader, MidwayHandlerKey } from 'midway-core';
 import * as path from 'path';
 import { MidwayLoaderOptions, WebMiddleware } from '../interface';
@@ -199,6 +201,7 @@ export class MidwayWebLoader extends EggLoader {
 
       // implement @get @post
       const webRouterInfo: RouterOption[] = getClassMetadata(WEB_ROUTER_KEY, target);
+
       if (webRouterInfo && typeof webRouterInfo[Symbol.iterator] === 'function') {
         for (const webRouter of webRouterInfo) {
           // get middleware
@@ -209,11 +212,17 @@ export class MidwayWebLoader extends EggLoader {
             methodMiddlwares.push(middlewareImpl);
           });
 
+          // implement @body @query @param @body
+          const routeArgsInfo = getMethodDataFromClass(ROUTE_ARGS_METADATA, target, webRouter.method) || [];
+
           const routerArgs = [
             webRouter.routerName,
             webRouter.path,
             ...methodMiddlwares,
-            this.generateController(`${controllerId}.${webRouter.method}`)
+            this.generateController(
+              `${controllerId}.${webRouter.method}`,
+              routeArgsInfo,
+            )
           ];
 
           // apply controller from request context
@@ -268,11 +277,17 @@ export class MidwayWebLoader extends EggLoader {
    * wrap controller string to middleware function
    * @param controllerMapping like xxxController.index
    */
-  public generateController(controllerMapping: string) {
+  public generateController(controllerMapping: string, routeArgsInfo: RouterParamValue[]) {
     const [controllerId, methodName] = controllerMapping.split('.');
     return async (ctx, next) => {
+      const args = [ctx, next];
+      if (Array.isArray(routeArgsInfo)) {
+        await Promise.all(routeArgsInfo.map(async({index, extractValue}) => {
+          args[index] = await extractValue(ctx, next);
+        }));
+      }
       const controller = await ctx.requestContext.getAsync(controllerId);
-      return controller[methodName].call(controller, ctx, next);
+      return controller[methodName].apply(controller, args);
     };
   }
 
