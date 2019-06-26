@@ -17,6 +17,15 @@ export class ParamController {
       ctx.body = query;
   }
 
+  @get('/:id/test')
+  async test(@query() query, @ctx() ctx, @param('id') id) {
+      const data = {
+        id,
+        ...query
+      };
+      ctx.body = data;
+  }
+
   @get('/query_id')
   async queryId(@query('id') id, @ctx() ctx) {
     ctx.body = id;

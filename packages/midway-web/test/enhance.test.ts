@@ -163,50 +163,55 @@ describe('/test/enhance.test.ts', () => {
 
       app.mockCsrf();
 
-      request(app.callback())
+      await request(app.callback())
+        .get('/param/12/test?name=1')
+        .expect(200)
+        .expect({id: '12', name: '1'});
+
+      await request(app.callback())
         .get('/param/query?name=1')
         .expect(200)
         .expect({name: '1'});
 
-      request(app.callback())
+      await request(app.callback())
         .get('/param/query_id?id=1')
         .expect(200)
         .expect('1');
 
-      request(app.callback())
+      await request(app.callback())
         .get('/param/param/12/test/456')
         .expect(200)
         .expect({id: '12', userId: '456'});
 
-      request(app.callback())
+      await request(app.callback())
         .get('/param/param/12')
         .expect(200)
         .expect('12');
 
-      request(app.callback())
+      await request(app.callback())
         .post('/param/body')
         .type('form')
         .send({ id: '1' })
         .expect(200)
         .expect({id: '1'});
 
-      request(app.callback())
+      await request(app.callback())
         .get('/param/body_id')
         .type('form')
         .send({ id: '1' })
         .expect(200)
         .expect('1');
 
-      request(app.callback())
+      await request(app.callback())
         .get('/param/session')
         .expect('{}');
 
-      request(app.callback())
+      await request(app.callback())
         .get('/param/headers')
         .expect(200)
         .expect('127');
 
-      request(app.callback())
+      await request(app.callback())
         .get('/param/headers_host')
         .expect(200)
         .expect('127');
