@@ -245,7 +245,7 @@ class Grandson extends Child {
 }
 ```
 
-`Grandson` 的实例 `gradson` 拥有 `@inject()` 装饰器注入的
+`Grandson` 的实例 `grandson` 拥有 `@inject()` 装饰器注入的
 `grandson.katana3`, `grandson.katana2`, `grandson.katana1` 属性。
 
 实现时，会查找 `Gradson` 的原型链，遍历原型链上所有用 `@inject()` 装饰的属性，运行装饰器，注入相应的属性。
