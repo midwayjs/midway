@@ -6,7 +6,7 @@ import {
   PRIORITY_KEY,
   RouterOption,
   WEB_ROUTER_KEY,
-  ROUTE_ARGS_METADATA,
+  WEB_ROUTER_PARAM_KEY,
   RouterParamValue
 } from '@midwayjs/decorator';
 import * as extend from 'extend2';
@@ -213,7 +213,7 @@ export class MidwayWebLoader extends EggLoader {
           });
 
           // implement @body @query @param @body
-          const routeArgsInfo = getMethodDataFromClass(ROUTE_ARGS_METADATA, target, webRouter.method) || [];
+          const routeArgsInfo = getMethodDataFromClass(WEB_ROUTER_PARAM_KEY, target, webRouter.method) || [];
 
           const routerArgs = [
             webRouter.routerName,

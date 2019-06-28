@@ -1,15 +1,40 @@
 import { attachMethodDataToClass } from 'injection';
+import { WEB_ROUTER_PARAM_KEY } from '../constant';
+
+interface GetFileStreamOptions {
+  requireFile?: boolean; // required file submit, default is true
+  defCharset?: string;
+  limits?: {
+    fieldNameSize?: number;
+    fieldSize?: number;
+    fields?: number;
+    fileSize?: number;
+    files?: number;
+    parts?: number;
+    headerPairs?: number;
+  };
+  checkFile?(
+    fieldname: string,
+    file: any,
+    filename: string,
+    encoding: string,
+    mimetype: string
+  ): void | Error;
+}
+
+interface GetFilesStreamOptions extends GetFileStreamOptions {
+  autoFields?: boolean;
+}
 
 export enum RouteParamTypes {
-    QUERY,
-    BODY,
-    PARAM,
-    CONTEXT,
-    HEADERS,
-    SESSION,
-    FILESTREAM,
-    FILESSTREAM,
-    NEXT,
+  QUERY,
+  BODY,
+  PARAM,
+  HEADERS,
+  SESSION,
+  FILESTREAM,
+  FILESSTREAM,
+  NEXT,
 }
 
 export interface RouterParamValue {
@@ -19,15 +44,11 @@ export interface RouterParamValue {
   extractValue?: (ctx, next) => Promise<any>;
 }
 
-export const ROUTE_ARGS_METADATA = '__routeArgsMetadata__';
-
 export const extractValue = function extractValue(key, data) {
-  return async function(ctx, next) {
+  return async function (ctx, next) {
     switch (key) {
       case RouteParamTypes.NEXT:
         return next;
-      case RouteParamTypes.CONTEXT:
-        return ctx;
       case RouteParamTypes.BODY:
         return data && ctx.request.body ? ctx.request.body[data] : ctx.request.body;
       case RouteParamTypes.PARAM:
@@ -48,24 +69,21 @@ export const extractValue = function extractValue(key, data) {
   };
 };
 
-function createParamMapping(type: RouteParamTypes) {
-    return (data?: any) => {
-      return (target, key, index) => {
-        attachMethodDataToClass(ROUTE_ARGS_METADATA, {
-          index,
-          type,
-          data,
-          extractValue: extractValue(type, data)
-        }, target, key);
-      };
-    };
-  }
+const createParamMapping = function (type: RouteParamTypes) {
+  return (data?: any) => (target, key, index) => {
+    attachMethodDataToClass(WEB_ROUTER_PARAM_KEY, {
+      index,
+      type,
+      data,
+      extractValue: extractValue(type, data)
+    }, target, key);
+  };
+};
 
-export const ctx = createParamMapping(RouteParamTypes.CONTEXT);
-export const body = createParamMapping(RouteParamTypes.BODY);
-export const param = createParamMapping(RouteParamTypes.PARAM);
-export const query = createParamMapping(RouteParamTypes.QUERY);
-export const session = createParamMapping(RouteParamTypes.SESSION);
-export const headers = createParamMapping(RouteParamTypes.HEADERS);
-export const file = createParamMapping(RouteParamTypes.FILESTREAM);
-export const files = createParamMapping(RouteParamTypes.FILESSTREAM);
+export const session = () => createParamMapping(RouteParamTypes.SESSION)();
+export const body = (property?: string) => createParamMapping(RouteParamTypes.BODY)(property);
+export const query = (property?: string) => createParamMapping(RouteParamTypes.QUERY)(property);
+export const param = (property?: string) => createParamMapping(RouteParamTypes.PARAM)(property);
+export const headers = (property?: string) => createParamMapping(RouteParamTypes.HEADERS)(property);
+export const file = (property?: GetFileStreamOptions) => createParamMapping(RouteParamTypes.FILESTREAM)(property);
+export const files = (property?: GetFilesStreamOptions) => createParamMapping(RouteParamTypes.FILESSTREAM)(property);

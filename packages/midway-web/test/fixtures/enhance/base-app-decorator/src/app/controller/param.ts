@@ -1,5 +1,5 @@
-import { provide } from 'injection';
-import { controller, config, get, post, query, param, ctx, files, file, session, body, headers } from '../../../../../../../src';
+import { provide, inject } from 'injection';
+import { controller, config, get, post, query, param, files, file, session, body, headers } from '../../../../../../../src';
 import * as path from 'path';
 import * as fs from 'fs';
 
@@ -12,57 +12,60 @@ export class ParamController {
   @config('baseDir')
   baseDir: string;
 
+  @inject()
+  ctx: any;
+
   @get('/query')
-  async query(@query() query, @ctx() ctx) {
-      ctx.body = query;
+  async query(@query() query) {
+      this.ctx.body = query;
   }
 
   @get('/:id/test')
-  async test(@query() query, @ctx() ctx, @param('id') id) {
-      const data = {
+  async test(@query() query, @param('id') id) {
+    const data = {
         id,
         ...query
       };
-      ctx.body = data;
+    this.ctx.body = data;
   }
 
   @get('/query_id')
-  async queryId(@query('id') id, @ctx() ctx) {
-    ctx.body = id;
+  async queryId(@query('id') id) {
+    this.ctx.body = id;
   }
 
   @get('/param/:id/test/:userId')
-  async param(@param() param, @ctx() ctx) {
+  async param(@param() param) {
     // service,hello,a,b
-    ctx.body = param;
+    this.ctx.body = param;
   }
 
   @get('/param/:id')
-  async paramId(@param('id') id, @ctx() ctx) {
-    ctx.body = id;
+  async paramId(@param('id') id) {
+    this.ctx.body = id;
   }
 
   @post('/body')
-  async body(@body() body, @ctx() ctx) {
-    ctx.body = body;
+  async body(@body() body) {
+    this.ctx.body = body;
   }
 
   @get('/body_id')
-  async bodyId(@body('id') id, @ctx() ctx) {
-    ctx.body = id;
+  async bodyId(@body('id') id) {
+    this.ctx.body = id;
   }
 
   @post('/file')
-  async file(@file() stream, @ctx() ctx) {
+  async file(@file() stream) {
     const filename = encodeURIComponent(stream.fields.name) + path.extname(stream.filename).toLowerCase();
     const target = path.join(this.baseDir, 'app/public', filename);
     const writeStream = fs.createWriteStream(target);
     await pump(stream, writeStream);
-    ctx.body = 'ok';
+    this.ctx.body = 'ok';
   }
 
   @post('/files')
-  async files(@files({ autoFields: true }) parts, @ctx() ctx) {
+  async files(@files({ autoFields: true }) parts) {
 
     let stream = await parts();
 
@@ -74,25 +77,25 @@ export class ParamController {
         stream = await parts();
     }
 
-    ctx.body = 'ok';
+    this.ctx.body = 'ok';
   }
 
   @get('/session')
-  async session(@session() session, @ctx() ctx) {
+  async session(@session() session) {
     // service,hello,a,b
-    ctx.body = session;
+    this.ctx.body = session;
   }
 
   @get('/headers')
-  async header(@headers() headers, @ctx() ctx) {
+  async header(@headers() headers) {
     // service,hello,a,b
-    ctx.body = headers.host.substring(0, 3);
+    this.ctx.body = headers.host.substring(0, 3);
   }
 
   @get('/headers_host')
-  async headerHost(@headers('host') host, @ctx() ctx) {
+  async headerHost(@headers('host') host) {
     // service,hello,a,b
-    ctx.body = host.substring(0, 3);
+    this.ctx.body = host.substring(0, 3);
   }
 
 }
