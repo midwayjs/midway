@@ -4,6 +4,7 @@ import * as path from 'path';
 const utils = require('./utils');
 const mm = require('mm');
 const pedding = require('pedding');
+const rimraf = require('mz-modules/rimraf');
 
 import { clearAllModule } from 'injection';
 
@@ -138,7 +139,10 @@ describe('/test/enhance.test.ts', () => {
       return app.ready();
     });
 
-    after(() => app.close());
+    after(() => {
+      rimraf(path.join(app.config.baseDir, 'app/public'));
+      app.close();
+    });
 
     it('should load ts directory', (done) => {
       request(app.callback())
@@ -152,6 +156,99 @@ describe('/test/enhance.test.ts', () => {
         .get('/hello/say')
         .expect(200)
         .expect('service,hello,a,b', done);
+    });
+
+    it('should param controller be ok ', async () => {
+      // done = pedding(11, done);
+
+      app.mockCsrf();
+
+      await request(app.callback())
+        .get('/param/12/test?name=1')
+        .expect(200)
+        .expect({id: '12', name: '1'});
+
+      await request(app.callback())
+        .get('/param/query?name=1')
+        .expect(200)
+        .expect({name: '1'});
+
+      await request(app.callback())
+        .get('/param/query_id?id=1')
+        .expect(200)
+        .expect('1');
+
+      await request(app.callback())
+        .get('/param/param/12/test/456')
+        .expect(200)
+        .expect({id: '12', userId: '456'});
+
+      await request(app.callback())
+        .get('/param/param/12')
+        .expect(200)
+        .expect('12');
+
+      await request(app.callback())
+        .post('/param/body')
+        .type('form')
+        .send({ id: '1' })
+        .expect(200)
+        .expect({id: '1'});
+
+      await request(app.callback())
+        .get('/param/body_id')
+        .type('form')
+        .send({ id: '1' })
+        .expect(200)
+        .expect('1');
+
+      await request(app.callback())
+        .get('/param/session')
+        .expect('{}');
+
+      await request(app.callback())
+        .get('/param/headers')
+        .expect(200)
+        .expect('127');
+
+      await request(app.callback())
+        .get('/param/headers_host')
+        .expect(200)
+        .expect('127');
+
+      const imagePath = path.join(__dirname, 'fixtures/enhance', 'base-app-decorator', '1.jpg');
+      const imagePath1 = path.join(__dirname, 'fixtures/enhance', 'base-app-decorator', '2.jpg');
+
+      await app.httpRequest()
+        .post('/param/file')
+        .field('name', 'form')
+        .attach('file', imagePath)
+        .expect('ok');
+
+      await app.httpRequest()
+        .get('/public/form.jpg')
+        .expect('content-length', '16424')
+        .expect(200);
+
+      await app.httpRequest()
+        .post('/param/files')
+        .field('name1', '1')
+        .attach('file1', imagePath)
+        .field('name2', '2')
+        .attach('file2', imagePath1)
+        .field('name3', '3')
+        .expect('ok');
+
+      await app.httpRequest()
+        .get('/public/1.jpg')
+        .expect('content-length', '16424')
+        .expect(200);
+
+      await app.httpRequest()
+        .get('/public/2.jpg')
+        .expect('content-length', '16424')
+        .expect(200);
+
     });
   });
 

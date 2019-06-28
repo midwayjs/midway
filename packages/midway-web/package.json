@@ -34,7 +34,8 @@
     "midway-mock": "^1.7.0",
     "pedding": "^1.1.0",
     "react": "^16.2.0",
-    "react-dom": "^16.2.0"
+    "react-dom": "^16.2.0",
+    "mz-modules": "^2.1.0"
   },
   "dependencies": {
     "@eggjs/router": "^2.0.0",

@@ -9,6 +9,7 @@ export const HANDLER_KEY = 'handler';
 // web
 export const CONTROLLER_KEY = 'controller';
 export const WEB_ROUTER_KEY = 'web_router';
+export const WEB_ROUTER_PARAM_KEY = 'web_router_param';
 
 // framework
 export const CONFIG_KEY = 'config';
