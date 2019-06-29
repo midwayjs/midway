@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.8.0](https://github.com/midwayjs/midway/compare/v1.7.0...v1.8.0) (2019-06-29)
+
+
+### Bug Fixes
+
+* **test:** param controller test add await ([b955427](https://github.com/midwayjs/midway/commit/b955427))
+* make routeArgsInfo Optional ([4ed5443](https://github.com/midwayjs/midway/commit/4ed5443))
+* package.json restore mkdir package ([c2ec7ba](https://github.com/midwayjs/midway/commit/c2ec7ba))
+* **types:** add file/files opt types ([f40b03e](https://github.com/midwayjs/midway/commit/f40b03e))
+
+
+### Features
+
+* support param decorator [@body](https://github.com/body) [@query](https://github.com/query) [@param](https://github.com/param).. ([6278d99](https://github.com/midwayjs/midway/commit/6278d99))
+
+
+
+
+
 # [1.7.0](https://github.com/midwayjs/midway/compare/v1.6.3...v1.7.0) (2019-06-25)
 
 
