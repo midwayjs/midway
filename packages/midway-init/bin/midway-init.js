@@ -40,7 +40,10 @@ co(function* () {
 // 判断是否处于内网环境
 function isInternal() {
   try {
-    const { stdout } = childProcess.spawnSync('tnpm', [ 'view', '@ali/midway-init', '--json' ]);
+    const { stdout } = childProcess.spawnSync('tnpm', [ 'view', '@ali/midway-init', '--json'], {
+      timeout: 3000
+    });
+
     const npmData = JSON.parse(stdout.toString(), null, 2);
 
     if (npmData.name === '@ali/midway-init') {
