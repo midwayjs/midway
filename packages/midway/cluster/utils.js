@@ -1,6 +1,7 @@
 'use strict';
 
 const path = require('path');
+const accessSync = require('fs').accessSync;
 
 exports.isTypeScriptEnvironment = () => {
   return !!require.extensions['.ts'];
@@ -17,7 +18,7 @@ exports.formatOptions = (options) => {
     options.baseDir = process.cwd();
   }
 
-  if(options.typescript === undefined) {
+  if(typeof options.typescript === 'undefined') {
     /* istanbul ignore else*/
     if(exports.isTypeScriptEnvironment()) {
       options.typescript = true;
@@ -30,6 +31,15 @@ exports.formatOptions = (options) => {
         options.typescript = true;
       }
     }
+
+    /* istanbul ignore else*/
+    if (! options.typescript) {
+      try {
+        accessSync(path.join(options.baseDir, 'tsconfig.json'));
+        options.typescript = true;
+      } catch (ex) { }
+    }
+
   }
 
   return options;
