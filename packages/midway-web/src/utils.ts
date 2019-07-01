@@ -45,3 +45,31 @@ export function getMethodNames(obj) {
 export function isTypeScriptEnvironment() {
   return !!require.extensions['.ts'];
 }
+
+/**
+ *  safelyGet(['a','b'],{a: {b: 2}})  // => 2
+ *  safelyGet(['a','b'],{c: {b: 2}})  // => undefined
+ *  safelyGet('a.b',{a: {b: 2}})  // => 2
+ *  safelyGet('a.b',{c: {b: 2}})  // => undefined
+ */
+export function safelyGet(list, obj) {
+  if (arguments.length === 1) { return _obj => safelyGet(list, _obj); }
+
+  if (obj === null || obj === undefined) {
+    return undefined;
+  }
+  let willReturn = obj;
+  let counter = 0;
+
+  const pathArrValue = typeof list === 'string' ? list.split('.') : list;
+
+  while (counter < pathArrValue.length) {
+    if (willReturn === null || willReturn === undefined) {
+      return undefined;
+    }
+    willReturn = willReturn[ pathArrValue[ counter ] ];
+    counter++;
+  }
+
+  return willReturn;
+}
