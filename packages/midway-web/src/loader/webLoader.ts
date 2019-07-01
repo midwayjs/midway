@@ -12,7 +12,7 @@ import {
 import * as extend from 'extend2';
 import * as fs from 'fs';
 import { getClassMetadata, getMethodDataFromClass, getProviderId, listModule } from 'injection';
-import { ContainerLoader, MidwayHandlerKey } from 'midway-core';
+import { ContainerLoader, MidwayHandlerKey, MidwayContainer } from 'midway-core';
 import * as path from 'path';
 import { MidwayLoaderOptions, WebMiddleware } from '../interface';
 import { isTypeScriptEnvironment } from '../utils';
@@ -33,7 +33,7 @@ export class MidwayWebLoader extends EggLoader {
     priority: number,
     router: Router,
   }> = [];
-  private containerLoader;
+  private containerLoader: ContainerLoader;
 
   constructor(options: MidwayLoaderOptions) {
     super(options);
@@ -42,32 +42,32 @@ export class MidwayWebLoader extends EggLoader {
   /**
    * 判断是否是 ts 模式，在构造器内就会被执行
    */
-  get isTsMode() {
+  get isTsMode(): boolean {
     return this.app.options.typescript;
   }
 
-  get applicationContext() {
+  get applicationContext(): MidwayContainer {
     return this.containerLoader.getApplicationContext();
   }
 
-  get pluginContext() {
+  get pluginContext(): any {
     return this.containerLoader.getPluginContext();
   }
 
   // loadPlugin -> loadConfig -> afterLoadConfig
-  protected loadConfig() {
+  protected loadConfig(): void {
     this.loadPlugin();
     super.loadConfig();
   }
 
   // Get the real plugin path
-  protected getPluginPath(plugin) {
-    if (plugin.path) {
+  protected getPluginPath(plugin: any): string {
+    if (plugin && plugin.path) {
       return plugin.path;
     }
 
-    const name = plugin.package || plugin.name;
-    const lookupDirs = [];
+    const name: string = plugin.package || plugin.name;
+    const lookupDirs: string[] = [];
 
     // 尝试在以下目录找到匹配的插件
     //  -> {APP_PATH}/node_modules
@@ -77,7 +77,7 @@ export class MidwayWebLoader extends EggLoader {
 
     // 到 egg 中查找，优先从外往里查找
     for (let i = this.eggPaths.length - 1; i >= 0; i--) {
-      const eggPath = this.eggPaths[i];
+      const eggPath: string = this.eggPaths[i];
       lookupDirs.push(path.join(eggPath, 'node_modules'));
     }
 
@@ -98,7 +98,7 @@ export class MidwayWebLoader extends EggLoader {
     throw new Error(`Can not find plugin ${name} in "${lookupDirs.join(', ')}"`);
   }
 
-  protected registerTypescriptDirectory() {
+  protected registerTypescriptDirectory(): void {
     const app = this.app;
     // 处理 ts 的初始路径
     this.appDir = this.baseDir = app.options.baseDir;
@@ -118,7 +118,7 @@ export class MidwayWebLoader extends EggLoader {
     }
   }
 
-  protected getEggPaths() {
+  protected getEggPaths(): string[] {
     if (!this.appDir) {
       // register appDir here
       this.registerTypescriptDirectory();
@@ -126,8 +126,8 @@ export class MidwayWebLoader extends EggLoader {
     return super.getEggPaths();
   }
 
-  protected getServerEnv() {
-    let serverEnv;
+  protected getServerEnv(): string {
+    let serverEnv: string;
 
     const envPath = path.join(this.appDir, 'config/env');
     if (fs.existsSync(envPath)) {
@@ -141,9 +141,9 @@ export class MidwayWebLoader extends EggLoader {
     return serverEnv;
   }
 
-  protected getAppInfo() {
+  protected getAppInfo(): EggAppInfo {
     if (!this.appInfo) {
-      const appInfo = super.getAppInfo();
+      const appInfo: EggAppInfo | undefined = super.getAppInfo();
       // ROOT == HOME in prod env
       this.appInfo = extend(true, appInfo, {
         root: appInfo.env === 'local' || appInfo.env === 'unittest' ? this.appDir : appInfo.root,
@@ -153,7 +153,7 @@ export class MidwayWebLoader extends EggLoader {
     return this.appInfo;
   }
 
-  protected loadApplicationContext() {
+  protected loadApplicationContext(): void {
     // this.app.options.container 测试用例编写方便点
     const containerConfig = this.config.container || this.app.options.container || {};
     if (!containerConfig.loadDir) {
@@ -172,15 +172,15 @@ export class MidwayWebLoader extends EggLoader {
     this.containerLoader.loadDirectory(containerConfig);
 
     // register handler for container
-    this.containerLoader.registerAllHook(MidwayHandlerKey.CONFIG, (key) => {
+    this.containerLoader.registerAllHook(MidwayHandlerKey.CONFIG, (key: string) => {
       return this.config[key];
     });
 
-    this.containerLoader.registerAllHook(MidwayHandlerKey.PLUGIN, (key) => {
+    this.containerLoader.registerAllHook(MidwayHandlerKey.PLUGIN, (key: string) => {
       return this.app[key] || this.pluginContext.get(key);
     });
 
-    this.containerLoader.registerAllHook(MidwayHandlerKey.LOGGER, (key) => {
+    this.containerLoader.registerAllHook(MidwayHandlerKey.LOGGER, (key: string) => {
       if (this.app.getLogger) {
         return this.app.getLogger(key);
       }
@@ -188,7 +188,7 @@ export class MidwayWebLoader extends EggLoader {
     });
   }
 
-  protected async preRegisterRouter(target, controllerId) {
+  protected async preRegisterRouter(target: any, controllerId: string): Promise<void> {
     const controllerOption: ControllerOption = getClassMetadata(CONTROLLER_KEY, target);
     const newRouter = this.createEggRouter(controllerOption);
 
@@ -240,7 +240,12 @@ export class MidwayWebLoader extends EggLoader {
 
   }
 
-  private async handlerWebMiddleware(middlewares, handlerCallback) {
+
+  private async handlerWebMiddleware<T extends any = any>(
+    middlewares: T[],
+    handlerCallback: (ps: T | ReturnType<WebMiddleware['resolve']>) => any,
+  ): Promise<void> {
+
     if (middlewares && middlewares.length) {
       for (const middleware of middlewares) {
         if (typeof middleware === 'function') {
