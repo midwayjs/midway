@@ -1,7 +1,7 @@
 const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
 const ARGUMENT_NAMES = /([^\s,]+)/g;
 
-export function getParamNames(func) {
+export function getParamNames(func: () => any): RegExpMatchArray {
   const fnStr = func.toString().replace(STRIP_COMMENTS, '');
   let result = fnStr.slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')')).match(ARGUMENT_NAMES);
   if (result === null) {
@@ -16,8 +16,8 @@ export function getParamNames(func) {
  * @param {*} obj - object to enumerate on
  * @returns {string[]} - method names
  */
-export function getMethodNames(obj) {
-  const enumerableOwnKeys = Object.keys(obj);
+export function getMethodNames(obj: object): string[] {
+  const enumerableOwnKeys: string[] = Object.keys(obj);
   const ownKeysOnObjectPrototype = Object.getOwnPropertyNames(Object.getPrototypeOf({}));
   // methods on obj itself should be always included
   const result = enumerableOwnKeys.filter(k => typeof obj[k] === 'function');
@@ -26,7 +26,7 @@ export function getMethodNames(obj) {
   let proto = obj;
   do {
     proto = Object.getPrototypeOf(proto);
-    const allOwnKeysOnPrototype = Object.getOwnPropertyNames(proto);
+    const allOwnKeysOnPrototype: string[] = Object.getOwnPropertyNames(proto);
     // get methods from es6 class
     allOwnKeysOnPrototype.forEach(k => {
       if (typeof obj[k] === 'function' && k !== 'constructor') {
@@ -42,6 +42,6 @@ export function getMethodNames(obj) {
   });
 }
 
-export function isTypeScriptEnvironment() {
+export function isTypeScriptEnvironment(): boolean {
   return !!require.extensions['.ts'];
 }
