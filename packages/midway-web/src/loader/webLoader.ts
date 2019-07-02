@@ -15,7 +15,7 @@ import { getClassMetadata, getMethodDataFromClass, getProviderId, listModule } f
 import { ContainerLoader, MidwayHandlerKey, MidwayContainer } from 'midway-core';
 import * as path from 'path';
 import { MidwayLoaderOptions, WebMiddleware } from '../interface';
-import { isTypeScriptEnvironment } from '../utils';
+import { isTypeScriptEnvironment, safelyGet } from '../utils';
 import { EggAppInfo } from 'egg';
 
 const debug = require('debug')(`midway:loader:${process.pid}`);
@@ -173,7 +173,7 @@ export class MidwayWebLoader extends EggLoader {
 
     // register handler for container
     this.containerLoader.registerAllHook(MidwayHandlerKey.CONFIG, (key: string) => {
-      return this.config[key];
+      return safelyGet(key, this.config);
     });
 
     this.containerLoader.registerAllHook(MidwayHandlerKey.PLUGIN, (key: string) => {
