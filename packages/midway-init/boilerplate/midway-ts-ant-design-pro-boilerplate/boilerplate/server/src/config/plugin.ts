@@ -12,4 +12,3 @@ export default {
     package: 'egg-view-assets',
   },
 }
-
