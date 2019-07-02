@@ -1,7 +1,7 @@
 import * as path from 'path';
 
-module.exports = (appInfo: any) => {
-  const config: any = (exports = {});
+export default (appInfo: any) => {
+  const config: any = {};
 
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_1541510581780_3944';

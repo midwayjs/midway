@@ -1,7 +1,7 @@
 import * as path from 'path';
 
-module.exports = (appInfo: any) => {
-  const config: any = (exports = {});
+export default (appInfo: any) => {
+  const config: any = {};
 
   config.assets = {
     publicPath: 'public',
