@@ -1,4 +1,4 @@
-// had enabled by midway
-// export = {
-//   static: true,
-// };
+
+export default {
+  static: true, // default is true
+}
