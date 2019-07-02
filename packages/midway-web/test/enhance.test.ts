@@ -158,6 +158,20 @@ describe('/test/enhance.test.ts', () => {
         .expect('service,hello,a,b', done);
     });
 
+    it('should config controller be ok', done => {
+      done = pedding(2, done);
+
+      request(app.callback())
+        .get('/config/test')
+        .expect(200)
+        .expect({ a: 1, b: true, c: 2}, done);
+
+      request(app.callback())
+        .get('/config/test2')
+        .expect(200)
+        .expect({ bucLogin: false, plugin2: true }, done);
+    });
+
     it('should param controller be ok ', async () => {
       // done = pedding(11, done);
 
