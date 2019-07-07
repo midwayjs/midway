@@ -1,0 +1,6 @@
+extends: '@waiting/eslint-config'
+
+# https://eslint.org/docs/rules/
+# https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/eslint-plugin
+#rules: 
+  
