@@ -9,6 +9,11 @@
     "description": "Simple example boilerplate for find bug or submit to midway-examples",
     "name": "midway mini example template"
   },
+  "midway-ts-strict": {
+    "package": "midway-ts-strict-boilerplate",
+    "description": "Simple midway application boilerplate by ts with ng style and strict eslint rules",
+    "name": "midway strict typescript template"
+  },
   "midway-ts-ant-design-pro": {
     "package": "midway-ts-ant-design-pro-boilerplate",
     "description": "A front-end and back-end separation project includes midway(ts) and ant-design-pro.",
