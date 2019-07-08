@@ -1,1 +1,3 @@
-export type KoaMiddleware = (context: any, next: () => Promise<any>) => any;
+import {Context} from 'egg';
+
+export type KoaMiddleware = (context: Context, next: () => Promise<any>) => void;
