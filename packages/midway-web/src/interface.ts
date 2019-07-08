@@ -1,8 +1,9 @@
 import {EggLoaderOptions} from 'egg-core';
 import {IApplicationContext} from 'injection';
+import {KoaMiddleware} from '@midwayjs/decorator';
 
 export interface WebMiddleware {
-  resolve(): (context: any, next: () => Promise<any>) => any;
+  resolve(): KoaMiddleware;
 }
 
 export interface MidwayLoaderOptions extends EggLoaderOptions {

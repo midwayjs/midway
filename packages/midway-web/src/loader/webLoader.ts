@@ -3,6 +3,7 @@ import {
   CONTROLLER_KEY,
   ControllerOption,
   KoaMiddleware,
+  MiddlewareParamArray,
   PRIORITY_KEY,
   RouterOption,
   WEB_ROUTER_KEY,
@@ -194,7 +195,7 @@ export class MidwayWebLoader extends EggLoader {
 
     if (newRouter) {
       // implement middleware in controller
-      const middlewares = controllerOption.routerOptions.middleware;
+      const middlewares: MiddlewareParamArray | void = controllerOption.routerOptions.middleware;
       await this.handlerWebMiddleware(middlewares, (middlewareImpl: KoaMiddleware) => {
         newRouter.use(middlewareImpl);
       });
@@ -205,10 +206,10 @@ export class MidwayWebLoader extends EggLoader {
       if (webRouterInfo && typeof webRouterInfo[Symbol.iterator] === 'function') {
         for (const webRouter of webRouterInfo) {
           // get middleware
-          const middlewares = webRouter.middleware;
+          const middlewares2: MiddlewareParamArray | void = webRouter.middleware;
           const methodMiddlwares = [];
 
-          await this.handlerWebMiddleware(middlewares, (middlewareImpl: KoaMiddleware) => {
+          await this.handlerWebMiddleware(middlewares2, (middlewareImpl: KoaMiddleware) => {
             methodMiddlwares.push(middlewareImpl);
           });
 
@@ -241,9 +242,9 @@ export class MidwayWebLoader extends EggLoader {
   }
 
 
-  private async handlerWebMiddleware<T extends any = any>(
-    middlewares: T[],
-    handlerCallback: (ps: T | ReturnType<WebMiddleware['resolve']>) => any,
+  private async handlerWebMiddleware(
+    middlewares: MiddlewareParamArray | void,
+    handlerCallback: (middlewareImpl: KoaMiddleware) => void,
   ): Promise<void> {
 
     if (middlewares && middlewares.length) {
@@ -252,8 +253,8 @@ export class MidwayWebLoader extends EggLoader {
           // web function middleware
           handlerCallback(middleware);
         } else {
-          const middlewareImpl: WebMiddleware = await this.applicationContext.getAsync(middleware);
-          if (middlewareImpl && middlewareImpl.resolve) {
+          const middlewareImpl: WebMiddleware | void = await this.applicationContext.getAsync(middleware);
+          if (middlewareImpl && typeof middlewareImpl.resolve === 'function') {
             handlerCallback(middlewareImpl.resolve());
           }
         }
