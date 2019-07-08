@@ -69,7 +69,8 @@ export function safelyGet(list: string | string[], obj?: object): any {
     if (typeof willReturn === 'undefined' || willReturn === null) {
       return void 0;
     }
-    else if (typeof willReturn !== 'object') {  // for willReturn is string and key is numeric string
+    // for willReturn is string and key is numeric string, and willReturn[offset] maybe valid string, but not expected
+    else if (typeof willReturn !== 'object') {
       return void 0;
     }
     willReturn = willReturn[key];
