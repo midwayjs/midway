@@ -279,7 +279,7 @@ export class MidwayWebLoader extends EggLoader {
 
   /**
    * wrap controller string to middleware function
-   * @param controllerMapping like xxxController.index
+   * @param controllerMapping like FooController.index
    */
   public generateController(controllerMapping: string, routeArgsInfo?: RouterParamValue[]) {
     const [controllerId, methodName] = controllerMapping.split('.');
