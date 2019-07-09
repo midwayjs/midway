@@ -1,18 +1,18 @@
 import { saveClassMetadata, saveModule, scope, ScopeEnum } from 'injection';
 import { CONTROLLER_KEY } from '../constant';
-import { KoaMiddleware } from '../interface';
+import { KoaMiddlewareParamArray } from '../interface';
 
 export interface ControllerOption {
   prefix: string;
   routerOptions: {
     sensitive?: boolean;
-    middleware?: Array<string | KoaMiddleware>
+    middleware?: KoaMiddlewareParamArray
   };
 }
 
 export function controller(prefix: string, routerOptions: {
   sensitive?: boolean,
-  middleware?: Array<string | KoaMiddleware>
+  middleware?: KoaMiddlewareParamArray
  } = {middleware: [], sensitive: true}
   ): ClassDecorator {
   return (target: any) => {

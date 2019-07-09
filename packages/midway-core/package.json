@@ -24,7 +24,8 @@
   "license": "MIT",
   "devDependencies": {
     "chai": "^4.2.0",
-    "midway-bin": "^1.5.6"
+    "midway-bin": "^1.5.6",
+    "xmldom": "^0.1.27"
   },
   "dependencies": {
     "@midwayjs/decorator": "^1.8.0",

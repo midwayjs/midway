@@ -49,26 +49,31 @@ export function isTypeScriptEnvironment(): boolean {
 /**
  *  safelyGet(['a','b'],{a: {b: 2}})  // => 2
  *  safelyGet(['a','b'],{c: {b: 2}})  // => undefined
+ *  safelyGet(['a','1'],{a: {"1": 2}})  // => 2
+ *  safelyGet(['a','1'],{a: {b: 2}})  // => undefined
  *  safelyGet('a.b',{a: {b: 2}})  // => 2
  *  safelyGet('a.b',{c: {b: 2}})  // => undefined
  */
-export function safelyGet(list, obj) {
-  if (arguments.length === 1) { return _obj => safelyGet(list, _obj); }
-
-  if (obj === null || obj === undefined) {
-    return undefined;
+export function safelyGet(list: string | string[], obj?: object): any {
+  if (arguments.length === 1) {
+    return (_obj: object) => safelyGet(list, _obj);
   }
-  let willReturn = obj;
-  let counter = 0;
 
+  if (typeof obj === 'undefined' || typeof obj !== 'object' || obj === null) {
+    return void 0;
+  }
   const pathArrValue = typeof list === 'string' ? list.split('.') : list;
+  let willReturn: any = obj;
 
-  while (counter < pathArrValue.length) {
-    if (willReturn === null || willReturn === undefined) {
-      return undefined;
+  for (const key of pathArrValue) {
+    if (typeof willReturn === 'undefined' || willReturn === null) {
+      return void 0;
     }
-    willReturn = willReturn[ pathArrValue[ counter ] ];
-    counter++;
+    // for willReturn is string and key is numeric string, and willReturn[offset] maybe valid string, but not expected
+    else if (typeof willReturn !== 'object') {
+      return void 0;
+    }
+    willReturn = willReturn[key];
   }
 
   return willReturn;
