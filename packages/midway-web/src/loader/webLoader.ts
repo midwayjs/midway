@@ -2,8 +2,6 @@ import { EggRouter as Router } from '@eggjs/router';
 import {
   CONTROLLER_KEY,
   ControllerOption,
-  KoaMiddleware,
-  MiddlewareParamArray,
   PRIORITY_KEY,
   RouterOption,
   WEB_ROUTER_KEY,
@@ -15,7 +13,7 @@ import * as fs from 'fs';
 import { getClassMetadata, getMethodDataFromClass, getProviderId, listModule } from 'injection';
 import { ContainerLoader, MidwayHandlerKey, MidwayContainer } from 'midway-core';
 import * as path from 'path';
-import { MidwayLoaderOptions, WebMiddleware } from '../interface';
+import { Middleware, MiddlewareParamArray, MidwayLoaderOptions, WebMiddleware } from '../interface';
 import { isTypeScriptEnvironment, safelyGet } from '../utils';
 import { EggAppInfo } from 'egg';
 
@@ -196,7 +194,7 @@ export class MidwayWebLoader extends EggLoader {
     if (newRouter) {
       // implement middleware in controller
       const middlewares: MiddlewareParamArray | void = controllerOption.routerOptions.middleware;
-      await this.handlerWebMiddleware(middlewares, (middlewareImpl: KoaMiddleware) => {
+      await this.handlerWebMiddleware(middlewares, (middlewareImpl: Middleware) => {
         newRouter.use(middlewareImpl);
       });
 
@@ -207,9 +205,9 @@ export class MidwayWebLoader extends EggLoader {
         for (const webRouter of webRouterInfo) {
           // get middleware
           const middlewares2: MiddlewareParamArray | void = webRouter.middleware;
-          const methodMiddlwares = [];
+          const methodMiddlwares: Middleware[] = [];
 
-          await this.handlerWebMiddleware(middlewares2, (middlewareImpl: KoaMiddleware) => {
+          await this.handlerWebMiddleware(middlewares2, (middlewareImpl: Middleware) => {
             methodMiddlwares.push(middlewareImpl);
           });
 
@@ -244,7 +242,7 @@ export class MidwayWebLoader extends EggLoader {
 
   private async handlerWebMiddleware(
     middlewares: MiddlewareParamArray | void,
-    handlerCallback: (middlewareImpl: KoaMiddleware) => void,
+    handlerCallback: (middlewareImpl: Middleware) => void,
   ): Promise<void> {
 
     if (middlewares && middlewares.length) {
