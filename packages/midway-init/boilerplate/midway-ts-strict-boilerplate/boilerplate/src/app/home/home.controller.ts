@@ -9,9 +9,9 @@ export class HomeController {
     @config() private readonly welcomeMsg: string,
   ) {}
 
-  @get('/')
+  @get('/', { middleware: ['apiMiddleware'] })
   public index(ctx: Context): void {
-    ctx.body = this.welcomeMsg
+    ctx.body = `${ this.welcomeMsg } - ${ ctx.api.reqTimeStr }`
   }
 
 }
