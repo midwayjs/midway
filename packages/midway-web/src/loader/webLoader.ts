@@ -2,19 +2,18 @@ import { EggRouter as Router } from '@eggjs/router';
 import {
   CONTROLLER_KEY,
   ControllerOption,
-  KoaMiddleware,
   PRIORITY_KEY,
   RouterOption,
   WEB_ROUTER_KEY,
   WEB_ROUTER_PARAM_KEY,
-  RouterParamValue
+  RouterParamValue,
 } from '@midwayjs/decorator';
 import * as extend from 'extend2';
 import * as fs from 'fs';
 import { getClassMetadata, getMethodDataFromClass, getProviderId, listModule } from 'injection';
 import { ContainerLoader, MidwayHandlerKey, MidwayContainer } from 'midway-core';
 import * as path from 'path';
-import { MidwayLoaderOptions, WebMiddleware } from '../interface';
+import { Middleware, MiddlewareParamArray, MidwayLoaderOptions, WebMiddleware } from '../interface';
 import { isTypeScriptEnvironment, safelyGet } from '../utils';
 import { EggAppInfo } from 'egg';
 
@@ -194,8 +193,8 @@ export class MidwayWebLoader extends EggLoader {
 
     if (newRouter) {
       // implement middleware in controller
-      const middlewares = controllerOption.routerOptions.middleware;
-      await this.handlerWebMiddleware(middlewares, (middlewareImpl: KoaMiddleware) => {
+      const middlewares: MiddlewareParamArray | void = controllerOption.routerOptions.middleware;
+      await this.handlerWebMiddleware(middlewares, (middlewareImpl: Middleware) => {
         newRouter.use(middlewareImpl);
       });
 
@@ -205,10 +204,10 @@ export class MidwayWebLoader extends EggLoader {
       if (webRouterInfo && typeof webRouterInfo[Symbol.iterator] === 'function') {
         for (const webRouter of webRouterInfo) {
           // get middleware
-          const middlewares = webRouter.middleware;
-          const methodMiddlwares = [];
+          const middlewares2: MiddlewareParamArray | void = webRouter.middleware;
+          const methodMiddlwares: Middleware[] = [];
 
-          await this.handlerWebMiddleware(middlewares, (middlewareImpl: KoaMiddleware) => {
+          await this.handlerWebMiddleware(middlewares2, (middlewareImpl: Middleware) => {
             methodMiddlwares.push(middlewareImpl);
           });
 
@@ -241,9 +240,9 @@ export class MidwayWebLoader extends EggLoader {
   }
 
 
-  private async handlerWebMiddleware<T extends any = any>(
-    middlewares: T[],
-    handlerCallback: (ps: T | ReturnType<WebMiddleware['resolve']>) => any,
+  private async handlerWebMiddleware(
+    middlewares: MiddlewareParamArray | void,
+    handlerCallback: (middlewareImpl: Middleware) => void,
   ): Promise<void> {
 
     if (middlewares && middlewares.length) {
@@ -252,8 +251,8 @@ export class MidwayWebLoader extends EggLoader {
           // web function middleware
           handlerCallback(middleware);
         } else {
-          const middlewareImpl: WebMiddleware = await this.applicationContext.getAsync(middleware);
-          if (middlewareImpl && middlewareImpl.resolve) {
+          const middlewareImpl: WebMiddleware | void = await this.applicationContext.getAsync(middleware);
+          if (middlewareImpl && typeof middlewareImpl.resolve === 'function') {
             handlerCallback(middlewareImpl.resolve());
           }
         }
@@ -280,9 +279,9 @@ export class MidwayWebLoader extends EggLoader {
 
   /**
    * wrap controller string to middleware function
-   * @param controllerMapping like xxxController.index
+   * @param controllerMapping like FooController.index
    */
-  public generateController(controllerMapping: string, routeArgsInfo?: RouterParamValue[]) {
+  public generateController(controllerMapping: string, routeArgsInfo?: RouterParamValue[]): Middleware {
     const [controllerId, methodName] = controllerMapping.split('.');
     return async (ctx, next) => {
       const args = [ctx, next];
