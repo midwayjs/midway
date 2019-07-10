@@ -18,6 +18,7 @@
     "egg-ci": "^1.8.0",
     "eslint": "^6.0.0",
     "eslint-plugin-import": "^2.18.0",
+    "eslint-plugin-unicorn": "^9.1.1",
     "midway-bin": "1",
     "midway-mock": "1",
     "tslib": "^1.8.1",
