@@ -28,5 +28,14 @@
     "@midwayjs/decorator": "^1.8.0",
     "injection": "^1.4.2",
     "is-type-of": "^1.2.1"
-  }
+  },
+  "engines": {
+    "node": ">= 8.0.0"
+  },
+  "files": [
+    "*.d.ts",
+    "*.map",
+    "agent.js",
+    "app.js"
+  ]
 }
