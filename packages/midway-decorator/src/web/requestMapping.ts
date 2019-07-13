@@ -5,7 +5,6 @@ import { attachClassMetadata } from 'injection';
 import { WEB_ROUTER_KEY } from '../constant';
 import { KoaMiddlewareParamArray } from '../interface';
 
-
 export interface RouterOption {
   path?: string;
   requestMethod: string;

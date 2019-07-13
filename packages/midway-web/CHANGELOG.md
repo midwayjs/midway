@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.9.0](https://github.com/midwayjs/midway/compare/v1.8.0...v1.9.0) (2019-07-13)
+
+
+### Bug Fixes
+
+* **midway-web:** path might be numeric string within safelyGet() ([5b48eff](https://github.com/midwayjs/midway/commit/5b48eff))
+* **types:** use generic as typeof context within KoaMiddleware ([6c963e5](https://github.com/midwayjs/midway/commit/6c963e5))
+
+
+### Features
+
+* [@config](https://github.com/config)(opt) decorator opt accept dot natation ([4ee1959](https://github.com/midwayjs/midway/commit/4ee1959))
+* **types:** export and use type MiddlewareParamArray ([90b4e28](https://github.com/midwayjs/midway/commit/90b4e28))
+* **types:** update types of utils.ts ([c76db38](https://github.com/midwayjs/midway/commit/c76db38)), closes [#258](https://github.com/midwayjs/midway/issues/258)
+* **types:** update webLoader.ts ([fb534bb](https://github.com/midwayjs/midway/commit/fb534bb))
+
+
+
+
+
 # [1.8.0](https://github.com/midwayjs/midway/compare/v1.7.0...v1.8.0) (2019-06-29)
 
 

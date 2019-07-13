@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.9.0](https://github.com/midwayjs/midway/compare/v1.8.0...v1.9.0) (2019-07-13)
+
+
+### Bug Fixes
+
+* **midway-init:** Internal employees can not use the external network midway ([3179434](https://github.com/midwayjs/midway/commit/3179434))
+
+
+### Features
+
+* **boilerplate:** add midway-ts-strict-boilerplate ([8ee325c](https://github.com/midwayjs/midway/commit/8ee325c))
+* **boilerplate:** enforce kebabCase style for filenames for midway-ts-strict ([816941b](https://github.com/midwayjs/midway/commit/816941b))
+* **boilerplate:** update midway-ts-strict ([c8388f0](https://github.com/midwayjs/midway/commit/c8388f0)), closes [#269](https://github.com/midwayjs/midway/issues/269)
+
+
+
+
+
 ## [1.6.2](https://github.com/midwayjs/midway/compare/v1.6.1...v1.6.2) (2019-06-12)
 
 
