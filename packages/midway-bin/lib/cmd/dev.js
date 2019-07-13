@@ -8,7 +8,13 @@ class DevCommand extends require('egg-bin/lib/cmd/dev') {
   }
 
   * run(context) {
-    context.argv.framework = 'midway';
+    if (!context.argv.framework) {
+      if (require.resolve('midway')) {
+        context.argv.framework = 'midway';
+      } else if (require.resolve('midway-mirror')) {
+        context.argv.framework = 'midway-mirror';
+      }
+    }
     yield super.run(context);
   }
 }
