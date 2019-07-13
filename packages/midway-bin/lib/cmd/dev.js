@@ -20,7 +20,7 @@ class DevCommand extends require('egg-bin/lib/cmd/dev') {
         return module;
       }
     } catch (err) {
-      console.log(`Not found framework ${module} and skip.`);
+      console.log(`[midway-bin] Not found framework ${module} and skip.`);
     }
   }
 }
