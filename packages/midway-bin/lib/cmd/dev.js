@@ -9,13 +9,19 @@ class DevCommand extends require('egg-bin/lib/cmd/dev') {
 
   * run(context) {
     if (!context.argv.framework) {
-      if (require.resolve('midway')) {
-        context.argv.framework = 'midway';
-      } else if (require.resolve('midway-mirror')) {
-        context.argv.framework = 'midway-mirror';
-      }
+      context.argv.framework = this.findFramework('midway') || this.findFramework('midway-mirror');
     }
     yield super.run(context);
+  }
+
+  findFramework(module) {
+    try {
+      if (require.resolve(module)) {
+        return module;
+      }
+    } catch (err) {
+      console.log(`Not found framework ${module} and skip.`);
+    }
   }
 }
 
