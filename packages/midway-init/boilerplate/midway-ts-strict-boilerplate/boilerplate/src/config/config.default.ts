@@ -1,10 +1,10 @@
-import { EggAppConfig, EggAppInfo, PowerPartial } from 'midway'
+import { EggAppInfo } from 'midway'
 
+import { DefaultConfig } from './config.modal'
 
-export type DefaultConfig = PowerPartial<EggAppConfig>
 
 export default (appInfo: EggAppInfo) => {
-  const config: DefaultConfig = {}
+  const config = <DefaultConfig> {}
 
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_{{keys}}';

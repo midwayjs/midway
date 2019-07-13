@@ -68,9 +68,7 @@ export function safelyGet(list: string | string[], obj?: object): any {
   for (const key of pathArrValue) {
     if (typeof willReturn === 'undefined' || willReturn === null) {
       return void 0;
-    }
-    // for willReturn is string and key is numeric string, and willReturn[offset] maybe valid string, but not expected
-    else if (typeof willReturn !== 'object') {
+    } else if (typeof willReturn !== 'object') {
       return void 0;
     }
     willReturn = willReturn[key];

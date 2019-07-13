@@ -2,5 +2,8 @@ extends: '@waiting/eslint-config'
 
 # https://eslint.org/docs/rules/
 # https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/eslint-plugin
-#rules: 
-  
+# https://github.com/benmosher/eslint-plugin-import
+# https://github.com/sindresorhus/eslint-plugin-unicorn
+rules: 
+  unicorn/filename-case: 2
+
