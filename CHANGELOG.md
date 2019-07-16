@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.10.0](https://github.com/midwayjs/midway/compare/v1.9.0...v1.10.0) (2019-07-16)
+
+
+### Features
+
+* 导出 egg 的 Service 和 Boot 类，以供用户继承 ([6180040](https://github.com/midwayjs/midway/commit/6180040))
+
+
+
+
+
 # [1.9.0](https://github.com/midwayjs/midway/compare/v1.8.0...v1.9.0) (2019-07-13)
 
 
