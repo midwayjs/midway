@@ -317,7 +317,7 @@ export class HomeController {
 现在可以提供一个 middleware（任意目录），比如 `src/app/middleware/api.ts`。
 
 ```ts
-import { WebMiddleware } from 'midway';
+import { Middleware, WebMiddleware, provide } from 'midway';
 
 @provide()
 export class ApiMiddleware implements WebMiddleware {
@@ -325,7 +325,7 @@ export class ApiMiddleware implements WebMiddleware {
   @config('hello')
   helloConfig;
 
-  resolve() {
+  resolve(): Middleware {
     return async (ctx, next) => {
       ctx.api = '222' + this.helloConfig.b;
       await next();
@@ -364,12 +364,12 @@ export class My {
 也可以直接传递 `koa middleware`。
 
 ```ts
-const mw = async (ctx, next) => {
+const mw: Middleware = async (ctx, next) => {
   ctx.home = '4444';
   await next();
 };
 
-const newMiddleware = (data) => {
+const newMiddleware = (data): Middleware => {
   return async (ctx, next) => {
     ctx.api = data;
     await next();
