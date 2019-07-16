@@ -24,6 +24,8 @@ export {
   Request,
   Response,
   Router,
+  Service,
+  Boot
 } from 'egg';
 export {
   LoggerLevel as EggLoggerLevel,
