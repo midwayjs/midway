@@ -11,7 +11,7 @@ export class HomeController {
 
   @get('/', { middleware: ['apiMiddleware'] })
   public index(ctx: Context): void {
-    ctx.body = `${ this.welcomeMsg } - ${ ctx.api.reqTimeStr }`
+    ctx.body = `${this.welcomeMsg} - ${ctx.api.reqTimeStr}`
   }
 
 }
