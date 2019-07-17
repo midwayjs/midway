@@ -415,7 +415,7 @@ export class My {
 
 ## 框架增强注入
 
-midway 默认使用 [injection](http://web.npm.alibaba-inc.com/package/injection) 这个包来做依赖注入，虽然 `@inject` 装饰器能满足大多数业务的需求，但是对于框架来说，还有需要需要扩展和使用的地方，比如插件，配置等等。
+midway 默认使用 [injection](http://web.npm.alibaba-inc.com/package/injection) 这个包来做依赖注入，虽然 `@inject` 装饰器能满足大多数业务的需求，但是对于框架来说，还有需要扩展和使用的地方，比如插件，配置等等。
 
 ### 注入插件
 
