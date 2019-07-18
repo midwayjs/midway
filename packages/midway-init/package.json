@@ -1,6 +1,6 @@
 {
   "name": "midway-init",
-  "version": "1.10.0",
+  "version": "1.10.1",
   "dependencies": {
     "co": "^4.6.0",
     "egg-init": "^1.16.1",
