@@ -3,7 +3,7 @@ import * as path from 'path';
 
 export type DefaultConfig = PowerPartial<EggAppConfig>
 
-export default (appInfo: : EggAppInfo) => {
+export default (appInfo: EggAppInfo) => {
   const config = <DefaultConfig> {};
 
   // use for cookie sign key, should change to your own and keep security
