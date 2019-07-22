@@ -1,24 +1,23 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
-    "alwaysStrict": true,
-    "charset": "utf8",
     "declaration": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "incremental": true,
     "inlineSourceMap": true,
     "module": "commonjs",
     "newLine": "lf",
     "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": true,
-    "noImplicitThis": true,
     "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "outDir": "dist",
     "pretty": true,
     "skipLibCheck": true,
     "strict": true,
     "stripInternal": true,
-    "target": "ES2017"
+    "target": "ES2017",
+    "tsBuildInfoFile": ".vscode/.tsbuildinfo"
   },
   "include": [
     "src/**/*.ts"
