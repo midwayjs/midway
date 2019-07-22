@@ -29,7 +29,7 @@
     "start_build": "npm run build && cross-env NODE_ENV=development midway-bin dev",
     "dev": "cross-env NODE_ENV=local midway-bin dev --ts",
     "debug": "cross-env NODE_ENV=local midway-bin debug --ts",
-    "test": "npm run lint && midway-bin test --ts",
+    "test": "npm run lint && cross-env TS_NODE_PROJECT=test/tsconfig.json midway-bin test --ts",
     "cov": "midway-bin cov --ts",
     "lint": "eslint --fix src/**/*.{ts,js} test/**/*.{ts,js}",
     "ci": "npm run cov",
