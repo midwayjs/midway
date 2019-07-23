@@ -11,5 +11,11 @@
   },
   "include": [
     "**/*.ts"
+  ],
+  "exclude": [
+    "asset/",
+    "node_modules*",
+    "**/*.d.ts",
+    "**/*.spec.ts"
   ]
 }
