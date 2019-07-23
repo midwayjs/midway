@@ -18,7 +18,7 @@ npm run dev
 ```
 
 ::: warning COMPATIBILITY NOTE
-midway requires Node.js >= 8.
+midway requires Node.js >= 10.16.0.
 :::
 
 <div class="feats">
