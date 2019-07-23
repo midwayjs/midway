@@ -7,7 +7,7 @@
     "midway": "^1.0.0"
   },
   "devDependencies": {
-    "@types/mocha": "^5.2.5",
+    "@types/mocha": "^6.0.0",
     "@types/node": "^10.5.5",
     "cross-env": "^5.2.0",
     "midway-bin": "1",
