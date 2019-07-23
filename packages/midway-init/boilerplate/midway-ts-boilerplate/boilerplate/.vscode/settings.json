@@ -1,44 +1,61 @@
 {
-  "files.insertFinalNewline": true,
   "files.eol": "\n",
   "files.exclude": {
-    "USE_GITIGNORE": true,
     "**/*.js": {
       "when": "$(basename).ts"
     },
-    "**/*.map": true,
-    "**/*.swp": true,
-    "**/.git": true,
-    "**/.DS_Store": true,
-    ".vscode": true,
-    ".git": true,
+    "*.map": true,
+    "*.swp": true,
     ".build": true,
+    ".dockerignore": true,
+    ".DS_Store": true,
+    ".eslint*": true,
+    ".editorconfig": true,
+    ".git": true,
+    ".gitignore": true,
     ".githooks": true,
+    ".npmignore": true,
+    ".nyc_output": true,
     ".sourcemaps": true,
-    "run": true,
-    "logs": true,
-    "out": true,
-    "node_modules": true,
-    "node_modules*": true,
+    ".travis.yml": true,
+    ".vscode": true,
+    "appveyor.yml": true,
+    "build": true,
+    "commitlint.config.js": true,
     "coverage": true,
     "dist": true,
-    "platforms": true
+    "logs": true,
+    "node_modules*": true,
+    "out": true,
+    "package-lock.json": true,
+    "rollup.*": true,
+    "run": true,
+    "temp": true,
+    "tmp": true
   },
+  "files.insertFinalNewline": true,
   "files.watcherExclude": {
       "**/.git/objects/**": true,
       "**/node_modules/**": true,
       "**/node_modules*/**": true,
+      "**/temp/**": true,
+      "**/tmp/**": true,
       "coverage/**": true,
-      "dist/**": true
+      "dist/**": true,
+      "logs/**": true,
+      "run/**": true
   },
   "files.trimTrailingWhitespace": true,
   "search.exclude": {
-    "**/node_modules": true,
-    ".vscode/**": true,
-    ".build/**": true,
-    "out/**": true,
-    "i18n/**": true
+    "node_modules*": true,
+    "bower_components*": true,
+    "*.anim": true,
+    "i18n/**": true,
+    "library/": true,
+    "platforms/": true,
+    "www/": true
   },
+  "search.useIgnoreFiles": true
   "[markdown]": {
     "files.trimTrailingWhitespace": false
   },

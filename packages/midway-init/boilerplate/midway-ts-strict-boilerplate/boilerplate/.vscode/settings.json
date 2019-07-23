@@ -1,4 +1,6 @@
 {
+  "editor.minimap.renderCharacters": false,
+  "editor.renderFinalNewline": false,
   "editor.tabSize": 2,
   "editor.wordWrap": "on",
   "eslint.autoFixOnSave": true,
@@ -12,19 +14,16 @@
     },
     "typescriptreact" 
   ],
-  "files.insertFinalNewline": true,
   "files.eol": "\n",
   "files.exclude": {
-    "USE_GITIGNORE": true,
     "**/*.js": {
       "when": "$(basename).ts"
     },
-    "**/*.map": true,
-    "**/*.swp": true,
-    "**/.git": true,
-    "**/.DS_Store": true,
+    "*.map": true,
+    "*.swp": true,
     ".build": true,
     ".dockerignore": true,
+    ".DS_Store": true,
     ".eslint*": true,
     ".editorconfig": true,
     ".git": true,
@@ -36,6 +35,7 @@
     ".travis.yml": true,
     ".vscode": true,
     "appveyor.yml": true,
+    "build": true,
     "commitlint.config.js": true,
     "coverage": true,
     "dist": true,
@@ -43,39 +43,49 @@
     "node_modules*": true,
     "out": true,
     "package-lock.json": true,
-    "platforms": true,
-    "rollup.config.js": true,
+    "rollup.*": true,
     "run": true,
-    "tslint.json": true
+    "temp": true,
+    "tmp": true
   },
+  "files.insertFinalNewline": true,
   "files.watcherExclude": {
-      "**/.classpath": true,
-      "**/.factorypath": true,
       "**/.git/objects/**": true,
-      "**/.project": true,
-      "**/.settings": true,
       "**/node_modules/**": true,
       "**/node_modules*/**": true,
+      "**/temp/**": true,
+      "**/tmp/**": true,
       "coverage/**": true,
-      "dist/**": true
+      "dist/**": true,
+      "logs/**": true,
+      "run/**": true
   },
   "files.trimTrailingWhitespace": true,
   "search.exclude": {
-    "**/node_modules": true,
-    ".vscode/**": true,
-    ".build/**": true,
-    "dist/": true,
-    "out/**": true,
-    "i18n/**": true
+    "node_modules*": true,
+    "bower_components*": true,
+    "*.anim": true,
+    "i18n/**": true,
+    "library/": true,
+    "platforms/": true,
+    "www/": true
   },
+  "search.useIgnoreFiles": true
   "[markdown]": {
     "files.trimTrailingWhitespace": false
   },
   "telemetry.enableTelemetry": false,
+  "typescript.autoClosingTags": false,
+  "typescript.experimental.useSeparateSyntaxServer": true,
   "typescript.format.enable": true,
   "typescript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
+  "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
   "typescript.format.insertSpaceAfterTypeAssertion": true,
   "typescript.format.insertSpaceBeforeAndAfterBinaryOperators": true,
   "typescript.updateImportsOnFileMove.enabled": "always",
+  "[typescript]": {
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true
+  },
   "git.ignoreLimitWarning": true
 }

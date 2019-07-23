@@ -18,7 +18,7 @@
     "tslint-midway-contrib": "1",
     "ts-node": "^8.0.2",
     "tslint": "^5.11.0",
-    "typescript": "^3.2.0"
+    "typescript": "^3.4.0"
   },
   "engines": {
     "node": ">=8.9.0"
