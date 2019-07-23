@@ -20,7 +20,7 @@
     "umi-plugin-react": "^1.1.1"
   },
   "engines": {
-    "node": ">=9.11.2"
+    "node": ">=10.16.0"
   },
   "scripts": {
     "debug": "cross-env NODE_ENV=local midway-bin debug --ts",

@@ -21,7 +21,7 @@
     "typescript": "^3.4.0"
   },
   "engines": {
-    "node": ">=8.9.0"
+    "node": ">=10.16.0"
   },
   "scripts": {
     "start": "egg-scripts start --daemon --title=egg-server-{{name}} --framework=midway",
