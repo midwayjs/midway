@@ -8,7 +8,7 @@
     "egg-scripts": "^2.10.0"
   },
   "devDependencies": {
-    "@types/mocha": "^5.2.5",
+    "@types/mocha": "^6.0.0",
     "@types/node": "^10.5.5",
     "cross-env": "^5.2.0",
     "egg-ci": "^1.8.0",
@@ -16,12 +16,12 @@
     "midway-mock": "1",
     "tslib": "^1.8.1",
     "tslint-midway-contrib": "1",
-    "ts-node": "^8.0.2",
+    "ts-node": "^8.3.0",
     "tslint": "^5.11.0",
-    "typescript": "^3.4.0"
+    "typescript": "^3.5.0"
   },
   "engines": {
-    "node": ">=8.9.0"
+    "node": ">=10.16.0"
   },
   "scripts": {
     "start": "egg-scripts start --daemon --title=egg-server-{{name}} --framework=midway",

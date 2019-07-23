@@ -51,10 +51,13 @@
   "files.insertFinalNewline": true,
   "files.watcherExclude": {
       "**/.git/objects/**": true,
+      "**/.git/subtree-cache/**": true,
       "**/node_modules/**": true,
       "**/node_modules*/**": true,
       "**/temp/**": true,
       "**/tmp/**": true,
+      "**/.tsbuildinfo": true,
+      "**/.tsbuildinfo.**": true,
       "coverage/**": true,
       "dist/**": true,
       "logs/**": true,
