@@ -16,9 +16,9 @@
     "midway-mock": "1",
     "tslib": "^1.8.1",
     "tslint-midway-contrib": "1",
-    "ts-node": "^8.0.2",
+    "ts-node": "^8.3.0",
     "tslint": "^5.11.0",
-    "typescript": "^3.4.0"
+    "typescript": "^3.5.0"
   },
   "engines": {
     "node": ">=10.16.0"
