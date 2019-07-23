@@ -1,8 +1,6 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
-    "alwaysStrict": true,
-    "charset": "utf8",
     "declaration": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -11,8 +9,6 @@
     "module": "commonjs",
     "newLine": "lf",
     "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": true,
-    "noImplicitThis": true,
     "noUnusedLocals": true,
     "outDir": "dist",
     "pretty": true,
@@ -27,7 +23,7 @@
     "app/public",
     "app/views",
     "dist",
-    "node_modules",
+    "node_modules*",
     "test",
     "**/*.d.ts",
     "**/*.spec.ts"
