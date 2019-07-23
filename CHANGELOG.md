@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.10.3](https://github.com/midwayjs/midway/compare/v1.10.2...v1.10.3) (2019-07-23)
+
+
+### Bug Fixes
+
+* **boilerplate:** sync configurations for all boilerplate ([e73ae35](https://github.com/midwayjs/midway/commit/e73ae35))
+* **boilerplate:** update deps @types/mocha for all boilerplate ([d84cde1](https://github.com/midwayjs/midway/commit/d84cde1))
+* **boilerplate:** update deps for all boilerplate ([4a015e7](https://github.com/midwayjs/midway/commit/4a015e7))
+* **boilerplate:** update nodejs requirement for all boilerplate ([1602d3a](https://github.com/midwayjs/midway/commit/1602d3a)), closes [#279](https://github.com/midwayjs/midway/issues/279)
+
+
+
+
+
 ## [1.10.2](https://github.com/midwayjs/midway/compare/v1.10.1...v1.10.2) (2019-07-20)
 
 **Note:** Version bump only for package midway
