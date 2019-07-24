@@ -18,7 +18,7 @@ Midway is a Node.js Web framework written by typescript, which uses the IoC inje
 ```bash
 $ npm install midway --save
 ```
-Node.js >= 8.0.0 required.
+Node.js >= 10.16.0 required.
 
 ## Features
 
