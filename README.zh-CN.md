@@ -17,7 +17,7 @@
 ```bash
 $ npm install midway --save
 ```
-需要 Node.js >= 8.0.0。
+需要 Node.js >= 10.16.0。
 
 ## 特性
 
