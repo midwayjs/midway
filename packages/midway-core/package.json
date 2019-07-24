@@ -31,7 +31,7 @@
     "@midwayjs/decorator": "^1.10.2",
     "camelcase": "^5.2.0",
     "debug": "^4.1.1",
-    "globby": "^9.1.0",
+    "globby": "^10.0.1",
     "injection": "^1.4.2",
     "is-type-of": "^1.2.1"
   },
