@@ -32,6 +32,7 @@
     "camelcase": "^5.2.0",
     "debug": "^4.1.1",
     "globby": "^10.0.1",
+    "graphviz": "^0.0.8",
     "injection": "^1.4.2",
     "is-type-of": "^1.2.1"
   },
