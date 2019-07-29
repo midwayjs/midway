@@ -239,7 +239,6 @@ export class MidwayWebLoader extends EggLoader {
 
   }
 
-
   private async handlerWebMiddleware(
     middlewares: MiddlewareParamArray | void,
     handlerCallback: (middlewareImpl: Middleware) => void,

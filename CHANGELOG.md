@@ -3,6 +3,84 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.10.4](https://github.com/midwayjs/midway/compare/v1.10.3...v1.10.4) (2019-07-24)
+
+
+### Bug Fixes
+
+* **boilerplate:** update vscode path match pattern for all boilerplate ([88352e5](https://github.com/midwayjs/midway/commit/88352e5))
+
+
+
+
+
+## [1.10.3](https://github.com/midwayjs/midway/compare/v1.10.2...v1.10.3) (2019-07-23)
+
+
+### Bug Fixes
+
+* **boilerplate:** sync configurations for all boilerplate ([e73ae35](https://github.com/midwayjs/midway/commit/e73ae35))
+* **boilerplate:** update deps @types/mocha for all boilerplate ([d84cde1](https://github.com/midwayjs/midway/commit/d84cde1))
+* **boilerplate:** update deps for all boilerplate ([4a015e7](https://github.com/midwayjs/midway/commit/4a015e7))
+* **boilerplate:** update nodejs requirement for all boilerplate ([1602d3a](https://github.com/midwayjs/midway/commit/1602d3a)), closes [#279](https://github.com/midwayjs/midway/issues/279)
+
+
+
+
+
+## [1.10.2](https://github.com/midwayjs/midway/compare/v1.10.1...v1.10.2) (2019-07-20)
+
+**Note:** Version bump only for package midway
+
+
+
+
+
+## [1.10.1](https://github.com/midwayjs/midway/compare/v1.10.0...v1.10.1) (2019-07-18)
+
+**Note:** Version bump only for package midway
+
+
+
+
+
+# [1.10.0](https://github.com/midwayjs/midway/compare/v1.9.0...v1.10.0) (2019-07-16)
+
+
+### Features
+
+* 导出 egg 的 Service 和 Boot 类，以供用户继承 ([6180040](https://github.com/midwayjs/midway/commit/6180040))
+
+
+
+
+
+# [1.9.0](https://github.com/midwayjs/midway/compare/v1.8.0...v1.9.0) (2019-07-13)
+
+
+### Bug Fixes
+
+* **build:** filter unnecessary files [#277](https://github.com/midwayjs/midway/issues/277) ([9c1be93](https://github.com/midwayjs/midway/commit/9c1be93))
+* **midway-init:** Internal employees can not use the external network midway ([3179434](https://github.com/midwayjs/midway/commit/3179434))
+* **midway-web:** path might be numeric string within safelyGet() ([5b48eff](https://github.com/midwayjs/midway/commit/5b48eff))
+* **types:** use generic as typeof context within KoaMiddleware ([6c963e5](https://github.com/midwayjs/midway/commit/6c963e5))
+
+
+### Features
+
+* [@config](https://github.com/config)(opt) decorator opt accept dot natation ([4ee1959](https://github.com/midwayjs/midway/commit/4ee1959))
+* **boilerplate:** add midway-ts-strict-boilerplate ([8ee325c](https://github.com/midwayjs/midway/commit/8ee325c))
+* **boilerplate:** enforce kebabCase style for filenames for midway-ts-strict ([816941b](https://github.com/midwayjs/midway/commit/816941b))
+* **boilerplate:** update midway-ts-strict ([c8388f0](https://github.com/midwayjs/midway/commit/c8388f0)), closes [#269](https://github.com/midwayjs/midway/issues/269)
+* **types:** assign egg['Context'] to types of parameter of context ([ea511fa](https://github.com/midwayjs/midway/commit/ea511fa))
+* **types:** export and use type MiddlewareParamArray ([90b4e28](https://github.com/midwayjs/midway/commit/90b4e28))
+* **types:** update types of utils.ts ([c76db38](https://github.com/midwayjs/midway/commit/c76db38)), closes [#258](https://github.com/midwayjs/midway/issues/258)
+* **types:** update webLoader.ts ([fb534bb](https://github.com/midwayjs/midway/commit/fb534bb))
+
+
+
+
+
 # [1.8.0](https://github.com/midwayjs/midway/compare/v1.7.0...v1.8.0) (2019-06-29)
 
 

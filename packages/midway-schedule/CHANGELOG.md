@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.10.2](https://github.com/midwayjs/midway/compare/v1.10.1...v1.10.2) (2019-07-20)
+
+**Note:** Version bump only for package midway-schedule
+
+
+
+
+
+# [1.9.0](https://github.com/midwayjs/midway/compare/v1.8.0...v1.9.0) (2019-07-13)
+
+
+### Bug Fixes
+
+* **build:** filter unnecessary files [#277](https://github.com/midwayjs/midway/issues/277) ([9c1be93](https://github.com/midwayjs/midway/commit/9c1be93))
+
+
+
+
+
 # [1.8.0](https://github.com/midwayjs/midway/compare/v1.7.0...v1.8.0) (2019-06-29)
 
 **Note:** Version bump only for package midway-schedule

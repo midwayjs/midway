@@ -11,7 +11,7 @@
     "midway-demo-lib": "1"
   },
   "engines": {
-    "node": ">=8.9.0"
+    "node": ">=10.16.0"
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=local midway-bin dev --ts",

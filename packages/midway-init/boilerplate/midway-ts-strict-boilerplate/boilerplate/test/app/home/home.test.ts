@@ -15,8 +15,11 @@ describe(filename, () => {
     // await ctx.service.xx();
   })
 
-  it('should GET /', async () => app.httpRequest()
-    .get('/')
-    .expect('Welcome to midwayjs!')
-    .expect(200))
+  it('should GET /', async () => {
+    const ret = await app.httpRequest()
+      .get('/')
+      .expect(200)
+
+    assert(app.config.welcomeMsg && ret.res.text.startsWith(app.config.welcomeMsg))
+  })
 })

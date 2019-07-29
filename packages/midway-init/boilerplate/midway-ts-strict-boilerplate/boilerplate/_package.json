@@ -8,7 +8,7 @@
     "egg-scripts": "^2.10.0"
   },
   "devDependencies": {
-    "@types/mocha": "^5.2.5",
+    "@types/mocha": "^6.0.0",
     "@types/node": "^10.5.5",
     "@waiting/eslint-config": "^1.4.0",
     "cross-env": "^5.2.0",
@@ -17,11 +17,11 @@
     "midway-bin": "1",
     "midway-mock": "1",
     "tslib": "^1.8.1",
-    "ts-node": "^8.0.2",
-    "typescript": "^3.2.0"
+    "ts-node": "^8.3.0",
+    "typescript": "^3.5.0"
   },
   "engines": {
-    "node": ">=8.9.0"
+    "node": ">=10.16.0"
   },
   "scripts": {
     "start": "egg-scripts start --daemon --title=egg-server-{{name}} --framework=midway",
@@ -29,7 +29,7 @@
     "start_build": "npm run build && cross-env NODE_ENV=development midway-bin dev",
     "dev": "cross-env NODE_ENV=local midway-bin dev --ts",
     "debug": "cross-env NODE_ENV=local midway-bin debug --ts",
-    "test": "npm run lint && midway-bin test --ts",
+    "test": "npm run lint && cross-env TS_NODE_PROJECT=test/tsconfig.json midway-bin test --ts",
     "cov": "midway-bin cov --ts",
     "lint": "eslint --fix src/**/*.{ts,js} test/**/*.{ts,js}",
     "ci": "npm run cov",

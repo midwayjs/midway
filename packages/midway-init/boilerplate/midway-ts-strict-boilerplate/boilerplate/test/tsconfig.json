@@ -1,24 +1,21 @@
 {
+  "extends": "../tsconfig.json",
   "compilerOptions": {
-    "declaration": false,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
+    "declaration": false, 
     "inlineSourceMap": false,
     "module": "commonjs",
-    "newLine": "lf",
-    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": false,
+    "noImplicitThis": false,
     "noUnusedLocals": false,
-    "pretty": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "target": "esnext"
+    "target": "ESNEXT"
   },
   "include": [
     "**/*.ts"
   ],
   "exclude": [
+    "asset/",
+    "node_modules*",
     "**/*.d.ts",
-    "**/*.spec.ts",
-    "node_modules*"
+    "**/*.spec.ts"
   ]
 }
