@@ -38,7 +38,7 @@
     "build": "midway-bin build -c"
   },
   "ci": {
-    "version": "8, 10"
+    "version": "10"
   },
   "repository": {
     "type": "git",

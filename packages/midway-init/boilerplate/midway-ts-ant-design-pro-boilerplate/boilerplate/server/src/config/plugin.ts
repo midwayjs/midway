@@ -1,4 +1,4 @@
-import { EggPlugin } from 'midway'
+import { EggPlugin } from 'midway';
 export default {
   static: true, // default is true
 
@@ -11,4 +11,4 @@ export default {
     enable: true,
     package: 'egg-view-assets',
   },
-} as EggPlugin
+} as EggPlugin;
