@@ -24,6 +24,7 @@ import * as path from 'path';
 import * as globby from 'globby';
 import * as is from 'is-type-of';
 
+const graphviz = require('graphviz');
 const camelcase = require('camelcase');
 const debug = require('debug')('midway:container');
 const CONTROLLERS = 'controllers';
@@ -380,6 +381,29 @@ export class MidwayContainer extends Container implements IContainer {
     if (objDefOptions && !objDefOptions.scope) {
       debug(`register @scope to default value(request), id=${objectDefinition.id}`);
       objectDefinition.scope = ScopeEnum.Request;
+    }
+  }
+
+  dumpDependency() {
+    const g = graphviz.digraph('G');
+
+    for (const [ id, module ] of this.dependencyMap.entries()) {
+
+      g.addNode(id, { label: `${id}(${module.name})\nscope:${module.scope}`, fontsize: '10' });
+
+      module.properties.forEach((depId) => {
+        g.addEdge(id, depId, { label: `properties`, fontsize: '8' });
+      });
+
+      module.constructorArgs.forEach((depId) => {
+        g.addEdge(id, depId, { label: 'constructor', fontsize: '8' });
+      });
+    }
+
+    try {
+      return g.to_dot();
+    } catch (err) {
+      console.error('generate injection dependency tree fail, err = ', err.message);
     }
   }
 
