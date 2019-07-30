@@ -56,7 +56,7 @@
     "**/node_modules*": true,
     "**/bower_components": true
   },
-  "search.useIgnoreFiles": true
+  "search.useIgnoreFiles": true,
   "[markdown]": {
     "files.trimTrailingWhitespace": false
   },
