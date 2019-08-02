@@ -3,7 +3,7 @@ import { FUNCTION_INJECT_KEY } from './constant';
 
 export function providerWrapper(wrapperInfo: Array<{
   id: ObjectIdentifier;
-  provider: (context?: IApplicationContext) => any;
+  provider: (context: IApplicationContext) => any;
   scope?: Scope;
   isAutowire?: boolean;
 }>): void {
