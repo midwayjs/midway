@@ -11,7 +11,7 @@ do
       rm -rf node_modules
       echo ">>>>>> install dependency"
       echo ">>>>>>" $pkg
-      npm i
+      cnpm i
       npm run ready
     fi
 done

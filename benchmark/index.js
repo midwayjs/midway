@@ -33,11 +33,6 @@ const cannon = (port, url) => {
 
 (async () => {
   const apps = require('./apps').apps;
-  console.log('----------------------------------------');
-  console.log('Waiting for run npm install in every sample');
-  execSync('./ready.sh', {cwd: __dirname, stdio: 'inherit'});
-  console.log('Run npm install in every sample Complete');
-  console.log('----------------------------------------');
 
   for (const app of apps) {
     let {cwd, name, command, url, port, delay, exit, skip} = app;
