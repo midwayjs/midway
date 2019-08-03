@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.10.7](https://github.com/midwayjs/midway/compare/v1.10.6...v1.10.7) (2019-08-03)
+
+
+### Bug Fixes
+
+* **boilerplate:** missing comma in .vscode/settings.json ([62fa953](https://github.com/midwayjs/midway/commit/62fa953))
+
+
+
+
+
 ## [1.10.6](https://github.com/midwayjs/midway/compare/v1.10.5...v1.10.6) (2019-07-30)
 
 
