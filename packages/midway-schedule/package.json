@@ -1,6 +1,6 @@
 {
   "name": "midway-schedule",
-  "version": "1.10.7",
+  "version": "1.10.8",
   "description": "",
   "main": "index.js",
   "directories": {
@@ -21,11 +21,11 @@
   "keywords": [],
   "license": "MIT",
   "devDependencies": {
-    "midway-bin": "^1.10.7",
-    "midway-mock": "^1.10.7"
+    "midway-bin": "^1.10.8",
+    "midway-mock": "^1.10.8"
   },
   "dependencies": {
-    "@midwayjs/decorator": "^1.10.7",
+    "@midwayjs/decorator": "^1.10.8",
     "injection": "^1.6.1",
     "is-type-of": "^1.2.1"
   },
