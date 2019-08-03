@@ -171,15 +171,15 @@ export class MidwayWebLoader extends EggLoader {
     this.containerLoader.loadDirectory(containerConfig);
 
     // register handler for container
-    this.containerLoader.registerAllHook(MidwayHandlerKey.CONFIG, (key: string) => {
+    this.containerLoader.registerHook(MidwayHandlerKey.CONFIG, (key: string) => {
       return safelyGet(key, this.config);
     });
 
-    this.containerLoader.registerAllHook(MidwayHandlerKey.PLUGIN, (key: string) => {
+    this.containerLoader.registerHook(MidwayHandlerKey.PLUGIN, (key: string) => {
       return this.app[key] || this.pluginContext.get(key);
     });
 
-    this.containerLoader.registerAllHook(MidwayHandlerKey.LOGGER, (key: string) => {
+    this.containerLoader.registerHook(MidwayHandlerKey.LOGGER, (key: string) => {
       if (this.app.getLogger) {
         return this.app.getLogger(key);
       }
