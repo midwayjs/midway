@@ -27,6 +27,7 @@
     "d.ts",
     "bootstrap.d.ts",
     "bootstrap.js",
+    "app",
     "config"
   ],
   "license": "MIT",
