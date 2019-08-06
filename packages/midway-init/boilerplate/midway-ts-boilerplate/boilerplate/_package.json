@@ -24,7 +24,7 @@
     "node": ">=10.16.0"
   },
   "scripts": {
-    "start": "egg-scripts start --daemon --title=egg-server-{{name}} --framework=midway",
+    "start": "egg-scripts start --daemon --title=egg-server-{{name}} --framework=midway --ts",
     "stop": "egg-scripts stop --title=egg-server-{{name}}",
     "start_build": "npm run build && cross-env NODE_ENV=development midway-bin dev",
     "clean": "midway-bin clean",
