@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.10.9](https://github.com/midwayjs/midway/compare/v1.10.8...v1.10.9) (2019-08-06)
+
+
+### Bug Fixes
+
+* app/extend 没有发布到 npm ([73ba51a](https://github.com/midwayjs/midway/commit/73ba51a))
+
+
+
+
+
 ## [1.10.8](https://github.com/midwayjs/midway/compare/v1.10.7...v1.10.8) (2019-08-03)
 
 **Note:** Version bump only for package midway-mock
