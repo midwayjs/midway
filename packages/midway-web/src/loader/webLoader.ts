@@ -66,25 +66,25 @@ export class MidwayWebLoader extends EggLoader {
     }
 
     const name: string = plugin.package || plugin.name;
-    const lookupDirs: string[] = [];
+    const lookupDirs: Set<string> = new Set();
 
     // 尝试在以下目录找到匹配的插件
     //  -> {APP_PATH}/node_modules
     //    -> {EGG_PATH}/node_modules
     //      -> $CWD/node_modules
-    lookupDirs.push(path.join(this.appDir, 'node_modules'));
+    lookupDirs.add(path.join(this.appDir, 'node_modules'));
 
     // 到 egg 中查找，优先从外往里查找
     for (let i = this.eggPaths.length - 1; i >= 0; i--) {
       const eggPath: string = this.eggPaths[i];
-      lookupDirs.push(path.join(eggPath, 'node_modules'));
+      lookupDirs.add(path.join(eggPath, 'node_modules'));
     }
 
     // should find the $cwd/node_modules when test the plugins under npm3
-    lookupDirs.push(path.join(process.cwd(), 'node_modules'));
+    lookupDirs.add(path.join(process.cwd(), 'node_modules'));
 
     if (process.env.PLUGIN_PATH) {
-      lookupDirs.push(path.join(process.env.PLUGIN_PATH, 'node_modules'));
+      lookupDirs.add(path.join(process.env.PLUGIN_PATH, 'node_modules'));
     }
 
     for (let dir of lookupDirs) {
@@ -94,7 +94,7 @@ export class MidwayWebLoader extends EggLoader {
       }
     }
 
-    throw new Error(`Can not find plugin ${name} in "${lookupDirs.join(', ')}"`);
+    throw new Error(`Can not find plugin ${name} in "${Array.from(lookupDirs).join(', ')}"`);
   }
 
   protected registerTypescriptDirectory(): void {
