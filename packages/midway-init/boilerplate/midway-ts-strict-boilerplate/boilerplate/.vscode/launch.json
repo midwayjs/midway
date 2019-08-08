@@ -41,9 +41,8 @@
         "--colors",
         "--full-trace",
         "--bail",
-        "-r", "ts-node/register",
-        "-r", "source-map-support/register",
         "-r", "intelli-espower-loader",
+        "-r", "espower-typescript/guess",
         "${workspaceFolder}/test/**/**.test.ts"
       ],
       "env": {
