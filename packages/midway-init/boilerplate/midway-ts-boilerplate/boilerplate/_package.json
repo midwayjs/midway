@@ -14,7 +14,6 @@
     "egg-ci": "^1.8.0",
     "midway-bin": "1",
     "midway-mock": "1",
-    "rimraf": "^2.6.2",
     "tslib": "^1.8.1",
     "tslint-midway-contrib": "1",
     "ts-node": "^8.3.0",
@@ -25,10 +24,10 @@
     "node": ">=10.16.0"
   },
   "scripts": {
-    "start": "egg-scripts start --daemon --title=egg-server-{{name}} --framework=midway",
+    "start": "egg-scripts start --daemon --title=egg-server-{{name}} --framework=midway --ts",
     "stop": "egg-scripts stop --title=egg-server-{{name}}",
     "start_build": "npm run build && cross-env NODE_ENV=development midway-bin dev",
-    "clean": "rm -rf dist/* .vscode/.tsbuildinfo .vscode/.tsbuildinfo.* ",
+    "clean": "midway-bin clean",
     "dev": "cross-env NODE_ENV=local midway-bin dev --ts",
     "debug": "cross-env NODE_ENV=local midway-bin debug --ts",
     "test": "npm run lint && midway-bin test --ts",
@@ -40,6 +39,10 @@
   "ci": {
     "version": "10"
   },
+  "midway-bin-clean": [
+    ".vscode/.tsbuildinfo",
+    "dist"
+  ],
   "repository": {
     "type": "git",
     "url": ""
