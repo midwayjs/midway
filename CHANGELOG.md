@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.11.0](https://github.com/midwayjs/midway/compare/v1.10.9...v1.11.0) (2019-08-09)
+
+
+### Features
+
+* **boilerplate:** enable source map for stack trace ([77afc3f](https://github.com/midwayjs/midway/commit/77afc3f))
+
+
+### Performance Improvements
+
+* **web:** use set to avoid duplicate lookup ([21e44f9](https://github.com/midwayjs/midway/commit/21e44f9))
+
+
+
+
+
 ## [1.10.9](https://github.com/midwayjs/midway/compare/v1.10.8...v1.10.9) (2019-08-06)
 
 
