@@ -1,6 +1,6 @@
 {
   "name": "midway-init",
-  "version": "1.9.0",
+  "version": "1.11.0",
   "dependencies": {
     "co": "^4.6.0",
     "egg-init": "^1.16.1",
@@ -10,10 +10,10 @@
   "main": "lib/command.js",
   "devDependencies": {
     "coffee": "^5.2.1",
-    "eslint": "^5.14.1",
+    "eslint": "^6.1.0",
     "eslint-config-egg": "^7.0.0",
     "intelli-espower-loader": "^1.0.1",
-    "midway-bin": "^1.9.0",
+    "midway-bin": "^1.10.8",
     "mm": "^2.5.0",
     "mz-modules": "^2.1.0",
     "power-assert": "^1.6.1",

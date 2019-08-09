@@ -1,17 +1,14 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
-    "alwaysStrict": true,
-    "charset": "utf8",
     "declaration": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "incremental": true,
     "inlineSourceMap": true,
     "module": "commonjs",
     "newLine": "lf",
     "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": true,
-    "noImplicitThis": true,
     "noUnusedLocals": true,
     "outDir": "dist",
     "pretty": true,
@@ -19,13 +16,14 @@
     "strict": true,
     "strictPropertyInitialization": false,
     "stripInternal": true,
-    "target": "ES2017"
+    "target": "ES2017",
+    "tsBuildInfoFile": ".vscode/.tsbuildinfo"
   },
   "exclude": [
     "app/public",
     "app/views",
     "dist",
-    "node_modules",
+    "node_modules*",
     "test",
     "**/*.d.ts",
     "**/*.spec.ts"

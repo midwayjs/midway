@@ -1,4 +1,5 @@
 import { CLASS_KEY_CONSTRUCTOR, CONFIG_KEY, LOGGER_KEY, PLUGIN_KEY } from '@midwayjs/decorator';
+import * as globby from 'globby';
 import {
   Autowire,
   Container,
@@ -19,11 +20,11 @@ import {
   ScopeEnum,
   XmlObjectDefinition
 } from 'injection';
-import { FUNCTION_INJECT_KEY, MidwayHandlerKey } from './constant';
-import * as path from 'path';
-import * as globby from 'globby';
 import * as is from 'is-type-of';
+import * as path from 'path';
+import { FUNCTION_INJECT_KEY, MidwayHandlerKey } from './constant';
 
+const graphviz = require('graphviz');
 const camelcase = require('camelcase');
 const debug = require('debug')('midway:container');
 const CONTROLLERS = 'controllers';
@@ -107,9 +108,9 @@ class LoggerResolver implements IManagedResolver {
   resolve(managed: IManagedInstance): any {
     const log: ManagedLogger = managed as ManagedLogger;
     if (log.name) {
-      return this.container.handlerMap.get(MidwayHandlerKey.LOGGER)(log.name);
+      return this.container.findHandlerHook(MidwayHandlerKey.LOGGER)(log.name);
     }
-    return this.container.handlerMap.get(MidwayHandlerKey.LOGGER)(log.type);
+    return this.container.findHandlerHook(MidwayHandlerKey.LOGGER)(log.type);
   }
 
   async resolveAsync(managed: IManagedInstance): Promise<any> {
@@ -147,7 +148,7 @@ class PluginResolver implements IManagedResolver {
 
   resolve(managed: IManagedInstance): any {
     const p = managed as ManagedPlugin;
-    return this.container.handlerMap.get(MidwayHandlerKey.PLUGIN)(p.name);
+    return this.container.findHandlerHook(MidwayHandlerKey.PLUGIN)(p.name);
   }
 
   async resolveAsync(managed: IManagedInstance): Promise<any> {
@@ -158,7 +159,7 @@ class PluginResolver implements IManagedResolver {
 export class MidwayContainer extends Container implements IContainer {
   controllersIds: string[] = [];
   middlewaresIds: string[] = [];
-  handlerMap: Map<string, (handlerKey: string) => any>;
+  handlerMap: Map<string, (handlerKey: string, instance?: any) => any>;
   // 仅仅用于兼容requestContainer的ctx
   ctx = {};
   isTsMode;
@@ -194,6 +195,7 @@ export class MidwayContainer extends Container implements IContainer {
    * update current context in applicationContext
    * for mock and other case
    * @param ctx ctx
+   * @deprecated
    */
   updateContext(ctx) {
     this.ctx = Object.assign({}, ctx || {});
@@ -299,13 +301,13 @@ export class MidwayContainer extends Container implements IContainer {
 
           switch (propertyMeta.type) {
             case 'config':
-              result = this.handlerMap.get(MidwayHandlerKey.CONFIG)(propertyMeta.key);
+              result = this.findHandlerHook(MidwayHandlerKey.CONFIG)(propertyMeta.key);
               break;
             case 'logger':
-              result = this.handlerMap.get(MidwayHandlerKey.LOGGER)(propertyMeta.key);
+              result = this.findHandlerHook(MidwayHandlerKey.LOGGER)(propertyMeta.key);
               break;
             case 'plugin':
-              result = this.handlerMap.get(MidwayHandlerKey.PLUGIN)(propertyMeta.key);
+              result = this.findHandlerHook(MidwayHandlerKey.PLUGIN)(propertyMeta.key);
               break;
           }
           constructorArgs[index] = result;
@@ -318,13 +320,13 @@ export class MidwayContainer extends Container implements IContainer {
 
       // 处理配置装饰器
       const configSetterProps: FrameworkDecoratorMetadata[] = getClassMetadata(CONFIG_KEY, instance);
-      this.defineGetterPropertyValue(configSetterProps, instance, this.handlerMap.get(MidwayHandlerKey.CONFIG));
+      this.defineGetterPropertyValue(configSetterProps, instance, this.findHandlerHook(MidwayHandlerKey.CONFIG));
       // 处理插件装饰器
       const pluginSetterProps: FrameworkDecoratorMetadata[] = getClassMetadata(PLUGIN_KEY, instance);
-      this.defineGetterPropertyValue(pluginSetterProps, instance, this.handlerMap.get(MidwayHandlerKey.PLUGIN));
+      this.defineGetterPropertyValue(pluginSetterProps, instance, this.findHandlerHook(MidwayHandlerKey.PLUGIN));
       // 处理日志装饰器
       const loggerSetterProps: FrameworkDecoratorMetadata[] = getClassMetadata(LOGGER_KEY, instance);
-      this.defineGetterPropertyValue(loggerSetterProps, instance, this.handlerMap.get(MidwayHandlerKey.LOGGER));
+      this.defineGetterPropertyValue(loggerSetterProps, instance, this.findHandlerHook(MidwayHandlerKey.LOGGER));
 
       // 表示非ts annotation模式
       if (!this.isTsMode && !pluginSetterProps && !loggerSetterProps && definition.isAutowire()) {
@@ -332,16 +334,16 @@ export class MidwayContainer extends Container implements IContainer {
         // this.$xxx = null; 用来注入 logger 或者 插件
         Autowire.patchDollar(instance, context, (key: string) => {
           if (key[0] === '$') {
-            return this.handlerMap.get(MidwayHandlerKey.CONFIG)(key.slice(1));
+            return this.findHandlerHook(MidwayHandlerKey.CONFIG)(key.slice(1));
           }
           try {
-            const v = this.handlerMap.get(MidwayHandlerKey.PLUGIN)(key);
+            const v = this.findHandlerHook(MidwayHandlerKey.PLUGIN)(key);
             if (v) {
               return v;
             }
           } catch (e) {
           }
-          return this.handlerMap.get(MidwayHandlerKey.LOGGER)(key);
+          return this.findHandlerHook(MidwayHandlerKey.LOGGER)(key);
         });
       }
     });
@@ -380,6 +382,40 @@ export class MidwayContainer extends Container implements IContainer {
     if (objDefOptions && !objDefOptions.scope) {
       debug(`register @scope to default value(request), id=${objectDefinition.id}`);
       objectDefinition.scope = ScopeEnum.Request;
+    }
+  }
+
+  dumpDependency() {
+    const g = graphviz.digraph('G');
+
+    for (const [id, module] of this.dependencyMap.entries()) {
+      g.addNode(id, {label: `${id}(${module.name})\nscope:${module.scope}`, fontsize: '10'});
+      module.properties.forEach((depId) => {
+        g.addEdge(id, depId, {label: `properties`, fontsize: '8'});
+      });
+      module.constructorArgs.forEach((depId) => {
+        g.addEdge(id, depId, {label: 'constructor', fontsize: '8'});
+      });
+    }
+
+    try {
+      return g.to_dot();
+    } catch (err) {
+      console.error('generate injection dependency tree fail, err = ', err.message);
+    }
+  }
+
+  /**
+   * get hook from current map or parent map
+   * @param hookKey
+   */
+  findHandlerHook(hookKey: string) {
+    if (this.handlerMap.has(hookKey)) {
+      return this.handlerMap.get(hookKey);
+    }
+
+    if (this.parent) {
+      return (this.parent as MidwayContainer).findHandlerHook(hookKey);
     }
   }
 

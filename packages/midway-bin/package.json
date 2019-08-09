@@ -1,6 +1,6 @@
 {
   "name": "midway-bin",
-  "version": "1.9.0",
+  "version": "1.10.8",
   "description": "Midway Command Tools",
   "main": "index.js",
   "bin": {
@@ -24,15 +24,15 @@
   "license": "MIT",
   "dependencies": {
     "egg-bin": "^4.11.1",
-    "fs-extra": "^7.0.1",
-    "globby": "^9.1.0",
+    "fs-extra": "^8.1.0",
+    "globby": "^10.0.1",
     "mz-modules": "^2.1.0",
     "typedoc": "^0.14.2"
   },
   "devDependencies": {
     "co-mocha": "^1.2.2",
     "coffee": "^5.2.1",
-    "eslint": "^5.14.1",
+    "eslint": "^6.1.0",
     "eslint-config-egg": "^7.0.0",
     "mm": "^2.5.0"
   },

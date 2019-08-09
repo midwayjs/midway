@@ -4,6 +4,10 @@ import * as path from 'path';
 import { MidwayContainer, MidwayHandlerKey } from '../src';
 import { App } from './fixtures/ts-app-inject/app';
 
+import { UserService } from './fixtures/complex_injection/userService';
+import { UserController } from './fixtures/complex_injection/userController';
+import { A, B, DbAPI } from './fixtures/complex_injection/dbAPI';
+
 describe('/test/midwayContainer.test.ts', () => {
 
   it('should scan app dir and inject automatic', () => {
@@ -54,5 +58,32 @@ describe('/test/midwayContainer.test.ts', () => {
     expect(my.$$mytest).not.null;
     expect(my.$$mytest).eq('this is my test');
     expect(my.$plugin2).deep.eq({text: 't'});
+  });
+
+  describe('dependency tree', () => {
+
+    it('should generate dependency dot in requestContainer', async () => {
+      const applicationContext = new MidwayContainer();
+      applicationContext.bind(UserService);
+      applicationContext.bind(UserController);
+      applicationContext.bind(DbAPI);
+      const newTree = await applicationContext.dumpDependency();
+      expect(/userController/.test(newTree)).to.be.true;
+      expect(/newKey\(DbAPI\)/.test(newTree)).to.be.true;
+    });
+
+    it('should skip empty properties', async () => {
+      const applicationContext = new MidwayContainer();
+      applicationContext.bind(UserService);
+      applicationContext.bind(UserController);
+      applicationContext.bind(DbAPI);
+      applicationContext.bind(A);
+      applicationContext.bind(B);
+      const newTree = await applicationContext.dumpDependency();
+      expect(/userController/.test(newTree)).to.be.true;
+      expect(/newKey\(DbAPI\)/.test(newTree)).to.be.true;
+      expect(/"newKey" -> "b"/.test(newTree)).to.be.true;
+    });
+
   });
 });

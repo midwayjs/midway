@@ -1,7 +1,7 @@
 import { CONFIG_KEY, LOGGER_KEY, PLUGIN_KEY } from '@midwayjs/decorator';
 import * as assert from 'assert';
 import * as path from 'path';
-import { ContainerLoader } from '../src';
+import { ContainerLoader, MidwayRequestContainer } from '../src';
 import { provide } from 'injection';
 
 @provide()
@@ -23,10 +23,9 @@ describe('/test/loader.test.ts', () => {
 
     const appCtx = loader.getApplicationContext();
     const pluginCtx = loader.getPluginContext();
-    const requestCtx = loader.getRequestContext();
 
+    assert(appCtx);
     assert(pluginCtx);
-    assert(requestCtx === await appCtx.getAsync('requestContext'));
   });
 
   it('should load ts file and use config, plugin decorator', async () => {
@@ -38,16 +37,16 @@ describe('/test/loader.test.ts', () => {
     await loader.refresh();
 
     // register handler for container
-    loader.registerAllHook(CONFIG_KEY, (key, target) => {
+    loader.registerHook(CONFIG_KEY, (key, target) => {
       assert(target instanceof require('./fixtures/base-app-decorator/src/lib/service')['BaseService']);
       return 'hello';
     });
 
-    loader.registerAllHook(PLUGIN_KEY, (key, target) => {
+    loader.registerHook(PLUGIN_KEY, (key, target) => {
       return {b: 2};
     });
 
-    loader.registerAllHook(LOGGER_KEY, (key, target) => {
+    loader.registerHook(LOGGER_KEY, (key, target) => {
       return console;
     });
 
@@ -58,8 +57,7 @@ describe('/test/loader.test.ts', () => {
     assert(baseService.plugin2.b === 2);
 
     const context = {logger: console};
-    const requestCtx = loader.getRequestContext();
-    requestCtx.updateContext(context);
+    const requestCtx = new MidwayRequestContainer(appCtx, context);
     const baseServiceCtx = await requestCtx.getAsync('baseService');
     const baseServiceCtx1 = await requestCtx.getAsync('baseService');
     assert(baseServiceCtx === baseServiceCtx1);
@@ -77,21 +75,20 @@ describe('/test/loader.test.ts', () => {
     await loader.refresh();
 
     // register handler for container
-    loader.registerAllHook(CONFIG_KEY, (key) => {
+    loader.registerHook(CONFIG_KEY, (key) => {
       return {c: 60};
     });
 
-    loader.registerAllHook(PLUGIN_KEY, (key) => {
+    loader.registerHook(PLUGIN_KEY, (key) => {
       return {text: 2};
     });
 
-    loader.registerAllHook(LOGGER_KEY, (key) => {
+    loader.registerHook(LOGGER_KEY, (key) => {
       return console;
     });
 
     const context = {logger: console};
-    const requestCtx = loader.getRequestContext();
-    requestCtx.updateContext(context);
+    const requestCtx = new MidwayRequestContainer(loader.getApplicationContext(), context);
     const module = require(path.join(__dirname, './fixtures/base-app-constructor/src/lib/service'));
     const baseServiceCtx = await requestCtx.getAsync(module['BaseService']);
     assert(baseServiceCtx.config.c === 120);
@@ -108,21 +105,20 @@ describe('/test/loader.test.ts', () => {
     await loader.refresh();
 
     // register handler for container
-    loader.registerAllHook(CONFIG_KEY, (key) => {
+    loader.registerHook(CONFIG_KEY, (key) => {
       return {c: 60};
     });
 
-    loader.registerAllHook(PLUGIN_KEY, (key) => {
+    loader.registerHook(PLUGIN_KEY, (key) => {
       return {text: 2};
     });
 
-    loader.registerAllHook(LOGGER_KEY, (key) => {
+    loader.registerHook(LOGGER_KEY, (key) => {
       return console;
     });
 
     const context = {logger: console};
-    const requestCtx = loader.getRequestContext();
-    requestCtx.updateContext(context);
+    const requestCtx = new MidwayRequestContainer(loader.getApplicationContext(), context);
     const baseServiceCtx = await requestCtx.getAsync('baseService');
     assert(baseServiceCtx.factory('google'));
   });

@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.10.8](https://github.com/midwayjs/midway/compare/v1.10.7...v1.10.8) (2019-08-03)
+
+**Note:** Version bump only for package tslint-midway-contrib
+
+
+
+
+
+## [1.10.7](https://github.com/midwayjs/midway/compare/v1.10.6...v1.10.7) (2019-08-03)
+
+**Note:** Version bump only for package tslint-midway-contrib
+
+
+
+
+
 # [1.5.0](https://github.com/midwayjs/midway/compare/v1.4.10...v1.5.0) (2019-04-11)
 
 **Note:** Version bump only for package tslint-midway-contrib

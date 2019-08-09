@@ -20,6 +20,18 @@ function mockContainer(options: MidwayApplicationOptions) {
   return new MockContainer(options);
 }
 
+function findFramework(module) {
+  try {
+    if (require.resolve(module)) {
+      return module;
+    }
+  } catch (err) {
+    console.log(`[midway-bin] Not found framework ${module} and skip.`);
+  }
+}
+
+const defaultFramework = findFramework('midway') || findFramework('midway-mirror');
+
 const mm2: MidwayMock = Object.assign({}, mock, {
   container: mockContainer,
 });
@@ -28,7 +40,7 @@ mm2.app = (options): MidwayMockApplication => {
   if (process.env.MIDWAY_BASE_DIR && !options.baseDir) { options.baseDir = process.env.MIDWAY_BASE_DIR; }
   if (process.env.MIDWAY_FRAMEWORK_PATH && !options.framework) { options.framework = process.env.MIDWAY_FRAMEWORK_PATH; }
   return mock.app(Object.assign({
-    framework: options.framework || 'midway',
+    framework: options.framework || defaultFramework,
     typescript: !!require.extensions['.ts'],
   }, options));
 };
@@ -37,7 +49,7 @@ mm2.cluster = (options) => {
   if (process.env.MIDWAY_BASE_DIR && !options.baseDir) { options.baseDir = process.env.MIDWAY_BASE_DIR; }
   if (process.env.MIDWAY_FRAMEWORK_PATH && !options.framework) { options.framework = process.env.MIDWAY_FRAMEWORK_PATH; }
   return mock.cluster(Object.assign({
-    framework: options.framework || 'midway',
+    framework: options.framework || defaultFramework,
     typescript: !!require.extensions['.ts'],
   }, options));
 };

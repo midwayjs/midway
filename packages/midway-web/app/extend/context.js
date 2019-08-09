@@ -1,13 +1,13 @@
 'use strict';
 
 const rc = Symbol('Context#RequestContext');
+const { MidwayRequestContainer } = require('midway-core');
 
 module.exports = {
   get requestContext() {
     if (!this[rc]) {
-      const requestContext = this.app.applicationContext.get('requestContext');
-      requestContext.updateContext(this);
-      this[rc] = requestContext;
+      this[rc] = new MidwayRequestContainer(this.app.applicationContext, this);
+      this[rc].ready();
     }
     return this[rc];
   },

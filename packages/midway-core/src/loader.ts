@@ -1,6 +1,5 @@
 import * as path from 'path';
 import { MidwayContainer } from './container';
-import { MidwayRequestContainer } from './requestContainer';
 
 function buildLoadDir(baseDir, dir) {
   if (!path.isAbsolute(dir)) {
@@ -14,7 +13,6 @@ export class ContainerLoader {
   baseDir;
   pluginContext;
   applicationContext: MidwayContainer;
-  requestContext;
   isTsMode;
   preloadModules;
 
@@ -27,9 +25,6 @@ export class ContainerLoader {
   initialize() {
     this.pluginContext = new MidwayContainer();
     this.applicationContext = new MidwayContainer(this.baseDir, undefined, this.isTsMode);
-    this.requestContext = new MidwayRequestContainer(this.applicationContext);
-    // put requestContext to applicationContext
-    this.applicationContext.registerObject('requestContext', this.requestContext);
     this.applicationContext.registerObject('baseDir', this.baseDir);
     this.applicationContext.registerObject('isTsMode', this.isTsMode);
   }
@@ -42,21 +37,8 @@ export class ContainerLoader {
     return this.pluginContext;
   }
 
-  getRequestContext() {
-    return this.requestContext;
-  }
-
-  registerAllHook(hookKey, hookHandler) {
-    this.registerApplicationHook(hookKey, hookHandler);
-    this.registerRequestHook(hookKey, hookHandler);
-  }
-
-  registerApplicationHook(hookKey, hookHandler) {
+  registerHook(hookKey, hookHandler) {
     this.applicationContext.registerDataHandler(hookKey, hookHandler);
-  }
-
-  registerRequestHook(hookKey, hookHandler) {
-    this.requestContext.registerDataHandler(hookKey, hookHandler);
   }
 
   loadDirectory(loadOpts: {
@@ -96,7 +78,6 @@ export class ContainerLoader {
   async refresh() {
     await this.pluginContext.ready();
     await this.applicationContext.ready();
-    await this.requestContext.ready();
   }
 
 }

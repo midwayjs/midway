@@ -307,7 +307,7 @@ Sometimes we have the need to load middleware on a specific route. In previous v
 Now you can provide a middleware in you application (any directory)，such as `src/app/middleware/api.ts`.
 
 ```ts
-import { WebMiddleware } from 'midway';
+import { Middleware, WebMiddleware, provide } from 'midway';
 
 @provide()
 export class ApiMiddleware implements WebMiddleware {
@@ -315,7 +315,7 @@ export class ApiMiddleware implements WebMiddleware {
   @config('hello')
   helloConfig;
 
-  resolve() {
+  resolve(): Middleware {
     return async (ctx, next) => {
       ctx.api = '222' + this.helloConfig.b;
       await next();
@@ -355,12 +355,12 @@ If it is a string, it will get the result of the `resolve` method of the corresp
 You can also set `koa middleware` directly.
 
 ```ts
-const mw = async (ctx, next) => {
+const mw: Middleware = async (ctx, next) => {
   ctx.home = '4444';
   await next();
 };
 
-const newMiddleware = (data) => {
+const newMiddleware = (data): Middleware => {
   return async (ctx, next) => {
     ctx.api = data;
     await next();

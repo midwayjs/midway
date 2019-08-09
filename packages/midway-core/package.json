@@ -1,6 +1,6 @@
 {
   "name": "midway-core",
-  "version": "1.9.0",
+  "version": "1.10.8",
   "description": "midway core",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -24,15 +24,16 @@
   "license": "MIT",
   "devDependencies": {
     "chai": "^4.2.0",
-    "midway-bin": "^1.9.0",
+    "midway-bin": "^1.10.8",
     "xmldom": "^0.1.27"
   },
   "dependencies": {
-    "@midwayjs/decorator": "^1.9.0",
+    "@midwayjs/decorator": "^1.10.8",
     "camelcase": "^5.2.0",
     "debug": "^4.1.1",
-    "globby": "^9.1.0",
-    "injection": "^1.4.2",
+    "globby": "^10.0.1",
+    "graphviz": "^0.0.8",
+    "injection": "^1.6.1",
     "is-type-of": "^1.2.1"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",

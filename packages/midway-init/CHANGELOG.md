@@ -3,6 +3,104 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.11.0](https://github.com/midwayjs/midway/compare/v1.10.9...v1.11.0) (2019-08-09)
+
+
+### Features
+
+* **boilerplate:** enable source map for stack trace ([77afc3f](https://github.com/midwayjs/midway/commit/77afc3f))
+
+
+
+
+
+## [1.10.8](https://github.com/midwayjs/midway/compare/v1.10.7...v1.10.8) (2019-08-03)
+
+**Note:** Version bump only for package midway-init
+
+
+
+
+
+## [1.10.7](https://github.com/midwayjs/midway/compare/v1.10.6...v1.10.7) (2019-08-03)
+
+
+### Bug Fixes
+
+* **boilerplate:** missing comma in .vscode/settings.json ([62fa953](https://github.com/midwayjs/midway/commit/62fa953))
+
+
+
+
+
+## [1.10.6](https://github.com/midwayjs/midway/compare/v1.10.5...v1.10.6) (2019-07-30)
+
+
+### Bug Fixes
+
+* @types/mocha has a wrong version: 6.0.0 ([e1a7285](https://github.com/midwayjs/midway/commit/e1a7285))
+
+
+
+
+
+## [1.10.5](https://github.com/midwayjs/midway/compare/v1.10.4...v1.10.5) (2019-07-30)
+
+**Note:** Version bump only for package midway-init
+
+
+
+
+
+## [1.10.4](https://github.com/midwayjs/midway/compare/v1.10.3...v1.10.4) (2019-07-24)
+
+
+### Bug Fixes
+
+* **boilerplate:** update vscode path match pattern for all boilerplate ([88352e5](https://github.com/midwayjs/midway/commit/88352e5))
+
+
+
+
+
+## [1.10.3](https://github.com/midwayjs/midway/compare/v1.10.2...v1.10.3) (2019-07-23)
+
+
+### Bug Fixes
+
+* **boilerplate:** sync configurations for all boilerplate ([e73ae35](https://github.com/midwayjs/midway/commit/e73ae35))
+* **boilerplate:** update deps @types/mocha for all boilerplate ([d84cde1](https://github.com/midwayjs/midway/commit/d84cde1))
+* **boilerplate:** update deps for all boilerplate ([4a015e7](https://github.com/midwayjs/midway/commit/4a015e7))
+* **boilerplate:** update nodejs requirement for all boilerplate ([1602d3a](https://github.com/midwayjs/midway/commit/1602d3a)), closes [#279](https://github.com/midwayjs/midway/issues/279)
+
+
+
+
+
+## [1.10.2](https://github.com/midwayjs/midway/compare/v1.10.1...v1.10.2) (2019-07-20)
+
+**Note:** Version bump only for package midway-init
+
+
+
+
+
+## [1.10.1](https://github.com/midwayjs/midway/compare/v1.10.0...v1.10.1) (2019-07-18)
+
+**Note:** Version bump only for package midway-init
+
+
+
+
+
+# [1.10.0](https://github.com/midwayjs/midway/compare/v1.9.0...v1.10.0) (2019-07-16)
+
+**Note:** Version bump only for package midway-init
+
+
+
+
+
 # [1.9.0](https://github.com/midwayjs/midway/compare/v1.8.0...v1.9.0) (2019-07-13)
 
 

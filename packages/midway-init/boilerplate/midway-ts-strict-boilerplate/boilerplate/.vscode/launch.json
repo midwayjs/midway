@@ -29,6 +29,32 @@
         "${workspaceFolder}/node_modules/rxjs/**/*.js",
         "<node_internals>/**/*.js"
       ]
+    {
+      // Need stop (Shift+F5) manually after end of test for Midway
+      "name": "Mocha Tests",
+      "type": "node",
+      "args": [
+        "-u",
+        "bdd",
+        "--timeout",
+        "999999",
+        "--colors",
+        "--full-trace",
+        "--bail",
+        "-r", "intelli-espower-loader",
+        "-r", "espower-typescript/guess",
+        "${workspaceFolder}/test/**/**.test.ts"
+      ],
+      "env": {
+        "NODE_ENV": "local",
+        "TS_NODE_PROJECT": "test/tsconfig.json",
+        "PGHOST": "",
+        "PGUSER": "",
+        "PGPASSWORD": "",
+      },
+      "internalConsoleOptions": "openOnSessionStart",
+      "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+      "request": "launch",
     }
   ]
 }

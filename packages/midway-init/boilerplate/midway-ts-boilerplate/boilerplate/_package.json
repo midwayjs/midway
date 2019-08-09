@@ -8,7 +8,7 @@
     "egg-scripts": "^2.10.0"
   },
   "devDependencies": {
-    "@types/mocha": "^5.2.5",
+    "@types/mocha": "^5.2.7",
     "@types/node": "^10.5.5",
     "cross-env": "^5.2.0",
     "egg-ci": "^1.8.0",
@@ -16,17 +16,18 @@
     "midway-mock": "1",
     "tslib": "^1.8.1",
     "tslint-midway-contrib": "1",
-    "ts-node": "^8.0.2",
+    "ts-node": "^8.3.0",
     "tslint": "^5.11.0",
-    "typescript": "^3.2.0"
+    "typescript": "^3.5.0"
   },
   "engines": {
-    "node": ">=8.9.0"
+    "node": ">=10.16.0"
   },
   "scripts": {
-    "start": "egg-scripts start --daemon --title=egg-server-{{name}} --framework=midway",
+    "start": "egg-scripts start --daemon --title=egg-server-{{name}} --framework=midway --ts",
     "stop": "egg-scripts stop --title=egg-server-{{name}}",
     "start_build": "npm run build && cross-env NODE_ENV=development midway-bin dev",
+    "clean": "midway-bin clean",
     "dev": "cross-env NODE_ENV=local midway-bin dev --ts",
     "debug": "cross-env NODE_ENV=local midway-bin debug --ts",
     "test": "npm run lint && midway-bin test --ts",
@@ -36,8 +37,12 @@
     "build": "midway-bin build -c"
   },
   "ci": {
-    "version": "8, 10"
+    "version": "10"
   },
+  "midway-bin-clean": [
+    ".vscode/.tsbuildinfo",
+    "dist"
+  ],
   "repository": {
     "type": "git",
     "url": ""
