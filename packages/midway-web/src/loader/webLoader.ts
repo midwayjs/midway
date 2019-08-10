@@ -84,8 +84,7 @@ export class MidwayWebLoader extends EggLoader {
     lookupDirs.add(path.join(process.cwd(), 'node_modules'));
 
     // support monorepo
-    // midway framework name maybe called @ali/midway, midway or midway-mirror
-    const monorepoPath = path.join(require.resolve('midway-web/package.json'), '../../');
+    const monorepoPath = path.join(__dirname, '../../../');
 
     if (path.basename(monorepoPath) === 'node_modules') {
       lookupDirs.add(monorepoPath);
