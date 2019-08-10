@@ -1,6 +1,6 @@
 {
   "name": "midway-web",
-  "version": "1.11.0",
+  "version": "1.11.1",
   "description": "Midway Web Scene",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -31,7 +31,7 @@
     "@types/react-dom": "^16.0.4",
     "is-type-of": "^1.2.1",
     "midway-bin": "^1.10.8",
-    "midway-mock": "^1.10.9",
+    "midway-mock": "^1.11.1",
     "mz-modules": "^2.1.0",
     "pedding": "^1.1.0",
     "react": "^16.2.0",
@@ -47,7 +47,7 @@
     "extend2": "^1.0.0",
     "injection": "^1.6.1",
     "midway-core": "^1.10.8",
-    "midway-schedule": "^1.10.9",
+    "midway-schedule": "^1.11.1",
     "mkdirp": "^0.5.1"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
