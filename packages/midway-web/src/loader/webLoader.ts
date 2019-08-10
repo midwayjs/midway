@@ -83,6 +83,13 @@ export class MidwayWebLoader extends EggLoader {
     // should find the $cwd/node_modules when test the plugins under npm3
     lookupDirs.add(path.join(process.cwd(), 'node_modules'));
 
+    // support monorepo
+    const monorepoPath = path.join(__dirname, '../../../');
+
+    if (path.basename(monorepoPath) === 'node_modules') {
+      lookupDirs.add(monorepoPath);
+    }
+
     if (process.env.PLUGIN_PATH) {
       lookupDirs.add(path.join(process.env.PLUGIN_PATH, 'node_modules'));
     }
@@ -229,7 +236,7 @@ export class MidwayWebLoader extends EggLoader {
         }
       }
 
-    // sort for priority
+      // sort for priority
       const priority = getClassMetadata(PRIORITY_KEY, target);
       this.prioritySortRouters.push({
         priority: priority || 0,
@@ -263,7 +270,7 @@ export class MidwayWebLoader extends EggLoader {
    * @param controllerOption
    */
   private createEggRouter(controllerOption: ControllerOption) {
-    const { prefix , routerOptions: { sensitive }}  = controllerOption;
+    const { prefix, routerOptions: { sensitive } } = controllerOption;
     if (prefix) {
       const router = new Router({ sensitive }, this.app);
       router.prefix(prefix);
@@ -285,7 +292,7 @@ export class MidwayWebLoader extends EggLoader {
     return async (ctx, next) => {
       const args = [ctx, next];
       if (Array.isArray(routeArgsInfo)) {
-        await Promise.all(routeArgsInfo.map(async({index, extractValue}) => {
+        await Promise.all(routeArgsInfo.map(async ({ index, extractValue }) => {
           args[index] = await extractValue(ctx, next);
         }));
       }

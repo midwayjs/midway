@@ -1,3 +1,4 @@
+import { join } from 'path';
 import { EggMock } from 'egg-mock';
 import { MidwayApplicationOptions, MidwayMockApplication } from './interface';
 export * from 'egg-mock';
@@ -23,7 +24,7 @@ function mockContainer(options: MidwayApplicationOptions) {
 function findFramework(module) {
   try {
     if (require.resolve(module)) {
-      return module;
+      return join(require.resolve(module), '../../');
     }
   } catch (err) {
     console.log(`[midway-bin] Not found framework ${module} and skip.`);
