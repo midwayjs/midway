@@ -1,0 +1,11 @@
+# /node_modules/* and /bower_components/* ignored by default
+
+**/*.min.js
+.git/
+app/public/
+app/view/
+node_modules*/
+
+commitlint.config.js
+rollup.*.js
+
