@@ -10,7 +10,7 @@
   "devDependencies": {
     "@types/mocha": "^5.2.7",
     "@types/node": "^10.5.5",
-    "@waiting/eslint-config": "^1.10.2",
+    "@waiting/eslint-config": "^2.1.0",
     "cross-env": "^5.2.0",
     "egg-ci": "^1.8.0",
     "eslint": "^6.0.0",

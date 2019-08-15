@@ -4,7 +4,7 @@ import { DefaultConfig } from './config.modal'
 
 
 export default (appInfo: EggAppInfo) => {
-  const config = <DefaultConfig> {}
+  const config = {} as DefaultConfig
 
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_{{keys}}';
