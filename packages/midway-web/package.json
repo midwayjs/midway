@@ -45,7 +45,7 @@
     "egg-core": "^4.15.0",
     "egg-logger": "^2.3.2",
     "extend2": "^1.0.0",
-    "injection": "^1.6.1",
+    "injection": "^1.7.4",
     "midway-core": "^1.10.8",
     "midway-schedule": "^1.11.1",
     "mkdirp": "^0.5.1"

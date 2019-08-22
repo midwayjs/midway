@@ -33,7 +33,7 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/decorator": "^1.10.8",
-    "injection": "^1.6.1",
+    "injection": "^1.7.4",
     "midway-bin": "^1.10.8"
   },
   "dependencies": {
