@@ -176,9 +176,9 @@ export class MidwayContainer extends Container implements IContainer {
     if (!this.isTsMode) {
       // xml扩展 <logger name=""/> <plugin name="hsfclient"/>
       this.parser.objectElementParser.registerParser(new LoggerParser());
-      this.resolverFactory.registerResolver(new LoggerResolver(this));
+      this.getManagedResolverFactory().registerResolver(new LoggerResolver(this));
       this.parser.objectElementParser.registerParser(new PluginParser());
-      this.resolverFactory.registerResolver(new PluginResolver(this));
+      this.getManagedResolverFactory().registerResolver(new PluginResolver(this));
 
       this.parser.registerParser(new ControllerDefinitionParser(this));
       this.parser.registerParser(new MiddlewareDefinitionParser(this));
@@ -212,6 +212,7 @@ export class MidwayContainer extends Container implements IContainer {
   }) {
     const loadDirs = [].concat(opts.loadDir || []);
 
+    // TODO set 去重
     for (const dir of loadDirs) {
       const fileResults = globby.sync(['**/**.ts', '**/**.tsx', '**/**.js', '!**/**.d.ts'].concat(opts.pattern || []), {
         cwd: dir,

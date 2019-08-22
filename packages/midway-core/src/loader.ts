@@ -23,7 +23,7 @@ export class ContainerLoader {
   }
 
   initialize() {
-    this.pluginContext = new MidwayContainer();
+    this.pluginContext = new MidwayContainer(this.baseDir);
     this.applicationContext = new MidwayContainer(this.baseDir, undefined, this.isTsMode);
     this.applicationContext.registerObject('baseDir', this.baseDir);
     this.applicationContext.registerObject('isTsMode', this.isTsMode);
