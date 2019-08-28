@@ -1,6 +1,7 @@
 import { basename } from 'path'
 
-import { app, assert } from 'midway-mock/bootstrap'
+import * as assert from 'power-assert'
+import { app } from 'midway-mock/bootstrap'
 
 
 const filename = basename(__filename)
