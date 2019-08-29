@@ -29,22 +29,12 @@
         "${workspaceFolder}/node_modules/rxjs/**/*.js",
         "<node_internals>/**/*.js"
       ]
+    },
     {
-      // Need stop (Shift+F5) manually after end of test for Midway
-      "name": "Mocha Tests",
+      "name": "Miday Test",
       "type": "node",
-      "args": [
-        "-u",
-        "bdd",
-        "--timeout",
-        "999999",
-        "--colors",
-        "--full-trace",
-        "--bail",
-        "-r", "intelli-espower-loader",
-        "-r", "espower-typescript/guess",
-        "${workspaceFolder}/test/**/**.test.ts"
-      ],
+      "autoAttachChildProcesses": true,
+      "console": "integratedTerminal",
       "env": {
         "NODE_ENV": "local",
         "TS_NODE_PROJECT": "test/tsconfig.json",
@@ -52,9 +42,23 @@
         "PGUSER": "",
         "PGPASSWORD": "",
       },
-      "internalConsoleOptions": "openOnSessionStart",
-      "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+      "port": 9229,
+      "protocol": "auto",
       "request": "launch",
+      "restart": true,
+      "runtimeArgs": [
+        "run",
+        "devtest",
+        "--",
+        "--inspect-brk"
+      ],
+      "runtimeExecutable": "npm",
+      "skipFiles": [
+        // "${workspaceFolder}/node_modules/**/*.js",
+        "${workspaceFolder}/node_modules/rxjs/**/*.js",
+        "<node_internals>/**/*.js"
+      ],
+      "timeout": 60000
     }
   ]
 }

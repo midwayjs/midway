@@ -12,7 +12,7 @@
       "language": "typescript",
       "autoFix": true
     },
-    "typescriptreact" 
+    "typescriptreact"
   ],
   "files.eol": "\n",
   "files.exclude": {
