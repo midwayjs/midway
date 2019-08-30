@@ -1,6 +1,6 @@
 {
   "name": "midway-bin",
-  "version": "1.10.8",
+  "version": "1.11.2",
   "description": "Midway Command Tools",
   "main": "index.js",
   "bin": {
