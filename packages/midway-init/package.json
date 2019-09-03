@@ -18,7 +18,7 @@
     "mz-modules": "^2.1.0",
     "power-assert": "^1.6.1",
     "proxy": "^0.2.4",
-    "rimraf": "^2.6.1"
+    "rimraf": "^3.0.0"
   },
   "keywords": [
     "midway",
