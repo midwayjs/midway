@@ -3,15 +3,20 @@
     "packages/*"
   ],
   "command": {
+    "bootstrap": {
+      "hoist": true,
+      "noCi": true,
+      "npmClientArgs": [
+        "--no-package-lock"
+      ]
+    },
     "publish": {
       "ignoreChanges": [
         "*.md"
       ]
     },
-    "bootstrap": {
-      "npmClientArgs": [
-        "--no-package-lock"
-      ]
+    "version": {
+      "conventionalCommits": true
     }
   },
   "npmClient": "npm",
