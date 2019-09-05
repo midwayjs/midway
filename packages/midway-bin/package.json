@@ -26,6 +26,7 @@
     "egg-bin": "^4.11.1",
     "fs-extra": "^8.1.0",
     "globby": "^10.0.1",
+    "jest-environment-node": "^24.9.0",
     "mz-modules": "^2.1.0",
     "typedoc": "^0.14.2"
   },
