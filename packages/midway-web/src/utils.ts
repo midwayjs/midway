@@ -43,7 +43,7 @@ export function getMethodNames(obj: object): string[] {
 }
 
 export function isTypeScriptEnvironment(): boolean {
-  return !!require.extensions['.ts'];
+  return !!require.extensions['.ts'] || process.env.TS_MODE === 'true';
 }
 
 /**
