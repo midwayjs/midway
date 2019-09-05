@@ -6,6 +6,8 @@ class JestEnvironment extends NodeEnvironment {
   }
 
   async setup() {
+    require('ts-node/register');
+    this.global.process.env.TS_MODE = 'true';
     await super.setup();
   }
 
@@ -14,8 +16,6 @@ class JestEnvironment extends NodeEnvironment {
   }
 
   runScript(script) {
-    require('ts-node/register')
-    this.global.process.env.TS_MODE = 'true'
     return super.runScript(script);
   }
 }
