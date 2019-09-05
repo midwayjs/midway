@@ -18,4 +18,10 @@ describe('test/lib/util.test.js', () => {
     assert(! path);
   });
 
+  it('should return void with empty input', function() {
+    const moduleName = ''
+    const path =  util.resolveModule(moduleName)
+    assert(! path);
+  });
+
 });
