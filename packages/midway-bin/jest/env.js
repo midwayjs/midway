@@ -1,5 +1,7 @@
+'use strict';
 const NodeEnvironment = require('jest-environment-node');
 
+/* eslint-disable no-useless-constructor */
 class JestEnvironment extends NodeEnvironment {
   constructor(config) {
     super(config);
