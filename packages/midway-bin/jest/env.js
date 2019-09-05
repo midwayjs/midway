@@ -9,7 +9,7 @@ class JestEnvironment extends NodeEnvironment {
 
   async setup() {
     require('ts-node/register');
-    this.global.process.env.TS_MODE = 'true';
+    this.global.process.env.MIDWAY_TS_MODE = 'true';
     await super.setup();
   }
 
