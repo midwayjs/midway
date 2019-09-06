@@ -1,10 +1,11 @@
 'use strict';
+const pathx = require('path');
 
 const assert = require('assert');
 
 const util = require('../../lib/util.js');
 
-describe.only('test/lib/util.test.js', () => {
+describe('test/lib/util.test.js', () => {
 
   it('should return full path of module', function() {
     const moduleName = 'egg'
