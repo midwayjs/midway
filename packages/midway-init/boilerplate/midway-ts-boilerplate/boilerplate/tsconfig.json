@@ -16,8 +16,7 @@
     "strict": true,
     "strictPropertyInitialization": false,
     "stripInternal": true,
-    "target": "ES2017",
-    "tsBuildInfoFile": ".vscode/.tsbuildinfo"
+    "target": "ES2017"
   },
   "exclude": [
     "app/public",
