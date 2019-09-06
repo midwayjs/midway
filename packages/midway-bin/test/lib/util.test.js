@@ -11,19 +11,19 @@ describe('test/lib/util.test.js', () => {
     const moduleName = 'egg'
     const path = util.resolveModule(moduleName)
     console.log('resolved path is:', path)
-    assert(path && path.length > moduleName.length);
+    assert(path && path.endsWith(`${pathx.sep}${moduleName}`));
   });
 
-  it('should return void with invalid input', function() {
+  it('should return blank with invalid input', function() {
     const moduleName = 'egg' + Math.random()
     const path =  util.resolveModule(moduleName)
-    assert(! path);
+    assert(path === '');
   });
 
-  it('should return void with empty input', function() {
+  it('should return blank with empty input', function() {
     const moduleName = ''
     const path =  util.resolveModule(moduleName)
-    assert(! path);
+    assert(path === '');
   });
 
 });
