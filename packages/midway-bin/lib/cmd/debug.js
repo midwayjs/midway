@@ -1,4 +1,5 @@
 'use strict';
+const resolver = require('../util').resolveModule;
 
 class DebugCommand extends require('egg-bin').DebugCommand {
   constructor(rawArgv) {
@@ -14,13 +15,7 @@ class DebugCommand extends require('egg-bin').DebugCommand {
   }
 
   findFramework(module) {
-    try {
-      if (require.resolve(module)) {
-        return module;
-      }
-    } catch (err) {
-      console.log(`[midway-bin] Not found framework ${module} and skip.`);
-    }
+    return resolver(module);
   }
 }
 
