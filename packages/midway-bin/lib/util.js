@@ -9,7 +9,7 @@ const path = require('path');
  */
 function resolveModule(moduleName) {
   if (!moduleName) {
-    console.log('[midway-bin] value of framework is blank and skipped.');
+    console.log('[midway-bin] value of framework/module to be loaded is blank and skipped.');
     return;
   }
 
@@ -17,7 +17,7 @@ function resolveModule(moduleName) {
     const moduleFullPath = retrieveModulePath(moduleName);
     return moduleFullPath;
   } catch (err) {
-    console.log(`[midway-bin] Not found framework ${moduleName} and skip.`);
+    console.log(`[midway-bin] Not found framework/module ${moduleName} and skip.`);
   }
 }
 
