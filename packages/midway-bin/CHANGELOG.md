@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.11.3](https://github.com/midwayjs/midway/compare/v1.11.2...v1.11.3) (2019-09-06)
+
+
+### Bug Fixes
+
+* module path under mono repo ([8342487](https://github.com/midwayjs/midway/commit/8342487)), closes [#329](https://github.com/midwayjs/midway/issues/329)
+
+
+
+
+
 ## [1.11.2](https://github.com/midwayjs/midway/compare/v1.11.1...v1.11.2) (2019-08-30)
 
 **Note:** Version bump only for package midway-bin
