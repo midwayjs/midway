@@ -1,5 +1,5 @@
 const { deepEqual } = require('assert');
-const { getParamNames, getMethodNames } = require('../src/utils');
+const { getParamNames, getMethodNames, isTypeScriptEnvironment } = require('../src/utils');
 
 describe('test/utils.test.ts', () => {
   it('#getParamNames', () => {
@@ -20,5 +20,24 @@ describe('test/utils.test.ts', () => {
       hello: () => null,
     });
     deepEqual(res, ['test', 'hello']);
+  });
+
+  it('#isTypeScriptEnvironment with ts-node', () => {
+    const isTS = isTypeScriptEnvironment();
+
+    deepEqual(isTS, true);
+  });
+
+  it('#isTypeScriptEnvironment with MIDWAY_TS_MODE', () => {
+    process.env.MIDWAY_TS_MODE = 'true';
+    Object.defineProperty(require.extensions, '.ts', {
+      get () {
+        return false;
+      },
+    });
+
+    const isTS = isTypeScriptEnvironment();
+
+    deepEqual(isTS, true);
   });
 });
