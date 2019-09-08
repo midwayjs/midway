@@ -1,0 +1,26 @@
+{
+  "midway-ts": {
+    "package": "midway-boilerplate-typescript",
+    "description": "Simple midway application boilerplate by ts.",
+    "name": "midway standard typescript template",
+    "author": "midwayJs"
+  },
+  "midway-demo": {
+    "package": "midway-boilerplate-demo",
+    "description": "Simple example boilerplate for find bug or submit to midway-examples.",
+    "name": "midway mini example template",
+    "author": "midwayJs"
+  },
+  "midway-ts-strict": {
+    "package": "midway-boilerplate-ts-strict",
+    "description": "Simple midway application boilerplate by ts with ng style and strict eslint rules.",
+    "name": "midway strict typescript template",
+    "author": "tw93"
+  },
+  "midway-ts-ant-design-pro": {
+    "package": "midway-boilerplate-ts-antd",
+    "description": "A front-end and back-end separation project includes midway(ts) and ant-design-pro.",
+    "name": "midway typescript and ant-design-pro template",
+    "author": "waitingsong"
+  }
+}

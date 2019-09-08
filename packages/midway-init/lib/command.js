@@ -1,45 +1,125 @@
 'use strict';
 
-const Command = require('egg-init');
 const path = require('path');
-const fs = require('fs');
-const Parser = require('./parser');
-const os = require('os');
+const { LightGenerator } = require('light-generator');
+const { Input, Select, Form } = require('enquirer');
+const chalk = require('chalk');
+const { getParser } = require('./parser');
 
-class MidwayInitCommand extends Command {
+async function sleep(timeout) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve();
+    }, timeout);
+  });
+}
 
-  constructor(options = {}) {
-    super(Object.assign({}, options));
-    this.templateDir = path.join(__dirname, '../boilerplate/');
+const defaultOptions = {
+  templateListPath: path.join(__dirname, '../boilerplate.json'),
+};
+
+class MidwayInitCommand {
+
+  constructor(npmClient) {
+    this.npmClient = npmClient || 'npm';
   }
 
-  * fetchBoilerplateMapping() {
-    return require('../boilerplate/boilerplate.json');
-  }
+  async run(cwd, args) {
+    const argv = this.argv = getParser().parse(args || []);
+    this.cwd = cwd;
 
-  * downloadBoilerplate(pkgName) {
-    const p = path.join(this.templateDir, pkgName);
-    if (fs.existsSync(p)) {
-      return p;
+    this.templateList = await this.getTemplateList();
+
+    if (argv.template) {
+      await this.createFromTemplate();
+    } else {
+      const prompt = new Select({
+        name: 'templateName',
+        message: 'Hello, traveller.\n  Which template do you like?',
+        choices: Object.keys(this.templateList).map(template => {
+          return `${template} - ${this.templateList[template].description}` +
+            (this.templateList[template].author ? `(by @${chalk.underline.bold(this.templateList[template].author)})` : '');
+        }),
+        result: value => {
+          return value.split(' - ')[0];
+        },
+      });
+      // get user input template
+      this.template = await prompt.run();
+      await this.createFromTemplate();
     }
-    return yield super.downloadBoilerplate(pkgName);
+    // done
+    this.printUsage();
   }
 
-  getParser() {
-    return Parser.getParser();
+  async createFromTemplate() {
+    if (!this.argv.dir) {
+      const prompt = new Input({
+        message: 'The directory where the boilerplate should be created',
+        initial: 'my_midway_app',
+      });
+      // get target path where template will be copy to
+      this.targetPath = await prompt.run();
+    } else {
+      this.targetPath = this.argv.dir;
+    }
+
+    const boilerplatePath = this.targetPath || '';
+    const newPath = path.join(process.cwd(), boilerplatePath);
+    const lightGenerator = new LightGenerator();
+    const generator = lightGenerator.defineNpmPackage({
+      npmClient: this.npmClient,
+      npmPackage: this.templateList[this.template].package,
+      targetPath: newPath,
+    });
+
+    const args = await generator.getParameterList();
+    const argsKeys = Object.keys(args);
+    if (argsKeys && argsKeys.length) {
+      const prompt = new Form({
+        name: 'user',
+        message: 'Please provide the following information:',
+        choices: argsKeys.map(argsKey => {
+          return {
+            name: `${argsKey}`,
+            message: `${args[argsKey].desc}`,
+            initial: `${args[argsKey].default}`,
+          };
+        }),
+      });
+
+      const parameters = await prompt.run();
+      await this.readyGenerate();
+      await generator.run(parameters);
+    } else {
+      await this.readyGenerate();
+      await generator.run();
+    }
   }
 
-  getParserOptions() {
-    return Parser.getParserOptions();
+  async getTemplateList() {
+    if (!this.template) {
+      return require(defaultOptions.templateListPath);
+    }
+  }
+
+  async readyGenerate() {
+    console.log();
+    await sleep(1000);
+    console.log('1...');
+    await sleep(1000);
+    console.log('2...');
+    await sleep(1000);
+    console.log('3...');
+    await sleep(1000);
+    console.log('Enjoy it...');
   }
 
   printUsage() {
-    super.printUsage();
-    if (os.platform() === 'win32') {
-      this.log(`Since it is windows system, please review this note.
-      https://midwayjs.org/midway/guide.html#%E5%90%AF%E5%8A%A8%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92
-      `);
-    }
+    // this.serverless.cli.asciiGreeting();
+    // this.serverless.cli
+    //   .log(`Successfully generated boilerplate for template: "${this.options.template}"`);
+    console.log();
   }
 }
 

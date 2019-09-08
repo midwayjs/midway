@@ -2,18 +2,11 @@
 
 'use strict';
 
-const co = require('co');
 const childProcess = require('child_process');
 const { Confirm } = require('enquirer');
 const Command = require('..');
-const pkgInfo = require('../package.json');
 
-const options = {
-  name: 'midway-init',
-  pkgInfo,
-};
-
-co(function* () {
+(async () => {
   const args = process.argv.slice(2);
 
   if (isInternal()) {
@@ -23,19 +16,21 @@ co(function* () {
       initial: false,
       default: '[Y(es)|N(o)]',
     });
-    const isContinue = yield prompt.run();
+    const isContinue = await prompt.run();
 
     if (!isContinue) {
       return;
     }
   }
 
-  const cmd = new Command(Object.assign({}, options));
-  yield cmd.run(process.cwd(), args);
-}).catch(err => {
-  console.error(err.stack);
-  process.exit(1);
-});
+  try {
+    const cmd = new Command();
+    await cmd.run(process.cwd(), args);
+  } catch (err) {
+    console.error(err.stack);
+    process.exit(1);
+  }
+})();
 
 // 判断是否处于内网环境
 function isInternal() {
