@@ -12,11 +12,6 @@ const getParserOptions = () => {
       type: 'string',
       description: 'target directory',
     },
-    force: {
-      type: 'boolean',
-      description: 'force to override directory',
-      alias: 'f',
-    },
     template: {
       type: 'string',
       description: 'local path to boilerplate',
