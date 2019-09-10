@@ -56,13 +56,13 @@ midway is comprised of many specialized packages. This repository contains all t
 
 | Package | Version | Dependencies | DevDependencies | quality |
 |--------|-------|------------|----------|----------|
-| [`midway`] | [![npm (scoped)][midway-svg]][midway-ch] | [![Dependency Status][midway-d-svg]][midway-d-link] | [![devDependency Status][midway-dd-svg]][midway-dd-link] | [![Package Quality][midway-q-svg]][midway-q-link] |
-| [`midway-web`] | [![npm (scoped)][web-svg]][web-ch] | [![Dependency Status][web-d-svg]][web-d-link] | [![devDependency Status][web-dd-svg]][web-dd-link] | [![Package Quality][web-q-svg]][web-q-link] | 
-| [`midway-core`] | [![npm (scoped)][core-svg]][core-ch] | [![Dependency Status][core-d-svg]][core-d-link] | [![devDependency Status][core-dd-svg]][core-dd-link] | [![Package Quality][core-q-svg]][core-q-link] |
-| [`midway-mock`] | [![npm (scoped)][mock-svg]][mock-ch] | [![Dependency Status][mock-d-svg]][mock-d-link] | [![devDependency Status][mock-dd-svg]][mock-dd-link] | [![Package Quality][mock-q-svg]][mock-q-link] |
-| [`midway-init`] | [![npm (scoped)][init-svg]][init-ch] | [![Dependency Status][init-d-svg]][init-d-link] |  [![devDependency Status][init-dd-svg]][init-dd-link] | [![Package Quality][init-q-svg]][init-q-link] |
-| [`midway-bin`] | [![npm (scoped)][bin-svg]][bin-ch] | [![Dependency Status][bin-d-svg]][bin-d-link] | [![devDependency Status][bin-dd-svg]][bin-dd-link] | [![Package Quality][bin-q-svg]][bin-q-link] |
-| [`midway-schedule`] | [![npm (scoped)][sch-svg]][sch-ch] | [![Dependency Status][sch-d-svg]][sch-d-link] | [![devDependency Status][sch-dd-svg]][sch-dd-link] | [![Package Quality][sch-q-svg]][sch-q-link] |
+| [`midway`] | [![][midway-svg]][midway-ch] | [![][midway-d-svg]][midway-d-link] | [![][midway-dd-svg]][midway-dd-link] | [![][midway-q-svg]][midway-q-link] |
+| [`midway-web`] | [![][web-svg]][web-ch] | [![][web-d-svg]][web-d-link] | [![][web-dd-svg]][web-dd-link] | [![][web-q-svg]][web-q-link] | 
+| [`midway-core`] | [![][core-svg]][core-ch] | [![][core-d-svg]][core-d-link] | [![][core-dd-svg]][core-dd-link] | [![][core-q-svg]][core-q-link] |
+| [`midway-mock`] | [![][mock-svg]][mock-ch] | [![][mock-d-svg]][mock-d-link] | [![][mock-dd-svg]][mock-dd-link] | [![][mock-q-svg]][mock-q-link] |
+| [`midway-init`] | [![][init-svg]][init-ch] | [![][init-d-svg]][init-d-link] | [![][init-dd-svg]][init-dd-link] | [![][init-q-svg]][init-q-link] |
+| [`midway-bin`] | [![][bin-svg]][bin-ch] | [![][bin-d-svg]][bin-d-link] | [![][bin-dd-svg]][bin-dd-link] | [![][bin-q-svg]][bin-q-link] |
+| [`midway-schedule`] | [![][sch-svg]][sch-ch] | [![][sch-d-svg]][sch-d-link] | [![][sch-dd-svg]][sch-dd-link] | [![][sch-q-svg]][sch-q-link] |
 
 Globally: [![Build Status](https://img.shields.io/travis/midwayjs/midway/master.svg?style=flat)](https://travis-ci.org/midwayjs/midway) [![devDependency Status](https://david-dm.org/midwayjs/midway/dev-status.svg)](https://david-dm.org/midwayjs/midway#info=devDependencies)
 
