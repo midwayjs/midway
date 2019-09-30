@@ -17,7 +17,7 @@ exports.formatOptions = (options) => {
     options.baseDir = process.cwd();
   }
 
-  if(options.typescript === undefined) {
+  if(typeof options.typescript === 'undefined') {
     options.typescript = true;
   }
 
