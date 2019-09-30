@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.11.6](https://github.com/midwayjs/midway/compare/v1.11.5...v1.11.6) (2019-09-30)
+
+**Note:** Version bump only for package midway
+
+
+
+
+
 ## [1.11.4](https://github.com/midwayjs/midway/compare/v1.11.3...v1.11.4) (2019-09-06)
 
 **Note:** Version bump only for package midway

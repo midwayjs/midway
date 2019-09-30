@@ -1,6 +1,6 @@
 {
   "name": "midway",
-  "version": "1.11.4",
+  "version": "1.11.6",
   "description": "Midway Main Package",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
