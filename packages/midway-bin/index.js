@@ -22,3 +22,5 @@ exports.DebugCommand = require('./lib/cmd/debug');
 exports.PkgfilesCommand = require('./lib/cmd/pkgfiles');
 exports.CleanCommand = require('./lib/cmd/clean');
 exports.DocCommand = require('./lib/cmd/doc');
+exports.findFramework = require('./lib/util').findFramework;
+exports.resolveModule = require('./lib/util').resolveModule;
