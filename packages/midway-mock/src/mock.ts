@@ -2,6 +2,7 @@ import { join } from 'path';
 import * as mock from 'egg-mock';
 
 import { MidwayApplicationOptions, MidwayMockApplication } from './interface';
+import { resolveModule } from './util';
 
 
 export interface MidwayMock extends mock.EggMock {
@@ -21,17 +22,19 @@ function mockContainer(options: MidwayApplicationOptions): MockContainer {
   return new MockContainer(options);
 }
 
-function findFramework(module) {
-  try {
-    if (require.resolve(module)) {
-      return join(require.resolve(module), '../../');
-    }
-  } catch (err) {
+export function findFramework(module: string): string {
+  const modPath = resolveModule(module)
+
+  if (modPath) {
+    return join(modPath, '../../')
+  }
+  else {
     console.log(`[midway-bin] Not found framework ${module} and skip.`);
+    return ''
   }
 }
 
-const defaultFramework = findFramework('midway') || findFramework('midway-mirror');
+const defaultFramework: string = findFramework('midway') || findFramework('midway-mirror');
 
 export const mm = Object.assign({}, mock, {
   container: mockContainer,
