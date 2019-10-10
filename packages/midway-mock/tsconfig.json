@@ -13,6 +13,9 @@
     "lib": ["es2017", "dom"],
     "sourceMap": true
   },
+  "include": [
+    "src/**/*.ts"
+  ],
   "exclude": [
     "dist",
     "node_modules",
