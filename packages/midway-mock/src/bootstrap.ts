@@ -10,7 +10,6 @@ export const app: MidwayMockApplication = mock.app({});
 before(app.ready);
 afterEach(mock.restore);
 
-
 export {
   assert,
   mock,

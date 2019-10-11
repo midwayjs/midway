@@ -3,7 +3,6 @@ import { findFramework } from 'midway-bin';
 
 import { MidwayApplicationOptions, MidwayMockApplication } from './interface';
 
-
 export interface MidwayMock extends mock.EggMock {
   container: typeof mockContainer;
   default: mock.EggMock;
@@ -20,7 +19,6 @@ export interface MidwayMock extends mock.EggMock {
 function mockContainer(options: MidwayApplicationOptions): MockContainer {
   return new MockContainer(options);
 }
-
 
 const defaultFramework: string = findFramework('midway') || findFramework('midway-mirror');
 
