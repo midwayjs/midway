@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.12.0](https://github.com/midwayjs/midway/compare/v1.11.6...v1.12.0) (2019-10-11)
+
+
+### Features
+
+* **midway-bin:** add and export functions ([80ef6b8](https://github.com/midwayjs/midway/commit/80ef6b8))
+
+
+
+
+
 ## [1.11.4](https://github.com/midwayjs/midway/compare/v1.11.3...v1.11.4) (2019-09-06)
 
 **Note:** Version bump only for package midway-mock
