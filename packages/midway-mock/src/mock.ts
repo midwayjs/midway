@@ -1,5 +1,5 @@
 import * as mock from 'egg-mock';
-import { findFramework } from 'midway-bin';
+import { resolveModule } from 'midway-bin';
 
 import { MidwayApplicationOptions, MidwayMockApplication } from './interface';
 
@@ -20,7 +20,7 @@ function mockContainer(options: MidwayApplicationOptions): MockContainer {
   return new MockContainer(options);
 }
 
-const defaultFramework: string = findFramework('midway') || findFramework('midway-mirror');
+const defaultFramework: string = resolveModule('midway') || resolveModule('midway-mirror');
 
 export const mm = Object.assign({}, mock, {
   container: mockContainer,
