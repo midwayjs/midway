@@ -2,26 +2,6 @@
 const fs = require('fs');
 const path = require('path');
 
-
-/**
- * Resolve mono-repo's full path
- * @param {string} module - module name
- * @return {string} full path or blank
- */
-function findFramework(module) {
-  let framePath = '';
-  const modPath = resolveModule(module);
-
-  if (modPath) {
-    framePath = path.join(modPath, '../../');
-  } else {
-    console.log(`[midway-bin] Not found framework "${module}" and skip.`);
-  }
-
-  return framePath;
-}
-
-
 /**
  * Resolve module's full path
  * @param {string} moduleName module name
@@ -63,6 +43,4 @@ function retrieveModulePath(moduleName) {
   return moduleDir ? path.join(moduleDir, moduleName) : '';
 }
 
-
-exports.findFramework = findFramework;
 exports.resolveModule = resolveModule;
