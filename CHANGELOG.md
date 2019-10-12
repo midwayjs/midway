@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.12.1](https://github.com/midwayjs/midway/compare/v1.12.0...v1.12.1) (2019-10-12)
+
+
+### Bug Fixes
+
+* **midway-bin:** use resolveModule() instead of findFramework() ([#344](https://github.com/midwayjs/midway/issues/344)) ([8c24e2e](https://github.com/midwayjs/midway/commit/8c24e2e))
+
+
+### BREAKING CHANGES
+
+* **midway-bin:** remove findFramework()
+
+
+
+
+
 # [1.12.0](https://github.com/midwayjs/midway/compare/v1.11.6...v1.12.0) (2019-10-11)
 
 
