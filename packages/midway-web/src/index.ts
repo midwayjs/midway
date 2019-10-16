@@ -25,7 +25,9 @@ export {
   Response,
   Router,
   Service,
-  Boot
+  Boot,
+  IBoot,
+  IgnoreOrMatch,
 } from 'egg';
 export {
   LoggerLevel as EggLoggerLevel,
