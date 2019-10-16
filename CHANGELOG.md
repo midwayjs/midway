@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.13.0](https://github.com/midwayjs/midway/compare/v1.12.1...v1.13.0) (2019-10-16)
+
+
+### Features
+
+* export IBoot and IgnoreOrMatch from egg ([d5abb3d](https://github.com/midwayjs/midway/commit/d5abb3d))
+
+
+
+
+
 ## [1.12.1](https://github.com/midwayjs/midway/compare/v1.12.0...v1.12.1) (2019-10-12)
 
 
