@@ -12,17 +12,17 @@ Midway 自 2013 年开始，基本保持着一年一个大版本的迭代速度�
 如今，集团内外的 Node.js 大环境早已脱离原有的前后端分离体系，朝着全栈的方向大步迈进，有着欣喜，有着期待，对此，MidwayJs 团队不仅仅承担着引导，支撑集团 Node.js 应用的责任，也同时通过 `Pandora.js` ，`Sandbox`  等不同形式来让应用变的更加稳定，可靠。
 
 在 2017 年，我们将集团内部的 Midway 5.3 升级到了基于 Koa2 的模型，全面支持了 async/await 的编码风格。
-''
+
 同年年中，我们开始计划将监控和数据采集能力进行抽象剥离，形成了全新 Pandora.js 工具，不仅仅服务于 Midway，也服务于全网，乃至外部所有的 Node.js 应用。
 
-2018 年，MidwayJs 团队将基于 Typescript，将 Midway6 在新的语言层面进行升级，让用户在开发体验上更近一步，对外部则是从第一个版本开始。
+2018 年，MidwayJs 团队将基于 TypeScript，将 Midway6 在新的语言层面进行升级，让用户在开发体验上更近一步，对外部则是从第一个版本开始。
 
-为什么选择 Typescript ? 相信[ 这篇文章](https://juejin.im/post/59c46bc86fb9a00a4636f939) 会给你一些答案。 
+为什么选择 TypeScript ? 相信[ 这篇文章](https://juejin.im/post/59c46bc86fb9a00a4636f939) 会给你一些答案。
 
 
 ## 关于 Midway
 
-Midway (中途岛) 品牌是淘宝技术部（前淘宝UED）前端部门研发的一款基于 Node.js 的全栈开发解决方案。它将搭配团队的其他产品，pandora 和 sandbox，将 Node.js 的开发体验朝着全新的场景发展，让用户在开发过程中享受到前所未有的愉悦感。
+Midway (中途岛) 品牌是淘宝技术部（前淘宝UED）前端部门研发的一款基于 Node.js 的全栈开发解决方案。它将搭配团队的其他产品，Pandora.js 和 Sandbox，将 Node.js 的开发体验朝着全新的场景发展，让用户在开发过程中享受到前所未有的愉悦感。
 
 
 ## 快速上手
@@ -92,7 +92,7 @@ midway 的目录和 eggjs 目录非常接近，但也有所区别，不同的地
 │   │   └── plugin.ts
 │   └── lib                             ---- 业务逻辑层目录，自由定义
 │   │   └── service                     ---- 业务逻辑层，自由定义
-│   │       └── user.ts   
+│   │       └── user.ts
 │   ├── interface.ts                    ---- 接口定义文件，自由定义
 │   ├── app.ts                          ---- 应用扩展文件，可选
 │   └── agent.ts                        ---- agent 扩展文件，可选
@@ -132,7 +132,7 @@ midway 的目录和 eggjs 目录非常接近，但也有所区别，不同的地
 
 想要快速上手 midway，除了需要了解一些基础的东西：
 
-- 虽然可以直接用 js 的语法书写，但是你最好了解 Typescript，这里有个 [快速介绍](ts_start.md)。
+- 虽然可以直接用 js 的语法书写，但是你最好了解 TypeScript，这里有个 [快速介绍](ts_start.md)。
 - 尽可能使用面向对象的思想来编码，它的经久不衰是有道理的，使用 class 机制能够方便的融入我们的新特性。
 - 了解 midway 的依赖注入体系，以及常用的装饰器，这里做了 [依赖注入的介绍](ioc.md)。
 - 如果你在 midway 的文档中没有找到你想要的东西，记住可以去 [Egg 的文档找找](https://eggjs.org/zh-cn/intro/)，或者 [向我们提 Issue](https://github.com/midwayjs/midway/issues)。
@@ -179,14 +179,14 @@ src/config
 // app.js
 module.exports = app => {
   app.beforeStart(async () => {
-    
+
     // 从全局作用域拿单例对象
     const obj = await app.applicationContext.getAsync('xxx');
-    
+
     // 从请求作用域拿对象
     const ctx = app.createAnonymousContext();
     const obj = await ctx.requestContext.getAsync('xxx');
-        
+
   });
 };
 ```
@@ -341,6 +341,7 @@ export class ApiMiddleware implements WebMiddleware {
 推荐使用 `WebMiddleware` 接口来规范你的 web 中间件。
 :::
 
+
 ```ts
 @provide()
 @controller('/', {middleware: ['homeMiddleware']})
@@ -390,6 +391,40 @@ export class My {
 }
 
 ```
+
+::: tip
+这种方式只用于某个路由下的中间件，如果你希望使用全局中间件，那么请依旧使用 egg 的那种形式。
+:::
+
+#### 中间件注入的特殊性
+
+
+由于中间件在生命周期的特殊性，会在应用请求前就被加载（绑定）到路由上，所以无法和上下文关联。
+
+中间件类固定为单例（Singleton），所有注入的内容都为单例，包括但不限于 @config/@logger/@plugin 等。
+
+这意味着你可以注入一个 service，但是这个 service 中无法注入 ctx 属性。
+
+这个时候，你必须在 `resolve` 方法中，通过调用 `ctx.requestContext.getAsync('xxx')` 的方式来创建请求作用域实例，和上下文绑定。
+
+```ts
+@provide()
+export class ApiMiddleware implements WebMiddleware {
+
+  @inject()
+  myService;  // 由于中间件实例属于单例，这个实例即使注入也无法获取到 ctx
+
+  resolve(): Middleware {
+    return async (ctx, next) => {
+      // 必须通过从请求作用域中获取对象的方式，来绑定上下文
+      ctx.service = await ctx.requestContext.getAsync('myService');
+      await next();
+    };
+  }
+
+}
+```
+
 
 ### 一个方法挂载多个路由
 
@@ -477,7 +512,7 @@ import { provide, schedule, CommonSchedule } from 'midway';
   type: 'worker', // 指定某一个 worker 执行
 })
 export class HelloCron implements CommonSchedule {
-  
+
   // 定时执行的具体任务
   async exec(ctx) {
     ctx.logger.info(process.pid, 'hello');
@@ -493,13 +528,13 @@ export class HelloCron implements CommonSchedule {
 
 在原有逻辑中，日志对象也都挂载在 app.loggers 中，通过在 config 中配置的 key 来生成不同的日志实例对象，比如插件的日志，链路的日志等。
 
-比如自定义一个日志，这个时候，日志的 key 则为 `customLogger` 。
+比如自定义一个日志 `myLogger`，这个时候，日志的 key 则为 `myLogger` 。
 
 ```typescript
 module.exports = appInfo => {
   return {
     customLogger: {
-      xxLogger: {
+      myLogger: {
         file: path.join(appInfo.root, 'logs/xx.log'),
       },
     },
@@ -515,7 +550,7 @@ import { provide, logger } from 'midway';
 @provide()
 export class BaseService {
 
-  @logger('customLogger')
+  @logger('myLogger')
   logger;
 
 }
@@ -541,7 +576,7 @@ export class BaseService {
   // 也可以直接传入 key
   // @inject('logger')
   // logger;
-  
+
 
 }
 ```
@@ -777,9 +812,9 @@ app.applicationContext 是 IoC 容器的应用上下文, 通过它可以异步�
 
 ### 构建打包
 
-由于 typescript 的特殊性，本地开发可以有 ts-node 等类似的工具进行开发，而在服务器端运行的时候，我们希望可以通过 js 来运行，这中间就需要编译工具。
+由于 TypeScript 的特殊性，本地开发可以有 ts-node 等类似的工具进行开发，而在服务器端运行的时候，我们希望可以通过 js 来运行，这中间就需要编译工具。
 
-幸好 Typescript 官方提供了 tsc 工具来帮助这个过程，而编译时会自动调用 `tsconfig.json` 来做一些编译时处理，midway 默认提供了一份该文件，用户也可以进行自定义。
+幸好 TypeScript 官方提供了 tsc 工具来帮助这个过程，而编译时会自动调用 `tsconfig.json` 来做一些编译时处理，midway 默认提供了一份该文件，用户也可以进行自定义。
 
 同时，在脚手架中，我们提供了 `build` 命令帮助用户更好的生成文件。
 
@@ -833,15 +868,15 @@ module.exports = pandora => {
 支持的参数见 [启动参数](https://github.com/eggjs/egg-cluster/blob/master/lib/master.js#L33)，同时，midway 框架额外增加了几个参数。
 
 - typescript {boolean} 如果为true，则会开启 ts 模式，加载 src 或者 dist 目录，默认内部会进行判断，无需手动处理
-- srcDir {string} 源码路径，默认为 src 
-- targetDir {string} 编译后路径，默认为 dist 
+- srcDir {string} 源码路径，默认为 src
+- targetDir {string} 编译后路径，默认为 dist
 
 ```json
 {
   "midway-server-options": {
     "workers": 1,
     "port": 3000
-  } 
+  }
 }
 ```
 
@@ -868,10 +903,6 @@ module.exports = {
 ### windows 支持
 
 由于在 windows 上开发体验不是特别友好，以及一些库缺乏支持，在大部分情况下，我们优先推荐在 mac/linux 下开发 Node.js 应用。
-
-经过我们的测试，在 windows 10 ， nodejs 官网下载的 v10 版本的 node 下运行 midway 程序通过，但是无法确保在其他的 windows 版本上能够正常。
-
-推荐使用类似 [Hyper](https://hyper.is/) 等相对友好的命令行工具来替换原生的命令行。
 
 需要注意的是，由于 windows 对设置环境变量的同步，默认生成的脚手架可能需要调整，主要是环境变量的部分。
 
