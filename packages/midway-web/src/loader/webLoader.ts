@@ -10,7 +10,7 @@ import {
 } from '@midwayjs/decorator';
 import * as extend from 'extend2';
 import * as fs from 'fs';
-import { getClassMetadata, getMethodDataFromClass, getProviderId, listModule } from 'injection';
+import { getClassMetadata, getPropertyDataFromClass, getProviderId, listModule } from 'injection';
 import { ContainerLoader, MidwayHandlerKey, MidwayContainer } from 'midway-core';
 import * as path from 'path';
 import { Middleware, MiddlewareParamArray, MidwayLoaderOptions, WebMiddleware } from '../interface';
@@ -219,7 +219,7 @@ export class MidwayWebLoader extends EggLoader {
           });
 
           // implement @body @query @param @body
-          const routeArgsInfo = getMethodDataFromClass(WEB_ROUTER_PARAM_KEY, target, webRouter.method) || [];
+          const routeArgsInfo = getPropertyDataFromClass(WEB_ROUTER_PARAM_KEY, target, webRouter.method) || [];
 
           const routerArgs = [
             webRouter.routerName,
