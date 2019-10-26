@@ -1,4 +1,4 @@
-import { attachMethodDataToClass } from 'injection';
+import { attachPropertyDataToClass } from 'injection';
 import { WEB_ROUTER_PARAM_KEY } from '../constant';
 
 interface GetFileStreamOptions {
@@ -71,7 +71,7 @@ export const extractValue = function extractValue(key, data) {
 
 const createParamMapping = function (type: RouteParamTypes) {
   return (data?: any) => (target, key, index) => {
-    attachMethodDataToClass(WEB_ROUTER_PARAM_KEY, {
+    attachPropertyDataToClass(WEB_ROUTER_PARAM_KEY, {
       index,
       type,
       data,
