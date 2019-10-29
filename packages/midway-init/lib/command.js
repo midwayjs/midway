@@ -6,6 +6,8 @@ const { Input, Select, Form } = require('enquirer');
 const chalk = require('chalk');
 const { getParser } = require('./parser');
 const { EventEmitter } = require('events');
+const fs = require('fs');
+const os = require('os');
 
 async function sleep(timeout) {
   return new Promise(resolve => {
@@ -55,6 +57,10 @@ class MidwayInitCommand extends EventEmitter {
       this.targetPath = argv.dir;
     }
 
+    if (argv.registry) {
+      this.registryUrl = this.getRegistryByType(argv.registry);
+    }
+
     if (argv.type) {
       // support --type argument
       this.templateName = argv.type;
@@ -101,6 +107,7 @@ class MidwayInitCommand extends EventEmitter {
       npmClient: this.npmClient,
       npmPackage: packageName || this.templateList[this.templateName].package,
       targetPath: this.targetPath,
+      registryUrl: this.registryUrl,
     });
     await this.execBoilerplate(generator);
   }
@@ -174,6 +181,34 @@ class MidwayInitCommand extends EventEmitter {
     // this.serverless.cli
     //   .log(`Successfully generated boilerplate for template: "${this.options.template}"`);
     console.log();
+  }
+
+  /**
+   * get registryUrl by short name
+   * @param {String} key - short name, support `china / npm / npmrc`, default to read from .npmrc
+   * @return {String} registryUrl
+   */
+  getRegistryByType(key) {
+    switch (key) {
+      case 'china':
+        return 'https://registry.npm.taobao.org';
+      case 'npm':
+        return 'https://registry.npmjs.org';
+      default: {
+        if (/^https?:/.test(key)) {
+          return key.replace(/\/$/, '');
+        } else {
+          // support .npmrc
+          const home = os.homedir();
+          let url = process.env.npm_registry || process.env.npm_config_registry || 'https://registry.npmjs.org';
+          if (fs.existsSync(path.join(home, '.cnpmrc')) || fs.existsSync(path.join(home, '.tnpmrc'))) {
+            url = 'https://registry.npm.taobao.org';
+          }
+          url = url.replace(/\/$/, '');
+          return url;
+        }
+      }
+    }
   }
 }
 
