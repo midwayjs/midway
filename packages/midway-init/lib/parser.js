@@ -25,10 +25,6 @@ const getParserOptions = () => {
       description: 'npm registry, support china/npm/custom, default to auto detect',
       alias: 'r',
     },
-    silent: {
-      type: 'boolean',
-      description: 'don\'t ask, just use default value',
-    },
   };
 };
 
