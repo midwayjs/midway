@@ -5,6 +5,7 @@ const { LightGenerator } = require('light-generator');
 const { Input, Select, Form } = require('enquirer');
 const chalk = require('chalk');
 const { getParser } = require('./parser');
+const { EventEmitter } = require('events');
 
 async function sleep(timeout) {
   return new Promise(resolve => {
@@ -18,10 +19,29 @@ const defaultOptions = {
   templateListPath: path.join(__dirname, '../boilerplate.json'),
 };
 
-class MidwayInitCommand {
+class MidwayInitCommand extends EventEmitter {
 
   constructor(npmClient) {
+    super();
     this.npmClient = npmClient || 'npm';
+    this._innerPrompt = null;
+    this.showPrompt = true;
+  }
+
+  set prompt(value) {
+    const originRun = value.run;
+    value.run = async () => {
+      await this.beforePromptSubmit();
+      return await originRun.call(value);
+    };
+    this._innerPrompt = value;
+  }
+
+  get prompt() {
+    return this._innerPrompt;
+  }
+
+  async beforePromptSubmit() {
   }
 
   async run(cwd, args) {
@@ -30,10 +50,30 @@ class MidwayInitCommand {
 
     this.templateList = await this.getTemplateList();
 
-    if (argv.template) {
+    if (argv.dir) {
+      // support --dir argument
+      this.targetPath = argv.dir;
+    }
+
+    if (argv.type) {
+      // support --type argument
+      this.templateName = argv.type;
       await this.createFromTemplate();
+    } else if (argv.template) {
+      // support --template argument
+      // ready targetDir
+      await this.createTargetDir();
+      const lightGenerator = new LightGenerator();
+      const generator = lightGenerator.defineLocalPath({
+        templatePath: this.getAbsoluteDir(argv.template),
+        targetPath: this.targetPath,
+      });
+      await this.execBoilerplate(generator);
+    } else if (argv.package) {
+      // support --package argument
+      await this.createFromTemplate(argv.package);
     } else {
-      const prompt = new Select({
+      this.prompt = new Select({
         name: 'templateName',
         message: 'Hello, traveller.\n  Which template do you like?',
         choices: Object.keys(this.templateList).map(template => {
@@ -43,62 +83,30 @@ class MidwayInitCommand {
         result: value => {
           return value.split(' - ')[0];
         },
+        show: this.showPrompt,
       });
       // get user input template
-      this.template = await prompt.run();
+      this.templateName = await this.prompt.run();
       await this.createFromTemplate();
     }
     // done
     this.printUsage();
   }
 
-  async createFromTemplate() {
-    if (!this.argv.dir) {
-      const prompt = new Input({
-        message: 'The directory where the boilerplate should be created',
-        initial: 'my_midway_app',
-      });
-      // get target path where template will be copy to
-      this.targetPath = await prompt.run();
-    } else {
-      this.targetPath = this.argv.dir;
-    }
-
-    const boilerplatePath = this.targetPath || '';
-    const newPath = path.join(process.cwd(), boilerplatePath);
+  async createFromTemplate(packageName) {
+    // ready targetDir
+    await this.createTargetDir();
     const lightGenerator = new LightGenerator();
     const generator = lightGenerator.defineNpmPackage({
       npmClient: this.npmClient,
-      npmPackage: this.templateList[this.template].package,
-      targetPath: newPath,
+      npmPackage: packageName || this.templateList[this.templateName].package,
+      targetPath: this.targetPath,
     });
-
-    const args = await generator.getParameterList();
-    const argsKeys = Object.keys(args);
-    if (argsKeys && argsKeys.length) {
-      const prompt = new Form({
-        name: 'user',
-        message: 'Please provide the following information:',
-        choices: argsKeys.map(argsKey => {
-          return {
-            name: `${argsKey}`,
-            message: `${args[argsKey].desc}`,
-            initial: `${args[argsKey].default}`,
-          };
-        }),
-      });
-
-      const parameters = await prompt.run();
-      await this.readyGenerate();
-      await generator.run(parameters);
-    } else {
-      await this.readyGenerate();
-      await generator.run();
-    }
+    await this.execBoilerplate(generator);
   }
 
   async getTemplateList() {
-    if (!this.template) {
+    if (!this.templateName) {
       return require(defaultOptions.templateListPath);
     }
   }
@@ -113,6 +121,52 @@ class MidwayInitCommand {
     console.log('3...');
     await sleep(1000);
     console.log('Enjoy it...');
+  }
+
+  async createTargetDir() {
+    if (!this.targetPath) {
+      this.prompt = new Input({
+        message: 'The directory where the boilerplate should be created',
+        initial: 'my_midway_app',
+        show: this.showPrompt,
+      });
+      // get target path where template will be copy to
+      this.targetPath = await this.prompt.run();
+    }
+    this.targetPath = this.getAbsoluteDir(this.targetPath);
+  }
+
+  async execBoilerplate(generator) {
+    const args = await generator.getParameterList();
+    const argsKeys = Object.keys(args);
+    if (argsKeys && argsKeys.length) {
+      this.prompt = new Form({
+        name: 'user',
+        message: 'Please provide the following information:',
+        choices: argsKeys.map(argsKey => {
+          return {
+            name: `${argsKey}`,
+            message: `${args[argsKey].desc}`,
+            initial: `${args[argsKey].default}`,
+          };
+        }),
+        show: this.showPrompt,
+      });
+
+      const parameters = await this.prompt.run();
+      await this.readyGenerate();
+      await generator.run(parameters);
+    } else {
+      await this.readyGenerate();
+      await generator.run();
+    }
+  }
+
+  getAbsoluteDir(dir) {
+    if (!path.isAbsolute(dir)) {
+      dir = path.join(process.cwd(), dir);
+    }
+    return dir;
   }
 
   printUsage() {
