@@ -28,6 +28,7 @@ class MidwayInitCommand extends EventEmitter {
     this.npmClient = npmClient || 'npm';
     this._innerPrompt = null;
     this.showPrompt = true;
+    this.name = 'midway';
   }
 
   set prompt(value) {
@@ -118,16 +119,21 @@ class MidwayInitCommand extends EventEmitter {
     }
   }
 
-  async readyGenerate() {
+  async readyGenerate(asyncFunction) {
     console.log();
+    this.log('Preparing your project, please wait a moment...');
+    await sleep(2000);
+    this.log('1...');
     await sleep(1000);
-    console.log('1...');
+    this.log('2...');
     await sleep(1000);
-    console.log('2...');
+    this.log('3...');
+    if (asyncFunction) {
+      await asyncFunction();
+    }
     await sleep(1000);
-    console.log('3...');
-    await sleep(1000);
-    console.log('Enjoy it...');
+    this.log('Initialization program has been executed successfully,enjoy it...');
+    console.log();
   }
 
   async createTargetDir() {
@@ -161,11 +167,15 @@ class MidwayInitCommand extends EventEmitter {
       });
 
       const parameters = await this.prompt.run();
-      await this.readyGenerate();
-      await generator.run(parameters);
+      // remove undefined property
+      Object.keys(parameters).forEach(key => parameters[key] === undefined && delete parameters[key]);
+      await this.readyGenerate(async () => {
+        await generator.run(parameters);
+      });
     } else {
-      await this.readyGenerate();
-      await generator.run();
+      await this.readyGenerate(async () => {
+        await generator.run();
+      });
     }
   }
 
@@ -176,11 +186,22 @@ class MidwayInitCommand extends EventEmitter {
     return dir;
   }
 
+  /**
+   * log with prefix
+   */
+  log() {
+    const args = Array.prototype.slice.call(arguments);
+    args[0] = chalk.blue(`[${this.name}] `) + args[0];
+    console.log.apply(console, args);
+  }
+
   printUsage() {
-    // this.serverless.cli.asciiGreeting();
-    // this.serverless.cli
-    //   .log(`Successfully generated boilerplate for template: "${this.options.template}"`);
-    console.log();
+    this.log(`Usage:
+          - cd ${this.targetPath}
+          - npm install
+          - npm run dev / npm start/ npm test
+    `);
+    this.log('Document: https://midwayjs.org/midway/guide.html');
   }
 
   /**

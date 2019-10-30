@@ -15,7 +15,7 @@
     "package": "midway-boilerplate-ts-strict",
     "description": "Simple midway application boilerplate by ts with ng style and strict eslint rules.",
     "name": "midway strict typescript template",
-`    "author": "waitingsong"
+    "author": "waitingsong"
   },
   "midway-ts-ant-design-pro": {
     "package": "midway-boilerplate-ts-antd",
