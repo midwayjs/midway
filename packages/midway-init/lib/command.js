@@ -28,7 +28,6 @@ class MidwayInitCommand extends EventEmitter {
     this.npmClient = npmClient || 'npm';
     this._innerPrompt = null;
     this.showPrompt = true;
-    this.name = 'midway';
   }
 
   set prompt(value) {
@@ -191,15 +190,15 @@ class MidwayInitCommand extends EventEmitter {
    */
   log() {
     const args = Array.prototype.slice.call(arguments);
-    args[0] = chalk.blue(`[${this.name}] `) + args[0];
+    args[0] = chalk.green('✔ ') + args[0];
     console.log.apply(console, args);
   }
 
   printUsage() {
     this.log(`Usage:
-          - cd ${this.targetPath}
-          - npm install
-          - npm run dev / npm start/ npm test
+    - cd ${this.targetPath}
+    - npm install
+    - npm run dev / npm start / npm test
     `);
     this.log('Document: https://midwayjs.org/midway/guide.html');
   }
