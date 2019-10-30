@@ -6,6 +6,7 @@ const rimraf = require('mz-modules/rimraf');
 const assert = require('assert');
 const { TestCommand } = require('./helper');
 const tmp = path.join(__dirname, '../.tmp');
+const { LightGenerator } = require('light-generator');
 
 describe('test/init.test.js', () => {
   beforeEach(() => rimraf(tmp));
@@ -125,5 +126,73 @@ describe('test/init.test.js', () => {
 
     const content = fs.readFileSync(path.join(targetDir, 'README.md'), 'utf-8');
     assert(/QuickStart/.test(content));
+  });
+
+  it('should use taobao npm registry url', async () => {
+    await LightGenerator.cleanCache();
+    const targetDir = path.join(tmp, 'test');
+    const command = new TestCommand();
+    command.mockPrompt([
+      [
+        'my_project',
+        [ null, { name: 'down' }],
+        'test',
+      ],
+    ]);
+    await command.run(tmp, '--dir=.tmp/test --package=midway-boilerplate-typescript --registry=china');
+
+    assert(fs.existsSync(path.join(targetDir, '.gitignore')));
+    assert(fs.existsSync(path.join(targetDir, 'package.json')));
+  });
+
+  it('should use npm registry url', async () => {
+    await LightGenerator.cleanCache();
+    const targetDir = path.join(tmp, 'test');
+    const command = new TestCommand();
+    command.mockPrompt([
+      [
+        'my_project',
+        [ null, { name: 'down' }],
+        'test',
+      ],
+    ]);
+    await command.run(tmp, '--dir=.tmp/test --package=midway-boilerplate-typescript --registry=npm');
+
+    assert(fs.existsSync(path.join(targetDir, '.gitignore')));
+    assert(fs.existsSync(path.join(targetDir, 'package.json')));
+  });
+
+  it('should use custom npm registry url', async () => {
+    await LightGenerator.cleanCache();
+    const targetDir = path.join(tmp, 'test');
+    const command = new TestCommand();
+    command.mockPrompt([
+      [
+        'my_project',
+        [ null, { name: 'down' }],
+        'test',
+      ],
+    ]);
+    await command.run(tmp, '--dir=.tmp/test --package=midway-boilerplate-typescript --registry=https://registry.cnpmjs.org');
+
+    assert(fs.existsSync(path.join(targetDir, '.gitignore')));
+    assert(fs.existsSync(path.join(targetDir, 'package.json')));
+  });
+
+  it('should use custom npm registry url without protocol', async () => {
+    await LightGenerator.cleanCache();
+    const targetDir = path.join(tmp, 'test');
+    const command = new TestCommand();
+    command.mockPrompt([
+      [
+        'my_project',
+        [ null, { name: 'down' }],
+        'test',
+      ],
+    ]);
+    await command.run(tmp, '--dir=.tmp/test --package=midway-boilerplate-typescript --registry=registry.cnpmjs.org');
+
+    assert(fs.existsSync(path.join(targetDir, '.gitignore')));
+    assert(fs.existsSync(path.join(targetDir, 'package.json')));
   });
 });

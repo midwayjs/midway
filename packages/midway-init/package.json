@@ -4,7 +4,7 @@
   "dependencies": {
     "chalk": "^2.4.2",
     "enquirer": "^2.3.2",
-    "light-generator": "^1.3.3",
+    "light-generator": "^1.4.0",
     "yargs": "^11.1.0"
   },
   "main": "lib/command.js",
