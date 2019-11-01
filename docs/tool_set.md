@@ -134,6 +134,17 @@ npm install -g midway-init
 midway-init
 ```
 
+可以通过内建的命令创建脚手架
+
+```bash
+midway-init -h                                          // 帮助文档
+midway-init --dir test                                  //在 test 目录创建脚手架
+midway-init --type midway-ts                            // 从内置脚手架类型 midway-ts 创建目录
+midway-init --template ../custom_boilerplate            // 从本地的特地目录创建脚手架
+midway-init --package midway-boilerplate-typescript     // 从 npm 包创建脚手架
+midway-init --registry china/npm/registry.cnpmjs.org    // 从不同的 registry 获取 npm 包，和 --package 合用
+```
+
 ## tslint-midway-contrib
 
 midway 对 Typescript 应用提供了简单的 tslint 规则包，只需要在 tslint.json 中做简单的继承，如果有其他的需求
