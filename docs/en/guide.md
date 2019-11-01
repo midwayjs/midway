@@ -38,11 +38,6 @@ $ npm i midway-init -g
 $ midway-init
 ```
 
-Specify boilerplate via `--type`
-```bash
-$ midway-init --type midway-ts-ant-design-pro
-```
-
 We can use the `npm scripts` commands to startup:
 
 ```bash

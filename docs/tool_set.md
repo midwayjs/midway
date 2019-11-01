@@ -127,7 +127,7 @@ midway-bin doc
 
 ## midway-init
 
-提供了基础的 midway 应用脚手架，后续会增加其他模板。
+提供了基础的 midway 应用脚手架，后续会不断增加其他模板。
 
 ```bash
 npm install -g midway-init
