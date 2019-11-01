@@ -1,13 +1,13 @@
-"use strict";
+'use strict';
 
-const path = require("path");
-const { LightGenerator } = require("light-generator");
-const { Input, Select, Form } = require("enquirer");
-const chalk = require("chalk");
-const { getParser } = require("./parser");
-const { EventEmitter } = require("events");
-const fs = require("fs");
-const os = require("os");
+const path = require('path');
+const { LightGenerator } = require('light-generator');
+const { Input, Select, Form } = require('enquirer');
+const chalk = require('chalk');
+const { getParser } = require('./parser');
+const { EventEmitter } = require('events');
+const fs = require('fs');
+const os = require('os');
 
 async function sleep(timeout) {
   return new Promise(resolve => {
@@ -18,13 +18,13 @@ async function sleep(timeout) {
 }
 
 const defaultOptions = {
-  templateListPath: path.join(__dirname, "../boilerplate.json")
+  templateListPath: path.join(__dirname, '../boilerplate.json'),
 };
 
 class MidwayInitCommand extends EventEmitter {
   constructor(npmClient) {
     super();
-    this.npmClient = npmClient || "npm";
+    this.npmClient = npmClient || 'npm';
     this._innerPrompt = null;
     this.showPrompt = true;
   }
@@ -70,7 +70,7 @@ class MidwayInitCommand extends EventEmitter {
       const lightGenerator = this.createGenerator();
       const generator = lightGenerator.defineLocalPath({
         templatePath: this.getAbsoluteDir(argv.template),
-        targetPath: this.targetPath
+        targetPath: this.targetPath,
       });
       await this.execBoilerplate(generator);
     } else if (argv.package) {
@@ -78,22 +78,22 @@ class MidwayInitCommand extends EventEmitter {
       await this.createFromTemplate(argv.package);
     } else {
       this.prompt = new Select({
-        name: "templateName",
-        message: "Hello, traveller.\n  Which template do you like?",
+        name: 'templateName',
+        message: 'Hello, traveller.\n  Which template do you like?',
         choices: Object.keys(this.templateList).map(template => {
           return (
             `${template} - ${this.templateList[template].description}` +
             (this.templateList[template].author
               ? `(by @${chalk.underline.bold(
-                  this.templateList[template].author
-                )})`
-              : "")
+                this.templateList[template].author
+              )})`
+              : '')
           );
         }),
         result: value => {
-          return value.split(" - ")[0];
+          return value.split(' - ')[0];
         },
-        show: this.showPrompt
+        show: this.showPrompt,
       });
       // get user input template
       this.templateName = await this.prompt.run();
@@ -111,7 +111,7 @@ class MidwayInitCommand extends EventEmitter {
       npmClient: this.npmClient,
       npmPackage: packageName || this.templateList[this.templateName].package,
       targetPath: this.targetPath,
-      registryUrl: this.registryUrl
+      registryUrl: this.registryUrl,
     });
     await this.execBoilerplate(generator);
   }
@@ -124,19 +124,19 @@ class MidwayInitCommand extends EventEmitter {
 
   async readyGenerate(asyncFunction) {
     console.log();
-    this.log("Preparing your project, please wait a moment...");
+    this.log('Preparing your project, please wait a moment...');
     await sleep(2000);
-    this.log("1...");
+    this.log('1...');
     await sleep(1000);
-    this.log("2...");
+    this.log('2...');
     await sleep(1000);
-    this.log("3...");
+    this.log('3...');
     if (asyncFunction) {
       await asyncFunction();
     }
     await sleep(1000);
     this.log(
-      "Initialization program has been executed successfully,enjoy it..."
+      'Initialization program has been executed successfully,enjoy it...'
     );
     console.log();
   }
@@ -148,9 +148,9 @@ class MidwayInitCommand extends EventEmitter {
   async createTargetDir() {
     if (!this.targetPath) {
       this.prompt = new Input({
-        message: "The directory where the boilerplate should be created",
-        initial: "my_midway_app",
-        show: this.showPrompt
+        message: 'The directory where the boilerplate should be created',
+        initial: 'my_midway_app',
+        show: this.showPrompt,
       });
       // get target path where template will be copy to
       this.targetPath = await this.prompt.run();
@@ -159,21 +159,21 @@ class MidwayInitCommand extends EventEmitter {
   }
 
   async execBoilerplate(generator) {
-    this.log("Fetch the boilerplate which you like...");
+    this.log('Fetch the boilerplate which you like...');
     const args = await generator.getParameterList();
     const argsKeys = Object.keys(args);
     if (argsKeys && argsKeys.length) {
       this.prompt = new Form({
-        name: "user",
-        message: "Please provide the following information:",
+        name: 'user',
+        message: 'Please provide the following information:',
         choices: argsKeys.map(argsKey => {
           return {
             name: `${argsKey}`,
             message: `${args[argsKey].desc}`,
-            initial: `${args[argsKey].default}`
+            initial: `${args[argsKey].default}`,
           };
         }),
-        show: this.showPrompt
+        show: this.showPrompt,
       });
 
       const parameters = await this.prompt.run();
@@ -203,7 +203,7 @@ class MidwayInitCommand extends EventEmitter {
    */
   log() {
     const args = Array.prototype.slice.call(arguments);
-    args[0] = chalk.green("✔ ") + chalk.bold(args[0]);
+    args[0] = chalk.green('✔ ') + chalk.bold(args[0]);
     console.log.apply(console, args);
   }
 
@@ -213,7 +213,7 @@ class MidwayInitCommand extends EventEmitter {
     - ${this.npmClient} install
     - ${this.npmClient} run dev / ${this.npmClient} start / ${this.npmClient} test
     `);
-    this.log("Document: https://midwayjs.org/midway/guide.html");
+    this.log('Document: https://midwayjs.org/midway/guide.html');
   }
 
   /**
@@ -223,27 +223,27 @@ class MidwayInitCommand extends EventEmitter {
    */
   getRegistryByType(key) {
     switch (key) {
-      case "china":
-        return "https://registry.npm.taobao.org";
-      case "npm":
-        return "https://registry.npmjs.org";
+      case 'china':
+        return 'https://registry.npm.taobao.org';
+      case 'npm':
+        return 'https://registry.npmjs.org';
       default: {
         if (/^https?:/.test(key)) {
-          return key.replace(/\/$/, "");
+          return key.replace(/\/$/, '');
         } else {
           // support .npmrc
           const home = os.homedir();
           let url =
             process.env.npm_registry ||
             process.env.npm_config_registry ||
-            "https://registry.npmjs.org";
+            'https://registry.npmjs.org';
           if (
-            fs.existsSync(path.join(home, ".cnpmrc")) ||
-            fs.existsSync(path.join(home, ".tnpmrc"))
+            fs.existsSync(path.join(home, '.cnpmrc')) ||
+            fs.existsSync(path.join(home, '.tnpmrc'))
           ) {
-            url = "https://registry.npm.taobao.org";
+            url = 'https://registry.npm.taobao.org';
           }
-          url = url.replace(/\/$/, "");
+          url = url.replace(/\/$/, '');
           return url;
         }
       }
