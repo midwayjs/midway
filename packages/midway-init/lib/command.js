@@ -159,6 +159,7 @@ class MidwayInitCommand extends EventEmitter {
   }
 
   async execBoilerplate(generator) {
+    this.log('Fetch the boilerplate which you like...');
     const args = await generator.getParameterList();
     const argsKeys = Object.keys(args);
     if (argsKeys && argsKeys.length) {
@@ -202,7 +203,7 @@ class MidwayInitCommand extends EventEmitter {
    */
   log() {
     const args = Array.prototype.slice.call(arguments);
-    args[0] = chalk.green('✔ ') + args[0];
+    args[0] = chalk.green('✔ ') + chalk.bold(args[0]);
     console.log.apply(console, args);
   }
 
