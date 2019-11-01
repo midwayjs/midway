@@ -22,7 +22,6 @@ const defaultOptions = {
 };
 
 class MidwayInitCommand extends EventEmitter {
-
   constructor(npmClient) {
     super();
     this.npmClient = npmClient || 'npm';
@@ -43,11 +42,10 @@ class MidwayInitCommand extends EventEmitter {
     return this._innerPrompt;
   }
 
-  async beforePromptSubmit() {
-  }
+  async beforePromptSubmit() {}
 
   async run(cwd, args) {
-    const argv = this.argv = getParser().parse(args || []);
+    const argv = (this.argv = getParser().parse(args || []));
     this.cwd = cwd;
 
     this.templateList = await this.getTemplateList();
@@ -69,7 +67,7 @@ class MidwayInitCommand extends EventEmitter {
       // support --template argument
       // ready targetDir
       await this.createTargetDir();
-      const lightGenerator = new LightGenerator();
+      const lightGenerator = this.createGenerator();
       const generator = lightGenerator.defineLocalPath({
         templatePath: this.getAbsoluteDir(argv.template),
         targetPath: this.targetPath,
@@ -83,8 +81,14 @@ class MidwayInitCommand extends EventEmitter {
         name: 'templateName',
         message: 'Hello, traveller.\n  Which template do you like?',
         choices: Object.keys(this.templateList).map(template => {
-          return `${template} - ${this.templateList[template].description}` +
-            (this.templateList[template].author ? `(by @${chalk.underline.bold(this.templateList[template].author)})` : '');
+          return (
+            `${template} - ${this.templateList[template].description}` +
+            (this.templateList[template].author
+              ? `(by @${chalk.underline.bold(
+                this.templateList[template].author
+              )})`
+              : '')
+          );
         }),
         result: value => {
           return value.split(' - ')[0];
@@ -102,7 +106,7 @@ class MidwayInitCommand extends EventEmitter {
   async createFromTemplate(packageName) {
     // ready targetDir
     await this.createTargetDir();
-    const lightGenerator = new LightGenerator();
+    const lightGenerator = this.createGenerator();
     const generator = lightGenerator.defineNpmPackage({
       npmClient: this.npmClient,
       npmPackage: packageName || this.templateList[this.templateName].package,
@@ -131,8 +135,14 @@ class MidwayInitCommand extends EventEmitter {
       await asyncFunction();
     }
     await sleep(1000);
-    this.log('Initialization program has been executed successfully,enjoy it...');
+    this.log(
+      'Initialization program has been executed successfully,enjoy it...'
+    );
     console.log();
+  }
+
+  createGenerator() {
+    return new LightGenerator();
   }
 
   async createTargetDir() {
@@ -167,7 +177,9 @@ class MidwayInitCommand extends EventEmitter {
 
       const parameters = await this.prompt.run();
       // remove undefined property
-      Object.keys(parameters).forEach(key => parameters[key] === undefined && delete parameters[key]);
+      Object.keys(parameters).forEach(
+        key => parameters[key] === undefined && delete parameters[key]
+      );
       await this.readyGenerate(async () => {
         await generator.run(parameters);
       });
@@ -220,8 +232,14 @@ class MidwayInitCommand extends EventEmitter {
         } else {
           // support .npmrc
           const home = os.homedir();
-          let url = process.env.npm_registry || process.env.npm_config_registry || 'https://registry.npmjs.org';
-          if (fs.existsSync(path.join(home, '.cnpmrc')) || fs.existsSync(path.join(home, '.tnpmrc'))) {
+          let url =
+            process.env.npm_registry ||
+            process.env.npm_config_registry ||
+            'https://registry.npmjs.org';
+          if (
+            fs.existsSync(path.join(home, '.cnpmrc')) ||
+            fs.existsSync(path.join(home, '.tnpmrc'))
+          ) {
             url = 'https://registry.npm.taobao.org';
           }
           url = url.replace(/\/$/, '');

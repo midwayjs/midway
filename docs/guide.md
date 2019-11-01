@@ -40,11 +40,6 @@ $ npm i midway-init -g
 $ midway-init
 ```
 
-可用 `--type` 参数指定模板名
-```bash
-$ midway-init --type midway-ts-ant-design-pro
-```
-
 通过生成的 `npm scripts` 来驱动启动命令:
 
 ```bash
