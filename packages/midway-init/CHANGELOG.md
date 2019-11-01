@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.14.0](https://github.com/midwayjs/midway/compare/v1.13.0...v1.14.0) (2019-11-01)
+
+
+### Features
+
+* add egg-init args ([d6c3582](https://github.com/midwayjs/midway/commit/d6c3582))
+* support npm registry parameter ([d9adfcf](https://github.com/midwayjs/midway/commit/d9adfcf))
+* use new generator for midway-init ([634b748](https://github.com/midwayjs/midway/commit/634b748))
+
+
+
+
+
 ## [1.12.1](https://github.com/midwayjs/midway/compare/v1.12.0...v1.12.1) (2019-10-12)
 
 **Note:** Version bump only for package midway-init
