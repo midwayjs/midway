@@ -138,7 +138,7 @@ midway-init
 
 ```bash
 midway-init -h                                          // 帮助文档
-midway-init --dir test                                  //在 test 目录创建脚手架
+midway-init --dir my_project                            // 在当前目录下的 my_project 子目录创建脚手架
 midway-init --type midway-ts                            // 从内置脚手架类型 midway-ts 创建目录
 midway-init --template ../custom_boilerplate            // 从本地的特地目录创建脚手架
 midway-init --package midway-boilerplate-typescript     // 从 npm 包创建脚手架
