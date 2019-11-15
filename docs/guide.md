@@ -803,6 +803,56 @@ describe('test/service/user.test.ts', () => {
 
 app.applicationContext 是 IoC 容器的应用上下文, 通过它可以异步取出注入的 service，并使用 service 进行测试。完整 demo 可以参见 [midway-test-demo](https://github.com/Lellansin/midway-test-demo)。
 
+### 使用 Jest
+
+Midway 在单元测试框架上，不仅支持 Mocha，也对 Jest 做了相应支持。具体使用步骤如下：
+
+1.在项根目录以下依赖：
+
+```bash
+$ npm install jest @types/jest ts-jest -D
+```
+
+2. 修改 `tsconfig.json`，避免 Mocha 与 Jest 的类型定义文件冲突
+
+```json
+{
+  "compilerOptions": {
+    "types": ["jest"]
+  }
+}
+```
+
+3. 在项目根目录下新增 `jest.config.js` 文件，内容如下：
+
+```typescript
+module.exports = {
+  preset: 'ts-jest',
+  testEnvironment: 'midway-bin/jest/env.js'
+};
+```
+
+4. 配置 npm scripts，修改 test 命令
+
+```json
+{
+  "scripts": {
+    "test": "jest"
+  }
+}
+```
+
+5. 运行 npm scripts，即可使用 Jest 完成单测
+
+```bash
+npm run test
+```
+
+::: tip
+我们也提供了可运行 Demo 供大家参考：[demo-unittest-jest](https://github.com/midwayjs/midway-examples/tree/4a22e07c661a01aa05221fe56e11dce6c9bfc604/demo-unittest-jest)
+:::
+
+
 ## 部署
 
 ### 构建打包
