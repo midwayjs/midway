@@ -780,6 +780,56 @@ describe('test/service/user.test.ts', () => {
 
 app.applicationContext is the application context of IoC Container, we can asynchronizely get the injected service object and use it for testing. Click [midway-test-demo](https://github.com/Lellansin/midway-test-demo) for the whole demo.
 
+### Use Jest
+
+Midway supports Jest as a unit testing framework. Here is the tutorial.
+
+1. Install the following dependencies in the project root directory：
+
+```bash
+$ npm install jest @types/jest ts-jest -D
+```
+
+2. Modify `tsconfig.json` to avoid conflicts between Mocha and Jest type definition files
+
+```json
+{
+  "compilerOptions": {
+    "types": ["jest"]
+  }
+}
+```
+
+3. Add the `jest.config.js` file to the project root directory :
+
+```typescript
+module.exports = {
+  preset: 'ts-jest',
+  testEnvironment: 'midway-bin/jest/env.js'
+};
+```
+
+4. Configure npm scripts :
+
+```json
+{
+  "scripts": {
+    "test": "jest"
+  }
+}
+```
+
+5. Run npm scripts :
+
+```bash
+npm run test
+```
+
+::: tip
+We also provide a runable demo: [demo-unittest-jest](https://github.com/midwayjs/midway-examples/tree/4a22e07c661a01aa05221fe56e11dce6c9bfc604/demo-unittest-jest)
+:::
+
+
 ## Deployment
 
 ### Building
