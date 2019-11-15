@@ -807,7 +807,7 @@ app.applicationContext 是 IoC 容器的应用上下文, 通过它可以异步�
 
 Midway 在单元测试框架上，不仅支持 Mocha，也对 Jest 做了相应支持。具体使用步骤如下：
 
-1.在项根目录以下依赖：
+1.在项目根目录安装以下依赖：
 
 ```bash
 $ npm install jest @types/jest ts-jest -D
@@ -849,7 +849,7 @@ npm run test
 ```
 
 ::: tip
-我们也提供了可运行 Demo 供大家参考：[demo-unittest-jest](https://github.com/midwayjs/midway-examples/tree/4a22e07c661a01aa05221fe56e11dce6c9bfc604/demo-unittest-jest)
+我们也提供了可运行 demo 供大家参考：[demo-unittest-jest](https://github.com/midwayjs/midway-examples/tree/4a22e07c661a01aa05221fe56e11dce6c9bfc604/demo-unittest-jest)
 :::
 
 
