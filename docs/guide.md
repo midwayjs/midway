@@ -495,7 +495,7 @@ export class BaseService {
 
 ### 注册定时任务
 
-midawy 的定时任务是基于 [egg 定时任务](https://eggjs.org/zh-cn/basics/schedule.html)提供了更多 typescript 以及装饰器方面的支持。定时任务可以存放在任意目录，例如 src/schedule 目录下，可以配置定时任务的属性和要执行的方法。例如：
+midway 的定时任务是基于 [egg 定时任务](https://eggjs.org/zh-cn/basics/schedule.html)提供了更多 typescript 以及装饰器方面的支持。定时任务可以存放在任意目录，例如 src/schedule 目录下，可以配置定时任务的属性和要执行的方法。例如：
 
 ```typescript
 // src/schedule/hello.ts
