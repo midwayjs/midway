@@ -1,0 +1,13 @@
+{
+  "name": "ts-dir-with-not-exists-file",
+  "version": "0.0.1",
+  "dependencies": {
+
+  },
+  "midway-bin-build": {
+    "include": [
+      "public",
+      "view"
+    ]
+  }
+}
