@@ -7,11 +7,11 @@ class DebugCommand extends require('egg-bin').DebugCommand {
     this.usage = 'Usage: midway-bin debug [dir] [options]';
   }
 
-  * run(context) {
+  async run(context) {
     if (!context.argv.framework) {
       context.argv.framework = this.findFramework('midway') || this.findFramework('midway-mirror');
     }
-    yield super.run(context);
+    await super.run(context);
   }
 
   findFramework(module) {

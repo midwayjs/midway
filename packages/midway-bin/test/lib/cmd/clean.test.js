@@ -12,26 +12,26 @@ describe('test/lib/cmd/clean.test.js', () => {
 
   afterEach(mm.restore);
 
-  it('should clean dir', function *() {
+  it('should clean dir', async () => {
     const cwd = path.join(__dirname, '../../fixtures/clean-dir');
-    yield mkdirp(path.join(cwd, 'logs/test.log'));
-    yield mkdirp(path.join(cwd, '.nodejs-cache/test.log'));
-    yield mkdirp(path.join(cwd, 'run/a.log'));
+    await mkdirp(path.join(cwd, 'logs/test.log'));
+    await mkdirp(path.join(cwd, '.nodejs-cache/test.log'));
+    await mkdirp(path.join(cwd, 'run/a.log'));
 
     const child = coffee.fork(midwayBin, [ 'clean' ], { cwd });
-    yield child.expect('code', 0).end();
+    await child.expect('code', 0).end();
     assert(fs.existsSync(path.join(cwd, 'a.ts')));
     assert(!fs.existsSync(path.join(cwd, '.nodejs-cache')));
     assert(!fs.existsSync(path.join(cwd, 'run')));
     assert(!fs.existsSync(path.join(cwd, 'logs')));
   });
 
-  it('should clean file with config', function *() {
+  it('should clean file with config', async () => {
     const cwd = path.join(__dirname, '../../fixtures/clean-dir-config');
-    yield mkdirp(path.join(cwd, 'customDir/a.js'));
+    await mkdirp(path.join(cwd, 'customDir/a.js'));
 
-    const child = coffee.fork(midwayBin, [ 'clean'], { cwd });
-    yield child.expect('code', 0).end();
+    const child = coffee.fork(midwayBin, [ 'clean' ], { cwd });
+    await child.expect('code', 0).end();
     assert(!fs.existsSync(path.join(cwd, 'customDir')));
   });
 

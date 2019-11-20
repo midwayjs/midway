@@ -36,7 +36,7 @@ class BuildCommand extends Command {
     return 'build application automatically';
   }
 
-  * run(context) {
+  async run(context) {
     const { cwd, argv } = context;
 
     const tscCli = require.resolve('typescript/bin/tsc');
@@ -46,10 +46,10 @@ class BuildCommand extends Command {
     }
 
     if (argv.clean) {
-      yield this.cleanDir(cwd, argv.project);
+      await this.cleanDir(cwd, argv.project);
     }
 
-    yield this.copyFiles(cwd, argv.project, argv);
+    await this.copyFiles(cwd, argv.project, argv);
 
     const args = [];
 
@@ -57,10 +57,10 @@ class BuildCommand extends Command {
       args.push('-p');
       args.push(argv.project);
     }
-    yield this.helper.forkNode(tscCli, args, { cwd });
+    await this.helper.forkNode(tscCli, args, { cwd });
   }
 
-  * cleanDir(cwd, projectFile) {
+  async cleanDir(cwd, projectFile) {
     const tsConfig = require(path.join(cwd, projectFile));
 
     // if projectFile extended and without outDir,
@@ -70,7 +70,7 @@ class BuildCommand extends Command {
         !tsConfig.compilerOptions ||
         (tsConfig.compilerOptions && !tsConfig.compilerOptions.outDir)
       ) {
-        yield this.cleanDir(cwd, tsConfig.extends);
+        await this.cleanDir(cwd, tsConfig.extends);
         return;
       }
     }
@@ -78,12 +78,12 @@ class BuildCommand extends Command {
     if (tsConfig && tsConfig.compilerOptions) {
       const outDir = tsConfig.compilerOptions.outDir;
       if (outDir) {
-        yield rimraf(outDir);
+        await rimraf(outDir);
       }
     }
   }
 
-  * copyFiles(cwd, projectFile, argv) {
+  async copyFiles(cwd, projectFile, argv) {
     const tsConfig = require(path.join(cwd, projectFile));
 
     // if projectFile extended and without outDir,
@@ -93,7 +93,7 @@ class BuildCommand extends Command {
         !tsConfig.compilerOptions ||
         (tsConfig.compilerOptions && !tsConfig.compilerOptions.outDir)
       ) {
-        yield this.copyFiles(cwd, tsConfig.extends, argv);
+        await this.copyFiles(cwd, tsConfig.extends, argv);
         return;
       }
     }
@@ -111,7 +111,7 @@ class BuildCommand extends Command {
               this.copyFile(srcDir, targetDir, cwd);
             } else {
               // 通配符的情况
-              const paths = yield globby([].concat(file), {
+              const paths = await globby([].concat(file), {
                 cwd: path.join(cwd, argv.srcDir),
               });
               for (const p of paths) {

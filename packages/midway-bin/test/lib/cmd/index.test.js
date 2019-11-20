@@ -8,9 +8,9 @@ const midwayBin = require.resolve('../../../bin/midway-bin.js');
 describe('test/lib/cmd/index.test.js', () => {
 
   describe('autod command', () => {
-    it('should stdout', function* () {
+    it('should stdout', async () => {
       const cwd = path.join(__dirname);
-      yield coffee.fork(midwayBin, ['autod', '-h'], {cwd})
+      await coffee.fork(midwayBin, [ 'autod', '-h' ], { cwd })
       // .debug()
         .expect('stdout', /midway/)
         .expect('code', 0)
@@ -19,9 +19,9 @@ describe('test/lib/cmd/index.test.js', () => {
   });
 
   describe('cov command', () => {
-    it('should stdout', function* () {
+    it('should stdout', async () => {
       const cwd = path.join(__dirname);
-      yield coffee.fork(midwayBin, ['cov', '-h'], {cwd})
+      await coffee.fork(midwayBin, [ 'cov', '-h' ], { cwd })
       // .debug()
         .expect('stdout', /midway/)
         .expect('code', 0)
@@ -30,9 +30,9 @@ describe('test/lib/cmd/index.test.js', () => {
   });
 
   describe('debug command', () => {
-    it('should stdout', function* () {
+    it('should stdout', async () => {
       const cwd = path.join(__dirname);
-      yield coffee.fork(midwayBin, ['debug', '-h'], {cwd})
+      await coffee.fork(midwayBin, [ 'debug', '-h' ], { cwd })
       // .debug()
         .expect('stdout', /midway/)
         .expect('code', 0)
@@ -41,9 +41,9 @@ describe('test/lib/cmd/index.test.js', () => {
   });
 
   describe('dev command', () => {
-    it('should stdout', function* () {
+    it('should stdout', async () => {
       const cwd = path.join(__dirname);
-      yield coffee.fork(midwayBin, ['dev', '-h'], {cwd})
+      await coffee.fork(midwayBin, [ 'dev', '-h' ], { cwd })
       // .debug()
         .expect('stdout', /midway/)
         .expect('code', 0)
@@ -52,9 +52,9 @@ describe('test/lib/cmd/index.test.js', () => {
   });
 
   describe('pkg command', () => {
-    it('should stdout', function* () {
+    it('should stdout', async () => {
       const cwd = path.join(__dirname);
-      yield coffee.fork(midwayBin, ['pkgfiles', '-h'], {cwd})
+      await coffee.fork(midwayBin, [ 'pkgfiles', '-h' ], { cwd })
       // .debug()
         .expect('stdout', /midway/)
         .expect('code', 0)
@@ -63,9 +63,9 @@ describe('test/lib/cmd/index.test.js', () => {
   });
 
   describe('test command', () => {
-    it('should stdout', function* () {
+    it('should stdout', async () => {
       const cwd = path.join(__dirname);
-      yield coffee.fork(midwayBin, ['test', '-h'], {cwd})
+      await coffee.fork(midwayBin, [ 'test', '-h' ], { cwd })
       // .debug()
         .expect('stdout', /midway/)
         .expect('code', 0)
@@ -74,9 +74,9 @@ describe('test/lib/cmd/index.test.js', () => {
   });
 
   describe('build command', () => {
-    it('should build ts file', (done) => {
+    it('should build ts file', done => {
       const cwd = path.join(__dirname);
-      coffee.fork(midwayBin, ['build', '-h'], {cwd})
+      coffee.fork(midwayBin, [ 'build', '-h' ], { cwd })
       // .debug()
         .expect('stdout', /midway/)
         .expect('code', 0)

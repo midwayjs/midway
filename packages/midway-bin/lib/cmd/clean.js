@@ -16,17 +16,17 @@ class CleanCommand extends Command {
     return 'clean application temporary files';
   }
 
-  * run(context) {
+  async run(context) {
     const { cwd } = context;
     if (!fs.existsSync(path.join(cwd, 'package.json'))) {
       console.log(`[midway-bin] package.json not found in ${cwd}\n`);
       return;
     }
-    yield this.cleanDir(cwd);
+    await this.cleanDir(cwd);
   }
 
-  * cleanDir(cwd) {
-    yield new Promise((resolve, reject) => {
+  async cleanDir(cwd) {
+    await new Promise((resolve, reject) => {
       cp.exec('find . -type d -name \'logs\' -or -name \'run\' -or -name \'.nodejs-cache\' | xargs rm -rf', {
         cwd,
       }, error => {
@@ -43,7 +43,7 @@ class CleanCommand extends Command {
     const pkg = require(path.join(cwd, 'package.json'));
     if (pkg['midway-bin-clean'] && pkg['midway-bin-clean'].length) {
       for (const file of pkg['midway-bin-clean']) {
-        yield rimraf(path.join(cwd, file));
+        await rimraf(path.join(cwd, file));
         console.log(`[midway-bin] clean ${file} success!`);
       }
       console.log('[midway-bin] clean complete!');
