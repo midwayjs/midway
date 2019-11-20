@@ -8,11 +8,11 @@ class DevCommand extends require('egg-bin/lib/cmd/dev') {
     this.defaultPort = process.env.PORT || 7001;
   }
 
-  * run(context) {
+  async run(context) {
     if (!context.argv.framework) {
       context.argv.framework = this.findFramework('midway') || this.findFramework('midway-mirror');
     }
-    yield super.run(context);
+    await super.run(context);
   }
 
   findFramework(module) {

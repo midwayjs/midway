@@ -55,7 +55,7 @@ class DocCommand extends Command {
     return 'generate typescript document by typedoc';
   }
 
-  * run({ cwd, argv }) {
+  async run({ cwd, argv }) {
     let args;
     if (argv.options) {
       // if has options args just ignore others
@@ -68,7 +68,7 @@ class DocCommand extends Command {
     }
 
     const docBin = require.resolve('typedoc/bin/typedoc');
-    yield this.helper.forkNode(docBin, args, { cwd });
+    await this.helper.forkNode(docBin, args, { cwd });
   }
 }
 
