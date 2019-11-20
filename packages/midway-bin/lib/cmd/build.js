@@ -130,7 +130,7 @@ class BuildCommand extends Command {
 
   copyFile(srcFile, targetFile, cwd) {
     if (!fs.existsSync(srcFile)) {
-      console.warn(`[midway-bin] can't found ${srcFile} and skip it`);
+      console.warn(`[midway-bin] can't find ${srcFile} and skip it`);
     } else {
       fse.copySync(path.join(cwd, srcFile), path.join(cwd, targetFile));
       console.log(`[midway-bin] copy ${srcFile} to ${targetFile} success!`);
