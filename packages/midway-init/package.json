@@ -2,10 +2,10 @@
   "name": "midway-init",
   "version": "1.14.4",
   "dependencies": {
-    "chalk": "^2.4.2",
+    "chalk": "^3.0.0",
     "enquirer": "^2.3.2",
     "light-generator": "^1.4.0",
-    "yargs": "^11.1.0"
+    "yargs": "^15.0.0"
   },
   "main": "lib/command.js",
   "devDependencies": {
