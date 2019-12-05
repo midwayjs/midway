@@ -46,4 +46,25 @@ describe('/test/issue.test.ts', () => {
     });
   });
 
+  describe('test #215 issue to fix egg extension', () => {
+    let app;
+    before(() => {
+      app = utils.app('issue/base-app-extend-context', {
+        typescript: true
+      });
+      return app.ready();
+    });
+
+    after(() => app.close());
+
+    it('Correctly reference the egg extension implementation', (done) => {
+
+      request(app.callback())
+        .get('/api/user/info')
+        .expect(200)
+        .expect('hello world', done);
+
+    });
+  });
+
 });
