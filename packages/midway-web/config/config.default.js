@@ -33,7 +33,8 @@ module.exports = (appInfo) => {
       '**/public/**',
       '**/view/**',
       '**/views/**',
-      '**/config/**'
+      '**/config/**',
+      "**/app/extend/**"
     ]
   };
 
