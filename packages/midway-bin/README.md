@@ -42,7 +42,7 @@ Add `midway-bin` to `package.json` scripts like [egg-bin], but just replace comm
 - build
 - clean
 - doc
- 
+
 ### build
 
 build typescript source file to dist directory like `tsc`  and copy js/css/html file to same place.
@@ -54,6 +54,7 @@ $ midway-bin build
 #### options
 
 - `--clean -c` clean dist directory before build
+- `--entrypoint <entrypoint-file>` bundle the output with the specified file as entrypoint
 
 #### copy static file
 
