@@ -8,7 +8,7 @@
     "@types/mocha": "^5.2.5",
     "@types/node": "^10.12.18",
     "autocannon": "^2.4.1",
-    "chalk": "^2.4.2",
+    "chalk": "^3.0.0",
     "debug": "^4.1.1",
     "gh-pages": "^1.2.0",
     "git-hooks": "^1.1.10",
