@@ -147,7 +147,7 @@ describe('test/lib/cmd/build.test.js - bundling', () => {
   it('should warn message', async () => {
     const cwd = path.join(__dirname, '../../fixtures/ts-dir-without-config');
     const child = coffee
-      .fork(midwayBin, [ 'build', '--entrypoint', 'a.js' ], { cwd })
+      .fork(midwayBin, [ 'build', '--entrypoint', 'a.ts' ], { cwd })
       .expect('stdout', /tsconfig/);
 
     await child.expect('code', 0).end();
@@ -156,7 +156,7 @@ describe('test/lib/cmd/build.test.js - bundling', () => {
   it('should build success', async () => {
     const cwd = path.join(__dirname, '../../fixtures/ts-dir');
     await rimraf(path.join(cwd, 'dist'));
-    const child = coffee.fork(midwayBin, [ 'build', '--entrypoint', 'a.js' ], { cwd });
+    const child = coffee.fork(midwayBin, [ 'build', '--entrypoint', 'a.ts' ], { cwd });
     await child.expect('code', 0).end();
     assert(fs.existsSync(path.join(cwd, 'dist/a.js')));
     await rimraf(path.join(cwd, 'dist'));
@@ -164,38 +164,9 @@ describe('test/lib/cmd/build.test.js - bundling', () => {
 
   it('should auto clean dir before build', async () => {
     const cwd = path.join(__dirname, '../../fixtures/ts-dir');
-    const child = coffee.fork(midwayBin, [ 'build', '--entrypoint', 'a.js' ], { cwd });
+    const child = coffee.fork(midwayBin, [ 'build', '--entrypoint', 'a.ts' ], { cwd });
     await child.expect('code', 0).end();
     assert(fs.existsSync(path.join(cwd, 'dist/a.js')));
-    await rimraf(path.join(cwd, 'dist'));
-  });
-
-  it('should copy assets file to dist dir', async () => {
-    const cwd = path.join(__dirname, '../../fixtures/ts-dir-with-assets');
-    const child = coffee.fork(midwayBin, [ 'build', '-c', '--entrypoint', 'a.js' ], { cwd });
-    await child.expect('code', 0).end();
-    assert(fs.existsSync(path.join(cwd, 'dist/a.js')));
-    assert(fs.existsSync(path.join(cwd, 'dist/view/index.html')));
-    assert(fs.existsSync(path.join(cwd, 'dist/public/test.css')));
-    assert(fs.existsSync(path.join(cwd, 'dist/public/test.js')));
-    assert(fs.existsSync(path.join(cwd, 'dist/resource.json')));
-    assert(fs.existsSync(path.join(cwd, 'dist/lib/b.json')));
-    assert(fs.existsSync(path.join(cwd, 'dist/lib/a.text')));
-    assert(fs.existsSync(path.join(cwd, 'dist/pattern/ignore.css')));
-    assert(fs.existsSync(path.join(cwd, 'dist/pattern/sub/sub_ignore.css')));
-    await rimraf(path.join(cwd, 'dist'));
-  });
-
-  it('should copy assets file and ignore not exists directory', async () => {
-    const cwd = path.join(
-      __dirname,
-      '../../fixtures/ts-dir-with-not-exists-file'
-    );
-    const child = coffee.fork(midwayBin, [ 'build', '-c', '--entrypoint', 'a.js' ], { cwd }).debug();
-    await child.expect('code', 0).end();
-    assert(!fs.existsSync(path.join(cwd, 'dist/view/index.html')));
-    assert(fs.existsSync(path.join(cwd, 'dist/public/test.css')));
-    assert(fs.existsSync(path.join(cwd, 'dist/public/test.js')));
     await rimraf(path.join(cwd, 'dist'));
   });
 });
