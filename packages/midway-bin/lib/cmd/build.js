@@ -64,7 +64,7 @@ class BuildCommand extends Command {
       await this.cleanDir(outDir);
     }
 
-    await this.copyFiles(cwd, tsConfig, argv);
+    await this.copyFiles(cwd, outDir, argv);
 
     if (argv.mode !== 'release') {
       argv.mode = 'debug';
@@ -191,7 +191,7 @@ class BuildCommand extends Command {
         !tsConfig.compilerOptions ||
         (tsConfig.compilerOptions && !tsConfig.compilerOptions[option])
       ) {
-        return this.inferCompilerOptions(require(path.join(process.cwd(), tsConfig.extends)));
+        return this.inferCompilerOptions(require(path.join(process.cwd(), tsConfig.extends)), option);
       }
     }
 
