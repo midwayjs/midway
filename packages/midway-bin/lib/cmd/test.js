@@ -11,7 +11,7 @@ class TestCommand extends require('egg-bin').TestCommand {
     if (!context.env.NODE_ENV) {
       context.env.NODE_ENV = 'unittest';
     }
-    return co(super.run(context));
+    await co(super.run(context));
   }
 }
 

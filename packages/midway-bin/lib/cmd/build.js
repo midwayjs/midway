@@ -107,7 +107,7 @@ class BuildCommand extends Command {
       v8cache: false,
       quiet: false,
       debugLog: false,
-    }
+    };
     if (mode === 'release') {
       options.minify = true;
     }
