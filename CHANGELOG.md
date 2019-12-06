@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.15.0](https://github.com/midwayjs/midway/compare/v1.14.4...v1.15.0) (2019-12-06)
+
+
+### Bug Fixes
+
+* ignore app/extend/* when loader start ([4db9e9b](https://github.com/midwayjs/midway/commit/4db9e9b))
+* **midway-bin:** log message grammar ([30091d0](https://github.com/midwayjs/midway/commit/30091d0))
+
+
+### Features
+
+* **midway-bin:** add bundle support ([9894049](https://github.com/midwayjs/midway/commit/9894049))
+* **midway-bin:** use async-await instead of generator ([eed48f1](https://github.com/midwayjs/midway/commit/eed48f1))
+
+
+
+
+
 ## [1.14.4](https://github.com/midwayjs/midway/compare/v1.14.3...v1.14.4) (2019-11-20)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.15.0](https://github.com/midwayjs/midway/compare/v1.14.4...v1.15.0) (2019-12-06)
+
+
+### Bug Fixes
+
+* ignore app/extend/* when loader start ([4db9e9b](https://github.com/midwayjs/midway/commit/4db9e9b))
+
+
+
+
+
 ## [1.14.4](https://github.com/midwayjs/midway/compare/v1.14.3...v1.14.4) (2019-11-20)
 
 **Note:** Version bump only for package midway-web
