@@ -1,4 +1,5 @@
 'use strict';
+const co = require('co');
 
 class TestCommand extends require('egg-bin').TestCommand {
   constructor(rawArgv) {
@@ -10,7 +11,7 @@ class TestCommand extends require('egg-bin').TestCommand {
     if (!context.env.NODE_ENV) {
       context.env.NODE_ENV = 'unittest';
     }
-    return super.run(context);
+    return co(super.run(context));
   }
 }
 
