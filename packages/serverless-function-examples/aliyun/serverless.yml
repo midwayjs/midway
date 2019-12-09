@@ -1,0 +1,26 @@
+service: serverless-midway-faas
+
+provider:
+  name: aliyun
+  runtime: nodejs8
+
+functions:
+  index:
+    initializer: index.initializer
+    handler: index.handler
+    events:
+      - http:
+          method: get
+
+plugins:
+  - '@midwayjs/serverless-plugin-faas'
+
+package:
+  include:
+  exclude:
+    - src/**
+    - tsconfig.json
+    - test/**
+    - ./*.zip
+  excludeDevDependencies: false
+  artifact: midwayFaas.zip

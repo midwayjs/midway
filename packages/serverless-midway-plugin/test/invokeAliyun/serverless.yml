@@ -1,0 +1,32 @@
+service: serverless-midway-test
+
+provider:
+  name: aliyun
+  runtime: nodejs8
+
+functions:
+  index:
+    initializer: index.initializer
+    handler: index.handler
+    events:
+      - http:
+          method: get
+  index2:
+    initializer: index.initializer
+    handler: index.handler2
+    events:
+      - http:
+          method: get
+
+plugins:
+  - test
+
+package:
+  include:
+  exclude:
+    - src/**
+    - tsconfig.json
+    - test/**
+    - ./*.zip
+  excludeDevDependencies: false
+  artifact: path/to/my-artifact.zip # Own package that should be used. You must provide this file.

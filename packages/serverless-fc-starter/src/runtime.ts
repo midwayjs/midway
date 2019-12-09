@@ -1,0 +1,119 @@
+import * as getRawBody from 'raw-body';
+import {
+  FAAS_ARGS_KEY,
+  ServerlessLightRuntime,
+} from '@midwayjs/runtime-engine';
+import { AliyunFCContext } from './interface';
+import { Context } from './context';
+
+export class FCRuntime extends ServerlessLightRuntime {
+  /**
+   * for handler wrapper
+   * @param handler
+   */
+  asyncEvent(handler) {
+    if (handler && handler.constructor.name !== 'AsyncFunction') {
+      throw new TypeError('Must be an AsyncFunction');
+    }
+
+    return (req: object, res: object, context?: AliyunFCContext) => {
+      if (context) {
+        return this.wrapperWebInvoker(handler, req, res, context);
+      } else {
+        return this.wrapperEventInvoker(handler, req, res);
+      }
+    };
+  }
+
+  async wrapperWebInvoker(handler, req, res, context) {
+    // for web
+    if (req.constructor.name === 'EventEmitter') {
+      const rawBody = await getRawBody(req);
+      // const rawBody = 'test';
+      // req.rawBody = rawBody;
+      req.body = rawBody; // TODO: body parser
+    }
+
+    const ctx: any = new Context(req, res, context);
+    ctx.EventType = 'fc_http';
+    const args = [ctx];
+
+    if (ctx.method === 'GET') {
+      if (ctx.query && ctx.query[FAAS_ARGS_KEY]) {
+        args.push(ctx.query[FAAS_ARGS_KEY]);
+      }
+    } else if (ctx.method === 'POST') {
+      if (ctx.req && ctx.req.body && ctx.req.body[FAAS_ARGS_KEY]) {
+        args.push(ctx.req.body[FAAS_ARGS_KEY]);
+      }
+    }
+
+    return this.invokeHandlerWrapper(ctx, async () => {
+      if (!handler) {
+        return this.defaultInvokeHandler.apply(this, args);
+      }
+      return handler.apply(handler, args);
+    }).then(result => {
+      if (result) {
+        ctx.body = result;
+      }
+      const data = ctx.body;
+      let encoded = false;
+      if (typeof data === 'string') {
+        if (!ctx.type) {
+          ctx.type = 'text/plain';
+        }
+        ctx.body = data;
+      } else if (Buffer.isBuffer(data)) {
+        encoded = true;
+        if (!ctx.type) {
+          ctx.type = 'application/octet-stream';
+        }
+        ctx.body = data.toString('base64');
+      } else if (typeof data === 'object') {
+        if (!ctx.type) {
+          ctx.type = 'application/json';
+        }
+        ctx.body = JSON.stringify(data);
+      }
+
+      if (res.setHeader) {
+        for (const key in ctx.res.headers) {
+          res.setHeader(key, ctx.res.headers[key]);
+        }
+      }
+
+      if (res.setStatusCode) {
+        res.setStatusCode(ctx.status);
+      }
+
+      if (res.send) {
+        res.send(ctx.body);
+      }
+
+      return {
+        isBase64Encoded: encoded,
+        statusCode: ctx.status,
+        headers: ctx.res.headers,
+        body: ctx.body,
+      };
+    });
+  }
+
+  async wrapperEventInvoker(handler, event, context) {
+    const args = [context];
+    if (event && event[FAAS_ARGS_KEY]) {
+      args.push(event[FAAS_ARGS_KEY]);
+    } else {
+      args.push(event);
+    }
+    // 其他事件场景
+    return this.invokeHandlerWrapper(context, async () => {
+      return handler.apply(handler, args);
+    });
+  }
+
+  async beforeInvokeHandler(context) {}
+
+  async afterInvokeHandler(err, result, context) {}
+}

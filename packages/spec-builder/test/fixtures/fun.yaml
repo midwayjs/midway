@@ -1,0 +1,27 @@
+service: serverless-hello-world
+
+provider:
+  name: ginkgo
+  runtime: nodejs8
+
+functions:
+  hello:
+    handler: index.handler
+    events:
+      - http:
+          path: /foo
+          method: get
+
+plugins:
+  - serverless-aliyun-function-compute
+
+package:
+  exclude:
+    - package-lock.json
+    - .gitignore
+    - .git/**
+
+layers:
+  test:
+    path: npm:@ali/market-layer@latest
+
