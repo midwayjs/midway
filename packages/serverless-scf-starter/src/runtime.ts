@@ -22,11 +22,14 @@ export class SCFRuntime extends ServerlessLightRuntime {
 
   async wrapperWebInvoker(handler, event: SCFHTTPEvent, context: SCFContext) {
     const ctx = new Context(event, context);
-    const args = [ctx];
+    const args = [ctx, event];
 
-    const result = await this.invokeHandlerWrapper(context, async () =>
-      handler.apply(handler, args)
-    );
+    const result = await this.invokeHandlerWrapper(context, async () => {
+      if (!handler) {
+        return this.defaultInvokeHandler.apply(this, args);
+      }
+      return handler.apply(handler, args);
+    });
 
     let encoded = false;
     if (result) {
@@ -63,9 +66,12 @@ export class SCFRuntime extends ServerlessLightRuntime {
   async wrapperEventInvoker(handler, event: any, context: SCFContext) {
     const args = [context, event];
     // 其他事件场景
-    return this.invokeHandlerWrapper(context, async () =>
-      handler.apply(handler, args)
-    );
+    return this.invokeHandlerWrapper(context, async () => {
+      if (!handler) {
+        return this.defaultInvokeHandler.apply(this, args);
+      }
+      return handler.apply(handler, args);
+    });
   }
 
   async beforeInvokeHandler(context) {}
