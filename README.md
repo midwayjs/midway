@@ -21,7 +21,7 @@ $ serverless install --url https://github.com/midwayjs/midway-faas/tree/developm
 ### For Tencent SCF
 
 ```shell script
-$ serverless install --url https://github.com/midwayjs/serverless-function-examples/tree/master/scf
+$ serverless install --url https://github.com/midwayjs/midway-faas/tree/development/packages/serverless-function-examples/scf
 ```
 
 ### Install Plugin

@@ -15,13 +15,13 @@ You can install the following example:
 #### For aliyun
 
 ```shell script
-$ serverless install --url https://github.com/midwayjs/serverless-function-examples/tree/master/aliyun
+$ serverless install --url https://github.com/midwayjs/midway-faas/tree/development/packages/serverless-function-examples/aliyun
 ```
 
 #### For SCF
 
 ```shell script
-$ serverless install --url https://github.com/midwayjs/serverless-function-examples/tree/master/scf
+$ serverless install --url https://github.com/midwayjs/midway-faas/tree/development/packages/serverless-function-examples/scf
 ```
 
 #### Install Plugin
