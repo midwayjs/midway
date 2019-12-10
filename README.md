@@ -1,19 +1,43 @@
-# Midway-FaaS
+# Midway Faas
 
-本仓库用于在开源 midway-faas 前提交准备代码。
+## Getting started
 
-命令
+Serverless CLI v1.26.1+. You can get it by running `npm i -g serverless`
 
-```bash
-tnpm install
-tnpm run bootstrap
-tnpm run build
-tnpm run test
+## Example
+
+You can install the following example:
+
+### For aliyun
+
+```shell
+$ serverless install --url https://github.com/midwayjs/midway-faas/tree/development/packages/serverless-function-examples/aliyun
 ```
 
-进入子包开发
+Install npm dependencies.
+```shell
+$ npm i
+```
 
-```bash
-cd package/xxxx
-tnpm run test
+## Usage
+
+### Local invoke
+```
+serverless invoke -f index
+```
+
+### Local debug
+```
+serverless invoke -f index --debug
+```
+
+### package to zip file
+```
+serverless package
+```
+
+
+### deploy to online
+```
+serverless deploy
 ```

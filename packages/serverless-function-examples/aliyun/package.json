@@ -10,11 +10,12 @@
     "midway"
   ],
   "dependencies": {
-    "@midwayjs/faas": "^1.0.0",
-    "@midwayjs/runtime-engine": "^1.0.0",
-    "@midwayjs/serverless-fc-starter": "^1.0.0"
+    "@midwayjs/faas": "*",
+    "@midwayjs/runtime-engine": "*",
+    "@midwayjs/serverless-fc-starter": "*"
   },
   "devDependencies": {
-    "@midwayjs/serverless-midway-plugin": "^1.0.0"
+    "@types/mocha": "^5.2.5",
+    "serverless-midway-plugin": "*"
   }
 }

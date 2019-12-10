@@ -13,7 +13,7 @@ functions:
           method: get
 
 plugins:
-  - '@midwayjs/serverless-plugin-faas'
+  - serverless-plugin-faas
 
 package:
   include:
