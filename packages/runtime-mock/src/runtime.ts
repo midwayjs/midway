@@ -102,7 +102,7 @@ export class MockRuntime {
       }
 
       return new Promise((resolve, reject) => {
-        if (this.trigger.useCallback) {
+        if (this.trigger && this.trigger.useCallback) {
           // 这个地方 callback 得调用 resolve
           const cb = this.trigger.createCallback((err, result) => {
             if (err) {
