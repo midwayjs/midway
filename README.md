@@ -41,7 +41,6 @@ $ cd scf
 
 ### 第四步：安装npm依赖
 
-Install npm dependencies.
 
 ```shell script
 $ npm i
@@ -52,41 +51,41 @@ $ npm i
 ### invoke 本地调用 & 本地调试
 
 ```shell script
-serverless invoke -f index
+$ serverless invoke -f index
 
 // debug 需要 node 10.15 +
-serverless invoke -f index --debug
+$ serverless invoke -f index --debug
 ```
 
-| option | explain |
+| 参数 | 释义 |
 | -- | -- |
-| -f / --function funcName| Specifies the function name to call |
-| --debug=debugPort?| Enable step debugging and specifies debug port，default port is 9229 |
+| -f / --function funcName| 指定要调用的函数名 |
+| --debug=debugPort?| 开启debug，并且指定调试端口，默认端口为 9229 |
 
 
 ### package 打包构建
 
 ```shell script
-serverless package
+$ serverless package
 ```
 
 | 参数 | 释义 |
 | -- | -- |
-| --package | Specify the package file(zip) address, e.g. `--package=dist` |
-| --npm=npmName| Specify the npm mirror, e.g. `--npm=cnpm` |
-| --skipZip | Package result does not generate zip package |
+| --package | 指定打包结果（zip）文件名 `--package=dist` |
+| --npm=npmName| 指定npm镜像，例如 `--npm=cnpm` |
+| --skipZip | 打包的结果跳过压缩生成 zip |
 
 ### deploy 部署到线上
 
 ```shell script
-serverless deploy
+$ serverless deploy
 ```
 
 支持所有 `package` 命令的参数
 
 | 参数 | 释义 |
 | -- | -- |
-| --resetConfig | use new account |
+| --resetConfig | 使用新的账户 |
 
 #### for aliyun
 
