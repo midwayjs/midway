@@ -108,7 +108,7 @@ export class ProviderBase {
   async callCommand(command: string, options?: any) {
     if (options) {
       Object.keys(options).forEach(option => {
-        this.serverless.processedInput.options['option'] = options[option];
+        this.serverless.processedInput.options[option] = options[option];
       });
     }
     return this.serverless.pluginManager.invoke.call(this.serverless.pluginManager, [command], true);
