@@ -4,7 +4,9 @@ import { existsSync } from 'fs';
 import { IFaaSStarter } from './interface';
 import { FaaSStarterClass, Debug_Tag } from './utils';
 import { createRuntime } from '@midwayjs/runtime-mock';
-import { asyncWrapper, start } from '@midwayjs/serverless-fc-starter';
+import * as FcStarter from '@midwayjs/serverless-fc-starter';
+import * as ScfStarter from '@midwayjs/serverless-scf-starter';
+
 import { ApiGatewayTrigger, HTTPTrigger } from '@midwayjs/serverless-fc-trigger';
 import { faasDebug } from './debug';
 
@@ -122,17 +124,19 @@ export class Local {
     let runtime = null;
     let trigger = [];
 
+    const innerFun = async (...args) => {
+      if (isDebug) {
+        const handler = await wrapFun(...args);
+        return faasDebug(handler);
+      }
+      return wrapFun(...args);
+    };
+
     if (this.runtime === 'aliyun') {
       runtime = createRuntime({
-        handler: asyncWrapper(async (...args) => {
-          const innerRuntime = await start({});
-          return innerRuntime.asyncEvent(async (...args) => {
-            if (isDebug) {
-              const handler = await wrapFun(...args);
-              return faasDebug(handler);
-            }
-            return wrapFun(...args);
-          })(...args);
+        handler: FcStarter.asyncWrapper(async (...args) => {
+          const innerRuntime = await FcStarter.start({});
+          return innerRuntime.asyncEvent(innerFun)(...args);
         }),
         layers: this.extensions || []
       });
@@ -141,10 +145,19 @@ export class Local {
         const httpTrigger: any = new HTTPTrigger(args && args[0] || {});
         trigger = [httpTrigger];
       } else if (this.trigger === 'apiGateway') {
-        trigger = [new ApiGatewayTrigger(...args)];
+        trigger = [new ApiGatewayTrigger()];
       }
+    } else if (this.runtime === 'tencent') {
+      runtime = createRuntime({
+        handler: ScfStarter.asyncWrapper(async (...args) => {
+          const innerRuntime = await ScfStarter.start({});
+          return innerRuntime.asyncEvent(innerFun)(...args);
+        }),
+        layers: this.extensions || []
+      });
     } else {
-      throw new Error(`runtime ${this.runtime} is not supported`);
+      console.warn(`runtime ${this.runtime} is not supported, use default invoke`);
+      return innerFun(...args);
     }
 
     await runtime.start();

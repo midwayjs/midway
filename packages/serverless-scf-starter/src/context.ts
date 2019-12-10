@@ -1,4 +1,4 @@
-import { SCFHTTPEvent } from './interface';
+import { SCFContext, SCFHTTPEvent } from './interface';
 
 const ORIGIN_EVENT = Symbol.for('ctx#origin_event');
 const EVENT = Symbol.for('ctx#event');
@@ -8,10 +8,10 @@ const BODY_PARSED = Symbol.for('ctx#body_parsed');
 const BODY = Symbol.for('ctx#body');
 
 export class Request {
-  _originEvent: SCFHTTPEvent;
+  originEvent: SCFHTTPEvent;
 
-  constructor(event) {
-    this._originEvent = event;
+  constructor(event: SCFHTTPEvent) {
+    this.originEvent = event;
     this[ORIGIN_EVENT] = event;
     this[PARSED_EVENT] = null;
   }
@@ -108,15 +108,16 @@ export class Context {
   response: Response;
   statusCode;
   requestId;
-  credentials;
+  credentials = undefined;
   function;
+  originContext: SCFContext;
 
-  constructor(event, context) {
+  constructor(event: SCFHTTPEvent, context: SCFContext) {
     this.req = this.request = new Request(event);
     this.res = this.response = new Response();
     this.requestId = context.request_id;
-    this.credentials = context.credentials;
     this.function = context.function_name;
+    this.originContext = context;
   }
 
   // req delegate

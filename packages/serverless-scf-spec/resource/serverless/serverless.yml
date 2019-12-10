@@ -81,7 +81,7 @@ functions:
           name: hello_world_apigw
           parameters:
             stageName: release
-            ? serviceId
+            serviceId:
             httpMethod: ANY
             integratedResponse: true
             path: /abc/cde

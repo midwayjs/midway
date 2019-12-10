@@ -64,13 +64,14 @@ export class SCFServerlessSpecBuilder extends SpecBuilder {
         if (event['http']) {
           const evt = event['http'] as HTTPEvent;
           const apiGateway: ApiGateway = {
-            name: `${funName}_${providerData.stage}_apigw`,
+            name: `${funName}_${providerData.stage || ''}_apigw`,
             parameters: {
               httpMethod: convertMethods(evt.method),
               path: evt.path,
               serviceTimeout: funSpec.timeout || timeout,
               stageName: providerData.stage,
-              serviceId: (evt as any).serviceId,
+              serviceId:
+                (providerData as any).serviceId || (evt as any).serviceId,
               integratedResponse: true,
             },
           };
