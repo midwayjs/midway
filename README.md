@@ -2,13 +2,15 @@
 
 ## Getting started
 
+> 国内用户建议使用 `cnpm` 加速npm，`npm install -g cnpm --registry=https://registry.npm.taobao.org`
+
 Serverless CLI v1.26.1+. You can get it by running:
 
 ```shell script
 npm i -g serverless
 ```
 
-## Example
+## 快速开始
 
 You can install the following example:
 
@@ -41,8 +43,6 @@ $ cd scf
 ```
 
 ### 第三步：安装npm依赖
-
-> 国内用户建议使用 `cnpm` 加速npm，`npm install -g cnpm --registry=https://registry.npm.taobao.org`
 
 Install npm dependencies.
 
