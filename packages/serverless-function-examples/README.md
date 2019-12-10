@@ -24,11 +24,3 @@ $ serverless install --url https://github.com/midwayjs/midway-faas/tree/developm
 $ serverless install --url https://github.com/midwayjs/midway-faas/tree/development/packages/serverless-function-examples/scf
 ```
 
-#### Install Plugin
-
-Install `@midwayjs/serverless-midway-plugin` to your service.
-
-```shell script
-$ serverless plugin install --name serverless-midway-plugin
-```
-
