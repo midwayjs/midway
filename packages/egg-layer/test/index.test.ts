@@ -1,20 +1,29 @@
-import path = require('path');
-import * as assert from 'assert';
 import { createRuntime } from '@midwayjs/runtime-mock';
 import { HTTPTrigger } from '@midwayjs/serverless-fc-trigger';
+import { join } from 'path';
+import * as request from 'supertest';
 
 describe('/test/index.test.ts', () => {
-  it.only('basic test', async () => {
-    const runtime = createRuntime({
-      functionDir: path.join(__dirname, './fixtures/eaas'),
+  describe('should test http trigger use app directly', () => {
+    let app;
+    let runtime;
+    before(async () => {
+      runtime = createRuntime({
+        functionDir: join(__dirname, './fixtures/eaas'),
+      });
+      await runtime.start();
+      app = await runtime.delegate(new HTTPTrigger());
     });
-    await runtime.start();
-    const result = await runtime.invoke(new HTTPTrigger({
-      path: '/',
-      method: 'GET'
-    }));
-    assert(result === 'hi, egg');
-    await runtime.close();
+
+    before(() => runtime.close());
+
+    it('should test with supertest', (done) => {
+      request(app)
+        .get('/user')
+        .expect('Content-Type', 'text/html; charset=utf-8')
+        .expect(/hello Alan/)
+        .expect(200, done);
+    });
   });
   // it('basic test while return Buffer', async () => {
   //   const runtime = createRuntime({

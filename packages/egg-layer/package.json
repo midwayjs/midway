@@ -19,7 +19,8 @@
     "@midwayjs/serverless-fc-starter": "^0.0.1",
     "@midwayjs/serverless-fc-trigger": "^0.0.1",
     "egg": "^2.25.0",
-    "midway-bin": "1"
+    "midway-bin": "1",
+    "supertest": "^4.0.2"
   },
   "repository": {
     "type": "git",
