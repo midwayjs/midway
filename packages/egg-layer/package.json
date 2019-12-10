@@ -13,12 +13,15 @@
     "clean": "midway-bin clean",
     "autod": "midway-bin autod"
   },
+  "dependencies": {
+    "egg": "^2.25.0",
+    "koa-compose": "^4.1.0"
+  },
   "devDependencies": {
     "@midwayjs/runtime-engine": "^0.0.3",
     "@midwayjs/runtime-mock": "^0.0.3",
     "@midwayjs/serverless-fc-starter": "^0.0.3",
     "@midwayjs/serverless-fc-trigger": "^0.0.3",
-    "egg": "^2.25.0",
     "midway-bin": "1",
     "supertest": "^4.0.2"
   },

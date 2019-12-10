@@ -1,6 +1,6 @@
 import { RuntimeEngine } from '@midwayjs/runtime-engine';
 import { join } from 'path';
-import compose = require('koa-compose');
+import * as compose from 'koa-compose';
 const { start } = require('egg');
 
 export = (engine: RuntimeEngine) => {
