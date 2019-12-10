@@ -1,10 +1,10 @@
 {
   "name": "@midwayjs/serverless-fc-spec",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/spec-builder": "^0.0.4"
+    "@midwayjs/spec-builder": "^0.0.5"
   },
   "devDependencies": {
     "midway-bin": "1"

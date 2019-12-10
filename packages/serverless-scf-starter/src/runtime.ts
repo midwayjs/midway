@@ -12,7 +12,7 @@ export class SCFRuntime extends ServerlessLightRuntime {
       throw new TypeError('Must be an AsyncFunction');
     }
 
-    return (event: object, context?: SCFContext) => {
+    return (event: object = {}, context = {} as SCFContext) => {
       if (isHttpEvent(event)) {
         return this.wrapperWebInvoker(handler, event, context);
       }
@@ -81,5 +81,5 @@ export class SCFRuntime extends ServerlessLightRuntime {
 }
 
 function isHttpEvent(event): event is SCFHTTPEvent {
-  return event.httpMethod && event.headers && event.requestContext;
+  return event?.httpMethod && event?.headers && event?.requestContext;
 }
