@@ -1,7 +1,7 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
-    "target": "ES2017",
+    "target": "ES2018",
     "module": "commonjs",
     "moduleResolution": "node",
     "experimentalDecorators": true,
@@ -12,8 +12,7 @@
     "stripInternal": true,
     "pretty": true,
     "declaration": true,
-    "outDir": "dist",
-    "lib": ["es2017", "dom"]
+    "outDir": "dist"
   },
   "exclude": [
     "dist",
