@@ -1,4 +1,4 @@
-const { FaaSStarter } = require('@ali/midway-faas');
+const { FaaSStarter } = require('@midwayjs/faas');
 
 let starter;
 

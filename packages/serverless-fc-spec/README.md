@@ -14,7 +14,7 @@ fc 发布支持多函数，所以直接将 spec 转换为固定的 template.yml�
 根据传入的标准 spec 文件，生成 fc 类型的 spec 文件。
 
 ```ts
-import { generateFunctionsSpecFile } from '@ali/fc-spec-generator';
+import { generateFunctionsSpecFile } from '@midwayjs/fc-spec-generator';
 import * as path from 'path';
 
 generateFunctionsSpecFile(path.join(__dirname, './fixtures/fun.yml'));
@@ -25,7 +25,7 @@ generateFunctionsSpecFile(path.join(__dirname, './fixtures/fun.yml'));
 根据传入的标准 spec 文件，生成 fc 类型的 spec JSON。
 
 ```ts
-import { generateFunctionsSpec } from '@ali/fc-spec-generator';
+import { generateFunctionsSpec } from '@midwayjs/fc-spec-generator';
 import * as path from 'path';
 
 const result = generateFunctionsSpec(path.join(__dirname, './fixtures/fun.yml'));

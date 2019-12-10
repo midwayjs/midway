@@ -5,7 +5,7 @@
   "private": true,
   "egg": {
     "declarations": true ,
-    "framework": "@ali/egg"
+    "framework": "egg"
   },
   "dependencies": {
     "egg": "^2.15.1",

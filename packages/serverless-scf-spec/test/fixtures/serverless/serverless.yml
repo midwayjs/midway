@@ -67,4 +67,4 @@ functions:
 
 layers:
   test:
-    path: npm:@ali/market-layer@latest
+    path: npm:@midwayjs/egg-layer@latest
