@@ -1,0 +1,21 @@
+{
+  "name": "midway-faas-scf",
+  "version": "1.0.0",
+  "description": "Midway Faas Template for the Serverless Framework and SCF",
+  "main": "index.js",
+  "license": "MIT",
+  "keywords": [
+    "serverless",
+    "scf",
+    "midway"
+  ],
+  "dependencies": {
+    "@midwayjs/faas": "*",
+    "@midwayjs/runtime-engine": "*",
+    "@midwayjs/serverless-fc-starter": "*"
+  },
+  "devDependencies": {
+    "@types/mocha": "^5.2.5",
+    "serverless-midway-plugin": "*"
+  }
+}
