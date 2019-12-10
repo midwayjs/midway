@@ -8,6 +8,9 @@
       "noCi": true,
       "npmClientArgs": [
         "--no-package-lock"
+      ],
+      "nohoist": [
+        "egg"
       ]
     },
     "publish": {
