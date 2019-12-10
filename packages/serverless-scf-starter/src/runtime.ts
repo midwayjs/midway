@@ -64,7 +64,8 @@ export class SCFRuntime extends ServerlessLightRuntime {
   }
 
   async wrapperEventInvoker(handler, event: any, context: SCFContext) {
-    const args = [context, event];
+    const ctx = new Context({}, context);
+    const args = [ctx, event];
     // 其他事件场景
     return this.invokeHandlerWrapper(context, async () => {
       if (!handler) {

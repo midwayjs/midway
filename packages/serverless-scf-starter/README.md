@@ -1,11 +1,11 @@
-# serverless SCF starter
+# Serverless SCF starter
 
-本模块用于包裹无法定制运行时的 FaaS 平台，比如阿里云 FC。
+本模块用于包裹无法定制运行时的 FaaS 平台，比如腾讯云 SCF。
 
 ## 腾讯云 SCF
 
 ```ts
-import { asyncWrapper, start } from '@midwayjs/serverless-fc-starter';
+import { asyncWrapper, start } from '@midwayjs/serverless-scf-starter';
 
 let runtime;
 export.init = asyncWrapper(async () => {
