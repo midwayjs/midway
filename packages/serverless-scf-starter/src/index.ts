@@ -3,6 +3,7 @@ import { SCFRuntime } from './runtime';
 
 export * from './runtime';
 export * from './interface';
+export { asyncWrapper } from '@midwayjs/runtime-engine';
 
 let bootstrap;
 

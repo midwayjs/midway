@@ -1,7 +1,7 @@
 import { BaseRuntimeEngine, LightRuntime } from '@midwayjs/runtime-engine';
 import { AWSRuntime } from './runtime';
 
-export * from './asyncWrapper';
+export { asyncWrapper } from '@midwayjs/runtime-engine';
 
 export const createRuntime = async () => {
   const runtimeEngine = new BaseRuntimeEngine();
