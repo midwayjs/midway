@@ -29,7 +29,7 @@ export class Request {
   }
 
   get ip() {
-    return this[EVENT].requestContext.sourceIp;
+    return this[EVENT].requestContext?.sourceIp;
   }
 
   get url() {
@@ -112,7 +112,7 @@ export class Context {
   function;
   originContext: SCFContext;
 
-  constructor(event: SCFHTTPEvent, context: SCFContext) {
+  constructor(event, context: SCFContext) {
     this.req = this.request = new Request(event);
     this.res = this.response = new Response();
     this.requestId = context.request_id;
@@ -163,7 +163,9 @@ export class Context {
 
   // response delegate
   set type(value) {
-    this.res.headers['content-type'] = value;
+    if (typeof this.res.headers === 'object') {
+      this.res.headers['content-type'] = value;
+    }
   }
 
   get type() {
@@ -187,6 +189,8 @@ export class Context {
   }
 
   set(key, value) {
-    this.res.headers[key] = value;
+    if (typeof this.res.headers === 'object') {
+      this.res.headers[key] = value;
+    }
   }
 }
