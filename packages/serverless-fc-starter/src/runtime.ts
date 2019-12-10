@@ -54,6 +54,10 @@ export class FCRuntime extends ServerlessLightRuntime {
       }
       return handler.apply(handler, args);
     }).then(result => {
+      if (res.headersSent) {
+        return;
+      }
+
       if (result) {
         ctx.body = result;
       }

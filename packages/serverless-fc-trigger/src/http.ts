@@ -82,8 +82,10 @@ export class HTTPTrigger extends FCBaseTrigger {
 
   createCallback(handler) {
     this.handler = handler;
-    return () => {
-      throw new Error('should not came here');
+    return err => {
+      if (err) {
+        throw err;
+      }
     };
   }
 
