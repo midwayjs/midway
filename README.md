@@ -12,8 +12,6 @@ npm i -g serverless
 
 ## 快速开始
 
-You can install the following example:
-
 ### 第一步：创建项目
 
 #### For 阿里云 fc 
