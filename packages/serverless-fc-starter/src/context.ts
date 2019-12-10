@@ -8,10 +8,10 @@ const BODY_PARSED = Symbol.for('ctx#body_parsed');
 const BODY = Symbol.for('ctx#body');
 
 export class Request {
-  _originEvent;
+  originEvent;
 
   constructor(event) {
-    this._originEvent = event;
+    this.originEvent = event;
     this[ORIGIN_EVENT] = event;
     this[PARSED_EVENT] = null;
   }

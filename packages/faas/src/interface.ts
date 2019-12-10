@@ -65,7 +65,7 @@ export interface FaaSContext extends FaaSHTTPContext {
   logger: FaaSLogger;
   env: string;
   requestContext: RequestContainer;
-  _originContext: any;
+  originContext: any;
 }
 
 export interface MidwayFaaSInfo {

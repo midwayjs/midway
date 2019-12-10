@@ -8,10 +8,10 @@ const BODY_PARSED = Symbol.for('ctx#body_parsed');
 const BODY = Symbol.for('ctx#body');
 
 export class Request {
-  _originEvent: SCFHTTPEvent;
+  originEvent: SCFHTTPEvent;
 
   constructor(event: SCFHTTPEvent) {
-    this._originEvent = event;
+    this.originEvent = event;
     this[ORIGIN_EVENT] = event;
     this[PARSED_EVENT] = null;
   }
@@ -110,14 +110,14 @@ export class Context {
   requestId;
   credentials = undefined;
   function;
-  _originContext: SCFContext;
+  originContext: SCFContext;
 
   constructor(event: SCFHTTPEvent, context: SCFContext) {
     this.req = this.request = new Request(event);
     this.res = this.response = new Response();
     this.requestId = context.request_id;
     this.function = context.function_name;
-    this._originContext = context;
+    this.originContext = context;
   }
 
   // req delegate
