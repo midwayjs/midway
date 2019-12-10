@@ -62,9 +62,7 @@ export class Package extends CommandBase {
       },
       'package:midway-copyFile': async () => {
         const timeTick = this.tick();
-        const paths = await this.resolveFilePathsAll();
-        paths.push('src');
-        paths.push('tsconfig.json');
+        const paths = ['src', 'tsconfig.json', 'package.json'];
         for (const path of paths) {
           await copy(join(this.servicePath, path), join(this.midwayBuildPath, path));
         }

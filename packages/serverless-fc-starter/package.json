@@ -4,6 +4,7 @@
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
+    "type-is": "^1.6.18",
     "@midwayjs/runtime-engine": "^0.0.1"
   },
   "devDependencies": {

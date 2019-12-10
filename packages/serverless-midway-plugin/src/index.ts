@@ -1,1 +1,2 @@
-export { MidwayServerless } from './core/main';
+import { MidwayServerless } from './core/main';
+export = MidwayServerless;
