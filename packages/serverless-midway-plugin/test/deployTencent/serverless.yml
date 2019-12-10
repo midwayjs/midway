@@ -13,14 +13,6 @@ functions:
           parameters:
             serviceId: ''
           method: get
-  index2:
-    initializer: index.initializer
-    handler: index.handler2
-    events:
-      - apigw:
-          parameters:
-            serviceId: ''
-          method: get
 
 plugins:
   - test

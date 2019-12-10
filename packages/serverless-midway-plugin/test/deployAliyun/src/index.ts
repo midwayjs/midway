@@ -8,6 +8,6 @@ export class HelloService {
   ctx: FaaSContext;  // context
 
   async handler(event, obj = {}) {
-      return 'hello world';
+    return 'hello world';
   }
 }

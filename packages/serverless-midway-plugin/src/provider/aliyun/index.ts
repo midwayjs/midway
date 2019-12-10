@@ -36,6 +36,7 @@ class ProviderFc extends ProviderBase {
 
         // 执行 package 打包
         await this.callCommand('package', {
+          ...this.options,
           skipZip: true // 跳过压缩成zip
         });
         this.serverless.cli.log('Start deploy by @alicloud/fun');

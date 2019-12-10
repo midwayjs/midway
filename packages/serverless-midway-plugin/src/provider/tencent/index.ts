@@ -37,9 +37,12 @@ class ProviderTencent extends ProviderBase {
         hooks['package:compileFunctions'].push({
           pluginName: 'ProviderTencent',
           hook: async () => {
-            this.serverless.processedInput.options.package = `.serverless/${artifact}`;
             // 进行构建
-            await this.serverless.pluginManager.invoke.call(this.serverless.pluginManager, ['package'], true);
+            // 执行 package 打包
+            await this.callCommand('package', {
+              ...this.options,
+              package: `.serverless/${artifact}`
+            });
           },
         });
         // 修改打包文件

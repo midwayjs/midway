@@ -123,7 +123,7 @@ export class Package extends CommandBase {
           }
         }
         writeFileSync(pkgJsonPath, JSON.stringify(pkgJson, null, '  '));
-        spinner.text = 'npm install';
+        spinner.text = `${this.options.npm || 'npm'} install`;
         await this.npmInstall();
         for (const localDepName in localDep) {
           spinner.text = localDepName;
