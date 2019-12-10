@@ -2,29 +2,45 @@
 
 ## Getting started
 
+> 国内用户建议使用 `cnpm` 加速npm，`npm install -g cnpm --registry=https://registry.npm.taobao.org`
+
 Serverless CLI v1.26.1+. You can get it by running:
 
 ```shell script
 npm i -g serverless
 ```
 
-## Example
+## 快速开始
 
-You can install the following example:
+### 第一步：创建项目
 
-### For Aliyun Fc
+#### For 阿里云 fc 
 
 ```shell script
 $ serverless install --url https://github.com/midwayjs/midway-faas/tree/development/packages/serverless-function-examples/aliyun
 ```
 
-### For Tencent SCF
+#### For 腾讯云 scf
 
 ```shell script
 $ serverless install --url https://github.com/midwayjs/midway-faas/tree/development/packages/serverless-function-examples/scf
 ```
 
-### Bootstrap
+### 第二步：进入目录
+
+#### For 阿里云 fc 
+
+```shell script
+$ cd aliyun
+```
+
+#### For 腾讯云 scf
+
+```shell script
+$ cd scf
+```
+
+### 第三步：安装npm依赖
 
 Install npm dependencies.
 
@@ -32,15 +48,15 @@ Install npm dependencies.
 $ npm i
 ```
 
-## Usage
+## 如何使用
 
-### Local invoke & debug
+### 本地调用 & 本地调试
 
 ```shell script
 serverless invoke -f index
 
+// debug 需要 node 10.15 +
 serverless invoke -f index --debug
-
 ```
 
 | option | explain |
@@ -69,6 +85,10 @@ serverless deploy
 
 Support all `package` options.
 
+| option | explain |
+| -- | -- |
+| --resetConfig | use new account |
+
 #### for aliyun
 
 阿里云部署首次需要配置 `accountId`、`accountKey`、`accountSecret`
@@ -77,7 +97,7 @@ Support all `package` options.
 
 相关配置获取，可参照下方图片（可点击跳转）：
 
-<a href="https://account.console.aliyun.com/#/secure" >![](https://gw.alicdn.com/tfs/TB1QoQapV67gK0jSZPfXXahhFXa-1832-696.png)</a>
+<a href="https://account.console.aliyun.com/#/secure" target="_blank">![](https://gw.alicdn.com/tfs/TB1QoQapV67gK0jSZPfXXahhFXa-1832-696.png)</a>
 
 <a href="https://usercenter.console.aliyun.com/#/manage/ak" target="_blank">![](https://gw.alicdn.com/tfs/TB1LgQPp1L2gK0jSZFmXXc7iXXa-2406-592.png)</a>
 
