@@ -29,6 +29,6 @@ $ serverless install --url https://github.com/midwayjs/midway-faas/tree/developm
 Install `@midwayjs/serverless-midway-plugin` to your service.
 
 ```shell script
-$ serverless plugin install --name @midwayjs/serverless-midway-plugin
+$ serverless plugin install --name serverless-midway-plugin
 ```
 
