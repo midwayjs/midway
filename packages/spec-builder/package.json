@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/spec-builder",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
