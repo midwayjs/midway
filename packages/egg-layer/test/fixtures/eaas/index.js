@@ -2,7 +2,7 @@
 
 const { asyncWrapper } = require('@midwayjs/runtime-engine');
 const { start } = require('@midwayjs/serverless-fc-starter');
-const eggLayer = require('../../../dist').default;
+const eggLayer = require('../../../dist');
 
 let runtime;
 let inited;

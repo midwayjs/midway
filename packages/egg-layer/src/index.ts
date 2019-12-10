@@ -3,7 +3,7 @@ import { join } from 'path';
 import compose = require('koa-compose');
 const { start } = require('egg');
 
-export default (engine: RuntimeEngine) => {
+export = (engine: RuntimeEngine) => {
   let eggApp;
   let proc;
   let framework = '';
@@ -24,7 +24,7 @@ export default (engine: RuntimeEngine) => {
         runtime,
       });
       const fn = compose(eggApp.middleware);
-      proc = (ctx) => {
+      proc = ctx => {
         return eggApp.handleRequest(ctx, fn);
       };
     },

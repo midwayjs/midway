@@ -28,7 +28,7 @@ export class MockRuntime {
   constructor(options: MockRuntimeOptions = {}) {
     this.options = options;
     this.handler = options.handler;
-    if (this.options.bootstrap || this.options.runtime) {
+    if (this.options.bootstrap || this.options.runtime || this.options.events) {
       this.bootstrap = this.options.bootstrap ? new this.options.bootstrap() : new BaseBootstrap({
         runtime: this.options.runtime,
         layers: this.options.layers,
