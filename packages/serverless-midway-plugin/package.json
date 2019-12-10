@@ -10,9 +10,7 @@
   ],
   "license": "MIT",
   "files": [
-    "dist",
-    "src",
-    "entry.js"
+    "dist"
   ],
   "repository": {
     "type": "git",

@@ -13,8 +13,7 @@
   },
   "files": [
     "dist",
-    "src",
-    "entry.js"
+    "src"
   ],
   "devDependencies": {
     "midway-bin": "1"

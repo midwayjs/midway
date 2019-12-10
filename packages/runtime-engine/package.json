@@ -18,6 +18,9 @@
     "clean": "midway-bin clean",
     "autod": "midway-bin autod"
   },
+  "files": [
+    "dist"
+  ],
   "repository": {
     "type": "git",
     "url": "git@github.com:midwayjs/midway-faas.git"

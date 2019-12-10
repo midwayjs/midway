@@ -22,6 +22,9 @@
     "midway-bin": "1",
     "supertest": "^4.0.2"
   },
+  "files": [
+    "dist"
+  ],
   "repository": {
     "type": "git",
     "url": "git@github.com:midwayjs/midway-faas.git"
