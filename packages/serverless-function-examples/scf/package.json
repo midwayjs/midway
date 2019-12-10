@@ -12,7 +12,7 @@
   "dependencies": {
     "@midwayjs/faas": "*",
     "@midwayjs/runtime-engine": "*",
-    "@midwayjs/serverless-fc-starter": "*"
+    "@midwayjs/serverless-scf-starter": "*"
   },
   "devDependencies": {
     "@types/mocha": "^5.2.5",
