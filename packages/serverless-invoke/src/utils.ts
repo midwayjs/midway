@@ -145,7 +145,7 @@ export class FaaSStarterClass extends exportMidwayFaaS.FaaSStarter implements IF
       if (args.length === 0) {
         throw new Error('first parameter must be function context');
       }
-      const context: any = this.getContext(args.shift());
+      const context: any = this.getContext(args.shift() || {});
       if (funModule) {
         const funModuleIns = await context.requestContext.getAsync(funModule);
         return this.invokeHandler(funModuleIns, this.getFunctionHandler(context, args, funModuleIns), args, debug);
