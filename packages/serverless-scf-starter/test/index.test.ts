@@ -1,5 +1,6 @@
 import * as assert from 'assert';
-import { asyncWrapper, start } from '../src';
+import { start } from '../src';
+import { asyncWrapper } from '@midwayjs/runtime-engine';
 import { SCFHTTPEvent } from '../src/interface';
 
 class Tester {

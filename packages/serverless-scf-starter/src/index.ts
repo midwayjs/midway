@@ -1,7 +1,6 @@
 import { BaseBootstrap } from '@midwayjs/runtime-engine';
 import { SCFRuntime } from './runtime';
 
-export * from './asyncWrapper';
 export * from './runtime';
 export * from './interface';
 
