@@ -29,8 +29,8 @@ export class Package extends CommandBase {
     const lifecycleEvents = [
       'midway-cleanup',
       'midway-spec',
-      'midway-copyFile',
       'midway-wrapper',
+      'midway-copyFile',
       'midway-layerInstall',
       'midway-depInstall',
       'midway-compileFunctions',

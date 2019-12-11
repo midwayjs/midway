@@ -33,12 +33,11 @@
 
 
 ### 打包函数的流程
-
   'midway-cleanup',
   'midway-compileFunctions',
   'midway-spec',
-  'midway-copyFile',
   'midway-wrapper',
+  'midway-copyFile',
   'midway-layerInstall',
   'midway-depInstall',
   'midway-package',
@@ -51,12 +50,13 @@
   支持 `--skipClean=true` 参数跳过清理目录
 1. midway-spec
   生成对应平台的spec描述文件
+1. midway-wrapper
+  生成对应平台的handler包裹文件
 1. midway-copyFile
   拷贝文件到待打包目录
   主要是在 `serverless.yml` 的 `package.include` 中指定的文件及文件夹列表
   默认会将 `package.json` 文件进行拷贝
-1. midway-wrapper
-  生成对应平台的handler包裹文件
+
 1. midway-layerInstall
   安装layer
 1. midway-depInstall
