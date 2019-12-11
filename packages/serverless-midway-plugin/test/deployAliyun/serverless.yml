@@ -25,9 +25,5 @@ layers:
 package:
   include:
   exclude:
-    - src/**
-    - tsconfig.json
-    - test/**
-    - ./*.zip
   excludeDevDependencies: false
   artifact: path/to/my-artifact.zip # Own package that should be used. You must provide this file.

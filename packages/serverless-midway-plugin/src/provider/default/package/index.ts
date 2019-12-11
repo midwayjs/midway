@@ -9,6 +9,7 @@ import * as co from 'co';
 import { join, resolve } from 'path';
 import * as archiver from 'archiver';
 import * as ora from 'ora';
+import * as globby from 'globby';
 // const { buildByNcc } = require('./ncc');
 
 export class Package extends CommandBase {
@@ -62,15 +63,23 @@ export class Package extends CommandBase {
       },
       'package:midway-copyFile': async () => {
         const timeTick = this.tick();
-        const paths = ['src', 'tsconfig.json', 'package.json'];
-        for (const path of paths) {
-          await copy(join(this.servicePath, path), join(this.midwayBuildPath, path));
-        }
+        const spinner = ora(' - Package files copying').start();
+        const packageObj: any = this.serverless.service.package || {};
+        const include = await globby(['src', 'tsconfig.json', 'package.json'].concat(packageObj.include || []));
+        const exclude = await globby(packageObj.exclude || []);
+        const paths = include.filter((filePath: string) => {
+          return exclude.indexOf(filePath) === -1;
+        });
+        await Promise.all(paths.map((path: string) => {
+          return copy(join(this.servicePath, path), join(this.midwayBuildPath, path));
+        }));
+        spinner.stop();
         this.serverless.cli.log(` - File copy complete (${timeTick()}ms)`);
       },
       'package:midway-layerInstall': async () => {
         // serverless.yml - layers
         const timeTick = this.tick();
+        const spinner = ora(' - Layers installing').start();
         const funcLayers = [];
         if (this.serverless.service.functions) {
           for (const func in this.serverless.service.functions) {
@@ -85,6 +94,7 @@ export class Package extends CommandBase {
         if (npmList && npmList.length) {
           await this.npmInstall(npmList);
         }
+        spinner.stop();
         this.serverless.cli.log(` - layers install complete (${timeTick()}ms)`);
       },
       'package:midway-depInstall': async () => {
