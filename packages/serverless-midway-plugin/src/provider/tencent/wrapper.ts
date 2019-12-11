@@ -1,12 +1,16 @@
 export const wrapperContent = `const { FaaSStarter } = require('@midwayjs/faas');
 const { asyncWrapper, start } = require('@midwayjs/serverless-scf-starter');
+<% layerDeps.forEach(function(layer){ %>const <%=layer.name%> = require('<%=layer.path%>');
+<% }); %>
 
 let starter;
 let runtime;
 let inited = false;
 
 const initializeMethod = async (config = {}) => {
-  runtime = await start();
+  runtime = await start({
+    layers: [<%= layers.join(", ") %>]
+  });
   starter = new FaaSStarter({ config, baseDir: __dirname });
   await starter.start();
   inited = true;

@@ -1,6 +1,6 @@
 export const wrapperContent = `const { FaaSStarter } = require('@midwayjs/faas');
 const { asyncWrapper, start } = require('@midwayjs/serverless-fc-starter');
-<% layerDeps.forEach(function(layer){ %>const <%=layer.name%> = require('<%=layer.path%>').default;
+<% layerDeps.forEach(function(layer){ %>const <%=layer.name%> = require('<%=layer.path%>');
 <% }); %>
 
 let starter;
