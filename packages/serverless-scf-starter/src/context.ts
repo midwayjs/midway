@@ -1,6 +1,5 @@
 import { SCFContext, SCFHTTPEvent } from './interface';
 
-const ORIGIN_EVENT = Symbol.for('ctx#origin_event');
 const EVENT = Symbol.for('ctx#event');
 const EVENT_PARSED = Symbol.for('ctx#event_parsed');
 const PARSED_EVENT = Symbol.for('ctx#parsed_body');
@@ -12,17 +11,17 @@ export class Request {
 
   constructor(event: SCFHTTPEvent) {
     this.originEvent = event;
-    this[ORIGIN_EVENT] = event;
     this[PARSED_EVENT] = null;
   }
 
   get [EVENT]() {
     if (!this[EVENT_PARSED]) {
-      this[EVENT_PARSED] =
-        typeof this[ORIGIN_EVENT] === 'object'
-          ? this[ORIGIN_EVENT]
-          : JSON.parse(this[ORIGIN_EVENT] || '{}');
-      this[ORIGIN_EVENT] = null;
+      const parsedEvent =
+        typeof this.originEvent === 'object'
+          ? this.originEvent
+          : JSON.parse(this.originEvent || '{}');
+
+      this[EVENT_PARSED] = parsedEvent;
     }
 
     return this[EVENT_PARSED];
@@ -45,6 +44,9 @@ export class Request {
   }
 
   get headers() {
+    if (typeof this[EVENT].headers !== 'object') {
+      this[EVENT].headers = {};
+    }
     return this[EVENT].headers;
   }
 
@@ -90,15 +92,9 @@ export class Request {
 }
 
 export class Response {
-  statusCode;
-  headers;
-  body;
-
-  constructor() {
-    this.statusCode = 200;
-    this.headers = {};
-    this.body = null;
-  }
+  statusCode = 200;
+  headers = {};
+  body = null;
 }
 
 export class Context {
@@ -163,9 +159,7 @@ export class Context {
 
   // response delegate
   set type(value) {
-    if (typeof this.res.headers === 'object') {
-      this.res.headers['content-type'] = value;
-    }
+    this.res.headers['content-type'] = value;
   }
 
   get type() {
@@ -189,8 +183,6 @@ export class Context {
   }
 
   set(key, value) {
-    if (typeof this.res.headers === 'object') {
-      this.res.headers[key] = value;
-    }
+    this.res.headers[key] = value;
   }
 }
