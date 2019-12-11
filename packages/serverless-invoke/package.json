@@ -19,7 +19,8 @@
     "midway-bin": "1"
   },
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
   "scripts": {
     "build": "npm run lint && midway-bin build -c",

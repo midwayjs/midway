@@ -109,7 +109,7 @@ function debugWs(addr) {
       send('Debugger.setBreakpointByUrl', {
         lineNumber: 3,
         columnNumber: 0,
-        urlRegex: 'serverless\-invoke/dist/debug\.js'
+        urlRegex: 'invoke/dist/debug\.js'
       });
       resolve(send);
     });
