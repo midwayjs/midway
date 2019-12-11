@@ -13,34 +13,17 @@ npm i -g serverless
 
 ### 第二步：创建项目
 
-#### For 阿里云 fc 
-
 ```shell script
-$ serverless install --url https://github.com/midwayjs/midway-faas/tree/development/packages/serverless-function-examples/aliyun
-```
-
-#### For 腾讯云 scf
-
-```shell script
-$ serverless install --url https://github.com/midwayjs/midway-faas/tree/development/packages/serverless-function-examples/scf
+$ serverless install --url https://github.com/midwayjs/midway-faas/tree/development/packages/serverless-function-examples/faas
 ```
 
 ### 第三步：进入目录
 
-#### For 阿里云 fc 
-
 ```shell script
-$ cd aliyun
-```
-
-#### For 腾讯云 scf
-
-```shell script
-$ cd scf
+$ cd faas
 ```
 
 ### 第四步：安装npm依赖
-
 
 ```shell script
 $ npm i

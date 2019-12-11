@@ -1,0 +1,13 @@
+service:
+  name: serverless-midway-test
+provider:
+  name: aliyun
+functions:
+  index:
+    initializer: index.initializer
+    handler: index.handler
+    events:
+      - apigw:
+          parameters:
+            serviceId: ''
+          method: get
