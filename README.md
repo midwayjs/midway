@@ -8,19 +8,19 @@
 ### 第一步：安装 serverless
 
 ```shell script
-npm i -g serverless
+$ npm i -g serverless
 ```
 
 ### 第二步：创建项目
 
 ```shell script
-$ serverless install --url https://github.com/midwayjs/midway-faas/tree/development/packages/serverless-function-examples/faas
+$ serverless install --url https://github.com/midwayjs/midway-faas/tree/master/demo-faas
 ```
 
 ### 第三步：进入目录
 
 ```shell script
-$ cd faas
+$ cd demo-faas
 ```
 
 ### 第四步：安装npm依赖
