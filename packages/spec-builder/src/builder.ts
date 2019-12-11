@@ -56,7 +56,7 @@ export class SpecBuilder implements Builder {
       layers: this.getLayers(),
       resources: this.getResources(),
       plugins: this.getPlugins(),
-      package: this.getPlugins()
+      package: this.getPackage()
     };
   }
 }
