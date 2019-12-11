@@ -19,7 +19,7 @@
       ]
     },
     "version": {
-      "conventionalCommits": false
+      "conventionalCommits": true
     }
   },
   "npmClient": "npm",
