@@ -20,7 +20,6 @@ export = (engine: RuntimeEngine) => {
       eggApp = await start({
         baseDir: process.env.ENTRY_DIR,
         framework,
-        mode: 'single',
         runtime,
       });
       const fn = compose(eggApp.middleware);
