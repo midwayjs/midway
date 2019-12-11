@@ -4,7 +4,8 @@
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/runtime-engine": "^0.0.6"
+    "@midwayjs/runtime-engine": "^0.0.6",
+    "querystring": "^0.2.0"
   },
   "devDependencies": {
     "@midwayjs/runtime-mock": "^0.0.6",

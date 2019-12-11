@@ -1,4 +1,5 @@
 import { SCFContext, SCFHTTPEvent } from './interface';
+import qs from 'querystring';
 
 const EVENT = Symbol.for('ctx#event');
 const EVENT_PARSED = Symbol.for('ctx#event_parsed');
@@ -71,22 +72,26 @@ export class Request {
       return this[BODY];
     }
 
-    const originBody = this[EVENT].body;
+    const body = this[EVENT].body;
 
-    if (this[EVENT].isBase64Encoded) {
-      this[BODY] = Buffer.from(originBody, 'base64').toString();
-    } else if (typeof originBody === 'string') {
-      try {
-        this[BODY] = JSON.parse(originBody);
-      } catch {
-        this[BODY] = originBody;
-      }
-    } else {
-      this[BODY] = originBody;
+    switch (this.headers['content-type']) {
+      case 'application/json':
+        try {
+          this[BODY] = JSON.parse(body);
+        } catch {
+          throw new Error('invalid json received');
+        }
+      case 'application/x-www-form-urlencoded':
+        try {
+          this[BODY] = qs.parse(body);
+        } catch {
+          throw new Error('invalid urlencoded received');
+        }
+      default:
+        this[BODY] = body;
     }
 
     this[BODY_PARSED] = true;
-
     return this[BODY];
   }
 }
