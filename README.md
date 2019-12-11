@@ -14,7 +14,7 @@ $ npm i -g serverless
 ### 第二步：创建项目
 
 ```shell script
-$ serverless install --url https://github.com/midwayjs/midway-faas/tree/master/demo-faas
+$ serverless install --url https://github.com/midwayjs/midway-faas-examples/tree/master/demo-faas
 ```
 
 ### 第三步：进入目录
