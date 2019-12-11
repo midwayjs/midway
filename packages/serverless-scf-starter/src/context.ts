@@ -1,5 +1,5 @@
 import { SCFContext, SCFHTTPEvent } from './interface';
-import qs from 'querystring';
+import * as qs from 'querystring';
 
 const EVENT = Symbol.for('ctx#event');
 const EVENT_PARSED = Symbol.for('ctx#event_parsed');
@@ -81,12 +81,14 @@ export class Request {
         } catch {
           throw new Error('invalid json received');
         }
+        break;
       case 'application/x-www-form-urlencoded':
         try {
           this[BODY] = qs.parse(body);
         } catch {
           throw new Error('invalid urlencoded received');
         }
+        break;
       default:
         this[BODY] = body;
     }
