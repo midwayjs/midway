@@ -68,7 +68,7 @@ class DocCommand extends Command {
     }
 
     const docBin = require.resolve('typedoc/bin/typedoc');
-    await this.helper.forkNode(docBin, args, { cwd });
+    await this.helper.forkNode(docBin, args, { cwd, execArgv: [] });
   }
 }
 

@@ -84,7 +84,7 @@ class BuildCommand extends Command {
       args.push('-p');
       args.push(argv.project);
     }
-    await this.helper.forkNode(tscCli, args, { cwd });
+    await this.helper.forkNode(tscCli, args, { cwd, execArgv: [] });
   }
 
   async bundle(entry, outDir, { sourceMap = false, mode } = {}) {
