@@ -1,12 +1,10 @@
-service: serverless-midway-faas-scf
+service: serverless-midway-faas
 
 provider:
   name: tencent
-  runtime: Nodejs8.9
 
 functions:
   index:
-    initializer: index.initializer
     handler: index.handler
     events:
       - http:
@@ -16,11 +14,4 @@ plugins:
   - serverless-midway-plugin
 
 package:
-  include:
-  exclude:
-    - src/**
-    - tsconfig.json
-    - test/**
-    - ./*.zip
-  excludeDevDependencies: false
   artifact: midwayFaas.zip

@@ -2,17 +2,14 @@ service: serverless-midway-test
 
 provider:
   name: aliyun
-  runtime: nodejs8
 
 functions:
   index:
-    initializer: index.initializer
     handler: index.handler
     events:
       - http:
           method: get
   index2:
-    initializer: index.initializer
     handler: index.handler2
     events:
       - http:

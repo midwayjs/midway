@@ -32,7 +32,7 @@ export class FCSpecBuilder extends SpecBuilder {
         Type: 'Aliyun::Serverless::Function',
         Properties: {
           Description: funSpec.description || '',
-          Initializer: funSpec.initializer || undefined, // 根据规范，暂不开放初始化入口
+          Initializer: funSpec.initializer || 'index.initializer',
           Handler: funSpec.handler || 'index.handler',
           Runtime: funSpec.runtime || providerData.runtime || 'nodejs8',
           CodeUri: funSpec.codeUri || '.',
