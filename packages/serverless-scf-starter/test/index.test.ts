@@ -314,7 +314,7 @@ describe('/test/index.test.ts', () => {
       assert(data.body === 'hello world harry');
     });
 
-    it('GET should get params in post method', async () => {
+    it('should get params in post method', async () => {
       const runtime = await start();
       const handle = asyncWrapper(async (...args) => {
         return runtime.asyncEvent(async ctx => {
@@ -324,11 +324,29 @@ describe('/test/index.test.ts', () => {
       const event = {
         path: '/',
         httpMethod: 'POST',
-        headers: { 'content-type': 'text/plain' },
+        headers: { 'content-type': 'application/json' },
         queryString: {},
         body: JSON.stringify({
           user: 'harry',
         }),
+      };
+      const data = await test(handle).runHttp(event, {});
+      assert(data.body === 'hello world harry');
+    });
+
+    it('should get urlencoded params in get method', async () => {
+      const runtime = await start();
+      const handle = asyncWrapper(async (...args) => {
+        return runtime.asyncEvent(async ctx => {
+          return 'hello world ' + ctx.req.body.user;
+        })(...args);
+      });
+      const event = {
+        path: '/',
+        httpMethod: 'GET',
+        headers: { 'content-type': 'application/x-www-form-urlencoded' },
+        queryString: {},
+        body: 'user=harry',
       };
       const data = await test(handle).runHttp(event, {});
       assert(data.body === 'hello world harry');
@@ -350,11 +368,11 @@ describe('/test/index.test.ts', () => {
       assert.equal(res, 'hello world!harry');
     });
 
-    it('POST should ok use fc request with body', async () => {
+    it('POST should ok use scf request with body', async () => {
       const runtime = await start();
       const handle = asyncWrapper(async (...args) => {
         return runtime.asyncEvent(async ctx => {
-          return JSON.stringify(ctx.request.body);
+          return ctx.request.body;
         })(...args);
       });
       const postData = JSON.stringify({ name: 'fc request' });
