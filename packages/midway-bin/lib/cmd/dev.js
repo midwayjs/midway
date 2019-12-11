@@ -1,5 +1,6 @@
 'use strict';
 const resolver = require('../util').resolveModule;
+const co = require('co');
 
 class DevCommand extends require('egg-bin/lib/cmd/dev') {
   constructor(rawArgv) {
@@ -12,7 +13,7 @@ class DevCommand extends require('egg-bin/lib/cmd/dev') {
     if (!context.argv.framework) {
       context.argv.framework = this.findFramework('midway') || this.findFramework('midway-mirror');
     }
-    await super.run(context);
+    await co(super.run(context));
   }
 
   findFramework(module) {
