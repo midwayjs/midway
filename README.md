@@ -1,18 +1,17 @@
 # Midway Faas
 
-## Getting started
+## 快速开始
 
 > 国内用户建议使用 `cnpm` 加速npm，`npm install -g cnpm --registry=https://registry.npm.taobao.org`
 
-Serverless CLI v1.26.1+. You can get it by running:
+
+### 第一步：安装 serverless
 
 ```shell script
 npm i -g serverless
 ```
 
-## 快速开始
-
-### 第一步：创建项目
+### 第二步：创建项目
 
 #### For 阿里云 fc 
 
@@ -26,7 +25,7 @@ $ serverless install --url https://github.com/midwayjs/midway-faas/tree/developm
 $ serverless install --url https://github.com/midwayjs/midway-faas/tree/development/packages/serverless-function-examples/scf
 ```
 
-### 第二步：进入目录
+### 第三步：进入目录
 
 #### For 阿里云 fc 
 
@@ -40,54 +39,53 @@ $ cd aliyun
 $ cd scf
 ```
 
-### 第三步：安装npm依赖
+### 第四步：安装npm依赖
 
-Install npm dependencies.
 
 ```shell script
 $ npm i
 ```
 
-## 如何使用
+## 如何使用？
 
-### 本地调用 & 本地调试
+### invoke 本地调用 & 本地调试
 
 ```shell script
-serverless invoke -f index
+$ serverless invoke -f index
 
 // debug 需要 node 10.15 +
-serverless invoke -f index --debug
+$ serverless invoke -f index --debug
 ```
 
-| option | explain |
+| 参数 | 释义 |
 | -- | -- |
-| -f / --function funcName| Specifies the function name to call |
-| --debug=debugPort?| Enable step debugging and specifies debug port，default port is 9229 |
+| -f / --function funcName| 指定要调用的函数名 |
+| --debug=debugPort?| 开启debug，并且指定调试端口，默认端口为 9229 |
 
 
-### package to zip file
+### package 打包构建
 
 ```shell script
-serverless package
+$ serverless package
 ```
 
-| option | explain |
+| 参数 | 释义 |
 | -- | -- |
-| --package | Specify the package file(zip) address, e.g. `--package=dist` |
-| --npm=npmName| Specify the npm mirror, e.g. `--npm=cnpm` |
-| --skipZip | Package result does not generate zip package |
+| --package | 指定打包结果（zip）文件名 `--package=dist` |
+| --npm=npmName| 指定npm镜像，例如 `--npm=cnpm` |
+| --skipZip | 打包的结果跳过压缩生成 zip |
 
-### deploy to online
+### deploy 部署到线上
 
 ```shell script
-serverless deploy
+$ serverless deploy
 ```
 
-Support all `package` options.
+支持所有 `package` 命令的参数
 
-| option | explain |
+| 参数 | 释义 |
 | -- | -- |
-| --resetConfig | use new account |
+| --resetConfig | 使用新的账户 |
 
 #### for aliyun
 
@@ -141,3 +139,7 @@ functions:
           method: get
           serviceId: <控制台返回的 ServiceId>
 ```
+
+## License
+
+[MIT](./LICENSE)
