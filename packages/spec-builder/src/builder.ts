@@ -25,6 +25,14 @@ export class SpecBuilder implements Builder {
     return this.originData['resources'];
   }
 
+  getPackage() {
+    return this.originData['package'];
+  }
+
+  getPlugins() {
+    return this.originData['plugins'];
+  }
+
   getService() {
     const serviceData = this.originData['service'];
     if (typeof serviceData === 'string') {
@@ -47,6 +55,8 @@ export class SpecBuilder implements Builder {
       functions: this.getFunctions(),
       layers: this.getLayers(),
       resources: this.getResources(),
+      plugins: this.getPlugins(),
+      package: this.getPlugins()
     };
   }
 }
