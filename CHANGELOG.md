@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.15.1](https://github.com/midwayjs/midway/compare/v1.15.0...v1.15.1) (2019-12-11)
+
+
+### Bug Fixes
+
+* use co wrap generator for egg-bin run method ([14cdb2d](https://github.com/midwayjs/midway/commit/14cdb2d))
+
+
+### Features
+
+* **midway-bin:** do not populate exec argv to child processes ([f22c858](https://github.com/midwayjs/midway/commit/f22c858))
+
+
+
+
+
 # [1.15.0](https://github.com/midwayjs/midway/compare/v1.14.4...v1.15.0) (2019-12-06)
 
 
