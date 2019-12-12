@@ -102,6 +102,12 @@ export class Response {
   statusCode = 200;
   headers = {};
   body = null;
+
+  setHeader(key: string, value: string) {
+    this.headers[key] = value;
+  }
+
+  end() {}
 }
 
 export class Context {
