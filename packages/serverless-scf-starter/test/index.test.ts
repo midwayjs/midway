@@ -1,5 +1,5 @@
 import * as assert from 'assert';
-import { start, asyncWrapper } from '../src';
+import { asyncWrapper, start } from '../src';
 import { SCFHTTPEvent } from '../src/interface';
 
 class Tester {
@@ -166,7 +166,7 @@ describe('/test/index.test.ts', () => {
       assert.equal(err.message, 'oops');
     });
 
-    it('should ok with non-async function', async () => {
+    it('non-async should passed', async () => {
       const runtime = await start();
       const handle = asyncWrapper(async (...args) => {
         return runtime.asyncEvent(ctx => {})(...args);
@@ -177,8 +177,7 @@ describe('/test/index.test.ts', () => {
       } catch (ex) {
         err = ex;
       }
-      assert.ok(err);
-      assert.equal(err.message, 'Must be an AsyncFunction');
+      assert.ok(!err);
     });
 
     it('should ok with asyncWrap', async () => {
@@ -222,8 +221,31 @@ describe('/test/index.test.ts', () => {
         err = ex;
       }
 
-      assert.ok(err);
-      assert.equal(err.message, 'Must be an AsyncFunction');
+      assert.ok(!err);
+    });
+
+    it('should ok with empty functions', async () => {
+      const runtime = await start();
+
+      const handle = asyncWrapper(async (...args) => {
+        return runtime.asyncEvent()(...args);
+      });
+
+      let err;
+      let defaultRun = false;
+
+      runtime.defaultInvokeHandler = () => {
+        defaultRun = true;
+      };
+
+      try {
+        await test(handle).run(require('../resource/event'), {});
+      } catch (ex) {
+        err = ex;
+      }
+
+      assert.ok(!err);
+      assert.ok(defaultRun);
     });
 
     it('GET should ok', async () => {
