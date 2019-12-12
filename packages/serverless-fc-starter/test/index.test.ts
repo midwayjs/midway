@@ -75,7 +75,7 @@ describe('/test/index.test.ts', () => {
     });
   });
 
-  describe('wrapper web event', () => {
+  describe('wrapper web event fc', () => {
     it('should ok with plain text', async () => {
       const runtime = await start({});
       const handle = asyncWrapper(async (...args) => {

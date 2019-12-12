@@ -17,6 +17,10 @@ export class SpecBuilder implements Builder {
     return this.originData['provider'] || {};
   }
 
+  getCustom() {
+    return this.originData['custom'];
+  }
+
   getFunctions() {
     return this.originData['functions'];
   }
@@ -54,14 +58,15 @@ export class SpecBuilder implements Builder {
 
   toJSON(): object {
     return {
-      service: this.getService(),
-      provider: this.getProvider(),
+      aggregation: this.getAggregation(),
+      custom: this.getCustom(),
       functions: this.getFunctions(),
       layers: this.getLayers(),
-      resources: this.getResources(),
-      plugins: this.getPlugins(),
       package: this.getPackage(),
-      aggregation: this.getAggregation()
+      plugins: this.getPlugins(),
+      provider: this.getProvider(),
+      resources: this.getResources(),
+      service: this.getService()
     };
   }
 }

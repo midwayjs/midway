@@ -63,7 +63,6 @@ export class ProviderBase {
       if (handlerConf._ignore) {
         continue;
       }
-      console.log('handlerConf', handlerConf);
       const [handlerFileName, name] = handlerConf.handler.split('.');
       if (!files[handlerFileName]) {
         files[handlerFileName] = {
@@ -87,7 +86,6 @@ export class ProviderBase {
         });
       }
     }
-    console.log('files[handlerFileName]', files);
 
     for (const file in files) {
       const fileName = join(this.midwayBuildPath, `${file}.js`);

@@ -22,14 +22,17 @@ export class MidwayServerless {
       this.serverless.service.provider = serviceyml.provider = { name: '', runtime: '' };
     }
 
-    if (!this.serverless.service.provider.name) {
-      const prompt = new Select({
-        name: 'provider',
-        message: 'Which platform do you want to use?',
-        choices: ['阿里云函数计算 aliyun fc', '腾讯云函数 tencent scf']
-      });
-      const answers = await prompt.run();
-      const platform = answers.split(' ')[1];
+    if (!this.serverless.service.provider.name || this.options.platform) {
+      let platform = this.options.platform;
+      if (this.options.platform === true) {
+        const prompt = new Select({
+          name: 'provider',
+          message: 'Which platform do you want to use?',
+          choices: ['阿里云函数计算 aliyun fc', '腾讯云函数 tencent scf']
+        });
+        const answers = await prompt.run();
+        platform = answers.split(' ')[1];
+      }
       serviceyml.provider.name = platform;
       this.serverless.service.provider.name = platform;
       this.serverless.pluginManager.serverlessConfigFile.provider.name = platform;
@@ -57,9 +60,16 @@ export class MidwayServerless {
       return;
     }
 
+    if (!this.serverless.service.custom || !this.serverless.service.custom.customDomain || !this.serverless.service.custom.customDomain.domainName) {
+      console.warn('If using aggregation deploy, please configure custom domain');
+      return;
+    }
+
+    this.serverless.cli.log('Aggregation Deploy');
     for (const aggregationName in this.serverless.service.aggregation) {
-      const aggregationFuncName = `${aggregationName}`;
+      const aggregationFuncName = `aggregation${aggregationName}`;
       this.serverless.service.functions[aggregationFuncName] = this.serverless.service.aggregation[aggregationName];
+      this.serverless.service.functions[aggregationFuncName].handler = `${aggregationFuncName}.handler`;
       this.serverless.service.functions[aggregationFuncName]._isAggregation = true;
       if (!this.serverless.service.functions[aggregationFuncName].events) {
         this.serverless.service.functions[aggregationFuncName].events = [];
@@ -68,7 +78,6 @@ export class MidwayServerless {
       const deployOrigin = this.serverless.service.aggregation[aggregationName].deployOrigin;
 
       const allPaths = [];
-      // const httpEventCache = [];
       let handlers = [];
       if (this.serverless.service.aggregation[aggregationName].functions) {
         handlers = this.serverless.service.aggregation[aggregationName].functions.map((functionName: string) => {
@@ -85,11 +94,6 @@ export class MidwayServerless {
           if (!httpEvent || !httpEvent.http.path) {
             return;
           }
-          // // 进行缓存，以便于计算出来高密度通用path时，替换原有函数的path
-          // httpEventCache.push({
-          //   name: functionName,
-          //   index: httpEventIndex
-          // });
           allPaths.push(httpEvent.http.path);
           if (!deployOrigin) {
             // 不把原有的函数进行部署
@@ -103,6 +107,7 @@ export class MidwayServerless {
       }
 
       const currentPath = this.commonPrefix(allPaths);
+      this.serverless.cli.log(` - using '${currentPath}/*' to deploy '${allPaths.join(`', '`)}'`);
       this.serverless.service.functions[aggregationFuncName]._handlers = handlers;
       this.serverless.service.functions[aggregationFuncName].events = [{ http: { method: 'get', path: currentPath + '/*' }}];
     }

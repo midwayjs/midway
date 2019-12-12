@@ -1,39 +1,33 @@
-service: serverless-midway-test
-
-provider:
-  name: aliyun
-
+aggregation:
+  common:
+    deployOrigin: false
+    functions:
+      - index
+      - hello
+custom:
+  customDomain:
+    domainName: fctest.iam.gy
 functions:
   index:
     handler: index.handler
     events:
       - http:
-          path: '/apis/index'
+          path: /apis/index
           method: get
   hello:
     handler: hello.handler
     events:
       - http:
-          path: '/apis/hello'
+          path: /apis/hello
           method: get
-
-plugins:
-  - test
-
-aggregation:
-  common:
-    deployOrigin: false
-    handler: common.handler
-    functions:
-      - index
-      - hello
-
-custom:
-  customDomain:
-    domainName: fctest.iam.gy
-
 package:
-  include:
-  exclude:
+  include: null
+  exclude: null
   excludeDevDependencies: false
   artifact: my-artifact.zip
+plugins:
+  - test
+provider:
+  name: aliyun
+service:
+  name: serverless-midway-test

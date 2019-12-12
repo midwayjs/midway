@@ -8,7 +8,7 @@ export class Deploy extends CommandBase {
 
   getHooks(): IHooks {
     return {
-      'before:deploy:midway-deploy': () => {
+      'after:deploy:midway-deploy': () => {
       }
     };
   }

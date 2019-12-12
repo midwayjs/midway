@@ -85,3 +85,8 @@
 2. 安装serverless框架 `npm i serverless -g`
 3. 如果部署到阿里云：进入到 `/test/deployAliyun` 目录，执行 `serverless deploy`
 3. 如果部署到腾讯云：进入到 `/test/deployTencent` 目录，执行 `serverless deploy`
+
+### 高密度部署相关Q&A
+1. 高密度部署只有在配置了http触发器的域名后可用
+2. handler名称必须与文件名保持一致，这是为什么？
+3. 高密度部署相关方法必须配置 path路径，切以 / 开头
