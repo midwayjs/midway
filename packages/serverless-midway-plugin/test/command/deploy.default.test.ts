@@ -9,7 +9,7 @@ describe('/test/core/command/deploy.default.test.ts', () => {
     });
     it('Deploy hooks', async () => {
         const cmd = deploy.getHooks();
-        const fun = cmd['before:deploy:midway-deploy'];
+        const fun = cmd['after:deploy:midway-deploy'];
         assert(fun && fun() === undefined);
     });
 });
