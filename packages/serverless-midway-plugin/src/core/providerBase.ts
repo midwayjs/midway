@@ -74,7 +74,7 @@ export class ProviderBase {
         files[handlerFileName].originLayers.push(handlerConf.layers);
       }
       // 高密度部署
-      if (/^aggregation_/.test(func) && handlerConf.functions) {
+      if (handlerConf._isAggregation && handlerConf.functions) {
         files[handlerFileName].handlers.push({
           name,
           handlers: handlerConf.functions.map((functionName: string) => {
@@ -154,8 +154,16 @@ export class ProviderBase {
     return func;
   }
 
-  getSpecJson() {
+  getSpecJson(coverOptions?: any) {
     const service = this.serverless.service;
+    if (coverOptions) {
+      Object.keys(coverOptions).forEach((key: string) => {
+        if (!service[key]) {
+          service[key] = {};
+        }
+        Object.assign(service[key], coverOptions[key]);
+      });
+    }
     return {
       service: service.service,
       provider: service.provider,

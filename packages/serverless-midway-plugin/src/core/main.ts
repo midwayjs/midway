@@ -58,9 +58,11 @@ export class MidwayServerless {
     }
     let filterFunc = [];
     for (const aggregationName in this.serverless.service.aggregation) {
-      this.serverless.service.functions[`aggregation_${aggregationName}`] = this.serverless.service.aggregation[aggregationName];
-      if (!this.serverless.service.functions[`aggregation_${aggregationName}`].events) {
-        this.serverless.service.functions[`aggregation_${aggregationName}`].events = [];
+      const aggregationFuncName = `${aggregationName}`;
+      this.serverless.service.functions[aggregationFuncName] = this.serverless.service.aggregation[aggregationName];
+      this.serverless.service.functions[aggregationFuncName]._isAggregation = true;
+      if (!this.serverless.service.functions[aggregationFuncName].events) {
+        this.serverless.service.functions[aggregationFuncName].events = [];
       }
       // 忽略原始方法，不再单独进行部署
       if (!this.serverless.service.aggregation[aggregationName].deployOrigin) {
@@ -68,8 +70,8 @@ export class MidwayServerless {
           this.serverless.service.aggregation[aggregationName].functions || []
         );
       }
-      if (!this.serverless.service.functions[`aggregation_${aggregationName}`].events.length) {
-        this.serverless.service.functions[`aggregation_${aggregationName}`].events.push({ http: { method: 'get' }});
+      if (!this.serverless.service.functions[aggregationFuncName].events.length) {
+        this.serverless.service.functions[aggregationFuncName].events.push({ http: { method: 'get' }});
       }
     }
 

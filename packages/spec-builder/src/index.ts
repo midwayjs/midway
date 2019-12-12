@@ -6,7 +6,7 @@ import { SpecBuilder } from './builder';
 export * from './interface';
 export * from './builder';
 
-export const transform = (sourcefilePathOrJson: string, builderCls?) => {
+export const transform = (sourcefilePathOrJson: any, builderCls?) => {
   let result: any = sourcefilePathOrJson;
   if (typeof sourcefilePathOrJson === 'string') {
     if (fs.existsSync(sourcefilePathOrJson)) {

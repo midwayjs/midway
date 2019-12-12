@@ -2,11 +2,11 @@ import { generate, transform } from '@midwayjs/spec-builder';
 import { SCFTemplateSpecBuilder } from './builder/template';
 import { SCFServerlessSpecBuilder } from './builder/serverless';
 
-export const generateFunctionsSpec = (filePath: string) => {
+export const generateFunctionsSpec = (filePath: any) => {
   return transform(filePath, SCFServerlessSpecBuilder);
 };
 
-export const generateTemplateFunctionsSpec = (filePath: string) => {
+export const generateTemplateFunctionsSpec = (filePath: any) => {
   return transform(filePath, SCFTemplateSpecBuilder);
 };
 

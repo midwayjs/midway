@@ -15,7 +15,11 @@ class ProviderTencent extends ProviderBase {
 
     this.hooks = {
       'package:midway-spec': async () => {
-        await generateFunctionsSpecFile(this.getSpecJson(), join(this.midwayBuildPath, 'serverless.yml'));
+        await generateFunctionsSpecFile(this.getSpecJson({
+          provider: {
+            stage: 'test'
+          }
+        }), join(this.midwayBuildPath, 'serverless.yml'));
       },
       'package:midway-wrapper': async () => {
         this.loadWrapper(wrapperContent);
@@ -71,7 +75,11 @@ class ProviderTencent extends ProviderBase {
         package: {},
         runtimeExtensions: {}
       },
-      await generateFunctionsSpec(join(this.servicePath, 'serverless.yml'))
+      await generateFunctionsSpec(this.getSpecJson({
+        provider: {
+          stage: 'test'
+        }
+      }))
     );
 
     midwayServerless.pluginManager.addPlugin(Tencent);

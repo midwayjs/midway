@@ -1,11 +1,11 @@
 service: serverless-midway-test
 
 provider:
-  name: aliyun
+  name: tencent
 
 functions:
-  index:
-    handler: index.handler
+  index2:
+    handler: index2.handler
     events:
       - http:
           path: '/'
@@ -23,9 +23,9 @@ plugins:
 aggregation:
   index:
     deployOrigin: false
-    handler: aggregation.handler
+    handler: index.handler
     functions:
-      - index
+      - index2
       - hello
 
 package:

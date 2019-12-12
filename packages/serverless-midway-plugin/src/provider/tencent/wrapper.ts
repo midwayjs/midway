@@ -25,6 +25,16 @@ exports.<%=handlerData.name%> = asyncWrapper(async (...args) => {
   if (!inited) {
     await initializeMethod();
   }
+  <% if (handlerData.handler) { %>
   return runtime.asyncEvent(starter.handleInvokeWrapper('<%=handlerData.handler%>'))(...args);
+  <% } else { %>
+  return runtime.asyncEvent(async (ctx) => {
+    <% handlerData.handlers.forEach(function(multiHandler){ %> if (ctx && ctx.path === '<%=multiHandler.path%>') {
+      return starter.handleInvokeWrapper('<%=multiHandler.handler%>')(ctx);
+    } else <% }); %>{
+      return 'unhandler path';
+    }
+  })(...args);
+  <% } %>
 });
 <% }); %>`;
