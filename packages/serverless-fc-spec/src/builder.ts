@@ -1,4 +1,4 @@
-import { SpecBuilder, ProviderStructure, HTTPEvent, ScheduleEvent } from '@midwayjs/spec-builder';
+import { SpecBuilder, ProviderStructure, HTTPEvent, ScheduleEvent, LogEvent, OsEvent } from '@midwayjs/spec-builder';
 import { FCFunctionsStructure, FCFunctionStructure, FCFunctionSpec, HTTPEventType, FCCustomDomainSpec, FCSpec } from './interface';
 
 export class FCSpecBuilder extends SpecBuilder {
@@ -68,6 +68,51 @@ export class FCSpecBuilder extends SpecBuilder {
               CronExpression: evt.type === 'every' ? `@every ${evt.value}` : evt.value,
               Enable: true,
               Payload: evt.payload
+            }
+          };
+        }
+
+        if (event['log']) {
+          const evt = event['log'] as LogEvent;
+          functionTemplate.Events['log'] = {
+            Type: 'Log',
+            Properties: {
+              SourceConfig: {
+                Logstore: evt.source
+              },
+              JobConfig: {
+                MaxRetryTime: evt.retryTime || 1,
+                TriggerInterval: evt.interval || 30
+              },
+              LogConfig: {
+                Project: evt.project,
+                Logstore: evt.log
+              },
+              Enable: true,
+              InvocationRole: evt.role,
+              Qualifier: evt.version
+            }
+          };
+        }
+
+        const osEvent = event['os'] || event['oss'] || event['cos'];
+
+        if (osEvent) {
+          const evt = osEvent as OsEvent;
+          functionTemplate.Events['oss'] = {
+            Type: 'OSS',
+            Properties: {
+              BucketName: evt.bucket,
+              Events: [].concat(evt.events),
+              Filter: {
+                Key: {
+                  Prefix: evt.filterPrefix,
+                  Suffix: evt.filterSuffix
+                }
+              },
+              Enable: true,
+              InvocationRole: evt.role,
+              Qualifier: evt.version
             }
           };
         }

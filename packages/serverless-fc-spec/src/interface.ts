@@ -58,7 +58,7 @@ export interface FCFunctionSpec {
     EnvironmentVariables?: object;
   };
   Events?: {
-    [eventName: string]: FCHTTPEvent | FCTimerEvent;
+    [eventName: string]: FCHTTPEvent | FCTimerEvent | FCOSSEvent | FCLOGEvent;
   };
 }
 
@@ -69,6 +69,43 @@ export interface FCHTTPEvent {
   Properties: {
     AuthType?: 'ANONYMOUS' | 'FUNCTION';
     Methods?: HTTPEventType[];
+  };
+}
+
+export interface FCOSSEvent {
+  Type: 'OSS';
+  Properties: {
+    BucketName: string;
+    Events: string[];
+    Filter: {
+      Key: {
+        Prefix: string;
+        Suffix: string;
+      }
+    },
+    Enable: boolean;
+    InvocationRole?: string;
+    Qualifier?: string;
+  };
+}
+
+export interface FCLOGEvent {
+  Type: 'Log';
+  Properties: {
+    SourceConfig: {
+      Logstore: string;
+    };
+    JobConfig: {
+      MaxRetryTime: number;
+      TriggerInterval: number;
+    };
+    LogConfig: {
+      Project: string;
+      Logstore: string;
+    };
+    Enable: boolean;
+    InvocationRole?: string;
+    Qualifier?: string;
   };
 }
 

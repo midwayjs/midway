@@ -50,6 +50,26 @@ export interface ScheduleEvent {
   payload?: string;
 }
 
+export interface LogEvent {
+  source: string;
+  project: string;
+  log: string;
+  retryTime?: number;
+  interval?: number;
+  role?: string;
+  version?: string;
+}
+
+// 对象存储
+export interface OsEvent {
+  bucket: string;
+  events: string[];
+  filterPrefix: string;
+  filterSuffix: string;
+  role?: string;
+  version?: string;
+}
+
 export interface FunctionStructure {
   handler: string;
   name?: string;
