@@ -22,6 +22,10 @@ class ProviderFc extends ProviderBase {
         await generateFunctionsSpecFile(this.getSpecJson(), join(this.midwayBuildPath, 'template.yml'));
       },
       'package:midway-wrapper': async () => {
+        if (!this.serverless.service.globalDependencies) {
+          this.serverless.service.globalDependencies = {};
+        }
+        this.serverless.service.globalDependencies['@midwayjs/serverless-fc-starter'] = '*';
         this.loadWrapper(wrapperContent);
       },
       'deploy:midway-deploy': async () => {

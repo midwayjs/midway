@@ -114,9 +114,8 @@ export class Package extends CommandBase {
         try {
           pkgJson = JSON.parse(readFileSync(pkgJsonPath).toString());
         } catch (e) {}
-        const allDependencies = Object.assign({}, pkgJson.dependencies, pkgJson.localDependencies);
+        const allDependencies = Object.assign({}, this.serverless.service.globalDependencies, pkgJson.dependencies, pkgJson.localDependencies);
         pkgJson.dependencies = {};
-
         const localDep = {};
 
         for (const depName in allDependencies) {

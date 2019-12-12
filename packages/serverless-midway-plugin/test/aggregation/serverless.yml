@@ -1,32 +1,36 @@
 service: serverless-midway-test
 
 provider:
-  name: tencent
+  name: aliyun
 
 functions:
-  index2:
-    handler: index2.handler
+  index:
+    handler: index.handler
     events:
       - http:
-          path: '/'
+          path: '/apis/index'
           method: get
   hello:
     handler: hello.handler
     events:
       - http:
-          path: '/hello'
+          path: '/apis/hello'
           method: get
 
 plugins:
   - test
 
 aggregation:
-  index:
+  common:
     deployOrigin: false
-    handler: index.handler
+    handler: common.handler
     functions:
-      - index2
+      - index
       - hello
+
+custom:
+  customDomain:
+    domainName: fctest.iam.gy
 
 package:
   include:

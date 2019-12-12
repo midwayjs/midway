@@ -56,7 +56,7 @@ export class MidwayServerless {
     if (!this.serverless.service.aggregation || !this.serverless.service.functions) {
       return;
     }
-    let filterFunc = [];
+
     for (const aggregationName in this.serverless.service.aggregation) {
       const aggregationFuncName = `${aggregationName}`;
       this.serverless.service.functions[aggregationFuncName] = this.serverless.service.aggregation[aggregationName];
@@ -65,21 +65,70 @@ export class MidwayServerless {
         this.serverless.service.functions[aggregationFuncName].events = [];
       }
       // 忽略原始方法，不再单独进行部署
-      if (!this.serverless.service.aggregation[aggregationName].deployOrigin) {
-        filterFunc = filterFunc.concat(
-          this.serverless.service.aggregation[aggregationName].functions || []
-        );
+      const deployOrigin = this.serverless.service.aggregation[aggregationName].deployOrigin;
+
+      const allPaths = [];
+      // const httpEventCache = [];
+      let handlers = [];
+      if (this.serverless.service.aggregation[aggregationName].functions) {
+        handlers = this.serverless.service.aggregation[aggregationName].functions.map((functionName: string) => {
+          const functions = this.serverless.service.functions;
+          const func = functions[functionName];
+          if (!func || !func.events) {
+            return;
+          }
+          const httpEventIndex = func.events.findIndex((event: any) => !!event.http);
+          if (httpEventIndex === -1) {
+            return;
+          }
+          const httpEvent = func.events[httpEventIndex];
+          if (!httpEvent || !httpEvent.http.path) {
+            return;
+          }
+          // // 进行缓存，以便于计算出来高密度通用path时，替换原有函数的path
+          // httpEventCache.push({
+          //   name: functionName,
+          //   index: httpEventIndex
+          // });
+          allPaths.push(httpEvent.http.path);
+          if (!deployOrigin) {
+            // 不把原有的函数进行部署
+            this.serverless.service.functions[functionName]._ignore = true;
+          }
+          return {
+            path: httpEvent.http.path,
+            handler: func.handler
+          };
+        }).filter((func: any) => !!func);
       }
-      if (!this.serverless.service.functions[aggregationFuncName].events.length) {
-        this.serverless.service.functions[aggregationFuncName].events.push({ http: { method: 'get' }});
-      }
+
+      const currentPath = this.commonPrefix(allPaths);
+      this.serverless.service.functions[aggregationFuncName]._handlers = handlers;
+      this.serverless.service.functions[aggregationFuncName].events = [{ http: { method: 'get', path: currentPath + '/*' }}];
+    }
+  }
+
+  commonPrefixUtil(str1: string, str2: string): string {
+    let result = '';
+    const n1 = str1.length;
+    const n2 = str2.length;
+
+    for (let i = 0, j = 0; i <= n1 - 1 && j <= n2 - 1; i++, j++) {
+        if (str1[i] !== str2[j]) {
+            break;
+        }
+        result += str1[i];
+    }
+    return result;
+  }
+
+  commonPrefix(arr: string[]): string {
+    let prefix: string = arr[0];
+    const n = arr.length;
+    for (let i = 1; i <= n - 1; i++) {
+        prefix = this.commonPrefixUtil(prefix, arr[i]);
     }
 
-    for (const func in this.serverless.service.functions) {
-      // 过滤掉，不进行构建以及部署
-      if (filterFunc.indexOf(func) !== -1) {
-        this.serverless.service.functions[func]._ignore = true;
-      }
-    }
+    return prefix.replace(/\/[^\/]*$/, '') || '/';
   }
 }

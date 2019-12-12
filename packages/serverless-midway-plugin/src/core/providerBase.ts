@@ -63,6 +63,7 @@ export class ProviderBase {
       if (handlerConf._ignore) {
         continue;
       }
+      console.log('handlerConf', handlerConf);
       const [handlerFileName, name] = handlerConf.handler.split('.');
       if (!files[handlerFileName]) {
         files[handlerFileName] = {
@@ -77,20 +78,7 @@ export class ProviderBase {
       if (handlerConf._isAggregation && handlerConf.functions) {
         files[handlerFileName].handlers.push({
           name,
-          handlers: handlerConf.functions.map((functionName: string) => {
-            const func = functions[functionName];
-            if (!func || !func.events) {
-              return;
-            }
-            const httpEvent = func.events.find((event: any) => !!event.http);
-            if (!httpEvent || !httpEvent.http.path) {
-              return;
-            }
-            return {
-              path: httpEvent.http.path,
-              handler: func.handler
-            };
-          }).filter((func: any) => !!func)
+          handlers: handlerConf._handlers,
         });
       } else {
         files[handlerFileName].handlers.push({
@@ -99,6 +87,7 @@ export class ProviderBase {
         });
       }
     }
+    console.log('files[handlerFileName]', files);
 
     for (const file in files) {
       const fileName = join(this.midwayBuildPath, `${file}.js`);
@@ -165,6 +154,7 @@ export class ProviderBase {
       });
     }
     return {
+      custom: service.custom,
       service: service.service,
       provider: service.provider,
       functions: this.getNotIgnoreFunc(),

@@ -22,6 +22,10 @@ class ProviderTencent extends ProviderBase {
         }), join(this.midwayBuildPath, 'serverless.yml'));
       },
       'package:midway-wrapper': async () => {
+        if (!this.serverless.service.globalDependencies) {
+          this.serverless.service.globalDependencies = {};
+        }
+        this.serverless.service.globalDependencies['@midwayjs/serverless-scf-starter'] = '*';
         this.loadWrapper(wrapperContent);
       },
       'deploy:midway-deploy': async () => {

@@ -32,7 +32,7 @@ exports.<%=handlerData.name%> = asyncWrapper(async (...args) => {
     <% handlerData.handlers.forEach(function(multiHandler){ %> if (ctx && ctx.path === '<%=multiHandler.path%>') {
       return starter.handleInvokeWrapper('<%=multiHandler.handler%>')(ctx);
     } else <% }); %>{
-      return 'unhandler path';
+      return 'unhandler path: ' + (ctx && ctx.path || '');
     }
   })(...args);
   <% } %>

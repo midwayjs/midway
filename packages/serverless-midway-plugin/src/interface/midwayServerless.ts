@@ -17,6 +17,8 @@ export interface IServerless {
         functions?: string[]
         _ignore?: boolean
         _isAggregation?: boolean
+        _handlers?: any
+        _originPath?: string
       }
     },
     provider: {
