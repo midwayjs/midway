@@ -56,14 +56,27 @@ export class MidwayServerless {
     if (!this.serverless.service.aggregation || !this.serverless.service.functions) {
       return;
     }
-
+    let filterFunc = [];
     for (const aggregationName in this.serverless.service.aggregation) {
       this.serverless.service.functions[`aggregation_${aggregationName}`] = this.serverless.service.aggregation[aggregationName];
       if (!this.serverless.service.functions[`aggregation_${aggregationName}`].events) {
         this.serverless.service.functions[`aggregation_${aggregationName}`].events = [];
       }
+      // 忽略原始方法，不再单独进行部署
+      if (!this.serverless.service.aggregation[aggregationName].deployOrigin) {
+        filterFunc = filterFunc.concat(
+          this.serverless.service.aggregation[aggregationName].functions || []
+        );
+      }
       if (!this.serverless.service.functions[`aggregation_${aggregationName}`].events.length) {
         this.serverless.service.functions[`aggregation_${aggregationName}`].events.push({ http: { method: 'get' }});
+      }
+    }
+
+    for (const func in this.serverless.service.functions) {
+      // 过滤掉，不进行构建以及部署
+      if (filterFunc.indexOf(func) !== -1) {
+        this.serverless.service.functions[func]._ignore = true;
       }
     }
   }

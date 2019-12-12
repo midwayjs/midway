@@ -60,6 +60,9 @@ export class ProviderBase {
     const functions = this.serverless.service.functions || {};
     for (const func in functions) {
       const handlerConf = functions[func];
+      if (handlerConf._ignore) {
+        continue;
+      }
       const [handlerFileName, name] = handlerConf.handler.split('.');
       if (!files[handlerFileName]) {
         files[handlerFileName] = {
@@ -139,12 +142,24 @@ export class ProviderBase {
     return this.serverless.pluginManager.invoke.call(this.serverless.pluginManager, [command], true);
   }
 
+  getNotIgnoreFunc() {
+    const func = {};
+    for (const funcName in this.serverless.service.functions) {
+      const funcConf = this.serverless.service.functions[funcName];
+      if (funcConf._ignore) {
+        continue;
+      }
+      func[funcName] = funcConf;
+    }
+    return func;
+  }
+
   getSpecJson() {
     const service = this.serverless.service;
     return {
       service: service.service,
       provider: service.provider,
-      functions: service.functions,
+      functions: this.getNotIgnoreFunc(),
       resources: service.resources,
       package: service.package,
     };

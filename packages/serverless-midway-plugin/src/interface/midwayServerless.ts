@@ -15,6 +15,7 @@ export interface IServerless {
         initialize?: string;
         layers?: Ilayer
         functions?: string[]
+        _ignore?: boolean
       }
     },
     provider: {
