@@ -1,9 +1,10 @@
 
 import { IServerless, IServerlessOptions, ICommandObject, ICommand, IHooks, IConfig, Ilayer } from '../interface/midwayServerless';
-import { writeFileSync } from 'fs';
+import { writeFileSync, existsSync } from 'fs';
 import { join } from 'path';
 import { render } from 'ejs';
 import { formatLayers } from './utils';
+const pkgJsonPath = join(__dirname, '../../package.json');
 export class ProviderBase {
 
   static isProvider = true;
@@ -14,6 +15,7 @@ export class ProviderBase {
   hooks: IHooks;
   servicePath: string;
   midwayBuildPath: string;
+  packageJson: any = {};
 
   constructor(serverless: IServerless, options: IServerlessOptions) {
     this.serverless = serverless;
@@ -22,6 +24,9 @@ export class ProviderBase {
     this.hooks = {};
     this.servicePath = this.serverless.config.servicePath;
     this.midwayBuildPath = join(this.servicePath, '.serverless');
+    if (existsSync(pkgJsonPath)) {
+      this.packageJson = require(pkgJsonPath);
+    }
   }
 
   protected bindCommand(cmdObj: any, link?: any): IConfig {
@@ -159,5 +164,12 @@ export class ProviderBase {
       resources: service.resources,
       package: service.package,
     };
+  }
+
+  setGolbalDependencies(name: string, version?: string) {
+    if (!this.serverless.service.globalDependencies) {
+      this.serverless.service.globalDependencies = {};
+    }
+    this.serverless.service.globalDependencies[name] = version || this.packageJson.version || '*';
   }
 }

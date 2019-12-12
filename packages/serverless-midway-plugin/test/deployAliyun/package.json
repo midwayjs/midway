@@ -1,7 +1,6 @@
 {
   "dependencies": {
-      "@midwayjs/runtime-engine": "../../../runtime-engine",
-      "@midwayjs/serverless-fc-starter": "../../../serverless-fc-starter",
-      "@midwayjs/faas": "../../../faas"
+      "@midwayjs/runtime-engine": "*",
+      "@midwayjs/faas": "*"
   }
 }
