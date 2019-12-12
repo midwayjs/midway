@@ -27,13 +27,13 @@ export class FCSpecBuilder extends SpecBuilder {
 
     for (const funName in functionsData) {
       const funSpec: FCFunctionStructure = functionsData[funName];
-
+      const handler = funSpec.handler || 'index.handler';
       const functionTemplate: FCFunctionSpec = {
         Type: 'Aliyun::Serverless::Function',
         Properties: {
           Description: funSpec.description || '',
-          Initializer: funSpec.initializer || 'index.initializer',
-          Handler: funSpec.handler || 'index.handler',
+          Initializer: funSpec.initializer || handler.split('.').slice(0, -1).join('.') + '.initializer',
+          Handler: handler,
           Runtime: funSpec.runtime || providerData.runtime || 'nodejs8',
           CodeUri: funSpec.codeUri || '.',
           Timeout: funSpec.timeout || providerData.timeout || 30,

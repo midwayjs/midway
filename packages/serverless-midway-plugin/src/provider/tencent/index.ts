@@ -15,7 +15,7 @@ class ProviderTencent extends ProviderBase {
 
     this.hooks = {
       'package:midway-spec': async () => {
-        await generateFunctionsSpecFile(join(this.servicePath, 'serverless.yml'), join(this.midwayBuildPath, 'serverless.yml'));
+        await generateFunctionsSpecFile(this.getSpecJson(), join(this.midwayBuildPath, 'serverless.yml'));
       },
       'package:midway-wrapper': async () => {
         this.loadWrapper(wrapperContent);

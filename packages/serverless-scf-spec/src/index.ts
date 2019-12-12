@@ -11,15 +11,15 @@ export const generateTemplateFunctionsSpec = (filePath: string) => {
 };
 
 export const generateFunctionsSpecFile = (
-  filePath: string,
+  sourceFilePathOrJson: any,
   targetFilePath = '.serverless/serverless.yml'
 ) => {
-  generate(filePath, targetFilePath, SCFServerlessSpecBuilder);
+  generate(sourceFilePathOrJson, targetFilePath, SCFServerlessSpecBuilder);
 };
 
 export const generateTemplateFunctionsSpecFile = (
-  filePath: string,
+  sourceFilePathOrJson: any,
   targetFilePath = 'template.yml'
 ) => {
-  generate(filePath, targetFilePath, SCFTemplateSpecBuilder);
+  generate(sourceFilePathOrJson, targetFilePath, SCFTemplateSpecBuilder);
 };

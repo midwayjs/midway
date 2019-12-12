@@ -57,8 +57,9 @@ export class ProviderBase {
 
   async loadWrapper(WrapperContent: string) {
     const files = {};
-    for (const func in this.serverless.service.functions) {
-      const handlerConf = this.serverless.service.functions[func];
+    const functions = this.serverless.service.functions || {};
+    for (const func in functions) {
+      const handlerConf = functions[func];
       const [handlerFileName, name] = handlerConf.handler.split('.');
       if (!files[handlerFileName]) {
         files[handlerFileName] = {
@@ -66,12 +67,36 @@ export class ProviderBase {
           originLayers: []
         };
       }
-      files[handlerFileName].originLayers.push(handlerConf.layers);
-      files[handlerFileName].handlers.push({
-        name,
-        handler: handlerConf.handler
-      });
+      if (handlerConf.layers && handlerConf.layers.length) {
+        files[handlerFileName].originLayers.push(handlerConf.layers);
+      }
+      // 高密度部署
+      if (/^aggregation_/.test(func) && handlerConf.functions) {
+        files[handlerFileName].handlers.push({
+          name,
+          handlers: handlerConf.functions.map((functionName: string) => {
+            const func = functions[functionName];
+            if (!func || !func.events) {
+              return;
+            }
+            const httpEvent = func.events.find((event: any) => !!event.http);
+            if (!httpEvent || !httpEvent.http.path) {
+              return;
+            }
+            return {
+              path: httpEvent.http.path,
+              handler: func.handler
+            };
+          }).filter((func: any) => !!func)
+        });
+      } else {
+        files[handlerFileName].handlers.push({
+          name,
+          handler: handlerConf.handler
+        });
+      }
     }
+
     for (const file in files) {
       const fileName = join(this.midwayBuildPath, `${file}.js`);
       const layers = this.getLayers(this.serverless.service.layers, ...files[file].originLayers);
@@ -112,5 +137,16 @@ export class ProviderBase {
       });
     }
     return this.serverless.pluginManager.invoke.call(this.serverless.pluginManager, [command], true);
+  }
+
+  getSpecJson() {
+    const service = this.serverless.service;
+    return {
+      service: service.service,
+      provider: service.provider,
+      functions: service.functions,
+      resources: service.resources,
+      package: service.package,
+    };
   }
 }

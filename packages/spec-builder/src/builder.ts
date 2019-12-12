@@ -14,7 +14,7 @@ export class SpecBuilder implements Builder {
   }
 
   getProvider() {
-    return this.originData['provider'];
+    return this.originData['provider'] || {};
   }
 
   getFunctions() {
@@ -26,7 +26,7 @@ export class SpecBuilder implements Builder {
   }
 
   getPackage() {
-    return this.originData['package'];
+    return this.originData['package'] || {};
   }
 
   getPlugins() {
@@ -40,12 +40,16 @@ export class SpecBuilder implements Builder {
         name: serviceData
       };
     } else {
-      return serviceData;
+      return serviceData || {};
     }
   }
 
   getLayers() {
     return this.originData['layers'];
+  }
+
+  getAggregation() {
+    return this.originData['aggregation'];
   }
 
   toJSON(): object {
@@ -56,7 +60,8 @@ export class SpecBuilder implements Builder {
       layers: this.getLayers(),
       resources: this.getResources(),
       plugins: this.getPlugins(),
-      package: this.getPackage()
+      package: this.getPackage(),
+      aggregation: this.getAggregation()
     };
   }
 }

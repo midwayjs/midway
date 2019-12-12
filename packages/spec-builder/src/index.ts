@@ -6,28 +6,37 @@ import { SpecBuilder } from './builder';
 export * from './interface';
 export * from './builder';
 
-export const transform = (sourcefilePath: string, builderCls?) => {
-  if (fs.existsSync(sourcefilePath)) {
-    const content = fs.readFileSync(sourcefilePath, 'utf8');
-    const result = parse(sourcefilePath, content);
-    if (builderCls) {
-      return new builderCls(result).toJSON();
-    } else {
-      return new SpecBuilder(result).toJSON();
+export const transform = (sourcefilePathOrJson: string, builderCls?) => {
+  let result: any = sourcefilePathOrJson;
+  if (typeof sourcefilePathOrJson === 'string') {
+    if (fs.existsSync(sourcefilePathOrJson)) {
+      const content = fs.readFileSync(sourcefilePathOrJson, 'utf8');
+      result = parse(sourcefilePathOrJson, content);
     }
+  }
+  if (!result) {
+    return;
+  }
+  if (builderCls) {
+    return new builderCls(result).toJSON();
+  } else {
+    return new SpecBuilder(result).toJSON();
   }
 };
 
 export { saveYaml } from './parse';
 
-export const generate = (sourceFilePath: string, targetFilePath: string, builderCls?) => {
-  const transformResultJSON = transform(sourceFilePath, builderCls);
+export const generate = (sourceFilePathOrJson: any, targetFilePath: string, builderCls?) => {
   let baseDir = process.cwd();
-  if (!path.isAbsolute(sourceFilePath)) {
-    sourceFilePath = path.join(baseDir, sourceFilePath);
-  } else {
-    baseDir = path.dirname(sourceFilePath);
+  let transformResultJSON = {};
+  if (typeof sourceFilePathOrJson === 'string') {
+    if (!path.isAbsolute(sourceFilePathOrJson)) {
+      sourceFilePathOrJson = path.join(baseDir, sourceFilePathOrJson);
+    } else {
+      baseDir = path.dirname(sourceFilePathOrJson);
+    }
   }
+  transformResultJSON = transform(sourceFilePathOrJson, builderCls);
   if (!path.isAbsolute(targetFilePath)) {
     targetFilePath = path.join(baseDir, targetFilePath);
   }

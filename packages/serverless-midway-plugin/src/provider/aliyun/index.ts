@@ -19,7 +19,7 @@ class ProviderFc extends ProviderBase {
 
       },
       'package:midway-spec': async () => {
-        await generateFunctionsSpecFile(join(this.servicePath, 'serverless.yml'), join(this.midwayBuildPath, 'template.yml'));
+        await generateFunctionsSpecFile(this.getSpecJson(), join(this.midwayBuildPath, 'template.yml'));
       },
       'package:midway-wrapper': async () => {
         this.loadWrapper(wrapperContent);

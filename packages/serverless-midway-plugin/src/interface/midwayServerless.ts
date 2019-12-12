@@ -14,6 +14,7 @@ export interface IServerless {
         events: any;
         initialize?: string;
         layers?: Ilayer
+        functions?: string[]
       }
     },
     provider: {

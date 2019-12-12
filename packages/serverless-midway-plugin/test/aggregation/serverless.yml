@@ -1,0 +1,34 @@
+service: serverless-midway-test
+
+provider:
+  name: aliyun
+
+functions:
+  index:
+    handler: index.handler
+    events:
+      - http:
+          path: '/'
+          method: get
+  hello:
+    handler: hello.handler
+    events:
+      - http:
+          path: '/hello'
+          method: get
+
+plugins:
+  - test
+
+aggregation:
+  index:
+    handler: aggregation.handler
+    functions:
+      - index
+      - hello
+
+package:
+  include:
+  exclude:
+  excludeDevDependencies: false
+  artifact: my-artifact.zip
