@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.2](https://github.com/midwayjs/midway-faas/compare/v0.1.1...v0.1.2) (2019-12-13)
+
+
+### Bug Fixes
+
+* aggregation deploy prefix ([06f5283](https://github.com/midwayjs/midway-faas/commit/06f52830bf796e99bcc716a3a48cb0d9529c65cd))
+* aggregation deploy prefix ([53b48fe](https://github.com/midwayjs/midway-faas/commit/53b48feb6d2698709eef491e856c8eb50ce9a1c9))
+
+
+
+
+
 ## [0.1.1](https://github.com/midwayjs/midway-faas/compare/v0.1.0...v0.1.1) (2019-12-13)
 
 
