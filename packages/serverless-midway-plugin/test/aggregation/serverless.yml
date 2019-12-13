@@ -1,5 +1,5 @@
 aggregation:
-  common:
+  index:
     deployOrigin: false
     functions:
       - index
@@ -12,22 +12,19 @@ functions:
     handler: index.handler
     events:
       - http:
-          path: /apis/index
+          path: /api/index
           method: get
   hello:
     handler: hello.handler
     events:
       - http:
-          path: /apis/hello
+          path: /api/hello
           method: get
 package:
-  include: null
-  exclude: null
-  excludeDevDependencies: false
-  artifact: my-artifact.zip
+  artifact: midwayFaas.zip
 plugins:
   - test
 provider:
   name: aliyun
 service:
-  name: serverless-midway-test
+  name: demo-aggregation

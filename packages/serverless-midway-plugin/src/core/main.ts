@@ -2,6 +2,7 @@ import { ProviderManager } from './providerManager';
 import { IServerless, IServerlessOptions } from '../interface/midwayServerless';
 import { transform, saveYaml } from '@midwayjs/spec-builder';
 import { join } from 'path';
+import { commonPrefix } from './utils';
 const { Select } = require('enquirer');
 const coverAttributes = ['layers', 'aggregation'];
 export class MidwayServerless {
@@ -74,6 +75,7 @@ export class MidwayServerless {
     }
 
     this.serverless.cli.log('Aggregation Deploy');
+    const allAggregationPaths = [];
     for (const aggregationName in this.serverless.service.aggregation) {
       const aggregationFuncName = `aggregation${aggregationName}`;
       this.serverless.service.functions[aggregationFuncName] = this.serverless.service.aggregation[aggregationName];
@@ -114,34 +116,16 @@ export class MidwayServerless {
         }).filter((func: any) => !!func);
       }
 
-      const currentPath = this.commonPrefix(allPaths);
-      this.serverless.cli.log(` - using '${currentPath}/*' to deploy '${allPaths.join(`', '`)}'`);
+      let currentPath = commonPrefix(allPaths);
+      currentPath = currentPath ? `${currentPath}/*` : '/*';
+      this.serverless.cli.log(` - using '${currentPath}' to deploy '${allPaths.join(`', '`)}'`);
+      if (allAggregationPaths.indexOf(currentPath) !== -1) {
+        console.error(`Cannot use the same prefix '${currentPath}' for aggregation deployment`);
+        process.exit();
+      }
+      allAggregationPaths.push(currentPath);
       this.serverless.service.functions[aggregationFuncName]._handlers = handlers;
-      this.serverless.service.functions[aggregationFuncName].events = [{ http: { method: 'get', path: currentPath + '/*' }}];
+      this.serverless.service.functions[aggregationFuncName].events = [{ http: { method: 'get', path: currentPath }}];
     }
-  }
-
-  commonPrefixUtil(str1: string, str2: string): string {
-    let result = '';
-    const n1 = str1.length;
-    const n2 = str2.length;
-
-    for (let i = 0, j = 0; i <= n1 - 1 && j <= n2 - 1; i++, j++) {
-        if (str1[i] !== str2[j]) {
-            break;
-        }
-        result += str1[i];
-    }
-    return result;
-  }
-
-  commonPrefix(arr: string[]): string {
-    let prefix: string = arr[0];
-    const n = arr.length;
-    for (let i = 1; i <= n - 1; i++) {
-        prefix = this.commonPrefixUtil(prefix, arr[i]);
-    }
-
-    return prefix.replace(/\/[^\/]*$/, '') || '/';
   }
 }
