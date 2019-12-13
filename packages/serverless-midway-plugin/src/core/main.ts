@@ -24,7 +24,13 @@ export class MidwayServerless {
 
     if (!this.serverless.service.provider.name || this.options.platform) {
       let platform = this.options.platform;
-      if (this.options.platform === true) {
+      let needSelectPlatform = false;
+      if (!this.serverless.service.provider.name) { // 未标明哪个平台
+        needSelectPlatform = true;
+      } else if (this.options.platform === true) { // 使用 --platform
+        needSelectPlatform = true;
+      }
+      if (needSelectPlatform) {
         const prompt = new Select({
           name: 'provider',
           message: 'Which platform do you want to use?',
@@ -33,10 +39,12 @@ export class MidwayServerless {
         const answers = await prompt.run();
         platform = answers.split(' ')[1];
       }
-      serviceyml.provider.name = platform;
-      this.serverless.service.provider.name = platform;
-      this.serverless.pluginManager.serverlessConfigFile.provider.name = platform;
-      saveYaml(yamlFile, serviceyml);
+      if (typeof platform === 'string') {
+        serviceyml.provider.name = platform;
+        this.serverless.service.provider.name = platform;
+        this.serverless.pluginManager.serverlessConfigFile.provider.name = platform;
+        saveYaml(yamlFile, serviceyml);
+      }
     }
 
     coverAttributes.forEach((attr: string) => {
