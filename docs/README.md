@@ -1,8 +1,7 @@
-# Midway FaaS 开源文档（汇总版）
+# Midway FaaS 开源文档
 
 <a name="61a3ec66"></a>
 # 介绍
-
 
 <a name="ea0d4c1d"></a>
 ## Midway FaaS 是什么
