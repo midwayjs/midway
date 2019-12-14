@@ -1,5 +1,7 @@
 # Midway Faas
 
+> 查看[详细文档](https://github.com/midwayjs/midway-faas/blob/development/docs/readme.md)
+
 ## 快速开始
 
 > 国内用户建议使用 `cnpm` 加速npm，`npm install -g cnpm --registry=https://registry.npm.taobao.org`
@@ -7,25 +9,25 @@
 
 ### 第一步：安装 serverless
 
-```shell script
+```shell
 $ npm i -g serverless
 ```
 
 ### 第二步：创建项目
 
-```shell script
+```shell
 $ serverless install --url https://github.com/midwayjs/midway-faas-examples/tree/master/demo-faas
 ```
 
 ### 第三步：进入目录
 
-```shell script
+```shell
 $ cd demo-faas
 ```
 
 ### 第四步：安装npm依赖
 
-```shell script
+```shell
 $ npm i
 ```
 
@@ -33,7 +35,7 @@ $ npm i
 
 ### invoke 本地调用 & 本地调试
 
-```shell script
+```shell
 $ serverless invoke -f index
 
 // debug 需要 node 10.15 +
@@ -48,7 +50,7 @@ $ serverless invoke -f index --debug
 
 ### package 打包构建
 
-```shell script
+```shell
 $ serverless package
 ```
 
@@ -60,7 +62,7 @@ $ serverless package
 
 ### deploy 部署到线上
 
-```shell script
+```shell
 $ serverless deploy
 ```
 
