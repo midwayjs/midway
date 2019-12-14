@@ -70,8 +70,8 @@ Typescript 和 Javascript 既相似又有着许多不同，以往的 Node.js 应
 
 推荐教程：
 
-- [Typescript 入门教程 ](https://ts.xcatliu.com/)
-- [Typescript Handbook ](https://zhongsp.gitbooks.io/typescript-handbook/)
+- [Typescript 入门教程](https://ts.xcatliu.com/)
+- [Typescript Handbook](https://zhongsp.gitbooks.io/typescript-handbook/)
 
 <a name="article-title"></a>
 # 快速入门
@@ -170,7 +170,7 @@ $ serverless invoke --function index
 
 调用演示如下：
 
-![render1576235391983.gif](https://intranetproxy.alipay.com/skylark/lark/0/2019/gif/49582/1576235466021-82b96e97-417a-4ac7-9572-5f35c3e53f14.gif#align=left&display=inline&height=860&name=render1576235391983.gif&originHeight=860&originWidth=1454&size=892849&status=done&style=none&width=1454)
+![render1576235391983.gif](https://img.alicdn.com/tfs/TB1kb6uqxn1gK0jSZKPXXXvUXXa-1454-860.gif)
 
 <a name="rXHCg"></a>
 ## 单元测试
@@ -184,7 +184,7 @@ $ serverless test
 
 单测流程演示如下：
 
-![render1576235168788.gif](https://intranetproxy.alipay.com/skylark/lark/0/2019/gif/49582/1576235262547-af124e43-cfae-44c0-a0dc-ea0c1a05e63e.gif#align=left&display=inline&height=860&name=render1576235168788.gif&originHeight=860&originWidth=1454&size=1074880&status=done&style=none&width=1454)
+![render1576235168788.gif](https://img.alicdn.com/tfs/TB1VcryqAT2gK0jSZFkXXcIQFXa-1454-860.gif)
 
 <a name="quokQ"></a>
 ## 部署
@@ -408,11 +408,13 @@ serverless deploy -playform=<aliyun|tencent>
 
 <a name="m26bz"></a>
 ### 阿里云
-阿里云首次部署需要配置 `accountId` 、 `accessKey` 与 `accessSecret`<br />![image.png](https://intranetproxy.alipay.com/skylark/lark/0/2019/png/12726/1576236625847-6ddd3c41-7ab0-4e94-bd7e-aea3394696f4.png#align=left&display=inline&height=257&name=image.png&originHeight=514&originWidth=1152&size=96360&status=done&style=none&width=576)
+阿里云首次部署需要配置 `accountId` 、 `accessKey` 与 `accessSecret`
 
-相关配置可以参考下列图示进行获取：<br />![image.png](https://intranetproxy.alipay.com/skylark/lark/0/2019/png/12726/1576236656586-a60d3c4a-be61-4a99-990a-bbc4b0e7232b.png#align=left&display=inline&height=219&name=image.png&originHeight=696&originWidth=1832&size=177573&status=done&style=none&width=577)[https://account.console.aliyun.com/#/secure](https://account.console.aliyun.com/#/secure)
+![image.png](https://img.alicdn.com/tfs/TB1csbyqrj1gK0jSZFOXXc7GpXa-1152-514.png)
 
-![image.png](https://intranetproxy.alipay.com/skylark/lark/0/2019/png/12726/1576236673971-10c9d827-3324-4f1a-a3ad-4b133bc007ff.png#align=left&display=inline&height=296&name=image.png&originHeight=592&originWidth=2406&size=175954&status=done&style=none&width=1203)<br />[https://usercenter.console.aliyun.com/#/manage/ak](https://usercenter.console.aliyun.com/#/manage/ak)
+相关配置可以参考下列图示进行获取：<br />![image.png](https://img.alicdn.com/tfs/TB1oWTsqpY7gK0jSZKzXXaikpXa-1832-696.png)[https://account.console.aliyun.com/#/secure](https://account.console.aliyun.com/#/secure)
+
+![image.png](https://img.alicdn.com/tfs/TB10yrxqxD1gK0jSZFKXXcJrVXa-2406-592.png)<br />[https://usercenter.console.aliyun.com/#/manage/ak](https://usercenter.console.aliyun.com/#/manage/ak)
 <a name="t7SG9"></a>
 ### 腾讯云
 <a name="Odt74"></a>
