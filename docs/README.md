@@ -412,9 +412,10 @@ serverless deploy -playform=<aliyun|tencent>
 
 ![image.png](https://img.alicdn.com/tfs/TB1csbyqrj1gK0jSZFOXXc7GpXa-1152-514.png)
 
-相关配置可以参考下列图示进行获取：<br />![image.png](https://img.alicdn.com/tfs/TB1oWTsqpY7gK0jSZKzXXaikpXa-1832-696.png)[https://account.console.aliyun.com/#/secure](https://account.console.aliyun.com/#/secure)
+相关配置可以参考下列图示进行获取：<br />![image.png](https://img.alicdn.com/tfs/TB1oWTsqpY7gK0jSZKzXXaikpXa-1832-696.png)
+[配置获取](https://account.console.aliyun.com/#/secure)
 
-![image.png](https://img.alicdn.com/tfs/TB10yrxqxD1gK0jSZFKXXcJrVXa-2406-592.png)<br />[https://usercenter.console.aliyun.com/#/manage/ak](https://usercenter.console.aliyun.com/#/manage/ak)
+![image.png](https://img.alicdn.com/tfs/TB10yrxqxD1gK0jSZFKXXcJrVXa-2406-592.png)<br />[安全信息管理](https://usercenter.console.aliyun.com/#/manage/ak)
 <a name="t7SG9"></a>
 ### 腾讯云
 <a name="Odt74"></a>
