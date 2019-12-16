@@ -15,6 +15,10 @@ import {
   MidwayRequestContainer,
 } from 'midway-core';
 
+import SimpleLock from '@midwayjs/simple-lock';
+
+const LOCK_KEY = '_faas_starter_start_key';
+
 function isTypeScriptEnvironment() {
   return !!require.extensions['.ts'] || process.env.MIDWAY_TS_MODE === 'true';
 }
@@ -29,6 +33,7 @@ export class FaaSStarter implements IFaaSStarter {
   isTsMode: boolean;
   funMappingStore: Map<string, any> = new Map();
   logger;
+  private lock = new SimpleLock();
 
   constructor(
     options: {
@@ -139,38 +144,46 @@ export class FaaSStarter implements IFaaSStarter {
   async start(
     opts: {
       disableAutoLoad?: boolean;
+      cb?: () => Promise<void>;
     } = {}
   ) {
-    let containerOptions = {};
-    try {
-      const containerOptPath = require.resolve(join(this.appDir, 'ioc'));
-      containerOptions = require(containerOptPath);
-      if (typeof containerOptions === 'function') {
-        containerOptions = containerOptions({
-          baseDir: this.baseDir,
-          appDir: this.appDir,
-        } as MidwayFaaSInfo);
+
+    return this.lock.sureOnce(async () => {
+      let containerOptions = {};
+      try {
+        const containerOptPath = require.resolve(join(this.appDir, 'ioc'));
+        containerOptions = require(containerOptPath);
+        if (typeof containerOptions === 'function') {
+          containerOptions = containerOptions({
+            baseDir: this.baseDir,
+            appDir: this.appDir,
+          } as MidwayFaaSInfo);
+        }
+      } catch (err) {
+        // ignore
+        this.logger.info('midway-faas: ioc config read fail and skip');
       }
-    } catch (err) {
-      // ignore
-      this.logger.info('midway-faas: ioc config read fail and skip');
-    }
 
-    this.loader.loadDirectory(Object.assign(opts, containerOptions));
-    this.registerDecorator();
+      this.loader.loadDirectory(Object.assign(opts, containerOptions));
+      this.registerDecorator();
 
-    // store all function entry
-    const funModules = listModule(FUNC_KEY);
-    for (const funModule of funModules) {
-      const funHandlerName: string = getClassMetadata(FUNC_KEY, funModule);
-      this.funMappingStore.set(funHandlerName, funModule);
-    }
+      // store all function entry
+      const funModules = listModule(FUNC_KEY);
+      for (const funModule of funModules) {
+        const funHandlerName: string = getClassMetadata(FUNC_KEY, funModule);
+        this.funMappingStore.set(funHandlerName, funModule);
+      }
 
-    const modules = listPreloadModule();
-    for (const module of modules) {
-      // preload init context
-      await this.getApplicationContext().getAsync(module);
-    }
+      const modules = listPreloadModule();
+      for (const module of modules) {
+        // preload init context
+        await this.getApplicationContext().getAsync(module);
+      }
+      // now only for test case
+      if (typeof opts.cb === 'function') {
+        await opts.cb();
+      }
+    }, LOCK_KEY);
   }
 
   getApplicationContext(): MidwayContainer {

@@ -1,20 +1,14 @@
 {
-  "name": "@midwayjs/faas",
-  "version": "0.1.2",
+  "name": "@midwayjs/simple-lock",
+  "version": "1.0.0",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/decorator": "^1.11.2",
-    "@midwayjs/simple-lock": "^1.0.0",
-    "debug": "^4.1.1",
-    "deep-eql": "^4.0.0",
-    "injection": "^1.7.4",
-    "is-type-of": "^1.2.1",
-    "midway-core": "^1.11.2"
   },
   "files": [
     "dist",
-    "src"
+    "src",
+    "entry.js"
   ],
   "devDependencies": {
     "midway-bin": "1"
@@ -27,6 +21,5 @@
     "cov": "NODE_ENV=unittest midway-bin cov --ts",
     "clean": "midway-bin clean",
     "autod": "midway-bin autod"
-  },
-  "gitHead": "5a6539a27cf1376a8ea9c9a8553fdfb2f78d55bd"
+  }
 }

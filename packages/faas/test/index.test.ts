@@ -1,5 +1,7 @@
 import { join } from 'path';
+import { expect } from 'chai';
 import { createServerlessMock } from './util';
+import { FaaSStarter } from '../src/';
 
 describe('test/index.test.ts', () => {
   describe('default value', () => {
@@ -85,6 +87,23 @@ describe('test/index.test.ts', () => {
           { text: 'a' }
         )
         .expect(/ahello/, done);
+    });
+  });
+
+  describe('use simple lock', () => {
+    it('start should exec only once', async () => {
+      const faas = new FaaSStarter({
+        baseDir: join(__dirname, './fixtures/base-app'),
+        typescript: true
+      });
+
+      let i = 0;
+      const cb = async () => {
+        i++;
+      };
+      const arr = [faas.start({cb}), faas.start({cb}), faas.start({cb})];
+      await Promise.all(arr);
+      expect(1).eq(i);
     });
   });
 });
