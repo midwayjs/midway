@@ -1,6 +1,6 @@
 {
   "name": "midway-core",
-  "version": "1.15.1",
+  "version": "1.16.0",
   "description": "midway core",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -28,12 +28,12 @@
     "xmldom": "^0.1.27"
   },
   "dependencies": {
-    "@midwayjs/decorator": "^1.15.1",
+    "@midwayjs/decorator": "^1.16.0",
     "camelcase": "^5.2.0",
     "debug": "^4.1.1",
     "globby": "^10.0.1",
     "graphviz": "^0.0.8",
-    "injection": "^1.7.4",
+    "injection": "^1.8.0",
     "is-type-of": "^1.2.1"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
