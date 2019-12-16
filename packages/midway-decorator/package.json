@@ -13,7 +13,7 @@
     "autod": "midway-bin autod"
   },
   "dependencies": {
-    "injection": "^1.7.4"
+    "injection": "^1.8.0"
   },
   "devDependencies": {
     "midway-bin": "^1.15.1"
