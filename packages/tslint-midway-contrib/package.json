@@ -1,6 +1,6 @@
 {
   "name": "tslint-midway-contrib",
-  "version": "1.14.1",
+  "version": "1.16.1",
   "description": "tslint default rule for midway",
   "main": "tslint.json",
   "scripts": {
