@@ -6,14 +6,15 @@
   "dependencies": {
   },
   "files": [
-    "dist",
-    "src",
-    "entry.js"
+    "dist"
   ],
   "devDependencies": {
     "midway-bin": "1"
   },
-  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:midwayjs/midway-faas.git"
+  },
   "scripts": {
     "build": "npm run lint && midway-bin build -c",
     "lint": "../../node_modules/.bin/tslint --format prose -c ../../tslint.json src/**/*.ts test/**/*.ts",
