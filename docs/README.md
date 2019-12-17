@@ -394,7 +394,7 @@ custom:
 
 ```
 
-如上面的示例，原本的两个函数单独部署时请求路径为：<br />index: `domain.example.com/api/index`<br />hello: `domain.example.com/api/hello`<br />在进行高密度部署之后，回创建一个 `domain.example.com/api/*` 路径，来统一承接 `/index`  与 `/hello`  路径的流量，然后再跟进每个的子路径进行分发，因此函数的请求路径不会产生变化。
+如上面的示例，原本的两个函数单独部署时请求路径为：<br />index: `domain.example.com/api/index`<br />hello: `domain.example.com/api/hello`<br />在进行高密度部署之后，会创建一个 `domain.example.com/api/*` 路径，来统一承接 `/index`  与 `/hello`  路径的流量，然后再跟进每个的子路径进行分发，因此函数的请求路径不会产生变化。
 
 <a name="EXNvD"></a>
 # 部署
