@@ -26,6 +26,17 @@ export class BaseRuntimeEngine implements RuntimeEngine {
   }
 
   addRuntimeExtension(ext: RuntimeExtension) {
+    //
+    // This is for compatibility legacy layers
+    // And this logic will be removed soon
+    //
+    const legacyExt: any = ext;
+    if (legacyExt.beforeStart) {
+      ext.beforeRuntimeStart = legacyExt.beforeStart;
+    }
+    if (legacyExt.beforeReady) {
+      ext.afterFunctionStart = legacyExt.beforeReady;
+    }
     this.runtimeExtensions.push(ext);
     return this;
   }
