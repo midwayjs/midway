@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/egg-layer",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "scripts": {
@@ -18,12 +18,12 @@
     "koa-compose": "^4.1.0"
   },
   "devDependencies": {
-    "@midwayjs/runtime-engine": "^0.1.2",
-    "@midwayjs/runtime-mock": "^0.1.2",
-    "@midwayjs/serverless-fc-starter": "^0.1.2",
-    "@midwayjs/serverless-fc-trigger": "^0.1.2",
-    "@midwayjs/serverless-scf-starter": "^0.1.2",
-    "@midwayjs/serverless-scf-trigger": "^0.1.2",
+    "@midwayjs/runtime-engine": "^0.1.3",
+    "@midwayjs/runtime-mock": "^0.1.3",
+    "@midwayjs/serverless-fc-starter": "^0.1.3",
+    "@midwayjs/serverless-fc-trigger": "^0.1.3",
+    "@midwayjs/serverless-scf-starter": "^0.1.3",
+    "@midwayjs/serverless-scf-trigger": "^0.1.3",
     "midway-bin": "1",
     "supertest": "^4.0.2"
   },
