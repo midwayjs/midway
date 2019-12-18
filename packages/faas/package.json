@@ -5,7 +5,7 @@
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@midwayjs/decorator": "^1.11.2",
-    "@midwayjs/simple-lock": "^1.0.0",
+    "@midwayjs/simple-lock": "^0.1.2",
     "debug": "^4.1.1",
     "deep-eql": "^4.0.0",
     "injection": "^1.7.4",
