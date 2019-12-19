@@ -34,7 +34,8 @@
     "clean": "lerna clean --yes && rm -rf ./packages/**/package-lock.json",
     "build": "sh scripts/build.sh",
     "prettier": "prettier --write 'packages/**/*.ts'",
-    "authors": "git log --format='%aN <%aE>' | sort -u > AUTHORS"
+    "authors": "git log --format='%aN <%aE>' | sort -u > AUTHORS",
+    "site": "vuepress dev docs"
   },
   "keywords": [
     "container",
