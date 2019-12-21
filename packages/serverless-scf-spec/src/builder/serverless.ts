@@ -73,6 +73,7 @@ export class SCFServerlessSpecBuilder extends SpecBuilder {
               serviceId:
                 (providerData as any).serviceId || (evt as any).serviceId,
               integratedResponse: true,
+              enableCORS: (providerData as any).cors || (evt as any).cors
             },
           };
 
