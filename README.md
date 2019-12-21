@@ -1,6 +1,6 @@
 # Midway Faas
 
-> 查看[详细文档](https://github.com/midwayjs/midway-faas/blob/development/docs/guide.md)
+> 查看[详细文档](https://github.com/midwayjs/midway-faas/blob/development/docs/guide)
 
 ## 快速开始
 
