@@ -5,7 +5,8 @@
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@midwayjs/runtime-engine": "^0.1.2",
-    "type-is": "^1.6.18"
+    "content-type": "^1.0.4",
+    "querystring": "^0.2.0"
   },
   "devDependencies": {
     "@midwayjs/runtime-mock": "^0.1.2",

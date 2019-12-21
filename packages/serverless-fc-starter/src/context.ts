@@ -1,4 +1,5 @@
 import typeis = require('type-is');
+import * as qs from 'querystring';
 
 const ORIGIN_EVENT = Symbol.for('ctx#origin_event');
 const EVENT = Symbol.for('ctx#event');
@@ -53,15 +54,39 @@ export class Request {
   }
 
   get body() {
-    if (!this[BODY_PARSED]) {
-      if (this[EVENT].isBase64Encoded) {
-        this[BODY] = Buffer.from(this[EVENT].body, 'base64').toString();
-      } else {
-        this[BODY] = this[EVENT].body;
-      }
-      this[BODY_PARSED] = true;
+    let body = this[EVENT].body;
+    if (this[EVENT].isBase64Encoded) {
+      return Buffer.from(body, 'base64').toString();
     }
 
+    if (this[BODY_PARSED]) {
+      return this[BODY];
+    }
+
+    if (Buffer.isBuffer(body)) {
+      body = Buffer.from(body).toString();
+    }
+
+    switch (typeis(this, ['urlencoded', 'json'])) {
+      case 'json':
+        try {
+          this[BODY] = JSON.parse(body);
+        } catch {
+          throw new Error('invalid json received');
+        }
+        break;
+      case 'urlencoded':
+        try {
+          this[BODY] = qs.parse(body);
+        } catch {
+          throw new Error('invalid urlencoded received');
+        }
+        break;
+      default:
+        this[BODY] = body;
+    }
+
+    this[BODY_PARSED] = true;
     return this[BODY];
   }
 
@@ -103,6 +128,7 @@ export class Context {
   requestId;
   credentials;
   function;
+  originContext: null;
 
   constructor(req, res, context) {
     this.req = this.request = new Request(req);
@@ -110,6 +136,7 @@ export class Context {
     this.requestId = context.requestId;
     this.credentials = context.credentials;
     this.function = context.function;
+    this.originContext = context;
   }
 
   // req delegate

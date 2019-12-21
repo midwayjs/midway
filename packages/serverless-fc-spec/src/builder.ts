@@ -1,8 +1,21 @@
-import { SpecBuilder, ProviderStructure, HTTPEvent, ScheduleEvent, LogEvent, OsEvent } from '@midwayjs/spec-builder';
-import { FCFunctionsStructure, FCFunctionStructure, FCFunctionSpec, HTTPEventType, FCCustomDomainSpec, FCSpec } from './interface';
+import {
+  HTTPEvent,
+  LogEvent,
+  OsEvent,
+  ProviderStructure,
+  ScheduleEvent,
+  SpecBuilder,
+} from '@midwayjs/spec-builder';
+import {
+  FCCustomDomainSpec,
+  FCFunctionSpec,
+  FCFunctionsStructure,
+  FCFunctionStructure,
+  FCSpec,
+  HTTPEventType,
+} from './interface';
 
 export class FCSpecBuilder extends SpecBuilder {
-
   toJSON() {
     const providerData: ProviderStructure = this.getProvider();
     const serviceData = this.getService();
@@ -19,7 +32,7 @@ export class FCSpecBuilder extends SpecBuilder {
             Description: serviceData.description,
             Role: providerData.role,
           },
-        }
+        },
       },
     };
 
@@ -32,7 +45,12 @@ export class FCSpecBuilder extends SpecBuilder {
         Type: 'Aliyun::Serverless::Function',
         Properties: {
           Description: funSpec.description || '',
-          Initializer: funSpec.initializer || handler.split('.').slice(0, -1).join('.') + '.initializer',
+          Initializer:
+            funSpec.initializer ||
+            handler
+              .split('.')
+              .slice(0, -1)
+              .join('.') + '.initializer',
           Handler: handler,
           Runtime: funSpec.runtime || providerData.runtime || 'nodejs8',
           CodeUri: funSpec.codeUri || '.',
@@ -40,7 +58,7 @@ export class FCSpecBuilder extends SpecBuilder {
           InitializationTimeout: funSpec.initTimeout || 3,
           MemorySize: funSpec.memorySize || providerData.memorySize || 512,
         },
-        Events: {}
+        Events: {},
       };
 
       for (const event of funSpec['events']) {
@@ -51,7 +69,7 @@ export class FCSpecBuilder extends SpecBuilder {
             Properties: {
               AuthType: 'ANONYMOUS', // 先写死
               Methods: convertMethods(evt.method),
-            }
+            },
           };
 
           httpEventRouters[evt.path] = {
@@ -65,10 +83,11 @@ export class FCSpecBuilder extends SpecBuilder {
           functionTemplate.Events['schedule'] = {
             Type: 'Timer',
             Properties: {
-              CronExpression: evt.type === 'every' ? `@every ${evt.value}` : evt.value,
+              CronExpression:
+                evt.type === 'every' ? `@every ${evt.value}` : evt.value,
               Enable: true,
-              Payload: evt.payload
-            }
+              Payload: evt.payload,
+            },
           };
         }
 
@@ -78,20 +97,20 @@ export class FCSpecBuilder extends SpecBuilder {
             Type: 'Log',
             Properties: {
               SourceConfig: {
-                Logstore: evt.source
+                Logstore: evt.source,
               },
               JobConfig: {
                 MaxRetryTime: evt.retryTime || 1,
-                TriggerInterval: evt.interval || 30
+                TriggerInterval: evt.interval || 30,
               },
               LogConfig: {
                 Project: evt.project,
-                Logstore: evt.log
+                Logstore: evt.log,
               },
               Enable: true,
               InvocationRole: evt.role,
-              Qualifier: evt.version
-            }
+              Qualifier: evt.version,
+            },
           };
         }
 
@@ -107,21 +126,26 @@ export class FCSpecBuilder extends SpecBuilder {
               Filter: {
                 Key: {
                   Prefix: evt.filterPrefix,
-                  Suffix: evt.filterSuffix
-                }
+                  Suffix: evt.filterSuffix,
+                },
               },
               Enable: true,
               InvocationRole: evt.role,
-              Qualifier: evt.version
-            }
+              Qualifier: evt.version,
+            },
           };
         }
       }
 
-      template.Resources[serviceName][funSpec.name || funName] = functionTemplate;
+      template.Resources[serviceName][
+        funSpec.name || funName
+      ] = functionTemplate;
     }
 
-    if (this.originData['custom'] && this.originData['custom']['customDomain']) {
+    if (
+      this.originData['custom'] &&
+      this.originData['custom']['customDomain']
+    ) {
       const domainInfo: {
         domainName: string;
         stage?: string;
@@ -132,8 +156,8 @@ export class FCSpecBuilder extends SpecBuilder {
           Protocol: 'HTTP',
           RouteConfig: {
             routes: httpEventRouters,
-          }
-        }
+          },
+        },
       } as FCCustomDomainSpec;
     }
 
@@ -143,10 +167,14 @@ export class FCSpecBuilder extends SpecBuilder {
 
 function convertMethods(methods: string | string[]): HTTPEventType[] {
   if (typeof methods === 'string') {
+    if (methods === 'any') {
+      return ['GET', 'PUT', 'POST', 'DELETE', 'HEAD'];
+    }
+
     methods = [methods];
   }
 
-  return methods.map((method) => {
+  return methods.map(method => {
     return method.toUpperCase();
   }) as HTTPEventType[];
 }
