@@ -89,11 +89,11 @@ export default class SimpleLock {
    * @param key lock key
    * @param fn exec function
    */
-  async acquire(key: string, fn: () => Promise<void>): Promise<void> {
+  async acquire(key: string, fn: () => Promise<any>): Promise<any> {
     let deferredResolve = null;
     let deferredReject = null;
 
-    const deferred = new Promise<void>((resolve, reject) => {
+    const deferred = new Promise<any>((resolve, reject) => {
       deferredResolve = resolve;
       deferredReject = reject;
     });

@@ -33,17 +33,18 @@ describe('simple lock', () => {
     const arr = [
       lock.acquire('hello', async () => {
         data.push(11);
-        i++;
+        return i++;
       }), lock.acquire('hello', async () => {
         data.push(2);
-        i++;
+        return i++;
       }), lock.acquire('hello', async () => {
         data.push(3);
-        i++;
+        return i++;
       })
     ];
 
-    await Promise.all(arr);
+    const rets = await Promise.all(arr);
+    expect([0, 1, 2]).deep.eq(rets);
     expect(3).eq(i);
     expect([11, 2, 3]).deep.eq(data);
   });
