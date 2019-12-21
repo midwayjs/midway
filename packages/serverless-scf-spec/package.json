@@ -1,10 +1,10 @@
 {
   "name": "@midwayjs/serverless-scf-spec",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/spec-builder": "^0.1.2"
+    "@midwayjs/spec-builder": "^0.1.3"
   },
   "devDependencies": {
     "midway-bin": "1"
