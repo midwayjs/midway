@@ -4,7 +4,7 @@ import LogPlugin from './plugins/test.lg';
 import OnePlugin from './plugins/one.common';
 import * as assert from 'assert';
 describe('load plugin', () => {
-  it('sigle plugin and liftcycles', async () => {
+  it('sigle plugin and lifecycleEvents', async () => {
     const core = new CommandHookCore({
       provider: 'test',
       options: {},
@@ -12,7 +12,7 @@ describe('load plugin', () => {
     core.addPlugin(InvokePlugin);
     await core.ready();
     const allCommands = core.getCommands();
-    assert(allCommands.invoke && allCommands.invoke.lifecycles.length === 6);
+    assert(allCommands.invoke && allCommands.invoke.lifecycleEvents.length === 6);
   });
 
   it('multi plugins', async () => {

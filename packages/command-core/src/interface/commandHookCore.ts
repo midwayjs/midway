@@ -50,7 +50,7 @@ export interface ICommands {
   [command: string]: {
     usage: string;
     type: string;
-    lifecycles: string[];
+    lifecycleEvents: string[];
     rank: number;
     options: {};
     origin: ICommandInstance[];
