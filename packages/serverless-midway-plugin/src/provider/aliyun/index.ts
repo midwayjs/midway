@@ -26,7 +26,7 @@ class ProviderFc extends ProviderBase {
         this.loadWrapper(wrapperContent);
       },
       'deploy:midway-deploy': async () => {
-
+        this.serverless.cli.log('deploy');
         const profPath = join(homedir(), '.fcli/config.yaml');
         const isExists = existsSync(profPath);
         if (!isExists || this.options.resetConfig) {

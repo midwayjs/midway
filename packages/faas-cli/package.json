@@ -6,7 +6,8 @@
   "dependencies": {
     "minimist": "^1.2.0",
     "@midwayjs/spec-builder": "^0.1.5",
-    "@midwayjs/command-core": "^0.1.5"
+    "@midwayjs/command-core": "^0.1.5",
+    "serverless-midway-plugin": "^0.1.5"
   },
   "bin": {
     "mf": "bin/fun.js",

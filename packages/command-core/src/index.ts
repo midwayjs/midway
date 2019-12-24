@@ -81,10 +81,8 @@ export = class CommandHookCore implements ICommandHooksCore {
     if (this.instances.some(plugin => plugin instanceof Plugin)) {
       return;
     }
-
     this.loadCommands(instance, this.commands, instance.commands);
     this.loadHooks(instance.hooks);
-
     this.instances.push(instance);
   }
 
@@ -98,7 +96,11 @@ export = class CommandHookCore implements ICommandHooksCore {
     options?: any
   ) {
     const commandInfo = this.getCommand(commandsArray, allowEntryPoints);
-    const lifecycleEvents = commandInfo.command.lifecycleEvents || [];
+    const lifecycleEvents = this.loadLifecycle(
+          commandInfo.commandName,
+          commandInfo.command.lifecycleEvents,
+          commandInfo.parentCommandList
+    );
     if (options) {
       Object.assign(this.options.options, options);
     }
@@ -218,11 +220,12 @@ export = class CommandHookCore implements ICommandHooksCore {
       // 如果当前插件的rank比当前命令的rank大，则会覆盖
       if (currentRank > currentCommand.rank) {
         currentCommand.rank = currentRank;
-        currentCommand.lifecycleEvents = this.loadLifecycle(
-          command,
-          commandInstance.lifecycleEvents,
-          parentCommandList
-        );
+        currentCommand.lifecycleEvents = commandInstance.lifecycleEvents;
+        // currentCommand.lifecycleEvents = this.loadLifecycle(
+        //   command,
+        //   commandInstance.lifecycleEvents,
+        //   parentCommandList
+        // );
         if (commandInstance.usage) {
           currentCommand.usage = commandInstance.usage;
         }
@@ -309,8 +312,10 @@ export = class CommandHookCore implements ICommandHooksCore {
     }
 
     return {
+      commandName: command,
       command: cmdObj,
       usage,
+      parentCommandList: commandPath.slice(0, -1)
     };
   }
 

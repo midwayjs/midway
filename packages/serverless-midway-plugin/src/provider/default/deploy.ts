@@ -3,6 +3,10 @@ export class Deploy extends CommandBase {
 
   getCommand(): ICommand {
     return {
+      deploy: {
+        usage: 'deploy to online',
+        lifecycleEvents: ['midway-deploy']
+      }
     };
   }
 

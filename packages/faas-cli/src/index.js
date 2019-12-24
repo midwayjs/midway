@@ -1,6 +1,7 @@
 const minimist = require('minimist');
 const CoreClass = require('@midwayjs/command-core');
 const { transform } = require('@midwayjs/spec-builder');
+const MidwayPlugin = require('serverless-midway-plugin');
 const { existsSync } = require('fs');
 const { join } = require('path');
 const baseDir = process.cwd();
@@ -24,7 +25,7 @@ class Cli {
   }
 
   loadDefaultPlugin() {
-    this.core.addPlugin(`npm::serverless-midway-plugin`);
+    this.core.addPlugin(MidwayPlugin);
   }
 
   loadSpec() {
