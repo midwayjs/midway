@@ -1,6 +1,6 @@
 import * as CommandHookCore from '..';
 import InvokePlugin from './plugins/test.invoke';
-import LogPlugin from './plugins/test.log';
+import LogPlugin from './plugins/test.lg';
 import OnePlugin from './plugins/one.common';
 import * as assert from 'assert';
 describe('load plugin', () => {
