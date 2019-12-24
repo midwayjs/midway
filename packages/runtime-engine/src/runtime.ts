@@ -79,9 +79,12 @@ export class ServerlessBaseRuntime extends EventEmitter implements Runtime {
 
   async getContext(eventType, newArgs) {
     return this.contextExtensions.reduce(
-      (promiseCtx, contextExtension) => promiseCtx.then((ctx) => {
-        return Promise.resolve(contextExtension(ctx, this)).then((realCtx: any) => realCtx || ctx);
-      }),
+      (promiseCtx, contextExtension) =>
+        promiseCtx.then(ctx => {
+          return Promise.resolve(contextExtension(ctx, this)).then(
+            (realCtx: any) => realCtx || ctx
+          );
+        }),
       Promise.resolve(this.createFunctionContext(eventType, newArgs))
     );
   }
@@ -235,5 +238,4 @@ export class ServerlessBaseRuntime extends EventEmitter implements Runtime {
       }
     }
   }
-
 }
