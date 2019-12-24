@@ -6,7 +6,29 @@ export class Invoke extends CommandBase {
   serverless: any;
 
   getCommand(): ICommand {
-    return {};
+    return {
+      invoke: {
+        usage: '',
+        lifecycleEvents: ['invoke'],
+        options: {
+          function: {
+            usage: 'function name',
+            shortcut: 'f'
+          },
+          data: {
+            usage: 'function args',
+            shortcut: 'd'
+          },
+          debug: {
+            usage: 'debug function'
+          },
+          trigger: {
+            usage: 'trigger name',
+            shortcut: 't'
+          }
+        }
+      }
+    };
   }
 
   getHooks(): IHooks {

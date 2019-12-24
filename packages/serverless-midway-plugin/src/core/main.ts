@@ -58,6 +58,9 @@ export class MidwayServerless {
 
     ProviderManager.call(this);
 
+    if (!this.serverless.pluginManager.commands.deploy) {
+      this.serverless.pluginManager.commands.deploy = {};
+    }
     this.serverless.pluginManager.commands.deploy.lifecycleEvents = [
       'midway-deploy',
     ];
