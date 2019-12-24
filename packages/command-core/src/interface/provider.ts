@@ -1,1 +1,1 @@
-export interface IProviderInstance { }
+export interface IProviderInstance {}

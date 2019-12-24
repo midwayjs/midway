@@ -1,3 +1,1 @@
-export class CoreError {
-    
-}
+export class CoreError {}

@@ -9,7 +9,7 @@
     "@midwayjs/command-core": "^0.1.5"
   },
   "bin": {
-    "mfun": "bin/fun.js",
+    "mf": "bin/fun.js",
     "f": "bin/fun.js"
   },
   "devDependencies": {

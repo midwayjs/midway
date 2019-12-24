@@ -12,11 +12,7 @@
     "stripInternal": true,
     "pretty": true,
     "declaration": true,
-    "outDir": "dist",
-    "baseUrl": "./src",
-    "paths": {
-      "@/*": ["./*"]
-    }
+    "outDir": "dist"
   },
   "exclude": [
     "dist",
