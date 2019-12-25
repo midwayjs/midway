@@ -6,17 +6,35 @@ import { Local } from './local';
     functionName,
     argsData,
     isDebug,
-    trigger
+    starter,
+    eventPath,
+    eventName,
+    handler,
+    layers
   ] = process.argv.slice(2);
 
   if (isDebug) {
     await waitDebug(isDebug);
   }
 
+  let layersObj: any = null;
+  if (layers) {
+    try {
+      layersObj = JSON.parse(layers);
+    } catch (E) {}
+  }
+
   try {
     const local = new Local({
       functionName,
-      trigger: trigger === 'undefined' ? undefined : trigger,
+      // trigger: trigger === 'undefined' ? undefined : trigger,
+      starter,
+      event: {
+        path: eventPath,
+        name: eventName
+      },
+      handler,
+      layers: layersObj
     });
 
     const args = argsData ? [].concat(JSON.parse(argsData)) : [];

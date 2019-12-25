@@ -1,20 +1,27 @@
 const minimist = require('minimist');
 const CoreClass = require('@midwayjs/command-core');
-const { transform } = require('@midwayjs/spec-builder');
-const MidwayPlugin = require('serverless-midway-plugin');
-const { existsSync } = require('fs');
 const { join } = require('path');
+import { loadSpec } from './utils/loadSpec';
+import CommandPlugin from './plugins/pluginManager';
+
 const baseDir = process.cwd();
-class Cli {
+export * from './plugins/invoke/main';
+export class Cli {
+  argv: any;
+  providerName: string;
+  core: any;
+  spec: any;
+  commands: string[];
   constructor(argv) {
     this.argv = minimist(argv.slice(2));
+    this.commands = [].concat(this.argv._);
     this.loadSpec();
     this.providerName = (this.spec.provider && this.spec.provider.name) || '';
     this.core = new CoreClass({
       config: {
         servicePath: baseDir,
       },
-      commands: this.argv._,
+      commands: this.commands,
       service: this.spec,
       provider: this.providerName,
       options: this.argv,
@@ -25,20 +32,19 @@ class Cli {
   }
 
   loadDefaultPlugin() {
-    this.core.addPlugin(MidwayPlugin);
+    if (!this.commands || !this.commands.length) {
+      return;
+    }
+    switch (this.commands[0]) {
+      case 'plugin':
+        this.core.addPlugin(CommandPlugin);
+        return;
+    }
+    this.core.addPlugin('npm::serverless-midway-plugin');
   }
 
   loadSpec() {
-    const specPath = [
-      'f.yml',
-      'f.yaml',
-      'serverless.yml',
-      'serverless.yaml',
-    ].find(spec => existsSync(join(baseDir, spec)));
-    if (!specPath) {
-      this.error('need f.yml');
-    }
-    this.spec = transform(specPath);
+    this.spec = loadSpec(baseDir);
   }
 
   error(errMsg) {
@@ -79,7 +85,6 @@ class Cli {
 
   async start() {
     await this.core.ready();
-    await this.core.invoke(this.argv._);
+    await this.core.invoke();
   }
 }
-module.exports = Cli;

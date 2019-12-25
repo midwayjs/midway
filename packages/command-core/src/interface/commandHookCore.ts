@@ -16,6 +16,7 @@ export interface IOptions {
     [extensionName: string]: any;
   };
   displayUsage?: any;
+  npm?: string;
 }
 
 export interface ICommandHooksCore {
@@ -27,7 +28,7 @@ export interface ICoreInstance {
   cli: ILog | Console;
   config: any;
   getProvider(providerName: string): IProviderInstance;
-  invoke(commandsArray: string[], allowEntryPoints?: boolean, options?: any);
+  invoke(commandsArray?: string[], allowEntryPoints?: boolean, options?: any);
   pluginManager: ICommandHooksCore;
   service: {
     provider: {

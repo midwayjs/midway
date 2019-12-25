@@ -4,16 +4,22 @@
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "minimist": "^1.2.0",
-    "@midwayjs/spec-builder": "^0.1.5",
     "@midwayjs/command-core": "^0.1.5",
-    "serverless-midway-plugin": "^0.1.5"
+    "@midwayjs/faas": "^0.1.5",
+    "@midwayjs/runtime-mock": "^0.1.5",
+    "@midwayjs/spec-builder": "^0.1.5",
+    "minimist": "^1.2.0",
+    "ora": "^4.0.3",
+    "ts-node": "^8.5.2",
+    "urllib": "^2.34.1",
+    "websocket": "^1.0.30"
   },
   "bin": {
     "mf": "bin/fun.js",
     "f": "bin/fun.js"
   },
   "devDependencies": {
+    "@types/mocha": "^5.2.5",
     "midway-bin": "1"
   },
   "files": [

@@ -2,6 +2,30 @@
 
 基于插件生命周期 + hook的内核
 
+## 内核使用文档
+```js
+import CoreClass from 'command-core';
+const core = new CoreClass({
+    config: {                   // 会挂载到 core.coreInstance.config 上
+        servicePath: baseDir,
+    },
+    commands: ['invoke'],       // 默认命令，多级命令依次传入数组
+    service: this.spec,         // 会挂载到 core.coreInstance.service 上
+    provider: 'providerName',   // 会比对与插件中的provider是都一致来决定插件是否加载
+    options: this.argv,         // 参数，会作为第二个参数传递给插件构造函数，例如 { function: 'index' }
+    log: console,               // 输出及错误捕获
+    displayUsage: func          // 自定义如何展示帮助 displayUsage(commandsArray, usage, this)
+});
+core.addPlugin(Plugin);         // 载入插件，插件支持 class / 'npm:provider:packageName' / 'local:provider:path' 三种形式
+await core.ready();             // 等待初始化
+await core.invoke();            // 执行默认命令
+```
+
+**core.coreInstance** 会作为第一个参数传递给插件的构造函数，上面挂载了各种方法及属性，详见 [./src/interface/commandHookCore.ts](./src/interface/commandHookCore.ts#L25) ICoreInstance
+
+**options** 作为第二个参数传递给插件构造函数
+
+
 ## 插件开发文档
 
 提供了 `BasePlugin` 插件基类，可以继承此基类编写插件
@@ -41,9 +65,10 @@ import CommandHookCore from 'command-core';
 const core = new CommandHookCore({
     provider: 'providerName',
     options: {},
+    commands: ['invoke'],
     log: console
 });
 core.addPlugin(Plugin);         // 载入你的插件
 await core.ready();             // 等待初始化
-await core.invoke(['command']); // 执行对应的命令
+await core.invoke();            // 执行对应的命令
 ```

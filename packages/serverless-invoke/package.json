@@ -4,7 +4,7 @@
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/faas": "^0.1.5",
+    "@midwayjs/faas-cli": "^0.1.5",
     "@midwayjs/runtime-mock": "^0.1.5",
     "@midwayjs/serverless-fc-starter": "^0.1.5",
     "@midwayjs/serverless-fc-trigger": "^0.1.5",

@@ -17,6 +17,10 @@ if (!existsSync(commandHookCoreBasePkg)) {
   writeFileSync(commandHookCoreBasePkg, `{}`);
 }
 
+export const getCoreBaseDir = () => {
+  return commandHookCoreBaseNodeModules;
+};
+
 async function getNpmPath(
   scope: any,
   npmName: string,

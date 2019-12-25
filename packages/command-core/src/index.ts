@@ -91,10 +91,14 @@ export = class CommandHookCore implements ICommandHooksCore {
     allowEntryPoints 为是否可以调用 entryPoints
     */
   public async invoke(
-    commandsArray: string[],
+    commandsArray?: string[],
     allowEntryPoints?: boolean,
     options?: any
   ) {
+    if (commandsArray == null) {
+      commandsArray = this.options.commands;
+    }
+    commandsArray = [].concat(commandsArray);
     const commandInfo = this.getCommand(commandsArray, allowEntryPoints);
     const lifecycleEvents = this.loadLifecycle(
           commandInfo.commandName,
@@ -332,7 +336,7 @@ export = class CommandHookCore implements ICommandHooksCore {
   // 加载npm包插件
   private async loadNpmPlugins() {
     for (const npmPath of this.npmPlugin) {
-      await this.loadNpm(npmPath);
+      await this.loadNpm(npmPath, this.options.npm);
     }
   }
 
