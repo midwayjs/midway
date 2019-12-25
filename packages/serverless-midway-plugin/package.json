@@ -1,6 +1,6 @@
 {
   "name": "serverless-midway-plugin",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "serverless plugin for midway faas",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -28,7 +28,7 @@
   "dependencies": {
     "@alicloud/fun": "^3.1.3",
     "@midwayjs/faas": "^0.1.5",
-    "@midwayjs/invoke": "^0.1.6",
+    "@midwayjs/invoke": "^0.1.7",
     "@midwayjs/serverless-fc-spec": "^0.1.5",
     "@midwayjs/serverless-scf-spec": "^0.1.5",
     "@midwayjs/spec-builder": "^0.1.5",
