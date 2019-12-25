@@ -1,12 +1,12 @@
 {
   "name": "@midwayjs/faas-cli",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/command-core": "^0.1.6",
+    "@midwayjs/command-core": "^0.1.7",
     "@midwayjs/faas": "^0.1.5",
-    "@midwayjs/runtime-mock": "^0.1.6",
+    "@midwayjs/runtime-mock": "^0.1.7",
     "@midwayjs/spec-builder": "^0.1.5",
     "minimist": "^1.2.0",
     "ts-node": "^8.5.2",
@@ -35,5 +35,6 @@
     "cov": "NODE_ENV=unittest midway-bin cov --ts",
     "clean": "midway-bin clean",
     "autod": "midway-bin autod"
-  }
+  },
+  "gitHead": "b67e2753cbdcc91813067ba2a1bb1ce7e85a3dff"
 }
