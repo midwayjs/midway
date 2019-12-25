@@ -10,8 +10,7 @@
     "strict": true,
     "declaration": true,
     "skipLibCheck": true,
-
-    "lib": ["es6", "es7", "dom", "scripthost"],
+    "lib": ["es6", "es7", "scripthost"],
     "sourceMap": true,
     "removeComments": true,
     "module": "commonjs",

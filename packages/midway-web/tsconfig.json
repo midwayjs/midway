@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
+    "target": "ES2018",
     "module": "commonjs",
     "moduleResolution": "node",
     "experimentalDecorators": true,
@@ -10,7 +10,6 @@
     "pretty": true,
     "declaration": true,
     "outDir": "dist",
-    "lib": ["es2017", "dom"],
     "sourceMap": true,
     "jsx": "react"
   },
