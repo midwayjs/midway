@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.6](https://github.com/midwayjs/midway-faas/compare/v0.1.5...v0.1.6) (2019-12-25)
+
+
+### Bug Fixes
+
+* format ([99edaef](https://github.com/midwayjs/midway-faas/commit/99edaef97a5c4b21b1223e089a9d39dbe8694d97))
+* lifecycle ([caa17ff](https://github.com/midwayjs/midway-faas/commit/caa17ffbf6e1b48c390db744a3ce7fcd17b2af3d))
+
+
+### Features
+
+* cli & cli core ([b1fc539](https://github.com/midwayjs/midway-faas/commit/b1fc5395598acc393786c550ef089321fc94ef2c))
+* faas-cli default plugin manager ([ec6cf5f](https://github.com/midwayjs/midway-faas/commit/ec6cf5ff334225eed098414af6aa6dd42c3bd39b))
+
+
+
+
+
 ## [0.1.5](https://github.com/midwayjs/midway-faas/compare/v0.1.4...v0.1.5) (2019-12-22)
 
 **Note:** Version bump only for package midway-faas

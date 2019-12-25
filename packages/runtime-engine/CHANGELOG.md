@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.6](https://github.com/midwayjs/midway-faas/compare/v0.1.5...v0.1.6) (2019-12-25)
+
+
+### Bug Fixes
+
+* format ([99edaef](https://github.com/midwayjs/midway-faas/commit/99edaef97a5c4b21b1223e089a9d39dbe8694d97))
+
+
+
+
+
 ## [0.1.5](https://github.com/midwayjs/midway-faas/compare/v0.1.4...v0.1.5) (2019-12-22)
 
 **Note:** Version bump only for package @midwayjs/runtime-engine

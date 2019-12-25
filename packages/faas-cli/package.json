@@ -1,12 +1,12 @@
 {
   "name": "@midwayjs/faas-cli",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/command-core": "^0.1.5",
+    "@midwayjs/command-core": "^0.1.6",
     "@midwayjs/faas": "^0.1.5",
-    "@midwayjs/runtime-mock": "^0.1.5",
+    "@midwayjs/runtime-mock": "^0.1.6",
     "@midwayjs/spec-builder": "^0.1.5",
     "minimist": "^1.2.0",
     "ora": "^4.0.3",
