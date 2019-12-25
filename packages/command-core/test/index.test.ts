@@ -12,7 +12,7 @@ describe('load plugin', () => {
     core.addPlugin(InvokePlugin);
     await core.ready();
     const allCommands = core.getCommands();
-    assert(allCommands.invoke && allCommands.invoke.lifecycleEvents.length === 6);
+    assert(allCommands.invoke && allCommands.invoke.lifecycleEvents.length === 2);
   });
 
   it('multi plugins', async () => {
