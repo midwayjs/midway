@@ -1,10 +1,10 @@
 {
   "name": "@midwayjs/runtime-mock",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/runtime-engine": "^0.1.7"
+    "@midwayjs/runtime-engine": "^0.1.8"
   },
   "devDependencies": {
     "midway-bin": "1"
