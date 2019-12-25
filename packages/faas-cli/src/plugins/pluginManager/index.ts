@@ -3,7 +3,6 @@ const { getCoreBaseDir } = require('@midwayjs/command-core/dist/npm');
 import { existsSync, readdirSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { exec } from 'child_process';
-import * as ora from 'ora';
 
 class PluginManager extends BasePlugin {
 
@@ -76,10 +75,8 @@ class PluginManager extends BasePlugin {
     async install() {
         if (typeof this.options.install === 'string') {
             const plugin = this.options.install.replace(/@.*$/, '');
-            const spinner = ora(`  - install plugin ${plugin}`).start();
             const dir: string = getCoreBaseDir();
             await this.execPromise(`cd ${join(dir, '../')};${ this.options.npm || 'npm'} install ${this.options.install} --production`);
-            spinner.stop();
             this.core.cli.log(`  - installed '${plugin}'`);
         } else {
             this.core.cli.log(`please user plugin -i=<plugin name>`);
@@ -111,12 +108,10 @@ class PluginManager extends BasePlugin {
 
     async updatePlugin(newPlugin) {
         const plugin = newPlugin.replace(/@.*$/, '');
-        const spinner = ora(`  - update plugin ${plugin}`).start();
         const oldVersion = this.getPluginVersion(plugin);
         const dir: string = getCoreBaseDir();
         await this.execPromise(`cd ${dir};rm -rf ${plugin}`);
         await this.execPromise(`cd ${join(dir, '../')};${ this.options.npm || 'npm'} install ${newPlugin} --production`);
-        spinner.stop();
         const newVersion = this.getPluginVersion(plugin);
         this.core.cli.log(`  - update '${plugin}'${ oldVersion ? ` from ${oldVersion}` : ''}${ newVersion ? ` to ${newVersion}` : ''}`);
     }

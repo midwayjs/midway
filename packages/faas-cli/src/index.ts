@@ -28,6 +28,7 @@ export class Cli {
       log: console,
     });
     this.loadDefaultPlugin();
+    this.loadPlatformPlugin();
     this.loadUserPlugin();
   }
 
@@ -40,6 +41,9 @@ export class Cli {
         this.core.addPlugin(CommandPlugin);
         return;
     }
+  }
+
+  loadPlatformPlugin() {
     this.core.addPlugin('npm::serverless-midway-plugin');
   }
 
