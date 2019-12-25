@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.16.2](https://github.com/midwayjs/midway/compare/v1.16.1...v1.16.2) (2019-12-25)
+
+
+### Bug Fixes
+
+* interface scheduleOpts ([2ae0766](https://github.com/midwayjs/midway/commit/2ae0766))
+
+
+
+
+
 ## [1.16.1](https://github.com/midwayjs/midway/compare/v1.16.0...v1.16.1) (2019-12-16)
 
 **Note:** Version bump only for package @midwayjs/decorator
