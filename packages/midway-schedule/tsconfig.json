@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
+    "target": "ES2018",
     "module": "commonjs",
     "moduleResolution": "node",
     "experimentalDecorators": true,
@@ -9,7 +9,6 @@
     "stripInternal": true,
     "pretty": true,
     "declaration": true,
-    "lib": ["es2017", "dom"],
     "sourceMap": true
   },
   "exclude": [
