@@ -9,7 +9,7 @@ export const loadSpec = (baseDir) => {
         'serverless.yaml',
     ].find(spec => existsSync(join(baseDir, spec)));
     if (!specPath) {
-        throw new Error('need yml config');
+        return {};
     }
     return transform(specPath);
 };

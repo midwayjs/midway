@@ -4,6 +4,7 @@ const { join } = require('path');
 import { loadSpec } from './utils/loadSpec';
 import CommandPlugin from './plugins/pluginManager';
 import CommandInvoke from './plugins/invoke';
+import CommandTest from './plugins/test';
 
 const baseDir = process.cwd();
 export * from './plugins/invoke/main';
@@ -37,6 +38,7 @@ export class Cli {
   loadDefaultPlugin() {
     this.loadCommandPlugin();
     this.loadCommandInvoke();
+    this.loadCommandTest();
   }
 
   loadCommandPlugin() {
@@ -47,8 +49,12 @@ export class Cli {
     this.core.addPlugin(CommandInvoke);
   }
 
+  loadCommandTest() {
+    this.core.addPlugin(CommandTest);
+  }
+
   loadPlatformPlugin() {
-    if (this.argv.skipPlatformPlugin) {
+    if (this.argv.skipPlatformPlugin || !this.spec.provider) {
       return;
     }
     this.core.addPlugin('npm::serverless-midway-plugin');

@@ -8,6 +8,8 @@
     "@midwayjs/faas": "^0.1.5",
     "@midwayjs/runtime-mock": "^0.1.7",
     "@midwayjs/spec-builder": "^0.1.5",
+    "co": "^4.6.0",
+    "midway-bin": "^1.15.1",
     "minimist": "^1.2.0",
     "ts-node": "^8.5.2",
     "urllib": "^2.34.1",
