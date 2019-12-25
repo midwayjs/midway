@@ -49,9 +49,13 @@ export class ProviderBase {
       const commandObj: ICommandObject = cmdObj[cmd];
       if (commandObj.getCommand) {
         commandList.push(commandObj.getCommand());
+      } else if (commandObj.commands) {
+        commandList.push(commandObj.commands);
       }
       if (commandObj.getHooks) {
         hooksList.push(commandObj.getHooks());
+      } else if (commandObj.hooks) {
+        hooksList.push(commandObj.hooks);
       }
     });
     return {

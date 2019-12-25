@@ -45,8 +45,10 @@ export interface IServerless {
 export type IServerlessOptions = any;
 
 export interface ICommandObject {
-  getCommand: () => ICommand;
-  getHooks: () => IHooks;
+  getCommand?: () => ICommand;
+  getHooks?: () => IHooks;
+  commands?: any;
+  hooks?: any;
 }
 
 export interface ICommand {

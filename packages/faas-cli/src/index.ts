@@ -3,9 +3,11 @@ const CoreClass = require('@midwayjs/command-core');
 const { join } = require('path');
 import { loadSpec } from './utils/loadSpec';
 import CommandPlugin from './plugins/pluginManager';
+import CommandInvoke from './plugins/invoke';
 
 const baseDir = process.cwd();
 export * from './plugins/invoke/main';
+export const InvokeClass = CommandInvoke;
 export class Cli {
   argv: any;
   providerName: string;
@@ -33,17 +35,22 @@ export class Cli {
   }
 
   loadDefaultPlugin() {
-    if (!this.commands || !this.commands.length) {
-      return;
-    }
-    switch (this.commands[0]) {
-      case 'plugin':
-        this.core.addPlugin(CommandPlugin);
-        return;
-    }
+    this.loadCommandPlugin();
+    this.loadCommandInvoke();
+  }
+
+  loadCommandPlugin() {
+    this.core.addPlugin(CommandPlugin);
+  }
+
+  loadCommandInvoke() {
+    this.core.addPlugin(CommandInvoke);
   }
 
   loadPlatformPlugin() {
+    if (this.argv.skipPlatformPlugin) {
+      return;
+    }
     this.core.addPlugin('npm::serverless-midway-plugin');
   }
 
