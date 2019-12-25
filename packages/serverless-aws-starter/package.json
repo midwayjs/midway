@@ -22,5 +22,5 @@
     "clean": "midway-bin clean",
     "autod": "midway-bin autod"
   },
-  "gitHead": "5a6539a27cf1376a8ea9c9a8553fdfb2f78d55bd"
+  "gitHead": "b67e2753cbdcc91813067ba2a1bb1ce7e85a3dff"
 }
