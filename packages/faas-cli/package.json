@@ -4,16 +4,8 @@
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/command-core": "^0.1.8",
-    "@midwayjs/faas": "^0.1.5",
-    "@midwayjs/runtime-mock": "^0.1.8",
-    "@midwayjs/spec-builder": "^0.1.5",
-    "co": "^4.6.0",
-    "midway-bin": "^1.15.1",
-    "minimist": "^1.2.0",
-    "ts-node": "^8.5.2",
-    "urllib": "^2.34.1",
-    "websocket": "^1.0.30"
+    "@midwayjs/faas-local": "^0.1.8",
+    "@midwayjs/invoke": "^0.1.8"
   },
   "bin": {
     "mf": "bin/fun.js",

@@ -6,6 +6,9 @@ import { existsSync } from 'fs';
 import { join } from 'path';
 
 export default class Test extends BasePlugin {
+  constructor(core, options) {
+    super(core, options);
+  }
   commands = {
     test: {
       usage: 'Test a Serverless service',

@@ -1,21 +1,33 @@
 {
-  "name": "@midwayjs/invoke",
+  "name": "@midwayjs/faas-local",
   "version": "0.1.8",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/faas-local": "^0.1.8",
-    "@midwayjs/serverless-fc-starter": "^0.1.8",
-    "@midwayjs/serverless-fc-trigger": "^0.1.8",
-    "@midwayjs/serverless-scf-starter": "^0.1.8",
-    "@midwayjs/serverless-scf-trigger": "^0.1.8"
+    "@midwayjs/command-core": "^0.1.8",
+    "@midwayjs/faas": "^0.1.5",
+    "@midwayjs/runtime-mock": "^0.1.8",
+    "@midwayjs/spec-builder": "^0.1.5",
+    "co": "^4.6.0",
+    "midway-bin": "^1.15.1",
+    "minimist": "^1.2.0",
+    "ts-node": "^8.5.2",
+    "urllib": "^2.34.1",
+    "websocket": "^1.0.30"
+  },
+  "bin": {
+    "mf": "bin/fun.js",
+    "f": "bin/fun.js"
   },
   "devDependencies": {
+    "@types/mocha": "^5.2.5",
     "midway-bin": "1"
   },
   "files": [
+    "bin",
+    "src",
     "dist",
-    "src"
+    "package.json"
   ],
   "scripts": {
     "build": "npm run lint && midway-bin build -c",

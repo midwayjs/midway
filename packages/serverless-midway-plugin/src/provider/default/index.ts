@@ -1,9 +1,7 @@
 import { ProviderBase } from '../../core/providerBase';
 import { IServerless, IServerlessOptions } from '../../interface/midwayServerless';
-import { Dev } from './dev';
-import { Invoke } from '@midwayjs/invoke';
+import { Invoke, Test } from '@midwayjs/faas-cli';
 import { Package } from './package';
-import { Test } from './test';
 import { Deploy } from './deploy';
 class ProviderDefault extends ProviderBase {
 
@@ -11,11 +9,10 @@ class ProviderDefault extends ProviderBase {
     super(serverless, options);
 
     const config = this.bindCommand({
-      dev: new Dev(this),
       invoke: new Invoke(serverless, options),
       package: new Package(this),
       deploy: new Deploy(this),
-      test: new Test(this)
+      test: new Test(serverless, options)
     }, {
       package: ['deploy']
     });

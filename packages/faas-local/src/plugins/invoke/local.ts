@@ -129,7 +129,6 @@ export class Local {
         });
       } catch (e) {}
     }
-
     if (this.opts.event) {
       try {
         const EventModule = require(this.opts.event.path);
