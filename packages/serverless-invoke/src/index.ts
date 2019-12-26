@@ -1,4 +1,4 @@
-import { invoke as InvokeFun } from '@midwayjs/faas-local';
+import { invoke as InvokeFun } from '@midwayjs/faas-plugin-common';
 
 export const runtimeEventMap = {
   aliyun: {

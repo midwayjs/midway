@@ -4,7 +4,7 @@
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/faas-local": "^0.1.8",
+    "@midwayjs/faas-plugin-common": "^0.1.8",
     "@midwayjs/serverless-fc-starter": "^0.1.8",
     "@midwayjs/serverless-fc-trigger": "^0.1.8",
     "@midwayjs/serverless-scf-starter": "^0.1.8",

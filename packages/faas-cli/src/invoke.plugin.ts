@@ -1,4 +1,4 @@
-import {  InvokeClass } from '@midwayjs/faas-local';
+import {  InvokeClass } from '@midwayjs/faas-plugin-common';
 import { runtimeEventMap } from '@midwayjs/invoke';
 export class Invoke extends InvokeClass {
   constructor(core, options) {
