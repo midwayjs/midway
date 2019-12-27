@@ -15,16 +15,11 @@
     "urllib": "^2.34.1",
     "websocket": "^1.0.30"
   },
-  "bin": {
-    "mf": "bin/fun.js",
-    "f": "bin/fun.js"
-  },
   "devDependencies": {
     "@types/mocha": "^5.2.5",
     "midway-bin": "1"
   },
   "files": [
-    "bin",
     "src",
     "dist",
     "package.json"
