@@ -1,12 +1,12 @@
 {
   "name": "@midwayjs/faas-plugin-common",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/command-core": "^0.1.8",
+    "@midwayjs/command-core": "^0.1.9",
     "@midwayjs/faas": "^0.1.5",
-    "@midwayjs/runtime-mock": "^0.1.8",
+    "@midwayjs/runtime-mock": "^0.1.9",
     "@midwayjs/spec-builder": "^0.1.5",
     "co": "^4.6.0",
     "midway-bin": "^1.15.1",

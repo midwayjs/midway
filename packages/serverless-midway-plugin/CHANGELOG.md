@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.9](https://github.com/midwayjs/midway-faas/compare/v0.1.8...v0.1.9) (2019-12-27)
+
+
+### Features
+
+* use faas-local for invoke/test... ([82e1451](https://github.com/midwayjs/midway-faas/commit/82e145199416784e243e266acb832f358408831d))
+
+
+
+
+
 ## [0.1.8](https://github.com/midwayjs/midway-faas/compare/v0.1.7...v0.1.8) (2019-12-25)
 
 
