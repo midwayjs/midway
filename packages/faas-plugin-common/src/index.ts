@@ -29,13 +29,15 @@ export class Cli {
       service: this.spec,
       provider: this.providerName,
       options: this.argv,
-      log: console,
+      log: this.loadLog(),
+      extensions: this.loadExtensions()
     });
     this.loadDefaultPlugin();
     this.loadPlatformPlugin();
     this.loadUserPlugin();
   }
 
+  // 加载默认插件
   loadDefaultPlugin() {
     this.loadCommandPlugin();
     this.loadCommandInvoke();
@@ -54,11 +56,22 @@ export class Cli {
     this.core.addPlugin(CommandTest);
   }
 
+  // 加载平台方插件
   loadPlatformPlugin() {
+  }
+
+  // 加载cli拓展
+  loadExtensions() {
+    return {};
   }
 
   loadSpec() {
     this.spec = loadSpec(baseDir);
+  }
+
+  // 加载命令行输出及报错
+  loadLog() {
+    return console;
   }
 
   error(errMsg) {
