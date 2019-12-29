@@ -1,14 +1,14 @@
 {
   "name": "@midwayjs/invoke",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/faas-plugin-common": "^0.1.9",
-    "@midwayjs/serverless-fc-starter": "^0.1.9",
-    "@midwayjs/serverless-fc-trigger": "^0.1.9",
-    "@midwayjs/serverless-scf-starter": "^0.1.9",
-    "@midwayjs/serverless-scf-trigger": "^0.1.9"
+    "@midwayjs/faas-plugin-common": "^0.1.10",
+    "@midwayjs/serverless-fc-starter": "^0.1.10",
+    "@midwayjs/serverless-fc-trigger": "^0.1.10",
+    "@midwayjs/serverless-scf-starter": "^0.1.10",
+    "@midwayjs/serverless-scf-trigger": "^0.1.10"
   },
   "devDependencies": {
     "midway-bin": "1"
