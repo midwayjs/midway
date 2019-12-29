@@ -30,8 +30,9 @@ export const invoke = (options: {
   eventName?: string;   // 触发器名称
   layers?: any;         // layer配置 , 不填会从yml中获取
   handler?: string;     // handler, 不填会从yml中获取
+  midwayModuleName?: string; // midway module name e.g. @midwayjs/faas
 }) => {
-  const { functionName, debug, data, nolog, functionDir, starter, eventPath, eventName, layers, handler } = options;
+  const { functionName, debug, data, nolog, functionDir, starter, eventPath, eventName, layers, handler, midwayModuleName } = options;
 
   process.env.TS_NODE_FILES = 'true';
   process.env.TS_NODE_TYPE_CHECK = 'false';
@@ -66,7 +67,10 @@ export const invoke = (options: {
       layers ? JSON.stringify(layers) : ''
     ], {
       cwd: functionDir || process.env.PWD,
-      env: process.env,
+      env: {
+        MidwayModuleName: midwayModuleName || '',
+        ...process.env
+      },
       silent: true,
       execArgv
     });

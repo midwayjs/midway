@@ -126,11 +126,12 @@ export async function waitDebug(port) {
 export const Debug_Tag = 'midway-faas-local::debug::0x90906';
 
 export const exportMidwayFaaS = (() => {
-  const faasPath = join(process.cwd(), './node_modules/@midwayjs/faas');
+  const midwayModuleName = process.env.MidwayModuleName || '@midwayjs/faas';
+  const faasPath = join(process.cwd(), './node_modules/', midwayModuleName);
   if (existsSync(faasPath)) {
     return require(faasPath);
   } else {
-    return require('@midwayjs/faas');
+    return require(midwayModuleName);
   }
 })();
 
