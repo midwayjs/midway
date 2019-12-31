@@ -38,6 +38,7 @@ export class Local {
     };
     handler?: string;
     layers?: any;
+    runtime?: string;
   }) {
     this.opts = opts;
     this.baseDir = opts.baseDir = opts.baseDir || process.cwd();
@@ -117,17 +118,31 @@ export class Local {
       return wrapFun(...args);
     };
 
+    let handler = null;
+    let othRuntime = null;
     if (this.opts.starter) {
       try {
         const starter = require(this.opts.starter);
-        runtime = createRuntime({
-          handler: starter.asyncWrapper(async (...args) => {
-            const innerRuntime = await starter.start({});
-            return innerRuntime.asyncEvent(innerFun)(...args);
-          }),
-          layers: this.extensions || []
+        handler =  starter.asyncWrapper(async (...args) => {
+          const innerRuntime = await starter.start({});
+          return innerRuntime.asyncEvent(innerFun)(...args);
         });
       } catch (e) {}
+    }
+
+    if (this.opts.runtime) {
+      try {
+        const runtimeClass = require(this.opts.runtime);
+        othRuntime =  new runtimeClass();
+      } catch (e) {}
+    }
+
+    if (handler || othRuntime) {
+      runtime = createRuntime({
+        handler,
+        runtime: othRuntime,
+        layers: this.extensions || []
+      });
     }
     if (this.opts.event) {
       try {

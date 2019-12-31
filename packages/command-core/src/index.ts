@@ -239,7 +239,7 @@ export = class CommandHookCore implements ICommandHooksCore {
       if (commandInstance.commands) {
         this.loadCommands(
           instance,
-          commandsMap[command].command,
+          commandsMap[command].commands,
           commandInstance.commands,
           (parentCommandList || []).concat(command)
         );
