@@ -1,3 +1,6 @@
+![](https://img.alicdn.com/tfs/TB1y4zbsEY1gK0jSZFMXXaWcVXa-10530-6280.png)
+
+
 # Midway Faas
 
 > 查看[详细文档](https://github.com/midwayjs/midway-faas/blob/development/docs/guide)
