@@ -9,7 +9,7 @@ import { IPluginInstance, ICommandInstance } from './interface/plugin';
 import { IProviderInstance } from './interface/provider';
 import GetMap from './errorMap';
 import { CoreError } from './classes';
-import * as Utils from './Utils';
+import * as Utils from './utils';
 import { loadNpm } from './npm';
 const RegProviderNpm = /^npm:([\w]*):(.*)$/i; // npm providerName pkgName
 const RegProviderLocal = /^local:([\w]*):(.*)$/i; // local providerName pkgPath
