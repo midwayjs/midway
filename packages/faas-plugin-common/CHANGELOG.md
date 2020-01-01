@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.12](https://github.com/midwayjs/midway-faas/compare/v0.1.11...v0.1.12) (2020-01-01)
+
+
+### Bug Fixes
+
+* command-core point and writeSpec ([d0dac1e](https://github.com/midwayjs/midway-faas/commit/d0dac1e41e783746b857eebcd9e4730e37737d72))
+* invoke user runtime ([7e5ab36](https://github.com/midwayjs/midway-faas/commit/7e5ab3636523d13b79527c2f0edd5fb405550d5f))
+
+
+
+
+
 ## [0.1.11](https://github.com/midwayjs/midway-faas/compare/v0.1.10...v0.1.11) (2019-12-30)
 
 
