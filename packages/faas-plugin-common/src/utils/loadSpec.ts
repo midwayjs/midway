@@ -1,15 +1,39 @@
-const { transform } = require('@midwayjs/spec-builder');
+const { transform, saveYaml } = require('@midwayjs/spec-builder');
 const { existsSync } = require('fs');
 const { resolve } = require('path');
-export const loadSpec = baseDir => {
+
+export const getSpecFile = baseDir => {
   const specPath = [
     'f.yml',
     'f.yaml',
     'serverless.yml',
     'serverless.yaml',
   ].find(spec => existsSync(resolve(baseDir, spec)));
-  if (!specPath) {
+  if (specPath) {
+    return {
+      type: 'yaml',
+      path: resolve(baseDir, specPath)
+    };
+  }
+  return {};
+};
+
+export const loadSpec = baseDir => {
+  const specFile = getSpecFile(baseDir);
+  if (!specFile || !specFile.type) {
     return {};
   }
-  return transform(resolve(baseDir, specPath));
+  if (specFile.type === 'yaml') {
+    return transform(specFile.path);
+  }
+};
+
+export const writeToSpec = (baseDir, specResult) => {
+  const specFile = getSpecFile(baseDir);
+  if (!specFile || !specFile.type) {
+    return {};
+  }
+  if (specFile.type === 'yaml') {
+    return saveYaml(specFile.path, specResult);
+  }
 };

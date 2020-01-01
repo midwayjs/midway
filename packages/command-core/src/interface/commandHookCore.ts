@@ -6,17 +6,18 @@ export interface ILog {
 }
 
 export interface IOptions {
-  provider: string;
-  options?: any;
-  commands?: string[];
-  service?: any;
-  config?: any;
+  provider: string;         // provider名称，如aliyun，会挂在到插件的 core.provider.name 上
+  options?: any;            // 参数，会处理后挂在到插件的 options 上
+  commands?: string[];      // 命令列表，如 ['invoke']
+  service?: any;            // 服务配置，也就是读取 yaml 文件的内容需要挂在上，会透传到插件的 core.service 上
+  config?: any;             // 通用配置，会挂在到插件的 core.config 上，一般 servicePath 需要在此配置
   log?: ILog;
-  extensions?: {
+  extensions?: {            // 更多的扩展内容，会透传到插件的 core 上
     [extensionName: string]: any;
   };
-  displayUsage?: any;
-  npm?: string;
+  displayUsage?: any;       // 使用帮助的展示处理
+  point?: any;              // 埋点   (type: string, commandsArray: string[], commandInfo: any, this);
+  npm?: string;             // 使用何种npm加速
 }
 
 export interface ICommandHooksCore {

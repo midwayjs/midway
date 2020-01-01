@@ -109,6 +109,10 @@ export = class CommandHookCore implements ICommandHooksCore {
       Object.assign(this.options.options, options);
     }
 
+    if (this.options.point) {
+      this.options.point('invoke', commandsArray, commandInfo, this);
+    }
+
     // 展示帮助
     if (this.options.options.h || this.options.options.help) {
       return this.displayHelp(commandsArray, commandInfo.usage);

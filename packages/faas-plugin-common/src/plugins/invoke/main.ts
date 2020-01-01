@@ -31,8 +31,22 @@ export const invoke = (options: {
   layers?: any;         // layer配置 , 不填会从yml中获取
   handler?: string;     // handler, 不填会从yml中获取
   midwayModuleName?: string; // midway module name e.g. @midwayjs/faas
+  debugCb?: any;        // debug 回调
 }) => {
-  const { functionName, debug, data, nolog, functionDir, starter, eventPath, eventName, layers, handler, midwayModuleName } = options;
+  const {
+    functionName,
+    debug,
+    data,
+    nolog,
+    functionDir,
+    starter,
+    eventPath,
+    eventName,
+    layers,
+    handler,
+    midwayModuleName,
+    debugCb
+  } = options;
 
   process.env.TS_NODE_FILES = 'true';
   process.env.TS_NODE_TYPE_CHECK = 'false';
@@ -79,6 +93,13 @@ export const invoke = (options: {
       getWssUrl(debugPort, 'devtoolsFrontendUrl', true).then(debugUrl => {
         console.log('[local invoke] debug at 127.0.0.1:' + debugPort);
         console.log('[local invoke] devtools at ' +  debugUrl);
+
+        if (debugCb) {
+          debugCb({
+            port: debugPort,
+            info: debugUrl
+          });
+        }
       });
     }
 
