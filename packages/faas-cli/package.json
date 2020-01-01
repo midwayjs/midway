@@ -1,11 +1,11 @@
 {
   "name": "@midwayjs/faas-cli",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/faas-plugin-common": "^0.1.11",
-    "@midwayjs/invoke": "^0.1.11"
+    "@midwayjs/faas-plugin-common": "^0.1.12",
+    "@midwayjs/invoke": "^0.1.12"
   },
   "bin": {
     "mf": "bin/fun.js",
