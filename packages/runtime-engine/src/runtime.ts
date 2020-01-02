@@ -12,6 +12,7 @@ import { EnvPropertyParser } from './lib/parser';
 import { DebugLogger } from './lib/debug';
 import { BaseLoggerFactory } from './lib/loggerFactory';
 import { fileExists, getHandlerMeta, getHandlerMethod } from './util';
+import { performance } from 'perf_hooks';
 
 export class ServerlessBaseRuntime extends EventEmitter implements Runtime {
   propertyParser: PropertyParser<string>;
@@ -126,6 +127,7 @@ export class ServerlessBaseRuntime extends EventEmitter implements Runtime {
   async ready() {
     await this.handlerInvokerWrapper('beforeReadyHandler', [this]);
     // TODO 增加健康检查
+    this.measureMarksOnReady();
   }
 
   async close() {
@@ -230,6 +232,7 @@ export class ServerlessBaseRuntime extends EventEmitter implements Runtime {
   }
 
   protected async handlerInvokerWrapper(handlerKey: string, args?) {
+    performance.mark(`${handlerKey}:start`);
     if (this.handlerStore.has(handlerKey)) {
       const handlers = this.handlerStore.get(handlerKey);
       this.debugLogger.log(`${handlerKey} exec, task = ${handlers.length}`);
@@ -237,5 +240,18 @@ export class ServerlessBaseRuntime extends EventEmitter implements Runtime {
         await handler.apply(this, args);
       }
     }
+    performance.mark(`${handlerKey}:end`);
+  }
+
+  private measureMarksOnReady() {
+    [
+      'beforeRuntimeStartHandler',
+      'afterRuntimeStartHandler',
+      'beforeFunctionStartHandler',
+      'afterFunctionStartHandler',
+      'beforeReadyHandler',
+    ].forEach(it => {
+      performance.measure(`${it}:measure`, `${it}:start`, `${it}:end`);
+    });
   }
 }
