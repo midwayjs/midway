@@ -1,10 +1,10 @@
 {
   "name": "@midwayjs/fcli-command-core",
-  "version": "0.1.12",
+  "version": "0.2.0",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/serverless-spec-builder": "^0.1.5",
+    "@midwayjs/serverless-spec-builder": "^0.2.0",
     "deepmerge": "^4.2.2",
     "minimist": "^1.2.0"
   },

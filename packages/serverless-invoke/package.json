@@ -1,22 +1,22 @@
 {
   "name": "@midwayjs/serverless-invoke",
-  "version": "0.1.12",
+  "version": "0.2.0",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/fcli-command-core": "^0.1.12",
-    "@midwayjs/runtime-mock": "^0.1.12",
-    "@midwayjs/serverless-fc-starter": "^0.1.12",
-    "@midwayjs/serverless-fc-trigger": "^0.1.12",
-    "@midwayjs/serverless-scf-starter": "^0.1.12",
-    "@midwayjs/serverless-scf-trigger": "^0.1.12",
+    "@midwayjs/fcli-command-core": "^0.2.0",
+    "@midwayjs/runtime-mock": "^0.2.0",
+    "@midwayjs/serverless-fc-starter": "^0.2.0",
+    "@midwayjs/serverless-fc-trigger": "^0.2.0",
+    "@midwayjs/serverless-scf-starter": "^0.2.0",
+    "@midwayjs/serverless-scf-trigger": "^0.2.0",
     "ts-node": "^8.5.2",
     "urllib": "^2.34.1",
     "websocket": "^1.0.30"
   },
   "devDependencies": {
-    "midway-bin": "1",
-    "@midwayjs/faas": "^0.1.5"
+    "@midwayjs/faas": "^0.2.0",
+    "midway-bin": "1"
   },
   "files": [
     "dist",

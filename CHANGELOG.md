@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0](https://github.com/midwayjs/midway-faas/compare/v0.1.12...v0.2.0) (2020-01-05)
+
+
+### Bug Fixes
+
+* Utils to utils ([8bebbee](https://github.com/midwayjs/midway-faas/commit/8bebbee2f3203b2de7cb61c47e0f7c962d481fe7))
+
+
+### Features
+
+* measure handler performance with perf_hooks ([0d372e8](https://github.com/midwayjs/midway-faas/commit/0d372e85f1792c212cdc0b586d00df0a7b6684c9))
+
+
+
+
+
 ## [0.1.12](https://github.com/midwayjs/midway-faas/compare/v0.1.11...v0.1.12) (2020-01-01)
 
 
