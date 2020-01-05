@@ -1,12 +1,14 @@
 import { ProviderBase } from '../../core/providerBase';
 import MidwayServerless from '../../core/serverless';
 import * as Tencent from 'serverless-tencent-scf';
-import { generateFunctionsSpec, generateFunctionsSpecFile } from '@midwayjs/serverless-scf-spec';
+import {
+  generateFunctionsSpec,
+  generateFunctionsSpecFile,
+} from '@midwayjs/serverless-spec-builder/scf';
 import { join } from 'path';
 import { wrapperContent } from './wrapper';
 
 class ProviderTencent extends ProviderBase {
-
   midwayBuildPath: string;
 
   constructor(serverless: any, options: any) {
@@ -15,11 +17,14 @@ class ProviderTencent extends ProviderBase {
 
     this.hooks = {
       'package:midway-spec': async () => {
-        await generateFunctionsSpecFile(this.getSpecJson({
-          provider: {
-            stage: 'test'
-          }
-        }), join(this.midwayBuildPath, 'serverless.yml'));
+        await generateFunctionsSpecFile(
+          this.getSpecJson({
+            provider: {
+              stage: 'test',
+            },
+          }),
+          join(this.midwayBuildPath, 'serverless.yml')
+        );
       },
       'package:midway-wrapper': async () => {
         this.setGolbalDependencies('@midwayjs/serverless-scf-starter');
@@ -33,7 +38,9 @@ class ProviderTencent extends ProviderBase {
             this.serverless.service.package.artifact = 'artifact.zip';
           }
         }
-        const artifact = this.serverless.service.package.artifact.split('/').pop();
+        const artifact = this.serverless.service.package.artifact
+          .split('/')
+          .pop();
         // 添加构建逻辑
         const hooks = tencentServerless.pluginManager.hooks;
         if (!hooks['package:compileFunctions']) {
@@ -46,7 +53,7 @@ class ProviderTencent extends ProviderBase {
             // 执行 package 打包
             await this.callCommand('package', {
               ...this.options,
-              package: `.serverless/${artifact}`
+              package: `.serverless/${artifact}`,
             });
           },
         });
@@ -56,7 +63,11 @@ class ProviderTencent extends ProviderBase {
         }
         tencentServerless.service.package.artifact = `.serverless/${artifact}`;
 
-        await tencentServerless.pluginManager.invoke.call(tencentServerless.pluginManager, ['deploy'], true);
+        await tencentServerless.pluginManager.invoke.call(
+          tencentServerless.pluginManager,
+          ['deploy'],
+          true
+        );
         this.serverless.cli.log('deploy tencent success');
       },
     };
@@ -66,7 +77,11 @@ class ProviderTencent extends ProviderBase {
     const midwayServerless: any = new MidwayServerless({
       providerName: this.provider,
     });
-    midwayServerless.setProvider.call(midwayServerless, this.provider, midwayServerless);
+    midwayServerless.setProvider.call(
+      midwayServerless,
+      this.provider,
+      midwayServerless
+    );
     await midwayServerless.init();
     await midwayServerless.run();
 
@@ -74,13 +89,15 @@ class ProviderTencent extends ProviderBase {
       midwayServerless.service,
       {
         package: {},
-        runtimeExtensions: {}
+        runtimeExtensions: {},
       },
-      await generateFunctionsSpec(this.getSpecJson({
-        provider: {
-          stage: 'test'
-        }
-      }))
+      await generateFunctionsSpec(
+        this.getSpecJson({
+          provider: {
+            stage: 'test',
+          },
+        })
+      )
     );
 
     midwayServerless.pluginManager.addPlugin(Tencent);

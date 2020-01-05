@@ -1,5 +1,5 @@
 #!/usr/bin/env node
 'use strict';
-const CliClass = require('../dist');
-const cli = new CliClass.AliCli(process.argv);
+const { CLI } = require('../dist');
+const cli = new CLI(process.argv);
 cli.start();

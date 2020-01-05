@@ -1,25 +1,30 @@
 import { ProviderBase } from '../../core/providerBase';
-import { IServerless, IServerlessOptions } from '../../interface/midwayServerless';
+import {
+  IServerless,
+  IServerlessOptions,
+} from '../../interface/midwayServerless';
 import * as AliyunDeploy from '@alicloud/fun/lib/commands/deploy';
 import * as AliyunConfig from '@alicloud/fun/lib/commands/config';
 import { join } from 'path';
 import { homedir } from 'os';
 import { existsSync } from 'fs';
-import { generateFunctionsSpecFile } from '@midwayjs/serverless-fc-spec';
+import { generateFunctionsSpecFile } from '@midwayjs/serverless-spec-builder/fc';
 import { wrapperContent } from './wrapper';
 
 class ProviderFc extends ProviderBase {
-
   constructor(serverless: IServerless, options: IServerlessOptions) {
     super(serverless, options);
     this.provider = 'aliyun';
     this.serverless.setProvider('aliyun', this);
     this.hooks = {
-      'invoke:invoke': async () => { // fc invoke 的流程需要把入口文件创建出来，默认的ioc注入的是不固定入口是哪一个的
-
+      'invoke:invoke': async () => {
+        // fc invoke 的流程需要把入口文件创建出来，默认的ioc注入的是不固定入口是哪一个的
       },
       'package:midway-spec': async () => {
-        await generateFunctionsSpecFile(this.getSpecJson(), join(this.midwayBuildPath, 'template.yml'));
+        await generateFunctionsSpecFile(
+          this.getSpecJson(),
+          join(this.midwayBuildPath, 'template.yml')
+        );
       },
       'package:midway-wrapper': async () => {
         this.setGolbalDependencies('@midwayjs/serverless-fc-starter');
@@ -38,12 +43,12 @@ class ProviderFc extends ProviderBase {
         // 执行 package 打包
         await this.callCommand('package', {
           ...this.options,
-          skipZip: true // 跳过压缩成zip
+          skipZip: true, // 跳过压缩成zip
         });
         this.serverless.cli.log('Start deploy by @alicloud/fun');
         try {
           await AliyunDeploy({
-            template: join(this.midwayBuildPath, 'template.yml')
+            template: join(this.midwayBuildPath, 'template.yml'),
           });
           this.serverless.cli.log('deploy success');
         } catch (e) {

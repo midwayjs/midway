@@ -1,7 +1,7 @@
 service: serverless-midway-test
 
 provider:
-  name: aliyun
+  name: fc
   runtime: nodejs8
   credentials: ./.aliyun_credentials # path must be absolute
 
@@ -16,7 +16,7 @@ plugins:
   - test
 
 layers:
-  
+
 
 package:
   include:
