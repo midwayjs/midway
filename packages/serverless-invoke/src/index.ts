@@ -1,6 +1,8 @@
 import { invoke as InvokeFun } from './main';
 import { InvokeOptions } from './interface';
 
+export * from './interface';
+
 export const defualtProviderEventMap = {
   fc: {
     starter: require.resolve('@midwayjs/serverless-fc-starter'),
