@@ -1,13 +1,13 @@
 {
   "name": "@midwayjs/faas-cli",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@midwayjs/fcli-command-core": "^0.2.0",
-    "@midwayjs/fcli-plugin-invoke": "^0.2.0",
-    "@midwayjs/fcli-plugin-test": "^0.2.0",
-    "@midwayjs/fcli-plugin-package": "^0.2.0"
+    "@midwayjs/fcli-plugin-invoke": "^0.2.1",
+    "@midwayjs/fcli-plugin-package": "^0.2.1",
+    "@midwayjs/fcli-plugin-test": "^0.2.0"
   },
   "bin": {
     "mf": "bin/fun.js",
