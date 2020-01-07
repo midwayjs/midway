@@ -33,13 +33,24 @@ export interface ICoreInstance {
   invoke(commandsArray?: string[], allowEntryPoints?: boolean, options?: any);
   pluginManager: ICommandHooksCore;
   service: {
+    service?: {
+      name: string;
+    };
     provider: {
       name: string;
     };
     functions: object;
-    layers: object;
+    layers?: object;
     resources: object;
     custom: any;
+    package?: any;
+    aggregation?: {
+      [aggregationName: string]: {
+        deployOrigin?: boolean;
+        functions: string[];
+      };
+    };
+    globalDependencies?: any;
   };
   processedInput: {
     options: any;

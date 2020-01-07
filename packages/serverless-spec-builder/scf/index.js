@@ -1,1 +1,1 @@
-module.exports = require('./dist/scf');
+module.exports = require('../dist/scf');

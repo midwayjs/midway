@@ -10,14 +10,13 @@ export class BaseCLI {
   core: any;
   spec: any;
   commands: string[];
-  cwd;
+  cwd = process.cwd();
 
   constructor(argv) {
     this.argv = minimist(argv.slice(2));
     this.commands = [].concat(this.argv._);
     this.loadSpec();
     this.providerName = (this.spec.provider && this.spec.provider.name) || '';
-    this.cwd = process.cwd();
     this.core = new CommandHookCore({
       config: {
         servicePath: this.cwd,
