@@ -3,7 +3,6 @@ import {
   FAAS_ARGS_KEY,
   ServerlessLightRuntime,
 } from '@midwayjs/runtime-engine';
-import { AliyunFCContext } from './interface';
 import { Context } from './context';
 
 export class FCRuntime extends ServerlessLightRuntime {
@@ -16,7 +15,8 @@ export class FCRuntime extends ServerlessLightRuntime {
       throw new TypeError('Must be an AsyncFunction');
     }
 
-    return (req: object, res: object, context?: AliyunFCContext) => {
+    return (...args) => {
+      const [req, res, context] = args;
       if (context) {
         return this.wrapperWebInvoker(handler, req, res, context);
       } else {
