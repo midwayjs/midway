@@ -1,10 +1,10 @@
 {
   "name": "@midwayjs/serverless-invoke",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/fcli-command-core": "^0.2.1",
+    "@midwayjs/fcli-command-core": "^0.2.2",
     "@midwayjs/runtime-mock": "^0.2.0",
     "@midwayjs/serverless-fc-starter": "^0.2.0",
     "@midwayjs/serverless-fc-trigger": "^0.2.0",
