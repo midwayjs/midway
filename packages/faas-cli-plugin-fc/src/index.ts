@@ -8,7 +8,7 @@ import { render } from 'ejs';
 import { generateFunctionsSpecFile } from '@midwayjs/serverless-spec-builder/fc';
 import { wrapperContent } from './wrapper';
 import { formatLayers } from './utils';
-export class AliyunFcPlugin extends BasePlugin {
+export class AliyunFCPlugin extends BasePlugin {
   core: ICoreInstance;
   options: any;
   provider = 'aliyun';
@@ -99,7 +99,7 @@ export class AliyunFcPlugin extends BasePlugin {
       if (!files[handlerFileName]) {
         files[handlerFileName] = {
           handlers: [],
-          originLayers: []
+          originLayers: [],
         };
       }
       if (handlerConf.layers && handlerConf.layers.length) {
@@ -114,17 +114,20 @@ export class AliyunFcPlugin extends BasePlugin {
       } else {
         files[handlerFileName].handlers.push({
           name,
-          handler: handlerConf.handler
+          handler: handlerConf.handler,
         });
       }
     }
 
     for (const file in files) {
       const fileName = join(this.midwayBuildPath, `${file}.js`);
-      const layers = this.getLayers(this.core.service.layers, ...files[file].originLayers);
+      const layers = this.getLayers(
+        this.core.service.layers,
+        ...files[file].originLayers
+      );
       const content = this.writeCodeToFile(WrapperContent, {
         handlers: files[file].handlers,
-        ...layers
+        ...layers,
       });
       writeFileSync(fileName, content);
     }
@@ -150,7 +153,7 @@ export class AliyunFcPlugin extends BasePlugin {
     }
     return {
       layerDeps,
-      layers
+      layers,
     };
   }
 
