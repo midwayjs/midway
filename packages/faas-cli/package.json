@@ -4,12 +4,12 @@
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/fcli-command-core": "^0.2.0",
-    "@midwayjs/fcli-plugin-invoke": "^0.2.1",
-    "@midwayjs/fcli-plugin-package": "^0.2.1",
+    "@midwayjs/fcli-command-core": "^0.2.1",
     "@midwayjs/fcli-plugin-deploy": "^0.2.1",
     "@midwayjs/fcli-plugin-fc": "^0.2.1",
-    "@midwayjs/fcli-plugin-test": "^0.2.0"
+    "@midwayjs/fcli-plugin-invoke": "^0.2.1",
+    "@midwayjs/fcli-plugin-package": "^0.2.1",
+    "@midwayjs/fcli-plugin-test": "^0.2.1"
   },
   "bin": {
     "mf": "bin/fun.js",
