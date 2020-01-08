@@ -34,6 +34,15 @@ export class PackagePlugin extends BasePlugin {
         },
         npm: {
           usage: 'npm'
+        },
+        buildDir: {
+          usage: 'build relative path, default is .serverless'
+        },
+        sourceDir: {
+          usage: 'source relative path, default is src'
+        },
+        skipZip: {
+          usage: 'skip zip package'
         }
       },
     },
@@ -50,6 +59,9 @@ export class PackagePlugin extends BasePlugin {
 
   async cleanup() {
     // 跳过清理
+    if (this.options.buildDir) {
+      this.midwayBuildPath = join(this.servicePath, this.options.buildDir);
+    }
     if (!this.options.skipClean) {
       await remove(this.midwayBuildPath);
     }
@@ -59,7 +71,7 @@ export class PackagePlugin extends BasePlugin {
 
   async copyFile() {
     const packageObj: any = this.core.service.package || {};
-    const include = await globby(['src', 'tsconfig.json', 'package.json'].concat(packageObj.include || []), { cwd: this.servicePath });
+    const include = await globby([this.options.sourceDir || 'src', 'tsconfig.json', 'package.json'].concat(packageObj.include || []), { cwd: this.servicePath });
     const exclude = await globby(packageObj.exclude || [], { cwd: this.servicePath });
     const paths = include.filter((filePath: string) => {
       return exclude.indexOf(filePath) === -1;
@@ -159,23 +171,23 @@ export class PackagePlugin extends BasePlugin {
       this.core.cli.log(' - Using tradition build mode');
       const builder = new BuildCommand();
       const servicePath: string = this.midwayBuildPath;
+      const source = this.options.sourceDir || 'src';
       await builder.run({
         cwd: servicePath,
         argv: {
           clean: true,
           project: 'tsconfig.json',
-          srcDir: 'src'
+          srcDir: source
         }
       });
-      await remove(join(this.midwayBuildPath, 'src'));
+      await remove(join(this.midwayBuildPath, source));
     }
     this.core.cli.log(` - Build Midway FaaS complete`);
   }
 
   async package() {
     // 跳过打包
-    const options: any = this.core.processedInput.options;
-    if (options.skipZip) {
+    if (this.options.skipZip) {
       return;
     }
     // 构建打包
