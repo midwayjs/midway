@@ -3,7 +3,7 @@ import { TestPlugin } from '@midwayjs/fcli-plugin-test';
 import { InvokePlugin } from '@midwayjs/fcli-plugin-invoke';
 import { PackagePlugin } from '@midwayjs/fcli-plugin-package';
 import { DeployPlugin } from '@midwayjs/fcli-plugin-deploy';
-import { AliyunFcPlugin } from '@midwayjs/fcli-plugin-fc';
+import { AliyunFCPlugin } from '@midwayjs/fcli-plugin-fc';
 
 export class CLI extends BaseCLI {
   loadDefaultPlugin() {
@@ -11,6 +11,6 @@ export class CLI extends BaseCLI {
     this.core.addPlugin(TestPlugin);
     this.core.addPlugin(PackagePlugin);
     this.core.addPlugin(DeployPlugin);
-    this.core.addPlugin(AliyunFcPlugin);
+    this.core.addPlugin(AliyunFCPlugin);
   }
 }
