@@ -38,3 +38,5 @@ export class CDNTrigger extends FCBaseTrigger {
   }
 
 }
+
+export const cdn = CDNTrigger;

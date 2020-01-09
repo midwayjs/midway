@@ -42,5 +42,8 @@
     "serverless-tencent-scf": "^0.1.21",
     "tar": "^5.0.5"
   },
-  "gitHead": "b67e2753cbdcc91813067ba2a1bb1ce7e85a3dff"
+  "gitHead": "b67e2753cbdcc91813067ba2a1bb1ce7e85a3dff",
+  "devDependencies": {
+    "@midwayjs/serverless-fc-starter": "^0.2.0"
+  }
 }

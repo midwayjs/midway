@@ -22,3 +22,5 @@ export class ApiGatewayTrigger extends FCBaseTrigger {
   }
 
 }
+
+export const apigw = ApiGatewayTrigger;

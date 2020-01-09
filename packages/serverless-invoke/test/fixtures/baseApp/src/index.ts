@@ -1,4 +1,4 @@
-import { FaaSContext, func, inject, provide } from '../../../../../faas';
+import { FaaSContext, func, inject, provide } from '@midwayjs/faas';
 
 @provide()
 @func('http.handler')

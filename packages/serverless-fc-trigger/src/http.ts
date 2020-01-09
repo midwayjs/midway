@@ -1,6 +1,6 @@
 import { exec } from 'child_process';
 import * as express from 'express';
-import * as http from 'http';
+import * as HTTP from 'http';
 import { FCBaseTrigger } from './base';
 
 interface HTTPTriggerOpts {
@@ -44,7 +44,7 @@ export class HTTPTrigger extends FCBaseTrigger {
     return new Promise((resolve, reject) => {
       if (!this.httpServer) {
         const app = express();
-        this.httpServer = http.createServer(app);
+        this.httpServer = HTTP.createServer(app);
 
         app.get('*', (req, res, next) => {
           /**
@@ -184,3 +184,5 @@ class Response {
     };
   }
 }
+
+export const http = HTTPTrigger;

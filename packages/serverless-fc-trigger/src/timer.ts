@@ -17,3 +17,4 @@ export class TimerTrigger extends FCBaseTrigger {
   }
 
 }
+export const timer = TimerTrigger;

@@ -27,3 +27,5 @@ export class SLSTrigger extends FCBaseTrigger {
   }
 
 }
+
+export const sls = SLSTrigger;

@@ -6,7 +6,7 @@ import { homedir } from 'os';
 import { writeFileSync, existsSync } from 'fs';
 import { render } from 'ejs';
 import { generateFunctionsSpecFile } from '@midwayjs/serverless-spec-builder/fc';
-import { wrapperContent } from './wrapper';
+import { wrapperContent } from '@midwayjs/serverless-fc-starter';
 import { formatLayers } from './utils';
 export class AliyunFCPlugin extends BasePlugin {
   core: ICoreInstance;

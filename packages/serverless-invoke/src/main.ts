@@ -1,117 +1,69 @@
-import { join } from 'path';
+import { Invoke } from './invoke';
+import { InvokeOptions } from './interface';
 import { fork } from 'child_process';
 import { get, getWssUrl } from './utils';
-import { InvokeOptions } from './interface';
-
-const getTsPath = () => {
-  try {
-    return join(require.resolve('ts-node'), '../../register');
-  } catch (err) {
-    return join(__dirname, '../../../node_modules/ts-node/register');
+export const invoke = async (options: InvokeOptions) => {
+  if (!options.data || !options.data.length) {
+    options.data = [{}];
   }
-};
 
-const makeDebugPort = debug => {
-  if (debug) {
-    if (/^\d+$/.test(debug + '')) {
-      return debug + '';
+  if (options.debug) {
+    if (typeof options.debug !== 'string' || !/^\d+^/.test(options.debug)) {
+      options.debug = '9229';
     }
-    return '9229';
-  }
-  return '';
-};
-
-export const invoke = (options: InvokeOptions) => {
-  const {
-    functionName,
-    debug,
-    data,
-    log,
-    functionDir,
-    starter,
-    eventPath,
-    eventName,
-    layers,
-    handler,
-    midwayModuleName,
-    debugCb,
-  } = options;
-
-  process.env.TS_NODE_FILES = 'true';
-  process.env.TS_NODE_TYPE_CHECK = 'false';
-  process.env.TS_NODE_TRANSPILE_ONLY = 'true';
-
-  return new Promise((resolve, reject) => {
-    const execArgv = ['-r', getTsPath()];
-
-    const debugPort = makeDebugPort(debug);
-    if (debugPort) {
-      execArgv.unshift('--inspect=' + debugPort);
-    }
-
-    let arg = data;
-    try {
-      if (typeof arg === 'string') {
-        arg = JSON.parse(arg);
-      }
-    } catch (e) {}
-
+    options.isDebug = true;
     const child = fork(
-      join(__dirname, './invoke'),
+      require.resolve('./debug'),
       [
-        functionName,
-        JSON.stringify([].concat(arg || [])),
-        debugPort,
-        starter || '',
-        eventPath || '',
-        eventName || '',
-        handler || '',
-        layers ? JSON.stringify(layers) : '',
+        JSON.stringify(options),
+        options.debug
       ],
       {
-        cwd: functionDir || process.env.PWD,
-        env: {
-          MidwayModuleName: midwayModuleName || '',
-          ...process.env,
-        },
-        silent: true,
-        execArgv,
+        cwd: options.functionDir || process.env.PWD,
+        execArgv: [
+          '--inspect=' + options.debug
+        ],
+        silent: true
       }
     );
+    getWssUrl(options.debug, 'devtoolsFrontendUrl', true).then(debugUrl => {
+      console.log('[local invoke] debug at 127.0.0.1:' + options.debug);
+      console.log('[local invoke] devtools at ' + debugUrl);
+      if (options.debugCb) {
+        options.debugCb({
+          port: options.debug,
+          info: debugUrl,
+        });
+      }
+    });
 
-    if (debugPort) {
-      getWssUrl(debugPort, 'devtoolsFrontendUrl', true).then(debugUrl => {
-        console.log('[local invoke] debug at 127.0.0.1:' + debugPort);
-        console.log('[local invoke] devtools at ' + debugUrl);
-
-        if (debugCb) {
-          debugCb({
-            port: debugPort,
-            info: debugUrl,
-          });
+    return new Promise((resolve, reject) => {
+      get(child, 'faastest').then(data => {
+        child.kill();
+        resolve(data);
+      });
+      let err = '';
+      child.stdout.on('data', buf => {
+        console.log('[local invoke log]', buf.toString());
+      });
+      child.stderr.on('data', buf => {
+        err += buf.toString();
+      });
+      child.on('close', () => {
+        if (err) {
+          reject(err);
         }
       });
-    }
-
-    get(child, 'faastest').then(data => {
-      resolve(data);
     });
+  }
 
-    let err = '';
-    child.stdout.on('data', buf => {
-      if (log || log === undefined) {
-        console.log('[local invoke log]', buf.toString());
-      }
-    });
-
-    child.stderr.on('data', buf => {
-      err += buf.toString();
-    });
-
-    child.on('close', () => {
-      if (err) {
-        reject(err);
-      }
-    });
+  const invokeFun = new Invoke({
+    baseDir: options.functionDir,
+    functionName: options.functionName,
+    handler: options.handler,
+    trigger: options.trigger,
+    isDebug: options.isDebug
   });
+
+  return invokeFun.invoke([].concat(options.data));
 };

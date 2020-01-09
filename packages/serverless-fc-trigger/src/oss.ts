@@ -49,3 +49,5 @@ export class OSSTrigger extends FCBaseTrigger {
   }
 
 }
+
+export const oss = OSSTrigger;

@@ -58,7 +58,8 @@ export function getWssUrl(port, type?: string, isThrowErr?: boolean) {
           }
         } else {
           const debugInfo = JSON.parse(data.toString());
-          resolve(debugInfo[0][type || 'webSocketDebuggerUrl']);
+          const url = debugInfo[0][type || 'webSocketDebuggerUrl'] || '';
+          resolve(url.replace('js_app.html?experiments=true&', 'inspector.html?'));
         }
       });
     }, 300);
@@ -105,12 +106,6 @@ function debugWs(addr) {
       send('Runtime.enable');
       send('Debugger.enable', { maxScriptsCacheSize: 10000000 });
       send('Debugger.setBlackboxPatterns', { patterns: ['internal'] });
-      send('Debugger.setBreakpointsActive', { active: true });
-      send('Debugger.setBreakpointByUrl', {
-        lineNumber: 3,
-        columnNumber: 0,
-        urlRegex: 'invoke/debug\.js'
-      });
       resolve(send);
     });
     client.connect(addr);

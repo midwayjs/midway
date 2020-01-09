@@ -3,6 +3,7 @@ import { FCRuntime } from './runtime';
 
 export { asyncWrapper } from '@midwayjs/runtime-engine';
 export * from './runtime';
+export * from './wrapper';
 
 let bootstrap;
 
