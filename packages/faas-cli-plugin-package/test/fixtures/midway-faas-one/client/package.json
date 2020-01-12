@@ -1,0 +1,39 @@
+{
+  "name": "taste-channel-faas-client",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build": "ice-scripts build --config ./ice.config.js",
+    "lint": "eslint --fix --quiet --ext .jsx --ext .js ./src"
+  },
+  "dependencies": {
+    "@alifd/next": "^1.x",
+    "@alifd/theme-element": "^0.3.0",
+    "@alife/element-filter-table": "^1.0.6",
+    "@alife/element-pro-layout": "^1.0.15",
+    "@ice/stark-app": "^1.0.1",
+    "@icedesign/theme": "^1.x",
+    "@types/react": "^16.8.3",
+    "@types/react-dom": "^16.8.2",
+    "axios": "^0.17.1",
+    "moment": "^2.23.0",
+    "prop-types": "^15.5.8",
+    "qs": "^6.9.1",
+    "ramda": "^0.26.1",
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4",
+    "react-router-dom": "^5.0.1"
+  },
+  "devDependencies": {
+    "@ice/spec": "^0.1.1",
+    "@types/qs": "^6.9.0",
+    "css-modules-typescript-loader": "^2.0.4",
+    "eslint": "^6.0.1",
+    "ice-plugin-fusion": "^0.1.10",
+    "ice-plugin-moment-locales": "^0.1.0",
+    "ice-scripts": "^2.1.9",
+    "stylelint": "^10.1.0",
+    "webpack": "^4.39.3",
+    "webpack-manifest-plugin": "^2.0.4"
+  }
+}

@@ -9,3 +9,10 @@ functions:
     events:
       - http:
           method: get
+
+package:
+  include:
+    - '*.json'
+  exclude:
+    - b.json
+  artifact: path/to/my-artifact.zip

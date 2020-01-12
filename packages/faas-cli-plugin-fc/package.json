@@ -11,6 +11,8 @@
     "ejs": "^3.0.1"
   },
   "devDependencies": {
+    "@midwayjs/fcli-plugin-package": "^0.2.4",
+    "fs-extra": "^8.1.0",
     "midway-bin": "1"
   },
   "files": [

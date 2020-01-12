@@ -1,0 +1,18 @@
+{
+  "name": "@icedesign/ts-scaffold9ade4c90-5de3-11e9-aef1-79dc0073b61f",
+  "version": "1.0.3",
+  "description": "该模板基于 TypeScript 适用于从 0 到 1 开始搭建项目，内置基础的页面，路由和菜单展示",
+  "dependencies": {
+    "@midwayjs/faas": "*",
+    "react-router-dom": "*",
+    "tslib": "*"
+  },
+  "scripts": {
+    "start": "build-scripts start",
+    "build": "build-scripts build",
+    "lint": "eslint . --ext '.js,.jsx' --fix"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  }
+}

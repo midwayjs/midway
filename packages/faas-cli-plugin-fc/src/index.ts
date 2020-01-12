@@ -16,13 +16,13 @@ export class AliyunFCPlugin extends BasePlugin {
   midwayBuildPath = join(this.servicePath, '.serverless');
 
   hooks = {
-    'package:spec': async () => {
+    'package:generateSpec': async () => {
       await generateFunctionsSpecFile(
         this.getSpecJson(),
         join(this.midwayBuildPath, 'template.yml')
       );
     },
-    'package:wrapper': async () => {
+    'package:generateEntry': async () => {
       this.setGolbalDependencies('@midwayjs/serverless-fc-starter');
       this.loadWrapper(wrapperContent);
     },
