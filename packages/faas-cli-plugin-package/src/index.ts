@@ -25,9 +25,13 @@ export class PackagePlugin extends BasePlugin {
   options: any;
   servicePath = this.core.config.servicePath;
   // 代表构建产物的路径，非 ts 构建路径
-  midwayBuildPath = join(this.servicePath, '.serverless');
+  midwayBuildPath = (this.core.config.buildPath = join(
+    this.servicePath,
+    '.serverless'
+  ));
   codeAnalyzeResult: AnalyzeResult;
   integrationDistTempDirectory = 'integration_dist'; // 一体化构建的临时目录
+  zipCodeDefaultName = 'serverless.zip';
 
   commands = {
     package: {
@@ -85,11 +89,12 @@ export class PackagePlugin extends BasePlugin {
     process.chdir(this.servicePath);
     // 修改构建目标目录
     if (this.options.buildDir) {
-      this.midwayBuildPath = join(
+      this.core.config.buildPath = join(
         this.servicePath,
         this.options.buildDir,
         '.serverless'
       );
+      this.midwayBuildPath = this.core.config.buildPath;
     }
 
     // 分析目录结构
@@ -357,7 +362,7 @@ export class PackagePlugin extends BasePlugin {
     // 构建打包
     const packageObj: any = this.core.service.package || {};
 
-    let file = join(this.servicePath, 'serverless.zip');
+    let file = join(this.servicePath, this.zipCodeDefaultName);
 
     if (packageObj.artifact) {
       if (isAbsolute(packageObj.artifact)) {

@@ -4,6 +4,7 @@
     "target": "ES2018",
     "module": "commonjs",
     "moduleResolution": "node",
+    "esModuleInterop": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "inlineSourceMap":true,

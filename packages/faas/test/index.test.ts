@@ -1,5 +1,5 @@
 import { join } from 'path';
-import { expect } from 'chai';
+import * as assert from 'assert';
 import { createServerlessMock } from './util';
 import { FaaSStarter } from '../src/';
 
@@ -94,16 +94,16 @@ describe('test/index.test.ts', () => {
     it('start should exec only once', async () => {
       const faas = new FaaSStarter({
         baseDir: join(__dirname, './fixtures/base-app'),
-        typescript: true
+        typescript: true,
       });
 
       let i = 0;
       const cb = async () => {
         i++;
       };
-      const arr = [faas.start({cb}), faas.start({cb}), faas.start({cb})];
+      const arr = [faas.start({ cb }), faas.start({ cb }), faas.start({ cb })];
       await Promise.all(arr);
-      expect(1).eq(i);
+      assert(1 === i);
     });
   });
 });

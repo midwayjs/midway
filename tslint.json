@@ -6,5 +6,5 @@
     "exclude": [
       "**/fixtures/**"
     ]
-}
+  }
 }
