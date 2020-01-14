@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.9](https://github.com/midwayjs/midway-faas/compare/v0.2.8...v0.2.9) (2020-01-14)
+
+
+### Bug Fixes
+
+* fix cover entry file in build ([#23](https://github.com/midwayjs/midway-faas/issues/23)) ([80ee7a0](https://github.com/midwayjs/midway-faas/commit/80ee7a0cebf2d434629c03229a4a4200b0228bfd))
+
+
+
+
+
 ## [0.2.8](https://github.com/midwayjs/midway-faas/compare/v0.2.7...v0.2.8) (2020-01-14)
 
 
