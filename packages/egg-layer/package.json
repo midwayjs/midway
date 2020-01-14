@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/egg-layer",
-  "version": "0.2.4",
+  "version": "0.2.6",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "scripts": {

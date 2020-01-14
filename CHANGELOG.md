@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.6](https://github.com/midwayjs/midway-faas/compare/v0.2.5...v0.2.6) (2020-01-14)
+
+
+### Bug Fixes
+
+* egg-layer fix logger directory ([#13](https://github.com/midwayjs/midway-faas/issues/13)) ([3443378](https://github.com/midwayjs/midway-faas/commit/34433784245cb6ae0d12fa81df5381bbc75e3b1d))
+
+
+
+
+
 ## [0.2.5](https://github.com/midwayjs/midway-faas/compare/v0.2.4...v0.2.5) (2020-01-12)
 
 
