@@ -33,4 +33,35 @@ describe('/test/index.test.ts', () => {
     // clean
     await remove(join(baseDir, 'serverless.zip'));
   });
+
+  it.only('build eaas function', async () => {
+    const baseDir = join(__dirname, './fixtures/eaas');
+    const core = new CommandHookCore({
+      config: {
+        servicePath: baseDir,
+      },
+      commands: ['package'],
+      service: loadSpec(baseDir),
+      provider: 'aliyun',
+      log: console,
+    });
+    core.addPlugin(PackagePlugin);
+    core.addPlugin(AliyunFCPlugin);
+    await core.ready();
+    await core.invoke(['package']);
+
+    const buildPath = join(baseDir, '.serverless');
+    assert(existsSync(join(buildPath, 'app')));
+    assert(existsSync(join(buildPath, 'node_modules')));
+    assert(existsSync(join(buildPath, 'config')));
+    assert(existsSync(join(buildPath, 'package.json')));
+    assert(existsSync(join(buildPath, 'app.js')));
+    assert(existsSync(join(buildPath, 'agent.js')));
+    assert(existsSync(join(buildPath, 'index.js')));
+    assert(existsSync(join(buildPath, 'template.yml')));
+    assert(existsSync(join(baseDir, 'serverless.zip')));
+
+    // clean
+    await remove(join(baseDir, '.serverless'));
+  });
 });
