@@ -1,11 +1,12 @@
 const { asyncWrapper, start } = require('@midwayjs/serverless-fc-starter');
+const eggLayer = require('@midwayjs/egg-layer');
 
 let runtime;
 let inited = false;
 
 const initializeMethod = async (config = {}) => {
   runtime = await start({
-    layers: [],
+    layers: [eggLayer],
   });
   inited = true;
 };
