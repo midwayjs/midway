@@ -17,13 +17,15 @@ export class AliyunFCPlugin extends BasePlugin {
 
   hooks = {
     'package:generateSpec': async () => {
+      this.core.cli.log('Generate spec file...');
       await generateFunctionsSpecFile(
         this.getSpecJson(),
         join(this.midwayBuildPath, 'template.yml')
       );
     },
     'package:generateEntry': async () => {
-      this.setGolbalDependencies('@midwayjs/serverless-fc-starter');
+      this.core.cli.log('Generate entry file...');
+      this.setGlobalDependencies('@midwayjs/serverless-fc-starter');
       this.loadWrapper(wrapperContent);
     },
     'deploy:deploy': async () => {
@@ -96,6 +98,11 @@ export class AliyunFCPlugin extends BasePlugin {
         continue;
       }
       const [handlerFileName, name] = handlerConf.handler.split('.');
+      if (existsSync(join(this.servicePath, handlerFileName + '.js'))) {
+        // 如果入口文件名存在，则跳过
+        this.core.cli.log(` - Find ${handlerFileName}.js and skip generate`);
+        continue;
+      }
       if (!files[handlerFileName]) {
         files[handlerFileName] = {
           handlers: [],
@@ -158,7 +165,7 @@ export class AliyunFCPlugin extends BasePlugin {
   }
 
   // 设置全局依赖，在package的时候会读取
-  setGolbalDependencies(name: string, version?: string) {
+  setGlobalDependencies(name: string, version?: string) {
     if (!this.core.service.globalDependencies) {
       this.core.service.globalDependencies = {};
     }

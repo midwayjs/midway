@@ -89,6 +89,10 @@ export class PackagePlugin extends BasePlugin {
     process.chdir(this.servicePath);
     // 修改构建目标目录
     if (this.options.buildDir) {
+      this.options.buildDir = this.transformToRelative(
+        this.servicePath,
+        this.options.buildDir
+      );
       this.core.config.buildPath = join(
         this.servicePath,
         this.options.buildDir,
@@ -97,6 +101,12 @@ export class PackagePlugin extends BasePlugin {
       this.midwayBuildPath = this.core.config.buildPath;
     }
 
+    if (this.options.sourceDir) {
+      this.options.sourceDir = this.transformToRelative(
+        this.servicePath,
+        this.options.sourceDir
+      );
+    }
     // 分析目录结构
     const locator = new Locator(this.servicePath);
     this.codeAnalyzeResult = await locator.run({
@@ -438,5 +448,14 @@ export class PackagePlugin extends BasePlugin {
         }
       );
     });
+  }
+
+  private transformToRelative(baseDir, targetDir) {
+    if (targetDir) {
+      if (isAbsolute(targetDir)) {
+        return relative(baseDir, targetDir);
+      }
+      return targetDir;
+    }
   }
 }

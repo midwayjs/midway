@@ -34,7 +34,7 @@ describe('/test/index.test.ts', () => {
     await remove(join(baseDir, 'serverless.zip'));
   });
 
-  it.only('build eaas function', async () => {
+  it('build eaas function', async () => {
     const baseDir = join(__dirname, './fixtures/eaas');
     const core = new CommandHookCore({
       config: {
