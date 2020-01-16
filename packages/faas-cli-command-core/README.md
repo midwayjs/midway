@@ -4,8 +4,8 @@
 
 ## 内核使用文档
 ```js
-import CoreClass from 'command-core';
-const core = new CoreClass({
+import { CommandHookCore } from '@midwayjs/fcli-command-core';
+const core = new CommandHookCore({
     config: {                   // 会挂载到 core.coreInstance.config 上
         servicePath: baseDir,
     },
@@ -61,7 +61,7 @@ export default Plugin;
 ## 插件如何进行测试？
 
 ```js
-import CommandHookCore from 'command-core';
+import { CommandHookCore } from '@midwayjs/fcli-command-core';
 const core = new CommandHookCore({
     provider: 'providerName',
     options: {},

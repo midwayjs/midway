@@ -10,7 +10,7 @@ import { execSync } from 'child_process';
 import { resolve } from 'path';
 import { existsSync, writeFileSync, ensureDirSync } from 'fs-extra';
 import { loadSpec } from '@midwayjs/fcli-command-core';
-import { render } from 'ejs';
+import { writeWrapper } from '@midwayjs/serverless-spec-builder';
 
 interface InvokeOptions {
   baseDir?: string;         // 目录，默认为process.cwd
@@ -107,8 +107,8 @@ export class InvokeCore {
     process.exit(1);
   }
 
-  async loadHandler(WrapperContent: string) {
-    const wrapperInfo = await this.makeWrapper(WrapperContent);
+  async loadHandler(starter: string) {
+    const wrapperInfo = await this.makeWrapper(starter);
     const { fileName, handlerName } = wrapperInfo;
     this.wrapperInfo = wrapperInfo;
     try {
@@ -120,70 +120,21 @@ export class InvokeCore {
   }
 
   // 写入口
-  async makeWrapper(WrapperContent: string) {
+  async makeWrapper(starter: string) {
     const funcInfo = this.getFunctionInfo();
     const [handlerFileName, name] = funcInfo.handler.split('.');
-    const funcLayers = funcInfo.layers || [];
-    const handlers = [];
-
-    // 高密度部署
-    if (funcInfo._isAggregation && funcInfo.functions) {
-      handlers.push({
-        name,
-        handlers: funcInfo._handlers,
-      });
-    } else {
-      handlers.push({
-        name,
-        handler: funcInfo.handler,
-      });
-    }
-
     const fileName = resolve(this.buildDir, `${handlerFileName}.js`);
-    const layers = this.getLayers(
-      this.spec.layers,
-      ...funcLayers
-    );
-    const content = render(WrapperContent, {
-      handlers,
-      ...layers,
+
+    writeWrapper({
+      baseDir: this.baseDir,
+      service: {
+        layers: this.spec.layers,
+        functions: {[this.options.functionName]: funcInfo}
+      },
+      distDir: this.buildDir,
+      starter
     });
-    writeFileSync(fileName, content);
     return { fileName, handlerName: name };
-  }
-
-  // 安装layer
-  private getLayers(...layersList: any) {
-    const layerTypeList = this.formatLayers(...layersList);
-    const layerDeps = [];
-    const layers = [];
-
-    if (layerTypeList && layerTypeList.npm) {
-      Object.keys(layerTypeList.npm).forEach((originName: string) => {
-        const name = 'layer_' + originName;
-        layerDeps.push({ name, path: layerTypeList.npm[originName] });
-        layers.push(name);
-      });
-    }
-    return {
-      layerDeps,
-      layers,
-    };
-  }
-
-  // 格式化layers
-  formatLayers(...multiLayers: any[]) {
-    const layerTypeList = { npm: {} };
-    multiLayers.forEach((layer: any) => {
-      Object.keys(layer || {}).forEach(layerName => {
-        const [type, path] = layer[layerName].path.split(':');
-        if (!layerTypeList[type]) {
-          return;
-        }
-        layerTypeList[type][layerName] = path;
-      });
-    });
-    return layerTypeList;
   }
 
   wrapperHandler(handler) {

@@ -32,19 +32,27 @@ export class InvokePlugin extends BasePlugin {
         return;
       }
       const func = this.options.function;
-      this.core.cli.log(` - Invoke ${func}`);
-
-      const result = await this.invokeFun(func);
-      this.core.cli.log('--------- result start --------');
-      this.core.cli.log(JSON.stringify(result));
-      this.core.cli.log('--------- result end --------');
+      try {
+        const result = await this.invokeFun(func);
+        this.core.cli.log('--------- result start --------');
+        this.core.cli.log('');
+        this.core.cli.log(JSON.stringify(result));
+        this.core.cli.log('');
+        this.core.cli.log('--------- result end --------');
+      } catch (e) {
+        const errorLog = this.core.cli.error || this.core.cli.log;
+        errorLog(e && e.message ? `[Error] ${e.message}` : e);
+      }
     },
   };
 
   async invokeFun(functionName: string) {
     const allFunctions = this.core.service.functions || {};
     const funcConf = allFunctions[functionName];
-
+    if (!funcConf) {
+      throw new Error(`function '${functionName}' not exists!`);
+    }
+    this.core.cli.log(`- Invoke ${functionName}`);
     const options = {
       functionDir: this.core.config.servicePath,
       functionName,

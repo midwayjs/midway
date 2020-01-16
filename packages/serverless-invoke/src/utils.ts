@@ -126,7 +126,11 @@ export const exportMidwayFaaS = (() => {
   if (existsSync(faasPath)) {
     return require(faasPath);
   } else {
-    return require(midwayModuleName);
+    try {
+      return require(midwayModuleName);
+    } catch (e) {
+      return { FaaSStarter: class DefaulltMidwayFaasStarter {}};
+    }
   }
 })();
 

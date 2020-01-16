@@ -1,8 +1,6 @@
 import { InvokeCore } from './core';
 import { createRuntime } from '@midwayjs/runtime-mock';
-import * as FCStarter from '@midwayjs/serverless-fc-starter';
 import * as FCTrigger from '@midwayjs/serverless-fc-trigger';
-import * as SCFStarter from '@midwayjs/serverless-scf-starter';
 
 export class Invoke extends InvokeCore {
   async getInvokeFunction() {
@@ -13,10 +11,10 @@ export class Invoke extends InvokeCore {
     if (provider) {
       let handler: any = ''; // todo
       if (provider === 'fc' || provider === 'aliyun') {
-        handler = await this.loadHandler(FCStarter.wrapperContent);
+        handler = await this.loadHandler(require.resolve('@midwayjs/serverless-fc-starter'));
         triggerMap = FCTrigger;
       } else if (provider === 'scf' || provider === 'tencent') {
-        handler = await this.loadHandler(SCFStarter.wrapperContent);
+        handler = await this.loadHandler(require.resolve('@midwayjs/serverless-scf-starter'));
       }
       if (handler) {
         runtime = createRuntime({

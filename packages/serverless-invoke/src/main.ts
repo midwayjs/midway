@@ -21,6 +21,7 @@ export const getInvoke = (Invoke, debugPath) => {
         ],
         {
           cwd: options.functionDir || process.env.PWD,
+          env: process.env,
           execArgv: [
             '--inspect=' + options.debug
           ],

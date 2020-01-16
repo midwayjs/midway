@@ -4,6 +4,7 @@
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
+    "@midwayjs/serverless-spec-builder": "^0.2.2",
     "@midwayjs/fcli-command-core": "^0.2.2",
     "@midwayjs/runtime-engine": "^0.2.0",
     "@midwayjs/runtime-mock": "^0.2.0",

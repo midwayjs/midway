@@ -5,6 +5,7 @@ import { SpecBuilder } from './builder';
 
 export * from './interface';
 export * from './builder';
+export * from './wrapper';
 
 export const transform = (sourcefilePathOrJson: any, builderCls?) => {
   let result: any = sourcefilePathOrJson;
