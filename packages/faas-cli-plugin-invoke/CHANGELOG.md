@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.10](https://github.com/midwayjs/midway-faas/compare/v0.2.9...v0.2.10) (2020-01-16)
+
+
+### Bug Fixes
+
+* refactor appregation & pass process env to invoke debug ([#24](https://github.com/midwayjs/midway-faas/issues/24)) ([f8cd981](https://github.com/midwayjs/midway-faas/commit/f8cd98118e91d3e1b15c2b37d1aaad6b15282f26))
+
+
+
+
+
 ## [0.2.7](https://github.com/midwayjs/midway-faas/compare/v0.2.6...v0.2.7) (2020-01-14)
 
 **Note:** Version bump only for package @midwayjs/fcli-plugin-invoke
