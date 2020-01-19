@@ -51,16 +51,6 @@ export interface FaaSHTTPContext {
   body: FaaSHTTPResponse['body'];
 }
 
-export interface ServerlessInvokeOptipns {
-  name: string;
-  group: string;
-  version?: string;
-}
-
-export interface ServerlessFunctionInvoker {
-  invoke(invokeOpts: ServerlessInvokeOptipns, args: string);
-}
-
 export interface FaaSContext extends FaaSHTTPContext {
   logger: FaaSLogger;
   env: string;
