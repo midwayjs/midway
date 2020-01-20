@@ -4,9 +4,11 @@ import { InvokePlugin } from '@midwayjs/fcli-plugin-invoke';
 import { PackagePlugin } from '@midwayjs/fcli-plugin-package';
 import { DeployPlugin } from '@midwayjs/fcli-plugin-deploy';
 import { AliyunFCPlugin } from '@midwayjs/fcli-plugin-fc';
+import { CreatePlugin } from '@midwayjs/fcli-plugin-create';
 
 export class CLI extends BaseCLI {
   loadDefaultPlugin() {
+    this.core.addPlugin(CreatePlugin);
     this.core.addPlugin(InvokePlugin);
     this.core.addPlugin(TestPlugin);
     this.core.addPlugin(PackagePlugin);
