@@ -6,7 +6,7 @@ describe('/test/index.test.ts', () => {
     const result: any = await invoke({
       functionDir: join(__dirname, 'fixtures/baseApp'),
       functionName: 'http',
-      data: [{ name: 'params' }]
+      data: [{ name: 'params' }],
     });
     assert(result && result.body === 'hello http world');
   });

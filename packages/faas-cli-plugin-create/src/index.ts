@@ -1,6 +1,7 @@
 import { BasePlugin } from '@midwayjs/fcli-command-core';
-import { join } from 'path';
-const { LightGenerator } = require('light-generator');
+import { join, isAbsolute } from 'path';
+import { templateList } from './list';
+import { LightGenerator } from 'light-generator';
 const { Select, Input, Form } = require('enquirer');
 
 async function sleep(timeout) {
@@ -19,6 +20,8 @@ export class CreatePlugin extends BasePlugin {
   npmClient = 'npm';
   _innerPrompt;
   templateList;
+  npmPackageName;
+  localBoilerplatePath;
 
   constructor(core, options) {
     super(core, options);
@@ -28,15 +31,23 @@ export class CreatePlugin extends BasePlugin {
         usage: 'Create new Ali FaaS service',
         lifecycleEvents: ['create'],
         options: {
-          template: {
+          'template': {
             usage: `Template for the service. Available templates: ${this.humanReadableTemplateList()}`,
             shortcut: 't',
           },
-          path: {
+          'path': {
             usage:
-              'The path where the service should be created (e.g. --path my-service)',
+              'The path where the service should be created (e.g. --path my-service).',
             shortcut: 'p',
           },
+          'template-path': {
+            usage:
+              'Your code will be created from this local template.',
+          },
+          'template-package': {
+            usage:
+              'Your code will be created from this npm package.',
+          }
         },
       },
     };
@@ -64,6 +75,17 @@ export class CreatePlugin extends BasePlugin {
   async create() {
     this.core.cli.log('Generating boilerplate...');
     if (this.options['template']) {
+      this.npmPackageName = this.templateList[this.options.template].package;
+      await this.createFromTemplate();
+    } else if (this.options['template-package']) {
+      this.npmPackageName = this.options['template-package'];
+      await this.createFromTemplate();
+    } else if (this.options['template-path']) {
+      if (!isAbsolute(this.options['template-path'])) {
+        this.localBoilerplatePath = join(this.servicePath, this.options['template-path']);
+      } else {
+        this.localBoilerplatePath = this.options['template-path'];
+      }
       await this.createFromTemplate();
     } else {
       this.prompt = new Select({
@@ -79,6 +101,7 @@ export class CreatePlugin extends BasePlugin {
       });
 
       this.options.template = await this.prompt.run();
+      this.npmPackageName = this.templateList[this.options.template].package;
       await this.createFromTemplate();
     }
     // done
@@ -99,11 +122,21 @@ export class CreatePlugin extends BasePlugin {
     const boilerplatePath = this.options.path || '';
     const newPath = join(this.servicePath, boilerplatePath);
     const lightGenerator = new LightGenerator();
-    const generator = lightGenerator.defineNpmPackage({
-      npmClient: this.npmClient,
-      npmPackage: this.templateList[this.options.template].package,
-      targetPath: newPath,
-    });
+    let generator;
+    if (this.npmPackageName) {
+      // 利用 npm 包
+      generator = lightGenerator.defineNpmPackage({
+        npmClient: this.npmClient,
+        npmPackage: this.npmPackageName,
+        targetPath: newPath,
+      });
+    } else {
+      // 利用本地路径
+      generator = lightGenerator.defineLocalPath({
+        templatePath: this.localBoilerplatePath,
+        targetPath: newPath,
+      });
+    }
 
     const args = await generator.getParameterList();
     const argsKeys = Object.keys(args);
@@ -128,7 +161,7 @@ export class CreatePlugin extends BasePlugin {
       await generator.run();
     }
     this.core.cli.log(
-      `Successfully generated boilerplate for template: "${this.options.template}"`
+      `Successfully generated boilerplate for template: "${this.options.template || this.npmPackageName || this.localBoilerplatePath}"`
     );
     this.core.cli.log();
   }
@@ -157,7 +190,7 @@ export class CreatePlugin extends BasePlugin {
   }
 
   loadTemplateList() {
-    this.templateList = require('./list');
+    this.templateList = templateList;
   }
 
   humanReadableTemplateList() {
