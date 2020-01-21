@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/serverless-invoke",
-  "version": "0.2.11",
+  "version": "0.2.13",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
