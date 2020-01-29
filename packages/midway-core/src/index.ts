@@ -1,3 +1,4 @@
+export * from 'injection';
 export { ContainerLoader } from './loader';
 export { MidwayContainer } from './container';
 export { MidwayRequestContainer }  from './requestContainer';

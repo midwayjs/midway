@@ -10,7 +10,7 @@ export interface ControllerOption {
   };
 }
 
-export function controller(prefix: string, routerOptions: {
+export function Controller(prefix: string, routerOptions: {
   sensitive?: boolean,
   middleware?: KoaMiddlewareParamArray
  } = {middleware: [], sensitive: true}

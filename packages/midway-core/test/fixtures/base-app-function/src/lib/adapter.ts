@@ -1,11 +1,10 @@
-import { autowire, provide } from 'injection';
+import { Autowire, Provide } from '@midwayjs/decorator';
 
-@provide()
-@autowire(false)
+@Provide()
+@Autowire(false)
 export class GoogleAdapter {
   _hello = null;
 }
 
-@provide()
-export class BaiduAdapter {
-}
+@Provide()
+export class BaiduAdapter {}

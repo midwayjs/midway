@@ -1,19 +1,19 @@
-import {provide} from 'injection';
+import { Provide } from '@midwayjs/decorator';
 
 export interface Loader {
   getConfig();
 }
 
-@provide('loader')
+@Provide('loader')
 export class BaseLoader implements Loader {
   getConfig() {
-    return {a: 1, b: 2};
+    return { a: 1, b: 2 };
   }
 }
 
-@provide('easyLoader')
+@Provide('easyLoader')
 export class EasyLoader extends BaseLoader implements Loader {
   getConfig() {
-    return {a: 3, b: 4};
+    return { a: 3, b: 4 };
   }
 }

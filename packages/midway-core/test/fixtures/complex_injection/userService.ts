@@ -1,8 +1,8 @@
-import { scope, ScopeEnum } from 'injection';
+import { ScopeEnum } from '../../../src';
+import { Scope } from '@midwayjs/decorator';
 
-@scope(ScopeEnum.Request)
+@Scope(ScopeEnum.Request)
 export class UserService {
-
   async getUsers() {
     return new Promise(resolve => {
       setTimeout(() => {

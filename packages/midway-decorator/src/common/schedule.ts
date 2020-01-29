@@ -22,7 +22,7 @@ export interface ScheduleOpts {
   };
 }
 
-export function schedule(scheduleOpts: ScheduleOpts | string) {
+export function Schedule(scheduleOpts: ScheduleOpts | string) {
   return function (target: any): void {
     saveModule(SCHEDULE_KEY, target);
     saveClassMetadata(SCHEDULE_KEY, scheduleOpts, target);

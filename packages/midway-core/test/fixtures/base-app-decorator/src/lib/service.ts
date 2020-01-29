@@ -1,15 +1,13 @@
-import {config, plugin, logger} from '@midwayjs/decorator';
-import {provide, async} from 'injection';
-@async()
-@provide()
+import { Config, Plugin, Logger, Provide, Async } from '@midwayjs/decorator';
+@Async()
+@Provide()
 export class BaseService {
-
-  @config('hello')
+  @Config('hello')
   config;
 
-  @plugin('plugin2')
+  @Plugin('plugin2')
   plugin2;
 
-  @logger()
+  @Logger()
   logger;
 }

@@ -1,13 +1,12 @@
-import { inject, provide } from 'injection';
 import { Loader } from './loader';
+import { Inject, Provide } from '@midwayjs/decorator';
 
-@provide()
+@Provide()
 export class App {
-
-  @inject('easyLoader')
+  @Inject('easyLoader')
   loader: Loader;
 
-  @inject('loader')
+  @Inject('loader')
   easyLoader: Loader;
 
   getConfig() {

@@ -1,43 +1,49 @@
-import {config, plugin, logger} from '@midwayjs/decorator';
-import {provide, async, init, inject} from 'injection';
+import {
+  Config,
+  Plugin,
+  Logger,
+  Provide,
+  Async,
+  Init,
+  Inject,
+} from '@midwayjs/decorator';
 
-@provide()
+@Provide()
 export class A {
   config = {
-    c: 20
+    c: 20,
   };
 }
 
-@provide()
+@Provide()
 export class B {
   config = {
-    c: 40
+    c: 40,
   };
 }
 
-@async()
-@provide()
+@Async()
+@Provide()
 export class BaseService {
-
   config;
   plugin2;
   logger;
 
   constructor(
-    @inject() a,
-    @config('hello') config,
-    @inject() b,
-    @plugin('plugin2') plugin2,
-    @logger() logger
+    @Inject() a,
+    @Config('hello') config,
+    @Inject() b,
+    @Plugin('plugin2') plugin2,
+    @Logger() logger
   ) {
     this.config = Object.assign(config, {
-      c: a.config.c + b.config.c + config.c
+      c: a.config.c + b.config.c + config.c,
     });
     this.plugin2 = plugin2;
     this.logger = logger;
   }
 
-  @init()
+  @Init()
   async init() {
     await new Promise(resolve => {
       setTimeout(() => {
@@ -45,5 +51,4 @@ export class BaseService {
       }, 100);
     });
   }
-
 }

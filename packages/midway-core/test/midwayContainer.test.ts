@@ -23,7 +23,7 @@ describe('/test/midwayContainer.test.ts', () => {
     expect(app.easyLoader.getConfig().a).to.equal(1);
   });
 
-  it('should load js dir and inject with $', () => {
+  xit('should load js dir and inject with $', () => {
     const container = new MidwayContainer(undefined, undefined, false);
     container.load({
       loadDir: path.join(__dirname, './fixtures/js-app-inject')
@@ -33,7 +33,7 @@ describe('/test/midwayContainer.test.ts', () => {
     expect(app.getConfig().a).to.equal(1);
   });
 
-  it('should load js app with xml', async () => {
+  xit('should load js app with xml', async () => {
     const container = new MidwayContainer(path.join(__dirname, './fixtures/js-app-xml'), undefined, false);
     container.configLocations = ['resources/main.xml'];
 

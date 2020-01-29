@@ -80,10 +80,10 @@ const createParamMapping = function (type: RouteParamTypes) {
   };
 };
 
-export const session = () => createParamMapping(RouteParamTypes.SESSION)();
-export const body = (property?: string) => createParamMapping(RouteParamTypes.BODY)(property);
-export const query = (property?: string) => createParamMapping(RouteParamTypes.QUERY)(property);
-export const param = (property?: string) => createParamMapping(RouteParamTypes.PARAM)(property);
-export const headers = (property?: string) => createParamMapping(RouteParamTypes.HEADERS)(property);
-export const file = (property?: GetFileStreamOptions) => createParamMapping(RouteParamTypes.FILESTREAM)(property);
-export const files = (property?: GetFilesStreamOptions) => createParamMapping(RouteParamTypes.FILESSTREAM)(property);
+export const Session = () => createParamMapping(RouteParamTypes.SESSION)();
+export const Body = (property?: string) => createParamMapping(RouteParamTypes.BODY)(property);
+export const Query = (property?: string) => createParamMapping(RouteParamTypes.QUERY)(property);
+export const Param = (property?: string) => createParamMapping(RouteParamTypes.PARAM)(property);
+export const Headers = (property?: string) => createParamMapping(RouteParamTypes.HEADERS)(property);
+export const File = (property?: GetFileStreamOptions) => createParamMapping(RouteParamTypes.FILESTREAM)(property);
+export const Files = (property?: GetFilesStreamOptions) => createParamMapping(RouteParamTypes.FILESSTREAM)(property);

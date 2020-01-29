@@ -1,30 +1,26 @@
-import { inject, provide, scope, ScopeEnum } from 'injection';
+import { Provide, Scope, Inject } from '@midwayjs/decorator';
+import { ScopeEnum } from '../../../src';
 
-@provide()
+@Provide()
 export class A {
   config = {
-    c: 1
+    c: 1,
   };
 }
 
-@provide()
+@Provide()
 export class B {
   config = {
-    c: 2
+    c: 2,
   };
 }
 
-@scope(ScopeEnum.Singleton)
-@provide('newKey')
+@Scope(ScopeEnum.Singleton)
+@Provide('newKey')
 export class DbAPI {
-
   private config;
 
-  constructor(
-    @inject() a,
-    hello,
-    @inject() b,
-  ) {
+  constructor(@Inject() a, hello, @Inject() b) {
     this.config = a.config.c + b.config.c;
   }
 

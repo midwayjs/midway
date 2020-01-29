@@ -82,39 +82,39 @@ const createMappingDecorator = (method: string) => (
 /**
  * Routes HTTP POST requests to the specified path.
  */
-export const post = createMappingDecorator(RequestMethod.POST);
+export const Post = createMappingDecorator(RequestMethod.POST);
 
 /**
  * Routes HTTP GET requests to the specified path.
  */
-export const get = createMappingDecorator(RequestMethod.GET);
+export const Get = createMappingDecorator(RequestMethod.GET);
 
 /**
  * Routes HTTP DELETE requests to the specified path.
  */
-export const del = createMappingDecorator(RequestMethod.DELETE);
+export const Del = createMappingDecorator(RequestMethod.DELETE);
 
 /**
  * Routes HTTP PUT requests to the specified path.
  */
-export const put = createMappingDecorator(RequestMethod.PUT);
+export const Put = createMappingDecorator(RequestMethod.PUT);
 
 /**
  * Routes HTTP PATCH requests to the specified path.
  */
-export const patch = createMappingDecorator(RequestMethod.PATCH);
+export const Patch = createMappingDecorator(RequestMethod.PATCH);
 
 /**
  * Routes HTTP OPTIONS requests to the specified path.
  */
-export const options = createMappingDecorator(RequestMethod.OPTIONS);
+export const Options = createMappingDecorator(RequestMethod.OPTIONS);
 
 /**
  * Routes HTTP HEAD requests to the specified path.
  */
-export const head = createMappingDecorator(RequestMethod.HEAD);
+export const Head = createMappingDecorator(RequestMethod.HEAD);
 
 /**
  * Routes all HTTP requests to the specified path.
  */
-export const all = createMappingDecorator(RequestMethod.ALL);
+export const All = createMappingDecorator(RequestMethod.ALL);

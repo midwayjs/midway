@@ -1,57 +1,62 @@
-import {config, plugin} from '@midwayjs/decorator';
-import {provide, async, init, inject} from 'injection';
+import {
+  Config,
+  Plugin,
+  Provide,
+  Async,
+  Init,
+  Inject,
+} from '@midwayjs/decorator';
 
-@provide()
+@Provide()
 export class A {
   config = {
-    c: 20
+    c: 20,
   };
 }
 
-@provide()
+@Provide()
 export class B {
   config = {
-    c: 40
+    c: 40,
   };
 }
 
-@async()
-@provide()
+@Async()
+@Provide()
 export class BaseService {
-
   config;
 
-  @config('adapterName')
+  @Config('adapterName')
   adapterName;
   plugin2;
 
-  @inject('adapterFactory')
+  @Inject('adapterFactory')
   factory;
 
-  @inject('otherFactory')
+  @Inject('otherFactory')
   other;
 
-  @inject('otherFactory1')
+  @Inject('otherFactory1')
   other1;
-  @inject('otherFactory2')
+  @Inject('otherFactory2')
   other2;
-  @inject('otherFactory3')
+  @Inject('otherFactory3')
   other3;
   adapter;
 
   constructor(
-    @inject() a,
-    @config('hello') config,
-    @inject() b,
-    @plugin('plugin2') plugin2
+    @Inject() a,
+    @Config('hello') config,
+    @Inject() b,
+    @Plugin('plugin2') plugin2
   ) {
     this.config = Object.assign(config, {
-      c: a.config.c + b.config.c + config.c
+      c: a.config.c + b.config.c + config.c,
     });
     this.plugin2 = plugin2;
   }
 
-  @init()
+  @Init()
   async init() {
     this.adapter = await this.factory(this.adapterName);
   }

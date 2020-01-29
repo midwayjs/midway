@@ -1,22 +1,21 @@
 import { UserService } from './userService';
-import { inject, scope, ScopeEnum } from 'injection';
+import { ScopeEnum } from '../../../src';
+import { Scope, Inject } from '@midwayjs/decorator';
 
-@scope(ScopeEnum.Request)
+@Scope(ScopeEnum.Request)
 export class UserController {
-
-  @inject('ctx')
+  @Inject('ctx')
   ctx;
 
-  @inject('newKey')
+  @Inject('newKey')
   dbApi;
 
-  @inject()
+  @Inject()
   userService: UserService;
 
   async index() {
-    const {ctx} = this;
+    const { ctx } = this;
     ctx.body = await this.userService.getUsers();
     ctx.status = 200;
   }
-
 }

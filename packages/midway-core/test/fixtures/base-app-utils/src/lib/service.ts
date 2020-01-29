@@ -1,21 +1,20 @@
-import {config, plugin, logger} from '../../../../../src/decorators';
-import {provide, inject} from 'injection';
+import { Config, Plugin, Logger, Provide, Inject } from '@midwayjs/decorator';
 
-@provide()
+@Provide()
 export class BaseService {
-  @inject()
+  @Inject()
   ctx;
 
-  @config('hello')
+  @Config('hello')
   config;
 
-  @plugin('plugin2')
+  @Plugin('plugin2')
   plugin2;
 
-  @inject('is')
+  @Inject('is')
   isModule;
 
-  @logger()
+  @Logger()
   logger;
 
   async getData() {

@@ -1,170 +1,62 @@
-import { CLASS_KEY_CONSTRUCTOR, CONFIG_KEY, LOGGER_KEY, PLUGIN_KEY } from '@midwayjs/decorator';
-import * as globby from 'globby';
 import {
-  Autowire,
+  CLASS_KEY_CONSTRUCTOR,
+  CONFIG_KEY,
+  LOGGER_KEY,
+  PLUGIN_KEY,
+} from '@midwayjs/decorator';
+import {
   Container,
   getClassMetadata,
   getObjectDefinition,
   getProviderId,
   IApplicationContext,
-  IContainer,
-  IManagedInstance,
-  IManagedParser,
-  IManagedResolver,
-  IObjectDefinition,
-  IObjectDefinitionParser,
-  IParserContext,
   ObjectDefinitionOptions,
   ObjectIdentifier,
   Scope,
   ScopeEnum,
-  XmlObjectDefinition
 } from 'injection';
 import * as is from 'is-type-of';
-import * as path from 'path';
+import { join } from 'path';
 import { FUNCTION_INJECT_KEY, MidwayHandlerKey } from './constant';
+import { ContainerConfiguration } from './configuration';
+import { IMidwayContainer } from './interface';
+import * as globby from 'globby';
+
+const DEFAULT_PATTERN = ['**/**.ts', '**/**.tsx', '**/**.js', '!**/**.d.ts'];
+const DEFAULT_IGNORE_PATTERN = [
+  '**/node_modules/**',
+  '**/logs/**',
+  '**/run/**',
+  '**/public/**',
+  '**/view/**',
+  '**/views/**',
+];
 
 const graphviz = require('graphviz');
-const camelcase = require('camelcase');
 const debug = require('debug')('midway:container');
-const CONTROLLERS = 'controllers';
-const MIDDLEWARES = 'middlewares';
-const TYPE_LOGGER = 'logger';
-const TYPE_PLUGIN = 'plugin';
 
 interface FrameworkDecoratorMetadata {
   key: string;
   propertyName: string;
 }
 
-class BaseParser {
-  container: MidwayContainer;
+const MAIN_MODULE_KEY = '__main__';
 
-  constructor(container: MidwayContainer) {
-    this.container = container;
-  }
-}
-
-/**
- * 用于xml解析扩展
- * <controllers />
- */
-class ControllerDefinitionParser extends BaseParser implements IObjectDefinitionParser {
-  readonly name: string = CONTROLLERS;
-
-  parse(ele: Element, context: IParserContext): IObjectDefinition {
-    const definition = new XmlObjectDefinition(ele);
-
-    context.parser.parseElementNodes(definition, ele, context);
-    this.container.controllersIds.push(definition.id);
-    return definition;
-  }
-}
-
-/**
- * 用于xml解析扩展
- * <middlewares />
- */
-class MiddlewareDefinitionParser extends BaseParser implements IObjectDefinitionParser {
-  readonly name: string = MIDDLEWARES;
-
-  parse(ele: Element, context: IParserContext): IObjectDefinition {
-    const definition = new XmlObjectDefinition(ele);
-
-    context.parser.parseElementNodes(definition, ele, context);
-    this.container.middlewaresIds.push(definition.id);
-    return definition;
-  }
-}
-
-class ManagedLogger implements IManagedInstance {
-  type = TYPE_LOGGER;
-  name: string;
-}
-
-class LoggerParser implements IManagedParser {
-  get name(): string {
-    return TYPE_LOGGER;
-  }
-
-  parse(ele: Element, context: IParserContext): IManagedInstance {
-    const log = new ManagedLogger();
-    log.name = ele.getAttribute('name').trim();
-    return log;
-  }
-}
-
-class LoggerResolver implements IManagedResolver {
-  private container: MidwayContainer;
-
-  constructor(container: MidwayContainer) {
-    this.container = container;
-  }
-
-  get type(): string {
-    return TYPE_LOGGER;
-  }
-
-  resolve(managed: IManagedInstance): any {
-    const log: ManagedLogger = managed as ManagedLogger;
-    if (log.name) {
-      return this.container.findHandlerHook(MidwayHandlerKey.LOGGER)(log.name);
-    }
-    return this.container.findHandlerHook(MidwayHandlerKey.LOGGER)(log.type);
-  }
-
-  async resolveAsync(managed: IManagedInstance): Promise<any> {
-    return this.resolve(managed);
-  }
-}
-
-class ManagedPlugin implements IManagedInstance {
-  type = TYPE_PLUGIN;
-  name: string;
-}
-
-class PluginParser implements IManagedParser {
-  get name(): string {
-    return TYPE_PLUGIN;
-  }
-
-  parse(ele: Element, context: IParserContext): IManagedInstance {
-    const plugin = new ManagedPlugin();
-    plugin.name = ele.getAttribute('name').trim();
-    return plugin;
-  }
-}
-
-class PluginResolver implements IManagedResolver {
-  private container: MidwayContainer;
-
-  constructor(container: MidwayContainer) {
-    this.container = container;
-  }
-
-  get type(): string {
-    return TYPE_PLUGIN;
-  }
-
-  resolve(managed: IManagedInstance): any {
-    const p = managed as ManagedPlugin;
-    return this.container.findHandlerHook(MidwayHandlerKey.PLUGIN)(p.name);
-  }
-
-  async resolveAsync(managed: IManagedInstance): Promise<any> {
-    return this.resolve(managed);
-  }
-}
-
-export class MidwayContainer extends Container implements IContainer {
+export class MidwayContainer extends Container implements IMidwayContainer {
   controllersIds: string[] = [];
   middlewaresIds: string[] = [];
   handlerMap: Map<string, (handlerKey: string, instance?: any) => any>;
   // 仅仅用于兼容requestContainer的ctx
   ctx = {};
   isTsMode;
+  readyBindModules: Map<string, Set<any>> = new Map();
+  importDirectory = [];
 
-  constructor(baseDir: string = process.cwd(), parent: IApplicationContext = undefined, isTsMode = true) {
+  constructor(
+    baseDir: string = process.cwd(),
+    parent: IApplicationContext = undefined,
+    isTsMode = true
+  ) {
     super(baseDir, parent);
     this.isTsMode = isTsMode;
   }
@@ -172,17 +64,6 @@ export class MidwayContainer extends Container implements IContainer {
   init(): void {
     this.handlerMap = new Map();
     super.init();
-
-    if (!this.isTsMode) {
-      // xml扩展 <logger name=""/> <plugin name="hsfclient"/>
-      this.parser.objectElementParser.registerParser(new LoggerParser());
-      this.getManagedResolverFactory().registerResolver(new LoggerResolver(this));
-      this.parser.objectElementParser.registerParser(new PluginParser());
-      this.getManagedResolverFactory().registerResolver(new PluginResolver(this));
-
-      this.parser.registerParser(new ControllerDefinitionParser(this));
-      this.parser.registerParser(new MiddlewareDefinitionParser(this));
-    }
 
     this.registerEachCreatedHook();
 
@@ -210,26 +91,43 @@ export class MidwayContainer extends Container implements IContainer {
     pattern?: string | string[];
     ignore?: string | string[];
   }) {
+    // create main module configuration
+    const configuration = this.createConfiguration();
+    configuration.load(this.baseDir);
+    const importDirectory = configuration.getImportDirectory();
+    importDirectory.push(this.baseDir);
+    this.loadDirectory(
+      Object.assign(
+        {
+          loadDir: importDirectory,
+        },
+        opts
+      )
+    );
+  }
+
+  // 加载模块
+  loadDirectory(opts: {
+    loadDir: string | string[];
+    pattern?: string | string[];
+    ignore?: string | string[];
+  }) {
     const loadDirs = [].concat(opts.loadDir || []);
 
-    // TODO set 去重
     for (const dir of loadDirs) {
-      const fileResults = globby.sync(['**/**.ts', '**/**.tsx', '**/**.js', '!**/**.d.ts'].concat(opts.pattern || []), {
-        cwd: dir,
-        ignore: [
-          '**/node_modules/**',
-          '**/logs/**',
-          '**/run/**',
-          '**/public/**',
-          '**/view/**',
-          '**/views/**'
-        ].concat(opts.ignore || []),
-      });
+      const fileResults = globby.sync(
+        DEFAULT_PATTERN.concat(opts.pattern || []),
+        {
+          cwd: dir,
+          ignore: DEFAULT_IGNORE_PATTERN.concat(opts.ignore || []),
+        }
+      );
 
       for (const name of fileResults) {
-        const file = path.join(dir, name);
+        const file = join(dir, name);
         debug(`binding file => ${file}`);
         const exports = require(file);
+        // add module to set
         this.bindClass(exports);
       }
     }
@@ -248,37 +146,51 @@ export class MidwayContainer extends Container implements IContainer {
     }
   }
 
-  protected bindModule(module) {
+  protected bindModule(module, moduleKey = '') {
+    if (moduleKey === MAIN_MODULE_KEY) {
+      moduleKey = '';
+    }
     if (is.class(module)) {
       const providerId = getProviderId(module);
       if (providerId) {
-        this.bind(providerId, module);
+        this.bind(
+          this.generateProvideIdByModuleKey(moduleKey, providerId),
+          module
+        );
       } else {
-        if (!this.isTsMode) {
-          // inject by name in js
-          this.bind(camelcase(module.name), module);
-        }
+        // no provide or js class must be skip
       }
     } else {
       const info: {
-        id: ObjectIdentifier,
-        provider: (context?: IApplicationContext) => any,
-        scope?: Scope,
-        isAutowire?: boolean
+        id: ObjectIdentifier;
+        provider: (context?: IApplicationContext) => any;
+        scope?: Scope;
+        isAutowire?: boolean;
       } = module[FUNCTION_INJECT_KEY];
       if (info && info.id) {
         if (!info.scope) {
           info.scope = ScopeEnum.Request;
         }
-        this.bind(info.id, module, {
-          scope: info.scope,
-          isAutowire: info.isAutowire
-        });
+        this.bind(
+          this.generateProvideIdByModuleKey(moduleKey, info.id),
+          module,
+          {
+            scope: info.scope,
+            isAutowire: info.isAutowire,
+          }
+        );
       }
     }
   }
 
-  createChild(): IContainer {
+  private generateProvideIdByModuleKey(moduleKey, provideId) {
+    if (moduleKey) {
+      return moduleKey + ':' + provideId;
+    }
+    return provideId;
+  }
+
+  createChild() {
     const child = new Container();
     child.parent = this;
     return child;
@@ -302,13 +214,19 @@ export class MidwayContainer extends Container implements IContainer {
 
           switch (propertyMeta.type) {
             case 'config':
-              result = this.findHandlerHook(MidwayHandlerKey.CONFIG)(propertyMeta.key);
+              result = this.findHandlerHook(MidwayHandlerKey.CONFIG)(
+                propertyMeta.key
+              );
               break;
             case 'logger':
-              result = this.findHandlerHook(MidwayHandlerKey.LOGGER)(propertyMeta.key);
+              result = this.findHandlerHook(MidwayHandlerKey.LOGGER)(
+                propertyMeta.key
+              );
               break;
             case 'plugin':
-              result = this.findHandlerHook(MidwayHandlerKey.PLUGIN)(propertyMeta.key);
+              result = this.findHandlerHook(MidwayHandlerKey.PLUGIN)(
+                propertyMeta.key
+              );
               break;
           }
           constructorArgs[index] = result;
@@ -318,35 +236,36 @@ export class MidwayContainer extends Container implements IContainer {
 
     // register property inject
     this.afterEachCreated((instance, context, definition) => {
-
       // 处理配置装饰器
-      const configSetterProps: FrameworkDecoratorMetadata[] = getClassMetadata(CONFIG_KEY, instance);
-      this.defineGetterPropertyValue(configSetterProps, instance, this.findHandlerHook(MidwayHandlerKey.CONFIG));
+      const configSetterProps: FrameworkDecoratorMetadata[] = getClassMetadata(
+        CONFIG_KEY,
+        instance
+      );
+      this.defineGetterPropertyValue(
+        configSetterProps,
+        instance,
+        this.findHandlerHook(MidwayHandlerKey.CONFIG)
+      );
       // 处理插件装饰器
-      const pluginSetterProps: FrameworkDecoratorMetadata[] = getClassMetadata(PLUGIN_KEY, instance);
-      this.defineGetterPropertyValue(pluginSetterProps, instance, this.findHandlerHook(MidwayHandlerKey.PLUGIN));
+      const pluginSetterProps: FrameworkDecoratorMetadata[] = getClassMetadata(
+        PLUGIN_KEY,
+        instance
+      );
+      this.defineGetterPropertyValue(
+        pluginSetterProps,
+        instance,
+        this.findHandlerHook(MidwayHandlerKey.PLUGIN)
+      );
       // 处理日志装饰器
-      const loggerSetterProps: FrameworkDecoratorMetadata[] = getClassMetadata(LOGGER_KEY, instance);
-      this.defineGetterPropertyValue(loggerSetterProps, instance, this.findHandlerHook(MidwayHandlerKey.LOGGER));
-
-      // 表示非ts annotation模式
-      if (!this.isTsMode && !pluginSetterProps && !loggerSetterProps && definition.isAutowire()) {
-        // this.$$xxx = null; 用来注入config
-        // this.$xxx = null; 用来注入 logger 或者 插件
-        Autowire.patchDollar(instance, context, (key: string) => {
-          if (key[0] === '$') {
-            return this.findHandlerHook(MidwayHandlerKey.CONFIG)(key.slice(1));
-          }
-          try {
-            const v = this.findHandlerHook(MidwayHandlerKey.PLUGIN)(key);
-            if (v) {
-              return v;
-            }
-          } catch (e) {
-          }
-          return this.findHandlerHook(MidwayHandlerKey.LOGGER)(key);
-        });
-      }
+      const loggerSetterProps: FrameworkDecoratorMetadata[] = getClassMetadata(
+        LOGGER_KEY,
+        instance
+      );
+      this.defineGetterPropertyValue(
+        loggerSetterProps,
+        instance,
+        this.findHandlerHook(MidwayHandlerKey.LOGGER)
+      );
     });
   }
 
@@ -357,14 +276,18 @@ export class MidwayContainer extends Container implements IContainer {
    * @param instance
    * @param getterHandler
    */
-  private defineGetterPropertyValue(setterProps: FrameworkDecoratorMetadata[], instance, getterHandler) {
+  private defineGetterPropertyValue(
+    setterProps: FrameworkDecoratorMetadata[],
+    instance,
+    getterHandler
+  ) {
     if (setterProps && getterHandler) {
       for (const prop of setterProps) {
         if (prop.propertyName) {
           Object.defineProperty(instance, prop.propertyName, {
             get: () => getterHandler(prop.key, instance),
             configurable: false,
-            enumerable: true
+            enumerable: true,
           });
         }
       }
@@ -381,7 +304,9 @@ export class MidwayContainer extends Container implements IContainer {
     // Override the default scope to request
     const objDefOptions: ObjectDefinitionOptions = getObjectDefinition(target);
     if (objDefOptions && !objDefOptions.scope) {
-      debug(`register @scope to default value(request), id=${objectDefinition.id}`);
+      debug(
+        `register @scope to default value(request), id=${objectDefinition.id}`
+      );
       objectDefinition.scope = ScopeEnum.Request;
     }
   }
@@ -390,19 +315,25 @@ export class MidwayContainer extends Container implements IContainer {
     const g = graphviz.digraph('G');
 
     for (const [id, module] of this.dependencyMap.entries()) {
-      g.addNode(id, {label: `${id}(${module.name})\nscope:${module.scope}`, fontsize: '10'});
-      module.properties.forEach((depId) => {
-        g.addEdge(id, depId, {label: `properties`, fontsize: '8'});
+      g.addNode(id, {
+        label: `${id}(${module.name})\nscope:${module.scope}`,
+        fontsize: '10',
       });
-      module.constructorArgs.forEach((depId) => {
-        g.addEdge(id, depId, {label: 'constructor', fontsize: '8'});
+      module.properties.forEach(depId => {
+        g.addEdge(id, depId, { label: `properties`, fontsize: '8' });
+      });
+      module.constructorArgs.forEach(depId => {
+        g.addEdge(id, depId, { label: 'constructor', fontsize: '8' });
       });
     }
 
     try {
       return g.to_dot();
     } catch (err) {
-      console.error('generate injection dependency tree fail, err = ', err.message);
+      console.error(
+        'generate injection dependency tree fail, err = ',
+        err.message
+      );
     }
   }
 
@@ -420,4 +351,7 @@ export class MidwayContainer extends Container implements IContainer {
     }
   }
 
+  createConfiguration() {
+    return new ContainerConfiguration(this);
+  }
 }
