@@ -2,8 +2,8 @@ import { saveClassMetadata } from 'injection';
 import { CONFIGURATION_KEY } from '../constant';
 
 export interface InjectionConfigurationOptions {
-  imports: string[];
-  importObjects: any[];
+  imports?: string[];
+  importObjects?: any[];
 }
 
 export function Configuration(

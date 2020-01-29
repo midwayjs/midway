@@ -1,9 +1,5 @@
-import {
-  CLASS_KEY_CONSTRUCTOR,
-  CONFIG_KEY,
-  LOGGER_KEY,
-  PLUGIN_KEY,
-} from '@midwayjs/decorator';
+import { CLASS_KEY_CONSTRUCTOR, CONFIG_KEY, LOGGER_KEY, PLUGIN_KEY, } from '@midwayjs/decorator';
+import * as globby from 'globby';
 import {
   Container,
   getClassMetadata,
@@ -17,10 +13,9 @@ import {
 } from 'injection';
 import * as is from 'is-type-of';
 import { join } from 'path';
-import { FUNCTION_INJECT_KEY, MidwayHandlerKey } from './constant';
 import { ContainerConfiguration } from './configuration';
+import { FUNCTION_INJECT_KEY, MidwayHandlerKey } from './constant';
 import { IMidwayContainer } from './interface';
-import * as globby from 'globby';
 
 const DEFAULT_PATTERN = ['**/**.ts', '**/**.tsx', '**/**.js', '!**/**.d.ts'];
 const DEFAULT_IGNORE_PATTERN = [
@@ -51,6 +46,7 @@ export class MidwayContainer extends Container implements IMidwayContainer {
   isTsMode;
   readyBindModules: Map<string, Set<any>> = new Map();
   importDirectory = [];
+  configurations = [];
 
   constructor(
     baseDir: string = process.cwd(),
@@ -94,16 +90,12 @@ export class MidwayContainer extends Container implements IMidwayContainer {
     // create main module configuration
     const configuration = this.createConfiguration();
     configuration.load(this.baseDir);
-    const importDirectory = configuration.getImportDirectory();
-    importDirectory.push(this.baseDir);
-    this.loadDirectory(
-      Object.assign(
-        {
-          loadDir: importDirectory,
-        },
-        opts
-      )
-    );
+
+    for (const containerConfiguration of this.configurations) {
+      this.importDirectory = this.importDirectory.concat(containerConfiguration.getImportDirectory());
+    }
+    opts.loadDir = this.importDirectory.concat(opts.loadDir);
+    this.loadDirectory(opts);
   }
 
   // 加载模块
@@ -320,10 +312,10 @@ export class MidwayContainer extends Container implements IMidwayContainer {
         fontsize: '10',
       });
       module.properties.forEach(depId => {
-        g.addEdge(id, depId, { label: `properties`, fontsize: '8' });
+        g.addEdge(id, depId, {label: `properties`, fontsize: '8'});
       });
       module.constructorArgs.forEach(depId => {
-        g.addEdge(id, depId, { label: 'constructor', fontsize: '8' });
+        g.addEdge(id, depId, {label: 'constructor', fontsize: '8'});
       });
     }
 
@@ -352,6 +344,8 @@ export class MidwayContainer extends Container implements IMidwayContainer {
   }
 
   createConfiguration() {
-    return new ContainerConfiguration(this);
+    const containerConfiguration = new ContainerConfiguration(this);
+    this.configurations.push(containerConfiguration);
+    return containerConfiguration;
   }
 }

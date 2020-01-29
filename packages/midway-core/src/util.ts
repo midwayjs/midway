@@ -1,4 +1,4 @@
-import { resolve, sep, dirname } from 'path';
+import { dirname, resolve, sep } from 'path';
 
 export const safeRequire = p => {
   if (p.startsWith(`.${sep}`) || p.startsWith(`..${sep}`)) {
@@ -8,11 +8,13 @@ export const safeRequire = p => {
   try {
     return require(p);
   } catch (err) {
-    // tslint:disable-next-line: no-bitwise
-    if (err.code === 'MODULE_NOT_FOUND' && ~err.message.indexOf(p)) {
-      return undefined;
-    } else {
-      throw err;
-    }
+    return undefined;
   }
+};
+
+export const isPath = (p): boolean => {
+  if (/(^[\.\/])|:|\\/.test(p)) {
+    return true;
+  }
+  return false;
 };

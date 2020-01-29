@@ -181,4 +181,17 @@ describe('/test/loader.test.ts', () => {
     const module: any = await appCtx.getAsync('testModule');
     assert(module.test() === 'hello');
   });
+
+  it.only('should load configuration', async () => {
+    const loader = new ContainerLoader({
+      baseDir: path.join(__dirname, './fixtures/app-with-configuration/base-app-decorator/src'),
+    });
+    loader.initialize();
+    loader.loadDirectory();
+    await loader.refresh();
+
+    const appCtx = loader.getApplicationContext();
+    const baseService: any = await appCtx.getAsync('baseService');
+    assert(await baseService.getInformation() === 'harry,one article');
+  });
 });
