@@ -10,25 +10,19 @@
 > 国内用户建议使用 `cnpm` 加速npm，`npm install -g cnpm --registry=https://registry.npm.taobao.org`
 
 
-### 第一步：安装 serverless
+### 第一步：安装 Midway FaaS cli
 
 ```shell
-$ npm i -g serverless
+$ npm i -g @midwayjs/faas-cli
 ```
 
 ### 第二步：创建项目
 
 ```shell
-$ serverless install --url https://github.com/midwayjs/midway-faas-examples/tree/master/demo-faas
+$ f create
 ```
 
-### 第三步：进入目录
-
-```shell
-$ cd demo-faas
-```
-
-### 第四步：安装npm依赖
+### 第三步：进入目录 并 安装依赖
 
 ```shell
 $ npm i
@@ -39,10 +33,10 @@ $ npm i
 ### invoke 本地调用 & 本地调试
 
 ```shell
-$ serverless invoke -f index
+$ f invoke -f index
 
 // debug 需要 node 10.15 +
-$ serverless invoke -f index --debug
+$ f invoke -f index --debug
 ```
 
 | 参数 | 释义 |
@@ -54,7 +48,7 @@ $ serverless invoke -f index --debug
 ### package 打包构建
 
 ```shell
-$ serverless package
+$ f package
 ```
 
 | 参数 | 释义 |
@@ -66,7 +60,7 @@ $ serverless package
 ### deploy 部署到线上
 
 ```shell
-$ serverless deploy
+$ f deploy
 ```
 
 支持所有 `package` 命令的参数

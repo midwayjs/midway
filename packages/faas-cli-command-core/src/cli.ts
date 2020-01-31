@@ -28,6 +28,9 @@ export class BaseCLI {
       log: this.loadLog(),
       extensions: this.loadExtensions(),
     });
+  }
+
+  async loadPlugins() {
     this.loadCorePlugin();
     this.loadDefaultPlugin();
     this.loadPlatformPlugin();
@@ -87,6 +90,7 @@ export class BaseCLI {
   }
 
   async start() {
+    await this.loadPlugins();
     await this.core.ready();
     await this.core.invoke();
   }

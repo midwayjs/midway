@@ -161,7 +161,6 @@ export class CommandHookCore implements ICommandHooksCore {
       },
       service: {},
     });
-    serviceData.service = serviceData;
     return {
       ...(extensions || {}),
       classes: {

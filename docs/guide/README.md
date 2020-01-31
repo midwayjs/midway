@@ -93,23 +93,24 @@ Typescript 和 Javascript 既相似又有着许多不同，以往的 Node.js 应
 - 操作系统：支持 macOS，Linux，Windows
 - 运行环境：建议选择 [LTS 版本](http://nodejs.org/)，最低要求 8.x。
 
-在安装完成 Node 后，继续安装我们开发所需要用到的框架 Serverless。
 
 > 国内用户建议使用 `cnpm` 加速 npm
 > `npm install -g cnpm --registry=https://registry.npm.taobao.org`
-
-```bash
-$ npm install -g serverless
-```
 
 <a name="NhgiP"></a>
 
 ## 快速初始化
 
-我们基于 Serverless 框架，提供了开箱即用的 examples：
+我们提供了开箱即用的本地cli工具
 
 ```bash
-$ serverless install --url https://github.com/midwayjs/midway-faas-examples/tree/master/demo-faas
+$ npm i -g @midwayjs/faas-cli
+```
+
+创建项目
+
+```
+$ f create
 ```
 
 完成后进入项目安装依赖：
@@ -129,7 +130,7 @@ $ npm i
 .
 ├── README.md
 ├── package.json
-├── serverless.yml
+├── f.yml
 ├── src
 │   └── index.ts
 ├── test
@@ -139,7 +140,7 @@ $ npm i
 
 具体目录解释如下：
 
-- `serverless.yml` 函数配置文件，具体参考：[Serverless.yml](#serverlessyml)
+- `f.yml` 函数配置文件，具体参考：[f.yml](#fyml)
 - `src/**` 函数运行时代码
 - `test/**` 函数单元测试相关代码，具体参考：[单元测试](#单元测试-1)
 - `README.md` 项目说明文档
@@ -184,7 +185,7 @@ export class HelloService {
 我们提供的便捷的 cli 命令来实现本地调用，只需要在项目根目录下运行如下命令，即可调用编写的 index 函数：
 
 ```bash
-$ serverless invoke --function index
+$ f invoke --function index
 ```
 
 调用演示如下：
@@ -200,7 +201,7 @@ $ serverless invoke --function index
 在项目目录下，只需输入如下命令即可运行单测：
 
 ```bash
-$ serverless test
+$ f test
 ```
 
 单测流程演示如下：
@@ -214,7 +215,7 @@ $ serverless test
 Midway FaaS 应用的部署也非常简单，只需要在项目根目录下运行如下命令，即可开始部署流程。
 
 ```bash
-$ serverless deploy
+$ f deploy
 ```
 
 同时，我们也提供了多云平台部署与高密度部署等选项，具体可以参考部署章节的内容。
@@ -293,7 +294,7 @@ export class HelloService implements FunctionHandler {
 具体解释如下：
 
 - [@provide](#) 声明这是一个可使用依赖注入的类。具体文档参考：[URL](https://midwayjs.org/injection/guide.html#provide)
-- [@function](#) 声明这是一个 FaaS 函数，其中传入的 id 则是在 `serverless.yml` 中声明的 id
+- [@function](#) 声明这是一个 FaaS 函数，其中传入的 id 则是在 `f.yml` 中声明的 id
 
 ```typescript
 @provide()
@@ -332,9 +333,9 @@ export class HelloService implements FunctionHandler {
 
 <a name="eec6E"></a>
 
-## 添加至 serverless.yml
+## 添加至 f.yml
 
-`serverless.yml`  是我们用来声明所需部署函数服务的文件，新增函数只需要在 serverless.yml 中填入相关信息即可。
+`f.yml`  是我们用来声明所需部署函数服务的文件，新增函数只需要在 f.yml 中填入相关信息即可。
 
 如我们这次添加的 hello 函数，则直接新增该函数即可。
 
@@ -352,7 +353,7 @@ functions:
           method: get
 ```
 
-关于 `serverless.yml` 的规范，可参考：[Serverless.yml](#serverlessyml)
+关于 `f.yml` 的规范，可参考：[f.yml](#fyml)
 
 <a name="SZJlw"></a>
 
@@ -362,7 +363,7 @@ functions:
 
 ## 多函数开发
 
-midway-faas 支持在同一个仓库中进行多个函数开发，在 `serverless.yml` 文件中的 `functions` 字段中可以指定多个方法：
+midway-faas 支持在同一个仓库中进行多个函数开发，在 `f.yml` 文件中的 `functions` 字段中可以指定多个方法：
 
 ```javascript
 service: faas-test
@@ -414,7 +415,7 @@ midway-faas 创新性的提供了高密度部署的能力，可以将多个函�
 
 建议使用高密度部署时同时配置函数的域名，这样构建时就能自动分析函数路径，实现聚合、拆分后函数请求路径无任何变化。
 
-若要使用高密度部署，需要在 `serverless.yml` 文件中配置 `aggregation` 字段：
+若要使用高密度部署，需要在 `f.yml` 文件中配置 `aggregation` 字段：
 
 ```yaml
 functions:
@@ -449,15 +450,15 @@ custom:
 
 # 部署
 
-midway-faas 提供了一键部署到云平台功能，只需要执行 `serverless deploy` 命令即可。
+midway-faas 提供了一键部署到云平台功能，只需要执行 `f deploy` 命令即可。
 <a name="OljHI"></a>
 
 ## 多云部署
 
-在执行 `serverless deploy` 时，如果在 `serverless.yml` 文件中未指定 `provider.name` ，则会提示选择要部署到 阿里云 还是 腾讯云 等云平台。<br />另外也可以通过如下命令来强制性指定要部署到的目标平台：
+在执行 `f deploy` 时，如果在 `f.yml` 文件中未指定 `provider.name` ，则会提示选择要部署到 阿里云 还是 腾讯云 等云平台。<br />另外也可以通过如下命令来强制性指定要部署到的目标平台：
 
 ```shell
-serverless deploy -playform=<aliyun|tencent>
+f deploy -playform=<aliyun|tencent>
 ```
 
 <a name="m26bz"></a>
@@ -480,12 +481,12 @@ serverless deploy -playform=<aliyun|tencent>
 
 #### 用户信息认证
 
-腾讯云在部署时，如果是首次部署，则控制台会展示相应二维码，扫码即可完成认证，后续会默认复用该配置<br />后续如想修改部署时的使用的用户，可手动在 serverless.yml 中设置当前用户的认证信息，教程：[https://cloud.tencent.com/document/product/1154/38811](https://cloud.tencent.com/document/product/1154/38811)
+腾讯云在部署时，如果是首次部署，则控制台会展示相应二维码，扫码即可完成认证，后续会默认复用该配置<br />后续如想修改部署时的使用的用户，可手动在 f.yml 中设置当前用户的认证信息，教程：[https://cloud.tencent.com/document/product/1154/38811](https://cloud.tencent.com/document/product/1154/38811)
 <a name="iaSjT"></a>
 
 #### 部署网关设置
 
-腾讯云在部署时，会为函数默认创建网关触发器<br />如果想避免重复创建，可按下列教程操作：<br />发布完成后，控制台会默认显示腾讯云此次创建的网关 serviceId（如下图所示）<br />此时需要修改 serverless.yml 的配置文件，serviceId 可以配在以下两处：
+腾讯云在部署时，会为函数默认创建网关触发器<br />如果想避免重复创建，可按下列教程操作：<br />发布完成后，控制台会默认显示腾讯云此次创建的网关 serviceId（如下图所示）<br />此时需要修改 f.yml 的配置文件，serviceId 可以配在以下两处：
 
 1. provider
 
@@ -519,7 +520,7 @@ serviceId: <控制台返回的 ServiceId>
 
 <a name="EexI4"></a>
 
-## serverless.yml
+## f.yml
 
 ```yaml
 service: 											# 【必要】应用服务配置

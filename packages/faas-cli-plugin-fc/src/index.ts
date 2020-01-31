@@ -32,7 +32,6 @@ export class AliyunFCPlugin extends BasePlugin {
       });
     },
     'deploy:deploy': async () => {
-      this.core.cli.log('deploy');
       const profPath = join(homedir(), '.fcli/config.yaml');
       const isExists = existsSync(profPath);
       if (!isExists || this.options.resetConfig) {

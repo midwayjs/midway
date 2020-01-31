@@ -10,7 +10,9 @@
     "@midwayjs/fcli-plugin-fc": "^0.2.10",
     "@midwayjs/fcli-plugin-invoke": "^0.2.13",
     "@midwayjs/fcli-plugin-package": "^0.2.10",
-    "@midwayjs/fcli-plugin-test": "^0.2.10"
+    "@midwayjs/fcli-plugin-test": "^0.2.10",
+    "@midwayjs/serverless-spec-builder": "^0.2.10",
+    "enquirer": "^2.3.4"
   },
   "bin": {
     "mf": "bin/fun.js",
