@@ -15,7 +15,7 @@
 目前第一层字段包括：
 
 - **service**  当前的服务（函数分组），对标应用
-- **provider** 当前的服务提供上，集团内为 ginkgo，fc，gaia
+- **provider** 当前的服务提供上，比如 aliuyun，tecent 等。
 - **functions** 函数的具体信息
 - **layers** 具体的layer 层配置
 - **resources**  引用的资源
