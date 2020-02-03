@@ -4,18 +4,17 @@ import {
   ControllerOption,
   PRIORITY_KEY,
   RouterOption,
+  RouterParamValue,
   WEB_ROUTER_KEY,
   WEB_ROUTER_PARAM_KEY,
-  RouterParamValue,
 } from '@midwayjs/decorator';
+import { EggAppInfo } from 'egg';
 import * as extend from 'extend2';
 import * as fs from 'fs';
-import { getClassMetadata, getPropertyDataFromClass, getProviderId, listModule } from 'injection';
-import { ContainerLoader, MidwayHandlerKey, MidwayContainer } from 'midway-core';
+import { ContainerLoader, MidwayContainer, MidwayHandlerKey, getClassMetadata, getPropertyDataFromClass, getProviderId, listModule } from '@midwayjs/core';
 import * as path from 'path';
 import { Middleware, MiddlewareParamArray, MidwayLoaderOptions, WebMiddleware } from '../interface';
 import { isTypeScriptEnvironment, safelyGet } from '../utils';
-import { EggAppInfo } from 'egg';
 
 const debug = require('debug')(`midway:loader:${process.pid}`);
 const EggLoader = require('egg-core').EggLoader;
@@ -51,6 +50,50 @@ export class MidwayWebLoader extends EggLoader {
 
   get pluginContext(): any {
     return this.containerLoader.getPluginContext();
+  }
+
+  public loadApplicationContext(): void {
+    // this.app.options.container 测试用例编写方便点
+    const containerConfig = this.config.container || this.app.options.container || {};
+    if (!containerConfig.loadDir) {
+      // 如果没有配置，默认就把扫描目录改到 /src or /dist
+      containerConfig.baseDir = this.baseDir;
+    }
+    // 在 super constructor 中会调用到getAppInfo，之后会被赋值
+    // 如果是typescript会加上 dist 或者 src 目录
+    this.containerLoader = new ContainerLoader({
+      baseDir: this.appDir,
+      isTsMode: this.isTsMode,
+    });
+    this.containerLoader.initialize();
+    this.applicationContext.registerObject('appDir', this.appDir);
+
+    // 外部给容器里设置环境
+    const envService = this.applicationContext.getEnvironmentService();
+    envService.setCurrentEnvironment(this.appInfo.env);
+
+    // 合并 egg config
+    const configService = this.applicationContext.getConfigService();
+    configService.addObject(this.app.config);
+
+    // 如果没有关闭autoLoad 则进行load
+    this.containerLoader.loadDirectory(containerConfig);
+
+    // register handler for container
+    this.containerLoader.registerHook(MidwayHandlerKey.CONFIG, (key: string) => {
+      return safelyGet(key, this.config);
+    });
+
+    this.containerLoader.registerHook(MidwayHandlerKey.PLUGIN, (key: string) => {
+      return this.app[key] || this.pluginContext.get(key);
+    });
+
+    this.containerLoader.registerHook(MidwayHandlerKey.LOGGER, (key: string) => {
+      if (this.app.getLogger) {
+        return this.app.getLogger(key);
+      }
+      return this.options.logger;
+    });
   }
 
   // loadPlugin -> loadConfig -> afterLoadConfig
@@ -159,41 +202,6 @@ export class MidwayWebLoader extends EggLoader {
     return this.appInfo;
   }
 
-  protected loadApplicationContext(): void {
-    // this.app.options.container 测试用例编写方便点
-    const containerConfig = this.config.container || this.app.options.container || {};
-    if (!containerConfig.loadDir) {
-      // 如果没有配置，默认就把扫描目录改到 /src or /dist
-      containerConfig.baseDir = this.baseDir;
-    }
-    // 在 super constructor 中会调用到getAppInfo，之后会被赋值
-    // 如果是typescript会加上 dist 或者 src 目录
-    this.containerLoader = new ContainerLoader({
-      baseDir: this.appDir,
-      isTsMode: this.isTsMode
-    });
-    this.containerLoader.initialize();
-    this.applicationContext.registerObject('appDir', this.appDir);
-    // 如果没有关闭autoLoad 则进行load
-    this.containerLoader.loadDirectory(containerConfig);
-
-    // register handler for container
-    this.containerLoader.registerHook(MidwayHandlerKey.CONFIG, (key: string) => {
-      return safelyGet(key, this.config);
-    });
-
-    this.containerLoader.registerHook(MidwayHandlerKey.PLUGIN, (key: string) => {
-      return this.app[key] || this.pluginContext.get(key);
-    });
-
-    this.containerLoader.registerHook(MidwayHandlerKey.LOGGER, (key: string) => {
-      if (this.app.getLogger) {
-        return this.app.getLogger(key);
-      }
-      return this.options.logger;
-    });
-  }
-
   protected async preRegisterRouter(target: any, controllerId: string): Promise<void> {
     const controllerOption: ControllerOption = getClassMetadata(CONTROLLER_KEY, target);
     const newRouter = this.createEggRouter(controllerOption);
@@ -270,9 +278,9 @@ export class MidwayWebLoader extends EggLoader {
    * @param controllerOption
    */
   private createEggRouter(controllerOption: ControllerOption) {
-    const { prefix, routerOptions: { sensitive } } = controllerOption;
+    const {prefix, routerOptions: {sensitive}} = controllerOption;
     if (prefix) {
-      const router = new Router({ sensitive }, this.app);
+      const router = new Router({sensitive}, this.app);
       router.prefix(prefix);
       return router;
     }
@@ -292,7 +300,7 @@ export class MidwayWebLoader extends EggLoader {
     return async (ctx, next) => {
       const args = [ctx, next];
       if (Array.isArray(routeArgsInfo)) {
-        await Promise.all(routeArgsInfo.map(async ({ index, extractValue }) => {
+        await Promise.all(routeArgsInfo.map(async ({index, extractValue}) => {
           args[index] = await extractValue(ctx, next);
         }));
       }

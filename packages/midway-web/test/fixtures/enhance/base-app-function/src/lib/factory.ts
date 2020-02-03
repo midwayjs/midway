@@ -1,4 +1,4 @@
-import { providerWrapper } from 'midway-core';
+import { providerWrapper } from '@midwayjs/core';
 import { IApplicationContext } from 'injection';
 
 export function adapterFactory(context: IApplicationContext) {

@@ -1,5 +1,6 @@
 import * as path from 'path';
 import { MidwayContainer } from './container';
+import { Container } from 'injection';
 
 function buildLoadDir(baseDir, dir) {
   if (!path.isAbsolute(dir)) {
@@ -23,8 +24,8 @@ export class ContainerLoader {
   }
 
   initialize() {
-    this.pluginContext = new MidwayContainer(this.baseDir);
-    this.applicationContext = new MidwayContainer(this.baseDir, undefined, this.isTsMode);
+    this.pluginContext = new Container(this.baseDir);
+    this.applicationContext = new MidwayContainer(this.baseDir, undefined);
     this.applicationContext.registerObject('baseDir', this.baseDir);
     this.applicationContext.registerObject('isTsMode', this.isTsMode);
   }

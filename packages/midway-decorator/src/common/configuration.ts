@@ -3,7 +3,9 @@ import { CONFIGURATION_KEY } from '../constant';
 
 export interface InjectionConfigurationOptions {
   imports?: string[];
-  importObjects?: any[];
+  importObjects?: object;
+  importConfigs?: string[];
+  namespace?: string;
 }
 
 export function Configuration(

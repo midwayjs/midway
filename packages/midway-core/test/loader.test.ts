@@ -65,7 +65,7 @@ describe('/test/loader.test.ts', () => {
     assert(baseService.plugin2.b === 2);
 
     const context = { logger: console };
-    const requestCtx = new MidwayRequestContainer(appCtx, context);
+    const requestCtx = new MidwayRequestContainer(context, appCtx);
     const baseServiceCtx = await requestCtx.getAsync('baseService');
     const baseServiceCtx1 = await requestCtx.getAsync('baseService');
     assert(baseServiceCtx === baseServiceCtx1);
@@ -97,8 +97,8 @@ describe('/test/loader.test.ts', () => {
 
     const context = { logger: console };
     const requestCtx = new MidwayRequestContainer(
-      loader.getApplicationContext(),
-      context
+      context,
+      loader.getApplicationContext()
     );
     const module = require(path.join(
       __dirname,
@@ -133,8 +133,8 @@ describe('/test/loader.test.ts', () => {
 
     const context = { logger: console };
     const requestCtx = new MidwayRequestContainer(
-      loader.getApplicationContext(),
-      context
+      context,
+      loader.getApplicationContext()
     );
     const baseServiceCtx = await requestCtx.getAsync('baseService');
     assert(baseServiceCtx.factory('google'));
@@ -182,7 +182,7 @@ describe('/test/loader.test.ts', () => {
     assert(module.test() === 'hello');
   });
 
-  it.only('should load configuration', async () => {
+  it('should load configuration', async () => {
     const loader = new ContainerLoader({
       baseDir: path.join(__dirname, './fixtures/app-with-configuration/base-app-decorator/src'),
     });

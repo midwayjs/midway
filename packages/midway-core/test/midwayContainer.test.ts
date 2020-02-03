@@ -24,7 +24,7 @@ describe('/test/midwayContainer.test.ts', () => {
   });
 
   xit('should load js dir and inject with $', () => {
-    const container = new MidwayContainer(undefined, undefined, false);
+    const container = new MidwayContainer(undefined, undefined);
     container.load({
       loadDir: path.join(__dirname, './fixtures/js-app-inject')
     });
@@ -34,7 +34,7 @@ describe('/test/midwayContainer.test.ts', () => {
   });
 
   xit('should load js app with xml', async () => {
-    const container = new MidwayContainer(path.join(__dirname, './fixtures/js-app-xml'), undefined, false);
+    const container = new MidwayContainer(path.join(__dirname, './fixtures/js-app-xml'), undefined);
     container.configLocations = ['resources/main.xml'];
 
     container.props.putObject(require('./fixtures/js-app-xml/config/config.default'));

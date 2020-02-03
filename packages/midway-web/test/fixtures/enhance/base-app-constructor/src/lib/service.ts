@@ -1,5 +1,4 @@
-import {config, plugin} from '@midwayjs/decorator';
-import {provide, async, init, inject} from 'injection';
+import { async, config, init, inject, plugin, provide } from '../../../../../../src';
 
 @provide()
 export class A {

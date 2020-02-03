@@ -1,7 +1,7 @@
 import { attachPropertyDataToClass } from 'injection';
 import { WEB_ROUTER_PARAM_KEY } from '../constant';
 
-interface GetFileStreamOptions {
+export interface GetFileStreamOptions {
   requireFile?: boolean; // required file submit, default is true
   defCharset?: string;
   limits?: {
@@ -22,7 +22,7 @@ interface GetFileStreamOptions {
   ): void | Error;
 }
 
-interface GetFilesStreamOptions extends GetFileStreamOptions {
+export interface GetFilesStreamOptions extends GetFileStreamOptions {
   autoFields?: boolean;
 }
 

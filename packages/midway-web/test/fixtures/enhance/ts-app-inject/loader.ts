@@ -1,4 +1,4 @@
-import {provide} from 'injection';
+import {provide} from '@midwayjs/core';
 
 export interface Loader {
   getConfig();

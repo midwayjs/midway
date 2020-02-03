@@ -1,5 +1,5 @@
-import { provide, inject } from 'injection';
-import { controller, config, get, post, query, param, files, file, session, body, headers } from '../../../../../../../src';
+import { provide, inject, controller, config, get, post, query, param, files, file, session, body, headers } from '../../../../../../../src';
+
 import * as path from 'path';
 import * as fs from 'fs';
 

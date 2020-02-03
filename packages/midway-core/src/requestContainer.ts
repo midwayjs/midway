@@ -1,26 +1,16 @@
-import { ManagedValue, VALUE_TYPE } from 'injection';
+import { ManagedValue, VALUE_TYPE, REQUEST_CTX_KEY } from 'injection';
 import { MidwayContainer } from './container';
 
 export class MidwayRequestContainer extends MidwayContainer {
 
   applicationContext: MidwayContainer;
-  ctx;
 
-  constructor(applicationContext, ctx?) {
+  constructor(ctx, applicationContext) {
     super();
     this.parent = applicationContext;
     this.applicationContext = applicationContext;
-
-    if (ctx) {
-      this.updateContext(ctx);
-    }
-  }
-
-  updateContext(ctx) {
-    // this.registry.clearAll();
-    this.ctx = ctx;
     // register ctx
-    this.registerObject('ctx', ctx);
+    this.registerObject(REQUEST_CTX_KEY, ctx);
     // register contextLogger
     this.registerObject('logger', ctx.logger);
   }

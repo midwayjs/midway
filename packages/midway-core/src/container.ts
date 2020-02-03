@@ -15,7 +15,9 @@ import * as is from 'is-type-of';
 import { join } from 'path';
 import { ContainerConfiguration } from './configuration';
 import { FUNCTION_INJECT_KEY, MidwayHandlerKey } from './constant';
-import { IMidwayContainer } from './interface';
+import { IConfigService, IEnvironmentService, IMidwayContainer } from './interface';
+import { MidwayConfigService } from './service/configService';
+import { MidwayEnvironmentService } from './service/environmentService';
 
 const DEFAULT_PATTERN = ['**/**.ts', '**/**.tsx', '**/**.js', '!**/**.d.ts'];
 const DEFAULT_IGNORE_PATTERN = [
@@ -38,44 +40,32 @@ interface FrameworkDecoratorMetadata {
 const MAIN_MODULE_KEY = '__main__';
 
 export class MidwayContainer extends Container implements IMidwayContainer {
-  controllersIds: string[] = [];
-  middlewaresIds: string[] = [];
   handlerMap: Map<string, (handlerKey: string, instance?: any) => any>;
   // 仅仅用于兼容requestContainer的ctx
   ctx = {};
-  isTsMode;
   readyBindModules: Map<string, Set<any>> = new Map();
   importDirectory = [];
   configurations = [];
+  configService: IConfigService;
+  environmentService: IEnvironmentService;
 
   constructor(
     baseDir: string = process.cwd(),
     parent: IApplicationContext = undefined,
-    isTsMode = true
   ) {
     super(baseDir, parent);
-    this.isTsMode = isTsMode;
   }
 
   init(): void {
     this.handlerMap = new Map();
+    this.environmentService = new MidwayEnvironmentService();
+    this.configService = new MidwayConfigService(this);
     super.init();
 
     this.registerEachCreatedHook();
-
     // 防止直接从applicationContext.getAsync or get对象实例时依赖当前上下文信息出错
     // ctx is in requestContainer
     this.registerObject('ctx', this.ctx);
-  }
-
-  /**
-   * update current context in applicationContext
-   * for mock and other case
-   * @param ctx ctx
-   * @deprecated
-   */
-  updateContext(ctx) {
-    this.ctx = Object.assign({}, ctx || {});
   }
 
   /**
@@ -348,4 +338,24 @@ export class MidwayContainer extends Container implements IMidwayContainer {
     this.configurations.push(containerConfiguration);
     return containerConfiguration;
   }
+
+  getConfigService() {
+    return this.configService;
+  }
+
+  getEnvironmentService() {
+    return this.environmentService;
+  }
+
+  getCurrentEnv() {
+    return this.environmentService.getCurrentEnvironment();
+  }
+
+  async ready() {
+    super.ready();
+    // 加载配置
+    await this.configService.load();
+  }
 }
+
+// TODO 测试的 ctx，看看行不行
