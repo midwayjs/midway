@@ -20,7 +20,7 @@ export interface IConfigService {
   add(configFilePaths: string[]);
   addObject(obj: object);
   load();
-  getConfiguration();
+  getConfiguration(configKey?: string);
 }
 
 export interface IEnvironmentService {

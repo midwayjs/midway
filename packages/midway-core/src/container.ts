@@ -353,6 +353,10 @@ export class MidwayContainer extends Container implements IMidwayContainer {
 
   async ready() {
     super.ready();
+    // register handler for container
+    this.registerDataHandler(MidwayHandlerKey.CONFIG, (key: string) => {
+      return this.configService.getConfiguration(key);
+    });
     // 加载配置
     await this.configService.load();
   }

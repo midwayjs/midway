@@ -2,6 +2,7 @@ import * as extend from 'extend2';
 import * as is from 'is-type-of';
 import { basename } from 'path';
 import { IConfigService, IMidwayContainer } from '../interface';
+import { safelyGet } from '../util';
 
 const debug = require('debug')('midway:config');
 
@@ -78,12 +79,12 @@ export class MidwayConfigService implements IConfigService {
       }
     }
     this.configuration = target;
+    this.isReady = true;
   }
 
-  async getConfiguration() {
-    if (!this.isReady) {
-      await this.load();
-      this.isReady = true;
+  getConfiguration(configKey) {
+    if (configKey) {
+      return safelyGet(configKey, this.configuration);
     }
     return this.configuration;
   }

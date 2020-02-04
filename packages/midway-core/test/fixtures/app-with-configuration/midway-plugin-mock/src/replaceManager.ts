@@ -1,8 +1,8 @@
 import { Provide } from '@midwayjs/decorator';
 
 @Provide()
-export class ArticleManager {
+export class ReplaceManager {
   async getOne() {
-    return 'ok';
+    return 'one article';
   }
 }

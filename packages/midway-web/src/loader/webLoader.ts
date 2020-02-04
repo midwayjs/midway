@@ -14,7 +14,7 @@ import * as fs from 'fs';
 import { ContainerLoader, MidwayContainer, MidwayHandlerKey, getClassMetadata, getPropertyDataFromClass, getProviderId, listModule } from '@midwayjs/core';
 import * as path from 'path';
 import { Middleware, MiddlewareParamArray, MidwayLoaderOptions, WebMiddleware } from '../interface';
-import { isTypeScriptEnvironment, safelyGet } from '../utils';
+import { isTypeScriptEnvironment } from '../utils';
 
 const debug = require('debug')(`midway:loader:${process.pid}`);
 const EggLoader = require('egg-core').EggLoader;
@@ -78,11 +78,6 @@ export class MidwayWebLoader extends EggLoader {
 
     // 如果没有关闭autoLoad 则进行load
     this.containerLoader.loadDirectory(containerConfig);
-
-    // register handler for container
-    this.containerLoader.registerHook(MidwayHandlerKey.CONFIG, (key: string) => {
-      return safelyGet(key, this.config);
-    });
 
     this.containerLoader.registerHook(MidwayHandlerKey.PLUGIN, (key: string) => {
       return this.app[key] || this.pluginContext.get(key);

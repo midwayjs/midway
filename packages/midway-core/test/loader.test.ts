@@ -7,6 +7,7 @@ import {
 import * as assert from 'assert';
 import * as path from 'path';
 import { ContainerLoader, MidwayRequestContainer } from '../src';
+import * as mm from 'mm';
 
 @Provide()
 class TestModule {
@@ -193,5 +194,48 @@ describe('/test/loader.test.ts', () => {
     const appCtx = loader.getApplicationContext();
     const baseService: any = await appCtx.getAsync('baseService');
     assert(await baseService.getInformation() === 'harry,one article');
+  });
+
+  it('should load config.*.ts by default env', async () => {
+    const loader = new ContainerLoader({
+      baseDir: path.join(__dirname, './fixtures/app-with-configuration/base-app-decorator/src'),
+    });
+    loader.initialize();
+    loader.loadDirectory();
+    await loader.refresh();
+
+    const appCtx = loader.getApplicationContext();
+    const replaceManager: any = await appCtx.getAsync('replaceManager');
+    assert(await replaceManager.getOne() === 'ok');
+  });
+
+  it('should load config.*.ts by process.env', async () => {
+    mm(process.env, 'NODE_ENV', 'local');
+    const loader = new ContainerLoader({
+      baseDir: path.join(__dirname, './fixtures/app-with-configuration/base-app-decorator/src'),
+    });
+    loader.initialize();
+    loader.loadDirectory();
+    await loader.refresh();
+
+    const appCtx = loader.getApplicationContext();
+    const replaceManager: any = await appCtx.getAsync('replaceManager');
+    assert(await replaceManager.getOne() === 'ok1');
+    mm.restore();
+  });
+
+  it('should load config.*.ts by process.env MIDWAY_SERVER_ENV', async () => {
+    mm(process.env, 'MIDWAY_SERVER_ENV', 'local');
+    const loader = new ContainerLoader({
+      baseDir: path.join(__dirname, './fixtures/app-with-configuration/base-app-decorator/src'),
+    });
+    loader.initialize();
+    loader.loadDirectory();
+    await loader.refresh();
+
+    const appCtx = loader.getApplicationContext();
+    const replaceManager: any = await appCtx.getAsync('replaceManager');
+    assert(await replaceManager.getOne() === 'ok1');
+    mm.restore();
   });
 });
