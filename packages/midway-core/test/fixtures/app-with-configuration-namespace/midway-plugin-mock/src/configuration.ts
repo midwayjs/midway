@@ -1,6 +1,4 @@
 import { Configuration } from '@midwayjs/decorator';
 
-@Configuration({
-  namespace: ''
-})
+@Configuration({})
 export class AutoConfiguraion {}

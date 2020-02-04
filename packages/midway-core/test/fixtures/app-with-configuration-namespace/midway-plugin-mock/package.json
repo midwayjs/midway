@@ -1,0 +1,4 @@
+{
+  "name": "midway-plugin-mock",
+  "main": "src/index.ts"
+}

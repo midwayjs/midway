@@ -26,7 +26,7 @@ describe('test/index.test.ts', () => {
     assert(service1.getData() !== ('mock_test' + ts));
   });
 
-  it('should use bootstrap to get app', () => {
+  it.only('should use bootstrap to get app', () => {
     return app.httpRequest()
       .get('/api/index')
       .expect(200);

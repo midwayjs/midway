@@ -55,4 +55,8 @@ export class MidwayRequestContainer extends MidwayContainer {
       return this.parent.getAsync<T>(identifier, args);
     }
   }
+
+  initService() {
+    // do nothing
+  }
 }

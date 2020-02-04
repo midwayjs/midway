@@ -1,7 +1,7 @@
 import { Configuration } from '@midwayjs/decorator';
 
 @Configuration({
-  namespace: 'ok',
+  namespace: '',
   importConfigs: [
     './config/config.default',
     './config/config.local'

@@ -58,14 +58,18 @@ export class MidwayContainer extends Container implements IMidwayContainer {
 
   init(): void {
     this.handlerMap = new Map();
-    this.environmentService = new MidwayEnvironmentService();
-    this.configService = new MidwayConfigService(this);
+    this.initService();
     super.init();
 
     this.registerEachCreatedHook();
     // 防止直接从applicationContext.getAsync or get对象实例时依赖当前上下文信息出错
     // ctx is in requestContainer
     this.registerObject('ctx', this.ctx);
+  }
+
+  initService() {
+    this.environmentService = new MidwayEnvironmentService();
+    this.configService = new MidwayConfigService(this);
   }
 
   /**
@@ -353,13 +357,15 @@ export class MidwayContainer extends Container implements IMidwayContainer {
 
   async ready() {
     super.ready();
-    // register handler for container
-    this.registerDataHandler(MidwayHandlerKey.CONFIG, (key: string) => {
-      return this.configService.getConfiguration(key);
-    });
-    // 加载配置
-    await this.configService.load();
+    if (this.configService) {
+      // register handler for container
+      this.registerDataHandler(MidwayHandlerKey.CONFIG, (key: string) => {
+        return this.configService.getConfiguration(key);
+      });
+      // 加载配置
+      await this.configService.load();
+    }
   }
 }
 
-// TODO 测试的 ctx，看看行不行
+// TODO configuration 依赖去重
