@@ -1,15 +1,15 @@
 {
   "name": "@midwayjs/serverless-fc-starter",
-  "version": "0.2.10",
+  "version": "0.2.15",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/runtime-engine": "^0.2.0",
+    "@midwayjs/runtime-engine": "^0.2.15",
     "querystring": "^0.2.0",
     "type-is": "^1.6.18"
   },
   "devDependencies": {
-    "@midwayjs/runtime-mock": "^0.2.0",
+    "@midwayjs/runtime-mock": "^0.2.15",
     "midway-bin": "1",
     "raw-body": "^2.4.1"
   },
