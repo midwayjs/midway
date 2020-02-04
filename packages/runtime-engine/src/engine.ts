@@ -8,6 +8,7 @@ import {
 } from './interface';
 import { ServerlessBaseRuntime } from './runtime';
 import { completeAssign } from './util';
+import { performance } from 'perf_hooks';
 
 export class BaseRuntimeEngine implements RuntimeEngine {
   runtimeExtensions = [];
@@ -65,8 +66,13 @@ export class BaseRuntimeEngine implements RuntimeEngine {
       [this.baseRuntime].concat(this.runtimeExtensions)
     );
     await this.getCurrentRuntime().init(this.contextExtensions);
+    performance.mark('midway-faas:runtimeStart:start');
     await this.getCurrentRuntime().runtimeStart(this.eventExtensions);
+    performance.mark('midway-faas:runtimeStart:end');
+    performance.mark('midway-faas:functionStart:start');
     await this.getCurrentRuntime().functionStart();
+    performance.mark('midway-faas:functionStart:end');
+    this.measureMarksOnReady();
   }
 
   async close() {
@@ -75,5 +81,18 @@ export class BaseRuntimeEngine implements RuntimeEngine {
 
   getCurrentRuntime() {
     return this.runtime;
+  }
+
+  private measureMarksOnReady() {
+    [
+      'runtimeStart',
+      'functionStart',
+      'beforeRuntimeStartHandler',
+      'afterRuntimeStartHandler',
+      'beforeFunctionStartHandler',
+      'afterFunctionStartHandler',
+    ].forEach(it => {
+      performance.measure(`midway-faas:${it}:measure`, `midway-faas:${it}:start`, `midway-faas:${it}:end`);
+    });
   }
 }

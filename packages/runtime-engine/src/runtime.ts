@@ -104,12 +104,6 @@ export class ServerlessBaseRuntime extends EventEmitter implements Runtime {
     }
   }
 
-  async ready() {
-    await this.handlerInvokerWrapper('beforeReadyHandler', [this]);
-    // TODO 增加健康检查
-    this.measureMarksOnReady();
-  }
-
   async close() {
     await this.handlerInvokerWrapper('beforeCloseHandler', [this]);
   }
@@ -244,7 +238,7 @@ export class ServerlessBaseRuntime extends EventEmitter implements Runtime {
   }
 
   protected async handlerInvokerWrapper(handlerKey: string, args?) {
-    performance.mark(`${handlerKey}:start`);
+    performance.mark(`midway-faas:${handlerKey}:start`);
     if (this.handlerStore.has(handlerKey)) {
       const handlers = this.handlerStore.get(handlerKey);
       this.debugLogger.log(`${handlerKey} exec, task = ${handlers.length}`);
@@ -252,18 +246,6 @@ export class ServerlessBaseRuntime extends EventEmitter implements Runtime {
         await handler.apply(this, args);
       }
     }
-    performance.mark(`${handlerKey}:end`);
-  }
-
-  private measureMarksOnReady() {
-    [
-      'beforeRuntimeStartHandler',
-      'afterRuntimeStartHandler',
-      'beforeFunctionStartHandler',
-      'afterFunctionStartHandler',
-      'beforeReadyHandler',
-    ].forEach(it => {
-      performance.measure(`${it}:measure`, `${it}:start`, `${it}:end`);
-    });
+    performance.mark(`midway-faas:${handlerKey}:end`);
   }
 }

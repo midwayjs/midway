@@ -47,7 +47,6 @@ export interface Runtime extends RuntimeExtension {
   init(contextExtensions: ContextExtensionHandler[]);
   runtimeStart(eventExtensions: EventExtensionHandler[]);
   functionStart();
-  ready(healthExtensions: HealthExtensionHandler[]);
   close();
   getProperty(propertyKey: string);
   getPropertyParser(): PropertyParser<string>;
