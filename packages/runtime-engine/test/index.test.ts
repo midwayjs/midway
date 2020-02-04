@@ -156,7 +156,7 @@ describe('/test/index.test.ts', () => {
               server = http
                 .createServer(async (request, response) => {
                   response.writeHead(200, { 'Content-Type': 'text/plain' });
-                  const res = await httpEvent.handler();
+                  const res = await runtime.invoke();
                   response.end(res);
                 })
                 .listen(3000, '127.0.0.1', () => {
@@ -211,7 +211,7 @@ describe('/test/index.test.ts', () => {
               server = http
                 .createServer(async (request, response) => {
                   response.writeHead(200, { 'Content-Type': 'text/plain' });
-                  const res = await httpEvent.handler();
+                  const res = await runtime.invoke();
                   response.end(res);
                 })
                 .listen(3000, '127.0.0.1', () => {
@@ -262,12 +262,12 @@ describe('/test/index.test.ts', () => {
           async beforeClose() {
             return new Promise(resolve => server.close(() => resolve()));
           },
-          async beforeRuntimeStart() {
+          async beforeRuntimeStart(runtime: Runtime) {
             return new Promise(resolve => {
               server = http
                 .createServer(async (request, response) => {
                   response.writeHead(200, { 'Content-Type': 'text/plain' });
-                  const res = await httpEvent.handler().catch(err => err);
+                  const res = await runtime.invoke().catch(err => err);
                   response.end(res.message);
                 })
                 .listen(3000, '127.0.0.1', () => resolve());
@@ -305,12 +305,12 @@ describe('/test/index.test.ts', () => {
           async beforeClose() {
             return new Promise(resolve => server.close(() => resolve()));
           },
-          async beforeRuntimeStart() {
+          async beforeRuntimeStart(runtime: Runtime) {
             return new Promise(resolve => {
               server = http
                 .createServer(async (request, response) => {
                   response.writeHead(200, { 'Content-Type': 'text/plain' });
-                  const res = await httpEvent.handler().catch(err => err);
+                  const res = await runtime.invoke().catch(err => err);
                   response.end(res.message);
                 })
                 .listen(3000, '127.0.0.1', () => resolve());
@@ -355,12 +355,12 @@ describe('/test/index.test.ts', () => {
           async beforeClose() {
             return new Promise(resolve => server.close(() => resolve()));
           },
-          async beforeRuntimeStart() {
+          async beforeRuntimeStart(runtime: Runtime) {
             return new Promise(resolve => {
               server = http
                 .createServer(async (request, response) => {
                   response.writeHead(200, { 'Content-Type': 'text/plain' });
-                  const res = await httpEvent.handler().catch(err => err);
+                  const res = await runtime.invoke().catch(err => err);
                   response.end(res.message);
                 })
                 .listen(3000, '127.0.0.1', () => resolve());

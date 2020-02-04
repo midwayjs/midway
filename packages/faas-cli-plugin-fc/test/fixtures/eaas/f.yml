@@ -11,7 +11,7 @@ functions:
           method: get
 
 layers:
-  egg-layer:
+  eggLayer:
     path: npm:@midwayjs/egg-layer
 
 package:

@@ -1,15 +1,16 @@
-import { FunctionEvent, ServerlessBaseRuntime } from '@midwayjs/runtime-engine';
+import { FunctionEvent } from '@midwayjs/runtime-engine';
 
 export class HTTPEvent implements FunctionEvent {
+  type;
+  meta;
 
-  async create(
-    runtime: ServerlessBaseRuntime,
-    handlerFactory: (
-      triggerType: string,
-      triggerMeta: any
-    ) => (arg: any) => Promise<any>
-  ) {
-    return handlerFactory('HTTP', {});
+  constructor() {
+    this.type = 'HTTP';
+    this.meta = {};
+  }
+
+  match() {
+    return true;
   }
 
   transformInvokeArgs(context): any[] {

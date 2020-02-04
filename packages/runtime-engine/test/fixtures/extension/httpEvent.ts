@@ -1,23 +1,18 @@
-import { FunctionEvent, Runtime } from '../../../src';
-import { EggLogger } from 'egg-logger';
+import { FunctionEvent } from '../../../src';
 
 export class HttpEvent implements FunctionEvent {
-  logger: EggLogger;
-  handler;
+  type: string;
+  meta: object;
+  logger;
 
-  constructor(options: { logger }) {
+  constructor(options) {
+    this.type = 'HTTP';
+    this.meta = { domainName: 'http.test.com' };
     this.logger = options.logger;
   }
 
-  async create(
-    runtime: Runtime,
-    handlerFactory: (
-      triggerType: string,
-      triggerMeta: any
-    ) => (arg: any) => Promise<any>
-  ) {
-    this.handler = handlerFactory('HTTP', { domainName: 'http.test.com' });
-    return this.handler;
+  match() {
+    return true;
   }
 
   transformInvokeArgs(...args): any[] {

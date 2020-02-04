@@ -43,7 +43,7 @@ export interface RuntimeExtension {
 export interface Runtime extends RuntimeExtension {
   debugLogger: any;
   logger: any;
-  eventHandlers: Array<(payload: any) => Promise<any>>;
+  eventHandlers: FunctionEvent[];
   init(contextExtensions: ContextExtensionHandler[]);
   runtimeStart(eventExtensions: EventExtensionHandler[]);
   functionStart();
@@ -53,6 +53,8 @@ export interface Runtime extends RuntimeExtension {
   getPropertyParser(): PropertyParser<string>;
   invokeInitHandler(...args);
   invokeDataHandler(...args);
+  invoke(...payload): Promise<any>;
+  triggerRoute(...payload): Promise<FunctionEvent>;
   getContextExtensions(): ContextExtensionHandler[];
 }
 
@@ -95,10 +97,11 @@ export interface LoggerFactory {
 }
 
 export interface FunctionEvent {
-  create(
-    runtime: Runtime,
-    handlerFactory: (eventType: string, meta: any) => handlerWrapper
-  ): Promise<(payload: any) => Promise<any>>;
+  type: string;
+  meta: object;
+  match(...args): boolean;
+  run?(...args): Promise<any>;
+  getContext?(...args): Promise<any>;
   transformInvokeArgs?(...args): any[];
 }
 

@@ -85,12 +85,7 @@ export class MockRuntime {
 
   private async invokeHandlerMethod(newArgs) {
     if (this.runtime) {
-      for (const handler of this.runtime.eventHandlers) {
-        const res = await handler.apply(handler, newArgs);
-        if (res) {
-          return res;
-        }
-      }
+      return this.runtime.invoke(newArgs);
     } else {
       // for LightRuntime
       let handlerMethod: any;
