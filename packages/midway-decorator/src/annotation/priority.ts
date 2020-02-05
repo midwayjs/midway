@@ -1,5 +1,4 @@
-import { saveClassMetadata } from 'injection';
-import { PRIORITY_KEY } from '../constant';
+import { saveClassMetadata, PRIORITY_KEY } from '../common';
 
 export function Priority(priority: number): ClassDecorator {
   return (target: any) => {

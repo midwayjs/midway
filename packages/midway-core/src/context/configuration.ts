@@ -1,9 +1,8 @@
-import { CONFIGURATION_KEY, InjectionConfigurationOptions } from '@midwayjs/decorator';
-import { getClassMetadata } from 'injection';
+import { CONFIGURATION_KEY, InjectionConfigurationOptions, getClassMetadata } from '@midwayjs/decorator';
 import * as is from 'is-type-of';
 import { dirname, isAbsolute, join } from 'path';
-import { IContainerConfiguration, IMidwayContainer } from './interface';
-import { isPath, safeRequire } from './util';
+import { IContainerConfiguration, IMidwayContainer } from '../interface';
+import { isPath, safeRequire } from '../common/util';
 
 export class ContainerConfiguration implements IContainerConfiguration {
   container: IMidwayContainer;

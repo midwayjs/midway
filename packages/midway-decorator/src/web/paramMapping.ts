@@ -1,5 +1,4 @@
-import { attachPropertyDataToClass } from 'injection';
-import { WEB_ROUTER_PARAM_KEY } from '../constant';
+import { attachPropertyDataToClass, WEB_ROUTER_PARAM_KEY } from '../common';
 
 export interface GetFileStreamOptions {
   requireFile?: boolean; // required file submit, default is true

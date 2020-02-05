@@ -1,6 +1,4 @@
-import { attachClassMetadata } from 'injection';
-import { LOGGER_KEY } from '../constant';
-import { attachConstructorDataOnClass } from '../utils';
+import { attachClassMetadata, LOGGER_KEY, attachConstructorDataOnClass } from '../common';
 
 export function Logger(identifier?: string) {
   return function (target: any, targetKey: string, index?: number): void {

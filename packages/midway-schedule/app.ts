@@ -1,5 +1,4 @@
-import { ScheduleOpts, SCHEDULE_KEY } from '@midwayjs/decorator';
-import { getClassMetadata, listModule, getProviderId } from 'injection';
+import { ScheduleOpts, SCHEDULE_KEY, getClassMetadata, listModule, getProviderId } from '@midwayjs/decorator';
 import * as is from 'is-type-of';
 
 export = (app) => {

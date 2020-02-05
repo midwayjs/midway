@@ -1,5 +1,7 @@
-import { ManagedValue, VALUE_TYPE, REQUEST_CTX_KEY } from 'injection';
-import { MidwayContainer } from './container';
+import { ManagedValue } from '../context/managed';
+import { VALUE_TYPE } from '../common/constants';
+import { MidwayContainer } from './midwayContainer';
+import { REQUEST_CTX_KEY } from '../interface';
 
 export class MidwayRequestContainer extends MidwayContainer {
 

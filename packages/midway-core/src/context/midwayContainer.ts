@@ -1,23 +1,24 @@
-import { CLASS_KEY_CONSTRUCTOR, CONFIG_KEY, LOGGER_KEY, PLUGIN_KEY, } from '@midwayjs/decorator';
 import * as globby from 'globby';
 import {
-  Container,
+  CLASS_KEY_CONSTRUCTOR,
+  CONFIG_KEY,
+  LOGGER_KEY,
+  PLUGIN_KEY,
   getClassMetadata,
   getObjectDefinition,
   getProviderId,
-  IApplicationContext,
   ObjectDefinitionOptions,
   ObjectIdentifier,
-  Scope,
   ScopeEnum,
-} from 'injection';
+} from '@midwayjs/decorator';
 import * as is from 'is-type-of';
 import { join } from 'path';
 import { ContainerConfiguration } from './configuration';
-import { FUNCTION_INJECT_KEY, MidwayHandlerKey } from './constant';
-import { IConfigService, IEnvironmentService, IMidwayContainer } from './interface';
-import { MidwayConfigService } from './service/configService';
-import { MidwayEnvironmentService } from './service/environmentService';
+import { FUNCTION_INJECT_KEY, MidwayHandlerKey } from '../common/constants';
+import { IConfigService, IEnvironmentService, IMidwayContainer, IApplicationContext } from '../interface';
+import { MidwayConfigService } from '../service/configService';
+import { MidwayEnvironmentService } from '../service/environmentService';
+import { Container } from './container';
 
 const DEFAULT_PATTERN = ['**/**.ts', '**/**.tsx', '**/**.js', '!**/**.d.ts'];
 const DEFAULT_IGNORE_PATTERN = [
@@ -150,7 +151,7 @@ export class MidwayContainer extends Container implements IMidwayContainer {
       const info: {
         id: ObjectIdentifier;
         provider: (context?: IApplicationContext) => any;
-        scope?: Scope;
+        scope?: ScopeEnum;
         isAutowire?: boolean;
       } = module[FUNCTION_INJECT_KEY];
       if (info && info.id) {
@@ -177,8 +178,7 @@ export class MidwayContainer extends Container implements IMidwayContainer {
   }
 
   createChild() {
-    const child = new Container();
-    child.parent = this;
+    const child = new MidwayContainer(this.baseDir, this);
     return child;
   }
 
@@ -306,10 +306,10 @@ export class MidwayContainer extends Container implements IMidwayContainer {
         fontsize: '10',
       });
       module.properties.forEach(depId => {
-        g.addEdge(id, depId, {label: `properties`, fontsize: '8'});
+        g.addEdge(id, depId, { label: `properties`, fontsize: '8' });
       });
       module.constructorArgs.forEach(depId => {
-        g.addEdge(id, depId, {label: 'constructor', fontsize: '8'});
+        g.addEdge(id, depId, { label: 'constructor', fontsize: '8' });
       });
     }
 

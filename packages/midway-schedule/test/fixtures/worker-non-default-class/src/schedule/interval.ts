@@ -1,10 +1,9 @@
 'use strict';
 
-import { provide } from 'injection';
-import { schedule } from '@midwayjs/decorator';
+import { Provide, Schedule } from '@midwayjs/decorator';
 
-@provide()
-@schedule({
+@Provide()
+@Schedule({
   type: 'worker',
   interval: 1000,
 })
@@ -14,8 +13,8 @@ export class IntervalCron {
   }
 }
 
-@provide()
-@schedule({
+@Provide()
+@Schedule({
   type: 'worker',
   interval: 1000,
 })

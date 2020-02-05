@@ -1,5 +1,5 @@
-import { saveClassMetadata, saveModule, scope, ScopeEnum } from 'injection';
-import { SCHEDULE_KEY } from '../constant';
+import { ScopeEnum, saveClassMetadata, saveModule, SCHEDULE_KEY } from '../common';
+import { Scope } from './objectDef';
 
 export interface CommonSchedule {
   exec(ctx?);
@@ -26,6 +26,6 @@ export function Schedule(scheduleOpts: ScheduleOpts | string) {
   return function (target: any): void {
     saveModule(SCHEDULE_KEY, target);
     saveClassMetadata(SCHEDULE_KEY, scheduleOpts, target);
-    scope(ScopeEnum.Request)(target);
+    Scope(ScopeEnum.Request)(target);
   };
 }

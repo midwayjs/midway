@@ -6,7 +6,7 @@ const mm = require('mm');
 const pedding = require('pedding');
 const rimraf = require('mz-modules/rimraf');
 
-import { clearAllModule } from 'injection';
+import { clearAllModule } from '@midwayjs/decorator';
 
 describe('/test/enhance.test.ts', () => {
 

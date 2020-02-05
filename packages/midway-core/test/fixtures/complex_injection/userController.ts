@@ -1,6 +1,5 @@
 import { UserService } from './userService';
-import { ScopeEnum } from '../../../src';
-import { Scope, Inject } from '@midwayjs/decorator';
+import { Scope, Inject, ScopeEnum } from '@midwayjs/decorator';
 
 @Scope(ScopeEnum.Request)
 export class UserController {

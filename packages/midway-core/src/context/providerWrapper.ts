@@ -1,10 +1,11 @@
-import { IApplicationContext, ObjectIdentifier, Scope } from 'injection';
-import { FUNCTION_INJECT_KEY } from './constant';
+import { ObjectIdentifier, ScopeEnum } from '@midwayjs/decorator';
+import { IApplicationContext } from '../interface';
+import { FUNCTION_INJECT_KEY } from '../common/constants';
 
 export function providerWrapper(wrapperInfo: Array<{
   id: ObjectIdentifier;
   provider: (context: IApplicationContext) => any;
-  scope?: Scope;
+  scope?: ScopeEnum;
   isAutowire?: boolean;
 }>): void {
   for (const info of wrapperInfo) {

@@ -13,7 +13,9 @@
     "autod": "midway-bin autod"
   },
   "dependencies": {
-    "injection": "^1.8.0"
+    "camelcase": "^5.0.0",
+    "debug": "^4.1.1",
+    "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
     "midway-bin": "^1.16.3"

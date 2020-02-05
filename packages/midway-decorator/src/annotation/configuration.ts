@@ -1,5 +1,4 @@
-import { saveClassMetadata } from 'injection';
-import { CONFIGURATION_KEY } from '../constant';
+import { saveClassMetadata, CONFIGURATION_KEY } from '../common';
 
 export interface InjectionConfigurationOptions {
   imports?: string[];
