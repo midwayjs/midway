@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.17](https://github.com/midwayjs/midway-faas/compare/v0.2.16...v0.2.17) (2020-02-05)
+
+**Note:** Version bump only for package @midwayjs/fcli-plugin-fc
+
+
+
+
+
 ## [0.2.16](https://github.com/midwayjs/midway-faas/compare/v0.2.15...v0.2.16) (2020-02-04)
 
 **Note:** Version bump only for package @midwayjs/fcli-plugin-fc
