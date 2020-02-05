@@ -14,6 +14,9 @@ export class HTTPEvent implements FunctionEvent {
   }
 
   transformInvokeArgs(context): any[] {
+    if (Array.isArray(context)) {
+      context = context.shift();
+    }
     return [context, {}];
   }
 }

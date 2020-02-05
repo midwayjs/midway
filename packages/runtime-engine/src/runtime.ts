@@ -73,7 +73,7 @@ export class ServerlessBaseRuntime extends EventEmitter implements Runtime {
   async emitHandler(funEvent: FunctionEvent, args) {
     let newArgs = args;
     if (funEvent.transformInvokeArgs) {
-      newArgs = funEvent.transformInvokeArgs.apply(funEvent, args) || [];
+      newArgs = funEvent.transformInvokeArgs.call(funEvent, args) || [];
     }
 
     const context = await this.getContext(funEvent, newArgs);
