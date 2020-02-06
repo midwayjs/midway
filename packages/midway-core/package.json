@@ -25,7 +25,8 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "midway-bin": "^1.16.3",
-    "mm": "^2.5.0"
+    "mm": "^2.5.0",
+    "sinon": "^7.2.2"
   },
   "dependencies": {
     "@midwayjs/decorator": "^2.0.0-beta.2",

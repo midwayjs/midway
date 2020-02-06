@@ -1,7 +1,7 @@
 import * as assert from 'assert';
 import * as extend2 from 'extend2';
 
-describe('/test/base.test.ts', () => {
+describe('/test/proxy.test.ts', () => {
   it('should proxy app when set property', () => {
     let app = {};
     const pluginContext = {};

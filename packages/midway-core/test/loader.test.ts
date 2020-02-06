@@ -141,18 +141,6 @@ describe('/test/loader.test.ts', () => {
     assert(baseServiceCtx.factory('google'));
   });
 
-  xit('should load js directory and set auto load', async () => {
-    const loader = new ContainerLoader({
-      baseDir: path.join(__dirname, './fixtures/js-app-loader'),
-      isTsMode: false,
-    });
-    loader.initialize();
-    loader.loadDirectory({ disableAutoLoad: false });
-    await loader.refresh();
-    const appCtx = loader.getApplicationContext();
-    assert(await appCtx.getAsync('app'));
-  });
-
   it('should load js directory and auto disable', async () => {
     const loader = new ContainerLoader({
       baseDir: path.join(__dirname, './fixtures/js-app-loader'),
