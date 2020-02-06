@@ -1,4 +1,4 @@
-import {provide, inject} from 'injection';
+import {provide, inject} from '../../../../../../src';
 import { BaseService } from './service';
 
 @provide()

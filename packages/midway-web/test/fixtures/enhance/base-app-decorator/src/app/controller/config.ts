@@ -1,5 +1,4 @@
-import {provide, inject} from 'injection';
-import { controller, get, config } from '../../../../../../../src';
+import { provide, inject, controller, get, config } from '../../../../../../../src';
 
 @provide()
 @controller('/config')

@@ -1,4 +1,4 @@
-import { inject, provide } from 'injection';
+import { inject, provide } from '../../../../../../../src';
 import sleep from '../../package/Sleep';
 import { Service } from '../../Service';
 
