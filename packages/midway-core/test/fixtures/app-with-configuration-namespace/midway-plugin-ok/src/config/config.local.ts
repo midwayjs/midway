@@ -1,5 +1,5 @@
 export = {
   ok: {
-    text: 'ok1'
-  }
+    text: 'ok2',
+  },
 };

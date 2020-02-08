@@ -1,8 +1,11 @@
-import { Provide } from '@midwayjs/decorator';
+import { Provide, Inject } from '@midwayjs/decorator';
 
 @Provide()
 export class ArticleManager {
+  @Inject()
+  replaceManager;
+
   async getOne() {
-    return 'two article';
+    return this.replaceManager.getOne();
   }
 }
