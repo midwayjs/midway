@@ -1,6 +1,4 @@
-import { attachClassMetadata } from 'injection';
-import { CONFIG_KEY } from '../constant';
-import { attachConstructorDataOnClass } from '../utils';
+import { attachClassMetadata, CONFIG_KEY, attachConstructorDataOnClass } from '../common';
 
 export function Config(identifier?: string) {
   return function (target: any, targetKey: string, index?: number): void {

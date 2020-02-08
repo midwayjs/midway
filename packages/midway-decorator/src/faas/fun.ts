@@ -1,5 +1,5 @@
-import { saveClassMetadata, saveModule, scope, ScopeEnum } from 'injection';
-import { FUNC_KEY } from '../constant';
+import { Scope } from '../annotation';
+import { ScopeEnum, saveClassMetadata, saveModule, FUNC_KEY } from '../common';
 import { KoaMiddlewareParamArray } from '..';
 
 export function Func(
@@ -20,6 +20,6 @@ export function Func(
       target
     );
     // 注册数据
-    scope(ScopeEnum.Request)(target);
+    Scope(ScopeEnum.Request)(target);
   };
 }

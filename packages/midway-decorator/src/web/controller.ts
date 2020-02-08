@@ -1,5 +1,5 @@
-import { saveClassMetadata, saveModule, scope, ScopeEnum } from 'injection';
-import { CONTROLLER_KEY } from '../constant';
+import { Scope } from '../annotation';
+import { ScopeEnum, saveClassMetadata, saveModule, CONTROLLER_KEY } from '../common';
 import { KoaMiddlewareParamArray } from '../interface';
 
 export interface ControllerOption {
@@ -21,6 +21,6 @@ export function Controller(prefix: string, routerOptions: {
       prefix,
       routerOptions
     } as ControllerOption, target);
-    scope(ScopeEnum.Request)(target);
+    Scope(ScopeEnum.Request)(target);
   };
 }

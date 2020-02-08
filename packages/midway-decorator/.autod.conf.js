@@ -11,7 +11,6 @@ module.exports = {
     'run',
   ],
   dep: [
-    "injection"
   ],
   devdep: [
   ],

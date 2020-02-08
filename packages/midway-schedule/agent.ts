@@ -1,5 +1,4 @@
-import { SCHEDULE_KEY, ScheduleOpts } from '@midwayjs/decorator';
-import { getClassMetadata, getProviderId, listModule } from 'injection';
+import { SCHEDULE_KEY, ScheduleOpts, getClassMetadata, getProviderId, listModule } from '@midwayjs/decorator';
 
 export = (agent) => {
 

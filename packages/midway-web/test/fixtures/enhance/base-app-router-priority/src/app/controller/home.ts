@@ -1,5 +1,4 @@
-import { provide } from 'injection';
-import { controller, get, priority } from '../../../../../../../src/';
+import { provide, controller, get, priority } from '../../../../../../../src/';
 
 @provide()
 @priority(-1)

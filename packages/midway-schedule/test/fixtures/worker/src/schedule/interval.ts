@@ -1,8 +1,7 @@
-import { provide } from 'injection';
-import { schedule, CommonSchedule } from '@midwayjs/decorator';
+import { Provide, Schedule, CommonSchedule } from '@midwayjs/decorator';
 
-@provide()
-@schedule({
+@Provide()
+@Schedule({
   type: 'worker',
   interval: 1000,
 })

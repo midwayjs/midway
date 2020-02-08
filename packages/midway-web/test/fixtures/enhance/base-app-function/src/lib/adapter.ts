@@ -1,4 +1,4 @@
-import {provide} from 'injection';
+import {provide} from '../../../../../../src';
 
 @provide()
 export class GoogleAdapter {

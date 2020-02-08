@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 import { join } from 'path';
-import { isPath, safeRequire } from '../src/util';
+import { isPath, safeRequire } from '../src/common/util';
 
 describe('/test/util.test.ts', () => {
   it('should test is path', () => {

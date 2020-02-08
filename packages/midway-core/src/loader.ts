@@ -1,6 +1,6 @@
 import * as path from 'path';
-import { MidwayContainer } from './container';
-import { Container } from 'injection';
+import { MidwayContainer } from './context/midwayContainer';
+import { Container } from './context/container';
 
 function buildLoadDir(baseDir, dir) {
   if (!path.isAbsolute(dir)) {

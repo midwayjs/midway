@@ -2,7 +2,7 @@ import * as extend from 'extend2';
 import * as is from 'is-type-of';
 import { basename } from 'path';
 import { IConfigService, IMidwayContainer } from '../interface';
-import { safelyGet } from '../util';
+import { safelyGet } from '../common/util';
 
 const debug = require('debug')('midway:config');
 

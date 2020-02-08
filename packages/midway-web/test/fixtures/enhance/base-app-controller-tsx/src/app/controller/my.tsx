@@ -1,5 +1,4 @@
-import { provide } from 'injection';
-import { controller, get } from '../../../../../../../src/';
+import { provide, controller, get } from '../../../../../../../src/';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/server';
 import App from '../../shared/App';

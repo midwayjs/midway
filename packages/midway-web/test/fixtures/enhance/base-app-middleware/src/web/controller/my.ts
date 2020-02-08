@@ -1,5 +1,4 @@
-import { inject, provide } from 'injection';
-import { controller, get, post } from '../../../../../../../src/';
+import { inject, provide, controller, get, post } from '../../../../../../../src/';
 
 const mw = async (ctx, next) => {
   ctx.home = ctx.home + '4444';

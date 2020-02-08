@@ -1,5 +1,5 @@
 const request = require('supertest');
-import { clearAllModule } from 'injection';
+import { clearAllModule } from '../src';
 
 const utils = require('./utils');
 const pedding = require('pedding');

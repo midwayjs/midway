@@ -1,7 +1,6 @@
 'use strict';
 
-import { provide } from 'injection';
-import { controller, get } from '../../../../../../../src/';
+import { controller, get, provide } from '../../../../../../../src/';
 import * as assert from 'assert';
 
 @provide()

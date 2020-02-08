@@ -1,5 +1,5 @@
 import { MockApplication, MockOption } from 'egg-mock';
-import { IApplicationContext } from 'injection';
+import { IApplicationContext } from '@midwayjs/core';
 
 export interface MidwayApplicationOptions extends MockOption {
   baseDir?: string;

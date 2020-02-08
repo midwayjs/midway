@@ -1,6 +1,6 @@
 'use strict';
 
-import { clearAllModule } from 'injection';
+import { clearAllModule } from '@midwayjs/decorator';
 import { mm } from 'midway-mock';
 
 import * as path from 'path';

@@ -1,5 +1,4 @@
-import { providerWrapper } from '@midwayjs/core';
-import { IApplicationContext } from 'injection';
+import { providerWrapper, IApplicationContext } from '@midwayjs/core';
 
 export function adapterFactory(context: IApplicationContext) {
   return async (adapterName: string) => {

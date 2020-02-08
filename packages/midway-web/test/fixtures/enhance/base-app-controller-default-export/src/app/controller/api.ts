@@ -1,7 +1,6 @@
 'use strict';
 
-import { inject, provide, scope, ScopeEnum } from 'injection';
-import { controller, get } from '../../../../../../../src/';
+import { inject, provide, scope, ScopeEnum, controller, get } from '../../../../../../../src/';
 
 const assert = require('assert');
 

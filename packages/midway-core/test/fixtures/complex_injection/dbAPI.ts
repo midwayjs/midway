@@ -1,5 +1,4 @@
-import { Provide, Scope, Inject } from '@midwayjs/decorator';
-import { ScopeEnum } from '../../../src';
+import { ScopeEnum, Provide, Scope, Inject } from '@midwayjs/decorator';
 
 @Provide()
 export class A {

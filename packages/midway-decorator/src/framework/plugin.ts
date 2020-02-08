@@ -1,6 +1,4 @@
-import { attachClassMetadata } from 'injection';
-import { PLUGIN_KEY } from '../constant';
-import { attachConstructorDataOnClass } from '../utils';
+import { attachClassMetadata, PLUGIN_KEY, attachConstructorDataOnClass } from '../common';
 
 export function Plugin(identifier?: string) {
   return function (target: any, targetKey: string, index?: number): void {

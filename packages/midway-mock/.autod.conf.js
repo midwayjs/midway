@@ -13,7 +13,6 @@ module.exports = {
   dep: [
   ],
   devdep: [
-    "injection",
   ],
   keep: [
   ]

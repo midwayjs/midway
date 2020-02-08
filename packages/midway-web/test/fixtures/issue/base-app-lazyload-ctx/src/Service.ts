@@ -1,4 +1,4 @@
-import { inject, provide } from 'injection';
+import { inject, provide } from '../../../../../src';
 import { CodeService } from './app/service/CodeService';
 import { UserService } from './app/service/UserService';
 

@@ -1,5 +1,4 @@
-import {provide, inject} from 'injection';
-import { controller, get } from '../../../../../../../src';
+import { provide, inject, controller, get } from '../../../../../../../src';
 import { BaseService } from '../../lib/service';
 import { HelloService } from '../../lib/HelloService';
 

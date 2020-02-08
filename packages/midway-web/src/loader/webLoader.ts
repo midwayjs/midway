@@ -7,11 +7,12 @@ import {
   RouterParamValue,
   WEB_ROUTER_KEY,
   WEB_ROUTER_PARAM_KEY,
+  getClassMetadata, getPropertyDataFromClass, getProviderId, listModule
 } from '@midwayjs/decorator';
 import { EggAppInfo } from 'egg';
 import * as extend from 'extend2';
 import * as fs from 'fs';
-import { ContainerLoader, MidwayContainer, MidwayHandlerKey, getClassMetadata, getPropertyDataFromClass, getProviderId, listModule } from '@midwayjs/core';
+import { ContainerLoader, MidwayContainer, MidwayHandlerKey } from '@midwayjs/core';
 import * as path from 'path';
 import { Middleware, MiddlewareParamArray, MidwayLoaderOptions, WebMiddleware } from '../interface';
 import { isTypeScriptEnvironment } from '../utils';
