@@ -1,4 +1,9 @@
-import { ObjectIdentifier, IManagedInstance, ScopeEnum, ObjectDefinitionOptions } from '@midwayjs/decorator';
+import {
+  ObjectIdentifier,
+  IManagedInstance,
+  ScopeEnum,
+  ObjectDefinitionOptions,
+} from '@midwayjs/decorator';
 /**
  * 生命周期定义
  */
@@ -16,7 +21,12 @@ export type Locale = string;
  * 多语言支持接口
  */
 export interface IMessageSource {
-  get(code: string, args?: any[], defaultMessage?: string, locale?: Locale): string;
+  get(
+    code: string,
+    args?: any[],
+    defaultMessage?: string,
+    locale?: Locale
+  ): string;
 }
 /**
  * 对象容器抽象
@@ -70,7 +80,10 @@ export interface IObjectCreator {
 export interface IObjectDefinitionRegistry {
   readonly identifiers: ObjectIdentifier[];
   readonly count: number;
-  registerDefinition(identifier: ObjectIdentifier, definition: IObjectDefinition);
+  registerDefinition(
+    identifier: ObjectIdentifier,
+    definition: IObjectDefinition
+  );
   getSingletonDefinitionIds(): ObjectIdentifier[];
   getDefinition(identifier: ObjectIdentifier): IObjectDefinition;
   getDefinitionByPath(path: string): IObjectDefinition;
@@ -151,8 +164,12 @@ export interface IManagedResolver {
  * 提供简化的容器绑定能力
  */
 export interface IContainer extends IApplicationContext {
-  bind<T>(target: T, options?: ObjectDefinitionOptions): void ;
-  bind<T>(identifier: ObjectIdentifier, target: T, options?: ObjectDefinitionOptions): void;
+  bind<T>(target: T, options?: ObjectDefinitionOptions): void;
+  bind<T>(
+    identifier: ObjectIdentifier,
+    target: T,
+    options?: ObjectDefinitionOptions
+  ): void;
   createChild(): IContainer;
   resolve<T>(target: T): T;
   registerCustomBinding(objectDefinition: IObjectDefinition, target): void;
@@ -196,6 +213,6 @@ export interface IEnvironmentService {
   setCurrentEnvironment(environment: string);
 }
 
-export interface Middleware<T> {
+export interface IMiddleware<T> {
   resolve: () => (context: T, next: () => Promise<any>) => any;
 }
