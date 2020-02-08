@@ -1,10 +1,10 @@
 {
   "name": "@midwayjs/serverless-invoke",
-  "version": "0.2.17",
+  "version": "0.2.18",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/faas-util-ts-compile": "^0.2.17",
+    "@midwayjs/faas-util-ts-compile": "^0.2.18",
     "@midwayjs/fcli-command-core": "^0.2.14",
     "@midwayjs/locate": "^1.0.3",
     "@midwayjs/runtime-engine": "^0.2.17",
@@ -20,7 +20,7 @@
     "websocket": "^1.0.30"
   },
   "devDependencies": {
-    "@midwayjs/faas": "^0.2.11",
+    "@midwayjs/faas": "^0.2.18",
     "midway-bin": "1"
   },
   "files": [

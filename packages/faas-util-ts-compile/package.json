@@ -1,13 +1,11 @@
 {
   "name": "@midwayjs/faas-util-ts-compile",
-  "version": "0.2.17",
+  "version": "0.2.18",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
     "fs-extra": "^8.1.0",
     "midway-bin": "1"
-  },
-  "devDependencies": {
   },
   "scripts": {
     "build": "npm run lint && midway-bin build -c",
