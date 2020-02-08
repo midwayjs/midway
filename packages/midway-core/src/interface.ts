@@ -27,3 +27,7 @@ export interface IEnvironmentService {
   getCurrentEnvironment(): string;
   setCurrentEnvironment(environment: string);
 }
+
+export interface Middleware<T> {
+  resolve: () => (context: T, next: () => Promise<any>) => any;
+}
