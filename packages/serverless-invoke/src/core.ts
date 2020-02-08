@@ -6,19 +6,22 @@
   3. 开源版: 【创建runtime、创建trigger】封装为平台invoke包，提供getInvoke方法，会传入args与入口方法，返回invoke方法
 */
 import { FaaSStarterClass } from './utils';
-import { execSync } from 'child_process';
-import { resolve } from 'path';
-import { existsSync, writeFileSync, ensureDirSync } from 'fs-extra';
+import { join, resolve } from 'path';
+import { existsSync, move, remove } from 'fs-extra';
 import { loadSpec } from '@midwayjs/fcli-command-core';
 import { writeWrapper } from '@midwayjs/serverless-spec-builder';
+import { AnalyzeResult, Locator } from '@midwayjs/locate';
+import { tsCompile, tsIntegrationProjectCompile, } from '@midwayjs/faas-util-ts-compile';
 
 interface InvokeOptions {
-  baseDir?: string;         // 目录，默认为process.cwd
-  functionName: string;     // 函数名
-  isDebug?: boolean;         // 是否debug
-  handler?: string;         // 函数的handler方法
-  trigger?: string;         // 触发器
-  buildDir?: string;        // 构建目录
+  baseDir?: string; // 目录，默认为process.cwd
+  functionName: string; // 函数名
+  isDebug?: boolean; // 是否debug
+  handler?: string; // 函数的handler方法
+  trigger?: string; // 触发器
+  buildDir?: string; // 构建目录
+  sourceDir?: string; // 函数源码目录
+  clean?: boolean; // 清理调试目录
 }
 
 export class InvokeCore {
@@ -28,12 +31,12 @@ export class InvokeCore {
   spec: any;
   buildDir: string;
   wrapperInfo: any;
+  codeAnalyzeResult: AnalyzeResult;
 
   constructor(options: InvokeOptions) {
     this.options = options;
     this.baseDir = options.baseDir || process.cwd();
     this.buildDir = resolve(this.baseDir, options.buildDir || 'dist');
-    ensureDirSync(this.buildDir);
     this.spec = loadSpec(this.baseDir);
   }
 
@@ -44,7 +47,7 @@ export class InvokeCore {
     const { functionName } = this.options;
     const starter = new FaaSStarterClass({
       baseDir: this.buildDir,
-      functionName
+      functionName,
     });
     await starter.start();
     this.starter = starter;
@@ -53,14 +56,18 @@ export class InvokeCore {
 
   // 获取用户代码中的函数方法
   async getUserFaasHandlerFunction() {
-    const handler = this.options.handler || this.getFunctionInfo().handler || '';
+    const handler =
+      this.options.handler || this.getFunctionInfo().handler || '';
     const starter = await this.getStarter();
     return starter.handleInvokeWrapper(handler);
   }
 
   getFunctionInfo(functionName?: string) {
     functionName = functionName || this.options.functionName;
-    return this.spec && this.spec.functions && this.spec.functions[functionName] || {};
+    return (
+      (this.spec && this.spec.functions && this.spec.functions[functionName]) ||
+      {}
+    );
   }
 
   async getInvokeFunction() {
@@ -70,27 +77,40 @@ export class InvokeCore {
 
   async buildTS() {
     const { baseDir } = this.options;
-    process.env.MIDWAY_TS_MODE = 'true';
     const tsconfig = resolve(baseDir, 'tsconfig.json');
     // 非ts
     if (!existsSync(tsconfig)) {
       return;
     }
-    const distTsconfig = resolve(this.buildDir, 'tsconfig.json');
-    if (!existsSync(distTsconfig)) { // midway-core 扫描判断isTsMode需要
-      writeFileSync(distTsconfig, '{}');
-    }
-    let tsc = 'tsc';
-    const tscBuildDir = resolve(this.buildDir, 'src');
-    try {
-      tsc = resolve(require.resolve('typescript'), '../../bin/tsc');
-    } catch (e) {
-      return this.invokeError('need typescript');
-    }
-    try {
-      await execSync(`cd ${baseDir};${tsc} --inlineSourceMap --outDir ${tscBuildDir} --skipLibCheck --skipDefaultLibCheck`);
-    } catch (e) {
-      this.invokeError(e);
+    // 设置走编译，扫描 dist 目录
+    process.env.MIDWAY_TS_MODE = 'false';
+    const debugRoot = this.options.buildDir || 'faas_debug_tmp';
+    // 分析目录结构
+    const locator = new Locator(baseDir);
+    this.codeAnalyzeResult = await locator.run({
+      tsCodeRoot: this.options.sourceDir,
+      tsBuildRoot: debugRoot,
+    });
+    this.buildDir = this.codeAnalyzeResult.tsBuildRoot;
+    // clean directory first
+    await this.cleanTarget(this.buildDir);
+    if (this.codeAnalyzeResult.integrationProject) {
+      // 一体化调整目录
+      await tsIntegrationProjectCompile(baseDir, {
+        sourceDir: 'src',
+        buildRoot: this.buildDir,
+        tsCodeRoot: this.codeAnalyzeResult.tsCodeRoot,
+      });
+      // remove tsconfig
+      await move(join(baseDir, 'tsconfig_integration_faas.json'), join(this.buildDir, 'tsconfig.json'));
+    } else {
+      // TODO 重构 midway-bin 不生成 tsconfig
+      await tsCompile(baseDir, {
+        source: 'src',
+        tsConfigName: 'tsconfig.json',
+        clean: true,
+      });
+      await move(join(baseDir, 'dist'), join(this.buildDir, 'dist'));
     }
   }
 
@@ -98,7 +118,11 @@ export class InvokeCore {
     await this.buildTS();
     const invoke = await this.getInvokeFunction();
     this.checkDebug();
-    return invoke(...args);
+    const result = await invoke(...args);
+    if (false !== this.options.clean) {
+      await this.cleanTarget(this.buildDir);
+    }
+    return result;
   }
 
   async invokeError(err) {
@@ -129,10 +153,10 @@ export class InvokeCore {
       baseDir: this.baseDir,
       service: {
         layers: this.spec.layers,
-        functions: {[this.options.functionName]: funcInfo}
+        functions: { [this.options.functionName]: funcInfo },
       },
       distDir: this.buildDir,
-      starter
+      starter,
     });
     return { fileName, handlerName: name };
   }
@@ -154,7 +178,9 @@ export class InvokeCore {
 
       请点击左侧文件目录中的代码文件进行调试
 
-      ${this.wrapperInfo ? `
+      ${
+        this.wrapperInfo
+          ? `
       函数的入口文件所在:
 
       ${this.wrapperInfo.fileName}  。
@@ -166,7 +192,15 @@ export class InvokeCore {
 
       感谢使用 midway-faas。
 
-      ` : ''}
+      `
+          : ''
+      }
       */`);
+  }
+
+  private async cleanTarget(p: string) {
+    if (existsSync(p)) {
+      await remove(p);
+    }
   }
 }

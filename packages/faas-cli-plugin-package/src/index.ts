@@ -1,21 +1,21 @@
 import { BasePlugin } from '@midwayjs/fcli-command-core';
-import { join, relative, resolve, isAbsolute } from 'path';
+import { isAbsolute, join, relative, resolve } from 'path';
 import {
   copy,
   createWriteStream,
   ensureDir,
+  ensureFile,
   existsSync,
+  move,
   readFileSync,
   remove,
   statSync,
   writeFileSync,
   writeJSON,
-  move,
-  ensureFile,
 } from 'fs-extra';
 import * as globby from 'globby';
-import { formatLayers, commonPrefix } from './utils';
-import { BuildCommand } from 'midway-bin';
+import { commonPrefix, formatLayers } from './utils';
+import { tsCompile, tsIntegrationProjectCompile } from '@midwayjs/faas-util-ts-compile';
 import { exec } from 'child_process';
 import * as archiver from 'archiver';
 import { AnalyzeResult, Locator } from '@midwayjs/locate';
@@ -217,7 +217,7 @@ export class PackagePlugin extends BasePlugin {
     const funcLayers = [];
     if (this.core.service.functions) {
       for (const func in this.core.service.functions) {
-        const funcConf = this.core.service.functions[func];
+        const funcConf = this.core.service.functions[ func ];
         if (funcConf.layers) {
           funcLayers.push(funcConf.layers);
         }
@@ -225,7 +225,7 @@ export class PackagePlugin extends BasePlugin {
     }
     const layerTypeList = formatLayers(this.core.service.layers, ...funcLayers);
     const npmList = Object.keys(layerTypeList.npm).map(
-      (name: string) => layerTypeList.npm[name]
+      (name: string) => layerTypeList.npm[ name ]
     );
     if (npmList && npmList.length) {
       await this.npmInstall({
@@ -248,7 +248,8 @@ export class PackagePlugin extends BasePlugin {
     let pkgJson: any = {};
     try {
       pkgJson = JSON.parse(readFileSync(pkgJsonPath).toString());
-    } catch (e) {}
+    } catch (e) {
+    }
     const allDependencies = Object.assign(
       {},
       this.core.service.globalDependencies,
@@ -258,17 +259,17 @@ export class PackagePlugin extends BasePlugin {
     pkgJson.dependencies = {};
     const localDep = {};
     for (const depName in allDependencies) {
-      const depVersion = allDependencies[depName];
+      const depVersion = allDependencies[ depName ];
       if (/^(\.|\/)/.test(depVersion)) {
         // local dep
         const depPath = join(this.servicePath, depVersion);
         if (existsSync(depPath)) {
-          localDep[depName] = depPath;
+          localDep[ depName ] = depPath;
         } else {
           this.core.cli.log(` - Local dep ${depName}:${depVersion} not exists`);
         }
       } else {
-        pkgJson.dependencies[depName] = depVersion;
+        pkgJson.dependencies[ depName ] = depVersion;
       }
     }
     writeFileSync(pkgJsonPath, JSON.stringify(pkgJson, null, '  '));
@@ -277,7 +278,7 @@ export class PackagePlugin extends BasePlugin {
     });
     for (const localDepName in localDep) {
       const target = join(this.midwayBuildPath, 'node_modules', localDepName);
-      await copy(localDep[localDepName], target);
+      await copy(localDep[ localDepName ], target);
     }
     this.core.cli.log(` - Dependencies install complete`);
   }
@@ -294,48 +295,14 @@ export class PackagePlugin extends BasePlugin {
       // await buildByNcc();
     } else {
       this.core.cli.log(' - Using tradition build mode');
-      const builder = new BuildCommand();
-      const source = this.options.sourceDir || 'src';
       if (this.codeAnalyzeResult.integrationProject) {
-        const tsFaaSConfigFilename = 'tsconfig_integration_faas.json';
         // 生成一个临时 tsconfig
-        const tempConfigFilePath = join(this.servicePath, tsFaaSConfigFilename);
-        await remove(tempConfigFilePath);
-        // 重新写一个新的
-        await writeJSON(tempConfigFilePath, {
-          compileOnSave: true,
-          compilerOptions: {
-            target: 'ES2018',
-            module: 'commonjs',
-            moduleResolution: 'node',
-            experimentalDecorators: true,
-            emitDecoratorMetadata: true,
-            inlineSourceMap: true,
-            noImplicitThis: true,
-            noUnusedLocals: true,
-            stripInternal: true,
-            pretty: true,
-            declaration: true,
-            outDir: relative(
-              this.servicePath,
-              join(this.midwayBuildPath, 'dist')
-            ),
-          },
-          include: [
-            `${relative(
-              this.servicePath,
-              this.codeAnalyzeResult.tsCodeRoot
-            )}/**/*`,
-          ],
-          exclude: ['dist', 'node_modules', 'test'],
-        });
-        await builder.run({
-          cwd: this.servicePath,
-          argv: {
-            clean: true,
-            project: tsFaaSConfigFilename,
-            srcDir: source,
-          },
+        const tempConfigFilePath = join(this.servicePath, 'tsconfig_integration_faas.json');
+
+        await tsIntegrationProjectCompile(this.servicePath, {
+          sourceDir: this.options.sourceDir || 'src',
+          buildRoot: this.midwayBuildPath,
+          tsCodeRoot: this.codeAnalyzeResult.tsCodeRoot
         });
         // 把临时的 tsconfig 移动进去
         await move(
@@ -346,13 +313,10 @@ export class PackagePlugin extends BasePlugin {
           }
         );
       } else {
-        await builder.run({
-          cwd: this.servicePath,
-          argv: {
-            clean: true,
-            project: 'tsconfig.json',
-            srcDir: source,
-          },
+        await tsCompile(this.servicePath, {
+          clean: true,
+          tsConfigName: 'tsconfig.json',
+          source: this.options.sourceDir || 'src',
         });
         // copy dist to artifact directory
         await move(
@@ -407,7 +371,7 @@ export class PackagePlugin extends BasePlugin {
   private makeZip(sourceDirection: string, targetFileName: string) {
     return new Promise(resolve => {
       const output = createWriteStream(targetFileName);
-      output.on('close', function() {
+      output.on('close', function () {
         resolve(archive.pointer());
       });
       const archive = archiver('zip', {
@@ -467,7 +431,7 @@ export class PackagePlugin extends BasePlugin {
   // 合并高密度部署
   assignAggregationToFunctions() {
     // 只在部署阶段生效
-    if (!this.core.processedInput.commands || !this.core.processedInput.commands.length || this.core.processedInput.commands[0] !== 'deploy') {
+    if (!this.core.processedInput.commands || !this.core.processedInput.commands.length || this.core.processedInput.commands[ 0 ] !== 'deploy') {
       return;
     }
     if (
@@ -494,29 +458,29 @@ export class PackagePlugin extends BasePlugin {
       const aggregationFuncName = `aggregation${aggregationName}`;
       this.core.service.functions[
         aggregationFuncName
-      ] = this.core.service.aggregation[aggregationName];
+        ] = this.core.service.aggregation[ aggregationName ];
       this.core.service.functions[
         aggregationFuncName
-      ].handler = `${aggregationFuncName}.handler`;
+        ].handler = `${aggregationFuncName}.handler`;
       this.core.service.functions[
         aggregationFuncName
-      ]._isAggregation = true;
-      if (!this.core.service.functions[aggregationFuncName].events) {
-        this.core.service.functions[aggregationFuncName].events = [];
+        ]._isAggregation = true;
+      if (!this.core.service.functions[ aggregationFuncName ].events) {
+        this.core.service.functions[ aggregationFuncName ].events = [];
       }
       // 忽略原始方法，不再单独进行部署
-      const deployOrigin = this.core.service.aggregation[aggregationName]
+      const deployOrigin = this.core.service.aggregation[ aggregationName ]
         .deployOrigin;
 
       const allPaths = [];
       let handlers = [];
-      if (this.core.service.aggregation[aggregationName].functions) {
+      if (this.core.service.aggregation[ aggregationName ].functions) {
         handlers = this.core.service.aggregation[
           aggregationName
-        ].functions
+          ].functions
           .map((functionName: string) => {
             const functions = this.core.service.functions;
-            const func = functions[functionName];
+            const func = functions[ functionName ];
             if (!func || !func.events) {
               return;
             }
@@ -526,14 +490,14 @@ export class PackagePlugin extends BasePlugin {
             if (httpEventIndex === -1) {
               return;
             }
-            const httpEvent = func.events[httpEventIndex];
+            const httpEvent = func.events[ httpEventIndex ];
             if (!httpEvent || !httpEvent.http.path) {
               return;
             }
             allPaths.push(httpEvent.http.path);
             if (!deployOrigin) {
               // 不把原有的函数进行部署
-              this.core.service.functions[functionName]._ignore = true;
+              this.core.service.functions[ functionName ]._ignore = true;
             }
             return {
               path: httpEvent.http.path,
@@ -557,8 +521,8 @@ export class PackagePlugin extends BasePlugin {
       allAggregationPaths.push(currentPath);
       this.core.service.functions[
         aggregationFuncName
-      ]._handlers = handlers;
-      this.core.service.functions[aggregationFuncName].events = [
+        ]._handlers = handlers;
+      this.core.service.functions[ aggregationFuncName ].events = [
         { http: { method: 'get', path: currentPath } },
       ];
     }

@@ -1,26 +1,20 @@
 import { FaaSContext, IFaaSStarter, MidwayFaaSInfo } from './interface';
 import { join } from 'path';
 import { existsSync } from 'fs';
-import {
-  getClassMetadata,
-  listModule,
-  listPreloadModule,
-  REQUEST_OBJ_CTX_KEY,
-} from 'injection';
+import { getClassMetadata, listModule, listPreloadModule, REQUEST_OBJ_CTX_KEY, } from 'injection';
 import { FUNC_KEY } from './constant';
-import {
-  ContainerLoader,
-  MidwayContainer,
-  MidwayHandlerKey,
-  MidwayRequestContainer,
-} from 'midway-core';
+import { ContainerLoader, MidwayContainer, MidwayHandlerKey, MidwayRequestContainer, } from 'midway-core';
 
 import SimpleLock from '@midwayjs/simple-lock';
 
 const LOCK_KEY = '_faas_starter_start_key';
 
 function isTypeScriptEnvironment() {
-  return !!require.extensions['.ts'] || process.env.MIDWAY_TS_MODE === 'true';
+  const TS_MODE_PROCESS_FLAG: string = process.env.MIDWAY_TS_MODE;
+  if ('false' === TS_MODE_PROCESS_FLAG) {
+    return false;
+  }
+  return TS_MODE_PROCESS_FLAG === 'true' || !!require.extensions[ '.ts' ];
 }
 
 export class FaaSStarter implements IFaaSStarter {
@@ -66,8 +60,8 @@ export class FaaSStarter implements IFaaSStarter {
       if (existsSync(join(this.appDir, 'package.json'))) {
         const pkg = require(join(this.appDir, 'package.json'));
         if (
-          (pkg['devDependencies'] && pkg['devDependencies']['typescript']) ||
-          (pkg['dependencies'] && pkg['dependencies']['typescript'])
+          (pkg[ 'devDependencies' ] && pkg[ 'devDependencies' ][ 'typescript' ]) ||
+          (pkg[ 'dependencies' ] && pkg[ 'dependencies' ][ 'typescript' ])
         ) {
           return true;
         }
@@ -92,17 +86,17 @@ export class FaaSStarter implements IFaaSStarter {
   registerDecorator() {
     // register handler for container
     this.loader.registerHook(MidwayHandlerKey.CONFIG, key => {
-      return this.globalConfig[key];
+      return this.globalConfig[ key ];
     });
 
     this.loader.registerHook(MidwayHandlerKey.PLUGIN, (key, target) => {
-      const ctx = target[REQUEST_OBJ_CTX_KEY] || {};
-      return ctx[key];
+      const ctx = target[ REQUEST_OBJ_CTX_KEY ] || {};
+      return ctx[ key ];
     });
 
     this.loader.registerHook(MidwayHandlerKey.LOGGER, (key, target) => {
-      const ctx = target[REQUEST_OBJ_CTX_KEY] || {};
-      return ctx['logger'];
+      const ctx = target[ REQUEST_OBJ_CTX_KEY ] || {};
+      return ctx[ 'logger' ];
     });
   }
 
@@ -130,9 +124,9 @@ export class FaaSStarter implements IFaaSStarter {
 
   async invokeHandler(funModule, handlerName, args) {
     handlerName = handlerName || this.defaultHandlerMethod;
-    if (funModule[handlerName]) {
+    if (funModule[ handlerName ]) {
       // invoke real method
-      return funModule[handlerName].apply(funModule, args);
+      return funModule[ handlerName ].apply(funModule, args);
     }
   }
 
