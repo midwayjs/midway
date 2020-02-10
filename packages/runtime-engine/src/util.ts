@@ -2,12 +2,16 @@ import { exists } from 'mz/fs';
 import { join } from 'path';
 
 export const isTsEnv = () => {
-  return require.extensions[ '.ts' ];
+  const TS_MODE_PROCESS_FLAG: string = process.env.MIDWAY_TS_MODE;
+  if ('false' === TS_MODE_PROCESS_FLAG) {
+    return false;
+  }
+  return TS_MODE_PROCESS_FLAG === 'true' || !!require.extensions['.ts'];
 };
 
 export const asyncWrapper = handler => {
   return (...args) => {
-    if (typeof args[ args.length - 1 ] === 'function') {
+    if (typeof args[args.length - 1] === 'function') {
       const callback = args.pop();
       if (handler.constructor.name !== 'AsyncFunction') {
         const err = new TypeError('Must be an AsyncFunction');
@@ -15,7 +19,7 @@ export const asyncWrapper = handler => {
       }
       // 其他事件场景
       return handler.apply(handler, args).then(
-        (result) => {
+        result => {
           callback(null, result);
         },
         err => {
@@ -95,8 +99,8 @@ export const completeAssign = function(...sources) {
  */
 export const getHandlerMethod = (filePath, handler) => {
   const mod = require(filePath);
-  if (mod && mod[ handler ]) {
-    return mod[ handler ].bind(mod);
+  if (mod && mod[handler]) {
+    return mod[handler].bind(mod);
   }
 };
 
@@ -104,10 +108,12 @@ export const getHandlerMethod = (filePath, handler) => {
  * parse handler file name and method name
  * @param handlerName
  */
-export const getHandlerMeta = (handlerName): { fileName: string; handler: string } => {
+export const getHandlerMeta = (
+  handlerName
+): { fileName: string; handler: string } => {
   if (/\./.test(handlerName)) {
     const meta = handlerName.split('.');
-    return { fileName: meta[ 0 ], handler: meta[ 1 ] };
+    return { fileName: meta[0], handler: meta[1] };
   } else {
     // error
   }
