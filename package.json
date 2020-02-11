@@ -34,7 +34,7 @@
     "canary": "sh scripts/publish.sh --canary",
     "beta": "sh scripts/publish.sh --npm-tag beta --force-publish=*",
     "next": "sh scripts/publish.sh --npm-tag next",
-    "publish": "rm -f ./packages/.DS* && sh scripts/publish.sh",
+    "release": "rm -f ./packages/.DS* && sh scripts/publish.sh",
     "bootstrap": "rm -f ./packages/.DS* && lerna bootstrap",
     "clean": "lerna clean --yes && rm -rf ./packages/**/package-lock.json",
     "build": "sh scripts/build.sh",
