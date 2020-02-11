@@ -18,38 +18,27 @@ export interface FunctionsStructure {
   [functionName: string]: FunctionStructure;
 }
 
-export type EventType = 'http' | 'hsf' | 'mq' | 'mtop' | 'schedule';
+export type EventTypeKey = 'http' | 'schedule' | 'os' | 'log';
+
+export type EventType = HTTPEvent | ScheduleEvent | LogEvent | OSEvent;
 
 export interface EventStructureType {
-  [eventName: string]: HTTPEvent | HSFEvent | MQEvent;
+  [eventName: string]: EventType;
 }
 
 export interface HTTPEvent {
   path?: string;
-  method?: string | string [];
+  method?: string | string[];
 }
 
-export interface HSFEvent {
-  hsf?: {
-    interfaceName?: string;
-    version?: string;
-    group?: string;
-  };
-}
-
-export interface MQEvent {
-  group?: string;
-  topic?: string;
-  tags?: string;
-  tag?: string;
-}
-
+// 定时任务
 export interface ScheduleEvent {
   type: 'cron' | 'every' | 'interval';
   value: string;
   payload?: string;
 }
 
+// 日志
 export interface LogEvent {
   source: string;
   project: string;
@@ -61,7 +50,7 @@ export interface LogEvent {
 }
 
 // 对象存储
-export interface OsEvent {
+export interface OSEvent {
   bucket: string;
   events: string[];
   filterPrefix: string;
@@ -82,13 +71,6 @@ export interface FunctionStructure {
     [key: string]: string;
   };
   events?: EventStructureType[];
-  scale?: ScaleStructure;
-}
-
-export interface ScaleStructure {
-  concurrency?: number;
-  min?: number;
-  max?: number;
 }
 
 export interface LayersStructure {
@@ -98,28 +80,50 @@ export interface LayersStructure {
   };
 }
 
-export interface ResourcesStructure {
-}
+export interface ResourcesStructure {}
 
-export type ServiceStructure = string | {
+export interface ServiceStructure {
   name?: string;
   description?: string;
-};
+}
+
+export interface AggregationStructure {
+  [aggregationName: string]: {
+    deployOrigin?: boolean;
+    functions: string[];
+  };
+}
+
+export type PluginsStructure = string[];
+
+export interface PackageStructure {
+  artifact?: string;
+  include?: string[];
+  exclude?: string[];
+}
 
 export interface SpecStructure {
   service?: ServiceStructure;
   provider?: ProviderStructure;
   functions?: FunctionsStructure;
+  aggregation?: AggregationStructure;
   layers?: LayersStructure;
+  plugins?: PluginsStructure;
+  package?: PackageStructure;
   resources?: ResourcesStructure;
+  custom?: any;
 }
 
 export interface Builder {
-  validate();
+  validate(): boolean;
+  toJSON();
   getProvider(): ProviderStructure;
   getFunctions(): FunctionsStructure;
   getResources(): ResourcesStructure;
   getService(): ServiceStructure;
   getLayers(): LayersStructure;
-  toJSON();
+  getCustom(): any;
+  getPackage(): PackageStructure;
+  getPlugins(): PluginsStructure;
+  getAggregation(): AggregationStructure;
 }

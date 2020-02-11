@@ -1,18 +1,26 @@
 import { SpecStructure, Builder } from './interface';
 
 export class SpecBuilder implements Builder {
-
   originData: SpecStructure;
 
   constructor(originData: SpecStructure) {
     this.originData = originData;
     this.validate();
+    this.transform();
   }
 
   validate() {
-    // TODO
+    return true;
   }
 
+  transform() {
+    const serviceData = this.originData['service'];
+    if (typeof serviceData === 'string') {
+      this.originData['service'] = {
+        name: serviceData,
+      };
+    }
+  }
   getProvider() {
     return this.originData['provider'] || {};
   }
@@ -38,14 +46,7 @@ export class SpecBuilder implements Builder {
   }
 
   getService() {
-    const serviceData = this.originData['service'];
-    if (typeof serviceData === 'string') {
-      return {
-        name: serviceData
-      };
-    } else {
-      return serviceData || {};
-    }
+    return this.originData['service'];
   }
 
   getLayers() {
@@ -56,17 +57,14 @@ export class SpecBuilder implements Builder {
     return this.originData['aggregation'];
   }
 
-  toJSON(): object {
-    return {
-      aggregation: this.getAggregation(),
-      custom: this.getCustom(),
-      functions: this.getFunctions(),
-      layers: this.getLayers(),
-      package: this.getPackage(),
-      plugins: this.getPlugins(),
-      provider: this.getProvider(),
-      resources: this.getResources(),
-      service: this.getService()
-    };
+  toJSON(): any {
+    const serviceData = this.originData['service'];
+    if (typeof serviceData === 'string') {
+      this.originData['service'] = {
+        name: serviceData,
+      };
+    }
+
+    return this.originData;
   }
 }

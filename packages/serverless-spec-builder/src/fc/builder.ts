@@ -12,7 +12,7 @@ import {
   HTTPEvent,
   ScheduleEvent,
   LogEvent,
-  OsEvent,
+  OSEvent,
 } from '../interface';
 
 export class FCSpecBuilder extends SpecBuilder {
@@ -117,7 +117,7 @@ export class FCSpecBuilder extends SpecBuilder {
         const osEvent = event['os'] || event['oss'] || event['cos'];
 
         if (osEvent) {
-          const evt = osEvent as OsEvent;
+          const evt = osEvent as OSEvent;
           functionTemplate.Events['oss'] = {
             Type: 'OSS',
             Properties: {
