@@ -1,4 +1,4 @@
-import { BasePlugin } from '@midwayjs/fcli-command-core';
+import { BasePlugin, getSpecFile, writeToSpec } from '@midwayjs/fcli-command-core';
 import { isAbsolute, join, relative, resolve } from 'path';
 import {
   copy,
@@ -29,6 +29,7 @@ export class PackagePlugin extends BasePlugin {
     this.servicePath,
     '.serverless'
   ));
+  cacheSpec: any;
   codeAnalyzeResult: AnalyzeResult;
   integrationDistTempDirectory = 'integration_dist'; // 一体化构建的临时目录
   zipCodeDefaultName = 'serverless.zip';
@@ -82,6 +83,7 @@ export class PackagePlugin extends BasePlugin {
     'package:installLayer': this.installLayer.bind(this),
     'package:installDep': this.installDep.bind(this),
     'package:package': this.package.bind(this),
+    'before:package:finalize': this.finalize.bind(this),
     'package:tscompile': this.tsCompile.bind(this),
   };
 
@@ -179,7 +181,7 @@ export class PackagePlugin extends BasePlugin {
     // copy packages config files
     const packageObj: any = this.core.service.package || {};
     const include = await globby(
-      [this.options.sourceDir || 'src', 'tsconfig.json', 'package.json'].concat(
+      [this.options.sourceDir || 'src', 'tsconfig.json', 'package.json', '*.yml'].concat(
         packageObj.include || []
       ),
       { cwd: this.servicePath }
@@ -431,7 +433,8 @@ export class PackagePlugin extends BasePlugin {
   // 合并高密度部署
   assignAggregationToFunctions() {
     // 只在部署阶段生效
-    if (!this.core.processedInput.commands || !this.core.processedInput.commands.length || this.core.processedInput.commands[ 0 ] !== 'deploy') {
+    const commands = this.core.processedInput.commands;
+    if (!commands || !commands.length || (commands[ 0 ] !== 'deploy' && commands[ 0 ] !== 'package')) {
       return;
     }
     if (
@@ -497,7 +500,8 @@ export class PackagePlugin extends BasePlugin {
             allPaths.push(httpEvent.http.path);
             if (!deployOrigin) {
               // 不把原有的函数进行部署
-              this.core.service.functions[ functionName ]._ignore = true;
+              this.core.cli.log(` - using function '${aggregationName}' to deploy '${functionName}'`);
+              delete this.core.service.functions[ functionName ];
             }
             return {
               path: httpEvent.http.path,
@@ -510,7 +514,7 @@ export class PackagePlugin extends BasePlugin {
       let currentPath = commonPrefix(allPaths);
       currentPath = currentPath ? `${currentPath}/*` : '/*';
       this.core.cli.log(
-        ` - using '${currentPath}' to deploy '${allPaths.join(`', '`)}'`
+        ` - using path '${currentPath}' to deploy '${allPaths.join(`', '`)}'`
       );
       if (allAggregationPaths.indexOf(currentPath) !== -1) {
         console.error(
@@ -525,6 +529,18 @@ export class PackagePlugin extends BasePlugin {
       this.core.service.functions[ aggregationFuncName ].events = [
         { http: { method: 'get', path: currentPath } },
       ];
+    }
+    const specFile = getSpecFile(this.servicePath);
+    this.cacheSpec = {
+      specFile,
+      specData: readFileSync(specFile.path)
+    };
+    writeToSpec(this.servicePath, this.core.service);
+  }
+
+  finalize() {
+    if (this.cacheSpec) {
+      writeFileSync(this.cacheSpec.specFile.path, this.cacheSpec.specData);
     }
   }
 }
