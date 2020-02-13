@@ -42,6 +42,7 @@ export interface IObjectFactory {
  * 对象描述定义
  */
 export interface IObjectDefinition {
+  namespace?: string;
   creator: IObjectCreator;
   id: string;
   name: string;
@@ -160,6 +161,11 @@ export interface IManagedResolver {
   resolveAsync(managed: IManagedInstance): Promise<any>;
 }
 
+export interface IManagedResolverFactoryCreateOptions {
+  definition: IObjectDefinition;
+  args?: any;
+  namespace?: string;
+}
 /**
  * 提供简化的容器绑定能力
  */
@@ -184,6 +190,7 @@ export interface ObjectDependencyTree {
 
 export const REQUEST_CTX_KEY = 'ctx';
 export const REQUEST_OBJ_CTX_KEY = '_req_ctx';
+export const MAIN_MODULE_KEY = '__main__';
 
 export interface IContainerConfiguration {
   addImports(imports: string[], baseDir?: string);
@@ -195,7 +202,7 @@ export interface IContainerConfiguration {
 }
 
 export interface IMidwayContainer extends IContainer {
-  createConfiguration();
+  createConfiguration(): IContainerConfiguration;
   getConfigService(): IConfigService;
   getEnvironmentService(): IEnvironmentService;
   getCurrentEnv(): string;

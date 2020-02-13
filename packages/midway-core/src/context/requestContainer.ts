@@ -2,6 +2,7 @@ import { ManagedValue } from '../context/managed';
 import { VALUE_TYPE } from '../common/constants';
 import { MidwayContainer } from './midwayContainer';
 import { REQUEST_CTX_KEY } from '../interface';
+import { parsePrefix } from '../common/util';
 
 export class MidwayRequestContainer extends MidwayContainer {
 
@@ -27,7 +28,7 @@ export class MidwayRequestContainer extends MidwayContainer {
     const definition = this.applicationContext.registry.getDefinition(identifier);
     if (definition && definition.isRequestScope()) {
       // create object from applicationContext definition for requestScope
-      return this.getManagedResolverFactory().create(definition, args);
+      return this.getManagedResolverFactory().create({ definition, args });
     }
 
     if (this.parent) {
@@ -39,6 +40,9 @@ export class MidwayRequestContainer extends MidwayContainer {
     if (typeof identifier !== 'string') {
       identifier = this.getIdentifier(identifier);
     }
+
+    identifier = parsePrefix(identifier);
+
     if (this.registry.hasObject(identifier)) {
       return this.registry.getObject(identifier);
     }
@@ -50,7 +54,7 @@ export class MidwayRequestContainer extends MidwayContainer {
         definition.constructorArgs = [valueManagedIns];
       }
       // create object from applicationContext definition for requestScope
-      return this.getManagedResolverFactory().createAsync(definition, args);
+      return this.getManagedResolverFactory().createAsync({ definition, args });
     }
 
     if (this.parent) {

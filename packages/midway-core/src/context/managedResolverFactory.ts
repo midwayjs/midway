@@ -23,7 +23,8 @@ import {
   IManagedResolver,
   IObjectDefinition,
   REQUEST_CTX_KEY,
-  REQUEST_OBJ_CTX_KEY
+  REQUEST_OBJ_CTX_KEY,
+  IManagedResolverFactoryCreateOptions
 } from '../interface';
 import { ObjectProperties } from '../definitions/properties';
 import { NotFoundError } from '../common/notFoundError';
@@ -278,12 +279,12 @@ class ObjectResolver extends BaseManagedResolver {
 
   resolve(managed: IManagedInstance): any {
     const mo = managed as ManagedObject;
-    return this._factory.create(mo.definition, null);
+    return this._factory.create({ definition: mo.definition });
   }
 
   async resolveAsync(managed: IManagedInstance): Promise<any> {
     const mo = managed as ManagedObject;
-    return this._factory.createAsync(mo.definition, null);
+    return this._factory.createAsync({ definition: mo.definition });
   }
 }
 
@@ -364,7 +365,8 @@ export class ManagedResolverFactory {
    * @param definition 对象定义
    * @param args 参数
    */
-  create(definition: IObjectDefinition, args: any): any {
+  create(opt: IManagedResolverFactoryCreateOptions): any {
+    const { definition, args } = opt;
     if (definition.isSingletonScope() &&
       this.singletonCache.has(definition.id)) {
       return this.singletonCache.get(definition.id);
@@ -453,7 +455,8 @@ export class ManagedResolverFactory {
    * @param definition 对象定义
    * @param args 参数
    */
-  async createAsync(definition: IObjectDefinition, args: any): Promise<any> {
+  async createAsync(opt: IManagedResolverFactoryCreateOptions): Promise<any> {
+    const { definition, args } = opt;
     if (definition.isSingletonScope() &&
       this.singletonCache.has(definition.id)) {
       return this.singletonCache.get(definition.id);

@@ -1,10 +1,10 @@
 import { dirname, resolve, sep } from 'path';
+import { MAIN_MODULE_KEY } from '../interface';
 
 export const safeRequire = p => {
   if (p.startsWith(`.${sep}`) || p.startsWith(`..${sep}`)) {
     p = resolve(dirname(module.parent.filename), p);
   }
-
   try {
     return require(p);
   } catch (err) {
@@ -48,4 +48,31 @@ export function safelyGet(list: string | string[], obj?: object): any {
   }
 
   return willReturn;
+}
+/**
+ * 生成带 namespace 的 provideId
+ * @param provideId provideId
+ * @param namespace namespace
+ */
+export function generateProvideId(provideId: string, namespace?: string) {
+  if (namespace && namespace !== MAIN_MODULE_KEY) {
+    if (provideId.includes('@')) {
+      return provideId.substr(1);
+    }
+    if (provideId.includes(':')) {
+      return provideId;
+    }
+    return namespace + ':' + provideId;
+  }
+  return provideId;
+}
+/**
+ * 剔除 @ 符号
+ * @param provideId provideId
+ */
+export function parsePrefix(provideId: string) {
+  if (provideId.includes('@')) {
+    return provideId.substr(1);
+  }
+  return provideId;
 }

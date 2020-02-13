@@ -199,7 +199,7 @@ describe('/test/loader.test.ts', () => {
     await loader.refresh();
 
     const appCtx = loader.getApplicationContext();
-    const replaceManager: any = await appCtx.getAsync('replaceManager');
+    const replaceManager: any = await appCtx.getAsync('@ok:replaceManager');
     assert((await replaceManager.getOne()) === 'ok');
   });
 
@@ -216,7 +216,7 @@ describe('/test/loader.test.ts', () => {
     await loader.refresh();
 
     const appCtx = loader.getApplicationContext();
-    const replaceManager: any = await appCtx.getAsync('replaceManager');
+    const replaceManager: any = await appCtx.getAsync('@ok:replaceManager');
     assert((await replaceManager.getOne()) === 'ok1');
     mm.restore();
   });
@@ -234,12 +234,12 @@ describe('/test/loader.test.ts', () => {
     await loader.refresh();
 
     const appCtx = loader.getApplicationContext();
-    const replaceManager: any = await appCtx.getAsync('replaceManager');
+    const replaceManager: any = await appCtx.getAsync('@ok:replaceManager');
     assert((await replaceManager.getOne()) === 'ok1');
     mm.restore();
   });
 
-  it.only('should load configuration with namespace', async () => {
+  it('should load configuration with namespace', async () => {
     mm(process.env, 'MIDWAY_SERVER_ENV', 'local');
     const loader = new ContainerLoader({
       baseDir: path.join(
@@ -256,13 +256,13 @@ describe('/test/loader.test.ts', () => {
     const replaceManager1: any = await appCtx.getAsync(
       '@midway-plugin-mock:replaceManager'
     );
-    assert((await replaceManager1.getOne()) === 'ok1');
+    assert((await replaceManager1.getOne()) === 'one article');
     // 取自定义 namespace
     const replaceManager2: any = await appCtx.getAsync('@ok:replaceManager');
     assert((await replaceManager2.getOne()) === 'ok2');
     // 查看覆盖的情况
     const baseService: any = await appCtx.getAsync('baseService');
-    assert((await baseService.getOne()) === 'harry,one article,ok2');
+    assert((await baseService.getInformation()) === 'harry,one article,ok2');
     mm.restore();
   });
 });
