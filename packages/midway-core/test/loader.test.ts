@@ -239,7 +239,7 @@ describe('/test/loader.test.ts', () => {
     mm.restore();
   });
 
-  it('should load configuration with namespace', async () => {
+  it.only('should load configuration with namespace', async () => {
     mm(process.env, 'MIDWAY_SERVER_ENV', 'local');
     const loader = new ContainerLoader({
       baseDir: path.join(
