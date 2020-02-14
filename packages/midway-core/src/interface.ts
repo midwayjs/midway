@@ -193,6 +193,7 @@ export const REQUEST_OBJ_CTX_KEY = '_req_ctx';
 export const MAIN_MODULE_KEY = '__main__';
 
 export interface IContainerConfiguration {
+  addLoadDir(dir: string);
   addImports(imports: string[], baseDir?: string);
   addImportObjects(importObjects: any[]);
   addImportConfigs(importConfigs: string[], baseDir: string);

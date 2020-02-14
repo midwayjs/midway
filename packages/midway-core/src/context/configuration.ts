@@ -9,20 +9,26 @@ const debug = require('debug')('midway:container:configuration');
 export class ContainerConfiguration implements IContainerConfiguration {
   container: IMidwayContainer;
   namespace: string;
-  imports: string[] = [];
+  loadDirs: string[] = [];
   importObjects: object = new Map();
 
   constructor(container) {
     this.container = container;
   }
 
+  addLoadDir(dir: string) {
+    this.loadDirs.push(dir);
+  }
+
   addImports(imports: string[] = [], baseDir?: string) {
     // 处理 imports
-    for (let importPackage of imports) {
+    for (const importPackage of imports) {
       // for package
-      importPackage = this.resolvePackageBaseDir(importPackage, baseDir);
-      debug('import package => %s.', importPackage);
-      this.imports.push(importPackage);
+      const subContainerConfiguration = this.container.createConfiguration();
+      const subPackageDir = this.resolvePackageBaseDir(importPackage);
+      debug('import package => %s dir => %s.', importPackage, subPackageDir);
+      subContainerConfiguration.addLoadDir(subPackageDir);
+      subContainerConfiguration.load(subPackageDir);
     }
   }
 
@@ -101,16 +107,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
           if (this.namespace !== MAIN_MODULE_KEY && configurationOptions.namespace) {
             this.namespace = configurationOptions.namespace;
           }
-          if (this.namespace === MAIN_MODULE_KEY) {
-            // 只支持一层
-            for (const importPackage of configurationOptions.imports) {
-              const subContainerConfiguration = this.container.createConfiguration();
-              const subPackageDir = this.resolvePackageBaseDir(importPackage);
-              debug('import package => %s dir => %s.', importPackage, subPackageDir);
-              subContainerConfiguration.load(subPackageDir);
-              subContainerConfiguration.addImports([ subPackageDir ]);
-            }
-          }
+          this.addImports(configurationOptions.imports);
           this.addImportObjects(configurationOptions.importObjects);
           this.addImportConfigs(configurationOptions.importConfigs, baseDir);
         }
@@ -119,7 +116,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
   }
 
   getImportDirectory() {
-    return this.imports;
+    return this.loadDirs;
   }
 
   private getConfigurationExport(exports): any[] {
