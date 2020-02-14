@@ -239,7 +239,7 @@ describe('/test/loader.test.ts', () => {
     mm.restore();
   });
 
-  it.only('should load configuration with namespace', async () => {
+  it('should load configuration with namespace', async () => {
     mm(process.env, 'MIDWAY_SERVER_ENV', 'local');
     const loader = new ContainerLoader({
       baseDir: path.join(
@@ -263,6 +263,9 @@ describe('/test/loader.test.ts', () => {
     // 查看覆盖的情况
     const baseService: any = await appCtx.getAsync('baseService');
     assert((await baseService.getInformation()) === 'harry,one article,ok2');
+
+    const repm: any = await appCtx.getAsync('@midway-plugin-mod:replaceManager');
+    assert((await repm.getOne()) === 'one article mod');
     mm.restore();
   });
 });
