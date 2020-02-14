@@ -52,7 +52,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
     try {
       return dirname(require.resolve(packageName));
     } catch (e) { /* ignore */ }
-    return join(baseDir || this.container.baseDir, 'node_modules', packageName);
+    return join(baseDir || this.container.baseDir, '../node_modules', packageName);
   }
 
   load(packageName: string) {

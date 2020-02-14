@@ -4,7 +4,7 @@ import { Configuration } from '@midwayjs/decorator';
   imports: [
     '../../midway-plugin-mock/src',
     '../../midway-plugin-ok/src',
-    '../node_modules/midway-plugin-mod'
+    'midway-plugin-mod'
   ],
 })
 export class AutoConfiguraion {}
