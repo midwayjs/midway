@@ -21,6 +21,11 @@ class BuildCommand extends Command {
         type: 'boolean',
         alias: 'c',
       },
+      incremental: {
+        description: 'save information about the project graph from the last compilation',
+        type: 'boolean',
+        default: false,
+      },
       project: {
         description: 'project file location',
         type: 'string',
@@ -88,6 +93,10 @@ class BuildCommand extends Command {
     }
 
     const args = [];
+
+    if (argv.incremental) {
+      args.push('--incremental');
+    }
 
     if (argv.project) {
       args.push('-p');
