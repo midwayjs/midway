@@ -29,6 +29,11 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
+## [1.16.4](https://github.com/midwayjs/midway/compare/v1.16.3...v1.16.4) (2020-02-11)
+
+**Note:** Version bump only for package @midwayjs/decorator
+
+
 
 
 ## [1.16.3](https://github.com/midwayjs/midway/compare/v1.16.2...v1.16.3) (2019-12-25)
