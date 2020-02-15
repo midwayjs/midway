@@ -1,33 +1,34 @@
 import { CONFIGURATION_KEY, InjectionConfigurationOptions, getClassMetadata } from '@midwayjs/decorator';
 import * as is from 'is-type-of';
 import { dirname, isAbsolute, join } from 'path';
-import { IContainerConfiguration, IMidwayContainer } from '../interface';
+import { IContainerConfiguration, IMidwayContainer, MAIN_MODULE_KEY } from '../interface';
 import { isPath, safeRequire } from '../common/util';
+
+const debug = require('debug')('midway:container:configuration');
 
 export class ContainerConfiguration implements IContainerConfiguration {
   container: IMidwayContainer;
-  importDirectory = [];
-  imports: string[] = [];
+  namespace: string;
+  loadDirs: string[] = [];
   importObjects: object = new Map();
 
   constructor(container) {
     this.container = container;
   }
 
+  addLoadDir(dir: string) {
+    this.loadDirs.push(dir);
+  }
+
   addImports(imports: string[] = [], baseDir?: string) {
     // 处理 imports
-    for (let importPackage of imports) {
-      // 把相对路径转为绝对路径
-      if (isPath(importPackage)) {
-        if (!isAbsolute(importPackage)) {
-          importPackage = join(baseDir || this.container.baseDir, importPackage);
-        }
-      } else {
-        // for package
-        importPackage = this.resolvePackageBaseDir(importPackage);
-      }
-      this.imports.push(importPackage);
-      this.load(importPackage);
+    for (const importPackage of imports) {
+      // for package
+      const subContainerConfiguration = this.container.createConfiguration();
+      const subPackageDir = this.resolvePackageBaseDir(importPackage);
+      debug('import package => %s dir => %s.', importPackage, subPackageDir);
+      subContainerConfiguration.addLoadDir(subPackageDir);
+      subContainerConfiguration.load(subPackageDir);
     }
   }
 
@@ -38,6 +39,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
   }
 
   addImportConfigs(importConfigs: string[], baseDir: string) {
+    debug('import configs %j baseDir => %s.', importConfigs, baseDir);
     if (importConfigs && importConfigs.length) {
       this.container.getConfigService().add(importConfigs.map(importConfigPath => {
         return join(baseDir || this.container.baseDir, importConfigPath);
@@ -45,33 +47,50 @@ export class ContainerConfiguration implements IContainerConfiguration {
     }
   }
 
-  private resolvePackageBaseDir(packageName: string) {
-    return dirname(require.resolve(packageName));
+  private resolvePackageBaseDir(packageName: string, baseDir?: string) {
+    // 把相对路径转为绝对路径
+    if (isPath(packageName)) {
+      if (!isAbsolute(packageName)) {
+        packageName = join(baseDir || this.container.baseDir, packageName);
+      }
+      return packageName;
+    }
+    try {
+      return dirname(require.resolve(packageName));
+    } catch (e) { /* ignore */ }
+    return join(baseDir || this.container.baseDir, '../node_modules', packageName);
   }
 
   load(packageName: string) {
     let configuration;
-    let baseDir = packageName;
-    if (isPath(packageName)) {
-      const pkg = safeRequire(join(packageName, 'package.json'));
-      if (pkg && pkg.main) {
-        // 找到 package.json 中的 main 指定的文件目录
-        baseDir = dirname(join(packageName, pkg.main));
-        configuration = safeRequire(join(baseDir, 'configuration'));
+    const packageBaseDir = this.resolvePackageBaseDir(packageName);
+    debug('load %s => %s.', packageName, packageBaseDir);
+    let pkg = safeRequire(join(packageBaseDir, 'package.json'));
+    if (!pkg) {
+      pkg = safeRequire(join(packageBaseDir, '../', 'package.json'));
+    }
+    debug('safeRequire pkg.name => %s, from %s.', pkg ? pkg.name : undefined, packageBaseDir);
+
+    if (pkg) {
+      if (this.namespace !== MAIN_MODULE_KEY) {
+        this.namespace = pkg.midwayNamespace ? pkg.midwayNamespace : pkg.name;
+      }
+      let cfgFile;
+      if (pkg.main) {
+        const cfgFileDir = dirname(join(packageBaseDir, pkg.main));
+        cfgFile = join(cfgFileDir, 'configuration');
+        configuration = safeRequire(cfgFile);
+        debug('configuration file path one => %s.', cfgFile);
       }
       if (!configuration) {
-        // 找外层目录
-        configuration = safeRequire(join(packageName, 'configuration'));
-      }
-    } else {
-      // 查找包中的文件
-      baseDir = this.resolvePackageBaseDir(packageName);
-      configuration = safeRequire(join(baseDir, 'configuration'));
-      if (!configuration) {
-        configuration = safeRequire(`${packageName}/configuration`);
+        cfgFile = `${packageBaseDir}/configuration`;
+        configuration = safeRequire(cfgFile);
+        debug('configuration file path two => %s.', cfgFile);
       }
     }
-    this.loadConfiguration(configuration, baseDir);
+    debug('packageName => %s namespace => %s configuration file => %s.',
+      packageName, this.namespace, configuration ? true : false);
+    this.loadConfiguration(configuration, packageBaseDir);
   }
 
   loadConfiguration(configuration, baseDir) {
@@ -83,9 +102,12 @@ export class ContainerConfiguration implements IContainerConfiguration {
           CONFIGURATION_KEY,
           configurationExport
         );
-
+        debug('configuration export %j.', configurationOptions);
         if (configurationOptions) {
-          this.addImports(configurationOptions.imports, baseDir);
+          if (this.namespace !== MAIN_MODULE_KEY && configurationOptions.namespace) {
+            this.namespace = configurationOptions.namespace;
+          }
+          this.addImports(configurationOptions.imports);
           this.addImportObjects(configurationOptions.importObjects);
           this.addImportConfigs(configurationOptions.importConfigs, baseDir);
         }
@@ -94,7 +116,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
   }
 
   getImportDirectory() {
-    return this.imports;
+    return this.loadDirs;
   }
 
   private getConfigurationExport(exports): any[] {

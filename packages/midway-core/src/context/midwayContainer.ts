@@ -15,10 +15,11 @@ import * as is from 'is-type-of';
 import { join } from 'path';
 import { ContainerConfiguration } from './configuration';
 import { FUNCTION_INJECT_KEY, MidwayHandlerKey } from '../common/constants';
-import { IConfigService, IEnvironmentService, IMidwayContainer, IApplicationContext } from '../interface';
+import { IConfigService, IEnvironmentService, IMidwayContainer, IApplicationContext, MAIN_MODULE_KEY } from '../interface';
 import { MidwayConfigService } from '../service/configService';
 import { MidwayEnvironmentService } from '../service/environmentService';
 import { Container } from './container';
+import { generateProvideId } from '../common/util';
 
 const DEFAULT_PATTERN = ['**/**.ts', '**/**.tsx', '**/**.js', '!**/**.d.ts'];
 const DEFAULT_IGNORE_PATTERN = [
@@ -38,15 +39,12 @@ interface FrameworkDecoratorMetadata {
   propertyName: string;
 }
 
-const MAIN_MODULE_KEY = '__main__';
-
 export class MidwayContainer extends Container implements IMidwayContainer {
   handlerMap: Map<string, (handlerKey: string, instance?: any) => any>;
   // 仅仅用于兼容requestContainer的ctx
   ctx = {};
   readyBindModules: Map<string, Set<any>> = new Map();
-  importDirectory = [];
-  configurations = [];
+  configurations: ContainerConfiguration[] = [];
   configService: IConfigService;
   environmentService: IEnvironmentService;
 
@@ -84,13 +82,21 @@ export class MidwayContainer extends Container implements IMidwayContainer {
   }) {
     // create main module configuration
     const configuration = this.createConfiguration();
+    configuration.namespace = MAIN_MODULE_KEY;
     configuration.load(this.baseDir);
-
-    for (const containerConfiguration of this.configurations) {
-      this.importDirectory = this.importDirectory.concat(containerConfiguration.getImportDirectory());
-    }
-    opts.loadDir = this.importDirectory.concat(opts.loadDir);
+    // loadDir
     this.loadDirectory(opts);
+
+    // load configuration
+    for (const containerConfiguration of this.configurations) {
+      debug('load configuration dir => %j, namespace => %s.',
+        containerConfiguration.getImportDirectory(), containerConfiguration.namespace);
+      this.loadDirectory({
+        ...opts,
+        loadDir: containerConfiguration.getImportDirectory(),
+        namespace: containerConfiguration.namespace
+      });
+    }
   }
 
   // 加载模块
@@ -98,6 +104,7 @@ export class MidwayContainer extends Container implements IMidwayContainer {
     loadDir: string | string[];
     pattern?: string | string[];
     ignore?: string | string[];
+    namespace?: string;
   }) {
     const loadDirs = [].concat(opts.loadDir || []);
 
@@ -107,42 +114,41 @@ export class MidwayContainer extends Container implements IMidwayContainer {
         {
           cwd: dir,
           ignore: DEFAULT_IGNORE_PATTERN.concat(opts.ignore || []),
+          suppressErrors: true
         }
       );
 
       for (const name of fileResults) {
         const file = join(dir, name);
-        debug(`binding file => ${file}`);
+        debug(`binding file => ${file}, namespace => ${opts.namespace}`);
         const exports = require(file);
         // add module to set
-        this.bindClass(exports);
+        this.bindClass(exports, opts.namespace);
       }
     }
   }
 
-  bindClass(exports) {
+  bindClass(exports, namespace = '') {
     if (is.class(exports) || is.function(exports)) {
-      this.bindModule(exports);
+      this.bindModule(exports, namespace);
     } else {
       for (const m in exports) {
         const module = exports[m];
         if (is.class(module) || is.function(module)) {
-          this.bindModule(module);
+          this.bindModule(module, namespace);
         }
       }
     }
   }
 
-  protected bindModule(module, moduleKey = '') {
-    if (moduleKey === MAIN_MODULE_KEY) {
-      moduleKey = '';
-    }
+  protected bindModule(module, namespace = '') {
     if (is.class(module)) {
       const providerId = getProviderId(module);
       if (providerId) {
         this.bind(
-          this.generateProvideIdByModuleKey(moduleKey, providerId),
-          module
+          generateProvideId(providerId, namespace),
+          module,
+          { namespace }
         );
       } else {
         // no provide or js class must be skip
@@ -159,22 +165,16 @@ export class MidwayContainer extends Container implements IMidwayContainer {
           info.scope = ScopeEnum.Request;
         }
         this.bind(
-          this.generateProvideIdByModuleKey(moduleKey, info.id),
+          generateProvideId(info.id, namespace),
           module,
           {
             scope: info.scope,
             isAutowire: info.isAutowire,
+            namespace
           }
         );
       }
     }
-  }
-
-  private generateProvideIdByModuleKey(moduleKey, provideId) {
-    if (moduleKey) {
-      return moduleKey + ':' + provideId;
-    }
-    return provideId;
   }
 
   createChild() {
@@ -360,7 +360,9 @@ export class MidwayContainer extends Container implements IMidwayContainer {
     if (this.configService) {
       // register handler for container
       this.registerDataHandler(MidwayHandlerKey.CONFIG, (key: string) => {
-        return this.configService.getConfiguration(key);
+        const val = this.configService.getConfiguration(key);
+        debug('@config key => %s value => %j.', key, val);
+        return val;
       });
       // 加载配置
       await this.configService.load();

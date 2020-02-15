@@ -61,6 +61,7 @@ export class FunctionDefinition implements IObjectDefinition {
   initMethod: string;
   path: any;
   properties: IProperties;
+  namespace = '';
   // 函数工厂创建的对象默认不需要自动装配
   protected innerAutowire = false;
   protected innerScope: ScopeEnum = ScopeEnum.Singleton;

@@ -22,12 +22,20 @@ export function Inject(identifier?: ObjectIdentifier) {
         if (target.length === args.length && index < target.length) {
           identifier = args[index];
         }
+      } else if (identifier.includes('@') && !identifier.includes(':')) {
+        const args = getParamNames(target);
+        if (target.length === args.length && index < target.length) {
+          identifier = `${identifier}:${args[index]}`;
+        }
       }
       const metadata = new Metadata(INJECT_TAG, identifier);
       tagParameter(target, targetKey, index, metadata);
     } else {
       if (!identifier) {
         identifier = targetKey;
+      }
+      if (identifier.includes('@') && !identifier.includes(':')) {
+        identifier = `${identifier}:${targetKey}`;
       }
       const metadata = new Metadata(INJECT_TAG, identifier);
       tagProperty(target, targetKey, metadata);

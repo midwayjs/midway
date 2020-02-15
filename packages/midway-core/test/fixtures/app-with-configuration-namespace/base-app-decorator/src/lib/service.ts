@@ -6,10 +6,10 @@ export class BaseService {
   @Inject()
   userManager;
 
-  @Inject('midway-plugin-mock:articleManager')
+  @Inject('@midway-plugin-mock')
   articleManager;
 
-  @Inject('ok:articleManager')
+  @Inject('@ok:articleManager')
   newArticleManager;
 
   async getInformation() {

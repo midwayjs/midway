@@ -23,6 +23,7 @@ export class ObjectDefinition implements IObjectDefinition {
   export: string = null;
   dependsOn: ObjectIdentifier[] = [];
   properties = new ObjectProperties();
+  namespace = '';
 
   constructor() {
     this.creator = new ObjectCreator(this);

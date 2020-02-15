@@ -12,9 +12,10 @@ import { ManagedReference, ManagedValue } from './managed';
 import { FunctionDefinition } from '../definitions/functionDefinition';
 import { BaseApplicationContext } from './applicationContext';
 import { recursiveGetMetadata } from '../common/reflectTool';
+import { generateProvideId } from '../common/util';
 
 const is = require('is-type-of');
-const debug = require('debug')(`injection:Container:${process.pid}`);
+const debug = require('debug')(`midway:container:${process.pid}`);
 
 export class Container extends BaseApplicationContext implements IContainer {
   id = '';
@@ -23,7 +24,7 @@ export class Container extends BaseApplicationContext implements IContainer {
   bind<T>(identifier: ObjectIdentifier, target: T, options?: ObjectDefinitionOptions): void;
   bind<T>(identifier: ObjectIdentifier, target: T, options?: ObjectDefinitionOptions): void {
     let definition;
-    // definition.autowire = true;
+
     if (is.class(identifier) || is.function(identifier)) {
       options = target;
       target = identifier as any;
@@ -39,6 +40,7 @@ export class Container extends BaseApplicationContext implements IContainer {
 
     definition.path = target;
     definition.id = identifier;
+    definition.namespace = options ? options.namespace : '';
 
     debug(`=> bind and build definition, id = [${definition.id}]`);
 
@@ -51,7 +53,7 @@ export class Container extends BaseApplicationContext implements IContainer {
         const propertyMeta = constructorMetaData[ i ];
         if (propertyMeta) {
           const refManagedIns = new ManagedReference();
-          refManagedIns.name = propertyMeta[ 0 ].value;
+          refManagedIns.name = generateProvideId(propertyMeta[ 0 ].value, definition.namespace);
           definition.constructorArgs.push(refManagedIns);
         } else {
           // inject empty value
@@ -69,7 +71,7 @@ export class Container extends BaseApplicationContext implements IContainer {
       for (const metaKey in metaData) {
         for (const propertyMeta of metaData[ metaKey ]) {
           const refManaged = new ManagedReference();
-          refManaged.name = propertyMeta.value;
+          refManaged.name = generateProvideId(propertyMeta.value, definition.namespace);
           definition.properties.set(metaKey, refManaged);
         }
       }

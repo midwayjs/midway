@@ -18,6 +18,7 @@ export interface ObjectDefinitionOptions {
   constructorArgs?: IManagedInstance[];
   // 是否自动装配
   isAutowire?: boolean;
+  namespace?: string;
 }
 
 export interface TagPropsMetadata {

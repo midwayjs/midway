@@ -16,6 +16,7 @@ import { ManagedResolverFactory } from './managedResolverFactory';
 import { NotFoundError } from '../common/notFoundError';
 
 import assert = require('assert');
+import { parsePrefix } from '../common/util';
 
 export const ContextEvent = {
   START: 'start',
@@ -203,6 +204,7 @@ export class BaseApplicationContext implements IApplicationContext, IObjectFacto
 
   get<T>(identifier: ObjectIdentifier, args?: any): T {
     // 因为在这里拿不到类名, NotFoundError 类的错误信息在 ManagedResolverFactory.ts createAsync 方法中增加错误类名
+    identifier = parsePrefix(identifier);
 
     if (this.registry.hasObject(identifier)) {
       return this.registry.getObject(identifier);
@@ -223,11 +225,12 @@ export class BaseApplicationContext implements IApplicationContext, IObjectFacto
     if (!definition) {
       throw new NotFoundError(identifier);
     }
-    return this.getManagedResolverFactory().create(definition, args);
+    return this.getManagedResolverFactory().create({ definition, args });
   }
 
   async getAsync<T>(identifier: ObjectIdentifier, args?: any): Promise<T> {
     // 因为在这里拿不到类名, NotFoundError 类的错误信息在 ManagedResolverFactory.ts createAsync 方法中增加错误类名
+    identifier = parsePrefix(identifier);
 
     if (this.registry.hasObject(identifier)) {
       return this.registry.getObject(identifier);
@@ -242,7 +245,7 @@ export class BaseApplicationContext implements IApplicationContext, IObjectFacto
       throw new NotFoundError(identifier);
     }
 
-    return this.getManagedResolverFactory().createAsync(definition, args);
+    return this.getManagedResolverFactory().createAsync({ definition, args });
   }
 
   addLifeCycle(lifeCycle: ILifeCycle): void {

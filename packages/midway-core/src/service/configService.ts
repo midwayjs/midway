@@ -84,12 +84,14 @@ export class MidwayConfigService implements IConfigService {
 
   getConfiguration(configKey) {
     if (configKey) {
+      debug('get configuration by key => %s.', configKey);
       return safelyGet(configKey, this.configuration);
     }
     return this.configuration;
   }
 
   async loadConfig(configFilename): Promise<object> {
+    debug('load config %s.', configFilename);
     const exports = require(configFilename);
     let result = exports;
     if (is.function(exports)) {
