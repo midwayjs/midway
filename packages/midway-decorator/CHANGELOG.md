@@ -3,6 +3,35 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.4](https://github.com/midwayjs/midway/compare/v1.16.4...v2.0.0-beta.4) (2020-02-16)
+
+
+### Features
+
+* add namespace feature ([#386](https://github.com/midwayjs/midway/issues/386)) ([bb2a8c8](https://github.com/midwayjs/midway/commit/bb2a8c8))
+
+
+
+# [2.0.0-beta.3](https://github.com/midwayjs/midway/compare/v2.0.0-beta.2...v2.0.0-beta.3) (2020-02-08)
+
+
+
+# [2.0.0-beta.2](https://github.com/midwayjs/midway/compare/v2.0.0-beta.1...v2.0.0-beta.2) (2020-02-04)
+
+
+
+# [2.0.0-beta.1](https://github.com/midwayjs/midway/compare/v1.16.3...v2.0.0-beta.1) (2020-02-04)
+
+
+### Features
+
+* support [@configuration](https://github.com/configuration) decorator ([0584494](https://github.com/midwayjs/midway/commit/0584494))
+* transfor to new package ([9144b48](https://github.com/midwayjs/midway/commit/9144b48))
+
+
+
+
+
 # [2.0.0-beta.3](https://github.com/midwayjs/midway/compare/v2.0.0-beta.2...v2.0.0-beta.3) (2020-02-08)
 
 **Note:** Version bump only for package @midwayjs/decorator
@@ -27,6 +56,11 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * support [@configuration](https://github.com/configuration) decorator ([0584494](https://github.com/midwayjs/midway/commit/0584494))
 * transfor to new package ([9144b48](https://github.com/midwayjs/midway/commit/9144b48))
 
+
+
+## [1.16.4](https://github.com/midwayjs/midway/compare/v1.16.3...v1.16.4) (2020-02-11)
+
+**Note:** Version bump only for package @midwayjs/decorator
 
 
 

@@ -108,6 +108,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
           if (this.namespace !== MAIN_MODULE_KEY && configurationOptions.namespace) {
             this.namespace = configurationOptions.namespace;
           }
+
           if (this.container.containsConfiguration(this.namespace)) {
             debug(`configuration ${this.namespace} exist than ignore.`);
             return;

@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.4](https://github.com/midwayjs/midway/compare/v1.16.4...v2.0.0-beta.4) (2020-02-16)
+
+**Note:** Version bump only for package midway-bin
+
+
+
+
+
+## [1.16.4](https://github.com/midwayjs/midway/compare/v1.16.3...v1.16.4) (2020-02-11)
+
+
+### Bug Fixes
+
+* executing midway-bin build at arbitrary directory ([#384](https://github.com/midwayjs/midway/issues/384)) ([1ace418](https://github.com/midwayjs/midway/commit/1ace418))
+
+
+
+
+
 ## [1.16.3](https://github.com/midwayjs/midway/compare/v1.16.2...v1.16.3) (2019-12-25)
 
 **Note:** Version bump only for package midway-bin
