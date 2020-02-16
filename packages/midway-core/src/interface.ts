@@ -193,17 +193,24 @@ export const REQUEST_OBJ_CTX_KEY = '_req_ctx';
 export const MAIN_MODULE_KEY = '__main__';
 
 export interface IContainerConfiguration {
+  namespace: string;
   addLoadDir(dir: string);
   addImports(imports: string[], baseDir?: string);
   addImportObjects(importObjects: any[]);
   addImportConfigs(importConfigs: string[], baseDir: string);
   load(packageName: string);
-  loadConfiguration(configuration: any, baseDir: string);
+  loadConfiguration(configuration: IContainerConfiguration, baseDir: string);
   getImportDirectory(): string[];
 }
 
 export interface IMidwayContainer extends IContainer {
-  createConfiguration(): IContainerConfiguration;
+  /**
+   * 默认不添加创建的 configuration 到 configurations 数组中
+   * @param noDefaultAdd 是否添加
+   */
+  createConfiguration(noDefaultAdd?: boolean): IContainerConfiguration;
+  containsConfiguration(namespace: string): boolean;
+  addConfiguration(configuration: IContainerConfiguration);
   getConfigService(): IConfigService;
   getEnvironmentService(): IEnvironmentService;
   getCurrentEnv(): string;

@@ -24,7 +24,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
     // 处理 imports
     for (const importPackage of imports) {
       // for package
-      const subContainerConfiguration = this.container.createConfiguration();
+      const subContainerConfiguration = this.container.createConfiguration(true);
       const subPackageDir = this.resolvePackageBaseDir(importPackage);
       debug('import package => %s dir => %s.', importPackage, subPackageDir);
       subContainerConfiguration.addLoadDir(subPackageDir);
@@ -69,7 +69,8 @@ export class ContainerConfiguration implements IContainerConfiguration {
     if (!pkg) {
       pkg = safeRequire(join(packageBaseDir, '../', 'package.json'));
     }
-    debug('safeRequire pkg.name => %s, from %s.', pkg ? pkg.name : undefined, packageBaseDir);
+    debug('safeRequire package.json name-version => %s, from %s.',
+      pkg ? `${pkg.name}-${pkg.version}` : undefined, packageBaseDir);
 
     if (pkg) {
       if (this.namespace !== MAIN_MODULE_KEY) {
@@ -106,6 +107,13 @@ export class ContainerConfiguration implements IContainerConfiguration {
         if (configurationOptions) {
           if (this.namespace !== MAIN_MODULE_KEY && configurationOptions.namespace) {
             this.namespace = configurationOptions.namespace;
+          }
+          if (this.container.containsConfiguration(this.namespace)) {
+            debug(`configuration ${this.namespace} exist than ignore.`);
+            return;
+          } else {
+            debug(`configuration ${this.namespace} not exist than add.`);
+            this.container.addConfiguration(this);
           }
           this.addImports(configurationOptions.imports);
           this.addImportObjects(configurationOptions.importObjects);

@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 import { join } from 'path';
-import { isPath, safeRequire } from '../src/common/util';
+import { isPath, safeRequire, generateProvideId, safelyGet } from '../src/common/util';
 
 describe('/test/util.test.ts', () => {
   it('should test is path', () => {
@@ -21,5 +21,21 @@ describe('/test/util.test.ts', () => {
     assert.equal(safeRequire(join(__dirname, './fixtures/dir/ok')), require('./fixtures/dir/ok'));
     assert.equal(safeRequire(join(__dirname, './fixtures/foo')), undefined);
     assert.equal(safeRequire(join(__dirname, './fixtures/dir/nok.js')), undefined);
+    assert.equal(safeRequire('./fixtures/dir/nok.js'), undefined);
+  });
+
+  it('should generateProvideId be ok', () => {
+    const id = generateProvideId('@ok:test1', 'ok');
+    assert.deepEqual('ok:test1', id, 'provide id is not ok:test1');
+    const id2 = generateProvideId('ok:test1', 'ok');
+    assert.deepEqual('ok:test1', id2, 'provide id is not ok:test1');
+  });
+
+  it('should safeGet be ok', () => {
+    const fn = safelyGet(['a', 'b']);
+    assert.deepEqual(2, fn({a: {b: 2}}), 'safelyGet one argument not ok');
+    assert.deepEqual(undefined, safelyGet(['a', 'b'], null), 'safelyGet obj is null not ok');
+    assert.deepEqual(undefined, safelyGet(['a1', 'b1'], {a: {b: 2}}), 'safelyGet obj is null not ok');
+    assert.deepEqual(undefined, safelyGet(['a', 'b2'], {a: 2}), 'safelyGet obj is number not ok');
   });
 });
