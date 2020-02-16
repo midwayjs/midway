@@ -11,7 +11,10 @@ import { existsSync, move, remove } from 'fs-extra';
 import { loadSpec } from '@midwayjs/fcli-command-core';
 import { writeWrapper } from '@midwayjs/serverless-spec-builder';
 import { AnalyzeResult, Locator } from '@midwayjs/locate';
-import { tsCompile, tsIntegrationProjectCompile, } from '@midwayjs/faas-util-ts-compile';
+import {
+  tsCompile,
+  tsIntegrationProjectCompile,
+} from '@midwayjs/faas-util-ts-compile';
 
 interface InvokeOptions {
   baseDir?: string; // 目录，默认为process.cwd
@@ -84,7 +87,7 @@ export class InvokeCore {
     }
     // 设置走编译，扫描 dist 目录
     process.env.MIDWAY_TS_MODE = 'false';
-    const debugRoot = this.options.buildDir || 'faas_debug_tmp';
+    const debugRoot = this.options.buildDir || '.faas_debug_tmp';
     // 分析目录结构
     const locator = new Locator(baseDir);
     this.codeAnalyzeResult = await locator.run({
@@ -102,7 +105,10 @@ export class InvokeCore {
         tsCodeRoot: this.codeAnalyzeResult.tsCodeRoot,
       });
       // remove tsconfig
-      await move(join(baseDir, 'tsconfig_integration_faas.json'), join(this.buildDir, 'tsconfig.json'));
+      await move(
+        join(baseDir, 'tsconfig_integration_faas.json'),
+        join(this.buildDir, 'tsconfig.json')
+      );
     } else {
       // TODO 重构 midway-bin 不生成 tsconfig
       await tsCompile(baseDir, {
