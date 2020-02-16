@@ -3,6 +3,51 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.4](https://github.com/midwayjs/midway/compare/v1.16.4...v2.0.0-beta.4) (2020-02-16)
+
+
+### Features
+
+* add namespace feature ([#386](https://github.com/midwayjs/midway/issues/386)) ([bb2a8c8](https://github.com/midwayjs/midway/commit/bb2a8c8))
+
+
+
+# [2.0.0-beta.3](https://github.com/midwayjs/midway/compare/v2.0.0-beta.2...v2.0.0-beta.3) (2020-02-08)
+
+
+### Bug Fixes
+
+* fix build ([1d5a7c1](https://github.com/midwayjs/midway/commit/1d5a7c1))
+
+
+
+# [2.0.0-beta.2](https://github.com/midwayjs/midway/compare/v2.0.0-beta.1...v2.0.0-beta.2) (2020-02-04)
+
+
+### Bug Fixes
+
+* add missing dep module ([04ecc82](https://github.com/midwayjs/midway/commit/04ecc82))
+
+
+
+# [2.0.0-beta.1](https://github.com/midwayjs/midway/compare/v1.16.3...v2.0.0-beta.1) (2020-02-04)
+
+
+### Bug Fixes
+
+* fix requestContext load configService ([f2c874f](https://github.com/midwayjs/midway/commit/f2c874f))
+
+
+### Features
+
+* support [@configuration](https://github.com/configuration) decorator ([0584494](https://github.com/midwayjs/midway/commit/0584494))
+* support importConfigs and add test case ([753cfb4](https://github.com/midwayjs/midway/commit/753cfb4))
+* transfor to new package ([9144b48](https://github.com/midwayjs/midway/commit/9144b48))
+
+
+
+
+
 # [2.0.0-beta.3](https://github.com/midwayjs/midway/compare/v2.0.0-beta.2...v2.0.0-beta.3) (2020-02-08)
 
 
