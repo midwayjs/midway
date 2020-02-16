@@ -24,6 +24,7 @@ interface InvokeOptions {
   trigger?: string; // 触发器
   buildDir?: string; // 构建目录
   sourceDir?: string; // 函数源码目录
+  incremental?: boolean; // 开启增量编译 (会无视 clean true)
   clean?: boolean; // 清理调试目录
 }
 
@@ -96,13 +97,16 @@ export class InvokeCore {
     });
     this.buildDir = this.codeAnalyzeResult.tsBuildRoot;
     // clean directory first
-    await this.cleanTarget(this.buildDir);
+    if (!this.options.incremental) {
+      await this.cleanTarget(this.buildDir);
+    }
     if (this.codeAnalyzeResult.integrationProject) {
       // 一体化调整目录
       await tsIntegrationProjectCompile(baseDir, {
         sourceDir: 'src',
         buildRoot: this.buildDir,
         tsCodeRoot: this.codeAnalyzeResult.tsCodeRoot,
+        incremental: this.options.incremental
       });
       // remove tsconfig
       await move(
@@ -125,7 +129,7 @@ export class InvokeCore {
     const invoke = await this.getInvokeFunction();
     this.checkDebug();
     const result = await invoke(...args);
-    if (false !== this.options.clean) {
+    if (true !== this.options.incremental && false !== this.options.clean) {
       await this.cleanTarget(this.buildDir);
     }
     return result;

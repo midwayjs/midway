@@ -6,6 +6,7 @@ export const tsIntegrationProjectCompile = async (baseDir, options: {
   sourceDir: string;
   buildRoot: string;
   tsCodeRoot: string;
+  incremental: boolean;
 }) => {
   const tsFaaSConfigFilename = 'tsconfig_integration_faas.json';
   // 生成一个临时 tsconfig
@@ -15,6 +16,7 @@ export const tsIntegrationProjectCompile = async (baseDir, options: {
   await writeJSON(tempConfigFilePath, {
     compileOnSave: true,
     compilerOptions: {
+      incremental: !!options.incremental,
       target: 'ES2018',
       module: 'commonjs',
       moduleResolution: 'node',
@@ -41,7 +43,7 @@ export const tsIntegrationProjectCompile = async (baseDir, options: {
     exclude: ['dist', 'node_modules', 'test'],
   });
   await tsCompile(baseDir, {
-    clean: true,
+    clean: options.incremental,
     tsConfigName: tsFaaSConfigFilename,
     source: options.sourceDir,
   });
@@ -64,7 +66,7 @@ export const tsCompile = async (baseDir: string, options: {
   await builder.run({
     cwd: baseDir,
     argv: {
-      clean: options.clean || true,
+      clean: typeof options.clean === 'undefined' ? true : options.clean,
       project: options.tsConfigName || 'tsconfig.json',
       srcDir: options.source || 'src',
     },
