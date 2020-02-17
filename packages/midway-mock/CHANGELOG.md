@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.17.0](https://github.com/midwayjs/midway/compare/v1.16.4...v1.17.0) (2020-02-17)
+
+**Note:** Version bump only for package midway-mock
+
+
+
+
+
 # [2.0.0-beta.4](https://github.com/midwayjs/midway/compare/v1.16.4...v2.0.0-beta.4) (2020-02-16)
 
 
@@ -57,6 +65,8 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Bug Fixes
 
 * egg bin modify setup file rule ([#380](https://github.com/midwayjs/midway/issues/380)) ([4b9461d](https://github.com/midwayjs/midway/commit/4b9461d))
+
+
 
 
 
