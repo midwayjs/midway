@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.17.1](https://github.com/midwayjs/midway/compare/v1.17.0...v1.17.1) (2020-02-17)
+
+
+### Bug Fixes
+
+* **deps:** add terser to depenencies ([#390](https://github.com/midwayjs/midway/issues/390)) ([e6da77e](https://github.com/midwayjs/midway/commit/e6da77e))
+
+
+
+
+
 # [1.17.0](https://github.com/midwayjs/midway/compare/v1.16.4...v1.17.0) (2020-02-17)
 
 
