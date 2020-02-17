@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.5](https://github.com/midwayjs/midway/compare/v2.0.0-beta.4...v2.0.0-beta.5) (2020-02-17)
+
+
+### Features
+
+* 2.x namespace ([#388](https://github.com/midwayjs/midway/issues/388)) ([9c90eb1](https://github.com/midwayjs/midway/commit/9c90eb1))
+
+
+
+
+
 ## [1.17.1](https://github.com/midwayjs/midway/compare/v1.17.0...v1.17.1) (2020-02-17)
 
 **Note:** Version bump only for package midway-core
