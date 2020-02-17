@@ -3,13 +3,12 @@
 const Command = require('egg-bin').Command;
 const path = require('path');
 const fs = require('fs');
-const fsPromise = fs.promises;
 const rimraf = require('mz-modules/rimraf');
 const fse = require('fs-extra');
 const globby = require('globby');
 const ncc = require('@midwayjs/ncc');
-const typescript = require('typescript');
 const terser = require('terser');
+let typescript;
 
 const shebangRegEx = /^#![^\n\r]*[\r\n]/;
 const inlineSourceMapRegEx = /\/\/# sourceMappingURL=data:application\/json;base64,(.*)/;
@@ -220,6 +219,10 @@ class BuildCommand extends Command {
   }
 
   async minify(tsConfig, outDir) {
+    if (typescript == null) {
+      typescript = require('typescript');
+    }
+
     const inlineSourceMap = !!tsConfig.compilerOptions.inlineSourceMap;
     const sourceMap = inlineSourceMap || tsConfig.compilerOptions.sourceMap;
     if (!sourceMap) {
@@ -242,12 +245,12 @@ class BuildCommand extends Command {
     }
 
     for (const file of files) {
-      let code = await fsPromise.readFile(file, 'utf8');
+      let code = await fse.readFile(file, 'utf8');
       let map;
       if (inlineSourceMap) {
         map = this.parseInlineSourceMap(code);
       } else {
-        map = await fsPromise.readFile(file + '.map', 'utf8');
+        map = await fse.readFile(file + '.map', 'utf8');
       }
       map = JSON.parse(map);
       const result = terser.minify(code, {
@@ -267,9 +270,9 @@ class BuildCommand extends Command {
         break;
       }
       if (!inlineSourceMap) {
-        await fsPromise.writeFile(file + '.map', map, 'utf8');
+        await fse.writeFile(file + '.map', map, 'utf8');
       }
-      await fsPromise.writeFile(file, code, 'utf8');
+      await fse.writeFile(file, code, 'utf8');
     }
   }
 
