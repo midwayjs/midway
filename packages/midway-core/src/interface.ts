@@ -206,9 +206,8 @@ export interface IContainerConfiguration {
 export interface IMidwayContainer extends IContainer {
   /**
    * 默认不添加创建的 configuration 到 configurations 数组中
-   * @param noDefaultAdd 是否添加
    */
-  createConfiguration(noDefaultAdd?: boolean): IContainerConfiguration;
+  createConfiguration(): IContainerConfiguration;
   containsConfiguration(namespace: string): boolean;
   addConfiguration(configuration: IContainerConfiguration);
   getConfigService(): IConfigService;

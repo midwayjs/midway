@@ -24,7 +24,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
     // 处理 imports
     for (const importPackage of imports) {
       // for package
-      const subContainerConfiguration = this.container.createConfiguration(true);
+      const subContainerConfiguration = this.container.createConfiguration();
       const subPackageDir = this.resolvePackageBaseDir(importPackage);
       debug('import package => %s dir => %s.', importPackage, subPackageDir);
       subContainerConfiguration.addLoadDir(subPackageDir);

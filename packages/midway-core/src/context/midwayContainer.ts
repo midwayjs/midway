@@ -81,7 +81,7 @@ export class MidwayContainer extends Container implements IMidwayContainer {
     ignore?: string | string[];
   }) {
     // create main module configuration
-    const configuration = this.createConfiguration(true);
+    const configuration = this.createConfiguration();
     configuration.namespace = MAIN_MODULE_KEY;
     configuration.load(this.baseDir);
     // loadDir
@@ -340,11 +340,8 @@ export class MidwayContainer extends Container implements IMidwayContainer {
     }
   }
 
-  createConfiguration(noDefaultAdd?: boolean): IContainerConfiguration {
+  createConfiguration(): IContainerConfiguration {
     const containerConfiguration = new ContainerConfiguration(this);
-    if (!noDefaultAdd) {
-      this.configurations.push(containerConfiguration);
-    }
     return containerConfiguration;
   }
 
