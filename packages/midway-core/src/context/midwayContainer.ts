@@ -44,7 +44,7 @@ export class MidwayContainer extends Container implements IMidwayContainer {
   // 仅仅用于兼容requestContainer的ctx
   ctx = {};
   readyBindModules: Map<string, Set<any>> = new Map();
-  configurations: IContainerConfiguration[] = [];
+  configurationMap: Map<string, IContainerConfiguration> = new Map();
   configService: IConfigService;
   environmentService: IEnvironmentService;
 
@@ -88,15 +88,15 @@ export class MidwayContainer extends Container implements IMidwayContainer {
     this.loadDirectory(opts);
 
     // load configuration
-    for (const containerConfiguration of this.configurations) {
+    for (const [namespace, containerConfiguration] of this.configurationMap) {
       const subDirs = containerConfiguration.getImportDirectory();
       if (subDirs && subDirs.length > 0) {
         debug('load configuration dir => %j, namespace => %s.',
-          subDirs, containerConfiguration.namespace);
+          subDirs, namespace);
         this.loadDirectory({
           ...opts,
           loadDir: subDirs,
-          namespace: containerConfiguration.namespace
+          namespace
         });
       }
     }
@@ -346,16 +346,11 @@ export class MidwayContainer extends Container implements IMidwayContainer {
   }
 
   addConfiguration(configuration: IContainerConfiguration) {
-    this.configurations.push(configuration);
+    this.configurationMap.set(configuration.namespace, configuration);
   }
 
   containsConfiguration(namespace: string): boolean {
-    for (const configuration of this.configurations) {
-      if (configuration.namespace === namespace) {
-        return true;
-      }
-    }
-    return false;
+    return this.configurationMap.has(namespace);
   }
 
   getConfigService() {
