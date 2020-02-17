@@ -8,8 +8,8 @@ const rimraf = require('mz-modules/rimraf');
 const fse = require('fs-extra');
 const globby = require('globby');
 const ncc = require('@midwayjs/ncc');
-const typescript = require('typescript');
 const terser = require('terser');
+let typescript;
 
 const shebangRegEx = /^#![^\n\r]*[\r\n]/;
 const inlineSourceMapRegEx = /\/\/# sourceMappingURL=data:application\/json;base64,(.*)/;
@@ -220,6 +220,10 @@ class BuildCommand extends Command {
   }
 
   async minify(tsConfig, outDir) {
+    if (typescript == null) {
+      typescript = require('typescript');
+    }
+
     const inlineSourceMap = !!tsConfig.compilerOptions.inlineSourceMap;
     const sourceMap = inlineSourceMap || tsConfig.compilerOptions.sourceMap;
     if (!sourceMap) {

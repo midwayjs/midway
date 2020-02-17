@@ -30,6 +30,7 @@
     "globby": "^10.0.1",
     "jest-environment-node": "^24.9.0",
     "mz-modules": "^2.1.0",
+    "terser": "^4.6.3",
     "typedoc": "^0.14.2"
   },
   "devDependencies": {
