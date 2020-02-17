@@ -15,7 +15,7 @@ import * as is from 'is-type-of';
 import { join } from 'path';
 import { ContainerConfiguration } from './configuration';
 import { FUNCTION_INJECT_KEY, MidwayHandlerKey } from '../common/constants';
-import { IConfigService, IEnvironmentService, IMidwayContainer, IApplicationContext, MAIN_MODULE_KEY } from '../interface';
+import { IConfigService, IEnvironmentService, IMidwayContainer, IApplicationContext, MAIN_MODULE_KEY, IContainerConfiguration } from '../interface';
 import { MidwayConfigService } from '../service/configService';
 import { MidwayEnvironmentService } from '../service/environmentService';
 import { Container } from './container';
@@ -44,7 +44,7 @@ export class MidwayContainer extends Container implements IMidwayContainer {
   // 仅仅用于兼容requestContainer的ctx
   ctx = {};
   readyBindModules: Map<string, Set<any>> = new Map();
-  configurations: ContainerConfiguration[] = [];
+  configurationMap: Map<string, IContainerConfiguration> = new Map();
   configService: IConfigService;
   environmentService: IEnvironmentService;
 
@@ -88,14 +88,17 @@ export class MidwayContainer extends Container implements IMidwayContainer {
     this.loadDirectory(opts);
 
     // load configuration
-    for (const containerConfiguration of this.configurations) {
-      debug('load configuration dir => %j, namespace => %s.',
-        containerConfiguration.getImportDirectory(), containerConfiguration.namespace);
-      this.loadDirectory({
-        ...opts,
-        loadDir: containerConfiguration.getImportDirectory(),
-        namespace: containerConfiguration.namespace
-      });
+    for (const [namespace, containerConfiguration] of this.configurationMap) {
+      const subDirs = containerConfiguration.getImportDirectory();
+      if (subDirs && subDirs.length > 0) {
+        debug('load configuration dir => %j, namespace => %s.',
+          subDirs, namespace);
+        this.loadDirectory({
+          ...opts,
+          loadDir: subDirs,
+          namespace
+        });
+      }
     }
   }
 
@@ -337,10 +340,17 @@ export class MidwayContainer extends Container implements IMidwayContainer {
     }
   }
 
-  createConfiguration() {
+  createConfiguration(): IContainerConfiguration {
     const containerConfiguration = new ContainerConfiguration(this);
-    this.configurations.push(containerConfiguration);
     return containerConfiguration;
+  }
+
+  addConfiguration(configuration: IContainerConfiguration) {
+    this.configurationMap.set(configuration.namespace, configuration);
+  }
+
+  containsConfiguration(namespace: string): boolean {
+    return this.configurationMap.has(namespace);
   }
 
   getConfigService() {
