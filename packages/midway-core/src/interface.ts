@@ -8,10 +8,8 @@ import {
  * 生命周期定义
  */
 export interface ILifeCycle {
-  key: string;
   onStart(): Promise<void>;
   onReady(): Promise<void>;
-  onRefresh(): Promise<void>;
   onStop(): Promise<void>;
 }
 
@@ -58,8 +56,6 @@ export interface IObjectDefinition {
   isAsync(): boolean;
   isSingletonScope(): boolean;
   isRequestScope(): boolean;
-  isExternal(): boolean;
-  isDirect(): boolean;
   hasDependsOn(): boolean;
   hasConstructorArgs(): boolean;
   getAttr(key: ObjectIdentifier): any;
@@ -144,7 +140,6 @@ export interface IApplicationContext extends IObjectFactory {
   configLocations: string[];
   messageSource: IMessageSource;
   dependencyMap: Map<string, ObjectDependencyTree>;
-  refreshAsync(): Promise<void>;
   ready(): Promise<void>;
   addLifeCycle(lifeCycle: ILifeCycle): void;
   removeLifeCycle(lifeCycle: ILifeCycle): void;

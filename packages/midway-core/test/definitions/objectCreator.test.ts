@@ -17,10 +17,6 @@ describe('/test/definitions/objectCreator.test.ts', () => {
 
     expect(creator.doConstruct(null)).is.an('object');
 
-    definition.direct = true;
-    expect(creator.doConstruct(111)).eq(111);
-
-    definition.direct = false;
     definition.constructMethod = 'say';
     expect(creator.doConstruct({
       say(a) {

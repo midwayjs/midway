@@ -16,14 +16,6 @@ describe('/test/definitions/objectDefinition.test.ts', () => {
     expect(definition.isRequestScope()).false;
     expect(definition.isSingletonScope()).false;
 
-    expect(definition.isExternal()).false;
-    definition.external = true;
-    expect(definition.isExternal()).true;
-
-    expect(definition.isDirect()).false;
-    definition.direct = true;
-    expect(definition.isDirect()).true;
-
     definition.setAttr('hello', 1);
     expect(definition.getAttr('hello')).eq(1);
     expect(definition.hasAttr('hello')).true;

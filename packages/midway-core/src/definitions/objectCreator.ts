@@ -44,9 +44,6 @@ export class ObjectCreator implements IObjectCreator {
       return Object.create(null);
     }
 
-    if (this.definition.isDirect()) {
-      return Clzz;
-    }
     let inst;
     if (this.definition.constructMethod) {
       inst = Clzz[this.definition.constructMethod].apply(Clzz, args);
@@ -66,9 +63,7 @@ export class ObjectCreator implements IObjectCreator {
     if (!Clzz) {
       return Object.create(null);
     }
-    if (this.definition.isDirect()) {
-      return Clzz;
-    }
+
     let inst;
     if (this.definition.constructMethod) {
       const fn = Clzz[this.definition.constructMethod];

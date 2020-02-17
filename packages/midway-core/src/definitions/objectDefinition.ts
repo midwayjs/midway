@@ -9,8 +9,6 @@ export class ObjectDefinition implements IObjectDefinition {
   protected _asynchronous = false;
   // 对象定义默认需要自动装配
   protected _autowire = true;
-  protected _external = false;
-  protected _direct = false;
   scope: ScopeEnum = ScopeEnum.Singleton;
   creator: IObjectCreator = null;
   id: string = null;
@@ -51,22 +49,6 @@ export class ObjectDefinition implements IObjectDefinition {
 
   isRequestScope(): boolean {
     return this.scope === ScopeEnum.Request;
-  }
-
-  set external(external: boolean) {
-    this._external = external;
-  }
-
-  isExternal(): boolean {
-    return this._external;
-  }
-
-  set direct(direct: boolean) {
-    this._direct = direct;
-  }
-
-  isDirect(): boolean {
-    return this._direct;
   }
 
   hasDependsOn(): boolean {

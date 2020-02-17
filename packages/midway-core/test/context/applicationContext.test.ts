@@ -53,15 +53,11 @@ describe('/test/context/applicationContext.test.ts', () => {
       const app = new BaseApplicationContext(__dirname);
 
       const listen = {
-        key: 'hello world',
         async onStart() {
           callback('onStart');
         },
         async onReady() {
           callback('onReady');
-        },
-        async onRefresh() {
-          callback('onRefresh');
         },
         async onStop() {
           callback('onStop');
@@ -72,10 +68,9 @@ describe('/test/context/applicationContext.test.ts', () => {
       await app.stop();
       app.removeLifeCycle();
 
-      expect(callback.callCount).eq(4);
+      expect(callback.callCount).eq(3);
       expect(callback.withArgs('onStart').calledOnce).true;
       expect(callback.withArgs('onReady').calledOnce).true;
-      expect(callback.withArgs('onRefresh').calledOnce).true;
       expect(callback.withArgs('onStop').calledOnce).true;
     });
   });

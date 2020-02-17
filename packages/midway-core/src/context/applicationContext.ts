@@ -18,13 +18,6 @@ import { NotFoundError } from '../common/notFoundError';
 import assert = require('assert');
 import { parsePrefix } from '../common/util';
 
-export const ContextEvent = {
-  START: 'start',
-  READY: 'onReady',
-  ONREFRESH: 'onRefresh',
-  STOP: 'stop'
-};
-
 const PREFIX = '_id_default_';
 
 export class ObjectDefinitionRegistry extends Map implements IObjectDefinitionRegistry {
@@ -106,7 +99,6 @@ export class ObjectDefinitionRegistry extends Map implements IObjectDefinitionRe
 }
 
 export class BaseApplicationContext implements IApplicationContext, IObjectFactory {
-  protected refreshing = false;
   protected readied = false;
   protected lifeCycle: ILifeCycle = null;
   private _resolverFactory: ManagedResolverFactory = null;
@@ -172,19 +164,7 @@ export class BaseApplicationContext implements IApplicationContext, IObjectFacto
     if (this.lifeCycle && this.lifeCycle.onStart) {
       await this.lifeCycle.onStart();
     }
-    await this.refreshAsync();
-  }
-
-  async refreshAsync(): Promise<void> {
-    if (this.refreshing) {
-      return;
-    }
-    this.refreshing = true;
-    if (this.lifeCycle && this.lifeCycle.onRefresh) {
-      await this.lifeCycle.onRefresh();
-    }
     await this.loadDefinitions(this.configLocations);
-    this.refreshing = false;
     this.readied = true;
     if (this.lifeCycle && this.lifeCycle.onReady) {
       await this.lifeCycle.onReady();
