@@ -3,7 +3,6 @@ const WebSocketClient = require('websocket').client;
 import { tmpdir } from 'os';
 import { existsSync, writeFileSync, readFileSync, unlinkSync } from 'fs';
 import { join, resolve } from 'path';
-import { MidwayContainer, IFaaSStarter } from './interface';
 // 传输大数据
 const maxSize = 0xf00;
 export function send(key, data) {
@@ -134,47 +133,4 @@ export const exportMidwayFaaS = (() => {
   }
 })();
 
-export class FaaSStarterClass extends exportMidwayFaaS.FaaSStarter implements IFaaSStarter {
-  constructor(opts) {
-    super(opts);
-  }
-
-  handleInvokeWrapper(handlerMapping: string, debug?: boolean) {
-    const funModule = this.funMappingStore.get(handlerMapping);
-    return async (...args) => {
-      if (args.length === 0) {
-        throw new Error('first parameter must be function context');
-      }
-      const context: any = this.getContext(args.shift() || {});
-      if (funModule) {
-        const funModuleIns = await context.requestContext.getAsync(funModule);
-        return this.invokeHandler(funModuleIns, this.getFunctionHandler(context, args, funModuleIns), args, debug);
-      }
-      throw new Error(`function handler = ${handlerMapping} not found`);
-    };
-  }
-
-  async invokeHandler(funModule, handlerName, args, debug) {
-    handlerName = handlerName || this.defaultHandlerMethod;
-    if (funModule[ handlerName ]) {
-      // invoke real method
-      if (debug) {
-        return funModule[ handlerName ].bind(funModule, ...args);
-      } else {
-        return funModule[ handlerName ].apply(funModule, args);
-      }
-    }
-  }
-
-  getApplicationContext(): MidwayContainer {
-    return this.loader.getApplicationContext();
-  }
-
-  async start(opts?: any) {
-    return super.start(opts);
-  }
-
-  getContext(context) {
-    return super.getContext(context);
-  }
-}
+export const FaaSStarterClass = exportMidwayFaaS.FaaSStarter;
