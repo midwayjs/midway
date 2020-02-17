@@ -3,12 +3,16 @@
 const Command = require('egg-bin').Command;
 const path = require('path');
 const fs = require('fs');
+const fsPromise = fs.promises;
 const rimraf = require('mz-modules/rimraf');
 const fse = require('fs-extra');
 const globby = require('globby');
 const ncc = require('@midwayjs/ncc');
+const typescript = require('typescript');
+const terser = require('terser');
 
 const shebangRegEx = /^#![^\n\r]*[\r\n]/;
+const inlineSourceMapRegEx = /\/\/# sourceMappingURL=data:application\/json;base64,(.*)/;
 
 class BuildCommand extends Command {
   constructor(rawArgv) {
@@ -36,6 +40,9 @@ class BuildCommand extends Command {
         description: 'bundle the source with the file given as entrypoint',
         type: 'string',
         default: '',
+      },
+      minify: {
+        type: 'boolean',
       },
       mode: {
         description: 'bundle mode, "debug" or "release" (default)',
@@ -94,6 +101,10 @@ class BuildCommand extends Command {
       args.push(argv.project);
     }
     await this.helper.forkNode(tscCli, args, { cwd, execArgv: [] });
+
+    if (argv.minify) {
+      await this.minify(tsConfig, outDirAbsolute);
+    }
   }
 
   async bundle(entry, outDir, { sourceMap = false, mode } = {}) {
@@ -206,6 +217,69 @@ class BuildCommand extends Command {
     if (tsConfig && tsConfig.compilerOptions) {
       return tsConfig.compilerOptions[optionKeyPath];
     }
+  }
+
+  async minify(tsConfig, outDir) {
+    const inlineSourceMap = !!tsConfig.compilerOptions.inlineSourceMap;
+    const sourceMap = inlineSourceMap || tsConfig.compilerOptions.sourceMap;
+    if (!sourceMap) {
+      return;
+    }
+
+    let files;
+    if (outDir) {
+      files = globby.sync([ '**/*.js' ], {
+        cwd: outDir,
+        ignore: [ '**/node_modules' ],
+      });
+      files = files.map(it => path.join(outDir, it));
+    } else {
+      const host = typescript.createCompilerHost(tsConfig.compilerOptions);
+      files = host.readDirectory(__dirname, [ '.ts' ], tsConfig.exclude, tsConfig.include);
+      files = files.map(it => {
+        return path.join(path.dirname(it), path.basename(it, '.js'));
+      });
+    }
+
+    for (const file of files) {
+      let code = await fsPromise.readFile(file, 'utf8');
+      let map;
+      if (inlineSourceMap) {
+        map = this.parseInlineSourceMap(code);
+      } else {
+        map = await fsPromise.readFile(file + '.map', 'utf8');
+      }
+      map = JSON.parse(map);
+      const result = terser.minify(code, {
+        compress: false,
+        mangle: {
+          keep_classnames: true,
+          keep_fnames: true,
+        },
+        sourceMap: {
+          content: map,
+          filename: path.basename(file),
+          url: inlineSourceMap ? 'inline' : `${path.basename(file)}.map`,
+        },
+      });
+      ({ code, map } = result);
+      if (code == null) {
+        break;
+      }
+      if (!inlineSourceMap) {
+        await fsPromise.writeFile(file + '.map', map, 'utf8');
+      }
+      await fsPromise.writeFile(file, code, 'utf8');
+    }
+  }
+
+  parseInlineSourceMap(code) {
+    const match = inlineSourceMapRegEx.exec(code);
+    if (match == null) {
+      return;
+    }
+    const map = Buffer.from(match[1], 'base64').toString('utf8');
+    return map;
   }
 }
 
