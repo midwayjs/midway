@@ -106,4 +106,21 @@ describe('test/index.test.ts', () => {
       assert(1 === i);
     });
   });
+
+  describe('use new decorator and use function middleware', () => {
+    let mock;
+    before(async () => {
+      mock = await createServerlessMock({
+        baseDir: join(__dirname, './fixtures/base-app-new'),
+        typescript: true,
+      });
+    });
+
+    it('invoke handler and execute middleware', done => {
+      return mock
+        .handler('index.handler')
+        .invoke({}, { text: 'a' })
+        .expect(/ahello/, done);
+    });
+  });
 });

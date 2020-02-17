@@ -2,6 +2,10 @@ import { InvokeCore } from './core';
 import { createRuntime } from '@midwayjs/runtime-mock';
 import * as FCTrigger from '@midwayjs/serverless-fc-trigger';
 
+/**
+ * 1、社区平台，找到入口，执行入口 + 参数
+ * 2、自定义运行时，执行运行时的 invoke 方法 + 参数
+ */
 export class Invoke extends InvokeCore {
   async getInvokeFunction() {
     let invoke;
@@ -9,7 +13,7 @@ export class Invoke extends InvokeCore {
     let triggerMap;
     const provider = this.spec && this.spec.provider && this.spec.provider.name;
     if (provider) {
-      let handler: any = ''; // todo
+      let handler: any = '';
       if (provider === 'fc' || provider === 'aliyun') {
         handler = await this.loadHandler(require.resolve('@midwayjs/serverless-fc-starter'));
         triggerMap = FCTrigger;
@@ -33,7 +37,7 @@ export class Invoke extends InvokeCore {
       };
     }
     if (!invoke) {
-      invoke = await this.getUserFaasHandlerFunction();
+      invoke = await this.getUserFaaSHandlerFunction();
     }
     return invoke;
   }

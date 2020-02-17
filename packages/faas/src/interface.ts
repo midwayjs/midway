@@ -1,4 +1,7 @@
-import { RequestContainer } from 'injection';
+import { MidwayRequestContainer } from '@midwayjs/core';
+import { KoaMiddleware } from '@midwayjs/decorator';
+
+export type Middleware = KoaMiddleware<FaaSContext>;
 
 export interface IFaaSStarter {
   start(opts?);
@@ -54,7 +57,7 @@ export interface FaaSHTTPContext {
 export interface FaaSContext extends FaaSHTTPContext {
   logger: FaaSLogger;
   env: string;
-  requestContext: RequestContainer;
+  requestContext: MidwayRequestContainer;
   originContext: any;
 }
 

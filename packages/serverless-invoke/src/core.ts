@@ -5,9 +5,9 @@
   2. tsc编译用户代码到dist目录
   3. 开源版: 【创建runtime、创建trigger】封装为平台invoke包，提供getInvoke方法，会传入args与入口方法，返回invoke方法
 */
-import { FaaSStarterClass } from './utils';
+import { FaaSStarterClass, cleanTarget } from './utils';
 import { join, resolve } from 'path';
-import { existsSync, move, remove } from 'fs-extra';
+import { existsSync, move } from 'fs-extra';
 import { loadSpec } from '@midwayjs/fcli-command-core';
 import { writeWrapper } from '@midwayjs/serverless-spec-builder';
 import { AnalyzeResult, Locator } from '@midwayjs/locate';
@@ -15,6 +15,7 @@ import {
   tsCompile,
   tsIntegrationProjectCompile,
 } from '@midwayjs/faas-util-ts-compile';
+import { IInvoke } from './interface';
 
 interface InvokeOptions {
   baseDir?: string; // 目录，默认为process.cwd
@@ -28,7 +29,7 @@ interface InvokeOptions {
   clean?: boolean; // 清理调试目录
 }
 
-export class InvokeCore {
+export abstract class InvokeCore implements IInvoke {
   options: InvokeOptions;
   baseDir: string;
   starter: any;
@@ -44,7 +45,7 @@ export class InvokeCore {
     this.spec = loadSpec(this.baseDir);
   }
 
-  async getStarter() {
+  private async getStarter() {
     if (this.starter) {
       return this.starter;
     }
@@ -59,14 +60,14 @@ export class InvokeCore {
   }
 
   // 获取用户代码中的函数方法
-  async getUserFaasHandlerFunction() {
+  protected async getUserFaaSHandlerFunction() {
     const handler =
       this.options.handler || this.getFunctionInfo().handler || '';
     const starter = await this.getStarter();
     return starter.handleInvokeWrapper(handler);
   }
 
-  getFunctionInfo(functionName?: string) {
+  protected getFunctionInfo(functionName?: string) {
     functionName = functionName || this.options.functionName;
     return (
       (this.spec && this.spec.functions && this.spec.functions[functionName]) ||
@@ -74,12 +75,9 @@ export class InvokeCore {
     );
   }
 
-  async getInvokeFunction() {
-    const invoke = await this.getUserFaasHandlerFunction();
-    return invoke;
-  }
+  abstract async getInvokeFunction();
 
-  async buildTS() {
+  protected async buildTS() {
     const { baseDir } = this.options;
     const tsconfig = resolve(baseDir, 'tsconfig.json');
     // 非ts
@@ -98,7 +96,7 @@ export class InvokeCore {
     this.buildDir = this.codeAnalyzeResult.tsBuildRoot;
     // clean directory first
     if (!this.options.incremental) {
-      await this.cleanTarget(this.buildDir);
+      await cleanTarget(this.buildDir);
     }
     if (this.codeAnalyzeResult.integrationProject) {
       // 一体化调整目录
@@ -106,7 +104,7 @@ export class InvokeCore {
         sourceDir: 'src',
         buildRoot: this.buildDir,
         tsCodeRoot: this.codeAnalyzeResult.tsCodeRoot,
-        incremental: this.options.incremental
+        incremental: this.options.incremental,
       });
       // remove tsconfig
       await move(
@@ -124,24 +122,24 @@ export class InvokeCore {
     }
   }
 
-  async invoke(...args: any) {
+  public async invoke(...args: any) {
     await this.buildTS();
     const invoke = await this.getInvokeFunction();
     this.checkDebug();
     const result = await invoke(...args);
     if (true !== this.options.incremental && false !== this.options.clean) {
-      await this.cleanTarget(this.buildDir);
+      await cleanTarget(this.buildDir);
     }
     return result;
   }
 
-  async invokeError(err) {
+  private async invokeError(err) {
     console.log('[faas invoke error]');
     console.log(err);
     process.exit(1);
   }
 
-  async loadHandler(starter: string) {
+  protected async loadHandler(starter: string) {
     const wrapperInfo = await this.makeWrapper(starter);
     const { fileName, handlerName } = wrapperInfo;
     this.wrapperInfo = wrapperInfo;
@@ -154,7 +152,7 @@ export class InvokeCore {
   }
 
   // 写入口
-  async makeWrapper(starter: string) {
+  private async makeWrapper(starter: string) {
     const funcInfo = this.getFunctionInfo();
     const [handlerFileName, name] = funcInfo.handler.split('.');
     const fileName = resolve(this.buildDir, `${handlerFileName}.js`);
@@ -171,11 +169,11 @@ export class InvokeCore {
     return { fileName, handlerName: name };
   }
 
-  wrapperHandler(handler) {
+  protected wrapperHandler(handler) {
     return handler;
   }
 
-  checkDebug() {
+  private checkDebug() {
     if (!this.options.isDebug) {
       return;
     }
@@ -206,11 +204,5 @@ export class InvokeCore {
           : ''
       }
       */`);
-  }
-
-  private async cleanTarget(p: string) {
-    if (existsSync(p)) {
-      await remove(p);
-    }
   }
 }

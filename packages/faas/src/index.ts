@@ -1,4 +1,8 @@
-export * from 'injection';
+export * from '@midwayjs/core';
 export * from './interface';
 export * from './starter';
-export * from '@midwayjs/decorator';
+export {
+  Func as func,
+  Provide as provide,
+  Inject as inject
+} from '@midwayjs/decorator';

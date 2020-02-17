@@ -24,7 +24,7 @@
     "test": "lerna run test",
     "cov": "lerna run cov --concurrency=1",
     "ci": "npm run build && npm run cov",
-    "purge": "npm run clean && rm -rf node_modules",
+    "purge": "npm run clean && rm -rf pakcage-lock.json && rm -rf node_modules",
     "reset": "npm run purge && npm i && npm run ci",
     "canary": "sh scripts/publish.sh --canary",
     "beta": "sh scripts/publish.sh --npm-tag beta --force-publish=*",

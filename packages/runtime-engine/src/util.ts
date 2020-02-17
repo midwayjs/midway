@@ -2,7 +2,7 @@ import { exists } from 'mz/fs';
 import { join } from 'path';
 
 export const isTsEnv = () => {
-  const TS_MODE_PROCESS_FLAG: string = process.env.MIDWAY_TS_MODE;
+  const TS_MODE_PROCESS_FLAG = process.env.MIDWAY_TS_MODE;
   if ('false' === TS_MODE_PROCESS_FLAG) {
     return false;
   }

@@ -1,7 +1,7 @@
 const urllib = require('urllib');
 const WebSocketClient = require('websocket').client;
 import { tmpdir } from 'os';
-import { existsSync, writeFileSync, readFileSync, unlinkSync } from 'fs';
+import { existsSync, readFileSync, remove, unlinkSync, writeFileSync } from 'fs-extra';
 import { join, resolve } from 'path';
 // 传输大数据
 const maxSize = 0xf00;
@@ -113,8 +113,7 @@ function debugWs(addr) {
 
 export async function waitDebug(port) {
   const wssUrl = await getWssUrl(port);
-  const sendDebug = await debugWs(wssUrl);
-  return sendDebug;
+  return debugWs(wssUrl);
 }
 
 export const exportMidwayFaaS = (() => {
@@ -132,3 +131,9 @@ export const exportMidwayFaaS = (() => {
 })();
 
 export const FaaSStarterClass = exportMidwayFaaS.FaaSStarter;
+
+export const cleanTarget = async (p: string) => {
+  if (existsSync(p)) {
+    await remove(p);
+  }
+};

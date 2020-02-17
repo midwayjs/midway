@@ -1,6 +1,4 @@
-import { inject, provide } from 'injection';
-import { func } from '@midwayjs/decorator';
-import { FunctionHandler } from '../../../../src';
+import { inject, provide, func, FunctionHandler } from '../../../../src';
 
 @provide()
 @func('deploy.handler9')
