@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.23](https://github.com/midwayjs/midway-faas/compare/v0.2.22...v0.2.23) (2020-02-17)
+
+
+### Bug Fixes
+
+* change private to protected ([#49](https://github.com/midwayjs/midway-faas/issues/49)) ([f5373c7](https://github.com/midwayjs/midway-faas/commit/f5373c724d91a08201314d04d50f925ba5f4be5f))
+
+
+
+
+
 ## [0.2.22](https://github.com/midwayjs/midway-faas/compare/v0.2.21...v0.2.22) (2020-02-17)
 
 
