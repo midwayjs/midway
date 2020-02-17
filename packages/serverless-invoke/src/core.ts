@@ -45,7 +45,7 @@ export abstract class InvokeCore implements IInvoke {
     this.spec = loadSpec(this.baseDir);
   }
 
-  private async getStarter() {
+  protected async getStarter() {
     if (this.starter) {
       return this.starter;
     }

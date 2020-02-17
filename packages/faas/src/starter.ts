@@ -175,8 +175,14 @@ export class FaaSStarter implements IFaaSStarter {
   ) {
     return this.lock.sureOnce(async () => {
       let containerOptions = {};
-      try {
+      if (
+        existsSync(join(this.appDir, 'ioc.js')) ||
+        existsSync(join(this.appDir, 'ioc.json'))
+      ) {
         const containerOptPath = require.resolve(join(this.appDir, 'ioc'));
+        this.logger.info(
+          'midway-faas: ioc config is deprecated，use @Configuration instead.'
+        );
         containerOptions = require(containerOptPath);
         if (typeof containerOptions === 'function') {
           containerOptions = containerOptions({
@@ -184,9 +190,6 @@ export class FaaSStarter implements IFaaSStarter {
             appDir: this.appDir,
           } as MidwayFaaSInfo);
         }
-      } catch (err) {
-        // ignore
-        this.logger.info('midway-faas: ioc config read fail and skip');
       }
 
       this.loader.loadDirectory(Object.assign(opts, containerOptions));
