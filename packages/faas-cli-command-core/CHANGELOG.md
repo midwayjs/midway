@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.22](https://github.com/midwayjs/midway-faas/compare/v0.2.21...v0.2.22) (2020-02-17)
+
+
+### Bug Fixes
+
+* Fix [#47](https://github.com/midwayjs/midway-faas/issues/47) ([#48](https://github.com/midwayjs/midway-faas/issues/48)) ([9060569](https://github.com/midwayjs/midway-faas/commit/90605695ab3158a2c2d3423ae4529416359908b7))
+
+
+
+
+
 ## [0.2.20](https://github.com/midwayjs/midway-faas/compare/v0.2.19...v0.2.20) (2020-02-11)
 
 **Note:** Version bump only for package @midwayjs/fcli-command-core

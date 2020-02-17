@@ -1,16 +1,16 @@
 {
   "name": "@midwayjs/faas",
-  "version": "0.2.18",
+  "version": "0.2.22",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@midwayjs/core": "beta",
     "@midwayjs/decorator": "beta",
     "@midwayjs/simple-lock": "^0.2.6",
-    "koa-compose": "^4.1.0",
     "debug": "^4.1.1",
     "deep-eql": "^4.0.0",
-    "is-type-of": "^1.2.1"
+    "is-type-of": "^1.2.1",
+    "koa-compose": "^4.1.0"
   },
   "files": [
     "dist",
