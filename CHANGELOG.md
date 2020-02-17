@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.17.0](https://github.com/midwayjs/midway/compare/v1.16.4...v1.17.0) (2020-02-17)
+
+
+### Features
+
+* **build:** options to minify all products ([#389](https://github.com/midwayjs/midway/issues/389)) ([86d5279](https://github.com/midwayjs/midway/commit/86d5279))
+
+
+
+
+
 ## [1.16.4](https://github.com/midwayjs/midway/compare/v1.16.3...v1.16.4) (2020-02-11)
 
 
