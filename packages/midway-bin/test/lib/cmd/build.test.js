@@ -170,3 +170,20 @@ describe('test/lib/cmd/build.test.js - bundling', () => {
     await rimraf(path.join(cwd, 'dist'));
   });
 });
+
+describe('test/lib/cmd/build.test.js - minify', () => {
+  const midwayBin = require.resolve('../../../bin/midway-bin.js');
+  const argv = [ 'build', '-c', '--minify'];
+
+  afterEach(mm.restore);
+
+  it('should build success', async () => {
+    const cwd = path.join(__dirname, '../../fixtures/ts-dir');
+    await rimraf(path.join(cwd, 'dist'));
+    const child = coffee.fork(midwayBin, argv, { cwd });
+    await child.expect('code', 0).end();
+    assert(fs.existsSync(path.join(cwd, 'dist/a.js')));
+    assert(/\/\/# sourceMappingURL/.exec(fs.readFileSync(path.join(cwd, 'dist/a.js'), 'utf8')));
+    await rimraf(path.join(cwd, 'dist'));
+  });
+});
