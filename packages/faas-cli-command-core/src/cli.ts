@@ -3,6 +3,7 @@ import { join } from 'path';
 import { loadSpec } from './utils/loadSpec';
 import { CommandHookCore } from './core';
 import { PluginManager } from './pluginManager';
+import * as commandLineUsage from 'command-line-usage';
 
 export class BaseCLI {
   argv: any;
@@ -26,6 +27,7 @@ export class BaseCLI {
       provider: this.providerName,
       options: this.argv,
       log: this.loadLog(),
+      displayUsage: this.displayUsage.bind(this),
       extensions: this.loadExtensions(),
     });
   }
@@ -59,6 +61,52 @@ export class BaseCLI {
   // 加载命令行输出及报错
   loadLog() {
     return console;
+  }
+
+  // 展示帮助信息
+  displayUsage(commandsArray, usage, coreInstance) {
+    const log = this.loadLog();
+    let commandList: any = {};
+    if (commandsArray && commandsArray.length) {
+      commandList = {
+        header: commandsArray.join(' '),
+        optionList: Object.keys(usage || {}).map((name => {
+          const usageInfo = usage[name] || {};
+          return {
+            name,
+            description: usageInfo.usage,
+            alias: usageInfo.shortcut,
+            type: Boolean
+          };
+        })),
+      };
+    } else {
+      commandList = [];
+      coreInstance.instances.forEach((plugin) => {
+        if (plugin.commands) {
+          Object.keys(plugin.commands).forEach(command => {
+            const commandInfo = plugin.commands[command];
+            if (!commandInfo || !commandInfo.lifecycleEvents) {
+              return;
+            }
+            commandList.push({
+              header: command,
+              content: commandInfo.usage,
+              optionList: Object.keys(commandInfo.options || {}).map((name => {
+                const usageInfo = commandInfo.options[name] || {};
+                return {
+                  name,
+                  description: usageInfo.usage,
+                  alias: usageInfo.shortcut,
+                  type: Boolean
+                };
+              }))
+            });
+          });
+        }
+      });
+    }
+    log.log(commandLineUsage(commandList));
   }
 
   error(errMsg) {

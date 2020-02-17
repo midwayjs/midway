@@ -5,6 +5,7 @@
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@midwayjs/serverless-spec-builder": "^0.2.20",
+    "command-line-usage": "^6.1.0",
     "deepmerge": "^4.2.2",
     "minimist": "^1.2.0"
   },

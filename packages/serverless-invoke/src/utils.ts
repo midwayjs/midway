@@ -117,8 +117,6 @@ export async function waitDebug(port) {
   return sendDebug;
 }
 
-export const Debug_Tag = 'midway-faas-local::debug::0x90906';
-
 export const exportMidwayFaaS = (() => {
   const midwayModuleName = process.env.MidwayModuleName || '@midwayjs/faas';
   const faasPath = join(process.cwd(), './node_modules/', midwayModuleName);

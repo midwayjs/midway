@@ -20,9 +20,38 @@ export class CLI extends BaseCLI {
   async loadPlugins() {
     await this.checkProvider();
     await super.loadPlugins();
+    await this.loadDefaultOptions();
+  }
+
+  async loadDefaultOptions() {
+    if (this.commands.length) {
+      return;
+    }
+
+    if (this.argv.v || this.argv.version) {
+      this.displayVersion();
+    }
+  }
+
+  displayVersion() {
+    let version = '';
+    try {
+      version = require('../package.json').version;
+    } catch (E) {}
+    const log = this.loadLog();
+    log.log(`@midwayjs/faas-cli v${version}`);
+  }
+
+  displayUsage(commandsArray, usage, coreInstance) {
+    this.displayVersion();
+    super.displayUsage(commandsArray, usage, coreInstance);
   }
 
   async checkProvider() {
+    // ignore f -v / f -h / f create
+    if (!this.commands.length || this.commands[0] === 'create' || this.argv.h) {
+      return;
+    }
     if (!this.spec.provider) {
       this.spec.provider = { name: '', runtime: '' };
     }
