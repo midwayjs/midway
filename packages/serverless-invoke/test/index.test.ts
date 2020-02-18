@@ -34,6 +34,7 @@ describe('/test/index.test.ts', () => {
       functionName: 'test1',
       data: [{ name: 'params' }],
       sourceDir: 'src/apis',
+      incremental: true,
     });
     assert(result && result.body === 'hello http world');
   });

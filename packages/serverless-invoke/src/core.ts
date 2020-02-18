@@ -98,6 +98,7 @@ export abstract class InvokeCore implements IInvoke {
     if (!this.options.incremental) {
       await cleanTarget(this.buildDir);
     }
+    const opts = this.options.incremental ? { overwrite: true } : {};
     if (this.codeAnalyzeResult.integrationProject) {
       // 一体化调整目录
       await tsIntegrationProjectCompile(baseDir, {
@@ -109,7 +110,8 @@ export abstract class InvokeCore implements IInvoke {
       // remove tsconfig
       await move(
         join(baseDir, 'tsconfig_integration_faas.json'),
-        join(this.buildDir, 'tsconfig.json')
+        join(this.buildDir, 'tsconfig.json'),
+        opts
       );
     } else {
       // TODO 重构 midway-bin 不生成 tsconfig
@@ -118,8 +120,15 @@ export abstract class InvokeCore implements IInvoke {
         tsConfigName: 'tsconfig.json',
         clean: true,
       });
-      await move(join(baseDir, 'dist'), join(this.buildDir, 'dist'));
+      await move(join(baseDir, 'dist'), join(this.buildDir, 'dist'), opts);
     }
+
+    // 针对多次调用清理缓存
+    Object.keys(require.cache).forEach(path => {
+      if (path.indexOf(this.buildDir) !== -1) {
+        delete require.cache[path];
+      }
+    });
   }
 
   public async invoke(...args: any) {

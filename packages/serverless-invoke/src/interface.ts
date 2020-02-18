@@ -17,6 +17,7 @@ export interface InvokeOptions {
   midwayModuleName?: string;
   sourceDir?: string; // 一体化目录结构下，函数的目录，比如 src/apis，这个影响到编译
   clean?: boolean; // 清理调试目录
+  incremental?: boolean; // 增量编译
 }
 
 export interface IInvoke {
