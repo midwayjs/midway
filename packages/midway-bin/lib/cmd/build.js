@@ -48,6 +48,10 @@ class BuildCommand extends Command {
         type: 'string',
         default: 'release',
       },
+      tsConfig: {
+        description: 'tsConfig json object data',
+        type: 'object',
+      },
     };
   }
 
@@ -98,6 +102,8 @@ class BuildCommand extends Command {
     if (argv.project) {
       args.push('-p');
       args.push(argv.project);
+    } else if (argv.tsConfig) {
+      await this.tsCfg2CliArgs(argv.tsConfig, args);
     }
     await this.helper.forkNode(tscCli, args, { cwd, execArgv: [] });
 
@@ -283,6 +289,41 @@ class BuildCommand extends Command {
     }
     const map = Buffer.from(match[1], 'base64').toString('utf8');
     return map;
+  }
+
+  async tsCfg2CliArgs(cfg, args) {
+    // https://www.typescriptlang.org/docs/handbook/tsconfig-json.html
+    /**
+     * Files
+     */
+    for (const file of cfg.files) {
+      args.push(file);
+    }
+
+    /**
+     * include & exclude
+     */
+    const files = await globby(
+      [].concat(
+        // include
+        cfg.include || [],
+        // exclude
+        (cfg.exclude || []).map(str => '!' + str)
+      ),
+      {
+        cwd: path.join(this.options.srcDir, '..'),
+      }
+    );
+    for (const item of files) {
+      args.push(item);
+    }
+
+    /**
+     * compilerOptions
+     */
+    for (const key in cfg.compilerOptions || {}) {
+      args.push(`--${key} ${cfg.compilerOptions[key]}`);
+    }
   }
 }
 
