@@ -92,7 +92,10 @@ export class MidwayConfigService implements IConfigService {
 
   async loadConfig(configFilename): Promise<object> {
     debug('load config %s.', configFilename);
-    const exports = require(configFilename);
+    let exports = require(configFilename);
+    if (exports && exports['default'] && Object.keys(exports).length === 1) {
+      exports = exports['default'];
+    }
     let result = exports;
     if (is.function(exports)) {
       result = await exports.apply(null, [].concat(this.container));
