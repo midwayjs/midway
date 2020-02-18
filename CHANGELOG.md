@@ -3,6 +3,42 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.6](https://github.com/midwayjs/midway/compare/v2.0.0-beta.5...v2.0.0-beta.6) (2020-02-17)
+
+**Note:** Version bump only for package midway
+
+
+
+
+
+# [2.0.0-beta.5](https://github.com/midwayjs/midway/compare/v2.0.0-beta.4...v2.0.0-beta.5) (2020-02-17)
+
+
+### Bug Fixes
+
+* **deps:** add terser to depenencies ([#390](https://github.com/midwayjs/midway/issues/390)) ([a8de587](https://github.com/midwayjs/midway/commit/a8de587))
+
+
+### Features
+
+* **build:** options to minify all products ([#389](https://github.com/midwayjs/midway/issues/389)) ([d309bdc](https://github.com/midwayjs/midway/commit/d309bdc))
+* 2.x namespace ([#388](https://github.com/midwayjs/midway/issues/388)) ([9c90eb1](https://github.com/midwayjs/midway/commit/9c90eb1))
+
+
+
+
+
+## [1.17.1](https://github.com/midwayjs/midway/compare/v1.17.0...v1.17.1) (2020-02-17)
+
+
+### Bug Fixes
+
+* **deps:** add terser to depenencies ([#390](https://github.com/midwayjs/midway/issues/390)) ([e6da77e](https://github.com/midwayjs/midway/commit/e6da77e))
+
+
+
+
+
 # [1.17.0](https://github.com/midwayjs/midway/compare/v1.16.4...v1.17.0) (2020-02-17)
 
 
