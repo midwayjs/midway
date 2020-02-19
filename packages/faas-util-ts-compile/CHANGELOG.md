@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.25](https://github.com/midwayjs/midway-faas/compare/v0.2.24...v0.2.25) (2020-02-19)
+
+
+### Bug Fixes
+
+* tsc incremental not work ([#51](https://github.com/midwayjs/midway-faas/issues/51)) ([0b9ac97](https://github.com/midwayjs/midway-faas/commit/0b9ac9754ced31c6cf2f746777aa47d7c3e54813))
+
+
+
+
+
 ## [0.2.22](https://github.com/midwayjs/midway-faas/compare/v0.2.21...v0.2.22) (2020-02-17)
 
 
