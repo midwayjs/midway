@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.26](https://github.com/midwayjs/midway-faas/compare/v0.2.25...v0.2.26) (2020-02-19)
+
+
+### Features
+
+* add sharedDir support ([#53](https://github.com/midwayjs/midway-faas/issues/53)) ([6e0625c](https://github.com/midwayjs/midway-faas/commit/6e0625cb8357c69c174b0be8373f7b595352e453))
+
+
+
+
+
 ## [0.2.25](https://github.com/midwayjs/midway-faas/compare/v0.2.24...v0.2.25) (2020-02-19)
 
 
