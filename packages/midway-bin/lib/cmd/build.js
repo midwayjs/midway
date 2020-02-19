@@ -64,11 +64,11 @@ class BuildCommand extends Command {
 
     const tscCli = require.resolve('typescript/bin/tsc');
     const projectFile = path.join(cwd, argv.project);
-    if (!fs.existsSync(projectFile)) {
+    if (!argv.tsConfig && !fs.existsSync(projectFile)) {
       console.log(`[midway-bin] tsconfig.json not found in ${cwd}\n`);
       return;
     }
-    const tsConfig = require(projectFile);
+    const tsConfig = argv.tsConfig || require(projectFile);
     const projectDir = this.projectDir = path.dirname(projectFile);
     let outDir = this.inferCompilerOptions(tsConfig, 'outDir');
     let outDirAbsolute;
