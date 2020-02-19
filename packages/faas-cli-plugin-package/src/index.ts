@@ -305,7 +305,8 @@ export class PackagePlugin extends BasePlugin {
           sourceDir: this.options.sourceDir || 'src',
           buildRoot: this.midwayBuildPath,
           tsCodeRoot: this.codeAnalyzeResult.tsCodeRoot,
-          incremental: this.options.incremental
+          incremental: false,
+          clean: true
         });
         // 把临时的 tsconfig 移动进去
         await move(

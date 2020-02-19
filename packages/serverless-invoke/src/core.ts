@@ -39,6 +39,7 @@ export abstract class InvokeCore implements IInvoke {
   codeAnalyzeResult: AnalyzeResult;
 
   constructor(options: InvokeOptions) {
+    options = this.formatOptions(options);
     this.options = options;
     this.baseDir = options.baseDir || process.cwd();
     this.buildDir = resolve(this.baseDir, options.buildDir || 'dist');
@@ -95,7 +96,7 @@ export abstract class InvokeCore implements IInvoke {
     });
     this.buildDir = this.codeAnalyzeResult.tsBuildRoot;
     // clean directory first
-    if (!this.options.incremental) {
+    if (this.options.clean) {
       await cleanTarget(this.buildDir);
     }
     const opts = this.options.incremental ? { overwrite: true } : {};
@@ -106,6 +107,7 @@ export abstract class InvokeCore implements IInvoke {
         buildRoot: this.buildDir,
         tsCodeRoot: this.codeAnalyzeResult.tsCodeRoot,
         incremental: this.options.incremental,
+        clean: this.options.clean,
       });
       // remove tsconfig
       await move(
@@ -118,7 +120,7 @@ export abstract class InvokeCore implements IInvoke {
       await tsCompile(baseDir, {
         source: 'src',
         tsConfigName: 'tsconfig.json',
-        clean: true,
+        clean: this.options.clean,
       });
       await move(join(baseDir, 'dist'), join(this.buildDir, 'dist'), opts);
     }
@@ -136,7 +138,7 @@ export abstract class InvokeCore implements IInvoke {
     const invoke = await this.getInvokeFunction();
     this.checkDebug();
     const result = await invoke(...args);
-    if (true !== this.options.incremental && false !== this.options.clean) {
+    if (this.options.clean) {
       await cleanTarget(this.buildDir);
     }
     return result;
@@ -213,5 +215,16 @@ export abstract class InvokeCore implements IInvoke {
           : ''
       }
       */`);
+  }
+
+  private formatOptions(options: InvokeOptions) {
+    // 开启增量编译，则不自动清理目录
+    if (options.incremental) {
+      options.clean = false;
+    }
+    if (options.clean !== false) {
+      options.clean = true;
+    }
+    return options;
   }
 }

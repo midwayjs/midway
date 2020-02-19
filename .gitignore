@@ -23,4 +23,5 @@ AUTHORS
 .env_temp
 serverless.zip
 /packages/serverless-invoke/test/fixtures/*/build
-/packages/serverless-invoke/test/fixtures/**/faas_debug_tmp/
+/packages/serverless-invoke/test/fixtures/**/*faas_debug_tmp/
+

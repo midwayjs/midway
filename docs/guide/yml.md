@@ -104,7 +104,7 @@ service: serverless-hello-world // 简写
 
 ```yaml
 service: 
-	name: serverless-hello-world
+  name: serverless-hello-world
   description: 'some description'
 ```
 
@@ -192,7 +192,7 @@ export interface FunctionStructure {
 export type EventType = 'http' | 'mq' | 'schedule';
 
 export interface EventStructureType {
-  [eventName: string]: HTTPEvent | HSFEvent | MQEvent;
+  [eventName: string]: HTTPEvent | MQEvent | ScheduleEvent;
 }
 
 export interface HTTPEvent {
@@ -361,12 +361,12 @@ layers:
 ### 示例
 
 ```yaml
-package:											# 打包配置
-	include:										# 打包包含文件列表，默认为 package.json、构建后的代码和依赖
+package:										# 打包配置
+  include:										# 打包包含文件列表，默认为 package.json、构建后的代码和依赖
   	- resource/*
   exclude:										# 打包剔除文件列表
   	- test/*
-  artifact: code.zip		      # 打包后的压缩包文件名
+  artifact: code.zip		                    # 打包后的压缩包文件名
 ```
 
 
