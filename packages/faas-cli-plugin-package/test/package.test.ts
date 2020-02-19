@@ -123,7 +123,7 @@ describe('/test/package.test.ts', () => {
     await remove(join(baseDir, '.serverless'));
   });
 
-  describe('integration project build', () => {
+  describe.only('integration project build', () => {
     it('integration project build', async () => {
       const baseDir = resolve(__dirname, './fixtures/ice-faas-ts');
       const core = new CommandHookCore({
@@ -135,6 +135,7 @@ describe('/test/package.test.ts', () => {
         provider: 'aliyun',
         options: {
           sourceDir: 'src/apis',
+          sharedDir: 'share',
         },
         log: console,
       });
@@ -142,6 +143,8 @@ describe('/test/package.test.ts', () => {
       await core.ready();
       await core.invoke(['package']);
       assert(existsSync(resolve(baseDir, '.serverless/dist/index.js')));
+      assert(existsSync(resolve(baseDir, '.serverless/render.html')));
+      assert(existsSync(resolve(baseDir, '.serverless/common/a.js')));
       assert(existsSync(resolve(baseDir, 'serverless.zip')));
     });
   });
