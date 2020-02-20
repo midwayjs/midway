@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { config, plugin } from '@midwayjs/decorator'
 
 import { async, init, provide, inject } from 'injection'
@@ -7,16 +8,16 @@ import { async, init, provide, inject } from 'injection'
 export class BaseService {
 
   @inject()
-  ctx
+  ctx: any
 
   @config('hello')
-  config
+  config: any
 
   @plugin('plugin2')
-  plugin2
+  plugin2: any
 
   @init()
-  async init() {
+  public async init() {
     await new Promise((resolve) => {
       setTimeout(() => {
         this.config.c = 10
@@ -25,7 +26,7 @@ export class BaseService {
     })
   }
 
-  getData() {
+  public getData() {
     return this.plugin2.text + this.config.c
   }
 

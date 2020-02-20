@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { resolveModule } from 'midway-bin'
 
 import * as mock from 'egg-mock'
@@ -13,22 +14,15 @@ export interface MidwayMock extends mock.EggMock {
   // [prop: string]: any
 }
 
-/**
- * 只初始化app级别的container
- * agent相关的逻辑使用mm2.app
- * @param options 参数
- */
-function mockContainer(options: MidwayApplicationOptions): MockContainer {
-  return new MockContainer(options)
-}
-
 const defaultFramework: string = resolveModule('midway') || resolveModule('midway-mirror')
 
 export const mm = ({ ...mock, container: mockContainer }) as MidwayMock
 
 mm.app = (options): MidwayMockApplication => {
   if (process.env.MIDWAY_BASE_DIR && ! options.baseDir) { options.baseDir = process.env.MIDWAY_BASE_DIR }
-  if (process.env.MIDWAY_FRAMEWORK_PATH && ! options.framework) { options.framework = process.env.MIDWAY_FRAMEWORK_PATH }
+  if (process.env.MIDWAY_FRAMEWORK_PATH && ! options.framework) {
+    options.framework = process.env.MIDWAY_FRAMEWORK_PATH
+  }
   // @ts-ignore
   return mock.app({
     framework: options.framework || defaultFramework,
@@ -39,7 +33,9 @@ mm.app = (options): MidwayMockApplication => {
 
 mm.cluster = (options) => {
   if (process.env.MIDWAY_BASE_DIR && ! options.baseDir) { options.baseDir = process.env.MIDWAY_BASE_DIR }
-  if (process.env.MIDWAY_FRAMEWORK_PATH && ! options.framework) { options.framework = process.env.MIDWAY_FRAMEWORK_PATH }
+  if (process.env.MIDWAY_FRAMEWORK_PATH && ! options.framework) {
+    options.framework = process.env.MIDWAY_FRAMEWORK_PATH
+  }
   // @ts-ignore
   return mock.cluster({
     framework: options.framework || defaultFramework,
@@ -56,16 +52,26 @@ export class MockContainer {
     this.app = mm.app(options)
   }
 
-  async ready() {
+  public async ready() {
     await this.app.ready()
   }
 
-  async getAsync(id: any) {
+  public async getAsync(id: any) {
     return this.app.applicationContext.getAsync(id)
   }
 
-  get(id: any) {
+  public get(id: any) {
     return this.app.applicationContext.get(id)
   }
 
 }
+
+/**
+ * 只初始化app级别的container
+ * agent相关的逻辑使用mm2.app
+ * @param options 参数
+ */
+function mockContainer(options: MidwayApplicationOptions): MockContainer {
+  return new MockContainer(options)
+}
+

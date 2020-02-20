@@ -1,4 +1,5 @@
 import * as path from 'path'
+import * as assert from 'assert'
 
 import { app, mm } from '../bootstrap'
 import { mm as mock, MockContainer } from '../src'
@@ -7,7 +8,6 @@ import { mm as mock, MockContainer } from '../src'
 const fixtures = path.join(__dirname, 'fixtures')
 // app dir
 process.env.MIDWAY_BASE_DIR = path.join(fixtures, 'base-app-decorator')
-const assert = require('assert')
 
 
 describe('test/index.test.ts', () => {
@@ -49,32 +49,32 @@ describe('test/index.test.ts', () => {
   })
 
   it('should use mm.app to get app', () => {
-    const app = mock.app({
+    const appLocal = mock.app({
       baseDir: process.env.MIDWAY_BASE_DIR,
       framework: process.env.MIDWAY_FRAMEWORK_PATH,
     })
-    return app.ready()
+    return appLocal.ready()
   })
 
   it('should use mm.cluster to get app by default options', () => {
     mm(process.env, 'MIDWAY_FRAMEWORK_PATH', path.join(__dirname, '../../midway'))
-    const app = mock.cluster({})
-    return app.ready()
+    const appLocal = mock.cluster({})
+    return appLocal.ready()
   })
 
   it('should use mm.cluster to get app', () => {
-    const app = mock.cluster({
+    const appLocal = mock.cluster({
       baseDir: process.env.MIDWAY_BASE_DIR,
       framework: process.env.MIDWAY_FRAMEWORK_PATH,
     })
-    return app.ready()
+    return appLocal.ready()
   })
 
   it('should init container from app', async () => {
-    const app = new MockContainer({
+    const appLocal = new MockContainer({
       baseDir: process.env.MIDWAY_BASE_DIR,
       framework: process.env.MIDWAY_FRAMEWORK_PATH,
     })
-    return app.ready()
+    return appLocal.ready()
   })
 })

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { MockApplication, MockOption } from 'egg-mock'
 import { IApplicationContext } from 'injection'
 

@@ -1,11 +1,9 @@
 import * as path from 'path'
+import * as assert from 'assert'
 
 import { mm } from '../src'
 
 import { BaseService } from './fixtures/base-app-decorator/src/lib/service'
-
-
-const assert = require('assert')
 
 
 const fixtures = path.join(__dirname, 'fixtures')

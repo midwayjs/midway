@@ -8,6 +8,7 @@ export const mm: MidwayMock['default'] = mock.default
 
 export const app: MidwayMockApplication = mock.app({})
 
+// eslint-disable-next-line @typescript-eslint/unbound-method
 before(app.ready)
 afterEach(mock.restore)
 
