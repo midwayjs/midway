@@ -1,14 +1,10 @@
-'use strict'
-
 import * as path from 'path'
+import * as fs from 'fs'
+import * as assert from 'assert'
 
 import { mm } from 'midway-mock'
 
 import { clearAllModule } from 'injection'
-
-
-const fs = require('fs')
-const assert = require('assert')
 
 
 describe('test/schedule.test.ts', () => {

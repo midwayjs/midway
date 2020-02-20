@@ -1,5 +1,3 @@
-'use strict'
-
 import { schedule } from '@midwayjs/decorator'
 
 import { provide } from 'injection'
@@ -11,7 +9,7 @@ import { provide } from 'injection'
 })
 export class IntervalCron {
 
-  async exec(ctx) {
+  public async exec(ctx) {
     ctx.logger.info(process.pid, 'hello decorator')
   }
 
@@ -24,7 +22,7 @@ export class IntervalCron {
 })
 export class NonDefCron {
 
-  async exec(ctx) {
+  public async exec(ctx) {
     ctx.logger.info(process.pid, 'hello other functions')
   }
 

@@ -9,7 +9,7 @@ import { provide } from 'injection'
 })
 export default class HelloCron {
 
-  async exec(ctx) {
+  public async exec(ctx) {
     ctx.logger.info(process.pid, 'hello')
   }
 
