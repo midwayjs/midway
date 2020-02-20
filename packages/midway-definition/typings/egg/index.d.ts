@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/interface-name-prefix */
+/* eslint-disable @typescript-eslint/no-empty-interface */
 import * as egg from 'egg'
 import * as eggLogger from 'egg-logger'
 
