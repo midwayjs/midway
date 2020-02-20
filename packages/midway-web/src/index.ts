@@ -32,6 +32,7 @@ export {
   KoaMiddlewareParamArray,
   ControllerOption,
   ScheduleOpts,
+  ScopeEnum,
 } from '@midwayjs/decorator';
 export * from './interface';
 export { AgentWorkerLoader, AppWorkerLoader } from './loader/loader';
