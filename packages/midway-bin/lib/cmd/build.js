@@ -300,7 +300,7 @@ class BuildCommand extends Command {
   }
 
   async tsCfg2CliArgs(cwd, argv, args) {
-    const cfg = argv.tsConfig
+    const cfg = argv.tsConfig;
     // https://www.typescriptlang.org/docs/handbook/tsconfig-json.html
     /**
      * Files
@@ -316,14 +316,10 @@ class BuildCommand extends Command {
      */
     const files = await globby(
       [].concat(
-        // include
-        cfg.include ? cfg.include : 'src/**/*.ts',
-        // exclude
-        (cfg.exclude || []).map(str => '!' + str)
+        cfg.include ? cfg.include : 'src/**/*.ts', // include
+        (cfg.exclude || []).map(str => '!' + str) // exclude
       ),
-      {
-        cwd,
-      }
+      { cwd }
     );
     for (const item of files) {
       args.push(item);
