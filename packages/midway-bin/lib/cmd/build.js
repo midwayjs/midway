@@ -316,13 +316,15 @@ class BuildCommand extends Command {
      */
     const files = await globby(
       [].concat(
-        cfg.include ? cfg.include : 'src/**/*.ts', // include
+        cfg.include ? cfg.include : 'src/**/*', // include
         (cfg.exclude || []).map(str => '!' + str) // exclude
       ),
       { cwd }
     );
     for (const item of files) {
-      args.push(item);
+      if (/\.tsx?$/.test(file)) {
+        args.push(item);
+      }
     }
 
     /**
