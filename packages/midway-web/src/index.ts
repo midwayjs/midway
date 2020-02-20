@@ -1,4 +1,3 @@
-export * from '@midwayjs/core';
 // 兼容老代码
 export {
   Provide as provide,
@@ -32,7 +31,7 @@ export {
   KoaMiddleware,
   KoaMiddlewareParamArray,
   ControllerOption,
-  ScheduleOpts
+  ScheduleOpts,
 } from '@midwayjs/decorator';
 export * from './interface';
 export { AgentWorkerLoader, AppWorkerLoader } from './loader/loader';
