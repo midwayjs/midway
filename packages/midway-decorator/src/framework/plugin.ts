@@ -5,6 +5,7 @@ import { attachConstructorDataOnClass } from '../utils'
 
 
 export function plugin(identifier?: string) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return function(target: any, targetKey: string, index?: number): void {
     if (typeof index === 'number') {
       attachConstructorDataOnClass(identifier, target, PLUGIN_KEY, index)
