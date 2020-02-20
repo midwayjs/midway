@@ -102,7 +102,8 @@ describe('/test/enhance.test.ts', () => {
           typescript: true,
         })
         await app.ready()
-      } catch (e) {
+      }
+      catch (e) {
         suc = true
       }
       assert.ok(suc)

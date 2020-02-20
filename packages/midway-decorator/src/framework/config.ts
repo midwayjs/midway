@@ -9,7 +9,8 @@ export function config(identifier?: string) {
   return function(target: any, targetKey: string, index?: number): void {
     if (typeof index === 'number') {
       attachConstructorDataOnClass(identifier, target, CONFIG_KEY, index)
-    } else {
+    }
+    else {
       let idf = identifier
 
       if (! idf) {

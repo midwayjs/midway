@@ -68,7 +68,8 @@ export function safelyGet(list: string | string[], obj?: object): any {
   for (const key of pathArrValue) {
     if (typeof willReturn === 'undefined' || willReturn === null) {
       return void 0
-    } else if (typeof willReturn !== 'object') {
+    }
+    else if (typeof willReturn !== 'object') {
       return void 0
     }
     willReturn = willReturn[key]

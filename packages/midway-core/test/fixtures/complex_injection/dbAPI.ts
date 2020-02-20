@@ -25,8 +25,8 @@ export class DbAPI {
   private config
 
   constructor(
-    @inject() a,
-      hello,
+  @inject() a,
+    hello,
     @inject() b,
   ) {
     this.config = a.config.c + b.config.c

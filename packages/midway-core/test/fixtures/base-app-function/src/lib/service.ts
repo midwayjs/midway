@@ -1,4 +1,5 @@
 import { config, plugin } from '@midwayjs/decorator'
+
 import { provide, async, init, inject } from 'injection'
 
 @provide()
@@ -48,7 +49,7 @@ export class BaseService {
   adapter
 
   constructor(
-    @inject() a,
+  @inject() a,
     @config('hello') config,
     @inject() b,
     @plugin('plugin2') plugin2,
@@ -73,7 +74,8 @@ export class BaseService {
     try {
       const o2 = await this.other2('ttt')
       await o2.say()
-    } catch (e) {
+    }
+    catch (e) {
       console.log('function inject is not support!', e.stack)
     }
 

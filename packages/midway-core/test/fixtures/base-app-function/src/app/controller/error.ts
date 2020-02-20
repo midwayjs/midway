@@ -3,7 +3,8 @@ exports.error = async (ctx, next) => {
   const baseService = await context.getAsync('baseService')
   try {
     await baseService.sayAuto()
-  } catch (e) {
+  }
+  catch (e) {
     ctx.body = e.message
     return
   }

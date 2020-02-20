@@ -27,8 +27,8 @@ export class ConfigController {
   b: boolean
 
   constructor(
-      // should be true
-      @config('plugins.plugin2') pluginFlag: boolean,
+  // should be true
+  @config('plugins.plugin2') pluginFlag: boolean,
   ) {
     this.b = pluginFlag
   }

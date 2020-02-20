@@ -1,4 +1,5 @@
 import { config, plugin, logger } from '@midwayjs/decorator'
+
 import { provide, async, init, inject } from 'injection'
 
 @provide()
@@ -30,7 +31,7 @@ export class BaseService {
   logger
 
   constructor(
-    @inject() a,
+  @inject() a,
     @config('hello') config,
     @inject() b,
     @plugin('plugin2') plugin2,

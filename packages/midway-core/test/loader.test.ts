@@ -2,6 +2,7 @@ import * as assert from 'assert'
 import * as path from 'path'
 
 import { CONFIG_KEY, LOGGER_KEY, PLUGIN_KEY } from '@midwayjs/decorator'
+
 import { provide } from 'injection'
 
 import { ContainerLoader, MidwayRequestContainer } from '../src'
@@ -152,7 +153,8 @@ describe('/test/loader.test.ts', () => {
     const appCtx = loader.getApplicationContext()
     try {
       await appCtx.getAsync('app')
-    } catch (err) {
+    }
+    catch (err) {
       assert(err)
     }
   })

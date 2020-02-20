@@ -1,4 +1,5 @@
 import { providerWrapper } from 'midway-core'
+
 import { IApplicationContext } from 'injection'
 
 

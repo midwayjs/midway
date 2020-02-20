@@ -1,7 +1,6 @@
 import * as fs from 'fs'
 import * as path from 'path'
 
-import { EggRouter as Router } from '@eggjs/router'
 import {
   CONTROLLER_KEY,
   ControllerOption,
@@ -11,9 +10,11 @@ import {
   WEB_ROUTER_PARAM_KEY,
   RouterParamValue,
 } from '@midwayjs/decorator'
+import { ContainerLoader, MidwayHandlerKey, MidwayContainer } from 'midway-core'
+
+import { EggRouter as Router } from '@eggjs/router'
 import * as extend from 'extend2'
 import { getClassMetadata, getPropertyDataFromClass, getProviderId, listModule } from 'injection'
-import { ContainerLoader, MidwayHandlerKey, MidwayContainer } from 'midway-core'
 import { EggAppInfo } from 'egg'
 
 import { Middleware, MiddlewareParamArray, MidwayLoaderOptions, WebMiddleware } from '../interface'
@@ -266,7 +267,8 @@ export class MidwayWebLoader extends EggLoader {
         if (typeof middleware === 'function') {
           // web function middleware
           handlerCallback(middleware)
-        } else {
+        }
+        else {
           const middlewareImpl: WebMiddleware | void = await this.applicationContext.getAsync(middleware)
           if (middlewareImpl && typeof middlewareImpl.resolve === 'function') {
             handlerCallback(middlewareImpl.resolve())

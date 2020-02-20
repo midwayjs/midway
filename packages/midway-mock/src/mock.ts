@@ -1,5 +1,6 @@
-import * as mock from 'egg-mock'
 import { resolveModule } from 'midway-bin'
+
+import * as mock from 'egg-mock'
 
 import { MidwayApplicationOptions, MidwayMockApplication } from './interface'
 

@@ -1,4 +1,5 @@
 import { config, plugin } from '@midwayjs/decorator'
+
 import { provide } from 'injection'
 
 @provide()

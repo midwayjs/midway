@@ -9,7 +9,8 @@ export = {
     console.log('app[VALIDATOR]', app)
     if (app instanceof Application) {
       return app[VALIDATOR]
-    } else {
+    }
+    else {
       throw new Error('not same')
     }
   },

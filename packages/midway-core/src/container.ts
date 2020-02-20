@@ -1,6 +1,7 @@
 import * as path from 'path'
 
 import { CLASS_KEY_CONSTRUCTOR, CONFIG_KEY, LOGGER_KEY, PLUGIN_KEY } from '@midwayjs/decorator'
+
 import * as globby from 'globby'
 import {
   Autowire,
@@ -268,7 +269,8 @@ export class MidwayContainer extends Container implements IContainer {
   bindClass(exports) {
     if (is.class(exports) || is.function(exports)) {
       this.bindModule(exports)
-    } else {
+    }
+    else {
       for (const m in exports) {
         const module = exports[m]
         if (is.class(module) || is.function(module)) {
@@ -283,11 +285,13 @@ export class MidwayContainer extends Container implements IContainer {
       const providerId = getProviderId(module)
       if (providerId) {
         this.bind(providerId, module)
-      } else if (! this.isTsMode) {
+      }
+      else if (! this.isTsMode) {
         // inject by name in js
         this.bind(camelcase(module.name), module)
       }
-    } else {
+    }
+    else {
       const info: {
         id: ObjectIdentifier,
         provider: (context?: IApplicationContext) => any,
@@ -318,7 +322,8 @@ export class MidwayContainer extends Container implements IContainer {
       let constructorMetaData
       try {
         constructorMetaData = getClassMetadata(CLASS_KEY_CONSTRUCTOR, target)
-      } catch (e) {
+      }
+      catch (e) {
         debug(`beforeEachCreated error ${e.stack}`)
       }
       // lack of field
@@ -370,7 +375,8 @@ export class MidwayContainer extends Container implements IContainer {
             if (v) {
               return v
             }
-          } catch (e) {
+          }
+          catch (e) {
           }
           return this.findHandlerHook(MidwayHandlerKey.LOGGER)(key)
         })
@@ -429,7 +435,8 @@ export class MidwayContainer extends Container implements IContainer {
 
     try {
       return g.to_dot()
-    } catch (err) {
+    }
+    catch (err) {
       console.error('generate injection dependency tree fail, err = ', err.message)
     }
   }

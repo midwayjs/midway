@@ -2,8 +2,9 @@
 
 import * as path from 'path'
 
-import { clearAllModule } from 'injection'
 import { mm } from 'midway-mock'
+
+import { clearAllModule } from 'injection'
 
 
 const fs = require('fs')

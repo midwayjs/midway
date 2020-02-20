@@ -9,7 +9,8 @@ export function logger(identifier?: string) {
   return function(target: any, targetKey: string, index?: number): void {
     if (typeof index === 'number') {
       attachConstructorDataOnClass(identifier, target, LOGGER_KEY, index)
-    } else {
+    }
+    else {
       let id = identifier
 
       if (! id) {
