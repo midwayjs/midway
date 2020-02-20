@@ -63,12 +63,20 @@ class BuildCommand extends Command {
     const { cwd, argv } = context;
 
     const tscCli = require.resolve('typescript/bin/tsc');
-    const projectFile = path.join(cwd, argv.project);
-    if (!fs.existsSync(projectFile)) {
+    const projectFile = path.join(cwd, argv.project || '');
+    if (typeof argv.tsConfig === 'string') {
+      try {
+        argv.tsConfig = JSON.parse(argv.tsConfig);
+      } catch (e) {
+        console.log(`[midway-bin] tsConfig should be JSON string or Object: ${e.message}\n`);
+        return;
+      }
+    }
+    if (!argv.tsConfig && !fs.existsSync(projectFile)) {
       console.log(`[midway-bin] tsconfig.json not found in ${cwd}\n`);
       return;
     }
-    const tsConfig = require(projectFile);
+    const tsConfig = argv.tsConfig || require(projectFile);
     const projectDir = this.projectDir = path.dirname(projectFile);
     let outDir = this.inferCompilerOptions(tsConfig, 'outDir');
     let outDirAbsolute;
@@ -103,7 +111,7 @@ class BuildCommand extends Command {
       args.push('-p');
       args.push(argv.project);
     } else if (argv.tsConfig) {
-      await this.tsCfg2CliArgs(argv.tsConfig, args);
+      await this.tsCfg2CliArgs(cwd, argv, args);
     }
     await this.helper.forkNode(tscCli, args, { cwd, execArgv: [] });
 
@@ -291,13 +299,16 @@ class BuildCommand extends Command {
     return map;
   }
 
-  async tsCfg2CliArgs(cfg, args) {
+  async tsCfg2CliArgs(cwd, argv, args) {
+    const cfg = argv.tsConfig
     // https://www.typescriptlang.org/docs/handbook/tsconfig-json.html
     /**
      * Files
      */
-    for (const file of cfg.files) {
-      args.push(file);
+    for (const file of cfg.files || []) {
+      if (/\.tsx?$/.test(file)) {
+        args.push(file);
+      }
     }
 
     /**
@@ -306,23 +317,30 @@ class BuildCommand extends Command {
     const files = await globby(
       [].concat(
         // include
-        cfg.include || [],
+        cfg.include ? cfg.include : './',
         // exclude
         (cfg.exclude || []).map(str => '!' + str)
       ),
       {
-        cwd: path.join(this.options.srcDir, '..'),
+        cwd: argv.srcDir ? path.join(argv.srcDir, '..') : cwd,
       }
     );
     for (const item of files) {
-      args.push(item);
+      if (/\.tsx?$/.test(item)) {
+        args.push(item);
+      }
     }
 
     /**
      * compilerOptions
      */
     for (const key in cfg.compilerOptions || {}) {
-      args.push(`--${key} ${cfg.compilerOptions[key]}`);
+      if (cfg.compilerOptions[key] === true || cfg.compilerOptions[key] === 'true') {
+        args.push(`--${key}`);
+      } else {
+        args.push(`--${key}`);
+        args.push(cfg.compilerOptions[key]);
+      }
     }
   }
 }
