@@ -9,11 +9,13 @@ export function plugin(identifier?: string) {
     if (typeof index === 'number') {
       attachConstructorDataOnClass(identifier, target, PLUGIN_KEY, index)
     } else {
-      if (! identifier) {
-        identifier = targetKey
+      let id = identifier
+
+      if (! id) {
+        id = targetKey
       }
       attachClassMetadata(PLUGIN_KEY, {
-        key: identifier,
+        key: id,
         propertyName: targetKey,
       }, target)
     }

@@ -4,11 +4,12 @@ import { CLASS_KEY_CONSTRUCTOR } from './constant'
 
 
 export function attachConstructorDataOnClass(identifier, clz, type, index) {
+  let id = identifier
 
-  if (! identifier) {
+  if (! id) {
     const args = getParamNames(clz)
     if (clz.length === args.length && index < clz.length) {
-      identifier = args[index]
+      id = args[index]
     }
   }
 
@@ -18,7 +19,7 @@ export function attachConstructorDataOnClass(identifier, clz, type, index) {
     constructorMetaValue = {}
   }
   constructorMetaValue[index] = {
-    key: identifier,
+    key: id,
     type,
   }
   saveClassMetadata(CLASS_KEY_CONSTRUCTOR, constructorMetaValue, clz)

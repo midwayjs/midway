@@ -4,6 +4,7 @@ import { FUNC_KEY } from '../constant'
 
 
 export function func(funHandler: string): ClassDecorator {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return (target: any) => {
     // 保存到扫描列表
     saveModule(FUNC_KEY, target)

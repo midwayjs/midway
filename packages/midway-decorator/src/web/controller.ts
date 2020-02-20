@@ -16,6 +16,7 @@ export function controller(prefix: string, routerOptions: {
   sensitive?: boolean,
   middleware?: KoaMiddlewareParamArray,
 } = { middleware: [], sensitive: true }): ClassDecorator {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return (target: any) => {
     saveModule(CONTROLLER_KEY, target)
     saveClassMetadata(CONTROLLER_KEY, {

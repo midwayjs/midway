@@ -25,6 +25,7 @@ export interface ScheduleOpts {
 }
 
 export function schedule(scheduleOpts: ScheduleOpts | string) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return function(target: any): void {
     saveModule(SCHEDULE_KEY, target)
     saveClassMetadata(SCHEDULE_KEY, scheduleOpts, target)

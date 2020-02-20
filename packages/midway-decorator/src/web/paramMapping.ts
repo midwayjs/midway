@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { attachPropertyDataToClass } from 'injection'
 
 import { WEB_ROUTER_PARAM_KEY } from '../constant'
