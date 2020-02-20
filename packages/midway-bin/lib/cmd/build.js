@@ -303,19 +303,11 @@ class BuildCommand extends Command {
     const cfg = argv.tsConfig;
     // https://www.typescriptlang.org/docs/handbook/tsconfig-json.html
     /**
-     * Files
-     */
-    for (const file of cfg.files || []) {
-      if (/\.tsx?$/.test(file)) {
-        args.push(file);
-      }
-    }
-
-    /**
      * include & exclude
      */
     const files = await globby(
       [].concat(
+        cfg.files || [],
         cfg.include ? cfg.include : 'src/**/*', // include
         (cfg.exclude || []).map(str => '!' + str) // exclude
       ),
