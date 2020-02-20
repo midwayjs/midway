@@ -66,6 +66,40 @@ describe('test/lib/cmd/build.test.js', () => {
     assert(fs.existsSync(path.join(cwd, 'dist/public/test.js')));
     await rimraf(path.join(cwd, 'dist'));
   });
+
+
+  it('build use tsConfig no project', async () => {
+    const BuildCommand = require('../../../lib/cmd/build');
+    const builder = new BuildCommand();
+    const cwd = path.join(__dirname, '../../fixtures/ts-dir-no-config');
+    await builder.run({
+      cwd,
+      argv: {
+        tsConfig: {
+          "compilerOptions": {
+            "target": "ES2017",
+            "module": "commonjs",
+            "moduleResolution": "node",
+            "experimentalDecorators": true,
+            "noImplicitThis": true,
+            "noUnusedLocals": true,
+            "stripInternal": true,
+            "pretty": true,
+            "declaration": true,
+            "sourceMap": true,
+            "outDir": "dist",
+            "lib": ["es2017", "dom"]
+          },
+          "exclude": [
+            "dist",
+            "node_modules",
+            "test"
+          ]
+        }
+      },
+    });
+    assert(fs.existsSync(path.join(cwd, 'dist/a.js')));
+  });
 });
 
 describe('test/lib/cmd/build.test.js - with another tsconfig', () => {

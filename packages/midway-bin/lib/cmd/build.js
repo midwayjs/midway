@@ -63,7 +63,7 @@ class BuildCommand extends Command {
     const { cwd, argv } = context;
 
     const tscCli = require.resolve('typescript/bin/tsc');
-    const projectFile = path.join(cwd, argv.project);
+    const projectFile = path.join(cwd, argv.project || '');
     if (!argv.tsConfig && !fs.existsSync(projectFile)) {
       console.log(`[midway-bin] tsconfig.json not found in ${cwd}\n`);
       return;
@@ -103,7 +103,7 @@ class BuildCommand extends Command {
       args.push('-p');
       args.push(argv.project);
     } else if (argv.tsConfig) {
-      await this.tsCfg2CliArgs(argv.tsConfig, args);
+      await this.tsCfg2CliArgs(cwd, argv.tsConfig, args);
     }
     await this.helper.forkNode(tscCli, args, { cwd, execArgv: [] });
 
@@ -291,13 +291,15 @@ class BuildCommand extends Command {
     return map;
   }
 
-  async tsCfg2CliArgs(cfg, args) {
+  async tsCfg2CliArgs(cwd, cfg, args) {
     // https://www.typescriptlang.org/docs/handbook/tsconfig-json.html
     /**
      * Files
      */
-    for (const file of cfg.files) {
-      args.push(file);
+    for (const file of cfg.files || []) {
+      if (/\.tsx?$/.test(file)) {
+        args.push(file);
+      }
     }
 
     /**
@@ -306,23 +308,30 @@ class BuildCommand extends Command {
     const files = await globby(
       [].concat(
         // include
-        cfg.include || [],
+        cfg.include ? cfg.include : './',
         // exclude
         (cfg.exclude || []).map(str => '!' + str)
       ),
       {
-        cwd: path.join(this.options.srcDir, '..'),
+        cwd: this.options && this.options.srcDir ? path.join(this.options.srcDir, '..') : cwd,
       }
     );
     for (const item of files) {
-      args.push(item);
+      if (/\.tsx?$/.test(item)) {
+        args.push(item);
+      }
     }
 
     /**
      * compilerOptions
      */
     for (const key in cfg.compilerOptions || {}) {
-      args.push(`--${key} ${cfg.compilerOptions[key]}`);
+      if (cfg.compilerOptions[key] === true || cfg.compilerOptions[key] === 'true') {
+        args.push(`--${key}`);
+      } else {
+        args.push(`--${key}`);
+        args.push(cfg.compilerOptions[key]);
+      }
     }
   }
 }
