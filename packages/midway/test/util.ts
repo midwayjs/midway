@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { mm } = require('../../midway-mock/dist')
 
 
