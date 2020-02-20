@@ -314,7 +314,7 @@ class BuildCommand extends Command {
       { cwd }
     );
     for (const item of files) {
-      if (/\.tsx?$/.test(file)) {
+      if (/\.tsx?$/.test(item)) {
         args.push(item);
       }
     }
