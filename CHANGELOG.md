@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.10](https://github.com/midwayjs/midway/compare/v2.0.0-beta.9...v2.0.0-beta.10) (2020-02-20)
+
+
+### Bug Fixes
+
+* ts build cwd ([#396](https://github.com/midwayjs/midway/issues/396)) ([83732f9](https://github.com/midwayjs/midway/commit/83732f90c325c646bc6983eac6460a7f65ca1c51))
+
+
+
+
+
 # [2.0.0-beta.9](https://github.com/midwayjs/midway/compare/v2.0.0-beta.8...v2.0.0-beta.9) (2020-02-20)
 
 
