@@ -64,6 +64,14 @@ class BuildCommand extends Command {
 
     const tscCli = require.resolve('typescript/bin/tsc');
     const projectFile = path.join(cwd, argv.project || '');
+    if (typeof argv.tsConfig === 'string') {
+      try {
+        argv.tsConfig = JSON.parse(argv.tsConfig);
+      } catch (e) {
+        console.log(`[midway-bin] tsConfig should be JSON string or Object: ${e.message}\n`);
+        return;
+      }
+    }
     if (!argv.tsConfig && !fs.existsSync(projectFile)) {
       console.log(`[midway-bin] tsconfig.json not found in ${cwd}\n`);
       return;
@@ -103,7 +111,7 @@ class BuildCommand extends Command {
       args.push('-p');
       args.push(argv.project);
     } else if (argv.tsConfig) {
-      await this.tsCfg2CliArgs(cwd, argv.tsConfig, args);
+      await this.tsCfg2CliArgs(cwd, argv, args);
     }
     await this.helper.forkNode(tscCli, args, { cwd, execArgv: [] });
 
@@ -291,7 +299,8 @@ class BuildCommand extends Command {
     return map;
   }
 
-  async tsCfg2CliArgs(cwd, cfg, args) {
+  async tsCfg2CliArgs(cwd, argv, args) {
+    const cfg = argv.tsConfig
     // https://www.typescriptlang.org/docs/handbook/tsconfig-json.html
     /**
      * Files
@@ -313,7 +322,7 @@ class BuildCommand extends Command {
         (cfg.exclude || []).map(str => '!' + str)
       ),
       {
-        cwd: this.options && this.options.srcDir ? path.join(this.options.srcDir, '..') : cwd,
+        cwd: argv.srcDir ? path.join(argv.srcDir, '..') : cwd,
       }
     );
     for (const item of files) {
