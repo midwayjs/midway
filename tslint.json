@@ -1,6 +1,0 @@
-{
-  "extends": [
-    "./packages/tslint-midway-contrib/tslint.json",
-    "tslint-no-unused-expression-chai"
-  ]
-}

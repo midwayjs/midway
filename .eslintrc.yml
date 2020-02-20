@@ -1,0 +1,13 @@
+extends: '@waiting/eslint-config'
+parserOptions:
+  project: 'tsconfig.eslint.json'
+
+# https://eslint.org/docs/rules/
+# https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/eslint-plugin
+# https://github.com/benmosher/eslint-plugin-import
+# https://github.com/sindresorhus/eslint-plugin-unicorn
+rules:
+  unicorn/filename-case: 2
+  # Use tsconfig.json noUnusedLocals:true instead
+  "@typescript-eslint/no-unused-vars": 0
+

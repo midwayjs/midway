@@ -1,0 +1,7 @@
+extends: '@waiting/eslint-config/recommended'
+parserOptions:
+  project: 'tsconfig.eslint.json'
+
+rules:
+  "@typescript-eslint/no-unused-vars": 0
+
