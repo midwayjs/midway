@@ -9,8 +9,6 @@
   },
   "main": "lib/command.js",
   "devDependencies": {
-    "eslint": "^6.1.0",
-    "eslint-config-egg": "^7.0.0",
     "midway-bin": "^1.17.1",
     "mz-modules": "^2.1.0",
     "power-assert": "^1.6.1"
@@ -29,8 +27,8 @@
     "boilerplate.json"
   ],
   "scripts": {
-    "lint": "eslint bin lib test",
-    "lint-fix": "npm run lint -- --fix",
+    "lint": "eslint --fix --cache {bin,lib}/**/*.js",
+    "lint:nofix": "eslint --cache {bin,lib}/**/*.js",
     "test": "npm run lint && midway-bin test",
     "cov": "midway-bin cov",
     "ci": "npm run lint && midway-bin cov",
