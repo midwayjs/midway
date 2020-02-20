@@ -15,7 +15,7 @@
     "test-local": "node bin/midway-bin.js test -t 3600000",
     "cov": "nyc -r lcov -r text-summary npm run test-local",
     "ci-test-only": "TESTS=test/lib/cmd/cov.test.js npm run test-local",
-    "ci": "npm run lint && npm run pkgfiles -- --check && npm run ci-test-only && npm run cov",
+    "ci": "npm run lint:nofix && npm run pkgfiles -- --check && npm run ci-test-only && npm run cov",
     "autod": "node bin/midway-bin.js autod"
   },
   "keywords": [
