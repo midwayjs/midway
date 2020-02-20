@@ -8,7 +8,8 @@
     "mocha": "bin/mocha.js"
   },
   "scripts": {
-    "lint": "eslint .",
+    "lint": "eslint --fix --cache {bin,lib}/**/*.js",
+    "lint:nofix": "eslint --cache {bin,lib}/**/*.js",
     "pkgfiles": "node bin/midway-bin.js pkgfiles",
     "test": "npm run lint -- --fix && npm run test-local",
     "test-local": "node bin/midway-bin.js test -t 3600000",
