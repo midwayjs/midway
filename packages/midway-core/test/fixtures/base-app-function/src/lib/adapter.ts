@@ -1,9 +1,11 @@
-import { autowire, provide } from 'injection';
+import { autowire, provide } from 'injection'
 
 @provide()
 @autowire(false)
 export class GoogleAdapter {
-  _hello = null;
+
+  _hello = null
+
 }
 
 @provide()

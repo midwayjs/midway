@@ -1,11 +1,11 @@
-let i = 1;
+let i = 1
 
 exports.task = async (ctx) => {
-  console.log('hasdf');
-  ctx.logger.info(process.pid, 'hehehehe', i++);
-};
+  console.log('hasdf')
+  ctx.logger.info(process.pid, 'hehehehe', i++)
+}
 
 exports.schedule = {
   type: 'worker',
   interval: 1000,
-};
+}

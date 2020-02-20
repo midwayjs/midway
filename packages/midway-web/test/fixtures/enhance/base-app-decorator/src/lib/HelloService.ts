@@ -1,19 +1,22 @@
-import {provide, inject} from 'injection';
-import { BaseService } from './service';
+import { provide, inject } from 'injection'
+
+import { BaseService } from './service'
 
 @provide()
 export class HelloService {
-  xxx: string[] = ['a', 'b'];
 
-  name: string;
+  xxx: string[] = ['a', 'b']
+
+  name: string
 
   @inject('baseService')
-  service: BaseService;
+  service: BaseService
 
   async say() {
-    if (!this.service) {
-      throw new Error('inject baseService fail!');
+    if (! this.service) {
+      throw new Error('inject baseService fail!')
     }
-    return `${this.xxx.join(',')}`;
+    return `${this.xxx.join(',')}`
   }
+
 }

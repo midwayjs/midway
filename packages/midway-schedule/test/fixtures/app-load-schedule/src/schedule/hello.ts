@@ -1,5 +1,5 @@
-import { provide } from 'injection';
-import { schedule } from '@midwayjs/decorator';
+import { provide } from 'injection'
+import { schedule } from '@midwayjs/decorator'
 
 @provide()
 @schedule({
@@ -7,7 +7,9 @@ import { schedule } from '@midwayjs/decorator';
   interval: 2333,
 })
 export default class HelloCron {
+
   async exec(ctx) {
-    ctx.logger.info(process.pid, 'hello');
+    ctx.logger.info(process.pid, 'hello')
   }
+
 }

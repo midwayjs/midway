@@ -1,21 +1,21 @@
-export * from 'midway-web';
-const Master = require('../cluster/master');
+export * from 'midway-web'
+const Master = require('../cluster/master')
 
 /**
  * current version of midway
  * @member {String} Midway#VERSION
  */
-export const VERSION = require('../package.json').version;
+export const VERSION = require('../package.json').version
 
 /**
  * current release name
  * @member {String} Midway#RELEASE
  */
-export const RELEASE = 'VISION';
+export const RELEASE = 'VISION'
 
 /**
  * debug for vscode
  */
 export function startCluster(options, callback) {
-  new Master(options).ready(callback);
+  new Master(options).ready(callback)
 }

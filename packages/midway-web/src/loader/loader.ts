@@ -1,4 +1,5 @@
-import { MidwayWebLoader } from './webLoader';
+import { MidwayWebLoader } from './webLoader'
+
 
 export class AppWorkerLoader extends MidwayWebLoader {
 
@@ -8,28 +9,28 @@ export class AppWorkerLoader extends MidwayWebLoader {
    */
   load() {
     // app > plugin > core
-    this.loadApplicationExtend();
-    this.loadRequestExtend();
-    this.loadResponseExtend();
-    this.loadContextExtend();
-    this.loadHelperExtend();
-    this.loadApplicationContext();
+    this.loadApplicationExtend()
+    this.loadRequestExtend()
+    this.loadResponseExtend()
+    this.loadContextExtend()
+    this.loadHelperExtend()
+    this.loadApplicationContext()
     // app > plugin
-    this.loadCustomApp();
+    this.loadCustomApp()
     // app > plugin
-    this.loadService();
+    this.loadService()
     // app > plugin > core
-    this.loadMiddleware();
+    this.loadMiddleware()
     // app
-    this.loadController();
+    this.loadController()
     // app
-    this.loadRouter(); // Dependent on controllers
+    this.loadRouter() // Dependent on controllers
 
     // midway logic
     this.app.beforeStart(async () => {
-      await this.refreshContext();
-      await this.loadMidwayController();
-    });
+      await this.refreshContext()
+      await this.loadMidwayController()
+    })
   }
 
 }
@@ -37,13 +38,13 @@ export class AppWorkerLoader extends MidwayWebLoader {
 export class AgentWorkerLoader extends MidwayWebLoader {
 
   load() {
-    this.loadAgentExtend();
-    this.loadApplicationContext();
-    this.loadContextExtend();
-    this.loadCustomAgent();
+    this.loadAgentExtend()
+    this.loadApplicationContext()
+    this.loadContextExtend()
+    this.loadCustomAgent()
     this.app.beforeStart(async () => {
-      await this.refreshContext();
-    });
+      await this.refreshContext()
+    })
   }
 
 }

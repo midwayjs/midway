@@ -1,4 +1,5 @@
-const { mm } = require('../../midway-mock/dist');
+const { mm } = require('../../midway-mock/dist')
+
 
 export function cluster(name, options?) {
   options = Object.assign(
@@ -9,10 +10,10 @@ export function cluster(name, options?) {
       cache: false,
     },
     options,
-  );
-  return mm.cluster(options);
+  )
+  return mm.cluster(options)
 }
 
 export function getFilepath(name) {
-  return require('path').join(__dirname, 'fixtures', name);
+  return require('path').join(__dirname, 'fixtures', name)
 }

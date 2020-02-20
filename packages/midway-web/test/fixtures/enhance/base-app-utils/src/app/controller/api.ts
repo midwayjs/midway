@@ -1,13 +1,15 @@
-'use strict';
+'use strict'
 
-import {inject, provide} from 'injection';
-import {controller, get, config} from '@midwayjs/decorator';
+import { inject, provide } from 'injection'
+import { controller, get, config } from '@midwayjs/decorator'
 
 @provide()
 export class BaseApi {
+
   async index(ctx) {
-    ctx.body = 'index';
+    ctx.body = 'index'
   }
+
 }
 
 @provide()
@@ -15,13 +17,14 @@ export class BaseApi {
 export class Api {
 
   @inject('is')
-  isModule;
+  isModule
 
   @config('hello')
-  config1;
+  config1
 
   @get('/test')
   async index(ctx) {
-    ctx.body = this.isModule.function('hello').toString() + this.config1.c;
+    ctx.body = this.isModule.function('hello').toString() + this.config1.c
   }
+
 }

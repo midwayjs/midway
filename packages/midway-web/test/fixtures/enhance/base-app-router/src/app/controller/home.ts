@@ -1,5 +1,6 @@
-import { provide } from 'injection';
-import { controller, get } from '../../../../../../../src/';
+import { provide } from 'injection'
+
+import { controller, get } from '../../../../../../../src'
 
 @provide()
 @controller('/')
@@ -9,7 +10,7 @@ export class HomeController {
   @get('/home')
   @get('/poster')
   async index(ctx) {
-    ctx.body = 'hello';
+    ctx.body = 'hello'
   }
 
 }

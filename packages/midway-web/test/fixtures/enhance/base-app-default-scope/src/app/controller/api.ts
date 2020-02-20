@@ -1,16 +1,21 @@
-'use strict';
+'use strict'
 
-import { provide } from 'injection';
-import { controller, get } from '../../../../../../../src/';
-import * as assert from 'assert';
+import * as assert from 'assert'
+
+import { provide } from 'injection'
+
+import { controller, get } from '../../../../../../../src'
+
 
 @provide()
 export class BaseApi {
+
   async index(ctx) {
-    const baseApi = await ctx.requestContext.getAsync('baseApi');
-    assert(baseApi);
-    ctx.body = 'index';
+    const baseApi = await ctx.requestContext.getAsync('baseApi')
+    assert(baseApi)
+    ctx.body = 'index'
   }
+
 }
 
 @provide()
@@ -19,6 +24,7 @@ export class Api {
 
   @get('/test')
   async index(ctx) {
-    ctx.body = 'hello';
+    ctx.body = 'hello'
   }
+
 }

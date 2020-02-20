@@ -1,10 +1,14 @@
-export * from 'injection';
-export * from 'midway-core';
-export * from '@midwayjs/decorator';
-export * from './interface';
-export {AgentWorkerLoader, AppWorkerLoader} from './loader/loader';
-export {Application, Agent} from './midway';
-export {MidwayWebLoader} from './loader/webLoader';
+export * from 'injection'
+export * from 'midway-core'
+export * from '@midwayjs/decorator'
+export * from './interface'
+export {
+  AgentWorkerLoader, AppWorkerLoader,
+} from './loader/loader'
+export {
+  Application, Agent,
+} from './midway'
+export { MidwayWebLoader } from './loader/webLoader'
 
 export {
   Context,
@@ -27,10 +31,10 @@ export {
   Boot,
   IBoot,
   IgnoreOrMatch,
-} from 'egg';
+} from 'egg'
 export {
   LoggerLevel as EggLoggerLevel,
   EggLogger,
   EggLoggers,
   EggContextLogger,
-} from 'egg-logger';
+} from 'egg-logger'

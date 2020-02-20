@@ -1,34 +1,37 @@
-import {provide, inject} from 'injection';
-import { controller, get } from '../../../../../../../src';
-import { BaseService } from '../../lib/service';
-import { HelloService } from '../../lib/HelloService';
+import { provide, inject } from 'injection'
+
+import { controller, get } from '../../../../../../../src'
+import { BaseService } from '../../lib/service'
+import { HelloService } from '../../lib/HelloService'
 
 @provide()
 @controller('/hello')
 export class HelloController {
-  name: string[] = ['a', 'b'];
 
-  xxx = 'hjjj';
+  name: string[] = ['a', 'b']
 
-  aaaa;
+  xxx = 'hjjj'
+
+  aaaa
 
   @inject()
-  helloService: HelloService;
+  helloService: HelloService
 
   @inject('baseService')
-  service: BaseService;
+  service: BaseService
 
   @get('/say')
   async say(ctx) {
-    const arr = [];
+    const arr = []
     if (this.service) {
-      arr.push('service');
+      arr.push('service')
     }
     if (this.helloService) {
-      arr.push('hello');
-      arr.push(await this.helloService.say());
+      arr.push('hello')
+      arr.push(await this.helloService.say())
     }
     // service,hello,a,b
-    ctx.body = arr.join(',');
+    ctx.body = arr.join(',')
   }
+
 }

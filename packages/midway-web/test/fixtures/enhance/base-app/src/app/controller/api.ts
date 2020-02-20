@@ -1,5 +1,5 @@
-'use strict';
+'use strict'
 
 exports.index = function*() {
-  this.body = 'hello';
-};
+  this.body = 'hello'
+}

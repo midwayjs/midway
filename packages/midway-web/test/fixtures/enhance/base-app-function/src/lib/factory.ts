@@ -1,23 +1,24 @@
-import { providerWrapper } from 'midway-core';
-import { IApplicationContext } from 'injection';
+import { providerWrapper } from 'midway-core'
+import { IApplicationContext } from 'injection'
+
 
 export function adapterFactory(context: IApplicationContext) {
   return async (adapterName: string) => {
     if (adapterName === 'google') {
-      return context.getAsync('googleAdapter');
+      return context.getAsync('googleAdapter')
     }
 
     if (adapterName === 'baidu') {
-      return context.getAsync('baiduAdapter');
+      return context.getAsync('baiduAdapter')
     }
-  };
+  }
 }
 
 export function contextHandler(context) {
   return async () => {
-    const ctx = await context.getAsync('ctx');
-    return !!ctx.logger;
-  };
+    const ctx = await context.getAsync('ctx')
+    return !! ctx.logger
+  }
 }
 
 providerWrapper([
@@ -27,6 +28,6 @@ providerWrapper([
   },
   {
     id: 'contextHandler',
-    provider: contextHandler
-  }
-]);
+    provider: contextHandler,
+  },
+])

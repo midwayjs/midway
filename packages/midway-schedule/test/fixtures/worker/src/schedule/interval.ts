@@ -1,5 +1,5 @@
-import { provide } from 'injection';
-import { schedule, CommonSchedule } from '@midwayjs/decorator';
+import { provide } from 'injection'
+import { schedule, CommonSchedule } from '@midwayjs/decorator'
 
 @provide()
 @schedule({
@@ -7,7 +7,9 @@ import { schedule, CommonSchedule } from '@midwayjs/decorator';
   interval: 1000,
 })
 export default class IntervalCron implements CommonSchedule {
+
   async exec(ctx) {
-    ctx.logger.info(process.pid, 'hello decorator');
+    ctx.logger.info(process.pid, 'hello decorator')
   }
+
 }

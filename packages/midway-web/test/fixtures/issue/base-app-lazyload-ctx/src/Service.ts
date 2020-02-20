@@ -1,17 +1,20 @@
-import { inject, provide } from 'injection';
-import { CodeService } from './app/service/CodeService';
-import { UserService } from './app/service/UserService';
+import { inject, provide } from 'injection'
+
+import { CodeService } from './app/service/CodeService'
+import { UserService } from './app/service/UserService'
 
 @provide()
 export class Service {
+
   @inject()
-  ctx: any;
+  ctx: any
 
   get code(): CodeService {
-    return this.ctx.requestContext.get('codeService');
+    return this.ctx.requestContext.get('codeService')
   }
 
   get user(): UserService {
-    return this.ctx.requestContext.get('userService');
+    return this.ctx.requestContext.get('userService')
   }
+
 }

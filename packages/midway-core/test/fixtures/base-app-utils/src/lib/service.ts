@@ -1,24 +1,27 @@
-import {config, plugin, logger} from '../../../../../src/decorators';
-import {provide, inject} from 'injection';
+import { provide, inject } from 'injection'
+
+import { config, plugin, logger } from '../../../../../src/decorators'
 
 @provide()
 export class BaseService {
+
   @inject()
-  ctx;
+  ctx
 
   @config('hello')
-  config;
+  config
 
   @plugin('plugin2')
-  plugin2;
+  plugin2
 
   @inject('is')
-  isModule;
+  isModule
 
   @logger()
-  logger;
+  logger
 
   async getData() {
-    return this.isModule.function('hello').toString() + this.config.c;
+    return this.isModule.function('hello').toString() + this.config.c
   }
+
 }

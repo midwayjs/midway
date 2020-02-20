@@ -1,52 +1,52 @@
+import * as fs from 'fs';
 import { Agent, Application } from 'egg';
 import { Logger } from 'egg-logger';
 import { AgentWorkerLoader, AppWorkerLoader } from './loader/loader';
-import * as fs from 'fs';
-import * as path from 'path';
-import { EggRouter as Router } from '@eggjs/router';
+import * as path from 'path'
+import { EggRouter as Router } from '@eggjs/router'
 
-const MIDWAY_PATH = path.dirname(__dirname);
+const MIDWAY_PATH = path.dirname(__dirname)
 
-class MidwayApplication extends (Application as {
+class MidwayApplication extends Application as {
   new(...x)
-}) {
+} {
 
-  Router = Router;
+  Router = Router
 
   get [Symbol.for('egg#loader')]() {
-    return AppWorkerLoader;
+    return AppWorkerLoader
   }
 
   get [Symbol.for('egg#eggPath')]() {
-    return MIDWAY_PATH;
+    return MIDWAY_PATH
   }
 
   getConfig(key?) {
-    return key ? this.config[key] : this.config;
+    return key ? this.config[key] : this.config
   }
 
   get enablePlugins() {
-    return this.plugins;
+    return this.plugins
   }
 
   getLogger(name?) {
-    return name ? this.loggers[name] : this.logger;
+    return name ? this.loggers[name] : this.logger
   }
 
   getPlugin(pluginName) {
-    return this.getPluginContext().get(pluginName);
+    return this.getPluginContext().get(pluginName)
   }
 
   getPluginContext() {
-    return (this.loader as AppWorkerLoader).pluginContext;
+    return (this.loader as AppWorkerLoader).pluginContext
   }
 
   getApplicationContext() {
-    return (this.loader as AppWorkerLoader).applicationContext;
+    return (this.loader as AppWorkerLoader).applicationContext
   }
 
   generateController(controllerMapping: string) {
-    return (this.loader as AppWorkerLoader).generateController(controllerMapping);
+    return (this.loader as AppWorkerLoader).generateController(controllerMapping)
   }
 
   /**
@@ -55,7 +55,7 @@ class MidwayApplication extends (Application as {
    * @member {String}
    */
   get baseDir(): string {
-    return this.loader.baseDir;
+    return this.loader.baseDir
   }
 
   /**
@@ -63,66 +63,67 @@ class MidwayApplication extends (Application as {
    * @member {String}
    */
   get appDir(): string {
-    return this.loader.appDir;
+    return this.loader.appDir
   }
 
   /**
    * get application context
    */
   get applicationContext() {
-    return this.loader.applicationContext;
+    return this.loader.applicationContext
   }
 
   /**
    * get plugin context
    */
   get pluginContext() {
-    return this.loader.pluginContext;
+    return this.loader.pluginContext
   }
 
   dumpConfig() {
-    super.dumpConfig();
+    super.dumpConfig()
     try {
-      const tree = this.applicationContext.dumpDependency();
-      const rundir = this.config.rundir;
-      const dumpFile = path.join(rundir, `${this.type}_dependency_${process.pid}`);
-      fs.writeFileSync(dumpFile, tree);
+      const tree = this.applicationContext.dumpDependency()
+      const {rundir} = this.config;
+      const dumpFile = path.join(rundir, `${this.type}_dependency_${process.pid}`)
+      fs.writeFileSync(dumpFile, tree)
     } catch (err) {
-      this.coreLogger.warn(`dump dependency dot error: ${err.message}`);
+      this.coreLogger.warn(`dump dependency dot error: ${err.message}`)
     }
   }
+
 }
 
-class MidwayAgent extends (Agent as {
+class MidwayAgent extends Agent as {
   new(...x)
-}) {
+} {
 
   get [Symbol.for('egg#loader')]() {
-    return AgentWorkerLoader;
+    return AgentWorkerLoader
   }
 
   get [Symbol.for('egg#eggPath')]() {
-    return MIDWAY_PATH;
+    return MIDWAY_PATH
   }
 
   getConfig(key?) {
-    return key ? this.config[key] : this.config;
+    return key ? this.config[key] : this.config
   }
 
   getLogger(name?): Logger {
-    return name ? this.loggers[name] : this.logger;
+    return name ? this.loggers[name] : this.logger
   }
 
   getPlugin(pluginName) {
-    return this.getPluginContext().get(pluginName);
+    return this.getPluginContext().get(pluginName)
   }
 
   getPluginContext() {
-    return (this.loader as AgentWorkerLoader).pluginContext;
+    return (this.loader as AgentWorkerLoader).pluginContext
   }
 
   getApplicationContext() {
-    return (this.loader as AgentWorkerLoader).applicationContext;
+    return (this.loader as AgentWorkerLoader).applicationContext
   }
 
   /**
@@ -131,7 +132,7 @@ class MidwayAgent extends (Agent as {
    * @member {String}
    */
   get baseDir(): string {
-    return this.loader.baseDir;
+    return this.loader.baseDir
   }
 
   /**
@@ -139,37 +140,38 @@ class MidwayAgent extends (Agent as {
    * @member {String}
    */
   get appDir(): string {
-    return this.loader.appDir;
+    return this.loader.appDir
   }
 
   /**
    * get application context
    */
   get applicationContext() {
-    return this.loader.applicationContext;
+    return this.loader.applicationContext
   }
 
   /**
    * get plugin context
    */
   get pluginContext() {
-    return this.loader.pluginContext;
+    return this.loader.pluginContext
   }
 
   dumpConfig() {
-    super.dumpConfig();
+    super.dumpConfig()
     try {
-      const tree = this.applicationContext.dumpDependency();
-      const rundir = this.config.rundir;
-      const dumpFile = path.join(rundir, `${this.type}_dependency_${process.pid}`);
-      fs.writeFileSync(dumpFile, tree);
+      const tree = this.applicationContext.dumpDependency()
+      const {rundir} = this.config;
+      const dumpFile = path.join(rundir, `${this.type}_dependency_${process.pid}`)
+      fs.writeFileSync(dumpFile, tree)
     } catch (err) {
-      this.coreLogger.warn(`dump dependency dot error: ${err.message}`);
+      this.coreLogger.warn(`dump dependency dot error: ${err.message}`)
     }
   }
+
 }
 
 export {
   MidwayApplication as Application,
-  MidwayAgent as Agent
-};
+  MidwayAgent as Agent,
+}

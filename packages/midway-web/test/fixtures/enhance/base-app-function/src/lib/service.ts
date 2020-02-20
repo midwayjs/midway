@@ -1,55 +1,60 @@
-import { config, plugin } from '@midwayjs/decorator';
-import { async, init, inject, provide } from 'injection';
+import { config, plugin } from '@midwayjs/decorator'
+import { async, init, inject, provide } from 'injection'
 
 @provide()
 export class A {
+
   config = {
-    c: 20
-  };
+    c: 20,
+  }
+
 }
 
 @provide()
 export class B {
+
   config = {
-    c: 40
-  };
+    c: 40,
+  }
+
 }
 
 @async()
 @provide()
 export class BaseService {
 
-  config;
+  config
 
   @config('adapterName')
-  adapterName;
-  plugin2;
+  adapterName
+
+  plugin2
 
   @inject('adapterFactory')
-  factory;
+  factory
 
   @inject()
-  contextHandler: () => boolean;
+  contextHandler: () => boolean
 
-  adapter;
+  adapter
 
   constructor(
     @inject() a,
     @config('hello') config,
     @inject() b,
-    @plugin('plugin2') plugin2
+    @plugin('plugin2') plugin2,
   ) {
     this.config = Object.assign(config, {
-      c: a.config.c + b.config.c + config.c
-    });
-    this.plugin2 = plugin2;
+      c: a.config.c + b.config.c + config.c,
+    })
+    this.plugin2 = plugin2
   }
 
   @init()
   async init() {
-    this.adapter = await this.factory(this.adapterName);
-    const data = await this.contextHandler();
-    this.config.d = data ? 1 : 2;
+    this.adapter = await this.factory(this.adapterName)
+    const data = await this.contextHandler()
+    this.config.d = data ? 1 : 2
   }
 
 }

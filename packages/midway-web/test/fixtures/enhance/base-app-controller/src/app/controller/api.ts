@@ -1,16 +1,20 @@
-'use strict';
+'use strict'
 
-import { inject, provide, scope, ScopeEnum } from 'injection';
-import { controller, get } from '../../../../../../../src/';
+import { inject, provide, scope, ScopeEnum } from 'injection'
 
-const assert = require('assert');
+import { controller, get } from '../../../../../../../src'
+
+
+const assert = require('assert')
 
 @provide()
 @scope(ScopeEnum.Request)
 export class BaseApi {
+
   async index(ctx) {
-    ctx.body = 'index';
+    ctx.body = 'index'
   }
+
 }
 
 @provide()
@@ -18,11 +22,12 @@ export class BaseApi {
 export class Api {
 
   @inject()
-  logger;
+  logger
 
   @get('/')
   async index(ctx) {
-    assert(this.logger.constructor.name === 'ContextLogger');
-    ctx.body = 'hello';
+    assert(this.logger.constructor.name === 'ContextLogger')
+    ctx.body = 'hello'
   }
+
 }

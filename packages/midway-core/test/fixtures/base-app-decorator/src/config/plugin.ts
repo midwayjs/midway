@@ -1,4 +1,5 @@
-import * as path from 'path';
+import * as path from 'path'
+
 
 module.exports = {
   // 默认开启的插件
@@ -9,5 +10,5 @@ module.exports = {
   plugin2: {
     enable: true,
     path: path.join(__dirname, '../plugins/plugin2'),
-  }
-};
+  },
+}

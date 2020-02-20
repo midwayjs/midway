@@ -1,1 +1,1 @@
-exports.logrotator = true;
+exports.logrotator = true

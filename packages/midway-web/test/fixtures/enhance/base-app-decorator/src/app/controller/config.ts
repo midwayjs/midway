@@ -1,50 +1,52 @@
-import {provide, inject} from 'injection';
-import { controller, get, config } from '../../../../../../../src';
+import { provide, inject } from 'injection'
+
+import { controller, get, config } from '../../../../../../../src'
 
 @provide()
 @controller('/config')
 export class ConfigController {
 
   @inject('ctx')
-  ctx: any;
+  ctx: any
 
   // should be 1
   @config('hello.a')
-  a: number;
+  a: number
 
   // should be 2
   @config('hello.e.f')
-  c: number;
+  c: number
 
   // should be undefined
   @config('hello.f')
-  d: number;
+  d: number
 
   @config('plugins')
-  plugins: any;
+  plugins: any
 
-  b: boolean;
+  b: boolean
 
   constructor(
       // should be true
-      @config('plugins.plugin2') pluginFlag: boolean
+      @config('plugins.plugin2') pluginFlag: boolean,
   ) {
-    this.b = pluginFlag;
+    this.b = pluginFlag
   }
 
   @get('/test')
   async test() {
-      const data =  {
-          a: this.a,
-          b: this.b,
-          c: this.c,
-          d: this.d,
-      };
-      this.ctx.body = data;
+    const data = {
+      a: this.a,
+      b: this.b,
+      c: this.c,
+      d: this.d,
+    }
+    this.ctx.body = data
   }
 
   @get('/test2')
   async test2() {
-      this.ctx.body = this.plugins;
+    this.ctx.body = this.plugins
   }
+
 }
