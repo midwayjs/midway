@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.27](https://github.com/midwayjs/midway-faas/compare/v0.2.26...v0.2.27) (2020-02-21)
+
+
+### Bug Fixes
+
+* invoke source map ([#52](https://github.com/midwayjs/midway-faas/issues/52)) ([9149d2a](https://github.com/midwayjs/midway-faas/commit/9149d2a9a3f3d9ba975588b61c6f9bbeec2e8d86)), closes [#51](https://github.com/midwayjs/midway-faas/issues/51)
+
+
+
+
+
 ## [0.2.22](https://github.com/midwayjs/midway-faas/compare/v0.2.21...v0.2.22) (2020-02-17)
 
 **Note:** Version bump only for package @midwayjs/runtime-mock
