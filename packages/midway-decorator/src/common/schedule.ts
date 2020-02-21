@@ -4,7 +4,7 @@ import { SCHEDULE_KEY } from '../constant';
 
 
 export interface CommonSchedule {
-  exec(ctx?);
+  exec(ctx?)
 }
 
 export interface ScheduleOpts {
@@ -15,12 +15,12 @@ export interface ScheduleOpts {
   disable?: boolean
   env?: [string]
   cronOptions?: {
-    currentDate?: string | number | Date,
-    startDate?: string | number | Date,
-    endDate?: string | number | Date,
-    iterator?: boolean,
-    utc?: boolean,
-    tz?: string,
+    currentDate?: string | number | Date;
+    startDate?: string | number | Date;
+    endDate?: string | number | Date;
+    iterator?: boolean;
+    utc?: boolean;
+    tz?: string;
   }
 }
 

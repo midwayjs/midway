@@ -5,16 +5,16 @@ import { KoaMiddlewareParamArray } from '../interface';
 
 
 export interface ControllerOption {
-  prefix: string;
+  prefix: string
   routerOptions: {
     sensitive?: boolean;
-    middleware?: KoaMiddlewareParamArray
-  };
+    middleware?: KoaMiddlewareParamArray;
+  }
 }
 
 export function controller(prefix: string, routerOptions: {
-  sensitive?: boolean,
-  middleware?: KoaMiddlewareParamArray,
+  sensitive?: boolean;
+  middleware?: KoaMiddlewareParamArray;
 } = { middleware: [], sensitive: true }): ClassDecorator {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return (target: any) => {
