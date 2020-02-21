@@ -1,4 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { mm } = require('../../midway-mock/dist');
+
 
 export function cluster(name, options?) {
   options = Object.assign(
