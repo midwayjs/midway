@@ -12,6 +12,9 @@ describe('/test/index.test.ts', () => {
     if (existsSync(join(__dirname, 'fixtures/ice-faas-ts-standard/.faas_debug_tmp'))) {
       await remove(join(__dirname, 'fixtures/ice-faas-ts-standard/.faas_debug_tmp'));
     }
+    if (existsSync(join(__dirname, 'fixtures/ice-faas-ts-standard/.tsbuildinfo'))) {
+      await remove(join(__dirname, 'fixtures/ice-faas-ts-standard/.tsbuildinfo'));
+    }
   });
 
   it('should use origin http trigger', async () => {

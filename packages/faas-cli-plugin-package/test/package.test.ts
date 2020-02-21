@@ -1,6 +1,6 @@
 import { CommandHookCore, loadSpec } from '@midwayjs/fcli-command-core';
 import { PackagePlugin } from '../src/index';
-import { join, resolve } from 'path';
+import { resolve, join } from 'path';
 import { existsSync, remove } from 'fs-extra';
 import * as assert from 'assert';
 

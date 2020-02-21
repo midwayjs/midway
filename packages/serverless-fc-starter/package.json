@@ -10,7 +10,7 @@
   },
   "devDependencies": {
     "@midwayjs/runtime-mock": "^0.2.22",
-    "midway-bin": "1",
+    "midway-bin": "beta",
     "raw-body": "^2.4.1"
   },
   "files": [

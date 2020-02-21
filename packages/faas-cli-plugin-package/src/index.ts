@@ -320,31 +320,17 @@ export class PackagePlugin extends BasePlugin {
       this.core.cli.log(' - Using tradition build mode');
       if (this.codeAnalyzeResult.integrationProject) {
         // 生成一个临时 tsconfig
-        const tempConfigFilePath = join(
-          this.servicePath,
-          'tsconfig_integration_faas.json'
-        );
-
-        await tsIntegrationProjectCompile(this.servicePath, {
-          sourceDir: this.options.sourceDir || 'src',
+        const tsConfig = await tsIntegrationProjectCompile(this.servicePath, {
           buildRoot: this.midwayBuildPath,
           tsCodeRoot: this.codeAnalyzeResult.tsCodeRoot,
           incremental: false,
           clean: true,
         });
-        // 把临时的 tsconfig 移动进去
-        await move(
-          tempConfigFilePath,
-          join(this.midwayBuildPath, 'tsconfig.json'),
-          {
-            overwrite: true,
-          }
-        );
+        writeJSON(join(this.midwayBuildPath, 'tsconfig.json'), tsConfig);
       } else {
         await tsCompile(this.servicePath, {
           clean: true,
-          tsConfigName: 'tsconfig.json',
-          source: this.options.sourceDir || 'src',
+          tsConfigName: 'tsconfig.json'
         });
         // copy dist to artifact directory
         await move(
@@ -500,7 +486,7 @@ export class PackagePlugin extends BasePlugin {
       const deployOrigin = this.core.service.aggregation[aggregationName]
         .deployOrigin;
 
-      const allPaths = [];
+      const allAggred = [];
       let handlers = [];
       if (this.core.service.aggregation[aggregationName].functions) {
         handlers = this.core.service.aggregation[aggregationName].functions
@@ -520,7 +506,10 @@ export class PackagePlugin extends BasePlugin {
             if (!httpEvent || !httpEvent.http.path) {
               return;
             }
-            allPaths.push(httpEvent.http.path);
+            allAggred.push({
+              path: httpEvent.http.path,
+              method: httpEvent.http.method
+            });
             if (!deployOrigin) {
               // 不把原有的函数进行部署
               this.core.cli.log(
@@ -536,6 +525,7 @@ export class PackagePlugin extends BasePlugin {
           .filter((func: any) => !!func);
       }
 
+      const allPaths = allAggred.map(aggre => aggre.path);
       let currentPath = commonPrefix(allPaths);
       currentPath = currentPath ? `${currentPath}/*` : '/*';
       this.core.cli.log(
@@ -549,6 +539,7 @@ export class PackagePlugin extends BasePlugin {
       }
       allAggregationPaths.push(currentPath);
       this.core.service.functions[aggregationFuncName]._handlers = handlers;
+      this.core.service.functions[aggregationFuncName]._allAggred = allAggred;
       this.core.service.functions[aggregationFuncName].events = [
         { http: { method: 'get', path: currentPath } },
       ];

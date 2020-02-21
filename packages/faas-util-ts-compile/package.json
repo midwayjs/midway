@@ -5,7 +5,7 @@
   "typings": "dist/index.d.ts",
   "dependencies": {
     "fs-extra": "^8.1.0",
-    "midway-bin": "1"
+    "midway-bin": "beta"
   },
   "scripts": {
     "build": "npm run lint && midway-bin build -c",

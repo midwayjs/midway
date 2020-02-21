@@ -30,6 +30,8 @@ export class CLI extends BaseCLI {
 
     if (this.argv.v || this.argv.version) {
       this.displayVersion();
+    } else { // 默认没有command的时候展示帮助
+      this.argv.h = true;
     }
   }
 
@@ -49,7 +51,7 @@ export class CLI extends BaseCLI {
 
   async checkProvider() {
     // ignore f -v / f -h / f create
-    if (!this.commands.length || this.commands[0] === 'create' || this.argv.h) {
+    if (!this.commands.length || this.argv.h || this.commands[0] === 'create') {
       return;
     }
     if (!this.spec.provider) {

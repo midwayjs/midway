@@ -38,7 +38,10 @@ export const getInvoke = (Invoke, debugPath) => {
           });
         }
       });
-
+      process.on('SIGINT', () => {
+        child.kill();
+        process.exit();
+      });
       return new Promise((resolve, reject) => {
         get(child, 'faastest').then(data => {
           child.kill();

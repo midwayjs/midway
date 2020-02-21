@@ -6,13 +6,14 @@
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "inlineSourceMap":true,
+    "inlineSourceMap": true,
     "noImplicitThis": true,
     "noUnusedLocals": true,
     "stripInternal": true,
     "pretty": true,
     "declaration": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "sourceRoot": ""
   },
   "exclude": [
     "dist",

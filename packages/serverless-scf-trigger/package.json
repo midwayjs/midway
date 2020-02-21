@@ -10,7 +10,7 @@
     "express": "^4.17.1"
   },
   "devDependencies": {
-    "midway-bin": "1"
+    "midway-bin": "beta"
   },
   "files": [
     "dist"

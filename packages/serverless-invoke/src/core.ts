@@ -103,24 +103,25 @@ export abstract class InvokeCore implements IInvoke {
     if (this.codeAnalyzeResult.integrationProject) {
       // 一体化调整目录
       await tsIntegrationProjectCompile(baseDir, {
-        sourceDir: 'src',
         buildRoot: this.buildDir,
         tsCodeRoot: this.codeAnalyzeResult.tsCodeRoot,
         incremental: this.options.incremental,
-        clean: this.options.clean,
+        tsConfig: {
+          compilerOptions: {
+            sourceRoot: this.codeAnalyzeResult.tsCodeRoot  // for sourceMap
+          }
+        },
+        clean: this.options.clean
       });
-      // remove tsconfig
-      await move(
-        join(baseDir, 'tsconfig_integration_faas.json'),
-        join(this.buildDir, 'tsconfig.json'),
-        opts
-      );
     } else {
-      // TODO 重构 midway-bin 不生成 tsconfig
       await tsCompile(baseDir, {
-        source: 'src',
         tsConfigName: 'tsconfig.json',
-        clean: this.options.clean,
+        tsConfig: {
+          compilerOptions: {
+            sourceRoot: resolve(baseDir, 'src') // for sourceMap
+          }
+        },
+        clean: this.options.clean
       });
       await move(join(baseDir, 'dist'), join(this.buildDir, 'dist'), opts);
     }

@@ -5,7 +5,7 @@
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@midwayjs/fcli-command-core": "^0.2.22",
-    "midway-bin": "1"
+    "midway-bin": "beta"
   },
   "files": [
     "src",

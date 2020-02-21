@@ -10,7 +10,7 @@
     "minimist": "^1.2.0"
   },
   "devDependencies": {
-    "midway-bin": "1"
+    "midway-bin": "beta"
   },
   "files": [
     "dist",

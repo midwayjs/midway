@@ -42,7 +42,7 @@ export function commonPrefix(arr: string[]): string {
       prefix = commonPrefixUtil(prefix, arr[i].replace(/([^\/])$/, '$1/'));
   }
   if (!prefix || prefix === '/') {
-    return prefix;
+    return '';
   }
   const result = prefix.replace(/\/[^\/]*$/ig, '') || '/';
   if (result && !/^\//.test(result)) {

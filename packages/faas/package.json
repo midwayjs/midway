@@ -17,7 +17,7 @@
     "src"
   ],
   "devDependencies": {
-    "midway-bin": "1"
+    "midway-bin": "beta"
   },
   "license": "MIT",
   "scripts": {

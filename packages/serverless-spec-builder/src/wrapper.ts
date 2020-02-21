@@ -32,12 +32,24 @@ exports.<%=handlerData.name%> = asyncWrapper(async (...args) => {
   <% if (handlerData.handler) { %>
   return runtime.asyncEvent(starter.handleInvokeWrapper('<%=handlerData.handler%>'))(...args);
   <% } else { %>
+  const allHandlers = <%-JSON.stringify(handlerData.handlers)%>;
   return runtime.asyncEvent(async (ctx) => {
-    <% handlerData.handlers.forEach(function(multiHandler){ %> if (ctx && ctx.path === '<%=multiHandler.path%>') {
-      return starter.handleInvokeWrapper('<%=multiHandler.handler%>')(ctx);
-    } else <% }); %>{
-      return 'unhandler path: ' + (ctx && ctx.path || '');
+    let handler = null;
+    let ctxPath = ctx && ctx.path || '';
+    if (ctxPath) {
+      handler = allHandlers.find(handler => {
+        return ctxPath.indexOf(handler.path) != -1;
+      });
     }
+
+    if (!handler) {
+      handler = allHandlers[allHandlers.length - 1];
+    }
+
+    if (handler) {
+      return starter.handleInvokeWrapper(handler.hanlder)(ctx);
+    }
+    return 'unhandler path: ' + ctxPath + '; handlerInfo: ' + JSON.stringify(allHandlers);
   })(...args);
   <% } %>
 });
@@ -49,8 +61,9 @@ export function writeWrapper(options: {
   baseDir: string;
   distDir: string;
   starter: string;
+  cover?: boolean;
 }) {
-  const { service, distDir, starter, baseDir } = options;
+  const { service, distDir, starter, baseDir, cover } = options;
   const files = {};
   const functions = service.functions || {};
   for (const func in functions) {
@@ -59,7 +72,7 @@ export function writeWrapper(options: {
       continue;
     }
     const [handlerFileName, name] = handlerConf.handler.split('.');
-    if (existsSync(join(baseDir, handlerFileName + '.js'))) {
+    if (!cover && existsSync(join(baseDir, handlerFileName + '.js'))) {
       // 如果入口文件名存在，则跳过
       continue;
     }
@@ -76,7 +89,7 @@ export function writeWrapper(options: {
     if (handlerConf._isAggregation && handlerConf.functions) {
       files[handlerFileName].handlers.push({
         name,
-        handlers: handlerConf._handlers,
+        handlers: formetAggregationHandlers(handlerConf._handlers),
       });
     } else {
       files[handlerFileName].handlers.push({
@@ -99,4 +112,20 @@ export function writeWrapper(options: {
     });
     writeFileSync(fileName, content);
   }
+}
+
+export function formetAggregationHandlers(handlers) {
+  if (!handlers || !handlers.length) {
+    return [];
+  }
+  return handlers.map(handler => {
+    const path = handler.path.replace(/\**$/, '');
+    return {
+      handler: handler.handler,
+      path,
+      level: path.split('/').length - 1
+    };
+  }).sort((handlerA, handlerB) => {
+    return handlerB.level - handlerA.level;
+  });
 }

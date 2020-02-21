@@ -7,7 +7,7 @@
     "egg-logger": "^2.3.1"
   },
   "devDependencies": {
-    "midway-bin": "1"
+    "midway-bin": "beta"
   },
   "scripts": {
     "build": "npm run lint && midway-bin build -c",
