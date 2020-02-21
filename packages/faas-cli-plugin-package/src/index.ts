@@ -71,6 +71,9 @@ export class PackagePlugin extends BasePlugin {
           usage:
             'Shared directory relative path, default is undefined，package command will copy content to build directory root',
         },
+        sharedTargetDir: {
+          usage: 'Where the shared directory will be copied, default is static',
+        },
         skipZip: {
           usage: 'Skip zip artifact',
           shortcut: 'z',
@@ -225,13 +228,21 @@ export class PackagePlugin extends BasePlugin {
         dependencies: this.codeAnalyzeResult.usingDependenciesVersion.valid,
       });
     }
-    this.core.cli.log(' - Copy Shared Files to build directory...');
     if (this.options.sharedDir) {
-      this.options.sharedDir = this.transformToRelative(
+      this.options.sharedTargetDir = this.options.sharedTargetDir || 'static';
+      this.core.cli.log(
+        ` - Copy Shared Files to build directory(${this.options.sharedTargetDir})...`
+      );
+      this.options.sharedDir = this.transformToAbsolute(
         this.servicePath,
         this.options.sharedDir
       );
-      await copy(this.options.sharedDir, this.midwayBuildPath);
+      this.options.sharedTargetDir = this.transformToAbsolute(
+        this.midwayBuildPath,
+        this.options.sharedTargetDir
+      );
+      console.log(this.options.sharedTargetDir);
+      await copy(this.options.sharedDir, this.options.sharedTargetDir);
     }
     this.core.cli.log(` - File copy complete`);
   }
@@ -330,7 +341,7 @@ export class PackagePlugin extends BasePlugin {
       } else {
         await tsCompile(this.servicePath, {
           clean: true,
-          tsConfigName: 'tsconfig.json'
+          tsConfigName: 'tsconfig.json',
         });
         // copy dist to artifact directory
         await move(
@@ -442,6 +453,15 @@ export class PackagePlugin extends BasePlugin {
     }
   }
 
+  private transformToAbsolute(baseDir, targetDir) {
+    if (targetDir) {
+      if (!isAbsolute(targetDir)) {
+        return join(baseDir, targetDir);
+      }
+      return targetDir;
+    }
+  }
+
   // 合并高密度部署
   assignAggregationToFunctions() {
     // 只在部署阶段生效
@@ -508,7 +528,7 @@ export class PackagePlugin extends BasePlugin {
             }
             allAggred.push({
               path: httpEvent.http.path,
-              method: httpEvent.http.method
+              method: httpEvent.http.method,
             });
             if (!deployOrigin) {
               // 不把原有的函数进行部署

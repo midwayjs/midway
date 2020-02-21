@@ -8,7 +8,6 @@
     "@types/mocha": "^5.2.5",
     "@types/node": "^10.12.18",
     "gh-pages": "^1.2.0",
-    "git-hooks": "^1.1.10",
     "lerna": "3",
     "lerna-relinker": "^1.4.0",
     "opencollective": "^1.0.3",
@@ -38,12 +37,10 @@
     "site": "vuepress dev docs"
   },
   "keywords": [
-    "container",
-    "runtime",
-    "cluster",
-    "service",
-    "application",
-    "webframework"
+    "serverless",
+    "faas",
+    "k8s",
+    "cloud native"
   ],
   "homepage": "http://github.com/midwayjs/midway-faas",
   "repository": {
