@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/fcli-plugin-package",
-  "version": "0.2.27",
+  "version": "0.2.28",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {

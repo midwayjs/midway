@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.28](https://github.com/midwayjs/midway-faas/compare/v0.2.27...v0.2.28) (2020-02-21)
+
+
+### Bug Fixes
+
+* fix shared dir use relative path ([#55](https://github.com/midwayjs/midway-faas/issues/55)) ([1d309a1](https://github.com/midwayjs/midway-faas/commit/1d309a10efb2460c6b954effefca34ee72c2e979))
+
+
+
+
+
 ## [0.2.27](https://github.com/midwayjs/midway-faas/compare/v0.2.26...v0.2.27) (2020-02-21)
 
 
