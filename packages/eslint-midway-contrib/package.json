@@ -1,0 +1,50 @@
+{
+  "name": "eslint-midway-contrib",
+  "version": "0.0.0",
+  "description": "ESlint default rule for midway",
+  "keywords": [
+    "ECMAScript Style",
+    "code style",
+    "eslint",
+    "eslintconfig",
+    "midway",
+    "typescript"
+  ],
+  "engines": {
+    "node": ">=8.10.0"
+  },
+  "main": "index.js",
+  "bugs": {
+    "url": "https://https://github.com/midwayjs/midway/issues"
+  },
+  "homepage": "https://https://github.com/midwayjs/midway#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/midwayjs/midway.git"
+  },
+  "license": "MIT",
+  "author": "waiting",
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.20.0",
+    "@typescript-eslint/eslint-plugin-tslint": "^2.20.0",
+    "@typescript-eslint/parser": "^2.20.0",
+    "eslint-plugin-import": "^2.20.0",
+    "eslint-plugin-unicorn": "^16.0.0"
+  },
+  "devDependencies": {
+    "eslint": "6",
+    "tape": "4",
+    "typescript": "3"
+  },
+  "peerDependencies": {
+    "eslint": ">=6.1.0"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "lint": "eslint --fix . --config=recommended.js && eslint --fix . --config=strict.js",
+    "prepublishOnly": "npm run test",
+    "test": "npm run lint && tape test/*.js"
+  }
+}
