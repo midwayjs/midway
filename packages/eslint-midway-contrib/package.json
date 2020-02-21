@@ -40,7 +40,7 @@
     "eslint": ">=6.1.0"
   },
   "files": [
-    "plugins",
+    "plugins/*.yml",
     "*.js"
   ],
   "publishConfig": {
