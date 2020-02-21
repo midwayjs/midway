@@ -2,15 +2,17 @@
  * 'HEAD', 'OPTIONS', 'GET', 'PUT', 'PATCH', 'POST', 'DELETE' 封装
  */
 import { attachClassMetadata } from 'injection';
+
 import { WEB_ROUTER_KEY } from '../constant';
 import { KoaMiddlewareParamArray } from '../interface';
 
+
 export interface RouterOption {
-  path?: string;
-  requestMethod: string;
-  routerName?: string;
-  method: string;
-  middleware?: KoaMiddlewareParamArray;
+  path?: string
+  requestMethod: string
+  routerName?: string
+  method: string
+  middleware?: KoaMiddlewareParamArray
 }
 
 export const RequestMethod = {
@@ -33,14 +35,14 @@ const defaultMetadata = {
   [PATH_METADATA]: '/',
   [METHOD_METADATA]: RequestMethod.GET,
   [ROUTER_NAME_METADATA]: null,
-  [ROUTER_MIDDLEWARE]: []
+  [ROUTER_MIDDLEWARE]: [],
 };
 
 export interface RequestMappingMetadata {
-  [PATH_METADATA]?: string;
-  [METHOD_METADATA]: string;
-  [ROUTER_NAME_METADATA]?: string;
-  [ROUTER_MIDDLEWARE]?: KoaMiddlewareParamArray;
+  [PATH_METADATA]?: string
+  [METHOD_METADATA]: string
+  [ROUTER_NAME_METADATA]?: string
+  [ROUTER_MIDDLEWARE]?: KoaMiddlewareParamArray
 }
 
 export const RequestMapping = (
@@ -57,7 +59,7 @@ export const RequestMapping = (
       requestMethod,
       routerName,
       method: key,
-      middleware
+      middleware,
     } as RouterOption, target);
 
     return descriptor;
@@ -69,7 +71,7 @@ const createMappingDecorator = (method: string) => (
   routerOptions: {
     routerName?: string;
     middleware?: KoaMiddlewareParamArray;
-  } = {middleware: []}
+  } = { middleware: [] },
 ): MethodDecorator => {
   return RequestMapping({
     [PATH_METADATA]: path,

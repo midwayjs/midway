@@ -1,9 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { attachPropertyDataToClass } from 'injection';
+
 import { WEB_ROUTER_PARAM_KEY } from '../constant';
 
+
 interface GetFileStreamOptions {
-  requireFile?: boolean; // required file submit, default is true
-  defCharset?: string;
+  requireFile?: boolean // required file submit, default is true
+  defCharset?: string
   limits?: {
     fieldNameSize?: number;
     fieldSize?: number;
@@ -12,18 +15,18 @@ interface GetFileStreamOptions {
     files?: number;
     parts?: number;
     headerPairs?: number;
-  };
+  }
   checkFile?(
     fieldname: string,
     file: any,
     filename: string,
     encoding: string,
     mimetype: string
-  ): void | Error;
+  ): void | Error
 }
 
 interface GetFilesStreamOptions extends GetFileStreamOptions {
-  autoFields?: boolean;
+  autoFields?: boolean
 }
 
 export enum RouteParamTypes {
@@ -38,14 +41,14 @@ export enum RouteParamTypes {
 }
 
 export interface RouterParamValue {
-  index?: number;
-  type?: RouteParamTypes;
-  data?: any;
-  extractValue?: (ctx, next) => Promise<any>;
+  index?: number
+  type?: RouteParamTypes
+  data?: any
+  extractValue?: (ctx, next) => Promise<any>
 }
 
 export const extractValue = function extractValue(key, data) {
-  return async function (ctx, next) {
+  return async function(ctx, next) {
     switch (key) {
       case RouteParamTypes.NEXT:
         return next;
@@ -69,13 +72,13 @@ export const extractValue = function extractValue(key, data) {
   };
 };
 
-const createParamMapping = function (type: RouteParamTypes) {
+const createParamMapping = function(type: RouteParamTypes) {
   return (data?: any) => (target, key, index) => {
     attachPropertyDataToClass(WEB_ROUTER_PARAM_KEY, {
       index,
       type,
       data,
-      extractValue: extractValue(type, data)
+      extractValue: extractValue(type, data),
     }, target, key);
   };
 };

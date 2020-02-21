@@ -1,18 +1,24 @@
 import { attachClassMetadata } from 'injection';
+
 import { LOGGER_KEY } from '../constant';
 import { attachConstructorDataOnClass } from '../utils';
 
+
 export function logger(identifier?: string) {
-  return function (target: any, targetKey: string, index?: number): void {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return function(target: any, targetKey: string, index?: number): void {
     if (typeof index === 'number') {
       attachConstructorDataOnClass(identifier, target, LOGGER_KEY, index);
-    } else {
-      if (!identifier) {
-        identifier = targetKey;
+    }
+    else {
+      let id = identifier;
+
+      if (! id) {
+        id = targetKey;
       }
       attachClassMetadata(LOGGER_KEY, {
-        key: identifier,
-        propertyName: targetKey
+        key: id,
+        propertyName: targetKey,
       }, target);
     }
   };
