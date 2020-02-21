@@ -1,5 +1,7 @@
-import { cluster } from './util';
 import { join } from 'path';
+
+import { cluster } from './util';
+
 
 describe('/test/master.test.js', () => {
   let app;

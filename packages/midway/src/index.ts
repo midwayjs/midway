@@ -1,10 +1,13 @@
+import Master from '../cluster/master';
+
+
 export * from 'midway-web';
-const Master = require('../cluster/master');
 
 /**
  * current version of midway
  * @member {String} Midway#VERSION
  */
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 export const VERSION = require('../package.json').version;
 
 /**
