@@ -3,14 +3,14 @@ import { inject, provide, scope, ScopeEnum } from 'injection';
 @provide()
 export class A {
   config = {
-    c: 1
+    c: 1,
   };
 }
 
 @provide()
 export class B {
   config = {
-    c: 2
+    c: 2,
   };
 }
 
@@ -21,7 +21,7 @@ export class DbAPI {
   private config;
 
   constructor(
-    @inject() a,
+  @inject() a,
     hello,
     @inject() b,
   ) {

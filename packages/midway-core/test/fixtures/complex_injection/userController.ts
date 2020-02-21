@@ -1,5 +1,6 @@
-import { UserService } from './userService';
 import { inject, scope, ScopeEnum } from 'injection';
+
+import { UserService } from './userService';
 
 @scope(ScopeEnum.Request)
 export class UserController {
@@ -14,7 +15,7 @@ export class UserController {
   userService: UserService;
 
   async index() {
-    const {ctx} = this;
+    const { ctx } = this;
     ctx.body = await this.userService.getUsers();
     ctx.status = 200;
   }
