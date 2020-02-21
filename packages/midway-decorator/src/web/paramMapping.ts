@@ -1,5 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { attachPropertyDataToClass } from 'injection';
+
 import { WEB_ROUTER_PARAM_KEY } from '../constant';
+
 
 interface GetFileStreamOptions {
   requireFile?: boolean; // required file submit, default is true
@@ -69,13 +72,13 @@ export const extractValue = function extractValue(key, data) {
   };
 };
 
-const createParamMapping = function (type: RouteParamTypes) {
+const createParamMapping = function(type: RouteParamTypes) {
   return (data?: any) => (target, key, index) => {
     attachPropertyDataToClass(WEB_ROUTER_PARAM_KEY, {
       index,
       type,
       data,
-      extractValue: extractValue(type, data)
+      extractValue: extractValue(type, data),
     }, target, key);
   };
 };

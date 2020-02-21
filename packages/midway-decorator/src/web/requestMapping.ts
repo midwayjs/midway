@@ -2,6 +2,7 @@
  * 'HEAD', 'OPTIONS', 'GET', 'PUT', 'PATCH', 'POST', 'DELETE' 封装
  */
 import { attachClassMetadata } from 'injection';
+
 import { WEB_ROUTER_KEY } from '../constant';
 import { KoaMiddlewareParamArray } from '../interface';
 
@@ -33,7 +34,7 @@ const defaultMetadata = {
   [PATH_METADATA]: '/',
   [METHOD_METADATA]: RequestMethod.GET,
   [ROUTER_NAME_METADATA]: null,
-  [ROUTER_MIDDLEWARE]: []
+  [ROUTER_MIDDLEWARE]: [],
 };
 
 export interface RequestMappingMetadata {
@@ -57,7 +58,7 @@ export const RequestMapping = (
       requestMethod,
       routerName,
       method: key,
-      middleware
+      middleware,
     } as RouterOption, target);
 
     return descriptor;
