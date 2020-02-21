@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "devDependencies": {
     "@types/chai": "^4.1.7",
+    "@types/debug": "4",
     "@types/lodash": "^4.14.119",
     "@types/mocha": "^5.2.5",
     "@types/node": "^10.12.18",
