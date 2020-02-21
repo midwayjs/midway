@@ -1,5 +1,7 @@
 import * as assert from 'assert';
+
 import { formatOptions } from '../cluster/utils';
+
 
 describe('/test/utils.test.js', () => {
 
