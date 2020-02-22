@@ -1,10 +1,17 @@
 #!/usr/bin/env node
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable brace-style */
+/* eslint-disable @typescript-eslint/brace-style */
+/* eslint-disable indent */
+/* eslint-disable @typescript-eslint/indent */
 
-'use strict';
 
 const childProcess = require('child_process');
+
 const { Confirm } = require('enquirer');
+
 const Command = require('..');
+
 
 (async () => {
   const args = process.argv.slice(2);
@@ -18,7 +25,7 @@ const Command = require('..');
     });
     const isContinue = await prompt.run();
 
-    if (!isContinue) {
+    if (! isContinue) {
       return;
     }
   }
@@ -26,7 +33,8 @@ const Command = require('..');
   try {
     const cmd = new Command();
     await cmd.run(process.cwd(), args);
-  } catch (err) {
+  }
+  catch (err) {
     console.error(err.stack);
     process.exit(1);
   }
@@ -35,7 +43,7 @@ const Command = require('..');
 // 判断是否处于内网环境
 function isInternal() {
   try {
-    const { stdout } = childProcess.spawnSync('tnpm', [ 'view', '@ali/midway-init', '--json' ], {
+    const { stdout } = childProcess.spawnSync('tnpm', ['view', '@ali/midway-init', '--json'], {
       timeout: 3000,
     });
 
@@ -43,10 +51,12 @@ function isInternal() {
 
     if (npmData.name === '@ali/midway-init') {
       return true;
-    } else {
+    }
+    else {
       return false;
     }
-  } catch (err) {
+  }
+  catch (err) {
     return false;
   }
 }
