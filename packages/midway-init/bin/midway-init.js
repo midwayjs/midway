@@ -1,10 +1,17 @@
 #!/usr/bin/env node
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable brace-style */
+/* eslint-disable @typescript-eslint/brace-style */
+/* eslint-disable indent */
+/* eslint-disable @typescript-eslint/indent */
 
-'use strict';
 
 const childProcess = require('child_process');
+
 const { Confirm } = require('enquirer');
+
 const Command = require('..');
+
 
 (async () => {
   const args = process.argv.slice(2);
@@ -26,7 +33,8 @@ const Command = require('..');
   try {
     const cmd = new Command();
     await cmd.run(process.cwd(), args);
-  } catch (err) {
+  }
+  catch (err) {
     console.error(err.stack);
     process.exit(1);
   }
@@ -43,10 +51,12 @@ function isInternal() {
 
     if (npmData.name === '@ali/midway-init') {
       return true;
-    } else {
+    }
+    else {
       return false;
     }
-  } catch (err) {
+  }
+  catch (err) {
     return false;
   }
 }

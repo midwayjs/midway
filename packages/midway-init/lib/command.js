@@ -1,13 +1,17 @@
-'use strict';
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable brace-style */
 
 const path = require('path');
-const { LightGenerator } = require('light-generator');
-const { Input, Select, Form } = require('enquirer');
-const chalk = require('chalk');
-const { getParser } = require('./parser');
 const { EventEmitter } = require('events');
 const fs = require('fs');
 const os = require('os');
+
+const { LightGenerator } = require('light-generator');
+const { Input, Select, Form } = require('enquirer');
+const chalk = require('chalk');
+
+const { getParser } = require('./parser');
+
 
 async function sleep(timeout) {
   return new Promise(resolve => {
@@ -42,10 +46,13 @@ class MidwayInitCommand extends EventEmitter {
     return this._innerPrompt;
   }
 
-  async beforePromptSubmit() {}
+  async beforePromptSubmit() {
+    return;
+  }
 
   async run(cwd, args) {
-    const argv = (this.argv = getParser().parse(args || []));
+    const argv = getParser().parse(args || []);
+    this.argv = argv;
     this.cwd = cwd;
 
     this.templateList = await this.getTemplateList();
@@ -63,7 +70,8 @@ class MidwayInitCommand extends EventEmitter {
       // support --type argument
       this.templateName = argv.type;
       await this.createFromTemplate();
-    } else if (argv.template) {
+    }
+    else if (argv.template) {
       // support --template argument
       // ready targetDir
       await this.createTargetDir();
@@ -73,10 +81,12 @@ class MidwayInitCommand extends EventEmitter {
         targetPath: this.targetPath,
       });
       await this.execBoilerplate(generator);
-    } else if (argv.package) {
+    }
+    else if (argv.package) {
       // support --package argument
       await this.createFromTemplate(argv.package);
-    } else {
+    }
+    else {
       this.prompt = new Select({
         name: 'templateName',
         message: 'Hello, traveller.\n  Which template do you like?',
@@ -184,7 +194,8 @@ class MidwayInitCommand extends EventEmitter {
       await this.readyGenerate(async () => {
         await generator.run(parameters);
       });
-    } else {
+    }
+    else {
       await this.readyGenerate(async () => {
         await generator.run();
       });
@@ -230,7 +241,8 @@ class MidwayInitCommand extends EventEmitter {
       default: {
         if (/^https?:/.test(key)) {
           return key.replace(/\/$/, '');
-        } else {
+        }
+        else {
           // support .npmrc
           const home = os.homedir();
           let url =
