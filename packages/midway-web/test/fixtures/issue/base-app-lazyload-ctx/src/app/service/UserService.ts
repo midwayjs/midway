@@ -1,4 +1,5 @@
 import { inject, provide } from 'injection';
+
 import sleep from '../../package/Sleep';
 import { Service } from '../../Service';
 

@@ -5,11 +5,11 @@ export const hello = {
   b: 2,
   d: [1, 2, 3],
   e: {
-    f: 2
-  }
+    f: 2,
+  },
 };
 
 export const plugins = {
   bucLogin: false,
-  plugin2: true
+  plugin2: true,
 };

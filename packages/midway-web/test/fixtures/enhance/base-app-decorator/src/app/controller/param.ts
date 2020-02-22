@@ -1,9 +1,13 @@
-import { provide, inject } from 'injection';
-import { controller, config, get, post, query, param, files, file, session, body, headers } from '../../../../../../../src';
 import * as path from 'path';
 import * as fs from 'fs';
 
+import { provide, inject } from 'injection';
 import * as pump from 'mz-modules/pump';
+
+import {
+  // eslint-disable-next-line import/named
+  controller, config, get, post, query, param, files, file, session, body, headers,
+} from '../../../../../../../src';
 
 @provide()
 @controller('/param')
@@ -16,16 +20,16 @@ export class ParamController {
   ctx: any;
 
   @get('/query')
-  async query(@query() query) {
-      this.ctx.body = query;
+  async query(@query('query') queryInput) {
+    this.ctx.body = queryInput;
   }
 
   @get('/:id/test')
-  async test(@query() query, @param('id') id) {
+  async test(@query('query') queryInput, @param('id') id) {
     const data = {
-        id,
-        ...query
-      };
+      id,
+      ...queryInput,
+    };
     this.ctx.body = data;
   }
 
@@ -35,9 +39,9 @@ export class ParamController {
   }
 
   @get('/param/:id/test/:userId')
-  async param(@param() param) {
+  async param(@param('param') paramInput) {
     // service,hello,a,b
-    this.ctx.body = param;
+    this.ctx.body = paramInput;
   }
 
   @get('/param/:id')
@@ -46,8 +50,8 @@ export class ParamController {
   }
 
   @post('/body')
-  async body(@body() body) {
-    this.ctx.body = body;
+  async body(@body('body') bodyInput) {
+    this.ctx.body = bodyInput;
   }
 
   @get('/body_id')
@@ -70,26 +74,26 @@ export class ParamController {
     let stream = await parts();
 
     while (stream) {
-        const filename = stream.filename.toLowerCase();
-        const target = path.join(this.baseDir, 'app/public', filename);
-        const writeStream = fs.createWriteStream(target);
-        await pump(stream, writeStream);
-        stream = await parts();
+      const filename = stream.filename.toLowerCase();
+      const target = path.join(this.baseDir, 'app/public', filename);
+      const writeStream = fs.createWriteStream(target);
+      await pump(stream, writeStream);
+      stream = await parts();
     }
 
     this.ctx.body = 'ok';
   }
 
   @get('/session')
-  async session(@session() session) {
+  async session(@session('session') sessionInput) {
     // service,hello,a,b
-    this.ctx.body = session;
+    this.ctx.body = sessionInput;
   }
 
   @get('/headers')
-  async header(@headers() headers) {
+  async header(@headers('headers') headersInput) {
     // service,hello,a,b
-    this.ctx.body = headers.host.substring(0, 3);
+    this.ctx.body = headersInput.host.substring(0, 3);
   }
 
   @get('/headers_host')

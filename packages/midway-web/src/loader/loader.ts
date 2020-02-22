@@ -1,5 +1,6 @@
 import { MidwayWebLoader } from './webLoader';
 
+
 export class AppWorkerLoader extends MidwayWebLoader {
 
   /**

@@ -1,8 +1,11 @@
 'use strict';
 
-import { provide } from 'injection';
-import { controller, get } from '../../../../../../../src/';
 import * as assert from 'assert';
+
+import { provide } from 'injection';
+
+// eslint-disable-next-line import/named
+import { controller, get } from '../../../../../../../src';
 
 @provide()
 export class BaseApi {
