@@ -1,12 +1,17 @@
-'use strict';
+/* eslint-disable @typescript-eslint/no-var-requires */
 
 const fs = require('fs');
 const path = require('path');
-const rimraf = require('mz-modules/rimraf');
 const assert = require('assert');
-const { TestCommand } = require('./helper');
-const tmp = path.join(__dirname, '../.tmp');
+
 const { LightGenerator } = require('light-generator');
+const rimraf = require('mz-modules/rimraf');
+
+const { TestCommand } = require('./helper');
+
+
+const tmp = path.join(__dirname, '../.tmp');
+
 
 describe('test/init.test.js', () => {
   beforeEach(() => rimraf(tmp));
@@ -16,11 +21,11 @@ describe('test/init.test.js', () => {
     const targetDir = path.join(tmp, 'test');
     const command = new TestCommand();
     command.mockPrompt([
-      [ null, { name: 'return' }],
+      [null, { name: 'return' } ],
       targetDir,
       [
         'my_project',
-        [ null, { name: 'down' }],
+        [null, { name: 'down' } ],
         'test',
       ],
     ]);
@@ -37,11 +42,11 @@ describe('test/init.test.js', () => {
     const targetDir = path.join(tmp, 'test');
     const command = new TestCommand();
     command.mockPrompt([
-      [ null, { name: 'return' }],
+      [null, { name: 'return' } ],
       '.tmp/test',
       [
         'my_project',
-        [ null, { name: 'down' }],
+        [null, { name: 'down' } ],
         'test',
       ],
     ]);
@@ -61,7 +66,7 @@ describe('test/init.test.js', () => {
       '.tmp/test',
       [
         'my_project',
-        [ null, { name: 'down' }],
+        [null, { name: 'down' } ],
         'test',
       ],
     ]);
@@ -80,7 +85,7 @@ describe('test/init.test.js', () => {
     command.mockPrompt([
       [
         'my_project',
-        [ null, { name: 'down' }],
+        [null, { name: 'down' } ],
         'test',
       ],
     ]);
@@ -99,7 +104,7 @@ describe('test/init.test.js', () => {
     command.mockPrompt([
       [
         'my_project',
-        [ null, { name: 'down' }],
+        [null, { name: 'down' } ],
         'test',
       ],
     ]);
@@ -115,7 +120,7 @@ describe('test/init.test.js', () => {
     command.mockPrompt([
       [
         'my_project',
-        [ null, { name: 'down' }],
+        [null, { name: 'down' } ],
         'test',
       ],
     ]);
@@ -135,7 +140,7 @@ describe('test/init.test.js', () => {
     command.mockPrompt([
       [
         'my_project',
-        [ null, { name: 'down' }],
+        [null, { name: 'down' } ],
         'test',
       ],
     ]);
@@ -152,7 +157,7 @@ describe('test/init.test.js', () => {
     command.mockPrompt([
       [
         'my_project',
-        [ null, { name: 'down' }],
+        [null, { name: 'down' } ],
         'test',
       ],
     ]);
@@ -169,7 +174,7 @@ describe('test/init.test.js', () => {
     command.mockPrompt([
       [
         'my_project',
-        [ null, { name: 'down' }],
+        [null, { name: 'down' } ],
         'test',
       ],
     ]);
@@ -186,7 +191,7 @@ describe('test/init.test.js', () => {
     command.mockPrompt([
       [
         'my_project',
-        [ null, { name: 'down' }],
+        [null, { name: 'down' } ],
         'test',
       ],
     ]);
