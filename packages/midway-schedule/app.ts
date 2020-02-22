@@ -2,10 +2,11 @@ import { ScheduleOpts, SCHEDULE_KEY } from '@midwayjs/decorator';
 import { getClassMetadata, listModule, getProviderId } from 'injection';
 import * as is from 'is-type-of';
 
+
 export = (app) => {
 
   // egg-schedule 的 app 里没有 schedule
-  if (!app.runSchedule) {
+  if (! app.runSchedule) {
     return;
   }
 
@@ -23,7 +24,7 @@ export = (app) => {
 
       const env = app.config.env;
       const envList = opts.env;
-      if (is.array(envList) && !envList.includes(env)) {
+      if (is.array(envList) && ! envList.includes(env)) {
         app.coreLogger.info(
           `[midway-schedule]: ignore schedule ${key} due to \`schedule.env\` not match`,
         );

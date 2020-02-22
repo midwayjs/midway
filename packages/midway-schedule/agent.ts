@@ -1,20 +1,21 @@
 import { SCHEDULE_KEY, ScheduleOpts } from '@midwayjs/decorator';
 import { getClassMetadata, getProviderId, listModule } from 'injection';
 
+
 export = (agent) => {
 
-  if (!agent.schedule) {
+  if (! agent.schedule) {
     return;
   }
 
   // ugly!! just support all and worker strategy
-  class AllStrategy extends agent['TimerScheduleStrategy'] {
+  class AllStrategy extends agent.TimerScheduleStrategy {
     handler() {
       this.sendAll();
     }
   }
 
-  class WorkerStrategy extends agent['TimerScheduleStrategy'] {
+  class WorkerStrategy extends agent.TimerScheduleStrategy {
     handler() {
       this.sendOne();
     }
@@ -35,7 +36,7 @@ export = (agent) => {
       }
       const key = provideId + '#' + scheduleModule.name;
       const Strategy = strategyMap.get(type);
-      if (!Strategy) {
+      if (! Strategy) {
         const err = new Error(`schedule type [${type}] is not defined`);
         err.name = 'MidwayScheduleError';
         throw err;

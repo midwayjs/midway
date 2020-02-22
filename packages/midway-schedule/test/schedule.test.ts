@@ -1,11 +1,10 @@
-'use strict';
-
-import { clearAllModule } from 'injection';
-import { mm } from 'midway-mock';
-
+import * as fs from 'fs';
 import * as path from 'path';
-const fs = require('fs');
-const assert = require('assert');
+import * as assert from 'assert';
+
+import { mm } from 'midway-mock';
+import { clearAllModule } from 'injection';
+
 
 describe('test/schedule.test.ts', () => {
   let application;
@@ -21,12 +20,10 @@ describe('test/schedule.test.ts', () => {
         typescript: true,
       });
       await application.ready();
-      const list = Object.keys(application.schedules).filter((key) =>
-        key.includes('HelloCron'),
-      );
+      const list = Object.keys(application.schedules).filter(key => key.includes('HelloCron'));
       assert(list.length === 1);
       const item = application.schedules[list[0]];
-      assert.deepEqual(item.schedule, {type: 'worker', interval: 2333});
+      assert.deepEqual(item.schedule, { type: 'worker', interval: 2333 });
     });
 
     it('should support interval with @schedule decorator (both app/schedule & lib/schedule)', async () => {
@@ -59,7 +56,7 @@ describe('test/schedule.test.ts', () => {
 
   describe('app.runSchedule', () => {
     it('should run schedule not exist throw error', async () => {
-      application = mm.app({ baseDir: 'worker', typescript: true, });
+      application = mm.app({ baseDir: 'worker', typescript: true });
       await application.ready();
       await application.runSchedule('intervalCron#IntervalCron');
       await sleep(1000);
@@ -83,11 +80,11 @@ function getLogContent(name) {
     name,
     'logs',
     name,
-    `midway-web.log`,
+    'midway-web.log',
   );
   return fs.readFileSync(logPath, 'utf8');
 }
 
 function contains(content, match) {
-  return content.split('\n').filter((line) => line.indexOf(match) >= 0).length;
+  return content.split('\n').filter(line => line.indexOf(match) >= 0).length;
 }
