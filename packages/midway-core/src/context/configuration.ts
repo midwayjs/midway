@@ -25,7 +25,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
     for (const importPackage of imports) {
       // for package
       const subContainerConfiguration = this.container.createConfiguration();
-      const subPackageDir = this.resolvePackageBaseDir(importPackage);
+      const subPackageDir = this.resolvePackageBaseDir(importPackage, baseDir);
       debug('import package => %s dir => %s.', importPackage, subPackageDir);
       subContainerConfiguration.addLoadDir(subPackageDir);
       subContainerConfiguration.load(subPackageDir);
@@ -116,7 +116,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
             debug(`configuration ${this.namespace} not exist than add.`);
             this.container.addConfiguration(this);
           }
-          this.addImports(configurationOptions.imports);
+          this.addImports(configurationOptions.imports, baseDir);
           this.addImportObjects(configurationOptions.importObjects);
           this.addImportConfigs(configurationOptions.importConfigs, baseDir);
         }
