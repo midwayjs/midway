@@ -14,8 +14,9 @@
   },
   "scripts": {
     "build": "midway-bin build -c",
-    "lint": "../../node_modules/.bin/tslint --format prose -c ../../tslint.json src/**/*.ts test/**/*.ts",
-    "test": "npm run lint && midway-bin clean && NODE_ENV=unittest midway-bin test --ts",
+    "lint": "eslint --fix --cache {src,test}/**/*.ts app.ts agent.ts",
+    "lint:nofix": "eslint --cache {src,test}/**/*.ts app.ts agent.ts",
+    "test": "npm run lint:nofix && midway-bin clean && NODE_ENV=unittest midway-bin test --ts",
     "autod": "midway-bin autod"
   },
   "keywords": [],
