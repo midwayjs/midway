@@ -41,7 +41,7 @@ export abstract class InvokeCore implements IInvoke {
   constructor(options: InvokeOptions) {
     options = this.formatOptions(options);
     this.options = options;
-    this.baseDir = options.baseDir || process.cwd();
+    this.baseDir = this.options.baseDir;
     this.buildDir = resolve(this.baseDir, options.buildDir || 'dist');
     this.spec = loadSpec(this.baseDir);
   }
@@ -108,20 +108,20 @@ export abstract class InvokeCore implements IInvoke {
         incremental: this.options.incremental,
         tsConfig: {
           compilerOptions: {
-            sourceRoot: this.codeAnalyzeResult.tsCodeRoot  // for sourceMap
-          }
+            sourceRoot: this.codeAnalyzeResult.tsCodeRoot, // for sourceMap
+          },
         },
-        clean: this.options.clean
+        clean: this.options.clean,
       });
     } else {
       await tsCompile(baseDir, {
         tsConfigName: 'tsconfig.json',
         tsConfig: {
           compilerOptions: {
-            sourceRoot: resolve(baseDir, 'src') // for sourceMap
-          }
+            sourceRoot: resolve(baseDir, 'src'), // for sourceMap
+          },
         },
-        clean: this.options.clean
+        clean: this.options.clean,
       });
       await move(join(baseDir, 'dist'), join(this.buildDir, 'dist'), opts);
     }
@@ -219,6 +219,9 @@ export abstract class InvokeCore implements IInvoke {
   }
 
   private formatOptions(options: InvokeOptions) {
+    if (!options.baseDir) {
+      options.baseDir = process.cwd();
+    }
     // 开启增量编译，则不自动清理目录
     if (options.incremental) {
       options.clean = false;
