@@ -6,8 +6,9 @@
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "midway-bin build -c",
-    "lint": "../../node_modules/.bin/tslint --format prose -c ../../tslint.json --fix 'src/**/*.ts' 'test/**/*.ts'",
-    "test": "npm run lint && midway-bin clean && NODE_ENV=test midway-bin test --ts",
+    "lint": "eslint --fix --cache {src,test,config}/**/*.ts",
+    "lint:nofix": "eslint --cache {src,test,config}/**/*.ts",
+    "test": "npm run lint:nofix && midway-bin clean && NODE_ENV=test midway-bin test --ts",
     "cov": "midway-bin cov --ts",
     "ci": "npm run test",
     "autod": "midway-bin autod"
