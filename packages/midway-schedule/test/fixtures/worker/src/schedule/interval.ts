@@ -1,5 +1,5 @@
-import { provide } from 'injection';
 import { schedule, CommonSchedule } from '@midwayjs/decorator';
+import { provide } from 'injection';
 
 @provide()
 @schedule({
