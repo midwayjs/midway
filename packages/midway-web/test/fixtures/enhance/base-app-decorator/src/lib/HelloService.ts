@@ -1,4 +1,5 @@
-import {provide, inject} from 'injection';
+import { provide, inject } from 'injection';
+
 import { BaseService } from './service';
 
 @provide()
@@ -11,7 +12,7 @@ export class HelloService {
   service: BaseService;
 
   async say() {
-    if (!this.service) {
+    if (! this.service) {
       throw new Error('inject baseService fail!');
     }
     return `${this.xxx.join(',')}`;

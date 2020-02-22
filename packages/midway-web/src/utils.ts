@@ -28,7 +28,7 @@ export function getMethodNames(obj: object): string[] {
     proto = Object.getPrototypeOf(proto);
     const allOwnKeysOnPrototype: string[] = Object.getOwnPropertyNames(proto);
     // get methods from es6 class
-    allOwnKeysOnPrototype.forEach(k => {
+    allOwnKeysOnPrototype.forEach((k) => {
       if (typeof obj[k] === 'function' && k !== 'constructor') {
         result.push(k);
       }
@@ -37,13 +37,13 @@ export function getMethodNames(obj: object): string[] {
   while (proto && proto !== Object.prototype);
 
   // leave out those methods on Object's prototype
-  return result.filter(k => {
+  return result.filter((k) => {
     return ownKeysOnObjectPrototype.indexOf(k) === -1;
   });
 }
 
 export function isTypeScriptEnvironment(): boolean {
-  return !!require.extensions['.ts'] || process.env.MIDWAY_TS_MODE === 'true';
+  return !! require.extensions['.ts'] || process.env.MIDWAY_TS_MODE === 'true';
 }
 
 /**
@@ -68,7 +68,8 @@ export function safelyGet(list: string | string[], obj?: object): any {
   for (const key of pathArrValue) {
     if (typeof willReturn === 'undefined' || willReturn === null) {
       return void 0;
-    } else if (typeof willReturn !== 'object') {
+    }
+    else if (typeof willReturn !== 'object') {
       return void 0;
     }
     willReturn = willReturn[key];

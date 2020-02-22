@@ -1,4 +1,5 @@
 import { inject, provide } from 'injection';
+
 import { Loader } from './loader';
 
 @provide()

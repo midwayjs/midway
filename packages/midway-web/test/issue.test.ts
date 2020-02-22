@@ -1,8 +1,9 @@
-const request = require('supertest');
 import { clearAllModule } from 'injection';
+import * as request from 'supertest';
+import * as pedding from 'pedding';
 
-const utils = require('./utils');
-const pedding = require('pedding');
+import * as utils from './utils';
+
 
 describe('/test/issue.test.ts', () => {
 
@@ -12,7 +13,7 @@ describe('/test/issue.test.ts', () => {
     let app;
     before(() => {
       app = utils.app('issue/base-app-lazyload-ctx', {
-        typescript: true
+        typescript: true,
       });
       return app.ready();
     });
@@ -50,7 +51,7 @@ describe('/test/issue.test.ts', () => {
     let app;
     before(() => {
       app = utils.app('issue/base-app-extend-context', {
-        typescript: true
+        typescript: true,
       });
       return app.ready();
     });

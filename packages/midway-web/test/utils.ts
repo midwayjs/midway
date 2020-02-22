@@ -1,26 +1,27 @@
-'use strict';
+/* eslint-disable no-shadow */
+import * as fs from 'fs';
+import * as path from 'path';
 
-const fs = require('fs');
-const path = require('path');
 import { mm } from 'midway-mock';
+
 
 const logDir = path.join(__dirname, '../logs');
 
 process.setMaxListeners(0);
 
-if (!fs.existsSync(logDir)) {
+if (! fs.existsSync(logDir)) {
   fs.mkdirSync(logDir);
 }
 
 export function app(name, options) {
   options = formatOptions(name, options);
   // mm.consoleLevel(options.consoleLevel || 'NONE');
-  const app: any = mm.app(options);
-  app.close = () => {
-    fs.rmdirSync(path.join(app.baseDir, 'run'));
-    return app.close;
+  const appInst: any = mm.app(options);
+  appInst.close = () => {
+    fs.rmdirSync(path.join(appInst.baseDir, 'run'));
+    return appInst.close;
   };
-  return app;
+  return appInst;
 }
 
 export function cluster(name, options) {

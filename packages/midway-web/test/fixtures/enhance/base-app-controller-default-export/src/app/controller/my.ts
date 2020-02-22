@@ -1,5 +1,8 @@
 import { provide } from 'injection';
-import { controller, get } from '../../../../../../../src/';
+
+// eslint-disable-next-line import/named
+import { controller, get } from '../../../../../../../src';
+
 
 @provide()
 @controller('/')

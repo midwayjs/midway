@@ -1,6 +1,7 @@
 import { providerWrapper } from 'midway-core';
 import { IApplicationContext } from 'injection';
 
+
 export function adapterFactory(context: IApplicationContext) {
   return async (adapterName: string) => {
     if (adapterName === 'google') {
@@ -16,7 +17,7 @@ export function adapterFactory(context: IApplicationContext) {
 export function contextHandler(context) {
   return async () => {
     const ctx = await context.getAsync('ctx');
-    return !!ctx.logger;
+    return !! ctx.logger;
   };
 }
 
@@ -27,6 +28,6 @@ providerWrapper([
   },
   {
     id: 'contextHandler',
-    provider: contextHandler
-  }
+    provider: contextHandler,
+  },
 ]);

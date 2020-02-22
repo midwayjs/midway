@@ -1,9 +1,11 @@
 'use strict';
+import * as assert from 'assert';
 
 import { inject, provide, scope, ScopeEnum } from 'injection';
-import { controller, get } from '../../../../../../../src/';
 
-const assert = require('assert');
+// eslint-disable-next-line import/named
+import { controller, get } from '../../../../../../../src';
+
 
 @provide()
 @scope(ScopeEnum.Request)

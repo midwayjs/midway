@@ -1,4 +1,4 @@
-import {provide} from 'injection';
+import { provide } from 'injection';
 
 @provide()
 export class GoogleAdapter {
