@@ -1,4 +1,5 @@
-'use strict';
+/* eslint-disable @typescript-eslint/no-var-requires */
+
 const fs = require('fs');
 const path = require('path');
 
@@ -8,7 +9,7 @@ const path = require('path');
  * @return {string} full path or blank
  */
 function resolveModule(moduleName) {
-  if (!moduleName) {
+  if (! moduleName) {
     console.log('[midway-bin] value of framework/module to be loaded is blank and skipped.');
     return '';
   }
@@ -29,13 +30,15 @@ function resolveModule(moduleName) {
 function retrieveModulePath(moduleName) {
   const paths = require.resolve.paths(moduleName);
 
-  const moduleDir = paths.find(dir => {
+  const moduleDir = paths.find((dir) => {
     const mpath = path.join(dir, moduleName);
     try {
       fs.accessSync(mpath, fs.constants.R_OK);
       const stats = fs.statSync(mpath);
       return stats && stats.isDirectory();
-    } catch (ex) {
+    // eslint-disable-next-line @typescript-eslint/indent, brace-style
+    }
+    catch (ex) {
       return false;
     }
   });

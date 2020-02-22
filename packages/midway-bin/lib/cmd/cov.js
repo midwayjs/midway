@@ -1,5 +1,5 @@
 /* istanbul ignore next */
-'use strict';
+
 
 /* istanbul ignore next */
 class CovCommand extends require('egg-bin').CovCommand {
@@ -8,5 +8,6 @@ class CovCommand extends require('egg-bin').CovCommand {
     this.usage = 'Usage: midway-bin cov';
   }
 }
+
 
 module.exports = CovCommand;
