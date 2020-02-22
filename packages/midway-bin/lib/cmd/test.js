@@ -1,4 +1,5 @@
-'use strict';
+/* eslint-disable @typescript-eslint/no-var-requires */
+
 const co = require('co');
 
 class TestCommand extends require('egg-bin').TestCommand {
@@ -14,5 +15,6 @@ class TestCommand extends require('egg-bin').TestCommand {
     await co(super.run(context));
   }
 }
+
 
 module.exports = TestCommand;

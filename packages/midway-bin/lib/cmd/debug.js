@@ -1,6 +1,8 @@
-'use strict';
-const resolver = require('../util').resolveModule;
+/* eslint-disable @typescript-eslint/no-var-requires */
 const co = require('co');
+
+const resolver = require('../util').resolveModule;
+
 
 class DebugCommand extends require('egg-bin').DebugCommand {
   constructor(rawArgv) {
@@ -19,5 +21,6 @@ class DebugCommand extends require('egg-bin').DebugCommand {
     return resolver(module);
   }
 }
+
 
 module.exports = DebugCommand;

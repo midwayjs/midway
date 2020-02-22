@@ -1,13 +1,20 @@
-'use strict';
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable brace-style */
+/* eslint-disable @typescript-eslint/brace-style */
+/* eslint-disable indent */
+/* eslint-disable @typescript-eslint/indent */
 
-const Command = require('egg-bin').Command;
 const path = require('path');
 const fs = require('fs');
+
+const Command = require('egg-bin').Command;
 const rimraf = require('mz-modules/rimraf');
 const fse = require('fs-extra');
 const globby = require('globby');
 const ncc = require('@midwayjs/ncc');
 const terser = require('terser');
+
+
 let typescript;
 
 const shebangRegEx = /^#![^\n\r]*[\r\n]/;
@@ -85,11 +92,14 @@ class BuildCommand extends Command {
     }
     if (argv.entrypoint) {
       outDir = outDirAbsolute || path.resolve(projectDir, 'dist');
-      await this.bundle(path.resolve(cwd, argv.entrypoint), outDir,
+      await this.bundle(
+        path.resolve(cwd, argv.entrypoint),
+        outDir,
         {
           sourceMap: this.inferCompilerOptions(tsConfig, 'sourceMap', { projectDir }),
           mode: argv.mode,
-        });
+        }
+      );
       return;
     }
 
@@ -130,7 +140,9 @@ class BuildCommand extends Command {
     if (mode === 'release') {
       options.minify = true;
     }
-    const { error, code, map, assets, symlinks } = await ncc(entry, options);
+    const {
+      error, code, map, assets, symlinks,
+    } = await ncc(entry, options);
 
     if (error) {
       console.error(error);
@@ -173,8 +185,10 @@ class BuildCommand extends Command {
             const srcDir = path.join(argv.srcDir, file);
             const targetDir = path.join(outDir, file);
             // 目录，或者不含通配符的普通文件
+
             this.copyFile(srcDir, targetDir, from);
-          } else {
+          }
+          else {
             // 通配符的情况
             const paths = await globby([].concat(file), {
               cwd: path.join(from, argv.srcDir),
@@ -207,7 +221,7 @@ class BuildCommand extends Command {
     if (tsConfig && tsConfig.extends) {
       if (
         !tsConfig.compilerOptions ||
-        (tsConfig.compilerOptions && !tsConfig.compilerOptions[optionKeyPath])
+        tsConfig.compilerOptions && !tsConfig.compilerOptions[optionKeyPath]
       ) {
         return this.inferCompilerOptions(require(path.join(projectDir, tsConfig.extends)), optionKeyPath, { projectDir });
       }
@@ -235,8 +249,10 @@ class BuildCommand extends Command {
         cwd: outDir,
         ignore: [ '**/node_modules' ],
       });
+
       files = files.map(it => path.join(outDir, it));
-    } else {
+    }
+    else {
       const host = typescript.createCompilerHost(tsConfig.compilerOptions);
       files = host.readDirectory(__dirname, [ '.ts' ], tsConfig.exclude, tsConfig.include);
       files = files.map(it => {
@@ -245,11 +261,13 @@ class BuildCommand extends Command {
     }
 
     for (const file of files) {
-      let code = await fse.readFile(file, 'utf8');
+      const code = await fse.readFile(file, 'utf8');
       let map;
       if (inlineSourceMap) {
-        map = this.parseInlineSourceMap(code);
-      } else {
+        map = this.parseInlineSource;
+        Map(code);
+      }
+      else {
         map = await fse.readFile(file + '.map', 'utf8');
       }
       map = JSON.parse(map);
@@ -265,14 +283,14 @@ class BuildCommand extends Command {
           url: inlineSourceMap ? 'inline' : `${path.basename(file)}.map`,
         },
       });
-      ({ code, map } = result);
-      if (code == null) {
+      const { code: codeNew, map: mapNew } = result;
+      if (codeNew == null) {
         break;
       }
       if (!inlineSourceMap) {
-        await fse.writeFile(file + '.map', map, 'utf8');
+        await fse.writeFile(file + '.map', mapNew, 'utf8');
       }
-      await fse.writeFile(file, code, 'utf8');
+      await fse.writeFile(file, codeNew, 'utf8');
     }
   }
 

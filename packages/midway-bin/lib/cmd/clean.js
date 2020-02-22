@@ -1,10 +1,11 @@
-'use strict';
-
-const Command = require('egg-bin').Command;
-const rimraf = require('mz-modules/rimraf');
+/* eslint-disable @typescript-eslint/no-var-requires */
 const cp = require('child_process');
 const path = require('path');
 const fs = require('fs');
+
+const Command = require('egg-bin').Command;
+const rimraf = require('mz-modules/rimraf');
+
 
 class CleanCommand extends Command {
   constructor(rawArgv) {

@@ -1,4 +1,4 @@
-'use strict';
+
 
 class PkgfilesCommand extends require('egg-bin').PkgfilesCommand {
   constructor(rawArgv) {
@@ -6,5 +6,6 @@ class PkgfilesCommand extends require('egg-bin').PkgfilesCommand {
     this.usage = 'Usage: midway-bin pkgfiles';
   }
 }
+
 
 module.exports = PkgfilesCommand;

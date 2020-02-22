@@ -1,4 +1,5 @@
-'use strict';
+/* eslint-disable @typescript-eslint/no-var-requires */
+
 const fs = require('fs');
 const path = require('path');
 
@@ -35,7 +36,9 @@ function retrieveModulePath(moduleName) {
       fs.accessSync(mpath, fs.constants.R_OK);
       const stats = fs.statSync(mpath);
       return stats && stats.isDirectory();
-    } catch (ex) {
+    // eslint-disable-next-line @typescript-eslint/indent, brace-style
+    }
+    catch (ex) {
       return false;
     }
   });
