@@ -8,13 +8,14 @@
     "mocha": "bin/mocha.js"
   },
   "scripts": {
-    "lint": "eslint .",
+    "lint": "eslint --fix --cache {bin,lib,test}/**/*.js",
+    "lint:nofix": "eslint --cache {bin,lib,test}/**/*.js",
     "pkgfiles": "node bin/midway-bin.js pkgfiles",
     "test": "npm run lint -- --fix && npm run test-local",
     "test-local": "node bin/midway-bin.js test -t 3600000",
     "cov": "nyc -r lcov -r text-summary npm run test-local",
     "ci-test-only": "TESTS=test/lib/cmd/cov.test.js npm run test-local",
-    "ci": "npm run lint && npm run pkgfiles -- --check && npm run ci-test-only && npm run cov",
+    "ci": "npm run lint:nofix && npm run pkgfiles -- --check && npm run ci-test-only && npm run cov",
     "autod": "node bin/midway-bin.js autod"
   },
   "keywords": [
@@ -36,8 +37,6 @@
   "devDependencies": {
     "co-mocha": "^1.2.2",
     "coffee": "^5.2.1",
-    "eslint": "^6.1.0",
-    "eslint-config-egg": "^7.0.0",
     "mm": "^2.5.0"
   },
   "engines": {
