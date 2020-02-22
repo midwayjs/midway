@@ -1,12 +1,14 @@
-const assert = require('assert');
-const request = require('supertest');
 import * as path from 'path';
-const utils = require('./utils');
-const mm = require('mm');
-const pedding = require('pedding');
-const rimraf = require('mz-modules/rimraf');
+import * as assert from 'assert';
 
 import { clearAllModule } from 'injection';
+import * as request from 'supertest';
+import * as mm from 'mm';
+import * as pedding from 'pedding';
+import * as rimraf from 'mz-modules/rimraf';
+
+import * as utils from './utils';
+
 
 describe('/test/enhance.test.ts', () => {
 
@@ -16,7 +18,7 @@ describe('/test/enhance.test.ts', () => {
     let app;
     before(() => {
       app = utils.app('enhance/base-app', {
-        typescript: true
+        typescript: true,
       });
       return app.ready();
     });
@@ -39,7 +41,7 @@ describe('/test/enhance.test.ts', () => {
     let app;
     before(() => {
       app = utils.app('enhance/base-app-controller', {
-        typescript: true
+        typescript: true,
       });
       return app.ready();
     });
@@ -60,7 +62,7 @@ describe('/test/enhance.test.ts', () => {
         .expect('hello', done);
     });
 
-    it('should load controller use controller decorator prefix /', done => {
+    it('should load controller use controller decorator prefix /', (done) => {
       request(app.callback())
         .get('/')
         .expect(200)
@@ -72,7 +74,7 @@ describe('/test/enhance.test.ts', () => {
     let app;
     before(() => {
       app = utils.app('enhance/base-app-controller-default-export', {
-        typescript: true
+        typescript: true,
       });
       return app.ready();
     });
@@ -94,10 +96,11 @@ describe('/test/enhance.test.ts', () => {
       let suc = false;
       try {
         app = utils.app('enhance/base-app-controller-conflicts', {
-          typescript: true
+          typescript: true,
         });
         await app.ready();
-      } catch (e) {
+      }
+      catch (e) {
         suc = true;
       }
       assert.ok(suc);
@@ -108,7 +111,7 @@ describe('/test/enhance.test.ts', () => {
     let app;
     before(() => {
       app = utils.app('enhance/base-app-default-scope', {
-        typescript: true
+        typescript: true,
       });
       return app.ready();
     });
@@ -134,7 +137,7 @@ describe('/test/enhance.test.ts', () => {
     let app;
     before(() => {
       app = utils.app('enhance/base-app-decorator', {
-        typescript: true
+        typescript: true,
       });
       return app.ready();
     });
@@ -151,20 +154,20 @@ describe('/test/enhance.test.ts', () => {
         .expect(/3t/, done);
     });
 
-    it('should hello controller be ok', done => {
+    it('should hello controller be ok', (done) => {
       request(app.callback())
         .get('/hello/say')
         .expect(200)
         .expect('service,hello,a,b', done);
     });
 
-    it('should config controller be ok', done => {
+    it('should config controller be ok', (done) => {
       done = pedding(2, done);
 
       request(app.callback())
         .get('/config/test')
         .expect(200)
-        .expect({ a: 1, b: true, c: 2}, done);
+        .expect({ a: 1, b: true, c: 2 }, done);
 
       request(app.callback())
         .get('/config/test2')
@@ -180,12 +183,12 @@ describe('/test/enhance.test.ts', () => {
       await request(app.callback())
         .get('/param/12/test?name=1')
         .expect(200)
-        .expect({id: '12', name: '1'});
+        .expect({ id: '12', name: '1' });
 
       await request(app.callback())
         .get('/param/query?name=1')
         .expect(200)
-        .expect({name: '1'});
+        .expect({ name: '1' });
 
       await request(app.callback())
         .get('/param/query_id?id=1')
@@ -195,7 +198,7 @@ describe('/test/enhance.test.ts', () => {
       await request(app.callback())
         .get('/param/param/12/test/456')
         .expect(200)
-        .expect({id: '12', userId: '456'});
+        .expect({ id: '12', userId: '456' });
 
       await request(app.callback())
         .get('/param/param/12')
@@ -207,7 +210,7 @@ describe('/test/enhance.test.ts', () => {
         .type('form')
         .send({ id: '1' })
         .expect(200)
-        .expect({id: '1'});
+        .expect({ id: '1' });
 
       await request(app.callback())
         .get('/param/body_id')
@@ -270,7 +273,7 @@ describe('/test/enhance.test.ts', () => {
     let app;
     before(() => {
       app = utils.app('enhance/base-app-utils', {
-        typescript: true
+        typescript: true,
       });
       return app.ready();
     });
@@ -289,7 +292,7 @@ describe('/test/enhance.test.ts', () => {
     let app;
     before(() => {
       app = utils.app('enhance/base-app-async', {
-        typescript: true
+        typescript: true,
       });
       return app.ready();
     });
@@ -304,13 +307,13 @@ describe('/test/enhance.test.ts', () => {
     });
   });
 
-  describe('ts directory different from other', function () {
+  describe('ts directory different from other', function() {
 
     let app;
     before(() => {
       mm(process.env, 'HOME', '');
       app = utils.app('enhance/base-app', {
-        typescript: true
+        typescript: true,
       });
       return app.ready();
     });
@@ -319,9 +322,9 @@ describe('/test/enhance.test.ts', () => {
 
     it('should appDir not equal baseDir', () => {
       const appInfo = app.loader.getAppInfo();
-      assert(appInfo['name'] === app.name);
-      assert(appInfo['baseDir'] === app.baseDir);
-      assert(appInfo['baseDir'] === app.appDir + '/src');
+      assert(appInfo.name === app.name);
+      assert(appInfo.baseDir === app.baseDir);
+      assert(appInfo.baseDir === app.appDir + '/src');
     });
   });
 
@@ -329,7 +332,7 @@ describe('/test/enhance.test.ts', () => {
     let app;
     before(() => {
       app = utils.app('enhance/base-app-constructor', {
-        typescript: true
+        typescript: true,
       });
       return app.ready();
     });
@@ -348,7 +351,7 @@ describe('/test/enhance.test.ts', () => {
     let app;
     before(() => {
       app = utils.app('enhance/base-app-function', {
-        typescript: true
+        typescript: true,
       });
       return app.ready();
     });
@@ -367,7 +370,7 @@ describe('/test/enhance.test.ts', () => {
     let app;
     before(() => {
       app = utils.app('enhance/base-app-router', {
-        typescript: true
+        typescript: true,
       });
       return app.ready();
     });
@@ -397,7 +400,7 @@ describe('/test/enhance.test.ts', () => {
     let app;
     before(() => {
       app = utils.app('enhance/base-app-router-priority', {
-        typescript: true
+        typescript: true,
       });
       return app.ready();
     });
@@ -427,7 +430,7 @@ describe('/test/enhance.test.ts', () => {
     let app;
     before(() => {
       app = utils.app('enhance/loader-duplicate', {
-        typescript: true
+        typescript: true,
       });
       return app.ready();
     });
@@ -446,7 +449,7 @@ describe('/test/enhance.test.ts', () => {
     let app;
     before(() => {
       app = utils.app('enhance/base-app-controller-tsx', {
-        typescript: true
+        typescript: true,
       });
       return app.ready();
     });
@@ -466,7 +469,7 @@ describe('/test/enhance.test.ts', () => {
     let app;
     before(() => {
       app = utils.app('enhance/base-app-middleware', {
-        typescript: true
+        typescript: true,
       });
       return app.ready();
     });

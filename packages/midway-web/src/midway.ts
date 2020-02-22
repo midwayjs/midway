@@ -1,14 +1,18 @@
-import { Agent, Application } from 'egg';
-import { Logger } from 'egg-logger';
-import { AgentWorkerLoader, AppWorkerLoader } from './loader/loader';
 import * as fs from 'fs';
 import * as path from 'path';
+
+import { Agent, Application } from 'egg';
+import { Logger } from 'egg-logger';
 import { EggRouter as Router } from '@eggjs/router';
+
+import { AgentWorkerLoader, AppWorkerLoader } from './loader/loader';
+
 
 const MIDWAY_PATH = path.dirname(__dirname);
 
+// eslint-disable-next-line @typescript-eslint/no-extra-parens
 class MidwayApplication extends (Application as {
-  new(...x)
+  new(...x);
 }) {
 
   Router = Router;
@@ -87,14 +91,16 @@ class MidwayApplication extends (Application as {
       const rundir = this.config.rundir;
       const dumpFile = path.join(rundir, `${this.type}_dependency_${process.pid}`);
       fs.writeFileSync(dumpFile, tree);
-    } catch (err) {
+    }
+    catch (err) {
       this.coreLogger.warn(`dump dependency dot error: ${err.message}`);
     }
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-extra-parens
 class MidwayAgent extends (Agent as {
-  new(...x)
+  new(...x);
 }) {
 
   get [Symbol.for('egg#loader')]() {
@@ -163,7 +169,8 @@ class MidwayAgent extends (Agent as {
       const rundir = this.config.rundir;
       const dumpFile = path.join(rundir, `${this.type}_dependency_${process.pid}`);
       fs.writeFileSync(dumpFile, tree);
-    } catch (err) {
+    }
+    catch (err) {
       this.coreLogger.warn(`dump dependency dot error: ${err.message}`);
     }
   }
@@ -171,5 +178,5 @@ class MidwayAgent extends (Agent as {
 
 export {
   MidwayApplication as Application,
-  MidwayAgent as Agent
+  MidwayAgent as Agent,
 };

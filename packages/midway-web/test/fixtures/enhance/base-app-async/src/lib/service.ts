@@ -1,5 +1,6 @@
-import {config, plugin} from '@midwayjs/decorator';
-import {provide, async, init} from 'injection';
+import { config, plugin } from '@midwayjs/decorator';
+
+import { provide, async, init } from 'injection';
 
 @async()
 @provide()
@@ -13,7 +14,7 @@ export class BaseService {
 
   @init()
   async init() {
-    await new Promise(resolve => {
+    await new Promise((resolve) => {
       setTimeout(() => {
         this.config.c = 10;
         resolve();

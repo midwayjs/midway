@@ -1,4 +1,6 @@
-import {provide, inject} from 'injection';
+import { provide, inject } from 'injection';
+
+// eslint-disable-next-line import/named
 import { controller, get } from '../../../../../../../src';
 import { BaseService } from '../../lib/service';
 import { HelloService } from '../../lib/HelloService';

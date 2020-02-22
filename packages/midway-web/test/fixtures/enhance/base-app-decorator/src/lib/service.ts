@@ -1,5 +1,6 @@
-import {config, plugin} from '@midwayjs/decorator';
-import {provide} from 'injection';
+import { config, plugin } from '@midwayjs/decorator';
+
+import { provide } from 'injection';
 
 @provide()
 export class BaseService {

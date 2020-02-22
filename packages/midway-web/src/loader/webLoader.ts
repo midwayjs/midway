@@ -1,4 +1,6 @@
-import { EggRouter as Router } from '@eggjs/router';
+import * as fs from 'fs';
+import * as path from 'path';
+
 import {
   CONTROLLER_KEY,
   ControllerOption,
@@ -8,17 +10,22 @@ import {
   WEB_ROUTER_PARAM_KEY,
   RouterParamValue,
 } from '@midwayjs/decorator';
-import * as extend from 'extend2';
-import * as fs from 'fs';
-import { getClassMetadata, getPropertyDataFromClass, getProviderId, listModule } from 'injection';
 import { ContainerLoader, MidwayHandlerKey, MidwayContainer } from 'midway-core';
-import * as path from 'path';
-import { Middleware, MiddlewareParamArray, MidwayLoaderOptions, WebMiddleware } from '../interface';
-import { isTypeScriptEnvironment, safelyGet } from '../utils';
+
+import * as Debug from 'debug';
+import * as EggCore from 'egg-core';
+import { EggRouter as Router } from '@eggjs/router';
+import * as extend from 'extend2';
+import { getClassMetadata, getPropertyDataFromClass, getProviderId, listModule } from 'injection';
 import { EggAppInfo } from 'egg';
 
-const debug = require('debug')(`midway:loader:${process.pid}`);
-const EggLoader = require('egg-core').EggLoader;
+import { Middleware, MiddlewareParamArray, MidwayLoaderOptions, WebMiddleware } from '../interface';
+import { isTypeScriptEnvironment, safelyGet } from '../utils';
+
+
+const debug = Debug(`midway:loader:${process.pid}`);
+const EggLoader = EggCore.EggLoader;
+
 
 const TS_SRC_DIR = 'src';
 const TS_TARGET_DIR = 'dist';
@@ -28,10 +35,10 @@ export class MidwayWebLoader extends EggLoader {
   public appDir: string;
   public appInfo: EggAppInfo;
   private controllerIds: string[] = [];
-  private prioritySortRouters: Array<{
-    priority: number,
-    router: Router,
-  }> = [];
+  private prioritySortRouters: {
+    priority: number;
+    router: Router;
+  }[] = [];
   private containerLoader: ContainerLoader;
 
   constructor(options: MidwayLoaderOptions) {
@@ -42,7 +49,7 @@ export class MidwayWebLoader extends EggLoader {
    * 判断是否是 ts 模式，在构造器内就会被执行
    */
   get isTsMode(): boolean {
-    return !!this.app.options.typescript;
+    return !! this.app.options.typescript;
   }
 
   get applicationContext(): MidwayContainer {
@@ -114,7 +121,7 @@ export class MidwayWebLoader extends EggLoader {
         dirSuffix = app.options.srcDir || TS_SRC_DIR;
         // 打开 egg 加载 ts 的开关
         process.env.EGG_TYPESCRIPT = 'true';
-        debug(`typescript mode = true`);
+        debug('typescript mode = true');
       }
 
       const dir = path.join(app.options.baseDir, dirSuffix);
@@ -125,7 +132,7 @@ export class MidwayWebLoader extends EggLoader {
   }
 
   protected getEggPaths(): string[] {
-    if (!this.appDir) {
+    if (! this.appDir) {
       // register appDir here
       this.registerTypescriptDirectory();
     }
@@ -140,7 +147,7 @@ export class MidwayWebLoader extends EggLoader {
       serverEnv = fs.readFileSync(envPath, 'utf8').trim();
     }
 
-    if (!serverEnv) {
+    if (! serverEnv) {
       serverEnv = super.getServerEnv();
     }
 
@@ -148,7 +155,7 @@ export class MidwayWebLoader extends EggLoader {
   }
 
   protected getAppInfo(): EggAppInfo {
-    if (!this.appInfo) {
+    if (! this.appInfo) {
       const appInfo: EggAppInfo | undefined = super.getAppInfo();
       // ROOT == HOME in prod env
       this.appInfo = extend(true, appInfo, {
@@ -162,7 +169,7 @@ export class MidwayWebLoader extends EggLoader {
   protected loadApplicationContext(): void {
     // this.app.options.container 测试用例编写方便点
     const containerConfig = this.config.container || this.app.options.container || {};
-    if (!containerConfig.loadDir) {
+    if (! containerConfig.loadDir) {
       // 如果没有配置，默认就把扫描目录改到 /src or /dist
       containerConfig.baseDir = this.baseDir;
     }
@@ -170,7 +177,7 @@ export class MidwayWebLoader extends EggLoader {
     // 如果是typescript会加上 dist 或者 src 目录
     this.containerLoader = new ContainerLoader({
       baseDir: this.appDir,
-      isTsMode: this.isTsMode
+      isTsMode: this.isTsMode,
     });
     this.containerLoader.initialize();
     this.applicationContext.registerObject('appDir', this.appDir);
@@ -228,10 +235,11 @@ export class MidwayWebLoader extends EggLoader {
             this.generateController(
               `${controllerId}.${webRouter.method}`,
               routeArgsInfo,
-            )
+            ),
           ];
 
           // apply controller from request context
+          // eslint-disable-next-line prefer-spread
           newRouter[webRouter.requestMethod].apply(newRouter, routerArgs);
         }
       }
@@ -256,7 +264,8 @@ export class MidwayWebLoader extends EggLoader {
         if (typeof middleware === 'function') {
           // web function middleware
           handlerCallback(middleware);
-        } else {
+        }
+        else {
           const middlewareImpl: WebMiddleware | void = await this.applicationContext.getAsync(middleware);
           if (middlewareImpl && typeof middlewareImpl.resolve === 'function') {
             handlerCallback(middlewareImpl.resolve());
@@ -297,6 +306,7 @@ export class MidwayWebLoader extends EggLoader {
         }));
       }
       const controller = await ctx.requestContext.getAsync(controllerId);
+      // eslint-disable-next-line prefer-spread
       return controller[methodName].apply(controller, args);
     };
   }

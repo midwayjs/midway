@@ -1,5 +1,7 @@
 import { provide } from 'injection';
-import { controller, get, priority } from '../../../../../../../src/';
+
+// eslint-disable-next-line import/named
+import { controller, get, priority } from '../../../../../../../src';
 
 @provide()
 @priority(-1)

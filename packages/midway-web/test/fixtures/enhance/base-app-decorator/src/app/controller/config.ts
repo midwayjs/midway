@@ -1,4 +1,6 @@
-import {provide, inject} from 'injection';
+import { provide, inject } from 'injection';
+
+// eslint-disable-next-line import/named
 import { controller, get, config } from '../../../../../../../src';
 
 @provide()
@@ -26,25 +28,25 @@ export class ConfigController {
   b: boolean;
 
   constructor(
-      // should be true
-      @config('plugins.plugin2') pluginFlag: boolean
+  // should be true
+  @config('plugins.plugin2') pluginFlag: boolean,
   ) {
     this.b = pluginFlag;
   }
 
   @get('/test')
   async test() {
-      const data =  {
-          a: this.a,
-          b: this.b,
-          c: this.c,
-          d: this.d,
-      };
-      this.ctx.body = data;
+    const data = {
+      a: this.a,
+      b: this.b,
+      c: this.c,
+      d: this.d,
+    };
+    this.ctx.body = data;
   }
 
   @get('/test2')
   async test2() {
-      this.ctx.body = this.plugins;
+    this.ctx.body = this.plugins;
   }
 }

@@ -1,4 +1,5 @@
-import { controller, get, provide, Context, inject } from '../../../../../../../src/';
+// eslint-disable-next-line import/named
+import { controller, get, provide, Context, inject } from '../../../../../../../src';
 
 @provide()
 @controller('/api/user')

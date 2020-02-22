@@ -1,4 +1,6 @@
-import { Application } from '../../../../../../../src/';
+// eslint-disable-next-line import/named
+import { Application } from '../../../../../../../src';
+
 
 const VALIDATOR: any = Symbol('Application#_validator');
 
@@ -8,8 +10,9 @@ export = {
     console.log('app[VALIDATOR]', app);
     if (app instanceof Application) {
       return app[VALIDATOR];
-    } else {
+    }
+    else {
       throw new Error('not same');
     }
-  }
+  },
 };
