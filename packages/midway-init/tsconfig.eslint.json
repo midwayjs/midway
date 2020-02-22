@@ -1,0 +1,20 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "src/**/*.ts",
+    "test/**/*.ts",
+    "test_browser/**/*.ts",
+    "bin/**/*.js",
+    "lib/**/*.js",
+    "test/**/*.js"
+  ],
+  "exclude": [
+    "asset",
+    "app/public",
+    "app/views",
+    "dist",
+    "node_modules*",
+    "**/*.d.ts",
+    "**/*.spec.ts"
+  ]
+}
