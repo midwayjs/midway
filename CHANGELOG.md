@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.29](https://github.com/midwayjs/midway-faas/compare/v0.2.28...v0.2.29) (2020-02-22)
+
+
+### Bug Fixes
+
+* fix hanlder to handler ([#56](https://github.com/midwayjs/midway-faas/issues/56)) ([c272bd7](https://github.com/midwayjs/midway-faas/commit/c272bd78aae12b430553afd041af9223e07b9910))
+
+
+
+
+
 ## [0.2.28](https://github.com/midwayjs/midway-faas/compare/v0.2.27...v0.2.28) (2020-02-21)
 
 
