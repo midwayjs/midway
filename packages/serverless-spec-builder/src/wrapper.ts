@@ -47,7 +47,7 @@ exports.<%=handlerData.name%> = asyncWrapper(async (...args) => {
     }
 
     if (handler) {
-      return starter.handleInvokeWrapper(handler.hanlder)(ctx);
+      return starter.handleInvokeWrapper(handler.handler)(ctx);
     }
     return 'unhandler path: ' + ctxPath + '; handlerInfo: ' + JSON.stringify(allHandlers);
   })(...args);
