@@ -1,11 +1,14 @@
 import * as path from 'path';
+
+import { app, mm } from '../bootstrap';
+import { mm as mock, MockContainer } from '../src';
+
+
 const fixtures = path.join(__dirname, 'fixtures');
 // app dir
 process.env.MIDWAY_BASE_DIR = path.join(fixtures, 'base-app-decorator');
-
-import { app, mm } from '../bootstrap';
 const assert = require('assert');
-import { mm as mock, MockContainer } from '../src/';
+
 
 describe('test/index.test.ts', () => {
   afterEach(mm.restore);
@@ -18,12 +21,12 @@ describe('test/index.test.ts', () => {
       return 'mock_test' + ts;
     });
     const service: any = await app.applicationContext.getAsync('baseService');
-    assert(service.getData() === ('mock_test' + ts));
+    assert(service.getData() === 'mock_test' + ts);
 
     mm.restore();
-    assert(service.getData() !== ('mock_test' + ts));
+    assert(service.getData() !== 'mock_test' + ts);
     const service1: any = await app.applicationContext.getAsync('baseService');
-    assert(service1.getData() !== ('mock_test' + ts));
+    assert(service1.getData() !== 'mock_test' + ts);
   });
 
   it('should use bootstrap to get app', () => {
