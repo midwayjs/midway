@@ -1,6 +1,8 @@
-'use strict';
-const resolver = require('../util').resolveModule;
+/* eslint-disable @typescript-eslint/no-var-requires */
 const co = require('co');
+
+const resolver = require('../util').resolveModule;
+
 
 class DevCommand extends require('egg-bin/lib/cmd/dev') {
   constructor(rawArgv) {
@@ -10,7 +12,7 @@ class DevCommand extends require('egg-bin/lib/cmd/dev') {
   }
 
   async run(context) {
-    if (!context.argv.framework) {
+    if (! context.argv.framework) {
       context.argv.framework = this.findFramework('midway') || this.findFramework('midway-mirror');
     }
     await co(super.run(context));
@@ -20,5 +22,6 @@ class DevCommand extends require('egg-bin/lib/cmd/dev') {
     return resolver(module);
   }
 }
+
 
 module.exports = DevCommand;
