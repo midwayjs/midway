@@ -1,5 +1,5 @@
 import { FaaSContext, IFaaSStarter, MidwayFaaSInfo } from './interface';
-import { join } from 'path';
+import { join, dirname, resolve } from 'path';
 import { existsSync } from 'fs';
 import {
   ContainerLoader,
@@ -17,6 +17,7 @@ import SimpleLock from '@midwayjs/simple-lock';
 import * as compose from 'koa-compose';
 
 const LOCK_KEY = '_faas_starter_start_key';
+const MIDWAY_FAAS_KEY = '__midway_faas__';
 
 function isTypeScriptEnvironment() {
   const TS_MODE_PROCESS_FLAG: string = process.env.MIDWAY_TS_MODE;
@@ -68,6 +69,21 @@ export class FaaSStarter implements IFaaSStarter {
       .getApplicationContext()
       .getConfigService();
     configService.addObject(this.globalConfig);
+  }
+
+  initConfiguration(filePath: string, fileDir?: string) {
+    if (!fileDir) {
+      fileDir = dirname(resolve(filePath));
+    }
+    const container = this.loader.getApplicationContext();
+    const cfg = container.createConfiguration();
+    cfg.namespace = MIDWAY_FAAS_KEY;
+    cfg.loadConfiguration(require(filePath), fileDir);
+  }
+
+  prepareConfiguration() {
+    // TODO use initConfiguration
+    // this.initConfiguration('./configuration', __dirname);
   }
 
   getTsMode(typescript): boolean {
@@ -191,6 +207,8 @@ export class FaaSStarter implements IFaaSStarter {
           } as MidwayFaaSInfo);
         }
       }
+      // add configuration support
+      this.prepareConfiguration();
 
       this.loader.loadDirectory(Object.assign(opts, containerOptions));
       this.registerDecorator();

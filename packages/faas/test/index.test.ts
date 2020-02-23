@@ -123,4 +123,22 @@ describe('test/index.test.ts', () => {
         .expect(/ahello/, done);
     });
   });
+
+  describe('configuration test should be ok', () => {
+    let mock;
+    before(async () => {
+      mock = await createServerlessMock({
+        baseDir: join(__dirname, './fixtures/base-app-configuration'),
+        typescript: true,
+        configurationTest: true
+      });
+    });
+
+    it('invoke handler and execute middleware', done => {
+      return mock
+        .handler('index.handler')
+        .invoke({}, { text: 'a' })
+        .expect(/aone articlereplace manager/, done);
+    });
+  });
 });

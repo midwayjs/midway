@@ -1,6 +1,13 @@
 import * as util from 'util';
 import * as assert from 'assert';
 import { FaaSStarter, IFaaSStarter } from '../src/';
+import { join } from 'path';
+
+class TestFaaSStarter extends FaaSStarter {
+  prepareConfiguration() {
+    this.initConfiguration(join(__dirname, './configuration'), join(__dirname, 'fixtures/midway-plugin-mod'));
+  }
+}
 
 class MockStarter {
 
@@ -140,9 +147,10 @@ function error(msg, expected, actual) {
 export async function createServerlessMock(options: {
   baseDir?: string;
   typescript?: boolean;
+  configurationTest?: boolean;
 }) {
   const starter = new MockStarter({
-    starter: new FaaSStarter(options),
+    starter: options.configurationTest ? new TestFaaSStarter(options) : new FaaSStarter(options),
   });
   await starter.ready();
   return starter;
