@@ -4,6 +4,7 @@ import { existsSync } from 'fs';
 import {
   ContainerLoader,
   getClassMetadata,
+  getPropertyDataFromClass,
   IMiddleware,
   listModule,
   listPreloadModule,
@@ -12,7 +13,7 @@ import {
   MidwayRequestContainer,
   REQUEST_OBJ_CTX_KEY,
 } from '@midwayjs/core';
-import { FUNC_KEY } from '@midwayjs/decorator';
+import { FUNC_KEY, HANDLER_KEY } from '@midwayjs/decorator';
 import SimpleLock from '@midwayjs/simple-lock';
 import * as compose from 'koa-compose';
 
@@ -133,6 +134,7 @@ export class FaaSStarter implements IFaaSStarter {
     const funOptions: {
       mod: any;
       middleware: Array<IMiddleware<FaaSContext>>;
+      method: string;
     } = this.funMappingStore.get(handlerMapping);
 
     return async (...args) => {
@@ -150,7 +152,7 @@ export class FaaSStarter implements IFaaSStarter {
           const mw: any[] = await this.formatMiddlewares(fnMiddleawere);
           mw.push(async ctx => {
             // invoke handler
-            const result = this.invokeHandler(funOptions.mod, ctx, args);
+            const result = this.invokeHandler(funOptions, ctx, args);
             if (!ctx.body) {
               ctx.body = result;
             }
@@ -160,7 +162,7 @@ export class FaaSStarter implements IFaaSStarter {
           });
         } else {
           // invoke handler
-          return this.invokeHandler(funOptions.mod, context, args);
+          return this.invokeHandler(funOptions, context, args);
         }
       }
 
@@ -168,10 +170,18 @@ export class FaaSStarter implements IFaaSStarter {
     };
   }
 
-  async invokeHandler(modName, context, args) {
-    const funModule = await context.requestContext.getAsync(modName);
+  async invokeHandler(
+    funOptions: {
+      mod: any;
+      middleware: Array<IMiddleware<FaaSContext>>;
+      method: string;
+    },
+    context,
+    args
+  ) {
+    const funModule = await context.requestContext.getAsync(funOptions.mod);
     const handlerName =
-      this.getFunctionHandler(context, args, funModule) ||
+      this.getFunctionHandler(context, args, funModule, funOptions.method) ||
       this.defaultHandlerMethod;
     if (funModule[handlerName]) {
       // invoke real method
@@ -179,8 +189,18 @@ export class FaaSStarter implements IFaaSStarter {
     }
   }
 
-  protected getFunctionHandler(ctx, args, target): string {
-    return this.defaultHandlerMethod;
+  protected getFunctionHandler(ctx, args, target, method): string {
+    if (method && typeof target[method] !== 'undefined') {
+      return method;
+    }
+    const handlerMethod = this.defaultHandlerMethod;
+    if (handlerMethod && typeof target[handlerMethod] !== 'undefined') {
+      return handlerMethod;
+    }
+    throw new Error(
+      `no handler setup on ${target.name}#${method ||
+        this.defaultHandlerMethod}`
+    );
   }
 
   async start(
@@ -220,10 +240,33 @@ export class FaaSStarter implements IFaaSStarter {
           funHandler;
           middleware: string[];
         } = getClassMetadata(FUNC_KEY, funModule);
-        this.funMappingStore.set(funOptions.funHandler, {
-          middleware: funOptions.middleware,
-          mod: funModule,
-        });
+        // @fun(key), only if key is set
+        if (funOptions.funHandler) {
+          this.funMappingStore.set(funOptions.funHandler, {
+            middleware: funOptions.middleware,
+            mod: funModule,
+          });
+        }
+        const methods = Object.getOwnPropertyNames(
+          (funModule as () => void).prototype
+        );
+        for (const method of methods) {
+          const meta = getPropertyDataFromClass(HANDLER_KEY, funModule, method);
+          if (!meta) {
+            continue;
+          }
+          // { method: 'handler', data: 'index.handler' }
+          const handlerName = meta.data
+            ? // @handler(key), if key is set
+              meta.data
+            : // else use ClassName.mehtod as handler key
+              (funModule as () => {}).name + '.' + method;
+          this.funMappingStore.set(handlerName, {
+            middleware: funOptions.middleware,
+            mod: funModule,
+            method,
+          });
+        }
       }
 
       const modules = listPreloadModule();
