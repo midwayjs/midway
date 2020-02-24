@@ -60,7 +60,7 @@ export class BaseCLI {
 
   // 加载命令行输出及报错
   loadLog() {
-    return console;
+    return { ...console, error: this.error };
   }
 
   // 展示帮助信息
@@ -109,8 +109,8 @@ export class BaseCLI {
     log.log(commandLineUsage(commandList));
   }
 
-  error(errMsg) {
-    console.log('errMsg', errMsg);
+  error(err) {
+    console.error(err && err.message || err);
     process.exit(1);
   }
 

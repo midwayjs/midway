@@ -3,7 +3,7 @@ import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { execSync } from 'child_process';
 import * as assert from 'assert';
 const homeDir = require('os').homedir();
-const currentNodeModules = execSync('npm root').toString();
+const currentNodeModules = execSync('npm root').toString().replace(/\n$/, '');
 const commandHookCoreBaseDir = join(homeDir, '.commandHookCore');
 const commandHookCoreBasePkg = join(commandHookCoreBaseDir, 'package.json');
 const commandHookCoreBaseNodeModules = join(
@@ -53,7 +53,10 @@ export async function loadNpm(
   try {
     const npmPath = await getNpmPath(scope, npmName, npmRegistry);
     assert(npmPath, 'empty npm path');
-    const plugin = require(npmPath);
+    let plugin = require(npmPath);
+    if (typeof plugin === 'object') {
+      plugin = plugin[Object.keys(plugin)[0]];
+    }
     scope.addPlugin(plugin);
   } catch (e) {
     scope.error('npmPlugin', { npmName, err: e });
