@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/fcli-command-core",
-  "version": "0.2.29",
+  "version": "0.2.33",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {

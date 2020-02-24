@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.33](https://github.com/midwayjs/midway-faas/compare/v0.2.32...v0.2.33) (2020-02-24)
+
+
+### Bug Fixes
+
+* Fix/load npm plugin ([#61](https://github.com/midwayjs/midway-faas/issues/61)) ([8d00e37](https://github.com/midwayjs/midway-faas/commit/8d00e37745d5f786f2ae9347ccf94d7a4cedf26e))
+
+
+
+
+
 ## [0.2.29](https://github.com/midwayjs/midway-faas/compare/v0.2.28...v0.2.29) (2020-02-22)
 
 **Note:** Version bump only for package @midwayjs/fcli-plugin-package

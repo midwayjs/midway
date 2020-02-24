@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.33](https://github.com/midwayjs/midway-faas/compare/v0.2.32...v0.2.33) (2020-02-24)
+
+
+### Bug Fixes
+
+* Fix/load npm plugin ([#61](https://github.com/midwayjs/midway-faas/issues/61)) ([8d00e37](https://github.com/midwayjs/midway-faas/commit/8d00e37745d5f786f2ae9347ccf94d7a4cedf26e))
+* get npm root ([#60](https://github.com/midwayjs/midway-faas/issues/60)) ([a3e8d3e](https://github.com/midwayjs/midway-faas/commit/a3e8d3ea0b4f68dc71469df8c6c7793cab3e491c))
+
+
+
+
+
 ## [0.2.32](https://github.com/midwayjs/midway-faas/compare/v0.2.31...v0.2.32) (2020-02-23)
 
 
