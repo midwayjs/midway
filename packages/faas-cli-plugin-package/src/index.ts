@@ -197,9 +197,9 @@ export class PackagePlugin extends BasePlugin {
     const include = await globby(
       [
         this.options.sourceDir || 'src',
-        'tsconfig.json',
-        'package.json',
         '*.yml',
+        '*.js',
+        '*.json'
       ].concat(packageObj.include || []),
       { cwd: this.servicePath }
     );

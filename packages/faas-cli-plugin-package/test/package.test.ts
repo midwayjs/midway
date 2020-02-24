@@ -33,6 +33,7 @@ describe('/test/package.test.ts', () => {
       assert(existsSync(join(buildPath, 'node_modules')));
       assert(existsSync(join(buildPath, 'src')));
       assert(existsSync(join(buildPath, 'package.json')));
+      assert(existsSync(join(buildPath, 'copy.js')));
       assert(existsSync(join(buildPath, 'tsconfig.json')));
       assert(existsSync(resolve(baseDir, 'serverless.zip')));
     });
