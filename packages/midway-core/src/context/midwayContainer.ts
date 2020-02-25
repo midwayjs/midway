@@ -87,6 +87,8 @@ export class MidwayContainer extends Container implements IMidwayContainer {
     // loadDir
     this.loadDirectory(opts);
 
+    this.registerImportObjects(configuration.getImportObjects());
+
     // load configuration
     for (const [namespace, containerConfiguration] of this.configurationMap) {
       const subDirs = containerConfiguration.getImportDirectory();
@@ -99,6 +101,9 @@ export class MidwayContainer extends Container implements IMidwayContainer {
           namespace
         });
       }
+
+      this.registerImportObjects(containerConfiguration.getImportObjects(),
+        containerConfiguration.namespace);
     }
   }
 
@@ -376,6 +381,21 @@ export class MidwayContainer extends Container implements IMidwayContainer {
       });
       // 加载配置
       await this.configService.load();
+    }
+  }
+  /**
+   * 注册 importObjects
+   * @param objs configuration 中的 importObjects
+   * @param namespace namespace
+   */
+  private registerImportObjects(objs: any, namespace?: string) {
+    if (objs) {
+      const keys = Object.keys(objs);
+      for (const key of keys) {
+        if (typeof objs[key] !== undefined) {
+          this.registerObject(generateProvideId(key, namespace), objs[key]);
+        }
+      }
     }
   }
 }

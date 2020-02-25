@@ -196,6 +196,7 @@ export interface IContainerConfiguration {
   load(packageName: string);
   loadConfiguration(configuration: IContainerConfiguration, baseDir: string);
   getImportDirectory(): string[];
+  getImportObjects(): any;
 }
 
 export interface IMidwayContainer extends IContainer {
