@@ -1,7 +1,6 @@
 import * as path from 'path';
 
 import { CLASS_KEY_CONSTRUCTOR, CONFIG_KEY, LOGGER_KEY, PLUGIN_KEY } from '@midwayjs/decorator';
-
 import * as globby from 'globby';
 import {
   Autowire,

@@ -1,8 +1,8 @@
 /* eslint-disable no-shadow */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { config, plugin, logger } from '@midwayjs/decorator';
-
 import { provide, async, init, inject } from 'injection';
+
 
 @provide()
 export class A {
