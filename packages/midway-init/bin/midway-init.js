@@ -25,7 +25,7 @@ const Command = require('..');
     });
     const isContinue = await prompt.run();
 
-    if (!isContinue) {
+    if (! isContinue) {
       return;
     }
   }
@@ -43,7 +43,7 @@ const Command = require('..');
 // 判断是否处于内网环境
 function isInternal() {
   try {
-    const { stdout } = childProcess.spawnSync('tnpm', [ 'view', '@ali/midway-init', '--json' ], {
+    const { stdout } = childProcess.spawnSync('tnpm', ['view', '@ali/midway-init', '--json'], {
       timeout: 3000,
     });
 

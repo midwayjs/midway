@@ -21,11 +21,11 @@ describe('test/init.test.js', () => {
     const targetDir = path.join(tmp, 'test');
     const command = new TestCommand();
     command.mockPrompt([
-      [ null, { name: 'return' }],
+      [null, { name: 'return' } ],
       targetDir,
       [
         'my_project',
-        [ null, { name: 'down' }],
+        [null, { name: 'down' } ],
         'test',
       ],
     ]);
@@ -42,11 +42,11 @@ describe('test/init.test.js', () => {
     const targetDir = path.join(tmp, 'test');
     const command = new TestCommand();
     command.mockPrompt([
-      [ null, { name: 'return' }],
+      [null, { name: 'return' } ],
       '.tmp/test',
       [
         'my_project',
-        [ null, { name: 'down' }],
+        [null, { name: 'down' } ],
         'test',
       ],
     ]);
@@ -66,7 +66,7 @@ describe('test/init.test.js', () => {
       '.tmp/test',
       [
         'my_project',
-        [ null, { name: 'down' }],
+        [null, { name: 'down' } ],
         'test',
       ],
     ]);
@@ -85,7 +85,7 @@ describe('test/init.test.js', () => {
     command.mockPrompt([
       [
         'my_project',
-        [ null, { name: 'down' }],
+        [null, { name: 'down' } ],
         'test',
       ],
     ]);
@@ -104,7 +104,7 @@ describe('test/init.test.js', () => {
     command.mockPrompt([
       [
         'my_project',
-        [ null, { name: 'down' }],
+        [null, { name: 'down' } ],
         'test',
       ],
     ]);
@@ -120,7 +120,7 @@ describe('test/init.test.js', () => {
     command.mockPrompt([
       [
         'my_project',
-        [ null, { name: 'down' }],
+        [null, { name: 'down' } ],
         'test',
       ],
     ]);
@@ -140,7 +140,7 @@ describe('test/init.test.js', () => {
     command.mockPrompt([
       [
         'my_project',
-        [ null, { name: 'down' }],
+        [null, { name: 'down' } ],
         'test',
       ],
     ]);
@@ -157,7 +157,7 @@ describe('test/init.test.js', () => {
     command.mockPrompt([
       [
         'my_project',
-        [ null, { name: 'down' }],
+        [null, { name: 'down' } ],
         'test',
       ],
     ]);
@@ -174,7 +174,7 @@ describe('test/init.test.js', () => {
     command.mockPrompt([
       [
         'my_project',
-        [ null, { name: 'down' }],
+        [null, { name: 'down' } ],
         'test',
       ],
     ]);
@@ -191,7 +191,7 @@ describe('test/init.test.js', () => {
     command.mockPrompt([
       [
         'my_project',
-        [ null, { name: 'down' }],
+        [null, { name: 'down' } ],
         'test',
       ],
     ]);

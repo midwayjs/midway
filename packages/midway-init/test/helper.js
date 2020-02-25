@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable brace-style */
-
 const Command = require('../lib/command');
 
 
@@ -21,6 +20,7 @@ class TestCommand extends Command {
       if (value) {
         for (const flag of value) {
           if (Array.isArray(flag)) {
+            // eslint-disable-next-line prefer-spread
             await this.prompt.keypress.apply(this.prompt, flag);
           }
           else if (typeof flag === 'string') {

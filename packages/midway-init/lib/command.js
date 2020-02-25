@@ -14,7 +14,7 @@ const { getParser } = require('./parser');
 
 
 async function sleep(timeout) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     setTimeout(() => {
       resolve();
     }, timeout);
@@ -90,17 +90,17 @@ class MidwayInitCommand extends EventEmitter {
       this.prompt = new Select({
         name: 'templateName',
         message: 'Hello, traveller.\n  Which template do you like?',
-        choices: Object.keys(this.templateList).map(template => {
+        choices: Object.keys(this.templateList).map((template) => {
           return (
             `${template} - ${this.templateList[template].description}` +
             (this.templateList[template].author
               ? `(by @${chalk.underline.bold(
-                this.templateList[template].author
+                this.templateList[template].author,
               )})`
               : '')
           );
         }),
-        result: value => {
+        result: (value) => {
           return value.split(' - ')[0];
         },
         show: this.showPrompt,
@@ -127,7 +127,7 @@ class MidwayInitCommand extends EventEmitter {
   }
 
   async getTemplateList() {
-    if (!this.templateName) {
+    if (! this.templateName) {
       return require(defaultOptions.templateListPath);
     }
   }
@@ -146,7 +146,7 @@ class MidwayInitCommand extends EventEmitter {
     }
     await sleep(1000);
     this.log(
-      'Initialization program has been executed successfully,enjoy it...'
+      'Initialization program has been executed successfully,enjoy it...',
     );
     console.log();
   }
@@ -156,7 +156,7 @@ class MidwayInitCommand extends EventEmitter {
   }
 
   async createTargetDir() {
-    if (!this.targetPath) {
+    if (! this.targetPath) {
       this.prompt = new Input({
         message: 'The directory where the boilerplate should be created',
         initial: 'my_midway_app',
@@ -176,7 +176,7 @@ class MidwayInitCommand extends EventEmitter {
       this.prompt = new Form({
         name: 'user',
         message: 'Please provide the following information:',
-        choices: argsKeys.map(argsKey => {
+        choices: argsKeys.map((argsKey) => {
           return {
             name: `${argsKey}`,
             message: `${args[argsKey].desc}`,
@@ -189,7 +189,7 @@ class MidwayInitCommand extends EventEmitter {
       const parameters = await this.prompt.run();
       // remove undefined property
       Object.keys(parameters).forEach(
-        key => parameters[key] === undefined && delete parameters[key]
+        key => parameters[key] === undefined && delete parameters[key],
       );
       await this.readyGenerate(async () => {
         await generator.run(parameters);
@@ -203,7 +203,7 @@ class MidwayInitCommand extends EventEmitter {
   }
 
   getAbsoluteDir(dir) {
-    if (!path.isAbsolute(dir)) {
+    if (! path.isAbsolute(dir)) {
       dir = path.join(process.cwd(), dir);
     }
     return dir;
@@ -213,8 +213,10 @@ class MidwayInitCommand extends EventEmitter {
    * log with prefix
    */
   log() {
+    // eslint-disable-next-line prefer-rest-params
     const args = Array.prototype.slice.call(arguments);
     args[0] = chalk.green('✔ ') + chalk.bold(args[0]);
+    // eslint-disable-next-line prefer-spread
     console.log.apply(console, args);
   }
 
