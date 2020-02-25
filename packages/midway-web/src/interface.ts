@@ -1,5 +1,4 @@
 import { KoaMiddleware, KoaMiddlewareParamArray } from '@midwayjs/decorator';
-
 import { Context } from 'egg';
 import { EggLoaderOptions } from 'egg-core';
 import { IApplicationContext } from 'injection';

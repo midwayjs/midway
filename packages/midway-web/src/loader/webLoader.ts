@@ -11,7 +11,6 @@ import {
   RouterParamValue,
 } from '@midwayjs/decorator';
 import { ContainerLoader, MidwayHandlerKey, MidwayContainer } from 'midway-core';
-
 import * as Debug from 'debug';
 import * as EggCore from 'egg-core';
 import { EggRouter as Router } from '@eggjs/router';
