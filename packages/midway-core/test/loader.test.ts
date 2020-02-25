@@ -264,7 +264,10 @@ describe('/test/loader.test.ts', () => {
     assert((await replaceManager2.getOne()) === 'ok2');
     // 查看覆盖的情况
     const baseService: any = await appCtx.getAsync('baseService');
-    assert((await baseService.getInformation()) === 'harry,one article,ok2');
+    assert((await baseService.getInformation()) === 'harryone article atmod,one article,ok2');
+
+    const userManager: any = await appCtx.getAsync('userManager');
+    assert((await userManager.getUser()) === 'harryone article atmod');
 
     const repm: any = await appCtx.getAsync('@midway-plugin-mod:replaceManager');
     assert((await repm.getOne()) === 'one article mod');
