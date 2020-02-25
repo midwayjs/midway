@@ -1,5 +1,3 @@
-
-
 const Command = require('egg-bin').Command;
 
 
@@ -60,13 +58,13 @@ class DocCommand extends Command {
     let args;
     if (argv.options) {
       // if has options args just ignore others
-      args = [ '--options', argv.options ];
+      args = ['--options', argv.options];
     // eslint-disable-next-line @typescript-eslint/indent, brace-style
     }
     else {
       args = this.helper.unparseArgv(argv, { allowCamelCase: true, useEquals: false });
-      args = args.filter(item => {
-        return !/--\w+-\w+/.test(item);
+      args = args.filter((item) => {
+        return ! /--\w+-\w+/.test(item);
       });
     }
 

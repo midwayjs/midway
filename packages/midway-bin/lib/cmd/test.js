@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-
 const co = require('co');
 
 class TestCommand extends require('egg-bin').TestCommand {
@@ -9,7 +8,7 @@ class TestCommand extends require('egg-bin').TestCommand {
   }
 
   async run(context) {
-    if (!context.env.NODE_ENV) {
+    if (! context.env.NODE_ENV) {
       context.env.NODE_ENV = 'unittest';
     }
     await co(super.run(context));

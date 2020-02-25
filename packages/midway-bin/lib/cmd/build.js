@@ -67,7 +67,7 @@ class BuildCommand extends Command {
 
     const tscCli = require.resolve('typescript/bin/tsc');
     const projectFile = path.join(cwd, argv.project);
-    if (!fs.existsSync(projectFile)) {
+    if (! fs.existsSync(projectFile)) {
       console.log(`[midway-bin] tsconfig.json not found in ${cwd}\n`);
       return;
     }
@@ -98,7 +98,7 @@ class BuildCommand extends Command {
         {
           sourceMap: this.inferCompilerOptions(tsConfig, 'sourceMap', { projectDir }),
           mode: argv.mode,
-        }
+        },
       );
       return;
     }
@@ -152,11 +152,11 @@ class BuildCommand extends Command {
     fse.mkdirpSync(outDir);
 
     let basename = path.basename(entry, '.ts');
-    if (!basename.endsWith('.js')) {
+    if (! basename.endsWith('.js')) {
       basename += '.js';
     }
     fs.writeFileSync(outDir + '/' + basename, code, { mode: code.match(shebangRegEx) ? 0o777 : 0o666 });
-    if (map) fs.writeFileSync(outDir + '/index.js.map', map);
+    if (map) { fs.writeFileSync(outDir + '/index.js.map', map); }
 
     for (const asset of Object.keys(assets)) {
       const assetPath = outDir + '/' + asset;
@@ -181,7 +181,7 @@ class BuildCommand extends Command {
       const pkg = require(path.join(from, 'package.json'));
       if (pkg['midway-bin-build'] && pkg['midway-bin-build'].include) {
         for (const file of pkg['midway-bin-build'].include) {
-          if (typeof file === 'string' && !/\*/.test(file)) {
+          if (typeof file === 'string' && ! /\*/.test(file)) {
             const srcDir = path.join(argv.srcDir, file);
             const targetDir = path.join(outDir, file);
             // 目录，或者不含通配符的普通文件
@@ -197,7 +197,7 @@ class BuildCommand extends Command {
               this.copyFile(
                 path.join(argv.srcDir, p),
                 path.join(outDir, p),
-                from
+                from,
               );
             }
           }
@@ -207,7 +207,7 @@ class BuildCommand extends Command {
   }
 
   copyFile(srcFile, targetFile, from) {
-    if (!fs.existsSync(srcFile)) {
+    if (! fs.existsSync(srcFile)) {
       console.warn(`[midway-bin] can't find ${srcFile} and skip it`);
     } else {
       fse.copySync(path.join(from, srcFile), path.join(from, targetFile));
@@ -220,8 +220,8 @@ class BuildCommand extends Command {
     // get setting from its parent
     if (tsConfig && tsConfig.extends) {
       if (
-        !tsConfig.compilerOptions ||
-        tsConfig.compilerOptions && !tsConfig.compilerOptions[optionKeyPath]
+        ! tsConfig.compilerOptions ||
+        tsConfig.compilerOptions && ! tsConfig.compilerOptions[optionKeyPath]
       ) {
         return this.inferCompilerOptions(require(path.join(projectDir, tsConfig.extends)), optionKeyPath, { projectDir });
       }
@@ -237,25 +237,25 @@ class BuildCommand extends Command {
       typescript = require('typescript');
     }
 
-    const inlineSourceMap = !!tsConfig.compilerOptions.inlineSourceMap;
+    const inlineSourceMap = !! tsConfig.compilerOptions.inlineSourceMap;
     const sourceMap = inlineSourceMap || tsConfig.compilerOptions.sourceMap;
-    if (!sourceMap) {
+    if (! sourceMap) {
       return;
     }
 
     let files;
     if (outDir) {
-      files = globby.sync([ '**/*.js' ], {
+      files = globby.sync(['**/*.js'], {
         cwd: outDir,
-        ignore: [ '**/node_modules' ],
+        ignore: ['**/node_modules'],
       });
 
       files = files.map(it => path.join(outDir, it));
     }
     else {
       const host = typescript.createCompilerHost(tsConfig.compilerOptions);
-      files = host.readDirectory(__dirname, [ '.ts' ], tsConfig.exclude, tsConfig.include);
-      files = files.map(it => {
+      files = host.readDirectory(__dirname, ['.ts'], tsConfig.exclude, tsConfig.include);
+      files = files.map((it) => {
         return path.join(path.dirname(it), path.basename(it, '.js'));
       });
     }
@@ -284,10 +284,10 @@ class BuildCommand extends Command {
         },
       });
       const { code: codeNew, map: mapNew } = result;
-      if (codeNew == null) {
+      if (codeNew === null) {
         break;
       }
-      if (!inlineSourceMap) {
+      if (! inlineSourceMap) {
         await fse.writeFile(file + '.map', mapNew, 'utf8');
       }
       await fse.writeFile(file, codeNew, 'utf8');
@@ -296,7 +296,7 @@ class BuildCommand extends Command {
 
   parseInlineSourceMap(code) {
     const match = inlineSourceMapRegEx.exec(code);
-    if (match == null) {
+    if (match === null) {
       return;
     }
     const map = Buffer.from(match[1], 'base64').toString('utf8');
