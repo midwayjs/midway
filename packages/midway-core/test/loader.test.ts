@@ -185,6 +185,8 @@ describe('/test/loader.test.ts', () => {
     const appCtx = loader.getApplicationContext();
     const baseService: any = await appCtx.getAsync('baseService');
     assert((await baseService.getInformation()) === 'harry,one article');
+    assert.equal(baseService.getAaa(), 123);
+    assert.equal(baseService.getCcc(), 'mock');
   });
 
   it('should load config.*.ts by default env', async () => {
@@ -262,7 +264,10 @@ describe('/test/loader.test.ts', () => {
     assert((await replaceManager2.getOne()) === 'ok2');
     // 查看覆盖的情况
     const baseService: any = await appCtx.getAsync('baseService');
-    assert((await baseService.getInformation()) === 'harry,one article,ok2');
+    assert((await baseService.getInformation()) === 'harryone article atmod,one article,ok2');
+
+    const userManager: any = await appCtx.getAsync('userManager');
+    assert((await userManager.getUser()) === 'harryone article atmod');
 
     const repm: any = await appCtx.getAsync('@midway-plugin-mod:replaceManager');
     assert((await repm.getOne()) === 'one article mod');

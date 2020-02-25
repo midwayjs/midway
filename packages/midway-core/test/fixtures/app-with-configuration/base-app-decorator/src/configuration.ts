@@ -5,5 +5,10 @@ import { Configuration } from '@midwayjs/decorator';
     '../../midway-plugin-mock/src',
     '../../midway-plugin-ok/src'
   ],
+  importObjects: {
+    aa: 123
+  }
 })
-export class AutoConfiguraion {}
+class AutoConfiguraion {}
+
+module.exports = AutoConfiguraion;
