@@ -1,6 +1,7 @@
 import { SCHEDULE_KEY, ScheduleOpts } from '@midwayjs/decorator';
 import { getClassMetadata, getProviderId, listModule } from 'injection';
 
+
 export = (agent) => {
 
   if (!agent.schedule) {

@@ -2,6 +2,7 @@ import { schedule } from '@midwayjs/decorator';
 
 import { provide } from 'injection';
 
+
 @provide()
 @schedule({
   type: 'worker',

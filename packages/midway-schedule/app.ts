@@ -2,6 +2,7 @@ import { ScheduleOpts, SCHEDULE_KEY } from '@midwayjs/decorator';
 import { getClassMetadata, listModule, getProviderId } from 'injection';
 import * as is from 'is-type-of';
 
+
 export = (app) => {
 
   // egg-schedule 的 app 里没有 schedule
