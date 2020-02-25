@@ -62,6 +62,9 @@ export function generateProvideId(provideId: string, namespace?: string) {
     if (provideId.includes(':')) {
       return provideId;
     }
+    if (namespace.includes('@')) {
+      namespace = namespace.substr(1);
+    }
     return namespace + ':' + provideId;
   }
   return provideId;
