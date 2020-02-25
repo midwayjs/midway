@@ -5,7 +5,7 @@
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "scripts": {
-    "build": "npm run lint:nofix && midway-bin build -c",
+    "build": "midway-bin build -c",
     "lint": "eslint --fix --cache {src,test}/**/*.ts",
     "lint:nofix": "eslint --cache {src,test}/**/*.ts",
     "test": "midway-bin test --ts",
