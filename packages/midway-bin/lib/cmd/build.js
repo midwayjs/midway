@@ -233,7 +233,7 @@ class BuildCommand extends Command {
   }
 
   async minify(tsConfig, outDir) {
-    if (typescript == null) {
+    if (typescript === null) {
       typescript = require('typescript');
     }
 

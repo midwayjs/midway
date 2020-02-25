@@ -12,7 +12,7 @@ class DevCommand extends require('egg-bin/lib/cmd/dev') {
   }
 
   async run(context) {
-    if (!context.argv.framework) {
+    if (! context.argv.framework) {
       context.argv.framework = this.findFramework('midway') || this.findFramework('midway-mirror');
     }
     await co(super.run(context));
