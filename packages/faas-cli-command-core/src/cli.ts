@@ -29,6 +29,7 @@ export class BaseCLI {
       log: this.loadLog(),
       displayUsage: this.displayUsage.bind(this),
       extensions: this.loadExtensions(),
+      ...this.coverCoreOptions(),
     });
   }
 
@@ -51,6 +52,11 @@ export class BaseCLI {
 
   // 加载cli拓展
   loadExtensions() {
+    return {};
+  }
+
+  // 覆盖默认的 core options
+  coverCoreOptions() {
     return {};
   }
 

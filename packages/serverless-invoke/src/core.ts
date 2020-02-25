@@ -5,9 +5,9 @@
   2. tsc编译用户代码到dist目录
   3. 开源版: 【创建runtime、创建trigger】封装为平台invoke包，提供getInvoke方法，会传入args与入口方法，返回invoke方法
 */
-import { FaaSStarterClass, cleanTarget } from './utils';
-import { join, resolve } from 'path';
-import { existsSync, move } from 'fs-extra';
+import { FaaSStarterClass, cleanTarget, compareFileChange } from './utils';
+import { join, resolve, relative } from 'path';
+import { existsSync, move, writeFileSync, ensureFileSync } from 'fs-extra';
 import { loadSpec } from '@midwayjs/fcli-command-core';
 import { writeWrapper } from '@midwayjs/serverless-spec-builder';
 import { AnalyzeResult, Locator } from '@midwayjs/locate';
@@ -95,6 +95,20 @@ export abstract class InvokeCore implements IInvoke {
       tsBuildRoot: debugRoot,
     });
     this.buildDir = this.codeAnalyzeResult.tsBuildRoot;
+    const buildLogPath = resolve(this.buildDir, '.faasTSBuildTime.log');
+    if (existsSync(buildLogPath)) {
+      const fileChanges = await compareFileChange(
+        [ `${relative(baseDir, this.codeAnalyzeResult.tsCodeRoot)}/**/*` ],
+        [ buildLogPath ],
+        { cwd: baseDir }
+      );
+      if (!fileChanges || !fileChanges.length) {
+        console.log('- Auto skip ts compile');
+        return;
+      }
+    }
+    ensureFileSync(buildLogPath);
+    writeFileSync(buildLogPath, `ts build at ${Date.now()}`);
     // clean directory first
     if (this.options.clean) {
       await cleanTarget(this.buildDir);

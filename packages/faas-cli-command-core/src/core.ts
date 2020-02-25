@@ -329,7 +329,10 @@ export class CommandHookCore implements ICommandHooksCore {
   // 加载本地插件
   private async loadLocalPlugin(localPath) {
     try {
-      const plugin = require(localPath);
+      let plugin = require(localPath);
+      if (typeof plugin === 'object') {
+        plugin = plugin[Object.keys(plugin)[0]];
+      }
       this.addPlugin(plugin);
     } catch (e) {
       this.error('localPlugin', { path: localPath, err: e });
@@ -339,7 +342,7 @@ export class CommandHookCore implements ICommandHooksCore {
   // 加载npm包插件
   private async loadNpmPlugins() {
     for (const npmPath of this.npmPlugin) {
-      await this.loadNpm(npmPath, this.options.npm);
+      await this.loadNpm(npmPath, this.options.options.npm || this.options.npm);
     }
   }
 
