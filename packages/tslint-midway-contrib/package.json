@@ -4,7 +4,7 @@
   "description": "tslint default rule for midway",
   "main": "tslint.json",
   "scripts": {
-    "build": "npm run compile",
+    "build": "",
     "compile": "tsc -p ."
   },
   "devDependencies": {
