@@ -37,8 +37,6 @@
   "devDependencies": {
     "co-mocha": "^1.2.2",
     "coffee": "^5.2.1",
-    "eslint": "^6.1.0",
-    "eslint-config-egg": "^7.0.0",
     "mm": "^2.5.0"
   },
   "engines": {
