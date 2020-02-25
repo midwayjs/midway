@@ -27,7 +27,6 @@ export class ContainerConfiguration implements IContainerConfiguration {
       const subContainerConfiguration = this.container.createConfiguration();
       const subPackageDir = this.resolvePackageBaseDir(importPackage, baseDir);
       debug('import package => %s dir => %s.', importPackage, subPackageDir);
-      subContainerConfiguration.addLoadDir(subPackageDir);
       subContainerConfiguration.load(subPackageDir);
     }
   }
@@ -36,6 +35,10 @@ export class ContainerConfiguration implements IContainerConfiguration {
     if (importObjects) {
       this.importObjects = importObjects;
     }
+  }
+
+  getImportObjects() {
+    return this.importObjects;
   }
 
   addImportConfigs(importConfigs: string[], baseDir: string) {
@@ -77,16 +80,23 @@ export class ContainerConfiguration implements IContainerConfiguration {
         this.namespace = pkg.midwayNamespace ? pkg.midwayNamespace : pkg.name;
       }
       let cfgFile;
+      let loadDir;
       if (pkg.main) {
         const cfgFileDir = dirname(join(packageBaseDir, pkg.main));
         cfgFile = join(cfgFileDir, 'configuration');
         configuration = safeRequire(cfgFile);
         debug('configuration file path one => %s.', cfgFile);
+        loadDir = cfgFileDir;
       }
       if (!configuration) {
         cfgFile = `${packageBaseDir}/configuration`;
         configuration = safeRequire(cfgFile);
         debug('configuration file path two => %s.', cfgFile);
+        loadDir = packageBaseDir;
+      }
+      if (loadDir) {
+        this.addLoadDir(loadDir);
+        debug('add loadDir => %s namespace => %s.', loadDir, this.namespace);
       }
     }
     debug('packageName => %s namespace => %s configuration file => %s.',

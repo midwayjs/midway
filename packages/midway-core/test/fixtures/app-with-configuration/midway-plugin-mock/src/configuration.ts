@@ -1,6 +1,10 @@
 import { Configuration } from '@midwayjs/decorator';
 
 @Configuration({
-  namespace: ''
+  namespace: '',
+  importObjects: {
+    bb: 123,
+    cc: 'mock'
+  }
 })
 export class AutoConfiguraion {}

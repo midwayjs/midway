@@ -185,6 +185,8 @@ describe('/test/loader.test.ts', () => {
     const appCtx = loader.getApplicationContext();
     const baseService: any = await appCtx.getAsync('baseService');
     assert((await baseService.getInformation()) === 'harry,one article');
+    assert.equal(baseService.getAaa(), 123);
+    assert.equal(baseService.getCcc(), 'mock');
   });
 
   it('should load config.*.ts by default env', async () => {
