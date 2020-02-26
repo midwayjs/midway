@@ -236,9 +236,22 @@ class PipelineHandler implements IPipelineHandler {
     const data = {};
 
     for (const valve of valves) {
-      // TODO
+      const r = await Promise.resolve(valve);
+      if (r.error) {
+        result.success = false;
+        result.error = {
+          valveName: r.valveName,
+          message: r.error.message,
+          error: r.error
+        };
+
+        return result;
+      } else {
+        data[r.dataKey] = r.data;
+      }
     }
-    return null;
+    result.result = data as any;
+    return result;
   }
 
   async concatSeries<T>(opts: IPipelineOptions): Promise<IPipelineResult<T>> {
