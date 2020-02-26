@@ -3,7 +3,7 @@
   "include": [
     "src/**/*.ts",
     "test/**/*.ts",
-    "test_browser/**/*.ts"
+    "test_browser/**/*.ts",
     "*.ts"
   ],
   "exclude": [

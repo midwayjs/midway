@@ -14,8 +14,8 @@
   },
   "scripts": {
     "build": "midway-bin build -c",
-    "lint": "",
-    "lint:nofix": "",
+    "lint": "eslint --fix --cache {src,test}/**/*.ts *.ts",
+    "lint:nofix": "eslint --cache {src,test}/**/*.ts *.ts",
     "test": "npm run lint && midway-bin clean && NODE_ENV=unittest midway-bin test --ts",
     "autod": "midway-bin autod"
   },
