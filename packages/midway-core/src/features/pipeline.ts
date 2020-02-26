@@ -46,7 +46,7 @@ interface IPipelineContext {
 /**
  * 每个具体的 valve 需要继承实现该接口
  */
-interface IValveHandler<T> {
+interface IValveHandler {
   /**
    * 最终合并结果object中的key，默认为 valve 名称
    */
@@ -55,7 +55,7 @@ interface IValveHandler<T> {
    * 执行当前 valve
    * @param ctx 上下文
    */
-  invoke(ctx: IPipelineContext): Promise<T>;
+  invoke(ctx: IPipelineContext): Promise<any>;
 }
 /**
  * pipeline 执行参数
@@ -90,6 +90,10 @@ interface IPipelineResult<T> {
      * 异常信息
      */
     message?: string;
+    /**
+     * 原始 Error
+     */
+    error?: Error;
   };
   /**
    * 返回结果
@@ -137,6 +141,11 @@ class PipelineContext implements IPipelineContext {
     prev?: string;
     next?: string;
   };
+
+  constructor(args?: any) {
+    this.args = args;
+  }
+
   private data = new Map<string, any>();
 
   get(key: string): any {
@@ -157,6 +166,13 @@ class PipelineContext implements IPipelineContext {
   }
 }
 
+interface IValveResult {
+  error?: Error;
+  valveName: string;
+  dataKey: string;
+  data: any;
+}
+
 class PipelineHandler implements IPipelineHandler {
   private applicationContext: IApplicationContext;
   // 默认的 valves (@Pipeline(['test1', 'test2']))
@@ -167,15 +183,61 @@ class PipelineHandler implements IPipelineHandler {
   }
 
   async parallel<T>(opts: IPipelineOptions): Promise<IPipelineResult<T>> {
+    const valves = this.prepareValves(opts);
+    const res = await Promise.all(valves);
 
-    return null;
+    const result: IPipelineResult<T> = { success: true, result: null };
+    const data = {};
+    for (const r of res) {
+      if (r.error) {
+        result.success = false;
+        result.error = {
+          valveName: r.valveName,
+          message: r.error.message,
+          error: r.error
+        };
+
+        return result;
+      } else {
+        data[r.dataKey] = r.data;
+      }
+    }
+    result.result = data as any;
+    return result;
   }
 
   async concat<T>(opts: IPipelineOptions): Promise<IPipelineResult<T>> {
-    return null;
+    const valves = this.prepareValves(opts);
+    const res = await Promise.all(valves);
+
+    const result: IPipelineResult<T> = { success: true, result: null };
+    const data = [];
+    for (const r of res) {
+      if (r.error) {
+        result.success = false;
+        result.error = {
+          valveName: r.valveName,
+          message: r.error.message,
+          error: r.error
+        };
+
+        return result;
+      } else {
+        data.push(r.data);
+      }
+    }
+    result.result = data as any;
+    return result;
   }
 
   async series<T>(opts: IPipelineOptions): Promise<IPipelineResult<T>> {
+    const valves = this.prepareValves(opts);
+    const result: IPipelineResult<T> = { success: true, result: null };
+    const data = {};
+
+    for (const valve of valves) {
+      // TODO
+    }
     return null;
   }
 
@@ -188,17 +250,41 @@ class PipelineHandler implements IPipelineHandler {
   }
 
   private mergeValves(valves: string[]) {
-    let items = null;
+    let items = [];
     if (this.valves && this.valves.length > 0) {
       items = this.valves;
     }
 
+    let newItems = [];
     if (valves) {
-      // TODO
+      for (const v of valves) {
+        if (items.includes(v)) {
+          newItems.push(v);
+        }
+      }
+    } else {
+      newItems = items;
     }
+
+    return newItems;
   }
 
-  private async getIntances(valves: string[]) {
-    // TODO
+  private prepareValves(opts: IPipelineOptions): Array<Promise<IValveResult>> {
+    const valves = this.mergeValves(opts.valves);
+    const ctx = new PipelineContext(opts.args);
+
+    return valves.map(async (v) => {
+      const rt: IValveResult = { valveName: v, dataKey: v, data: null };
+      try {
+        const inst: IValveHandler = await this.applicationContext.getAsync(v);
+        if (inst.alias) {
+          rt.dataKey = inst.alias;
+        }
+        rt.data = await inst.invoke(ctx);
+      } catch (e) {
+        rt.error = e;
+      }
+      return rt;
+    });
   }
 }
