@@ -15,6 +15,7 @@ describe('/test/base.test.ts', () => {
       },
     });
 
+    // @ts-ignore
     app.test = 1;
 
     Object.defineProperty(app, 'key', {
@@ -23,7 +24,9 @@ describe('/test/base.test.ts', () => {
       configurable: false,
     });
 
+    // @ts-ignore
     assert(pluginContext.test === 1);
+    // @ts-ignore
     assert(pluginContext.key === 123);
   });
 
