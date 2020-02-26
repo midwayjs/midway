@@ -91,6 +91,11 @@ export class MidwayContainer extends Container implements IMidwayContainer {
 
     // load configuration
     for (const [namespace, containerConfiguration] of this.configurationMap) {
+      // main 的需要 skip 掉
+      if (namespace === MAIN_MODULE_KEY) {
+        continue;
+      }
+
       const subDirs = containerConfiguration.getImportDirectory();
       if (subDirs && subDirs.length > 0) {
         debug('load configuration dir => %j, namespace => %s.',
