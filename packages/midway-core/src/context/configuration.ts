@@ -65,28 +65,30 @@ export class ContainerConfiguration implements IContainerConfiguration {
   }
 
   load(packageName: string) {
-    let configuration;
-    const packageBaseDir = this.resolvePackageBaseDir(packageName);
+    let isSubDir = false;
+    let packageBaseDir = this.resolvePackageBaseDir(packageName);
     debug('load %s => %s.', packageName, packageBaseDir);
     let pkg = safeRequire(join(packageBaseDir, 'package.json'));
     if (!pkg) {
+      isSubDir = true;
       pkg = safeRequire(join(packageBaseDir, '../', 'package.json'));
     }
     debug('safeRequire package.json name-version => %s, from %s.',
       pkg ? `${pkg.name}-${pkg.version}` : undefined, packageBaseDir);
 
+    let configuration;
     if (pkg) {
       if (this.namespace !== MAIN_MODULE_KEY) {
         this.namespace = pkg.midwayNamespace ? pkg.midwayNamespace : pkg.name;
       }
       let cfgFile;
       let loadDir;
-      if (pkg.main) {
-        const cfgFileDir = dirname(join(packageBaseDir, pkg.main));
-        cfgFile = join(cfgFileDir, 'configuration');
+      if (pkg.main && !isSubDir) {
+        packageBaseDir = dirname(join(packageBaseDir, pkg.main));
+        cfgFile = join(packageBaseDir, 'configuration');
         configuration = safeRequire(cfgFile);
         debug('configuration file path one => %s.', cfgFile);
-        loadDir = cfgFileDir;
+        loadDir = packageBaseDir;
       }
       if (!configuration) {
         cfgFile = `${packageBaseDir}/configuration`;

@@ -1,4 +1,4 @@
-import { Provide, Inject } from '@midwayjs/decorator';
+import { Provide, Inject, Config } from '@midwayjs/decorator';
 
 @Provide()
 export class BaseService {
@@ -11,6 +11,9 @@ export class BaseService {
 
   @Inject('@ok:articleManager')
   newArticleManager;
+
+  @Config('helloworld')
+  helloworld: any;
 
   async getInformation() {
     const result1 = await this.userManager.getUser();
