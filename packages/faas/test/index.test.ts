@@ -1,8 +1,12 @@
 import { join } from 'path';
 import * as assert from 'assert';
 import { FaaSStarter } from '../src/';
+import { clearAllModule } from '@midwayjs/decorator';
 
 describe('test/index.test.ts', () => {
+  afterEach(() => {
+    clearAllModule();
+  });
   it('invoke handler by default name', async () => {
     const starter = new FaaSStarter({
       baseDir: join(__dirname, './fixtures/base-app'),
@@ -81,7 +85,7 @@ describe('test/index.test.ts', () => {
     assert(data === 'abhello');
   });
 
-  it.only('deprecated: use ioc.js cover loadDir', async () => {
+  it('deprecated: use ioc.js cover loadDir', async () => {
     const starter = new FaaSStarter({
       baseDir: join(__dirname, './fixtures/base-app-ioc'),
       typescript: true,
@@ -93,7 +97,7 @@ describe('test/index.test.ts', () => {
       },
       { text: 'ab' }
     );
-    assert(data === 'abhello');
+    assert(data === 'abhellotest');
   });
 
   it('use simple lock start should exec only once', async () => {

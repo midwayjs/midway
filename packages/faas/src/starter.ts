@@ -120,11 +120,11 @@ export class FaaSStarter implements IFaaSStarter {
       const context: FaaSContext = this.getContext(args.shift());
       if (funOptions && funOptions.mod) {
         // invoke middleware, just for http
-        let fnMiddleawere = [];
-        fnMiddleawere = fnMiddleawere.concat(this.globalMiddleware);
-        fnMiddleawere = fnMiddleawere.concat(funOptions.middleware);
-        if (fnMiddleawere.length) {
-          const mw: any[] = await this.formatMiddlewares(fnMiddleawere);
+        let fnMiddlewere = [];
+        fnMiddlewere = fnMiddlewere.concat(this.globalMiddleware);
+        fnMiddlewere = fnMiddlewere.concat(funOptions.middleware);
+        if (fnMiddlewere.length) {
+          const mw: any[] = await this.formatMiddlewares(fnMiddlewere);
           mw.push(async ctx => {
             // invoke handler
             const result = this.invokeHandler(funOptions, ctx, args);

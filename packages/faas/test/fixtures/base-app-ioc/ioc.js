@@ -1,6 +1,9 @@
 const { join } = require('path');
 module.exports = options => {
   return {
-    loadDir: [join(options.appDir, 'proxy')],
+    loadDir: [
+      options.baseDir,
+      join(options.appDir, 'proxy')
+    ],
   };
 };
