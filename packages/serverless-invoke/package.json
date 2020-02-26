@@ -1,11 +1,11 @@
 {
   "name": "@midwayjs/serverless-invoke",
-  "version": "0.2.33",
+  "version": "0.2.34",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@midwayjs/faas-util-ts-compile": "^0.2.27",
-    "@midwayjs/fcli-command-core": "^0.2.33",
+    "@midwayjs/fcli-command-core": "^0.2.34",
     "@midwayjs/locate": "^1.0.3",
     "@midwayjs/runtime-engine": "^0.2.27",
     "@midwayjs/runtime-mock": "^0.2.27",
@@ -13,11 +13,11 @@
     "@midwayjs/serverless-fc-trigger": "^0.2.27",
     "@midwayjs/serverless-scf-starter": "^0.2.27",
     "@midwayjs/serverless-scf-trigger": "^0.2.27",
-    "@midwayjs/serverless-spec-builder": "^0.2.29",
+    "@midwayjs/serverless-spec-builder": "^0.2.34",
     "fs-extra": "^8.1.0",
+    "globby": "^10.0.1",
     "ts-node": "^8.5.2",
     "urllib": "^2.34.1",
-    "globby": "^10.0.1",
     "websocket": "^1.0.30"
   },
   "devDependencies": {
