@@ -1,5 +1,4 @@
 import { schedule } from '@midwayjs/decorator';
-
 import { provide } from 'injection';
 
 
