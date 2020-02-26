@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.13](https://github.com/midwayjs/midway/compare/v2.0.0-beta.12...v2.0.0-beta.13) (2020-02-26)
+
+
+### Bug Fixes
+
+* configuration load config bug ([#404](https://github.com/midwayjs/midway/issues/404)) ([5e18763](https://github.com/midwayjs/midway/commit/5e187633b58e76b606a95063056d670e234c1d22))
+
+
+
+
+
 
 
 **Note:** Version bump only for package midway
