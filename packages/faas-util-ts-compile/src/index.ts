@@ -81,7 +81,7 @@ export const tsCompile = async (baseDir: string, options: {
     if (tsConfig.compilerOptions.incremental) {
       let tsBuildInfoFile = '';
       if (tsConfig.compilerOptions.outDir && existsSync(tsConfig.compilerOptions.outDir)) {
-        tsBuildInfoFile = resolve(tsConfig.compilerOptions.outDir, '.tsbuildinfo');
+        tsBuildInfoFile = resolve(baseDir, tsConfig.compilerOptions.outDir, '.tsbuildinfo');
       } else {
         const tmpDir = ['build', 'dist'].find(dirName => existsSync(resolve(baseDir, dirName)));
         tsBuildInfoFile = resolve(tmpDir || baseDir, '.tsbuildinfo');

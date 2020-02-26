@@ -2,7 +2,7 @@ import { Invoke } from './invoke';
 import { InvokeOptions } from './interface';
 import { fork } from 'child_process';
 import { get, getWssUrl } from './utils';
-export const getInvoke = (Invoke, debugPath) => {
+export const getInvoke = (Invoke, debugPath, otherOptions?) => {
   return async (options: InvokeOptions) => {
     if (!options.data || !options.data.length) {
       options.data = [{}];
@@ -70,6 +70,7 @@ export const getInvoke = (Invoke, debugPath) => {
       sourceDir: options.sourceDir,
       clean: options.clean,
       incremental: options.incremental,
+      ...otherOptions
     });
     return invokeFun.invoke([].concat(options.data));
   };
