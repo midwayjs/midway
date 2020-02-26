@@ -266,6 +266,8 @@ describe('/test/loader.test.ts', () => {
     const baseService: any = await appCtx.getAsync('baseService');
     assert((await baseService.getInformation()) === 'harryone article atmod,one article,ok2');
 
+    assert(baseService.helloworld === 234);
+
     const userManager: any = await appCtx.getAsync('userManager');
     assert((await userManager.getUser()) === 'harryone article atmod');
 
