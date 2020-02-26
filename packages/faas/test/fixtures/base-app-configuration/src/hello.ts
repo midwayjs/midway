@@ -1,4 +1,4 @@
-import { inject, provide, func, FunctionHandler } from '../../../../src';
+import { inject, provide, func, config, FunctionHandler } from '../../../../src';
 import { UserManager } from './lib/userManager';
 import assert = require('assert');
 
@@ -9,6 +9,9 @@ export class HelloService implements FunctionHandler {
   @inject()
   ctx;  // context
 
+  @config()
+  allConfig;
+
   @inject()
   userManager: UserManager;
 
@@ -16,6 +19,7 @@ export class HelloService implements FunctionHandler {
   articleManager: any;
 
   async handler(event) {
+    console.log(this.allConfig);
     assert.equal(await this.userManager.getUser(), 'harry', 'userManager.getUser should be ok');
 
     return event.text + (await this.articleManager.getOne());

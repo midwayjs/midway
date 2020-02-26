@@ -207,6 +207,7 @@ export class FaaSStarter implements IFaaSStarter {
 
       this.loader.loadDirectory(Object.assign(opts, containerOptions));
       this.registerDecorator();
+      await this.loader.refresh();
 
       // store all function entry
       const funModules = listModule(FUNC_KEY);

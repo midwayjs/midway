@@ -130,8 +130,13 @@ describe('test/index.test.ts', () => {
     assert(data === 'abhello');
   });
 
-  it('configuration test should be ok', async () => {
-    const starter = new FaaSStarter({
+  it.only('configuration test should be ok', async () => {
+    class TestFaaSStarter extends FaaSStarter {
+      prepareConfiguration() {
+        this.initConfiguration(join(__dirname, './configuration'), join(__dirname, 'fixtures/midway-plugin-mod'));
+      }
+    }
+    const starter = new TestFaaSStarter({
       baseDir: join(__dirname, './fixtures/base-app-configuration'),
       typescript: true,
     });
@@ -140,6 +145,6 @@ describe('test/index.test.ts', () => {
       {},
       { text: 'ab' }
     );
-    assert(data === 'aone articlereplace manager');
+    assert(data === 'abone articlereplace manager');
   });
 });
