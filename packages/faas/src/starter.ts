@@ -36,7 +36,6 @@ export class FaaSStarter implements IFaaSStarter {
   loader: ContainerLoader;
   globalConfig: object;
   globalMiddleware: string[];
-  isTsMode: boolean;
   funMappingStore: Map<string, any> = new Map();
   logger;
   private lock = new SimpleLock();
@@ -55,12 +54,11 @@ export class FaaSStarter implements IFaaSStarter {
     this.globalConfig = options.config || {};
     this.globalMiddleware = options.middleware || [];
     this.logger = options.logger || console;
-    this.isTsMode = this.getTsMode(options.typescript);
     this.baseDir = this.getBaseDir();
 
     this.loader = new ContainerLoader({
       baseDir: this.baseDir,
-      isTsMode: this.isTsMode,
+      isTsMode: true,     // 用 midway-faas 只能是 ts
       preloadModules: options.preloadModules || [],
     });
     this.loader.initialize();
@@ -87,35 +85,12 @@ export class FaaSStarter implements IFaaSStarter {
     // this.initConfiguration('./configuration', __dirname);
   }
 
-  getTsMode(typescript): boolean {
-    if (typescript === undefined) {
-      if (existsSync(join(this.appDir, 'tsconfig.json'))) {
-        return true;
-      }
-      if (existsSync(join(this.appDir, 'package.json'))) {
-        const pkg = require(join(this.appDir, 'package.json'));
-        if (
-          (pkg['devDependencies'] && pkg['devDependencies']['typescript']) ||
-          (pkg['dependencies'] && pkg['dependencies']['typescript'])
-        ) {
-          return true;
-        }
-      }
-      return !!existsSync(join(this.appDir, 'dist'));
-    } else {
-      return typescript;
-    }
-  }
-
   getBaseDir() {
-    if (this.isTsMode) {
-      if (isTypeScriptEnvironment()) {
-        return join(this.appDir, 'src');
-      } else {
-        return join(this.appDir, 'dist');
-      }
+    if (isTypeScriptEnvironment()) {
+      return join(this.appDir, 'src');
+    } else {
+      return join(this.appDir, 'dist');
     }
-    return this.appDir;
   }
 
   registerDecorator() {
@@ -145,11 +120,11 @@ export class FaaSStarter implements IFaaSStarter {
       const context: FaaSContext = this.getContext(args.shift());
       if (funOptions && funOptions.mod) {
         // invoke middleware, just for http
-        let fnMiddleawere = [];
-        fnMiddleawere = fnMiddleawere.concat(this.globalMiddleware);
-        fnMiddleawere = fnMiddleawere.concat(funOptions.middleware);
-        if (fnMiddleawere.length) {
-          const mw: any[] = await this.formatMiddlewares(fnMiddleawere);
+        let fnMiddlewere = [];
+        fnMiddlewere = fnMiddlewere.concat(this.globalMiddleware);
+        fnMiddlewere = fnMiddlewere.concat(funOptions.middleware);
+        if (fnMiddlewere.length) {
+          const mw: any[] = await this.formatMiddlewares(fnMiddlewere);
           mw.push(async ctx => {
             // invoke handler
             const result = this.invokeHandler(funOptions, ctx, args);
@@ -232,6 +207,7 @@ export class FaaSStarter implements IFaaSStarter {
 
       this.loader.loadDirectory(Object.assign(opts, containerOptions));
       this.registerDecorator();
+      await this.loader.refresh();
 
       // store all function entry
       const funModules = listModule(FUNC_KEY);

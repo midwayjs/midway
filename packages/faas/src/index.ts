@@ -4,5 +4,8 @@ export * from './starter';
 export {
   Func as func,
   Provide as provide,
-  Inject as inject
+  Inject as inject,
+  Config as config,
+  Plugin as plugin,
+  Logger as logger,
 } from '@midwayjs/decorator';
