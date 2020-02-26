@@ -48,6 +48,7 @@ export class MidwayWebLoader extends EggLoader {
    * 判断是否是 ts 模式，在构造器内就会被执行
    */
   get isTsMode(): boolean {
+    // @ts-ignore
     return !! this.app.options.typescript;
   }
 
@@ -126,18 +127,24 @@ export class MidwayWebLoader extends EggLoader {
   protected registerTypescriptDirectory(): void {
     const app = this.app;
     // 处理 ts 的初始路径
+    // @ts-ignore
     this.appDir = this.baseDir = app.options.baseDir;
     if (this.isTsMode) {
+      // @ts-ignore
       let dirSuffix = app.options.targetDir || TS_TARGET_DIR;
       if (isTypeScriptEnvironment()) {
+        // @ts-ignore
         dirSuffix = app.options.srcDir || TS_SRC_DIR;
         // 打开 egg 加载 ts 的开关
         process.env.EGG_TYPESCRIPT = 'true';
         debug('typescript mode = true');
       }
 
+      // @ts-ignore
       const dir = path.join(app.options.baseDir, dirSuffix);
+      // @ts-ignore
       this.baseDir = app.options.baseDir = this.options.baseDir = dir;
+      // @ts-ignore
       this.options.logger.info(`in typescript current dir change to ${dir}`);
       debug(`in typescript current dir change to ${dir}`);
     }
@@ -148,6 +155,7 @@ export class MidwayWebLoader extends EggLoader {
       // register appDir here
       this.registerTypescriptDirectory();
     }
+    // @ts-ignore
     return super.getEggPaths();
   }
 
@@ -160,6 +168,7 @@ export class MidwayWebLoader extends EggLoader {
     }
 
     if (! serverEnv) {
+      // @ts-ignore
       serverEnv = super.getServerEnv();
     }
 
@@ -168,6 +177,7 @@ export class MidwayWebLoader extends EggLoader {
 
   protected loadApplicationContext(): void {
     // this.app.options.container 测试用例编写方便点
+    // @ts-ignore
     const containerConfig = this.config.container || this.app.options.container || {};
     if (! containerConfig.loadDir) {
       // 如果没有配置，默认就把扫描目录改到 /src or /dist
@@ -194,9 +204,12 @@ export class MidwayWebLoader extends EggLoader {
     });
 
     this.containerLoader.registerHook(MidwayHandlerKey.LOGGER, (key: string) => {
+      // @ts-ignore
       if (this.app.getLogger) {
+        // @ts-ignore
         return this.app.getLogger(key);
       }
+      // @ts-ignore
       return this.options.logger;
     });
   }
