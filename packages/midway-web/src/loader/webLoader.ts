@@ -59,6 +59,19 @@ export class MidwayWebLoader extends EggLoader {
     return this.containerLoader.getPluginContext();
   }
 
+  public getAppInfo(): EggAppInfo {
+    if (! this.appInfo) {
+      const appInfo: EggAppInfo | undefined = super.getAppInfo();
+      // ROOT == HOME in prod env
+      this.appInfo = extend(true, appInfo, {
+        root: appInfo.env === 'local' || appInfo.env === 'unittest' ? this.appDir : appInfo.root,
+        appDir: this.appDir,
+      });
+    }
+    return this.appInfo;
+  }
+
+
   // loadPlugin -> loadConfig -> afterLoadConfig
   protected loadConfig(): void {
     this.loadPlugin();
@@ -151,18 +164,6 @@ export class MidwayWebLoader extends EggLoader {
     }
 
     return serverEnv;
-  }
-
-  protected getAppInfo(): EggAppInfo {
-    if (! this.appInfo) {
-      const appInfo: EggAppInfo | undefined = super.getAppInfo();
-      // ROOT == HOME in prod env
-      this.appInfo = extend(true, appInfo, {
-        root: appInfo.env === 'local' || appInfo.env === 'unittest' ? this.appDir : appInfo.root,
-        appDir: this.appDir,
-      });
-    }
-    return this.appInfo;
   }
 
   protected loadApplicationContext(): void {
