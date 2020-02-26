@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.35](https://github.com/midwayjs/midway-faas/compare/v0.2.34...v0.2.35) (2020-02-26)
+
+
+### Bug Fixes
+
+* fix ioc.json case ([07a5094](https://github.com/midwayjs/midway-faas/commit/07a509425dd1f80ffa7e85a4d430b78e79ab895f))
+* fix load config case ([59f9983](https://github.com/midwayjs/midway-faas/commit/59f99835e508bedd9d153b362e98bc86999a85e0))
+* fix missing decorator and refresh method ([421fab7](https://github.com/midwayjs/midway-faas/commit/421fab774f5d6248c308985a4ae72f7efaa45f11))
+
+
+
+
+
 ## [0.2.32](https://github.com/midwayjs/midway-faas/compare/v0.2.31...v0.2.32) (2020-02-23)
 
 

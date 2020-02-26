@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.35](https://github.com/midwayjs/midway-faas/compare/v0.2.34...v0.2.35) (2020-02-26)
+
+
+### Bug Fixes
+
+* tsbuildinfo positoin and invoke othOptions ([#63](https://github.com/midwayjs/midway-faas/issues/63)) ([043b2b3](https://github.com/midwayjs/midway-faas/commit/043b2b3c263c9390f27bc167787edf8a4947046d))
+
+
+
+
+
 ## [0.2.34](https://github.com/midwayjs/midway-faas/compare/v0.2.33...v0.2.34) (2020-02-26)
 
 
