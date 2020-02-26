@@ -1,212 +1,141 @@
 import { join } from 'path';
 import * as assert from 'assert';
-import { createServerlessMock } from './util';
 import { FaaSStarter } from '../src/';
 
 describe('test/index.test.ts', () => {
-  describe('default value', () => {
-    let mock;
-
-    before(async () => {
-      mock = await createServerlessMock({
-        baseDir: join(__dirname, './fixtures/base-app'),
-        typescript: true,
-      });
+  it('invoke handler by default name', async () => {
+    const starter = new FaaSStarter({
+      baseDir: join(__dirname, './fixtures/base-app'),
+      typescript: true,
     });
-
-    it('invoke handler by default name', done => {
-      return mock
-        .handler('index.handler')
-        .invoke(
-          {
-            text: 'hello',
-          },
-          { text: 'a' }
-        )
-        .expect(/ahello/, done);
-    });
-
-    it('invoke handler by appoint service but no route', done => {
-      return mock
-        .invoke(
-          {
-            text: 'hello',
-          },
-          { text: 'a' }
-        )
-        .expect(/ahello/, done);
-    });
+    await starter.start();
+    const data = await starter.handleInvokeWrapper('index.handler')(
+      {
+        text: 'hello',
+      },
+      { text: 'a' }
+    );
+    assert(data === 'ahello');
   });
 
-  describe('change default handler', () => {
-    let mock;
-    before(async () => {
-      mock = await createServerlessMock({
-        baseDir: join(__dirname, './fixtures/base-app-handler'),
-        typescript: true,
-      });
+  it('invoke different handler use @Handler', async () => {
+    const starter = new FaaSStarter({
+      baseDir: join(__dirname, './fixtures/base-app-handler'),
+      typescript: true,
     });
-
-    it('invoke handler one', done => {
-      return mock
-        .handler('index.entry')
-        .invoke(
-          {
-            text: 'hello',
-          },
-          { text: 'a' }
-        )
-        .expect(/ahello/, done);
-    });
-
-    it('invoke handler two', done => {
-      return mock
-        .handler('index.list')
-        .invoke(
-          {
-            text: 'hello',
-          },
-          { text: 'a' }
-        )
-        .expect(/ahello/, done);
-    });
+    await starter.start();
+    assert(
+      (await starter.handleInvokeWrapper('index.entry')(
+        {
+          text: 'hello',
+        },
+        { text: 'a' }
+      )) === 'ahello'
+    );
+    assert(
+      (await starter.handleInvokeWrapper('index.list')(
+        {
+          text: 'hello',
+        },
+        { text: 'a' }
+      )) === 'ahello'
+    );
   });
 
-  describe('use default handler and new handler', () => {
-    let mock;
-    before(async () => {
-      mock = await createServerlessMock({
-        baseDir: join(__dirname, './fixtures/base-app-handler2'),
-        typescript: true,
-      });
+  it('use default handler and new handler', async () => {
+    const starter = new FaaSStarter({
+      baseDir: join(__dirname, './fixtures/base-app-handler2'),
+      typescript: true,
     });
-
-    it('invoke default @fun handler', done => {
-      return mock
-        .handler('index.handler')
-        .invoke(
-          {
-            text: 'hello',
-          },
-          { text: 'a' }
-        )
-        .expect(/ahello/, done);
-    });
-
-    it('invoke new decorator handler', done => {
-      return mock
-        .handler('index.list')
-        .invoke(
-          {
-            text: 'hello',
-          },
-          { text: 'a' }
-        )
-        .expect(/ahello/, done);
-    });
+    await starter.start();
+    assert(
+      (await starter.handleInvokeWrapper('index.handler')(
+        {
+          text: 'hello',
+        },
+        { text: 'a' }
+      )) === 'defaultahello'
+    );
+    assert(
+      (await starter.handleInvokeWrapper('index.list')(
+        {
+          text: 'hello',
+        },
+        { text: 'ab' }
+      )) === 'abhello'
+    );
   });
 
-  describe('change default route', () => {
-    it('invoke handler by appoint function route', async () => {
-      const mock = await createServerlessMock({
-        baseDir: join(__dirname, './fixtures/base-app-route'),
-      });
-
-      await mock
-        .handler('deploy.handler9')
-        .invoke(
-          {
-            text: 'hello',
-          },
-          { text: 'a' }
-        )
-        .expect(/ahello/);
+  it('invoke handler by default name', async () => {
+    const starter = new FaaSStarter({
+      baseDir: join(__dirname, './fixtures/base-app-route'),
+      typescript: true,
     });
+    await starter.start();
+    const data = await starter.handleInvokeWrapper('deploy.handler9')(
+      {
+        text: 'hello',
+      },
+      { text: 'ab' }
+    );
+    assert(data === 'abhello');
   });
 
-  describe('use ioc.js cover loadDir', () => {
-    let mock;
-
-    before(async () => {
-      mock = await createServerlessMock({
-        baseDir: join(__dirname, './fixtures/base-app-ioc'),
-        typescript: true,
-      });
+  it.only('deprecated: use ioc.js cover loadDir', async () => {
+    const starter = new FaaSStarter({
+      baseDir: join(__dirname, './fixtures/base-app-ioc'),
+      typescript: true,
     });
-
-    it('invoke handler by default name', done => {
-      return mock
-        .handler('index.handler')
-        .invoke(
-          {
-            text: 'hello',
-          },
-          { text: 'a' }
-        )
-        .expect(/ahello/, done);
-    });
-
-    it('invoke handler by appoint service but no route', done => {
-      return mock
-        .invoke(
-          {
-            text: 'hello',
-          },
-          { text: 'a' }
-        )
-        .expect(/ahello/, done);
-    });
+    await starter.start();
+    const data = await starter.handleInvokeWrapper('index.handler')(
+      {
+        text: 'hello',
+      },
+      { text: 'ab' }
+    );
+    assert(data === 'abhello');
   });
 
-  describe('use simple lock', () => {
-    it('start should exec only once', async () => {
-      const faas = new FaaSStarter({
-        baseDir: join(__dirname, './fixtures/base-app'),
-        typescript: true,
-      });
-
-      let i = 0;
-      const cb = async () => {
-        i++;
-      };
-      const arr = [faas.start({ cb }), faas.start({ cb }), faas.start({ cb })];
-      await Promise.all(arr);
-      assert(1 === i);
+  it('use simple lock start should exec only once', async () => {
+    const faas = new FaaSStarter({
+      baseDir: join(__dirname, './fixtures/base-app'),
+      typescript: true,
     });
+
+    let i = 0;
+    const cb = async () => {
+      i++;
+    };
+    const arr = [faas.start({ cb }), faas.start({ cb }), faas.start({ cb })];
+    await Promise.all(arr);
+    assert(1 === i);
   });
 
-  describe('use new decorator and use function middleware', () => {
-    let mock;
-    before(async () => {
-      mock = await createServerlessMock({
-        baseDir: join(__dirname, './fixtures/base-app-new'),
-        typescript: true,
-      });
+  it('use new decorator and use function middleware', async () => {
+    const starter = new FaaSStarter({
+      baseDir: join(__dirname, './fixtures/base-app-new'),
+      typescript: true,
     });
-
-    it('invoke handler and execute middleware', done => {
-      return mock
-        .handler('index.handler')
-        .invoke({}, { text: 'a' })
-        .expect(/ahello/, done);
-    });
+    await starter.start();
+    const data = await starter.handleInvokeWrapper('index.handler')(
+      {
+        text: 'hello',
+      },
+      { text: 'ab' }
+    );
+    assert(data === 'abhello');
   });
 
-  describe('configuration test should be ok', () => {
-    let mock;
-    before(async () => {
-      mock = await createServerlessMock({
-        baseDir: join(__dirname, './fixtures/base-app-configuration'),
-        typescript: true,
-        configurationTest: true,
-      });
+  it('configuration test should be ok', async () => {
+    const starter = new FaaSStarter({
+      baseDir: join(__dirname, './fixtures/base-app-configuration'),
+      typescript: true,
     });
-
-    it('invoke handler and execute middleware', done => {
-      return mock
-        .handler('index.handler')
-        .invoke({}, { text: 'a' })
-        .expect(/aone articlereplace manager/, done);
-    });
+    await starter.start();
+    const data = await starter.handleInvokeWrapper('index.handler')(
+      {},
+      { text: 'ab' }
+    );
+    assert(data === 'aone articlereplace manager');
   });
 });

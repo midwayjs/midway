@@ -9,7 +9,7 @@ export class IndexService implements FunctionHandler {
 
   // index.handler default method
   handler(event) {
-    return event.text + this.ctx.text;
+    return 'default' + event.text + this.ctx.text;
   }
 
   @Handler('index.list')
