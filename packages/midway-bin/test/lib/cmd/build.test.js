@@ -9,7 +9,7 @@ const rimraf = require('mz-modules/rimraf');
 
 process.setMaxListeners(0);
 
-describe('test/lib/cmd/build.test.js', () => {
+describe.only('test/lib/cmd/build.test.js', () => {
   const midwayBin = require.resolve('../../../bin/midway-bin.js');
 
   afterEach(mm.restore);
@@ -70,7 +70,7 @@ describe('test/lib/cmd/build.test.js', () => {
   });
 });
 
-describe('test/lib/cmd/build.test.js - with another tsconfig', () => {
+describe.only('test/lib/cmd/build.test.js - with another tsconfig', () => {
   const midwayBin = require.resolve('../../../bin/midway-bin.js');
 
   afterEach(mm.restore);
@@ -141,7 +141,7 @@ describe('test/lib/cmd/build.test.js - with another tsconfig', () => {
   });
 });
 
-describe('test/lib/cmd/build.test.js - bundling', () => {
+describe.only('test/lib/cmd/build.test.js - bundling', () => {
   const midwayBin = require.resolve('../../../bin/midway-bin.js');
 
   afterEach(mm.restore);
@@ -173,7 +173,7 @@ describe('test/lib/cmd/build.test.js - bundling', () => {
   });
 });
 
-describe('test/lib/cmd/build.test.js - minify', () => {
+describe.only('test/lib/cmd/build.test.js - minify', () => {
   const midwayBin = require.resolve('../../../bin/midway-bin.js');
   const argv = [ 'build', '-c', '--minify'];
 
