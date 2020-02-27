@@ -7,6 +7,8 @@ const coffee = require('coffee');
 const mm = require('mm');
 const rimraf = require('mz-modules/rimraf');
 
+process.setMaxListeners(0);
+
 describe('test/lib/cmd/build.test.js', () => {
   const midwayBin = require.resolve('../../../bin/midway-bin.js');
 
