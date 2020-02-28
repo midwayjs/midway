@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.36](https://github.com/midwayjs/midway-faas/compare/v0.2.35...v0.2.36) (2020-02-28)
+
+
+### Bug Fixes
+
+* add init decorator ([#66](https://github.com/midwayjs/midway-faas/issues/66)) ([716f3b8](https://github.com/midwayjs/midway-faas/commit/716f3b8a4e80c61a3d7726de9a7067e8cd77b4d9))
+
+
+
+
+
 ## [0.2.35](https://github.com/midwayjs/midway-faas/compare/v0.2.34...v0.2.35) (2020-02-26)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/serverless-invoke",
-  "version": "0.2.35",
+  "version": "0.2.36",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
@@ -21,7 +21,7 @@
     "websocket": "^1.0.30"
   },
   "devDependencies": {
-    "@midwayjs/faas": "^0.2.35",
+    "@midwayjs/faas": "^0.2.36",
     "midway-bin": "beta"
   },
   "files": [
