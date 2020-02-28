@@ -28,8 +28,8 @@
   },
   "scripts": {
     "autod": "lerna run autod",
-    "test": "lerna run test",
-    "cov": "lerna run cov --concurrency=1",
+    "test": "lerna run test --scope midway-mock",
+    "cov": "lerna run cov --scope midway-mock --concurrency=1",
     "ci": "npm run build && npm run cov",
     "lint": "lerna run lint --parallel",
     "lint:nofix": "lerna run lint:nofix --parallel",
