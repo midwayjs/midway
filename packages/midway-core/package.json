@@ -8,7 +8,7 @@
     "build": "midway-bin build -c",
     "lint": "eslint --fix --cache {src,test}/**/*.ts",
     "lint:nofix": "eslint --cache {src,test}/**/*.ts",
-    "test": "npm run lint:nofix && midway-bin clean && NODE_ENV=test midway-bin test --ts",
+    "test": "npm run lint:nofix && midway-bin clean && cross-env NODE_ENV=test midway-bin test --ts",
     "cov": "midway-bin clean && midway-bin cov --ts",
     "autod": "midway-bin autod"
   },
@@ -25,6 +25,7 @@
   "license": "MIT",
   "devDependencies": {
     "chai": "^4.2.0",
+    "cross-env": "7",
     "midway-bin": "^1.17.1",
     "xmldom": "^0.1.27"
   },
