@@ -8,7 +8,7 @@
     "build": "midway-bin build -c",
     "lint": "eslint --fix --cache {src,test,config}/**/*.ts",
     "lint:nofix": "eslint --cache {src,test,config}/**/*.ts",
-    "test": "npm run lint && midway-bin clean && NODE_ENV=test midway-bin test --ts",
+    "test": "npm run lint && midway-bin clean && cross-env NODE_ENV=test midway-bin test --ts",
     "cov": "midway-bin cov --ts",
     "ci": "npm run test",
     "autod": "midway-bin autod"
@@ -30,6 +30,7 @@
   "devDependencies": {
     "@types/react": "^16.0.38",
     "@types/react-dom": "^16.0.4",
+    "cross-env": "7",
     "is-type-of": "^1.2.1",
     "midway-bin": "^1.17.1",
     "midway-mock": "^1.17.1",
