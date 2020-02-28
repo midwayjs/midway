@@ -6,6 +6,9 @@
     "bootstrap": {
       "hoist": true,
       "noCi": true,
+      "nohoist": [
+        "cross-env"
+      ],
       "npmClientArgs": [
         "--no-package-lock"
       ]
