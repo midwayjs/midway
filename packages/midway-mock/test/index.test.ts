@@ -1,3 +1,4 @@
+/* eslint-disable import/named */
 import * as path from 'path';
 import * as assert from 'assert';
 
