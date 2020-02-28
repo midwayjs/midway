@@ -1,9 +1,14 @@
 module.exports = {
   mockClassFunction(className, methodName, fn) {
     const def = this.applicationContext.registry.getDefinition(className);
-    const clazz = def.path;
-    if (clazz && typeof clazz === 'function') {
-      this._mockFn(clazz.prototype, methodName, fn);
+    if (! def) {
+      throw new TypeError(`def undefined with className: "${className}", methodName: "${methodName}"`)
+    }
+    else {
+      const clazz = def.path;
+      if (clazz && typeof clazz === 'function') {
+        this._mockFn(clazz.prototype, methodName, fn);
+      }
     }
   }
 };
