@@ -8,7 +8,7 @@
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "scripts": {
-    "build": "npm run lint && midway-bin build -c",
+    "build": "midway-bin build -c",
     "lint": "../../node_modules/.bin/tslint --format prose -c ../../tslint.json --fix 'src/**/*.ts'",
     "test": "npm run lint && midway-bin clean && midway-bin test --ts",
     "cov": "midway-bin cov --ts",
