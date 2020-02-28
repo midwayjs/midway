@@ -8,4 +8,5 @@ export {
   Config as config,
   Plugin as plugin,
   Logger as logger,
+  Init as init,
 } from '@midwayjs/decorator';
