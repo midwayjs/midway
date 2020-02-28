@@ -137,7 +137,6 @@ export interface IApplicationContext extends IObjectFactory {
   baseDir: string;
   parent: IApplicationContext;
   props: IProperties;
-  configLocations: string[];
   messageSource: IMessageSource;
   dependencyMap: Map<string, ObjectDependencyTree>;
   ready(): Promise<void>;

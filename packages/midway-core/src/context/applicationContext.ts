@@ -107,7 +107,6 @@ export class BaseApplicationContext implements IApplicationContext, IObjectFacto
   private _dependencyMap: Map<string, ObjectDependencyTree> = null;
   baseDir: string = null;
   parent: IApplicationContext = null;
-  configLocations: string[] = [];
   messageSource: IMessageSource = null;
 
   constructor(baseDir = '', parent?: IApplicationContext) {
@@ -164,15 +163,14 @@ export class BaseApplicationContext implements IApplicationContext, IObjectFacto
     if (this.lifeCycle && this.lifeCycle.onStart) {
       await this.lifeCycle.onStart();
     }
-    await this.loadDefinitions(this.configLocations);
+    await this.loadDefinitions();
     this.readied = true;
     if (this.lifeCycle && this.lifeCycle.onReady) {
       await this.lifeCycle.onReady();
     }
   }
 
-  protected loadDefinitions(configLocations?: string[]): void {
-    // throw new Error('BaseApplicationContext not implement _loadDefinitions');
+  protected loadDefinitions(): void {
   }
 
   isAsync(identifier: ObjectIdentifier): boolean {

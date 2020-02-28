@@ -1,4 +1,3 @@
-import { ManagedValue } from '../context/managed';
 import { IManagedInstance, ObjectIdentifier, ScopeEnum } from '@midwayjs/decorator';
 import {
   IApplicationContext,
@@ -17,24 +16,24 @@ class FunctionWrapperCreator extends ObjectCreator {
     this.context = context;
   }
 
-  doConstruct(Clzz: any, args: IManagedInstance[] = []): any {
+  doConstruct(Clzz: any, args?: any): any {
     if (!Clzz) {
       return null;
     }
 
-    if (args.length) {
-      return Clzz((args[0] as ManagedValue).value);
+    if (args) {
+      return Clzz(this.context, args);
     } else {
       return Clzz(this.context);
     }
   }
 
-  async doConstructAsync(Clzz: any, args: IApplicationContext[] = []): Promise<any> {
+  async doConstructAsync(Clzz: any, args?: any): Promise<any> {
     if (!Clzz) {
       return null;
     }
-    if (args.length) {
-      return Clzz(args[0]);
+    if (args) {
+      return Clzz(this.context, args);
     } else {
       return Clzz(this.context);
     }

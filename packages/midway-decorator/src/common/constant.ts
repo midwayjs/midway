@@ -40,3 +40,6 @@ export const TAGGED_CLS = 'injection:tagged_class';
 export const TAGGED_FUN = 'injection:tagged_function';
 
 export const OBJ_DEF_CLS = 'injection:object_definition_class';
+
+// pipeline
+export const PIPELINE_IDENTIFIER = '__pipeline_identifier__';

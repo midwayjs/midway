@@ -5,7 +5,8 @@ import { ObjectDefinitionOptions,
   OBJ_DEF_CLS,
   TAGGED,
   TAGGED_CLS,
-  TAGGED_PROP } from '@midwayjs/decorator';
+  TAGGED_PROP
+} from '@midwayjs/decorator';
 import { IContainer } from '../interface';
 import { ObjectDefinition } from '../definitions/objectDefinition';
 import { ManagedReference, ManagedValue } from './managed';
@@ -19,7 +20,8 @@ const debug = require('debug')(`midway:container:${process.pid}`);
 
 export class Container extends BaseApplicationContext implements IContainer {
   id = '';
-
+  // 自己内部实现的，可注入的 feature(见 features)
+  protected midwayIdentifiers: string[] = [];
   bind<T>(target: T, options?: ObjectDefinitionOptions): void;
   bind<T>(identifier: ObjectIdentifier, target: T, options?: ObjectDefinitionOptions): void;
   bind<T>(identifier: ObjectIdentifier, target: T, options?: ObjectDefinitionOptions): void {
@@ -53,7 +55,13 @@ export class Container extends BaseApplicationContext implements IContainer {
         const propertyMeta = constructorMetaData[ i ];
         if (propertyMeta) {
           const refManagedIns = new ManagedReference();
-          refManagedIns.name = generateProvideId(propertyMeta[ 0 ].value, definition.namespace);
+          const name = propertyMeta[ 0 ].value;
+          refManagedIns.args = propertyMeta[ 0 ].args;
+          if (this.midwayIdentifiers.includes(name)) {
+            refManagedIns.name = name;
+          } else {
+            refManagedIns.name = generateProvideId(name, definition.namespace);
+          }
           definition.constructorArgs.push(refManagedIns);
         } else {
           // inject empty value
@@ -71,7 +79,12 @@ export class Container extends BaseApplicationContext implements IContainer {
       for (const metaKey in metaData) {
         for (const propertyMeta of metaData[ metaKey ]) {
           const refManaged = new ManagedReference();
-          refManaged.name = generateProvideId(propertyMeta.value, definition.namespace);
+          refManaged.args = propertyMeta.args;
+          if (this.midwayIdentifiers.includes(propertyMeta.value)) {
+            refManaged.name = propertyMeta.value;
+          } else {
+            refManaged.name = generateProvideId(propertyMeta.value, definition.namespace);
+          }
           definition.properties.set(metaKey, refManaged);
         }
       }
@@ -100,17 +113,17 @@ export class Container extends BaseApplicationContext implements IContainer {
       }
 
       if (options.initMethod) {
-        debug(`   register initMethod = ${definition.initMethod}`);
+        debug(`   register initMethod = ${options.initMethod}`);
         definition.initMethod = options.initMethod;
       }
 
       if (options.destroyMethod) {
-        debug(`   register destroyMethod = ${definition.destroyMethod}`);
+        debug(`   register destroyMethod = ${options.destroyMethod}`);
         definition.destroyMethod = options.destroyMethod;
       }
 
       if (options.scope) {
-        debug(`   register scope = ${definition.scope}`);
+        debug(`   register scope = ${options.scope}`);
         definition.scope = options.scope;
       }
 

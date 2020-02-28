@@ -1,8 +1,7 @@
 import { FunctionDefinition } from '../../src/definitions/functionDefinition';
 import { BaseApplicationContext } from '../../src/context/applicationContext';
 import { expect } from 'chai';
-import { ScopeEnum, VALUE_TYPE } from '../../src';
-import { ManagedValue } from '../../src/context/managed';
+import { ScopeEnum } from '../../src';
 import sinon = require('sinon');
 
 describe('/test/definitions/functionDefinition.test.ts', () => {
@@ -28,19 +27,17 @@ describe('/test/definitions/functionDefinition.test.ts', () => {
 
     const callback = sinon.spy();
 
-    const clzz = function (a) {
-      callback(a);
-      return a;
+    const clzz = function (a, args) {
+      callback(args[0]);
+      return args[0];
     };
 
     expect(await fun.creator.doConstructAsync(clzz, [1])).eq(1);
     expect(callback.withArgs(1).calledOnce).true;
 
     expect(fun.creator.doConstruct(null)).is.null;
-    const m = new ManagedValue();
-    m.value = 123;
-    m.valueType = VALUE_TYPE.NUMBER;
-    expect(fun.creator.doConstruct(clzz, [m])).eq(123);
+
+    expect(fun.creator.doConstruct(clzz, [123])).eq(123);
     expect(callback.withArgs(123).calledOnce).true;
   });
 });

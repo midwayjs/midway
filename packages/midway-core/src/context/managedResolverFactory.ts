@@ -29,6 +29,8 @@ import {
 import { ObjectProperties } from '../definitions/properties';
 import { NotFoundError } from '../common/notFoundError';
 
+const debug = require('debug')('midway:managedresolver');
+
 /**
  * 所有解析器基类
  */
@@ -131,12 +133,12 @@ class RefResolver extends BaseManagedResolver {
 
   resolve(managed: IManagedInstance): any {
     const mr = managed as ManagedReference;
-    return this._factory.context.get(mr.name);
+    return this._factory.context.get(mr.name, mr.args);
   }
 
   async resolveAsync(managed: IManagedInstance): Promise<any> {
     const mr = managed as ManagedReference;
-    return this._factory.context.getAsync(mr.name);
+    return this._factory.context.getAsync(mr.name, mr.args);
   }
 }
 
@@ -459,12 +461,14 @@ export class ManagedResolverFactory {
     const { definition, args } = opt;
     if (definition.isSingletonScope() &&
       this.singletonCache.has(definition.id)) {
+      debug('id = %s from singleton cache.', definition.id);
       return this.singletonCache.get(definition.id);
     }
 
     // 如果非 null 表示已经创建 proxy
     let inst = this.createProxyReference(definition);
     if (inst) {
+      debug('id = %s from proxy reference.', definition.id);
       return inst;
     }
 
@@ -472,6 +476,7 @@ export class ManagedResolverFactory {
     // 预先初始化依赖
     if (definition.hasDependsOn()) {
       for (const dep of definition.dependsOn) {
+        debug('id = %s init depend %s.', definition.id, dep);
         await this.context.getAsync(dep, args);
       }
     }
@@ -484,6 +489,7 @@ export class ManagedResolverFactory {
       if (definition.constructorArgs) {
         constructorArgs = [];
         for (const arg of definition.constructorArgs) {
+          debug('id = %s resolve constructor arg %s.', definition.id, arg);
           constructorArgs.push(await this.resolveManagedAsync(arg));
         }
       }
@@ -501,6 +507,7 @@ export class ManagedResolverFactory {
 
     // binding ctx object
     if (definition.isRequestScope() && definition.constructor.name === 'ObjectDefinition') {
+      debug('id = %s inject ctx', definition.id);
       Object.defineProperty(inst, REQUEST_OBJ_CTX_KEY, {
         value: this.context.get(REQUEST_CTX_KEY),
         writable: false,
@@ -513,6 +520,7 @@ export class ManagedResolverFactory {
       for (const key of keys) {
         const identifier = definition.properties.getProperty(key);
         try {
+          debug('id = %s resolve property key = %s => %s.', definition.id, key, identifier);
           inst[ key ] = await this.resolveManagedAsync(identifier);
         } catch (error) {
           if (NotFoundError.isClosePrototypeOf(error)) {
@@ -533,11 +541,13 @@ export class ManagedResolverFactory {
     await definition.creator.doInitAsync(inst);
 
     if (definition.isSingletonScope() && definition.id) {
+      debug('id = %s set to singleton cache', definition.id);
       this.singletonCache.set(definition.id, inst);
     }
 
     // for request scope
     if (definition.isRequestScope() && definition.id) {
+      debug('id = %s set to register object', definition.id);
       this.context.registry.registerObject(definition.id, inst);
     }
     this.removeCreateStatus(definition, true);
@@ -593,6 +603,7 @@ export class ManagedResolverFactory {
     if (this.isCreating(definition)) {
       // 非循环依赖的允许重新创建对象
       if (!this.depthFirstSearch(definition.id, definition)) {
+        debug('id = %s after dfs return null', definition.id);
         return null;
       }
       // 创建代理对象

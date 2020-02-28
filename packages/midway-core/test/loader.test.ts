@@ -22,7 +22,9 @@ describe('/test/loader.test.ts', () => {
       baseDir: path.join(__dirname, './fixtures/base-app/src'),
     });
     loader.initialize();
-    loader.loadDirectory();
+    loader.loadDirectory({
+      loadDir: ['app', 'lib', '../test_other']
+    });
     await loader.refresh();
 
     const appCtx = loader.getApplicationContext();
@@ -30,6 +32,8 @@ describe('/test/loader.test.ts', () => {
 
     assert(appCtx);
     assert(pluginCtx);
+
+    assert.ok(typeof (await appCtx.getAsync('testOther')));
   });
 
   it('should load ts file and use config, plugin decorator', async () => {

@@ -65,6 +65,9 @@ describe('/test/context/applicationContext.test.ts', () => {
       };
       app.addLifeCycle(listen);
       await app.ready();
+
+      expect(app.isReady).true;
+
       await app.stop();
       app.removeLifeCycle();
 

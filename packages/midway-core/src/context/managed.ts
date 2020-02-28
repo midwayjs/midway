@@ -21,6 +21,7 @@ export class ManagedValue implements IManagedInstance {
 export class ManagedReference implements IManagedInstance {
   type = KEYS.REF_ELEMENT;
   name: string;
+  args?: any;
 }
 
 export class ManagedJSON implements IManagedInstance {
