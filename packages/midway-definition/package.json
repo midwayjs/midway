@@ -7,7 +7,7 @@
     "build": "midway-bin build -c",
     "lint": "eslint --fix --cache typings/**/*.ts",
     "lint:nofix": "eslint --cache typings/**/*.ts",
-    "test": "npm run lint && midway-bin clean && NODE_ENV=test midway-bin test --ts",
+    "test": "npm run lint && midway-bin clean && cross-env NODE_ENV=test midway-bin test --ts",
     "cov": "midway-bin cov --ts",
     "ci": "npm run test",
     "autod": "midway-bin autod"
@@ -17,6 +17,7 @@
     "egg-logger": "^2.3.2"
   },
   "devDependencies": {
+    "cross-env": "7",
     "midway-bin": "^1.17.1"
   },
   "keywords": [
