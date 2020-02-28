@@ -2,7 +2,7 @@ import * as path from 'path';
 import * as assert from 'assert';
 
 // 原路径为 '../bootstrap';
-import { app, mm } from '../src/bootstrap';
+import { app, mm } from '../bootstrap';
 import { mm as mock, MockContainer } from '../src';
 
 
