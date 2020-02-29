@@ -1,4 +1,5 @@
 import * as assert from 'power-assert';
+
 import { MidwayMockApplication } from './interface';
 import { MidwayMock, mm as mock } from './mock';
 
