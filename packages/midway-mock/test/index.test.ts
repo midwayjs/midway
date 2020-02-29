@@ -1,20 +1,17 @@
 import * as path from 'path';
-import * as assert from 'assert';
-
-// 原路径为 '../bootstrap';
-import { app, mm } from '../src/bootstrap';
-import { mm as mock, MockContainer } from '../src';
-
-
 const fixtures = path.join(__dirname, 'fixtures');
 // app dir
 process.env.MIDWAY_BASE_DIR = path.join(fixtures, 'base-app-decorator');
 
+import { app, mm } from '../bootstrap';
+const assert = require('assert');
+import { mm as mock, MockContainer } from '../src/';
 
 describe('test/index.test.ts', () => {
   afterEach(mm.restore);
 
-  it('should app has mockClassFunction', async () => {
+  it.only('should app has mockClassFunction', async () => {
+    assert(typeof app === 'object')
     assert.ok(app.mockClassFunction && typeof app.mockClassFunction === 'function');
 
     const ts = Date.now();
@@ -22,12 +19,12 @@ describe('test/index.test.ts', () => {
       return 'mock_test' + ts;
     });
     const service: any = await app.applicationContext.getAsync('baseService');
-    assert(service.getData() === 'mock_test' + ts);
+    assert(service.getData() === ('mock_test' + ts));
 
     mm.restore();
-    assert(service.getData() !== 'mock_test' + ts);
+    assert(service.getData() !== ('mock_test' + ts));
     const service1: any = await app.applicationContext.getAsync('baseService');
-    assert(service1.getData() !== 'mock_test' + ts);
+    assert(service1.getData() !== ('mock_test' + ts));
   });
 
   it('should use bootstrap to get app', () => {
@@ -50,32 +47,32 @@ describe('test/index.test.ts', () => {
   });
 
   it('should use mm.app to get app', () => {
-    const appInst = mock.app({
+    const app = mock.app({
       baseDir: process.env.MIDWAY_BASE_DIR,
       framework: process.env.MIDWAY_FRAMEWORK_PATH,
     });
-    return appInst.ready();
+    return app.ready();
   });
 
   it('should use mm.cluster to get app by default options', () => {
     mm(process.env, 'MIDWAY_FRAMEWORK_PATH', path.join(__dirname, '../../midway'));
-    const appInst = mock.cluster({});
-    return appInst.ready();
+    const app = mock.cluster({});
+    return app.ready();
   });
 
   it('should use mm.cluster to get app', () => {
-    const appInst = mock.cluster({
+    const app = mock.cluster({
       baseDir: process.env.MIDWAY_BASE_DIR,
       framework: process.env.MIDWAY_FRAMEWORK_PATH,
     });
-    return appInst.ready();
+    return app.ready();
   });
 
   it('should init container from app', async () => {
-    const appInst = new MockContainer({
+    const app = new MockContainer({
       baseDir: process.env.MIDWAY_BASE_DIR,
       framework: process.env.MIDWAY_FRAMEWORK_PATH,
     });
-    return appInst.ready();
+    return app.ready();
   });
 });
