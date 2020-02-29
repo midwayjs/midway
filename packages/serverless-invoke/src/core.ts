@@ -103,7 +103,7 @@ export abstract class InvokeCore implements IInvoke {
         { cwd: baseDir }
       );
       if (!fileChanges || !fileChanges.length) {
-        console.log('- Auto skip ts compile');
+        console.log('Auto skip ts compile');
         return;
       }
     }

@@ -1,0 +1,55 @@
+service: serverless-midway-test
+
+provider:
+  name: aliyun
+
+functions:
+  api1:
+    handler: api1.handler
+    events:
+      - http:
+          method: get
+          path: /api/1
+  api2:
+    handler: api2.handler
+    events:
+      - http:
+          method: get
+          path: /api/2
+  api3:
+    handler: api3.handler
+    events:
+      - http:
+          method: get
+          path: /api/3
+  render:
+    handler: render.handler
+    events:
+      - http:
+          method: get
+          path: /render
+  render1:
+    handler: render1.handler
+    events:
+      - http:
+          method: get
+          path: /render/1
+  render2:
+    handler: render2.handler
+    events:
+      - http:
+          method: get
+          path: /render/2
+
+custom:
+  customDomain:
+    domainName: 'aggregation.exanple.com'
+
+aggregation:
+  api:
+    functions:
+      - api*
+  renderNot2:
+    functions:
+      - render*
+      - '!render2'

@@ -18,6 +18,7 @@ import {
   writeJSON,
 } from 'fs-extra';
 import * as globby from 'globby';
+import * as micromatch from 'micromatch';
 import { commonPrefix, formatLayers } from './utils';
 import {
   tsCompile,
@@ -490,6 +491,7 @@ export class PackagePlugin extends BasePlugin {
 
     this.core.cli.log('Aggregation Deploy');
     const allAggregationPaths = [];
+    let allFuncNames = Object.keys(this.core.service.functions);
     for (const aggregationName in this.core.service.aggregation) {
       const aggregationFuncName = `aggregation${aggregationName}`;
       this.core.service.functions[
@@ -509,8 +511,19 @@ export class PackagePlugin extends BasePlugin {
       const allAggred = [];
       let handlers = [];
       if (this.core.service.aggregation[aggregationName].functions) {
-        handlers = this.core.service.aggregation[aggregationName].functions
-          .map((functionName: string) => {
+        const matchedFuncName = [];
+        const notMatchedFuncName = [];
+        for (const functionName of allFuncNames) {
+          const isMatch = micromatch.all(functionName, this.core.service.aggregation[aggregationName].functions);
+          if (isMatch) {
+            matchedFuncName.push(functionName);
+          } else {
+            notMatchedFuncName.push(functionName);
+          }
+        }
+        allFuncNames = notMatchedFuncName;
+
+        handlers = matchedFuncName.map((functionName: string) => {
             const functions = this.core.service.functions;
             const func = functions[functionName];
             if (!func || !func.events) {
@@ -547,7 +560,7 @@ export class PackagePlugin extends BasePlugin {
 
       const allPaths = allAggred.map(aggre => aggre.path);
       let currentPath = commonPrefix(allPaths);
-      currentPath = currentPath ? `${currentPath}/*` : '/*';
+      currentPath = currentPath && currentPath !== '/' ? `${currentPath}/*` : '/*';
       this.core.cli.log(
         ` - using path '${currentPath}' to deploy '${allPaths.join(`', '`)}'`
       );
