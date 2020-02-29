@@ -21,7 +21,6 @@ jobs:
           openssl version
           npm i -g lerna codecov
           npm run bootstrap
-          npm run lint:nofix
           npm run build --if-present
           npm run cov
         env:
