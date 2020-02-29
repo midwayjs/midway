@@ -7,7 +7,7 @@ import { app, mm } from '../bootstrap';
 const assert = require('assert');
 import { mm as mock, MockContainer } from '../src/';
 
-describe('test/index.test.ts', () => {
+describe.only('test/index.test.ts', () => {
   afterEach(mm.restore);
 
   it('should app has mockClassFunction', async () => {
