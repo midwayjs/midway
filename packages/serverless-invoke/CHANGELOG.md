@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.37](https://github.com/midwayjs/midway-faas/compare/v0.2.36...v0.2.37) (2020-02-29)
+
+
+### Bug Fixes
+
+* aggregation micro match ([#67](https://github.com/midwayjs/midway-faas/issues/67)) ([602ef03](https://github.com/midwayjs/midway-faas/commit/602ef0354784cc8c8e623de945de82b727516814))
+
+
+
+
+
 ## [0.2.36](https://github.com/midwayjs/midway-faas/compare/v0.2.35...v0.2.36) (2020-02-28)
 
 **Note:** Version bump only for package @midwayjs/serverless-invoke
