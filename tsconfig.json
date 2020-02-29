@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "incremental": true,
+    "inlineSourceMap": true,
+    "module": "commonjs",
+    "newLine": "lf",
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "outDir": "dist",
+    "pretty": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "stripInternal": true,
+    "target": "ES2019",
+    "tsBuildInfoFile": ".vscode/.tsbuildinfo",
+    "types" : ["node", "mocha"]
+  },
+  "include": [
+    "src/**/*.ts",
+    "packages/*/src/**/*.ts"
+  ],
+  "exclude": [
+    "asset",
+    "app/public",
+    "app/views",
+    "dist",
+    "node_modules*",
+    "test",
+    "**/*.d.ts",
+    "**/*.spec.ts"
+  ]
+}

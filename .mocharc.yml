@@ -1,0 +1,11 @@
+
+bail: true
+full-trace: true
+require:
+  - intelli-espower-loader
+  - espower-typescript/guess
+spec: 
+  - test/**/*.test.ts
+timeout: 60000 
+ui: bdd
+
