@@ -9,6 +9,8 @@
   },
   "main": "lib/command.js",
   "devDependencies": {
+    "eslint": "6",
+    "eslint-config-egg": "7",
     "midway-bin": "^1.17.1",
     "mz-modules": "^2.1.0",
     "power-assert": "^1.6.1"
