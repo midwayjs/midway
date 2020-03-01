@@ -19,7 +19,6 @@ jobs:
       - name: npm install, build, and test
         run: |
           openssl version
-
           npm i -g lerna codecov
           npm run bootstrap
           npm run build --if-present
