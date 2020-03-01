@@ -1,0 +1,49 @@
+{
+  // 有关 tasks.json 格式的文档，请参见
+  // https://go.microsoft.com/fwlink/?LinkId=733558
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "TypeScript compile",
+      "command": "tsc",
+      "args": [
+        "-p",
+        "."
+      ],
+      "problemMatcher": [
+        "$tsc"
+      ],
+      "type": "shell"
+    },
+    {
+      "label": "watch",
+      "command": "tsc",
+      "args": [
+        "-w",
+        "-p",
+        "."
+      ],
+      "isBackground": true,
+      "problemMatcher": [
+        "$tsc-watch"
+      ],
+      "type": "shell"
+    },
+    {
+      // Ctrl+Shift+B
+      "type": "npm",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "silent"
+      },
+      "problemMatcher": [
+        "$eslint-stylish",
+        "$tsc"
+      ],
+      "script": "build"
+    }
+  ]
+}

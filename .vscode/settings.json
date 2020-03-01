@@ -1,0 +1,88 @@
+{
+  "editor.minimap.renderCharacters": false,
+  "editor.renderFinalNewline": false,
+  "editor.tabSize": 2,
+  "editor.wordWrap": "on",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "files.eol": "\n",
+  "files.exclude": {
+    "**/*.js": {
+      "when": "$(basename).ts"
+    },
+    ".build": true,
+    ".dockerignore": true,
+    ".editorconfig": true,
+    ".eslint*": true,
+    ".gitignore": true,
+    ".githooks": true,
+    ".npmignore": true,
+    ".nyc_output": true,
+    ".sourcemaps": true,
+    "build": true,
+    "commitlint.*": true,
+    "coverage": true,
+    "dist": true,
+    "logs": true,
+    "out": true,
+    "packages/*/.eslint*": true,
+    "packages/*/dist": true,
+    "packages/*/logs": true,
+    "packages/*/run": true,
+    "rollup.*": true,
+    "run": true,
+    "**/*.map": true,
+    "**/*.swp": true,
+    "**/.DS_Store": true,
+    "**/.git": true,
+    "**/node_modules*": true
+  },
+  "files.insertFinalNewline": true,
+  "files.watcherExclude": {
+    "coverage/**": true,
+    "dist/**": true,
+    "packages/*/dist/**": true,
+    "packages/*/logs/**": true,
+    "packages/*/run/**": true,
+    "run/**": true,
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/.tsbuildinfo": true,
+    "**/.tsbuildinfo.*": true,
+    "**/logs/**": true,
+    "**/node_modules/**": true,
+    "**/node_modules*/**": true,
+    "**/temp/**": true,
+    "**/tmp/**": true
+  },
+  "files.trimTrailingWhitespace": true,
+  "search.exclude": {
+    "i18n/**": true,
+    "library/": true,
+    "node_modules": true,
+    "platforms/": true,
+    "www/": true,
+    "**/node_modules*": true,
+    "**/bower_components": true
+  },
+  "search.useIgnoreFiles": true,
+  "typescript.autoClosingTags": false,
+  "typescript.format.enable": true,
+  "typescript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
+  "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
+  "typescript.format.insertSpaceAfterTypeAssertion": true,
+  "typescript.format.insertSpaceBeforeAndAfterBinaryOperators": true,
+  "typescript.preferences.quoteStyle": "single",
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "[markdown]": {
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": false,
+    "files.trimTrailingWhitespace": false
+  },
+  "[typescript]": {
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": false
+  },
+  "git.ignoreLimitWarning": true
+}
