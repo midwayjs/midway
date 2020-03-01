@@ -1,5 +1,7 @@
-import {providerWrapper} from '../../../../../src/';
-import {IApplicationContext} from 'injection';
+import { IApplicationContext } from 'injection';
+
+import { providerWrapper } from '../../../../../src';
+
 
 export function adapterFactory(context: IApplicationContext) {
   return async (adapterName: string) => {
@@ -16,6 +18,6 @@ export function adapterFactory(context: IApplicationContext) {
 providerWrapper([
   {
     id: 'adapterFactory',
-    provider: adapterFactory
-  }
+    provider: adapterFactory,
+  },
 ]);

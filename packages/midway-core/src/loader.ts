@@ -1,8 +1,10 @@
 import * as path from 'path';
+
 import { MidwayContainer } from './container';
 
+
 function buildLoadDir(baseDir, dir) {
-  if (!path.isAbsolute(dir)) {
+  if (! path.isAbsolute(dir)) {
     return path.join(baseDir, dir);
   }
   return dir;
@@ -16,7 +18,7 @@ export class ContainerLoader {
   isTsMode;
   preloadModules;
 
-  constructor({baseDir, isTsMode = true, preloadModules = []}) {
+  constructor({ baseDir, isTsMode = true, preloadModules = [] }) {
     this.baseDir = baseDir;
     this.isTsMode = isTsMode;
     this.preloadModules = preloadModules;
@@ -49,22 +51,22 @@ export class ContainerLoader {
     ignore?: string;
     configLocations?: string[];
   } = {}) {
-    if (!this.isTsMode && loadOpts.disableAutoLoad === undefined) {
+    if (! this.isTsMode && loadOpts.disableAutoLoad === undefined) {
       // disable auto load in js mode by default
       loadOpts.disableAutoLoad = true;
     }
 
     // if not disable auto load
-    if (!loadOpts.disableAutoLoad) {
+    if (! loadOpts.disableAutoLoad) {
       // use baseDir in parameter first
       const baseDir = loadOpts.baseDir || this.baseDir;
       const defaultLoadDir = this.isTsMode ? [baseDir] : ['app', 'lib'];
       this.applicationContext.load({
-        loadDir: (loadOpts.loadDir || defaultLoadDir).map(dir => {
+        loadDir: (loadOpts.loadDir || defaultLoadDir).map((dir) => {
           return buildLoadDir(baseDir, dir);
         }),
         pattern: loadOpts.pattern,
-        ignore: loadOpts.ignore
+        ignore: loadOpts.ignore,
       });
     }
 

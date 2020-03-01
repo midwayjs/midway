@@ -1,19 +1,21 @@
+import * as path from 'path';
+
 import { expect } from 'chai';
 
-import * as path from 'path';
 import { MidwayContainer, MidwayHandlerKey } from '../src';
-import { App } from './fixtures/ts-app-inject/app';
 
+import { App } from './fixtures/ts-app-inject/app';
 import { UserService } from './fixtures/complex_injection/userService';
 import { UserController } from './fixtures/complex_injection/userController';
 import { A, B, DbAPI } from './fixtures/complex_injection/dbAPI';
+
 
 describe('/test/midwayContainer.test.ts', () => {
 
   it('should scan app dir and inject automatic', () => {
     const container = new MidwayContainer();
     container.load({
-      loadDir: path.join(__dirname, './fixtures/ts-app-inject')
+      loadDir: path.join(__dirname, './fixtures/ts-app-inject'),
     });
 
     const app = container.get('app') as App;
@@ -26,7 +28,7 @@ describe('/test/midwayContainer.test.ts', () => {
   it('should load js dir and inject with $', () => {
     const container = new MidwayContainer(undefined, undefined, false);
     container.load({
-      loadDir: path.join(__dirname, './fixtures/js-app-inject')
+      loadDir: path.join(__dirname, './fixtures/js-app-inject'),
     });
 
     const app = container.get('app') as App;
@@ -37,17 +39,18 @@ describe('/test/midwayContainer.test.ts', () => {
     const container = new MidwayContainer(path.join(__dirname, './fixtures/js-app-xml'), undefined, false);
     container.configLocations = ['resources/main.xml'];
 
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     container.props.putObject(require('./fixtures/js-app-xml/config/config.default'));
 
-    container.registerDataHandler(MidwayHandlerKey.CONFIG, key => {
+    container.registerDataHandler(MidwayHandlerKey.CONFIG, (key) => {
       return container.props.get(key);
     });
-    container.registerDataHandler(MidwayHandlerKey.PLUGIN, key => {
+    container.registerDataHandler(MidwayHandlerKey.PLUGIN, (key) => {
       return {
-        text: 't'
+        text: 't',
       };
     });
-    container.registerDataHandler(MidwayHandlerKey.LOGGER, key => {
+    container.registerDataHandler(MidwayHandlerKey.LOGGER, (key) => {
       return console;
     });
 
@@ -57,7 +60,7 @@ describe('/test/midwayContainer.test.ts', () => {
     expect(my).not.null;
     expect(my.$$mytest).not.null;
     expect(my.$$mytest).eq('this is my test');
-    expect(my.$plugin2).deep.eq({text: 't'});
+    expect(my.$plugin2).deep.eq({ text: 't' });
   });
 
   describe('dependency tree', () => {

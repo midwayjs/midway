@@ -8,5 +8,5 @@ export const hello = {
 
 export const plugins = {
   bucLogin: false,
-  plugin2: true
+  plugin2: true,
 };

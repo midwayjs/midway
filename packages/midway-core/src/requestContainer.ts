@@ -1,5 +1,7 @@
 import { ManagedValue, VALUE_TYPE } from 'injection';
+
 import { MidwayContainer } from './container';
+
 
 export class MidwayRequestContainer extends MidwayContainer {
 
@@ -25,7 +27,8 @@ export class MidwayRequestContainer extends MidwayContainer {
     this.registerObject('logger', ctx.logger);
   }
 
-  get<T = any>(identifier: any, args?: any): T {
+  // eslint-disable-next-line @typescript-eslint/type-annotation-spacing
+  get<T = any>(identifier: any, args?: any):T {
     if (typeof identifier !== 'string') {
       identifier = this.getIdentifier(identifier);
     }
@@ -43,6 +46,7 @@ export class MidwayRequestContainer extends MidwayContainer {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/type-annotation-spacing
   async getAsync<T = any>(identifier: any, args?: any): Promise<T> {
     if (typeof identifier !== 'string') {
       identifier = this.getIdentifier(identifier);
