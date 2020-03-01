@@ -1,9 +1,10 @@
-module.exports = {
-  mockClassFunction(className, methodName, fn) {
-    const def = this.applicationContext.registry.getDefinition(className);
-    const clazz = def.path;
-    if (clazz && typeof clazz === 'function') {
-      this._mockFn(clazz.prototype, methodName, fn);
-    }
-  }
-};
+"use strict";
+
+// exports = require('../../dist/app/extend/application')
+
+function __export(m) {
+  for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+__export(require("../../dist/app/extend/application"));
+
