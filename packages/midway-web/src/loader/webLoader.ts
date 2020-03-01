@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-ignore */
 import * as fs from 'fs';
 import * as path from 'path';
 
