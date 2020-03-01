@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-ignore */
 import * as assert from 'assert';
 
 import * as extend2 from 'extend2';
