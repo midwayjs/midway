@@ -4,7 +4,7 @@ import { scope, ScopeEnum } from 'injection';
 export class UserService {
 
   async getUsers() {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       setTimeout(() => {
         resolve(['harry', 'jiakun.du']);
       }, 100);

@@ -1,17 +1,20 @@
-import {config, plugin, logger} from '@midwayjs/decorator';
-import {provide, async, init, inject} from 'injection';
+/* eslint-disable no-shadow */
+/* eslint-disable @typescript-eslint/no-use-before-define */
+import { config, plugin, logger } from '@midwayjs/decorator';
+import { provide, async, init, inject } from 'injection';
+
 
 @provide()
 export class A {
   config = {
-    c: 20
+    c: 20,
   };
 }
 
 @provide()
 export class B {
   config = {
-    c: 40
+    c: 40,
   };
 }
 
@@ -24,14 +27,14 @@ export class BaseService {
   logger;
 
   constructor(
-    @inject() a,
+  @inject() a,
     @config('hello') config,
     @inject() b,
     @plugin('plugin2') plugin2,
-    @logger() logger
+    @logger() logger,
   ) {
     this.config = Object.assign(config, {
-      c: a.config.c + b.config.c + config.c
+      c: a.config.c + b.config.c + config.c,
     });
     this.plugin2 = plugin2;
     this.logger = logger;
@@ -39,7 +42,7 @@ export class BaseService {
 
   @init()
   async init() {
-    await new Promise(resolve => {
+    await new Promise((resolve) => {
       setTimeout(() => {
         resolve();
       }, 100);

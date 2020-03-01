@@ -1,3 +1,5 @@
+import * as path from 'path';
+
 import { CLASS_KEY_CONSTRUCTOR, CONFIG_KEY, LOGGER_KEY, PLUGIN_KEY } from '@midwayjs/decorator';
 import * as globby from 'globby';
 import {
@@ -18,23 +20,26 @@ import {
   ObjectIdentifier,
   Scope,
   ScopeEnum,
-  XmlObjectDefinition
+  XmlObjectDefinition,
 } from 'injection';
 import * as is from 'is-type-of';
-import * as path from 'path';
+import * as graphviz from 'graphviz';
+import * as camelcase from 'camelcase';
+import * as Debug from 'debug';
+
 import { FUNCTION_INJECT_KEY, MidwayHandlerKey } from './constant';
 
-const graphviz = require('graphviz');
-const camelcase = require('camelcase');
-const debug = require('debug')('midway:container');
+
+const debug = Debug('midway:container');
+
 const CONTROLLERS = 'controllers';
 const MIDDLEWARES = 'middlewares';
 const TYPE_LOGGER = 'logger';
 const TYPE_PLUGIN = 'plugin';
 
 interface FrameworkDecoratorMetadata {
-  key: string;
-  propertyName: string;
+  key: string
+  propertyName: string
 }
 
 class BaseParser {
@@ -173,7 +178,7 @@ export class MidwayContainer extends Container implements IContainer {
     this.handlerMap = new Map();
     super.init();
 
-    if (!this.isTsMode) {
+    if (! this.isTsMode) {
       // xml扩展 <logger name=""/> <plugin name="hsfclient"/>
       this.parser.objectElementParser.registerParser(new LoggerParser());
       this.getManagedResolverFactory().registerResolver(new LoggerResolver(this));
@@ -222,13 +227,14 @@ export class MidwayContainer extends Container implements IContainer {
           '**/run/**',
           '**/public/**',
           '**/view/**',
-          '**/views/**'
+          '**/views/**',
         ].concat(opts.ignore || []),
       });
 
       for (const name of fileResults) {
         const file = path.join(dir, name);
         debug(`binding file => ${file}`);
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
         const exports = require(file);
         this.bindClass(exports);
       }
@@ -238,7 +244,8 @@ export class MidwayContainer extends Container implements IContainer {
   bindClass(exports) {
     if (is.class(exports) || is.function(exports)) {
       this.bindModule(exports);
-    } else {
+    }
+    else {
       for (const m in exports) {
         const module = exports[m];
         if (is.class(module) || is.function(module)) {
@@ -253,26 +260,28 @@ export class MidwayContainer extends Container implements IContainer {
       const providerId = getProviderId(module);
       if (providerId) {
         this.bind(providerId, module);
-      } else {
-        if (!this.isTsMode) {
+      }
+      else {
+        if (! this.isTsMode) {
           // inject by name in js
           this.bind(camelcase(module.name), module);
         }
       }
-    } else {
+    }
+    else {
       const info: {
-        id: ObjectIdentifier,
-        provider: (context?: IApplicationContext) => any,
-        scope?: Scope,
-        isAutowire?: boolean
+        id: ObjectIdentifier;
+        provider: (context?: IApplicationContext) => any;
+        scope?: Scope;
+        isAutowire?: boolean;
       } = module[FUNCTION_INJECT_KEY];
       if (info && info.id) {
-        if (!info.scope) {
+        if (! info.scope) {
           info.scope = ScopeEnum.Request;
         }
         this.bind(info.id, module, {
           scope: info.scope,
-          isAutowire: info.isAutowire
+          isAutowire: info.isAutowire,
         });
       }
     }
@@ -290,7 +299,8 @@ export class MidwayContainer extends Container implements IContainer {
       let constructorMetaData;
       try {
         constructorMetaData = getClassMetadata(CLASS_KEY_CONSTRUCTOR, target);
-      } catch (e) {
+      }
+      catch (e) {
         debug(`beforeEachCreated error ${e.stack}`);
       }
       // lack of field
@@ -330,7 +340,7 @@ export class MidwayContainer extends Container implements IContainer {
       this.defineGetterPropertyValue(loggerSetterProps, instance, this.findHandlerHook(MidwayHandlerKey.LOGGER));
 
       // 表示非ts annotation模式
-      if (!this.isTsMode && !pluginSetterProps && !loggerSetterProps && definition.isAutowire()) {
+      if (! this.isTsMode && ! pluginSetterProps && ! loggerSetterProps && definition.isAutowire()) {
         // this.$$xxx = null; 用来注入config
         // this.$xxx = null; 用来注入 logger 或者 插件
         Autowire.patchDollar(instance, context, (key: string) => {
@@ -342,7 +352,9 @@ export class MidwayContainer extends Container implements IContainer {
             if (v) {
               return v;
             }
-          } catch (e) {
+          }
+          catch (e) {
+            // void
           }
           return this.findHandlerHook(MidwayHandlerKey.LOGGER)(key);
         });
@@ -364,7 +376,7 @@ export class MidwayContainer extends Container implements IContainer {
           Object.defineProperty(instance, prop.propertyName, {
             get: () => getterHandler(prop.key, instance),
             configurable: false,
-            enumerable: true
+            enumerable: true,
           });
         }
       }
@@ -380,7 +392,7 @@ export class MidwayContainer extends Container implements IContainer {
 
     // Override the default scope to request
     const objDefOptions: ObjectDefinitionOptions = getObjectDefinition(target);
-    if (objDefOptions && !objDefOptions.scope) {
+    if (objDefOptions && ! objDefOptions.scope) {
       debug(`register @scope to default value(request), id=${objectDefinition.id}`);
       objectDefinition.scope = ScopeEnum.Request;
     }
@@ -390,18 +402,19 @@ export class MidwayContainer extends Container implements IContainer {
     const g = graphviz.digraph('G');
 
     for (const [id, module] of this.dependencyMap.entries()) {
-      g.addNode(id, {label: `${id}(${module.name})\nscope:${module.scope}`, fontsize: '10'});
+      g.addNode(id, { label: `${id}(${module.name})\nscope:${module.scope}`, fontsize: '10' });
       module.properties.forEach((depId) => {
-        g.addEdge(id, depId, {label: `properties`, fontsize: '8'});
+        g.addEdge(id, depId, { label: 'properties', fontsize: '8' });
       });
       module.constructorArgs.forEach((depId) => {
-        g.addEdge(id, depId, {label: 'constructor', fontsize: '8'});
+        g.addEdge(id, depId, { label: 'constructor', fontsize: '8' });
       });
     }
 
     try {
       return g.to_dot();
-    } catch (err) {
+    }
+    catch (err) {
       console.error('generate injection dependency tree fail, err = ', err.message);
     }
   }

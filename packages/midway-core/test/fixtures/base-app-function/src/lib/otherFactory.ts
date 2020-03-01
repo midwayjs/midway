@@ -1,5 +1,7 @@
-import {providerWrapper} from '../../../../../src/';
-import {IApplicationContext} from 'injection';
+import { IApplicationContext } from 'injection';
+
+import { providerWrapper } from '../../../../../src';
+
 
 class MyTestObj {
   _notfound = null;
@@ -22,7 +24,7 @@ class MyTestAuto {
   }
 
   say() {
-    if (this.baiduAdapter == null) {
+    if (this.baiduAdapter === null) {
       throw new Error('baiduAdapter is null');
     }
     return `hello ${this._name}.`;
@@ -52,22 +54,22 @@ export function otherFactory3(context: IApplicationContext) {
 providerWrapper([
   {
     id: 'otherFactory',
-    provider: otherFactory
+    provider: otherFactory,
   },
   {
     id: 'otherFactory1',
-    provider: otherFactory1
+    provider: otherFactory1,
   },
   {
     // 用于测试自动装配是否成功
     id: 'otherFactory2',
     provider: otherFactory2,
-    isAutowire: true
+    isAutowire: true,
   },
   {
     // 用于测试自动装配是否成功
     id: 'otherFactory3',
     provider: otherFactory3,
-    isAutowire: true
-  }
+    isAutowire: true,
+  },
 ]);

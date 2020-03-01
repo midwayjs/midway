@@ -1,5 +1,8 @@
-import {BaseService} from '../../lib/service';
+import { BaseService } from '../../lib/service';
+
+
 const Controller = require('egg').Controller;
+
 
 class ApiController extends Controller {
 

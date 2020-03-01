@@ -1,17 +1,20 @@
-import {config, plugin} from '@midwayjs/decorator';
-import {provide, async, init, inject} from 'injection';
+/* eslint-disable no-shadow */
+/* eslint-disable @typescript-eslint/no-use-before-define */
+import { config, plugin } from '@midwayjs/decorator';
+import { provide, async, init, inject } from 'injection';
+
 
 @provide()
 export class A {
   config = {
-    c: 20
+    c: 20,
   };
 }
 
 @provide()
 export class B {
   config = {
-    c: 40
+    c: 40,
   };
 }
 
@@ -40,13 +43,13 @@ export class BaseService {
   adapter;
 
   constructor(
-    @inject() a,
+  @inject() a,
     @config('hello') config,
     @inject() b,
-    @plugin('plugin2') plugin2
+    @plugin('plugin2') plugin2,
   ) {
     this.config = Object.assign(config, {
-      c: a.config.c + b.config.c + config.c
+      c: a.config.c + b.config.c + config.c,
     });
     this.plugin2 = plugin2;
   }
@@ -65,7 +68,8 @@ export class BaseService {
     try {
       const o2 = await this.other2('ttt');
       await o2.say();
-    } catch (e) {
+    }
+    catch (e) {
       console.log('function inject is not support!', e.stack);
     }
 

@@ -1,4 +1,5 @@
-import {BaseService} from '../../lib/service';
+import { BaseService } from '../../lib/service';
+
 
 exports.index = async (ctx, next) => {
   const context = ctx.app.applicationContext;

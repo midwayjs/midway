@@ -1,5 +1,6 @@
-import {config, plugin, logger} from '../../../../../src/decorators';
-import {provide, inject} from 'injection';
+import { provide, inject } from 'injection';
+
+import { config, plugin, logger } from '../../../../../src/decorators';
 
 @provide()
 export class BaseService {

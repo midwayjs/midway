@@ -1,5 +1,7 @@
 import { ManagedValue, VALUE_TYPE } from 'injection';
+
 import { MidwayContainer } from './container';
+
 
 export class MidwayRequestContainer extends MidwayContainer {
 
