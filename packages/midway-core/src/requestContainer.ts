@@ -41,7 +41,7 @@ export class MidwayRequestContainer extends MidwayContainer {
     }
 
     if (this.parent) {
-      return this.parent.get(identifier, args);
+      return this.parent.get<T>(identifier, args);
     }
   }
 
