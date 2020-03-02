@@ -26,7 +26,7 @@ export interface FaaSHTTPRequest {
   method: string;
   headers: { [key: string]: string };
   query: { [key: string]: string };
-  body: object;
+  body: any;
 }
 
 export interface FaaSHTTPResponse {
