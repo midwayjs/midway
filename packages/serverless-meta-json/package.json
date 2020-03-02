@@ -1,10 +1,10 @@
 {
   "name": "@midwayjs/serverless-meta-json",
-  "version": "0.2.38",
+  "version": "0.2.39",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "devDependencies": {
-    "@midwayjs/faas": "^0.2.35",
+    "@midwayjs/faas": "^0.2.39",
     "midway-bin": "beta"
   },
   "files": [
