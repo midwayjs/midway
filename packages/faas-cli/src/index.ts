@@ -6,6 +6,7 @@ import { DeployPlugin } from '@midwayjs/fcli-plugin-deploy';
 import { AliyunFCPlugin } from '@midwayjs/fcli-plugin-fc';
 import { CreatePlugin } from '@midwayjs/fcli-plugin-create';
 import { saveYaml } from '@midwayjs/serverless-spec-builder';
+import { execSync } from 'child_process';
 const { Select } = require('enquirer');
 export class CLI extends BaseCLI {
   loadDefaultPlugin() {
@@ -35,13 +36,31 @@ export class CLI extends BaseCLI {
     }
   }
 
-  displayVersion() {
-    let version = '';
-    try {
-      version = require('../package.json').version;
-    } catch (E) {}
+  loadExtensions() {
+    return {
+      debug: this.debug
+    };
+  }
+
+  debug(...args) {
+    if (!this.argv.V && !this.argv.verbose) {
+      return;
+    }
     const log = this.loadLog();
-    log.log(`@midwayjs/faas-cli v${version}`);
+    log.log(...args);
+  }
+
+  displayVersion() {
+    const log = this.loadLog();
+    try {
+      const nodeVersion = execSync('node -v').toString().replace('\n', '');
+      log.log('Node.js'.padEnd(20) + nodeVersion);
+    } catch (E) {}
+
+    try { // midway-faas version
+      const cliVersion = require('../package.json').version;
+      log.log('@midwayjs/faas-cli'.padEnd(20) + `v${cliVersion}`);
+    } catch (E) {}
   }
 
   displayUsage(commandsArray, usage, coreInstance) {
@@ -51,7 +70,11 @@ export class CLI extends BaseCLI {
 
   async checkProvider() {
     // ignore f -v / f -h / f create
-    if (!this.commands.length || this.argv.h || this.commands[0] === 'create') {
+    if (!this.commands.length || this.argv.h) {
+      return;
+    }
+    const skipCommands = ['create', 'test'];
+    if (skipCommands.indexOf(this.commands[0]) !== -1) {
       return;
     }
     if (!this.spec.provider) {
