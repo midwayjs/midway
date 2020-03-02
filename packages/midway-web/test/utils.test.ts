@@ -9,7 +9,7 @@ import {
 
 describe('test/utils.test.ts', () => {
   it('#getParamNames', () => {
-    const res = getParamNames(function test(a, b) {
+    const res = getParamNames(function test(a: unknown, b: unknown) {
       console.log(a, b);
     });
     deepEqual(res, ['a', 'b']);
