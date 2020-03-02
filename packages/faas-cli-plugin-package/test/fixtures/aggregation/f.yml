@@ -40,6 +40,18 @@ functions:
       - http:
           method: get
           path: /render/2
+  normal1:
+    handler: normal1.handler
+    events:
+      - http:
+          method: get
+          path: /normal/1
+  normal2:
+    handler: normal2.handler
+    events:
+      - http:
+          method: get
+          path: /normal/2
 
 custom:
   customDomain:
@@ -47,9 +59,15 @@ custom:
 
 aggregation:
   api:
-    functions:
+    functionsPattern:
       - api*
   renderNot2:
-    functions:
+    functionsPattern:
       - render*
       - '!render2'
+  normal:
+    functions:
+      - normal1
+      - normal2
+    functionsPattern: # skip pattern, use functions
+      - '!normal*'

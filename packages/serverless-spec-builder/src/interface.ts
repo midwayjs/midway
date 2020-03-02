@@ -90,7 +90,8 @@ export interface ServiceStructure {
 export interface AggregationStructure {
   [aggregationName: string]: {
     deployOrigin?: boolean;
-    functions: string[];
+    functions?: string[];
+    functionsPattern?: string[];
   };
 }
 

@@ -510,11 +510,17 @@ export class PackagePlugin extends BasePlugin {
 
       const allAggred = [];
       let handlers = [];
-      if (this.core.service.aggregation[aggregationName].functions) {
+      const aggregationConfig = this.core.service.aggregation[aggregationName];
+      if (aggregationConfig.functions || aggregationConfig.functionsPattern) {
         const matchedFuncName = [];
         const notMatchedFuncName = [];
         for (const functionName of allFuncNames) {
-          const isMatch = micromatch.all(functionName, this.core.service.aggregation[aggregationName].functions);
+          let isMatch = false;
+          if (aggregationConfig.functions) {
+            isMatch = aggregationConfig.functions.indexOf(functionName) !== -1;
+          } else if (aggregationConfig.functionsPattern) {
+            isMatch = micromatch.all(functionName, aggregationConfig.functionsPattern);
+          }
           if (isMatch) {
             matchedFuncName.push(functionName);
           } else {

@@ -380,9 +380,12 @@ package:										# 打包配置
 aggregation:									# 聚合部署，详细内容请查看 聚合部署部分
   index:											# 聚合部署聚合名称
     deployOrigin: false				# 是否部署原始方法
-    functions:								# 聚合部署方法列表
+    functions:								# 聚合部署方法列表，比functionsPattern优先级要高
       - index									# 聚合部署方法名
       - hello
+    functionsPattern:         # 聚合部署方法匹配规则，配置 functions 时无效
+      - 'render*'             # 使用 micromatch 匹配规则，即任何以render开头的函数
+      - '!render2'
 ```
 
 
