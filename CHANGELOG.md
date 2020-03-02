@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.40](https://github.com/midwayjs/midway-faas/compare/v0.2.39...v0.2.40) (2020-03-02)
+
+
+### Bug Fixes
+
+* aggregation pattern ([#71](https://github.com/midwayjs/midway-faas/issues/71)) ([938c4b3](https://github.com/midwayjs/midway-faas/commit/938c4b338adc5826954c514a913996a1b5abbd49))
+
+
+### Features
+
+* **faas-cli:** enable local devevelopment source-map support ([#70](https://github.com/midwayjs/midway-faas/issues/70)) ([813cf24](https://github.com/midwayjs/midway-faas/commit/813cf240f6756fd9da7d220fad9c6e022554ba20))
+
+
+
+
+
 ## [0.2.39](https://github.com/midwayjs/midway-faas/compare/v0.2.38...v0.2.39) (2020-03-02)
 
 **Note:** Version bump only for package midway-faas

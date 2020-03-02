@@ -1,11 +1,11 @@
 {
   "name": "@midwayjs/fcli-plugin-invoke",
-  "version": "0.2.39",
+  "version": "0.2.40",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/fcli-command-core": "^0.2.34",
-    "@midwayjs/serverless-invoke": "^0.2.39"
+    "@midwayjs/fcli-command-core": "^0.2.40",
+    "@midwayjs/serverless-invoke": "^0.2.40"
   },
   "devDependencies": {
     "midway-bin": "beta"

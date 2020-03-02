@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.40](https://github.com/midwayjs/midway-faas/compare/v0.2.39...v0.2.40) (2020-03-02)
+
+
+### Bug Fixes
+
+* aggregation pattern ([#71](https://github.com/midwayjs/midway-faas/issues/71)) ([938c4b3](https://github.com/midwayjs/midway-faas/commit/938c4b338adc5826954c514a913996a1b5abbd49))
+
+
+
+
+
 ## [0.2.34](https://github.com/midwayjs/midway-faas/compare/v0.2.33...v0.2.34) (2020-02-26)
 
 
