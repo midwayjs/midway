@@ -28,7 +28,9 @@ import { childAsyncFunction,
   singletonFactory } from '../fixtures/fun_sample';
 import { DieselCar, DieselEngine, engineFactory, PetrolEngine } from '../fixtures/mix_sample';
 import { HelloSingleton, HelloErrorInitSingleton, HelloErrorSingleton } from '../fixtures/singleton_sample';
-import { CircularOne, CircularTwo, CircularThree } from '../fixtures/circular_dependency';
+import { CircularOne, CircularTwo, CircularThree, TestOne, TestTwo, TestThree } from '../fixtures/circular_dependency';
+import { ManagedValue } from '../../src/context/managed';
+import { VALUE_TYPE } from '../../src';
 
 describe('/test/context/container.test.ts', () => {
 
@@ -58,13 +60,20 @@ describe('/test/context/container.test.ts', () => {
 
   it('should inject property', () => {
     const container = new Container();
-    container.bind<Warrior>('warrior', Samurai as any);
+    const va = new ManagedValue();
+    va.value = 123;
+    va.valueType = VALUE_TYPE.INTEGER;
+    container.bind<Warrior>('warrior', Samurai as any, { constructorArgs: [ va ]});
     container.bind<Warrior>('katana1', Katana as any);
     container.bind<Warrior>('katana2', Katana as any);
-    const warrior = container.get<Warrior>('warrior');
+
+    const subContainer = container.createChild();
+
+    const warrior = subContainer.get<Warrior>('warrior');
     expect(warrior instanceof Samurai).to.be.true;
     expect(warrior.katana1).not.to.be.undefined;
     expect(warrior.katana2).not.to.be.undefined;
+    expect((warrior as any).args).eq(123);
   });
 
   it('should inject attributes that on the prototype chain and property', () => {
@@ -240,7 +249,7 @@ describe('/test/context/container.test.ts', () => {
       const container = new Container();
       container.bind('parentAsync', testInjectAsyncFunction);
       container.bind('childAsync', childAsyncFunction);
-      const result = await container.get('parentAsync');
+      const result = await container.getAsync('parentAsync');
       expect(result).to.equal(7);
     });
   });
@@ -335,6 +344,50 @@ describe('/test/context/container.test.ts', () => {
       expect(circularOneSync.test1).eq('this is one');
       expect(circularTwoSync.ttest2('try ttest2')).eq('try ttest2twoone');
       expect(await circularTwoSync.ctest2('try ttest2')).eq('try ttest2twoone');
+    });
+  });
+
+  describe('circular dependency sync', () => {
+    it('sync circular should be ok', async () => {
+      const container = new Container();
+      container.registerObject('ctx', {});
+
+      container.bind(CircularOne);
+      container.bind(CircularTwo);
+      container.bind(CircularThree);
+
+      const circularTwo: CircularTwo = container.get(CircularTwo);
+      const circularThree: CircularThree = container.get(CircularThree);
+
+      expect(circularTwo.test2).eq('this is two');
+      expect((circularTwo.circularOne as CircularOne).test1).eq('this is one');
+      expect(((circularTwo.circularOne as CircularOne).circularTwo as CircularTwo).test2).eq('this is two');
+      expect(circularThree.circularTwo.test2).eq('this is two');
+      expect(circularTwo.ts).eq(((circularTwo.circularOne as CircularOne).circularTwo as CircularTwo).ts);
+      expect(circularTwo.ttest2('try ttest2')).eq('try ttest2twoone');
+      expect(await circularTwo.ctest2('try ttest2')).eq('try ttest2twoone');
+      expect(await ((circularTwo.circularOne as CircularOne).circularTwo as CircularTwo).ctest2('try ttest2')).eq('try ttest2twoone');
+    });
+  });
+
+  describe('circular dependency dfs should be ok', () => {
+    const container = new Container();
+
+    it('sub container should be ok', async () => {
+      container.bind(TestOne);
+      container.bind(TestTwo);
+      const sub = container.createChild();
+
+      sub.bind(TestThree);
+
+      const one = sub.get<TestOne>('testOne');
+      expect(one.ts).eq('this is one');
+      expect(one.one.ts).eq('this is one');
+      expect(one.testTwo.ts).eq('this is two');
+
+      const three = sub.get<TestThree>('testThree');
+      expect(three.ts).eq('this is three');
+      expect(three.one.ts).eq('this is one');
     });
   });
 

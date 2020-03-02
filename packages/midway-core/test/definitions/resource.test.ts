@@ -68,4 +68,33 @@ describe('/test/definitions/resource.test.ts', () => {
     // expect(await res.getContentAsJSON()).deep.eq({});
     // expect(await res.getSubResources()).deep.eq([]);
   });
+
+  it('resource test', async () => {
+    const res = new Resource(__dirname, 'aaa');
+    const callback = sinon.spy();
+    try {
+      res.getContent();
+    } catch (e) {
+      callback(e.message + 1);
+    }
+
+    try {
+      res.getContentAsJSON();
+    } catch (e) {
+      callback(e.message + 2);
+    }
+
+    expect(callback.withArgs(__dirname + '/aaa not found!1').calledOnce).true;
+    expect(callback.withArgs(__dirname + '/aaa not found!2').calledOnce).true;
+
+    const resjson = new Resource(__dirname, '../fixtures/config/config.daily.ts');
+    const obj: any = resjson.getContentAsJSON();
+    expect(obj).not.null;
+    expect(obj).not.undefined;
+    expect(obj.default.daily).eq(1);
+
+    const errjson = new Resource(__dirname, '../fixtures/error.json');
+    const er: any = errjson.getContentAsJSON();
+    expect(Object.keys(er)).deep.eq([]);
+  });
 });

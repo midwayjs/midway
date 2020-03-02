@@ -19,7 +19,7 @@ export class MidwayConfigService implements IConfigService {
     this.envDirMap = new Map();
   }
 
-  add(configFilePaths) {
+  add(configFilePaths: string[]) {
     for (const dir of configFilePaths) {
       const env = this.getConfigEnv(dir);
       const envSet = this.getEnvSet(env);

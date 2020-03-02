@@ -1,52 +1,34 @@
 import { IManagedInstance, ObjectIdentifier, ScopeEnum } from '@midwayjs/decorator';
 import {
-  IApplicationContext,
   IProperties,
   IObjectCreator,
-  IObjectDefinition
+  IObjectDefinition,
+  IApplicationContext
 } from '../interface';
 import { ObjectCreator } from './objectCreator';
 
 class FunctionWrapperCreator extends ObjectCreator {
 
-  context;
-
-  constructor(definition: IObjectDefinition, context: IApplicationContext) {
-    super(definition);
-    this.context = context;
+  doConstruct(Clzz: any, args?: any, context?: IApplicationContext): any {
+    if (!Clzz) {
+      return null;
+    }
+    return Clzz(context, args);
   }
 
-  doConstruct(Clzz: any, args?: any): any {
+  async doConstructAsync(Clzz: any, args?: any, context?: IApplicationContext): Promise<any> {
     if (!Clzz) {
       return null;
     }
 
-    if (args) {
-      return Clzz(this.context, args);
-    } else {
-      return Clzz(this.context);
-    }
-  }
-
-  async doConstructAsync(Clzz: any, args?: any): Promise<any> {
-    if (!Clzz) {
-      return null;
-    }
-    if (args) {
-      return Clzz(this.context, args);
-    } else {
-      return Clzz(this.context);
-    }
+    return Clzz(context, args);
   }
 }
 
 export class FunctionDefinition implements IObjectDefinition {
 
-  context;
-
-  constructor(context: IApplicationContext) {
-    this.context = context;
-    this.creator = new FunctionWrapperCreator(this, context);
+  constructor() {
+    this.creator = new FunctionWrapperCreator(this);
   }
 
   constructMethod: string;
@@ -61,6 +43,7 @@ export class FunctionDefinition implements IObjectDefinition {
   path: any;
   properties: IProperties;
   namespace = '';
+  asynchronous = true;
   // 函数工厂创建的对象默认不需要自动装配
   protected innerAutowire = false;
   protected innerScope: ScopeEnum = ScopeEnum.Singleton;
@@ -85,7 +68,7 @@ export class FunctionDefinition implements IObjectDefinition {
   }
 
   isAsync(): boolean {
-    return true;
+    return this.asynchronous;
   }
 
   isAutowire(): boolean {

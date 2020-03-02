@@ -333,7 +333,7 @@ export class ManagedResolverFactory {
    * @param value 配置的模版值
    */
   tpl(value) {
-    if (value && value.indexOf('{{') > -1) {
+    if (typeof value === 'string' && value.indexOf('{{') > -1) {
       return _.template(value, {
         // use `{{` and `}}` as delimiters
         interpolate: /{{([\s\S]+?)}}/g
@@ -348,7 +348,7 @@ export class ManagedResolverFactory {
 
   resolveManaged(managed: IManagedInstance): any {
     const resolver = this.resolvers[managed.type];
-    if (!resolver) {
+    if (!resolver || resolver.type !== managed.type) {
       throw new Error(`${managed.type} resolver is not exists!`);
     }
     return resolver.resolve(managed);
@@ -356,7 +356,7 @@ export class ManagedResolverFactory {
 
   async resolveManagedAsync(managed: IManagedInstance): Promise<any> {
     const resolver = this.resolvers[managed.type];
-    if (!resolver) {
+    if (!resolver || resolver.type !== managed.type) {
       throw new Error(`${managed.type} resolver is not exists!`);
     }
     return resolver.resolveAsync(managed);
@@ -404,7 +404,7 @@ export class ManagedResolverFactory {
       handler.call(this, Clzz, constructorArgs, this.context);
     }
 
-    inst = definition.creator.doConstruct(Clzz, constructorArgs);
+    inst = definition.creator.doConstruct(Clzz, constructorArgs, this.context);
 
     // binding ctx object
     if (definition.isRequestScope() && definition.constructor.name === 'ObjectDefinition') {
@@ -499,7 +499,7 @@ export class ManagedResolverFactory {
       handler.call(this, Clzz, constructorArgs, this.context);
     }
 
-    inst = await definition.creator.doConstructAsync(Clzz, constructorArgs);
+    inst = await definition.creator.doConstructAsync(Clzz, constructorArgs, this.context);
     if (!inst) {
       this.removeCreateStatus(definition, false);
       throw new Error(`${definition.id} config no valid path`);

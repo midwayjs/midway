@@ -14,6 +14,11 @@ export class Ninja implements Warrior {
 }
 
 export class Samurai implements Warrior {
+  args?: any;
+  constructor(args?: any) {
+    this.args = args;
+  }
+
   @Inject('katana1')
   katana1: Katana;
   @Inject('katana2')

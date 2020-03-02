@@ -215,6 +215,8 @@ export class PipelineHandler implements IPipelineHandler {
       info.current = v;
       if (nextIdx < valves.length) {
         info.next = valves[nextIdx];
+      } else {
+        info.next = undefined;
       }
       nextIdx += 1;
       ctx.info = info;
@@ -263,6 +265,8 @@ export class PipelineHandler implements IPipelineHandler {
       info.current = v;
       if (nextIdx < valves.length) {
         info.next = valves[nextIdx];
+      } else {
+        info.next = undefined;
       }
       nextIdx += 1;
       ctx.info = info;

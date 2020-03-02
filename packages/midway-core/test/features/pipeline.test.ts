@@ -6,11 +6,14 @@ describe('/test/features/pipeline.test.ts', () => {
   const container = new MidwayContainer();
 
   it('pipeline should be ok', async () => {
-    bindClass(container);
-
     await container.ready();
 
+    bindClass(container);
+
     const dataMainTest: DataMainTest = await container.getAsync<DataMainTest>('dataMainTest');
+
+    expect(dataMainTest.ss).not.null;
+    expect(dataMainTest.ss).not.undefined;
 
     let r = await dataMainTest.runParallel();
     expect(r).is.not.null;
@@ -85,6 +88,10 @@ describe('/test/features/pipeline.test.ts', () => {
     expect(rr.error).not.undefined;
     expect(rr.error.message).eq('this is error feeds');
     expect(rr.error.valveName).eq('errorFeeds');
+
+    const rw = await dataMainTest.runStagesWaterfall();
+    expect(!rw.error).true;
+    expect(rw.result).eq('stagetwo');
   });
 
 });

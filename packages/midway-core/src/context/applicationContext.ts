@@ -82,6 +82,7 @@ export class ObjectDefinitionRegistry extends Map implements IObjectDefinitionRe
   }
 
   clearAll(): void {
+    this.singletonIds = [];
     this.clear();
   }
 
@@ -175,7 +176,7 @@ export class BaseApplicationContext implements IApplicationContext, IObjectFacto
 
   isAsync(identifier: ObjectIdentifier): boolean {
     if (this.registry.hasDefinition(identifier)) {
-      this.registry.getDefinition(identifier).isAsync();
+      return this.registry.getDefinition(identifier).isAsync();
     }
     return false;
   }
@@ -297,7 +298,7 @@ export class BaseApplicationContext implements IApplicationContext, IObjectFacto
   }
 
   dumpDependency() {
-    assert('this method has move to midway-core，please invoke this from midway');
+    assert(false, 'this method has move to midway-core，please invoke this from midway');
   }
 
 }

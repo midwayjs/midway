@@ -37,7 +37,10 @@ export class Container extends BaseApplicationContext implements IContainer {
     if (is.class(target)) {
       definition = new ObjectDefinition();
     } else {
-      definition = new FunctionDefinition(this);
+      definition = new FunctionDefinition();
+      if (!is.asyncFunction(target)) {
+        definition.asynchronous = false;
+      }
     }
 
     definition.path = target;

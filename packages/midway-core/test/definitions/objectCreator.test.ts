@@ -8,9 +8,18 @@ describe('/test/definitions/objectCreator.test.ts', () => {
   it('object creator should be ok', async () => {
     const definition = new ObjectDefinition();
     definition.id = 'mytest';
-    definition.path = path.join(__dirname, '../fixtures/singleton_sample');
-    definition.export = 'HelloSingleton';
     const creator = new ObjectCreator(definition);
+
+    definition.path = '';
+    expect(creator.load()).null;
+
+    definition.path = path.join(__dirname, '../fixtures/singleton_sample');
+    definition.export = '';
+    const oo = creator.load();
+    expect(Object.keys(oo).length).gt(2);
+
+    definition.export = 'HelloSingleton';
+
     const obj = creator.load();
     expect(obj).is.a('function');
     expect(obj.name).eq('HelloSingleton');
@@ -19,6 +28,12 @@ describe('/test/definitions/objectCreator.test.ts', () => {
 
     definition.constructMethod = 'say';
     expect(creator.doConstruct({
+      say(a) {
+        return a;
+      }
+    }, [123])).eq(123);
+
+    expect(await creator.doConstructAsync({
       say(a) {
         return a;
       }

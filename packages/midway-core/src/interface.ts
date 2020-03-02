@@ -64,8 +64,8 @@ export interface IObjectDefinition {
 }
 export interface IObjectCreator {
   load(): any;
-  doConstruct(Clzz: any, args?: any): any;
-  doConstructAsync(Clzz: any, args?: any): Promise<any>;
+  doConstruct(Clzz: any, args?: any, context?: IApplicationContext): any;
+  doConstructAsync(Clzz: any, args?: any, context?: IApplicationContext): Promise<any>;
   doInit(obj: any): void;
   doInitAsync(obj: any): Promise<void>;
   doDestroy(obj: any): void;

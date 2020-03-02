@@ -108,12 +108,69 @@ class ErrorFeeds implements IValveHandler {
   }
 }
 
+@Provide()
+class StageOne implements IValveHandler {
+  async invoke(ctx: IPipelineContext): Promise<any> {
+    if (ctx.args.aa !== 123) {
+      throw new Error('args aa is undefined');
+    }
+    ctx.set('stageone', 'this is stage one');
+    ctx.set('stageone_date', Date.now());
+    if (ctx.info.current !== 'stageOne') {
+      throw new Error('current stage is not stageOne');
+    }
+    if (ctx.info.next !== 'stageTwo') {
+      throw new Error('next stage is not stageTwo');
+    }
+    if (ctx.info.prev) {
+      throw new Error('stageOne prev stage is not undefined');
+    }
+
+    return 'stageone';
+  }
+}
+
+@Provide()
+class StageTwo implements IValveHandler {
+  async invoke(ctx: IPipelineContext): Promise<any> {
+    const keys = ctx.keys();
+    if (keys.length !== 2) {
+      throw new Error('keys is not equal');
+    }
+    ctx.set('stagetwo', ctx.get('stageone') + 1);
+    ctx.set('stagetwo_date', Date.now());
+    if (ctx.info.prevValue !== 'stageone') {
+      throw new Error('stageone result empty');
+    }
+    if (ctx.info.current !== 'stageTwo') {
+      throw new Error('current stage is not stageTwo');
+    }
+    if (ctx.info.next) {
+      throw new Error('stageTwo next stage is not undefined');
+    }
+    if (ctx.info.prev !== 'stageOne') {
+      throw new Error('prev stage is not stageOne');
+    }
+
+    return 'stagetwo';
+  }
+}
+
 export class DataMainTest {
   @Pipeline(['videoFeeds', 'crowFeeds', 'accountMap'])
   service: IPipelineHandler;
 
   @Pipeline(['videoFeeds', 'errorFeeds', 'accountMap'])
   service1: IPipelineHandler;
+
+  ss: IPipelineHandler;
+
+  @Pipeline(['stageOne', 'stageTwo'])
+  stages: IPipelineHandler;
+
+  constructor(@Pipeline(['videoFeeds', 'errorFeeds', 'accountMap']) ss: IPipelineHandler) {
+    this.ss = ss;
+  }
 
   async runParallel(): Promise<HomepageDto> {
     // 获取数据执行逻辑
@@ -170,6 +227,12 @@ export class DataMainTest {
       args: {aa: 123}
     });
   }
+
+  async runStagesWaterfall(): Promise<any> {
+    return this.stages.waterfall<any>({
+      args: {aa: 123}
+    });
+  }
 }
 
 export default (container: IContainer) => {
@@ -179,4 +242,6 @@ export default (container: IContainer) => {
   container.bind(ErrorFeeds);
   container.bind(CrowFeeds);
   container.bind(DataMainTest);
+  container.bind(StageOne);
+  container.bind(StageTwo);
 };
