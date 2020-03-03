@@ -20,15 +20,15 @@ export class ParamController {
   ctx: any;
 
   @get('/query')
-  async query(@query('query') queryInput) {
-    this.ctx.body = queryInput;
+  async query(@query() input) {
+    this.ctx.body = input;
   }
 
   @get('/:id/test')
-  async test(@query('query') queryInput, @param('id') id) {
+  async test(@query() input, @param('id') id) {
     const data = {
       id,
-      ...queryInput,
+      ...input,
     };
     this.ctx.body = data;
   }
@@ -39,7 +39,7 @@ export class ParamController {
   }
 
   @get('/param/:id/test/:userId')
-  async param(@param('param') paramInput) {
+  async param(@param() paramInput) {
     // service,hello,a,b
     this.ctx.body = paramInput;
   }
@@ -50,8 +50,8 @@ export class ParamController {
   }
 
   @post('/body')
-  async body(@body('body') bodyInput) {
-    this.ctx.body = bodyInput;
+  async body(@body() bodyObj) {
+    this.ctx.body = bodyObj;
   }
 
   @get('/body_id')
@@ -85,15 +85,15 @@ export class ParamController {
   }
 
   @get('/session')
-  async session(@session('session') sessionInput) {
+  async session(@session() sessionObj) {
     // service,hello,a,b
-    this.ctx.body = sessionInput;
+    this.ctx.body = sessionObj;
   }
 
   @get('/headers')
-  async header(@headers('headers') headersInput) {
+  async header(@headers() headersObj) {
     // service,hello,a,b
-    this.ctx.body = headersInput.host.substring(0, 3);
+    this.ctx.body = headersObj.host.substring(0, 3);
   }
 
   @get('/headers_host')

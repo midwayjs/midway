@@ -133,7 +133,7 @@ describe('/test/enhance.test.ts', () => {
     });
   });
 
-  describe('load ts file and use config, plugin decorator', () => {
+  describe.only('load ts file and use config, plugin decorator', () => {
     let app;
     before(() => {
       app = utils.app('enhance/base-app-decorator', {
