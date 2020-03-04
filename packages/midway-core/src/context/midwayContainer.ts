@@ -60,7 +60,6 @@ export class MidwayContainer extends Container implements IMidwayContainer {
   init(): void {
     this.handlerMap = new Map();
     this.initService();
-    super.init();
 
     this.registerEachCreatedHook();
     // 防止直接从applicationContext.getAsync or get对象实例时依赖当前上下文信息出错
@@ -127,6 +126,7 @@ export class MidwayContainer extends Container implements IMidwayContainer {
       const fileResults = globby.sync(
         DEFAULT_PATTERN.concat(opts.pattern || []),
         {
+          followSymbolicLinks: false,
           cwd: dir,
           ignore: DEFAULT_IGNORE_PATTERN.concat(opts.ignore || []),
           suppressErrors: true

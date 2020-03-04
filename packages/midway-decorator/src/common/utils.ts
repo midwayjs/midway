@@ -99,6 +99,7 @@ export function saveConstructorInject(opts: InjectOptions) {
     }
   }
   const metadata = new Metadata(INJECT_TAG, identifier);
+  metadata.args = opts.args;
   _tagParameterOrProperty(TAGGED, opts.target, opts.targetKey, metadata, opts.index);
 }
 
@@ -118,6 +119,7 @@ export function savePropertyInject(opts: InjectOptions) {
     identifier = `${identifier}:${opts.targetKey}`;
   }
   const metadata = new Metadata(INJECT_TAG, identifier);
+  metadata.args = opts.args;
   _tagParameterOrProperty(TAGGED_PROP, opts.target.constructor, opts.targetKey, metadata);
 }
 
@@ -162,6 +164,10 @@ export function saveProviderId(identifier: ObjectIdentifier, target: any, overri
     id: identifier,
     originName: target.name,
   }, target);
+
+  if (!Reflect.hasMetadata(OBJ_DEF_CLS, target)) {
+    Reflect.defineMetadata(OBJ_DEF_CLS, {}, target);
+  }
 
   return target;
 }

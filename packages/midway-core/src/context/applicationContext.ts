@@ -161,10 +161,11 @@ export class BaseApplicationContext implements IApplicationContext, IObjectFacto
   }
 
   async ready(): Promise<void> {
+    await this.loadDefinitions();
+
     if (this.lifeCycle && this.lifeCycle.onStart) {
       await this.lifeCycle.onStart();
     }
-    await this.loadDefinitions();
     this.readied = true;
     if (this.lifeCycle && this.lifeCycle.onReady) {
       await this.lifeCycle.onReady();
