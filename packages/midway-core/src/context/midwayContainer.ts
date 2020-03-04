@@ -10,13 +10,15 @@ import {
   ObjectDefinitionOptions,
   ObjectIdentifier,
   ScopeEnum,
-  PIPELINE_IDENTIFIER
+  PIPELINE_IDENTIFIER,
+  listModule,
+  LIFECYCLE_KEY
 } from '@midwayjs/decorator';
 import * as is from 'is-type-of';
 import { join } from 'path';
 import { ContainerConfiguration } from './configuration';
 import { FUNCTION_INJECT_KEY, MidwayHandlerKey } from '../common/constants';
-import { IConfigService, IEnvironmentService, IMidwayContainer, IApplicationContext, MAIN_MODULE_KEY, IContainerConfiguration } from '../interface';
+import { IConfigService, IEnvironmentService, IMidwayContainer, IApplicationContext, MAIN_MODULE_KEY, IContainerConfiguration, ILifeCycle } from '../interface';
 import { MidwayConfigService } from '../service/configService';
 import { MidwayEnvironmentService } from '../service/environmentService';
 import { Container } from './container';
@@ -389,6 +391,9 @@ export class MidwayContainer extends Container implements IMidwayContainer {
       // 加载配置
       await this.configService.load();
     }
+
+    // 增加 lifecycle 支持
+    await this.loadAndReadyLifeCycles();
   }
   /**
    * 注册 importObjects
@@ -412,5 +417,13 @@ export class MidwayContainer extends Container implements IMidwayContainer {
     // 默认加载 pipeline
     this.bindModule(pipelineFactory);
     this.midwayIdentifiers.push(PIPELINE_IDENTIFIER);
+  }
+
+  private async loadAndReadyLifeCycles() {
+    const cycles = listModule(LIFECYCLE_KEY);
+    for (const cycle of cycles) {
+      const inst = await this.getAsync<ILifeCycle>(cycle);
+      await inst.onReady();
+    }
   }
 }

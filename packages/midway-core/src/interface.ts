@@ -140,8 +140,6 @@ export interface IApplicationContext extends IObjectFactory {
   messageSource: IMessageSource;
   dependencyMap: Map<string, ObjectDependencyTree>;
   ready(): Promise<void>;
-  addLifeCycle(lifeCycle: ILifeCycle): void;
-  removeLifeCycle(lifeCycle: ILifeCycle): void;
   stop(): Promise<void>;
   dumpDependency(): void;
 }
