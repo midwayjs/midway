@@ -216,6 +216,7 @@ export class MidwayContainer extends Container implements IContainer {
     for (const dir of loadDirs) {
       const fileResults = globby.sync(['**/**.ts', '**/**.tsx', '**/**.js', '!**/**.d.ts'].concat(opts.pattern || []), {
         cwd: dir,
+        followSymbolicLinks: false,
         ignore: [
           '**/node_modules/**',
           '**/logs/**',
