@@ -48,4 +48,24 @@ describe('/test/services/configService.test.ts', () => {
     const env = cfg.getConfigEnv(configFile);
     assert.equal(env, 'daily', 'getConfigEnv should be ok');
   });
+
+  it('load shoud be ok', async () => {
+    const container = new MidwayContainer();
+    const cfg = new MidwayConfigService(container);
+
+    cfg.addObject({bb: 222});
+
+    cfg.add([join(__dirname, '../fixtures/config', 'config.daily'),
+      join(__dirname, '../fixtures/config', 'config.default'),
+      join(__dirname, '../fixtures/config', 'config.local'),
+      join(__dirname, '../fixtures/config', 'config.pre'),
+      join(__dirname, '../fixtures/config', 'config.prod'),
+      join(__dirname, '../fixtures/config', 'config.test')]);
+
+    await cfg.load();
+
+    assert.ok(Object.keys(cfg.configuration).length === 2);
+    assert.ok(cfg.configuration.bb === 222);
+    assert.ok(cfg.configuration.aa === 1);
+  });
 });

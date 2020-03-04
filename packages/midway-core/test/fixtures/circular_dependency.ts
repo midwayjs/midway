@@ -55,3 +55,33 @@ export class CircularThree {
   public circularTwo: any;
   public ts: number;
 }
+
+@Provide()
+@Scope(ScopeEnum.Prototype)
+export class TestOne {
+  ts = 'this is one';
+  @Inject()
+  testTwo: any;
+
+  @Inject('testOne')
+  one: any;
+}
+
+@Provide()
+export class TestTwo {
+  ts = 'this is two';
+  one: any;
+  constructor(@Inject() testOne: TestOne) {
+    this.one = testOne;
+  }
+
+  @Inject('testOne')
+  one1: any;
+}
+@Provide()
+export class TestThree {
+  ts = 'this is three';
+
+  @Inject('testOne')
+  one: any;
+}

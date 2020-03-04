@@ -74,6 +74,9 @@ describe('/test/definitions/properties.test.ts', () => {
       config1.putObject(bb);
       bb.cc.aaa = '123';
       expect(config1.get('cc.aaa')).eq('123');
+
+      expect(config1.stringPropertyNames()).deep.eq(['bb', 'cc', 'b', 'c', 'aa']);
+      expect(config1.getProperty('jjj', 123)).eq(123);
     });
   });
 });

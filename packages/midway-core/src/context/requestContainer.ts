@@ -1,5 +1,3 @@
-import { ManagedValue } from '../context/managed';
-import { VALUE_TYPE } from '../common/constants';
 import { MidwayContainer } from './midwayContainer';
 import { REQUEST_CTX_KEY } from '../interface';
 import { parsePrefix } from '../common/util';
@@ -49,10 +47,6 @@ export class MidwayRequestContainer extends MidwayContainer {
 
     const definition = this.applicationContext.registry.getDefinition(identifier);
     if (definition && definition.isRequestScope()) {
-      if (definition.creator.constructor.name === 'FunctionWrapperCreator') {
-        const valueManagedIns = new ManagedValue(this, VALUE_TYPE.OBJECT);
-        definition.constructorArgs = [valueManagedIns];
-      }
       // create object from applicationContext definition for requestScope
       return this.getManagedResolverFactory().createAsync({ definition, args });
     }

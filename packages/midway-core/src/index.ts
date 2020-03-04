@@ -36,3 +36,4 @@ export { MidwayContainer } from './context/midwayContainer';
 export { MidwayRequestContainer }  from './context/requestContainer';
 export * from './context/providerWrapper';
 export * from './common/constants';
+export * from './features';

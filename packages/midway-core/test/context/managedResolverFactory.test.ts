@@ -5,6 +5,25 @@ import { expect } from 'chai';
 import { ManagedProperties, ManagedValue, ManagedJSON, ManagedObject, ManagedProperty, ManagedList, ManagedSet, ManagedMap } from '../../src/context/managed';
 import { VALUE_TYPE } from '../../src/common/constants';
 import { ObjectProperties } from '../../src/definitions/properties';
+import { IManagedResolver } from '../../src/interface';
+import { IManagedInstance } from '@midwayjs/decorator';
+import sinon = require('sinon');
+
+class TestManaged implements IManagedInstance {
+  type = 'test';
+  val = 123;
+}
+class TestResolver implements IManagedResolver {
+  type = 'test';
+  resolve(managed: IManagedInstance): any {
+    const t = managed as TestManaged;
+    return 'this is a test sync' + t.val;
+  }
+  async resolveAsync(managed: IManagedInstance): Promise<any> {
+    const t = managed as TestManaged;
+    return 'this is a test' + t.val;
+  }
+}
 
 describe('/test/context/managedResolverFactory.test.ts', () => {
   it('base resolver should be ok', async () => {
@@ -87,7 +106,27 @@ describe('/test/context/managedResolverFactory.test.ts', () => {
     const v2 = await resolver.resolveManagedAsync(vmv);
     expect(v2).eq(1234);
 
+    const dtv = new ManagedValue();
+    dtv.valueType = VALUE_TYPE.DATE;
+    dtv.value = '2020-02-29T05:15:21.292Z';
+    const dt = await resolver.resolveManagedAsync(dtv);
+    expect(dt.toISOString()).eq((new Date('2020-02-29T05:15:21.292Z')).toISOString());
+
     expect(b).false;
+
+    const bv = new ManagedValue();
+    bv.valueType = VALUE_TYPE.BOOLEAN;
+    bv.value = 'false';
+    let bbv = await resolver.resolveManagedAsync(bv);
+    expect(bbv).false;
+
+    bv.value = 'true';
+    bbv = await resolver.resolveManagedAsync(bv);
+    expect(bbv).true;
+
+    bv.valueType = 'helloworld';
+    bbv = await resolver.resolveManagedAsync(bv);
+    expect(bbv).eq('true');
   });
 
   it('resolve object should be ok', async () => {
@@ -162,5 +201,82 @@ describe('/test/context/managedResolverFactory.test.ts', () => {
     const map1 = new Map();
     map1.set('hello', 1111);
     expect(res1.firstMap).deep.eq(map1);
+  });
+
+  it('register resolver should be ok', async () => {
+    const context = new BaseApplicationContext();
+    const resolver = new ManagedResolverFactory(context);
+    resolver.registerResolver(new TestResolver());
+
+    const t = new TestManaged();
+    t.val = 555;
+    const srt = resolver.resolveManaged(t);
+    const rt = await resolver.resolveManagedAsync(t);
+
+    expect(srt).eq('this is a test sync555');
+    expect(rt).eq('this is a test555');
+  });
+
+  it('create get deps should be ok', async () => {
+    const context = new BaseApplicationContext();
+    const resolver = new ManagedResolverFactory(context);
+
+    const definition = new ObjectDefinition();
+    definition.id = 'hello';
+    definition.name = 'helloworld';
+    definition.path = class HelloWorld {
+      aa = 123;
+      args?: any;
+      constructor(args?: any) {
+        this.args = args;
+      }
+    };
+
+    definition.dependsOn.push('hello1');
+
+    const definition1 = new ObjectDefinition();
+    definition1.id = 'hello1';
+    definition1.name = 'helloworld1';
+    definition1.path = class HelloWorld1 {
+      aa = 123;
+      args?: any;
+      constructor(args?: any) {
+        this.args = args;
+      }
+    };
+
+    context.registerDefinition(definition.id, definition);
+    context.registerDefinition(definition1.id, definition1);
+
+    let r = resolver.create({ definition, args: [[ 2, 3, 4 ]]});
+    expect(r.aa).eq(123);
+    expect(r.args).deep.eq([2, 3, 4]);
+
+    await resolver.destroyCache();
+
+    r = await resolver.createAsync({ definition, args: [[ 2, 3, 4 ]]});
+    expect(r.aa).eq(123);
+    expect(r.args).deep.eq([2, 3, 4]);
+
+    await resolver.destroyCache();
+
+    const callback = sinon.spy();
+
+    definition1.path = {
+      returnNull() {
+        callback('return null');
+        return null;
+      }
+    };
+    definition1.constructMethod = 'returnNull';
+
+    try {
+      await resolver.createAsync({ definition: definition1 });
+    } catch (e) {
+      callback(e.message);
+    }
+
+    expect(callback.withArgs('return null').calledOnce).true;
+    expect(callback.withArgs('hello1 config no valid path').calledOnce).true;
   });
 });

@@ -1,20 +1,20 @@
 import { FunctionDefinition } from '../../src/definitions/functionDefinition';
-import { BaseApplicationContext } from '../../src/context/applicationContext';
 import { expect } from 'chai';
-import { ScopeEnum, VALUE_TYPE } from '../../src';
-import { ManagedValue } from '../../src/context/managed';
+import { ScopeEnum } from '../../src';
 import sinon = require('sinon');
 
 describe('/test/definitions/functionDefinition.test.ts', () => {
   it('function definition should be ok', async () => {
-    const fun = new FunctionDefinition(new BaseApplicationContext());
+    const fun = new FunctionDefinition();
 
     fun.setAttr('test', 1234);
+    expect(fun.isAutowire()).false;
     expect(fun.hasAttr('test')).false;
     expect(fun.getAttr('test')).undefined;
     expect(fun.hasConstructorArgs()).false;
 
     fun.autowire = true;
+    expect(fun.isAutowire()).true;
     expect(fun.isDirect()).false;
     expect(fun.isExternal()).false;
 
@@ -28,19 +28,31 @@ describe('/test/definitions/functionDefinition.test.ts', () => {
 
     const callback = sinon.spy();
 
-    const clzz = function (a) {
-      callback(a);
-      return a;
+    const clzz = function (a, args) {
+      callback(args[0]);
+      return args[0];
     };
 
     expect(await fun.creator.doConstructAsync(clzz, [1])).eq(1);
     expect(callback.withArgs(1).calledOnce).true;
 
     expect(fun.creator.doConstruct(null)).is.null;
-    const m = new ManagedValue();
-    m.value = 123;
-    m.valueType = VALUE_TYPE.NUMBER;
-    expect(fun.creator.doConstruct(clzz, [m])).eq(123);
+
+    expect(fun.creator.doConstruct(clzz, [123])).eq(123);
     expect(callback.withArgs(123).calledOnce).true;
+
+    let count = 0;
+    const clzzNoArgs = (a) => {
+      count++;
+      callback('noArgs' + count);
+      return 'noArgs' + count;
+    };
+
+    expect(fun.creator.doConstruct(clzzNoArgs)).eq('noArgs1');
+    expect(callback.withArgs('noArgs1').calledOnce).true;
+    expect(count).eq(1);
+
+    expect(await fun.creator.doConstructAsync(clzzNoArgs)).eq('noArgs2');
+    expect(callback.withArgs('noArgs2').calledOnce).true;
   });
 });
