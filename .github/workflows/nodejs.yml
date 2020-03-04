@@ -1,0 +1,42 @@
+name: Node CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: npm install, build, and test
+        run: |
+          openssl version
+          npm i -g lerna codecov
+          npm run bootstrap
+          npm run build --if-present
+          npm run cov
+        env:
+          CI: true
+          PGHOST: localhost
+          PGUSER: postgres
+          PGPASSWORD: postgres
+
+    #services:
+    #  postgres:
+    #    image: postgres:alpine
+    #    ports:
+    #      - 5432:5432
+    #    env:
+    #      POSTGRES_USER: postgres
+    #      POSTGRES_PASSWORD: postgres
+    #      POSTGRES_DB: db_ci_test
+    #    # needed because the postgres container does not provide a healthcheck
+    #    options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
