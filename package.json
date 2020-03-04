@@ -11,7 +11,7 @@
     "chalk": "^3.0.0",
     "debug": "^4.1.1",
     "eslint": "6",
-    "gh-pages": "^1.2.0",
+    "gh-pages": "^2.2.0",
     "git-hooks": "^1.1.10",
     "lerna": "^3.14.1",
     "lerna-relinker": "^1.4.0",
