@@ -1,6 +1,6 @@
 {
   "name": "midway-mock",
-  "version": "2.0.0-beta.13",
+  "version": "2.0.0-beta.14",
   "eggPlugin": {
     "name": "midway-mock"
   },
@@ -32,9 +32,9 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/core": "^2.0.0-beta.13",
-    "@midwayjs/decorator": "^2.0.0-beta.13",
-    "midway-bin": "^2.0.0-beta.13"
+    "@midwayjs/core": "^2.0.0-beta.14",
+    "@midwayjs/decorator": "^2.0.0-beta.14",
+    "midway-bin": "^2.0.0-beta.14"
   },
   "dependencies": {
     "egg-mock": "^3.21.0",
