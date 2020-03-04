@@ -13,6 +13,8 @@ describe('/test/definitions/messageSource.test.ts', () => {
     const res = new Resource(dir, 'zh-cn.json');
     await source.load('zh-cn', res);
     await source.load('en', res.createRelative('en.json'));
+    // 虽然重复加载两次，但是必须结果一致
+    await source.loadUseFileName(res);
 
     expect(source.getMessage('hello')).eq('这是一个测试');
     expect(source.getMessage('new', [], 'by name')).eq('by name');

@@ -24,6 +24,7 @@ export interface ObjectDefinitionOptions {
 export interface TagPropsMetadata {
   key: string | number | symbol;
   value: any;
+  args?: any;
 }
 
 export interface TagClsMetadata {

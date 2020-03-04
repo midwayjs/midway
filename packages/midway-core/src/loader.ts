@@ -48,7 +48,6 @@ export class ContainerLoader {
     disableAutoLoad?: boolean;
     pattern?: string;
     ignore?: string;
-    configLocations?: string[];
   } = {}) {
     if (!this.isTsMode && loadOpts.disableAutoLoad === undefined) {
       // disable auto load in js mode by default

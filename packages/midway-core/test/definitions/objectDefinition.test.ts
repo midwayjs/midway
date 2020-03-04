@@ -19,5 +19,7 @@ describe('/test/definitions/objectDefinition.test.ts', () => {
     definition.setAttr('hello', 1);
     expect(definition.getAttr('hello')).eq(1);
     expect(definition.hasAttr('hello')).true;
+
+    expect(definition.hasConstructorArgs()).false;
   });
 });

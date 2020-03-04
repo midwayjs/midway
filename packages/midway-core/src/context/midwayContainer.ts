@@ -10,6 +10,7 @@ import {
   ObjectDefinitionOptions,
   ObjectIdentifier,
   ScopeEnum,
+  PIPELINE_IDENTIFIER
 } from '@midwayjs/decorator';
 import * as is from 'is-type-of';
 import { join } from 'path';
@@ -20,6 +21,7 @@ import { MidwayConfigService } from '../service/configService';
 import { MidwayEnvironmentService } from '../service/environmentService';
 import { Container } from './container';
 import { generateProvideId } from '../common/util';
+import { pipelineFactory } from '../features/pipeline';
 
 const DEFAULT_PATTERN = ['**/**.ts', '**/**.tsx', '**/**.js', '!**/**.d.ts'];
 const DEFAULT_IGNORE_PATTERN = [
@@ -403,6 +405,12 @@ export class MidwayContainer extends Container implements IMidwayContainer {
       }
     }
   }
+  /**
+   * 初始化默认需要 bind 到 container 中的基础依赖
+   */
+  loadDefinitions() {
+    // 默认加载 pipeline
+    this.bindModule(pipelineFactory);
+    this.midwayIdentifiers.push(PIPELINE_IDENTIFIER);
+  }
 }
-
-// TODO configuration 依赖去重

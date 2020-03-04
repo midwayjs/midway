@@ -4,7 +4,7 @@ import { FUNCTION_INJECT_KEY } from '../common/constants';
 
 export function providerWrapper(wrapperInfo: Array<{
   id: ObjectIdentifier;
-  provider: (context: IApplicationContext) => any;
+  provider: (context: IApplicationContext, args?: any) => any;
   scope?: ScopeEnum;
   isAutowire?: boolean;
 }>): void {
