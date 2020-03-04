@@ -8,9 +8,9 @@ import {
  * 生命周期定义
  */
 export interface ILifeCycle {
-  onStart(): Promise<void>;
+  onStart?(): Promise<void>;
   onReady(): Promise<void>;
-  onStop(): Promise<void>;
+  onStop?(): Promise<void>;
 }
 
 export type Locale = string;

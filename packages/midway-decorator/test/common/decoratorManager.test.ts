@@ -10,11 +10,11 @@ import {
   listMethodDataFromClass,
   listModule,
   listPreloadModule, getObjectDefinition
-} from '../src';
+} from '../../src';
 import * as assert from 'assert';
-import { ManagerTest as module } from './fixtures/decorator/customClass';
+import { ManagerTest as module } from '../fixtures/decorator/customClass';
 
-describe('/test/unit/base/decoratorManager.test.ts', () => {
+describe('/test/common/decoratorManager.test.ts', () => {
 
   it('should save data on class and get it', () => {
     assert(getClassMetadata('custom', module) === 'test');
@@ -46,7 +46,7 @@ describe('/test/unit/base/decoratorManager.test.ts', () => {
     assert(modules.length === 1);
   });
 
-  it('should clear all module', () => {
+  it.skip('should clear all module', () => {
     clearAllModule();
     let modules = listPreloadModule();
     assert(modules.length === 0);

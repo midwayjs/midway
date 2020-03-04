@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import { ObjectDefinitionOptions, TagClsMetadata } from '../interface';
 import { OBJ_DEF_CLS, TAGGED_CLS } from './constant';
+import { classNamed } from './utils';
 
 const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
 const ARGUMENT_NAMES = /([^\s,]+)/g;
@@ -379,7 +380,7 @@ export function savePreloadModule(target) {
 /**
  * list preload module
  */
-export function listPreloadModule() {
+export function listPreloadModule(): any[] {
   return manager.listModule(PRELOAD_MODULE_KEY);
 }
 
@@ -396,7 +397,7 @@ export function saveModule(decoratorNameKey: decoratorKey, target) {
  * list module from decorator key
  * @param decoratorNameKey
  */
-export function listModule(decoratorNameKey: decoratorKey) {
+export function listModule(decoratorNameKey: decoratorKey): any[] {
   return manager.listModule(decoratorNameKey);
 }
 
@@ -411,7 +412,7 @@ export function clearAllModule() {
  * get parameter name from function
  * @param func
  */
-export function getParamNames(func) {
+export function getParamNames(func): string[] {
   const fnStr = func.toString().replace(STRIP_COMMENTS, '');
   let result = fnStr.slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')')).match(ARGUMENT_NAMES);
   if (result === null) {
@@ -424,11 +425,12 @@ export function getParamNames(func) {
  * get provider id from module
  * @param module
  */
-export function getProviderId(module) {
+export function getProviderId(module): string {
   const metaData = Reflect.getMetadata(TAGGED_CLS, module) as TagClsMetadata;
   if (metaData) {
     return metaData.id;
   }
+  return classNamed(module.name);
 }
 
 /**
