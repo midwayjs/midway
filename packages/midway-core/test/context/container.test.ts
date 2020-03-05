@@ -380,14 +380,14 @@ describe('/test/context/container.test.ts', () => {
 
       sub.bind(TestThree);
 
+      const three = sub.get<TestThree>('testThree');
+      expect(three.ts).eq('this is three');
+      expect(three.one.ts).eq('this is one');
+
       const one = sub.get<TestOne>('testOne');
       expect(one.ts).eq('this is one');
       expect(one.one.ts).eq('this is one');
       expect(one.testTwo.ts).eq('this is two');
-
-      const three = sub.get<TestThree>('testThree');
-      expect(three.ts).eq('this is three');
-      expect(three.one.ts).eq('this is one');
     });
   });
 

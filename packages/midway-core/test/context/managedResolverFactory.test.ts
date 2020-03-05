@@ -279,4 +279,43 @@ describe('/test/context/managedResolverFactory.test.ts', () => {
     expect(callback.withArgs('return null').calledOnce).true;
     expect(callback.withArgs('hello1 config no valid path').calledOnce).true;
   });
+
+  it('dfs should be ok', () => {
+    const parent = new BaseApplicationContext();
+    const context = new BaseApplicationContext('', parent);
+    const resolver = new ManagedResolverFactory(context);
+
+    const definition = new ObjectDefinition();
+    definition.id = 'hello';
+    definition.name = 'helloworld';
+    definition.path = class HelloWorld {
+      aa = 123;
+      args?: any;
+      constructor(args?: any) {
+        this.args = args;
+      }
+    };
+
+    definition.dependsOn.push('hello1');
+
+    const definition1 = new ObjectDefinition();
+    definition1.id = 'hello1';
+    definition1.name = 'helloworld1';
+    definition1.path = class HelloWorld1 {
+      aa = 123;
+      args?: any;
+      constructor(args?: any) {
+        this.args = args;
+      }
+    };
+
+    parent.registerDefinition(definition.id, definition);
+    parent.registerDefinition(definition1.id, definition1);
+
+    const subdef = new ObjectDefinition();
+    subdef.id = 'test';
+    subdef.properties.setProperty('hello1', 111);
+    const r = resolver.depthFirstSearch('tt', subdef);
+    expect(r).false;
+  });
 });
