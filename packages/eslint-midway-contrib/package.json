@@ -32,9 +32,8 @@
     "eslint-plugin-unicorn": "^16.0.0"
   },
   "devDependencies": {
-    "eslint": "6",
-    "tape": "4",
-    "typescript": "3"
+    "eslint": "^6.1.0",
+    "tape": "4"
   },
   "peerDependencies": {
     "eslint": ">=6.1.0"

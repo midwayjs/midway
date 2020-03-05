@@ -1,13 +1,12 @@
 import { MockApplication } from 'egg-mock';
-import { ApplicationContext } from 'injection';
-
+import { IApplicationContext } from '@midwayjs/core';
 
 interface Application extends MockApplication {
-  applicationContext: ApplicationContext
+  applicationContext: IApplicationContext;
   _mockFn(
     service: string,
     methodName: string,
-    fn: () => any): void
+    fn: () => any): void;
 }
 
 export function mockClassFunction(
@@ -22,12 +21,10 @@ export function mockClassFunction(
   const def = applicationContext.registry.getDefinition(className);
   if (! def) {
     throw new TypeError(`def undefined with className: "${className}", methodName: "${methodName}"`);
-  }
-  else {
+  } else {
     const clazz = def.path;
     if (clazz && typeof clazz === 'function') {
       this._mockFn(clazz.prototype, methodName, fn);
     }
   }
 }
-
