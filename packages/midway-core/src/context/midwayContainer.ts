@@ -130,7 +130,6 @@ export class MidwayContainer extends Container implements IMidwayContainer {
         {
           followSymbolicLinks: false,
           cwd: dir,
-          followSymbolicLinks: false,
           ignore: DEFAULT_IGNORE_PATTERN.concat(opts.ignore || []),
           suppressErrors: true
         }
