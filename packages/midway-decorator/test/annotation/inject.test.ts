@@ -15,12 +15,14 @@ describe('/test/annotation/inject.test.ts', () => {
     expect(meta).deep.eq({
       0: [
         {
+          args: undefined,
           key: 'inject',
           value: 'bb'
         },
       ],
       1: [
         {
+          args: undefined,
           key: 'inject',
           value: 'cc'
         },
@@ -30,6 +32,7 @@ describe('/test/annotation/inject.test.ts', () => {
     meta = getPropertyInject(Test);
     expect(meta).deep.eq({
       aa: [{
+        args: undefined,
         key: 'inject',
         value: 'aa'
       }]
