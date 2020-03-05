@@ -61,35 +61,6 @@ describe('/test/context/applicationContext.test.ts', () => {
     });
   });
   describe('BaseApplicationContext', () => {
-    it('context event should be ok', async () => {
-      const callback = sinon.spy();
-      const app = new BaseApplicationContext(__dirname);
-
-      const listen = {
-        async onStart() {
-          callback('onStart');
-        },
-        async onReady() {
-          callback('onReady');
-        },
-        async onStop() {
-          callback('onStop');
-        }
-      };
-      app.addLifeCycle(listen);
-      await app.ready();
-
-      expect(app.isReady).true;
-
-      await app.stop();
-      app.removeLifeCycle();
-
-      expect(callback.callCount).eq(3);
-      expect(callback.withArgs('onStart').calledOnce).true;
-      expect(callback.withArgs('onReady').calledOnce).true;
-      expect(callback.withArgs('onStop').calledOnce).true;
-    });
-
     it('context get/getAsync should be ok', async () => {
       const callback = sinon.spy();
       const definition = new ObjectDefinition();
@@ -111,6 +82,11 @@ describe('/test/context/applicationContext.test.ts', () => {
       const app = new BaseApplicationContext(__dirname);
       app.registerDefinition(definition.id, definition);
       app.registerDefinition(definition1.id, definition1);
+
+      expect(app.isReady).false;
+      await app.ready();
+      expect(app.isReady).true;
+
       try {
         app.get('hello2');
       } catch (e) {
@@ -142,6 +118,9 @@ describe('/test/context/applicationContext.test.ts', () => {
       expect(b).not.null;
       expect(b).not.undefined;
       expect(b.aa).eq(1231);
+
+      await app.stop();
+      expect(app.registry.identifiers.length).eq(0);
     });
   });
 });

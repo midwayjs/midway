@@ -157,6 +157,7 @@ export class BaseApplicationContext implements IApplicationContext, IObjectFacto
 
   async ready(): Promise<void> {
     await this.loadDefinitions();
+    this.readied = true;
   }
 
   protected loadDefinitions(): void {

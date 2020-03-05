@@ -7,6 +7,7 @@ import { App } from '../fixtures/ts-app-inject/app';
 import { UserService } from '../fixtures/complex_injection/userService';
 import { UserController } from '../fixtures/complex_injection/userController';
 import { A, B, DbAPI } from '../fixtures/complex_injection/dbAPI';
+import { TestBinding, LifeCycleTest, LifeCycleTest1 } from '../fixtures/lifecycle';
 import sinon = require('sinon');
 import mm = require('mm');
 // import * as decs from '@midwayjs/decorator';
@@ -73,5 +74,27 @@ describe('/test/midwayContainer.test.ts', () => {
       expect(/"newKey" -> "b"/.test(newTree)).to.be.true;
     });
 
+  });
+
+  describe('lifecycle case', () => {
+    const container = new MidwayContainer();
+
+    it('lifecycle should be ok', async () => {
+      container.bind(TestBinding);
+      container.bind(LifeCycleTest);
+      container.bind(LifeCycleTest1);
+
+      expect(container.isReady).false;
+      await container.ready();
+      expect(container.isReady).true;
+
+      const aa = await container.getAsync<LifeCycleTest>('lifeCycleTest');
+      expect(aa.ts).eq('hello');
+      expect(aa.ready).true;
+
+      const aa1 = await container.getAsync<LifeCycleTest1>('lifeCycleTest1');
+      expect(aa1.tts).eq('hello');
+      expect(aa1.ready).true;
+    });
   });
 });

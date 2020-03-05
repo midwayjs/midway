@@ -421,8 +421,11 @@ export class MidwayContainer extends Container implements IMidwayContainer {
 
   private async loadAndReadyLifeCycles() {
     const cycles = listModule(LIFECYCLE_KEY);
+    debug('load lifecycle length => %s.', cycles && cycles.length);
     for (const cycle of cycles) {
-      const inst = await this.getAsync<ILifeCycle>(cycle);
+      const providerId = getProviderId(cycle);
+      debug('ready lifecycle id => %s.', providerId);
+      const inst = await this.getAsync<ILifeCycle>(providerId);
       await inst.onReady();
     }
   }
