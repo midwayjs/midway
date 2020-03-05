@@ -245,6 +245,26 @@ describe('/test/loader.test.ts', () => {
     mm.restore();
   });
 
+  it('should load with no package.json', async () => {
+    mm(process.env, 'MIDWAY_SERVER_ENV', 'local');
+    const loader = new ContainerLoader({
+      baseDir: path.join(
+        __dirname,
+        './fixtures/app-with-configuration/base-app-no-package-json/src'
+      ),
+    });
+    loader.initialize();
+    loader.loadDirectory();
+    await loader.refresh();
+
+    const appCtx = loader.getApplicationContext();
+    const replaceManager: any = await appCtx.getAsync('@ok:replaceManager');
+    assert((await replaceManager.getOne()) === 'ok1');
+    const replaceManagerno: any = await appCtx.getAsync('@midway-plugin-no-pkg-json:replaceManager');
+    assert((await replaceManagerno.getOne()) === 'ok1');
+    mm.restore();
+  });
+
   it('should load configuration with namespace', async () => {
     mm(process.env, 'MIDWAY_SERVER_ENV', 'local');
     const loader = new ContainerLoader({

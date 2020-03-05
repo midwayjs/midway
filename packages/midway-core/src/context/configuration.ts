@@ -77,12 +77,12 @@ export class ContainerConfiguration implements IContainerConfiguration {
       pkg ? `${pkg.name}-${pkg.version}` : undefined, packageBaseDir);
 
     let configuration;
+    let cfgFile;
+    let loadDir;
     if (pkg) {
       if (this.namespace !== MAIN_MODULE_KEY) {
         this.namespace = pkg.midwayNamespace ? pkg.midwayNamespace : pkg.name;
       }
-      let cfgFile;
-      let loadDir;
       if (pkg.main && !isSubDir) {
         packageBaseDir = dirname(join(packageBaseDir, pkg.main));
         cfgFile = join(packageBaseDir, 'configuration');
@@ -90,16 +90,16 @@ export class ContainerConfiguration implements IContainerConfiguration {
         debug('configuration file path one => %s.', cfgFile);
         loadDir = packageBaseDir;
       }
-      if (!configuration) {
-        cfgFile = `${packageBaseDir}/configuration`;
-        configuration = safeRequire(cfgFile);
-        debug('configuration file path two => %s.', cfgFile);
-        loadDir = packageBaseDir;
-      }
-      if (loadDir) {
-        this.addLoadDir(loadDir);
-        debug('add loadDir => %s namespace => %s.', loadDir, this.namespace);
-      }
+    }
+    if (!configuration) {
+      cfgFile = `${packageBaseDir}/configuration`;
+      configuration = safeRequire(cfgFile);
+      debug('configuration file path two => %s.', cfgFile);
+      loadDir = packageBaseDir;
+    }
+    if (loadDir) {
+      this.addLoadDir(loadDir);
+      debug('add loadDir => %s namespace => %s.', loadDir, this.namespace);
     }
     debug('packageName => %s namespace => %s configuration file => %s.',
       packageName, this.namespace, configuration ? true : false);
