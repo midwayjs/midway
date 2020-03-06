@@ -8,7 +8,7 @@
 import { FaaSStarterClass, cleanTarget, compareFileChange } from './utils';
 import { join, resolve, relative } from 'path';
 import { existsSync, move, writeFileSync, ensureFileSync } from 'fs-extra';
-import { loadSpec } from '@midwayjs/fcli-command-core';
+import { loadSpec, getSpecFile } from '@midwayjs/fcli-command-core';
 import { writeWrapper } from '@midwayjs/serverless-spec-builder';
 import { AnalyzeResult, Locator } from '@midwayjs/locate';
 import {
@@ -37,6 +37,7 @@ export abstract class InvokeCore implements IInvoke {
   spec: any;
   buildDir: string;
   wrapperInfo: any;
+  specFile: string;
   codeAnalyzeResult: AnalyzeResult;
 
   constructor(options: InvokeOptions) {
@@ -45,6 +46,7 @@ export abstract class InvokeCore implements IInvoke {
     this.baseDir = this.options.baseDir;
     this.buildDir = resolve(this.baseDir, options.buildDir || 'dist');
     this.spec = loadSpec(this.baseDir);
+    this.specFile = getSpecFile(this.baseDir).path;
   }
 
   protected async getStarter() {
@@ -99,7 +101,7 @@ export abstract class InvokeCore implements IInvoke {
     const buildLogPath = resolve(this.buildDir, '.faasTSBuildTime.log');
     if (existsSync(buildLogPath)) {
       const fileChanges = await compareFileChange(
-        [ `${relative(baseDir, this.codeAnalyzeResult.tsCodeRoot)}/**/*` ],
+        [ this.specFile, `${relative(baseDir, this.codeAnalyzeResult.tsCodeRoot)}/**/*` ],
         [ buildLogPath ],
         { cwd: baseDir }
       );
