@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.42](https://github.com/midwayjs/midway-faas/compare/v0.2.41...v0.2.42) (2020-03-06)
+
+
+### Bug Fixes
+
+* compile skip check ([#73](https://github.com/midwayjs/midway-faas/issues/73)) ([c61e2ad](https://github.com/midwayjs/midway-faas/commit/c61e2ad293b087556a3d7495c120bb9441a9aabb))
+
+
+
+
+
 ## [0.2.41](https://github.com/midwayjs/midway-faas/compare/v0.2.40...v0.2.41) (2020-03-06)
 
 
