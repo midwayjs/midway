@@ -1,4 +1,4 @@
-import { basename, join } from 'path';
+import { basename } from 'path';
 import { readdirSync } from 'fs';
 import { IGateway, IOptions, IPathMethodInfo, IPathInfo, ITriggerItem } from './inter';
 export const generator = async (options: IOptions) => {

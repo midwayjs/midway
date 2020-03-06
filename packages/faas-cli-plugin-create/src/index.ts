@@ -74,6 +74,7 @@ export class CreatePlugin extends BasePlugin {
 
   async create() {
     this.core.cli.log('Generating boilerplate...');
+    this.core.debug('options', this.options);
     if (this.options['template']) {
       this.npmPackageName = this.templateList[this.options.template].package;
       await this.createFromTemplate();
@@ -121,6 +122,8 @@ export class CreatePlugin extends BasePlugin {
 
     const boilerplatePath = this.options.path || '';
     const newPath = join(this.servicePath, boilerplatePath);
+    this.setStore('path', newPath);
+    this.core.debug('path', newPath);
     const lightGenerator = new LightGenerator();
     let generator;
     if (this.npmPackageName) {
@@ -154,6 +157,8 @@ export class CreatePlugin extends BasePlugin {
         show: this.showPrompt,
       });
       const parameters = await this.prompt.run();
+      this.setStore('parameters', parameters);
+      this.core.debug('parameters', parameters);
       await this.readyGenerate();
       await generator.run(parameters);
     } else {

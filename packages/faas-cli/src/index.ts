@@ -36,20 +36,6 @@ export class CLI extends BaseCLI {
     }
   }
 
-  loadExtensions() {
-    return {
-      debug: this.debug
-    };
-  }
-
-  debug(...args) {
-    if (!this.argv.V && !this.argv.verbose) {
-      return;
-    }
-    const log = this.loadLog();
-    log.log(...args);
-  }
-
   displayVersion() {
     const log = this.loadLog();
     try {

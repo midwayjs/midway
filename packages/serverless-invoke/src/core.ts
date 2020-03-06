@@ -27,6 +27,7 @@ interface InvokeOptions {
   sourceDir?: string; // 函数源码目录
   incremental?: boolean; // 开启增量编译 (会无视 clean true)
   clean?: boolean; // 清理调试目录
+  verbose?: boolean; // 输出详细日志
 }
 
 export abstract class InvokeCore implements IInvoke {
@@ -103,7 +104,7 @@ export abstract class InvokeCore implements IInvoke {
         { cwd: baseDir }
       );
       if (!fileChanges || !fileChanges.length) {
-        console.log('Auto skip ts compile');
+        this.debug('Auto skip ts compile');
         return;
       }
     }
@@ -244,5 +245,12 @@ export abstract class InvokeCore implements IInvoke {
       options.clean = true;
     }
     return options;
+  }
+
+  debug(...args) {
+    if (!this.options.verbose) {
+      return;
+    }
+    console.log('[Verbose] ', ...args);
   }
 }

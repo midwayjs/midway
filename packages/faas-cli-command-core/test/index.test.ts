@@ -2,6 +2,9 @@ import { CommandHookCore } from '../src';
 import InvokePlugin from './plugins/test.invoke';
 import LogPlugin from './plugins/test.lg';
 import OnePlugin from './plugins/one.common';
+import StoreSet from './plugins/store.set';
+import StoreGet from './plugins/store.get';
+
 import * as assert from 'assert';
 
 describe('load plugin', () => {
@@ -88,5 +91,17 @@ describe('invoke', () => {
         result[1] === 'invoke:one' &&
         result[3] === 'before:invoke:two'
     );
+  });
+
+  it('store set', async () => {
+    const core = new CommandHookCore({
+      provider: '',
+      options: {},
+    });
+    core.addPlugin(StoreGet);
+    core.addPlugin(StoreSet);
+    await core.ready();
+    await core.invoke(['store']);
+    assert((core as any).coreInstance.store.get('StoreGet:get') === 123456);
   });
 });
