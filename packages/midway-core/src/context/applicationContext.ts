@@ -4,7 +4,6 @@
 import { ObjectIdentifier } from '@midwayjs/decorator';
 import {
   IApplicationContext,
-  ILifeCycle,
   IMessageSource,
   IObjectDefinition,
   IObjectDefinitionRegistry,
@@ -101,7 +100,6 @@ export class ObjectDefinitionRegistry extends Map implements IObjectDefinitionRe
 
 export class BaseApplicationContext implements IApplicationContext, IObjectFactory {
   protected readied = false;
-  protected lifeCycle: ILifeCycle = null;
   private _resolverFactory: ManagedResolverFactory = null;
   private _registry: IObjectDefinitionRegistry = null;
   private _props: ObjectProperties = null;
@@ -155,20 +153,11 @@ export class BaseApplicationContext implements IApplicationContext, IObjectFacto
     await this.getManagedResolverFactory().destroyCache();
     this.registry.clearAll();
     this.readied = false;
-    if (this.lifeCycle && this.lifeCycle.onStop) {
-      await this.lifeCycle.onStop();
-    }
   }
 
   async ready(): Promise<void> {
-    if (this.lifeCycle && this.lifeCycle.onStart) {
-      await this.lifeCycle.onStart();
-    }
     await this.loadDefinitions();
     this.readied = true;
-    if (this.lifeCycle && this.lifeCycle.onReady) {
-      await this.lifeCycle.onReady();
-    }
   }
 
   protected loadDefinitions(): void {
@@ -225,14 +214,6 @@ export class BaseApplicationContext implements IApplicationContext, IObjectFacto
     }
 
     return this.getManagedResolverFactory().createAsync({ definition, args });
-  }
-
-  addLifeCycle(lifeCycle: ILifeCycle): void {
-    this.lifeCycle = lifeCycle;
-  }
-
-  removeLifeCycle(): void {
-    this.lifeCycle = null;
   }
 
   get isReady(): boolean {

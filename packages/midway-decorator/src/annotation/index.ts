@@ -4,4 +4,5 @@ export * from './objectDef';
 export * from './priority';
 export * from './provide';
 export * from './schedule';
+export * from './lifecycle';
 export * from './pipeline';

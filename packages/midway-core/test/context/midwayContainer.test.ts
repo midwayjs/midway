@@ -3,13 +3,15 @@ import { expect } from 'chai';
 import * as path from 'path';
 import { MidwayContainer } from '../../src';
 import { App } from '../fixtures/ts-app-inject/app';
+import { TestCons } from '../fixtures/ts-app-inject/test';
 
 import { UserService } from '../fixtures/complex_injection/userService';
 import { UserController } from '../fixtures/complex_injection/userController';
 import { A, B, DbAPI } from '../fixtures/complex_injection/dbAPI';
+import { TestBinding, LifeCycleTest, LifeCycleTest1 } from '../fixtures/lifecycle';
 import sinon = require('sinon');
 import mm = require('mm');
-// import * as decs from '@midwayjs/decorator';
+import * as decs from '@midwayjs/decorator';
 
 describe('/test/midwayContainer.test.ts', () => {
 
@@ -18,6 +20,19 @@ describe('/test/midwayContainer.test.ts', () => {
     container.load({
       loadDir: path.join(__dirname, '../fixtures/ts-app-inject')
     });
+
+    const origin = decs.getClassMetadata;
+
+    mm(decs, 'getClassMetadata', (key, target) => {
+      if (key === decs.CLASS_KEY_CONSTRUCTOR) {
+        throw new Error('mock error');
+      }
+      return origin(key, target);
+    });
+
+    const tt = container.get<TestCons>('testCons');
+    expect(tt.ts).gt(0);
+    mm.restore();
 
     const app = container.get('app') as App;
     expect(app.loader).not.to.be.undefined;
@@ -73,5 +88,27 @@ describe('/test/midwayContainer.test.ts', () => {
       expect(/"newKey" -> "b"/.test(newTree)).to.be.true;
     });
 
+  });
+
+  describe('lifecycle case', () => {
+    const container = new MidwayContainer();
+
+    it('lifecycle should be ok', async () => {
+      container.bind(TestBinding);
+      container.bind(LifeCycleTest);
+      container.bind(LifeCycleTest1);
+
+      expect(container.isReady).false;
+      await container.ready();
+      expect(container.isReady).true;
+
+      const aa = await container.getAsync<LifeCycleTest>('lifeCycleTest');
+      expect(aa.ts).eq('hello');
+      expect(aa.ready).true;
+
+      const aa1 = await container.getAsync<LifeCycleTest1>('lifeCycleTest1');
+      expect(aa1.tts).eq('hello');
+      expect(aa1.ready).true;
+    });
   });
 });

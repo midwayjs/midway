@@ -1,12 +1,10 @@
 import 'reflect-metadata';
 import { ObjectDefinitionOptions,
   ObjectIdentifier,
-  classNamed,
-  OBJ_DEF_CLS,
-  TAGGED,
-  TAGGED_CLS,
-  TAGGED_PROP
-} from '@midwayjs/decorator';
+  getConstructorInject,
+  getObjectDefProps,
+  TAGGED_PROP,
+  getProviderId} from '@midwayjs/decorator';
 import { IContainer } from '../interface';
 import { ObjectDefinition } from '../definitions/objectDefinition';
 import { ManagedReference, ManagedValue } from './managed';
@@ -50,7 +48,7 @@ export class Container extends BaseApplicationContext implements IContainer {
     debug(`=> bind and build definition, id = [${definition.id}]`);
 
     // inject constructArgs
-    const constructorMetaData = Reflect.getMetadata(TAGGED, target);
+    const constructorMetaData = getConstructorInject(target);
     if (constructorMetaData) {
       debug(`   register inject constructor length = ${target[ 'length' ]}`);
       const maxLength = Math.max.apply(null, Object.keys(constructorMetaData));
@@ -103,7 +101,7 @@ export class Container extends BaseApplicationContext implements IContainer {
 
   registerCustomBinding(objectDefinition: ObjectDefinition, target: any) {
     // @async, @init, @destroy @scope
-    const objDefOptions: ObjectDefinitionOptions = Reflect.getMetadata(OBJ_DEF_CLS, target);
+    const objDefOptions: ObjectDefinitionOptions = getObjectDefProps(target);
 
     this.convertOptionsToDefinition(objDefOptions, objectDefinition);
   }
@@ -173,11 +171,6 @@ export class Container extends BaseApplicationContext implements IContainer {
   }
 
   protected getIdentifier(target: any) {
-    const metaData = Reflect.getOwnMetadata(TAGGED_CLS, target);
-    if (metaData) {
-      return metaData.id;
-    } else {
-      return classNamed(target.name);
-    }
+    return getProviderId(target);
   }
 }

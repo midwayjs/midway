@@ -10,13 +10,15 @@ import {
   ObjectDefinitionOptions,
   ObjectIdentifier,
   ScopeEnum,
-  PIPELINE_IDENTIFIER
+  PIPELINE_IDENTIFIER,
+  listModule,
+  LIFECYCLE_KEY
 } from '@midwayjs/decorator';
 import * as is from 'is-type-of';
 import { join } from 'path';
 import { ContainerConfiguration } from './configuration';
 import { FUNCTION_INJECT_KEY, MidwayHandlerKey } from '../common/constants';
-import { IConfigService, IEnvironmentService, IMidwayContainer, IApplicationContext, MAIN_MODULE_KEY, IContainerConfiguration } from '../interface';
+import { IConfigService, IEnvironmentService, IMidwayContainer, IApplicationContext, MAIN_MODULE_KEY, IContainerConfiguration, ILifeCycle } from '../interface';
 import { MidwayConfigService } from '../service/configService';
 import { MidwayEnvironmentService } from '../service/environmentService';
 import { Container } from './container';
@@ -60,7 +62,6 @@ export class MidwayContainer extends Container implements IMidwayContainer {
   init(): void {
     this.handlerMap = new Map();
     this.initService();
-    super.init();
 
     this.registerEachCreatedHook();
     // 防止直接从applicationContext.getAsync or get对象实例时依赖当前上下文信息出错
@@ -127,8 +128,8 @@ export class MidwayContainer extends Container implements IMidwayContainer {
       const fileResults = globby.sync(
         DEFAULT_PATTERN.concat(opts.pattern || []),
         {
-          cwd: dir,
           followSymbolicLinks: false,
+          cwd: dir,
           ignore: DEFAULT_IGNORE_PATTERN.concat(opts.ignore || []),
           suppressErrors: true
         }
@@ -390,6 +391,9 @@ export class MidwayContainer extends Container implements IMidwayContainer {
       // 加载配置
       await this.configService.load();
     }
+
+    // 增加 lifecycle 支持
+    await this.loadAndReadyLifeCycles();
   }
   /**
    * 注册 importObjects
@@ -413,5 +417,16 @@ export class MidwayContainer extends Container implements IMidwayContainer {
     // 默认加载 pipeline
     this.bindModule(pipelineFactory);
     this.midwayIdentifiers.push(PIPELINE_IDENTIFIER);
+  }
+
+  private async loadAndReadyLifeCycles() {
+    const cycles = listModule(LIFECYCLE_KEY);
+    debug('load lifecycle length => %s.', cycles && cycles.length);
+    for (const cycle of cycles) {
+      const providerId = getProviderId(cycle);
+      debug('ready lifecycle id => %s.', providerId);
+      const inst = await this.getAsync<ILifeCycle>(providerId);
+      await inst.onReady();
+    }
   }
 }

@@ -8,9 +8,9 @@ import {
  * 生命周期定义
  */
 export interface ILifeCycle {
-  onStart(): Promise<void>;
+  onStart?(): Promise<void>;
   onReady(): Promise<void>;
-  onStop(): Promise<void>;
+  onStop?(): Promise<void>;
 }
 
 export type Locale = string;
@@ -140,8 +140,6 @@ export interface IApplicationContext extends IObjectFactory {
   messageSource: IMessageSource;
   dependencyMap: Map<string, ObjectDependencyTree>;
   ready(): Promise<void>;
-  addLifeCycle(lifeCycle: ILifeCycle): void;
-  removeLifeCycle(lifeCycle: ILifeCycle): void;
   stop(): Promise<void>;
   dumpDependency(): void;
 }

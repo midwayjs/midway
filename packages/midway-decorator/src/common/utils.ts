@@ -1,8 +1,9 @@
 import { getParamNames, getClassMetadata, saveClassMetadata } from './decoratorManager';
-import { CLASS_KEY_CONSTRUCTOR, OBJ_DEF_CLS, TAGGED, TAGGED_PROP} from './constant';
-import { ObjectDefinitionOptions, TagPropsMetadata, ReflectResult } from '../interface';
-import { DUPLICATED_METADATA, INVALID_DECORATOR_OPERATION } from './errMsg';
+import { CLASS_KEY_CONSTRUCTOR, OBJ_DEF_CLS, TAGGED, TAGGED_PROP, TAGGED_CLS, INJECT_TAG} from './constant';
+import { TagPropsMetadata, ReflectResult, ObjectIdentifier, ObjectDefinitionOptions } from '../interface';
+import { DUPLICATED_METADATA, INVALID_DECORATOR_OPERATION, DUPLICATED_INJECTABLE_DECORATOR } from './errMsg';
 import camelcase = require('camelcase');
+import { Metadata } from './metadata';
 
 function _tagParameterOrProperty(
   metadataKey: string,
@@ -45,31 +46,6 @@ function _tagParameterOrProperty(
   Reflect.defineMetadata(metadataKey, paramsOrPropertiesMetadata, annotationTarget);
 }
 
-export function tagParameter(
-  annotationTarget: any,
-  propertyName: string,
-  parameterIndex: number,
-  metadata: TagPropsMetadata
-) {
-  _tagParameterOrProperty(TAGGED, annotationTarget, propertyName, metadata, parameterIndex);
-}
-
-export function tagProperty(
-  annotationTarget: any,
-  propertyName: string,
-  metadata: TagPropsMetadata
-) {
-  _tagParameterOrProperty(TAGGED_PROP, annotationTarget.constructor, propertyName, metadata);
-}
-
-export function initOrGetObjectDefProps(target): ObjectDefinitionOptions {
-  const result = Reflect.hasMetadata(OBJ_DEF_CLS, target);
-  if (!result) {
-    Reflect.defineMetadata(OBJ_DEF_CLS, {}, target);
-  }
-  return Reflect.getMetadata(OBJ_DEF_CLS, target);
-}
-
 export function attachConstructorDataOnClass(identifier, clz, type, index) {
 
   if (!identifier) {
@@ -96,4 +72,102 @@ export function attachConstructorDataOnClass(identifier, clz, type, index) {
  */
 export function classNamed(name: string) {
   return camelcase(name);
+}
+
+interface InjectOptions {
+  identifier: ObjectIdentifier;
+  target: any;
+  targetKey: string;
+  index?: number;
+  args?: any;
+}
+/**
+ * 构造器注入
+ * @param opts 参数
+ */
+export function saveConstructorInject(opts: InjectOptions) {
+  let identifier = opts.identifier;
+  if (!identifier) {
+    const args = getParamNames(opts.target);
+    if (opts.target.length === args.length && opts.index < opts.target.length) {
+      identifier = args[opts.index];
+    }
+  } else if (identifier.includes('@') && !identifier.includes(':')) {
+    const args = getParamNames(opts.target);
+    if (opts.target.length === args.length && opts.index < opts.target.length) {
+      identifier = `${identifier}:${args[opts.index]}`;
+    }
+  }
+  const metadata = new Metadata(INJECT_TAG, identifier);
+  metadata.args = opts.args;
+  _tagParameterOrProperty(TAGGED, opts.target, opts.targetKey, metadata, opts.index);
+}
+
+export function getConstructorInject(target: any): TagPropsMetadata[] {
+  return Reflect.getMetadata(TAGGED, target);
+}
+/**
+ * 属性注入
+ * @param opts 参数
+ */
+export function savePropertyInject(opts: InjectOptions) {
+  let identifier = opts.identifier;
+  if (!identifier) {
+    identifier = opts.targetKey;
+  }
+  if (identifier.includes('@') && !identifier.includes(':')) {
+    identifier = `${identifier}:${opts.targetKey}`;
+  }
+  const metadata = new Metadata(INJECT_TAG, identifier);
+  metadata.args = opts.args;
+  _tagParameterOrProperty(TAGGED_PROP, opts.target.constructor, opts.targetKey, metadata);
+}
+
+export function getPropertyInject(target: any): TagPropsMetadata[] {
+  return Reflect.getMetadata(TAGGED_PROP, target);
+}
+/**
+ * class 元数据定义
+ * @param target class
+ * @param props 属性
+ */
+export function saveObjectDefProps(target: any, props: object = {}) {
+  if (Reflect.hasMetadata(OBJ_DEF_CLS, target)) {
+    const originProps = Reflect.getMetadata(OBJ_DEF_CLS, target);
+
+    Reflect.defineMetadata(OBJ_DEF_CLS, Object.assign(originProps, props), target);
+  } else {
+    Reflect.defineMetadata(OBJ_DEF_CLS, props, target);
+  }
+  return target;
+}
+
+export function getObjectDefProps(target: any): ObjectDefinitionOptions {
+  return Reflect.getMetadata(OBJ_DEF_CLS, target);
+}
+/**
+ * class provider id
+ * @param identifier id
+ * @param target class
+ * @param override 是否覆盖
+ */
+export function saveProviderId(identifier: ObjectIdentifier, target: any, override?: boolean) {
+  if (Reflect.hasOwnMetadata(TAGGED_CLS, target) && !override) {
+    throw new Error(DUPLICATED_INJECTABLE_DECORATOR);
+  }
+
+  if (!identifier) {
+    identifier = classNamed(target.name);
+  }
+
+  Reflect.defineMetadata(TAGGED_CLS, {
+    id: identifier,
+    originName: target.name,
+  }, target);
+
+  if (!Reflect.hasMetadata(OBJ_DEF_CLS, target)) {
+    Reflect.defineMetadata(OBJ_DEF_CLS, {}, target);
+  }
+
+  return target;
 }

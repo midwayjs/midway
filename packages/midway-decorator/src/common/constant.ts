@@ -2,6 +2,7 @@
 export const PRIORITY_KEY = 'priority';
 export const SCHEDULE_KEY = 'schedule';
 export const CONFIGURATION_KEY = 'configuration';
+export const LIFECYCLE_KEY = 'lifecycle';
 
 // faas
 export const FUNC_KEY = 'func';
