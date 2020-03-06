@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.41](https://github.com/midwayjs/midway-faas/compare/v0.2.40...v0.2.41) (2020-03-06)
+
+
+### Features
+
+* command core store ([#72](https://github.com/midwayjs/midway-faas/issues/72)) ([10e68a9](https://github.com/midwayjs/midway-faas/commit/10e68a9a1cf096628eabb7b2b3f2c34dbdd14f3a))
+
+
+
+
+
 ## [0.2.40](https://github.com/midwayjs/midway-faas/compare/v0.2.39...v0.2.40) (2020-03-02)
 
 **Note:** Version bump only for package @midwayjs/fcli-plugin-invoke
