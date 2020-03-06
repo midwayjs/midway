@@ -1,0 +1,16 @@
+# Change Log
+
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+# [2.0.0-beta.15](https://github.com/midwayjs/midway/compare/v2.0.0-beta.14...v2.0.0-beta.15) (2020-03-06)
+
+
+### Bug Fixes
+
+* merge bug ([7f41fc9](https://github.com/midwayjs/midway/commit/7f41fc94adf1fc9e4465c5aefdf94346184e1efc))
+
+
+### Features
+
+* feat(eslint-midway-contrib): add pkg for js and ts ([#397](https://github.com/midwayjs/midway/issues/397)) ([3b404a5](https://github.com/midwayjs/midway/commit/3b404a5ed92e6843766634b78db1aa6f321191d8))

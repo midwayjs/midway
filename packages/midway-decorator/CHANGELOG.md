@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.15](https://github.com/midwayjs/midway/compare/v2.0.0-beta.14...v2.0.0-beta.15) (2020-03-06)
+
+
+### Bug Fixes
+
+* merge bug ([7f41fc9](https://github.com/midwayjs/midway/commit/7f41fc94adf1fc9e4465c5aefdf94346184e1efc))
+
+
+### Features
+
+* 2.x lifecycle ([#414](https://github.com/midwayjs/midway/issues/414)) ([7313ab8](https://github.com/midwayjs/midway/commit/7313ab804091fd410b1b3118ea41f18cf05fb01f))
+
+
+
+
+
 # [2.0.0-beta.14](https://github.com/midwayjs/midway/compare/v2.0.0-beta.13...v2.0.0-beta.14) (2020-03-04)
 
 

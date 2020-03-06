@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.15](https://github.com/midwayjs/midway/compare/v2.0.0-beta.14...v2.0.0-beta.15) (2020-03-06)
+
+
+### Bug Fixes
+
+* disable follow symbolic link ([#413](https://github.com/midwayjs/midway/issues/413)) ([99c30d7](https://github.com/midwayjs/midway/commit/99c30d72ae25001c17372ddd9981b6710af3a3a7))
+* merge bug ([7f41fc9](https://github.com/midwayjs/midway/commit/7f41fc94adf1fc9e4465c5aefdf94346184e1efc))
+* modified configuration load logic ([#415](https://github.com/midwayjs/midway/issues/415)) ([6e77d36](https://github.com/midwayjs/midway/commit/6e77d3624ed407893b8df1937482bef044b1f36b))
+
+
+### Features
+
+* 2.x lifecycle ([#414](https://github.com/midwayjs/midway/issues/414)) ([7313ab8](https://github.com/midwayjs/midway/commit/7313ab804091fd410b1b3118ea41f18cf05fb01f))
+* MidwayRequestContainer 增加泛型标注 ([#407](https://github.com/midwayjs/midway/issues/407)) ([b206035](https://github.com/midwayjs/midway/commit/b20603577a99f31ece9720d5f7893c2af7905887))
+
+
+
+
+
 # [2.0.0-beta.14](https://github.com/midwayjs/midway/compare/v2.0.0-beta.13...v2.0.0-beta.14) (2020-03-04)
 
 
