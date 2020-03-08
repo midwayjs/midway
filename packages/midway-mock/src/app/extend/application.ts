@@ -1,19 +1,32 @@
 import { MockApplication } from 'egg-mock';
-import { ApplicationContext } from 'injection';
+import { ApplicationContext, IApplicationContext } from 'injection';
 
-interface Application extends MockApplication {
-  applicationContext: ApplicationContext;
+
+export interface MidwayMockApplication extends MockApplication {
+  applicationContext: ApplicationContext
+  pluginContext: IApplicationContext
+  appDir: string
+  baseDir: string
+  enablePlugins: any
+  getApplicationContext(): IApplicationContext
+  getPluginContext(): IApplicationContext
+  getPlugin(pluginName: string): any
+  getLogger(name?: string): any
+  getConfig(key?: string): any
   _mockFn(
     service: string,
     methodName: string,
-    fn: () => any): void;
+    /** {Object|Function|Error} - mock you data */
+    fnOrData: any,
+  ): void
+  mockClassFunction: typeof mockClassFunction
 }
 
 export function mockClassFunction(
-  this: Application,
+  this: MidwayMockApplication,
   className: string,
   methodName: string,
-  fn: () => any,
+  fnOrData: any,
 ): void {
 
   const { applicationContext } = this;
@@ -24,7 +37,7 @@ export function mockClassFunction(
   } else {
     const clazz = def.path;
     if (clazz && typeof clazz === 'function') {
-      this._mockFn(clazz.prototype, methodName, fn);
+      this._mockFn(clazz.prototype, methodName, fnOrData);
     }
   }
 }
