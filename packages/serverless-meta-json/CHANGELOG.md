@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.44](https://github.com/midwayjs/midway-faas/compare/v0.2.43...v0.2.44) (2020-03-10)
+
+
+### Bug Fixes
+
+* no domainName , gateway is null ([#75](https://github.com/midwayjs/midway-faas/issues/75)) ([0809eb4](https://github.com/midwayjs/midway-faas/commit/0809eb4454ed27b45fcdb6e6b69d95e71d29574e))
+
+
+
+
+
 ## [0.2.41](https://github.com/midwayjs/midway-faas/compare/v0.2.40...v0.2.41) (2020-03-06)
 
 
