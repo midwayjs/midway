@@ -88,6 +88,7 @@ describe('/test/package.test.ts', () => {
     assert(existsSync(join(buildPath, 'package.json')));
     assert(existsSync(join(buildPath, 'tsconfig.json')));
     assert(existsSync(join(buildPath, 'a.json')));
+    assert(existsSync(join(buildPath, 'app/test.js')));
     assert(!existsSync(join(buildPath, 'b.json')));
     assert(existsSync(join(baseDir, 'path/to/my-artifact.zip')));
 

@@ -200,7 +200,9 @@ export class PackagePlugin extends BasePlugin {
         this.options.sourceDir || 'src',
         '*.yml',
         '*.js',
-        '*.json'
+        '*.json',
+        'app',
+        'config'
       ].concat(packageObj.include || []),
       { cwd: this.servicePath }
     );
