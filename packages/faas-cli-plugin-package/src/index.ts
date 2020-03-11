@@ -99,6 +99,7 @@ export class PackagePlugin extends BasePlugin {
     'package:installDep': this.installDep.bind(this),
     'package:package': this.package.bind(this),
     'before:package:finalize': this.finalize.bind(this),
+    'after:package:finalize': this.afterFinalize.bind(this),
     'package:tscompile': this.tsCompile.bind(this),
   };
 
@@ -136,6 +137,8 @@ export class PackagePlugin extends BasePlugin {
         this.options.sourceDir &&
         join(this.servicePath, this.options.sourceDir),
     });
+    this.setStore('codeAnalyzeResult', this.codeAnalyzeResult);
+    this.core.debug('codeAnalyzeResult', this.codeAnalyzeResult);
     this.core.cli.log(`Information`);
     this.core.cli.log(` - BaseDir: ${this.servicePath}`);
     this.core.cli.log(` - AnalyzeResult`);
@@ -604,6 +607,12 @@ export class PackagePlugin extends BasePlugin {
   finalize() {
     if (this.cacheSpec) {
       writeFileSync(this.cacheSpec.specFile.path, this.cacheSpec.specData);
+    }
+  }
+
+  afterFinalize() {
+    if (!this.options.skipExit) {
+      process.exit();
     }
   }
 }

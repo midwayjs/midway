@@ -2,25 +2,34 @@ const urllib = require('urllib');
 const WebSocketClient = require('websocket').client;
 import * as globby from 'globby';
 import { tmpdir } from 'os';
-import { existsSync, readFileSync, remove, unlinkSync, writeFileSync } from 'fs-extra';
+import {
+  existsSync,
+  readFileSync,
+  remove,
+  unlinkSync,
+  writeFileSync,
+} from 'fs-extra';
 import { join, resolve } from 'path';
 // 传输大数据
 const maxSize = 0xf00;
 export function send(key, data) {
   const stringifyData = data && JSON.stringify(data);
   if (stringifyData && stringifyData.length >= maxSize) {
-    const pathId = resolve(tmpdir(), 'trsd_' + key + (Date.now() + '' + Math.random()).replace(/[^0-9]/, '_'));
+    const pathId = resolve(
+      tmpdir(),
+      'trsd_' + key + (Date.now() + '' + Math.random()).replace(/[^0-9]/, '_')
+    );
     writeFileSync(pathId, stringifyData);
     process.send({
       type: 'file',
       key,
-      id: pathId
+      id: pathId,
     });
   } else {
     process.send({
       type: 'data',
       key,
-      data
+      data,
     });
   }
 }
@@ -59,7 +68,9 @@ export function getWssUrl(port, type?: string, isThrowErr?: boolean) {
         } else {
           const debugInfo = JSON.parse(data.toString());
           const url = debugInfo[0][type || 'webSocketDebuggerUrl'] || '';
-          resolve(url.replace('js_app.html?experiments=true&', 'inspector.html?'));
+          resolve(
+            url.replace('js_app.html?experiments=true&', 'inspector.html?')
+          );
         }
       });
     }, 300);
@@ -71,7 +82,7 @@ function debugWs(addr) {
   const cbMap = {};
   return new Promise(resolve => {
     const client = new WebSocketClient();
-    client.on('connect', function (connection) {
+    client.on('connect', function(connection) {
       connection.on('message', message => {
         if (message.utf8Data) {
           const data = JSON.parse(message.utf8Data);
@@ -126,7 +137,7 @@ export const exportMidwayFaaS = (() => {
     try {
       return require(midwayModuleName);
     } catch (e) {
-      return { FaaSStarter: class DefaulltMidwayFaasStarter {}};
+      return { FaaSStarter: class DefaulltMidwayFaasStarter {} };
     }
   }
 })();
@@ -141,7 +152,11 @@ export const cleanTarget = async (p: string) => {
 
 // 符合sourceGlob条件的文件中 是否存在 比所有符合toGlob条件的文件 要新的文件
 // 返回 fromGlob 中更新的文件
-export const compareFileChange = async (fromGlob: string[], toGlob: string[], options?: any) => {
+export const compareFileChange = async (
+  fromGlob: string[],
+  toGlob: string[],
+  options?: any
+) => {
   options = options || {};
   if (!options.cwd) {
     options.cwd = process.cwd();
