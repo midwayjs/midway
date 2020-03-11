@@ -202,7 +202,7 @@ export class PackagePlugin extends BasePlugin {
         '*.js',
         '*.json',
         'app',
-        'config'
+        'config',
       ].concat(packageObj.include || []),
       { cwd: this.servicePath }
     );
@@ -325,6 +325,9 @@ export class PackagePlugin extends BasePlugin {
     this.core.cli.log('Building Midway FaaS directory files...');
     if (!isTsDir) {
       this.core.cli.log(' - Not found tsconfig.json and skip build');
+      return;
+    }
+    if (!this.codeAnalyzeResult.tsBuildRoot) {
       return;
     }
     if (this.options.ncc) {
@@ -521,7 +524,10 @@ export class PackagePlugin extends BasePlugin {
           if (aggregationConfig.functions) {
             isMatch = aggregationConfig.functions.indexOf(functionName) !== -1;
           } else if (aggregationConfig.functionsPattern) {
-            isMatch = micromatch.all(functionName, aggregationConfig.functionsPattern);
+            isMatch = micromatch.all(
+              functionName,
+              aggregationConfig.functionsPattern
+            );
           }
           if (isMatch) {
             matchedFuncName.push(functionName);
@@ -531,7 +537,8 @@ export class PackagePlugin extends BasePlugin {
         }
         allFuncNames = notMatchedFuncName;
 
-        handlers = matchedFuncName.map((functionName: string) => {
+        handlers = matchedFuncName
+          .map((functionName: string) => {
             const functions = this.core.service.functions;
             const func = functions[functionName];
             if (!func || !func.events) {
@@ -568,7 +575,8 @@ export class PackagePlugin extends BasePlugin {
 
       const allPaths = allAggred.map(aggre => aggre.path);
       let currentPath = commonPrefix(allPaths);
-      currentPath = currentPath && currentPath !== '/' ? `${currentPath}/*` : '/*';
+      currentPath =
+        currentPath && currentPath !== '/' ? `${currentPath}/*` : '/*';
       this.core.cli.log(
         ` - using path '${currentPath}' to deploy '${allPaths.join(`', '`)}'`
       );

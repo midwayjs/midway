@@ -98,11 +98,17 @@ export abstract class InvokeCore implements IInvoke {
       tsBuildRoot: debugRoot,
     });
     this.buildDir = this.codeAnalyzeResult.tsBuildRoot;
+    if (!this.codeAnalyzeResult.tsBuildRoot) {
+      return;
+    }
     const buildLogPath = resolve(this.buildDir, '.faasTSBuildTime.log');
     if (existsSync(buildLogPath)) {
       const fileChanges = await compareFileChange(
-        [ this.specFile, `${relative(baseDir, this.codeAnalyzeResult.tsCodeRoot)}/**/*` ],
-        [ buildLogPath ],
+        [
+          this.specFile,
+          `${relative(baseDir, this.codeAnalyzeResult.tsCodeRoot) || '.'}/**/*`,
+        ],
+        [buildLogPath],
         { cwd: baseDir }
       );
       if (!fileChanges || !fileChanges.length) {
