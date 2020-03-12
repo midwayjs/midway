@@ -650,9 +650,17 @@ export class ManagedResolverFactory {
           return true;
         }
         for (const key of keys) {
-          let subDefinition = this.context.registry.getDefinition(key);
+          let iden = key;
+          const ref: ManagedReference = definition.properties.get(key);
+          if (ref && ref.name) {
+            iden = ref.name;
+          }
+          if (iden === identifier) {
+            return true;
+          }
+          let subDefinition = this.context.registry.getDefinition(iden);
           if (!subDefinition && this.context.parent) {
-            subDefinition = this.context.parent.registry.getDefinition(key);
+            subDefinition = this.context.parent.registry.getDefinition(iden);
           }
           if (this.depthFirstSearch(identifier, subDefinition)) {
             return true;
