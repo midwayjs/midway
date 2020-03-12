@@ -28,7 +28,7 @@ import { childAsyncFunction,
   singletonFactory } from '../fixtures/fun_sample';
 import { DieselCar, DieselEngine, engineFactory, PetrolEngine } from '../fixtures/mix_sample';
 import { HelloSingleton, HelloErrorInitSingleton, HelloErrorSingleton } from '../fixtures/singleton_sample';
-import { CircularOne, CircularTwo, CircularThree, TestOne, TestTwo, TestThree } from '../fixtures/circular_dependency';
+import { CircularOne, CircularTwo, CircularThree, TestOne, TestTwo, TestThree, TestOne1, TestTwo1, TestThree1 } from '../fixtures/circular_dependency';
 import { ManagedValue } from '../../src/context/managed';
 import { VALUE_TYPE } from '../../src';
 
@@ -316,9 +316,8 @@ describe('/test/context/container.test.ts', () => {
   });
 
   describe('circular dependency', () => {
-    const container = new Container();
-
     it('circular should be ok', async () => {
+      const container = new Container();
       container.registerObject('ctx', {});
 
       container.bind(CircularOne);
@@ -344,6 +343,29 @@ describe('/test/context/container.test.ts', () => {
       expect(circularOneSync.test1).eq('this is one');
       expect(circularTwoSync.ttest2('try ttest2')).eq('try ttest2twoone');
       expect(await circularTwoSync.ctest2('try ttest2')).eq('try ttest2twoone');
+    });
+
+    it('alias circular should be ok', async () => {
+      const container = new Container();
+      container.registerObject('ctx', {});
+
+      container.bind(TestOne1);
+      container.bind(TestTwo1);
+      container.bind(TestThree1);
+      container.bind(CircularOne);
+      container.bind(CircularTwo);
+      container.bind(CircularThree);
+
+      const circularTwo: CircularTwo = await container.getAsync(CircularTwo);
+      expect(circularTwo.test2).eq('this is two');
+      expect((circularTwo.circularOne as CircularOne).test1).eq('this is one');
+      expect(((circularTwo.circularOne as CircularOne).circularTwo as CircularTwo).test2).eq('this is two');
+
+      const one = await container.getAsync<TestOne1>(TestOne1);
+      expect(one).not.null;
+      expect(one).not.undefined;
+      expect(one.name).eq('one');
+      expect((one.two as TestTwo1).name).eq('two');
     });
   });
 

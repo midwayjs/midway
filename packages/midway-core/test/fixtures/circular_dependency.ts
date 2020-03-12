@@ -1,6 +1,26 @@
 import {Provide, Inject, Scope} from '@midwayjs/decorator';
 import { ScopeEnum } from '../../src';
+@Provide()
+export class TestOne1 {
+  name = 'one';
 
+  @Inject('testTwo1')
+  two: any;
+}
+@Provide()
+export class TestTwo1 {
+  name = 'two';
+
+  @Inject('testOne1')
+  testOne: any;
+}
+@Provide()
+export class TestThree1 {
+  name = 'three';
+
+  @Inject('testTwo1')
+  two: any;
+}
 @Provide()
 @Scope(ScopeEnum.Request)
 export class CircularTwo {
