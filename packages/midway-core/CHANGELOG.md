@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-beta.16](https://github.com/midwayjs/midway/compare/v2.0.0-beta.15...v2.0.0-beta.16) (2020-03-12)
+
+
+### Bug Fixes
+
+* 修复循环引用bug ([#419](https://github.com/midwayjs/midway/issues/419)) ([8852c6c](https://github.com/midwayjs/midway/commit/8852c6c55de8975aea3df2978bf50425378379e6))
+
+
+
+
+
 # [2.0.0-beta.15](https://github.com/midwayjs/midway/compare/v2.0.0-beta.14...v2.0.0-beta.15) (2020-03-06)
 
 
