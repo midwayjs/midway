@@ -25,7 +25,7 @@ export class MidwayRequestContainer extends MidwayContainer {
     this.registerObject('logger', ctx.logger);
   }
 
-  get<T = any>(identifier: any, args?: any) :T {
+  get<T = any>(identifier: any, args?: any): T {
     if (typeof identifier !== 'string') {
       identifier = this.getIdentifier(identifier);
     }
@@ -43,7 +43,7 @@ export class MidwayRequestContainer extends MidwayContainer {
     }
   }
 
-  async getAsync<T = any>(identifier: any, args?: any) :Promise<T> {
+  async getAsync<T = any>(identifier: any, args?: any): Promise<T> {
     if (typeof identifier !== 'string') {
       identifier = this.getIdentifier(identifier);
     }

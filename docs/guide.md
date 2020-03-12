@@ -210,11 +210,14 @@ export class UserController {
   @inject('userService')
   service: IUserService;
 
+  @inject()
+  ctx;
+
   @get('/:id')
-  async getUser(ctx): Promise<void> {
-    const id: number = ctx.params.id;
+  async getUser(): Promise<void> {
+    const id: number = this.ctx.params.id;
     const user: IUserResult = await this.service.getUser({id});
-    ctx.body = {success: true, message: 'OK', data: user};
+    this.ctx.body = {success: true, message: 'OK', data: user};
   }
 }
 
@@ -237,7 +240,7 @@ midway 针对 web 请求，提供了和 koa-router 对应的方法装饰器，�
 * @head
 * @all
 
-这几个装饰器用于修饰不同的异步方法，同时对应到了 koa-router 的相应的方法。和原有提供的控制器一样，每个控制器都为异步方法，参数为 koa 上下文。
+这几个装饰器用于修饰不同的异步方法，同时对应到了 koa-router 的相应的方法。和原有提供的控制器一样，每个控制器都为异步方法，默认参数为 koa 上下文。
 
 ```typescript
 @get('/:id')
@@ -245,7 +248,6 @@ async getUser(ctx): Promise<void> {
     // TODO ctx...
 }
 ```
-
 
 ### 路由绑定
 
@@ -446,6 +448,25 @@ export class My {
 ## 框架增强注入
 
 midway 默认使用 [injection](http://web.npm.alibaba-inc.com/package/injection) 这个包来做依赖注入，虽然 `@inject` 装饰器能满足大多数业务的需求，但是对于框架来说，还有需要扩展和使用的地方，比如插件，配置等等。
+
+### 框架默认注入
+
+在默认情况下，框架会注入一些属性，方便开发，这些属性都能通过 `@inject` 装饰器来注入。
+
+```ts
+@inject()
+appDir; // 当前项目的根目录
+
+@inject()
+baseDir;  // 当前项目基础目录 src 或者 dist，绝对路径
+
+@inject()
+ctx; // 请求作用域，koa ctx
+
+@inject()
+logger; // 请求作用域，ContextLogger
+```
+
 
 ### 注入插件
 

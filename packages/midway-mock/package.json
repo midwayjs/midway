@@ -1,6 +1,6 @@
 {
   "name": "midway-mock",
-  "version": "1.17.1",
+  "version": "1.18.0",
   "eggPlugin": {
     "name": "midway-mock"
   },
