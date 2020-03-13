@@ -21,6 +21,5 @@ jobs:
     - run: npm run bootstrap
     - run: npm run build --if-present
     - run: npm run cov
-    - run: npx codecov
-      env:
-        CI: true
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1
