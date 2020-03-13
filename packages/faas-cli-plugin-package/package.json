@@ -1,10 +1,10 @@
 {
   "name": "@midwayjs/fcli-plugin-package",
-  "version": "0.2.47",
+  "version": "0.2.48",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/faas-util-ts-compile": "^0.2.37",
+    "@midwayjs/faas-util-ts-compile": "^0.2.48",
     "@midwayjs/fcli-command-core": "^0.2.41",
     "@midwayjs/locate": "^1.0.3",
     "archiver": "^3.1.1",
