@@ -17,9 +17,9 @@ export const WEB_ROUTER_PARAM_KEY = 'web:router_param';
 export const HSF_KEY = 'rpc:hsf';
 
 // framework
-export const CONFIG_KEY = 'framework:config';
-export const PLUGIN_KEY = 'framework:plugin';
-export const LOGGER_KEY = 'framework:logger';
+export const CONFIG_KEY = 'config';
+export const PLUGIN_KEY = 'plugin';
+export const LOGGER_KEY = 'logger';
 
 ////////////////////////////////////////// inject keys
 // constructor key
