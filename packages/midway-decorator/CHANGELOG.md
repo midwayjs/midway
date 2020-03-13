@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.1](https://github.com/midwayjs/midway/compare/v2.0.0...v2.0.1) (2020-03-13)
+
+
+### Features
+
+* add hsf decorator ([#421](https://github.com/midwayjs/midway/issues/421)) ([d5afed3](https://github.com/midwayjs/midway/commit/d5afed3ace4e3570b29a2c789b2683f0cd4fd697))
+
+
+
+
+
 # [2.0.0](https://github.com/midwayjs/midway/compare/v2.0.0-beta.16...v2.0.0) (2020-03-13)
 
 **Note:** Version bump only for package @midwayjs/decorator
