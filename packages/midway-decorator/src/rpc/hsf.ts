@@ -1,14 +1,14 @@
 import { ScopeEnum, saveClassMetadata, saveModule, HSF_KEY } from '../common';
 import { Scope } from '../annotation';
 
-export interface HsfOpts {
+export interface HSFOpts {
   interfaceName?: string;
   version?: string;
   group?: string;
   namespace?: string;
 }
 
-export function hsf(hsfOption: HsfOpts = {}): ClassDecorator {
+export function HSF(hsfOption: HSFOpts = {}): ClassDecorator {
   return (target: any) => {
     saveModule(HSF_KEY, target);
     saveClassMetadata(HSF_KEY, hsfOption, target);
