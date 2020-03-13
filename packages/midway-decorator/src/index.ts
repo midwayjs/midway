@@ -6,6 +6,7 @@ export * from './faas/handler';
 export * from './web/requestMapping';
 export * from './web/paramMapping';
 export * from './web/controller';
+export * from './rpc/hsf';
 export * from './framework/config';
 export * from './framework/logger';
 export * from './framework/plugin';
