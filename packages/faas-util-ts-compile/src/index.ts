@@ -1,15 +1,19 @@
 import { join, relative, resolve } from 'path';
 import { readFileSync, existsSync } from 'fs-extra';
 import { BuildCommand } from 'midway-bin';
+export * from './utils';
 import { combineTsConfig } from './utils';
 
-export const tsIntegrationProjectCompile = async (baseDir, options: {
-  buildRoot: string;
-  tsCodeRoot: string;
-  incremental: boolean;
-  tsConfig?: any; // 临时的ts配置
-  clean: boolean;
-}) => {
+export const tsIntegrationProjectCompile = async (
+  baseDir,
+  options: {
+    buildRoot: string;
+    tsCodeRoot: string;
+    incremental: boolean;
+    tsConfig?: any; // 临时的ts配置
+    clean: boolean;
+  }
+) => {
   const tsConfig = await tsCompile(baseDir, {
     tsConfig: options.tsConfig,
     clean: options.clean,
@@ -30,19 +34,11 @@ export const tsIntegrationProjectCompile = async (baseDir, options: {
         pretty: true,
         declaration: true,
         jsx: 'react',
-        outDir: relative(
-          baseDir,
-          join(options.buildRoot, 'dist')
-        ),
+        outDir: relative(baseDir, join(options.buildRoot, 'dist')),
       },
-      include: [
-        `${relative(
-          baseDir,
-          options.tsCodeRoot
-        )}/**/*`
-      ],
+      include: [`${relative(baseDir, options.tsCodeRoot)}/**/*`],
       exclude: ['dist', 'node_modules', 'test'],
-    }
+    },
   });
   return tsConfig;
 };
@@ -55,21 +51,31 @@ export const tsIntegrationProjectCompile = async (baseDir, options: {
  * @param options.tsConfigName tsconfig.json 名
  * @param options.clean 是否在构建前清理
  */
-export const tsCompile = async (baseDir: string, options: {
-  tsConfigName?: string;
-  clean?: boolean;
-  innerTsConfig?: any;
-  tsConfig?: any; // extra tsconfig
-  incremental?: boolean;
-} = {}) => {
+export const tsCompile = async (
+  baseDir: string,
+  options: {
+    tsConfigName?: string;
+    clean?: boolean;
+    innerTsConfig?: any;
+    tsConfig?: any; // extra tsconfig
+    incremental?: boolean;
+  } = {}
+) => {
   const builder = new BuildCommand();
   let tsJson = null;
   if (options.tsConfigName) {
     try {
-      tsJson = JSON.parse(readFileSync(resolve(baseDir, options.tsConfigName)).toString());
+      tsJson = JSON.parse(
+        readFileSync(resolve(baseDir, options.tsConfigName)).toString()
+      );
     } catch (e) {}
   }
-  const tsConfig = combineTsConfig({}, options.innerTsConfig, options.tsConfig, tsJson);
+  const tsConfig = combineTsConfig(
+    {},
+    options.innerTsConfig,
+    options.tsConfig,
+    tsJson
+  );
 
   if (tsConfig.compilerOptions) {
     if (tsConfig.compilerOptions.inlineSourceMap) {
@@ -81,9 +87,15 @@ export const tsCompile = async (baseDir: string, options: {
     if (tsConfig.compilerOptions.incremental) {
       let tsBuildInfoFile = '';
       if (tsConfig.compilerOptions.outDir) {
-        tsBuildInfoFile = resolve(baseDir, tsConfig.compilerOptions.outDir, '.tsbuildinfo');
+        tsBuildInfoFile = resolve(
+          baseDir,
+          tsConfig.compilerOptions.outDir,
+          '.tsbuildinfo'
+        );
       } else {
-        const tmpDir = ['build', 'dist'].find(dirName => existsSync(resolve(baseDir, dirName)));
+        const tmpDir = ['build', 'dist'].find(dirName =>
+          existsSync(resolve(baseDir, dirName))
+        );
         tsBuildInfoFile = resolve(tmpDir || baseDir, '.tsbuildinfo');
       }
       tsConfig.compilerOptions.tsBuildInfoFile = tsBuildInfoFile;
@@ -94,7 +106,7 @@ export const tsCompile = async (baseDir: string, options: {
     cwd: baseDir,
     argv: {
       clean: typeof options.clean === 'undefined' ? true : options.clean,
-      tsConfig
+      tsConfig,
     },
   });
 

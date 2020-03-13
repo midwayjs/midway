@@ -5,6 +5,7 @@
   "typings": "dist/index.d.ts",
   "dependencies": {
     "fs-extra": "^8.1.0",
+    "globby": "^10.0.1",
     "midway-bin": "beta"
   },
   "scripts": {

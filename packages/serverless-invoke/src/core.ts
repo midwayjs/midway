@@ -5,7 +5,7 @@
   2. tsc编译用户代码到dist目录
   3. 开源版: 【创建runtime、创建trigger】封装为平台invoke包，提供getInvoke方法，会传入args与入口方法，返回invoke方法
 */
-import { FaaSStarterClass, cleanTarget, compareFileChange } from './utils';
+import { FaaSStarterClass, cleanTarget } from './utils';
 import { join, resolve, relative } from 'path';
 import { existsSync, move, writeFileSync, ensureFileSync } from 'fs-extra';
 import { loadSpec, getSpecFile } from '@midwayjs/fcli-command-core';
@@ -14,6 +14,8 @@ import { AnalyzeResult, Locator } from '@midwayjs/locate';
 import {
   tsCompile,
   tsIntegrationProjectCompile,
+  compareFileChange,
+  copyFiles,
 } from '@midwayjs/faas-util-ts-compile';
 import { IInvoke } from './interface';
 
@@ -158,6 +160,7 @@ export abstract class InvokeCore implements IInvoke {
   }
 
   public async invoke(...args: any) {
+    await this.copyFile();
     await this.buildTS();
     const invoke = await this.getInvokeFunction();
     this.checkDebug();
@@ -184,6 +187,19 @@ export abstract class InvokeCore implements IInvoke {
     } catch (e) {
       this.invokeError(e);
     }
+  }
+
+  private async copyFile() {
+    const packageObj: any = this.spec.package || {};
+    return copyFiles({
+      sourceDir: this.baseDir,
+      targetDir: this.buildDir,
+      include: packageObj.include,
+      exclude: packageObj.exclude,
+      log: path => {
+        this.debug('copy file', path);
+      },
+    });
   }
 
   // 写入口

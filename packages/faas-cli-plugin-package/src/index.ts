@@ -17,12 +17,12 @@ import {
   writeFileSync,
   writeJSON,
 } from 'fs-extra';
-import * as globby from 'globby';
 import * as micromatch from 'micromatch';
 import { commonPrefix, formatLayers } from './utils';
 import {
   tsCompile,
   tsIntegrationProjectCompile,
+  copyFiles,
 } from '@midwayjs/faas-util-ts-compile';
 import { exec } from 'child_process';
 import * as archiver from 'archiver';
@@ -197,35 +197,17 @@ export class PackagePlugin extends BasePlugin {
     this.core.cli.log('Copy Files to build directory...');
     // copy packages config files
     const packageObj: any = this.core.service.package || {};
-    const include = await globby(
-      [
-        this.options.sourceDir || 'src',
-        '*.yml',
-        '*.js',
-        '*.json',
-        'app',
-        'config',
-      ].concat(packageObj.include || []),
-      { cwd: this.servicePath }
-    );
-    const exclude = await globby(packageObj.exclude || [], {
-      cwd: this.servicePath,
-    });
-    const paths = include.filter((filePath: string) => {
-      return exclude.indexOf(filePath) === -1;
-    });
-    if (paths.length) {
-      this.core.cli.log(` - Copy files`);
-    }
-    await Promise.all(
-      paths.map((path: string) => {
+    await copyFiles({
+      sourceDir: this.servicePath,
+      targetDir: this.midwayBuildPath,
+      include: [this.options.sourceDir || 'src'].concat(
+        packageObj.include || []
+      ),
+      exclude: packageObj.exclude,
+      log: path => {
         this.core.cli.log(`   ◎ Copy ${path}`);
-        return copy(
-          join(this.servicePath, path),
-          join(this.midwayBuildPath, path)
-        );
-      })
-    );
+      },
+    });
     if (this.codeAnalyzeResult.integrationProject) {
       await writeJSON(join(this.midwayBuildPath, 'package.json'), {
         name: this.codeAnalyzeResult.projectType,
