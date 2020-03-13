@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/definition",
-  "version": "2.0.0",
+  "version": "2.0.2",
   "description": "declare all midway dependencies by typescript definition",
   "typings": "dist/index.d.ts",
   "scripts": {
@@ -16,7 +16,7 @@
     "egg-logger": "^2.3.2"
   },
   "devDependencies": {
-    "midway-bin": "^2.0.0"
+    "midway-bin": "^2.0.2"
   },
   "keywords": [
     "midway",
