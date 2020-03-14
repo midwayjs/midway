@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/simple-lock",
-  "version": "0.2.27",
+  "version": "0.2.49",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "files": [

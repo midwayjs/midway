@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.49](https://github.com/midwayjs/midway-faas/compare/v0.2.48...v0.2.49) (2020-03-14)
+
+**Note:** Version bump only for package @midwayjs/serverless-meta-json
+
+
+
+
+
 ## [0.2.44](https://github.com/midwayjs/midway-faas/compare/v0.2.43...v0.2.44) (2020-03-10)
 
 
