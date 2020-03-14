@@ -7,7 +7,7 @@
     "@midwayjs/runtime-engine": "^0.2.27"
   },
   "devDependencies": {
-    "midway-bin": "beta"
+    "midway-bin": "^2.0.0"
   },
   "files": [
     "dist"

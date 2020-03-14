@@ -9,7 +9,7 @@
     "light-generator": "^1.3.2"
   },
   "devDependencies": {
-    "midway-bin": "beta"
+    "midway-bin": "^2.0.0"
   },
   "files": [
     "src",

@@ -6,7 +6,7 @@
   "dependencies": {
     "fs-extra": "^8.1.0",
     "globby": "^10.0.1",
-    "midway-bin": "beta"
+    "midway-bin": "^2.0.0"
   },
   "scripts": {
     "build": "npm run lint && midway-bin build -c",

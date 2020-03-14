@@ -7,7 +7,7 @@
     "dist"
   ],
   "devDependencies": {
-    "midway-bin": "beta"
+    "midway-bin": "^2.0.0"
   },
   "repository": {
     "type": "git",

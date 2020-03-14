@@ -7,7 +7,7 @@
     "@midwayjs/fcli-command-core": "^0.2.41"
   },
   "devDependencies": {
-    "midway-bin": "beta"
+    "midway-bin": "^2.0.0"
   },
   "files": [
     "src",

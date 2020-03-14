@@ -4,8 +4,8 @@
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/core": "beta",
-    "@midwayjs/decorator": "beta",
+    "@midwayjs/core": "^2.0.0",
+    "@midwayjs/decorator": "^2.0.0",
     "@midwayjs/simple-lock": "^0.2.27",
     "debug": "^4.1.1",
     "deep-eql": "^4.0.0",
@@ -17,7 +17,7 @@
     "src"
   ],
   "devDependencies": {
-    "midway-bin": "beta"
+    "midway-bin": "^2.0.0"
   },
   "license": "MIT",
   "scripts": {

@@ -11,7 +11,7 @@
     "fs-extra": "^8.1.0",
     "globby": "^10.0.1",
     "micromatch": "^4.0.2",
-    "midway-bin": "beta"
+    "midway-bin": "^2.0.0"
   },
   "devDependencies": {
     "@midwayjs/serverless-spec-builder": "^0.2.40"

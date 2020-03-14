@@ -24,7 +24,7 @@
     "@midwayjs/serverless-fc-trigger": "^0.2.27",
     "@midwayjs/serverless-scf-starter": "^0.2.27",
     "@midwayjs/serverless-scf-trigger": "^0.2.27",
-    "midway-bin": "beta",
+    "midway-bin": "^2.0.0",
     "supertest": "^4.0.2"
   },
   "files": [

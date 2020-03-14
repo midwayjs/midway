@@ -10,7 +10,7 @@
     "mkdirp": "^0.5.1"
   },
   "devDependencies": {
-    "midway-bin": "beta"
+    "midway-bin": "^2.0.0"
   },
   "files": [
     "dist",

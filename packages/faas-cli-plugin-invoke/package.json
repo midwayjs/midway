@@ -8,7 +8,7 @@
     "@midwayjs/serverless-invoke": "^0.2.48"
   },
   "devDependencies": {
-    "midway-bin": "beta"
+    "midway-bin": "^2.0.0"
   },
   "files": [
     "src",

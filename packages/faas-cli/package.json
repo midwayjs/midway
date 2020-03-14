@@ -19,7 +19,7 @@
     "f": "bin/fun.js"
   },
   "devDependencies": {
-    "midway-bin": "beta"
+    "midway-bin": "^2.0.0"
   },
   "files": [
     "bin",

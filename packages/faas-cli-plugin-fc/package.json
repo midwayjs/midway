@@ -12,7 +12,7 @@
   "devDependencies": {
     "@midwayjs/fcli-plugin-package": "^0.2.48",
     "fs-extra": "^8.1.0",
-    "midway-bin": "beta"
+    "midway-bin": "^2.0.0"
   },
   "files": [
     "src",
