@@ -395,6 +395,21 @@ export class MidwayContainer extends Container implements IMidwayContainer {
     // 增加 lifecycle 支持
     await this.loadAndReadyLifeCycles();
   }
+
+  async stop(): Promise<void> {
+    const cycles = listModule(LIFECYCLE_KEY);
+    debug('load lifecycle length => %s when stop.', cycles && cycles.length);
+    for (const cycle of cycles) {
+      const providerId = getProviderId(cycle);
+      debug('onStop lifecycle id => %s.', providerId);
+      const inst = await this.getAsync<ILifeCycle>(providerId);
+      if (inst.onStop && typeof inst.onStop === 'function') {
+        await inst.onStop(this);
+      }
+    }
+
+    await super.stop();
+  }
   /**
    * 注册 importObjects
    * @param objs configuration 中的 importObjects
