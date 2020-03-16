@@ -30,6 +30,10 @@ export class AppWorkerLoader extends MidwayWebLoader {
       await this.refreshContext();
       await this.loadMidwayController();
     });
+
+    this.app.beforeClose(async () => {
+      await this.onClose();
+    });
   }
 
 }
@@ -43,6 +47,10 @@ export class AgentWorkerLoader extends MidwayWebLoader {
     this.loadCustomAgent();
     this.app.beforeStart(async () => {
       await this.refreshContext();
+    });
+
+    this.app.beforeClose(async () => {
+      await this.onClose();
     });
   }
 
