@@ -8,9 +8,8 @@ import {
  * 生命周期定义
  */
 export interface ILifeCycle {
-  onStart?(): Promise<void>;
-  onReady(): Promise<void>;
-  onStop?(): Promise<void>;
+  onReady(container?: IMidwayContainer): Promise<void>;
+  onStop?(container?: IMidwayContainer): Promise<void>;
 }
 
 export type Locale = string;
@@ -142,6 +141,7 @@ export interface IApplicationContext extends IObjectFactory {
   ready(): Promise<void>;
   stop(): Promise<void>;
   dumpDependency(): void;
+  registerObject(identifier: ObjectIdentifier, target: any);
 }
 /**
  * 解析内部管理的属性、json、ref等实例的解析器

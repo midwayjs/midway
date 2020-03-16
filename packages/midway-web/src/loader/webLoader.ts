@@ -287,6 +287,10 @@ export class MidwayWebLoader extends EggLoader {
     await this.containerLoader.refresh();
   }
 
+  protected async onClose(): Promise<void> {
+    await this.applicationContext.stop();
+  }
+
   /**
    * wrap controller string to middleware function
    * @param controllerMapping like FooController.index
