@@ -23,7 +23,7 @@ describe('/test/loader.test.ts', () => {
     });
     loader.initialize();
     loader.loadDirectory({
-      loadDir: ['app', 'lib', '../test_other']
+      loadDir: ['app', 'lib', '../test_other'],
     });
     await loader.refresh();
 
@@ -260,7 +260,9 @@ describe('/test/loader.test.ts', () => {
     const appCtx = loader.getApplicationContext();
     const replaceManager: any = await appCtx.getAsync('@ok:replaceManager');
     assert((await replaceManager.getOne()) === 'ok1');
-    const replaceManagerno: any = await appCtx.getAsync('@midway-plugin-no-pkg-json:replaceManager');
+    const replaceManagerno: any = await appCtx.getAsync(
+      '@midway-plugin-no-pkg-json:replaceManager'
+    );
     assert((await replaceManagerno.getOne()) === 'ok1');
     mm.restore();
   });
@@ -288,14 +290,19 @@ describe('/test/loader.test.ts', () => {
     assert((await replaceManager2.getOne()) === 'ok2');
     // 查看覆盖的情况
     const baseService: any = await appCtx.getAsync('baseService');
-    assert((await baseService.getInformation()) === 'harryone article atmod,one article,ok2');
+    assert(
+      (await baseService.getInformation()) ===
+        'harryone article atmod,one article,ok2'
+    );
 
     assert(baseService.helloworld === 234);
 
     const userManager: any = await appCtx.getAsync('userManager');
     assert((await userManager.getUser()) === 'harryone article atmod');
 
-    const repm: any = await appCtx.getAsync('@midway-plugin-mod:replaceManager');
+    const repm: any = await appCtx.getAsync(
+      '@midway-plugin-mod:replaceManager'
+    );
     assert((await repm.getOne()) === 'one article mod');
     mm.restore();
   });

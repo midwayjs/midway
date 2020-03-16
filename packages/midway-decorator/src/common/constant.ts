@@ -1,17 +1,20 @@
 // common
-export const PRIORITY_KEY = 'priority';
-export const SCHEDULE_KEY = 'schedule';
-export const CONFIGURATION_KEY = 'configuration';
-export const LIFECYCLE_KEY = 'lifecycle';
+export const PRIORITY_KEY = 'common:priority';
+export const SCHEDULE_KEY = 'common:schedule';
+export const CONFIGURATION_KEY = 'common:configuration';
+export const LIFECYCLE_KEY = 'common:lifecycle';
 
 // faas
-export const FUNC_KEY = 'func';
-export const HANDLER_KEY = 'handler';
+export const FUNC_KEY = 'faas:func';
+export const HANDLER_KEY = 'faas:handler';
 
 // web
-export const CONTROLLER_KEY = 'controller';
-export const WEB_ROUTER_KEY = 'web_router';
-export const WEB_ROUTER_PARAM_KEY = 'web_router_param';
+export const CONTROLLER_KEY = 'web:controller';
+export const WEB_ROUTER_KEY = 'web:router';
+export const WEB_ROUTER_PARAM_KEY = 'web:router_param';
+
+// RPC
+export const HSF_KEY = 'rpc:hsf';
 
 // framework
 export const CONFIG_KEY = 'config';

@@ -199,6 +199,8 @@ Now you can do it like `src/web/controller`, or you can divide it by business di
 In new ts system, our controller directory is `app/controller`, we  write `*.ts` files inside. Such as the `userController.ts` below, we provide  a interface to get user's information.
 
 ```typescript
+import { provide, controller, inject, get } from 'midway';
+
 @provide()
 @controller('/user')
 export class UserController {
@@ -206,11 +208,14 @@ export class UserController {
   @inject('userService')
   service: IUserService;
 
+  @inject()
+  ctx;
+
   @get('/:id')
-  async getUser(ctx): Promise<void> {
-    const id: number = ctx.params.id;
+  async getUser(): Promise<void> {
+    const id: number = this.ctx.params.id;
     const user: IUserResult = await this.service.getUser({id});
-    ctx.body = {success: true, message: 'OK', data: user};
+    this.ctx.body = {success: true, message: 'OK', data: user};
   }
 }
 ```
@@ -232,11 +237,11 @@ For web request, Midway provide corresponding function decorator of koa-router:
 * @head
 * @all
 
-These decorators is for different async functions, and has the similar meaning of koa-router's. Like original koa2 routers, every router method is async, and got koa context as parameter.
+These decorators is for different async functions, and has the similar meaning of koa-router's. Like original koa2 routers, every router method is async, and got koa context as default parameter.
 
 ```typescript
 @get('/:id')
-async getUser(ctx, next): Promise<void> {
+async getUser(ctx): Promise<void> {
   // TODO ctx...
 }
 ```
@@ -436,6 +441,24 @@ The result of the post and get method are different (get request to mount additi
 ## Enhanced injection
 
 Midway use [injection](http://web.npm.alibaba-inc.com/package/injection) as default IoC tool. Though `@inject` can satisfy most business logic, for framework there are still places to be extended like plugin, config etc.
+
+### Framework injection by default
+
+By default, the framework injects some attributes to facilitate development. These attributes can be obtained through @inject The decorator is used to inject.
+
+```ts
+@inject()
+appDir; // The root directory of the current project
+
+@inject()
+baseDir;  // The basic directory src or dist of the current project, absolute path
+
+@inject()
+ctx; // Request scope, koa ctx
+
+@inject()
+logger; // Request scope, ContextLogger
+```
 
 ### Plugin inject
 
