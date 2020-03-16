@@ -105,6 +105,8 @@ describe('/test/midwayContainer.test.ts', () => {
       const aa = await container.getAsync<LifeCycleTest>('lifeCycleTest');
       expect(aa.ts).eq('hello');
       expect(aa.ready).true;
+      // container.registerObject('hellotest111', '12312312');
+      expect(container.get('hellotest111')).eq('12312312');
 
       const aa1 = await container.getAsync<LifeCycleTest1>('lifeCycleTest1');
       expect(aa1.tts).eq('hello');

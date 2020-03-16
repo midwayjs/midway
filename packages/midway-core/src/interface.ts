@@ -9,7 +9,7 @@ import {
  */
 export interface ILifeCycle {
   onStart?(): Promise<void>;
-  onReady(): Promise<void>;
+  onReady(container?: IMidwayContainer): Promise<void>;
   onStop?(): Promise<void>;
 }
 
@@ -142,6 +142,7 @@ export interface IApplicationContext extends IObjectFactory {
   ready(): Promise<void>;
   stop(): Promise<void>;
   dumpDependency(): void;
+  registerObject(identifier: ObjectIdentifier, target: any);
 }
 /**
  * 解析内部管理的属性、json、ref等实例的解析器

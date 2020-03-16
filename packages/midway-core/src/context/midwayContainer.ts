@@ -426,7 +426,7 @@ export class MidwayContainer extends Container implements IMidwayContainer {
       const providerId = getProviderId(cycle);
       debug('ready lifecycle id => %s.', providerId);
       const inst = await this.getAsync<ILifeCycle>(providerId);
-      await inst.onReady();
+      await inst.onReady(this);
     }
   }
 }

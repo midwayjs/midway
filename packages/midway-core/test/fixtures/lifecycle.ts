@@ -1,4 +1,4 @@
-import { ILifeCycle } from '../../src';
+import { ILifeCycle, IMidwayContainer } from '../../src';
 import { LifeCycle, Provide, Inject } from '@midwayjs/decorator';
 
 @Provide()
@@ -16,9 +16,9 @@ export class LifeCycleTest implements ILifeCycle {
   @Inject()
   testBinding: TestBinding;
 
-  async onReady() {
+  async onReady(container: IMidwayContainer) {
     this.ts = await this.testBinding.doReady();
-
+    container.registerObject('hellotest111', '12312312');
     await new Promise(resolve => {
       setTimeout(() => {
         this.ready = true;
