@@ -189,7 +189,7 @@ export abstract class InvokeCore implements IInvoke {
     }
   }
 
-  private async copyFile() {
+  protected async copyFile() {
     const packageObj: any = this.spec.package || {};
     return copyFiles({
       sourceDir: this.baseDir,

@@ -8,8 +8,6 @@ import {
 import { IPluginInstance, ICommandInstance } from './interface/plugin';
 import { IProviderInstance } from './interface/provider';
 import GetMap from './errorMap';
-import { CoreError } from './classes';
-import * as Utils from './utils';
 import { loadNpm } from './npm';
 
 const RegProviderNpm = /^npm:([\w]*):(.*)$/i; // npm providerName pkgName
@@ -78,8 +76,12 @@ export class CommandHookCore implements ICommandHooksCore {
     }
 
     // 避免多次加载
-    if (this.instances.some(plugin => plugin instanceof Plugin)) {
-      return;
+    if (this.instances.length) {
+      for (const plugin of this.instances) {
+        if (plugin instanceof Plugin) {
+          return;
+        }
+      }
     }
     this.loadCommands(instance, this.commands, instance.commands);
     this.loadHooks(instance.hooks);
@@ -95,26 +97,29 @@ export class CommandHookCore implements ICommandHooksCore {
     allowEntryPoints?: boolean,
     options?: any
   ) {
-    if (commandsArray == null) {
-      commandsArray = this.options.commands;
+    if (!Array.isArray(commandsArray)) {
+      commandsArray = [].concat(commandsArray || []);
     }
-    commandsArray = [].concat(commandsArray);
+    if (options) {
+      Object.assign(this.options.options, options);
+    }
+    const displayHelp = this.options.options.h || this.options.options.help;
+    if (!commandsArray.length && displayHelp) {
+      return this.displayHelp();
+    }
     const commandInfo = this.getCommand(commandsArray, allowEntryPoints);
     const lifecycleEvents = this.loadLifecycle(
       commandInfo.commandName,
       commandInfo.command.lifecycleEvents,
       commandInfo.parentCommandList
     );
-    if (options) {
-      Object.assign(this.options.options, options);
-    }
 
     if (this.options.point) {
       this.options.point('invoke', commandsArray, commandInfo, this);
     }
 
     // 展示帮助
-    if (this.options.options.h || this.options.options.help) {
+    if (displayHelp) {
       return this.displayHelp(commandsArray, commandInfo.usage);
     }
     for (const lifecycle of lifecycleEvents) {
@@ -147,23 +152,21 @@ export class CommandHookCore implements ICommandHooksCore {
 
   // 获取核心instance
   private getCoreInstance(): ICoreInstance {
-    const {
-      provider,
-      service,
-      config,
-      extensions,
-      commands,
-    } = this.options;
-    const serviceData: any = Utils.deepMerge(service || {}, {
-      provider: {
-        name: provider,
-      },
-      service: {},
-    });
+    const { provider, service, config, extensions, commands } = this.options;
+    const serviceData: any = service || {};
+    if (!serviceData.provider) {
+      serviceData.provider = { name: provider };
+    }
+    if (!serviceData.service) {
+      serviceData.service = service;
+    }
+    if (provider) {
+      serviceData.provider.name = provider;
+    }
     return {
       ...(extensions || {}),
       classes: {
-        Error: CoreError,
+        Error,
       },
       store: new Map(),
       cli: this.getLog(),
@@ -205,7 +208,7 @@ export class CommandHookCore implements ICommandHooksCore {
     if (!commands) {
       return;
     }
-    Object.keys(commands).map((command: string) => {
+    Object.keys(commands).forEach((command: string) => {
       const commandInstance: ICommandInstance = commands[command];
 
       if (!commandsMap[command]) {
@@ -229,11 +232,6 @@ export class CommandHookCore implements ICommandHooksCore {
       if (currentRank > currentCommand.rank) {
         currentCommand.rank = currentRank;
         currentCommand.lifecycleEvents = commandInstance.lifecycleEvents;
-        // currentCommand.lifecycleEvents = this.loadLifecycle(
-        //   command,
-        //   commandInstance.lifecycleEvents,
-        //   parentCommandList
-        // );
         if (commandInstance.usage) {
           currentCommand.usage = commandInstance.usage;
         }
@@ -261,14 +259,12 @@ export class CommandHookCore implements ICommandHooksCore {
     if (!hooks) {
       return;
     }
-
-    Object.keys(hooks).map((hookName: string) => {
-      const hook = hooks[hookName];
+    for (const hookName in hooks) {
       if (!this.hooks[hookName]) {
         this.hooks[hookName] = [];
       }
-      this.hooks[hookName].push(hook);
-    });
+      this.hooks[hookName].push(hooks[hookName]);
+    }
   }
 
   private loadLifecycle(
@@ -282,12 +278,12 @@ export class CommandHookCore implements ICommandHooksCore {
         ? `${parentCommandList.join(':')}:`
         : '';
     if (lifecycleEvents) {
-      lifecycleEvents.map((life: string) => {
+      for (const life of lifecycleEvents) {
         const tmpLife = `${parentCommand}${command}:${life}`;
         allLifecycles.push(`before:${tmpLife}`);
         allLifecycles.push(tmpLife);
         allLifecycles.push(`after:${tmpLife}`);
-      });
+      }
     }
     return allLifecycles;
   }
@@ -297,20 +293,20 @@ export class CommandHookCore implements ICommandHooksCore {
     // tslint:disable-next-line: no-this-assignment
     let cmdObj: any = this;
     const commandPath: string[] = [];
+    const parentCommandList: string[] = [];
     const usage = {};
     for (command of commandsArray) {
+      if (commandPath.length) {
+        parentCommandList.push(commandPath[commandPath.length - 1]);
+      }
       commandPath.push(command);
       if (!cmdObj || !cmdObj.commands || !cmdObj.commands[command]) {
         this.error('commandNotFound', { command, commandPath });
       }
       cmdObj = cmdObj.commands[command];
-      const commandOptions = this.commandOptions(cmdObj.options || {});
-      Object.assign(this.options.options, commandOptions.options);
-      Object.assign(usage, commandOptions.usage);
-      Object.assign(
-        this.coreInstance.processedInput.options,
-        commandOptions.options
-      );
+      if (cmdObj.options) {
+        this.commandOptions(cmdObj.options, usage);
+      }
     }
     if (!cmdObj) {
       this.error('commandNotFound', { command, commandPath });
@@ -323,7 +319,7 @@ export class CommandHookCore implements ICommandHooksCore {
       commandName: command,
       command: cmdObj,
       usage,
-      parentCommandList: commandPath.slice(0, -1),
+      parentCommandList,
     };
   }
 
@@ -356,31 +352,30 @@ export class CommandHookCore implements ICommandHooksCore {
     }
   }
 
-  private commandOptions(commandOptions): any {
-    const options = {};
-    const usage = {};
+  private commandOptions(commandOptions, usage): any {
     if (!commandOptions) {
-      return {
-        options,
-        usage,
-      };
+      return;
     }
+
     for (const option in commandOptions) {
       const optionInfo = commandOptions[option];
       usage[option] = optionInfo;
-      options[option] =
-        this.options.options[optionInfo.shortcut] ||
-        this.options.options[option];
+      if (optionInfo.shortcut) {
+        if (this.options.options[optionInfo.shortcut]) {
+          this.options.options[option] = this.options.options[
+            optionInfo.shortcut
+          ];
+        }
+      }
+      this.coreInstance.processedInput.options[option] = this.options.options[
+        option
+      ];
     }
-    return {
-      options,
-      usage,
-    };
   }
 
-  private displayHelp(commandsArray, usage) {
+  private displayHelp(commandsArray?, usage?) {
     if (this.options.displayUsage) {
-      this.options.displayUsage(commandsArray, usage, this);
+      this.options.displayUsage(commandsArray || [], usage || {}, this);
     }
   }
 
@@ -400,7 +395,6 @@ export class CommandHookCore implements ICommandHooksCore {
     } else {
       throw new Error(errObj.message);
     }
-    process.exit(1);
   }
 
   debug(...args) {

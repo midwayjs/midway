@@ -37,7 +37,7 @@ interface ReturnValue<T> {
 }
 
 export default <T>(type: string, info: T): ReturnValue<T> => {
-  let error = ErrorMap[type];
+  const error = ErrorMap[type];
   if (!error) {
     return {
       info,

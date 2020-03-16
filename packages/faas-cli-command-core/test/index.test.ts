@@ -1,9 +1,11 @@
-import { CommandHookCore } from '../src';
+import { CommandHookCore, PluginManager } from '../src';
+import ErrorMap from '../src/errorMap';
 import InvokePlugin from './plugins/test.invoke';
 import LogPlugin from './plugins/test.lg';
 import OnePlugin from './plugins/one.common';
 import StoreSet from './plugins/store.set';
 import StoreGet from './plugins/store.get';
+import { resolve } from 'path';
 
 import * as assert from 'assert';
 
@@ -75,7 +77,9 @@ describe('invoke', () => {
     const result: string[] = [];
     const core = new CommandHookCore({
       provider: 'test',
-      options: {},
+      options: {
+        point: () => {},
+      },
       log: {
         log: (msg: string) => {
           result.push(msg);
@@ -96,12 +100,69 @@ describe('invoke', () => {
   it('store set', async () => {
     const core = new CommandHookCore({
       provider: '',
-      options: {},
+      options: null,
     });
     core.addPlugin(StoreGet);
     core.addPlugin(StoreSet);
+    core.addPlugin(StoreSet);
     await core.ready();
-    await core.invoke(['store']);
+    await core.invoke(['store'], false, {});
     assert((core as any).coreInstance.store.get('StoreGet:get') === 123456);
+  });
+
+  it('spawn', async () => {
+    const core = new CommandHookCore({
+      provider: 'test',
+      options: null,
+    });
+    core.addPlugin(StoreGet);
+    core.addPlugin(StoreSet);
+    core.addPlugin(StoreSet);
+    core.addPlugin(class Test {});
+    core.addPlugin('npm:test2:debug');
+    core.addPlugin(`local:test:${resolve(__dirname, './plugins/store.set')}`);
+    core.addPlugin('local:test2:./plugins/store.set');
+    core.addPlugin('xxx');
+    await core.ready();
+    await core.spawn('store', {});
+    assert((core as any).coreInstance.store.get('StoreGet:get') === 123456);
+  });
+
+  it('pluginManager', async () => {
+    const core = new CommandHookCore({
+      provider: '',
+      options: {
+        l: true,
+      },
+    });
+    core.addPlugin(PluginManager);
+    await core.ready();
+    await core.spawn('plugin', {});
+  });
+});
+
+describe('errorMap', () => {
+  it('error', () => {
+    assert(ErrorMap('notMatch', 'notMatch').message === 'error');
+    assert(
+      ErrorMap('commandIsEntrypoint', { command: '1' }).message ===
+        'command 1 is entrypoint, cannot invoke'
+    );
+    assert(
+      ErrorMap('commandNotFound', { command: '2' }).message ===
+        'command 2 not found'
+    );
+    assert(
+      ErrorMap('localPlugin', { path: 'test', err: { message: '4' } })
+        .message === `load local plugin 'test' error '4'`
+    );
+    assert(
+      ErrorMap('npmPlugin', { path: 'test', err: { message: '5' } }).message ===
+        `load npm plugin 'test' error '5'`
+    );
+    assert(
+      ErrorMap('pluginType', {}).message ===
+        'only support npm / local / class plugin'
+    );
   });
 });

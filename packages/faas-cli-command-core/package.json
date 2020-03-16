@@ -6,10 +6,10 @@
   "dependencies": {
     "@midwayjs/serverless-spec-builder": "^0.2.49",
     "command-line-usage": "^6.1.0",
-    "deepmerge": "^4.2.2",
     "minimist": "^1.2.0"
   },
   "devDependencies": {
+    "benchmark": "^2.1.4",
     "midway-bin": "^2.0.0"
   },
   "files": [
