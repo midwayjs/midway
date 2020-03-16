@@ -130,19 +130,19 @@ describe('/test/enhance.test.ts', () => {
     });
   });
 
-  describe.only('load ts file and use config, plugin decorator', () => {
+  describe('load ts file and use config, plugin decorator', () => {
     let app;
 
-    before(async () => {
+    before(() => {
       app = utils.app('enhance/base-app-decorator', {
         typescript: true
       });
-      await app.ready();
+      return app.ready();
     });
 
-    after(async () => {
+    after(() => {
       rimraf(path.join(app.config.baseDir, 'app/public'));
-      await app.close();
+      return app.close();
     });
 
     it('should load ts directory', (done) => {
