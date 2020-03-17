@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.52](https://github.com/midwayjs/midway-faas/compare/v0.2.51...v0.2.52) (2020-03-17)
+
+
+### Bug Fixes
+
+* support more than one invoke at same time ([#89](https://github.com/midwayjs/midway-faas/issues/89)) ([bf889ab](https://github.com/midwayjs/midway-faas/commit/bf889abb8ecacc4ea752ec64b8023be516692525))
+
+
+
+
+
 ## [0.2.51](https://github.com/midwayjs/midway-faas/compare/v0.2.50...v0.2.51) (2020-03-17)
 
 
