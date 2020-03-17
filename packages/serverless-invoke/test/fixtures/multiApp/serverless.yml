@@ -1,0 +1,28 @@
+service: serverless-midway-test
+
+provider:
+  name: fc
+  runtime: nodejs8
+  credentials: ./.aliyun_credentials # path must be absolute
+
+functions:
+  http:
+    handler: http.handler
+    events:
+      - http:
+          method: get
+
+plugins:
+  - test
+
+layers:
+
+
+package:
+  include:
+  exclude:
+    - src/**
+    - tsconfig.json
+    - test/**
+  excludeDevDependencies: false
+  artifact: path/to/my-artifact.zip # Own package that should be used. You must provide this file.

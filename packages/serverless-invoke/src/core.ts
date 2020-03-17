@@ -5,7 +5,7 @@
   2. tsc编译用户代码到dist目录
   3. 开源版: 【创建runtime、创建trigger】封装为平台invoke包，提供getInvoke方法，会传入args与入口方法，返回invoke方法
 */
-import { FaaSStarterClass, cleanTarget } from './utils';
+import { FaaSStarterClass, cleanTarget, wait, complete } from './utils';
 import { join, resolve, relative } from 'path';
 import { existsSync, move, writeFileSync, ensureFileSync } from 'fs-extra';
 import { loadSpec, getSpecFile } from '@midwayjs/fcli-command-core';
@@ -18,7 +18,6 @@ import {
   copyFiles,
 } from '@midwayjs/faas-util-ts-compile';
 import { IInvoke } from './interface';
-
 interface InvokeOptions {
   baseDir?: string; // 目录，默认为process.cwd
   functionName: string; // 函数名
@@ -104,6 +103,7 @@ export abstract class InvokeCore implements IInvoke {
       return;
     }
     const buildLogPath = resolve(this.buildDir, '.faasTSBuildTime.log');
+    await wait(buildLogPath);
     if (existsSync(buildLogPath)) {
       const fileChanges = await compareFileChange(
         [
@@ -150,7 +150,7 @@ export abstract class InvokeCore implements IInvoke {
       });
       await move(join(baseDir, 'dist'), join(this.buildDir, 'dist'), opts);
     }
-
+    complete(buildLogPath);
     // 针对多次调用清理缓存
     Object.keys(require.cache).forEach(path => {
       if (path.indexOf(this.buildDir) !== -1) {
