@@ -97,6 +97,9 @@ export class CommandHookCore implements ICommandHooksCore {
     allowEntryPoints?: boolean,
     options?: any
   ) {
+    if (commandsArray == null) {
+      commandsArray = this.options.commands;
+    }
     if (!Array.isArray(commandsArray)) {
       commandsArray = [].concat(commandsArray || []);
     }

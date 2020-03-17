@@ -7,4 +7,4 @@ class Empty extends BasePlugin {
   hooks = {};
 }
 
-export default Empty;
+export = Empty;

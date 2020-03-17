@@ -148,28 +148,3 @@ export const cleanTarget = async (p: string) => {
     await remove(p);
   }
 };
-
-const waitKeyMap = {};
-export const wait = (waitKey, count?) => {
-  count = count || 0;
-  return new Promise(resolve => {
-    if (count > 100) {
-      // after 10s continue
-      return resolve();
-    }
-    if (!waitKeyMap[waitKey]) {
-      waitKeyMap[waitKey] = 'waiting';
-      resolve();
-    } else if (waitKeyMap[waitKey] === 'waiting') {
-      setTimeout(() => {
-        wait(waitKey, count + 1).then(resolve);
-      }, 100);
-    } else {
-      resolve();
-    }
-  });
-};
-
-export const complete = waitKey => {
-  waitKeyMap[waitKey] = 'complete';
-};

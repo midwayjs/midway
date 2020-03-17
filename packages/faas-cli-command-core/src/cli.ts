@@ -1,9 +1,9 @@
 import * as minimist from 'minimist';
 import { join } from 'path';
 import { loadSpec } from './utils/loadSpec';
+import { commandLineUsage } from './utils/commandLineUsage';
 import { CommandHookCore } from './core';
 import { PluginManager } from './pluginManager';
-import * as commandLineUsage from 'command-line-usage';
 
 export class BaseCLI {
   argv: any;
@@ -76,19 +76,18 @@ export class BaseCLI {
     if (commandsArray && commandsArray.length) {
       commandList = {
         header: commandsArray.join(' '),
-        optionList: Object.keys(usage || {}).map((name => {
+        optionList: Object.keys(usage || {}).map(name => {
           const usageInfo = usage[name] || {};
           return {
             name,
             description: usageInfo.usage,
             alias: usageInfo.shortcut,
-            type: Boolean
           };
-        })),
+        }),
       };
     } else {
       commandList = [];
-      coreInstance.instances.forEach((plugin) => {
+      coreInstance.instances.forEach(plugin => {
         if (plugin.commands) {
           Object.keys(plugin.commands).forEach(command => {
             const commandInfo = plugin.commands[command];
@@ -98,15 +97,14 @@ export class BaseCLI {
             commandList.push({
               header: command,
               content: commandInfo.usage,
-              optionList: Object.keys(commandInfo.options || {}).map((name => {
+              optionList: Object.keys(commandInfo.options || {}).map(name => {
                 const usageInfo = commandInfo.options[name] || {};
                 return {
                   name,
                   description: usageInfo.usage,
                   alias: usageInfo.shortcut,
-                  type: Boolean
                 };
-              }))
+              }),
             });
           });
         }
@@ -116,7 +114,7 @@ export class BaseCLI {
   }
 
   error(err) {
-    console.error(err && err.message || err);
+    console.error((err && err.message) || err);
     process.exit(1);
   }
 
