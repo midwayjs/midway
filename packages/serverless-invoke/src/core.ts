@@ -139,6 +139,7 @@ export abstract class InvokeCore implements IInvoke {
         return;
       }
     }
+    lockMap[buildLogPath] = 'waiting';
     ensureFileSync(buildLogPath);
     writeFileSync(buildLogPath, `ts build at ${Date.now()}`);
     // clean directory first
