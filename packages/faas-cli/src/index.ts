@@ -1,27 +1,54 @@
 import { BaseCLI, getSpecFile } from '@midwayjs/fcli-command-core';
-import { TestPlugin } from '@midwayjs/fcli-plugin-test';
-import { InvokePlugin } from '@midwayjs/fcli-plugin-invoke';
-import { PackagePlugin } from '@midwayjs/fcli-plugin-package';
-import { DeployPlugin } from '@midwayjs/fcli-plugin-deploy';
-import { AliyunFCPlugin } from '@midwayjs/fcli-plugin-fc';
-import { CreatePlugin } from '@midwayjs/fcli-plugin-create';
 import { saveYaml } from '@midwayjs/serverless-spec-builder';
 import { execSync } from 'child_process';
+
+const plugins = {
+  create: { mod: '@midwayjs/fcli-plugin-create', name: 'CreatePlugin' },
+  invoke: { mod: '@midwayjs/fcli-plugin-invoke', name: 'InvokePlugin' },
+  test: { mod: '@midwayjs/fcli-plugin-test', name: 'TestPlugin' },
+  package: [
+    { mod: '@midwayjs/fcli-plugin-package', name: 'PackagePlugin' },
+    { mod: '@midwayjs/fcli-plugin-fc', name: 'AliyunFCPlugin' },
+  ],
+  deploy: [
+    { mod: '@midwayjs/fcli-plugin-deploy', name: 'DeployPlugin' },
+    { mod: '@midwayjs/fcli-plugin-fc', name: 'AliyunFCPlugin' },
+  ],
+};
+
 const { Select } = require('enquirer');
 export class CLI extends BaseCLI {
   loadDefaultPlugin() {
-    this.core.addPlugin(CreatePlugin);
-    this.core.addPlugin(InvokePlugin);
-    this.core.addPlugin(TestPlugin);
-    this.core.addPlugin(PackagePlugin);
-    this.core.addPlugin(DeployPlugin);
-    this.core.addPlugin(AliyunFCPlugin);
+    const command = this.commands && this.commands[0];
+    // version not load plugin
+    if (this.argv.v || this.argv.version) {
+      return;
+    }
+    let needLoad = [];
+    if (!this.argv.h && command) {
+      if (plugins[command]) {
+        needLoad = needLoad.concat(plugins[command]);
+      }
+    } else {
+      // load all
+      Object.keys(plugins).forEach((cmd: string) => {
+        needLoad = needLoad.concat(plugins[cmd]);
+      });
+    }
+    needLoad.forEach(pluginInfo => {
+      try {
+        const mod = require(pluginInfo.mod);
+        if (mod[pluginInfo.name]) {
+          this.core.addPlugin(mod[pluginInfo.name]);
+        }
+      } catch (e) {}
+    });
   }
 
   async loadPlugins() {
     await this.checkProvider();
-    await super.loadPlugins();
     await this.loadDefaultOptions();
+    await super.loadPlugins();
   }
 
   async loadDefaultOptions() {
@@ -31,7 +58,8 @@ export class CLI extends BaseCLI {
 
     if (this.argv.v || this.argv.version) {
       this.displayVersion();
-    } else { // 默认没有command的时候展示帮助
+    } else {
+      // 默认没有command的时候展示帮助
       this.argv.h = true;
     }
   }
@@ -39,11 +67,14 @@ export class CLI extends BaseCLI {
   displayVersion() {
     const log = this.loadLog();
     try {
-      const nodeVersion = execSync('node -v').toString().replace('\n', '');
+      const nodeVersion = execSync('node -v')
+        .toString()
+        .replace('\n', '');
       log.log('Node.js'.padEnd(20) + nodeVersion);
     } catch (E) {}
 
-    try { // midway-faas version
+    try {
+      // midway-faas version
       const cliVersion = require('../package.json').version;
       log.log('@midwayjs/faas-cli'.padEnd(20) + `v${cliVersion}`);
     } catch (E) {}
@@ -69,16 +100,18 @@ export class CLI extends BaseCLI {
     if (!this.spec.provider.name || this.argv.platform) {
       let platform = this.argv.platform;
       let needSelectPlatform = false;
-      if (!this.spec.provider.name) { // 未标明哪个平台
+      if (!this.spec.provider.name) {
+        // 未标明哪个平台
         needSelectPlatform = true;
-      } else if (this.argv.platform === true) { // 使用 f xxx --platform
+      } else if (this.argv.platform === true) {
+        // 使用 f xxx --platform
         needSelectPlatform = true;
       }
       if (needSelectPlatform) {
         const prompt = new Select({
           name: 'provider',
           message: 'Which platform do you want to use?',
-          choices: ['阿里云函数计算 aliyun fc', '腾讯云函数 tencent scf']
+          choices: ['阿里云函数计算 aliyun fc', '腾讯云函数 tencent scf'],
         });
         const answers = await prompt.run();
         platform = answers.split(' ')[1];

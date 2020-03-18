@@ -7,6 +7,7 @@
     "@types/lodash": "^4.14.119",
     "@types/mocha": "^5.2.5",
     "@types/node": "^10.12.18",
+    "benchmark": "^2.1.4",
     "gh-pages": "^1.2.0",
     "lerna": "3",
     "lerna-relinker": "^1.4.0",
