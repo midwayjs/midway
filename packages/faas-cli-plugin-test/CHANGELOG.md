@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.53](https://github.com/midwayjs/midway-faas/compare/v0.2.52...v0.2.53) (2020-03-18)
+
+
+### Bug Fixes
+
+* fix invoke lock ([#91](https://github.com/midwayjs/midway-faas/issues/91)) ([2a7b847](https://github.com/midwayjs/midway-faas/commit/2a7b8473e466e706425adf9ce1601670e8d6b438))
+
+
+
+
+
 ## [0.2.51](https://github.com/midwayjs/midway-faas/compare/v0.2.50...v0.2.51) (2020-03-17)
 
 **Note:** Version bump only for package @midwayjs/fcli-plugin-test
