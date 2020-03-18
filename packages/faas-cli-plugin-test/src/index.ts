@@ -1,6 +1,4 @@
 import { BasePlugin } from '@midwayjs/fcli-command-core';
-import { TestCommand, CovCommand } from 'midway-bin';
-import * as co from 'co';
 import { existsSync } from 'fs';
 import { join } from 'path';
 
@@ -41,6 +39,9 @@ export class TestPlugin extends BasePlugin {
         this.core.cli.log('Testing all *.test.js/ts...');
       }
       const options = this.options;
+      const TestCommand = require('midway-bin/lib/cmd/test');
+      const CovCommand = require('midway-bin/lib/cmd/cov');
+      const co = require('co');
       const Command = options.cov ? CovCommand : TestCommand;
       const tester = new Command();
       await co(function*() {

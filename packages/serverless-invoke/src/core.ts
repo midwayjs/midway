@@ -135,6 +135,7 @@ export abstract class InvokeCore implements IInvoke {
         { cwd: baseDir }
       );
       if (!fileChanges || !fileChanges.length) {
+        lockMap[buildLogPath] = true;
         this.debug('Auto skip ts compile');
         return;
       }

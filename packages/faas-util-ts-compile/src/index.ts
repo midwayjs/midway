@@ -1,6 +1,5 @@
 import { join, relative, resolve } from 'path';
 import { readFileSync, existsSync } from 'fs-extra';
-import { BuildCommand } from 'midway-bin';
 export * from './utils';
 import { combineTsConfig } from './utils';
 
@@ -61,6 +60,7 @@ export const tsCompile = async (
     incremental?: boolean;
   } = {}
 ) => {
+  const BuildCommand = require('midway-bin/lib/cmd/build');
   const builder = new BuildCommand();
   let tsJson = null;
   if (options.tsConfigName) {
