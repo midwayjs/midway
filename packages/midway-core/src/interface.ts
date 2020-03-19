@@ -194,6 +194,7 @@ export interface IContainerConfiguration {
   loadConfiguration(configuration: IContainerConfiguration, baseDir: string);
   getImportDirectory(): string[];
   getImportObjects(): any;
+  bindConfigurationClass(clzz: any);
 }
 
 export interface IMidwayContainer extends IContainer {

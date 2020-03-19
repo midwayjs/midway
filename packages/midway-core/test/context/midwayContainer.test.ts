@@ -12,6 +12,7 @@ import { TestBinding, LifeCycleTest, LifeCycleTest1 } from '../fixtures/lifecycl
 import sinon = require('sinon');
 import mm = require('mm');
 import * as decs from '@midwayjs/decorator';
+const { LIFECYCLE_IDENTIFIER_PREFIX } = decs;
 
 describe('/test/midwayContainer.test.ts', () => {
 
@@ -94,21 +95,22 @@ describe('/test/midwayContainer.test.ts', () => {
     const container = new MidwayContainer();
 
     it('lifecycle should be ok', async () => {
+      const cfg = container.createConfiguration();
       container.bind(TestBinding);
-      container.bind(LifeCycleTest);
-      container.bind(LifeCycleTest1);
+      cfg.bindConfigurationClass(LifeCycleTest);
+      cfg.bindConfigurationClass(LifeCycleTest1);
 
       expect(container.isReady).false;
       await container.ready();
       expect(container.isReady).true;
 
-      const aa = await container.getAsync<LifeCycleTest>('__lifecycle__lifeCycleTest');
+      const aa = await container.getAsync<LifeCycleTest>(LIFECYCLE_IDENTIFIER_PREFIX + 'lifeCycleTest');
       expect(aa.ts).eq('hello');
       expect(aa.ready).true;
       // container.registerObject('hellotest111', '12312312');
       expect(container.get('hellotest111')).eq('12312312');
 
-      const aa1 = await container.getAsync<LifeCycleTest1>('__lifecycle__lifeCycleTest1');
+      const aa1 = await container.getAsync<LifeCycleTest1>(LIFECYCLE_IDENTIFIER_PREFIX + 'lifeCycleTest1');
       expect(aa1.tts).eq('hello');
       expect(aa1.ready).true;
 
@@ -117,9 +119,9 @@ describe('/test/midwayContainer.test.ts', () => {
         callback(m);
       });
 
-      expect(container.registry.hasObject('__lifecycle__lifeCycleTest')).true;
+      expect(container.registry.hasObject(LIFECYCLE_IDENTIFIER_PREFIX + 'lifeCycleTest')).true;
       await container.stop();
-      expect(container.registry.hasObject('__lifecycle__lifeCycleTest')).false;
+      expect(container.registry.hasObject(LIFECYCLE_IDENTIFIER_PREFIX + 'lifeCycleTest')).false;
       expect(callback.withArgs('on stop').calledOnce).true;
 
       mm.restore();

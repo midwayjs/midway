@@ -1,6 +1,6 @@
 
 import { expect } from 'chai';
-import { Configuration, getClassMetadata, CONFIGURATION_KEY, getProviderId, LIFECYCLE_IDENTIFIER_PREFIX, listModule } from '../../src';
+import { Configuration, getClassMetadata, CONFIGURATION_KEY } from '../../src';
 
 @Configuration({
   importConfigs: ['./config.default'],
@@ -19,11 +19,5 @@ describe('/test/annotation/configuration.test.ts', () => {
       imports: ['./nodes'],
       namespace: 'hello'
     });
-
-    const id = getProviderId(Test);
-    expect(id).eq(LIFECYCLE_IDENTIFIER_PREFIX + 'test');
-
-    const ms = listModule(CONFIGURATION_KEY);
-    expect(ms.length).eq(1);
   });
 });
