@@ -1,5 +1,5 @@
 import { ILifeCycle, IMidwayContainer } from '../../src';
-import { LifeCycle, Provide, Inject } from '@midwayjs/decorator';
+import { Provide, Inject, Configuration } from '@midwayjs/decorator';
 
 @Provide()
 export class TestBinding {
@@ -8,7 +8,7 @@ export class TestBinding {
   }
 }
 
-@LifeCycle()
+@Configuration({})
 export class LifeCycleTest implements ILifeCycle {
   ready = false;
   ts: string;
@@ -32,7 +32,7 @@ export class LifeCycleTest implements ILifeCycle {
   }
 }
 
-@LifeCycle()
+@Configuration({})
 export class LifeCycleTest1 implements ILifeCycle {
   ready = false;
   tts: string;

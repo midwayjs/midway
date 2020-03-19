@@ -12,7 +12,7 @@ import {
   ScopeEnum,
   PIPELINE_IDENTIFIER,
   listModule,
-  LIFECYCLE_KEY
+  CONFIGURATION_KEY
 } from '@midwayjs/decorator';
 import * as is from 'is-type-of';
 import { join } from 'path';
@@ -397,7 +397,7 @@ export class MidwayContainer extends Container implements IMidwayContainer {
   }
 
   async stop(): Promise<void> {
-    const cycles = listModule(LIFECYCLE_KEY);
+    const cycles = listModule(CONFIGURATION_KEY);
     debug('load lifecycle length => %s when stop.', cycles && cycles.length);
     for (const cycle of cycles) {
       const providerId = getProviderId(cycle);
@@ -435,13 +435,15 @@ export class MidwayContainer extends Container implements IMidwayContainer {
   }
 
   private async loadAndReadyLifeCycles() {
-    const cycles = listModule(LIFECYCLE_KEY);
+    const cycles = listModule(CONFIGURATION_KEY);
     debug('load lifecycle length => %s.', cycles && cycles.length);
     for (const cycle of cycles) {
       const providerId = getProviderId(cycle);
       debug('ready lifecycle id => %s.', providerId);
       const inst = await this.getAsync<ILifeCycle>(providerId);
-      await inst.onReady(this);
+      if (typeof inst.onReady === 'function') {
+        await inst.onReady(this);
+      }
     }
   }
 }

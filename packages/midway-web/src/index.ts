@@ -1,6 +1,6 @@
 // 兼容老代码
 export {
-  LifeCycle as lifeCycle,
+  Configuration as configuration,
   Provide as provide,
   Inject as inject,
   Async as async,
