@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.54](https://github.com/midwayjs/midway-faas/compare/v0.2.53...v0.2.54) (2020-03-19)
+
+
+### Bug Fixes
+
+* using ws instead of websocket ([#93](https://github.com/midwayjs/midway-faas/issues/93)) ([01c0b38](https://github.com/midwayjs/midway-faas/commit/01c0b3817a55bd7d6c8326d33b076645ca9f885e))
+
+
+
+
+
 ## [0.2.51](https://github.com/midwayjs/midway-faas/compare/v0.2.50...v0.2.51) (2020-03-17)
 
 
