@@ -102,13 +102,13 @@ describe('/test/midwayContainer.test.ts', () => {
       await container.ready();
       expect(container.isReady).true;
 
-      const aa = await container.getAsync<LifeCycleTest>('lifeCycleTest');
+      const aa = await container.getAsync<LifeCycleTest>('__lifecycle__lifeCycleTest');
       expect(aa.ts).eq('hello');
       expect(aa.ready).true;
       // container.registerObject('hellotest111', '12312312');
       expect(container.get('hellotest111')).eq('12312312');
 
-      const aa1 = await container.getAsync<LifeCycleTest1>('lifeCycleTest1');
+      const aa1 = await container.getAsync<LifeCycleTest1>('__lifecycle__lifeCycleTest1');
       expect(aa1.tts).eq('hello');
       expect(aa1.ready).true;
 
@@ -117,9 +117,9 @@ describe('/test/midwayContainer.test.ts', () => {
         callback(m);
       });
 
-      expect(container.registry.hasObject('lifeCycleTest')).true;
+      expect(container.registry.hasObject('__lifecycle__lifeCycleTest')).true;
       await container.stop();
-      expect(container.registry.hasObject('lifeCycleTest')).false;
+      expect(container.registry.hasObject('__lifecycle__lifeCycleTest')).false;
       expect(callback.withArgs('on stop').calledOnce).true;
 
       mm.restore();

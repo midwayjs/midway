@@ -2,7 +2,6 @@
 export const PRIORITY_KEY = 'common:priority';
 export const SCHEDULE_KEY = 'common:schedule';
 export const CONFIGURATION_KEY = 'common:configuration';
-export const LIFECYCLE_KEY = 'common:lifecycle';
 
 // faas
 export const FUNC_KEY = 'faas:func';
@@ -47,3 +46,5 @@ export const OBJ_DEF_CLS = 'injection:object_definition_class';
 
 // pipeline
 export const PIPELINE_IDENTIFIER = '__pipeline_identifier__';
+// lifecycle interface
+export const LIFECYCLE_IDENTIFIER_PREFIX = '__lifecycle__';
