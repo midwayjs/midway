@@ -72,9 +72,8 @@ const CorefuncTestInvoke = async () => {
   await core.invoke('invoke');
 };
 const contenders = {
-  'core help no plugin': Corefunc,
-  'core help test plugin': CorefuncTest,
-  'core invoke test plugin': CorefuncTestInvoke,
+  'pure core': Corefunc,
+  'core help': CorefuncTest,
 };
 
 console.log('\nBenchmark:');

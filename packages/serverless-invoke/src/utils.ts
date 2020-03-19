@@ -1,5 +1,5 @@
 const urllib = require('urllib');
-const WebSocketClient = require('websocket').client;
+const WebSocket = require('ws');
 import { tmpdir } from 'os';
 import {
   existsSync,
@@ -72,53 +72,16 @@ export function getWssUrl(port, type?: string, isThrowErr?: boolean) {
           );
         }
       });
-    }, 300);
+    }, 100);
   });
 }
 
 function debugWs(addr) {
-  let currentId = 0;
-  const cbMap = {};
   return new Promise(resolve => {
-    const client = new WebSocketClient();
-    client.on('connect', function(connection) {
-      connection.on('message', message => {
-        if (message.utf8Data) {
-          const data = JSON.parse(message.utf8Data);
-          if (data.id) {
-            if (data.id > currentId) {
-              currentId = data.id - 0;
-            }
-            if (cbMap[data.id]) {
-              cbMap[data.id](data);
-            }
-          }
-        }
-      });
-
-      const send = (method, params?) => {
-        return new Promise(resolve => {
-          const curId = currentId + 1;
-          currentId = curId;
-          cbMap[curId] = data => {
-            resolve(data);
-          };
-
-          const param: any = { id: curId, method };
-          if (params) {
-            param.params = params;
-          }
-          connection.sendUTF(JSON.stringify(param));
-        });
-      };
-
-      send('Profiler.enable');
-      send('Runtime.enable');
-      send('Debugger.enable', { maxScriptsCacheSize: 10000000 });
-      send('Debugger.setBlackboxPatterns', { patterns: ['internal'] });
+    const ws = new WebSocket(addr);
+    ws.on('open', () => {
       resolve(send);
     });
-    client.connect(addr);
   });
 }
 

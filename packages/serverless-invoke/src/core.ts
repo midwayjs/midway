@@ -7,7 +7,13 @@
 */
 import { FaaSStarterClass, cleanTarget } from './utils';
 import { join, resolve, relative } from 'path';
-import { existsSync, move, writeFileSync, ensureFileSync } from 'fs-extra';
+import {
+  existsSync,
+  move,
+  writeFileSync,
+  ensureFileSync,
+  remove,
+} from 'fs-extra';
 import { loadSpec, getSpecFile } from '@midwayjs/fcli-command-core';
 import { writeWrapper } from '@midwayjs/serverless-spec-builder';
 import { AnalyzeResult, Locator } from '@midwayjs/locate';
@@ -148,30 +154,36 @@ export abstract class InvokeCore implements IInvoke {
       await cleanTarget(this.buildDir);
     }
     const opts = this.options.incremental ? { overwrite: true } : {};
-    if (this.codeAnalyzeResult.integrationProject) {
-      // 一体化调整目录
-      await tsIntegrationProjectCompile(baseDir, {
-        buildRoot: this.buildDir,
-        tsCodeRoot: this.codeAnalyzeResult.tsCodeRoot,
-        incremental: this.options.incremental,
-        tsConfig: {
-          compilerOptions: {
-            sourceRoot: this.codeAnalyzeResult.tsCodeRoot, // for sourceMap
+    try {
+      if (this.codeAnalyzeResult.integrationProject) {
+        // 一体化调整目录
+        await tsIntegrationProjectCompile(baseDir, {
+          buildRoot: this.buildDir,
+          tsCodeRoot: this.codeAnalyzeResult.tsCodeRoot,
+          incremental: this.options.incremental,
+          tsConfig: {
+            compilerOptions: {
+              sourceRoot: this.codeAnalyzeResult.tsCodeRoot, // for sourceMap
+            },
           },
-        },
-        clean: this.options.clean,
-      });
-    } else {
-      await tsCompile(baseDir, {
-        tsConfigName: 'tsconfig.json',
-        tsConfig: {
-          compilerOptions: {
-            sourceRoot: resolve(baseDir, 'src'), // for sourceMap
+          clean: this.options.clean,
+        });
+      } else {
+        await tsCompile(baseDir, {
+          tsConfigName: 'tsconfig.json',
+          tsConfig: {
+            compilerOptions: {
+              sourceRoot: resolve(baseDir, 'src'), // for sourceMap
+            },
           },
-        },
-        clean: this.options.clean,
-      });
-      await move(join(baseDir, 'dist'), join(this.buildDir, 'dist'), opts);
+          clean: this.options.clean,
+        });
+        await move(join(baseDir, 'dist'), join(this.buildDir, 'dist'), opts);
+      }
+    } catch (e) {
+      await remove(buildLogPath);
+      lockMap[buildLogPath] = false;
+      throw new Error(`Typescript Build Error, Please Check Your FaaS Code!`);
     }
     lockMap[buildLogPath] = true;
     // 针对多次调用清理缓存

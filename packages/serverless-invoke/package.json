@@ -16,9 +16,8 @@
     "@midwayjs/serverless-spec-builder": "^0.2.49",
     "fs-extra": "^8.1.0",
     "globby": "^10.0.1",
-    "ts-node": "^8.5.2",
     "urllib": "^2.34.1",
-    "websocket": "^1.0.30"
+    "ws": "^7.2.3"
   },
   "devDependencies": {
     "@midwayjs/faas": "^0.2.49",
