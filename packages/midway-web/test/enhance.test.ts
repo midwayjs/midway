@@ -32,7 +32,7 @@ describe('/test/enhance.test.ts', () => {
     it('mock context', async () => {
       const ctx = app.mockContext();
       const userService = await ctx.requestContext.getAsync('userService');
-      assert((await userService.hello()) === 'world');
+      assert((await userService.hello()) === 'world,0');
     });
 
     it('should load ts directory', done => {
