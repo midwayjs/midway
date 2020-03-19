@@ -6,7 +6,7 @@ import {
 } from '@midwayjs/decorator';
 import * as assert from 'assert';
 import * as path from 'path';
-import { ContainerLoader, MidwayRequestContainer } from '../src';
+import { ContainerLoader, MidwayRequestContainer, clearAllModule } from '../src';
 import * as mm from 'mm';
 
 @Provide()
@@ -17,6 +17,9 @@ class TestModule {
 }
 
 describe('/test/loader.test.ts', () => {
+  beforeEach(() => {
+    clearAllModule();
+  });
   it('should create new loader', async () => {
     const loader = new ContainerLoader({
       baseDir: path.join(__dirname, './fixtures/base-app/src'),

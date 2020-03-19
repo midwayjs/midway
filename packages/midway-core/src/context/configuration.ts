@@ -1,8 +1,8 @@
-import { CONFIGURATION_KEY, InjectionConfigurationOptions, getClassMetadata } from '@midwayjs/decorator';
+import { CONFIGURATION_KEY, InjectionConfigurationOptions, getClassMetadata, LIFECYCLE_IDENTIFIER_PREFIX, classNamed, saveModule, saveProviderId } from '@midwayjs/decorator';
 import * as is from 'is-type-of';
 import { dirname, isAbsolute, join } from 'path';
 import { IContainerConfiguration, IMidwayContainer, MAIN_MODULE_KEY } from '../interface';
-import { isPath, safeRequire } from '../common/util';
+import { isPath, safeRequire, generateProvideId } from '../common/util';
 
 const debug = require('debug')('midway:container:configuration');
 
@@ -131,9 +131,21 @@ export class ContainerConfiguration implements IContainerConfiguration {
           this.addImports(configurationOptions.imports, baseDir);
           this.addImportObjects(configurationOptions.importObjects);
           this.addImportConfigs(configurationOptions.importConfigs, baseDir);
+          this.bindConfigurationClass(configurationExport);
         }
       }
     }
+  }
+  /**
+   * 用于 ready 或者 stop 时处理 lifecycle 实现
+   * @param clzz configuration class
+   */
+  bindConfigurationClass(clzz) {
+    const clzzName = `${LIFECYCLE_IDENTIFIER_PREFIX}${classNamed(clzz.name)}`;
+    const id = generateProvideId(clzzName, this.namespace);
+    saveProviderId(id, clzz, true);
+    this.container.bind(id, clzz, { namespace: this.namespace });
+    saveModule(CONFIGURATION_KEY, clzz);
   }
 
   getImportDirectory() {
