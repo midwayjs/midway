@@ -26,6 +26,10 @@ export class LifeCycleTest implements ILifeCycle {
       }, 500);
     });
   }
+
+  async onStop(container: IMidwayContainer) {
+    console.log('on stop');
+  }
 }
 
 @LifeCycle()

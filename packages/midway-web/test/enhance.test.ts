@@ -132,6 +132,7 @@ describe('/test/enhance.test.ts', () => {
 
   describe('load ts file and use config, plugin decorator', () => {
     let app;
+
     before(() => {
       app = utils.app('enhance/base-app-decorator', {
         typescript: true
@@ -141,7 +142,7 @@ describe('/test/enhance.test.ts', () => {
 
     after(() => {
       rimraf(path.join(app.config.baseDir, 'app/public'));
-      app.close();
+      return app.close();
     });
 
     it('should load ts directory', (done) => {
