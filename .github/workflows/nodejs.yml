@@ -23,7 +23,6 @@ jobs:
     strategy:
       matrix:
         node-version: [12.x, 13.x]
-
     <<: *run-cov
 
   build-windows:
@@ -32,5 +31,4 @@ jobs:
     strategy:
       matrix:
         node-version: [12.x, 13.x]
-
     <<: *run-cov
