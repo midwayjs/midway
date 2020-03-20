@@ -79,7 +79,40 @@ export function getWssUrl(port, type?: string, isThrowErr?: boolean) {
 function debugWs(addr) {
   return new Promise(resolve => {
     const ws = new WebSocket(addr);
+    let currentId = 0;
+    const cbMap = {};
     ws.on('open', () => {
+      ws.on('message', message => {
+        if (message.utf8Data) {
+          const data = JSON.parse(message.utf8Data);
+          if (data.id) {
+            if (data.id > currentId) {
+              currentId = data.id - 0;
+            }
+            if (cbMap[data.id]) {
+              cbMap[data.id](data);
+            }
+          }
+        }
+      });
+      const send = (method, params?: any) => {
+        return new Promise(resolve => {
+          const curId = currentId + 1;
+          currentId = curId;
+          cbMap[curId] = data => {
+            resolve(data);
+          };
+          const param: any = { id: curId, method };
+          if (params) {
+            param.params = params;
+          }
+          ws.send(JSON.stringify(param));
+        });
+      };
+      send('Profiler.enable');
+      send('Runtime.enable');
+      send('Debugger.enable', { maxScriptsCacheSize: 10000000 });
+      send('Debugger.setBlackboxPatterns', { patterns: ['internal'] });
       resolve(send);
     });
   });
