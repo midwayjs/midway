@@ -14,6 +14,9 @@
     "fs-extra": "^8.1.0",
     "midway-bin": "^2.0.0"
   },
+  "engines": {
+    "node": ">= 10"
+  },
   "files": [
     "src",
     "dist"

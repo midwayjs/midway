@@ -18,6 +18,9 @@
     "clean": "midway-bin clean",
     "autod": "midway-bin autod"
   },
+  "engines": {
+    "node": ">= 10"
+  },
   "files": [
     "dist"
   ],

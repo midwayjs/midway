@@ -23,6 +23,9 @@
     "@midwayjs/faas": "^0.2.49",
     "midway-bin": "^2.0.0"
   },
+  "engines": {
+    "node": ">= 10"
+  },
   "files": [
     "dist",
     "src"

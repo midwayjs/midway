@@ -12,6 +12,9 @@
   "devDependencies": {
     "midway-bin": "^2.0.0"
   },
+  "engines": {
+    "node": ">= 10"
+  },
   "files": [
     "dist"
   ],

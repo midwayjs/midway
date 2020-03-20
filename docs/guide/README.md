@@ -91,7 +91,7 @@ Typescript 和 Javascript 既相似又有着许多不同，以往的 Node.js 应
 ## 环境准备
 
 - 操作系统：支持 macOS，Linux，Windows
-- 运行环境：建议选择 [LTS 版本](http://nodejs.org/)，最低要求 8.x。
+- 运行环境：建议选择 [LTS 版本](http://nodejs.org/)，最低要求 10.x。
 
 
 > 国内用户建议使用 `cnpm` 加速 npm

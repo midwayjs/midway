@@ -12,6 +12,9 @@
     "is-type-of": "^1.2.1",
     "koa-compose": "^4.1.0"
   },
+  "engines": {
+    "node": ">= 10"
+  },
   "files": [
     "dist",
     "src"

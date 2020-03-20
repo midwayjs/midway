@@ -16,6 +16,9 @@
   "devDependencies": {
     "@midwayjs/serverless-spec-builder": "^0.2.49"
   },
+  "engines": {
+    "node": ">= 10"
+  },
   "files": [
     "src",
     "dist"

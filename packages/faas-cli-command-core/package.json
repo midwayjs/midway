@@ -11,6 +11,9 @@
     "benchmark": "^2.1.4",
     "midway-bin": "^2.0.0"
   },
+  "engines": {
+    "node": ">= 10"
+  },
   "files": [
     "dist",
     "src"

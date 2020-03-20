@@ -7,6 +7,9 @@
     "@midwayjs/fcli-command-core": "^0.2.54",
     "midway-bin": "^2.0.0"
   },
+  "engines": {
+    "node": ">= 10"
+  },
   "files": [
     "src",
     "dist"

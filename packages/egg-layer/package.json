@@ -27,6 +27,9 @@
     "midway-bin": "^2.0.0",
     "supertest": "^4.0.2"
   },
+  "engines": {
+    "node": ">= 10"
+  },
   "files": [
     "framework",
     "dist",
