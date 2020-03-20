@@ -24,7 +24,7 @@ jobs:
       matrix:
         node-version: [12.x, 13.x]
 
-    <<: &run-cov
+    <<: *run-cov
 
   build-windows:
     runs-on: windows-latest
@@ -33,4 +33,4 @@ jobs:
       matrix:
         node-version: [12.x, 13.x]
 
-    <<: &run-cov
+    <<: *run-cov
