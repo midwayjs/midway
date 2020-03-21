@@ -45,12 +45,14 @@ describe('test/index.test.ts', () => {
     assert(service.getData() !== 'hello' + ts);
   });
 
-  it('should use mm.app to get app', () => {
+  it('should use mm.app to get app', async () => {
     const app = mock.app({
       baseDir: process.env.MIDWAY_BASE_DIR,
       framework: process.env.MIDWAY_FRAMEWORK_PATH,
     });
-    return app.ready();
+    await app.ready();
+    assert.ok(app.mockClassFunction && typeof app.mockClassFunction === 'function');
+    await app.close();
   });
 
   it('should use mm.cluster to get app by default options', () => {
