@@ -140,7 +140,6 @@ export interface IApplicationContext extends IObjectFactory {
   dependencyMap: Map<string, ObjectDependencyTree>;
   ready(): Promise<void>;
   stop(): Promise<void>;
-  dumpDependency(): void;
   registerObject(identifier: ObjectIdentifier, target: any);
 }
 /**

@@ -5,16 +5,13 @@ import { MidwayContainer } from '../../src';
 import { App } from '../fixtures/ts-app-inject/app';
 import { TestCons } from '../fixtures/ts-app-inject/test';
 
-import { UserService } from '../fixtures/complex_injection/userService';
-import { UserController } from '../fixtures/complex_injection/userController';
-import { A, B, DbAPI } from '../fixtures/complex_injection/dbAPI';
 import { TestBinding, LifeCycleTest, LifeCycleTest1 } from '../fixtures/lifecycle';
 import sinon = require('sinon');
 import mm = require('mm');
 import * as decs from '@midwayjs/decorator';
 const { LIFECYCLE_IDENTIFIER_PREFIX } = decs;
 
-describe('/test/midwayContainer.test.ts', () => {
+describe('/test/context/midwayContainer.test.ts', () => {
 
   it('should scan app dir and inject automatic', () => {
     const container = new MidwayContainer();
@@ -48,47 +45,6 @@ describe('/test/midwayContainer.test.ts', () => {
     const sapp = subContainer.get('app') as App;
     expect(sapp.loader).not.to.be.undefined;
     expect(sapp.getConfig().a).to.equal(3);
-  });
-
-  describe('dependency tree', () => {
-
-    it('should generate dependency dot in requestContainer', async () => {
-      const callback = sinon.spy();
-      const Graph: any = require('graphviz/lib/deps/graph').Graph;
-      mm(Graph.prototype, 'to_dot', () => {
-        throw new Error('mock to_dot error');
-      });
-      mm(console, 'error', (msg, err) => {
-        callback(msg + err);
-      });
-
-      const applicationContext = new MidwayContainer();
-      await applicationContext.dumpDependency();
-
-      expect(callback.withArgs('generate injection dependency tree fail, err = mock to_dot error').calledOnce).true;
-      mm.restore();
-
-      applicationContext.bind(UserService);
-      applicationContext.bind(UserController);
-      applicationContext.bind(DbAPI);
-      const newTree = await applicationContext.dumpDependency();
-      expect(/userController/.test(newTree)).to.be.true;
-      expect(/newKey\(DbAPI\)/.test(newTree)).to.be.true;
-    });
-
-    it('should skip empty properties', async () => {
-      const applicationContext = new MidwayContainer();
-      applicationContext.bind(UserService);
-      applicationContext.bind(UserController);
-      applicationContext.bind(DbAPI);
-      applicationContext.bind(A);
-      applicationContext.bind(B);
-      const newTree = await applicationContext.dumpDependency();
-      expect(/userController/.test(newTree)).to.be.true;
-      expect(/newKey\(DbAPI\)/.test(newTree)).to.be.true;
-      expect(/"newKey" -> "b"/.test(newTree)).to.be.true;
-    });
-
   });
 
   describe('lifecycle case', () => {
