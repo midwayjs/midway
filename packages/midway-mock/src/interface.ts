@@ -11,11 +11,11 @@ export interface MidwayApplicationOptions extends MockOption {
   worker?: number;
 }
 
-type EggContext = Pick<MockApplication, 'mockContext'>;
+type EggContext = ReturnType<MockApplication['mockContext']>;
 
-export type MidwayMockContext = EggContext & {
+export interface MidwayMockContext extends EggContext {
   requestContext: IApplicationContext;
-};
+}
 
 export type FilterPick<T, U> = Pick<T, Exclude<keyof T, U>>;
 

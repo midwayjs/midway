@@ -12,7 +12,6 @@ describe('test/index.test.ts', () => {
 
   it('should app has mockClassFunction', async () => {
     assert.ok(app.mockClassFunction && typeof app.mockClassFunction === 'function');
-
     const ts = Date.now();
     app.mockClassFunction('baseService', 'getData', () => {
       return 'mock_test' + ts;
