@@ -76,7 +76,11 @@ class BuildCommand extends Command {
       console.log(`[midway-bin] tsconfig.json not found in ${cwd}\n`);
       return;
     }
-    const tsConfig = argv.tsConfig || require(projectFile);
+    let tsConfig = argv.tsConfig;
+    if (!tsConfig) {
+      const Hjson = require('hjson');
+      tsConfig = Hjson.parse(fs.readFileSync(projectFile, 'utf-8'));
+    }
     const projectDir = this.projectDir = path.dirname(projectFile);
     let outDir = this.inferCompilerOptions(tsConfig, 'outDir');
     let outDirAbsolute;

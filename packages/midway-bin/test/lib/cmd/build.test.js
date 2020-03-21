@@ -30,6 +30,15 @@ describe('test/lib/cmd/build.test.js', () => {
     await rimraf(path.join(cwd, 'dist'));
   });
 
+  it('should build success with tsconfig comments', async ()=>{
+    const cwd = path.join(__dirname, '../../fixtures/ts-dir-tsconfig-comments')
+    await rimraf(path.join(cwd, 'dist'));
+    const child = coffee.fork(midwayBin, ['build'], { cwd});
+    await child.expect('code', 0).end();
+    assert(fs.existsSync(path.join(cwd, 'dist/index.js')));
+    await rimraf(path.join(cwd, 'dist'));
+  })
+
   it('should auto clean dir before build', async () => {
     const cwd = path.join(__dirname, '../../fixtures/ts-dir');
     const child = coffee.fork(midwayBin, [ 'build' ], { cwd });
