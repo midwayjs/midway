@@ -1,6 +1,6 @@
 import * as mock from 'egg-mock';
 import { resolveModule } from 'midway-bin';
-
+import { join } from 'path';
 import { MidwayApplicationOptions, MidwayMockApplication } from './interface';
 
 export interface MidwayMock extends mock.EggMock {
@@ -8,7 +8,6 @@ export interface MidwayMock extends mock.EggMock {
   default: mock.EggMock;
   app: (option?: MidwayApplicationOptions) => MidwayMockApplication;
   cluster: (option?: MidwayApplicationOptions) => MidwayMockApplication;
-  // [prop: string]: any
 }
 
 /**
@@ -26,23 +25,33 @@ export const mm = Object.assign({}, mock, {
   container: mockContainer,
 }) as MidwayMock;
 
-mm.app = (options): MidwayMockApplication => {
+mm.app = (options = {}): MidwayMockApplication => {
   if (process.env.MIDWAY_BASE_DIR && !options.baseDir) { options.baseDir = process.env.MIDWAY_BASE_DIR; }
   if (process.env.MIDWAY_FRAMEWORK_PATH && !options.framework) { options.framework = process.env.MIDWAY_FRAMEWORK_PATH; }
   // @ts-ignore
   return mock.app(Object.assign({
     framework: options.framework || getDefaultFramework(),
     typescript: !!require.extensions['.ts'],
+    plugins: {
+      'midway-mock': {
+        path: join(__dirname, '../')
+      }
+    }
   }, options));
 };
 
-mm.cluster = (options) => {
+mm.cluster = (options = {}) => {
   if (process.env.MIDWAY_BASE_DIR && !options.baseDir) { options.baseDir = process.env.MIDWAY_BASE_DIR; }
   if (process.env.MIDWAY_FRAMEWORK_PATH && !options.framework) { options.framework = process.env.MIDWAY_FRAMEWORK_PATH; }
   // @ts-ignore
   return mock.cluster(Object.assign({
     framework: options.framework || getDefaultFramework(),
     typescript: !!require.extensions['.ts'],
+    plugins: {
+      'midway-mock': {
+        path: join(__dirname, '../')
+      }
+    }
   }, options));
 };
 
@@ -50,7 +59,7 @@ export class MockContainer {
 
   app: MidwayMockApplication;
 
-  constructor(options: MidwayApplicationOptions) {
+  constructor(options: MidwayApplicationOptions = {}) {
     this.app = mm.app(options);
   }
 
