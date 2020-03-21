@@ -1,29 +1,7 @@
-import { MockApplication } from 'egg-mock';
-import { ApplicationContext, IApplicationContext } from 'injection';
+import { MidwayMockApplication } from '../../interface';
 
 
-export interface MidwayMockApplication extends MockApplication {
-  applicationContext: ApplicationContext
-  pluginContext: IApplicationContext
-  appDir: string
-  baseDir: string
-  enablePlugins: any
-  getApplicationContext(): IApplicationContext
-  getPluginContext(): IApplicationContext
-  getPlugin(pluginName: string): any
-  getLogger(name?: string): any
-  getConfig(key?: string): any
-  _mockFn(
-    service: string,
-    methodName: string,
-    /** {Object|Function|Error} - mock you data */
-    fnOrData: any,
-  ): void
-  mockClassFunction: typeof mockClassFunction
-}
-
-export function mockClassFunction(
-  this: MidwayMockApplication,
+export const mockClassFunction: MidwayMockApplication['mockClassFunction'] = function(
   className: string,
   methodName: string,
   fnOrData: any,
@@ -36,8 +14,7 @@ export function mockClassFunction(
     throw new TypeError(`def undefined with className: "${className}", methodName: "${methodName}"`);
   } else {
     const clazz = def.path;
-    if (clazz && typeof clazz === 'function') {
-      this._mockFn(clazz.prototype, methodName, fnOrData);
-    }
+    this._mockFn(clazz.prototype, methodName, fnOrData);
   }
 }
+
