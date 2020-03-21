@@ -1,14 +1,13 @@
 import * as mock from 'egg-mock';
 import { resolveModule } from 'midway-bin';
 import { join } from 'path';
-import { MidwayApplicationOptions, MidwayMockApplication } from './interface';
+import { MidwayApplicationOptions, MidwayMockApplication, FilterPick } from './interface';
 
-export interface MidwayMock extends mock.EggMock {
+export interface MidwayMock extends FilterPick<mock.EggMock, 'app' | 'cluster'> {
   container: typeof mockContainer;
   default: mock.EggMock;
   app: (option?: MidwayApplicationOptions) => MidwayMockApplication;
   cluster: (option?: MidwayApplicationOptions) => MidwayMockApplication;
-  // [prop: string]: any
 }
 
 /**

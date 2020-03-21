@@ -11,6 +11,14 @@ export interface MidwayApplicationOptions extends MockOption {
   worker?: number;
 }
 
+type EggContext = Pick<MockApplication, 'mockContext'>;
+
+export type MidwayMockContext = EggContext & {
+  requestContext: IApplicationContext;
+};
+
+export type FilterPick<T, U> = Pick<T, Exclude<keyof T, U>>;
+
 export interface MidwayMockApplication extends MockApplication {
   applicationContext: IApplicationContext;
   pluginContext: IApplicationContext;
@@ -22,6 +30,7 @@ export interface MidwayMockApplication extends MockApplication {
   getPlugin(pluginName: string): any;
   getLogger(name?: string): any;
   getConfig(key?: string): any;
+  mockContext(data?: any): MidwayMockContext;
   /**
    * Mock class function
    */
