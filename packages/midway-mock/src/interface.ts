@@ -23,12 +23,6 @@ export interface MidwayMockApplication extends MockApplication {
   getPlugin(pluginName: string): any
   getLogger(name?: string): any
   getConfig(key?: string): any
-  _mockFn(
-    service: string,
-    methodName: string,
-    /** {Object|Function|Error} - mock you data */
-    fnOrData: any,
-  ): void
 
   /**
    * Mock class function

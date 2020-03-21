@@ -1,7 +1,17 @@
 import { MidwayMockApplication } from '../../interface';
 
 
-export const mockClassFunction: MidwayMockApplication['mockClassFunction'] = function(
+interface MidwayMockApplicationInner extends MidwayMockApplication {
+  _mockFn(
+    service: string,
+    methodName: string,
+    /** {Object|Function|Error} - mock you data */
+    fnOrData: any,
+  ): void
+}
+
+export const mockClassFunction: MidwayMockApplicationInner['mockClassFunction'] = function(
+  this: MidwayMockApplicationInner,
   className: string,
   methodName: string,
   fnOrData: any,
