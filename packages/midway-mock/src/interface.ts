@@ -17,7 +17,12 @@ export interface MidwayMockContext extends EggContext {
   requestContext: IApplicationContext;
 }
 
-export type FilterPick<T, U> = Pick<T, Exclude<keyof T, U>>;
+export type MockClassFunctionHandler = (
+  this: MidwayMockApplication,
+  className: string,
+  methodName: string,
+  fnOrData: any,
+) => any;
 
 export interface MidwayMockApplication extends MockApplication {
   applicationContext: IApplicationContext;
@@ -31,13 +36,5 @@ export interface MidwayMockApplication extends MockApplication {
   getLogger(name?: string): any;
   getConfig(key?: string): any;
   mockContext(data?: any): MidwayMockContext;
-  /**
-   * Mock class function
-   */
-  mockClassFunction(
-    this: MidwayMockApplication,
-    className: string,
-    methodName: string,
-    fnOrData: any,
-  ): any
+  mockClassFunction: MockClassFunctionHandler; // Mock class function
 }
