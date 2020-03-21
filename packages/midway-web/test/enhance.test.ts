@@ -9,14 +9,13 @@ const rimraf = require('mz-modules/rimraf');
 import { clearAllModule } from '@midwayjs/decorator';
 
 describe('/test/enhance.test.ts', () => {
-
   afterEach(clearAllModule);
 
   describe('load ts file', () => {
     let app;
     before(() => {
       app = utils.app('enhance/base-app', {
-        typescript: true
+        typescript: true,
       });
       return app.ready();
     });
@@ -24,10 +23,19 @@ describe('/test/enhance.test.ts', () => {
     after(() => app.close());
 
     it('should get config merge', () => {
-      assert(app.config.rundir, path.join(__dirname, './fixtures/enhance/base-app/run'));
+      assert(
+        app.config.rundir,
+        path.join(__dirname, './fixtures/enhance/base-app/run')
+      );
     });
 
-    it('should load ts directory', (done) => {
+    it('mock context', async () => {
+      const ctx = app.mockContext();
+      const userService = await ctx.requestContext.getAsync('userService');
+      assert((await userService.hello()) === 'world,0');
+    });
+
+    it('should load ts directory', done => {
       request(app.callback())
         .get('/api')
         .expect(200)
@@ -39,21 +47,21 @@ describe('/test/enhance.test.ts', () => {
     let app;
     before(() => {
       app = utils.app('enhance/base-app-controller', {
-        typescript: true
+        typescript: true,
       });
       return app.ready();
     });
 
     after(() => app.close());
 
-    it('should load controller from requestContext', (done) => {
+    it('should load controller from requestContext', done => {
       request(app.callback())
         .get('/api/index')
         .expect(200)
         .expect('index', done);
     });
 
-    it('should load controller use controller decorator', (done) => {
+    it('should load controller use controller decorator', done => {
       request(app.callback())
         .get('/components/')
         .expect(200)
@@ -72,20 +80,19 @@ describe('/test/enhance.test.ts', () => {
     let app;
     before(() => {
       app = utils.app('enhance/base-app-controller-default-export', {
-        typescript: true
+        typescript: true,
       });
       return app.ready();
     });
 
     after(() => app.close());
 
-    it('should load controller', (done) => {
+    it('should load controller', done => {
       request(app.callback())
         .get('/')
         .expect(200)
         .expect('root_test', done);
     });
-
   });
 
   describe('load ts class controller use decorator conflicts', () => {
@@ -94,7 +101,7 @@ describe('/test/enhance.test.ts', () => {
       let suc = false;
       try {
         app = utils.app('enhance/base-app-controller-conflicts', {
-          typescript: true
+          typescript: true,
         });
         await app.ready();
       } catch (e) {
@@ -108,21 +115,21 @@ describe('/test/enhance.test.ts', () => {
     let app;
     before(() => {
       app = utils.app('enhance/base-app-default-scope', {
-        typescript: true
+        typescript: true,
       });
       return app.ready();
     });
 
     after(() => app.close());
 
-    it('should load controller from requestContext', (done) => {
+    it('should load controller from requestContext', done => {
       request(app.callback())
         .get('/api/index')
         .expect(200)
         .expect('index', done);
     });
 
-    it('should load controller use controller decorator', (done) => {
+    it('should load controller use controller decorator', done => {
       request(app.callback())
         .get('/api/test')
         .expect(200)
@@ -135,7 +142,7 @@ describe('/test/enhance.test.ts', () => {
 
     before(() => {
       app = utils.app('enhance/base-app-decorator', {
-        typescript: true
+        typescript: true,
       });
       return app.ready();
     });
@@ -145,7 +152,7 @@ describe('/test/enhance.test.ts', () => {
       return app.close();
     });
 
-    it('should load ts directory', (done) => {
+    it('should load ts directory', done => {
       request(app.callback())
         .get('/api')
         .expect(200)
@@ -165,7 +172,7 @@ describe('/test/enhance.test.ts', () => {
       request(app.callback())
         .get('/config/test')
         .expect(200)
-        .expect({ a: 1, b: true, c: 2}, done);
+        .expect({ a: 1, b: true, c: 2 }, done);
 
       request(app.callback())
         .get('/config/test2')
@@ -181,12 +188,12 @@ describe('/test/enhance.test.ts', () => {
       await request(app.callback())
         .get('/param/12/test?name=1')
         .expect(200)
-        .expect({id: '12', name: '1'});
+        .expect({ id: '12', name: '1' });
 
       await request(app.callback())
         .get('/param/query?name=1')
         .expect(200)
-        .expect({name: '1'});
+        .expect({ name: '1' });
 
       await request(app.callback())
         .get('/param/query_id?id=1')
@@ -196,7 +203,7 @@ describe('/test/enhance.test.ts', () => {
       await request(app.callback())
         .get('/param/param/12/test/456')
         .expect(200)
-        .expect({id: '12', userId: '456'});
+        .expect({ id: '12', userId: '456' });
 
       await request(app.callback())
         .get('/param/param/12')
@@ -208,7 +215,7 @@ describe('/test/enhance.test.ts', () => {
         .type('form')
         .send({ id: '1' })
         .expect(200)
-        .expect({id: '1'});
+        .expect({ id: '1' });
 
       await request(app.callback())
         .get('/param/body_id')
@@ -231,21 +238,34 @@ describe('/test/enhance.test.ts', () => {
         .expect(200)
         .expect('127');
 
-      const imagePath = path.join(__dirname, 'fixtures/enhance', 'base-app-decorator', '1.jpg');
-      const imagePath1 = path.join(__dirname, 'fixtures/enhance', 'base-app-decorator', '2.jpg');
+      const imagePath = path.join(
+        __dirname,
+        'fixtures/enhance',
+        'base-app-decorator',
+        '1.jpg'
+      );
+      const imagePath1 = path.join(
+        __dirname,
+        'fixtures/enhance',
+        'base-app-decorator',
+        '2.jpg'
+      );
 
-      await app.httpRequest()
+      await app
+        .httpRequest()
         .post('/param/file')
         .field('name', 'form')
         .attach('file', imagePath)
         .expect('ok');
 
-      await app.httpRequest()
+      await app
+        .httpRequest()
         .get('/public/form.jpg')
         .expect('content-length', '16424')
         .expect(200);
 
-      await app.httpRequest()
+      await app
+        .httpRequest()
         .post('/param/files')
         .field('name1', '1')
         .attach('file1', imagePath)
@@ -254,16 +274,17 @@ describe('/test/enhance.test.ts', () => {
         .field('name3', '3')
         .expect('ok');
 
-      await app.httpRequest()
+      await app
+        .httpRequest()
         .get('/public/1.jpg')
         .expect('content-length', '16424')
         .expect(200);
 
-      await app.httpRequest()
+      await app
+        .httpRequest()
         .get('/public/2.jpg')
         .expect('content-length', '16424')
         .expect(200);
-
     });
   });
 
@@ -271,14 +292,14 @@ describe('/test/enhance.test.ts', () => {
     let app;
     before(() => {
       app = utils.app('enhance/base-app-utils', {
-        typescript: true
+        typescript: true,
       });
       return app.ready();
     });
 
     after(() => app.close());
 
-    it('should load ts directory and inject module', (done) => {
+    it('should load ts directory and inject module', done => {
       request(app.callback())
         .get('/api/test')
         .expect(200)
@@ -290,14 +311,14 @@ describe('/test/enhance.test.ts', () => {
     let app;
     before(() => {
       app = utils.app('enhance/base-app-async', {
-        typescript: true
+        typescript: true,
       });
       return app.ready();
     });
 
     after(() => app.close());
 
-    it('should load ts directory and inject module', (done) => {
+    it('should load ts directory and inject module', done => {
       request(app.callback())
         .get('/api')
         .expect(200)
@@ -305,13 +326,12 @@ describe('/test/enhance.test.ts', () => {
     });
   });
 
-  describe('ts directory different from other', function () {
-
+  describe('ts directory different from other', function() {
     let app;
     before(() => {
       mm(process.env, 'HOME', '');
       app = utils.app('enhance/base-app', {
-        typescript: true
+        typescript: true,
       });
       return app.ready();
     });
@@ -330,14 +350,14 @@ describe('/test/enhance.test.ts', () => {
     let app;
     before(() => {
       app = utils.app('enhance/base-app-constructor', {
-        typescript: true
+        typescript: true,
       });
       return app.ready();
     });
 
     after(() => app.close());
 
-    it('should load ts directory and inject in constructor', (done) => {
+    it('should load ts directory and inject in constructor', done => {
       request(app.callback())
         .get('/api')
         .expect(200)
@@ -349,14 +369,14 @@ describe('/test/enhance.test.ts', () => {
     let app;
     before(() => {
       app = utils.app('enhance/base-app-function', {
-        typescript: true
+        typescript: true,
       });
       return app.ready();
     });
 
     after(() => app.close());
 
-    it('should load ts directory and inject in constructor', (done) => {
+    it('should load ts directory and inject in constructor', done => {
       request(app.callback())
         .get('/api')
         .expect(200)
@@ -368,14 +388,14 @@ describe('/test/enhance.test.ts', () => {
     let app;
     before(() => {
       app = utils.app('enhance/base-app-router', {
-        typescript: true
+        typescript: true,
       });
       return app.ready();
     });
 
     after(() => app.close());
 
-    it('should invoke different router and get same result', (done) => {
+    it('should invoke different router and get same result', done => {
       done = pedding(3, done);
       request(app.callback())
         .get('/')
@@ -398,14 +418,14 @@ describe('/test/enhance.test.ts', () => {
     let app;
     before(() => {
       app = utils.app('enhance/base-app-router-priority', {
-        typescript: true
+        typescript: true,
       });
       return app.ready();
     });
 
     after(() => app.close());
 
-    it('should invoke different router and get same result', (done) => {
+    it('should invoke different router and get same result', done => {
       done = pedding(3, done);
       request(app.callback())
         .get('/hello')
@@ -428,14 +448,14 @@ describe('/test/enhance.test.ts', () => {
     let app;
     before(() => {
       app = utils.app('enhance/loader-duplicate', {
-        typescript: true
+        typescript: true,
       });
       return app.ready();
     });
 
     after(() => app.close());
 
-    it('should fix egg-socket.io load controller directory', (done) => {
+    it('should fix egg-socket.io load controller directory', done => {
       request(app.callback())
         .get('/')
         .expect(200)
@@ -447,46 +467,44 @@ describe('/test/enhance.test.ts', () => {
     let app;
     before(() => {
       app = utils.app('enhance/base-app-controller-tsx', {
-        typescript: true
+        typescript: true,
       });
       return app.ready();
     });
 
     after(() => app.close());
 
-    it('should load tsx controller', (done) => {
+    it('should load tsx controller', done => {
       request(app.callback())
         .get('/')
         .expect(200)
         .expect(/react/, done);
     });
-
   });
 
   describe('support middleware parameter', () => {
     let app;
     before(() => {
       app = utils.app('enhance/base-app-middleware', {
-        typescript: true
+        typescript: true,
       });
       return app.ready();
     });
 
     after(() => app.close());
 
-    it('should load middleware in controller and router', (done) => {
+    it('should load middleware in controller and router', done => {
       request(app.callback())
         .get('/')
         .expect(200)
         .expect('1111444455552224', done);
     });
 
-    it('should support multi-router in one method', (done) => {
+    it('should support multi-router in one method', done => {
       request(app.callback())
         .post('/api/data')
         .expect(200)
         .expect('11114444', done);
     });
-
   });
 });
