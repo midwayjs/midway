@@ -39,11 +39,11 @@ describe('/test/definitions/objectCreator.test.ts', () => {
       }
     }, [123])).eq(123);
 
-    expect(await creator.doConstructAsync({
-      *say(a) {
-        return a;
-      }
-    }, [1234])).eq(1234);
+    // expect(await creator.doConstructAsync({
+    //   *say(a) {
+    //     return a;
+    //   }
+    // }, [1234])).eq(1234);
     expect(await creator.doConstructAsync({
       async say(a) {
         return a;
@@ -106,12 +106,12 @@ describe('/test/definitions/objectCreator.test.ts', () => {
     });
     expect(callback.withArgs('destroy async1').calledOnce).true;
 
-    await creator.doDestroyAsync({
-      *destroy() {
-        callback('destroy asyncg1');
-      }
-    });
-    expect(callback.withArgs('destroy asyncg1').calledOnce).true;
+    // await creator.doDestroyAsync({
+    //   *destroy() {
+    //     callback('destroy asyncg1');
+    //   }
+    // });
+    // expect(callback.withArgs('destroy asyncg1').calledOnce).true;
 
     await creator.doDestroyAsync({
       async destroy() {

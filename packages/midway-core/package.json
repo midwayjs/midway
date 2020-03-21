@@ -31,7 +31,6 @@
   },
   "dependencies": {
     "@midwayjs/decorator": "^2.0.4",
-    "co": "^4.6.0",
     "debug": "^4.1.1",
     "extend2": "^1.0.0",
     "globby": "^10.0.1",
