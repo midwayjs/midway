@@ -20,7 +20,7 @@ function mockContainer(options: MidwayApplicationOptions): MockContainer {
   return new MockContainer(options);
 }
 
-const defaultFramework: string = resolveModule('midway') || resolveModule('midway-mirror');
+const getDefaultFramework: () => string = () => resolveModule('midway') || resolveModule('midway-mirror');
 
 export const mm = Object.assign({}, mock, {
   container: mockContainer,
@@ -31,7 +31,7 @@ mm.app = (options): MidwayMockApplication => {
   if (process.env.MIDWAY_FRAMEWORK_PATH && !options.framework) { options.framework = process.env.MIDWAY_FRAMEWORK_PATH; }
   // @ts-ignore
   return mock.app(Object.assign({
-    framework: options.framework || defaultFramework,
+    framework: options.framework || getDefaultFramework(),
     typescript: !!require.extensions['.ts'],
   }, options));
 };
@@ -41,7 +41,7 @@ mm.cluster = (options) => {
   if (process.env.MIDWAY_FRAMEWORK_PATH && !options.framework) { options.framework = process.env.MIDWAY_FRAMEWORK_PATH; }
   // @ts-ignore
   return mock.cluster(Object.assign({
-    framework: options.framework || defaultFramework,
+    framework: options.framework || getDefaultFramework(),
     typescript: !!require.extensions['.ts'],
   }, options));
 };
