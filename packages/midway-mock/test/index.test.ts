@@ -50,7 +50,7 @@ describe('test/index.test.ts', () => {
       framework: process.env.MIDWAY_FRAMEWORK_PATH,
     });
     await app.ready();
-    app.mockContext().
+    assert(app.mockContext().requestContext);
     assert.ok(app.mockClassFunction && typeof app.mockClassFunction === 'function');
     await app.close();
   });
