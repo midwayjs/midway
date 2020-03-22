@@ -39,7 +39,7 @@ export * from './interface';
 export { AgentWorkerLoader, AppWorkerLoader } from './loader/loader';
 export { Application, Agent } from './midway';
 export { MidwayWebLoader } from './loader/webLoader';
-
+export * from '@midwayjs/core';
 export {
   Context,
   IContextLocals,

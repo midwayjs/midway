@@ -1,12 +1,12 @@
 const assert = require('assert');
 const request = require('supertest');
+import { clearAllModule } from '@midwayjs/decorator';
 import * as path from 'path';
+
 const utils = require('./utils');
 const mm = require('mm');
 const pedding = require('pedding');
 const rimraf = require('mz-modules/rimraf');
-
-import { clearAllModule } from '@midwayjs/decorator';
 
 describe('/test/enhance.test.ts', () => {
   afterEach(clearAllModule);

@@ -1,4 +1,3 @@
-import * as co from 'co';
 import * as is from 'is-type-of';
 import { IObjectCreator, IObjectDefinition } from '../interface';
 
@@ -67,9 +66,7 @@ export class ObjectCreator implements IObjectCreator {
     let inst;
     if (this.definition.constructMethod) {
       const fn = Clzz[this.definition.constructMethod];
-      if (is.generatorFunction(fn)) {
-        inst = await co.wrap(fn).apply(Clzz, args);
-      } else if (is.asyncFunction(fn)) {
+      if (is.asyncFunction(fn)) {
         inst = await fn.apply(Clzz, args);
       } else {
         inst = fn.apply(Clzz, args);
@@ -111,9 +108,7 @@ export class ObjectCreator implements IObjectCreator {
     const inst = obj;
     if (this.definition.initMethod && inst[this.definition.initMethod]) {
       const initFn = inst[this.definition.initMethod];
-      if (is.generatorFunction(initFn)) {
-        await co.wrap(initFn).call(inst);
-      } else if (is.asyncFunction(initFn)) {
+      if (is.asyncFunction(initFn)) {
         await initFn.call(inst);
       } else {
         if (initFn.length === 1) {
@@ -146,9 +141,7 @@ export class ObjectCreator implements IObjectCreator {
   async doDestroyAsync(obj: any): Promise<void> {
     if (this.definition.destroyMethod && obj[this.definition.destroyMethod]) {
       const fn = obj[this.definition.destroyMethod];
-      if (is.generatorFunction(fn)) {
-        await co.wrap(fn).call(obj);
-      } else if (is.asyncFunction(fn)) {
+      if (is.asyncFunction(fn)) {
         await fn.call(obj);
       } else {
         if (fn.length === 1) {

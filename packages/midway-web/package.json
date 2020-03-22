@@ -46,6 +46,7 @@
     "egg-core": "^4.15.0",
     "egg-logger": "^2.3.2",
     "extend2": "^1.0.0",
+    "graphviz": "^0.0.8",
     "midway-schedule": "^2.0.4",
     "mkdirp": "^0.5.1"
   },
