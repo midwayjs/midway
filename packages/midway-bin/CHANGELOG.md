@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.5](https://github.com/midwayjs/midway/compare/v2.0.4...v2.0.5) (2020-03-22)
+
+
+### Bug Fixes
+
+* can midway build when tsconfig.json has comments ([#424](https://github.com/midwayjs/midway/issues/424)) ([f2b2713](https://github.com/midwayjs/midway/commit/f2b27137fe35d1de462adfdc289953d6a405ecd9))
+
+
+
+
+
 ## [2.0.4](https://github.com/midwayjs/midway/compare/v2.0.3...v2.0.4) (2020-03-19)
 
 **Note:** Version bump only for package midway-bin

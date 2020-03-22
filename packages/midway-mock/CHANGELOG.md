@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.5](https://github.com/midwayjs/midway/compare/v2.0.4...v2.0.5) (2020-03-22)
+
+
+### Bug Fixes
+
+* lazy get default framework ([#430](https://github.com/midwayjs/midway/issues/430)) ([c8c4b49](https://github.com/midwayjs/midway/commit/c8c4b49dd66d197b10bafd24aba55f42672d7d59))
+* mock fn ([#439](https://github.com/midwayjs/midway/issues/439)) ([d0a36e4](https://github.com/midwayjs/midway/commit/d0a36e4ff15493603ebb334dc746d64fed300627))
+
+
+
+
+
 ## [2.0.4](https://github.com/midwayjs/midway/compare/v2.0.3...v2.0.4) (2020-03-19)
 
 **Note:** Version bump only for package midway-mock
