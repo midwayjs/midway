@@ -11,6 +11,7 @@ const plugins = {
     { mod: '@midwayjs/fcli-plugin-fc', name: 'AliyunFCPlugin' },
   ],
   deploy: [
+    { mod: '@midwayjs/fcli-plugin-package', name: 'PackagePlugin' },
     { mod: '@midwayjs/fcli-plugin-deploy', name: 'DeployPlugin' },
     { mod: '@midwayjs/fcli-plugin-fc', name: 'AliyunFCPlugin' },
   ],
