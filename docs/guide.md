@@ -314,7 +314,7 @@ export class HomeController {
 现在可以提供一个 middleware（任意目录），比如 `src/app/middleware/api.ts`。
 
 ```ts
-import { Middleware, WebMiddleware, provide } from 'midway';
+import { Middleware, WebMiddleware, provide, config } from 'midway';
 
 @provide()
 export class ApiMiddleware implements WebMiddleware {
