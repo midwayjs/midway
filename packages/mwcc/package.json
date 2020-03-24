@@ -1,0 +1,36 @@
+{
+  "name": "@miwayjs/mwcc",
+  "version": "2.0.5",
+  "description": "Midway Compiler Collection",
+  "main": "dist/index",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "npm run lint && tsc -p .",
+    "lint": "../../node_modules/.bin/tslint --format prose -c ../../tslint.json --fix 'src/**/*.ts' 'test/**/*.ts'",
+    "test": "NODE_ENV=test ../midway-bin/bin/midway-bin.js test --ts",
+    "cov": "../midway-bin/bin/midway-bin.js cov --ts",
+    "ci": "npm run test"
+  },
+  "keywords": [
+    "midway",
+    "compiler"
+  ],
+  "files": [
+    "dist",
+    "src"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "ncc": "^0.3.6"
+  },
+  "peerDependencies": {
+    "typescript": "^3.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/midwayjs/midway.git"
+  }
+}

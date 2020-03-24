@@ -1,0 +1,10 @@
+{
+  "scenario": "baseline",
+  "projectRoot": "test/cases/projects/baseline",
+  "outputFiles": [
+    "dist/emit.js",
+    "dist/emit.js.map",
+    "dist/decl.js",
+    "dist/decl.js.map"
+  ]
+}
