@@ -2,7 +2,9 @@ import * as ts from 'typescript';
 import * as globby from 'globby';
 import * as fs from 'fs';
 import * as path from 'path';
-import { MwccOptions } from './iface';
+import * as os from 'os';
+import bundler from './plugin/bundler';
+import { MwccOptions, MwccPluginContext as MwccContext } from './iface';
 import { mergeCompilerOptions, getDefaultOptions } from './config';
 
 const globOptions = {
@@ -19,7 +21,8 @@ const globOptions = {
   ],
 };
 
-export function mwcc(projectDir: string, outputDir: string, options?: MwccOptions) {
+export async function mwcc(projectDir: string, outputDir: string, options?: MwccOptions) {
+  projectDir = path.resolve(projectDir);
   const originalCWD = process.cwd();
   process.chdir(projectDir);
   if (options == null) {
@@ -27,18 +30,39 @@ export function mwcc(projectDir: string, outputDir: string, options?: MwccOption
   }
   const defaultOptions = getDefaultOptions(projectDir, outputDir);
   const compilerOptions = mergeCompilerOptions(defaultOptions.compilerOptions, options.compilerOptions);
+  const derivedRootDir = compilerOptions.rootDir;
   const derivedOutputDir = compilerOptions.outDir;
 
   const projectFiles = globby.sync('**/*.ts', {
     ...globOptions,
     cwd: projectDir,
   });
+
+  const context: MwccContext = {
+    options,
+    files: projectFiles,
+    outFiles: [],
+    projectDir,
+    derivedOutputDir,
+    buildDir: fs.mkdtempSync(path.join(os.tmpdir(), 'mwcc-')),
+    getTsOutputPath(filename) {
+      if (path.isAbsolute(filename) && !filename.startsWith(projectDir)) {
+        return undefined;
+      }
+
+      const relPath = path.relative(derivedRootDir, filename);
+      const basename = path.basename(relPath).replace(/\.tsx?$/, '');
+      return path.join(context.buildDir, path.dirname(relPath), basename + '.js');
+    }
+  }
+  compilerOptions.outDir = context.buildDir;
   /**
    * 1. compile TypeScript files
    */
   const host = ts.createCompilerHost(compilerOptions);
   const program = ts.createProgram(projectFiles, compilerOptions, host);
   const emitResult = program.emit();
+  context.outFiles = emitResult.emittedFiles;
 
   const allDiagnostics = ts
     .getPreEmitDiagnostics(program)
@@ -52,8 +76,12 @@ export function mwcc(projectDir: string, outputDir: string, options?: MwccOption
   /**
    * 2. Run plugins
    */
+  if (options.plugins?.bundler) {
+    await bundler(context, host);
+  }
 
-  const summary = generateBuildSummary(projectFiles, options, emitResult);
+  finalizeFileSystem(context, host);
+  const summary = generateBuildSummary(context);
   fs.writeFileSync(path.join(derivedOutputDir, 'midway.build.json'), JSON.stringify(summary));
   process.chdir(originalCWD);
   return { summary, diagnostics: allDiagnostics };
@@ -76,12 +104,23 @@ function reportDiagnostic(diagnostic: ts.Diagnostic) {
   }
 }
 
-function generateBuildSummary(projectFiles: string[], options: MwccOptions, emitResult: ts.EmitResult) {
+function finalizeFileSystem(context: MwccContext, host: ts.CompilerHost) {
+  for (let file of context.outFiles) {
+    const content = host.readFile(file);
+    const filename = path.join(context.derivedOutputDir, path.relative(context.buildDir, file));
+    host.writeFile(filename, content, false);
+  }
+  context.outFiles = context.outFiles.map(it => {
+    return path.join(context.derivedOutputDir, path.relative(context.buildDir, it));
+  });
+}
+
+function generateBuildSummary(context: MwccContext) {
   return {
-    ...options,
+    ...context.options,
     build: {
-      inputFiles: projectFiles,
-      outputFiles: emitResult.emittedFiles,
+      inputFiles: context.files,
+      outputFiles: context.outFiles,
     },
     versions: {
       mwcc: require('../package.json').version,

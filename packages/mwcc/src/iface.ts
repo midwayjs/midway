@@ -27,4 +27,13 @@ export interface MwccBuildSummary extends MwccOptions {
 export interface MwccPluginContext {
   options: MwccOptions;
   files: string[];
+  outFiles: string[];
+  projectDir: string;
+  buildDir: string;
+  derivedOutputDir: string;
+  getTsOutputPath: (filename: string) => string;
+}
+
+export interface MwccCompilerHost extends ts.CompilerHost {
+
 }

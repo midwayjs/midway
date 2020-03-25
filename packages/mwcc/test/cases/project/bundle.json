@@ -1,0 +1,15 @@
+{
+  "scenario": "bundle",
+  "projectRoot": "test/cases/projects/bundle",
+  "plugins": {
+    "bundler": {
+      "entries": {
+        "src/entry.ts": "index.js"
+      }
+    }
+  },
+  "outputFiles": [
+    "dist/index.js",
+    "dist/index.js.map"
+  ]
+}

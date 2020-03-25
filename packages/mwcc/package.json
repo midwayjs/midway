@@ -24,7 +24,8 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "ncc": "^0.3.6"
+    "@midwayjs/ncc": "^0.22.2-1",
+    "globby": "^11.0.0"
   },
   "peerDependencies": {
     "typescript": "^3.0.0"

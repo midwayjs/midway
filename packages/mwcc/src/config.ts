@@ -19,7 +19,7 @@ export function getDefaultOptions(projectDir: string, outputDir: string): MwccOp
 
 export function mergeCompilerOptions(base: ts.CompilerOptions, target: ts.CompilerOptions) {
   const compilerOptions = Object.assign({}, base, target);
-  if (target.inlineSourceMap) {
+  if (target?.inlineSourceMap) {
     delete compilerOptions.sourceMap;
   }
   return compilerOptions;
