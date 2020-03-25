@@ -1,8 +1,8 @@
 import * as path from 'path';
 import * as ncc from '@midwayjs/ncc';
-import { MwccPluginContext, MwccCompilerHost } from '../iface';
+import { MwccContext, MwccCompilerHost } from '../iface';
 
-export default async function bundle(ctx: MwccPluginContext, host: MwccCompilerHost) {
+export default async function bundle(ctx: MwccContext, host: MwccCompilerHost) {
   const bundleOpts = ctx.options.plugins.bundler;
   const outFiles = [];
 
@@ -17,6 +17,7 @@ export default async function bundle(ctx: MwccPluginContext, host: MwccCompilerH
       filename: target,
       sourceMap: true,
       sourceMapRegister: false,
+      quiet: true,
     });
 
     host.writeFile(targetFilepath, code, false);

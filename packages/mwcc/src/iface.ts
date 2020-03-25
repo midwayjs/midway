@@ -24,7 +24,7 @@ export interface MwccBuildSummary extends MwccOptions {
   };
 }
 
-export interface MwccPluginContext {
+export interface MwccContext {
   options: MwccOptions;
   files: string[];
   outFiles: string[];
