@@ -25,11 +25,10 @@
   "license": "MIT",
   "author": "waiting",
   "dependencies": {
-    "@typescript-eslint/eslint-plugin": "^2.20.0",
-    "@typescript-eslint/eslint-plugin-tslint": "^2.20.0",
-    "@typescript-eslint/parser": "^2.20.0",
+    "@typescript-eslint/eslint-plugin": "^2.25.0",
+    "@typescript-eslint/parser": "^2.25.0",
     "eslint-plugin-import": "^2.20.0",
-    "eslint-plugin-unicorn": "^16.0.0"
+    "eslint-plugin-unicorn": "^17.0.0"
   },
   "devDependencies": {
     "eslint": "6",
@@ -37,7 +36,7 @@
     "typescript": "3"
   },
   "peerDependencies": {
-    "eslint": ">=6.1.0"
+    "eslint": ">=6.7.1"
   },
   "files": [
     "plugins/*.yml",
