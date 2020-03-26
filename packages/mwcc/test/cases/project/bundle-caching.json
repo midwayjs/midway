@@ -1,0 +1,19 @@
+{
+  "scenario": "bundle",
+  "projectRoot": "test/cases/projects/bundle",
+  "plugins": {
+    "bundler": {
+      "entries": {
+        "src/entry.ts": "index.js"
+      },
+      "codecache": "node-v13.11.0"
+    }
+  },
+  "outputFiles": [
+    "dist/index.js",
+    "dist/index.cache.js",
+    "dist/index.cache",
+    "dist/index.js.map"
+  ],
+  "integration": "dist/index.js"
+}
