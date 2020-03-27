@@ -48,6 +48,8 @@ export class MidwayContainer extends Container implements IMidwayContainer {
   ctx = {};
   readyBindModules: Map<string, Set<any>> = new Map();
   configurationMap: Map<string, IContainerConfiguration> = new Map();
+  // 特殊处理，按照 main 加载
+  likeMainConfiguration: IContainerConfiguration[] = [];
   configService: IConfigService;
   environmentService: IEnvironmentService;
 
@@ -102,19 +104,10 @@ export class MidwayContainer extends Container implements IMidwayContainer {
         continue;
       }
 
-      const subDirs = containerConfiguration.getImportDirectory();
-      if (subDirs && subDirs.length > 0) {
-        debug('load configuration dir => %j, namespace => %s.',
-          subDirs, namespace);
-        this.loadDirectory({
-          ...opts,
-          loadDir: subDirs,
-          namespace
-        });
-      }
-
-      this.registerImportObjects(containerConfiguration.getImportObjects(),
-        containerConfiguration.namespace);
+      this.loadConfiguration(opts, containerConfiguration);
+    }
+    for (const containerConfiguration of this.likeMainConfiguration) {
+      this.loadConfiguration(opts, containerConfiguration);
     }
   }
 
@@ -338,7 +331,11 @@ export class MidwayContainer extends Container implements IMidwayContainer {
   }
 
   addConfiguration(configuration: IContainerConfiguration) {
-    this.configurationMap.set(configuration.namespace, configuration);
+    if (configuration.namespace === '') {
+      this.likeMainConfiguration.push(configuration);
+    } else {
+      this.configurationMap.set(configuration.namespace, configuration);
+    }
   }
 
   containsConfiguration(namespace: string): boolean {
@@ -409,6 +406,22 @@ export class MidwayContainer extends Container implements IMidwayContainer {
   loadDefinitions() {
     // 默认加载 pipeline
     this.bindModule(pipelineFactory);
+  }
+
+  private loadConfiguration(opts: any, containerConfiguration: IContainerConfiguration) {
+    const subDirs = containerConfiguration.getImportDirectory();
+    if (subDirs && subDirs.length > 0) {
+      debug('load configuration dir => %j, namespace => %s.',
+        subDirs, containerConfiguration.namespace);
+      this.loadDirectory({
+        ...opts,
+        loadDir: subDirs,
+        namespace: containerConfiguration.namespace
+      });
+    }
+
+    this.registerImportObjects(containerConfiguration.getImportObjects(),
+      containerConfiguration.namespace);
   }
 
   private async loadAndReadyLifeCycles() {

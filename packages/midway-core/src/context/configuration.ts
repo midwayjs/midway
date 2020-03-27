@@ -81,7 +81,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
     let loadDir;
     if (pkg) {
       if (this.namespace !== MAIN_MODULE_KEY) {
-        this.namespace = pkg.midwayNamespace ? pkg.midwayNamespace : pkg.name;
+        this.namespace = pkg.midwayNamespace !== undefined ? pkg.midwayNamespace : pkg.name;
       }
       if (pkg.main && !isSubDir) {
         packageBaseDir = dirname(join(packageBaseDir, pkg.main));
@@ -121,7 +121,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
             this.namespace = configurationOptions.namespace;
           }
 
-          if (this.container.containsConfiguration(this.namespace)) {
+          if (this.container.containsConfiguration(this.namespace) && this.namespace !== '') {
             debug(`configuration ${this.namespace} exist than ignore.`);
             return;
           } else {
@@ -135,7 +135,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
         }
       }
     } else {
-      if (this.container.containsConfiguration(this.namespace)) {
+      if (this.container.containsConfiguration(this.namespace) && this.namespace !== '') {
         debug(`configuration ${this.namespace} exist than ignore.`);
         return;
       } else {

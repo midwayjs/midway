@@ -9,6 +9,7 @@ import { Configuration } from '@midwayjs/decorator';
     '../../midway-plugin-mock/src',
     '../../midway-plugin-ok/src',
     '../../midway-plugin-empty/src',
+    '../../midway-plugin-emptytwo/src',
     'midway-plugin-mod',
     '@midwayjs/midway-plugin-atmod',
     '@midwayjs/midway-plugin-btmod',

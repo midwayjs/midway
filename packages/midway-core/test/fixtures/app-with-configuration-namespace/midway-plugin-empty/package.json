@@ -1,4 +1,5 @@
 {
-  "name": "midway-plugin-ok",
-  "main": "src/index.ts"
+  "name": "midway-plugin-empty",
+  "main": "src/index.ts",
+  "midwayNamespace": ""
 }
