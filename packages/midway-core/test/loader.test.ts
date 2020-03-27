@@ -306,6 +306,9 @@ describe('/test/loader.test.ts', () => {
 
     assert(baseService.helloworld === 234);
 
+    assert(baseService.articleManager1);
+    assert(await baseService.articleManager1.getOne() === 'ok2empty');
+
     const userManager: any = await appCtx.getAsync('userManager');
     assert((await userManager.getUser()) === 'harryone article atmod');
     assert((await userManager.getTest()) === 'testone article atmod bt');

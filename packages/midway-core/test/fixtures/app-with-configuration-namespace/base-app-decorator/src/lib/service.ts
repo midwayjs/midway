@@ -6,6 +6,9 @@ export class BaseService {
   @Inject()
   userManager;
 
+  @Inject('articleManager')
+  articleManager1;
+
   @Inject('@midway-plugin-mock')
   articleManager;
 
