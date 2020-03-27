@@ -13,8 +13,6 @@ import {
 import { ObjectProperties } from '../definitions/properties';
 import { ManagedResolverFactory } from './managedResolverFactory';
 import { NotFoundError } from '../common/notFoundError';
-
-import assert = require('assert');
 import { parsePrefix } from '../common/util';
 
 const PREFIX = '_id_default_';
@@ -281,9 +279,4 @@ export class BaseApplicationContext implements IApplicationContext, IObjectFacto
       });
     }
   }
-
-  dumpDependency() {
-    assert(false, 'this method has move to midway-core，please invoke this from midway');
-  }
-
 }

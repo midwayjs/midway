@@ -35,7 +35,6 @@ const DEFAULT_IGNORE_PATTERN = [
   '**/views/**',
 ];
 
-const graphviz = require('graphviz');
 const debug = require('debug')('midway:container');
 
 interface FrameworkDecoratorMetadata {
@@ -315,32 +314,6 @@ export class MidwayContainer extends Container implements IMidwayContainer {
         `register @scope to default value(request), id=${objectDefinition.id}`
       );
       objectDefinition.scope = ScopeEnum.Request;
-    }
-  }
-
-  dumpDependency() {
-    const g = graphviz.digraph('G');
-
-    for (const [id, module] of this.dependencyMap.entries()) {
-      g.addNode(id, {
-        label: `${id}(${module.name})\nscope:${module.scope}`,
-        fontsize: '10',
-      });
-      module.properties.forEach(depId => {
-        g.addEdge(id, depId, { label: `properties`, fontsize: '8' });
-      });
-      module.constructorArgs.forEach(depId => {
-        g.addEdge(id, depId, { label: 'constructor', fontsize: '8' });
-      });
-    }
-
-    try {
-      return g.to_dot();
-    } catch (err) {
-      console.error(
-        'generate injection dependency tree fail, err = ',
-        err.message
-      );
     }
   }
 

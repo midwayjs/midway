@@ -102,13 +102,6 @@ describe('/test/context/applicationContext.test.ts', () => {
       }
       expect(callback.withArgs('hello2 must use getAsync1').calledOnce).true;
 
-      try {
-        app.dumpDependency();
-      } catch (e) {
-        callback(e.message);
-      }
-      expect(callback.withArgs('this method has move to midway-core，please invoke this from midway').calledOnce).true;
-
       const d: any = await subApp.getAsync('hello2');
       expect(d).not.null;
       expect(d).not.undefined;

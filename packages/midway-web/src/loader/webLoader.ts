@@ -17,6 +17,7 @@ import * as path from 'path';
 import { Middleware, MiddlewareParamArray, MidwayLoaderOptions, WebMiddleware } from '../interface';
 import { isTypeScriptEnvironment } from '../utils';
 
+const graphviz = require('graphviz');
 const debug = require('debug')(`midway:loader:${process.pid}`);
 const EggLoader = require('egg-core').EggLoader;
 
@@ -333,6 +334,32 @@ export class MidwayWebLoader extends EggLoader {
       this.prioritySortRouters.forEach((prioritySortRouter) => {
         this.app.use(prioritySortRouter.router.middleware());
       });
+    }
+  }
+
+  dumpDependency() {
+    const g = graphviz.digraph('G');
+
+    for (const [id, module] of this.applicationContext.dependencyMap.entries()) {
+      g.addNode(id, {
+        label: `${id}(${module.name})\nscope:${module.scope}`,
+        fontsize: '10',
+      });
+      module.properties.forEach(depId => {
+        g.addEdge(id, depId, { label: `properties`, fontsize: '8' });
+      });
+      module.constructorArgs.forEach(depId => {
+        g.addEdge(id, depId, { label: 'constructor', fontsize: '8' });
+      });
+    }
+
+    try {
+      return g.to_dot();
+    } catch (err) {
+      console.error(
+        'generate injection dependency tree fail, err = ',
+        err.message
+      );
     }
   }
 

@@ -83,7 +83,7 @@ class MidwayApplication extends (Application as {
   dumpConfig() {
     super.dumpConfig();
     try {
-      const tree = this.applicationContext.dumpDependency();
+      const tree = this.loader.dumpDependency();
       const rundir = this.config.rundir;
       const dumpFile = path.join(rundir, `${this.type}_dependency_${process.pid}`);
       fs.writeFileSync(dumpFile, tree);
@@ -159,7 +159,7 @@ class MidwayAgent extends (Agent as {
   dumpConfig() {
     super.dumpConfig();
     try {
-      const tree = this.applicationContext.dumpDependency();
+      const tree = this.loader.dumpDependency();
       const rundir = this.config.rundir;
       const dumpFile = path.join(rundir, `${this.type}_dependency_${process.pid}`);
       fs.writeFileSync(dumpFile, tree);
