@@ -46,6 +46,7 @@ export interface IObjectDefinition {
   initMethod: string;
   destroyMethod: string;
   constructMethod: string;
+  srcPath: string;
   path: any;
   export: string;
   dependsOn: ObjectIdentifier[];

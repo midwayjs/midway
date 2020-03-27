@@ -225,9 +225,9 @@ export class BaseApplicationContext implements IApplicationContext, IObjectFacto
    * @param {IObjectDefinition} definition
    */
   registerDefinition(identifier: ObjectIdentifier, definition: IObjectDefinition) {
-    // if (!this.disableClassConflict && this.registry.hasDefinition(identifier)) {
-    //   throw new Error(`${identifier} is exist!`);
-    // }
+    if (!this.disableClassConflict && this.registry.hasDefinition(identifier)) {
+      throw new Error(`${identifier} is exist!`);
+    }
     this.registry.registerDefinition(identifier, definition);
     this.createObjectDependencyTree(identifier, definition);
   }
