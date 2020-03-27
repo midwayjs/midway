@@ -316,4 +316,40 @@ describe('/test/loader.test.ts', () => {
     assert((await repm.getOne()) === 'one article mod');
     mm.restore();
   });
+
+  it('should load conflict with error', async () => {
+    const loader = new ContainerLoader({
+      baseDir: path.join(
+        __dirname,
+        './fixtures/app-with-conflict/base-app-decorator/src'
+      ),
+    });
+    loader.initialize();
+    const callback = sinon.spy();
+    try {
+      loader.loadDirectory();
+      await loader.refresh();
+    } catch (e) {
+      callback(e.message);
+    }
+    const s = 'baseService path = /Users/kurten/workspace/nodejs/midway-open/packages/midway-core/test/fixtures/app-with-conflict/base-app-decorator/src/lib/userManager.ts is exist (/Users/kurten/workspace/nodejs/midway-open/packages/midway-core/test/fixtures/app-with-conflict/base-app-decorator/src/lib/service.ts)!';
+    assert.ok(callback.withArgs(s).calledOnce);
+  });
+
+  it('should load conflict without error', async () => {
+    const loader = new ContainerLoader({
+      baseDir: path.join(
+        __dirname,
+        './fixtures/app-with-conflict/base-app-decorator/src'
+      ),
+      disableConflictCheck: true
+    });
+    loader.initialize();
+    loader.loadDirectory();
+    await loader.refresh();
+
+    const appCtx = loader.getApplicationContext();
+    const baseService: any = await appCtx.getAsync('baseService');
+    assert.ok(await baseService.getInformation() === 'this is conflict');
+  });
 });

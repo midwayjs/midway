@@ -103,10 +103,10 @@ export class ContainerConfiguration implements IContainerConfiguration {
     }
     debug('packageName => %s namespace => %s configuration file => %s.',
       packageName, this.namespace, configuration ? true : false);
-    this.loadConfiguration(configuration, packageBaseDir);
+    this.loadConfiguration(configuration, packageBaseDir, cfgFile);
   }
 
-  loadConfiguration(configuration, baseDir) {
+  loadConfiguration(configuration, baseDir, filePath?: string) {
     if (configuration) {
       // 可能导出多个
       const configurationExports = this.getConfigurationExport(configuration);
@@ -131,7 +131,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
           this.addImports(configurationOptions.imports, baseDir);
           this.addImportObjects(configurationOptions.importObjects);
           this.addImportConfigs(configurationOptions.importConfigs, baseDir);
-          this.bindConfigurationClass(configurationExport);
+          this.bindConfigurationClass(configurationExport, filePath);
         }
       }
     } else {
@@ -148,11 +148,11 @@ export class ContainerConfiguration implements IContainerConfiguration {
    * 用于 ready 或者 stop 时处理 lifecycle 实现
    * @param clzz configuration class
    */
-  bindConfigurationClass(clzz) {
+  bindConfigurationClass(clzz, filePath?: string) {
     const clzzName = `${LIFECYCLE_IDENTIFIER_PREFIX}${classNamed(clzz.name)}`;
     const id = generateProvideId(clzzName, this.namespace);
     saveProviderId(id, clzz, true);
-    this.container.bind(id, clzz, { namespace: this.namespace });
+    this.container.bind(id, clzz, { namespace: this.namespace, srcPath: filePath });
     saveModule(CONFIGURATION_KEY, clzz);
   }
 

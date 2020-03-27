@@ -13,7 +13,7 @@ import {
 import { ObjectProperties } from '../definitions/properties';
 import { ManagedResolverFactory } from './managedResolverFactory';
 import { NotFoundError } from '../common/notFoundError';
-import { parsePrefix } from '../common/util';
+import { parsePrefix, isPathEqual } from '../common/util';
 
 const PREFIX = '_id_default_';
 
@@ -105,7 +105,7 @@ export class BaseApplicationContext implements IApplicationContext, IObjectFacto
   baseDir: string = null;
   parent: IApplicationContext = null;
   messageSource: IMessageSource = null;
-  disableClassConflict = false;
+  disableConflictCheck = false;
 
   constructor(baseDir = '', parent?: IApplicationContext) {
     this.parent = parent;
@@ -225,8 +225,11 @@ export class BaseApplicationContext implements IApplicationContext, IObjectFacto
    * @param {IObjectDefinition} definition
    */
   registerDefinition(identifier: ObjectIdentifier, definition: IObjectDefinition) {
-    if (!this.disableClassConflict && this.registry.hasDefinition(identifier)) {
-      throw new Error(`${identifier} is exist!`);
+    if (!this.disableConflictCheck && this.registry.hasDefinition(identifier)) {
+      const def = this.registry.getDefinition(identifier);
+      if (!isPathEqual(definition.srcPath, def.srcPath)) {
+        throw new Error(`${identifier} path = ${definition.srcPath} is exist (${def.srcPath})!`);
+      }
     }
     this.registry.registerDefinition(identifier, definition);
     this.createObjectDependencyTree(identifier, definition);

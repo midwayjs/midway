@@ -1,4 +1,4 @@
-import { dirname, resolve, sep } from 'path';
+import { dirname, resolve, sep, extname } from 'path';
 import { MAIN_MODULE_KEY } from '../interface';
 
 export const safeRequire = p => {
@@ -78,4 +78,12 @@ export function parsePrefix(provideId: string) {
     return provideId.substr(1);
   }
   return provideId;
+}
+
+export function isPathEqual(one: string, two: string) {
+  if (!one || !two) {
+    return false;
+  }
+  const ext = extname(one);
+  return one.replace(ext, '') === two;
 }

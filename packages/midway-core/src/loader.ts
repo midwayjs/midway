@@ -16,16 +16,19 @@ export class ContainerLoader {
   applicationContext: MidwayContainer;
   isTsMode;
   preloadModules;
+  disableConflictCheck;
 
-  constructor({baseDir, isTsMode = true, preloadModules = []}) {
+  constructor({baseDir, isTsMode = true, preloadModules = [], disableConflictCheck = false}) {
     this.baseDir = baseDir;
     this.isTsMode = isTsMode;
     this.preloadModules = preloadModules;
+    this.disableConflictCheck = disableConflictCheck;
   }
 
   initialize() {
     this.pluginContext = new Container(this.baseDir);
     this.applicationContext = new MidwayContainer(this.baseDir, undefined);
+    this.applicationContext.disableConflictCheck = this.disableConflictCheck;
     this.applicationContext.registerObject('baseDir', this.baseDir);
     this.applicationContext.registerObject('isTsMode', this.isTsMode);
   }

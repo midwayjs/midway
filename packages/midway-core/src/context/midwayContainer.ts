@@ -143,32 +143,32 @@ export class MidwayContainer extends Container implements IMidwayContainer {
         debug(`binding file => ${file}, namespace => ${opts.namespace}`);
         const exports = require(file);
         // add module to set
-        this.bindClass(exports, opts.namespace);
+        this.bindClass(exports, opts.namespace, file);
       }
     }
   }
 
-  bindClass(exports, namespace = '') {
+  bindClass(exports, namespace = '', filePath?: string) {
     if (is.class(exports) || is.function(exports)) {
-      this.bindModule(exports, namespace);
+      this.bindModule(exports, namespace, filePath);
     } else {
       for (const m in exports) {
         const module = exports[m];
         if (is.class(module) || is.function(module)) {
-          this.bindModule(module, namespace);
+          this.bindModule(module, namespace, filePath);
         }
       }
     }
   }
 
-  protected bindModule(module, namespace = '') {
+  protected bindModule(module, namespace = '', filePath?: string) {
     if (is.class(module)) {
       const providerId = getProviderId(module);
       if (providerId) {
         this.bind(
           generateProvideId(providerId, namespace),
           module,
-          { namespace }
+          { namespace, srcPath: filePath }
         );
       } else {
         // no provide or js class must be skip
@@ -190,7 +190,8 @@ export class MidwayContainer extends Container implements IMidwayContainer {
           {
             scope: info.scope,
             isAutowire: info.isAutowire,
-            namespace
+            namespace,
+            srcPath: filePath
           }
         );
       }
