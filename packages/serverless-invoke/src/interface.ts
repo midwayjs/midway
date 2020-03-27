@@ -1,13 +1,10 @@
 export interface InvokeOptions {
   functionDir?: string; // 函数所在目录
   functionName: string; // 函数名
-  debug?: string; // debug 端口
-  isDebug?: boolean; // 是否采用debug
   data?: any[]; // 函数入参
   log?: boolean; // 是否进行console输出
   trigger?: string; // 触发器
   provider?: string; // 部署的环境
-  debugCb?: any;
   providerEventMap?: any;
   starter?: any;
   eventPath?: string;

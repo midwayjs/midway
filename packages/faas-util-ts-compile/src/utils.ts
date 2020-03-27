@@ -122,3 +122,34 @@ export const copyFiles = async (options: ICopyOptions) => {
     })
   );
 };
+
+interface InnerTsConfigOptions {
+  incremental: boolean;
+  outDir: string;
+  include: string[];
+  exclude: string[];
+}
+
+export const innerTsConfigMaker = (options: InnerTsConfigOptions) => {
+  return {
+    compileOnSave: true,
+    compilerOptions: {
+      incremental: options.incremental,
+      target: 'ES2018',
+      module: 'commonjs',
+      moduleResolution: 'node',
+      experimentalDecorators: true,
+      emitDecoratorMetadata: true,
+      inlineSourceMap: true,
+      noImplicitThis: true,
+      noUnusedLocals: true,
+      stripInternal: true,
+      pretty: true,
+      declaration: true,
+      jsx: 'react',
+      outDir: options.outDir,
+    },
+    include: options.include || [],
+    exclude: options.exclude || [],
+  };
+};

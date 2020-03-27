@@ -28,7 +28,6 @@ const lockMap = {};
 interface InvokeOptions {
   baseDir?: string; // 目录，默认为process.cwd
   functionName: string; // 函数名
-  isDebug?: boolean; // 是否debug
   handler?: string; // 函数的handler方法
   trigger?: string; // 触发器
   buildDir?: string; // 构建目录
@@ -198,7 +197,6 @@ export abstract class InvokeCore implements IInvoke {
     await this.copyFile();
     await this.buildTS();
     const invoke = await this.getInvokeFunction();
-    this.checkDebug();
     const result = await invoke(...args);
     if (this.options.clean) {
       await cleanTarget(this.buildDir);
@@ -257,39 +255,6 @@ export abstract class InvokeCore implements IInvoke {
 
   protected wrapperHandler(handler) {
     return handler;
-  }
-
-  private checkDebug() {
-    if (!this.options.isDebug) {
-      return;
-    }
-    // tslint:disable-next-line: no-eval
-    eval(`
-      debugger;
-      /*
-
-      Debug 温馨提示
-
-      请点击左侧文件目录中的代码文件进行调试
-
-      ${
-        this.wrapperInfo
-          ? `
-      函数的入口文件所在:
-
-      ${this.wrapperInfo.fileName}  。
-
-      其中 exports.${this.wrapperInfo.handlerName} 方法为函数入口。
-
-      请断点至此函数
-      执行至此函数时，会自动生成源代码 sourceMap，方可继续调试。
-
-      感谢使用 midway-faas。
-
-      `
-          : ''
-      }
-      */`);
   }
 
   private formatOptions(options: InvokeOptions) {

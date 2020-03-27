@@ -15,9 +15,7 @@
     "@midwayjs/serverless-scf-trigger": "^0.2.55",
     "@midwayjs/serverless-spec-builder": "^0.2.55",
     "fs-extra": "^8.1.0",
-    "globby": "^10.0.1",
-    "urllib": "^2.34.1",
-    "ws": "^7.2.3"
+    "globby": "^10.0.1"
   },
   "devDependencies": {
     "@midwayjs/faas": "^0.2.55",

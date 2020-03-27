@@ -8,3 +8,4 @@ export * from './npm';
 export * from './utils/loadSpec';
 export * from './utils/commandLineUsage';
 export * from './cli';
+export * from './debug';

@@ -1,7 +1,7 @@
 import { join, relative, resolve } from 'path';
 import { readFileSync, existsSync } from 'fs-extra';
 export * from './utils';
-import { combineTsConfig } from './utils';
+import { combineTsConfig, innerTsConfigMaker } from './utils';
 
 export const tsIntegrationProjectCompile = async (
   baseDir,
@@ -17,27 +17,12 @@ export const tsIntegrationProjectCompile = async (
     tsConfig: options.tsConfig,
     clean: options.clean,
     incremental: options.incremental,
-    innerTsConfig: {
-      compileOnSave: true,
-      compilerOptions: {
-        incremental: !!options.incremental,
-        target: 'ES2018',
-        module: 'commonjs',
-        moduleResolution: 'node',
-        experimentalDecorators: true,
-        emitDecoratorMetadata: true,
-        inlineSourceMap: true,
-        noImplicitThis: true,
-        noUnusedLocals: true,
-        stripInternal: true,
-        pretty: true,
-        declaration: true,
-        jsx: 'react',
-        outDir: relative(baseDir, join(options.buildRoot, 'dist')),
-      },
+    innerTsConfig: innerTsConfigMaker({
+      incremental: !!options.incremental,
+      outDir: relative(baseDir, join(options.buildRoot, 'dist')),
       include: [`${relative(baseDir, options.tsCodeRoot)}/**/*`],
-      exclude: ['dist', 'node_modules', 'test'],
-    },
+      exclude: ['dist', 'node_modules', 'test']
+    }),
   });
   return tsConfig;
 };

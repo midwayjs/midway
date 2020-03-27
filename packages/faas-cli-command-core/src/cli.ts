@@ -14,7 +14,11 @@ export class BaseCLI {
   cwd = process.cwd();
 
   constructor(argv) {
-    this.argv = minimist(argv.slice(2));
+    if (Array.isArray(argv)) {
+      this.argv = minimist(argv.slice(2));
+    } else {
+      this.argv = argv;
+    }
     this.commands = [].concat(this.argv._);
     this.loadSpec();
     this.providerName = (this.spec.provider && this.spec.provider.name) || '';
