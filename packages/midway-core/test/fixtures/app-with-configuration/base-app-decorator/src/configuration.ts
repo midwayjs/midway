@@ -1,3 +1,4 @@
+import { ILifeCycle } from '../../../../../src';
 import { Configuration } from '@midwayjs/decorator';
 
 @Configuration({
@@ -9,6 +10,10 @@ import { Configuration } from '@midwayjs/decorator';
     aa: 123
   }
 })
-class AutoConfiguraion {}
+class AutoConfiguraion implements ILifeCycle {
+  async onReady() {
+    console.log('------auto configuration ready now');
+  }
+}
 
 module.exports = AutoConfiguraion;

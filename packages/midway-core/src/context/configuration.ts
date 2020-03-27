@@ -117,7 +117,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
         );
         debug('configuration export %j.', configurationOptions);
         if (configurationOptions) {
-          if (this.namespace !== MAIN_MODULE_KEY && configurationOptions.namespace) {
+          if (this.namespace !== MAIN_MODULE_KEY && configurationOptions.namespace !== undefined) {
             this.namespace = configurationOptions.namespace;
           }
 
@@ -133,6 +133,14 @@ export class ContainerConfiguration implements IContainerConfiguration {
           this.addImportConfigs(configurationOptions.importConfigs, baseDir);
           this.bindConfigurationClass(configurationExport);
         }
+      }
+    } else {
+      if (this.container.containsConfiguration(this.namespace)) {
+        debug(`configuration ${this.namespace} exist than ignore.`);
+        return;
+      } else {
+        debug(`configuration ${this.namespace} not exist than add.`);
+        this.container.addConfiguration(this);
       }
     }
   }

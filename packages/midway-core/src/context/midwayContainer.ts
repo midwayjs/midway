@@ -82,6 +82,10 @@ export class MidwayContainer extends Container implements IMidwayContainer {
     pattern?: string | string[];
     ignore?: string | string[];
   }) {
+    // 添加全局白名单
+    this.midwayIdentifiers.push(PIPELINE_IDENTIFIER);
+    this.midwayIdentifiers.push('ctx');
+
     // create main module configuration
     const configuration = this.createConfiguration();
     configuration.namespace = MAIN_MODULE_KEY;
@@ -404,7 +408,6 @@ export class MidwayContainer extends Container implements IMidwayContainer {
   loadDefinitions() {
     // 默认加载 pipeline
     this.bindModule(pipelineFactory);
-    this.midwayIdentifiers.push(PIPELINE_IDENTIFIER);
   }
 
   private async loadAndReadyLifeCycles() {

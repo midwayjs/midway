@@ -8,6 +8,7 @@ import * as assert from 'assert';
 import * as path from 'path';
 import { ContainerLoader, MidwayRequestContainer, clearAllModule } from '../src';
 import * as mm from 'mm';
+import sinon = require('sinon');
 
 @Provide()
 class TestModule {
@@ -232,6 +233,10 @@ describe('/test/loader.test.ts', () => {
 
   it('should load config.*.ts by process.env MIDWAY_SERVER_ENV', async () => {
     mm(process.env, 'MIDWAY_SERVER_ENV', 'local');
+    const callback = sinon.spy();
+    mm(console, 'log', (m) => {
+      callback(m);
+    });
     const loader = new ContainerLoader({
       baseDir: path.join(
         __dirname,
@@ -245,6 +250,7 @@ describe('/test/loader.test.ts', () => {
     const appCtx = loader.getApplicationContext();
     const replaceManager: any = await appCtx.getAsync('@ok:replaceManager');
     assert((await replaceManager.getOne()) === 'ok1');
+    assert.ok(callback.withArgs('------auto configuration ready now').calledOnce);
     mm.restore();
   });
 
@@ -302,6 +308,7 @@ describe('/test/loader.test.ts', () => {
 
     const userManager: any = await appCtx.getAsync('userManager');
     assert((await userManager.getUser()) === 'harryone article atmod');
+    assert((await userManager.getTest()) === 'testone article atmod bt');
 
     const repm: any = await appCtx.getAsync(
       '@midway-plugin-mod:replaceManager'
