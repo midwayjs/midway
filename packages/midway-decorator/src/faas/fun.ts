@@ -25,10 +25,7 @@ export function Func(
       saveModule(FUNC_KEY, target);
       attachClassMetadata(
         FUNC_KEY,
-        {
-          funHandler,
-          middleware: functionOptions.middleware,
-        },
+        Object.assign({ funHandler }, functionOptions),
         target
       );
       // register data
@@ -38,12 +35,11 @@ export function Func(
       saveModule(FUNC_KEY, (target as object).constructor);
       attachClassMetadata(
         FUNC_KEY,
-        {
+        Object.assign({
           funHandler,
           key,
           descriptor,
-          middleware: functionOptions.middleware,
-        },
+        }, functionOptions),
         target.constructor
       );
     }
