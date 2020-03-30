@@ -15,8 +15,8 @@ export class StageOne implements IValveHandler {
     if (ctx.info.current !== 'stageOne') {
       throw new Error('current stage is not stageOne');
     }
-    if (ctx.info.next !== 'stageTwo') {
-      throw new Error('next stage is not stageTwo');
+    if (this.ctx === undefined) {
+      throw new Error('inject ctx is undefined');
     }
     if (ctx.info.prev) {
       throw new Error('stageOne prev stage is not undefined');
