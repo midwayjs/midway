@@ -12,7 +12,7 @@ export interface FuncParams {
 export function Func(
   funHandler: string | FuncParams,
   functionOptions?: FuncParams
-): ClassDecorator | PropertyDecorator {
+) {
   if (typeof funHandler !== 'string' && functionOptions === undefined) {
     functionOptions = funHandler;
     funHandler = '';
