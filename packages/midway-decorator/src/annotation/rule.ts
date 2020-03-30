@@ -3,7 +3,7 @@ import * as joi from 'joi';
 export function Rule(rule) {
   return function (target: any, propertyKey: string) {
     if (!rule.isJoi) {
-      rule = Reflect.getMetadata('ruls', rule.prototype);
+      rule = Reflect.getMetadata('rules', rule.prototype);
       if (Reflect.getMetadata('design:type', target, propertyKey).name === 'Array') {
         rule = joi.array().items(rule).required();
       } else {

@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import * as joi from 'joi';
-export function Check() {
+export function Check(failValue?: any) {
   return function (target, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
     const origin = descriptor.value;
     descriptor.value = function (...args: any[]) {
@@ -11,7 +11,7 @@ export function Check() {
         if (rules) {
           const result = joi.validate(args[i], rules);
           if (result.error) {
-            return result;
+            return failValue ? failValue : result;
           }
         }
       }
