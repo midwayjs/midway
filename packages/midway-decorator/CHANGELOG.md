@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.8](https://github.com/midwayjs/midway/compare/v2.0.7...v2.0.8) (2020-03-30)
+
+
+### Bug Fixes
+
+* 2.x conflict 能力 ([#449](https://github.com/midwayjs/midway/issues/449)) ([6064ecf](https://github.com/midwayjs/midway/commit/6064ecf0fcf0f79ca9f9f177b06baef6d65ca7ea))
+
+
+
+
+
 ## [2.0.7](https://github.com/midwayjs/midway/compare/v2.0.6...v2.0.7) (2020-03-30)
 
 **Note:** Version bump only for package @midwayjs/decorator
