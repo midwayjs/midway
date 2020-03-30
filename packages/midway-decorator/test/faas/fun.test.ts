@@ -8,10 +8,10 @@ class TestFun {}
 describe('/test/faas/fun.test.ts', () => {
   it('fun decorator should be ok', () => {
     const meta = getClassMetadata(FUNC_KEY, TestFun);
-    expect(meta).deep.eq({
+    expect(meta).deep.eq([{
       funHandler: 'index.handler',
       middleware: ['hello'],
-    });
+    }]);
 
     const def = getObjectDefProps(TestFun);
     expect(def).deep.eq({
