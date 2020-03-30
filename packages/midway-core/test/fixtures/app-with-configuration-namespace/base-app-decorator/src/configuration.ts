@@ -9,7 +9,9 @@ import { Configuration } from '@midwayjs/decorator';
     '../../midway-plugin-mock/src',
     '../../midway-plugin-ok/src',
     'midway-plugin-mod',
-    '@midwayjs/midway-plugin-atmod'
+    '@midwayjs/midway-plugin-atmod',
+    '@midwayjs/midway-plugin-btmod',
+    '@midwayjs/midway-plugin-btmod'
   ],
 })
 export class AutoConfiguraion {}

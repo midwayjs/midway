@@ -133,6 +133,7 @@ export interface IResource {
  * IoC上下文抽象
  */
 export interface IApplicationContext extends IObjectFactory {
+  disableClassConflict: boolean;
   baseDir: string;
   parent: IApplicationContext;
   props: IProperties;

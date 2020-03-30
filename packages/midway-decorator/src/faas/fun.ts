@@ -1,25 +1,47 @@
 import { Scope } from '../annotation';
-import { ScopeEnum, saveClassMetadata, saveModule, FUNC_KEY } from '../common';
+import { ScopeEnum, saveModule, FUNC_KEY, attachClassMetadata } from '../common';
 import { KoaMiddlewareParamArray } from '..';
 
+export interface FuncParams {
+  event?: string;
+  method?: string;
+  path?: string;
+  middleware?: KoaMiddlewareParamArray;
+}
+
 export function Func(
-  funHandler: string,
-  functionOptions: {
-    middleware?: KoaMiddlewareParamArray;
-  } = { middleware: [] }
+  funHandler: string | FuncParams,
+  functionOptions: FuncParams | undefined
 ): ClassDecorator {
-  return (target: any) => {
-    // 保存到扫描列表
-    saveModule(FUNC_KEY, target);
-    saveClassMetadata(
-      FUNC_KEY,
-      {
-        funHandler,
-        middleware: functionOptions.middleware,
-      },
-      target
-    );
-    // 注册数据
-    Scope(ScopeEnum.Request)(target);
+  if (typeof funHandler !== 'string' && functionOptions === undefined) {
+    functionOptions = funHandler;
+    funHandler = '';
+  }
+  return (...args) => {
+    const [target, key, descriptor] = args as any;
+    // If target is function, @Func annotate class
+    if (typeof target === 'function') {
+      // save target
+      saveModule(FUNC_KEY, target);
+      attachClassMetadata(
+        FUNC_KEY,
+        Object.assign({ funHandler }, functionOptions),
+        target
+      );
+      // register data
+      Scope(ScopeEnum.Request)(target);
+    } else {
+      // If target is instance, @Func annotate class member method
+      saveModule(FUNC_KEY, (target as object).constructor);
+      attachClassMetadata(
+        FUNC_KEY,
+        Object.assign({
+          funHandler,
+          key,
+          descriptor,
+        }, functionOptions),
+        target.constructor
+      );
+    }
   };
 }
