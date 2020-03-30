@@ -286,7 +286,7 @@ export class MidwayContainer extends Container implements IMidwayContainer {
         if (prop.propertyName) {
           Object.defineProperty(instance, prop.propertyName, {
             get: () => getterHandler(prop.key, instance),
-            configurable: false,
+            configurable: true, // 继承对象有可能会有相同属性，这里需要配置成 true
             enumerable: true,
           });
         }
