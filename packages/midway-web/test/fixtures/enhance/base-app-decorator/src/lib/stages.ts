@@ -1,8 +1,11 @@
 import { IValveHandler, IPipelineContext } from '@midwayjs/core';
-import { Provide } from '@midwayjs/decorator';
+import { Provide, Inject } from '@midwayjs/decorator';
 
 @Provide()
 export class StageOne implements IValveHandler {
+  @Inject()
+  ctx: any;
+
   async invoke(ctx: IPipelineContext): Promise<any> {
     if (ctx.args.aa !== 123) {
       throw new Error('args aa is undefined');
@@ -25,6 +28,9 @@ export class StageOne implements IValveHandler {
 
 @Provide()
 export class StageTwo implements IValveHandler {
+  @Inject()
+  ctx: any;
+
   async invoke(ctx: IPipelineContext): Promise<any> {
     const keys = ctx.keys();
     if (keys.length !== 2) {
