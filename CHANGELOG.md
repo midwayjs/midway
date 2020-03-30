@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.9](https://github.com/midwayjs/midway/compare/v2.0.8...v2.0.9) (2020-03-30)
+
+
+### Bug Fixes
+
+* @Func return type ([#452](https://github.com/midwayjs/midway/issues/452)) ([9064743](https://github.com/midwayjs/midway/commit/9064743c04713ef77ef246416dabe8f79b97fc79))
+
+
+
+
+
 ## [2.0.8](https://github.com/midwayjs/midway/compare/v2.0.7...v2.0.8) (2020-03-30)
 
 
