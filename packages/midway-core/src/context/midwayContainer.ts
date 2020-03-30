@@ -48,6 +48,8 @@ export class MidwayContainer extends Container implements IMidwayContainer {
   ctx = {};
   readyBindModules: Map<string, Set<any>> = new Map();
   configurationMap: Map<string, IContainerConfiguration> = new Map();
+  // 特殊处理，按照 main 加载
+  likeMainConfiguration: IContainerConfiguration[] = [];
   configService: IConfigService;
   environmentService: IEnvironmentService;
 
@@ -102,19 +104,10 @@ export class MidwayContainer extends Container implements IMidwayContainer {
         continue;
       }
 
-      const subDirs = containerConfiguration.getImportDirectory();
-      if (subDirs && subDirs.length > 0) {
-        debug('load configuration dir => %j, namespace => %s.',
-          subDirs, namespace);
-        this.loadDirectory({
-          ...opts,
-          loadDir: subDirs,
-          namespace
-        });
-      }
-
-      this.registerImportObjects(containerConfiguration.getImportObjects(),
-        containerConfiguration.namespace);
+      this.loadConfiguration(opts, containerConfiguration);
+    }
+    for (const containerConfiguration of this.likeMainConfiguration) {
+      this.loadConfiguration(opts, containerConfiguration);
     }
   }
 
@@ -143,32 +136,32 @@ export class MidwayContainer extends Container implements IMidwayContainer {
         debug(`binding file => ${file}, namespace => ${opts.namespace}`);
         const exports = require(file);
         // add module to set
-        this.bindClass(exports, opts.namespace);
+        this.bindClass(exports, opts.namespace, file);
       }
     }
   }
 
-  bindClass(exports, namespace = '') {
+  bindClass(exports, namespace = '', filePath?: string) {
     if (is.class(exports) || is.function(exports)) {
-      this.bindModule(exports, namespace);
+      this.bindModule(exports, namespace, filePath);
     } else {
       for (const m in exports) {
         const module = exports[m];
         if (is.class(module) || is.function(module)) {
-          this.bindModule(module, namespace);
+          this.bindModule(module, namespace, filePath);
         }
       }
     }
   }
 
-  protected bindModule(module, namespace = '') {
+  protected bindModule(module, namespace = '', filePath?: string) {
     if (is.class(module)) {
       const providerId = getProviderId(module);
       if (providerId) {
         this.bind(
           generateProvideId(providerId, namespace),
           module,
-          { namespace }
+          { namespace, srcPath: filePath }
         );
       } else {
         // no provide or js class must be skip
@@ -190,7 +183,8 @@ export class MidwayContainer extends Container implements IMidwayContainer {
           {
             scope: info.scope,
             isAutowire: info.isAutowire,
-            namespace
+            namespace,
+            srcPath: filePath
           }
         );
       }
@@ -292,7 +286,7 @@ export class MidwayContainer extends Container implements IMidwayContainer {
         if (prop.propertyName) {
           Object.defineProperty(instance, prop.propertyName, {
             get: () => getterHandler(prop.key, instance),
-            configurable: false,
+            configurable: true, // 继承对象有可能会有相同属性，这里需要配置成 true
             enumerable: true,
           });
         }
@@ -337,7 +331,11 @@ export class MidwayContainer extends Container implements IMidwayContainer {
   }
 
   addConfiguration(configuration: IContainerConfiguration) {
-    this.configurationMap.set(configuration.namespace, configuration);
+    if (configuration.namespace === '') {
+      this.likeMainConfiguration.push(configuration);
+    } else {
+      this.configurationMap.set(configuration.namespace, configuration);
+    }
   }
 
   containsConfiguration(namespace: string): boolean {
@@ -408,6 +406,22 @@ export class MidwayContainer extends Container implements IMidwayContainer {
   loadDefinitions() {
     // 默认加载 pipeline
     this.bindModule(pipelineFactory);
+  }
+
+  private loadConfiguration(opts: any, containerConfiguration: IContainerConfiguration) {
+    const subDirs = containerConfiguration.getImportDirectory();
+    if (subDirs && subDirs.length > 0) {
+      debug('load configuration dir => %j, namespace => %s.',
+        subDirs, containerConfiguration.namespace);
+      this.loadDirectory({
+        ...opts,
+        loadDir: subDirs,
+        namespace: containerConfiguration.namespace
+      });
+    }
+
+    this.registerImportObjects(containerConfiguration.getImportObjects(),
+      containerConfiguration.namespace);
   }
 
   private async loadAndReadyLifeCycles() {

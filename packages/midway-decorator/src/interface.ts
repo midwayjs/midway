@@ -19,6 +19,7 @@ export interface ObjectDefinitionOptions {
   // 是否自动装配
   isAutowire?: boolean;
   namespace?: string;
+  srcPath?: string;
 }
 
 export interface TagPropsMetadata {

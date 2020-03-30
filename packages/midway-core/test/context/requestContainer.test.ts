@@ -79,6 +79,9 @@ describe('/test/context/requestContainer.test.ts', () => {
     appCtx.bind('tracer', Tracer);
 
     const reqCtx1 = new RequestContainer({}, appCtx);
+    await reqCtx1.ready();
+    expect(reqCtx1.isReady).true;
+
     reqCtx1.registerObject('tracer', new ChildTracer());
     const reqCtx2 = new RequestContainer({}, appCtx);
     reqCtx2.registerObject('tracer', new ChildTracer());

@@ -30,4 +30,9 @@ export class HelloController {
     // service,hello,a,b
     ctx.body = arr.join(',');
   }
+
+  @get('/stage')
+  async doStage(ctx) {
+    ctx.body = await this.service.doStages();
+  }
 }

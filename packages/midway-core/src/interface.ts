@@ -46,6 +46,7 @@ export interface IObjectDefinition {
   initMethod: string;
   destroyMethod: string;
   constructMethod: string;
+  srcPath: string;
   path: any;
   export: string;
   dependsOn: ObjectIdentifier[];
@@ -133,7 +134,7 @@ export interface IResource {
  * IoC上下文抽象
  */
 export interface IApplicationContext extends IObjectFactory {
-  disableClassConflict: boolean;
+  disableConflictCheck: boolean;
   baseDir: string;
   parent: IApplicationContext;
   props: IProperties;
@@ -191,10 +192,10 @@ export interface IContainerConfiguration {
   addImportObjects(importObjects: any[]);
   addImportConfigs(importConfigs: string[], baseDir: string);
   load(packageName: string);
-  loadConfiguration(configuration: IContainerConfiguration, baseDir: string);
+  loadConfiguration(configuration: IContainerConfiguration, baseDir: string, filePath?: string);
   getImportDirectory(): string[];
   getImportObjects(): any;
-  bindConfigurationClass(clzz: any);
+  bindConfigurationClass(clzz: any, filePath?: string);
 }
 
 export interface IMidwayContainer extends IContainer {

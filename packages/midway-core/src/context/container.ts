@@ -43,6 +43,7 @@ export class Container extends BaseApplicationContext implements IContainer {
 
     definition.path = target;
     definition.id = identifier;
+    definition.srcPath = options ? options.srcPath : null;
     definition.namespace = options ? options.namespace : '';
 
     debug(`=> bind and build definition, id = [${definition.id}]`);

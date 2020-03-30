@@ -296,15 +296,21 @@ describe('/test/loader.test.ts', () => {
     assert((await replaceManager1.getOne()) === 'one article');
     // 取自定义 namespace
     const replaceManager2: any = await appCtx.getAsync('@ok:replaceManager');
-    assert((await replaceManager2.getOne()) === 'ok2');
+    assert((await replaceManager2.getOne()) === 'ok3');
     // 查看覆盖的情况
     const baseService: any = await appCtx.getAsync('baseService');
     assert(
       (await baseService.getInformation()) ===
-        'harryone article atmod,one article,ok2'
+        'harryone article atmod,one article,ok3'
     );
 
     assert(baseService.helloworld === 234);
+
+    assert(baseService.articleManager1);
+    assert(await baseService.articleManager1.getOne() === 'ok3empty');
+
+    assert(baseService.articleManager2);
+    assert(await baseService.articleManager2.getOne() === 'ok3emptytwo');
 
     const userManager: any = await appCtx.getAsync('userManager');
     assert((await userManager.getUser()) === 'harryone article atmod');
@@ -315,5 +321,42 @@ describe('/test/loader.test.ts', () => {
     );
     assert((await repm.getOne()) === 'one article mod');
     mm.restore();
+  });
+
+  it('should load conflict with error', async () => {
+    const loader = new ContainerLoader({
+      baseDir: path.join(
+        __dirname,
+        './fixtures/app-with-conflict/base-app-decorator/src'
+      ),
+    });
+    loader.initialize();
+    const callback = sinon.spy();
+    try {
+      loader.loadDirectory();
+      await loader.refresh();
+    } catch (e) {
+      callback(e.message);
+    }
+    const p = path.resolve(__dirname, './fixtures/app-with-conflict/base-app-decorator/src/lib/');
+    const s = `baseService path = ${p}/userManager.ts is exist (${p}/service.ts)!`;
+    assert.ok(callback.withArgs(s).calledOnce);
+  });
+
+  it('should load conflict without error', async () => {
+    const loader = new ContainerLoader({
+      baseDir: path.join(
+        __dirname,
+        './fixtures/app-with-conflict/base-app-decorator/src'
+      ),
+      disableConflictCheck: true
+    });
+    loader.initialize();
+    loader.loadDirectory();
+    await loader.refresh();
+
+    const appCtx = loader.getApplicationContext();
+    const baseService: any = await appCtx.getAsync('baseService');
+    assert.ok(await baseService.getInformation() === 'this is conflict');
   });
 });

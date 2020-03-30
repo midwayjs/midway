@@ -1,6 +1,7 @@
 import { MidwayContainer } from './midwayContainer';
 import { REQUEST_CTX_KEY } from '../interface';
 import { parsePrefix } from '../common/util';
+import { PIPELINE_IDENTIFIER } from '@midwayjs/decorator';
 
 export class MidwayRequestContainer extends MidwayContainer {
 
@@ -24,9 +25,11 @@ export class MidwayRequestContainer extends MidwayContainer {
       return this.registry.getObject(identifier);
     }
     const definition = this.applicationContext.registry.getDefinition(identifier);
-    if (definition && definition.isRequestScope()) {
-      // create object from applicationContext definition for requestScope
-      return this.getManagedResolverFactory().create({ definition, args });
+    if (definition) {
+      if (definition.isRequestScope() || definition.id === PIPELINE_IDENTIFIER) {
+        // create object from applicationContext definition for requestScope
+        return this.getManagedResolverFactory().create({ definition, args });
+      }
     }
 
     if (this.parent) {
@@ -46,9 +49,11 @@ export class MidwayRequestContainer extends MidwayContainer {
     }
 
     const definition = this.applicationContext.registry.getDefinition(identifier);
-    if (definition && definition.isRequestScope()) {
-      // create object from applicationContext definition for requestScope
-      return this.getManagedResolverFactory().createAsync({ definition, args });
+    if (definition) {
+      if (definition.isRequestScope() || definition.id === PIPELINE_IDENTIFIER) {
+        // create object from applicationContext definition for requestScope
+        return this.getManagedResolverFactory().createAsync({ definition, args });
+      }
     }
 
     if (this.parent) {
@@ -58,5 +63,10 @@ export class MidwayRequestContainer extends MidwayContainer {
 
   initService() {
     // do nothing
+  }
+
+  async ready() {
+    this.readied = true;
+    // ignore other things
   }
 }

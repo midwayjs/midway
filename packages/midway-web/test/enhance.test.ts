@@ -286,6 +286,12 @@ describe('/test/enhance.test.ts', () => {
         .expect('content-length', '16424')
         .expect(200);
     });
+
+    it('pipeline ctx should be ok', async () => {
+      await app.httpRequest()
+        .get('/hello/stage')
+        .expect(200);
+    });
   });
 
   describe('load ts file and use third party module', () => {
