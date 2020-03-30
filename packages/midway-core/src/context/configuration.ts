@@ -135,6 +135,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
         }
       }
     } else {
+
       if (this.container.containsConfiguration(this.namespace) && this.namespace !== '') {
         debug(`configuration ${this.namespace} exist than ignore.`);
         return;
