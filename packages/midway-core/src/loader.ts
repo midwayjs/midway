@@ -16,7 +16,7 @@ export class ContainerLoader {
   applicationContext: MidwayContainer;
   isTsMode;
   preloadModules;
-  disableConflictCheck;
+  disableConflictCheck: boolean;
 
   constructor({baseDir, isTsMode = true, preloadModules = [], disableConflictCheck = false}) {
     this.baseDir = baseDir;

@@ -338,7 +338,8 @@ describe('/test/loader.test.ts', () => {
     } catch (e) {
       callback(e.message);
     }
-    const s = 'baseService path = /Users/kurten/workspace/nodejs/midway-open/packages/midway-core/test/fixtures/app-with-conflict/base-app-decorator/src/lib/userManager.ts is exist (/Users/kurten/workspace/nodejs/midway-open/packages/midway-core/test/fixtures/app-with-conflict/base-app-decorator/src/lib/service.ts)!';
+    const p = path.resolve(__dirname, './fixtures/app-with-conflict/base-app-decorator/src/lib/');
+    const s = `baseService path = ${p}/userManager.ts is exist (${p}/service.ts)!`;
     assert.ok(callback.withArgs(s).calledOnce);
   });
 
