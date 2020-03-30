@@ -23,6 +23,8 @@ export class CommandHookCore implements ICommandHooksCore {
   private npmPlugin: string[] = [];
   private loadNpm: any;
 
+  store = new Map();
+
   constructor(options: IOptions) {
     this.options = options || { provider: '' };
     if (!this.options.options) {
@@ -171,7 +173,7 @@ export class CommandHookCore implements ICommandHooksCore {
       classes: {
         Error,
       },
-      store: new Map(),
+      store: this.store,
       cli: this.getLog(),
       config: config || {},
       getProvider: this.getProvider.bind(this),
@@ -328,6 +330,10 @@ export class CommandHookCore implements ICommandHooksCore {
 
   // 加载本地插件
   private async loadLocalPlugin(localPath) {
+    if (this.options.pluginType && this.options.pluginType.indexOf('local') === -1) {
+      this.debug('Skip Local Plugins');
+      return;
+    }
     try {
       let plugin = require(localPath);
       if (typeof plugin === 'object') {
@@ -341,6 +347,10 @@ export class CommandHookCore implements ICommandHooksCore {
 
   // 加载npm包插件
   private async loadNpmPlugins() {
+    if (this.options.pluginType && this.options.pluginType.indexOf('npm') === -1) {
+      this.debug('Skip Npm Plugins');
+      return;
+    }
     for (const npmPath of this.npmPlugin) {
       await this.loadNpm(npmPath, this.options.options.npm || this.options.npm);
     }

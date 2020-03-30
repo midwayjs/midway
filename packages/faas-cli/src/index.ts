@@ -4,7 +4,7 @@ import { execSync } from 'child_process';
 
 const plugins = {
   create: { mod: '@midwayjs/fcli-plugin-create', name: 'CreatePlugin' },
-  invoke: { mod: '@midwayjs/fcli-plugin-invoke', name: 'InvokePlugin' },
+  invoke: { mod: '@midwayjs/fcli-plugin-invoke', name: 'FaaSInvokePlugin' },
   test: { mod: '@midwayjs/fcli-plugin-test', name: 'TestPlugin' },
   package: [
     { mod: '@midwayjs/fcli-plugin-package', name: 'PackagePlugin' },

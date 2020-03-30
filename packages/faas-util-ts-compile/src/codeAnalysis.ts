@@ -1,7 +1,7 @@
 import * as globby from 'globby';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
-import * as ts from 'typescript';
+let ts;
 interface IOptions {
   baseDir: string;
   sourceDir: string;
@@ -82,7 +82,7 @@ class CodeAnalysis {
   }
 
   // 遍历文件
-  visit(node: ts.Node) {
+  visit(node) {
     if (ts.isClassDeclaration(node) && node.name) {
       if (!node.decorators) {
         return;
@@ -181,7 +181,13 @@ class CodeAnalysis {
     existsFuncData.handler = handler;
     const events = existsFuncData.events || [];
 
-    if (trigger && trigger.event) {
+    if (!trigger) {
+      trigger = {
+        event: 'http'
+      };
+    }
+
+    if (trigger.event) {
       const eventType = trigger.event.toLowerCase();
       const event: any = { [eventType]: true };
       if (trigger.event.toLowerCase() === 'http') {
@@ -204,7 +210,6 @@ class CodeAnalysis {
     }
     existsFuncData.events = events;
     this.spec.functions[funName] = existsFuncData;
-
   }
 
   getEventKey(type, event) {
@@ -215,7 +220,7 @@ class CodeAnalysis {
   }
 
   // 获取参数
-  getParam(symbol: ts.Symbol) {
+  getParam(symbol) {
     const type = this.getType(symbol);
     const valueDeclaration: any = (symbol.valueDeclaration as any);
     if (type === 'string') {
@@ -255,6 +260,7 @@ class CodeAnalysis {
 }
 
 export const CodeAny = async (options: IOptions) => {
+  ts = require('typescript');
   const codeAna = new CodeAnalysis(options);
   return codeAna.start();
 };

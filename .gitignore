@@ -20,6 +20,7 @@ AUTHORS
 .ncc_entry
 .zip
 .aliyun_credentials
+.faas_debug_tmp
 .env_temp
 serverless.zip
 /packages/serverless-invoke/test/fixtures/*/build

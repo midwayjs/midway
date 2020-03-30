@@ -1,6 +1,7 @@
 import { join, relative, resolve } from 'path';
 import { readFileSync, existsSync } from 'fs-extra';
 export * from './utils';
+export * from './codeAnalysis';
 import { combineTsConfig, innerTsConfigMaker } from './utils';
 
 export const tsIntegrationProjectCompile = async (
