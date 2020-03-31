@@ -289,7 +289,7 @@ describe('/test/index.test.ts', () => {
         });
       });
 
-      assert(result.includes('invoke handler not found'));
+      assert(result.includes('handler not found:'));
       await runtimeEngine.close();
     });
 

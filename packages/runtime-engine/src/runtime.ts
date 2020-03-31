@@ -215,7 +215,10 @@ export class ServerlessBaseRuntime extends EventEmitter implements Runtime {
   }
 
   async defaultInvokeHandler(...args) {
-    throw new Error('invoke handler not found');
+    const { fileName, handler } = getHandlerMeta(
+      this.propertyParser.getFunctionHandler()
+    );
+    throw new Error(`handler not found: ${fileName}.${handler}, please check your f.yml`);
   }
 
   createFunctionContext(event: FunctionEvent, ...args): any {
