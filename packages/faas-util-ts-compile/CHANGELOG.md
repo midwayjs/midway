@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.61](https://github.com/midwayjs/midway-faas/compare/v0.2.60...v0.2.61) (2020-03-31)
+
+
+### Bug Fixes
+
+* core hooks ([#104](https://github.com/midwayjs/midway-faas/issues/104)) ([ac6b574](https://github.com/midwayjs/midway-faas/commit/ac6b574b7bab95358d5f14214711390959ad56b6))
+
+
+
+
+
 ## [0.2.59](https://github.com/midwayjs/midway-faas/compare/v0.2.58...v0.2.59) (2020-03-30)
 
 **Note:** Version bump only for package @midwayjs/faas-util-ts-compile
