@@ -68,6 +68,7 @@ describe('test/index.test.ts', () => {
         { text: 'ab' }
       )) === 'abhello'
     );
+    assert((await starter.handleInvokeWrapper('indexService.get')({}, {})) === 'hello');
   });
 
   it('invoke handler by default name', async () => {

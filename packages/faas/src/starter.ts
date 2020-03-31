@@ -4,7 +4,6 @@ import { existsSync } from 'fs';
 import {
   ContainerLoader,
   getClassMetadata,
-  getPropertyDataFromClass,
   IMiddleware,
   listModule,
   listPreloadModule,
@@ -13,7 +12,7 @@ import {
   MidwayRequestContainer,
   REQUEST_OBJ_CTX_KEY,
 } from '@midwayjs/core';
-import { FUNC_KEY, HANDLER_KEY } from '@midwayjs/decorator';
+import { FUNC_KEY } from '@midwayjs/decorator';
 import SimpleLock from '@midwayjs/simple-lock';
 import * as compose from 'koa-compose';
 
@@ -110,6 +109,7 @@ export class FaaSStarter implements IFaaSStarter {
       mod: any;
       middleware: Array<IMiddleware<FaaSContext>>;
       method: string;
+      descriptor: any;
     } = this.funMappingStore.get(handlerMapping);
 
     return async (...args) => {
@@ -212,37 +212,27 @@ export class FaaSStarter implements IFaaSStarter {
       // store all function entry
       const funModules = listModule(FUNC_KEY);
       for (const funModule of funModules) {
-        const funOptions: {
+        const funOptions: Array<{
           funHandler;
+          key;
+          descriptor;
           middleware: string[];
-        } = getClassMetadata(FUNC_KEY, funModule);
-        // @fun(key), only if key is set
-        if (funOptions.funHandler) {
-          this.funMappingStore.set(funOptions.funHandler, {
-            middleware: funOptions.middleware,
-            mod: funModule,
-          });
-        }
-        const methods = Object.getOwnPropertyNames(
-          (funModule as () => void).prototype
-        );
-        for (const method of methods) {
-          const meta = getPropertyDataFromClass(HANDLER_KEY, funModule, method);
-          if (!meta) {
-            continue;
-          }
+        }> = getClassMetadata(FUNC_KEY, funModule);
+        funOptions.map((opts) => {
           // { method: 'handler', data: 'index.handler' }
-          const handlerName = meta.data
-            ? // @handler(key), if key is set
-              meta.data
+          const handlerName = opts.funHandler
+            ? // @Func(key), if key is set
+              // or @Func({ handler })
+              opts.funHandler
             : // else use ClassName.mehtod as handler key
-              (funModule as () => {}).name + '.' + method;
+            covertId(funModule.name, opts.key);
           this.funMappingStore.set(handlerName, {
-            middleware: funOptions.middleware,
+            middleware: opts.middleware || [],
             mod: funModule,
-            method,
+            method: opts.key,
+            descriptor: opts.descriptor
           });
-        }
+        });
       }
 
       const modules = listPreloadModule();
@@ -289,4 +279,8 @@ export class FaaSStarter implements IFaaSStarter {
     }
     return mwArr;
   }
+}
+
+function covertId(cls, method) {
+  return cls.replace(/^[A-Z]/, (c) => c.toLowerCase()) + '.' + method;
 }
