@@ -177,11 +177,16 @@ export abstract class InvokeCore implements IInvoke {
           },
           clean: this.options.clean,
         });
-        await move(join(baseDir, 'dist'), join(this.buildDir, 'dist'), opts);
+        const dest = join(this.buildDir, 'dist');
+        if (existsSync(dest)) {
+          await remove(dest);
+        }
+        await move(join(baseDir, 'dist'), dest, opts);
       }
     } catch (e) {
       await remove(buildLogPath);
       lockMap[buildLogPath] = false;
+      console.log(e);
       throw new Error(`Typescript Build Error, Please Check Your FaaS Code!`);
     }
     lockMap[buildLogPath] = true;

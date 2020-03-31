@@ -6,6 +6,7 @@ import {
   compareFileChange,
   copyFiles,
   CodeAny,
+  combineTsConfig
 } from '@midwayjs/faas-util-ts-compile';
 import { writeWrapper } from '@midwayjs/serverless-spec-builder';
 import { createRuntime } from '@midwayjs/runtime-mock';
@@ -148,6 +149,7 @@ export class FaaSInvokePlugin extends BasePlugin {
         }
         lockMap[buildLockPath] = true;
         this.skipTsBuild = true;
+        this.setStore('skipTsBuild', true);
         this.core.debug('Auto skip ts compile');
         return;
       }
@@ -185,21 +187,21 @@ export class FaaSInvokePlugin extends BasePlugin {
           buildRoot: this.buildDir,
           tsCodeRoot: this.codeAnalyzeResult.tsCodeRoot,
           incremental: this.options.incremental,
-          tsConfig: {
+          tsConfig: combineTsConfig({
             compilerOptions: {
               sourceRoot: this.codeAnalyzeResult.tsCodeRoot, // for sourceMap
             },
-          },
+          }, this.options.tsConfig),
           clean: this.options.clean,
         });
       } else {
         await tsCompile(this.baseDir, {
           tsConfigName: 'tsconfig.json',
-          tsConfig: {
+          tsConfig: combineTsConfig({
             compilerOptions: {
               sourceRoot: resolve(this.baseDir, 'src'), // for sourceMap
             },
-          },
+          }, this.options.tsConfig),
           clean: this.options.clean,
         });
         const dest = join(this.buildDir, 'dist');

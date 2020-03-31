@@ -9,6 +9,7 @@ import { IPluginInstance, ICommandInstance } from './interface/plugin';
 import { IProviderInstance } from './interface/provider';
 import GetMap from './errorMap';
 import { loadNpm } from './npm';
+import { resolve } from 'path';
 
 const RegProviderNpm = /^npm:([\w]*):(.*)$/i; // npm providerName pkgName
 const RegProviderLocal = /^local:([\w]*):(.*)$/i; // local providerName pkgPath
@@ -128,9 +129,16 @@ export class CommandHookCore implements ICommandHooksCore {
       return this.displayHelp(commandsArray, commandInfo.usage);
     }
     for (const lifecycle of lifecycleEvents) {
+      this.debug('Core Lifecycle', lifecycle);
       const hooks = this.hooks[lifecycle] || [];
       for (const hook of hooks) {
-        await hook();
+        try {
+          await hook();
+        } catch (e) {
+          this.debug('Core Lifecycle Hook Error');
+          console.log(e);
+          throw e;
+        }
       }
     }
   }
@@ -335,6 +343,10 @@ export class CommandHookCore implements ICommandHooksCore {
       return;
     }
     try {
+      if (this.options.config && this.options.config.servicePath && /^\./.test(localPath)) {
+        localPath = resolve(this.options.config.servicePath, localPath);
+      }
+      this.debug('Core Local Plugin', localPath);
       let plugin = require(localPath);
       if (typeof plugin === 'object') {
         plugin = plugin[Object.keys(plugin)[0]];

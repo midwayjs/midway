@@ -30,16 +30,17 @@ export const debug = async (options) => {
         ]
       }
     );
+    const exit = () => {
+      execSync('kill -9 ' + child.pid);
+      child.kill();
+      process.exit();
+    };
     child.on('message', (m) => {
       if (m === 'childExit') {
-          process.exit();
+        exit();
       }
     });
-    process.on('SIGINT', () => {
-        execSync('kill -9 ' + child.pid);
-        child.kill();
-        process.exit();
-    });
+    process.on('SIGINT', exit);
     return;
   }
   if (argv.debugInspectPort) {
@@ -83,14 +84,17 @@ function debugWs(addr) {
     const cbMap = {};
     ws.on('open', () => {
       ws.on('message', message => {
-        if (message.utf8Data) {
-          const data = JSON.parse(message.utf8Data);
-          if (data.id) {
-            if (data.id > currentId) {
-              currentId = data.id - 0;
+        try {
+          message = JSON.parse(message);
+        } catch (e) {}
+        if (message.params) {
+          const id = message.params.scriptId;
+          if (id) {
+            if (id > currentId) {
+              currentId = id - 0;
             }
-            if (cbMap[data.id]) {
-              cbMap[data.id](data);
+            if (cbMap[id]) {
+              cbMap[id](message.params);
             }
           }
         }
