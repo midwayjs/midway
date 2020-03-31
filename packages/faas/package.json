@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/faas",
-  "version": "0.2.59",
+  "version": "0.2.60",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
