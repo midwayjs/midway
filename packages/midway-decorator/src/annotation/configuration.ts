@@ -8,7 +8,7 @@ export interface InjectionConfigurationOptions {
 }
 
 export function Configuration(
-  options: InjectionConfigurationOptions
+  options: InjectionConfigurationOptions = {}
 ): ClassDecorator {
   return (target: any) => {
     saveClassMetadata(CONFIGURATION_KEY, options, target);
