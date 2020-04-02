@@ -5,27 +5,30 @@ import {
   copyFiles,
   CodeAny,
 } from '@midwayjs/faas-util-ts-compile';
-import { compileWithOptions, compileInProject } from '@midwayjs/mwcc';
+import { compileWithOptions } from '@midwayjs/mwcc';
 import { writeWrapper } from '@midwayjs/serverless-spec-builder';
 import { createRuntime } from '@midwayjs/runtime-mock';
 import * as FCTrigger from '@midwayjs/serverless-fc-trigger';
 import { resolve, relative, join } from 'path';
 import { FaaSStarterClass, cleanTarget } from './utils';
-import { ensureFileSync, existsSync, writeFileSync, remove, readFileSync } from 'fs-extra';
+import { ensureFileSync, existsSync, writeFileSync, remove, readFileSync, copy } from 'fs-extra';
 export * from './invoke';
-const lockMap = {};
-enum BUILD_TYPE {
-  BUILDING = 1,
+const commonLock: any = {};
+enum LOCK_TYPE {
+  INITIAL,
+  WAITING,
   COMPLETE
 }
 export class FaaSInvokePlugin extends BasePlugin {
   baseDir: string;
   buildDir: string;
+  invokeFun: any;
   codeAnalyzeResult: AnalyzeResult;
-  private skipTsBuild: boolean;
-  private buildLockPath: string;
-  private entryInfo: any;
-  private invokeFun: any;
+  skipTsBuild: boolean;
+  buildLockPath: string;
+  entryInfo: any;
+  fileChanges: any;
+  defaultTmpFaaSOut = './node_modules/.faas_out';
   commands = {
     invoke: {
       usage: '',
@@ -84,16 +87,56 @@ export class FaaSInvokePlugin extends BasePlugin {
     }
   }
 
+  getLock(lockKey) {
+    if (!commonLock[lockKey]) {
+      commonLock[lockKey] = { lockType: LOCK_TYPE.INITIAL, lockData: {}};
+    }
+    return commonLock[lockKey];
+  }
+
+  setLock(lockKey, status, data?) {
+    commonLock[lockKey].lockType = status;
+    commonLock[lockKey].lockData = data;
+  }
+
+  async waitForLock(lockKey, count?) {
+    count = count || 0;
+    return new Promise(resolve => {
+      if (count > 100) {
+        return resolve();
+      }
+      const { lockType, lockData } = this.getLock(lockKey);
+      if (lockType === LOCK_TYPE.WAITING) {
+        setTimeout(() => {
+          this.waitForLock(lockKey, count + 1).then(resolve);
+        }, 300);
+      } else {
+        resolve(lockData);
+      }
+    });
+  }
+
   async locator() {
     this.baseDir = this.core.config.servicePath;
     this.buildDir = resolve(this.baseDir, '.faas_debug_tmp');
-
-    // 分析目录结构
-    const locator = new Locator(this.baseDir);
-    this.codeAnalyzeResult = await locator.run({
-      tsCodeRoot: this.options.sourceDir,
-      tsBuildRoot: this.buildDir,
-    });
+    const lockKey = `codeAnalyzeResult:${this.baseDir}`;
+    const { lockType, lockData } = this.getLock(lockKey);
+    let codeAnalyzeResult: any;
+    if (lockType === LOCK_TYPE.INITIAL) {
+      this.setLock(lockKey, LOCK_TYPE.WAITING);
+      // 分析目录结构
+      const locator = new Locator(this.baseDir);
+      codeAnalyzeResult = await locator.run({
+        tsCodeRoot: this.options.sourceDir,
+        tsBuildRoot: this.buildDir,
+      });
+      this.setLock(lockKey, LOCK_TYPE.COMPLETE, codeAnalyzeResult);
+    } else if (lockType === LOCK_TYPE.COMPLETE) {
+      codeAnalyzeResult = lockData;
+    } else if (lockType === LOCK_TYPE.WAITING) {
+      codeAnalyzeResult = await this.waitForLock(lockKey);
+    }
+    this.codeAnalyzeResult = codeAnalyzeResult;
   }
 
   async copyFile() {
@@ -120,55 +163,65 @@ export class FaaSInvokePlugin extends BasePlugin {
       this.skipTsBuild = true;
       return;
     }
+    this.skipTsBuild = false;
     process.env.MIDWAY_TS_MODE = 'false';
     // 构建锁文件
     const buildLockPath = this.buildLockPath = resolve(this.buildDir, '.faasTSBuildInfo.log');
+    const { lockType } = this.getLock(this.buildLockPath);
     // 如果当前存在构建任务，那么久进行等待
-    if (!lockMap[buildLockPath]) {
-      lockMap[buildLockPath] = BUILD_TYPE.BUILDING;
-    } else if (lockMap[buildLockPath] === BUILD_TYPE.BUILDING) {
-      await this.waitForTsBuild(buildLockPath);
+    if (lockType === LOCK_TYPE.INITIAL) {
+      this.setLock(this.buildLockPath, LOCK_TYPE.WAITING);
+    } else if (lockType === LOCK_TYPE.WAITING) {
+      await this.waitForLock(this.buildLockPath);
     }
 
     const specFile = getSpecFile(this.baseDir).path;
-
+    const relativeTsCodeRoot = relative(this.baseDir, this.codeAnalyzeResult.tsCodeRoot) || '.';
     if (existsSync(buildLockPath)) {
-      const fileChanges = await compareFileChange(
+      this.fileChanges = await compareFileChange(
         [
           specFile,
-          `${relative(this.baseDir, this.codeAnalyzeResult.tsCodeRoot) || '.'}/**/*`,
+          `${relativeTsCodeRoot}/**/*`,
+          `${this.defaultTmpFaaSOut}/src/**/*`, // 允许用户将ts代码生成到此文件夹
         ],
         [buildLockPath],
         { cwd: this.baseDir }
       );
-      if (!fileChanges || !fileChanges.length) {
+      if (!this.fileChanges || !this.fileChanges.length) {
         if (!this.core.service.functions) {
           this.core.service.functions = JSON.parse(readFileSync(buildLockPath).toString());
         }
-        lockMap[buildLockPath] = true;
+        this.setLock(this.buildLockPath, LOCK_TYPE.COMPLETE);
         this.skipTsBuild = true;
         this.setStore('skipTsBuild', true);
         this.core.debug('Auto skip ts compile');
         return;
       }
+    } else {
+      this.fileChanges = [
+        `${relativeTsCodeRoot}/**/*`,
+        `${this.defaultTmpFaaSOut}/src/**/*`,
+      ];
     }
-    lockMap[buildLockPath] = BUILD_TYPE.BUILDING;
+    this.setLock(this.buildLockPath, LOCK_TYPE.WAITING);
     ensureFileSync(buildLockPath);
-    const functions = await this.analysisCode();
-    writeFileSync(buildLockPath, JSON.stringify(functions));
+    writeFileSync(buildLockPath, JSON.stringify(this.core.service.functions));
   }
 
   async analysisCode() {
+    if (this.skipTsBuild) {
+      return;
+    }
     if (this.core.service.functions) {
       return this.core.service.functions;
     }
     const newSpec: any = await CodeAny({
       spec: this.core.service,
       baseDir: this.baseDir,
-      sourceDir: this.codeAnalyzeResult.tsCodeRoot
+      sourceDir: this.fileChanges
     });
     this.core.service.functions = newSpec.functions;
-    return newSpec.functions;
+    writeFileSync(this.buildLockPath, JSON.stringify(newSpec.functions));
   }
 
   async compile() {
@@ -178,23 +231,17 @@ export class FaaSInvokePlugin extends BasePlugin {
 
     this.core.debug('Compile', this.codeAnalyzeResult);
     try {
-      if (this.codeAnalyzeResult.integrationProject) {
-        // 一体化调整目录
-        const dest = join(this.buildDir, 'dist');
-        await compileWithOptions(this.baseDir, dest, {
-          include: [this.codeAnalyzeResult.tsCodeRoot]
-        });
-      } else {
-        const dest = join(this.buildDir, 'dist');
-        await compileInProject(this.baseDir, dest);
-      }
+      const dest = join(this.buildDir, 'dist');
+      await compileWithOptions(this.baseDir, dest, {
+        include: [].concat(this.fileChanges)
+      });
     } catch (e) {
       await remove(this.buildLockPath);
-      lockMap[this.buildLockPath] = 0;
+      this.setLock(this.buildLockPath, LOCK_TYPE.COMPLETE);
       this.core.debug('Typescript Build Error', e);
       throw new Error(`Typescript Build Error, Please Check Your FaaS Code!`);
     }
-    lockMap[this.buildLockPath] = BUILD_TYPE.COMPLETE;
+    this.setLock(this.buildLockPath, LOCK_TYPE.COMPLETE);
     // 针对多次调用清理缓存
     Object.keys(require.cache).forEach(path => {
       if (path.indexOf(this.buildDir) !== -1) {
@@ -204,31 +251,49 @@ export class FaaSInvokePlugin extends BasePlugin {
     });
   }
 
-  async entry() {
-    let starterName;
-    const platform = this.getPlatform();
-    this.core.debug('Platform entry', platform);
-    if (platform === 'aliyun') {
-      starterName = require.resolve('@midwayjs/serverless-fc-starter');
-    } else if (platform === 'tencent') {
-      starterName = require.resolve('@midwayjs/serverless-scf-starter');
-    }
-    if (!starterName) {
-      return;
-    }
+  checkUserEntry() {
     const funcInfo = this.getFunctionInfo();
     const [handlerFileName, name] = funcInfo.handler.split('.');
     const fileName = resolve(this.buildDir, `${handlerFileName}.js`);
+    const userEntry = [
+      resolve(this.baseDir, `${handlerFileName}.js`),
+      resolve(this.baseDir, `${this.defaultTmpFaaSOut}/${handlerFileName}.js`),
+    ].find(existsSync);
+    return {
+      funcInfo,
+      name,
+      userEntry,
+      fileName
+    };
+  }
 
-    writeWrapper({
-      baseDir: this.baseDir,
-      service: {
-        layers: this.core.service.layers,
-        functions: { [this.options.function]: funcInfo },
-      },
-      distDir: this.buildDir,
-      starter: starterName,
-    });
+  async entry() {
+    const { funcInfo , name, fileName, userEntry } = this.checkUserEntry();
+    if (!userEntry) {
+      let starterName;
+      const platform = this.getPlatform();
+      this.core.debug('Platform entry', platform);
+      if (platform === 'aliyun') {
+        starterName = require.resolve('@midwayjs/serverless-fc-starter');
+      } else if (platform === 'tencent') {
+        starterName = require.resolve('@midwayjs/serverless-scf-starter');
+      }
+      if (!starterName) {
+        return;
+      }
+
+      writeWrapper({
+        baseDir: this.baseDir,
+        service: {
+          layers: this.core.service.layers,
+          functions: { [this.options.function]: funcInfo },
+        },
+        distDir: this.buildDir,
+        starter: starterName,
+      });
+    } else {
+      copy(userEntry, fileName);
+    }
     this.entryInfo = { fileName, handlerName: name };
     this.core.debug('EntryInfo', this.entryInfo);
   }
@@ -385,22 +450,6 @@ export class FaaSInvokePlugin extends BasePlugin {
     });
     await starter.start();
     return starter;
-  }
-
-  waitForTsBuild(buildLogPath, count?) {
-    count = count || 0;
-    return new Promise(resolve => {
-      if (count > 100) {
-        return resolve();
-      }
-      if (lockMap[buildLogPath] === BUILD_TYPE.BUILDING) {
-        setTimeout(() => {
-          this.waitForTsBuild(buildLogPath, count + 1).then(resolve);
-        }, 300);
-      } else {
-        resolve();
-      }
-    });
   }
 }
 

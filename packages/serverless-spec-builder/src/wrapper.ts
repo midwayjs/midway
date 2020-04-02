@@ -126,6 +126,10 @@ export function formetAggregationHandlers(handlers) {
       level: path.split('/').length - 1
     };
   }).sort((handlerA, handlerB) => {
-    return handlerB.level - handlerA.level;
+    const levelDiff = handlerB.level - handlerA.level;
+    if (levelDiff === 0) {
+      return handlerB.path.length - handlerA.path.length;
+    }
+    return levelDiff;
   });
 }

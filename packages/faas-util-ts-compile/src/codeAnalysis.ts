@@ -3,7 +3,7 @@ import { findAndParseTsConfig } from '@midwayjs/mwcc';
 let ts;
 interface IOptions {
   baseDir: string;
-  sourceDir: string;
+  sourceDir: string | string[];
   spec?: any;
 }
 
@@ -18,7 +18,7 @@ class CodeAnalysis {
   async start() {
     this.loadSpec();
 
-    const parsedCli = findAndParseTsConfig(this.options.baseDir, undefined, undefined, { include: [this.options.sourceDir] });
+    const parsedCli = findAndParseTsConfig(this.options.baseDir, undefined, undefined, { include: [].concat(this.options.sourceDir) });
     const compilerOptions = parsedCli.options;
     const program = ts.createProgram(parsedCli.fileNames, compilerOptions);
     this.checker = program.getTypeChecker();

@@ -19,11 +19,23 @@ describe('/test/multi.test.ts', () => {
         return invoke({
           functionDir: join(__dirname, 'fixtures/multiApp'),
           functionName,
-          data: [{ name: 'params' }],
+          data: [
+            {
+              headers: { 'Content-Type': 'text/json'},
+              method: 'GET',
+              path:  '/test/xxx',
+              queries: {name: 123},
+              body: {
+                name: 'test'
+              }
+            }
+          ],
           clean: false,
         });
       })
     );
     assert(result.length === 2);
+    const data = JSON.parse(result[0].body);
+    assert(data.method === 'GET' && data.path === '/test/xxx');
   });
 });
