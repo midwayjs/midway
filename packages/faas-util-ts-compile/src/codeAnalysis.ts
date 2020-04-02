@@ -1,6 +1,5 @@
-import * as globby from 'globby';
-import { readFileSync } from 'fs';
-import { resolve } from 'path';
+import { findAndParseTsConfig } from '@midwayjs/mwcc';
+
 let ts;
 interface IOptions {
   baseDir: string;
@@ -19,13 +18,9 @@ class CodeAnalysis {
   async start() {
     this.loadSpec();
 
-    const allFiles = await this.loadTs();
-    if (!allFiles.length) {
-      return;
-    }
-    // Build a program using the set of root file names in fileNames
-    const compilerOptions = this.getTsConfigInfo();
-    const program = ts.createProgram(allFiles, compilerOptions);
+    const parsedCli = findAndParseTsConfig(this.options.baseDir, undefined, undefined, { include: [this.options.sourceDir] });
+    const compilerOptions = parsedCli.options;
+    const program = ts.createProgram(parsedCli.fileNames, compilerOptions);
     this.checker = program.getTypeChecker();
     for (const sourceFile of program.getSourceFiles()) {
       if (!sourceFile.isDeclarationFile) {
@@ -41,44 +36,6 @@ class CodeAnalysis {
     if (!this.spec.functions) {
       this.spec.functions = {};
     }
-  }
-
-  // 获取所有ts代码文件
-  async loadTs() {
-    return globby(
-      [
-        `${this.options.sourceDir}/**/*.ts`,
-        `${this.options.sourceDir}/*.ts`
-      ],
-      {
-        absolute: true,
-        cwd: this.options.baseDir,
-        followSymbolicLinks: false,
-        ignore: [
-          '**/node_modules/**',
-          '**/.serverless/**',
-          '**/.faas_debug_tmp/**',
-        ],
-      }
-    );
-  }
-
-  // 获取ts配置
-  getTsConfigInfo() {
-    let obj: any = {};
-    try {
-      const content = readFileSync(resolve(this.options.baseDir, 'tsconfig.json'), { encoding: 'utf8' });
-      obj = JSON.parse(content);
-    } catch (e) {}
-    const config = {
-      ...(obj.compilerOptions || {}), // 增加定制化检测
-      outDir: undefined,
-      lib: undefined,
-      inlineSourceMap: false,
-      inlineSources: false,
-      moduleResolution: ts.ModuleResolutionKind.NodeJs,
-    };
-    return config;
   }
 
   // 遍历文件

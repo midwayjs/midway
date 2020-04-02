@@ -1,19 +1,17 @@
 import { BasePlugin, getSpecFile } from '@midwayjs/fcli-command-core';
 import { AnalyzeResult, Locator } from '@midwayjs/locate';
 import {
-  tsCompile,
-  tsIntegrationProjectCompile,
   compareFileChange,
   copyFiles,
   CodeAny,
-  combineTsConfig
 } from '@midwayjs/faas-util-ts-compile';
+import { compileWithOptions, compileInProject } from '@midwayjs/mwcc';
 import { writeWrapper } from '@midwayjs/serverless-spec-builder';
 import { createRuntime } from '@midwayjs/runtime-mock';
 import * as FCTrigger from '@midwayjs/serverless-fc-trigger';
 import { resolve, relative, join } from 'path';
 import { FaaSStarterClass, cleanTarget } from './utils';
-import { ensureFileSync, existsSync, writeFileSync, move, remove, readFileSync } from 'fs-extra';
+import { ensureFileSync, existsSync, writeFileSync, remove, readFileSync } from 'fs-extra';
 export * from './invoke';
 const lockMap = {};
 enum BUILD_TYPE {
@@ -179,36 +177,16 @@ export class FaaSInvokePlugin extends BasePlugin {
     }
 
     this.core.debug('Compile', this.codeAnalyzeResult);
-    const opts = this.options.incremental ? { overwrite: true } : {};
     try {
       if (this.codeAnalyzeResult.integrationProject) {
         // 一体化调整目录
-        await tsIntegrationProjectCompile(this.baseDir, {
-          buildRoot: this.buildDir,
-          tsCodeRoot: this.codeAnalyzeResult.tsCodeRoot,
-          incremental: this.options.incremental,
-          tsConfig: combineTsConfig({
-            compilerOptions: {
-              sourceRoot: this.codeAnalyzeResult.tsCodeRoot, // for sourceMap
-            },
-          }, this.options.tsConfig),
-          clean: this.options.clean,
+        const dest = join(this.buildDir, 'dist');
+        await compileWithOptions(this.baseDir, dest, {
+          include: [this.codeAnalyzeResult.tsCodeRoot]
         });
       } else {
-        await tsCompile(this.baseDir, {
-          tsConfigName: 'tsconfig.json',
-          tsConfig: combineTsConfig({
-            compilerOptions: {
-              sourceRoot: resolve(this.baseDir, 'src'), // for sourceMap
-            },
-          }, this.options.tsConfig),
-          clean: this.options.clean,
-        });
         const dest = join(this.buildDir, 'dist');
-        if (existsSync(dest)) {
-          await remove(dest);
-        }
-        await move(join(this.baseDir, 'dist'), dest, opts);
+        await compileInProject(this.baseDir, dest);
       }
     } catch (e) {
       await remove(this.buildLockPath);

@@ -144,7 +144,10 @@ describe('/test/package.test.ts', () => {
       core.addPlugin(PackagePlugin);
       await core.ready();
       await core.invoke(['package']);
-      assert(existsSync(resolve(baseDir, '.serverless/dist/index.js')));
+      // asserting function entry files exist
+      assert(existsSync(resolve(baseDir, '.serverless/dist/apis/index.js')));
+      // asserting files not in src/apis should
+      assert(existsSync(resolve(baseDir, '.serverless/dist/util.js')));
       assert(existsSync(resolve(baseDir, '.serverless/static/render.html')));
       assert(existsSync(resolve(baseDir, '.serverless/static/common/a.js')));
       assert(existsSync(resolve(baseDir, 'serverless.zip')));
@@ -169,7 +172,10 @@ describe('/test/package.test.ts', () => {
       core.addPlugin(PackagePlugin);
       await core.ready();
       await core.invoke(['package']);
-      assert(existsSync(resolve(baseDir, '.serverless/dist/index.js')));
+      // asserting function entry files exist
+      assert(existsSync(resolve(baseDir, '.serverless/dist/apis/index.js')));
+      // asserting files not in src/apis should
+      assert(existsSync(resolve(baseDir, '.serverless/dist/util.js')));
       assert(existsSync(resolve(baseDir, '.serverless/shared/render.html')));
       assert(existsSync(resolve(baseDir, '.serverless/shared/common/a.js')));
       assert(existsSync(resolve(baseDir, 'serverless.zip')));

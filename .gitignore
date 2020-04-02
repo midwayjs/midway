@@ -25,4 +25,6 @@ AUTHORS
 serverless.zip
 /packages/serverless-invoke/test/fixtures/*/build
 /packages/serverless-invoke/test/fixtures/**/*faas_debug_tmp/
+/packages/faas-util-ts-compile/test/fixtures/files/tmp/*
+!/packages/faas-util-ts-compile/test/fixtures/files/tmp/.gitkeep
 

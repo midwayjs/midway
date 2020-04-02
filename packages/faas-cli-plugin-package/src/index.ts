@@ -20,10 +20,9 @@ import {
 import * as micromatch from 'micromatch';
 import { commonPrefix, formatLayers } from './utils';
 import {
-  tsCompile,
-  tsIntegrationProjectCompile,
   copyFiles,
 } from '@midwayjs/faas-util-ts-compile';
+import { compileWithOptions, compileInProject } from '@midwayjs/mwcc';
 import { exec } from 'child_process';
 import * as archiver from 'archiver';
 import { AnalyzeResult, Locator } from '@midwayjs/locate';
@@ -311,37 +310,14 @@ export class PackagePlugin extends BasePlugin {
       this.core.cli.log(' - Not found tsconfig.json and skip build');
       return;
     }
-    if (!this.codeAnalyzeResult.tsBuildRoot) {
-      return;
-    }
-    if (this.options.ncc) {
-      this.core.cli.log(' - Using single file build mode');
-      // await buildByNcc();
+    this.core.cli.log(' - Using tradition build mode');
+    if (this.codeAnalyzeResult.integrationProject) {
+      await compileWithOptions(this.servicePath, join(this.midwayBuildPath, 'dist'), {
+        compilerOptions: { sourceRoot: '../src' },
+        include: [this.codeAnalyzeResult.tsCodeRoot]
+      });
     } else {
-      this.core.cli.log(' - Using tradition build mode');
-      if (this.codeAnalyzeResult.integrationProject) {
-        // 生成一个临时 tsconfig
-        const tsConfig = await tsIntegrationProjectCompile(this.servicePath, {
-          buildRoot: this.midwayBuildPath,
-          tsCodeRoot: this.codeAnalyzeResult.tsCodeRoot,
-          incremental: false,
-          clean: true,
-        });
-        writeJSON(join(this.midwayBuildPath, 'tsconfig.json'), tsConfig);
-      } else {
-        await tsCompile(this.servicePath, {
-          clean: true,
-          tsConfigName: 'tsconfig.json',
-        });
-        // copy dist to artifact directory
-        await move(
-          this.codeAnalyzeResult.tsBuildRoot,
-          join(this.midwayBuildPath, 'dist'),
-          {
-            overwrite: true,
-          }
-        );
-      }
+      await compileInProject(this.servicePath, join(this.midwayBuildPath, 'dist'), undefined, { compilerOptions: { sourceRoot: '../src' } });
     }
     this.core.cli.log(` - Build Midway FaaS complete`);
   }

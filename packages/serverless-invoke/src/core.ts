@@ -9,7 +9,6 @@ import { FaaSStarterClass, cleanTarget } from './utils';
 import { join, resolve, relative } from 'path';
 import {
   existsSync,
-  move,
   writeFileSync,
   ensureFileSync,
   remove,
@@ -18,11 +17,10 @@ import { loadSpec, getSpecFile } from '@midwayjs/fcli-command-core';
 import { writeWrapper } from '@midwayjs/serverless-spec-builder';
 import { AnalyzeResult, Locator } from '@midwayjs/locate';
 import {
-  tsCompile,
-  tsIntegrationProjectCompile,
   compareFileChange,
   copyFiles,
 } from '@midwayjs/faas-util-ts-compile';
+import { compileWithOptions, compileInProject } from '@midwayjs/mwcc';
 import { IInvoke } from './interface';
 const lockMap = {};
 interface InvokeOptions {
@@ -152,36 +150,13 @@ export abstract class InvokeCore implements IInvoke {
     if (this.options.clean) {
       await cleanTarget(this.buildDir);
     }
-    const opts = this.options.incremental ? { overwrite: true } : {};
     try {
       if (this.codeAnalyzeResult.integrationProject) {
-        // 一体化调整目录
-        await tsIntegrationProjectCompile(baseDir, {
-          buildRoot: this.buildDir,
-          tsCodeRoot: this.codeAnalyzeResult.tsCodeRoot,
-          incremental: this.options.incremental,
-          tsConfig: {
-            compilerOptions: {
-              sourceRoot: this.codeAnalyzeResult.tsCodeRoot, // for sourceMap
-            },
-          },
-          clean: this.options.clean,
+        await compileWithOptions(baseDir, join(this.buildDir, 'dist'), {
+          include: [this.codeAnalyzeResult.tsCodeRoot]
         });
       } else {
-        await tsCompile(baseDir, {
-          tsConfigName: 'tsconfig.json',
-          tsConfig: {
-            compilerOptions: {
-              sourceRoot: resolve(baseDir, 'src'), // for sourceMap
-            },
-          },
-          clean: this.options.clean,
-        });
-        const dest = join(this.buildDir, 'dist');
-        if (existsSync(dest)) {
-          await remove(dest);
-        }
-        await move(join(baseDir, 'dist'), dest, opts);
+        await compileInProject(this.baseDir, join(this.buildDir, 'dist'));
       }
     } catch (e) {
       await remove(buildLogPath);

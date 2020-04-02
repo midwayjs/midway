@@ -5,6 +5,7 @@ import {
   inject,
   FaaSContext,
 } from '@midwayjs/faas';
+import foo from '../util'
 
 @provide()
 @func('index.handler')
@@ -17,6 +18,6 @@ export class IndexHandler implements FunctionHandler {
    * @param event
    */
   async handler(event: string) {
-    return 'hello';
+    return 'hello' + foo();
   }
 }
