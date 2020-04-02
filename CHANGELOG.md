@@ -3,6 +3,115 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.18.4](https://github.com/midwayjs/midway/compare/v1.18.3...v1.18.4) (2020-04-02)
+
+**Note:** Version bump only for package midway
+
+
+
+
+
+## [1.18.3](https://github.com/midwayjs/midway/compare/v1.18.2...v1.18.3) (2020-03-27)
+
+**Note:** Version bump only for package midway
+
+
+
+
+
+## [1.18.2](https://github.com/midwayjs/midway/compare/v1.18.1...v1.18.2) (2020-03-21)
+
+
+### Bug Fixes
+
+* mock fn ([#439](https://github.com/midwayjs/midway/issues/439)) ([dd9f843](https://github.com/midwayjs/midway/commit/dd9f8434faae3cdc07535774fbf18b7163a3dc35))
+
+
+
+
+
+## [1.18.1](https://github.com/midwayjs/midway/compare/v1.18.0...v1.18.1) (2020-03-17)
+
+
+### Bug Fixes
+
+* lazy get default framework ([#430](https://github.com/midwayjs/midway/issues/430)) ([140c3df](https://github.com/midwayjs/midway/commit/140c3df79ed10f4df09be73eb73e3379d0b82e27))
+
+
+
+
+
+# [1.18.0](https://github.com/midwayjs/midway/compare/v1.17.1...v1.18.0) (2020-03-04)
+
+
+### Bug Fixes
+
+* disable follow symbolic link ([#413](https://github.com/midwayjs/midway/issues/413)) ([cf62627](https://github.com/midwayjs/midway/commit/cf62627f81e98f33cbd3f4899e94a3aac9a7e751))
+
+
+### Features
+
+* feat(eslint-midway-contrib): add pkg for js and ts ([#397](https://github.com/midwayjs/midway/issues/397)) ([6b32262](https://github.com/midwayjs/midway/commit/6b32262f8364df8f062a668a257a72efa5d4d9d4))
+* MidwayRequestContainer 增加泛型标注 ([#407](https://github.com/midwayjs/midway/issues/407)) ([daee9d3](https://github.com/midwayjs/midway/commit/daee9d3008a8ea199e8d12f25f2ffdeeda9a4b92))
+
+
+
+
+
+## [1.17.1](https://github.com/midwayjs/midway/compare/v1.17.0...v1.17.1) (2020-02-17)
+
+
+### Bug Fixes
+
+* **deps:** add terser to depenencies ([#390](https://github.com/midwayjs/midway/issues/390)) ([e6da77e](https://github.com/midwayjs/midway/commit/e6da77e))
+
+
+
+
+
+# [1.17.0](https://github.com/midwayjs/midway/compare/v1.16.4...v1.17.0) (2020-02-17)
+
+
+### Features
+
+* **build:** options to minify all products ([#389](https://github.com/midwayjs/midway/issues/389)) ([86d5279](https://github.com/midwayjs/midway/commit/86d5279))
+
+
+
+
+
+## [1.16.4](https://github.com/midwayjs/midway/compare/v1.16.3...v1.16.4) (2020-02-11)
+
+
+### Bug Fixes
+
+* egg bin modify setup file rule ([#380](https://github.com/midwayjs/midway/issues/380)) ([4b9461d](https://github.com/midwayjs/midway/commit/4b9461d))
+* executing midway-bin build at arbitrary directory ([#384](https://github.com/midwayjs/midway/issues/384)) ([1ace418](https://github.com/midwayjs/midway/commit/1ace418))
+
+
+
+
+
+## [1.16.3](https://github.com/midwayjs/midway/compare/v1.16.2...v1.16.3) (2019-12-25)
+
+**Note:** Version bump only for package midway
+
+
+
+
+
+## [1.16.2](https://github.com/midwayjs/midway/compare/v1.16.1...v1.16.2) (2019-12-25)
+
+
+### Bug Fixes
+
+* fix ts mode value is empty for non-ts items ([ef3b46a](https://github.com/midwayjs/midway/commit/ef3b46a))
+* interface scheduleOpts ([2ae0766](https://github.com/midwayjs/midway/commit/2ae0766))
+
+
+
+
+
 ## [1.16.1](https://github.com/midwayjs/midway/compare/v1.16.0...v1.16.1) (2019-12-16)
 
 **Note:** Version bump only for package midway

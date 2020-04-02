@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/decorator",
-  "version": "1.16.1",
+  "version": "1.17.1",
   "description": "definition decorator for midway project",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -16,7 +16,7 @@
     "injection": "^1.8.0"
   },
   "devDependencies": {
-    "midway-bin": "^1.16.1"
+    "midway-bin": "^1.17.1"
   },
   "keywords": [
     "midway",

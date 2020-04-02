@@ -57,7 +57,7 @@ module.exports = {
               {
                 text: '监控产品',
                 items: [
-                  { text: 'Sandbox - 私有化 Node.js 监控产品', link: '#' },
+                  { text: 'Sandbox - 私有化 Node.js 监控产品', link: 'https://github.com/midwayjs/sandbox-docker' },
                 ],
               },
               {
@@ -113,7 +113,7 @@ module.exports = {
               },
               {
                 text: 'Monitoring',
-                items: [{ text: 'Sandbox - Private Node.js APM', link: '#' }],
+                items: [{ text: 'Sandbox - Private Node.js APM', link: 'https://github.com/midwayjs/sandbox-docker' }],
               },
               {
                 text: 'Node.js Injection Module',

@@ -28,7 +28,7 @@ export class MidwayWebLoader extends EggLoader {
   public appDir: string;
   public appInfo: EggAppInfo;
   private controllerIds: string[] = [];
-  private prioritySortRouters: Array<{
+  public prioritySortRouters: Array<{
     priority: number,
     router: Router,
   }> = [];
@@ -42,7 +42,7 @@ export class MidwayWebLoader extends EggLoader {
    * 判断是否是 ts 模式，在构造器内就会被执行
    */
   get isTsMode(): boolean {
-    return this.app.options.typescript;
+    return !!this.app.options.typescript;
   }
 
   get applicationContext(): MidwayContainer {

@@ -3,6 +3,58 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.17.1](https://github.com/midwayjs/midway/compare/v1.17.0...v1.17.1) (2020-02-17)
+
+
+### Bug Fixes
+
+* **deps:** add terser to depenencies ([#390](https://github.com/midwayjs/midway/issues/390)) ([e6da77e](https://github.com/midwayjs/midway/commit/e6da77e))
+
+
+
+
+
+# [1.17.0](https://github.com/midwayjs/midway/compare/v1.16.4...v1.17.0) (2020-02-17)
+
+
+### Features
+
+* **build:** options to minify all products ([#389](https://github.com/midwayjs/midway/issues/389)) ([86d5279](https://github.com/midwayjs/midway/commit/86d5279))
+
+
+
+
+
+## [1.16.4](https://github.com/midwayjs/midway/compare/v1.16.3...v1.16.4) (2020-02-11)
+
+
+### Bug Fixes
+
+* executing midway-bin build at arbitrary directory ([#384](https://github.com/midwayjs/midway/issues/384)) ([1ace418](https://github.com/midwayjs/midway/commit/1ace418))
+
+
+
+
+
+## [1.16.3](https://github.com/midwayjs/midway/compare/v1.16.2...v1.16.3) (2019-12-25)
+
+**Note:** Version bump only for package midway-bin
+
+
+
+
+
+## [1.16.2](https://github.com/midwayjs/midway/compare/v1.16.1...v1.16.2) (2019-12-25)
+
+
+### Bug Fixes
+
+* fix ts mode value is empty for non-ts items ([ef3b46a](https://github.com/midwayjs/midway/commit/ef3b46a))
+
+
+
+
+
 ## [1.16.1](https://github.com/midwayjs/midway/compare/v1.16.0...v1.16.1) (2019-12-16)
 
 **Note:** Version bump only for package midway-bin

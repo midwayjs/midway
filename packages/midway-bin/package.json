@@ -1,6 +1,6 @@
 {
   "name": "midway-bin",
-  "version": "1.16.1",
+  "version": "1.17.1",
   "description": "Midway Command Tools",
   "main": "index.js",
   "bin": {
@@ -23,12 +23,14 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@zeit/ncc": "^0.20.5",
+    "@midwayjs/ncc": "^0.22.0",
+    "co": "^4.6.0",
     "egg-bin": "^4.11.1",
     "fs-extra": "^8.1.0",
     "globby": "^10.0.1",
     "jest-environment-node": "^24.9.0",
     "mz-modules": "^2.1.0",
+    "terser": "^4.6.3",
     "typedoc": "^0.14.2"
   },
   "devDependencies": {
