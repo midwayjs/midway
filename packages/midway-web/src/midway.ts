@@ -82,13 +82,35 @@ class MidwayApplication extends (Application as {
 
   dumpConfig() {
     super.dumpConfig();
+    const rundir = this.config.rundir;
     try {
       const tree = this.loader.dumpDependency();
-      const rundir = this.config.rundir;
       const dumpFile = path.join(rundir, `${this.type}_dependency_${process.pid}`);
       fs.writeFileSync(dumpFile, tree);
     } catch (err) {
       this.coreLogger.warn(`dump dependency dot error: ${err.message}`);
+    }
+
+    // dump routers to router.json
+    try {
+      const dumpRouterFile = path.join(rundir, 'midway-router.json');
+      const routers = [];
+      for (const router of this.loader.prioritySortRouters) {
+        for (const layer of router['router'].stack) {
+          routers.push({
+            name: layer.name,
+            methods: layer.methods,
+            paramNames: layer.paramNames,
+            path: layer.path,
+            regexp: layer.regexp.toString(),
+            stack: layer.stack.map(stack => stack._name || stack.name || 'anonymous'),
+          });
+        }
+      }
+
+      fs.writeFileSync(dumpRouterFile, JSON.stringify(routers, null, 2));
+    } catch (err) {
+      this.coreLogger.warn(`dumpConfig midway-router.json error: ${err.message}`);
     }
   }
 }
