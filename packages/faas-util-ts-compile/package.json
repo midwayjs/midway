@@ -4,7 +4,7 @@
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/mwcc": "^0.1.7",
+    "@midwayjs/mwcc": "^0.1.9",
     "fs-extra": "^8.1.0",
     "globby": "^10.0.1",
     "midway-bin": "^2.0.0",
