@@ -10,8 +10,9 @@ import { writeWrapper } from '@midwayjs/serverless-spec-builder';
 import { createRuntime } from '@midwayjs/runtime-mock';
 import * as FCTrigger from '@midwayjs/serverless-fc-trigger';
 import { resolve, relative, join } from 'path';
+import { tmpdir } from 'os';
 import { FaaSStarterClass, cleanTarget } from './utils';
-import { ensureFileSync, existsSync, writeFileSync, remove, readFileSync, copy } from 'fs-extra';
+import { ensureFileSync, existsSync, writeFileSync, remove, readFileSync, copy, mkdirSync } from 'fs-extra';
 export * from './invoke';
 const commonLock: any = {};
 enum LOCK_TYPE {
@@ -28,7 +29,7 @@ export class FaaSInvokePlugin extends BasePlugin {
   buildLockPath: string;
   entryInfo: any;
   fileChanges: any;
-  defaultTmpFaaSOut = './node_modules/.faas_out';
+  defaultTmpFaaSOut = resolve(tmpdir(), `faas_out_${Date.now()}`);
   commands = {
     invoke: {
       usage: '',
@@ -233,6 +234,9 @@ export class FaaSInvokePlugin extends BasePlugin {
     this.core.debug('Compile', this.codeAnalyzeResult);
     try {
       const dest = join(this.buildDir, 'dist');
+      if (!existsSync(dest)) {
+        mkdirSync(dest);
+      }
       await compileWithOptions(this.baseDir, dest, {
         include: [].concat(this.fileChanges)
       });

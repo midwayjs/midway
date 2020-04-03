@@ -338,10 +338,6 @@ export class CommandHookCore implements ICommandHooksCore {
 
   // 加载本地插件
   private async loadLocalPlugin(localPath) {
-    if (this.options.pluginType && this.options.pluginType.indexOf('local') === -1) {
-      this.debug('Skip Local Plugins');
-      return;
-    }
     try {
       if (this.options.config && this.options.config.servicePath && /^\./.test(localPath)) {
         localPath = resolve(this.options.config.servicePath, localPath);
@@ -359,10 +355,6 @@ export class CommandHookCore implements ICommandHooksCore {
 
   // 加载npm包插件
   private async loadNpmPlugins() {
-    if (this.options.pluginType && this.options.pluginType.indexOf('npm') === -1) {
-      this.debug('Skip Npm Plugins');
-      return;
-    }
     for (const npmPath of this.npmPlugin) {
       await this.loadNpm(npmPath, this.options.options.npm || this.options.npm);
     }

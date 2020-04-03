@@ -35,8 +35,7 @@ export async function invoke (options: InvokeOptions) {
       verbose: options.verbose,
       resultType: 'store'
     },
-    log: console,
-    pluginType: 'local'
+    log: console
   });
   core.addPlugin(FaaSInvokePlugin);
   await core.ready();
