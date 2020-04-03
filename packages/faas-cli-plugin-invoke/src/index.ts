@@ -1,4 +1,4 @@
-import { BasePlugin, getSpecFile } from '@midwayjs/fcli-command-core';
+import { BasePlugin } from '@midwayjs/fcli-command-core';
 import { AnalyzeResult, Locator } from '@midwayjs/locate';
 import {
   compareFileChange,
@@ -85,6 +85,7 @@ export class FaaSInvokePlugin extends BasePlugin {
     if (this.options.clean !== false) {
       this.options.clean = true;
     }
+    this.setStore('defaultTmpFaaSOut', this.defaultTmpFaaSOut);
   }
 
   getLock(lockKey) {
@@ -175,7 +176,7 @@ export class FaaSInvokePlugin extends BasePlugin {
       await this.waitForLock(this.buildLockPath);
     }
 
-    const specFile = getSpecFile(this.baseDir).path;
+    const specFile = this.core.config.specFile.path;
     const relativeTsCodeRoot = relative(this.baseDir, this.codeAnalyzeResult.tsCodeRoot) || '.';
     if (existsSync(buildLockPath)) {
       this.fileChanges = await compareFileChange(

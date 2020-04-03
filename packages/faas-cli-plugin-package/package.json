@@ -15,6 +15,7 @@
     "midway-bin": "^2.0.0"
   },
   "devDependencies": {
+    "@midwayjs/faas": "^0.2.61",
     "@midwayjs/serverless-spec-builder": "^0.2.61"
   },
   "engines": {

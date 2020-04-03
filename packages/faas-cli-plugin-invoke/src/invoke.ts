@@ -1,4 +1,4 @@
-import { CommandHookCore, loadSpec } from '@midwayjs/fcli-command-core';
+import { CommandHookCore, loadSpec, getSpecFile } from '@midwayjs/fcli-command-core';
 import { FaaSInvokePlugin } from './index';
 
 export interface InvokeOptions {
@@ -15,12 +15,14 @@ export interface InvokeOptions {
 
 export async function invoke (options: InvokeOptions) {
   const baseDir = options.functionDir;
+  const specFile = getSpecFile(baseDir);
   const core = new CommandHookCore({
     config: {
       servicePath: baseDir,
+      specFile
     },
     commands: ['invoke'],
-    service: loadSpec(baseDir),
+    service: loadSpec(baseDir, specFile),
     provider: '',
     options: {
       function: options.functionName,

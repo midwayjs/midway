@@ -18,8 +18,8 @@ export const getSpecFile = baseDir => {
   return {};
 };
 
-export const loadSpec = baseDir => {
-  const specFile = getSpecFile(baseDir);
+export const loadSpec = (baseDir, specFileInfo?) => {
+  const specFile = specFileInfo || getSpecFile(baseDir);
   if (!specFile || !specFile.type) {
     return {};
   }
@@ -28,8 +28,8 @@ export const loadSpec = baseDir => {
   }
 };
 
-export const writeToSpec = (baseDir, specResult) => {
-  const specFile = getSpecFile(baseDir);
+export const writeToSpec = (baseDir, specResult, specFileInfo?) => {
+  const specFile = specFileInfo || getSpecFile(baseDir);
   if (!specFile || !specFile.type) {
     return {};
   }

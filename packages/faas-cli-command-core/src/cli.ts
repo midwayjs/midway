@@ -1,6 +1,6 @@
 import * as minimist from 'minimist';
 import { join } from 'path';
-import { loadSpec } from './utils/loadSpec';
+import { loadSpec, getSpecFile } from './utils/loadSpec';
 import { commandLineUsage } from './utils/commandLineUsage';
 import { CommandHookCore } from './core';
 import { PluginManager } from './pluginManager';
@@ -10,6 +10,7 @@ export class BaseCLI {
   providerName: string;
   core: any;
   spec: any;
+  specFile: any;
   commands: string[];
   cwd = process.cwd();
 
@@ -25,6 +26,7 @@ export class BaseCLI {
     this.core = new CommandHookCore({
       config: {
         servicePath: this.cwd,
+        specFile: this.specFile
       },
       commands: this.commands,
       service: this.spec,
@@ -65,7 +67,8 @@ export class BaseCLI {
   }
 
   loadSpec() {
-    this.spec = loadSpec(this.cwd);
+    this.specFile = getSpecFile(this.cwd);
+    this.spec = loadSpec(this.cwd, this.specFile);
   }
 
   // 加载命令行输出及报错

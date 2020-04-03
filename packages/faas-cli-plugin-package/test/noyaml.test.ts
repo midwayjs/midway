@@ -2,13 +2,14 @@ import { CommandHookCore, loadSpec } from '@midwayjs/fcli-command-core';
 import { PackagePlugin } from '../src/index';
 import { AliyunFCPlugin } from '../../faas-cli-plugin-fc/src/index';
 import { resolve } from 'path';
-import { existsSync, remove } from 'fs-extra';
+import { remove } from 'fs-extra';
+import { transform } from '@midwayjs/serverless-spec-builder';
 import * as assert from 'assert';
 
-describe('/test/package.test.ts', () => {
+describe('/test/noyaml.test.ts', () => {
   describe('integration project build', () => {
     it('aggregation package', async () => {
-      const baseDir = resolve(__dirname, './fixtures/aggregation');
+      const baseDir = resolve(__dirname, 'fixtures/noYaml');
       const buildDir = resolve(baseDir, './.serverless');
       await remove(buildDir);
       const core = new CommandHookCore({
@@ -25,9 +26,8 @@ describe('/test/package.test.ts', () => {
       core.addPlugin(AliyunFCPlugin);
       await core.ready();
       await core.invoke(['package']);
-      assert(existsSync(resolve(buildDir, 'aggregationapi.js')));
-      assert(existsSync(resolve(buildDir, 'aggregationnormal.js')));
-      assert(existsSync(resolve(buildDir, 'aggregationrenderNot2.js')));
+      const yaml = transform(resolve(buildDir, 'template.yml'));
+      assert(yaml.Resources['serverless-midway-test']['service'].Properties.Handler === 'service.handler');
     });
   });
 });

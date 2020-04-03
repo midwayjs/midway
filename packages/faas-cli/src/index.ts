@@ -1,4 +1,4 @@
-import { BaseCLI, getSpecFile } from '@midwayjs/fcli-command-core';
+import { BaseCLI } from '@midwayjs/fcli-command-core';
 import { saveYaml } from '@midwayjs/serverless-spec-builder';
 import { execSync } from 'child_process';
 
@@ -119,7 +119,7 @@ export class CLI extends BaseCLI {
       }
       if (typeof platform === 'string') {
         this.spec.provider.name = platform;
-        saveYaml(getSpecFile(this.cwd).path, this.spec);
+        saveYaml(this.specFile.path, this.spec);
       }
     }
   }

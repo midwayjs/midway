@@ -8,7 +8,7 @@ describe('/test/noyaml.test.ts', () => {
     await remove(join(baseDir, './.faas_debug_tmp'));
     const result: any = await (invoke as any)({
       functionDir: join(__dirname, 'fixtures/noYaml'),
-      functionName: 'service-handler'
+      functionName: 'service'
     });
     assert(result.body === 'hello world');
   });

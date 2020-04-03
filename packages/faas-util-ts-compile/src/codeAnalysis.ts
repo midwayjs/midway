@@ -132,7 +132,7 @@ class CodeAnalysis {
       trigger = args[0];
     }
 
-    const funName = handler.replace(/\./g, '-');
+    const funName = handler.replace(/\.handler$/, '').replace(/\./g, '-');
 
     const existsFuncData = this.spec.functions[funName] || {};
     existsFuncData.handler = handler;

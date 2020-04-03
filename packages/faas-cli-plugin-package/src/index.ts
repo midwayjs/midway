@@ -21,11 +21,13 @@ import * as micromatch from 'micromatch';
 import { commonPrefix, formatLayers } from './utils';
 import {
   copyFiles,
+  CodeAny
 } from '@midwayjs/faas-util-ts-compile';
 import { compileWithOptions, compileInProject } from '@midwayjs/mwcc';
 import { exec } from 'child_process';
 import * as archiver from 'archiver';
 import { AnalyzeResult, Locator } from '@midwayjs/locate';
+import { tmpdir } from 'os';
 
 export class PackagePlugin extends BasePlugin {
   core: any;
@@ -36,7 +38,6 @@ export class PackagePlugin extends BasePlugin {
     this.servicePath,
     '.serverless'
   ));
-  cacheSpec: any;
   codeAnalyzeResult: AnalyzeResult;
   integrationDistTempDirectory = 'integration_dist'; // 一体化构建的临时目录
   zipCodeDefaultName = 'serverless.zip';
@@ -48,7 +49,9 @@ export class PackagePlugin extends BasePlugin {
         'cleanup', // 清理构建目录
         'installDevDep', // 安装开发期依赖
         'copyFile', // 拷贝文件: package.include 和 shared content
+        'codeAnalysis', // 代码分析
         'tscompile', // 编译函数  'package:after:tscompile'
+        'checkAggregation', // 检测高密度部署
         'generateSpec', // 生成对应平台的描述文件，例如 serverless.yml 等
         'generateEntry', // 生成对应平台的入口文件
         'installLayer', // 安装layer
@@ -94,19 +97,19 @@ export class PackagePlugin extends BasePlugin {
     'package:cleanup': this.cleanup.bind(this),
     'package:installDevDep': this.installDevDep.bind(this),
     'package:copyFile': this.copyFile.bind(this),
+    'package:codeAnalysis': this.codeAnalysis.bind(this),
     'package:installLayer': this.installLayer.bind(this),
     'package:installDep': this.installDep.bind(this),
+    'package:checkAggregation': this.checkAggregation.bind(this),
     'package:package': this.package.bind(this),
     'before:package:finalize': this.finalize.bind(this),
     'package:tscompile': this.tsCompile.bind(this),
   };
 
-  constructor(core, options) {
-    super(core, options);
-    this.assignAggregationToFunctions();
-  }
-
   async cleanup() {
+    if (!this.core.config.specFile) {
+      this.core.config.specFile = getSpecFile(this.servicePath);
+    }
     process.chdir(this.servicePath);
     // 修改构建目标目录
     if (this.options.buildDir) {
@@ -303,6 +306,18 @@ export class PackagePlugin extends BasePlugin {
     this.core.cli.log(` - Dependencies install complete`);
   }
 
+  async codeAnalysis() {
+    if (this.core.service.functions) {
+      return this.core.service.functions;
+    }
+    const newSpec: any = await CodeAny({
+      spec: this.core.service,
+      baseDir: this.servicePath,
+      sourceDir: this.codeAnalyzeResult.tsCodeRoot
+    });
+    this.core.service.functions = newSpec.functions;
+  }
+
   async tsCompile() {
     const isTsDir = existsSync(join(this.servicePath, 'tsconfig.json'));
     this.core.cli.log('Building Midway FaaS directory files...');
@@ -429,7 +444,7 @@ export class PackagePlugin extends BasePlugin {
   }
 
   // 合并高密度部署
-  assignAggregationToFunctions() {
+  async checkAggregation() {
     // 只在部署阶段生效
     const commands = this.core.processedInput.commands;
     if (
@@ -553,17 +568,13 @@ export class PackagePlugin extends BasePlugin {
         { http: { method: 'get', path: currentPath } },
       ];
     }
-    const specFile = getSpecFile(this.servicePath);
-    this.cacheSpec = {
-      specFile,
-      specData: readFileSync(specFile.path),
-    };
-    writeToSpec(this.servicePath, this.core.service);
+
+    const tmpSpecFile = resolve(tmpdir(), `aggre-${Date.now()}/f.yml`);
+    await ensureFile(tmpSpecFile);
+
+    this.core.config.specFile.path = tmpSpecFile;
+    writeToSpec(this.servicePath, this.core.service, this.core.config.specFile);
   }
 
-  finalize() {
-    if (this.cacheSpec) {
-      writeFileSync(this.cacheSpec.specFile.path, this.cacheSpec.specData);
-    }
-  }
+  finalize() {}
 }

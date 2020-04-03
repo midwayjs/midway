@@ -8,9 +8,9 @@ describe('/test/code.test.ts', () => {
       sourceDir: resolve(__dirname, './fixtures/baseApp/src'),
     });
     assert(newSpec.functions);
-    assert(newSpec.functions['no-handler-and-path-handler'].events.length === 1);
-    assert(newSpec.functions['no-handler-and-path-handler'].events[0].http.path === '/noHandlerAndPath/handler');
-    assert(newSpec.functions['test-handler'].events.length === 1);
+    assert(newSpec.functions['no-handler-and-path'].events.length === 1);
+    assert(newSpec.functions['no-handler-and-path'].events[0].http.path === '/noHandlerAndPath/handler');
+    assert(newSpec.functions['test'].events.length === 1);
     assert(newSpec.functions['index-index'].handler === 'index.index');
     assert(newSpec.functions['multi-deco-index'].events.length === 3);
     assert(newSpec.functions['multi-deco-index'].events[0].http.path === '/api/test1');
