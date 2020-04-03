@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.62](https://github.com/midwayjs/midway-faas/compare/v0.2.61...v0.2.62) (2020-04-03)
+
+
+### Bug Fixes
+
+* code ana package ([#108](https://github.com/midwayjs/midway-faas/issues/108)) ([6e11d0f](https://github.com/midwayjs/midway-faas/commit/6e11d0f588e10b41551256a23a7d4fd6b8133c93))
+
+
+
+
+
 ## [0.2.61](https://github.com/midwayjs/midway-faas/compare/v0.2.60...v0.2.61) (2020-03-31)
 
 

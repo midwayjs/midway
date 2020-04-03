@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/faas-util-ts-compile",
-  "version": "0.2.61",
+  "version": "0.2.62",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {

@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.62](https://github.com/midwayjs/midway-faas/compare/v0.2.61...v0.2.62) (2020-04-03)
+
+
+### Bug Fixes
+
+* code ana package ([#108](https://github.com/midwayjs/midway-faas/issues/108)) ([6e11d0f](https://github.com/midwayjs/midway-faas/commit/6e11d0f588e10b41551256a23a7d4fd6b8133c93))
+* invoke bug ([#106](https://github.com/midwayjs/midway-faas/issues/106)) ([d45ff3f](https://github.com/midwayjs/midway-faas/commit/d45ff3f3c41764d08c6968dbdd676d174b695d96))
+
+
+### Features
+
+* introduce mwcc integration ([#103](https://github.com/midwayjs/midway-faas/issues/103)) ([40f458c](https://github.com/midwayjs/midway-faas/commit/40f458cf2c10903c03a93362cd691c04d97f91cd))
+
+
+
+
+
 ## [0.2.61](https://github.com/midwayjs/midway-faas/compare/v0.2.60...v0.2.61) (2020-03-31)
 
 
