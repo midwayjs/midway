@@ -18,7 +18,11 @@ class CodeAnalysis {
   async start() {
     this.loadSpec();
 
-    const parsedCli = findAndParseTsConfig(this.options.baseDir, undefined, undefined, undefined, { include: [].concat(this.options.sourceDir) });
+    const parsedCli = findAndParseTsConfig(this.options.baseDir,
+      /** outDir */undefined,
+      /** configName */undefined,
+      /** hintConfig */undefined,
+      /** overrideConfig */{ include: [].concat(this.options.sourceDir) });
     const compilerOptions = parsedCli.options;
     const program = ts.createProgram(parsedCli.fileNames, compilerOptions);
     this.checker = program.getTypeChecker();
