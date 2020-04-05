@@ -1,12 +1,12 @@
 {
   "name": "@midwayjs/serverless-scf-trigger",
-  "version": "0.2.63",
+  "version": "0.2.64",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/runtime-mock": "^0.2.63",
-    "@midwayjs/serverless-fc-starter": "^0.2.63",
-    "@midwayjs/serverless-scf-starter": "^0.2.63",
+    "@midwayjs/runtime-mock": "^0.2.64",
+    "@midwayjs/serverless-fc-starter": "^0.2.64",
+    "@midwayjs/serverless-scf-starter": "^0.2.64",
     "express": "^4.17.1"
   },
   "devDependencies": {
