@@ -15,7 +15,7 @@ const RegProviderNpm = /^npm:([\w]*):(.*)$/i; // npm providerName pkgName
 const RegProviderLocal = /^local:([\w]*):(.*)$/i; // local providerName pkgPath
 
 export class CommandHookCore implements ICommandHooksCore {
-  private options: IOptions;
+  options: IOptions;
   private instances: IPluginInstance[] = [];
   private commands: ICommands = {};
   private hooks: IHooks = {};
@@ -286,6 +286,7 @@ export class CommandHookCore implements ICommandHooksCore {
     parentCommandList?: string[]
   ) {
     const allLifecycles: string[] = [];
+    const { stopLifecycle } = this.options;
     const parentCommand =
       parentCommandList && parentCommandList.length
         ? `${parentCommandList.join(':')}:`
@@ -296,6 +297,9 @@ export class CommandHookCore implements ICommandHooksCore {
         allLifecycles.push(`before:${tmpLife}`);
         allLifecycles.push(tmpLife);
         allLifecycles.push(`after:${tmpLife}`);
+        if (stopLifecycle === tmpLife) {
+          return allLifecycles;
+        }
       }
     }
     return allLifecycles;

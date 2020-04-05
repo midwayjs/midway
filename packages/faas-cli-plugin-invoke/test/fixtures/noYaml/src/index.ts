@@ -12,3 +12,14 @@ export class Service {
     return 'hello world';
   }
 }
+
+@Provide()
+export class Service2 {
+  @Inject()
+  ctx: FaaSContext;
+  
+  @Func({ event: 'HTTP', method: 'POST', path: '/api/test2' })
+  async index() {
+    return 'hello world'
+  }
+}

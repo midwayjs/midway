@@ -14,6 +14,7 @@ import { tmpdir } from 'os';
 import { FaaSStarterClass, cleanTarget } from './utils';
 import { ensureFileSync, existsSync, writeFileSync, remove, readFileSync, copy, mkdirSync } from 'fs-extra';
 export * from './invoke';
+export * from './getFuncList';
 const commonLock: any = {};
 enum LOCK_TYPE {
   INITIAL,
@@ -170,7 +171,8 @@ export class FaaSInvokePlugin extends BasePlugin {
     // 构建锁文件
     const buildLockPath = this.buildLockPath = resolve(this.buildDir, '.faasTSBuildInfo.log');
     const { lockType } = this.getLock(this.buildLockPath);
-    // 如果当前存在构建任务，那么久进行等待
+    this.core.debug('lockType', lockType);
+    // 如果当前存在构建任务，那么就进行等待
     if (lockType === LOCK_TYPE.INITIAL) {
       this.setLock(this.buildLockPath, LOCK_TYPE.WAITING);
     } else if (lockType === LOCK_TYPE.WAITING) {
@@ -211,6 +213,7 @@ export class FaaSInvokePlugin extends BasePlugin {
   }
 
   async analysisCode() {
+    this.setStore('functions', this.core.service.functions);
     if (this.skipTsBuild) {
       return;
     }
@@ -223,7 +226,11 @@ export class FaaSInvokePlugin extends BasePlugin {
       sourceDir: this.fileChanges
     });
     this.core.service.functions = newSpec.functions;
+    this.setStore('functions', this.core.service.functions);
     writeFileSync(this.buildLockPath, JSON.stringify(newSpec.functions));
+    if (this.core.pluginManager.options.stopLifecycle === 'invoke:analysisCode') {
+      this.setLock(this.buildLockPath, LOCK_TYPE.COMPLETE);
+    }
   }
 
   async compile() {
@@ -455,56 +462,5 @@ export class FaaSInvokePlugin extends BasePlugin {
     });
     await starter.start();
     return starter;
-  }
-}
-
-export class InvokePlugin extends BasePlugin {
-  commands = {
-    invoke: {
-      usage: '',
-      lifecycleEvents: ['invoke'],
-      options: {
-        function: {
-          usage: 'function name',
-          shortcut: 'f',
-        },
-        data: {
-          usage: 'function args',
-          shortcut: 'd',
-        },
-        debug: {
-          usage: 'debug function',
-        },
-        trigger: {
-          usage: 'trigger name',
-          shortcut: 't',
-        },
-      },
-    },
-  };
-
-  hooks = {
-    'invoke:invoke': async () => {
-      if (this.options.remote) {
-        return;
-      }
-      const func = this.options.function;
-      try {
-        const result = await this.invokeFun(func);
-        this.core.cli.log('--------- result start --------');
-        this.core.cli.log('');
-        this.core.cli.log(JSON.stringify(result));
-        this.core.cli.log('');
-        this.core.cli.log('--------- result end. --------');
-        process.exit();
-      } catch (e) {
-        const errorLog = this.core.cli.error || this.core.cli.log;
-        errorLog(e && e.message ? `[Error] ${e.message}` : e);
-        process.exit(1);
-      }
-    },
-  };
-
-  async invokeFun(functionName: string) {
   }
 }

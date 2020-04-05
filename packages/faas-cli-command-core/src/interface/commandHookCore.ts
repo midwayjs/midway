@@ -19,11 +19,13 @@ export interface IOptions {
   displayUsage?: any; // 使用帮助的展示处理
   point?: any; // 埋点   (type: string, commandsArray: string[], commandInfo: any, this);
   npm?: string; // 使用何种npm加速
+  stopLifecycle?: string; // 生命周期执行到什么时候终止，例如 invoke:invoke
 }
 
 export interface ICommandHooksCore {
   addPlugin(plugin: IPlugin): void;
   store: IStore<any>;
+  options: any;
 }
 
 interface IStore<T> {
