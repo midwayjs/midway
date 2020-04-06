@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.66](https://github.com/midwayjs/midway-faas/compare/v0.2.65...v0.2.66) (2020-04-06)
+
+
+### Bug Fixes
+
+* invoke getFuncList and core auto load plugin ([#112](https://github.com/midwayjs/midway-faas/issues/112)) ([54e4d11](https://github.com/midwayjs/midway-faas/commit/54e4d1151942075b86d187c46fc107b9ff1d816b))
+
+
+
+
+
 ## [0.2.65](https://github.com/midwayjs/midway-faas/compare/v0.2.64...v0.2.65) (2020-04-05)
 
 **Note:** Version bump only for package @midwayjs/serverless-invoke
