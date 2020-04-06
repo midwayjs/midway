@@ -34,6 +34,9 @@ export class CommandHookCore implements ICommandHooksCore {
 
     this.loadNpm = loadNpm.bind(null, this);
     this.coreInstance = this.getCoreInstance();
+    if (!this.options.disableAutoLoad) {
+      this.autoLoadPlugins();
+    }
   }
 
   // 添加插件
@@ -161,6 +164,15 @@ export class CommandHookCore implements ICommandHooksCore {
   public async ready() {
     await this.loadNpmPlugins();
     await this.asyncInit();
+  }
+
+  autoLoadPlugins() {
+    if (this.options.service && this.options.service.plugins) {
+      this.options.service.plugins.forEach(plugin => {
+        this.debug('Auto Plugin', plugin);
+        this.addPlugin(plugin);
+      });
+    }
   }
 
   // 获取核心instance

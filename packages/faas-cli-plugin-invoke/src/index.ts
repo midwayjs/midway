@@ -12,7 +12,7 @@ import * as FCTrigger from '@midwayjs/serverless-fc-trigger';
 import { resolve, relative, join } from 'path';
 import { tmpdir } from 'os';
 import { FaaSStarterClass, cleanTarget } from './utils';
-import { ensureFileSync, existsSync, writeFileSync, remove, readFileSync, copy, mkdirSync } from 'fs-extra';
+import { ensureFileSync, existsSync, writeFileSync, remove, readFileSync, copy, mkdirSync, ensureDirSync } from 'fs-extra';
 export * from './invoke';
 export * from './getFuncList';
 const commonLock: any = {};
@@ -28,6 +28,8 @@ export class FaaSInvokePlugin extends BasePlugin {
   codeAnalyzeResult: AnalyzeResult;
   skipTsBuild: boolean;
   buildLockPath: string;
+  buildLogDir: string;
+  analysisCodeInfoPath: string;
   entryInfo: any;
   fileChanges: any;
   defaultTmpFaaSOut = resolve(tmpdir(), `faas_out_${Date.now()}`);
@@ -87,6 +89,7 @@ export class FaaSInvokePlugin extends BasePlugin {
     if (this.options.clean !== false) {
       this.options.clean = true;
     }
+
     this.setStore('defaultTmpFaaSOut', this.defaultTmpFaaSOut);
   }
 
@@ -169,7 +172,10 @@ export class FaaSInvokePlugin extends BasePlugin {
     this.skipTsBuild = false;
     process.env.MIDWAY_TS_MODE = 'false';
     // 构建锁文件
-    const buildLockPath = this.buildLockPath = resolve(this.buildDir, '.faasTSBuildInfo.log');
+    this.buildLogDir = resolve(this.buildDir, 'log');
+    ensureDirSync(this.buildLogDir);
+    const buildLockPath = this.buildLockPath = resolve(this.buildLogDir, '.faasTSBuildInfo.log');
+    this.analysisCodeInfoPath = resolve(this.buildLogDir, '.faasFuncList.log');
     const { lockType } = this.getLock(this.buildLockPath);
     this.core.debug('lockType', lockType);
     // 如果当前存在构建任务，那么就进行等待
@@ -181,6 +187,7 @@ export class FaaSInvokePlugin extends BasePlugin {
 
     const specFile = this.core.config.specFile.path;
     const relativeTsCodeRoot = relative(this.baseDir, this.codeAnalyzeResult.tsCodeRoot) || '.';
+    // 只有当非首次调用时才会进行增量分析，其他情况均进行全量分析
     if (existsSync(buildLockPath)) {
       this.fileChanges = await compareFileChange(
         [
@@ -189,12 +196,10 @@ export class FaaSInvokePlugin extends BasePlugin {
           `${this.defaultTmpFaaSOut}/src/**/*`, // 允许用户将ts代码生成到此文件夹
         ],
         [buildLockPath],
-        { cwd: this.baseDir }
+        { cwd: this.baseDir, }
       );
       if (!this.fileChanges || !this.fileChanges.length) {
-        if (!this.core.service.functions) {
-          this.core.service.functions = JSON.parse(readFileSync(buildLockPath).toString());
-        }
+        this.getAnaLysisCodeInfo();
         this.setLock(this.buildLockPath, LOCK_TYPE.COMPLETE);
         this.skipTsBuild = true;
         this.setStore('skipTsBuild', true);
@@ -206,33 +211,47 @@ export class FaaSInvokePlugin extends BasePlugin {
         `${relativeTsCodeRoot}/**/*`,
         `${this.defaultTmpFaaSOut}/src/**/*`,
       ];
+      // 如果没有构建锁，但是存在代码分析，这时候认为上一次是获取了函数列表
+      // if (existsSync(this.analysisCodeInfoPath)) {
+      //   this.getAnaLysisCodeInfo();
+      // }
     }
     this.setLock(this.buildLockPath, LOCK_TYPE.WAITING);
-    ensureFileSync(buildLockPath);
-    writeFileSync(buildLockPath, JSON.stringify(this.core.service.functions));
   }
 
   async analysisCode() {
+    // 如果在代码分析中止，那么可以从store中获取function信息
     this.setStore('functions', this.core.service.functions);
+    // 如果跳过了ts编译，那么也就是说曾经编译过，那么也跳过代码分析
     if (this.skipTsBuild) {
       return;
     }
-    if (this.core.service.functions) {
-      return this.core.service.functions;
+    // 当spec上面没有functions的时候，启动代码分析
+    if (!this.core.service.functions) {
+      const newSpec: any = await CodeAny({
+        spec: this.core.service,
+        baseDir: this.baseDir,
+        sourceDir: this.fileChanges
+      });
+      this.core.service.functions = newSpec.functions;
+      this.setStore('functions', this.core.service.functions);
+      writeFileSync(this.analysisCodeInfoPath, JSON.stringify(newSpec.functions));
     }
-    const newSpec: any = await CodeAny({
-      spec: this.core.service,
-      baseDir: this.baseDir,
-      sourceDir: this.fileChanges
-    });
-    this.core.service.functions = newSpec.functions;
-    this.setStore('functions', this.core.service.functions);
-    writeFileSync(this.buildLockPath, JSON.stringify(newSpec.functions));
     if (this.core.pluginManager.options.stopLifecycle === 'invoke:analysisCode') {
-      this.setLock(this.buildLockPath, LOCK_TYPE.COMPLETE);
+      // LOCK_TYPE.INITIAL 是因为跳过了ts编译，下一次来的时候还是得进行ts编译
+      this.setLock(this.buildLockPath, LOCK_TYPE.INITIAL);
     }
+    return this.core.service.functions;
   }
 
+  getAnaLysisCodeInfo() {
+    // 当spec上面没有functions的时候，利用代码分析的结果
+    if (!this.core.service.functions) {
+      try {
+        this.core.service.functions = JSON.parse(readFileSync(this.analysisCodeInfoPath).toString());
+      } catch (e) {}
+    }
+  }
   async compile() {
     if (this.skipTsBuild) {
       return;
@@ -261,6 +280,8 @@ export class FaaSInvokePlugin extends BasePlugin {
         delete require.cache[path];
       }
     });
+    ensureFileSync(this.buildLockPath);
+    writeFileSync(this.buildLockPath, JSON.stringify(this.fileChanges));
   }
 
   checkUserEntry() {

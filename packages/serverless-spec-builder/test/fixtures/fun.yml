@@ -12,9 +12,6 @@ functions:
           path: /foo
           method: get
 
-plugins:
-  - serverless-aliyun-function-compute
-
 package:
   exclude:
     - package-lock.json

@@ -33,7 +33,7 @@ export async function invoke (options: InvokeOptions) {
       clean: options.clean,
       incremental: options.incremental,
       verbose: options.verbose,
-      resultType: 'store'
+      resultType: 'store',
     },
     log: console
   });

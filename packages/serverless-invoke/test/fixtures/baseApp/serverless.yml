@@ -12,9 +12,6 @@ functions:
       - http:
           method: get
 
-plugins:
-  - test
-
 layers:
 
 

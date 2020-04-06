@@ -36,9 +36,6 @@ provider: # provider information
     vpcId: test
     subnetId: test
 
-plugins:
-  - serverless-tencent-scf
-
 # you can add packaging information here
 package:
   include:
