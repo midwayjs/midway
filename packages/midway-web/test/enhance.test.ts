@@ -292,6 +292,13 @@ describe('/test/enhance.test.ts', () => {
         .get('/hello/stage')
         .expect(200);
     });
+
+    it('circular shoule be ok', async () => {
+      await app.httpRequest()
+        .get('/circular/test')
+        .expect('success')
+        .expect(200);
+    });
   });
 
   describe('load ts file and use third party module', () => {
