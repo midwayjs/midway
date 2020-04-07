@@ -47,12 +47,9 @@ export class FCSpecBuilder extends SpecBuilder {
           Description: funSpec.description || '',
           Initializer:
             funSpec.initializer ||
-            handler
-              .split('.')
-              .slice(0, -1)
-              .join('.') + '.initializer',
+            handler.split('.').slice(0, -1).join('.') + '.initializer',
           Handler: handler,
-          Runtime: funSpec.runtime || providerData.runtime || 'nodejs8',
+          Runtime: funSpec.runtime || providerData.runtime || 'nodejs10',
           CodeUri: funSpec.codeUri || '.',
           Timeout: funSpec.timeout || providerData.timeout || 30,
           InitializationTimeout: funSpec.initTimeout || 3,
@@ -61,7 +58,7 @@ export class FCSpecBuilder extends SpecBuilder {
         Events: {},
       };
 
-      for (const event of funSpec['events']) {
+      for (const event of funSpec?.['events'] ?? []) {
         if (event['http']) {
           const evt = event['http'] as HTTPEvent;
           functionTemplate.Events['http-' + funName] = {
@@ -174,7 +171,7 @@ function convertMethods(methods: string | string[]): HTTPEventType[] {
     methods = [methods];
   }
 
-  return methods.map(method => {
+  return methods.map((method) => {
     return method.toUpperCase();
   }) as HTTPEventType[];
 }

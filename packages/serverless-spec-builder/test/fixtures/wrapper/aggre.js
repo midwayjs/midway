@@ -31,7 +31,7 @@ exports.handler = asyncWrapper(async (...args) => {
     let ctxPath = ctx && ctx.path || '';
     if (ctxPath) {
       handler = allHandlers.find(handler => {
-        return ctxPath.indexOf(handler.path) != -1;
+        return ctxPath.indexOf(handler.path) === 0;
       });
     }
 
