@@ -171,3 +171,10 @@ export function saveProviderId(identifier: ObjectIdentifier, target: any, overri
 
   return target;
 }
+/**
+ * 是否使用了 saveProviderId
+ * @param target class
+ */
+export function isProvide(target: any): boolean {
+  return Reflect.hasOwnMetadata(TAGGED_CLS, target);
+}
