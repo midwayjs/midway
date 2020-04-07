@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.11](https://github.com/midwayjs/midway/compare/v2.0.10...v2.0.11) (2020-04-07)
+
+
+### Bug Fixes
+
+* fix dfs circular ([#457](https://github.com/midwayjs/midway/issues/457)) ([8b91326](https://github.com/midwayjs/midway/commit/8b9132604df041dad5f1124389d49f75c288aff5))
+
+
+
+
+
 ## [2.0.10](https://github.com/midwayjs/midway/compare/v2.0.9...v2.0.10) (2020-03-31)
 
 **Note:** Version bump only for package midway-web
