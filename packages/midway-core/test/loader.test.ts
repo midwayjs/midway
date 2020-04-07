@@ -329,6 +329,7 @@ describe('/test/loader.test.ts', () => {
         __dirname,
         './fixtures/app-with-conflict/base-app-decorator/src'
       ),
+      disableConflictCheck: false
     });
     loader.initialize();
     const callback = sinon.spy();

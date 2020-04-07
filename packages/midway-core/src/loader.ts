@@ -18,7 +18,7 @@ export class ContainerLoader {
   preloadModules;
   disableConflictCheck: boolean;
 
-  constructor({baseDir, isTsMode = true, preloadModules = [], disableConflictCheck = false}) {
+  constructor({baseDir, isTsMode = true, preloadModules = [], disableConflictCheck = true}) {
     this.baseDir = baseDir;
     this.isTsMode = isTsMode;
     this.preloadModules = preloadModules;
