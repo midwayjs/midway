@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.67](https://github.com/midwayjs/midway-faas/compare/v0.2.66...v0.2.67) (2020-04-07)
+
+
+### Bug Fixes
+
+* invoke hooks ([#113](https://github.com/midwayjs/midway-faas/issues/113)) ([765ec7e](https://github.com/midwayjs/midway-faas/commit/765ec7e259775360ff0c26755bdf78843b3658bf))
+
+
+
+
+
 ## [0.2.66](https://github.com/midwayjs/midway-faas/compare/v0.2.65...v0.2.66) (2020-04-06)
 
 
