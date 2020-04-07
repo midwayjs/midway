@@ -22,7 +22,12 @@ class CodeAnalysis {
       /** outDir */undefined,
       /** configName */undefined,
       /** hintConfig */undefined,
-      /** overrideConfig */{ include: [].concat(this.options.sourceDir) });
+      /** overrideConfig */{
+        include: [].concat(this.options.sourceDir),
+        compilerOptions: {
+          rootDir: ''
+        }
+      });
     const compilerOptions = parsedCli.options;
     const program = ts.createProgram(parsedCli.fileNames, compilerOptions);
     this.checker = program.getTypeChecker();

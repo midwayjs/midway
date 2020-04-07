@@ -23,6 +23,7 @@ export class CommandHookCore implements ICommandHooksCore {
   private providers: any = {};
   private npmPlugin: string[] = [];
   private loadNpm: any;
+  private preDebugTime: any;
 
   store = new Map();
 
@@ -434,6 +435,11 @@ export class CommandHookCore implements ICommandHooksCore {
     if (!this.options.options.V && !this.options.options.verbose) {
       return;
     }
-    this.getLog().log('[Verbose] ', ...args);
+    const now = Date.now();
+    if (!this.preDebugTime) {
+      this.preDebugTime = now;
+    }
+    const diffTime = Number((now - this.preDebugTime) / 1000).toFixed(2);
+    this.getLog().log('[Verbose]', `${diffTime}s`, ...args);
   }
 }

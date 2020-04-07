@@ -10,7 +10,6 @@ import { writeWrapper } from '@midwayjs/serverless-spec-builder';
 import { createRuntime } from '@midwayjs/runtime-mock';
 import * as FCTrigger from '@midwayjs/serverless-fc-trigger';
 import { resolve, relative, join } from 'path';
-import { tmpdir } from 'os';
 import { FaaSStarterClass, cleanTarget } from './utils';
 import { ensureFileSync, existsSync, writeFileSync, remove, readFileSync, copy, mkdirSync, ensureDirSync } from 'fs-extra';
 export * from './invoke';
@@ -32,7 +31,10 @@ export class FaaSInvokePlugin extends BasePlugin {
   analysisCodeInfoPath: string;
   entryInfo: any;
   fileChanges: any;
-  defaultTmpFaaSOut = resolve(tmpdir(), `faas_out_${Date.now()}`);
+  relativeTsCodeRoot: string;
+  get defaultTmpFaaSOut() {
+    return resolve(this.core.config.servicePath, '.faas_debug_tmp/faas_tmp_out');
+  }
   commands = {
     invoke: {
       usage: '',
@@ -186,13 +188,13 @@ export class FaaSInvokePlugin extends BasePlugin {
     }
 
     const specFile = this.core.config.specFile.path;
-    const relativeTsCodeRoot = relative(this.baseDir, this.codeAnalyzeResult.tsCodeRoot) || '.';
+    this.relativeTsCodeRoot = relative(this.baseDir, this.codeAnalyzeResult.tsCodeRoot) || '.';
     // 只有当非首次调用时才会进行增量分析，其他情况均进行全量分析
     if (existsSync(buildLockPath)) {
       this.fileChanges = await compareFileChange(
         [
           specFile,
-          `${relativeTsCodeRoot}/**/*`,
+          `${this.relativeTsCodeRoot}/**/*`,
           `${this.defaultTmpFaaSOut}/src/**/*`, // 允许用户将ts代码生成到此文件夹
         ],
         [buildLockPath],
@@ -208,7 +210,7 @@ export class FaaSInvokePlugin extends BasePlugin {
       }
     } else {
       this.fileChanges = [
-        `${relativeTsCodeRoot}/**/*`,
+        `${this.relativeTsCodeRoot}/**/*`,
         `${this.defaultTmpFaaSOut}/src/**/*`,
       ];
       // 如果没有构建锁，但是存在代码分析，这时候认为上一次是获取了函数列表
@@ -231,7 +233,10 @@ export class FaaSInvokePlugin extends BasePlugin {
       const newSpec: any = await CodeAny({
         spec: this.core.service,
         baseDir: this.baseDir,
-        sourceDir: this.fileChanges
+        sourceDir: [
+          `${this.relativeTsCodeRoot}/**/*`,
+          `${this.defaultTmpFaaSOut}/src/**/*`,
+        ]
       });
       this.core.service.functions = newSpec.functions;
       this.setStore('functions', this.core.service.functions);
@@ -263,9 +268,31 @@ export class FaaSInvokePlugin extends BasePlugin {
       if (!existsSync(dest)) {
         mkdirSync(dest);
       }
-      await compileWithOptions(this.baseDir, dest, {
-        include: [].concat(this.fileChanges)
+      const source = [];
+      const tmp = [];
+      this.fileChanges.forEach((file: string) => {
+        if (file.indexOf(this.defaultTmpFaaSOut) !== -1) {
+          tmp.push(file);
+        } else {
+          source.push(file);
+        }
       });
+      if (source.length) {
+        await compileWithOptions(this.baseDir, dest, {
+          include: source,
+          compilerOptions: {
+            rootDir: this.codeAnalyzeResult.tsCodeRoot
+          }
+        });
+      }
+      if (tmp.length) {
+        await compileWithOptions(this.baseDir, dest, {
+          include: tmp,
+          compilerOptions: {
+            rootDir: resolve(this.defaultTmpFaaSOut, 'src')
+          }
+        });
+      }
     } catch (e) {
       await remove(this.buildLockPath);
       this.setLock(this.buildLockPath, LOCK_TYPE.COMPLETE);
