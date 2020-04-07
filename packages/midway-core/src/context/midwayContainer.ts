@@ -12,7 +12,8 @@ import {
   ScopeEnum,
   PIPELINE_IDENTIFIER,
   listModule,
-  CONFIGURATION_KEY
+  CONFIGURATION_KEY,
+  isProvide
 } from '@midwayjs/decorator';
 import * as is from 'is-type-of';
 import { join } from 'path';
@@ -155,7 +156,7 @@ export class MidwayContainer extends Container implements IMidwayContainer {
   }
 
   protected bindModule(module, namespace = '', filePath?: string) {
-    if (is.class(module)) {
+    if (is.class(module) && isProvide(module)) {
       const providerId = getProviderId(module);
       if (providerId) {
         this.bind(
