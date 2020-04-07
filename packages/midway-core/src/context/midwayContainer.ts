@@ -13,13 +13,21 @@ import {
   PIPELINE_IDENTIFIER,
   listModule,
   CONFIGURATION_KEY,
-  isProvide
+  isProvide,
 } from '@midwayjs/decorator';
 import * as is from 'is-type-of';
 import { join } from 'path';
 import { ContainerConfiguration } from './configuration';
 import { FUNCTION_INJECT_KEY, MidwayHandlerKey } from '../common/constants';
-import { IConfigService, IEnvironmentService, IMidwayContainer, IApplicationContext, MAIN_MODULE_KEY, IContainerConfiguration, ILifeCycle } from '../interface';
+import {
+  IConfigService,
+  IEnvironmentService,
+  IMidwayContainer,
+  IApplicationContext,
+  MAIN_MODULE_KEY,
+  IContainerConfiguration,
+  ILifeCycle,
+} from '../interface';
 import { MidwayConfigService } from '../service/configService';
 import { MidwayEnvironmentService } from '../service/environmentService';
 import { Container } from './container';
@@ -56,7 +64,7 @@ export class MidwayContainer extends Container implements IMidwayContainer {
 
   constructor(
     baseDir: string = process.cwd(),
-    parent: IApplicationContext = undefined,
+    parent: IApplicationContext = undefined
   ) {
     super(baseDir, parent);
   }
@@ -128,7 +136,7 @@ export class MidwayContainer extends Container implements IMidwayContainer {
           followSymbolicLinks: false,
           cwd: dir,
           ignore: DEFAULT_IGNORE_PATTERN.concat(opts.ignore || []),
-          suppressErrors: true
+          suppressErrors: true,
         }
       );
 
@@ -156,14 +164,13 @@ export class MidwayContainer extends Container implements IMidwayContainer {
   }
 
   protected bindModule(module, namespace = '', filePath?: string) {
-    if (is.class(module) && isProvide(module)) {
-      const providerId = getProviderId(module);
+    if (is.class(module)) {
+      const providerId = isProvide(module) ? getProviderId(module) : null;
       if (providerId) {
-        this.bind(
-          generateProvideId(providerId, namespace),
-          module,
-          { namespace, srcPath: filePath }
-        );
+        this.bind(generateProvideId(providerId, namespace), module, {
+          namespace,
+          srcPath: filePath,
+        });
       } else {
         // no provide or js class must be skip
       }
@@ -178,16 +185,12 @@ export class MidwayContainer extends Container implements IMidwayContainer {
         if (!info.scope) {
           info.scope = ScopeEnum.Request;
         }
-        this.bind(
-          generateProvideId(info.id, namespace),
-          module,
-          {
-            scope: info.scope,
-            isAutowire: info.isAutowire,
-            namespace,
-            srcPath: filePath
-          }
-        );
+        this.bind(generateProvideId(info.id, namespace), module, {
+          scope: info.scope,
+          isAutowire: info.isAutowire,
+          namespace,
+          srcPath: filePath,
+        });
       }
     }
   }
@@ -409,20 +412,28 @@ export class MidwayContainer extends Container implements IMidwayContainer {
     this.bindModule(pipelineFactory);
   }
 
-  private loadConfiguration(opts: any, containerConfiguration: IContainerConfiguration) {
+  private loadConfiguration(
+    opts: any,
+    containerConfiguration: IContainerConfiguration
+  ) {
     const subDirs = containerConfiguration.getImportDirectory();
     if (subDirs && subDirs.length > 0) {
-      debug('load configuration dir => %j, namespace => %s.',
-        subDirs, containerConfiguration.namespace);
+      debug(
+        'load configuration dir => %j, namespace => %s.',
+        subDirs,
+        containerConfiguration.namespace
+      );
       this.loadDirectory({
         ...opts,
         loadDir: subDirs,
-        namespace: containerConfiguration.namespace
+        namespace: containerConfiguration.namespace,
       });
     }
 
-    this.registerImportObjects(containerConfiguration.getImportObjects(),
-      containerConfiguration.namespace);
+    this.registerImportObjects(
+      containerConfiguration.getImportObjects(),
+      containerConfiguration.namespace
+    );
   }
 
   private async loadAndReadyLifeCycles() {
