@@ -105,3 +105,88 @@ export class TestThree {
   @Inject('testOne')
   one: any;
 }
+
+@Provide()
+export class GatewayManager {
+  ts = 'gtmanager';
+  @Inject()
+  groupService: GroupService;
+  @Inject()
+  funService: FunService;
+  @Inject()
+  appService: AppService;
+}
+
+@Provide()
+export class GatewayService {
+  ts = 'gateway';
+  @Inject()
+  appService: AppService;
+  @Inject()
+  funService: FunService;
+  @Inject()
+  gatewayManager: GatewayManager;
+  @Inject()
+  groupService: GroupService;
+}
+@Provide()
+export class GroupService {
+  ts = 'group';
+  @Inject()
+  gatewayService: GatewayService;
+  @Inject()
+  tenService: TenService;
+  @Inject()
+  appService: AppService;
+}
+@Provide()
+export class FunService {
+
+}
+@Provide()
+export class AppService {
+
+}
+@Provide()
+export class TenService {
+
+}
+@Provide()
+export class ScaleManager {
+  ts = 'scale';
+  @Inject()
+  tenService: TenService;
+  @Inject()
+  appService: AppService;
+  @Inject()
+  funService: FunService;
+  @Inject()
+  gatewayManager: GatewayManager;
+  @Inject()
+  gatewayService: GatewayService;
+  @Inject()
+  groupService: GroupService;
+
+  @Inject()
+  autoScaleService: AutoScaleService;
+}
+
+@Provide()
+export class AutoScaleService {
+  ts = 'ascale';
+  @Inject()
+  gatewayManager: GatewayManager;
+  @Inject()
+  gatewayService: GatewayService;
+  @Inject()
+  groupService: GroupService;
+  @Inject()
+  scaleManager: ScaleManager;
+}
+
+@Provide()
+export class CCController {
+  ts = 'controller';
+  @Inject()
+  autoScaleService: AutoScaleService;
+}

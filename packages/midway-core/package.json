@@ -37,10 +37,7 @@
     "lodash.assign": "^4.2.0",
     "lodash.clonedeep": "^4.5.0",
     "lodash.defaultsdeep": "^4.6.0",
-    "lodash.forown": "^4.4.0",
     "lodash.get": "^4.4.2",
-    "lodash.has": "^4.5.2",
-    "lodash.keys": "^4.2.0",
     "lodash.set": "^4.3.2",
     "lodash.template": "^4.4.0",
     "reflect-metadata": "^0.1.13"
