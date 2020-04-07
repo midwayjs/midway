@@ -334,6 +334,13 @@ export class PackagePlugin extends BasePlugin {
     } else {
       await compileInProject(this.servicePath, join(this.midwayBuildPath, 'dist'), undefined, { compilerOptions: { sourceRoot: '../src' } });
     }
+    const tmpOutDir = resolve(this.midwayBuildPath, 'faas_tmp_out/src');
+    if (existsSync(tmpOutDir)) {
+      await compileWithOptions(this.servicePath, join(this.midwayBuildPath, 'dist'), {
+        compilerOptions: { rootDir: tmpOutDir },
+        include: [tmpOutDir]
+      });
+    }
     this.core.cli.log(` - Build Midway FaaS complete`);
   }
 
