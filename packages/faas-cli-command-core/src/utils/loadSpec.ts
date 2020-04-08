@@ -3,12 +3,13 @@ import { existsSync } from 'fs';
 import { resolve } from 'path';
 
 export const getSpecFile = baseDir => {
+  baseDir = baseDir || process.cwd();
   const specPath = [
     'f.yml',
     'f.yaml',
     'serverless.yml',
     'serverless.yaml',
-  ].find(spec => existsSync(resolve(baseDir || process.cwd(), spec)));
+  ].find(spec => existsSync(resolve(baseDir, spec)));
   if (specPath) {
     return {
       type: 'yaml',
