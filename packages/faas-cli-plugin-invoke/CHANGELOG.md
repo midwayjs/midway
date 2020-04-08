@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.69](https://github.com/midwayjs/midway-faas/compare/v0.2.68...v0.2.69) (2020-04-08)
+
+
+### Bug Fixes
+
+* load spec ([#119](https://github.com/midwayjs/midway-faas/issues/119)) ([66df38c](https://github.com/midwayjs/midway-faas/commit/66df38c221c033cf1ba9e28fcdc9953e33aabf34))
+* serverless invoke ([#117](https://github.com/midwayjs/midway-faas/issues/117)) ([e6e37af](https://github.com/midwayjs/midway-faas/commit/e6e37af83856292d8e54896a0c3543cc50aba86e))
+
+
+
+
+
 ## [0.2.68](https://github.com/midwayjs/midway-faas/compare/v0.2.67...v0.2.68) (2020-04-07)
 
 
