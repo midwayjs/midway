@@ -8,7 +8,7 @@ export interface IGetFuncList {
 }
 
 export async function getFuncList (options: IGetFuncList) {
-  const baseDir = options.functionDir;
+  const baseDir = options.functionDir || process.cwd();
   const specFile = getSpecFile(baseDir);
   const core = new CommandHookCore({
     config: {

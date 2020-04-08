@@ -440,6 +440,7 @@ export class CommandHookCore implements ICommandHooksCore {
       this.preDebugTime = now;
     }
     const diffTime = Number((now - this.preDebugTime) / 1000).toFixed(2);
+    this.preDebugTime = now;
     this.getLog().log('[Verbose]', `${diffTime}s`, ...args);
   }
 }

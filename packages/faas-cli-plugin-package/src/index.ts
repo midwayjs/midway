@@ -38,6 +38,7 @@ export class PackagePlugin extends BasePlugin {
     this.servicePath,
     '.serverless'
   ));
+  defaultTmpFaaSOut = resolve(this.midwayBuildPath, 'faas_tem_out');
   codeAnalyzeResult: AnalyzeResult;
   integrationDistTempDirectory = 'integration_dist'; // 一体化构建的临时目录
   zipCodeDefaultName = 'serverless.zip';
@@ -102,6 +103,7 @@ export class PackagePlugin extends BasePlugin {
     'package:installDep': this.installDep.bind(this),
     'package:checkAggregation': this.checkAggregation.bind(this),
     'package:package': this.package.bind(this),
+    'after:package:generateEntry': this.defaultGenerateEntry.bind(this),
     'before:package:finalize': this.finalize.bind(this),
     'package:tscompile': this.tsCompile.bind(this),
   };
@@ -181,6 +183,7 @@ export class PackagePlugin extends BasePlugin {
     }
     await remove(this.midwayBuildPath);
     await ensureDir(this.midwayBuildPath);
+    this.setStore('defaultTmpFaaSOut', this.defaultTmpFaaSOut);
   }
 
   async installDevDep() {
@@ -313,8 +316,12 @@ export class PackagePlugin extends BasePlugin {
     const newSpec: any = await CodeAny({
       spec: this.core.service,
       baseDir: this.servicePath,
-      sourceDir: this.codeAnalyzeResult.tsCodeRoot
+      sourceDir: [
+        this.codeAnalyzeResult.tsCodeRoot,
+        resolve(this.defaultTmpFaaSOut, 'src')
+      ]
     });
+    this.core.debug('CcdeAnalysis', newSpec);
     this.core.service.functions = newSpec.functions;
   }
 
@@ -334,7 +341,7 @@ export class PackagePlugin extends BasePlugin {
     } else {
       await compileInProject(this.servicePath, join(this.midwayBuildPath, 'dist'), undefined, { compilerOptions: { sourceRoot: '../src' } });
     }
-    const tmpOutDir = resolve(this.midwayBuildPath, 'faas_tmp_out/src');
+    const tmpOutDir = resolve(this.defaultTmpFaaSOut, 'src');
     if (existsSync(tmpOutDir)) {
       await compileWithOptions(this.servicePath, join(this.midwayBuildPath, 'dist'), {
         compilerOptions: { rootDir: tmpOutDir },
@@ -342,6 +349,31 @@ export class PackagePlugin extends BasePlugin {
       });
     }
     this.core.cli.log(` - Build Midway FaaS complete`);
+  }
+
+  // 生成默认入口
+  async defaultGenerateEntry() {
+    const functions = this.core.service.functions || {};
+    for (const func in functions) {
+      const handlerConf = functions[func];
+      if (handlerConf._ignore) {
+        continue;
+      }
+      const [handlerFileName] = handlerConf.handler.split('.');
+      const othEnterFile = [
+        join(this.defaultTmpFaaSOut, handlerFileName + '.js'),
+        join(this.core.config.servicePath, handlerFileName + '.js'),
+      ].find((file) => existsSync(file));
+      if (othEnterFile) {
+        const fileName = join(this.midwayBuildPath, `${handlerFileName}.js`);
+        await copy(othEnterFile, fileName);
+        this.core.debug('Use user entry', othEnterFile);
+      }
+    }
+    if (existsSync(this.defaultTmpFaaSOut)) {
+      this.core.debug('Tmp Out Dir Removed');
+      await remove(this.defaultTmpFaaSOut);
+    }
   }
 
   async package() {

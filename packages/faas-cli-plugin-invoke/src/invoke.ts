@@ -14,8 +14,8 @@ export interface InvokeOptions {
 }
 
 export async function invoke (options: InvokeOptions) {
-  const baseDir = options.functionDir;
-  const specFile = getSpecFile(baseDir || process.cwd());
+  const baseDir = options.functionDir || process.cwd();
+  const specFile = getSpecFile(baseDir);
   const core = new CommandHookCore({
     config: {
       servicePath: baseDir,

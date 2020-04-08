@@ -8,7 +8,7 @@ export const getSpecFile = baseDir => {
     'f.yaml',
     'serverless.yml',
     'serverless.yaml',
-  ].find(spec => existsSync(resolve(baseDir, spec)));
+  ].find(spec => existsSync(resolve(baseDir || process.cwd(), spec)));
   if (specPath) {
     return {
       type: 'yaml',
