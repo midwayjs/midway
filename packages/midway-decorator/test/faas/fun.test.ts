@@ -19,6 +19,6 @@ describe('/test/faas/fun.test.ts', () => {
     });
 
     const m = listModule(FUNC_KEY);
-    expect(m.length).eq(1);
+    expect(m.length).eq(2);
   });
 });
