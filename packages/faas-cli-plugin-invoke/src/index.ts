@@ -281,6 +281,7 @@ export class FaaSInvokePlugin extends BasePlugin {
         await compileWithOptions(this.baseDir, dest, {
           include: source,
           compilerOptions: {
+            incremental: this.options.incremental,
             rootDir: this.codeAnalyzeResult.tsCodeRoot
           }
         });
