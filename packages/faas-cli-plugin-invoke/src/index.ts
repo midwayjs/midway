@@ -5,7 +5,7 @@ import {
   copyFiles,
   CodeAny,
 } from '@midwayjs/faas-util-ts-compile';
-import { compileWithOptions } from '@midwayjs/mwcc';
+import { compileInProject } from '@midwayjs/mwcc';
 import { writeWrapper } from '@midwayjs/serverless-spec-builder';
 import { createRuntime } from '@midwayjs/runtime-mock';
 import * as FCTrigger from '@midwayjs/serverless-fc-trigger';
@@ -278,7 +278,7 @@ export class FaaSInvokePlugin extends BasePlugin {
         }
       });
       if (source.length) {
-        await compileWithOptions(this.baseDir, dest, {
+        await compileInProject(this.baseDir, dest, undefined, {
           include: source,
           compilerOptions: {
             incremental: this.options.incremental,
@@ -287,7 +287,7 @@ export class FaaSInvokePlugin extends BasePlugin {
         });
       }
       if (tmp.length) {
-        await compileWithOptions(this.baseDir, dest, {
+        await compileInProject(this.baseDir, dest, undefined, {
           include: tmp,
           compilerOptions: {
             rootDir: resolve(this.defaultTmpFaaSOut, 'src')

@@ -23,7 +23,7 @@ import {
   copyFiles,
   CodeAny
 } from '@midwayjs/faas-util-ts-compile';
-import { compileWithOptions, compileInProject } from '@midwayjs/mwcc';
+import { compileInProject } from '@midwayjs/mwcc';
 import { exec } from 'child_process';
 import * as archiver from 'archiver';
 import { AnalyzeResult, Locator } from '@midwayjs/locate';
@@ -42,6 +42,7 @@ export class PackagePlugin extends BasePlugin {
   codeAnalyzeResult: AnalyzeResult;
   integrationDistTempDirectory = 'integration_dist'; // 一体化构建的临时目录
   zipCodeDefaultName = 'serverless.zip';
+  mwccHintConfig = {};
 
   commands = {
     package: {
@@ -334,16 +335,18 @@ export class PackagePlugin extends BasePlugin {
     }
     this.core.cli.log(' - Using tradition build mode');
     if (this.codeAnalyzeResult.integrationProject) {
-      await compileWithOptions(this.servicePath, join(this.midwayBuildPath, 'dist'), {
+      await compileInProject(this.servicePath, join(this.midwayBuildPath, 'dist'), this.mwccHintConfig, {
         compilerOptions: { sourceRoot: '../src' },
         include: [this.codeAnalyzeResult.tsCodeRoot]
       });
     } else {
-      await compileInProject(this.servicePath, join(this.midwayBuildPath, 'dist'), undefined, { compilerOptions: { sourceRoot: '../src' } });
+      await compileInProject(this.servicePath, join(this.midwayBuildPath, 'dist'), this.mwccHintConfig, {
+        compilerOptions: { sourceRoot: '../src' }
+      });
     }
     const tmpOutDir = resolve(this.defaultTmpFaaSOut, 'src');
     if (existsSync(tmpOutDir)) {
-      await compileWithOptions(this.servicePath, join(this.midwayBuildPath, 'dist'), {
+      await compileInProject(this.servicePath, join(this.midwayBuildPath, 'dist'), this.mwccHintConfig, {
         compilerOptions: { rootDir: tmpOutDir },
         include: [tmpOutDir]
       });
