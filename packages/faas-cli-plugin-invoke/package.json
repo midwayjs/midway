@@ -12,7 +12,6 @@
     "@midwayjs/runtime-mock": "^0.2.65",
     "@midwayjs/serverless-fc-starter": "^0.2.65",
     "@midwayjs/serverless-fc-trigger": "^0.2.65",
-    "@midwayjs/serverless-invoke": "^0.2.67",
     "@midwayjs/serverless-scf-starter": "^0.2.65",
     "@midwayjs/serverless-scf-trigger": "^0.2.65",
     "@midwayjs/serverless-spec-builder": "^0.2.66",
