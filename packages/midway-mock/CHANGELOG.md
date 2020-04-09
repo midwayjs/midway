@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.18.6](https://github.com/midwayjs/midway/compare/v1.18.5...v1.18.6) (2020-04-09)
+
+
+### Bug Fixes
+
+* jest support ([#466](https://github.com/midwayjs/midway/issues/466)) ([2d176cf](https://github.com/midwayjs/midway/commit/2d176cf3ec97bdc377ea51c7e42736a994ab4e63))
+
+
+
+
+
 ## [1.18.5](https://github.com/midwayjs/midway/compare/v1.18.4...v1.18.5) (2020-04-02)
 
 **Note:** Version bump only for package midway-mock
