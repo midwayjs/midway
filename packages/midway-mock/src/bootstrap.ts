@@ -10,7 +10,7 @@ export const mm: MidwayMock['default'] = mock.default;
 export const app: MidwayMockApplication = mock.app({ typescript: isJest });
 
 if (isJest) {
-  (global as any).beforeAll(app.ready)
+  (global as any).beforeAll(app.ready);
 } else {
   before(app.ready);
 }
