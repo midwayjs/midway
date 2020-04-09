@@ -836,7 +836,7 @@ module.exports = {
 ```json
 {
   "scripts": {
-    "test": "jest"
+    "test": "jest --forceExit"
   }
 }
 ```
