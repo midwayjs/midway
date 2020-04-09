@@ -51,7 +51,7 @@ The structure of Midway is similar to Eggjs, but there are still differences:
 
 * TypeScript code is located in `src/`, and built out `dist/`.
 * The original `app/` is moved to `src/app/`.
-* It is suggested that write your business logic to the `lib/`, such as `lib/service`.
+* It is suggested that write your business logic to other directories, such as `/service`.
 
 ```plain
 ➜  midway6-test tree -I node_modules
@@ -83,9 +83,8 @@ The structure of Midway is similar to Eggjs, but there are still differences:
 │   │   ├── config.prod.ts
 │   │   ├── config.unittest.ts
 │   │   └── plugin.ts
-│   └── lib                             ---- business logics (user define)
+│   └── service                         ---- business logics (user define)
 │   │   └── service                     ---- services (user define)
-│   │       └── user.ts
 │   ├── interface.ts                    ---- interface definition (user define)
 │   ├── app.ts (opt)                    ---- application extend file
 │   └── agent.ts (opt)                  ---- agent extend file
@@ -757,7 +756,7 @@ describe('test/controller/home.test.ts', () => {
 
 Cause Midway suggest use IoC way to write service, so it's coding and testing have obvious difference with Eggjs.
 
-Such as `src/lib/service/user.ts`:
+Such as `src/service/user.ts`:
 
 ```typescript
 import { provide } from 'midway';
