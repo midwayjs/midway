@@ -334,16 +334,13 @@ export class PackagePlugin extends BasePlugin {
       return;
     }
     this.core.cli.log(' - Using tradition build mode');
-    if (this.codeAnalyzeResult.integrationProject) {
-      await compileInProject(this.servicePath, join(this.midwayBuildPath, 'dist'), this.mwccHintConfig, {
-        compilerOptions: { sourceRoot: '../src' },
-        include: [this.codeAnalyzeResult.tsCodeRoot]
-      });
-    } else {
-      await compileInProject(this.servicePath, join(this.midwayBuildPath, 'dist'), this.mwccHintConfig, {
-        compilerOptions: { sourceRoot: '../src' }
-      });
-    }
+    await compileInProject(this.servicePath, join(this.midwayBuildPath, 'dist'), this.mwccHintConfig, {
+      compilerOptions: {
+        sourceRoot: '../src',
+        rootDir: this.codeAnalyzeResult.tsCodeRoot
+      },
+      include: [this.codeAnalyzeResult.tsCodeRoot]
+    });
     const tmpOutDir = resolve(this.defaultTmpFaaSOut, 'src');
     if (existsSync(tmpOutDir)) {
       await compileInProject(this.servicePath, join(this.midwayBuildPath, 'dist'), this.mwccHintConfig, {
