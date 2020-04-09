@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.70](https://github.com/midwayjs/midway-faas/compare/v0.2.69...v0.2.70) (2020-04-09)
+
+
+### Bug Fixes
+
+* package root dir ([#122](https://github.com/midwayjs/midway-faas/issues/122)) ([2c3f9ef](https://github.com/midwayjs/midway-faas/commit/2c3f9ef26c6c60285c976a5c7e6117b874343fe2))
+* process ([#120](https://github.com/midwayjs/midway-faas/issues/120)) ([53da26f](https://github.com/midwayjs/midway-faas/commit/53da26f1937b2dc20d6068c89e6b5addb16fb655))
+
+
+
+
+
 ## [0.2.69](https://github.com/midwayjs/midway-faas/compare/v0.2.68...v0.2.69) (2020-04-08)
 
 
