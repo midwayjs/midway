@@ -53,7 +53,7 @@ midway 的目录和 eggjs 目录非常接近，但也有所区别，不同的地
 
 * ts 源码存放于 `/src` 目录下，编译后代码存放于 `/dist` 下
 * 以往的 app 等都迁移至 `/src/app` 下，作为 web 层
-* 传统的业务逻辑等，移动到其他目录，比如 `lib/service`
+* 传统的业务逻辑等，移动到其他目录，比如 `/service`
 
 ```plain
 ➜  midway6-test tree -I node_modules
@@ -85,9 +85,8 @@ midway 的目录和 eggjs 目录非常接近，但也有所区别，不同的地
 │   │   ├── config.prod.ts
 │   │   ├── config.unittest.ts
 │   │   └── plugin.ts
-│   └── lib                             ---- 业务逻辑层目录，自由定义
-│   │   └── service                     ---- 业务逻辑层，自由定义
-│   │       └── user.ts
+│   └── service                         ---- 业务逻辑层目录，自由定义
+│   │   └── user.ts                     ---- 业务逻辑层，自由定义
 │   ├── interface.ts                    ---- 接口定义文件，自由定义
 │   ├── app.ts                          ---- 应用扩展文件，可选
 │   └── agent.ts                        ---- agent 扩展文件，可选
@@ -778,7 +777,7 @@ describe('test/controller/home.test.ts', () => {
 
 由于 midway 提倡使用 IoC 的方式来定义 service，所以编码与测试都与 eggjs 有明显的区别。
 
-例如 `src/lib/service/user.ts`:
+例如 `src/service/user.ts`:
 
 ```typescript
 import { provide } from 'midway';
