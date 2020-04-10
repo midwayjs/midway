@@ -11,14 +11,23 @@ import { createRuntime } from '@midwayjs/runtime-mock';
 import * as FCTrigger from '@midwayjs/serverless-fc-trigger';
 import { resolve, relative, join } from 'path';
 import { FaaSStarterClass, cleanTarget } from './utils';
-import { ensureFileSync, existsSync, writeFileSync, remove, readFileSync, copy, mkdirSync, ensureDirSync } from 'fs-extra';
+import {
+  ensureFileSync,
+  existsSync,
+  writeFileSync,
+  remove,
+  readFileSync,
+  copy,
+  mkdirSync,
+  ensureDirSync,
+} from 'fs-extra';
 export * from './invoke';
 export * from './getFuncList';
 const commonLock: any = {};
 enum LOCK_TYPE {
   INITIAL,
   WAITING,
-  COMPLETE
+  COMPLETE,
 }
 export class FaaSInvokePlugin extends BasePlugin {
   baseDir: string;
@@ -33,22 +42,25 @@ export class FaaSInvokePlugin extends BasePlugin {
   fileChanges: any;
   relativeTsCodeRoot: string;
   get defaultTmpFaaSOut() {
-    return resolve(this.core.config.servicePath, '.faas_debug_tmp/faas_tmp_out');
+    return resolve(
+      this.core.config.servicePath,
+      '.faas_debug_tmp/faas_tmp_out'
+    );
   }
   commands = {
     invoke: {
       usage: '',
       lifecycleEvents: [
-        'formatOptions',      // 处理参数
-        'locator',            // 分析目录结构
-        'copyFile',           // 拷贝文件
-        'checkFileChange',    // 检查文件是否更新
-        'analysisCode',       // 代码分析
-        'compile',            // ts 编译
-        'entry',              // 生成执行入口
-        'getInvoke',          // 获取runtime
-        'callInvoke',             // 进行调用
-        'clean'               // 进行清理
+        'formatOptions', // 处理参数
+        'locator', // 分析目录结构
+        'copyFile', // 拷贝文件
+        'checkFileChange', // 检查文件是否更新
+        'analysisCode', // 代码分析
+        'compile', // ts 编译
+        'entry', // 生成执行入口
+        'getInvoke', // 获取runtime
+        'callInvoke', // 进行调用
+        'clean', // 进行清理
       ],
       options: {
         function: {
@@ -97,7 +109,7 @@ export class FaaSInvokePlugin extends BasePlugin {
 
   getLock(lockKey) {
     if (!commonLock[lockKey]) {
-      commonLock[lockKey] = { lockType: LOCK_TYPE.INITIAL, lockData: {}};
+      commonLock[lockKey] = { lockType: LOCK_TYPE.INITIAL, lockData: {} };
     }
     return commonLock[lockKey];
   }
@@ -109,7 +121,7 @@ export class FaaSInvokePlugin extends BasePlugin {
 
   async waitForLock(lockKey, count?) {
     count = count || 0;
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       if (count > 100) {
         return resolve();
       }
@@ -158,7 +170,7 @@ export class FaaSInvokePlugin extends BasePlugin {
       targetDir: this.buildDir,
       include: packageObj.include,
       exclude: packageObj.exclude,
-      log: path => {
+      log: (path) => {
         this.core.debug('copy file', path);
       },
     });
@@ -176,7 +188,10 @@ export class FaaSInvokePlugin extends BasePlugin {
     // 构建锁文件
     this.buildLogDir = resolve(this.buildDir, 'log');
     ensureDirSync(this.buildLogDir);
-    const buildLockPath = this.buildLockPath = resolve(this.buildLogDir, '.faasTSBuildInfo.log');
+    const buildLockPath = (this.buildLockPath = resolve(
+      this.buildLogDir,
+      '.faasTSBuildInfo.log'
+    ));
     this.analysisCodeInfoPath = resolve(this.buildLogDir, '.faasFuncList.log');
     const { lockType } = this.getLock(this.buildLockPath);
     this.core.debug('lockType', lockType);
@@ -188,7 +203,8 @@ export class FaaSInvokePlugin extends BasePlugin {
     }
 
     const specFile = this.core.config.specFile.path;
-    this.relativeTsCodeRoot = relative(this.baseDir, this.codeAnalyzeResult.tsCodeRoot) || '.';
+    this.relativeTsCodeRoot =
+      relative(this.baseDir, this.codeAnalyzeResult.tsCodeRoot) || '.';
     // 只有当非首次调用时才会进行增量分析，其他情况均进行全量分析
     if (existsSync(buildLockPath)) {
       this.fileChanges = await compareFileChange(
@@ -198,7 +214,7 @@ export class FaaSInvokePlugin extends BasePlugin {
           `${this.defaultTmpFaaSOut}/src/**/*`, // 允许用户将ts代码生成到此文件夹
         ],
         [buildLockPath],
-        { cwd: this.baseDir, }
+        { cwd: this.baseDir }
       );
       if (!this.fileChanges || !this.fileChanges.length) {
         this.getAnaLysisCodeInfo();
@@ -236,13 +252,18 @@ export class FaaSInvokePlugin extends BasePlugin {
         sourceDir: [
           `${this.relativeTsCodeRoot}/**/*`,
           `${this.defaultTmpFaaSOut}/src/**/*`,
-        ]
+        ],
       });
       this.core.service.functions = newSpec.functions;
       this.setStore('functions', this.core.service.functions);
-      writeFileSync(this.analysisCodeInfoPath, JSON.stringify(newSpec.functions));
+      writeFileSync(
+        this.analysisCodeInfoPath,
+        JSON.stringify(newSpec.functions)
+      );
     }
-    if (this.core.pluginManager.options.stopLifecycle === 'invoke:analysisCode') {
+    if (
+      this.core.pluginManager.options.stopLifecycle === 'invoke:analysisCode'
+    ) {
       // LOCK_TYPE.INITIAL 是因为跳过了ts编译，下一次来的时候还是得进行ts编译
       this.setLock(this.buildLockPath, LOCK_TYPE.INITIAL);
     }
@@ -253,7 +274,9 @@ export class FaaSInvokePlugin extends BasePlugin {
     // 当spec上面没有functions的时候，利用代码分析的结果
     if (!this.core.service.functions) {
       try {
-        this.core.service.functions = JSON.parse(readFileSync(this.analysisCodeInfoPath).toString());
+        this.core.service.functions = JSON.parse(
+          readFileSync(this.analysisCodeInfoPath).toString()
+        );
       } catch (e) {}
     }
   }
@@ -282,16 +305,16 @@ export class FaaSInvokePlugin extends BasePlugin {
           include: source,
           compilerOptions: {
             incremental: this.options.incremental,
-            rootDir: this.codeAnalyzeResult.tsCodeRoot
-          }
+            rootDir: this.codeAnalyzeResult.tsCodeRoot,
+          },
         });
       }
       if (tmp.length) {
         await compileInProject(this.baseDir, dest, undefined, {
           include: tmp,
           compilerOptions: {
-            rootDir: resolve(this.defaultTmpFaaSOut, 'src')
-          }
+            rootDir: resolve(this.defaultTmpFaaSOut, 'src'),
+          },
         });
       }
     } catch (e) {
@@ -302,7 +325,7 @@ export class FaaSInvokePlugin extends BasePlugin {
     }
     this.setLock(this.buildLockPath, LOCK_TYPE.COMPLETE);
     // 针对多次调用清理缓存
-    Object.keys(require.cache).forEach(path => {
+    Object.keys(require.cache).forEach((path) => {
       if (path.indexOf(this.buildDir) !== -1) {
         this.core.debug('Clear Cache', path);
         delete require.cache[path];
@@ -324,12 +347,12 @@ export class FaaSInvokePlugin extends BasePlugin {
       funcInfo,
       name,
       userEntry,
-      fileName
+      fileName,
     };
   }
 
   async entry() {
-    const { funcInfo , name, fileName, userEntry } = this.checkUserEntry();
+    const { funcInfo, name, fileName, userEntry } = this.checkUserEntry();
     if (!userEntry) {
       let starterName;
       const platform = this.getPlatform();
@@ -376,7 +399,7 @@ export class FaaSInvokePlugin extends BasePlugin {
     if (handler) {
       this.core.debug('Have Handler');
       runtime = createRuntime({
-        handler
+        handler,
       });
     }
 
@@ -459,7 +482,8 @@ export class FaaSInvokePlugin extends BasePlugin {
   }
 
   getPlatform() {
-    const provider = this.core.service.provider && this.core.service.provider.name;
+    const provider =
+      this.core.service.provider && this.core.service.provider.name;
     if (provider) {
       if (provider === 'fc' || provider === 'aliyun') {
         return 'aliyun';
@@ -471,9 +495,10 @@ export class FaaSInvokePlugin extends BasePlugin {
 
   getFunctionInfo() {
     const functionName = this.options.function;
-    const functionInfo = this.core.service.functions && this.core.service.functions[functionName];
+    const functionInfo =
+      this.core.service.functions && this.core.service.functions[functionName];
     if (!functionInfo) {
-      throw new Error(`Function: ${ functionName } not exists`);
+      throw new Error(`Function: ${functionName} not exists`);
     }
     return functionInfo;
   }
@@ -489,7 +514,7 @@ export class FaaSInvokePlugin extends BasePlugin {
         triggerName = Object.keys(funcInfo.events[0])[0];
       }
     }
-    const EventClass = triggerMap[triggerName];
+    const EventClass = triggerMap[triggerName || 'event'];
     if (EventClass) {
       return [new EventClass(...args)];
     }

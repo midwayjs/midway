@@ -1,10 +1,32 @@
 import { createRuntime } from '@midwayjs/runtime-mock';
 import { join } from 'path';
-import { ApiGatewayTrigger, CDNTrigger, HTTPTrigger, OSSTrigger, SLSTrigger, TimerTrigger } from '../src';
+import {
+  ApiGatewayTrigger,
+  CDNTrigger,
+  HTTPTrigger,
+  OSSTrigger,
+  SLSTrigger,
+  TimerTrigger,
+  FCBaseTrigger,
+} from '../src';
 import * as assert from 'assert';
 import * as request from 'supertest';
 
 describe('/test/index.test.ts', () => {
+  it('should use event', async () => {
+    const runtime = createRuntime({
+      functionDir: join(__dirname, './fixtures/event'),
+    });
+    await runtime.start();
+    const result = await runtime.invoke(
+      new FCBaseTrigger({
+        bbb: 111,
+      })
+    );
+    assert.deepEqual(result, { bbb: 111 });
+    await runtime.close();
+  });
+
   it('should use origin http trigger', async () => {
     const runtime = createRuntime({
       functionDir: join(__dirname, './fixtures/http'),

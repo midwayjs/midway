@@ -1,7 +1,6 @@
 import { BaseTrigger } from '@midwayjs/runtime-mock';
 
 export class FCBaseTrigger extends BaseTrigger {
-
   useCallback = true;
 
   createContext() {
@@ -25,11 +24,16 @@ export class FCBaseTrigger extends BaseTrigger {
         logProject: 'my-log-project',
         logStore: 'my-log-store',
         qualifier: 'qualifier',
-        versionId: '1'
+        versionId: '1',
       },
       region: 'cn-shanghai',
-      accountId: '123456'
+      accountId: '123456',
     };
   }
 
+  async toArgs(): Promise<any[]> {
+    return [this.triggerOptions, this.createContext()];
+  }
 }
+
+export const event = FCBaseTrigger;

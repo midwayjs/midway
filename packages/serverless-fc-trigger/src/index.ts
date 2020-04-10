@@ -5,3 +5,4 @@ export * from './oss';
 export * from './sls';
 export * from './cdn';
 export * from './timer';
+export * from './base';
