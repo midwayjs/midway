@@ -53,7 +53,7 @@ export class FCRuntime extends ServerlessLightRuntime {
         return this.defaultInvokeHandler.apply(this, args);
       }
       return handler.apply(handler, args);
-    }).then(result => {
+    }).then((result) => {
       if (res.headersSent) {
         return;
       }
@@ -79,6 +79,12 @@ export class FCRuntime extends ServerlessLightRuntime {
           ctx.type = 'application/json';
         }
         ctx.body = JSON.stringify(data);
+      } else {
+        // 阿里云网关必须返回字符串
+        if (!ctx.type) {
+          ctx.type = 'text/plain';
+        }
+        ctx.body = data + '';
       }
 
       if (res.setHeader) {
