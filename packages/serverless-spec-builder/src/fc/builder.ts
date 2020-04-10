@@ -169,6 +169,8 @@ function convertMethods(methods: string | string[]): HTTPEventType[] {
     }
 
     methods = [methods];
+  } else {
+    return ['GET', 'PUT', 'POST', 'DELETE', 'HEAD'];
   }
 
   return methods.map((method) => {

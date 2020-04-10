@@ -1,0 +1,15 @@
+service:
+  name: serverless-hello-world
+
+provider:
+  name: aliyun
+
+functions:
+  index:
+    handler: index.handler
+    events:
+      - http:
+          path: /
+
+package:
+  artifact: code.zip
