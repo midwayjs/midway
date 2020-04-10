@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.71](https://github.com/midwayjs/midway-faas/compare/v0.2.70...v0.2.71) (2020-04-10)
+
+
+### Features
+
+* introduce `experimentalFeatures` root option ([#123](https://github.com/midwayjs/midway-faas/issues/123)) ([e20417f](https://github.com/midwayjs/midway-faas/commit/e20417f11e8bcdada52ca9835adeec6c16b67c06))
+
+
+
+
+
 ## [0.2.70](https://github.com/midwayjs/midway-faas/compare/v0.2.69...v0.2.70) (2020-04-09)
 
 **Note:** Version bump only for package @midwayjs/fcli-plugin-invoke
