@@ -44,6 +44,9 @@ export interface ICoreInstance {
   store: IStore<any>;
   debug: any;
   service: {
+    experimentalFeatures?: {
+      [featureName: string]: any;
+    },
     service?: {
       name: string;
     };
@@ -51,7 +54,11 @@ export interface ICoreInstance {
       name: string;
     };
     functions: object;
-    layers?: object;
+    layers?: {
+      [layerName: string]: {
+        path: string;
+      };
+    };
     resources: object;
     custom: any;
     package?: any;
@@ -59,6 +66,7 @@ export interface ICoreInstance {
       [aggregationName: string]: {
         deployOrigin?: boolean;
         functions: string[];
+        functionsPattern?: string;
       };
     };
     globalDependencies?: any;

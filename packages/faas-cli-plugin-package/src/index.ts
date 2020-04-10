@@ -23,14 +23,13 @@ import {
   copyFiles,
   CodeAny
 } from '@midwayjs/faas-util-ts-compile';
-import { compileInProject } from '@midwayjs/mwcc';
+import { compileInProject, MwccConfig } from '@midwayjs/mwcc';
 import { exec } from 'child_process';
 import * as archiver from 'archiver';
 import { AnalyzeResult, Locator } from '@midwayjs/locate';
 import { tmpdir } from 'os';
 
 export class PackagePlugin extends BasePlugin {
-  core: any;
   options: any;
   servicePath = this.core.config.servicePath;
   // 代表构建产物的路径，非 ts 构建路径
@@ -42,7 +41,7 @@ export class PackagePlugin extends BasePlugin {
   codeAnalyzeResult: AnalyzeResult;
   integrationDistTempDirectory = 'integration_dist'; // 一体化构建的临时目录
   zipCodeDefaultName = 'serverless.zip';
-  mwccHintConfig = {};
+  mwccHintConfig: MwccConfig = {};
 
   commands = {
     package: {
