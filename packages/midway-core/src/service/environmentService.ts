@@ -5,7 +5,8 @@ export class MidwayEnvironmentService implements IEnvironmentService {
 
   getCurrentEnvironment() {
     if (!this.environment) {
-      this.environment = process.env['MIDWAY_SERVER_ENV'] || process.env['NODE_ENV'] || 'production';
+      this.environment =
+        process.env['MIDWAY_SERVER_ENV'] || process.env['NODE_ENV'] || 'prod';
     }
     return this.environment;
   }
