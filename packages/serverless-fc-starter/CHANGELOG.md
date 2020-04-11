@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.73-alpha.0](https://github.com/midwayjs/midway-faas/compare/v0.2.72...v0.2.73-alpha.0) (2020-04-11)
+
+
+### Bug Fixes
+
+* fix buffer event ([2d43e75](https://github.com/midwayjs/midway-faas/commit/2d43e75b4c1c8561345a3ce00c23e55f76e34f0c))
+
+
+
+
+
 ## [0.2.72](https://github.com/midwayjs/midway-faas/compare/v0.2.71...v0.2.72) (2020-04-11)
 
 
