@@ -3,7 +3,6 @@
 const Command = require('egg-bin').Command;
 const rimraf = require('mz-modules/rimraf');
 const path = require('path');
-const fs = require('fs');
 const fseExtra = require('fs-extra');
 
 class CleanCommand extends Command {
@@ -18,7 +17,7 @@ class CleanCommand extends Command {
 
   async run(context) {
     const { cwd } = context;
-    if (!fs.existsSync(path.join(cwd, 'package.json'))) {
+    if (!fseExtra.existsSync(path.join(cwd, 'package.json'))) {
       console.log(`[midway-bin] package.json not found in ${cwd}\n`);
       return;
     }
@@ -27,7 +26,7 @@ class CleanCommand extends Command {
 
   async cleanDir(cwd) {
     await new Promise((resolve, reject) => {
-      const rmDirName = [ 'logs', 'run', '.nodejs-cache' ];
+      const rmDirName = ['logs', 'run', '.nodejs-cache'];
       try {
         rmDirName.forEach(name => {
           fseExtra.removeSync(path.join(cwd, name));
