@@ -115,6 +115,13 @@ export class FCRuntime extends ServerlessLightRuntime {
     if (event && event[FAAS_ARGS_KEY]) {
       args.push(event[FAAS_ARGS_KEY]);
     } else {
+      // 阿里云无触发器，入参是 buffer
+      if (Buffer.isBuffer(event)) {
+        event = event.toString('utf8');
+        try {
+          event = JSON.parse(event);
+        } catch (_err) {}
+      }
       args.push(event);
     }
     // 其他事件场景
