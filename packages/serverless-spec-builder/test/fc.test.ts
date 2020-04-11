@@ -54,4 +54,16 @@ describe('/test/fc.test.ts', () => {
       },
     });
   });
+
+  it('test api gateway event', () => {
+    const result = generateFunctionsSpec(
+      path.join(__dirname, './fixtures/fc/f-event-apigw.yml')
+    );
+    const funResult = result['Resources']['serverless-hello-world']['index'];
+    assert(funResult['Type'] === 'Aliyun::Serverless::Function');
+    assert(funResult['Properties']['Initializer'] === 'index.initializer');
+    assert(funResult['Properties']['Handler'] === 'index.handler');
+    assert(funResult['Properties']['Runtime'] === 'nodejs10');
+    assert.deepStrictEqual(funResult['Events'], {});
+  });
 });

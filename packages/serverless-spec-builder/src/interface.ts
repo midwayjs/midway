@@ -18,9 +18,14 @@ export interface FunctionsStructure {
   [functionName: string]: FunctionStructure;
 }
 
-export type EventTypeKey = 'http' | 'schedule' | 'os' | 'log';
+export type EventTypeKey = 'http' | 'schedule' | 'os' | 'log' | 'apigw';
 
-export type EventType = HTTPEvent | ScheduleEvent | LogEvent | OSEvent;
+export type EventType =
+  | HTTPEvent
+  | ScheduleEvent
+  | LogEvent
+  | OSEvent
+  | APIGatewayEvent;
 
 export interface EventStructureType {
   [eventName: string]: EventType;
@@ -58,6 +63,9 @@ export interface OSEvent {
   role?: string;
   version?: string;
 }
+
+// API 网关
+export interface APIGatewayEvent {}
 
 export interface FunctionStructure {
   handler: string;
