@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.72](https://github.com/midwayjs/midway-faas/compare/v0.2.71...v0.2.72) (2020-04-11)
+
+
+### Bug Fixes
+
+* aliyun gateway accept number ([03a79b7](https://github.com/midwayjs/midway-faas/commit/03a79b74045dff1ed58522154025af3747549a13))
+
+
+
+
+
 ## [0.2.65](https://github.com/midwayjs/midway-faas/compare/v0.2.64...v0.2.65) (2020-04-05)
 
 **Note:** Version bump only for package @midwayjs/serverless-fc-starter
