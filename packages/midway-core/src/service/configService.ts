@@ -3,7 +3,7 @@ import * as is from 'is-type-of';
 import { basename, join } from 'path';
 import { IConfigService, IMidwayContainer } from '../interface';
 import { safelyGet } from '../common/util';
-import { readdirSync } from 'fs';
+import { readdirSync, statSync } from 'fs';
 
 const debug = require('debug')('midway:config');
 
@@ -28,12 +28,15 @@ export class MidwayConfigService implements IConfigService {
         envSet.add(dir);
       } else {
         // directory
-        const files = readdirSync(dir);
-        this.add(
-          files.map(file => {
-            return join(dir, file);
-          })
-        );
+        const fileStat = statSync(dir);
+        if (fileStat.isDirectory()) {
+          const files = readdirSync(dir);
+          this.add(
+            files.map(file => {
+              return join(dir, file);
+            })
+          );
+        }
       }
     }
   }
