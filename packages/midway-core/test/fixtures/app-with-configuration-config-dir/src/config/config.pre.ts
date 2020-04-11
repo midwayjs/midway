@@ -1,3 +1,5 @@
-export default {
-  env: 'pre',
+export = () => {
+  return {
+    env: 'pre',
+  };
 };
