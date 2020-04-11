@@ -363,9 +363,13 @@ export class MidwayContainer extends Container implements IMidwayContainer {
     if (this.configService) {
       // register handler for container
       this.registerDataHandler(MidwayHandlerKey.CONFIG, (key: string) => {
-        const val = this.configService.getConfiguration(key);
-        debug('@config key => %s value => %j.', key, val);
-        return val;
+        if (key) {
+          const val = this.configService.getConfiguration(key);
+          debug('@config key => %s value => %j.', key, val);
+          return val;
+        } else {
+          return this.configService.getConfiguration();
+        }
       });
       // 加载配置
       await this.configService.load();

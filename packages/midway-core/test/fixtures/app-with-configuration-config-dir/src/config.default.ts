@@ -1,4 +1,4 @@
-export = {
+export default {
   env: 'default',
-  bbb: '111',
+  bbb: '222',
 };
