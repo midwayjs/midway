@@ -2,6 +2,7 @@ import { join } from 'path';
 import * as assert from 'assert';
 import { FaaSStarter } from '../src/';
 import { clearAllModule } from '@midwayjs/decorator';
+import * as mm from 'mm';
 
 describe('test/index.test.ts', () => {
   afterEach(() => {
@@ -68,7 +69,10 @@ describe('test/index.test.ts', () => {
         { text: 'ab' }
       )) === 'abhello'
     );
-    assert((await starter.handleInvokeWrapper('indexService.get')({}, {})) === 'hello');
+    assert(
+      (await starter.handleInvokeWrapper('indexService.get')({}, {})) ===
+        'hello'
+    );
   });
 
   it('invoke handler by default name', async () => {
@@ -132,6 +136,7 @@ describe('test/index.test.ts', () => {
   });
 
   it('configuration test should be ok', async () => {
+    mm(process.env, 'NODE_ENV', '');
     class TestFaaSStarter extends FaaSStarter {
       prepareConfiguration() {
         this.initConfiguration(
@@ -149,6 +154,7 @@ describe('test/index.test.ts', () => {
       {},
       { text: 'ab' }
     );
-    assert(data === '1235abone articlereplace manager');
+    assert(data === '5321abone articlereplace manager');
+    mm.restore();
   });
 });

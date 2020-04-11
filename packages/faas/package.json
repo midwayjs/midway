@@ -20,7 +20,8 @@
     "src"
   ],
   "devDependencies": {
-    "midway-bin": "^2.0.0"
+    "midway-bin": "^2.0.0",
+    "mm": "3"
   },
   "license": "MIT",
   "scripts": {

@@ -2,7 +2,7 @@ import { generateFunctionsSpec } from '../src/fc';
 import * as path from 'path';
 import * as assert from 'assert';
 
-describe.only('/test/fc.test.ts', () => {
+describe('/test/fc.test.ts', () => {
   it('test base', () => {
     const result = generateFunctionsSpec(
       path.join(__dirname, './fixtures/fc/f-base.yml')
