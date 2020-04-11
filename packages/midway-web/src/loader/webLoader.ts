@@ -29,7 +29,7 @@ export class MidwayWebLoader extends EggLoader {
   public appDir: string;
   public appInfo: EggAppInfo;
   private controllerIds: string[] = [];
-  private prioritySortRouters: Array<{
+  public prioritySortRouters: Array<{
     priority: number,
     router: Router,
   }> = [];

@@ -1,13 +1,13 @@
 import * as extend from 'extend2';
 import * as is from 'is-type-of';
-import { basename } from 'path';
+import { basename, join } from 'path';
 import { IConfigService, IMidwayContainer } from '../interface';
 import { safelyGet } from '../common/util';
+import { readdirSync, statSync } from 'fs';
 
 const debug = require('debug')('midway:config');
 
 export class MidwayConfigService implements IConfigService {
-
   envDirMap: Map<string, Set<string>>;
   configuration;
   isReady = false;
@@ -21,9 +21,23 @@ export class MidwayConfigService implements IConfigService {
 
   add(configFilePaths: string[]) {
     for (const dir of configFilePaths) {
-      const env = this.getConfigEnv(dir);
-      const envSet = this.getEnvSet(env);
-      envSet.add(dir);
+      if (/\.\w+$/.test(dir)) {
+        // file
+        const env = this.getConfigEnv(dir);
+        const envSet = this.getEnvSet(env);
+        envSet.add(dir);
+      } else {
+        // directory
+        const fileStat = statSync(dir);
+        if (fileStat.isDirectory()) {
+          const files = readdirSync(dir);
+          this.add(
+            files.map(file => {
+              return join(dir, file);
+            })
+          );
+        }
+      }
     }
   }
 

@@ -2,9 +2,8 @@
 
 const Command = require('egg-bin').Command;
 const rimraf = require('mz-modules/rimraf');
-const cp = require('child_process');
 const path = require('path');
-const fs = require('fs');
+const fseExtra = require('fs-extra');
 
 class CleanCommand extends Command {
   constructor(rawArgv) {
@@ -18,7 +17,7 @@ class CleanCommand extends Command {
 
   async run(context) {
     const { cwd } = context;
-    if (!fs.existsSync(path.join(cwd, 'package.json'))) {
+    if (!fseExtra.existsSync(path.join(cwd, 'package.json'))) {
       console.log(`[midway-bin] package.json not found in ${cwd}\n`);
       return;
     }
@@ -27,17 +26,18 @@ class CleanCommand extends Command {
 
   async cleanDir(cwd) {
     await new Promise((resolve, reject) => {
-      cp.exec('find . -type d -name \'logs\' -or -name \'run\' -or -name \'.nodejs-cache\' | xargs rm -rf', {
-        cwd,
-      }, error => {
-        if (error) {
-          console.error(`[midway-bin] exec error: ${error}`);
-          reject(error);
-          return;
-        }
+      const rmDirName = ['logs', 'run', '.nodejs-cache'];
+      try {
+        rmDirName.forEach(name => {
+          fseExtra.removeSync(path.join(cwd, name));
+        });
         console.log('[midway-bin] clean midway temporary files complete!');
         resolve();
-      });
+      } catch (error) {
+        console.error(`[midway-bin] exec error: ${error}`);
+        reject(error);
+        return;
+      }
     });
 
     const pkg = require(path.join(cwd, 'package.json'));
