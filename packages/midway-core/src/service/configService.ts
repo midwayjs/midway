@@ -21,7 +21,12 @@ export class MidwayConfigService implements IConfigService {
 
   add(configFilePaths: string[]) {
     for (const dir of configFilePaths) {
-      if (/\/$/.test(dir)) {
+      if (/\.\w+$/.test(dir)) {
+        // file
+        const env = this.getConfigEnv(dir);
+        const envSet = this.getEnvSet(env);
+        envSet.add(dir);
+      } else {
         // directory
         const files = readdirSync(dir);
         this.add(
@@ -29,11 +34,6 @@ export class MidwayConfigService implements IConfigService {
             return join(dir, file);
           })
         );
-      } else {
-        // file
-        const env = this.getConfigEnv(dir);
-        const envSet = this.getEnvSet(env);
-        envSet.add(dir);
       }
     }
   }
