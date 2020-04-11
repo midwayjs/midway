@@ -1,6 +1,5 @@
 import { MidwayRequestContainer } from '@midwayjs/core';
 import { KoaMiddleware } from '@midwayjs/decorator';
-import { type } from 'os';
 
 export type Middleware = KoaMiddleware<FaaSContext>;
 
