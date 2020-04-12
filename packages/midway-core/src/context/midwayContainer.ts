@@ -18,7 +18,7 @@ import {
 import * as is from 'is-type-of';
 import { join } from 'path';
 import { ContainerConfiguration } from './configuration';
-import { FUNCTION_INJECT_KEY, MidwayHandlerKey } from '../common/constants';
+import { FUNCTION_INJECT_KEY, MidwayHandlerKey, MIDWAY_ALL_CONFIG } from '../common/constants';
 import {
   IConfigService,
   IEnvironmentService,
@@ -363,9 +363,15 @@ export class MidwayContainer extends Container implements IMidwayContainer {
     if (this.configService) {
       // register handler for container
       this.registerDataHandler(MidwayHandlerKey.CONFIG, (key: string) => {
-        const val = this.configService.getConfiguration(key);
-        debug('@config key => %s value => %j.', key, val);
-        return val;
+        if (key) {
+          if (key === MIDWAY_ALL_CONFIG) {
+            return this.configService.getConfiguration();
+          } else {
+            const val = this.configService.getConfiguration(key);
+            debug('@config key => %s value => %j.', key, val);
+            return val;
+          }
+        }
       });
       // 加载配置
       await this.configService.load();

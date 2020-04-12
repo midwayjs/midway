@@ -5,6 +5,7 @@ export const MidwayHandlerKey = {
 };
 
 export const FUNCTION_INJECT_KEY = 'midway:function_inject_key';
+export const MIDWAY_ALL_CONFIG = 'midway:all_config_inject_key';
 
 /**
  * 静态参数

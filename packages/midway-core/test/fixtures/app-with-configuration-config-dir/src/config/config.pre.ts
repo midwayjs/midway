@@ -1,3 +1,5 @@
-export = {
-  env: 'pre',
+export = () => {
+  return {
+    env: 'pre',
+  };
 };
