@@ -9,7 +9,7 @@ export function Config(identifier?: string) {
     if (typeof index === 'number') {
       attachConstructorDataOnClass(identifier, target, CONFIG_KEY, index);
     } else {
-      if (identifier !== '' && !identifier) {
+      if (!identifier) {
         identifier = targetKey;
       }
       attachClassMetadata(
