@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.16](https://github.com/midwayjs/midway/compare/v2.0.15...v2.0.16) (2020-04-12)
+
+
+### Bug Fixes
+
+* Fix cov ([#469](https://github.com/midwayjs/midway/issues/469)) ([1d65da9](https://github.com/midwayjs/midway/commit/1d65da96c34b46fc0e81373c137545613fb1d7b7))
+
+
+
+
+
 ## [2.0.15](https://github.com/midwayjs/midway/compare/v2.0.14...v2.0.15) (2020-04-11)
 
 

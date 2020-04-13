@@ -486,7 +486,15 @@ describe('/test/loader.test.ts', () => {
       const applicationContext = loader.getApplicationContext();
       const value = applicationContext.getConfigService().getConfiguration();
       assert(value['env'] === 'prod');
-      assert(value['bbb'] === '111');
+      assert(value['bbb'] === '222');
+
+      const configManager = await applicationContext.getAsync<{
+        allConfig: any;
+        bbbConfig: any;
+      }>('configManager');
+      assert(configManager.allConfig['env'] === 'prod');
+      assert(configManager.allConfig['bbb'] === '222');
+      assert(configManager.bbbConfig === '222');
     });
 
     it('load prod env', async () => {
