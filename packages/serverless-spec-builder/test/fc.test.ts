@@ -25,7 +25,8 @@ describe('/test/fc.test.ts', () => {
     assert(funResult['Properties']['Handler'] === 'index.handler');
     assert(funResult['Properties']['Runtime'] === 'nodejs10');
     assert.deepStrictEqual(funResult['Events'], {});
-    const properties = result['Resources']['serverless-hello-world']['Properties'];
+    const properties =
+      result['Resources']['serverless-hello-world']['Properties'];
     assert(properties['VpcConfig']);
     assert(properties['Policies']);
     assert(properties['LogConfig']);
@@ -82,5 +83,23 @@ describe('/test/fc.test.ts', () => {
     assert(funResult['Properties']['Handler'] === 'index.handler');
     assert(funResult['Properties']['Runtime'] === 'nodejs10');
     assert.deepStrictEqual(funResult['Events'], {});
+  });
+
+  it('test transform environment', () => {
+    const result = generateFunctionsSpec(
+      path.join(__dirname, './fixtures/fc/f-environment.yml')
+    );
+    const funResult = result['Resources']['serverless-hello-world']['index'];
+    assert(funResult['Type'] === 'Aliyun::Serverless::Function');
+    assert(funResult['Properties']['Handler'] === 'index.handler');
+    assert(funResult['Properties']['Runtime'] === 'nodejs10');
+    assert(funResult['Properties']['EnvironmentVariables']['GLOBAL_PASS']);
+    assert(!funResult['Properties']['EnvironmentVariables']['MYSQL_USER']);
+    assert(!funResult['Properties']['EnvironmentVariables']['MYSQL_PASS']);
+
+    const funResult2 = result['Resources']['serverless-hello-world']['index2'];
+    assert(funResult2['Properties']['EnvironmentVariables']['GLOBAL_PASS']);
+    assert(funResult2['Properties']['EnvironmentVariables']['MYSQL_USER']);
+    assert(funResult2['Properties']['EnvironmentVariables']['MYSQL_PASS']);
   });
 });

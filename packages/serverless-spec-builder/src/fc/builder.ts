@@ -55,6 +55,10 @@ export class FCSpecBuilder extends SpecBuilder {
           Timeout: funSpec.timeout || providerData.timeout || 30,
           InitializationTimeout: funSpec.initTimeout || 3,
           MemorySize: funSpec.memorySize || providerData.memorySize || 512,
+          EnvironmentVariables: {
+            ...providerData.environment,
+            ...funSpec.environment,
+          },
         },
         Events: {},
       };

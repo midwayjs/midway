@@ -36,9 +36,11 @@ export function getLayers(...layersList: any) {
 }
 
 export function uppercaseObjectKey(obj) {
-  const json = JSON.stringify(obj);
-  const result = json.replace(/"([^"])([^"]*)":/gim, (...value) => {
-    return `"${value[1].toUpperCase()}${value[2]}":`;
-  });
-  return JSON.parse(result);
+  if (obj) {
+    const json = JSON.stringify(obj);
+    const result = json.replace(/"([^"])([^"]*)":/gim, (...value) => {
+      return `"${value[1].toUpperCase()}${value[2]}":`;
+    });
+    return JSON.parse(result);
+  }
 }

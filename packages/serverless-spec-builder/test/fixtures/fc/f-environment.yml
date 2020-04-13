@@ -1,0 +1,19 @@
+service:
+  name: serverless-hello-world
+
+provider:
+  name: aliyun
+  environment:
+    GLOBAL_PASS: admin
+
+functions:
+  index:
+    handler: index.handler
+  index2:
+    handler: index2.handler
+    environment:
+      MYSQL_USER: root
+      MYSQL_PASS: pass
+
+package:
+  artifact: code.zip
