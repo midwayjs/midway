@@ -6,7 +6,7 @@ export interface Ilayer {
 export function formatLayers(...multiLayers: Ilayer[]) {
   const layerTypeList = { npm: {} };
   multiLayers.forEach((layer: Ilayer) => {
-    Object.keys(layer || {}).forEach(layerName => {
+    Object.keys(layer || {}).forEach((layerName) => {
       const [type, path] = layer[layerName].path.split(':');
       if (!layerTypeList[type]) {
         return;
@@ -33,4 +33,12 @@ export function getLayers(...layersList: any) {
     layerDeps,
     layers,
   };
+}
+
+export function uppercaseObjectKey(obj) {
+  const json = JSON.stringify(obj);
+  const result = json.replace(/"([^"])([^"]*)":/gim, (...value) => {
+    return `"${value[1].toUpperCase()}${value[2]}":`;
+  });
+  return JSON.parse(result);
 }

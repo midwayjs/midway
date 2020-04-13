@@ -1,4 +1,9 @@
-import { FunctionsStructure, FunctionStructure } from '../interface';
+import {
+  FunctionsStructure,
+  FunctionStructure,
+  ProviderStructure,
+  SpecStructure,
+} from '../interface';
 
 export interface FCSpec {
   ROSTemplateFormatVersion: string;
@@ -13,6 +18,34 @@ export type FCFunctionType = 'Aliyun::Serverless::Function';
 export type FCCustomDomainType = 'Aliyun::Serverless::CustomDomain';
 export type FCLogType = 'Aliyun::Serverless::Log';
 export type FCLogStoreType = 'Aliyun::Serverless::Log::Logstore';
+
+export interface FCProviderStructure extends ProviderStructure {
+  vpcConfig?: {
+    vpcId: string;
+    vSwitchIds: string[];
+    securityGroupId: string;
+  };
+  internetAccess?: boolean;
+  policies?: string | string[];
+  logConfig?: {
+    project: string;
+    logstore: string;
+  };
+  nasConfig?:
+    | 'auto'
+    | {
+        userId: number;
+        groupId: number;
+        mountPoints: Array<{
+          serverAddr: string;
+          mountDir: string;
+        }>;
+      };
+}
+
+export interface FCSpecStructure extends SpecStructure {
+  provider?: FCProviderStructure;
+}
 
 export interface FCServiceProperties {
   Role?: string;

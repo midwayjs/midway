@@ -15,6 +15,23 @@ describe('/test/fc.test.ts', () => {
     assert.deepStrictEqual(funResult['Events'], {});
   });
 
+  it('test transform service properties', () => {
+    const result = generateFunctionsSpec(
+      path.join(__dirname, './fixtures/fc/f-service-properties.yml')
+    );
+    const funResult = result['Resources']['serverless-hello-world']['index'];
+    assert(funResult['Type'] === 'Aliyun::Serverless::Function');
+    assert(funResult['Properties']['Initializer'] === 'index.initializer');
+    assert(funResult['Properties']['Handler'] === 'index.handler');
+    assert(funResult['Properties']['Runtime'] === 'nodejs10');
+    assert.deepStrictEqual(funResult['Events'], {});
+    const properties = result['Resources']['serverless-hello-world']['Properties'];
+    assert(properties['VpcConfig']);
+    assert(properties['Policies']);
+    assert(properties['LogConfig']);
+    assert(properties['NasConfig']);
+  });
+
   it('test http events', () => {
     const result = generateFunctionsSpec(
       path.join(__dirname, './fixtures/fc/f-event-http.yml')

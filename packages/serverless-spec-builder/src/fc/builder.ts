@@ -5,19 +5,15 @@ import {
   FCFunctionStructure,
   FCSpec,
   HTTPEventType,
+  FCProviderStructure,
 } from './interface';
 import { SpecBuilder } from '../builder';
-import {
-  ProviderStructure,
-  HTTPEvent,
-  ScheduleEvent,
-  LogEvent,
-  OSEvent,
-} from '../interface';
+import { HTTPEvent, ScheduleEvent, LogEvent, OSEvent } from '../interface';
+import { uppercaseObjectKey } from '../utils';
 
 export class FCSpecBuilder extends SpecBuilder {
   toJSON() {
-    const providerData: ProviderStructure = this.getProvider();
+    const providerData: FCProviderStructure = this.getProvider();
     const serviceData = this.getService();
     const functionsData: FCFunctionsStructure = this.getFunctions();
     const serviceName = serviceData.name;
@@ -31,6 +27,11 @@ export class FCSpecBuilder extends SpecBuilder {
           Properties: {
             Description: serviceData.description,
             Role: providerData.role,
+            InternetAccess: providerData.internetAccess,
+            VpcConfig: uppercaseObjectKey(providerData.vpcConfig),
+            Policies: uppercaseObjectKey(providerData.policies),
+            LogConfig: uppercaseObjectKey(providerData.logConfig),
+            NasConfig: uppercaseObjectKey(providerData.nasConfig),
           },
         },
       },
