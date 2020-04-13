@@ -9,11 +9,7 @@ exports.handler = asyncWrapper(async (...args) => {
     runtime = await start();
   }
   return runtime.asyncEvent(async function (ctx, event) {
-    return {
-      isBase64Encoded: false,
-      statusCode: 200,
-      headers: {},
-      body: 'hello world',
-    };
+    ctx.status = 200;
+    ctx.body = 'hello world';
   })(...args);
 });
