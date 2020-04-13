@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.74](https://github.com/midwayjs/midway-faas/compare/v0.2.73...v0.2.74) (2020-04-13)
+
+
+### Bug Fixes
+
+* support apigw ([abfc27a](https://github.com/midwayjs/midway-faas/commit/abfc27a93ae1b335bcb040679bbb5d39f71f5c9e))
+
+
+
+
+
 ## [0.2.73](https://github.com/midwayjs/midway-faas/compare/v0.2.73-alpha.0...v0.2.73) (2020-04-11)
 
 **Note:** Version bump only for package @midwayjs/serverless-fc-trigger

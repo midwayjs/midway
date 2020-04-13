@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.74](https://github.com/midwayjs/midway-faas/compare/v0.2.73...v0.2.74) (2020-04-13)
+
+
+### Bug Fixes
+
+* add fc service properties definition ([3cbdfe6](https://github.com/midwayjs/midway-faas/commit/3cbdfe6ad793d5a553a097587bb3883680f1a4f2))
+
+
+
+
+
 ## [0.2.73](https://github.com/midwayjs/midway-faas/compare/v0.2.73-alpha.0...v0.2.73) (2020-04-11)
 
 **Note:** Version bump only for package @midwayjs/serverless-spec-builder

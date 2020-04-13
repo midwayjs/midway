@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.74](https://github.com/midwayjs/midway-faas/compare/v0.2.73...v0.2.74) (2020-04-13)
+
+
+### Bug Fixes
+
+* add fc service properties definition ([3cbdfe6](https://github.com/midwayjs/midway-faas/commit/3cbdfe6ad793d5a553a097587bb3883680f1a4f2))
+* fc starter apigw ([00da6a9](https://github.com/midwayjs/midway-faas/commit/00da6a94292b9217da94fde81c338666d44bde33))
+* resume npm ([1bff53b](https://github.com/midwayjs/midway-faas/commit/1bff53b0140d82182d82517a5f3b93e6741ea649))
+* set default env to ctx.env ([ef732e0](https://github.com/midwayjs/midway-faas/commit/ef732e05a738d42ba47088d6cced5375e78e1dff))
+* support apigw ([abfc27a](https://github.com/midwayjs/midway-faas/commit/abfc27a93ae1b335bcb040679bbb5d39f71f5c9e))
+
+
+
+
+
 ## [0.2.73](https://github.com/midwayjs/midway-faas/compare/v0.2.73-alpha.0...v0.2.73) (2020-04-11)
 
 **Note:** Version bump only for package midway-faas
