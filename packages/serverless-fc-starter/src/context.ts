@@ -41,6 +41,10 @@ export class Request {
     return this[EVENT].path;
   }
 
+  get pathParameters() {
+    return this[EVENT].pathParameters;
+  }
+
   get method() {
     return this[EVENT].method;
   }
@@ -150,6 +154,10 @@ export class Context {
 
   get path() {
     return this.req.path;
+  }
+
+  get pathParameters() {
+    return this.req.pathParameters;
   }
 
   get query() {
