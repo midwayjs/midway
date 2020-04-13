@@ -1,5 +1,8 @@
 import {
-  saveProviderId, getProviderId, DUPLICATED_INJECTABLE_DECORATOR, getPropertyInject, Provide, Inject, getConstructorInject
+  saveProviderId, getProviderId, DUPLICATED_INJECTABLE_DECORATOR, getPropertyInject, Provide, Inject, getConstructorInject, attachConstructorDataOnClass, getClassMetadata,
+  CLASS_KEY_CONSTRUCTOR,
+  savePropertyInject,
+  saveConstructorInject
 } from '../../src';
 import { expect } from 'chai';
 
@@ -11,6 +14,12 @@ class Test {
 
   @Inject('@testpackage')
   hello: any;
+}
+
+class TestOne {
+  constructor(h1: any, h2: any) {
+    // ignore
+  }
 }
 
 describe('/test/common/util.test.ts', () => {
@@ -48,5 +57,44 @@ describe('/test/common/util.test.ts', () => {
         value: '@testpackage:tt'
       }]
     });
+
+    let s = 'empty!';
+    try {
+      savePropertyInject({
+        identifier: '@testpackage',
+        target: Test,
+        targetKey: 'hello'
+      });
+      savePropertyInject({
+        identifier: '@testpackage',
+        target: Test,
+        targetKey: 'hello'
+      });
+    } catch (e) {
+      s = e.message;
+    }
+    expect(s).not.eq('empty!');
+    expect(s).eq('Metadata key was used more than once in a parameter: inject');
+
+    s = 'empty1';
+    try {
+      saveConstructorInject({
+        identifier: 'test',
+        target: TestOne,
+        targetKey: 'hello',
+        index: 1
+      });
+    } catch (e) {
+      s = e.message;
+    }
+    expect(s).not.eq('empty1');
+    expect(s).eq('The @inject @multiInject @tagged and @named decorators must be applied to the parameters of a class constructor or a class property.');
+  });
+
+  it('util attachConstructorDataOnClass shoule be ok', () => {
+    attachConstructorDataOnClass('', TestOne, 'ttt', 0);
+
+    const meta = getClassMetadata(CLASS_KEY_CONSTRUCTOR, TestOne);
+    expect(meta).deep.eq({ 0: { key: 'h1', type: 'ttt' } });
   });
 });

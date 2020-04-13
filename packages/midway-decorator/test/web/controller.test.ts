@@ -8,6 +8,9 @@ import { Controller, CONTROLLER_KEY, listModule, getClassMetadata, ScopeEnum, ge
 })
 class TestController {}
 
+@Controller('/tt')
+class TestOneController {}
+
 describe('/test/web/controller.test.ts', () => {
   it('controller decorator should be ok', () => {
     const meta = getClassMetadata(CONTROLLER_KEY, TestController);
@@ -19,12 +22,21 @@ describe('/test/web/controller.test.ts', () => {
       }
     });
 
+    const metaone = getClassMetadata(CONTROLLER_KEY, TestOneController);
+    expect(metaone).deep.eq({
+      prefix: '/tt',
+      routerOptions: {
+        sensitive: true,
+        middleware: []
+      }
+    });
+
     const def = getObjectDefProps(TestController);
     expect(def).deep.eq({
       scope: ScopeEnum.Request,
     });
 
     const m = listModule(CONTROLLER_KEY);
-    expect(m.length).eq(1);
+    expect(m.length).eq(2);
   });
 });

@@ -7,6 +7,9 @@ class Test {
     // ignore
   }
 
+  @Config()
+  hhh: any;
+
   @Config('bbb')
   bbb: any;
 }
@@ -23,7 +26,7 @@ describe('/test/framework/config.test.ts', () => {
 
     data = getClassMetadata(CONFIG_KEY, Test);
     expect(data).deep.eq(
-      [ {key: 'bbb', propertyName: 'bbb'} ]
+      [ {key: 'hhh', propertyName: 'hhh'}, {key: 'bbb', propertyName: 'bbb'} ]
     );
   });
 });

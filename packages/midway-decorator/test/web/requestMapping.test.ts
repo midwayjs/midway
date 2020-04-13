@@ -1,6 +1,6 @@
 
 import { expect } from 'chai';
-import { Get, Post, Options, Head, All, getClassMetadata, WEB_ROUTER_KEY } from '../../src';
+import { Get, Post, Options, Head, All, getClassMetadata, WEB_ROUTER_KEY, RequestMapping } from '../../src';
 
 class Test {
 
@@ -24,10 +24,12 @@ class Test {
     // ignore
   }
 
-  @All('/get', { routerName: 'all', middleware: ['hello']})
+  @All(null, { routerName: 'all' })
   async doAll() {
     // ignore
   }
+
+  async ttt() {}
 }
 
 describe('/test/web/requestMapping.test.ts', () => {
@@ -63,12 +65,38 @@ describe('/test/web/requestMapping.test.ts', () => {
         middleware: [ 'hello' ]
       },
       {
-        path: '/get',
+        path: '/',
         requestMethod: 'all',
         routerName: 'all',
         method: 'doAll',
-        middleware: [ 'hello' ]
+        middleware: undefined
       }
     ]);
+
+    const dd = RequestMapping();
+    dd(Test, 'ttt', null);
+
+    const metadd = getClassMetadata(WEB_ROUTER_KEY, Test);
+    expect(metadd[metadd.length - 1]).deep.eq({
+      path: '/',
+      requestMethod: 'get',
+      routerName: null,
+      method: 'ttt',
+      middleware: []
+    });
+
+    const bb = RequestMapping({
+      METHOD_METADATA: null
+    });
+
+    bb(Test, 'ttt', null);
+    const metabb = getClassMetadata(WEB_ROUTER_KEY, Test);
+    expect(metabb[metabb.length - 1]).deep.eq({
+      path: '/',
+      requestMethod: 'get',
+      routerName: undefined,
+      method: 'ttt',
+      middleware: undefined
+    });
   });
 });

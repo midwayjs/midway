@@ -7,6 +7,9 @@ class Test {
     // ignore
   }
 
+  @Logger()
+  logger: any;
+
   @Logger('bbb')
   bbb: any;
 }
@@ -23,7 +26,7 @@ describe('/test/framework/logger.test.ts', () => {
 
     data = getClassMetadata(LOGGER_KEY, Test);
     expect(data).deep.eq(
-      [ {key: 'bbb', propertyName: 'bbb'} ]
+      [ {key: 'logger', propertyName: 'logger'}, {key: 'bbb', propertyName: 'bbb'},  ]
     );
   });
 });

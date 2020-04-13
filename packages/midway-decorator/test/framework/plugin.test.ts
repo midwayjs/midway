@@ -7,6 +7,9 @@ class Test {
     // ignore
   }
 
+  @Plugin()
+  test: any;
+
   @Plugin('bbb')
   bbb: any;
 }
@@ -23,7 +26,7 @@ describe('/test/framework/plugin.test.ts', () => {
 
     data = getClassMetadata(PLUGIN_KEY, Test);
     expect(data).deep.eq(
-      [ {key: 'bbb', propertyName: 'bbb'} ]
+      [ {key: 'test', propertyName: 'test'}, {key: 'bbb', propertyName: 'bbb'},  ]
     );
   });
 });

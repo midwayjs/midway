@@ -9,13 +9,13 @@ import {
   getProviderId,
   listMethodDataFromClass,
   listModule,
-  listPreloadModule, getObjectDefinition
+  listPreloadModule, getObjectDefinition, savePropertyDataToClass, listPropertyDataFromClass, attachPropertyMetadata
 } from '../../src';
 import * as assert from 'assert';
+import { expect } from 'chai';
 import { ManagerTest as module } from '../fixtures/decorator/customClass';
 
 describe('/test/common/decoratorManager.test.ts', () => {
-
   it('should save data on class and get it', () => {
     assert(getClassMetadata('custom', module) === 'test');
     assert(getClassMetadata('custom_method', module) === 'testSomething');
@@ -56,9 +56,12 @@ describe('/test/common/decoratorManager.test.ts', () => {
   });
 
   it('should get function args', () => {
-    const args = getParamNames((a, b, c) => {
+    let args = getParamNames((a, b, c) => {
     });
     assert(args.length === 3);
+
+    args = getParamNames(() => {});
+    assert(args.length === 0);
   });
 
   it('should get attach data from method', () => {
@@ -74,6 +77,8 @@ describe('/test/common/decoratorManager.test.ts', () => {
   it('should get id from class', () => {
     assert(module.name === 'ManagerTest');
     assert(getProviderId(module) === 'managerTest');
+
+    assert(getProviderId(class Test {}) === 'test');
   });
 
   it('should get property data', () => {
@@ -84,5 +89,25 @@ describe('/test/common/decoratorManager.test.ts', () => {
 
   it('should get object definition metadata', () => {
     assert(getObjectDefinition(module).scope === 'Singleton');
+  });
+
+  it('savePropertyDataToClass should be ok', () => {
+    class TestOne {}
+    savePropertyDataToClass('hello1', {a: 1}, TestOne, 'hello');
+
+    const data = listPropertyDataFromClass('hello1', TestOne);
+    expect(data).deep.eq([{
+      a: 1
+    }]);
+  });
+
+  it('attachPropertyMetadata should be ok', () => {
+    class TestTwo {}
+    attachPropertyMetadata('ttt', {a: 1, b: 22}, TestTwo, 'hhh');
+
+    const meta = getPropertyMetadata('ttt', TestTwo, 'hhh');
+    expect(meta).deep.eq([
+      {a: 1, b: 22}
+    ]);
   });
 });
