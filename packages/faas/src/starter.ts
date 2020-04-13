@@ -57,7 +57,7 @@ export class FaaSStarter implements IFaaSStarter {
 
     this.loader = new ContainerLoader({
       baseDir: this.baseDir,
-      isTsMode: true,     // 用 midway-faas 只能是 ts
+      isTsMode: true, // 用 midway-faas 只能是 ts
       preloadModules: options.preloadModules || [],
     });
     this.loader.initialize();
@@ -118,6 +118,7 @@ export class FaaSStarter implements IFaaSStarter {
       }
 
       const context: FaaSContext = this.getContext(args.shift());
+
       if (funOptions && funOptions.mod) {
         // invoke middleware, just for http
         let fnMiddlewere = [];
@@ -125,7 +126,7 @@ export class FaaSStarter implements IFaaSStarter {
         fnMiddlewere = fnMiddlewere.concat(funOptions.middleware);
         if (fnMiddlewere.length) {
           const mw: any[] = await this.formatMiddlewares(fnMiddlewere);
-          mw.push(async ctx => {
+          mw.push(async (ctx) => {
             // invoke handler
             const result = this.invokeHandler(funOptions, ctx, args);
             if (!ctx.body) {
@@ -173,8 +174,9 @@ export class FaaSStarter implements IFaaSStarter {
       return handlerMethod;
     }
     throw new Error(
-      `no handler setup on ${target.name}#${method ||
-        this.defaultHandlerMethod}`
+      `no handler setup on ${target.name}#${
+        method || this.defaultHandlerMethod
+      }`
     );
   }
 
@@ -225,12 +227,12 @@ export class FaaSStarter implements IFaaSStarter {
               // or @Func({ handler })
               opts.funHandler
             : // else use ClassName.mehtod as handler key
-            covertId(funModule.name, opts.key);
+              covertId(funModule.name, opts.key);
           this.funMappingStore.set(handlerName, {
             middleware: opts.middleware || [],
             mod: funModule,
             method: opts.key,
-            descriptor: opts.descriptor
+            descriptor: opts.descriptor,
           });
         });
       }
@@ -255,8 +257,13 @@ export class FaaSStarter implements IFaaSStarter {
     if (!context.requestContext) {
       context.requestContext = new MidwayRequestContainer(
         context,
-        this.loader.getApplicationContext()
+        this.getApplicationContext()
       );
+    }
+    if (!context.env) {
+      context.env = this.getApplicationContext()
+        .getEnvironmentService()
+        .getCurrentEnvironment();
     }
     return context;
   }

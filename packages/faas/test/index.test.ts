@@ -154,7 +154,7 @@ describe('test/index.test.ts', () => {
       {},
       { text: 'ab' }
     );
-    assert(data === '5321abone articlereplace manager');
+    assert(data === '5321abone articlereplace managerprod');
     mm.restore();
   });
 });

@@ -30,6 +30,10 @@ export class HelloService implements FunctionHandler {
       'userManager.getUser should be ok'
     );
 
-    return this.allConfig + event.text + (await this.articleManager.getOne());
+    return (
+      this.allConfig +
+      event.text +
+      ((await this.articleManager.getOne()) + this.ctx.env)
+    );
   }
 }
