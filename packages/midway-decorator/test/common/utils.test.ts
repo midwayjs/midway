@@ -2,7 +2,9 @@ import {
   saveProviderId, getProviderId, DUPLICATED_INJECTABLE_DECORATOR, getPropertyInject, Provide, Inject, getConstructorInject, attachConstructorDataOnClass, getClassMetadata,
   CLASS_KEY_CONSTRUCTOR,
   savePropertyInject,
-  saveConstructorInject
+  saveConstructorInject,
+  saveObjectDefProps,
+  getObjectDefProps
 } from '../../src';
 import { expect } from 'chai';
 
@@ -96,5 +98,11 @@ describe('/test/common/util.test.ts', () => {
 
     const meta = getClassMetadata(CLASS_KEY_CONSTRUCTOR, TestOne);
     expect(meta).deep.eq({ 0: { key: 'h1', type: 'ttt' } });
+  });
+
+  it('util saveObjectDefProps should be ok', () => {
+    saveObjectDefProps(TestOne);
+    const tt = getObjectDefProps(TestOne);
+    expect(tt).deep.eq({});
   });
 });

@@ -46,6 +46,9 @@ describe('/test/common/decoratorManager.test.ts', () => {
   it('should list module', () => {
     const modules = listModule('custom');
     assert(modules.length === 1);
+
+    const nothings = listModule('c_custom_notfound');
+    assert(nothings.length === 0);
   });
 
   it('should clear all module', () => {
