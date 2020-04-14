@@ -18,6 +18,7 @@
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
+    "mm": "^2.5.0",
     "midway-bin": "^2.0.15"
   },
   "keywords": [

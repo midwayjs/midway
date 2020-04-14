@@ -1,4 +1,5 @@
 import {
+  DecoratorManager,
   clearAllModule,
   getClassMetadata,
   getMethodDataFromClass,
@@ -14,6 +15,7 @@ import {
 import * as assert from 'assert';
 import { expect } from 'chai';
 import { ManagerTest as module } from '../fixtures/decorator/customClass';
+import mm = require('mm');
 
 describe('/test/common/decoratorManager.test.ts', () => {
   it('should save data on class and get it', () => {
@@ -46,13 +48,14 @@ describe('/test/common/decoratorManager.test.ts', () => {
     assert(modules.length === 1);
   });
 
-  it.skip('should clear all module', () => {
+  it('should clear all module', () => {
+    let s = 'empty!';
+    mm(DecoratorManager.prototype, 'clear', () => {
+      s = 'clear';
+    });
     clearAllModule();
-    let modules = listPreloadModule();
-    assert(modules.length === 0);
-
-    modules = listModule('custom');
-    assert(modules.length === 0);
+    expect(s).eq('clear');
+    mm.restore();
   });
 
   it('should get function args', () => {
