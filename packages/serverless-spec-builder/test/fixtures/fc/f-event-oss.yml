@@ -1,0 +1,25 @@
+service:
+  name: serverless-hello-world
+
+provider:
+  name: aliyun
+
+functions:
+  index:
+    handler: index.handler
+    events:
+      - os:
+          bucket: ossBucketName
+          events:
+            - oss:ObjectCreated:*
+            - oss:ObjectRemoved:DeleteObject
+          filter:
+            prefix: filterdir/
+            suffix: .jpg
+          role: acs:ram::1234567890:role/fc-invoke-test
+          version: LATEST
+
+
+
+package:
+  artifact: code.zip

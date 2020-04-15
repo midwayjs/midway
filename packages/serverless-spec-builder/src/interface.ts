@@ -56,10 +56,14 @@ export interface LogEvent {
 
 // 对象存储
 export interface OSEvent {
+  name?: string;
   bucket: string;
-  events: string[];
-  filterPrefix: string;
-  filterSuffix: string;
+  events: string;
+  filter: {
+    prefix: string;
+    suffix: string;
+  };
+  enable?: boolean;
   role?: string;
   version?: string;
 }

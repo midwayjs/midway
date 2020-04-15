@@ -102,4 +102,33 @@ describe('/test/fc.test.ts', () => {
     assert(funResult2['Properties']['EnvironmentVariables']['MYSQL_USER']);
     assert(funResult2['Properties']['EnvironmentVariables']['MYSQL_PASS']);
   });
+
+  it('test transform oss event', () => {
+    const result = generateFunctionsSpec(
+      path.join(__dirname, './fixtures/fc/f-event-oss.yml')
+    );
+    const funResult = result['Resources']['serverless-hello-world']['index'];
+    assert(funResult['Type'] === 'Aliyun::Serverless::Function');
+    assert(funResult['Properties']['Handler'] === 'index.handler');
+    assert(funResult['Properties']['Runtime'] === 'nodejs10');
+
+    assert.deepStrictEqual(funResult['Events'], {
+      oss: {
+        Type: 'OSS',
+        Properties: {
+          BucketName: 'ossBucketName',
+          Enable: true,
+          Events: ['oss:ObjectCreated:*', 'oss:ObjectRemoved:DeleteObject'],
+          Filter: {
+            Key: {
+              Prefix: 'filterdir/',
+              Suffix: '.jpg',
+            },
+          },
+          InvocationRole: 'acs:ram::1234567890:role/fc-invoke-test',
+          Qualifier: 'LATEST',
+        },
+      },
+    });
+  });
 });

@@ -27,6 +27,7 @@ export interface FaaSHTTPRequest {
   headers: { [key: string]: string };
   query: { [key: string]: string };
   body: any;
+  params: any;
 }
 
 export interface FaaSHTTPResponse {
@@ -44,6 +45,7 @@ export interface FaaSHTTPContext {
   method: FaaSHTTPRequest['method'];
   path: FaaSHTTPRequest['path'];
   query: FaaSHTTPRequest['query'];
+  params: FaaSHTTPRequest['params'];
 
   get(key: string): string;
 

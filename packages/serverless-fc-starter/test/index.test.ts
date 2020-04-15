@@ -420,8 +420,33 @@ describe('/test/index.test.ts', () => {
         functionDir: join(__dirname, './fixtures/apigw'),
       });
       await runtime.start();
-      const result = await runtime.invoke(new ApiGatewayTrigger());
-      assert.equal(result.body, 'hello world');
+      const result = await runtime.invoke(
+        new ApiGatewayTrigger({
+          headers: {
+            'Content-Type': 'text/json',
+          },
+          method: 'POST',
+          query: {
+            q: 'testq',
+          },
+          pathParameters: {
+            id: 'id',
+          },
+          path: '/test',
+          body: {
+            name: 'test',
+          },
+        })
+      );
+      assert(result.isBase64Encoded === false);
+      assert(result.statusCode === 200);
+      assert(result.headers);
+      assert.equal(typeof result.body, 'string');
+      const body = JSON.parse(result.body);
+      assert.equal(body.method, 'POST');
+      assert.equal(body.path, '/test');
+      assert.equal(body.body.name, 'test');
+      assert.equal(body.params.id, 'id');
       await runtime.close();
     });
   });

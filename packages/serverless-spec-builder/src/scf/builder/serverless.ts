@@ -82,8 +82,8 @@ export class SCFServerlessSpecBuilder extends SpecBuilder {
           });
         }
 
-        if (event['schedule']) {
-          const evt = event['schedule'] as ScheduleEvent;
+        if (event['timer']) {
+          const evt = event['timer'] as ScheduleEvent;
           const timer: Timer = {
             name: 'timer',
             parameters: {

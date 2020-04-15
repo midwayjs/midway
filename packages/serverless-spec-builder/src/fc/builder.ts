@@ -80,9 +80,9 @@ export class FCSpecBuilder extends SpecBuilder {
           };
         }
 
-        if (event['schedule']) {
-          const evt = event['schedule'] as ScheduleEvent;
-          functionTemplate.Events['schedule'] = {
+        if (event['timer']) {
+          const evt = event['timer'] as ScheduleEvent;
+          functionTemplate.Events['timer'] = {
             Type: 'Timer',
             Properties: {
               CronExpression:
@@ -127,15 +127,22 @@ export class FCSpecBuilder extends SpecBuilder {
               Events: [].concat(evt.events),
               Filter: {
                 Key: {
-                  Prefix: evt.filterPrefix,
-                  Suffix: evt.filterSuffix,
+                  Prefix: evt.filter.prefix,
+                  Suffix: evt.filter.suffix,
                 },
               },
               Enable: true,
-              InvocationRole: evt.role,
-              Qualifier: evt.version,
             },
           };
+
+          if (evt.role) {
+            functionTemplate.Events['oss']['Properties']['InvocationRole'] =
+              evt.role;
+          }
+          if (evt.version) {
+            functionTemplate.Events['oss']['Properties']['Qualifier'] =
+              evt.version;
+          }
         }
       }
 

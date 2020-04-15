@@ -10,6 +10,12 @@ exports.handler = asyncWrapper(async (...args) => {
   }
   return runtime.asyncEvent(async function (ctx, event) {
     ctx.status = 200;
-    ctx.body = 'hello world';
+    ctx.body = {
+      headers: ctx.headers,
+      method: ctx.method,
+      path: ctx.path,
+      body: ctx.request.body,
+      params: ctx.params,
+    };
   })(...args);
 });

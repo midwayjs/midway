@@ -69,7 +69,24 @@ describe('/test/index.test.ts', () => {
       functionDir: join(__dirname, './fixtures/apiGateway'),
     });
     await runtime.start();
-    const result = await runtime.invoke(new ApiGatewayTrigger());
+    const result = await runtime.invoke(
+      new ApiGatewayTrigger({
+        headers: {
+          'Content-Type': 'text/json',
+        },
+        method: 'POST',
+        query: {
+          q: 'testq',
+        },
+        pathParameters: {
+          id: 'id',
+        },
+        path: '/test',
+        body: {
+          name: 'test',
+        },
+      })
+    );
     assert.equal(result.body, 'hello Alan');
     await runtime.close();
   });

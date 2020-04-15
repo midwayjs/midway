@@ -172,6 +172,10 @@ export class Context {
     return this.req.url;
   }
 
+  get params() {
+    return this.req.pathParameters;
+  }
+
   get(key) {
     return this.headers[key];
   }

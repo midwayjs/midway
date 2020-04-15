@@ -265,6 +265,9 @@ export class FaaSStarter implements IFaaSStarter {
         .getEnvironmentService()
         .getCurrentEnvironment();
     }
+    if (!context.logger) {
+      context.logger = this.logger;
+    }
     return context;
   }
 
