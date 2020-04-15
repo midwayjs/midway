@@ -277,7 +277,7 @@ describe('/test/context/managedResolverFactory.test.ts', () => {
     }
 
     expect(callback.withArgs('return null').calledOnce).true;
-    expect(callback.withArgs('hello1 config no valid path').calledOnce).true;
+    expect(callback.withArgs('hello1 construct return undefined').calledOnce).true;
   });
 
   it('dfs should be ok', () => {

@@ -502,7 +502,7 @@ export class ManagedResolverFactory {
     inst = await definition.creator.doConstructAsync(Clzz, constructorArgs, this.context);
     if (!inst) {
       this.removeCreateStatus(definition, false);
-      throw new Error(`${definition.id} config no valid path`);
+      throw new Error(`${definition.id} construct return undefined`);
     }
 
     // binding ctx object

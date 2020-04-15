@@ -10,6 +10,9 @@ import { Configuration, getClassMetadata, CONFIGURATION_KEY } from '../../src';
 })
 class Test {}
 
+@Configuration()
+class TestOne {}
+
 describe('/test/annotation/configuration.test.ts', () => {
   it('configuration decorator should be ok', () => {
     const meta = getClassMetadata(CONFIGURATION_KEY, Test);
@@ -19,5 +22,8 @@ describe('/test/annotation/configuration.test.ts', () => {
       imports: ['./nodes'],
       namespace: 'hello'
     });
+
+    const metaone = getClassMetadata(CONFIGURATION_KEY, TestOne);
+    expect(metaone).deep.eq({});
   });
 });

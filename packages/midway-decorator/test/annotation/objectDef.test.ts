@@ -13,6 +13,10 @@ class Test {
   destroy() {}
 }
 
+@Scope()
+@Autowire()
+class TestOne {}
+
 describe('/test/annotation/objectDef.test.ts', () => {
   it('objectDef decorator should be ok', () => {
     const def = getObjectDefProps(Test);
@@ -22,6 +26,12 @@ describe('/test/annotation/objectDef.test.ts', () => {
       initMethod: 'init',
       destroyMethod: 'destroy',
       isAsync: true
+    });
+
+    const defone = getObjectDefProps(TestOne);
+    expect(defone).deep.eq({
+      isAutowire: true,
+      scope: ScopeEnum.Singleton,
     });
   });
 });
