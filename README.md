@@ -1,16 +1,26 @@
+
+
 ![](https://img.alicdn.com/tfs/TB1y4zbsEY1gK0jSZFMXXaWcVXa-10530-6280.png)
 
 <p align="center">
   <a href="https://www.npmjs.com/package/@midwayjs/faas" alt="npm version">
-    <img src="https://img.shields.io/npm/v/@midwayjs/faas.svg?style=flat" /></a>
+    <img src="https://img.shields.io/npm/v/@midwayjs/faas.svg?style=flat" />
+  </a>
   <a href="./LICENSE" alt="GitHub license">
-    <img src="https://img.shields.io/badge/license-MIT-blue.svg" /></a>
+    <img src="https://img.shields.io/badge/license-MIT-blue.svg" />
+  </a>
   <a href="https://github.com/midwayjs/midway-faas/actions?query=workflow%3A%22Node.js+CI%22" alt="Node.js CI">
-    <img src="https://img.shields.io/badge/Node.js%20CI-passing-brightgreen" /></a>
+    <img src="https://img.shields.io/badge/Node.js%20CI-passing-brightgreen" />
+  </a>
   <a href="https://github.com/midwayjs/midway-faas" alt="Activity">
-    <img src="https://img.shields.io/github/commit-activity/m/midwayjs/midway-faas" /></a>
+    <img src="https://img.shields.io/github/commit-activity/m/midwayjs/midway-faas" />
+  </a>
   <a href="https://github.com/midwayjs/midway-faas/graphs/contributors" alt="Contributors">
-    <img src="https://img.shields.io/github/contributors/midwayjs/midway-faas" /></a>
+    <img src="https://img.shields.io/github/contributors/midwayjs/midway-faas" />
+  </a>
+  <a href="https://gitpod.io/#https://github.com/midwayjs/midway-faas" alt="Gitpod Ready-to-Code">
+    <img src="https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod" />
+  </a>
 </p>
 
 Midway FaaS 是用于构建云函数的 Serverless 框架。帮助您在云原生时代大幅降低维护成本，更专注于产品研发。
