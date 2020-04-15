@@ -192,7 +192,7 @@ export interface FunctionStructure {
 export type EventType = 'http' | 'mq' | 'schedule';
 
 export interface EventStructureType {
-  [eventName: string]: HTTPEvent | MQEvent | ScheduleEvent;
+  [eventName: string]: HTTPEvent | MQEvent | TimerEvent;
 }
 
 export interface HTTPEvent {
@@ -206,7 +206,7 @@ export interface MQEvent {
   tag?: string;
 }
 
-export interface ScheduleEvent {
+export interface TimerEvent {
 	type: 'cron' | 'every';
   value: string;
   payload?: string;
@@ -248,7 +248,7 @@ events 是一个由不同事件（触发器）组成的**对象数组**。这个
 | topic | string | 接收 metaq 消息的 topic |
 | tag | string | 接收 metaq 消息的 tag，用竖线分割 |
 |  |  |  |
-| **ScheduleEvent** |  |  |
+| **TimerEvent** |  |  |
 | type | string | 必填，触发类型，可以选择 'cron'，'every' |
 | value | string | 必填，对应触发的值。<br />如果是 cron类型，则填写 cron 表达式。<br />如果是 every 类型，则填写间隔时间，**带上单位** |
 | payload | any | 可选，配置在网关，每次触发的内容 |

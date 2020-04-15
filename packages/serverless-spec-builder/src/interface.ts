@@ -18,11 +18,11 @@ export interface FunctionsStructure {
   [functionName: string]: FunctionStructure;
 }
 
-export type EventTypeKey = 'http' | 'schedule' | 'os' | 'log' | 'apigw';
+export type EventTypeKey = 'http' | 'timer' | 'os' | 'log' | 'apigw';
 
 export type EventType =
   | HTTPEvent
-  | ScheduleEvent
+  | TimerEvent
   | LogEvent
   | OSEvent
   | APIGatewayEvent;
@@ -37,7 +37,7 @@ export interface HTTPEvent {
 }
 
 // 定时任务
-export interface ScheduleEvent {
+export interface TimerEvent {
   type: 'cron' | 'every' | 'interval';
   value: string;
   payload?: string;

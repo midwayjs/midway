@@ -146,27 +146,11 @@ export class Context {
     return this.req.query;
   }
 
-  get ip() {
-    return this.req.ip;
-  }
-
-  get url() {
-    return this.req.url;
-  }
-
   get(key) {
     return this.headers[key];
   }
 
-  get queryStringParameters() {
-    return this.req.queryStringParameters;
-  }
-
-  get headerParameters() {
-    return this.req.headerParameters;
-  }
-
-  get pathParameters() {
+  get params() {
     return this.req.pathParameters;
   }
 

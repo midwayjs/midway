@@ -27,31 +27,17 @@ export class ApiGatewayTrigger extends SCFBaseTrigger {
   async toArgs() {
     const event: Partial<SCFHTTPEvent> = {
       headerParameters: {},
-      headers: {
-        'accept':
-          'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3',
-        'accept-encoding': 'gzip, deflate, br',
-        'accept-language': 'zh-CN,zh;q=0.9,en;q=0.8,ja;q=0.7',
-        'connection': 'keep-alive',
-        'host': 'service-qcz3nag0-1251881243.gz.apigw.tencentcs.com',
-        'sec-fetch-mode': 'navigate',
-        'sec-fetch-site': 'cross-site',
-        'sec-fetch-user': '?1',
-        'upgrade-insecure-requests': '1',
-        'user-agent':
-          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36',
-        'x-anonymous-consumer': 'true',
-        'x-qualifier': '$LATEST',
-      },
-      httpMethod: 'GET',
-      path: '/hellotest',
-      pathParameters: {},
-      queryString: {},
-      queryStringParameters: {},
+      headers: this.triggerOptions.headers || {},
+      httpMethod: this.triggerOptions.method || 'request method name',
+      path: this.triggerOptions.path || 'api request path',
+      pathParameters: this.triggerOptions.pathParameters || {},
+      queryString: this.triggerOptions.query || {},
+      queryStringParameters: this.triggerOptions.query || {},
+      body: this.triggerOptions.body,
       requestContext: {
-        httpMethod: 'ANY',
+        httpMethod: this.triggerOptions.method || 'request method name',
         identity: {},
-        path: '/hellotest',
+        path: this.triggerOptions.path || 'api request path',
         serviceId: 'service-qcz3nag0',
         sourceIp: '42.120.74.90',
         stage: 'release',
@@ -62,3 +48,5 @@ export class ApiGatewayTrigger extends SCFBaseTrigger {
     return [event, this.createContext()];
   }
 }
+
+export const apigw = ApiGatewayTrigger;

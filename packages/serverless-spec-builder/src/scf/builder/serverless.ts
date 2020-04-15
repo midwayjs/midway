@@ -2,7 +2,7 @@ import {
   FunctionStructure,
   HTTPEvent,
   ProviderStructure,
-  ScheduleEvent,
+  TimerEvent,
   SpecBuilder,
 } from '../../index';
 import { SCFFunctionsStructure, SCFHTTPEventType } from '../interface/template';
@@ -61,8 +61,8 @@ export class SCFServerlessSpecBuilder extends SpecBuilder {
       };
 
       for (const event of funSpec['events']) {
-        if (event['http']) {
-          const evt = event['http'] as HTTPEvent;
+        if (event['http'] || event['apigw']) {
+          const evt = (event['http'] || event['apigw']) as HTTPEvent;
           const apiGateway: ApiGateway = {
             name: `${funName}_${providerData.stage || ''}_apigw`,
             parameters: {
@@ -83,7 +83,7 @@ export class SCFServerlessSpecBuilder extends SpecBuilder {
         }
 
         if (event['timer']) {
-          const evt = event['timer'] as ScheduleEvent;
+          const evt = event['timer'] as TimerEvent;
           const timer: Timer = {
             name: 'timer',
             parameters: {

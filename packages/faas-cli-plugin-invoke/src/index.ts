@@ -9,6 +9,7 @@ import { compileInProject } from '@midwayjs/mwcc';
 import { writeWrapper } from '@midwayjs/serverless-spec-builder';
 import { createRuntime } from '@midwayjs/runtime-mock';
 import * as FCTrigger from '@midwayjs/serverless-fc-trigger';
+import * as SCFTrigger from '@midwayjs/serverless-scf-trigger';
 import { resolve, relative, join } from 'path';
 import { FaaSStarterClass, cleanTarget } from './utils';
 import {
@@ -409,6 +410,8 @@ export class FaaSInvokePlugin extends BasePlugin {
         let triggerMap;
         if (platform === 'aliyun') {
           triggerMap = FCTrigger;
+        } else if (platform === 'tencent') {
+          triggerMap = SCFTrigger;
         }
         const trigger = this.getTrigger(triggerMap, args);
         await runtime.start();

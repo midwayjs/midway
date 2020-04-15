@@ -1,7 +1,7 @@
 import {
   HTTPEvent,
   ProviderStructure,
-  ScheduleEvent,
+  TimerEvent,
   SpecBuilder,
 } from '../../';
 import {
@@ -77,7 +77,7 @@ export class SCFTemplateSpecBuilder extends SpecBuilder {
 
         // 定时器
         if (event['schedule']) {
-          const evt = event['schedule'] as ScheduleEvent;
+          const evt = event['schedule'] as TimerEvent;
           functionTemplate.Properties.Events['schedule'] = {
             Type: 'Timer',
             Properties: {

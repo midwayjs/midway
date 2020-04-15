@@ -8,7 +8,7 @@ import {
   FCProviderStructure,
 } from './interface';
 import { SpecBuilder } from '../builder';
-import { HTTPEvent, ScheduleEvent, LogEvent, OSEvent } from '../interface';
+import { HTTPEvent, TimerEvent, LogEvent, OSEvent } from '../interface';
 import { uppercaseObjectKey } from '../utils';
 
 export class FCSpecBuilder extends SpecBuilder {
@@ -81,7 +81,7 @@ export class FCSpecBuilder extends SpecBuilder {
         }
 
         if (event['timer']) {
-          const evt = event['timer'] as ScheduleEvent;
+          const evt = event['timer'] as TimerEvent;
           functionTemplate.Events['timer'] = {
             Type: 'Timer',
             Properties: {

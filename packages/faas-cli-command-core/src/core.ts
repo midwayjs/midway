@@ -334,7 +334,7 @@ export class CommandHookCore implements ICommandHooksCore {
         this.error('commandNotFound', { command, commandPath });
       }
       cmdObj = cmdObj.commands[command];
-      if (cmdObj.options) {
+      if (cmdObj && cmdObj.options) {
         this.commandOptions(cmdObj.options, usage);
       }
     }
