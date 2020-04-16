@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.76](https://github.com/midwayjs/midway-faas/compare/v0.2.71...v0.2.76) (2020-04-16)
+
+
+### Bug Fixes
+
+* aliyun gateway accept number ([55c77b3](https://github.com/midwayjs/midway-faas/commit/55c77b3aa9000249e0987e808cb558a74bf51a55))
+* fc starter apigw ([acaa9d1](https://github.com/midwayjs/midway-faas/commit/acaa9d1c5a7704175feb2525970e2609bd237a7b))
+* fix buffer event ([c05b219](https://github.com/midwayjs/midway-faas/commit/c05b2197658c869aff03f38d55df7775c87ac163))
+* support apigw ([2321c08](https://github.com/midwayjs/midway-faas/commit/2321c08be4ed7a076aa6004df95a64f04db0ee6d))
+
+
+
+
+
 ## [0.2.75](https://github.com/midwayjs/midway-faas/compare/v0.2.71...v0.2.75) (2020-04-15)
 
 

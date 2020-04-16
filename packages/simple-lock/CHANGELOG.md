@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.76](https://github.com/midwayjs/midway-faas/compare/v0.2.71...v0.2.76) (2020-04-16)
+
+**Note:** Version bump only for package @midwayjs/simple-lock
+
+
+
+
+
 ## [0.2.75](https://github.com/midwayjs/midway-faas/compare/v0.2.71...v0.2.75) (2020-04-15)
 
 **Note:** Version bump only for package @midwayjs/simple-lock
