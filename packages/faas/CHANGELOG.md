@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.75](https://github.com/midwayjs/midway-faas/compare/v0.2.71...v0.2.75) (2020-04-15)
+
+
+### Bug Fixes
+
+* set default env to ctx.env ([0f590eb](https://github.com/midwayjs/midway-faas/commit/0f590eb545a6e1eeeac3cda46681d759d5b5278d))
+
+
+
+
+
 ## [0.2.74](https://github.com/midwayjs/midway-faas/compare/v0.2.73...v0.2.74) (2020-04-13)
 
 

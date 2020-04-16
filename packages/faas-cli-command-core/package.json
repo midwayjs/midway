@@ -1,10 +1,10 @@
 {
   "name": "@midwayjs/fcli-command-core",
-  "version": "0.2.74",
+  "version": "0.2.75",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/serverless-spec-builder": "^0.2.74",
+    "@midwayjs/serverless-spec-builder": "^0.2.75",
     "minimist": "^1.2.0",
     "urllib": "^2.34.1",
     "ws": "^7.2.3"
@@ -21,9 +21,8 @@
     "src"
   ],
   "scripts": {
-    "build": "npm run lint && midway-bin build -c",
-    "lint": "../../node_modules/.bin/tslint --format prose -c ../../tslint.json src/**/*.ts test/**/*.ts",
-    "test": "npm run lint && NODE_ENV=test midway-bin test --ts --full-trace",
+    "build": "midway-bin build -c",
+    "test": "NODE_ENV=test midway-bin test --ts --full-trace",
     "cov": "NODE_ENV=unittest midway-bin cov --ts",
     "autod": "midway-bin autod"
   },

@@ -1,5 +1,6 @@
 export * from '@midwayjs/core';
 export * from './interface';
+export * from './typings/fc';
 export * from './starter';
 export {
   Func as func,

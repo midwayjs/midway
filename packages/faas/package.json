@@ -1,12 +1,12 @@
 {
   "name": "@midwayjs/faas",
-  "version": "0.2.74",
+  "version": "0.2.75",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@midwayjs/core": "^2.0.0",
     "@midwayjs/decorator": "^2.0.8",
-    "@midwayjs/simple-lock": "^0.2.74",
+    "@midwayjs/simple-lock": "^0.2.75",
     "debug": "^4.1.1",
     "deep-eql": "^4.0.0",
     "is-type-of": "^1.2.1",
@@ -25,9 +25,8 @@
   },
   "license": "MIT",
   "scripts": {
-    "build": "npm run lint && midway-bin build -c",
-    "lint": "../../node_modules/.bin/tslint --format prose -c ../../tslint.json src/**/*.ts test/**/*.ts",
-    "test": "npm run lint && NODE_ENV=test midway-bin test --ts --full-trace",
+    "build": "midway-bin build -c",
+    "test": "NODE_ENV=test midway-bin test --ts --full-trace",
     "cov": "NODE_ENV=unittest midway-bin cov --ts",
     "clean": "midway-bin clean",
     "autod": "midway-bin autod"

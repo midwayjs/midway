@@ -67,21 +67,3 @@ export interface MidwayFaaSInfo {
   baseDir: string;
   appDir: string;
 }
-
-export interface FC {
-  APIGatewayEvent: {
-    path: string;
-    httpMethod: string;
-    headers: object;
-    queryParameters: object;
-    pathParameters: object;
-    body: string;
-    isBase64Encoded: 'true' | 'false';
-  };
-  APIGatewayResponse: {
-    isBase64Encoded: boolean;
-    statusCode: number;
-    headers: object;
-    body: string;
-  };
-}

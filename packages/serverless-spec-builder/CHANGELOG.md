@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.75](https://github.com/midwayjs/midway-faas/compare/v0.2.71...v0.2.75) (2020-04-15)
+
+
+### Bug Fixes
+
+* add fc service properties definition ([d2a30ca](https://github.com/midwayjs/midway-faas/commit/d2a30ca5526d5cd2932b2623e71a70444544ec2a))
+
+
+
+
+
 ## [0.2.74](https://github.com/midwayjs/midway-faas/compare/v0.2.73...v0.2.74) (2020-04-13)
 
 

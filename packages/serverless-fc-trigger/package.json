@@ -1,11 +1,11 @@
 {
   "name": "@midwayjs/serverless-fc-trigger",
-  "version": "0.2.74",
+  "version": "0.2.75",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/runtime-mock": "^0.2.74",
-    "@midwayjs/serverless-fc-starter": "^0.2.74",
+    "@midwayjs/runtime-mock": "^0.2.75",
+    "@midwayjs/serverless-fc-starter": "^0.2.75",
     "express": "^4.17.1"
   },
   "devDependencies": {
@@ -19,10 +19,9 @@
     "dist"
   ],
   "scripts": {
-    "build": "npm run lint && midway-bin build -c",
-    "lint": "../../node_modules/.bin/tslint --format prose -c ../../tslint.json src/**/*.ts test/**/*.ts",
-    "test": "npm run lint && NODE_ENV=test midway-bin test --ts --full-trace",
-    "debug": "npm run lint && NODE_ENV=test midway-bin test --ts --full-trace --inspect-brk=9229",
+    "build": "midway-bin build -c",
+    "test": "NODE_ENV=test midway-bin test --ts --full-trace",
+    "debug": "NODE_ENV=test midway-bin test --ts --full-trace --inspect-brk=9229",
     "cov": "NODE_ENV=unittest midway-bin cov --ts",
     "clean": "midway-bin clean",
     "autod": "midway-bin autod"

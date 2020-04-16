@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/serverless-spec-builder",
-  "version": "0.2.74",
+  "version": "0.2.75",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
@@ -22,9 +22,8 @@
     "aws"
   ],
   "scripts": {
-    "build": "npm run lint && midway-bin build -c",
-    "lint": "../../node_modules/.bin/tslint --format prose -c ../../tslint.json src/**/*.ts test/**/*.ts",
-    "test": "npm run lint && NODE_ENV=test midway-bin test --ts --full-trace",
+    "build": "midway-bin build -c",
+    "test": "NODE_ENV=test midway-bin test --ts --full-trace",
     "cov": "NODE_ENV=unittest midway-bin cov --ts",
     "clean": "midway-bin clean",
     "autod": "midway-bin autod"
