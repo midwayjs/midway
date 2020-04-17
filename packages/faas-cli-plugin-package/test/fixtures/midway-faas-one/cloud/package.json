@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "src/index.ts",
   "dependencies": {
-    "@ali/midway-faas": "^2.4.14",
+    "@midwayjs/faas": "*",
     "request": "^2.88.0",
     "request-promise": "^4.2.5"
   },

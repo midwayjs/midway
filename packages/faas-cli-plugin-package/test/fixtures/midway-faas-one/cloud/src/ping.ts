@@ -4,7 +4,7 @@ import {
   func,
   inject,
   FaaSContext,
-} from '@ali/midway-faas';
+} from '@midwayjs/faas';
 
 @provide()
 @func('ping.handler')

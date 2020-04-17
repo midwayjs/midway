@@ -30,7 +30,7 @@ describe('/test/apigw.test.ts', () => {
       ]
     });
     const resultBody = JSON.parse(result.body);
-    assert(resultBody.headers['Content-Type'] === 'text/json' && resultBody.method === 'POST' && resultBody.path === '/test' && resultBody.body.name === 'test' && resultBody.params.id === 'id');
+    assert(resultBody.headers['Content-Type'] === 'text/json' && resultBody.query.q === 'testq' && resultBody.method === 'POST' && resultBody.path === '/test' && resultBody.body.name === 'test' && resultBody.params.id === 'id');
   });
 
   it('tencent', async () => {

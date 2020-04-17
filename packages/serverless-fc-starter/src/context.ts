@@ -54,7 +54,7 @@ export class Request {
   }
 
   get query() {
-    return this[EVENT].queries;
+    return this[EVENT].queries || this[EVENT].queryParameters;
   }
 
   get body() {

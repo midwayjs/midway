@@ -1,0 +1,43 @@
+{
+  "name": "@midwayjs/faas-dev-pack",
+  "version": "0.2.76",
+  "main": "dist/index",
+  "typings": "dist/index.d.ts",
+  "dependencies": {
+    "@midwayjs/serverless-invoke": "^0.2.76",
+    "@midwayjs/gateway-core": "^0.2.76",
+    "@midwayjs/serverless-spec-builder": "^0.2.76",
+    "@midwayjs/gateway-http": "^0.2.76",
+    "body-parser": "^1.19.0",
+    "compose-middleware": "^5.0.1",
+    "koa-bodyparser": "^4.2.1",
+    "koa-compose": "^4.1.0"
+  },
+  "devDependencies": {
+    "@midwayjs/faas": "^0.2.76",
+    "@types/express": "^4.17.0",
+    "@types/koa": "^2.0.49",
+    "express": "^4.17.1",
+    "fs-extra": "^8.0.0",
+    "koa": "^2.11.0",
+    "midway-bin": "2",
+    "supertest": "^4.0.2"
+  },
+  "files": [
+    "dist",
+    "src",
+    "gateway.json"
+  ],
+  "scripts": {
+    "build": "midway-bin build -c",
+    "test": "NODE_ENV=test midway-bin test --ts --full-trace",
+    "debug": "NODE_ENV=test midway-bin test --ts --full-trace --inspect-brk=9229",
+    "cov": "NODE_ENV=unittest midway-bin cov --ts",
+    "clean": "midway-bin clean",
+    "autod": "midway-bin autod"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "registry": "http://registry.npm.alibaba-inc.com"
+  }
+}

@@ -54,6 +54,9 @@ export class HTTPTrigger extends FCBaseTrigger {
           resolve([
             new Proxy(req, {
               get: (target, key) => {
+                if (key === 'queries') {
+                  key = 'query';
+                }
                 if (key in this.opts) {
                   return this.opts[ key ];
                 }

@@ -1,0 +1,31 @@
+service: fc-test
+
+provider:
+  name: tencent
+  runtime: nodejs10
+
+functions:
+  test1:
+    handler: index.handler
+    events:
+      - http:
+          path: /server/user/info
+  test2:
+    handler: test2.handler
+    events:
+      - http: true
+  test3:
+    handler: test3.handler
+    events:
+      - http:
+          path: /api/*
+  test4:
+    handler: test4.handler
+    events:
+      - http:
+          path: /api/a/b/c
+  test5:
+    handler: test4.handler
+    events:
+      - http:
+          path: /ignore.do

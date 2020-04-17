@@ -19,8 +19,6 @@ module.exports = {
       {
         locales: ['zh-cn'],
       },
-    ],
-    '@ali/ice-plugin-faas',
-    '@ali/ice-plugin-fake-page',
+    ]
   ],
 };

@@ -10,7 +10,7 @@ export interface InvokeOptions {
   sourceDir?: string; // 一体化目录结构下，函数的目录，比如 src/apis，这个影响到编译
   clean?: boolean; // 清理调试目录
   incremental?: boolean; // 增量编译
-  verbose?: boolean; // 输出更多信息
+  verbose?: boolean | string; // 输出更多信息
 }
 
 export async function invoke (options: InvokeOptions) {

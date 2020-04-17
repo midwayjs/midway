@@ -24,7 +24,7 @@ describe('/test/multi.test.ts', () => {
               headers: { 'Content-Type': 'text/json'},
               method: 'GET',
               path:  '/test/xxx',
-              queries: {name: 123},
+              query: {name: 123},
               body: {
                 name: 'test'
               }

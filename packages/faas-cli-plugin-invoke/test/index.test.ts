@@ -47,7 +47,7 @@ describe('/test/index.test.ts', () => {
       data: [{name: 'params'}],
       sourceDir: 'src/apis',
       incremental: false,
-      verbose: true
+      verbose: 'invoke'
     });
     assert(result && result.body === 'hello http world');
     await remove(join(__dirname, 'fixtures/ice-faas-ts-standard/.faas_debug_tmp'));

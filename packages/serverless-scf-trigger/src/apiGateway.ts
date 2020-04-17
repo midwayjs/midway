@@ -50,3 +50,4 @@ export class ApiGatewayTrigger extends SCFBaseTrigger {
 }
 
 export const apigw = ApiGatewayTrigger;
+export const http = ApiGatewayTrigger;

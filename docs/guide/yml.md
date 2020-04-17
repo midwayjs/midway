@@ -61,15 +61,6 @@ functions:
               - GET
               - POST
 
-
-layers:
-  test:
-    path: npm:@ali/market-layer@latest
-
-custom:
-  customDomain:
-    domainName: midway-fc.alibaba-inc.com
-
 ```
 
 

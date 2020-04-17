@@ -14,6 +14,9 @@ describe('/test/http.test.ts', () => {
           headers: { 'Content-Type': 'text/json' },
           method: 'POST',
           path: '/test',
+          query: {
+            name: 'q',
+          },
           body: {
             name: 'test'
           }
@@ -21,6 +24,6 @@ describe('/test/http.test.ts', () => {
       ]
     });
     const resultBody = JSON.parse(result.body);
-    assert(resultBody.headers['Content-Type'] === 'text/json' && resultBody.method === 'POST' && resultBody.path === '/test' && resultBody.body.name === 'test');
+    assert(resultBody.headers['Content-Type'] === 'text/json' && resultBody.query.name === 'q' && resultBody.method === 'POST' && resultBody.path === '/test' && resultBody.body.name === 'test');
   });
 });

@@ -24,6 +24,7 @@ export class CommandHookCore implements ICommandHooksCore {
   private npmPlugin: string[] = [];
   private loadNpm: any;
   private preDebugTime: any;
+  private execId: number = Math.ceil(Math.random() * 1000);
 
   store = new Map();
 
@@ -432,15 +433,51 @@ export class CommandHookCore implements ICommandHooksCore {
   }
 
   debug(...args) {
-    if (!this.options.options.V && !this.options.options.verbose) {
-      return;
+
+    const verbose = this.options.options.V || this.options.options.verbose;
+    if (!verbose) {
+        return;
     }
+
     const now = Date.now();
     if (!this.preDebugTime) {
-      this.preDebugTime = now;
+        this.preDebugTime = now;
+    }
+    const { type, path, line } = this.getStackTrace();
+    let stack = '';
+    if (type) {
+        if (typeof verbose === 'string' && type !== verbose) {
+            return;
+        }
+        stack = `(${type}:${path}:${line})`;
     }
     const diffTime = Number((now - this.preDebugTime) / 1000).toFixed(2);
     this.preDebugTime = now;
-    this.getLog().log('[Verbose]', `${diffTime}s`, ...args);
+    this.getLog().log('[Verbose]', this.execId, `+${diffTime}s`, ...args, stack);
+  }
+
+  getStackTrace() {
+    if (!Error.captureStackTrace) {
+        return {};
+    }
+    const obj: any = {};
+    Error.captureStackTrace(obj, this.getStackTrace);
+    if (!obj.stack || !obj.stack.split) {
+        return {};
+    }
+    const stackStr = obj.stack.split('\n');
+    if (!stackStr || !stackStr[2]) {
+        return {};
+    }
+    const matchReg = /(?:-plugin-|\/faas-cli-command-)(\w+)\/(.*?):(\d+):\d+/;
+    if (!matchReg.test(stackStr[2])) {
+        return {};
+    }
+    const matchResult = matchReg.exec(stackStr[2]);
+    return {
+        type: matchResult[1],
+        path: matchResult[2],
+        line: matchResult[3]
+    }
   }
 }
