@@ -1,5 +1,5 @@
 {
-  "name": "@midwayjs/gateway-core",
+  "name": "@midwayjs/gateway-common-core",
   "version": "0.2.76",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -11,7 +11,7 @@
     "express": "^4.17.1",
     "koa": "^2.11.0",
     "koa-bodyparser": "^4.2.1",
-    "midway-bin": "2"
+    "midway-bin": "^2.0.0"
   },
   "files": [
     "dist",

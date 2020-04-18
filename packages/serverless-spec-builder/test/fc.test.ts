@@ -12,6 +12,7 @@ describe('/test/fc.test.ts', () => {
     assert(funResult['Properties']['Initializer'] === 'index.initializer');
     assert(funResult['Properties']['Handler'] === 'index.handler');
     assert(funResult['Properties']['Runtime'] === 'nodejs10');
+    assert(funResult['Properties']['InstanceConcurrency'] === 2);
     assert.deepStrictEqual(funResult['Events'], {});
   });
 
@@ -47,6 +48,25 @@ describe('/test/fc.test.ts', () => {
         Properties: {
           AuthType: 'ANONYMOUS',
           Methods: ['GET'],
+        },
+        Type: 'HTTP',
+      },
+    });
+
+    // second function
+    const funResult2 = result['Resources']['serverless-hello-world']['index2'];
+    assert(funResult2['Type'] === 'Aliyun::Serverless::Function');
+    assert(funResult2['Properties']['Initializer'] === 'index.initializer');
+    assert(funResult2['Properties']['Handler'] === 'index.handler');
+    assert(funResult2['Properties']['Runtime'] === 'nodejs10');
+
+    assert.deepStrictEqual(funResult2['Events'], {
+      'http-index2': {
+        Properties: {
+          AuthType: 'ANONYMOUS',
+          Methods: ['POST'],
+          InvocationRole: 'acs:ram::1234567890:role/fc-invoke-test',
+          Qualifier: 'LATEST',
         },
         Type: 'HTTP',
       },
@@ -126,6 +146,50 @@ describe('/test/fc.test.ts', () => {
             },
           },
           InvocationRole: 'acs:ram::1234567890:role/fc-invoke-test',
+          Qualifier: 'LATEST',
+        },
+      },
+    });
+  });
+
+  it('test transform mq event', () => {
+    const result = generateFunctionsSpec(
+      path.join(__dirname, './fixtures/fc/f-event-mq.yml')
+    );
+    const funResult = result['Resources']['serverless-hello-world']['index'];
+    assert(funResult['Type'] === 'Aliyun::Serverless::Function');
+    assert(funResult['Properties']['Handler'] === 'index.handler');
+    assert(funResult['Properties']['Runtime'] === 'nodejs10');
+
+    assert.deepStrictEqual(funResult['Events'], {
+      mq: {
+        Type: 'MNSTopic',
+        Properties: {
+          NotifyContentFormat: 'JSON',
+          NotifyStrategy: 'BACKOFF_RETRY',
+          Region: 'cn-shanghai',
+          TopicName: 'test-topic',
+        },
+      },
+    });
+  });
+
+  it('test transform timer event', () => {
+    const result = generateFunctionsSpec(
+      path.join(__dirname, './fixtures/fc/f-event-timer.yml')
+    );
+    const funResult = result['Resources']['serverless-hello-world']['index'];
+    assert(funResult['Type'] === 'Aliyun::Serverless::Function');
+    assert(funResult['Properties']['Handler'] === 'index.handler');
+    assert(funResult['Properties']['Runtime'] === 'nodejs10');
+
+    assert.deepStrictEqual(funResult['Events'], {
+      timer: {
+        Type: 'Timer',
+        Properties: {
+          CronExpression: '@every 1m',
+          Enable: false,
+          Payload: 'awesome-fc',
           Qualifier: 'LATEST',
         },
       },

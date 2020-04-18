@@ -5,7 +5,7 @@ import {
   ExpressGatewayAdapter,
   InvokeCallback,
   KoaGatewayAdapter,
-} from '@midwayjs/gateway-core';
+} from '@midwayjs/gateway-common-core';
 import { Context } from 'koa';
 import { NextFunction, Request, Response } from 'express';
 import { parseInvokeOptionsByOriginUrl } from './common';

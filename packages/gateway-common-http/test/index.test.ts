@@ -3,7 +3,10 @@ import { isMatch } from 'micromatch';
 import * as minimatch from 'minimatch';
 import * as picomatch from 'picomatch';
 import * as assert from 'assert';
-import { createExpressSuit, createKoaSuit } from '@midwayjs/gateway-core';
+import {
+  createExpressSuit,
+  createKoaSuit,
+} from '@midwayjs/gateway-common-core';
 
 describe('/test/index.test.ts', () => {
   describe('test url match', () => {
@@ -54,7 +57,7 @@ describe('/test/index.test.ts', () => {
   });
 
   describe('test express', () => {
-    it('test /server/user/info', done => {
+    it('test /server/user/info', (done) => {
       createExpressSuit({
         functionDir: join(__dirname, './fixtures/ice-demo-repo'),
         sourceDir: 'src/apis',
@@ -70,7 +73,7 @@ describe('/test/index.test.ts', () => {
         .expect(200, done);
     });
 
-    it('test /* router', done => {
+    it('test /* router', (done) => {
       createExpressSuit({
         functionDir: join(__dirname, './fixtures/ice-demo-repo'),
         sourceDir: 'src/apis',
@@ -83,7 +86,7 @@ describe('/test/index.test.ts', () => {
         .expect(200, done);
     });
 
-    it('test /api/* router', done => {
+    it('test /api/* router', (done) => {
       createExpressSuit({
         functionDir: join(__dirname, './fixtures/ice-demo-repo'),
         sourceDir: 'src/apis',
@@ -96,7 +99,7 @@ describe('/test/index.test.ts', () => {
         .expect(200, done);
     });
 
-    it('test /api/a/b/c router', done => {
+    it('test /api/a/b/c router', (done) => {
       createExpressSuit({
         functionDir: join(__dirname, './fixtures/ice-demo-repo'),
         sourceDir: 'src/apis',
@@ -109,7 +112,7 @@ describe('/test/index.test.ts', () => {
         .expect(200, done);
     });
 
-    it('test /api/a/b/c/d router must match /api/* not /api/a/b/c', done => {
+    it('test /api/a/b/c/d router must match /api/* not /api/a/b/c', (done) => {
       createExpressSuit({
         functionDir: join(__dirname, './fixtures/ice-demo-repo'),
         sourceDir: 'src/apis',
@@ -120,7 +123,7 @@ describe('/test/index.test.ts', () => {
     });
   });
 
-  it('should invoke by http api and koa', done => {
+  it('should invoke by http api and koa', (done) => {
     createKoaSuit({
       functionDir: join(__dirname, './fixtures/ice-demo-repo'),
       sourceDir: 'src/apis',
@@ -137,7 +140,7 @@ describe('/test/index.test.ts', () => {
   });
 
   describe('test koa ignore pattern', () => {
-    it('should test ignore pattern', done => {
+    it('should test ignore pattern', (done) => {
       createKoaSuit({
         functionDir: join(__dirname, './fixtures/ice-demo-repo'),
         sourceDir: 'src/apis',
@@ -148,11 +151,11 @@ describe('/test/index.test.ts', () => {
         .expect(404, done);
     });
 
-    it('should test ignore pattern by function', done => {
+    it('should test ignore pattern by function', (done) => {
       createKoaSuit({
         functionDir: join(__dirname, './fixtures/ice-demo-repo'),
         sourceDir: 'src/apis',
-        ignorePattern: req => {
+        ignorePattern: (req) => {
           return /\.do/.test(req.url);
         },
       })
@@ -161,7 +164,7 @@ describe('/test/index.test.ts', () => {
         .expect(404, done);
     });
 
-    it('should support ignore wildcard function', done => {
+    it('should support ignore wildcard function', (done) => {
       createKoaSuit({
         functionDir: join(__dirname, './fixtures/ice-demo-repo'),
         sourceDir: 'src/apis',
@@ -174,7 +177,7 @@ describe('/test/index.test.ts', () => {
   });
 
   describe('test express ignore pattern', () => {
-    it('should test ignore pattern', done => {
+    it('should test ignore pattern', (done) => {
       createExpressSuit({
         functionDir: join(__dirname, './fixtures/ice-demo-repo'),
         sourceDir: 'src/apis',
@@ -185,11 +188,11 @@ describe('/test/index.test.ts', () => {
         .expect(404, done);
     });
 
-    it('should test ignore pattern by function', done => {
+    it('should test ignore pattern by function', (done) => {
       createExpressSuit({
         functionDir: join(__dirname, './fixtures/ice-demo-repo'),
         sourceDir: 'src/apis',
-        ignorePattern: req => {
+        ignorePattern: (req) => {
           return /\.do/.test(req.url);
         },
       })
@@ -198,7 +201,7 @@ describe('/test/index.test.ts', () => {
         .expect(404, done);
     });
 
-    it('should support ignore wildcard function', done => {
+    it('should support ignore wildcard function', (done) => {
       createExpressSuit({
         functionDir: join(__dirname, './fixtures/ice-demo-repo'),
         sourceDir: 'src/apis',

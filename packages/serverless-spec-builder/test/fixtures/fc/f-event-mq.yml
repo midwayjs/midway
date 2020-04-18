@@ -7,7 +7,10 @@ provider:
 functions:
   index:
     handler: index.handler
-    concurrency: 2
+    events:
+      - mq:
+          topic: test-topic
+          region: cn-shanghai
 
 package:
   artifact: code.zip

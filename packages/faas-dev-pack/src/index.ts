@@ -1,9 +1,9 @@
-import { getGatewayFromConfig, resolveModule, invokeFunction } from './common';
+import { resolveModule, invokeFunction } from './common';
 import {
   DevPackOptions,
   CreateExpressGateway,
   CreateKoaGateway,
-} from '@midwayjs/gateway-core';
+} from '@midwayjs/gateway-common-core';
 import { NextFunction, Request, Response } from 'express';
 import { Context } from 'koa';
 import * as koaBodyParser from 'koa-bodyparser';
@@ -18,11 +18,7 @@ export function useExpressDevPack(options: DevPackOptions) {
     expressBodyParser.urlencoded({ extended: false }),
     expressBodyParser.json(),
     async (req: Request, res: Response, next: NextFunction) => {
-      const gatewayName = await getGatewayFromConfig(
-        options.functionDir,
-        options.sourceDir,
-        req
-      );
+      const gatewayName = 'http';
       if (!gatewayName) {
         return next();
       }
@@ -44,11 +40,7 @@ export function useKoaDevPack(options: DevPackOptions) {
       enableTypes: ['form', 'json'],
     }),
     async (ctx: Context, next: () => Promise<any>) => {
-      const gatewayName = await getGatewayFromConfig(
-        options.functionDir,
-        options.sourceDir,
-        ctx.request
-      );
+      const gatewayName = 'http';
       if (!gatewayName) {
         await next();
       } else {

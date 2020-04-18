@@ -12,5 +12,14 @@ functions:
           method: get
           path: /
 
+  index2:
+    handler: index.handler
+    events:
+      - http:
+          method: post
+          path: /api
+          role: 'acs:ram::1234567890:role/fc-invoke-test'
+          version: LATEST
+
 package:
   artifact: code.zip

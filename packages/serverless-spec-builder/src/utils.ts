@@ -44,3 +44,11 @@ export function uppercaseObjectKey(obj) {
     return JSON.parse(result);
   }
 }
+
+export function safeAttachPropertyValue(obj, key, value) {
+  if (!obj) return;
+  if (value === null || value === undefined) {
+    return;
+  }
+  obj[key] = value;
+}

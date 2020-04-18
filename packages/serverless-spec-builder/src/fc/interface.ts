@@ -89,9 +89,17 @@ export interface FCFunctionSpec {
     Timeout?: number;
     InitializationTimeout?: number;
     EnvironmentVariables?: object;
+    InstanceConcurrency?: number;
   };
   Events?: {
-    [eventName: string]: FCHTTPEvent | FCTimerEvent | FCOSSEvent | FCLOGEvent;
+    [eventName: string]:
+      | FCHTTPEvent
+      | FCTimerEvent
+      | FCOSSEvent
+      | FCLOGEvent
+      | FCMNSTopicEvent
+      | FCRDSEvent
+      | FCTableStoreEvent;
   };
 }
 
@@ -102,6 +110,8 @@ export interface FCHTTPEvent {
   Properties: {
     AuthType?: 'ANONYMOUS' | 'FUNCTION';
     Methods?: HTTPEventType[];
+    InvocationRole?: string;
+    Qualifier?: string;
   };
 }
 
@@ -148,6 +158,44 @@ export interface FCTimerEvent {
     CronExpression: string;
     Enable?: boolean;
     Payload?: string;
+    InvocationRole?: string;
+    Qualifier?: string;
+  };
+}
+
+export interface FCMNSTopicEvent {
+  Type: 'MNSTopic';
+  Properties: {
+    TopicName: string;
+    Region?: string;
+    NotifyContentFormat?: 'STREAM' | 'JSON';
+    NotifyStrategy?: string | 'BACKOFF_RETRY' | 'EXPONENTIAL_DECAY_RETRY';
+    FilterTag?: string;
+    InvocationRole?: string;
+    Qualifier?: string;
+  };
+}
+
+export interface FCRDSEvent {
+  Type: 'RDS';
+  Properties: {
+    InstanceId: string;
+    SubscriptionObjects: string[];
+    Retry?: string;
+    Concurrency?: string;
+    EventFormat?: 'json' | 'protobuf';
+    InvocationRole?: string;
+    Qualifier?: string;
+  };
+}
+
+export interface FCTableStoreEvent {
+  Type: 'TableStore';
+  Properties: {
+    InstanceName: string;
+    TableName: string;
+    InvocationRole?: string;
+    Qualifier?: string;
   };
 }
 

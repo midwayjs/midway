@@ -18,7 +18,7 @@ export interface FunctionsStructure {
   [functionName: string]: FunctionStructure;
 }
 
-export type EventTypeKey = 'http' | 'timer' | 'os' | 'log' | 'apigw';
+export type EventTypeKey = 'http' | 'timer' | 'os' | 'log' | 'apigw' | 'mq';
 
 export type EventType =
   | HTTPEvent
@@ -34,6 +34,8 @@ export interface EventStructureType {
 export interface HTTPEvent {
   path?: string;
   method?: string | string[];
+  role?: string;
+  version?: string;
 }
 
 // 定时任务
@@ -41,6 +43,8 @@ export interface TimerEvent {
   type: 'cron' | 'every' | 'interval';
   value: string;
   payload?: string;
+  version?: string;
+  enable?: boolean;
 }
 
 // 日志
@@ -68,6 +72,15 @@ export interface OSEvent {
   version?: string;
 }
 
+export interface MQEvent {
+  topic: string;
+  tags?: string;
+  region?: string;
+  strategy?: string;
+  role?: string;
+  version?: string;
+}
+
 // API 网关
 export interface APIGatewayEvent {}
 
@@ -83,6 +96,7 @@ export interface FunctionStructure {
     [key: string]: string;
   };
   events?: EventStructureType[];
+  concurrency?: number;
 }
 
 export interface LayersStructure {

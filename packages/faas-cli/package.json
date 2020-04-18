@@ -7,6 +7,7 @@
     "@midwayjs/fcli-command-core": "^0.2.76",
     "@midwayjs/fcli-plugin-create": "^0.2.76",
     "@midwayjs/fcli-plugin-deploy": "^0.2.76",
+    "@midwayjs/fcli-plugin-dev-pack": "^0.2.76",
     "@midwayjs/fcli-plugin-fc": "^0.2.76",
     "@midwayjs/fcli-plugin-invoke": "^0.2.76",
     "@midwayjs/fcli-plugin-package": "^0.2.76",

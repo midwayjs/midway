@@ -8,8 +8,14 @@ import {
   FCProviderStructure,
 } from './interface';
 import { SpecBuilder } from '../builder';
-import { HTTPEvent, TimerEvent, LogEvent, OSEvent } from '../interface';
-import { uppercaseObjectKey } from '../utils';
+import {
+  HTTPEvent,
+  TimerEvent,
+  LogEvent,
+  OSEvent,
+  MQEvent,
+} from '../interface';
+import { uppercaseObjectKey, safeAttachPropertyValue } from '../utils';
 
 export class FCSpecBuilder extends SpecBuilder {
   toJSON() {
@@ -59,6 +65,7 @@ export class FCSpecBuilder extends SpecBuilder {
             ...providerData.environment,
             ...funSpec.environment,
           },
+          InstanceConcurrency: funSpec.concurrency || 1,
         },
         Events: {},
       };
@@ -73,6 +80,10 @@ export class FCSpecBuilder extends SpecBuilder {
               Methods: convertMethods(evt.method),
             },
           };
+          const properties =
+            functionTemplate.Events['http-' + funName]['Properties'];
+          safeAttachPropertyValue(properties, 'InvocationRole', evt.role);
+          safeAttachPropertyValue(properties, 'Qualifier', evt.version);
 
           httpEventRouters[evt.path] = {
             serviceName,
@@ -82,15 +93,19 @@ export class FCSpecBuilder extends SpecBuilder {
 
         if (event['timer']) {
           const evt = event['timer'] as TimerEvent;
+
           functionTemplate.Events['timer'] = {
             Type: 'Timer',
             Properties: {
               CronExpression:
                 evt.type === 'every' ? `@every ${evt.value}` : evt.value,
-              Enable: true,
+              Enable: evt.enable === false ? false : true,
               Payload: evt.payload,
             },
           };
+          const properties = functionTemplate.Events['timer']['Properties'];
+          // safeAttachPropertyValue(properties, 'InvocationRole', evt.role);
+          safeAttachPropertyValue(properties, 'Qualifier', evt.version);
         }
 
         if (event['log']) {
@@ -114,6 +129,9 @@ export class FCSpecBuilder extends SpecBuilder {
               Qualifier: evt.version,
             },
           };
+          const properties = functionTemplate.Events['log']['Properties'];
+          safeAttachPropertyValue(properties, 'InvocationRole', evt.role);
+          safeAttachPropertyValue(properties, 'Qualifier', evt.version);
         }
 
         const osEvent = event['os'] || event['oss'] || event['cos'];
@@ -134,15 +152,26 @@ export class FCSpecBuilder extends SpecBuilder {
               Enable: true,
             },
           };
+          const properties = functionTemplate.Events['oss']['Properties'];
+          safeAttachPropertyValue(properties, 'InvocationRole', evt.role);
+          safeAttachPropertyValue(properties, 'Qualifier', evt.version);
+        }
 
-          if (evt.role) {
-            functionTemplate.Events['oss']['Properties']['InvocationRole'] =
-              evt.role;
-          }
-          if (evt.version) {
-            functionTemplate.Events['oss']['Properties']['Qualifier'] =
-              evt.version;
-          }
+        if (event['mq']) {
+          const evt = event['mq'] as MQEvent;
+          functionTemplate.Events['mq'] = {
+            Type: 'MNSTopic',
+            Properties: {
+              TopicName: evt.topic,
+              NotifyContentFormat: 'JSON',
+              NotifyStrategy: evt.strategy || 'BACKOFF_RETRY',
+            },
+          };
+          const properties = functionTemplate.Events['mq']['Properties'];
+          safeAttachPropertyValue(properties, 'Region', evt.region);
+          safeAttachPropertyValue(properties, 'FilterTag', evt.tags);
+          safeAttachPropertyValue(properties, 'InvocationRole', evt.role);
+          safeAttachPropertyValue(properties, 'Qualifier', evt.version);
         }
       }
 

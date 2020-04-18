@@ -15,7 +15,7 @@
     "opencollective-postinstall": "^2.0.2",
     "rimraf": "^3.0.0",
     "typedoc": "^0.11.0",
-    "typescript": "^3.5.1"
+    "typescript": "^3.8.3"
   },
   "scripts": {
     "autod": "lerna run autod",

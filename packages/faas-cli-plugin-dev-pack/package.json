@@ -1,0 +1,32 @@
+{
+  "name": "@midwayjs/fcli-plugin-dev-pack",
+  "version": "0.2.76",
+  "description": "faas cli dev pack",
+  "keywords": [
+    "faas",
+    "devpack"
+  ],
+  "license": "MIT",
+  "main": "dist/index",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "dependencies": {
+    "@midwayjs/faas-dev-pack": "^0.2.76",
+    "@midwayjs/fcli-command-core": "^0.2.76",
+    "koa": "^2.11.0",
+    "koa-onerror": "^4.1.0"
+  },
+  "devDependencies": {
+    "midway-bin": "^2.0.0"
+  },
+  "scripts": {
+    "build": " midway-bin build -c",
+    "test": "NODE_ENV=test midway-bin test --ts --full-trace",
+    "cov": "NODE_ENV=unittest midway-bin cov --ts",
+    "clean": "midway-bin clean",
+    "autod": "midway-bin autod"
+  }
+}

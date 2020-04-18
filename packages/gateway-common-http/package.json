@@ -1,18 +1,18 @@
 {
-  "name": "@midwayjs/gateway-http",
+  "name": "@midwayjs/gateway-common-http",
   "version": "0.2.76",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@midwayjs/serverless-invoke": "^0.2.76",
-    "@midwayjs/gateway-core": "^0.2.76",
+    "@midwayjs/gateway-common-core": "^0.2.76",
     "@midwayjs/serverless-spec-builder": "^0.2.76",
     "picomatch": "^2.2.1"
   },
   "devDependencies": {
     "@midwayjs/faas": "^0.2.76",
     "micromatch": "^4.0.2",
-    "midway-bin": "2",
+    "midway-bin": "^2.0.0",
     "minimatch": "^3.0.4"
   },
   "files": [

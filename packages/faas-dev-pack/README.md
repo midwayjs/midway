@@ -32,7 +32,7 @@ DevOptions
 ```ts
 export interface DevOptions {
   functionDir: string; // 本地目录，默认 process.cwd()
-  sourceDir?: string; // 一体化调用是，需要知道当前的函数目录结构
+  sourceDir?: string; // 一体化调用时，需要知道当前的函数目录结构
 }
 ```
 

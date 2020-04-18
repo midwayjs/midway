@@ -1,4 +1,4 @@
-import { DevPackOptions, InvokeOptions } from '@midwayjs/gateway-core';
+import { DevPackOptions, InvokeOptions } from '@midwayjs/gateway-common-core';
 import { isMatch } from 'picomatch';
 import * as qs from 'querystring';
 import { getFuncList } from '@midwayjs/serverless-invoke';

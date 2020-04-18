@@ -4,7 +4,10 @@ import { execSync } from 'child_process';
 
 const plugins = {
   create: { mod: '@midwayjs/fcli-plugin-create', name: 'CreatePlugin' },
-  invoke: { mod: '@midwayjs/fcli-plugin-invoke', name: 'FaaSInvokePlugin' },
+  invoke: [
+    { mod: '@midwayjs/fcli-plugin-invoke', name: 'FaaSInvokePlugin' },
+    { mod: '@midwayjs/fcli-plugin-dev-pack', name: 'DevPackPlugin' },
+  ],
   test: { mod: '@midwayjs/fcli-plugin-test', name: 'TestPlugin' },
   package: [
     { mod: '@midwayjs/fcli-plugin-package', name: 'PackagePlugin' },
@@ -37,7 +40,7 @@ export class CLI extends BaseCLI {
         needLoad = needLoad.concat(plugins[cmd]);
       });
     }
-    needLoad.forEach(pluginInfo => {
+    needLoad.forEach((pluginInfo) => {
       try {
         const mod = require(pluginInfo.mod);
         if (mod[pluginInfo.name]) {
@@ -69,9 +72,7 @@ export class CLI extends BaseCLI {
   displayVersion() {
     const log = this.loadLog();
     try {
-      const nodeVersion = execSync('node -v')
-        .toString()
-        .replace('\n', '');
+      const nodeVersion = execSync('node -v').toString().replace('\n', '');
       log.log('Node.js'.padEnd(20) + nodeVersion);
     } catch (E) {}
 
