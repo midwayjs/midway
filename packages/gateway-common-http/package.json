@@ -27,5 +27,6 @@
     "clean": "midway-bin clean",
     "autod": "midway-bin autod"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "gitHead": "5783f06ff0298f0e172f801cae053c3fc80813a9"
 }

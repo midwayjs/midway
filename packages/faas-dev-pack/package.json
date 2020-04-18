@@ -36,7 +36,5 @@
     "autod": "midway-bin autod"
   },
   "license": "MIT",
-  "publishConfig": {
-    "registry": "http://registry.npm.alibaba-inc.com"
-  }
+  "gitHead": "5783f06ff0298f0e172f801cae053c3fc80813a9"
 }

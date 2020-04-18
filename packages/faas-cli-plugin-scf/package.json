@@ -28,5 +28,6 @@
     "cov": "NODE_ENV=unittest midway-bin cov --ts",
     "clean": "midway-bin clean",
     "autod": "midway-bin autod"
-  }
+  },
+  "gitHead": "5783f06ff0298f0e172f801cae053c3fc80813a9"
 }
