@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.79](https://github.com/midwayjs/midway-faas/compare/v0.2.78...v0.2.79) (2020-04-19)
+
+
+### Features
+
+* add tecent def ([#135](https://github.com/midwayjs/midway-faas/issues/135)) ([8a5a28d](https://github.com/midwayjs/midway-faas/commit/8a5a28df17e3a1b28cf8e7f32aacaf791bf048e8))
+
+
+
+
+
 ## [0.2.78](https://github.com/midwayjs/midway-faas/compare/v0.2.77...v0.2.78) (2020-04-18)
 
 **Note:** Version bump only for package @midwayjs/serverless-spec-builder
