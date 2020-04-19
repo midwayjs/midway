@@ -45,10 +45,52 @@ export function uppercaseObjectKey(obj) {
   }
 }
 
-export function safeAttachPropertyValue(obj, key, value) {
-  if (!obj) return;
-  if (value === null || value === undefined) {
-    return;
+export function removeObjectEmptyAttributes(obj) {
+  function isObjectEmpty(el) {
+    return el !== null && el !== undefined && el !== '';
   }
-  obj[key] = value;
+
+  function removeEmptyArray(arr) {
+    const newArr = [];
+
+    for (const ele of arr) {
+      if (ele && typeof ele === 'object') {
+        const el = removeObjectEmptyAttributes(ele);
+        if (isObjectEmpty(el)) {
+          newArr.push(el);
+        }
+      } else if (isObjectEmpty(ele)) {
+        newArr.push(ele);
+      }
+    }
+    if (newArr.length) {
+      return newArr;
+    }
+  }
+
+  function removeEmptyObject(obj) {
+    const newObj = {};
+    Object.keys(obj).forEach((key) => {
+      if (obj[key] && typeof obj[key] === 'object') {
+        if (Array.isArray(obj[key])) {
+          const arr = removeEmptyArray(obj[key]);
+          if (arr) {
+            newObj[key] = arr;
+          }
+        } else {
+          const ele = removeEmptyObject(obj[key]); // recurse
+          if (ele) {
+            newObj[key] = ele;
+          }
+        }
+      } else if (isObjectEmpty(obj[key])) {
+        newObj[key] = obj[key]; // copy value
+      }
+    });
+    if (Object.keys(newObj).length > 0) {
+      return newObj;
+    }
+  }
+
+  return removeEmptyObject(obj);
 }

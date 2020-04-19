@@ -1,4 +1,4 @@
-import { uppercaseObjectKey } from '../src/utils';
+import { uppercaseObjectKey, removeObjectEmptyAttributes } from '../src/utils';
 import { deepStrictEqual } from 'assert';
 
 describe('/test/utils.test.ts', () => {
@@ -19,5 +19,21 @@ describe('/test/utils.test.ts', () => {
       Bbbb: 2,
       Ddd: ['ccc', { Fff: ['eee'] }],
     });
+  });
+
+  it('empty object', () => {
+    const result = removeObjectEmptyAttributes({
+      a: null,
+      b: 1,
+      c: [
+        {
+          d: [{}],
+          ff: [undefined, null],
+        },
+      ],
+      e: [1, undefined],
+      f: '',
+    });
+    deepStrictEqual(result, { b: 1, e: [1] });
   });
 });

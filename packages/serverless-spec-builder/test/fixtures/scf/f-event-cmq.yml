@@ -1,0 +1,16 @@
+service:
+  name: serverless-hello-world
+
+provider:
+  name: tecent
+  runtime: nodejs10
+
+functions:
+  index:
+    handler: index.handler
+    events:
+      - cmq:
+          topic: test-topic-queue
+          enable: false
+package:
+  artifact: code.zip

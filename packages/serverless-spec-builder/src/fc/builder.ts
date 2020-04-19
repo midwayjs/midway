@@ -15,7 +15,7 @@ import {
   OSEvent,
   MQEvent,
 } from '../interface';
-import { uppercaseObjectKey, safeAttachPropertyValue } from '../utils';
+import { uppercaseObjectKey, removeObjectEmptyAttributes } from '../utils';
 
 export class FCSpecBuilder extends SpecBuilder {
   toJSON() {
@@ -58,9 +58,9 @@ export class FCSpecBuilder extends SpecBuilder {
           Handler: handler,
           Runtime: funSpec.runtime || providerData.runtime || 'nodejs10',
           CodeUri: funSpec.codeUri || '.',
-          Timeout: funSpec.timeout || providerData.timeout || 30,
+          Timeout: funSpec.timeout || providerData.timeout || 3,
           InitializationTimeout: funSpec.initTimeout || 3,
-          MemorySize: funSpec.memorySize || providerData.memorySize || 512,
+          MemorySize: funSpec.memorySize || providerData.memorySize || 128,
           EnvironmentVariables: {
             ...providerData.environment,
             ...funSpec.environment,
@@ -78,12 +78,10 @@ export class FCSpecBuilder extends SpecBuilder {
             Properties: {
               AuthType: 'ANONYMOUS', // 先写死
               Methods: convertMethods(evt.method),
+              InvocationRole: evt.role,
+              Qualifier: evt.version,
             },
           };
-          const properties =
-            functionTemplate.Events['http-' + funName]['Properties'];
-          safeAttachPropertyValue(properties, 'InvocationRole', evt.role);
-          safeAttachPropertyValue(properties, 'Qualifier', evt.version);
 
           httpEventRouters[evt.path] = {
             serviceName,
@@ -101,11 +99,9 @@ export class FCSpecBuilder extends SpecBuilder {
                 evt.type === 'every' ? `@every ${evt.value}` : evt.value,
               Enable: evt.enable === false ? false : true,
               Payload: evt.payload,
+              Qualifier: evt.version,
             },
           };
-          const properties = functionTemplate.Events['timer']['Properties'];
-          // safeAttachPropertyValue(properties, 'InvocationRole', evt.role);
-          safeAttachPropertyValue(properties, 'Qualifier', evt.version);
         }
 
         if (event['log']) {
@@ -129,9 +125,6 @@ export class FCSpecBuilder extends SpecBuilder {
               Qualifier: evt.version,
             },
           };
-          const properties = functionTemplate.Events['log']['Properties'];
-          safeAttachPropertyValue(properties, 'InvocationRole', evt.role);
-          safeAttachPropertyValue(properties, 'Qualifier', evt.version);
         }
 
         const osEvent = event['os'] || event['oss'] || event['cos'];
@@ -150,11 +143,10 @@ export class FCSpecBuilder extends SpecBuilder {
                 },
               },
               Enable: true,
+              InvocationRole: evt.role,
+              Qualifier: evt.version,
             },
           };
-          const properties = functionTemplate.Events['oss']['Properties'];
-          safeAttachPropertyValue(properties, 'InvocationRole', evt.role);
-          safeAttachPropertyValue(properties, 'Qualifier', evt.version);
         }
 
         if (event['mq']) {
@@ -165,13 +157,12 @@ export class FCSpecBuilder extends SpecBuilder {
               TopicName: evt.topic,
               NotifyContentFormat: 'JSON',
               NotifyStrategy: evt.strategy || 'BACKOFF_RETRY',
+              Region: evt.region,
+              FilterTag: evt.tags,
+              InvocationRole: evt.role,
+              Qualifier: evt.version,
             },
           };
-          const properties = functionTemplate.Events['mq']['Properties'];
-          safeAttachPropertyValue(properties, 'Region', evt.region);
-          safeAttachPropertyValue(properties, 'FilterTag', evt.tags);
-          safeAttachPropertyValue(properties, 'InvocationRole', evt.role);
-          safeAttachPropertyValue(properties, 'Qualifier', evt.version);
         }
       }
 
@@ -199,7 +190,7 @@ export class FCSpecBuilder extends SpecBuilder {
       } as FCCustomDomainSpec;
     }
 
-    return template;
+    return removeObjectEmptyAttributes(template);
   }
 }
 

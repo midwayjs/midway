@@ -12,6 +12,7 @@ export interface ProviderStructure {
   environment?: {
     [key: string]: string;
   };
+  serviceId?: string;
 }
 
 export interface FunctionsStructure {
@@ -36,11 +37,15 @@ export interface HTTPEvent {
   method?: string | string[];
   role?: string;
   version?: string;
+  serviceId?: string;
+  cors?: boolean;
+  timeout?: number;
+  integratedResponse?: boolean;
 }
 
 // 定时任务
 export interface TimerEvent {
-  type: 'cron' | 'every' | 'interval';
+  type?: 'cron' | 'every' | 'interval';
   value: string;
   payload?: string;
   version?: string;
@@ -79,10 +84,11 @@ export interface MQEvent {
   strategy?: string;
   role?: string;
   version?: string;
+  enable?: boolean;
 }
 
 // API 网关
-export interface APIGatewayEvent {}
+export interface APIGatewayEvent extends HTTPEvent {}
 
 export interface FunctionStructure {
   handler: string;
@@ -97,6 +103,7 @@ export interface FunctionStructure {
   };
   events?: EventStructureType[];
   concurrency?: number;
+  stage?: string;
 }
 
 export interface LayersStructure {

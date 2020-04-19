@@ -13,7 +13,7 @@ describe('/test/fc.test.ts', () => {
     assert(funResult['Properties']['Handler'] === 'index.handler');
     assert(funResult['Properties']['Runtime'] === 'nodejs10');
     assert(funResult['Properties']['InstanceConcurrency'] === 2);
-    assert.deepStrictEqual(funResult['Events'], {});
+    assert.deepStrictEqual(funResult['Events'], undefined);
   });
 
   it('test transform service properties', () => {
@@ -25,7 +25,7 @@ describe('/test/fc.test.ts', () => {
     assert(funResult['Properties']['Initializer'] === 'index.initializer');
     assert(funResult['Properties']['Handler'] === 'index.handler');
     assert(funResult['Properties']['Runtime'] === 'nodejs10');
-    assert.deepStrictEqual(funResult['Events'], {});
+    assert.deepStrictEqual(funResult['Events'], undefined);
     const properties =
       result['Resources']['serverless-hello-world']['Properties'];
     assert(properties['VpcConfig']);
@@ -102,7 +102,7 @@ describe('/test/fc.test.ts', () => {
     assert(funResult['Properties']['Initializer'] === 'index.initializer');
     assert(funResult['Properties']['Handler'] === 'index.handler');
     assert(funResult['Properties']['Runtime'] === 'nodejs10');
-    assert.deepStrictEqual(funResult['Events'], {});
+    assert.deepStrictEqual(funResult['Events'], undefined);
   });
 
   it('test transform environment', () => {
