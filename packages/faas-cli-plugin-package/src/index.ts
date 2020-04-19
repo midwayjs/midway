@@ -441,7 +441,7 @@ export class PackagePlugin extends BasePlugin {
       if (!existsSync(pkgJson)) {
         writeFileSync(pkgJson, '{}');
       }
-      const register = this.options.register ? ` --registry=${this.options.register}` : '';
+      const registry = this.options.registry ? ` --registry=${this.options.registry}` : '';
       exec(
         `${this.options.npm || 'npm'} install ${
           options.npmList
@@ -449,7 +449,7 @@ export class PackagePlugin extends BasePlugin {
             : options.production
             ? '--production'
             : ''
-        }${register}`,
+        }${registry}`,
         { cwd: installDirectory },
         err => {
           if (err) {
