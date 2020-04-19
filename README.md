@@ -1,6 +1,6 @@
 
 
-![](https://img.alicdn.com/tfs/TB1y4zbsEY1gK0jSZFMXXaWcVXa-10530-6280.png)
+![](https://img.alicdn.com/tfs/TB1HdniCSf2gK0jSZFPXXXsopXa-1000-353.png)
 
 <p align="center">
   <a href="https://www.npmjs.com/package/@midwayjs/faas" alt="npm version">
