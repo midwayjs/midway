@@ -5,6 +5,10 @@ export function Handler(
   funHandler: string | FuncParams,
   functionOptions?: FuncParams
 ): MethodDecorator {
+  if (typeof funHandler !== 'string' && functionOptions === undefined) {
+    functionOptions = funHandler;
+    funHandler = functionOptions.funHandler;
+  }
   return (target: object, propertykey: string, descriptor: PropertyDescriptor) => {
     // If target is instance, @Func annotate class member method
     saveModule(FUNC_KEY, (target as object).constructor);
