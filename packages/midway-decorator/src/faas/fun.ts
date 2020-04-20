@@ -16,7 +16,7 @@ export function Func(
 ) {
   if (typeof funHandler !== 'string' && functionOptions === undefined) {
     functionOptions = funHandler;
-    funHandler = functionOptions.funHandler;
+    funHandler = functionOptions.funHandler || '';
   }
   return (...args) => {
     const [target, key, descriptor] = args as any;
