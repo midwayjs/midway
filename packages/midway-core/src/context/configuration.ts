@@ -1,7 +1,19 @@
-import { CONFIGURATION_KEY, InjectionConfigurationOptions, getClassMetadata, LIFECYCLE_IDENTIFIER_PREFIX, classNamed, saveModule, saveProviderId } from '@midwayjs/decorator';
+import {
+  CONFIGURATION_KEY,
+  InjectionConfigurationOptions,
+  getClassMetadata,
+  LIFECYCLE_IDENTIFIER_PREFIX,
+  classNamed,
+  saveModule,
+  saveProviderId,
+} from '@midwayjs/decorator';
 import * as is from 'is-type-of';
 import { dirname, isAbsolute, join } from 'path';
-import { IContainerConfiguration, IMidwayContainer, MAIN_MODULE_KEY } from '../interface';
+import {
+  IContainerConfiguration,
+  IMidwayContainer,
+  MAIN_MODULE_KEY,
+} from '../interface';
 import { isPath, safeRequire, generateProvideId } from '../common/util';
 
 const debug = require('debug')('midway:container:configuration');
@@ -44,9 +56,15 @@ export class ContainerConfiguration implements IContainerConfiguration {
   addImportConfigs(importConfigs: string[], baseDir: string) {
     debug('import configs %j baseDir => %s.', importConfigs, baseDir);
     if (importConfigs && importConfigs.length) {
-      this.container.getConfigService().add(importConfigs.map(importConfigPath => {
-        return join(baseDir || this.container.baseDir, importConfigPath);
-      }));
+      this.container.getConfigService().add(
+        importConfigs.map(importConfigPath => {
+          if (isAbsolute(importConfigPath)) {
+            return importConfigPath;
+          } else {
+            return join(baseDir || this.container.baseDir, importConfigPath);
+          }
+        })
+      );
     }
   }
 
@@ -60,8 +78,14 @@ export class ContainerConfiguration implements IContainerConfiguration {
     }
     try {
       return dirname(require.resolve(packageName));
-    } catch (e) { /* ignore */ }
-    return join(baseDir || this.container.baseDir, '../node_modules', packageName);
+    } catch (e) {
+      /* ignore */
+    }
+    return join(
+      baseDir || this.container.baseDir,
+      '../node_modules',
+      packageName
+    );
   }
 
   load(packageName: string) {
@@ -73,15 +97,19 @@ export class ContainerConfiguration implements IContainerConfiguration {
       isSubDir = true;
       pkg = safeRequire(join(packageBaseDir, '../', 'package.json'));
     }
-    debug('safeRequire package.json name-version => %s, from %s.',
-      pkg ? `${pkg.name}-${pkg.version}` : undefined, packageBaseDir);
+    debug(
+      'safeRequire package.json name-version => %s, from %s.',
+      pkg ? `${pkg.name}-${pkg.version}` : undefined,
+      packageBaseDir
+    );
 
     let configuration;
     let cfgFile;
     let loadDir;
     if (pkg) {
       if (this.namespace !== MAIN_MODULE_KEY) {
-        this.namespace = pkg.midwayNamespace !== undefined ? pkg.midwayNamespace : pkg.name;
+        this.namespace =
+          pkg.midwayNamespace !== undefined ? pkg.midwayNamespace : pkg.name;
       }
       if (pkg.main && !isSubDir) {
         packageBaseDir = dirname(join(packageBaseDir, pkg.main));
@@ -101,8 +129,12 @@ export class ContainerConfiguration implements IContainerConfiguration {
       this.addLoadDir(loadDir);
       debug('add loadDir => %s namespace => %s.', loadDir, this.namespace);
     }
-    debug('packageName => %s namespace => %s configuration file => %s.',
-      packageName, this.namespace, configuration ? true : false);
+    debug(
+      'packageName => %s namespace => %s configuration file => %s.',
+      packageName,
+      this.namespace,
+      configuration ? true : false
+    );
     this.loadConfiguration(configuration, packageBaseDir, cfgFile);
   }
 
@@ -117,11 +149,17 @@ export class ContainerConfiguration implements IContainerConfiguration {
         );
         debug('configuration export %j.', configurationOptions);
         if (configurationOptions) {
-          if (this.namespace !== MAIN_MODULE_KEY && configurationOptions.namespace !== undefined) {
+          if (
+            this.namespace !== MAIN_MODULE_KEY &&
+            configurationOptions.namespace !== undefined
+          ) {
             this.namespace = configurationOptions.namespace;
           }
 
-          if (this.container.containsConfiguration(this.namespace) && this.namespace !== '') {
+          if (
+            this.container.containsConfiguration(this.namespace) &&
+            this.namespace !== ''
+          ) {
             debug(`configuration ${this.namespace} exist than ignore.`);
             return;
           } else {
@@ -135,8 +173,10 @@ export class ContainerConfiguration implements IContainerConfiguration {
         }
       }
     } else {
-
-      if (this.container.containsConfiguration(this.namespace) && this.namespace !== '') {
+      if (
+        this.container.containsConfiguration(this.namespace) &&
+        this.namespace !== ''
+      ) {
         debug(`configuration ${this.namespace} exist than ignore.`);
         return;
       } else {
@@ -153,7 +193,10 @@ export class ContainerConfiguration implements IContainerConfiguration {
     const clzzName = `${LIFECYCLE_IDENTIFIER_PREFIX}${classNamed(clzz.name)}`;
     const id = generateProvideId(clzzName, this.namespace);
     saveProviderId(id, clzz, true);
-    this.container.bind(id, clzz, { namespace: this.namespace, srcPath: filePath });
+    this.container.bind(id, clzz, {
+      namespace: this.namespace,
+      srcPath: filePath,
+    });
     saveModule(CONFIGURATION_KEY, clzz);
   }
 

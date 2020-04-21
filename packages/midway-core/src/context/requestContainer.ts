@@ -4,8 +4,7 @@ import { parsePrefix } from '../common/util';
 import { PIPELINE_IDENTIFIER } from '@midwayjs/decorator';
 
 export class MidwayRequestContainer extends MidwayContainer {
-
-  applicationContext: MidwayContainer;
+  private applicationContext: MidwayContainer;
 
   constructor(ctx, applicationContext) {
     super();
@@ -24,11 +23,19 @@ export class MidwayRequestContainer extends MidwayContainer {
     if (this.registry.hasObject(identifier)) {
       return this.registry.getObject(identifier);
     }
-    const definition = this.applicationContext.registry.getDefinition(identifier);
+    const definition = this.applicationContext.registry.getDefinition(
+      identifier
+    );
     if (definition) {
-      if (definition.isRequestScope() || definition.id === PIPELINE_IDENTIFIER) {
+      if (
+        definition.isRequestScope() ||
+        definition.id === PIPELINE_IDENTIFIER
+      ) {
         // create object from applicationContext definition for requestScope
-        return this.getManagedResolverFactory().create({ definition, args });
+        return this.getManagedResolverFactory().create({
+          definition,
+          args,
+        });
       }
     }
 
@@ -48,11 +55,19 @@ export class MidwayRequestContainer extends MidwayContainer {
       return this.registry.getObject(identifier);
     }
 
-    const definition = this.applicationContext.registry.getDefinition(identifier);
+    const definition = this.applicationContext.registry.getDefinition(
+      identifier
+    );
     if (definition) {
-      if (definition.isRequestScope() || definition.id === PIPELINE_IDENTIFIER) {
+      if (
+        definition.isRequestScope() ||
+        definition.id === PIPELINE_IDENTIFIER
+      ) {
         // create object from applicationContext definition for requestScope
-        return this.getManagedResolverFactory().createAsync({ definition, args });
+        return this.getManagedResolverFactory().createAsync({
+          definition,
+          args,
+        });
       }
     }
 
@@ -68,5 +83,13 @@ export class MidwayRequestContainer extends MidwayContainer {
   async ready() {
     this.readied = true;
     // ignore other things
+  }
+
+  get configService() {
+    return this.applicationContext.configService;
+  }
+
+  get environmentService() {
+    return this.applicationContext.environmentService;
   }
 }

@@ -1,7 +1,13 @@
 import { expect } from 'chai';
-import { MidwayContainer as Container, REQUEST_OBJ_CTX_KEY, MidwayRequestContainer as RequestContainer, ScopeEnum } from '../../src';
+import {
+  MidwayContainer as Container,
+  REQUEST_OBJ_CTX_KEY,
+  MidwayRequestContainer as RequestContainer,
+  ScopeEnum,
+} from '../../src';
 import { Inject, Provide, Scope } from '@midwayjs/decorator';
-import { CircularOne,
+import {
+  CircularOne,
   CircularTwo,
   CircularThree,
   TestOne,
@@ -18,19 +24,16 @@ import { CircularOne,
   TenService,
   ScaleManager,
   AutoScaleService,
-  CCController
+  CCController,
 } from '../fixtures/circular_dependency';
 
 class Tracer {
-
   get parentId() {
     return '321';
   }
-
 }
 
 class DataCollector {
-
   id = Math.random();
 
   getData() {
@@ -41,7 +44,6 @@ class DataCollector {
 @Provide('tracer')
 @Scope(ScopeEnum.Request)
 class ChildTracer extends Tracer {
-
   id = Math.random();
 
   @Inject('dataCollector')
@@ -58,11 +60,9 @@ class ChildTracer extends Tracer {
   getData() {
     return this.collector.getData();
   }
-
 }
 
 describe('/test/context/requestContainer.test.ts', () => {
-
   it('should create request container more then once and get same value from parent', async () => {
     const appCtx = new Container();
     appCtx.bind(DataCollector);
@@ -70,8 +70,12 @@ describe('/test/context/requestContainer.test.ts', () => {
 
     const reqCtx1 = new RequestContainer({}, appCtx);
     const reqCtx2 = new RequestContainer({}, appCtx);
-    expect(reqCtx1.get<Tracer>(ChildTracer).parentId).to.equal(reqCtx2.get<Tracer>(ChildTracer).parentId);
-    expect((await reqCtx1.getAsync(ChildTracer)).parentId).to.equal((await reqCtx2.getAsync(ChildTracer)).parentId);
+    expect(reqCtx1.get<Tracer>(ChildTracer).parentId).to.equal(
+      reqCtx2.get<Tracer>(ChildTracer).parentId
+    );
+    expect((await reqCtx1.getAsync(ChildTracer)).parentId).to.equal(
+      (await reqCtx2.getAsync(ChildTracer)).parentId
+    );
   });
 
   it('should get same object in same request context', async () => {
@@ -145,8 +149,8 @@ describe('/test/context/requestContainer.test.ts', () => {
     const tracer1 = await reqCtx1.getAsync('tracer');
     const tracer2 = await reqCtx2.getAsync('tracer');
 
-    expect(tracer1[ REQUEST_OBJ_CTX_KEY ]).to.equal(ctx1);
-    expect(tracer2[ REQUEST_OBJ_CTX_KEY ]).to.equal(ctx2);
+    expect(tracer1[REQUEST_OBJ_CTX_KEY]).to.equal(ctx1);
+    expect(tracer2[REQUEST_OBJ_CTX_KEY]).to.equal(ctx2);
   });
 
   it('circular should be ok in requestContainer', async () => {
@@ -167,7 +171,10 @@ describe('/test/context/requestContainer.test.ts', () => {
     const circularTwo: CircularTwo = await container.getAsync(CircularTwo);
     expect(circularTwo.test2).eq('this is two');
     expect((circularTwo.circularOne as CircularOne).test1).eq('this is one');
-    expect(((circularTwo.circularOne as CircularOne).circularTwo as CircularTwo).test2).eq('this is two');
+    expect(
+      ((circularTwo.circularOne as CircularOne).circularTwo as CircularTwo)
+        .test2
+    ).eq('this is two');
 
     const one = await container.getAsync<TestOne1>(TestOne1);
     expect(one).not.null;
@@ -197,5 +204,26 @@ describe('/test/context/requestContainer.test.ts', () => {
 
     expect(one.autoScaleService.ts).eq('ascale');
     expect(one.autoScaleService.scaleManager.ts).eq('scale');
+  });
+
+  it('test getService in requestContainer', () => {
+    const appCtx = new Container();
+    // 合并 egg config
+    const configService = appCtx.getConfigService();
+    configService.addObject({
+      name: 'zhangting',
+    });
+    appCtx.bind(GatewayManager);
+    appCtx.ready();
+    const ctx1 = { a: 1 };
+    const container = new RequestContainer(ctx1, appCtx);
+    const defaultConfig = container.getConfigService().getConfiguration();
+    expect(defaultConfig.name).to.equal('zhangting');
+    const defaultEnv = container
+      .getEnvironmentService()
+      .getCurrentEnvironment();
+    const currentEnv = container.getCurrentEnv();
+    expect(defaultEnv).to.equal('test');
+    expect(currentEnv).to.equal(defaultEnv);
   });
 });
