@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.17](https://github.com/midwayjs/midway/compare/v2.0.16...v2.0.17) (2020-04-21)
+
+
+### Bug Fixes
+
+* fix export service method ([#477](https://github.com/midwayjs/midway/issues/477)) ([586b0be](https://github.com/midwayjs/midway/commit/586b0be05ee9ef38cef9d312f19de4318c2b1701))
+
+
+
+
+
 ## [2.0.16](https://github.com/midwayjs/midway/compare/v2.0.15...v2.0.16) (2020-04-12)
 
 **Note:** Version bump only for package @midwayjs/core
