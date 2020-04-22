@@ -13,24 +13,32 @@ describe('/test/apigw.test.ts', () => {
       data: [
         {
           headers: {
-            'Content-Type': 'text/json'
+            'Content-Type': 'text/json',
           },
           method: 'POST',
           query: {
-            q: 'testq'
+            q: 'testq',
           },
           pathParameters: {
-            id: 'id'
+            id: 'id',
           },
           path: '/test',
           body: {
-            name: 'test'
-          }
-        }
-      ]
+            name: 'test',
+          },
+        },
+      ],
     });
     const resultBody = JSON.parse(result.body);
-    assert(resultBody.headers['Content-Type'] === 'text/json' && resultBody.query.q === 'testq' && resultBody.method === 'POST' && resultBody.path === '/test' && resultBody.body.name === 'test' && resultBody.params.id === 'id');
+
+    assert(
+      resultBody.headers['content-type'] === 'text/json' &&
+        resultBody.query.q === 'testq' &&
+        resultBody.method === 'POST' &&
+        resultBody.path === '/test' &&
+        resultBody.body.name === 'test' &&
+        resultBody.params.id === 'id'
+    );
   });
 
   it('tencent', async () => {
@@ -43,23 +51,29 @@ describe('/test/apigw.test.ts', () => {
       data: [
         {
           headers: {
-            'Content-Type': 'text/json'
+            'Content-Type': 'text/json',
           },
           method: 'POST',
           query: {
-            q: 'testq'
+            q: 'testq',
           },
           pathParameters: {
-            id: 'id'
+            id: 'id',
           },
           path: '/test',
           body: {
-            name: 'test'
-          }
-        }
-      ]
+            name: 'test',
+          },
+        },
+      ],
     });
     const resultBody = JSON.parse(result.body);
-    assert(resultBody.headers['Content-Type'] === 'text/json' && resultBody.method === 'POST' && resultBody.path === '/test' && resultBody.body.name === 'test' && resultBody.params.id === 'id');
+    assert(
+      resultBody.headers['content-type'] === 'text/json' &&
+        resultBody.method === 'POST' &&
+        resultBody.path === '/test' &&
+        resultBody.body.name === 'test' &&
+        resultBody.params.id === 'id'
+    );
   });
 });

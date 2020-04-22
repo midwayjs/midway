@@ -88,7 +88,7 @@ describe('/test/index.test.ts', () => {
       });
       const res: any = await test(handle).runHttp('', '');
       assert.equal(res.statusCode, 200);
-      assert.equal(res.headers['content-type'], 'text/plain');
+      assert.equal(res.headers['content-type'], 'text/plain; charset=utf-8');
       assert.equal(res.body, 'hello world!');
     });
 
@@ -101,7 +101,7 @@ describe('/test/index.test.ts', () => {
       });
       const res = await test(handle).runHttp('', '');
       assert.equal(res.statusCode, 200);
-      assert.equal(res.headers['content-type'], 'application/json');
+      assert.equal(res.headers['content-type'], 'application/json; charset=utf-8');
       assert.equal(res.body, '{"ok":true}');
     });
 
@@ -115,7 +115,7 @@ describe('/test/index.test.ts', () => {
       });
       const res = await test(handle).runHttp('', '');
       assert.equal(res.statusCode, 200);
-      assert.equal(res.headers['content-type'], 'application/json');
+      assert.equal(res.headers['content-type'], 'application/json; charset=utf-8');
       assert.equal(res.body, '{"ok":true}');
     });
 
@@ -129,7 +129,7 @@ describe('/test/index.test.ts', () => {
       });
       const res = await test(handle).runHttp('', '');
       assert.equal(res.statusCode, 200);
-      assert.equal(res.headers['content-type'], 'application/json');
+      assert.equal(res.headers['content-type'], 'application/json; charset=utf-8');
       assert.equal(res.body, '{"ok":true}');
     });
 

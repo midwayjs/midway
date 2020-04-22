@@ -5,12 +5,11 @@
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@midwayjs/runtime-engine": "^0.2.76",
-    "querystring": "^0.2.0"
+    "@midwayjs/serverless-http-parser": "^0.2.79"
   },
   "devDependencies": {
     "@midwayjs/runtime-mock": "^0.2.76",
-    "midway-bin": "^2.0.0",
-    "raw-body": "^2.4.1"
+    "midway-bin": "^2.0.0"
   },
   "engines": {
     "node": ">= 10"

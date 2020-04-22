@@ -1,5 +1,5 @@
 import { ServerlessLightRuntime } from '@midwayjs/runtime-engine';
-import { Context } from './context';
+import { Context } from '@midwayjs/serverless-http-parser';
 import { SCFContext, SCFHTTPEvent } from './interface';
 
 export class SCFRuntime extends ServerlessLightRuntime {
