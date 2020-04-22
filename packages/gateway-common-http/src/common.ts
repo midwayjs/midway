@@ -47,13 +47,14 @@ export async function parseInvokeOptionsByOriginUrl(
   Object.keys(functions).forEach((functionName) => {
     const functionItem = functions[functionName] || {};
     const event = (functionItem.events || []).find((eventItem: any) => {
-      return eventItem.http;
+      return eventItem.http || eventItem.apigw;
     });
-    if (event?.http) {
+    const eventItem = event?.http || event?.apigw;
+    if (eventItem) {
       urlMatchList.push({
         functionName,
-        originRouter: event?.http?.path || '/*',
-        router: event?.http?.path?.replace(/\/\*$/, '/**') || '/**',
+        originRouter: eventItem.path || '/*',
+        router: eventItem.path?.replace(/\/\*$/, '/**') || '/**',
       });
     }
   });

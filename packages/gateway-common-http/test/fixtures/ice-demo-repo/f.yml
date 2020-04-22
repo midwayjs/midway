@@ -17,7 +17,7 @@ functions:
   test3:
     handler: test3.handler
     events:
-      - http:
+      - apigw:
           path: /api/*
   test4:
     handler: test4.handler
