@@ -16,6 +16,8 @@ const initializeMethod = async (config = {}) => {
     layers: [<%= layers.join(", ") %>]
   });
   starter = new FaaSStarter({ config, baseDir: __dirname });
+  <% loadDirectory.forEach(function(dirName){ %>
+  starter.loader.loadDirectory({ baseDir: '<%=dirName%>'});<% }) %>
   await starter.start();
   inited = true;
 };
@@ -62,8 +64,9 @@ export function writeWrapper(options: {
   distDir: string;
   starter: string;
   cover?: boolean;
+  loadDirectory?: string[];
 }) {
-  const { service, distDir, starter, baseDir, cover } = options;
+  const { service, distDir, starter, baseDir, cover, loadDirectory = [] } = options;
   const files = {};
   const functions = service.functions || {};
   for (const func in functions) {
@@ -107,6 +110,7 @@ export function writeWrapper(options: {
     );
     const content = render(wrapperContent, {
       starter,
+      loadDirectory,
       handlers: files[file].handlers,
       ...layers,
     });

@@ -14,7 +14,7 @@ describe('/test/noyaml.test.ts', () => {
     const result2: any = await invoke({
       functionDir,
       functionName: 'service',
-      clean: false
+      clean: false,
     });
     console.timeEnd('invoke');
     assert(result2.body === 'hello world');
