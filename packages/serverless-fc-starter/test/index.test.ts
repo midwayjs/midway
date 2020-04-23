@@ -59,7 +59,7 @@ function send(request: events.EventEmitter, data: string) {
 describe('/test/index.test.ts', () => {
   describe('wrapper normal event', () => {
     it('should wrap in init function', async () => {
-      const handle = asyncWrapper(async (context) => {
+      const handle = asyncWrapper(async context => {
         return context.data;
       });
       const res: any = await test(handle).run({ data: 1 });
@@ -82,7 +82,7 @@ describe('/test/index.test.ts', () => {
     it('should ok with plain text', async () => {
       const runtime = await start({});
       const handle = asyncWrapper(async (...args) => {
-        return runtime.asyncEvent(async (ctx) => {
+        return runtime.asyncEvent(async ctx => {
           ctx.body = 'hello world!';
         })(...args);
       });
@@ -95,48 +95,57 @@ describe('/test/index.test.ts', () => {
     it('should ok with json', async () => {
       const runtime = await start({});
       const handle = asyncWrapper(async (...args) => {
-        return runtime.asyncEvent(async (ctx) => {
+        return runtime.asyncEvent(async ctx => {
           ctx.body = { ok: true };
         })(...args);
       });
       const res = await test(handle).runHttp('', '');
       assert.equal(res.statusCode, 200);
-      assert.equal(res.headers['content-type'], 'application/json; charset=utf-8');
+      assert.equal(
+        res.headers['content-type'],
+        'application/json; charset=utf-8'
+      );
       assert.equal(res.body, '{"ok":true}');
     });
 
     it('should ok with raw json', async () => {
       const runtime = await start({});
       const handle = asyncWrapper(async (...args) => {
-        return runtime.asyncEvent(async (ctx) => {
+        return runtime.asyncEvent(async ctx => {
           ctx.type = 'application/json';
           ctx.body = '{"ok":true}';
         })(...args);
       });
       const res = await test(handle).runHttp('', '');
       assert.equal(res.statusCode, 200);
-      assert.equal(res.headers['content-type'], 'application/json; charset=utf-8');
+      assert.equal(
+        res.headers['content-type'],
+        'application/json; charset=utf-8'
+      );
       assert.equal(res.body, '{"ok":true}');
     });
 
     it('should ok with raw json/object', async () => {
       const runtime = await start({});
       const handle = asyncWrapper(async (...args) => {
-        return runtime.asyncEvent(async (ctx) => {
+        return runtime.asyncEvent(async ctx => {
           ctx.type = 'application/json';
           ctx.body = { ok: true };
         })(...args);
       });
       const res = await test(handle).runHttp('', '');
       assert.equal(res.statusCode, 200);
-      assert.equal(res.headers['content-type'], 'application/json; charset=utf-8');
+      assert.equal(
+        res.headers['content-type'],
+        'application/json; charset=utf-8'
+      );
       assert.equal(res.body, '{"ok":true}');
     });
 
     it('should ok with Buffer', async () => {
       const runtime = await start({});
       const handle = asyncWrapper(async (...args) => {
-        return runtime.asyncEvent(async (ctx) => {
+        return runtime.asyncEvent(async ctx => {
           ctx.body = Buffer.from('hello world!');
         })(...args);
       });
@@ -149,7 +158,7 @@ describe('/test/index.test.ts', () => {
     it('should ok with context', async () => {
       const runtime = await start({});
       const handle = asyncWrapper(async (...args) => {
-        return runtime.asyncEvent(async (ctx) => {
+        return runtime.asyncEvent(async ctx => {
           ctx.body = ctx.query.requestId;
         })(...args);
       });
@@ -168,7 +177,7 @@ describe('/test/index.test.ts', () => {
     it('should ok with error', async () => {
       const runtime = await start({});
       const handle = asyncWrapper(async (...args) => {
-        return runtime.asyncEvent(async (ctx) => {
+        return runtime.asyncEvent(async ctx => {
           throw new Error('oops');
         })(...args);
       });
@@ -185,7 +194,7 @@ describe('/test/index.test.ts', () => {
     it('should ok with non-async function', async () => {
       const runtime = await start({});
       const handle = asyncWrapper(async (...args) => {
-        return runtime.asyncEvent((ctx) => {})(...args);
+        return runtime.asyncEvent(ctx => {})(...args);
       });
       let err;
       try {
@@ -211,7 +220,7 @@ describe('/test/index.test.ts', () => {
     it('should ok with asyncWrap when error', async () => {
       const runtime = await start({});
       const handle = asyncWrapper(async (...args) => {
-        return runtime.asyncEvent(async (ctx) => {
+        return runtime.asyncEvent(async ctx => {
           throw new Error('ooops!');
         })(...args);
       });
@@ -229,7 +238,7 @@ describe('/test/index.test.ts', () => {
     it('should ok with asyncWrap when not async functions', async () => {
       const runtime = await start({});
       const handle = asyncWrapper(async (...args) => {
-        return runtime.asyncEvent((ctx) => {})(...args);
+        return runtime.asyncEvent(ctx => {})(...args);
       });
       let err;
       try {
@@ -245,7 +254,7 @@ describe('/test/index.test.ts', () => {
     it('GET should ok', async () => {
       const runtime = await start({});
       const handle = asyncWrapper(async (...args) => {
-        return runtime.asyncEvent(async (ctx) => {
+        return runtime.asyncEvent(async ctx => {
           ctx.body = {
             path: ctx.path,
             method: ctx.method,
@@ -276,7 +285,7 @@ describe('/test/index.test.ts', () => {
     it('GET should ok', async () => {
       const runtime = await start({});
       const handle = asyncWrapper(async (...args) => {
-        return runtime.asyncEvent(async (ctx) => {
+        return runtime.asyncEvent(async ctx => {
           ctx.body = {
             path: ctx.path,
             method: ctx.method,
@@ -385,7 +394,7 @@ describe('/test/index.test.ts', () => {
     it('POST should ok use fc request with body', async () => {
       const runtime = await start({});
       const handle = asyncWrapper(async (...args) => {
-        return runtime.asyncEvent(async (ctx) => {
+        return runtime.asyncEvent(async ctx => {
           return ctx.request.body.toString();
         })(...args);
       });

@@ -8,16 +8,14 @@ import { remove, pathExists } from 'fs-extra';
 
 describe('/test/index.test.ts', () => {
   beforeEach(async () => {
-    const dirs = [
-      join(__dirname, './fixtures/ice-demo-repo'),
-    ];
+    const dirs = [join(__dirname, './fixtures/ice-demo-repo')];
     for (const dir of dirs) {
       if (await pathExists(join(dir, '.faas_debug_tmp'))) {
         await remove(join(dir, '.faas_debug_tmp'));
       }
     }
   });
-  it('should invoke by http api and koa', done => {
+  it('should invoke by http api and koa', (done) => {
     const app = new koa();
     app.use(
       useKoaDevPack({
@@ -37,7 +35,7 @@ describe('/test/index.test.ts', () => {
       .expect(200, done);
   });
 
-  it('should invoke by http router /api/*', done => {
+  it('should invoke by http router /api/*', (done) => {
     const app = new koa();
     app.use(
       useKoaDevPack({
@@ -45,13 +43,10 @@ describe('/test/index.test.ts', () => {
         sourceDir: 'src/apis',
       })
     );
-    request(app.callback())
-      .get('/api/test2')
-      .expect(/test2/)
-      .expect(200, done);
+    request(app.callback()).get('/api/test2').expect(/test2/).expect(200, done);
   });
 
-  it('should invoke by http api and express', done => {
+  it('should invoke by http api and express', (done) => {
     const app = express();
     app.use(
       useExpressDevPack({
@@ -71,7 +66,7 @@ describe('/test/index.test.ts', () => {
       .expect(200, done);
   });
 
-  it('should invoke by http api parallel', done => {
+  it('should invoke by http api parallel', (done) => {
     const app = express();
     app.use(
       useExpressDevPack({
@@ -88,7 +83,7 @@ describe('/test/index.test.ts', () => {
         .send({ name: 'one' })
         .expect('Content-type', 'text/html; charset=utf-8')
         .expect(200)
-        .then(response => {
+        .then((response) => {
           return response.text;
         }),
       request(app)
@@ -99,14 +94,14 @@ describe('/test/index.test.ts', () => {
         .send({ name: 'two' })
         .expect('Content-type', 'text/html; charset=utf-8')
         .expect(200)
-        .then(response => {
+        .then((response) => {
           return response.text;
         }),
     ])
-      .then(res => {
+      .then((res) => {
         assert.deepEqual(res, [
-          "one,hello http world,doTest",
-          "two,hello http world,doTest",
+          'one,hello http world,doTest',
+          'two,hello http world,doTest',
         ]);
         done();
       })
