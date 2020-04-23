@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.83](https://github.com/midwayjs/midway-faas/compare/v0.2.82...v0.2.83) (2020-04-23)
+
+
+### Bug Fixes
+
+* ts load dir ([#140](https://github.com/midwayjs/midway-faas/issues/140)) ([354c08c](https://github.com/midwayjs/midway-faas/commit/354c08cd6f7d50918f2393b8dddb90857735d5ac))
+
+
+
+
+
 ## [0.2.82](https://github.com/midwayjs/midway-faas/compare/v0.2.81...v0.2.82) (2020-04-23)
 
 
