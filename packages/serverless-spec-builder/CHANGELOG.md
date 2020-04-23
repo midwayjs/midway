@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.82](https://github.com/midwayjs/midway-faas/compare/v0.2.81...v0.2.82) (2020-04-23)
+
+
+### Bug Fixes
+
+* support typescript run ([#139](https://github.com/midwayjs/midway-faas/issues/139)) ([472c985](https://github.com/midwayjs/midway-faas/commit/472c985d054f452ed79b496d348a95adc754663e))
+
+
+
+
+
 ## [0.2.79](https://github.com/midwayjs/midway-faas/compare/v0.2.78...v0.2.79) (2020-04-19)
 
 
