@@ -21,6 +21,7 @@ import {
   copy,
   mkdirSync,
   ensureDirSync,
+  symlinkSync
 } from 'fs-extra';
 export * from './invoke';
 const commonLock: any = {};
@@ -411,10 +412,17 @@ export class FaaSInvokePlugin extends BasePlugin {
         distDir: this.buildDir,
         starter: starterName,
         loadDirectory: isTsMode ? [
-          this.codeAnalyzeResult.tsCodeRoot,
           resolve(this.defaultTmpFaaSOut, 'src')
         ] : []
       });
+      if (isTsMode) {
+        // ts模式 midway-core 会默认加载入口文件所在目录下的 src 目录里面的ts代码
+        // 因此通过软连接的形式将其与原代码目录进行绑定
+        const symlinkPath = resolve(this.buildDir, 'src');
+        if (!existsSync(symlinkPath)) {
+          symlinkSync(this.codeAnalyzeResult.tsCodeRoot, resolve(this.buildDir, 'src'));
+        }
+      }
     } else {
       copy(userEntry, fileName);
     }

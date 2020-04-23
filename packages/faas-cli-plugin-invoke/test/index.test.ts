@@ -26,6 +26,7 @@ describe('/test/index.test.ts', () => {
     });
     console.log('result', result);
     assert(existsSync(join(__dirname, 'fixtures/baseApp/.faas_debug_tmp')));
+    assert(existsSync(join(__dirname, 'fixtures/baseApp/.faas_debug_tmp/src/index.ts')));
     assert(result && result.body === 'hello http world');
     await remove(join(__dirname, 'fixtures/baseApp/.faas_debug_tmp'));
   });
