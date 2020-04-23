@@ -434,7 +434,7 @@ export class CommandHookCore implements ICommandHooksCore {
 
   debug(...args) {
 
-    const verbose = this.options.options.V || this.options.options.verbose;
+    const verbose = this.options.options.V || this.options.options.verbose || process.env.MIDWAY_FAAS_VERBOSE;
     if (!verbose) {
         return;
     }

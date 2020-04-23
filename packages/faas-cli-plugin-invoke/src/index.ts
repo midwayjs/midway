@@ -226,6 +226,7 @@ export class FaaSInvokePlugin extends BasePlugin {
     const specFile = this.core.config.specFile.path;
     // 只有当非首次调用时才会进行增量分析，其他情况均进行全量分析
     if (existsSync(buildLockPath)) {
+      this.core.debug('buildLockPath', buildLockPath);
       this.fileChanges = await compareFileChange(
         [
           specFile,
@@ -253,6 +254,7 @@ export class FaaSInvokePlugin extends BasePlugin {
       //   this.getAnaLysisCodeInfo();
       // }
     }
+    this.core.debug('fileChanges', this.fileChanges);
     this.setLock(this.buildLockPath, LOCK_TYPE.WAITING);
   }
 
@@ -419,6 +421,7 @@ export class FaaSInvokePlugin extends BasePlugin {
         // ts模式 midway-core 会默认加载入口文件所在目录下的 src 目录里面的ts代码
         // 因此通过软连接的形式将其与原代码目录进行绑定
         const symlinkPath = resolve(this.buildDir, 'src');
+        this.core.debug('tsMode symlink', symlinkPath);
         if (!existsSync(symlinkPath)) {
           symlinkSync(this.codeAnalyzeResult.tsCodeRoot, resolve(this.buildDir, 'src'));
         }

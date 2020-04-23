@@ -16,14 +16,14 @@ export interface InvokeOptions {
 export const getFunction = (getOptions) => {
   return async (options: any) => {
     const baseDir = options.functionDir || process.cwd();
-    const specFile = getSpecFile(baseDir);
+    const specFile = getOptions.specFile || getSpecFile(baseDir);
     const core = new CommandHookCore({
       config: {
         servicePath: baseDir,
         specFile
       },
       commands: ['invoke'],
-      service: loadSpec(baseDir, specFile),
+      service: getOptions.spec || loadSpec(baseDir, specFile),
       provider: '',
       options: {
         function: options.functionName,
@@ -63,11 +63,23 @@ export interface IGetFuncList {
   functionDir?: string; // 函数所在目录
   sourceDir?: string; // 一体化目录结构下，函数的目录，比如 src/apis，这个影响到编译
   verbose?: boolean; // 输出更多信息
+  [key: string]: any;
 }
 export async function getFuncList (options: IGetFuncList) {
+  const baseDir = options.functionDir || process.cwd();
+  const specFile = getSpecFile(baseDir);
+  const spec = loadSpec(baseDir, specFile);
+  // 如果spec中有functions，就不走代码分析
+  if (spec.functions) {
+    return spec.functions;
+  }
   const invokeFun = getFunction({
     stopLifecycle: 'invoke:analysisCode',
-    key: 'functions'
+    key: 'functions',
+    specFile,
+    spec
   });
+  options.clean = false;
+  options.incremental = true;
   return invokeFun(options);
 }
