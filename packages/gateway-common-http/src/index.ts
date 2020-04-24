@@ -35,7 +35,7 @@ export class KoaGateway implements KoaGatewayAdapter {
           headers: object;
           statusCode: number;
           body: string;
-          base64Encoded: boolean;
+          isBase64Encoded: boolean;
         } = await invoke({
           functionDir: invokeOptions.functionDir,
           functionName: invokeOptions.functionName,
@@ -44,21 +44,27 @@ export class KoaGateway implements KoaGatewayAdapter {
           incremental: true,
           verbose: invokeOptions.verbose,
         });
-        ctx.status = result.statusCode;
         let data;
-        try {
-          data = JSON.parse(result.body);
-        } catch (err) {
-          data = result.body;
+        ctx.status = result.statusCode;
+        if (result.isBase64Encoded) {
+          // base64 to buffer
+          data = new Buffer(result.body, 'base64');
+        } else {
+          try {
+            data = JSON.parse(result.body);
+          } catch (err) {
+            data = result.body;
+          }
         }
-        ctx.body = data;
         for (const key in result.headers) {
           ctx.set(key, getHeaderValue(result.headers, key));
         }
+        ctx.body = data;
       } catch (err) {
         ctx.body = err.stack;
         ctx.status = 500;
       }
+      await next();
     }
   }
 }
@@ -96,15 +102,21 @@ export class ExpressGateway implements ExpressGatewayAdapter {
             headers: object;
             statusCode: number;
             body: string;
-            base64Encoded: boolean;
+            isBase64Encoded: boolean;
           }) => {
-            res.statusCode = result.statusCode;
             let data;
-            try {
-              data = JSON.parse(result.body);
-            } catch (err) {
-              data = result.body;
+            res.statusCode = result.statusCode;
+            if (result.isBase64Encoded) {
+              // base64 to buffer
+              data = new Buffer(result.body, 'base64');
+            } else {
+              try {
+                data = JSON.parse(result.body);
+              } catch (err) {
+                data = result.body;
+              }
             }
+
             for (const key in result.headers) {
               res.setHeader(key, getHeaderValue(result.headers, key));
             }

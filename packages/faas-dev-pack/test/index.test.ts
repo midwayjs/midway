@@ -107,4 +107,67 @@ describe('/test/index.test.ts', () => {
       })
       .catch(done);
   });
+
+  describe('test buffer return', () => {
+
+    it('test buffer result koa in http trigger', (done) => {
+      const app = new koa();
+      app.use(
+        useKoaDevPack({
+          functionDir: join(__dirname, './fixtures/base-fn-http'),
+        })
+      );
+      request(app.callback())
+        .get('/api')
+        .expect('Content-type', 'text/plain; charset=utf-8')
+        .expect(/hello world/)
+        .expect(200, done);
+    });
+
+    it('test buffer result koa in apigw trigger', (done) => {
+      const app = new koa();
+      app.use(
+        useKoaDevPack({
+          functionDir: join(__dirname, './fixtures/base-fn-apigw'),
+        })
+      );
+      request(app.callback())
+        .get('/api')
+        .expect('Content-type', 'text/plain; charset=utf-8')
+        .expect(/hello world/)
+        .expect(200, done);
+    });
+
+    it('test buffer result express in http trigger', (done) => {
+      const app = express();
+      app.use(
+        useExpressDevPack({
+          functionDir: join(__dirname, './fixtures/base-fn-http'),
+          sourceDir: 'src/apis',
+        })
+      );
+      request(app)
+        .get('/api')
+        .expect('Content-type', 'text/plain; charset=utf-8')
+        .expect(/hello world/)
+        .expect(200, done);
+    });
+
+    it('test buffer result express in apigw trigger', (done) => {
+      const app = express();
+      app.use(
+        useExpressDevPack({
+          functionDir: join(__dirname, './fixtures/base-fn-apigw'),
+          sourceDir: 'src/apis',
+        })
+      );
+      request(app)
+        .get('/api')
+        .expect('Content-type', 'text/plain; charset=utf-8')
+        .expect(/hello world/)
+        .expect(200, done);
+    });
+
+  });
+
 });

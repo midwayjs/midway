@@ -6,9 +6,9 @@ import { FCBaseTrigger } from './base';
 interface HTTPTriggerOpts {
   path: string;
   method: string;
-  headers?: { [ key: string ]: any };
-  query?: { [ key: string ]: any };
-  body?: { [ key: string ]: any } | Buffer;
+  headers?: { [key: string]: any };
+  query?: { [key: string]: any };
+  body?: { [key: string]: any } | Buffer;
 }
 
 export class HTTPTrigger extends FCBaseTrigger {
@@ -29,11 +29,7 @@ export class HTTPTrigger extends FCBaseTrigger {
         /**
          * function(request, response, context)
          */
-        invokeWrapper([
-          req,
-          res,
-          this.createContext(),
-        ]);
+        invokeWrapper([req, res, this.createContext()]);
         next();
       });
     }
@@ -58,9 +54,9 @@ export class HTTPTrigger extends FCBaseTrigger {
                   key = 'query';
                 }
                 if (key in this.opts) {
-                  return this.opts[ key ];
+                  return this.opts[key];
                 }
-                return target[ key ];
+                return target[key];
               },
             }),
             resp,
@@ -69,11 +65,11 @@ export class HTTPTrigger extends FCBaseTrigger {
         });
       }
 
-      this.httpServer.listen(0, err => {
+      this.httpServer.listen(0, (err) => {
         if (err) {
           reject(err);
         } else {
-          exec(`curl 127.0.0.1:${this.httpServer.address().port}`, err => {
+          exec(`curl 127.0.0.1:${this.httpServer.address().port}`, (err) => {
             if (err) {
               reject(err);
             }
@@ -85,7 +81,7 @@ export class HTTPTrigger extends FCBaseTrigger {
 
   createCallback(handler) {
     this.handler = handler;
-    return err => {
+    return (err) => {
       if (err) {
         throw err;
       }
@@ -95,7 +91,7 @@ export class HTTPTrigger extends FCBaseTrigger {
   async close(): Promise<void> {
     return new Promise((resolve, reject) => {
       if (this.httpServer) {
-        this.httpServer.close(err => {
+        this.httpServer.close((err) => {
           if (err) {
             reject(err);
           }
@@ -137,18 +133,18 @@ class Response {
     const keys = Object.keys(json);
     const map = {};
     for (const key of keys) {
-      const item = json[ key ];
+      const item = json[key];
       if (Array.isArray(item)) {
-        map[ key ] = item;
+        map[key] = item;
       } else {
-        map[ key ] = [item];
+        map[key] = [item];
       }
     }
     this._headers = map;
   }
 
   setHeader(key, value) {
-    this._headers[ key ] = value;
+    this._headers[key] = value;
   }
 
   send(data) {
@@ -167,13 +163,13 @@ class Response {
 
   toJSON() {
     const headers = this.headers;
-    let base64Encoded = false;
+    let isBase64Encoded = false;
     let body;
     if (typeof this.body === 'string') {
       body = this.body;
     } else if (Buffer.isBuffer(this.body)) {
       body = this.body.toString('base64');
-      base64Encoded = true;
+      isBase64Encoded = true;
     } else {
       body = JSON.stringify(this.body);
     }
@@ -183,7 +179,7 @@ class Response {
       headers,
       statusCode: this.statusCode,
       body,
-      base64Encoded,
+      isBase64Encoded,
     };
   }
 }

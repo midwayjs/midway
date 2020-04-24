@@ -1,9 +1,7 @@
 import * as getRawBody from 'raw-body';
-import {
-  FAAS_ARGS_KEY,
-  ServerlessLightRuntime,
-} from '@midwayjs/runtime-engine';
+import { FAAS_ARGS_KEY, ServerlessLightRuntime, } from '@midwayjs/runtime-engine';
 import { Context } from './context';
+import * as util from 'util';
 
 export class FCRuntime extends ServerlessLightRuntime {
   /**
@@ -28,7 +26,8 @@ export class FCRuntime extends ServerlessLightRuntime {
   async wrapperWebInvoker(handler, req, res, context) {
     let ctx: any;
     // for web
-    const isHTTPMode = req.constructor.name === 'EventEmitter';
+    const isHTTPMode =
+      req.constructor.name === 'EventEmitter' || util.types.isProxy(req); // for local test
     if (isHTTPMode) {
       // http
       const rawBody = await getRawBody(req);
@@ -60,7 +59,7 @@ export class FCRuntime extends ServerlessLightRuntime {
         return this.defaultInvokeHandler.apply(this, args);
       }
       return handler.apply(handler, args);
-    }).then(result => {
+    }).then((result) => {
       if (res.headersSent) {
         return;
       }
@@ -97,9 +96,19 @@ export class FCRuntime extends ServerlessLightRuntime {
         }
       }
 
+
+      const newHeader = {};
+
+      for (const key in ctx.res.headers) {
+        // The length after base64 is wrong.
+        if(!['content-length'].includes(key)) {
+          newHeader[key] = ctx.res.headers[key];
+        }
+      }
+
       if (res.setHeader) {
-        for (const key in ctx.res.headers) {
-          res.setHeader(key, ctx.res.headers[key]);
+        for (const key in newHeader) {
+          res.setHeader(key, newHeader[ key ]);
         }
       }
 
@@ -114,7 +123,7 @@ export class FCRuntime extends ServerlessLightRuntime {
       return {
         isBase64Encoded: encoded,
         statusCode: ctx.status,
-        headers: ctx.res.headers,
+        headers: newHeader,
         body: ctx.body,
       };
     });

@@ -58,7 +58,6 @@ export async function parseInvokeOptionsByOriginUrl(
       });
     }
   });
-  // https://yuque.antfin-inc.com/cse/docs/custom-domain-name
   // 1. 绝对路径规则优先级最高如 /ab/cb/e
   // 2. 星号只能出现最后且必须在/后面，如 /ab/cb/**
   // 3. 如果绝对路径和通配都能匹配一个路径时，绝对规则优先级高
@@ -117,7 +116,6 @@ export async function parseInvokeOptionsByOriginUrl(
     invokeHTTPData.path = currentUrl;
     invokeHTTPData.query = req.query;
     invokeHTTPData.base64Encoded = false;
-    // ginkgo http 调用是数组
     invokeOptions.data = [invokeHTTPData];
   }
 

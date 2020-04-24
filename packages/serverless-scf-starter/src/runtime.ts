@@ -51,10 +51,18 @@ export class SCFRuntime extends ServerlessLightRuntime {
       ctx.body = JSON.stringify(ctx.body);
     }
 
+    const newHeader = {};
+    for (const key in ctx.res.headers) {
+      // The length after base64 is wrong.
+      if(!['content-length'].includes(key)) {
+        newHeader[key] = ctx.res.headers[key];
+      }
+    }
+
     return {
       isBase64Encoded: encoded,
       statusCode: ctx.status,
-      headers: ctx.res.headers,
+      headers: newHeader,
       body: ctx.body,
     };
   }
