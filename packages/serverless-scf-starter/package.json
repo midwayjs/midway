@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/serverless-scf-starter",
-  "version": "0.2.81",
+  "version": "0.2.86",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
