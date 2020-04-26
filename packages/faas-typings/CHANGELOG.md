@@ -5,12 +5,4 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [0.2.87](https://github.com/midwayjs/midway-faas/compare/v0.2.86...v0.2.87) (2020-04-26)
 
-**Note:** Version bump only for package @midwayjs/serverless-http-parser
-
-
-
-
-
-## [0.2.81](https://github.com/midwayjs/midway-faas/compare/v0.2.80...v0.2.81) (2020-04-22)
-
-**Note:** Version bump only for package @midwayjs/serverless-http-parser
+**Note:** Version bump only for package @midwayjs/faas-typings
