@@ -5,6 +5,7 @@
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@midwayjs/core": "^2.0.0",
+    "@midwayjs/faas-typings": "^0.2.76",
     "@midwayjs/decorator": "^2.0.8",
     "@midwayjs/simple-lock": "^0.2.76",
     "debug": "^4.1.1",
@@ -16,14 +17,12 @@
     "node": ">= 10"
   },
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "devDependencies": {
     "midway-bin": "^2.0.0",
     "mm": "3"
   },
-  "license": "MIT",
   "scripts": {
     "build": "midway-bin build -c",
     "test": "NODE_ENV=test midway-bin test --ts --full-trace",
@@ -31,5 +30,10 @@
     "clean": "midway-bin clean",
     "autod": "midway-bin autod"
   },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:midwayjs/midway-faas.git"
+  },
+  "license": "MIT",
   "gitHead": "5a6539a27cf1376a8ea9c9a8553fdfb2f78d55bd"
 }

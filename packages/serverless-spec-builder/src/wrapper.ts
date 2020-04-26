@@ -11,19 +11,19 @@ let starter;
 let runtime;
 let inited = false;
 
-const initializeMethod = async (config = {}) => {
+const initializeMethod = async (initializeContext = {}) => {
   runtime = await start({
     layers: [<%= layers.join(", ") %>]
   });
-  starter = new FaaSStarter({ config, baseDir: __dirname });
+  starter = new FaaSStarter({ baseDir: __dirname, initializeContext });
   <% loadDirectory.forEach(function(dirName){ %>
   starter.loader.loadDirectory({ baseDir: '<%=dirName%>'});<% }) %>
   await starter.start();
   inited = true;
 };
 
-exports.initializer = asyncWrapper(async ({config} = {}) => {
-  await initializeMethod(config);
+exports.initializer = asyncWrapper(async (...args) => {
+  await initializeMethod(...args);
 });
 
 <% handlers.forEach(function(handlerData){ %>
@@ -66,7 +66,14 @@ export function writeWrapper(options: {
   cover?: boolean;
   loadDirectory?: string[];
 }) {
-  const { service, distDir, starter, baseDir, cover, loadDirectory = [] } = options;
+  const {
+    service,
+    distDir,
+    starter,
+    baseDir,
+    cover,
+    loadDirectory = [],
+  } = options;
   const files = {};
   const functions = service.functions || {};
   for (const func in functions) {
@@ -104,10 +111,7 @@ export function writeWrapper(options: {
 
   for (const file in files) {
     const fileName = join(distDir, `${file}.js`);
-    const layers = getLayers(
-      service.layers,
-      ...files[file].originLayers
-    );
+    const layers = getLayers(service.layers, ...files[file].originLayers);
     const content = render(wrapperContent, {
       starter,
       loadDirectory,
@@ -122,18 +126,20 @@ export function formetAggregationHandlers(handlers) {
   if (!handlers || !handlers.length) {
     return [];
   }
-  return handlers.map(handler => {
-    const path = handler.path.replace(/\**$/, '');
-    return {
-      handler: handler.handler,
-      path,
-      level: path.split('/').length - 1
-    };
-  }).sort((handlerA, handlerB) => {
-    const levelDiff = handlerB.level - handlerA.level;
-    if (levelDiff === 0) {
-      return handlerB.path.length - handlerA.path.length;
-    }
-    return levelDiff;
-  });
+  return handlers
+    .map((handler) => {
+      const path = handler.path.replace(/\**$/, '');
+      return {
+        handler: handler.handler,
+        path,
+        level: path.split('/').length - 1,
+      };
+    })
+    .sort((handlerA, handlerB) => {
+      const levelDiff = handlerB.level - handlerA.level;
+      if (levelDiff === 0) {
+        return handlerB.path.length - handlerA.path.length;
+      }
+      return levelDiff;
+    });
 }

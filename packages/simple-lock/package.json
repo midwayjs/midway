@@ -9,10 +9,6 @@
   "devDependencies": {
     "midway-bin": "^2.0.0"
   },
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:midwayjs/midway-faas.git"
-  },
   "engines": {
     "node": ">= 10"
   },
@@ -22,5 +18,10 @@
     "cov": "NODE_ENV=unittest midway-bin cov --ts",
     "clean": "midway-bin clean",
     "autod": "midway-bin autod"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:midwayjs/midway-faas.git"
+  },
+  "license": "MIT"
 }

@@ -15,7 +15,11 @@ import {
   OSEvent,
   MQEvent,
 } from '../interface';
-import { uppercaseObjectKey, removeObjectEmptyAttributes } from '../utils';
+import {
+  uppercaseObjectKey,
+  removeObjectEmptyAttributes,
+  filterUserDefinedEnv,
+} from '../utils';
 
 export class FCSpecBuilder extends SpecBuilder {
   toJSON() {
@@ -23,6 +27,7 @@ export class FCSpecBuilder extends SpecBuilder {
     const serviceData = this.getService();
     const functionsData: FCFunctionsStructure = this.getFunctions();
     const serviceName = serviceData.name;
+    const userDefinedEnv = filterUserDefinedEnv();
 
     const template: FCSpec = {
       ROSTemplateFormatVersion: '2015-09-01',
@@ -64,6 +69,7 @@ export class FCSpecBuilder extends SpecBuilder {
           EnvironmentVariables: {
             ...providerData.environment,
             ...funSpec.environment,
+            ...userDefinedEnv,
           },
           InstanceConcurrency: funSpec.concurrency || 1,
         },

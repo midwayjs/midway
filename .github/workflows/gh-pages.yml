@@ -1,9 +1,9 @@
 name: GitHub Pages
 
 on:
-  push:
-    branches:
-      - master
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron:  '*/15 * * * *'
 
 jobs:
   deploy:
@@ -19,11 +19,4 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: npm install && npm run bootstrap
-    - run: npm run docs:build && npm run gen-api-ref
-    - run: |
-          npx gh-pages -d docs/.vuepress/dist \
-                       -b gh-pages \
-                       --repo "https://$GITHUB_ACTOR:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY.git" \
-                       --user "Auto Doc Publisher <docs@midwayjs.org>" \
-                       --no-history
+    - run: npm -v

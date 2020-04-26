@@ -1,5 +1,5 @@
 import { SCFBaseTrigger } from './base';
-import { SCFTimerEvent } from '@midwayjs/serverless-scf-starter';
+import { SCF } from '@midwayjs/faas-typings';
 
 /**
  * https://cloud.tencent.com/document/product/583/9708
@@ -8,7 +8,7 @@ export class TimerTrigger extends SCFBaseTrigger {
   handler;
 
   async toArgs() {
-    const event: SCFTimerEvent = {
+    const event: SCF.TimerEvent = {
       Message: '',
       Time: '2019-11-19T03:33:00Z',
       TriggerName: 'test',
@@ -17,3 +17,5 @@ export class TimerTrigger extends SCFBaseTrigger {
     return [event, this.createContext()];
   }
 }
+
+export const timer = TimerTrigger;

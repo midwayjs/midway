@@ -17,7 +17,7 @@ import {
   SCFCOSEvent,
   SCFCMQEvent,
 } from './interface';
-import { removeObjectEmptyAttributes } from '../utils';
+import { removeObjectEmptyAttributes, filterUserDefinedEnv } from '../utils';
 
 export const nodejsVersion = {
   nodejs6: 'Node.js6.10',
@@ -41,6 +41,7 @@ export class SCFServerlessSpecBuilder extends SpecBuilder {
     const serviceData = this.getService();
     const functionsData: FunctionsStructure = this.getFunctions();
     const serviceName = serviceData.name;
+    const userDefinedEnv = filterUserDefinedEnv();
 
     const serverless: Partial<SCFServerlessStructure> = {
       service: serviceName,
@@ -53,7 +54,10 @@ export class SCFServerlessSpecBuilder extends SpecBuilder {
         role: providerData.role,
         memorySize: providerData.memorySize || 128,
         environment: {
-          variables: providerData.environment,
+          variables: {
+            ...providerData.environment,
+            ...userDefinedEnv,
+          },
         },
         timeout: providerData.timeout || 3,
       },
@@ -89,7 +93,7 @@ export class SCFServerlessSpecBuilder extends SpecBuilder {
               serviceTimeout: funSpec.timeout || evt.timeout,
               stageName: funSpec.stage || providerData.stage,
               serviceId: evt.serviceId || providerData.serviceId,
-              integratedResponse: evt.integratedResponse,
+              integratedResponse: evt.integratedResponse || true,
               enableCORS: evt.cors,
             },
           };

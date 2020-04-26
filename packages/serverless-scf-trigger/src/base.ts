@@ -1,11 +1,10 @@
 import { BaseTrigger } from '@midwayjs/runtime-mock';
-import { SCFContext } from '@midwayjs/serverless-scf-starter';
+import { SCF } from '@midwayjs/faas-typings';
 
 export class SCFBaseTrigger extends BaseTrigger {
-
   useCallback = true;
 
-  createContext(): SCFContext {
+  createContext(): SCF.RequestContext {
     return {
       callbackWaitsForEmptyEventLoop: true,
       memory_limit_in_mb: 128,

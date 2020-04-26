@@ -1,6 +1,9 @@
 import * as getRawBody from 'raw-body';
-import { FAAS_ARGS_KEY, ServerlessLightRuntime, } from '@midwayjs/runtime-engine';
-import { Context } from './context';
+import {
+  FAAS_ARGS_KEY,
+  ServerlessLightRuntime,
+} from '@midwayjs/runtime-engine';
+import { Context } from '@midwayjs/serverless-http-parser';
 import * as util from 'util';
 
 export class FCRuntime extends ServerlessLightRuntime {
@@ -24,7 +27,8 @@ export class FCRuntime extends ServerlessLightRuntime {
   }
 
   async wrapperWebInvoker(handler, req, res, context) {
-    let ctx: any;
+    let ctx: Context;
+    const args = [];
     // for web
     const isHTTPMode =
       req.constructor.name === 'EventEmitter' || util.types.isProxy(req); // for local test
@@ -34,25 +38,27 @@ export class FCRuntime extends ServerlessLightRuntime {
       // const rawBody = 'test';
       // req.rawBody = rawBody;
       req.body = rawBody; // TODO: body parser
-      ctx = new Context(req, res, context);
-      ctx.EventType = 'fc_http';
+      ctx = new Context(req, context);
+      // ctx.EventType = 'fc_http';
+      args.push(ctx);
     } else {
       // api gateway
-      ctx = new Context(req, {}, context);
-      ctx.EventType = 'fc_apigw';
+      ctx = new Context(req, context);
+      // ctx.EventType = 'fc_apigw';
+      args.push(ctx);
+      // Pass original event
+      args.push(req);
     }
 
-    const args = [ctx];
-
-    if (ctx.method === 'GET') {
-      if (ctx.query && ctx.query[FAAS_ARGS_KEY]) {
-        args.push(ctx.query[FAAS_ARGS_KEY]);
-      }
-    } else if (ctx.method === 'POST') {
-      if (ctx.req && ctx.req.body && ctx.req.body[FAAS_ARGS_KEY]) {
-        args.push(ctx.req.body[FAAS_ARGS_KEY]);
-      }
-    }
+    // if (ctx.method === 'GET') {
+    //   if (ctx.query && ctx.query[FAAS_ARGS_KEY]) {
+    //     args.push(ctx.query[FAAS_ARGS_KEY]);
+    //   }
+    // } else if (ctx.method === 'POST') {
+    //   if (ctx.req && ctx.req.body && ctx.req.body[FAAS_ARGS_KEY]) {
+    //     args.push(ctx.req.body[FAAS_ARGS_KEY]);
+    //   }
+    // }
 
     return this.invokeHandlerWrapper(ctx, async () => {
       if (!handler) {
@@ -96,19 +102,18 @@ export class FCRuntime extends ServerlessLightRuntime {
         }
       }
 
-
       const newHeader = {};
 
       for (const key in ctx.res.headers) {
         // The length after base64 is wrong.
-        if(!['content-length'].includes(key)) {
+        if (!['content-length'].includes(key)) {
           newHeader[key] = ctx.res.headers[key];
         }
       }
 
       if (res.setHeader) {
         for (const key in newHeader) {
-          res.setHeader(key, newHeader[ key ]);
+          res.setHeader(key, newHeader[key]);
         }
       }
 

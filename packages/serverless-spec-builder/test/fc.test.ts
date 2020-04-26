@@ -1,9 +1,11 @@
 import { generateFunctionsSpec } from '../src/fc';
 import * as path from 'path';
 import * as assert from 'assert';
+import * as mm from 'mm';
 
 describe('/test/fc.test.ts', () => {
   it('test base', () => {
+    mm(process.env, 'UDEV_NODE_ENV', 'prod');
     const result = generateFunctionsSpec(
       path.join(__dirname, './fixtures/fc/f-base.yml')
     );
@@ -13,7 +15,11 @@ describe('/test/fc.test.ts', () => {
     assert(funResult['Properties']['Handler'] === 'index.handler');
     assert(funResult['Properties']['Runtime'] === 'nodejs10');
     assert(funResult['Properties']['InstanceConcurrency'] === 2);
+    assert(
+      funResult['Properties']['EnvironmentVariables']['NODE_ENV'] === 'prod'
+    );
     assert.deepStrictEqual(funResult['Events'], undefined);
+    mm.restore();
   });
 
   it('test transform service properties', () => {

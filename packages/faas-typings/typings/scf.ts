@@ -80,6 +80,14 @@ export namespace SCF {
   }
 
   export interface APIGatewayEvent {
+    /**
+     * 请求来源的 API 网关的配置信息、请求标识、认证信息、来源信息。其中：
+     * serviceId，path，httpMethod 指向 API 网关的服务Id、API 的路径和方法；
+     * stage 指向请求来源 API 所在的环境；
+     * requestId 标识当前这次请求的唯一 ID；
+     * identity 标识用户的认证方法和认证的信息；
+     * sourceIp 标识请求来源 IP
+     */
     requestContext: {
       serviceId: string;
       path: string;
@@ -91,30 +99,41 @@ export namespace SCF {
       sourceIp: string;
       stage: string;
     };
-    headers: {
-      'Accept-Language': string;
-      Accept: string;
-      Host: string;
-      'User-Agent': string;
-    };
+    /**
+     * 记录实际请求的完整 Header 内容
+     */
+    headers: { [key: string]: string };
+    /**
+     * 记录实际请求的完整 Body 内容
+     */
     body: string;
+    /**
+     * 记录在 API 网关中配置过的 Path 参数以及实际取值
+     */
     pathParameters: {
       path: string;
     };
+    /**
+     * 记录在 API 网关中配置过的 Query 参数以及实际取值
+     */
     queryStringParameters: {
       foo: string;
     };
-    headerParameters: {
-      Refer: string;
-    };
+    /**
+     * 记录在 API 网关中配置过的 Header 参数以及实际取值
+     */
+    headerParameters: { [key: string]: string };
     stageVariables: {
       stage: string;
     };
+    /**
+     * 记录实际请求的完整 Path 信息，注意 midway faas 为了获取真实 path 做过处理
+     */
     path: string;
-    queryString: {
-      foo: string;
-      bob: string;
-    };
+    /**
+     * 请求地址的查询参数
+     */
+    queryString: { [key: string]: string };
     httpMethod: string;
   }
 
@@ -155,5 +174,16 @@ export namespace SCF {
       secWebSocketProtocol: string;
       secWebSocketExtensions: string;
     };
+  }
+
+  export interface RequestContext {
+    callbackWaitsForEmptyEventLoop: boolean;
+    memory_limit_in_mb: number;
+    time_limit_in_ms: number;
+    request_id: string;
+    environ: string;
+    function_version: string;
+    function_name: string;
+    namespace: string;
   }
 }

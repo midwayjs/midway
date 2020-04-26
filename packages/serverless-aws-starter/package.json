@@ -24,5 +24,10 @@
     "clean": "midway-bin clean",
     "autod": "midway-bin autod"
   },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:midwayjs/midway-faas.git"
+  },
+  "license": "MIT",
   "gitHead": "b67e2753cbdcc91813067ba2a1bb1ce7e85a3dff"
 }

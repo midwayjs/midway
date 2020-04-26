@@ -1,4 +1,4 @@
-import { SCFHTTPEvent } from '@midwayjs/serverless-scf-starter';
+import { SCF } from '@midwayjs/faas-typings';
 import { SCFBaseTrigger } from './base';
 import * as express from 'express';
 
@@ -25,8 +25,10 @@ export class ApiGatewayTrigger extends SCFBaseTrigger {
   }
 
   async toArgs() {
-    const event: Partial<SCFHTTPEvent> = {
-      headerParameters: {},
+    const event: Partial<SCF.APIGatewayEvent> = {
+      headerParameters: {
+        Refer: '10.0.2.14',
+      },
       headers: this.triggerOptions.headers || {},
       httpMethod: this.triggerOptions.method || 'request method name',
       path: this.triggerOptions.path || 'api request path',
@@ -36,7 +38,9 @@ export class ApiGatewayTrigger extends SCFBaseTrigger {
       body: this.triggerOptions.body,
       requestContext: {
         httpMethod: this.triggerOptions.method || 'request method name',
-        identity: {},
+        identity: {
+          secretId: 'abdcdxxxxxxxsdfs',
+        },
         path: this.triggerOptions.path || 'api request path',
         serviceId: 'service-qcz3nag0',
         sourceIp: '42.120.74.90',

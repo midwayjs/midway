@@ -94,3 +94,18 @@ export function removeObjectEmptyAttributes(obj) {
 
   return removeEmptyObject(obj);
 }
+
+/**
+ * USER_DEFINED_ENVIRONMENT_VARIABLE
+ */
+const USER_DEFINIED_ENV_KEY = 'UDEV_';
+
+export function filterUserDefinedEnv() {
+  const userDefinedEnv = {};
+  for (let key in process.env || {}) {
+    if (key.startsWith(USER_DEFINIED_ENV_KEY)) {
+      userDefinedEnv[key.replace(USER_DEFINIED_ENV_KEY, '')] = process.env[key];
+    }
+  }
+  return userDefinedEnv;
+}

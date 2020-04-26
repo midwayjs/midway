@@ -37,6 +37,7 @@ export class FaaSStarter implements IFaaSStarter {
   globalMiddleware: string[];
   funMappingStore: Map<string, any> = new Map();
   logger;
+  initializeContext;
   private lock = new SimpleLock();
 
   constructor(
@@ -46,6 +47,7 @@ export class FaaSStarter implements IFaaSStarter {
       middleware?: string[];
       typescript?: boolean;
       preloadModules?: any[];
+      initializeContext?: object;
       logger?: any;
     } = {}
   ) {
@@ -54,6 +56,7 @@ export class FaaSStarter implements IFaaSStarter {
     this.globalMiddleware = options.middleware || [];
     this.logger = options.logger || console;
     this.baseDir = this.getBaseDir();
+    this.initializeContext = options.initializeContext || {};
 
     this.loader = new ContainerLoader({
       baseDir: this.baseDir,
@@ -69,7 +72,7 @@ export class FaaSStarter implements IFaaSStarter {
     configService.addObject(this.globalConfig);
   }
 
-  initConfiguration(filePath: string, fileDir?: string) {
+  protected initConfiguration(filePath: string, fileDir?: string) {
     if (!fileDir) {
       fileDir = dirname(resolve(filePath));
     }
@@ -79,12 +82,12 @@ export class FaaSStarter implements IFaaSStarter {
     cfg.loadConfiguration(require(filePath), fileDir);
   }
 
-  prepareConfiguration() {
+  protected prepareConfiguration() {
     // TODO use initConfiguration
     // this.initConfiguration('./configuration', __dirname);
   }
 
-  getBaseDir() {
+  private getBaseDir() {
     if (isTypeScriptEnvironment()) {
       return join(this.appDir, 'src');
     } else {
@@ -92,10 +95,10 @@ export class FaaSStarter implements IFaaSStarter {
     }
   }
 
-  registerDecorator() {
+  private registerDecorator() {
     this.loader.registerHook(MidwayHandlerKey.PLUGIN, (key, target) => {
       const ctx = target[REQUEST_OBJ_CTX_KEY] || {};
-      return ctx[key];
+      return ctx[key] || this[key];
     });
 
     this.loader.registerHook(MidwayHandlerKey.LOGGER, (key, target) => {
@@ -104,7 +107,7 @@ export class FaaSStarter implements IFaaSStarter {
     });
   }
 
-  handleInvokeWrapper(handlerMapping: string) {
+  public handleInvokeWrapper(handlerMapping: string) {
     const funOptions: {
       mod: any;
       middleware: Array<IMiddleware<FaaSContext>>;
@@ -146,7 +149,7 @@ export class FaaSStarter implements IFaaSStarter {
     };
   }
 
-  async invokeHandler(
+  private async invokeHandler(
     funOptions: {
       mod: any;
       middleware: Array<IMiddleware<FaaSContext>>;
@@ -180,7 +183,7 @@ export class FaaSStarter implements IFaaSStarter {
     );
   }
 
-  async start(
+  public async start(
     opts: {
       disableAutoLoad?: boolean;
       cb?: () => Promise<void>;
@@ -249,11 +252,11 @@ export class FaaSStarter implements IFaaSStarter {
     }, LOCK_KEY);
   }
 
-  getApplicationContext(): MidwayContainer {
+  public getApplicationContext(): MidwayContainer {
     return this.loader.getApplicationContext();
   }
 
-  getContext(context) {
+  protected getContext(context) {
     if (!context.requestContext) {
       context.requestContext = new MidwayRequestContainer(
         context,
@@ -288,6 +291,13 @@ export class FaaSStarter implements IFaaSStarter {
       }
     }
     return mwArr;
+  }
+
+  /**
+   * return init context value such as aliyun fc
+   */
+  public getInitializeContext() {
+    return this.initializeContext;
   }
 }
 

@@ -1,13 +1,14 @@
-import { is as typeis} from 'type-is';
+import { is as typeis } from 'type-is';
 import * as qs from 'querystring';
 import * as accepts from 'accepts';
 import { GatewayEvent } from './interface';
+import { FaaSHTTPRequest } from '@midwayjs/faas-typings';
 
 const EVENT = Symbol.for('ctx#event');
 const EVENT_PARSED = Symbol.for('ctx#event_parsed');
 const BODY = Symbol.for('ctx#body');
 
-export class Request {
+export class Request implements FaaSHTTPRequest {
   originEvent;
   _accept;
   private bodyParsed = false;
@@ -126,7 +127,7 @@ export class Request {
   }
 
   get pathParameters() {
-    return this[EVENT].pathParameters;
+    return this[EVENT].pathParameters || [];
   }
 
   get method() {
@@ -142,7 +143,12 @@ export class Request {
   }
 
   get query() {
-    return this[EVENT].queries || this[EVENT].queryParameters || this[EVENT].queryString || this[EVENT].queryStringParameters;
+    return (
+      this[EVENT].queries ||
+      this[EVENT].queryParameters ||
+      this[EVENT].queryString ||
+      this[EVENT].queryStringParameters
+    );
   }
 
   get body() {
@@ -209,7 +215,7 @@ export class Request {
    */
 
   get(field) {
-    switch (field = field.toLowerCase()) {
+    switch ((field = field.toLowerCase())) {
       case 'referer':
       case 'referrer':
         return this.headers.referrer || this.headers.referer || '';

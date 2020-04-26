@@ -1,27 +1,53 @@
 import { Request } from './request';
 import { Response } from './response';
 import * as Cookies from 'cookies';
+import {
+  FaaSHTTPContext,
+  FaaSHTTPRequest,
+  FaaSHTTPResponse,
+  FaaSOriginContext,
+} from '@midwayjs/faas-typings';
 
 const COOKIES = Symbol('context#cookies');
 
-export class Context {
-  req: Request;
-  request: Request;
-  res: Response;
-  response: Response;
-  statusCode;
-  requestId;
-  credentials;
-  function;
-  originContext: null;
+export class Context implements FaaSHTTPContext {
+  private _req: FaaSHTTPRequest;
+  private _res: FaaSHTTPResponse;
+  private _originContext;
+  private _originEvent;
 
   constructor(event, context) {
-    this.req = this.request = new Request(event);
-    this.res = this.response = new Response();
-    this.requestId = context.requestId;
-    this.credentials = context.credentials;
-    this.function = context.function;
-    this.originContext = context;
+    this._req = new Request(event);
+    this._res = new Response();
+    this._originContext = context;
+    this._originEvent = event;
+  }
+
+  /**
+   * faas origin context object
+   */
+  get getOriginEvent(): FaaSOriginContext {
+    return this._originEvent;
+  }
+
+  get originContext() {
+    return this._originContext;
+  }
+
+  get req(): FaaSHTTPRequest {
+    return this._req;
+  }
+
+  get res(): FaaSHTTPResponse {
+    return this._res;
+  }
+
+  get request(): FaaSHTTPRequest {
+    return this._req;
+  }
+
+  get response(): FaaSHTTPResponse {
+    return this._res;
   }
 
   // req delegate
@@ -54,7 +80,7 @@ export class Context {
   }
 
   get params() {
-    return this.req.pathParameters || [];
+    return this.req.pathParameters;
   }
 
   get host() {
@@ -95,7 +121,7 @@ export class Context {
   }
 
   set(key, value?) {
-    this.res.set(key, value)
+    this.res.set(key, value);
   }
 
   set etag(value) {
@@ -114,20 +140,8 @@ export class Context {
     return this.res.length;
   }
 
-  accepts(type?: string | string[]) {
-    return this.request.accepts(type);
-  }
-
-  acceptsEncodings(encoding?: string | string[]) {
-    return this.request.acceptsEncodings(encoding);
-  }
-
-  acceptsCharsets(charset?: string | string[]) {
-    return this.request.acceptsCharsets(charset);
-  }
-
-  acceptsLanguages(lang?: string | string []) {
-    return this.request.acceptsLanguages(lang);
+  get accept() {
+    return this.req.accept;
   }
 
   is(type, ...types) {
@@ -142,11 +156,11 @@ export class Context {
           if (prop !== 'set') {
             return obj[prop];
           }
-        }
+        },
       });
-      this[ COOKIES ] = new Cookies(this.req as any,  resProxy as any, {
+      this[COOKIES] = new Cookies(this.req as any, resProxy as any, {
         keys: undefined,
-        secure: false
+        secure: false,
       });
     }
     return this[COOKIES];
@@ -156,4 +170,39 @@ export class Context {
     this[COOKIES] = _cookies;
   }
 
+  append(field: string, val: string | string[]) {
+    this.response.append(field, val);
+  }
+
+  remove(field: string): void {
+    this.response.remove(field);
+  }
+
+  accepts(): boolean | string[];
+  accepts(...types: string[]): string | boolean;
+  accepts(types: string[]): string | boolean;
+  accepts(...args): any {
+    return this.request.accepts(...args);
+  }
+
+  acceptsEncodings(): boolean | string[];
+  acceptsEncodings(...encodings: string[]): string | boolean;
+  acceptsEncodings(encodings: string[]): string | boolean;
+  acceptsEncodings(...args): any {
+    return this.request.acceptsEncodings(...args);
+  }
+
+  acceptsCharsets(): boolean | string[];
+  acceptsCharsets(...charsets: string[]): string | boolean;
+  acceptsCharsets(charsets: string[]): string | boolean;
+  acceptsCharsets(...args): any {
+    return this.request.acceptsCharsets(...args);
+  }
+
+  acceptsLanguages(): boolean | string[];
+  acceptsLanguages(...langs: string[]): string | boolean;
+  acceptsLanguages(langs: string[]): string | boolean;
+  acceptsLanguages(...args): any {
+    return this.request.acceptsLanguages(...args);
+  }
 }

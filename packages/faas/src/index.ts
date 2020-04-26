@@ -1,7 +1,7 @@
-export * from '@midwayjs/core';
+export * from '@midwayjs/faas-typings';
 export * from './interface';
-export * from './typings/fc';
 export * from './starter';
+export * from '@midwayjs/core';
 export {
   Func as func,
   Provide as provide,

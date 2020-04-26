@@ -58,37 +58,53 @@ describe('test http parser', () => {
 
     // set json
     context.body = {
-      a: 1
+      a: 1,
     };
     assert(context.type === 'application/json');
 
-    assert.deepStrictEqual(context.accepts(), ['text/html', 'application/xml', 'application/json']);
+    assert.deepStrictEqual(context.accepts(), [
+      'text/html',
+      'application/xml',
+      'application/json',
+    ]);
     assert.deepStrictEqual(context.acceptsEncodings(), ['identity']);
     assert.deepStrictEqual(context.acceptsCharsets(), ['*']);
     assert.deepStrictEqual(context.acceptsLanguages(), ['en-US', 'en', 'cn']);
-    assert.deepStrictEqual(context.host, 'service-3ei3tii4-251000691.ap-guangzhou.apigateway.myqloud.com');
-    assert.deepStrictEqual(context.hostname, 'service-3ei3tii4-251000691.ap-guangzhou.apigateway.myqloud.com');
+    assert.deepStrictEqual(
+      context.host,
+      'service-3ei3tii4-251000691.ap-guangzhou.apigateway.myqloud.com'
+    );
+    assert.deepStrictEqual(
+      context.hostname,
+      'service-3ei3tii4-251000691.ap-guangzhou.apigateway.myqloud.com'
+    );
 
     context.type = 'html';
-    assert.deepStrictEqual(context.res.get('Content-Type'), 'text/html; charset=utf-8');
+    assert.deepStrictEqual(
+      context.res.get('Content-Type'),
+      'text/html; charset=utf-8'
+    );
 
     // ctx.params
     assert.deepStrictEqual(context.params['path'], 'value');
 
-    assert.deepStrictEqual(context.is('html',  'application/*'), false);
+    assert.deepStrictEqual(context.is('html', 'application/*'), false);
     assert.deepStrictEqual(context.res.get('ETag'), '');
 
     const cacheTime = 1587543474000;
     // set etag
     context.set({
-      'Etag': '1234',
-      'Last-Modified': new Date(cacheTime)
+      Etag: '1234',
+      'Last-Modified': new Date(cacheTime),
     });
     assert.deepStrictEqual(context.res.get('ETag').length, 4);
-    assert.deepStrictEqual(context.res.lastModified.getTime(), cacheTime)
+    assert.deepStrictEqual(context.res.lastModified.getTime(), cacheTime);
 
     context.lastModified = new Date(cacheTime + 1000);
-    assert.deepStrictEqual(context.res.lastModified.getTime(), cacheTime + 1000);
+    assert.deepStrictEqual(
+      context.res.lastModified.getTime(),
+      cacheTime + 1000
+    );
 
     // ctx.length
     assert.deepStrictEqual(context.length, 7);
@@ -104,11 +120,11 @@ describe('test http parser', () => {
   it('should parser fc http event', () => {
     const context = new Context(
       Object.assign(require('./resource/fc_http.json'), {
-        body: Buffer.from(JSON.stringify(
-          {
-            a: '1'
-          }
-        ))
+        body: Buffer.from(
+          JSON.stringify({
+            a: '1',
+          })
+        ),
       }),
       require('./resource/fc_ctx.json')
     );
@@ -134,17 +150,17 @@ describe('test http parser', () => {
       a: '1',
     });
 
-    assert.deepStrictEqual(
-      context.request.body,
-      "{\"a\":\"1\"}"
-    );
+    assert.deepStrictEqual(context.request.body, '{"a":"1"}');
 
     // get request header
-    assert.deepStrictEqual(context.get('User-Agent'),"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36");
+    assert.deepStrictEqual(
+      context.get('User-Agent'),
+      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36'
+    );
 
     // set response header
     context.set('X-FaaS-Duration', 2100);
-    assert.deepStrictEqual(context.response.get('X-FaaS-Duration'),'2100');
+    assert.deepStrictEqual(context.response.get('X-FaaS-Duration'), '2100');
 
     // set response status
     assert(context.status === 200);
@@ -159,7 +175,7 @@ describe('test http parser', () => {
 
     // set json
     context.body = {
-      a: 1
+      a: 1,
     };
     assert(context.type === 'application/json');
     assert.deepStrictEqual(context.host, '');
@@ -219,11 +235,13 @@ describe('test http parser', () => {
 
     // set json
     context.body = {
-      a: 1
+      a: 1,
     };
     assert(context.type === 'application/json');
 
-    assert.deepStrictEqual(context.host, 'service-3ei3tii4-251000691.ap-guangzhou.apigateway.myqloud.com');
+    assert.deepStrictEqual(
+      context.host,
+      'service-3ei3tii4-251000691.ap-guangzhou.apigateway.myqloud.com'
+    );
   });
-
 });

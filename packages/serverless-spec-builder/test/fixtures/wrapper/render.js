@@ -6,17 +6,18 @@ let starter;
 let runtime;
 let inited = false;
 
-const initializeMethod = async (config = {}) => {
+const initializeMethod = async (initializeContext = {}) => {
   runtime = await start({
     layers: []
   });
-  starter = new FaaSStarter({ config, baseDir: __dirname });
+  starter = new FaaSStarter({ baseDir: __dirname, initializeContext });
+  
   await starter.start();
   inited = true;
 };
 
-exports.initializer = asyncWrapper(async ({config} = {}) => {
-  await initializeMethod(config);
+exports.initializer = asyncWrapper(async (...args) => {
+  await initializeMethod(...args);
 });
 
 

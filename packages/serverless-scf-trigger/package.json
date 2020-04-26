@@ -4,6 +4,7 @@
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
+    "@midwayjs/faas-typings": "^0.2.76",
     "@midwayjs/runtime-mock": "^0.2.76",
     "@midwayjs/serverless-fc-starter": "^0.2.86",
     "@midwayjs/serverless-scf-starter": "^0.2.86",
@@ -30,5 +31,6 @@
     "type": "git",
     "url": "git@github.com:midwayjs/midway-faas.git"
   },
+  "license": "MIT",
   "gitHead": "5783f06ff0298f0e172f801cae053c3fc80813a9"
 }

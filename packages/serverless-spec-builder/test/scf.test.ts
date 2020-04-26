@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { generateFunctionsSpec, generateFunctionsSpecFile } from '../src/scf';
 import { SCFServerlessStructure } from '../src/scf/interface';
+import * as mm from 'mm';
 
 describe('/test/scf.test.ts', () => {
   describe('generate', () => {
@@ -26,6 +27,7 @@ describe('/test/scf.test.ts', () => {
 
   describe('validate transform', () => {
     it('test base', () => {
+      mm(process.env, 'UDEV_NODE_ENV', 'prod');
       const result = generateFunctionsSpec(
         path.join(__dirname, './fixtures/scf/f-base.yml')
       );
@@ -39,7 +41,13 @@ describe('/test/scf.test.ts', () => {
           stage: 'dev',
           role: 'QCS_SCFExcuteRole',
           memorySize: 256,
-          environment: { variables: { ENV_FIRST: 'env1', ENV_SECOND: 'env2' } },
+          environment: {
+            variables: {
+              ENV_FIRST: 'env1',
+              ENV_SECOND: 'env2',
+              NODE_ENV: 'prod',
+            },
+          },
           timeout: 10,
         },
         functions: {
@@ -51,6 +59,7 @@ describe('/test/scf.test.ts', () => {
           },
         },
       });
+      mm.restore();
     });
 
     it('test transform http event', () => {
@@ -76,7 +85,11 @@ describe('/test/scf.test.ts', () => {
               {
                 apigw: {
                   name: 'index_apigw_dev',
-                  parameters: { httpMethod: 'GET', path: '/foo' },
+                  parameters: {
+                    httpMethod: 'GET',
+                    integratedResponse: true,
+                    path: '/foo',
+                  },
                 },
               },
             ],

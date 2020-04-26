@@ -1,5 +1,10 @@
-import { uppercaseObjectKey, removeObjectEmptyAttributes } from '../src/utils';
+import {
+  uppercaseObjectKey,
+  removeObjectEmptyAttributes,
+  filterUserDefinedEnv,
+} from '../src/utils';
 import { deepStrictEqual } from 'assert';
+import * as mm from 'mm';
 
 describe('/test/utils.test.ts', () => {
   it('test unppercase', () => {
@@ -35,5 +40,12 @@ describe('/test/utils.test.ts', () => {
       f: '',
     });
     deepStrictEqual(result, { b: 1, e: [1] });
+  });
+
+  it('filterUserDefinedEnv', () => {
+    mm(process.env, 'UDEV_NODE_ENV', 'prod');
+    const env = filterUserDefinedEnv();
+    deepStrictEqual(env['NODE_ENV'], 'prod');
+    mm.restore();
   });
 });

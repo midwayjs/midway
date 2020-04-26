@@ -1,9 +1,10 @@
 import * as getType from 'cache-content-type';
 import * as assert from 'assert';
 import * as statuses from 'statuses';
-import { is as typeis} from 'type-is';
+import { is as typeis } from 'type-is';
+import { FaaSHTTPResponse } from '@midwayjs/faas-typings';
 
-export class Response {
+export class Response implements FaaSHTTPResponse {
   statusCode;
   explicitStatus;
   _body;
@@ -14,7 +15,6 @@ export class Response {
     this._body = null;
     this._headers = {};
   }
-
 
   /**
    * Return response header.
@@ -96,7 +96,7 @@ export class Response {
 
   setHeader(name, value) {
     name = name.toLowerCase();
-    this.headers[ name ] = value;
+    this.headers[name] = value;
   }
 
   getHeader(field) {
@@ -175,7 +175,8 @@ export class Response {
    */
   set(field, val?) {
     if (typeof field !== 'object') {
-      if (Array.isArray(val)) val = val.map(v => typeof v === 'string' ? v : String(v));
+      if (Array.isArray(val))
+        val = val.map((v) => (typeof v === 'string' ? v : String(v)));
       else if (typeof val !== 'string') val = String(val);
       this.setHeader(field, val);
     } else {
@@ -205,9 +206,7 @@ export class Response {
     const prev = this.get(field);
 
     if (prev) {
-      val = Array.isArray(prev)
-        ? prev.concat(val)
-        : [prev].concat(val);
+      val = Array.isArray(prev) ? prev.concat(val) : [prev].concat(val);
     }
 
     return this.set(field, val);

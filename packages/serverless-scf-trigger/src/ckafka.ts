@@ -1,5 +1,5 @@
 import { SCFBaseTrigger } from './base';
-import { CKafkaEvent } from '@midwayjs/serverless-scf-starter';
+import { SCF } from '@midwayjs/faas-typings';
 
 /**
  * https://cloud.tencent.com/document/product/583/17530
@@ -8,7 +8,7 @@ export class CKafkaTrigger extends SCFBaseTrigger {
   handler;
 
   async toArgs() {
-    const event: CKafkaEvent = {
+    const event: SCF.CKafkaEvent = {
       Records: [
         {
           Ckafka: {
@@ -34,3 +34,5 @@ export class CKafkaTrigger extends SCFBaseTrigger {
     return [event, this.createContext()];
   }
 }
+
+export const ckafka = CKafkaTrigger;

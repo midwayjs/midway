@@ -10,7 +10,8 @@
     "mkdirp": "^0.5.1"
   },
   "devDependencies": {
-    "midway-bin": "^2.0.0"
+    "midway-bin": "^2.0.0",
+    "mm": "3"
   },
   "engines": {
     "node": ">= 10"
@@ -28,5 +29,10 @@
     "clean": "midway-bin clean",
     "autod": "midway-bin autod"
   },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:midwayjs/midway-faas.git"
+  },
+  "license": "MIT",
   "gitHead": "5783f06ff0298f0e172f801cae053c3fc80813a9"
 }

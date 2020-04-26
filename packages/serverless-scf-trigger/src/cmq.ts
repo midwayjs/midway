@@ -1,5 +1,5 @@
 import { SCFBaseTrigger } from './base';
-import { SCFCMQEvent } from '@midwayjs/serverless-scf-starter';
+import { SCF } from '@midwayjs/faas-typings';
 
 /**
  * https://cloud.tencent.com/document/product/583/11517
@@ -8,7 +8,7 @@ export class CMQTrigger extends SCFBaseTrigger {
   handler;
 
   async toArgs() {
-    const event: SCFCMQEvent = {
+    const event: SCF.CMQEvent = {
       Records: [
         {
           CMQ: {
@@ -20,7 +20,7 @@ export class CMQTrigger extends SCFBaseTrigger {
             msgId: '123345346',
             requestId: '123345346',
             msgBody: 'Hello from CMQ!',
-            msgTag: ['tag1', 'tag2'],
+            msgTag: 'tag1,tag2',
           },
         },
       ],
@@ -29,3 +29,6 @@ export class CMQTrigger extends SCFBaseTrigger {
     return [event, this.createContext()];
   }
 }
+
+export const mq = CMQTrigger;
+export const cmq = CMQTrigger;
