@@ -7,15 +7,21 @@ import {
   RouterParamValue,
   WEB_ROUTER_KEY,
   WEB_ROUTER_PARAM_KEY,
-  getClassMetadata, getPropertyDataFromClass, getProviderId, listModule, PLUGIN_KEY, LOGGER_KEY, APPLICATION_KEY
+  getClassMetadata,
+  getPropertyDataFromClass,
+  getProviderId,
+  listModule,
+  PLUGIN_KEY,
+  LOGGER_KEY
 } from '@midwayjs/decorator';
 import { EggAppInfo } from 'egg';
 import * as extend from 'extend2';
 import * as fs from 'fs';
-import { ContainerLoader, MidwayContainer } from '@midwayjs/core';
+import { ContainerLoader, MidwayContainer, PRIVATE_META_DATA_KEY } from '@midwayjs/core';
 import * as path from 'path';
 import { Middleware, MiddlewareParamArray, MidwayLoaderOptions, WebMiddleware } from '../interface';
 import { isTypeScriptEnvironment } from '../utils';
+import { generateProvideId } from '@midwayjs/core/dist/common/util';
 
 const graphviz = require('graphviz');
 const debug = require('debug')(`midway:loader:${process.pid}`);
@@ -64,12 +70,12 @@ export class MidwayWebLoader extends EggLoader {
     // 在 super constructor 中会调用到getAppInfo，之后会被赋值
     // 如果是typescript会加上 dist 或者 src 目录
     this.containerLoader = new ContainerLoader({
-      baseDir: this.appDir,
+      baseDir: this.baseDir,
       isTsMode: this.isTsMode,
     });
     this.containerLoader.initialize();
     this.applicationContext.registerObject('appDir', this.appDir);
-
+    console.log('--asd-fad', this.baseDir, this.appDir);
     // 外部给容器里设置环境
     const envService = this.applicationContext.getEnvironmentService();
     envService.setCurrentEnvironment(this.appInfo.env);
@@ -92,9 +98,7 @@ export class MidwayWebLoader extends EggLoader {
       return this.options.logger;
     });
     // register app
-    this.containerLoader.registerHook(APPLICATION_KEY, (key: string) => {
-      return this.app;
-    });
+    this.containerLoader.bindApp(this.app);
   }
 
   // loadPlugin -> loadConfig -> afterLoadConfig
@@ -319,7 +323,11 @@ export class MidwayWebLoader extends EggLoader {
 
     // implement @controller
     for (const module of controllerModules) {
-      const providerId = getProviderId(module);
+      let providerId = getProviderId(module);
+      const meta = getClassMetadata(PRIVATE_META_DATA_KEY, module);
+      if (providerId && meta) {
+        providerId = generateProvideId(providerId, meta.namespace);
+      }
       if (providerId) {
         if (this.controllerIds.indexOf(providerId) > -1) {
           throw new Error(`controller identifier [${providerId}] is exists!`);

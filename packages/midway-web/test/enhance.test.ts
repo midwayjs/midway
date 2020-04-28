@@ -299,6 +299,13 @@ describe('/test/enhance.test.ts', () => {
         .expect('success')
         .expect(200);
     });
+
+    it('configuration package controller should be ok', async () => {
+      await app.httpRequest()
+        .get('/book/1')
+        .expect('[{"id":1,"name":"小森林","ISBN":"9787541089329","desc":"《小森林》是知名漫画家五十岚大介的经典作品，也是豆瓣高分电影《小森林》原著，讲述一位平凡女孩在田园生活中寻找自我的故事。"}]')
+        .expect(200);
+    });
   });
 
   describe('load ts file and use third party module', () => {
