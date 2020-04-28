@@ -7,7 +7,7 @@ import {
   RouterParamValue,
   WEB_ROUTER_KEY,
   WEB_ROUTER_PARAM_KEY,
-  getClassMetadata, getPropertyDataFromClass, getProviderId, listModule, PLUGIN_KEY, LOGGER_KEY
+  getClassMetadata, getPropertyDataFromClass, getProviderId, listModule, PLUGIN_KEY, LOGGER_KEY, APPLICATION_KEY
 } from '@midwayjs/decorator';
 import { EggAppInfo } from 'egg';
 import * as extend from 'extend2';
@@ -90,6 +90,10 @@ export class MidwayWebLoader extends EggLoader {
         return this.app.getLogger(key);
       }
       return this.options.logger;
+    });
+    // register app
+    this.containerLoader.registerHook(APPLICATION_KEY, (key: string) => {
+      return this.app;
     });
   }
 
