@@ -513,7 +513,7 @@ export class PackagePlugin extends BasePlugin {
     let allFuncNames = Object.keys(this.core.service.functions);
     for (const aggregationName in this.core.service.aggregation) {
       const aggregationConfig = this.core.service.aggregation[aggregationName];
-      const aggregationFuncName = `aggregation${aggregationName}`;
+      const aggregationFuncName = aggregationName;
       this.core.service.functions[
         aggregationFuncName
       ] = aggregationConfig;

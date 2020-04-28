@@ -1,6 +1,7 @@
 import { BasePlugin } from '@midwayjs/fcli-command-core';
 import { existsSync } from 'fs';
 import { join } from 'path';
+import { Test } from './test';
 
 export class TestPlugin extends BasePlugin {
   commands = {
@@ -39,26 +40,19 @@ export class TestPlugin extends BasePlugin {
         this.core.cli.log('Testing all *.test.js/ts...');
       }
       const options = this.options;
-      const TestCommand = require('midway-bin/lib/cmd/test');
-      const CovCommand = require('midway-bin/lib/cmd/cov');
-      const co = require('co');
-      const Command = options.cov ? CovCommand : TestCommand;
-      const tester = new Command();
-      await co(function*() {
-        process.env.TS_NODE_FILES = 'true';
-        yield tester.run({
-          cwd: servicePath,
-          env: process.env,
-          argv: Object.assign(process.argv, {
-            _: testFiles,
-            nyc: '--reporter=json --reporter=lcov --reporter=text',
-            watch: options.watch,
-            extension: 'ts,js',
-            reporter: options.reporter,
-            typescript: existsSync(join(servicePath, 'tsconfig.json')),
-          }),
-          execArgv: process.execArgv,
-        });
+      const tester = new Test();
+      await tester.run({
+        cwd: servicePath,
+        env: process.env,
+        argv: Object.assign(process.argv, {
+          _: testFiles,
+          nyc: '--reporter=json --reporter=lcov --reporter=text',
+          watch: options.watch,
+          extension: 'ts,js',
+          reporter: options.reporter,
+          typescript: existsSync(join(servicePath, 'tsconfig.json')),
+        }),
+        execArgv: process.execArgv,
       });
     },
   };

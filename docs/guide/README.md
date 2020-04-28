@@ -433,7 +433,7 @@ functions:
           method: get
 
 aggregation:
-  common: # 高密度部署分组名，会自动拼接aggregation发布为一个单独的函数
+  common: # 高密度部署分组名，会发布为一个单独的函数
     deployOrigin: false # 如果为true，则聚合的index和hello函数也会进行单独部署
     functions: # 要聚合的 函数名 列表
       - index
