@@ -75,7 +75,6 @@ export class MidwayWebLoader extends EggLoader {
     });
     this.containerLoader.initialize();
     this.applicationContext.registerObject('appDir', this.appDir);
-    console.log('--asd-fad', this.baseDir, this.appDir);
     // 外部给容器里设置环境
     const envService = this.applicationContext.getEnvironmentService();
     envService.setCurrentEnvironment(this.appInfo.env);
