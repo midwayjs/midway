@@ -1,4 +1,5 @@
 import { asyncWrapper, start } from '../../../src';
+import { deepStrictEqual } from 'assert';
 
 let runtime;
 let inited;
@@ -9,6 +10,9 @@ exports.handler = asyncWrapper(async (...args) => {
     runtime = await start();
   }
   return runtime.asyncEvent(async function (ctx, event) {
+    deepStrictEqual(ctx.logger, console);
+    deepStrictEqual(event.path, '/test');
+    deepStrictEqual(event.httpMethod, 'POST');
     ctx.status = 200;
     ctx.body = {
       headers: ctx.headers,

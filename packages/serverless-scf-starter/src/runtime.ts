@@ -21,7 +21,8 @@ export class SCFRuntime extends ServerlessLightRuntime {
     event: SCF.APIGatewayEvent,
     context: SCF.RequestContext
   ) {
-    const ctx = new Context(event, context);
+    const ctx: Context & { logger?: any } = new Context(event, context);
+    ctx.logger = console;
     const args = [ctx, event];
 
     const result = await this.invokeHandlerWrapper(context, async () => {
@@ -72,8 +73,12 @@ export class SCFRuntime extends ServerlessLightRuntime {
   }
 
   async wrapperEventInvoker(handler, event: any, context: SCF.RequestContext) {
-    const ctx = new Context({}, context);
-    const args = [ctx, event];
+    // format context
+    const newCtx = {
+      logger: console,
+      originContext: context,
+    };
+    const args = [newCtx, event];
     // 其他事件场景
     return this.invokeHandlerWrapper(context, async () => {
       if (!handler) {

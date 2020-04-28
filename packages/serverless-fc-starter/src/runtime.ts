@@ -1,8 +1,5 @@
 import * as getRawBody from 'raw-body';
-import {
-  FAAS_ARGS_KEY,
-  ServerlessLightRuntime,
-} from '@midwayjs/runtime-engine';
+import { FAAS_ARGS_KEY, ServerlessLightRuntime, } from '@midwayjs/runtime-engine';
 import { Context } from '@midwayjs/serverless-http-parser';
 import * as util from 'util';
 
@@ -27,23 +24,24 @@ export class FCRuntime extends ServerlessLightRuntime {
   }
 
   async wrapperWebInvoker(handler, req, res, context) {
-    let ctx: Context;
+    let ctx: Context & { logger?: any };
     const args = [];
     // for web
     const isHTTPMode =
       req.constructor.name === 'EventEmitter' || util.types.isProxy(req); // for local test
     if (isHTTPMode) {
       // http
-      const rawBody = await getRawBody(req);
       // const rawBody = 'test';
       // req.rawBody = rawBody;
-      req.body = rawBody; // TODO: body parser
+      req.body = await getRawBody(req); // TODO: body parser
       ctx = new Context(req, context);
+      ctx.logger = context.logger || console;
       // ctx.EventType = 'fc_http';
       args.push(ctx);
     } else {
       // api gateway
       ctx = new Context(req, context);
+      ctx.logger = context.logger || console;
       // ctx.EventType = 'fc_apigw';
       args.push(ctx);
       // Pass original event
@@ -156,8 +154,13 @@ export class FCRuntime extends ServerlessLightRuntime {
       }
       args.push(event);
     }
+    // format context
+    const newCtx = {
+      logger: context.logger || console,
+      originContext: context,
+    };
     // 其他事件场景
-    return this.invokeHandlerWrapper(context, async () => {
+    return this.invokeHandlerWrapper(newCtx, async () => {
       return handler.apply(handler, args);
     });
   }
