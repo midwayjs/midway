@@ -7,12 +7,12 @@ import {
   RouterParamValue,
   WEB_ROUTER_KEY,
   WEB_ROUTER_PARAM_KEY,
-  getClassMetadata, getPropertyDataFromClass, getProviderId, listModule
+  getClassMetadata, getPropertyDataFromClass, getProviderId, listModule, PLUGIN_KEY, LOGGER_KEY
 } from '@midwayjs/decorator';
 import { EggAppInfo } from 'egg';
 import * as extend from 'extend2';
 import * as fs from 'fs';
-import { ContainerLoader, MidwayContainer, MidwayHandlerKey } from '@midwayjs/core';
+import { ContainerLoader, MidwayContainer } from '@midwayjs/core';
 import * as path from 'path';
 import { Middleware, MiddlewareParamArray, MidwayLoaderOptions, WebMiddleware } from '../interface';
 import { isTypeScriptEnvironment } from '../utils';
@@ -81,11 +81,11 @@ export class MidwayWebLoader extends EggLoader {
     // 如果没有关闭autoLoad 则进行load
     this.containerLoader.loadDirectory(containerConfig);
 
-    this.containerLoader.registerHook(MidwayHandlerKey.PLUGIN, (key: string) => {
+    this.containerLoader.registerHook(PLUGIN_KEY, (key: string) => {
       return this.app[key] || this.pluginContext.get(key);
     });
 
-    this.containerLoader.registerHook(MidwayHandlerKey.LOGGER, (key: string) => {
+    this.containerLoader.registerHook(LOGGER_KEY, (key: string) => {
       if (this.app.getLogger) {
         return this.app.getLogger(key);
       }

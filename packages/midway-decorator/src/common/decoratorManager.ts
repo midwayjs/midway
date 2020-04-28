@@ -33,6 +33,10 @@ export class DecoratorManager extends Map {
     this.get(key).add(module);
   }
 
+  resetModule(key) {
+    this.set(key, new Set());
+  }
+
   static getDecoratorClassKey(decoratorNameKey: decoratorKey) {
     return decoratorNameKey.toString() + '_CLS';
   }
@@ -399,6 +403,13 @@ export function saveModule(decoratorNameKey: decoratorKey, target) {
  */
 export function listModule(decoratorNameKey: decoratorKey): any[] {
   return manager.listModule(decoratorNameKey);
+}
+/**
+ * reset module
+ * @param decoratorNameKey
+ */
+export function resetModule(decoratorNameKey: decoratorKey): void {
+  return manager.resetModule(decoratorNameKey);
 }
 
 /**

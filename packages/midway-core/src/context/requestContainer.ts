@@ -14,6 +14,14 @@ export class MidwayRequestContainer extends MidwayContainer {
     this.registerObject(REQUEST_CTX_KEY, ctx);
     // register contextLogger
     this.registerObject('logger', ctx.logger);
+
+    const resolverHandler = this.applicationContext.resolverHandler;
+    this.beforeEachCreated(resolverHandler.beforeEachCreated.bind(resolverHandler));
+    this.afterEachCreated(resolverHandler.afterEachCreated.bind(resolverHandler));
+  }
+
+  init() {
+    // do nothing
   }
 
   get<T = any>(identifier: any, args?: any): T {
@@ -74,10 +82,6 @@ export class MidwayRequestContainer extends MidwayContainer {
     if (this.parent) {
       return this.parent.getAsync<T>(identifier, args);
     }
-  }
-
-  initService() {
-    // do nothing
   }
 
   async ready() {

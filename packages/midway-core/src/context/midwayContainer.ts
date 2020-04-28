@@ -1,10 +1,5 @@
 import * as globby from 'globby';
 import {
-  CLASS_KEY_CONSTRUCTOR,
-  CONFIG_KEY,
-  LOGGER_KEY,
-  PLUGIN_KEY,
-  getClassMetadata,
   getObjectDefinition,
   getProviderId,
   ObjectDefinitionOptions,
@@ -18,7 +13,7 @@ import {
 import * as is from 'is-type-of';
 import { join } from 'path';
 import { ContainerConfiguration } from './configuration';
-import { FUNCTION_INJECT_KEY, MidwayHandlerKey, MIDWAY_ALL_CONFIG } from '../common/constants';
+import { FUNCTION_INJECT_KEY } from '../common/constants';
 import {
   IConfigService,
   IEnvironmentService,
@@ -27,12 +22,14 @@ import {
   MAIN_MODULE_KEY,
   IContainerConfiguration,
   ILifeCycle,
+  REQUEST_CTX_KEY,
 } from '../interface';
 import { MidwayConfigService } from '../service/configService';
 import { MidwayEnvironmentService } from '../service/environmentService';
 import { Container } from './container';
 import { generateProvideId } from '../common/util';
 import { pipelineFactory } from '../features/pipeline';
+import { ResolverHandler } from './resolverHandler';
 
 const DEFAULT_PATTERN = ['**/**.ts', '**/**.tsx', '**/**.js', '!**/**.d.ts'];
 const DEFAULT_IGNORE_PATTERN = [
@@ -46,13 +43,8 @@ const DEFAULT_IGNORE_PATTERN = [
 
 const debug = require('debug')('midway:container');
 
-interface FrameworkDecoratorMetadata {
-  key: string;
-  propertyName: string;
-}
-
 export class MidwayContainer extends Container implements IMidwayContainer {
-  handlerMap: Map<string, (handlerKey: string, instance?: any) => any>;
+  resolverHandler: ResolverHandler;
   // 仅仅用于兼容requestContainer的ctx
   ctx = {};
   readyBindModules: Map<string, Set<any>> = new Map();
@@ -70,13 +62,12 @@ export class MidwayContainer extends Container implements IMidwayContainer {
   }
 
   init(): void {
-    this.handlerMap = new Map();
     this.initService();
 
-    this.registerEachCreatedHook();
+    this.resolverHandler = new ResolverHandler(this, this.getManagedResolverFactory());
     // 防止直接从applicationContext.getAsync or get对象实例时依赖当前上下文信息出错
     // ctx is in requestContainer
-    this.registerObject('ctx', this.ctx);
+    this.registerObject(REQUEST_CTX_KEY, this.ctx);
   }
 
   initService() {
@@ -200,106 +191,8 @@ export class MidwayContainer extends Container implements IMidwayContainer {
     return child;
   }
 
-  protected registerEachCreatedHook() {
-    // register constructor inject
-    this.beforeEachCreated((target, constructorArgs, context) => {
-      let constructorMetaData;
-      try {
-        constructorMetaData = getClassMetadata(CLASS_KEY_CONSTRUCTOR, target);
-      } catch (e) {
-        debug(`beforeEachCreated error ${e.stack}`);
-      }
-      // lack of field
-      if (constructorMetaData && constructorArgs) {
-        for (const idx in constructorMetaData) {
-          const index = parseInt(idx, 10);
-          const propertyMeta = constructorMetaData[index];
-          let result;
-
-          switch (propertyMeta.type) {
-            case 'config':
-              result = this.findHandlerHook(MidwayHandlerKey.CONFIG)(
-                propertyMeta.key
-              );
-              break;
-            case 'logger':
-              result = this.findHandlerHook(MidwayHandlerKey.LOGGER)(
-                propertyMeta.key
-              );
-              break;
-            case 'plugin':
-              result = this.findHandlerHook(MidwayHandlerKey.PLUGIN)(
-                propertyMeta.key
-              );
-              break;
-          }
-          constructorArgs[index] = result;
-        }
-      }
-    });
-
-    // register property inject
-    this.afterEachCreated((instance, context, definition) => {
-      // 处理配置装饰器
-      const configSetterProps: FrameworkDecoratorMetadata[] = getClassMetadata(
-        CONFIG_KEY,
-        instance
-      );
-      this.defineGetterPropertyValue(
-        configSetterProps,
-        instance,
-        this.findHandlerHook(MidwayHandlerKey.CONFIG)
-      );
-      // 处理插件装饰器
-      const pluginSetterProps: FrameworkDecoratorMetadata[] = getClassMetadata(
-        PLUGIN_KEY,
-        instance
-      );
-      this.defineGetterPropertyValue(
-        pluginSetterProps,
-        instance,
-        this.findHandlerHook(MidwayHandlerKey.PLUGIN)
-      );
-      // 处理日志装饰器
-      const loggerSetterProps: FrameworkDecoratorMetadata[] = getClassMetadata(
-        LOGGER_KEY,
-        instance
-      );
-      this.defineGetterPropertyValue(
-        loggerSetterProps,
-        instance,
-        this.findHandlerHook(MidwayHandlerKey.LOGGER)
-      );
-    });
-  }
-
-  /**
-   * binding getter method for decorator
-   *
-   * @param setterProps
-   * @param instance
-   * @param getterHandler
-   */
-  private defineGetterPropertyValue(
-    setterProps: FrameworkDecoratorMetadata[],
-    instance,
-    getterHandler
-  ) {
-    if (setterProps && getterHandler) {
-      for (const prop of setterProps) {
-        if (prop.propertyName) {
-          Object.defineProperty(instance, prop.propertyName, {
-            get: () => getterHandler(prop.key, instance),
-            configurable: true, // 继承对象有可能会有相同属性，这里需要配置成 true
-            enumerable: true,
-          });
-        }
-      }
-    }
-  }
-
   registerDataHandler(handlerType: string, handler: (handlerKey) => any) {
-    this.handlerMap.set(handlerType, handler);
+    this.resolverHandler.registerHandler(handlerType, handler);
   }
 
   registerCustomBinding(objectDefinition, target) {
@@ -312,20 +205,6 @@ export class MidwayContainer extends Container implements IMidwayContainer {
         `register @scope to default value(request), id=${objectDefinition.id}`
       );
       objectDefinition.scope = ScopeEnum.Request;
-    }
-  }
-
-  /**
-   * get hook from current map or parent map
-   * @param hookKey
-   */
-  findHandlerHook(hookKey: string) {
-    if (this.handlerMap.has(hookKey)) {
-      return this.handlerMap.get(hookKey);
-    }
-
-    if (this.parent) {
-      return (this.parent as MidwayContainer).findHandlerHook(hookKey);
     }
   }
 
@@ -361,18 +240,6 @@ export class MidwayContainer extends Container implements IMidwayContainer {
   async ready() {
     super.ready();
     if (this.configService) {
-      // register handler for container
-      this.registerDataHandler(MidwayHandlerKey.CONFIG, (key: string) => {
-        if (key) {
-          if (key === MIDWAY_ALL_CONFIG) {
-            return this.configService.getConfiguration();
-          } else {
-            const val = this.configService.getConfiguration(key);
-            debug('@config key => %s value => %j.', key, val);
-            return val;
-          }
-        }
-      });
       // 加载配置
       await this.configService.load();
     }
