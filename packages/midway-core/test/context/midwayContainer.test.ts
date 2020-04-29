@@ -9,7 +9,7 @@ import { TestBinding, LifeCycleTest, LifeCycleTest1 } from '../fixtures/lifecycl
 import sinon = require('sinon');
 import mm = require('mm');
 import * as decs from '@midwayjs/decorator';
-const { LIFECYCLE_IDENTIFIER_PREFIX } = decs;
+const { LIFECYCLE_IDENTIFIER_PREFIX, APPLICATION_KEY, CONFIGURATION_KEY, resetModule } = decs;
 
 describe('/test/context/midwayContainer.test.ts', () => {
 
@@ -51,6 +51,9 @@ describe('/test/context/midwayContainer.test.ts', () => {
     const container = new MidwayContainer();
 
     it('lifecycle should be ok', async () => {
+      container.registerDataHandler(APPLICATION_KEY, () => {
+        return { hello: 123};
+      });
       const cfg = container.createConfiguration();
       container.bind(TestBinding);
       cfg.bindConfigurationClass(LifeCycleTest);
@@ -80,6 +83,7 @@ describe('/test/context/midwayContainer.test.ts', () => {
       expect(container.registry.hasObject(LIFECYCLE_IDENTIFIER_PREFIX + 'lifeCycleTest')).false;
       expect(callback.withArgs('on stop').calledOnce).true;
 
+      resetModule(CONFIGURATION_KEY);
       mm.restore();
     });
   });

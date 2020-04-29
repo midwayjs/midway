@@ -225,3 +225,21 @@ export interface IEnvironmentService {
 export interface IMiddleware<T> {
   resolve: () => (context: T, next: () => Promise<any>) => any;
 }
+
+export interface IMidwayCoreApplication {
+  isTsMode: boolean;
+  baseDir: string;
+  appDir: string;
+  env?: string;
+  /**
+   * application/agent
+   */
+  type?: string;
+  applicationContext: IMidwayContainer;
+  /**
+   * middlewares
+   */
+  middleware: any[];
+
+  getConfig(key?: string): any;
+}

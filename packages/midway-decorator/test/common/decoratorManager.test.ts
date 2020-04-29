@@ -10,12 +10,14 @@ import {
   getProviderId,
   listMethodDataFromClass,
   listModule,
+  resetModule,
   listPreloadModule, getObjectDefinition, savePropertyDataToClass, listPropertyDataFromClass, attachPropertyMetadata
 } from '../../src';
 import * as assert from 'assert';
 import { expect } from 'chai';
 import { ManagerTest as module } from '../fixtures/decorator/customClass';
 import mm = require('mm');
+import { PRELOAD_MODULE_KEY } from '../../dist';
 
 describe('/test/common/decoratorManager.test.ts', () => {
   it('should save data on class and get it', () => {
@@ -39,8 +41,12 @@ describe('/test/common/decoratorManager.test.ts', () => {
   });
 
   it('should list preload module', () => {
-    const modules = listPreloadModule();
+    let modules = listPreloadModule();
     assert(modules.length === 1);
+
+    resetModule(PRELOAD_MODULE_KEY);
+    modules = listPreloadModule();
+    assert(modules.length === 0);
   });
 
   it('should list module', () => {

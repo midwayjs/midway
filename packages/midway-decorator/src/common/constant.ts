@@ -19,6 +19,7 @@ export const HSF_KEY = 'rpc:hsf';
 export const CONFIG_KEY = 'config';
 export const PLUGIN_KEY = 'plugin';
 export const LOGGER_KEY = 'logger';
+export const APPLICATION_KEY = '__midway_framework_app__';
 
 ////////////////////////////////////////// inject keys
 // constructor key

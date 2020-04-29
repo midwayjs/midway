@@ -87,6 +87,44 @@ describe('/test/loader.test.ts', () => {
     assert(baseServiceCtx.plugin2.b === 2);
   });
 
+  it('should load ts file and bindapp success', async () => {
+    const loader = new ContainerLoader({
+      baseDir: path.join(__dirname, './fixtures/base-app-forbindapp/src'),
+    });
+    loader.initialize();
+    loader.loadDirectory();
+    const tt: any = {
+      baseDir: 'hello this is basedir'
+    };
+    loader.bindApp(tt);
+    await loader.refresh();
+    // register handler for container
+    loader.registerHook(CONFIG_KEY, (key, target) => {
+      assert(
+        target instanceof
+          require('./fixtures/base-app-forbindapp/src/lib/service')[
+            'BaseService'
+          ]
+      );
+      return 'hello';
+    });
+
+    loader.registerHook(PLUGIN_KEY, (key, target) => {
+      return { b: 2 };
+    });
+
+    loader.registerHook(LOGGER_KEY, (key, target) => {
+      return console;
+    });
+
+    const appCtx = loader.getApplicationContext();
+    const baseService: any = await appCtx.getAsync('baseService');
+    assert(baseService.config === 'hello');
+    assert(baseService.logger === console);
+    assert(baseService.plugin2.b === 2);
+    assert(baseService.test.baseDir === 'hello this is basedir');
+  });
+
   it('load ts file support constructor inject', async () => {
     const loader = new ContainerLoader({
       baseDir: path.join(__dirname, './fixtures/base-app-constructor/src'),
