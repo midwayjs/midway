@@ -527,4 +527,41 @@ describe('/test/enhance.test.ts', () => {
         .expect('11114444', done);
     });
   });
+
+  describe('shoule egg hackernew be ok', () => {
+    let app;
+    before(() => {
+      app = utils.app('enhance/base-app-hackernews', {
+        typescript: false,
+      });
+      return app.ready();
+    });
+
+    after(() => app.close());
+
+    it('news should be ok', async () => {
+      await app.httpRequest()
+        .get('/news')
+        .expect((res) => res.text.includes('<a href="/news/user/pseudolus">pseudolus</a>'))
+        .expect('Content-Type', /html/)
+        .expect(200);
+    });
+
+    it('new item should be ok', async () => {
+      await app.httpRequest()
+        .get('/news/item/1')
+        .expect((res) => res.text.includes('<a class="title" target="_blank" href="http://ycombinator.com">Y Combinator</a>'))
+        .expect('Content-Type', /html/)
+        .expect(200);
+    });
+
+    it('user should be ok', async () => {
+      // stevage
+      await app.httpRequest()
+        .get('/news/user/stevage')
+        .expect((res) => res.text.includes('Profile: stevage | egg - HackerNews'))
+        .expect('Content-Type', /html/)
+        .expect(200);
+    });
+  });
 });
