@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.19.0](https://github.com/midwayjs/midway/compare/v1.18.6...v1.19.0) (2020-04-29)
+
+
+### Features
+
+* add env switch to disable ts ([#481](https://github.com/midwayjs/midway/issues/481)) ([73aeba9](https://github.com/midwayjs/midway/commit/73aeba948c6cd9f29b1612175f39180a574e9c75))
+
+
+
+
+
 ## [1.18.6](https://github.com/midwayjs/midway/compare/v1.18.5...v1.18.6) (2020-04-09)
 
 **Note:** Version bump only for package midway-web

@@ -1,6 +1,6 @@
 {
   "name": "midway-web",
-  "version": "1.18.6",
+  "version": "1.19.0",
   "description": "Midway Web Scene",
   "main": "dist/index",
   "typings": "dist/index.d.ts",

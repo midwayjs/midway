@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.19.0](https://github.com/midwayjs/midway/compare/v1.18.6...v1.19.0) (2020-04-29)
+
+**Note:** Version bump only for package midway
+
+
+
+
+
 ## [1.18.6](https://github.com/midwayjs/midway/compare/v1.18.5...v1.18.6) (2020-04-09)
 
 **Note:** Version bump only for package midway
