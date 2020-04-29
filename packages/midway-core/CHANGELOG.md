@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0](https://github.com/midwayjs/midway/compare/v2.0.17...v2.1.0) (2020-04-29)
+
+
+### Features
+
+* refactor hook & add @App ([#482](https://github.com/midwayjs/midway/issues/482)) ([3bfd300](https://github.com/midwayjs/midway/commit/3bfd300daf21fce96f2ff92be22ecb0f12bdd033))
+
+
+
+
+
 ## [2.0.17](https://github.com/midwayjs/midway/compare/v2.0.16...v2.0.17) (2020-04-21)
 
 
