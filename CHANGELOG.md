@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.90](https://github.com/midwayjs/midway-faas/compare/v0.2.89...v0.2.90) (2020-04-29)
+
+
+### Bug Fixes
+
+* add origin context for normal event ([#146](https://github.com/midwayjs/midway-faas/issues/146)) ([9d5b353](https://github.com/midwayjs/midway-faas/commit/9d5b353b13e0d70cc68205d0b9626db10245c4b5))
+* aggregation all ([#147](https://github.com/midwayjs/midway-faas/issues/147)) ([59600a1](https://github.com/midwayjs/midway-faas/commit/59600a13625c2a86d7e28c32fdefca2c3bbc1d4a))
+
+
+
+
+
 ## [0.2.89](https://github.com/midwayjs/midway-faas/compare/v0.2.88...v0.2.89) (2020-04-28)
 
 **Note:** Version bump only for package midway-faas

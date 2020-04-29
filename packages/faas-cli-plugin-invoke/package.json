@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/fcli-plugin-invoke",
-  "version": "0.2.89",
+  "version": "0.2.90",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
@@ -10,16 +10,16 @@
     "@midwayjs/mwcc": "^0.2.2",
     "@midwayjs/runtime-engine": "^0.2.89",
     "@midwayjs/runtime-mock": "^0.2.89",
-    "@midwayjs/serverless-fc-starter": "^0.2.89",
-    "@midwayjs/serverless-fc-trigger": "^0.2.89",
-    "@midwayjs/serverless-scf-starter": "^0.2.89",
-    "@midwayjs/serverless-scf-trigger": "^0.2.89",
+    "@midwayjs/serverless-fc-starter": "^0.2.90",
+    "@midwayjs/serverless-fc-trigger": "^0.2.90",
+    "@midwayjs/serverless-scf-starter": "^0.2.90",
+    "@midwayjs/serverless-scf-trigger": "^0.2.90",
     "@midwayjs/serverless-spec-builder": "^0.2.89",
     "fs-extra": "^8.1.0",
     "globby": "^10.0.1"
   },
   "devDependencies": {
-    "@midwayjs/faas": "^0.2.89",
+    "@midwayjs/faas": "^0.2.90",
     "midway-bin": "^2.0.0"
   },
   "engines": {
