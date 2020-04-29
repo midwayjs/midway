@@ -513,7 +513,7 @@ export class PackagePlugin extends BasePlugin {
     let allFuncNames = Object.keys(this.core.service.functions);
     for (const aggregationName in this.core.service.aggregation) {
       const aggregationConfig = this.core.service.aggregation[aggregationName];
-      const aggregationFuncName = aggregationName;
+      const aggregationFuncName = this.getAggregationFunName(aggregationName);
       this.core.service.functions[
         aggregationFuncName
       ] = aggregationConfig;
@@ -613,6 +613,11 @@ export class PackagePlugin extends BasePlugin {
 
     this.core.config.specFile.path = tmpSpecFile;
     writeToSpec(this.servicePath, this.core.service, this.core.config.specFile);
+  }
+
+
+  getAggregationFunName(aggregationName: string) {
+    return aggregationName;
   }
 
   finalize() {}
