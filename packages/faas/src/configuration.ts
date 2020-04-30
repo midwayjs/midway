@@ -1,19 +1,22 @@
 import { Configuration, App, Config } from '@midwayjs/decorator';
-import { ILifeCycle, IMidwayContainer } from '@midwayjs/core';
+import { ILifeCycle } from '@midwayjs/core';
 
 @Configuration({
   importConfigs: ['./config.default'],
 })
 export class FaaSContainerConfiguration implements ILifeCycle {
   @App()
-  app;
+  app: {
+    globalMiddleware: string[];
+  };
 
   @Config('middleware')
-  middleware;
+  middleware: string[];
 
-  async onReady(container: IMidwayContainer) {
+  async onReady() {
+    // add middleware from user config
     for (const mw of this.middleware) {
-      this.app.use(mw);
+      this.app.globalMiddleware.push(mw);
     }
   }
 }
