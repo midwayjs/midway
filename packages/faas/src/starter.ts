@@ -206,6 +206,8 @@ export class FaaSStarter implements IFaaSStarter {
           } as MidwayFaaSInfo);
         }
       }
+
+      this.initConfiguration('./configuration', __dirname);
       // add configuration support
       this.prepareConfiguration();
 
