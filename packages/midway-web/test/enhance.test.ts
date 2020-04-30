@@ -299,6 +299,13 @@ describe('/test/enhance.test.ts', () => {
         .expect('success')
         .expect(200);
     });
+
+    it('configuration package controller should be ok', async () => {
+      await app.httpRequest()
+        .get('/book/1')
+        .expect('[{"id":1,"name":"小森林","ISBN":"9787541089329","desc":"《小森林》是知名漫画家五十岚大介的经典作品，也是豆瓣高分电影《小森林》原著，讲述一位平凡女孩在田园生活中寻找自我的故事。"}]')
+        .expect(200);
+    });
   });
 
   describe('load ts file and use third party module', () => {
@@ -518,6 +525,43 @@ describe('/test/enhance.test.ts', () => {
         .post('/api/data')
         .expect(200)
         .expect('11114444', done);
+    });
+  });
+
+  describe('shoule egg hackernew be ok', () => {
+    let app;
+    before(() => {
+      app = utils.app('enhance/base-app-hackernews', {
+        typescript: false,
+      });
+      return app.ready();
+    });
+
+    after(() => app.close());
+
+    it('news should be ok', async () => {
+      await app.httpRequest()
+        .get('/news')
+        .expect((res) => res.text.includes('<a href="/news/user/pseudolus">pseudolus</a>'))
+        .expect('Content-Type', /html/)
+        .expect(200);
+    });
+
+    it('new item should be ok', async () => {
+      await app.httpRequest()
+        .get('/news/item/1')
+        .expect((res) => res.text.includes('<a class="title" target="_blank" href="http://ycombinator.com">Y Combinator</a>'))
+        .expect('Content-Type', /html/)
+        .expect(200);
+    });
+
+    it('user should be ok', async () => {
+      // stevage
+      await app.httpRequest()
+        .get('/news/user/stevage')
+        .expect((res) => res.text.includes('Profile: stevage | egg - HackerNews'))
+        .expect('Content-Type', /html/)
+        .expect(200);
     });
   });
 });

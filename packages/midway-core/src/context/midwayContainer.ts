@@ -9,11 +9,12 @@ import {
   listModule,
   CONFIGURATION_KEY,
   isProvide,
+  saveClassMetadata,
 } from '@midwayjs/decorator';
 import * as is from 'is-type-of';
 import { join } from 'path';
 import { ContainerConfiguration } from './configuration';
-import { FUNCTION_INJECT_KEY } from '../common/constants';
+import { FUNCTION_INJECT_KEY, PRIVATE_META_DATA_KEY } from '../common/constants';
 import {
   IConfigService,
   IEnvironmentService,
@@ -86,7 +87,7 @@ export class MidwayContainer extends Container implements IMidwayContainer {
   }) {
     // 添加全局白名单
     this.midwayIdentifiers.push(PIPELINE_IDENTIFIER);
-    this.midwayIdentifiers.push('ctx');
+    this.midwayIdentifiers.push(REQUEST_CTX_KEY);
 
     // create main module configuration
     const configuration = this.createConfiguration();
@@ -158,6 +159,9 @@ export class MidwayContainer extends Container implements IMidwayContainer {
     if (is.class(module)) {
       const providerId = isProvide(module) ? getProviderId(module) : null;
       if (providerId) {
+        if (namespace) {
+          saveClassMetadata(PRIVATE_META_DATA_KEY, { namespace }, module);
+        }
         this.bind(generateProvideId(providerId, namespace), module, {
           namespace,
           srcPath: filePath,

@@ -1,7 +1,14 @@
 import { configuration, logger, app } from '../../../../../src';
 import { ILifeCycle, IMidwayContainer, IMidwayCoreApplication } from '@midwayjs/core';
 
-@configuration({})
+@configuration({
+  imports: [
+    'midway-plugin-mod',
+    '@midwayjs/midway-plugin-atmod',
+    '@midwayjs/midway-plugin-btmod',
+    '@midwayjs/midway-plugin-btmod'
+  ]
+})
 export class LifeCycleTest implements ILifeCycle {
   @logger()
   logger: any;
@@ -13,10 +20,10 @@ export class LifeCycleTest implements ILifeCycle {
     console.log('this is lifecycle test1');
     this.logger.debug('this is a lifecycle test1');
 
-    if (this.appx) {
+    if (!this.appx) {
       throw new Error('app is empty!');
     }
-    if (!this.appx.baseDir) {
+    if (!this.appx.getAppDir()) {
       throw new Error('app.baseDir is empty!');
     }
   }

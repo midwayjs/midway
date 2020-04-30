@@ -13,7 +13,7 @@ class AutoConfiguraion implements ILifeCycle {
   test: IMidwayCoreApplication;
 
   async onReady() {
-    if (this.test.baseDir !== 'hello this is basedir') {
+    if (this.test.getBaseDir() !== 'hello this is basedir') {
       throw new Error('midway core application error');
     }
   }

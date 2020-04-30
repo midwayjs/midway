@@ -3,6 +3,7 @@ import {
   LOGGER_KEY,
   PLUGIN_KEY,
   Provide,
+  APPLICATION_KEY,
 } from '@midwayjs/decorator';
 import * as assert from 'assert';
 import * as path from 'path';
@@ -94,9 +95,9 @@ describe('/test/loader.test.ts', () => {
     loader.initialize();
     loader.loadDirectory();
     const tt: any = {
-      baseDir: 'hello this is basedir'
+      getBaseDir() { return 'hello this is basedir'; }
     };
-    loader.bindApp(tt);
+    loader.registerHook(APPLICATION_KEY, () => tt);
     await loader.refresh();
     // register handler for container
     loader.registerHook(CONFIG_KEY, (key, target) => {
@@ -122,7 +123,7 @@ describe('/test/loader.test.ts', () => {
     assert(baseService.config === 'hello');
     assert(baseService.logger === console);
     assert(baseService.plugin2.b === 2);
-    assert(baseService.test.baseDir === 'hello this is basedir');
+    assert(baseService.test.getBaseDir() === 'hello this is basedir');
   });
 
   it('load ts file support constructor inject', async () => {
@@ -230,6 +231,11 @@ describe('/test/loader.test.ts', () => {
     });
     loader.initialize();
     loader.loadDirectory();
+    loader.registerHook(APPLICATION_KEY, () => ({
+      getBaseDir() {
+        return 'base dir';
+      }
+    }));
     await loader.refresh();
 
     const appCtx = loader.getApplicationContext();

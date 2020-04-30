@@ -28,6 +28,7 @@
   "scripts": {
     "autod": "lerna run autod",
     "test": "lerna run test",
+    "link": "lerna run link",
     "cov": "lerna run cov --concurrency=1",
     "ci": "npm run build && npm run cov",
     "purge": "npm run clean && rm -rf node_modules",

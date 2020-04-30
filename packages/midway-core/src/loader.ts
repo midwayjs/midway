@@ -1,8 +1,6 @@
 import * as path from 'path';
 import { MidwayContainer } from './context/midwayContainer';
 import { Container } from './context/container';
-import { IMidwayCoreApplication } from './interface';
-import { APPLICATION_KEY } from '@midwayjs/decorator';
 
 function buildLoadDir(baseDir, dir) {
   if (!path.isAbsolute(dir)) {
@@ -45,12 +43,6 @@ export class ContainerLoader {
 
   registerHook(hookKey, hookHandler) {
     this.applicationContext.registerDataHandler(hookKey, hookHandler);
-  }
-
-  bindApp(app: IMidwayCoreApplication) {
-    this.applicationContext.registerDataHandler(APPLICATION_KEY, () => {
-      return app;
-    });
   }
 
   loadDirectory(loadOpts: {
