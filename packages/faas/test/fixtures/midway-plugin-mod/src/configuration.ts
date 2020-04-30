@@ -1,6 +1,7 @@
 import { Configuration } from '@midwayjs/decorator';
 
 @Configuration({
-  imports: []
+  imports: [],
+  namespace: 'midway-plugin-mod',
 })
 export class AutoConfiguraion {}

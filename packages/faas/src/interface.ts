@@ -1,8 +1,5 @@
 import { MidwayRequestContainer } from '@midwayjs/core';
-import { KoaMiddleware } from '@midwayjs/decorator';
 import { FaaSHTTPContext } from '@midwayjs/faas-typings';
-
-export type Middleware = KoaMiddleware<FaaSContext>;
 
 export interface IFaaSStarter {
   start(opts?);
@@ -27,9 +24,4 @@ export interface FaaSContext extends FaaSHTTPContext {
   env: string;
   requestContext: MidwayRequestContainer;
   originContext: any;
-}
-
-export interface MidwayFaaSInfo {
-  baseDir: string;
-  appDir: string;
 }

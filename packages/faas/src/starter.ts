@@ -1,6 +1,5 @@
-import { FaaSContext, IFaaSStarter, MidwayFaaSInfo } from './interface';
-import { join, dirname, resolve } from 'path';
-import { existsSync } from 'fs';
+import { FaaSContext, IFaaSStarter } from './interface';
+import { dirname, join, resolve } from 'path';
 import {
   ContainerLoader,
   getClassMetadata,
@@ -11,12 +10,7 @@ import {
   MidwayRequestContainer,
   REQUEST_OBJ_CTX_KEY,
 } from '@midwayjs/core';
-import {
-  FUNC_KEY,
-  PLUGIN_KEY,
-  LOGGER_KEY,
-  APPLICATION_KEY,
-} from '@midwayjs/decorator';
+import { APPLICATION_KEY, FUNC_KEY, LOGGER_KEY, PLUGIN_KEY, } from '@midwayjs/decorator';
 import SimpleLock from '@midwayjs/simple-lock';
 import * as compose from 'koa-compose';
 
@@ -32,16 +26,15 @@ function isTypeScriptEnvironment() {
 }
 
 export class FaaSStarter implements IFaaSStarter {
-  baseDir: string;
-  appDir: string;
-  defaultHandlerMethod = 'handler';
-  defaultRouterName = 'handler';
+  public baseDir: string;
+  public appDir: string;
+  protected defaultHandlerMethod = 'handler';
   loader: ContainerLoader;
   globalConfig: object;
-  globalMiddleware: string[];
-  funMappingStore: Map<string, any> = new Map();
-  logger;
-  initializeContext;
+  private globalMiddleware: string[];
+  protected funMappingStore: Map<string, any> = new Map();
+  protected logger;
+  protected initializeContext;
   private lock = new SimpleLock();
 
   constructor(
@@ -76,13 +69,13 @@ export class FaaSStarter implements IFaaSStarter {
     configService.addObject(this.globalConfig);
   }
 
-  protected initConfiguration(filePath: string, fileDir?: string) {
+  protected initConfiguration(filePath: string, fileDir?: string, namespace?: string) {
     if (!fileDir) {
       fileDir = dirname(resolve(filePath));
     }
     const container = this.loader.getApplicationContext();
     const cfg = container.createConfiguration();
-    cfg.namespace = MIDWAY_FAAS_KEY;
+    cfg.namespace = namespace;
     cfg.loadConfiguration(require(filePath), fileDir);
   }
 
@@ -197,29 +190,10 @@ export class FaaSStarter implements IFaaSStarter {
     } = {}
   ) {
     return this.lock.sureOnce(async () => {
-      let containerOptions = {};
-      if (
-        existsSync(join(this.appDir, 'ioc.js')) ||
-        existsSync(join(this.appDir, 'ioc.json'))
-      ) {
-        const containerOptPath = require.resolve(join(this.appDir, 'ioc'));
-        this.logger.info(
-          'midway-faas: ioc config is deprecated，use @Configuration instead.'
-        );
-        containerOptions = require(containerOptPath);
-        if (typeof containerOptions === 'function') {
-          containerOptions = containerOptions({
-            baseDir: this.baseDir,
-            appDir: this.appDir,
-          } as MidwayFaaSInfo);
-        }
-      }
-
-      this.initConfiguration('./configuration', __dirname);
-      // add configuration support
+      this.initConfiguration('./configuration', __dirname, MIDWAY_FAAS_KEY); // add configuration support
       this.prepareConfiguration();
 
-      this.loader.loadDirectory(Object.assign(opts, containerOptions));
+      this.loader.loadDirectory(opts);
       this.registerDecorator();
       await this.loader.refresh();
 
@@ -307,6 +281,14 @@ export class FaaSStarter implements IFaaSStarter {
    */
   public getInitializeContext() {
     return this.initializeContext;
+  }
+
+  /**
+   * push middleware to global middleware
+   * @param mw
+   */
+  public addGlobalMiddleware(mw) {
+    this.globalMiddleware.push(mw);
   }
 }
 

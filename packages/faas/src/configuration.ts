@@ -7,7 +7,7 @@ import { ILifeCycle } from '@midwayjs/core';
 export class FaaSContainerConfiguration implements ILifeCycle {
   @App()
   app: {
-    globalMiddleware: string[];
+    addGlobalMiddleware(mw: string);
   };
 
   @Config('middleware')
@@ -16,7 +16,7 @@ export class FaaSContainerConfiguration implements ILifeCycle {
   async onReady() {
     // add middleware from user config
     for (const mw of this.middleware) {
-      this.app.globalMiddleware.push(mw);
+      this.app.addGlobalMiddleware(mw);
     }
   }
 }
