@@ -11,7 +11,12 @@ import {
   MidwayRequestContainer,
   REQUEST_OBJ_CTX_KEY,
 } from '@midwayjs/core';
-import { FUNC_KEY, PLUGIN_KEY, LOGGER_KEY } from '@midwayjs/decorator';
+import {
+  FUNC_KEY,
+  PLUGIN_KEY,
+  LOGGER_KEY,
+  APPLICATION_KEY,
+} from '@midwayjs/decorator';
 import SimpleLock from '@midwayjs/simple-lock';
 import * as compose from 'koa-compose';
 
@@ -95,6 +100,9 @@ export class FaaSStarter implements IFaaSStarter {
   }
 
   private registerDecorator() {
+    this.loader.registerHook(APPLICATION_KEY, () => {
+      return this;
+    });
     this.loader.registerHook(PLUGIN_KEY, (key, target) => {
       const ctx = target[REQUEST_OBJ_CTX_KEY] || {};
       return ctx[key] || this[key];

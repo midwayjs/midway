@@ -157,4 +157,18 @@ describe('test/index.test.ts', () => {
     assert(data === '5321abone articlereplace managerprod');
     mm.restore();
   });
+
+  it('test custom global middleware', async () => {
+    const starter = new FaaSStarter({
+      baseDir: join(__dirname, './fixtures/base-app-middleware'),
+    });
+    await starter.start();
+    const data = await starter.handleInvokeWrapper('index.handler')(
+      {
+        text: 'hello',
+      },
+      { text: 'a' }
+    );
+    assert(data === 'ahello555');
+  });
 });
