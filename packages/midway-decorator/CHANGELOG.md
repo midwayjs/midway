@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.1](https://github.com/midwayjs/midway/compare/v2.1.0...v2.1.1) (2020-04-30)
+
+
+### Bug Fixes
+
+* add metadata when configuration load controller ([#483](https://github.com/midwayjs/midway/issues/483)) ([e4e3c57](https://github.com/midwayjs/midway/commit/e4e3c5784df844a290a57a3d309a5f4e866e4831))
+
+
+
+
+
 # [2.1.0](https://github.com/midwayjs/midway/compare/v2.0.17...v2.1.0) (2020-04-29)
 
 
