@@ -94,7 +94,7 @@ describe('/test/loader.test.ts', () => {
     loader.initialize();
     loader.loadDirectory();
     const tt: any = {
-      baseDir: 'hello this is basedir'
+      getBaseDir() { return 'hello this is basedir'; }
     };
     loader.bindApp(tt);
     await loader.refresh();
@@ -122,7 +122,7 @@ describe('/test/loader.test.ts', () => {
     assert(baseService.config === 'hello');
     assert(baseService.logger === console);
     assert(baseService.plugin2.b === 2);
-    assert(baseService.test.baseDir === 'hello this is basedir');
+    assert(baseService.test.getBaseDir() === 'hello this is basedir');
   });
 
   it('load ts file support constructor inject', async () => {
@@ -230,6 +230,11 @@ describe('/test/loader.test.ts', () => {
     });
     loader.initialize();
     loader.loadDirectory();
+    loader.bindApp({
+      getBaseDir() {
+        return 'base dir';
+      }
+    } as any);
     await loader.refresh();
 
     const appCtx = loader.getApplicationContext();

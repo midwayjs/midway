@@ -97,7 +97,26 @@ export class MidwayWebLoader extends EggLoader {
       return this.options.logger;
     });
     // register app
-    this.containerLoader.bindApp(this.app);
+    this.containerLoader.bindApp(new Proxy(this.app, {
+      get: (obj, prop) => {
+        if (prop === 'getBaseDir') {
+          return () => this.baseDir;
+        }
+        if (prop === 'getAppDir') {
+          return () => this.appDir;
+        }
+        if (prop === 'isTypeScriptMode') {
+          return () => this.isTsMode;
+        }
+        if (prop === 'getEnv') {
+          return () => this.appInfo.env;
+        }
+        if (prop === 'getType') {
+          return () => this.app.type;
+        }
+        return obj[prop];
+      }
+    }));
   }
 
   // loadPlugin -> loadConfig -> afterLoadConfig

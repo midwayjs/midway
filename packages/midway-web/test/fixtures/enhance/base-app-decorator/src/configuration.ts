@@ -23,7 +23,7 @@ export class LifeCycleTest implements ILifeCycle {
     if (!this.appx) {
       throw new Error('app is empty!');
     }
-    if (!this.appx.baseDir) {
+    if (!this.appx.getAppDir()) {
       throw new Error('app.baseDir is empty!');
     }
   }

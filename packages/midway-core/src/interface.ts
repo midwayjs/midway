@@ -227,19 +227,14 @@ export interface IMiddleware<T> {
 }
 
 export interface IMidwayCoreApplication {
-  isTsMode: boolean;
-  baseDir: string;
-  appDir: string;
-  env?: string;
+  isTypeScriptMode(): boolean;
+  getBaseDir(): string;
+  getAppDir(): string;
+  getEnv(): string;
   /**
    * application/agent
    */
-  type?: string;
-  applicationContext: IMidwayContainer;
-  /**
-   * middlewares
-   */
-  middleware: any[];
-
+  getType(): string;
+  getApplicationContext(): IMidwayContainer;
   getConfig(key?: string): any;
 }
