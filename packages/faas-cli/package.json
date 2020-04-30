@@ -4,6 +4,7 @@
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
+    "@midwayjs/debugger": "^0.0.3",
     "@midwayjs/fcli-command-core": "^0.2.89",
     "@midwayjs/fcli-plugin-create": "^0.2.89",
     "@midwayjs/fcli-plugin-deploy": "^0.2.89",
@@ -14,7 +15,8 @@
     "@midwayjs/fcli-plugin-scf": "^0.2.90",
     "@midwayjs/fcli-plugin-test": "^0.2.89",
     "@midwayjs/serverless-spec-builder": "^0.2.89",
-    "enquirer": "^2.3.4"
+    "enquirer": "^2.3.4",
+    "minimist": "^1.2.5"
   },
   "bin": {
     "mf": "bin/fun.js",
