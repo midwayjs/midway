@@ -20,6 +20,19 @@ jobs:
     - run: npm install && npm install codecov
     - run: npm run bootstrap
     - run: npm run build --if-present
-    - run: npm run cov
+    - run: npm run link
+    # - run: npm run cov
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
+    - name: Checkout Midway FaaS
+      uses: actions/checkout@v2
+      with:
+        repository: midway/midway-faas
+        path: midway-faas
+    - run: cd midway-faas
+    - run: npm install
+    - run: npm run bootstrap
+    - run: npm run build
+    - run: cd packages/faas
+    - run: npm link @midwayjs/core & npm link @midwayjs/decorator
+    - run: npm run cov

@@ -10,7 +10,8 @@
     "test": "npm run lint && midway-bin clean && NODE_ENV=test midway-bin test --ts",
     "cov": "midway-bin cov --ts",
     "ci": "npm run test",
-    "autod": "midway-bin autod"
+    "autod": "midway-bin autod",
+    "link": "npm link"
   },
   "dependencies": {
     "camelcase": "^5.0.0",
