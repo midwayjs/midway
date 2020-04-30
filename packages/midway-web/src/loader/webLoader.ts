@@ -12,7 +12,8 @@ import {
   getProviderId,
   listModule,
   PLUGIN_KEY,
-  LOGGER_KEY
+  LOGGER_KEY,
+  APPLICATION_KEY
 } from '@midwayjs/decorator';
 import { EggAppInfo } from 'egg';
 import * as extend from 'extend2';
@@ -97,7 +98,7 @@ export class MidwayWebLoader extends EggLoader {
       return this.options.logger;
     });
     // register app
-    this.containerLoader.bindApp(new Proxy(this.app, {
+    this.containerLoader.registerHook(APPLICATION_KEY, () => new Proxy(this.app, {
       get: (obj, prop) => {
         if (prop === 'getBaseDir') {
           return () => this.baseDir;
