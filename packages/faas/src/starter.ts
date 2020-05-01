@@ -69,7 +69,7 @@ export class FaaSStarter implements IFaaSStarter {
     configService.addObject(this.globalConfig);
   }
 
-  protected initConfiguration(filePath: string, fileDir?: string, namespace?: string) {
+  protected addConfiguration(filePath: string, fileDir?: string, namespace?: string) {
     if (!fileDir) {
       fileDir = dirname(resolve(filePath));
     }
@@ -79,6 +79,18 @@ export class FaaSStarter implements IFaaSStarter {
     cfg.loadConfiguration(require(filePath), fileDir);
   }
 
+  /**
+   * @deprecated
+   * use this.addConfiguration
+   */
+  protected initConfiguration(filePath: string, fileDir?: string) {
+    this.addConfiguration(filePath, fileDir)
+  }
+
+  /**
+   * @deprecated
+   * use this.addConfiguration
+   */
   protected prepareConfiguration() {
     // TODO use initConfiguration
     // this.initConfiguration('./configuration', __dirname);
@@ -190,7 +202,7 @@ export class FaaSStarter implements IFaaSStarter {
     } = {}
   ) {
     return this.lock.sureOnce(async () => {
-      this.initConfiguration('./configuration', __dirname, MIDWAY_FAAS_KEY); // add configuration support
+      this.addConfiguration('./configuration', __dirname, MIDWAY_FAAS_KEY);
       this.prepareConfiguration();
 
       this.loader.loadDirectory(opts);
