@@ -8,9 +8,8 @@ import { EggRouter as Router } from '@eggjs/router';
 const MIDWAY_PATH = path.dirname(__dirname);
 
 class MidwayApplication extends (Application as {
-  new(...x)
+  new (...x);
 }) {
-
   Router = Router;
 
   get [Symbol.for('egg#loader')]() {
@@ -46,7 +45,9 @@ class MidwayApplication extends (Application as {
   }
 
   generateController(controllerMapping: string) {
-    return (this.loader as AppWorkerLoader).generateController(controllerMapping);
+    return (this.loader as AppWorkerLoader).generateController(
+      controllerMapping
+    );
   }
 
   /**
@@ -85,7 +86,10 @@ class MidwayApplication extends (Application as {
     const rundir = this.config.rundir;
     try {
       const tree = this.loader.dumpDependency();
-      const dumpFile = path.join(rundir, `${this.type}_dependency_${process.pid}`);
+      const dumpFile = path.join(
+        rundir,
+        `${this.type}_dependency_${process.pid}`
+      );
       fs.writeFileSync(dumpFile, tree);
     } catch (err) {
       this.coreLogger.warn(`dump dependency dot error: ${err.message}`);
@@ -103,22 +107,25 @@ class MidwayApplication extends (Application as {
             paramNames: layer.paramNames,
             path: layer.path,
             regexp: layer.regexp.toString(),
-            stack: layer.stack.map(stack => stack._name || stack.name || 'anonymous'),
+            stack: layer.stack.map(
+              stack => stack._name || stack.name || 'anonymous'
+            ),
           });
         }
       }
 
       fs.writeFileSync(dumpRouterFile, JSON.stringify(routers, null, 2));
     } catch (err) {
-      this.coreLogger.warn(`dumpConfig midway-router.json error: ${err.message}`);
+      this.coreLogger.warn(
+        `dumpConfig midway-router.json error: ${err.message}`
+      );
     }
   }
 }
 
 class MidwayAgent extends (Agent as {
-  new(...x)
+  new (...x);
 }) {
-
   get [Symbol.for('egg#loader')]() {
     return AgentWorkerLoader;
   }
@@ -183,7 +190,10 @@ class MidwayAgent extends (Agent as {
     try {
       const tree = this.loader.dumpDependency();
       const rundir = this.config.rundir;
-      const dumpFile = path.join(rundir, `${this.type}_dependency_${process.pid}`);
+      const dumpFile = path.join(
+        rundir,
+        `${this.type}_dependency_${process.pid}`
+      );
       fs.writeFileSync(dumpFile, tree);
     } catch (err) {
       this.coreLogger.warn(`dump dependency dot error: ${err.message}`);
@@ -191,7 +201,4 @@ class MidwayAgent extends (Agent as {
   }
 }
 
-export {
-  MidwayApplication as Application,
-  MidwayAgent as Agent
-};
+export { MidwayApplication as Application, MidwayAgent as Agent };

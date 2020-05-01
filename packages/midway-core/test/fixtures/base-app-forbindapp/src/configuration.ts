@@ -2,11 +2,10 @@ import { ILifeCycle, IMidwayCoreApplication } from '../../../../src';
 import { Configuration, App } from '@midwayjs/decorator';
 
 @Configuration({
-  imports: [
-  ],
+  imports: [],
   importObjects: {
-    aa: 123
-  }
+    aa: 123,
+  },
 })
 class AutoConfiguraion implements ILifeCycle {
   @App()
