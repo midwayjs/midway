@@ -22,6 +22,7 @@ import {
   ContainerLoader,
   MidwayContainer,
   PRIVATE_META_DATA_KEY,
+  util,
 } from '@midwayjs/core';
 import * as path from 'path';
 import {
@@ -31,7 +32,6 @@ import {
   WebMiddleware,
 } from '../interface';
 import { isTypeScriptEnvironment } from '../utils';
-import { util } from '@midwayjs/core';
 
 const graphviz = require('graphviz');
 const debug = require('debug')(`midway:loader:${process.pid}`);
