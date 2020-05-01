@@ -234,12 +234,17 @@ export interface IMiddleware<T> {
   resolve: () => (context: T, next: () => Promise<any>) => any;
 }
 
+export enum MidwayProcessTypeEnum {
+  APPLICATION = 'APPLICATION',
+  AGENT = 'AGENT',
+}
+
 export interface IMidwayCoreApplication {
   getBaseDir(): string;
   getAppDir(): string;
   getEnv(): string;
   getMidwayType(): string;
-  getProcessType(): 'APPLICATION' | 'AGENT';
+  getProcessType(): MidwayProcessTypeEnum;
   getApplicationContext(): IMidwayContainer;
   getConfig(key?: string): any;
   getLogger(

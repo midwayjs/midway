@@ -4,7 +4,7 @@ import { AgentWorkerLoader, AppWorkerLoader } from './loader/loader';
 import * as fs from 'fs';
 import * as path from 'path';
 import { EggRouter as Router } from '@eggjs/router';
-import { IMidwayCoreApplication } from '@midwayjs/core';
+import { IMidwayCoreApplication, MidwayProcessTypeEnum } from '@midwayjs/core';
 
 const MIDWAY_PATH = path.dirname(__dirname);
 
@@ -137,8 +137,8 @@ class MidwayApplication
   getMidwayType(): string {
     return 'MIDWAY_EGG';
   }
-  getProcessType(): 'APPLICATION' | 'AGENT' {
-    return 'APPLICATION';
+  getProcessType(): MidwayProcessTypeEnum {
+    return MidwayProcessTypeEnum.APPLICATION;
   }
 }
 
@@ -233,8 +233,8 @@ class MidwayAgent
   getMidwayType(): string {
     return 'MIDWAY_EGG';
   }
-  getProcessType(): 'APPLICATION' | 'AGENT' {
-    return 'AGENT';
+  getProcessType(): MidwayProcessTypeEnum {
+    return MidwayProcessTypeEnum.AGENT;
   }
 }
 
