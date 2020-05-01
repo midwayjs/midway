@@ -269,7 +269,7 @@ export class FaaSStarter implements IFaaSStarter, IMidwayCoreApplication {
       );
     }
     if (!context.env) {
-      context.env = this.getConfig();
+      context.env = this.getEnv();
     }
     if (!context.logger) {
       context.logger = this.logger;
