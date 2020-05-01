@@ -108,7 +108,9 @@ export class MidwayWebLoader extends EggLoader {
       return this.options.logger;
     });
     // register app
-    this.containerLoader.registerHook(APPLICATION_KEY, this.app);
+    this.containerLoader.registerHook(APPLICATION_KEY, () => {
+      return this.app;
+    });
   }
 
   // loadPlugin -> loadConfig -> afterLoadConfig
