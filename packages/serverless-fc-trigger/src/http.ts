@@ -119,7 +119,7 @@ class Response {
 
     this.statusCode = 200;
     this._headers = {
-      'Content-Type': ['application/json; charset=utf-8'],
+      'content-type': 'application/json; charset=utf-8',
     };
     this.typeSetted = false;
     this.body = null;

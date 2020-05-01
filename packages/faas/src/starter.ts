@@ -9,8 +9,14 @@ import {
   MidwayContainer,
   MidwayRequestContainer,
   REQUEST_OBJ_CTX_KEY,
+  IMidwayCoreApplication,
 } from '@midwayjs/core';
-import { APPLICATION_KEY, FUNC_KEY, LOGGER_KEY, PLUGIN_KEY, } from '@midwayjs/decorator';
+import {
+  APPLICATION_KEY,
+  FUNC_KEY,
+  LOGGER_KEY,
+  PLUGIN_KEY,
+} from '@midwayjs/decorator';
 import SimpleLock from '@midwayjs/simple-lock';
 import * as compose from 'koa-compose';
 
@@ -25,7 +31,7 @@ function isTypeScriptEnvironment() {
   return TS_MODE_PROCESS_FLAG === 'true' || !!require.extensions['.ts'];
 }
 
-export class FaaSStarter implements IFaaSStarter {
+export class FaaSStarter implements IFaaSStarter, IMidwayCoreApplication {
   public baseDir: string;
   public appDir: string;
   protected defaultHandlerMethod = 'handler';
@@ -52,7 +58,7 @@ export class FaaSStarter implements IFaaSStarter {
     this.globalConfig = options.config || {};
     this.globalMiddleware = options.middleware || [];
     this.logger = options.logger || console;
-    this.baseDir = this.getBaseDir();
+    this.baseDir = this.getFaaSBaseDir();
     this.initializeContext = options.initializeContext || {};
 
     this.loader = new ContainerLoader({
@@ -69,7 +75,11 @@ export class FaaSStarter implements IFaaSStarter {
     configService.addObject(this.globalConfig);
   }
 
-  protected addConfiguration(filePath: string, fileDir?: string, namespace?: string) {
+  protected addConfiguration(
+    filePath: string,
+    fileDir?: string,
+    namespace?: string
+  ) {
     if (!fileDir) {
       fileDir = dirname(resolve(filePath));
     }
@@ -84,7 +94,7 @@ export class FaaSStarter implements IFaaSStarter {
    * use this.addConfiguration
    */
   protected initConfiguration(filePath: string, fileDir?: string) {
-    this.addConfiguration(filePath, fileDir)
+    this.addConfiguration(filePath, fileDir);
   }
 
   /**
@@ -96,8 +106,8 @@ export class FaaSStarter implements IFaaSStarter {
     // this.initConfiguration('./configuration', __dirname);
   }
 
-  private getBaseDir() {
-    if (isTypeScriptEnvironment()) {
+  private getFaaSBaseDir() {
+    if (this.isTypeScriptMode()) {
       return join(this.appDir, 'src');
     } else {
       return join(this.appDir, 'dist');
@@ -259,9 +269,7 @@ export class FaaSStarter implements IFaaSStarter {
       );
     }
     if (!context.env) {
-      context.env = this.getApplicationContext()
-        .getEnvironmentService()
-        .getCurrentEnvironment();
+      context.env = this.getConfig();
     }
     if (!context.logger) {
       context.logger = this.logger;
@@ -301,6 +309,38 @@ export class FaaSStarter implements IFaaSStarter {
    */
   public addGlobalMiddleware(mw) {
     this.globalMiddleware.push(mw);
+  }
+
+  public isTypeScriptMode(): boolean {
+    return isTypeScriptEnvironment();
+  }
+
+  public getBaseDir(): string {
+    return this.baseDir;
+  }
+
+  public getAppDir(): string {
+    return this.appDir;
+  }
+
+  public getEnv(): string {
+    return this.getApplicationContext()
+      .getEnvironmentService()
+      .getCurrentEnvironment();
+  }
+
+  public getType(): string {
+    throw 'application';
+  }
+
+  public getConfig(key?: string) {
+    return this.getApplicationContext()
+      .getConfigService()
+      .getConfiguration(key);
+  }
+
+  public getLogger() {
+    return this.logger;
   }
 }
 
