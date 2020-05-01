@@ -4,12 +4,15 @@ import { AgentWorkerLoader, AppWorkerLoader } from './loader/loader';
 import * as fs from 'fs';
 import * as path from 'path';
 import { EggRouter as Router } from '@eggjs/router';
+import { IMidwayCoreApplication } from '@midwayjs/core';
 
 const MIDWAY_PATH = path.dirname(__dirname);
 
-class MidwayApplication extends (Application as {
-  new (...x);
-}) {
+class MidwayApplication
+  extends (Application as {
+    new (...x);
+  })
+  implements IMidwayCoreApplication {
   Router = Router;
 
   get [Symbol.for('egg#loader')]() {
@@ -121,11 +124,29 @@ class MidwayApplication extends (Application as {
       );
     }
   }
+
+  getBaseDir(): string {
+    return this.baseDir;
+  }
+  getAppDir(): string {
+    return this.appDir;
+  }
+  getEnv(): string {
+    return this.config.env;
+  }
+  getMidwayType(): string {
+    return 'MIDWAY_EGG';
+  }
+  getProcessType(): 'APPLICATION' | 'AGENT' {
+    return 'APPLICATION';
+  }
 }
 
-class MidwayAgent extends (Agent as {
-  new (...x);
-}) {
+class MidwayAgent
+  extends (Agent as {
+    new (...x);
+  })
+  implements IMidwayCoreApplication {
   get [Symbol.for('egg#loader')]() {
     return AgentWorkerLoader;
   }
@@ -198,6 +219,22 @@ class MidwayAgent extends (Agent as {
     } catch (err) {
       this.coreLogger.warn(`dump dependency dot error: ${err.message}`);
     }
+  }
+
+  getBaseDir(): string {
+    return this.baseDir;
+  }
+  getAppDir(): string {
+    return this.appDir;
+  }
+  getEnv(): string {
+    return this.config.env;
+  }
+  getMidwayType(): string {
+    return 'MIDWAY_EGG';
+  }
+  getProcessType(): 'APPLICATION' | 'AGENT' {
+    return 'AGENT';
   }
 }
 
