@@ -31,7 +31,7 @@ import {
   WebMiddleware,
 } from '../interface';
 import { isTypeScriptEnvironment } from '../utils';
-import { generateProvideId } from '@midwayjs/core/dist/common/util';
+import { util } from '@midwayjs/core';
 
 const graphviz = require('graphviz');
 const debug = require('debug')(`midway:loader:${process.pid}`);
@@ -374,7 +374,7 @@ export class MidwayWebLoader extends EggLoader {
       let providerId = getProviderId(module);
       const meta = getClassMetadata(PRIVATE_META_DATA_KEY, module);
       if (providerId && meta) {
-        providerId = generateProvideId(providerId, meta.namespace);
+        providerId = util.generateProvideId(providerId, meta.namespace);
       }
       if (providerId) {
         if (this.controllerIds.indexOf(providerId) > -1) {
