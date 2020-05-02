@@ -90,7 +90,7 @@ describe('test/index.test.ts', () => {
     assert(data === 'abhello');
   });
 
-  it('deprecated: use ioc.js cover loadDir', async () => {
+  xit('deprecated: use ioc.js cover loadDir', async () => {
     const starter = new FaaSStarter({
       baseDir: join(__dirname, './fixtures/base-app-ioc'),
       typescript: true,
@@ -141,7 +141,7 @@ describe('test/index.test.ts', () => {
       prepareConfiguration() {
         this.initConfiguration(
           join(__dirname, './configuration'),
-          join(__dirname, 'fixtures/midway-plugin-mod')
+          join(__dirname, 'fixtures/midway-plugin-mod'),
         );
       }
     }
@@ -156,5 +156,19 @@ describe('test/index.test.ts', () => {
     );
     assert(data === '5321abone articlereplace managerprod');
     mm.restore();
+  });
+
+  it('test custom global middleware', async () => {
+    const starter = new FaaSStarter({
+      baseDir: join(__dirname, './fixtures/base-app-middleware'),
+    });
+    await starter.start();
+    const data = await starter.handleInvokeWrapper('index.handler')(
+      {
+        text: 'hello',
+      },
+      { text: 'a' }
+    );
+    assert(data === 'ahello555');
   });
 });

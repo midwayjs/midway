@@ -19,6 +19,17 @@
   "files": [
     "dist"
   ],
+  "keywords": [
+    "serverless",
+    "faas",
+    "k8s",
+    "cloud native",
+    "aliyun",
+    "tencent",
+    "midway",
+    "aws",
+    "lambda"
+  ],
   "devDependencies": {
     "midway-bin": "^2.0.0",
     "mm": "3"
