@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.2](https://github.com/midwayjs/midway/compare/v2.1.1...v2.1.2) (2020-05-02)
+
+
+### Bug Fixes
+
+* fix util import ([7d76cbf](https://github.com/midwayjs/midway/commit/7d76cbf4cedc31b141adc76194c89a284e4fe8ee))
+* fix wrap app ([c16ea0b](https://github.com/midwayjs/midway/commit/c16ea0b0a0d02539f80586c5a08a027a28ce2d00))
+
+
+
+
+
 ## [2.1.1](https://github.com/midwayjs/midway/compare/v2.1.0...v2.1.1) (2020-04-30)
 
 
