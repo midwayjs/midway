@@ -9,7 +9,7 @@ import {
   MidwayContainer,
   MidwayRequestContainer,
   REQUEST_OBJ_CTX_KEY,
-  IMidwayCoreApplication,
+  MidwayProcessTypeEnum,
 } from '@midwayjs/core';
 import {
   APPLICATION_KEY,
@@ -31,7 +31,7 @@ function isTypeScriptEnvironment() {
   return TS_MODE_PROCESS_FLAG === 'true' || !!require.extensions['.ts'];
 }
 
-export class FaaSStarter implements IFaaSStarter, IMidwayCoreApplication {
+export class FaaSStarter implements IFaaSStarter {
   public baseDir: string;
   public appDir: string;
   protected defaultHandlerMethod = 'handler';
@@ -107,7 +107,7 @@ export class FaaSStarter implements IFaaSStarter, IMidwayCoreApplication {
   }
 
   private getFaaSBaseDir() {
-    if (this.isTypeScriptMode()) {
+    if (isTypeScriptEnvironment()) {
       return join(this.appDir, 'src');
     } else {
       return join(this.appDir, 'dist');
@@ -311,10 +311,6 @@ export class FaaSStarter implements IFaaSStarter, IMidwayCoreApplication {
     this.globalMiddleware.push(mw);
   }
 
-  public isTypeScriptMode(): boolean {
-    return isTypeScriptEnvironment();
-  }
-
   public getBaseDir(): string {
     return this.baseDir;
   }
@@ -329,10 +325,6 @@ export class FaaSStarter implements IFaaSStarter, IMidwayCoreApplication {
       .getCurrentEnvironment();
   }
 
-  public getType(): string {
-    throw 'application';
-  }
-
   public getConfig(key?: string) {
     return this.getApplicationContext()
       .getConfigService()
@@ -341,6 +333,14 @@ export class FaaSStarter implements IFaaSStarter, IMidwayCoreApplication {
 
   public getLogger() {
     return this.logger;
+  }
+
+  public getMidwayType(): string {
+    return 'MIDWAY_FAAS';
+  }
+
+  public getProcessType(): MidwayProcessTypeEnum {
+    return MidwayProcessTypeEnum.APPLICATION;
   }
 }
 

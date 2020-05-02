@@ -1,10 +1,16 @@
-import { MidwayRequestContainer } from '@midwayjs/core';
+import { MidwayRequestContainer, IMidwayCoreApplication } from '@midwayjs/core';
 import { FaaSHTTPContext } from '@midwayjs/faas-typings';
 
-export interface IFaaSStarter {
+export interface IFaaSApplication extends IMidwayCoreApplication {
   start(opts?);
   handleInvokeWrapper(handlerMapping: string);
+  getInitializeContext();
 }
+
+/**
+ * @deprecated same as IFaaSApplication
+ */
+export interface IFaaSStarter extends IFaaSApplication {}
 
 export interface FunctionHandler {
   handler(...args);
