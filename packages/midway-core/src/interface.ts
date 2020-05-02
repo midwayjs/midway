@@ -65,7 +65,11 @@ export interface IObjectDefinition {
 export interface IObjectCreator {
   load(): any;
   doConstruct(Clzz: any, args?: any, context?: IApplicationContext): any;
-  doConstructAsync(Clzz: any, args?: any, context?: IApplicationContext): Promise<any>;
+  doConstructAsync(
+    Clzz: any,
+    args?: any,
+    context?: IApplicationContext
+  ): Promise<any>;
   doInit(obj: any): void;
   doInitAsync(obj: any): Promise<void>;
   doDestroy(obj: any): void;
@@ -192,7 +196,11 @@ export interface IContainerConfiguration {
   addImportObjects(importObjects: any[]);
   addImportConfigs(importConfigs: string[], baseDir: string);
   load(packageName: string);
-  loadConfiguration(configuration: IContainerConfiguration, baseDir: string, filePath?: string);
+  loadConfiguration(
+    configuration: IContainerConfiguration,
+    baseDir: string,
+    filePath?: string
+  );
   getImportDirectory(): string[];
   getImportObjects(): any;
   bindConfigurationClass(clzz: any, filePath?: string);
@@ -226,15 +234,27 @@ export interface IMiddleware<T> {
   resolve: () => (context: T, next: () => Promise<any>) => any;
 }
 
+export enum MidwayProcessTypeEnum {
+  APPLICATION = 'APPLICATION',
+  AGENT = 'AGENT',
+}
+
 export interface IMidwayCoreApplication {
-  isTypeScriptMode(): boolean;
   getBaseDir(): string;
   getAppDir(): string;
   getEnv(): string;
-  /**
-   * application/agent
-   */
-  getType(): string;
+  getMidwayType(): string;
+  getProcessType(): MidwayProcessTypeEnum;
   getApplicationContext(): IMidwayContainer;
   getConfig(key?: string): any;
+  getLogger(
+    key?: string
+  ): Partial<{
+    log(...args);
+    info(...args);
+    error(...args);
+    warn(...args);
+    debug(...args);
+    trace(...args);
+  }>;
 }
