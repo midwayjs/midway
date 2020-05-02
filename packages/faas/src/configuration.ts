@@ -1,14 +1,13 @@
 import { Configuration, App, Config } from '@midwayjs/decorator';
 import { ILifeCycle } from '@midwayjs/core';
+import { IFaaSApplication } from './interface';
 
 @Configuration({
   importConfigs: ['./config.default'],
 })
 export class FaaSContainerConfiguration implements ILifeCycle {
   @App()
-  app: {
-    addGlobalMiddleware(mw: string);
-  };
+  app: IFaaSApplication;
 
   @Config('middleware')
   middleware: string[];

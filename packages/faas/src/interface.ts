@@ -5,6 +5,7 @@ export interface IFaaSApplication extends IMidwayCoreApplication {
   start(opts?);
   handleInvokeWrapper(handlerMapping: string);
   getInitializeContext();
+  addGlobalMiddleware(mw: string);
 }
 
 /**
