@@ -450,6 +450,8 @@ describe('/test/index.test.ts', () => {
       assert(result.isBase64Encoded === false);
       assert(result.statusCode === 200);
       assert(result.headers);
+      assert(result.headers['set-cookie'] === 'bbbb=123; path=/; httponly');
+      result.headers;
       assert.equal(typeof result.body, 'string');
       const body = JSON.parse(result.body);
       assert.equal(body.method, 'POST');

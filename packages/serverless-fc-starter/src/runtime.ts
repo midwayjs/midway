@@ -1,5 +1,8 @@
 import * as getRawBody from 'raw-body';
-import { FAAS_ARGS_KEY, ServerlessLightRuntime, } from '@midwayjs/runtime-engine';
+import {
+  FAAS_ARGS_KEY,
+  ServerlessLightRuntime,
+} from '@midwayjs/runtime-engine';
 import { Context } from '@midwayjs/serverless-http-parser';
 import * as util from 'util';
 
@@ -105,7 +108,17 @@ export class FCRuntime extends ServerlessLightRuntime {
       for (const key in ctx.res.headers) {
         // The length after base64 is wrong.
         if (!['content-length'].includes(key)) {
-          newHeader[key] = ctx.res.headers[key];
+          if ('set-cookie' === key && !isHTTPMode) {
+            // unsupport multiple cookie when use apiGateway
+            newHeader[key] = ctx.res.headers[key][0];
+            if (ctx.res.headers[key].length > 1) {
+              ctx.logger.warn(
+                `[fc-starter]: unsupport multiple cookie when use apiGateway`
+              );
+            }
+          } else {
+            newHeader[key] = ctx.res.headers[key];
+          }
         }
       }
 
