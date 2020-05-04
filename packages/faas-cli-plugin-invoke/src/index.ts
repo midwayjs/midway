@@ -384,7 +384,6 @@ export class FaaSInvokePlugin extends BasePlugin {
 
   async entry() {
     const {
-      funcInfo,
       name,
       fileName,
       userEntry,
@@ -409,7 +408,7 @@ export class FaaSInvokePlugin extends BasePlugin {
         baseDir: this.baseDir,
         service: {
           layers: this.core.service.layers,
-          functions: { [this.options.function]: funcInfo },
+          functions: this.core.service.functions,
         },
         distDir: this.buildDir,
         starter: starterName,
