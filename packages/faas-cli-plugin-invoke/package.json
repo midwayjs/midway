@@ -1,25 +1,25 @@
 {
   "name": "@midwayjs/fcli-plugin-invoke",
-  "version": "0.2.92-beta.1",
+  "version": "0.2.92",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@midwayjs/faas-util-ts-compile": "^0.2.89",
-    "@midwayjs/fcli-command-core": "^0.2.92-beta.1",
+    "@midwayjs/fcli-command-core": "^0.2.92",
     "@midwayjs/locate": "^1.0.3",
     "@midwayjs/mwcc": "^0.2.2",
     "@midwayjs/runtime-engine": "^0.2.89",
     "@midwayjs/runtime-mock": "^0.2.89",
-    "@midwayjs/serverless-fc-starter": "^0.2.92-beta.1",
-    "@midwayjs/serverless-fc-trigger": "^0.2.92-beta.1",
-    "@midwayjs/serverless-scf-starter": "^0.2.92-beta.1",
-    "@midwayjs/serverless-scf-trigger": "^0.2.92-beta.1",
-    "@midwayjs/serverless-spec-builder": "^0.2.92-beta.1",
+    "@midwayjs/serverless-fc-starter": "^0.2.92",
+    "@midwayjs/serverless-fc-trigger": "^0.2.92",
+    "@midwayjs/serverless-scf-starter": "^0.2.92",
+    "@midwayjs/serverless-scf-trigger": "^0.2.92",
+    "@midwayjs/serverless-spec-builder": "^0.2.92",
     "fs-extra": "^8.1.0",
     "globby": "^10.0.1"
   },
   "devDependencies": {
-    "@midwayjs/faas": "^0.2.92-beta.1",
+    "@midwayjs/faas": "^0.2.92",
     "midway-bin": "^2.0.0"
   },
   "engines": {

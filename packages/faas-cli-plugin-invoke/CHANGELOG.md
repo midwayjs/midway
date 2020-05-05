@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.92](https://github.com/midwayjs/midway-faas/compare/v0.2.91...v0.2.92) (2020-05-05)
+
+
+### Bug Fixes
+
+* entry ([#154](https://github.com/midwayjs/midway-faas/issues/154)) ([c3c745d](https://github.com/midwayjs/midway-faas/commit/c3c745de7716245656d4eb156e55bd79c7177e64))
+* fix error control in fc ([#153](https://github.com/midwayjs/midway-faas/issues/153)) ([f7dd007](https://github.com/midwayjs/midway-faas/commit/f7dd0070f9c1b7f07e628c8d2052d273a8133910))
+
+
+
+
+
 ## [0.2.92-beta.1](https://github.com/midwayjs/midway-faas/compare/v0.2.91...v0.2.92-beta.1) (2020-05-04)
 
 **Note:** Version bump only for package @midwayjs/fcli-plugin-invoke

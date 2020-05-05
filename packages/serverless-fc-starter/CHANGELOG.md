@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.92](https://github.com/midwayjs/midway-faas/compare/v0.2.91...v0.2.92) (2020-05-05)
+
+
+### Bug Fixes
+
+* fix cookie in fc apigw ([e15decb](https://github.com/midwayjs/midway-faas/commit/e15decba1d751e6e6a448d9da89dec7eec1303e7))
+* fix error control in fc ([#153](https://github.com/midwayjs/midway-faas/issues/153)) ([f7dd007](https://github.com/midwayjs/midway-faas/commit/f7dd0070f9c1b7f07e628c8d2052d273a8133910))
+
+
+
+
+
 ## [0.2.92-beta.1](https://github.com/midwayjs/midway-faas/compare/v0.2.91...v0.2.92-beta.1) (2020-05-04)
 
 
