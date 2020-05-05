@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.93](https://github.com/midwayjs/midway-faas/compare/v0.2.92...v0.2.93) (2020-05-05)
+
+
+### Bug Fixes
+
+* fix send json when fc use http trigger ([#155](https://github.com/midwayjs/midway-faas/issues/155)) ([1e9abc4](https://github.com/midwayjs/midway-faas/commit/1e9abc48bb479f91caee2ecd09db0fe747827a65))
+
+
+
+
+
 ## [0.2.92](https://github.com/midwayjs/midway-faas/compare/v0.2.91...v0.2.92) (2020-05-05)
 
 
