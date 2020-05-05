@@ -181,14 +181,13 @@ describe('/test/index.test.ts', () => {
           throw new Error('oops');
         })(...args);
       });
-      let err;
-      try {
-        await test(handle).runHttp('', '');
-      } catch (ex) {
-        err = ex;
-      }
-      assert.ok(err);
-      assert.equal(err.message, 'oops');
+      const result = await test(handle).runHttp('', '');
+      assert.deepStrictEqual(result, {
+        isBase64Encoded: false,
+        statusCode: 500,
+        headers: {},
+        body: 'Internal Server Error',
+      });
     });
 
     it('should ok with non-async function', async () => {

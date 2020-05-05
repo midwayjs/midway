@@ -153,7 +153,7 @@ export class FaaSStarter implements IFaaSStarter {
           const mw: any[] = await this.formatMiddlewares(fnMiddlewere);
           mw.push(async (ctx) => {
             // invoke handler
-            const result = this.invokeHandler(funOptions, ctx, args);
+            const result = await this.invokeHandler(funOptions, ctx, args);
             if (!ctx.body) {
               ctx.body = result;
             }

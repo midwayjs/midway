@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.92-beta.1](https://github.com/midwayjs/midway-faas/compare/v0.2.91...v0.2.92-beta.1) (2020-05-04)
+
+
+### Bug Fixes
+
+* fix cookie in fc apigw ([e15decb](https://github.com/midwayjs/midway-faas/commit/e15decba1d751e6e6a448d9da89dec7eec1303e7))
+* fix error control in fc ([fd99384](https://github.com/midwayjs/midway-faas/commit/fd99384375b038d8f4c9767a9e5730923bbf6dda))
+* fix fc http trigger header ([3e80468](https://github.com/midwayjs/midway-faas/commit/3e80468833072649d35a4222963b1653e9bf9558))
+* fix getEnv ([f38a370](https://github.com/midwayjs/midway-faas/commit/f38a370ada478e329cb01b4af789b02419915c04))
+* fix test case ([81fc9d6](https://github.com/midwayjs/midway-faas/commit/81fc9d61f4e0ff0e9f78dad28d5353f5f23b74a9))
+* use IMidwayCoreApplication ([cbf871f](https://github.com/midwayjs/midway-faas/commit/cbf871f8e5b6c7986df333203f9a68164312a6ca))
+
+
+### Features
+
+* add faas middleware loader ([250560a](https://github.com/midwayjs/midway-faas/commit/250560a1656e0d0e7601e44d7807ff5124c3ad86))
+* add middleware info from user config ([67b9adc](https://github.com/midwayjs/midway-faas/commit/67b9adcbfa29bff65c988a592471f9c9562d4d26))
+* support mw ([788e417](https://github.com/midwayjs/midway-faas/commit/788e41764c2e5d345da302c03a99ceae70714e51))
+
+
+
+
+
 ## [0.2.91](https://github.com/midwayjs/midway-faas/compare/v0.2.90...v0.2.91) (2020-04-30)
 
 **Note:** Version bump only for package midway-faas

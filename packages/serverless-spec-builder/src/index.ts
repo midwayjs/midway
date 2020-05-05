@@ -12,6 +12,7 @@ export const transform = (sourcefilePathOrJson: any, builderCls?) => {
   if (typeof sourcefilePathOrJson === 'string') {
     if (fs.existsSync(sourcefilePathOrJson)) {
       const content = fs.readFileSync(sourcefilePathOrJson, 'utf8');
+      // replace
       result = parse(sourcefilePathOrJson, content);
     }
   }
@@ -27,7 +28,11 @@ export const transform = (sourcefilePathOrJson: any, builderCls?) => {
 
 export { saveYaml } from './parse';
 
-export const generate = (sourceFilePathOrJson: any, targetFilePath: string, builderCls?) => {
+export const generate = (
+  sourceFilePathOrJson: any,
+  targetFilePath: string,
+  builderCls?
+) => {
   let baseDir = process.cwd();
   let transformResultJSON = {};
   if (typeof sourceFilePathOrJson === 'string') {

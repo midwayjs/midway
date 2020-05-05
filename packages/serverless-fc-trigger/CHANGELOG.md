@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.92-beta.1](https://github.com/midwayjs/midway-faas/compare/v0.2.91...v0.2.92-beta.1) (2020-05-04)
+
+
+### Bug Fixes
+
+* fix error control in fc ([fd99384](https://github.com/midwayjs/midway-faas/commit/fd99384375b038d8f4c9767a9e5730923bbf6dda))
+* fix fc http trigger header ([3e80468](https://github.com/midwayjs/midway-faas/commit/3e80468833072649d35a4222963b1653e9bf9558))
+
+
+
+
+
 ## [0.2.90](https://github.com/midwayjs/midway-faas/compare/v0.2.89...v0.2.90) (2020-04-29)
 
 **Note:** Version bump only for package @midwayjs/serverless-fc-trigger

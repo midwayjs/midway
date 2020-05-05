@@ -6,6 +6,13 @@ import {
 import { Context } from '@midwayjs/serverless-http-parser';
 import * as util from 'util';
 
+const isLocalEnv = () => {
+  return (
+    process.env.MIDWAY_SERVER_ENV === 'local' ||
+    process.env.NODE_ENV === 'local'
+  );
+};
+
 export class FCRuntime extends ServerlessLightRuntime {
   /**
    * for handler wrapper
@@ -66,83 +73,97 @@ export class FCRuntime extends ServerlessLightRuntime {
         return this.defaultInvokeHandler.apply(this, args);
       }
       return handler.apply(handler, args);
-    }).then((result) => {
-      if (res.headersSent) {
-        return;
-      }
-
-      if (result) {
-        ctx.body = result;
-      }
-
-      let encoded = false;
-      if (!isHTTPMode) {
-        const data = ctx.body;
-        if (typeof data === 'string') {
-          if (!ctx.type) {
-            ctx.type = 'text/plain';
-          }
-          ctx.body = data;
-        } else if (Buffer.isBuffer(data)) {
-          encoded = true;
-          if (!ctx.type) {
-            ctx.type = 'application/octet-stream';
-          }
-          ctx.body = data.toString('base64');
-        } else if (typeof data === 'object') {
-          if (!ctx.type) {
-            ctx.type = 'application/json';
-          }
-          ctx.body = JSON.stringify(data);
-        } else {
-          // 阿里云网关必须返回字符串
-          if (!ctx.type) {
-            ctx.type = 'text/plain';
-          }
-          ctx.body = data + '';
+    })
+      .then((result) => {
+        if (res.headersSent) {
+          return;
         }
-      }
 
-      const newHeader = {};
+        if (result) {
+          ctx.body = result;
+        }
 
-      for (const key in ctx.res.headers) {
-        // The length after base64 is wrong.
-        if (!['content-length'].includes(key)) {
-          if ('set-cookie' === key && !isHTTPMode) {
-            // unsupport multiple cookie when use apiGateway
-            newHeader[key] = ctx.res.headers[key][0];
-            if (ctx.res.headers[key].length > 1) {
-              ctx.logger.warn(
-                `[fc-starter]: unsupport multiple cookie when use apiGateway`
-              );
+        let encoded = false;
+        if (!isHTTPMode) {
+          const data = ctx.body;
+          if (typeof data === 'string') {
+            if (!ctx.type) {
+              ctx.type = 'text/plain';
             }
+            ctx.body = data;
+          } else if (Buffer.isBuffer(data)) {
+            encoded = true;
+            if (!ctx.type) {
+              ctx.type = 'application/octet-stream';
+            }
+            ctx.body = data.toString('base64');
+          } else if (typeof data === 'object') {
+            if (!ctx.type) {
+              ctx.type = 'application/json';
+            }
+            ctx.body = JSON.stringify(data);
           } else {
-            newHeader[key] = ctx.res.headers[key];
+            // 阿里云网关必须返回字符串
+            if (!ctx.type) {
+              ctx.type = 'text/plain';
+            }
+            ctx.body = data + '';
           }
         }
-      }
 
-      if (res.setHeader) {
-        for (const key in newHeader) {
-          res.setHeader(key, newHeader[key]);
+        const newHeader = {};
+
+        for (const key in ctx.res.headers) {
+          // The length after base64 is wrong.
+          if (!['content-length'].includes(key)) {
+            if ('set-cookie' === key && !isHTTPMode) {
+              // unsupport multiple cookie when use apiGateway
+              newHeader[key] = ctx.res.headers[key][0];
+              if (ctx.res.headers[key].length > 1) {
+                ctx.logger.warn(
+                  `[fc-starter]: unsupport multiple cookie when use apiGateway`
+                );
+              }
+            } else {
+              newHeader[key] = ctx.res.headers[key];
+            }
+          }
         }
-      }
 
-      if (res.setStatusCode) {
-        res.setStatusCode(ctx.status);
-      }
+        if (res.setHeader) {
+          for (const key in newHeader) {
+            res.setHeader(key, newHeader[key]);
+          }
+        }
 
-      if (res.send) {
-        res.send(ctx.body);
-      }
+        if (res.setStatusCode) {
+          res.setStatusCode(ctx.status);
+        }
 
-      return {
-        isBase64Encoded: encoded,
-        statusCode: ctx.status,
-        headers: newHeader,
-        body: ctx.body,
-      };
-    });
+        if (res.send) {
+          res.send(ctx.body);
+        }
+
+        return {
+          isBase64Encoded: encoded,
+          statusCode: ctx.status,
+          headers: newHeader,
+          body: ctx.body,
+        };
+      })
+      .catch((err) => {
+        ctx.logger.error(err);
+        if (res.send) {
+          res.setStatusCode(500);
+          res.send(isLocalEnv() ? err.stack : 'Internal Server Error');
+        }
+        return {
+          isBase64Encoded: false,
+          statusCode: 500,
+          headers: {},
+          body: isLocalEnv() ? err.stack : 'Internal Server Error',
+        };
+      });
   }
 
   async wrapperEventInvoker(handler, event, context) {

@@ -157,6 +157,10 @@ class Response {
     this._res.end();
   }
 
+  setStatusCode(statusCode) {
+    this.statusCode = statusCode;
+  }
+
   end(data) {
     this.send(data);
   }
