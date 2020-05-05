@@ -1,7 +1,8 @@
 const assert = require('assert');
 const request = require('supertest');
 import { clearAllModule } from '@midwayjs/decorator';
-import * as path from 'path';
+import path = require('path');
+import urllib = require('urllib');
 
 const utils = require('./utils');
 const mm = require('mm');
@@ -534,10 +535,28 @@ describe('/test/enhance.test.ts', () => {
       app = utils.app('enhance/base-app-hackernews', {
         typescript: false,
       });
+      const originRequest = urllib.HttpClient2.prototype.request;
+      mm(urllib.HttpClient2.prototype, 'request', (url, args, callback) => {
+        if (url) {
+          if (url.includes('https://hacker-news.firebaseio.com/v0/item')) {
+            return { data: JSON.parse('{"by":"pg","descendants":15,"id":1,"kids":[15,234509,487171,454426,454424,454410,82729],"score":57,"time":1160418111,"title":"Y Combinator","type":"story","url":"http://ycombinator.com"}')};
+          }
+          if (url.includes('https://hacker-news.firebaseio.com/v0/user')) {
+            return { data: JSON.parse('{"created":1344225010,"id":"stevage","karma":164,"submitted":[23038727,23013820,23013797,22995592,22820177,22819227,22817427,22659470,22624885,22624467,22621483,22333639,22305974,22143659,22069408,21987055,21987045,21807698,21807677,21799835,21662201,20438536,20290644,20261053,20102070,20018617,19134123,19134104,19134065,19134056,18803141,18803098,17922891,17902520,17850980,17780847,17534650,17435464,17386143,17335732,17161325,15890590,15414238,14785201,14493573,14393971,14251559,14176015,14029087,13793286,13621128,13621127,13274921,13138573,12497739,4343630]}')};
+          }
+          if (url.includes('https://hacker-news.firebaseio.com/v0/topstories')) {
+            return { data: JSON.parse('{"12":23064974,"8":23072690,"19":23076081,"23":23071190,"4":23074435,"15":23070821,"11":23075484,"9":23076341,"22":23071134,"26":23064859,"13":23076241,"24":23072696,"16":23075556,"5":23073126,"10":23072956,"21":23069372,"6":23069114,"1":23073000,"17":23075097,"25":23074312,"14":23075893,"20":23065902,"27":23072443,"2":23072333,"18":23073109,"30":23073455,"7":23070567,"29":23070151,"3":23076007,"28":23071867}')};
+          }
+        }
+        return originRequest(url, args, callback);
+      });
       return app.ready();
     });
 
-    after(() => app.close());
+    after(() => {
+      mm.restore();
+      return app.close();
+    });
 
     it('news should be ok', async () => {
       await app.httpRequest()
@@ -562,6 +581,29 @@ describe('/test/enhance.test.ts', () => {
         .expect((res) => res.text.includes('Profile: stevage | egg - HackerNews'))
         .expect('Content-Type', /html/)
         .expect(200);
+    });
+  });
+
+  describe('plugin error should be ok', () => {
+    it('error', async () => {
+      const originJoin = path.join;
+      mm(path, 'join', (...args) => {
+        if (args[0] === path.resolve(__dirname, '../src/loader')) {
+          return originJoin(__dirname, '/../node_modules');
+        }
+        return originJoin.apply(path, args);
+      });
+      const app = utils.app('enhance/base-app-plugin-error', {
+        typescript: true,
+      });
+      let msg = '';
+      try {
+        await app.ready();
+      } catch (e) {
+        msg = e.message;
+      }
+      assert.ok(msg.includes('Can not find plugin plugin2 in'));
+      mm.restore();
     });
   });
 });

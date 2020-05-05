@@ -5,6 +5,7 @@ const path = require('path');
 import { mm } from 'midway-mock';
 
 const logDir = path.join(__dirname, '../logs');
+process.env.NODE_LOG_DIR = logDir;
 
 process.setMaxListeners(0);
 
