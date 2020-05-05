@@ -84,31 +84,34 @@ export class FCRuntime extends ServerlessLightRuntime {
         }
 
         let encoded = false;
-        if (!isHTTPMode) {
-          const data = ctx.body;
-          if (typeof data === 'string') {
-            if (!ctx.type) {
-              ctx.type = 'text/plain';
-            }
-            ctx.body = data;
-          } else if (Buffer.isBuffer(data)) {
-            encoded = true;
-            if (!ctx.type) {
-              ctx.type = 'application/octet-stream';
-            }
-            ctx.body = data.toString('base64');
-          } else if (typeof data === 'object') {
-            if (!ctx.type) {
-              ctx.type = 'application/json';
-            }
-            ctx.body = JSON.stringify(data);
-          } else {
-            // 阿里云网关必须返回字符串
-            if (!ctx.type) {
-              ctx.type = 'text/plain';
-            }
-            ctx.body = data + '';
+
+        let data = ctx.body;
+        if (typeof data === 'string') {
+          if (!ctx.type) {
+            ctx.type = 'text/plain';
           }
+          ctx.body = data;
+        } else if (Buffer.isBuffer(data)) {
+          encoded = true;
+          if (!ctx.type) {
+            ctx.type = 'application/octet-stream';
+          }
+
+          // data is reserved as buffer
+          ctx.body = data.toString('base64');
+        } else if (typeof data === 'object') {
+          if (!ctx.type) {
+            ctx.type = 'application/json';
+          }
+          // set data to string
+          ctx.body = data = JSON.stringify(data);
+        } else {
+          // 阿里云网关必须返回字符串
+          if (!ctx.type) {
+            ctx.type = 'text/plain';
+          }
+          // set data to string
+          ctx.body = data = data + '';
         }
 
         const newHeader = {};
@@ -141,7 +144,8 @@ export class FCRuntime extends ServerlessLightRuntime {
         }
 
         if (res.send) {
-          res.send(ctx.body);
+          // http trigger only support `Buffer` or a `string` or a `stream.Readable`
+          res.send(data);
         }
 
         return {

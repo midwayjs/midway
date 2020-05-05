@@ -423,6 +423,25 @@ describe('/test/index.test.ts', () => {
       await runtime.close();
     });
 
+    it('should invoke normal code', async () => {
+      const runtime = createRuntime({
+        functionDir: join(__dirname, './fixtures/http-json'),
+      });
+      await runtime.start();
+      const result = await runtime.invoke(
+        new HTTPTrigger({
+          path: '/help',
+          method: 'GET',
+        })
+      );
+      assert.equal(
+        result.headers['content-type'],
+        'application/json; charset=utf-8'
+      );
+      assert.equal(result.body, '{"name":"Alan"}');
+      await runtime.close();
+    });
+
     it('should invoke with api gateway', async () => {
       const runtime = createRuntime({
         functionDir: join(__dirname, './fixtures/apigw'),

@@ -109,7 +109,6 @@ describe('/test/index.test.ts', () => {
   });
 
   describe('test buffer return', () => {
-
     it('test buffer result koa in http trigger', (done) => {
       const app = new koa();
       app.use(
@@ -167,7 +166,5 @@ describe('/test/index.test.ts', () => {
         .expect(/hello world/)
         .expect(200, done);
     });
-
   });
-
 });
