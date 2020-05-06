@@ -497,16 +497,15 @@ export class PackagePlugin extends BasePlugin {
       return;
     }
 
-    if (
-      !this.core.service.custom ||
-      !this.core.service.custom.customDomain ||
-      !this.core.service.custom.customDomain.domainName
-    ) {
-      console.warn(
-        'If using aggregation deploy, please configure custom domain'
-      );
-      return;
-    }
+    // if (
+    //   !this.core.service.custom ||
+    //   !this.core.service.custom.customDomain ||
+    //   !this.core.service.custom.customDomain.domainName
+    // ) {
+    //   console.warn(
+    //     'If using aggregation deploy, it is best to configure custom domain'
+    //   );
+    // }
 
     this.core.cli.log('Aggregation Deploy');
     const allAggregationPaths = [];
@@ -604,7 +603,7 @@ export class PackagePlugin extends BasePlugin {
       this.core.service.functions[aggregationFuncName]._handlers = handlers;
       this.core.service.functions[aggregationFuncName]._allAggred = allAggred;
       this.core.service.functions[aggregationFuncName].events = [
-        { http: { method: 'get', path: currentPath } },
+        { http: { method: 'any', path: currentPath } },
       ];
     }
 

@@ -71,14 +71,14 @@ describe('/test/scf.test.ts', () => {
         service: 'serverless-hello-world',
         provider: {
           name: 'tencent',
-          runtime: 'Node.js10.15',
+          runtime: 'Nodejs10.15',
           memorySize: 128,
           timeout: 3,
         },
         functions: {
           index: {
             handler: 'index.handler',
-            runtime: 'Node.js10.15',
+            runtime: 'Nodejs10.15',
             timeout: 3,
             memorySize: 128,
             events: [
@@ -106,14 +106,14 @@ describe('/test/scf.test.ts', () => {
         service: 'serverless-hello-world',
         provider: {
           name: 'tencent',
-          runtime: 'Node.js10.15',
+          runtime: 'Nodejs10.15',
           memorySize: 128,
           timeout: 3,
         },
         functions: {
           index: {
             handler: 'index.handler',
-            runtime: 'Node.js10.15',
+            runtime: 'Nodejs10.15',
             timeout: 3,
             memorySize: 128,
             events: [
@@ -138,14 +138,14 @@ describe('/test/scf.test.ts', () => {
         service: 'serverless-hello-world',
         provider: {
           name: 'tencent',
-          runtime: 'Node.js10.15',
+          runtime: 'Nodejs10.15',
           memorySize: 128,
           timeout: 3,
         },
         functions: {
           index: {
             handler: 'index.handler',
-            runtime: 'Node.js10.15',
+            runtime: 'Nodejs10.15',
             timeout: 3,
             memorySize: 128,
             events: [
@@ -175,14 +175,14 @@ describe('/test/scf.test.ts', () => {
         service: 'serverless-hello-world',
         provider: {
           name: 'tencent',
-          runtime: 'Node.js10.15',
+          runtime: 'Nodejs10.15',
           memorySize: 128,
           timeout: 3,
         },
         functions: {
           index: {
             handler: 'index.handler',
-            runtime: 'Node.js10.15',
+            runtime: 'Nodejs10.15',
             timeout: 3,
             memorySize: 128,
             events: [

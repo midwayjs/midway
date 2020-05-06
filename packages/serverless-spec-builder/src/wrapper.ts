@@ -96,7 +96,7 @@ export function writeWrapper(options: {
       files[handlerFileName].originLayers.push(handlerConf.layers);
     }
     // 高密度部署
-    if (handlerConf._isAggregation && handlerConf.functions) {
+    if (handlerConf._isAggregation) {
       files[handlerFileName].handlers.push({
         name,
         handlers: formetAggregationHandlers(handlerConf._handlers),

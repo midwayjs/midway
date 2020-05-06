@@ -8,7 +8,7 @@ export class Test {
   public async run(config) {
     this.config = config;
     this.argv = config.argv;
-    const execArgv = [];
+    const execArgv = this.argv.execArgv || [];
     if (this.argv.typescript) {
       execArgv.push('--require', require.resolve('ts-node/register'));
     }
@@ -22,7 +22,7 @@ export class Test {
     };
     const mochaFile = require.resolve('mocha/bin/_mocha');
     const args = await this.formatTestArgs();
-    this.forkNode(mochaFile, args, opt);
+    return this.forkNode(mochaFile, args, opt);
   }
 
   private async formatTestArgs() {

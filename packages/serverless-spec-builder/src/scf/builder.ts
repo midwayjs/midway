@@ -20,9 +20,9 @@ import {
 import { removeObjectEmptyAttributes, filterUserDefinedEnv } from '../utils';
 
 export const nodejsVersion = {
-  nodejs6: 'Node.js6.10',
+  nodejs6: 'Nodejs6.10',
   nodejs8: 'Nodejs8.9',
-  nodejs10: 'Node.js10.15',
+  nodejs10: 'Nodejs10.15',
 };
 
 function getNodejsRuntime(runtime) {
