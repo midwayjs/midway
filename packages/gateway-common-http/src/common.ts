@@ -23,9 +23,6 @@ export async function parseInvokeOptionsByOriginUrl(
       }
     }
   }
-  if (currentUrl === '/favicon.ico') {
-    return {};
-  }
   const invokeOptions: Partial<InvokeOptions> = {};
   invokeOptions.functionDir = options.functionDir;
   invokeOptions.sourceDir = options.sourceDir;
@@ -46,16 +43,19 @@ export async function parseInvokeOptionsByOriginUrl(
   let urlMatchList = [];
   Object.keys(functions).forEach((functionName) => {
     const functionItem = functions[functionName] || {};
-    const event = (functionItem.events || []).find((eventItem: any) => {
+    const httpEvents = (functionItem.events || []).filter((eventItem: any) => {
       return eventItem.http || eventItem.apigw;
     });
-    const eventItem = event?.http || event?.apigw;
-    if (eventItem) {
-      urlMatchList.push({
-        functionName,
-        originRouter: eventItem.path || '/*',
-        router: eventItem.path?.replace(/\/\*$/, '/**') || '/**',
-      });
+
+    for( const event of httpEvents) {
+      const eventItem = event?.http || event?.apigw;
+      if (eventItem) {
+        urlMatchList.push({
+          functionName,
+          originRouter: eventItem.path || '/*',
+          router: eventItem.path?.replace(/\/\*$/, '/**') || '/**',
+        });
+      }
     }
   });
   // 1. 绝对路径规则优先级最高如 /ab/cb/e

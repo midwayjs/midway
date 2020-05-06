@@ -73,6 +73,22 @@ describe('/test/index.test.ts', () => {
         .expect(200, done);
     });
 
+    it('test second url /server/user/info2', (done) => {
+      createExpressSuit({
+        functionDir: join(__dirname, './fixtures/ice-demo-repo'),
+        sourceDir: 'src/apis',
+      })
+        .post('/server/user/info2')
+        .query({
+          action: 'doTest',
+        })
+        .send({ name: 'zhangting' })
+        .expect('Content-type', 'text/html; charset=utf-8')
+        .expect(/zhangting,hello http world,doTest/)
+        .expect('x-schema', 'bbb')
+        .expect(200, done);
+    });
+
     it('test /* router', (done) => {
       createExpressSuit({
         functionDir: join(__dirname, './fixtures/ice-demo-repo'),
@@ -129,6 +145,22 @@ describe('/test/index.test.ts', () => {
       sourceDir: 'src/apis',
     })
       .post('/server/user/info')
+      .query({
+        action: 'doTest',
+      })
+      .send({ name: 'zhangting' })
+      .expect('Content-type', 'text/html; charset=utf-8')
+      .expect(/zhangting,hello http world,doTest/)
+      .expect('x-schema', 'bbb')
+      .expect(200, done);
+  });
+
+  it('should invoke second url by http api and koa', (done) => {
+    createKoaSuit({
+      functionDir: join(__dirname, './fixtures/ice-demo-repo'),
+      sourceDir: 'src/apis',
+    })
+      .post('/server/user/info2')
       .query({
         action: 'doTest',
       })

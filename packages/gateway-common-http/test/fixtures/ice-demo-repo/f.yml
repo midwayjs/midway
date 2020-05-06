@@ -10,6 +10,8 @@ functions:
     events:
       - http:
           path: /server/user/info
+      - http:
+          path: /server/user/info2
   test2:
     handler: test2.handler
     events:
