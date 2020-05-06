@@ -1,16 +1,16 @@
 service: serverless-hello-world
 
 provider:
-  name: fc
-  runtime: nodejs8
+  name: ${ env.FAAS_PROVIDER }
+  runtime: ${ env.NODEJS_VERSION }
 
 functions:
   hello:
-    handler: index.handler
+    handler: ${env.FN_HANDLER}
     events:
       - http:
-          path: /foo
-          method: get
+          path: ${ env.FN_HTTP_PATH}
+          method: ${env.FN_HTTP_METHOD }
 
 package:
   exclude:

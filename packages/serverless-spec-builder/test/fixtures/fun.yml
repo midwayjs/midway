@@ -1,7 +1,7 @@
 service: serverless-hello-world
 
 provider:
-  name: ginkgo
+  name: fc
   runtime: nodejs8
 
 functions:
