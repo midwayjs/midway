@@ -6,7 +6,6 @@ import {
   Parent,
   BaseService,
   BaseServiceAsync,
-  BaseServiceGenerator,
   Katana,
   Ninja,
   Samurai,
@@ -191,13 +190,6 @@ describe('/test/context/container.test.ts', () => {
     const container = new Container();
     container.bind(BaseServiceAsync);
     const ins = await container.getAsync(BaseServiceAsync) as BaseServiceAsync;
-    expect(ins.foodNumber).to.equal(20);
-  });
-
-  xit('should execute generator init method when object created', async () => {
-    const container = new Container();
-    container.bind(BaseServiceGenerator);
-    const ins = await container.getAsync(BaseServiceGenerator) as BaseServiceGenerator;
     expect(ins.foodNumber).to.equal(20);
   });
 

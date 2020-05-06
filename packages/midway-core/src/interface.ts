@@ -191,6 +191,7 @@ export const MAIN_MODULE_KEY = '__main__';
 
 export interface IContainerConfiguration {
   namespace: string;
+  packageName: string;
   addLoadDir(dir: string);
   addImports(imports: string[], baseDir?: string);
   addImportObjects(importObjects: any[]);

@@ -99,9 +99,10 @@ export class MidwayContainer extends Container implements IMidwayContainer {
     this.registerImportObjects(configuration.getImportObjects());
 
     // load configuration
-    for (const [namespace, containerConfiguration] of this.configurationMap) {
+    for (const [packageName, containerConfiguration] of this.configurationMap) {
+      debug(`load ${packageName}`);
       // main 的需要 skip 掉
-      if (namespace === MAIN_MODULE_KEY) {
+      if (containerConfiguration.namespace === MAIN_MODULE_KEY) {
         continue;
       }
 
@@ -221,7 +222,7 @@ export class MidwayContainer extends Container implements IMidwayContainer {
     if (configuration.namespace === '') {
       this.likeMainConfiguration.push(configuration);
     } else {
-      this.configurationMap.set(configuration.namespace, configuration);
+      this.configurationMap.set(configuration.packageName, configuration);
     }
   }
 
