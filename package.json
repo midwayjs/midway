@@ -4,9 +4,9 @@
   "version": "1.0.0",
   "devDependencies": {
     "@types/chai": "^4.2.11",
-    "@types/lodash": "^4.14.149",
+    "@types/lodash": "^4.14.150",
     "@types/mocha": "^5.2.7",
-    "@types/node": "^10.17.18",
+    "@types/node": "^10.17.21",
     "autocannon": "^2.4.1",
     "chalk": "^3.0.0",
     "debug": "^4.1.1",

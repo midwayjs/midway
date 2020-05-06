@@ -318,11 +318,14 @@ describe('/test/loader.test.ts', () => {
 
     const appCtx = loader.getApplicationContext();
     const replaceManager: any = await appCtx.getAsync('@ok:replaceManager');
-    assert((await replaceManager.getOne()) === 'ok1');
+    assert((await replaceManager.getOne()) === 'oktwo');
     const replaceManagerno: any = await appCtx.getAsync(
       '@midway-plugin-no-pkg-json:replaceManager'
     );
-    assert((await replaceManagerno.getOne()) === 'ok1');
+    assert((await replaceManagerno.getOne()) === 'oktwo');
+
+    const replaceManagerTwo: any = await appCtx.getAsync('@ok:replaceManagerTwo');
+    assert((await replaceManagerTwo.getOne()) === 'oktwo');
     mm.restore();
   });
 

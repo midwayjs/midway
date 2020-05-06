@@ -21,6 +21,7 @@ const debug = require('debug')('midway:container:configuration');
 export class ContainerConfiguration implements IContainerConfiguration {
   container: IMidwayContainer;
   namespace: string;
+  packageName: string;
   loadDirs: string[] = [];
   importObjects: object = new Map();
 
@@ -107,6 +108,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
     let cfgFile;
     let loadDir;
     if (pkg) {
+      this.packageName = pkg.name;
       if (this.namespace !== MAIN_MODULE_KEY) {
         this.namespace =
           pkg.midwayNamespace !== undefined ? pkg.midwayNamespace : pkg.name;
@@ -156,14 +158,18 @@ export class ContainerConfiguration implements IContainerConfiguration {
             this.namespace = configurationOptions.namespace;
           }
 
+          if (!this.packageName) {
+            this.packageName = this.namespace;
+          }
+
           if (
-            this.container.containsConfiguration(this.namespace) &&
+            this.container.containsConfiguration(this.packageName) &&
             this.namespace !== ''
           ) {
-            debug(`configuration ${this.namespace} exist than ignore.`);
+            debug(`configuration ${this.namespace}/${this.packageName} exist than ignore.`);
             return;
           } else {
-            debug(`configuration ${this.namespace} not exist than add.`);
+            debug(`configuration ${this.namespace}/${this.packageName} not exist than add.`);
             this.container.addConfiguration(this);
           }
           this.addImports(configurationOptions.imports, baseDir);
@@ -174,13 +180,13 @@ export class ContainerConfiguration implements IContainerConfiguration {
       }
     } else {
       if (
-        this.container.containsConfiguration(this.namespace) &&
+        this.container.containsConfiguration(this.packageName) &&
         this.namespace !== ''
       ) {
-        debug(`configuration ${this.namespace} exist than ignore.`);
+        debug(`configuration ${this.namespace}/${this.packageName} exist than ignore.`);
         return;
       } else {
-        debug(`configuration ${this.namespace} not exist than add.`);
+        debug(`configuration ${this.namespace}/${this.packageName} not exist than add.`);
         this.container.addConfiguration(this);
       }
     }

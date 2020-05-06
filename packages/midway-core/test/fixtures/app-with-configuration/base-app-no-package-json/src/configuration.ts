@@ -4,7 +4,8 @@ import { Configuration } from '@midwayjs/decorator';
   imports: [
     '../../midway-plugin-mock/src',
     '../../midway-plugin-ok/src',
-    '../../midway-plugin-no-pkg-json/dist'
+    '../../midway-plugin-no-pkg-json/dist',
+    '../../midway-plugin-oktwo/src'
   ],
   importObjects: {
     aa: 123
