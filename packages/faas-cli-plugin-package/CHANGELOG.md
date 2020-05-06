@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.94](https://github.com/midwayjs/midway-faas/compare/v0.2.93...v0.2.94) (2020-05-06)
+
+
+### Bug Fixes
+
+* wrapper generator ([#156](https://github.com/midwayjs/midway-faas/issues/156)) ([be2d5a1](https://github.com/midwayjs/midway-faas/commit/be2d5a1a2c9e6404ded49b78e98f65b50dfe36d5))
+
+
+
+
+
 ## [0.2.92](https://github.com/midwayjs/midway-faas/compare/v0.2.91...v0.2.92) (2020-05-05)
 
 

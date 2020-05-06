@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.94](https://github.com/midwayjs/midway-faas/compare/v0.2.93...v0.2.94) (2020-05-06)
+
+
+### Bug Fixes
+
+* wrapper generator ([#156](https://github.com/midwayjs/midway-faas/issues/156)) ([be2d5a1](https://github.com/midwayjs/midway-faas/commit/be2d5a1a2c9e6404ded49b78e98f65b50dfe36d5))
+
+
+### Features
+
+* support yaml with ${env.variable} ([#157](https://github.com/midwayjs/midway-faas/issues/157)) ([53f40ef](https://github.com/midwayjs/midway-faas/commit/53f40ef62b2b35ede3c9b667079c5126d41e6804))
+
+
+
+
+
 ## [0.2.92](https://github.com/midwayjs/midway-faas/compare/v0.2.91...v0.2.92) (2020-05-05)
 
 
