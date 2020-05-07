@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.3](https://github.com/midwayjs/midway/compare/v2.1.2...v2.1.3) (2020-05-07)
+
+
+### Bug Fixes
+
+* configuration use package name ([#485](https://github.com/midwayjs/midway/issues/485)) ([a00cb18](https://github.com/midwayjs/midway/commit/a00cb189b10a7353f6e0545c17837e8c9b10ca2c))
+
+
+
+
+
 ## [2.1.2](https://github.com/midwayjs/midway/compare/v2.1.1...v2.1.2) (2020-05-02)
 
 **Note:** Version bump only for package @midwayjs/core
