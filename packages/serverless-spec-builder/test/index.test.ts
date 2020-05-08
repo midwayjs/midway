@@ -5,7 +5,6 @@ import * as fs from 'fs';
 import * as mm from 'mm';
 
 describe('/test/index.test.ts', () => {
-
   describe('test all format', () => {
     it('test transform yml', () => {
       const result = transform(path.join(__dirname, './fixtures/fun.yml'));
@@ -33,14 +32,12 @@ describe('/test/index.test.ts', () => {
 
   describe('test custom builder', () => {
     it('test use custom builder', () => {
-
       class CustomBuilder extends SpecBuilder {
-
         getTest() {
           return {
             test: {
-              hello: 'test'
-            }
+              hello: 'test',
+            },
           };
         }
 
@@ -51,7 +48,10 @@ describe('/test/index.test.ts', () => {
         }
       }
 
-      const result = transform(path.join(__dirname, './fixtures/fun.yml'), CustomBuilder);
+      const result = transform(
+        path.join(__dirname, './fixtures/fun.yml'),
+        CustomBuilder
+      );
       assert(result['test']['hello'] === 'test');
     });
   });
@@ -63,5 +63,4 @@ describe('/test/index.test.ts', () => {
       fs.unlinkSync(path.join(__dirname, './fixtures/test.yml'));
     });
   });
-
 });

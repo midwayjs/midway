@@ -127,7 +127,7 @@ export function formetAggregationHandlers(handlers) {
     return [];
   }
   return handlers
-    .map((handler) => {
+    .map(handler => {
       const path = handler.path.replace(/\**$/, '');
       return {
         handler: handler.handler,

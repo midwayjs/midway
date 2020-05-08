@@ -11,7 +11,7 @@ export interface IFaaSApplication extends IMidwayCoreApplication {
 /**
  * @deprecated same as IFaaSApplication
  */
-export interface IFaaSStarter extends IFaaSApplication {}
+export type IFaaSStarter = IFaaSApplication;
 
 export interface FunctionHandler {
   handler(...args);

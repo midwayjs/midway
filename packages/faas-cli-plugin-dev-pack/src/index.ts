@@ -53,7 +53,7 @@ export class DevPackPlugin extends BasePlugin {
           'start a server at http://127.0.0.1:' + this.options.port
         );
       });
-      return new Promise((resolve) => {});
+      return new Promise(resolve => {});
     }
   }
 }

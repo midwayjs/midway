@@ -17,7 +17,9 @@ export class Request {
   get [EVENT]() {
     if (!this[EVENT_PARSED]) {
       this[EVENT_PARSED] =
-        typeof this[ORIGIN_EVENT] === 'object' ? this[ORIGIN_EVENT] : JSON.parse(this[ORIGIN_EVENT] || '{}');
+        typeof this[ORIGIN_EVENT] === 'object'
+          ? this[ORIGIN_EVENT]
+          : JSON.parse(this[ORIGIN_EVENT] || '{}');
       this[ORIGIN_EVENT] = null;
     }
 

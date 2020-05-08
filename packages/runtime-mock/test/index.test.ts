@@ -7,7 +7,7 @@ describe('/test/index.test.ts', () => {
   it('should create runtime', async () => {
     const runtime = createRuntime({
       functionDir: join(__dirname, './code'),
-      events: [new HTTPEvent()]
+      events: [new HTTPEvent()],
     });
     await runtime.start();
     const result = await runtime.invoke({
@@ -19,5 +19,4 @@ describe('/test/index.test.ts', () => {
     assert.equal(result, 'hello Alan');
     await runtime.close();
   });
-
 });

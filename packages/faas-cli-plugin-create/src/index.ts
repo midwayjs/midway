@@ -31,23 +31,21 @@ export class CreatePlugin extends BasePlugin {
         usage: 'Create new Ali FaaS service',
         lifecycleEvents: ['create'],
         options: {
-          'template': {
+          template: {
             usage: `Template for the service. Available templates: ${this.humanReadableTemplateList()}`,
             shortcut: 't',
           },
-          'path': {
+          path: {
             usage:
               'The path where the service should be created (e.g. --path my-service).',
             shortcut: 'p',
           },
           'template-path': {
-            usage:
-              'Your code will be created from this local template.',
+            usage: 'Your code will be created from this local template.',
           },
           'template-package': {
-            usage:
-              'Your code will be created from this npm package.',
-          }
+            usage: 'Your code will be created from this npm package.',
+          },
         },
       },
     };
@@ -83,7 +81,10 @@ export class CreatePlugin extends BasePlugin {
       await this.createFromTemplate();
     } else if (this.options['template-path']) {
       if (!isAbsolute(this.options['template-path'])) {
-        this.localBoilerplatePath = join(this.servicePath, this.options['template-path']);
+        this.localBoilerplatePath = join(
+          this.servicePath,
+          this.options['template-path']
+        );
       } else {
         this.localBoilerplatePath = this.options['template-path'];
       }
@@ -112,7 +113,7 @@ export class CreatePlugin extends BasePlugin {
   async createFromTemplate() {
     if (!this.options.path) {
       this.prompt = new Input({
-        message: `The directory where the service should be created`,
+        message: 'The directory where the service should be created',
         initial: 'my_new_serverless',
         show: this.showPrompt,
       });
@@ -166,7 +167,11 @@ export class CreatePlugin extends BasePlugin {
       await generator.run();
     }
     this.core.cli.log(
-      `Successfully generated boilerplate for template: "${this.options.template || this.npmPackageName || this.localBoilerplatePath}"`
+      `Successfully generated boilerplate for template: "${
+        this.options.template ||
+        this.npmPackageName ||
+        this.localBoilerplatePath
+      }"`
     );
     this.core.cli.log();
   }
@@ -202,9 +207,8 @@ export class CreatePlugin extends BasePlugin {
     // class wide constants
     const validTemplates = Object.keys(this.templateList);
     return `${validTemplates
-    .slice(0, -1)
-    .map(template => `"${template}"`)
-    .join(', ')} and "${validTemplates.slice(-1)}"`;
+      .slice(0, -1)
+      .map(template => `"${template}"`)
+      .join(', ')} and "${validTemplates.slice(-1)}"`;
   }
-
 }

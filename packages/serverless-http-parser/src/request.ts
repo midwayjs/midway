@@ -31,7 +31,7 @@ export class Request implements FaaSHTTPRequest {
   get hostname() {
     const host = this.host;
     if (!host) return '';
-    if ('[' == host[0]) return ''; // IPv6 not support
+    if ('[' === host[0]) return ''; // IPv6 not support
     return host.split(':', 1)[0];
   }
 
@@ -101,7 +101,7 @@ export class Request implements FaaSHTTPRequest {
           ? this.originEvent
           : JSON.parse(this.originEvent || '{}');
       const headers = {};
-      Object.keys(this[EVENT_PARSED]['headers'] || {}).forEach((field) => {
+      Object.keys(this[EVENT_PARSED]['headers'] || {}).forEach(field => {
         headers[field.toLowerCase()] = this[EVENT_PARSED]['headers'][field];
       });
       this[EVENT_PARSED]['headers'] = headers;

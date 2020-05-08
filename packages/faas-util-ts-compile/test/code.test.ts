@@ -9,10 +9,15 @@ describe('/test/code.test.ts', () => {
     });
     assert(newSpec.functions);
     assert(newSpec.functions['no-handler-and-path'].events.length === 1);
-    assert(newSpec.functions['no-handler-and-path'].events[0].http.path === '/noHandlerAndPath/handler');
+    assert(
+      newSpec.functions['no-handler-and-path'].events[0].http.path ===
+        '/noHandlerAndPath/handler'
+    );
     assert(newSpec.functions['test'].events.length === 1);
     assert(newSpec.functions['index-index'].handler === 'index.index');
     assert(newSpec.functions['multi-deco-index'].events.length === 3);
-    assert(newSpec.functions['multi-deco-index'].events[0].http.path === '/api/test1');
+    assert(
+      newSpec.functions['multi-deco-index'].events[0].http.path === '/api/test1'
+    );
   });
 });

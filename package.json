@@ -11,6 +11,7 @@
     "gh-pages": "^1.2.0",
     "lerna": "3",
     "lerna-relinker": "^1.4.0",
+    "mwts": "^1.0.5",
     "opencollective": "^1.0.3",
     "opencollective-postinstall": "^2.0.2",
     "rimraf": "^3.0.0",
@@ -33,7 +34,9 @@
     "build": "sh scripts/build.sh",
     "prettier": "prettier --write 'packages/**/*.ts'",
     "authors": "git log --format='%aN <%aE>' | sort -u > AUTHORS",
-    "site": "vuepress dev docs"
+    "site": "vuepress dev docs",
+    "lint": "lerna exec mwts check",
+    "lint:fix": "lerna exec mwts fix"
   },
   "keywords": [
     "serverless",

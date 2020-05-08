@@ -15,9 +15,12 @@ export class Test {
 
     const opt = {
       cwd: this.config.cwd,
-      env: Object.assign({
-        NODE_ENV: 'test',
-      }, this.config.env),
+      env: Object.assign(
+        {
+          NODE_ENV: 'test',
+        },
+        this.config.env
+      ),
       execArgv,
     };
     const mochaFile = require.resolve('mocha/bin/_mocha');
@@ -27,19 +30,18 @@ export class Test {
 
   private async formatTestArgs() {
     const args = [];
-    let timeout =  this.argv.timeout || process.env.TEST_TIMEOUT || 60000;
+    let timeout = this.argv.timeout || process.env.TEST_TIMEOUT || 60000;
     if (process.env.JB_DEBUG_FILE) {
       // --no-timeout
       timeout = false;
     }
-    args.push(timeout ? `--timeout=${timeout}`: '--no-timeout');
-
+    args.push(timeout ? `--timeout=${timeout}` : '--no-timeout');
 
     if (this.argv.reporter || process.env.TEST_REPORTER) {
-      args.push(`--reporter=true`);
+      args.push('--reporter=true');
     }
 
-    args.push(`--exit=true`);
+    args.push('--exit=true');
 
     const requireArr = [].concat(this.argv.require || this.argv.r || []);
 
@@ -70,9 +72,9 @@ export class Test {
     }
 
     if (!pattern.length) {
-      pattern = [ `test/**/*.test.${this.argv.typescript ? 'ts' : 'js'}` ];
+      pattern = [`test/**/*.test.${this.argv.typescript ? 'ts' : 'js'}`];
     }
-    pattern = pattern.concat([ '!test/fixtures', '!test/node_modules' ]);
+    pattern = pattern.concat(['!test/fixtures', '!test/node_modules']);
 
     const files = globby.sync(pattern);
 
@@ -84,7 +86,10 @@ export class Test {
     args.push(...files);
 
     // auto add setup file as the first test file
-    const setupFile = join(process.cwd(), `test/.setup.${this.argv.typescript ? 'ts' : 'js'}`);
+    const setupFile = join(
+      process.cwd(),
+      `test/.setup.${this.argv.typescript ? 'ts' : 'js'}`
+    );
     if (existsSync(setupFile)) {
       args.unshift(setupFile);
     }
@@ -99,7 +104,9 @@ export class Test {
       proc.once('exit', (code: any) => {
         childs.delete(proc);
         if (code !== 0) {
-          const err: any = new Error(modulePath + ' ' + args + ' exit with code ' + code);
+          const err: any = new Error(
+            modulePath + ' ' + args + ' exit with code ' + code
+          );
           err.code = code;
           reject(err);
         } else {
@@ -121,7 +128,7 @@ function gracefull(proc) {
   if (!hadHook) {
     hadHook = true;
     let signal;
-    [ 'SIGINT', 'SIGQUIT', 'SIGTERM' ].forEach((event: any) => {
+    ['SIGINT', 'SIGQUIT', 'SIGTERM'].forEach((event: any) => {
       process.once(event, () => {
         signal = event;
         process.exit(0);

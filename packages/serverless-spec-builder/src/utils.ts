@@ -6,7 +6,7 @@ export interface Ilayer {
 export function formatLayers(...multiLayers: Ilayer[]) {
   const layerTypeList = { npm: {} };
   multiLayers.forEach((layer: Ilayer) => {
-    Object.keys(layer || {}).forEach((layerName) => {
+    Object.keys(layer || {}).forEach(layerName => {
       const [type, path] = layer[layerName].path.split(':');
       if (!layerTypeList[type]) {
         return;
@@ -70,7 +70,7 @@ export function removeObjectEmptyAttributes(obj) {
 
   function removeEmptyObject(obj) {
     const newObj = {};
-    Object.keys(obj).forEach((key) => {
+    Object.keys(obj).forEach(key => {
       if (obj[key] && typeof obj[key] === 'object') {
         if (Array.isArray(obj[key])) {
           const arr = removeEmptyArray(obj[key]);
@@ -102,7 +102,7 @@ const USER_DEFINIED_ENV_KEY = 'UDEV_';
 
 export function filterUserDefinedEnv() {
   const userDefinedEnv = {};
-  for (let key in process.env || {}) {
+  for (const key in process.env || {}) {
     if (key.startsWith(USER_DEFINIED_ENV_KEY)) {
       userDefinedEnv[key.replace(USER_DEFINIED_ENV_KEY, '')] = process.env[key];
     }

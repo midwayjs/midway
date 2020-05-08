@@ -26,7 +26,7 @@ const ErrorMap = {
   pluginType: (info: string) => {
     return {
       info,
-      message: `only support npm / local / class plugin`,
+      message: 'only support npm / local / class plugin',
     };
   },
 };
@@ -41,7 +41,7 @@ export default <T>(type: string, info: T): ReturnValue<T> => {
   if (!error) {
     return {
       info,
-      message: `error`,
+      message: 'error',
     };
   }
   return error(info);

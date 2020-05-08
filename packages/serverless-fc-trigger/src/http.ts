@@ -65,11 +65,11 @@ export class HTTPTrigger extends FCBaseTrigger {
         });
       }
 
-      this.httpServer.listen(0, (err) => {
+      this.httpServer.listen(0, err => {
         if (err) {
           reject(err);
         } else {
-          exec(`curl 127.0.0.1:${this.httpServer.address().port}`, (err) => {
+          exec(`curl 127.0.0.1:${this.httpServer.address().port}`, err => {
             if (err) {
               reject(err);
             }
@@ -81,7 +81,7 @@ export class HTTPTrigger extends FCBaseTrigger {
 
   createCallback(handler) {
     this.handler = handler;
-    return (err) => {
+    return err => {
       if (err) {
         throw err;
       }
@@ -91,7 +91,7 @@ export class HTTPTrigger extends FCBaseTrigger {
   async close(): Promise<void> {
     return new Promise((resolve, reject) => {
       if (this.httpServer) {
-        this.httpServer.close((err) => {
+        this.httpServer.close(err => {
           if (err) {
             reject(err);
           }

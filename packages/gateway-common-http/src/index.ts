@@ -48,7 +48,7 @@ export class KoaGateway implements KoaGatewayAdapter {
         ctx.status = result.statusCode;
         if (result.isBase64Encoded) {
           // base64 to buffer
-          data = new Buffer(result.body, 'base64');
+          data = Buffer.from(result.body, 'base64');
         } else {
           try {
             data = JSON.parse(result.body);
@@ -108,7 +108,7 @@ export class ExpressGateway implements ExpressGatewayAdapter {
             res.statusCode = result.statusCode;
             if (result.isBase64Encoded) {
               // base64 to buffer
-              data = new Buffer(result.body, 'base64');
+              data = Buffer.from(result.body, 'base64');
             } else {
               try {
                 data = JSON.parse(result.body);
@@ -123,7 +123,7 @@ export class ExpressGateway implements ExpressGatewayAdapter {
             res.send(data);
           }
         )
-        .catch((err) => {
+        .catch(err => {
           next(err);
         });
     }

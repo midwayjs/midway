@@ -16,13 +16,15 @@
     "@midwayjs/fcli-plugin-test": "^0.2.94",
     "@midwayjs/serverless-spec-builder": "^0.2.94",
     "enquirer": "^2.3.4",
-    "minimist": "^1.2.5"
+    "minimist": "^1.2.5",
+    "source-map-support": "^0.5.19"
   },
   "bin": {
     "mf": "bin/fun.js",
     "f": "bin/fun.js"
   },
   "devDependencies": {
+    "fs-extra": "^8.1.0",
     "midway-bin": "^2.0.0"
   },
   "engines": {

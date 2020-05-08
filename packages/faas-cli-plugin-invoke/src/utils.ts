@@ -1,7 +1,4 @@
-import {
-  existsSync,
-  remove,
-} from 'fs-extra';
+import { existsSync, remove } from 'fs-extra';
 import { join } from 'path';
 export const exportMidwayFaaS = (() => {
   const midwayModuleName = process.env.MidwayModuleName || '@midwayjs/faas';

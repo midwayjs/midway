@@ -4,7 +4,7 @@ invoke({
   functionDir: join(__dirname, 'fixtures/baseApp'),
   functionName: 'http',
   data: [{ name: 'params' }],
-  debug: '9229'
+  debug: '9229',
 }).then(result => {
   console.log('result', result);
 });

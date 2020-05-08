@@ -17,7 +17,9 @@ export = (engine: RuntimeEngine) => {
       const packageJSON = require(resolve(baseDir, 'package.json'));
       framework = packageJSON.egg && packageJSON.egg.framework;
       const localFrameWorkPath = resolve(__dirname, '../framework');
-      require(localFrameWorkPath).getFramework(framework && resolve(baseDir, 'node_modules', framework));
+      require(localFrameWorkPath).getFramework(
+        framework && resolve(baseDir, 'node_modules', framework)
+      );
       eggApp = await start({
         baseDir,
         framework: localFrameWorkPath,

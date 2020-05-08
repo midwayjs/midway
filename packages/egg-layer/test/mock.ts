@@ -1,4 +1,8 @@
-import { BaseRuntimeEngine, Runtime, ServerlessBaseRuntime } from '@midwayjs/runtime-engine';
+import {
+  BaseRuntimeEngine,
+  Runtime,
+  ServerlessBaseRuntime,
+} from '@midwayjs/runtime-engine';
 import * as http from 'http';
 import { exec } from 'child_process';
 
@@ -17,7 +21,7 @@ export class MockRuntime {
     options: {
       layers?: any[];
       functionDir?: string;
-      runtime?: Runtime
+      runtime?: Runtime;
     } = {}
   ) {
     this.options = options;
@@ -26,6 +30,7 @@ export class MockRuntime {
 
   async start() {
     process.env.ENTRY_DIR = this.options.functionDir;
+    // eslint-disable-next-line no-async-promise-executor
     return new Promise(async (resolve, reject) => {
       if (this.runtime.on) {
         this.runtime.on('error', err => {
@@ -53,7 +58,7 @@ export class MockRuntime {
   }
 
   async invoke(...args) {
-    return this.runtime.invokeDataHandler.apply(this.runtime, args);
+    return this.runtime.invokeDataHandler(...args);
   }
 
   async invokeHTTP(data) {
@@ -68,17 +73,20 @@ export class MockRuntime {
         });
       }
 
-      this.httpServer.listen(0, (err) => {
+      this.httpServer.listen(0, err => {
         if (err) {
           reject(err);
         } else {
-          exec(`curl 127.0.0.1:${this.httpServer.address().port}`, (error, stdout, stderr) => {
-            if (error) {
-              reject(error);
-              return;
+          exec(
+            `curl 127.0.0.1:${this.httpServer.address().port}`,
+            (error, stdout, stderr) => {
+              if (error) {
+                reject(error);
+                return;
+              }
+              resolve(stdout);
             }
-            resolve(stdout);
-          });
+          );
         }
       });
     });

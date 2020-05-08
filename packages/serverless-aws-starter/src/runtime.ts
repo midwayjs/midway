@@ -1,4 +1,7 @@
-import { FAAS_ARGS_KEY, ServerlessLightRuntime } from '@midwayjs/runtime-engine';
+import {
+  FAAS_ARGS_KEY,
+  ServerlessLightRuntime,
+} from '@midwayjs/runtime-engine';
 import { AWSContext, AWSHTTPEvent } from './interface';
 import { Context } from './context';
 

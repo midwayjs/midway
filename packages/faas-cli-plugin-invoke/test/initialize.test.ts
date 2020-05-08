@@ -9,7 +9,7 @@ describe('/test/http.test.ts', () => {
     const result: any = await invoke({
       functionDir: baseDir,
       functionName: 'index',
-      clean: false
+      clean: false,
     });
     console.log('result', result);
     assert(true);

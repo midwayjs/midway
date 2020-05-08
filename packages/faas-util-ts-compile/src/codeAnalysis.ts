@@ -18,16 +18,18 @@ class CodeAnalysis {
   async start() {
     this.loadSpec();
 
-    const parsedCli = findAndParseTsConfig(this.options.baseDir,
-      /** outDir */undefined,
-      /** configName */undefined,
-      /** hintConfig */undefined,
-      /** overrideConfig */{
+    const parsedCli = findAndParseTsConfig(
+      this.options.baseDir,
+      /** outDir */ undefined,
+      /** configName */ undefined,
+      /** hintConfig */ undefined,
+      /** overrideConfig */ {
         include: [].concat(this.options.sourceDir),
         compilerOptions: {
-          rootDir: ''
-        }
-      });
+          rootDir: '',
+        },
+      }
+    );
     const compilerOptions = parsedCli.options;
     const program = ts.createProgram(parsedCli.fileNames, compilerOptions);
     this.checker = program.getTypeChecker();
@@ -53,7 +55,7 @@ class CodeAnalysis {
       if (!node.decorators) {
         return;
       }
-      const decoratorsInfo: any = { type: {}, list: []};
+      const decoratorsInfo: any = { type: {}, list: [] };
       node.decorators.forEach(decorator => {
         this.getDecoratorInfo(decoratorsInfo, decorator);
       });
@@ -97,7 +99,7 @@ class CodeAnalysis {
 
   // 格式化装饰器参数
   formatArgs(args) {
-    return args.map((arg) => {
+    return args.map(arg => {
       if (arg.name) {
         return arg.name.escapedText;
       }
@@ -113,9 +115,13 @@ class CodeAnalysis {
   }
 
   getHandlerFunc(symbol) {
-    symbol.members.forEach((member) => {
-      const decoratorsInfo: any = { type: {}, list: []};
-      if (member.valueDeclaration && member.valueDeclaration.decorators && member.valueDeclaration.decorators.length) {
+    symbol.members.forEach(member => {
+      const decoratorsInfo: any = { type: {}, list: [] };
+      if (
+        member.valueDeclaration &&
+        member.valueDeclaration.decorators &&
+        member.valueDeclaration.decorators.length
+      ) {
         member.valueDeclaration.decorators.forEach(decorator => {
           this.getDecoratorInfo(decoratorsInfo, decorator);
         });
@@ -137,7 +143,9 @@ class CodeAnalysis {
       handler = args[0];
       trigger = args[1];
     } else {
-      handler = `${this.formatUpperCamel(className)}.${this.formatUpperCamel(funcName)}`;
+      handler = `${this.formatUpperCamel(className)}.${this.formatUpperCamel(
+        funcName
+      )}`;
       trigger = args[0];
     }
 
@@ -149,7 +157,7 @@ class CodeAnalysis {
 
     if (!trigger) {
       trigger = {
-        event: 'http'
+        event: 'http',
       };
     }
 
@@ -159,7 +167,11 @@ class CodeAnalysis {
       if (trigger.event.toLowerCase() === 'http') {
         event[eventType] = {
           method: (trigger.method || 'GET').toUpperCase(),
-          path: trigger.path || `/${this.firstCharLower(className)}/${this.firstCharLower(funcName)}`,
+          path:
+            trigger.path ||
+            `/${this.firstCharLower(className)}/${this.firstCharLower(
+              funcName
+            )}`,
         };
       }
       // 防止有重复的触发器
@@ -188,7 +200,7 @@ class CodeAnalysis {
   // 获取参数
   getParam(symbol) {
     const type = this.getType(symbol);
-    const valueDeclaration: any = (symbol.valueDeclaration as any);
+    const valueDeclaration: any = symbol.valueDeclaration as any;
     if (type === 'string') {
       if (valueDeclaration.initializer) {
         if (valueDeclaration.initializer.text) {
@@ -210,13 +222,19 @@ class CodeAnalysis {
 
   // 获取类型
   getType(symbol) {
-    const checkerType: any = this.checker.getTypeOfSymbolAtLocation(symbol, symbol.valueDeclaration);
+    const checkerType: any = this.checker.getTypeOfSymbolAtLocation(
+      symbol,
+      symbol.valueDeclaration
+    );
     return this.checker.typeToString(checkerType).toLowerCase();
   }
 
   // 驼峰变为 -
   formatUpperCamel(str) {
-    return this.firstCharLower(str).replace(/[A-Z]/g, match => `-${match.toLowerCase()}`);
+    return this.firstCharLower(str).replace(
+      /[A-Z]/g,
+      match => `-${match.toLowerCase()}`
+    );
   }
 
   // 首字母小写

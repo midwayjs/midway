@@ -21,14 +21,14 @@ describe('/test/multi.test.ts', () => {
           functionName,
           data: [
             {
-              headers: { 'Content-Type': 'text/json'},
+              headers: { 'Content-Type': 'text/json' },
               method: 'GET',
-              path:  '/test/xxx',
-              query: {name: 123},
+              path: '/test/xxx',
+              query: { name: 123 },
               body: {
-                name: 'test'
-              }
-            }
+                name: 'test',
+              },
+            },
           ],
           clean: false,
         });

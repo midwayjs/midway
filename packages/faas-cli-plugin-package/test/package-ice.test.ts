@@ -23,7 +23,7 @@ describe('/test/package-ice.test.ts', () => {
         service: loadSpec(baseDir),
         provider: 'aliyun',
         options: {
-          sourceDir: 'src/apis'
+          sourceDir: 'src/apis',
         },
         log: console,
       });

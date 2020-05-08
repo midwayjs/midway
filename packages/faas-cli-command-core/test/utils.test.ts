@@ -18,9 +18,9 @@ describe('/test/utils.test.ts', () => {
       optionList: [
         {
           alias: 't',
-          name: 'test'
-        }
-      ]
+          name: 'test',
+        },
+      ],
     });
     assert(/-t, --test/.test(result));
   });

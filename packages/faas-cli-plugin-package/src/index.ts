@@ -19,10 +19,7 @@ import {
 } from 'fs-extra';
 import * as micromatch from 'micromatch';
 import { commonPrefix, formatLayers } from './utils';
-import {
-  copyFiles,
-  CodeAny
-} from '@midwayjs/faas-util-ts-compile';
+import { copyFiles, CodeAny } from '@midwayjs/faas-util-ts-compile';
 import { compileInProject, MwccConfig } from '@midwayjs/mwcc';
 import { exec } from 'child_process';
 import * as archiver from 'archiver';
@@ -142,9 +139,9 @@ export class PackagePlugin extends BasePlugin {
     });
     this.setStore('codeAnalyzeResult', this.codeAnalyzeResult);
     this.core.debug('codeAnalyzeResult', this.codeAnalyzeResult);
-    this.core.cli.log(`Information`);
+    this.core.cli.log('Information');
     this.core.cli.log(` - BaseDir: ${this.servicePath}`);
-    this.core.cli.log(` - AnalyzeResult`);
+    this.core.cli.log(' - AnalyzeResult');
     this.core.cli.log(
       `   ◎ ProjectType: ${this.codeAnalyzeResult.projectType}`
     );
@@ -174,7 +171,7 @@ export class PackagePlugin extends BasePlugin {
         );
         await remove(join(this.servicePath, this.integrationDistTempDirectory));
       } else {
-        this.core.cli.log(`   ◎ TSBuildTemporaryRoot: dist`);
+        this.core.cli.log('   ◎ TSBuildTemporaryRoot: dist');
       }
       // 输出构建产物根路径
       this.core.cli.log(
@@ -236,11 +233,11 @@ export class PackagePlugin extends BasePlugin {
       console.log(this.options.sharedTargetDir);
       await copy(this.options.sharedDir, this.options.sharedTargetDir);
     }
-    this.core.cli.log(` - File copy complete`);
+    this.core.cli.log(' - File copy complete');
   }
 
   async installLayer() {
-    this.core.cli.log(`Install layers...`);
+    this.core.cli.log('Install layers...');
     const funcLayers = [];
     if (this.core.service.functions) {
       for (const func in this.core.service.functions) {
@@ -259,7 +256,7 @@ export class PackagePlugin extends BasePlugin {
         npmList,
       });
     }
-    this.core.cli.log(` - Layers install complete`);
+    this.core.cli.log(' - Layers install complete');
   }
 
   async installDep() {
@@ -275,7 +272,9 @@ export class PackagePlugin extends BasePlugin {
     let pkgJson: any = {};
     try {
       pkgJson = JSON.parse(readFileSync(pkgJsonPath).toString());
-    } catch (e) {}
+    } catch (e) {
+      /** ignore */
+    }
     const allDependencies = Object.assign(
       {},
       this.core.service.globalDependencies,
@@ -306,7 +305,7 @@ export class PackagePlugin extends BasePlugin {
       const target = join(this.midwayBuildPath, 'node_modules', localDepName);
       await copy(localDep[localDepName], target);
     }
-    this.core.cli.log(` - Dependencies install complete`);
+    this.core.cli.log(' - Dependencies install complete');
   }
 
   async codeAnalysis() {
@@ -318,8 +317,8 @@ export class PackagePlugin extends BasePlugin {
       baseDir: this.servicePath,
       sourceDir: [
         this.codeAnalyzeResult.tsCodeRoot,
-        resolve(this.defaultTmpFaaSOut, 'src')
-      ]
+        resolve(this.defaultTmpFaaSOut, 'src'),
+      ],
     });
     this.core.debug('CcdeAnalysis', newSpec);
     this.core.service.functions = newSpec.functions;
@@ -333,21 +332,31 @@ export class PackagePlugin extends BasePlugin {
       return;
     }
     this.core.cli.log(' - Using tradition build mode');
-    await compileInProject(this.servicePath, join(this.midwayBuildPath, 'dist'), this.mwccHintConfig, {
-      compilerOptions: {
-        sourceRoot: '../src',
-        rootDir: this.codeAnalyzeResult.tsCodeRoot
-      },
-      include: [this.codeAnalyzeResult.tsCodeRoot]
-    });
+    await compileInProject(
+      this.servicePath,
+      join(this.midwayBuildPath, 'dist'),
+      this.mwccHintConfig,
+      {
+        compilerOptions: {
+          sourceRoot: '../src',
+          rootDir: this.codeAnalyzeResult.tsCodeRoot,
+        },
+        include: [this.codeAnalyzeResult.tsCodeRoot],
+      }
+    );
     const tmpOutDir = resolve(this.defaultTmpFaaSOut, 'src');
     if (existsSync(tmpOutDir)) {
-      await compileInProject(this.servicePath, join(this.midwayBuildPath, 'dist'), this.mwccHintConfig, {
-        compilerOptions: { rootDir: tmpOutDir },
-        include: [tmpOutDir]
-      });
+      await compileInProject(
+        this.servicePath,
+        join(this.midwayBuildPath, 'dist'),
+        this.mwccHintConfig,
+        {
+          compilerOptions: { rootDir: tmpOutDir },
+          include: [tmpOutDir],
+        }
+      );
     }
-    this.core.cli.log(` - Build Midway FaaS complete`);
+    this.core.cli.log(' - Build Midway FaaS complete');
   }
 
   // 生成默认入口
@@ -362,7 +371,7 @@ export class PackagePlugin extends BasePlugin {
       const othEnterFile = [
         join(this.defaultTmpFaaSOut, handlerFileName + '.js'),
         join(this.core.config.servicePath, handlerFileName + '.js'),
-      ].find((file) => existsSync(file));
+      ].find(file => existsSync(file));
       if (othEnterFile) {
         const fileName = join(this.midwayBuildPath, `${handlerFileName}.js`);
         await copy(othEnterFile, fileName);
@@ -415,7 +424,7 @@ export class PackagePlugin extends BasePlugin {
   private makeZip(sourceDirection: string, targetFileName: string) {
     return new Promise(resolve => {
       const output = createWriteStream(targetFileName);
-      output.on('close', function() {
+      output.on('close', () => {
         resolve(archive.pointer());
       });
       const archive = archiver('zip', {
@@ -441,7 +450,9 @@ export class PackagePlugin extends BasePlugin {
       if (!existsSync(pkgJson)) {
         writeFileSync(pkgJson, '{}');
       }
-      const registry = this.options.registry ? ` --registry=${this.options.registry}` : '';
+      const registry = this.options.registry
+        ? ` --registry=${this.options.registry}`
+        : '';
       exec(
         `${this.options.npm || 'npm'} install ${
           options.npmList
@@ -513,9 +524,7 @@ export class PackagePlugin extends BasePlugin {
     for (const aggregationName in this.core.service.aggregation) {
       const aggregationConfig = this.core.service.aggregation[aggregationName];
       const aggregationFuncName = this.getAggregationFunName(aggregationName);
-      this.core.service.functions[
-        aggregationFuncName
-      ] = aggregationConfig;
+      this.core.service.functions[aggregationFuncName] = aggregationConfig;
       this.core.service.functions[
         aggregationFuncName
       ].handler = `${aggregationFuncName}.handler`;
@@ -528,7 +537,7 @@ export class PackagePlugin extends BasePlugin {
 
       const allAggred = [];
       let handlers = [];
-      
+
       if (aggregationConfig.functions || aggregationConfig.functionsPattern) {
         const matchedFuncName = [];
         const notMatchedFuncName = [];
@@ -591,7 +600,7 @@ export class PackagePlugin extends BasePlugin {
       currentPath =
         currentPath && currentPath !== '/' ? `${currentPath}/*` : '/*';
       this.core.cli.log(
-        ` - using path '${currentPath}' to deploy '${allPaths.join(`', '`)}'`
+        ` - using path '${currentPath}' to deploy '${allPaths.join("', '")}'`
       );
       if (allAggregationPaths.indexOf(currentPath) !== -1) {
         console.error(
@@ -613,7 +622,6 @@ export class PackagePlugin extends BasePlugin {
     this.core.config.specFile.path = tmpSpecFile;
     writeToSpec(this.servicePath, this.core.service, this.core.config.specFile);
   }
-
 
   getAggregationFunName(aggregationName: string) {
     return aggregationName;

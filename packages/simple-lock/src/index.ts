@@ -55,15 +55,17 @@ export default class SimpleLock {
 
     const exec = () => {
       if (!this.q.get(localKey).resolved) {
-        Promise.resolve(fn()).then(ret => {
-          deferredResolve(ret);
+        Promise.resolve(fn())
+          .then(ret => {
+            deferredResolve(ret);
 
-          if (this.q.get(localKey).fns.length > 0) {
-            this.q.get(localKey).fns.shift()();
-          }
-        }).catch(err => {
-          deferredReject(err);
-        });
+            if (this.q.get(localKey).fns.length > 0) {
+              this.q.get(localKey).fns.shift()();
+            }
+          })
+          .catch(err => {
+            deferredReject(err);
+          });
 
         this.q.get(localKey).resolved = true;
       } else {
@@ -100,19 +102,21 @@ export default class SimpleLock {
 
     const exec = () => {
       // run fn
-      Promise.resolve(fn()).then(ret => {
-        deferredResolve(ret);
+      Promise.resolve(fn())
+        .then(ret => {
+          deferredResolve(ret);
 
-        if (this.q.get(key).fns.length > 0) {
-          this.q.get(key).fns.shift()();
-        }
+          if (this.q.get(key).fns.length > 0) {
+            this.q.get(key).fns.shift()();
+          }
 
-        this.q.get(key).resolved = true;
-      }).catch(err => {
-        deferredReject(err);
+          this.q.get(key).resolved = true;
+        })
+        .catch(err => {
+          deferredReject(err);
 
-        this.q.get(key).resolved = true;
-      });
+          this.q.get(key).resolved = true;
+        });
     };
 
     if (!this.q.has(key)) {

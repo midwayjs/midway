@@ -1,4 +1,3 @@
-
 import { BasePlugin } from '../../src';
 
 class StoreGet extends BasePlugin {

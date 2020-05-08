@@ -1,5 +1,5 @@
 export class RuntimeError extends Error {
-  name = `RuntimeError`;
+  name = 'RuntimeError';
   code = 1;
 
   constructor(message: string, errName?: string, code?: number) {

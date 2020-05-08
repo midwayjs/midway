@@ -154,11 +154,11 @@ describe('errorMap', () => {
     );
     assert(
       ErrorMap('localPlugin', { path: 'test', err: { message: '4' } })
-        .message === `load local plugin 'test' error '4'`
+        .message === "load local plugin 'test' error '4'"
     );
     assert(
       ErrorMap('npmPlugin', { path: 'test', err: { message: '5' } }).message ===
-        `load npm plugin 'test' error '5'`
+        "load npm plugin 'test' error '5'"
     );
     assert(
       ErrorMap('pluginType', {}).message ===

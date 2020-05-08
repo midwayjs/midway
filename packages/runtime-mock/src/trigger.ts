@@ -18,8 +18,7 @@ export class BaseTrigger implements Trigger {
     return Promise.resolve([]);
   }
 
-  async close() {
-  }
+  async close() {}
 
   createCallback(handler) {
     return (err, result) => {
@@ -27,6 +26,5 @@ export class BaseTrigger implements Trigger {
     };
   }
 
-  async delegate(invokeWrapper: (invokeArgs: any[]) => any): Promise<any> {
-  }
+  async delegate(invokeWrapper: (invokeArgs: any[]) => any): Promise<any> {}
 }

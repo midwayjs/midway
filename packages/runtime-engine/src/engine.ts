@@ -92,7 +92,11 @@ export class BaseRuntimeEngine implements RuntimeEngine {
       'beforeFunctionStartHandler',
       'afterFunctionStartHandler',
     ].forEach(it => {
-      performance.measure(`midway-faas:${it}:measure`, `midway-faas:${it}:start`, `midway-faas:${it}:end`);
+      performance.measure(
+        `midway-faas:${it}:measure`,
+        `midway-faas:${it}:start`,
+        `midway-faas:${it}:end`
+      );
     });
   }
 }

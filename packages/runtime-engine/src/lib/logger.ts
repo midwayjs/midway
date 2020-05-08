@@ -26,10 +26,10 @@ export class ServerlessLogger extends Logger implements IServerlessLogger {
     }
   }
 
-  write(...args) {
+  write(...args: [string, ...any[]]) {
     let msg = args[0];
     if (args.length > 1) {
-      msg = util.format.apply(util, args);
+      msg = util.format(...args);
     }
     // tracing use ALL level, but write default is NONE, will not output
     this.log(this.options.level === 'ALL' ? 'ALL' : 'NONE', [msg], {

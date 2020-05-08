@@ -88,7 +88,7 @@ export interface MQEvent {
 }
 
 // API 网关
-export interface APIGatewayEvent extends HTTPEvent {}
+export type APIGatewayEvent = HTTPEvent;
 
 export interface FunctionStructure {
   handler: string;
@@ -113,6 +113,7 @@ export interface LayersStructure {
   };
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface ResourcesStructure {}
 
 export interface ServiceStructure {

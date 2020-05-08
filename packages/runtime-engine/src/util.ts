@@ -6,6 +6,7 @@ export const isTsEnv = () => {
   if ('false' === TS_MODE_PROCESS_FLAG) {
     return false;
   }
+  // eslint-disable-next-line node/no-deprecated-api
   return TS_MODE_PROCESS_FLAG === 'true' || !!require.extensions['.ts'];
 };
 
@@ -42,7 +43,7 @@ export const isDebug = () => {
  * @param {Object} sources 合并的原对象
  * @return {*} 合并的结果对象
  */
-export const completeAssign = function(...sources) {
+export const completeAssign = function (...sources) {
   const target = sources.shift();
 
   sources.forEach(source => {

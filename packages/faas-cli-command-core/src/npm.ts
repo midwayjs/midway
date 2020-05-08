@@ -14,7 +14,7 @@ if (!existsSync(commandHookCoreBaseDir)) {
   mkdirSync(commandHookCoreBaseDir, '0777');
 }
 if (!existsSync(commandHookCoreBasePkg)) {
-  writeFileSync(commandHookCoreBasePkg, `{}`);
+  writeFileSync(commandHookCoreBasePkg, '{}');
 }
 
 export const getCoreBaseDir = () => {
@@ -38,8 +38,9 @@ async function getNpmPath(
 
   scope.coreInstance.cli.log(`Installing ${npmName}`);
   execSync(
-    `cd ${commandHookCoreBaseDir};${npmRegistry ||
-      'npm'} i ${npmName} --production`
+    `cd ${commandHookCoreBaseDir};${
+      npmRegistry || 'npm'
+    } i ${npmName} --production`
   );
 
   return globalNpmPath;

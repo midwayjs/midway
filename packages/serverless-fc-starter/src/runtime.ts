@@ -70,11 +70,11 @@ export class FCRuntime extends ServerlessLightRuntime {
 
     return this.invokeHandlerWrapper(ctx, async () => {
       if (!handler) {
-        return this.defaultInvokeHandler.apply(this, args);
+        return this.defaultInvokeHandler(...args);
       }
       return handler.apply(handler, args);
     })
-      .then((result) => {
+      .then(result => {
         if (res.headersSent) {
           return;
         }
@@ -124,7 +124,7 @@ export class FCRuntime extends ServerlessLightRuntime {
               newHeader[key] = ctx.res.headers[key][0];
               if (ctx.res.headers[key].length > 1) {
                 ctx.logger.warn(
-                  `[fc-starter]: unsupport multiple cookie when use apiGateway`
+                  '[fc-starter]: unsupport multiple cookie when use apiGateway'
                 );
               }
             } else {
@@ -155,7 +155,7 @@ export class FCRuntime extends ServerlessLightRuntime {
           body: ctx.body,
         };
       })
-      .catch((err) => {
+      .catch(err => {
         ctx.logger.error(err);
         if (res.send) {
           res.setStatusCode(500);
@@ -180,7 +180,9 @@ export class FCRuntime extends ServerlessLightRuntime {
         event = event.toString('utf8');
         try {
           event = JSON.parse(event);
-        } catch (_err) {}
+        } catch (_err) {
+          /** ignore */
+        }
       }
       if (
         event &&

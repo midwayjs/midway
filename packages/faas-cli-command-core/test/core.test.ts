@@ -12,7 +12,7 @@ describe('command-core', () => {
           result.push(msg);
         },
       },
-      stopLifecycle: 'invoke:one'
+      stopLifecycle: 'invoke:one',
     });
     core.addPlugin(TestPlugin);
     await core.ready();

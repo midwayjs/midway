@@ -1,4 +1,8 @@
-import { CommandHookCore, loadSpec, getSpecFile } from '@midwayjs/fcli-command-core';
+import {
+  CommandHookCore,
+  loadSpec,
+  getSpecFile,
+} from '@midwayjs/fcli-command-core';
 import { FaaSInvokePlugin } from './index';
 
 export interface InvokeOptions {
@@ -13,14 +17,14 @@ export interface InvokeOptions {
   verbose?: boolean | string; // 输出更多信息
 }
 
-export const getFunction = (getOptions) => {
+export const getFunction = getOptions => {
   return async (options: any) => {
     const baseDir = options.functionDir || process.cwd();
     const specFile = getOptions.specFile || getSpecFile(baseDir);
     const core = new CommandHookCore({
       config: {
         servicePath: baseDir,
-        specFile
+        specFile,
       },
       commands: ['invoke'],
       service: getOptions.spec || loadSpec(baseDir, specFile),
@@ -34,21 +38,21 @@ export const getFunction = (getOptions) => {
         clean: options.clean,
         incremental: options.incremental,
         verbose: options.verbose,
-        resultType: 'store'
+        resultType: 'store',
       },
       log: console,
-      stopLifecycle: getOptions.stopLifecycle
+      stopLifecycle: getOptions.stopLifecycle,
     });
     core.addPlugin(FaaSInvokePlugin);
     await core.ready();
     await core.invoke(['invoke']);
     return core.store.get('FaaSInvokePlugin:' + getOptions.key);
-  }
-}
+  };
+};
 
-export async function invoke (options: InvokeOptions) {
+export async function invoke(options: InvokeOptions) {
   const invokeFun = getFunction({
-    key: 'result'
+    key: 'result',
   });
   const result = await invokeFun(options);
   if (result.success) {
@@ -58,14 +62,13 @@ export async function invoke (options: InvokeOptions) {
   }
 }
 
-
 export interface IGetFuncList {
   functionDir?: string; // 函数所在目录
   sourceDir?: string; // 一体化目录结构下，函数的目录，比如 src/apis，这个影响到编译
   verbose?: boolean; // 输出更多信息
   [key: string]: any;
 }
-export async function getFuncList (options: IGetFuncList) {
+export async function getFuncList(options: IGetFuncList) {
   const baseDir = options.functionDir || process.cwd();
   const specFile = getSpecFile(baseDir);
   const spec = loadSpec(baseDir, specFile);
@@ -77,7 +80,7 @@ export async function getFuncList (options: IGetFuncList) {
     stopLifecycle: 'invoke:analysisCode',
     key: 'functions',
     specFile,
-    spec
+    spec,
   });
   options.clean = false;
   options.incremental = true;

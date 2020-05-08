@@ -6,8 +6,8 @@ describe('runtime-error', () => {
     try {
       throw new RuntimeError('init fail');
     } catch (e) {
-      assert.equal(e.name, `RuntimeError`);
-      assert.equal(e.message, `init fail`);
+      assert.equal(e.name, 'RuntimeError');
+      assert.equal(e.message, 'init fail');
     }
   });
 

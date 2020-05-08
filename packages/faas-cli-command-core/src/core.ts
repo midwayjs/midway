@@ -321,7 +321,7 @@ export class CommandHookCore implements ICommandHooksCore {
 
   private getCommand(commandsArray: string[], allowEntryPoints?: boolean): any {
     let command: string | undefined = '';
-    // tslint:disable-next-line: no-this-assignment
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     let cmdObj: any = this;
     const commandPath: string[] = [];
     const parentCommandList: string[] = [];
@@ -357,7 +357,11 @@ export class CommandHookCore implements ICommandHooksCore {
   // 加载本地插件
   private async loadLocalPlugin(localPath) {
     try {
-      if (this.options.config && this.options.config.servicePath && /^\./.test(localPath)) {
+      if (
+        this.options.config &&
+        this.options.config.servicePath &&
+        /^\./.test(localPath)
+      ) {
         localPath = resolve(this.options.config.servicePath, localPath);
       }
       this.debug('Core Local Plugin', localPath);
@@ -433,51 +437,59 @@ export class CommandHookCore implements ICommandHooksCore {
   }
 
   debug(...args) {
-
-    const verbose = this.options.options.V || this.options.options.verbose || process.env.MIDWAY_FAAS_VERBOSE;
+    const verbose =
+      this.options.options.V ||
+      this.options.options.verbose ||
+      process.env.MIDWAY_FAAS_VERBOSE;
     if (!verbose) {
-        return;
+      return;
     }
 
     const now = Date.now();
     if (!this.preDebugTime) {
-        this.preDebugTime = now;
+      this.preDebugTime = now;
     }
     const { type, path, line } = this.getStackTrace();
     let stack = '';
     if (type) {
-        if (typeof verbose === 'string' && type !== verbose) {
-            return;
-        }
-        stack = `(${type}:${path}:${line})`;
+      if (typeof verbose === 'string' && type !== verbose) {
+        return;
+      }
+      stack = `(${type}:${path}:${line})`;
     }
     const diffTime = Number((now - this.preDebugTime) / 1000).toFixed(2);
     this.preDebugTime = now;
-    this.getLog().log('[Verbose]', this.execId, `+${diffTime}s`, ...args, stack);
+    this.getLog().log(
+      '[Verbose]',
+      this.execId,
+      `+${diffTime}s`,
+      ...args,
+      stack
+    );
   }
 
   getStackTrace() {
     if (!Error.captureStackTrace) {
-        return {};
+      return {};
     }
     const obj: any = {};
     Error.captureStackTrace(obj, this.getStackTrace);
     if (!obj.stack || !obj.stack.split) {
-        return {};
+      return {};
     }
     const stackStr = obj.stack.split('\n');
     if (!stackStr || !stackStr[2]) {
-        return {};
+      return {};
     }
     const matchReg = /(?:-plugin-|\/faas-cli-command-)(\w+)\/(.*?):(\d+):\d+/;
     if (!matchReg.test(stackStr[2])) {
-        return {};
+      return {};
     }
     const matchResult = matchReg.exec(stackStr[2]);
     return {
-        type: matchResult[1],
-        path: matchResult[2],
-        line: matchResult[3]
-    }
+      type: matchResult[1],
+      path: matchResult[2],
+      line: matchResult[3],
+    };
   }
 }

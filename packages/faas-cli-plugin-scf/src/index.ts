@@ -1,8 +1,15 @@
-import { BasePlugin, ICoreInstance, CommandHookCore } from '@midwayjs/fcli-command-core';
+import {
+  BasePlugin,
+  ICoreInstance,
+  CommandHookCore,
+} from '@midwayjs/fcli-command-core';
 import { join } from 'path';
 import * as Tencent from 'serverless-tencent-scf';
 import { writeWrapper } from '@midwayjs/serverless-spec-builder';
-import { generateFunctionsSpec, generateFunctionsSpecFile } from '@midwayjs/serverless-spec-builder/scf';
+import {
+  generateFunctionsSpec,
+  generateFunctionsSpecFile,
+} from '@midwayjs/serverless-spec-builder/scf';
 
 export class TencentSCFPlugin extends BasePlugin {
   core: ICoreInstance;
@@ -30,7 +37,7 @@ export class TencentSCFPlugin extends BasePlugin {
         baseDir: this.servicePath,
         service: this.core.service,
         distDir: this.midwayBuildPath,
-        starter: '@midwayjs/serverless-scf-starter'
+        starter: '@midwayjs/serverless-scf-starter',
       });
     },
     'deploy:deploy': async () => {
@@ -42,7 +49,9 @@ export class TencentSCFPlugin extends BasePlugin {
         this.core.service.package.artifact = 'artifact.zip';
       }
       await this.core.invoke(['package'], true, this.options);
-      const tencentDeploy = await this.getTencentServerless(this.core.service.package.artifact);
+      const tencentDeploy = await this.getTencentServerless(
+        this.core.service.package.artifact
+      );
       await tencentDeploy.invoke();
     },
   };
@@ -118,20 +127,22 @@ export class TencentSCFPlugin extends BasePlugin {
           return this.core.service.functions[functionName];
         },
         package: {
-          artifact
-        }
+          artifact,
+        },
       },
       provider: this.provider,
       options: {
         package: `.serverless/${this.core.service.package.artifact}`,
-      }
+      },
     });
     midwayServerless.cliCommands = ['deploy'];
-    midwayServerless.addPlugin(class DeployPlugin extends BasePlugin {
-      commands = {
-        deploy: { lifecycleEvents: ['deploy'] }
-      };
-    });
+    midwayServerless.addPlugin(
+      class DeployPlugin extends BasePlugin {
+        commands = {
+          deploy: { lifecycleEvents: ['deploy'] },
+        };
+      }
+    );
     midwayServerless.addPlugin(Tencent);
     await midwayServerless.ready();
     return midwayServerless;

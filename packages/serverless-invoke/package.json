@@ -8,6 +8,7 @@
   },
   "devDependencies": {
     "@midwayjs/faas": "^0.2.92",
+    "fs-extra": "^8.1.0",
     "midway-bin": "^2.0.0"
   },
   "engines": {

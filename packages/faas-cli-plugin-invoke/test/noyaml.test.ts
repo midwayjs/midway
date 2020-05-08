@@ -9,7 +9,11 @@ describe('/test/noyaml.test.ts', () => {
     console.time('getFuncList');
     const result: any = await getFuncList({ functionDir });
     console.timeEnd('getFuncList');
-    assert(result.service && result.service.handler === 'service.handler' && result['service2-index'].events[0].http.path === '/api/test2');
+    assert(
+      result.service &&
+        result.service.handler === 'service.handler' &&
+        result['service2-index'].events[0].http.path === '/api/test2'
+    );
     console.time('invoke');
     const result2: any = await invoke({
       functionDir,
@@ -23,14 +27,20 @@ describe('/test/noyaml.test.ts', () => {
     const functionDir = join(__dirname, 'fixtures/noYaml');
     await remove(join(functionDir, './.faas_debug_tmp'));
     const result: any = await getFuncList({ functionDir });
-    assert(result.service && result.service.handler === 'service.handler' && result['service2-index'].events[0].http.path === '/api/test2');
+    assert(
+      result.service &&
+        result.service.handler === 'service.handler' &&
+        result['service2-index'].events[0].http.path === '/api/test2'
+    );
   });
   it('TrippleGetFuncList', async () => {
     const functionDir = join(__dirname, 'fixtures/noYaml');
     await remove(join(functionDir, './.faas_debug_tmp'));
-    const result = await Promise.all([0, 1, 2].map(() => {
-      return getFuncList({ functionDir });
-    }));
+    const result = await Promise.all(
+      [0, 1, 2].map(() => {
+        return getFuncList({ functionDir });
+      })
+    );
     assert(result.length === 3 && result[2].service);
   });
   it('invoke', async () => {
@@ -38,19 +48,21 @@ describe('/test/noyaml.test.ts', () => {
     await remove(join(functionDir, './.faas_debug_tmp'));
     const result: any = await invoke({
       functionDir,
-      functionName: 'service'
+      functionName: 'service',
     });
     assert(result.body === 'hello world');
   });
   it('doubleInvoke', async () => {
     const functionDir = join(__dirname, 'fixtures/noYaml');
     await remove(join(functionDir, './.faas_debug_tmp'));
-    const result = await Promise.all([0, 1].map(() => {
-      return invoke({
-        functionDir,
-        functionName: 'service'
-      });
-    }));
+    const result = await Promise.all(
+      [0, 1].map(() => {
+        return invoke({
+          functionDir,
+          functionName: 'service',
+        });
+      })
+    );
     assert(result.length === 2 && result[1].body === 'hello world');
   });
 });

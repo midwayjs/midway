@@ -40,13 +40,15 @@ export class CLI extends BaseCLI {
         needLoad = needLoad.concat(plugins[cmd]);
       });
     }
-    needLoad.forEach((pluginInfo) => {
+    needLoad.forEach(pluginInfo => {
       try {
         const mod = require(pluginInfo.mod);
         if (mod[pluginInfo.name]) {
           this.core.addPlugin(mod[pluginInfo.name]);
         }
-      } catch (e) {}
+      } catch (e) {
+        /** ignore */
+      }
     });
   }
 
@@ -74,13 +76,17 @@ export class CLI extends BaseCLI {
     try {
       const nodeVersion = execSync('node -v').toString().replace('\n', '');
       log.log('Node.js'.padEnd(20) + nodeVersion);
-    } catch (E) {}
+    } catch (E) {
+      /** ignore */
+    }
 
     try {
       // midway-faas version
       const cliVersion = require('../package.json').version;
       log.log('@midwayjs/faas-cli'.padEnd(20) + `v${cliVersion}`);
-    } catch (E) {}
+    } catch (E) {
+      /** ignore */
+    }
   }
 
   displayUsage(commandsArray, usage, coreInstance) {

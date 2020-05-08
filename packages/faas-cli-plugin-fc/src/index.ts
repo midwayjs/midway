@@ -28,7 +28,7 @@ export class AliyunFCPlugin extends BasePlugin {
         baseDir: this.servicePath,
         service: this.core.service,
         distDir: this.midwayBuildPath,
-        starter: '@midwayjs/serverless-fc-starter'
+        starter: '@midwayjs/serverless-fc-starter',
       });
     },
     'deploy:deploy': async () => {

@@ -1,4 +1,10 @@
-import { BaseBootstrap, FunctionEvent, getHandlerMeta, getHandlerMethod, Runtime } from '@midwayjs/runtime-engine';
+import {
+  BaseBootstrap,
+  FunctionEvent,
+  getHandlerMeta,
+  getHandlerMethod,
+  Runtime,
+} from '@midwayjs/runtime-engine';
 import { BaseTrigger, Trigger } from './trigger';
 import { join } from 'path';
 
@@ -29,10 +35,12 @@ export class MockRuntime {
     this.options = options;
     this.handler = options.handler;
     if (this.options.bootstrap || this.options.runtime || this.options.events) {
-      this.bootstrap = this.options.bootstrap ? new this.options.bootstrap() : new BaseBootstrap({
-        runtime: this.options.runtime,
-        layers: this.options.layers,
-      });
+      this.bootstrap = this.options.bootstrap
+        ? new this.options.bootstrap()
+        : new BaseBootstrap({
+            runtime: this.options.runtime,
+            layers: this.options.layers,
+          });
       this.engine = this.bootstrap.getRuntimeEngine();
     }
   }
@@ -41,31 +49,25 @@ export class MockRuntime {
     process.env.ENTRY_DIR = this.options.functionDir;
     if (this.bootstrap) {
       // lightRuntime 需要调用自身逻辑
-      return new Promise(async (resolve, reject) => {
-        try {
-          if (this.options.events) {
-            for (const event of this.options.events) {
-              this.engine.addEventExtension(async (runtime: Runtime) => {
-                return event;
-              });
-            }
-          }
-
-          await this.bootstrap.start();
-          await sleep(500);
-          this.runtime = this.bootstrap.getRuntime();
-          resolve(this.runtime);
-        } catch (err) {
-          reject(err);
+      if (this.options.events) {
+        for (const event of this.options.events) {
+          this.engine.addEventExtension(async (runtime: Runtime) => {
+            return event;
+          });
         }
-      });
+      }
+
+      await this.bootstrap.start();
+      await sleep(500);
+      this.runtime = this.bootstrap.getRuntime();
+      return this.runtime;
     }
   }
 
   async invoke(...args) {
     let newArgs;
-    if (args[ 0 ] && args[ 0 ] instanceof BaseTrigger) {
-      this.trigger = args[ 0 ];
+    if (args[0] && args[0] instanceof BaseTrigger) {
+      this.trigger = args[0];
       newArgs = await this.trigger.toArgs();
     } else {
       newArgs = args;
@@ -78,7 +80,7 @@ export class MockRuntime {
     this.trigger = trigger;
     // TODO 普通 runtime
     // 传入一个方法包裹，返回一个参数列表，然后执行方法
-    return this.trigger.delegate((invokeArgs) => {
+    return this.trigger.delegate(invokeArgs => {
       return this.invokeHandlerMethod(invokeArgs);
     });
   }
@@ -92,8 +94,13 @@ export class MockRuntime {
       if (typeof this.handler === 'function') {
         handlerMethod = this.handler;
       } else {
-        const { fileName, handler } = getHandlerMeta(this.handler || 'index.handler');
-        handlerMethod = getHandlerMethod(join(this.options.functionDir, fileName), handler);
+        const { fileName, handler } = getHandlerMeta(
+          this.handler || 'index.handler'
+        );
+        handlerMethod = getHandlerMethod(
+          join(this.options.functionDir, fileName),
+          handler
+        );
       }
 
       return new Promise((resolve, reject) => {
@@ -110,7 +117,10 @@ export class MockRuntime {
           newArgs.push(cb);
         }
 
-        Promise.resolve(handlerMethod.apply(this, newArgs)).then(resolve, reject);
+        Promise.resolve(handlerMethod.apply(this, newArgs)).then(
+          resolve,
+          reject
+        );
       });
     }
   }
@@ -125,7 +135,6 @@ export class MockRuntime {
     }
     await sleep(500);
   }
-
 }
 
 export const createRuntime = (options?: MockRuntimeOptions) => {

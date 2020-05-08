@@ -10,7 +10,10 @@ class Tester {
   }
 
   async runHttp(event: AWSBasicHTTPEvent, context = {}) {
-    const args = [Object.assign({}, require('../resource/event'), event), context];
+    const args = [
+      Object.assign({}, require('../resource/event'), event),
+      context,
+    ];
     return this.handler.apply(this.handler, args);
   }
 
@@ -22,7 +25,7 @@ class Tester {
         }
         resolve(result);
       });
-      return this.handler.apply(this, args);
+      return this.handler(...args);
     });
   }
 }
@@ -61,7 +64,10 @@ describe('/test/index.test.ts', () => {
           ctx.body = 'hello world!';
         })(...args);
       });
-      const res: any = await test(handle).runHttp(require('../resource/event'), {});
+      const res: any = await test(handle).runHttp(
+        require('../resource/event'),
+        {}
+      );
       assert.equal(res.statusCode, 200);
       assert.equal(res.headers['content-type'], 'text/plain');
       assert.equal(res.body, 'hello world!');

@@ -14,7 +14,7 @@ export class TestCreatePlugin extends CreatePlugin {
       if (value) {
         for (const flag of value) {
           if (Array.isArray(flag)) {
-            await this.prompt.keypress.apply(this.prompt, flag);
+            await this.prompt.keypress(...flag);
           } else if (typeof flag === 'string') {
             try {
               for (const key of flag.split('')) {

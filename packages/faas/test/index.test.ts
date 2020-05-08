@@ -141,7 +141,7 @@ describe('test/index.test.ts', () => {
       prepareConfiguration() {
         this.initConfiguration(
           join(__dirname, './configuration'),
-          join(__dirname, 'fixtures/midway-plugin-mod'),
+          join(__dirname, 'fixtures/midway-plugin-mod')
         );
       }
     }

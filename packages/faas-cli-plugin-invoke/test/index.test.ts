@@ -9,11 +9,21 @@ describe('/test/index.test.ts', () => {
   });
 
   after(async () => {
-    if (existsSync(join(__dirname, 'fixtures/ice-faas-ts-standard/.faas_debug_tmp'))) {
-      await remove(join(__dirname, 'fixtures/ice-faas-ts-standard/.faas_debug_tmp'));
+    if (
+      existsSync(
+        join(__dirname, 'fixtures/ice-faas-ts-standard/.faas_debug_tmp')
+      )
+    ) {
+      await remove(
+        join(__dirname, 'fixtures/ice-faas-ts-standard/.faas_debug_tmp')
+      );
     }
-    if (existsSync(join(__dirname, 'fixtures/ice-faas-ts-standard/.tsbuildinfo'))) {
-      await remove(join(__dirname, 'fixtures/ice-faas-ts-standard/.tsbuildinfo'));
+    if (
+      existsSync(join(__dirname, 'fixtures/ice-faas-ts-standard/.tsbuildinfo'))
+    ) {
+      await remove(
+        join(__dirname, 'fixtures/ice-faas-ts-standard/.tsbuildinfo')
+      );
     }
   });
 
@@ -21,12 +31,16 @@ describe('/test/index.test.ts', () => {
     const result: any = await invoke({
       functionDir: join(__dirname, 'fixtures/baseApp'),
       functionName: 'http',
-      data: [{name: 'params'}],
+      data: [{ name: 'params' }],
       clean: false,
     });
     console.log('result', result);
     assert(existsSync(join(__dirname, 'fixtures/baseApp/.faas_debug_tmp')));
-    assert(existsSync(join(__dirname, 'fixtures/baseApp/.faas_debug_tmp/src/index.ts')));
+    assert(
+      existsSync(
+        join(__dirname, 'fixtures/baseApp/.faas_debug_tmp/src/index.ts')
+      )
+    );
     assert(result && result.body === 'hello http world');
     await remove(join(__dirname, 'fixtures/baseApp/.faas_debug_tmp'));
   });
@@ -35,30 +49,34 @@ describe('/test/index.test.ts', () => {
     const result: any = await invoke({
       functionDir: join(__dirname, 'fixtures/ice-faas-ts-pkg-options'),
       functionName: 'test1',
-      data: [{name: 'params'}],
+      data: [{ name: 'params' }],
     });
     assert(result && result.body === 'hello http world');
-    await remove(join(__dirname, 'fixtures/ice-faas-ts-pkg-options/.faas_debug_tmp'));
+    await remove(
+      join(__dirname, 'fixtures/ice-faas-ts-pkg-options/.faas_debug_tmp')
+    );
   });
 
   it('should use origin http trigger in ice + faas demo by args, with incremental: false', async () => {
     const result: any = await invoke({
       functionDir: join(__dirname, 'fixtures/ice-faas-ts-standard'),
       functionName: 'test1',
-      data: [{name: 'params'}],
+      data: [{ name: 'params' }],
       sourceDir: 'src/apis',
       incremental: false,
-      verbose: 'invoke'
+      verbose: 'invoke',
     });
     assert(result && result.body === 'hello http world');
-    await remove(join(__dirname, 'fixtures/ice-faas-ts-standard/.faas_debug_tmp'));
+    await remove(
+      join(__dirname, 'fixtures/ice-faas-ts-standard/.faas_debug_tmp')
+    );
   });
 
   it('should use origin http trigger in ice + faas demo by args, with incremental: true, first', async () => {
     const result: any = await invoke({
       functionDir: join(__dirname, 'fixtures/ice-faas-ts-standard'),
       functionName: 'test1',
-      data: [{name: 'params'}],
+      data: [{ name: 'params' }],
       sourceDir: 'src/apis',
       incremental: true,
     });
@@ -69,7 +87,7 @@ describe('/test/index.test.ts', () => {
     const result: any = await invoke({
       functionDir: join(__dirname, 'fixtures/ice-faas-ts-standard'),
       functionName: 'test1',
-      data: [{name: 'params'}],
+      data: [{ name: 'params' }],
       sourceDir: 'src/apis',
       incremental: true,
     });

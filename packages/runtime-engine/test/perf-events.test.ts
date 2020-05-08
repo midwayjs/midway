@@ -1,4 +1,3 @@
-
 import { BaseRuntimeEngine } from '../src';
 import * as assert from 'assert';
 import * as perfHooks from 'perf_hooks';
@@ -12,7 +11,7 @@ describe('/test/perf-events.test.ts', () => {
 
   it('should call all events', async () => {
     let actualEvents = [];
-    const observer = new perfHooks.PerformanceObserver((entryList) => {
+    const observer = new perfHooks.PerformanceObserver(entryList => {
       actualEvents = actualEvents.concat(entryList.getEntries());
     });
     observer.observe({ entryTypes: ['measure'] });
@@ -22,14 +21,17 @@ describe('/test/perf-events.test.ts', () => {
     await runtimeEngine.ready();
     await runtimeEngine.close();
 
-    assert.deepStrictEqual(actualEvents.map(it => it.name), [
-      'midway-faas:runtimeStart:measure',
-      'midway-faas:functionStart:measure',
-      'midway-faas:beforeRuntimeStartHandler:measure',
-      'midway-faas:afterRuntimeStartHandler:measure',
-      'midway-faas:beforeFunctionStartHandler:measure',
-      'midway-faas:afterFunctionStartHandler:measure',
-    ]);
+    assert.deepStrictEqual(
+      actualEvents.map(it => it.name),
+      [
+        'midway-faas:runtimeStart:measure',
+        'midway-faas:functionStart:measure',
+        'midway-faas:beforeRuntimeStartHandler:measure',
+        'midway-faas:afterRuntimeStartHandler:measure',
+        'midway-faas:beforeFunctionStartHandler:measure',
+        'midway-faas:afterFunctionStartHandler:measure',
+      ]
+    );
 
     observer.disconnect();
   });

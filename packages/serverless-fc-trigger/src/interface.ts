@@ -13,10 +13,10 @@ export interface FCOriginContext {
   function: {
     name: string;
     handler: string;
-    memory: number,
-    timeout: number,
+    memory: number;
+    timeout: number;
     initializer: string;
-    initializationTimeout: number,
+    initializationTimeout: number;
   };
   service: {
     name: string;
@@ -142,14 +142,14 @@ export interface FCOriginSLSEvent {
  * CDN
  */
 export type FCOriginInnerCDNEvent =
-  FCOriginInnerCDNCachedObjectsRefreshedEvent
+  | FCOriginInnerCDNCachedObjectsRefreshedEvent
   | FCOriginInnerCDNCachedObjectsPushedEvent
   | FCOriginInnerCDNCachedObjectsBlockedEvent
   | FCOriginInnerCDNLogFileCreatedEvent;
 
 export interface FCOriginInnerCDNBaseEvent {
   eventName: string; // 事件类型
-  eventVersion: string;  // 事件版本，目前都是1.0.0版本
+  eventVersion: string; // 事件版本，目前都是1.0.0版本
   eventSource: string; // 事件源名称
   region: string; // 区域，默认为"cn-hangzhou"
   eventTime: string; // 事件发生时间
@@ -162,24 +162,24 @@ export interface FCOriginInnerCDNBaseEvent {
   };
 }
 
-export interface FCOriginInnerCDNCachedObjectsRefreshedEvent extends FCOriginInnerCDNBaseEvent {
+export interface FCOriginInnerCDNCachedObjectsRefreshedEvent
+  extends FCOriginInnerCDNBaseEvent {
   eventParameter: {
-    objectPath: string [];
+    objectPath: string[];
     createTime: number; // 刷新开始时间
     domain: string; // 资源所在的域名
     completeTime: number; // 刷新结束时间
-    objectType: string;  // 刷新类型，取值为File，Directory
+    objectType: string; // 刷新类型，取值为File，Directory
     taskId: number; // 资源刷新任务ID
   };
 }
 
-export interface FCOriginInnerCDNCachedObjectsPushedEvent extends FCOriginInnerCDNCachedObjectsRefreshedEvent {
-}
+export type FCOriginInnerCDNCachedObjectsPushedEvent = FCOriginInnerCDNCachedObjectsRefreshedEvent;
 
-export interface FCOriginInnerCDNCachedObjectsBlockedEvent extends FCOriginInnerCDNCachedObjectsRefreshedEvent {
-}
+export type FCOriginInnerCDNCachedObjectsBlockedEvent = FCOriginInnerCDNCachedObjectsRefreshedEvent;
 
-export interface FCOriginInnerCDNLogFileCreatedEvent extends FCOriginInnerCDNBaseEvent {
+export interface FCOriginInnerCDNLogFileCreatedEvent
+  extends FCOriginInnerCDNBaseEvent {
   eventParameter: {
     domain: number; // 域名
     endTime: number; // 日志文件的结束时间

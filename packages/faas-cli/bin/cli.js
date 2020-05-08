@@ -4,11 +4,14 @@ const cliFun = async argv => {
   require('source-map-support/register');
   const { CLI } = require('../dist');
   const cli = new CLI(argv);
-  cli.start().then(() => {
-    process.exit();
-  }).catch(e => {
-    process.exit();
-  });
+  cli
+    .start()
+    .then(() => {
+      process.exit();
+    })
+    .catch(e => {
+      process.exit();
+    });
 };
 
 const cli = argv => {

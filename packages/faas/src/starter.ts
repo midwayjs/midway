@@ -28,6 +28,7 @@ function isTypeScriptEnvironment() {
   if ('false' === TS_MODE_PROCESS_FLAG) {
     return false;
   }
+  // eslint-disable-next-line node/no-deprecated-api
   return TS_MODE_PROCESS_FLAG === 'true' || !!require.extensions['.ts'];
 }
 
@@ -151,7 +152,7 @@ export class FaaSStarter implements IFaaSStarter {
         fnMiddlewere = fnMiddlewere.concat(funOptions.middleware);
         if (fnMiddlewere.length) {
           const mw: any[] = await this.formatMiddlewares(fnMiddlewere);
-          mw.push(async (ctx) => {
+          mw.push(async ctx => {
             // invoke handler
             const result = await this.invokeHandler(funOptions, ctx, args);
             if (!ctx.body) {
@@ -186,7 +187,7 @@ export class FaaSStarter implements IFaaSStarter {
       this.defaultHandlerMethod;
     if (funModule[handlerName]) {
       // invoke real method
-      return funModule[handlerName].apply(funModule, args);
+      return funModule[handlerName](...args);
     }
   }
 
@@ -228,7 +229,7 @@ export class FaaSStarter implements IFaaSStarter {
           descriptor;
           middleware: string[];
         }> = getClassMetadata(FUNC_KEY, funModule);
-        funOptions.map((opts) => {
+        funOptions.map(opts => {
           // { method: 'handler', data: 'index.handler' }
           const handlerName = opts.funHandler
             ? // @Func(key), if key is set
@@ -345,5 +346,5 @@ export class FaaSStarter implements IFaaSStarter {
 }
 
 function covertId(cls, method) {
-  return cls.replace(/^[A-Z]/, (c) => c.toLowerCase()) + '.' + method;
+  return cls.replace(/^[A-Z]/, c => c.toLowerCase()) + '.' + method;
 }

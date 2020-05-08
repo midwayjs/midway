@@ -1,8 +1,12 @@
 import { BaseRuntimeEngine } from './engine';
-import { Bootstrap, Runtime, RuntimeEngine, BootstrapOptions } from './interface';
+import {
+  Bootstrap,
+  Runtime,
+  RuntimeEngine,
+  BootstrapOptions,
+} from './interface';
 
 export class BaseBootstrap implements Bootstrap {
-
   runtimeEngine: RuntimeEngine;
   options;
   runtime;

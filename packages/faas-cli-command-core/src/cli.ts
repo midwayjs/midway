@@ -26,7 +26,7 @@ export class BaseCLI {
     this.core = new CommandHookCore({
       config: {
         servicePath: this.cwd,
-        specFile: this.specFile
+        specFile: this.specFile,
       },
       commands: this.commands,
       service: this.spec,

@@ -51,7 +51,7 @@ describe('/test/create.test.ts', () => {
       provider: 'aliyun',
       options: {
         'template-package': '@midwayjs/faas-boilerplate-standard',
-        'path': 'my_serverless',
+        path: 'my_serverless',
       },
       log: console,
     });

@@ -36,11 +36,10 @@ export class ServerlessBaseRuntime extends EventEmitter implements Runtime {
   }
 
   async runtimeStart(eventExtensions: EventExtensionHandler[]) {
-    const self = this;
     await this.handlerInvokerWrapper('beforeRuntimeStartHandler', [this]);
 
     for (const eventExtension of eventExtensions) {
-      const funEvent = await eventExtension(self);
+      const funEvent = await eventExtension(this);
       if (funEvent) {
         this.eventHandlers.push(funEvent);
       }
@@ -175,7 +174,7 @@ export class ServerlessBaseRuntime extends EventEmitter implements Runtime {
         this.debugLogger.log('found handler and call');
         return func.apply(this, args);
       } else {
-        return this.defaultInvokeHandler.apply(this, args);
+        return this.defaultInvokeHandler(...args);
       }
     } catch (err) {
       error = err;
@@ -218,7 +217,9 @@ export class ServerlessBaseRuntime extends EventEmitter implements Runtime {
     const { fileName, handler } = getHandlerMeta(
       this.propertyParser.getFunctionHandler()
     );
-    throw new Error(`handler not found: ${fileName}.${handler}, please check your f.yml`);
+    throw new Error(
+      `handler not found: ${fileName}.${handler}, please check your f.yml`
+    );
   }
 
   createFunctionContext(event: FunctionEvent, ...args): any {

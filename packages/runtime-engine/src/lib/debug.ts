@@ -21,22 +21,22 @@ export class DebugLogger {
   }
 
   write(...args) {
-    this.log.apply(this, args);
+    this.log(...args);
   }
 
   warn(...args) {
-    this.log.apply(this, args);
+    this.log(...args);
   }
 
   info(...args) {
-    this.log.apply(this, args);
+    this.log(...args);
   }
 
   error(...args) {
-    this.log.apply(this, args);
+    this.log(...args);
   }
 
   debug(...args) {
-    this.log.apply(this, args);
+    this.log(...args);
   }
 }

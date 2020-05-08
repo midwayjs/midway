@@ -4,7 +4,8 @@
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "egg-logger": "^2.3.1"
+    "egg-logger": "^2.3.1",
+    "mz": "^2.7.0"
   },
   "devDependencies": {
     "midway-bin": "^2.0.0"

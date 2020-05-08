@@ -12,19 +12,19 @@ describe('/test/wrapper.test.ts', () => {
             aggregation: {
               handler: 'aggre.handler',
               _isAggregation: true,
-              functions: [ 'index' ],
+              functions: ['index'],
               _handlers: [
                 { path: '/api/test', handler: 'index.handler' },
                 { path: '/*', handler: 'render.handler' },
-              ]
+              ],
             },
             index: {
-              handler: 'index.handler'
+              handler: 'index.handler',
             },
             render: {
-              handler: 'render.handler'
-            }
-          }
+              handler: 'render.handler',
+            },
+          },
         },
         baseDir: path.join(__dirname, './fixtures/wrapper'),
         distDir: path.join(__dirname, './fixtures/wrapper'),

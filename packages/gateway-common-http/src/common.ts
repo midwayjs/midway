@@ -41,13 +41,13 @@ export async function parseInvokeOptionsByOriginUrl(
   }> = {};
   // 获取路由
   let urlMatchList = [];
-  Object.keys(functions).forEach((functionName) => {
+  Object.keys(functions).forEach(functionName => {
     const functionItem = functions[functionName] || {};
     const httpEvents = (functionItem.events || []).filter((eventItem: any) => {
       return eventItem.http || eventItem.apigw;
     });
 
-    for( const event of httpEvents) {
+    for (const event of httpEvents) {
       const eventItem = event?.http || event?.apigw;
       if (eventItem) {
         urlMatchList.push({
@@ -63,7 +63,7 @@ export async function parseInvokeOptionsByOriginUrl(
   // 3. 如果绝对路径和通配都能匹配一个路径时，绝对规则优先级高
   // 4. 有多个通配能匹配一个路径时，最长的规则匹配，如 /ab/** 和 /ab/cd/** 在匹配 /ab/cd/f 时命中 /ab/cd/**
   urlMatchList = urlMatchList
-    .map((item) => {
+    .map(item => {
       const router = item.router.replace(/\**$/, '');
       return {
         functionName: item.functionName,
@@ -76,7 +76,7 @@ export async function parseInvokeOptionsByOriginUrl(
       return handlerB.level - handlerA.level;
     });
 
-  const functionItem = urlMatchList.find((item) => {
+  const functionItem = urlMatchList.find(item => {
     if (isMatch(currentUrl, item.router)) {
       // 如果不在白名单内，并且是需要被忽略的函数，则跳过函数处理
       if (

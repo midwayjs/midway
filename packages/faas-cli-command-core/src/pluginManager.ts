@@ -81,7 +81,7 @@ export class PluginManager extends BasePlugin {
       );
       this.core.cli.log(`  - installed '${plugin}'`);
     } else {
-      this.core.cli.log(`please user plugin -i=<plugin name>`);
+      this.core.cli.log('please user plugin -i=<plugin name>');
     }
   }
 
@@ -104,7 +104,9 @@ export class PluginManager extends BasePlugin {
     let version = '';
     try {
       version = JSON.parse(readFileSync(pkgJson).toString()).version;
-    } catch (E) {}
+    } catch (E) {
+      /** ignore */
+    }
     return version;
   }
 
@@ -114,8 +116,9 @@ export class PluginManager extends BasePlugin {
     const dir: string = getCoreBaseDir();
     await this.execPromise(`cd ${dir};rm -rf ${plugin}`);
     await this.execPromise(
-      `cd ${join(dir, '../')};${this.options.npm ||
-        'npm'} install ${newPlugin} --production`
+      `cd ${join(dir, '../')};${
+        this.options.npm || 'npm'
+      } install ${newPlugin} --production`
     );
     const newVersion = this.getPluginVersion(plugin);
     this.core.cli.log(

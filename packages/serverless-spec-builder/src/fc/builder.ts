@@ -211,7 +211,7 @@ function convertMethods(methods: string | string[]): HTTPEventType[] {
     return ['GET', 'PUT', 'POST', 'DELETE', 'HEAD'];
   }
 
-  return methods.map((method) => {
+  return methods.map(method => {
     return method.toUpperCase();
   }) as HTTPEventType[];
 }

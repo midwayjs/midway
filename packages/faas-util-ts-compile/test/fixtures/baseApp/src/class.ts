@@ -2,7 +2,7 @@ import { Inject, Func, Provide } from '@midwayjs/decorator';
 import { FaaSContext } from '@midwayjs/faas';
 
 const FaaSTrigger = {
-  HTTP: 'HTTP'
+  HTTP: 'HTTP',
 };
 
 @Provide()
@@ -10,9 +10,9 @@ const FaaSTrigger = {
 export class NoHandlerAndPath {
   @Inject()
   ctx: FaaSContext;
-  
+
   async handler() {
-    return 'hello world'
+    return 'hello world';
   }
 }
 
@@ -21,19 +21,19 @@ export class NoHandlerAndPath {
 export class NoEvents {
   @Inject()
   ctx: FaaSContext;
-  
+
   async handler() {
-    return 'hello world'
+    return 'hello world';
   }
 }
 
 @Provide()
 @Func('test2.handler')
-export class NoEvents {
+export class Test2Events {
   @Inject()
   ctx: FaaSContext;
-  
+
   async handler() {
-    return 'hello world'
+    return 'hello world';
   }
 }

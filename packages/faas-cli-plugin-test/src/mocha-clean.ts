@@ -24,7 +24,7 @@ const internal = [
 
 // monkey-patch `Runner#fail` to modify stack
 const originFn = mochaMod.Runner.prototype.fail;
-mochaMod.Runner.prototype.fail = function(test, err) {
+mochaMod.Runner.prototype.fail = function (test, err) {
   /* istanbul ignore else */
   if (err.stack) {
     const stack = err.stack.split('\n').filter(line => {

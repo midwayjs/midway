@@ -21,7 +21,7 @@ import {
   copy,
   mkdirSync,
   ensureDirSync,
-  symlinkSync
+  symlinkSync,
 } from 'fs-extra';
 export * from './invoke';
 const commonLock: any = {};
@@ -132,7 +132,7 @@ export class FaaSInvokePlugin extends BasePlugin {
 
   async waitForLock(lockKey, count?) {
     count = count || 0;
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       if (count > 100) {
         return resolve();
       }
@@ -181,7 +181,7 @@ export class FaaSInvokePlugin extends BasePlugin {
       targetDir: this.buildDir,
       include: packageObj.include,
       exclude: packageObj.exclude,
-      log: (path) => {
+      log: path => {
         this.core.debug('copy file', path);
       },
     });
@@ -203,10 +203,7 @@ export class FaaSInvokePlugin extends BasePlugin {
       this.buildLogDir,
       '.faasTSBuildInfo.log'
     ));
-    this.analysisCodeInfoPath = resolve(
-      this.buildLogDir,
-      '.faasFuncList.log'
-    );
+    this.analysisCodeInfoPath = resolve(this.buildLogDir, '.faasFuncList.log');
     this.relativeTsCodeRoot =
       relative(this.baseDir, this.codeAnalyzeResult.tsCodeRoot) || '.';
     const isTsMode = this.checkIsTsMode();
@@ -286,8 +283,7 @@ export class FaaSInvokePlugin extends BasePlugin {
       );
     }
     if (
-      this.core.pluginManager.options.stopLifecycle ===
-      'invoke:analysisCode'
+      this.core.pluginManager.options.stopLifecycle === 'invoke:analysisCode'
     ) {
       // LOCK_TYPE.INITIAL 是因为跳过了ts编译，下一次来的时候还是得进行ts编译
       this.setLock(this.buildLockPath, LOCK_TYPE.INITIAL);
@@ -302,7 +298,9 @@ export class FaaSInvokePlugin extends BasePlugin {
         this.core.service.functions = JSON.parse(
           readFileSync(this.analysisCodeInfoPath).toString()
         );
-      } catch (e) { }
+      } catch (e) {
+        /** ignore */
+      }
     }
   }
   async compile() {
@@ -347,13 +345,11 @@ export class FaaSInvokePlugin extends BasePlugin {
       await remove(this.buildLockPath);
       this.setLock(this.buildLockPath, LOCK_TYPE.COMPLETE);
       this.core.debug('Typescript Build Error', e);
-      throw new Error(
-        `Typescript Build Error, Please Check Your FaaS Code!`
-      );
+      throw new Error('Typescript Build Error, Please Check Your FaaS Code!');
     }
     this.setLock(this.buildLockPath, LOCK_TYPE.COMPLETE);
     // 针对多次调用清理缓存
-    Object.keys(require.cache).forEach((path) => {
+    Object.keys(require.cache).forEach(path => {
       if (path.indexOf(this.buildDir) !== -1) {
         this.core.debug('Clear Cache', path);
         delete require.cache[path];
@@ -369,10 +365,7 @@ export class FaaSInvokePlugin extends BasePlugin {
     const fileName = resolve(this.buildDir, `${handlerFileName}.js`);
     const userEntry = [
       resolve(this.baseDir, `${handlerFileName}.js`),
-      resolve(
-        this.baseDir,
-        `${this.defaultTmpFaaSOut}/${handlerFileName}.js`
-      ),
+      resolve(this.baseDir, `${this.defaultTmpFaaSOut}/${handlerFileName}.js`),
     ].find(existsSync);
     return {
       funcInfo,
@@ -383,11 +376,7 @@ export class FaaSInvokePlugin extends BasePlugin {
   }
 
   async entry() {
-    const {
-      name,
-      fileName,
-      userEntry,
-    } = this.checkUserEntry();
+    const { name, fileName, userEntry } = this.checkUserEntry();
     if (!userEntry) {
       const isTsMode = this.checkIsTsMode();
       let starterName;
@@ -396,9 +385,7 @@ export class FaaSInvokePlugin extends BasePlugin {
       if (platform === 'aliyun') {
         starterName = require.resolve('@midwayjs/serverless-fc-starter');
       } else if (platform === 'tencent') {
-        starterName = require.resolve(
-          '@midwayjs/serverless-scf-starter'
-        );
+        starterName = require.resolve('@midwayjs/serverless-scf-starter');
       }
       if (!starterName) {
         return;
@@ -412,9 +399,7 @@ export class FaaSInvokePlugin extends BasePlugin {
         },
         distDir: this.buildDir,
         starter: starterName,
-        loadDirectory: isTsMode ? [
-          resolve(this.defaultTmpFaaSOut, 'src')
-        ] : []
+        loadDirectory: isTsMode ? [resolve(this.defaultTmpFaaSOut, 'src')] : [],
       });
       if (isTsMode) {
         // ts模式 midway-core 会默认加载入口文件所在目录下的 src 目录里面的ts代码
@@ -422,7 +407,10 @@ export class FaaSInvokePlugin extends BasePlugin {
         const symlinkPath = resolve(this.buildDir, 'src');
         this.core.debug('tsMode symlink', symlinkPath);
         if (!existsSync(symlinkPath)) {
-          symlinkSync(this.codeAnalyzeResult.tsCodeRoot, resolve(this.buildDir, 'src'));
+          symlinkSync(
+            this.codeAnalyzeResult.tsCodeRoot,
+            resolve(this.buildDir, 'src')
+          );
         }
       }
     } else {
@@ -554,8 +542,7 @@ export class FaaSInvokePlugin extends BasePlugin {
   getFunctionInfo() {
     const functionName = this.options.function;
     const functionInfo =
-      this.core.service.functions &&
-      this.core.service.functions[functionName];
+      this.core.service.functions && this.core.service.functions[functionName];
     if (!functionInfo) {
       throw new Error(`Function: ${functionName} not exists`);
     }
@@ -598,6 +585,7 @@ export class FaaSInvokePlugin extends BasePlugin {
   }
 
   checkIsTsMode(): boolean {
+    // eslint-disable-next-line node/no-deprecated-api
     return !!require.extensions['.ts'];
   }
 }

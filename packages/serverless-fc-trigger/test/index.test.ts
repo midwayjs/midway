@@ -55,7 +55,7 @@ describe('/test/index.test.ts', () => {
 
     before(() => runtime.close());
 
-    it('should test with supertest', (done) => {
+    it('should test with supertest', done => {
       request(app)
         .get('/user')
         .expect('Content-Type', 'text/html; charset=utf-8')

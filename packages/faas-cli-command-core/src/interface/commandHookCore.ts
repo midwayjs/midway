@@ -46,7 +46,7 @@ export interface ICoreInstance {
   service: {
     experimentalFeatures?: {
       [featureName: string]: any;
-    },
+    };
     service?: {
       name: string;
     };

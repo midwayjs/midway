@@ -94,6 +94,8 @@ interface TableStoreRecord {
   ];
 }
 
+// TODO: prevent namespace usage
+// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace FC {
   export interface OSSEvent {
     events: SingleOSSEvent[];
@@ -175,5 +177,5 @@ export namespace FC {
     logger: Console;
   }
 
-  export interface RequestContext extends InitializeContext {}
+  export type RequestContext = InitializeContext;
 }

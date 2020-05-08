@@ -18,12 +18,18 @@ describe('/test/http.test.ts', () => {
             name: 'q',
           },
           body: {
-            name: 'test'
-          }
-        }
-      ]
+            name: 'test',
+          },
+        },
+      ],
     });
     const resultBody = JSON.parse(result.body);
-    assert(resultBody.headers['Content-Type'] === 'text/json' && resultBody.query.name === 'q' && resultBody.method === 'POST' && resultBody.path === '/test' && resultBody.body.name === 'test');
+    assert(
+      resultBody.headers['Content-Type'] === 'text/json' &&
+        resultBody.query.name === 'q' &&
+        resultBody.method === 'POST' &&
+        resultBody.path === '/test' &&
+        resultBody.body.name === 'test'
+    );
   });
 });
