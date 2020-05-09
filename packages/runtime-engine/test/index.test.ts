@@ -66,7 +66,7 @@ describe('/test/index.test.ts', () => {
       runtimeEngine.add(engine => {
         engine.addRuntimeExtension({
           async beforeRuntimeStart(runtime: Runtime) {
-            return new Promise(resolve => setTimeout(() => resolve()));
+            return new Promise(resolve => setImmediate(() => resolve()));
           },
         });
       });
@@ -89,7 +89,7 @@ describe('/test/index.test.ts', () => {
       runtimeEngine.add(engine => {
         engine.addRuntimeExtension({
           async beforeRuntimeStart(runtime: Runtime) {
-            return new Promise(resolve => setTimeout(() => resolve()));
+            return new Promise(resolve => setImmediate(() => resolve()));
           },
         });
       });
