@@ -236,6 +236,11 @@ describe('/test/enhance.test.ts', () => {
         .get('/param/headers_host')
         .expect(200)
         .expect('127');
+    });
+
+    it('should param controller 2 be ok ', async () => {
+
+      app.mockCsrf();
 
       const imagePath = path.join(
         __dirname,
