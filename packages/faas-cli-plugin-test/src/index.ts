@@ -46,6 +46,7 @@ export class TestPlugin extends BasePlugin {
         env: process.env,
         argv: Object.assign(process.argv, {
           _: testFiles,
+          cov: this.options.cov,
           nyc: '--reporter=json --reporter=lcov --reporter=text',
           watch: options.watch,
           extension: 'ts,js',

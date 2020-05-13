@@ -1,7 +1,7 @@
 import { fork } from 'child_process';
 import * as globby from 'globby';
-import { existsSync } from 'fs';
 import { join } from 'path';
+import { existsSync, remove } from 'fs-extra';
 export class Test {
   config: any;
   argv: any;
@@ -9,10 +9,18 @@ export class Test {
     this.config = config;
     this.argv = config.argv;
     const execArgv = this.argv.execArgv || [];
-    if (this.argv.typescript) {
-      execArgv.push('--require', require.resolve('ts-node/register'));
-    }
 
+    // if cov need not exists report dir
+    if (this.argv.cov) {
+      const coverageDir = join(this.config.cwd, 'coverage');
+      if (existsSync(coverageDir)) {
+        await remove(coverageDir);
+      }
+      const outputDir = join(this.config.cwd, 'node_modules/.nyc_output');
+      if (existsSync(outputDir)) {
+        await remove(outputDir);
+      }
+    }
     const opt = {
       cwd: this.config.cwd,
       env: Object.assign(
@@ -23,13 +31,37 @@ export class Test {
       ),
       execArgv,
     };
-    const mochaFile = require.resolve('mocha/bin/_mocha');
+
+    // exec bin file
+    let binFile;
+    if (this.argv.cov) {
+      binFile = require.resolve('nyc/bin/nyc.js');
+    } else {
+      binFile = require.resolve('mocha/bin/_mocha');
+    }
     const args = await this.formatTestArgs();
-    return this.forkNode(mochaFile, args, opt);
+    return this.forkNode(binFile, args, opt);
   }
 
   private async formatTestArgs() {
+    const argsPre = [];
     const args = [];
+    if (this.argv.typescript) {
+      argsPre.push('--require', require.resolve('ts-node/register'));
+    }
+    if (this.argv.cov) {
+      if (this.argv.nyc) {
+        argsPre.push(...this.argv.nyc.split(' '));
+        argsPre.push('--temp-directory', './node_modules/.nyc_output');
+      }
+      if (this.argv.typescript) {
+        argsPre.push(`--extension`);
+        argsPre.push(`.ts`);
+      }
+      argsPre.push(require.resolve('mocha/bin/_mocha'));
+    } else if (this.argv.extension) {
+      args.push(`--extension=${this.argv.extension}`);
+    }
     let timeout = this.argv.timeout || process.env.TEST_TIMEOUT || 60000;
     if (process.env.JB_DEBUG_FILE) {
       // --no-timeout
@@ -52,14 +84,6 @@ export class Test {
     requireArr.forEach(requireItem => {
       args.push(`--require=${requireItem}`);
     });
-
-    if (this.argv.extension) {
-      args.push(`--extension=${this.argv.extension}`);
-    }
-
-    if (this.argv.nyc) {
-      args.push(`--nyc=${this.argv.nyc}`);
-    }
 
     let pattern;
 
@@ -93,7 +117,7 @@ export class Test {
     if (existsSync(setupFile)) {
       args.unshift(setupFile);
     }
-    return args;
+    return argsPre.concat(args);
   }
 
   protected forkNode(modulePath, args = [], options: any = {}) {
