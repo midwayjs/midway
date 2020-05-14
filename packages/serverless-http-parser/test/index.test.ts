@@ -1,9 +1,10 @@
-import { Context } from '../src/context';
 import * as assert from 'assert';
+import { Application } from '../src/application';
 
 describe('test http parser', () => {
   it('should parser tencent apigw event', () => {
-    const context = new Context(
+    const app = new Application();
+    const context = app.createContext(
       require('./resource/scf_apigw.json'),
       require('./resource/scf_ctx.json')
     );
@@ -118,7 +119,8 @@ describe('test http parser', () => {
   });
 
   it('should parser fc http event', () => {
-    const context = new Context(
+    const app = new Application();
+    const context = app.createContext(
       Object.assign(require('./resource/fc_http.json'), {
         body: Buffer.from(
           JSON.stringify({
@@ -182,7 +184,8 @@ describe('test http parser', () => {
   });
 
   it('should parser aliyun apigw event', () => {
-    const context = new Context(
+    const app = new Application();
+    const context = app.createContext(
       require('./resource/fc_apigw.json'),
       require('./resource/fc_ctx.json')
     );

@@ -2,7 +2,7 @@
   "name": "@midwayjs/faas",
   "version": "0.2.92",
   "main": "dist/index",
-  "typings": "dist/index.d.ts",
+  "typings": "index.d.ts",
   "dependencies": {
     "@midwayjs/core": "^2.0.0",
     "@midwayjs/decorator": "^2.0.8",

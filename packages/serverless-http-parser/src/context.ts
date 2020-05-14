@@ -1,11 +1,10 @@
-import { Request } from './request';
-import { Response } from './response';
 import {
   FaaSHTTPContext,
   FaaSHTTPRequest,
   FaaSHTTPResponse,
   FaaSOriginContext,
 } from '@midwayjs/faas-typings';
+import * as util from 'util';
 
 export class Context implements FaaSHTTPContext {
   private _req: FaaSHTTPRequest;
@@ -14,8 +13,6 @@ export class Context implements FaaSHTTPContext {
   private _originEvent;
 
   constructor(event, context) {
-    this._req = new Request(event);
-    this._res = new Response();
     this._originContext = context;
     this._originEvent = event;
   }
@@ -35,8 +32,16 @@ export class Context implements FaaSHTTPContext {
     return this._req;
   }
 
+  set req(request) {
+    this._req = request;
+  }
+
   get res(): FaaSHTTPResponse {
     return this._res;
+  }
+
+  set res(response) {
+    this._res = response;
   }
 
   get request(): FaaSHTTPRequest {
@@ -141,6 +146,10 @@ export class Context implements FaaSHTTPContext {
     return this.req.accept;
   }
 
+  get logger() {
+    return this.originContext.logger || console;
+  }
+
   is(type, ...types) {
     return this.request.is(type, ...types);
   }
@@ -179,5 +188,30 @@ export class Context implements FaaSHTTPContext {
   acceptsLanguages(langs: string[]): string | boolean;
   acceptsLanguages(...args): any {
     return this.request.acceptsLanguages(...args);
+  }
+
+  onerror(err) {
+    // don't do anything if there is no error.
+    // this allows you to pass `this.onerror`
+    // to node-style callbacks.
+    if (null == err) return;
+
+    if (!(err instanceof Error))
+      err = new Error(util.format('non-error thrown: %j', err));
+
+    const { res } = this;
+
+    // first unset all headers
+    res.headers = {};
+
+    // then set those specified
+    this.set(err.headers);
+
+    // force text/plain
+    this.type = 'text';
+    this.status = 500;
+
+    // throw err and runtime will proxy this error
+    throw err;
   }
 }

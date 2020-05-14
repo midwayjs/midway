@@ -1,4 +1,3 @@
-export * from '@midwayjs/faas-typings';
 export * from './interface';
 export * from './starter';
 export * from '@midwayjs/core';

@@ -1,1 +1,1 @@
-export const middleware = ['testMiddlware'];
+export const middleware = ['testMiddleware'];

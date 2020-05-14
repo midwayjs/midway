@@ -164,14 +164,12 @@ describe('/test/index.test.ts', () => {
           throw new Error('oops');
         })(...args);
       });
-      let err;
-      try {
-        await test(handle).runHttp(require('../resource/event'), {});
-      } catch (ex) {
-        err = ex;
-      }
-      assert.ok(err);
-      assert.equal(err.message, 'oops');
+      const result = await test(handle).runHttp(
+        require('../resource/event'),
+        {}
+      );
+      assert.ok(result.statusCode === 500);
+      assert.equal(result.body, 'Internal Server Error');
     });
 
     it('non-async should passed', async () => {
@@ -179,13 +177,12 @@ describe('/test/index.test.ts', () => {
       const handle = asyncWrapper(async (...args) => {
         return runtime.asyncEvent(ctx => {})(...args);
       });
-      let err;
-      try {
-        await test(handle).runHttp(require('../resource/event'), {});
-      } catch (ex) {
-        err = ex;
-      }
-      assert.ok(!err);
+      const result = await test(handle).runHttp(
+        require('../resource/event'),
+        {}
+      );
+      assert.ok(result.statusCode === 204);
+      assert.ok(result.body === '');
     });
 
     it('should ok with asyncWrap', async () => {
@@ -206,15 +203,13 @@ describe('/test/index.test.ts', () => {
           throw new Error('ooops!');
         })(...args);
       });
-      let err;
-      try {
-        await test(handle).run(require('../resource/event'), {});
-      } catch (ex) {
-        err = ex;
-      }
 
-      assert.ok(err);
-      assert.equal(err.message, 'ooops!');
+      const result: any = await test(handle).run(
+        require('../resource/event'),
+        {}
+      );
+      assert.ok(result.statusCode === 500);
+      assert.ok(result.body === 'Internal Server Error');
     });
 
     it('should ok with asyncWrap when not async functions', async () => {

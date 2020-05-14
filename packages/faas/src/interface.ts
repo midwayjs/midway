@@ -2,16 +2,17 @@ import { MidwayRequestContainer, IMidwayCoreApplication } from '@midwayjs/core';
 import { FaaSHTTPContext } from '@midwayjs/faas-typings';
 
 export interface IFaaSApplication extends IMidwayCoreApplication {
-  start(opts?);
-  handleInvokeWrapper(handlerMapping: string);
   getInitializeContext();
-  addGlobalMiddleware(mw: string);
+  use(
+    middleware: (() => (context: any, next: () => Promise<any>) => any) | string
+  );
+  useMiddleware(mw: string[]);
 }
 
-/**
- * @deprecated same as IFaaSApplication
- */
-export type IFaaSStarter = IFaaSApplication;
+export interface IFaaSStarter {
+  start(opts?);
+  handleInvokeWrapper(handlerMapping: string);
+}
 
 export interface FunctionHandler {
   handler(...args);

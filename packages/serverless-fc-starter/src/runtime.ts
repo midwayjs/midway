@@ -3,7 +3,7 @@ import {
   FAAS_ARGS_KEY,
   ServerlessLightRuntime,
 } from '@midwayjs/runtime-engine';
-import { Context } from '@midwayjs/serverless-http-parser';
+import { Application } from '@midwayjs/serverless-http-parser';
 import * as util from 'util';
 
 const isLocalEnv = () => {
@@ -14,6 +14,13 @@ const isLocalEnv = () => {
 };
 
 export class FCRuntime extends ServerlessLightRuntime {
+  app;
+  respond;
+
+  init() {
+    this.app = new Application();
+  }
+
   /**
    * for handler wrapper
    * @param handler
@@ -34,28 +41,21 @@ export class FCRuntime extends ServerlessLightRuntime {
   }
 
   async wrapperWebInvoker(handler, req, res, context) {
-    let ctx: Context & { logger?: any };
-    const args = [];
     // for web
     const isHTTPMode =
       req.constructor.name === 'EventEmitter' || util.types.isProxy(req); // for local test
+
+    if (!this.respond) {
+      this.respond = this.app.callback();
+    }
+
     if (isHTTPMode) {
       // http
       // const rawBody = 'test';
       // req.rawBody = rawBody;
       req.body = await getRawBody(req); // TODO: body parser
-      ctx = new Context(req, context);
-      ctx.logger = context.logger || console;
-      // ctx.EventType = 'fc_http';
-      args.push(ctx);
     } else {
       // api gateway
-      ctx = new Context(req, context);
-      ctx.logger = context.logger || console;
-      // ctx.EventType = 'fc_apigw';
-      args.push(ctx);
-      // Pass original event
-      args.push(req);
     }
 
     // if (ctx.method === 'GET') {
@@ -68,106 +68,119 @@ export class FCRuntime extends ServerlessLightRuntime {
     //   }
     // }
 
-    return this.invokeHandlerWrapper(ctx, async () => {
-      if (!handler) {
-        return this.defaultInvokeHandler(...args);
-      }
-      return handler.apply(handler, args);
-    })
-      .then(result => {
-        if (res.headersSent) {
-          return;
-        }
-
-        if (result) {
-          ctx.body = result;
-        }
-
-        let encoded = false;
-
-        let data = ctx.body;
-        if (typeof data === 'string') {
-          if (!ctx.type) {
-            ctx.type = 'text/plain';
+    return this.respond.apply(this.respond, [
+      req,
+      context,
+      ctx => {
+        return this.invokeHandlerWrapper(ctx, async () => {
+          if (!handler) {
+            const args = isHTTPMode ? [ctx] : [ctx, req];
+            return this.defaultInvokeHandler(...args);
           }
-          ctx.body = data;
-        } else if (Buffer.isBuffer(data)) {
-          encoded = true;
-          if (!ctx.type) {
-            ctx.type = 'application/octet-stream';
-          }
-
-          // data is reserved as buffer
-          ctx.body = data.toString('base64');
-        } else if (typeof data === 'object') {
-          if (!ctx.type) {
-            ctx.type = 'application/json';
-          }
-          // set data to string
-          ctx.body = data = JSON.stringify(data);
-        } else {
-          // 阿里云网关必须返回字符串
-          if (!ctx.type) {
-            ctx.type = 'text/plain';
-          }
-          // set data to string
-          ctx.body = data = data + '';
-        }
-
-        const newHeader = {};
-
-        for (const key in ctx.res.headers) {
-          // The length after base64 is wrong.
-          if (!['content-length'].includes(key)) {
-            if ('set-cookie' === key && !isHTTPMode) {
-              // unsupport multiple cookie when use apiGateway
-              newHeader[key] = ctx.res.headers[key][0];
-              if (ctx.res.headers[key].length > 1) {
-                ctx.logger.warn(
-                  '[fc-starter]: unsupport multiple cookie when use apiGateway'
-                );
-              }
-            } else {
-              newHeader[key] = ctx.res.headers[key];
+          return handler.apply(handler, isHTTPMode ? [ctx] : [ctx, req]);
+        })
+          .then(result => {
+            if (res.headersSent) {
+              return;
             }
-          }
-        }
 
-        if (res.setHeader) {
-          for (const key in newHeader) {
-            res.setHeader(key, newHeader[key]);
-          }
-        }
+            if (result) {
+              ctx.body = result;
+            }
 
-        if (res.setStatusCode) {
-          res.setStatusCode(ctx.status);
-        }
+            if (ctx.body === null || ctx.body === 'undefined') {
+              ctx.body = '';
+              ctx.type = 'text';
+              ctx.status = 204;
+            }
 
-        if (res.send) {
-          // http trigger only support `Buffer` or a `string` or a `stream.Readable`
-          res.send(data);
-        }
+            let encoded = false;
 
-        return {
-          isBase64Encoded: encoded,
-          statusCode: ctx.status,
-          headers: newHeader,
-          body: ctx.body,
-        };
-      })
-      .catch(err => {
-        ctx.logger.error(err);
-        if (res.send) {
-          res.setStatusCode(500);
-          res.send(isLocalEnv() ? err.stack : 'Internal Server Error');
-        }
-        return {
-          isBase64Encoded: false,
-          statusCode: 500,
-          headers: {},
-          body: isLocalEnv() ? err.stack : 'Internal Server Error',
-        };
-      });
+            let data = ctx.body;
+            if (typeof data === 'string') {
+              if (!ctx.type) {
+                ctx.type = 'text/plain';
+              }
+              ctx.body = data;
+            } else if (Buffer.isBuffer(data)) {
+              encoded = true;
+              if (!ctx.type) {
+                ctx.type = 'application/octet-stream';
+              }
+
+              // data is reserved as buffer
+              ctx.body = data.toString('base64');
+            } else if (typeof data === 'object') {
+              if (!ctx.type) {
+                ctx.type = 'application/json';
+              }
+              // set data to string
+              ctx.body = data = JSON.stringify(data);
+            } else {
+              // 阿里云网关必须返回字符串
+              if (!ctx.type) {
+                ctx.type = 'text/plain';
+              }
+              // set data to string
+              ctx.body = data = data + '';
+            }
+
+            const newHeader = {};
+
+            for (const key in ctx.res.headers) {
+              // The length after base64 is wrong.
+              if (!['content-length'].includes(key)) {
+                if ('set-cookie' === key && !isHTTPMode) {
+                  // unsupport multiple cookie when use apiGateway
+                  newHeader[key] = ctx.res.headers[key][0];
+                  if (ctx.res.headers[key].length > 1) {
+                    ctx.logger.warn(
+                      '[fc-starter]: unsupport multiple cookie when use apiGateway'
+                    );
+                  }
+                } else {
+                  newHeader[key] = ctx.res.headers[key];
+                }
+              }
+            }
+
+            if (res.setHeader) {
+              for (const key in newHeader) {
+                res.setHeader(key, newHeader[key]);
+              }
+            }
+
+            if (res.setStatusCode) {
+              res.setStatusCode(ctx.status);
+            }
+
+            if (res.send) {
+              // http trigger only support `Buffer` or a `string` or a `stream.Readable`
+              res.send(data);
+            }
+
+            return {
+              isBase64Encoded: encoded,
+              statusCode: ctx.status,
+              headers: newHeader,
+              body: ctx.body,
+            };
+          })
+          .catch(err => {
+            ctx.logger.error(err);
+            if (res.send) {
+              res.setStatusCode(500);
+              res.send(isLocalEnv() ? err.stack : 'Internal Server Error');
+            }
+            return {
+              isBase64Encoded: false,
+              statusCode: 500,
+              headers: {},
+              body: isLocalEnv() ? err.stack : 'Internal Server Error',
+            };
+          });
+      },
+    ]);
   }
 
   async wrapperEventInvoker(handler, event, context) {
@@ -208,4 +221,8 @@ export class FCRuntime extends ServerlessLightRuntime {
   async beforeInvokeHandler(context) {}
 
   async afterInvokeHandler(err, result, context) {}
+
+  getApplication() {
+    return this.app;
+  }
 }

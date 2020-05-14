@@ -15,7 +15,7 @@ const initializeMethod = async (initializeContext = {}) => {
   runtime = await start({
     layers: [<%= layers.join(", ") %>]
   });
-  starter = new FaaSStarter({ baseDir: __dirname, initializeContext });
+  starter = new FaaSStarter({ baseDir: __dirname, initializeContext, applicationAdapter: runtime });
   <% loadDirectory.forEach(function(dirName){ %>
   starter.loader.loadDirectory({ baseDir: '<%=dirName%>'});<% }) %>
   await starter.start();

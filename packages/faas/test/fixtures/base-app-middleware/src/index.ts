@@ -7,6 +7,6 @@ export class HelloService implements FunctionHandler {
   ctx; // context
 
   handler(event) {
-    return event.text + this.ctx.text + this.ctx.requestId;
+    return this.ctx.originContext['text'] + event.text + this.ctx.requestId;
   }
 }

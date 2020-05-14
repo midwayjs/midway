@@ -14,8 +14,8 @@ export class FaaSContainerConfiguration implements ILifeCycle {
 
   async onReady() {
     // add middleware from user config
-    for (const mw of this.middleware) {
-      this.app.addGlobalMiddleware(mw);
+    if (this.app?.use) {
+      await this.app.useMiddleware(this.middleware);
     }
   }
 }
