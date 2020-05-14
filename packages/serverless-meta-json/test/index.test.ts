@@ -42,4 +42,17 @@ describe('/test/index.test.ts', () => {
     );
     assert(meta.gateway['x-gateway-domain'] === 'meta-test.example.com');
   });
+
+  it('gateway', async () => {
+    const meta = await simpleGenerator(resolve(__dirname, 'archives-gateway'), {
+      service: {
+        name: 'test',
+      },
+      apiGateway: {
+        type: 'test',
+      },
+    });
+    assert(meta.gateway['kind'] === 'auto-test');
+    assert(meta.gateway['testName'] === '123456');
+  });
 });

@@ -1,11 +1,12 @@
-import { basename } from 'path';
-import { readdirSync } from 'fs';
+import { basename, resolve } from 'path';
+import { readdirSync, readFileSync, existsSync } from 'fs';
 import {
   IGateway,
   IOptions,
   IPathMethodInfo,
   IPathInfo,
   ITriggerItem,
+  IInfo,
 } from './inter';
 export const generator = async (options: IOptions) => {
   const {
@@ -13,6 +14,7 @@ export const generator = async (options: IOptions) => {
     extra,
     archivePaths,
     archiveDirPath,
+    baseDir = process.cwd(),
     generatorArchivePath,
   } = options;
   let { archiveType } = options;
@@ -52,8 +54,11 @@ export const generator = async (options: IOptions) => {
       };
     });
   }
-  const functions = infos.map(
-    (info: { name: string; archivePath?: string }) => {
+  const functions = infos
+    .map((info: IInfo) => {
+      if (!yamlData.functions) {
+        return;
+      }
       const { name, archivePath } = info;
       const funcInfo = yamlData.functions[name];
       const handler = funcInfo.handler;
@@ -109,8 +114,15 @@ export const generator = async (options: IOptions) => {
         trigger,
         ...extra,
       };
-    }
-  );
+    })
+    .filter(v => !!v);
+
+  if (yamlData.apiGateway && yamlData.apiGateway.type) {
+    gateway = {
+      kind: 'auto-' + yamlData.apiGateway.type,
+      ...getApiGwData(baseDir, yamlData.apiGateway.type),
+    };
+  }
 
   return {
     'spec-version': '1.0.0',
@@ -119,16 +131,43 @@ export const generator = async (options: IOptions) => {
   };
 };
 
+const getApiGwData = (baseDir: string, type: string) => {
+  const apigwFile = resolve(baseDir, `${type}_mapping.json`);
+  try {
+    return JSON.parse(readFileSync(apigwFile).toString());
+  } catch (e) {
+    return {};
+  }
+};
+
+const findBaseDir = (path: string, index?: number) => {
+  index = index || 0;
+  const fileName = resolve(path, 'f.yml');
+  if (existsSync(fileName)) {
+    return path;
+  }
+  const parent = resolve(path, '../');
+  if (parent === path || index > 10) {
+    return process.cwd();
+  }
+  return findBaseDir(parent, index + 1);
+};
+
 export const simpleGenerator = async (
   archivesPath: string,
   yamlData: any,
-  extra?: any
+  extra?: any,
+  baseDir?: string
 ) => {
+  if (!baseDir) {
+    baseDir = findBaseDir(archivesPath);
+  }
   const archivePaths = readdirSync(archivesPath);
   return generator({
     yamlData,
     archivePaths,
     archiveDirPath: './archives/',
     extra,
+    baseDir,
   });
 };

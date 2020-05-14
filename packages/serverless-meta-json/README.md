@@ -102,3 +102,8 @@ const meta = await generator({
   }
 }
 ```
+
+## 自动网关配置
+如果yaml中存在 apiGateway 字段
+探寻 是否存在 ${ apiGateway.type }_mapping.json 文件
+将此文件内容放在 gateway 字段中，其 kind 为 auto-${ apiGateway.type }

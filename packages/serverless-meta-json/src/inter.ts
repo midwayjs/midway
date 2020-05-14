@@ -5,6 +5,7 @@ export interface IOptions {
   archivePaths?: string[]; // 构建包地址列表
   archiveDirPath?: string; // 构建包所在目录地址
   generatorArchivePath?: (functionInfo: any) => string; // 生成构建包地址
+  baseDir?: string; // f.yml 所在目录，默认为 process.cwd()
 }
 
 export interface IPathInfo {
@@ -37,10 +38,15 @@ export interface IPathMethodInfo {
 
 export interface IGateway {
   // 网关信息
-  kind: 'simple-mapping'; // 版本
-  paths: {
+  kind: string; // 版本
+  paths?: {
     // 路径信息
     [path: string]: IPathMethodInfo; // 路径详细内容
   };
   'x-gateway-domain'?: string; // 域名
+}
+
+export interface IInfo {
+  name: string;
+  archivePath?: string;
 }
