@@ -2,7 +2,8 @@ import { BasePlugin } from '@midwayjs/fcli-command-core';
 import { join, isAbsolute } from 'path';
 import { templateList } from './list';
 import { LightGenerator } from 'light-generator';
-const { Select, Input, Form } = require('enquirer');
+import { CategorySelect } from './categorySelect';
+const { Input, Form } = require('enquirer');
 
 async function sleep(timeout) {
   return new Promise(resolve => {
@@ -90,12 +91,10 @@ export class CreatePlugin extends BasePlugin {
       }
       await this.createFromTemplate();
     } else {
-      this.prompt = new Select({
+      this.prompt = new CategorySelect({
         name: 'templateName',
         message: 'Hello, traveller.\n  Which template do you like?',
-        choices: Object.keys(this.templateList).map(template => {
-          return `${template} - ${this.templateList[template].desc}`;
-        }),
+        groupChoices: this.templateList,
         result: value => {
           return value.split(' - ')[0];
         },
