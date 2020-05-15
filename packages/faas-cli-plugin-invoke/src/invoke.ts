@@ -4,6 +4,7 @@ import {
   getSpecFile,
 } from '@midwayjs/fcli-command-core';
 import { FaaSInvokePlugin } from './index';
+const { debugWrapper } = require('@midwayjs/debugger');
 
 export interface InvokeOptions {
   functionDir?: string; // 函数所在目录
@@ -50,7 +51,7 @@ export const getFunction = getOptions => {
   };
 };
 
-export async function invoke(options: InvokeOptions) {
+export async function invokeFun(options: InvokeOptions) {
   const invokeFun = getFunction({
     key: 'result',
   });
@@ -60,6 +61,15 @@ export async function invoke(options: InvokeOptions) {
   } else {
     throw result.err;
   }
+}
+
+export async function invoke(options: InvokeOptions) {
+  const isDebug = process.env.MIDWAY_FAAS_DEBUG;
+  return debugWrapper({
+    file: __filename, // 要包裹的方法所在文件
+    export: 'invokeFun', // 要包裹的方法的方法名
+    debug: isDebug,
+  })(options);
 }
 
 export interface IGetFuncList {

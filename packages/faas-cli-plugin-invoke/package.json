@@ -15,6 +15,7 @@
     "@midwayjs/serverless-scf-starter": "^0.2.92",
     "@midwayjs/serverless-scf-trigger": "^0.2.93",
     "@midwayjs/serverless-spec-builder": "^0.2.94",
+    "@midwayjs/debugger": "^0.0.3",
     "fs-extra": "^8.1.0",
     "globby": "^10.0.1"
   },
