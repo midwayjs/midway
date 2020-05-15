@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.95](https://github.com/midwayjs/midway-faas/compare/v0.2.94...v0.2.95) (2020-05-15)
+
+
+### Features
+
+* test support cov ([#161](https://github.com/midwayjs/midway-faas/issues/161)) ([b949b59](https://github.com/midwayjs/midway-faas/commit/b949b59d6db639f5026f508a6d3020fcf1836212))
+
+
+
+
+
 ## [0.2.94](https://github.com/midwayjs/midway-faas/compare/v0.2.93...v0.2.94) (2020-05-06)
 
 

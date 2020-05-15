@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.95](https://github.com/midwayjs/midway-faas/compare/v0.2.94...v0.2.95) (2020-05-15)
+
+
+### Features
+
+* meta-json support gateway ([#164](https://github.com/midwayjs/midway-faas/issues/164)) ([0472f1a](https://github.com/midwayjs/midway-faas/commit/0472f1acf578864298dc1c811727a3b38a1b559e))
+
+
+
+
+
 ## [0.2.92](https://github.com/midwayjs/midway-faas/compare/v0.2.91...v0.2.92) (2020-05-05)
 
 

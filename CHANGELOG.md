@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.95](https://github.com/midwayjs/midway-faas/compare/v0.2.94...v0.2.95) (2020-05-15)
+
+
+### Features
+
+* meta-json support gateway ([#164](https://github.com/midwayjs/midway-faas/issues/164)) ([0472f1a](https://github.com/midwayjs/midway-faas/commit/0472f1acf578864298dc1c811727a3b38a1b559e))
+* support debug by MIDWAY_FAAS_DEBUG ([#165](https://github.com/midwayjs/midway-faas/issues/165)) ([7c5cfc0](https://github.com/midwayjs/midway-faas/commit/7c5cfc0720fd3a6a58f4e30a477aa6500338f9b7))
+* support koa application ([#162](https://github.com/midwayjs/midway-faas/issues/162)) ([364d62b](https://github.com/midwayjs/midway-faas/commit/364d62b48242d2ee86f97f087f912e640e8ff6e7))
+* test support cov ([#161](https://github.com/midwayjs/midway-faas/issues/161)) ([b949b59](https://github.com/midwayjs/midway-faas/commit/b949b59d6db639f5026f508a6d3020fcf1836212))
+
+
+
+
+
 ## [0.2.94](https://github.com/midwayjs/midway-faas/compare/v0.2.93...v0.2.94) (2020-05-06)
 
 
