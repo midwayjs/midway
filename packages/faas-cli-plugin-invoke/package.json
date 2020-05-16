@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/fcli-plugin-invoke",
-  "version": "0.2.95",
+  "version": "0.2.96",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
@@ -20,7 +20,7 @@
     "globby": "^10.0.1"
   },
   "devDependencies": {
-    "@midwayjs/faas": "^0.2.95",
+    "@midwayjs/faas": "^0.2.96",
     "midway-bin": "^2.0.0"
   },
   "engines": {
