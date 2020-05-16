@@ -39,7 +39,7 @@ Midway FaaS 是一个用于构建 Node.js 云函数的 Serverless 框架，可�
 当前已接入以下前端一体化示例。
 
 |<img alt="React" src="https://user-images.githubusercontent.com/677114/42611693-f921fc7c-85c9-11e8-8de1-6d6013b92f69.png" width="48">| <img alt="Vue" src="https://user-images.githubusercontent.com/677114/42611543-44ef4502-85c9-11e8-9ef9-e9f98477c646.png" width="48">
-| :---: | :---: | :---: |
+| :---: | :---: |
 | [React](https://www.yuque.com/midwayjs/faas/faas_with_react) | [Vue](https://www.yuque.com/midwayjs/faas/faas_with_vue) |
 
 ## 加入社区
