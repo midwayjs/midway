@@ -20,8 +20,8 @@
   ],
   "scripts": {
     "build": "midway-bin build -c",
-    "test": "NODE_ENV=test midway-bin test --ts --full-trace",
-    "cov": "NODE_ENV=unittest midway-bin cov --ts",
+    "test": "midway-bin test --ts --full-trace",
+    "cov": "midway-bin cov --ts",
     "autod": "midway-bin autod"
   },
   "repository": {

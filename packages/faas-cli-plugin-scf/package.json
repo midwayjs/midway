@@ -23,9 +23,9 @@
   ],
   "scripts": {
     "build": "midway-bin build -c",
-    "test": "NODE_ENV=test midway-bin test --ts --full-trace --timeout=0",
-    "debug": "NODE_ENV=test midway-bin test --ts --full-trace --inspect-brk=9229",
-    "cov": "NODE_ENV=unittest midway-bin cov --ts",
+    "test": "midway-bin test --ts --full-trace --timeout=0",
+    "debug": "midway-bin test --ts --full-trace --inspect-brk=9229",
+    "cov": "midway-bin cov --ts",
     "clean": "midway-bin clean",
     "autod": "midway-bin autod"
   },

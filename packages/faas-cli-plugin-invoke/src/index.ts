@@ -12,6 +12,7 @@ import * as FCTrigger from '@midwayjs/serverless-fc-trigger';
 import * as SCFTrigger from '@midwayjs/serverless-scf-trigger';
 import { resolve, relative, join } from 'path';
 import { FaaSStarterClass, cleanTarget } from './utils';
+import { type } from 'os';
 import {
   ensureFileSync,
   existsSync,
@@ -30,6 +31,14 @@ enum LOCK_TYPE {
   WAITING,
   COMPLETE,
 }
+
+function getPlatformPath(p) {
+  if (type() === 'Windows_NT') {
+    return p.replace(/\\/g, '\\\\');
+  }
+  return p;
+}
+
 export class FaaSInvokePlugin extends BasePlugin {
   baseDir: string;
   buildDir: string;
@@ -152,7 +161,7 @@ export class FaaSInvokePlugin extends BasePlugin {
     this.buildDir = resolve(this.baseDir, '.faas_debug_tmp');
     const lockKey = `codeAnalyzeResult:${this.baseDir}`;
     const { lockType, lockData } = this.getLock(lockKey);
-    let codeAnalyzeResult: any;
+    let codeAnalyzeResult;
     if (lockType === LOCK_TYPE.INITIAL) {
       this.setLock(lockKey, LOCK_TYPE.WAITING);
       // 分析目录结构
@@ -171,7 +180,7 @@ export class FaaSInvokePlugin extends BasePlugin {
   }
 
   async copyFile() {
-    const packageObj: any = this.core.service.package || {};
+    const packageObj = this.core.service.package || {};
     // clean directory first
     if (this.options.clean) {
       await cleanTarget(this.buildDir);
@@ -273,7 +282,7 @@ export class FaaSInvokePlugin extends BasePlugin {
         ],
       };
       this.core.debug('Code Analysis Params', codeAnyParams);
-      const newSpec: any = await CodeAny(codeAnyParams);
+      const newSpec = await CodeAny(codeAnyParams);
       this.core.debug('Code Analysis Result', newSpec);
       this.core.service.functions = newSpec.functions;
       this.setStore('functions', this.core.service.functions);
@@ -387,6 +396,7 @@ export class FaaSInvokePlugin extends BasePlugin {
       } else if (platform === 'tencent') {
         starterName = require.resolve('@midwayjs/serverless-scf-starter');
       }
+
       if (!starterName) {
         return;
       }
@@ -398,8 +408,10 @@ export class FaaSInvokePlugin extends BasePlugin {
           functions: this.core.service.functions,
         },
         distDir: this.buildDir,
-        starter: starterName,
-        loadDirectory: isTsMode ? [resolve(this.defaultTmpFaaSOut, 'src')] : [],
+        starter: getPlatformPath(starterName),
+        loadDirectory: isTsMode
+          ? [getPlatformPath(resolve(this.defaultTmpFaaSOut, 'src'))]
+          : [],
       });
       if (isTsMode) {
         // ts模式 midway-core 会默认加载入口文件所在目录下的 src 目录里面的ts代码
