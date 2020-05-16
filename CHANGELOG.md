@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.97](https://github.com/midwayjs/midway-faas/compare/v0.2.96...v0.2.97) (2020-05-16)
+
+
+### Bug Fixes
+
+* fix windows path when invoke ([#169](https://github.com/midwayjs/midway-faas/issues/169)) ([e637a0a](https://github.com/midwayjs/midway-faas/commit/e637a0ab05a769a3797e2dccf0612bbbf650d074))
+
+
+### Features
+
+* command-core support user lifecycle config ([#167](https://github.com/midwayjs/midway-faas/issues/167)) ([ebb84a2](https://github.com/midwayjs/midway-faas/commit/ebb84a2c215d6af504841d448db14149cac4d155))
+
+
+
+
+
 ## [0.2.96](https://github.com/midwayjs/midway-faas/compare/v0.2.95...v0.2.96) (2020-05-16)
 
 

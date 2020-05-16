@@ -1,11 +1,11 @@
 {
   "name": "@midwayjs/serverless-fc-trigger",
-  "version": "0.2.95",
+  "version": "0.2.97",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/runtime-mock": "^0.2.95",
-    "@midwayjs/serverless-fc-starter": "^0.2.95",
+    "@midwayjs/runtime-mock": "^0.2.97",
+    "@midwayjs/serverless-fc-starter": "^0.2.97",
     "express": "^4.17.1"
   },
   "devDependencies": {

@@ -1,10 +1,10 @@
 {
   "name": "@midwayjs/serverless-aws-starter",
-  "version": "0.2.95",
+  "version": "0.2.97",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/runtime-engine": "^0.2.95"
+    "@midwayjs/runtime-engine": "^0.2.97"
   },
   "devDependencies": {
     "midway-bin": "^2.0.0",
