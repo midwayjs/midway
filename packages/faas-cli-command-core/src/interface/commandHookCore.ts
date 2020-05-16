@@ -21,6 +21,7 @@ export interface IOptions {
   npm?: string; // 使用何种npm加速
   stopLifecycle?: string; // 生命周期执行到什么时候终止，例如 invoke:invoke
   disableAutoLoad?: boolean; // 是否禁用自动加载插件
+  cwd?: string; // command core 执行时cwd目录
 }
 
 export interface ICommandHooksCore {

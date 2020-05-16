@@ -10,6 +10,8 @@ import { IProviderInstance } from './interface/provider';
 import GetMap from './errorMap';
 import { loadNpm } from './npm';
 import { resolve } from 'path';
+import { exec } from 'child_process';
+import { readFileSync, existsSync } from 'fs';
 
 const RegProviderNpm = /^npm:([\w]*):(.*)$/i; // npm providerName pkgName
 const RegProviderLocal = /^local:([\w]*):(.*)$/i; // local providerName pkgPath
@@ -25,6 +27,8 @@ export class CommandHookCore implements ICommandHooksCore {
   private loadNpm: any;
   private preDebugTime: any;
   private execId: number = Math.ceil(Math.random() * 1000);
+  private userLifecycle: any = {};
+  private cwd: string;
 
   store = new Map();
 
@@ -33,6 +37,7 @@ export class CommandHookCore implements ICommandHooksCore {
     if (!this.options.options) {
       this.options.options = {};
     }
+    this.cwd = this.options.cwd || process.cwd();
 
     this.loadNpm = loadNpm.bind(null, this);
     this.coreInstance = this.getCoreInstance();
@@ -134,6 +139,10 @@ export class CommandHookCore implements ICommandHooksCore {
       return this.displayHelp(commandsArray, commandInfo.usage);
     }
     for (const lifecycle of lifecycleEvents) {
+      if (this.userLifecycle && this.userLifecycle[lifecycle]) {
+        this.debug('User Lifecycle', lifecycle);
+        await this.execCommand(this.userLifecycle[lifecycle]);
+      }
       this.debug('Core Lifecycle', lifecycle);
       const hooks = this.hooks[lifecycle] || [];
       for (const hook of hooks) {
@@ -165,6 +174,7 @@ export class CommandHookCore implements ICommandHooksCore {
 
   public async ready() {
     await this.loadNpmPlugins();
+    await this.loadUserLifecycleExtends();
     await this.asyncInit();
   }
 
@@ -391,6 +401,26 @@ export class CommandHookCore implements ICommandHooksCore {
     }
   }
 
+  // 获取用户的生命周期扩展
+  private async loadUserLifecycleExtends() {
+    const pkgJsonFile = resolve(this.cwd, 'package.json');
+    if (!existsSync(pkgJsonFile)) {
+      return;
+    }
+    try {
+      const pkgJson = JSON.parse(readFileSync(pkgJsonFile).toString());
+      if (
+        pkgJson &&
+        pkgJson['midway-integration'] &&
+        pkgJson['midway-integration'].lifecycle
+      ) {
+        this.userLifecycle = pkgJson['midway-integration'].lifecycle;
+      }
+    } catch (e) {
+      return;
+    }
+  }
+
   private commandOptions(commandOptions, usage): any {
     if (!commandOptions) {
       return;
@@ -491,5 +521,23 @@ export class CommandHookCore implements ICommandHooksCore {
       path: matchResult[2],
       line: matchResult[3],
     };
+  }
+
+  async execCommand(command: string) {
+    return new Promise((resolve, reject) => {
+      exec(
+        command,
+        {
+          cwd: this.cwd,
+        },
+        error => {
+          if (error) {
+            reject(error);
+            return;
+          }
+          resolve();
+        }
+      );
+    });
   }
 }

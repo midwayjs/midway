@@ -1,0 +1,7 @@
+{
+  "midway-integration": {
+    "lifecycle": {
+      "before:invoke:one": "node ./index.js"
+    }
+  }
+}
