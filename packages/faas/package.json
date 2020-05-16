@@ -17,7 +17,8 @@
     "node": ">= 10"
   },
   "files": [
-    "dist"
+    "dist",
+    "index.d.ts"
   ],
   "keywords": [
     "serverless",
