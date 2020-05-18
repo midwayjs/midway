@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.98](https://github.com/midwayjs/midway-faas/compare/v0.2.97...v0.2.98) (2020-05-18)
+
+
+### Bug Fixes
+
+* Fix inner mw ([#170](https://github.com/midwayjs/midway-faas/issues/170)) ([aa91d29](https://github.com/midwayjs/midway-faas/commit/aa91d29817f6d38b6d8cefd28ca426c31651ae50))
+
+
+
+
+
 ## [0.2.97](https://github.com/midwayjs/midway-faas/compare/v0.2.96...v0.2.97) (2020-05-16)
 
 
