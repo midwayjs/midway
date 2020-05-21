@@ -168,7 +168,7 @@ export interface FaaSHTTPRequest extends ContextDelegatedRequest {
   /**
    * Get Parsed path parameters from event
    */
-  pathParameters;
+  pathParameters: any;
 }
 
 interface ContextDelegatedResponse {
