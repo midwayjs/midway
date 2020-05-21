@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.99](https://github.com/midwayjs/midway-faas/compare/v0.2.98...v0.2.99) (2020-05-21)
+
+
+### Bug Fixes
+
+* fix missing typings ([#171](https://github.com/midwayjs/midway-faas/issues/171)) ([1d40cf1](https://github.com/midwayjs/midway-faas/commit/1d40cf1c1d76f45888b4ce15f9a2151b81c7a8f9))
+
+
+
+
+
 ## [0.2.95](https://github.com/midwayjs/midway-faas/compare/v0.2.94...v0.2.95) (2020-05-15)
 
 **Note:** Version bump only for package @midwayjs/faas-typings
