@@ -11,7 +11,7 @@
     "typescript"
   ],
   "engines": {
-    "node": ">=8.10.0"
+    "node": ">=10.16.0"
   },
   "main": "index.js",
   "bugs": {
@@ -25,28 +25,35 @@
   "license": "MIT",
   "author": "waiting",
   "dependencies": {
-    "@typescript-eslint/eslint-plugin": "^2.25.0",
-    "@typescript-eslint/parser": "^2.25.0",
+    "@typescript-eslint/eslint-plugin": "^3.0.0",
+    "@typescript-eslint/parser": "^3.0.0",
     "eslint-plugin-import": "^2.20.0",
-    "eslint-plugin-unicorn": "^18.0.0"
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-unicorn": "^20.0.0"
   },
   "devDependencies": {
-    "eslint": "6",
-    "tape": "4",
-    "typescript": "3"
+    "@types/tape": "4",
+    "eslint": "7",
+    "tape": "5",
+    "typescript": ">=3.9"
   },
   "peerDependencies": {
-    "eslint": ">=6.7.1"
+    "eslint": ">=7.0.0"
   },
   "files": [
     "plugins/*.yml",
-    "*.js"
+    "base.js",
+    "index.js",
+    "recommended.js",
+    "strict.js"
   ],
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
-    "lint": "eslint --fix . --config=recommended.js && eslint --fix . --config=strict.js",
+    "lint": "npm run lint:src && npm run lint:test",
+    "lint:src": "eslint --fix ./*.js --config=strict.js --parser-options=project:tsconfig.json",
+    "lint:test": "eslint test/*.ts --config=strict.js --parser-options=project:tsconfig.json",
     "prepublishOnly": "npm run test",
     "test": "npm run lint && tape test/*.js"
   }
