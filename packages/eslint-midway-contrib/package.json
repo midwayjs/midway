@@ -51,6 +51,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
+    "cov": "npm run lint",
     "lint": "npm run lint:src && npm run lint:test",
     "lint:src": "eslint --fix ./*.js --config=strict.js --parser-options=project:tsconfig.json",
     "lint:test": "eslint test/*.ts --config=strict.js --parser-options=project:tsconfig.json",
