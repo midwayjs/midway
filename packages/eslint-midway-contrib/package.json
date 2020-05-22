@@ -54,7 +54,7 @@
     "cov": "npm run lint",
     "lint": "npm run lint:src && npm run lint:test",
     "lint:src": "eslint --fix ./*.js --config=strict.js --parser-options=project:tsconfig.json",
-    "lint:test": "eslint test/*.ts --config=strict.js --parser-options=project:tsconfig.json",
+    "lint:test": "eslint test/*.ts --config=test/.eslintrc.yml",
     "prepublishOnly": "npm run test",
     "test": "npm run lint && tape test/*.js"
   }

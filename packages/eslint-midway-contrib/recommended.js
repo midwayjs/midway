@@ -12,6 +12,7 @@ module.exports = {
 
     // https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/eslint-plugin
     '@typescript-eslint/array-type': [2],
+    '@typescript-eslint/ban-ts-comment': [0],
     'brace-style': 0,
     '@typescript-eslint/brace-style': [1, 'stroustrup', { allowSingleLine: true } ],
     '@typescript-eslint/consistent-type-definitions': [2, 'interface'],
@@ -54,7 +55,7 @@ module.exports = {
     '@typescript-eslint/no-use-before-define': [2, { functions: false, typedefs: false } ],
     '@typescript-eslint/require-await': 0,
     semi: 0,
-    '@typescript-eslint/semi': [1, 'always', { beforeStatementContinuationChars: 'always' } ],
+    '@typescript-eslint/semi': [1, 'always'],
     'space-before-function-paren': 0,
     '@typescript-eslint/space-before-function-paren': [
       1, {
