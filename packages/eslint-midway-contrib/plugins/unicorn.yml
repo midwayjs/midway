@@ -1,0 +1,7 @@
+---
+rules:
+  # https://github.com/sindresorhus/eslint-plugin-unicorn#readme
+  unicorn/filename-case:
+    - 2
+    - case: kebabCase
+
