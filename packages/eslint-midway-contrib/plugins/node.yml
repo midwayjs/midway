@@ -1,0 +1,9 @@
+# https://github.com/mysticatea/eslint-plugin-node
+extends:
+  - plugin:node/recommended
+
+rules:
+  node/no-missing-import: 0
+  node/no-path-concat: 2
+  node/no-unsupported-features/es-syntax: 0
+

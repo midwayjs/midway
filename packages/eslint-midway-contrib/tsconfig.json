@@ -17,8 +17,8 @@
     "target": "ES2018"
   },
   "include": [
-    "src/**/*.ts",
     "test/*.js",
+    "test/*.ts",
     "*.js"
   ],
   "exclude": [
