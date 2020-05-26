@@ -3,6 +3,8 @@ import { ObjectDefinitionOptions, TagClsMetadata } from '../interface';
 import { OBJ_DEF_CLS, TAGGED_CLS } from './constant';
 import { classNamed } from './utils';
 
+const debug = require('debug')('decorator:manager');
+
 const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
 const ARGUMENT_NAMES = /([^\s,]+)/g;
 
@@ -85,6 +87,7 @@ export class DecoratorManager extends Map {
    * @param propertyName
    */
   saveMetadata(decoratorNameKey: decoratorKey, data, target, propertyName?) {
+    debug('saveMetadata %s on target %o propertyName = %s.', decoratorNameKey, target, propertyName);
     if (propertyName) {
       const originMap = DecoratorManager.getOriginMetadata(this.injectMethodKeyPrefix, target, propertyName);
       originMap.set(DecoratorManager.getDecoratorMethodKey(decoratorNameKey), data);
@@ -102,6 +105,7 @@ export class DecoratorManager extends Map {
    * @param propertyName
    */
   attachMetadata(decoratorNameKey: decoratorKey, data, target, propertyName?) {
+    debug('attachMetadata %s on target %o propertyName = %s.', decoratorNameKey, target, propertyName);
     let originMap;
     let key;
     if (propertyName) {
@@ -141,6 +145,7 @@ export class DecoratorManager extends Map {
    * @param propertyName
    */
   savePropertyDataToClass(decoratorNameKey: decoratorKey, data, target, propertyName) {
+    debug('savePropertyDataToClass %s on target %o propertyName = %s.', decoratorNameKey, target, propertyName);
     const originMap = DecoratorManager.getOriginMetadata(this.injectClassMethodKeyPrefix, target);
     originMap.set(DecoratorManager.getDecoratorClsMethodKey(decoratorNameKey, propertyName), data);
   }
@@ -153,6 +158,7 @@ export class DecoratorManager extends Map {
    * @param propertyName
    */
   attachPropertyDataToClass(decoratorNameKey: decoratorKey, data, target, propertyName) {
+    debug('attachPropertyDataToClass %s on target %o propertyName = %s.', decoratorNameKey, target, propertyName);
     const originMap = DecoratorManager.getOriginMetadata(this.injectClassMethodKeyPrefix, target);
     const key = DecoratorManager.getDecoratorClsMethodKey(decoratorNameKey, propertyName);
     if (!originMap.has(key)) {

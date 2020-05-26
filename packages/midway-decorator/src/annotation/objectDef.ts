@@ -1,6 +1,6 @@
 import { ScopeEnum, saveObjectDefProps } from '../common';
 
-const debug = require('debug')('injection:context:obj_def');
+const debug = require('debug')('decorator:context:obj_def');
 
 export function Async() {
   return function (target: any): void {

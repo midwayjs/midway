@@ -1,5 +1,5 @@
 import { attachClass, attachMethod, customCls, customMethod, preload, propertyKeyA, propertyKeyB } from './custom';
-import { Provide, Scope, ScopeEnum } from '../../../src';
+import { Provide, Scope, ScopeEnum, Logger, Controller } from '../../../src';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -28,5 +28,21 @@ export class ManagerTest {
   index() {
     console.log('hello world index');
   }
+
+}
+
+export class Base {
+  @Logger('logbase')
+  logger: any;
+}
+
+@Provide()
+@Controller('/api/one')
+export class ControllerOne extends Base {
+
+}
+@Provide()
+@Controller('/api/two')
+export class ControllerTwo extends Base {
 
 }
