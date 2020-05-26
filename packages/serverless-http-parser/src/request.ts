@@ -1,25 +1,17 @@
 import { is as typeis } from 'type-is';
-import * as qs from 'querystring';
 import * as accepts from 'accepts';
-import { GatewayEvent } from './interface';
-import { FaaSHTTPRequest } from '@midwayjs/faas-typings';
+import { FaaSOriginContext } from '@midwayjs/faas-typings';
+import * as qs from 'querystring';
 
-const EVENT = Symbol.for('ctx#event');
-const EVENT_PARSED = Symbol.for('ctx#event_parsed');
 const BODY = Symbol.for('ctx#body');
 
-export class Request implements FaaSHTTPRequest {
-  originEvent;
-  _accept;
-  private bodyParsed = false;
-
-  constructor(event) {
-    this.originEvent = event;
-  }
+export const request = {
+  _accept: null,
+  req: null,
 
   get host(): string {
     return this.get('host');
-  }
+  },
 
   /**
    * Parse the "Host" header field hostname
@@ -33,15 +25,15 @@ export class Request implements FaaSHTTPRequest {
     if (!host) return '';
     if ('[' === host[0]) return ''; // IPv6 not support
     return host.split(':', 1)[0];
-  }
+  },
 
   accepts(...args) {
     return this.accept.types(...args);
-  }
+  },
 
   get accept() {
     return this._accept || (this._accept = accepts(this as any));
-  }
+  },
 
   /**
    * Return accepted encodings or best fit based on `encodings`.
@@ -58,7 +50,7 @@ export class Request implements FaaSHTTPRequest {
 
   acceptsEncodings(...args) {
     return this.accept.encodings(...args);
-  }
+  },
 
   /**
    * Return accepted charsets or best fit based on `charsets`.
@@ -75,7 +67,7 @@ export class Request implements FaaSHTTPRequest {
 
   acceptsCharsets(...args) {
     return this.accept.charsets(...args);
-  }
+  },
 
   /**
    * Return accepted languages or best fit based on `langs`.
@@ -92,72 +84,55 @@ export class Request implements FaaSHTTPRequest {
 
   acceptsLanguages(...args) {
     return this.accept.languages(...args);
-  }
+  },
 
-  get [EVENT](): GatewayEvent {
-    if (!this[EVENT_PARSED]) {
-      this[EVENT_PARSED] =
-        typeof this.originEvent === 'object'
-          ? this.originEvent
-          : JSON.parse(this.originEvent || '{}');
-      const headers = {};
-      Object.keys(this[EVENT_PARSED]['headers'] || {}).forEach(field => {
-        headers[field.toLowerCase()] = this[EVENT_PARSED]['headers'][field];
-      });
-      this[EVENT_PARSED]['headers'] = headers;
-    }
+  /**
+   * faas origin context object
+   */
+  get originEvent() {
+    return this.req.getOriginEvent?.() || {};
+  },
 
-    return this[EVENT_PARSED];
-  }
+  get originContext(): FaaSOriginContext {
+    return this.req.getOriginContext?.() || {};
+  },
 
   get ip() {
-    return this[EVENT].clientIP || this[EVENT].requestContext?.sourceIp || '';
-  }
+    return this.req?.clientIP || this.req.ip;
+  },
 
   get url() {
-    if (!this[EVENT].url) {
-      const querystirng = qs.stringify(this.query || {});
-      this[EVENT].url = this.path + (querystirng ? '?' + querystirng : '');
-    }
-    return this[EVENT].url;
-  }
+    return this.req.url;
+  },
 
   get path() {
-    return this[EVENT].path;
-  }
-
-  get pathParameters() {
-    return this[EVENT].pathParameters || [];
-  }
+    return this.req.path;
+  },
 
   get method() {
-    return this[EVENT].method || this[EVENT].httpMethod;
-  }
+    return this.req.method;
+  },
 
   get headers() {
-    return this[EVENT].headers;
-  }
+    return this.req.headers;
+  },
 
   get header() {
-    return this.headers;
-  }
+    return this.req.headers;
+  },
 
   get query() {
-    return (
-      this[EVENT].queries ||
-      this[EVENT].queryParameters ||
-      this[EVENT].queryString ||
-      this[EVENT].queryStringParameters
-    );
-  }
+    return this.req?.queries || this.req.query;
+  },
 
   get body() {
-    let body = this[EVENT].body;
-    if (this[EVENT].isBase64Encoded === 'true') {
-      return Buffer.from(body, 'base64').toString();
+    if (this.req.bodyParsed) {
+      return this.req.body;
     }
 
-    if (this.bodyParsed) {
+    let body = this.req.body;
+
+    if (this[BODY]) {
       return this[BODY];
     }
 
@@ -184,13 +159,16 @@ export class Request implements FaaSHTTPRequest {
         this[BODY] = body;
     }
 
-    this.bodyParsed = true;
     return this[BODY];
-  }
+  },
+
+  get params() {
+    return this.req.pathParameters || {};
+  },
 
   is(type, ...types) {
     return typeis(type, ...types);
-  }
+  },
 
   /**
    * Return request header.
@@ -222,5 +200,5 @@ export class Request implements FaaSHTTPRequest {
       default:
         return this.headers[field] || '';
     }
-  }
-}
+  },
+};

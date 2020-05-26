@@ -256,6 +256,21 @@ interface ContextDelegatedResponse {
    * Remove header `field`.
    */
   remove(field: string): void;
+  /**
+   * Perform a 302 redirect to `url`.
+   *
+   * The string "back" is special-cased
+   * to provide Referrer support, when Referrer
+   * is not present `alt` or "/" is used.
+   *
+   * Examples:
+   *
+   *    this.redirect('back');
+   *    this.redirect('back', '/index.html');
+   *    this.redirect('/login');
+   *    this.redirect('http://google.com');
+   */
+  redirect(url: string, alt?: string): void;
 }
 
 export interface FaaSHTTPResponse extends ContextDelegatedResponse {
@@ -322,6 +337,11 @@ export interface FaaSHTTPContext
    * FaaS original context object.
    */
   originContext: FaaSOriginContext;
+
+  /**
+   * FaaS original event object.
+   */
+  originEvent: any;
 }
 
 export type FaaSOriginContext = FC.RequestContext | SCF.RequestContext;

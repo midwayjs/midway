@@ -3,7 +3,11 @@ import {
   FAAS_ARGS_KEY,
   ServerlessLightRuntime,
 } from '@midwayjs/runtime-engine';
-import { Application } from '@midwayjs/serverless-http-parser';
+import {
+  Application,
+  HTTPRequest,
+  HTTPResponse,
+} from '@midwayjs/serverless-http-parser';
 import * as util from 'util';
 
 const isLocalEnv = () => {
@@ -49,13 +53,18 @@ export class FCRuntime extends ServerlessLightRuntime {
       this.respond = this.app.callback();
     }
 
+    let newReq = null;
+    const newRes = new HTTPResponse();
+
     if (isHTTPMode) {
       // http
       // const rawBody = 'test';
       // req.rawBody = rawBody;
       req.body = await getRawBody(req); // TODO: body parser
+      newReq = req;
     } else {
       // api gateway
+      newReq = new HTTPRequest(req, context);
     }
 
     // if (ctx.method === 'GET') {
@@ -69,8 +78,8 @@ export class FCRuntime extends ServerlessLightRuntime {
     // }
 
     return this.respond.apply(this.respond, [
-      req,
-      context,
+      newReq,
+      newRes,
       ctx => {
         return this.invokeHandlerWrapper(ctx, async () => {
           if (!handler) {

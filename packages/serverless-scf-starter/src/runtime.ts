@@ -1,6 +1,10 @@
 import { ServerlessLightRuntime } from '@midwayjs/runtime-engine';
-import { Application } from '@midwayjs/serverless-http-parser';
 import { SCF } from '@midwayjs/faas-typings';
+import {
+  Application,
+  HTTPRequest,
+  HTTPResponse,
+} from '@midwayjs/serverless-http-parser';
 
 const isLocalEnv = () => {
   return (
@@ -39,9 +43,12 @@ export class SCFRuntime extends ServerlessLightRuntime {
       this.respond = this.app.callback();
     }
 
+    const newReq = new HTTPRequest(event, context);
+    const newRes = new HTTPResponse();
+
     return this.respond.apply(this.respond, [
-      event,
-      context,
+      newReq,
+      newRes,
       ctx => {
         return this.invokeHandlerWrapper(ctx, async () => {
           if (!handler) {

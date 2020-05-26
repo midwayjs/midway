@@ -1,194 +1,152 @@
-import {
-  FaaSHTTPContext,
-  FaaSHTTPRequest,
-  FaaSHTTPResponse,
-  FaaSOriginContext,
-} from '@midwayjs/faas-typings';
+import { FaaSOriginContext } from '@midwayjs/faas-typings';
 import * as util from 'util';
 
-export class Context implements FaaSHTTPContext {
-  private _req: FaaSHTTPRequest;
-  private _res: FaaSHTTPResponse;
-  private _originContext;
-  private _originEvent;
-
-  constructor(event, context) {
-    this._originContext = context;
-    this._originEvent = event;
-  }
+export const context = {
+  req: null,
+  res: null,
+  request: null,
+  response: null,
 
   /**
    * faas origin context object
    */
-  get getOriginEvent(): FaaSOriginContext {
-    return this._originEvent;
-  }
+  get originEvent() {
+    return this.request.originEvent;
+  },
 
-  get originContext() {
-    return this._originContext;
-  }
-
-  get req(): FaaSHTTPRequest {
-    return this._req;
-  }
-
-  set req(request) {
-    this._req = request;
-  }
-
-  get res(): FaaSHTTPResponse {
-    return this._res;
-  }
-
-  set res(response) {
-    this._res = response;
-  }
-
-  get request(): FaaSHTTPRequest {
-    return this._req;
-  }
-
-  get response(): FaaSHTTPResponse {
-    return this._res;
-  }
+  get originContext(): FaaSOriginContext {
+    return this.request.originContext;
+  },
 
   // req delegate
   get headers() {
-    return this.req.headers;
-  }
+    return this.request.headers;
+  },
 
   get header() {
-    return this.req.header;
-  }
+    return this.request.headers;
+  },
 
   get method() {
-    return this.req.method;
-  }
+    return this.request.method;
+  },
 
   get path() {
-    return this.req.path;
-  }
+    return this.request.path;
+  },
 
   get query() {
-    return this.req.query;
-  }
+    return this.request.query;
+  },
 
   get ip() {
-    return this.req.ip;
-  }
+    return this.request.ip;
+  },
 
   get url() {
-    return this.req.url;
-  }
+    return this.request.url;
+  },
 
   get params() {
-    return this.req.pathParameters;
-  }
+    return this.request.params;
+  },
 
   get host() {
-    return this.req.host;
-  }
+    return this.request.host;
+  },
 
   get hostname() {
-    return this.req.hostname;
-  }
+    return this.request.hostname;
+  },
 
   get(field) {
     return this.request.get(field);
-  }
+  },
 
   // response delegate
   set type(value) {
-    this.res.type = value;
-  }
+    this.response.type = value;
+  },
 
   get type() {
-    return this.res.type;
-  }
+    return this.response.type;
+  },
 
   set body(value) {
-    this.res.body = value;
-  }
+    this.response.body = value;
+  },
 
   get body() {
-    return this.res.body;
-  }
+    return this.response.body;
+  },
 
   set status(code) {
-    this.res.status = code;
-  }
+    this.response.status = code;
+  },
 
   get status() {
-    return this.res.status;
-  }
+    return this.response.status;
+  },
 
   set(key, value?) {
-    this.res.set(key, value);
-  }
+    this.response.set(key, value);
+  },
 
   set etag(value) {
-    this.res.etag = value;
-  }
+    this.response.etag = value;
+  },
+
+  get etag() {
+    return this.response.etag;
+  },
 
   set lastModified(value) {
-    this.res.lastModified = value;
-  }
+    this.response.lastModified = value;
+  },
 
   set length(value) {
-    this.res.length = value;
-  }
+    this.response.length = value;
+  },
 
   get length() {
-    return this.res.length;
-  }
+    return this.response.length;
+  },
 
   get accept() {
-    return this.req.accept;
-  }
+    return this.request.accept;
+  },
 
   get logger() {
-    return this.originContext.logger || console;
-  }
+    return (this.originContext as any).logger || console;
+  },
 
   is(type, ...types) {
     return this.request.is(type, ...types);
-  }
+  },
 
   append(field: string, val: string | string[]) {
     this.response.append(field, val);
-  }
+  },
 
   remove(field: string): void {
     this.response.remove(field);
-  }
+  },
 
-  accepts(): boolean | string[];
-  accepts(...types: string[]): string | boolean;
-  accepts(types: string[]): string | boolean;
   accepts(...args): any {
     return this.request.accepts(...args);
-  }
+  },
 
-  acceptsEncodings(): boolean | string[];
-  acceptsEncodings(...encodings: string[]): string | boolean;
-  acceptsEncodings(encodings: string[]): string | boolean;
   acceptsEncodings(...args): any {
     return this.request.acceptsEncodings(...args);
-  }
+  },
 
-  acceptsCharsets(): boolean | string[];
-  acceptsCharsets(...charsets: string[]): string | boolean;
-  acceptsCharsets(charsets: string[]): string | boolean;
   acceptsCharsets(...args): any {
     return this.request.acceptsCharsets(...args);
-  }
+  },
 
-  acceptsLanguages(): boolean | string[];
-  acceptsLanguages(...langs: string[]): string | boolean;
-  acceptsLanguages(langs: string[]): string | boolean;
   acceptsLanguages(...args): any {
     return this.request.acceptsLanguages(...args);
-  }
+  },
 
   onerror(err) {
     // don't do anything if there is no error.
@@ -213,5 +171,9 @@ export class Context implements FaaSHTTPContext {
 
     // throw err and runtime will proxy this error
     throw err;
-  }
-}
+  },
+
+  redirect(url: string, alt?: string) {
+    return this.response.redirect(url, alt);
+  },
+};

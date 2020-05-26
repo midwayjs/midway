@@ -131,9 +131,9 @@ export namespace FC {
   export interface APIGatewayEvent {
     path: string;
     httpMethod: string;
-    headers: object;
-    queryParameters: object;
-    pathParameters: object;
+    headers: { [key: string]: string };
+    queryParameters: { [key: string]: string };
+    pathParameters: { [key: string]: string };
     body: string;
     isBase64Encoded: 'true' | 'false';
   }

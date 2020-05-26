@@ -13,8 +13,8 @@ export class IndexHandler implements FunctionHandler {
   ctx: FaaSContext;
 
   async handler() {
-    console.log('this.ctx.req.body', this.ctx.req.body, this.ctx.query);
-    const name = this.ctx.req.body['name'];
+    console.log('this.ctx.req.body', this.ctx.request.body, this.ctx.query);
+    const name = this.ctx.request.body['name'];
     const action = this.ctx.query['action'];
     this.ctx.type = 'text/html; charset=utf-8';
     this.ctx.set('x-schema', 'bbb');

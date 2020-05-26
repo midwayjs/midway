@@ -1,6 +1,6 @@
-import { Context } from './context';
-import { Request } from './request';
-import { Response } from './response';
+import { context } from './context';
+import { request } from './request';
+import { response } from './response';
 import * as compose from 'koa-compose';
 
 export class Application {
@@ -16,21 +16,22 @@ export class Application {
 
   constructor(options?) {
     options = options || {};
-    this.context = options?.context || Context;
-    this.request = options?.request || Request;
-    this.response = options?.response || Response;
+    this.context = Object.create(context);
+    this.request = Object.create(request);
+    this.response = Object.create(response);
   }
 
   /**
    * Initialize a new context.
    */
-  createContext(event, faasContext) {
-    const context = new this.context(event, faasContext);
-    const request = new this.request(event);
-    const response = new this.response();
+  createContext(req, res) {
+    const context = Object.create(this.context);
+    const request = (context.request = Object.create(this.request));
+    const response = (context.response = Object.create(this.response));
+
     context.app = request.app = response.app = this;
-    context.req = request.req = response.req = request;
-    context.res = request.res = response.res = response;
+    context.req = request.req = response.req = req;
+    context.res = request.res = response.res = res;
     request.ctx = response.ctx = context;
     request.response = response;
     response.request = request;
@@ -49,7 +50,7 @@ export class Application {
    * @api public
    */
 
-  use(fn: () => {}) {
+  use(fn: (...args) => Promise<void>) {
     if (typeof fn !== 'function')
       throw new TypeError('middleware must be a function!');
     this.middleware.push(fn);
@@ -66,10 +67,10 @@ export class Application {
 
   callback() {
     const fn = compose(this.middleware);
-    return (event, context, respond) => {
+    return (req, res, respond) => {
       // if (!this.listenerCount('error')) this.on('error', this.onerror);
       const onerror = err => ctx.onerror(err);
-      const ctx = this.createContext(event, context);
+      const ctx = this.createContext(req, res);
       return fn(ctx)
         .then(() => {
           return respond(ctx);

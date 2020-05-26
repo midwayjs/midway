@@ -112,15 +112,11 @@ export namespace SCF {
     /**
      * 记录在 API 网关中配置过的 Path 参数以及实际取值
      */
-    pathParameters: {
-      path: string;
-    };
+    pathParameters: { [key: string]: string };
     /**
      * 记录在 API 网关中配置过的 Query 参数以及实际取值
      */
-    queryStringParameters: {
-      foo: string;
-    };
+    queryStringParameters: { [key: string]: string };
     /**
      * 记录在 API 网关中配置过的 Header 参数以及实际取值
      */
