@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/midwayjs/midway-faas/compare/v0.2.99...v0.3.0) (2020-05-26)
+
+
+### Features
+
+* support koa app create ([#173](https://github.com/midwayjs/midway-faas/issues/173)) ([c3793eb](https://github.com/midwayjs/midway-faas/commit/c3793eba182f634684fdaf147981433bb64639a1))
+
+
+
+
+
 ## [0.2.99](https://github.com/midwayjs/midway-faas/compare/v0.2.98...v0.2.99) (2020-05-21)
 
 **Note:** Version bump only for package @midwayjs/serverless-fc-starter
