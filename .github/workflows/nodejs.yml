@@ -24,7 +24,7 @@ jobs:
     - run: npm run cov
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
-    - name: Checkout Midway FaaS
+    - name: Run Midway FaaS case use link
       uses: actions/checkout@v2
       with:
         repository: midwayjs/midway-faas

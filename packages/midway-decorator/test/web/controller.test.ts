@@ -12,7 +12,7 @@ class TestController {}
 @Controller('/tt')
 class TestOneController {}
 
-describe.only('/test/web/controller.test.ts', () => {
+describe('/test/web/controller.test.ts', () => {
   it('controller decorator should be ok', () => {
     const meta = getClassMetadata(CONTROLLER_KEY, TestController);
     expect(meta).deep.eq({
@@ -38,7 +38,7 @@ describe.only('/test/web/controller.test.ts', () => {
     });
 
     const m = listModule(CONTROLLER_KEY);
-    expect(m.length).eq(2);
+    expect(m.length).eq(4);
   });
 
   it('controller extends should be ok', () => {
