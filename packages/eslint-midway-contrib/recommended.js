@@ -15,6 +15,8 @@ module.exports = {
     '@typescript-eslint/ban-ts-comment': [0],
     'brace-style': 0,
     '@typescript-eslint/brace-style': [1, 'stroustrup', { allowSingleLine: true } ],
+    'comma-spacing': 0,
+    '@typescript-eslint/comma-spacing': 1,
     '@typescript-eslint/consistent-type-definitions': [2, 'interface'],
     'default-param-last': 0,
     '@typescript-eslint/default-param-last': 2,
@@ -163,6 +165,10 @@ module.exports = {
     'no-useless-rename': 1,
     'no-var': 2,
     'object-shorthand': [1, 'always'],
+
+    // https://eslint.org/docs/rules/#deprecated
+    // deprecated off
+    'no-process-exit': 0,
   },
 };
 

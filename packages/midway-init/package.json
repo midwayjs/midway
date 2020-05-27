@@ -9,7 +9,7 @@
   },
   "main": "lib/command.js",
   "devDependencies": {
-    "eslint": "^6.1.0",
+    "eslint": "7",
     "eslint-config-egg": "^7.0.0",
     "midway-bin": "^1.18.6",
     "mz-modules": "^2.1.0",
