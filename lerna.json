@@ -6,6 +6,10 @@
     "bootstrap": {
       "hoist": true,
       "noCi": true,
+      "nohoist": [
+        "@typescript-eslint/eslint-plugin",
+        "@typescript-eslint/parser"
+      ],
       "npmClientArgs": [
         "--no-package-lock"
       ]
