@@ -10,7 +10,7 @@
     "autocannon": "^2.4.1",
     "chalk": "^3.0.0",
     "debug": "^4.1.1",
-    "eslint": "6",
+    "eslint": "7",
     "gh-pages": "^2.2.0",
     "lerna": "^3.14.1",
     "lerna-relinker": "^1.4.0",
