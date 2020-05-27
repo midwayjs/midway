@@ -1,6 +1,6 @@
 {
   "name": "eslint-midway-contrib",
-  "version": "1.18.4",
+  "version": "1.20.0",
   "description": "ESlint default rule for midway",
   "keywords": [
     "ECMAScript Style",
