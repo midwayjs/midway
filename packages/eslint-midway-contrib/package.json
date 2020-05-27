@@ -34,8 +34,7 @@
   "devDependencies": {
     "@types/tape": "4",
     "eslint": "7",
-    "tape": "5",
-    "typescript": "^3.9.3"
+    "tape": "5"
   },
   "peerDependencies": {
     "eslint": ">=7.0.0"
