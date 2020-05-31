@@ -1,6 +1,7 @@
 import * as assert from 'assert';
 import { Application, HTTPRequest, HTTPResponse } from '../src';
 import { FaaSHTTPContext } from '@midwayjs/faas-typings';
+import * as mm from 'mm';
 
 describe('test http parser', () => {
   it('should parser tencent apigw event', () => {
@@ -11,6 +12,7 @@ describe('test http parser', () => {
     );
     const res = new HTTPResponse();
     const context = app.createContext(req, res);
+    assert(context.toJSON().request);
 
     // alias
     assert(context.req !== context.request);
@@ -430,6 +432,31 @@ describe('test http parser', () => {
     assert.equal(ctx.status, 302);
     assert.equal(ctx.body, `Redirecting to ${url5}.`);
     assert.equal(ctx.type, 'text/plain');
+  });
+
+  describe('test onerror', () => {
+    it('test throw error', () => {
+      const app = new Application();
+      assert.throws(
+        () => {
+          app.onerror('foo');
+        },
+        TypeError,
+        'non-error thrown: foo'
+      );
+    });
+    it('test emit error', () => {
+      const app = new Application();
+      const err = new Error('mock stack null');
+      err.stack = null;
+      app.onerror(err);
+      let msg = '';
+      mm(console, 'error', input => {
+        if (input) msg = input;
+      });
+      app.onerror(err);
+      assert(msg === '  Error: mock stack null');
+    });
   });
 });
 

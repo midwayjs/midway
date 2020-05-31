@@ -131,7 +131,7 @@ export class FaaSStarter implements IFaaSStarter {
     });
     this.loader.registerHook(PLUGIN_KEY, (key, target) => {
       const ctx = target[REQUEST_OBJ_CTX_KEY] || {};
-      return ctx[key] || this[key];
+      return ctx[key] || this.webApplication[key];
     });
 
     this.loader.registerHook(LOGGER_KEY, (key, target) => {

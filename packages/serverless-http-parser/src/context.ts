@@ -2,6 +2,7 @@ import { FaaSOriginContext } from '@midwayjs/faas-typings';
 import * as util from 'util';
 
 export const context = {
+  app: null,
   req: null,
   res: null,
   request: null,
@@ -175,5 +176,29 @@ export const context = {
 
   redirect(url: string, alt?: string) {
     return this.response.redirect(url, alt);
+  },
+
+  /**
+   * util.inspect() implementation, which
+   * just returns the JSON output.
+   *
+   * @return {Object}
+   * @api public
+   */
+
+  inspect() {
+    if (this === context) return this;
+    return this.toJSON();
+  },
+
+  toJSON() {
+    return {
+      request: this.request.toJSON(),
+      response: this.response.toJSON(),
+      app: this.app.toJSON(),
+      req: '<original node req>',
+      res: '<original node res>',
+      socket: '<original node socket>',
+    };
   },
 };

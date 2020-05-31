@@ -4,6 +4,7 @@ import * as statuses from 'statuses';
 import { is as typeis } from 'type-is';
 import * as encodeUrl from 'encodeurl';
 import * as escape from 'escape-html';
+import * as only from 'only';
 
 export const response = {
   explicitStatus: null,
@@ -360,6 +361,31 @@ export const response = {
     // text
     this.type = 'text/plain; charset=utf-8';
     this.body = `Redirecting to ${url}.`;
+  },
+
+  /**
+   * Inspect implementation.
+   *
+   * @return {Object}
+   * @api public
+   */
+
+  inspect() {
+    if (!this.res) return;
+    const o = this.toJSON();
+    o.body = this.body;
+    return o;
+  },
+
+  /**
+   * Return JSON representation.
+   *
+   * @return {Object}
+   * @api public
+   */
+
+  toJSON() {
+    return only(this, ['status', 'message', 'header']);
   },
 
   end() {},

@@ -2,8 +2,11 @@ import { context } from './context';
 import { request } from './request';
 import { response } from './response';
 import * as compose from 'koa-compose';
+import * as only from 'only';
+import { EventEmitter } from 'events';
+import { format } from 'util';
 
-export class Application {
+export class Application extends EventEmitter {
   proxy = false;
   subdomainOffset = 2;
   proxyIpHeader = 'X-Forwarded-For';
@@ -15,6 +18,7 @@ export class Application {
   response;
 
   constructor(options?) {
+    super();
     options = options || {};
     this.context = Object.create(context);
     this.request = Object.create(request);
@@ -67,6 +71,7 @@ export class Application {
 
   callback() {
     const fn = compose(this.middleware);
+    this.on('error', this.onerror);
     return (req, res, respond) => {
       // if (!this.listenerCount('error')) this.on('error', this.onerror);
       const onerror = err => ctx.onerror(err);
@@ -77,5 +82,44 @@ export class Application {
         })
         .catch(onerror);
     };
+  }
+
+  /**
+   * Return JSON representation.
+   * We only bother showing settings.
+   *
+   * @return {Object}
+   * @api public
+   */
+
+  toJSON() {
+    return only(this, ['subdomainOffset', 'proxy', 'env']);
+  }
+
+  /**
+   * Inspect implementation.
+   *
+   * @return {Object}
+   * @api public
+   */
+
+  inspect() {
+    return this.toJSON();
+  }
+
+  /**
+   * Default error handler.
+   *
+   * @param {Error} err
+   * @api private
+   */
+
+  onerror(err) {
+    if (!(err instanceof Error))
+      throw new TypeError(format('non-error thrown: %j', err));
+    const msg = err.stack || err.toString();
+    console.error();
+    console.error(msg.replace(/^/gm, '  '));
+    console.error();
   }
 }

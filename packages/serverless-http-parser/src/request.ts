@@ -2,6 +2,7 @@ import { is as typeis } from 'type-is';
 import * as accepts from 'accepts';
 import { FaaSOriginContext } from '@midwayjs/faas-typings';
 import * as qs from 'querystring';
+import * as only from 'only';
 
 const BODY = Symbol.for('ctx#body');
 
@@ -200,5 +201,28 @@ export const request = {
       default:
         return this.headers[field] || '';
     }
+  },
+
+  /**
+   * Inspect implementation.
+   *
+   * @return {Object}
+   * @api public
+   */
+
+  inspect() {
+    if (!this.req) return;
+    return this.toJSON();
+  },
+
+  /**
+   * Return JSON representation.
+   *
+   * @return {Object}
+   * @api public
+   */
+
+  toJSON() {
+    return only(this, ['method', 'url', 'header']);
   },
 };
