@@ -344,6 +344,16 @@ describe('test http parser', () => {
     }
   });
 
+  it('set req url', () => {
+    const req = new HTTPRequest(
+      require('./resource/scf_apigw.json'),
+      require('./resource/scf_ctx.json')
+    );
+    req.url = '/api/123?name=test';
+    assert(req.path === '/api/123');
+    assert((req.query as any).name === 'test');
+  });
+
   it('should test redirect', () => {
     const app = new Application();
     const req = new HTTPRequest(

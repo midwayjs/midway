@@ -1,6 +1,7 @@
 import { FaaSOriginContext } from '@midwayjs/faas-typings';
 import { is as typeis } from 'type-is';
 import * as qs from 'querystring';
+import * as parseurl from 'parseurl';
 import { GatewayEvent } from '../interface';
 
 const EVENT = Symbol.for('ctx#event');
@@ -54,6 +55,13 @@ export class HTTPRequest {
       this[EVENT].url = this.path + (querystirng ? '?' + querystirng : '');
     }
     return this[EVENT].url;
+  }
+
+  set url(newUrl: string) {
+    const newUrlInfo = parseurl({ url: newUrl });
+    this[EVENT].url = newUrl;
+    this[EVENT].path = newUrlInfo.pathname;
+    this[EVENT].queries = qs.parse(newUrlInfo.query);
   }
 
   get path() {
