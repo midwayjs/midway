@@ -11,7 +11,7 @@ export interface ScheduleOpts {
   interval?: number | string;
   immediate?: boolean;
   disable?: boolean;
-  env?: [string];
+  env?: string[];
   cronOptions?: {
     currentDate?: string | number | Date
     startDate?: string | number | Date
