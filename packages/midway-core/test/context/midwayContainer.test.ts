@@ -21,16 +21,17 @@ describe('/test/context/midwayContainer.test.ts', () => {
 
     const origin = decs.getClassMetadata;
 
-    mm(decs, 'getClassMetadata', (key, target) => {
+    (decs as any).getClassMetadata = (key, target) => {
       if (key === decs.CLASS_KEY_CONSTRUCTOR) {
         throw new Error('mock error');
       }
       return origin(key, target);
-    });
+    };
 
     const tt = container.get<TestCons>('testCons');
     expect(tt.ts).gt(0);
-    mm.restore();
+
+    (decs as any).getClassMetadata = origin;
 
     const app = container.get('app') as App;
     expect(app.loader).not.to.be.undefined;
