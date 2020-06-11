@@ -62,17 +62,21 @@ export async function parseInvokeOptionsByOriginUrl(
   // 2. 星号只能出现最后且必须在/后面，如 /ab/cb/**
   // 3. 如果绝对路径和通配都能匹配一个路径时，绝对规则优先级高
   // 4. 有多个通配能匹配一个路径时，最长的规则匹配，如 /ab/** 和 /ab/cd/** 在匹配 /ab/cd/f 时命中 /ab/cd/**
+  // 5. 如果 / 与 /* 都能匹配 / ,但 / 的优先级高于 /*
   urlMatchList = urlMatchList
     .map(item => {
-      const router = item.router.replace(/\**$/, '');
       return {
         functionName: item.functionName,
         router: item.router,
+        pureRouter: item.router.replace(/\**$/, ''),
         originRouter: item.originRouter,
-        level: router.split('/').length - 1,
+        level: item.router.split('/').length - 1,
       };
     })
     .sort((handlerA, handlerB) => {
+      if (handlerA.pureRouter === handlerB.pureRouter) {
+        return handlerA.router.length - handlerB.router.length;
+      }
       return handlerB.level - handlerA.level;
     });
 

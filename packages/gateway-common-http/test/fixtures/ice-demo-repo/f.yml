@@ -31,3 +31,8 @@ functions:
     events:
       - http:
           path: /ignore.do
+  test6:
+    handler: test6.handler
+    events:
+      - apigw:
+          path: /api/

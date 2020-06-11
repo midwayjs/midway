@@ -137,6 +137,19 @@ describe('/test/index.test.ts', () => {
         .expect(/test3/)
         .expect(200, done);
     });
+
+    it('test /api/ router', done => {
+      createExpressSuit({
+        functionDir: join(__dirname, './fixtures/ice-demo-repo'),
+        sourceDir: 'src/apis',
+      })
+        .post('/api/')
+        .query({
+          action: 'doTest',
+        })
+        .expect(/test6/)
+        .expect(200, done);
+    });
   });
 
   it('should invoke by http api and koa', done => {
