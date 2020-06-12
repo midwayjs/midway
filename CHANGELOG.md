@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.2](https://github.com/midwayjs/midway-faas/compare/v0.3.1...v0.3.2) (2020-06-12)
+
+
+### Bug Fixes
+
+* strip all the * of end of 2 paths, no * is first ([#176](https://github.com/midwayjs/midway-faas/issues/176)) ([3b10a3d](https://github.com/midwayjs/midway-faas/commit/3b10a3dbf2f40a76d195d06e021465c35016953d))
+
+
+### Features
+
+* support url change ([#175](https://github.com/midwayjs/midway-faas/issues/175)) ([a2246b4](https://github.com/midwayjs/midway-faas/commit/a2246b4d792833be90314dcadf5af32d339e4e82))
+
+
+
+
+
 ## [0.3.1](https://github.com/midwayjs/midway-faas/compare/v0.3.0...v0.3.1) (2020-05-31)
 
 
