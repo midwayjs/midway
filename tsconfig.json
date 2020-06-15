@@ -13,6 +13,7 @@
     "strict": false,
     // TODO: Emit test files to outDir
     "noEmitOnError": false,
+    "skipLibCheck": true,
   },
   "exclude": [
     "dist",

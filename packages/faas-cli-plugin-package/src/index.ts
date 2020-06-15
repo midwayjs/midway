@@ -20,7 +20,7 @@ import {
 import * as micromatch from 'micromatch';
 import { commonPrefix, formatLayers } from './utils';
 import { analysis, copyFiles } from '@midwayjs/faas-code-analysis';
-import { compileInProject, MwccConfig } from '@midwayjs/mwcc';
+import { CompilerHost, Program, resolveTsConfigFile } from '@midwayjs/mwcc';
 import { exec } from 'child_process';
 import * as archiver from 'archiver';
 import { AnalyzeResult, Locator } from '@midwayjs/locate';
@@ -38,7 +38,9 @@ export class PackagePlugin extends BasePlugin {
   codeAnalyzeResult: AnalyzeResult;
   integrationDistTempDirectory = 'integration_dist'; // 一体化构建的临时目录
   zipCodeDefaultName = 'serverless.zip';
-  mwccHintConfig: MwccConfig = {};
+
+  private compilerHost: CompilerHost;
+  private program: Program;
 
   commands = {
     package: {
@@ -47,8 +49,8 @@ export class PackagePlugin extends BasePlugin {
         'cleanup', // 清理构建目录
         'installDevDep', // 安装开发期依赖
         'copyFile', // 拷贝文件: package.include 和 shared content
-        'codeAnalysis', // 代码分析
-        'tscompile', // 编译函数  'package:after:tscompile'
+        'compile', // 代码分析
+        'emit', // 编译函数  'package:after:tscompile'
         'checkAggregation', // 检测高密度部署
         'generateSpec', // 生成对应平台的描述文件，例如 serverless.yml 等
         'generateEntry', // 生成对应平台的入口文件
@@ -95,14 +97,14 @@ export class PackagePlugin extends BasePlugin {
     'package:cleanup': this.cleanup.bind(this),
     'package:installDevDep': this.installDevDep.bind(this),
     'package:copyFile': this.copyFile.bind(this),
-    'package:codeAnalysis': this.codeAnalysis.bind(this),
+    'package:compile': this.compile.bind(this),
     'package:installLayer': this.installLayer.bind(this),
     'package:installDep': this.installDep.bind(this),
     'package:checkAggregation': this.checkAggregation.bind(this),
     'package:package': this.package.bind(this),
     'after:package:generateEntry': this.defaultGenerateEntry.bind(this),
     'before:package:finalize': this.finalize.bind(this),
-    'package:tscompile': this.tsCompile.bind(this),
+    'package:emit': this.emit.bind(this),
   };
 
   async cleanup() {
@@ -308,7 +310,31 @@ export class PackagePlugin extends BasePlugin {
     this.core.cli.log(' - Dependencies install complete');
   }
 
-  async codeAnalysis() {
+  async compile() {
+    let tsCodeRoot: string;
+    const tmpOutDir = resolve(this.defaultTmpFaaSOut, 'src');
+    if (existsSync(tmpOutDir)) {
+      tsCodeRoot = tmpOutDir;
+    } else {
+      tsCodeRoot = this.codeAnalyzeResult.tsCodeRoot;
+    }
+
+    const { config } = resolveTsConfigFile(
+      this.servicePath,
+      join(this.midwayBuildPath, 'dist'),
+      undefined,
+      this.getStore('mwccHintConfig', 'global'),
+      {
+        compilerOptions: {
+          sourceRoot: '../src',
+          rootDir: tsCodeRoot,
+        },
+        include: [tsCodeRoot],
+      }
+    );
+    this.compilerHost = new CompilerHost(this.servicePath, config);
+    this.program = new Program(this.compilerHost);
+
     if (this.core.service.functions) {
       return this.core.service.functions;
     }
@@ -320,7 +346,7 @@ export class PackagePlugin extends BasePlugin {
     this.core.service.functions = newSpec.functions;
   }
 
-  async tsCompile() {
+  async emit() {
     const isTsDir = existsSync(join(this.servicePath, 'tsconfig.json'));
     this.core.cli.log('Building Midway FaaS directory files...');
     if (!isTsDir) {
@@ -328,30 +354,7 @@ export class PackagePlugin extends BasePlugin {
       return;
     }
     this.core.cli.log(' - Using tradition build mode');
-    await compileInProject(
-      this.servicePath,
-      join(this.midwayBuildPath, 'dist'),
-      this.mwccHintConfig,
-      {
-        compilerOptions: {
-          sourceRoot: '../src',
-          rootDir: this.codeAnalyzeResult.tsCodeRoot,
-        },
-        include: [this.codeAnalyzeResult.tsCodeRoot],
-      }
-    );
-    const tmpOutDir = resolve(this.defaultTmpFaaSOut, 'src');
-    if (existsSync(tmpOutDir)) {
-      await compileInProject(
-        this.servicePath,
-        join(this.midwayBuildPath, 'dist'),
-        this.mwccHintConfig,
-        {
-          compilerOptions: { rootDir: tmpOutDir },
-          include: [tmpOutDir],
-        }
-      );
-    }
+    this.program.emit();
     this.core.cli.log(' - Build Midway FaaS complete');
   }
 
