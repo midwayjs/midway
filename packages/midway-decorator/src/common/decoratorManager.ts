@@ -246,13 +246,25 @@ export function attachClassMetadata(decoratorNameKey: decoratorKey, data, target
   return manager.attachMetadata(decoratorNameKey, data, target);
 }
 
+const testKeyMap = new Map<decoratorKey, Error>();
 /**
  * get data from class
  * @param decoratorNameKey
  * @param target
  */
 export function getClassMetadata(decoratorNameKey: decoratorKey, target) {
+  if (testKeyMap.size > 0 && testKeyMap.has(decoratorNameKey)) {
+    throw testKeyMap.get(decoratorNameKey);
+  }
   return manager.getMetadata(decoratorNameKey, target);
+}
+// TODO 因 https://github.com/microsoft/TypeScript/issues/38820 等 4.0 发布移除掉
+export function throwErrorForTest(key: decoratorKey, e: Error) {
+  if (e) {
+    testKeyMap.set(key, e);
+  } else {
+    testKeyMap.delete(key);
+  }
 }
 
 /**

@@ -19,19 +19,12 @@ describe('/test/context/midwayContainer.test.ts', () => {
       loadDir: path.join(__dirname, '../fixtures/ts-app-inject')
     });
 
-    const origin = decs.getClassMetadata;
-
-    (decs as any).getClassMetadata = (key, target) => {
-      if (key === decs.CLASS_KEY_CONSTRUCTOR) {
-        throw new Error('mock error');
-      }
-      return origin(key, target);
-    };
+    (decs as any).throwErrorForTest(decs.CLASS_KEY_CONSTRUCTOR, new Error('mock error'));
 
     const tt = container.get<TestCons>('testCons');
     expect(tt.ts).gt(0);
 
-    (decs as any).getClassMetadata = origin;
+    (decs as any).throwErrorForTest(decs.CLASS_KEY_CONSTRUCTOR);
 
     const app = container.get('app') as App;
     expect(app.loader).not.to.be.undefined;
