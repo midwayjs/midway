@@ -226,8 +226,7 @@ export class MidwayContainer extends Container implements IContainer {
         ].concat(opts.ignore || []),
       });
 
-      for (const name of fileResults) {
-        const file = path.join(dir, name);
+      for (const file of fileResults) {
         debug(`binding file => ${file}`);
         const exports = require(file);
         this.bindClass(exports);
