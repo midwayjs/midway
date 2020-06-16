@@ -20,7 +20,6 @@ import {
   XmlObjectDefinition
 } from 'injection';
 import * as is from 'is-type-of';
-import * as path from 'path';
 import { FUNCTION_INJECT_KEY, MidwayHandlerKey } from './constant';
 import { run } from '@midwayjs/glob';
 
