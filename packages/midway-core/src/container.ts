@@ -1,5 +1,4 @@
 import { CLASS_KEY_CONSTRUCTOR, CONFIG_KEY, LOGGER_KEY, PLUGIN_KEY } from '@midwayjs/decorator';
-import * as globby from 'globby';
 import {
   Autowire,
   Container,
@@ -23,6 +22,7 @@ import {
 import * as is from 'is-type-of';
 import * as path from 'path';
 import { FUNCTION_INJECT_KEY, MidwayHandlerKey } from './constant';
+import { run } from '@midwayjs/glob';
 
 const graphviz = require('graphviz');
 const camelcase = require('camelcase');
@@ -214,11 +214,10 @@ export class MidwayContainer extends Container implements IContainer {
 
     // TODO set 去重
     for (const dir of loadDirs) {
-      const fileResults = globby.sync(['**/**.ts', '**/**.tsx', '**/**.js', '!**/**.d.ts'].concat(opts.pattern || []), {
+      const fileResults = run(['**/**.ts', '**/**.tsx', '**/**.js'].concat(opts.pattern || []), {
         cwd: dir,
-        followSymbolicLinks: false,
         ignore: [
-          '**/node_modules/**',
+          '**/**.d.ts',
           '**/logs/**',
           '**/run/**',
           '**/public/**',
