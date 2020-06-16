@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.20.1](https://github.com/midwayjs/midway/compare/v1.20.0...v1.20.1) (2020-06-16)
+
+
+### Bug Fixes
+
+* fix path ([57128b1](https://github.com/midwayjs/midway/commit/57128b1ca97ab69f066b80f8862c376e02aebec1))
+
+
+
+
+
 ## [1.18.6](https://github.com/midwayjs/midway/compare/v1.18.5...v1.18.6) (2020-04-09)
 
 **Note:** Version bump only for package midway-core

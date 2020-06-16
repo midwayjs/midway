@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.20.1](https://github.com/midwayjs/midway/compare/v1.20.0...v1.20.1) (2020-06-16)
+
+
+### Bug Fixes
+
+* fix cnpm case ([945c797](https://github.com/midwayjs/midway/commit/945c7976f2f77fee3a40f2fdc38c870bb1f345e4))
+* fix path ([57128b1](https://github.com/midwayjs/midway/commit/57128b1ca97ab69f066b80f8862c376e02aebec1))
+* lerna nohoist config for eslint-midway-contrib ([#499](https://github.com/midwayjs/midway/issues/499)) ([7e0dd24](https://github.com/midwayjs/midway/commit/7e0dd24bc3229623ce6bb4847817080caf1adc16))
+
+
+
+
+
 # [1.20.0](https://github.com/midwayjs/midway/compare/v1.19.1...v1.20.0) (2020-05-27)
 
 
