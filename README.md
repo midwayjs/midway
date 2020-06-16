@@ -55,17 +55,17 @@ See [midway-examples](https://github.com/midwayjs/midway-examples).
 
 midway is comprised of many specialized packages. This repository contains all these packages. Below you will find a summary of each package.
 
-| Package | Version | Dependencies | DevDependencies | quality |
-|--------|-------|------------|----------|----------|
-| [`midway`] | [![midway-svg]][midway-ch] | [![midway-d-svg]][midway-d-link] | [![midway-dd-svg]][midway-dd-link] | [![midway-q-svg]][midway-q-link] |
-| [`midway-web`] | [![web-svg]][web-ch] | [![web-d-svg]][web-d-link] | [![web-dd-svg]][web-dd-link] | [![web-q-svg]][web-q-link] | 
-| [`midway-core`] | [![core-svg]][core-ch] | [![core-d-svg]][core-d-link] | [![core-dd-svg]][core-dd-link] | [![core-q-svg]][core-q-link] |
-| [`midway-mock`] | [![mock-svg]][mock-ch] | [![mock-d-svg]][mock-d-link] | [![mock-dd-svg]][mock-dd-link] | [![mock-q-svg]][mock-q-link] |
-| [`midway-init`] | [![init-svg]][init-ch] | [![init-d-svg]][init-d-link] | [![init-dd-svg]][init-dd-link] | [![init-q-svg]][init-q-link] |
-| [`midway-bin`] | [![bin-svg]][bin-ch] | [![bin-d-svg]][bin-d-link] | [![bin-dd-svg]][bin-dd-link] | [![bin-q-svg]][bin-q-link] |
-| [`midway-schedule`] | [![sch-svg]][sch-ch] | [![sch-d-svg]][sch-d-link] | [![sch-dd-svg]][sch-dd-link] | [![sch-q-svg]][sch-q-link] |
+| Package | Version | quality |
+|--------|-------|------------|
+| [`midway`] | [![midway-svg]][midway-ch] | [![midway-q-svg]][midway-q-link] |
+| [`midway-web`] | [![web-svg]][web-ch] |  [![web-q-svg]][web-q-link] | 
+| [`midway-core`] | [![core-svg]][core-ch] | [![core-q-svg]][core-q-link] |
+| [`midway-mock`] | [![mock-svg]][mock-ch]  | [![mock-q-svg]][mock-q-link] |
+| [`midway-init`] | [![init-svg]][init-ch]  | [![init-q-svg]][init-q-link] |
+| [`midway-bin`] | [![bin-svg]][bin-ch] | [![bin-q-svg]][bin-q-link] |
+| [`midway-schedule`] | [![sch-svg]][sch-ch] | [![sch-q-svg]][sch-q-link] |
 
-Globally: [![Build Status](https://img.shields.io/travis/midwayjs/midway/master.svg?style=flat)](https://travis-ci.org/midwayjs/midway) [![devDependency Status](https://david-dm.org/midwayjs/midway/dev-status.svg)](https://david-dm.org/midwayjs/midway#info=devDependencies)
+Globally: [![Build Status](https://img.shields.io/travis/midwayjs/midway/master.svg?style=flat)](https://travis-ci.org/midwayjs/midway) 
 
 ## Contributors
 
