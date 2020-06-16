@@ -173,7 +173,7 @@ describe('test/init.test.js', () => {
         'test',
       ],
     ]);
-    await command.run(tmp, '--dir=.tmp/test --package=midway-boilerplate-typescript --registry=https://registry.cnpmjs.org');
+    await command.run(tmp, '--dir=.tmp/test --package=midway-boilerplate-typescript --registry=https://r.cnpmjs.org');
 
     assert(fs.existsSync(path.join(targetDir, '.gitignore')));
     assert(fs.existsSync(path.join(targetDir, 'package.json')));
@@ -190,7 +190,7 @@ describe('test/init.test.js', () => {
         'test',
       ],
     ]);
-    await command.run(tmp, '--dir=.tmp/test --package=midway-boilerplate-typescript --registry=registry.cnpmjs.org');
+    await command.run(tmp, '--dir=.tmp/test --package=midway-boilerplate-typescript --registry=r.cnpmjs.org');
 
     assert(fs.existsSync(path.join(targetDir, '.gitignore')));
     assert(fs.existsSync(path.join(targetDir, 'package.json')));

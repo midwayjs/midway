@@ -1,6 +1,7 @@
 
 import { expect } from 'chai';
 import { Controller, CONTROLLER_KEY, listModule, getClassMetadata, ScopeEnum, getObjectDefProps } from '../../src';
+import { ControllerOne, ControllerTwo } from '../fixtures/decorator/customClass';
 
 @Controller('/hhh', {
   sensitive: true,
@@ -37,6 +38,26 @@ describe('/test/web/controller.test.ts', () => {
     });
 
     const m = listModule(CONTROLLER_KEY);
-    expect(m.length).eq(2);
+    expect(m.length).eq(4);
+  });
+
+  it('controller extends should be ok', () => {
+    const metaone = getClassMetadata(CONTROLLER_KEY, ControllerOne);
+    expect(metaone).deep.eq({
+      prefix: '/api/one',
+      routerOptions: {
+        sensitive: true,
+        middleware: []
+      }
+    });
+
+    const metatwo = getClassMetadata(CONTROLLER_KEY, ControllerTwo);
+    expect(metatwo).deep.eq({
+      prefix: '/api/two',
+      routerOptions: {
+        sensitive: true,
+        middleware: []
+      }
+    });
   });
 });
