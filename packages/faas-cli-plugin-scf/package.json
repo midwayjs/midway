@@ -1,16 +1,16 @@
 {
   "name": "@midwayjs/fcli-plugin-scf",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/fcli-command-core": "^0.3.0",
+    "@midwayjs/fcli-command-core": "^0.3.3",
     "@midwayjs/serverless-scf-starter": "^0.3.2",
-    "@midwayjs/serverless-spec-builder": "^0.3.0",
+    "@midwayjs/serverless-spec-builder": "^0.3.3",
     "serverless-tencent-scf": "^0.1.36"
   },
   "devDependencies": {
-    "@midwayjs/fcli-plugin-package": "^0.3.1",
+    "@midwayjs/fcli-plugin-package": "^0.3.3",
     "fs-extra": "^8.1.0",
     "midway-bin": "^2.0.0"
   },
