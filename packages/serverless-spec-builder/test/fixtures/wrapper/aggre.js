@@ -10,7 +10,7 @@ const initializeMethod = async (initializeContext = {}) => {
   runtime = await start({
     layers: []
   });
-  starter = new FaaSStarter({ baseDir: __dirname, initializeContext });
+  starter = new FaaSStarter({ baseDir: __dirname, initializeContext, applicationAdapter: runtime });
   
   await starter.start();
   inited = true;
@@ -26,18 +26,15 @@ exports.handler = asyncWrapper(async (...args) => {
     await initializeMethod();
   }
   
-  const allHandlers = [{"handler":"index.handler","path":"/api/test","level":2},{"handler":"render.handler","path":"/","level":1}];
+  const picomatch = require('picomatch');
+  const allHandlers = [{"handler":"index.handler","router":"/api/test","pureRouter":"/api/test","level":2},{"handler":"render.handler","router":"/*","pureRouter":"/","level":1}];
   return runtime.asyncEvent(async (ctx) => {
     let handler = null;
     let ctxPath = ctx && ctx.path || '';
     if (ctxPath) {
       handler = allHandlers.find(handler => {
-        return ctxPath.indexOf(handler.path) === 0;
+        return picomatch.isMatch(ctxPath, handler.router)
       });
-    }
-
-    if (!handler) {
-      handler = allHandlers[allHandlers.length - 1];
     }
 
     if (handler) {

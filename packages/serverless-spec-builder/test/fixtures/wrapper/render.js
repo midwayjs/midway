@@ -10,7 +10,7 @@ const initializeMethod = async (initializeContext = {}) => {
   runtime = await start({
     layers: []
   });
-  starter = new FaaSStarter({ baseDir: __dirname, initializeContext });
+  starter = new FaaSStarter({ baseDir: __dirname, initializeContext, applicationAdapter: runtime });
   
   await starter.start();
   inited = true;

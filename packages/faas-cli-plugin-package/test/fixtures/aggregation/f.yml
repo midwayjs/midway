@@ -22,6 +22,12 @@ functions:
       - http:
           method: get
           path: /api/3
+  apiall:
+    handler: apiall.handler
+    events:
+      - http:
+          method: get
+          path: /api/*
   render:
     handler: render.handler
     events:
@@ -55,7 +61,7 @@ functions:
 
 custom:
   customDomain:
-    domainName: 'aggregation.exanple.com'
+    domainName: 'fctest.iam.gy'
 
 aggregation:
   api:

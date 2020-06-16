@@ -519,6 +519,12 @@ export class PackagePlugin extends BasePlugin {
     // }
 
     this.core.cli.log('Aggregation Deploy');
+
+    // use picomatch to match url
+    if (!this.core.service.globalDependencies) {
+      this.core.service.globalDependencies = {};
+    }
+    this.core.service.globalDependencies['picomatch'] = '*';
     const allAggregationPaths = [];
     let allFuncNames = Object.keys(this.core.service.functions);
     for (const aggregationName in this.core.service.aggregation) {

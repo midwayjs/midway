@@ -32,13 +32,6 @@ enum LOCK_TYPE {
   COMPLETE,
 }
 
-function getPlatformPath(p) {
-  if (type() === 'Windows_NT') {
-    return p.replace(/\\/g, '\\\\');
-  }
-  return p;
-}
-
 export class FaaSInvokePlugin extends BasePlugin {
   baseDir: string;
   buildDir: string;
@@ -388,15 +381,7 @@ export class FaaSInvokePlugin extends BasePlugin {
     const { name, fileName, userEntry } = this.checkUserEntry();
     if (!userEntry) {
       const isTsMode = this.checkIsTsMode();
-      let starterName;
-      const platform = this.getPlatform();
-      this.core.debug('Platform entry', platform);
-      if (platform === 'aliyun') {
-        starterName = require.resolve('@midwayjs/serverless-fc-starter');
-      } else if (platform === 'tencent') {
-        starterName = require.resolve('@midwayjs/serverless-scf-starter');
-      }
-
+      const starterName = this.getStarterName();
       if (!starterName) {
         return;
       }
@@ -407,10 +392,11 @@ export class FaaSInvokePlugin extends BasePlugin {
           layers: this.core.service.layers,
           functions: this.core.service.functions,
         },
+        faasModName: process.env.MidwayModuleName,
         distDir: this.buildDir,
-        starter: getPlatformPath(starterName),
+        starter: this.getPlatformPath(starterName),
         loadDirectory: isTsMode
-          ? [getPlatformPath(resolve(this.defaultTmpFaaSOut, 'src'))]
+          ? [this.getPlatformPath(resolve(this.defaultTmpFaaSOut, 'src'))]
           : [],
       });
       if (isTsMode) {
@@ -432,12 +418,21 @@ export class FaaSInvokePlugin extends BasePlugin {
     this.core.debug('EntryInfo', this.entryInfo);
   }
 
+  getStarterName() {
+    const platform = this.getPlatform();
+    this.core.debug('Platform entry', platform);
+    if (platform === 'aliyun') {
+      return require.resolve('@midwayjs/serverless-fc-starter');
+    } else if (platform === 'tencent') {
+      return require.resolve('@midwayjs/serverless-scf-starter');
+    }
+  }
+
   async getInvoke() {
     let handler;
     let initHandler;
     let runtime;
     let invoke;
-    const platform = this.getPlatform();
     if (this.entryInfo) {
       try {
         const handlerMod = require(this.entryInfo.fileName);
@@ -462,13 +457,7 @@ export class FaaSInvokePlugin extends BasePlugin {
     if (runtime) {
       this.core.debug('Have Runtime');
       invoke = async (...args) => {
-        let triggerMap;
-        if (platform === 'aliyun') {
-          triggerMap = FCTrigger;
-        } else if (platform === 'tencent') {
-          triggerMap = SCFTrigger;
-        }
-        const trigger = this.getTrigger(triggerMap, args);
+        const trigger = await this.getTriggerInfo(args);
         await runtime.start();
         this.core.debug('Invoke', trigger);
         const result = await runtime.invoke(...trigger);
@@ -480,6 +469,17 @@ export class FaaSInvokePlugin extends BasePlugin {
       invoke = await this.getUserFaaSHandlerFunction();
     }
     this.invokeFun = invoke;
+  }
+
+  async getTriggerInfo(args) {
+    const platform = this.getPlatform();
+    let triggerMap;
+    if (platform === 'aliyun') {
+      triggerMap = FCTrigger;
+    } else if (platform === 'tencent') {
+      triggerMap = SCFTrigger;
+    }
+    return this.getTrigger(triggerMap, args);
   }
 
   async callInvoke() {
@@ -549,6 +549,7 @@ export class FaaSInvokePlugin extends BasePlugin {
         return 'tencent';
       }
     }
+    return provider;
   }
 
   getFunctionInfo() {
@@ -599,5 +600,12 @@ export class FaaSInvokePlugin extends BasePlugin {
   checkIsTsMode(): boolean {
     // eslint-disable-next-line node/no-deprecated-api
     return !!require.extensions['.ts'];
+  }
+
+  getPlatformPath(p) {
+    if (type() === 'Windows_NT') {
+      return p.replace(/\\/g, '\\\\');
+    }
+    return p;
   }
 }
