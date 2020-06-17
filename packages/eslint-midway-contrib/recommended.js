@@ -2,8 +2,9 @@ module.exports = {
   extends: [
     './base.js',
     'eslint:recommended',
-    'plugin:@typescript-eslint/eslint-recommended',
+    // 'plugin:@typescript-eslint/eslint-recommended',  included in @typescript-eslint/recommended
     'plugin:@typescript-eslint/recommended',
+    'plugin:@typescript-eslint/recommended-requiring-type-checking',
   ],
   rules: {
     'sort-imports': 0,
@@ -11,10 +12,14 @@ module.exports = {
 
     // https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/eslint-plugin
     '@typescript-eslint/array-type': [2],
+    '@typescript-eslint/ban-ts-comment': [0],
     'brace-style': 0,
     '@typescript-eslint/brace-style': [1, 'stroustrup', { allowSingleLine: true } ],
-    '@typescript-eslint/camelcase': 0,
+    'comma-spacing': 0,
+    '@typescript-eslint/comma-spacing': 1,
     '@typescript-eslint/consistent-type-definitions': [2, 'interface'],
+    'default-param-last': 0,
+    '@typescript-eslint/default-param-last': 2,
     '@typescript-eslint/explicit-function-return-type': 0,
     'func-call-spacing': 0,
     '@typescript-eslint/func-call-spacing': [1, 'never'],
@@ -33,16 +38,35 @@ module.exports = {
         },
       },
     ],
-    'no-empty-function': 0,
+    '@typescript-eslint/no-base-to-string': 2,
+    'no-dupe-class-members': 0,
+    '@typescript-eslint/no-dupe-class-members': 2,
     '@typescript-eslint/no-empty-function': 1,
     '@typescript-eslint/no-explicit-any': [0],
     'no-extra-parens': 0,
     '@typescript-eslint/no-extra-parens': 2,
     '@typescript-eslint/no-parameter-properties': 0,
+    '@typescript-eslint/no-this-alias': [
+      2,
+      {
+        allowDestructuring: true,
+        allowedNames: ['self'],
+      },
+    ],
     'no-use-before-define': 0,
     '@typescript-eslint/no-use-before-define': [2, { functions: false, typedefs: false } ],
+    '@typescript-eslint/require-await': 0,
     semi: 0,
     '@typescript-eslint/semi': [1, 'always'],
+    'space-before-function-paren': 0,
+    '@typescript-eslint/space-before-function-paren': [
+      1, {
+        anonymous: 'never',
+        named: 'never',
+        asyncArrow: 'always',
+      },
+    ],
+    '@typescript-eslint/type-annotation-spacing': 1,
 
     // https://eslint.org/docs/rules/#best-practices
     curly: 2,
@@ -70,7 +94,6 @@ module.exports = {
         functions: 'always-multiline',
       },
     ],
-    'comma-spacing': 1,
     'comma-style': 1,
     'computed-property-spacing': 1,
     'eol-last': [1, 'always'],
@@ -101,13 +124,6 @@ module.exports = {
     'semi-spacing': [1, { before: false, after: true } ],
     'semi-style': [2, 'last'],
     'space-before-blocks': [1, 'always'],
-    'space-before-function-paren': [
-      1, {
-        anonymous: 'never',
-        named: 'never',
-        asyncArrow: 'always',
-      },
-    ],
     'spaced-comment': [
       1, 'always',
       {
@@ -149,6 +165,10 @@ module.exports = {
     'no-useless-rename': 1,
     'no-var': 2,
     'object-shorthand': [1, 'always'],
+
+    // https://eslint.org/docs/rules/#deprecated
+    // deprecated off
+    'no-process-exit': 0,
   },
 };
 
