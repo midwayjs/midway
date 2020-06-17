@@ -95,7 +95,9 @@ describe('/test/loader.test.ts', () => {
     loader.initialize();
     loader.loadDirectory();
     const tt: any = {
-      getBaseDir() { return 'hello this is basedir'; }
+      getBaseDir() {
+        return 'hello this is basedir';
+      },
     };
     loader.registerHook(APPLICATION_KEY, () => tt);
     await loader.refresh();
@@ -234,7 +236,7 @@ describe('/test/loader.test.ts', () => {
     loader.registerHook(APPLICATION_KEY, () => ({
       getBaseDir() {
         return 'base dir';
-      }
+      },
     }));
     await loader.refresh();
 
@@ -324,7 +326,9 @@ describe('/test/loader.test.ts', () => {
     );
     assert((await replaceManagerno.getOne()) === 'oktwo');
 
-    const replaceManagerTwo: any = await appCtx.getAsync('@ok:replaceManagerTwo');
+    const replaceManagerTwo: any = await appCtx.getAsync(
+      '@ok:replaceManagerTwo'
+    );
     assert((await replaceManagerTwo.getOne()) === 'oktwo');
     mm.restore();
   });

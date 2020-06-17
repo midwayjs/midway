@@ -1,4 +1,3 @@
-import * as globby from 'globby';
 import {
   getObjectDefinition,
   getProviderId,
@@ -12,9 +11,11 @@ import {
   saveClassMetadata,
 } from '@midwayjs/decorator';
 import * as is from 'is-type-of';
-import { join } from 'path';
 import { ContainerConfiguration } from './configuration';
-import { FUNCTION_INJECT_KEY, PRIVATE_META_DATA_KEY } from '../common/constants';
+import {
+  FUNCTION_INJECT_KEY,
+  PRIVATE_META_DATA_KEY,
+} from '../common/constants';
 import {
   IConfigService,
   IEnvironmentService,
@@ -31,10 +32,11 @@ import { Container } from './container';
 import { generateProvideId } from '../common/util';
 import { pipelineFactory } from '../features/pipeline';
 import { ResolverHandler } from './resolverHandler';
+import { run } from '@midwayjs/glob';
 
-const DEFAULT_PATTERN = ['**/**.ts', '**/**.tsx', '**/**.js', '!**/**.d.ts'];
+const DEFAULT_PATTERN = ['**/**.ts', '**/**.tsx', '**/**.js'];
 const DEFAULT_IGNORE_PATTERN = [
-  '**/node_modules/**',
+  '**/**.d.ts',
   '**/logs/**',
   '**/run/**',
   '**/public/**',
@@ -65,7 +67,10 @@ export class MidwayContainer extends Container implements IMidwayContainer {
   init(): void {
     this.initService();
 
-    this.resolverHandler = new ResolverHandler(this, this.getManagedResolverFactory());
+    this.resolverHandler = new ResolverHandler(
+      this,
+      this.getManagedResolverFactory()
+    );
     // 防止直接从applicationContext.getAsync or get对象实例时依赖当前上下文信息出错
     // ctx is in requestContainer
     this.registerObject(REQUEST_CTX_KEY, this.ctx);
@@ -123,18 +128,12 @@ export class MidwayContainer extends Container implements IMidwayContainer {
     const loadDirs = [].concat(opts.loadDir || []);
 
     for (const dir of loadDirs) {
-      const fileResults = globby.sync(
-        DEFAULT_PATTERN.concat(opts.pattern || []),
-        {
-          followSymbolicLinks: false,
-          cwd: dir,
-          ignore: DEFAULT_IGNORE_PATTERN.concat(opts.ignore || []),
-          suppressErrors: true,
-        }
-      );
+      const fileResults = run(DEFAULT_PATTERN.concat(opts.pattern || []), {
+        cwd: dir,
+        ignore: DEFAULT_IGNORE_PATTERN.concat(opts.ignore || []),
+      });
 
-      for (const name of fileResults) {
-        const file = join(dir, name);
+      for (const file of fileResults) {
         debug(`binding file => ${file}, namespace => ${opts.namespace}`);
         const exports = require(file);
         // add module to set
