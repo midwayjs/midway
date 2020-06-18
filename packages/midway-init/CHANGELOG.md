@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.4](https://github.com/midwayjs/midway/compare/v2.1.3...v2.1.4) (2020-06-17)
+
+
+### Bug Fixes
+
+* 2.x extends bug ([#498](https://github.com/midwayjs/midway/issues/498)) ([19ec029](https://github.com/midwayjs/midway/commit/19ec0292eedd94cb2e40e69af8897703fc8f55c7))
+
+
+
+
+
 ## [2.0.15](https://github.com/midwayjs/midway/compare/v2.0.14...v2.0.15) (2020-04-11)
 
 **Note:** Version bump only for package midway-init

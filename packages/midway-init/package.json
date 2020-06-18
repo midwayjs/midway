@@ -1,6 +1,6 @@
 {
   "name": "midway-init",
-  "version": "2.0.15",
+  "version": "2.1.4",
   "dependencies": {
     "chalk": "^3.0.0",
     "enquirer": "^2.3.2",
