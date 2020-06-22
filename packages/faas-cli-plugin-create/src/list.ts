@@ -19,4 +19,19 @@ export const templateList = {
     package: '@midwayjs-examples/faas-with-vue',
     group: 'Examples',
   },
+  'faas-ots': {
+    desc: 'A serverless example building a todo list with aliyun ots',
+    package: '@midwayjs-examples/faas-with-ots',
+    group: 'Examples',
+  },
+  'faas-rds-mysql': {
+    desc: 'A serverless example building a todo list with rds and mysql',
+    package: '@midwayjs-examples/faas-with-rds',
+    group: 'Examples',
+  },
+  'faas-covid19': {
+    desc: 'A serverless example with covid19 data visualization',
+    package: '@midwayjs-examples/faas-with-covid19',
+    group: 'Examples',
+  },
 };
