@@ -47,10 +47,10 @@ Midway FaaS is the Serverless framework used to build Node.js cloud functions. H
 
 [midway-faas]: https://github.com/midwayjs/midway-faas
 [midway]: https://github.com/midwayjs/midway
-[runtime-engine]: https://github.com/midwayjs/midway-faas/packages/runtime-engine
-[faas-cli]: https://github.com/midwayjs/midway-faas/packages/faas-cli
-[serverless-fc-starter]: https://github.com/midwayjs/midway-faas/packages/serverless-fc-starter
-[serverless-scf-starter]: https://github.com/midwayjs/midway-faas/packages/serverless-scf-starter
+[runtime-engine]: https://github.com/midwayjs/midway-faas/tree/master/packages/runtime-engine
+[faas-cli]: https://github.com/midwayjs/midway-faas/tree/master/packages/faas-cli
+[serverless-fc-starter]: https://github.com/midwayjs/midway-faas/tree/master/packages/serverless-fc-starter
+[serverless-scf-starter]: https://github.com/midwayjs/midway-faas/tree/master/packages/serverless-scf-starter
 
 [faas-status]: https://img.shields.io/npm/v/@midwayjs/faas.svg
 [midway-status]: https://img.shields.io/npm/v/midway.svg
