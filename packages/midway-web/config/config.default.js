@@ -27,7 +27,6 @@ module.exports = (appInfo) => {
 
   exports.container = {
     ignore: [
-      '**/node_modules/**',
       '**/logs/**',
       '**/run/**',
       '**/public/**',
