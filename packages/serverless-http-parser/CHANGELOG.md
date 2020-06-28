@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.5](https://github.com/midwayjs/midway-faas/compare/v0.3.4...v0.3.5) (2020-06-28)
+
+
+### Bug Fixes
+
+* fix post in fc apigw and add more test case ([#181](https://github.com/midwayjs/midway-faas/issues/181)) ([8286552](https://github.com/midwayjs/midway-faas/commit/82865521ea8d2b62397aa29bcfc692c6a23f53f9))
+
+
+
+
+
 ## [0.3.2](https://github.com/midwayjs/midway-faas/compare/v0.3.1...v0.3.2) (2020-06-12)
 
 
