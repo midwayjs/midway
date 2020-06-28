@@ -257,6 +257,109 @@ describe('test http parser', () => {
     );
   });
 
+  describe('test aliyun apigw post type', () => {
+    it('should parse text/html and got string body', () => {
+      const app = new Application();
+      const req = new HTTPRequest(
+        require('./resource/fc_apigw_post_text.json'),
+        require('./resource/fc_ctx.json')
+      );
+      const res = new HTTPResponse();
+      const context = app.createContext(req, res);
+
+      // alias
+      assert(context.req !== context.request);
+      assert(context.res !== context.response);
+      assert(context.header === context.headers);
+      assert(context.headers === context.req.headers);
+
+      // request
+      assert(context.method === 'POST');
+      assert(context.request.method === 'POST');
+      assert(context.path === '/api/321');
+      assert(context.request.path === '/api/321');
+
+      // test parser body, it's string because content-type is text/html
+      assert(context.request.body === '{"c":"b"}');
+    });
+
+    it('should parse application/json and got json body', () => {
+      const app = new Application();
+      const req = new HTTPRequest(
+        require('./resource/fc_apigw_post_json.json'),
+        require('./resource/fc_ctx.json')
+      );
+      const res = new HTTPResponse();
+      const context = app.createContext(req, res);
+
+      // alias
+      assert(context.req !== context.request);
+      assert(context.res !== context.response);
+      assert(context.header === context.headers);
+      assert(context.headers === context.req.headers);
+
+      // request
+      assert(context.method === 'POST');
+      assert(context.request.method === 'POST');
+      assert(context.path === '/api/321');
+      assert(context.request.path === '/api/321');
+
+      // test parser body, it's string because content-type is text/html
+      assert.deepStrictEqual(context.request.body, { c: 'b' });
+    });
+
+    it('should parse form-urlencoded and got json body', () => {
+      const app = new Application();
+      const req = new HTTPRequest(
+        require('./resource/fc_apigw_post_form.json'),
+        require('./resource/fc_ctx.json')
+      );
+      const res = new HTTPResponse();
+      const context = app.createContext(req, res);
+
+      // alias
+      assert(context.req !== context.request);
+      assert(context.res !== context.response);
+      assert(context.header === context.headers);
+      assert(context.headers === context.req.headers);
+
+      // request
+      assert(context.method === 'POST');
+      assert(context.request.method === 'POST');
+      assert(context.path === '/api/321');
+      assert(context.request.path === '/api/321');
+
+      // test parser body, it's string because content-type is text/html
+      assert.deepStrictEqual(context.request.body, { c: 'b' });
+    });
+
+    it('should parse json by gw filter', () => {
+      // 网关过滤后的结果
+      const app = new Application();
+      const req = new HTTPRequest(
+        require('./resource/fc_apigw_post_gw_filter.json'),
+        require('./resource/fc_ctx.json')
+      );
+      const res = new HTTPResponse();
+      const context = app.createContext(req, res);
+
+      // alias
+      assert(context.req !== context.request);
+      assert(context.res !== context.response);
+      assert(context.header === context.headers);
+      assert(context.headers === context.req.headers);
+
+      // request
+      assert(context.method === 'POST');
+      assert(context.request.method === 'POST');
+      assert(context.path === '/api/321');
+      assert(context.request.path === '/api/321');
+
+      // test parser body, it's string because content-type is text/html
+      assert.deepStrictEqual(context.request.body, '{"c":"b"}');
+    });
+  });
+
   it('should test callback', async () => {
     const app = new Application();
     app.use(async (ctx, next) => {

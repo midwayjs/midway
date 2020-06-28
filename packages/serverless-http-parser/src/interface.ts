@@ -5,7 +5,7 @@ export interface FCAPIGatewayEvent {
   queryParameters: object;
   pathParameters: object;
   body: string;
-  isBase64Encoded: 'true' | 'false';
+  isBase64Encoded: 'true' | 'false' | boolean;
 }
 
 export interface FCHTTPEvent {

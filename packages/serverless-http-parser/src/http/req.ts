@@ -90,13 +90,16 @@ export class HTTPRequest {
   }
 
   get body() {
-    let body = this[EVENT].body;
-    if (this[EVENT].isBase64Encoded === 'true') {
-      return Buffer.from(body, 'base64').toString();
-    }
-
     if (this.bodyParsed) {
       return this[BODY];
+    }
+
+    let body = this[EVENT].body;
+    if (
+      this[EVENT].isBase64Encoded === 'true' ||
+      this[EVENT].isBase64Encoded === true
+    ) {
+      body = Buffer.from(body, 'base64').toString();
     }
 
     if (Buffer.isBuffer(body)) {
@@ -113,9 +116,14 @@ export class HTTPRequest {
         break;
       case 'urlencoded':
         try {
-          this[BODY] = qs.parse(body);
+          // fc apigw use this
+          this[BODY] = JSON.parse(body);
         } catch {
-          throw new Error('invalid urlencoded received');
+          try {
+            this[BODY] = qs.parse(body);
+          } catch (err) {
+            throw new Error('invalid urlencoded received');
+          }
         }
         break;
       default:

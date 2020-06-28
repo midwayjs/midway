@@ -1,0 +1,15 @@
+{
+  "body": "eyJjIjoiYiJ9",
+  "headers": {
+    "X-Ca-Dashboard-Action": "DEBUG",
+    "X-Ca-Dashboard-Uid": "111111",
+    "X-Ca-Dashboard-Role": "USER"
+  },
+  "httpMethod": "POST",
+  "isBase64Encoded": true,
+  "path": "/api/321",
+  "pathParameters": {
+    "userId": "321"
+  },
+  "queryParameters": {}
+}

@@ -127,16 +127,18 @@ export const request = {
   },
 
   get body() {
-    if (this.req.bodyParsed) {
-      return this.req.body;
-    }
-
-    let body = this.req.body;
-
     if (this[BODY]) {
       return this[BODY];
     }
 
+    let body = this.req.body;
+    if (this.req.bodyParsed) {
+      // api 网关会被 parse，这里就直接返回了
+      this[BODY] = this.req.body;
+      return this[BODY];
+    }
+
+    // fc http parser 会走到这里，因为 req.body 是 buffer，且不会被处理
     if (Buffer.isBuffer(body)) {
       body = Buffer.from(body).toString();
     }
