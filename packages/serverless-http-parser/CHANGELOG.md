@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.7](https://github.com/midwayjs/midway-faas/compare/v0.3.6...v0.3.7) (2020-07-02)
+
+
+### Bug Fixes
+
+* add vary method ([#187](https://github.com/midwayjs/midway-faas/issues/187)) ([73049de](https://github.com/midwayjs/midway-faas/commit/73049dea8b6eab710dba7e2596c7da183d662ea6))
+
+
+
+
+
 ## [0.3.5](https://github.com/midwayjs/midway-faas/compare/v0.3.4...v0.3.5) (2020-06-28)
 
 

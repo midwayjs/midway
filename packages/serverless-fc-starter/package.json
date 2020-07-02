@@ -1,11 +1,11 @@
 {
   "name": "@midwayjs/serverless-fc-starter",
-  "version": "0.3.5",
+  "version": "0.3.7",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@midwayjs/runtime-engine": "^0.3.0",
-    "@midwayjs/serverless-http-parser": "^0.3.5"
+    "@midwayjs/serverless-http-parser": "^0.3.7"
   },
   "devDependencies": {
     "@midwayjs/runtime-mock": "^0.3.0",
