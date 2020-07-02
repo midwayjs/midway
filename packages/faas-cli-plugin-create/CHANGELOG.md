@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.0.0 (2020-07-02)
+
+
+### Bug Fixes
+
+* fix error control in fc ([#153](https://github.com/midwayjs/midway-faas/issues/153)) ([f7dd007](https://github.com/midwayjs/midway-faas/commit/f7dd0070f9c1b7f07e628c8d2052d273a8133910))
+* fix windows path when invoke ([#169](https://github.com/midwayjs/midway-faas/issues/169)) ([e637a0a](https://github.com/midwayjs/midway-faas/commit/e637a0ab05a769a3797e2dccf0612bbbf650d074))
+* invoke source map ([#52](https://github.com/midwayjs/midway-faas/issues/52)) ([9149d2a](https://github.com/midwayjs/midway-faas/commit/9149d2a9a3f3d9ba975588b61c6f9bbeec2e8d86)), closes [#51](https://github.com/midwayjs/midway-faas/issues/51)
+
+
+### Features
+
+* 支持自定义模板 ([#28](https://github.com/midwayjs/midway-faas/issues/28)) ([7aaba06](https://github.com/midwayjs/midway-faas/commit/7aaba06c69deafb6a52d8805c9cd00924d722a4d))
+* add create plugin ([#26](https://github.com/midwayjs/midway-faas/issues/26)) ([ee445dd](https://github.com/midwayjs/midway-faas/commit/ee445dd8ee1b3e812abb30e34e2e9313ad69c0c2))
+* command core store ([#72](https://github.com/midwayjs/midway-faas/issues/72)) ([10e68a9](https://github.com/midwayjs/midway-faas/commit/10e68a9a1cf096628eabb7b2b3f2c34dbdd14f3a))
+
+
+
+
+
 ## [0.3.6](https://github.com/midwayjs/midway-faas/compare/v0.3.5...v0.3.6) (2020-06-30)
 
 **Note:** Version bump only for package @midwayjs/fcli-plugin-create

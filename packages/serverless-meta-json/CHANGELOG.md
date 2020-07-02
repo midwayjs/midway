@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.0.0 (2020-07-02)
+
+
+### Bug Fixes
+
+* fix error control in fc ([#153](https://github.com/midwayjs/midway-faas/issues/153)) ([f7dd007](https://github.com/midwayjs/midway-faas/commit/f7dd0070f9c1b7f07e628c8d2052d273a8133910))
+* fix windows path when invoke ([#169](https://github.com/midwayjs/midway-faas/issues/169)) ([e637a0a](https://github.com/midwayjs/midway-faas/commit/e637a0ab05a769a3797e2dccf0612bbbf650d074))
+* no domainName , gateway is null ([#75](https://github.com/midwayjs/midway-faas/issues/75)) ([0809eb4](https://github.com/midwayjs/midway-faas/commit/0809eb4454ed27b45fcdb6e6b69d95e71d29574e))
+
+
+### Features
+
+* command core store ([#72](https://github.com/midwayjs/midway-faas/issues/72)) ([10e68a9](https://github.com/midwayjs/midway-faas/commit/10e68a9a1cf096628eabb7b2b3f2c34dbdd14f3a))
+* meat json ([#65](https://github.com/midwayjs/midway-faas/issues/65)) ([34df124](https://github.com/midwayjs/midway-faas/commit/34df124c44cce985a34dd54c6f9a260cf3304886))
+* meta-json support gateway ([#164](https://github.com/midwayjs/midway-faas/issues/164)) ([0472f1a](https://github.com/midwayjs/midway-faas/commit/0472f1acf578864298dc1c811727a3b38a1b559e))
+
+
+
+
+
 ## [0.3.1](https://github.com/midwayjs/midway-faas/compare/v0.3.0...v0.3.1) (2020-05-31)
 
 **Note:** Version bump only for package @midwayjs/serverless-meta-json

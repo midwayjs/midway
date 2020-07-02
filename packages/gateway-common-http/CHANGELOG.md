@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.0.0 (2020-07-02)
+
+
+### Bug Fixes
+
+* dev pack support apigw ([#137](https://github.com/midwayjs/midway-faas/issues/137)) ([53158d7](https://github.com/midwayjs/midway-faas/commit/53158d71789b7a145df5ed55139bb9ba5c581aa6))
+* fix error control in fc ([#153](https://github.com/midwayjs/midway-faas/issues/153)) ([f7dd007](https://github.com/midwayjs/midway-faas/commit/f7dd0070f9c1b7f07e628c8d2052d273a8133910))
+* fix http local buffer support ([#143](https://github.com/midwayjs/midway-faas/issues/143)) ([39e0cbf](https://github.com/midwayjs/midway-faas/commit/39e0cbf30de87fbe802c3209ef73eac6cfa8c48b))
+* fix windows path when invoke ([#169](https://github.com/midwayjs/midway-faas/issues/169)) ([e637a0a](https://github.com/midwayjs/midway-faas/commit/e637a0ab05a769a3797e2dccf0612bbbf650d074))
+* strip all the * of end of 2 paths, no * is first ([#176](https://github.com/midwayjs/midway-faas/issues/176)) ([3b10a3d](https://github.com/midwayjs/midway-faas/commit/3b10a3dbf2f40a76d195d06e021465c35016953d))
+
+
+### Features
+
+* support local single function to set multiple paths ([#158](https://github.com/midwayjs/midway-faas/issues/158)) ([c21044d](https://github.com/midwayjs/midway-faas/commit/c21044dbaf73aee1fcefa2dc106e56187e93ee20))
+
+
+
+
+
 ## [0.3.7](https://github.com/midwayjs/midway-faas/compare/v0.3.6...v0.3.7) (2020-07-02)
 
 **Note:** Version bump only for package @midwayjs/gateway-common-http
