@@ -1,7 +1,7 @@
 [English](./README.en-US.md) | 简体中文
 
 
-![](https://img.alicdn.com/tfs/TB1HdniCSf2gK0jSZFPXXXsopXa-1000-353.png)
+![](https://img.alicdn.com/tfs/TB1c1utMuT2gK0jSZFvXXXnFXXa-1422-305.png)
 
 <p align="center">
   <a href="https://www.npmjs.com/package/@midwayjs/faas" alt="npm version">
@@ -10,31 +10,88 @@
   <a href="./LICENSE" alt="GitHub license">
     <img src="https://img.shields.io/badge/license-MIT-blue.svg" />
   </a>
-  <a href="https://github.com/midwayjs/midway-faas/actions?query=workflow%3A%22Node.js+CI%22" alt="Node.js CI">
+  <a href="https://github.com/midwayjs/midway-serverless/actions?query=workflow%3A%22Node.js+CI%22" alt="Node.js CI">
     <img src="https://img.shields.io/badge/Node.js%20CI-passing-brightgreen" />
   </a>
-  <a href="https://github.com/midwayjs/midway-faas" alt="Activity">
+  <a href="https://github.com/midwayjs/midway-serverless" alt="Activity">
     <img src="https://img.shields.io/github/commit-activity/m/midwayjs/midway-faas" />
   </a>
-  <a href="https://github.com/midwayjs/midway-faas/graphs/contributors" alt="Contributors">
+  <a href="https://github.com/midwayjs/midway-serverless/graphs/contributors" alt="Contributors">
     <img src="https://img.shields.io/github/contributors/midwayjs/midway-faas" />
   </a>
-  <a href="https://gitpod.io/#https://github.com/midwayjs/midway-faas" alt="Gitpod Ready-to-Code">
+  <a href="https://gitpod.io/#https://github.com/midwayjs/midway-serverless" alt="Gitpod Ready-to-Code">
     <img src="https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod" />
   </a>
 </p>
 
-Midway FaaS 是一个用于构建 Node.js 云函数的 Serverless 框架，可以帮您在云原生时代更专注于产品开发，降低维护成本。
+Midway Serverless 是一个用于构建 Node.js 云函数的 Serverless 框架，可以帮您在云原生时代更专注于产品开发，降低维护成本。
 
-- **跨云厂商**：一份代码可以在多个云平台上快速部署，你不用担心产品被捆绑在一个云厂商上。
-- **代码重用**：通过框架的依赖注入能力，代码逻辑的每个部分都是自然可复用的，可以快速轻松组合生成复杂的应用。
-- **传统迁移**：通过框架的运行时扩展能力，可以将传统应用如 Egg.js、Koa、Express.js 等无缝迁移到各个云厂商。
+- 1、平台间迁移更容易
+  - 通过提供统一的配置规范以及入口抹平机制，让代码在每个平台基本相同。
+  - 扩展不同云平台的运行时 API，不仅能加载通用的平台间扩展，也能接入公司内部的私有化部署方案。
+- 2、让应用更易维护和扩展
+  - 使用了 TypeScript 作为基础语言，方便应用扩展和定义
+  - 提供了完善的 Midway 体系标志性的依赖注入解决方案，
+  - 提供了标准的云平台函数出入参事件定义
+  - 提供了多套和社区前端 React、Vue 等融合一体化开发的方案
+- 3、 生态更轻量和自由
+  - 函数体系复用 koa 的生态和 Web 中间件能力，在处理传统 Web 时更加得心应手。
+  - 提供 egg 组件复用 egg 插件的生态链，企业级开发链路更简单顺畅。
+  -  Midway 体系的装饰器能力统一，让传统 Web 迁移到 Serverless 体系更快更好。
 
 ## 文档
 
+- 快速开始 [中文](https://www.yuque.com/midwayjs/faas/quick_start)
 - 文档 [中文](https://www.yuque.com/midwayjs/faas)
 
-## 示例
+
+## Overview
+
+
+### 安装 CLI 工具
+
+首先，你需要安装 Node（> 10.9)，以及 npm。
+
+```bash
+npm install @midwayjs/faas-cli -g
+```
+
+### 创建示例
+
+执行下面的命令。
+
+```
+f create
+```
+
+你会看到以下脚手架选择，选择脚手架或者示例代码，比如 `faas-standard` 。
+
+```
+Generating boilerplate...
+? Hello, traveller.
+  Which template do you like? …
+
+ ⊙ Boilerplate
+❯ faas-standard - A serverless boilerplate for aliyun fc, tencent scf and so on
+  faas-layer - A serverless runtime layer boilerplate
+
+ ⊙ Examples
+  faas-react - A serverless example with react
+  faas-vue - A serverless example with vue
+```
+
+### 部署函数
+
+执行下面的命令即可发布到云平台。
+
+```
+f deploy
+```
+
+Midway Serverless 现已支持阿里云、腾讯云的部署，aws 正在开发中。
+
+
+## 前端一体示例
 
 当前已接入以下前端一体化示例。
 
@@ -53,19 +110,19 @@ Midway FaaS 是一个用于构建 Node.js 云函数的 Serverless 框架，可�
 
 |    Project         |    Version                                |   Description       |
 |----------------|-----------------------------------------|-----------|
-| [midway-faas] | [![faas-status]][faas-package] |基于依赖注入适配多云平台的 Serverless 开发框架|
+| [midway-serverless] | [![faas-status]][faas-package] |新一代渐进式 Serverless 开发框架|
 | [runtime-engine] | [![runtime-engine-status]][runtime-engine-package] |通用的基础 Serverless 运行时|
 | [serverless-fc-starter] | [![serverless-fc-starter-status]][serverless-fc-starter-package] |阿里云 FC 函数启动器|
 | [serverless-scf-starter] | [![serverless-scf-starter-status]][serverless-scf-starter-package] |腾讯云 SCF 函数启动器|
 | [midway] | [![midway-status]][midway-package] |基于依赖注入面向未来的 Web 开发框架|
 
 
-[midway-faas]: https://github.com/midwayjs/midway-faas
+[midway-serverless]: https://github.com/midwayjs/midway-serverless
 [midway]: https://github.com/midwayjs/midway
-[runtime-engine]: https://github.com/midwayjs/midway-faas/tree/master/packages/runtime-engine
-[faas-cli]: https://github.com/midwayjs/midway-faas/tree/master/packages/faas-cli
-[serverless-fc-starter]: https://github.com/midwayjs/midway-faas/tree/master/packages/serverless-fc-starter
-[serverless-scf-starter]: https://github.com/midwayjs/midway-faas/tree/master/packages/serverless-scf-starter
+[runtime-engine]: https://github.com/midwayjs/midway-serverless/tree/master/packages/runtime-engine
+[faas-cli]: https://github.com/midwayjs/midway-serverless/tree/master/packages/faas-cli
+[serverless-fc-starter]: https://github.com/midwayjs/midway-serverless/tree/master/packages/serverless-fc-starter
+[serverless-scf-starter]: https://github.com/midwayjs/midway-serverless/tree/master/packages/serverless-scf-starter
 
 [faas-status]: https://img.shields.io/npm/v/@midwayjs/faas.svg
 [midway-status]: https://img.shields.io/npm/v/midway.svg
@@ -82,12 +139,14 @@ Midway FaaS 是一个用于构建 Node.js 云函数的 Serverless 框架，可�
 
 ## 社区合作伙伴
 
+- [Koa](https://koajs.com/)
+- [Egg](https://eggjs.org/)
 - [icejs](https://ice.work/)
 - [ykfe/ssr](https://github.com/ykfe/ssr/)
 
 ## 协议
 
-Midway FaaS 基于 [MIT licensed](./LICENSE) 协议开发.
+Midway Serverless 基于 [MIT licensed](./LICENSE) 协议开发.
 
 ## About
 
