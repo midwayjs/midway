@@ -179,6 +179,16 @@ export const context = {
   },
 
   /**
+   * Vary on `field`.
+   *
+   * @param {String} field
+   * @api public
+   */
+  vary(field) {
+    return this.response.vary(field);
+  },
+
+  /**
    * util.inspect() implementation, which
    * just returns the JSON output.
    *

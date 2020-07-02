@@ -5,6 +5,7 @@ import { is as typeis } from 'type-is';
 import * as encodeUrl from 'encodeurl';
 import * as escape from 'escape-html';
 import * as only from 'only';
+import * as vary from 'vary';
 
 export const response = {
   explicitStatus: null,
@@ -323,6 +324,30 @@ export const response = {
   is(type, ...types) {
     return typeis(this.type, type, ...types);
   },
+
+  /**
+   * Check if a header has been written to the socket.
+   *
+   * @return {Boolean}
+   * @api public
+   */
+
+  get headerSent() {
+    return this.res.headersSent;
+  },
+
+  /**
+   * Vary on `field`.
+   *
+   * @param {String} field
+   * @api public
+   */
+  vary(field) {
+    if (this.headerSent) return;
+
+    vary(this.res, field);
+  },
+
   /**
    * Perform a 302 redirect to `url`.
    *
@@ -341,7 +366,6 @@ export const response = {
    * @param {String} [alt]
    * @api public
    */
-
   redirect(url: string, alt?: string) {
     // location
     if ('back' === url) url = this.ctx.get('Referrer') || alt || '/';
