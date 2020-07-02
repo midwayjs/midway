@@ -24,6 +24,10 @@
   </a>
 </p>
 
+## 介绍
+
+[详细介绍文章：阿里 Midway 正式发布 Serverless v1.0](https://github.com/midwayjs/midway/wiki/%E9%98%BF%E9%87%8C-Midway-%E6%AD%A3%E5%BC%8F%E5%8F%91%E5%B8%83-Serverless-v1.0%EF%BC%8C%E7%A0%94%E5%8F%91%E6%8F%90%E6%95%88-50%25)， 欢迎 Star 本仓库
+
 Midway Serverless 是一个用于构建 Node.js 云函数的 Serverless 框架，可以帮您在云原生时代更专注于产品开发，降低维护成本。
 
 - 1、平台间迁移更容易
@@ -40,9 +44,6 @@ Midway Serverless 是一个用于构建 Node.js 云函数的 Serverless 框架�
   -  Midway 体系的装饰器能力统一，让传统 Web 迁移到 Serverless 体系更快更好。
   
   
-## 介绍文章
-
-- [阿里 Midway 正式发布 Serverless v1.0，研发提效 50%](https://github.com/midwayjs/midway/wiki/%E9%98%BF%E9%87%8C-Midway-%E6%AD%A3%E5%BC%8F%E5%8F%91%E5%B8%83-Serverless-v1.0%EF%BC%8C%E7%A0%94%E5%8F%91%E6%8F%90%E6%95%88-50%25)
 
 ## 文档
 
