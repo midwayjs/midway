@@ -50,7 +50,7 @@ Midway Serverless 是一个用于构建 Node.js 云函数的 Serverless 框架�
 - 文档 [中文](https://www.yuque.com/midwayjs/faas)
 
 
-## Overview
+## 快速开始
 
 
 ### 安装 CLI 工具
@@ -85,6 +85,8 @@ Generating boilerplate...
   faas-vue - A serverless example with vue
 ```
 
+![](https://camo.githubusercontent.com/7819739b6a9eb3d673124817b0d40e46dc963993/68747470733a2f2f63646e2e6e6c61726b2e636f6d2f79757175652f302f323032302f6769662f3530313430382f313539333636313634363431362d35636238663637392d336331302d343638392d386465612d6530313731326438653231662e67696623616c69676e3d6c65667426646973706c61793d696e6c696e65266865696768743d383731266d617267696e3d2535426f626a6563742532304f626a656374253544266e616d653d323032302d30372d303225323031312d34342d32382e323032302d30372d303225323031315f34365f34302e676966266f726967696e4865696768743d383731266f726967696e57696474683d313036302673697a653d373438353839267374617475733d646f6e65267374796c653d6e6f6e652677696474683d31303630)
+
 ### 部署函数
 
 执行下面的命令即可发布到云平台。
@@ -100,7 +102,7 @@ Midway Serverless 现已支持阿里云、腾讯云的部署，aws 正在开发�
 
 当前已接入以下前端一体化示例。
 
-|<img alt="React" src="https://user-images.githubusercontent.com/677114/42611693-f921fc7c-85c9-11e8-8de1-6d6013b92f69.png" width="48">| <img alt="Vue" src="https://user-images.githubusercontent.com/677114/42611543-44ef4502-85c9-11e8-9ef9-e9f98477c646.png" width="48">
+|<img alt="React" src="https://user-images.githubusercontent.com/677114/42611693-f921fc7c-85c9-11e8-8de1-6d6013b92f69.png" width="72">| <img alt="Vue" src="https://user-images.githubusercontent.com/677114/42611543-44ef4502-85c9-11e8-9ef9-e9f98477c646.png" width="72">
 | :---: | :---: |
 | [React](https://www.yuque.com/midwayjs/faas/faas_with_react) | [Vue](https://www.yuque.com/midwayjs/faas/faas_with_vue) |
 
@@ -148,6 +150,16 @@ Midway Serverless 现已支持阿里云、腾讯云的部署，aws 正在开发�
 - [Egg](https://eggjs.org/)
 - [icejs](https://ice.work/)
 - [ykfe/ssr](https://github.com/ykfe/ssr/)
+
+## Contributors
+
+Please let us know how can we help. Do check out [issues](http://github.com/midwayjs/midway/issues) for bug reports or suggestions first.
+
+To become a contributor, please follow our contributing guide.
+
+This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+<a href="https://github.com/midwayjs/midway/graphs/contributors"><img src="https://opencollective.com/midway/contributors.svg?width=890&button=false" /></a>
+
 
 ## 协议
 
