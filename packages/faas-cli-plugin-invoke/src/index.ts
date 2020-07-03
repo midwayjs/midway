@@ -1,10 +1,6 @@
 import { BasePlugin } from '@midwayjs/fcli-command-core';
 import { AnalyzeResult, Locator } from '@midwayjs/locate';
-import {
-  compareFileChange,
-  copyFiles,
-  CodeAny,
-} from '@midwayjs/faas-util-ts-compile';
+import { analysis, compareFileChange, copyFiles } from '@midwayjs/faas-code-analysis';
 import { compileInProject } from '@midwayjs/mwcc';
 import { writeWrapper } from '@midwayjs/serverless-spec-builder';
 import { createRuntime } from '@midwayjs/runtime-mock';
@@ -266,16 +262,10 @@ export class FaaSInvokePlugin extends BasePlugin {
     }
     // 当spec上面没有functions的时候，启动代码分析
     if (!this.core.service.functions) {
-      const codeAnyParams = {
-        spec: this.core.service,
-        baseDir: this.baseDir,
-        sourceDir: [
-          `${this.relativeTsCodeRoot}/**/*`,
-          `${this.defaultTmpFaaSOut}/src/**/*`,
-        ],
-      };
-      this.core.debug('Code Analysis Params', codeAnyParams);
-      const newSpec = await CodeAny(codeAnyParams);
+      const newSpec = await analysis([
+        this.relativeTsCodeRoot,
+        `${this.defaultTmpFaaSOut}/src`,
+      ]);
       this.core.debug('Code Analysis Result', newSpec);
       this.core.service.functions = newSpec.functions;
       this.setStore('functions', this.core.service.functions);
