@@ -7,6 +7,9 @@ export function formatLayers(...multiLayers: Ilayer[]) {
   const layerTypeList = { npm: {} };
   multiLayers.forEach((layer: Ilayer) => {
     Object.keys(layer || {}).forEach(layerName => {
+      if (!layer[layerName].path) {
+        return;
+      }
       const [type, path] = layer[layerName].path.split(':');
       if (!layerTypeList[type]) {
         return;
