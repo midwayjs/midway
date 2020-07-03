@@ -312,7 +312,7 @@ export class PackagePlugin extends BasePlugin {
     if (this.core.service.functions) {
       return this.core.service.functions;
     }
-    const newSpec: any = analysis([
+    const newSpec: any = await analysis([
       resolve(this.servicePath, this.codeAnalyzeResult.tsCodeRoot),
       resolve(this.defaultTmpFaaSOut, 'src'),
     ]);
