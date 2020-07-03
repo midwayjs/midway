@@ -19,7 +19,7 @@ import {
 } from 'fs-extra';
 import * as micromatch from 'micromatch';
 import { commonPrefix, formatLayers } from './utils';
-import { copyFiles, CodeAny } from '@midwayjs/faas-util-ts-compile';
+import { analysis, copyFiles } from '@midwayjs/faas-code-analysis';
 import { compileInProject, MwccConfig } from '@midwayjs/mwcc';
 import { exec } from 'child_process';
 import * as archiver from 'archiver';
@@ -312,14 +312,10 @@ export class PackagePlugin extends BasePlugin {
     if (this.core.service.functions) {
       return this.core.service.functions;
     }
-    const newSpec: any = await CodeAny({
-      spec: this.core.service,
-      baseDir: this.servicePath,
-      sourceDir: [
-        this.codeAnalyzeResult.tsCodeRoot,
-        resolve(this.defaultTmpFaaSOut, 'src'),
-      ],
-    });
+    const newSpec: any = await analysis([
+      resolve(this.servicePath, this.codeAnalyzeResult.tsCodeRoot),
+      resolve(this.defaultTmpFaaSOut, 'src'),
+    ]);
     this.core.debug('CcdeAnalysis', newSpec);
     this.core.service.functions = newSpec.functions;
   }
