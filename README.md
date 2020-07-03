@@ -125,12 +125,12 @@ Midway Serverless 现已支持阿里云、腾讯云的部署，aws 正在开发�
 | [midway] | [![midway-status]][midway-package] |基于依赖注入面向未来的 Web 开发框架|
 
 
-[midway-serverless]: https://github.com/midwayjs/midway-serverless
+[midway-serverless]: https://github.com/midwayjs/midway/tree/serverless/packages/faas
 [midway]: https://github.com/midwayjs/midway
-[runtime-engine]: https://github.com/midwayjs/midway-serverless/tree/master/packages/runtime-engine
-[faas-cli]: https://github.com/midwayjs/midway-serverless/tree/master/packages/faas-cli
-[serverless-fc-starter]: https://github.com/midwayjs/midway-serverless/tree/master/packages/serverless-fc-starter
-[serverless-scf-starter]: https://github.com/midwayjs/midway-serverless/tree/master/packages/serverless-scf-starter
+[runtime-engine]: https://github.com/midwayjs/midway/tree/serverless/packages/runtime-engine
+[faas-cli]: https://github.com/midwayjs/midway/tree/serverless/packages/faas-cli
+[serverless-fc-starter]: https://github.com/midwayjs/midway/tree/serverless/packages/serverless-fc-starter
+[serverless-scf-starter]: https://github.com/midwayjs/midway/tree/serverless/packages/serverless-scf-starter
 
 [faas-status]: https://img.shields.io/npm/v/@midwayjs/faas.svg
 [midway-status]: https://img.shields.io/npm/v/midway.svg
@@ -158,7 +158,7 @@ Please let us know how can we help. Do check out [issues](http://github.com/midw
 
 To become a contributor, please follow our contributing guide.
 
-This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+This project exists thanks to all the people who contribute.
 <a href="https://github.com/midwayjs/midway/graphs/contributors"><img src="https://opencollective.com/midway/contributors.svg?width=890&button=false" /></a>
 
 
