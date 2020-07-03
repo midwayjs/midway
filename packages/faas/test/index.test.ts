@@ -208,4 +208,32 @@ describe('test/index.test.ts', () => {
 
     assert(data.body === 'ahello123');
   });
+
+  it('test inject logger', async () => {
+    const { start } = require('../../serverless-scf-starter/src');
+    const runtime = await start();
+    const starter = new FaaSStarter({
+      baseDir: join(__dirname, './fixtures/base-app-inject-logger'),
+      applicationAdapter: runtime,
+    });
+    // set app
+    const app = runtime.getApplication();
+    app.mysql = {
+      model: '123',
+    };
+    await starter.start();
+    const data = await runtime.asyncEvent(
+      starter.handleInvokeWrapper('index.handler')
+    )(
+      {
+        text: 'hello',
+        httpMethod: 'GET',
+        headers: {},
+        requestContext: {},
+      },
+      { text: 'a' }
+    );
+
+    assert(data.body === 'hello world');
+  });
 });
