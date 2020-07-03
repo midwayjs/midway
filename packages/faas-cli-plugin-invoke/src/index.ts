@@ -1,6 +1,10 @@
 import { BasePlugin } from '@midwayjs/fcli-command-core';
 import { AnalyzeResult, Locator } from '@midwayjs/locate';
-import { analysis, compareFileChange, copyFiles } from '@midwayjs/faas-code-analysis';
+import {
+  analysis,
+  compareFileChange,
+  copyFiles,
+} from '@midwayjs/faas-code-analysis';
 import { compileInProject } from '@midwayjs/mwcc';
 import { writeWrapper } from '@midwayjs/serverless-spec-builder';
 import { createRuntime } from '@midwayjs/runtime-mock';

@@ -10,24 +10,24 @@ interface IResult {
 
 @Provider()
 export class Test {
-
   @Inject('context')
   private ctx: any;
 
   @Oth
   private oth: any;
 
-  constructor(name: string, age: number) {
-    console.log('init');
-  }
-
   @Func('index.handler', { event: 'http', method: 'GET', path: '/api/test' })
   @Func('index.handler', { event: 'http' })
-  public async handler(event: { d: { name: string}; name: string}): Promise<IResult> {
+  public async handler(event: {
+    d: {
+      name: string;
+    };
+    name: string;
+  }): Promise<IResult> {
     console.log(event.d.name, event.name, this.ctx, this.oth);
     return {
       success: true,
-      data: [ 1, 2, 3 ],
+      data: [1, 2, 3],
     };
   }
 }
