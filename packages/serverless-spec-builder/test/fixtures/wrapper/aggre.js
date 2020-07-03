@@ -27,7 +27,7 @@ exports.handler = asyncWrapper(async (...args) => {
   }
   
   const picomatch = require('picomatch');
-  const allHandlers = [{"handler":"index.handler","router":"/api/test","pureRouter":"/api/test","level":2},{"handler":"render.handler","router":"/*","pureRouter":"/","level":1}];
+  const allHandlers = [{"handler":"index.handler","router":"/api/test","pureRouter":"/api/test","level":2},{"handler":"render.handler","router":"/**","pureRouter":"/","level":1}];
   return runtime.asyncEvent(async (ctx) => {
     let handler = null;
     let ctxPath = ctx && ctx.path || '';
@@ -40,7 +40,9 @@ exports.handler = asyncWrapper(async (...args) => {
     if (handler) {
       return starter.handleInvokeWrapper(handler.handler)(ctx);
     }
-    return 'unhandler path: ' + ctxPath + '; handlerInfo: ' + JSON.stringify(allHandlers);
+    ctx.status = 404;
+    ctx.set('Content-Type', 'text/html');
+    return '<h1>404 Page Not Found</h1><hr />Request path: ' + ctxPath + '<hr /><div style="font-size: 12px;color: #999999;">Powered by <a href="https://github.com/midwayjs/midway-faas">Midway</a></div>';
   })(...args);
   
 });

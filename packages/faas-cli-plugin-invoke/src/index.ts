@@ -267,8 +267,8 @@ export class FaaSInvokePlugin extends BasePlugin {
     // 当spec上面没有functions的时候，启动代码分析
     if (!this.core.service.functions) {
       const newSpec = await analysis([
-        this.relativeTsCodeRoot,
-        `${this.defaultTmpFaaSOut}/src`,
+        resolve(this.baseDir, this.relativeTsCodeRoot),
+        resolve(this.defaultTmpFaaSOut, 'src'),
       ]);
       this.core.debug('Code Analysis Result', newSpec);
       this.core.service.functions = newSpec.functions;

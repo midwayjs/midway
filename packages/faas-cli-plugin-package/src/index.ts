@@ -313,7 +313,7 @@ export class PackagePlugin extends BasePlugin {
       return this.core.service.functions;
     }
     const newSpec: any = analysis([
-      this.codeAnalyzeResult.tsCodeRoot,
+      resolve(this.servicePath, this.codeAnalyzeResult.tsCodeRoot),
       resolve(this.defaultTmpFaaSOut, 'src'),
     ]);
     this.core.debug('CcdeAnalysis', newSpec);

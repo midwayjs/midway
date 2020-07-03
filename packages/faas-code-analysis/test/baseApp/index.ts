@@ -1,4 +1,4 @@
-const Provider: any = () => 0;
+const Provide: any = () => 0;
 const Inject: any = () => 0;
 const Func: any = () => 0;
 const Oth: any = () => 0;
@@ -8,7 +8,7 @@ interface IResult {
   data: number[];
 }
 
-@Provider()
+@Provide()
 export class Test {
   @Inject('context')
   private ctx: any;

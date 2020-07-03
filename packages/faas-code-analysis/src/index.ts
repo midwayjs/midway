@@ -7,19 +7,23 @@ export const analysis = async (codePath: IParam) => {
   const result: IResult = {
     functions: {},
   };
-  const analysisResult: ITsAnalysisResult = await tsAnalysisInstance(codePath);
-  const funcList = [].concat(
-    analysisResult.decorator.Func || [],
-    analysisResult.decorator.func || []
-  );
+  const analysisResult: ITsAnalysisResult = await tsAnalysisInstance(codePath, {
+    decoratorLowerCase: true,
+  });
+  const funcList = analysisResult.decorator.func || [];
   if (!funcList.length) {
     return result;
   }
 
   funcList.forEach(item => {
     const params = item.params;
-    const className = item.parent?.Provider?.[0]?.target?.name || '';
-    const funcName = item.target.name || 'handler';
+    let className = item.parent?.provide?.[0]?.target?.name || '';
+    let funcName = item.target.name || 'handler';
+
+    if (item.target.type === 'class') {
+      className = item.target.name;
+      funcName = 'handler';
+    }
     let handler;
     let trigger: IEvent;
     if (typeof params[0] === 'string') {
