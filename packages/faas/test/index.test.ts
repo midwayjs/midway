@@ -216,11 +216,6 @@ describe('test/index.test.ts', () => {
       baseDir: join(__dirname, './fixtures/base-app-inject-logger'),
       applicationAdapter: runtime,
     });
-    // set app
-    const app = runtime.getApplication();
-    app.mysql = {
-      model: '123',
-    };
     await starter.start();
     const data = await runtime.asyncEvent(
       starter.handleInvokeWrapper('index.handler')

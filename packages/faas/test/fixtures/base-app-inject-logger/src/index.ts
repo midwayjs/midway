@@ -12,6 +12,7 @@ export class HelloService implements FunctionHandler {
   loggerService;
 
   async handler() {
+    assert(this.loggerService.getLogger());
     assert(this.loggerService.getLogger() === this.app.getLogger());
     return 'hello world';
   }
