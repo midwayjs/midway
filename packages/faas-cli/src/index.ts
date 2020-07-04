@@ -1,7 +1,9 @@
 import { BaseCLI, installNpm } from '@midwayjs/fcli-command-core';
 import { saveYaml } from '@midwayjs/serverless-spec-builder';
-import { execSync } from 'child_process';
 import { plugins } from './plugins';
+import { resolve } from 'path';
+import { existsSync } from 'fs';
+import { execSync } from 'child_process';
 
 const { Select } = require('enquirer');
 export class CLI extends BaseCLI {
@@ -23,23 +25,32 @@ export class CLI extends BaseCLI {
       });
     }
     const platform = this.spec.provider.name;
+    const requiredMap = {};
     for (let pluginIndex = 0; pluginIndex < needLoad.length; pluginIndex++) {
       const pluginInfo = needLoad[pluginIndex];
+      const key = `${pluginInfo.mod}:${pluginInfo.name}`;
       // skip unneed plugin
-      if (pluginInfo.platform && platform !== pluginInfo.platform) {
+      if (
+        requiredMap[key] ||
+        (pluginInfo.platform && platform !== pluginInfo.platform)
+      ) {
         continue;
       }
+      requiredMap[key] = true;
       let mod;
       try {
         mod = require(pluginInfo.mod);
       } catch (e) {
+        const userModPath = resolve(this.cwd, 'node_modules', pluginInfo.mod);
         // if plugin not exists, auto install
-        await this.autoInstallMod(pluginInfo.mod);
-      }
-      try {
-        mod = require(pluginInfo.mod);
-      } catch (e) {
-        // no oth doing
+        if (!existsSync(userModPath)) {
+          await this.autoInstallMod(pluginInfo.mod);
+        }
+        try {
+          mod = require(pluginInfo.mod);
+        } catch (e) {
+          // no oth doing
+        }
       }
       if (mod && mod[pluginInfo.name]) {
         this.core.addPlugin(mod[pluginInfo.name]);
@@ -140,7 +151,8 @@ export class CLI extends BaseCLI {
       await installNpm({
         npmName: modName,
         register: this.argv.npm,
-        baseDir: process.cwd(),
+        baseDir: this.cwd,
+        slience: true,
       });
     } catch (e) {
       log.error(
