@@ -26,7 +26,7 @@ English | [简体中文](./README.md)
 
 ## Introduction
 
-[Detailed introduction article: Ali Midway Serverless release v1.0](https://medium.com/@Lellansin/alibaba-midway-serverless-v1-0-lets-building-serverless-cloud-ecosystem-with-node-js-8a6d09a777a3)， welcome Star this repository.
+[Detailed introduction article: Alibaba Midway Serverless release v1.0](https://medium.com/@Lellansin/alibaba-midway-serverless-v1-0-lets-building-serverless-cloud-ecosystem-with-node-js-8a6d09a777a3)， welcome Star this repository.
 
 Midway Serverless is a serverless framework used to build Node.js cloud functions. Helps you significantly reduce maintenance costs and focus more on product development in the cloud-native era.
 
