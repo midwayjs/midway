@@ -32,8 +32,8 @@ Midway Serverless is a serverless framework used to build Node.js cloud function
 - 2、Make applications easier to maintain and expand
   - 🐯 Provides standard cloud platform function entry and exit parameter definitions;
   - 🐦 Provided multiple sets of integrated development solutions for community front-end React, Vue, etc.;
-  - 🐶 提供了 TypeScript 支持，方便应用扩展和定义；
-  - 🐱 Provides TypeScript support to facilitate application expansion and definition;
+  - 🐶 Provides TypeScript support to facilitate application expansion and definition;
+  - 🐱 Provides a complete Midway system iconic dependency injection solution;
 - 3、 Ecology is more lightweight and free
   - 🦁 The function system reuses the ecological and Web middleware capabilities of koa, which is more handy when dealing with traditional Web;
   - 🐴 Provide an ecological chain of egg components reusing egg plug-ins, enterprise-level development links are simpler and smoother;
