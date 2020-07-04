@@ -1,29 +1,11 @@
-import { BaseCLI } from '@midwayjs/fcli-command-core';
+import { BaseCLI, installNpm } from '@midwayjs/fcli-command-core';
 import { saveYaml } from '@midwayjs/serverless-spec-builder';
 import { execSync } from 'child_process';
-
-const plugins = {
-  create: { mod: '@midwayjs/fcli-plugin-create', name: 'CreatePlugin' },
-  invoke: [
-    { mod: '@midwayjs/fcli-plugin-invoke', name: 'FaaSInvokePlugin' },
-    { mod: '@midwayjs/fcli-plugin-dev-pack', name: 'DevPackPlugin' },
-  ],
-  test: { mod: '@midwayjs/fcli-plugin-test', name: 'TestPlugin' },
-  package: [
-    { mod: '@midwayjs/fcli-plugin-package', name: 'PackagePlugin' },
-    { mod: '@midwayjs/fcli-plugin-fc', name: 'AliyunFCPlugin' },
-  ],
-  deploy: [
-    { mod: '@midwayjs/fcli-plugin-package', name: 'PackagePlugin' },
-    { mod: '@midwayjs/fcli-plugin-deploy', name: 'DeployPlugin' },
-    { mod: '@midwayjs/fcli-plugin-fc', name: 'AliyunFCPlugin' },
-    { mod: '@midwayjs/fcli-plugin-scf', name: 'TencentSCFPlugin' },
-  ],
-};
+import { plugins } from './plugins';
 
 const { Select } = require('enquirer');
 export class CLI extends BaseCLI {
-  loadDefaultPlugin() {
+  async loadDefaultPlugin() {
     const command = this.commands && this.commands[0];
     // version not load plugin
     if (this.argv.v || this.argv.version) {
@@ -40,16 +22,29 @@ export class CLI extends BaseCLI {
         needLoad = needLoad.concat(plugins[cmd]);
       });
     }
-    needLoad.forEach(pluginInfo => {
-      try {
-        const mod = require(pluginInfo.mod);
-        if (mod[pluginInfo.name]) {
-          this.core.addPlugin(mod[pluginInfo.name]);
-        }
-      } catch (e) {
-        /** ignore */
+    const platform = this.spec.provider.name;
+    for (let pluginIndex = 0; pluginIndex < needLoad.length; pluginIndex++) {
+      const pluginInfo = needLoad[pluginIndex];
+      // skip unneed plugin
+      if (pluginInfo.platform && platform !== pluginInfo.platform) {
+        continue;
       }
-    });
+      let mod;
+      try {
+        mod = require(pluginInfo.mod);
+      } catch (e) {
+        // if plugin not exists, auto install
+        await this.autoInstallMod(pluginInfo.mod);
+      }
+      try {
+        mod = require(pluginInfo.mod);
+      } catch (e) {
+        // no oth doing
+      }
+      if (mod && mod[pluginInfo.name]) {
+        this.core.addPlugin(mod[pluginInfo.name]);
+      }
+    }
   }
 
   async loadPlugins() {
@@ -120,7 +115,11 @@ export class CLI extends BaseCLI {
         const prompt = new Select({
           name: 'provider',
           message: 'Which platform do you want to use?',
-          choices: ['阿里云函数计算 aliyun fc', '腾讯云函数 tencent scf'],
+          choices: [
+            '阿里云函数计算 aliyun fc',
+            '腾讯云函数 tencent scf',
+            '亚马逊 aws lambda',
+          ],
         });
         const answers = await prompt.run();
         platform = answers.split(' ')[1];
@@ -129,6 +128,25 @@ export class CLI extends BaseCLI {
         this.spec.provider.name = platform;
         saveYaml(this.specFile.path, this.spec);
       }
+    }
+  }
+
+  async autoInstallMod(modName) {
+    const log = this.loadLog();
+    log.log(
+      `[ midway ] cli plugin '${modName}' was not installed. Auto installing`
+    );
+    try {
+      await installNpm({
+        npmName: modName,
+        register: this.argv.npm,
+        baseDir: process.cwd(),
+      });
+    } catch (e) {
+      log.error(
+        `[ midway ] cli plugin '${modName}' install error: ${e?.message}`
+      );
+      log.log(`[ midway ] please manual install '${modName}'`);
     }
   }
 }

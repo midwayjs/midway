@@ -1,27 +1,16 @@
 {
-  "name": "@midwayjs/faas-cli",
+  "name": "@midwayjs/fcli-plugin-aws",
   "version": "1.0.0",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/debugger": "^0.0.3",
+    "@alicloud/fun": "^3.1.3",
     "@midwayjs/fcli-command-core": "^1.0.0",
-    "@midwayjs/fcli-plugin-create": "^1.0.0",
-    "@midwayjs/fcli-plugin-deploy": "^1.0.0",
-    "@midwayjs/fcli-plugin-dev-pack": "^1.0.0",
-    "@midwayjs/fcli-plugin-invoke": "^1.0.0",
-    "@midwayjs/fcli-plugin-package": "^1.0.0",
-    "@midwayjs/fcli-plugin-test": "^1.0.0",
-    "@midwayjs/serverless-spec-builder": "^1.0.0",
-    "enquirer": "^2.3.4",
-    "minimist": "^1.2.5",
-    "source-map-support": "^0.5.19"
-  },
-  "bin": {
-    "mf": "bin/fun.js",
-    "f": "bin/fun.js"
+    "@midwayjs/serverless-fc-starter": "^1.0.0",
+    "@midwayjs/serverless-spec-builder": "^1.0.0"
   },
   "devDependencies": {
+    "@midwayjs/fcli-plugin-package": "^1.0.0",
     "fs-extra": "^8.1.0",
     "midway-bin": "^2.0.0"
   },
@@ -29,14 +18,12 @@
     "node": ">= 10"
   },
   "files": [
-    "bin",
     "src",
-    "dist",
-    "package.json"
+    "dist"
   ],
   "scripts": {
     "build": "midway-bin build -c",
-    "test": "midway-bin test --ts --full-trace",
+    "test": "midway-bin test --ts --full-trace --timeout=0",
     "debug": "midway-bin test --ts --full-trace --inspect-brk=9229",
     "cov": "midway-bin cov --ts",
     "clean": "midway-bin clean",
