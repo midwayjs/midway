@@ -4,6 +4,7 @@ import { plugins } from './plugins';
 import { resolve } from 'path';
 import { existsSync } from 'fs';
 import { execSync } from 'child_process';
+import Spin from 'light-spinner';
 
 const { Select } = require('enquirer');
 export class CLI extends BaseCLI {
@@ -47,7 +48,7 @@ export class CLI extends BaseCLI {
           await this.autoInstallMod(pluginInfo.mod);
         }
         try {
-          mod = require(pluginInfo.mod);
+          mod = require(userModPath);
         } catch (e) {
           // no oth doing
         }
@@ -147,6 +148,8 @@ export class CLI extends BaseCLI {
     log.log(
       `[ midway ] cli plugin '${modName}' was not installed. Auto installing`
     );
+    const spin = new Spin({ text: 'installing' });
+    spin.start();
     try {
       await installNpm({
         npmName: modName,
@@ -160,5 +163,6 @@ export class CLI extends BaseCLI {
       );
       log.log(`[ midway ] please manual install '${modName}'`);
     }
+    spin.stop();
   }
 }
