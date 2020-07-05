@@ -146,8 +146,13 @@ export class CLI extends BaseCLI {
   async autoInstallMod(modName) {
     const log = this.loadLog();
     log.log(
-      `[ midway ] cli plugin '${modName}' was not installed. Auto installing`
+      `[ midway ] CLI plugin '${modName}' was not installed, and will be installed automatically`
     );
+    if (!this.argv.npm) {
+      log.log(
+        '[ midway ] You could use the `--npm` parameter to speed up the installation process'
+      );
+    }
     const spin = new Spin({ text: 'installing' });
     spin.start();
     try {
