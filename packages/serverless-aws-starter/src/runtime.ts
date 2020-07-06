@@ -8,7 +8,6 @@ import {
   HTTPRequest,
   HTTPResponse,
 } from '@midwayjs/serverless-http-parser';
-import { Context } from './context';
 
 export class AWSRuntime extends ServerlessLightRuntime {
   app;
