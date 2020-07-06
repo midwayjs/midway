@@ -141,7 +141,11 @@ export class CommandHookCore implements ICommandHooksCore {
     for (const lifecycle of lifecycleEvents) {
       if (this.userLifecycle && this.userLifecycle[lifecycle]) {
         this.debug('User Lifecycle', lifecycle);
-        await this.execCommand(this.userLifecycle[lifecycle]);
+        try {
+          await this.execCommand(this.userLifecycle[lifecycle]);
+        } catch (e) {
+          this.debug('User Lifecycle Hook Error', e?.message);
+        }
       }
       this.debug('Core Lifecycle', lifecycle);
       const hooks = this.hooks[lifecycle] || [];

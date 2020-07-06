@@ -40,10 +40,10 @@ export class BaseCLI {
   }
 
   async loadPlugins() {
-    this.loadCorePlugin();
-    this.loadDefaultPlugin();
-    this.loadPlatformPlugin();
-    this.loadUserPlugin();
+    await this.loadCorePlugin();
+    await this.loadDefaultPlugin();
+    await this.loadPlatformPlugin();
+    await this.loadUserPlugin();
   }
 
   loadCorePlugin() {

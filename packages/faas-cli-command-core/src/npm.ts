@@ -1,9 +1,8 @@
 import { join } from 'path';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
-import { execSync } from 'child_process';
+import { exec, execSync } from 'child_process';
 import * as assert from 'assert';
 const homeDir = require('os').homedir();
-const currentNodeModules = execSync('npm root').toString().replace(/\n$/, '');
 const commandHookCoreBaseDir = join(homeDir, '.commandHookCore');
 const commandHookCoreBasePkg = join(commandHookCoreBaseDir, 'package.json');
 const commandHookCoreBaseNodeModules = join(
@@ -30,20 +29,48 @@ async function getNpmPath(
   if (existsSync(globalNpmPath)) {
     return globalNpmPath;
   }
-
+  const currentNodeModules = execSync('npm root').toString().replace(/\n$/, '');
   const localNpmPath = join(currentNodeModules, npmName);
   if (existsSync(localNpmPath)) {
     return localNpmPath;
   }
 
   scope.coreInstance.cli.log(`Installing ${npmName}`);
-  execSync(
-    `cd ${commandHookCoreBaseDir};${
-      npmRegistry || 'npm'
-    } i ${npmName} --production`
-  );
-
+  await installNpm({
+    baseDir: commandHookCoreBaseDir,
+    register: npmRegistry,
+    npmName,
+    mode: 'production',
+  });
   return globalNpmPath;
+}
+
+interface INpmInstallOptions {
+  baseDir?: string;
+  register?: string;
+  npmName: string;
+  mode?: string;
+  slience?: boolean;
+}
+export async function installNpm(options: INpmInstallOptions) {
+  const { baseDir, register = 'npm', npmName, mode, slience } = options;
+  const cmd = `${baseDir ? `cd ${baseDir};` : ''}${register} i ${npmName}${
+    mode ? ` --${mode}` : ''
+  }`;
+
+  return new Promise((resolved, rejected) => {
+    const execProcess = exec(cmd, (err, result) => {
+      if (err) {
+        return rejected(err);
+      }
+      resolved(result.replace(/\n$/, '').replace(/^\s*|\s*$/, ''));
+    });
+    execProcess.stdout.on('data', data => {
+      if (!slience) {
+        console.log(data);
+      }
+    });
+  });
 }
 
 export async function loadNpm(
