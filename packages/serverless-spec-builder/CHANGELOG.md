@@ -3,6 +3,39 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.0.1 (2020-07-06)
+
+
+### Bug Fixes
+
+* add fc service properties definition ([d2a30ca](https://github.com/midwayjs/midway-faas/commit/d2a30ca5526d5cd2932b2623e71a70444544ec2a))
+* aggregation pattern ([#71](https://github.com/midwayjs/midway-faas/issues/71)) ([938c4b3](https://github.com/midwayjs/midway-faas/commit/938c4b338adc5826954c514a913996a1b5abbd49))
+* code ana package ([#108](https://github.com/midwayjs/midway-faas/issues/108)) ([6e11d0f](https://github.com/midwayjs/midway-faas/commit/6e11d0f588e10b41551256a23a7d4fd6b8133c93))
+* file compare & npm options ([#62](https://github.com/midwayjs/midway-faas/issues/62)) ([beb50f8](https://github.com/midwayjs/midway-faas/commit/beb50f85106cd627aac7b2ab0317ed29ae830e33))
+* fix error control in fc ([#153](https://github.com/midwayjs/midway-faas/issues/153)) ([f7dd007](https://github.com/midwayjs/midway-faas/commit/f7dd0070f9c1b7f07e628c8d2052d273a8133910))
+* fix hanlder to handler ([#56](https://github.com/midwayjs/midway-faas/issues/56)) ([c272bd7](https://github.com/midwayjs/midway-faas/commit/c272bd78aae12b430553afd041af9223e07b9910))
+* fix windows path when invoke ([#169](https://github.com/midwayjs/midway-faas/issues/169)) ([e637a0a](https://github.com/midwayjs/midway-faas/commit/e637a0ab05a769a3797e2dccf0612bbbf650d074))
+* invoke bug ([#106](https://github.com/midwayjs/midway-faas/issues/106)) ([d45ff3f](https://github.com/midwayjs/midway-faas/commit/d45ff3f3c41764d08c6968dbdd676d174b695d96))
+* invoke getFuncList and core auto load plugin ([#112](https://github.com/midwayjs/midway-faas/issues/112)) ([54e4d11](https://github.com/midwayjs/midway-faas/commit/54e4d1151942075b86d187c46fc107b9ff1d816b))
+* invoke source map ([#52](https://github.com/midwayjs/midway-faas/issues/52)) ([9149d2a](https://github.com/midwayjs/midway-faas/commit/9149d2a9a3f3d9ba975588b61c6f9bbeec2e8d86)), closes [#51](https://github.com/midwayjs/midway-faas/issues/51)
+* refactor appregation & pass process env to invoke debug ([#24](https://github.com/midwayjs/midway-faas/issues/24)) ([f8cd981](https://github.com/midwayjs/midway-faas/commit/f8cd98118e91d3e1b15c2b37d1aaad6b15282f26))
+* Refactor/invoke ([#178](https://github.com/midwayjs/midway-faas/issues/178)) ([37dd34f](https://github.com/midwayjs/midway-faas/commit/37dd34feab822900af61d7515bc0a4cbed7b20f8))
+* support typescript run ([#139](https://github.com/midwayjs/midway-faas/issues/139)) ([472c985](https://github.com/midwayjs/midway-faas/commit/472c985d054f452ed79b496d348a95adc754663e))
+* tencent trigger ([#131](https://github.com/midwayjs/midway-faas/issues/131)) ([0e93057](https://github.com/midwayjs/midway-faas/commit/0e93057205c2b761d1ee6fcf7e9c5d35bab349a7))
+* wrapper generator ([#156](https://github.com/midwayjs/midway-faas/issues/156)) ([be2d5a1](https://github.com/midwayjs/midway-faas/commit/be2d5a1a2c9e6404ded49b78e98f65b50dfe36d5))
+
+
+### Features
+
+* add cli deploy plugins ([#11](https://github.com/midwayjs/midway-faas/issues/11)) ([f8dbaf8](https://github.com/midwayjs/midway-faas/commit/f8dbaf8f0010731faeda48e1c30be72f2f912791))
+* add tecent def ([#135](https://github.com/midwayjs/midway-faas/issues/135)) ([8a5a28d](https://github.com/midwayjs/midway-faas/commit/8a5a28df17e3a1b28cf8e7f32aacaf791bf048e8))
+* support koa application ([#162](https://github.com/midwayjs/midway-faas/issues/162)) ([364d62b](https://github.com/midwayjs/midway-faas/commit/364d62b48242d2ee86f97f087f912e640e8ff6e7))
+* support yaml with ${env.variable} ([#157](https://github.com/midwayjs/midway-faas/issues/157)) ([53f40ef](https://github.com/midwayjs/midway-faas/commit/53f40ef62b2b35ede3c9b667079c5126d41e6804))
+
+
+
+
+
 # 1.0.0 (2020-07-02)
 
 

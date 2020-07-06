@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.0.1 (2020-07-06)
+
+
+### Bug Fixes
+
+* add vary method ([#187](https://github.com/midwayjs/midway-faas/issues/187)) ([73049de](https://github.com/midwayjs/midway-faas/commit/73049dea8b6eab710dba7e2596c7da183d662ea6))
+* fix error control in fc ([#153](https://github.com/midwayjs/midway-faas/issues/153)) ([f7dd007](https://github.com/midwayjs/midway-faas/commit/f7dd0070f9c1b7f07e628c8d2052d273a8133910))
+* fix load plugin from app ([#174](https://github.com/midwayjs/midway-faas/issues/174)) ([9a3d539](https://github.com/midwayjs/midway-faas/commit/9a3d539ac8fff3ea20837b133c105c2328604eb2))
+* fix post in fc apigw and add more test case ([#181](https://github.com/midwayjs/midway-faas/issues/181)) ([8286552](https://github.com/midwayjs/midway-faas/commit/82865521ea8d2b62397aa29bcfc692c6a23f53f9))
+* fix windows path when invoke ([#169](https://github.com/midwayjs/midway-faas/issues/169)) ([e637a0a](https://github.com/midwayjs/midway-faas/commit/e637a0ab05a769a3797e2dccf0612bbbf650d074))
+
+
+### Features
+
+* support koa app create ([#173](https://github.com/midwayjs/midway-faas/issues/173)) ([c3793eb](https://github.com/midwayjs/midway-faas/commit/c3793eba182f634684fdaf147981433bb64639a1))
+* support koa application ([#162](https://github.com/midwayjs/midway-faas/issues/162)) ([364d62b](https://github.com/midwayjs/midway-faas/commit/364d62b48242d2ee86f97f087f912e640e8ff6e7))
+* support url change ([#175](https://github.com/midwayjs/midway-faas/issues/175)) ([a2246b4](https://github.com/midwayjs/midway-faas/commit/a2246b4d792833be90314dcadf5af32d339e4e82))
+
+
+
+
+
 # 1.0.0 (2020-07-02)
 
 

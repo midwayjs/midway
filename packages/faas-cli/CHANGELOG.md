@@ -3,6 +3,48 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.0.1 (2020-07-06)
+
+
+### Bug Fixes
+
+* change faas-local name ([f1dc443](https://github.com/midwayjs/midway-faas/commit/f1dc4437451c9459171dce3cba72491e2f743bb9))
+* cli help ([#68](https://github.com/midwayjs/midway-faas/issues/68)) ([7f5cda4](https://github.com/midwayjs/midway-faas/commit/7f5cda42dc4d3c0baeec74bf36ee2046800112e4))
+* cli performance ([#92](https://github.com/midwayjs/midway-faas/issues/92)) ([1416f97](https://github.com/midwayjs/midway-faas/commit/1416f9768332044c93f60f51775ec87a00d8c55c))
+* code ana package ([#108](https://github.com/midwayjs/midway-faas/issues/108)) ([6e11d0f](https://github.com/midwayjs/midway-faas/commit/6e11d0f588e10b41551256a23a7d4fd6b8133c93))
+* deploy ([#97](https://github.com/midwayjs/midway-faas/issues/97)) ([d905a79](https://github.com/midwayjs/midway-faas/commit/d905a7991300aaeb539613e0a906626c36e29d67))
+* faas-cli package dist ([302de75](https://github.com/midwayjs/midway-faas/commit/302de754e9839ab77dc0b554916633d2dc1cc5d2))
+* faas-cli test ([08b1722](https://github.com/midwayjs/midway-faas/commit/08b17227260b53c1d32dc78e63fc98b9dd5e74bc))
+* faas-cli use aliCli ([3e9e89b](https://github.com/midwayjs/midway-faas/commit/3e9e89b8ecbd326e15a5e95e7f48ed1c0c9ccc4d))
+* Fix [#47](https://github.com/midwayjs/midway-faas/issues/47) ([#48](https://github.com/midwayjs/midway-faas/issues/48)) ([9060569](https://github.com/midwayjs/midway-faas/commit/90605695ab3158a2c2d3423ae4529416359908b7))
+* fix error control in fc ([#153](https://github.com/midwayjs/midway-faas/issues/153)) ([f7dd007](https://github.com/midwayjs/midway-faas/commit/f7dd0070f9c1b7f07e628c8d2052d273a8133910))
+* fix windows path when invoke ([#169](https://github.com/midwayjs/midway-faas/issues/169)) ([e637a0a](https://github.com/midwayjs/midway-faas/commit/e637a0ab05a769a3797e2dccf0612bbbf650d074))
+* format ([99edaef](https://github.com/midwayjs/midway-faas/commit/99edaef97a5c4b21b1223e089a9d39dbe8694d97))
+* instead invoke by faas-cli ([5391f8a](https://github.com/midwayjs/midway-faas/commit/5391f8a5b63f1066dcde83165d31697abf96c900))
+* instead invoke by faas-cli ([db6eae7](https://github.com/midwayjs/midway-faas/commit/db6eae75bbe9087b2e3e243cc61052e82c3474be))
+* invoke source map ([#52](https://github.com/midwayjs/midway-faas/issues/52)) ([9149d2a](https://github.com/midwayjs/midway-faas/commit/9149d2a9a3f3d9ba975588b61c6f9bbeec2e8d86)), closes [#51](https://github.com/midwayjs/midway-faas/issues/51)
+* lifecycle ([caa17ff](https://github.com/midwayjs/midway-faas/commit/caa17ffbf6e1b48c390db744a3ce7fcd17b2af3d))
+* remove command usage ([#88](https://github.com/midwayjs/midway-faas/issues/88)) ([c4c6050](https://github.com/midwayjs/midway-faas/commit/c4c60507b12112eb34a16b2af06c8f24353c9d80))
+* repair no provider & change doc to faas-cli ([#30](https://github.com/midwayjs/midway-faas/issues/30)) ([e72b4c5](https://github.com/midwayjs/midway-faas/commit/e72b4c538349985ac934cfe291e6e755f99cec92))
+* tencent trigger ([#131](https://github.com/midwayjs/midway-faas/issues/131)) ([0e93057](https://github.com/midwayjs/midway-faas/commit/0e93057205c2b761d1ee6fcf7e9c5d35bab349a7))
+
+
+### Features
+
+* add cli deploy plugins ([#11](https://github.com/midwayjs/midway-faas/issues/11)) ([f8dbaf8](https://github.com/midwayjs/midway-faas/commit/f8dbaf8f0010731faeda48e1c30be72f2f912791))
+* add create plugin ([#26](https://github.com/midwayjs/midway-faas/issues/26)) ([ee445dd](https://github.com/midwayjs/midway-faas/commit/ee445dd8ee1b3e812abb30e34e2e9313ad69c0c2))
+* cli & cli core ([b1fc539](https://github.com/midwayjs/midway-faas/commit/b1fc5395598acc393786c550ef089321fc94ef2c))
+* code analysis ([#98](https://github.com/midwayjs/midway-faas/issues/98)) ([2651faa](https://github.com/midwayjs/midway-faas/commit/2651faa55155b3e00be875275536039792473f2c))
+* command core store ([#72](https://github.com/midwayjs/midway-faas/issues/72)) ([10e68a9](https://github.com/midwayjs/midway-faas/commit/10e68a9a1cf096628eabb7b2b3f2c34dbdd14f3a))
+* new invoke ([#101](https://github.com/midwayjs/midway-faas/issues/101)) ([4c13a69](https://github.com/midwayjs/midway-faas/commit/4c13a695d9443f0f6683cad28967157f0d2ab496))
+* **faas-cli:** enable local devevelopment source-map support ([#70](https://github.com/midwayjs/midway-faas/issues/70)) ([813cf24](https://github.com/midwayjs/midway-faas/commit/813cf240f6756fd9da7d220fad9c6e022554ba20))
+* faas-cli default plugin manager ([ec6cf5f](https://github.com/midwayjs/midway-faas/commit/ec6cf5ff334225eed098414af6aa6dd42c3bd39b))
+* use faas-local for invoke/test... ([82e1451](https://github.com/midwayjs/midway-faas/commit/82e145199416784e243e266acb832f358408831d))
+
+
+
+
+
 # 1.0.0 (2020-07-02)
 
 

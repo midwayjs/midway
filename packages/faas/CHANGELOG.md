@@ -3,6 +3,45 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.0.1 (2020-07-06)
+
+
+### Bug Fixes
+
+* add init decorator ([#66](https://github.com/midwayjs/midway-faas/issues/66)) ([716f3b8](https://github.com/midwayjs/midway-faas/commit/716f3b8a4e80c61a3d7726de9a7067e8cd77b4d9))
+* change private to protected ([#49](https://github.com/midwayjs/midway-faas/issues/49)) ([f5373c7](https://github.com/midwayjs/midway-faas/commit/f5373c724d91a08201314d04d50f925ba5f4be5f))
+* fix error control in fc ([#153](https://github.com/midwayjs/midway-faas/issues/153)) ([f7dd007](https://github.com/midwayjs/midway-faas/commit/f7dd0070f9c1b7f07e628c8d2052d273a8133910))
+* fix fc http trigger header ([3e80468](https://github.com/midwayjs/midway-faas/commit/3e80468833072649d35a4222963b1653e9bf9558))
+* fix getEnv ([f38a370](https://github.com/midwayjs/midway-faas/commit/f38a370ada478e329cb01b4af789b02419915c04))
+* fix index.d.ts ([#168](https://github.com/midwayjs/midway-faas/issues/168)) ([e7e7bae](https://github.com/midwayjs/midway-faas/commit/e7e7baeb9e203eafdb103b64b80d10cb1a5b68e0))
+* fix inject sington logger ([#518](https://github.com/midwayjs/midway-faas/issues/518)) ([abc83be](https://github.com/midwayjs/midway-faas/commit/abc83be40610ae1c9b4f884703784b80265c71fe))
+* Fix inner mw ([#170](https://github.com/midwayjs/midway-faas/issues/170)) ([aa91d29](https://github.com/midwayjs/midway-faas/commit/aa91d29817f6d38b6d8cefd28ca426c31651ae50))
+* fix ioc.json case ([07a5094](https://github.com/midwayjs/midway-faas/commit/07a509425dd1f80ffa7e85a4d430b78e79ab895f))
+* fix load config case ([59f9983](https://github.com/midwayjs/midway-faas/commit/59f99835e508bedd9d153b362e98bc86999a85e0))
+* fix load plugin from app ([#174](https://github.com/midwayjs/midway-faas/issues/174)) ([9a3d539](https://github.com/midwayjs/midway-faas/commit/9a3d539ac8fff3ea20837b133c105c2328604eb2))
+* fix missing decorator and refresh method ([421fab7](https://github.com/midwayjs/midway-faas/commit/421fab774f5d6248c308985a4ae72f7efaa45f11))
+* fix one package invoke ([#39](https://github.com/midwayjs/midway-faas/issues/39)) ([13284a9](https://github.com/midwayjs/midway-faas/commit/13284a9895e846f86e0a29567c1bad6af79e9fd7))
+* fix windows path when invoke ([#169](https://github.com/midwayjs/midway-faas/issues/169)) ([e637a0a](https://github.com/midwayjs/midway-faas/commit/e637a0ab05a769a3797e2dccf0612bbbf650d074))
+* invoke source map ([#52](https://github.com/midwayjs/midway-faas/issues/52)) ([9149d2a](https://github.com/midwayjs/midway-faas/commit/9149d2a9a3f3d9ba975588b61c6f9bbeec2e8d86)), closes [#51](https://github.com/midwayjs/midway-faas/issues/51)
+* set default env to ctx.env ([0f590eb](https://github.com/midwayjs/midway-faas/commit/0f590eb545a6e1eeeac3cda46681d759d5b5278d))
+* use IMidwayCoreApplication ([cbf871f](https://github.com/midwayjs/midway-faas/commit/cbf871f8e5b6c7986df333203f9a68164312a6ca))
+
+
+### Features
+
+* [@handler](https://github.com/handler) support ([#59](https://github.com/midwayjs/midway-faas/issues/59)) ([d0d6e49](https://github.com/midwayjs/midway-faas/commit/d0d6e491a16bcc24d8a56dd5095e1186852402bb))
+* add configuration ([#58](https://github.com/midwayjs/midway-faas/issues/58)) ([0aec92d](https://github.com/midwayjs/midway-faas/commit/0aec92dc16c70c812268b1d3b328886fe3d6c309))
+* add faas middleware loader ([250560a](https://github.com/midwayjs/midway-faas/commit/250560a1656e0d0e7601e44d7807ff5124c3ad86))
+* add middleware info from user config ([67b9adc](https://github.com/midwayjs/midway-faas/commit/67b9adcbfa29bff65c988a592471f9c9562d4d26))
+* commit development code ([a51a14a](https://github.com/midwayjs/midway-faas/commit/a51a14ae266a12f37fbe20ebf7eabfa764cf6532))
+* Support @Func class method ([#100](https://github.com/midwayjs/midway-faas/issues/100)) ([cce042a](https://github.com/midwayjs/midway-faas/commit/cce042af2d456b74d9db951fe65b6e6f731ecf59))
+* support koa application ([#162](https://github.com/midwayjs/midway-faas/issues/162)) ([364d62b](https://github.com/midwayjs/midway-faas/commit/364d62b48242d2ee86f97f087f912e640e8ff6e7))
+* support mw ([788e417](https://github.com/midwayjs/midway-faas/commit/788e41764c2e5d345da302c03a99ceae70714e51))
+
+
+
+
+
 # 1.0.0 (2020-07-02)
 
 

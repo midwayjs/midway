@@ -3,6 +3,54 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.0.1 (2020-07-06)
+
+
+### Bug Fixes
+
+* add package buildDir and sourceDir ([#14](https://github.com/midwayjs/midway-faas/issues/14)) ([db39986](https://github.com/midwayjs/midway-faas/commit/db3998621c6ad84b4ce5ab3b9d99091d4eebbdf9))
+* aggregation all ([#147](https://github.com/midwayjs/midway-faas/issues/147)) ([59600a1](https://github.com/midwayjs/midway-faas/commit/59600a13625c2a86d7e28c32fdefca2c3bbc1d4a))
+* aggregation micro match ([#67](https://github.com/midwayjs/midway-faas/issues/67)) ([602ef03](https://github.com/midwayjs/midway-faas/commit/602ef0354784cc8c8e623de945de82b727516814))
+* aggregation pattern ([#71](https://github.com/midwayjs/midway-faas/issues/71)) ([938c4b3](https://github.com/midwayjs/midway-faas/commit/938c4b338adc5826954c514a913996a1b5abbd49))
+* app/config default copy ([#74](https://github.com/midwayjs/midway-faas/issues/74)) ([6b7f1d7](https://github.com/midwayjs/midway-faas/commit/6b7f1d787ccaca1c7d13b737500857b45da227a3))
+* code ana package ([#108](https://github.com/midwayjs/midway-faas/issues/108)) ([6e11d0f](https://github.com/midwayjs/midway-faas/commit/6e11d0f588e10b41551256a23a7d4fd6b8133c93))
+* compare file change path ([#76](https://github.com/midwayjs/midway-faas/issues/76)) ([b24a34f](https://github.com/midwayjs/midway-faas/commit/b24a34f2365118694fc235fe06efac9fa681833f))
+* fix cover entry file in build ([#23](https://github.com/midwayjs/midway-faas/issues/23)) ([80ee7a0](https://github.com/midwayjs/midway-faas/commit/80ee7a0cebf2d434629c03229a4a4200b0228bfd))
+* fix error control in fc ([#153](https://github.com/midwayjs/midway-faas/issues/153)) ([f7dd007](https://github.com/midwayjs/midway-faas/commit/f7dd0070f9c1b7f07e628c8d2052d273a8133910))
+* fix one package invoke ([#39](https://github.com/midwayjs/midway-faas/issues/39)) ([13284a9](https://github.com/midwayjs/midway-faas/commit/13284a9895e846f86e0a29567c1bad6af79e9fd7))
+* fix shared dir use relative path ([#55](https://github.com/midwayjs/midway-faas/issues/55)) ([1d309a1](https://github.com/midwayjs/midway-faas/commit/1d309a10efb2460c6b954effefca34ee72c2e979))
+* fix windows path when invoke ([#169](https://github.com/midwayjs/midway-faas/issues/169)) ([e637a0a](https://github.com/midwayjs/midway-faas/commit/e637a0ab05a769a3797e2dccf0612bbbf650d074))
+* Fix/load npm plugin ([#61](https://github.com/midwayjs/midway-faas/issues/61)) ([8d00e37](https://github.com/midwayjs/midway-faas/commit/8d00e37745d5f786f2ae9347ccf94d7a4cedf26e))
+* invoke copy file ([#81](https://github.com/midwayjs/midway-faas/issues/81)) ([9558410](https://github.com/midwayjs/midway-faas/commit/9558410aa90d4504bb4ee26297087c9cf4302de3))
+* invoke missing cwd ([#116](https://github.com/midwayjs/midway-faas/issues/116)) ([424e08b](https://github.com/midwayjs/midway-faas/commit/424e08bf63e8ce31d8f50b234d3c6beb00a05c9a))
+* invoke source map ([#52](https://github.com/midwayjs/midway-faas/issues/52)) ([9149d2a](https://github.com/midwayjs/midway-faas/commit/9149d2a9a3f3d9ba975588b61c6f9bbeec2e8d86)), closes [#51](https://github.com/midwayjs/midway-faas/issues/51)
+* layer format ([#22](https://github.com/midwayjs/midway-faas/issues/22)) ([31ee630](https://github.com/midwayjs/midway-faas/commit/31ee6307e517709580e55b9b4942cf97c6896691))
+* load spec ([#119](https://github.com/midwayjs/midway-faas/issues/119)) ([66df38c](https://github.com/midwayjs/midway-faas/commit/66df38c221c033cf1ba9e28fcdc9953e33aabf34))
+* package root dir ([#122](https://github.com/midwayjs/midway-faas/issues/122)) ([2c3f9ef](https://github.com/midwayjs/midway-faas/commit/2c3f9ef26c6c60285c976a5c7e6117b874343fe2))
+* refactor appregation & pass process env to invoke debug ([#24](https://github.com/midwayjs/midway-faas/issues/24)) ([f8cd981](https://github.com/midwayjs/midway-faas/commit/f8cd98118e91d3e1b15c2b37d1aaad6b15282f26))
+* Refactor/invoke ([#178](https://github.com/midwayjs/midway-faas/issues/178)) ([37dd34f](https://github.com/midwayjs/midway-faas/commit/37dd34feab822900af61d7515bc0a4cbed7b20f8))
+* remove process ([#78](https://github.com/midwayjs/midway-faas/issues/78)) ([fcfddd2](https://github.com/midwayjs/midway-faas/commit/fcfddd2f6b43208b634a301ca622dc1148278a58))
+* store code analyze result ([#77](https://github.com/midwayjs/midway-faas/issues/77)) ([261947d](https://github.com/midwayjs/midway-faas/commit/261947d3933e34cda666001ed428dc913d4560d6))
+* support registry ([#136](https://github.com/midwayjs/midway-faas/issues/136)) ([2a7abf3](https://github.com/midwayjs/midway-faas/commit/2a7abf3159c07ff08cc6d749f209d0c7b61059eb))
+* support typescript run ([#139](https://github.com/midwayjs/midway-faas/issues/139)) ([472c985](https://github.com/midwayjs/midway-faas/commit/472c985d054f452ed79b496d348a95adc754663e))
+* tsc incremental not work ([#51](https://github.com/midwayjs/midway-faas/issues/51)) ([0b9ac97](https://github.com/midwayjs/midway-faas/commit/0b9ac9754ced31c6cf2f746777aa47d7c3e54813))
+* wrapper generator ([#156](https://github.com/midwayjs/midway-faas/issues/156)) ([be2d5a1](https://github.com/midwayjs/midway-faas/commit/be2d5a1a2c9e6404ded49b78e98f65b50dfe36d5))
+
+
+### Features
+
+* add dev pack ([#134](https://github.com/midwayjs/midway-faas/issues/134)) ([cd08f54](https://github.com/midwayjs/midway-faas/commit/cd08f54859da80f517cb37f99857679286f10f0f))
+* add sharedDir support ([#53](https://github.com/midwayjs/midway-faas/issues/53)) ([6e0625c](https://github.com/midwayjs/midway-faas/commit/6e0625cb8357c69c174b0be8373f7b595352e453))
+* introduce `experimentalFeatures` root option ([#123](https://github.com/midwayjs/midway-faas/issues/123)) ([e20417f](https://github.com/midwayjs/midway-faas/commit/e20417f11e8bcdada52ca9835adeec6c16b67c06))
+* introduce mwcc integration ([#103](https://github.com/midwayjs/midway-faas/issues/103)) ([40f458c](https://github.com/midwayjs/midway-faas/commit/40f458cf2c10903c03a93362cd691c04d97f91cd))
+* One pkg ([#17](https://github.com/midwayjs/midway-faas/issues/17)) ([c1e3f61](https://github.com/midwayjs/midway-faas/commit/c1e3f611a2d169fdccf995c278260895de97b1cc))
+* single process invoke and debug ([#16](https://github.com/midwayjs/midway-faas/issues/16)) ([826a8c7](https://github.com/midwayjs/midway-faas/commit/826a8c7a7a36d8ec03a84f3d29498bef58811146))
+* support tsc incremental before each invoke ([#44](https://github.com/midwayjs/midway-faas/issues/44)) ([4976d7c](https://github.com/midwayjs/midway-faas/commit/4976d7c0b9f818566dc8d999b69209d8194e7a23))
+
+
+
+
+
 # 1.0.0 (2020-07-02)
 
 

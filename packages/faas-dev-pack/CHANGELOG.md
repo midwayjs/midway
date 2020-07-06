@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.0.1 (2020-07-06)
+
+
+### Bug Fixes
+
+* fix error control in fc ([#153](https://github.com/midwayjs/midway-faas/issues/153)) ([f7dd007](https://github.com/midwayjs/midway-faas/commit/f7dd0070f9c1b7f07e628c8d2052d273a8133910))
+* fix http local buffer support ([#143](https://github.com/midwayjs/midway-faas/issues/143)) ([39e0cbf](https://github.com/midwayjs/midway-faas/commit/39e0cbf30de87fbe802c3209ef73eac6cfa8c48b))
+* fix send json when fc use http trigger ([#155](https://github.com/midwayjs/midway-faas/issues/155)) ([1e9abc4](https://github.com/midwayjs/midway-faas/commit/1e9abc48bb479f91caee2ecd09db0fe747827a65))
+* fix windows path when invoke ([#169](https://github.com/midwayjs/midway-faas/issues/169)) ([e637a0a](https://github.com/midwayjs/midway-faas/commit/e637a0ab05a769a3797e2dccf0612bbbf650d074))
+
+
+### Features
+
+* add dev pack ([#134](https://github.com/midwayjs/midway-faas/issues/134)) ([cd08f54](https://github.com/midwayjs/midway-faas/commit/cd08f54859da80f517cb37f99857679286f10f0f))
+* support koa app create ([#173](https://github.com/midwayjs/midway-faas/issues/173)) ([c3793eb](https://github.com/midwayjs/midway-faas/commit/c3793eba182f634684fdaf147981433bb64639a1))
+
+
+
+
+
 # 1.0.0 (2020-07-02)
 
 
