@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.0.2 (2020-07-06)
+
+
+### Bug Fixes
+
+* fix error control in fc ([#153](https://github.com/midwayjs/midway-faas/issues/153)) ([f7dd007](https://github.com/midwayjs/midway-faas/commit/f7dd0070f9c1b7f07e628c8d2052d273a8133910))
+* fix windows path when invoke ([#169](https://github.com/midwayjs/midway-faas/issues/169)) ([e637a0a](https://github.com/midwayjs/midway-faas/commit/e637a0ab05a769a3797e2dccf0612bbbf650d074))
+* invoke source map ([#52](https://github.com/midwayjs/midway-faas/issues/52)) ([9149d2a](https://github.com/midwayjs/midway-faas/commit/9149d2a9a3f3d9ba975588b61c6f9bbeec2e8d86)), closes [#51](https://github.com/midwayjs/midway-faas/issues/51)
+* refactor appregation & pass process env to invoke debug ([#24](https://github.com/midwayjs/midway-faas/issues/24)) ([f8cd981](https://github.com/midwayjs/midway-faas/commit/f8cd98118e91d3e1b15c2b37d1aaad6b15282f26))
+
+
+### Features
+
+* add cli deploy plugins ([#11](https://github.com/midwayjs/midway-faas/issues/11)) ([f8dbaf8](https://github.com/midwayjs/midway-faas/commit/f8dbaf8f0010731faeda48e1c30be72f2f912791))
+
+
+
+
+
 ## 1.0.1 (2020-07-06)
 
 

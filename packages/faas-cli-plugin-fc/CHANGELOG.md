@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.0.2 (2020-07-06)
+
+
+### Bug Fixes
+
+* fix case ([1ec7fb8](https://github.com/midwayjs/midway-faas/commit/1ec7fb8e5c47a1822fe6dbeb5a557b80bc923454))
+* fix cover entry file in build ([#23](https://github.com/midwayjs/midway-faas/issues/23)) ([80ee7a0](https://github.com/midwayjs/midway-faas/commit/80ee7a0cebf2d434629c03229a4a4200b0228bfd))
+* fix error control in fc ([#153](https://github.com/midwayjs/midway-faas/issues/153)) ([f7dd007](https://github.com/midwayjs/midway-faas/commit/f7dd0070f9c1b7f07e628c8d2052d273a8133910))
+* fix windows path when invoke ([#169](https://github.com/midwayjs/midway-faas/issues/169)) ([e637a0a](https://github.com/midwayjs/midway-faas/commit/e637a0ab05a769a3797e2dccf0612bbbf650d074))
+* invoke source map ([#52](https://github.com/midwayjs/midway-faas/issues/52)) ([9149d2a](https://github.com/midwayjs/midway-faas/commit/9149d2a9a3f3d9ba975588b61c6f9bbeec2e8d86)), closes [#51](https://github.com/midwayjs/midway-faas/issues/51)
+* refactor appregation & pass process env to invoke debug ([#24](https://github.com/midwayjs/midway-faas/issues/24)) ([f8cd981](https://github.com/midwayjs/midway-faas/commit/f8cd98118e91d3e1b15c2b37d1aaad6b15282f26))
+* repair no provider & change doc to faas-cli ([#30](https://github.com/midwayjs/midway-faas/issues/30)) ([e72b4c5](https://github.com/midwayjs/midway-faas/commit/e72b4c538349985ac934cfe291e6e755f99cec92))
+
+
+### Features
+
+* add cli deploy plugins ([#11](https://github.com/midwayjs/midway-faas/issues/11)) ([f8dbaf8](https://github.com/midwayjs/midway-faas/commit/f8dbaf8f0010731faeda48e1c30be72f2f912791))
+* One pkg ([#17](https://github.com/midwayjs/midway-faas/issues/17)) ([c1e3f61](https://github.com/midwayjs/midway-faas/commit/c1e3f611a2d169fdccf995c278260895de97b1cc))
+* single process invoke and debug ([#16](https://github.com/midwayjs/midway-faas/issues/16)) ([826a8c7](https://github.com/midwayjs/midway-faas/commit/826a8c7a7a36d8ec03a84f3d29498bef58811146))
+
+
+
+
+
 ## 1.0.1 (2020-07-06)
 
 
