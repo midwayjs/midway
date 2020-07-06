@@ -55,7 +55,7 @@ interface INpmInstallOptions {
 export async function installNpm(options: INpmInstallOptions) {
   const { baseDir, register = 'npm', npmName, mode, slience } = options;
   const cmd = `${baseDir ? `cd ${baseDir};` : ''}${register} i ${npmName}${
-    mode ? ` --${mode}` : ''
+    mode ? ` --${mode}` : ' --no-save'
   }`;
 
   return new Promise((resolved, rejected) => {
