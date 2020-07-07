@@ -1,11 +1,14 @@
 import { writeWrapper } from '../src/wrapper';
-import * as path from 'path';
+import { resolve } from 'path';
 import * as assert from 'assert';
+import { existsSync, readFileSync } from 'fs';
 
 describe('/test/wrapper.test.ts', () => {
   describe('test all format', () => {
-    it('writeWrapper', () => {
+    it.only('writeWrapper', () => {
+      const wrapperPath = resolve(__dirname, './fixtures/wrapper');
       writeWrapper({
+        initializeName: 'initializeUserDefine',
         cover: true,
         service: {
           functions: {
@@ -26,11 +29,31 @@ describe('/test/wrapper.test.ts', () => {
             },
           },
         },
-        baseDir: path.join(__dirname, './fixtures/wrapper'),
-        distDir: path.join(__dirname, './fixtures/wrapper'),
+        baseDir: wrapperPath,
+        distDir: wrapperPath,
         starter: 'testStarter',
       });
-      assert(true);
+      const aggrePath = resolve(wrapperPath, 'aggre.js');
+      const indexPath = resolve(wrapperPath, 'index.js');
+      const renderPath = resolve(wrapperPath, 'render.js');
+      assert(existsSync(aggrePath));
+      assert(existsSync(indexPath));
+      assert(existsSync(renderPath));
+      assert(
+        /exports\.initializeUserDefine\s*=/.test(
+          readFileSync(aggrePath).toString()
+        )
+      );
+      assert(
+        /exports\.initializeUserDefine\s*=/.test(
+          readFileSync(indexPath).toString()
+        )
+      );
+      assert(
+        /exports\.initializeUserDefine\s*=/.test(
+          readFileSync(renderPath).toString()
+        )
+      );
     });
   });
 });

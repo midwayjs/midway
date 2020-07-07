@@ -1,60 +1,7 @@
-import { join } from 'path';
-import { writeFileSync, existsSync } from 'fs';
+import { join, resolve } from 'path';
+import { writeFileSync, existsSync, readFileSync } from 'fs';
 import { render } from 'ejs';
 import { getLayers } from './utils';
-export const wrapperContent = `const { FaaSStarter } = require('<%=faasModName %>');
-const { asyncWrapper, start } = require('<%=starter %>');
-<% layerDeps.forEach(function(layer){ %>const <%=layer.name%> = require('<%=layer.path%>');
-<% }); %>
-
-let starter;
-let runtime;
-let inited = false;
-
-const initializeMethod = async (initializeContext = {}) => {
-  runtime = await start({
-    layers: [<%= layers.join(", ") %>]
-  });
-  starter = new FaaSStarter({ baseDir: __dirname, initializeContext, applicationAdapter: runtime });
-  <% loadDirectory.forEach(function(dirName){ %>
-  starter.loader.loadDirectory({ baseDir: '<%=dirName%>'});<% }) %>
-  await starter.start();
-  inited = true;
-};
-
-exports.initializer = asyncWrapper(async (...args) => {
-  await initializeMethod(...args);
-});
-
-<% handlers.forEach(function(handlerData){ %>
-exports.<%=handlerData.name%> = asyncWrapper(async (...args) => {
-  if (!inited) {
-    await initializeMethod();
-  }
-  <% if (handlerData.handler) { %>
-  return runtime.asyncEvent(starter.handleInvokeWrapper('<%=handlerData.handler%>'))(...args);
-  <% } else { %>
-  const picomatch = require('picomatch');
-  const allHandlers = <%-JSON.stringify(handlerData.handlers)%>;
-  return runtime.asyncEvent(async (ctx) => {
-    let handler = null;
-    let ctxPath = ctx && ctx.path || '';
-    if (ctxPath) {
-      handler = allHandlers.find(handler => {
-        return picomatch.isMatch(ctxPath, handler.router)
-      });
-    }
-
-    if (handler) {
-      return starter.handleInvokeWrapper(handler.handler)(ctx);
-    }
-    ctx.status = 404;
-    ctx.set('Content-Type', 'text/html');
-    return '<h1>404 Page Not Found</h1><hr />Request path: ' + ctxPath + '<hr /><div style="font-size: 12px;color: #999999;">Powered by <a href="https://github.com/midwayjs/midway-faas">Midway</a></div>';
-  })(...args);
-  <% } %>
-});
-<% }); %>`;
 
 // 写入口
 export function writeWrapper(options: {
@@ -64,7 +11,8 @@ export function writeWrapper(options: {
   starter: string;
   cover?: boolean;
   loadDirectory?: string[];
-  faasModName?: string;
+  initializeName?: string; // default is initializer
+  faasModName?: string; // default is '@midwayjs/faas'
 }) {
   const {
     service,
@@ -73,6 +21,7 @@ export function writeWrapper(options: {
     baseDir,
     cover,
     faasModName,
+    initializeName,
     loadDirectory = [],
   } = options;
   const files = {};
@@ -109,14 +58,15 @@ export function writeWrapper(options: {
       });
     }
   }
-
+  const tpl = readFileSync(resolve(__dirname, './wrapper.ejs')).toString();
   for (const file in files) {
     const fileName = join(distDir, `${file}.js`);
     const layers = getLayers(service.layers, ...files[file].originLayers);
-    const content = render(wrapperContent, {
+    const content = render(tpl, {
       starter,
       faasModName: faasModName || '@midwayjs/faas',
       loadDirectory,
+      initializer: initializeName || 'initializer',
       handlers: files[file].handlers,
       ...layers,
     });
