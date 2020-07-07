@@ -58,7 +58,7 @@ export function writeWrapper(options: {
       });
     }
   }
-  const tpl = readFileSync(resolve(__dirname, './wrapper.ejs')).toString();
+  const tpl = readFileSync(resolve(__dirname, '../wrapper.ejs')).toString();
   for (const file in files) {
     const fileName = join(distDir, `${file}.js`);
     const layers = getLayers(service.layers, ...files[file].originLayers);
