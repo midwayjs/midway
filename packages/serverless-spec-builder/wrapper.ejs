@@ -44,6 +44,7 @@ const getHandler = (hanlderName) => {
         return '<h1>404 Page Not Found</h1><hr />Request path: ' + ctxPath + '<hr /><div style="font-size: 12px;color: #999999;">Powered by <a href="https://github.com/midwayjs/midway">Midway Serverless</a></div>';
       }; <% } %>
     }
+  <% }); %>
 }
 
 
@@ -51,7 +52,7 @@ exports.<%=initializer%> = asyncWrapper(async (...args) => {
   await initializeMethod(...args);
 });
 
-
+<% handlers.forEach(function(handlerData){ %>
 exports.<%=handlerData.name%> = asyncWrapper(async (...args) => {
   if (!inited) {
     await initializeMethod();

@@ -5,7 +5,7 @@ import { existsSync, readFileSync } from 'fs';
 
 describe('/test/wrapper.test.ts', () => {
   describe('test all format', () => {
-    it.only('writeWrapper', () => {
+    it('writeWrapper', () => {
       const wrapperPath = resolve(__dirname, './fixtures/wrapper');
       writeWrapper({
         initializeName: 'initializeUserDefine',
