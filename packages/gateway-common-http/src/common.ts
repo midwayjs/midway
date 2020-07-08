@@ -55,9 +55,11 @@ export async function parseInvokeOptionsByOriginUrl(
           functionName,
           originRouter: eventItem.path || '/*',
           router: eventItem.path?.replace(/\/\*$/, '/**') || '/**',
-          method: (eventItem.method ? [].concat(eventItem) : []).map(method => {
-            return method.toLowerCase();
-          }),
+          method: (eventItem.method ? [].concat(eventItem.method) : []).map(
+            method => {
+              return method.toLowerCase();
+            }
+          ),
         });
       }
     }
