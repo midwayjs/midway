@@ -7,18 +7,44 @@ const picomatch = require('picomatch');
 let starter;
 let runtime;
 let inited = false;
+let initializing = false;
 
 
 const initializeMethod = async (initializeContext = {}) => {
-  runtime = await start({
-    layers: [<%= layers.join(", ") %>],
-    getHandler: getHandler
+  if (initializing) {
+    await waitInitialize();
+  }
+  if (inited) {
+    return;
+  }
+  initializing = true;
+  try {
+    runtime = await start({
+      layers: [<%= layers.join(", ") %>],
+      getHandler: getHandler
+    });
+    starter = new FaaSStarter({ baseDir: __dirname, initializeContext, applicationAdapter: runtime });
+    <% loadDirectory.forEach(function(dirName){ %>
+    starter.loader.loadDirectory({ baseDir: '<%=dirName%>'});<% }) %>
+    await starter.start();
+    inited = true;
+    initializing = false;
+  } catch(e) {
+    initializing = false;
+    throw e;
+  }
+};
+
+const waitInitialize = () => {
+  return new Promise(resolve => {
+    if (!initializing) {
+      resolve();
+    } else {
+      setTimeout(() => {
+        waitInitialize().then(resolve);
+      }, 100);
+    }
   });
-  starter = new FaaSStarter({ baseDir: __dirname, initializeContext, applicationAdapter: runtime });
-  <% loadDirectory.forEach(function(dirName){ %>
-  starter.loader.loadDirectory({ baseDir: '<%=dirName%>'});<% }) %>
-  await starter.start();
-  inited = true;
 };
 
 const getHandler = (hanlderName) => {
@@ -49,7 +75,9 @@ const getHandler = (hanlderName) => {
 
 
 exports.<%=initializer%> = asyncWrapper(async (...args) => {
-  await initializeMethod(...args);
+  if (!inited) {
+    await initializeMethod(...args);
+  }
 });
 
 <% handlers.forEach(function(handlerData){ %>
