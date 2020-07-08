@@ -13,6 +13,7 @@ export function writeWrapper(options: {
   loadDirectory?: string[];
   initializeName?: string; // default is initializer
   faasModName?: string; // default is '@midwayjs/faas'
+  advancePreventMultiInit?: boolean;
 }) {
   const {
     service,
@@ -22,6 +23,7 @@ export function writeWrapper(options: {
     cover,
     faasModName,
     initializeName,
+    advancePreventMultiInit,
     loadDirectory = [],
   } = options;
   const files = {};
@@ -66,6 +68,7 @@ export function writeWrapper(options: {
       starter,
       faasModName: faasModName || '@midwayjs/faas',
       loadDirectory,
+      advancePreventMultiInit: advancePreventMultiInit || false,
       initializer: initializeName || 'initializer',
       handlers: files[file].handlers,
       ...layers,

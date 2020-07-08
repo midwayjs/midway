@@ -195,7 +195,7 @@ export class CreatePlugin extends BasePlugin {
     - ${this.npmClient} run test
     - and read README.md
     `);
-    this.core.cli.log('Document: https://midwayjs.org/faas');
+    this.core.cli.log('Document ❤ Star: https://github.com/midwayjs/midway');
   }
 
   loadTemplateList() {

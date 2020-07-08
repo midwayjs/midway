@@ -8,8 +8,8 @@ let starter;
 let runtime;
 let inited = false;
 
-
 const initializeMethod = async (initializeContext = {}) => {
+  <% if (advancePreventMultiInit) { %> inited = true; <% } %>
   runtime = await start({
     layers: [<%= layers.join(", ") %>],
     getHandler: getHandler
@@ -18,7 +18,7 @@ const initializeMethod = async (initializeContext = {}) => {
   <% loadDirectory.forEach(function(dirName){ %>
   starter.loader.loadDirectory({ baseDir: '<%=dirName%>'});<% }) %>
   await starter.start();
-  inited = true;
+  <% if (!advancePreventMultiInit) { %> inited = true; <% } %>
 };
 
 const getHandler = (hanlderName) => {
@@ -49,7 +49,9 @@ const getHandler = (hanlderName) => {
 
 
 exports.<%=initializer%> = asyncWrapper(async (...args) => {
-  await initializeMethod(...args);
+  if (!inited) {
+    await initializeMethod(...args);
+  }
 });
 
 <% handlers.forEach(function(handlerData){ %>

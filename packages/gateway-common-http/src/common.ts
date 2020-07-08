@@ -10,6 +10,7 @@ export async function parseInvokeOptionsByOriginUrl(
 ): Promise<Partial<InvokeOptions>> {
   const ignorePattern = options.ignorePattern;
   const currentUrl = req.path || req.url;
+  const currentMethod = req.method.toLowerCase();
   if (ignorePattern) {
     if (typeof ignorePattern === 'function') {
       if (ignorePattern(req)) {
@@ -54,6 +55,11 @@ export async function parseInvokeOptionsByOriginUrl(
           functionName,
           originRouter: eventItem.path || '/*',
           router: eventItem.path?.replace(/\/\*$/, '/**') || '/**',
+          method: (eventItem.method ? [].concat(eventItem.method) : []).map(
+            method => {
+              return method.toLowerCase();
+            }
+          ),
         });
       }
     }
@@ -71,6 +77,7 @@ export async function parseInvokeOptionsByOriginUrl(
         pureRouter: item.router.replace(/\**$/, ''),
         originRouter: item.originRouter,
         level: item.router.split('/').length - 1,
+        method: item.method,
       };
     })
     .sort((handlerA, handlerB) => {
@@ -82,6 +89,9 @@ export async function parseInvokeOptionsByOriginUrl(
 
   const functionItem = urlMatchList.find(item => {
     if (isMatch(currentUrl, item.router)) {
+      if (item.method.length && item.method.indexOf(currentMethod) === -1) {
+        return false;
+      }
       // 如果不在白名单内，并且是需要被忽略的函数，则跳过函数处理
       if (
         !ignoreWildcardFunctionsWhiteList.includes(currentUrl) &&
