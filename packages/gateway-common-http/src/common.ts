@@ -10,7 +10,7 @@ export async function parseInvokeOptionsByOriginUrl(
 ): Promise<Partial<InvokeOptions>> {
   const ignorePattern = options.ignorePattern;
   const currentUrl = req.path || req.url;
-  const currentMethod = req.method;
+  const currentMethod = req.method.toLowerCase();
   if (ignorePattern) {
     if (typeof ignorePattern === 'function') {
       if (ignorePattern(req)) {
