@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/fcli-plugin-dev-pack",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "faas cli dev pack",
   "keywords": [
     "faas",
@@ -13,8 +13,8 @@
     "src"
   ],
   "dependencies": {
-    "@midwayjs/faas-dev-pack": "^1.0.3",
-    "@midwayjs/fcli-command-core": "^1.0.3",
+    "@midwayjs/faas-dev-pack": "^1.0.4",
+    "@midwayjs/fcli-command-core": "^1.0.4",
     "koa": "^2.11.0",
     "koa-onerror": "^4.1.0"
   },
