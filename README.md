@@ -33,9 +33,9 @@ Midway Serverless 是一个用于构建 Node.js 云函数的 Serverless 框架�
 - 1、平台间迁移更容易
   - 🐒 通过提供统一的配置规范以及入口抹平机制，让代码在每个平台基本相同；
   - 🦊 扩展不同云平台的运行时 API，不仅能加载通用的平台间扩展，也能接入公司内部的私有化部署方案；
-- 2、让应用更易维护和扩展
-  - 🐯 提供了标准的云平台函数出入参事件定义；
+- 2、让应用更易维护和更快交付
   - 🐦 提供了多套和社区前端 React、Vue 等融合一体化开发的方案；
+  - 🐯 提供了标准的云平台函数出入参事件定义；
   - 🐶 提供了 TypeScript 支持，方便应用扩展和定义；
   - 🐱 提供了完善的 Midway 体系标志性的依赖注入解决方案；
 - 3、 生态更轻量和自由
@@ -43,12 +43,10 @@ Midway Serverless 是一个用于构建 Node.js 云函数的 Serverless 框架�
   - 🐴 提供 egg 组件复用 egg 插件的生态链，企业级开发链路更简单顺畅；
   - 🐘 Midway 体系的装饰器能力统一，让传统 Web 迁移到 Serverless 体系更快更好；
 
-
-
-## 文档
+## 使用文档
 
 - 快速开始-标准函数 [中文](https://www.yuque.com/midwayjs/faas/quick_start)
-- 快速开始-云端一体化 [中文](https://www.yuque.com/midwayjs/faas/kl3bk5)
+- 快速开始-云端一体化（React/Vue） [中文](https://www.yuque.com/midwayjs/faas/kl3bk5)
 - 详细文档 [中文](https://www.yuque.com/midwayjs/faas)
 
 ## 快速开始
