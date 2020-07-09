@@ -47,9 +47,9 @@ Midway Serverless 是一个用于构建 Node.js 云函数的 Serverless 框架�
 
 ## 文档
 
-- 快速开始 [中文](https://www.yuque.com/midwayjs/faas/quick_start)
-- 文档 [中文](https://www.yuque.com/midwayjs/faas)
-
+- 快速开始-标准函数 [中文](https://www.yuque.com/midwayjs/faas/quick_start)
+- 快速开始-云端一体化 [中文](https://www.yuque.com/midwayjs/faas/kl3bk5)
+- 详细文档 [中文](https://www.yuque.com/midwayjs/faas)
 
 ## 快速开始
 
