@@ -275,12 +275,6 @@ export class FaaSStarter implements IFaaSStarter {
   }
 
   protected getContext(context) {
-    if (!context.requestContext) {
-      context.requestContext = new MidwayRequestContainer(
-        context,
-        this.getApplicationContext()
-      );
-    }
     if (!context.env) {
       context.env = this.getApplicationContext()
         .getEnvironmentService()
@@ -288,6 +282,12 @@ export class FaaSStarter implements IFaaSStarter {
     }
     if (!context.logger) {
       context.logger = this.logger;
+    }
+    if (!context.requestContext) {
+      context.requestContext = new MidwayRequestContainer(
+        context,
+        this.getApplicationContext()
+      );
     }
     return context;
   }
