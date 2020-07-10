@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.5](https://github.com/midwayjs/midway-faas/compare/serverless-v1.0.4...serverless-v1.0.5) (2020-07-10)
+
+
+### Bug Fixes
+
+* fix logger set after ioc set ([#525](https://github.com/midwayjs/midway-faas/issues/525)) ([7e4ebe5](https://github.com/midwayjs/midway-faas/commit/7e4ebe512ce8939dd5eb2bfe03e5debe9fbcb3e1))
+
+
+
+
+
 ## [1.0.4](https://github.com/midwayjs/midway-faas/compare/serverless-v1.0.3...serverless-v1.0.4) (2020-07-08)
 
 
