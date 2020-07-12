@@ -1,14 +1,14 @@
 {
   "name": "@midwayjs/serverless-fc-starter",
-  "version": "1.0.1",
+  "version": "1.0.6-alpha.522+1afeb34c",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/runtime-engine": "^1.0.1",
-    "@midwayjs/serverless-http-parser": "^1.0.1"
+    "@midwayjs/runtime-engine": "^1.0.6-alpha.522+1afeb34c",
+    "@midwayjs/serverless-http-parser": "^1.0.6-alpha.522+1afeb34c"
   },
   "devDependencies": {
-    "@midwayjs/runtime-mock": "^1.0.1",
+    "@midwayjs/runtime-mock": "^1.0.6-alpha.522+1afeb34c",
     "midway-bin": "^2.0.0",
     "raw-body": "^2.4.1"
   },
@@ -31,5 +31,5 @@
     "url": "git@github.com:midwayjs/midway-faas.git"
   },
   "license": "MIT",
-  "gitHead": "5783f06ff0298f0e172f801cae053c3fc80813a9"
+  "gitHead": "1afeb34cbb6c0ad49ccdb9cfaebd254ae73afc6a"
 }
