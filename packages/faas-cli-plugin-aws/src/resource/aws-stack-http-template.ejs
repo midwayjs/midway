@@ -1,0 +1,40 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Transform": "AWS::Serverless-2016-10-31",
+  "Description": "The Midway Serverless function deploy specification template.",
+  "Resources": {
+    "hellocurl": {
+      "Type": "AWS::Serverless::Function",
+      "Properties": {
+        "Handler": "<%= options.handler || "index.handler" %>",
+        "Runtime": "<%= options.runtime || "nodejs12.x" %>",
+        "Description": "<%= options.description || "" %>",
+        "MemorySize": <%- options.memorySize || 128 %>,
+        "Timeout": <%= options.timeout || 3 %>,
+        "Role": "arn:aws:iam::752677612709:role/service-role/hello-curl-role-5tk89mye",
+        "CodeUri": {
+          "Bucket": "<%= options.codeBucket %>",
+          "Key": "<%= options.codeKey %>"
+        },
+        "Events": {
+          "Api1": {
+            "Type": "Api",
+            "Properties": {
+              "Path": "<%= options.path %>",
+              "Method": "ANY",
+              "RestApiId": {
+                "Ref": "MyApi"
+              }
+            }
+          }
+        }
+      }
+    },
+    "MyApi": {
+      "Type": "AWS::Serverless::Api",
+      "Properties": {
+        "StageName": "<%= options.stage || 'v1' %>"
+      }
+    }
+  }
+}
