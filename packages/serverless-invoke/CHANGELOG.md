@@ -3,6 +3,150 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.5](https://github.com/midwayjs/midway-faas/compare/serverless-v1.0.4...serverless-v1.0.5) (2020-07-10)
+
+**Note:** Version bump only for package @midwayjs/serverless-invoke
+
+
+
+
+
+## [1.0.4](https://github.com/midwayjs/midway-faas/compare/serverless-v1.0.3...serverless-v1.0.4) (2020-07-08)
+
+**Note:** Version bump only for package @midwayjs/serverless-invoke
+
+
+
+
+
+## [1.0.3](https://github.com/midwayjs/midway-faas/compare/serverless-v1.0.2...serverless-v1.0.3) (2020-07-07)
+
+**Note:** Version bump only for package @midwayjs/serverless-invoke
+
+
+
+
+
+## 1.0.2 (2020-07-06)
+
+
+### Bug Fixes
+
+* aggregation micro match ([#67](https://github.com/midwayjs/midway-faas/issues/67)) ([602ef03](https://github.com/midwayjs/midway-faas/commit/602ef0354784cc8c8e623de945de82b727516814))
+* change faas-local name ([f1dc443](https://github.com/midwayjs/midway-faas/commit/f1dc4437451c9459171dce3cba72491e2f743bb9))
+* change private to protected ([#49](https://github.com/midwayjs/midway-faas/issues/49)) ([f5373c7](https://github.com/midwayjs/midway-faas/commit/f5373c724d91a08201314d04d50f925ba5f4be5f))
+* compare file change path ([#76](https://github.com/midwayjs/midway-faas/issues/76)) ([b24a34f](https://github.com/midwayjs/midway-faas/commit/b24a34f2365118694fc235fe06efac9fa681833f))
+* compile skip check ([#73](https://github.com/midwayjs/midway-faas/issues/73)) ([c61e2ad](https://github.com/midwayjs/midway-faas/commit/c61e2ad293b087556a3d7495c120bb9441a9aabb))
+* copyFiles to protected ([#86](https://github.com/midwayjs/midway-faas/issues/86)) ([bf54687](https://github.com/midwayjs/midway-faas/commit/bf5468776901c7c93d61eab8a38d8bd6a361eb01))
+* core hooks ([#104](https://github.com/midwayjs/midway-faas/issues/104)) ([ac6b574](https://github.com/midwayjs/midway-faas/commit/ac6b574b7bab95358d5f14214711390959ad56b6))
+* debug ws ([#95](https://github.com/midwayjs/midway-faas/issues/95)) ([c780d1b](https://github.com/midwayjs/midway-faas/commit/c780d1b3c47bcb941e49f76c2ce1c9d8db333ce7))
+* deploy ([#97](https://github.com/midwayjs/midway-faas/issues/97)) ([d905a79](https://github.com/midwayjs/midway-faas/commit/d905a7991300aaeb539613e0a906626c36e29d67))
+* double invoke at same time ([#87](https://github.com/midwayjs/midway-faas/issues/87)) ([37b9d17](https://github.com/midwayjs/midway-faas/commit/37b9d1737e5869955f0a82f356e9cf154b204396))
+* file compare & npm options ([#62](https://github.com/midwayjs/midway-faas/issues/62)) ([beb50f8](https://github.com/midwayjs/midway-faas/commit/beb50f85106cd627aac7b2ab0317ed29ae830e33))
+* Fix [#47](https://github.com/midwayjs/midway-faas/issues/47) ([#48](https://github.com/midwayjs/midway-faas/issues/48)) ([9060569](https://github.com/midwayjs/midway-faas/commit/90605695ab3158a2c2d3423ae4529416359908b7))
+* fix error control in fc ([#153](https://github.com/midwayjs/midway-faas/issues/153)) ([f7dd007](https://github.com/midwayjs/midway-faas/commit/f7dd0070f9c1b7f07e628c8d2052d273a8133910))
+* fix invoke lock ([#91](https://github.com/midwayjs/midway-faas/issues/91)) ([2a7b847](https://github.com/midwayjs/midway-faas/commit/2a7b8473e466e706425adf9ce1601670e8d6b438))
+* fix one package invoke ([#39](https://github.com/midwayjs/midway-faas/issues/39)) ([13284a9](https://github.com/midwayjs/midway-faas/commit/13284a9895e846f86e0a29567c1bad6af79e9fd7))
+* fix options.basedir default value ([#57](https://github.com/midwayjs/midway-faas/issues/57)) ([04edc9f](https://github.com/midwayjs/midway-faas/commit/04edc9f8a23ee17c7ed994fa249f190288f4d40a))
+* fix tsconfig ([414b126](https://github.com/midwayjs/midway-faas/commit/414b12643c7dbb1173d6ecd52c87e826523508e5))
+* fix windows path when invoke ([#169](https://github.com/midwayjs/midway-faas/issues/169)) ([e637a0a](https://github.com/midwayjs/midway-faas/commit/e637a0ab05a769a3797e2dccf0612bbbf650d074))
+* format ([99edaef](https://github.com/midwayjs/midway-faas/commit/99edaef97a5c4b21b1223e089a9d39dbe8694d97))
+* incremental args pass ([#50](https://github.com/midwayjs/midway-faas/issues/50)) ([d689f64](https://github.com/midwayjs/midway-faas/commit/d689f64a54aae0db175cc66dab7ed50b2abbd06c))
+* instead invoke by faas-cli ([5391f8a](https://github.com/midwayjs/midway-faas/commit/5391f8a5b63f1066dcde83165d31697abf96c900))
+* instead invoke by faas-cli ([db6eae7](https://github.com/midwayjs/midway-faas/commit/db6eae75bbe9087b2e3e243cc61052e82c3474be))
+* invoke copy file ([#81](https://github.com/midwayjs/midway-faas/issues/81)) ([9558410](https://github.com/midwayjs/midway-faas/commit/9558410aa90d4504bb4ee26297087c9cf4302de3))
+* invoke debug ([#46](https://github.com/midwayjs/midway-faas/issues/46)) ([9a3e2b4](https://github.com/midwayjs/midway-faas/commit/9a3e2b4a1a6c04195e9f9da137ecfe98f45b2b6f))
+* invoke export ([#20](https://github.com/midwayjs/midway-faas/issues/20)) ([9d743f8](https://github.com/midwayjs/midway-faas/commit/9d743f80e54f5696ce942f6c580fdcabb5c6805f))
+* invoke getFuncList and core auto load plugin ([#112](https://github.com/midwayjs/midway-faas/issues/112)) ([54e4d11](https://github.com/midwayjs/midway-faas/commit/54e4d1151942075b86d187c46fc107b9ff1d816b))
+* invoke source map ([#52](https://github.com/midwayjs/midway-faas/issues/52)) ([9149d2a](https://github.com/midwayjs/midway-faas/commit/9149d2a9a3f3d9ba975588b61c6f9bbeec2e8d86)), closes [#51](https://github.com/midwayjs/midway-faas/issues/51)
+* local debug breakpoint ([4b499b1](https://github.com/midwayjs/midway-faas/commit/4b499b1df92cff2c9052abdc343015aefedb350e))
+* refactor appregation & pass process env to invoke debug ([#24](https://github.com/midwayjs/midway-faas/issues/24)) ([f8cd981](https://github.com/midwayjs/midway-faas/commit/f8cd98118e91d3e1b15c2b37d1aaad6b15282f26))
+* remove command usage ([#88](https://github.com/midwayjs/midway-faas/issues/88)) ([c4c6050](https://github.com/midwayjs/midway-faas/commit/c4c60507b12112eb34a16b2af06c8f24353c9d80))
+* serverless invoke ([#117](https://github.com/midwayjs/midway-faas/issues/117)) ([e6e37af](https://github.com/midwayjs/midway-faas/commit/e6e37af83856292d8e54896a0c3543cc50aba86e))
+* store code analyze result ([#77](https://github.com/midwayjs/midway-faas/issues/77)) ([261947d](https://github.com/midwayjs/midway-faas/commit/261947d3933e34cda666001ed428dc913d4560d6))
+* support more than one invoke at same time ([#89](https://github.com/midwayjs/midway-faas/issues/89)) ([bf889ab](https://github.com/midwayjs/midway-faas/commit/bf889abb8ecacc4ea752ec64b8023be516692525))
+* tsbuildinfo positoin and invoke othOptions ([#63](https://github.com/midwayjs/midway-faas/issues/63)) ([043b2b3](https://github.com/midwayjs/midway-faas/commit/043b2b3c263c9390f27bc167787edf8a4947046d))
+* tsc incremental not work ([#51](https://github.com/midwayjs/midway-faas/issues/51)) ([0b9ac97](https://github.com/midwayjs/midway-faas/commit/0b9ac9754ced31c6cf2f746777aa47d7c3e54813))
+* upgrade target compiler options ([564c2c4](https://github.com/midwayjs/midway-faas/commit/564c2c464d1ea7e7b50a21e04c61b2cb742d1b08))
+* using ws instead of websocket ([#93](https://github.com/midwayjs/midway-faas/issues/93)) ([01c0b38](https://github.com/midwayjs/midway-faas/commit/01c0b3817a55bd7d6c8326d33b076645ca9f885e))
+
+
+### Features
+
+* 支持自定义模板 ([#28](https://github.com/midwayjs/midway-faas/issues/28)) ([7aaba06](https://github.com/midwayjs/midway-faas/commit/7aaba06c69deafb6a52d8805c9cd00924d722a4d))
+* code analysis ([#98](https://github.com/midwayjs/midway-faas/issues/98)) ([2651faa](https://github.com/midwayjs/midway-faas/commit/2651faa55155b3e00be875275536039792473f2c))
+* command core store ([#72](https://github.com/midwayjs/midway-faas/issues/72)) ([10e68a9](https://github.com/midwayjs/midway-faas/commit/10e68a9a1cf096628eabb7b2b3f2c34dbdd14f3a))
+* commit development code ([a51a14a](https://github.com/midwayjs/midway-faas/commit/a51a14ae266a12f37fbe20ebf7eabfa764cf6532))
+* faas-cli default plugin manager ([ec6cf5f](https://github.com/midwayjs/midway-faas/commit/ec6cf5ff334225eed098414af6aa6dd42c3bd39b))
+* introduce mwcc integration ([#103](https://github.com/midwayjs/midway-faas/issues/103)) ([40f458c](https://github.com/midwayjs/midway-faas/commit/40f458cf2c10903c03a93362cd691c04d97f91cd))
+* single process invoke and debug ([#16](https://github.com/midwayjs/midway-faas/issues/16)) ([826a8c7](https://github.com/midwayjs/midway-faas/commit/826a8c7a7a36d8ec03a84f3d29498bef58811146))
+* support tsc incremental before each invoke ([#44](https://github.com/midwayjs/midway-faas/issues/44)) ([4976d7c](https://github.com/midwayjs/midway-faas/commit/4976d7c0b9f818566dc8d999b69209d8194e7a23))
+* use faas-local for invoke/test... ([82e1451](https://github.com/midwayjs/midway-faas/commit/82e145199416784e243e266acb832f358408831d))
+
+
+
+
+
+## 1.0.1 (2020-07-06)
+
+
+### Bug Fixes
+
+* aggregation micro match ([#67](https://github.com/midwayjs/midway-faas/issues/67)) ([602ef03](https://github.com/midwayjs/midway-faas/commit/602ef0354784cc8c8e623de945de82b727516814))
+* change faas-local name ([f1dc443](https://github.com/midwayjs/midway-faas/commit/f1dc4437451c9459171dce3cba72491e2f743bb9))
+* change private to protected ([#49](https://github.com/midwayjs/midway-faas/issues/49)) ([f5373c7](https://github.com/midwayjs/midway-faas/commit/f5373c724d91a08201314d04d50f925ba5f4be5f))
+* compare file change path ([#76](https://github.com/midwayjs/midway-faas/issues/76)) ([b24a34f](https://github.com/midwayjs/midway-faas/commit/b24a34f2365118694fc235fe06efac9fa681833f))
+* compile skip check ([#73](https://github.com/midwayjs/midway-faas/issues/73)) ([c61e2ad](https://github.com/midwayjs/midway-faas/commit/c61e2ad293b087556a3d7495c120bb9441a9aabb))
+* copyFiles to protected ([#86](https://github.com/midwayjs/midway-faas/issues/86)) ([bf54687](https://github.com/midwayjs/midway-faas/commit/bf5468776901c7c93d61eab8a38d8bd6a361eb01))
+* core hooks ([#104](https://github.com/midwayjs/midway-faas/issues/104)) ([ac6b574](https://github.com/midwayjs/midway-faas/commit/ac6b574b7bab95358d5f14214711390959ad56b6))
+* debug ws ([#95](https://github.com/midwayjs/midway-faas/issues/95)) ([c780d1b](https://github.com/midwayjs/midway-faas/commit/c780d1b3c47bcb941e49f76c2ce1c9d8db333ce7))
+* deploy ([#97](https://github.com/midwayjs/midway-faas/issues/97)) ([d905a79](https://github.com/midwayjs/midway-faas/commit/d905a7991300aaeb539613e0a906626c36e29d67))
+* double invoke at same time ([#87](https://github.com/midwayjs/midway-faas/issues/87)) ([37b9d17](https://github.com/midwayjs/midway-faas/commit/37b9d1737e5869955f0a82f356e9cf154b204396))
+* file compare & npm options ([#62](https://github.com/midwayjs/midway-faas/issues/62)) ([beb50f8](https://github.com/midwayjs/midway-faas/commit/beb50f85106cd627aac7b2ab0317ed29ae830e33))
+* Fix [#47](https://github.com/midwayjs/midway-faas/issues/47) ([#48](https://github.com/midwayjs/midway-faas/issues/48)) ([9060569](https://github.com/midwayjs/midway-faas/commit/90605695ab3158a2c2d3423ae4529416359908b7))
+* fix error control in fc ([#153](https://github.com/midwayjs/midway-faas/issues/153)) ([f7dd007](https://github.com/midwayjs/midway-faas/commit/f7dd0070f9c1b7f07e628c8d2052d273a8133910))
+* fix invoke lock ([#91](https://github.com/midwayjs/midway-faas/issues/91)) ([2a7b847](https://github.com/midwayjs/midway-faas/commit/2a7b8473e466e706425adf9ce1601670e8d6b438))
+* fix one package invoke ([#39](https://github.com/midwayjs/midway-faas/issues/39)) ([13284a9](https://github.com/midwayjs/midway-faas/commit/13284a9895e846f86e0a29567c1bad6af79e9fd7))
+* fix options.basedir default value ([#57](https://github.com/midwayjs/midway-faas/issues/57)) ([04edc9f](https://github.com/midwayjs/midway-faas/commit/04edc9f8a23ee17c7ed994fa249f190288f4d40a))
+* fix tsconfig ([414b126](https://github.com/midwayjs/midway-faas/commit/414b12643c7dbb1173d6ecd52c87e826523508e5))
+* fix windows path when invoke ([#169](https://github.com/midwayjs/midway-faas/issues/169)) ([e637a0a](https://github.com/midwayjs/midway-faas/commit/e637a0ab05a769a3797e2dccf0612bbbf650d074))
+* format ([99edaef](https://github.com/midwayjs/midway-faas/commit/99edaef97a5c4b21b1223e089a9d39dbe8694d97))
+* incremental args pass ([#50](https://github.com/midwayjs/midway-faas/issues/50)) ([d689f64](https://github.com/midwayjs/midway-faas/commit/d689f64a54aae0db175cc66dab7ed50b2abbd06c))
+* instead invoke by faas-cli ([5391f8a](https://github.com/midwayjs/midway-faas/commit/5391f8a5b63f1066dcde83165d31697abf96c900))
+* instead invoke by faas-cli ([db6eae7](https://github.com/midwayjs/midway-faas/commit/db6eae75bbe9087b2e3e243cc61052e82c3474be))
+* invoke copy file ([#81](https://github.com/midwayjs/midway-faas/issues/81)) ([9558410](https://github.com/midwayjs/midway-faas/commit/9558410aa90d4504bb4ee26297087c9cf4302de3))
+* invoke debug ([#46](https://github.com/midwayjs/midway-faas/issues/46)) ([9a3e2b4](https://github.com/midwayjs/midway-faas/commit/9a3e2b4a1a6c04195e9f9da137ecfe98f45b2b6f))
+* invoke export ([#20](https://github.com/midwayjs/midway-faas/issues/20)) ([9d743f8](https://github.com/midwayjs/midway-faas/commit/9d743f80e54f5696ce942f6c580fdcabb5c6805f))
+* invoke getFuncList and core auto load plugin ([#112](https://github.com/midwayjs/midway-faas/issues/112)) ([54e4d11](https://github.com/midwayjs/midway-faas/commit/54e4d1151942075b86d187c46fc107b9ff1d816b))
+* invoke source map ([#52](https://github.com/midwayjs/midway-faas/issues/52)) ([9149d2a](https://github.com/midwayjs/midway-faas/commit/9149d2a9a3f3d9ba975588b61c6f9bbeec2e8d86)), closes [#51](https://github.com/midwayjs/midway-faas/issues/51)
+* local debug breakpoint ([4b499b1](https://github.com/midwayjs/midway-faas/commit/4b499b1df92cff2c9052abdc343015aefedb350e))
+* refactor appregation & pass process env to invoke debug ([#24](https://github.com/midwayjs/midway-faas/issues/24)) ([f8cd981](https://github.com/midwayjs/midway-faas/commit/f8cd98118e91d3e1b15c2b37d1aaad6b15282f26))
+* remove command usage ([#88](https://github.com/midwayjs/midway-faas/issues/88)) ([c4c6050](https://github.com/midwayjs/midway-faas/commit/c4c60507b12112eb34a16b2af06c8f24353c9d80))
+* serverless invoke ([#117](https://github.com/midwayjs/midway-faas/issues/117)) ([e6e37af](https://github.com/midwayjs/midway-faas/commit/e6e37af83856292d8e54896a0c3543cc50aba86e))
+* store code analyze result ([#77](https://github.com/midwayjs/midway-faas/issues/77)) ([261947d](https://github.com/midwayjs/midway-faas/commit/261947d3933e34cda666001ed428dc913d4560d6))
+* support more than one invoke at same time ([#89](https://github.com/midwayjs/midway-faas/issues/89)) ([bf889ab](https://github.com/midwayjs/midway-faas/commit/bf889abb8ecacc4ea752ec64b8023be516692525))
+* tsbuildinfo positoin and invoke othOptions ([#63](https://github.com/midwayjs/midway-faas/issues/63)) ([043b2b3](https://github.com/midwayjs/midway-faas/commit/043b2b3c263c9390f27bc167787edf8a4947046d))
+* tsc incremental not work ([#51](https://github.com/midwayjs/midway-faas/issues/51)) ([0b9ac97](https://github.com/midwayjs/midway-faas/commit/0b9ac9754ced31c6cf2f746777aa47d7c3e54813))
+* upgrade target compiler options ([564c2c4](https://github.com/midwayjs/midway-faas/commit/564c2c464d1ea7e7b50a21e04c61b2cb742d1b08))
+* using ws instead of websocket ([#93](https://github.com/midwayjs/midway-faas/issues/93)) ([01c0b38](https://github.com/midwayjs/midway-faas/commit/01c0b3817a55bd7d6c8326d33b076645ca9f885e))
+
+
+### Features
+
+* 支持自定义模板 ([#28](https://github.com/midwayjs/midway-faas/issues/28)) ([7aaba06](https://github.com/midwayjs/midway-faas/commit/7aaba06c69deafb6a52d8805c9cd00924d722a4d))
+* code analysis ([#98](https://github.com/midwayjs/midway-faas/issues/98)) ([2651faa](https://github.com/midwayjs/midway-faas/commit/2651faa55155b3e00be875275536039792473f2c))
+* command core store ([#72](https://github.com/midwayjs/midway-faas/issues/72)) ([10e68a9](https://github.com/midwayjs/midway-faas/commit/10e68a9a1cf096628eabb7b2b3f2c34dbdd14f3a))
+* commit development code ([a51a14a](https://github.com/midwayjs/midway-faas/commit/a51a14ae266a12f37fbe20ebf7eabfa764cf6532))
+* faas-cli default plugin manager ([ec6cf5f](https://github.com/midwayjs/midway-faas/commit/ec6cf5ff334225eed098414af6aa6dd42c3bd39b))
+* introduce mwcc integration ([#103](https://github.com/midwayjs/midway-faas/issues/103)) ([40f458c](https://github.com/midwayjs/midway-faas/commit/40f458cf2c10903c03a93362cd691c04d97f91cd))
+* single process invoke and debug ([#16](https://github.com/midwayjs/midway-faas/issues/16)) ([826a8c7](https://github.com/midwayjs/midway-faas/commit/826a8c7a7a36d8ec03a84f3d29498bef58811146))
+* support tsc incremental before each invoke ([#44](https://github.com/midwayjs/midway-faas/issues/44)) ([4976d7c](https://github.com/midwayjs/midway-faas/commit/4976d7c0b9f818566dc8d999b69209d8194e7a23))
+* use faas-local for invoke/test... ([82e1451](https://github.com/midwayjs/midway-faas/commit/82e145199416784e243e266acb832f358408831d))
+
+
+
+
+
 # 1.0.0 (2020-07-02)
 
 

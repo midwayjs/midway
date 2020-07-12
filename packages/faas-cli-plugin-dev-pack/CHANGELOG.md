@@ -3,6 +3,54 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.5](https://github.com/midwayjs/midway-faas/compare/serverless-v1.0.4...serverless-v1.0.5) (2020-07-10)
+
+**Note:** Version bump only for package @midwayjs/fcli-plugin-dev-pack
+
+
+
+
+
+## [1.0.4](https://github.com/midwayjs/midway-faas/compare/serverless-v1.0.3...serverless-v1.0.4) (2020-07-08)
+
+**Note:** Version bump only for package @midwayjs/fcli-plugin-dev-pack
+
+
+
+
+
+## [1.0.3](https://github.com/midwayjs/midway-faas/compare/serverless-v1.0.2...serverless-v1.0.3) (2020-07-07)
+
+**Note:** Version bump only for package @midwayjs/fcli-plugin-dev-pack
+
+
+
+
+
+## 1.0.2 (2020-07-06)
+
+
+### Bug Fixes
+
+* fix error control in fc ([#153](https://github.com/midwayjs/midway-faas/issues/153)) ([f7dd007](https://github.com/midwayjs/midway-faas/commit/f7dd0070f9c1b7f07e628c8d2052d273a8133910))
+* fix windows path when invoke ([#169](https://github.com/midwayjs/midway-faas/issues/169)) ([e637a0a](https://github.com/midwayjs/midway-faas/commit/e637a0ab05a769a3797e2dccf0612bbbf650d074))
+
+
+
+
+
+## 1.0.1 (2020-07-06)
+
+
+### Bug Fixes
+
+* fix error control in fc ([#153](https://github.com/midwayjs/midway-faas/issues/153)) ([f7dd007](https://github.com/midwayjs/midway-faas/commit/f7dd0070f9c1b7f07e628c8d2052d273a8133910))
+* fix windows path when invoke ([#169](https://github.com/midwayjs/midway-faas/issues/169)) ([e637a0a](https://github.com/midwayjs/midway-faas/commit/e637a0ab05a769a3797e2dccf0612bbbf650d074))
+
+
+
+
+
 # 1.0.0 (2020-07-02)
 
 

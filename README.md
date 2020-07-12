@@ -30,26 +30,26 @@
 
 Midway Serverless 是一个用于构建 Node.js 云函数的 Serverless 框架，可以帮您在云原生时代更专注于产品开发，降低维护成本。
 
-- 1、平台间迁移更容易
-  - 🐒 通过提供统一的配置规范以及入口抹平机制，让代码在每个平台基本相同；
-  - 🦊 扩展不同云平台的运行时 API，不仅能加载通用的平台间扩展，也能接入公司内部的私有化部署方案；
-- 2、让应用更易维护和扩展
-  - 🐯 提供了标准的云平台函数出入参事件定义；
+- 1、让应用更易维护和更快交付
   - 🐦 提供了多套和社区前端 React、Vue 等融合一体化开发的方案；
+  - 🐯 提供了标准的云平台函数出入参事件定义；
   - 🐶 提供了 TypeScript 支持，方便应用扩展和定义；
   - 🐱 提供了完善的 Midway 体系标志性的依赖注入解决方案；
-- 3、 生态更轻量和自由
+- 2、 生态更轻量和自由
   - 🦁 函数体系复用 koa 的生态和 Web 中间件能力，在处理传统 Web 时更加得心应手；
   - 🐴 提供 egg 组件复用 egg 插件的生态链，企业级开发链路更简单顺畅；
   - 🐘 Midway 体系的装饰器能力统一，让传统 Web 迁移到 Serverless 体系更快更好；
+- 3、平台间迁移更容易
+  - 🐒 通过提供统一的配置规范以及入口抹平机制，让代码在每个平台基本相同；
+  - 🦊 扩展不同云平台的运行时 API，不仅能加载通用的平台间扩展，也能接入公司内部的私有化部署方案；
 
+## 使用文档
 
+- 快速开始-标准函数 [中文](https://www.yuque.com/midwayjs/faas/quick_start)
+- 快速开始-云端一体化（React/Vue） [中文](https://www.yuque.com/midwayjs/faas/kl3bk5)
+- 详细文档 [中文](https://www.yuque.com/midwayjs/faas)
 
-## 文档
-
-- 快速开始 [中文](https://www.yuque.com/midwayjs/faas/quick_start)
-- 文档 [中文](https://www.yuque.com/midwayjs/faas)
-
+原 Midway Web 全栈能力将与 Serverless 版本深度融合， 原全栈版本文档见： [Master](https://github.com/midwayjs/midway/tree/master)
 
 ## 快速开始
 
@@ -85,6 +85,7 @@ Generating boilerplate...
   faas-react - A serverless example with react
   faas-vue - A serverless example with vue
 ```
+### VSC 开发辅助插件
 
 ![](https://camo.githubusercontent.com/7819739b6a9eb3d673124817b0d40e46dc963993/68747470733a2f2f63646e2e6e6c61726b2e636f6d2f79757175652f302f323032302f6769662f3530313430382f313539333636313634363431362d35636238663637392d336331302d343638392d386465612d6530313731326438653231662e67696623616c69676e3d6c65667426646973706c61793d696e6c696e65266865696768743d383731266d617267696e3d2535426f626a6563742532304f626a656374253544266e616d653d323032302d30372d303225323031312d34342d32382e323032302d30372d303225323031315f34365f34302e676966266f726967696e4865696768743d383731266f726967696e57696474683d313036302673697a653d373438353839267374617475733d646f6e65267374796c653d6e6f6e652677696474683d31303630)
 
@@ -101,18 +102,22 @@ Midway Serverless 现已支持阿里云、腾讯云的部署，aws 正在开发�
 
 ## 快速开始 - 云 + 端一体化
 
-当前已接入以下云 + 端一体化示例。
+Midway Serverless 提供另一亮点功能是提供了与 React、Vue 等前端框架高度集成的——云端一体开发方案。基于云端一体方案可以高效交付一个互联网应用。
 
 |[<img alt="React" src="https://user-images.githubusercontent.com/677114/42611693-f921fc7c-85c9-11e8-8de1-6d6013b92f69.png" width="72">](https://www.yuque.com/midwayjs/faas/faas_with_react)| [<img alt="Vue" src="https://user-images.githubusercontent.com/677114/42611543-44ef4502-85c9-11e8-9ef9-e9f98477c646.png" width="72">](https://www.yuque.com/midwayjs/faas/faas_with_vue)
 | :---: | :---: |
 | [React](https://www.yuque.com/midwayjs/faas/faas_with_react) | [Vue](https://www.yuque.com/midwayjs/faas/faas_with_vue) |
+
+使用 React 一体化方案开发的新冠疫情可视化项目，使用 f create 命令选择 faas-covid19 命令即可创建。
+
+![](https://img.alicdn.com/tfs/TB1IxOkNeL2gK0jSZFmXXc7iXXa-1492-1168.png)
 
 ## 加入社区
 
 扫码加入即刻交流与反馈：
 
 
-<img alt="Join the chat at dingtalk" src="https://user-images.githubusercontent.com/418820/82108754-60371300-9763-11ea-88f4-fc59c743ea23.png" width="200">
+<img alt="Join the chat at dingtalk" src="https://user-images.githubusercontent.com/418820/82108754-60371300-9763-11ea-88f4-fc59c743ea23.png" width="500">
 
 ## 生态体系
 

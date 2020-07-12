@@ -1,13 +1,13 @@
 {
   "name": "@midwayjs/faas",
-  "version": "1.0.0",
+  "version": "1.0.5",
   "main": "dist/index",
   "typings": "index.d.ts",
   "dependencies": {
     "@midwayjs/core": "^2.0.0",
     "@midwayjs/decorator": "^2.0.8",
-    "@midwayjs/faas-typings": "^1.0.0",
-    "@midwayjs/simple-lock": "^1.0.0",
+    "@midwayjs/faas-typings": "^1.0.1",
+    "@midwayjs/simple-lock": "^1.0.1",
     "debug": "^4.1.1",
     "deep-eql": "^4.0.0",
     "is-type-of": "^1.2.1",

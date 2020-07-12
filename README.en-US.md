@@ -30,23 +30,26 @@ English | [简体中文](./README.md)
 
 Midway Serverless is a serverless framework used to build Node.js cloud functions. Helps you significantly reduce maintenance costs and focus more on product development in the cloud-native era.
 
-- 1、Easier migration between platforms
-  - 🐒 By providing a unified configuration specification and entry smoothing mechanism, the code is basically the same on each platform;
-  - 🦊 Expanding the runtime APIs of different cloud platforms can not only load common inter-platform extensions, but also access the company's internal private deployment solutions;
-- 2、Make applications easier to maintain and expand
-  - 🐯 Provides standard cloud platform function entry and exit parameter definitions;
+- 1、Make applications easier to maintain and delivering
   - 🐦 Provided multiple sets of integrated development solutions for community front-end React, Vue, etc.;
+  - 🐯 Provides standard cloud platform function entry and exit parameter definitions;
   - 🐶 Provides TypeScript support to facilitate application expansion and definition;
   - 🐱 Provides a complete Midway system iconic dependency injection solution;
-- 3、 Ecology is more lightweight and free
+- 2、 Ecology is more lightweight and free
   - 🦁 The function system reuses the ecological and Web middleware capabilities of koa, which is more handy when dealing with traditional Web;
   - 🐴 Provide an ecological chain of egg components reusing egg plug-ins, enterprise-level development links are simpler and smoother;
   - 🐘 The decorator capabilities of the Midway system are unified, making the traditional Web migration to the Serverless system faster and better;
+- 3、Easier migration between platforms
+  - 🐒 By providing a unified configuration specification and entry smoothing mechanism, the code is basically the same on each platform;
+  - 🦊 Expanding the runtime APIs of different cloud platforms can not only load common inter-platform extensions, but also access the company's internal private deployment solutions;
 
 
 ## Document
 
-- Guide [中文](https://www.yuque.com/midwayjs/faas) and [English](https://www.yuque.com/midwayjs/faas/quick_start?translate=en)
+- Quick Start - Function [English](https://www.yuque.com/midwayjs/faas/quick_start?translate=en)
+- Quick Start - E2E front-end integration (React/Vue) [English](https://www.yuque.com/midwayjs/faas/kl3bk5?translate=en)
+- Document [中文](https://www.yuque.com/midwayjs/faas)
+
 
 ## Quick Start
 
@@ -83,6 +86,8 @@ Generating boilerplate...
   faas-vue - A serverless example with vue
 ```
 
+### VSC Plugin
+
 ![](https://camo.githubusercontent.com/7819739b6a9eb3d673124817b0d40e46dc963993/68747470733a2f2f63646e2e6e6c61726b2e636f6d2f79757175652f302f323032302f6769662f3530313430382f313539333636313634363431362d35636238663637392d336331302d343638392d386465612d6530313731326438653231662e67696623616c69676e3d6c65667426646973706c61793d696e6c696e65266865696768743d383731266d617267696e3d2535426f626a6563742532304f626a656374253544266e616d653d323032302d30372d303225323031312d34342d32382e323032302d30372d303225323031315f34365f34302e676966266f726967696e4865696768743d383731266f726967696e57696474683d313036302673697a653d373438353839267374617475733d646f6e65267374796c653d6e6f6e652677696474683d31303630)
 
 ### Deploy Function
@@ -102,6 +107,11 @@ The following examples of front-end integration are currently connected.
 |[<img alt="React" src="https://user-images.githubusercontent.com/677114/42611693-f921fc7c-85c9-11e8-8de1-6d6013b92f69.png" width="72">](https://www.yuque.com/midwayjs/faas/faas_with_react?translate=en)| [<img alt="Vue" src="https://user-images.githubusercontent.com/677114/42611543-44ef4502-85c9-11e8-9ef9-e9f98477c646.png" width="72">](https://www.yuque.com/midwayjs/faas/faas_with_vue?translate=en)
 | :---: | :---: |
 | [React](https://www.yuque.com/midwayjs/faas/faas_with_react?translate=en) | [Vue](https://www.yuque.com/midwayjs/faas/faas_with_vue?translate=en) |
+
+The visualization project of COVID-2019 pandemic developed by react integration, it can be created by selecting faas-covid19  with command `f create`.
+
+![](https://img.alicdn.com/tfs/TB1IxOkNeL2gK0jSZFmXXc7iXXa-1492-1168.png)
+
 
 ## Ecosystem
 

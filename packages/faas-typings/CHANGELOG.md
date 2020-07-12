@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.0.1 (2020-07-06)
+
+
+### Bug Fixes
+
+* fix missing typings ([#171](https://github.com/midwayjs/midway-faas/issues/171)) ([1d40cf1](https://github.com/midwayjs/midway-faas/commit/1d40cf1c1d76f45888b4ce15f9a2151b81c7a8f9))
+
+
+### Features
+
+* support koa app create ([#173](https://github.com/midwayjs/midway-faas/issues/173)) ([c3793eb](https://github.com/midwayjs/midway-faas/commit/c3793eba182f634684fdaf147981433bb64639a1))
+
+
+
+
+
 # 1.0.0 (2020-07-02)
 
 

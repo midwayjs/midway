@@ -3,6 +3,65 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.4](https://github.com/midwayjs/midway-faas/compare/serverless-v1.0.3...serverless-v1.0.4) (2020-07-08)
+
+
+### Bug Fixes
+
+* http support method match ([#524](https://github.com/midwayjs/midway-faas/issues/524)) ([bce48b5](https://github.com/midwayjs/midway-faas/commit/bce48b505dc006e1ff36a78674213c41d9ab5489))
+
+
+
+
+
+## [1.0.3](https://github.com/midwayjs/midway-faas/compare/serverless-v1.0.2...serverless-v1.0.3) (2020-07-07)
+
+**Note:** Version bump only for package @midwayjs/fcli-plugin-create
+
+
+
+
+
+## 1.0.2 (2020-07-06)
+
+
+### Bug Fixes
+
+* fix error control in fc ([#153](https://github.com/midwayjs/midway-faas/issues/153)) ([f7dd007](https://github.com/midwayjs/midway-faas/commit/f7dd0070f9c1b7f07e628c8d2052d273a8133910))
+* fix windows path when invoke ([#169](https://github.com/midwayjs/midway-faas/issues/169)) ([e637a0a](https://github.com/midwayjs/midway-faas/commit/e637a0ab05a769a3797e2dccf0612bbbf650d074))
+* invoke source map ([#52](https://github.com/midwayjs/midway-faas/issues/52)) ([9149d2a](https://github.com/midwayjs/midway-faas/commit/9149d2a9a3f3d9ba975588b61c6f9bbeec2e8d86)), closes [#51](https://github.com/midwayjs/midway-faas/issues/51)
+
+
+### Features
+
+* 支持自定义模板 ([#28](https://github.com/midwayjs/midway-faas/issues/28)) ([7aaba06](https://github.com/midwayjs/midway-faas/commit/7aaba06c69deafb6a52d8805c9cd00924d722a4d))
+* add create plugin ([#26](https://github.com/midwayjs/midway-faas/issues/26)) ([ee445dd](https://github.com/midwayjs/midway-faas/commit/ee445dd8ee1b3e812abb30e34e2e9313ad69c0c2))
+* command core store ([#72](https://github.com/midwayjs/midway-faas/issues/72)) ([10e68a9](https://github.com/midwayjs/midway-faas/commit/10e68a9a1cf096628eabb7b2b3f2c34dbdd14f3a))
+
+
+
+
+
+## 1.0.1 (2020-07-06)
+
+
+### Bug Fixes
+
+* fix error control in fc ([#153](https://github.com/midwayjs/midway-faas/issues/153)) ([f7dd007](https://github.com/midwayjs/midway-faas/commit/f7dd0070f9c1b7f07e628c8d2052d273a8133910))
+* fix windows path when invoke ([#169](https://github.com/midwayjs/midway-faas/issues/169)) ([e637a0a](https://github.com/midwayjs/midway-faas/commit/e637a0ab05a769a3797e2dccf0612bbbf650d074))
+* invoke source map ([#52](https://github.com/midwayjs/midway-faas/issues/52)) ([9149d2a](https://github.com/midwayjs/midway-faas/commit/9149d2a9a3f3d9ba975588b61c6f9bbeec2e8d86)), closes [#51](https://github.com/midwayjs/midway-faas/issues/51)
+
+
+### Features
+
+* 支持自定义模板 ([#28](https://github.com/midwayjs/midway-faas/issues/28)) ([7aaba06](https://github.com/midwayjs/midway-faas/commit/7aaba06c69deafb6a52d8805c9cd00924d722a4d))
+* add create plugin ([#26](https://github.com/midwayjs/midway-faas/issues/26)) ([ee445dd](https://github.com/midwayjs/midway-faas/commit/ee445dd8ee1b3e812abb30e34e2e9313ad69c0c2))
+* command core store ([#72](https://github.com/midwayjs/midway-faas/issues/72)) ([10e68a9](https://github.com/midwayjs/midway-faas/commit/10e68a9a1cf096628eabb7b2b3f2c34dbdd14f3a))
+
+
+
+
+
 # 1.0.0 (2020-07-02)
 
 

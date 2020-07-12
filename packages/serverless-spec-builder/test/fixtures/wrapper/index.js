@@ -1,14 +1,17 @@
 const { FaaSStarter } = require('@midwayjs/faas');
 const { asyncWrapper, start } = require('testStarter');
+const picomatch = require('picomatch');
 
 
 let starter;
 let runtime;
 let inited = false;
 
+
 const initializeMethod = async (initializeContext = {}) => {
   runtime = await start({
-    layers: []
+    layers: [],
+    getHandler: getHandler
   });
   starter = new FaaSStarter({ baseDir: __dirname, initializeContext, applicationAdapter: runtime });
   
@@ -16,7 +19,15 @@ const initializeMethod = async (initializeContext = {}) => {
   inited = true;
 };
 
-exports.initializer = asyncWrapper(async (...args) => {
+const getHandler = (hanlderName) => {
+  
+    if (hanlderName === 'handler') {
+      return  starter.handleInvokeWrapper('index.handler'); 
+    }
+}
+
+
+exports.initializeUserDefine = asyncWrapper(async (...args) => {
   await initializeMethod(...args);
 });
 
@@ -25,7 +36,7 @@ exports.handler = asyncWrapper(async (...args) => {
   if (!inited) {
     await initializeMethod();
   }
-  
-  return runtime.asyncEvent(starter.handleInvokeWrapper('index.handler'))(...args);
-  
+
+  const handler = getHandler('handler');
+  return runtime.asyncEvent(handler)(...args);
 });

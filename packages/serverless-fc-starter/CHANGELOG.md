@@ -3,6 +3,40 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.0.1 (2020-07-06)
+
+
+### Bug Fixes
+
+* add origin context for normal event ([#146](https://github.com/midwayjs/midway-faas/issues/146)) ([9d5b353](https://github.com/midwayjs/midway-faas/commit/9d5b353b13e0d70cc68205d0b9626db10245c4b5))
+* aggregation custom domain configure ([5c92e5b](https://github.com/midwayjs/midway-faas/commit/5c92e5b0b9725f5507e2d692f8839b47586f71d9))
+* aliyun gateway accept number ([55c77b3](https://github.com/midwayjs/midway-faas/commit/55c77b3aa9000249e0987e808cb558a74bf51a55))
+* egg-layer test case ([060cdab](https://github.com/midwayjs/midway-faas/commit/060cdab4b18592eae63ca4e598f35cff0f4dde4c))
+* fc starter apigw ([acaa9d1](https://github.com/midwayjs/midway-faas/commit/acaa9d1c5a7704175feb2525970e2609bd237a7b))
+* fix buffer event ([c05b219](https://github.com/midwayjs/midway-faas/commit/c05b2197658c869aff03f38d55df7775c87ac163))
+* fix cookie in fc apigw ([e15decb](https://github.com/midwayjs/midway-faas/commit/e15decba1d751e6e6a448d9da89dec7eec1303e7))
+* fix error control in fc ([#153](https://github.com/midwayjs/midway-faas/issues/153)) ([f7dd007](https://github.com/midwayjs/midway-faas/commit/f7dd0070f9c1b7f07e628c8d2052d273a8133910))
+* fix http local buffer support ([#143](https://github.com/midwayjs/midway-faas/issues/143)) ([39e0cbf](https://github.com/midwayjs/midway-faas/commit/39e0cbf30de87fbe802c3209ef73eac6cfa8c48b))
+* fix send json when fc use http trigger ([#155](https://github.com/midwayjs/midway-faas/issues/155)) ([1e9abc4](https://github.com/midwayjs/midway-faas/commit/1e9abc48bb479f91caee2ecd09db0fe747827a65))
+* fix windows path when invoke ([#169](https://github.com/midwayjs/midway-faas/issues/169)) ([e637a0a](https://github.com/midwayjs/midway-faas/commit/e637a0ab05a769a3797e2dccf0612bbbf650d074))
+* invoke source map ([#52](https://github.com/midwayjs/midway-faas/issues/52)) ([9149d2a](https://github.com/midwayjs/midway-faas/commit/9149d2a9a3f3d9ba975588b61c6f9bbeec2e8d86)), closes [#51](https://github.com/midwayjs/midway-faas/issues/51)
+* lambda params can't use ...args ([#15](https://github.com/midwayjs/midway-faas/issues/15)) ([3c18e50](https://github.com/midwayjs/midway-faas/commit/3c18e5068e408188862c10a810e59b5b8f14cd94))
+* refactor appregation & pass process env to invoke debug ([#24](https://github.com/midwayjs/midway-faas/issues/24)) ([f8cd981](https://github.com/midwayjs/midway-faas/commit/f8cd98118e91d3e1b15c2b37d1aaad6b15282f26))
+* support apigw ([2321c08](https://github.com/midwayjs/midway-faas/commit/2321c08be4ed7a076aa6004df95a64f04db0ee6d))
+
+
+### Features
+
+* add dev pack ([#134](https://github.com/midwayjs/midway-faas/issues/134)) ([cd08f54](https://github.com/midwayjs/midway-faas/commit/cd08f54859da80f517cb37f99857679286f10f0f))
+* commit development code ([a51a14a](https://github.com/midwayjs/midway-faas/commit/a51a14ae266a12f37fbe20ebf7eabfa764cf6532))
+* single process invoke and debug ([#16](https://github.com/midwayjs/midway-faas/issues/16)) ([826a8c7](https://github.com/midwayjs/midway-faas/commit/826a8c7a7a36d8ec03a84f3d29498bef58811146))
+* support koa app create ([#173](https://github.com/midwayjs/midway-faas/issues/173)) ([c3793eb](https://github.com/midwayjs/midway-faas/commit/c3793eba182f634684fdaf147981433bb64639a1))
+* support koa application ([#162](https://github.com/midwayjs/midway-faas/issues/162)) ([364d62b](https://github.com/midwayjs/midway-faas/commit/364d62b48242d2ee86f97f087f912e640e8ff6e7))
+
+
+
+
+
 # 1.0.0 (2020-07-02)
 
 
