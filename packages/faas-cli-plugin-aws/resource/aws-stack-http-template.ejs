@@ -6,6 +6,7 @@
     "hellocurl": {
       "Type": "AWS::Serverless::Function",
       "Properties": {
+        "FunctionName": "<%= options.name %>",
         "Handler": "<%= options.handler || "index.handler" %>",
         "Runtime": "<%= options.runtime || "nodejs12.x" %>",
         "Description": "<%= options.description || "" %>",

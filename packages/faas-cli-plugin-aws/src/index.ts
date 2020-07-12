@@ -114,6 +114,7 @@ interface S3UploadResult {
 }
 
 interface LambdaFunctionOptions {
+  name: string;
   handler?: string;
   runtime?: string;
   description?: string;
@@ -195,6 +196,27 @@ export class AWSLambdaPlugin extends BasePlugin {
     });
   }
 
+  async featchBucket(bucket: string): Promise<S3UploadResult> {
+    this.core.cli.log('Check aws s3 bucket...');
+    const s3 = new S3({ apiVersion: '2006-03-01' });
+    try {
+      return await new Promise((resolve, reject) => {
+        s3.createBucket({ Bucket: bucket }, (err) => {
+          if (err) {
+            return reject(err);
+          }
+          resolve();
+        });
+      });
+    } catch (err) {
+      if (err.message.includes('connect ETIMEDOUT')) {
+        this.core.cli.log('  - cannot connect to aws network, please try again later.');
+      }
+      this.core.cli.log('  -', err.message);
+      process.exit(1);
+    }
+  }
+
   async uploadArtifact(bucket: string): Promise<S3UploadResult> {
     this.core.cli.log('Start upload artifact...');
     const uploadParams = { Bucket: bucket, Key: '', Body: '' };
@@ -211,25 +233,34 @@ export class AWSLambdaPlugin extends BasePlugin {
     uploadParams.Key = basename(file);
 
     const s3 = new S3({ apiVersion: '2006-03-01' });
-    return new Promise((resolve, reject) => {
-      s3.upload(uploadParams, (err, data) => {
-        if (err) {
-          return reject(err);
-        } if (data) {
-          this.core.cli.log('  - artifact uploaded');
-          return resolve(data);
-        }
-        resolve(null);
+    try {
+      return await new Promise((resolve, reject) => {
+        s3.upload(uploadParams, (err, data) => {
+          if (err) {
+            return reject(err);
+          } if (data) {
+            this.core.cli.log('  - artifact uploaded');
+            return resolve(data);
+          }
+          resolve(null);
+        });
       });
-    });
+    } catch (err) {
+      if (err.message.includes('connect ETIMEDOUT')) {
+        this.core.cli.log('  - cannot connect to aws network, please try again later.');
+      }
+      this.core.cli.log('  -', err.message);
+      process.exit(1);
+    }
   }
 
-  async generateStackJson(handler = 'index.handler', path = '/hello', bucket: string, key: string) {
+  async generateStackJson(name: string, handler = 'index.handler', path = '/hello', bucket: string, key: string) {
     this.core.cli.log('  - generate stack template json');
     // TODO 支持多函数模板
     const tpl = fs.readFileSync(join(__dirname, '../resource/aws-stack-http-template.ejs')).toString();
     const params: { options: LambdaFunctionOptions } = {
       options: {
+        name,
         handler, path,
         codeBucket: bucket,
         codeKey: key,
@@ -238,11 +269,10 @@ export class AWSLambdaPlugin extends BasePlugin {
     return render(tpl, params);
   }
 
-  async createStack(credentials, bucket: string, key: string): Promise<{ StackId: string }> {
+  async createStack(credentials, name: string, handler: string, bucket: S3UploadResult): Promise<{ StackId: string }> {
     this.core.cli.log('Start stack create');
 
     // TODO support multi function;
-    const names = Object.keys(this.core.service.functions);
 
     /**
      * this.core.service {
@@ -252,10 +282,9 @@ export class AWSLambdaPlugin extends BasePlugin {
      *   package: { artifact: 'code.zip' }
      * }
      */
-    const handler = this.core.service.functions[names[0]].handler;
 
     const service = new CloudFormation(credentials);
-    const TemplateBody = await this.generateStackJson(handler, '/hello', bucket, key);
+    const TemplateBody = await this.generateStackJson(name, handler, '/hello', bucket.Bucket, bucket.key);
     const params = {
       StackName: 'my-test-stack',
       OnFailure: 'DELETE',
@@ -274,13 +303,13 @@ export class AWSLambdaPlugin extends BasePlugin {
     }));
   }
 
-  async updateStack(credentials, bucket: string, key: string): Promise<{ StackId: string }> {
+  async updateStack(credentials, bucket: string, key: string, name: string): Promise<{ StackId: string }> {
     this.core.cli.log('  - stack already exists, do stack update');
     // TODO support multi function;
     const names = Object.keys(this.core.service.functions);
     const handler = this.core.service.functions[names[0]].handler;
     const service = new CloudFormation(credentials);
-    const TemplateBody = await this.generateStackJson(handler, '/hello', bucket, key);
+    const TemplateBody = await this.generateStackJson(name, handler, '/hello', bucket, key);
     const params = {
       StackName: 'my-test-stack',
       Capabilities: ['CAPABILITY_IAM', 'CAPABILITY_AUTO_EXPAND'],
@@ -348,35 +377,57 @@ export class AWSLambdaPlugin extends BasePlugin {
     }
   }
 
-  async updateFunction(credentials): Promise<any> {
+  async updateFunction(credentials, name: string, bucket: S3UploadResult): Promise<any> {
+    this.core.cli.log('  - upadte function');
     const service = new Lambda(credentials);
+    // TODO check md5
+    // const result = await new Promise<any>((resolve, reject) => {
+    //   service.getFunction({ FunctionName: name },
+    //     (err, data) => err ? reject(err) : resolve(data));
+    // });
 
     // TODO support multi function;
-    const names = Object.keys(this.core.service.functions);
-    console.log('functions', names);
     const params = {
-      FunctionName: names[0],
-      ZipFile: join(this.midwayBuildPath, './code.zip'),
+      FunctionName: name,
+      S3Bucket: bucket.Bucket,
+      S3Key: bucket.key,
     };
-    const req = service.updateFunctionCode(params, (err, cfg) => {
-      console.log('updateFunctionCode', err, cfg);
-    })
-
-    console.log(req.promise);
-    const res: any = await req.promise
-      ? req.promise()
-      : new Promise((resolve, reject) => {
-        req.send((err, res) => {
-          if (err) {
-            return reject(err);
-          }
-          resolve(res);
-        });
-      });
-    return res;
+    await new Promise((resolve, reject) => {
+      /**
+       * {
+       *    FunctionName: 'serverless-hello-world-index',
+       *    FunctionArn: 'arn:aws:lambda:us-east-1:752677612709:function:serverless-hello-world-index',
+       *    Runtime: 'nodejs12.x',
+       *    Role: 'arn:aws:iam::752677612709:role/service-role/hello-curl-role-5tk89mye',
+       *    Handler: 'index.handler',
+       *    CodeSize: 311,
+       *    Description: '',
+       *    Timeout: 3,
+       *    MemorySize: 128,
+       *    LastModified: '2020-07-12T18:10:09.191+0000',
+       *    CodeSha256: 'pg5zZr5JSWbuN14CoyCzcz5tu0mZA7mxAoIgdC5+dL0=',
+       *    Version: '$LATEST',
+       *    KMSKeyArn: null,
+       *    TracingConfig: { Mode: 'PassThrough' },
+       *    MasterArn: null,
+       *    RevisionId: '7d0b02dc-cde7-4680-9db1-95792282f96c',
+       *    State: 'Active',
+       *    StateReason: null,
+       *    StateReasonCode: null,
+       *    LastUpdateStatus: 'Successful',
+       *    LastUpdateStatusReason: null,
+       *    LastUpdateStatusReasonCode: null
+       *  }
+       */
+      service.updateFunctionCode(params, (err) => err ? reject(err) : resolve());
+    });
+    this.core.cli.log('  - upadte over');
   }
 
   async deploy() {
+    const names = Object.keys(this.core.service.functions);
+    const handler = this.core.service.functions[names[0]].handler;
+    const name = `${this.core.service.service.name}-${names[0]}`;
     const stage = 'v1';
     const path = '/hello';
 
@@ -384,31 +435,23 @@ export class AWSLambdaPlugin extends BasePlugin {
     this.core.cli.log('Start deploy by aws-sdk');
 
     // TODO create bucket
-    const bucket = 'sfprotesthello-dev-serverlessdeploymentbucket-1vxqzgvgdn1is';
+    const bucket = `${this.core.service.service.name}-deploymentbucket`;
+    await this.featchBucket(bucket);
     const artifactRes = await this.uploadArtifact(bucket);
 
     // 配置 crendentials
-
-    /**
-     * this.core.service {
-     *   service: { name: 'serverless-hello-world' },
-     *   provider: { name: 'aws' },
-     *   functions: { index: { handler: 'index.handler', events: [Array] } },
-     *   package: { artifact: 'code.zip' }
-     * }
-     */
     const credentials = this.getCredentials();
     credentials.region = this.getRegion();
 
     let stackData: { StackId: string } = null;
     try {
-      stackData = await this.createStack(credentials, artifactRes.Bucket, artifactRes.key);
+      stackData = await this.createStack(credentials, name, handler, artifactRes);
     } catch (err) {
       if (err.message.includes('already exists')) {
-        stackData = await this.updateStack(credentials, artifactRes.Bucket, artifactRes.key);
-      } else {
-        throw err;
+        await this.updateFunction(credentials, name, artifactRes);
+        return;
       }
+      throw err;
     }
     const result = await this.monitorStackResult(credentials, stackData.StackId, stage, path);
     this.core.cli.log('Deploy over, test url:', result.api);
@@ -421,7 +464,6 @@ export class AWSLambdaPlugin extends BasePlugin {
    */
   getCredentials() {
     if (this.cachedCredentials) {
-      // We have already created the credentials object once, so return it.
       return this.cachedCredentials;
     }
     const result: any = {};
