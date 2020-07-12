@@ -107,9 +107,9 @@ const impl = {
 
 interface S3UploadResult {
   ETag: string;
-  ServerSideEncryption: string;
+  ServerSideEncryption?: string;
   Location: string;
-  key: string;
+  Key: string;
   Bucket: string;
 }
 
@@ -227,8 +227,8 @@ export class AWSLambdaPlugin extends BasePlugin {
       this.core.cli.log('  - File Error', err);
       process.exit(1);
     });
+    // TODO loading bar by stream event
     uploadParams.Body = fileStream;
-
     // TODO use prefix by project-function
     uploadParams.Key = basename(file);
 
@@ -284,7 +284,7 @@ export class AWSLambdaPlugin extends BasePlugin {
      */
 
     const service = new CloudFormation(credentials);
-    const TemplateBody = await this.generateStackJson(name, handler, '/hello', bucket.Bucket, bucket.key);
+    const TemplateBody = await this.generateStackJson(name, handler, '/hello', bucket.Bucket, bucket.Key);
     const params = {
       StackName: 'my-test-stack',
       OnFailure: 'DELETE',
@@ -390,37 +390,37 @@ export class AWSLambdaPlugin extends BasePlugin {
     const params = {
       FunctionName: name,
       S3Bucket: bucket.Bucket,
-      S3Key: bucket.key,
+      S3Key: bucket.Key,
     };
-    await new Promise((resolve, reject) => {
-      /**
-       * {
-       *    FunctionName: 'serverless-hello-world-index',
-       *    FunctionArn: 'arn:aws:lambda:us-east-1:752677612709:function:serverless-hello-world-index',
-       *    Runtime: 'nodejs12.x',
-       *    Role: 'arn:aws:iam::752677612709:role/service-role/hello-curl-role-5tk89mye',
-       *    Handler: 'index.handler',
-       *    CodeSize: 311,
-       *    Description: '',
-       *    Timeout: 3,
-       *    MemorySize: 128,
-       *    LastModified: '2020-07-12T18:10:09.191+0000',
-       *    CodeSha256: 'pg5zZr5JSWbuN14CoyCzcz5tu0mZA7mxAoIgdC5+dL0=',
-       *    Version: '$LATEST',
-       *    KMSKeyArn: null,
-       *    TracingConfig: { Mode: 'PassThrough' },
-       *    MasterArn: null,
-       *    RevisionId: '7d0b02dc-cde7-4680-9db1-95792282f96c',
-       *    State: 'Active',
-       *    StateReason: null,
-       *    StateReasonCode: null,
-       *    LastUpdateStatus: 'Successful',
-       *    LastUpdateStatusReason: null,
-       *    LastUpdateStatusReasonCode: null
-       *  }
-       */
-      service.updateFunctionCode(params, (err) => err ? reject(err) : resolve());
-    });
+    /**
+     * {
+     *    FunctionName: 'serverless-hello-world-index',
+     *    FunctionArn: 'arn:aws:lambda:us-east-1:752677612709:function:serverless-hello-world-index',
+     *    Runtime: 'nodejs12.x',
+     *    Role: 'arn:aws:iam::752677612709:role/service-role/hello-curl-role-5tk89mye',
+     *    Handler: 'index.handler',
+     *    CodeSize: 311,
+     *    Description: '',
+     *    Timeout: 3,
+     *    MemorySize: 128,
+     *    LastModified: '2020-07-12T18:10:09.191+0000',
+     *    CodeSha256: 'pg5zZr5JSWbuN14CoyCzcz5tu0mZA7mxAoIgdC5+dL0=',
+     *    Version: '$LATEST',
+     *    KMSKeyArn: null,
+     *    TracingConfig: { Mode: 'PassThrough' },
+     *    MasterArn: null,
+     *    RevisionId: '7d0b02dc-cde7-4680-9db1-95792282f96c',
+     *    State: 'Active',
+     *    StateReason: null,
+     *    StateReasonCode: null,
+     *    LastUpdateStatus: 'Successful',
+     *    LastUpdateStatusReason: null,
+     *    LastUpdateStatusReasonCode: null
+     *  }
+     */
+    await new Promise((resolve, reject) =>
+      service.updateFunctionCode(params, (err) => err ? reject(err) : resolve())
+    );
     this.core.cli.log('  - upadte over');
   }
 
@@ -431,13 +431,13 @@ export class AWSLambdaPlugin extends BasePlugin {
     const stage = 'v1';
     const path = '/hello';
 
-    // await this.package();
+    await this.package();
     this.core.cli.log('Start deploy by aws-sdk');
 
-    // TODO create bucket
     const bucket = `${this.core.service.service.name}-deploymentbucket`;
     await this.featchBucket(bucket);
     const artifactRes = await this.uploadArtifact(bucket);
+    // console.log('artifactRes', artifactRes);
 
     // 配置 crendentials
     const credentials = this.getCredentials();
