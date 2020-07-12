@@ -145,11 +145,11 @@ interface StackEvents {
   >
 }
 
-interface StackRestApiDetail {
+interface StackResourcesDetail {
   ResponseMetadata: {
     RequestId: string;
   };
-  StackResourceDetail: {
+  StackResources: {
     StackName: string;
     StackId: string;
     LogicalResourceId: string;
@@ -161,7 +161,7 @@ interface StackRestApiDetail {
     DriftInformation: {
       StackResourceDriftStatus: string;
     }
-  }
+  }[]
 }
 
 export class AWSLambdaPlugin extends BasePlugin {
@@ -186,15 +186,27 @@ export class AWSLambdaPlugin extends BasePlugin {
     'deploy:deploy': this.deploy.bind(this),
   };
 
+  async package() {
+    this.core.cli.log('Start package');
+    // 执行 package 打包
+    await this.core.invoke(['package'], true, {
+      ...this.options,
+      skipZip: false, // 生成 zip 包
+    });
+  }
+
   async uploadArtifact(bucket: string): Promise<S3UploadResult> {
+    this.core.cli.log('Start upload artifact...');
     const uploadParams = { Bucket: bucket, Key: '', Body: '' };
     const file = join(this.servicePath, 'code.zip');
 
-    const fileStream = fs.createReadableStream(file);
-    fileStream.on('error', function (err) {
-      console.log('File Error', err);
+    const fileStream = fs.createReadStream(file);
+    fileStream.on('error', (err) => {
+      this.core.cli.log('  - File Error', err);
+      process.exit(1);
     });
     uploadParams.Body = fileStream;
+
     // TODO use prefix by project-function
     uploadParams.Key = basename(file);
 
@@ -204,6 +216,7 @@ export class AWSLambdaPlugin extends BasePlugin {
         if (err) {
           return reject(err);
         } if (data) {
+          this.core.cli.log('  - artifact uploaded');
           return resolve(data);
         }
         resolve(null);
@@ -212,7 +225,9 @@ export class AWSLambdaPlugin extends BasePlugin {
   }
 
   async generateStackJson(handler = 'index.handler', path = '/hello', bucket: string, key: string) {
-    const tpl = fs.readFileSync('./resource/aws-stack-http-template.ejs').toString();
+    this.core.cli.log('  - generate stack template json');
+    // TODO 支持多函数模板
+    const tpl = fs.readFileSync(join(__dirname, '../resource/aws-stack-http-template.ejs')).toString();
     const params: { options: LambdaFunctionOptions } = {
       options: {
         handler, path,
@@ -223,11 +238,11 @@ export class AWSLambdaPlugin extends BasePlugin {
     return render(tpl, params);
   }
 
-  async createStack(credentials, bucket: string, key: string): Promise<{ stackId: string }> {
+  async createStack(credentials, bucket: string, key: string): Promise<{ StackId: string }> {
+    this.core.cli.log('Start stack create');
 
     // TODO support multi function;
     const names = Object.keys(this.core.service.functions);
-    console.log('functions', names);
 
     /**
      * this.core.service {
@@ -241,18 +256,16 @@ export class AWSLambdaPlugin extends BasePlugin {
 
     const service = new CloudFormation(credentials);
     const TemplateBody = await this.generateStackJson(handler, '/hello', bucket, key);
-    // const setup = template;
-    // const TemplateBody = JSON.stringify(setup);
     const params = {
       StackName: 'my-test-stack',
       OnFailure: 'DELETE',
-      // Capabilities: ['CAPABILITY_IAM', 'CAPABILITY_NAMED_IAM'],
       Capabilities: ['CAPABILITY_IAM', 'CAPABILITY_AUTO_EXPAND'],
       Parameters: [],
       TemplateBody,
       // Tags: Object.keys(stackTags).map(key => ({ Key: key, Value: stackTags[key] })),
     };
 
+    this.core.cli.log('  - creating stack request');
     return new Promise((resolve, reject) => service.createStack(params, (err, data) => {
       if (err) {
         return reject(err);
@@ -261,15 +274,36 @@ export class AWSLambdaPlugin extends BasePlugin {
     }));
   }
 
-  async monitorStackResult(credentials, stackId: string, stage = 'v1', path = '/hello') {
+  async updateStack(credentials, bucket: string, key: string): Promise<{ StackId: string }> {
+    this.core.cli.log('  - stack already exists, do stack update');
+    // TODO support multi function;
+    const names = Object.keys(this.core.service.functions);
+    const handler = this.core.service.functions[names[0]].handler;
     const service = new CloudFormation(credentials);
-    const TemplateBody = fs.readFileSync(__dirname + '/temp.yml').toString();
+    const TemplateBody = await this.generateStackJson(handler, '/hello', bucket, key);
     const params = {
-      // LogicalResourceId: "ServerlessRestApi",
-      // StackName: 'arn:aws:cloudformation:us-east-1:752677612709:stack/my-test-stack/275319b0-c357-11ea-a1f5-0a99e59b1983'
+      StackName: 'my-test-stack',
+      Capabilities: ['CAPABILITY_IAM', 'CAPABILITY_AUTO_EXPAND'],
+      Parameters: [],
+      TemplateBody,
+    };
+    this.core.cli.log('  - updating stack request');
+    return new Promise((resolve, reject) => service.updateStack(params, (err, data) => {
+      if (err) {
+        return reject(err);
+      }
+      resolve(data as any);
+    }));
+  }
+
+  async monitorStackResult(credentials, stackId: string, stage = 'v1', path = '/hello') {
+    this.core.cli.log('  - wait stack ready');
+    const service = new CloudFormation(credentials);
+    const params = {
       StackName: stackId
     };
 
+    process.stdout.write('    - checking');
     while (true) {
       const stackEvents: StackEvents = await new Promise((resolve, reject) =>
         service.describeStackEvents(params, (err, data) => {
@@ -279,36 +313,36 @@ export class AWSLambdaPlugin extends BasePlugin {
           resolve(data as any);
         }));
       const events = stackEvents.StackEvents;
-      const lastEvent = events[events.length - 1];
-      if (lastEvent && lastEvent.ResourceType === 'ResourceType' && lastEvent.ResourceStatus === 'DELETE_COMPLETE') {
+      const lastEvent = events[0];
+      if (lastEvent && lastEvent.ResourceType === 'AWS::CloudFormation::Stack'
+        && lastEvent.ResourceStatus === 'DELETE_COMPLETE') {
         return Promise.reject('stack deploy failed');
       }
-      if (lastEvent && lastEvent.ResourceType === 'ResourceType' && lastEvent.ResourceStatus === 'CREATE_COMPLETE') {
+      if (lastEvent && lastEvent.ResourceType === 'AWS::CloudFormation::Stack'
+        && (lastEvent.ResourceStatus === 'CREATE_COMPLETE'
+          || lastEvent.ResourceStatus === 'UPDATE_COMPLETE')) {
         break;
       }
-      // TODO debug log here
-      console.log('statue not ready');
+      process.stdout.write('.');
       await sleep(1000);
     }
+    this.core.cli.log('\n  - stack ready, check api url');
 
-    const result: StackRestApiDetail = await new Promise((resolve, reject) => service.describeStackResources({
-      LogicalResourceId: "ServerlessRestApi",
-      StackName: stackId
-    }, (err, data) => {
-      if (err) {
-        return reject(err);
-      }
-      resolve(data as any);
-    }));
+    const result: StackResourcesDetail = await new Promise((resolve, reject) =>
+      service.describeStackResources({
+        StackName: stackId
+      }, (err, data) => {
+        if (err) {
+          return reject(err);
+        }
+        resolve(data as any);
+      }));
 
-
-    // describeStackResources
-    // "LogicalResourceId": "ServerlessRestApi",
-    // "PhysicalResourceId": "wsqd4ni6i5",
-    // staga
+    const { StackResources } = result;
+    const data = StackResources.find((res) => res.ResourceType === 'AWS::ApiGateway::RestApi');
 
     // https://wsqd4ni6i5.execute-api.us-east-1.amazonaws.com/Prod/hello-curl
-    const api = `https://${result.StackResourceDetail.LogicalResourceId}.execute-api.${credentials.region}.amazonaws.com/${stage}${path}`;
+    const api = `https://${data.PhysicalResourceId}.execute-api.${credentials.region}.amazonaws.com/${stage}${path}`;
     return {
       api
     }
@@ -346,12 +380,10 @@ export class AWSLambdaPlugin extends BasePlugin {
     const stage = 'v1';
     const path = '/hello';
 
-    // 执行 package 打包
-    await this.core.invoke(['package'], true, {
-      ...this.options,
-      skipZip: false, // 生成 zip 包
-    });
+    // await this.package();
     this.core.cli.log('Start deploy by aws-sdk');
+
+    // TODO create bucket
     const bucket = 'sfprotesthello-dev-serverlessdeploymentbucket-1vxqzgvgdn1is';
     const artifactRes = await this.uploadArtifact(bucket);
 
@@ -367,22 +399,19 @@ export class AWSLambdaPlugin extends BasePlugin {
      */
     const credentials = this.getCredentials();
     credentials.region = this.getRegion();
-    console.log('credentials', credentials);
 
-    let stackData: { stackId: string } = null;
+    let stackData: { StackId: string } = null;
     try {
       stackData = await this.createStack(credentials, artifactRes.Bucket, artifactRes.key);
-
     } catch (err) {
       if (err.message.includes('already exists')) {
-        // TODO stack 已经 deploy 需走 updateFunction 逻辑
-        return;
+        stackData = await this.updateStack(credentials, artifactRes.Bucket, artifactRes.key);
+      } else {
+        throw err;
       }
     }
-
-    const result = await this.monitorStackResult(credentials, stackData.stackId, stage, path);
+    const result = await this.monitorStackResult(credentials, stackData.StackId, stage, path);
     this.core.cli.log('Deploy over, test url:', result.api);
-    // return res;
   }
 
   /**
