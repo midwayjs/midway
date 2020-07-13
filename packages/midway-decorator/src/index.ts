@@ -10,3 +10,4 @@ export * from './rpc/hsf';
 export * from './framework/config';
 export * from './framework/logger';
 export * from './framework/plugin';
+export * from './framework/app';

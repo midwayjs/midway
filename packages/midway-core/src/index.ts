@@ -24,6 +24,7 @@ export {
   listPreloadModule,
   saveModule,
   listModule,
+  resetModule,
   clearAllModule,
   getParamNames,
   getProviderId,
@@ -36,4 +37,5 @@ export { MidwayContainer } from './context/midwayContainer';
 export { MidwayRequestContainer }  from './context/requestContainer';
 export * from './context/providerWrapper';
 export * from './common/constants';
+export * as util from './common/util';
 export * from './features';

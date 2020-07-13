@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/decorator",
-  "version": "2.0.7",
+  "version": "2.1.4",
   "description": "definition decorator for midway project",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -10,7 +10,8 @@
     "test": "npm run lint && midway-bin clean && NODE_ENV=test midway-bin test --ts",
     "cov": "midway-bin cov --ts",
     "ci": "npm run test",
-    "autod": "midway-bin autod"
+    "autod": "midway-bin autod",
+    "link": "npm link"
   },
   "dependencies": {
     "camelcase": "^5.0.0",
@@ -20,7 +21,8 @@
   },
   "devDependencies": {
     "@types/joi": "^14.3.4",
-    "midway-bin": "^2.0.7"
+    "midway-bin": "^2.0.15",
+    "mm": "^2.5.0"
   },
   "keywords": [
     "midway",

@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/core",
-  "version": "2.0.7",
+  "version": "2.1.4",
   "description": "midway core",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -9,7 +9,8 @@
     "lint": "../../node_modules/.bin/tslint --format prose -c ../../tslint.json --fix 'src/**/*.ts' 'test/**/*.ts'",
     "test": "npm run lint && midway-bin clean && NODE_ENV=test midway-bin test --ts",
     "cov": "midway-bin clean && midway-bin cov --ts",
-    "autod": "midway-bin autod"
+    "autod": "midway-bin autod",
+    "link": "npm link"
   },
   "keywords": [
     "midway",
@@ -24,12 +25,12 @@
   "license": "MIT",
   "devDependencies": {
     "chai": "^4.2.0",
-    "midway-bin": "^2.0.7",
+    "midway-bin": "^2.0.15",
     "mm": "^2.5.0",
     "sinon": "^7.2.2"
   },
   "dependencies": {
-    "@midwayjs/decorator": "^2.0.7",
+    "@midwayjs/decorator": "^2.1.4",
     "debug": "^4.1.1",
     "extend2": "^1.0.0",
     "globby": "^10.0.1",
@@ -37,10 +38,7 @@
     "lodash.assign": "^4.2.0",
     "lodash.clonedeep": "^4.5.0",
     "lodash.defaultsdeep": "^4.6.0",
-    "lodash.forown": "^4.4.0",
     "lodash.get": "^4.4.2",
-    "lodash.has": "^4.5.2",
-    "lodash.keys": "^4.2.0",
     "lodash.set": "^4.3.2",
     "lodash.template": "^4.4.0",
     "reflect-metadata": "^0.1.13"

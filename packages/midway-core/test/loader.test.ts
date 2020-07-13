@@ -3,10 +3,15 @@ import {
   LOGGER_KEY,
   PLUGIN_KEY,
   Provide,
+  APPLICATION_KEY,
 } from '@midwayjs/decorator';
 import * as assert from 'assert';
 import * as path from 'path';
-import { ContainerLoader, MidwayRequestContainer, clearAllModule } from '../src';
+import {
+  ContainerLoader,
+  MidwayRequestContainer,
+  clearAllModule,
+} from '../src';
 import * as mm from 'mm';
 import sinon = require('sinon');
 
@@ -81,6 +86,44 @@ describe('/test/loader.test.ts', () => {
     assert(baseServiceCtx.config === 'hello');
     assert(baseServiceCtx.logger === console);
     assert(baseServiceCtx.plugin2.b === 2);
+  });
+
+  it('should load ts file and bindapp success', async () => {
+    const loader = new ContainerLoader({
+      baseDir: path.join(__dirname, './fixtures/base-app-forbindapp/src'),
+    });
+    loader.initialize();
+    loader.loadDirectory();
+    const tt: any = {
+      getBaseDir() { return 'hello this is basedir'; }
+    };
+    loader.registerHook(APPLICATION_KEY, () => tt);
+    await loader.refresh();
+    // register handler for container
+    loader.registerHook(CONFIG_KEY, (key, target) => {
+      assert(
+        target instanceof
+          require('./fixtures/base-app-forbindapp/src/lib/service')[
+            'BaseService'
+          ]
+      );
+      return 'hello';
+    });
+
+    loader.registerHook(PLUGIN_KEY, (key, target) => {
+      return { b: 2 };
+    });
+
+    loader.registerHook(LOGGER_KEY, (key, target) => {
+      return console;
+    });
+
+    const appCtx = loader.getApplicationContext();
+    const baseService: any = await appCtx.getAsync('baseService');
+    assert(baseService.config === 'hello');
+    assert(baseService.logger === console);
+    assert(baseService.plugin2.b === 2);
+    assert(baseService.test.getBaseDir() === 'hello this is basedir');
   });
 
   it('load ts file support constructor inject', async () => {
@@ -188,6 +231,11 @@ describe('/test/loader.test.ts', () => {
     });
     loader.initialize();
     loader.loadDirectory();
+    loader.registerHook(APPLICATION_KEY, () => ({
+      getBaseDir() {
+        return 'base dir';
+      }
+    }));
     await loader.refresh();
 
     const appCtx = loader.getApplicationContext();
@@ -234,7 +282,7 @@ describe('/test/loader.test.ts', () => {
   it('should load config.*.ts by process.env MIDWAY_SERVER_ENV', async () => {
     mm(process.env, 'MIDWAY_SERVER_ENV', 'local');
     const callback = sinon.spy();
-    mm(console, 'log', (m) => {
+    mm(console, 'log', m => {
       callback(m);
     });
     const loader = new ContainerLoader({
@@ -250,7 +298,9 @@ describe('/test/loader.test.ts', () => {
     const appCtx = loader.getApplicationContext();
     const replaceManager: any = await appCtx.getAsync('@ok:replaceManager');
     assert((await replaceManager.getOne()) === 'ok1');
-    assert.ok(callback.withArgs('------auto configuration ready now').calledOnce);
+    assert.ok(
+      callback.withArgs('------auto configuration ready now').calledOnce
+    );
     mm.restore();
   });
 
@@ -268,11 +318,14 @@ describe('/test/loader.test.ts', () => {
 
     const appCtx = loader.getApplicationContext();
     const replaceManager: any = await appCtx.getAsync('@ok:replaceManager');
-    assert((await replaceManager.getOne()) === 'ok1');
+    assert((await replaceManager.getOne()) === 'oktwo');
     const replaceManagerno: any = await appCtx.getAsync(
       '@midway-plugin-no-pkg-json:replaceManager'
     );
-    assert((await replaceManagerno.getOne()) === 'ok1');
+    assert((await replaceManagerno.getOne()) === 'oktwo');
+
+    const replaceManagerTwo: any = await appCtx.getAsync('@ok:replaceManagerTwo');
+    assert((await replaceManagerTwo.getOne()) === 'oktwo');
     mm.restore();
   });
 
@@ -296,15 +349,21 @@ describe('/test/loader.test.ts', () => {
     assert((await replaceManager1.getOne()) === 'one article');
     // 取自定义 namespace
     const replaceManager2: any = await appCtx.getAsync('@ok:replaceManager');
-    assert((await replaceManager2.getOne()) === 'ok2');
+    assert((await replaceManager2.getOne()) === 'ok3');
     // 查看覆盖的情况
     const baseService: any = await appCtx.getAsync('baseService');
     assert(
       (await baseService.getInformation()) ===
-        'harryone article atmod,one article,ok2'
+        'harryone article atmod,one article,ok3'
     );
 
     assert(baseService.helloworld === 234);
+
+    assert(baseService.articleManager1);
+    assert((await baseService.articleManager1.getOne()) === 'ok3empty');
+
+    assert(baseService.articleManager2);
+    assert((await baseService.articleManager2.getOne()) === 'ok3emptytwo');
 
     const userManager: any = await appCtx.getAsync('userManager');
     assert((await userManager.getUser()) === 'harryone article atmod');
@@ -315,5 +374,250 @@ describe('/test/loader.test.ts', () => {
     );
     assert((await repm.getOne()) === 'one article mod');
     mm.restore();
+  });
+
+  it('should load conflict with error', async () => {
+    const loader = new ContainerLoader({
+      baseDir: path.join(
+        __dirname,
+        './fixtures/app-with-conflict/base-app-decorator/src'
+      ),
+      disableConflictCheck: false,
+    });
+    loader.initialize();
+    const callback = sinon.spy();
+    try {
+      loader.loadDirectory();
+      await loader.refresh();
+    } catch (e) {
+      callback(e.message);
+    }
+    const p = path.resolve(
+      __dirname,
+      './fixtures/app-with-conflict/base-app-decorator/src/lib/'
+    );
+    const s = `baseService path = ${p}/userManager.ts is exist (${p}/service.ts)!`;
+    assert.ok(callback.withArgs(s).calledOnce);
+  });
+
+  it('should load conflict without error', async () => {
+    const loader = new ContainerLoader({
+      baseDir: path.join(
+        __dirname,
+        './fixtures/app-with-conflict/base-app-decorator/src'
+      ),
+      disableConflictCheck: true,
+    });
+    loader.initialize();
+    loader.loadDirectory();
+    await loader.refresh();
+
+    const appCtx = loader.getApplicationContext();
+    const baseService: any = await appCtx.getAsync('baseService');
+    assert.ok((await baseService.getInformation()) === 'this is conflict');
+  });
+
+  describe('test load different env', () => {
+    afterEach(mm.restore);
+
+    it('load default env', async () => {
+      mm(process.env, 'NODE_ENV', '');
+      const loader = new ContainerLoader({
+        baseDir: path.join(
+          __dirname,
+          './fixtures/app-with-configuration-config/src'
+        ),
+        disableConflictCheck: true,
+      });
+      loader.initialize();
+      loader.loadDirectory();
+      await loader.refresh();
+      const applicationContext = loader.getApplicationContext();
+      const value = applicationContext.getConfigService().getConfiguration();
+      assert(value['env'] === 'prod');
+      assert(value['bbb'] === '111');
+    });
+
+    it('load prod env', async () => {
+      mm(process.env, 'NODE_ENV', 'prod');
+      const loader = new ContainerLoader({
+        baseDir: path.join(
+          __dirname,
+          './fixtures/app-with-configuration-config/src'
+        ),
+        disableConflictCheck: true,
+      });
+      loader.initialize();
+      loader.loadDirectory();
+      await loader.refresh();
+      const applicationContext = loader.getApplicationContext();
+      const value = applicationContext
+        .getConfigService()
+        .getConfiguration('env');
+      assert(value === 'prod');
+    });
+
+    it('load daily env', async () => {
+      mm(process.env, 'NODE_ENV', 'daily');
+      const loader = new ContainerLoader({
+        baseDir: path.join(
+          __dirname,
+          './fixtures/app-with-configuration-config/src'
+        ),
+        disableConflictCheck: true,
+      });
+      loader.initialize();
+      loader.loadDirectory();
+      await loader.refresh();
+      const applicationContext = loader.getApplicationContext();
+      const value = applicationContext
+        .getConfigService()
+        .getConfiguration('env');
+      assert(value === 'daily');
+    });
+
+    it('load pre env', async () => {
+      mm(process.env, 'NODE_ENV', 'pre');
+      const loader = new ContainerLoader({
+        baseDir: path.join(
+          __dirname,
+          './fixtures/app-with-configuration-config/src'
+        ),
+        disableConflictCheck: true,
+      });
+      loader.initialize();
+      loader.loadDirectory();
+      await loader.refresh();
+      const applicationContext = loader.getApplicationContext();
+      const value = applicationContext
+        .getConfigService()
+        .getConfiguration('env');
+      assert(value === 'pre');
+    });
+
+    it('load local env', async () => {
+      mm(process.env, 'NODE_ENV', 'local');
+      const loader = new ContainerLoader({
+        baseDir: path.join(
+          __dirname,
+          './fixtures/app-with-configuration-config/src'
+        ),
+        disableConflictCheck: true,
+      });
+      loader.initialize();
+      loader.loadDirectory();
+      await loader.refresh();
+      const applicationContext = loader.getApplicationContext();
+      const value = applicationContext
+        .getConfigService()
+        .getConfiguration('env');
+      assert(value === 'local');
+    });
+  });
+
+  describe('test load different env by load directory', () => {
+    afterEach(mm.restore);
+
+    it('load default env', async () => {
+      mm(process.env, 'NODE_ENV', '');
+      const loader = new ContainerLoader({
+        baseDir: path.join(
+          __dirname,
+          './fixtures/app-with-configuration-config-dir/src'
+        ),
+        disableConflictCheck: true,
+      });
+      loader.initialize();
+      loader.loadDirectory();
+      await loader.refresh();
+      const applicationContext = loader.getApplicationContext();
+      const value = applicationContext.getConfigService().getConfiguration();
+      assert(value['env'] === 'prod');
+      assert(value['bbb'] === '222');
+
+      const configManager = await applicationContext.getAsync<{
+        allConfig: any;
+        bbbConfig: any;
+      }>('configManager');
+      assert(configManager.allConfig['env'] === 'prod');
+      assert(configManager.allConfig['bbb'] === '222');
+      assert(configManager.bbbConfig === '222');
+    });
+
+    it('load prod env', async () => {
+      mm(process.env, 'NODE_ENV', 'prod');
+      const loader = new ContainerLoader({
+        baseDir: path.join(
+          __dirname,
+          './fixtures/app-with-configuration-config-dir/src'
+        ),
+        disableConflictCheck: true,
+      });
+      loader.initialize();
+      loader.loadDirectory();
+      await loader.refresh();
+      const applicationContext = loader.getApplicationContext();
+      const value = applicationContext
+        .getConfigService()
+        .getConfiguration('env');
+      assert(value === 'prod');
+    });
+
+    it('load daily env', async () => {
+      mm(process.env, 'NODE_ENV', 'daily');
+      const loader = new ContainerLoader({
+        baseDir: path.join(
+          __dirname,
+          './fixtures/app-with-configuration-config-dir/src'
+        ),
+        disableConflictCheck: true,
+      });
+      loader.initialize();
+      loader.loadDirectory();
+      await loader.refresh();
+      const applicationContext = loader.getApplicationContext();
+      const value = applicationContext
+        .getConfigService()
+        .getConfiguration('env');
+      assert(value === 'daily');
+    });
+
+    it('load pre env', async () => {
+      mm(process.env, 'NODE_ENV', 'pre');
+      const loader = new ContainerLoader({
+        baseDir: path.join(
+          __dirname,
+          './fixtures/app-with-configuration-config-dir/src'
+        ),
+        disableConflictCheck: true,
+      });
+      loader.initialize();
+      loader.loadDirectory();
+      await loader.refresh();
+      const applicationContext = loader.getApplicationContext();
+      const value = applicationContext
+        .getConfigService()
+        .getConfiguration('env');
+      assert(value === 'pre');
+    });
+
+    it('load local env', async () => {
+      mm(process.env, 'NODE_ENV', 'local');
+      const loader = new ContainerLoader({
+        baseDir: path.join(
+          __dirname,
+          './fixtures/app-with-configuration-config-dir/src'
+        ),
+        disableConflictCheck: true,
+      });
+      loader.initialize();
+      loader.loadDirectory();
+      await loader.refresh();
+      const applicationContext = loader.getApplicationContext();
+      const value = applicationContext
+        .getConfigService()
+        .getConfiguration('env');
+      assert(value === 'local');
+    });
   });
 });

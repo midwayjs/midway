@@ -1,3 +1,4 @@
 {
-  "name": "ali-demo"
+  "name": "ali-demo",
+  "main1": "src/index"
 }

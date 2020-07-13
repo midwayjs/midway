@@ -17,6 +17,7 @@ export class ObjectDefinition implements IObjectDefinition {
   destroyMethod: string = null;
   constructMethod: string = null;
   constructorArgs: any[] = [];
+  srcPath: string;
   path: any = null;
   export: string = null;
   dependsOn: ObjectIdentifier[] = [];

@@ -502,7 +502,7 @@ export class ManagedResolverFactory {
     inst = await definition.creator.doConstructAsync(Clzz, constructorArgs, this.context);
     if (!inst) {
       this.removeCreateStatus(definition, false);
-      throw new Error(`${definition.id} config no valid path`);
+      throw new Error(`${definition.id} construct return undefined`);
     }
 
     // binding ctx object
@@ -601,13 +601,14 @@ export class ManagedResolverFactory {
    */
   private createProxyReference(definition: IObjectDefinition): any {
     if (this.isCreating(definition)) {
+      debug('create proxy for %s.', definition.id);
       // 非循环依赖的允许重新创建对象
       if (!this.depthFirstSearch(definition.id, definition)) {
         debug('id = %s after dfs return null', definition.id);
         return null;
       }
       // 创建代理对象
-      return new Proxy({ __is_proxy__: true }, {
+      return new Proxy({ __is_proxy__: true, __target_id__: definition.id }, {
         get: (obj, prop) => {
           let target;
           if (definition.isRequestScope()) {
@@ -636,37 +637,53 @@ export class ManagedResolverFactory {
    * @param identifier 目标id
    * @param definition 定义描述
    */
-  public depthFirstSearch(identifier: string, definition: IObjectDefinition): boolean {
+  public depthFirstSearch(identifier: string, definition: IObjectDefinition, depth?: string[]): boolean {
     if (definition) {
+      debug('dfs for %s == %s start.', identifier, definition.id);
       if (definition.constructorArgs) {
         const args = definition.constructorArgs.map(val => (val as ManagedReference).name);
         if (args.indexOf(identifier) > -1) {
+          debug('dfs exist in constructor %s == %s.', identifier, definition.id);
           return true;
         }
       }
       if (definition.properties) {
         const keys = definition.properties.keys();
         if (keys.indexOf(identifier) > -1) {
+          debug('dfs exist in properties %s == %s.', identifier, definition.id);
           return true;
         }
         for (const key of keys) {
+          if (!Array.isArray(depth)) {
+            depth = [identifier];
+          }
           let iden = key;
           const ref: ManagedReference = definition.properties.get(key);
           if (ref && ref.name) {
             iden = ref.name;
           }
           if (iden === identifier) {
+            debug('dfs exist in properties key %s == %s.', identifier, definition.id);
             return true;
+          }
+          if (depth.indexOf(iden) > -1) {
+            debug('dfs depth circular %s == %s, %s, %j.', identifier, definition.id, iden, depth);
+            continue;
+          } else {
+            depth.push(iden);
+            debug('dfs depth push %s == %s, %j.', identifier, iden, depth);
           }
           let subDefinition = this.context.registry.getDefinition(iden);
           if (!subDefinition && this.context.parent) {
             subDefinition = this.context.parent.registry.getDefinition(iden);
           }
-          if (this.depthFirstSearch(identifier, subDefinition)) {
+          if (this.depthFirstSearch(identifier, subDefinition, depth)) {
+            debug('dfs exist in sub tree %s == %s subId = %s.', identifier, definition.id, subDefinition.id);
             return true;
           }
         }
       }
+      debug('dfs for %s == %s end.', identifier, definition.id);
     }
     return false;
   }

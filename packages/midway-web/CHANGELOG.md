@@ -3,6 +3,148 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.4](https://github.com/midwayjs/midway/compare/v2.1.3...v2.1.4) (2020-06-17)
+
+**Note:** Version bump only for package midway-web
+
+
+
+
+
+## [2.1.3](https://github.com/midwayjs/midway/compare/v2.1.2...v2.1.3) (2020-05-07)
+
+
+### Bug Fixes
+
+* configuration use package name ([#485](https://github.com/midwayjs/midway/issues/485)) ([a00cb18](https://github.com/midwayjs/midway/commit/a00cb189b10a7353f6e0545c17837e8c9b10ca2c))
+
+
+
+
+
+## [2.1.2](https://github.com/midwayjs/midway/compare/v2.1.1...v2.1.2) (2020-05-02)
+
+
+### Bug Fixes
+
+* fix util import ([7d76cbf](https://github.com/midwayjs/midway/commit/7d76cbf4cedc31b141adc76194c89a284e4fe8ee))
+* fix wrap app ([c16ea0b](https://github.com/midwayjs/midway/commit/c16ea0b0a0d02539f80586c5a08a027a28ce2d00))
+
+
+
+
+
+## [2.1.1](https://github.com/midwayjs/midway/compare/v2.1.0...v2.1.1) (2020-04-30)
+
+
+### Bug Fixes
+
+* add metadata when configuration load controller ([#483](https://github.com/midwayjs/midway/issues/483)) ([e4e3c57](https://github.com/midwayjs/midway/commit/e4e3c5784df844a290a57a3d309a5f4e866e4831))
+
+
+
+
+
+# [2.1.0](https://github.com/midwayjs/midway/compare/v2.0.17...v2.1.0) (2020-04-29)
+
+
+### Features
+
+* refactor hook & add @App ([#482](https://github.com/midwayjs/midway/issues/482)) ([3bfd300](https://github.com/midwayjs/midway/commit/3bfd300daf21fce96f2ff92be22ecb0f12bdd033))
+
+
+
+
+
+## [2.0.17](https://github.com/midwayjs/midway/compare/v2.0.16...v2.0.17) (2020-04-21)
+
+**Note:** Version bump only for package midway-web
+
+
+
+
+
+## [2.0.16](https://github.com/midwayjs/midway/compare/v2.0.15...v2.0.16) (2020-04-12)
+
+**Note:** Version bump only for package midway-web
+
+
+
+
+
+## [2.0.15](https://github.com/midwayjs/midway/compare/v2.0.14...v2.0.15) (2020-04-11)
+
+
+### Bug Fixes
+
+* Fix default env ([#468](https://github.com/midwayjs/midway/issues/468)) ([db9ffcf](https://github.com/midwayjs/midway/commit/db9ffcfcc412bfb7613d46eb3b3b30f44e3b553f)), closes [#450](https://github.com/midwayjs/midway/issues/450) [#454](https://github.com/midwayjs/midway/issues/454) [#379](https://github.com/midwayjs/midway/issues/379) [#455](https://github.com/midwayjs/midway/issues/455) [#463](https://github.com/midwayjs/midway/issues/463) [#464](https://github.com/midwayjs/midway/issues/464) [#466](https://github.com/midwayjs/midway/issues/466)
+
+
+
+
+
+## [2.0.14](https://github.com/midwayjs/midway/compare/v2.0.13...v2.0.14) (2020-04-08)
+
+**Note:** Version bump only for package midway-web
+
+
+
+
+
+## [2.0.13](https://github.com/midwayjs/midway/compare/v2.0.12...v2.0.13) (2020-04-07)
+
+**Note:** Version bump only for package midway-web
+
+
+
+
+
+## [2.0.12](https://github.com/midwayjs/midway/compare/v2.0.11...v2.0.12) (2020-04-07)
+
+**Note:** Version bump only for package midway-web
+
+
+
+
+
+## [2.0.11](https://github.com/midwayjs/midway/compare/v2.0.10...v2.0.11) (2020-04-07)
+
+
+### Bug Fixes
+
+* fix dfs circular ([#457](https://github.com/midwayjs/midway/issues/457)) ([8b91326](https://github.com/midwayjs/midway/commit/8b9132604df041dad5f1124389d49f75c288aff5))
+
+
+
+
+
+## [2.0.10](https://github.com/midwayjs/midway/compare/v2.0.9...v2.0.10) (2020-03-31)
+
+**Note:** Version bump only for package midway-web
+
+
+
+
+
+## [2.0.9](https://github.com/midwayjs/midway/compare/v2.0.8...v2.0.9) (2020-03-30)
+
+**Note:** Version bump only for package midway-web
+
+
+
+
+
+## [2.0.8](https://github.com/midwayjs/midway/compare/v2.0.7...v2.0.8) (2020-03-30)
+
+
+### Bug Fixes
+
+* 2.x conflict 能力 ([#449](https://github.com/midwayjs/midway/issues/449)) ([6064ecf](https://github.com/midwayjs/midway/commit/6064ecf0fcf0f79ca9f9f177b06baef6d65ca7ea))
+
+
+
+
+
 ## [2.0.7](https://github.com/midwayjs/midway/compare/v2.0.6...v2.0.7) (2020-03-30)
 
 **Note:** Version bump only for package midway-web

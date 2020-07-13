@@ -1,0 +1,203 @@
+body,
+html {
+  font-family: Verdana;
+  font-size: 13px;
+  height: 100%
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0
+}
+a {
+  color: #000;
+  cursor: pointer;
+  text-decoration: none
+}
+#wrapper {
+  background-color: #f6f6ef;
+  width: 85%;
+  min-height: 80px;
+  margin: 0 auto
+}
+#header,
+#wrapper {
+  position: relative
+}
+#header {
+  background-color: #f60;
+  height: 24px
+}
+#header h1 {
+  font-weight: 700;
+  font-size: 13px;
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0
+}
+#header .source {
+  color: #fff;
+  font-size: 11px;
+  position: absolute;
+  top: 4px;
+  right: 4px
+}
+#header .source a {
+  color: #fff
+}
+#header .source a:hover {
+  text-decoration: underline
+}
+#yc {
+  border: 1px solid #fff;
+  margin: 2px;
+  display: inline-block
+}
+#yc,
+#yc img {
+  vertical-align: middle
+}
+.view {
+  position: absolute;
+  background-color: #f6f6ef;
+  width: 100%;
+  -webkit-transition: opacity .2s ease;
+  transition: opacity .2s ease;
+  box-sizing: border-box;
+  padding: 8px 20px
+}
+.view.v-enter,
+.view.v-leave {
+  opacity: 0
+}
+@media screen and (max-width: 700px) {
+  body,
+  html {
+    margin: 0
+  }
+  #wrapper {
+    width: 100%
+  }
+}
+.news-view {
+  padding-left: 5px;
+  padding-right: 15px
+}
+.news-view.loading:before {
+  content: "Loading...";
+  position: absolute;
+  top: 16px;
+  left: 20px
+}
+.news-view .nav {
+  padding: 10px 10px 10px 40px;
+  margin-top: 10px;
+  border-top: 2px solid #f60
+}
+.news-view .nav a {
+  margin-right: 10px
+}
+.news-view .nav a:hover {
+  text-decoration: underline
+}
+.item {
+  padding: 2px 0 2px 40px;
+  position: relative;
+  -webkit-transition: background-color .2s ease;
+  transition: background-color .2s ease
+}
+.item p {
+  margin: 2px 0
+}
+.item .index,
+.item .title:visited {
+  color: #828282
+}
+.item .index {
+  position: absolute;
+  width: 30px;
+  text-align: right;
+  left: 0;
+  top: 4px
+}
+.item .domain,
+.item .subtext {
+  font-size: 11px;
+  color: #828282
+}
+.item .domain a,
+.item .subtext a {
+  color: #828282
+}
+.item .subtext a:hover {
+  text-decoration: underline
+}
+.item-view .item {
+  padding-left: 0;
+  margin-bottom: 30px
+}
+.item-view .item .index {
+  display: none
+}
+.item-view .poll-options {
+  margin-left: 30px;
+  margin-bottom: 40px
+}
+.item-view .poll-options li {
+  margin: 12px 0
+}
+.item-view .poll-options p {
+  margin: 8px 0
+}
+.item-view .poll-options .subtext {
+  color: #828282;
+  font-size: 11px
+}
+.item-view .itemtext {
+  color: #828282;
+  margin-top: 0;
+  margin-bottom: 30px
+}
+.item-view .itemtext p {
+  margin: 10px 0
+}
+.comhead {
+  font-size: 11px;
+  margin-bottom: 8px
+}
+.comhead,
+.comhead a {
+  color: #828282
+}
+.comhead a:hover {
+  text-decoration: underline
+}
+.comhead .toggle {
+  margin-right: 4px
+}
+.comment-content {
+  margin: 0 0 16px 24px;
+  word-wrap: break-word
+}
+.comment-content code {
+  white-space: pre-wrap
+}
+.child-comments {
+  margin: 8px 0 8px 22px
+}
+.user-view {
+  color: #828282
+}
+.user-view li {
+  margin: 5px 0
+}
+.user-view .label {
+  display: inline-block;
+  min-width: 60px
+}
+.user-view .about {
+  margin-top: 1em
+}
+.user-view .links a {
+  text-decoration: underline
+}

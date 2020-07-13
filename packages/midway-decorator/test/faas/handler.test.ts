@@ -1,19 +1,30 @@
 
 import { expect } from 'chai';
-import { Handler, getPropertyDataFromClass, HANDLER_KEY } from '../../src';
+import { Handler, FUNC_KEY, getClassMetadata } from '../../src';
 
 class Test {
+  @Handler('index.handler', { middleware: ['hello'] })
+  greeting() {}
 
-  @Handler('/aaa')
-  handler() {}
+  @Handler({ funHandler: 'index.handler1', middleware: ['hello'] })
+  test() {}
 }
 
 describe('/test/faas/handler.test.ts', () => {
   it('handler decorator should be ok', () => {
-    const data = getPropertyDataFromClass(HANDLER_KEY, Test, 'handler');
-    expect(data).deep.eq({
-      method: 'handler',
-      data: '/aaa',
-    });
+    const meta = getClassMetadata(FUNC_KEY, Test);
+    delete meta[0].descriptor;
+    delete meta[1].descriptor;
+    expect(meta).deep.eq([{
+      funHandler: 'index.handler',
+      middleware: ['hello'],
+      key: 'greeting',
+    }, {
+      funHandler: 'index.handler1',
+      key: 'test',
+      middleware: [
+        'hello'
+      ]
+    }]);
   });
 });

@@ -3,6 +3,7 @@ import { ScopeEnum, saveModule, FUNC_KEY, attachClassMetadata } from '../common'
 import { KoaMiddlewareParamArray } from '..';
 
 export interface FuncParams {
+  funHandler?: string;
   event?: string;
   method?: string;
   path?: string;
@@ -11,11 +12,11 @@ export interface FuncParams {
 
 export function Func(
   funHandler: string | FuncParams,
-  functionOptions: FuncParams | undefined
-): ClassDecorator {
+  functionOptions?: FuncParams
+) {
   if (typeof funHandler !== 'string' && functionOptions === undefined) {
     functionOptions = funHandler;
-    funHandler = '';
+    funHandler = functionOptions.funHandler || '';
   }
   return (...args) => {
     const [target, key, descriptor] = args as any;

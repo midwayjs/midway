@@ -46,6 +46,7 @@ export interface IObjectDefinition {
   initMethod: string;
   destroyMethod: string;
   constructMethod: string;
+  srcPath: string;
   path: any;
   export: string;
   dependsOn: ObjectIdentifier[];
@@ -64,7 +65,11 @@ export interface IObjectDefinition {
 export interface IObjectCreator {
   load(): any;
   doConstruct(Clzz: any, args?: any, context?: IApplicationContext): any;
-  doConstructAsync(Clzz: any, args?: any, context?: IApplicationContext): Promise<any>;
+  doConstructAsync(
+    Clzz: any,
+    args?: any,
+    context?: IApplicationContext
+  ): Promise<any>;
   doInit(obj: any): void;
   doInitAsync(obj: any): Promise<void>;
   doDestroy(obj: any): void;
@@ -133,7 +138,7 @@ export interface IResource {
  * IoC上下文抽象
  */
 export interface IApplicationContext extends IObjectFactory {
-  disableClassConflict: boolean;
+  disableConflictCheck: boolean;
   baseDir: string;
   parent: IApplicationContext;
   props: IProperties;
@@ -186,15 +191,20 @@ export const MAIN_MODULE_KEY = '__main__';
 
 export interface IContainerConfiguration {
   namespace: string;
+  packageName: string;
   addLoadDir(dir: string);
   addImports(imports: string[], baseDir?: string);
   addImportObjects(importObjects: any[]);
   addImportConfigs(importConfigs: string[], baseDir: string);
   load(packageName: string);
-  loadConfiguration(configuration: IContainerConfiguration, baseDir: string);
+  loadConfiguration(
+    configuration: IContainerConfiguration,
+    baseDir: string,
+    filePath?: string
+  );
   getImportDirectory(): string[];
   getImportObjects(): any;
-  bindConfigurationClass(clzz: any);
+  bindConfigurationClass(clzz: any, filePath?: string);
 }
 
 export interface IMidwayContainer extends IContainer {
@@ -223,4 +233,29 @@ export interface IEnvironmentService {
 
 export interface IMiddleware<T> {
   resolve: () => (context: T, next: () => Promise<any>) => any;
+}
+
+export enum MidwayProcessTypeEnum {
+  APPLICATION = 'APPLICATION',
+  AGENT = 'AGENT',
+}
+
+export interface IMidwayCoreApplication {
+  getBaseDir(): string;
+  getAppDir(): string;
+  getEnv(): string;
+  getMidwayType(): string;
+  getProcessType(): MidwayProcessTypeEnum;
+  getApplicationContext(): IMidwayContainer;
+  getConfig(key?: string): any;
+  getLogger(
+    key?: string
+  ): Partial<{
+    log(...args);
+    info(...args);
+    error(...args);
+    warn(...args);
+    debug(...args);
+    trace(...args);
+  }>;
 }

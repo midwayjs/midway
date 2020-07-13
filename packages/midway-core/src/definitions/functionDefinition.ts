@@ -40,6 +40,7 @@ export class FunctionDefinition implements IObjectDefinition {
   id: string;
   name: string;
   initMethod: string;
+  srcPath: string;
   path: any;
   properties: IProperties;
   namespace = '';

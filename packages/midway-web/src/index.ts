@@ -29,6 +29,7 @@ export {
   Options as options,
   Head as head,
   All as all,
+  App as app,
   KoaMiddleware,
   KoaMiddlewareParamArray,
   ControllerOption,

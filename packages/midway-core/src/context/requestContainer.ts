@@ -1,10 +1,10 @@
 import { MidwayContainer } from './midwayContainer';
 import { REQUEST_CTX_KEY } from '../interface';
 import { parsePrefix } from '../common/util';
+import { PIPELINE_IDENTIFIER } from '@midwayjs/decorator';
 
 export class MidwayRequestContainer extends MidwayContainer {
-
-  applicationContext: MidwayContainer;
+  private applicationContext: MidwayContainer;
 
   constructor(ctx, applicationContext) {
     super();
@@ -14,6 +14,14 @@ export class MidwayRequestContainer extends MidwayContainer {
     this.registerObject(REQUEST_CTX_KEY, ctx);
     // register contextLogger
     this.registerObject('logger', ctx.logger);
+
+    const resolverHandler = this.applicationContext.resolverHandler;
+    this.beforeEachCreated(resolverHandler.beforeEachCreated.bind(resolverHandler));
+    this.afterEachCreated(resolverHandler.afterEachCreated.bind(resolverHandler));
+  }
+
+  init() {
+    // do nothing
   }
 
   get<T = any>(identifier: any, args?: any): T {
@@ -23,10 +31,20 @@ export class MidwayRequestContainer extends MidwayContainer {
     if (this.registry.hasObject(identifier)) {
       return this.registry.getObject(identifier);
     }
-    const definition = this.applicationContext.registry.getDefinition(identifier);
-    if (definition && definition.isRequestScope()) {
-      // create object from applicationContext definition for requestScope
-      return this.getManagedResolverFactory().create({ definition, args });
+    const definition = this.applicationContext.registry.getDefinition(
+      identifier
+    );
+    if (definition) {
+      if (
+        definition.isRequestScope() ||
+        definition.id === PIPELINE_IDENTIFIER
+      ) {
+        // create object from applicationContext definition for requestScope
+        return this.getManagedResolverFactory().create({
+          definition,
+          args,
+        });
+      }
     }
 
     if (this.parent) {
@@ -45,10 +63,20 @@ export class MidwayRequestContainer extends MidwayContainer {
       return this.registry.getObject(identifier);
     }
 
-    const definition = this.applicationContext.registry.getDefinition(identifier);
-    if (definition && definition.isRequestScope()) {
-      // create object from applicationContext definition for requestScope
-      return this.getManagedResolverFactory().createAsync({ definition, args });
+    const definition = this.applicationContext.registry.getDefinition(
+      identifier
+    );
+    if (definition) {
+      if (
+        definition.isRequestScope() ||
+        definition.id === PIPELINE_IDENTIFIER
+      ) {
+        // create object from applicationContext definition for requestScope
+        return this.getManagedResolverFactory().createAsync({
+          definition,
+          args,
+        });
+      }
     }
 
     if (this.parent) {
@@ -56,7 +84,16 @@ export class MidwayRequestContainer extends MidwayContainer {
     }
   }
 
-  initService() {
-    // do nothing
+  async ready() {
+    this.readied = true;
+    // ignore other things
+  }
+
+  get configService() {
+    return this.applicationContext.configService;
+  }
+
+  get environmentService() {
+    return this.applicationContext.environmentService;
   }
 }

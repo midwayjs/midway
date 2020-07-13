@@ -1,5 +1,6 @@
 import { ILifeCycle, IMidwayContainer } from '../../src';
 import { Provide, Inject, Configuration } from '@midwayjs/decorator';
+import { App } from '@midwayjs/decorator/src';
 
 @Provide()
 export class TestBinding {
@@ -40,6 +41,14 @@ export class LifeCycleTest1 implements ILifeCycle {
   @Inject()
   testBinding: TestBinding;
 
+  test: any;
+  constructor(@App() ttt: any) {
+    this.test = ttt;
+  }
+
+  @App()
+  ttt: any;
+
   async onReady() {
     this.tts = await this.testBinding.doReady();
 
@@ -49,5 +58,12 @@ export class LifeCycleTest1 implements ILifeCycle {
         resolve();
       }, 500);
     });
+
+    if (this.test.hello !== 123) {
+      throw new Error('test.hello !== 123');
+    }
+    if (this.ttt.hello !== 123) {
+      throw new Error('ttt.hello !== 123');
+    }
   }
 }

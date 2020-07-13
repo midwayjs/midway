@@ -1,7 +1,19 @@
-import { CONFIGURATION_KEY, InjectionConfigurationOptions, getClassMetadata, LIFECYCLE_IDENTIFIER_PREFIX, classNamed, saveModule, saveProviderId } from '@midwayjs/decorator';
+import {
+  CONFIGURATION_KEY,
+  InjectionConfigurationOptions,
+  getClassMetadata,
+  LIFECYCLE_IDENTIFIER_PREFIX,
+  classNamed,
+  saveModule,
+  saveProviderId,
+} from '@midwayjs/decorator';
 import * as is from 'is-type-of';
 import { dirname, isAbsolute, join } from 'path';
-import { IContainerConfiguration, IMidwayContainer, MAIN_MODULE_KEY } from '../interface';
+import {
+  IContainerConfiguration,
+  IMidwayContainer,
+  MAIN_MODULE_KEY,
+} from '../interface';
 import { isPath, safeRequire, generateProvideId } from '../common/util';
 
 const debug = require('debug')('midway:container:configuration');
@@ -9,6 +21,7 @@ const debug = require('debug')('midway:container:configuration');
 export class ContainerConfiguration implements IContainerConfiguration {
   container: IMidwayContainer;
   namespace: string;
+  packageName: string;
   loadDirs: string[] = [];
   importObjects: object = new Map();
 
@@ -44,9 +57,15 @@ export class ContainerConfiguration implements IContainerConfiguration {
   addImportConfigs(importConfigs: string[], baseDir: string) {
     debug('import configs %j baseDir => %s.', importConfigs, baseDir);
     if (importConfigs && importConfigs.length) {
-      this.container.getConfigService().add(importConfigs.map(importConfigPath => {
-        return join(baseDir || this.container.baseDir, importConfigPath);
-      }));
+      this.container.getConfigService().add(
+        importConfigs.map(importConfigPath => {
+          if (isAbsolute(importConfigPath)) {
+            return importConfigPath;
+          } else {
+            return join(baseDir || this.container.baseDir, importConfigPath);
+          }
+        })
+      );
     }
   }
 
@@ -60,8 +79,14 @@ export class ContainerConfiguration implements IContainerConfiguration {
     }
     try {
       return dirname(require.resolve(packageName));
-    } catch (e) { /* ignore */ }
-    return join(baseDir || this.container.baseDir, '../node_modules', packageName);
+    } catch (e) {
+      /* ignore */
+    }
+    return join(
+      baseDir || this.container.baseDir,
+      '../node_modules',
+      packageName
+    );
   }
 
   load(packageName: string) {
@@ -73,15 +98,20 @@ export class ContainerConfiguration implements IContainerConfiguration {
       isSubDir = true;
       pkg = safeRequire(join(packageBaseDir, '../', 'package.json'));
     }
-    debug('safeRequire package.json name-version => %s, from %s.',
-      pkg ? `${pkg.name}-${pkg.version}` : undefined, packageBaseDir);
+    debug(
+      'safeRequire package.json name-version => %s, from %s.',
+      pkg ? `${pkg.name}-${pkg.version}` : undefined,
+      packageBaseDir
+    );
 
     let configuration;
     let cfgFile;
     let loadDir;
     if (pkg) {
+      this.packageName = pkg.name;
       if (this.namespace !== MAIN_MODULE_KEY) {
-        this.namespace = pkg.midwayNamespace ? pkg.midwayNamespace : pkg.name;
+        this.namespace =
+          pkg.midwayNamespace !== undefined ? pkg.midwayNamespace : pkg.name;
       }
       if (pkg.main && !isSubDir) {
         packageBaseDir = dirname(join(packageBaseDir, pkg.main));
@@ -101,12 +131,16 @@ export class ContainerConfiguration implements IContainerConfiguration {
       this.addLoadDir(loadDir);
       debug('add loadDir => %s namespace => %s.', loadDir, this.namespace);
     }
-    debug('packageName => %s namespace => %s configuration file => %s.',
-      packageName, this.namespace, configuration ? true : false);
-    this.loadConfiguration(configuration, packageBaseDir);
+    debug(
+      'packageName => %s namespace => %s configuration file => %s.',
+      packageName,
+      this.namespace,
+      configuration ? true : false
+    );
+    this.loadConfiguration(configuration, packageBaseDir, cfgFile);
   }
 
-  loadConfiguration(configuration, baseDir) {
+  loadConfiguration(configuration, baseDir, filePath?: string) {
     if (configuration) {
       // 可能导出多个
       const configurationExports = this.getConfigurationExport(configuration);
@@ -117,29 +151,42 @@ export class ContainerConfiguration implements IContainerConfiguration {
         );
         debug('configuration export %j.', configurationOptions);
         if (configurationOptions) {
-          if (this.namespace !== MAIN_MODULE_KEY && configurationOptions.namespace !== undefined) {
+          if (
+            this.namespace !== MAIN_MODULE_KEY &&
+            configurationOptions.namespace !== undefined
+          ) {
             this.namespace = configurationOptions.namespace;
           }
 
-          if (this.container.containsConfiguration(this.namespace)) {
-            debug(`configuration ${this.namespace} exist than ignore.`);
+          if (!this.packageName) {
+            this.packageName = this.namespace;
+          }
+
+          if (
+            this.container.containsConfiguration(this.packageName) &&
+            this.namespace !== ''
+          ) {
+            debug(`configuration ${this.namespace}/${this.packageName} exist than ignore.`);
             return;
           } else {
-            debug(`configuration ${this.namespace} not exist than add.`);
+            debug(`configuration ${this.namespace}/${this.packageName} not exist than add.`);
             this.container.addConfiguration(this);
           }
           this.addImports(configurationOptions.imports, baseDir);
           this.addImportObjects(configurationOptions.importObjects);
           this.addImportConfigs(configurationOptions.importConfigs, baseDir);
-          this.bindConfigurationClass(configurationExport);
+          this.bindConfigurationClass(configurationExport, filePath);
         }
       }
     } else {
-      if (this.container.containsConfiguration(this.namespace)) {
-        debug(`configuration ${this.namespace} exist than ignore.`);
+      if (
+        this.container.containsConfiguration(this.packageName) &&
+        this.namespace !== ''
+      ) {
+        debug(`configuration ${this.namespace}/${this.packageName} exist than ignore.`);
         return;
       } else {
-        debug(`configuration ${this.namespace} not exist than add.`);
+        debug(`configuration ${this.namespace}/${this.packageName} not exist than add.`);
         this.container.addConfiguration(this);
       }
     }
@@ -148,11 +195,14 @@ export class ContainerConfiguration implements IContainerConfiguration {
    * 用于 ready 或者 stop 时处理 lifecycle 实现
    * @param clzz configuration class
    */
-  bindConfigurationClass(clzz) {
+  bindConfigurationClass(clzz, filePath?: string) {
     const clzzName = `${LIFECYCLE_IDENTIFIER_PREFIX}${classNamed(clzz.name)}`;
     const id = generateProvideId(clzzName, this.namespace);
     saveProviderId(id, clzz, true);
-    this.container.bind(id, clzz, { namespace: this.namespace });
+    this.container.bind(id, clzz, {
+      namespace: this.namespace,
+      srcPath: filePath,
+    });
     saveModule(CONFIGURATION_KEY, clzz);
   }
 

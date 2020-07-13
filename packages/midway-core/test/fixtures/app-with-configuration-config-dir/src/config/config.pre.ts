@@ -1,0 +1,5 @@
+export = () => {
+  return {
+    env: 'pre',
+  };
+};

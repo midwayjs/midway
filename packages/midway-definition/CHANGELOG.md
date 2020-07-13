@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.15](https://github.com/midwayjs/midway/compare/v2.0.14...v2.0.15) (2020-04-11)
+
+**Note:** Version bump only for package @midwayjs/definition
+
+
+
+
+
+## [2.0.10](https://github.com/midwayjs/midway/compare/v2.0.9...v2.0.10) (2020-03-31)
+
+**Note:** Version bump only for package @midwayjs/definition
+
+
+
+
+
+## [2.0.9](https://github.com/midwayjs/midway/compare/v2.0.8...v2.0.9) (2020-03-30)
+
+**Note:** Version bump only for package @midwayjs/definition
+
+
+
+
+
+## [2.0.8](https://github.com/midwayjs/midway/compare/v2.0.7...v2.0.8) (2020-03-30)
+
+**Note:** Version bump only for package @midwayjs/definition
+
+
+
+
+
 ## [2.0.7](https://github.com/midwayjs/midway/compare/v2.0.6...v2.0.7) (2020-03-30)
 
 **Note:** Version bump only for package @midwayjs/definition

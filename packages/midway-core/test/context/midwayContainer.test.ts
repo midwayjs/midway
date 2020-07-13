@@ -9,7 +9,7 @@ import { TestBinding, LifeCycleTest, LifeCycleTest1 } from '../fixtures/lifecycl
 import sinon = require('sinon');
 import mm = require('mm');
 import * as decs from '@midwayjs/decorator';
-const { LIFECYCLE_IDENTIFIER_PREFIX } = decs;
+const { LIFECYCLE_IDENTIFIER_PREFIX, APPLICATION_KEY, CONFIGURATION_KEY, resetModule } = decs;
 
 describe('/test/context/midwayContainer.test.ts', () => {
 
@@ -19,18 +19,12 @@ describe('/test/context/midwayContainer.test.ts', () => {
       loadDir: path.join(__dirname, '../fixtures/ts-app-inject')
     });
 
-    const origin = decs.getClassMetadata;
-
-    mm(decs, 'getClassMetadata', (key, target) => {
-      if (key === decs.CLASS_KEY_CONSTRUCTOR) {
-        throw new Error('mock error');
-      }
-      return origin(key, target);
-    });
+    (decs as any).throwErrorForTest(decs.CLASS_KEY_CONSTRUCTOR, new Error('mock error'));
 
     const tt = container.get<TestCons>('testCons');
     expect(tt.ts).gt(0);
-    mm.restore();
+
+    (decs as any).throwErrorForTest(decs.CLASS_KEY_CONSTRUCTOR);
 
     const app = container.get('app') as App;
     expect(app.loader).not.to.be.undefined;
@@ -51,6 +45,9 @@ describe('/test/context/midwayContainer.test.ts', () => {
     const container = new MidwayContainer();
 
     it('lifecycle should be ok', async () => {
+      container.registerDataHandler(APPLICATION_KEY, () => {
+        return { hello: 123};
+      });
       const cfg = container.createConfiguration();
       container.bind(TestBinding);
       cfg.bindConfigurationClass(LifeCycleTest);
@@ -80,6 +77,7 @@ describe('/test/context/midwayContainer.test.ts', () => {
       expect(container.registry.hasObject(LIFECYCLE_IDENTIFIER_PREFIX + 'lifeCycleTest')).false;
       expect(callback.withArgs('on stop').calledOnce).true;
 
+      resetModule(CONFIGURATION_KEY);
       mm.restore();
     });
   });
