@@ -1,4 +1,4 @@
-const { FaaSStarter } = require('<%=faasModName %>');
+const { <%=faasStarterName %> } = require('<%=faasModName %>');
 const { asyncWrapper, start } = require('<%=starter %>');
 const picomatch = require('picomatch');
 <% layerDeps.forEach(function(layer){ %>const <%=layer.name%> = require('<%=layer.path%>');
@@ -14,7 +14,7 @@ const initializeMethod = async (initializeContext = {}) => {
     layers: [<%= layers.join(", ") %>],
     getHandler: getHandler
   });
-  starter = new FaaSStarter({ baseDir: __dirname, initializeContext, applicationAdapter: runtime });
+  starter = new <%=faasStarterName %>({ baseDir: __dirname, initializeContext, applicationAdapter: runtime });
   <% loadDirectory.forEach(function(dirName){ %>
   starter.loader.loadDirectory({ baseDir: '<%=dirName%>'});<% }) %>
   await starter.start();
