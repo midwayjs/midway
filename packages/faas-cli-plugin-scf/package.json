@@ -1,16 +1,16 @@
 {
   "name": "@midwayjs/fcli-plugin-scf",
-  "version": "1.0.6-alpha.522+1afeb34c",
+  "version": "1.0.6",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/fcli-command-core": "^1.0.6-alpha.522+1afeb34c",
-    "@midwayjs/serverless-scf-starter": "^1.0.6-alpha.522+1afeb34c",
-    "@midwayjs/serverless-spec-builder": "^1.0.6-alpha.522+1afeb34c",
+    "@midwayjs/fcli-command-core": "^1.0.6",
+    "@midwayjs/serverless-scf-starter": "^1.0.1",
+    "@midwayjs/serverless-spec-builder": "^1.0.6",
     "serverless-tencent-scf": "^0.1.36"
   },
   "devDependencies": {
-    "@midwayjs/fcli-plugin-package": "^1.0.6-alpha.522+1afeb34c",
+    "@midwayjs/fcli-plugin-package": "^1.0.6",
     "fs-extra": "^8.1.0",
     "midway-bin": "^2.0.0"
   },
@@ -34,5 +34,5 @@
     "url": "git@github.com:midwayjs/midway-faas.git"
   },
   "license": "MIT",
-  "gitHead": "1afeb34cbb6c0ad49ccdb9cfaebd254ae73afc6a"
+  "gitHead": "5783f06ff0298f0e172f801cae053c3fc80813a9"
 }

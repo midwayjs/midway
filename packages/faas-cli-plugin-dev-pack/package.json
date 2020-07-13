@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/fcli-plugin-dev-pack",
-  "version": "1.0.6-alpha.522+1afeb34c",
+  "version": "1.0.6",
   "description": "faas cli dev pack",
   "keywords": [
     "faas",
@@ -13,8 +13,8 @@
     "src"
   ],
   "dependencies": {
-    "@midwayjs/faas-dev-pack": "^1.0.6-alpha.522+1afeb34c",
-    "@midwayjs/fcli-command-core": "^1.0.6-alpha.522+1afeb34c",
+    "@midwayjs/faas-dev-pack": "^1.0.6",
+    "@midwayjs/fcli-command-core": "^1.0.6",
     "koa": "^2.11.0",
     "koa-onerror": "^4.1.0"
   },
@@ -33,5 +33,5 @@
     "url": "git@github.com:midwayjs/midway-faas.git"
   },
   "license": "MIT",
-  "gitHead": "1afeb34cbb6c0ad49ccdb9cfaebd254ae73afc6a"
+  "gitHead": "5783f06ff0298f0e172f801cae053c3fc80813a9"
 }

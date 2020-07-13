@@ -1,19 +1,16 @@
 {
   "name": "@midwayjs/fcli-plugin-aws",
-  "version": "1.0.6-alpha.522+1afeb34c",
+  "version": "1.0.6",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@alicloud/fun": "^3.1.3",
-    "@midwayjs/fcli-command-core": "^1.0.6-alpha.522+1afeb34c",
-    "@midwayjs/serverless-aws-starter": "^1.0.6-alpha.522+1afeb34c",
-    "@midwayjs/serverless-spec-builder": "^1.0.6-alpha.522+1afeb34c",
-    "aws-sdk": "^2.712.0",
-    "ejs": "^3.1.3",
-    "lodash": "^4.17.19"
+    "@midwayjs/fcli-command-core": "^1.0.6",
+    "@midwayjs/serverless-fc-starter": "^1.0.1",
+    "@midwayjs/serverless-spec-builder": "^1.0.6"
   },
   "devDependencies": {
-    "@midwayjs/fcli-plugin-package": "^1.0.6-alpha.522+1afeb34c",
+    "@midwayjs/fcli-plugin-package": "^1.0.6",
     "fs-extra": "^8.1.0",
     "midway-bin": "^2.0.0"
   },
@@ -37,5 +34,5 @@
     "url": "git@github.com:midwayjs/midway-faas.git"
   },
   "license": "MIT",
-  "gitHead": "1afeb34cbb6c0ad49ccdb9cfaebd254ae73afc6a"
+  "gitHead": "5783f06ff0298f0e172f801cae053c3fc80813a9"
 }
