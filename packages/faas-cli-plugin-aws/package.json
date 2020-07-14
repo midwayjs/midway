@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/fcli-plugin-aws",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
