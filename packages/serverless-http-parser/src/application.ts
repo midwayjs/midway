@@ -20,9 +20,9 @@ export class Application extends EventEmitter {
   constructor(options?) {
     super();
     options = options || {};
-    this.context = Object.create(context);
-    this.request = Object.create(request);
-    this.response = Object.create(response);
+    this.context = Object.create(options.context || context);
+    this.request = Object.create(options.request || request);
+    this.response = Object.create(options.response || response);
   }
 
   /**
