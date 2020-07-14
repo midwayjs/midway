@@ -4,6 +4,7 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "noImplicitThis": true,
     "noUnusedLocals": true,
     "stripInternal": true,
@@ -12,9 +13,5 @@
     "outDir": "dist",
     "sourceMap": true
   },
-  "exclude": [
-    "dist",
-    "node_modules",
-    "test"
-  ]
+  "exclude": ["dist", "node_modules", "test"]
 }
