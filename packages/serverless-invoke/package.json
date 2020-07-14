@@ -1,13 +1,13 @@
 {
   "name": "@midwayjs/serverless-invoke",
-  "version": "1.0.5",
+  "version": "1.0.6-alpha.522+1afeb34c",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/fcli-plugin-invoke": "^1.0.5"
+    "@midwayjs/fcli-plugin-invoke": "^1.0.6-alpha.522+1afeb34c"
   },
   "devDependencies": {
-    "@midwayjs/faas": "^1.0.5",
+    "@midwayjs/faas": "^1.0.6-alpha.522+1afeb34c",
     "fs-extra": "^8.1.0",
     "midway-bin": "^2.0.0"
   },
@@ -31,5 +31,5 @@
     "url": "git@github.com:midwayjs/midway-faas.git"
   },
   "license": "MIT",
-  "gitHead": "5783f06ff0298f0e172f801cae053c3fc80813a9"
+  "gitHead": "1afeb34cbb6c0ad49ccdb9cfaebd254ae73afc6a"
 }

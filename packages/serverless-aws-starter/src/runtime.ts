@@ -3,9 +3,20 @@ import {
   ServerlessLightRuntime,
 } from '@midwayjs/runtime-engine';
 import { AWSContext, AWSHTTPEvent } from './interface';
-import { Context } from './context';
+import {
+  Application,
+  HTTPRequest,
+  HTTPResponse,
+} from '@midwayjs/serverless-http-parser';
 
 export class AWSRuntime extends ServerlessLightRuntime {
+  app;
+  respond;
+
+  init() {
+    this.app = new Application();
+  }
+
   /**
    * for handler wrapper
    * @param handler
@@ -23,52 +34,61 @@ export class AWSRuntime extends ServerlessLightRuntime {
   }
 
   async wrapperWebInvoker(handler, event: AWSHTTPEvent, context: AWSContext) {
-    const ctx = new Context(event, context);
-    const args = [ctx];
-
-    if (ctx.method === 'GET') {
-      if (ctx.query && ctx.query[FAAS_ARGS_KEY]) {
-        args.push(ctx.query[FAAS_ARGS_KEY]);
-      }
-    } else if (ctx.method === 'POST') {
-      if (ctx.req && ctx.req.body && ctx.req.body[FAAS_ARGS_KEY]) {
-        args.push(ctx.req.body[FAAS_ARGS_KEY]);
-      }
+    if (!this.respond) {
+      this.respond = this.app.callback();
     }
+    const newReq = new HTTPRequest(event, context);
+    const newRes = new HTTPResponse();
 
-    return this.invokeHandlerWrapper(context, async () => {
-      return handler.apply(handler, args);
-    }).then(result => {
-      if (result) {
-        ctx.body = result;
-      }
-      const data = ctx.body;
-      let encoded = false;
-      if (typeof data === 'string') {
-        if (!ctx.type) {
-          ctx.type = 'text/plain';
-        }
-        ctx.body = data;
-      } else if (Buffer.isBuffer(data)) {
-        encoded = true;
-        if (!ctx.type) {
-          ctx.type = 'application/octet-stream';
-        }
-        ctx.body = data.toString('base64');
-      } else if (typeof data === 'object') {
-        if (!ctx.type) {
-          ctx.type = 'application/json';
-        }
-        ctx.body = JSON.stringify(data);
-      }
+    return this.respond.apply(this.respond, [
+      newReq,
+      newRes,
+      ctx => {
+        return this.invokeHandlerWrapper(ctx, async () => {
+          const args = [ctx];
+          if (ctx.method === 'GET') {
+            if (ctx.query && ctx.query[FAAS_ARGS_KEY]) {
+              args.push(ctx.query[FAAS_ARGS_KEY]);
+            }
+          } else if (ctx.method === 'POST') {
+            if (ctx.req && ctx.req.body && ctx.req.body[FAAS_ARGS_KEY]) {
+              args.push(ctx.req.body[FAAS_ARGS_KEY]);
+            }
+          }
+          return handler.apply(handler, args);
+        }).then(result => {
+          if (result) {
+            ctx.body = result;
+          }
+          const data = ctx.body;
+          let encoded = false;
+          if (typeof data === 'string') {
+            if (!ctx.type) {
+              ctx.type = 'text/plain';
+            }
+            ctx.body = data;
+          } else if (Buffer.isBuffer(data)) {
+            encoded = true;
+            if (!ctx.type) {
+              ctx.type = 'application/octet-stream';
+            }
+            ctx.body = data.toString('base64');
+          } else if (typeof data === 'object') {
+            if (!ctx.type) {
+              ctx.type = 'application/json';
+            }
+            ctx.body = JSON.stringify(data);
+          }
 
-      return {
-        isBase64Encoded: encoded,
-        statusCode: ctx.status,
-        headers: ctx.res.headers,
-        body: ctx.body,
-      };
-    });
+          return {
+            isBase64Encoded: encoded,
+            statusCode: ctx.status,
+            headers: ctx.res.headers,
+            body: ctx.body,
+          };
+        });
+      },
+    ]);
   }
 
   async wrapperEventInvoker(handler, event: any, context: AWSContext) {
@@ -87,6 +107,10 @@ export class AWSRuntime extends ServerlessLightRuntime {
   async beforeInvokeHandler(context) {}
 
   async afterInvokeHandler(err, result, context) {}
+
+  getApplication() {
+    return this.app;
+  }
 }
 
 function isHttpEvent(event): event is AWSHTTPEvent {

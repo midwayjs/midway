@@ -1,10 +1,11 @@
 {
   "name": "@midwayjs/serverless-aws-starter",
-  "version": "1.0.1",
+  "version": "1.0.6-alpha.522+1afeb34c",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/runtime-engine": "^1.0.1"
+    "@midwayjs/runtime-engine": "^1.0.6-alpha.522+1afeb34c",
+    "@midwayjs/serverless-http-parser": "^1.0.6-alpha.522+1afeb34c"
   },
   "devDependencies": {
     "midway-bin": "^2.0.0",
@@ -29,5 +30,5 @@
     "url": "git@github.com:midwayjs/midway-faas.git"
   },
   "license": "MIT",
-  "gitHead": "b67e2753cbdcc91813067ba2a1bb1ce7e85a3dff"
+  "gitHead": "1afeb34cbb6c0ad49ccdb9cfaebd254ae73afc6a"
 }

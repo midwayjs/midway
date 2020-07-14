@@ -1,13 +1,13 @@
 {
   "name": "@midwayjs/faas",
-  "version": "1.0.5",
+  "version": "1.0.6-alpha.522+1afeb34c",
   "main": "dist/index",
   "typings": "index.d.ts",
   "dependencies": {
     "@midwayjs/core": "^2.0.0",
     "@midwayjs/decorator": "^2.0.8",
-    "@midwayjs/faas-typings": "^1.0.1",
-    "@midwayjs/simple-lock": "^1.0.1",
+    "@midwayjs/faas-typings": "^1.0.6-alpha.522+1afeb34c",
+    "@midwayjs/simple-lock": "^1.0.6-alpha.522+1afeb34c",
     "debug": "^4.1.1",
     "deep-eql": "^4.0.0",
     "is-type-of": "^1.2.1",
@@ -47,5 +47,5 @@
     "url": "git@github.com:midwayjs/midway-faas.git"
   },
   "license": "MIT",
-  "gitHead": "5a6539a27cf1376a8ea9c9a8553fdfb2f78d55bd"
+  "gitHead": "1afeb34cbb6c0ad49ccdb9cfaebd254ae73afc6a"
 }
