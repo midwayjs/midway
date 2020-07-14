@@ -18,7 +18,7 @@ import {
 } from './interface';
 
 // const fs = require('fs');
-const _ = require('lodash');
+import { get } from 'lodash';
 
 export class AWSLambdaPlugin extends BasePlugin {
   core: ICoreInstance;
@@ -439,7 +439,7 @@ export class AWSLambdaPlugin extends BasePlugin {
   getValues(source, paths) {
     return paths.map(path => ({
       path,
-      value: _.get(source, path.join('.')),
+      value: get(source, path.join('.')),
     }));
   }
 
