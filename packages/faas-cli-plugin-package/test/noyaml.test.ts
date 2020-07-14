@@ -4,7 +4,6 @@ import { AliyunFCPlugin } from '../../faas-cli-plugin-fc/src/index';
 import { FaaSTmpOutPlugin } from './fixtures/plugins/faas_tmp_out';
 import { resolve } from 'path';
 import { remove, existsSync, readFileSync } from 'fs-extra';
-import { transform } from '@midwayjs/serverless-spec-builder';
 import * as assert from 'assert';
 
 describe('/test/noyaml.test.ts', () => {
@@ -28,15 +27,6 @@ describe('/test/noyaml.test.ts', () => {
       core.addPlugin(FaaSTmpOutPlugin);
       await core.ready();
       await core.invoke(['package']);
-      const yaml = transform(resolve(buildDir, 'template.yml'));
-      assert(
-        yaml.Resources['serverless-midway-test']['service'].Properties
-          .Handler === 'service.handler'
-      );
-      assert(
-        yaml.Resources['serverless-midway-test']['test-hand'].Properties
-          .Handler === 'test.hand'
-      );
       assert(!existsSync(resolve(buildDir, 'faas_tmp_out')));
       assert(
         /console.log\('test\.js'\)/.test(
