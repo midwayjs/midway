@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.0.7 (2020-07-14)
+
+
+### Bug Fixes
+
+* fix windows path when invoke ([#169](https://github.com/midwayjs/midway-faas/issues/169)) ([e637a0a](https://github.com/midwayjs/midway-faas/commit/e637a0ab05a769a3797e2dccf0612bbbf650d074))
+* format ([99edaef](https://github.com/midwayjs/midway-faas/commit/99edaef97a5c4b21b1223e089a9d39dbe8694d97))
+* invoke source map ([#52](https://github.com/midwayjs/midway-faas/issues/52)) ([9149d2a](https://github.com/midwayjs/midway-faas/commit/9149d2a9a3f3d9ba975588b61c6f9bbeec2e8d86)), closes [#51](https://github.com/midwayjs/midway-faas/issues/51)
+* runtime engine refactor compatibility ([#35](https://github.com/midwayjs/midway-faas/issues/35)) ([99ed6c5](https://github.com/midwayjs/midway-faas/commit/99ed6c59a24158137e244fda3ca3adfc14eeda48))
+
+
+### Features
+
+* aws support ([#526](https://github.com/midwayjs/midway-faas/issues/526)) ([9da022e](https://github.com/midwayjs/midway-faas/commit/9da022ecdf1e7770c21705131679940adc67ff3c))
+* commit development code ([a51a14a](https://github.com/midwayjs/midway-faas/commit/a51a14ae266a12f37fbe20ebf7eabfa764cf6532))
+* measure handler performance with perf_hooks ([0d372e8](https://github.com/midwayjs/midway-faas/commit/0d372e85f1792c212cdc0b586d00df0a7b6684c9))
+
+
+
+
+
 ## 1.0.1 (2020-07-06)
 
 

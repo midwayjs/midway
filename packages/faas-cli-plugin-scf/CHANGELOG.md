@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.0.7 (2020-07-14)
+
+
+### Bug Fixes
+
+* fix error control in fc ([#153](https://github.com/midwayjs/midway-faas/issues/153)) ([f7dd007](https://github.com/midwayjs/midway-faas/commit/f7dd0070f9c1b7f07e628c8d2052d273a8133910))
+* fix windows path when invoke ([#169](https://github.com/midwayjs/midway-faas/issues/169)) ([e637a0a](https://github.com/midwayjs/midway-faas/commit/e637a0ab05a769a3797e2dccf0612bbbf650d074))
+* tencent trigger ([#131](https://github.com/midwayjs/midway-faas/issues/131)) ([0e93057](https://github.com/midwayjs/midway-faas/commit/0e93057205c2b761d1ee6fcf7e9c5d35bab349a7))
+
+
+### Features
+
+* aws support ([#526](https://github.com/midwayjs/midway-faas/issues/526)) ([9da022e](https://github.com/midwayjs/midway-faas/commit/9da022ecdf1e7770c21705131679940adc67ff3c))
+
+
+
+
+
 ## [1.0.6](https://github.com/midwayjs/midway-faas/compare/serverless-v1.0.5...serverless-v1.0.6) (2020-07-13)
 
 **Note:** Version bump only for package @midwayjs/fcli-plugin-scf

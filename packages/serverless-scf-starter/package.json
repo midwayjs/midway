@@ -1,15 +1,15 @@
 {
   "name": "@midwayjs/serverless-scf-starter",
-  "version": "1.0.6-alpha.522+1afeb34c",
+  "version": "1.0.7",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/runtime-engine": "^1.0.6-alpha.522+1afeb34c",
-    "@midwayjs/serverless-http-parser": "^1.0.6-alpha.522+1afeb34c"
+    "@midwayjs/runtime-engine": "^1.0.7",
+    "@midwayjs/serverless-http-parser": "^1.0.7"
   },
   "devDependencies": {
-    "@midwayjs/faas-typings": "^1.0.6-alpha.522+1afeb34c",
-    "@midwayjs/runtime-mock": "^1.0.6-alpha.522+1afeb34c",
+    "@midwayjs/faas-typings": "^1.0.7",
+    "@midwayjs/runtime-mock": "^1.0.7",
     "midway-bin": "^2.0.0"
   },
   "engines": {

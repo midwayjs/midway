@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.0.7 (2020-07-14)
+
+
+### Bug Fixes
+
+* fix error control in fc ([#153](https://github.com/midwayjs/midway-faas/issues/153)) ([f7dd007](https://github.com/midwayjs/midway-faas/commit/f7dd0070f9c1b7f07e628c8d2052d273a8133910))
+* fix windows path when invoke ([#169](https://github.com/midwayjs/midway-faas/issues/169)) ([e637a0a](https://github.com/midwayjs/midway-faas/commit/e637a0ab05a769a3797e2dccf0612bbbf650d074))
+* invoke source map ([#52](https://github.com/midwayjs/midway-faas/issues/52)) ([9149d2a](https://github.com/midwayjs/midway-faas/commit/9149d2a9a3f3d9ba975588b61c6f9bbeec2e8d86)), closes [#51](https://github.com/midwayjs/midway-faas/issues/51)
+* tencent trigger ([#131](https://github.com/midwayjs/midway-faas/issues/131)) ([0e93057](https://github.com/midwayjs/midway-faas/commit/0e93057205c2b761d1ee6fcf7e9c5d35bab349a7))
+
+
+### Features
+
+* add dev pack ([#134](https://github.com/midwayjs/midway-faas/issues/134)) ([cd08f54](https://github.com/midwayjs/midway-faas/commit/cd08f54859da80f517cb37f99857679286f10f0f))
+* aws support ([#526](https://github.com/midwayjs/midway-faas/issues/526)) ([9da022e](https://github.com/midwayjs/midway-faas/commit/9da022ecdf1e7770c21705131679940adc67ff3c))
+* commit development code ([a51a14a](https://github.com/midwayjs/midway-faas/commit/a51a14ae266a12f37fbe20ebf7eabfa764cf6532))
+
+
+
+
+
 ## 1.0.1 (2020-07-06)
 
 
