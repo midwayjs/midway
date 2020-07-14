@@ -82,7 +82,10 @@ describe('/test/index.test.ts', () => {
       });
       const res = await test(handle).runHttp(require('../resource/event'), {});
       assert.equal(res.statusCode, 200);
-      assert.equal(res.headers['content-type'], 'application/json; charset=utf-8');
+      assert.equal(
+        res.headers['content-type'],
+        'application/json; charset=utf-8'
+      );
       assert.equal(res.body, '{"ok":true}');
     });
 
@@ -96,7 +99,10 @@ describe('/test/index.test.ts', () => {
       });
       const res = await test(handle).runHttp(require('../resource/event'), {});
       assert.equal(res.statusCode, 200);
-      assert.equal(res.headers['content-type'], 'application/json; charset=utf-8');
+      assert.equal(
+        res.headers['content-type'],
+        'application/json; charset=utf-8'
+      );
       assert.equal(res.body, '{"ok":true}');
     });
 
@@ -110,7 +116,10 @@ describe('/test/index.test.ts', () => {
       });
       const res = await test(handle).runHttp(require('../resource/event'), {});
       assert.equal(res.statusCode, 200);
-      assert.equal(res.headers['content-type'], 'application/json; charset=utf-8');
+      assert.equal(
+        res.headers['content-type'],
+        'application/json; charset=utf-8'
+      );
       assert.equal(res.body, '{"ok":true}');
     });
 
@@ -169,7 +178,7 @@ describe('/test/index.test.ts', () => {
     it('should ok with non-async function', async () => {
       const runtime = await start();
       const handle = asyncWrapper(async (...args) => {
-        return runtime.asyncEvent(ctx => { })(...args);
+        return runtime.asyncEvent(ctx => {})(...args);
       });
       let err;
       try {
@@ -213,7 +222,7 @@ describe('/test/index.test.ts', () => {
     it('should ok with asyncWrap when not async functions', async () => {
       const runtime = await start();
       const handle = asyncWrapper(async (...args) => {
-        return runtime.asyncEvent(ctx => { })(...args);
+        return runtime.asyncEvent(ctx => {})(...args);
       });
       let err;
       try {

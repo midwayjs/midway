@@ -70,7 +70,10 @@ export function addProfileCredentials(results, profile) {
 
     // Setup a MFA callback for asking the code from the user.
     params.tokenCodeFn = (mfaSerial, callback) => {
-      const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+      const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout,
+      });
       rl.question(`Enter MFA code for ${mfaSerial}: `, answer => {
         rl.close();
         callback(null, answer);
@@ -103,4 +106,3 @@ export function addEnvironmentProfile(results, prefix) {
     addProfileCredentials(results, profile);
   }
 }
-

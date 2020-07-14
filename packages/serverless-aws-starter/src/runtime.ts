@@ -87,7 +87,8 @@ export class AWSRuntime extends ServerlessLightRuntime {
             body: ctx.body,
           };
         });
-      }]);
+      },
+    ]);
   }
 
   async wrapperEventInvoker(handler, event: any, context: AWSContext) {
@@ -103,9 +104,9 @@ export class AWSRuntime extends ServerlessLightRuntime {
     });
   }
 
-  async beforeInvokeHandler(context) { }
+  async beforeInvokeHandler(context) {}
 
-  async afterInvokeHandler(err, result, context) { }
+  async afterInvokeHandler(err, result, context) {}
 
   getApplication() {
     return this.app;

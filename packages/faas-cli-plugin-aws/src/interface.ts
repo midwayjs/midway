@@ -1,4 +1,3 @@
-
 export interface S3UploadResult {
   ETag: string;
   ServerSideEncryption?: string;
@@ -24,20 +23,18 @@ export interface StackEvents {
   ResponseMetadata: {
     RequestId: string;
   };
-  StackEvents: Array<
-    {
-      StackId: string;
-      EventId: string;
-      StackName: string;
-      LogicalResourceId: string;
-      PhysicalResourceId: string;
-      ResourceType: string;
-      Timestamp: string;
-      ResourceStatus: string;
-      ResourceProperties?: string;
-      ClientRequestToken: string;
-    }
-  >
+  StackEvents: Array<{
+    StackId: string;
+    EventId: string;
+    StackName: string;
+    LogicalResourceId: string;
+    PhysicalResourceId: string;
+    ResourceType: string;
+    Timestamp: string;
+    ResourceStatus: string;
+    ResourceProperties?: string;
+    ClientRequestToken: string;
+  }>;
 }
 
 export interface StackResourcesDetail {
@@ -55,6 +52,6 @@ export interface StackResourcesDetail {
     Metadata: string;
     DriftInformation: {
       StackResourceDriftStatus: string;
-    }
-  }[]
+    };
+  }[];
 }
