@@ -1,5 +1,5 @@
 import * as assert from 'assert';
-import { asyncWrapper, createRuntime } from '../src';
+import { asyncWrapper, start } from '../src';
 import { AWSBasicHTTPEvent } from '../src/interface';
 
 class Tester {
@@ -45,7 +45,7 @@ describe('/test/index.test.ts', () => {
     });
 
     it('should wrap with event and context', async () => {
-      const runtime = await createRuntime();
+      const runtime = await start();
       const handle = asyncWrapper(async (...args) => {
         return runtime.asyncEvent(async (ctx, event) => {
           return event.data;
@@ -58,7 +58,7 @@ describe('/test/index.test.ts', () => {
 
   describe('wrapper web event', () => {
     it('should ok with plain text', async () => {
-      const runtime = await createRuntime();
+      const runtime = await start();
       const handle = asyncWrapper(async (...args) => {
         return runtime.asyncEvent(async ctx => {
           ctx.body = 'hello world!';
@@ -69,12 +69,12 @@ describe('/test/index.test.ts', () => {
         {}
       );
       assert.equal(res.statusCode, 200);
-      assert.equal(res.headers['content-type'], 'text/plain');
+      assert.equal(res.headers['content-type'], 'text/plain; charset=utf-8');
       assert.equal(res.body, 'hello world!');
     });
 
     it('should ok with json', async () => {
-      const runtime = await createRuntime();
+      const runtime = await start();
       const handle = asyncWrapper(async (...args) => {
         return runtime.asyncEvent(async ctx => {
           ctx.body = { ok: true };
@@ -82,12 +82,12 @@ describe('/test/index.test.ts', () => {
       });
       const res = await test(handle).runHttp(require('../resource/event'), {});
       assert.equal(res.statusCode, 200);
-      assert.equal(res.headers['content-type'], 'application/json');
+      assert.equal(res.headers['content-type'], 'application/json; charset=utf-8');
       assert.equal(res.body, '{"ok":true}');
     });
 
     it('should ok with raw json', async () => {
-      const runtime = await createRuntime();
+      const runtime = await start();
       const handle = asyncWrapper(async (...args) => {
         return runtime.asyncEvent(async ctx => {
           ctx.type = 'application/json';
@@ -96,12 +96,12 @@ describe('/test/index.test.ts', () => {
       });
       const res = await test(handle).runHttp(require('../resource/event'), {});
       assert.equal(res.statusCode, 200);
-      assert.equal(res.headers['content-type'], 'application/json');
+      assert.equal(res.headers['content-type'], 'application/json; charset=utf-8');
       assert.equal(res.body, '{"ok":true}');
     });
 
     it('should ok with raw json/object', async () => {
-      const runtime = await createRuntime();
+      const runtime = await start();
       const handle = asyncWrapper(async (...args) => {
         return runtime.asyncEvent(async ctx => {
           ctx.type = 'application/json';
@@ -110,12 +110,12 @@ describe('/test/index.test.ts', () => {
       });
       const res = await test(handle).runHttp(require('../resource/event'), {});
       assert.equal(res.statusCode, 200);
-      assert.equal(res.headers['content-type'], 'application/json');
+      assert.equal(res.headers['content-type'], 'application/json; charset=utf-8');
       assert.equal(res.body, '{"ok":true}');
     });
 
     it('should ok with Buffer', async () => {
-      const runtime = await createRuntime();
+      const runtime = await start();
       const handle = asyncWrapper(async (...args) => {
         return runtime.asyncEvent(async ctx => {
           ctx.body = Buffer.from('hello world!');
@@ -128,7 +128,7 @@ describe('/test/index.test.ts', () => {
     });
 
     it('should ok with context', async () => {
-      const runtime = await createRuntime();
+      const runtime = await start();
       const handle = asyncWrapper(async (...args) => {
         return runtime.asyncEvent(async ctx => {
           ctx.body = ctx.query.hello;
@@ -150,7 +150,7 @@ describe('/test/index.test.ts', () => {
     });
 
     it('should ok with error', async () => {
-      const runtime = await createRuntime();
+      const runtime = await start();
       const handle = asyncWrapper(async (...args) => {
         return runtime.asyncEvent(async ctx => {
           throw new Error('oops');
@@ -167,9 +167,9 @@ describe('/test/index.test.ts', () => {
     });
 
     it('should ok with non-async function', async () => {
-      const runtime = await createRuntime();
+      const runtime = await start();
       const handle = asyncWrapper(async (...args) => {
-        return runtime.asyncEvent(ctx => {})(...args);
+        return runtime.asyncEvent(ctx => { })(...args);
       });
       let err;
       try {
@@ -182,7 +182,7 @@ describe('/test/index.test.ts', () => {
     });
 
     it('should ok with asyncWrap', async () => {
-      const runtime = await createRuntime();
+      const runtime = await start();
       const handle = asyncWrapper(async (...args) => {
         return runtime.asyncEvent(async (ctx, event) => {
           return 'hello world!';
@@ -193,7 +193,7 @@ describe('/test/index.test.ts', () => {
     });
 
     it('should ok with asyncWrap when error', async () => {
-      const runtime = await createRuntime();
+      const runtime = await start();
       const handle = asyncWrapper(async (...args) => {
         return runtime.asyncEvent(async ctx => {
           throw new Error('ooops!');
@@ -211,9 +211,9 @@ describe('/test/index.test.ts', () => {
     });
 
     it('should ok with asyncWrap when not async functions', async () => {
-      const runtime = await createRuntime();
+      const runtime = await start();
       const handle = asyncWrapper(async (...args) => {
-        return runtime.asyncEvent(ctx => {})(...args);
+        return runtime.asyncEvent(ctx => { })(...args);
       });
       let err;
       try {
@@ -227,7 +227,7 @@ describe('/test/index.test.ts', () => {
     });
 
     it('GET should ok', async () => {
-      const runtime = await createRuntime();
+      const runtime = await start();
       const handle = asyncWrapper(async (...args) => {
         return runtime.asyncEvent(async ctx => {
           ctx.body = {
@@ -258,7 +258,7 @@ describe('/test/index.test.ts', () => {
     });
 
     it('GET should ok', async () => {
-      const runtime = await createRuntime();
+      const runtime = await start();
       const handle = asyncWrapper(async (...args) => {
         return runtime.asyncEvent(async ctx => {
           ctx.body = {
@@ -293,7 +293,7 @@ describe('/test/index.test.ts', () => {
     });
 
     it('GET should use faas parameters to appoint parameter', async () => {
-      const runtime = await createRuntime();
+      const runtime = await start();
       const handle = asyncWrapper(async (...args) => {
         return runtime.asyncEvent(async (ctx, user) => {
           ctx.body = user + ' hello';
@@ -314,7 +314,7 @@ describe('/test/index.test.ts', () => {
     });
 
     it('GET should get text if return data', async () => {
-      const runtime = await createRuntime();
+      const runtime = await start();
       const handle = asyncWrapper(async (...args) => {
         return runtime.asyncEvent(async (ctx, user) => {
           return 'hello world ' + user;
@@ -335,7 +335,7 @@ describe('/test/index.test.ts', () => {
     });
 
     it('GET should get params in post method', async () => {
-      const runtime = await createRuntime();
+      const runtime = await start();
       const handle = asyncWrapper(async (...args) => {
         return runtime.asyncEvent(async (ctx, user) => {
           return 'hello world ' + user;
@@ -356,7 +356,7 @@ describe('/test/index.test.ts', () => {
     });
 
     it('should ok with asyncWrap use appoint args in event', async () => {
-      const runtime = await createRuntime();
+      const runtime = await start();
       const handle = asyncWrapper(async (...args) => {
         return runtime.asyncEvent(async (ctx, name) => {
           return 'hello world!' + name;
@@ -372,7 +372,7 @@ describe('/test/index.test.ts', () => {
     });
 
     it('POST should ok use fc request with body', async () => {
-      const runtime = await createRuntime();
+      const runtime = await start();
       const handle = asyncWrapper(async (...args) => {
         return runtime.asyncEvent(async ctx => {
           return ctx.request.body.toString();

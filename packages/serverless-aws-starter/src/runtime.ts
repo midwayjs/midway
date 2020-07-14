@@ -39,25 +39,23 @@ export class AWSRuntime extends ServerlessLightRuntime {
     }
     const newReq = new HTTPRequest(event, context);
     const newRes = new HTTPResponse();
-    // const ctx = new Context(event, context);
-    // const args = [ctx];
-
-    // if (ctx.method === 'GET') {
-    //   if (ctx.query && ctx.query[FAAS_ARGS_KEY]) {
-    //     args.push(ctx.query[FAAS_ARGS_KEY]);
-    //   }
-    // } else if (ctx.method === 'POST') {
-    //   if (ctx.req && ctx.req.body && ctx.req.body[FAAS_ARGS_KEY]) {
-    //     args.push(ctx.req.body[FAAS_ARGS_KEY]);
-    //   }
-    // }
 
     return this.respond.apply(this.respond, [
       newReq,
       newRes,
       ctx => {
         return this.invokeHandlerWrapper(ctx, async () => {
-          return handler.apply(handler, [ctx]);
+          const args = [ctx];
+          if (ctx.method === 'GET') {
+            if (ctx.query && ctx.query[FAAS_ARGS_KEY]) {
+              args.push(ctx.query[FAAS_ARGS_KEY]);
+            }
+          } else if (ctx.method === 'POST') {
+            if (ctx.req && ctx.req.body && ctx.req.body[FAAS_ARGS_KEY]) {
+              args.push(ctx.req.body[FAAS_ARGS_KEY]);
+            }
+          }
+          return handler.apply(handler, args);
         }).then(result => {
           if (result) {
             ctx.body = result;
