@@ -10,6 +10,15 @@ const eggLayer = require('../../../dist');
 let runtime;
 let inited;
 
+exports.initializer = asyncWrapper(async (...args) => {
+  if (!inited) {
+    inited = true;
+    runtime = await start({
+      layers: [eggLayer],
+    });
+  }
+});
+
 exports.handler = asyncWrapper(async (...args) => {
   if (!inited) {
     inited = true;

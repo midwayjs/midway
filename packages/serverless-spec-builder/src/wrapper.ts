@@ -31,6 +31,10 @@ export function writeWrapper(options: {
     middleware,
   } = options;
   const files = {};
+  if (service?.deployType) {
+    expandYMLForApplication(service);
+  }
+
   const functions = service.functions || {};
   for (const func in functions) {
     const handlerConf = functions[func];
@@ -103,4 +107,40 @@ export function formetAggregationHandlers(handlers) {
       }
       return handlerB.level - handlerA.level;
     });
+}
+
+/**
+ * support application deploy to serverless cloud platform
+ * @param service
+ */
+function expandYMLForApplication(service) {
+  if (!service.deployType) {
+    return;
+  }
+
+  // add default function
+  if (!service.functions) {
+    service.functions = {
+      app_index: {
+        handler: 'index.handler',
+        events: [{ http: { path: '/*' } }],
+      },
+    };
+  }
+
+  if (service?.layers) {
+    service.layers = {};
+  }
+
+  if (service?.deployType === 'egg') {
+    service.layers['eggLayer'] = { path: 'npm:@midwayjs/egg-layer' };
+  }
+
+  if (service?.deployType === 'express') {
+    service.layers['expressLayer'] = { path: 'npm:@midwayjs/express-layer' };
+  }
+
+  if (service?.deployType === 'koa') {
+    service.layers['koaLayer'] = { path: 'npm:@midwayjs/koa-layer' };
+  }
 }
