@@ -7,16 +7,16 @@ let starter;
 let runtime;
 let inited = false;
 
-
 const initializeMethod = async (initializeContext = {}) => {
+  
   runtime = await start({
     layers: [],
     getHandler: getHandler
   });
-  starter = new FaaSStarter({ baseDir: __dirname, initializeContext, applicationAdapter: runtime });
+  starter = new FaaSStarter({ baseDir: __dirname, initializeContext, applicationAdapter: runtime, middleware: ["test1","test2"] });
   
   await starter.start();
-  inited = true;
+   inited = true; 
 };
 
 const getHandler = (hanlderName) => {
@@ -24,11 +24,14 @@ const getHandler = (hanlderName) => {
     if (hanlderName === 'handler') {
       return  starter.handleInvokeWrapper('render.handler'); 
     }
+  
 }
 
 
 exports.initializeUserDefine = asyncWrapper(async (...args) => {
-  await initializeMethod(...args);
+  if (!inited) {
+    await initializeMethod(...args);
+  }
 });
 
 
