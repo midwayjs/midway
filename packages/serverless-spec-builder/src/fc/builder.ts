@@ -64,7 +64,8 @@ export class FCSpecBuilder extends SpecBuilder {
           Runtime: funSpec.runtime || providerData.runtime || 'nodejs10',
           CodeUri: funSpec.codeUri || '.',
           Timeout: funSpec.timeout || providerData.timeout || 3,
-          InitializationTimeout: funSpec.initTimeout || 3,
+          InitializationTimeout:
+            funSpec.initTimeout || providerData.initTimeout || 3,
           MemorySize: funSpec.memorySize || providerData.memorySize || 128,
           EnvironmentVariables: {
             ...providerData.environment,

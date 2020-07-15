@@ -20,6 +20,7 @@ export type FCLogType = 'Aliyun::Serverless::Log';
 export type FCLogStoreType = 'Aliyun::Serverless::Log::Logstore';
 
 export interface FCProviderStructure extends ProviderStructure {
+  initTimeout?: number;
   vpcConfig?: {
     vpcId: string;
     vSwitchIds: string[];

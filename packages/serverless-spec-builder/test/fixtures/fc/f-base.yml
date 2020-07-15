@@ -3,6 +3,7 @@ service:
 
 provider:
   name: aliyun
+  initTimeout: 10
 
 functions:
   index:
