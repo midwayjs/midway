@@ -72,6 +72,7 @@ export function writeWrapper(options: {
       starter,
       faasModName: faasModName || '@midwayjs/faas',
       loadDirectory,
+      // Todo: future need remove middleware, use egg
       middleware: middleware || [],
       faasStarterName: faasStarterName || 'FaaSStarter',
       advancePreventMultiInit: advancePreventMultiInit || false,
