@@ -436,7 +436,10 @@ describe('/test/index.test.ts', () => {
       );
       await runtime.close();
       assert.equal(result.statusCode, 302);
-      assert.equal(result.headers.location, 'https://github.com/midwayjs/midway');
+      assert.equal(
+        result.headers.location,
+        'https://github.com/midwayjs/midway'
+      );
     });
 
     it('should invoke normal code', async () => {
