@@ -12,6 +12,7 @@ describe('/test/fc.test.ts', () => {
     const funResult = result['Resources']['serverless-hello-world']['index'];
     assert(funResult['Type'] === 'Aliyun::Serverless::Function');
     assert(funResult['Properties']['Initializer'] === 'index.initializer');
+    assert(funResult['Properties']['InitializationTimeout'] === 10);
     assert(funResult['Properties']['Handler'] === 'index.handler');
     assert(funResult['Properties']['Runtime'] === 'nodejs10');
     assert(funResult['Properties']['InstanceConcurrency'] === 2);
@@ -29,6 +30,7 @@ describe('/test/fc.test.ts', () => {
     const funResult = result['Resources']['serverless-hello-world']['index'];
     assert(funResult['Type'] === 'Aliyun::Serverless::Function');
     assert(funResult['Properties']['Initializer'] === 'index.initializer');
+    assert(funResult['Properties']['InitializationTimeout'] === 3);
     assert(funResult['Properties']['Handler'] === 'index.handler');
     assert(funResult['Properties']['Runtime'] === 'nodejs10');
     assert.deepStrictEqual(funResult['Events'], undefined);
