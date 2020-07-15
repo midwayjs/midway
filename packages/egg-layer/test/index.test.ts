@@ -3,6 +3,7 @@ import { HTTPTrigger } from '@midwayjs/serverless-fc-trigger';
 import { ApiGatewayTrigger } from '@midwayjs/serverless-scf-trigger';
 import { join } from 'path';
 import * as request from 'supertest';
+import * as assert from 'assert';
 
 describe('/test/index.test.ts', () => {
   describe('should test http trigger use app directly', () => {
@@ -12,6 +13,7 @@ describe('/test/index.test.ts', () => {
       if (runtime) {
         runtime.close();
       }
+      delete require.cache[require.resolve('./fixtures/eaas/index.js')];
     });
 
     it('should test with supertest', async () => {
@@ -58,18 +60,21 @@ describe('/test/index.test.ts', () => {
       });
     });
   });
-  // it('basic test while return Buffer', async () => {
-  //   const runtime = createRuntime({
-  //     functionDir: path.join(__dirname, './fixtures/eaas'),
-  //     layers: [eggLayer],
-  //   });
-  //   await runtime.start();
-  //   const result = await runtime.invoke({
-  //     path: '/buffer',
-  //     header: {},
-  //     query: {},
-  //   });
-  //   assert(result === 'hi, egg');
-  //   await runtime.close();
-  // });
+  it.only('basic test while return Buffer', async () => {
+    const runtime = createRuntime({
+      functionDir: join(__dirname, './fixtures/eaas'),
+    });
+    await runtime.start();
+    const result = await runtime.invoke(
+      {
+        path: '/buffer',
+        header: {},
+        query: {},
+      },
+      {}
+    );
+
+    assert.ok(result === 'hi, egg');
+    await runtime.close();
+  });
 });
