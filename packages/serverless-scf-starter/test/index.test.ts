@@ -89,6 +89,18 @@ describe('/test/index.test.ts', () => {
       assert.equal(res.body, '{"ok":true}');
     });
 
+    it('should 302', async () => {
+      const runtime = await start();
+      const handle = asyncWrapper(async (...args) => {
+        return runtime.asyncEvent(async ctx => {
+          ctx.status = 302;
+          ctx.set('Location', 'https://github.com/midwayjs/midway');
+        })(...args);
+      });
+      const res = await test(handle).runHttp(require('../resource/event'), {});
+      assert.equal(res.statusCode, 302);
+    });
+
     it('should ok with raw json', async () => {
       const runtime = await start();
       const handle = asyncWrapper(async (...args) => {

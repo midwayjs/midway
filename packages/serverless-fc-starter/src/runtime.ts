@@ -97,10 +97,12 @@ export class FCRuntime extends ServerlessLightRuntime {
               ctx.body = result;
             }
 
-            if (ctx.body === null || ctx.body === 'undefined') {
-              ctx.body = '';
-              ctx.type = 'text';
-              ctx.status = 204;
+            if (!ctx.response.explicitStatus) {
+              if (ctx.body === null || ctx.body === 'undefined') {
+                ctx.body = '';
+                ctx.type = 'text';
+                ctx.status = 204;
+              }
             }
 
             let encoded = false;
