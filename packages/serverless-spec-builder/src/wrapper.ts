@@ -73,6 +73,7 @@ export function writeWrapper(options: {
     const fileName = join(distDir, `${file}.js`);
     const layers = getLayers(service.layers, ...files[file].originLayers);
     const content = render(tpl, {
+      isCustomAppType: !!service?.deployType,
       starter,
       faasModName: faasModName || '@midwayjs/faas',
       loadDirectory,

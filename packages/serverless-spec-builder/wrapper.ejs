@@ -1,3 +1,36 @@
+<% if (isCustomAppType) { %>
+const { asyncWrapper } = require('@midwayjs/runtime-engine');
+const { asyncWrapper, start } = require('<%=starter %>');
+<% layerDeps.forEach(function(layer){ %>const <%=layer.name%> = require('<%=layer.path%>');
+<% }); %>
+
+let runtime;
+let inited = false;
+
+const initializeMethod = async (initializeContext = {}) => {
+  runtime = await start({
+    layers: [<%= layers.join(", ") %>],
+  });
+};
+
+exports.<%=initializer%> = asyncWrapper(async (...args) => {
+  if (!inited) {
+    inited = true;
+    await initializeMethod();
+  }
+});
+
+<% handlers.forEach(function(handlerData){ %>
+  exports.<%=handlerData.name%> = asyncWrapper(async (...args) => {
+    if (!inited) {
+      await initializeMethod();
+    }
+
+    return runtime.asyncEvent()(...args);
+  });
+<% }); %>
+
+<% } else { %>
 const { <%=faasStarterName %> } = require('<%=faasModName %>');
 const { asyncWrapper, start } = require('<%=starter %>');
 const picomatch = require('picomatch');
@@ -24,8 +57,8 @@ const initializeMethod = async (initializeContext = {}) => {
 const getHandler = (hanlderName) => {
   <% handlers.forEach(function(handlerData){ %>
     if (hanlderName === '<%=handlerData.name%>') {
-      return <% if (handlerData.handler) { 
-      %> starter.handleInvokeWrapper('<%=handlerData.handler%>'); <% } else { 
+      return <% if (handlerData.handler) {
+      %> starter.handleInvokeWrapper('<%=handlerData.handler%>'); <% } else {
       %> async (ctx) => {
         const allHandlers = <%-JSON.stringify(handlerData.handlers)%>;
         let handler = null;
@@ -35,7 +68,7 @@ const getHandler = (hanlderName) => {
             return picomatch.isMatch(ctxPath, handler.router)
           });
         }
-      
+
         if (handler) {
           return starter.handleInvokeWrapper(handler.handler)(ctx);
         }
@@ -64,3 +97,5 @@ exports.<%=handlerData.name%> = asyncWrapper(async (...args) => {
   return runtime.asyncEvent(handler)(...args);
 });
 <% }); %>
+
+<% } %>
