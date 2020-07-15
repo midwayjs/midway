@@ -9,6 +9,7 @@ describe('/test/wrapper.test.ts', () => {
       const wrapperPath = resolve(__dirname, './fixtures/wrapper');
       writeWrapper({
         initializeName: 'initializeUserDefine',
+        middleware: ['test1', 'test2'],
         cover: true,
         service: {
           functions: {

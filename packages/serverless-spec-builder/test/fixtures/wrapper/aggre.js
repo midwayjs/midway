@@ -7,16 +7,16 @@ let starter;
 let runtime;
 let inited = false;
 
-
 const initializeMethod = async (initializeContext = {}) => {
+  
   runtime = await start({
     layers: [],
     getHandler: getHandler
   });
-  starter = new FaaSStarter({ baseDir: __dirname, initializeContext, applicationAdapter: runtime });
+  starter = new FaaSStarter({ baseDir: __dirname, initializeContext, applicationAdapter: runtime, middleware: ["test1","test2"] });
   
   await starter.start();
-  inited = true;
+   inited = true; 
 };
 
 const getHandler = (hanlderName) => {
@@ -40,11 +40,14 @@ const getHandler = (hanlderName) => {
         return '<h1>404 Page Not Found</h1><hr />Request path: ' + ctxPath + '<hr /><div style="font-size: 12px;color: #999999;">Powered by <a href="https://github.com/midwayjs/midway">Midway Serverless</a></div>';
       }; 
     }
+  
 }
 
 
 exports.initializeUserDefine = asyncWrapper(async (...args) => {
-  await initializeMethod(...args);
+  if (!inited) {
+    await initializeMethod(...args);
+  }
 });
 
 
