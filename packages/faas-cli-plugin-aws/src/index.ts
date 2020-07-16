@@ -20,7 +20,6 @@ import {
   StackResourcesDetail,
 } from './interface';
 
-// const fs = require('fs');
 import { get } from 'lodash';
 
 export class AWSLambdaPlugin extends BasePlugin {
@@ -384,7 +383,7 @@ export class AWSLambdaPlugin extends BasePlugin {
     const stage = 'v1';
     const path = '/hello';
 
-    // await this.package();
+    await this.package();
 
     this.core.cli.log('Start deploy by aws-sdk');
     // 配置 crendentials
