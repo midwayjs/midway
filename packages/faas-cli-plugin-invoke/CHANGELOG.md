@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.10](https://github.com/midwayjs/midway-faas/compare/serverless-v1.0.9...serverless-v1.0.10) (2020-07-16)
+
+
+### Features
+
+* mwcc multi stage compilation support ([#523](https://github.com/midwayjs/midway-faas/issues/523)) ([c5a64f2](https://github.com/midwayjs/midway-faas/commit/c5a64f216aeddda4c62d4ae674ed4eb27433e751))
+
+
+
+
+
 ## [1.0.8](https://github.com/midwayjs/midway-faas/compare/v1.0.7...v1.0.8) (2020-07-14)
 
 **Note:** Version bump only for package @midwayjs/fcli-plugin-invoke

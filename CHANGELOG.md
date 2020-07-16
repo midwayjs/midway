@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.10](https://github.com/midwayjs/midway-faas/compare/serverless-v1.0.9...serverless-v1.0.10) (2020-07-16)
+
+
+### Bug Fixes
+
+* wrapper support middleware ([#529](https://github.com/midwayjs/midway-faas/issues/529)) ([eade6a6](https://github.com/midwayjs/midway-faas/commit/eade6a6fd41494517154398674ab76cbcc2b3e1a))
+
+
+### Features
+
+* mwcc multi stage compilation support ([#523](https://github.com/midwayjs/midway-faas/issues/523)) ([c5a64f2](https://github.com/midwayjs/midway-faas/commit/c5a64f216aeddda4c62d4ae674ed4eb27433e751))
+* support initTimeout in fc provider ([#530](https://github.com/midwayjs/midway-faas/issues/530)) ([ddfe654](https://github.com/midwayjs/midway-faas/commit/ddfe65484e0c1dc79c12e855bd098dceb075a22c))
+
+
+
+
+
 ## [1.0.9](https://github.com/midwayjs/midway-faas/compare/serverless-v1.0.6...serverless-v1.0.9) (2020-07-14)
 
 
