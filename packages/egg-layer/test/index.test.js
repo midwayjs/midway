@@ -1,18 +1,18 @@
-import { createRuntime } from '@midwayjs/runtime-mock';
-import { HTTPTrigger } from '@midwayjs/serverless-fc-trigger';
-import { ApiGatewayTrigger } from '@midwayjs/serverless-scf-trigger';
-import { join } from 'path';
-import * as request from 'supertest';
-import * as assert from 'assert';
+const { createRuntime } = require('@midwayjs/runtime-mock');
+const { HTTPTrigger } = require('@midwayjs/serverless-fc-trigger');
+const { ApiGatewayTrigger } = require('@midwayjs/serverless-scf-trigger');
+const { join } = require('path');
+const request = require('supertest');
 
 describe('/test/index.test.ts', () => {
-  describe('should test http trigger use app directly', () => {
+  describe.only('FC test', () => {
     let runtime;
 
     afterEach(() => {
       if (runtime) {
         runtime.close();
       }
+      process.env.ENTRY_DIR = '';
       delete require.cache[require.resolve('./fixtures/eaas/index.js')];
     });
 
@@ -24,17 +24,22 @@ describe('/test/index.test.ts', () => {
       });
       await runtime.start();
       const app = await runtime.delegate(new HTTPTrigger());
-      return new Promise(resolve => {
+      return new Promise((resolve, reject) => {
         request(app)
-          .get('/user')
+          .get('/get')
           .expect('Content-Type', 'text/html; charset=utf-8')
-          .expect(/hello Alan/)
-          .expect(200, resolve);
+          .expect(/hi, egg/)
+          .expect(200, err => {
+            if (err) {
+              reject(err);
+            }
+            resolve();
+          });
       });
     });
   });
 
-  describe('SCF should test apigateway trigger use app directly', () => {
+  describe('SCF test', () => {
     let runtime;
 
     afterEach(() => {
@@ -59,22 +64,5 @@ describe('/test/index.test.ts', () => {
           .expect(200, resolve);
       });
     });
-  });
-  it.only('basic test while return Buffer', async () => {
-    const runtime = createRuntime({
-      functionDir: join(__dirname, './fixtures/eaas'),
-    });
-    await runtime.start();
-    const result = await runtime.invoke(
-      {
-        path: '/buffer',
-        header: {},
-        query: {},
-      },
-      {}
-    );
-
-    assert.ok(result === 'hi, egg');
-    await runtime.close();
   });
 });

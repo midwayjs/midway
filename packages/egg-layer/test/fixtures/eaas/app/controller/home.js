@@ -3,7 +3,11 @@
 const Controller = require('egg').Controller;
 
 class HomeController extends Controller {
-  async index() {
+  async getMethod() {
+    const { ctx } = this;
+    ctx.body = 'hi, egg';
+  }
+  async postMethod() {
     const { ctx } = this;
     ctx.body = 'hi, egg';
   }

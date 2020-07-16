@@ -47,7 +47,9 @@ export class FCRuntime extends ServerlessLightRuntime {
   async wrapperWebInvoker(handler, req, res, context) {
     // for web
     const isHTTPMode =
-      req.constructor.name === 'EventEmitter' || util.types.isProxy(req); // for local test
+      req.constructor.name === 'IncomingMessage' ||
+      req.constructor.name === 'EventEmitter' ||
+      util.types.isProxy(req); // for local test
 
     if (!this.respond) {
       this.respond = this.app.callback();
