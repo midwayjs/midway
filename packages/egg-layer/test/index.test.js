@@ -5,7 +5,7 @@ const { join } = require('path');
 const request = require('supertest');
 
 describe('/test/index.test.ts', () => {
-  describe.only('FC test', () => {
+  describe('FC test', () => {
     let runtime;
 
     afterEach(() => {
