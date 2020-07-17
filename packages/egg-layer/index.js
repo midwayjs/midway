@@ -42,7 +42,6 @@ module.exports = engine => {
       context.eggRequest = request;
     },
     async defaultInvokeHandler(context) {
-      const result = proc(context.ectx);
       const { req } = context;
       const request = context.eggRequest;
       // egg request的body是通过koa-bodyParse进行解析的，其依赖data和end事件
@@ -50,7 +49,10 @@ module.exports = engine => {
         request.emit('data', Buffer.from(req.rawBody));
       }
       request.emit('end');
-      await result;
+      return new Promise(resolve => {
+        context.ectx.res.end = resolve;
+        proc(context.ectx);
+      });
     },
     afterInvoke(err, result, context) {
       const { res, ectx } = context;
