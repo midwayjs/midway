@@ -19,12 +19,12 @@ describe('/test/index.test.ts', () => {
       app = await runtime.delegate(new HTTPTrigger());
     });
 
-    afterEach(() => {
+    after(() => {
       if (runtime) {
         runtime.close();
       }
       process.env.ENTRY_DIR = '';
-      delete require.cache[require.resolve('./fixtures/app/index.js')];
+      // delete require.cache[require.resolve('./fixtures/app/index.js')];
     });
 
     it('should test with get', done => {
@@ -38,7 +38,7 @@ describe('/test/index.test.ts', () => {
     it('should test with post', done => {
       request(app)
         .post('/post')
-        .expect('Content-Type', 'text/html; charset=utf-8')
+        .expect('Content-Type', 'text/plain; charset=utf-8')
         .expect(/Hello World, post/)
         .expect(200, done);
     });
