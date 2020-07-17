@@ -227,6 +227,9 @@ export class FaaSStarter implements IFaaSStarter {
       this.addConfiguration('./configuration', __dirname, MIDWAY_FAAS_KEY);
       this.prepareConfiguration();
 
+      // set app keys
+      this.webApplication['keys'] = this.webApplication.getConfig('keys') || '';
+
       this.loader.loadDirectory(opts);
       this.registerDecorator();
       await this.loader.refresh();

@@ -1,5 +1,8 @@
 import { FaaSOriginContext } from '@midwayjs/faas-typings';
 import * as util from 'util';
+const Cookies = require('cookies');
+
+const COOKIES = Symbol('context#cookies');
 
 export const context = {
   app: null,
@@ -210,5 +213,27 @@ export const context = {
       res: '<original node res>',
       socket: '<original node socket>',
     };
+  },
+
+  get cookies() {
+    if (!this[COOKIES]) {
+      const resProxy = new Proxy(this.res, {
+        get(obj, prop) {
+          // 这里屏蔽 set 方法，是因为 cookies 模块中根据这个方法获取 setHeader 方法
+          if (prop !== 'set') {
+            return obj[prop];
+          }
+        },
+      });
+      this[COOKIES] = new Cookies(this.req, resProxy, {
+        keys: this.app.keys,
+        secure: this.request.secure,
+      });
+    }
+    return this[COOKIES];
+  },
+
+  set cookies(_cookies) {
+    this[COOKIES] = _cookies;
   },
 };
