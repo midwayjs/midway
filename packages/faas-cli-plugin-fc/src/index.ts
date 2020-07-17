@@ -1,11 +1,13 @@
 import { BasePlugin, ICoreInstance } from '@midwayjs/fcli-command-core';
-import * as AliyunDeploy from '@alicloud/fun/lib/commands/deploy';
+// import * as AliyunDeploy from '@alicloud/fun/lib/commands/deploy';
 import * as AliyunConfig from '@alicloud/fun/lib/commands/config';
+import * as AliyunROSClient from '@alicloud/ros-2019-09-10';
 import { join } from 'path';
 import { homedir } from 'os';
 import { existsSync } from 'fs';
 import { writeWrapper } from '@midwayjs/serverless-spec-builder';
 import { generateFunctionsSpecFile } from '@midwayjs/serverless-spec-builder/fc';
+import { AliyunROSClientOpts } from './interface';
 export class AliyunFCPlugin extends BasePlugin {
   core: ICoreInstance;
   options: any;
@@ -37,25 +39,46 @@ export class AliyunFCPlugin extends BasePlugin {
       if (!isExists || this.options.resetConfig) {
         // aliyun config
         this.core.cli.log('please input aliyun config');
-        await AliyunConfig();
+        const res = await AliyunConfig();
+        console.log('res', res)
       }
 
       // 执行 package 打包
-      await this.core.invoke(['package'], true, {
-        ...this.options,
-        skipZip: true, // 跳过压缩成zip
-      });
+      // await this.core.invoke(['package'], true, {
+      //   ...this.options,
+      //   skipZip: true, // 跳过压缩成zip
+      // });
       this.core.cli.log('Start deploy by @alicloud/fun');
       try {
-        await AliyunDeploy({
-          template: join(this.midwayBuildPath, 'template.yml'),
-        });
+        await this.createStack();
+        // await AliyunDeploy({
+        //   template: join(this.midwayBuildPath, 'template.yml'),
+        // });
         this.core.cli.log('deploy success');
       } catch (e) {
         this.core.cli.log(`deploy error: ${e.message}`);
       }
     },
   };
+
+  async createStack() {
+    const client = new AliyunROSClient({
+      accessKeyId: 'LTAIealJdISAUePV',
+      accessKeySecret: 'veu6jrDf13bF8bNJGWIeKZ0yi0xY5b',
+      endpoint: 'https://1834461034413514.cn-hangzhou.fc.aliyuncs.com',
+      apiVersion: '2016-08-15'
+    } as AliyunROSClientOpts);
+    try {
+      const res = await client.createStack({
+        RegionId: 'cn-hangzhou',
+        StackName: 'my-test-stack',
+        TimeoutInMinutes: 1,
+      });
+      console.log('res', res)
+    } catch (err) {
+      console.log('err', err)
+    }
+  }
 
   getSpecJson(coverOptions?: any) {
     const service = this.core.service;
