@@ -27,8 +27,8 @@ describe('/test/index.test.ts', () => {
       return new Promise((resolve, reject) => {
         request(app)
           .get('/get')
-          .expect('Content-Type', 'text/html; charset=utf-8')
-          .expect(/hi, egg/)
+          .expect('Content-Type', 'text/plain; charset=utf-8')
+          .expect(/Hello World/)
           .expect(200, err => {
             if (err) {
               reject(err);

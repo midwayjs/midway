@@ -17,6 +17,16 @@ exports.initializer = asyncWrapper(async (...args) => {
 });
 
 exports.handler = asyncWrapper(async (...args) => {
+
+  // args[1] = new Proxy(args[1], {
+  //   set: function(target, prop, receiver) {
+  //     if(prop === 'headersSent') {
+  //       throw new Error('can\'t set header now');
+  //     }
+  //   }
+  // })
+
+
   if (!inited) {
     inited = true;
     runtime = await start({

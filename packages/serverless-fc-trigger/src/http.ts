@@ -29,8 +29,9 @@ export class HTTPTrigger extends FCBaseTrigger {
         /**
          * function(request, response, context)
          */
-        invokeWrapper([req, res, this.createContext()]);
-        next();
+        invokeWrapper([req, res, this.createContext()]).then(() => {
+          next();
+        });
       });
     }
     return this.app;

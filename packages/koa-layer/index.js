@@ -1,9 +1,6 @@
-const { resolve } = require('path');
-const querystring = require('querystring');
 const { join } = require('path');
 
 module.exports = engine => {
-
   let handleRequest;
 
   engine.addRuntimeExtension({
