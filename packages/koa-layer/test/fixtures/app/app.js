@@ -5,11 +5,25 @@ const assert = require('assert');
 const router = new Router();
 
 router.get('/get', (ctx, next) => {
+  ctx.type = 'html';
   ctx.body = 'Hello World';
 });
 
+router.get('/get/query', (ctx, next) => {
+  ctx.body = {
+    query: ctx.query
+  };
+});
+
+
 router.post('/post', (ctx, next) => {
   ctx.body = 'Hello World, post';
+});
+
+router.post('/post/body', (ctx, next) => {
+  ctx.body = {
+    body: ctx.request.body
+  };
 });
 
 app.use(router.routes()).use(router.allowedMethods());

@@ -5,7 +5,7 @@ const { join } = require('path');
 const request = require('supertest');
 
 describe('/test/index.test.ts', () => {
-  describe('FC test', () => {
+  describe('FC test with http trigger', () => {
     let runtime;
     let app;
 
@@ -30,8 +30,19 @@ describe('/test/index.test.ts', () => {
     it('should test with get', done => {
       request(app)
         .get('/get')
-        .expect('Content-Type', 'text/plain; charset=utf-8')
+        .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(/Hello World/)
+        .expect(200, done);
+    });
+
+    it('should test with get and query', done => {
+      request(app)
+        .get('/get/query')
+        .query({
+          b: 1,
+        })
+        .expect('Content-Type', 'application/json; charset=utf-8')
+        .expect(/{"query":{"b":"1"}}/)
         .expect(200, done);
     });
 
@@ -39,6 +50,17 @@ describe('/test/index.test.ts', () => {
       request(app)
         .post('/post')
         .expect('Content-Type', 'text/plain; charset=utf-8')
+        .expect(/Hello World, post/)
+        .expect(200, done);
+    });
+
+    it('should test with post and body', done => {
+      request(app)
+        .post('/post/body')
+        .send({
+          b: 1,
+        })
+        .expect('Content-Type', 'application/json; charset=utf-8')
         .expect(/Hello World, post/)
         .expect(200, done);
     });
