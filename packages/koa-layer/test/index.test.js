@@ -16,7 +16,7 @@ describe('/test/index.test.ts', () => {
       delete require.cache[require.resolve('./fixtures/app/index.js')];
     });
 
-    it('should test with supertest', async () => {
+    it('should test with get', async () => {
       const entryDir = join(__dirname, './fixtures/app');
       process.env.ENTRY_DIR = entryDir;
       runtime = createRuntime({
@@ -29,6 +29,28 @@ describe('/test/index.test.ts', () => {
           .get('/get')
           .expect('Content-Type', 'text/plain; charset=utf-8')
           .expect(/Hello World/)
+          .expect(200, err => {
+            if (err) {
+              reject(err);
+            }
+            resolve();
+          });
+      });
+    });
+
+    it('should test with post', async () => {
+      const entryDir = join(__dirname, './fixtures/app');
+      process.env.ENTRY_DIR = entryDir;
+      runtime = createRuntime({
+        functionDir: entryDir,
+      });
+      await runtime.start();
+      const app = await runtime.delegate(new HTTPTrigger());
+      return new Promise((resolve, reject) => {
+        request(app)
+          .post('/post')
+          .expect('Content-Type', 'text/html; charset=utf-8')
+          .expect(/Hello World, post/)
           .expect(200, err => {
             if (err) {
               reject(err);
