@@ -161,14 +161,15 @@ export class FaaSStarter implements IFaaSStarter {
         let fnMiddlewere = [];
         fnMiddlewere = fnMiddlewere.concat(this.globalMiddleware);
         fnMiddlewere = fnMiddlewere.concat(funOptions.middleware);
-        if (fnMiddlewere.length) {
+        if (fnMiddlewere.length || this.webApplication['middleware']?.length) {
           const mw: any[] = await this.loadMiddleware(fnMiddlewere);
-          mw.push(async ctx => {
+          mw.push(async (ctx, next) => {
             // invoke handler
             const result = await this.invokeHandler(funOptions, ctx, args);
             if (!ctx.body) {
               ctx.body = result;
             }
+            return next();
           });
           return compose(mw)(context).then(() => {
             return context.body;
