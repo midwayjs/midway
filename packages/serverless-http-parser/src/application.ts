@@ -70,17 +70,17 @@ export class Application extends EventEmitter {
    */
 
   callback() {
-    const fn = compose(this.middleware);
     this.on('error', this.onerror);
     return (req, res, respond) => {
+      const fn = compose(
+        this.middleware.concat(async ctx => {
+          return respond(ctx);
+        })
+      );
       // if (!this.listenerCount('error')) this.on('error', this.onerror);
       const onerror = err => ctx.onerror(err);
       const ctx = this.createContext(req, res);
-      return fn(ctx)
-        .then(() => {
-          return respond(ctx);
-        })
-        .catch(onerror);
+      return fn(ctx).catch(onerror);
     };
   }
 
