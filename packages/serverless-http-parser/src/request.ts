@@ -227,4 +227,24 @@ export const request = {
   toJSON() {
     return only(this, ['method', 'url', 'header']);
   },
+
+  get protocol() {
+    // TODO 现在函数没有透出协议
+    const proto = this.get('X-Forwarded-Proto');
+    return proto ? proto.split(/\s*,\s*/, 1)[0] : 'http';
+  },
+
+  /**
+   * Short-hand for:
+   *
+   *    this.protocol == 'https'
+   *
+   * @return {Boolean}
+   * @api public
+   */
+
+  get secure() {
+    // TODO 现在函数没有透出协议
+    return false;
+  },
 };
