@@ -3,6 +3,7 @@ const Router = require('koa-router');
 const app = new Koa();
 const assert = require('assert');
 const router = new Router();
+const bodyParser = require('koa-bodyparser');
 
 router.get('/get', (ctx, next) => {
   ctx.type = 'html';
@@ -15,7 +16,6 @@ router.get('/get/query', (ctx, next) => {
   };
 });
 
-
 router.post('/post', (ctx, next) => {
   ctx.body = 'Hello World, post';
 });
@@ -26,6 +26,7 @@ router.post('/post/body', (ctx, next) => {
   };
 });
 
+app.use(bodyParser());
 app.use(router.routes()).use(router.allowedMethods());
 
 // app.listen(3000);

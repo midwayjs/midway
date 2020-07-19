@@ -1,3 +1,4 @@
+import * as express from 'express';
 import { FCBaseTrigger } from './base';
 
 /**
@@ -5,6 +6,40 @@ import { FCBaseTrigger } from './base';
  */
 export class ApiGatewayTrigger extends FCBaseTrigger {
   handler;
+  app: express.Application;
+
+  async delegate(invokeWrapper: (invokeArgs: any[]) => any) {
+    if (!this.app) {
+      this.app = express();
+      this.app.all('*', (req, res, next) => {
+        const event = Buffer.from(
+          JSON.stringify(
+            Object.assign({
+              path: req.path,
+              httpMethod: req.method,
+              headers: req.headers,
+              queryParameters: req.query,
+              pathParameters: this.triggerOptions.pathParameters || {},
+              body: this.triggerOptions.body || {},
+              isBase64Encoded: false,
+            })
+          )
+        );
+        invokeWrapper([event, this.createContext()]).then(
+          (result: {
+            isBase64Encoded: boolean;
+            statusCode: number;
+            headers: any;
+            body: any;
+          }) => {
+            res.set(result.headers);
+            res.status(result.statusCode).send(result.body);
+          }
+        );
+      });
+    }
+    return this.app;
+  }
 
   async toArgs(): Promise<any[]> {
     const event = Buffer.from(

@@ -13,7 +13,7 @@ export class ApiGatewayTrigger extends SCFBaseTrigger {
   async delegate(invokeWrapper: (invokeArgs: any[]) => any) {
     if (!this.app) {
       this.app = express();
-      this.app.get('*', (req, res, next) => {
+      this.app.all('*', (req, res, next) => {
         /**
          * function(request, response, context)
          */

@@ -44,6 +44,7 @@ export interface Runtime extends RuntimeExtension {
   debugLogger: any;
   logger: any;
   eventHandlers: FunctionEvent[];
+  isAppMode: boolean;
   init(contextExtensions: ContextExtensionHandler[]);
   runtimeStart(eventExtensions: EventExtensionHandler[]);
   functionStart();
@@ -55,6 +56,7 @@ export interface Runtime extends RuntimeExtension {
   invoke(...payload): Promise<any>;
   triggerRoute(...payload): Promise<FunctionEvent>;
   getContextExtensions(): ContextExtensionHandler[];
+  setOptions(RuntimeOptions): void;
 }
 
 export interface LightRuntime extends Runtime {
@@ -111,7 +113,11 @@ export interface Bootstrap {
   getRuntimeEngine();
 }
 
-export interface BootstrapOptions {
+export interface RuntimeOptions {
+  isAppMode?: boolean;
+}
+
+export interface BootstrapOptions extends RuntimeOptions {
   layers?: any[];
   runtime?: Runtime;
 }

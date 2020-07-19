@@ -20,6 +20,7 @@
     "@midwayjs/serverless-scf-trigger": "^1.0.8",
     "koa": "^2.11.0",
     "koa-router": "^9.1.0",
+    "koa-bodyparser": "^4.3.0",
     "midway-bin": "^2.0.0",
     "supertest": "^4.0.2"
   },

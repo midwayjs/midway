@@ -62,7 +62,11 @@ export class FCRuntime extends ServerlessLightRuntime {
       // http
       // const rawBody = 'test';
       // req.rawBody = rawBody;
-      req.body = await getRawBody(req); // TODO: body parser
+
+      // 应用下自行解决 bodyparser 的问题
+      if (!this.isAppMode) {
+        req.body = await getRawBody(req); // TODO: body parser
+      }
       newReq = req;
     } else {
       // api gateway

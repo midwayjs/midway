@@ -7,21 +7,21 @@ const KoaLayer = require('../../../');
 let runtime;
 let inited;
 
-exports.initializer = asyncWrapper(async (...args) => {
-  if (!inited) {
+async function initializeMethod() {
+  if(!inited) {
     inited = true;
     runtime = await start({
       layers: [KoaLayer],
+      isAppMode: true
     });
   }
+}
+
+exports.initializer = asyncWrapper(async (...args) => {
+  await initializeMethod();
 });
 
 exports.handler = asyncWrapper(async (...args) => {
-  if (!inited) {
-    inited = true;
-    runtime = await start({
-      layers: [KoaLayer],
-    });
-  }
+  await initializeMethod();
   return runtime.asyncEvent()(...args);
 });
