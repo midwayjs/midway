@@ -1,9 +1,18 @@
-import { readFileSync, createReadStream } from 'fs';
+import { homedir } from 'os';
 import { join, basename } from 'path';
+import {
+  readFileSync,
+  createReadStream,
+  writeFileSync,
+  mkdirSync,
+  existsSync,
+} from 'fs';
 import { S3, Lambda, CloudFormation } from 'aws-sdk';
 import { render } from 'ejs';
 import { writeWrapper } from '@midwayjs/serverless-spec-builder';
 import { BasePlugin, ICoreInstance } from '@midwayjs/fcli-command-core';
+
+const { Input } = require('enquirer');
 
 import {
   addProfileCredentials,
@@ -17,7 +26,6 @@ import {
   StackResourcesDetail,
 } from './interface';
 
-// const fs = require('fs');
 import { get } from 'lodash';
 
 export class AWSLambdaPlugin extends BasePlugin {
@@ -67,8 +75,13 @@ export class AWSLambdaPlugin extends BasePlugin {
         this.core.cli.log(
           '  - cannot connect to aws network, please try again later.'
         );
+      } else if (err.message.includes('Access Denied')) {
+        this.core.cli.log('  - credential has not S3FullAccess permission.');
+      } else {
+        this.core.cli.log('  -', err.message);
       }
-      this.core.cli.log('  -', err.message);
+      this.core.cli.log('  - please check your ~/.aws/credentials');
+      this.core.cli.log('Deploy failed.');
       process.exit(1);
     }
   }
@@ -175,14 +188,28 @@ export class AWSLambdaPlugin extends BasePlugin {
     };
 
     this.core.cli.log('  - creating stack request');
-    return new Promise((resolve, reject) =>
-      service.createStack(params, (err, data) => {
-        if (err) {
-          return reject(err);
-        }
-        resolve(data as any);
-      })
-    );
+    try {
+      return await new Promise((resolve, reject) =>
+        service.createStack(params, (err, data) => {
+          if (err) {
+            return reject(err);
+          }
+          resolve(data as any);
+        })
+      );
+    } catch (err) {
+      if (err.message.includes('is not authorized to perform')) {
+        this.core.cli.log(
+          '  - credentials has not AWSCloudFormationFullAccess permission'
+        );
+        this.core.cli.log('  - please check your ~/.aws/credentials');
+        this.core.cli.log('Deploy failed.');
+        process.exit(1);
+      } else {
+        this.core.cli.log('  -', err.message);
+      }
+      throw err;
+    }
   }
 
   async updateStack(
@@ -249,7 +276,8 @@ export class AWSLambdaPlugin extends BasePlugin {
         lastEvent.ResourceType === 'AWS::CloudFormation::Stack' &&
         lastEvent.ResourceStatus === 'DELETE_COMPLETE'
       ) {
-        return Promise.reject('stack deploy failed');
+        process.stdout.write('\n');
+        return Promise.reject('Stack deploy failed');
       }
       if (
         lastEvent &&
@@ -341,6 +369,26 @@ export class AWSLambdaPlugin extends BasePlugin {
     this.core.cli.log('  - upadte over');
   }
 
+  async saveCredentials(accessKeyId: string, accessKeySecret: string) {
+    if (!accessKeyId || !accessKeySecret) {
+      throw new Error('please provide credentials');
+    }
+    const homeAwsDir = join(homedir(), '.aws');
+    const awsCredentialsPath = join(homeAwsDir, 'credentials');
+    if (!existsSync(homeAwsDir)) {
+      mkdirSync(homeAwsDir);
+    }
+    const text =
+      '[default]\n' +
+      'aws_access_key_id = ' +
+      accessKeyId +
+      '\n' +
+      'aws_secret_access_key = ' +
+      accessKeySecret +
+      '\n';
+    writeFileSync(awsCredentialsPath, text);
+  }
+
   async deploy() {
     const names = Object.keys(this.core.service.functions);
     const handler = this.core.service.functions[names[0]].handler;
@@ -351,15 +399,36 @@ export class AWSLambdaPlugin extends BasePlugin {
     await this.package();
 
     this.core.cli.log('Start deploy by aws-sdk');
+    // 配置 crendentials
+    let credentials = this.getCredentials();
+    if (!credentials.credentials) {
+      this.core.cli.log(
+        'There is no credentials available, please ensure you have the permissions below:'
+      );
+      this.core.cli.log('  - AmazonS3FullAccess');
+      this.core.cli.log('  - AWSCloudFormationFullAccess');
+      this.core.cli.log('  - AWSLambdaFullAccess');
+      this.core.cli.log('  - AmazonAPIGatewayAdministrator');
+      this.core.cli.log(
+        'There is no credentials available, please input aws credentials: (you can get credentials from https://console.aws.amazon.com/iam/home?region=us-east-1#/users)'
+      );
+      const accessKeyId = await new Input({
+        message: 'aws_access_key_id =',
+        show: true,
+      }).run();
+      const accessKeySecret = await new Input({
+        message: 'aws_secret_access_key =',
+        show: true,
+      }).run();
+      await this.saveCredentials(accessKeyId, accessKeySecret);
+      credentials = this.getCredentials(true);
+    }
+    credentials.region = this.getRegion();
 
     const bucket = `${this.core.service.service.name}-deploymentbucket`;
     await this.featchBucket(bucket);
     const artifactRes = await this.uploadArtifact(bucket);
     // console.log('artifactRes', artifactRes);
-
-    // 配置 crendentials
-    const credentials = this.getCredentials();
-    credentials.region = this.getRegion();
 
     let stackData: { StackId: string } = null;
     try {
@@ -390,8 +459,8 @@ export class AWSLambdaPlugin extends BasePlugin {
    * well known environment variables
    * @returns {{region: *}}
    */
-  getCredentials() {
-    if (this.cachedCredentials) {
+  getCredentials(force = false) {
+    if (!force && this.cachedCredentials) {
       return this.cachedCredentials;
     }
     const result: any = {};
