@@ -21,7 +21,8 @@
     "fc",
     "scf",
     "aws",
-    "wrapper.ejs"
+    "wrapper.ejs",
+    "wrapper_app.ejs"
   ],
   "scripts": {
     "build": "midway-bin build -c",

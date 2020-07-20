@@ -68,12 +68,18 @@ export function writeWrapper(options: {
       });
     }
   }
-  const tpl = readFileSync(resolve(__dirname, '../wrapper.ejs')).toString();
+  const isCustomAppType = !!service?.deployType;
+
+  const tpl = readFileSync(
+    resolve(
+      __dirname,
+      isCustomAppType ? '../wrapper_app.ejs' : '../wrapper.ejs'
+    )
+  ).toString();
   for (const file in files) {
     const fileName = join(distDir, `${file}.js`);
     const layers = getLayers(service.layers, ...files[file].originLayers);
     const content = render(tpl, {
-      isCustomAppType: !!service?.deployType,
       starter,
       faasModName: faasModName || '@midwayjs/faas',
       loadDirectory,

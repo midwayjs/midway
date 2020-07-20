@@ -132,6 +132,11 @@ export const request = {
     }
 
     let body = this.req.body;
+    if (typeof body === 'object') {
+      // body has been parsed in express environment
+      this.req.bodyParsed = true;
+    }
+
     if (this.req.bodyParsed) {
       // api 网关会被 parse，这里就直接返回了
       this[BODY] = this.req.body;

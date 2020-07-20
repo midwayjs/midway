@@ -1,36 +1,3 @@
-<% if (isCustomAppType) { %>
-const { asyncWrapper } = require('@midwayjs/runtime-engine');
-const { asyncWrapper, start } = require('<%=starter %>');
-<% layerDeps.forEach(function(layer){ %>const <%=layer.name%> = require('<%=layer.path%>');
-<% }); %>
-
-let runtime;
-let inited = false;
-
-const initializeMethod = async (initializeContext = {}) => {
-  runtime = await start({
-    layers: [<%= layers.join(", ") %>],
-  });
-};
-
-exports.<%=initializer%> = asyncWrapper(async (...args) => {
-  if (!inited) {
-    inited = true;
-    await initializeMethod();
-  }
-});
-
-<% handlers.forEach(function(handlerData){ %>
-  exports.<%=handlerData.name%> = asyncWrapper(async (...args) => {
-    if (!inited) {
-      await initializeMethod();
-    }
-
-    return runtime.asyncEvent()(...args);
-  });
-<% }); %>
-
-<% } else { %>
 const { <%=faasStarterName %> } = require('<%=faasModName %>');
 const { asyncWrapper, start } = require('<%=starter %>');
 const picomatch = require('picomatch');
@@ -97,5 +64,3 @@ exports.<%=handlerData.name%> = asyncWrapper(async (...args) => {
   return runtime.asyncEvent(handler)(...args);
 });
 <% }); %>
-
-<% } %>

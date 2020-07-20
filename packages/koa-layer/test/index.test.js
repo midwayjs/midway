@@ -1,6 +1,7 @@
 const { createRuntime } = require('@midwayjs/runtime-mock');
 const { HTTPTrigger } = require('@midwayjs/serverless-fc-trigger');
-const FCApiGatewayTrigger = require('@midwayjs/serverless-fc-trigger').ApiGatewayTrigger;
+const FCApiGatewayTrigger = require('@midwayjs/serverless-fc-trigger')
+  .ApiGatewayTrigger;
 const { ApiGatewayTrigger } = require('@midwayjs/serverless-scf-trigger');
 const { join } = require('path');
 const request = require('supertest');
@@ -11,7 +12,7 @@ describe('/test/index.test.ts', () => {
     let app;
 
     before(async () => {
-      const entryDir = join(__dirname, './fixtures/app');
+      const entryDir = join(__dirname, './fixtures/app-fc');
       process.env.ENTRY_DIR = entryDir;
       runtime = createRuntime({
         functionDir: entryDir,
@@ -25,7 +26,7 @@ describe('/test/index.test.ts', () => {
         runtime.close();
       }
       process.env.ENTRY_DIR = '';
-      // delete require.cache[require.resolve('./fixtures/app/index.js')];
+      // delete require.cache[require.resolve('./fixtures/app-fc/index.js')];
     });
 
     it('should test with get', done => {
@@ -67,12 +68,12 @@ describe('/test/index.test.ts', () => {
     });
   });
 
-  describe.only('FC test with api gateway', () => {
+  describe('FC test with api gateway', () => {
     let runtime;
     let app;
 
     before(async () => {
-      const entryDir = join(__dirname, './fixtures/app');
+      const entryDir = join(__dirname, './fixtures/app-fc');
       process.env.ENTRY_DIR = entryDir;
       runtime = createRuntime({
         functionDir: entryDir,
@@ -86,7 +87,6 @@ describe('/test/index.test.ts', () => {
         runtime.close();
       }
       process.env.ENTRY_DIR = '';
-      // delete require.cache[require.resolve('./fixtures/app/index.js')];
     });
 
     it('should test with get', done => {
@@ -108,7 +108,7 @@ describe('/test/index.test.ts', () => {
         .expect(200, done);
     });
 
-    it.only('should test with post', done => {
+    it('should test with post', done => {
       request(app)
         .post('/post')
         .expect('Content-Type', 'text/plain; charset=utf-8')
@@ -128,30 +128,63 @@ describe('/test/index.test.ts', () => {
     });
   });
 
-  describe('SCF test', () => {
+  describe('SCF test with api gateway', () => {
     let runtime;
+    let app;
 
-    afterEach(() => {
-      if (runtime) {
-        runtime.close();
-      }
-    });
-
-    it('should test with supertest', async () => {
-      const entryDir = join(__dirname, './fixtures/app');
+    before(async () => {
+      const entryDir = join(__dirname, './fixtures/app-scf');
       process.env.ENTRY_DIR = entryDir;
       runtime = createRuntime({
         functionDir: entryDir,
       });
       await runtime.start();
-      const app = await runtime.delegate(new ApiGatewayTrigger());
-      return new Promise(resolve => {
-        request(app)
-          .get('/user')
-          .expect('Content-Type', 'text/html; charset=utf-8')
-          .expect(/hello Alan/)
-          .expect(200, resolve);
-      });
+      app = await runtime.delegate(new ApiGatewayTrigger());
+    });
+
+    after(() => {
+      if (runtime) {
+        runtime.close();
+      }
+      process.env.ENTRY_DIR = '';
+    });
+
+    it('should test with get', done => {
+      request(app)
+        .get('/get')
+        .expect('Content-Type', 'text/html; charset=utf-8')
+        .expect(/Hello World/)
+        .expect(200, done);
+    });
+
+    it('should test with get and query', done => {
+      request(app)
+        .get('/get/query')
+        .query({
+          b: 1,
+        })
+        .expect('Content-Type', 'application/json; charset=utf-8')
+        .expect(/{"query":{"b":"1"}}/)
+        .expect(200, done);
+    });
+
+    it('should test with post', done => {
+      request(app)
+        .post('/post')
+        .expect('Content-Type', 'text/plain; charset=utf-8')
+        .expect(/Hello World, post/)
+        .expect(200, done);
+    });
+
+    it('should test with post and body', done => {
+      request(app)
+        .post('/post/body')
+        .send({
+          b: 1,
+        })
+        .expect('Content-Type', 'application/json; charset=utf-8')
+        .expect(/{"body":{"b":1}}/)
+        .expect(200, done);
     });
   });
 });

@@ -95,6 +95,12 @@ export class HTTPRequest {
     }
 
     let body = this[EVENT].body;
+    if (typeof body === 'object') {
+      // body has been parsed in express environment
+      this.bodyParsed = true;
+      this[BODY] = body;
+      return body;
+    }
     if (
       this[EVENT].isBase64Encoded === 'true' ||
       this[EVENT].isBase64Encoded === true

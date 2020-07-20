@@ -1,6 +1,6 @@
 import * as express from 'express';
 import { FCBaseTrigger } from './base';
-import * as expressBodyParser from "body-parser";
+import * as expressBodyParser from 'body-parser';
 
 /**
  * https://help.aliyun.com/document_detail/54788.html

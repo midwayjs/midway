@@ -104,7 +104,7 @@ export namespace SCF {
     /**
      * 记录实际请求的完整 Header 内容
      */
-    headers: { [key: string]: string };
+    headers: object;
     /**
      * 记录实际请求的完整 Body 内容
      */
@@ -112,15 +112,15 @@ export namespace SCF {
     /**
      * 记录在 API 网关中配置过的 Path 参数以及实际取值
      */
-    pathParameters: { [key: string]: string };
+    pathParameters: object;
     /**
      * 记录在 API 网关中配置过的 Query 参数以及实际取值
      */
-    queryStringParameters: { [key: string]: string };
+    queryStringParameters: object;
     /**
      * 记录在 API 网关中配置过的 Header 参数以及实际取值
      */
-    headerParameters: { [key: string]: string };
+    headerParameters: object;
     stageVariables: {
       stage: string;
     };
@@ -131,7 +131,7 @@ export namespace SCF {
     /**
      * 请求地址的查询参数
      */
-    queryString: { [key: string]: string };
+    queryString: object;
     httpMethod: string;
   }
 
