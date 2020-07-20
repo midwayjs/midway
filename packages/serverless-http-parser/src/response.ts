@@ -159,7 +159,7 @@ export const response = {
         val = val.map(v => (typeof v === 'string' ? v : String(v)));
       else if (typeof val !== 'string') val = String(val);
       this.res.setHeader(field, val);
-    } else if(typeof field !== 'string') {
+    } else if (typeof field !== 'string') {
       for (const key in field) {
         this.set(key, field[key]);
       }
