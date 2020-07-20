@@ -55,8 +55,8 @@ export class Test {
         argsPre.push('--temp-directory', './node_modules/.nyc_output');
       }
       if (this.argv.typescript) {
-        argsPre.push(`--extension`);
-        argsPre.push(`.ts`);
+        argsPre.push('--extension');
+        argsPre.push('.ts');
       }
       argsPre.push(require.resolve('mocha/bin/_mocha'));
     } else if (this.argv.extension) {

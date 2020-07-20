@@ -1,6 +1,12 @@
 import { homedir } from 'os';
 import { join, basename } from 'path';
-import { readFileSync, createReadStream, writeFileSync, mkdirSync, existsSync } from 'fs';
+import {
+  readFileSync,
+  createReadStream,
+  writeFileSync,
+  mkdirSync,
+  existsSync,
+} from 'fs';
 import { S3, Lambda, CloudFormation } from 'aws-sdk';
 import { render } from 'ejs';
 import { writeWrapper } from '@midwayjs/serverless-spec-builder';
@@ -193,7 +199,9 @@ export class AWSLambdaPlugin extends BasePlugin {
       );
     } catch (err) {
       if (err.message.includes('is not authorized to perform')) {
-        this.core.cli.log('  - credentials has not AWSCloudFormationFullAccess permission');
+        this.core.cli.log(
+          '  - credentials has not AWSCloudFormationFullAccess permission'
+        );
         this.core.cli.log('  - please check your ~/.aws/credentials');
         this.core.cli.log('Deploy failed.');
         process.exit(1);
@@ -370,9 +378,14 @@ export class AWSLambdaPlugin extends BasePlugin {
     if (!existsSync(homeAwsDir)) {
       mkdirSync(homeAwsDir);
     }
-    const text = '[default]\n' +
-      'aws_access_key_id = ' + accessKeyId + '\n' +
-      'aws_secret_access_key = ' + accessKeySecret + '\n';
+    const text =
+      '[default]\n' +
+      'aws_access_key_id = ' +
+      accessKeyId +
+      '\n' +
+      'aws_secret_access_key = ' +
+      accessKeySecret +
+      '\n';
     writeFileSync(awsCredentialsPath, text);
   }
 
@@ -389,12 +402,16 @@ export class AWSLambdaPlugin extends BasePlugin {
     // 配置 crendentials
     let credentials = this.getCredentials();
     if (!credentials.credentials) {
-      this.core.cli.log('There is no credentials available, please ensure you have the permissions below:');
+      this.core.cli.log(
+        'There is no credentials available, please ensure you have the permissions below:'
+      );
       this.core.cli.log('  - AmazonS3FullAccess');
       this.core.cli.log('  - AWSCloudFormationFullAccess');
       this.core.cli.log('  - AWSLambdaFullAccess');
       this.core.cli.log('  - AmazonAPIGatewayAdministrator');
-      this.core.cli.log('There is no credentials available, please input aws credentials: (you can get credentials from https://console.aws.amazon.com/iam/home?region=us-east-1#/users)');
+      this.core.cli.log(
+        'There is no credentials available, please input aws credentials: (you can get credentials from https://console.aws.amazon.com/iam/home?region=us-east-1#/users)'
+      );
       const accessKeyId = await new Input({
         message: 'aws_access_key_id =',
         show: true,
