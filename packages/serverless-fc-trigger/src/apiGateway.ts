@@ -1,5 +1,6 @@
 import * as express from 'express';
 import { FCBaseTrigger } from './base';
+import * as expressBodyParser from "body-parser";
 
 /**
  * https://help.aliyun.com/document_detail/54788.html
@@ -11,6 +12,8 @@ export class ApiGatewayTrigger extends FCBaseTrigger {
   async delegate(invokeWrapper: (invokeArgs: any[]) => any) {
     if (!this.app) {
       this.app = express();
+      this.app.use(expressBodyParser.urlencoded({ extended: false }));
+      this.app.use(expressBodyParser.json());
       this.app.all('*', (req, res, next) => {
         const event = Buffer.from(
           JSON.stringify(
@@ -19,8 +22,8 @@ export class ApiGatewayTrigger extends FCBaseTrigger {
               httpMethod: req.method,
               headers: req.headers,
               queryParameters: req.query,
-              pathParameters: this.triggerOptions.pathParameters || {},
-              body: this.triggerOptions.body || {},
+              pathParameters: {},
+              body: JSON.stringify(req.body),
               isBase64Encoded: false,
             })
           )
