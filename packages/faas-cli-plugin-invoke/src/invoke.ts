@@ -18,7 +18,7 @@ export interface InvokeOptions {
   verbose?: boolean | string; // 输出更多信息
 }
 
-export const getFunction = getOptions => {
+export const getFunction = (getOptions: any = {})=> {
   return async (options: any) => {
     const baseDir = options.functionDir || process.cwd();
     const specFile = getOptions.specFile || getSpecFile(baseDir);
@@ -47,15 +47,20 @@ export const getFunction = getOptions => {
     core.addPlugin(FaaSInvokePlugin);
     await core.ready();
     await core.invoke(['invoke']);
-    return core.store.get('FaaSInvokePlugin:' + getOptions.key);
+    
+    return {
+      core,
+      getResult: (key) => {
+        return core.store.get('FaaSInvokePlugin:' + key);
+      }
+    }
   };
 };
 
 export async function invokeFun(options: InvokeOptions) {
-  const invokeFun = getFunction({
-    key: 'result',
-  });
-  const result = await invokeFun(options);
+  const invokeFun = getFunction();
+  const { getResult } = await invokeFun(options);
+  const result = getResult('result');
   if (result.success) {
     return result.result;
   } else {
@@ -88,11 +93,18 @@ export async function getFuncList(options: IGetFuncList) {
   }
   const invokeFun = getFunction({
     stopLifecycle: 'invoke:compile',
-    key: 'functions',
     specFile,
-    spec,
+    spec,  
   });
   options.clean = false;
   options.incremental = true;
-  return invokeFun(options);
+  const { core, getResult } = await invokeFun(options);
+  return {
+    funcList: getResult('functions'),
+    invoke: async () => {
+      await core.resume();
+      return getResult('result');
+    }
+  }
 }
+
