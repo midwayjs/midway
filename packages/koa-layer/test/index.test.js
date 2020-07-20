@@ -108,7 +108,7 @@ describe('/test/index.test.ts', () => {
         .expect(200, done);
     });
 
-    it('should test with post', done => {
+    it.only('should test with post', done => {
       request(app)
         .post('/post')
         .expect('Content-Type', 'text/plain; charset=utf-8')
@@ -116,7 +116,7 @@ describe('/test/index.test.ts', () => {
         .expect(200, done);
     });
 
-    it.only('should test with post and body', done => {
+    it('should test with post and body', done => {
       request(app)
         .post('/post/body')
         .send({

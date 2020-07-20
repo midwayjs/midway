@@ -10,6 +10,7 @@
     "autod": "midway-bin autod"
   },
   "dependencies": {
+    "request": "^2.88.2"
   },
   "devDependencies": {
     "@midwayjs/runtime-engine": "^1.0.7",
@@ -20,7 +21,7 @@
     "@midwayjs/serverless-scf-trigger": "^1.0.8",
     "koa": "^2.11.0",
     "koa-router": "^9.1.0",
-    "koa-bodyparser": "^4.3.0",
+    "koa-bodyparser": "^4.2.1",
     "midway-bin": "^2.0.0",
     "supertest": "^4.0.2"
   },
