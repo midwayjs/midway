@@ -21,9 +21,10 @@ import {
 } from './profile';
 import {
   S3UploadResult,
-  LambdaFunctionOptions,
+  // LambdaFunctionOptions,
   StackEvents,
   StackResourcesDetail,
+  MFunctions,
 } from './interface';
 
 import { get } from 'lodash';
@@ -129,9 +130,8 @@ export class AWSLambdaPlugin extends BasePlugin {
   }
 
   async generateStackJson(
-    name: string,
-    handler = 'index.handler',
-    path = '/hello',
+    fns: MFunctions[],
+    stage: string,
     bucket: string,
     key: string
   ) {
@@ -140,13 +140,29 @@ export class AWSLambdaPlugin extends BasePlugin {
     const tpl = readFileSync(
       join(__dirname, '../resource/aws-stack-http-template.ejs')
     ).toString();
-    const params: { options: LambdaFunctionOptions } = {
-      options: {
-        name,
-        handler,
-        path,
+    const params: {
+      functions: Array<{
+        name: string;
+        handler: string;
+        runtime?: string;
+        description?: string;
+        memorySize?: number;
+        timeout?: number;
+        codeBucket: string;
+        codeKey: string;
+        events: { path: string; method: string }[]
+      }>,
+      options?: { stage: string }
+    } = {
+      functions: fns.map(item => Object.assign({}, {
+        name: item.name,
+        handler: item.handler,
+        events: item.events,
         codeBucket: bucket,
         codeKey: key,
+      })),
+      options: {
+        stage,
       },
     };
     return render(tpl, params);
@@ -154,8 +170,8 @@ export class AWSLambdaPlugin extends BasePlugin {
 
   async createStack(
     credentials,
-    name: string,
-    handler: string,
+    fns: MFunctions[],
+    stage: string,
     bucket: S3UploadResult
   ): Promise<{ StackId: string }> {
     this.core.cli.log('Start stack create');
@@ -172,14 +188,13 @@ export class AWSLambdaPlugin extends BasePlugin {
      */
     const service = new CloudFormation(credentials);
     const TemplateBody = await this.generateStackJson(
-      name,
-      handler,
-      '/hello',
+      fns,
+      stage,
       bucket.Bucket,
       bucket.Key
     );
     const params = {
-      StackName: 'my-test-stack',
+      StackName: 'ms-stack-' + this.core.service.service.name,
       OnFailure: 'DELETE',
       Capabilities: ['CAPABILITY_IAM', 'CAPABILITY_AUTO_EXPAND'],
       Parameters: [],
@@ -216,22 +231,20 @@ export class AWSLambdaPlugin extends BasePlugin {
     credentials,
     bucket: string,
     key: string,
-    name: string
+    fns: MFunctions[],
+    stage,
   ): Promise<{ StackId: string }> {
     this.core.cli.log('  - stack already exists, do stack update');
     // TODO support multi function;
-    const names = Object.keys(this.core.service.functions);
-    const handler = this.core.service.functions[names[0]].handler;
     const service = new CloudFormation(credentials);
     const TemplateBody = await this.generateStackJson(
-      name,
-      handler,
-      '/hello',
+      fns,
+      stage,
       bucket,
       key
     );
     const params = {
-      StackName: 'my-test-stack',
+      StackName: 'ms-stack-' + this.core.service.service.name,
       Capabilities: ['CAPABILITY_IAM', 'CAPABILITY_AUTO_EXPAND'],
       Parameters: [],
       TemplateBody,
@@ -251,9 +264,9 @@ export class AWSLambdaPlugin extends BasePlugin {
     credentials,
     stackId: string,
     stage = 'v1',
-    path = '/hello'
+    fns: MFunctions[],
   ) {
-    this.core.cli.log('  - wait stack ready');
+    this.core.cli.log('  - wait stack ready', stackId);
     const service = new CloudFormation(credentials);
     const params = {
       StackName: stackId,
@@ -307,20 +320,20 @@ export class AWSLambdaPlugin extends BasePlugin {
     );
 
     const { StackResources } = result;
-    const data = StackResources.find(
+    const datas = StackResources.filter(
       res => res.ResourceType === 'AWS::ApiGateway::RestApi'
     );
 
     // https://wsqd4ni6i5.execute-api.us-east-1.amazonaws.com/Prod/hello-curl
-    const api = `https://${data.PhysicalResourceId}.execute-api.${credentials.region}.amazonaws.com/${stage}${path}`;
-    return {
-      api,
-    };
+    fns.map((fn) => {
+      const api = `https://${datas[0].PhysicalResourceId}.execute-api.${credentials.region}.amazonaws.com/${stage}${fn.events[0].path}`;
+      console.log(fn.name, 'test url', api)
+    });
   }
 
   async updateFunction(
     credentials,
-    name: string,
+    fns: MFunctions[],
     bucket: S3UploadResult
   ): Promise<any> {
     this.core.cli.log('  - upadte function');
@@ -331,41 +344,19 @@ export class AWSLambdaPlugin extends BasePlugin {
     //     (err, data) => err ? reject(err) : resolve(data));
     // });
 
-    // TODO support multi function;
-    const params = {
-      FunctionName: name,
-      S3Bucket: bucket.Bucket,
-      S3Key: bucket.Key,
-    };
-    /**
-     * {
-     *    FunctionName: 'serverless-hello-world-index',
-     *    FunctionArn: 'arn:aws:lambda:us-east-1:752677612709:function:serverless-hello-world-index',
-     *    Runtime: 'nodejs12.x',
-     *    Role: 'arn:aws:iam::752677612709:role/service-role/hello-curl-role-5tk89mye',
-     *    Handler: 'index.handler',
-     *    CodeSize: 311,
-     *    Description: '',
-     *    Timeout: 3,
-     *    MemorySize: 128,
-     *    LastModified: '2020-07-12T18:10:09.191+0000',
-     *    CodeSha256: 'pg5zZr5JSWbuN14CoyCzcz5tu0mZA7mxAoIgdC5+dL0=',
-     *    Version: '$LATEST',
-     *    KMSKeyArn: null,
-     *    TracingConfig: { Mode: 'PassThrough' },
-     *    MasterArn: null,
-     *    RevisionId: '7d0b02dc-cde7-4680-9db1-95792282f96c',
-     *    State: 'Active',
-     *    StateReason: null,
-     *    StateReasonCode: null,
-     *    LastUpdateStatus: 'Successful',
-     *    LastUpdateStatusReason: null,
-     *    LastUpdateStatusReasonCode: null
-     *  }
-     */
-    await new Promise((resolve, reject) =>
-      service.updateFunctionCode(params, err => (err ? reject(err) : resolve()))
-    );
+    const tasks = fns.map(fn => {
+      const params = {
+        FunctionName: fn.name,
+        S3Bucket: bucket.Bucket,
+        S3Key: bucket.Key,
+      };
+      return new Promise((resolve, reject) =>
+        service.updateFunctionCode(params, err =>
+          (err ? reject(err) : resolve()))
+      );
+    });
+    tasks.push()
+    await Promise.all(tasks);
     this.core.cli.log('  - upadte over');
   }
 
@@ -389,12 +380,34 @@ export class AWSLambdaPlugin extends BasePlugin {
     writeFileSync(awsCredentialsPath, text);
   }
 
+  getFunctions(): MFunctions[] {
+    const obj: {
+      [key: string]: {
+        handler: string;
+        events: Array<{
+          [key: string]: {
+            method: string;
+            path: string
+          }
+        }>
+      }
+    } = this.core.service.functions as any;
+    return Object.keys(obj).map((name) => ({
+      name,
+      handler: obj[name].handler || 'index.handler',
+      events: obj[name].events.reduce((arr, item) => {
+        arr.push(...Object.keys(item).map((type) => ({
+          type,
+          ...item[type]
+        })));
+        return arr;
+      }, [] as { type: string; method: string; path: string }[])
+    }));
+  }
+
   async deploy() {
-    const names = Object.keys(this.core.service.functions);
-    const handler = this.core.service.functions[names[0]].handler;
-    const name = `${this.core.service.service.name}-${names[0]}`;
     const stage = 'v1';
-    const path = '/hello';
+    const fns = this.getFunctions();
 
     await this.package();
 
@@ -434,24 +447,24 @@ export class AWSLambdaPlugin extends BasePlugin {
     try {
       stackData = await this.createStack(
         credentials,
-        name,
-        handler,
+        fns,
+        stage,
         artifactRes
       );
     } catch (err) {
       if (err.message.includes('already exists')) {
-        await this.updateFunction(credentials, name, artifactRes);
+        await this.updateFunction(credentials, fns, artifactRes);
         return;
       }
       throw err;
     }
-    const result = await this.monitorStackResult(
+    await this.monitorStackResult(
       credentials,
       stackData.StackId,
       stage,
-      path
+      fns,
     );
-    this.core.cli.log('Deploy over, test url:', result.api);
+    this.core.cli.log('Deploy over');
   }
 
   /**

@@ -3,34 +3,38 @@
   "Transform": "AWS::Serverless-2016-10-31",
   "Description": "The Midway Serverless function deploy specification template.",
   "Resources": {
-    "hellocurl": {
+    <% functions.forEach(function (opt) { %> 
+    "<%= opt.name %>": {
       "Type": "AWS::Serverless::Function",
       "Properties": {
-        "FunctionName": "<%= options.name %>",
-        "Handler": "<%= options.handler || "index.handler" %>",
-        "Runtime": "<%= options.runtime || "nodejs12.x" %>",
-        "Description": "<%= options.description || "" %>",
-        "MemorySize": <%- options.memorySize || 128 %>,
-        "Timeout": <%= options.timeout || 3 %>,
+        "FunctionName": "<%= opt.name %>",
+        "Handler": "<%= opt.handler || "index.handler" %>",
+        "Runtime": "<%= opt.runtime || "nodejs12.x" %>",
+        "Description": "<%= opt.description || "" %>",
+        "MemorySize": <%- opt.memorySize || 128 %>,
+        "Timeout": <%= opt.timeout || 3 %>,
         "Role": "arn:aws:iam::752677612709:role/service-role/hello-curl-role-5tk89mye",
         "CodeUri": {
-          "Bucket": "<%= options.codeBucket %>",
-          "Key": "<%= options.codeKey %>"
+          "Bucket": "<%= opt.codeBucket %>",
+          "Key": "<%= opt.codeKey %>"
         },
         "Events": {
-          "Api1": {
+          <% opt.events.forEach(function (event, idx) { %> 
+          "Api<%= idx + opt.name + 1 %>": {
             "Type": "Api",
             "Properties": {
-              "Path": "<%= options.path %>",
-              "Method": "ANY",
+              "Path": "<%= event.path %>",
+              "Method": "<%= event.method || 'ANY' %>",
               "RestApiId": {
                 "Ref": "MyApi"
               }
             }
           }
+          <% }) %> 
         }
       }
     },
+    <% }) %> 
     "MyApi": {
       "Type": "AWS::Serverless::Api",
       "Properties": {
