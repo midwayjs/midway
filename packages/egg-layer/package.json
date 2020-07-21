@@ -28,8 +28,7 @@
   },
   "files": [
     "framework",
-    "dist",
-    "framework/config"
+    "index.js"
   ],
   "repository": {
     "type": "git",

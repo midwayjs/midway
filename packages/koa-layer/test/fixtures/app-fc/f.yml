@@ -3,11 +3,4 @@ service: my-egg-demo
 provider:
   name: aliyun
 
-functions:
-  index:
-    handler: index.handler
-    events:
-      - http:
-          path: /*
-
 deployType: koa

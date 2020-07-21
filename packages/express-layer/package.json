@@ -1,5 +1,5 @@
 {
-  "name": "@midwayjs/koa-layer",
+  "name": "@midwayjs/express-layer",
   "version": "1.0.8",
   "main": "index.js",
   "scripts": {
@@ -19,9 +19,8 @@
     "@midwayjs/serverless-fc-trigger": "^1.0.8",
     "@midwayjs/serverless-scf-starter": "^1.0.8",
     "@midwayjs/serverless-scf-trigger": "^1.0.8",
-    "koa": "^2.11.0",
-    "koa-router": "^9.1.0",
-    "koa-bodyparser": "^4.2.1",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
     "midway-bin": "^2.0.0",
     "supertest": "^4.0.2"
   },
