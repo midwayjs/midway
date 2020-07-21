@@ -3,6 +3,7 @@ import * as accepts from 'accepts';
 import { FaaSOriginContext } from '@midwayjs/faas-typings';
 import * as qs from 'querystring';
 import * as only from 'only';
+import { isPlainObject } from './util';
 
 const BODY = Symbol.for('ctx#body');
 
@@ -132,7 +133,7 @@ export const request = {
     }
 
     let body = this.req.body;
-    if (typeof body === 'object') {
+    if (isPlainObject(body)) {
       // body has been parsed in express environment
       this.req.bodyParsed = true;
     }
