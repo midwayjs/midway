@@ -1,4 +1,3 @@
-
 export interface MFunctions {
   name: string;
   handler: string;
@@ -6,7 +5,7 @@ export interface MFunctions {
     type: string;
     method: string;
     path: string;
-  }[]
+  }[];
 }
 
 export interface S3UploadResult {

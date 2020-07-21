@@ -150,17 +150,22 @@ export class AWSLambdaPlugin extends BasePlugin {
         timeout?: number;
         codeBucket: string;
         codeKey: string;
-        events: { path: string; method: string }[]
-      }>,
-      options?: { stage: string }
+        events: { path: string; method: string }[];
+      }>;
+      options?: { stage: string };
     } = {
-      functions: fns.map(item => Object.assign({}, {
-        name: item.name,
-        handler: item.handler,
-        events: item.events,
-        codeBucket: bucket,
-        codeKey: key,
-      })),
+      functions: fns.map(item =>
+        Object.assign(
+          {},
+          {
+            name: item.name,
+            handler: item.handler,
+            events: item.events,
+            codeBucket: bucket,
+            codeKey: key,
+          }
+        )
+      ),
       options: {
         stage,
       },
@@ -232,17 +237,12 @@ export class AWSLambdaPlugin extends BasePlugin {
     bucket: string,
     key: string,
     fns: MFunctions[],
-    stage,
+    stage
   ): Promise<{ StackId: string }> {
     this.core.cli.log('  - stack already exists, do stack update');
     // TODO support multi function;
     const service = new CloudFormation(credentials);
-    const TemplateBody = await this.generateStackJson(
-      fns,
-      stage,
-      bucket,
-      key
-    );
+    const TemplateBody = await this.generateStackJson(fns, stage, bucket, key);
     const params = {
       StackName: 'ms-stack-' + this.core.service.service.name,
       Capabilities: ['CAPABILITY_IAM', 'CAPABILITY_AUTO_EXPAND'],
@@ -264,7 +264,7 @@ export class AWSLambdaPlugin extends BasePlugin {
     credentials,
     stackId: string,
     stage = 'v1',
-    fns: MFunctions[],
+    fns: MFunctions[]
   ) {
     this.core.cli.log('  - wait stack ready', stackId);
     const service = new CloudFormation(credentials);
@@ -325,9 +325,9 @@ export class AWSLambdaPlugin extends BasePlugin {
     );
 
     // https://wsqd4ni6i5.execute-api.us-east-1.amazonaws.com/Prod/hello-curl
-    fns.map((fn) => {
+    fns.map(fn => {
       const api = `https://${datas[0].PhysicalResourceId}.execute-api.${credentials.region}.amazonaws.com/${stage}${fn.events[0].path}`;
-      console.log(fn.name, 'test url', api)
+      console.log(fn.name, 'test url', api);
     });
   }
 
@@ -352,10 +352,11 @@ export class AWSLambdaPlugin extends BasePlugin {
       };
       return new Promise((resolve, reject) =>
         service.updateFunctionCode(params, err =>
-          (err ? reject(err) : resolve()))
+          err ? reject(err) : resolve()
+        )
       );
     });
-    tasks.push()
+    tasks.push();
     await Promise.all(tasks);
     this.core.cli.log('  - upadte over');
   }
@@ -387,21 +388,23 @@ export class AWSLambdaPlugin extends BasePlugin {
         events: Array<{
           [key: string]: {
             method: string;
-            path: string
-          }
-        }>
-      }
+            path: string;
+          };
+        }>;
+      };
     } = this.core.service.functions as any;
-    return Object.keys(obj).map((name) => ({
+    return Object.keys(obj).map(name => ({
       name,
       handler: obj[name].handler || 'index.handler',
       events: obj[name].events.reduce((arr, item) => {
-        arr.push(...Object.keys(item).map((type) => ({
-          type,
-          ...item[type]
-        })));
+        arr.push(
+          ...Object.keys(item).map(type => ({
+            type,
+            ...item[type],
+          }))
+        );
         return arr;
-      }, [] as { type: string; method: string; path: string }[])
+      }, [] as { type: string; method: string; path: string }[]),
     }));
   }
 
@@ -445,12 +448,7 @@ export class AWSLambdaPlugin extends BasePlugin {
 
     let stackData: { StackId: string } = null;
     try {
-      stackData = await this.createStack(
-        credentials,
-        fns,
-        stage,
-        artifactRes
-      );
+      stackData = await this.createStack(credentials, fns, stage, artifactRes);
     } catch (err) {
       if (err.message.includes('already exists')) {
         await this.updateFunction(credentials, fns, artifactRes);
@@ -458,12 +456,7 @@ export class AWSLambdaPlugin extends BasePlugin {
       }
       throw err;
     }
-    await this.monitorStackResult(
-      credentials,
-      stackData.StackId,
-      stage,
-      fns,
-    );
+    await this.monitorStackResult(credentials, stackData.StackId, stage, fns);
     this.core.cli.log('Deploy over');
   }
 
