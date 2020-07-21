@@ -29,7 +29,7 @@ describe('/test/index.test.ts', () => {
       // delete require.cache[require.resolve('./fixtures/app-fc/index.js')];
     });
 
-    it('should test with get', done => {
+    it.only('should test with get', done => {
       request(app)
         .get('/get')
         .expect('Content-Type', 'text/html; charset=utf-8')

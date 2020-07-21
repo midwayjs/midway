@@ -7,7 +7,7 @@ const { join } = require('path');
 const request = require('supertest');
 
 describe('/test/index.test.ts', () => {
-  describe.only('FC test with http trigger', () => {
+  describe('FC test with http trigger', () => {
     let runtime;
     let app;
 
@@ -49,9 +49,10 @@ describe('/test/index.test.ts', () => {
     });
 
     it('should test with post', done => {
+      // express 当返回内容为字符串并且没有返回头的时候，返回 text/html
       request(app)
         .post('/post')
-        .expect('Content-Type', 'text/plain; charset=utf-8')
+        .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(/Hello World, post/)
         .expect(200, done);
     });
@@ -111,7 +112,7 @@ describe('/test/index.test.ts', () => {
     it('should test with post', done => {
       request(app)
         .post('/post')
-        .expect('Content-Type', 'text/plain; charset=utf-8')
+        .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(/Hello World, post/)
         .expect(200, done);
     });
@@ -171,7 +172,7 @@ describe('/test/index.test.ts', () => {
     it('should test with post', done => {
       request(app)
         .post('/post')
-        .expect('Content-Type', 'text/plain; charset=utf-8')
+        .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(/Hello World, post/)
         .expect(200, done);
     });

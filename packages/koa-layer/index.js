@@ -9,12 +9,12 @@ module.exports = engine => {
   engine.addRuntimeExtension({
     async beforeRuntimeStart(runtime) {
       const baseDir = runtime.getPropertyParser().getEntryDir();
-      const koaApp = require(join(baseDir, 'app'));
+      const app = require(join(baseDir, 'app'));
       // handleRequest = koaApp.callback();
       if (fs.existsSync(socketPath)) {
         fs.unlinkSync(socketPath);
       }
-      koaApp.listen(socketPath);
+      app.listen(socketPath);
     },
 
     async defaultInvokeHandler(context) {

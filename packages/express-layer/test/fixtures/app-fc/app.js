@@ -1,34 +1,28 @@
 const express = require('express');
-// const expressBodyParser = require('body-parser');
-const app = express.createServer();
+const app = express();
+const bodyParser = require('body-parser');
 
-app.configure(function(){
-  app.use(express.methodOverride());
-  app.use(express.bodyParser());
-  app.use(app.router);
-});
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
 
-// this.app.use(expressBodyParser.urlencoded({ extended: false }));
-// this.app.use(expressBodyParser.json());
-
-router.get('/get', (res, res) => {
-  res.type = 'html';
+app.get('/get', (req, res) => {
+  res.type('html')
   res.send('Hello World');
 });
 
-router.get('/get/query', (res, res) => {
+app.get('/get/query', (req, res) => {
   res.send({
-    query: ctx.query
+    query: req.query
   });
 });
 
-router.post('/post', (res, res) => {
+app.post('/post', (req, res) => {
   res.send('Hello World, post');
 });
 
-router.post('/post/body', (res, res) => {
+app.post('/post/body', (req, res) => {
   res.send({
-    body: res.body
+    body: req.body
   });
 });
 

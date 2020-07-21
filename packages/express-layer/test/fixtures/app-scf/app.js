@@ -1,33 +1,30 @@
-const Koa = require('koa');
-const Router = require('koa-router');
-const app = new Koa();
-const assert = require('assert');
-const router = new Router();
-const bodyParser = require('koa-bodyparser');
+const express = require('express');
+const app = express();
+const bodyParser = require('body-parser');
 
-router.get('/get', (ctx, next) => {
-  ctx.type = 'html';
-  ctx.body = 'Hello World';
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
+
+app.get('/get', (req, res) => {
+  res.type('html')
+  res.send('Hello World');
 });
 
-router.get('/get/query', (ctx, next) => {
-  ctx.body = {
-    query: ctx.query
-  };
+app.get('/get/query', (req, res) => {
+  res.send({
+    query: req.query
+  });
 });
 
-router.post('/post', (ctx, next) => {
-  ctx.body = 'Hello World, post';
+app.post('/post', (req, res) => {
+  res.send('Hello World, post');
 });
 
-router.post('/post/body', (ctx, next) => {
-  ctx.body = {
-    body: ctx.request.body
-  };
+app.post('/post/body', (req, res) => {
+  res.send({
+    body: req.body
+  });
 });
-
-app.use(bodyParser());
-app.use(router.routes()).use(router.allowedMethods());
 
 // app.listen(3000);
 
