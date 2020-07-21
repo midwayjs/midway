@@ -6,6 +6,8 @@
 module.exports = app => {
   const { router, controller } = app;
   router.get('/get', controller.home.getMethod);
-  router.get('/post', controller.home.postMethod);
+  router.get('/get/query', controller.home.getQueryMethod);
+  router.post('/post', controller.home.postMethod);
+  router.post('/post/body', controller.home.postBodyMethod);
   router.get('/buffer', controller.home.buffer);
 };

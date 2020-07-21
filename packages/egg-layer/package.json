@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "egg": "^2.25.0",
-    "koa-compose": "^4.1.0"
+    "request": "^2.88.2"
   },
   "devDependencies": {
     "@midwayjs/runtime-engine": "^1.0.7",

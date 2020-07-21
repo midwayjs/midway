@@ -5,11 +5,24 @@ const Controller = require('egg').Controller;
 class HomeController extends Controller {
   async getMethod() {
     const { ctx } = this;
-    ctx.body = 'hi, egg';
+    ctx.type = 'html';
+    ctx.body = 'Hello World';
+  }
+  async getQueryMethod() {
+    const { ctx } = this;
+    ctx.body = {
+      query: ctx.query
+    };
   }
   async postMethod() {
     const { ctx } = this;
-    ctx.body = 'hi, egg';
+    ctx.body = 'Hello World, post';
+  }
+  async postBodyMethod() {
+    const { ctx } = this;
+    ctx.body = {
+      body: ctx.request.body
+    };
   }
   async buffer() {
     const { ctx } = this;
