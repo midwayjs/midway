@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.11](https://github.com/midwayjs/midway-faas/compare/serverless-v1.0.10...serverless-v1.0.11) (2020-07-21)
+
+
+### Bug Fixes
+
+* add analysisCode lifecycle ([#535](https://github.com/midwayjs/midway-faas/issues/535)) ([1bf2e8a](https://github.com/midwayjs/midway-faas/commit/1bf2e8a65b658b3c5a341245e02a97b9d96eb856))
+* aws plugin permission confirm ([#536](https://github.com/midwayjs/midway-faas/issues/536)) ([4fa679d](https://github.com/midwayjs/midway-faas/commit/4fa679dfb9480a01beac944cbd1c6217355d9e0f))
+* http parser set response ([#545](https://github.com/midwayjs/midway-faas/issues/545)) ([74a854d](https://github.com/midwayjs/midway-faas/commit/74a854d975bbb8baa281e6ef76f319e22c53afc6))
+* status 204 when user not set status ([#533](https://github.com/midwayjs/midway-faas/issues/533)) ([9276fe8](https://github.com/midwayjs/midway-faas/commit/9276fe846b983f4f870c2b3eb97e2c254bd5ff5a))
+
+
+### Features
+
+* default add cookie for http parser ([#540](https://github.com/midwayjs/midway-faas/issues/540)) ([5799e96](https://github.com/midwayjs/midway-faas/commit/5799e9642144b23b81d5c629387ce52510dde00d))
+
+
+
+
+
 ## [1.0.10](https://github.com/midwayjs/midway-faas/compare/serverless-v1.0.9...serverless-v1.0.10) (2020-07-16)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.11](https://github.com/midwayjs/midway-faas/compare/serverless-v1.0.10...serverless-v1.0.11) (2020-07-21)
+
+
+### Bug Fixes
+
+* add analysisCode lifecycle ([#535](https://github.com/midwayjs/midway-faas/issues/535)) ([1bf2e8a](https://github.com/midwayjs/midway-faas/commit/1bf2e8a65b658b3c5a341245e02a97b9d96eb856))
+
+
+
+
+
 ## [1.0.10](https://github.com/midwayjs/midway-faas/compare/serverless-v1.0.9...serverless-v1.0.10) (2020-07-16)
 
 
