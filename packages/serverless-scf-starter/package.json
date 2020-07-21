@@ -9,7 +9,6 @@
   },
   "devDependencies": {
     "@midwayjs/faas-typings": "^1.0.11",
-    "@midwayjs/runtime-mock": "^1.0.7",
     "midway-bin": "^2.0.0"
   },
   "engines": {

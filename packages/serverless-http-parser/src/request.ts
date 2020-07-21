@@ -3,6 +3,7 @@ import * as accepts from 'accepts';
 import { FaaSOriginContext } from '@midwayjs/faas-typings';
 import * as qs from 'querystring';
 import * as only from 'only';
+import { isPlainObject } from './util';
 
 const BODY = Symbol.for('ctx#body');
 
@@ -132,6 +133,11 @@ export const request = {
     }
 
     let body = this.req.body;
+    if (isPlainObject(body)) {
+      // body has been parsed in express environment
+      this.req.bodyParsed = true;
+    }
+
     if (this.req.bodyParsed) {
       // api 网关会被 parse，这里就直接返回了
       this[BODY] = this.req.body;

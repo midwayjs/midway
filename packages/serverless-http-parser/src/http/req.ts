@@ -3,6 +3,7 @@ import { is as typeis } from 'type-is';
 import * as qs from 'querystring';
 import * as parseurl from 'parseurl';
 import { GatewayEvent } from '../interface';
+import { isPlainObject } from '../util';
 
 const EVENT = Symbol.for('ctx#event');
 const EVENT_PARSED = Symbol.for('ctx#event_parsed');
@@ -95,6 +96,12 @@ export class HTTPRequest {
     }
 
     let body = this[EVENT].body;
+    if (isPlainObject(body)) {
+      // body has been parsed in express environment
+      this.bodyParsed = true;
+      this[BODY] = body;
+      return body;
+    }
     if (
       this[EVENT].isBase64Encoded === 'true' ||
       this[EVENT].isBase64Encoded === true

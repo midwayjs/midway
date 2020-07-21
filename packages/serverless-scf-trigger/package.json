@@ -8,7 +8,8 @@
     "@midwayjs/runtime-mock": "^1.0.7",
     "@midwayjs/serverless-fc-starter": "^1.0.11",
     "@midwayjs/serverless-scf-starter": "^1.0.11",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "body-parser": "^1.19.0"
   },
   "devDependencies": {
     "midway-bin": "^2.0.0"

@@ -47,7 +47,9 @@ export class FCRuntime extends ServerlessLightRuntime {
   async wrapperWebInvoker(handler, req, res, context) {
     // for web
     const isHTTPMode =
-      req.constructor.name === 'EventEmitter' || util.types.isProxy(req); // for local test
+      req.constructor.name === 'IncomingMessage' ||
+      req.constructor.name === 'EventEmitter' ||
+      util.types.isProxy(req); // for local test
 
     if (!this.respond) {
       this.respond = this.app.callback();
@@ -60,7 +62,11 @@ export class FCRuntime extends ServerlessLightRuntime {
       // http
       // const rawBody = 'test';
       // req.rawBody = rawBody;
-      req.body = await getRawBody(req); // TODO: body parser
+
+      // 应用下自行解决 bodyparser 的问题
+      if (!this.isAppMode) {
+        req.body = await getRawBody(req); // TODO: body parser
+      }
       newReq = req;
     } else {
       // api gateway

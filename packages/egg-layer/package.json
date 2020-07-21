@@ -1,20 +1,17 @@
 {
   "name": "@midwayjs/egg-layer",
-  "version": "1.0.11",
-  "main": "dist/index",
-  "typings": "dist/index.d.ts",
+  "version": "1.0.8",
+  "main": "index.js",
   "scripts": {
-    "build": "midway-bin build -c",
-    "test": "midway-bin test --ts --full-trace",
-    "test-local": "midway-bin test --ts --full-trace",
-    "debug": "midway-bin test --ts --full-trace --inspect-brk=9229",
-    "cov": "midway-bin cov --ts",
-    "clean": "midway-bin clean",
+    "test": "midway-bin test --full-trace",
+    "test-local": "midway-bin test --full-trace",
+    "debug": "midway-bin test --full-trace --inspect-brk=9229",
+    "cov": "midway-bin cov",
     "autod": "midway-bin autod"
   },
   "dependencies": {
     "egg": "^2.25.0",
-    "koa-compose": "^4.1.0"
+    "request": "^2.88.2"
   },
   "devDependencies": {
     "@midwayjs/runtime-engine": "^1.0.7",
@@ -31,8 +28,7 @@
   },
   "files": [
     "framework",
-    "dist",
-    "config"
+    "index.js"
   ],
   "repository": {
     "type": "git",

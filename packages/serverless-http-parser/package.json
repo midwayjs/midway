@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "midway-bin": "^2.0.0",
-    "mm": "^3.2.0"
+    "mm": "3"
   },
   "engines": {
     "node": ">= 10"
