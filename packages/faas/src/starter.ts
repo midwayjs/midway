@@ -232,7 +232,7 @@ export class FaaSStarter implements IFaaSStarter {
       await this.loader.refresh();
 
       // set app keys
-      this.webApplication['keys'] = this.webApplication.getConfig('keys') || '';      
+      this.webApplication['keys'] = this.webApplication.getConfig('keys') || '';
 
       // store all function entry
       const funModules = listModule(FUNC_KEY);
