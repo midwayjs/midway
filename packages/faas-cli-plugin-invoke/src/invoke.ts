@@ -4,19 +4,10 @@ import {
   getSpecFile,
 } from '@midwayjs/fcli-command-core';
 import { FaaSInvokePlugin } from './index';
+import { formatInvokeResult, optionsToInvokeParams, InvokeOptions } from './utils';
 const { debugWrapper } = require('@midwayjs/debugger');
 
-export interface InvokeOptions {
-  functionDir?: string; // 函数所在目录
-  functionName: string; // 函数名
-  data?: any[]; // 函数入参
-  trigger?: string; // 触发器
-  handler?: string;
-  sourceDir?: string; // 一体化目录结构下，函数的目录，比如 src/apis，这个影响到编译
-  clean?: boolean; // 清理调试目录
-  incremental?: boolean; // 增量编译
-  verbose?: boolean | string; // 输出更多信息
-}
+export { InvokeOptions } from './utils';
 
 export const getFunction = (getOptions: any = {})=> {
   return async (options: any) => {
@@ -30,17 +21,7 @@ export const getFunction = (getOptions: any = {})=> {
       commands: ['invoke'],
       service: getOptions.spec || loadSpec(baseDir, specFile),
       provider: '',
-      options: {
-        function: options.functionName,
-        data: options.data,
-        trigger: options.trigger,
-        handler: options.handler,
-        sourceDir: options.sourceDir,
-        clean: options.clean,
-        incremental: options.incremental,
-        verbose: options.verbose,
-        resultType: 'store',
-      },
+      options: optionsToInvokeParams(options),
       log: console,
       stopLifecycle: getOptions.stopLifecycle,
     });
@@ -58,14 +39,24 @@ export const getFunction = (getOptions: any = {})=> {
 };
 
 export async function invokeFun(options: InvokeOptions) {
-  const invokeFun = getFunction();
-  const { getResult } = await invokeFun(options);
-  const result = getResult('result');
-  if (result.success) {
-    return result.result;
-  } else {
-    throw result.err;
+  const invokeFun = getFunction({
+    stopLifecycle: options.getFunctionList ? 'invoke:compile' : undefined
+  });
+  const { core, getResult } = await invokeFun(options);
+
+  if (!options.getFunctionList) {
+    const result = getResult('result');
+    return formatInvokeResult(result);
   }
+
+  return {
+    functionList: getResult('functions'),
+    invoke: async (options: InvokeOptions) => {
+      await core.resume(optionsToInvokeParams(options));
+      const result = getResult('result');
+      return formatInvokeResult(result);
+    }
+  };
 }
 
 export async function invoke(options: InvokeOptions) {
@@ -98,13 +89,7 @@ export async function getFuncList(options: IGetFuncList) {
   });
   options.clean = false;
   options.incremental = true;
-  const { core, getResult } = await invokeFun(options);
-  return {
-    funcList: getResult('functions'),
-    invoke: async () => {
-      await core.resume();
-      return getResult('result');
-    }
-  }
+  const { getResult } = await invokeFun(options);
+  return getResult('functions');
 }
 

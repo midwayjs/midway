@@ -168,7 +168,13 @@ export class CommandHookCore implements ICommandHooksCore {
   }
 
   // resume stop licycle execute
-  public async resume() {
+  public async resume(options) {
+    if (options) {
+      if (!this.options.options) {
+        this.options.options = {};
+      }
+      Object.assign(this.options.options, options);
+    }
     await this.execLiftcycle(this.stopLifecycles);
   }
 
