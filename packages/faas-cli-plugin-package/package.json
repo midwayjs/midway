@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/fcli-plugin-package",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
@@ -14,7 +14,7 @@
     "micromatch": "^4.0.2"
   },
   "devDependencies": {
-    "@midwayjs/faas": "^1.1.0",
+    "@midwayjs/faas": "^1.1.1",
     "@midwayjs/serverless-spec-builder": "^1.1.0",
     "midway-bin": "^2.0.0"
   },

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.1](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.0...serverless-v1.1.1) (2020-07-22)
+
+
+### Bug Fixes
+
+* aws multi function support ([#546](https://github.com/midwayjs/midway-faas/issues/546)) ([f89134c](https://github.com/midwayjs/midway-faas/commit/f89134ce3bcd470da30dbcc79f91ba08337de967))
+
+
+
+
+
 # [1.1.0](https://github.com/midwayjs/midway-faas/compare/serverless-v1.0.11...serverless-v1.1.0) (2020-07-21)
 
 **Note:** Version bump only for package @midwayjs/fcli-plugin-aws

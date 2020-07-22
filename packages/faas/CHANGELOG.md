@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.1](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.0...serverless-v1.1.1) (2020-07-22)
+
+
+### Bug Fixes
+
+* set app key where load user code ([#548](https://github.com/midwayjs/midway-faas/issues/548)) ([1c5aa44](https://github.com/midwayjs/midway-faas/commit/1c5aa446d9d02545ae2a596b538a211fde4214d5))
+
+
+
+
+
 # [1.1.0](https://github.com/midwayjs/midway-faas/compare/serverless-v1.0.11...serverless-v1.1.0) (2020-07-21)
 
 **Note:** Version bump only for package @midwayjs/faas
