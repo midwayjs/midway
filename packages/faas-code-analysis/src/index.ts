@@ -10,6 +10,7 @@ export const analysis = async (codePath: IParam) => {
   }
   const analysisInstance = new Analyzer({
     projectDir: codePath,
+    decoratorLowerCase: true,
   });
   const analysisResult: AnalyzeResult = analysisInstance.analyze();
   return analysisResultToSpec(analysisResult);

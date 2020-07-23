@@ -1,6 +1,6 @@
 const { FaaSStarter } = require('@midwayjs/faas');
 const { asyncWrapper, start } = require('testStarter');
-const { registerFunctionToIocByConfig } = require('registerFunction.js');
+
 const picomatch = require('picomatch');
 
 
@@ -16,11 +16,6 @@ const initializeMethod = async (initializeContext = {}) => {
   });
   starter = new FaaSStarter({ baseDir: __dirname, initializeContext, applicationAdapter: runtime, middleware: ["test1","test2"] });
   
-  
-  registerFunctionToIocByConfig({"functionList":[{"functionNama":"index","functionHandler":"index.handler","functionFilePath":"fun.js"}]}, {
-    baseDir: join(__dirname, 'dist'),
-    context: starter.loader.getApplicationContext()
-  });
   
   await starter.start();
    inited = true; 
