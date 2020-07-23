@@ -107,6 +107,7 @@ export class PackagePlugin extends BasePlugin {
     'package:installDep': this.installDep.bind(this),
     'package:checkAggregation': this.checkAggregation.bind(this),
     'package:package': this.package.bind(this),
+    'before:package:generateSpec': this.defaultBeforeGenerateSpec.bind(this),
     'after:package:generateEntry': this.defaultGenerateEntry.bind(this),
     'before:package:finalize': this.finalize.bind(this),
     'package:emit': this.emit.bind(this),
@@ -316,6 +317,10 @@ export class PackagePlugin extends BasePlugin {
   }
 
   async compile() {
+    // 不存在 tsconfig，跳过编译
+    if (!existsSync(resolve(this.servicePath, 'tsconfig.json'))) {
+      return;
+    }
     let tsCodeRoot: string;
     const tmpOutDir = resolve(this.defaultTmpFaaSOut, 'src');
     if (existsSync(tmpOutDir)) {
@@ -350,7 +355,7 @@ export class PackagePlugin extends BasePlugin {
     });
     const analyzeResult = analyzeInstance.analyze();
     const newSpec = analysisResultToSpec(analyzeResult);
-    this.core.debug('CcdeAnalysis', newSpec);
+    this.core.debug('CodeAnalysis', newSpec);
     this.core.service.functions = newSpec.functions;
   }
 
@@ -638,6 +643,41 @@ export class PackagePlugin extends BasePlugin {
 
   getAggregationFunName(aggregationName: string) {
     return aggregationName;
+  }
+
+  defaultBeforeGenerateSpec() {
+    const service: any = this.core.service;
+    if (service?.deployType) {
+      // add default function
+      if (!service.functions) {
+        service.functions = {
+          app_index: {
+            handler: 'index.handler',
+            events: [{ http: { path: '/*' } }],
+          },
+        };
+      }
+
+      if (!service?.layers) {
+        service.layers = {};
+      }
+
+      if (service?.deployType === 'egg') {
+        service.layers['eggLayer'] = { path: 'npm:@midwayjs/egg-layer' };
+      }
+
+      if (service?.deployType === 'express') {
+        service.layers['expressLayer'] = {
+          path: 'npm:@midwayjs/express-layer',
+        };
+      }
+
+      if (service?.deployType === 'koa') {
+        service.layers['koaLayer'] = { path: 'npm:@midwayjs/koa-layer' };
+      }
+    }
+
+    writeToSpec(this.midwayBuildPath, this.core.service);
   }
 
   finalize() {}
