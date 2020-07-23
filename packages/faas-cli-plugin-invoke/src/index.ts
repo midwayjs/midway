@@ -225,7 +225,6 @@ export class FaaSInvokePlugin extends BasePlugin {
       directoryToScan = relative(this.baseDir, this.analyzedTsCodeRoot);
     }
 
-    
     if (isTsMode) {
       return;
     }
