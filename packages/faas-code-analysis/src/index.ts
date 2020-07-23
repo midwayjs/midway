@@ -1,27 +1,55 @@
-import { tsAnalysisInstance, ITsAnalysisResult } from '@midwayjs/ts-analysis';
+import { Analyzer, AnalyzeResult } from '@midwayjs/mwcc';
 import { formatUpperCamel, firstCharLower, getEventKey } from './utils';
 import { IParam, IResult, IFunction, IEvent } from './interface';
 export * from './interface';
 export * from './utils';
 export const analysis = async (codePath: IParam) => {
+  if (Array.isArray(codePath)) {
+    codePath = codePath[0];
+    console.log('[warn] code analysi only support 1 source dir');
+  }
+  const analysisInstance = new Analyzer({
+    projectDir: codePath
+  });
+  const analysisResult: AnalyzeResult = analysisInstance.analyze();
+  return analysisResultToSpec(analysisResult);
+};
+
+export const analysisResultToSpec = (analysisResult: AnalyzeResult) => {
   const result: IResult = {
     functions: {},
   };
-  const analysisResult: ITsAnalysisResult = await tsAnalysisInstance(codePath, {
-    decoratorLowerCase: true,
+
+  const provideList = analysisResult?.decorator?.provide || [];
+  provideList.forEach(provide => {
+    if (!provide.childDecorators.func) {
+      return;
+    }
+    provide.childDecorators.func.forEach((item) => {
+      formatFuncInfo(result, item, provide.target);
+    });
   });
-  const funcList = analysisResult.decorator.func || [];
-  if (!funcList.length) {
-    return result;
-  }
+
+  const funcList = analysisResult?.decorator?.func || [];
 
   funcList.forEach(item => {
-    const params = item.params;
-    let className = item.parent?.provide?.[0]?.target?.name || '';
-    let funcName = item.target.name || 'handler';
+    if (item.target.type !== 'class') {
+      return;
+    }
+    formatFuncInfo(result, item);
+  });
 
-    if (item.target.type === 'class') {
-      className = item.target.name;
+  return result;
+}
+
+
+const formatFuncInfo = (result, funcInfo, parentTarget?) => {
+  const params = funcInfo.params;
+    let className = parentTarget?.name || '';
+    let funcName = funcInfo.target.name || 'handler';
+
+    if (funcInfo.target.type === 'class') {
+      className = funcInfo.target.name;
       funcName = 'handler';
     }
     let handler;
@@ -74,7 +102,4 @@ export const analysis = async (codePath: IParam) => {
     }
     existsFuncData.events = events;
     result.functions[funName] = existsFuncData;
-  });
-
-  return result;
-};
+}

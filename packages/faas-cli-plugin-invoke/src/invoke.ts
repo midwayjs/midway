@@ -4,10 +4,10 @@ import {
   getSpecFile,
 } from '@midwayjs/fcli-command-core';
 import { FaaSInvokePlugin } from './index';
-import { formatInvokeResult, optionsToInvokeParams, InvokeOptions } from './utils';
+import { formatInvokeResult, optionsToInvokeParams } from './utils';
+import { InvokeOptions } from './interface';
 const { debugWrapper } = require('@midwayjs/debugger');
 
-export { InvokeOptions } from './utils';
 
 export const getFunction = (getOptions: any = {})=> {
   return async (options: any) => {
