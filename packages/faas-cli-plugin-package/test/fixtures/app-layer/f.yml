@@ -1,0 +1,5 @@
+service:
+  name: my-egg-demo
+provider:
+  name: aliyun
+deployType: egg
