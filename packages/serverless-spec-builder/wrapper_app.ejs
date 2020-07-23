@@ -1,4 +1,3 @@
-const { asyncWrapper } = require('@midwayjs/runtime-engine');
 const { asyncWrapper, start } = require('<%=starter %>');
 <% layerDeps.forEach(function(layer){ %>const <%=layer.name%> = require('<%=layer.path%>');
 <% }); %>
