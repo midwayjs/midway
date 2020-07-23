@@ -135,7 +135,7 @@ function expandYMLForApplication(service) {
     };
   }
 
-  if (service?.layers) {
+  if (!service?.layers) {
     service.layers = {};
   }
 

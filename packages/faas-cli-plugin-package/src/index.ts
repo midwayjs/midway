@@ -311,6 +311,10 @@ export class PackagePlugin extends BasePlugin {
   }
 
   async compile() {
+    // 不存在 tsconfig，跳过编译
+    if (!existsSync(resolve(this.servicePath, 'tsconfig.json'))) {
+      return;
+    }
     let tsCodeRoot: string;
     const tmpOutDir = resolve(this.defaultTmpFaaSOut, 'src');
     if (existsSync(tmpOutDir)) {
