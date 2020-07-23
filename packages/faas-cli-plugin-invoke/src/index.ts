@@ -224,7 +224,6 @@ export class FaaSInvokePlugin extends BasePlugin {
 
     const isTsMode = this.checkIsTsMode();
     if (isTsMode) {
-      process.env.MIDWAY_TS_MODE = 'true';
       return;
     }
     const { lockType } = this.getLock(this.buildLockPath);
@@ -594,7 +593,7 @@ export class FaaSInvokePlugin extends BasePlugin {
 
   checkIsTsMode(): boolean {
     // eslint-disable-next-line node/no-deprecated-api
-    return !!require.extensions['.ts'];
+    return process.env.MIDWAY_TS_MODE === 'true';
   }
 
   getPlatformPath(p) {
