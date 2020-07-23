@@ -4,7 +4,7 @@
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/debugger": "^0.0.3",
+    "@midwayjs/debugger": "^1.0.x",
     "@midwayjs/fcli-command-core": "^1.1.0",
     "@midwayjs/fcli-plugin-create": "^1.1.0",
     "@midwayjs/fcli-plugin-deploy": "^1.1.0",

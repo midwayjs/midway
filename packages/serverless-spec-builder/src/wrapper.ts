@@ -2,7 +2,6 @@ import { join, resolve } from 'path';
 import { writeFileSync, existsSync, readFileSync, copyFileSync } from 'fs';
 import { render } from 'ejs';
 import { getLayers } from './utils';
-export const faasFunctionsMapFile = 'faasFunctionsMap.json';
 // 写入口
 export function writeWrapper(options: {
   service: any;
@@ -35,9 +34,23 @@ export function writeWrapper(options: {
     expandYMLForApplication(service);
   }
 
+  // for function programing，function
+  let functionMap: any;
   const functions = service.functions || {};
   for (const func in functions) {
     const handlerConf = functions[func];
+    // for fp
+    if (handlerConf.isFunctional) {
+      if (!functionMap?.functionList) {
+        functionMap = { functionList: [] };
+      }
+      functionMap.functionList.push({
+        functionName: handlerConf.exportFunction,
+        functionHandler: handlerConf.handler,
+        functionFilePath: handlerConf.sourceFilePath,
+      });
+    }
+
     if (handlerConf._ignore) {
       continue;
     }
@@ -77,18 +90,8 @@ export function writeWrapper(options: {
       isCustomAppType ? '../wrapper_app.ejs' : '../wrapper.ejs'
     )
   ).toString();
-  // for function programing，function info build to dist/faasFunctionsMap.json
-  // need register this function to ioc
-  const functionMapFile = resolve(distDir, faasFunctionsMapFile);
-  let functionMap: any;
-  if (existsSync(functionMapFile)) {
-    try {
-      functionMap = JSON.parse(readFileSync(functionMapFile).toString());
-    } catch {
-      //
-    }
-  }
-  if (functionMap?.functionList) {
+
+  if (functionMap?.functionList?.length) {
     const registerFunctionFile = join(distDir, 'registerFunction.js');
     const sourceFile = resolve(__dirname, '../registerFunction.js');
     if (!existsSync(registerFunctionFile) && existsSync(sourceFile)) {

@@ -1,29 +1,16 @@
 import { writeWrapper } from '../src/wrapper';
 import { resolve } from 'path';
 import * as assert from 'assert';
-import { existsSync, readFileSync, remove, writeFileSync } from 'fs-extra';
+import { existsSync, readFileSync, remove } from 'fs-extra';
 
 describe('/test/wrapper.test.ts', () => {
   describe('test all format', () => {
     it('writeWrapper functionMap', async () => {
       const wrapperPath = resolve(__dirname, './fixtures/wrapper');
-      const faasFunctionMap = resolve(wrapperPath, 'faasFunctionsMap.json');
       const registerFunction = resolve(wrapperPath, 'registerFunction.js');
       if (existsSync(registerFunction)) {
         await remove(registerFunction);
       }
-      writeFileSync(
-        faasFunctionMap,
-        JSON.stringify({
-          functionList: [
-            {
-              functionNama: 'index',
-              functionHandler: 'index.handler',
-              functionFilePath: 'fun.js',
-            },
-          ],
-        })
-      );
       writeWrapper({
         initializeName: 'initializeUserDefine',
         middleware: ['test1', 'test2'],
@@ -41,6 +28,9 @@ describe('/test/wrapper.test.ts', () => {
             },
             index: {
               handler: 'index.handler',
+              isFunctional: true,
+              exportFunction: 'aggregation',
+              sourceFilePath: 'fun-index.js',
             },
             render: {
               handler: 'render.handler',
@@ -81,15 +71,10 @@ describe('/test/wrapper.test.ts', () => {
           readFileSync(renderPath).toString()
         )
       );
-      await remove(faasFunctionMap);
       await remove(registerFunction);
     });
     it('writeWrapper', async () => {
       const wrapperPath = resolve(__dirname, './fixtures/wrapper');
-      const faasFunctionMap = resolve(wrapperPath, 'faasFunctionsMap.json');
-      if (existsSync(faasFunctionMap)) {
-        await remove(faasFunctionMap);
-      }
       const registerFunction = resolve(wrapperPath, 'registerFunction.js');
       if (existsSync(registerFunction)) {
         await remove(registerFunction);
