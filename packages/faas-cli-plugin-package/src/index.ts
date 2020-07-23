@@ -20,7 +20,12 @@ import {
 import * as micromatch from 'micromatch';
 import { commonPrefix, formatLayers } from './utils';
 import { analysisResultToSpec, copyFiles } from '@midwayjs/faas-code-analysis';
-import { CompilerHost, Program, resolveTsConfigFile, Analyzer } from '@midwayjs/mwcc';
+import {
+  CompilerHost,
+  Program,
+  resolveTsConfigFile,
+  Analyzer,
+} from '@midwayjs/mwcc';
 import { exec } from 'child_process';
 import * as archiver from 'archiver';
 import { AnalyzeResult, Locator } from '@midwayjs/locate';
@@ -341,7 +346,7 @@ export class PackagePlugin extends BasePlugin {
 
     const analyzeInstance = new Analyzer({
       program: this.program,
-      decoratorLowerCase: true
+      decoratorLowerCase: true,
     });
     const analyzeResult = analyzeInstance.analyze();
     const newSpec = analysisResultToSpec(analyzeResult);

@@ -26,13 +26,13 @@ export const cleanTarget = async (p: string) => {
 };
 
 // 格式化调用的返回值结果
-export const formatInvokeResult = (result) => {
+export const formatInvokeResult = result => {
   if (result.success) {
     return result.result;
   } else {
     throw result.err;
   }
-}
+};
 
 // 转换传递给 invoke 方法的参数 到 invoke plugin 所需要的参数
 export const optionsToInvokeParams = (options: InvokeOptions) => {
@@ -47,7 +47,7 @@ export const optionsToInvokeParams = (options: InvokeOptions) => {
     verbose: options.verbose,
     resultType: 'store',
   };
-}
+};
 
 const commonLock: any = {};
 export enum LOCK_TYPE {
@@ -56,7 +56,7 @@ export enum LOCK_TYPE {
   COMPLETE,
 }
 
-export const getLock = (lockKey) => {
+export const getLock = lockKey => {
   if (!commonLock[lockKey]) {
     commonLock[lockKey] = {
       lockType: LOCK_TYPE.INITIAL,
@@ -64,7 +64,7 @@ export const getLock = (lockKey) => {
     };
   }
   return commonLock[lockKey];
-}
+};
 
 export const setLock = (lockKey, status, data?) => {
   if (!commonLock[lockKey]) {
@@ -72,7 +72,7 @@ export const setLock = (lockKey, status, data?) => {
   }
   commonLock[lockKey].lockType = status;
   commonLock[lockKey].lockData = data;
-}
+};
 
 export const waitForLock = async (lockKey, count?) => {
   count = count || 0;
@@ -89,16 +89,16 @@ export const waitForLock = async (lockKey, count?) => {
       resolve(lockData);
     }
   });
-}
+};
 
 export const checkIsTsMode = () => {
   // eslint-disable-next-line node/no-deprecated-api
   return !!require.extensions['.ts'];
-}
+};
 
-export const getPlatformPath = (p) => {
+export const getPlatformPath = p => {
   if (type() === 'Windows_NT') {
     return p.replace(/\\/g, '\\\\');
   }
   return p;
-}
+};

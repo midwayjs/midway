@@ -84,13 +84,15 @@ export function writeWrapper(options: {
   if (existsSync(functionMapFile)) {
     try {
       functionMap = JSON.parse(readFileSync(functionMapFile).toString());
-    } catch {}
+    } catch {
+      //
+    }
   }
   if (functionMap?.functionList) {
-    const registerFunctionFile = join(distDir, `registerFunction.js`);
+    const registerFunctionFile = join(distDir, 'registerFunction.js');
     const sourceFile = resolve(__dirname, '../registerFunction.js');
     if (!existsSync(registerFunctionFile) && existsSync(sourceFile)) {
-      copyFileSync(sourceFile, registerFunctionFile)
+      copyFileSync(sourceFile, registerFunctionFile);
     }
   }
 

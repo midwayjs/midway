@@ -3,15 +3,20 @@ import { AnalyzeResult, Locator } from '@midwayjs/locate';
 import {
   analysisResultToSpec,
   compareFileChange,
-  copyFiles
+  copyFiles,
 } from '@midwayjs/faas-code-analysis';
-import { CompilerHost, Program, resolveTsConfigFile, Analyzer } from '@midwayjs/mwcc';
+import {
+  CompilerHost,
+  Program,
+  resolveTsConfigFile,
+  Analyzer,
+} from '@midwayjs/mwcc';
 import { writeWrapper } from '@midwayjs/serverless-spec-builder';
 import { createRuntime } from '@midwayjs/runtime-mock';
 import * as FCTrigger from '@midwayjs/serverless-fc-trigger';
 import * as SCFTrigger from '@midwayjs/serverless-scf-trigger';
 import { resolve, relative, join } from 'path';
-import { 
+import {
   FaaSStarterClass,
   checkIsTsMode,
   cleanTarget,
@@ -19,7 +24,8 @@ import {
   getPlatformPath,
   setLock,
   waitForLock,
-  LOCK_TYPE, } from './utils';
+  LOCK_TYPE,
+} from './utils';
 import {
   ensureFileSync,
   existsSync,
@@ -161,8 +167,7 @@ export class FaaSInvokePlugin extends BasePlugin {
     });
   }
 
-
-  public getTsCodeRoot () {
+  public getTsCodeRoot() {
     const tmpOutDir = resolve(this.defaultTmpFaaSOut, 'src');
     if (existsSync(tmpOutDir)) {
       return tmpOutDir;
@@ -192,7 +197,10 @@ export class FaaSInvokePlugin extends BasePlugin {
     // 获取要分析的代码目录
     this.analyzedTsCodeRoot = this.getTsCodeRoot();
     // 扫描文件查看是否发生变化，乳沟没有变化就跳过编译
-    const directoryToScan: string = relative(this.baseDir, this.analyzedTsCodeRoot);
+    const directoryToScan: string = relative(
+      this.baseDir,
+      this.analyzedTsCodeRoot
+    );
 
     const isTsMode = checkIsTsMode();
     if (isTsMode) {
@@ -266,7 +274,7 @@ export class FaaSInvokePlugin extends BasePlugin {
     if (!this.core.service.functions) {
       const analyzeInstance = new Analyzer({
         program: this.program,
-        decoratorLowerCase: true
+        decoratorLowerCase: true,
       });
       const analyzeResult = analyzeInstance.analyze();
       const newSpec = await analysisResultToSpec(analyzeResult);

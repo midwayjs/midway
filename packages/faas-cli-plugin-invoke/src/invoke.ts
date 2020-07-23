@@ -8,8 +8,7 @@ import { formatInvokeResult, optionsToInvokeParams } from './utils';
 import { InvokeOptions } from './interface';
 const { debugWrapper } = require('@midwayjs/debugger');
 
-
-export const getFunction = (getOptions: any = {})=> {
+export const getFunction = (getOptions: any = {}) => {
   return async (options: any) => {
     const baseDir = options.functionDir || process.cwd();
     const specFile = getOptions.specFile || getSpecFile(baseDir);
@@ -28,19 +27,19 @@ export const getFunction = (getOptions: any = {})=> {
     core.addPlugin(FaaSInvokePlugin);
     await core.ready();
     await core.invoke(['invoke']);
-    
+
     return {
       core,
-      getResult: (key) => {
+      getResult: key => {
         return core.store.get('FaaSInvokePlugin:' + key);
-      }
-    }
+      },
+    };
   };
 };
 
 export async function invokeFun(options: InvokeOptions) {
   const invokeFun = getFunction({
-    stopLifecycle: options.getFunctionList ? 'invoke:compile' : undefined
+    stopLifecycle: options.getFunctionList ? 'invoke:compile' : undefined,
   });
   const { core, getResult } = await invokeFun(options);
 
@@ -55,7 +54,7 @@ export async function invokeFun(options: InvokeOptions) {
       await core.resume(optionsToInvokeParams(options));
       const result = getResult('result');
       return formatInvokeResult(result);
-    }
+    },
   };
 }
 
@@ -85,11 +84,10 @@ export async function getFuncList(options: IGetFuncList) {
   const invokeFun = getFunction({
     stopLifecycle: 'invoke:compile',
     specFile,
-    spec,  
+    spec,
   });
   options.clean = false;
   options.incremental = true;
   const { getResult } = await invokeFun(options);
   return getResult('functions');
 }
-

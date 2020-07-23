@@ -142,7 +142,6 @@ export class CommandHookCore implements ICommandHooksCore {
     await this.execLiftcycle(lifecycleEvents);
   }
 
-
   private async execLiftcycle(lifecycleEvents) {
     for (const lifecycle of lifecycleEvents) {
       if (this.userLifecycle && this.userLifecycle[lifecycle]) {
