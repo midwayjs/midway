@@ -202,7 +202,10 @@ export class FaaSInvokePlugin extends BasePlugin {
       return;
     }
     this.skipTsBuild = false;
-    process.env.MIDWAY_TS_MODE = 'false';
+    const isTsMode = this.checkIsTsMode();
+    if (!isTsMode) {
+      process.env.MIDWAY_TS_MODE = 'false';
+    }
     // 构建锁文件
     this.buildLogDir = resolve(this.buildDir, 'log');
     ensureDirSync(this.buildLogDir);
@@ -222,7 +225,7 @@ export class FaaSInvokePlugin extends BasePlugin {
       directoryToScan = relative(this.baseDir, this.analyzedTsCodeRoot);
     }
 
-    const isTsMode = this.checkIsTsMode();
+    
     if (isTsMode) {
       return;
     }
@@ -593,7 +596,7 @@ export class FaaSInvokePlugin extends BasePlugin {
 
   checkIsTsMode(): boolean {
     // eslint-disable-next-line node/no-deprecated-api
-    return process.env.MIDWAY_TS_MODE === 'true';
+    return process.env.MIDWAY_TS_MODE === 'true' && !!require.extensions['.ts'];
   }
 
   getPlatformPath(p) {
