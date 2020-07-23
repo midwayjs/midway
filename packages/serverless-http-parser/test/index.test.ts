@@ -160,6 +160,8 @@ describe('test http parser', () => {
 
     assert.deepStrictEqual(context.request.body, '{"a":"1"}');
 
+    assert(context.cookies.get('_ga') === 'GA1.2.690852134.1546410522');
+
     // get request header
     assert.deepStrictEqual(
       context.get('User-Agent'),

@@ -423,6 +423,25 @@ describe('/test/index.test.ts', () => {
       await runtime.close();
     });
 
+    it('should invoke 302', async () => {
+      const runtime = createRuntime({
+        functionDir: join(__dirname, './fixtures/http-302'),
+      });
+      await runtime.start();
+      const result = await runtime.invoke(
+        new HTTPTrigger({
+          path: '/help',
+          method: 'GET',
+        })
+      );
+      await runtime.close();
+      assert.equal(result.statusCode, 302);
+      assert.equal(
+        result.headers.location,
+        'https://github.com/midwayjs/midway'
+      );
+    });
+
     it('should invoke normal code', async () => {
       const runtime = createRuntime({
         functionDir: join(__dirname, './fixtures/http-json'),

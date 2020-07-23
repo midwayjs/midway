@@ -31,8 +31,8 @@ const initializeMethod = async (initializeContext = {}) => {
 const getHandler = (hanlderName) => {
   <% handlers.forEach(function(handlerData){ %>
     if (hanlderName === '<%=handlerData.name%>') {
-      return <% if (handlerData.handler) { 
-      %> starter.handleInvokeWrapper('<%=handlerData.handler%>'); <% } else { 
+      return <% if (handlerData.handler) {
+      %> starter.handleInvokeWrapper('<%=handlerData.handler%>'); <% } else {
       %> async (ctx) => {
         const allHandlers = <%-JSON.stringify(handlerData.handlers)%>;
         let handler = null;
@@ -42,7 +42,7 @@ const getHandler = (hanlderName) => {
             return picomatch.isMatch(ctxPath, handler.router)
           });
         }
-      
+
         if (handler) {
           return starter.handleInvokeWrapper(handler.handler)(ctx);
         }

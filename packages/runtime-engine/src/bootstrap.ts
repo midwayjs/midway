@@ -9,7 +9,7 @@ import {
 export class BaseBootstrap implements Bootstrap {
   runtimeEngine: RuntimeEngine;
   options;
-  runtime;
+  runtime: Runtime;
   layers;
 
   constructor(options: BootstrapOptions = {}) {
@@ -19,6 +19,10 @@ export class BaseBootstrap implements Bootstrap {
     this.runtimeEngine.add(engine => {
       engine.addBaseRuntime(options.runtime);
     });
+    // set options
+    if (this.runtime) {
+      this.runtime.setOptions(this.options);
+    }
   }
 
   async start() {

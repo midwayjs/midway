@@ -231,6 +231,9 @@ export class FaaSStarter implements IFaaSStarter {
       this.registerDecorator();
       await this.loader.refresh();
 
+      // set app keys
+      this.webApplication['keys'] = this.webApplication.getConfig('keys') || '';
+
       // store all function entry
       const funModules = listModule(FUNC_KEY);
       for (const funModule of funModules) {

@@ -65,6 +65,7 @@ export class FaaSInvokePlugin extends BasePlugin {
         'copyFile', // 拷贝文件
         'checkFileChange', // 检查文件是否更新
         'compile', // ts 代码编译
+        'analysisCode', // Todo: 代码分析，向前兼容
         'emit', // ts 代码输出
         'entry', // 生成执行入口
         'getInvoke', // 获取runtime
