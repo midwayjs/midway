@@ -21,7 +21,8 @@
     "fc",
     "scf",
     "aws",
-    "wrapper.ejs"
+    "wrapper.ejs",
+    "registerFunction.js"
   ],
   "scripts": {
     "build": "midway-bin build -c",

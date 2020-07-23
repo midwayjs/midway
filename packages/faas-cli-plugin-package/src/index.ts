@@ -19,8 +19,8 @@ import {
 } from 'fs-extra';
 import * as micromatch from 'micromatch';
 import { commonPrefix, formatLayers } from './utils';
-import { analysis, copyFiles } from '@midwayjs/faas-code-analysis';
-import { CompilerHost, Program, resolveTsConfigFile } from '@midwayjs/mwcc';
+import { analysisResultToSpec, copyFiles } from '@midwayjs/faas-code-analysis';
+import { CompilerHost, Program, resolveTsConfigFile, Analyzer } from '@midwayjs/mwcc';
 import { exec } from 'child_process';
 import * as archiver from 'archiver';
 import { AnalyzeResult, Locator } from '@midwayjs/locate';
@@ -338,10 +338,13 @@ export class PackagePlugin extends BasePlugin {
     if (this.core.service.functions) {
       return this.core.service.functions;
     }
-    const newSpec: any = await analysis([
-      resolve(this.servicePath, this.codeAnalyzeResult.tsCodeRoot),
-      resolve(this.defaultTmpFaaSOut, 'src'),
-    ]);
+
+    const analyzeInstance = new Analyzer({
+      program: this.program,
+      decoratorLowerCase: true
+    });
+    const analyzeResult = analyzeInstance.analyze();
+    const newSpec = analysisResultToSpec(analyzeResult);
     this.core.debug('CcdeAnalysis', newSpec);
     this.core.service.functions = newSpec.functions;
   }

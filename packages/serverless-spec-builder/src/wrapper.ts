@@ -1,8 +1,8 @@
 import { join, resolve } from 'path';
-import { writeFileSync, existsSync, readFileSync } from 'fs';
+import { writeFileSync, existsSync, readFileSync, copyFileSync } from 'fs';
 import { render } from 'ejs';
 import { getLayers } from './utils';
-
+export const faasFunctionsMapFile = 'faasFunctionsMap.json';
 // 写入口
 export function writeWrapper(options: {
   service: any;
@@ -65,6 +65,23 @@ export function writeWrapper(options: {
     }
   }
   const tpl = readFileSync(resolve(__dirname, '../wrapper.ejs')).toString();
+  // for function programing，function info build to dist/faasFunctionsMap.json
+  // need register this function to ioc
+  const functionMapFile = resolve(distDir, faasFunctionsMapFile);
+  let functionMap: any;
+  if (existsSync(functionMapFile)) {
+    try {
+      functionMap = JSON.parse(readFileSync(functionMapFile).toString());
+    } catch {}
+  }
+  if (functionMap?.functionList) {
+    const registerFunctionFile = join(distDir, `registerFunction.js`);
+    const sourceFile = resolve(__dirname, '../registerFunction.js');
+    if (!existsSync(registerFunctionFile) && existsSync(sourceFile)) {
+      copyFileSync(sourceFile, registerFunctionFile)
+    }
+  }
+  
   for (const file in files) {
     const fileName = join(distDir, `${file}.js`);
     const layers = getLayers(service.layers, ...files[file].originLayers);
@@ -78,6 +95,7 @@ export function writeWrapper(options: {
       advancePreventMultiInit: advancePreventMultiInit || false,
       initializer: initializeName || 'initializer',
       handlers: files[file].handlers,
+      functionMap,
       ...layers,
     });
     writeFileSync(fileName, content);
