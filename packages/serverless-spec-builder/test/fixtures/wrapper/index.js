@@ -17,7 +17,7 @@ const initializeMethod = async (initializeContext = {}) => {
   starter = new FaaSStarter({ baseDir: __dirname, initializeContext, applicationAdapter: runtime, middleware: ["test1","test2"] });
   
   
-  registerFunctionToIocByConfig({"functionList":[{"functionNama":"index","functionHandler":"index.handler","functionFilePath":"fun.js"}]}, {
+  registerFunctionToIocByConfig({"functionList":[{"functionNama":"index","functionFilePath":"fun.js"}]}, {
     baseDir: join(__dirname, 'dist'),
     context: starter.loader.getApplicationContext()
   });

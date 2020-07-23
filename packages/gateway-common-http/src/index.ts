@@ -23,10 +23,10 @@ export class KoaGateway implements KoaGatewayAdapter {
     next: () => Promise<any>,
     invoke: InvokeCallback
   ) {
-    const invokeOptions = await parseInvokeOptionsByOriginUrl(
-      this.options,
-      ctx.request
-    );
+    const {
+      invokeOptions,
+      invokeFun = invoke,
+    } = await parseInvokeOptionsByOriginUrl(this.options, ctx.request, invoke);
     if (!invokeOptions.functionName) {
       await next();
     } else {
@@ -36,7 +36,7 @@ export class KoaGateway implements KoaGatewayAdapter {
           statusCode: number;
           body: string;
           isBase64Encoded: boolean;
-        } = await invoke({
+        } = await invokeFun({
           functionDir: invokeOptions.functionDir,
           functionName: invokeOptions.functionName,
           data: invokeOptions.data,
@@ -82,14 +82,14 @@ export class ExpressGateway implements ExpressGatewayAdapter {
     next: NextFunction,
     invoke: InvokeCallback
   ) {
-    const invokeOptions = await parseInvokeOptionsByOriginUrl(
-      this.options,
-      req
-    );
+    const {
+      invokeOptions,
+      invokeFun = invoke,
+    } = await parseInvokeOptionsByOriginUrl(this.options, req, invoke);
     if (!invokeOptions.functionName) {
       return next();
     } else {
-      invoke({
+      invokeFun({
         functionDir: invokeOptions.functionDir,
         functionName: invokeOptions.functionName,
         data: invokeOptions.data,
