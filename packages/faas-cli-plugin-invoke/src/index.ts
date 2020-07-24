@@ -39,6 +39,7 @@ import {
 } from 'fs-extra';
 export * from './invoke';
 export * from './interface';
+export * from './utils';
 
 export class FaaSInvokePlugin extends BasePlugin {
   baseDir: string;
