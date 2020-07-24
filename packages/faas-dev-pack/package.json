@@ -1,12 +1,12 @@
 {
   "name": "@midwayjs/faas-dev-pack",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/gateway-common-core": "^1.1.4",
-    "@midwayjs/gateway-common-http": "^1.1.4",
-    "@midwayjs/serverless-invoke": "^1.1.4",
+    "@midwayjs/gateway-common-core": "^1.1.5",
+    "@midwayjs/gateway-common-http": "^1.1.5",
+    "@midwayjs/serverless-invoke": "^1.1.5",
     "body-parser": "^1.19.0",
     "compose-middleware": "^5.0.1",
     "koa-bodyparser": "^4.2.1",

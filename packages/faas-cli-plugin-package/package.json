@@ -1,11 +1,11 @@
 {
   "name": "@midwayjs/fcli-plugin-package",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/faas-code-analysis": "^1.1.4",
-    "@midwayjs/fcli-command-core": "^1.1.4",
+    "@midwayjs/faas-code-analysis": "^1.1.5",
+    "@midwayjs/fcli-command-core": "^1.1.5",
     "@midwayjs/locate": "^1.0.3",
     "@midwayjs/mwcc": "^0.3.0",
     "archiver": "^3.1.1",
@@ -15,7 +15,7 @@
   },
   "devDependencies": {
     "@midwayjs/faas": "^1.1.4",
-    "@midwayjs/serverless-spec-builder": "^1.1.4",
+    "@midwayjs/serverless-spec-builder": "^1.1.5",
     "midway-bin": "^2.0.0"
   },
   "engines": {
