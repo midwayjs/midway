@@ -7,9 +7,11 @@
     "ejs": "^3.1.3",
     "js-yaml": "^3.13.0",
     "json-cycle": "^1.3.0",
-    "mkdirp": "^0.5.1"
+    "mkdirp": "^0.5.1",
+    "@midwayjs/decorator": "^2.0.8"
   },
   "devDependencies": {
+    "fs-extra": "^8.1.0",
     "midway-bin": "^2.0.0",
     "mm": "3"
   },
@@ -22,6 +24,7 @@
     "scf",
     "aws",
     "wrapper.ejs",
+    "registerFunction.js",
     "wrapper_app.ejs"
   ],
   "scripts": {

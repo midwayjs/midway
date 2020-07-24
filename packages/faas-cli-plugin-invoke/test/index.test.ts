@@ -47,6 +47,30 @@ describe('/test/index.test.ts', () => {
     await remove(join(__dirname, 'fixtures/baseApp/.faas_debug_tmp'));
   });
 
+  it('invoke use two step', async () => {
+    process.env.MIDWAY_TS_MODE = 'true';
+    const invokeInstance: any = await invoke({
+      getFunctionList: true,
+      functionDir: join(__dirname, 'fixtures/baseApp'),
+      clean: false,
+    });
+    assert(invokeInstance.functionList.http.handler === 'http.handler');
+    assert(invokeInstance.invoke);
+    const result = await invokeInstance.invoke({
+      functionName: 'http',
+      data: [{ name: 'params' }],
+    });
+    process.env.MIDWAY_TS_MODE = 'false';
+    assert(existsSync(join(__dirname, 'fixtures/baseApp/.faas_debug_tmp')));
+    assert(
+      existsSync(
+        join(__dirname, 'fixtures/baseApp/.faas_debug_tmp/src/index.ts')
+      )
+    );
+    assert(result && result.body === 'hello http world');
+    await remove(join(__dirname, 'fixtures/baseApp/.faas_debug_tmp'));
+  });
+
   it('should use origin http trigger in ice + faas demo by package options', async () => {
     const result: any = await invoke({
       functionDir: join(__dirname, 'fixtures/ice-faas-ts-pkg-options'),

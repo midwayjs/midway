@@ -1,5 +1,6 @@
 const { <%=faasStarterName %> } = require('<%=faasModName %>');
 const { asyncWrapper, start } = require('<%=starter %>');
+<% if (functionMap) { %>const { registerFunctionToIocByConfig } = require('registerFunction.js');<% } %>
 const picomatch = require('picomatch');
 <% layerDeps.forEach(function(layer){ %>const <%=layer.name%> = require('<%=layer.path%>');
 <% }); %>
@@ -17,6 +18,12 @@ const initializeMethod = async (initializeContext = {}) => {
   starter = new <%=faasStarterName %>({ baseDir: __dirname, initializeContext, applicationAdapter: runtime, middleware: <%-JSON.stringify(middleware)%> });
   <% loadDirectory.forEach(function(dirName){ %>
   starter.loader.loadDirectory({ baseDir: '<%=dirName%>'});<% }) %>
+  <% if (functionMap) { %>
+  registerFunctionToIocByConfig(<%-JSON.stringify(functionMap)%>, {
+    baseDir: join(__dirname, 'dist'),
+    context: starter.loader.getApplicationContext()
+  });
+  <% } %>
   await starter.start();
   <% if (!advancePreventMultiInit) { %> inited = true; <% } %>
 };

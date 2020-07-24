@@ -1,25 +1,32 @@
 import { DevPackOptions, InvokeOptions } from '@midwayjs/gateway-common-core';
 import { isMatch } from 'picomatch';
 import * as qs from 'querystring';
-import { getFuncList } from '@midwayjs/serverless-invoke';
 const ignoreWildcardFunctionsWhiteList = [];
 
 export async function parseInvokeOptionsByOriginUrl(
   options: DevPackOptions,
-  req
-): Promise<Partial<InvokeOptions>> {
+  req,
+  getFuncList
+): Promise<{
+  invokeOptions: Partial<InvokeOptions>;
+  invokeFun?: any;
+}> {
   const ignorePattern = options.ignorePattern;
   const currentUrl = req.path || req.url;
   const currentMethod = req.method.toLowerCase();
   if (ignorePattern) {
     if (typeof ignorePattern === 'function') {
       if (ignorePattern(req)) {
-        return {};
+        return {
+          invokeOptions: {},
+        };
       }
     } else if (ignorePattern.length) {
       for (const pattern of ignorePattern as string[]) {
         if (new RegExp(pattern).test(currentUrl)) {
-          return {};
+          return {
+            invokeOptions: {},
+          };
         }
       }
     }
@@ -28,7 +35,8 @@ export async function parseInvokeOptionsByOriginUrl(
   invokeOptions.functionDir = options.functionDir;
   invokeOptions.sourceDir = options.sourceDir;
   invokeOptions.verbose = options.verbose;
-  const functions = await getFuncList({
+  const { functionList, invoke } = await getFuncList({
+    getFunctionList: true,
     functionDir: options.functionDir,
     sourceDir: options.sourceDir,
   });
@@ -42,8 +50,8 @@ export async function parseInvokeOptionsByOriginUrl(
   }> = {};
   // 获取路由
   let urlMatchList = [];
-  Object.keys(functions).forEach(functionName => {
-    const functionItem = functions[functionName] || {};
+  Object.keys(functionList).forEach(functionName => {
+    const functionItem = functionList[functionName] || {};
     const httpEvents = (functionItem.events || []).filter((eventItem: any) => {
       return eventItem.http || eventItem.apigw;
     });
@@ -133,5 +141,8 @@ export async function parseInvokeOptionsByOriginUrl(
     invokeOptions.data = [invokeHTTPData];
   }
 
-  return invokeOptions;
+  return {
+    invokeOptions,
+    invokeFun: invoke,
+  };
 }
