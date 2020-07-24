@@ -31,7 +31,7 @@ const getHandler = (hanlderName) => {
             return picomatch.isMatch(ctxPath, handler.router)
           });
         }
-      
+
         if (handler) {
           return starter.handleInvokeWrapper(handler.handler)(ctx);
         }

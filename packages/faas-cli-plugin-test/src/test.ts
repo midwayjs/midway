@@ -25,6 +25,10 @@ export class Test {
       cwd: this.config.cwd,
       env: Object.assign(
         {
+          MIDWAY_TS_MODE: this.argv.typescript,
+        },
+        process.env,
+        {
           NODE_ENV: 'test',
         },
         this.config.env
