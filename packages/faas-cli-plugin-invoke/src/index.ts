@@ -365,13 +365,28 @@ export class FaaSInvokePlugin extends BasePlugin {
         return;
       }
 
+      const {
+        faasModName,
+        initializeName,
+        faasStarterName,
+        advancePreventMultiInit,
+      } = this.getEntryInfo();
+
+      // 获取中间件
+      const mw = this.core.service['feature'] || {};
+      const middleware = Object.keys(mw).filter(item => !!mw[item]);
+
       writeWrapper({
         baseDir: this.baseDir,
+        middleware,
+        faasModName,
+        initializeName,
+        faasStarterName,
+        advancePreventMultiInit,
         service: {
           layers: this.core.service.layers,
           functions: this.core.service.functions,
         },
-        faasModName: process.env.MidwayModuleName,
         distDir: this.buildDir,
         starter: getPlatformPath(starterName),
         loadDirectory: isTsMode
@@ -395,6 +410,15 @@ export class FaaSInvokePlugin extends BasePlugin {
     }
     this.entryInfo = { fileName, handlerName: name };
     this.core.debug('EntryInfo', this.entryInfo);
+  }
+
+  public getEntryInfo() {
+    return {
+      faasModName: process.env.MidwayModuleName,
+      initializeName: 'initializer',
+      faasStarterName: 'FaaSStarter',
+      advancePreventMultiInit: false,
+    };
   }
 
   getStarterName() {
@@ -574,5 +598,9 @@ export class FaaSInvokePlugin extends BasePlugin {
     });
     await starter.start();
     return starter;
+  }
+
+  checkIsTsMode() {
+    return checkIsTsMode();
   }
 }
