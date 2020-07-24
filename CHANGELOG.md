@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.4](https://github.com/midwayjs/midway-faas/compare/v1.0.8...v1.1.4) (2020-07-24)
+
+
+### Bug Fixes
+
+* add analysisCode lifecycle ([#535](https://github.com/midwayjs/midway-faas/issues/535)) ([1bf2e8a](https://github.com/midwayjs/midway-faas/commit/1bf2e8a65b658b3c5a341245e02a97b9d96eb856))
+* aws multi function support ([#546](https://github.com/midwayjs/midway-faas/issues/546)) ([f89134c](https://github.com/midwayjs/midway-faas/commit/f89134ce3bcd470da30dbcc79f91ba08337de967))
+* aws plugin permission confirm ([#536](https://github.com/midwayjs/midway-faas/issues/536)) ([4fa679d](https://github.com/midwayjs/midway-faas/commit/4fa679dfb9480a01beac944cbd1c6217355d9e0f))
+* http parser set response ([#545](https://github.com/midwayjs/midway-faas/issues/545)) ([74a854d](https://github.com/midwayjs/midway-faas/commit/74a854d975bbb8baa281e6ef76f319e22c53afc6))
+* set app key where load user code ([#548](https://github.com/midwayjs/midway-faas/issues/548)) ([1c5aa44](https://github.com/midwayjs/midway-faas/commit/1c5aa446d9d02545ae2a596b538a211fde4214d5))
+* skip compile when tsconfig not found ([#549](https://github.com/midwayjs/midway-faas/issues/549)) ([f40dbae](https://github.com/midwayjs/midway-faas/commit/f40dbaec4883f60801b895d4929fa09f47bb2506))
+* status 204 when user not set status ([#533](https://github.com/midwayjs/midway-faas/issues/533)) ([9276fe8](https://github.com/midwayjs/midway-faas/commit/9276fe846b983f4f870c2b3eb97e2c254bd5ff5a))
+* ts-mode ([#552](https://github.com/midwayjs/midway-faas/issues/552)) ([d8f231c](https://github.com/midwayjs/midway-faas/commit/d8f231c8a0ad5c50d42809e915c1669b67902305))
+* wrapper support middleware ([#529](https://github.com/midwayjs/midway-faas/issues/529)) ([eade6a6](https://github.com/midwayjs/midway-faas/commit/eade6a6fd41494517154398674ab76cbcc2b3e1a))
+
+
+### Features
+
+* default add cookie for http parser ([#540](https://github.com/midwayjs/midway-faas/issues/540)) ([5799e96](https://github.com/midwayjs/midway-faas/commit/5799e9642144b23b81d5c629387ce52510dde00d))
+* mwcc multi stage compilation support ([#523](https://github.com/midwayjs/midway-faas/issues/523)) ([c5a64f2](https://github.com/midwayjs/midway-faas/commit/c5a64f216aeddda4c62d4ae674ed4eb27433e751))
+* progressive ([#551](https://github.com/midwayjs/midway-faas/issues/551)) ([7b0060e](https://github.com/midwayjs/midway-faas/commit/7b0060e642de8e62ee07d9f4ca8c9aa569f3f34f))
+* Support application layer ([#534](https://github.com/midwayjs/midway-faas/issues/534)) ([7a141c0](https://github.com/midwayjs/midway-faas/commit/7a141c0c9404dc20d4d146a14e01dff404943142))
+* support initTimeout in fc provider ([#530](https://github.com/midwayjs/midway-faas/issues/530)) ([ddfe654](https://github.com/midwayjs/midway-faas/commit/ddfe65484e0c1dc79c12e855bd098dceb075a22c))
+
+
+
+
+
 ## [1.1.3](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.2...serverless-v1.1.3) (2020-07-24)
 
 

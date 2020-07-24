@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.4](https://github.com/midwayjs/midway-faas/compare/v1.0.8...v1.1.4) (2020-07-24)
+
+
+### Bug Fixes
+
+* aws plugin permission confirm ([#536](https://github.com/midwayjs/midway-faas/issues/536)) ([4fa679d](https://github.com/midwayjs/midway-faas/commit/4fa679dfb9480a01beac944cbd1c6217355d9e0f))
+* ts-mode ([#552](https://github.com/midwayjs/midway-faas/issues/552)) ([d8f231c](https://github.com/midwayjs/midway-faas/commit/d8f231c8a0ad5c50d42809e915c1669b67902305))
+
+
+### Features
+
+* Support application layer ([#534](https://github.com/midwayjs/midway-faas/issues/534)) ([7a141c0](https://github.com/midwayjs/midway-faas/commit/7a141c0c9404dc20d4d146a14e01dff404943142))
+
+
+
+
+
 ## [1.1.3](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.2...serverless-v1.1.3) (2020-07-24)
 
 
