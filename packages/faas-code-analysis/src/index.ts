@@ -23,7 +23,7 @@ export const analysisResultToSpec = (analysisResult: AnalyzeResult) => {
 
   const provideList = analysisResult?.decorator?.provide || [];
   provideList.forEach(provide => {
-    if (!provide.childDecorators.func) {
+    if (!provide?.childDecorators?.func) {
       return;
     }
     provide.childDecorators.func.forEach(item => {
