@@ -15,6 +15,9 @@ for (const item of data) {
       `npm show ${item.name} version`
     ).toString().replace('\n', '');
     arr.push(
+      `npm dist-tag add ${item.name}@${version} latest\n`
+    );
+    arr.push(
       `tnpm dist-tag add ${item.name}@${version} latest\n`
     );
     diff.push(`#  - ${item.name}: ${version} => 3.2.9\n`);
