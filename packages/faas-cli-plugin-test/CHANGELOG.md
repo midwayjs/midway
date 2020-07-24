@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.3](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.2...serverless-v1.1.3) (2020-07-24)
+
+
+### Bug Fixes
+
+* ts-mode ([#552](https://github.com/midwayjs/midway-faas/issues/552)) ([d8f231c](https://github.com/midwayjs/midway-faas/commit/d8f231c8a0ad5c50d42809e915c1669b67902305))
+
+
+
+
+
 ## [1.1.2](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.1...serverless-v1.1.2) (2020-07-23)
 
 **Note:** Version bump only for package @midwayjs/fcli-plugin-test
