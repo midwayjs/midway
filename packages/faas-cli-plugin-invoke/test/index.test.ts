@@ -48,6 +48,7 @@ describe('/test/index.test.ts', () => {
   });
 
   it('invoke use two step', async () => {
+    process.env.MIDWAY_TS_MODE = 'true';
     const invokeInstance: any = await invoke({
       getFunctionList: true,
       functionDir: join(__dirname, 'fixtures/baseApp'),
@@ -59,6 +60,7 @@ describe('/test/index.test.ts', () => {
       functionName: 'http',
       data: [{ name: 'params' }],
     });
+    process.env.MIDWAY_TS_MODE = 'false';
     assert(existsSync(join(__dirname, 'fixtures/baseApp/.faas_debug_tmp')));
     assert(
       existsSync(
