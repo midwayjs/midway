@@ -28,12 +28,14 @@ describe('/test/index.test.ts', () => {
   });
 
   it('should use origin http trigger', async () => {
+    process.env.MIDWAY_TS_MODE = 'true';
     const result: any = await invoke({
       functionDir: join(__dirname, 'fixtures/baseApp'),
       functionName: 'http',
       data: [{ name: 'params' }],
       clean: false,
     });
+    process.env.MIDWAY_TS_MODE = 'false';
     console.log('result', result);
     assert(existsSync(join(__dirname, 'fixtures/baseApp/.faas_debug_tmp')));
     assert(

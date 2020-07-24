@@ -93,7 +93,7 @@ export const waitForLock = async (lockKey, count?) => {
 
 export const checkIsTsMode = () => {
   // eslint-disable-next-line node/no-deprecated-api
-  return !!require.extensions['.ts'];
+  return process.env.MIDWAY_TS_MODE === 'true' && !!require.extensions['.ts'];
 };
 
 export const getPlatformPath = p => {

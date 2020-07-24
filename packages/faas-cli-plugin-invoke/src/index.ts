@@ -184,7 +184,10 @@ export class FaaSInvokePlugin extends BasePlugin {
       return;
     }
     this.skipTsBuild = false;
-    process.env.MIDWAY_TS_MODE = 'false';
+    const isTsMode = checkIsTsMode();
+    if (!isTsMode) {
+      process.env.MIDWAY_TS_MODE = 'false';
+    }
     // 构建锁文件
     this.buildLogDir = resolve(this.buildDir, 'log');
     ensureDirSync(this.buildLogDir);
@@ -202,9 +205,7 @@ export class FaaSInvokePlugin extends BasePlugin {
       this.analyzedTsCodeRoot
     );
 
-    const isTsMode = checkIsTsMode();
     if (isTsMode) {
-      process.env.MIDWAY_TS_MODE = 'true';
       return;
     }
     const { lockType } = getLock(this.buildLockPath);
