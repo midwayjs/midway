@@ -74,6 +74,7 @@ export class FaaSInvokePlugin extends BasePlugin {
         'compile', // ts 代码编译
         'analysisCode', // Todo: 代码分析，向前兼容
         'emit', // ts 代码输出
+        'setFunctionList',
         'entry', // 生成执行入口
         'getInvoke', // 获取runtime
         'callInvoke', // 进行调用
@@ -110,6 +111,7 @@ export class FaaSInvokePlugin extends BasePlugin {
     'invoke:checkFileChange': this.checkFileChange.bind(this),
     'invoke:compile': this.compile.bind(this),
     'invoke:emit': this.emit.bind(this),
+    'invoke:setFunctionList': this.setFunctionList.bind(this),
     'invoke:entry': this.entry.bind(this),
     'invoke:getInvoke': this.getInvoke.bind(this),
     'invoke:callInvoke': this.callInvoke.bind(this),
@@ -338,6 +340,10 @@ export class FaaSInvokePlugin extends BasePlugin {
     });
     ensureFileSync(this.buildLockPath);
     writeFileSync(this.buildLockPath, JSON.stringify(this.fileChanges));
+  }
+
+  async setFunctionList() {
+    this.setStore('functions', this.core.service.functions);
   }
 
   checkUserEntry() {

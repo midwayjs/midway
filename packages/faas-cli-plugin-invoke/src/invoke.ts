@@ -82,7 +82,7 @@ export async function getFuncList(options: IGetFuncList) {
     return spec.functions;
   }
   const invokeFun = getFunction({
-    stopLifecycle: 'invoke:compile',
+    stopLifecycle: 'invoke:setFunctionList',
     specFile,
     spec,
   });

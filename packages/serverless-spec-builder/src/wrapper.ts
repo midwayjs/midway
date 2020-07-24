@@ -112,6 +112,12 @@ export function writeWrapper(options: {
       functionMap,
       ...layers,
     });
+    if (existsSync(fileName)) {
+      const oldContent = readFileSync(fileName).toString();
+      if (oldContent === content) {
+        continue;
+      }
+    }
     writeFileSync(fileName, content);
   }
 }

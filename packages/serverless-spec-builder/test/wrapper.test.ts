@@ -52,7 +52,7 @@ describe('/test/wrapper.test.ts', () => {
         /registerFunctionToIocByConfig/.test(readFileSync(aggrePath).toString())
       );
       assert(
-        /require\('registerFunction\.js'\)/.test(
+        /require\('.\/registerFunction\.js'\)/.test(
           readFileSync(aggrePath).toString()
         )
       );

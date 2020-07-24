@@ -1,6 +1,9 @@
 const { <%=faasStarterName %> } = require('<%=faasModName %>');
 const { asyncWrapper, start } = require('<%=starter %>');
-<% if (functionMap) { %>const { registerFunctionToIocByConfig } = require('registerFunction.js');<% } %>
+<% if (functionMap) { %>
+const { registerFunctionToIocByConfig } = require('./registerFunction.js');
+const { join } = require('path');
+<% } %>
 const picomatch = require('picomatch');
 <% layerDeps.forEach(function(layer){ %>const <%=layer.name%> = require('<%=layer.path%>');
 <% }); %>
