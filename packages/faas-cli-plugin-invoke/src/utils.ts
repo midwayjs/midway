@@ -37,6 +37,7 @@ export const formatInvokeResult = result => {
 // 转换传递给 invoke 方法的参数 到 invoke plugin 所需要的参数
 export const optionsToInvokeParams = (options: InvokeOptions) => {
   return {
+    ...options,
     function: options.functionName,
     data: options.data,
     trigger: options.trigger,
