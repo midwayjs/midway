@@ -13,8 +13,8 @@ const registerFunctionToIoc = (container, functionName, func) => {
     async handler(event) {
       const bindCtx = {
         ctx: this.ctx,
-        event
-      }
+        event,
+      };
 
       /**
        * HTTP Case
@@ -62,7 +62,7 @@ const registerFunctionToIocByConfig = (config, options) => {
       if (!exportMods || !exportMods[functionName]) {
         return;
       }
-      
+
       registerFunctionToIoc(
         options.context,
         functionHandler || `${functionName}.handler`,
