@@ -77,8 +77,14 @@ const registerFunctionToIocByConfig = (config, options) => {
         modExports[functionName]
       );
     } catch (error) {
-      console.error(`require ${functionPath} error, function info: ${JSON.stringify(functionInfo, null, 2)}`)
-      console.error(error)
+      console.error(
+        `require ${functionPath} error, function info: ${JSON.stringify(
+          functionInfo,
+          null,
+          2
+        )}`
+      );
+      console.error(error);
     }
   });
 };
