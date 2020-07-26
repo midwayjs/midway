@@ -11,6 +11,7 @@
     "mkdirp": "^0.5.1"
   },
   "devDependencies": {
+    "@types/lodash.get": "^4.4.6",
     "fs-extra": "^8.1.0",
     "midway-bin": "^2.0.0",
     "mm": "3"
