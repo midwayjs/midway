@@ -1,0 +1,40 @@
+{
+  "name": "@midwayjs/koa-layer",
+  "version": "1.1.4",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx midway-bin test --full-trace",
+    "test-local": "midway-bin test --full-trace",
+    "debug": "midway-bin test --full-trace --inspect-brk=9229",
+    "cov": "midway-bin cov",
+    "autod": "midway-bin autod"
+  },
+  "dependencies": {
+    "request": "^2.88.2"
+  },
+  "devDependencies": {
+    "@midwayjs/runtime-engine": "^1.1.4",
+    "@midwayjs/runtime-mock": "^1.1.4",
+    "@midwayjs/serverless-fc-starter": "^1.1.4",
+    "@midwayjs/serverless-fc-trigger": "^1.1.4",
+    "@midwayjs/serverless-scf-starter": "^1.1.4",
+    "@midwayjs/serverless-scf-trigger": "^1.1.4",
+    "koa": "^2.11.0",
+    "koa-bodyparser": "^4.2.1",
+    "koa-router": "^9.1.0",
+    "midway-bin": "^2.0.0",
+    "supertest": "^4.0.2"
+  },
+  "engines": {
+    "node": ">= 10"
+  },
+  "files": [
+    "index.js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:midwayjs/midway-faas.git"
+  },
+  "license": "MIT",
+  "gitHead": "1afeb34cbb6c0ad49ccdb9cfaebd254ae73afc6a"
+}

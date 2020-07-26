@@ -3,6 +3,112 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.7](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.6...serverless-v1.1.7) (2020-07-26)
+
+
+### Bug Fixes
+
+* use ts analyze cache ([#560](https://github.com/midwayjs/midway-faas/issues/560)) ([06dbcb5](https://github.com/midwayjs/midway-faas/commit/06dbcb52210f6a43ed8d54d5288b09c1243d0665))
+
+
+
+
+
+## [1.1.6](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.5...serverless-v1.1.6) (2020-07-26)
+
+
+### Bug Fixes
+
+* register faas ctx ([#559](https://github.com/midwayjs/midway-faas/issues/559)) ([d9e1764](https://github.com/midwayjs/midway-faas/commit/d9e1764d55c053e74f9cad2b70641ba7b8ab70c3))
+
+
+
+
+
+## [1.1.5](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.3...serverless-v1.1.5) (2020-07-24)
+
+
+### Bug Fixes
+
+* wrapper compare ([#553](https://github.com/midwayjs/midway-faas/issues/553)) ([426aa65](https://github.com/midwayjs/midway-faas/commit/426aa65f2eb0d9f4312f5375ea39f9186f2a083c))
+
+
+
+## 1.1.4 (2020-07-24)
+
+
+
+
+
+## [1.1.4](https://github.com/midwayjs/midway-faas/compare/v1.0.8...v1.1.4) (2020-07-24)
+
+
+### Bug Fixes
+
+* add analysisCode lifecycle ([#535](https://github.com/midwayjs/midway-faas/issues/535)) ([1bf2e8a](https://github.com/midwayjs/midway-faas/commit/1bf2e8a65b658b3c5a341245e02a97b9d96eb856))
+* ts-mode ([#552](https://github.com/midwayjs/midway-faas/issues/552)) ([d8f231c](https://github.com/midwayjs/midway-faas/commit/d8f231c8a0ad5c50d42809e915c1669b67902305))
+
+
+### Features
+
+* mwcc multi stage compilation support ([#523](https://github.com/midwayjs/midway-faas/issues/523)) ([c5a64f2](https://github.com/midwayjs/midway-faas/commit/c5a64f216aeddda4c62d4ae674ed4eb27433e751))
+* progressive ([#551](https://github.com/midwayjs/midway-faas/issues/551)) ([7b0060e](https://github.com/midwayjs/midway-faas/commit/7b0060e642de8e62ee07d9f4ca8c9aa569f3f34f))
+
+
+
+
+
+## [1.1.3](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.2...serverless-v1.1.3) (2020-07-24)
+
+
+### Bug Fixes
+
+* ts-mode ([#552](https://github.com/midwayjs/midway-faas/issues/552)) ([d8f231c](https://github.com/midwayjs/midway-faas/commit/d8f231c8a0ad5c50d42809e915c1669b67902305))
+
+
+### Features
+
+* progressive ([#551](https://github.com/midwayjs/midway-faas/issues/551)) ([7b0060e](https://github.com/midwayjs/midway-faas/commit/7b0060e642de8e62ee07d9f4ca8c9aa569f3f34f))
+
+
+
+
+
+## [1.1.2](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.1...serverless-v1.1.2) (2020-07-23)
+
+**Note:** Version bump only for package @midwayjs/fcli-plugin-invoke
+
+
+
+
+
+## [1.1.1](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.0...serverless-v1.1.1) (2020-07-22)
+
+**Note:** Version bump only for package @midwayjs/fcli-plugin-invoke
+
+
+
+
+
+# [1.1.0](https://github.com/midwayjs/midway-faas/compare/serverless-v1.0.11...serverless-v1.1.0) (2020-07-21)
+
+**Note:** Version bump only for package @midwayjs/fcli-plugin-invoke
+
+
+
+
+
+## [1.0.11](https://github.com/midwayjs/midway-faas/compare/serverless-v1.0.10...serverless-v1.0.11) (2020-07-21)
+
+
+### Bug Fixes
+
+* add analysisCode lifecycle ([#535](https://github.com/midwayjs/midway-faas/issues/535)) ([1bf2e8a](https://github.com/midwayjs/midway-faas/commit/1bf2e8a65b658b3c5a341245e02a97b9d96eb856))
+
+
+
+
+
 ## [1.0.10](https://github.com/midwayjs/midway-faas/compare/serverless-v1.0.9...serverless-v1.0.10) (2020-07-16)
 
 

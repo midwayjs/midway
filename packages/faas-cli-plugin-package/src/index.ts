@@ -19,8 +19,13 @@ import {
 } from 'fs-extra';
 import * as micromatch from 'micromatch';
 import { commonPrefix, formatLayers } from './utils';
-import { analysis, copyFiles } from '@midwayjs/faas-code-analysis';
-import { CompilerHost, Program, resolveTsConfigFile } from '@midwayjs/mwcc';
+import { analysisResultToSpec, copyFiles } from '@midwayjs/faas-code-analysis';
+import {
+  CompilerHost,
+  Program,
+  resolveTsConfigFile,
+  Analyzer,
+} from '@midwayjs/mwcc';
 import { exec } from 'child_process';
 import * as archiver from 'archiver';
 import { AnalyzeResult, Locator } from '@midwayjs/locate';
@@ -102,6 +107,7 @@ export class PackagePlugin extends BasePlugin {
     'package:installDep': this.installDep.bind(this),
     'package:checkAggregation': this.checkAggregation.bind(this),
     'package:package': this.package.bind(this),
+    'before:package:generateSpec': this.defaultBeforeGenerateSpec.bind(this),
     'after:package:generateEntry': this.defaultGenerateEntry.bind(this),
     'before:package:finalize': this.finalize.bind(this),
     'package:emit': this.emit.bind(this),
@@ -311,6 +317,10 @@ export class PackagePlugin extends BasePlugin {
   }
 
   async compile() {
+    // 不存在 tsconfig，跳过编译
+    if (!existsSync(resolve(this.servicePath, 'tsconfig.json'))) {
+      return;
+    }
     let tsCodeRoot: string;
     const tmpOutDir = resolve(this.defaultTmpFaaSOut, 'src');
     if (existsSync(tmpOutDir)) {
@@ -338,11 +348,14 @@ export class PackagePlugin extends BasePlugin {
     if (this.core.service.functions) {
       return this.core.service.functions;
     }
-    const newSpec: any = await analysis([
-      resolve(this.servicePath, this.codeAnalyzeResult.tsCodeRoot),
-      resolve(this.defaultTmpFaaSOut, 'src'),
-    ]);
-    this.core.debug('CcdeAnalysis', newSpec);
+
+    const analyzeInstance = new Analyzer({
+      program: this.program,
+      decoratorLowerCase: true,
+    });
+    const analyzeResult = analyzeInstance.analyze();
+    const newSpec = analysisResultToSpec(analyzeResult);
+    this.core.debug('CodeAnalysis', newSpec);
     this.core.service.functions = newSpec.functions;
   }
 
@@ -630,6 +643,41 @@ export class PackagePlugin extends BasePlugin {
 
   getAggregationFunName(aggregationName: string) {
     return aggregationName;
+  }
+
+  defaultBeforeGenerateSpec() {
+    const service: any = this.core.service;
+    if (service?.deployType) {
+      // add default function
+      if (!service.functions) {
+        service.functions = {
+          app_index: {
+            handler: 'index.handler',
+            events: [{ http: { path: '/*' } }],
+          },
+        };
+      }
+
+      if (!service?.layers) {
+        service.layers = {};
+      }
+
+      if (service?.deployType === 'egg') {
+        service.layers['eggLayer'] = { path: 'npm:@midwayjs/egg-layer' };
+      }
+
+      if (service?.deployType === 'express') {
+        service.layers['expressLayer'] = {
+          path: 'npm:@midwayjs/express-layer',
+        };
+      }
+
+      if (service?.deployType === 'koa') {
+        service.layers['koaLayer'] = { path: 'npm:@midwayjs/koa-layer' };
+      }
+    }
+
+    writeToSpec(this.midwayBuildPath, this.core.service);
   }
 
   finalize() {}

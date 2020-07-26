@@ -29,6 +29,7 @@ export class CommandHookCore implements ICommandHooksCore {
   private execId: number = Math.ceil(Math.random() * 1000);
   private userLifecycle: any = {};
   private cwd: string;
+  private stopLifecycles: string[] = [];
 
   store = new Map();
 
@@ -138,6 +139,10 @@ export class CommandHookCore implements ICommandHooksCore {
     if (displayHelp) {
       return this.displayHelp(commandsArray, commandInfo.usage);
     }
+    await this.execLiftcycle(lifecycleEvents);
+  }
+
+  private async execLiftcycle(lifecycleEvents) {
     for (const lifecycle of lifecycleEvents) {
       if (this.userLifecycle && this.userLifecycle[lifecycle]) {
         this.debug('User Lifecycle', lifecycle);
@@ -159,6 +164,17 @@ export class CommandHookCore implements ICommandHooksCore {
         }
       }
     }
+  }
+
+  // resume stop licycle execute
+  public async resume(options?) {
+    if (options) {
+      if (!this.options.options) {
+        this.options.options = {};
+      }
+      Object.assign(this.options.options, options);
+    }
+    await this.execLiftcycle(this.stopLifecycles);
   }
 
   // spawn('aliyun:invoke')
@@ -314,6 +330,7 @@ export class CommandHookCore implements ICommandHooksCore {
     parentCommandList?: string[]
   ) {
     const allLifecycles: string[] = [];
+    let isStop = false;
     const { stopLifecycle } = this.options;
     const parentCommand =
       parentCommandList && parentCommandList.length
@@ -321,12 +338,13 @@ export class CommandHookCore implements ICommandHooksCore {
         : '';
     if (lifecycleEvents) {
       for (const life of lifecycleEvents) {
+        const liftCycles = isStop ? this.stopLifecycles : allLifecycles;
         const tmpLife = `${parentCommand}${command}:${life}`;
-        allLifecycles.push(`before:${tmpLife}`);
-        allLifecycles.push(tmpLife);
-        allLifecycles.push(`after:${tmpLife}`);
+        liftCycles.push(`before:${tmpLife}`);
+        liftCycles.push(tmpLife);
+        liftCycles.push(`after:${tmpLife}`);
         if (stopLifecycle === tmpLife) {
-          return allLifecycles;
+          isStop = true;
         }
       }
     }

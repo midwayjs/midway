@@ -1,3 +1,13 @@
+export interface MFunctions {
+  name: string;
+  handler: string;
+  events: {
+    type: string;
+    method: string;
+    path: string;
+  }[];
+}
+
 export interface S3UploadResult {
   ETag: string;
   ServerSideEncryption?: string;

@@ -3,6 +3,97 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.7](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.6...serverless-v1.1.7) (2020-07-26)
+
+**Note:** Version bump only for package @midwayjs/fcli-plugin-package
+
+
+
+
+
+## [1.1.6](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.5...serverless-v1.1.6) (2020-07-26)
+
+**Note:** Version bump only for package @midwayjs/fcli-plugin-package
+
+
+
+
+
+## [1.1.5](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.3...serverless-v1.1.5) (2020-07-24)
+
+
+
+## 1.1.4 (2020-07-24)
+
+**Note:** Version bump only for package @midwayjs/fcli-plugin-package
+
+
+
+
+
+## [1.1.4](https://github.com/midwayjs/midway-faas/compare/v1.0.8...v1.1.4) (2020-07-24)
+
+
+### Bug Fixes
+
+* skip compile when tsconfig not found ([#549](https://github.com/midwayjs/midway-faas/issues/549)) ([f40dbae](https://github.com/midwayjs/midway-faas/commit/f40dbaec4883f60801b895d4929fa09f47bb2506))
+
+
+### Features
+
+* mwcc multi stage compilation support ([#523](https://github.com/midwayjs/midway-faas/issues/523)) ([c5a64f2](https://github.com/midwayjs/midway-faas/commit/c5a64f216aeddda4c62d4ae674ed4eb27433e751))
+* progressive ([#551](https://github.com/midwayjs/midway-faas/issues/551)) ([7b0060e](https://github.com/midwayjs/midway-faas/commit/7b0060e642de8e62ee07d9f4ca8c9aa569f3f34f))
+
+
+
+
+
+## [1.1.3](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.2...serverless-v1.1.3) (2020-07-24)
+
+
+### Features
+
+* progressive ([#551](https://github.com/midwayjs/midway-faas/issues/551)) ([7b0060e](https://github.com/midwayjs/midway-faas/commit/7b0060e642de8e62ee07d9f4ca8c9aa569f3f34f))
+
+
+
+
+
+## [1.1.2](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.1...serverless-v1.1.2) (2020-07-23)
+
+
+### Bug Fixes
+
+* skip compile when tsconfig not found ([#549](https://github.com/midwayjs/midway-faas/issues/549)) ([f40dbae](https://github.com/midwayjs/midway-faas/commit/f40dbaec4883f60801b895d4929fa09f47bb2506))
+
+
+
+
+
+## [1.1.1](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.0...serverless-v1.1.1) (2020-07-22)
+
+**Note:** Version bump only for package @midwayjs/fcli-plugin-package
+
+
+
+
+
+# [1.1.0](https://github.com/midwayjs/midway-faas/compare/serverless-v1.0.11...serverless-v1.1.0) (2020-07-21)
+
+**Note:** Version bump only for package @midwayjs/fcli-plugin-package
+
+
+
+
+
+## [1.0.11](https://github.com/midwayjs/midway-faas/compare/serverless-v1.0.10...serverless-v1.0.11) (2020-07-21)
+
+**Note:** Version bump only for package @midwayjs/fcli-plugin-package
+
+
+
+
+
 ## [1.0.10](https://github.com/midwayjs/midway-faas/compare/serverless-v1.0.9...serverless-v1.0.10) (2020-07-16)
 
 

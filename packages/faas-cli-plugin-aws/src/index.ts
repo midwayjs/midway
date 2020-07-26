@@ -1,9 +1,18 @@
-import { readFileSync, createReadStream } from 'fs';
+import { homedir } from 'os';
 import { join, basename } from 'path';
+import {
+  readFileSync,
+  createReadStream,
+  writeFileSync,
+  mkdirSync,
+  existsSync,
+} from 'fs';
 import { S3, Lambda, CloudFormation } from 'aws-sdk';
 import { render } from 'ejs';
 import { writeWrapper } from '@midwayjs/serverless-spec-builder';
 import { BasePlugin, ICoreInstance } from '@midwayjs/fcli-command-core';
+
+const { Input } = require('enquirer');
 
 import {
   addProfileCredentials,
@@ -12,12 +21,12 @@ import {
 } from './profile';
 import {
   S3UploadResult,
-  LambdaFunctionOptions,
+  // LambdaFunctionOptions,
   StackEvents,
   StackResourcesDetail,
+  MFunctions,
 } from './interface';
 
-// const fs = require('fs');
 import { get } from 'lodash';
 
 export class AWSLambdaPlugin extends BasePlugin {
@@ -67,8 +76,13 @@ export class AWSLambdaPlugin extends BasePlugin {
         this.core.cli.log(
           '  - cannot connect to aws network, please try again later.'
         );
+      } else if (err.message.includes('Access Denied')) {
+        this.core.cli.log('  - credential has not S3FullAccess permission.');
+      } else {
+        this.core.cli.log('  -', err.message);
       }
-      this.core.cli.log('  -', err.message);
+      this.core.cli.log('  - please check your ~/.aws/credentials');
+      this.core.cli.log('Deploy failed.');
       process.exit(1);
     }
   }
@@ -116,9 +130,8 @@ export class AWSLambdaPlugin extends BasePlugin {
   }
 
   async generateStackJson(
-    name: string,
-    handler = 'index.handler',
-    path = '/hello',
+    fns: MFunctions[],
+    stage: string,
     bucket: string,
     key: string
   ) {
@@ -127,13 +140,34 @@ export class AWSLambdaPlugin extends BasePlugin {
     const tpl = readFileSync(
       join(__dirname, '../resource/aws-stack-http-template.ejs')
     ).toString();
-    const params: { options: LambdaFunctionOptions } = {
+    const params: {
+      functions: Array<{
+        name: string;
+        handler: string;
+        runtime?: string;
+        description?: string;
+        memorySize?: number;
+        timeout?: number;
+        codeBucket: string;
+        codeKey: string;
+        events: { path: string; method: string }[];
+      }>;
+      options?: { stage: string };
+    } = {
+      functions: fns.map(item =>
+        Object.assign(
+          {},
+          {
+            name: item.name,
+            handler: item.handler,
+            events: item.events,
+            codeBucket: bucket,
+            codeKey: key,
+          }
+        )
+      ),
       options: {
-        name,
-        handler,
-        path,
-        codeBucket: bucket,
-        codeKey: key,
+        stage,
       },
     };
     return render(tpl, params);
@@ -141,8 +175,8 @@ export class AWSLambdaPlugin extends BasePlugin {
 
   async createStack(
     credentials,
-    name: string,
-    handler: string,
+    fns: MFunctions[],
+    stage: string,
     bucket: S3UploadResult
   ): Promise<{ StackId: string }> {
     this.core.cli.log('Start stack create');
@@ -159,14 +193,13 @@ export class AWSLambdaPlugin extends BasePlugin {
      */
     const service = new CloudFormation(credentials);
     const TemplateBody = await this.generateStackJson(
-      name,
-      handler,
-      '/hello',
+      fns,
+      stage,
       bucket.Bucket,
       bucket.Key
     );
     const params = {
-      StackName: 'my-test-stack',
+      StackName: 'ms-stack-' + this.core.service.service.name,
       OnFailure: 'DELETE',
       Capabilities: ['CAPABILITY_IAM', 'CAPABILITY_AUTO_EXPAND'],
       Parameters: [],
@@ -175,36 +208,43 @@ export class AWSLambdaPlugin extends BasePlugin {
     };
 
     this.core.cli.log('  - creating stack request');
-    return new Promise((resolve, reject) =>
-      service.createStack(params, (err, data) => {
-        if (err) {
-          return reject(err);
-        }
-        resolve(data as any);
-      })
-    );
+    try {
+      return await new Promise((resolve, reject) =>
+        service.createStack(params, (err, data) => {
+          if (err) {
+            return reject(err);
+          }
+          resolve(data as any);
+        })
+      );
+    } catch (err) {
+      if (err.message.includes('is not authorized to perform')) {
+        this.core.cli.log(
+          '  - credentials has not AWSCloudFormationFullAccess permission'
+        );
+        this.core.cli.log('  - please check your ~/.aws/credentials');
+        this.core.cli.log('Deploy failed.');
+        process.exit(1);
+      } else {
+        this.core.cli.log('  -', err.message);
+      }
+      throw err;
+    }
   }
 
   async updateStack(
     credentials,
     bucket: string,
     key: string,
-    name: string
+    fns: MFunctions[],
+    stage
   ): Promise<{ StackId: string }> {
     this.core.cli.log('  - stack already exists, do stack update');
     // TODO support multi function;
-    const names = Object.keys(this.core.service.functions);
-    const handler = this.core.service.functions[names[0]].handler;
     const service = new CloudFormation(credentials);
-    const TemplateBody = await this.generateStackJson(
-      name,
-      handler,
-      '/hello',
-      bucket,
-      key
-    );
+    const TemplateBody = await this.generateStackJson(fns, stage, bucket, key);
     const params = {
-      StackName: 'my-test-stack',
+      StackName: 'ms-stack-' + this.core.service.service.name,
       Capabilities: ['CAPABILITY_IAM', 'CAPABILITY_AUTO_EXPAND'],
       Parameters: [],
       TemplateBody,
@@ -224,9 +264,9 @@ export class AWSLambdaPlugin extends BasePlugin {
     credentials,
     stackId: string,
     stage = 'v1',
-    path = '/hello'
+    fns: MFunctions[]
   ) {
-    this.core.cli.log('  - wait stack ready');
+    this.core.cli.log('  - wait stack ready', stackId);
     const service = new CloudFormation(credentials);
     const params = {
       StackName: stackId,
@@ -249,7 +289,8 @@ export class AWSLambdaPlugin extends BasePlugin {
         lastEvent.ResourceType === 'AWS::CloudFormation::Stack' &&
         lastEvent.ResourceStatus === 'DELETE_COMPLETE'
       ) {
-        return Promise.reject('stack deploy failed');
+        process.stdout.write('\n');
+        return Promise.reject('Stack deploy failed');
       }
       if (
         lastEvent &&
@@ -279,20 +320,20 @@ export class AWSLambdaPlugin extends BasePlugin {
     );
 
     const { StackResources } = result;
-    const data = StackResources.find(
+    const datas = StackResources.filter(
       res => res.ResourceType === 'AWS::ApiGateway::RestApi'
     );
 
     // https://wsqd4ni6i5.execute-api.us-east-1.amazonaws.com/Prod/hello-curl
-    const api = `https://${data.PhysicalResourceId}.execute-api.${credentials.region}.amazonaws.com/${stage}${path}`;
-    return {
-      api,
-    };
+    fns.map(fn => {
+      const api = `https://${datas[0].PhysicalResourceId}.execute-api.${credentials.region}.amazonaws.com/${stage}${fn.events[0].path}`;
+      console.log(fn.name, 'test url', api);
+    });
   }
 
   async updateFunction(
     credentials,
-    name: string,
+    fns: MFunctions[],
     bucket: S3UploadResult
   ): Promise<any> {
     this.core.cli.log('  - upadte function');
@@ -303,86 +344,120 @@ export class AWSLambdaPlugin extends BasePlugin {
     //     (err, data) => err ? reject(err) : resolve(data));
     // });
 
-    // TODO support multi function;
-    const params = {
-      FunctionName: name,
-      S3Bucket: bucket.Bucket,
-      S3Key: bucket.Key,
-    };
-    /**
-     * {
-     *    FunctionName: 'serverless-hello-world-index',
-     *    FunctionArn: 'arn:aws:lambda:us-east-1:752677612709:function:serverless-hello-world-index',
-     *    Runtime: 'nodejs12.x',
-     *    Role: 'arn:aws:iam::752677612709:role/service-role/hello-curl-role-5tk89mye',
-     *    Handler: 'index.handler',
-     *    CodeSize: 311,
-     *    Description: '',
-     *    Timeout: 3,
-     *    MemorySize: 128,
-     *    LastModified: '2020-07-12T18:10:09.191+0000',
-     *    CodeSha256: 'pg5zZr5JSWbuN14CoyCzcz5tu0mZA7mxAoIgdC5+dL0=',
-     *    Version: '$LATEST',
-     *    KMSKeyArn: null,
-     *    TracingConfig: { Mode: 'PassThrough' },
-     *    MasterArn: null,
-     *    RevisionId: '7d0b02dc-cde7-4680-9db1-95792282f96c',
-     *    State: 'Active',
-     *    StateReason: null,
-     *    StateReasonCode: null,
-     *    LastUpdateStatus: 'Successful',
-     *    LastUpdateStatusReason: null,
-     *    LastUpdateStatusReasonCode: null
-     *  }
-     */
-    await new Promise((resolve, reject) =>
-      service.updateFunctionCode(params, err => (err ? reject(err) : resolve()))
-    );
+    const tasks = fns.map(fn => {
+      const params = {
+        FunctionName: fn.name,
+        S3Bucket: bucket.Bucket,
+        S3Key: bucket.Key,
+      };
+      return new Promise((resolve, reject) =>
+        service.updateFunctionCode(params, err =>
+          err ? reject(err) : resolve()
+        )
+      );
+    });
+    tasks.push();
+    await Promise.all(tasks);
     this.core.cli.log('  - upadte over');
   }
 
+  async saveCredentials(accessKeyId: string, accessKeySecret: string) {
+    if (!accessKeyId || !accessKeySecret) {
+      throw new Error('please provide credentials');
+    }
+    const homeAwsDir = join(homedir(), '.aws');
+    const awsCredentialsPath = join(homeAwsDir, 'credentials');
+    if (!existsSync(homeAwsDir)) {
+      mkdirSync(homeAwsDir);
+    }
+    const text =
+      '[default]\n' +
+      'aws_access_key_id = ' +
+      accessKeyId +
+      '\n' +
+      'aws_secret_access_key = ' +
+      accessKeySecret +
+      '\n';
+    writeFileSync(awsCredentialsPath, text);
+  }
+
+  getFunctions(): MFunctions[] {
+    const obj: {
+      [key: string]: {
+        handler: string;
+        events: Array<{
+          [key: string]: {
+            method: string;
+            path: string;
+          };
+        }>;
+      };
+    } = this.core.service.functions as any;
+    return Object.keys(obj).map(name => ({
+      name,
+      handler: obj[name].handler || 'index.handler',
+      events: obj[name].events.reduce((arr, item) => {
+        arr.push(
+          ...Object.keys(item).map(type => ({
+            type,
+            ...item[type],
+          }))
+        );
+        return arr;
+      }, [] as { type: string; method: string; path: string }[]),
+    }));
+  }
+
   async deploy() {
-    const names = Object.keys(this.core.service.functions);
-    const handler = this.core.service.functions[names[0]].handler;
-    const name = `${this.core.service.service.name}-${names[0]}`;
     const stage = 'v1';
-    const path = '/hello';
+    const fns = this.getFunctions();
 
     await this.package();
 
     this.core.cli.log('Start deploy by aws-sdk');
+    // 配置 crendentials
+    let credentials = this.getCredentials();
+    if (!credentials.credentials) {
+      this.core.cli.log(
+        'There is no credentials available, please ensure you have the permissions below:'
+      );
+      this.core.cli.log('  - AmazonS3FullAccess');
+      this.core.cli.log('  - AWSCloudFormationFullAccess');
+      this.core.cli.log('  - AWSLambdaFullAccess');
+      this.core.cli.log('  - AmazonAPIGatewayAdministrator');
+      this.core.cli.log(
+        'There is no credentials available, please input aws credentials: (you can get credentials from https://console.aws.amazon.com/iam/home?region=us-east-1#/users)'
+      );
+      const accessKeyId = await new Input({
+        message: 'aws_access_key_id =',
+        show: true,
+      }).run();
+      const accessKeySecret = await new Input({
+        message: 'aws_secret_access_key =',
+        show: true,
+      }).run();
+      await this.saveCredentials(accessKeyId, accessKeySecret);
+      credentials = this.getCredentials(true);
+    }
+    credentials.region = this.getRegion();
 
     const bucket = `${this.core.service.service.name}-deploymentbucket`;
     await this.featchBucket(bucket);
     const artifactRes = await this.uploadArtifact(bucket);
     // console.log('artifactRes', artifactRes);
 
-    // 配置 crendentials
-    const credentials = this.getCredentials();
-    credentials.region = this.getRegion();
-
     let stackData: { StackId: string } = null;
     try {
-      stackData = await this.createStack(
-        credentials,
-        name,
-        handler,
-        artifactRes
-      );
+      stackData = await this.createStack(credentials, fns, stage, artifactRes);
     } catch (err) {
       if (err.message.includes('already exists')) {
-        await this.updateFunction(credentials, name, artifactRes);
+        await this.updateFunction(credentials, fns, artifactRes);
         return;
       }
       throw err;
     }
-    const result = await this.monitorStackResult(
-      credentials,
-      stackData.StackId,
-      stage,
-      path
-    );
-    this.core.cli.log('Deploy over, test url:', result.api);
+    await this.monitorStackResult(credentials, stackData.StackId, stage, fns);
+    this.core.cli.log('Deploy over');
   }
 
   /**
@@ -390,8 +465,8 @@ export class AWSLambdaPlugin extends BasePlugin {
    * well known environment variables
    * @returns {{region: *}}
    */
-  getCredentials() {
-    if (this.cachedCredentials) {
+  getCredentials(force = false) {
+    if (!force && this.cachedCredentials) {
       return this.cachedCredentials;
     }
     const result: any = {};

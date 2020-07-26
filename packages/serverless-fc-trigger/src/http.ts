@@ -2,6 +2,7 @@ import { exec } from 'child_process';
 import * as express from 'express';
 import * as HTTP from 'http';
 import { FCBaseTrigger } from './base';
+import * as expressBodyParser from 'body-parser';
 
 interface HTTPTriggerOpts {
   path: string;
@@ -25,12 +26,15 @@ export class HTTPTrigger extends FCBaseTrigger {
   async delegate(invokeWrapper: (invokeArgs: any[]) => any) {
     if (!this.app) {
       this.app = express();
-      this.app.get('*', (req, res, next) => {
+      this.app.use(expressBodyParser.urlencoded({ extended: false }));
+      this.app.use(expressBodyParser.json());
+      this.app.all('*', (req, res, next) => {
         /**
          * function(request, response, context)
          */
-        invokeWrapper([req, res, this.createContext()]);
-        next();
+        invokeWrapper([req, res, this.createContext()]).then(() => {
+          next();
+        });
       });
     }
     return this.app;

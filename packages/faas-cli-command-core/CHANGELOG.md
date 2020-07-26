@@ -3,6 +3,86 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.7](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.6...serverless-v1.1.7) (2020-07-26)
+
+**Note:** Version bump only for package @midwayjs/fcli-command-core
+
+
+
+
+
+## [1.1.6](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.5...serverless-v1.1.6) (2020-07-26)
+
+**Note:** Version bump only for package @midwayjs/fcli-command-core
+
+
+
+
+
+## [1.1.5](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.3...serverless-v1.1.5) (2020-07-24)
+
+
+
+## 1.1.4 (2020-07-24)
+
+**Note:** Version bump only for package @midwayjs/fcli-command-core
+
+
+
+
+
+## [1.1.4](https://github.com/midwayjs/midway-faas/compare/v1.0.8...v1.1.4) (2020-07-24)
+
+
+### Bug Fixes
+
+* ts-mode ([#552](https://github.com/midwayjs/midway-faas/issues/552)) ([d8f231c](https://github.com/midwayjs/midway-faas/commit/d8f231c8a0ad5c50d42809e915c1669b67902305))
+
+
+### Features
+
+* progressive ([#551](https://github.com/midwayjs/midway-faas/issues/551)) ([7b0060e](https://github.com/midwayjs/midway-faas/commit/7b0060e642de8e62ee07d9f4ca8c9aa569f3f34f))
+* Support application layer ([#534](https://github.com/midwayjs/midway-faas/issues/534)) ([7a141c0](https://github.com/midwayjs/midway-faas/commit/7a141c0c9404dc20d4d146a14e01dff404943142))
+
+
+
+
+
+## [1.1.3](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.2...serverless-v1.1.3) (2020-07-24)
+
+
+### Bug Fixes
+
+* ts-mode ([#552](https://github.com/midwayjs/midway-faas/issues/552)) ([d8f231c](https://github.com/midwayjs/midway-faas/commit/d8f231c8a0ad5c50d42809e915c1669b67902305))
+
+
+### Features
+
+* progressive ([#551](https://github.com/midwayjs/midway-faas/issues/551)) ([7b0060e](https://github.com/midwayjs/midway-faas/commit/7b0060e642de8e62ee07d9f4ca8c9aa569f3f34f))
+
+
+
+
+
+## [1.1.2](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.1...serverless-v1.1.2) (2020-07-23)
+
+**Note:** Version bump only for package @midwayjs/fcli-command-core
+
+
+
+
+
+# [1.1.0](https://github.com/midwayjs/midway-faas/compare/serverless-v1.0.11...serverless-v1.1.0) (2020-07-21)
+
+
+### Features
+
+* Support application layer ([#534](https://github.com/midwayjs/midway-faas/issues/534)) ([7a141c0](https://github.com/midwayjs/midway-faas/commit/7a141c0c9404dc20d4d146a14e01dff404943142))
+
+
+
+
+
 ## [1.0.10](https://github.com/midwayjs/midway-faas/compare/serverless-v1.0.9...serverless-v1.0.10) (2020-07-16)
 
 **Note:** Version bump only for package @midwayjs/fcli-command-core

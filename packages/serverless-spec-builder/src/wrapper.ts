@@ -1,8 +1,7 @@
 import { join, resolve } from 'path';
-import { writeFileSync, existsSync, readFileSync } from 'fs';
+import { writeFileSync, existsSync, readFileSync, copyFileSync } from 'fs';
 import { render } from 'ejs';
 import { getLayers } from './utils';
-
 // 写入口
 export function writeWrapper(options: {
   service: any;
@@ -31,9 +30,24 @@ export function writeWrapper(options: {
     middleware,
   } = options;
   const files = {};
+
+  // for function programing，function
+  let functionMap: any;
   const functions = service.functions || {};
   for (const func in functions) {
     const handlerConf = functions[func];
+    // for fp
+    if (handlerConf.isFunctional) {
+      if (!functionMap?.functionList) {
+        functionMap = { functionList: [] };
+      }
+      functionMap.functionList.push({
+        functionName: handlerConf.exportFunction,
+        functionHandler: handlerConf.handler,
+        functionFilePath: handlerConf.sourceFilePath,
+      });
+    }
+
     if (handlerConf._ignore) {
       continue;
     }
@@ -64,7 +78,24 @@ export function writeWrapper(options: {
       });
     }
   }
-  const tpl = readFileSync(resolve(__dirname, '../wrapper.ejs')).toString();
+
+  const isCustomAppType = !!service?.deployType;
+
+  const tpl = readFileSync(
+    resolve(
+      __dirname,
+      isCustomAppType ? '../wrapper_app.ejs' : '../wrapper.ejs'
+    )
+  ).toString();
+
+  if (functionMap?.functionList?.length) {
+    const registerFunctionFile = join(distDir, 'registerFunction.js');
+    const sourceFile = resolve(__dirname, '../registerFunction.js');
+    if (!existsSync(registerFunctionFile) && existsSync(sourceFile)) {
+      copyFileSync(sourceFile, registerFunctionFile);
+    }
+  }
+
   for (const file in files) {
     const fileName = join(distDir, `${file}.js`);
     const layers = getLayers(service.layers, ...files[file].originLayers);
@@ -78,8 +109,15 @@ export function writeWrapper(options: {
       advancePreventMultiInit: advancePreventMultiInit || false,
       initializer: initializeName || 'initializer',
       handlers: files[file].handlers,
+      functionMap,
       ...layers,
     });
+    if (existsSync(fileName)) {
+      const oldContent = readFileSync(fileName).toString();
+      if (oldContent === content) {
+        continue;
+      }
+    }
     writeFileSync(fileName, content);
   }
 }

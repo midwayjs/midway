@@ -238,6 +238,8 @@ export class FaaSStarter implements IFaaSStarter {
           this.webApplication['middleware']
         );
       }
+      // set app keys
+      this.webApplication['keys'] = this.webApplication.getConfig('keys') || '';
 
       // store all function entry
       const funModules = listModule(FUNC_KEY);

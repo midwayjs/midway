@@ -173,7 +173,7 @@ describe('/test/index.test.ts', () => {
         engine.addHealthExtension(async (ctx, runtime) => {
           console.log('--- health ctx', ctx, 'runtime', runtime);
         });
-        engine.addContextExtension(async (ctx, runtime) => {
+        engine.addContextExtension(async ctx => {
           ctx.myValue = 'res';
         });
       });

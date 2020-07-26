@@ -1,5 +1,9 @@
 const { <%=faasStarterName %> } = require('<%=faasModName %>');
 const { asyncWrapper, start } = require('<%=starter %>');
+<% if (functionMap) { %>
+const { registerFunctionToIocByConfig } = require('./registerFunction.js');
+const { join } = require('path');
+<% } %>
 const picomatch = require('picomatch');
 <% layerDeps.forEach(function(layer){ %>const <%=layer.name%> = require('<%=layer.path%>');
 <% }); %>
@@ -7,9 +11,15 @@ const picomatch = require('picomatch');
 let starter;
 let runtime;
 let inited = false;
+<% if (advancePreventMultiInit) { %>
+let isInitialing = false;
+<% } %>
 
 const initializeMethod = async (initializeContext = {}) => {
-  <% if (advancePreventMultiInit) { %> inited = true; <% } %>
+  <% if (advancePreventMultiInit) { %>
+  inited = true;
+  isInitialing = true;
+  <% } %>
   runtime = await start({
     layers: [<%= layers.join(", ") %>],
     getHandler: getHandler
@@ -17,15 +27,24 @@ const initializeMethod = async (initializeContext = {}) => {
   starter = new <%=faasStarterName %>({ baseDir: __dirname, initializeContext, applicationAdapter: runtime, middleware: <%-JSON.stringify(middleware)%> });
   <% loadDirectory.forEach(function(dirName){ %>
   starter.loader.loadDirectory({ baseDir: '<%=dirName%>'});<% }) %>
+  <% if (functionMap) { %>
+  registerFunctionToIocByConfig(<%-JSON.stringify(functionMap)%>, {
+    baseDir: join(__dirname, 'dist'),
+    context: starter.loader.getApplicationContext()
+  });
+  <% } %>
   await starter.start();
   <% if (!advancePreventMultiInit) { %> inited = true; <% } %>
+  <% if (advancePreventMultiInit) { %>
+  isInitialing = false;
+  <% } %>
 };
 
 const getHandler = (hanlderName) => {
   <% handlers.forEach(function(handlerData){ %>
     if (hanlderName === '<%=handlerData.name%>') {
-      return <% if (handlerData.handler) { 
-      %> starter.handleInvokeWrapper('<%=handlerData.handler%>'); <% } else { 
+      return <% if (handlerData.handler) {
+      %> starter.handleInvokeWrapper('<%=handlerData.handler%>'); <% } else {
       %> async (ctx) => {
         const allHandlers = <%-JSON.stringify(handlerData.handlers)%>;
         let handler = null;
@@ -35,7 +54,7 @@ const getHandler = (hanlderName) => {
             return picomatch.isMatch(ctxPath, handler.router)
           });
         }
-      
+
         if (handler) {
           return starter.handleInvokeWrapper(handler.handler)(ctx);
         }
@@ -46,6 +65,19 @@ const getHandler = (hanlderName) => {
     }
   <% }); %>
 }
+
+<% if (advancePreventMultiInit) { %>
+const waitInitial = () => {
+  return new Promise(resolve => {
+    if (!isInitialing) {
+      return resolve();
+    }
+    setTimeout(() => {
+      waitInitial().then(resolve);
+    }, 50);
+  });
+};
+<% } %>
 
 
 exports.<%=initializer%> = asyncWrapper(async (...args) => {
@@ -59,6 +91,11 @@ exports.<%=handlerData.name%> = asyncWrapper(async (...args) => {
   if (!inited) {
     await initializeMethod();
   }
+  <% if (advancePreventMultiInit) { %>
+  if (isInitialing) {
+    await waitInitial();
+  }
+  <% } %>
 
   const handler = getHandler('<%=handlerData.name%>');
   return runtime.asyncEvent(handler)(...args);

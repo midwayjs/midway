@@ -3,6 +3,50 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.4](https://github.com/midwayjs/midway-faas/compare/v1.0.8...v1.1.4) (2020-07-24)
+
+
+### Bug Fixes
+
+* http parser set response ([#545](https://github.com/midwayjs/midway-faas/issues/545)) ([74a854d](https://github.com/midwayjs/midway-faas/commit/74a854d975bbb8baa281e6ef76f319e22c53afc6))
+
+
+### Features
+
+* default add cookie for http parser ([#540](https://github.com/midwayjs/midway-faas/issues/540)) ([5799e96](https://github.com/midwayjs/midway-faas/commit/5799e9642144b23b81d5c629387ce52510dde00d))
+* Support application layer ([#534](https://github.com/midwayjs/midway-faas/issues/534)) ([7a141c0](https://github.com/midwayjs/midway-faas/commit/7a141c0c9404dc20d4d146a14e01dff404943142))
+
+
+
+
+
+# [1.1.0](https://github.com/midwayjs/midway-faas/compare/serverless-v1.0.11...serverless-v1.1.0) (2020-07-21)
+
+
+### Features
+
+* Support application layer ([#534](https://github.com/midwayjs/midway-faas/issues/534)) ([7a141c0](https://github.com/midwayjs/midway-faas/commit/7a141c0c9404dc20d4d146a14e01dff404943142))
+
+
+
+
+
+## [1.0.11](https://github.com/midwayjs/midway-faas/compare/serverless-v1.0.10...serverless-v1.0.11) (2020-07-21)
+
+
+### Bug Fixes
+
+* http parser set response ([#545](https://github.com/midwayjs/midway-faas/issues/545)) ([74a854d](https://github.com/midwayjs/midway-faas/commit/74a854d975bbb8baa281e6ef76f319e22c53afc6))
+
+
+### Features
+
+* default add cookie for http parser ([#540](https://github.com/midwayjs/midway-faas/issues/540)) ([5799e96](https://github.com/midwayjs/midway-faas/commit/5799e9642144b23b81d5c629387ce52510dde00d))
+
+
+
+
+
 ## [1.0.8](https://github.com/midwayjs/midway-faas/compare/v1.0.7...v1.0.8) (2020-07-14)
 
 **Note:** Version bump only for package @midwayjs/serverless-http-parser

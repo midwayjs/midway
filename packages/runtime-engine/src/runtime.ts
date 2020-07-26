@@ -7,6 +7,7 @@ import {
   PropertyParser,
   Runtime,
   FunctionEvent,
+  RuntimeOptions,
 } from './interface';
 import { join } from 'path';
 import { EnvPropertyParser } from './lib/parser';
@@ -23,6 +24,7 @@ export class ServerlessBaseRuntime extends EventEmitter implements Runtime {
   eventHandlers: FunctionEvent[] = [];
   handlerStore = new Map();
   logger = null;
+  private options: RuntimeOptions = {};
 
   constructor() {
     super();
@@ -251,5 +253,13 @@ export class ServerlessBaseRuntime extends EventEmitter implements Runtime {
       }
     }
     performance.mark(`midway-faas:${handlerKey}:end`);
+  }
+
+  setOptions(options) {
+    this.options = options;
+  }
+
+  get isAppMode() {
+    return !!this.options.isAppMode;
   }
 }

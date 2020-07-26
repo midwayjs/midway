@@ -25,6 +25,10 @@ export class Test {
       cwd: this.config.cwd,
       env: Object.assign(
         {
+          MIDWAY_TS_MODE: this.argv.typescript,
+        },
+        process.env,
+        {
           NODE_ENV: 'test',
         },
         this.config.env
@@ -55,8 +59,8 @@ export class Test {
         argsPre.push('--temp-directory', './node_modules/.nyc_output');
       }
       if (this.argv.typescript) {
-        argsPre.push(`--extension`);
-        argsPre.push(`.ts`);
+        argsPre.push('--extension');
+        argsPre.push('.ts');
       }
       argsPre.push(require.resolve('mocha/bin/_mocha'));
     } else if (this.argv.extension) {
