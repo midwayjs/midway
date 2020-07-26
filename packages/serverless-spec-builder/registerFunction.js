@@ -23,7 +23,7 @@ const registerFunctionToIoc = (container, functionName, func) => {
         (this.ctx &&
           this.ctx.request &&
           this.ctx.request.body &&
-          this.ctx.request.args) ||
+          this.ctx.request.body.args) ||
         [];
 
       return func.bind(bindCtx)(...args);
