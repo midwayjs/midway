@@ -3,6 +3,7 @@ const {
   saveProviderId,
   FUNC_KEY,
   attachClassMetadata,
+  savePropertyInject,
 } = require('@midwayjs/decorator');
 const { join } = require('path');
 const { existsSync } = require('fs');
@@ -10,7 +11,7 @@ const registerFunctionToIoc = (container, funHandler, fun) => {
   class Fun {
     async handler(event) {
       const _this = {
-        context: this['REQUEST_OBJ_CTX_KEY'],
+        ctx: this.ctx,
         event,
       };
       const args =
@@ -22,6 +23,10 @@ const registerFunctionToIoc = (container, funHandler, fun) => {
       return fun.bind(_this)(...args);
     }
   }
+  savePropertyInject({
+    target: Fun.prototype,
+    targetKey: 'ctx',
+  });
   const id = 'bind_func::' + funHandler;
   saveProviderId(id, Fun, true);
   container.bind(id, Fun);

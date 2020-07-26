@@ -14,6 +14,7 @@
     "@midwayjs/fcli-plugin-test": "^1.1.5",
     "@midwayjs/serverless-spec-builder": "^1.1.5",
     "enquirer": "^2.3.4",
+    "fs-extra": "^8.1.0",
     "light-spinner": "^1.0.0",
     "minimist": "^1.2.5",
     "source-map-support": "^0.5.19"
