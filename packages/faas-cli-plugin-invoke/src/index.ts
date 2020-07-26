@@ -340,7 +340,10 @@ export class FaaSInvokePlugin extends BasePlugin {
       }
     });
     ensureFileSync(this.buildLockPath);
-    writeFileSync(this.buildLockPath, JSON.stringify(this.fileChanges, null, 2));
+    writeFileSync(
+      this.buildLockPath,
+      JSON.stringify(this.fileChanges, null, 2)
+    );
   }
 
   async setFunctionList() {
