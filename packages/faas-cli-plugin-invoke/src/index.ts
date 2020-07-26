@@ -346,6 +346,11 @@ export class FaaSInvokePlugin extends BasePlugin {
   async setFunctionList() {
     // 这里是必须的，用以其他插件动态修改 functions，比如 hooks
     this.setStore('functions', this.core.service.functions);
+    // 将函数信息放入代码分析结果缓存中，便于下次跳过ts编译时使用
+    writeFileSync(
+      this.analysisCodeInfoPath,
+      JSON.stringify(this.core.service.functions)
+    );
   }
 
   checkUserEntry() {

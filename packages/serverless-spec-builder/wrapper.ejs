@@ -11,9 +11,15 @@ const picomatch = require('picomatch');
 let starter;
 let runtime;
 let inited = false;
+<% if (advancePreventMultiInit) { %>
+let isInitialing = false;
+<% } %>
 
 const initializeMethod = async (initializeContext = {}) => {
-  <% if (advancePreventMultiInit) { %> inited = true; <% } %>
+  <% if (advancePreventMultiInit) { %>
+  inited = true;
+  isInitialing = true;
+  <% } %>
   runtime = await start({
     layers: [<%= layers.join(", ") %>],
     getHandler: getHandler
@@ -29,6 +35,9 @@ const initializeMethod = async (initializeContext = {}) => {
   <% } %>
   await starter.start();
   <% if (!advancePreventMultiInit) { %> inited = true; <% } %>
+  <% if (advancePreventMultiInit) { %>
+  isInitialing = false;
+  <% } %>
 };
 
 const getHandler = (hanlderName) => {
@@ -57,6 +66,19 @@ const getHandler = (hanlderName) => {
   <% }); %>
 }
 
+<% if (advancePreventMultiInit) { %>
+const waitInitial = () => {
+  return new Promise(resolve => {
+    if (!isInitialing) {
+      return resolve();
+    }
+    setTimeout(() => {
+      waitInitial().then(resolve);
+    }, 50);
+  });
+};
+<% } %>
+
 
 exports.<%=initializer%> = asyncWrapper(async (...args) => {
   if (!inited) {
@@ -69,6 +91,11 @@ exports.<%=handlerData.name%> = asyncWrapper(async (...args) => {
   if (!inited) {
     await initializeMethod();
   }
+  <% if (advancePreventMultiInit) { %>
+  if (isInitialing) {
+    await waitInitial();
+  }
+  <% } %>
 
   const handler = getHandler('<%=handlerData.name%>');
   return runtime.asyncEvent(handler)(...args);
