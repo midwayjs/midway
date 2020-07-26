@@ -1,11 +1,11 @@
 {
   "name": "@midwayjs/gateway-common-http",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/gateway-common-core": "^1.1.5",
-    "@midwayjs/serverless-spec-builder": "^1.1.5",
+    "@midwayjs/gateway-common-core": "^1.1.6",
+    "@midwayjs/serverless-spec-builder": "^1.1.6",
     "@types/express": "^4.17.0",
     "picomatch": "^2.2.1"
   },

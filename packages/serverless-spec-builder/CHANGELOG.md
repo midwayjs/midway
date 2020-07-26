@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.6](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.5...serverless-v1.1.6) (2020-07-26)
+
+
+### Bug Fixes
+
+* 参数获取不正确 & ctx 符合格式 ([#556](https://github.com/midwayjs/midway-faas/issues/556)) ([106bfac](https://github.com/midwayjs/midway-faas/commit/106bfacff0f762fe561e026f883158f0bd7c3cdc))
+* register faas ctx ([#559](https://github.com/midwayjs/midway-faas/issues/559)) ([d9e1764](https://github.com/midwayjs/midway-faas/commit/d9e1764d55c053e74f9cad2b70641ba7b8ab70c3))
+
+
+
+
+
 ## [1.1.5](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.3...serverless-v1.1.5) (2020-07-24)
 
 
