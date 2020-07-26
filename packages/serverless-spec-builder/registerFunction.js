@@ -3,10 +3,10 @@ const {
   saveProviderId,
   FUNC_KEY,
   attachClassMetadata,
+  savePropertyInject,
 } = require('@midwayjs/decorator');
 const { join } = require('path');
 const { existsSync } = require('fs');
-const get = require('lodash.get');
 
 const registerFunctionToIoc = (container, functionName, func) => {
   class FunctionContainer {
@@ -19,14 +19,22 @@ const registerFunctionToIoc = (container, functionName, func) => {
       /**
        * HTTP Case
        */
-      const args = get(this.ctx, 'request.body.args', []);
+      const args =
+        (this.ctx &&
+          this.ctx.request &&
+          this.ctx.request.body &&
+          this.ctx.request.args) ||
+        [];
 
       return func.bind(bindCtx)(...args);
     }
   }
 
   const id = 'bind_func::' + functionName;
-
+  savePropertyInject({
+    target: FunctionContainer.prototype,
+    targetKey: 'ctx',
+  });
   saveProviderId(id, FunctionContainer, true);
   container.bind(id, FunctionContainer);
   saveModule(FUNC_KEY, FunctionContainer);

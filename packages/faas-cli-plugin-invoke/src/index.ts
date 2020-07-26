@@ -187,6 +187,7 @@ export class FaaSInvokePlugin extends BasePlugin {
       return;
     }
     this.skipTsBuild = false;
+    // 是否使用ts模式进行运行
     const isTsMode = checkIsTsMode();
     if (!isTsMode) {
       process.env.MIDWAY_TS_MODE = 'false';
@@ -343,6 +344,7 @@ export class FaaSInvokePlugin extends BasePlugin {
   }
 
   async setFunctionList() {
+    // 这里是必须的，用以其他插件动态修改 functions，比如 hooks
     this.setStore('functions', this.core.service.functions);
   }
 
