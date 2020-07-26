@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.7](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.6...serverless-v1.1.7) (2020-07-26)
+
+
+### Bug Fixes
+
+* use ts analyze cache ([#560](https://github.com/midwayjs/midway-faas/issues/560)) ([06dbcb5](https://github.com/midwayjs/midway-faas/commit/06dbcb52210f6a43ed8d54d5288b09c1243d0665))
+
+
+
+
+
 ## [1.1.6](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.5...serverless-v1.1.6) (2020-07-26)
 
 
