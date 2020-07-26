@@ -24,11 +24,11 @@ const initializeMethod = async (initializeContext = {}) => {
     layers: [<%= layers.join(", ") %>],
     getHandler: getHandler
   });
-  starter = new <%=faasStarterName %>({ baseDir: __dirname, initializeContext, applicationAdapter: runtime, middleware: <%-JSON.stringify(middleware)%> });
+  starter = new <%=faasStarterName %>({ baseDir: __dirname, initializeContext, applicationAdapter: runtime, middleware: <%-JSON.stringify(middleware, null, 2)%> });
   <% loadDirectory.forEach(function(dirName){ %>
   starter.loader.loadDirectory({ baseDir: '<%=dirName%>'});<% }) %>
   <% if (functionMap) { %>
-  registerFunctionToIocByConfig(<%-JSON.stringify(functionMap)%>, {
+  registerFunctionToIocByConfig(<%-JSON.stringify(functionMap, null, 2)%>, {
     baseDir: join(__dirname, 'dist'),
     context: starter.loader.getApplicationContext()
   });
@@ -46,7 +46,7 @@ const getHandler = (hanlderName) => {
       return <% if (handlerData.handler) {
       %> starter.handleInvokeWrapper('<%=handlerData.handler%>'); <% } else {
       %> async (ctx) => {
-        const allHandlers = <%-JSON.stringify(handlerData.handlers)%>;
+        const allHandlers = <%-JSON.stringify(handlerData.handlers, null, 2)%>;
         let handler = null;
         let ctxPath = ctx && ctx.path || '';
         if (ctxPath) {
