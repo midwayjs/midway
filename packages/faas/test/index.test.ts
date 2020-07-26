@@ -181,7 +181,7 @@ describe('test/index.test.ts', () => {
     assert(data.body === 'ahello555');
   });
 
-  it.only('test throw error from code and middleware catch it', async () => {
+  it('test throw error from code and middleware catch it', async () => {
     const { start } = require('../../serverless-scf-starter/src');
     const runtime = await start();
     const starter = new FaaSStarter({
