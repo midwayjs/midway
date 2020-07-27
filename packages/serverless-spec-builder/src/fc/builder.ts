@@ -80,7 +80,7 @@ export class FCSpecBuilder extends SpecBuilder {
       for (const event of funSpec?.['events'] ?? []) {
         if (event['http']) {
           const evt = event['http'] as HTTPEvent;
-          functionTemplate.Events['http-' + funName] = {
+          functionTemplate.Events[ evt.name|| ('http-' + funName)] = {
             Type: 'HTTP',
             Properties: {
               AuthType: 'ANONYMOUS', // 先写死
@@ -99,7 +99,7 @@ export class FCSpecBuilder extends SpecBuilder {
         if (event['timer']) {
           const evt = event['timer'] as TimerEvent;
 
-          functionTemplate.Events['timer'] = {
+          functionTemplate.Events[ evt.name || 'timer'] = {
             Type: 'Timer',
             Properties: {
               CronExpression:
@@ -113,7 +113,7 @@ export class FCSpecBuilder extends SpecBuilder {
 
         if (event['log']) {
           const evt = event['log'] as LogEvent;
-          functionTemplate.Events['log'] = {
+          functionTemplate.Events[ evt.name || 'log'] = {
             Type: 'Log',
             Properties: {
               SourceConfig: {
@@ -138,7 +138,7 @@ export class FCSpecBuilder extends SpecBuilder {
 
         if (osEvent) {
           const evt = osEvent as OSEvent;
-          functionTemplate.Events['oss'] = {
+          functionTemplate.Events[ evt.name || 'oss'] = {
             Type: 'OSS',
             Properties: {
               BucketName: evt.bucket,
@@ -158,7 +158,7 @@ export class FCSpecBuilder extends SpecBuilder {
 
         if (event['mq']) {
           const evt = event['mq'] as MQEvent;
-          functionTemplate.Events['mq'] = {
+          functionTemplate.Events[ evt.name || 'mq'] = {
             Type: 'MNSTopic',
             Properties: {
               TopicName: evt.topic,
