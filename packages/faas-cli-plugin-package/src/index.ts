@@ -305,7 +305,7 @@ export class PackagePlugin extends BasePlugin {
         pkgJson.dependencies[depName] = depVersion;
       }
     }
-    writeFileSync(pkgJsonPath, JSON.stringify(pkgJson, null, '  '));
+    writeFileSync(pkgJsonPath, JSON.stringify(pkgJson, null, 2));
     await this.npmInstall({
       production: true,
     });

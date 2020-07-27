@@ -290,7 +290,7 @@ export class FaaSInvokePlugin extends BasePlugin {
       this.setStore('functions', this.core.service.functions);
       writeFileSync(
         this.analysisCodeInfoPath,
-        JSON.stringify(newSpec.functions)
+        JSON.stringify(newSpec.functions, null, 2)
       );
     }
     if (this.core.pluginManager.options.stopLifecycle === 'invoke:compile') {
@@ -342,7 +342,10 @@ export class FaaSInvokePlugin extends BasePlugin {
       }
     });
     ensureFileSync(this.buildLockPath);
-    writeFileSync(this.buildLockPath, JSON.stringify(this.fileChanges));
+    writeFileSync(
+      this.buildLockPath,
+      JSON.stringify(this.fileChanges, null, 2)
+    );
   }
 
   async setFunctionList() {
@@ -351,7 +354,7 @@ export class FaaSInvokePlugin extends BasePlugin {
     // 将函数信息放入代码分析结果缓存中，便于下次跳过ts编译时使用
     writeFileSync(
       this.analysisCodeInfoPath,
-      JSON.stringify(this.core.service.functions)
+      JSON.stringify(this.core.service.functions, null, 2)
     );
   }
 
