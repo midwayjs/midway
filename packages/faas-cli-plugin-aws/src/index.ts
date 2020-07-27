@@ -11,6 +11,7 @@ import { S3, Lambda, CloudFormation } from 'aws-sdk';
 import { render } from 'ejs';
 import { writeWrapper } from '@midwayjs/serverless-spec-builder';
 import { BasePlugin, ICoreInstance } from '@midwayjs/fcli-command-core';
+import { yellow } from 'chalk';
 
 const { Input } = require('enquirer');
 
@@ -158,12 +159,10 @@ export class AWSLambdaPlugin extends BasePlugin {
         Object.assign(
           {},
           {
-            name: item.name,
-            handler: item.handler,
-            events: item.events,
             codeBucket: bucket,
             codeKey: key,
-          }
+          },
+          item
         )
       ),
       options: {
@@ -394,7 +393,8 @@ export class AWSLambdaPlugin extends BasePlugin {
       };
     } = this.core.service.functions as any;
     return Object.keys(obj).map(name => ({
-      name,
+      name: `${this.core.service.service.name}-${name}`,
+      logicId: name,
       handler: obj[name].handler || 'index.handler',
       events: obj[name].events.reduce((arr, item) => {
         arr.push(
@@ -419,14 +419,20 @@ export class AWSLambdaPlugin extends BasePlugin {
     let credentials = this.getCredentials();
     if (!credentials.credentials) {
       this.core.cli.log(
-        'There is no credentials available, please ensure you have the permissions below:'
+        yellow(
+          'There is no credentials available, please ensure you have the permissions below:'
+        )
       );
+      this.core.cli.log('  - AmazonAPIGatewayAdministrator');
       this.core.cli.log('  - AmazonS3FullAccess');
       this.core.cli.log('  - AWSCloudFormationFullAccess');
       this.core.cli.log('  - AWSLambdaFullAccess');
-      this.core.cli.log('  - AmazonAPIGatewayAdministrator');
+      this.core.cli.log('  - IAMFullAccess');
       this.core.cli.log(
-        'There is no credentials available, please input aws credentials: (you can get credentials from https://console.aws.amazon.com/iam/home?region=us-east-1#/users)'
+        yellow(
+          'There is no credentials available, please input aws credentials: '
+        ) +
+          '(you can get credentials from https://console.aws.amazon.com/iam/home?region=us-east-1#/users)'
       );
       const accessKeyId = await new Input({
         message: 'aws_access_key_id =',

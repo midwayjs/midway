@@ -3,8 +3,40 @@
   "Transform": "AWS::Serverless-2016-10-31",
   "Description": "The Midway Serverless function deploy specification template.",
   "Resources": {
+    "InvokerRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": ["lambda.amazonaws.com"]
+              },
+              "Action": ["sts:AssumeRole"]
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "midway-serverless-lambda-invoker",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": "*",
+                  "Resource": "*"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
     <% functions.forEach(function (opt) { %> 
-    "<%= opt.name %>": {
+    "<%= opt.logicId %>": {
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "FunctionName": "<%= opt.name %>",
@@ -13,7 +45,9 @@
         "Description": "<%= opt.description || "" %>",
         "MemorySize": <%- opt.memorySize || 128 %>,
         "Timeout": <%= opt.timeout || 3 %>,
-        "Role": "arn:aws:iam::752677612709:role/service-role/hello-curl-role-5tk89mye",
+        "Role": {
+          "Fn::GetAtt": ["InvokerRole", "Arn"],
+        },
         "CodeUri": {
           "Bucket": "<%= opt.codeBucket %>",
           "Key": "<%= opt.codeKey %>"
