@@ -21,7 +21,8 @@ export interface FunctionsStructure {
 
 export type EventTypeKey = 'http' | 'timer' | 'os' | 'log' | 'apigw' | 'mq';
 
-export type EventType = HTTPEvent
+export type EventType =
+  | HTTPEvent
   | TimerEvent
   | LogEvent
   | OSEvent
