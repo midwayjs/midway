@@ -432,7 +432,7 @@ export class AWSLambdaPlugin extends BasePlugin {
         yellow(
           'There is no credentials available, please input aws credentials: '
         ) +
-        '(you can get credentials from https://console.aws.amazon.com/iam/home?region=us-east-1#/users)'
+          '(you can get credentials from https://console.aws.amazon.com/iam/home?region=us-east-1#/users)'
       );
       const accessKeyId = await new Input({
         message: 'aws_access_key_id =',
