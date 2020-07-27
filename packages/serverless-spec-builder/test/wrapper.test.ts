@@ -1,4 +1,4 @@
-import { writeWrapper } from '../src/wrapper';
+import { writeWrapper, formetAggregationHandlers } from '../src/wrapper';
 import { resolve } from 'path';
 import * as assert from 'assert';
 import { existsSync, readFileSync, remove } from 'fs-extra';
@@ -139,5 +139,23 @@ describe('/test/wrapper.test.ts', () => {
         )
       );
     });
+  });
+  it('formetAggregationHandlers', async () => {
+    const formatResult = formetAggregationHandlers([
+      { path: '/api/1' },
+      { path: '/api/' },
+      { path: '/' },
+      { path: '/api/*' },
+      { path: '/api2' },
+      { path: '/api/2' },
+      { path: '/api' },
+      { path: '/*' },
+    ]);
+    assert(formatResult[2].router === '/api/');
+    assert(formatResult[3].router === '/api/**');
+    assert(formatResult[4].router === '/api2');
+    assert(formatResult[5].router === '/api');
+    assert(formatResult[6].router === '/');
+    assert(formatResult[7].router === '/**');
   });
 });
