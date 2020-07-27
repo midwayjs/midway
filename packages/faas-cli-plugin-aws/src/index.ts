@@ -419,7 +419,9 @@ export class AWSLambdaPlugin extends BasePlugin {
     let credentials = this.getCredentials();
     if (!credentials.credentials) {
       this.core.cli.log(
-        yellow('There is no credentials available, please ensure you have the permissions below:')
+        yellow(
+          'There is no credentials available, please ensure you have the permissions below:'
+        )
       );
       this.core.cli.log('  - AmazonAPIGatewayAdministrator');
       this.core.cli.log('  - AmazonS3FullAccess');
@@ -427,8 +429,10 @@ export class AWSLambdaPlugin extends BasePlugin {
       this.core.cli.log('  - AWSLambdaFullAccess');
       this.core.cli.log('  - IAMFullAccess');
       this.core.cli.log(
-        yellow('There is no credentials available, please input aws credentials: ') +
-        '(you can get credentials from https://console.aws.amazon.com/iam/home?region=us-east-1#/users)'
+        yellow(
+          'There is no credentials available, please input aws credentials: '
+        ) +
+          '(you can get credentials from https://console.aws.amazon.com/iam/home?region=us-east-1#/users)'
       );
       const accessKeyId = await new Input({
         message: 'aws_access_key_id =',
