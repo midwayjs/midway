@@ -203,4 +203,18 @@ describe('/test/fc.test.ts', () => {
       },
     });
   });
+
+  it('add name for ebent', () => {
+    const result = generateFunctionsSpec(
+      path.join(__dirname, './fixtures/fc/f-event-name.yml')
+    );
+    let funResult = result['Resources']['serverless-hello-world']['index'];
+    assert(funResult['Type'] === 'Aliyun::Serverless::Function');
+    assert(funResult['Events']['my_mq']);
+    assert(funResult['Events']['my_os']);
+    assert(funResult['Events']['my_timer']);
+
+    funResult = result['Resources']['serverless-hello-world']['index2'];
+    assert(funResult['Events']['my_http']);
+  });
 });
