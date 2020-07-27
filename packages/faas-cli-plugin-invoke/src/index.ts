@@ -234,7 +234,9 @@ export class FaaSInvokePlugin extends BasePlugin {
         this.getAnaLysisCodeInfo();
         setLock(this.buildLockPath, LOCK_TYPE.COMPLETE);
         this.skipTsBuild = true;
-        this.setStore('skipTsBuild', true);
+
+        // for fp and oth plugin
+        this.setStore('skipTsBuild', true, true);
         this.core.debug('Auto skip ts compile');
         return;
       }

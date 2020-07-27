@@ -23,7 +23,7 @@ const registerFunctionToIoc = (container, functionName, func) => {
         (this.ctx &&
           this.ctx.request &&
           this.ctx.request.body &&
-          this.ctx.request.args) ||
+          this.ctx.request.body.args) ||
         [];
 
       return func.bind(bindCtx)(...args);
@@ -66,18 +66,25 @@ const registerFunctionToIocByConfig = (config, options) => {
     }
 
     try {
-      const exportMods = require(functionPath);
-      if (!exportMods || !exportMods[functionName]) {
+      const modExports = require(functionPath);
+      if (!modExports || !modExports[functionName]) {
         return;
       }
 
       registerFunctionToIoc(
         options.context,
         functionHandler || `${functionName}.handler`,
-        exportMods[functionName]
+        modExports[functionName]
       );
-    } catch {
-      //
+    } catch (error) {
+      console.error(
+        `require ${functionPath} error, function info: ${JSON.stringify(
+          functionInfo,
+          null,
+          2
+        )}`
+      );
+      console.error(error);
     }
   });
 };
