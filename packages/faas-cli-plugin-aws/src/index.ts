@@ -393,8 +393,8 @@ export class AWSLambdaPlugin extends BasePlugin {
       };
     } = this.core.service.functions as any;
     return Object.keys(obj).map(name => ({
-      name,
-      logicId: `${this.core.service.service.name}-${name}`,
+      name: `${this.core.service.service.name}-${name}`,
+      logicId: name,
       handler: obj[name].handler || 'index.handler',
       events: obj[name].events.reduce((arr, item) => {
         arr.push(
@@ -432,7 +432,7 @@ export class AWSLambdaPlugin extends BasePlugin {
         yellow(
           'There is no credentials available, please input aws credentials: '
         ) +
-          '(you can get credentials from https://console.aws.amazon.com/iam/home?region=us-east-1#/users)'
+        '(you can get credentials from https://console.aws.amazon.com/iam/home?region=us-east-1#/users)'
       );
       const accessKeyId = await new Input({
         message: 'aws_access_key_id =',

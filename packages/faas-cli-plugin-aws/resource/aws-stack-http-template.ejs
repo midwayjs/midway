@@ -36,10 +36,10 @@
       }
     },
     <% functions.forEach(function (opt) { %> 
-    "<%= opt.name %>": {
+    "<%= opt.logicId %>": {
       "Type": "AWS::Serverless::Function",
       "Properties": {
-        "FunctionName": "<%= opt.logicId %>",
+        "FunctionName": "<%= opt.name %>",
         "Handler": "<%= opt.handler || "index.handler" %>",
         "Runtime": "<%= opt.runtime || "nodejs12.x" %>",
         "Description": "<%= opt.description || "" %>",
