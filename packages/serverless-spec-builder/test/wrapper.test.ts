@@ -73,6 +73,46 @@ describe('/test/wrapper.test.ts', () => {
       );
       await remove(registerFunction);
     });
+    it('writeWrapper aggregation', async () => {
+      const wrapperPath = resolve(__dirname, './fixtures/wrapper');
+      const registerFunction = resolve(wrapperPath, 'registerFunction.js');
+      if (existsSync(registerFunction)) {
+        await remove(registerFunction);
+      }
+      writeWrapper({
+        initializeName: 'initializeUserDefine',
+        middleware: ['test1', 'test2'],
+        cover: true,
+        service: {
+          functions: {
+            aggregation: {
+              handler: 'aggre.handler',
+              _isAggregation: true,
+              functions: ['index'],
+              _handlers: [
+                {
+                  path: '/api/test',
+                  handler: 'index.handler',
+                  isFunctional: true,
+                  exportFunction: 'test',
+                  sourceFilePath: 'fun-index.js',
+                },
+                { path: '/*', handler: 'render.handler' },
+              ],
+            },
+          },
+        },
+        baseDir: wrapperPath,
+        distDir: wrapperPath,
+        starter: 'testStarter',
+      });
+      const aggrePath = resolve(wrapperPath, 'aggre.js');
+      assert(existsSync(registerFunction));
+      assert(
+        /registerFunctionToIocByConfig/.test(readFileSync(aggrePath).toString())
+      );
+      await remove(registerFunction);
+    });
     it('writeWrapper', async () => {
       const wrapperPath = resolve(__dirname, './fixtures/wrapper');
       const registerFunction = resolve(wrapperPath, 'registerFunction.js');
