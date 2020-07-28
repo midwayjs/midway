@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.9](https://github.com/midwayjs/midway-faas/compare/v1.1.4...v1.1.9) (2020-07-28)
+
+
+### Bug Fixes
+
+* 参数获取不正确 & ctx 符合格式 ([#556](https://github.com/midwayjs/midway-faas/issues/556)) ([106bfac](https://github.com/midwayjs/midway-faas/commit/106bfacff0f762fe561e026f883158f0bd7c3cdc))
+* aggregation path ([#567](https://github.com/midwayjs/midway-faas/issues/567)) ([11a6d8a](https://github.com/midwayjs/midway-faas/commit/11a6d8aab2e18a70ec1195090df04beff8e08760))
+* aws plugin publish role ([#568](https://github.com/midwayjs/midway-faas/issues/568)) ([9074d7c](https://github.com/midwayjs/midway-faas/commit/9074d7cb813d8fd5619900a864a9be926645cab2))
+* faas middle http ([#570](https://github.com/midwayjs/midway-faas/issues/570)) ([27de83b](https://github.com/midwayjs/midway-faas/commit/27de83b7f0e726e99f8edd153ae585a38bd5f517))
+* fp args ([#561](https://github.com/midwayjs/midway-faas/issues/561)) ([e91983e](https://github.com/midwayjs/midway-faas/commit/e91983e6ee1d9e725eaed061b80cde083bdf7e1d))
+* global middleware can't catch error ([#542](https://github.com/midwayjs/midway-faas/issues/542)) ([8892471](https://github.com/midwayjs/midway-faas/commit/8892471defe5e6071eb0f3d5b0993f8ce298f5e3))
+* register faas ctx ([#559](https://github.com/midwayjs/midway-faas/issues/559)) ([d9e1764](https://github.com/midwayjs/midway-faas/commit/d9e1764d55c053e74f9cad2b70641ba7b8ab70c3))
+* use ts analyze cache ([#560](https://github.com/midwayjs/midway-faas/issues/560)) ([06dbcb5](https://github.com/midwayjs/midway-faas/commit/06dbcb52210f6a43ed8d54d5288b09c1243d0665))
+* wrapper compare ([#553](https://github.com/midwayjs/midway-faas/issues/553)) ([426aa65](https://github.com/midwayjs/midway-faas/commit/426aa65f2eb0d9f4312f5375ea39f9186f2a083c))
+
+
+### Features
+
+* add  name for fc event ([#569](https://github.com/midwayjs/midway-faas/issues/569)) ([41797e7](https://github.com/midwayjs/midway-faas/commit/41797e77da4b5217c6367ca616f7cc9c874aea5b))
+
+
+
+
+
 ## [1.1.8](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.7...serverless-v1.1.8) (2020-07-27)
 
 
