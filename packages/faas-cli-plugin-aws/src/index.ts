@@ -2,12 +2,12 @@ import { homedir } from 'os';
 import { join, basename } from 'path';
 import {
   readFileSync,
-  createReadStream,
   writeFileSync,
+  createReadStream,
   mkdirSync,
   existsSync,
 } from 'fs';
-import { S3, Lambda, CloudFormation } from 'aws-sdk';
+import { S3, Lambda, CloudFormation, IAM, MetadataService } from 'aws-sdk';
 import { render } from 'ejs';
 import { writeWrapper } from '@midwayjs/serverless-spec-builder';
 import { BasePlugin, ICoreInstance } from '@midwayjs/fcli-command-core';
@@ -169,7 +169,10 @@ export class AWSLambdaPlugin extends BasePlugin {
         stage,
       },
     };
-    return render(tpl, params);
+    const text = render(tpl, params);
+    const tmpJSONPath = join(this.midwayBuildPath, 'template.json');
+    writeFileSync(tmpJSONPath, text);
+    return text;
   }
 
   async createStack(
@@ -408,6 +411,27 @@ export class AWSLambdaPlugin extends BasePlugin {
     }));
   }
 
+  async getAccount() {
+    const iam = new IAM();
+    const metadata = new MetadataService();
+
+    return new Promise((resolve, reject) => {
+      iam.getUser({}, (err, data) => {
+        if (err) {
+          metadata.request('/latest/meta-data/iam/info/', (err, data) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(JSON.parse(data).InstanceProfileArn.split(':')[4]);
+            }
+          });
+        } else {
+          resolve(data.User.Arn.split(':')[4]);
+        }
+      });
+    });
+  }
+
   async deploy() {
     const stage = 'v1';
     const fns = this.getFunctions();
@@ -446,8 +470,9 @@ export class AWSLambdaPlugin extends BasePlugin {
       credentials = this.getCredentials(true);
     }
     credentials.region = this.getRegion();
+    const accountId = await this.getAccount();
 
-    const bucket = `${this.core.service.service.name}-deploymentbucket`;
+    const bucket = `${accountId}-${this.core.service.service.name}-deploymentbucket`;
     await this.featchBucket(bucket);
     const artifactRes = await this.uploadArtifact(bucket);
     // console.log('artifactRes', artifactRes);
