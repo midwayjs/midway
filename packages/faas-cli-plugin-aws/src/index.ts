@@ -171,7 +171,6 @@ export class AWSLambdaPlugin extends BasePlugin {
     };
     const text = render(tpl, params);
     const tmpJSONPath = join(this.midwayBuildPath, 'template.json');
-    console.log(tmpJSONPath);
     writeFileSync(tmpJSONPath, text);
     return text;
   }
