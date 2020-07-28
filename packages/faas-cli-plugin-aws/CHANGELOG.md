@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.11](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.10...serverless-v1.1.11) (2020-07-28)
+
+
+### Bug Fixes
+
+* aws duplicated bucketname & default path ([#573](https://github.com/midwayjs/midway-faas/issues/573)) ([28b6520](https://github.com/midwayjs/midway-faas/commit/28b6520d46d2496003a7e7681c663aa9814832bb))
+
+
+
+
+
 ## [1.1.10](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.9...serverless-v1.1.10) (2020-07-28)
 
 
