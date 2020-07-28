@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.10](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.9...serverless-v1.1.10) (2020-07-28)
+
+
+### Bug Fixes
+
+* resource not included by npm ([#572](https://github.com/midwayjs/midway-faas/issues/572)) ([6835b5f](https://github.com/midwayjs/midway-faas/commit/6835b5f5a170f84401288d6b06f82328baecde9c))
+
+
+
+
+
 ## [1.1.9](https://github.com/midwayjs/midway-faas/compare/v1.1.4...v1.1.9) (2020-07-28)
 
 
