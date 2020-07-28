@@ -46,7 +46,7 @@
         "MemorySize": <%- opt.memorySize || 128 %>,
         "Timeout": <%= opt.timeout || 3 %>,
         "Role": {
-          "Fn::GetAtt": ["InvokerRole", "Arn"],
+          "Fn::GetAtt": ["InvokerRole", "Arn"]
         },
         "CodeUri": {
           "Bucket": "<%= opt.codeBucket %>",
@@ -54,10 +54,10 @@
         },
         "Events": {
           <% opt.events.forEach(function (event, idx) { %> 
-          "Api<%= idx + opt.name + 1 %>": {
+          "Api<%= idx + opt.logicId + 1 %>": {
             "Type": "Api",
             "Properties": {
-              "Path": "<%= event.path %>",
+              "Path": "<%= event.path || '/*' %>",
               "Method": "<%= event.method || 'ANY' %>",
               "RestApiId": {
                 "Ref": "MyApi"
