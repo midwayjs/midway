@@ -1,6 +1,9 @@
 const { FaaSStarter } = require('@midwayjs/faas');
 const { asyncWrapper, start } = require('testStarter');
 
+const { registerFunctionToIocByConfig } = require('./registerFunction.js');
+const { join } = require('path');
+
 const picomatch = require('picomatch');
 
 
@@ -8,24 +11,55 @@ let starter;
 let runtime;
 let inited = false;
 
+
 const initializeMethod = async (initializeContext = {}) => {
   
   runtime = await start({
     layers: [],
     getHandler: getHandler
   });
-  starter = new FaaSStarter({ baseDir: __dirname, initializeContext, applicationAdapter: runtime, middleware: ["test1","test2"] });
+  starter = new FaaSStarter({ baseDir: __dirname, initializeContext, applicationAdapter: runtime, middleware: [
+  "test1",
+  "test2"
+] });
   
+  
+  registerFunctionToIocByConfig({
+  "functionList": [
+    {
+      "functionName": "test",
+      "functionHandler": "index.handler",
+      "functionFilePath": "fun-index.js"
+    }
+  ]
+}, {
+    baseDir: join(__dirname, 'dist'),
+    context: starter.loader.getApplicationContext()
+  });
   
   await starter.start();
    inited = true; 
+  
 };
 
 const getHandler = (hanlderName) => {
   
     if (hanlderName === 'handler') {
       return  async (ctx) => {
-        const allHandlers = [{"handler":"index.handler","router":"/api/test","pureRouter":"/api/test","level":2},{"handler":"render.handler","router":"/**","pureRouter":"/","level":1}];
+        const allHandlers = [
+  {
+    "handler": "index.handler",
+    "router": "/api/test",
+    "pureRouter": "/api/test",
+    "level": 2
+  },
+  {
+    "handler": "render.handler",
+    "router": "/**",
+    "pureRouter": "/",
+    "level": 1
+  }
+];
         let handler = null;
         let ctxPath = ctx && ctx.path || '';
         if (ctxPath) {
@@ -46,6 +80,8 @@ const getHandler = (hanlderName) => {
 }
 
 
+
+
 exports.initializeUserDefine = asyncWrapper(async (...args) => {
   if (!inited) {
     await initializeMethod(...args);
@@ -57,7 +93,9 @@ exports.handler = asyncWrapper(async (...args) => {
   if (!inited) {
     await initializeMethod();
   }
+  
 
   const handler = getHandler('handler');
   return runtime.asyncEvent(handler)(...args);
 });
+

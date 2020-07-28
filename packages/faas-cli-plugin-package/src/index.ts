@@ -606,8 +606,8 @@ export class PackagePlugin extends BasePlugin {
               delete this.core.service.functions[functionName];
             }
             return {
+              ...func,
               path: httpEvent.http.path,
-              handler: func.handler,
             };
           })
           .filter((func: any) => !!func);

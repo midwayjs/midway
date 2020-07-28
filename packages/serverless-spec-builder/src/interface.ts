@@ -29,10 +29,11 @@ export type EventType =
   | APIGatewayEvent;
 
 export interface EventStructureType {
-  [eventName: string]: EventType;
+  [eventType: string]: EventType;
 }
 
 export interface HTTPEvent {
+  name?: string;
   path?: string;
   method?: string | string[];
   role?: string;
@@ -45,6 +46,7 @@ export interface HTTPEvent {
 
 // 定时任务
 export interface TimerEvent {
+  name?: string;
   type?: 'cron' | 'every' | 'interval';
   value: string;
   payload?: string;
@@ -54,6 +56,7 @@ export interface TimerEvent {
 
 // 日志
 export interface LogEvent {
+  name?: string;
   source: string;
   project: string;
   log: string;
@@ -78,6 +81,7 @@ export interface OSEvent {
 }
 
 export interface MQEvent {
+  name?: string;
   topic: string;
   tags?: string;
   region?: string;

@@ -36,15 +36,13 @@ export function writeWrapper(options: {
   const functions = service.functions || {};
   for (const func in functions) {
     const handlerConf = functions[func];
+
     // for fp
-    if (handlerConf.isFunctional) {
-      if (!functionMap?.functionList) {
-        functionMap = { functionList: [] };
-      }
-      functionMap.functionList.push({
-        functionName: handlerConf.exportFunction,
-        functionHandler: handlerConf.handler,
-        functionFilePath: handlerConf.sourceFilePath,
+    functionMap = assignToFunctionMap(functionMap, handlerConf);
+    // for aggregation fp
+    if (handlerConf._handlers) {
+      handlerConf._handlers.forEach(innerHandlerConf => {
+        functionMap = assignToFunctionMap(functionMap, innerHandlerConf);
       });
     }
 
@@ -122,6 +120,20 @@ export function writeWrapper(options: {
   }
 }
 
+const assignToFunctionMap = (functionMap, handlerConf) => {
+  if (handlerConf.isFunctional) {
+    if (!functionMap?.functionList) {
+      functionMap = { functionList: [] };
+    }
+    functionMap.functionList.push({
+      functionName: handlerConf.exportFunction,
+      functionHandler: handlerConf.handler,
+      functionFilePath: handlerConf.sourceFilePath,
+    });
+  }
+  return functionMap;
+};
+
 export function formetAggregationHandlers(handlers) {
   if (!handlers || !handlers.length) {
     return [];
@@ -136,8 +148,11 @@ export function formetAggregationHandlers(handlers) {
       };
     })
     .sort((handlerA, handlerB) => {
-      if (handlerA.pureRouter === handlerB.pureRouter) {
-        return handlerA.router.length - handlerB.router.length;
+      if (handlerA.level === handlerB.level) {
+        if (handlerB.pureRouter === handlerA.pureRouter) {
+          return handlerA.router.length - handlerB.router.length;
+        }
+        return handlerB.pureRouter.length - handlerA.pureRouter.length;
       }
       return handlerB.level - handlerA.level;
     });
