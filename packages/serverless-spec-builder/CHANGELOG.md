@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.12](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.11...serverless-v1.1.12) (2020-07-29)
+
+
+### Bug Fixes
+
+* support default fp ([#575](https://github.com/midwayjs/midway-faas/issues/575)) ([6c3d59c](https://github.com/midwayjs/midway-faas/commit/6c3d59c1737db901baadb386b75d49d0a711991f))
+
+
+
+
+
 ## [1.1.10](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.9...serverless-v1.1.10) (2020-07-28)
 
 **Note:** Version bump only for package @midwayjs/serverless-spec-builder
