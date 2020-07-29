@@ -77,7 +77,7 @@ const registerFunctionToIocByConfig = (config, options) => {
         fun = modExports.default || modExports;
       }
 
-      if (typeof fun === 'function') {
+      if (typeof fun !== 'function') {
         return;
       }
 
