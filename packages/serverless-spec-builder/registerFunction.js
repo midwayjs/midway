@@ -67,14 +67,24 @@ const registerFunctionToIocByConfig = (config, options) => {
 
     try {
       const modExports = require(functionPath);
-      if (!modExports || !modExports[functionName]) {
+      if (!modExports) {
+        return;
+      }
+      let fun;
+      if (functionName) {
+        fun = modExports[functionName];
+      } else {
+        fun = modExports.default || modExports;
+      }
+
+      if (typeof fun !== 'function') {
         return;
       }
 
       registerFunctionToIoc(
         options.context,
-        functionHandler || `${functionName}.handler`,
-        modExports[functionName]
+        functionHandler || `${functionName || '$default'}.handler`,
+        fun
       );
     } catch (error) {
       console.error(
