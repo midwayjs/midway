@@ -81,7 +81,7 @@ const registerFunctionToIocByConfig = (config, options) => {
         options.context,
         functionHandler || `${functionName || '$default'}.handler`,
         fun,
-        argsPath,
+        argsPath
       );
     } catch (error) {
       console.error(
