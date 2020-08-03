@@ -48,7 +48,7 @@ export class FCSpecBuilder extends SpecBuilder {
       },
     };
 
-    const httpEventRouters = {};
+    let httpEventRouters;
 
     for (const funName in functionsData) {
       const funSpec: FCFunctionStructure = functionsData[funName];
@@ -90,6 +90,9 @@ export class FCSpecBuilder extends SpecBuilder {
             },
           };
 
+          if (!httpEventRouters) {
+            httpEventRouters = {};
+          }
           httpEventRouters[evt.path] = {
             serviceName,
             functionName: funSpec.name || funName,
@@ -178,23 +181,36 @@ export class FCSpecBuilder extends SpecBuilder {
       ] = functionTemplate;
     }
 
-    if (
-      this.originData['custom'] &&
-      this.originData['custom']['customDomain']
-    ) {
-      const domainInfo: {
-        domainName: string;
-        stage?: string;
-      } = this.originData['custom']['customDomain'];
-      template.Resources[domainInfo.domainName] = {
-        Type: 'Aliyun::Serverless::CustomDomain',
-        Properties: {
-          Protocol: 'HTTP',
-          RouteConfig: {
-            routes: httpEventRouters,
+    if (httpEventRouters) {
+      if (
+        this.originData['custom'] &&
+        this.originData['custom']['customDomain']
+      ) {
+        const domainInfo: {
+          domainName: string;
+          stage?: string;
+        } = this.originData['custom']['customDomain'];
+        template.Resources[domainInfo.domainName] = {
+          Type: 'Aliyun::Serverless::CustomDomain',
+          Properties: {
+            Protocol: 'HTTP',
+            RouteConfig: {
+              routes: httpEventRouters,
+            },
           },
-        },
-      } as FCCustomDomainSpec;
+        } as FCCustomDomainSpec;
+      } else {
+        template.Resources['midway_auto_domain'] = {
+          Type: 'Aliyun::Serverless::CustomDomain',
+          Properties: {
+            DomainName: 'Auto',
+            Protocol: 'HTTP',
+            RouteConfig: {
+              routes: httpEventRouters,
+            },
+          },
+        } as FCCustomDomainSpec;
+      }
     }
 
     return removeObjectEmptyAttributes(template);
