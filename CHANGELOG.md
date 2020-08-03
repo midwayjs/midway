@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.13](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.12...serverless-v1.1.13) (2020-08-03)
+
+
+### Bug Fixes
+
+* args path ([#578](https://github.com/midwayjs/midway-faas/issues/578)) ([f0de617](https://github.com/midwayjs/midway-faas/commit/f0de617087419ecb433d430b6cb3b1d9e3028d47))
+* fc auto domain ([#580](https://github.com/midwayjs/midway-faas/issues/580)) ([f8bf9e0](https://github.com/midwayjs/midway-faas/commit/f8bf9e05922b154285ee29f1a65b59d9d448cf5b))
+
+
+
+
+
 ## [1.1.12](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.11...serverless-v1.1.12) (2020-07-29)
 
 
