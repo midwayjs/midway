@@ -93,6 +93,7 @@ describe('/test/wrapper.test.ts', () => {
                 {
                   path: '/api/test',
                   handler: 'index.handler',
+                  argsPath: 'ctx.request.data.args',
                   isFunctional: true,
                   exportFunction: 'test',
                   sourceFilePath: 'fun-index.js',
