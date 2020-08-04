@@ -1,5 +1,12 @@
 const { asyncWrapper, start } = require('<%=starter %>');
-<% layerDeps.forEach(function(layer){ %>const <%=layer.name%> = require('<%=layer.path%>');
+const layers = [];
+<% layerDeps.forEach(function(layer){ %>
+try {
+  const <%=layer.name%> = require('<%=layer.path%>');
+  layers.push(<%=layer.name%>);
+} catch(e) {
+  console.error('<%=layer.type%> layer "<%=layer.path%>" not install', e);
+}
 <% }); %>
 
 let runtime;
@@ -7,7 +14,7 @@ let inited = false;
 
 const initializeMethod = async (initializeContext = {}) => {
   runtime = await start({
-    layers: [<%= layers.join(", ") %>],
+    layers: layers,
   });
 };
 

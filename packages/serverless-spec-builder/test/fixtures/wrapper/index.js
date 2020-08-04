@@ -2,6 +2,7 @@ const { FaaSStarter } = require('@midwayjs/faas');
 const { asyncWrapper, start } = require('testStarter');
 
 const picomatch = require('picomatch');
+const layers = [];
 
 
 let starter;
@@ -12,7 +13,7 @@ let inited = false;
 const initializeMethod = async (initializeContext = {}) => {
   
   runtime = await start({
-    layers: [],
+    layers: layers,
     getHandler: getHandler
   });
   starter = new FaaSStarter({ baseDir: __dirname, initializeContext, applicationAdapter: runtime, middleware: [
