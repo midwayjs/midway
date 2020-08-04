@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.14](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.13...serverless-v1.1.14) (2020-08-04)
+
+
+### Bug Fixes
+
+* add default path for fc ([#584](https://github.com/midwayjs/midway-faas/issues/584)) ([064d3f0](https://github.com/midwayjs/midway-faas/commit/064d3f08fa7e74420bdcac111f3fda3cf3ef6ec1))
+* layer wrapper ([#583](https://github.com/midwayjs/midway-faas/issues/583)) ([1c9966d](https://github.com/midwayjs/midway-faas/commit/1c9966d6d05108451745183efbc4a15ae1caae6b))
+
+
+
+
+
 ## [1.1.13](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.12...serverless-v1.1.13) (2020-08-03)
 
 
