@@ -10,16 +10,16 @@
   <a href="./LICENSE" alt="GitHub license">
     <img src="https://img.shields.io/badge/license-MIT-blue.svg" />
   </a>
-  <a href="https://github.com/midwayjs/midway-serverless/actions?query=workflow%3A%22Node.js+CI%22" alt="Node.js CI">
+  <a href="https://github.com/midwayjs/midway/actions?query=workflow%3A%22Node.js+CI%22" alt="Node.js CI">
     <img src="https://img.shields.io/badge/Node.js%20CI-passing-brightgreen" />
   </a>
-  <a href="https://github.com/midwayjs/midway-serverless" alt="Activity">
-    <img src="https://img.shields.io/github/commit-activity/m/midwayjs/midway-faas" />
+  <a href="https://github.com/midwayjs/midway" alt="Activity">
+    <img src="https://img.shields.io/github/commit-activity/m/midwayjs/midway" />
   </a>
-  <a href="https://github.com/midwayjs/midway-serverless/graphs/contributors" alt="Contributors">
-    <img src="https://img.shields.io/github/contributors/midwayjs/midway-faas" />
+  <a href="https://github.com/midwayjs/midway/graphs/contributors" alt="Contributors">
+    <img src="https://img.shields.io/github/contributors/midwayjs/midway" />
   </a>
-  <a href="https://gitpod.io/#https://github.com/midwayjs/midway-serverless" alt="Gitpod Ready-to-Code">
+  <a href="https://gitpod.io/#https://github.com/midwayjs/midway" alt="Gitpod Ready-to-Code">
     <img src="https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod" />
   </a>
 </p>
