@@ -93,7 +93,7 @@ export class FCSpecBuilder extends SpecBuilder {
           if (!httpEventRouters) {
             httpEventRouters = {};
           }
-          httpEventRouters[evt.path] = {
+          httpEventRouters[evt.path || '/*'] = {
             serviceName,
             functionName: funSpec.name || funName,
           };
