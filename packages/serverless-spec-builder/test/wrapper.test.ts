@@ -102,6 +102,14 @@ describe('/test/wrapper.test.ts', () => {
               ],
             },
           },
+          layers: {
+            testNpm: {
+              path: 'npm:test',
+            },
+            testOss: {
+              path: 'oss:test',
+            },
+          },
         },
         baseDir: wrapperPath,
         distDir: wrapperPath,
@@ -111,6 +119,11 @@ describe('/test/wrapper.test.ts', () => {
       assert(existsSync(registerFunction));
       assert(
         /registerFunctionToIocByConfig/.test(readFileSync(aggrePath).toString())
+      );
+      assert(
+        /const layer_npm_testNpm = require\('test'\);/.test(
+          readFileSync(aggrePath).toString()
+        )
       );
       await remove(registerFunction);
     });
