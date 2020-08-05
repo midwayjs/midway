@@ -32,7 +32,7 @@ export function getLayers(...layersList: any) {
         continue;
       }
       for (const layerName in typeLayerMap) {
-        const name = `layer_${type}_${layerName}`;
+        const name = `layer_${type}_${layerName.replace(/[^\w]/g, '_')}`;
         layerDeps.push({
           name,
           type,

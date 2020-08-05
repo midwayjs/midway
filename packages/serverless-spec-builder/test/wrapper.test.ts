@@ -106,6 +106,9 @@ describe('/test/wrapper.test.ts', () => {
             testNpm: {
               path: 'npm:test',
             },
+            'remote-debug': {
+              path: 'oss:remote-debug',
+            },
             testOss: {
               path: 'oss:test',
             },
@@ -125,6 +128,7 @@ describe('/test/wrapper.test.ts', () => {
           readFileSync(aggrePath).toString()
         )
       );
+      assert(/layer_oss_remote_debug/.test(readFileSync(aggrePath).toString()));
       await remove(registerFunction);
     });
     it('writeWrapper', async () => {
