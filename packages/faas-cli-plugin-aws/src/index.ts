@@ -91,6 +91,12 @@ export class AWSLambdaPlugin extends BasePlugin {
 
   async uploadArtifact(bucket: string): Promise<S3UploadResult> {
     this.core.cli.log('Start upload artifact...');
+
+    // TODO check md5
+    // const result = await new Promise<any>((resolve, reject) => {
+    //   service.getFunction({ FunctionName: name },
+    //     (err, data) => err ? reject(err) : resolve(data));
+    // });
     const uploadParams = { Bucket: bucket, Key: '', Body: null };
     // TODO fixed code.zip path
     const file = join(this.servicePath, 'code.zip');
@@ -333,11 +339,6 @@ export class AWSLambdaPlugin extends BasePlugin {
   ): Promise<any> {
     this.core.cli.log('  - upadte function');
     const service = new Lambda(credentials);
-    // TODO check md5
-    // const result = await new Promise<any>((resolve, reject) => {
-    //   service.getFunction({ FunctionName: name },
-    //     (err, data) => err ? reject(err) : resolve(data));
-    // });
 
     const tasks = fns.map(fn => {
       const params = {
@@ -436,22 +437,22 @@ export class AWSLambdaPlugin extends BasePlugin {
     // 配置 crendentials
     let credentials = this.getCredentials();
     if (!credentials.credentials) {
+      // this.core.cli.log(
+      //   yellow(
+      //     'There is no credentials available, please ensure you have the permissions below:'
+      //   )
+      // );
+      // this.core.cli.log('  - AmazonAPIGatewayAdministrator');
+      // this.core.cli.log('  - AmazonS3FullAccess');
+      // this.core.cli.log('  - AWSCloudFormationFullAccess');
+      // this.core.cli.log('  - AWSLambdaFullAccess');
+      // this.core.cli.log('  - IAMFullAccess');
       this.core.cli.log(
         yellow(
-          'There is no credentials available, please ensure you have the permissions below:'
-        )
-      );
-      this.core.cli.log('  - AmazonAPIGatewayAdministrator');
-      this.core.cli.log('  - AmazonS3FullAccess');
-      this.core.cli.log('  - AWSCloudFormationFullAccess');
-      this.core.cli.log('  - AWSLambdaFullAccess');
-      this.core.cli.log('  - IAMFullAccess');
-      this.core.cli.log(
-        yellow(
-          'There is no credentials available, please input aws credentials: '
-        ) +
-        '(you can get credentials from https://console.aws.amazon.com/iam/home?region=us-east-1#/users)'
-      );
+          'There is no aws credentials available, please input your access keys: '
+          +
+          '(you can get access keys from https://console.aws.amazon.com/iam/home?region=us-east-1#/security_credentials)',
+        ));
       const accessKeyId = await new Input({
         message: 'aws_access_key_id =',
         show: true,
