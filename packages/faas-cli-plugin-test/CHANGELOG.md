@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.16](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.15...serverless-v1.1.16) (2020-08-05)
+
+**Note:** Version bump only for package @midwayjs/fcli-plugin-test
+
+
+
+
+
 ## [1.1.15](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.14...serverless-v1.1.15) (2020-08-05)
 
 **Note:** Version bump only for package @midwayjs/fcli-plugin-test
