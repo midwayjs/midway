@@ -53,18 +53,30 @@
           "Key": "<%= opt.codeKey %>"
         },
         "Events": {
-          <% opt.events.forEach(function (event, idx) { %> 
+        <% opt.events.forEach(function (event, idx) { %> 
           "Api<%= idx + opt.logicId + 1 %>": {
             "Type": "Api",
             "Properties": {
-              "Path": "<%= event.path || '/*' %>",
+              "Path": "<%=  event.path.endsWith('*') ? event.path.replace(/\*$/, '') : event.path %>",
               "Method": "<%= event.method || 'ANY' %>",
               "RestApiId": {
                 "Ref": "MyApi"
               }
             }
           }
-          <% }) %> 
+          <% if (event.path.endsWith('*')) { %>,
+          "Api<%= idx + opt.logicId + 2 %>": {
+            "Type": "Api",
+            "Properties": {
+              "Path": "<%= event.path.replace(/\/?\*$/, '/{proxy+}') %>",
+              "Method": "<%= event.method || 'ANY' %>",
+              "RestApiId": {
+                "Ref": "MyApi"
+              }
+            }
+          }
+          <% } %> 
+        <% }) %> 
         }
       }
     },
