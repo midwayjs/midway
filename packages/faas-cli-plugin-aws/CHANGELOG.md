@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.17](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.16...serverless-v1.1.17) (2020-08-05)
+
+
+### Bug Fixes
+
+* aws bucket duplicated path default ([#587](https://github.com/midwayjs/midway-faas/issues/587)) ([9e504ef](https://github.com/midwayjs/midway-faas/commit/9e504ef48724edc5eb50c527424dfb261872e9c2))
+
+
+
+
+
 ## [1.1.16](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.15...serverless-v1.1.16) (2020-08-05)
 
 **Note:** Version bump only for package @midwayjs/fcli-plugin-aws
