@@ -243,7 +243,12 @@ export class AWSLambdaPlugin extends BasePlugin {
   ): Promise<CloudFormation.UpdateStackOutput> {
     this.core.cli.log('  - stack already exists, do stack update');
 
-    const TemplateBody = await this.generateStackJson(fns, stage, bucket.Bucket, bucket.Key);
+    const TemplateBody = await this.generateStackJson(
+      fns,
+      stage,
+      bucket.Bucket,
+      bucket.Key
+    );
     const params = {
       StackName: this.stackName,
       Capabilities: ['CAPABILITY_IAM', 'CAPABILITY_AUTO_EXPAND'],
@@ -306,18 +311,19 @@ export class AWSLambdaPlugin extends BasePlugin {
     }
     this.core.cli.log('\n  - stack ready, check api url');
 
-    const result: CloudFormation.DescribeStackResourcesOutput = await new Promise((resolve, reject) =>
-      service.describeStackResources(
-        {
-          StackName: stackId,
-        },
-        (err, data) => {
-          if (err) {
-            return reject(err);
+    const result: CloudFormation.DescribeStackResourcesOutput = await new Promise(
+      (resolve, reject) =>
+        service.describeStackResources(
+          {
+            StackName: stackId,
+          },
+          (err, data) => {
+            if (err) {
+              return reject(err);
+            }
+            resolve(data as any);
           }
-          resolve(data as any);
-        }
-      )
+        )
     );
 
     const { StackResources } = result;
@@ -449,10 +455,10 @@ export class AWSLambdaPlugin extends BasePlugin {
       // this.core.cli.log('  - IAMFullAccess');
       this.core.cli.log(
         yellow(
-          'There is no aws credentials available, please input your access keys: '
-          +
-          '(you can get access keys from https://console.aws.amazon.com/iam/home?region=us-east-1#/security_credentials)',
-        ));
+          'There is no aws credentials available, please input your access keys: ' +
+            '(you can get access keys from https://console.aws.amazon.com/iam/home?region=us-east-1#/security_credentials)'
+        )
+      );
       const accessKeyId = await new Input({
         message: 'aws_access_key_id =',
         show: true,
