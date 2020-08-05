@@ -4,9 +4,7 @@ const layers = [];
 try {
   const <%=layer.name%> = require('<%=layer.path%>');
   layers.push(<%=layer.name%>);
-} catch(e) {
-  console.error('<%=layer.type%> layer "<%=layer.path%>" not install', e);
-}
+} catch(e) { }
 <% }); %>
 
 let runtime;
