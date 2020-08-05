@@ -8,7 +8,7 @@ const {
 const { join } = require('path');
 const { existsSync } = require('fs');
 
-const registerFunctionToIoc = (container, functionName, func) => {
+const registerFunctionToIoc = (container, functionName, func, argsPath) => {
   class FunctionContainer {
     async handler(event) {
       const bindCtx = {
@@ -16,16 +16,7 @@ const registerFunctionToIoc = (container, functionName, func) => {
         event,
       };
 
-      /**
-       * HTTP Case
-       */
-      const args =
-        (this.ctx &&
-          this.ctx.request &&
-          this.ctx.request.body &&
-          this.ctx.request.body.args) ||
-        [];
-
+      const args = getValue(bindCtx, argsPath || 'ctx.request.body.args', []);
       return func.bind(bindCtx)(...args);
     }
   }
@@ -53,7 +44,12 @@ const registerFunctionToIocByConfig = (config, options) => {
   const { baseDir = process.cwd() } = options || {};
 
   config.functionList.forEach(functionInfo => {
-    const { functionName, functionFilePath, functionHandler } = functionInfo;
+    const {
+      functionName,
+      functionFilePath,
+      functionHandler,
+      argsPath,
+    } = functionInfo;
 
     if (!functionFilePath) {
       return;
@@ -67,14 +63,25 @@ const registerFunctionToIocByConfig = (config, options) => {
 
     try {
       const modExports = require(functionPath);
-      if (!modExports || !modExports[functionName]) {
+      if (!modExports) {
+        return;
+      }
+      let fun;
+      if (functionName) {
+        fun = modExports[functionName];
+      } else {
+        fun = modExports.default || modExports;
+      }
+
+      if (typeof fun !== 'function') {
         return;
       }
 
       registerFunctionToIoc(
         options.context,
-        functionHandler || `${functionName}.handler`,
-        modExports[functionName]
+        functionHandler || `${functionName || '$default'}.handler`,
+        fun,
+        argsPath
       );
     } catch (error) {
       console.error(
@@ -87,6 +94,15 @@ const registerFunctionToIocByConfig = (config, options) => {
       console.error(error);
     }
   });
+};
+
+// copy from https://github.com/developit/dlv/blob/master/index.js
+const getValue = (obj, key, def, p, undef) => {
+  key = key.split ? key.split('.') : key;
+  for (p = 0; p < key.length; p++) {
+    obj = obj ? obj[key[p]] : undef;
+  }
+  return obj === undef ? def : obj;
 };
 
 module.exports = {

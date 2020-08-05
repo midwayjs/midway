@@ -129,6 +129,7 @@ const assignToFunctionMap = (functionMap, handlerConf) => {
       functionName: handlerConf.exportFunction,
       functionHandler: handlerConf.handler,
       functionFilePath: handlerConf.sourceFilePath,
+      argsPath: handlerConf.argsPath,
     });
   }
   return functionMap;

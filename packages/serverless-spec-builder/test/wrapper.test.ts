@@ -93,12 +93,24 @@ describe('/test/wrapper.test.ts', () => {
                 {
                   path: '/api/test',
                   handler: 'index.handler',
+                  argsPath: 'ctx.request.data.args',
                   isFunctional: true,
                   exportFunction: 'test',
                   sourceFilePath: 'fun-index.js',
                 },
                 { path: '/*', handler: 'render.handler' },
               ],
+            },
+          },
+          layers: {
+            testNpm: {
+              path: 'npm:test',
+            },
+            'remote-debug': {
+              path: 'oss:remote-debug',
+            },
+            testOss: {
+              path: 'oss:test',
             },
           },
         },
@@ -111,6 +123,12 @@ describe('/test/wrapper.test.ts', () => {
       assert(
         /registerFunctionToIocByConfig/.test(readFileSync(aggrePath).toString())
       );
+      assert(
+        /const layer_npm_testNpm = require\('test'\);/.test(
+          readFileSync(aggrePath).toString()
+        )
+      );
+      assert(/layer_oss_remote_debug/.test(readFileSync(aggrePath).toString()));
       await remove(registerFunction);
     });
     it('writeWrapper', async () => {

@@ -3,6 +3,57 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.16](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.15...serverless-v1.1.16) (2020-08-05)
+
+**Note:** Version bump only for package @midwayjs/fcli-command-core
+
+
+
+
+
+## [1.1.15](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.14...serverless-v1.1.15) (2020-08-05)
+
+**Note:** Version bump only for package @midwayjs/fcli-command-core
+
+
+
+
+
+## [1.1.14](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.13...serverless-v1.1.14) (2020-08-04)
+
+**Note:** Version bump only for package @midwayjs/fcli-command-core
+
+
+
+
+
+## [1.1.13](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.12...serverless-v1.1.13) (2020-08-03)
+
+
+### Bug Fixes
+
+* fc auto domain ([#580](https://github.com/midwayjs/midway-faas/issues/580)) ([f8bf9e0](https://github.com/midwayjs/midway-faas/commit/f8bf9e05922b154285ee29f1a65b59d9d448cf5b))
+
+
+
+
+
+## [1.1.12](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.11...serverless-v1.1.12) (2020-07-29)
+
+**Note:** Version bump only for package @midwayjs/fcli-command-core
+
+
+
+
+
+## [1.1.10](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.9...serverless-v1.1.10) (2020-07-28)
+
+**Note:** Version bump only for package @midwayjs/fcli-command-core
+
+
+
+
+
 ## [1.1.9](https://github.com/midwayjs/midway-faas/compare/v1.1.4...v1.1.9) (2020-07-28)
 
 **Note:** Version bump only for package @midwayjs/fcli-command-core

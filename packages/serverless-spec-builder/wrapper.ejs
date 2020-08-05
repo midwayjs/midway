@@ -5,7 +5,12 @@ const { registerFunctionToIocByConfig } = require('./registerFunction.js');
 const { join } = require('path');
 <% } %>
 const picomatch = require('picomatch');
-<% layerDeps.forEach(function(layer){ %>const <%=layer.name%> = require('<%=layer.path%>');
+const layers = [];
+<% layerDeps.forEach(function(layer){ %>
+try {
+  const <%=layer.name%> = require('<%=layer.path%>');
+  layers.push(<%=layer.name%>);
+} catch(e) { }
 <% }); %>
 
 let starter;
@@ -21,7 +26,7 @@ const initializeMethod = async (initializeContext = {}) => {
   isInitialing = true;
   <% } %>
   runtime = await start({
-    layers: [<%= layers.join(", ") %>],
+    layers: layers,
     getHandler: getHandler
   });
   starter = new <%=faasStarterName %>({ baseDir: __dirname, initializeContext, applicationAdapter: runtime, middleware: <%-JSON.stringify(middleware, null, 2)%> });

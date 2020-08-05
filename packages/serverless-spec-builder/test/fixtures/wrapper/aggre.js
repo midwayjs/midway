@@ -5,6 +5,28 @@ const { registerFunctionToIocByConfig } = require('./registerFunction.js');
 const { join } = require('path');
 
 const picomatch = require('picomatch');
+const layers = [];
+
+try {
+  const layer_npm_testNpm = require('test');
+  layers.push(layer_npm_testNpm);
+} catch(e) {
+  console.error('npm layer "test" not install', e);
+}
+
+try {
+  const layer_oss_remote_debug = require('remote-debug');
+  layers.push(layer_oss_remote_debug);
+} catch(e) {
+  console.error('oss layer "remote-debug" not install', e);
+}
+
+try {
+  const layer_oss_testOss = require('test');
+  layers.push(layer_oss_testOss);
+} catch(e) {
+  console.error('oss layer "test" not install', e);
+}
 
 
 let starter;
@@ -15,7 +37,7 @@ let inited = false;
 const initializeMethod = async (initializeContext = {}) => {
   
   runtime = await start({
-    layers: [],
+    layers: layers,
     getHandler: getHandler
   });
   starter = new FaaSStarter({ baseDir: __dirname, initializeContext, applicationAdapter: runtime, middleware: [
@@ -29,7 +51,8 @@ const initializeMethod = async (initializeContext = {}) => {
     {
       "functionName": "test",
       "functionHandler": "index.handler",
-      "functionFilePath": "fun-index.js"
+      "functionFilePath": "fun-index.js",
+      "argsPath": "ctx.request.data.args"
     }
   ]
 }, {

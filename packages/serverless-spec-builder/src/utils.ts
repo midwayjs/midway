@@ -4,7 +4,7 @@ export interface Ilayer {
   };
 }
 export function formatLayers(...multiLayers: Ilayer[]) {
-  const layerTypeList = { npm: {} };
+  const layerTypeList: any = {};
   multiLayers.forEach((layer: Ilayer) => {
     Object.keys(layer || {}).forEach(layerName => {
       if (!layer[layerName].path) {
@@ -12,7 +12,7 @@ export function formatLayers(...multiLayers: Ilayer[]) {
       }
       const [type, path] = layer[layerName].path.split(':');
       if (!layerTypeList[type]) {
-        return;
+        layerTypeList[type] = {};
       }
       layerTypeList[type][layerName] = path;
     });
@@ -25,12 +25,22 @@ export function getLayers(...layersList: any) {
   const layerDeps = [];
   const layers = [];
 
-  if (layerTypeList && layerTypeList.npm) {
-    Object.keys(layerTypeList.npm).forEach((originName: string) => {
-      const name = 'layer_' + originName;
-      layerDeps.push({ name, path: layerTypeList.npm[originName] });
-      layers.push(name);
-    });
+  if (layerTypeList) {
+    for (const type in layerTypeList) {
+      const typeLayerMap = layerTypeList[type];
+      if (!typeLayerMap) {
+        continue;
+      }
+      for (const layerName in typeLayerMap) {
+        const name = `layer_${type}_${layerName.replace(/[^\w]/g, '_')}`;
+        layerDeps.push({
+          name,
+          type,
+          path: typeLayerMap[layerName].replace(/@[^/]*$/, ''), // 移除末尾版本
+        });
+        layers.push(name);
+      }
+    }
   }
   return {
     layerDeps,

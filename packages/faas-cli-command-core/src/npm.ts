@@ -48,15 +48,23 @@ async function getNpmPath(
 interface INpmInstallOptions {
   baseDir?: string;
   register?: string;
+  registerPath?: string;
   npmName: string;
   mode?: string;
   slience?: boolean;
 }
 export async function installNpm(options: INpmInstallOptions) {
-  const { baseDir, register = 'npm', npmName, mode, slience } = options;
+  const {
+    baseDir,
+    register = 'npm',
+    npmName,
+    mode,
+    slience,
+    registerPath,
+  } = options;
   const cmd = `${baseDir ? `cd ${baseDir};` : ''}${register} i ${npmName}${
     mode ? ` --${mode}` : ' --no-save'
-  }`;
+  }${registerPath ? ` --registry=${registerPath}` : ''}`;
 
   return new Promise((resolved, rejected) => {
     const execProcess = exec(cmd, (err, result) => {

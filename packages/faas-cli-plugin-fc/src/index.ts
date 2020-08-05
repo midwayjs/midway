@@ -50,9 +50,9 @@ export class AliyunFCPlugin extends BasePlugin {
         await AliyunDeploy({
           template: join(this.midwayBuildPath, 'template.yml'),
         });
-        this.core.cli.log('deploy success');
+        this.core.cli.log('Deploy success');
       } catch (e) {
-        this.core.cli.log(`deploy error: ${e.message}`);
+        this.core.cli.log(`Deploy error: ${e.message}`);
       }
     },
   };

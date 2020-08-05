@@ -3,6 +3,85 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.16](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.15...serverless-v1.1.16) (2020-08-05)
+
+
+### Bug Fixes
+
+* remove layer console ([#586](https://github.com/midwayjs/midway-faas/issues/586)) ([51b144b](https://github.com/midwayjs/midway-faas/commit/51b144b8d18b15cc31b31d8a2eacf7b16c12cdd1))
+
+
+
+
+
+## [1.1.15](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.14...serverless-v1.1.15) (2020-08-05)
+
+
+### Bug Fixes
+
+* layer name ([#585](https://github.com/midwayjs/midway-faas/issues/585)) ([9a774b7](https://github.com/midwayjs/midway-faas/commit/9a774b7e6bb5652a595954c63518ef4747d85259))
+
+
+
+
+
+## [1.1.14](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.13...serverless-v1.1.14) (2020-08-04)
+
+
+### Bug Fixes
+
+* add default path for fc ([#584](https://github.com/midwayjs/midway-faas/issues/584)) ([064d3f0](https://github.com/midwayjs/midway-faas/commit/064d3f08fa7e74420bdcac111f3fda3cf3ef6ec1))
+* layer wrapper ([#583](https://github.com/midwayjs/midway-faas/issues/583)) ([1c9966d](https://github.com/midwayjs/midway-faas/commit/1c9966d6d05108451745183efbc4a15ae1caae6b))
+
+
+
+
+
+## [1.1.13](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.12...serverless-v1.1.13) (2020-08-03)
+
+
+### Bug Fixes
+
+* args path ([#578](https://github.com/midwayjs/midway-faas/issues/578)) ([f0de617](https://github.com/midwayjs/midway-faas/commit/f0de617087419ecb433d430b6cb3b1d9e3028d47))
+* fc auto domain ([#580](https://github.com/midwayjs/midway-faas/issues/580)) ([f8bf9e0](https://github.com/midwayjs/midway-faas/commit/f8bf9e05922b154285ee29f1a65b59d9d448cf5b))
+
+
+
+
+
+## [1.1.12](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.11...serverless-v1.1.12) (2020-07-29)
+
+
+### Bug Fixes
+
+* support default fp ([#575](https://github.com/midwayjs/midway-faas/issues/575)) ([6c3d59c](https://github.com/midwayjs/midway-faas/commit/6c3d59c1737db901baadb386b75d49d0a711991f))
+
+
+
+
+
+## [1.1.11](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.10...serverless-v1.1.11) (2020-07-28)
+
+
+### Bug Fixes
+
+* aws duplicated bucketname & default path ([#573](https://github.com/midwayjs/midway-faas/issues/573)) ([28b6520](https://github.com/midwayjs/midway-faas/commit/28b6520d46d2496003a7e7681c663aa9814832bb))
+
+
+
+
+
+## [1.1.10](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.9...serverless-v1.1.10) (2020-07-28)
+
+
+### Bug Fixes
+
+* resource not included by npm ([#572](https://github.com/midwayjs/midway-faas/issues/572)) ([6835b5f](https://github.com/midwayjs/midway-faas/commit/6835b5f5a170f84401288d6b06f82328baecde9c))
+
+
+
+
+
 ## [1.1.9](https://github.com/midwayjs/midway-faas/compare/v1.1.4...v1.1.9) (2020-07-28)
 
 

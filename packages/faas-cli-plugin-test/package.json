@@ -1,10 +1,10 @@
 {
   "name": "@midwayjs/fcli-plugin-test",
-  "version": "1.1.9",
+  "version": "1.1.16",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/fcli-command-core": "^1.1.9",
+    "@midwayjs/fcli-command-core": "^1.1.16",
     "fs-extra": "^8.1.0",
     "globby": "^10.0.1",
     "mocha": "^7.1.2",
