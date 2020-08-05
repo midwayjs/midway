@@ -34,4 +34,19 @@ export const templateList = {
     package: '@midwayjs-examples/faas-with-covid19',
     group: 'Examples',
   },
+  'express-migrate': {
+    desc: 'A serverless example for express appliction migrate',
+    package: '@midwayjs-examples/express-migrate-serverless',
+    group: 'Examples',
+  },
+  'koa-migrate': {
+    desc: 'A serverless example for koa appliction migrate',
+    package: '@midwayjs-examples/koa-migrate-serverless',
+    group: 'Examples',
+  },
+  'eggjs-migrate': {
+    desc: 'A serverless example for eggjs appliction migrate',
+    package: '@midwayjs-examples/eggjs-migrate-serverless',
+    group: 'Examples',
+  },
 };
