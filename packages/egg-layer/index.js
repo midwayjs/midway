@@ -53,6 +53,7 @@ module.exports = engine => {
                 ? context.request.body
                 : JSON.stringify(context.request.body),
             headers: context.headers,
+            followRedirect: false,
           },
           (error, response, body) => {
             context.res = response;
