@@ -46,22 +46,3 @@ export interface StackEvents {
     ClientRequestToken: string;
   }>;
 }
-
-export interface StackResourcesDetail {
-  ResponseMetadata: {
-    RequestId: string;
-  };
-  StackResources: {
-    StackName: string;
-    StackId: string;
-    LogicalResourceId: string;
-    PhysicalResourceId: string;
-    ResourceType: string;
-    LastUpdatedTimestamp: string;
-    ResourceStatus: string;
-    Metadata: string;
-    DriftInformation: {
-      StackResourceDriftStatus: string;
-    };
-  }[];
-}

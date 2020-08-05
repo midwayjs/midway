@@ -24,7 +24,6 @@ import {
   S3UploadResult,
   // LambdaFunctionOptions,
   StackEvents,
-  StackResourcesDetail,
   MFunctions,
 } from './interface';
 
@@ -37,6 +36,8 @@ export class AWSLambdaPlugin extends BasePlugin {
   servicePath = this.core.config.servicePath;
   midwayBuildPath = join(this.servicePath, '.serverless');
   cachedCredentials: Lambda.ClientConfiguration;
+  stackName: string;
+  cfService: CloudFormation;
 
   hooks = {
     'package:generateEntry': async () => {
@@ -137,7 +138,6 @@ export class AWSLambdaPlugin extends BasePlugin {
     key: string
   ) {
     this.core.cli.log('  - generate stack template json');
-    // TODO 支持多函数模板
     const tpl = readFileSync(
       join(__dirname, '../resource/aws-stack-http-template.ejs')
     ).toString();
@@ -176,14 +176,11 @@ export class AWSLambdaPlugin extends BasePlugin {
   }
 
   async createStack(
-    credentials,
     fns: MFunctions[],
     stage: string,
     bucket: S3UploadResult
-  ): Promise<{ StackId: string }> {
+  ): Promise<CloudFormation.CreateStackOutput> {
     this.core.cli.log('Start stack create');
-
-    // TODO support multi function;
 
     /**
      * this.core.service {
@@ -193,7 +190,6 @@ export class AWSLambdaPlugin extends BasePlugin {
      *   package: { artifact: 'code.zip' }
      * }
      */
-    const service = new CloudFormation(credentials);
     const TemplateBody = await this.generateStackJson(
       fns,
       stage,
@@ -201,7 +197,7 @@ export class AWSLambdaPlugin extends BasePlugin {
       bucket.Key
     );
     const params = {
-      StackName: 'ms-stack-' + this.core.service.service.name,
+      StackName: this.stackName,
       OnFailure: 'DELETE',
       Capabilities: ['CAPABILITY_IAM', 'CAPABILITY_AUTO_EXPAND'],
       Parameters: [],
@@ -212,11 +208,11 @@ export class AWSLambdaPlugin extends BasePlugin {
     this.core.cli.log('  - creating stack request');
     try {
       return await new Promise((resolve, reject) =>
-        service.createStack(params, (err, data) => {
+        this.cfService.createStack(params, (err, data) => {
           if (err) {
             return reject(err);
           }
-          resolve(data as any);
+          resolve(data);
         })
       );
     } catch (err) {
@@ -235,29 +231,26 @@ export class AWSLambdaPlugin extends BasePlugin {
   }
 
   async updateStack(
-    credentials,
-    bucket: string,
-    key: string,
     fns: MFunctions[],
-    stage
-  ): Promise<{ StackId: string }> {
+    stage: string,
+    bucket: S3UploadResult
+  ): Promise<CloudFormation.UpdateStackOutput> {
     this.core.cli.log('  - stack already exists, do stack update');
-    // TODO support multi function;
-    const service = new CloudFormation(credentials);
-    const TemplateBody = await this.generateStackJson(fns, stage, bucket, key);
+
+    const TemplateBody = await this.generateStackJson(fns, stage, bucket.Bucket, bucket.Key);
     const params = {
-      StackName: 'ms-stack-' + this.core.service.service.name,
+      StackName: this.stackName,
       Capabilities: ['CAPABILITY_IAM', 'CAPABILITY_AUTO_EXPAND'],
       Parameters: [],
       TemplateBody,
     };
     this.core.cli.log('  - updating stack request');
     return new Promise((resolve, reject) =>
-      service.updateStack(params, (err, data) => {
+      this.cfService.updateStack(params, (err, data) => {
         if (err) {
           return reject(err);
         }
-        resolve(data as any);
+        resolve(data);
       })
     );
   }
@@ -307,7 +300,7 @@ export class AWSLambdaPlugin extends BasePlugin {
     }
     this.core.cli.log('\n  - stack ready, check api url');
 
-    const result: StackResourcesDetail = await new Promise((resolve, reject) =>
+    const result: CloudFormation.DescribeStackResourcesOutput = await new Promise((resolve, reject) =>
       service.describeStackResources(
         {
           StackName: stackId,
@@ -439,6 +432,7 @@ export class AWSLambdaPlugin extends BasePlugin {
     await this.package();
 
     this.core.cli.log('Start deploy by aws-sdk');
+    this.stackName = 'ms-stack-' + this.core.service.service.name;
     // 配置 crendentials
     let credentials = this.getCredentials();
     if (!credentials.credentials) {
@@ -456,7 +450,7 @@ export class AWSLambdaPlugin extends BasePlugin {
         yellow(
           'There is no credentials available, please input aws credentials: '
         ) +
-          '(you can get credentials from https://console.aws.amazon.com/iam/home?region=us-east-1#/users)'
+        '(you can get credentials from https://console.aws.amazon.com/iam/home?region=us-east-1#/users)'
       );
       const accessKeyId = await new Input({
         message: 'aws_access_key_id =',
@@ -475,17 +469,18 @@ export class AWSLambdaPlugin extends BasePlugin {
     const bucket = `${accountId}-${this.core.service.service.name}-deploymentbucket`;
     await this.featchBucket(bucket);
     const artifactRes = await this.uploadArtifact(bucket);
-    // console.log('artifactRes', artifactRes);
+    this.cfService = new CloudFormation(credentials);
 
-    let stackData: { StackId: string } = null;
+    let stackData: CloudFormation.UpdateStackOutput = null;
     try {
-      stackData = await this.createStack(credentials, fns, stage, artifactRes);
+      stackData = await this.createStack(fns, stage, artifactRes);
     } catch (err) {
       if (err.message.includes('already exists')) {
         await this.updateFunction(credentials, fns, artifactRes);
-        return;
+        stackData = await this.updateStack(fns, stage, artifactRes);
+      } else {
+        throw err;
       }
-      throw err;
     }
     await this.monitorStackResult(credentials, stackData.StackId, stage, fns);
     this.core.cli.log('Deploy over');
