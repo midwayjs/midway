@@ -13,6 +13,7 @@ let inited = false;
 const initializeMethod = async (initializeContext = {}) => {
   runtime = await start({
     layers: layers,
+    isAppMode: true
   });
 };
 
