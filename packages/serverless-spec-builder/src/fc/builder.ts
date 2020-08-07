@@ -224,7 +224,10 @@ function convertMethods(methods: string | string[]): HTTPEventType[] {
     }
 
     methods = [methods];
+  } else if (methods?.length) {
+    // has value
   } else {
+    // empty
     return ['GET', 'PUT', 'POST', 'DELETE', 'HEAD'];
   }
 

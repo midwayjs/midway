@@ -79,6 +79,23 @@ describe('/test/fc.test.ts', () => {
         Type: 'HTTP',
       },
     });
+
+    // third function
+    const funResult3 = result['Resources']['serverless-hello-world']['index3'];
+    assert(funResult3['Type'] === 'Aliyun::Serverless::Function');
+    assert(funResult3['Properties']['Initializer'] === 'index.initializer');
+    assert(funResult3['Properties']['Handler'] === 'index.handler');
+    assert(funResult3['Properties']['Runtime'] === 'nodejs10');
+
+    assert.deepStrictEqual(funResult3['Events'], {
+      'http-index3': {
+        Properties: {
+          AuthType: 'ANONYMOUS',
+          Methods: ['GET', 'POST'],
+        },
+        Type: 'HTTP',
+      },
+    });
   });
 
   it('test http events no method', () => {

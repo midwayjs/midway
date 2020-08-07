@@ -21,5 +21,14 @@ functions:
           role: 'acs:ram::1234567890:role/fc-invoke-test'
           version: LATEST
 
+  index3:
+    handler: index.handler
+    events:
+      - http:
+          method: 
+            - get
+            - post
+          path: /
+
 package:
   artifact: code.zip
