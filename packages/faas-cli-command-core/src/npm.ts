@@ -62,7 +62,7 @@ export async function installNpm(options: INpmInstallOptions) {
     slience,
     registerPath,
   } = options;
-  const cmd = `${baseDir ? `cd ${baseDir};` : ''}${register} i ${npmName}${
+  const cmd = `${baseDir ? `cd ${baseDir} && ;` : ''}${register} i ${npmName}${
     mode ? ` --${mode}` : ' --no-save'
   }${registerPath ? ` --registry=${registerPath}` : ''}`;
 

@@ -151,12 +151,12 @@ export class PackagePlugin extends BasePlugin {
     this.core.cli.log(` - BaseDir: ${this.servicePath}`);
     this.core.cli.log(' - AnalyzeResult');
     this.core.cli.log(
-      `   ◎ ProjectType: ${this.codeAnalyzeResult.projectType}`
+      `   - ProjectType: ${this.codeAnalyzeResult.projectType}`
     );
     if (this.codeAnalyzeResult.midwayRoot) {
       // 输出 midway-* 项目根路径
       this.core.cli.log(
-        `   ◎ MidwayRoot: ${
+        `   - MidwayRoot: ${
           this.servicePath === this.codeAnalyzeResult.midwayRoot
             ? '.'
             : relative(this.servicePath, this.codeAnalyzeResult.midwayRoot)
@@ -164,7 +164,7 @@ export class PackagePlugin extends BasePlugin {
       );
       // 输出 ts 代码根路径
       this.core.cli.log(
-        `   ◎ TSCodeRoot: ${relative(
+        `   - TSCodeRoot: ${relative(
           this.servicePath,
           this.codeAnalyzeResult.tsCodeRoot
         )}`
@@ -175,15 +175,15 @@ export class PackagePlugin extends BasePlugin {
       );
       if (this.codeAnalyzeResult.integrationProject) {
         this.core.cli.log(
-          `   ◎ TSBuildTemporaryRoot: ${this.integrationDistTempDirectory}`
+          `   - TSBuildTemporaryRoot: ${this.integrationDistTempDirectory}`
         );
         await remove(join(this.servicePath, this.integrationDistTempDirectory));
       } else {
-        this.core.cli.log('   ◎ TSBuildTemporaryRoot: dist');
+        this.core.cli.log('   - TSBuildTemporaryRoot: dist');
       }
       // 输出构建产物根路径
       this.core.cli.log(
-        `   ◎ PackageRoot: ${relative(this.servicePath, this.midwayBuildPath)}`
+        `   - PackageRoot: ${relative(this.servicePath, this.midwayBuildPath)}`
       );
     }
     await remove(this.midwayBuildPath);
@@ -215,7 +215,7 @@ export class PackagePlugin extends BasePlugin {
       ),
       exclude: packageObj.exclude,
       log: path => {
-        this.core.cli.log(`   ◎ Copy ${path}`);
+        this.core.cli.log(`   - Copy ${path}`);
       },
     });
     if (this.codeAnalyzeResult.integrationProject) {
