@@ -97,6 +97,7 @@ export class CommandHookCore implements ICommandHooksCore {
         }
       }
     }
+    this.debug('Core Load plugin', Plugin.name);
     this.loadCommands(instance, this.commands, instance.commands);
     this.loadHooks(instance.hooks);
     this.instances.push(instance);
@@ -152,8 +153,8 @@ export class CommandHookCore implements ICommandHooksCore {
           this.debug('User Lifecycle Hook Error', e?.message);
         }
       }
-      this.debug('Core Lifecycle', lifecycle);
       const hooks = this.hooks[lifecycle] || [];
+      this.debug('Core Lifecycle', lifecycle, hooks.length);
       for (const hook of hooks) {
         try {
           await hook();

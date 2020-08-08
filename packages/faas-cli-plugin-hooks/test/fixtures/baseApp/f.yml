@@ -1,0 +1,11 @@
+service: serverless-hooks-test
+
+provider:
+  name: aliyun
+  runtime: nodejs8
+
+functionsRule:
+  - baseDir: ./
+    events:
+      - http:
+          basePath: /api

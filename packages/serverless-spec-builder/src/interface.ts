@@ -141,6 +141,15 @@ export interface PackageStructure {
   exclude?: string[];
 }
 
+export interface FunctionsRuleItem {
+  baseDir: string;
+  events?: {
+    http: {
+      basePath: string;
+    };
+  }[];
+}
+
 export interface SpecStructure {
   service?: ServiceStructure;
   provider?: ProviderStructure;
@@ -151,6 +160,7 @@ export interface SpecStructure {
   package?: PackageStructure;
   resources?: ResourcesStructure;
   custom?: any;
+  functionsRule?: FunctionsRuleItem[];
 }
 
 export interface Builder {

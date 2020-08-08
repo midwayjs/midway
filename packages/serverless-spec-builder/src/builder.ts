@@ -57,6 +57,10 @@ export class SpecBuilder implements Builder {
     return this.originData['aggregation'];
   }
 
+  getFunctionsRule() {
+    return this.originData['functionsRule'];
+  }
+
   toJSON(): any {
     const serviceData = this.originData['service'];
     if (typeof serviceData === 'string') {

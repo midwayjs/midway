@@ -39,6 +39,7 @@ export async function parseInvokeOptionsByOriginUrl(
     getFunctionList: true,
     functionDir: options.functionDir,
     sourceDir: options.sourceDir,
+    verbose: options.verbose,
   });
   const invokeHTTPData: Partial<{
     headers: object;

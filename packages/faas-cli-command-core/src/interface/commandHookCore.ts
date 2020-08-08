@@ -1,5 +1,6 @@
 import { IProviderInstance } from './provider';
 import { ICommandInstance } from './plugin';
+import { SpecStructure } from '@midwayjs/serverless-spec-builder';
 export interface ILog {
   log: (...any) => void;
   error?: (...any) => void;
@@ -35,6 +36,14 @@ interface IStore<T> {
   [index: number]: T;
 }
 
+interface CoreService extends Omit<SpecStructure, 'functions'> {
+  experimentalFeatures?: {
+    [featureName: string]: any;
+  };
+  globalDependencies?: any;
+  functions: object;
+}
+
 export interface ICoreInstance {
   classes: any;
   cli: ILog | Console;
@@ -44,34 +53,7 @@ export interface ICoreInstance {
   pluginManager: ICommandHooksCore;
   store: IStore<any>;
   debug: any;
-  service: {
-    experimentalFeatures?: {
-      [featureName: string]: any;
-    };
-    service?: {
-      name: string;
-    };
-    provider: {
-      name: string;
-    };
-    functions: object;
-    layers?: {
-      [layerName: string]: {
-        path: string;
-      };
-    };
-    resources: object;
-    custom: any;
-    package?: any;
-    aggregation?: {
-      [aggregationName: string]: {
-        deployOrigin?: boolean;
-        functions: string[];
-        functionsPattern?: string;
-      };
-    };
-    globalDependencies?: any;
-  };
+  service: CoreService;
   processedInput: {
     options: any;
     commands: string[];
