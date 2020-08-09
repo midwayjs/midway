@@ -245,7 +245,14 @@ export class FaaSStarter implements IFaaSStarter {
 
       // store all function entry
       const funModules = listModule(FUNC_KEY);
+      const funNames = [];
       for (const funModule of funModules) {
+        // 判断是否存在重复的函数名
+        if (funNames.indexOf(funModule.name) !== -1) {
+          throw new Error(`duplicate function name: ${funModule.name}`);
+        }
+        funNames.push(funModule.name);
+
         const funOptions: Array<{
           funHandler;
           key;
@@ -268,6 +275,7 @@ export class FaaSStarter implements IFaaSStarter {
           });
         });
       }
+      funNames = null; // 释放内存
 
       const modules = listPreloadModule();
       for (const module of modules) {
