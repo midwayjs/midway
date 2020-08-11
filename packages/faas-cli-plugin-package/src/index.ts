@@ -361,7 +361,7 @@ export class PackagePlugin extends BasePlugin {
 
   async emit() {
     const isTsDir = existsSync(join(this.servicePath, 'tsconfig.json'));
-    this.core.cli.log('Building Midway FaaS directory files...');
+    this.core.cli.log('Building project directory files...');
     if (!isTsDir) {
       this.core.cli.log(' - Not found tsconfig.json and skip build');
       return;
