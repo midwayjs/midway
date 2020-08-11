@@ -4,7 +4,9 @@ import { resolve, join } from 'path';
 import { existsSync, remove, readFileSync } from 'fs-extra';
 import * as assert from 'assert';
 
-describe('/test/package-a[[.test.ts', () => {
+import { AliyunFCPlugin } from '../../faas-cli-plugin-fc';
+
+describe.only('/test/package-a[[.test.ts', () => {
   describe('package application layer project', () => {
     const baseDir = resolve(__dirname, './fixtures/app-layer');
 
@@ -25,6 +27,7 @@ describe('/test/package-a[[.test.ts', () => {
         log: console,
       });
       core.addPlugin(PackagePlugin);
+      core.addPlugin(AliyunFCPlugin);
       await core.ready();
       await core.invoke(['package']);
       const buildPath = join(baseDir, '.serverless');
