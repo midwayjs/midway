@@ -66,6 +66,21 @@ describe('/test/index.test.ts', () => {
         .expect(/{"body":{"b":1}}/)
         .expect(200, done);
     });
+
+    it('should test static file', done => {
+      request(app)
+        .get('/public/news.css')
+        .expect('Content-Type', 'text/css; charset=utf-8')
+        .expect(/font-size/)
+        .expect(200, done);
+    });
+
+    it('should test redirect router', done => {
+      request(app)
+        .get('/')
+        .expect('Content-Type', 'text/html; charset=utf-8')
+        .expect(301, done);
+    });
   });
 
   describe('FC test with api gateway', () => {
@@ -126,6 +141,21 @@ describe('/test/index.test.ts', () => {
         .expect(/{"body":{"b":1}}/)
         .expect(200, done);
     });
+
+    it('should test static file', done => {
+      request(app)
+        .get('/public/news.css')
+        .expect('Content-Type', 'text/css; charset=utf-8')
+        .expect(/font-size/)
+        .expect(200, done);
+    });
+
+    it('should test redirect router', done => {
+      request(app)
+        .get('/')
+        .expect('Content-Type', 'text/html; charset=utf-8')
+        .expect(301, done);
+    });
   });
 
   describe('SCF test with api gateway', () => {
@@ -185,6 +215,21 @@ describe('/test/index.test.ts', () => {
         .expect('Content-Type', 'application/json; charset=utf-8')
         .expect(/{"body":{"b":1}}/)
         .expect(200, done);
+    });
+
+    it('should test static file', done => {
+      request(app)
+        .get('/public/news.css')
+        .expect('Content-Type', 'text/css; charset=utf-8')
+        .expect(/font-size/)
+        .expect(200, done);
+    });
+
+    it('should test redirect router', done => {
+      request(app)
+        .get('/')
+        .expect('Content-Type', 'text/html; charset=utf-8')
+        .expect(301, done);
     });
   });
 });
