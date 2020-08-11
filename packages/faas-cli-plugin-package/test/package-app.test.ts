@@ -6,7 +6,7 @@ import * as assert from 'assert';
 
 import { AliyunFCPlugin } from '../../faas-cli-plugin-fc';
 
-describe.only('/test/package-a[[.test.ts', () => {
+describe('/test/package-a[[.test.ts', () => {
   describe('package application layer project', () => {
     const baseDir = resolve(__dirname, './fixtures/app-layer');
 
