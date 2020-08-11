@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.19](https://github.com/midwayjs/midway/compare/serverless-v1.1.18...serverless-v1.1.19) (2020-08-11)
+
+
+### Bug Fixes
+
+* application return 301 and buffer case ([#596](https://github.com/midwayjs/midway/issues/596)) ([a31c022](https://github.com/midwayjs/midway/commit/a31c022409d234e001030d81ce1e414159039a0b))
+
+
+
+
+
 ## [1.1.18](https://github.com/midwayjs/midway/compare/serverless-v1.1.17...serverless-v1.1.18) (2020-08-11)
 
 
