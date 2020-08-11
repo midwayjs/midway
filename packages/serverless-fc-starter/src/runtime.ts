@@ -167,8 +167,14 @@ export class FCRuntime extends ServerlessLightRuntime {
               }
             }
 
-            if (res.setStatusCode) {
-              res.setStatusCode(ctx.status);
+            if (res.statusCode !== ctx.status) {
+              if (res.setStatusCode) {
+                res.setStatusCode(ctx.status);
+              }
+
+              if (res.statusCode) {
+                res.statusCode = ctx.status;
+              }
             }
 
             if (res.send) {
