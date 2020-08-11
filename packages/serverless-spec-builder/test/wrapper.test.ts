@@ -1,10 +1,20 @@
 import { writeWrapper, formetAggregationHandlers } from '../src/wrapper';
 import { resolve } from 'path';
 import * as assert from 'assert';
-import { existsSync, readFileSync, remove } from 'fs-extra';
+import { existsSync, readFileSync, remove, mkdirpSync } from 'fs-extra';
 
 describe('/test/wrapper.test.ts', () => {
+  const wrapperPath = resolve(__dirname, './fixtures/wrapper');
+
+  after(async () => {
+    await remove(wrapperPath);
+  });
+
   describe('test all format', () => {
+    beforeEach(async () => {
+      await remove(wrapperPath);
+      mkdirpSync(wrapperPath);
+    });
     it('writeWrapper functionMap', async () => {
       const wrapperPath = resolve(__dirname, './fixtures/wrapper');
       const registerFunction = resolve(wrapperPath, 'registerFunction.js');

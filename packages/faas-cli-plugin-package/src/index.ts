@@ -151,12 +151,12 @@ export class PackagePlugin extends BasePlugin {
     this.core.cli.log(` - BaseDir: ${this.servicePath}`);
     this.core.cli.log(' - AnalyzeResult');
     this.core.cli.log(
-      `   ◎ ProjectType: ${this.codeAnalyzeResult.projectType}`
+      `   - ProjectType: ${this.codeAnalyzeResult.projectType}`
     );
     if (this.codeAnalyzeResult.midwayRoot) {
       // 输出 midway-* 项目根路径
       this.core.cli.log(
-        `   ◎ MidwayRoot: ${
+        `   - MidwayRoot: ${
           this.servicePath === this.codeAnalyzeResult.midwayRoot
             ? '.'
             : relative(this.servicePath, this.codeAnalyzeResult.midwayRoot)
@@ -164,7 +164,7 @@ export class PackagePlugin extends BasePlugin {
       );
       // 输出 ts 代码根路径
       this.core.cli.log(
-        `   ◎ TSCodeRoot: ${relative(
+        `   - TSCodeRoot: ${relative(
           this.servicePath,
           this.codeAnalyzeResult.tsCodeRoot
         )}`
@@ -175,15 +175,15 @@ export class PackagePlugin extends BasePlugin {
       );
       if (this.codeAnalyzeResult.integrationProject) {
         this.core.cli.log(
-          `   ◎ TSBuildTemporaryRoot: ${this.integrationDistTempDirectory}`
+          `   - TSBuildTemporaryRoot: ${this.integrationDistTempDirectory}`
         );
         await remove(join(this.servicePath, this.integrationDistTempDirectory));
       } else {
-        this.core.cli.log('   ◎ TSBuildTemporaryRoot: dist');
+        this.core.cli.log('   - TSBuildTemporaryRoot: dist');
       }
       // 输出构建产物根路径
       this.core.cli.log(
-        `   ◎ PackageRoot: ${relative(this.servicePath, this.midwayBuildPath)}`
+        `   - PackageRoot: ${relative(this.servicePath, this.midwayBuildPath)}`
       );
     }
     await remove(this.midwayBuildPath);
@@ -215,7 +215,7 @@ export class PackagePlugin extends BasePlugin {
       ),
       exclude: packageObj.exclude,
       log: path => {
-        this.core.cli.log(`   ◎ Copy ${path}`);
+        this.core.cli.log(`   - Copy ${path}`);
       },
     });
     if (this.codeAnalyzeResult.integrationProject) {
@@ -361,14 +361,14 @@ export class PackagePlugin extends BasePlugin {
 
   async emit() {
     const isTsDir = existsSync(join(this.servicePath, 'tsconfig.json'));
-    this.core.cli.log('Building Midway FaaS directory files...');
+    this.core.cli.log('Building project directory files...');
     if (!isTsDir) {
       this.core.cli.log(' - Not found tsconfig.json and skip build');
       return;
     }
     this.core.cli.log(' - Using tradition build mode');
     this.program.emit();
-    this.core.cli.log(' - Build Midway FaaS complete');
+    this.core.cli.log(' - Build project complete');
   }
 
   // 生成默认入口
@@ -648,8 +648,10 @@ export class PackagePlugin extends BasePlugin {
   defaultBeforeGenerateSpec() {
     const service: any = this.core.service;
     if (service?.deployType) {
+      this.core.cli.log(` - found deployType: ${service?.deployType}`);
       // add default function
-      if (!service.functions) {
+      if (!service.functions || Object.keys(service.functions).length === 0) {
+        this.core.cli.log(` - create default functions`);
         service.functions = {
           app_index: {
             handler: 'index.handler',
@@ -663,16 +665,19 @@ export class PackagePlugin extends BasePlugin {
       }
 
       if (service?.deployType === 'egg') {
+        this.core.cli.log(` - create default layer: egg`);
         service.layers['eggLayer'] = { path: 'npm:@midwayjs/egg-layer' };
       }
 
       if (service?.deployType === 'express') {
+        this.core.cli.log(` - create default layer: express`);
         service.layers['expressLayer'] = {
           path: 'npm:@midwayjs/express-layer',
         };
       }
 
       if (service?.deployType === 'koa') {
+        this.core.cli.log(` - create default layer: koa`);
         service.layers['koaLayer'] = { path: 'npm:@midwayjs/koa-layer' };
       }
     }
