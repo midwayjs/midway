@@ -3,174 +3,174 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [1.1.18](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.17...serverless-v1.1.18) (2020-08-11)
+## [1.1.18](https://github.com/midwayjs/midway/compare/serverless-v1.1.17...serverless-v1.1.18) (2020-08-11)
 
 
 ### Bug Fixes
 
-* fix global middleware load order ([#594](https://github.com/midwayjs/midway-faas/issues/594)) ([137dd03](https://github.com/midwayjs/midway-faas/commit/137dd036bde70a0f0c6a7ed98596da7c17b4a188))
-* fix windows word when output ([#591](https://github.com/midwayjs/midway-faas/issues/591)) ([1ab9a7f](https://github.com/midwayjs/midway-faas/commit/1ab9a7f009d5b80db077e500ebc3302fa92c2664))
-* isAppMode ([#590](https://github.com/midwayjs/midway-faas/issues/590)) ([016e430](https://github.com/midwayjs/midway-faas/commit/016e43068e109dac49c8c0a1b6465ffec564ae0e))
+* fix global middleware load order ([#594](https://github.com/midwayjs/midway/issues/594)) ([137dd03](https://github.com/midwayjs/midway/commit/137dd036bde70a0f0c6a7ed98596da7c17b4a188))
+* fix windows word when output ([#591](https://github.com/midwayjs/midway/issues/591)) ([1ab9a7f](https://github.com/midwayjs/midway/commit/1ab9a7f009d5b80db077e500ebc3302fa92c2664))
+* isAppMode ([#590](https://github.com/midwayjs/midway/issues/590)) ([016e430](https://github.com/midwayjs/midway/commit/016e43068e109dac49c8c0a1b6465ffec564ae0e))
 
 
 
 
 
-## [1.1.17](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.16...serverless-v1.1.17) (2020-08-05)
-
-
-### Bug Fixes
-
-* aws bucket duplicated path default ([#587](https://github.com/midwayjs/midway-faas/issues/587)) ([9e504ef](https://github.com/midwayjs/midway-faas/commit/9e504ef48724edc5eb50c527424dfb261872e9c2))
-
-
-
-
-
-## [1.1.16](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.15...serverless-v1.1.16) (2020-08-05)
+## [1.1.17](https://github.com/midwayjs/midway/compare/serverless-v1.1.16...serverless-v1.1.17) (2020-08-05)
 
 
 ### Bug Fixes
 
-* remove layer console ([#586](https://github.com/midwayjs/midway-faas/issues/586)) ([51b144b](https://github.com/midwayjs/midway-faas/commit/51b144b8d18b15cc31b31d8a2eacf7b16c12cdd1))
+* aws bucket duplicated path default ([#587](https://github.com/midwayjs/midway/issues/587)) ([9e504ef](https://github.com/midwayjs/midway/commit/9e504ef48724edc5eb50c527424dfb261872e9c2))
 
 
 
 
 
-## [1.1.15](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.14...serverless-v1.1.15) (2020-08-05)
-
-
-### Bug Fixes
-
-* layer name ([#585](https://github.com/midwayjs/midway-faas/issues/585)) ([9a774b7](https://github.com/midwayjs/midway-faas/commit/9a774b7e6bb5652a595954c63518ef4747d85259))
-
-
-
-
-
-## [1.1.14](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.13...serverless-v1.1.14) (2020-08-04)
+## [1.1.16](https://github.com/midwayjs/midway/compare/serverless-v1.1.15...serverless-v1.1.16) (2020-08-05)
 
 
 ### Bug Fixes
 
-* add default path for fc ([#584](https://github.com/midwayjs/midway-faas/issues/584)) ([064d3f0](https://github.com/midwayjs/midway-faas/commit/064d3f08fa7e74420bdcac111f3fda3cf3ef6ec1))
-* layer wrapper ([#583](https://github.com/midwayjs/midway-faas/issues/583)) ([1c9966d](https://github.com/midwayjs/midway-faas/commit/1c9966d6d05108451745183efbc4a15ae1caae6b))
+* remove layer console ([#586](https://github.com/midwayjs/midway/issues/586)) ([51b144b](https://github.com/midwayjs/midway/commit/51b144b8d18b15cc31b31d8a2eacf7b16c12cdd1))
 
 
 
 
 
-## [1.1.13](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.12...serverless-v1.1.13) (2020-08-03)
-
-
-### Bug Fixes
-
-* args path ([#578](https://github.com/midwayjs/midway-faas/issues/578)) ([f0de617](https://github.com/midwayjs/midway-faas/commit/f0de617087419ecb433d430b6cb3b1d9e3028d47))
-* fc auto domain ([#580](https://github.com/midwayjs/midway-faas/issues/580)) ([f8bf9e0](https://github.com/midwayjs/midway-faas/commit/f8bf9e05922b154285ee29f1a65b59d9d448cf5b))
-
-
-
-
-
-## [1.1.12](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.11...serverless-v1.1.12) (2020-07-29)
+## [1.1.15](https://github.com/midwayjs/midway/compare/serverless-v1.1.14...serverless-v1.1.15) (2020-08-05)
 
 
 ### Bug Fixes
 
-* support default fp ([#575](https://github.com/midwayjs/midway-faas/issues/575)) ([6c3d59c](https://github.com/midwayjs/midway-faas/commit/6c3d59c1737db901baadb386b75d49d0a711991f))
+* layer name ([#585](https://github.com/midwayjs/midway/issues/585)) ([9a774b7](https://github.com/midwayjs/midway/commit/9a774b7e6bb5652a595954c63518ef4747d85259))
 
 
 
 
 
-## [1.1.11](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.10...serverless-v1.1.11) (2020-07-28)
-
-
-### Bug Fixes
-
-* aws duplicated bucketname & default path ([#573](https://github.com/midwayjs/midway-faas/issues/573)) ([28b6520](https://github.com/midwayjs/midway-faas/commit/28b6520d46d2496003a7e7681c663aa9814832bb))
-
-
-
-
-
-## [1.1.10](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.9...serverless-v1.1.10) (2020-07-28)
+## [1.1.14](https://github.com/midwayjs/midway/compare/serverless-v1.1.13...serverless-v1.1.14) (2020-08-04)
 
 
 ### Bug Fixes
 
-* resource not included by npm ([#572](https://github.com/midwayjs/midway-faas/issues/572)) ([6835b5f](https://github.com/midwayjs/midway-faas/commit/6835b5f5a170f84401288d6b06f82328baecde9c))
+* add default path for fc ([#584](https://github.com/midwayjs/midway/issues/584)) ([064d3f0](https://github.com/midwayjs/midway/commit/064d3f08fa7e74420bdcac111f3fda3cf3ef6ec1))
+* layer wrapper ([#583](https://github.com/midwayjs/midway/issues/583)) ([1c9966d](https://github.com/midwayjs/midway/commit/1c9966d6d05108451745183efbc4a15ae1caae6b))
 
 
 
 
 
-## [1.1.9](https://github.com/midwayjs/midway-faas/compare/v1.1.4...v1.1.9) (2020-07-28)
+## [1.1.13](https://github.com/midwayjs/midway/compare/serverless-v1.1.12...serverless-v1.1.13) (2020-08-03)
 
 
 ### Bug Fixes
 
-* 参数获取不正确 & ctx 符合格式 ([#556](https://github.com/midwayjs/midway-faas/issues/556)) ([106bfac](https://github.com/midwayjs/midway-faas/commit/106bfacff0f762fe561e026f883158f0bd7c3cdc))
-* aggregation path ([#567](https://github.com/midwayjs/midway-faas/issues/567)) ([11a6d8a](https://github.com/midwayjs/midway-faas/commit/11a6d8aab2e18a70ec1195090df04beff8e08760))
-* aws plugin publish role ([#568](https://github.com/midwayjs/midway-faas/issues/568)) ([9074d7c](https://github.com/midwayjs/midway-faas/commit/9074d7cb813d8fd5619900a864a9be926645cab2))
-* faas middle http ([#570](https://github.com/midwayjs/midway-faas/issues/570)) ([27de83b](https://github.com/midwayjs/midway-faas/commit/27de83b7f0e726e99f8edd153ae585a38bd5f517))
-* fp args ([#561](https://github.com/midwayjs/midway-faas/issues/561)) ([e91983e](https://github.com/midwayjs/midway-faas/commit/e91983e6ee1d9e725eaed061b80cde083bdf7e1d))
-* global middleware can't catch error ([#542](https://github.com/midwayjs/midway-faas/issues/542)) ([8892471](https://github.com/midwayjs/midway-faas/commit/8892471defe5e6071eb0f3d5b0993f8ce298f5e3))
-* register faas ctx ([#559](https://github.com/midwayjs/midway-faas/issues/559)) ([d9e1764](https://github.com/midwayjs/midway-faas/commit/d9e1764d55c053e74f9cad2b70641ba7b8ab70c3))
-* use ts analyze cache ([#560](https://github.com/midwayjs/midway-faas/issues/560)) ([06dbcb5](https://github.com/midwayjs/midway-faas/commit/06dbcb52210f6a43ed8d54d5288b09c1243d0665))
-* wrapper compare ([#553](https://github.com/midwayjs/midway-faas/issues/553)) ([426aa65](https://github.com/midwayjs/midway-faas/commit/426aa65f2eb0d9f4312f5375ea39f9186f2a083c))
+* args path ([#578](https://github.com/midwayjs/midway/issues/578)) ([f0de617](https://github.com/midwayjs/midway/commit/f0de617087419ecb433d430b6cb3b1d9e3028d47))
+* fc auto domain ([#580](https://github.com/midwayjs/midway/issues/580)) ([f8bf9e0](https://github.com/midwayjs/midway/commit/f8bf9e05922b154285ee29f1a65b59d9d448cf5b))
+
+
+
+
+
+## [1.1.12](https://github.com/midwayjs/midway/compare/serverless-v1.1.11...serverless-v1.1.12) (2020-07-29)
+
+
+### Bug Fixes
+
+* support default fp ([#575](https://github.com/midwayjs/midway/issues/575)) ([6c3d59c](https://github.com/midwayjs/midway/commit/6c3d59c1737db901baadb386b75d49d0a711991f))
+
+
+
+
+
+## [1.1.11](https://github.com/midwayjs/midway/compare/serverless-v1.1.10...serverless-v1.1.11) (2020-07-28)
+
+
+### Bug Fixes
+
+* aws duplicated bucketname & default path ([#573](https://github.com/midwayjs/midway/issues/573)) ([28b6520](https://github.com/midwayjs/midway/commit/28b6520d46d2496003a7e7681c663aa9814832bb))
+
+
+
+
+
+## [1.1.10](https://github.com/midwayjs/midway/compare/serverless-v1.1.9...serverless-v1.1.10) (2020-07-28)
+
+
+### Bug Fixes
+
+* resource not included by npm ([#572](https://github.com/midwayjs/midway/issues/572)) ([6835b5f](https://github.com/midwayjs/midway/commit/6835b5f5a170f84401288d6b06f82328baecde9c))
+
+
+
+
+
+## [1.1.9](https://github.com/midwayjs/midway/compare/v1.1.4...v1.1.9) (2020-07-28)
+
+
+### Bug Fixes
+
+* 参数获取不正确 & ctx 符合格式 ([#556](https://github.com/midwayjs/midway/issues/556)) ([106bfac](https://github.com/midwayjs/midway/commit/106bfacff0f762fe561e026f883158f0bd7c3cdc))
+* aggregation path ([#567](https://github.com/midwayjs/midway/issues/567)) ([11a6d8a](https://github.com/midwayjs/midway/commit/11a6d8aab2e18a70ec1195090df04beff8e08760))
+* aws plugin publish role ([#568](https://github.com/midwayjs/midway/issues/568)) ([9074d7c](https://github.com/midwayjs/midway/commit/9074d7cb813d8fd5619900a864a9be926645cab2))
+* faas middle http ([#570](https://github.com/midwayjs/midway/issues/570)) ([27de83b](https://github.com/midwayjs/midway/commit/27de83b7f0e726e99f8edd153ae585a38bd5f517))
+* fp args ([#561](https://github.com/midwayjs/midway/issues/561)) ([e91983e](https://github.com/midwayjs/midway/commit/e91983e6ee1d9e725eaed061b80cde083bdf7e1d))
+* global middleware can't catch error ([#542](https://github.com/midwayjs/midway/issues/542)) ([8892471](https://github.com/midwayjs/midway/commit/8892471defe5e6071eb0f3d5b0993f8ce298f5e3))
+* register faas ctx ([#559](https://github.com/midwayjs/midway/issues/559)) ([d9e1764](https://github.com/midwayjs/midway/commit/d9e1764d55c053e74f9cad2b70641ba7b8ab70c3))
+* use ts analyze cache ([#560](https://github.com/midwayjs/midway/issues/560)) ([06dbcb5](https://github.com/midwayjs/midway/commit/06dbcb52210f6a43ed8d54d5288b09c1243d0665))
+* wrapper compare ([#553](https://github.com/midwayjs/midway/issues/553)) ([426aa65](https://github.com/midwayjs/midway/commit/426aa65f2eb0d9f4312f5375ea39f9186f2a083c))
 
 
 ### Features
 
-* add  name for fc event ([#569](https://github.com/midwayjs/midway-faas/issues/569)) ([41797e7](https://github.com/midwayjs/midway-faas/commit/41797e77da4b5217c6367ca616f7cc9c874aea5b))
+* add  name for fc event ([#569](https://github.com/midwayjs/midway/issues/569)) ([41797e7](https://github.com/midwayjs/midway/commit/41797e77da4b5217c6367ca616f7cc9c874aea5b))
 
 
 
 
 
-## [1.1.8](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.7...serverless-v1.1.8) (2020-07-27)
-
-
-### Bug Fixes
-
-* fp args ([#561](https://github.com/midwayjs/midway-faas/issues/561)) ([e91983e](https://github.com/midwayjs/midway-faas/commit/e91983e6ee1d9e725eaed061b80cde083bdf7e1d))
-* global middleware can't catch error ([#542](https://github.com/midwayjs/midway-faas/issues/542)) ([8892471](https://github.com/midwayjs/midway-faas/commit/8892471defe5e6071eb0f3d5b0993f8ce298f5e3))
-
-
-
-
-
-## [1.1.7](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.6...serverless-v1.1.7) (2020-07-26)
+## [1.1.8](https://github.com/midwayjs/midway/compare/serverless-v1.1.7...serverless-v1.1.8) (2020-07-27)
 
 
 ### Bug Fixes
 
-* use ts analyze cache ([#560](https://github.com/midwayjs/midway-faas/issues/560)) ([06dbcb5](https://github.com/midwayjs/midway-faas/commit/06dbcb52210f6a43ed8d54d5288b09c1243d0665))
+* fp args ([#561](https://github.com/midwayjs/midway/issues/561)) ([e91983e](https://github.com/midwayjs/midway/commit/e91983e6ee1d9e725eaed061b80cde083bdf7e1d))
+* global middleware can't catch error ([#542](https://github.com/midwayjs/midway/issues/542)) ([8892471](https://github.com/midwayjs/midway/commit/8892471defe5e6071eb0f3d5b0993f8ce298f5e3))
 
 
 
 
 
-## [1.1.6](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.5...serverless-v1.1.6) (2020-07-26)
-
-
-### Bug Fixes
-
-* 参数获取不正确 & ctx 符合格式 ([#556](https://github.com/midwayjs/midway-faas/issues/556)) ([106bfac](https://github.com/midwayjs/midway-faas/commit/106bfacff0f762fe561e026f883158f0bd7c3cdc))
-* register faas ctx ([#559](https://github.com/midwayjs/midway-faas/issues/559)) ([d9e1764](https://github.com/midwayjs/midway-faas/commit/d9e1764d55c053e74f9cad2b70641ba7b8ab70c3))
-
-
-
-
-
-## [1.1.5](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.3...serverless-v1.1.5) (2020-07-24)
+## [1.1.7](https://github.com/midwayjs/midway/compare/serverless-v1.1.6...serverless-v1.1.7) (2020-07-26)
 
 
 ### Bug Fixes
 
-* wrapper compare ([#553](https://github.com/midwayjs/midway-faas/issues/553)) ([426aa65](https://github.com/midwayjs/midway-faas/commit/426aa65f2eb0d9f4312f5375ea39f9186f2a083c))
+* use ts analyze cache ([#560](https://github.com/midwayjs/midway/issues/560)) ([06dbcb5](https://github.com/midwayjs/midway/commit/06dbcb52210f6a43ed8d54d5288b09c1243d0665))
+
+
+
+
+
+## [1.1.6](https://github.com/midwayjs/midway/compare/serverless-v1.1.5...serverless-v1.1.6) (2020-07-26)
+
+
+### Bug Fixes
+
+* 参数获取不正确 & ctx 符合格式 ([#556](https://github.com/midwayjs/midway/issues/556)) ([106bfac](https://github.com/midwayjs/midway/commit/106bfacff0f762fe561e026f883158f0bd7c3cdc))
+* register faas ctx ([#559](https://github.com/midwayjs/midway/issues/559)) ([d9e1764](https://github.com/midwayjs/midway/commit/d9e1764d55c053e74f9cad2b70641ba7b8ab70c3))
+
+
+
+
+
+## [1.1.5](https://github.com/midwayjs/midway/compare/serverless-v1.1.3...serverless-v1.1.5) (2020-07-24)
+
+
+### Bug Fixes
+
+* wrapper compare ([#553](https://github.com/midwayjs/midway/issues/553)) ([426aa65](https://github.com/midwayjs/midway/commit/426aa65f2eb0d9f4312f5375ea39f9186f2a083c))
 
 
 
@@ -180,121 +180,121 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-## [1.1.4](https://github.com/midwayjs/midway-faas/compare/v1.0.8...v1.1.4) (2020-07-24)
+## [1.1.4](https://github.com/midwayjs/midway/compare/v1.0.8...v1.1.4) (2020-07-24)
 
 
 ### Bug Fixes
 
-* add analysisCode lifecycle ([#535](https://github.com/midwayjs/midway-faas/issues/535)) ([1bf2e8a](https://github.com/midwayjs/midway-faas/commit/1bf2e8a65b658b3c5a341245e02a97b9d96eb856))
-* aws multi function support ([#546](https://github.com/midwayjs/midway-faas/issues/546)) ([f89134c](https://github.com/midwayjs/midway-faas/commit/f89134ce3bcd470da30dbcc79f91ba08337de967))
-* aws plugin permission confirm ([#536](https://github.com/midwayjs/midway-faas/issues/536)) ([4fa679d](https://github.com/midwayjs/midway-faas/commit/4fa679dfb9480a01beac944cbd1c6217355d9e0f))
-* http parser set response ([#545](https://github.com/midwayjs/midway-faas/issues/545)) ([74a854d](https://github.com/midwayjs/midway-faas/commit/74a854d975bbb8baa281e6ef76f319e22c53afc6))
-* set app key where load user code ([#548](https://github.com/midwayjs/midway-faas/issues/548)) ([1c5aa44](https://github.com/midwayjs/midway-faas/commit/1c5aa446d9d02545ae2a596b538a211fde4214d5))
-* skip compile when tsconfig not found ([#549](https://github.com/midwayjs/midway-faas/issues/549)) ([f40dbae](https://github.com/midwayjs/midway-faas/commit/f40dbaec4883f60801b895d4929fa09f47bb2506))
-* status 204 when user not set status ([#533](https://github.com/midwayjs/midway-faas/issues/533)) ([9276fe8](https://github.com/midwayjs/midway-faas/commit/9276fe846b983f4f870c2b3eb97e2c254bd5ff5a))
-* ts-mode ([#552](https://github.com/midwayjs/midway-faas/issues/552)) ([d8f231c](https://github.com/midwayjs/midway-faas/commit/d8f231c8a0ad5c50d42809e915c1669b67902305))
-* wrapper support middleware ([#529](https://github.com/midwayjs/midway-faas/issues/529)) ([eade6a6](https://github.com/midwayjs/midway-faas/commit/eade6a6fd41494517154398674ab76cbcc2b3e1a))
+* add analysisCode lifecycle ([#535](https://github.com/midwayjs/midway/issues/535)) ([1bf2e8a](https://github.com/midwayjs/midway/commit/1bf2e8a65b658b3c5a341245e02a97b9d96eb856))
+* aws multi function support ([#546](https://github.com/midwayjs/midway/issues/546)) ([f89134c](https://github.com/midwayjs/midway/commit/f89134ce3bcd470da30dbcc79f91ba08337de967))
+* aws plugin permission confirm ([#536](https://github.com/midwayjs/midway/issues/536)) ([4fa679d](https://github.com/midwayjs/midway/commit/4fa679dfb9480a01beac944cbd1c6217355d9e0f))
+* http parser set response ([#545](https://github.com/midwayjs/midway/issues/545)) ([74a854d](https://github.com/midwayjs/midway/commit/74a854d975bbb8baa281e6ef76f319e22c53afc6))
+* set app key where load user code ([#548](https://github.com/midwayjs/midway/issues/548)) ([1c5aa44](https://github.com/midwayjs/midway/commit/1c5aa446d9d02545ae2a596b538a211fde4214d5))
+* skip compile when tsconfig not found ([#549](https://github.com/midwayjs/midway/issues/549)) ([f40dbae](https://github.com/midwayjs/midway/commit/f40dbaec4883f60801b895d4929fa09f47bb2506))
+* status 204 when user not set status ([#533](https://github.com/midwayjs/midway/issues/533)) ([9276fe8](https://github.com/midwayjs/midway/commit/9276fe846b983f4f870c2b3eb97e2c254bd5ff5a))
+* ts-mode ([#552](https://github.com/midwayjs/midway/issues/552)) ([d8f231c](https://github.com/midwayjs/midway/commit/d8f231c8a0ad5c50d42809e915c1669b67902305))
+* wrapper support middleware ([#529](https://github.com/midwayjs/midway/issues/529)) ([eade6a6](https://github.com/midwayjs/midway/commit/eade6a6fd41494517154398674ab76cbcc2b3e1a))
 
 
 ### Features
 
-* default add cookie for http parser ([#540](https://github.com/midwayjs/midway-faas/issues/540)) ([5799e96](https://github.com/midwayjs/midway-faas/commit/5799e9642144b23b81d5c629387ce52510dde00d))
-* mwcc multi stage compilation support ([#523](https://github.com/midwayjs/midway-faas/issues/523)) ([c5a64f2](https://github.com/midwayjs/midway-faas/commit/c5a64f216aeddda4c62d4ae674ed4eb27433e751))
-* progressive ([#551](https://github.com/midwayjs/midway-faas/issues/551)) ([7b0060e](https://github.com/midwayjs/midway-faas/commit/7b0060e642de8e62ee07d9f4ca8c9aa569f3f34f))
-* Support application layer ([#534](https://github.com/midwayjs/midway-faas/issues/534)) ([7a141c0](https://github.com/midwayjs/midway-faas/commit/7a141c0c9404dc20d4d146a14e01dff404943142))
-* support initTimeout in fc provider ([#530](https://github.com/midwayjs/midway-faas/issues/530)) ([ddfe654](https://github.com/midwayjs/midway-faas/commit/ddfe65484e0c1dc79c12e855bd098dceb075a22c))
+* default add cookie for http parser ([#540](https://github.com/midwayjs/midway/issues/540)) ([5799e96](https://github.com/midwayjs/midway/commit/5799e9642144b23b81d5c629387ce52510dde00d))
+* mwcc multi stage compilation support ([#523](https://github.com/midwayjs/midway/issues/523)) ([c5a64f2](https://github.com/midwayjs/midway/commit/c5a64f216aeddda4c62d4ae674ed4eb27433e751))
+* progressive ([#551](https://github.com/midwayjs/midway/issues/551)) ([7b0060e](https://github.com/midwayjs/midway/commit/7b0060e642de8e62ee07d9f4ca8c9aa569f3f34f))
+* Support application layer ([#534](https://github.com/midwayjs/midway/issues/534)) ([7a141c0](https://github.com/midwayjs/midway/commit/7a141c0c9404dc20d4d146a14e01dff404943142))
+* support initTimeout in fc provider ([#530](https://github.com/midwayjs/midway/issues/530)) ([ddfe654](https://github.com/midwayjs/midway/commit/ddfe65484e0c1dc79c12e855bd098dceb075a22c))
 
 
 
 
 
-## [1.1.3](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.2...serverless-v1.1.3) (2020-07-24)
+## [1.1.3](https://github.com/midwayjs/midway/compare/serverless-v1.1.2...serverless-v1.1.3) (2020-07-24)
 
 
 ### Bug Fixes
 
-* ts-mode ([#552](https://github.com/midwayjs/midway-faas/issues/552)) ([d8f231c](https://github.com/midwayjs/midway-faas/commit/d8f231c8a0ad5c50d42809e915c1669b67902305))
+* ts-mode ([#552](https://github.com/midwayjs/midway/issues/552)) ([d8f231c](https://github.com/midwayjs/midway/commit/d8f231c8a0ad5c50d42809e915c1669b67902305))
 
 
 ### Features
 
-* progressive ([#551](https://github.com/midwayjs/midway-faas/issues/551)) ([7b0060e](https://github.com/midwayjs/midway-faas/commit/7b0060e642de8e62ee07d9f4ca8c9aa569f3f34f))
+* progressive ([#551](https://github.com/midwayjs/midway/issues/551)) ([7b0060e](https://github.com/midwayjs/midway/commit/7b0060e642de8e62ee07d9f4ca8c9aa569f3f34f))
 
 
 
 
 
-## [1.1.2](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.1...serverless-v1.1.2) (2020-07-23)
-
-
-### Bug Fixes
-
-* skip compile when tsconfig not found ([#549](https://github.com/midwayjs/midway-faas/issues/549)) ([f40dbae](https://github.com/midwayjs/midway-faas/commit/f40dbaec4883f60801b895d4929fa09f47bb2506))
-
-
-
-
-
-## [1.1.1](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.0...serverless-v1.1.1) (2020-07-22)
+## [1.1.2](https://github.com/midwayjs/midway/compare/serverless-v1.1.1...serverless-v1.1.2) (2020-07-23)
 
 
 ### Bug Fixes
 
-* aws multi function support ([#546](https://github.com/midwayjs/midway-faas/issues/546)) ([f89134c](https://github.com/midwayjs/midway-faas/commit/f89134ce3bcd470da30dbcc79f91ba08337de967))
-* set app key where load user code ([#548](https://github.com/midwayjs/midway-faas/issues/548)) ([1c5aa44](https://github.com/midwayjs/midway-faas/commit/1c5aa446d9d02545ae2a596b538a211fde4214d5))
+* skip compile when tsconfig not found ([#549](https://github.com/midwayjs/midway/issues/549)) ([f40dbae](https://github.com/midwayjs/midway/commit/f40dbaec4883f60801b895d4929fa09f47bb2506))
 
 
 
 
 
-# [1.1.0](https://github.com/midwayjs/midway-faas/compare/serverless-v1.0.11...serverless-v1.1.0) (2020-07-21)
+## [1.1.1](https://github.com/midwayjs/midway/compare/serverless-v1.1.0...serverless-v1.1.1) (2020-07-22)
+
+
+### Bug Fixes
+
+* aws multi function support ([#546](https://github.com/midwayjs/midway/issues/546)) ([f89134c](https://github.com/midwayjs/midway/commit/f89134ce3bcd470da30dbcc79f91ba08337de967))
+* set app key where load user code ([#548](https://github.com/midwayjs/midway/issues/548)) ([1c5aa44](https://github.com/midwayjs/midway/commit/1c5aa446d9d02545ae2a596b538a211fde4214d5))
+
+
+
+
+
+# [1.1.0](https://github.com/midwayjs/midway/compare/serverless-v1.0.11...serverless-v1.1.0) (2020-07-21)
 
 
 ### Features
 
-* Support application layer ([#534](https://github.com/midwayjs/midway-faas/issues/534)) ([7a141c0](https://github.com/midwayjs/midway-faas/commit/7a141c0c9404dc20d4d146a14e01dff404943142))
+* Support application layer ([#534](https://github.com/midwayjs/midway/issues/534)) ([7a141c0](https://github.com/midwayjs/midway/commit/7a141c0c9404dc20d4d146a14e01dff404943142))
 
 
 
 
 
-## [1.0.11](https://github.com/midwayjs/midway-faas/compare/serverless-v1.0.10...serverless-v1.0.11) (2020-07-21)
-
-
-### Bug Fixes
-
-* add analysisCode lifecycle ([#535](https://github.com/midwayjs/midway-faas/issues/535)) ([1bf2e8a](https://github.com/midwayjs/midway-faas/commit/1bf2e8a65b658b3c5a341245e02a97b9d96eb856))
-* aws plugin permission confirm ([#536](https://github.com/midwayjs/midway-faas/issues/536)) ([4fa679d](https://github.com/midwayjs/midway-faas/commit/4fa679dfb9480a01beac944cbd1c6217355d9e0f))
-* http parser set response ([#545](https://github.com/midwayjs/midway-faas/issues/545)) ([74a854d](https://github.com/midwayjs/midway-faas/commit/74a854d975bbb8baa281e6ef76f319e22c53afc6))
-* status 204 when user not set status ([#533](https://github.com/midwayjs/midway-faas/issues/533)) ([9276fe8](https://github.com/midwayjs/midway-faas/commit/9276fe846b983f4f870c2b3eb97e2c254bd5ff5a))
-
-
-### Features
-
-* default add cookie for http parser ([#540](https://github.com/midwayjs/midway-faas/issues/540)) ([5799e96](https://github.com/midwayjs/midway-faas/commit/5799e9642144b23b81d5c629387ce52510dde00d))
-
-
-
-
-
-## [1.0.10](https://github.com/midwayjs/midway-faas/compare/serverless-v1.0.9...serverless-v1.0.10) (2020-07-16)
+## [1.0.11](https://github.com/midwayjs/midway/compare/serverless-v1.0.10...serverless-v1.0.11) (2020-07-21)
 
 
 ### Bug Fixes
 
-* wrapper support middleware ([#529](https://github.com/midwayjs/midway-faas/issues/529)) ([eade6a6](https://github.com/midwayjs/midway-faas/commit/eade6a6fd41494517154398674ab76cbcc2b3e1a))
+* add analysisCode lifecycle ([#535](https://github.com/midwayjs/midway/issues/535)) ([1bf2e8a](https://github.com/midwayjs/midway/commit/1bf2e8a65b658b3c5a341245e02a97b9d96eb856))
+* aws plugin permission confirm ([#536](https://github.com/midwayjs/midway/issues/536)) ([4fa679d](https://github.com/midwayjs/midway/commit/4fa679dfb9480a01beac944cbd1c6217355d9e0f))
+* http parser set response ([#545](https://github.com/midwayjs/midway/issues/545)) ([74a854d](https://github.com/midwayjs/midway/commit/74a854d975bbb8baa281e6ef76f319e22c53afc6))
+* status 204 when user not set status ([#533](https://github.com/midwayjs/midway/issues/533)) ([9276fe8](https://github.com/midwayjs/midway/commit/9276fe846b983f4f870c2b3eb97e2c254bd5ff5a))
 
 
 ### Features
 
-* mwcc multi stage compilation support ([#523](https://github.com/midwayjs/midway-faas/issues/523)) ([c5a64f2](https://github.com/midwayjs/midway-faas/commit/c5a64f216aeddda4c62d4ae674ed4eb27433e751))
-* support initTimeout in fc provider ([#530](https://github.com/midwayjs/midway-faas/issues/530)) ([ddfe654](https://github.com/midwayjs/midway-faas/commit/ddfe65484e0c1dc79c12e855bd098dceb075a22c))
+* default add cookie for http parser ([#540](https://github.com/midwayjs/midway/issues/540)) ([5799e96](https://github.com/midwayjs/midway/commit/5799e9642144b23b81d5c629387ce52510dde00d))
 
 
 
 
 
-## [1.0.9](https://github.com/midwayjs/midway-faas/compare/serverless-v1.0.6...serverless-v1.0.9) (2020-07-14)
+## [1.0.10](https://github.com/midwayjs/midway/compare/serverless-v1.0.9...serverless-v1.0.10) (2020-07-16)
+
+
+### Bug Fixes
+
+* wrapper support middleware ([#529](https://github.com/midwayjs/midway/issues/529)) ([eade6a6](https://github.com/midwayjs/midway/commit/eade6a6fd41494517154398674ab76cbcc2b3e1a))
+
+
+### Features
+
+* mwcc multi stage compilation support ([#523](https://github.com/midwayjs/midway/issues/523)) ([c5a64f2](https://github.com/midwayjs/midway/commit/c5a64f216aeddda4c62d4ae674ed4eb27433e751))
+* support initTimeout in fc provider ([#530](https://github.com/midwayjs/midway/issues/530)) ([ddfe654](https://github.com/midwayjs/midway/commit/ddfe65484e0c1dc79c12e855bd098dceb075a22c))
+
+
+
+
+
+## [1.0.9](https://github.com/midwayjs/midway/compare/serverless-v1.0.6...serverless-v1.0.9) (2020-07-14)
 
 
 
@@ -310,7 +310,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-## [1.0.8](https://github.com/midwayjs/midway-faas/compare/v1.0.7...v1.0.8) (2020-07-14)
+## [1.0.8](https://github.com/midwayjs/midway/compare/v1.0.7...v1.0.8) (2020-07-14)
 
 **Note:** Version bump only for package midway-faas
 

@@ -44,10 +44,10 @@
     "k8s",
     "cloud native"
   ],
-  "homepage": "http://github.com/midwayjs/midway-faas",
+  "homepage": "http://github.com/midwayjs/midway",
   "repository": {
     "type": "git",
-    "url": "http://github.com/midwayjs/midway-faas.git"
+    "url": "http://github.com/midwayjs/midway.git"
   },
   "engines": {
     "node": ">= 10"
