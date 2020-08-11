@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.18](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.17...serverless-v1.1.18) (2020-08-11)
+
+
+### Bug Fixes
+
+* fix windows word when output ([#591](https://github.com/midwayjs/midway-faas/issues/591)) ([1ab9a7f](https://github.com/midwayjs/midway-faas/commit/1ab9a7f009d5b80db077e500ebc3302fa92c2664))
+
+
+
+
+
 ## [1.1.16](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.15...serverless-v1.1.16) (2020-08-05)
 
 **Note:** Version bump only for package @midwayjs/fcli-command-core

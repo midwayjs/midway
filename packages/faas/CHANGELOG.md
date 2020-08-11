@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.18](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.17...serverless-v1.1.18) (2020-08-11)
+
+
+### Bug Fixes
+
+* fix global middleware load order ([#594](https://github.com/midwayjs/midway-faas/issues/594)) ([137dd03](https://github.com/midwayjs/midway-faas/commit/137dd036bde70a0f0c6a7ed98596da7c17b4a188))
+
+
+
+
+
 ## [1.1.10](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.9...serverless-v1.1.10) (2020-07-28)
 
 **Note:** Version bump only for package @midwayjs/faas
