@@ -368,7 +368,7 @@ export class PackagePlugin extends BasePlugin {
     }
     this.core.cli.log(' - Using tradition build mode');
     this.program.emit();
-    this.core.cli.log(' - Build Midway FaaS complete');
+    this.core.cli.log(' - Build project complete');
   }
 
   // 生成默认入口
@@ -648,8 +648,10 @@ export class PackagePlugin extends BasePlugin {
   defaultBeforeGenerateSpec() {
     const service: any = this.core.service;
     if (service?.deployType) {
+      this.core.cli.log(` - found deployType: ${service?.deployType}`);
       // add default function
-      if (!service.functions) {
+      if (!service.functions || Object.keys(service.functions).length === 0) {
+        this.core.cli.log(` - create default functions`);
         service.functions = {
           app_index: {
             handler: 'index.handler',
@@ -663,16 +665,19 @@ export class PackagePlugin extends BasePlugin {
       }
 
       if (service?.deployType === 'egg') {
+        this.core.cli.log(` - create default layer: egg`);
         service.layers['eggLayer'] = { path: 'npm:@midwayjs/egg-layer' };
       }
 
       if (service?.deployType === 'express') {
+        this.core.cli.log(` - create default layer: express`);
         service.layers['expressLayer'] = {
           path: 'npm:@midwayjs/express-layer',
         };
       }
 
       if (service?.deployType === 'koa') {
+        this.core.cli.log(` - create default layer: koa`);
         service.layers['koaLayer'] = { path: 'npm:@midwayjs/koa-layer' };
       }
     }
