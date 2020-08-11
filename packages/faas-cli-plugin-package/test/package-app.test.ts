@@ -31,6 +31,7 @@ describe('/test/package-a[[.test.ts', () => {
       assert(existsSync(join(buildPath, 'f.yml')));
       assert(existsSync(join(buildPath, 'app')));
       assert(existsSync(join(buildPath, 'config')));
+      assert(existsSync(join(buildPath, 'index.js')));
       assert(
         /npm:@midwayjs\/egg-layer/.test(
           readFileSync(join(buildPath, 'f.yml')).toString('utf8')
