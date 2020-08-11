@@ -234,12 +234,15 @@ export class FaaSStarter implements IFaaSStarter {
       this.registerDecorator();
       await this.loader.refresh();
 
-      // merge app middleware to global
-      if (this.webApplication?.['middleware']?.length) {
+      // attach global middleawre from user config
+      if (this.webApplication?.use) {
+        const middlewares = this.webApplication.getConfig('middleware') || [];
+        await this.webApplication.useMiddleware(middlewares);
         this.globalMiddleware = this.globalMiddleware.concat(
           this.webApplication['middleware']
         );
       }
+
       // set app keys
       this.webApplication['keys'] = this.webApplication.getConfig('keys') || '';
 
@@ -349,9 +352,11 @@ export class FaaSStarter implements IFaaSStarter {
       },
 
       useMiddleware: async middlewares => {
-        const newMiddlewares = await this.loadMiddleware(middlewares);
-        for (const mw of newMiddlewares) {
-          this.webApplication.use(mw);
+        if (middlewares.length) {
+          const newMiddlewares = await this.loadMiddleware(middlewares);
+          for (const mw of newMiddlewares) {
+            this.webApplication.use(mw);
+          }
         }
       },
     });
