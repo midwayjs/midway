@@ -34,6 +34,7 @@ module.exports = engine => {
           },
           (error, response, body) => {
             context.res = response;
+            context.status = response.statusCode;
             if (error) {
               reject(error);
             }
