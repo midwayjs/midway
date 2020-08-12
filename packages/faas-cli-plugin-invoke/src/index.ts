@@ -43,7 +43,7 @@ export * from './utils';
 
 export class FaaSInvokePlugin extends BasePlugin {
   baseDir: string;
-  buildDir: string;
+  buildDir: string = resolve(this.core.config.servicePath, '.faas_debug_tmp');
   invokeFun: any;
   codeAnalyzeResult: AnalyzeResult;
   skipTsBuild: boolean;
@@ -123,8 +123,20 @@ export class FaaSInvokePlugin extends BasePlugin {
     if (this.options.incremental) {
       this.options.clean = false;
     }
-    if (this.options.clean !== false) {
+    if (this.options.clean !== false && this.options.clean !== 'false') {
       this.options.clean = true;
+    }
+
+    const envClean = process.env.MIDWAY_LOCAL_CLEAN;
+    if (envClean === 'true') {
+      this.options.clean = true;
+      this.options.incremental = false;
+    } else if (envClean === 'false') {
+      this.options.clean = false;
+    }
+
+    if (this.options.clean) {
+      cleanTarget(this.buildDir);
     }
 
     this.setStore('defaultTmpFaaSOut', this.defaultTmpFaaSOut);
@@ -132,7 +144,6 @@ export class FaaSInvokePlugin extends BasePlugin {
 
   async locator() {
     this.baseDir = this.core.config.servicePath;
-    this.buildDir = resolve(this.baseDir, '.faas_debug_tmp');
     const lockKey = `codeAnalyzeResult:${this.baseDir}`;
     const { lockType, lockData } = getLock(lockKey);
     let codeAnalyzeResult;

@@ -1,15 +1,8 @@
 'use strict';
 const { debugWrapper } = require('@midwayjs/debugger');
-const { existsSync, remove } = require('fs-extra');
-const { resolve } = require('path');
 const cliFun = async argv => {
   require('source-map-support/register');
   const { CLI } = require('../dist');
-  const buildDirectionPath = resolve(process.cwd(), '.faas_debug_tmp');
-  if (existsSync(buildDirectionPath)) {
-    await remove(buildDirectionPath);
-  }
-
   const cli = new CLI(argv);
   cli
     .start()

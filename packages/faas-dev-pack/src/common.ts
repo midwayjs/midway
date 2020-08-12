@@ -11,14 +11,9 @@ export function resolveModule(gatewayName: string) {
 }
 
 export async function invokeFunction(options) {
-  if (!process.env.MIDWAY_DEV_PACK_RUNNING) {
-    const baseDir = options.functionDir || process.cwd();
-    const buildDir = resolve(baseDir, '.faas_debug_tmp');
-    if (existsSync(buildDir)) {
-      removeSync(buildDir);
-    }
-    process.env.MIDWAY_DEV_PACK_RUNNING = 'true';
-  }
   options.incremental = options.incremental ?? true;
+  if (options.incremental) {
+    options.clean = false;
+  }
   return invoke(options);
 }
