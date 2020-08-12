@@ -32,8 +32,13 @@ export class DevPackPlugin extends BasePlugin {
   }
 
   async checkPort() {
-    if (this.options.clean === 'false' || this.options.clean === false) {
-      process.env.MIDWAY_LOCAL_CLEAN = 'false';
+    if (
+      this.options.clean === 'false' ||
+      this.options.clean === false ||
+      this.options.clean === 'true' ||
+      this.options.clean === true
+    ) {
+      process.env.MIDWAY_LOCAL_CLEAN = String(this.options.clean);
     }
     if (this.options.port) {
       if (this.options.port === true) {
