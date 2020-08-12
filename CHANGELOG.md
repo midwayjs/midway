@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.21](https://github.com/midwayjs/midway/compare/serverless-v1.1.20...serverless-v1.1.21) (2020-08-12)
+
+
+### Bug Fixes
+
+* xss bug ([#598](https://github.com/midwayjs/midway/issues/598)) ([0a265f3](https://github.com/midwayjs/midway/commit/0a265f3bb2086f2ee805a174794e82bc68bb2765))
+
+
+
+
+
 ## [1.1.20](https://github.com/midwayjs/midway/compare/serverless-v1.1.19...serverless-v1.1.20) (2020-08-12)
 
 
