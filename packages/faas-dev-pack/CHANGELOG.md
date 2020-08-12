@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.20](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.19...serverless-v1.1.20) (2020-08-12)
+
+
+### Bug Fixes
+
+* clean temp directory in local env ([#597](https://github.com/midwayjs/midway-faas/issues/597)) ([798cdf1](https://github.com/midwayjs/midway-faas/commit/798cdf12be8c77d1bf33a575d4c6e4a82153d597))
+
+
+
+
+
 ## [1.1.19](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.18...serverless-v1.1.19) (2020-08-11)
 
 **Note:** Version bump only for package @midwayjs/faas-dev-pack
