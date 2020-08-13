@@ -45,7 +45,7 @@ Midway Serverless is a serverless framework used to build Node.js cloud function
 ## Document
 
 - Quick Start - Function [English](https://github.com/midwayjs/midway/wiki/Standard-Function)
-- Document [中文](https://www.yuque.com/midwayjs/faas)
+- Document [English](https://github.com/midwayjs/midway/wiki/) [中文](https://www.yuque.com/midwayjs/faas)
 
 ## Quick Start
 
