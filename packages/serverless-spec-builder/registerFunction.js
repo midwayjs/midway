@@ -11,6 +11,9 @@ const { existsSync } = require('fs');
 const registerFunctionToIoc = (container, functionName, func, argsPath) => {
   class FunctionContainer {
     async handler(event) {
+      if (!this.ctx.originEvent) {
+        this.ctx.originEvent = event;
+      }
       const bindCtx = {
         ctx: this.ctx,
         event,
