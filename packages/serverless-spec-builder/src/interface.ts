@@ -144,7 +144,7 @@ export interface PackageStructure {
 export interface FunctionsRuleItem {
   baseDir: string;
   events?: {
-    http: {
+    http?: {
       basePath: string;
     };
   }[];
