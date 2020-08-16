@@ -1,5 +1,4 @@
-[English](./README.en-US.md) | 简体中文
-
+English | [简体中文](./README.zh-cn.md)
 
 ![](https://img.alicdn.com/tfs/TB1c1utMuT2gK0jSZFvXXXnFXXa-1422-305.png)
 
@@ -24,53 +23,49 @@
   </a>
 </p>
 
-## 介绍
+## Introduction
 
-[详细介绍文章：阿里 Midway 正式发布 Serverless v1.0](https://github.com/midwayjs/midway/wiki/%E9%98%BF%E9%87%8C-Midway-%E6%AD%A3%E5%BC%8F%E5%8F%91%E5%B8%83-Serverless-v1.0%EF%BC%8C%E7%A0%94%E5%8F%91%E6%8F%90%E6%95%88-50%25)， 欢迎 Star 本仓库
+[Detailed introduction article: Alibaba Midway Serverless release v1.0](https://medium.com/@Lellansin/alibaba-midway-serverless-v1-0-lets-building-serverless-cloud-ecosystem-with-node-js-8a6d09a777a3)， welcome Star this repository.
 
-Midway Serverless 是一个用于构建 Node.js 云函数的 Serverless 框架，可以帮您在云原生时代更专注于产品开发，降低维护成本。
+Midway Serverless is a serverless framework used to build Node.js cloud functions. Helps you significantly reduce maintenance costs and focus more on product development in the cloud-native era.
 
-- 1、让应用更易维护和更快交付
-  - 🐦 提供了多套和社区前端 React、Vue 等融合一体化开发的方案；
-  - 🐯 提供了标准的云平台函数出入参事件定义；
-  - 🐶 提供了 TypeScript 支持，方便应用扩展和定义；
-  - 🐱 提供了完善的 Midway 体系标志性的依赖注入解决方案；
-- 2、 生态更轻量和自由
-  - 🦁 函数体系复用 koa 的生态和 Web 中间件能力，在处理传统 Web 时更加得心应手；
-  - 🐴 提供 egg 组件复用 egg 插件的生态链，企业级开发链路更简单顺畅；
-  - 🐘 Midway 体系的装饰器能力统一，让传统 Web 迁移到 Serverless 体系更快更好；
-- 3、平台间迁移更容易
-  - 🐒 通过提供统一的配置规范以及入口抹平机制，让代码在每个平台基本相同；
-  - 🦊 扩展不同云平台的运行时 API，不仅能加载通用的平台间扩展，也能接入公司内部的私有化部署方案；
+- 1、Make applications easier to maintain and delivering
+  - 🐦 Provided multiple sets of integrated development solutions for community front-end React, Vue, etc.;
+  - 🐯 Provides standard cloud platform function entry and exit parameter definitions;
+  - 🐶 Provides TypeScript support to facilitate application expansion and definition;
+  - 🐱 Provides a complete Midway system iconic dependency injection solution;
+- 2、 Ecology is more lightweight and free
+  - 🦁 The function system reuses the ecological and Web middleware capabilities of koa, which is more handy when dealing with traditional Web;
+  - 🐴 Provide an ecological chain of egg components reusing egg plug-ins, enterprise-level development links are simpler and smoother;
+  - 🐘 The decorator capabilities of the Midway system are unified, making the traditional Web migration to the Serverless system faster and better;
+- 3、Easier migration between platforms
+  - 🐒 By providing a unified configuration specification and entry smoothing mechanism, the code is basically the same on each platform;
+  - 🦊 Expanding the runtime APIs of different cloud platforms can not only load common inter-platform extensions, but also access the company's internal private deployment solutions;
 
-## 使用文档
+## Document
 
-- 快速开始-标准函数 [中文](https://www.yuque.com/midwayjs/faas/quick_start)
-- 快速开始-云端一体化（React/Vue） [中文](https://www.yuque.com/midwayjs/faas/kl3bk5)
-- 详细文档 [中文](https://www.yuque.com/midwayjs/faas)
+- Quick Start - Function [English](https://github.com/midwayjs/midway/wiki/Standard-Function)
+- Document [English](https://github.com/midwayjs/midway/wiki/) [中文](https://www.yuque.com/midwayjs/faas)
 
-原 Midway Web 全栈能力将与 Serverless 版本深度融合， 原全栈版本文档见： [Master](https://github.com/midwayjs/midway/tree/master)
+## Quick Start
 
-## 快速开始
+### Install CLI
 
-
-### 安装 CLI 工具
-
-首先，你需要安装 Node（> 10.9)，以及 npm。
+First, you need to install Node (> 10.9), and npm.
 
 ```bash
 npm install @midwayjs/faas-cli -g
 ```
 
-### 创建示例
+### Create First Function
 
-执行下面的命令。
+Execute the following command.
 
 ```
 f create
 ```
 
-你会看到以下脚手架选择，选择脚手架或者示例代码，比如 `faas-standard` 。
+You will see the following scaffolding options, choose scaffolding or sample code, such as `faas-standard`.
 
 ```
 Generating boilerplate...
@@ -85,50 +80,42 @@ Generating boilerplate...
   faas-react - A serverless example with react
   faas-vue - A serverless example with vue
 ```
-### VSC 开发辅助插件
+
+### VSC Plugin
 
 ![](https://camo.githubusercontent.com/7819739b6a9eb3d673124817b0d40e46dc963993/68747470733a2f2f63646e2e6e6c61726b2e636f6d2f79757175652f302f323032302f6769662f3530313430382f313539333636313634363431362d35636238663637392d336331302d343638392d386465612d6530313731326438653231662e67696623616c69676e3d6c65667426646973706c61793d696e6c696e65266865696768743d383731266d617267696e3d2535426f626a6563742532304f626a656374253544266e616d653d323032302d30372d303225323031312d34342d32382e323032302d30372d303225323031315f34365f34302e676966266f726967696e4865696768743d383731266f726967696e57696474683d313036302673697a653d373438353839267374617475733d646f6e65267374796c653d6e6f6e652677696474683d31303630)
 
-### 部署函数
+### Deploy Function
 
-执行下面的命令即可发布到云平台。
+Execute the following command to publish to the cloud platform.
 
 ```
 f deploy
 ```
 
-Midway Serverless 现已支持阿里云、腾讯云的部署，aws 正在开发中。
+Midway Serverless support Alibaba Cloud and Tencent Cloud. Amazon Lambda will be soon.
 
+# Quick Start - Front-end Integration Examples
 
-## 快速开始 - 云 + 端一体化
+The following examples of front-end integration are currently connected.
 
-Midway Serverless 提供另一亮点功能是提供了与 React、Vue 等前端框架高度集成的——云端一体开发方案。基于云端一体方案可以高效交付一个互联网应用。
+| [<img alt="React" src="https://user-images.githubusercontent.com/677114/42611693-f921fc7c-85c9-11e8-8de1-6d6013b92f69.png" width="72">](https://www.yuque.com/midwayjs/faas/faas_with_react?translate=en) | [<img alt="Vue" src="https://user-images.githubusercontent.com/677114/42611543-44ef4502-85c9-11e8-9ef9-e9f98477c646.png" width="72">](https://www.yuque.com/midwayjs/faas/faas_with_vue?translate=en) |
+| :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|                                                                 [React](https://www.yuque.com/midwayjs/faas/faas_with_react?translate=en)                                                                 |                                                                 [Vue](https://www.yuque.com/midwayjs/faas/faas_with_vue?translate=en)                                                                 |
 
-|[<img alt="React" src="https://user-images.githubusercontent.com/677114/42611693-f921fc7c-85c9-11e8-8de1-6d6013b92f69.png" width="72">](https://www.yuque.com/midwayjs/faas/faas_with_react)| [<img alt="Vue" src="https://user-images.githubusercontent.com/677114/42611543-44ef4502-85c9-11e8-9ef9-e9f98477c646.png" width="72">](https://www.yuque.com/midwayjs/faas/faas_with_vue)
-| :---: | :---: |
-| [React](https://www.yuque.com/midwayjs/faas/faas_with_react) | [Vue](https://www.yuque.com/midwayjs/faas/faas_with_vue) |
-
-使用 React 一体化方案开发的新冠疫情可视化项目，使用 f create 命令选择 faas-covid19 命令即可创建。
+The visualization project of COVID-2019 pandemic developed by react integration, it can be created by selecting faas-covid19 with command `f create`.
 
 ![](https://img.alicdn.com/tfs/TB1IxOkNeL2gK0jSZFmXXc7iXXa-1492-1168.png)
 
-## 加入社区
+## Ecosystem
 
-扫码加入即刻交流与反馈：
-
-
-<img alt="Join the chat at dingtalk" src="https://user-images.githubusercontent.com/418820/82108754-60371300-9763-11ea-88f4-fc59c743ea23.png" width="500">
-
-## 生态体系
-
-|    Project         |    Version                                |   Description       |
-|----------------|-----------------------------------------|-----------|
-| [midway-serverless] | [![faas-status]][faas-package] |新一代渐进式 Serverless 开发框架|
-| [runtime-engine] | [![runtime-engine-status]][runtime-engine-package] |通用的基础 Serverless 运行时|
-| [serverless-fc-starter] | [![serverless-fc-starter-status]][serverless-fc-starter-package] |阿里云 FC 函数启动器|
-| [serverless-scf-starter] | [![serverless-scf-starter-status]][serverless-scf-starter-package] |腾讯云 SCF 函数启动器|
-| [midway] | [![midway-status]][midway-package] |基于依赖注入面向未来的 Web 开发框架|
-
+| Project                  | Version                                                            | Description                                                             |
+| ------------------------ | ------------------------------------------------------------------ | ----------------------------------------------------------------------- |
+| [midway-serverless]      | [![faas-status]][faas-package]                                     | A new generation of progressive Serverless development framework        |
+| [runtime-engine]         | [![runtime-engine-status]][runtime-engine-package]                 | Common basic Serverless runtime                                         |
+| [serverless-fc-starter]  | [![serverless-fc-starter-status]][serverless-fc-starter-package]   | Alibaba Cloud FC function launcher                                      |
+| [serverless-scf-starter] | [![serverless-scf-starter-status]][serverless-scf-starter-package] | Tencent Cloud SCF Function Launcher                                     |
+| [midway]                 | [![midway-status]][midway-package]                                 | Future-oriented web development framework based on dependency injection |
 
 [midway-serverless]: https://github.com/midwayjs/midway/tree/serverless/packages/faas
 [midway]: https://github.com/midwayjs/midway
@@ -136,21 +123,18 @@ Midway Serverless 提供另一亮点功能是提供了与 React、Vue 等前端�
 [faas-cli]: https://github.com/midwayjs/midway/tree/serverless/packages/faas-cli
 [serverless-fc-starter]: https://github.com/midwayjs/midway/tree/serverless/packages/serverless-fc-starter
 [serverless-scf-starter]: https://github.com/midwayjs/midway/tree/serverless/packages/serverless-scf-starter
-
 [faas-status]: https://img.shields.io/npm/v/@midwayjs/faas.svg
 [midway-status]: https://img.shields.io/npm/v/midway.svg
 [runtime-engine-status]: https://img.shields.io/npm/v/@midwayjs/runtime-engine.svg
 [serverless-fc-starter-status]: https://img.shields.io/npm/v/@midwayjs/runtime-engine.svg
 [serverless-scf-starter-status]: https://img.shields.io/npm/v/@midwayjs/runtime-engine.svg
-
 [faas-package]: https://npmjs.com/package/@midwayjs/faas
 [midway-package]: https://npmjs.com/package/midway
 [runtime-engine-package]: https://npmjs.com/package/@midwayjs/runtime-engine
 [serverless-fc-starter-package]: https://npmjs.com/package/@midwayjs/serverless-fc-starter
 [serverless-scf-starter-package]: https://npmjs.com/package/@midwayjs/serverless-scf-starter
 
-
-## 社区合作伙伴
+## Community partners
 
 - [Koa](https://koajs.com/)
 - [Egg](https://eggjs.org/)
@@ -166,10 +150,9 @@ To become a contributor, please follow our contributing guide.
 This project exists thanks to all the people who contribute.
 <a href="https://github.com/midwayjs/midway/graphs/contributors"><img src="https://opencollective.com/midway/contributors.svg?width=890&button=false" /></a>
 
+## license
 
-## 协议
-
-Midway Serverless 基于 [MIT licensed](./LICENSE) 协议开发.
+Midway Serverless based [MIT licensed](./LICENSE).
 
 ## About
 
