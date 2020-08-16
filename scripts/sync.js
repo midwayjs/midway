@@ -21,7 +21,9 @@ async function sync() {
   await Promise.all(task);
 
   console.log('\n=== check sync status ===\n');
-  await execa('node', [resolve(__dirname, 'sync_status.js')]);
+  await execa('node', [resolve(__dirname, 'sync_status.js')], {
+    stdio: 'inherit',
+  });
 
   console.log('\n=== sync finished ===');
   process.exit(1);
