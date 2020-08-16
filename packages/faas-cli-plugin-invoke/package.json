@@ -11,7 +11,6 @@
     "@midwayjs/mwcc": "^0.3.0",
     "@midwayjs/runtime-engine": "^1.1.4",
     "@midwayjs/runtime-mock": "^1.1.4",
-    "@midwayjs/fcli-plugin-hooks": "^1.1.16",
     "@midwayjs/serverless-fc-starter": "^1.1.8",
     "@midwayjs/serverless-fc-trigger": "^1.1.8",
     "@midwayjs/serverless-scf-starter": "^1.1.8",

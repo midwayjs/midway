@@ -6,7 +6,6 @@ import {
 import { FaaSInvokePlugin } from './index';
 import { formatInvokeResult, optionsToInvokeParams } from './utils';
 import { InvokeOptions } from './interface';
-import { HooksPlugin } from '@midwayjs/fcli-plugin-hooks';
 const { debugWrapper } = require('@midwayjs/debugger');
 
 export const getFunction = (getOptions: any = {}) => {
@@ -26,7 +25,6 @@ export const getFunction = (getOptions: any = {}) => {
       stopLifecycle: getOptions.stopLifecycle,
     });
     core.addPlugin(FaaSInvokePlugin);
-    core.addPlugin(HooksPlugin);
     await core.ready();
     await core.invoke(['invoke']);
 
