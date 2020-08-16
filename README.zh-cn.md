@@ -1,4 +1,4 @@
-[English](./README.en-US.md) | 简体中文
+[English](./README.md) | 简体中文
 
 
 ![](https://img.alicdn.com/tfs/TB1c1utMuT2gK0jSZFvXXXnFXXa-1422-305.png)
