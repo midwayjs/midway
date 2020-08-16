@@ -1,4 +1,4 @@
-English | [简体中文](./README.md)
+English | [简体中文](./README.zh-cn.md)
 
 ![](https://img.alicdn.com/tfs/TB1c1utMuT2gK0jSZFvXXXnFXXa-1422-305.png)
 
@@ -13,10 +13,10 @@ English | [简体中文](./README.md)
     <img src="https://img.shields.io/badge/Node.js%20CI-passing-brightgreen" />
   </a>
   <a href="https://github.com/midwayjs/midway" alt="Activity">
-    <img src="https://img.shields.io/github/commit-activity/m/midwayjs/midway-faas" />
+    <img src="https://img.shields.io/github/commit-activity/m/midwayjs/midway" />
   </a>
   <a href="https://github.com/midwayjs/midway/graphs/contributors" alt="Contributors">
-    <img src="https://img.shields.io/github/contributors/midwayjs/midway-faas" />
+    <img src="https://img.shields.io/github/contributors/midwayjs/midway" />
   </a>
   <a href="https://gitpod.io/#https://github.com/midwayjs/midway" alt="Gitpod Ready-to-Code">
     <img src="https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod" />
