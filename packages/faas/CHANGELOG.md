@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.1](https://github.com/midwayjs/midway-faas/compare/v1.1.4...v1.2.1) (2020-08-17)
+
+
+### Bug Fixes
+
+* faas middle http ([#570](https://github.com/midwayjs/midway-faas/issues/570)) ([27de83b](https://github.com/midwayjs/midway-faas/commit/27de83b7f0e726e99f8edd153ae585a38bd5f517))
+* fix global middleware load order ([#594](https://github.com/midwayjs/midway-faas/issues/594)) ([137dd03](https://github.com/midwayjs/midway-faas/commit/137dd036bde70a0f0c6a7ed98596da7c17b4a188))
+* global middleware can't catch error ([#542](https://github.com/midwayjs/midway-faas/issues/542)) ([8892471](https://github.com/midwayjs/midway-faas/commit/8892471defe5e6071eb0f3d5b0993f8ce298f5e3))
+
+
+### Features
+
+* add builtin hooks ([#603](https://github.com/midwayjs/midway-faas/issues/603)) ([4ae7e45](https://github.com/midwayjs/midway-faas/commit/4ae7e45cb8a3627b858bddefd9808ad3f94163c0))
+
+
+
+
+
 ## [1.1.18](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.17...serverless-v1.1.18) (2020-08-11)
 
 

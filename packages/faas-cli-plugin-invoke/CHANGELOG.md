@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.1](https://github.com/midwayjs/midway-faas/compare/v1.1.4...v1.2.1) (2020-08-17)
+
+
+### Bug Fixes
+
+* clean temp directory in local env ([#597](https://github.com/midwayjs/midway-faas/issues/597)) ([798cdf1](https://github.com/midwayjs/midway-faas/commit/798cdf12be8c77d1bf33a575d4c6e4a82153d597))
+* fp args ([#561](https://github.com/midwayjs/midway-faas/issues/561)) ([e91983e](https://github.com/midwayjs/midway-faas/commit/e91983e6ee1d9e725eaed061b80cde083bdf7e1d))
+* register faas ctx ([#559](https://github.com/midwayjs/midway-faas/issues/559)) ([d9e1764](https://github.com/midwayjs/midway-faas/commit/d9e1764d55c053e74f9cad2b70641ba7b8ab70c3))
+* use ts analyze cache ([#560](https://github.com/midwayjs/midway-faas/issues/560)) ([06dbcb5](https://github.com/midwayjs/midway-faas/commit/06dbcb52210f6a43ed8d54d5288b09c1243d0665))
+* wrapper compare ([#553](https://github.com/midwayjs/midway-faas/issues/553)) ([426aa65](https://github.com/midwayjs/midway-faas/commit/426aa65f2eb0d9f4312f5375ea39f9186f2a083c))
+
+
+### Features
+
+* add hooks ([#601](https://github.com/midwayjs/midway-faas/issues/601)) ([e9973f1](https://github.com/midwayjs/midway-faas/commit/e9973f110e3654d619ff7bc4020608c2082e47ae))
+
+
+
+
+
 # [1.2.0](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.21...serverless-v1.2.0) (2020-08-17)
 
 

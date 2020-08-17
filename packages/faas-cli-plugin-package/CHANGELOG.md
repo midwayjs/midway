@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.1](https://github.com/midwayjs/midway-faas/compare/v1.1.4...v1.2.1) (2020-08-17)
+
+
+### Bug Fixes
+
+* faas middle http ([#570](https://github.com/midwayjs/midway-faas/issues/570)) ([27de83b](https://github.com/midwayjs/midway-faas/commit/27de83b7f0e726e99f8edd153ae585a38bd5f517))
+* fix windows word when output ([#591](https://github.com/midwayjs/midway-faas/issues/591)) ([1ab9a7f](https://github.com/midwayjs/midway-faas/commit/1ab9a7f009d5b80db077e500ebc3302fa92c2664))
+
+
+
+
+
 # [1.2.0](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.21...serverless-v1.2.0) (2020-08-17)
 
 **Note:** Version bump only for package @midwayjs/fcli-plugin-package

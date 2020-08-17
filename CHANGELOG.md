@@ -3,6 +3,48 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.1](https://github.com/midwayjs/midway/compare/v1.1.4...v1.2.1) (2020-08-17)
+
+
+### Bug Fixes
+
+* 参数获取不正确 & ctx 符合格式 ([#556](https://github.com/midwayjs/midway/issues/556)) ([106bfac](https://github.com/midwayjs/midway/commit/106bfacff0f762fe561e026f883158f0bd7c3cdc))
+* add default path for fc ([#584](https://github.com/midwayjs/midway/issues/584)) ([064d3f0](https://github.com/midwayjs/midway/commit/064d3f08fa7e74420bdcac111f3fda3cf3ef6ec1))
+* aggregation path ([#567](https://github.com/midwayjs/midway/issues/567)) ([11a6d8a](https://github.com/midwayjs/midway/commit/11a6d8aab2e18a70ec1195090df04beff8e08760))
+* application return 301 and buffer case ([#596](https://github.com/midwayjs/midway/issues/596)) ([a31c022](https://github.com/midwayjs/midway/commit/a31c022409d234e001030d81ce1e414159039a0b))
+* args path ([#578](https://github.com/midwayjs/midway/issues/578)) ([f0de617](https://github.com/midwayjs/midway/commit/f0de617087419ecb433d430b6cb3b1d9e3028d47))
+* aws bucket duplicated path default ([#587](https://github.com/midwayjs/midway/issues/587)) ([9e504ef](https://github.com/midwayjs/midway/commit/9e504ef48724edc5eb50c527424dfb261872e9c2))
+* aws duplicated bucketname & default path ([#573](https://github.com/midwayjs/midway/issues/573)) ([28b6520](https://github.com/midwayjs/midway/commit/28b6520d46d2496003a7e7681c663aa9814832bb))
+* aws plugin publish role ([#568](https://github.com/midwayjs/midway/issues/568)) ([9074d7c](https://github.com/midwayjs/midway/commit/9074d7cb813d8fd5619900a864a9be926645cab2))
+* clean temp directory in local env ([#597](https://github.com/midwayjs/midway/issues/597)) ([798cdf1](https://github.com/midwayjs/midway/commit/798cdf12be8c77d1bf33a575d4c6e4a82153d597))
+* faas middle http ([#570](https://github.com/midwayjs/midway/issues/570)) ([27de83b](https://github.com/midwayjs/midway/commit/27de83b7f0e726e99f8edd153ae585a38bd5f517))
+* fc auto domain ([#580](https://github.com/midwayjs/midway/issues/580)) ([f8bf9e0](https://github.com/midwayjs/midway/commit/f8bf9e05922b154285ee29f1a65b59d9d448cf5b))
+* fix global middleware load order ([#594](https://github.com/midwayjs/midway/issues/594)) ([137dd03](https://github.com/midwayjs/midway/commit/137dd036bde70a0f0c6a7ed98596da7c17b4a188))
+* fix windows word when output ([#591](https://github.com/midwayjs/midway/issues/591)) ([1ab9a7f](https://github.com/midwayjs/midway/commit/1ab9a7f009d5b80db077e500ebc3302fa92c2664))
+* fp args ([#561](https://github.com/midwayjs/midway/issues/561)) ([e91983e](https://github.com/midwayjs/midway/commit/e91983e6ee1d9e725eaed061b80cde083bdf7e1d))
+* global middleware can't catch error ([#542](https://github.com/midwayjs/midway/issues/542)) ([8892471](https://github.com/midwayjs/midway/commit/8892471defe5e6071eb0f3d5b0993f8ce298f5e3))
+* isAppMode ([#590](https://github.com/midwayjs/midway/issues/590)) ([016e430](https://github.com/midwayjs/midway/commit/016e43068e109dac49c8c0a1b6465ffec564ae0e))
+* layer name ([#585](https://github.com/midwayjs/midway/issues/585)) ([9a774b7](https://github.com/midwayjs/midway/commit/9a774b7e6bb5652a595954c63518ef4747d85259))
+* layer wrapper ([#583](https://github.com/midwayjs/midway/issues/583)) ([1c9966d](https://github.com/midwayjs/midway/commit/1c9966d6d05108451745183efbc4a15ae1caae6b))
+* register faas ctx ([#559](https://github.com/midwayjs/midway/issues/559)) ([d9e1764](https://github.com/midwayjs/midway/commit/d9e1764d55c053e74f9cad2b70641ba7b8ab70c3))
+* remove layer console ([#586](https://github.com/midwayjs/midway/issues/586)) ([51b144b](https://github.com/midwayjs/midway/commit/51b144b8d18b15cc31b31d8a2eacf7b16c12cdd1))
+* resource not included by npm ([#572](https://github.com/midwayjs/midway/issues/572)) ([6835b5f](https://github.com/midwayjs/midway/commit/6835b5f5a170f84401288d6b06f82328baecde9c))
+* support default fp ([#575](https://github.com/midwayjs/midway/issues/575)) ([6c3d59c](https://github.com/midwayjs/midway/commit/6c3d59c1737db901baadb386b75d49d0a711991f))
+* use ts analyze cache ([#560](https://github.com/midwayjs/midway/issues/560)) ([06dbcb5](https://github.com/midwayjs/midway/commit/06dbcb52210f6a43ed8d54d5288b09c1243d0665))
+* wrapper compare ([#553](https://github.com/midwayjs/midway/issues/553)) ([426aa65](https://github.com/midwayjs/midway/commit/426aa65f2eb0d9f4312f5375ea39f9186f2a083c))
+* xss bug ([#598](https://github.com/midwayjs/midway/issues/598)) ([0a265f3](https://github.com/midwayjs/midway/commit/0a265f3bb2086f2ee805a174794e82bc68bb2765))
+
+
+### Features
+
+* add  name for fc event ([#569](https://github.com/midwayjs/midway/issues/569)) ([41797e7](https://github.com/midwayjs/midway/commit/41797e77da4b5217c6367ca616f7cc9c874aea5b))
+* add builtin hooks ([#603](https://github.com/midwayjs/midway/issues/603)) ([4ae7e45](https://github.com/midwayjs/midway/commit/4ae7e45cb8a3627b858bddefd9808ad3f94163c0))
+* add hooks ([#601](https://github.com/midwayjs/midway/issues/601)) ([e9973f1](https://github.com/midwayjs/midway/commit/e9973f110e3654d619ff7bc4020608c2082e47ae))
+
+
+
+
+
 # [1.2.0](https://github.com/midwayjs/midway/compare/serverless-v1.1.21...serverless-v1.2.0) (2020-08-17)
 
 

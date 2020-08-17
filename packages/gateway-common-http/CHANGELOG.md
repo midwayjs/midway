@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.1](https://github.com/midwayjs/midway-faas/compare/v1.1.4...v1.2.1) (2020-08-17)
+
+
+### Features
+
+* add hooks ([#601](https://github.com/midwayjs/midway-faas/issues/601)) ([e9973f1](https://github.com/midwayjs/midway-faas/commit/e9973f110e3654d619ff7bc4020608c2082e47ae))
+
+
+
+
+
 # [1.2.0](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.21...serverless-v1.2.0) (2020-08-17)
 
 
