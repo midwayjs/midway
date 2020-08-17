@@ -33,5 +33,5 @@ export interface FaaSContext extends FaaSHTTPContext {
   env: string;
   requestContext: MidwayRequestContainer;
   originContext: any;
-  hooks: MidwayHooks
+  hooks: MidwayHooks;
 }
