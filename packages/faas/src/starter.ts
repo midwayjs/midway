@@ -19,6 +19,7 @@ import {
 } from '@midwayjs/decorator';
 import SimpleLock from '@midwayjs/simple-lock';
 import * as compose from 'koa-compose';
+import { MidwayHooks } from './hooks';
 
 const LOCK_KEY = '_faas_starter_start_key';
 const MIDWAY_FAAS_KEY = '__midway_faas__';
@@ -303,6 +304,9 @@ export class FaaSStarter implements IFaaSStarter {
         context,
         this.getApplicationContext()
       );
+    }
+    if (!context.hooks) {
+      context.hooks = new MidwayHooks(context, this.webApplication);
     }
     return context;
   }

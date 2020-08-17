@@ -254,4 +254,29 @@ describe('test/index.test.ts', () => {
 
     assert(data.body === 'hello world');
   });
+
+  it('test midway-hooks', async () => {
+    mm(process.env, 'NODE_ENV', 'sh');
+    const starter = new FaaSStarter({
+      baseDir: join(__dirname, 'fixtures/midway-hooks'),
+    });
+    await starter.start();
+    const data1 = await starter.handleInvokeWrapper('index.handler')({}, {});
+    const data2 = await starter.handleInvokeWrapper('inject.handler')({}, {});
+
+    assert(data1);
+    assert(data2);
+
+    const config = await starter.handleInvokeWrapper('config.handler')({}, {});
+    const applicationContext = starter.getApplicationContext();
+    const value = applicationContext.getConfigService().getConfiguration('env');
+
+    assert(config === value);
+
+    const loggerExist = await starter.handleInvokeWrapper('logger.handler')(
+      {},
+      {}
+    );
+    assert(loggerExist);
+  });
 });
