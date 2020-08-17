@@ -1,5 +1,6 @@
 import { MidwayRequestContainer, IMidwayCoreApplication } from '@midwayjs/core';
 import { FaaSHTTPContext } from '@midwayjs/faas-typings';
+import type { MidwayHooks } from './hooks';
 
 export interface IFaaSApplication extends IMidwayCoreApplication {
   getInitializeContext();
@@ -32,4 +33,5 @@ export interface FaaSContext extends FaaSHTTPContext {
   env: string;
   requestContext: MidwayRequestContainer;
   originContext: any;
+  hooks: MidwayHooks
 }
