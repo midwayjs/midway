@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.21...serverless-v1.2.0) (2020-08-17)
+
+
+### Features
+
+* add hooks ([#601](https://github.com/midwayjs/midway-faas/issues/601)) ([e9973f1](https://github.com/midwayjs/midway-faas/commit/e9973f110e3654d619ff7bc4020608c2082e47ae))
+
+
+
+
+
 ## [1.1.21](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.20...serverless-v1.1.21) (2020-08-12)
 
 **Note:** Version bump only for package @midwayjs/fcli-command-core
