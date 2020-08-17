@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.1](https://github.com/midwayjs/midway/compare/serverless-v1.2.0...serverless-v1.2.1) (2020-08-17)
+
+
+### Features
+
+* add builtin hooks ([#603](https://github.com/midwayjs/midway/issues/603)) ([4ae7e45](https://github.com/midwayjs/midway/commit/4ae7e45cb8a3627b858bddefd9808ad3f94163c0))
+
+
+
+
+
 ## [1.2.1](https://github.com/midwayjs/midway/compare/v1.1.4...v1.2.1) (2020-08-17)
 
 
