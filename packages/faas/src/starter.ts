@@ -306,7 +306,7 @@ export class FaaSStarter implements IFaaSStarter {
       );
     }
     if (!context.hooks) {
-      context.hooks = new MidwayHooks(context);
+      context.hooks = new MidwayHooks(context, this.webApplication);
     }
     return context;
   }
