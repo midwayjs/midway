@@ -39,7 +39,9 @@ export const getFunction = (getOptions: any = {}) => {
 
 export async function invokeFun(options: InvokeOptions) {
   const invokeFun = getFunction({
-    stopLifecycle: options.getFunctionList ? 'invoke:compile' : undefined,
+    stopLifecycle: options.getFunctionList
+      ? 'invoke:setFunctionList'
+      : undefined,
   });
   const { core, getResult } = await invokeFun(options);
 
