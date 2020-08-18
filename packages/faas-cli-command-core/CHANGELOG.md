@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.2](https://github.com/midwayjs/midway-faas/compare/serverless-v1.2.1...serverless-v1.2.2) (2020-08-18)
+
+
+### Bug Fixes
+
+* createLogger & commond-core support multi provider ([#604](https://github.com/midwayjs/midway-faas/issues/604)) ([c1748f0](https://github.com/midwayjs/midway-faas/commit/c1748f00516a86624fab3cd64d2a61052513cbf3))
+
+
+
+
+
 # [1.2.0](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.21...serverless-v1.2.0) (2020-08-17)
 
 

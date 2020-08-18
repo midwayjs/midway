@@ -1,10 +1,10 @@
 {
   "name": "@midwayjs/serverless-scf-starter",
-  "version": "1.1.8",
+  "version": "1.2.2",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/runtime-engine": "^1.1.4",
+    "@midwayjs/runtime-engine": "^1.2.2",
     "@midwayjs/serverless-http-parser": "^1.1.8"
   },
   "devDependencies": {
