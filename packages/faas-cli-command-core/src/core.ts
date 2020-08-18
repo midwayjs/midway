@@ -79,6 +79,11 @@ export class CommandHookCore implements ICommandHooksCore {
     if (instance.provider) {
       if (typeof instance.provider === 'string') {
         pluginProvider = instance.provider;
+      } else if (Array.isArray(instance.provider)) {
+        // provider is list
+        if (instance.provider.indexOf(provider) === -1) {
+          return;
+        }
       } else {
         pluginProvider = instance.provider.constructor.getProviderName();
       }

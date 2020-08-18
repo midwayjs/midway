@@ -1,7 +1,7 @@
 import { BasePlugin } from '../../src';
 
 class LogPlugin extends BasePlugin {
-  provider = 'test';
+  provider = ['test'];
   commands = {
     log: {
       usage: 'log command',

@@ -19,7 +19,14 @@ export class BaseLoggerFactory implements LoggerFactory {
     this.Logger = Logger || ServerlessLogger;
   }
 
-  createLogger(options?) {
+  createLogger(options?);
+  createLogger(filename?, options?) {
+    if (typeof filename === 'string') {
+      options = options || {};
+      options.file = filename;
+    } else {
+      options = filename || {};
+    }
     options = options || {};
     const lv = this.envParser ? this.envParser.getLoggerLevel() : 'ERROR';
     if (lv) {
