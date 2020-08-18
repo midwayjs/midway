@@ -27,7 +27,6 @@ export class BaseLoggerFactory implements LoggerFactory {
     } else {
       options = filename || {};
     }
-    options = options || {};
     const lv = this.envParser ? this.envParser.getLoggerLevel() : 'ERROR';
     if (lv) {
       options.level = lv;
