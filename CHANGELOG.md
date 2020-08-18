@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.3](https://github.com/midwayjs/midway/compare/serverless-v1.2.2...serverless-v1.2.3) (2020-08-18)
+
+
+### Bug Fixes
+
+* fix options for midway v1 ([#606](https://github.com/midwayjs/midway/issues/606)) ([e90883a](https://github.com/midwayjs/midway/commit/e90883a789c2dc7a452fbfdd92cb75a037f4aced))
+* provider check ([#605](https://github.com/midwayjs/midway/issues/605)) ([c2808bf](https://github.com/midwayjs/midway/commit/c2808bf0542d0fc051a61d8a5e88a2fe90f5bf91))
+
+
+
+
+
 ## [1.2.2](https://github.com/midwayjs/midway/compare/serverless-v1.2.1...serverless-v1.2.2) (2020-08-18)
 
 
