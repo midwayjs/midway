@@ -26,6 +26,8 @@ module.exports = engine => {
         framework: localFrameWorkPath,
         ignoreWarning: true,
         runtime,
+        typescript:
+          framework && framework.includes('midway') ? true : undefined,
       });
       if (fs.existsSync(socketPath)) {
         fs.unlinkSync(socketPath);
