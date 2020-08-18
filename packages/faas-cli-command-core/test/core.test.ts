@@ -1,5 +1,6 @@
 import { CommandHookCore } from '../src';
 import TestPlugin from './plugins/test.invoke';
+import { PluginTest2 } from './plugins/test-not-provider.invoke';
 import * as assert from 'assert';
 import { join } from 'path';
 import { readFileSync } from 'fs';
@@ -17,6 +18,7 @@ describe('command-core', () => {
       stopLifecycle: 'invoke:one',
     });
     core.addPlugin(TestPlugin);
+    core.addPlugin(PluginTest2);
     await core.ready();
     await core.invoke(['invoke']);
     assert(result && result.length === 3);

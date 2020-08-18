@@ -49,7 +49,8 @@ export class CommandHookCore implements ICommandHooksCore {
 
   // 添加插件
   public addPlugin(Plugin: any) {
-    const provider = this.options.provider;
+    const provider =
+      this.options.service?.provider?.name || this.options.provider;
     const coreInstance: ICoreInstance = this.coreInstance;
     let pluginProvider = '';
     // 支持加载npm 或 本地插件（绝对地址）
