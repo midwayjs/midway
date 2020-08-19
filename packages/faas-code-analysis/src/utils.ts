@@ -1,6 +1,7 @@
 import * as globby from 'globby';
 import { existsSync, copy, statSync } from 'fs-extra';
 import { join } from 'path';
+import { platform } from 'os';
 
 // 首字母小写
 export const firstCharLower = str => {
@@ -34,6 +35,15 @@ export const compareFileChange = async (
     options.cwd = process.cwd();
   }
   options.stats = true;
+  const isWindows = platform() === 'win32';
+  if (isWindows) {
+    fromGlob = fromGlob.map(pattern => {
+      return pattern.replace(/\\+/g, '/');
+    });
+    toGlob = toGlob.map(pattern => {
+      return pattern.replace(/\\+/g, '/');
+    });
+  }
   const fromFiles: any = await globby(fromGlob, options);
   const toFiles: any = await globby(toGlob, options);
 
