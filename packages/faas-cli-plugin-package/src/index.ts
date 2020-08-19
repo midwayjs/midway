@@ -22,7 +22,7 @@ import { commonPrefix, formatLayers } from './utils';
 import {
   analysisResultToSpec,
   copyFiles,
-  copyStaticFiles
+  copyStaticFiles,
 } from '@midwayjs/faas-code-analysis';
 import {
   CompilerHost,
