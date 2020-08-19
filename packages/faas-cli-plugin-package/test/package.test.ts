@@ -14,7 +14,7 @@ describe('/test/package.test.ts', () => {
       await remove(join(baseDir, '.serverless'));
       await remove(join(baseDir, 'node_modules'));
     });
-    it.only('base package', async () => {
+    it('base package', async () => {
       const core = new CommandHookCore({
         config: {
           servicePath: baseDir,
