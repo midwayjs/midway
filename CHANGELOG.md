@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.5](https://github.com/midwayjs/midway/compare/serverless-v1.2.4...serverless-v1.2.5) (2020-08-19)
+
+
+### Bug Fixes
+
+* invoke error output ([#610](https://github.com/midwayjs/midway/issues/610)) ([9724f4a](https://github.com/midwayjs/midway/commit/9724f4a06e301fe37e428b9428aa6d1639232301))
+
+
+
+
+
 ## [1.2.4](https://github.com/midwayjs/midway/compare/serverless-v1.2.3...serverless-v1.2.4) (2020-08-19)
 
 
