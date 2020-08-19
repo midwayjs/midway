@@ -569,16 +569,14 @@ export class FaaSInvokePlugin extends BasePlugin {
         });
       }
     } catch (e) {
-      this.core.debug('Call Error', e);
-      if (resultType !== 'store') {
-        const errorLog = this.core.cli.error || this.core.cli.log;
-        errorLog(e && e.message ? `[Error] ${e.message}` : e);
-      } else {
+      if (resultType === 'store') {
         this.setStore('result', {
           success: false,
           err: e,
         });
       }
+      const errorLog = this.core.cli.error || this.core.cli.log;
+      errorLog(e && e.message ? `[Error] ${e.message}` : e);
     }
   }
 
