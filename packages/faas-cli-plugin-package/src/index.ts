@@ -19,7 +19,11 @@ import {
 } from 'fs-extra';
 import * as micromatch from 'micromatch';
 import { commonPrefix, formatLayers } from './utils';
-import { analysisResultToSpec, copyFiles } from '@midwayjs/faas-code-analysis';
+import {
+  analysisResultToSpec,
+  copyFiles,
+  copyStaticFiles
+} from '@midwayjs/faas-code-analysis';
 import {
   CompilerHost,
   Program,
@@ -56,6 +60,7 @@ export class PackagePlugin extends BasePlugin {
         'copyFile', // 拷贝文件: package.include 和 shared content
         'compile', // 代码分析
         'emit', // 编译函数  'package:after:tscompile'
+        'copyStaticFile', // 拷贝src中的静态文件到dist目录，例如 html 等
         'checkAggregation', // 检测高密度部署
         'generateSpec', // 生成对应平台的描述文件，例如 serverless.yml 等
         'generateEntry', // 生成对应平台的入口文件
@@ -111,6 +116,7 @@ export class PackagePlugin extends BasePlugin {
     'after:package:generateEntry': this.defaultGenerateEntry.bind(this),
     'before:package:finalize': this.finalize.bind(this),
     'package:emit': this.emit.bind(this),
+    'package:copyStaticFile': this.copyStaticFile.bind(this),
   };
 
   async cleanup() {
@@ -316,11 +322,7 @@ export class PackagePlugin extends BasePlugin {
     this.core.cli.log(' - Dependencies install complete');
   }
 
-  async compile() {
-    // 不存在 tsconfig，跳过编译
-    if (!existsSync(resolve(this.servicePath, 'tsconfig.json'))) {
-      return;
-    }
+  public getTsCodeRoot(): string {
     let tsCodeRoot: string;
     const tmpOutDir = resolve(this.defaultTmpFaaSOut, 'src');
     if (existsSync(tmpOutDir)) {
@@ -328,6 +330,15 @@ export class PackagePlugin extends BasePlugin {
     } else {
       tsCodeRoot = this.codeAnalyzeResult.tsCodeRoot;
     }
+    return tsCodeRoot;
+  }
+
+  async compile() {
+    // 不存在 tsconfig，跳过编译
+    if (!existsSync(resolve(this.servicePath, 'tsconfig.json'))) {
+      return;
+    }
+    const tsCodeRoot: string = this.getTsCodeRoot();
 
     const { config } = resolveTsConfigFile(
       this.servicePath,
@@ -369,6 +380,21 @@ export class PackagePlugin extends BasePlugin {
     this.core.cli.log(' - Using tradition build mode');
     this.program.emit();
     this.core.cli.log(' - Build project complete');
+  }
+
+  private copyStaticFile() {
+    const isTsDir = existsSync(join(this.servicePath, 'tsconfig.json'));
+    if (!isTsDir) {
+      return;
+    }
+    const tsCodeRoot: string = this.getTsCodeRoot();
+    return copyStaticFiles({
+      sourceDir: tsCodeRoot,
+      targetDir: join(this.midwayBuildPath, 'dist'),
+      log: filePath => {
+        this.core.cli.log(' - copyStaticFiles', filePath);
+      },
+    });
   }
 
   // 生成默认入口
@@ -651,7 +677,7 @@ export class PackagePlugin extends BasePlugin {
       this.core.cli.log(` - found deployType: ${service?.deployType}`);
       // add default function
       if (!service.functions || Object.keys(service.functions).length === 0) {
-        this.core.cli.log(` - create default functions`);
+        this.core.cli.log(' - create default functions');
         service.functions = {
           app_index: {
             handler: 'index.handler',
@@ -665,19 +691,19 @@ export class PackagePlugin extends BasePlugin {
       }
 
       if (service?.deployType === 'egg') {
-        this.core.cli.log(` - create default layer: egg`);
+        this.core.cli.log(' - create default layer: egg');
         service.layers['eggLayer'] = { path: 'npm:@midwayjs/egg-layer' };
       }
 
       if (service?.deployType === 'express') {
-        this.core.cli.log(` - create default layer: express`);
+        this.core.cli.log(' - create default layer: express');
         service.layers['expressLayer'] = {
           path: 'npm:@midwayjs/express-layer',
         };
       }
 
       if (service?.deployType === 'koa') {
-        this.core.cli.log(` - create default layer: koa`);
+        this.core.cli.log(' - create default layer: koa');
         service.layers['koaLayer'] = { path: 'npm:@midwayjs/koa-layer' };
       }
     }
