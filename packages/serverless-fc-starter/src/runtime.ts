@@ -21,7 +21,8 @@ export class FCRuntime extends ServerlessLightRuntime {
   app;
   respond;
 
-  init() {
+  init(contextExtensions) {
+    super.init(contextExtensions);
     this.app = new Application();
   }
 
@@ -237,6 +238,7 @@ export class FCRuntime extends ServerlessLightRuntime {
     };
     // 其他事件场景
     return this.invokeHandlerWrapper(newCtx, async () => {
+      args[0] = newCtx;
       return handler.apply(handler, args);
     });
   }
