@@ -1,4 +1,3 @@
-import { exec } from 'child_process';
 import * as express from 'express';
 import * as HTTP from 'http';
 import { FCBaseTrigger } from './base';
@@ -73,11 +72,14 @@ export class HTTPTrigger extends FCBaseTrigger {
         if (err) {
           reject(err);
         } else {
-          exec(`curl 127.0.0.1:${this.httpServer.address().port}`, err => {
-            if (err) {
-              reject(err);
-            }
-          });
+          const options = {
+            port: this.httpServer.address().port,
+            host: '127.0.0.1',
+            method: 'GET',
+          };
+
+          const req = HTTP.request(options);
+          req.end();
         }
       });
     });
