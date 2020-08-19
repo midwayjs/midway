@@ -138,6 +138,9 @@ export const innerTsConfigMaker = (options: InnerTsConfigOptions) => {
 };
 
 export const copyStaticFiles = async ({ sourceDir, targetDir, log }) => {
+  if (!sourceDir || !targetDir) {
+    return;
+  }
   const paths = globby.sync(['**/*.*'], {
     cwd: sourceDir,
     followSymbolicLinks: false,

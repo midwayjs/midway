@@ -388,6 +388,9 @@ export class PackagePlugin extends BasePlugin {
       return;
     }
     const tsCodeRoot: string = this.getTsCodeRoot();
+    if (!tsCodeRoot) {
+      return;
+    }
     return copyStaticFiles({
       sourceDir: tsCodeRoot,
       targetDir: join(this.midwayBuildPath, 'dist'),
