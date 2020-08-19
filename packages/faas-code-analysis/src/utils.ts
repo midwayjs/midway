@@ -93,24 +93,7 @@ export const copyFiles = async (options: ICopyOptions) => {
       ].concat(exclude || []),
     }
   );
-  await Promise.all(
-    paths.map((path: string) => {
-      const source = join(sourceDir, path);
-      const target = join(targetDir, path);
-      if (existsSync(target)) {
-        const sourceStat = statSync(source);
-        const targetStat = statSync(target);
-        // source 修改时间小于目标文件 修改时间，则不拷贝
-        if (sourceStat.mtimeMs <= targetStat.mtimeMs) {
-          return;
-        }
-      }
-      if (log) {
-        log(path);
-      }
-      return copy(source, target);
-    })
-  );
+  await docopy(sourceDir, targetDir, paths, log);
 };
 
 interface InnerTsConfigOptions {
@@ -142,4 +125,42 @@ export const innerTsConfigMaker = (options: InnerTsConfigOptions) => {
     include: options.include || [],
     exclude: options.exclude || [],
   };
+};
+
+export const copyStaticFiles = async ({ sourceDir, targetDir, log }) => {
+  const paths = globby.sync(['**/*.*'], {
+    cwd: sourceDir,
+    followSymbolicLinks: false,
+    ignore: [
+      '**/*.ts',
+      '**/node_modules/**', // 模块依赖目录
+    ],
+  });
+  return docopy(sourceDir, targetDir, paths, log);
+};
+
+const docopy = async (
+  sourceDir: string,
+  targetDir: string,
+  paths: string[],
+  log?
+) => {
+  await Promise.all(
+    paths.map((path: string) => {
+      const source = join(sourceDir, path);
+      const target = join(targetDir, path);
+      if (existsSync(target)) {
+        const sourceStat = statSync(source);
+        const targetStat = statSync(target);
+        // source 修改时间小于目标文件 修改时间，则不拷贝
+        if (sourceStat.mtimeMs <= targetStat.mtimeMs) {
+          return;
+        }
+      }
+      if (log) {
+        log(path);
+      }
+      return copy(source, target);
+    })
+  );
 };

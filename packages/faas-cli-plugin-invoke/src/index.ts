@@ -4,6 +4,7 @@ import {
   analysisResultToSpec,
   compareFileChange,
   copyFiles,
+  copyStaticFiles,
 } from '@midwayjs/faas-code-analysis';
 import {
   CompilerHost,
@@ -74,6 +75,7 @@ export class FaaSInvokePlugin extends BasePlugin {
         'compile', // ts 代码编译
         'analysisCode', // Todo: 代码分析，向前兼容
         'emit', // ts 代码输出
+        'copyStaticFile', // 拷贝src中的静态文件到dist目录，例如 html 等
         'setFunctionList',
         'entry', // 生成执行入口
         'getInvoke', // 获取runtime
@@ -111,6 +113,7 @@ export class FaaSInvokePlugin extends BasePlugin {
     'invoke:checkFileChange': this.checkFileChange.bind(this),
     'invoke:compile': this.compile.bind(this),
     'invoke:emit': this.emit.bind(this),
+    'invoke:copyStaticFile': this.copyStaticFile.bind(this),
     'invoke:setFunctionList': this.setFunctionList.bind(this),
     'invoke:entry': this.entry.bind(this),
     'invoke:getInvoke': this.getInvoke.bind(this),
@@ -357,6 +360,20 @@ export class FaaSInvokePlugin extends BasePlugin {
       this.buildLockPath,
       JSON.stringify(this.fileChanges, null, 2)
     );
+  }
+
+  private async copyStaticFile() {
+    const isTsMode = checkIsTsMode();
+    if (isTsMode || this.skipTsBuild) {
+      return;
+    }
+    return copyStaticFiles({
+      sourceDir: this.analyzedTsCodeRoot,
+      targetDir: resolve(this.buildDir, 'dist'),
+      log: filePath => {
+        this.core.debug('copyStaticFiles', filePath);
+      },
+    });
   }
 
   async setFunctionList() {

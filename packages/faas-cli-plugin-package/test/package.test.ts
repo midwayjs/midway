@@ -30,6 +30,8 @@ describe('/test/package.test.ts', () => {
       await core.invoke(['package']);
       const buildPath = join(baseDir, '.serverless');
       assert(existsSync(join(buildPath, 'dist/index.js')));
+      assert(existsSync(join(buildPath, 'dist/a.html')));
+      assert(existsSync(join(buildPath, 'dist/view/b.json')));
       assert(existsSync(join(buildPath, 'node_modules')));
       assert(existsSync(join(buildPath, 'src')));
       assert(existsSync(join(buildPath, 'package.json')));
