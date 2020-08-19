@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/egg-layer",
-  "version": "1.2.4",
+  "version": "1.2.6",
   "main": "index.js",
   "scripts": {
     "test": "midway-bin test --full-trace",
@@ -16,10 +16,10 @@
   "devDependencies": {
     "@midwayjs/runtime-engine": "^1.2.2",
     "@midwayjs/runtime-mock": "^1.2.2",
-    "@midwayjs/serverless-fc-starter": "^1.2.2",
-    "@midwayjs/serverless-fc-trigger": "^1.2.4",
+    "@midwayjs/serverless-fc-starter": "^1.2.6",
+    "@midwayjs/serverless-fc-trigger": "^1.2.6",
     "@midwayjs/serverless-scf-starter": "^1.2.2",
-    "@midwayjs/serverless-scf-trigger": "^1.2.2",
+    "@midwayjs/serverless-scf-trigger": "^1.2.6",
     "midway-bin": "^2.0.0",
     "supertest": "^4.0.2"
   },

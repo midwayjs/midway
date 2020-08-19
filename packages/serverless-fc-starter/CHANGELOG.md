@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.6](https://github.com/midwayjs/midway-faas/compare/serverless-v1.2.5...serverless-v1.2.6) (2020-08-19)
+
+
+### Bug Fixes
+
+* fc-starter layer contextExtensions failed ([#614](https://github.com/midwayjs/midway-faas/issues/614)) ([f69f434](https://github.com/midwayjs/midway-faas/commit/f69f43486f73ea101412592f7c85cee4b498b59b))
+
+
+
+
+
 ## [1.2.2](https://github.com/midwayjs/midway-faas/compare/serverless-v1.2.1...serverless-v1.2.2) (2020-08-18)
 
 **Note:** Version bump only for package @midwayjs/serverless-fc-starter

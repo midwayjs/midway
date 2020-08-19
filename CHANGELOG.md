@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.6](https://github.com/midwayjs/midway/compare/serverless-v1.2.5...serverless-v1.2.6) (2020-08-19)
+
+
+### Bug Fixes
+
+* fc-starter layer contextExtensions failed ([#614](https://github.com/midwayjs/midway/issues/614)) ([f69f434](https://github.com/midwayjs/midway/commit/f69f43486f73ea101412592f7c85cee4b498b59b))
+* static copy ([#613](https://github.com/midwayjs/midway/issues/613)) ([c572b04](https://github.com/midwayjs/midway/commit/c572b044a1411c641b40fb7ff0ed52a3f65df0ee))
+* windows globby ([#612](https://github.com/midwayjs/midway/issues/612)) ([a19a143](https://github.com/midwayjs/midway/commit/a19a143804d7ab36e6cfa421c4996f5e5d82075d))
+
+
+
+
+
 ## [1.2.5](https://github.com/midwayjs/midway/compare/serverless-v1.2.4...serverless-v1.2.5) (2020-08-19)
 
 
