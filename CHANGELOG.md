@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.4](https://github.com/midwayjs/midway/compare/serverless-v1.2.3...serverless-v1.2.4) (2020-08-19)
+
+
+### Bug Fixes
+
+* curl in windows ([#609](https://github.com/midwayjs/midway/issues/609)) ([efad770](https://github.com/midwayjs/midway/commit/efad7703a4628b0bc7c805ae519425ca0881de10))
+* support static file copy ([#608](https://github.com/midwayjs/midway/issues/608)) ([941bc5c](https://github.com/midwayjs/midway/commit/941bc5c35d816e57f08d069e11818279ace475bd))
+
+
+
+
+
 ## [1.2.3](https://github.com/midwayjs/midway/compare/serverless-v1.2.2...serverless-v1.2.3) (2020-08-18)
 
 

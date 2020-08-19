@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.4](https://github.com/midwayjs/midway-faas/compare/serverless-v1.2.3...serverless-v1.2.4) (2020-08-19)
+
+
+### Bug Fixes
+
+* curl in windows ([#609](https://github.com/midwayjs/midway-faas/issues/609)) ([efad770](https://github.com/midwayjs/midway-faas/commit/efad7703a4628b0bc7c805ae519425ca0881de10))
+
+
+
+
+
 ## [1.2.2](https://github.com/midwayjs/midway-faas/compare/serverless-v1.2.1...serverless-v1.2.2) (2020-08-18)
 
 **Note:** Version bump only for package @midwayjs/serverless-fc-trigger
