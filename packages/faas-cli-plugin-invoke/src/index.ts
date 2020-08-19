@@ -364,7 +364,7 @@ export class FaaSInvokePlugin extends BasePlugin {
 
   private async copyStaticFile() {
     const isTsMode = checkIsTsMode();
-    if (isTsMode || this.skipTsBuild) {
+    if (isTsMode || this.skipTsBuild || !this.analyzedTsCodeRoot) {
       return;
     }
     return copyStaticFiles({
