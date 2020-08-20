@@ -83,7 +83,7 @@ export class ServerlessLogger extends Logger implements IServerlessLogger {
         Number(process.env.LOG_ROTATE_FILE_SIZE) ||
         DEFAULT_MAX_FILE_SIZE;
       const transport: any = this.get('file');
-      if (transport._stream && transport._stream.writable) {
+      if (transport?._stream?.writable) {
         const stat = await fs.fstat(transport._stream.fd);
         if (stat.size >= maxFileSize) {
           this.info(
