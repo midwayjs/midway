@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/faas-cli",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
@@ -8,8 +8,8 @@
     "@midwayjs/fcli-command-core": "^1.2.3",
     "@midwayjs/fcli-plugin-create": "^1.2.3",
     "@midwayjs/fcli-plugin-deploy": "^1.2.3",
-    "@midwayjs/fcli-plugin-dev-pack": "^1.2.6",
-    "@midwayjs/fcli-plugin-invoke": "^1.2.6",
+    "@midwayjs/fcli-plugin-dev-pack": "^1.2.7",
+    "@midwayjs/fcli-plugin-invoke": "^1.2.7",
     "@midwayjs/fcli-plugin-package": "^1.2.6",
     "@midwayjs/fcli-plugin-test": "^1.2.3",
     "@midwayjs/serverless-spec-builder": "^1.2.0",

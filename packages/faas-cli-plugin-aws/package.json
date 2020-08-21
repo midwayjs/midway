@@ -1,11 +1,11 @@
 {
   "name": "@midwayjs/fcli-plugin-aws",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@midwayjs/fcli-command-core": "^1.2.3",
-    "@midwayjs/serverless-fc-starter": "^1.2.6",
+    "@midwayjs/serverless-fc-starter": "^1.2.7",
     "@midwayjs/serverless-spec-builder": "^1.2.0",
     "aws-sdk": "^2.712.0",
     "chalk": "^4.1.0",
