@@ -50,7 +50,10 @@ export class ServerlessLogger extends Logger implements IServerlessLogger {
   protected async startLogRotateBySize(): Promise<void> {
     const size = 100;
     while (true) {
-      const dealyMs = this.options.fileClearInterval || DEFAULT_INTERVAL;
+      const dealyMs =
+        this.options.fileClearInterval ||
+        Number(process.env.LOG_ROTATE_INTERVAL) ||
+        DEFAULT_INTERVAL;
       debuglog(`will rotate by size after ${dealyMs}ms, size: ${size}`);
       await this.delayOnOptimisticLock(dealyMs);
       /* istanbul ignore next */
@@ -75,14 +78,16 @@ export class ServerlessLogger extends Logger implements IServerlessLogger {
    */
   protected async rotateLogBySize(): Promise<void> {
     try {
-      const logfile = this.options.file;
-      const maxFileSize = this.options.maxFileSize || DEFAULT_MAX_FILE_SIZE;
-      const exists = await fs.exists(logfile);
-      if (exists) {
-        const stat = await fs.stat(logfile);
+      const maxFileSize =
+        this.options.maxFileSize ||
+        Number(process.env.LOG_ROTATE_FILE_SIZE) ||
+        DEFAULT_MAX_FILE_SIZE;
+      const transport: any = this.get('file');
+      if (transport?._stream?.writable) {
+        const stat = await fs.fstat(transport._stream.fd);
         if (stat.size >= maxFileSize) {
           this.info(
-            `File ${logfile} reach the maximum file size, current size: ${stat.size}, max size: ${maxFileSize}`
+            `File ${transport._stream.path} (fd ${transport._stream.fd}) reach the maximum file size, current size: ${stat.size}, max size: ${maxFileSize}`
           );
           await this.rotateBySize();
         }
@@ -100,7 +105,10 @@ export class ServerlessLogger extends Logger implements IServerlessLogger {
    */
   protected async rotateBySize(): Promise<void> {
     const logfile = this.options.file;
-    const maxFiles = this.options.maxFiles || DEFAULT_MAX_FILE;
+    const maxFiles =
+      this.options.maxFiles ||
+      Number(process.env.LOG_ROTATE_MAX_FILE_NUM) ||
+      DEFAULT_MAX_FILE;
     const exists = await fs.exists(logfile);
     if (!exists) {
       return;
