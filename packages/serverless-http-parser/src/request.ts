@@ -171,6 +171,9 @@ export const request = {
     return this[BODY];
   },
 
+  get files() {
+    return this.req.files;
+  },
   get params() {
     return this.req.pathParameters || {};
   },
