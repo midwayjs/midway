@@ -7,7 +7,6 @@ import {
   Application,
   HTTPRequest,
   HTTPResponse,
-  formatMultipart
 } from '@midwayjs/serverless-http-parser';
 import * as util from 'util';
 
@@ -68,7 +67,6 @@ export class FCRuntime extends ServerlessLightRuntime {
       // 应用下自行解决 bodyparser 的问题
       if (!this.isAppMode) {
         req.body = await getRawBody(req); // TODO: body parser
-        await formatMultipart(req);
       }
       newReq = req;
     } else {
@@ -221,6 +219,13 @@ export class FCRuntime extends ServerlessLightRuntime {
           event = JSON.parse(event);
         } catch (_err) {
           /** ignore */
+        }
+      }
+      if (event.isBase64Encoded) {
+        try {
+          event.body = Buffer.from(event.body, 'base64');
+        } catch {
+          //
         }
       }
       if (

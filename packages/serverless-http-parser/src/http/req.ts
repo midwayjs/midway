@@ -3,7 +3,7 @@ import { is as typeis } from 'type-is';
 import * as qs from 'querystring';
 import * as parseurl from 'parseurl';
 import { GatewayEvent } from '../interface';
-import { isPlainObject } from '../util';
+import { isPlainObject, parseMultipart } from '../util';
 
 const EVENT = Symbol.for('ctx#event');
 const EVENT_PARSED = Symbol.for('ctx#event_parsed');
@@ -30,6 +30,7 @@ export class HTTPRequest {
         headers[field.toLowerCase()] = this[EVENT_PARSED]['headers'][field];
       });
       this[EVENT_PARSED]['headers'] = headers;
+      parseMultipart(this[EVENT_PARSED]);
     }
 
     return this[EVENT_PARSED];
@@ -88,6 +89,10 @@ export class HTTPRequest {
 
   get ip() {
     return this[EVENT].clientIP || this[EVENT].requestContext?.sourceIp || '';
+  }
+
+  get files() {
+    return this[EVENT_PARSED].files;
   }
 
   get body() {

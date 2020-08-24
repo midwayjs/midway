@@ -498,4 +498,19 @@ describe('/test/index.test.ts', () => {
       await runtime.close();
     });
   });
+  it.only('should invoke with api gateway upload', async () => {
+    const runtime = createRuntime({
+      functionDir: join(__dirname, './fixtures/apigw'),
+    });
+    await runtime.start();
+    const result = await runtime.invoke(
+      new ApiGatewayTrigger(
+        require(join(__dirname, './fixtures/apigw/upload.event.json'))
+      )
+    );
+    const body = JSON.parse(result.body);
+    assert.equal(body.files[0].filename, '下载.png');
+    assert.equal(body.files[0].mimeType, 'image/png');
+    await runtime.close();
+  });
 });

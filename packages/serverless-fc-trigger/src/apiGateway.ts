@@ -57,7 +57,7 @@ export class ApiGatewayTrigger extends FCBaseTrigger {
           queryParameters: this.triggerOptions.query || {},
           pathParameters: this.triggerOptions.pathParameters || {},
           body: this.triggerOptions.body || '',
-          isBase64Encoded: false,
+          isBase64Encoded: this.triggerOptions.isBase64Encoded || false,
         })
       )
     );

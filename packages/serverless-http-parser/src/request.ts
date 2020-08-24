@@ -3,13 +3,14 @@ import * as accepts from 'accepts';
 import { FaaSOriginContext } from '@midwayjs/faas-typings';
 import * as qs from 'querystring';
 import * as only from 'only';
-import { isPlainObject } from './util';
+import { isPlainObject, parseMultipart } from './util';
 
 const BODY = Symbol.for('ctx#body');
 
 export const request = {
   _accept: null,
   req: null,
+  _parsedMultipart: false,
 
   get host(): string {
     return this.get('host');
@@ -131,7 +132,7 @@ export const request = {
     if (this[BODY]) {
       return this[BODY];
     }
-
+    this.parseMultipart();
     let body = this.req.body;
     if (isPlainObject(body)) {
       // body has been parsed in express environment
@@ -172,10 +173,19 @@ export const request = {
   },
 
   get files() {
+    this.parseMultipart();
     return this.req.files;
   },
   get params() {
     return this.req.pathParameters || {};
+  },
+
+  parseMultipart() {
+    if (this._parsedMultipart) {
+      return;
+    }
+    parseMultipart(this.req);
+    this._parsedMultipart = true;
   },
 
   is(type, ...types) {

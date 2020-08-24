@@ -1,15 +1,14 @@
 import * as request from 'supertest';
 import * as express from 'express';
 import * as getRawBody from 'raw-body';
-import { formatMultipart, Application } from '../src';
+import { Application } from '../src';
 import { resolve } from 'path';
 import { assert } from 'console';
-describe.only('test multipart', () => {
+describe('test multipart', () => {
   it('should get multipart file', done => {
     const app = express();
     app.post('/upload', async (req, res) => {
       req.body = await getRawBody(req);
-      req = await formatMultipart(req);
       const ctx = new Application().createContext(req, {});
       res.status(200).json({
         files: ctx.files,
