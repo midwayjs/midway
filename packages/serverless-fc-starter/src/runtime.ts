@@ -221,13 +221,6 @@ export class FCRuntime extends ServerlessLightRuntime {
           /** ignore */
         }
       }
-      if (event.isBase64Encoded) {
-        try {
-          event.body = Buffer.from(event.body, 'base64');
-        } catch {
-          //
-        }
-      }
       if (
         event &&
         event.headers &&
