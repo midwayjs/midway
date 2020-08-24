@@ -15,8 +15,7 @@ exports.handler = asyncWrapper(async (...args) => {
     deepStrictEqual(event.httpMethod, 'POST');
     ctx.status = 200;
     ctx.set('set-cookie', [
-      'bbbb=123; path=/; httponly',
-      'ccc=321; path=/; httponly',
+      'bbbb=123; path=/; httponly'
     ]);
     ctx.body = {
       headers: ctx.headers,

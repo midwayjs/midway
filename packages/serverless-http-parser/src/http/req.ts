@@ -8,6 +8,7 @@ import { isPlainObject, parseMultipart } from '../util';
 const EVENT = Symbol.for('ctx#event');
 const EVENT_PARSED = Symbol.for('ctx#event_parsed');
 const BODY = Symbol.for('ctx#body');
+const FILES = Symbol.for('ctx#files');
 
 export class HTTPRequest {
   private originContext;
@@ -30,7 +31,6 @@ export class HTTPRequest {
         headers[field.toLowerCase()] = this[EVENT_PARSED]['headers'][field];
       });
       this[EVENT_PARSED]['headers'] = headers;
-      parseMultipart(this[EVENT_PARSED]);
     }
 
     return this[EVENT_PARSED];
@@ -92,7 +92,8 @@ export class HTTPRequest {
   }
 
   get files() {
-    return this[EVENT].files;
+    this.body;
+    return this[FILES];
   }
 
   get body() {
@@ -100,7 +101,7 @@ export class HTTPRequest {
       return this[BODY];
     }
 
-    let body = this[EVENT].body;
+    let body: any = this[EVENT].body;
     if (isPlainObject(body)) {
       // body has been parsed in express environment
       this.bodyParsed = true;
@@ -111,7 +112,17 @@ export class HTTPRequest {
       this[EVENT].isBase64Encoded === 'true' ||
       this[EVENT].isBase64Encoded === true
     ) {
-      body = Buffer.from(body, 'base64').toString();
+      body = Buffer.from(body, 'base64');
+    }
+
+    const { parsedMultipart, files, body: newBody } = parseMultipart({
+      ...this[EVENT],
+      body,
+    });
+
+    if (parsedMultipart) {
+      body = newBody;
+      this[FILES] = files;
     }
 
     if (Buffer.isBuffer(body)) {

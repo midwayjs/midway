@@ -53,6 +53,7 @@ export const parseMultipart = (req: any) => {
 
   req.files = files;
   req.body = field;
+  req.parsedMultipart = true;
   return req;
 };
 
