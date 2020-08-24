@@ -92,7 +92,7 @@ export class HTTPRequest {
   }
 
   get files() {
-    return this[EVENT_PARSED].files;
+    return this[EVENT].files;
   }
 
   get body() {

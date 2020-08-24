@@ -498,7 +498,7 @@ describe('/test/index.test.ts', () => {
       await runtime.close();
     });
   });
-  it.only('should invoke with api gateway upload', async () => {
+  it('should invoke with api gateway upload', async () => {
     const runtime = createRuntime({
       functionDir: join(__dirname, './fixtures/apigw'),
     });
