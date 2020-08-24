@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.8](https://github.com/midwayjs/midway-faas/compare/serverless-v1.2.7...serverless-v1.2.8) (2020-08-24)
+
+
+### Bug Fixes
+
+* add default env for egg module ([#618](https://github.com/midwayjs/midway-faas/issues/618)) ([41272d0](https://github.com/midwayjs/midway-faas/commit/41272d02c9184cb3fc1d8b457ebac8228b16f116))
+
+
+
+
+
 ## [1.2.7](https://github.com/midwayjs/midway-faas/compare/serverless-v1.2.6...serverless-v1.2.7) (2020-08-21)
 
 **Note:** Version bump only for package @midwayjs/serverless-scf-starter
