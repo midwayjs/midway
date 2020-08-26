@@ -13,7 +13,8 @@ export enum EnvPropertyKey {
   EAGLEEYE_FLAG = 'EAGLE_FLAG', // layer
 }
 
-export class EnvPropertyParser<T> extends Map<string, T>
+export class EnvPropertyParser<T>
+  extends Map<string, T>
   implements PropertyParser<T> {
   setProperty(propertyKey: string, value) {
     process.env[propertyKey] = value;

@@ -6,7 +6,8 @@ import { LightRuntime } from './interface';
  * A lightweight runtime implementation for a platform like aliyun fc that does not provide a custom runtime
  * So you can wrapper invoke handler use asyncEvent method
  */
-export abstract class ServerlessLightRuntime extends ServerlessBaseRuntime
+export abstract class ServerlessLightRuntime
+  extends ServerlessBaseRuntime
   implements LightRuntime {
   async invokeHandlerWrapper(context, invokeHandler) {
     // load context extension
