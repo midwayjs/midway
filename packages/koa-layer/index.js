@@ -9,7 +9,10 @@ module.exports = engine => {
   engine.addRuntimeExtension({
     async beforeRuntimeStart(runtime) {
       const baseDir = runtime.getPropertyParser().getEntryDir();
-      const app = require(join(baseDir, 'app'));
+      let app = require(join(baseDir, 'app'));
+      if (typeof app === 'function') {
+        app = await app();
+      }
       // handleRequest = koaApp.callback();
       if (fs.existsSync(socketPath)) {
         fs.unlinkSync(socketPath);
