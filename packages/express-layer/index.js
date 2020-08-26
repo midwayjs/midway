@@ -10,7 +10,7 @@ module.exports = engine => {
     async beforeRuntimeStart(runtime) {
       const baseDir = runtime.getPropertyParser().getEntryDir();
       let app = require(join(baseDir, 'app'));
-      if (typeof app === 'function') {
+      if (typeof app === 'function' && !app['emit']) {
         app = await app();
       }
       if (fs.existsSync(socketPath)) {
