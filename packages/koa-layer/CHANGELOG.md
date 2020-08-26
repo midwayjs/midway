@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.9](https://github.com/midwayjs/midway-faas/compare/serverless-v1.2.8...serverless-v1.2.9) (2020-08-26)
+
+
+### Bug Fixes
+
+* support async  entry for  koa/express ([#621](https://github.com/midwayjs/midway-faas/issues/621)) ([19bb466](https://github.com/midwayjs/midway-faas/commit/19bb466e99f3c7e7cb5b755e9fb4bb89f0a65256))
+
+
+
+
+
 ## [1.2.8](https://github.com/midwayjs/midway-faas/compare/serverless-v1.2.7...serverless-v1.2.8) (2020-08-24)
 
 **Note:** Version bump only for package @midwayjs/koa-layer

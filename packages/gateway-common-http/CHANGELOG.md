@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.9](https://github.com/midwayjs/midway-faas/compare/serverless-v1.2.8...serverless-v1.2.9) (2020-08-26)
+
+**Note:** Version bump only for package @midwayjs/gateway-common-http
+
+
+
+
+
 ## [1.2.8](https://github.com/midwayjs/midway-faas/compare/serverless-v1.2.7...serverless-v1.2.8) (2020-08-24)
 
 **Note:** Version bump only for package @midwayjs/gateway-common-http
