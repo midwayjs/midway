@@ -571,13 +571,6 @@ export class AWSLambdaPlugin extends BasePlugin {
     ]);
     return this.firstValue(values);
   }
-
-  setGlobalDependencies(name: string, version?: string) {
-    if (!this.core.service.globalDependencies) {
-      this.core.service.globalDependencies = {};
-    }
-    this.core.service.globalDependencies[name] = version || '*';
-  }
 }
 
 function sleep(sec: number) {

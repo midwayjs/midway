@@ -89,14 +89,6 @@ export class TencentSCFPlugin extends BasePlugin {
     return func;
   }
 
-  // 设置全局依赖，在package的时候会读取
-  setGlobalDependencies(name: string, version?: string) {
-    if (!this.core.service.globalDependencies) {
-      this.core.service.globalDependencies = {};
-    }
-    this.core.service.globalDependencies[name] = version || '*';
-  }
-
   async getTencentServerless(artifact) {
     Object.assign(
       this.core.service,
