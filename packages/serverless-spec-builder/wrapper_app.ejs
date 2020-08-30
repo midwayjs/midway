@@ -1,4 +1,6 @@
 const { asyncWrapper, start } = require('<%=starter %>');
+const SimpleLock  = require('@midwayjs/simple-lock').default;
+const lock = new SimpleLock();
 const layers = [];
 <% layerDeps.forEach(function(layer){ %>
 try {
@@ -11,10 +13,12 @@ let runtime;
 let inited = false;
 
 const initializeMethod = async (initializeContext = {}) => {
-  runtime = await start({
-    layers: layers,
-    isAppMode: true
-  });
+  return lock.sureOnce(async () => {
+    runtime = await start({
+      layers: layers,
+      isAppMode: true
+    });
+  }, 'APP_START_LOCK_KEY');
 };
 
 exports.<%=initializer%> = asyncWrapper(async (...args) => {

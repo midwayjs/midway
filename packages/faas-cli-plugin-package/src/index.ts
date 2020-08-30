@@ -562,10 +562,7 @@ export class PackagePlugin extends BasePlugin {
     this.core.cli.log('Aggregation Deploy');
 
     // use picomatch to match url
-    if (!this.core.service.globalDependencies) {
-      this.core.service.globalDependencies = {};
-    }
-    this.core.service.globalDependencies['picomatch'] = '*';
+    this.setGlobalDependencies('picomatch');
     const allAggregationPaths = [];
     let allFuncNames = Object.keys(this.core.service.functions);
     for (const aggregationName in this.core.service.aggregation) {
@@ -678,6 +675,13 @@ export class PackagePlugin extends BasePlugin {
     const service: any = this.core.service;
     if (service?.deployType) {
       this.core.cli.log(` - found deployType: ${service?.deployType}`);
+
+      this.setGlobalDependencies('@midwayjs/simple-lock');
+
+      if (!service.provider.initTimeout || service.provider.initTimeout < 10) {
+        service.provider.initTimeout = 10;
+      }
+
       // add default function
       if (!service.functions || Object.keys(service.functions).length === 0) {
         this.core.cli.log(' - create default functions');

@@ -31,4 +31,11 @@ export class BasePlugin implements IPluginInstance {
   public getStore(key: string, scope?: string) {
     return this.core.store.get(`${scope || this.name}:${key}`);
   }
+
+  setGlobalDependencies(name: string, version?: string) {
+    if (!this.core.service.globalDependencies) {
+      this.core.service.globalDependencies = {};
+    }
+    this.core.service.globalDependencies[name] = version || '*';
+  }
 }

@@ -40,6 +40,11 @@ describe('/test/package-a[[.test.ts', () => {
           readFileSync(join(buildPath, 'f.yml')).toString('utf8')
         )
       );
+      assert(
+        /initTimeout: 10/.test(
+          readFileSync(join(buildPath, 'f.yml')).toString('utf8')
+        )
+      );
     });
   });
 });
