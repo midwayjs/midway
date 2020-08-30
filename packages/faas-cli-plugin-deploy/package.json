@@ -1,10 +1,10 @@
 {
   "name": "@midwayjs/fcli-plugin-deploy",
-  "version": "1.2.3",
+  "version": "1.2.10",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/fcli-command-core": "^1.2.3"
+    "@midwayjs/fcli-command-core": "^1.2.10"
   },
   "devDependencies": {
     "midway-bin": "^2.0.0"

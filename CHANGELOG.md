@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.10](https://github.com/midwayjs/midway/compare/serverless-v1.2.9...serverless-v1.2.10) (2020-08-30)
+
+
+### Bug Fixes
+
+* add lock init for egg app ([#622](https://github.com/midwayjs/midway/issues/622)) ([ccb5fe5](https://github.com/midwayjs/midway/commit/ccb5fe52778f19b3e66dc1d727cc38e09f2c3ed6))
+
+
+
+
+
 ## [1.2.9](https://github.com/midwayjs/midway/compare/serverless-v1.2.8...serverless-v1.2.9) (2020-08-26)
 
 
