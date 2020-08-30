@@ -679,6 +679,7 @@ export class PackagePlugin extends BasePlugin {
       this.setGlobalDependencies('@midwayjs/simple-lock');
 
       if (!service.provider.initTimeout || service.provider.initTimeout < 10) {
+        // just for aliyun
         service.provider.initTimeout = 10;
       }
 
