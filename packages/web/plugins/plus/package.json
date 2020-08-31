@@ -1,0 +1,10 @@
+{
+  "name": "midway-plus",
+  "version": "1.0.0",
+  "dependencies": {
+  },
+  "eggPlugin": {
+    "name": "midwayPlus",
+    "dep": []
+  }
+}

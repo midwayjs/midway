@@ -9,14 +9,14 @@ describe('/test/issue.test.ts', () => {
 
   describe('test #264 issue to fix ctx bind', () => {
     let app;
-    before(() => {
+    beforeAll(() => {
       app = utils.app('issue/base-app-lazyload-ctx', {
         typescript: true,
       });
       return app.ready();
     });
 
-    after(() => app.close());
+    afterAll(() => app.close());
 
     it('should get right ctx path', done => {
       done = pedding(4, done);
@@ -51,14 +51,14 @@ describe('/test/issue.test.ts', () => {
 
   describe('test #215 issue to fix egg extension', () => {
     let app;
-    before(() => {
+    beforeAll(() => {
       app = utils.app('issue/base-app-extend-context', {
         typescript: true,
       });
       return app.ready();
     });
 
-    after(() => app.close());
+    afterAll(() => app.close());
 
     it('Correctly reference the egg extension implementation', done => {
       request(app.callback())

@@ -14,14 +14,14 @@ describe('/test/enhance.test.ts', () => {
 
   describe('load ts file', () => {
     let app;
-    before(() => {
+    beforeAll(() => {
       app = utils.app('enhance/base-app', {
         typescript: true,
       });
       return app.ready();
     });
 
-    after(() => app.close());
+    afterAll(() => app.close());
 
     it('should get config merge', () => {
       assert(
@@ -46,14 +46,14 @@ describe('/test/enhance.test.ts', () => {
 
   describe('load ts class controller use decorator', () => {
     let app;
-    before(() => {
+    beforeAll(() => {
       app = utils.app('enhance/base-app-controller', {
         typescript: true,
       });
       return app.ready();
     });
 
-    after(() => app.close());
+    afterAll(() => app.close());
 
     it('should load controller from requestContext', done => {
       request(app.callback())
@@ -79,14 +79,14 @@ describe('/test/enhance.test.ts', () => {
 
   describe('load ts class when controller has default export', () => {
     let app;
-    before(() => {
+    beforeAll(() => {
       app = utils.app('enhance/base-app-controller-default-export', {
         typescript: true,
       });
       return app.ready();
     });
 
-    after(() => app.close());
+    afterAll(() => app.close());
 
     it('should load controller', done => {
       request(app.callback())
@@ -114,14 +114,14 @@ describe('/test/enhance.test.ts', () => {
 
   describe('load ts class and use default scope', () => {
     let app;
-    before(() => {
+    beforeAll(() => {
       app = utils.app('enhance/base-app-default-scope', {
         typescript: true,
       });
       return app.ready();
     });
 
-    after(() => app.close());
+    afterAll(() => app.close());
 
     it('should load controller from requestContext', done => {
       request(app.callback())
@@ -141,14 +141,14 @@ describe('/test/enhance.test.ts', () => {
   describe('load ts file and use config, plugin decorator', () => {
     let app;
 
-    before(() => {
+    beforeAll(() => {
       app = utils.app('enhance/base-app-decorator', {
         typescript: true,
       });
       return app.ready();
     });
 
-    after(() => {
+    afterAll(() => {
       rimraf(path.join(app.config.baseDir, 'app/public'));
       return app.close();
     });
@@ -289,36 +289,41 @@ describe('/test/enhance.test.ts', () => {
     });
 
     it('pipeline ctx should be ok', async () => {
-      await app.httpRequest()
+      await app
+        .httpRequest()
         .get('/hello/stage')
         .expect(200);
     });
 
     it('circular shoule be ok', async () => {
-      await app.httpRequest()
+      await app
+        .httpRequest()
         .get('/circular/test')
         .expect('success')
         .expect(200);
     });
 
     it('configuration package controller should be ok', async () => {
-      await app.httpRequest()
+      await app
+        .httpRequest()
         .get('/book/1')
-        .expect('[{"id":1,"name":"小森林","ISBN":"9787541089329","desc":"《小森林》是知名漫画家五十岚大介的经典作品，也是豆瓣高分电影《小森林》原著，讲述一位平凡女孩在田园生活中寻找自我的故事。"}]')
+        .expect(
+          '[{"id":1,"name":"小森林","ISBN":"9787541089329","desc":"《小森林》是知名漫画家五十岚大介的经典作品，也是豆瓣高分电影《小森林》原著，讲述一位平凡女孩在田园生活中寻找自我的故事。"}]'
+        )
         .expect(200);
     });
   });
 
   describe('load ts file and use third party module', () => {
     let app;
-    before(() => {
+    beforeAll(() => {
       app = utils.app('enhance/base-app-utils', {
         typescript: true,
       });
       return app.ready();
     });
 
-    after(() => app.close());
+    afterAll(() => app.close());
 
     it('should load ts directory and inject module', done => {
       request(app.callback())
@@ -330,14 +335,14 @@ describe('/test/enhance.test.ts', () => {
 
   describe('load ts file and use async init', () => {
     let app;
-    before(() => {
+    beforeAll(() => {
       app = utils.app('enhance/base-app-async', {
         typescript: true,
       });
       return app.ready();
     });
 
-    after(() => app.close());
+    afterAll(() => app.close());
 
     it('should load ts directory and inject module', done => {
       request(app.callback())
@@ -347,9 +352,9 @@ describe('/test/enhance.test.ts', () => {
     });
   });
 
-  describe('ts directory different from other', function() {
+  describe('ts directory different from other', () => {
     let app;
-    before(() => {
+    beforeAll(() => {
       mm(process.env, 'HOME', '');
       app = utils.app('enhance/base-app', {
         typescript: true,
@@ -357,7 +362,7 @@ describe('/test/enhance.test.ts', () => {
       return app.ready();
     });
     afterEach(mm.restore);
-    after(() => app.close());
+    afterAll(() => app.close());
 
     it('should appDir not equal baseDir', () => {
       const appInfo = app.loader.getAppInfo();
@@ -369,14 +374,14 @@ describe('/test/enhance.test.ts', () => {
 
   describe('load ts file support constructor inject', () => {
     let app;
-    before(() => {
+    beforeAll(() => {
       app = utils.app('enhance/base-app-constructor', {
         typescript: true,
       });
       return app.ready();
     });
 
-    after(() => app.close());
+    afterAll(() => app.close());
 
     it('should load ts directory and inject in constructor', done => {
       request(app.callback())
@@ -388,14 +393,14 @@ describe('/test/enhance.test.ts', () => {
 
   describe('auto load function file and inject by function name', () => {
     let app;
-    before(() => {
+    beforeAll(() => {
       app = utils.app('enhance/base-app-function', {
         typescript: true,
       });
       return app.ready();
     });
 
-    after(() => app.close());
+    afterAll(() => app.close());
 
     it('should load ts directory and inject in constructor', done => {
       request(app.callback())
@@ -407,14 +412,14 @@ describe('/test/enhance.test.ts', () => {
 
   describe('should support multi router in one function', () => {
     let app;
-    before(() => {
+    beforeAll(() => {
       app = utils.app('enhance/base-app-router', {
         typescript: true,
       });
       return app.ready();
     });
 
-    after(() => app.close());
+    afterAll(() => app.close());
 
     it('should invoke different router and get same result', done => {
       done = pedding(3, done);
@@ -437,14 +442,14 @@ describe('/test/enhance.test.ts', () => {
 
   describe('should support change route priority', () => {
     let app;
-    before(() => {
+    beforeAll(() => {
       app = utils.app('enhance/base-app-router-priority', {
         typescript: true,
       });
       return app.ready();
     });
 
-    after(() => app.close());
+    afterAll(() => app.close());
 
     it('should invoke different router and get same result', done => {
       done = pedding(3, done);
@@ -467,14 +472,14 @@ describe('/test/enhance.test.ts', () => {
 
   describe('plugin can load controller directory directly', () => {
     let app;
-    before(() => {
+    beforeAll(() => {
       app = utils.app('enhance/loader-duplicate', {
         typescript: true,
       });
       return app.ready();
     });
 
-    after(() => app.close());
+    afterAll(() => app.close());
 
     it('should fix egg-socket.io load controller directory', done => {
       request(app.callback())
@@ -486,14 +491,14 @@ describe('/test/enhance.test.ts', () => {
 
   describe('load tsx file', () => {
     let app;
-    before(() => {
+    beforeAll(() => {
       app = utils.app('enhance/base-app-controller-tsx', {
         typescript: true,
       });
       return app.ready();
     });
 
-    after(() => app.close());
+    afterAll(() => app.close());
 
     it('should load tsx controller', done => {
       request(app.callback())
@@ -505,14 +510,14 @@ describe('/test/enhance.test.ts', () => {
 
   describe('support middleware parameter', () => {
     let app;
-    before(() => {
+    beforeAll(() => {
       app = utils.app('enhance/base-app-middleware', {
         typescript: true,
       });
       return app.ready();
     });
 
-    after(() => app.close());
+    afterAll(() => app.close());
 
     it('should load middleware in controller and router', done => {
       request(app.callback())
@@ -531,7 +536,7 @@ describe('/test/enhance.test.ts', () => {
 
   describe('shoule egg hackernew be ok', () => {
     let app;
-    before(() => {
+    beforeAll(() => {
       app = utils.app('enhance/base-app-hackernews', {
         typescript: false,
       });
@@ -539,13 +544,27 @@ describe('/test/enhance.test.ts', () => {
       mm(urllib.HttpClient2.prototype, 'request', (url, args, callback) => {
         if (url) {
           if (url.includes('https://hacker-news.firebaseio.com/v0/item')) {
-            return { data: JSON.parse('{"by":"pg","descendants":15,"id":1,"kids":[15,234509,487171,454426,454424,454410,82729],"score":57,"time":1160418111,"title":"Y Combinator","type":"story","url":"http://ycombinator.com"}')};
+            return {
+              data: JSON.parse(
+                '{"by":"pg","descendants":15,"id":1,"kids":[15,234509,487171,454426,454424,454410,82729],"score":57,"time":1160418111,"title":"Y Combinator","type":"story","url":"http://ycombinator.com"}'
+              ),
+            };
           }
           if (url.includes('https://hacker-news.firebaseio.com/v0/user')) {
-            return { data: JSON.parse('{"created":1344225010,"id":"stevage","karma":164,"submitted":[23038727,23013820,23013797,22995592,22820177,22819227,22817427,22659470,22624885,22624467,22621483,22333639,22305974,22143659,22069408,21987055,21987045,21807698,21807677,21799835,21662201,20438536,20290644,20261053,20102070,20018617,19134123,19134104,19134065,19134056,18803141,18803098,17922891,17902520,17850980,17780847,17534650,17435464,17386143,17335732,17161325,15890590,15414238,14785201,14493573,14393971,14251559,14176015,14029087,13793286,13621128,13621127,13274921,13138573,12497739,4343630]}')};
+            return {
+              data: JSON.parse(
+                '{"created":1344225010,"id":"stevage","karma":164,"submitted":[23038727,23013820,23013797,22995592,22820177,22819227,22817427,22659470,22624885,22624467,22621483,22333639,22305974,22143659,22069408,21987055,21987045,21807698,21807677,21799835,21662201,20438536,20290644,20261053,20102070,20018617,19134123,19134104,19134065,19134056,18803141,18803098,17922891,17902520,17850980,17780847,17534650,17435464,17386143,17335732,17161325,15890590,15414238,14785201,14493573,14393971,14251559,14176015,14029087,13793286,13621128,13621127,13274921,13138573,12497739,4343630]}'
+              ),
+            };
           }
-          if (url.includes('https://hacker-news.firebaseio.com/v0/topstories')) {
-            return { data: JSON.parse('{"12":23064974,"8":23072690,"19":23076081,"23":23071190,"4":23074435,"15":23070821,"11":23075484,"9":23076341,"22":23071134,"26":23064859,"13":23076241,"24":23072696,"16":23075556,"5":23073126,"10":23072956,"21":23069372,"6":23069114,"1":23073000,"17":23075097,"25":23074312,"14":23075893,"20":23065902,"27":23072443,"2":23072333,"18":23073109,"30":23073455,"7":23070567,"29":23070151,"3":23076007,"28":23071867}')};
+          if (
+            url.includes('https://hacker-news.firebaseio.com/v0/topstories')
+          ) {
+            return {
+              data: JSON.parse(
+                '{"12":23064974,"8":23072690,"19":23076081,"23":23071190,"4":23074435,"15":23070821,"11":23075484,"9":23076341,"22":23071134,"26":23064859,"13":23076241,"24":23072696,"16":23075556,"5":23073126,"10":23072956,"21":23069372,"6":23069114,"1":23073000,"17":23075097,"25":23074312,"14":23075893,"20":23065902,"27":23072443,"2":23072333,"18":23073109,"30":23073455,"7":23070567,"29":23070151,"3":23076007,"28":23071867}'
+              ),
+            };
           }
         }
         return originRequest(url, args, callback);
@@ -553,32 +572,41 @@ describe('/test/enhance.test.ts', () => {
       return app.ready();
     });
 
-    after(() => {
+    afterAll(() => {
       mm.restore();
       return app.close();
     });
 
     it('news should be ok', async () => {
-      await app.httpRequest()
+      await app
+        .httpRequest()
         .get('/news')
-        .expect((res) => res.text.includes('<a href="/news/user/pseudolus">pseudolus</a>'))
+        .expect(res =>
+          res.text.includes('<a href="/news/user/pseudolus">pseudolus</a>')
+        )
         .expect('Content-Type', /html/)
         .expect(200);
     });
 
     it('new item should be ok', async () => {
-      await app.httpRequest()
+      await app
+        .httpRequest()
         .get('/news/item/1')
-        .expect((res) => res.text.includes('<a class="title" target="_blank" href="http://ycombinator.com">Y Combinator</a>'))
+        .expect(res =>
+          res.text.includes(
+            '<a class="title" target="_blank" href="http://ycombinator.com">Y Combinator</a>'
+          )
+        )
         .expect('Content-Type', /html/)
         .expect(200);
     });
 
     it('user should be ok', async () => {
       // stevage
-      await app.httpRequest()
+      await app
+        .httpRequest()
         .get('/news/user/stevage')
-        .expect((res) => res.text.includes('Profile: stevage | egg - HackerNews'))
+        .expect(res => res.text.includes('Profile: stevage | egg - HackerNews'))
         .expect('Content-Type', /html/)
         .expect(200);
     });

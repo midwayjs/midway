@@ -1,0 +1,23 @@
+service: ginkgo-test
+
+provider:
+  name: ginkgo
+  runtime: nodejs10
+
+functions:
+  index:
+    handler: index.handler
+    events:
+      - http: true
+  inject:
+    handler: inject.handler
+    events:
+      - http: true
+  config:
+    handler: config.handler
+    events:
+      - http: true
+  logger:
+    handler: logger.handler
+    events:
+      - http: true

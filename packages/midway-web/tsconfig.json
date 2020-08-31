@@ -1,21 +1,11 @@
 {
+  "extends": "../../tsconfig.json",
+  "compileOnSave": true,
   "compilerOptions": {
-    "target": "ES2018",
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "experimentalDecorators": true,
-    "noImplicitThis": true,
-    "noUnusedLocals": true,
-    "stripInternal": true,
-    "pretty": true,
-    "declaration": true,
-    "outDir": "dist",
-    "sourceMap": true,
-    "jsx": "react"
+    "rootDir": "src",
+    "outDir": "dist"
   },
-  "exclude": [
-    "dist",
-    "node_modules",
-    "test"
+  "include": [
+    "./src/**/*.ts"
   ]
 }
