@@ -45,17 +45,28 @@ export class MidwayWebFramework extends BaseFramework<
   IMidwayWebConfigurationOptions
 > {
   private app: IMidwayWebApplication;
-  private controllerIds: string[] = [];
+  private _controllerIds: string[] = [];
   public prioritySortRouters: Array<{
     priority: number;
     router: Router;
   }> = [];
+
+  get controllerIds() {
+    return this._controllerIds;
+  }
 
   public configure(
     options: IMidwayWebConfigurationOptions
   ): MidwayWebFramework {
     this.configurationOptions = options;
     return this;
+  }
+
+  protected async beforeInitialize(
+    options: Partial<IMidwayBootstrapOptions>
+  ): Promise<void> {
+    options.ignore = options.ignore || [];
+    options.ignore.push('**/app/extend/**');
   }
 
   protected async afterInitialize(

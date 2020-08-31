@@ -45,6 +45,6 @@ export interface IFaaSConfigurationOptions {
   };
 }
 
-export interface IMidwayFaaSFramework<T> extends IMidwayFramework<T> {
-  configure(configureOptions: Partial<IFaaSConfigurationOptions>): T;
+export interface IMidwayFaaSFramework extends IMidwayFramework {
+  configure(configureOptions: Partial<IFaaSConfigurationOptions>);
 }

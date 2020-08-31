@@ -11,9 +11,8 @@ import {
   saveClassMetadata,
 } from '@midwayjs/decorator';
 import * as is from 'is-type-of';
-import { join } from 'path';
 import { ContainerConfiguration } from './configuration';
-import { FUNCTION_INJECT_KEY, PRIVATE_META_DATA_KEY } from '../common/constants';
+import { FUNCTION_INJECT_KEY, PRIVATE_META_DATA_KEY } from '..';
 import {
   IConfigService,
   IEnvironmentService,
@@ -123,18 +122,12 @@ export class MidwayContainer extends Container implements IMidwayContainer {
     const loadDirs = [].concat(opts.loadDir || []);
 
     for (const dir of loadDirs) {
-      const fileResults = run(
-        DEFAULT_PATTERN.concat(opts.pattern || []),
-        {
-          followSymbolicLinks: false,
-          cwd: dir,
-          ignore: DEFAULT_IGNORE_PATTERN.concat(opts.ignore || []),
-          suppressErrors: true,
-        }
-      );
+      const fileResults = run(DEFAULT_PATTERN.concat(opts.pattern || []), {
+        cwd: dir,
+        ignore: DEFAULT_IGNORE_PATTERN.concat(opts.ignore || []),
+      });
 
-      for (const name of fileResults) {
-        const file = join(dir, name);
+      for (const file of fileResults) {
         debug(`binding file => ${file}, namespace => ${opts.namespace}`);
         const exports = require(file);
         // add module to set

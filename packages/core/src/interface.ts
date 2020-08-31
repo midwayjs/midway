@@ -277,6 +277,8 @@ export interface IMidwayBootstrapOptions {
   appDir: string;
   preloadModules: string[];
   disableAutoLoad: boolean;
+  pattern: string[];
+  ignore: string[];
 }
 
 export interface IConfigurationOptions {}

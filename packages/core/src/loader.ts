@@ -57,8 +57,8 @@ export class ContainerLoader {
       baseDir?: string;
       loadDir?: string[];
       disableAutoLoad?: boolean;
-      pattern?: string;
-      ignore?: string;
+      pattern?: string | string[];
+      ignore?: string | string[];
     } = {}
   ) {
     if (!this.isTsMode && loadOpts.disableAutoLoad === undefined) {

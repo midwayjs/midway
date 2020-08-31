@@ -5,12 +5,15 @@ import { creatApp } from './utils';
 const pedding = require('pedding');
 
 describe('/test/issue.test.ts', () => {
-  afterEach(clearAllModule);
+  afterEach(() => {
+    clearAllModule();
+  });
 
   describe('test #264 issue to fix ctx bind', () => {
     let app;
     beforeAll(async () => {
       app = await creatApp('issue/base-app-lazyload-ctx');
+      app.id = 1;
     });
 
     it('should get right ctx path', done => {

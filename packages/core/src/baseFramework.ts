@@ -25,6 +25,8 @@ export abstract class BaseFramework<T extends IConfigurationOptions>
     this.baseDir = options.baseDir;
     this.appDir = options.appDir;
 
+    await this.beforeInitialize(options);
+
     this.containerLoader = new ContainerLoader({
       baseDir: this.baseDir,
       isTsMode: true,
@@ -62,6 +64,10 @@ export abstract class BaseFramework<T extends IConfigurationOptions>
   public abstract run(): Promise<void>;
 
   public abstract stop(): Promise<void>;
+
+  protected async beforeInitialize(
+    options: Partial<IMidwayBootstrapOptions>
+  ): Promise<void> {}
 
   protected abstract async afterInitialize(
     options: Partial<IMidwayBootstrapOptions>

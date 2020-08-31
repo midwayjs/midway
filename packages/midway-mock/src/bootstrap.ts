@@ -12,7 +12,7 @@ export const app: MidwayMockApplication = mock.app(isJest ? {typescript: true} :
 if (isJest) {
   (global as any).beforeAll(app.ready);
 } else {
-  before(app.ready);
+  beforeAll(app.ready);
 }
 
 afterEach(mock.restore);

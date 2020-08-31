@@ -4,15 +4,14 @@ import { AgentWorkerLoader, AppWorkerLoader } from './loader/loader';
 import * as fs from 'fs';
 import * as path from 'path';
 import { EggRouter as Router } from '@eggjs/router';
-import { IMidwayCoreApplication, MidwayProcessTypeEnum } from '@midwayjs/core';
+import { MidwayProcessTypeEnum } from '@midwayjs/core';
 
 const MIDWAY_PATH = path.dirname(__dirname);
 
 class MidwayApplication
   extends (Application as {
     new (...x);
-  })
-  implements IMidwayCoreApplication {
+  }) {
   Router = Router;
 
   get [Symbol.for('egg#loader')]() {
@@ -145,8 +144,7 @@ class MidwayApplication
 class MidwayAgent
   extends (Agent as {
     new (...x);
-  })
-  implements IMidwayCoreApplication {
+  }) {
   get [Symbol.for('egg#loader')]() {
     return AgentWorkerLoader;
   }
