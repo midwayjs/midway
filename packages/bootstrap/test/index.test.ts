@@ -3,16 +3,18 @@ import {
   IMidwayFramework,
   IMidwayApplication,
   IMidwayBootstrapOptions,
-  IMidwayContainer,
+  IMidwayContainer, IConfigurationOptions,
 } from '@midwayjs/core';
 
 class TestFrameworkUnit implements IMidwayFramework {
   options;
   app;
-  configure(options: any): TestFrameworkUnit {
+
+  configure(options: IConfigurationOptions): TestFrameworkUnit {
     this.options = options;
     return this;
   }
+
   async run(): Promise<any> {
     return 'bbb';
   }
@@ -21,13 +23,23 @@ class TestFrameworkUnit implements IMidwayFramework {
   }
 
   async initialize(options: IMidwayBootstrapOptions): Promise<void> {
-    this.app = { bbb: 22 };
+    this.app = {bbb: 22};
   }
+
   getApplicationContext(): IMidwayContainer {
-    return { a: 1 } as any;
+    return {a: 1} as any;
   }
+
   getApplication(): IMidwayApplication {
     return this.app;
+  }
+
+  getConfiguration(key?: string) {
+    return {}
+  }
+
+  getCurrentEnvironment(): string {
+    return 'prod'
   }
 }
 
@@ -44,9 +56,9 @@ describe('/test/index.test.ts', () => {
     });
     await bootstrap.load(framework).run();
     expect(framework);
-    expect(framework.getApplicationContext()).toStrictEqual({ a: 1 });
-    expect(framework.app).toStrictEqual({ bbb: 22 });
-    expect(framework.getApplication()).toStrictEqual({ bbb: 22 });
+    expect(framework.getApplicationContext()).toStrictEqual({a: 1});
+    expect(framework.app).toStrictEqual({bbb: 22});
+    expect(framework.getApplication()).toStrictEqual({bbb: 22});
 
 
     // Bootstrap.configure({})
