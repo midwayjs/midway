@@ -1,4 +1,5 @@
-import { config, plugin, provide, IPipelineHandler } from '../../../../../../src';
+import { config, plugin, provide } from '../../../../../../src';
+import { IPipelineHandler } from '@midwayjs/core';
 import { Pipeline } from '@midwayjs/decorator';
 
 @provide()

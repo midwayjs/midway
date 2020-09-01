@@ -27,7 +27,7 @@
     "@midwayjs/bootstrap": "^1.0.0",
     "midway-bin": "^2.0.15",
     "midway-mock": "^2.1.4",
-    "mz-modules": "^2.1.0",
+    "fs-extra": "^8.0.1",
     "pedding": "^1.1.0"
   },
   "dependencies": {

@@ -1,1 +1,1 @@
-export { Bootstrap } from './bootstrap';
+export { Bootstrap, BootstrapStarter } from './bootstrap';

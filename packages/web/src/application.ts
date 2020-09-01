@@ -1,4 +1,7 @@
-const extend = require('extend2');
+import type { MidwayWebFramework } from "./framework";
+import { RouterParamValue } from "@midwayjs/decorator";
+
+// const extend = require('extend2');
 
 const {
   AppWorkerLoader,
@@ -12,21 +15,12 @@ const EGG_PATH = Symbol.for('egg#eggPath');
 
 export const createAppWorkerLoader = AppWorkerLoader => {
   class EggAppWorkerLoader extends (AppWorkerLoader as any) {
-    loadConfig() {
-      super.loadConfig();
-      this.afterLoadConfig();
-    }
-
-    afterLoadConfig() {
-      // mix config
-      extend(true, this.config, this.app.appOptions['allConfig']);
-    }
 
     getEggPaths() {
       if (!this.appDir) {
         this.baseDir = this.app.appOptions['sourceDir'];
         this.options.baseDir = this.baseDir;
-        this.appDir = this.app.appOptions['baseDir'];
+        this.appDir = this.app.appDir = this.app.appOptions['baseDir'];
       }
       if (process.env.MIDWAY_EGG_PLUGIN_PATH) {
         return super.getEggPaths().concat(process.env.MIDWAY_EGG_PLUGIN_PATH);
@@ -44,15 +38,6 @@ export const createAppWorkerLoader = AppWorkerLoader => {
 
 export const createAgentWorkerLoader = AppWorkerLoader => {
   class EggAppWorkerLoader extends (AppWorkerLoader as any) {
-    loadConfig() {
-      super.loadConfig();
-      this.afterLoadConfig();
-    }
-
-    afterLoadConfig() {
-      // mix config
-      extend(true, this.config, this.app.appOptions['allConfig']);
-    }
 
     getEggPaths() {
       if (!this.appDir) {
@@ -75,10 +60,6 @@ export const createEggApplication = Application => {
       super(options);
     }
 
-    get appOptions() {
-      return this.options;
-    }
-
     get [EGG_LOADER]() {
       return null;
     }
@@ -86,6 +67,33 @@ export const createEggApplication = Application => {
     get [EGG_PATH]() {
       return __dirname;
     }
+
+    get appOptions() {
+      return this.options;
+    }
+
+    get midwayWebFramework(): MidwayWebFramework {
+      return this.appOptions['webFramework'];
+    }
+
+    get applicationContext() {
+      return this.midwayWebFramework.getApplicationContext();
+    }
+
+    getApplicationContext() {
+      return this.applicationContext;
+    }
+
+    generateController(controllerMapping: string,
+                       routeArgsInfo?: RouterParamValue[],
+                       routerResponseData?: any []) {
+      return this.midwayWebFramework.generateController(controllerMapping, routeArgsInfo, routerResponseData);
+    }
+
+    get baseDir() {
+      return this.loader.baseDir;
+    }
+
   }
 
   return EggApplication as any;
@@ -97,16 +105,32 @@ export const createEggAgent = Agent => {
       super(options);
     }
 
-    get appOptions() {
-      return this.options;
-    }
-
     get [EGG_LOADER]() {
       return null;
     }
 
     get [EGG_PATH]() {
       return __dirname;
+    }
+
+    get appOptions() {
+      return this.options;
+    }
+
+    get midwayWebFramework(): MidwayWebFramework {
+      return this.appOptions['webFramework'];
+    }
+
+    get applicationContext() {
+      return this.midwayWebFramework.getApplicationContext();
+    }
+
+    getApplicationContext() {
+      return this.applicationContext;
+    }
+
+    get baseDir() {
+      return this.loader.baseDir;
     }
   }
 

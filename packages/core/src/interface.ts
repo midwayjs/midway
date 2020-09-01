@@ -279,6 +279,7 @@ export interface IMidwayBootstrapOptions {
   disableAutoLoad: boolean;
   pattern: string[];
   ignore: string[];
+  isTsMode: boolean;
 }
 
 export interface IConfigurationOptions {}

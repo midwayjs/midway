@@ -6,7 +6,8 @@ export interface ControllerOption {
   prefix: string;
   routerOptions: {
     sensitive?: boolean;
-    middleware?: KoaMiddlewareParamArray
+    middleware?: KoaMiddlewareParamArray;
+    alias?: string[];
   };
 }
 

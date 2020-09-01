@@ -10,17 +10,19 @@ function isTypeScriptEnvironment() {
   return TS_MODE_PROCESS_FLAG === 'true' || !!require.extensions['.ts'];
 }
 
-class BootstrapStarter {
+export class BootstrapStarter {
   private appDir;
   private bootstrapItems: IMidwayFramework[] = [];
   private globalOptions: Partial<IMidwayBootstrapOptions>;
 
   public configure(options: Partial<IMidwayBootstrapOptions>) {
     this.globalOptions = options;
+    return this;
   }
 
-  public pushFrameworkUnit(unit: IMidwayFramework) {
+  public load(unit: IMidwayFramework) {
     this.bootstrapItems.push(unit);
+    return this;
   }
 
   public async init() {
@@ -31,6 +33,18 @@ class BootstrapStarter {
         baseDir: this.getBaseDir(),
         appDir: this.appDir,
       })
+    );
+  }
+
+  public async run() {
+    await Promise.all(
+      this.getActions('run', {})
+    );
+  }
+
+  public async stop() {
+    await Promise.all(
+      this.getActions('stop', {})
     );
   }
 
@@ -66,7 +80,7 @@ export class Bootstrap {
    * @param unit
    */
   static load(unit: IMidwayFramework) {
-    this.getStarter().pushFrameworkUnit(unit);
+    this.getStarter().load(unit);
     return this;
   }
 
@@ -79,13 +93,13 @@ export class Bootstrap {
 
   static async run() {
     await this.getStarter().init();
-    return Promise.all(this.getStarter().getActions('run')).catch(
+    return this.getStarter().run().catch(
       console.error
     );
   }
 
   static async stop() {
-    return Promise.all(this.getStarter().getActions('stop')).catch(
+    return this.getStarter().stop().catch(
       console.error
     );
   }

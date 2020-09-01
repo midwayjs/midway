@@ -9,6 +9,7 @@ import { ContainerLoader } from './';
 
 export abstract class BaseFramework<T extends IConfigurationOptions>
   implements IMidwayFramework {
+  protected isTsMode = true;
   protected baseDir: string;
   protected appDir: string;
   protected configurationOptions: T;
@@ -25,22 +26,35 @@ export abstract class BaseFramework<T extends IConfigurationOptions>
     this.baseDir = options.baseDir;
     this.appDir = options.appDir;
 
-    await this.beforeInitialize(options);
-
     this.containerLoader = new ContainerLoader({
       baseDir: this.baseDir,
-      isTsMode: true,
+      isTsMode: this.isTsMode,
       preloadModules: options.preloadModules || [],
     });
+
+    /**
+     * initialize containerLoader and initialize ioc container instance
+     */
+    await this.beforeInitialize(options);
     this.containerLoader.initialize();
 
+    /**
+     * load directory and bind files to ioc container
+     */
+    await this.beforeDirectoryLoad(options);
     const applicationContext = this.containerLoader.getApplicationContext();
     applicationContext.registerObject('baseDir', this.baseDir);
     applicationContext.registerObject('appDir', this.appDir);
     // 如果没有关闭autoLoad 则进行load
     this.containerLoader.loadDirectory(options);
+    await this.afterDirectoryLoad(options);
+
+    /**
+     * start to load configuration and lifeCycle
+     */
     await this.containerLoader.refresh();
     await this.afterInitialize(options);
+
   }
 
   public getApplicationContext(): IMidwayContainer {
@@ -63,11 +77,24 @@ export abstract class BaseFramework<T extends IConfigurationOptions>
 
   public abstract run(): Promise<void>;
 
-  public abstract stop(): Promise<void>;
+  public async stop(): Promise<void> {
+    await this.beforeStop();
+    await this.containerLoader.stop();
+  }
+
+  protected async beforeStop(): Promise<void> {}
 
   protected async beforeInitialize(
     options: Partial<IMidwayBootstrapOptions>
-  ): Promise<void> {}
+  ): Promise<void> {};
+
+  protected async beforeDirectoryLoad(
+    options: Partial<IMidwayBootstrapOptions>
+  ): Promise<void> {};
+
+  protected async afterDirectoryLoad(
+    options: Partial<IMidwayBootstrapOptions>
+  ): Promise<void> {};
 
   protected abstract async afterInitialize(
     options: Partial<IMidwayBootstrapOptions>

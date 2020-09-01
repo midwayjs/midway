@@ -70,7 +70,7 @@ export class ContainerLoader {
     if (!loadOpts.disableAutoLoad) {
       // use baseDir in parameter first
       const baseDir = loadOpts.baseDir || this.baseDir;
-      const defaultLoadDir = this.isTsMode ? [baseDir] : ['app', 'lib'];
+      const defaultLoadDir = this.isTsMode ? [baseDir] : [];
       this.applicationContext.load({
         loadDir: (loadOpts.loadDir || defaultLoadDir).map(dir => {
           return buildLoadDir(baseDir, dir);
@@ -90,5 +90,10 @@ export class ContainerLoader {
   async refresh() {
     await this.pluginContext.ready();
     await this.applicationContext.ready();
+  }
+
+  async stop() {
+    await this.pluginContext.stop();
+    await this.applicationContext.stop();
   }
 }

@@ -1,20 +1,21 @@
 import * as request from 'supertest';
 import { clearAllModule } from '@midwayjs/decorator';
-import { creatApp } from './utils';
+import { creatApp, closeApp } from './utils';
 
 const pedding = require('pedding');
 
 describe('/test/issue.test.ts', () => {
-  afterEach(() => {
-    clearAllModule();
-  });
+  afterEach(clearAllModule);
 
   describe('test #264 issue to fix ctx bind', () => {
     let app;
     beforeAll(async () => {
       app = await creatApp('issue/base-app-lazyload-ctx');
-      app.id = 1;
     });
+
+    afterAll(async () => {
+      await closeApp(app);
+    })
 
     it('should get right ctx path', done => {
       done = pedding(4, done);
@@ -52,6 +53,10 @@ describe('/test/issue.test.ts', () => {
     beforeAll(async () => {
       app = await creatApp('issue/base-app-extend-context');
     });
+
+    afterAll(async () => {
+      await closeApp(app);
+    })
 
     it('Correctly reference the egg extension implementation', done => {
       request(app.callback())

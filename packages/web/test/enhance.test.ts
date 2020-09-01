@@ -1,27 +1,22 @@
 const assert = require('assert');
 const request = require('supertest');
-import { clearAllModule } from '@midwayjs/decorator';
 import path = require('path');
 import urllib = require('urllib');
-import { creatApp } from './utils';
+import { creatApp, closeApp } from './utils';
 
 const mm = require('mm');
 const pedding = require('pedding');
-const rimraf = require('mz-modules/rimraf');
 
-xdescribe('/test/enhance.test.ts', () => {
-  afterEach(clearAllModule);
-
+describe('/test/enhance.test.ts', () => {
   describe('load ts file', () => {
     let app;
-    beforeAll(() => {
-      app = creatApp('enhance/base-app', {
-        typescript: true,
-      });
-      return app.ready();
+    beforeAll(async () => {
+      app = await creatApp('enhance/base-app');
     });
 
-    afterAll(() => app.close());
+    afterAll(async () => {
+      await closeApp(app);
+    })
 
     it('should get config merge', () => {
       assert(
@@ -46,14 +41,13 @@ xdescribe('/test/enhance.test.ts', () => {
 
   describe('load ts class controller use decorator', () => {
     let app;
-    beforeAll(() => {
-      app = creatApp('enhance/base-app-controller', {
-        typescript: true,
-      });
-      return app.ready();
+    beforeAll(async () => {
+      app = await creatApp('enhance/base-app-controller');
     });
 
-    afterAll(() => app.close());
+    afterAll(async () => {
+      await closeApp(app);
+    })
 
     it('should load controller from requestContext', done => {
       request(app.callback())
@@ -79,14 +73,13 @@ xdescribe('/test/enhance.test.ts', () => {
 
   describe('load ts class when controller has default export', () => {
     let app;
-    beforeAll(() => {
-      app = creatApp('enhance/base-app-controller-default-export', {
-        typescript: true,
-      });
-      return app.ready();
+    beforeAll(async () => {
+      app = await creatApp('enhance/base-app-controller-default-export');
     });
 
-    afterAll(() => app.close());
+    afterAll(async () => {
+      await closeApp(app);
+    })
 
     it('should load controller', done => {
       request(app.callback())
@@ -97,31 +90,28 @@ xdescribe('/test/enhance.test.ts', () => {
   });
 
   describe('load ts class controller use decorator conflicts', () => {
-    let app;
     it('should load controller conflicts', async () => {
+      let app;
       let suc = false;
       try {
-        app = creatApp('enhance/base-app-controller-conflicts', {
-          typescript: true,
-        });
-        await app.ready();
+        app = await creatApp('enhance/base-app-controller-conflicts');
       } catch (e) {
         suc = true;
       }
       assert.ok(suc);
+      await closeApp(app);
     });
   });
 
   describe('load ts class and use default scope', () => {
     let app;
-    beforeAll(() => {
-      app = creatApp('enhance/base-app-default-scope', {
-        typescript: true,
-      });
-      return app.ready();
+    beforeAll(async () => {
+      app = await creatApp('enhance/base-app-default-scope');
     });
 
-    afterAll(() => app.close());
+    afterAll(async () => {
+      await closeApp(app);
+    })
 
     it('should load controller from requestContext', done => {
       request(app.callback())
@@ -141,17 +131,13 @@ xdescribe('/test/enhance.test.ts', () => {
   describe('load ts file and use config, plugin decorator', () => {
     let app;
 
-    beforeAll(() => {
-      app = creatApp('enhance/base-app-decorator', {
-        typescript: true,
-      });
-      return app.ready();
+    beforeAll(async () => {
+      app = await creatApp('enhance/base-app-decorator');
     });
 
-    afterAll(() => {
-      rimraf(path.join(app.config.baseDir, 'app/public'));
-      return app.close();
-    });
+    afterAll(async () => {
+      await closeApp(app);
+    })
 
     it('should load ts directory', done => {
       request(app.callback())
@@ -173,12 +159,12 @@ xdescribe('/test/enhance.test.ts', () => {
       request(app.callback())
         .get('/config/test')
         .expect(200)
-        .expect({ a: 1, b: true, c: 2 }, done);
+        .expect({a: 1, b: true, c: 2}, done);
 
       request(app.callback())
         .get('/config/test2')
         .expect(200)
-        .expect({ bucLogin: false, plugin2: true }, done);
+        .expect({bucLogin: false, plugin2: true}, done);
     });
 
     it('should param controller be ok ', async () => {
@@ -189,12 +175,12 @@ xdescribe('/test/enhance.test.ts', () => {
       await request(app.callback())
         .get('/param/12/test?name=1')
         .expect(200)
-        .expect({ id: '12', name: '1' });
+        .expect({id: '12', name: '1'});
 
       await request(app.callback())
         .get('/param/query?name=1')
         .expect(200)
-        .expect({ name: '1' });
+        .expect({name: '1'});
 
       await request(app.callback())
         .get('/param/query_id?id=1')
@@ -204,7 +190,7 @@ xdescribe('/test/enhance.test.ts', () => {
       await request(app.callback())
         .get('/param/param/12/test/456')
         .expect(200)
-        .expect({ id: '12', userId: '456' });
+        .expect({id: '12', userId: '456'});
 
       await request(app.callback())
         .get('/param/param/12')
@@ -214,14 +200,14 @@ xdescribe('/test/enhance.test.ts', () => {
       await request(app.callback())
         .post('/param/body')
         .type('form')
-        .send({ id: '1' })
+        .send({id: '1'})
         .expect(200)
-        .expect({ id: '1' });
+        .expect({id: '1'});
 
       await request(app.callback())
         .get('/param/body_id')
         .type('form')
-        .send({ id: '1' })
+        .send({id: '1'})
         .expect(200)
         .expect('1');
 
@@ -252,21 +238,18 @@ xdescribe('/test/enhance.test.ts', () => {
         '2.jpg'
       );
 
-      await app
-        .httpRequest()
+      await request(app.callback())
         .post('/param/file')
         .field('name', 'form')
         .attach('file', imagePath)
         .expect('ok');
 
-      await app
-        .httpRequest()
+      await request(app.callback())
         .get('/public/form.jpg')
         .expect('content-length', '16424')
         .expect(200);
 
-      await app
-        .httpRequest()
+      await request(app.callback())
         .post('/param/files')
         .field('name1', '1')
         .attach('file1', imagePath)
@@ -275,37 +258,32 @@ xdescribe('/test/enhance.test.ts', () => {
         .field('name3', '3')
         .expect('ok');
 
-      await app
-        .httpRequest()
+      await request(app.callback())
         .get('/public/1.jpg')
         .expect('content-length', '16424')
         .expect(200);
 
-      await app
-        .httpRequest()
+      await request(app.callback())
         .get('/public/2.jpg')
         .expect('content-length', '16424')
         .expect(200);
     });
 
     it('pipeline ctx should be ok', async () => {
-      await app
-        .httpRequest()
+      await request(app.callback())
         .get('/hello/stage')
         .expect(200);
     });
 
     it('circular shoule be ok', async () => {
-      await app
-        .httpRequest()
+      await request(app.callback())
         .get('/circular/test')
         .expect('success')
         .expect(200);
     });
 
     it('configuration package controller should be ok', async () => {
-      await app
-        .httpRequest()
+      await request(app.callback())
         .get('/book/1')
         .expect(
           '[{"id":1,"name":"小森林","ISBN":"9787541089329","desc":"《小森林》是知名漫画家五十岚大介的经典作品，也是豆瓣高分电影《小森林》原著，讲述一位平凡女孩在田园生活中寻找自我的故事。"}]'
@@ -316,14 +294,14 @@ xdescribe('/test/enhance.test.ts', () => {
 
   describe('load ts file and use third party module', () => {
     let app;
-    beforeAll(() => {
-      app = creatApp('enhance/base-app-utils', {
-        typescript: true,
-      });
-      return app.ready();
+    beforeAll(async () => {
+      app = await creatApp('enhance/base-app-utils');
+
     });
 
-    afterAll(() => app.close());
+    afterAll(async () => {
+      await closeApp(app);
+    })
 
     it('should load ts directory and inject module', done => {
       request(app.callback())
@@ -335,14 +313,14 @@ xdescribe('/test/enhance.test.ts', () => {
 
   describe('load ts file and use async init', () => {
     let app;
-    beforeAll(() => {
-      app = creatApp('enhance/base-app-async', {
-        typescript: true,
-      });
-      return app.ready();
+    beforeAll(async () => {
+      app = await creatApp('enhance/base-app-async');
+
     });
 
-    afterAll(() => app.close());
+    afterAll(async () => {
+      await closeApp(app);
+    })
 
     it('should load ts directory and inject module', done => {
       request(app.callback())
@@ -354,15 +332,14 @@ xdescribe('/test/enhance.test.ts', () => {
 
   describe('ts directory different from other', () => {
     let app;
-    beforeAll(() => {
+    beforeAll(async () => {
       mm(process.env, 'HOME', '');
-      app = creatApp('enhance/base-app', {
-        typescript: true,
-      });
-      return app.ready();
+      app = await creatApp('enhance/base-app');
     });
     afterEach(mm.restore);
-    afterAll(() => app.close());
+    afterAll(async () => {
+      await closeApp(app);
+    })
 
     it('should appDir not equal baseDir', () => {
       const appInfo = app.loader.getAppInfo();
@@ -374,14 +351,14 @@ xdescribe('/test/enhance.test.ts', () => {
 
   describe('load ts file support constructor inject', () => {
     let app;
-    beforeAll(() => {
-      app = creatApp('enhance/base-app-constructor', {
-        typescript: true,
-      });
-      return app.ready();
+    beforeAll(async () => {
+      app = await creatApp('enhance/base-app-constructor');
+
     });
 
-    afterAll(() => app.close());
+    afterAll(async () => {
+      await closeApp(app);
+    })
 
     it('should load ts directory and inject in constructor', done => {
       request(app.callback())
@@ -393,14 +370,14 @@ xdescribe('/test/enhance.test.ts', () => {
 
   describe('auto load function file and inject by function name', () => {
     let app;
-    beforeAll(() => {
-      app = creatApp('enhance/base-app-function', {
-        typescript: true,
-      });
-      return app.ready();
+    beforeAll(async () => {
+      app = await creatApp('enhance/base-app-function');
+
     });
 
-    afterAll(() => app.close());
+    afterAll(async () => {
+      await closeApp(app);
+    })
 
     it('should load ts directory and inject in constructor', done => {
       request(app.callback())
@@ -412,14 +389,14 @@ xdescribe('/test/enhance.test.ts', () => {
 
   describe('should support multi router in one function', () => {
     let app;
-    beforeAll(() => {
-      app = creatApp('enhance/base-app-router', {
-        typescript: true,
-      });
-      return app.ready();
+    beforeAll(async () => {
+      app = await creatApp('enhance/base-app-router');
+
     });
 
-    afterAll(() => app.close());
+    afterAll(async () => {
+      await closeApp(app);
+    })
 
     it('should invoke different router and get same result', done => {
       done = pedding(3, done);
@@ -442,14 +419,14 @@ xdescribe('/test/enhance.test.ts', () => {
 
   describe('should support change route priority', () => {
     let app;
-    beforeAll(() => {
-      app = creatApp('enhance/base-app-router-priority', {
-        typescript: true,
-      });
-      return app.ready();
+    beforeAll(async () => {
+      app = await creatApp('enhance/base-app-router-priority');
+
     });
 
-    afterAll(() => app.close());
+    afterAll(async () => {
+      await closeApp(app);
+    })
 
     it('should invoke different router and get same result', done => {
       done = pedding(3, done);
@@ -472,14 +449,14 @@ xdescribe('/test/enhance.test.ts', () => {
 
   describe('plugin can load controller directory directly', () => {
     let app;
-    beforeAll(() => {
-      app = creatApp('enhance/loader-duplicate', {
-        typescript: true,
-      });
-      return app.ready();
+    beforeAll(async () => {
+      app = await creatApp('enhance/loader-duplicate');
+
     });
 
-    afterAll(() => app.close());
+    afterAll(async () => {
+      await closeApp(app);
+    })
 
     it('should fix egg-socket.io load controller directory', done => {
       request(app.callback())
@@ -491,14 +468,13 @@ xdescribe('/test/enhance.test.ts', () => {
 
   describe('load tsx file', () => {
     let app;
-    beforeAll(() => {
-      app = creatApp('enhance/base-app-controller-tsx', {
-        typescript: true,
-      });
-      return app.ready();
+    beforeAll(async () => {
+      app = await creatApp('enhance/base-app-controller-tsx');
     });
 
-    afterAll(() => app.close());
+    afterAll(async () => {
+      await closeApp(app);
+    })
 
     it('should load tsx controller', done => {
       request(app.callback())
@@ -510,14 +486,14 @@ xdescribe('/test/enhance.test.ts', () => {
 
   describe('support middleware parameter', () => {
     let app;
-    beforeAll(() => {
-      app = creatApp('enhance/base-app-middleware', {
-        typescript: true,
-      });
-      return app.ready();
+    beforeAll(async () => {
+      app = await creatApp('enhance/base-app-middleware');
+
     });
 
-    afterAll(() => app.close());
+    afterAll(async () => {
+      await closeApp(app);
+    })
 
     it('should load middleware in controller and router', done => {
       request(app.callback())
@@ -536,8 +512,8 @@ xdescribe('/test/enhance.test.ts', () => {
 
   describe('shoule egg hackernew be ok', () => {
     let app;
-    beforeAll(() => {
-      app = creatApp('enhance/base-app-hackernews', {
+    beforeAll(async () => {
+      app = await creatApp('enhance/base-app-hackernews', {
         typescript: false,
       });
       const originRequest = urllib.HttpClient2.prototype.request;
@@ -569,7 +545,7 @@ xdescribe('/test/enhance.test.ts', () => {
         }
         return originRequest(url, args, callback);
       });
-      return app.ready();
+
     });
 
     afterAll(() => {
@@ -578,8 +554,7 @@ xdescribe('/test/enhance.test.ts', () => {
     });
 
     it('news should be ok', async () => {
-      await app
-        .httpRequest()
+      await request(app.callback())
         .get('/news')
         .expect(res =>
           res.text.includes('<a href="/news/user/pseudolus">pseudolus</a>')
@@ -589,8 +564,7 @@ xdescribe('/test/enhance.test.ts', () => {
     });
 
     it('new item should be ok', async () => {
-      await app
-        .httpRequest()
+      await request(app.callback())
         .get('/news/item/1')
         .expect(res =>
           res.text.includes(
@@ -603,8 +577,7 @@ xdescribe('/test/enhance.test.ts', () => {
 
     it('user should be ok', async () => {
       // stevage
-      await app
-        .httpRequest()
+      await request(app.callback())
         .get('/news/user/stevage')
         .expect(res => res.text.includes('Profile: stevage | egg - HackerNews'))
         .expect('Content-Type', /html/)
@@ -621,12 +594,10 @@ xdescribe('/test/enhance.test.ts', () => {
         }
         return originJoin.apply(path, args);
       });
-      const app: any = creatApp('enhance/base-app-plugin-error', {
-        typescript: true,
-      });
+
       let msg = '';
       try {
-        await app.ready();
+        await creatApp('enhance/base-app-plugin-error');
       } catch (e) {
         msg = e.message;
       }

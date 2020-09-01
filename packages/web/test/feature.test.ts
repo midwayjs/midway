@@ -1,8 +1,8 @@
 import * as request from 'supertest';
-import { creatApp } from './utils';
+import {closeApp, creatApp} from './utils';
 import {clearAllModule} from "@midwayjs/decorator";
 
-xdescribe('/test/feature.test.ts', () => {
+describe('/test/feature.test.ts', () => {
 
   afterEach(clearAllModule);
 
@@ -10,6 +10,10 @@ xdescribe('/test/feature.test.ts', () => {
     let app;
     beforeAll(async () => {
       app = await creatApp('feature/base-app');
+    })
+
+    afterAll(async () => {
+      await closeApp(app);
     })
 
     it('test get method with return value', async () => {

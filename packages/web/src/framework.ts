@@ -38,53 +38,56 @@ import {
 import { resolve } from 'path';
 
 import { Application, Router } from 'egg';
+import { safelyGet } from "@midwayjs/core/dist/common/util";
 
 export type IMidwayWebApplication = IMidwayApplication & Application;
 
-export class MidwayWebFramework extends BaseFramework<
-  IMidwayWebConfigurationOptions
-> {
+export class MidwayWebFramework extends BaseFramework<IMidwayWebConfigurationOptions> {
   private app: IMidwayWebApplication;
-  private _controllerIds: string[] = [];
+  private controllerIds: string[] = [];
   public prioritySortRouters: Array<{
     priority: number;
     router: Router;
   }> = [];
 
-  get controllerIds() {
-    return this._controllerIds;
-  }
-
   public configure(
     options: IMidwayWebConfigurationOptions
   ): MidwayWebFramework {
     this.configurationOptions = options;
+    if (options.typescript === false) {
+      this.isTsMode = false;
+    }
     return this;
   }
 
   protected async beforeInitialize(
     options: Partial<IMidwayBootstrapOptions>
-  ): Promise<void> {
+  ) {
     options.ignore = options.ignore || [];
     options.ignore.push('**/app/extend/**');
   }
 
-  protected async afterInitialize(
-    options: Partial<IMidwayBootstrapOptions>
-  ): Promise<void> {
-    process.env.EGG_TYPESCRIPT = 'true';
-    const { start } = require('egg');
+  protected async beforeDirectoryLoad(options: Partial<IMidwayBootstrapOptions>) {
+
+  }
+
+  protected async afterDirectoryLoad(options: Partial<IMidwayBootstrapOptions>) {
+    if (this.isTsMode) {
+      process.env.EGG_TYPESCRIPT = 'true';
+    }
+
+    const {start} = require('egg');
     this.app = await start({
       baseDir: options.appDir,
-      sourceDir: options.baseDir,
+      sourceDir: this.isTsMode ? options.baseDir : options.appDir,
       ignoreWarning: true,
       framework: resolve(__dirname, 'application'),
-      allConfig: this.getConfiguration(),
+      plugins: this.configurationOptions.plugins,
+      webFramework: this,
       mode: 'single',
     });
 
     this.defineApplicationProperties(this.app);
-
     // register plugin
     this.containerLoader.registerHook(
       PLUGIN_KEY,
@@ -95,7 +98,7 @@ export class MidwayWebFramework extends BaseFramework<
 
     // register config
     this.containerLoader.registerHook(CONFIG_KEY, (key: string) => {
-      return key ? this.app.config['key'] : this.app.config;
+      return key ? safelyGet(key, this.app.config) : this.app.config;
     });
 
     // register logger
@@ -103,13 +106,17 @@ export class MidwayWebFramework extends BaseFramework<
       if (this.app.getLogger) {
         return this.app.getLogger(key);
       }
-      return options.logger;
+      return this.app.coreLogger;
     });
     // register app
     this.containerLoader.registerHook(APPLICATION_KEY, () => {
       return this.app;
     });
+  }
 
+  protected async afterInitialize(
+    options: Partial<IMidwayBootstrapOptions>
+  ): Promise<void> {
     await this.loadMidwayController();
   }
 
@@ -117,8 +124,8 @@ export class MidwayWebFramework extends BaseFramework<
     // return this.app.listen(this.configurationOptions.port);
   }
 
-  public async stop(): Promise<void> {
-    throw new Error('Method not implemented.');
+  protected async beforeStop(): Promise<void> {
+    await this.app.close();
   }
 
   public getApplication(): IMidwayWebApplication {
@@ -128,6 +135,8 @@ export class MidwayWebFramework extends BaseFramework<
   /**
    * wrap controller string to middleware function
    * @param controllerMapping like FooController.index
+   * @param routeArgsInfo
+   * @param routerResponseData
    */
   public generateController(
     controllerMapping: string,
@@ -158,7 +167,7 @@ export class MidwayWebFramework extends BaseFramework<
               ctx.status = routerRes.code;
               break;
             case WEB_RESPONSE_HEADER:
-              routerRes.setHeaders.forEach((key, value) =>  {
+              routerRes.setHeaders.forEach((key, value) => {
                 ctx.set(key, value);
               });
               break;
@@ -294,10 +303,10 @@ export class MidwayWebFramework extends BaseFramework<
   private createEggRouter(controllerOption: ControllerOption): Router {
     const {
       prefix,
-      routerOptions: { sensitive },
+      routerOptions: {sensitive},
     } = controllerOption;
     if (prefix) {
-      const router = new EggRouter({ sensitive }, this.app);
+      const router = new EggRouter({sensitive}, this.app);
       router.prefix(prefix);
       return router;
     }
@@ -353,15 +362,7 @@ export class MidwayWebFramework extends BaseFramework<
 
       getProcessType: () => {
         return MidwayProcessTypeEnum.APPLICATION;
-      },
-
-      getApplicationContext: () => {
-        return this.getApplicationContext();
-      },
-
-      get applicationContext() {
-        return this.getApplicationContext();
-      },
+      }
     });
   }
 }
