@@ -17,4 +17,3 @@ package-lock.json
 .nodejs-cache
 .tmp
 packages/midway/_package.json
-public
