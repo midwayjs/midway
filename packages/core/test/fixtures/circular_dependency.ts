@@ -106,80 +106,86 @@ export class TestThree {
   one: any;
 }
 
+interface IGroupService {}
+interface IFunService {}
+interface IAppService {}
+interface ITenService {}
+interface IAutoScaleService {}
+
 @Provide()
 export class GatewayManager {
   ts = 'gtmanager';
   @Inject()
-  groupService: GroupService;
+  groupService: IGroupService;
   @Inject()
-  funService: FunService;
+  funService: IFunService;
   @Inject()
-  appService: AppService;
+  appService: IAppService;
 }
 
 @Provide()
 export class GatewayService {
   ts = 'gateway';
   @Inject()
-  appService: AppService;
+  appService: IAppService;
   @Inject()
-  funService: FunService;
+  funService: IFunService;
   @Inject()
   gatewayManager: GatewayManager;
   @Inject()
-  groupService: GroupService;
+  groupService: IGroupService;
 }
 @Provide()
-export class GroupService {
+export class GroupService implements IGroupService {
   ts = 'group';
   @Inject()
   gatewayService: GatewayService;
   @Inject()
-  tenService: TenService;
+  tenService: ITenService;
   @Inject()
-  appService: AppService;
+  appService: IAppService;
 }
 @Provide()
-export class FunService {
+export class FunService implements IFunService {
 
 }
 @Provide()
-export class AppService {
+export class AppService implements IAppService {
 
 }
 @Provide()
-export class TenService {
+export class TenService implements ITenService {
 
 }
 @Provide()
 export class ScaleManager {
   ts = 'scale';
   @Inject()
-  tenService: TenService;
+  tenService: ITenService;
   @Inject()
-  appService: AppService;
+  appService: IAppService;
   @Inject()
-  funService: FunService;
+  funService: IFunService;
   @Inject()
   gatewayManager: GatewayManager;
   @Inject()
   gatewayService: GatewayService;
   @Inject()
-  groupService: GroupService;
+  groupService: IGroupService;
 
   @Inject()
-  autoScaleService: AutoScaleService;
+  autoScaleService: IAutoScaleService;
 }
 
 @Provide()
-export class AutoScaleService {
+export class AutoScaleService implements IAutoScaleService {
   ts = 'ascale';
   @Inject()
   gatewayManager: GatewayManager;
   @Inject()
   gatewayService: GatewayService;
   @Inject()
-  groupService: GroupService;
+  groupService: IGroupService;
   @Inject()
   scaleManager: ScaleManager;
 }
@@ -188,5 +194,5 @@ export class AutoScaleService {
 export class CCController {
   ts = 'controller';
   @Inject()
-  autoScaleService: AutoScaleService;
+  autoScaleService: IAutoScaleService;
 }

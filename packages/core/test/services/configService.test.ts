@@ -1,6 +1,6 @@
 import assert = require('assert');
 import { resolve, join } from 'path';
-import { MidwayContainer } from '../../src/context/midwayContainer';
+import { MidwayContainer } from '../../src';
 import { MidwayConfigService } from '../../src/service/configService';
 
 describe('/test/services/configService.test.ts', () => {
@@ -49,7 +49,7 @@ describe('/test/services/configService.test.ts', () => {
     assert.equal(env, 'daily', 'getConfigEnv should be ok');
   });
 
-  it('load shoud be ok', async () => {
+  it('load should be ok', async () => {
     const container = new MidwayContainer();
     const cfg = new MidwayConfigService(container);
 
