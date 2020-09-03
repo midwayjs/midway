@@ -2,7 +2,7 @@ import {
   attachClassMetadata,
   APPLICATION_KEY,
   attachConstructorDataOnClass,
-} from '../common';
+} from '../';
 
 export function App() {
   return function(target: any, targetKey: string, index?: number): void {

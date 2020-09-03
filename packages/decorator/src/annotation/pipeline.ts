@@ -1,5 +1,5 @@
 import { ObjectIdentifier } from '../interface';
-import { PIPELINE_IDENTIFIER, saveConstructorInject, savePropertyInject } from '../common';
+import { PIPELINE_IDENTIFIER, saveConstructorInject, savePropertyInject } from '../';
 
 export function Pipeline(valves?: ObjectIdentifier[]) {
   return function (target: any, targetKey: string, index?: number): void {

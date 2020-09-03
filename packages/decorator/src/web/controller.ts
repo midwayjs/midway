@@ -1,5 +1,5 @@
 import { Scope } from '../annotation';
-import { ScopeEnum, saveClassMetadata, saveModule, CONTROLLER_KEY } from '../common';
+import { ScopeEnum, saveClassMetadata, saveModule, CONTROLLER_KEY } from '../';
 import { KoaMiddlewareParamArray } from '../interface';
 
 export interface ControllerOption {

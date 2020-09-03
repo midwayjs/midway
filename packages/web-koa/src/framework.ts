@@ -1,47 +1,33 @@
 import {
-  IMidwayApplication,
-  PRIVATE_META_DATA_KEY,
-  safelyGet,
   BaseFramework,
-  IMidwayBootstrapOptions,
-  MidwayProcessTypeEnum,
-  extractKoaLikeValue,
-  generateProvideId,
-} from '@midwayjs/core';
-
-import {
-  CONTROLLER_KEY,
-  ControllerOption,
-  PRIORITY_KEY,
-  RouterOption,
-  RouterParamValue,
-  WEB_ROUTER_KEY,
-  WEB_ROUTER_PARAM_KEY,
+  extractKoaLikeValue, generateProvideId,
   getClassMetadata,
   getPropertyDataFromClass,
   getPropertyMetadata,
   getProviderId,
+  IMidwayBootstrapOptions,
   listModule,
-  PLUGIN_KEY,
-  LOGGER_KEY,
-  APPLICATION_KEY,
-  WEB_RESPONSE_KEY, WEB_RESPONSE_HTTP_CODE, WEB_RESPONSE_HEADER, WEB_RESPONSE_REDIRECT, CONFIG_KEY,
-} from '@midwayjs/decorator';
-
-import { EggRouter } from '@eggjs/router';
+  MidwayProcessTypeEnum,
+  PRIVATE_META_DATA_KEY,
+} from "@midwayjs/core";
 
 import {
+  APPLICATION_KEY,
+  CONFIG_KEY, CONTROLLER_KEY,
+  LOGGER_KEY,
+  PLUGIN_KEY, PRIORITY_KEY, WEB_RESPONSE_HEADER,
+  WEB_RESPONSE_HTTP_CODE, WEB_RESPONSE_KEY, WEB_RESPONSE_REDIRECT, WEB_ROUTER_KEY, WEB_ROUTER_PARAM_KEY,
+  RouterOption, RouterParamValue, ControllerOption
+} from "@midwayjs/decorator";
+import {
+  IMidwayWebApplication,
   IMidwayWebConfigurationOptions,
-  Middleware,
   MiddlewareParamArray,
-  WebMiddleware,
-} from './interface';
-
-import { resolve } from 'path';
-
-import { Application, Router } from 'egg';
-
-export type IMidwayWebApplication = IMidwayApplication & Application;
+  WebMiddleware
+} from "./interface";
+import * as Router from 'koa-router';
+import * as KOAApplication from 'koa';
+import type { Middleware } from 'koa';
 
 export class MidwayWebFramework extends BaseFramework<IMidwayWebConfigurationOptions> {
   private app: IMidwayWebApplication;
@@ -55,9 +41,6 @@ export class MidwayWebFramework extends BaseFramework<IMidwayWebConfigurationOpt
     options: IMidwayWebConfigurationOptions
   ): MidwayWebFramework {
     this.configurationOptions = options;
-    if (options.typescript === false) {
-      this.isTsMode = false;
-    }
     return this;
   }
 
@@ -69,20 +52,7 @@ export class MidwayWebFramework extends BaseFramework<IMidwayWebConfigurationOpt
   }
 
   protected async afterDirectoryLoad(options: Partial<IMidwayBootstrapOptions>) {
-    if (this.isTsMode) {
-      process.env.EGG_TYPESCRIPT = 'true';
-    }
-
-    const { start } = require('egg');
-    this.app = await start({
-      baseDir: options.appDir,
-      sourceDir: this.isTsMode ? options.baseDir : options.appDir,
-      ignoreWarning: true,
-      framework: resolve(__dirname, 'application'),
-      plugins: this.configurationOptions.plugins,
-      webFramework: this,
-      mode: 'single',
-    });
+    this.app = new KOAApplication();
 
     this.defineApplicationProperties(this.app);
     // register plugin
@@ -95,7 +65,7 @@ export class MidwayWebFramework extends BaseFramework<IMidwayWebConfigurationOpt
 
     // register config
     this.containerLoader.registerHook(CONFIG_KEY, (key: string) => {
-      return key ? safelyGet(key, this.app.config) : this.app.config;
+      return this.getConfiguration(key);
     });
 
     // register logger
@@ -118,7 +88,7 @@ export class MidwayWebFramework extends BaseFramework<IMidwayWebConfigurationOpt
   }
 
   public async run(): Promise<void> {
-    // return this.app.listen(this.configurationOptions.port);
+    return this.app.listen(this.configurationOptions.port);
   }
 
   protected async beforeStop(): Promise<void> {
@@ -304,7 +274,7 @@ export class MidwayWebFramework extends BaseFramework<IMidwayWebConfigurationOpt
       routerOptions: { sensitive },
     } = controllerOption;
     if (prefix) {
-      const router = new EggRouter({ sensitive }, this.app);
+      const router = new Router({ sensitive });
       router.prefix(prefix);
       return router;
     }

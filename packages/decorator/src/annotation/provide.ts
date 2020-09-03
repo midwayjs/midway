@@ -1,5 +1,5 @@
 import { ObjectIdentifier } from '../interface';
-import { saveProviderId } from '../common';
+import { saveProviderId } from '../';
 
 export function Provide(identifier?: ObjectIdentifier) {
   return function (target: any) {

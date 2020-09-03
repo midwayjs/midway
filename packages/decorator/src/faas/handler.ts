@@ -1,4 +1,4 @@
-import { FUNC_KEY, saveModule, attachClassMetadata } from '../common';
+import { FUNC_KEY, saveModule, attachClassMetadata } from '../';
 import { FuncParams } from './fun';
 
 export function Handler(

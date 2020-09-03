@@ -1,4 +1,4 @@
-import { saveClassMetadata, PRIORITY_KEY } from '../common';
+import { saveClassMetadata, PRIORITY_KEY } from '../';
 
 export function Priority(priority: number): ClassDecorator {
   return (target: any) => {

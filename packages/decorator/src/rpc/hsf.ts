@@ -1,4 +1,4 @@
-import { ScopeEnum, saveClassMetadata, saveModule, HSF_KEY } from '../common';
+import { ScopeEnum, saveClassMetadata, saveModule, HSF_KEY } from '../';
 import { Scope } from '../annotation';
 
 export interface HSFOpts {

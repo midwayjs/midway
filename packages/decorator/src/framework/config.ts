@@ -2,7 +2,7 @@ import {
   attachClassMetadata,
   CONFIG_KEY,
   attachConstructorDataOnClass,
-} from '../common';
+} from '../';
 
 export function Config(identifier?: string) {
   return function(target: any, targetKey: string, index?: number): void {

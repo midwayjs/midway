@@ -1,4 +1,4 @@
-import { ScopeEnum, saveObjectDefProps } from '../common';
+import { ScopeEnum, saveObjectDefProps } from '../';
 
 const debug = require('debug')('decorator:context:obj_def');
 

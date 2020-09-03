@@ -1,4 +1,4 @@
-import { saveConstructorInject, savePropertyInject } from '../common';
+import { saveConstructorInject, savePropertyInject } from '../';
 import { ObjectIdentifier } from '../interface';
 
 export function Inject(identifier?: ObjectIdentifier) {

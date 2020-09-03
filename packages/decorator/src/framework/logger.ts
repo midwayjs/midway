@@ -1,4 +1,4 @@
-import { attachClassMetadata, LOGGER_KEY, attachConstructorDataOnClass } from '../common';
+import { attachClassMetadata, LOGGER_KEY, attachConstructorDataOnClass } from '../';
 
 export function Logger(identifier?: string) {
   return function (target: any, targetKey: string, index?: number): void {

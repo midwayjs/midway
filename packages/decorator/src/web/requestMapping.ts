@@ -1,7 +1,7 @@
 /**
  * 'HEAD', 'OPTIONS', 'GET', 'PUT', 'PATCH', 'POST', 'DELETE' 封装
  */
-import { attachClassMetadata, WEB_ROUTER_KEY } from '../common';
+import { attachClassMetadata, WEB_ROUTER_KEY } from '../';
 import { KoaMiddlewareParamArray } from '../interface';
 
 export interface RouterOption {

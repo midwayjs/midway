@@ -1,5 +1,5 @@
 import { Scope } from '../annotation';
-import { ScopeEnum, saveModule, FUNC_KEY, attachClassMetadata } from '../common';
+import { ScopeEnum, saveModule, FUNC_KEY, attachClassMetadata } from '../';
 import { KoaMiddlewareParamArray } from '..';
 
 export interface FuncParams {

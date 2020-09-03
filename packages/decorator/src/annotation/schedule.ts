@@ -1,4 +1,4 @@
-import { ScopeEnum, saveClassMetadata, saveModule, SCHEDULE_KEY } from '../common';
+import { ScopeEnum, saveClassMetadata, saveModule, SCHEDULE_KEY } from '../';
 import { Scope } from './objectDef';
 
 export interface CommonSchedule {
