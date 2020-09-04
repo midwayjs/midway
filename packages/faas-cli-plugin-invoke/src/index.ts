@@ -576,7 +576,12 @@ export class FaaSInvokePlugin extends BasePlugin {
         });
       }
       const errorLog = this.core.cli.error || this.core.cli.log;
-      errorLog(e && e.message ? `[Error] ${e.message}` : e);
+      if (e?.message) {
+        errorLog(`[Error Message] ${e.message}`);
+        errorLog(`[Error Stack] ${e.stack}`);
+      } else {
+        errorLog(e);
+      }
     }
   }
 

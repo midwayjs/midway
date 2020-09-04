@@ -12,7 +12,7 @@ import { loadNpm } from './npm';
 import { resolve } from 'path';
 import { exec } from 'child_process';
 import { readFileSync, existsSync } from 'fs';
-
+import Spin from 'light-spinner';
 const RegProviderNpm = /^npm:([\w]*):(.*)$/i; // npm providerName pkgName
 const RegProviderLocal = /^local:([\w]*):(.*)$/i; // local providerName pkgPath
 
@@ -157,12 +157,16 @@ export class CommandHookCore implements ICommandHooksCore {
   private async execLiftcycle(lifecycleEvents) {
     for (const lifecycle of lifecycleEvents) {
       if (this.userLifecycle && this.userLifecycle[lifecycle]) {
+        const userCmd = this.userLifecycle[lifecycle];
         this.debug('User Lifecycle', lifecycle);
+        const spin = new Spin({ text: `Executing: ${userCmd}` });
+        spin.start();
         try {
-          await this.execCommand(this.userLifecycle[lifecycle]);
+          await this.execCommand(userCmd);
         } catch (e) {
-          this.debug('User Lifecycle Hook Error', e?.message);
+          this.debug('User Lifecycle Hook Error', userCmd, e);
         }
+        spin.stop();
       }
       const hooks = this.hooks[lifecycle] || [];
       this.debug('Core Lifecycle', lifecycle, hooks.length);
