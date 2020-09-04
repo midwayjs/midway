@@ -89,9 +89,12 @@ export async function loadNpm(
   try {
     const npmPath = await getNpmPath(scope, npmName, npmRegistry);
     assert(npmPath, 'empty npm path');
-    let plugin = require(npmPath);
+    const plugin = require(npmPath);
     if (typeof plugin === 'object') {
-      plugin = plugin[Object.keys(plugin)[0]];
+      Object.keys(plugin).forEach(key => {
+        scope.addPlugin(plugin[key]);
+      });
+      return;
     }
     scope.addPlugin(plugin);
   } catch (e) {
