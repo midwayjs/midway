@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.12](https://github.com/midwayjs/midway/compare/serverless-v1.2.11...serverless-v1.2.12) (2020-09-04)
+
+
+### Bug Fixes
+
+* 支持字符串 args 传参 ([#628](https://github.com/midwayjs/midway/issues/628)) ([0f8f8ce](https://github.com/midwayjs/midway/commit/0f8f8ced40b4b38c517346c5682a20b6da990f64))
+* support npm multi plugin ([#627](https://github.com/midwayjs/midway/issues/627)) ([d2ebc2e](https://github.com/midwayjs/midway/commit/d2ebc2ec70374db5f1ea595d7ccaacbe9ef540a4))
+
+
+
+
+
 ## [1.2.11](https://github.com/midwayjs/midway/compare/serverless-v1.2.10...serverless-v1.2.11) (2020-09-04)
 
 **Note:** Version bump only for package midway-faas
