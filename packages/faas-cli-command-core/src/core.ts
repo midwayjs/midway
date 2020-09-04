@@ -75,6 +75,11 @@ export class CommandHookCore implements ICommandHooksCore {
       return;
     }
 
+    // 非class不加载
+    if (typeof Plugin !== 'function') {
+      return;
+    }
+
     const instance = new Plugin(coreInstance, this.options.options);
 
     if (instance.provider) {
@@ -404,9 +409,12 @@ export class CommandHookCore implements ICommandHooksCore {
         localPath = resolve(this.options.config.servicePath, localPath);
       }
       this.debug('Core Local Plugin', localPath);
-      let plugin = require(localPath);
+      const plugin = require(localPath);
       if (typeof plugin === 'object') {
-        plugin = plugin[Object.keys(plugin)[0]];
+        Object.keys(plugin).forEach(key => {
+          this.addPlugin(plugin[key]);
+        });
+        return;
       }
       this.addPlugin(plugin);
     } catch (e) {
