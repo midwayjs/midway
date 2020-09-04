@@ -16,7 +16,11 @@ const registerFunctionToIoc = (container, functionName, func, argsPath) => {
         event,
       };
 
-      const args = getValue(bindCtx, argsPath || 'ctx.request.body.args', []);
+      let args = getValue(bindCtx, argsPath || 'ctx.request.body.args', []);
+      if (typeof args === 'string') {
+        args = JSON.parse(args);
+      }
+
       return func.bind(bindCtx)(...args);
     }
   }
