@@ -43,6 +43,7 @@ export async function closeApp(app) {
   const starter = appMap.get(app);
   if (starter) {
     await starter.stop();
+    appMap.delete(starter);
   }
 
   await remove(join(app.getAppDir(), 'logs'));

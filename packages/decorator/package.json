@@ -7,7 +7,7 @@
   "scripts": {
     "build": "midway-bin build -c",
     "lint": "../../node_modules/.bin/tslint --format prose -c ../../tslint.json --fix 'src/**/*.ts' 'test/**/*.ts'",
-    "test": "npm run lint && midway-bin clean && NODE_ENV=test midway-bin test --ts",
+    "test": "../../node_modules/.bin/jest --forceExit",
     "cov": "midway-bin cov --ts",
     "ci": "npm run test",
     "autod": "midway-bin autod",

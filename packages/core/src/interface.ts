@@ -280,6 +280,7 @@ export interface IMidwayBootstrapOptions {
   pattern: string[];
   ignore: string[];
   isTsMode: boolean;
+  middleware: string[];
 }
 
 export interface IConfigurationOptions {}

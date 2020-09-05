@@ -5,12 +5,6 @@ import { Func, listModule, FUNC_KEY, getClassMetadata, getObjectDefProps, ScopeE
 @Func('index.handler', { middleware: ['hello'] })
 class TestFun {}
 
-@Func({
-  event: 'test',
-  method: 'hello',
-  path: '/ttt/tt',
-  middleware: ['hello']
-})
 class TestFun1 {
 
   @Func('ttt.handler')
@@ -31,13 +25,6 @@ describe('/test/faas/fun.test.ts', () => {
         descriptor: undefined,
         funHandler: 'ttt.handler',
         key: 'fff'
-      },
-      {
-        funHandler: '',
-        event: 'test',
-        method: 'hello',
-        path: '/ttt/tt',
-        middleware: ['hello']
       }
     ]);
 
@@ -47,6 +34,6 @@ describe('/test/faas/fun.test.ts', () => {
     });
 
     const m = listModule(FUNC_KEY);
-    expect(m.length).eq(3);
+    expect(m.length).eq(2);
   });
 });

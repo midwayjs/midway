@@ -1,6 +1,5 @@
 export * from './interface';
-export * from './starter';
-export * from '@midwayjs/core';
+export * from './framework';
 export {
   Func as func,
   Provide as provide,

@@ -1,11 +1,9 @@
 import * as request from 'supertest';
-import { clearAllModule } from '@midwayjs/decorator';
 import { creatApp, closeApp } from './utils';
 
 const pedding = require('pedding');
 
 describe('/test/issue.test.ts', () => {
-  afterEach(clearAllModule);
 
   describe('test #264 issue to fix ctx bind', () => {
     let app;

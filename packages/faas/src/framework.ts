@@ -40,21 +40,24 @@ export class MidwayFaaSFramework extends BaseFramework<
   private lock = new SimpleLock();
   private webApplication: IFaaSApplication;
 
-  protected async afterInitialize(options: Partial<IMidwayBootstrapOptions>) {
+  protected async beforeDirectoryLoad(options: Partial<IMidwayBootstrapOptions>) {
     this.logger = options.logger || console;
+    this.globalMiddleware = this.configurationOptions.middleware || [];
     this.webApplication = this.defineApplicationProperties(
       this.configurationOptions.applicationAdapter?.getApplication() || {}
     );
 
     this.addConfiguration('./configuration', __dirname, MIDWAY_FAAS_KEY);
     this.prepareConfiguration();
+  }
 
+  protected async afterInitialize(options: Partial<IMidwayBootstrapOptions>) {
     this.registerDecorator();
   }
 
   public async run() {
     return this.lock.sureOnce(async () => {
-      // attach global middleawre from user config
+      // attach global middleware from user config
       if (this.webApplication?.use) {
         const middlewares = this.webApplication.getConfig('middleware') || [];
         await this.webApplication.useMiddleware(middlewares);
