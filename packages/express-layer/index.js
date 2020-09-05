@@ -22,6 +22,7 @@ module.exports = engine => {
     async defaultInvokeHandler(context) {
       return new Promise((resolve, reject) => {
         delete context.headers['content-length'];
+        delete context.headers['accept-encoding'];
         request(
           {
             uri: `http://unix:${socketPath}:${context.path}`,
