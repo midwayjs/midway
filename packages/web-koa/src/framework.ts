@@ -1,6 +1,7 @@
 import {
   BaseFramework,
-  extractKoaLikeValue, generateProvideId,
+  extractKoaLikeValue,
+  generateProvideId,
   getClassMetadata,
   getPropertyDataFromClass,
   getPropertyMetadata,
