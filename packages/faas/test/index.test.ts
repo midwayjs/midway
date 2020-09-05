@@ -2,7 +2,7 @@ import { join } from 'path';
 import * as assert from 'assert';
 import * as mm from 'mm';
 import { creatApp, closeApp } from './utils';
-import { MidwayFaaSFramework } from '../src';
+import { Framework } from '../src';
 
 describe('test/index.test.ts', () => {
 
@@ -103,7 +103,7 @@ describe('test/index.test.ts', () => {
 
   it('configuration test should be ok', async () => {
     mm(process.env, 'NODE_ENV', '');
-    class TestFaaSStarter extends MidwayFaaSFramework {
+    class TestFaaSStarter extends Framework {
       prepareConfiguration() {
         this.initConfiguration(
           join(__dirname, './configuration'),

@@ -1,5 +1,5 @@
 export * from './interface';
-export { MidwayWebFramework } from './framework';
+export { MidwayWebFramework as Framework } from './framework';
 export { Application, Agent } from './application';
 
 /**

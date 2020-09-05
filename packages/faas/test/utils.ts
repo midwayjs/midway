@@ -1,19 +1,11 @@
 import { BootstrapStarter } from '@midwayjs/bootstrap';
-import { IFaaSConfigurationOptions, MidwayFaaSFramework } from '../src';
+import { IFaaSConfigurationOptions, Framework } from '../src';
 import { join } from 'path';
 import { clearAllModule } from "@midwayjs/decorator";
 
 const appMap = new WeakMap();
 
-// function clearBaseDirCache(baseDir)  {
-//   for(const cachePath of require.cache) {
-//     if(cachePath.indexOf(baseDir) !== -1) {
-//       delete require.cache[cachePath];
-//     }
-//   }
-// }
-
-export async function creatApp(name, options: Partial<IFaaSConfigurationOptions> = {}, Clz?): Promise<MidwayFaaSFramework> {
+export async function creatApp(name, options: Partial<IFaaSConfigurationOptions> = {}, Clz?): Promise<Framework> {
   const baseDir = join(__dirname, 'fixtures', name);
   clearAllModule();
   // clearBaseDirCache(baseDir);
@@ -22,7 +14,7 @@ export async function creatApp(name, options: Partial<IFaaSConfigurationOptions>
   if (Clz) {
     framework = new Clz().configure(options);
   } else {
-    framework = new MidwayFaaSFramework().configure(options);
+    framework = new Framework().configure(options);
   }
   const starter = new BootstrapStarter();
 

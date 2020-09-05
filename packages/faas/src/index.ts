@@ -1,5 +1,5 @@
 export * from './interface';
-export * from './framework';
+export { MidwayFaaSFramework as Framework } from './framework';
 export {
   Func as func,
   Provide as provide,

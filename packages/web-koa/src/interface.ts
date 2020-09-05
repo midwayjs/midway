@@ -6,7 +6,7 @@ import { Context } from 'koa';
 export type IMidwayWebApplication = IMidwayApplication & Application;
 
 export interface IMidwayWebConfigurationOptions {
-  port: number;
+  port?: number;
 }
 
 export type Middleware = KoaMiddleware<Context>;

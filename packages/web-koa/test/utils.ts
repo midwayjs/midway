@@ -1,5 +1,5 @@
 import { BootstrapStarter } from '@midwayjs/bootstrap';
-import { IMidwayWebConfigurationOptions, MidwayWebFramework } from '../src';
+import { IMidwayWebConfigurationOptions, Framework } from '../src';
 import { join } from 'path';
 import { clearAllModule } from "@midwayjs/decorator";
 
@@ -7,7 +7,7 @@ const appMap = new WeakMap();
 
 export async function creatApp(name, options: IMidwayWebConfigurationOptions = {}) {
   clearAllModule();
-  const midwayWeb = new MidwayWebFramework().configure(options);
+  const midwayWeb = new Framework().configure(options);
   const starter = new BootstrapStarter();
 
   starter

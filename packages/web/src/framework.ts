@@ -73,7 +73,7 @@ export class MidwayWebFramework extends BaseFramework<IMidwayWebConfigurationOpt
       process.env.EGG_TYPESCRIPT = 'true';
     }
 
-    const { start } = require('egg');
+    const {start} = require('egg');
     this.app = await start({
       baseDir: options.appDir,
       sourceDir: this.isTsMode ? options.baseDir : options.appDir,
@@ -145,7 +145,7 @@ export class MidwayWebFramework extends BaseFramework<IMidwayWebConfigurationOpt
       const args = [ctx, next];
       if (Array.isArray(routeArgsInfo)) {
         await Promise.all(
-          routeArgsInfo.map(async ({ index, type, propertyData }) => {
+          routeArgsInfo.map(async ({index, type, propertyData}) => {
             args[index] = await extractKoaLikeValue(type, propertyData)(ctx, next);
           })
         );
@@ -301,10 +301,10 @@ export class MidwayWebFramework extends BaseFramework<IMidwayWebConfigurationOpt
   private createEggRouter(controllerOption: ControllerOption): Router {
     const {
       prefix,
-      routerOptions: { sensitive },
+      routerOptions: {sensitive},
     } = controllerOption;
     if (prefix) {
-      const router = new EggRouter({ sensitive }, this.app);
+      const router = new EggRouter({sensitive}, this.app);
       router.prefix(prefix);
       return router;
     }

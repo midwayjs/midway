@@ -1,5 +1,5 @@
 import { BootstrapStarter } from '@midwayjs/bootstrap';
-import { IMidwayWebConfigurationOptions, MidwayWebFramework } from '../src';
+import { IMidwayWebConfigurationOptions, Framework } from '../src';
 import { join } from 'path';
 import { remove } from 'fs-extra';
 import { clearAllModule } from "@midwayjs/decorator";
@@ -21,7 +21,7 @@ export async function creatApp(name, options: IMidwayWebConfigurationOptions = {
       }
     }
   });
-  const midwayWeb = new MidwayWebFramework().configure(newOptions);
+  const midwayWeb = new Framework().configure(newOptions);
   const starter = new BootstrapStarter();
 
   starter
