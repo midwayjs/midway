@@ -39,8 +39,9 @@ export class ContainerConfiguration implements IContainerConfiguration {
       // for package
       const subContainerConfiguration = this.container.createConfiguration();
       const subPackageDir = this.resolvePackageBaseDir(importPackage, baseDir);
-      debug('import package => %s dir => %s.', importPackage, subPackageDir);
+      debug(`\n---------- start load configuration from sub package "${importPackage}" ----------`);
       subContainerConfiguration.load(subPackageDir);
+      debug(`---------- end load configuration from sub package "${importPackage}" ----------`);
     }
   }
 
@@ -55,8 +56,8 @@ export class ContainerConfiguration implements IContainerConfiguration {
   }
 
   addImportConfigs(importConfigs: string[], baseDir: string) {
-    debug('import configs %j baseDir => %s.', importConfigs, baseDir);
     if (importConfigs && importConfigs.length) {
+      debug('   import configs %j from baseDir => "%s".', importConfigs, baseDir);
       this.container.getConfigService().add(
         importConfigs.map(importConfigPath => {
           if (isAbsolute(importConfigPath)) {
@@ -92,17 +93,29 @@ export class ContainerConfiguration implements IContainerConfiguration {
   load(packageName: string) {
     let isSubDir = false;
     let packageBaseDir = this.resolvePackageBaseDir(packageName);
-    debug('load %s => %s.', packageName, packageBaseDir);
+    // package name is a path
+    if (packageName === packageBaseDir) {
+      debug('load configuration.ts from "%s"', packageName);
+    } else {
+      // package name is a normal npm package
+      debug('load configuration.ts in "%s" from "%s"', packageName, packageBaseDir);
+    }
     let pkg = safeRequire(join(packageBaseDir, 'package.json'));
     if (!pkg) {
       isSubDir = true;
       pkg = safeRequire(join(packageBaseDir, '../', 'package.json'));
     }
-    debug(
-      'safeRequire package.json name-version => %s, from %s.',
-      pkg ? `${pkg.name}-${pkg.version}` : undefined,
-      packageBaseDir
-    );
+    if (pkg) {
+      debug(
+        'found package.json and name-version => "%s", from "%s".',
+        `${pkg.name}-${pkg.version}`,
+        packageBaseDir
+      );
+    } else {
+      // no package.json
+      debug('not found package.json from "%s".', packageBaseDir);
+      debug(`will be load configuration.ts from "${packageBaseDir}/configuration" directly`);
+    }
 
     let configuration;
     let cfgFile;
@@ -117,24 +130,23 @@ export class ContainerConfiguration implements IContainerConfiguration {
         packageBaseDir = dirname(join(packageBaseDir, pkg.main));
         cfgFile = join(packageBaseDir, 'configuration');
         configuration = safeRequire(cfgFile);
-        debug('configuration file path one => %s.', cfgFile);
+        debug('current case 1 => configuration file "%s".', cfgFile);
         loadDir = packageBaseDir;
       }
     }
     if (!configuration) {
       cfgFile = `${packageBaseDir}/configuration`;
       configuration = safeRequire(cfgFile);
-      debug('configuration file path two => %s.', cfgFile);
+      debug('current case 2 => configuration file "%s".', cfgFile);
       loadDir = packageBaseDir;
     }
     if (loadDir) {
       this.addLoadDir(loadDir);
-      debug('add loadDir => %s namespace => %s.', loadDir, this.namespace);
+      debug('   add loadDir => "%s".', loadDir);
+      debug('   add namespace => "%s".', this.namespace);
     }
     debug(
-      'packageName => %s namespace => %s configuration file => %s.',
-      packageName,
-      this.namespace,
+      '   has configuration file => %s.',
       configuration ? true : false
     );
     this.loadConfiguration(configuration, packageBaseDir, cfgFile);
@@ -149,7 +161,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
           CONFIGURATION_KEY,
           configurationExport
         );
-        debug('configuration export %j.', configurationOptions);
+        debug('   configuration export %j.', configurationOptions);
         if (configurationOptions) {
           if (
             this.namespace !== MAIN_MODULE_KEY &&
@@ -166,10 +178,10 @@ export class ContainerConfiguration implements IContainerConfiguration {
             this.container.containsConfiguration(this.packageName) &&
             this.namespace !== ''
           ) {
-            debug(`configuration ${this.namespace}/${this.packageName} exist than ignore.`);
+            debug(`   configuration "namespace(${this.namespace})/packageName(${this.packageName})" exist than ignore.`);
             return;
           } else {
-            debug(`configuration ${this.namespace}/${this.packageName} not exist than add.`);
+            debug(`   configuration "namespace(${this.namespace})/packageName(${this.packageName})" not exist than add.`);
             this.container.addConfiguration(this);
           }
           this.addImports(configurationOptions.imports, baseDir);
@@ -183,14 +195,15 @@ export class ContainerConfiguration implements IContainerConfiguration {
         this.container.containsConfiguration(this.packageName) &&
         this.namespace !== ''
       ) {
-        debug(`configuration ${this.namespace}/${this.packageName} exist than ignore.`);
+        debug(`   configuration "namespace(${this.namespace})/packageName(${this.packageName})" exist than ignore.`);
         return;
       } else {
-        debug(`configuration ${this.namespace}/${this.packageName} not exist than add.`);
+        debug(`   configuration "namespace(${this.namespace})/packageName(${this.packageName})" not exist than add.`);
         this.container.addConfiguration(this);
       }
     }
   }
+
   /**
    * 用于 ready 或者 stop 时处理 lifecycle 实现
    * @param clzz configuration class

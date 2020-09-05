@@ -41,8 +41,6 @@ const DEFAULT_IGNORE_PATTERN = [
   '**/views/**',
 ];
 
-const debug = require('debug')('midway:container');
-
 export class MidwayContainer extends Container implements IMidwayContainer {
   resolverHandler: ResolverHandler;
   // 仅仅用于兼容requestContainer的ctx
@@ -88,23 +86,26 @@ export class MidwayContainer extends Container implements IMidwayContainer {
     this.midwayIdentifiers.push(PIPELINE_IDENTIFIER);
     this.midwayIdentifiers.push(REQUEST_CTX_KEY);
 
+    this.debugLogger(`main:create "Main Module" and "Main Configuration"`);
     // create main module configuration
     const configuration = this.createConfiguration();
     configuration.namespace = MAIN_MODULE_KEY;
+    this.debugLogger(`main:"Main Configuration" load from "${this.baseDir}"`);
     configuration.load(this.baseDir);
     // loadDir
+    this.debugLogger(`main:load directory`);
     this.loadDirectory(opts);
 
+    this.debugLogger(`main:main configuration register import objects`);
     this.registerImportObjects(configuration.getImportObjects());
 
     // load configuration
     for (const [packageName, containerConfiguration] of this.configurationMap) {
-      debug(`load ${packageName}`);
       // main 的需要 skip 掉
       if (containerConfiguration.namespace === MAIN_MODULE_KEY) {
         continue;
       }
-
+      this.debugLogger(`main:load configuration from ${packageName}`);
       this.loadConfiguration(opts, containerConfiguration);
     }
     for (const containerConfiguration of this.likeMainConfiguration) {
@@ -128,10 +129,12 @@ export class MidwayContainer extends Container implements IMidwayContainer {
       });
 
       for (const file of fileResults) {
-        debug(`binding file => ${file}, namespace => ${opts.namespace}`);
+        this.debugLogger(`\nmain:*********** binding "${file}" ***********`);
+        this.debugLogger(`  namespace => "${opts.namespace}"`);
         const exports = require(file);
         // add module to set
         this.bindClass(exports, opts.namespace, file);
+        this.debugLogger(`  binding "${file}" end`);
       }
     }
   }
@@ -199,9 +202,7 @@ export class MidwayContainer extends Container implements IMidwayContainer {
     // Override the default scope to request
     const objDefOptions: ObjectDefinitionOptions = getObjectDefinition(target);
     if (objDefOptions && !objDefOptions.scope) {
-      debug(
-        `register @scope to default value(request), id=${objectDefinition.id}`
-      );
+      this.debugLogger(`  @scope => request`);
       objectDefinition.scope = ScopeEnum.Request;
     }
   }
@@ -248,10 +249,10 @@ export class MidwayContainer extends Container implements IMidwayContainer {
 
   async stop(): Promise<void> {
     const cycles = listModule(CONFIGURATION_KEY);
-    debug('load lifecycle length => %s when stop.', cycles && cycles.length);
+    this.debugLogger('load lifecycle length => %s when stop.', cycles && cycles.length);
     for (const cycle of cycles) {
       const providerId = getProviderId(cycle);
-      debug('onStop lifecycle id => %s.', providerId);
+      this.debugLogger('onStop lifecycle id => %s.', providerId);
       const inst = await this.getAsync<ILifeCycle>(providerId);
       if (inst.onStop && typeof inst.onStop === 'function') {
         await inst.onStop(this);
@@ -289,7 +290,7 @@ export class MidwayContainer extends Container implements IMidwayContainer {
   ) {
     const subDirs = containerConfiguration.getImportDirectory();
     if (subDirs && subDirs.length > 0) {
-      debug(
+      this.debugLogger(
         'load configuration dir => %j, namespace => %s.',
         subDirs,
         containerConfiguration.namespace
@@ -309,10 +310,10 @@ export class MidwayContainer extends Container implements IMidwayContainer {
 
   private async loadAndReadyLifeCycles() {
     const cycles = listModule(CONFIGURATION_KEY);
-    debug('load lifecycle length => %s.', cycles && cycles.length);
+    this.debugLogger('load lifecycle length => %s.', cycles && cycles.length);
     for (const cycle of cycles) {
       const providerId = getProviderId(cycle);
-      debug('ready lifecycle id => %s.', providerId);
+      this.debugLogger('ready lifecycle id => %s.', providerId);
       const inst = await this.getAsync<ILifeCycle>(providerId);
       if (typeof inst.onReady === 'function') {
         await inst.onReady(this);

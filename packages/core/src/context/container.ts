@@ -14,10 +14,10 @@ import { recursiveGetMetadata } from '../common/reflectTool';
 import { generateProvideId } from '../common/util';
 
 const is = require('is-type-of');
-const debug = require('debug')(`midway:container:${process.pid}`);
 
 export class Container extends BaseApplicationContext implements IContainer {
-  id = '';
+  id = (Math.random()).toString(10).slice(-5);
+  debugLogger = require('debug')(`midway:container:${this.id}`);
   // 自己内部实现的，可注入的 feature(见 features)
   protected midwayIdentifiers: string[] = [];
   bind<T>(target: T, options?: ObjectDefinitionOptions): void;
@@ -46,12 +46,12 @@ export class Container extends BaseApplicationContext implements IContainer {
     definition.srcPath = options ? options.srcPath : null;
     definition.namespace = options ? options.namespace : '';
 
-    debug(`=> bind and build definition, id = [${definition.id}]`);
+    this.debugLogger(`  bind id => [${definition.id}]`);
 
     // inject constructArgs
     const constructorMetaData = getConstructorInject(target);
     if (constructorMetaData) {
-      debug(`   register inject constructor length = ${target[ 'length' ]}`);
+      this.debugLogger(`inject constructor => length = ${target[ 'length' ]}`);
       const maxLength = Math.max.apply(null, Object.keys(constructorMetaData));
       for (let i = 0; i < maxLength + 1; i++) {
         const propertyMeta = constructorMetaData[ i ];
@@ -77,7 +77,7 @@ export class Container extends BaseApplicationContext implements IContainer {
     // inject properties
     const metaDatas = recursiveGetMetadata(TAGGED_PROP, target);
     for (const metaData of metaDatas) {
-      debug(`   register inject properties = [${Object.keys(metaData)}]`);
+      this.debugLogger(`inject properties => [${Object.keys(metaData)}]`);
       for (const metaKey in metaData) {
         for (const propertyMeta of metaData[ metaKey ]) {
           const refManaged = new ManagedReference();
@@ -97,7 +97,6 @@ export class Container extends BaseApplicationContext implements IContainer {
     this.registerCustomBinding(definition, target);
 
     this.registerDefinition(identifier, definition);
-    debug(`   bind and build definition complete, id = [${definition.id}]`);
   }
 
   registerCustomBinding(objectDefinition: ObjectDefinition, target: any) {
@@ -110,35 +109,35 @@ export class Container extends BaseApplicationContext implements IContainer {
   private convertOptionsToDefinition(options: ObjectDefinitionOptions, definition: ObjectDefinition): ObjectDefinition {
     if (options) {
       if (options.isAsync) {
-        debug(`   register isAsync = true`);
+        this.debugLogger(`   register isAsync = true`);
         definition.asynchronous = true;
       }
 
       if (options.initMethod) {
-        debug(`   register initMethod = ${options.initMethod}`);
+        this.debugLogger(`   register initMethod = ${options.initMethod}`);
         definition.initMethod = options.initMethod;
       }
 
       if (options.destroyMethod) {
-        debug(`   register destroyMethod = ${options.destroyMethod}`);
+        this.debugLogger(`   register destroyMethod = ${options.destroyMethod}`);
         definition.destroyMethod = options.destroyMethod;
       }
 
       if (options.scope) {
-        debug(`   register scope = ${options.scope}`);
+        this.debugLogger(`   register scope = ${options.scope}`);
         definition.scope = options.scope;
       }
 
       if (options.constructorArgs) {
-        debug(`   register constructorArgs = ${options.constructorArgs}`);
+        this.debugLogger(`   register constructorArgs = ${options.constructorArgs}`);
         definition.constructorArgs = options.constructorArgs;
       }
 
       if (options.isAutowire === false) {
-        debug(`   register autowire = ${options.isAutowire}`);
+        this.debugLogger(`   register autowire = ${options.isAutowire}`);
         definition.autowire = false;
       } else if (options.isAutowire === true) {
-        debug(`   register autowire = ${options.isAutowire}`);
+        this.debugLogger(`   register autowire = ${options.isAutowire}`);
         definition.autowire = true;
       }
     }

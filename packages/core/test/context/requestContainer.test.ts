@@ -202,8 +202,8 @@ describe('/test/context/requestContainer.test.ts', () => {
     expect(one).not.undefined;
     expect(one.ts).eq('controller');
 
-    expect(one.autoScaleService.ts).eq('ascale');
-    expect(one.autoScaleService.scaleManager.ts).eq('scale');
+    expect((one.autoScaleService as any).ts).eq('ascale');
+    expect((one.autoScaleService as any).scaleManager.ts).eq('scale');
   });
 
   it('test getService in requestContainer', () => {
