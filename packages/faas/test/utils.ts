@@ -5,8 +5,19 @@ import { clearAllModule } from "@midwayjs/decorator";
 
 const appMap = new WeakMap();
 
+// function clearBaseDirCache(baseDir)  {
+//   for(const cachePath of require.cache) {
+//     if(cachePath.indexOf(baseDir) !== -1) {
+//       delete require.cache[cachePath];
+//     }
+//   }
+// }
+
 export async function creatApp(name, options: Partial<IFaaSConfigurationOptions> = {}, Clz?): Promise<MidwayFaaSFramework> {
+  const baseDir = join(__dirname, 'fixtures', name);
   clearAllModule();
+  // clearBaseDirCache(baseDir);
+
   let framework;
   if (Clz) {
     framework = new Clz().configure(options);
@@ -17,7 +28,7 @@ export async function creatApp(name, options: Partial<IFaaSConfigurationOptions>
 
   starter
     .configure({
-      baseDir: join(__dirname, 'fixtures', name),
+      baseDir,
     })
     .load(framework);
 

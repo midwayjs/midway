@@ -121,7 +121,7 @@ describe('test/index.test.ts', () => {
     await closeApp(starter);
   });
 
-  it.only('test custom global middleware in fc', async () => {
+  it('test custom global middleware in fc', async () => {
     const { start } = require('@midwayjs/serverless-fc-starter');
     const runtime = await start();
     const starter = await creatApp('base-app-middleware', {
@@ -145,10 +145,10 @@ describe('test/index.test.ts', () => {
     await closeApp(starter);
   });
 
-  it.only('test custom global middleware in scf', async () => {
+  it('test custom global middleware in scf', async () => {
     const { start } = require('@midwayjs/serverless-scf-starter');
     const runtime = await start();
-    const starter = await creatApp('base-app-middleware', {
+    const starter = await creatApp('base-app-middleware-scf', {
       applicationAdapter: runtime,
     });
 

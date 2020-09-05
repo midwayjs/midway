@@ -28,7 +28,7 @@ import * as compose from 'koa-compose';
 import { MidwayHooks } from './hooks';
 
 const LOCK_KEY = '_faas_starter_start_key';
-const MIDWAY_FAAS_KEY = '__midway_faas__';
+// const MIDWAY_FAAS_KEY = '__midway_faas__';
 
 export class MidwayFaaSFramework extends BaseFramework<
   Partial<IFaaSConfigurationOptions & IMidwayBootstrapOptions>
@@ -47,7 +47,6 @@ export class MidwayFaaSFramework extends BaseFramework<
       this.configurationOptions.applicationAdapter?.getApplication() || {}
     );
 
-    this.addConfiguration('./configuration', __dirname, MIDWAY_FAAS_KEY);
     this.prepareConfiguration();
   }
 
@@ -71,6 +70,7 @@ export class MidwayFaaSFramework extends BaseFramework<
 
       // store all function entry
       const funModules = listModule(FUNC_KEY);
+
       for (const funModule of funModules) {
         const funOptions: Array<{
           funHandler;
