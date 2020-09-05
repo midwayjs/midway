@@ -18,7 +18,8 @@ export async function creatApp(name, options: IMidwayWebConfigurationOptions = {
       'egg-mock': {
         enable: true,
         package: 'egg-mock'
-      }
+      },
+      watcher: false,
     }
   });
   const midwayWeb = new Framework().configure(newOptions);

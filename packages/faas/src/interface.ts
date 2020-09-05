@@ -26,10 +26,10 @@ export interface FaaSContext extends FaaSHTTPContext {
 }
 
 export interface IFaaSConfigurationOptions {
-  config: object;
-  middleware: string[];
-  initializeContext: object;
-  applicationAdapter: {
+  config?: object;
+  middleware?: string[];
+  initializeContext?: object;
+  applicationAdapter?: {
     getApplication(): IFaaSApplication;
   };
 }
