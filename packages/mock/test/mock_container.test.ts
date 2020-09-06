@@ -9,7 +9,7 @@ describe('test/mock_container.test.ts', () => {
 
   describe('test base app decorator', () => {
     let container;
-    before(() => {
+    beforeAll(() => {
       container = mm.container({
         baseDir: path.join(fixtures, 'base-app-decorator'),
         typescript: true

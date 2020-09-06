@@ -250,11 +250,11 @@ export interface IMidwayLogger {
 }
 
 export interface IMidwayApplication {
-  appilcationContext: IMidwayContainer;
+  applicationContext: IMidwayContainer;
   getBaseDir(): string;
   getAppDir(): string;
   getEnv(): string;
-  getMidwayType(): string;
+  getFrameworkType(): MidwayFrameworkType;
   getProcessType(): MidwayProcessTypeEnum;
   getApplicationContext(): IMidwayContainer;
   getConfig(key?: string): any;
@@ -285,8 +285,9 @@ export interface IMidwayBootstrapOptions {
 
 export interface IConfigurationOptions {}
 
-export interface IMidwayFramework {
-  configure(options: IConfigurationOptions): IMidwayFramework;
+export interface IMidwayFramework<T extends IConfigurationOptions> {
+  configurationOptions: T;
+  configure(options: T): IMidwayFramework<T>;
   initialize(options: Partial<IMidwayBootstrapOptions>): Promise<void>;
   run(): Promise<void>;
   stop(): Promise<void>;
@@ -294,4 +295,16 @@ export interface IMidwayFramework {
   getApplicationContext(): IMidwayContainer;
   getConfiguration(key?: string): any;
   getCurrentEnvironment(): string;
+  getFrameworkType(): MidwayFrameworkType;
+}
+
+export enum MidwayFrameworkType {
+  WEB = '@midwayjs/web',
+  WEB_KOA = '@midwayjs/web_koa',
+  WEB_EXPRESS = '@midwayjs/web_express',
+  FAAS = '@midwayjs/faas',
+  RPC_HSF = '',
+  RPC_GRPC = '',
+  WS = '',
+  wss = ''
 }

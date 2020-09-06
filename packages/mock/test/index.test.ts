@@ -1,9 +1,11 @@
 import * as path from 'path';
+
 const fixtures = path.join(__dirname, 'fixtures');
 // app dir
 process.env.MIDWAY_BASE_DIR = path.join(fixtures, 'base-app-decorator');
 
 import { app, mm } from '../bootstrap';
+
 const assert = require('assert');
 import { mm as mock, MockContainer } from '../src/';
 
@@ -25,7 +27,7 @@ describe('test/index.test.ts', () => {
     assert(service1.getData() !== ('mock_test' + ts));
   });
 
-  it.only('should use bootstrap to get app', () => {
+  it('should use bootstrap to get app', () => {
     return app.httpRequest()
       .get('/api/index')
       .expect(200);

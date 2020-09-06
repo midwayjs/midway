@@ -71,7 +71,7 @@ const createMappingDecorator = (method: string) => (
   } = {middleware: []}
 ): MethodDecorator => {
   return RequestMapping({
-    [PATH_METADATA]: path,
+    [PATH_METADATA]: path || '/',
     [METHOD_METADATA]: method,
     [ROUTER_NAME_METADATA]: routerOptions.routerName,
     [ROUTER_MIDDLEWARE]: routerOptions.middleware,

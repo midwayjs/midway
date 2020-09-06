@@ -1,52 +1,14 @@
-import { BootstrapStarter } from '@midwayjs/bootstrap';
 import { IMidwayWebConfigurationOptions, Framework } from '../src';
 import { join } from 'path';
-import { remove } from 'fs-extra';
-import { clearAllModule } from "@midwayjs/decorator";
+import { createApp, close } from '@midwayjs/mock';
 
 const logDir = join(__dirname, '../logs');
 process.env.NODE_LOG_DIR = logDir;
 
-process.setMaxListeners(0);
-
-const appMap = new WeakMap();
-
 export async function creatApp(name, options: IMidwayWebConfigurationOptions = {}) {
-  clearAllModule();
-  const newOptions = Object.assign(options, {
-    plugins: {
-      'egg-mock': {
-        enable: true,
-        package: 'egg-mock'
-      },
-      watcher: false,
-    }
-  });
-  const midwayWeb = new Framework().configure(newOptions);
-  const starter = new BootstrapStarter();
-
-  starter
-    .configure({
-      baseDir: join(__dirname, 'fixtures', name),
-    })
-    .load(midwayWeb);
-
-  await starter.init();
-  await starter.run();
-
-  appMap.set(midwayWeb.getApplication(), starter);
-
-  return midwayWeb.getApplication();
+  return createApp(join(__dirname, 'fixtures', name), options, Framework)
 }
 
 export async function closeApp(app) {
-  if (!app) return;
-  const starter = appMap.get(app);
-  if (starter) {
-    await starter.stop();
-    appMap.delete(starter);
-  }
-
-  await remove(join(app.getAppDir(), 'logs'));
-  await remove(join(app.getAppDir(), 'run'));
+  return close(app);
 }

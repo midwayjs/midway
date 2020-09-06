@@ -1,12 +1,11 @@
 import {
   BaseFramework,
-  extractKoaLikeValue,
+  extractExpressLikeValue,
   generateProvideId,
   getClassMetadata,
   getPropertyDataFromClass,
   getPropertyMetadata,
   getProviderId,
-  IMidwayApplication,
   IMidwayBootstrapOptions,
   listModule,
   MidwayFrameworkType,
@@ -31,25 +30,74 @@ import {
   WEB_ROUTER_PARAM_KEY
 } from '@midwayjs/decorator';
 import {
-  IMidwayKoaApplication,
-  IMidwayKoaApplicationPlus,
-  IMidwayKoaConfigurationOptions,
+  IMidwayExpressApplication,
+  IMidwayExpressConfigurationOptions,
   MiddlewareParamArray,
   WebMiddleware
 } from './interface';
 import * as Router from 'koa-router';
-import type { Context, DefaultState, Middleware } from 'koa';
-import * as koa from 'koa';
+import type { IRouterHandler } from 'express';
+import * as express from "express";
 
-export abstract class MidwayKoaBaseFramework<T, U extends IMidwayApplication & IMidwayKoaApplicationPlus> extends BaseFramework<T> {
-  protected app: U;
+export class MidwayExpressFramework extends BaseFramework<IMidwayExpressConfigurationOptions> {
+  protected app: IMidwayExpressApplication;
   private controllerIds: string[] = [];
   public prioritySortRouters: Array<{
     priority: number;
     router: Router;
   }> = [];
 
-  public getApplication(): U {
+  public configure(
+    options: IMidwayExpressConfigurationOptions
+  ): MidwayExpressFramework {
+    this.configurationOptions = options;
+    return this;
+  }
+
+  protected async afterDirectoryLoad(options: Partial<IMidwayBootstrapOptions>) {
+    this.app = express();
+    this.app.use((req, res, next) => {
+      req.requestContext = new MidwayRequestContainer(req, this.getApplicationContext());
+      req.requestContext.registerObject('req', req);
+      req.requestContext.registerObject('res', res);
+      req.requestContext.ready();
+      next();
+    });
+
+    this.defineApplicationProperties(this.app);
+
+    // register config
+    this.containerLoader.registerHook(CONFIG_KEY, (key: string) => {
+      return this.getConfiguration(key);
+    });
+
+    // register app
+    this.containerLoader.registerHook(APPLICATION_KEY, () => {
+      return this.app;
+    });
+  }
+
+  protected async afterInitialize(
+    options: Partial<IMidwayBootstrapOptions>
+  ): Promise<void> {
+    await this.loadMidwayController();
+  }
+
+  public async run(): Promise<void> {
+    if (this.configurationOptions.port) {
+      new Promise((resolve) => {
+        this.app.listen(this.configurationOptions.port, () => {
+          resolve();
+        });
+      });
+    }
+  }
+
+  public getFrameworkType(): MidwayFrameworkType {
+    return MidwayFrameworkType.WEB_EXPRESS;
+  }
+
+  public getApplication(): IMidwayExpressApplication {
     return this.app;
   }
 
@@ -63,18 +111,18 @@ export abstract class MidwayKoaBaseFramework<T, U extends IMidwayApplication & I
     controllerMapping: string,
     routeArgsInfo?: RouterParamValue[],
     routerResponseData?: any []
-  ): Middleware {
+  ): IRouterHandler {
     const [controllerId, methodName] = controllerMapping.split('.');
-    return async (ctx, next) => {
-      const args = [ctx, next];
+    return async (req, res, next) => {
+      const args = [req, res, next];
       if (Array.isArray(routeArgsInfo)) {
         await Promise.all(
           routeArgsInfo.map(async ({ index, type, propertyData }) => {
-            args[index] = await extractKoaLikeValue(type, propertyData)(ctx, next);
+            args[index] = await extractExpressLikeValue(type, propertyData)(req, res, next);
           })
         );
       }
-      const controller = await ctx.requestContext.getAsync(controllerId);
+      const controller = await req.requestContext.getAsync(controllerId);
       const result = await controller[methodName].apply(controller, args);
       if (result) {
         ctx.body = result;
@@ -256,7 +304,7 @@ export abstract class MidwayKoaBaseFramework<T, U extends IMidwayApplication & I
     }
   }
 
-  protected defineApplicationProperties(app: U): U {
+  protected defineApplicationProperties(app: IMidwayExpressApplication): IMidwayExpressApplication {
     return Object.assign(app, {
       getBaseDir: () => {
         return this.baseDir;
@@ -286,55 +334,5 @@ export abstract class MidwayKoaBaseFramework<T, U extends IMidwayApplication & I
         return MidwayProcessTypeEnum.APPLICATION;
       }
     });
-  }
-}
-
-export class MidwayKoaFramework extends MidwayKoaBaseFramework<IMidwayKoaConfigurationOptions, IMidwayKoaApplication> {
-  public configure(
-    options: IMidwayKoaConfigurationOptions
-  ): MidwayKoaFramework {
-    this.configurationOptions = options;
-    return this;
-  }
-
-  protected async afterDirectoryLoad(options: Partial<IMidwayBootstrapOptions>) {
-    this.app = new koa<DefaultState, Context>() as IMidwayKoaApplication;
-    this.app.use(async (ctx, next) => {
-      ctx.requestContext = new MidwayRequestContainer(ctx, this.getApplicationContext());
-      await ctx.requestContext.ready();
-      await next();
-    });
-
-    this.defineApplicationProperties(this.app);
-
-    // register config
-    this.containerLoader.registerHook(CONFIG_KEY, (key: string) => {
-      return this.getConfiguration(key);
-    });
-
-    // register app
-    this.containerLoader.registerHook(APPLICATION_KEY, () => {
-      return this.app;
-    });
-  }
-
-  protected async afterInitialize(
-    options: Partial<IMidwayBootstrapOptions>
-  ): Promise<void> {
-    await this.loadMidwayController();
-  }
-
-  public async run(): Promise<void> {
-    if (this.configurationOptions.port) {
-      new Promise((resolve) => {
-        this.app.listen(this.configurationOptions.port, () => {
-          resolve();
-        });
-      });
-    }
-  }
-
-  public getFrameworkType(): MidwayFrameworkType {
-    return MidwayFrameworkType.WEB_KOA;
   }
 }

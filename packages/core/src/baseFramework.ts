@@ -3,19 +3,19 @@ import {
   IMidwayApplication,
   IMidwayBootstrapOptions,
   IMidwayContainer,
-  IMidwayFramework,
+  IMidwayFramework, MidwayFrameworkType,
 } from './interface';
 import { ContainerLoader } from './';
 
 export abstract class BaseFramework<T extends IConfigurationOptions>
-  implements IMidwayFramework {
+  implements IMidwayFramework<T> {
   protected isTsMode = true;
   protected baseDir: string;
   protected appDir: string;
-  protected configurationOptions: T;
   protected containerLoader: ContainerLoader;
+  public configurationOptions: T;
 
-  public configure(options: T): IMidwayFramework {
+  public configure(options: T): BaseFramework<T> {
     this.configurationOptions = options;
     return this;
   }
@@ -69,9 +69,11 @@ export abstract class BaseFramework<T extends IConfigurationOptions>
 
   public getCurrentEnvironment() {
     return this.getApplicationContext()
-    .getEnvironmentService()
-    .getCurrentEnvironment();
+      .getEnvironmentService()
+      .getCurrentEnvironment();
   }
+
+  public abstract getFrameworkType(): MidwayFrameworkType;
 
   public abstract getApplication(): IMidwayApplication;
 
@@ -82,19 +84,23 @@ export abstract class BaseFramework<T extends IConfigurationOptions>
     await this.containerLoader.stop();
   }
 
-  protected async beforeStop(): Promise<void> {}
+  protected async beforeStop(): Promise<void> {
+  }
 
   protected async beforeInitialize(
     options: Partial<IMidwayBootstrapOptions>
-  ): Promise<void> {};
+  ): Promise<void> {
+  };
 
   protected async beforeDirectoryLoad(
     options: Partial<IMidwayBootstrapOptions>
-  ): Promise<void> {};
+  ): Promise<void> {
+  };
 
   protected async afterDirectoryLoad(
     options: Partial<IMidwayBootstrapOptions>
-  ): Promise<void> {};
+  ): Promise<void> {
+  };
 
   protected abstract async afterInitialize(
     options: Partial<IMidwayBootstrapOptions>

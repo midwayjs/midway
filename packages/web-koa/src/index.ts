@@ -1,2 +1,2 @@
-export { MidwayWebFramework as Framework } from './framework';
+export { MidwayKoaFramework as Framework, MidwayKoaBaseFramework } from './framework';
 export * from './interface';

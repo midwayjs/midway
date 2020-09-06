@@ -1,18 +1,15 @@
 {
-  "name": "midway-mock",
-  "version": "2.1.4",
-  "eggPlugin": {
-    "name": "midway-mock"
-  },
-  "description": "mock server for midway",
+  "name": "@midwayjs/mock",
+  "version": "1.0.0",
+  "description": "create your test app from midway framework",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "midway-bin build -c",
     "lint": "../../node_modules/.bin/tslint --format prose -c ../../tslint.json --fix 'src/**/*.ts'",
     "devtest": "midway-bin test --ts",
-    "test": "npm run lint && midway-bin clean && midway-bin test --ts",
-    "cov": "midway-bin cov --ts",
+    "test": "../../node_modules/.bin/jest --forceExit",
+    "cov": "../../node_modules/.bin/jest --coverage --forceExit",
     "ci": "midway-bin test",
     "autod": "midway-bin autod"
   },
@@ -20,7 +17,8 @@
     "midway",
     "IoC",
     "mock",
-    "plugin"
+    "plugin",
+    "bootstrap"
   ],
   "files": [
     "src",
@@ -33,11 +31,12 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/core": "^2.1.4",
     "@midwayjs/decorator": "^2.1.4",
     "midway-bin": "^2.0.15"
   },
   "dependencies": {
+    "@midwayjs/bootstrap": "^1.0.0",
+    "@midwayjs/core": "^2.1.4",
     "egg-mock": "^3.21.0",
     "power-assert": "^1.6.1"
   },

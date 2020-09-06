@@ -25,13 +25,15 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/bootstrap": "^1.0.0",
+    "@midwayjs/mock": "^1.0.0",
+    "@types/express": "^4.17.8",
     "midway-bin": "^2.0.15",
     "fs-extra": "^8.0.1"
   },
   "dependencies": {
     "@midwayjs/core": "^2.1.4",
-    "@midwayjs/decorator": "^2.1.4"
+    "@midwayjs/decorator": "^2.1.4",
+    "express": "^4.17.1"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
   "repository": {

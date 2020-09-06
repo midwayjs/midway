@@ -1,13 +1,13 @@
 import { join } from 'path';
 import * as assert from 'assert';
 import * as mm from 'mm';
-import { creatApp, closeApp } from './utils';
+import { creatStarter, closeApp } from './utils';
 import { Framework } from '../src';
 
 describe('test/index.test.ts', () => {
 
   it('invoke handler by default name', async () => {
-    const starter = await creatApp('base-app');
+    const starter = await creatStarter('base-app');
     const data = await starter.handleInvokeWrapper('index.handler')(
       {
         text: 'hello',
@@ -19,7 +19,7 @@ describe('test/index.test.ts', () => {
   });
 
   it('invoke different handler use @Handler', async () => {
-    const starter = await creatApp('base-app-handler');
+    const starter = await creatStarter('base-app-handler');
     assert(
       (await starter.handleInvokeWrapper('index.entry')(
         {
@@ -40,7 +40,7 @@ describe('test/index.test.ts', () => {
   });
 
   it('use default handler and new handler', async () => {
-    const starter = await creatApp('base-app-handler2');
+    const starter = await creatStarter('base-app-handler2');
     assert(
       (await starter.handleInvokeWrapper('index.handler')(
         {
@@ -65,7 +65,7 @@ describe('test/index.test.ts', () => {
   });
 
   it('invoke handler by default name', async () => {
-    const starter = await creatApp('base-app-route');
+    const starter = await creatStarter('base-app-route');
     const data = await starter.handleInvokeWrapper('deploy.handler9')(
       {
         text: 'hello',
@@ -90,7 +90,7 @@ describe('test/index.test.ts', () => {
   // });
 
   it('use new decorator and use function middleware', async () => {
-    const starter = await creatApp('base-app-new');
+    const starter = await creatStarter('base-app-new');
     const data = await starter.handleInvokeWrapper('index.handler')(
       {
         text: 'hello',
@@ -111,7 +111,7 @@ describe('test/index.test.ts', () => {
         );
       }
     }
-    const starter = await creatApp('base-app-configuration', {}, TestFaaSStarter);
+    const starter = await creatStarter('base-app-configuration', {}, TestFaaSStarter);
     const data = await starter.handleInvokeWrapper('index.handler')(
       {},
       { text: 'ab' }
@@ -124,7 +124,7 @@ describe('test/index.test.ts', () => {
   it('test custom global middleware in fc', async () => {
     const { start } = require('@midwayjs/serverless-fc-starter');
     const runtime = await start();
-    const starter = await creatApp('base-app-middleware', {
+    const starter = await creatStarter('base-app-middleware', {
       applicationAdapter: runtime,
     });
 
@@ -148,7 +148,7 @@ describe('test/index.test.ts', () => {
   it('test custom global middleware in scf', async () => {
     const { start } = require('@midwayjs/serverless-scf-starter');
     const runtime = await start();
-    const starter = await creatApp('base-app-middleware-scf', {
+    const starter = await creatStarter('base-app-middleware-scf', {
       applicationAdapter: runtime,
     });
 
@@ -172,7 +172,7 @@ describe('test/index.test.ts', () => {
     const { start } = require('@midwayjs/serverless-scf-starter');
     const runtime = await start();
 
-    const starter = await creatApp('base-app-middleware-err', {
+    const starter = await creatStarter('base-app-middleware-err', {
       applicationAdapter: runtime,
     });
     const data = await runtime.asyncEvent(
@@ -194,7 +194,7 @@ describe('test/index.test.ts', () => {
   it('test inject app and plugin', async () => {
     const { start } = require('@midwayjs/serverless-scf-starter');
     const runtime = await start();
-    const starter = await creatApp('base-app-inject', {
+    const starter = await creatStarter('base-app-inject', {
       applicationAdapter: runtime,
     });
     // set app
@@ -221,7 +221,7 @@ describe('test/index.test.ts', () => {
   it('test inject logger', async () => {
     const { start } = require('@midwayjs/serverless-scf-starter');
     const runtime = await start();
-    const starter = await creatApp('base-app-inject-logger', {
+    const starter = await creatStarter('base-app-inject-logger', {
       applicationAdapter: runtime,
     });
 
@@ -243,7 +243,7 @@ describe('test/index.test.ts', () => {
 
   it('test midway-hooks', async () => {
     mm(process.env, 'NODE_ENV', 'sh');
-    const starter = await creatApp('midway-hooks');
+    const starter = await creatStarter('midway-hooks');
     const data1 = await starter.handleInvokeWrapper('index.handler')({}, {});
     const data2 = await starter.handleInvokeWrapper('inject.handler')({}, {});
 

@@ -10,12 +10,13 @@ import {
   Redirect,
 } from '@midwayjs/decorator';
 import { UserService } from '../service/user';
+import { IMidwayKoaContext } from '../../../../../src';
 
 @Provide()
 @Controller('/')
 export class APIController {
   @Inject()
-  ctx: any;
+  ctx: IMidwayKoaContext;
 
   @Inject()
   userService: UserService;

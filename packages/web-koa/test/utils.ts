@@ -1,33 +1,11 @@
-import { BootstrapStarter } from '@midwayjs/bootstrap';
-import { IMidwayWebConfigurationOptions, Framework } from '../src';
+import { IMidwayKoaConfigurationOptions, Framework, IMidwayKoaApplication } from '../src';
 import { join } from 'path';
-import { clearAllModule } from "@midwayjs/decorator";
+import { createApp, close } from '@midwayjs/mock';
 
-const appMap = new WeakMap();
-
-export async function creatApp(name, options: IMidwayWebConfigurationOptions = {}) {
-  clearAllModule();
-  const midwayWeb = new Framework().configure(options);
-  const starter = new BootstrapStarter();
-
-  starter
-    .configure({
-      baseDir: join(__dirname, 'fixtures', name),
-    })
-    .load(midwayWeb);
-
-  await starter.init();
-  await starter.run();
-
-  appMap.set(midwayWeb.getApplication(), starter);
-
-  return midwayWeb.getApplication();
+export async function creatApp(name: string, options: IMidwayKoaConfigurationOptions = {}): Promise<IMidwayKoaApplication> {
+  return createApp(join(__dirname, 'fixtures', name), options, Framework);
 }
 
 export async function closeApp(app) {
-  if (!app) return;
-  const starter = appMap.get(app);
-  if (starter) {
-    await starter.stop();
-  }
+  return close(app);
 }

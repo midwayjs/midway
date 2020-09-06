@@ -1,8 +1,12 @@
-import { Context } from 'egg';
+import { Context, Application } from 'egg';
 import { KoaMiddleware, KoaMiddlewareParamArray } from '@midwayjs/decorator';
+import { IMidwayApplication, IMidwayContext } from '@midwayjs/core';
+import { IMidwayKoaConfigurationOptions } from '@midwayjs/koa';
 
-export interface IMidwayWebConfigurationOptions {
-  port?: number;
+export type IMidwayWebApplication = IMidwayApplication & Application;
+export type IMidwayWebContext = IMidwayContext & Context;
+
+export interface IMidwayWebConfigurationOptions extends IMidwayKoaConfigurationOptions {
   plugins?: {
     [plugin: string]: {
       enable: boolean;
@@ -13,8 +17,8 @@ export interface IMidwayWebConfigurationOptions {
   typescript?: boolean;
 }
 
-export type Middleware = KoaMiddleware<Context>;
-export type MiddlewareParamArray = KoaMiddlewareParamArray<Context>;
+export type Middleware = KoaMiddleware<IMidwayWebContext>;
+export type MiddlewareParamArray = KoaMiddlewareParamArray<IMidwayWebContext>;
 
 export interface WebMiddleware {
   resolve(): Middleware;

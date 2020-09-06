@@ -1,17 +1,20 @@
-import { IMidwayApplication } from "@midwayjs/core";
-import { Application } from 'koa/lib/application';
-import { KoaMiddleware, KoaMiddlewareParamArray } from '@midwayjs/decorator';
-import { Context } from 'koa';
+import { IMidwayApplication, IMidwayContext } from '@midwayjs/core';
+import { KoaMiddlewareParamArray } from '@midwayjs/decorator';
+import * as koa from 'koa';
+import { Context, DefaultState } from 'koa';
 
-export type IMidwayWebApplication = IMidwayApplication & Application;
+export type IMidwayKoaContext = IMidwayContext & Context;
+export type IMidwayKoaApplication = IMidwayApplication & koa<DefaultState, IMidwayKoaContext>;
+export interface IMidwayKoaApplicationPlus {
+  use(...args);
+}
 
-export interface IMidwayWebConfigurationOptions {
+export interface IMidwayKoaConfigurationOptions {
   port?: number;
 }
 
-export type Middleware = KoaMiddleware<Context>;
-export type MiddlewareParamArray = KoaMiddlewareParamArray<Context>;
+export type MiddlewareParamArray = KoaMiddlewareParamArray<IMidwayKoaContext>;
 
 export interface WebMiddleware {
-  resolve(): Middleware;
+  resolve(): koa.Middleware;
 }

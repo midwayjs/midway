@@ -13,7 +13,7 @@ import {
   MidwayProcessTypeEnum,
   MidwayRequestContainer,
   REQUEST_OBJ_CTX_KEY,
-  BaseFramework,
+  BaseFramework, MidwayFrameworkType,
 } from '@midwayjs/core';
 
 import { dirname, resolve } from 'path';
@@ -107,6 +107,10 @@ export class MidwayFaaSFramework extends BaseFramework<
 
   public getApplication(): IMidwayApplication {
     return this.webApplication;
+  }
+
+  public getFrameworkType(): MidwayFrameworkType {
+    return MidwayFrameworkType.FAAS;
   }
 
   public handleInvokeWrapper(handlerMapping: string) {
@@ -265,8 +269,8 @@ export class MidwayFaaSFramework extends BaseFramework<
         return this.logger;
       },
 
-      getMidwayType: () => {
-        return 'MIDWAY_FAAS';
+      getFrameworkType: () => {
+        return this.getFrameworkType();
       },
 
       getProcessType: () => {

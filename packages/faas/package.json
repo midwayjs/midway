@@ -8,17 +8,14 @@
     "@midwayjs/decorator": "^2.1.4",
     "@midwayjs/faas-typings": "^1.1.4",
     "@midwayjs/simple-lock": "^1.1.4",
-    "debug": "^4.1.1",
-    "deep-eql": "^4.0.0",
-    "is-type-of": "^1.2.1",
     "koa-compose": "^4.1.0"
   },
   "devDependencies": {
-    "@midwayjs/bootstrap": "^1.0.0",
+    "@midwayjs/mock": "^1.0.0",
     "@midwayjs/serverless-fc-starter": "^1.0.0",
     "@midwayjs/serverless-scf-starter": "^1.0.0",
     "midway-bin": "^2.0.15",
-    "mm": "3"
+    "mm": "^2.5.0"
   },
   "engines": {
     "node": ">= 10"
