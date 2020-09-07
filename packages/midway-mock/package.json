@@ -1,6 +1,6 @@
 {
   "name": "midway-mock",
-  "version": "1.20.1",
+  "version": "1.20.3",
   "eggPlugin": {
     "name": "midway-mock"
   },
@@ -33,9 +33,9 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/decorator": "^1.20.1",
+    "@midwayjs/decorator": "^1.20.3",
     "injection": "^1.8.0",
-    "midway-bin": "^1.20.1"
+    "midway-bin": "^1.20.3"
   },
   "dependencies": {
     "egg-mock": "^3.21.0",

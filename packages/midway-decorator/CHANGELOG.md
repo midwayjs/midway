@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.20.3](https://github.com/midwayjs/midway/compare/v1.20.2...v1.20.3) (2020-09-07)
+
+
+### Bug Fixes
+
+* **decorator:** fix schedule opts env's typing ([#506](https://github.com/midwayjs/midway/issues/506)) ([9c2da61](https://github.com/midwayjs/midway/commit/9c2da61aaf788f1aa6cb27fdf9acad04e53bba29))
+
+
+
+
+
 ## [1.20.1](https://github.com/midwayjs/midway/compare/v1.20.0...v1.20.1) (2020-06-16)
 
 **Note:** Version bump only for package @midwayjs/decorator
