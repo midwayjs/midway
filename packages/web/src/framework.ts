@@ -5,6 +5,7 @@ import { MidwayKoaBaseFramework } from '@midwayjs/koa';
 import { EggRouter } from '@eggjs/router';
 import { resolve } from 'path';
 import { Router } from 'egg';
+import { EggAgent, EggApplication } from './application';
 
 export class MidwayWebFramework extends MidwayKoaBaseFramework<IMidwayWebConfigurationOptions, IMidwayWebApplication, IMidwayWebContext> {
   protected app: IMidwayWebApplication;
@@ -21,6 +22,7 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<IMidwayWebConfigu
     if (options.typescript === false) {
       this.isTsMode = false;
     }
+
     return this;
   }
 
@@ -36,16 +38,24 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<IMidwayWebConfigu
       process.env.EGG_TYPESCRIPT = 'true';
     }
 
-    const { start } = require('egg');
-    this.app = await start({
-      baseDir: options.appDir,
-      sourceDir: this.isTsMode ? options.baseDir : options.appDir,
-      ignoreWarning: true,
-      framework: resolve(__dirname, 'application'),
-      plugins: this.configurationOptions.plugins,
-      webFramework: this,
-      mode: 'single',
-    });
+    if (this.configurationOptions.processType) {
+      if (this.configurationOptions.processType === 'application') {
+        this.app = new EggApplication();
+      } else {
+        this.app = new EggAgent();
+      }
+    } else {
+      const { start } = require('egg');
+      this.app = await start({
+        baseDir: options.appDir,
+        sourceDir: this.isTsMode ? options.baseDir : options.appDir,
+        ignoreWarning: true,
+        framework: resolve(__dirname, 'application'),
+        plugins: this.configurationOptions.plugins,
+        webFramework: this,
+        mode: 'single',
+      });
+    }
 
     this.defineApplicationProperties(this.app);
     // register plugin
@@ -73,7 +83,9 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<IMidwayWebConfigu
   protected async afterInitialize(
     options: Partial<IMidwayBootstrapOptions>
   ): Promise<void> {
-    await this.loadMidwayController();
+    if (this.configurationOptions.processType !== 'agent') {
+      await this.loadMidwayController();
+    }
   }
 
   public getApplication(): IMidwayWebApplication {
@@ -141,6 +153,7 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<IMidwayWebConfigu
       },
 
       getProcessType: () => {
+        // TODO 区分进程类型
         return MidwayProcessTypeEnum.APPLICATION;
       }
     });

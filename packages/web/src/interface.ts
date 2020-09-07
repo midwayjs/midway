@@ -15,6 +15,7 @@ export interface IMidwayWebConfigurationOptions extends IMidwayKoaConfigurationO
     }
   };
   typescript?: boolean;
+  processType?: 'application' | 'agent';
 }
 
 export type MidwayWebMiddleware = Middleware<DefaultState, IMidwayWebContext>;

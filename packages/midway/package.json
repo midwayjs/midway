@@ -23,7 +23,8 @@
   },
   "dependencies": {
     "egg-cluster": "^1.23.0",
-    "midway-web": "^2.1.4"
+    "@midwayjs/bootstrap": "^1.0.0",
+    "@midwayjs/web": "^1.0.0"
   },
   "files": [
     "bin",
