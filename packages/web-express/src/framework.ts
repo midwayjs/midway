@@ -37,7 +37,7 @@ import {
   IMidwayExpressRequest
 } from './interface';
 import type { IRouter, IRouterHandler, RequestHandler } from 'express';
-import * as express from "express";
+import * as express from 'express';
 
 export class MidwayExpressFramework extends BaseFramework<IMidwayExpressConfigurationOptions> {
   protected app: IMidwayExpressApplication;
@@ -117,7 +117,7 @@ export class MidwayExpressFramework extends BaseFramework<IMidwayExpressConfigur
       const args = [req, res, next];
       if (Array.isArray(routeArgsInfo)) {
         await Promise.all(
-          routeArgsInfo.map(async ({index, type, propertyData}) => {
+          routeArgsInfo.map(async ({ index, type, propertyData }) => {
             args[index] = await extractExpressLikeValue(type, propertyData)(req, res, next);
           })
         );
@@ -130,16 +130,13 @@ export class MidwayExpressFramework extends BaseFramework<IMidwayExpressConfigur
         for (const routerRes of routerResponseData) {
           switch (routerRes.type) {
             case WEB_RESPONSE_HTTP_CODE:
-              res.status = routerRes.code;
+              res.status(routerRes.code);
               break;
             case WEB_RESPONSE_HEADER:
-              routerRes.setHeaders.forEach((key, value) => {
-                res.set(key, value);
-              });
+              res.set(routerRes.setHeaders);
               break;
             case WEB_RESPONSE_REDIRECT:
-              res.status = routerRes.code;
-              res.redirect(routerRes.url);
+              res.redirect(routerRes.code, routerRes.url);
               return;
           }
         }
@@ -218,12 +215,13 @@ export class MidwayExpressFramework extends BaseFramework<IMidwayExpressConfigur
         for (const webRouter of webRouterInfo) {
           // get middleware
           const middlewares2 = webRouter.middleware as unknown as MiddlewareParamArray;
-          const methodMiddlewares: MiddlewareParamArray = [];
+          // const methodMiddlewares: MiddlewareParamArray = [];
 
           await this.handlerWebMiddleware(
             middlewares2,
             (middlewareImpl: Middleware) => {
-              methodMiddlewares.push(middlewareImpl);
+              // methodMiddlewares.push(middlewareImpl);
+              newRouter.use(middlewareImpl);
             }
           );
 
@@ -242,19 +240,12 @@ export class MidwayExpressFramework extends BaseFramework<IMidwayExpressConfigur
               webRouter.method
             ) || [];
 
-          const routerArgs = [
-            webRouter.routerName,
-            webRouter.path,
-            ...methodMiddlewares,
-            this.generateController(
-              `${controllerId}.${webRouter.method}`,
-              routeArgsInfo,
-              routerResponseData
-            ),
-          ];
-
           // apply controller from request context
-          newRouter[webRouter.requestMethod].apply(newRouter, routerArgs);
+          newRouter[webRouter.requestMethod].call(newRouter, webRouter.path, this.generateController(
+            `${controllerId}.${webRouter.method}`,
+            routeArgsInfo,
+            routerResponseData
+          ));
         }
       }
 
@@ -274,10 +265,10 @@ export class MidwayExpressFramework extends BaseFramework<IMidwayExpressConfigur
   protected createRouter(controllerOption: ControllerOption): IRouter {
     const {
       prefix,
-      routerOptions: {sensitive},
+      routerOptions: { sensitive },
     } = controllerOption;
     if (prefix) {
-      return express.Router({caseSensitive: sensitive});
+      return express.Router({ caseSensitive: sensitive });
     }
     return null;
   }

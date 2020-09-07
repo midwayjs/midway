@@ -1,5 +1,4 @@
 import { IMidwayApplication, IMidwayContext } from '@midwayjs/core';
-// import { KoaMiddlewareParamArray } from '@midwayjs/decorator';
 import { Application, Request, Response, RequestHandler } from 'express';
 
 export type IMidwayExpressRequest = IMidwayContext & Request;
