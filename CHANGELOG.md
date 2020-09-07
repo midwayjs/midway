@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.13](https://github.com/midwayjs/midway/compare/serverless-v1.2.12...serverless-v1.2.13) (2020-09-07)
+
+
+### Bug Fixes
+
+* update header after gizp ([#629](https://github.com/midwayjs/midway/issues/629)) ([9f91985](https://github.com/midwayjs/midway/commit/9f919850af334f0c463947b2730dfafabba43f1d))
+
+
+
+
+
 ## [1.2.12](https://github.com/midwayjs/midway/compare/serverless-v1.2.11...serverless-v1.2.12) (2020-09-04)
 
 
