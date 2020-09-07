@@ -15,8 +15,6 @@ import {
 } from '@midwayjs/core';
 
 import {
-  APPLICATION_KEY,
-  CONFIG_KEY,
   CONTROLLER_KEY,
   ControllerOption,
   PRIORITY_KEY,
@@ -64,16 +62,6 @@ export class MidwayExpressFramework extends BaseFramework<IMidwayExpressConfigur
       req.requestContext.registerObject('res', res);
       req.requestContext.ready();
       next();
-    });
-
-    // register config
-    this.containerLoader.registerHook(CONFIG_KEY, (key: string) => {
-      return this.getConfiguration(key);
-    });
-
-    // register app
-    this.containerLoader.registerHook(APPLICATION_KEY, () => {
-      return this.app;
     });
   }
 
