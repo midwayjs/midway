@@ -26,24 +26,24 @@ export const extractKoaLikeValue = (key, data) => {
 };
 
 export const extractExpressLikeValue = (key, data) => {
-  return async function (ctx, next) {
+  return async function (req, res, next) {
     switch (key) {
       case RouteParamTypes.NEXT:
         return next;
       case RouteParamTypes.BODY:
-        return data && ctx.request.body ? ctx.request.body[data] : ctx.request.body;
+        return data && req.body ? req.body[data] : req.body;
       case RouteParamTypes.PARAM:
-        return data ? ctx.params[data] : ctx.params;
+        return data ? req.params[data] : req.params;
       case RouteParamTypes.QUERY:
-        return data ? ctx.query[data] : ctx.query;
+        return data ? req.query[data] : req.query;
       case RouteParamTypes.HEADERS:
-        return data ? ctx.headers[data] : ctx.headers;
+        return data ? req.headers[data] : req.headers;
       case RouteParamTypes.SESSION:
-        return ctx.session;
+        return req.session;
       case RouteParamTypes.FILESTREAM:
-        return ctx.getFileStream && ctx.getFileStream(data);
+        return req.getFileStream && req.getFileStream(data);
       case RouteParamTypes.FILESSTREAM:
-        return ctx.multipart && ctx.multipart(data);
+        return req.multipart && req.multipart(data);
       default:
         return null;
     }

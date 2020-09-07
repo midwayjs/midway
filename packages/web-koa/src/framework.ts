@@ -34,14 +34,15 @@ import {
   IMidwayKoaApplication,
   IMidwayKoaApplicationPlus,
   IMidwayKoaConfigurationOptions,
-  MiddlewareParamArray,
-  WebMiddleware
+  WebMiddleware,
+  IMidwayKoaContext,
+  MiddlewareParamArray
 } from './interface';
 import * as Router from 'koa-router';
-import type { Context, DefaultState, Middleware } from 'koa';
+import type { DefaultState, Middleware } from 'koa';
 import * as koa from 'koa';
 
-export abstract class MidwayKoaBaseFramework<T, U extends IMidwayApplication & IMidwayKoaApplicationPlus> extends BaseFramework<T> {
+export abstract class MidwayKoaBaseFramework<T, U extends IMidwayApplication & IMidwayKoaApplicationPlus, CustomContext> extends BaseFramework<T> {
   protected app: U;
   private controllerIds: string[] = [];
   public prioritySortRouters: Array<{
@@ -63,13 +64,13 @@ export abstract class MidwayKoaBaseFramework<T, U extends IMidwayApplication & I
     controllerMapping: string,
     routeArgsInfo?: RouterParamValue[],
     routerResponseData?: any []
-  ): Middleware {
+  ): Middleware<DefaultState, IMidwayKoaContext> {
     const [controllerId, methodName] = controllerMapping.split('.');
     return async (ctx, next) => {
       const args = [ctx, next];
       if (Array.isArray(routeArgsInfo)) {
         await Promise.all(
-          routeArgsInfo.map(async ({ index, type, propertyData }) => {
+          routeArgsInfo.map(async ({index, type, propertyData}) => {
             args[index] = await extractKoaLikeValue(type, propertyData)(ctx, next);
           })
         );
@@ -147,8 +148,7 @@ export abstract class MidwayKoaBaseFramework<T, U extends IMidwayApplication & I
 
     if (newRouter) {
       // implement middleware in controller
-      const middlewares: MiddlewareParamArray | void =
-        controllerOption.routerOptions.middleware;
+      const middlewares = controllerOption.routerOptions.middleware as MiddlewareParamArray;
       await this.handlerWebMiddleware(
         middlewares,
         (middlewareImpl: Middleware) => {
@@ -168,8 +168,7 @@ export abstract class MidwayKoaBaseFramework<T, U extends IMidwayApplication & I
       ) {
         for (const webRouter of webRouterInfo) {
           // get middleware
-          const middlewares2: MiddlewareParamArray | void =
-            webRouter.middleware;
+          const middlewares2 = webRouter.middleware as MiddlewareParamArray;
           const methodMiddlewares: Middleware[] = [];
 
           await this.handlerWebMiddleware(
@@ -225,10 +224,10 @@ export abstract class MidwayKoaBaseFramework<T, U extends IMidwayApplication & I
   protected createRouter(controllerOption: ControllerOption): Router {
     const {
       prefix,
-      routerOptions: { sensitive },
+      routerOptions: {sensitive},
     } = controllerOption;
     if (prefix) {
-      const router = new Router({ sensitive });
+      const router = new Router({sensitive});
       router.prefix(prefix);
       return router;
     }
@@ -236,7 +235,7 @@ export abstract class MidwayKoaBaseFramework<T, U extends IMidwayApplication & I
   }
 
   private async handlerWebMiddleware(
-    middlewares: MiddlewareParamArray | void,
+    middlewares: MiddlewareParamArray,
     handlerCallback: (middlewareImpl: Middleware) => void
   ): Promise<void> {
     if (middlewares && middlewares.length) {
@@ -289,7 +288,7 @@ export abstract class MidwayKoaBaseFramework<T, U extends IMidwayApplication & I
   }
 }
 
-export class MidwayKoaFramework extends MidwayKoaBaseFramework<IMidwayKoaConfigurationOptions, IMidwayKoaApplication> {
+export class MidwayKoaFramework extends MidwayKoaBaseFramework<IMidwayKoaConfigurationOptions, IMidwayKoaApplication, IMidwayKoaContext> {
   public configure(
     options: IMidwayKoaConfigurationOptions
   ): MidwayKoaFramework {
@@ -298,7 +297,7 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<IMidwayKoaConfigu
   }
 
   protected async afterDirectoryLoad(options: Partial<IMidwayBootstrapOptions>) {
-    this.app = new koa<DefaultState, Context>() as IMidwayKoaApplication;
+    this.app = new koa<DefaultState, IMidwayKoaContext>() as IMidwayKoaApplication;
     this.app.use(async (ctx, next) => {
       ctx.requestContext = new MidwayRequestContainer(ctx, this.getApplicationContext());
       await ctx.requestContext.ready();

@@ -1,13 +1,12 @@
 import { Scope } from '../annotation';
-import { ScopeEnum, saveModule, FUNC_KEY, attachClassMetadata } from '../';
-import { KoaMiddlewareParamArray } from '..';
+import { ScopeEnum, saveModule, FUNC_KEY, attachClassMetadata, MiddlewareParamArray } from '..';
 
 export interface FuncParams {
   funHandler?: string;
   event?: string;
   method?: string;
   path?: string;
-  middleware?: KoaMiddlewareParamArray;
+  middleware?: MiddlewareParamArray;
 }
 
 export function Func(

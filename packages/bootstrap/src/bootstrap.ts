@@ -12,7 +12,7 @@ function isTypeScriptEnvironment() {
 
 export class BootstrapStarter {
   private appDir;
-  private bootstrapItems: IMidwayFramework[] = [];
+  private bootstrapItems: IMidwayFramework<any>[] = [];
   private globalOptions: Partial<IMidwayBootstrapOptions>;
 
   public configure(options: Partial<IMidwayBootstrapOptions>) {
@@ -20,7 +20,7 @@ export class BootstrapStarter {
     return this;
   }
 
-  public load(unit: IMidwayFramework) {
+  public load(unit: IMidwayFramework<any>) {
     this.bootstrapItems.push(unit);
     return this;
   }
@@ -79,7 +79,7 @@ export class Bootstrap {
    * load midway framework unit
    * @param unit
    */
-  static load(unit: IMidwayFramework) {
+  static load(unit: IMidwayFramework<any>) {
     this.getStarter().load(unit);
     return this;
   }

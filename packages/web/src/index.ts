@@ -34,8 +34,6 @@ export {
   Options as options,
   Head as head,
   All as all,
-  KoaMiddleware,
-  KoaMiddlewareParamArray,
   ControllerOption,
   ScheduleOpts,
   ScopeEnum,

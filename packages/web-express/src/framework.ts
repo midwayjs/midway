@@ -31,12 +31,12 @@ import {
 } from '@midwayjs/decorator';
 import {
   IMidwayExpressApplication,
-  IMidwayExpressConfigurationOptions,
+  IMidwayExpressConfigurationOptions, Middleware,
   MiddlewareParamArray,
-  WebMiddleware
+  WebMiddleware,
+  IMidwayExpressRequest
 } from './interface';
-import * as Router from 'koa-router';
-import type { IRouterHandler } from 'express';
+import type { IRouter, IRouterHandler, RequestHandler } from 'express';
 import * as express from "express";
 
 export class MidwayExpressFramework extends BaseFramework<IMidwayExpressConfigurationOptions> {
@@ -44,7 +44,8 @@ export class MidwayExpressFramework extends BaseFramework<IMidwayExpressConfigur
   private controllerIds: string[] = [];
   public prioritySortRouters: Array<{
     priority: number;
-    router: Router;
+    router: IRouter;
+    prefix: string;
   }> = [];
 
   public configure(
@@ -55,16 +56,15 @@ export class MidwayExpressFramework extends BaseFramework<IMidwayExpressConfigur
   }
 
   protected async afterDirectoryLoad(options: Partial<IMidwayBootstrapOptions>) {
-    this.app = express();
-    this.app.use((req, res, next) => {
+    this.app = express() as unknown as IMidwayExpressApplication;
+    this.defineApplicationProperties(this.app);
+    this.app.use((req: IMidwayExpressRequest, res, next) => {
       req.requestContext = new MidwayRequestContainer(req, this.getApplicationContext());
       req.requestContext.registerObject('req', req);
       req.requestContext.registerObject('res', res);
       req.requestContext.ready();
       next();
     });
-
-    this.defineApplicationProperties(this.app);
 
     // register config
     this.containerLoader.registerHook(CONFIG_KEY, (key: string) => {
@@ -111,41 +111,42 @@ export class MidwayExpressFramework extends BaseFramework<IMidwayExpressConfigur
     controllerMapping: string,
     routeArgsInfo?: RouterParamValue[],
     routerResponseData?: any []
-  ): IRouterHandler {
+  ): IRouterHandler<any> {
     const [controllerId, methodName] = controllerMapping.split('.');
     return async (req, res, next) => {
       const args = [req, res, next];
       if (Array.isArray(routeArgsInfo)) {
         await Promise.all(
-          routeArgsInfo.map(async ({ index, type, propertyData }) => {
+          routeArgsInfo.map(async ({index, type, propertyData}) => {
             args[index] = await extractExpressLikeValue(type, propertyData)(req, res, next);
           })
         );
       }
       const controller = await req.requestContext.getAsync(controllerId);
       const result = await controller[methodName].apply(controller, args);
-      if (result) {
-        ctx.body = result;
-      }
 
       // implement response decorator
       if (Array.isArray(routerResponseData) && routerResponseData.length) {
         for (const routerRes of routerResponseData) {
           switch (routerRes.type) {
             case WEB_RESPONSE_HTTP_CODE:
-              ctx.status = routerRes.code;
+              res.status = routerRes.code;
               break;
             case WEB_RESPONSE_HEADER:
               routerRes.setHeaders.forEach((key, value) => {
-                ctx.set(key, value);
+                res.set(key, value);
               });
               break;
             case WEB_RESPONSE_REDIRECT:
-              ctx.status = routerRes.code;
-              ctx.redirect(routerRes.url);
+              res.status = routerRes.code;
+              res.redirect(routerRes.url);
               return;
           }
         }
+      }
+
+      if (result) {
+        res.send(result);
       }
     };
   }
@@ -178,7 +179,7 @@ export class MidwayExpressFramework extends BaseFramework<IMidwayExpressConfigur
       );
 
       this.prioritySortRouters.forEach(prioritySortRouter => {
-        this.app.use(prioritySortRouter.router.middleware());
+        this.app.use(prioritySortRouter.router);
       });
     }
   }
@@ -195,11 +196,11 @@ export class MidwayExpressFramework extends BaseFramework<IMidwayExpressConfigur
 
     if (newRouter) {
       // implement middleware in controller
-      const middlewares: MiddlewareParamArray | void =
-        controllerOption.routerOptions.middleware;
+      const middlewares =
+        controllerOption.routerOptions.middleware as unknown as MiddlewareParamArray;
       await this.handlerWebMiddleware(
         middlewares,
-        (middlewareImpl: Middleware) => {
+        (middlewareImpl: RequestHandler) => {
           newRouter.use(middlewareImpl);
         }
       );
@@ -216,9 +217,8 @@ export class MidwayExpressFramework extends BaseFramework<IMidwayExpressConfigur
       ) {
         for (const webRouter of webRouterInfo) {
           // get middleware
-          const middlewares2: MiddlewareParamArray | void =
-            webRouter.middleware;
-          const methodMiddlewares: Middleware[] = [];
+          const middlewares2 = webRouter.middleware as unknown as MiddlewareParamArray;
+          const methodMiddlewares: MiddlewareParamArray = [];
 
           await this.handlerWebMiddleware(
             middlewares2,
@@ -263,6 +263,7 @@ export class MidwayExpressFramework extends BaseFramework<IMidwayExpressConfigur
       this.prioritySortRouters.push({
         priority: priority || 0,
         router: newRouter,
+        prefix: controllerOption.prefix,
       });
     }
   }
@@ -270,22 +271,20 @@ export class MidwayExpressFramework extends BaseFramework<IMidwayExpressConfigur
   /**
    * @param controllerOption
    */
-  protected createRouter(controllerOption: ControllerOption): Router {
+  protected createRouter(controllerOption: ControllerOption): IRouter {
     const {
       prefix,
-      routerOptions: { sensitive },
+      routerOptions: {sensitive},
     } = controllerOption;
     if (prefix) {
-      const router = new Router({ sensitive });
-      router.prefix(prefix);
-      return router;
+      return express.Router({caseSensitive: sensitive});
     }
     return null;
   }
 
   private async handlerWebMiddleware(
-    middlewares: MiddlewareParamArray | void,
-    handlerCallback: (middlewareImpl: Middleware) => void
+    middlewares: MiddlewareParamArray,
+    handlerCallback: (middlewareImpl: RequestHandler) => void
   ): Promise<void> {
     if (middlewares && middlewares.length) {
       for (const middleware of middlewares) {

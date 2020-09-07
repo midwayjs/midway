@@ -1,7 +1,7 @@
 import { Context, Application } from 'egg';
-import { KoaMiddleware, KoaMiddlewareParamArray } from '@midwayjs/decorator';
 import { IMidwayApplication, IMidwayContext } from '@midwayjs/core';
 import { IMidwayKoaConfigurationOptions } from '@midwayjs/koa';
+import { DefaultState, Middleware } from 'koa';
 
 export type IMidwayWebApplication = IMidwayApplication & Application;
 export type IMidwayWebContext = IMidwayContext & Context;
@@ -17,9 +17,8 @@ export interface IMidwayWebConfigurationOptions extends IMidwayKoaConfigurationO
   typescript?: boolean;
 }
 
-export type Middleware = KoaMiddleware<IMidwayWebContext>;
-export type MiddlewareParamArray = KoaMiddlewareParamArray<IMidwayWebContext>;
+export type MidwayWebMiddleware = Middleware<DefaultState, IMidwayWebContext>;
 
 export interface WebMiddleware {
-  resolve(): Middleware;
+  resolve(): MidwayWebMiddleware;
 }

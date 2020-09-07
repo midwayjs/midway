@@ -2,14 +2,14 @@
  * 'HEAD', 'OPTIONS', 'GET', 'PUT', 'PATCH', 'POST', 'DELETE' 封装
  */
 import { attachClassMetadata, WEB_ROUTER_KEY } from '../';
-import { KoaMiddlewareParamArray } from '../interface';
+import { MiddlewareParamArray } from '../interface';
 
 export interface RouterOption {
   path?: string;
   requestMethod: string;
   routerName?: string;
   method: string;
-  middleware?: KoaMiddlewareParamArray;
+  middleware?: MiddlewareParamArray;
 }
 
 export const RequestMethod = {
@@ -39,7 +39,7 @@ export interface RequestMappingMetadata {
   [PATH_METADATA]?: string;
   [METHOD_METADATA]: string;
   [ROUTER_NAME_METADATA]?: string;
-  [ROUTER_MIDDLEWARE]?: KoaMiddlewareParamArray;
+  [ROUTER_MIDDLEWARE]?: MiddlewareParamArray;
 }
 
 export const RequestMapping = (
@@ -67,7 +67,7 @@ const createMappingDecorator = (method: string) => (
   path?: string,
   routerOptions: {
     routerName?: string;
-    middleware?: KoaMiddlewareParamArray;
+    middleware?: MiddlewareParamArray;
   } = {middleware: []}
 ): MethodDecorator => {
   return RequestMapping({

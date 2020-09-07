@@ -1,7 +1,8 @@
 import { ScopeEnum } from './common/scopeEnum';
+import { Middleware } from 'koa';
+import { RequestHandler } from 'express';
 
-export type KoaMiddleware <T = any> = (context: T, next: () => Promise<any>) => void;
-export type KoaMiddlewareParamArray <T = any> = Array<string | KoaMiddleware<T>>;
+export type MiddlewareParamArray = Array<Middleware | RequestHandler | string>;
 export type ObjectIdentifier = string;
 
 /**
@@ -10,6 +11,7 @@ export type ObjectIdentifier = string;
 export interface IManagedInstance {
   type: string;
 }
+
 export interface ObjectDefinitionOptions {
   isAsync?: boolean;
   initMethod?: string;

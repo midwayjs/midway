@@ -1,19 +1,19 @@
 import { Scope } from '../annotation';
 import { ScopeEnum, saveClassMetadata, saveModule, CONTROLLER_KEY } from '../';
-import { KoaMiddlewareParamArray } from '../interface';
+import { MiddlewareParamArray } from '../interface';
 
 export interface ControllerOption {
   prefix: string;
   routerOptions: {
     sensitive?: boolean;
-    middleware?: KoaMiddlewareParamArray;
+    middleware?: MiddlewareParamArray;
     alias?: string[];
   };
 }
 
 export function Controller(prefix: string, routerOptions: {
   sensitive?: boolean,
-  middleware?: KoaMiddlewareParamArray
+  middleware?: MiddlewareParamArray
  } = {middleware: [], sensitive: true}
   ): ClassDecorator {
   return (target: any) => {

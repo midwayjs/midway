@@ -1,12 +1,12 @@
-import { IMidwayBootstrapOptions, MidwayFrameworkType, MidwayProcessTypeEnum, safelyGet, } from '@midwayjs/core';
+import { IMidwayBootstrapOptions, MidwayFrameworkType, MidwayProcessTypeEnum, safelyGet } from '@midwayjs/core';
 import { APPLICATION_KEY, CONFIG_KEY, ControllerOption, LOGGER_KEY, PLUGIN_KEY, } from '@midwayjs/decorator';
-import { IMidwayWebApplication, IMidwayWebConfigurationOptions, } from './interface';
+import { IMidwayWebApplication, IMidwayWebConfigurationOptions, IMidwayWebContext, } from './interface';
 import { MidwayKoaBaseFramework } from '@midwayjs/koa';
 import { EggRouter } from '@eggjs/router';
 import { resolve } from 'path';
 import { Router } from 'egg';
 
-export class MidwayWebFramework extends MidwayKoaBaseFramework<IMidwayWebConfigurationOptions, IMidwayWebApplication> {
+export class MidwayWebFramework extends MidwayKoaBaseFramework<IMidwayWebConfigurationOptions, IMidwayWebApplication, IMidwayWebContext> {
   protected app: IMidwayWebApplication;
   public configurationOptions: IMidwayWebConfigurationOptions;
   public prioritySortRouters: Array<{
@@ -36,7 +36,7 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<IMidwayWebConfigu
       process.env.EGG_TYPESCRIPT = 'true';
     }
 
-    const { start } = require('egg');
+    const {start} = require('egg');
     this.app = await start({
       baseDir: options.appDir,
       sourceDir: this.isTsMode ? options.baseDir : options.appDir,
@@ -108,10 +108,10 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<IMidwayWebConfigu
   protected createRouter(controllerOption: ControllerOption): Router {
     const {
       prefix,
-      routerOptions: { sensitive },
+      routerOptions: {sensitive},
     } = controllerOption;
     if (prefix) {
-      const router = new EggRouter({ sensitive }, this.app);
+      const router = new EggRouter({sensitive}, this.app);
       router.prefix(prefix);
       return router;
     }

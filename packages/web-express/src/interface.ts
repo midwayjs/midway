@@ -1,6 +1,6 @@
 import { IMidwayApplication, IMidwayContext } from '@midwayjs/core';
 // import { KoaMiddlewareParamArray } from '@midwayjs/decorator';
-import { Application, Request, Response, IRouterHandler } from 'express';
+import { Application, Request, Response, RequestHandler } from 'express';
 
 export type IMidwayExpressRequest = IMidwayContext & Request;
 export type IMidwayExpressResponse = Response;
@@ -10,8 +10,10 @@ export interface IMidwayExpressConfigurationOptions {
   port?: number;
 }
 
-// export type MiddlewareParamArray = KoaMiddlewareParamArray<IMidwayKoaContext>;
+export type MiddlewareParamArray = RequestHandler[];
 
-export interface WebMiddleware<T> {
-  resolve(): IRouterHandler<T>;
+export type Middleware = RequestHandler;
+
+export interface WebMiddleware {
+  resolve(): Middleware;
 }

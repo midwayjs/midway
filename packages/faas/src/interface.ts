@@ -1,4 +1,4 @@
-import { MidwayRequestContainer, IMidwayApplication, IMidwayFramework, IMidwayLogger } from '@midwayjs/core';
+import { MidwayRequestContainer, IMidwayApplication, IMidwayLogger } from '@midwayjs/core';
 import { FaaSHTTPContext } from '@midwayjs/faas-typings';
 import type { MidwayHooks } from './hooks';
 
@@ -32,8 +32,4 @@ export interface IFaaSConfigurationOptions {
   applicationAdapter?: {
     getApplication(): IFaaSApplication;
   };
-}
-
-export interface IMidwayFaaSFramework extends IMidwayFramework {
-  configure(configureOptions: Partial<IFaaSConfigurationOptions>);
 }

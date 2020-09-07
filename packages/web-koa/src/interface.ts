@@ -1,7 +1,6 @@
 import { IMidwayApplication, IMidwayContext } from '@midwayjs/core';
-import { KoaMiddlewareParamArray } from '@midwayjs/decorator';
 import * as koa from 'koa';
-import { Context, DefaultState } from 'koa';
+import { Context, DefaultState, Middleware } from 'koa';
 
 export type IMidwayKoaContext = IMidwayContext & Context;
 export type IMidwayKoaApplication = IMidwayApplication & koa<DefaultState, IMidwayKoaContext>;
@@ -13,8 +12,8 @@ export interface IMidwayKoaConfigurationOptions {
   port?: number;
 }
 
-export type MiddlewareParamArray = KoaMiddlewareParamArray<IMidwayKoaContext>;
+export type MiddlewareParamArray = Array<Middleware<DefaultState,  IMidwayKoaContext>>;
 
 export interface WebMiddleware {
-  resolve(): koa.Middleware;
+  resolve(): koa.Middleware<DefaultState, IMidwayKoaContext>;
 }
