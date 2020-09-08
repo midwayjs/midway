@@ -306,5 +306,5 @@ export enum MidwayFrameworkType {
   RPC_HSF = '',
   RPC_GRPC = '',
   WS = '',
-  wss = ''
+  wss = '',
 }

@@ -18,7 +18,6 @@ import {
 
 import { dirname, resolve } from 'path';
 import {
-  APPLICATION_KEY,
   FUNC_KEY,
   LOGGER_KEY,
   PLUGIN_KEY,
@@ -297,9 +296,6 @@ export class MidwayFaaSFramework extends BaseFramework<IFaaSConfigurationOptions
   }
 
   private registerDecorator() {
-    this.containerLoader.registerHook(APPLICATION_KEY, () => {
-      return this.webApplication;
-    });
     this.containerLoader.registerHook(PLUGIN_KEY, (key, target) => {
       return target[REQUEST_OBJ_CTX_KEY]?.[key] || this.webApplication[key];
     });

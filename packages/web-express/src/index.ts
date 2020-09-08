@@ -1,2 +1,2 @@
-export { MidwayExpressFramework } from './framework';
 export * from './interface';
+export { MidwayExpressFramework as Framework } from './framework';

@@ -77,7 +77,7 @@ export class Container extends BaseApplicationContext implements IContainer {
     // inject properties
     const metaDatas = recursiveGetMetadata(TAGGED_PROP, target);
     for (const metaData of metaDatas) {
-      this.debugLogger(`inject properties => [${Object.keys(metaData)}]`);
+      this.debugLogger(`  inject properties => [${Object.keys(metaData)}]`);
       for (const metaKey in metaData) {
         for (const propertyMeta of metaData[ metaKey ]) {
           const refManaged = new ManagedReference();
@@ -109,35 +109,35 @@ export class Container extends BaseApplicationContext implements IContainer {
   private convertOptionsToDefinition(options: ObjectDefinitionOptions, definition: ObjectDefinition): ObjectDefinition {
     if (options) {
       if (options.isAsync) {
-        this.debugLogger(`   register isAsync = true`);
+        this.debugLogger(`  register isAsync = true`);
         definition.asynchronous = true;
       }
 
       if (options.initMethod) {
-        this.debugLogger(`   register initMethod = ${options.initMethod}`);
+        this.debugLogger(`  register initMethod = ${options.initMethod}`);
         definition.initMethod = options.initMethod;
       }
 
       if (options.destroyMethod) {
-        this.debugLogger(`   register destroyMethod = ${options.destroyMethod}`);
+        this.debugLogger(`  register destroyMethod = ${options.destroyMethod}`);
         definition.destroyMethod = options.destroyMethod;
       }
 
       if (options.scope) {
-        this.debugLogger(`   register scope = ${options.scope}`);
+        this.debugLogger(`  register scope = ${options.scope}`);
         definition.scope = options.scope;
       }
 
       if (options.constructorArgs) {
-        this.debugLogger(`   register constructorArgs = ${options.constructorArgs}`);
+        this.debugLogger(`  register constructorArgs = ${options.constructorArgs}`);
         definition.constructorArgs = options.constructorArgs;
       }
 
       if (options.isAutowire === false) {
-        this.debugLogger(`   register autowire = ${options.isAutowire}`);
+        this.debugLogger(`  register autowire = ${options.isAutowire}`);
         definition.autowire = false;
       } else if (options.isAutowire === true) {
-        this.debugLogger(`   register autowire = ${options.isAutowire}`);
+        this.debugLogger(`  register autowire = ${options.isAutowire}`);
         definition.autowire = true;
       }
     }

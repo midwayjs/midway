@@ -6,6 +6,7 @@ import {
   IMidwayFramework, MidwayFrameworkType,
 } from './interface';
 import { ContainerLoader } from './';
+import { APPLICATION_KEY, CONFIG_KEY } from '@midwayjs/decorator';
 
 export abstract class BaseFramework<T extends IConfigurationOptions>
   implements IMidwayFramework<T> {
@@ -47,6 +48,17 @@ export abstract class BaseFramework<T extends IConfigurationOptions>
     applicationContext.registerObject('appDir', this.appDir);
     // 如果没有关闭autoLoad 则进行load
     this.containerLoader.loadDirectory(options);
+
+    // register config
+    this.containerLoader.registerHook(CONFIG_KEY, (key: string) => {
+      return this.getConfiguration(key);
+    });
+
+    // register app
+    this.containerLoader.registerHook(APPLICATION_KEY, () => {
+      return this.getApplication();
+    });
+
     await this.afterDirectoryLoad(options);
 
     /**
@@ -54,7 +66,6 @@ export abstract class BaseFramework<T extends IConfigurationOptions>
      */
     await this.containerLoader.refresh();
     await this.afterInitialize(options);
-
   }
 
   public getApplicationContext(): IMidwayContainer {

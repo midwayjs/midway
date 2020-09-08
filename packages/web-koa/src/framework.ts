@@ -16,8 +16,6 @@ import {
 } from '@midwayjs/core';
 
 import {
-  APPLICATION_KEY,
-  CONFIG_KEY,
   CONTROLLER_KEY,
   ControllerOption,
   PRIORITY_KEY,
@@ -275,16 +273,6 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<IMidwayKoaConfigu
     });
 
     this.defineApplicationProperties(this.app);
-
-    // register config
-    this.containerLoader.registerHook(CONFIG_KEY, (key: string) => {
-      return this.getConfiguration(key);
-    });
-
-    // register app
-    this.containerLoader.registerHook(APPLICATION_KEY, () => {
-      return this.app;
-    });
   }
 
   protected async afterInitialize(

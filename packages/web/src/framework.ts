@@ -1,10 +1,11 @@
 import { IMidwayBootstrapOptions, MidwayFrameworkType, MidwayProcessTypeEnum, safelyGet } from '@midwayjs/core';
-import { APPLICATION_KEY, CONFIG_KEY, ControllerOption, LOGGER_KEY, PLUGIN_KEY, } from '@midwayjs/decorator';
+import { CONFIG_KEY, ControllerOption, LOGGER_KEY, PLUGIN_KEY, } from '@midwayjs/decorator';
 import { IMidwayWebApplication, IMidwayWebConfigurationOptions, IMidwayWebContext, } from './interface';
 import { MidwayKoaBaseFramework } from '@midwayjs/koa';
 import { EggRouter } from '@eggjs/router';
 import { resolve } from 'path';
 import { Router } from 'egg';
+import { EggAgent, EggApplication } from './application';
 
 export class MidwayWebFramework extends MidwayKoaBaseFramework<IMidwayWebConfigurationOptions, IMidwayWebApplication, IMidwayWebContext> {
   protected app: IMidwayWebApplication;
@@ -21,6 +22,7 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<IMidwayWebConfigu
     if (options.typescript === false) {
       this.isTsMode = false;
     }
+
     return this;
   }
 
@@ -36,16 +38,24 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<IMidwayWebConfigu
       process.env.EGG_TYPESCRIPT = 'true';
     }
 
-    const {start} = require('egg');
-    this.app = await start({
-      baseDir: options.appDir,
-      sourceDir: this.isTsMode ? options.baseDir : options.appDir,
-      ignoreWarning: true,
-      framework: resolve(__dirname, 'application'),
-      plugins: this.configurationOptions.plugins,
-      webFramework: this,
-      mode: 'single',
-    });
+    if (this.configurationOptions.processType) {
+      if (this.configurationOptions.processType === 'application') {
+        this.app = new EggApplication();
+      } else {
+        this.app = new EggAgent();
+      }
+    } else {
+      const { start } = require('egg');
+      this.app = await start({
+        baseDir: options.appDir,
+        sourceDir: this.isTsMode ? options.baseDir : options.appDir,
+        ignoreWarning: true,
+        framework: resolve(__dirname, 'application'),
+        plugins: this.configurationOptions.plugins,
+        webFramework: this,
+        mode: 'single',
+      });
+    }
 
     this.defineApplicationProperties(this.app);
     // register plugin
@@ -68,16 +78,14 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<IMidwayWebConfigu
       }
       return this.app.coreLogger;
     });
-    // register app
-    this.containerLoader.registerHook(APPLICATION_KEY, () => {
-      return this.app;
-    });
   }
 
   protected async afterInitialize(
     options: Partial<IMidwayBootstrapOptions>
   ): Promise<void> {
-    await this.loadMidwayController();
+    if (this.configurationOptions.processType !== 'agent') {
+      await this.loadMidwayController();
+    }
   }
 
   public getApplication(): IMidwayWebApplication {
@@ -108,10 +116,10 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<IMidwayWebConfigu
   protected createRouter(controllerOption: ControllerOption): Router {
     const {
       prefix,
-      routerOptions: {sensitive},
+      routerOptions: { sensitive },
     } = controllerOption;
     if (prefix) {
-      const router = new EggRouter({sensitive}, this.app);
+      const router = new EggRouter({ sensitive }, this.app);
       router.prefix(prefix);
       return router;
     }
@@ -145,6 +153,7 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<IMidwayWebConfigu
       },
 
       getProcessType: () => {
+        // TODO 区分进程类型
         return MidwayProcessTypeEnum.APPLICATION;
       }
     });
