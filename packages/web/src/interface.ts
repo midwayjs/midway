@@ -10,6 +10,7 @@ export type IMidwayWebApplication = IMidwayApplication & Application & {
 export type IMidwayWebContext = IMidwayContext & Context;
 
 export interface IMidwayWebConfigurationOptions extends IMidwayKoaConfigurationOptions {
+  app?: IMidwayWebApplication;
   plugins?: {
     [plugin: string]: {
       enable: boolean;

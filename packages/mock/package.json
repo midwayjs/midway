@@ -29,6 +29,9 @@
     "app",
     "config"
   ],
+  "eggPlugin": {
+    "name": "midway-mock"
+  },
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/decorator": "^2.1.4",

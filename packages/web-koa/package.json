@@ -2,7 +2,7 @@
   "name": "@midwayjs/koa",
   "version": "1.0.0",
   "description": "Midway Web Framework for KOA",
-  "main": "src/index",
+  "main": "dist/index",
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "midway-bin build -c",

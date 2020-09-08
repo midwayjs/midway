@@ -2,7 +2,7 @@
   "name": "@midwayjs/web",
   "version": "1.0.0",
   "description": "Midway Web Scene",
-  "main": "src/index",
+  "main": "dist/index",
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "midway-bin build -c",
@@ -16,7 +16,8 @@
     "midway",
     "IoC",
     "web",
-    "scene"
+    "scene",
+    "eggjs"
   ],
   "files": [
     "src",
@@ -31,6 +32,7 @@
   },
   "dependencies": {
     "@eggjs/router": "^2.0.0",
+    "@midwayjs/bootstrap": "^1.0.0",
     "@midwayjs/core": "^2.1.4",
     "@midwayjs/decorator": "^2.1.4",
     "@midwayjs/koa": "^1.0.0",

@@ -5,7 +5,6 @@ import { MidwayKoaBaseFramework } from '@midwayjs/koa';
 import { EggRouter } from '@eggjs/router';
 import { resolve } from 'path';
 import { Router } from 'egg';
-import { EggAgent, EggApplication } from './application';
 
 export class MidwayWebFramework extends MidwayKoaBaseFramework<IMidwayWebConfigurationOptions, IMidwayWebApplication, IMidwayWebContext> {
   protected app: IMidwayWebApplication;
@@ -23,6 +22,7 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<IMidwayWebConfigu
       this.isTsMode = false;
     }
 
+    this.app = options.app;
     return this;
   }
 
@@ -38,13 +38,7 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<IMidwayWebConfigu
       process.env.EGG_TYPESCRIPT = 'true';
     }
 
-    if (this.configurationOptions.processType) {
-      if (this.configurationOptions.processType === 'application') {
-        this.app = new EggApplication();
-      } else {
-        this.app = new EggAgent();
-      }
-    } else {
+    if (!this.app) {
       const { start } = require('egg');
       this.app = await start({
         baseDir: options.appDir,

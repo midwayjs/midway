@@ -1,5 +1,7 @@
 import type { MidwayWebFramework } from "./framework";
 import { RouterParamValue } from "@midwayjs/decorator";
+import { existsSync } from "fs";
+import { join } from "path";
 
 // const extend = require('extend2');
 
@@ -147,6 +149,11 @@ const BaseEggAgent = createEggAgent(Agent);
 
 export class EggApplication extends BaseEggApplication {
   constructor(options) {
+    if (!options.sourceDir) {
+      if (existsSync(join(options.baseDir, 'src')) || existsSync(join(options.baseDir, 'dist'))) {
+        options.sourceDir = join(options.baseDir, 'dist');
+      }
+    }
     super(options);
   }
 
@@ -161,6 +168,11 @@ export class EggApplication extends BaseEggApplication {
 
 export class EggAgent extends BaseEggAgent {
   constructor(options) {
+    if (!options.sourceDir) {
+      if (existsSync(join(options.baseDir, 'src')) || existsSync(join(options.baseDir, 'dist'))) {
+        options.sourceDir = join(options.baseDir, 'dist');
+      }
+    }
     super(options);
   }
 

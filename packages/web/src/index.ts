@@ -1,5 +1,7 @@
 export * from './interface';
 export { MidwayWebFramework as Framework } from './framework';
+export { createEggApplication, createEggAgent, createAppWorkerLoader, createAgentWorkerLoader } from './application';
+// must export mock app here
 export { Application, Agent } from './application';
 
 /**
