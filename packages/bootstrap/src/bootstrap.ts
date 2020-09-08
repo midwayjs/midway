@@ -1,7 +1,7 @@
 import { IMidwayFramework, IMidwayBootstrapOptions } from '@midwayjs/core';
 import { join } from 'path';
 
-function isTypeScriptEnvironment() {
+export function isTypeScriptEnvironment() {
   const TS_MODE_PROCESS_FLAG: string = process.env.MIDWAY_TS_MODE;
   if ('false' === TS_MODE_PROCESS_FLAG) {
     return false;

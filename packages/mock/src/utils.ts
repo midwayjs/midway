@@ -49,6 +49,7 @@ export async function create<T extends IMidwayFramework<U>, U = T['configuration
             package: 'egg-mock'
           },
           watcher: false,
+          development: false,
         }
       });
     }

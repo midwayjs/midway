@@ -8,8 +8,8 @@ describe('/test/cluster.ts', () => {
     let app;
     beforeAll(async () => {
       app = mm.app({
-        baseDir: path.join(__dirname, 'fixtures/feature/base-app-dist'),
-        framework: path.join(__dirname, '../'),
+        baseDir: path.join(__dirname, 'fixtures/enhance/base-app'),
+        framework: path.join(__dirname, '../src'),
         typescript: true,
       });
 

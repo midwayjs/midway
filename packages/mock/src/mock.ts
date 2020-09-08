@@ -2,6 +2,7 @@ import * as mock from 'egg-mock';
 import { resolveModule } from 'midway-bin';
 import { join } from 'path';
 import { MidwayApplicationOptions, MidwayMockApplication } from './interface';
+import { isTypeScriptEnvironment } from '@midwayjs/bootstrap';
 
 export interface MidwayMock extends mock.EggMock {
   container: typeof mockContainer;
@@ -31,11 +32,14 @@ mm.app = (options = {}): MidwayMockApplication => {
   // @ts-ignore
   return mock.app(Object.assign({
     framework: options.framework || getDefaultFramework(),
-    typescript: !!require.extensions['.ts'],
+    typescript: isTypeScriptEnvironment(),
     plugins: {
       'midway-mock': {
+        enable: true,
         path: join(__dirname, '../')
-      }
+      },
+      watcher: false,
+      development: false,
     }
   }, options));
 };
@@ -46,11 +50,14 @@ mm.cluster = (options = {}) => {
   // @ts-ignore
   return mock.cluster(Object.assign({
     framework: options.framework || getDefaultFramework(),
-    typescript: !!require.extensions['.ts'],
+    typescript: isTypeScriptEnvironment(),
     plugins: {
       'midway-mock': {
+        enable: true,
         path: join(__dirname, '../')
-      }
+      },
+      watcher: false,
+      development: false,
     }
   }, options));
 };

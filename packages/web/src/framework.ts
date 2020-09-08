@@ -13,6 +13,7 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<IMidwayWebConfigu
     priority: number;
     router: Router;
   }> = [];
+  public isClusterMode = false;
 
   public configure(
     options: IMidwayWebConfigurationOptions
@@ -23,6 +24,7 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<IMidwayWebConfigu
     }
 
     this.app = options.app;
+    this.isClusterMode = !!this.app;
     return this;
   }
 
@@ -42,12 +44,13 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<IMidwayWebConfigu
       const { start } = require('egg');
       this.app = await start({
         baseDir: options.appDir,
-        sourceDir: this.isTsMode ? options.baseDir : options.appDir,
         ignoreWarning: true,
         framework: resolve(__dirname, 'application'),
         plugins: this.configurationOptions.plugins,
         webFramework: this,
+        isClusterMode: this.isClusterMode,
         mode: 'single',
+        isTsMode: this.isTsMode,
       });
     }
 
@@ -147,8 +150,16 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<IMidwayWebConfigu
       },
 
       getProcessType: () => {
-        // TODO 区分进程类型
+        if (this.configurationOptions.processType === 'application') {
+          return MidwayProcessTypeEnum.APPLICATION;
+        }
+        if (this.configurationOptions.processType === 'agent') {
+          return MidwayProcessTypeEnum.AGENT;
+        }
+
+        // TODO 单进程模式下区分进程类型??
         return MidwayProcessTypeEnum.APPLICATION;
+
       }
     });
   }

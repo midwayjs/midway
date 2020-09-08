@@ -1,7 +1,6 @@
-import type { MidwayWebFramework } from "./framework";
-import { RouterParamValue } from "@midwayjs/decorator";
-import { existsSync } from "fs";
-import { join } from "path";
+import type { MidwayWebFramework } from './framework';
+import { RouterParamValue } from '@midwayjs/decorator';
+import { parseNormalDir } from './utils';
 
 // const extend = require('extend2');
 
@@ -20,10 +19,16 @@ export const createAppWorkerLoader = AppWorkerLoader => {
 
     getEggPaths() {
       if (!this.appDir) {
-        this.baseDir = this.app.appOptions['sourceDir'];
+        // 这里的逻辑是为了兼容老 cluster 模式
+        if (this.app.appOptions.typescript || this.app.appOptions.isTsMode) {
+          process.env.EGG_TYPESCRIPT = 'true';
+        }
+        const result = parseNormalDir(this.app.appOptions['baseDir'], this.app.appOptions.isTsMode);
+        this.baseDir = result.baseDir;
         this.options.baseDir = this.baseDir;
-        this.appDir = this.app.appDir = this.app.appOptions['baseDir'];
+        this.appDir = this.app.appDir = result.appDir;
       }
+
       if (process.env.MIDWAY_EGG_PLUGIN_PATH) {
         return super.getEggPaths().concat(process.env.MIDWAY_EGG_PLUGIN_PATH);
       }
@@ -43,9 +48,15 @@ export const createAgentWorkerLoader = AppWorkerLoader => {
 
     getEggPaths() {
       if (!this.appDir) {
-        this.baseDir = this.app.appOptions['sourceDir'];
-        this.appDir = this.app.appOptions['baseDir'];
+        if (this.app.appOptions.typescript || this.app.appOptions.isTsMode) {
+          process.env.EGG_TYPESCRIPT = 'true';
+        }
+        const result = parseNormalDir(this.app.appOptions['baseDir'], this.app.appOptions.isTsMode);
+        this.baseDir = result.baseDir;
+        this.options.baseDir = this.baseDir;
+        this.appDir = this.app.appDir = result.appDir;
       }
+
       if (process.env.MIDWAY_EGG_PLUGIN_PATH) {
         return super.getEggPaths().concat(process.env.MIDWAY_EGG_PLUGIN_PATH);
       }
@@ -148,14 +159,6 @@ const EggAgentWorkerLoader = createAgentWorkerLoader(AgentWorkerLoader);
 const BaseEggAgent = createEggAgent(Agent);
 
 export class EggApplication extends BaseEggApplication {
-  constructor(options) {
-    if (!options.sourceDir) {
-      if (existsSync(join(options.baseDir, 'src')) || existsSync(join(options.baseDir, 'dist'))) {
-        options.sourceDir = join(options.baseDir, 'dist');
-      }
-    }
-    super(options);
-  }
 
   get [EGG_LOADER]() {
     return EggAppWorkerLoader;
@@ -167,14 +170,6 @@ export class EggApplication extends BaseEggApplication {
 }
 
 export class EggAgent extends BaseEggAgent {
-  constructor(options) {
-    if (!options.sourceDir) {
-      if (existsSync(join(options.baseDir, 'src')) || existsSync(join(options.baseDir, 'dist'))) {
-        options.sourceDir = join(options.baseDir, 'dist');
-      }
-    }
-    super(options);
-  }
 
   get [EGG_LOADER]() {
     return EggAgentWorkerLoader;

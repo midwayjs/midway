@@ -3,10 +3,11 @@ import {
   IMidwayFramework,
   IMidwayApplication,
   IMidwayBootstrapOptions,
-  IMidwayContainer, IConfigurationOptions,
+  IMidwayContainer, IConfigurationOptions, MidwayFrameworkType,
 } from '@midwayjs/core';
 
-class TestFrameworkUnit implements IMidwayFramework {
+class TestFrameworkUnit implements IMidwayFramework<IConfigurationOptions> {
+  configurationOptions: IConfigurationOptions;
   options;
   app;
 
@@ -40,6 +41,10 @@ class TestFrameworkUnit implements IMidwayFramework {
 
   getCurrentEnvironment(): string {
     return 'prod'
+  }
+
+  getFrameworkType(): MidwayFrameworkType {
+    return MidwayFrameworkType.CUSTOM;
   }
 }
 

@@ -1,1 +1,1 @@
-export { Bootstrap, BootstrapStarter } from './bootstrap';
+export { isTypeScriptEnvironment, Bootstrap, BootstrapStarter } from './bootstrap';
