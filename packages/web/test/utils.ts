@@ -6,7 +6,7 @@ const logDir = join(__dirname, '../logs');
 process.env.NODE_LOG_DIR = logDir;
 
 export async function creatApp(name, options: IMidwayWebConfigurationOptions = {}) {
-  return createApp(join(__dirname, 'fixtures', name), options, Framework)
+  return createApp<Framework>(join(__dirname, 'fixtures', name), options, Framework)
 }
 
 export async function closeApp(app) {

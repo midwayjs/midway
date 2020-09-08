@@ -1,10 +1,16 @@
 import { IMidwayApplication, IMidwayContext } from '@midwayjs/core';
-// import { KoaMiddlewareParamArray } from '@midwayjs/decorator';
 import { Application, Request, Response, RequestHandler } from 'express';
+import { RouterParamValue } from "@midwayjs/decorator";
 
 export type IMidwayExpressRequest = IMidwayContext & Request;
 export type IMidwayExpressResponse = Response;
-export type IMidwayExpressApplication = IMidwayApplication & Application;
+export type IMidwayExpressApplication = IMidwayApplication & Application & {
+  generateController(
+    controllerMapping: string,
+    routeArgsInfo?: RouterParamValue[],
+    routerResponseData?: any []
+  ): Middleware;
+};
 
 export interface IMidwayExpressConfigurationOptions {
   port?: number;

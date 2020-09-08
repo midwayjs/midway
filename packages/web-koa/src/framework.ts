@@ -255,37 +255,7 @@ export abstract class MidwayKoaBaseFramework<T, U extends IMidwayApplication & I
     }
   }
 
-  protected defineApplicationProperties(app: U): U {
-    return Object.assign(app, {
-      getBaseDir: () => {
-        return this.baseDir;
-      },
-
-      getAppDir: () => {
-        return this.appDir;
-      },
-
-      getEnv: () => {
-        return this.getApplicationContext()
-          .getEnvironmentService()
-          .getCurrentEnvironment();
-      },
-
-      getConfig: (key?: string) => {
-        return this.getApplicationContext()
-          .getConfigService()
-          .getConfiguration(key);
-      },
-
-      getFrameworkType: () => {
-        return this.getFrameworkType();
-      },
-
-      getProcessType: () => {
-        return MidwayProcessTypeEnum.APPLICATION;
-      }
-    });
-  }
+  protected abstract defineApplicationProperties(app: U): U;
 }
 
 export class MidwayKoaFramework extends MidwayKoaBaseFramework<IMidwayKoaConfigurationOptions, IMidwayKoaApplication, IMidwayKoaContext> {
@@ -335,5 +305,43 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<IMidwayKoaConfigu
 
   public getFrameworkType(): MidwayFrameworkType {
     return MidwayFrameworkType.WEB_KOA;
+  }
+
+  protected defineApplicationProperties(app: IMidwayKoaApplication): IMidwayKoaApplication {
+    return Object.assign(app, {
+      getBaseDir: () => {
+        return this.baseDir;
+      },
+
+      getAppDir: () => {
+        return this.appDir;
+      },
+
+      getEnv: () => {
+        return this.getApplicationContext()
+          .getEnvironmentService()
+          .getCurrentEnvironment();
+      },
+
+      getConfig: (key?: string) => {
+        return this.getApplicationContext()
+          .getConfigService()
+          .getConfiguration(key);
+      },
+
+      getFrameworkType: () => {
+        return this.getFrameworkType();
+      },
+
+      getProcessType: () => {
+        return MidwayProcessTypeEnum.APPLICATION;
+      },
+
+      generateController: (controllerMapping: string,
+                           routeArgsInfo?: RouterParamValue[],
+                           routerResponseData?: any []) => {
+        return this.generateController(controllerMapping, routeArgsInfo, routerResponseData);
+      }
+    });
   }
 }

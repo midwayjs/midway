@@ -331,6 +331,12 @@ export class MidwayExpressFramework extends BaseFramework<IMidwayExpressConfigur
 
       getProcessType: () => {
         return MidwayProcessTypeEnum.APPLICATION;
+      },
+
+      generateController: (controllerMapping: string,
+                           routeArgsInfo?: RouterParamValue[],
+                           routerResponseData?: any []) => {
+        return this.generateController(controllerMapping, routeArgsInfo, routerResponseData);
       }
     });
   }

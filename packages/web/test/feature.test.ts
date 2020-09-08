@@ -1,10 +1,11 @@
 import * as request from 'supertest';
 import { closeApp, creatApp } from './utils';
+import { IMidwayWebApplication } from "../src";
 
 describe('/test/feature.test.ts', () => {
 
   describe('test new features', () => {
-    let app;
+    let app: IMidwayWebApplication;
     beforeAll(async () => {
       app = await creatApp('feature/base-app');
     });
