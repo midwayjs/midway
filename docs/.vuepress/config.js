@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-  base: '/midway/',
+  base: '/',
   locales: {
     '/': {
       lang: 'zh-CN',
@@ -57,15 +57,21 @@ module.exports = {
               {
                 text: '监控产品',
                 items: [
-                  { text: 'Sandbox - 私有化 Node.js 监控产品', link: 'https://github.com/midwayjs/sandbox-docker' },
+                  {
+                    text: 'Sandbox - 私有化 Node.js 监控产品',
+                    link: 'https://github.com/midwayjs/sandbox-docker',
+                  },
                 ],
               },
               {
                 text: 'Node.js 依赖注入模块',
                 items: [
-                  { text: 'Injection - 让你的应用用上 IoC，体验依赖注入的感觉', link: 'http://midwayjs.org/injection' },
-                ]
-              }
+                  {
+                    text: 'Injection - 让你的应用用上 IoC，体验依赖注入的感觉',
+                    link: 'http://midwayjs.org/injection',
+                  },
+                ],
+              },
             ],
           },
         ],
@@ -113,14 +119,22 @@ module.exports = {
               },
               {
                 text: 'Monitoring',
-                items: [{ text: 'Sandbox - Private Node.js APM', link: 'https://github.com/midwayjs/sandbox-docker' }],
+                items: [
+                  {
+                    text: 'Sandbox - Private Node.js APM',
+                    link: 'https://github.com/midwayjs/sandbox-docker',
+                  },
+                ],
               },
               {
                 text: 'Node.js Injection Module',
                 items: [
-                  { text: 'Injection - Use IoC in your Node.js application', link: 'http://midwayjs.org/injection' },
-                ]
-              }
+                  {
+                    text: 'Injection - Use IoC in your Node.js application',
+                    link: 'http://midwayjs.org/injection',
+                  },
+                ],
+              },
             ],
           },
         ],
