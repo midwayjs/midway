@@ -27,7 +27,7 @@
   "devDependencies": {
     "@midwayjs/mock": "^1.0.0",
     "@types/express": "^4.17.8",
-    "midway-bin": "^2.0.15",
+    "@midwayjs/bin": "^1.0.0",
     "fs-extra": "^8.0.1"
   },
   "dependencies": {

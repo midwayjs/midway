@@ -11,7 +11,7 @@
   "devDependencies": {
     "eslint": "^6.1.0",
     "eslint-config-egg": "^7.0.0",
-    "midway-bin": "^2.0.15",
+    "@midwayjs/bin": "^1.0.0",
     "mz-modules": "^2.1.0",
     "power-assert": "^1.6.1"
   },

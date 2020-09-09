@@ -14,7 +14,7 @@
     "@midwayjs/mock": "^1.0.0",
     "@midwayjs/serverless-fc-starter": "^1.0.0",
     "@midwayjs/serverless-scf-starter": "^1.0.0",
-    "midway-bin": "^2.0.15",
+    "@midwayjs/bin": "^1.0.0",
     "mm": "^2.5.0"
   },
   "engines": {

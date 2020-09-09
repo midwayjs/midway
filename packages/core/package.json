@@ -25,7 +25,7 @@
   "license": "MIT",
   "devDependencies": {
     "chai": "^4.2.0",
-    "midway-bin": "^2.0.15",
+    "@midwayjs/bin": "^1.0.0",
     "mm": "^2.5.0",
     "sinon": "^7.2.2"
   },
