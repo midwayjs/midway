@@ -22,7 +22,6 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/bin": "^1.0.0"
   },
   "dependencies": {
     "@midwayjs/core": "^2.1.4"

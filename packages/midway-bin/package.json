@@ -8,9 +8,8 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "test": "npm run lint -- --fix && npm run test-local",
-    "test-local": "node bin/midway-bin.js test -t 3600000",
-    "cov": "nyc -r lcov -r text-summary npm run test-local",
+    "test": "../../node_modules/.bin/jest",
+    "cov": "../../node_modules/.bin/jest --coverage",
     "ci-test-only": "TESTS=test/lib/cmd/cov.test.js npm run test-local",
     "ci": "npm run lint && npm run pkgfiles -- --check && npm run ci-test-only && npm run cov"
   },
@@ -22,9 +21,13 @@
   "dependencies": {
     "@midwayjs/debugger": "^1.0.0",
     "@midwayjs/fcli-command-core": "^1.2.12",
+    "@midwayjs/locate": "^1.0.3",
+    "@midwayjs/mock": "^1.0.0",
+    "@midwayjs/mwcc": "^0.3.3",
     "jest-environment-node": "^24.9.0",
     "fs-extra": "^8.1.0",
-    "source-map-support": "^0.5.19"
+    "source-map-support": "^0.5.19",
+    "light-spinner": "^1.0.0"
   },
   "devDependencies": {
   },
