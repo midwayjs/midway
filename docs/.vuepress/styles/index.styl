@@ -4,13 +4,13 @@
       transform: scale(1);
     }
     30% {
-      transform: scale(1.2);
-    }
-    50% {
       transform: scale(1.1);
     }
+    50% {
+      transform: scale(1.05);
+    }
     100% {
-      transform: scale(1.15);
+      transform: scale(1.08);
     }
   }
   @keyframes buttonCover {
@@ -79,6 +79,21 @@
         font-size: 12px;
         width: 520px;
         line-height: 24px;
+    .home-top-button-list
+      position: absolute;
+      display: flex;
+      left: 0;
+      bottom: 110px;
+      .home-top-button
+        padding: 12px 48px;
+        color: #fff;
+        margin-right: 36px;
+        .buttonScale
+          border-radius: 36px;
+        &.view
+          .buttonScale
+            background: #498ef0;
+        
   .home-solutions
     position: relative;
     height: 660px;
@@ -103,7 +118,10 @@
       height: 40px;
       line-height: 40px;
       border-radius: 24px;
-      background: #498ef0;
+      &.button
+        .buttonScale
+          background: #498ef0;
+      
       color: #fff;
       padding: 0 32px;
       font-size: 15px;
@@ -156,10 +174,33 @@
         color: #fff;
         line-height: 60px;
       .home-why-card-content
+        position: relative;
+        left: 20px;
+        opacity: 0;
         margin-top: 40px;
         font-size: 20px;
         text-align: left;
         color: #fff;
+        transition: opacity 1s ease, left 1s ease;
+        &.display
+          opacity: 1;
+          left: 0;
+      .home-why-img
+        position: absolute;
+        opacity: 0;
+        right: 0;
+        top: 180px;
+        width: 430px;
+        height: 350px;
+        background-repeat: no-repeat;
+        transition: opacity 1s ease, top 1s ease;
+        background-size: contain;
+        background-position: certer;
+        &.left
+          left: 0;
+        &.display
+          top: 140px;
+          opacity: 1;
   .home-joinus
     box-sizing: border-box;
     padding-top: 120px;
@@ -211,30 +252,57 @@
     width: 1200px;
     margin: 0 auto;
 
+  .github
+    display: block;
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
+    background: url('https://gw.alicdn.com/tfs/TB1zcV0Uxz1gK0jSZSgXXavwpXa-63-60.png') center/contain no-repeat;
   .button
     position: relative;
     text-decoration: none;
-    overflow: hidden;
-    transtion: transform .3s ease;
     position: relative;
     font-size: 15px;
+    line-height: 24px;
     padding: 6px 24px;
     display: inline-block;
     color: #535353;
-    box-shadow: 0 0 2px rgba(0,0,0,0.5);
+
+    > div
+      position: relative;
+      display: flex;
+      align-items: center;
+      z-index: 2;
+    
+    .buttonScale
+      position: absolute;
+      display: inline-block;
+      transtion: transform .3s ease;
+      left: 0;
+      top: 0;
+      width: 100%;
+      overflow: hidden;
+      height: 100%;
+      border-radius: 18px;
+      box-shadow: 0 0 2px rgba(0,0,0,0.5);
     &:hover
-      animation: button 0.5s ease forwards;
-      &:before
-        content: ' ';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        animation: buttonCover .8s ease forwards;
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        background: #000;
+      .buttonScale
+        animation: button 0.5s ease forwards;
+        &:before
+          content: ' ';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          animation: buttonCover 1s forwards;
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background: #000;
     &.white
       color: #fff;
-      box-shadow: 0 0 3px rgba(255,255,255,1);
+      .buttonScale
+        box-shadow: 0 0 3px rgba(255,255,255,1);
+        &:before
+          background: #fff;
   
+
