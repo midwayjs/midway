@@ -19,7 +19,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/bin": "^1.0.0"
+    "midway-bin": "^2.0.15"
   },
   "dependencies": {
     "egg-cluster": "^1.23.0",

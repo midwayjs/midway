@@ -1,17 +1,21 @@
 {
-  "name": "@midwayjs/bin",
-  "version": "1.0.0",
+  "name": "midway-bin",
+  "version": "2.0.15",
   "description": "Midway Command Tools",
   "main": "index.js",
   "bin": {
-    "midway-bin": "bin/midway-bin.js"
+    "midway-bin": "bin/midway-bin.js",
+    "mocha": "bin/mocha.js"
   },
   "scripts": {
     "lint": "eslint .",
-    "test": "../../node_modules/.bin/jest",
-    "cov": "../../node_modules/.bin/jest --coverage",
+    "pkgfiles": "node bin/midway-bin.js pkgfiles",
+    "test": "npm run lint -- --fix && npm run test-local",
+    "test-local": "node bin/midway-bin.js test -t 3600000",
+    "cov": "nyc -r lcov -r text-summary npm run test-local",
     "ci-test-only": "TESTS=test/lib/cmd/cov.test.js npm run test-local",
-    "ci": "npm run lint && npm run pkgfiles -- --check && npm run ci-test-only && npm run cov"
+    "ci": "npm run lint && npm run pkgfiles -- --check && npm run ci-test-only && npm run cov",
+    "autod": "node bin/midway-bin.js autod"
   },
   "keywords": [
     "midway",
@@ -19,17 +23,23 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@midwayjs/debugger": "^1.0.0",
-    "@midwayjs/fcli-command-core": "^1.2.12",
-    "@midwayjs/locate": "^1.0.3",
-    "@midwayjs/mock": "^1.0.0",
-    "@midwayjs/mwcc": "^0.3.3",
-    "jest-environment-node": "^24.9.0",
+    "@midwayjs/ncc": "^0.22.0",
+    "co": "^4.6.0",
+    "egg-bin": "^4.11.1",
     "fs-extra": "^8.1.0",
-    "source-map-support": "^0.5.19",
-    "light-spinner": "^1.0.0"
+    "globby": "^10.0.1",
+    "hjson": "^3.2.1",
+    "jest-environment-node": "^24.9.0",
+    "mz-modules": "^2.1.0",
+    "terser": "^4.6.3",
+    "typedoc": "^0.14.2"
   },
   "devDependencies": {
+    "co-mocha": "^1.2.2",
+    "coffee": "^5.2.1",
+    "eslint": "^6.1.0",
+    "eslint-config-egg": "^7.0.0",
+    "mm": "^2.5.0"
   },
   "engines": {
     "node": ">= 8.0.0"
