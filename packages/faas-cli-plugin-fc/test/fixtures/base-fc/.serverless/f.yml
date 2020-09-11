@@ -1,0 +1,16 @@
+service: serverless-midway-test
+
+provider:
+  name: aliyun
+
+functions:
+  index:
+    handler: index.handler
+    events:
+      - http:
+          method: get
+  index2:
+    handler: index.handler2
+    events:
+      - http:
+          method: get
