@@ -34,7 +34,8 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/decorator": "^2.1.4"
+    "@midwayjs/decorator": "^2.1.4",
+    "midway-bin": "^2.0.15"
   },
   "dependencies": {
     "@midwayjs/bootstrap": "^1.0.0",
