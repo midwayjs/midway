@@ -16,6 +16,10 @@ export const WEB_RESPONSE_HTTP_CODE = 'web:response_http_code';
 export const WEB_RESPONSE_REDIRECT = 'web:response_redirect';
 export const WEB_RESPONSE_HEADER = 'web:response_header';
 
+// ws
+export const WS_CONTROLLER_KEY = 'ws:controller';
+export const WS_EVENT_KEY = 'ws:event';
+
 // RPC
 export const HSF_KEY = 'rpc:hsf';
 

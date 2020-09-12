@@ -305,7 +305,7 @@ export enum MidwayFrameworkType {
   FAAS = '@midwayjs/faas',
   RPC_HSF = '',
   RPC_GRPC = '',
-  WS = '',
+  WS_IO = '@midwayjs/socketio',
   WSS = '',
   CUSTOM = ''
 }
