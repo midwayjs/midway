@@ -1,13 +1,14 @@
 import {
-  BaseFramework,
-  IMidwayBootstrapOptions,
+  BaseFramework, generateProvideId, getClassMetadata, getProviderId,
+  IMidwayBootstrapOptions, listModule,
   MidwayFrameworkType,
   MidwayProcessTypeEnum,
-  MidwayRequestContainer,
+  PRIVATE_META_DATA_KEY,
 } from '@midwayjs/core';
 
 import { IMidwaySocketIOApplication, IMidwaySocketIOConfigurationOptions } from './interface';
 import * as SocketIO from 'socket.io';
+import { ControllerOption, WS_CONTROLLER_KEY } from "@midwayjs/decorator";
 
 export class MidwaySocketIOFramework extends BaseFramework<IMidwaySocketIOConfigurationOptions> {
   protected app: IMidwaySocketIOApplication;
@@ -20,7 +21,12 @@ export class MidwaySocketIOFramework extends BaseFramework<IMidwaySocketIOConfig
   }
 
   protected async afterDirectoryLoad(options: Partial<IMidwayBootstrapOptions>) {
-    this.app = SocketIO() as unknown as IMidwaySocketIOApplication;
+    if (this.configurationOptions.webServer) {
+      this.app = SocketIO(this.configurationOptions.webServer, this.configurationOptions) as unknown as IMidwaySocketIOApplication;
+    } else {
+      this.app = SocketIO(this.configurationOptions) as unknown as IMidwaySocketIOApplication;
+    }
+
     this.defineApplicationProperties(this.app);
     // this.app.use((req: IMidwayExpressRequest, res, next) => {
     //   req.requestContext = new MidwayRequestContainer(req, this.getApplicationContext());
@@ -39,11 +45,12 @@ export class MidwaySocketIOFramework extends BaseFramework<IMidwaySocketIOConfig
 
   public async run(): Promise<void> {
     if (this.configurationOptions.port) {
-      new Promise((resolve) => {
-        this.app.listen(this.configurationOptions.port, () => {
-          resolve();
+      // if set httpServer will be listen in web framework
+      if (!this.configurationOptions.webServer) {
+        new Promise((resolve) => {
+          this.app.listen(this.configurationOptions.port, this.configurationOptions);
         });
-      });
+      }
     }
   }
 
@@ -89,6 +96,25 @@ export class MidwaySocketIOFramework extends BaseFramework<IMidwaySocketIOConfig
 
   private async loadMidwayController() {
     // create room
-    // on connection
+    const controllerModules = listModule(WS_CONTROLLER_KEY);
+    for (const module of controllerModules) {
+      let providerId = getProviderId(module);
+      const meta = getClassMetadata(PRIVATE_META_DATA_KEY, module);
+      if (providerId && meta) {
+        providerId = generateProvideId(providerId, meta.namespace);
+      }
+      if (providerId) {
+        await this.addNamespace(module, providerId);
+      }
+    }
+  }
+
+  private async addNamespace(target: any, controllerId: string) {
+    const controllerOption: ControllerOption = getClassMetadata(
+      WS_CONTROLLER_KEY,
+      target
+    );
+
+    console.log(controllerOption);
   }
 }

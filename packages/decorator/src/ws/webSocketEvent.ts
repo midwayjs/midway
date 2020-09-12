@@ -5,7 +5,7 @@ export function OnConnection(): MethodDecorator {
     attachClassMetadata(
       WS_EVENT_KEY,
       {
-        eventName: 'onConnection',
+        eventName: 'ws:onConnection',
         key: propertyKey,
         descriptor,
       },
@@ -19,7 +19,7 @@ export function OnDisConnection(): MethodDecorator {
     attachClassMetadata(
       WS_EVENT_KEY,
       {
-        eventName: 'onDisConnection',
+        eventName: 'ws:onDisConnection',
         key: propertyKey,
         descriptor,
       },
@@ -33,7 +33,7 @@ export function OnMessage(messageName: string): MethodDecorator {
     attachClassMetadata(
       WS_EVENT_KEY,
       {
-        eventName: 'onMessage',
+        eventName: 'ws:onMessage',
         messageName,
         key: propertyKey,
         descriptor,
@@ -48,7 +48,7 @@ export function Emit(messageName: string): MethodDecorator {
     attachClassMetadata(
       WS_EVENT_KEY,
       {
-        eventName: 'onEmit',
+        eventName: 'ws:emit',
         key: propertyKey,
         descriptor,
       },
@@ -62,7 +62,7 @@ export function Broadcast(): MethodDecorator {
     attachClassMetadata(
       WS_EVENT_KEY,
       {
-        eventName: 'onBroadcast',
+        eventName: 'ws:broadcast',
         key: propertyKey,
         descriptor,
       },

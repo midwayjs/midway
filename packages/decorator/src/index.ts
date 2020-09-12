@@ -17,3 +17,5 @@ export * from './framework/config';
 export * from './framework/logger';
 export * from './framework/plugin';
 export * from './framework/app';
+export * from './ws/webSocketController';
+export * from './ws/webSocketEvent';
