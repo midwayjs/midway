@@ -22,6 +22,8 @@ export const WS_EVENT_KEY = 'ws:event';
 
 // RPC
 export const HSF_KEY = 'rpc:hsf';
+export const RPC_GRPC_KEY = 'rpc:grpc';
+export const RPC_DUBBO_KEY = 'rpc:dubbo';
 
 // framework
 export const CONFIG_KEY = 'config';

@@ -1,14 +1,19 @@
 import {
-  BaseFramework, generateProvideId, getClassMetadata, getProviderId,
-  IMidwayBootstrapOptions, listModule,
+  BaseFramework,
+  generateProvideId,
+  getClassMetadata,
+  getProviderId,
+  IMidwayBootstrapOptions,
+  listModule,
   MidwayFrameworkType,
   MidwayProcessTypeEnum,
+  MidwayRequestContainer,
   PRIVATE_META_DATA_KEY,
 } from '@midwayjs/core';
 
-import { IMidwaySocketIOApplication, IMidwaySocketIOConfigurationOptions } from './interface';
+import { IMidwaySocketIOApplication, IMidwaySocketIOConfigurationOptions, IMidwaySocketIOContext } from './interface';
 import * as SocketIO from 'socket.io';
-import { ControllerOption, WS_CONTROLLER_KEY } from "@midwayjs/decorator";
+import { WS_CONTROLLER_KEY, WS_EVENT_KEY, WSControllerOption, WSEventInfo, WSEventTypeEnum } from '@midwayjs/decorator';
 
 export class MidwaySocketIOFramework extends BaseFramework<IMidwaySocketIOConfigurationOptions> {
   protected app: IMidwaySocketIOApplication;
@@ -28,13 +33,11 @@ export class MidwaySocketIOFramework extends BaseFramework<IMidwaySocketIOConfig
     }
 
     this.defineApplicationProperties(this.app);
-    // this.app.use((req: IMidwayExpressRequest, res, next) => {
-    //   req.requestContext = new MidwayRequestContainer(req, this.getApplicationContext());
-    //   req.requestContext.registerObject('req', req);
-    //   req.requestContext.registerObject('res', res);
-    //   req.requestContext.ready();
-    //   next();
-    // });
+    this.app.use((socket, next) => {
+      socket.requestContext = new MidwayRequestContainer(socket, this.getApplicationContext());
+      socket.requestContext.registerObject('socket', socket);
+      next();
+    });
   }
 
   protected async afterInitialize(
@@ -54,8 +57,16 @@ export class MidwaySocketIOFramework extends BaseFramework<IMidwaySocketIOConfig
     }
   }
 
+  protected async beforeStop(): Promise<void> {
+    return new Promise((resolve) => {
+      this.app.close(() => {
+        resolve();
+      });
+    });
+  }
+
   public getFrameworkType(): MidwayFrameworkType {
-    return MidwayFrameworkType.WS;
+    return MidwayFrameworkType.WS_IO;
   }
 
   public getApplication(): IMidwaySocketIOApplication {
@@ -110,11 +121,74 @@ export class MidwaySocketIOFramework extends BaseFramework<IMidwaySocketIOConfig
   }
 
   private async addNamespace(target: any, controllerId: string) {
-    const controllerOption: ControllerOption = getClassMetadata(
+    const controllerOption: WSControllerOption = getClassMetadata(
       WS_CONTROLLER_KEY,
       target
     );
 
-    console.log(controllerOption);
+    const nsp = this.app.of(controllerOption.namespace);
+
+    nsp.on('connect', async (socket: IMidwaySocketIOContext) => {
+
+      const wsEventInfos: WSEventInfo[] = getClassMetadata(
+        WS_EVENT_KEY,
+        target
+      );
+
+      // 存储方法对应的响应处理
+      const methodMap = {};
+
+      if (wsEventInfos.length) {
+        for (let wsEventInfo of wsEventInfos) {
+          methodMap[wsEventInfo.propertyName] = methodMap[wsEventInfo.propertyName] || { responseEvents: [] };
+          const controller = await socket.requestContext.getAsync(controllerId);
+          // on connection
+          if (wsEventInfo.eventType === WSEventTypeEnum.ON_CONNECTION) {
+            const result = await controller[wsEventInfo.propertyName].apply(controller, [socket]);
+            await this.bindSocketResponse(result, socket, wsEventInfo.propertyName, methodMap);
+          } else if (wsEventInfo.eventType === WSEventTypeEnum.ON_MESSAGE) {
+            // on user custom event
+            socket.on(wsEventInfo.messageEventName, async (...args) => {
+              const result = await controller[wsEventInfo.propertyName].apply(controller, args);
+              await this.bindSocketResponse(result, socket, wsEventInfo.propertyName, methodMap);
+            });
+          } else if (wsEventInfo.eventType === WSEventTypeEnum.ON_DISCONNECTION) {
+            // on socket disconnect
+            socket.on('disconnect', async (reason: string) => {
+              const result = await controller[wsEventInfo.propertyName].apply(controller, [reason]);
+              await this.bindSocketResponse(result, socket, wsEventInfo.propertyName, methodMap);
+            });
+          } else if (wsEventInfo.eventType === WSEventTypeEnum.ON_SOCKET_ERROR) {
+            // on socket error
+            socket.on('error', async (err) => {
+              const result = await controller[wsEventInfo.propertyName].apply(controller, [err]);
+              await this.bindSocketResponse(result, socket, wsEventInfo.propertyName, methodMap);
+            });
+          } else {
+            // 存储每个方法对应的后置响应处理，供后续快速匹配
+            methodMap[wsEventInfo.propertyName].responseEvents.push(wsEventInfo);
+          }
+        }
+      }
+    });
+  }
+
+  private async bindSocketResponse(result: any, socket: IMidwaySocketIOContext, propertyName: string, methodMap: {
+    responseEvents?: WSEventInfo[]
+  }) {
+    if (result && methodMap[propertyName]) {
+      for (const wsEventInfo of methodMap[propertyName].responseEvents) {
+        if (wsEventInfo.eventType === WSEventTypeEnum.EMIT) {
+          if (wsEventInfo.roomName.length) {
+            socket = wsEventInfo.roomName.reduce((socket, name) => {
+              return socket.to(name);
+            }, socket);
+          }
+          socket.emit.apply(socket, [wsEventInfo.messageEventName].concat(result));
+        } else if (wsEventInfo.eventType === WSEventTypeEnum.BROADCAST) {
+          socket.nsp.emit.apply(socket.nsp, [].concat(result));
+        }
+      }
+    }
   }
 }
