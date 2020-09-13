@@ -43,7 +43,7 @@ describe.skip('/test/enhance.test.ts', () => {
     let app;
     beforeAll(async () => {
       app = await creatApp('enhance/base-app-controller');
-    }, 20000);
+    });
 
     afterAll(async () => {
       await closeApp(app);
@@ -75,7 +75,7 @@ describe.skip('/test/enhance.test.ts', () => {
     let app;
     beforeAll(async () => {
       app = await creatApp('enhance/base-app-controller-default-export');
-    }, 20000);
+    });
 
     afterAll(async () => {
       await closeApp(app);
@@ -107,7 +107,7 @@ describe.skip('/test/enhance.test.ts', () => {
     let app;
     beforeAll(async () => {
       app = await creatApp('enhance/base-app-default-scope');
-    }, 20000);
+    });
 
     afterAll(async () => {
       await closeApp(app);
@@ -133,7 +133,7 @@ describe.skip('/test/enhance.test.ts', () => {
 
     beforeAll(async () => {
       app = await creatApp('enhance/base-app-decorator');
-    }, 20000);
+    });
 
     afterAll(async () => {
       await closeApp(app);
@@ -296,7 +296,7 @@ describe.skip('/test/enhance.test.ts', () => {
     let app;
     beforeAll(async () => {
       app = await creatApp('enhance/base-app-utils');
-    }, 20000);
+    });
 
     afterAll(async () => {
       await closeApp(app);
@@ -314,7 +314,7 @@ describe.skip('/test/enhance.test.ts', () => {
     let app;
     beforeAll(async () => {
       app = await creatApp('enhance/base-app-async');
-    }, 20000);
+    });
 
     afterAll(async () => {
       await closeApp(app);
@@ -333,7 +333,7 @@ describe.skip('/test/enhance.test.ts', () => {
     beforeAll(async () => {
       mm(process.env, 'HOME', '');
       app = await creatApp('enhance/base-app');
-    }, 20000);
+    });
     afterEach(mm.restore);
     afterAll(async () => {
       await closeApp(app);
@@ -351,7 +351,7 @@ describe.skip('/test/enhance.test.ts', () => {
     let app;
     beforeAll(async () => {
       app = await creatApp('enhance/base-app-constructor');
-    }, 20000);
+    });
 
     afterAll(async () => {
       await closeApp(app);
@@ -369,7 +369,7 @@ describe.skip('/test/enhance.test.ts', () => {
     let app;
     beforeAll(async () => {
       app = await creatApp('enhance/base-app-function');
-    }, 20000);
+    });
 
     afterAll(async () => {
       await closeApp(app);
@@ -387,7 +387,7 @@ describe.skip('/test/enhance.test.ts', () => {
     let app;
     beforeAll(async () => {
       app = await creatApp('enhance/base-app-router');
-    }, 20000);
+    });
 
     afterAll(async () => {
       await closeApp(app);
@@ -416,7 +416,7 @@ describe.skip('/test/enhance.test.ts', () => {
     let app;
     beforeAll(async () => {
       app = await creatApp('enhance/base-app-router-priority');
-    }, 20000);
+    });
 
     afterAll(async () => {
       await closeApp(app);
@@ -445,7 +445,7 @@ describe.skip('/test/enhance.test.ts', () => {
     let app;
     beforeAll(async () => {
       app = await creatApp('enhance/loader-duplicate');
-    }, 20000);
+    });
 
     afterAll(async () => {
       await closeApp(app);
@@ -463,7 +463,7 @@ describe.skip('/test/enhance.test.ts', () => {
     let app;
     beforeAll(async () => {
       app = await creatApp('enhance/base-app-controller-tsx');
-    }, 20000);
+    });
 
     afterAll(async () => {
       await closeApp(app);
@@ -481,7 +481,7 @@ describe.skip('/test/enhance.test.ts', () => {
     let app;
     beforeAll(async () => {
       app = await creatApp('enhance/base-app-middleware');
-    }, 20000);
+    });
 
     afterAll(async () => {
       await closeApp(app);
@@ -537,7 +537,7 @@ describe.skip('/test/enhance.test.ts', () => {
         }
         return originRequest(url, args, callback);
       });
-    }, 20000);
+    });
 
     afterAll(() => {
       mm.restore();

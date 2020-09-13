@@ -12,7 +12,7 @@ describe('/test/new.test.ts', () => {
     expect(result.status).toBe(200);
     expect(result.text).toBe('hello world, harry');
     await close(app);
-  }, 20000);
+  });
 
   it('should test create another app', async () => {
     const app = await createApp<KoaFramework>(join(__dirname, 'fixtures/base-app-new'), {}, KoaFramework);
