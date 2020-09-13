@@ -11,10 +11,11 @@ pageClass: home-class
       <div class="home-logo"></div>
       <div class="top-right">
         <nav>
-          <a href="" class="home-link">使用文档</a>
-          <a href="" class="home-link">API</a>
-          <a href="" class="home-link">示例库</a>
+          <a href="" class="home-link link">使用文档</a>
+          <a href="" class="home-link link">API</a>
+          <a href="" class="home-link link">示例库</a>
         </nav>
+        <iframe frameborder="0" scrolling="0" width="114" height="20" title="Star Midway on GitHub" src="https://ghbtns.com/github-btn.html?user=midwayjs&repo=midway&type=star&count=true"></iframe>
       </div>
     </div>
   </div>
@@ -28,6 +29,10 @@ pageClass: home-class
       <div class="home-top-button-list">
         <a class="home-top-button button view" href=""><span class="buttonScale"></span><div>访问文档</div></a>
         <a class="home-top-button button white" href="https://github.com/midwayjs/midway"><span class="buttonScale"></span><div><i class="github"></i>源码</div></a>
+      </div>
+      <div class="home-top-right">
+        <div class="home-top-container" id="top-wall">
+        </div>
       </div>
     </div>
   </div>
@@ -95,23 +100,77 @@ pageClass: home-class
   <div class="home-bottom">
     <div class="content-container">
       <div class="home-left">
-        <div>© 2020 Midwayjs</div>
-        <a href="https://github.com/midwayjs/midway">Github</a>
-        <a href="https://github.com/midwayjs/midway/issues">Issue</a>
-        <a href="https://www.yuque.com/midwayjs/topics">Help</a>
-        <a href="http://demo.midwayjs.org/">Gallery</a>
+        <div class="home-copyright">© 2020 Midwayjs</div>
+        <a class="link" href="https://github.com/midwayjs/midway">Github</a>
+        <a class="link" href="https://github.com/midwayjs/midway/issues">Issue</a>
+        <a class="link" href="https://www.yuque.com/midwayjs/topics">Help</a>
+        <a class="link" href="http://demo.midwayjs.org/">Gallery</a>
       </div>
       <a class="bottom-logo"></a>
       <div class="home-right">
-        <a href="http://midwayjs.org/pandora">Pandora</a>
-        <a href="http://midwayjs.org/injection">Injection</a>
-        <a href="https://github.com/midwayjs/sandbox-docker">Sandbox</a>
-        <a href="https://ice.work/">ICE</a>
+        <a class="link" href="http://midwayjs.org/pandora">Pandora</a>
+        <a class="link" href="http://midwayjs.org/injection">Injection</a>
+        <a class="link" href="https://github.com/midwayjs/sandbox-docker">Sandbox</a>
+        <a class="link" href="https://ice.work/">ICE</a>
       </div>
     </div>
   </div>
 </div>
 <script>
+const topWallList = [
+  { cover: "//gw.alicdn.com/tfs/TB1tXBJhAcx_u4jSZFlXXXnUFXa-546-274.png" },
+  { cover: "//gw.alicdn.com/tfs/TB1uDh1UAL0gK0jSZFAXXcA9pXa-546-274.png" },
+  { cover: "//gw.alicdn.com/tfs/TB1tXBJhAcx_u4jSZFlXXXnUFXa-546-274.png" },
+  { cover: "//gw.alicdn.com/tfs/TB1uDh1UAL0gK0jSZFAXXcA9pXa-546-274.png" },
+  { cover: "//gw.alicdn.com/tfs/TB1tXBJhAcx_u4jSZFlXXXnUFXa-546-274.png" },
+  { cover: "//gw.alicdn.com/tfs/TB1uDh1UAL0gK0jSZFAXXcA9pXa-546-274.png" },
+  { cover: "//gw.alicdn.com/tfs/TB1tXBJhAcx_u4jSZFlXXXnUFXa-546-274.png" },
+  { cover: "//gw.alicdn.com/tfs/TB1uDh1UAL0gK0jSZFAXXcA9pXa-546-274.png" },
+  { cover: "//gw.alicdn.com/tfs/TB1tXBJhAcx_u4jSZFlXXXnUFXa-546-274.png" },
+  { cover: "//gw.alicdn.com/tfs/TB1uDh1UAL0gK0jSZFAXXcA9pXa-546-274.png" },
+  { cover: "//gw.alicdn.com/tfs/TB1uDh1UAL0gK0jSZFAXXcA9pXa-546-274.png" },
+  { cover: "//gw.alicdn.com/tfs/TB1tXBJhAcx_u4jSZFlXXXnUFXa-546-274.png" },
+  { cover: "//gw.alicdn.com/tfs/TB1uDh1UAL0gK0jSZFAXXcA9pXa-546-274.png" },
+  { cover: "//gw.alicdn.com/tfs/TB1tXBJhAcx_u4jSZFlXXXnUFXa-546-274.png" },
+  { cover: "//gw.alicdn.com/tfs/TB1uDh1UAL0gK0jSZFAXXcA9pXa-546-274.png" },
+];
+const topWallEle = document.getElementById('top-wall');
+const topWallItemList = [];
+// render top wall
+const lastLineIndex = (Math.ceil(topWallList.length / 5) - 1) * 5;
+topWallList.forEach((item, i) => {
+  const topWallItem = document.createElement('a');
+  topWallItem.setAttribute('class', 'top-wall-item');
+  topWallItem.setAttribute('href', item.link);
+  topWallItem.setAttribute('target', '_blank');
+  const topWallItemInner = document.createElement('div');
+  topWallItemInner.setAttribute('class', 'top-wall-item-inner');
+  topWallItemInner.style.backgroundImage = `url('${ item.cover }')`;
+  topWallItem.appendChild(topWallItemInner);
+  // if (i === 0) {
+  //    topWallItem.style.transformOrigin = 'left top';
+  // } else if (i === 4) {
+  //    topWallItem.style.transformOrigin = 'right top';
+  // } else if (i === lastLineIndex) {
+  //    topWallItem.style.transformOrigin = 'left bottom';
+  // } else if (i === lastLineIndex + 4) {
+  //    topWallItem.style.transformOrigin = 'right bottom';
+  // } else if (i < 4) {
+  //    topWallItem.style.transformOrigin = 'top';
+  // } else if (i > lastLineIndex) {
+  //    topWallItem.style.transformOrigin = 'bottom';
+  // } else if (i % 5 === 0) {
+  //    topWallItem.style.transformOrigin = 'left';
+  // } else if (i % 5 === 4) {
+  //    topWallItem.style.transformOrigin = 'right';
+  // }
+  topWallEle.appendChild(topWallItem);
+  topWallItemList.push(topWallItem);
+  setTimeout(() => {
+    topWallItem.style.opacity = 1;
+  }, Math.random() * 1000);
+});
+// render why img
 const allImg = Array.from(document.querySelectorAll('.home-why-img'));
 if (window.IntersectionObserver) {
   const observer = new IntersectionObserver((entries) => {

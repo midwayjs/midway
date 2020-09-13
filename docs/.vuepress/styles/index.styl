@@ -23,6 +23,24 @@
       opacity: 0;
     }
   }
+  @keyframes link {
+    0% {
+      left: 0;
+      width: 0%;
+    }
+    30% {
+      left: 0;
+      width: 100%;
+    }
+    60% {
+      width: 80%;
+      left: 20%;
+    }
+    100% {
+      left: 0;
+      width: 100%;
+    }
+  }
   .home-class
     .navbar
       display: none;
@@ -53,10 +71,13 @@
     .top-right
       position: absolute;
       right: 0;
+      display: flex;
+      align-items: center;
       nav
         a
           margin-right: 32px;
-          color: #b4b6ba;
+          margin-top: -6px;
+          color: #fff;
           font-size: 15px;
 
   .home-top
@@ -93,6 +114,41 @@
         &.view
           .buttonScale
             background: #498ef0;
+    .home-top-right
+      position: absolute;
+      right: 0;
+      top: 200px;
+      width: 600px;
+      height: 320px;
+      .home-top-container
+        position: absolute;
+        width: 100%;
+        top: 50%;
+        left: 0;
+        transform: translate(0, -50%);
+        .top-wall-item
+          position: relative;
+          box-sizing: border-box;
+          z-index: 1;
+          display: inline-block;
+          opacity: 0;
+          width: calc(20% - 12px);
+          margin-right: 12px;
+          margin-bottom: 12px;
+          height: 80px;
+          vertical-align: top;
+          transition: opacity 1s ease;
+          &:hover
+            .top-wall-item-inner
+              box-shadow: 0 0 25px #498ef0;
+          .top-wall-item-inner
+            height: 100%;
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-cover: #fff;
+            border-radius: 3px;
+            transition: box-shadow .5s ease;
         
   .home-solutions
     position: relative;
@@ -225,6 +281,8 @@
     padding: 48px 0;
     height: 48px;
     font-size: 12px;
+    .home-copyright
+      padding-bottom: 2px;
     .home-left,.home-right
       display: flex;
       height: 100%;
@@ -232,6 +290,12 @@
       a
         color: #0366d6;
         margin-left: 24px;
+        display: inline-block;
+        &.link
+          padding-bottom: 2px;
+          &:after
+            height: 1px;
+            background-color: #0366d6;
     .home-right
       position: absolute;
       right: 0;
@@ -263,7 +327,7 @@
     text-decoration: none;
     position: relative;
     font-size: 15px;
-    line-height: 24px;
+    line-height: 23px;
     padding: 6px 24px;
     display: inline-block;
     color: #535353;
@@ -304,5 +368,22 @@
         box-shadow: 0 0 3px rgba(255,255,255,1);
         &:before
           background: #fff;
-  
 
+  .link
+    position: relative;
+    padding-bottom: 8px;
+    text-decoration: none;
+    transform: opacity .3s ease;
+    opacity: 0.9;
+    &:hover
+      opacity: 1;
+      &:after
+        animation: link .8s ease forwards;
+    &:after
+      content: ' ';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 0px;
+      height: 2px;
+      background: #fff;
