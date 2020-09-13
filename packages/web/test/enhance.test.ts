@@ -502,12 +502,12 @@ describe('/test/enhance.test.ts', () => {
     });
   });
 
-  describe('shoule egg hackernew be ok', () => {
+  describe('should egg hackernew be ok', () => {
     let app;
     beforeAll(async () => {
       app = await creatApp('enhance/base-app-hackernews', {
         typescript: false,
-      }, 20000);
+      });
       const originRequest = urllib.HttpClient2.prototype.request;
       mm(urllib.HttpClient2.prototype, 'request', (url, args, callback) => {
         if (url) {
@@ -537,8 +537,7 @@ describe('/test/enhance.test.ts', () => {
         }
         return originRequest(url, args, callback);
       });
-
-    });
+    }, 20000);
 
     afterAll(() => {
       mm.restore();
