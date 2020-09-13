@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "picomatch": "*",
-    "@midwayjs/serverless-fc-starter": "*",
-    "@midwayjs/faas": "*"
-  }
-}

@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "@midwayjs/runtime-engine": "*",
-    "@midwayjs/faas": "*"
-  }
-}

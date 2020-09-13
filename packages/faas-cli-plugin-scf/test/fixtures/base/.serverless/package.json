@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "@midwayjs/serverless-scf-starter": "*",
-    "@midwayjs/runtime-engine": "*",
-    "@midwayjs/faas": "*"
-  }
-}
