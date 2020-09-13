@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/express",
-  "version": "1.0.0",
+  "version": "2.2.0",
   "description": "Midway Web Framework for Express",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -25,14 +25,14 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/mock": "^1.0.0",
+    "@midwayjs/mock": "^2.2.0",
     "@types/express": "^4.17.8",
-    "midway-bin": "^2.0.15",
-    "fs-extra": "^8.0.1"
+    "fs-extra": "^8.0.1",
+    "midway-bin": "^2.2.0"
   },
   "dependencies": {
-    "@midwayjs/core": "^2.1.4",
-    "@midwayjs/decorator": "^2.1.4",
+    "@midwayjs/core": "^2.2.0",
+    "@midwayjs/decorator": "^2.2.0",
     "express": "^4.17.1"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",

@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/core",
-  "version": "2.1.4",
+  "version": "2.2.0",
   "description": "midway core",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -25,12 +25,12 @@
   "license": "MIT",
   "devDependencies": {
     "chai": "^4.2.0",
-    "midway-bin": "^2.0.15",
+    "midway-bin": "^2.2.0",
     "mm": "^2.5.0",
     "sinon": "^7.2.2"
   },
   "dependencies": {
-    "@midwayjs/decorator": "^2.1.4",
+    "@midwayjs/decorator": "^2.2.0",
     "@midwayjs/glob": "^1.0.2",
     "debug": "^4.1.1",
     "extend2": "^1.0.0",
