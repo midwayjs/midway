@@ -1,8 +1,9 @@
 import type { MidwayWebFramework } from './framework';
 import { RouterParamValue } from '@midwayjs/decorator';
 import { parseNormalDir } from './utils';
+import * as extend from 'extend2';
 
-// const extend = require('extend2');
+import { EggAppInfo } from 'egg';
 
 const {
   AppWorkerLoader,
@@ -38,6 +39,19 @@ export const createAppWorkerLoader = AppWorkerLoader => {
     loadMiddleware(opt) {
       return super.loadMiddleware(opt);
     }
+
+    protected getAppInfo(): EggAppInfo {
+      if (!this.appInfo) {
+        const appInfo: EggAppInfo | undefined = super.getAppInfo();
+        // ROOT == HOME in prod env
+        this.appInfo = extend(true, appInfo, {
+          root: appInfo.env === 'local' || appInfo.env === 'unittest' ? this.appDir : appInfo.root,
+          appDir: this.appDir,
+        });
+      }
+      return this.appInfo;
+    }
+
   }
 
   return EggAppWorkerLoader as any;
@@ -61,6 +75,18 @@ export const createAgentWorkerLoader = AppWorkerLoader => {
         return super.getEggPaths().concat(process.env.MIDWAY_EGG_PLUGIN_PATH);
       }
       return super.getEggPaths();
+    }
+
+    protected getAppInfo(): EggAppInfo {
+      if (!this.appInfo) {
+        const appInfo: EggAppInfo | undefined = super.getAppInfo();
+        // ROOT == HOME in prod env
+        this.appInfo = extend(true, appInfo, {
+          root: appInfo.env === 'local' || appInfo.env === 'unittest' ? this.appDir : appInfo.root,
+          appDir: this.appDir,
+        });
+      }
+      return this.appInfo;
     }
   }
 
