@@ -1,66 +1,38 @@
-import * as request from 'supertest';
-import { creatApp, closeApp } from './utils';
-
-const pedding = require('pedding');
+import { creatApp, closeApp, createHttpRequest } from './utils';
 
 describe('/test/issue.test.ts', () => {
 
-  describe('test #264 issue to fix ctx bind', () => {
-    let app;
-    beforeAll(async () => {
-      app = await creatApp('issue/base-app-lazyload-ctx');
-    });
+  it('test #264 issue to fix ctx bind', async() => {
+    const app = await creatApp('issue/base-app-lazyload-ctx');
 
-    afterAll(async () => {
-      await closeApp(app);
-    })
+    let result = await createHttpRequest(app).get('/api/code/list');
 
-    it('should get right ctx path', done => {
-      done = pedding(4, done);
+    expect(result.status).toEqual(200);
+    expect(result.text).toEqual('Code: /api/code/list, User: /api/code/list, Hello Result');
 
-      request(app.callback())
-        .get('/api/code/list')
-        .expect(200)
-        .expect(
-          'Code: /api/code/list, User: /api/code/list, Hello Result',
-          done
-        );
+    result = await createHttpRequest(app).get('/api/user/info');
 
-      request(app.callback())
-        .get('/api/user/info')
-        .expect(200)
-        .expect('User: /api/user/info, Hello Result', done);
+    expect(result.status).toEqual(200);
+    expect(result.text).toEqual('User: /api/user/info, Hello Result');
 
-      request(app.callback())
-        .get('/api/code/list')
-        .expect(200)
-        .expect(
-          'Code: /api/code/list, User: /api/code/list, Hello Result',
-          done
-        );
+    result = await createHttpRequest(app).get('/api/code/list');
 
-      request(app.callback())
-        .get('/api/user/info')
-        .expect(200)
-        .expect('User: /api/user/info, Hello Result', done);
-    });
+    expect(result.status).toEqual(200);
+    expect(result.text).toEqual('Code: /api/code/list, User: /api/code/list, Hello Result');
+
+    result = await createHttpRequest(app).get('/api/user/info');
+
+    expect(result.status).toEqual(200);
+    expect(result.text).toEqual('User: /api/user/info, Hello Result');
+
+    await closeApp(app);
   });
 
-  describe('test #215 issue to fix egg extension', () => {
-    let app;
-    beforeAll(async () => {
-      app = await creatApp('issue/base-app-extend-context');
-    });
-
-    afterAll(async () => {
-      await closeApp(app);
-    })
-
-    it('Correctly reference the egg extension implementation', done => {
-      request(app.callback())
-        .get('/api/user/info')
-        .expect(200)
-        .expect('hello world', done);
-    });
+  it('test #215 issue to fix egg extension', async () => {
+    const app = await creatApp('issue/base-app-extend-context');
+    let result = await createHttpRequest(app).get('/api/user/info');
+    expect(result.status).toEqual(200);
+    expect(result.text).toEqual('hello world');
+    await closeApp(app);
   });
 });
