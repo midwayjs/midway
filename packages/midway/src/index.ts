@@ -19,4 +19,4 @@ export function startCluster(options, callback) {
   new Master(options).ready(callback);
 }
 
-export { Application, Agent } from './application';
+export * from '@midwayjs/web';

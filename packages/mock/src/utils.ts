@@ -9,10 +9,11 @@ process.setMaxListeners(0);
 
 const appMap = new WeakMap();
 
-function getIncludeFramework(dependencies): MidwayFrameworkType {
+function getIncludeFramework(dependencies): string {
+  const values: string[] = Object.values(MidwayFrameworkType);
   for (const name of Object.keys(dependencies)) {
-    if (name in MidwayFrameworkType) {
-      return MidwayFrameworkType[name];
+    if (values.includes(name)) {
+      return name;
     }
   }
 }
@@ -35,7 +36,7 @@ export async function create<T extends IMidwayFramework<U>, U = T['configuration
     if (pkg.dependencies) {
       customFrameworkName = getIncludeFramework(pkg.dependencies);
     }
-    DefaultFramework = customFrameworkName;
+    DefaultFramework = require(customFrameworkName as string).Framework;
   }
 
   // got options from framework
@@ -43,7 +44,7 @@ export async function create<T extends IMidwayFramework<U>, U = T['configuration
     framework = new DefaultFramework();
     if (framework.getFrameworkType() === MidwayFrameworkType.WEB) {
       // add egg-mock plugin for @midwayjs/web test, provide mock method
-      options = Object.assign(options, {
+      options = Object.assign(options || {}, {
         plugins: {
           'egg-mock': {
             enable: true,
@@ -52,7 +53,7 @@ export async function create<T extends IMidwayFramework<U>, U = T['configuration
           watcher: false,
           development: false,
         }
-      });
+      }) as any;
     }
     framework.configure(options);
   } else {

@@ -22,7 +22,6 @@
     "midway-bin": "^2.2.0"
   },
   "dependencies": {
-    "@midwayjs/bootstrap": "^2.2.0",
     "@midwayjs/web": "^2.2.0",
     "egg-cluster": "^1.23.0"
   },
