@@ -5,7 +5,7 @@ import * as path from 'path';
 const assert = require('assert');
 const fixtures = path.join(__dirname, 'fixtures');
 
-describe('test/mock_container.test.ts', () => {
+describe.skip('test/mock_container.test.ts', () => {
 
   describe('test base app decorator', () => {
     let container;
