@@ -1,4 +1,4 @@
-export { create, close, createApp } from './utils';
+export { create, close, createApp, createHttpRequest } from './utils';
 
 /**
  * @deprecated below

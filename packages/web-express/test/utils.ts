@@ -9,3 +9,5 @@ export async function creatApp(name: string, options: IMidwayExpressConfiguratio
 export async function closeApp(app) {
   return close(app);
 }
+
+export { createHttpRequest } from '@midwayjs/mock';

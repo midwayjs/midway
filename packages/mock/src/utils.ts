@@ -2,7 +2,8 @@ import { BootstrapStarter } from '@midwayjs/bootstrap';
 import { IMidwayApplication, IMidwayFramework, MidwayFrameworkType } from '@midwayjs/core';
 import { isAbsolute, join } from 'path';
 import { remove } from 'fs-extra';
-import { clearAllModule } from "@midwayjs/decorator";
+import { clearAllModule } from '@midwayjs/decorator';
+import * as request from 'supertest';
 
 process.setMaxListeners(0);
 
@@ -86,7 +87,7 @@ export async function createApp<T extends IMidwayFramework<U>, U = T['configurat
 export async function close(app: IMidwayApplication | IMidwayFramework<any>) {
   if (!app) return;
   let newApp: IMidwayApplication;
-  if((app as IMidwayFramework<any>).getApplication) {
+  if ((app as IMidwayFramework<any>).getApplication) {
     newApp = (app as IMidwayFramework<any>).getApplication();
   } else {
     newApp = app as IMidwayApplication;
@@ -100,5 +101,13 @@ export async function close(app: IMidwayApplication | IMidwayFramework<any>) {
   if (MidwayFrameworkType.WEB === newApp.getFrameworkType()) {
     await remove(join(newApp.getAppDir(), 'logs'));
     await remove(join(newApp.getAppDir(), 'run'));
+  }
+}
+
+export function createHttpRequest(app: IMidwayApplication) {
+  if ((app as any).callback) {
+    return request((app as any).callback());
+  } else {
+    return request(app);
   }
 }

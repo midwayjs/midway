@@ -12,3 +12,5 @@ export async function creatApp(name, options: IMidwayWebConfigurationOptions = {
 export async function closeApp(app) {
   return close(app);
 }
+
+export { createHttpRequest } from '@midwayjs/mock';

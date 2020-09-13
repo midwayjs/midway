@@ -1,5 +1,4 @@
-import * as request from 'supertest';
-import { closeApp, creatApp } from './utils';
+import { closeApp, creatApp, createHttpRequest } from './utils';
 import { IMidwayExpressApplication } from '../src';
 
 describe('/test/feature.test.ts', () => {
@@ -15,13 +14,13 @@ describe('/test/feature.test.ts', () => {
     });
 
     it('test get method with return value', async () => {
-      const result = await request(app).get('/').query({ name: 'harry' });
+      const result = await createHttpRequest(app).get('/').query({ name: 'harry' });
       expect(result.status).toBe(201);
       expect(result.text).toBe('hello world,harry');
     });
 
     it('test get method with redirect', async () => {
-      const result = await request(app).get('/login');
+      const result = await createHttpRequest(app).get('/login');
       expect(result.status).toBe(302);
     });
   });
