@@ -1,0 +1,52 @@
+{
+  "name": "@midwayjs/mock",
+  "version": "1.0.0",
+  "description": "create your test app from midway framework",
+  "main": "dist/index",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "midway-bin build -c",
+    "lint": "../../node_modules/.bin/tslint --format prose -c ../../tslint.json --fix 'src/**/*.ts'",
+    "devtest": "midway-bin test --ts",
+    "test": "../../node_modules/.bin/jest --forceExit",
+    "cov": "../../node_modules/.bin/jest --coverage --forceExit",
+    "ci": "midway-bin test",
+    "autod": "midway-bin autod"
+  },
+  "keywords": [
+    "midway",
+    "IoC",
+    "mock",
+    "plugin",
+    "bootstrap"
+  ],
+  "files": [
+    "src",
+    "dist",
+    "d.ts",
+    "bootstrap.d.ts",
+    "bootstrap.js",
+    "app",
+    "config"
+  ],
+  "eggPlugin": {
+    "name": "midway-mock"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@midwayjs/decorator": "^2.1.4",
+    "midway-bin": "^2.0.15"
+  },
+  "dependencies": {
+    "@midwayjs/bootstrap": "^1.0.0",
+    "@midwayjs/core": "^2.1.4",
+    "egg-mock": "^3.21.0",
+    "power-assert": "^1.6.1",
+    "supertest": "^4.0.2"
+  },
+  "author": "Harry Chen <czy88840616@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/midwayjs/midway.git"
+  }
+}

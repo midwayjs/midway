@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.json",
+  "compileOnSave": true,
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    "jsx": "react"
+  },
+  "files": [
+    "typings/index.d.ts"
+  ],
+  "include": [
+    "./src/**/*.ts"
+  ]
+}

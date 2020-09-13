@@ -26,7 +26,7 @@ class CleanCommand extends Command {
 
   async cleanDir(cwd) {
     await new Promise((resolve, reject) => {
-      const rmDirName = ['logs', 'run', '.nodejs-cache'];
+      const rmDirName = [ 'logs', 'run', '.nodejs-cache' ];
       try {
         rmDirName.forEach(name => {
           fseExtra.removeSync(path.join(cwd, name));

@@ -1,0 +1,51 @@
+{
+  "name": "@midwayjs/faas",
+  "version": "2.0.0",
+  "main": "dist/index",
+  "typings": "index.d.ts",
+  "dependencies": {
+    "@midwayjs/core": "^2.1.4",
+    "@midwayjs/decorator": "^2.1.4",
+    "@midwayjs/faas-typings": "^1.1.4",
+    "@midwayjs/simple-lock": "^1.1.4",
+    "koa-compose": "^4.1.0"
+  },
+  "devDependencies": {
+    "@midwayjs/mock": "^1.0.0",
+    "@midwayjs/serverless-fc-starter": "^1.0.0",
+    "@midwayjs/serverless-scf-starter": "^1.0.0",
+    "midway-bin": "^2.0.15",
+    "mm": "^2.5.0"
+  },
+  "engines": {
+    "node": ">= 10"
+  },
+  "files": [
+    "dist",
+    "index.d.ts"
+  ],
+  "keywords": [
+    "serverless",
+    "faas",
+    "k8s",
+    "cloud native",
+    "aliyun",
+    "tencent",
+    "midway",
+    "aws",
+    "lambda"
+  ],
+  "scripts": {
+    "build": "midway-bin build -c",
+    "test": "../../node_modules/.bin/jest",
+    "cov": "../../node_modules/.bin/jest --coverage",
+    "clean": "midway-bin clean",
+    "autod": "midway-bin autod"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:midwayjs/midway.git"
+  },
+  "license": "MIT",
+  "gitHead": "1afeb34cbb6c0ad49ccdb9cfaebd254ae73afc6a"
+}

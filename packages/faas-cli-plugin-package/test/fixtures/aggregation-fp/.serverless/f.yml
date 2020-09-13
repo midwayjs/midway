@@ -1,0 +1,119 @@
+service:
+  name: serverless-midway-test
+provider:
+  name: aliyun
+functions:
+  all: &ref_0
+    functionsPattern:
+      - '*'
+      - '!normal*'
+    handler: all.handler
+    _isAggregation: true
+    events:
+      - http:
+          method: any
+          path: /*
+    _handlers:
+      - handler: api1.handler
+        events:
+          - http:
+              method: get
+              path: /api/1
+        path: /api/1
+      - handler: api2.handler
+        events:
+          - http:
+              method: get
+              path: /api/2
+        path: /api/2
+      - handler: api3.handler
+        events:
+          - http:
+              method: get
+              path: /api/3
+        path: /api/3
+      - handler: apiall.handler
+        events:
+          - http:
+              method: get
+              path: /api/*
+        path: /api/*
+      - handler: render.handler
+        events:
+          - http:
+              method: get
+              path: /render
+        path: /render
+      - handler: render1.handler
+        events:
+          - http:
+              method: get
+              path: /render/1
+        path: /render/1
+      - handler: render2.handler
+        events:
+          - http:
+              method: get
+              path: /render/2
+        path: /render/2
+      - handler: fp.handler
+        isFunctional: true
+        exportFunction: fp
+        sourceFilePath: fun-index.js
+        events:
+          - http:
+              method: get
+              path: /api/fp
+        path: /api/fp
+    _allAggred:
+      - path: /api/1
+        method: get
+      - path: /api/2
+        method: get
+      - path: /api/3
+        method: get
+      - path: /api/*
+        method: get
+      - path: /render
+        method: get
+      - path: /render/1
+        method: get
+      - path: /render/2
+        method: get
+      - path: /api/fp
+        method: get
+  normal: &ref_1
+    functionsPattern:
+      - normal*
+    handler: normal.handler
+    _isAggregation: true
+    events:
+      - http:
+          method: any
+          path: /normal/*
+    _handlers:
+      - handler: normal1.handler
+        events:
+          - http:
+              method: get
+              path: /normal/1
+        path: /normal/1
+      - handler: normal2.handler
+        events:
+          - http:
+              method: get
+              path: /normal/2
+        path: /normal/2
+    _allAggred:
+      - path: /normal/1
+        method: get
+      - path: /normal/2
+        method: get
+custom:
+  customDomain:
+    domainName: fctest.iam.gy
+aggregation:
+  all: *ref_0
+  normal: *ref_1
+globalDependencies:
+  picomatch: '*'

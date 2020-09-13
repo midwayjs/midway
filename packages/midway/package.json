@@ -5,10 +5,10 @@
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "scripts": {
-    "build": "npm run lint && midway-bin build -c",
+    "build": "midway-bin build -c",
     "lint": "../../node_modules/.bin/tslint --format prose -c ../../tslint.json --fix 'src/**/*.ts'",
-    "test": "midway-bin test --ts",
-    "cov": "midway-bin cov --ts",
+    "test": "../../node_modules/.bin/jest --forceExit",
+    "cov": "../../node_modules/.bin/jest --coverage --forceExit",
     "ci": "npm run test",
     "autod": "midway-bin autod"
   },
@@ -23,7 +23,8 @@
   },
   "dependencies": {
     "egg-cluster": "^1.23.0",
-    "midway-web": "^2.1.4"
+    "@midwayjs/bootstrap": "^1.0.0",
+    "@midwayjs/web": "^1.0.0"
   },
   "files": [
     "bin",

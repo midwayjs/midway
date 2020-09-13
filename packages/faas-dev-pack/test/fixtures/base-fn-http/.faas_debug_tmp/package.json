@@ -1,0 +1,6 @@
+{
+  "name": "faas-demo",
+  "dependencies": {
+    "@midwayjs/faas": "*"
+  }
+}

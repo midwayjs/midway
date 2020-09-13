@@ -1,4 +1,4 @@
 'use strict';
 
-module.exports = require('../../../../midway-web/dist');
+module.exports = require('../../../../web/dist');
 module.exports.startCluster = require('../../../dist').startCluster;
