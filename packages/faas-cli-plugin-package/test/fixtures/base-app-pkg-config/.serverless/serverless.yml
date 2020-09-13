@@ -1,0 +1,18 @@
+service: serverless-midway-test
+
+provider:
+  name: aliyun
+
+functions:
+  index:
+    handler: index.handler
+    events:
+      - http:
+          method: get
+
+package:
+  include:
+    - '*.json'
+  exclude:
+    - b.json
+  artifact: path/to/my-artifact.zip

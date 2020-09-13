@@ -1,0 +1,7 @@
+{
+  "name": "midway_faas_front_integration",
+  "version": "1.0.0",
+  "dependencies": {
+    "@midwayjs/faas": "*"
+  }
+}

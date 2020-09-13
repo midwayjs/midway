@@ -1,0 +1,11 @@
+service: fc-test
+
+provider:
+  name: fc
+  runtime: nodejs10
+
+functions:
+  test1:
+    handler: index.handler
+    events:
+      - http: true

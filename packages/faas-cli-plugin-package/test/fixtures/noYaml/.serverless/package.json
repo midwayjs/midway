@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@midwayjs/serverless-fc-starter": "*",
+    "@midwayjs/faas": "*"
+  }
+}

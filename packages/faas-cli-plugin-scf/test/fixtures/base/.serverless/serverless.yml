@@ -1,0 +1,34 @@
+service: midway-test
+provider:
+  name: tencent
+  runtime: Nodejs10.15
+  stage: test
+  memorySize: 128
+  timeout: 3
+functions:
+  index:
+    handler: index.handler
+    runtime: Nodejs10.15
+    timeout: 3
+    memorySize: 128
+    events:
+      - apigw:
+          name: index_apigw_test
+          parameters:
+            httpMethod: GET
+            path: /http
+            stageName: test
+            integratedResponse: true
+  index2:
+    handler: index.handler2
+    runtime: Nodejs10.15
+    timeout: 3
+    memorySize: 128
+    events:
+      - apigw:
+          name: index2_apigw_test
+          parameters:
+            httpMethod: GET
+            path: /apigw
+            stageName: test
+            integratedResponse: true

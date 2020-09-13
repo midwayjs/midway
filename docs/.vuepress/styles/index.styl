@@ -1,33 +1,389 @@
 #app
-  .no-sidebar
+  @keyframes button {
+    0% {
+      transform: scale(1);
+    }
+    30% {
+      transform: scale(1.1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+    100% {
+      transform: scale(1.08);
+    }
+  }
+  @keyframes buttonCover {
+    0% {
+      transform: translate(-50%, -50%);
+      opacity: 0.1;
+    }
+    100% {
+      transform: translate(-50%, -50%) scale(20);
+      opacity: 0;
+    }
+  }
+  @keyframes link {
+    0% {
+      left: 0;
+      width: 0%;
+    }
+    30% {
+      left: 0;
+      width: 100%;
+    }
+    60% {
+      width: 80%;
+      left: 20%;
+    }
+    100% {
+      left: 0;
+      width: 100%;
+    }
+  }
+  .home-class
     .navbar
-      display: none
-
-    .theme-default-content:not(.custom)
-      max-width: 100% !important
+      display: none;
+    .theme-default-content
+      position: relative;
       padding: 0;
-
-  .top-header
-    background-color: var(--wt-color-dark,#27282c) !important
+      min-width: 1440px;
+      max-width: initial;
+    .home-container
+      padding: 0;
+      margin: 0;
+  
+  .top-header-container
+    position: absolute;
+    height: 120px;
     width: 100%;
-    max-width: 100%
-    margin-top: 0 !important
-    .top-wrapper
-      max-width: 740px
-      margin: 0 auto
+    z-index: 2;
+    min-width: 1440px;
+    background: transparent;
+    .content-container
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    .home-logo
+      width: 190px;
+      height: 50px;
+      background: url('//gw.alicdn.com/tfs/TB1OlNIUAL0gK0jSZFtXXXQCXXa-564-135.png') center/contain no-repeat;
+    .top-right
+      position: absolute;
+      right: 0;
+      display: flex;
+      align-items: center;
+      nav
+        a
+          margin-right: 32px;
+          margin-top: -6px;
+          color: #fff;
+          font-size: 15px;
+
+  .home-top
+    position: relative;
+    height: 698px;
+    background: #11161a url('//gw.alicdn.com/tfs/TB1s.OTkTM11u4jSZPxXXahcXXa-1440-698.png') center/cover no-repeat;
+
+    .home-top-title
+      position: absolute;
+      color: #ffffff;
+      top: 50%;
+      left: 0;
+      transform: translate(0, -50%);
+      .home-top-line
+        font-size: 40px;
+        font-weight: bold;
+        line-height: 60px;
+        white-space: nowrap;
+      .home-top-mini-line
+        font-size: 12px;
+        width: 520px;
+        line-height: 24px;
+    .home-top-button-list
+      position: absolute;
+      display: flex;
+      left: 0;
+      bottom: 110px;
+      .home-top-button
+        padding: 12px 48px;
+        color: #fff;
+        margin-right: 36px;
+        .buttonScale
+          border-radius: 36px;
+        &.view
+          .buttonScale
+            background: #498ef0;
+    .home-top-right
+      position: absolute;
+      right: 0;
+      top: 200px;
+      width: 600px;
+      height: 320px;
+      .home-top-container
+        position: absolute;
+        width: 100%;
+        top: 50%;
+        left: 0;
+        transform: translate(0, -50%);
+        .top-wall-item
+          position: relative;
+          box-sizing: border-box;
+          z-index: 1;
+          display: inline-block;
+          opacity: 0;
+          width: calc(20% - 12px);
+          margin-right: 12px;
+          margin-bottom: 12px;
+          height: 80px;
+          vertical-align: top;
+          transition: opacity 1s ease;
+          &:hover
+            .top-wall-item-inner
+              box-shadow: 0 0 25px #498ef0;
+          .top-wall-item-inner
+            height: 100%;
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-cover: #fff;
+            border-radius: 3px;
+            transition: box-shadow .5s ease;
+        
+  .home-solutions
+    position: relative;
+    height: 660px;
+    padding-top: 88px;
+    box-sizing: border-box;
+    .home-solution-title
+      line-height: 64px;
+      font-size: 40px;
+      color: #000;
+    .home-solution-list
+      padding: 20px 0;
+      .home-solution
+        height: 40px;
+        line-height: 40px;
+        padding: 0 24px;
+        color: #000;
+        margin-right: 24px;
+        margin-bottom: 24px;
+        border-radius: 24px;
+    .home-solution-more
+      display: inline-block;
+      height: 40px;
+      line-height: 40px;
+      border-radius: 24px;
+      &.button
+        .buttonScale
+          background: #498ef0;
       
+      color: #fff;
+      padding: 0 32px;
+      font-size: 15px;
+      text-decoration: none;
+  .home-ad-middle
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+    bottom: 0px;
+    width: 100%;
+    height: 275px;
+    transform: translate(0, 50%);
+    .ad-middle-card
+      position: relative;
+      background: #fff;
+      width: 546px;
+      height: 275px;
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: certer;
+      background-color: #fff;
+      box-shadow: 0 0 2px rgba(0,0,0,0.1);
+      .ad-middle-button
+        position: absolute;
+        left: 60px;
+        bottom: 50px;
+        border-radius: 24px;
+  .home-why-use
+    box-sizing: border-box;
+    background: linear-gradient(135deg, #27282C, #3D5474, #374F4E, #27282C);
+    padding-top: 220px;
+    padding-bottom: 220px;
+    .home-why-use-title
+      font-size: 40px;
+      font-weight: bold;
+      text-align: center;
+      color: #fff;
+      line-height: 60px;
+    .home-why-use-card
+      position: relative;
+      padding-top: 220px;
+      padding-bottom: 100px;
+      padding-right: 550px;
+      &.right
+        padding-left: 550px;
+        padding-right: 0;
+      .home-why-card-title
+        font-size: 40px;
+        text-align: left;
+        color: #fff;
+        line-height: 60px;
+      .home-why-card-content
+        position: relative;
+        left: 20px;
+        opacity: 0;
+        margin-top: 40px;
+        font-size: 20px;
+        text-align: left;
+        color: #fff;
+        transition: opacity 1s ease, left 1s ease;
+        &.display
+          opacity: 1;
+          left: 0;
+      .home-why-img
+        position: absolute;
+        opacity: 0;
+        right: 0;
+        top: 180px;
+        width: 430px;
+        height: 350px;
+        background-repeat: no-repeat;
+        transition: opacity 1s ease, top 1s ease;
+        background-size: contain;
+        background-position: certer;
+        &.left
+          left: 0;
+        &.display
+          top: 140px;
+          opacity: 1;
+  .home-joinus
+    box-sizing: border-box;
+    padding-top: 120px;
+    padding-bottom: 100px;
+    .home-joinus-title
+      font-size: 40px;
+      font-weight: bold;
+      text-align: center;
+      color: #000;
+      line-height: 60px;
+    .home-joinus-sub-title
+      margin-top: 60px;
+      text-align: center;
+      color: #27282C;
+      font-size: 18px;
+    .home-joinus-contribute
+      margin-top: 60px;
+      height: 150px;
+      background: url('//gw.alicdn.com/tfs/TB1zLZMj2zO3e4jSZFxXXaP_FXa-1176-143.png') center/contain no-repeat; 
+  .home-bottom
+    border-top: 1px solid #eee;
+    padding: 48px 0;
+    height: 48px;
+    font-size: 12px;
+    .home-copyright
+      padding-bottom: 2px;
+    .home-left,.home-right
+      display: flex;
+      height: 100%;
+      align-items: center;
       a
-        color: #fff 
-      .logo-wrapper
+        color: #0366d6;
+        margin-left: 24px;
         display: inline-block;
-        .logo
-          max-width: 70px !important
-      .pull-right
-        float: right
+        &.link
+          padding-bottom: 2px;
+          &:after
+            height: 1px;
+            background-color: #0366d6;
+    .home-right
+      position: absolute;
+      right: 0;
+      top: 0;
+    .bottom-logo
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 36px;
+      height: 36px;
+      background: url('https://gw.alicdn.com/tfs/TB1eGsrk79l0K4jSZFKXXXFjpXa-347-340.png') center/contain no-repeat;
 
-  .default-content
-    max-width: 740px
+
+  .content-container
+    position: relative
+    height: 100%;
+    width: 1200px;
     margin: 0 auto;
-    padding: 2rem 2.5rem;
 
-// background-color: var(--wt-color-dark,#27282c) !important
+  .github
+    display: block;
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
+    background: url('https://gw.alicdn.com/tfs/TB1zcV0Uxz1gK0jSZSgXXavwpXa-63-60.png') center/contain no-repeat;
+  .button
+    position: relative;
+    text-decoration: none;
+    position: relative;
+    font-size: 15px;
+    line-height: 23px;
+    padding: 6px 24px;
+    display: inline-block;
+    color: #535353;
+
+    > div
+      position: relative;
+      display: flex;
+      align-items: center;
+      z-index: 2;
+    
+    .buttonScale
+      position: absolute;
+      display: inline-block;
+      transtion: transform .3s ease;
+      left: 0;
+      top: 0;
+      width: 100%;
+      overflow: hidden;
+      height: 100%;
+      border-radius: 18px;
+      box-shadow: 0 0 2px rgba(0,0,0,0.5);
+    &:hover
+      .buttonScale
+        animation: button 0.5s ease forwards;
+        &:before
+          content: ' ';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          animation: buttonCover 1s forwards;
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background: #000;
+    &.white
+      color: #fff;
+      .buttonScale
+        box-shadow: 0 0 3px rgba(255,255,255,1);
+        &:before
+          background: #fff;
+
+  .link
+    position: relative;
+    padding-bottom: 8px;
+    text-decoration: none;
+    transform: opacity .3s ease;
+    opacity: 0.9;
+    &:hover
+      opacity: 1;
+      &:after
+        animation: link .8s ease forwards;
+    &:after
+      content: ' ';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 0px;
+      height: 2px;
+      background: #fff;
