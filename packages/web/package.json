@@ -9,8 +9,7 @@
     "lint": "../../node_modules/.bin/tslint --format prose -c ../../tslint.json --fix 'src/**/*.ts' 'test/**/*.ts'",
     "test": "../../node_modules/.bin/jest --forceExit",
     "cov": "../../node_modules/.bin/jest --coverage --forceExit",
-    "ci": "npm run test",
-    "autod": "midway-bin autod"
+    "ci": "npm run test"
   },
   "keywords": [
     "midway",
@@ -26,9 +25,12 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/mock": "^1.0.0",
+    "egg-view-nunjucks": "^2.2.0",
     "midway-bin": "^2.0.15",
     "fs-extra": "^8.0.1",
-    "pedding": "^1.1.0"
+    "pedding": "^1.1.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
   },
   "dependencies": {
     "@eggjs/router": "^2.0.0",
