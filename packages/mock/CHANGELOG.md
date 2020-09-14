@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.3](https://github.com/midwayjs/midway/compare/v2.2.2...v2.2.3) (2020-09-14)
+
+
+### Bug Fixes
+
+* remove midway-bin dep ([632bd96](https://github.com/midwayjs/midway/commit/632bd96d105b554b8523fd7d24af60f00e67f01d))
+
+
+
+
+
 ## [2.2.2](https://github.com/midwayjs/midway/compare/v2.2.1...v2.2.2) (2020-09-14)
 
 **Note:** Version bump only for package @midwayjs/mock
