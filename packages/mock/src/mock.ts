@@ -1,5 +1,5 @@
 import * as mock from 'egg-mock';
-import { resolveModule } from 'midway-bin';
+import { resolveModule } from './resolve';
 import { join } from 'path';
 import { MidwayApplicationOptions, MidwayMockApplication } from './interface';
 import { isTypeScriptEnvironment } from '@midwayjs/bootstrap';

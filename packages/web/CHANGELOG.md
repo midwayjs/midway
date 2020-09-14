@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.3](https://github.com/midwayjs/midway/compare/v2.2.2...v2.2.3) (2020-09-14)
+
+**Note:** Version bump only for package @midwayjs/web
+
+
+
+
+
+## [2.2.2](https://github.com/midwayjs/midway/compare/v2.2.1...v2.2.2) (2020-09-14)
+
+**Note:** Version bump only for package @midwayjs/web
+
+
+
+
+
+## [2.2.1](https://github.com/midwayjs/midway/compare/v2.2.0...v2.2.1) (2020-09-14)
+
+
+### Bug Fixes
+
+* fix default logger dir ([ce0e06a](https://github.com/midwayjs/midway/commit/ce0e06ab1cc121074d0b64e35c127982f7b27296))
+
+
+
+
+
 # [2.2.0](https://github.com/midwayjs/midway/compare/v2.1.4...v2.2.0) (2020-09-13)
 
 
