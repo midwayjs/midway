@@ -213,6 +213,17 @@ export class PackagePlugin extends BasePlugin {
     this.core.cli.log('Copy Files to build directory...');
     // copy packages config files
     const packageObj: any = this.core.service.package || {};
+    // backup original yml file
+    await copy(
+      this.core.config.specFile.path,
+      resolve(this.midwayBuildPath, './f.origin.yml')
+    );
+    this.core.cli.log(
+      `   - Copy ${this.core.config.specFile.path.replace(
+        `${this.servicePath}/`,
+        ''
+      )} to ${'f.origin.yml'}`
+    );
     await copyFiles({
       sourceDir: this.servicePath,
       targetDir: this.midwayBuildPath,

@@ -38,6 +38,7 @@ describe('/test/package.test.ts', () => {
       assert(existsSync(join(buildPath, 'copy.js')));
       assert(existsSync(join(buildPath, 'tsconfig.json')));
       assert(existsSync(resolve(baseDir, 'serverless.zip')));
+      assert(existsSync(join(buildPath, 'f.origin.yml')));
     });
     it('build target package', async () => {
       const core = new CommandHookCore({
