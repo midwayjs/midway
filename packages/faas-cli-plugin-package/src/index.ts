@@ -215,7 +215,7 @@ export class PackagePlugin extends BasePlugin {
     const packageObj: any = this.core.service.package || {};
     // backup original yml file
     await copy(
-      resolve(this.core.config.specFile.path),
+      this.core.config.specFile.path,
       resolve(this.midwayBuildPath, './f.origin.yml')
     );
     this.core.cli.log(
