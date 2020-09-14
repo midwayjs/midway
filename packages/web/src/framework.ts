@@ -159,7 +159,6 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<IMidwayWebConfigu
 
         // TODO 单进程模式下区分进程类型??
         return MidwayProcessTypeEnum.APPLICATION;
-
       }
     });
   }

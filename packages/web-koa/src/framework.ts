@@ -101,6 +101,11 @@ export abstract class MidwayKoaBaseFramework<T, U extends IMidwayApplication & I
     };
   }
 
+  public async generateMiddleware(middlewareId: string) {
+    const mwIns = await this.getApplicationContext().getAsync<WebMiddleware>(middlewareId);
+    return mwIns.resolve();
+  }
+
   public async loadMidwayController(): Promise<void> {
     const controllerModules = listModule(CONTROLLER_KEY);
 
@@ -325,10 +330,12 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<IMidwayKoaConfigu
         return MidwayProcessTypeEnum.APPLICATION;
       },
 
-      generateController: (controllerMapping: string,
-                           routeArgsInfo?: RouterParamValue[],
-                           routerResponseData?: any []) => {
-        return this.generateController(controllerMapping, routeArgsInfo, routerResponseData);
+      generateController: (controllerMapping: string) => {
+        return this.generateController(controllerMapping);
+      },
+
+      generateMiddleware: async (middlewareId: string) => {
+        return this.generateMiddleware(middlewareId);
       }
     });
   }
