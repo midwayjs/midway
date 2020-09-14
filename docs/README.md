@@ -11,9 +11,9 @@ pageClass: home-class
       <div class="home-logo"></div>
       <div class="top-right">
         <nav>
-          <a href="" class="home-link link">使用文档</a>
-          <a href="" class="home-link link">API</a>
-          <a href="" class="home-link link">示例库</a>
+          <a href="https://www.yuque.com/midwayjs/midway_v2" class="home-link link">使用文档</a>
+          <a href="https://www.yuque.com/midwayjs/midway_v2" class="home-link link">API</a>
+          <a href="http://demo.midwayjs.org/" class="home-link link">示例库</a>
         </nav>
         <iframe frameborder="0" scrolling="0" width="114" height="20" title="Star Midway on GitHub" src="https://ghbtns.com/github-btn.html?user=midwayjs&repo=midway&type=star&count=true"></iframe>
       </div>
@@ -22,12 +22,11 @@ pageClass: home-class
   <div class="home-top">
     <div class="content-container">
       <div class="home-top-title">
-        <div class="home-top-line">面向未来无服务器</div>
-        <div class="home-top-line">云端一体研发 Node.js 框架</div>
-        <div class="home-top-mini-line">Midway is a modern Node.js framework for building fully-featured backend apps with Typescript.</div>
+        <div class="home-top-line">面向未来的云端一体 Node.js 框架</div>
+        <div class="home-top-mini-line">Midway 是一个适用于构建大型应用、微服务，无服务程序，小程序后端的 Node.js 框架。</div>
       </div>
       <div class="home-top-button-list">
-        <a class="home-top-button button view" href=""><span class="buttonScale"></span><div>访问文档</div></a>
+        <a class="home-top-button button view" href="https://www.yuque.com/midwayjs/midway_v2"><span class="buttonScale"></span><div>访问文档</div></a>
         <a class="home-top-button button white" href="https://github.com/midwayjs/midway"><span class="buttonScale"></span><div><i class="github"></i>源码</div></a>
       </div>
       <div class="home-top-right">
@@ -100,7 +99,7 @@ pageClass: home-class
   <div class="home-bottom">
     <div class="content-container">
       <div class="home-left">
-        <div class="home-copyright">© 2020 Midwayjs</div>
+        <div class="home-copyright">© 2020 ~ ∞ Midwayjs@Serverless</div>
         <a class="link" href="https://github.com/midwayjs/midway">Github</a>
         <a class="link" href="https://github.com/midwayjs/midway/issues">Issue</a>
         <a class="link" href="https://www.yuque.com/midwayjs/topics">Help</a>
@@ -130,9 +129,6 @@ const topWallList = [
   { cover: "//gw.alicdn.com/tfs/TB1uDh1UAL0gK0jSZFAXXcA9pXa-546-274.png" },
   { cover: "//gw.alicdn.com/tfs/TB1uDh1UAL0gK0jSZFAXXcA9pXa-546-274.png" },
   { cover: "//gw.alicdn.com/tfs/TB1tXBJhAcx_u4jSZFlXXXnUFXa-546-274.png" },
-  { cover: "//gw.alicdn.com/tfs/TB1uDh1UAL0gK0jSZFAXXcA9pXa-546-274.png" },
-  { cover: "//gw.alicdn.com/tfs/TB1tXBJhAcx_u4jSZFlXXXnUFXa-546-274.png" },
-  { cover: "//gw.alicdn.com/tfs/TB1uDh1UAL0gK0jSZFAXXcA9pXa-546-274.png" },
 ];
 const topWallEle = document.getElementById('top-wall');
 const topWallItemList = [];
