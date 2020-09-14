@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.2](https://github.com/midwayjs/midway/compare/v2.2.1...v2.2.2) (2020-09-14)
+
+
+### Bug Fixes
+
+* add missing typing dep ([083395f](https://github.com/midwayjs/midway/commit/083395f76709e4b5e8c32e7a9f89d839d8e16b5f))
+
+
+
+
+
 ## [2.2.1](https://github.com/midwayjs/midway/compare/v2.2.0...v2.2.1) (2020-09-14)
 
 
