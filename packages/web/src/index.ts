@@ -4,6 +4,12 @@ export { createEggApplication, createEggAgent, createAppWorkerLoader, createAgen
 // must export mock app here
 export { Application, Agent } from './application';
 
+declare module 'egg' {
+  interface EggAppInfo {
+    appDir: string;
+  }
+}
+
 /**
  * @deprecated
  */
