@@ -117,18 +117,18 @@ pageClass: home-class
 </div>
 <script>
 const topWallList = [
-  { cover: "//gw.alicdn.com/tfs/TB1tXBJhAcx_u4jSZFlXXXnUFXa-546-274.png" },
-  { cover: "//gw.alicdn.com/tfs/TB1uDh1UAL0gK0jSZFAXXcA9pXa-546-274.png" },
-  { cover: "//gw.alicdn.com/tfs/TB1tXBJhAcx_u4jSZFlXXXnUFXa-546-274.png" },
-  { cover: "//gw.alicdn.com/tfs/TB1uDh1UAL0gK0jSZFAXXcA9pXa-546-274.png" },
-  { cover: "//gw.alicdn.com/tfs/TB1tXBJhAcx_u4jSZFlXXXnUFXa-546-274.png" },
-  { cover: "//gw.alicdn.com/tfs/TB1uDh1UAL0gK0jSZFAXXcA9pXa-546-274.png" },
-  { cover: "//gw.alicdn.com/tfs/TB1tXBJhAcx_u4jSZFlXXXnUFXa-546-274.png" },
-  { cover: "//gw.alicdn.com/tfs/TB1uDh1UAL0gK0jSZFAXXcA9pXa-546-274.png" },
-  { cover: "//gw.alicdn.com/tfs/TB1tXBJhAcx_u4jSZFlXXXnUFXa-546-274.png" },
-  { cover: "//gw.alicdn.com/tfs/TB1uDh1UAL0gK0jSZFAXXcA9pXa-546-274.png" },
-  { cover: "//gw.alicdn.com/tfs/TB1uDh1UAL0gK0jSZFAXXcA9pXa-546-274.png" },
-  { cover: "//gw.alicdn.com/tfs/TB1tXBJhAcx_u4jSZFlXXXnUFXa-546-274.png" },
+  { cover: '//gw.alicdn.com/tfs/TB1tXBJhAcx_u4jSZFlXXXnUFXa-546-274.png' },
+  { cover: '//gw.alicdn.com/tfs/TB1uDh1UAL0gK0jSZFAXXcA9pXa-546-274.png' },
+  { cover: '//gw.alicdn.com/tfs/TB1tXBJhAcx_u4jSZFlXXXnUFXa-546-274.png' },
+  { cover: '//gw.alicdn.com/tfs/TB1uDh1UAL0gK0jSZFAXXcA9pXa-546-274.png' },
+  { cover: '//gw.alicdn.com/tfs/TB1tXBJhAcx_u4jSZFlXXXnUFXa-546-274.png' },
+  { cover: '//gw.alicdn.com/tfs/TB1uDh1UAL0gK0jSZFAXXcA9pXa-546-274.png' },
+  { cover: '//gw.alicdn.com/tfs/TB1tXBJhAcx_u4jSZFlXXXnUFXa-546-274.png' },
+  { cover: '//gw.alicdn.com/tfs/TB1uDh1UAL0gK0jSZFAXXcA9pXa-546-274.png' },
+  { cover: '//gw.alicdn.com/tfs/TB1tXBJhAcx_u4jSZFlXXXnUFXa-546-274.png' },
+  { cover: '//gw.alicdn.com/tfs/TB1uDh1UAL0gK0jSZFAXXcA9pXa-546-274.png' },
+  { cover: '//gw.alicdn.com/tfs/TB1uDh1UAL0gK0jSZFAXXcA9pXa-546-274.png' },
+  { cover: '//gw.alicdn.com/tfs/TB1tXBJhAcx_u4jSZFlXXXnUFXa-546-274.png' },
 ];
 const topWallEle = document.getElementById('top-wall');
 const topWallItemList = [];
@@ -162,7 +162,7 @@ topWallList.forEach((item, i) => {
   // }
   topWallEle.appendChild(topWallItem);
   topWallItemList.push(topWallItem);
-  setTimeout(() => {
+  setTimeout(function () {
     topWallItem.style.opacity = 1;
   }, Math.random() * 1000);
 });
@@ -185,11 +185,11 @@ if (window.IntersectionObserver) {
     rootMargin: '0px', 
     threshold: [0.0, 0.1, 0.2, 0.3, 0.7, 0.8, 0.9, 1.0]
   });
-  allImg.forEach(ele => {
+  allImg.forEach(function (ele) {
     observer.observe(ele);
   });
 } else {
-  allImg.forEach(ele => {
+  allImg.forEach(function (ele) {
     ele.classList.add('display');
     ele.previousElementSibling.classList.add('display');
   });
