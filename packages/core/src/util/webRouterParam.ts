@@ -1,6 +1,9 @@
-import { RouteParamTypes } from "@midwayjs/decorator";
+import { RouteParamTypes, ALL_VALUE } from "@midwayjs/decorator";
 
 export const extractKoaLikeValue = (key, data) => {
+  if(ALL_VALUE === data) {
+    data = undefined;
+  }
   return async function (ctx, next) {
     switch (key) {
       case RouteParamTypes.NEXT:
@@ -14,7 +17,7 @@ export const extractKoaLikeValue = (key, data) => {
       case RouteParamTypes.HEADERS:
         return data ? ctx.headers[data] : ctx.headers;
       case RouteParamTypes.SESSION:
-        return ctx.session;
+        return data ? ctx.session[data] : ctx.session;
       case RouteParamTypes.FILESTREAM:
         return ctx.getFileStream && ctx.getFileStream(data);
       case RouteParamTypes.FILESSTREAM:
@@ -26,6 +29,9 @@ export const extractKoaLikeValue = (key, data) => {
 };
 
 export const extractExpressLikeValue = (key, data) => {
+  if(ALL_VALUE === data) {
+    data = undefined;
+  }
   return async function (req, res, next) {
     switch (key) {
       case RouteParamTypes.NEXT:
@@ -39,7 +45,7 @@ export const extractExpressLikeValue = (key, data) => {
       case RouteParamTypes.HEADERS:
         return data ? req.headers[data] : req.headers;
       case RouteParamTypes.SESSION:
-        return req.session;
+        return data ? req.session[data] : req.session;
       case RouteParamTypes.FILESTREAM:
         return req.getFileStream && req.getFileStream(data);
       case RouteParamTypes.FILESSTREAM:
