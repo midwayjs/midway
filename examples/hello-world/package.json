@@ -1,0 +1,8 @@
+{
+  "name": "testing",
+  "version": "2.2.3",
+  "private": true,
+  "dependencies": {
+    "@midwayjs/web": "2.2.3"
+  }
+}

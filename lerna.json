@@ -1,5 +1,6 @@
 {
   "packages": [
+    "examples/*",
     "packages/*"
   ],
   "command": {
