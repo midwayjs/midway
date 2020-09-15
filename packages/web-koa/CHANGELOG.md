@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.4](https://github.com/midwayjs/midway/compare/v2.2.3...v2.2.4) (2020-09-15)
+
+
+### Bug Fixes
+
+* support midway global middleware use id ([8dc9ae3](https://github.com/midwayjs/midway/commit/8dc9ae33acd559d74f144a75f08fc039037fa45b))
+
+
+
+
+
 ## [2.2.3](https://github.com/midwayjs/midway/compare/v2.2.2...v2.2.3) (2020-09-14)
 
 **Note:** Version bump only for package @midwayjs/koa

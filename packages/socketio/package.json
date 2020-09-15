@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/socketio",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "description": "Midway Web Framework for KOA",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -25,16 +25,16 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/mock": "^2.2.3",
+    "@midwayjs/mock": "^2.2.4",
     "@types/socket.io": "^2.1.11",
     "@types/socket.io-client": "^1.4.33",
     "fs-extra": "^8.0.1",
-    "midway-bin": "^2.2.3",
+    "midway-bin": "^2.2.4",
     "socket.io-client": "^2.3.0"
   },
   "dependencies": {
-    "@midwayjs/core": "^2.2.3",
-    "@midwayjs/decorator": "^2.2.3",
+    "@midwayjs/core": "^2.2.4",
+    "@midwayjs/decorator": "^2.2.4",
     "socket.io": "^2.3.0"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",

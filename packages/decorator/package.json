@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/decorator",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "description": "definition decorator for midway project",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "@types/joi": "^14.3.4",
-    "midway-bin": "^2.2.3",
+    "midway-bin": "^2.2.4",
     "mm": "^2.5.0"
   },
   "keywords": [
