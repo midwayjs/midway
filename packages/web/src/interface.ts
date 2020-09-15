@@ -3,11 +3,22 @@ import { IMidwayApplication, IMidwayContext } from '@midwayjs/core';
 import { IMidwayKoaConfigurationOptions, IMidwayKoaContext } from '@midwayjs/koa';
 import { DefaultState, Middleware } from 'koa';
 
-export type IMidwayWebApplication = IMidwayApplication & Application & {
-  generateController(controllerMapping: string);
-  generateMiddleware(middlewareId: string): Promise<Middleware<DefaultState, IMidwayKoaContext>>;
-};
-export type IMidwayWebContext = IMidwayContext & Context;
+declare module 'egg' {
+  interface EggAppInfo {
+    appDir: string;
+  }
+
+  interface Application extends IMidwayApplication {
+    generateController?(controllerMapping: string);
+    generateMiddleware?(middlewareId: string): Promise<Middleware<DefaultState, IMidwayKoaContext>>;
+  }
+
+  interface Context extends IMidwayContext {
+  }
+}
+
+export type IMidwayWebApplication = Application;
+export type IMidwayWebContext = Context;
 
 export interface IMidwayWebConfigurationOptions extends IMidwayKoaConfigurationOptions {
   app?: IMidwayWebApplication;
@@ -22,7 +33,7 @@ export interface IMidwayWebConfigurationOptions extends IMidwayKoaConfigurationO
   processType?: 'application' | 'agent';
 }
 
-export type MidwayWebMiddleware = Middleware<DefaultState, IMidwayWebContext>;
+export type MidwayWebMiddleware = Middleware<DefaultState, Context>;
 
 export interface WebMiddleware {
   resolve(): MidwayWebMiddleware;

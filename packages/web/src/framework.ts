@@ -1,13 +1,13 @@
 import { IMidwayBootstrapOptions, MidwayFrameworkType, MidwayProcessTypeEnum, safelyGet } from '@midwayjs/core';
 import { CONFIG_KEY, ControllerOption, LOGGER_KEY, PLUGIN_KEY, } from '@midwayjs/decorator';
-import { IMidwayWebApplication, IMidwayWebConfigurationOptions, IMidwayWebContext, } from './interface';
+import { IMidwayWebConfigurationOptions, } from './interface';
 import { MidwayKoaBaseFramework } from '@midwayjs/koa';
 import { EggRouter } from '@eggjs/router';
 import { resolve } from 'path';
-import { Router } from 'egg';
+import { Application, Router, Context } from 'egg';
 
-export class MidwayWebFramework extends MidwayKoaBaseFramework<IMidwayWebConfigurationOptions, IMidwayWebApplication, IMidwayWebContext> {
-  protected app: IMidwayWebApplication;
+export class MidwayWebFramework extends MidwayKoaBaseFramework<IMidwayWebConfigurationOptions, Application, Context> {
+  protected app: Application;
   public configurationOptions: IMidwayWebConfigurationOptions;
   public prioritySortRouters: Array<{
     priority: number;
@@ -85,7 +85,7 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<IMidwayWebConfigu
     }
   }
 
-  public getApplication(): IMidwayWebApplication {
+  public getApplication(): Application {
     return this.app;
   }
 
@@ -123,7 +123,7 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<IMidwayWebConfigu
     return null;
   }
 
-  protected defineApplicationProperties(app): IMidwayWebApplication {
+  protected defineApplicationProperties(app): Application {
     return Object.assign(app, {
       getBaseDir: () => {
         return this.baseDir;
