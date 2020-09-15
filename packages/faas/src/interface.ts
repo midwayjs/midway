@@ -2,13 +2,20 @@ import { MidwayRequestContainer, IMidwayApplication, IMidwayLogger } from '@midw
 import { FaaSHTTPContext } from '@midwayjs/faas-typings';
 import type { MidwayHooks } from './hooks';
 
-export interface IFaaSApplication extends IMidwayApplication {
+export type FaaSMiddleware = (() => (context: FaaSContext, next: () => Promise<any>) => any) | string;
+
+export interface IMidwayFaaSApplication extends IMidwayApplication {
   getInitializeContext();
-  use(
-    middleware: (() => (context: any, next: () => Promise<any>) => any) | string
-  );
+  use(middleware: FaaSMiddleware);
   useMiddleware(mw: string[]);
+  generateMiddleware(middlewareId: string): Promise<FaaSMiddleware>;
 }
+
+/**
+ * @deprecated
+ * use IMidwayFaaSApplication instead
+ */
+export type IFaaSApplication = IMidwayFaaSApplication;
 
 /**
  * @deprecated
@@ -30,6 +37,10 @@ export interface IFaaSConfigurationOptions {
   middleware?: string[];
   initializeContext?: object;
   applicationAdapter?: {
-    getApplication(): IFaaSApplication;
+    getApplication(): IMidwayFaaSApplication;
   };
+}
+
+export interface WebMiddleware {
+  resolve(): FaaSMiddleware;
 }

@@ -169,6 +169,11 @@ export class MidwayExpressFramework extends BaseFramework<IMidwayExpressConfigur
     }
   }
 
+  public async generateMiddleware(middlewareId: string) {
+    const mwIns = await this.getApplicationContext().getAsync<WebMiddleware>(middlewareId);
+    return mwIns.resolve();
+  }
+
   protected async preRegisterRouter(
     target: any,
     controllerId: string
@@ -312,10 +317,12 @@ export class MidwayExpressFramework extends BaseFramework<IMidwayExpressConfigur
         return MidwayProcessTypeEnum.APPLICATION;
       },
 
-      generateController: (controllerMapping: string,
-                           routeArgsInfo?: RouterParamValue[],
-                           routerResponseData?: any []) => {
-        return this.generateController(controllerMapping, routeArgsInfo, routerResponseData);
+      generateController: (controllerMapping: string) => {
+        return this.generateController(controllerMapping);
+      },
+
+      generateMiddleware: async (middlewareId: string) => {
+        return this.generateMiddleware(middlewareId);
       }
     });
   }
