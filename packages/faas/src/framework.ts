@@ -1,32 +1,32 @@
 import {
-  IFaaSConfigurationOptions,
-  IFaaSApplication,
   FaaSContext,
+  FaaSMiddleware,
+  IFaaSConfigurationOptions,
+  IMidwayFaaSApplication,
+  WebMiddleware
 } from './interface';
 import {
-  IMidwayApplication,
-  IMidwayBootstrapOptions,
+  BaseFramework,
   getClassMetadata,
   IMiddleware,
+  IMidwayApplication,
+  IMidwayBootstrapOptions,
   listModule,
   listPreloadModule,
+  MidwayFrameworkType,
   MidwayProcessTypeEnum,
   MidwayRequestContainer,
   REQUEST_OBJ_CTX_KEY,
-  BaseFramework, MidwayFrameworkType,
 } from '@midwayjs/core';
 
 import { dirname, resolve } from 'path';
-import {
-  FUNC_KEY,
-  LOGGER_KEY,
-  PLUGIN_KEY,
-} from '@midwayjs/decorator';
+import { FUNC_KEY, LOGGER_KEY, PLUGIN_KEY, } from '@midwayjs/decorator';
 import SimpleLock from '@midwayjs/simple-lock';
 import * as compose from 'koa-compose';
 import { MidwayHooks } from './hooks';
 
 const LOCK_KEY = '_faas_starter_start_key';
+
 // const MIDWAY_FAAS_KEY = '__midway_faas__';
 
 export class MidwayFaaSFramework extends BaseFramework<IFaaSConfigurationOptions> {
@@ -35,7 +35,7 @@ export class MidwayFaaSFramework extends BaseFramework<IFaaSConfigurationOptions
   protected funMappingStore: Map<string, any> = new Map();
   protected logger;
   private lock = new SimpleLock();
-  private webApplication: IFaaSApplication;
+  private webApplication: IMidwayFaaSApplication;
 
   protected async beforeDirectoryLoad(options: Partial<IMidwayBootstrapOptions>) {
     this.logger = options.logger || console;
@@ -80,9 +80,9 @@ export class MidwayFaaSFramework extends BaseFramework<IFaaSConfigurationOptions
           const handlerName = opts.funHandler
             ? // @Func(key), if key is set
               // or @Func({ handler })
-              opts.funHandler
+            opts.funHandler
             : // else use ClassName.mehtod as handler key
-              covertId(funModule.name, opts.key);
+            covertId(funModule.name, opts.key);
           this.funMappingStore.set(handlerName, {
             middleware: opts.middleware || [],
             mod: funModule,
@@ -100,7 +100,8 @@ export class MidwayFaaSFramework extends BaseFramework<IFaaSConfigurationOptions
     }, LOCK_KEY);
   }
 
-  public async stop(): Promise<void> {}
+  public async stop(): Promise<void> {
+  }
 
   public getApplication(): IMidwayApplication {
     return this.webApplication;
@@ -155,6 +156,11 @@ export class MidwayFaaSFramework extends BaseFramework<IFaaSConfigurationOptions
     };
   }
 
+  public async generateMiddleware(middlewareId: string): Promise<FaaSMiddleware> {
+    const mwIns = await this.getApplicationContext().getAsync<WebMiddleware>(middlewareId);
+    return mwIns.resolve();
+  }
+
   protected getContext(context) {
     if (!context.env) {
       context.env = this.getApplicationContext()
@@ -205,7 +211,7 @@ export class MidwayFaaSFramework extends BaseFramework<IFaaSConfigurationOptions
     }
     throw new Error(
       `no handler setup on ${target.name}#${method ||
-        this.defaultHandlerMethod}`
+      this.defaultHandlerMethod}`
     );
   }
 
@@ -240,7 +246,7 @@ export class MidwayFaaSFramework extends BaseFramework<IFaaSConfigurationOptions
     // this.initConfiguration('./configuration', __dirname);
   }
 
-  private defineApplicationProperties(app): IFaaSApplication {
+  private defineApplicationProperties(app): IMidwayFaaSApplication {
     return Object.assign(app, {
       getBaseDir: () => {
         return this.baseDir;
@@ -292,6 +298,10 @@ export class MidwayFaaSFramework extends BaseFramework<IFaaSConfigurationOptions
           }
         }
       },
+
+      generateMiddleware: async (middlewareId: string) => {
+        return this.generateMiddleware(middlewareId);
+      }
     });
   }
 

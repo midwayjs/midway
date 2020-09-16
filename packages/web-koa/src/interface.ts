@@ -1,7 +1,7 @@
 import { IMidwayApplication, IMidwayContext } from '@midwayjs/core';
 import * as koa from 'koa';
 import { Context, DefaultState, Middleware } from 'koa';
-import { RouterParamValue } from "@midwayjs/decorator";
+import { RouterParamValue } from '@midwayjs/decorator';
 
 export type IMidwayKoaContext = IMidwayContext & Context;
 export type IMidwayKoaApplication = IMidwayApplication & koa<DefaultState, IMidwayKoaContext> & {
@@ -10,6 +10,7 @@ export type IMidwayKoaApplication = IMidwayApplication & koa<DefaultState, IMidw
     routeArgsInfo?: RouterParamValue[],
     routerResponseData?: any []
   ): Middleware<DefaultState, IMidwayKoaContext>;
+  generateMiddleware(middlewareId: string): Promise<Middleware<DefaultState, IMidwayKoaContext>>;
 };
 
 export interface IMidwayKoaApplicationPlus {

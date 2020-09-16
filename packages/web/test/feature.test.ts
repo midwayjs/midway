@@ -3,7 +3,7 @@ import { IMidwayWebApplication } from "../src";
 
 describe('/test/feature.test.ts', () => {
 
-  describe('test new features', () => {
+  describe('test new decorator', () => {
     let app: IMidwayWebApplication;
     beforeAll(async () => {
       app = await creatApp('feature/base-app');
@@ -23,6 +23,13 @@ describe('/test/feature.test.ts', () => {
       const result = await createHttpRequest(app).get('/login');
       expect(result.status).toBe(302);
     });
+  });
+
+  it('should test global use midway middleware id in egg', async () => {
+    const app = await creatApp('feature/base-app-middleware');
+    const result = await createHttpRequest(app).get('/')
+    expect(result.text).toEqual('1111222233334444');
+    await closeApp(app);
   });
 
 });

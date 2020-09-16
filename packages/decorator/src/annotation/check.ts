@@ -1,10 +1,10 @@
-import 'reflect-metadata';
 import * as joi from 'joi';
+
 export function Check(failValue?: any) {
   return function (target, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
     const origin = descriptor.value;
     descriptor.value = function (...args: any[]) {
-      const paramTypes = Reflect.getMetadata('design:paramtypes', target, propertyKey);
+      const paramTypes = Reflect.getMetadata('design:paramTypes', target, propertyKey);
       for (let i = 0; i < paramTypes.length; i++) {
         const item = paramTypes[i];
         const rules = Reflect.getMetadata('rules', item.prototype);
@@ -15,8 +15,7 @@ export function Check(failValue?: any) {
           }
         }
       }
-      const result = origin.call(this, ...arguments);
-      return result;
+      return origin.call(this, ...arguments);
     };
   };
 }

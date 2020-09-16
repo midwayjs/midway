@@ -3,6 +3,44 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.4](https://github.com/midwayjs/midway/compare/v2.2.3...v2.2.4) (2020-09-15)
+
+**Note:** Version bump only for package @midwayjs/decorator
+
+
+
+
+
+## [2.2.3](https://github.com/midwayjs/midway/compare/v2.2.2...v2.2.3) (2020-09-14)
+
+**Note:** Version bump only for package @midwayjs/decorator
+
+
+
+
+
+## [2.2.2](https://github.com/midwayjs/midway/compare/v2.2.1...v2.2.2) (2020-09-14)
+
+
+### Bug Fixes
+
+* add missing typing dep ([083395f](https://github.com/midwayjs/midway/commit/083395f76709e4b5e8c32e7a9f89d839d8e16b5f))
+
+
+
+
+
+## [2.2.1](https://github.com/midwayjs/midway/compare/v2.2.0...v2.2.1) (2020-09-14)
+
+
+### Bug Fixes
+
+* add missing typing dep ([09a9473](https://github.com/midwayjs/midway/commit/09a9473d0ddc73b7e9e624e1bed1fe58691e36ec))
+
+
+
+
+
 # [2.2.0](https://github.com/midwayjs/midway/compare/v2.1.4...v2.2.0) (2020-09-13)
 
 

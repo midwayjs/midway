@@ -3,7 +3,6 @@ import { basename, join } from 'path';
 
 const isTypeScriptEnv = isTypeScriptEnvironment();
 
-
 export const parseNormalDir = (baseDir: string, isTypescript = true) => {
   if (isTypescript) {
     if (/src$/.test(baseDir) || /dist$/.test(baseDir)) {

@@ -12,6 +12,7 @@ export interface GetFileStreamOptions {
     parts?: number;
     headerPairs?: number;
   };
+
   checkFile?(
     fieldname: string,
     file: any,
@@ -44,6 +45,9 @@ export interface RouterParamValue {
 
 const createParamMapping = function (type: RouteParamTypes) {
   return (propertyData?: any) => (target, propertyName, index) => {
+    if (propertyData === undefined) {
+      propertyData = propertyName;
+    }
     attachPropertyDataToClass(WEB_ROUTER_PARAM_KEY, {
       index,
       type,
@@ -52,10 +56,10 @@ const createParamMapping = function (type: RouteParamTypes) {
   };
 };
 
-export const Session = () => createParamMapping(RouteParamTypes.SESSION)();
+export const Session = (property?: string) => createParamMapping(RouteParamTypes.SESSION)(property);
 export const Body = (property?: string) => createParamMapping(RouteParamTypes.BODY)(property);
 export const Query = (property?: string) => createParamMapping(RouteParamTypes.QUERY)(property);
 export const Param = (property?: string) => createParamMapping(RouteParamTypes.PARAM)(property);
 export const Headers = (property?: string) => createParamMapping(RouteParamTypes.HEADERS)(property);
-export const File = (property?: GetFileStreamOptions) => createParamMapping(RouteParamTypes.FILESTREAM)(property);
-export const Files = (property?: GetFilesStreamOptions) => createParamMapping(RouteParamTypes.FILESSTREAM)(property);
+export const File = (property: GetFileStreamOptions) => createParamMapping(RouteParamTypes.FILESTREAM)(property);
+export const Files = (property: GetFilesStreamOptions) => createParamMapping(RouteParamTypes.FILESSTREAM)(property);
