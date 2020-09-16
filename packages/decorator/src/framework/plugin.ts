@@ -1,4 +1,8 @@
-import { attachClassMetadata, PLUGIN_KEY, attachConstructorDataOnClass } from '../';
+import {
+  attachClassMetadata,
+  PLUGIN_KEY,
+  attachConstructorDataOnClass,
+} from '../';
 
 export function Plugin(identifier?: string) {
   return function (target: any, targetKey: string, index?: number): void {
@@ -8,10 +12,14 @@ export function Plugin(identifier?: string) {
       if (!identifier) {
         identifier = targetKey;
       }
-      attachClassMetadata(PLUGIN_KEY, {
-        key: identifier,
-        propertyName: targetKey
-      }, target);
+      attachClassMetadata(
+        PLUGIN_KEY,
+        {
+          key: identifier,
+          propertyName: targetKey,
+        },
+        target
+      );
     }
   };
 }

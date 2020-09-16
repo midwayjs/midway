@@ -1,11 +1,20 @@
-
 import { expect } from 'chai';
-import { Controller, CONTROLLER_KEY, listModule, getClassMetadata, ScopeEnum, getObjectDefProps } from '../../src';
-import { ControllerOne, ControllerTwo } from '../fixtures/decorator/customClass';
+import {
+  Controller,
+  CONTROLLER_KEY,
+  listModule,
+  getClassMetadata,
+  ScopeEnum,
+  getObjectDefProps,
+} from '../../src';
+import {
+  ControllerOne,
+  ControllerTwo,
+} from '../fixtures/decorator/customClass';
 
 @Controller('/hhh', {
   sensitive: true,
-  middleware: ['hello']
+  middleware: ['hello'],
 })
 class TestController {}
 
@@ -19,8 +28,8 @@ describe('/test/web/controller.test.ts', () => {
       prefix: '/hhh',
       routerOptions: {
         sensitive: true,
-        middleware: ['hello']
-      }
+        middleware: ['hello'],
+      },
     });
 
     const metaone = getClassMetadata(CONTROLLER_KEY, TestOneController);
@@ -28,8 +37,8 @@ describe('/test/web/controller.test.ts', () => {
       prefix: '/tt',
       routerOptions: {
         sensitive: true,
-        middleware: []
-      }
+        middleware: [],
+      },
     });
 
     const def = getObjectDefProps(TestController);
@@ -47,8 +56,8 @@ describe('/test/web/controller.test.ts', () => {
       prefix: '/api/one',
       routerOptions: {
         sensitive: true,
-        middleware: []
-      }
+        middleware: [],
+      },
     });
 
     const metatwo = getClassMetadata(CONTROLLER_KEY, ControllerTwo);
@@ -56,8 +65,8 @@ describe('/test/web/controller.test.ts', () => {
       prefix: '/api/two',
       routerOptions: {
         sensitive: true,
-        middleware: []
-      }
+        middleware: [],
+      },
     });
   });
 });

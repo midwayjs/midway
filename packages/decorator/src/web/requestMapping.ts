@@ -32,7 +32,7 @@ const defaultMetadata = {
   [PATH_METADATA]: '/',
   [METHOD_METADATA]: RequestMethod.GET,
   [ROUTER_NAME_METADATA]: null,
-  [ROUTER_MIDDLEWARE]: []
+  [ROUTER_MIDDLEWARE]: [],
 };
 
 export interface RequestMappingMetadata {
@@ -43,7 +43,7 @@ export interface RequestMappingMetadata {
 }
 
 export const RequestMapping = (
-  metadata: RequestMappingMetadata = defaultMetadata,
+  metadata: RequestMappingMetadata = defaultMetadata
 ): MethodDecorator => {
   const path = metadata[PATH_METADATA] || '/';
   const requestMethod = metadata[METHOD_METADATA] || RequestMethod.GET;
@@ -51,13 +51,17 @@ export const RequestMapping = (
   const middleware = metadata[ROUTER_MIDDLEWARE];
 
   return (target, key, descriptor: PropertyDescriptor) => {
-    attachClassMetadata(WEB_ROUTER_KEY, {
-      path,
-      requestMethod,
-      routerName,
-      method: key,
-      middleware
-    } as RouterOption, target);
+    attachClassMetadata(
+      WEB_ROUTER_KEY,
+      {
+        path,
+        requestMethod,
+        routerName,
+        method: key,
+        middleware,
+      } as RouterOption,
+      target
+    );
 
     return descriptor;
   };
@@ -68,7 +72,7 @@ const createMappingDecorator = (method: string) => (
   routerOptions: {
     routerName?: string;
     middleware?: MiddlewareParamArray;
-  } = {middleware: []}
+  } = { middleware: [] }
 ): MethodDecorator => {
   return RequestMapping({
     [PATH_METADATA]: path || '/',

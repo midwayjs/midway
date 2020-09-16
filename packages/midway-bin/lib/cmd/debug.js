@@ -10,7 +10,8 @@ class DebugCommand extends require('egg-bin').DebugCommand {
 
   async run(context) {
     if (!context.argv.framework) {
-      context.argv.framework = this.findFramework('midway') || this.findFramework('midway-mirror');
+      context.argv.framework =
+        this.findFramework('midway') || this.findFramework('midway-mirror');
     }
     await co(super.run(context));
   }

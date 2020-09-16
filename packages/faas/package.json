@@ -38,9 +38,7 @@
   "scripts": {
     "build": "midway-bin build -c",
     "test": "../../node_modules/.bin/jest",
-    "cov": "../../node_modules/.bin/jest --coverage",
-    "clean": "midway-bin clean",
-    "autod": "midway-bin autod"
+    "cov": "../../node_modules/.bin/jest --coverage"
   },
   "repository": {
     "type": "git",

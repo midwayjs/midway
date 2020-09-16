@@ -1,6 +1,13 @@
-
 import { expect } from 'chai';
-import { Async, Scope, ScopeEnum, Autowire, Init, Destroy, getObjectDefProps } from '../../src';
+import {
+  Async,
+  Scope,
+  ScopeEnum,
+  Autowire,
+  Init,
+  Destroy,
+  getObjectDefProps,
+} from '../../src';
 
 @Async()
 @Scope(ScopeEnum.Prototype)
@@ -25,7 +32,7 @@ describe('/test/annotation/objectDef.test.ts', () => {
       scope: ScopeEnum.Prototype,
       initMethod: 'init',
       destroyMethod: 'destroy',
-      isAsync: true
+      isAsync: true,
     });
 
     const defone = getObjectDefProps(TestOne);

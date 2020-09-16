@@ -18,7 +18,7 @@ describe('test/lib/cmd/clean.test.js', () => {
     await mkdirp(path.join(cwd, '.nodejs-cache/test.log'));
     await mkdirp(path.join(cwd, 'run/a.log'));
 
-    const child = coffee.fork(midwayBin, [ 'clean' ], { cwd });
+    const child = coffee.fork(midwayBin, ['clean'], { cwd });
     await child.expect('code', 0).end();
     assert(fs.existsSync(path.join(cwd, 'a.ts')));
     assert(!fs.existsSync(path.join(cwd, '.nodejs-cache')));
@@ -30,9 +30,8 @@ describe('test/lib/cmd/clean.test.js', () => {
     const cwd = path.join(__dirname, '../../fixtures/clean-dir-config');
     await mkdirp(path.join(cwd, 'customDir/a.js'));
 
-    const child = coffee.fork(midwayBin, [ 'clean' ], { cwd });
+    const child = coffee.fork(midwayBin, ['clean'], { cwd });
     await child.expect('code', 0).end();
     assert(!fs.existsSync(path.join(cwd, 'customDir')));
   });
-
 });

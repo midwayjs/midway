@@ -1,12 +1,17 @@
-
 import { expect } from 'chai';
-import { Func, listModule, FUNC_KEY, getClassMetadata, getObjectDefProps, ScopeEnum } from '../../src';
+import {
+  Func,
+  listModule,
+  FUNC_KEY,
+  getClassMetadata,
+  getObjectDefProps,
+  ScopeEnum,
+} from '../../src';
 
 @Func('index.handler', { middleware: ['hello'] })
 class TestFun {}
 
 class TestFun1 {
-
   @Func('ttt.handler')
   fff: any;
 }
@@ -14,18 +19,20 @@ class TestFun1 {
 describe('/test/faas/fun.test.ts', () => {
   it('fun decorator should be ok', () => {
     const meta = getClassMetadata(FUNC_KEY, TestFun);
-    expect(meta).deep.eq([{
-      funHandler: 'index.handler',
-      middleware: ['hello'],
-    }]);
+    expect(meta).deep.eq([
+      {
+        funHandler: 'index.handler',
+        middleware: ['hello'],
+      },
+    ]);
 
     const c = getClassMetadata(FUNC_KEY, TestFun1);
     expect(c).deep.eq([
       {
         descriptor: undefined,
         funHandler: 'ttt.handler',
-        key: 'fff'
-      }
+        key: 'fff',
+      },
     ]);
 
     const def = getObjectDefProps(TestFun);

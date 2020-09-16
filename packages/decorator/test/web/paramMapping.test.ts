@@ -1,26 +1,27 @@
 import { expect } from 'chai';
 import {
-  Param,
-  Session,
-  Query,
+  ALL_VALUE,
   Body,
-  Headers,
   File,
   Files,
-  WEB_ROUTER_PARAM_KEY,
   getPropertyDataFromClass,
+  Headers,
+  Param,
+  Query,
+  Session,
+  WEB_ROUTER_PARAM_KEY,
 } from '../../src';
 
 class Test {
-  async doget(@Param('aa')aa: any,
-              @Query('bb') query: any,
-              @Body('body') body: any,
-              @Headers('tt') tt: any,
-              @File({ requireFile: true }) f: any,
-              @Files() files: any,
-              @Session() bb: any) {
-
-  }
+  async doget(
+    @Param('aa') aa: any,
+    @Query('bb') query: any,
+    @Body('body') body: any,
+    @Headers('tt') tt: any,
+    @File({ requireFile: true }) f: any,
+    @Files() files: any,
+    @Session(ALL_VALUE) bb: any
+  ) {}
 }
 
 describe('/test/web/paramMapping.test.ts', () => {

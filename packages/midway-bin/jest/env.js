@@ -8,6 +8,7 @@ class JestEnvironment extends NodeEnvironment {
   }
 
   async setup() {
+    /* eslint-disable node/no-extraneous-require */
     require('ts-node/register');
     this.global.process.env.MIDWAY_TS_MODE = 'true';
     this.global.process.env.MIDWAY_JEST_MODE = 'true';

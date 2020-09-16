@@ -1,12 +1,18 @@
-
 import { expect } from 'chai';
-import { HSF, listModule, HSF_KEY, getClassMetadata, getObjectDefProps, ScopeEnum } from '../../src';
+import {
+  HSF,
+  listModule,
+  HSF_KEY,
+  getClassMetadata,
+  getObjectDefProps,
+  ScopeEnum,
+} from '../../src';
 
 @HSF({
   version: '1.0.0',
   interfaceName: 'com.test.ttt.123',
   group: 'ttt',
-  namespace: 'nnn'
+  namespace: 'nnn',
 })
 class TestFun {}
 
@@ -20,7 +26,7 @@ describe('/test/rpc/hsf.test.ts', () => {
       version: '1.0.0',
       interfaceName: 'com.test.ttt.123',
       group: 'ttt',
-      namespace: 'nnn'
+      namespace: 'nnn',
     });
 
     const m1 = getClassMetadata(HSF_KEY, TestFun1);

@@ -9,23 +9,27 @@ class DocCommand extends Command {
 
     this.options = {
       out: {
-        description: 'Specifies the location the documentation should be written to.',
+        description:
+          'Specifies the location the documentation should be written to.',
         type: 'string',
         default: 'doc',
         alias: 'o',
       },
       mode: {
-        description: 'Specifies the output mode the project is used to be compiled with.',
+        description:
+          'Specifies the output mode the project is used to be compiled with.',
         type: 'string',
         default: 'file',
         alias: 'm',
       },
       options: {
-        description: 'Specify a js option file that should be loaded. If not specified TypeDoc will look for ‘typedoc.json’ in the current directory.',
+        description:
+          'Specify a js option file that should be loaded. If not specified TypeDoc will look for ‘typedoc.json’ in the current directory.',
         type: 'string',
       },
       exclude: {
-        description: 'Exclude files by the given pattern when a path is provided as source.',
+        description:
+          'Exclude files by the given pattern when a path is provided as source.',
         type: 'string',
       },
       theme: {
@@ -34,12 +38,14 @@ class DocCommand extends Command {
         default: 'default',
       },
       excludeExternals: {
-        description: 'Prevent externally resolved TypeScript files from being documented.',
+        description:
+          'Prevent externally resolved TypeScript files from being documented.',
         type: 'boolean',
         default: true,
       },
       ignoreCompilerErrors: {
-        description: 'Generates documentation, even if the project does not TypeScript compile.',
+        description:
+          'Generates documentation, even if the project does not TypeScript compile.',
         type: 'boolean',
         default: true,
       },
@@ -59,9 +65,12 @@ class DocCommand extends Command {
     let args;
     if (argv.options) {
       // if has options args just ignore others
-      args = [ '--options', argv.options ];
+      args = ['--options', argv.options];
     } else {
-      args = this.helper.unparseArgv(argv, { allowCamelCase: true, useEquals: false });
+      args = this.helper.unparseArgv(argv, {
+        allowCamelCase: true,
+        useEquals: false,
+      });
       args = args.filter(item => {
         return !/--\w+-\w+/.test(item);
       });

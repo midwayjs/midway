@@ -1,4 +1,3 @@
-
 import { expect } from 'chai';
 import { Handler, FUNC_KEY, getClassMetadata } from '../../src';
 
@@ -15,16 +14,17 @@ describe('/test/faas/handler.test.ts', () => {
     const meta = getClassMetadata(FUNC_KEY, Test);
     delete meta[0].descriptor;
     delete meta[1].descriptor;
-    expect(meta).deep.eq([{
-      funHandler: 'index.handler',
-      middleware: ['hello'],
-      key: 'greeting',
-    }, {
-      funHandler: 'index.handler1',
-      key: 'test',
-      middleware: [
-        'hello'
-      ]
-    }]);
+    expect(meta).deep.eq([
+      {
+        funHandler: 'index.handler',
+        middleware: ['hello'],
+        key: 'greeting',
+      },
+      {
+        funHandler: 'index.handler1',
+        key: 'test',
+        middleware: ['hello'],
+      },
+    ]);
   });
 });

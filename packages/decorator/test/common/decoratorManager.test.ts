@@ -1,23 +1,27 @@
 import {
-  DecoratorManager,
+  attachPropertyMetadata,
   clearAllModule,
+  DecoratorManager,
   getClassMetadata,
   getMethodDataFromClass,
   getMethodMetadata,
+  getObjectDefinition,
   getParamNames,
-  getPropertyMetadata,
   getPropertyDataFromClass,
+  getPropertyMetadata,
   getProviderId,
   listMethodDataFromClass,
   listModule,
+  listPreloadModule,
+  listPropertyDataFromClass,
+  PRELOAD_MODULE_KEY,
   resetModule,
-  listPreloadModule, getObjectDefinition, savePropertyDataToClass, listPropertyDataFromClass, attachPropertyMetadata
+  savePropertyDataToClass
 } from '../../src';
 import * as assert from 'assert';
 import { expect } from 'chai';
 import { ManagerTest as module } from '../fixtures/decorator/customClass';
 import mm = require('mm');
-import { PRELOAD_MODULE_KEY } from '../../dist';
 
 describe('/test/common/decoratorManager.test.ts', () => {
   it('should save data on class and get it', () => {
@@ -29,9 +33,13 @@ describe('/test/common/decoratorManager.test.ts', () => {
     const dataRes = listMethodDataFromClass('custom', module);
     assert(dataRes.length === 1);
 
-    const { method, data } = getMethodDataFromClass('custom', module, 'testSomething');
-    assert(dataRes[ 0 ].method === method);
-    assert(dataRes[ 0 ].data === data);
+    const { method, data } = getMethodDataFromClass(
+      'custom',
+      module,
+      'testSomething'
+    );
+    assert(dataRes[0].method === method);
+    assert(dataRes[0].data === data);
   });
 
   it('should get method meta data from method', () => {
@@ -68,8 +76,7 @@ describe('/test/common/decoratorManager.test.ts', () => {
   });
 
   it('should get function args', () => {
-    let args = getParamNames((a, b, c) => {
-    });
+    let args = getParamNames((a, b, c) => {});
     assert(args.length === 3);
 
     args = getParamNames(() => {});
@@ -79,7 +86,10 @@ describe('/test/common/decoratorManager.test.ts', () => {
   it('should get attach data from method', () => {
     const m = new module();
     assert(getMethodMetadata('custom_attach', m, 'index').length === 3);
-    assert(getMethodDataFromClass('custom_attach_to_class', module, 'index').length === 3);
+    assert(
+      getMethodDataFromClass('custom_attach_to_class', module, 'index')
+        .length === 3
+    );
   });
 
   it('should get attach data from class', () => {
@@ -95,8 +105,13 @@ describe('/test/common/decoratorManager.test.ts', () => {
 
   it('should get property data', () => {
     const m = new module();
-    assert(getPropertyMetadata('custom_property', m, 'testProperty') === 'property_a');
-    assert(getPropertyDataFromClass('custom_property_class', module, 'testProperty').length === 3);
+    assert(
+      getPropertyMetadata('custom_property', m, 'testProperty') === 'property_a'
+    );
+    assert(
+      getPropertyDataFromClass('custom_property_class', module, 'testProperty')
+        .length === 3
+    );
   });
 
   it('should get object definition metadata', () => {
@@ -105,21 +120,21 @@ describe('/test/common/decoratorManager.test.ts', () => {
 
   it('savePropertyDataToClass should be ok', () => {
     class TestOne {}
-    savePropertyDataToClass('hello1', {a: 1}, TestOne, 'hello');
+    savePropertyDataToClass('hello1', { a: 1 }, TestOne, 'hello');
 
     const data = listPropertyDataFromClass('hello1', TestOne);
-    expect(data).deep.eq([{
-      a: 1
-    }]);
+    expect(data).deep.eq([
+      {
+        a: 1,
+      },
+    ]);
   });
 
   it('attachPropertyMetadata should be ok', () => {
     class TestTwo {}
-    attachPropertyMetadata('ttt', {a: 1, b: 22}, TestTwo, 'hhh');
+    attachPropertyMetadata('ttt', { a: 1, b: 22 }, TestTwo, 'hhh');
 
     const meta = getPropertyMetadata('ttt', TestTwo, 'hhh');
-    expect(meta).deep.eq([
-      {a: 1, b: 22}
-    ]);
+    expect(meta).deep.eq([{ a: 1, b: 22 }]);
   });
 });

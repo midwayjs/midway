@@ -1,6 +1,10 @@
-
 import { expect } from 'chai';
-import { Config, getClassMetadata, CONFIG_KEY, CLASS_KEY_CONSTRUCTOR } from '../../src';
+import {
+  Config,
+  getClassMetadata,
+  CONFIG_KEY,
+  CLASS_KEY_CONSTRUCTOR,
+} from '../../src';
 
 class Test {
   constructor(@Config('aaa') aaa: any) {
@@ -20,13 +24,14 @@ describe('/test/framework/config.test.ts', () => {
     expect(data).deep.eq({
       0: {
         key: 'aaa',
-        type: CONFIG_KEY
-      }
+        type: CONFIG_KEY,
+      },
     });
 
     data = getClassMetadata(CONFIG_KEY, Test);
-    expect(data).deep.eq(
-      [ {key: 'hhh', propertyName: 'hhh'}, {key: 'bbb', propertyName: 'bbb'} ]
-    );
+    expect(data).deep.eq([
+      { key: 'hhh', propertyName: 'hhh' },
+      { key: 'bbb', propertyName: 'bbb' },
+    ]);
   });
 });

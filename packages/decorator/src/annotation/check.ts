@@ -1,13 +1,18 @@
 import * as joi from 'joi';
+import { getMethodParamTypes, getClassMetadata, RULES_KEY } from '..';
 
 export function Check(failValue?: any) {
-  return function (target, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
+  return function (
+    target,
+    propertyKey: string | symbol,
+    descriptor: PropertyDescriptor
+  ) {
     const origin = descriptor.value;
     descriptor.value = function (...args: any[]) {
-      const paramTypes = Reflect.getMetadata('design:paramTypes', target, propertyKey);
+      const paramTypes = getMethodParamTypes(target, propertyKey);
       for (let i = 0; i < paramTypes.length; i++) {
         const item = paramTypes[i];
-        const rules = Reflect.getMetadata('rules', item.prototype);
+        const rules = getClassMetadata(RULES_KEY, item);
         if (rules) {
           const result = joi.validate(args[i], rules);
           if (result.error) {
@@ -15,7 +20,7 @@ export function Check(failValue?: any) {
           }
         }
       }
-      return origin.call(this, ...arguments);
+      return origin.call(this, ...args);
     };
   };
 }

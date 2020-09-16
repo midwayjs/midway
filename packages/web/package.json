@@ -6,7 +6,6 @@
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "midway-bin build -c",
-    "lint": "../../node_modules/.bin/tslint --format prose -c ../../tslint.json --fix 'src/**/*.ts' 'test/**/*.ts'",
     "test": "../../node_modules/.bin/jest --forceExit",
     "cov": "../../node_modules/.bin/jest --coverage --forceExit",
     "ci": "npm run test"

@@ -2,7 +2,6 @@ import { NAMED_TAG } from './constant';
 import { TagPropsMetadata } from '../interface';
 
 export class Metadata implements TagPropsMetadata {
-
   public key: string | number | symbol;
   public value: any;
   public args?: any;

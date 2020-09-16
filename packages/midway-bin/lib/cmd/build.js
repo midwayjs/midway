@@ -62,13 +62,16 @@ class BuildCommand extends Command {
   async run(context) {
     const { cwd, argv } = context;
 
+    /* eslint-disable node/no-extraneous-require */
     const tscCli = require.resolve('typescript/bin/tsc');
     const projectFile = path.join(cwd, argv.project || '');
     if (typeof argv.tsConfig === 'string') {
       try {
         argv.tsConfig = JSON.parse(argv.tsConfig);
       } catch (e) {
-        console.log(`[midway-bin] tsConfig should be JSON string or Object: ${e.message}\n`);
+        console.log(
+          `[midway-bin] tsConfig should be JSON string or Object: ${e.message}\n`
+        );
         return;
       }
     }
@@ -81,7 +84,7 @@ class BuildCommand extends Command {
       const Hjson = require('hjson');
       tsConfig = Hjson.parse(fs.readFileSync(projectFile, 'utf-8'));
     }
-    const projectDir = this.projectDir = path.dirname(projectFile);
+    const projectDir = (this.projectDir = path.dirname(projectFile));
     let outDir = this.inferCompilerOptions(tsConfig, 'outDir');
     let outDirAbsolute;
     if (outDir) {
@@ -101,11 +104,12 @@ class BuildCommand extends Command {
     }
     if (argv.entrypoint) {
       outDir = outDirAbsolute || path.resolve(projectDir, 'dist');
-      await this.bundle(path.resolve(cwd, argv.entrypoint), outDir,
-        {
-          sourceMap: this.inferCompilerOptions(tsConfig, 'sourceMap', { projectDir }),
-          mode: argv.mode,
-        });
+      await this.bundle(path.resolve(cwd, argv.entrypoint), outDir, {
+        sourceMap: this.inferCompilerOptions(tsConfig, 'sourceMap', {
+          projectDir,
+        }),
+        mode: argv.mode,
+      });
       return;
     }
 
@@ -161,13 +165,17 @@ class BuildCommand extends Command {
     if (!basename.endsWith('.js')) {
       basename += '.js';
     }
-    fs.writeFileSync(outDir + '/' + basename, code, { mode: code.match(shebangRegEx) ? 0o777 : 0o666 });
+    fs.writeFileSync(outDir + '/' + basename, code, {
+      mode: code.match(shebangRegEx) ? 0o777 : 0o666,
+    });
     if (map) fs.writeFileSync(outDir + '/index.js.map', map);
 
     for (const asset of Object.keys(assets)) {
       const assetPath = outDir + '/' + asset;
       fse.mkdirpSync(path.dirname(assetPath));
-      fs.writeFileSync(assetPath, assets[asset].source, { mode: assets[asset].permissions });
+      fs.writeFileSync(assetPath, assets[asset].source, {
+        mode: assets[asset].permissions,
+      });
     }
 
     for (const symlink of Object.keys(symlinks)) {
@@ -219,7 +227,11 @@ class BuildCommand extends Command {
     }
   }
 
-  inferCompilerOptions(tsConfig, optionKeyPath, { projectDir = process.cwd() } = {}) {
+  inferCompilerOptions(
+    tsConfig,
+    optionKeyPath,
+    { projectDir = process.cwd() } = {}
+  ) {
     // if projectFile extended and without the option,
     // get setting from its parent
     if (tsConfig && tsConfig.extends) {
@@ -227,7 +239,11 @@ class BuildCommand extends Command {
         !tsConfig.compilerOptions ||
         (tsConfig.compilerOptions && !tsConfig.compilerOptions[optionKeyPath])
       ) {
-        return this.inferCompilerOptions(require(path.join(projectDir, tsConfig.extends)), optionKeyPath, { projectDir });
+        return this.inferCompilerOptions(
+          require(path.join(projectDir, tsConfig.extends)),
+          optionKeyPath,
+          { projectDir }
+        );
       }
     }
 
@@ -238,6 +254,7 @@ class BuildCommand extends Command {
 
   async minify(tsConfig, outDir) {
     if (typescript == null) {
+      /* eslint-disable node/no-extraneous-require */
       typescript = require('typescript');
     }
 
@@ -249,14 +266,19 @@ class BuildCommand extends Command {
 
     let files;
     if (outDir) {
-      files = globby.sync([ '**/*.js' ], {
+      files = globby.sync(['**/*.js'], {
         cwd: outDir,
-        ignore: [ '**/node_modules' ],
+        ignore: ['**/node_modules'],
       });
       files = files.map(it => path.join(outDir, it));
     } else {
       const host = typescript.createCompilerHost(tsConfig.compilerOptions);
-      files = host.readDirectory(__dirname, [ '.ts' ], tsConfig.exclude, tsConfig.include);
+      files = host.readDirectory(
+        __dirname,
+        ['.ts'],
+        tsConfig.exclude,
+        tsConfig.include
+      );
       files = files.map(it => {
         return path.join(path.dirname(it), path.basename(it, '.js'));
       });
@@ -327,7 +349,10 @@ class BuildCommand extends Command {
      * compilerOptions
      */
     for (const key in cfg.compilerOptions || {}) {
-      if (cfg.compilerOptions[key] === true || cfg.compilerOptions[key] === 'true') {
+      if (
+        cfg.compilerOptions[key] === true ||
+        cfg.compilerOptions[key] === 'true'
+      ) {
         args.push(`--${key}`);
       } else {
         args.push(`--${key}`);

@@ -11,17 +11,23 @@ export interface ControllerOption {
   };
 }
 
-export function Controller(prefix: string, routerOptions: {
-  sensitive?: boolean,
-  middleware?: MiddlewareParamArray
- } = {middleware: [], sensitive: true}
-  ): ClassDecorator {
+export function Controller(
+  prefix: string,
+  routerOptions: {
+    sensitive?: boolean;
+    middleware?: MiddlewareParamArray;
+  } = { middleware: [], sensitive: true }
+): ClassDecorator {
   return (target: any) => {
     saveModule(CONTROLLER_KEY, target);
-    saveClassMetadata(CONTROLLER_KEY, {
-      prefix,
-      routerOptions
-    } as ControllerOption, target);
+    saveClassMetadata(
+      CONTROLLER_KEY,
+      {
+        prefix,
+        routerOptions,
+      } as ControllerOption,
+      target
+    );
     Scope(ScopeEnum.Request)(target);
   };
 }

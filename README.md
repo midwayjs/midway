@@ -10,7 +10,9 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/midwayjs/midway/pulls)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/856737478fa94e78bce39d5fc2315cec)](https://www.codacy.com/app/czy88840616/midway?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=midwayjs/midway&amp;utm_campaign=Badge_Grade)
 [![Backers on Open Collective](https://opencollective.com/midway/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/midway/sponsors/badge.svg)](#sponsors)
-[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/midwayjs/midway) 
+[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/midwayjs/midway)
+[![Code Style: MidwayJS](https://img.shields.io/badge/code%20style-midwayjs-brightgreen.svg)](https://github.com/midwayjs/mwts)
+
 
 Midway is a Node.js Web framework written by typescript, which uses the IoC injection mechanism to decouple the business logic of the application and make the development of large Node.js application easier and more natural.
 
@@ -58,7 +60,7 @@ midway is comprised of many specialized packages. This repository contains all t
 | Package | Version | Dependencies | DevDependencies | quality |
 |--------|-------|------------|----------|----------|
 | [`midway`] | [![midway-svg]][midway-ch] | [![midway-d-svg]][midway-d-link] | [![midway-dd-svg]][midway-dd-link] | [![midway-q-svg]][midway-q-link] |
-| [`midway-web`] | [![web-svg]][web-ch] | [![web-d-svg]][web-d-link] | [![web-dd-svg]][web-dd-link] | [![web-q-svg]][web-q-link] | 
+| [`midway-web`] | [![web-svg]][web-ch] | [![web-d-svg]][web-d-link] | [![web-dd-svg]][web-dd-link] | [![web-q-svg]][web-q-link] |
 | [`midway-core`] | [![core-svg]][core-ch] | [![core-d-svg]][core-d-link] | [![core-dd-svg]][core-dd-link] | [![core-q-svg]][core-q-link] |
 | [`midway-mock`] | [![mock-svg]][mock-ch] | [![mock-d-svg]][mock-d-link] | [![mock-dd-svg]][mock-dd-link] | [![mock-q-svg]][mock-q-link] |
 | [`midway-init`] | [![init-svg]][init-ch] | [![init-d-svg]][init-d-link] | [![init-dd-svg]][init-dd-link] | [![init-q-svg]][init-q-link] |

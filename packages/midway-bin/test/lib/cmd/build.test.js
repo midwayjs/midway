@@ -15,7 +15,7 @@ describe('test/lib/cmd/build.test.js', () => {
   it('should warn message', async () => {
     const cwd = path.join(__dirname, '../../fixtures/ts-dir-without-config');
     const child = coffee
-      .fork(midwayBin, [ 'build' ], { cwd })
+      .fork(midwayBin, ['build'], { cwd })
       .expect('stdout', /tsconfig/);
 
     await child.expect('code', 0).end();
@@ -24,24 +24,24 @@ describe('test/lib/cmd/build.test.js', () => {
   it('should build success', async () => {
     const cwd = path.join(__dirname, '../../fixtures/ts-dir');
     await rimraf(path.join(cwd, 'dist'));
-    const child = coffee.fork(midwayBin, [ 'build' ], { cwd });
+    const child = coffee.fork(midwayBin, ['build'], { cwd });
     await child.expect('code', 0).end();
     assert(fs.existsSync(path.join(cwd, 'dist/a.js')));
     await rimraf(path.join(cwd, 'dist'));
   });
 
-  it('should build success with tsconfig comments', async ()=>{
-    const cwd = path.join(__dirname, '../../fixtures/ts-dir-tsconfig-comments')
+  it('should build success with tsconfig comments', async () => {
+    const cwd = path.join(__dirname, '../../fixtures/ts-dir-tsconfig-comments');
     await rimraf(path.join(cwd, 'dist'));
-    const child = coffee.fork(midwayBin, ['build'], { cwd});
+    const child = coffee.fork(midwayBin, ['build'], { cwd });
     await child.expect('code', 0).end();
     assert(fs.existsSync(path.join(cwd, 'dist/index.js')));
     await rimraf(path.join(cwd, 'dist'));
-  })
+  });
 
   it('should auto clean dir before build', async () => {
     const cwd = path.join(__dirname, '../../fixtures/ts-dir');
-    const child = coffee.fork(midwayBin, [ 'build' ], { cwd });
+    const child = coffee.fork(midwayBin, ['build'], { cwd });
     await child.expect('code', 0).end();
     assert(fs.existsSync(path.join(cwd, 'dist/a.js')));
     await rimraf(path.join(cwd, 'dist'));
@@ -49,7 +49,7 @@ describe('test/lib/cmd/build.test.js', () => {
 
   it('should copy assets file to dist dir', async () => {
     const cwd = path.join(__dirname, '../../fixtures/ts-dir-with-assets');
-    const child = coffee.fork(midwayBin, [ 'build', '-c' ], { cwd });
+    const child = coffee.fork(midwayBin, ['build', '-c'], { cwd });
     await child.expect('code', 0).end();
     assert(fs.existsSync(path.join(cwd, 'dist/a.js')));
     assert(fs.existsSync(path.join(cwd, 'dist/view/index.html')));
@@ -68,14 +68,13 @@ describe('test/lib/cmd/build.test.js', () => {
       __dirname,
       '../../fixtures/ts-dir-with-not-exists-file'
     );
-    const child = coffee.fork(midwayBin, [ 'build', '-c' ], { cwd }).debug();
+    const child = coffee.fork(midwayBin, ['build', '-c'], { cwd }).debug();
     await child.expect('code', 0).end();
     assert(!fs.existsSync(path.join(cwd, 'dist/view/index.html')));
     assert(fs.existsSync(path.join(cwd, 'dist/public/test.css')));
     assert(fs.existsSync(path.join(cwd, 'dist/public/test.js')));
     await rimraf(path.join(cwd, 'dist'));
   });
-
 
   it('build use tsConfig no project', async () => {
     const BuildCommand = require('../../../lib/cmd/build');
@@ -85,26 +84,22 @@ describe('test/lib/cmd/build.test.js', () => {
       cwd,
       argv: {
         tsConfig: {
-          "compilerOptions": {
-            "target": "ES2017",
-            "module": "commonjs",
-            "moduleResolution": "node",
-            "experimentalDecorators": true,
-            "noImplicitThis": true,
-            "noUnusedLocals": true,
-            "stripInternal": true,
-            "pretty": true,
-            "declaration": true,
-            "sourceMap": true,
-            "outDir": "dist",
-            "lib": ["es2017", "dom"]
+          compilerOptions: {
+            target: 'ES2017',
+            module: 'commonjs',
+            moduleResolution: 'node',
+            experimentalDecorators: true,
+            noImplicitThis: true,
+            noUnusedLocals: true,
+            stripInternal: true,
+            pretty: true,
+            declaration: true,
+            sourceMap: true,
+            outDir: 'dist',
+            lib: ['es2017', 'dom'],
           },
-          "exclude": [
-            "dist",
-            "node_modules",
-            "test"
-          ]
-        }
+          exclude: ['dist', 'node_modules', 'test'],
+        },
       },
     });
     assert(fs.existsSync(path.join(cwd, 'dist/a.js')));
@@ -119,7 +114,7 @@ describe('test/lib/cmd/build.test.js - with another tsconfig', () => {
   it('should warn message', async () => {
     const cwd = path.join(__dirname, '../../fixtures/ts-dir-without-config');
     const child = coffee
-      .fork(midwayBin, [ 'build', '-p', 'tsconfig.prod.json' ], { cwd })
+      .fork(midwayBin, ['build', '-p', 'tsconfig.prod.json'], { cwd })
       .expect('stdout', /tsconfig/);
 
     await child.expect('code', 0).end();
@@ -133,7 +128,7 @@ describe('test/lib/cmd/build.test.js - with another tsconfig', () => {
     await rimraf(path.join(cwd, 'dist'));
     const child = coffee.fork(
       midwayBin,
-      [ 'build', '-p', 'tsconfig.prod.json' ],
+      ['build', '-p', 'tsconfig.prod.json'],
       { cwd }
     );
     await child.expect('code', 0).end();
@@ -149,7 +144,7 @@ describe('test/lib/cmd/build.test.js - with another tsconfig', () => {
     await rimraf(path.join(cwd, 'dist'));
     const child = coffee.fork(
       midwayBin,
-      [ 'build', '-p', 'tsconfig.prod.json' ],
+      ['build', '-p', 'tsconfig.prod.json'],
       { cwd }
     );
     await child.expect('code', 0).end();
@@ -165,7 +160,7 @@ describe('test/lib/cmd/build.test.js - with another tsconfig', () => {
 
     const child = coffee.fork(
       midwayBin,
-      [ 'build', '-c', '-p', 'tsconfig.prod.json' ],
+      ['build', '-c', '-p', 'tsconfig.prod.json'],
       { cwd }
     );
     await child.expect('code', 0).end();
@@ -190,7 +185,7 @@ describe('test/lib/cmd/build.test.js - bundling', () => {
   it('should warn message', async () => {
     const cwd = path.join(__dirname, '../../fixtures/ts-dir-without-config');
     const child = coffee
-      .fork(midwayBin, [ 'build', '--entrypoint', 'a.ts' ], { cwd })
+      .fork(midwayBin, ['build', '--entrypoint', 'a.ts'], { cwd })
       .expect('stdout', /tsconfig/);
 
     await child.expect('code', 0).end();
@@ -199,7 +194,9 @@ describe('test/lib/cmd/build.test.js - bundling', () => {
   it('should build success', async () => {
     const cwd = path.join(__dirname, '../../fixtures/ts-dir');
     await rimraf(path.join(cwd, 'dist'));
-    const child = coffee.fork(midwayBin, [ 'build', '--entrypoint', 'a.ts' ], { cwd });
+    const child = coffee.fork(midwayBin, ['build', '--entrypoint', 'a.ts'], {
+      cwd,
+    });
     await child.expect('code', 0).end();
     assert(fs.existsSync(path.join(cwd, 'dist/a.js')));
     await rimraf(path.join(cwd, 'dist'));
@@ -207,7 +204,9 @@ describe('test/lib/cmd/build.test.js - bundling', () => {
 
   it('should auto clean dir before build', async () => {
     const cwd = path.join(__dirname, '../../fixtures/ts-dir');
-    const child = coffee.fork(midwayBin, [ 'build', '--entrypoint', 'a.ts' ], { cwd });
+    const child = coffee.fork(midwayBin, ['build', '--entrypoint', 'a.ts'], {
+      cwd,
+    });
     await child.expect('code', 0).end();
     assert(fs.existsSync(path.join(cwd, 'dist/a.js')));
     await rimraf(path.join(cwd, 'dist'));
@@ -216,7 +215,7 @@ describe('test/lib/cmd/build.test.js - bundling', () => {
 
 describe('test/lib/cmd/build.test.js - minify', () => {
   const midwayBin = require.resolve('../../../bin/midway-bin.js');
-  const argv = [ 'build', '-c', '--minify'];
+  const argv = ['build', '-c', '--minify'];
 
   afterEach(mm.restore);
 
@@ -226,7 +225,11 @@ describe('test/lib/cmd/build.test.js - minify', () => {
     const child = coffee.fork(midwayBin, argv, { cwd });
     await child.expect('code', 0).end();
     assert(fs.existsSync(path.join(cwd, 'dist/a.js')));
-    assert(/\/\/# sourceMappingURL/.exec(fs.readFileSync(path.join(cwd, 'dist/a.js'), 'utf8')));
+    assert(
+      /\/\/# sourceMappingURL/.exec(
+        fs.readFileSync(path.join(cwd, 'dist/a.js'), 'utf8')
+      )
+    );
     await rimraf(path.join(cwd, 'dist'));
   });
 });

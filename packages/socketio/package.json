@@ -1,16 +1,14 @@
 {
   "name": "@midwayjs/socketio",
   "version": "2.2.4",
-  "description": "Midway Web Framework for KOA",
+  "description": "Midway Web Framework for socket.io",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "midway-bin build -c",
-    "lint": "../../node_modules/.bin/tslint --format prose -c ../../tslint.json --fix 'src/**/*.ts' 'test/**/*.ts'",
     "test": "../../node_modules/.bin/jest --forceExit",
     "cov": "../../node_modules/.bin/jest --coverage --forceExit",
-    "ci": "npm run test",
-    "autod": "midway-bin autod"
+    "ci": "npm run test"
   },
   "keywords": [
     "midway",

@@ -1,4 +1,3 @@
-
 import { expect } from 'chai';
 import { Priority, getClassMetadata, PRIORITY_KEY } from '../../src';
 

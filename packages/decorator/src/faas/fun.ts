@@ -1,5 +1,11 @@
 import { Scope } from '../annotation';
-import { ScopeEnum, saveModule, FUNC_KEY, attachClassMetadata, MiddlewareParamArray } from '..';
+import {
+  ScopeEnum,
+  saveModule,
+  FUNC_KEY,
+  attachClassMetadata,
+  MiddlewareParamArray,
+} from '..';
 
 export interface FuncParams {
   funHandler?: string;
@@ -35,11 +41,14 @@ export function Func(
       saveModule(FUNC_KEY, (target as object).constructor);
       attachClassMetadata(
         FUNC_KEY,
-        Object.assign({
-          funHandler,
-          key,
-          descriptor,
-        }, functionOptions),
+        Object.assign(
+          {
+            funHandler,
+            key,
+            descriptor,
+          },
+          functionOptions
+        ),
         target.constructor
       );
     }

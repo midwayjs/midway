@@ -1,4 +1,8 @@
-import { attachClassMetadata, LOGGER_KEY, attachConstructorDataOnClass } from '../';
+import {
+  attachClassMetadata,
+  LOGGER_KEY,
+  attachConstructorDataOnClass,
+} from '../';
 
 export function Logger(identifier?: string) {
   return function (target: any, targetKey: string, index?: number): void {
@@ -8,10 +12,14 @@ export function Logger(identifier?: string) {
       if (!identifier) {
         identifier = targetKey;
       }
-      attachClassMetadata(LOGGER_KEY, {
-        key: identifier,
-        propertyName: targetKey
-      }, target);
+      attachClassMetadata(
+        LOGGER_KEY,
+        {
+          key: identifier,
+          propertyName: targetKey,
+        },
+        target
+      );
     }
   };
 }

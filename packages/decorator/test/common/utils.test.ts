@@ -1,10 +1,18 @@
 import {
-  saveProviderId, getProviderId, DUPLICATED_INJECTABLE_DECORATOR, getPropertyInject, Provide, Inject, getConstructorInject, attachConstructorDataOnClass, getClassMetadata,
+  saveProviderId,
+  getProviderId,
+  DUPLICATED_INJECTABLE_DECORATOR,
+  getPropertyInject,
+  Provide,
+  Inject,
+  getConstructorInject,
+  attachConstructorDataOnClass,
+  getClassMetadata,
   CLASS_KEY_CONSTRUCTOR,
   savePropertyInject,
   saveConstructorInject,
   saveObjectDefProps,
-  getObjectDefProps
+  getObjectDefProps,
 } from '../../src';
 import { expect } from 'chai';
 
@@ -46,18 +54,20 @@ describe('/test/common/util.test.ts', () => {
         {
           args: undefined,
           key: 'inject',
-          value: '@testpackage:hello'
+          value: '@testpackage:hello',
         },
       ],
     });
 
     const c = getConstructorInject(Test);
     expect(c).deep.eq({
-      0: [{
-        args: undefined,
-        key: 'inject',
-        value: '@testpackage:tt'
-      }]
+      0: [
+        {
+          args: undefined,
+          key: 'inject',
+          value: '@testpackage:tt',
+        },
+      ],
     });
 
     let s = 'empty!';
@@ -65,12 +75,12 @@ describe('/test/common/util.test.ts', () => {
       savePropertyInject({
         identifier: '@testpackage',
         target: Test,
-        targetKey: 'hello'
+        targetKey: 'hello',
       });
       savePropertyInject({
         identifier: '@testpackage',
         target: Test,
-        targetKey: 'hello'
+        targetKey: 'hello',
       });
     } catch (e) {
       s = e.message;
@@ -84,13 +94,15 @@ describe('/test/common/util.test.ts', () => {
         identifier: 'test',
         target: TestOne,
         targetKey: 'hello',
-        index: 1
+        index: 1,
       });
     } catch (e) {
       s = e.message;
     }
     expect(s).not.eq('empty1');
-    expect(s).eq('The @inject @multiInject @tagged and @named decorators must be applied to the parameters of a class constructor or a class property.');
+    expect(s).eq(
+      'The @inject @multiInject @tagged and @named decorators must be applied to the parameters of a class constructor or a class property.'
+    );
   });
 
   it('util attachConstructorDataOnClass shoule be ok', () => {

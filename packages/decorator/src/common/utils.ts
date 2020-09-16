@@ -1,7 +1,27 @@
-import { getParamNames, getClassMetadata, saveClassMetadata } from './decoratorManager';
-import { CLASS_KEY_CONSTRUCTOR, OBJ_DEF_CLS, TAGGED, TAGGED_PROP, TAGGED_CLS, INJECT_TAG} from './constant';
-import { TagPropsMetadata, ReflectResult, ObjectIdentifier, ObjectDefinitionOptions } from '../interface';
-import { DUPLICATED_METADATA, INVALID_DECORATOR_OPERATION, DUPLICATED_INJECTABLE_DECORATOR } from './errMsg';
+import {
+  getParamNames,
+  getClassMetadata,
+  saveClassMetadata,
+} from './decoratorManager';
+import {
+  CLASS_KEY_CONSTRUCTOR,
+  OBJ_DEF_CLS,
+  TAGGED,
+  TAGGED_PROP,
+  TAGGED_CLS,
+  INJECT_TAG,
+} from './constant';
+import {
+  TagPropsMetadata,
+  ReflectResult,
+  ObjectIdentifier,
+  ObjectDefinitionOptions,
+} from '../interface';
+import {
+  DUPLICATED_METADATA,
+  INVALID_DECORATOR_OPERATION,
+  DUPLICATED_INJECTABLE_DECORATOR,
+} from './errMsg';
 import camelcase = require('camelcase');
 import { Metadata } from './metadata';
 
@@ -12,10 +32,12 @@ function _tagParameterOrProperty(
   metadata: TagPropsMetadata,
   parameterIndex?: number
 ) {
-
   let paramsOrPropertiesMetadata: ReflectResult = {};
-  const isParameterDecorator = (typeof parameterIndex === 'number');
-  const key: string = (parameterIndex !== undefined && isParameterDecorator) ? parameterIndex.toString() : propertyName;
+  const isParameterDecorator = typeof parameterIndex === 'number';
+  const key: string =
+    parameterIndex !== undefined && isParameterDecorator
+      ? parameterIndex.toString()
+      : propertyName;
 
   // if the decorator is used as a parameter decorator, the property name must be provided
   if (isParameterDecorator && propertyName !== undefined) {
@@ -24,11 +46,15 @@ function _tagParameterOrProperty(
 
   // read metadata if available
   if (Reflect.hasOwnMetadata(metadataKey, annotationTarget)) {
-    paramsOrPropertiesMetadata = Reflect.getMetadata(metadataKey, annotationTarget);
+    paramsOrPropertiesMetadata = Reflect.getMetadata(
+      metadataKey,
+      annotationTarget
+    );
   }
 
   // get metadata for the decorated parameter by its index
-  let paramOrPropertyMetadata: TagPropsMetadata[] = paramsOrPropertiesMetadata[key];
+  let paramOrPropertyMetadata: TagPropsMetadata[] =
+    paramsOrPropertiesMetadata[key];
 
   if (!Array.isArray(paramOrPropertyMetadata)) {
     paramOrPropertyMetadata = [];
@@ -43,11 +69,14 @@ function _tagParameterOrProperty(
   // set metadata
   paramOrPropertyMetadata.push(metadata);
   paramsOrPropertiesMetadata[key] = paramOrPropertyMetadata;
-  Reflect.defineMetadata(metadataKey, paramsOrPropertiesMetadata, annotationTarget);
+  Reflect.defineMetadata(
+    metadataKey,
+    paramsOrPropertiesMetadata,
+    annotationTarget
+  );
 }
 
 export function attachConstructorDataOnClass(identifier, clz, type, index) {
-
   if (!identifier) {
     const args = getParamNames(clz);
     if (clz.length === args.length && index < clz.length) {
@@ -62,7 +91,7 @@ export function attachConstructorDataOnClass(identifier, clz, type, index) {
   }
   constructorMetaValue[index] = {
     key: identifier,
-    type
+    type,
   };
   saveClassMetadata(CLASS_KEY_CONSTRUCTOR, constructorMetaValue, clz);
 }
@@ -100,7 +129,13 @@ export function saveConstructorInject(opts: InjectOptions) {
   }
   const metadata = new Metadata(INJECT_TAG, identifier);
   metadata.args = opts.args;
-  _tagParameterOrProperty(TAGGED, opts.target, opts.targetKey, metadata, opts.index);
+  _tagParameterOrProperty(
+    TAGGED,
+    opts.target,
+    opts.targetKey,
+    metadata,
+    opts.index
+  );
 }
 
 export function getConstructorInject(target: any): TagPropsMetadata[] {
@@ -120,7 +155,12 @@ export function savePropertyInject(opts: InjectOptions) {
   }
   const metadata = new Metadata(INJECT_TAG, identifier);
   metadata.args = opts.args;
-  _tagParameterOrProperty(TAGGED_PROP, opts.target.constructor, opts.targetKey, metadata);
+  _tagParameterOrProperty(
+    TAGGED_PROP,
+    opts.target.constructor,
+    opts.targetKey,
+    metadata
+  );
 }
 
 export function getPropertyInject(target: any): TagPropsMetadata[] {
@@ -135,7 +175,11 @@ export function saveObjectDefProps(target: any, props: object = {}) {
   if (Reflect.hasMetadata(OBJ_DEF_CLS, target)) {
     const originProps = Reflect.getMetadata(OBJ_DEF_CLS, target);
 
-    Reflect.defineMetadata(OBJ_DEF_CLS, Object.assign(originProps, props), target);
+    Reflect.defineMetadata(
+      OBJ_DEF_CLS,
+      Object.assign(originProps, props),
+      target
+    );
   } else {
     Reflect.defineMetadata(OBJ_DEF_CLS, props, target);
   }
@@ -151,7 +195,11 @@ export function getObjectDefProps(target: any): ObjectDefinitionOptions {
  * @param target class
  * @param override 是否覆盖
  */
-export function saveProviderId(identifier: ObjectIdentifier, target: any, override?: boolean) {
+export function saveProviderId(
+  identifier: ObjectIdentifier,
+  target: any,
+  override?: boolean
+) {
   if (Reflect.hasOwnMetadata(TAGGED_CLS, target) && !override) {
     throw new Error(DUPLICATED_INJECTABLE_DECORATOR);
   }
@@ -160,10 +208,14 @@ export function saveProviderId(identifier: ObjectIdentifier, target: any, overri
     identifier = classNamed(target.name);
   }
 
-  Reflect.defineMetadata(TAGGED_CLS, {
-    id: identifier,
-    originName: target.name,
-  }, target);
+  Reflect.defineMetadata(
+    TAGGED_CLS,
+    {
+      id: identifier,
+      originName: target.name,
+    },
+    target
+  );
 
   if (!Reflect.hasMetadata(OBJ_DEF_CLS, target)) {
     Reflect.defineMetadata(OBJ_DEF_CLS, {}, target);

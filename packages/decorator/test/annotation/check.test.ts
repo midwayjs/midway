@@ -14,7 +14,7 @@ describe('/test/annotation/check.test.ts', () => {
       }
     }
     const user = {
-      age: 8
+      age: 8,
     };
     const result = new Hello().school(1, user);
     assert.deepEqual(result, user);
@@ -32,7 +32,7 @@ describe('/test/annotation/check.test.ts', () => {
       }
     }
     const user = {
-      age: 18
+      age: 18,
     };
     const result = new Hello().school(1, user);
     assert.deepEqual(result, user);
@@ -61,8 +61,8 @@ describe('/test/annotation/check.test.ts', () => {
     const user = {
       age: 10,
       world: {
-        age: 18
-      }
+        age: 18,
+      },
     };
     const result = new Hello().school(1, user);
     assert.deepEqual(result, user);
@@ -91,8 +91,8 @@ describe('/test/annotation/check.test.ts', () => {
     const user = {
       age: 10,
       world: {
-        age: 22
-      }
+        age: 22,
+      },
     };
     const result = new Hello().school(1, user);
     assert.notDeepEqual(result, user);
@@ -120,9 +120,11 @@ describe('/test/annotation/check.test.ts', () => {
     }
     const user = {
       age: 10,
-      worlds: [{
-        age: 22
-      }]
+      worlds: [
+        {
+          age: 22,
+        },
+      ],
     };
     const result = new Hello().school(1, user);
     assert.notDeepEqual(result, user);

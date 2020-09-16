@@ -30,7 +30,11 @@ export interface WSEventInfo {
 }
 
 export function OnConnection(): MethodDecorator {
-  return (target: object, propertyKey: string, descriptor: PropertyDescriptor) => {
+  return (
+    target: object,
+    propertyKey: string,
+    descriptor: PropertyDescriptor
+  ) => {
     attachClassMetadata(
       WS_EVENT_KEY,
       {
@@ -44,7 +48,11 @@ export function OnConnection(): MethodDecorator {
 }
 
 export function OnDisConnection(): MethodDecorator {
-  return (target: object, propertyKey: string, descriptor: PropertyDescriptor) => {
+  return (
+    target: object,
+    propertyKey: string,
+    descriptor: PropertyDescriptor
+  ) => {
     attachClassMetadata(
       WS_EVENT_KEY,
       {
@@ -58,7 +66,11 @@ export function OnDisConnection(): MethodDecorator {
 }
 
 export function OnMessage(eventName: string): MethodDecorator {
-  return (target: object, propertyKey: string, descriptor: PropertyDescriptor) => {
+  return (
+    target: object,
+    propertyKey: string,
+    descriptor: PropertyDescriptor
+  ) => {
     attachClassMetadata(
       WS_EVENT_KEY,
       {
@@ -73,7 +85,11 @@ export function OnMessage(eventName: string): MethodDecorator {
 }
 
 export function OnSocketError(eventName: string): MethodDecorator {
-  return (target: object, propertyKey: string, descriptor: PropertyDescriptor) => {
+  return (
+    target: object,
+    propertyKey: string,
+    descriptor: PropertyDescriptor
+  ) => {
     attachClassMetadata(
       WS_EVENT_KEY,
       {
@@ -87,8 +103,15 @@ export function OnSocketError(eventName: string): MethodDecorator {
   };
 }
 
-export function Emit(messageName: string, roomName: string | string[] = []): MethodDecorator {
-  return (target: object, propertyKey: string, descriptor: PropertyDescriptor) => {
+export function Emit(
+  messageName: string,
+  roomName: string | string[] = []
+): MethodDecorator {
+  return (
+    target: object,
+    propertyKey: string,
+    descriptor: PropertyDescriptor
+  ) => {
     attachClassMetadata(
       WS_EVENT_KEY,
       {
@@ -104,7 +127,11 @@ export function Emit(messageName: string, roomName: string | string[] = []): Met
 }
 
 export function Broadcast(): MethodDecorator {
-  return (target: object, propertyKey: string, descriptor: PropertyDescriptor) => {
+  return (
+    target: object,
+    propertyKey: string,
+    descriptor: PropertyDescriptor
+  ) => {
     attachClassMetadata(
       WS_EVENT_KEY,
       {
@@ -116,4 +143,3 @@ export function Broadcast(): MethodDecorator {
     );
   };
 }
-

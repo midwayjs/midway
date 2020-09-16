@@ -1,6 +1,12 @@
-
 import { expect } from 'chai';
-import { Schedule, getObjectDefProps, ScopeEnum, listModule, SCHEDULE_KEY, getClassMetadata } from '../../src';
+import {
+  Schedule,
+  getObjectDefProps,
+  ScopeEnum,
+  listModule,
+  SCHEDULE_KEY,
+  getClassMetadata,
+} from '../../src';
 
 @Schedule({
   type: 'worker',

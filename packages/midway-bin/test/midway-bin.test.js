@@ -9,28 +9,30 @@ describe('test/midway-bin.test.js', () => {
 
   describe('global options', () => {
     it('should show version', done => {
-      coffee.fork(midwayBin, [ '--version' ], { cwd })
-      // .debug()
+      coffee
+        .fork(midwayBin, ['--version'], { cwd })
+        // .debug()
         .expect('stdout', /\d+\.\d+\.\d+/)
         .expect('code', 0)
         .end(done);
     });
 
     it('should show help', done => {
-      coffee.fork(midwayBin, [ '--help' ], { cwd })
-      // .debug()
+      coffee
+        .fork(midwayBin, ['--help'], { cwd })
+        // .debug()
         .expect('stdout', /Usage: .*midway-bin.* \[command] \[options]/)
         .expect('code', 0)
         .end(done);
     });
 
     it('should show help when command not exists', done => {
-      coffee.fork(midwayBin, [ 'not-exists' ], { cwd })
-      // .debug()
+      coffee
+        .fork(midwayBin, ['not-exists'], { cwd })
+        // .debug()
         .expect('stdout', /Usage: .*midway-bin.* \[command] \[options]/)
         .expect('code', 0)
         .end(done);
     });
   });
-
 });

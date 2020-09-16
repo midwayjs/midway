@@ -1,6 +1,12 @@
-
 import { expect } from 'chai';
-import { Pipeline, Provide, getPropertyInject, getConstructorInject, PIPELINE_IDENTIFIER, NAMED_TAG } from '../../src';
+import {
+  Pipeline,
+  Provide,
+  getPropertyInject,
+  getConstructorInject,
+  PIPELINE_IDENTIFIER,
+  NAMED_TAG,
+} from '../../src';
 
 @Provide()
 class Test {
@@ -20,23 +26,29 @@ describe('/test/annotation/pipeline.test.ts', () => {
         {
           args: undefined,
           key: 'inject',
-          value: PIPELINE_IDENTIFIER
+          value: PIPELINE_IDENTIFIER,
         },
       ],
     });
 
-    expect(p['dd'][0].toString()).eq('tagged: { key:inject, value: __pipeline_identifier__ }');
+    expect(p['dd'][0].toString()).eq(
+      'tagged: { key:inject, value: __pipeline_identifier__ }'
+    );
 
     const c = getConstructorInject(Test);
     expect(c).deep.eq({
-      0: [{
-        args: undefined,
-        key: 'inject',
-        value: PIPELINE_IDENTIFIER
-      }]
+      0: [
+        {
+          args: undefined,
+          key: 'inject',
+          value: PIPELINE_IDENTIFIER,
+        },
+      ],
     });
 
-    expect(c[0].toString()).eq('tagged: { key:inject, value: __pipeline_identifier__ }');
+    expect(c[0].toString()).eq(
+      'tagged: { key:inject, value: __pipeline_identifier__ }'
+    );
 
     const meta = c[0][0];
     meta.key = NAMED_TAG;

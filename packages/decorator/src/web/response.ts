@@ -6,10 +6,11 @@ import {
   WEB_RESPONSE_KEY,
 } from '..';
 
-export function Redirect(url: string, code: number = 302) {
+export function Redirect(url: string, code = 302) {
   return (target, key, descriptor: PropertyDescriptor) => {
     attachPropertyMetadata(
-      WEB_RESPONSE_KEY, {
+      WEB_RESPONSE_KEY,
+      {
         type: WEB_RESPONSE_REDIRECT,
         url,
         code,
@@ -25,9 +26,10 @@ export function Redirect(url: string, code: number = 302) {
 export function HttpCode(code: number) {
   return (target, key, descriptor: PropertyDescriptor) => {
     attachPropertyMetadata(
-      WEB_RESPONSE_KEY, {
+      WEB_RESPONSE_KEY,
+      {
         type: WEB_RESPONSE_HTTP_CODE,
-        code
+        code,
       },
       target,
       key
@@ -37,16 +39,20 @@ export function HttpCode(code: number) {
   };
 }
 
-export function SetHeader(headerKey: string | Object, value?: string) {
+export function SetHeader(
+  headerKey: string | Record<string, any>,
+  value?: string
+) {
   return (target, key, descriptor: PropertyDescriptor) => {
-    let headerObject: Object = {};
+    let headerObject: Record<string, any> = {};
     if (value) {
       headerObject[headerKey as string] = value;
     } else {
-      headerObject = headerKey as Object;
+      headerObject = headerKey as Record<string, any>;
     }
     attachPropertyMetadata(
-      WEB_RESPONSE_KEY, {
+      WEB_RESPONSE_KEY,
+      {
         type: WEB_RESPONSE_HEADER,
         setHeaders: headerObject,
       },
@@ -60,35 +66,30 @@ export function SetHeader(headerKey: string | Object, value?: string) {
 
 export function ContentType(contentType: string) {
   return (target, key, descriptor: PropertyDescriptor) => {
-
     return descriptor;
   };
 }
 
 export function OnUndefined(data: Error | number) {
   return (target, key, descriptor: PropertyDescriptor) => {
-
     return descriptor;
   };
 }
 
 export function OnNull(data: Error | number) {
   return (target, key, descriptor: PropertyDescriptor) => {
-
     return descriptor;
   };
 }
 
 export function OnEmpty(data: Error | number) {
   return (target, key, descriptor: PropertyDescriptor) => {
-
     return descriptor;
   };
 }
 
 export function Render(templateName: string) {
   return (target, key, descriptor: PropertyDescriptor) => {
-
     return descriptor;
   };
 }

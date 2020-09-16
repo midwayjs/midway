@@ -1,4 +1,4 @@
-import { RouteParamTypes, ALL_VALUE } from "@midwayjs/decorator";
+import { ALL_VALUE, RouteParamTypes } from '@midwayjs/decorator';
 
 export const extractKoaLikeValue = (key, data) => {
   if(ALL_VALUE === data) {

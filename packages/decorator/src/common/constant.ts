@@ -1,10 +1,11 @@
 // got all value with no property name
-export const ALL_VALUE= 'common:all_value_key';
+export const ALL_VALUE = 'common:all_value_key';
 
 // common
 export const PRIORITY_KEY = 'common:priority';
 export const SCHEDULE_KEY = 'common:schedule';
 export const CONFIGURATION_KEY = 'common:configuration';
+export const RULES_KEY = 'common:rules';
 
 // faas
 export const FUNC_KEY = 'faas:func';

@@ -1,25 +1,32 @@
-
 import { expect } from 'chai';
-import { Get, Post, Options, Head, All, getClassMetadata, WEB_ROUTER_KEY, RequestMapping } from '../../src';
+import {
+  Get,
+  Post,
+  Options,
+  Head,
+  All,
+  getClassMetadata,
+  WEB_ROUTER_KEY,
+  RequestMapping,
+} from '../../src';
 
 class Test {
-
-  @Get('/get', { routerName: 'get', middleware: ['hello']})
+  @Get('/get', { routerName: 'get', middleware: ['hello'] })
   async doGet() {
     // ignore
   }
 
-  @Post('/get', { routerName: 'post', middleware: ['hello']})
+  @Post('/get', { routerName: 'post', middleware: ['hello'] })
   async doPost() {
     // ignore
   }
 
-  @Options('/get', { routerName: 'options', middleware: ['hello']})
+  @Options('/get', { routerName: 'options', middleware: ['hello'] })
   async doOptions() {
     // ignore
   }
 
-  @Head('/get', { routerName: 'head', middleware: ['hello']})
+  @Head('/get', { routerName: 'head', middleware: ['hello'] })
   async doHead() {
     // ignore
   }
@@ -41,36 +48,36 @@ describe('/test/web/requestMapping.test.ts', () => {
         requestMethod: 'get',
         routerName: 'get',
         method: 'doGet',
-        middleware: [ 'hello' ]
+        middleware: ['hello'],
       },
       {
         path: '/get',
         requestMethod: 'post',
         routerName: 'post',
         method: 'doPost',
-        middleware: [ 'hello' ]
+        middleware: ['hello'],
       },
       {
         path: '/get',
         requestMethod: 'options',
         routerName: 'options',
         method: 'doOptions',
-        middleware: [ 'hello' ]
+        middleware: ['hello'],
       },
       {
         path: '/get',
         requestMethod: 'head',
         routerName: 'head',
         method: 'doHead',
-        middleware: [ 'hello' ]
+        middleware: ['hello'],
       },
       {
         path: '/',
         requestMethod: 'all',
         routerName: 'all',
         method: 'doAll',
-        middleware: undefined
-      }
+        middleware: undefined,
+      },
     ]);
 
     const dd = RequestMapping();
@@ -82,11 +89,11 @@ describe('/test/web/requestMapping.test.ts', () => {
       requestMethod: 'get',
       routerName: null,
       method: 'ttt',
-      middleware: []
+      middleware: [],
     });
 
     const bb = RequestMapping({
-      METHOD_METADATA: null
+      METHOD_METADATA: null,
     });
 
     bb(Test, 'ttt', null);
@@ -96,7 +103,7 @@ describe('/test/web/requestMapping.test.ts', () => {
       requestMethod: 'get',
       routerName: undefined,
       method: 'ttt',
-      middleware: undefined
+      middleware: undefined,
     });
   });
 });
