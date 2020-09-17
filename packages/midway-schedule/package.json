@@ -14,13 +14,13 @@
   },
   "scripts": {
     "build": "midway-bin build -c",
-    "test": "midway-bin clean && NODE_ENV=unittest midway-bin test --ts"
+    "test": "NODE_ENV=unittest midway-bin test --ts"
   },
   "keywords": [],
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/mock": "^2.2.4",
-    "midway-bin": "^2.2.4"
+    "@midwayjs/cli": "^1.0.x"
   },
   "dependencies": {
     "@midwayjs/decorator": "^2.2.4",

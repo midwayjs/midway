@@ -31,7 +31,6 @@
     "clean": "lerna clean --yes && rm -rf ./packages/**/package-lock.json",
     "build": "sh scripts/build.sh",
     "authors": "git log --format='%aN <%aE>' | sort -u > AUTHORS",
-    "gen-api-ref": "node ./packages/midway-bin/bin/midway-bin.js doc --options typedoc.js",
     "postinstall": "opencollective-postinstall",
     "lint": "lerna exec mwts check",
     "lint:fix": "lerna exec mwts fix"
