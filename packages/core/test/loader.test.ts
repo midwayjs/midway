@@ -601,23 +601,19 @@ describe('/test/loader.test.ts', () => {
       assert(value === 'pre');
     });
 
-    it('load local env', async () => {
-      mm(process.env, 'NODE_ENV', 'local');
-      const loader = new ContainerLoader({
-        baseDir: path.join(
-          __dirname,
-          './fixtures/app-with-configuration-config-dir/src'
-        ),
-        disableConflictCheck: true,
-      });
-      loader.initialize();
-      loader.loadDirectory();
-      await loader.refresh();
-      const applicationContext = loader.getApplicationContext();
-      const value = applicationContext
-        .getConfigService()
-        .getConfiguration('env');
-      assert(value === 'local');
-    });
   });
+
+  it('should test aspect decorator', async () => {
+    const loader = new ContainerLoader({
+      baseDir: path.join(
+        __dirname,
+        './fixtures/base-app-aspect/src'
+      )
+    });
+    loader.initialize();
+    loader.loadDirectory();
+    await loader.refresh();
+
+
+  })
 });

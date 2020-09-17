@@ -1,6 +1,15 @@
 import * as path from 'path';
 import { MidwayContainer } from './context/midwayContainer';
 import { Container } from './context/container';
+import {
+  ASPECT_KEY,
+  AspectMetadata,
+  getClassMetadata,
+  IAspect,
+  listModule,
+  listPreloadModule,
+} from '@midwayjs/decorator';
+import { getPrototypeNames } from "./util";
 
 function buildLoadDir(baseDir, dir) {
   if (!path.isAbsolute(dir)) {
@@ -90,6 +99,38 @@ export class ContainerLoader {
   async refresh() {
     await this.pluginContext.ready();
     await this.applicationContext.ready();
+
+    // some common decorator implements
+    const modules = listPreloadModule();
+    for (const module of modules) {
+      // preload init context
+      await this.getApplicationContext().getAsync(module);
+    }
+
+    const aspectModules = listModule(ASPECT_KEY);
+    for (const module of aspectModules) {
+      const data: AspectMetadata = getClassMetadata(ASPECT_KEY, module);
+      for (const aspectTarget of data.aspectTarget) {
+        // eslint-disable-next-line no-undef
+        const names = getPrototypeNames(module.prototype);
+        const aspectIns = await this.getApplicationContext().getAsync<IAspect>(aspectTarget);
+        if (data.match) {
+          // TODO match
+        }
+
+        for (const name of names) {
+          const descriptor = Object.getOwnPropertyDescriptor(module.prototype, name);
+          const originMethod = descriptor.value;
+
+          descriptor.value = async () => {
+            return originMethod();
+          }
+        }
+
+        console.log(names, aspectIns);
+      }
+
+    }
   }
 
   async stop() {
