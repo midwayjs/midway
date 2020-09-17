@@ -6,15 +6,10 @@ export function sleep(sleepTime: number = 1000) {
   });
 }
 
-// export function getPrototypeNames(target) {
-//   const prototype = Object.getPrototypeOf(target);
-//   let prototypeName = [];
-//   if (prototype && !prototype['isPrototypeOf']) {
-//     prototypeName = getPrototypeNames(prototype);
-//   }
-//   return prototypeName.concat(Object.getOwnPropertyNames(target));
-// }
-
+/**
+ * get all method names from obj or it's prototype
+ * @param obj
+ */
 export function getPrototypeNames(obj) {
   const enumerableOwnKeys = Object.keys(obj);
   const ownKeysOnObjectPrototype = Object.getOwnPropertyNames(Object.getPrototypeOf({}));
@@ -40,4 +35,8 @@ export function getPrototypeNames(obj) {
 
   // leave out those methods on Object's prototype
   return result.filter(k => ownKeysOnObjectPrototype.indexOf(k) === -1);
-};
+}
+
+export function isAsyncFunction(fn) {
+  return fn[Symbol.toStringTag] === 'AsyncFunction'
+}

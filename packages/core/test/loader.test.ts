@@ -614,6 +614,7 @@ describe('/test/loader.test.ts', () => {
     loader.loadDirectory();
     await loader.refresh();
 
-
+    const home: any = await loader.getApplicationContext().getAsync('home');
+    expect(home.hello()).toEqual('hello worlddddfff');
   })
 });

@@ -9,7 +9,8 @@ import {
   listModule,
   listPreloadModule,
 } from '@midwayjs/decorator';
-import { getPrototypeNames } from "./util";
+import { getPrototypeNames, isAsyncFunction } from './util';
+import * as pm from 'picomatch';
 
 function buildLoadDir(baseDir, dir) {
   if (!path.isAbsolute(dir)) {
@@ -111,23 +112,94 @@ export class ContainerLoader {
     for (const module of aspectModules) {
       const data: AspectMetadata = getClassMetadata(ASPECT_KEY, module);
       for (const aspectTarget of data.aspectTarget) {
-        // eslint-disable-next-line no-undef
         const names = getPrototypeNames(module.prototype);
         const aspectIns = await this.getApplicationContext().getAsync<IAspect>(aspectTarget);
-        if (data.match) {
-          // TODO match
-        }
+        const isMatch = data.match ? pm(data.match) : () => true;
 
         for (const name of names) {
-          const descriptor = Object.getOwnPropertyDescriptor(module.prototype, name);
-          const originMethod = descriptor.value;
-
-          descriptor.value = async () => {
-            return originMethod();
+          if(!isMatch(name)) {
+            continue;
           }
-        }
+          const descriptor = Object.getOwnPropertyDescriptor(module.prototype, name);
+          if(!descriptor || descriptor.writable === false) {
+            // 暂时不支持父类
+            continue;
+          }
+          const originMethod = descriptor.value;
+          if(isAsyncFunction(originMethod)) {
+            descriptor.value = async (...args) => {
+              let error, result;
+              const joinPoint = {
+                methodName: name,
+                target: this,
+                args: args,
+                proceed: originMethod,
+              };
+              try {
+                await aspectIns.before?.(joinPoint);
+                if (aspectIns.around) {
+                  result = await aspectIns.around(joinPoint);
+                } else {
+                  result = await originMethod.apply(this, joinPoint.args);
+                }
+                let resultTemp = await aspectIns.afterReturn?.(joinPoint, result);
+                result = typeof resultTemp === 'undefined' ? result : resultTemp;
+                return result;
+              } catch (err) {
+                error = err;
+                if (aspectIns.afterThrow) {
+                  try {
+                    await aspectIns.afterThrow(joinPoint, error);
+                  } catch (newErr) {
+                    error = newErr;
+                    throw newErr;
+                  }
+                } else {
+                  throw err;
+                }
+              } finally {
+                await aspectIns.after?.(joinPoint, result, error);
+              }
+            }
+          } else {
+            descriptor.value = (...args) => {
+              let error, result;
+              const joinPoint = {
+                methodName: name,
+                target:this,
+                args: args,
+                proceed: originMethod,
+              };
+              try {
+                aspectIns.before?.(joinPoint);
+                if (aspectIns.around) {
+                  result = aspectIns.around(joinPoint);
+                } else {
+                  result = originMethod.apply(this, joinPoint.args);
+                }
+                let resultTemp = aspectIns.afterReturn?.(joinPoint, result);
+                result = typeof resultTemp === 'undefined' ? result : resultTemp;
+                return result;
+              } catch (err) {
+                error = err;
+                if (aspectIns.afterThrow) {
+                  try {
+                    aspectIns.afterThrow(joinPoint, error);
+                  } catch (newErr) {
+                    error = newErr;
+                    throw newErr;
+                  }
+                } else {
+                  throw err;
+                }
+              } finally {
+                aspectIns.after?.(joinPoint, result, error);
+              }
+            }
+          }
 
-        console.log(names, aspectIns);
+          Object.defineProperty(module.prototype, name, descriptor );
+        }
       }
 
     }

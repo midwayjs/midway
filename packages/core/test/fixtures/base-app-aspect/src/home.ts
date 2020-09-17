@@ -5,7 +5,7 @@ import { MyAspect1 } from './aspect/a';
 class Parent {
   ddd = 'ddd';
 
-  async hello() {
+  hello() {
     return 'hello world parent';
   }
 
@@ -15,15 +15,18 @@ class Parent {
 }
 
 @Provide()
-@Aspect(MyAspect1)
+@Aspect([MyAspect1])
 export class Home extends Parent {
 
   bbb = 'aaa';
 
   ccc: string;
 
-  async hello() {
-    this.ccc = 'ccc';
-    return 'hello world';
+  hello(data1: string = 'ggg', data2 = 'fff') {
+    return 'hello world' + data1 + data2;
+  }
+
+  async hello2(data1: string = 'ggg', data2 = 'fff') {
+    return 'hello world' + data1 + data2;
   }
 }

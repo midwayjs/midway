@@ -2,9 +2,7 @@ import { ASPECT_KEY } from '../common/constant';
 import { saveClassMetadata, saveModule } from '../common/decoratorManager';
 
 export interface JoinPoint {
-  type: any;
-  fun: Function;
-  thisArg: any;
+  methodName: string;
   target: any;
   args: any[];
   proceed(...args: any[]): any;
