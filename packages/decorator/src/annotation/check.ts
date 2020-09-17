@@ -8,8 +8,9 @@ export function Check(failValue?: any) {
     descriptor: PropertyDescriptor
   ) {
     const origin = descriptor.value;
+    const paramTypes = getMethodParamTypes(target, propertyKey);
+
     descriptor.value = function (...args: any[]) {
-      const paramTypes = getMethodParamTypes(target, propertyKey);
       for (let i = 0; i < paramTypes.length; i++) {
         const item = paramTypes[i];
         const rules = getClassMetadata(RULES_KEY, item);

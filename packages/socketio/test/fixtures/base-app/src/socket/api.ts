@@ -1,11 +1,19 @@
-import { Emit, Inject, OnConnection, OnDisConnection, OnMessage, Provide, WSController } from '@midwayjs/decorator';
+import {
+  Check,
+  Emit,
+  Inject,
+  OnConnection,
+  OnDisConnection,
+  OnMessage,
+  Provide,
+  WSController,
+} from '@midwayjs/decorator';
 import { UserService } from '../service/user';
 import { IMidwaySocketIOContext } from '../../../../../src';
 
 @Provide()
 @WSController('/')
 export class APIController {
-
   @Inject()
   ctx: IMidwaySocketIOContext;
 
