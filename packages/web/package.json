@@ -6,8 +6,8 @@
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "midway-bin build -c",
-    "test": "../../node_modules/.bin/jest --forceExit",
-    "cov": "../../node_modules/.bin/jest --coverage --forceExit",
+    "test": "midway-bin test --forceExit",
+    "cov": "midway-bin cov --forceExit",
     "ci": "npm run test"
   },
   "keywords": [
@@ -26,7 +26,7 @@
     "@midwayjs/mock": "^2.2.4",
     "egg-view-nunjucks": "^2.2.0",
     "fs-extra": "^8.0.1",
-    "midway-bin": "^2.2.4",
+    "@midwayjs/cli": "^1.0.x",
     "pedding": "^1.1.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"

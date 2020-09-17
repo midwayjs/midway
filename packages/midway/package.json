@@ -6,8 +6,8 @@
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "midway-bin build -c",
-    "test": "../../node_modules/.bin/jest --forceExit",
-    "cov": "../../node_modules/.bin/jest --coverage --forceExit",
+    "test": "midway-bin test",
+    "cov": "midway-bin test --cov",
     "ci": "npm run test"
   },
   "keywords": [
@@ -17,7 +17,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "midway-bin": "^2.2.4"
+    "@midwayjs/cli": "^1.0.x"
   },
   "dependencies": {
     "@midwayjs/web": "^2.2.4",

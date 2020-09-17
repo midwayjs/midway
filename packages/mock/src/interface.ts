@@ -1,5 +1,5 @@
 import { MockApplication, MockOption } from 'egg-mock';
-import { IApplicationContext } from '@midwayjs/core';
+import { IApplicationContext, IMidwayContainer } from '@midwayjs/core';
 
 export interface MidwayApplicationOptions extends MockOption {
   baseDir?: string;
@@ -14,7 +14,7 @@ export interface MidwayApplicationOptions extends MockOption {
 type EggContext = ReturnType<MockApplication['mockContext']>;
 
 export interface MidwayMockContext extends EggContext {
-  requestContext: IApplicationContext;
+  requestContext: IMidwayContainer;
 }
 
 export type MockClassFunctionHandler = (
