@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.5](https://github.com/midwayjs/midway/compare/v2.2.4...v2.2.5) (2020-09-17)
+
+
+### Bug Fixes
+
+* move @types/joi to dependencies ([#638](https://github.com/midwayjs/midway/issues/638)) ([7c31164](https://github.com/midwayjs/midway/commit/7c31164ae8959b00213527c7fb384a07929790b9))
+
+
+### Features
+
+* add generateMiddleware for express and faas ([bfcfc9a](https://github.com/midwayjs/midway/commit/bfcfc9a377f01026a459aaed35a3f0fdf0530f26))
+* add property for web params ([5c19644](https://github.com/midwayjs/midway/commit/5c1964482b4c8efe0ac23c3c1feb1f48ce5b7889))
+* use midway cli replace egg-bin ([#639](https://github.com/midwayjs/midway/issues/639)) ([62bbf38](https://github.com/midwayjs/midway/commit/62bbf3852899476600a0b594cb7dc274b05e29ec))
+
+
+
+
+
 ## [2.2.4](https://github.com/midwayjs/midway/compare/v2.2.3...v2.2.4) (2020-09-15)
 
 
