@@ -6,6 +6,7 @@ export const PRIORITY_KEY = 'common:priority';
 export const SCHEDULE_KEY = 'common:schedule';
 export const CONFIGURATION_KEY = 'common:configuration';
 export const RULES_KEY = 'common:rules';
+export const ASPECT_KEY = 'common:aspect';
 
 // faas
 export const FUNC_KEY = 'faas:func';

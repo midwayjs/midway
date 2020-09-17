@@ -7,3 +7,4 @@ export * from './schedule';
 export * from './pipeline';
 export * from './check';
 export * from './rule';
+export * from './aspect';
