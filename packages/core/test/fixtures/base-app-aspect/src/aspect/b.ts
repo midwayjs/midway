@@ -1,10 +1,14 @@
-import { IAspect, JoinPoint, Provide } from '@midwayjs/decorator';
+import { Aspect, IMethodAspect, JoinPoint, Provide } from '@midwayjs/decorator';
+import { Home } from "../home";
 
 @Provide()
-export class MyAspect2 implements IAspect {
+@Aspect([Home], '*2', 1)
+export class MyAspect2 implements IMethodAspect {
+
   async before(point: JoinPoint) {
     point.args = ['ccc', 'ppp']
   }
+
   async around(point: JoinPoint) {
     console.log('before around in aspect2');
     const data = await point.proceed(...point.args);

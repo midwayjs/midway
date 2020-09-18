@@ -1,7 +1,8 @@
 import * as joi from 'joi';
-import { getMethodParamTypes, getClassMetadata, RULES_KEY } from '..';
+import { getClassMetadata, getMethodParamTypes, RULES_KEY } from '..';
+import { plainToClass } from 'class-transformer';
 
-export function Check() {
+export function Check(isTransform = true) {
   return function (
     target,
     propertyKey: string | symbol,
@@ -18,6 +19,10 @@ export function Check() {
           const result = joi.validate(args[i], rules);
           if (result.error) {
             throw new Error(result.error as any);
+          }
+          // passed
+          if (isTransform) {
+            args[i] = plainToClass(item, args[i]);
           }
         }
       }

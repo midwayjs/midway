@@ -1,5 +1,4 @@
-import { Aspect, Provide } from '@midwayjs/decorator';
-import { MyAspect1 } from './aspect/a';
+import { Provide } from '@midwayjs/decorator';
 
 class Parent {
   ddd = 'ddd';
@@ -14,8 +13,6 @@ class Parent {
 }
 
 @Provide()
-@Aspect([MyAspect1])
-@Aspect(['myAspect2'], '*2')
 export class Home extends Parent {
 
   bbb = 'aaa';

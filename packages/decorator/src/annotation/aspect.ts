@@ -1,5 +1,5 @@
-import { ASPECT_KEY } from '../common/constant';
-import { attachClassMetadata, saveModule } from '../common/decoratorManager';
+import { ASPECT_KEY, attachClassMetadata, saveModule, ScopeEnum } from '..';
+import { Scope } from './objectDef';
 
 export interface JoinPoint {
   methodName: string;
@@ -9,8 +9,9 @@ export interface JoinPoint {
 }
 
 export interface AspectMetadata {
-  aspectTarget: any[];
+  aspectTarget: any;
   match?: string | (() => boolean);
+  priority?: number;
 }
 
 export interface IMethodAspect {
@@ -23,17 +24,24 @@ export interface IMethodAspect {
 
 export function Aspect(
   aspectTarget: any | any[],
-  match?: string | (() => boolean)
+  match?: string | (() => boolean),
+  priority?: number
 ) {
   return function (target) {
     saveModule(ASPECT_KEY, target);
-    attachClassMetadata(
-      ASPECT_KEY,
-      {
-        aspectTarget: [].concat(aspectTarget),
-        match,
-      },
-      target
-    );
+    const aspectTargets = [].concat(aspectTarget);
+    for (const aspectTarget of aspectTargets) {
+      attachClassMetadata(
+        ASPECT_KEY,
+        {
+          aspectTarget,
+          match,
+          priority,
+        },
+        target
+      );
+    }
+
+    Scope(ScopeEnum.Singleton);
   };
 }
