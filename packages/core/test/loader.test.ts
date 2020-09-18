@@ -616,5 +616,7 @@ describe('/test/loader.test.ts', () => {
 
     const home: any = await loader.getApplicationContext().getAsync('home');
     expect(home.hello()).toEqual('hello worlddddfff');
+    expect(await home.hello1()).toEqual('hello world 1');
+    expect(await home.hello2()).toEqual('hello worldcccppp');
   })
 });

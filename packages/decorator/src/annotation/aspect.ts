@@ -1,5 +1,5 @@
 import { ASPECT_KEY } from '../common/constant';
-import { saveClassMetadata, saveModule } from '../common/decoratorManager';
+import { attachClassMetadata, saveModule } from '../common/decoratorManager';
 
 export interface JoinPoint {
   methodName: string;
@@ -27,7 +27,7 @@ export function Aspect(
 ) {
   return function (target) {
     saveModule(ASPECT_KEY, target);
-    saveClassMetadata(
+    attachClassMetadata(
       ASPECT_KEY,
       {
         aspectTarget: [].concat(aspectTarget),
