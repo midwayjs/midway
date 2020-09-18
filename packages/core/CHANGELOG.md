@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.6](https://github.com/midwayjs/midway/compare/v2.2.5...v2.2.6) (2020-09-18)
+
+
+### Features
+
+* add aop ([#640](https://github.com/midwayjs/midway/issues/640)) ([c3e15b3](https://github.com/midwayjs/midway/commit/c3e15b328c184318e364bf40d32fa4df6be2a30a))
+
+
+
+
+
 ## [2.2.5](https://github.com/midwayjs/midway/compare/v2.2.4...v2.2.5) (2020-09-17)
 
 
