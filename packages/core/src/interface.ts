@@ -3,6 +3,8 @@ import {
   IManagedInstance,
   ScopeEnum,
   ObjectDefinitionOptions,
+  IMethodAspect,
+  AspectMetadata,
 } from '@midwayjs/decorator';
 /**
  * 生命周期定义
@@ -217,6 +219,10 @@ export interface IMidwayContainer extends IContainer {
   getConfigService(): IConfigService;
   getEnvironmentService(): IEnvironmentService;
   getCurrentEnv(): string;
+  addAspect(
+    aspectIns: IMethodAspect,
+    aspectData: AspectMetadata
+  )
 }
 
 export interface IConfigService {

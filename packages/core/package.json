@@ -30,6 +30,7 @@
   "dependencies": {
     "@midwayjs/decorator": "^2.2.5",
     "@midwayjs/glob": "^1.0.2",
+    "class-transformer": "^0.3.1",
     "debug": "^4.1.1",
     "extend2": "^1.0.0",
     "is-type-of": "^1.2.1",

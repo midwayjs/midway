@@ -46,3 +46,4 @@ export {
 } from './common/util';
 export * from './features';
 export * from './util/webRouterParam';
+export { plainToClass, classToPlain } from 'class-transformer';

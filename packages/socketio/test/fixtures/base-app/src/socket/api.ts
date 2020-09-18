@@ -1,5 +1,4 @@
 import {
-  Check,
   Emit,
   Inject,
   OnConnection,
