@@ -94,8 +94,9 @@ describe('/test/annotation/check.test.ts', () => {
         age: 22,
       },
     };
-    const result = new Hello().school(1, user);
-    assert.notDeepEqual(result, user);
+    expect(() => {
+      new Hello().school(1, user);
+    }).toThrow(Error);
   });
 
   it('check with check when two level and array and not equal', () => {
@@ -126,7 +127,8 @@ describe('/test/annotation/check.test.ts', () => {
         },
       ],
     };
-    const result = new Hello().school(1, user);
-    assert.notDeepEqual(result, user);
+    expect(() => {
+      new Hello().school(1, user);
+    }).toThrow(Error);
   });
 });

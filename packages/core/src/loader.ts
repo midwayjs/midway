@@ -5,7 +5,7 @@ import {
   ASPECT_KEY,
   AspectMetadata,
   getClassMetadata,
-  IAspect,
+  IMethodAspect,
   listModule,
   listPreloadModule,
 } from '@midwayjs/decorator';
@@ -121,9 +121,9 @@ export class ContainerLoader {
   private async registerAspectToTarget(aspectData, module) {
     for (const aspectTarget of aspectData.aspectTarget) {
       const names = Object.getOwnPropertyNames(module.prototype);
-      const aspectIns = await this.getApplicationContext().getAsync<IAspect>(
-        aspectTarget
-      );
+      const aspectIns = await this.getApplicationContext().getAsync<
+        IMethodAspect
+      >(aspectTarget);
       const isMatch = aspectData.match ? pm(aspectData.match) : () => true;
 
       for (const name of names) {
@@ -163,12 +163,7 @@ export class ContainerLoader {
             } catch (err) {
               error = err;
               if (aspectIns.afterThrow) {
-                try {
-                  await aspectIns.afterThrow(joinPoint, error);
-                } catch (newErr) {
-                  error = newErr;
-                  throw newErr;
-                }
+                await aspectIns.afterThrow(joinPoint, error);
               } else {
                 throw err;
               }
@@ -198,12 +193,7 @@ export class ContainerLoader {
             } catch (err) {
               error = err;
               if (aspectIns.afterThrow) {
-                try {
-                  aspectIns.afterThrow(joinPoint, error);
-                } catch (newErr) {
-                  error = newErr;
-                  throw newErr;
-                }
+                aspectIns.afterThrow(joinPoint, error);
               } else {
                 throw err;
               }

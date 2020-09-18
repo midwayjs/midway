@@ -1,7 +1,7 @@
 import * as joi from 'joi';
 import { getMethodParamTypes, getClassMetadata, RULES_KEY } from '..';
 
-export function Check(failValue?: any) {
+export function Check() {
   return function (
     target,
     propertyKey: string | symbol,
@@ -17,7 +17,7 @@ export function Check(failValue?: any) {
         if (rules) {
           const result = joi.validate(args[i], rules);
           if (result.error) {
-            return failValue ? failValue : result;
+            throw new Error(result.error as any);
           }
         }
       }

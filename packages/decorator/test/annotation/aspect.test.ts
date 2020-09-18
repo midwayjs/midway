@@ -1,8 +1,8 @@
-import { Aspect, ASPECT_KEY, IAspect, JoinPoint, listModule } from '../../src';
+import { Aspect, ASPECT_KEY, IMethodAspect, JoinPoint, listModule } from '../../src';
 
 describe('/test/annotation/aspect.test.ts', () => {
   it('test inspect key in module', () => {
-    class MyAspect implements IAspect {
+    class MyAspect implements IMethodAspect {
       around(point: JoinPoint): any {
         point.proceed();
       }

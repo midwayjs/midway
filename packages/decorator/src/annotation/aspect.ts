@@ -13,7 +13,7 @@ export interface AspectMetadata {
   match?: string | (() => boolean);
 }
 
-export interface IAspect {
+export interface IMethodAspect {
   after?(joinPoint: JoinPoint, result: any, error: Error);
   afterReturn?(joinPoint: JoinPoint, result: any): any;
   afterThrow?(joinPoint: JoinPoint, error: Error): void;
