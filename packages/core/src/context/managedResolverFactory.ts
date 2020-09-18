@@ -1,10 +1,7 @@
 /**
  * 管理对象解析构建
  */
-import {
-  IManagedInstance,
-  ObjectIdentifier
-} from '@midwayjs/decorator';
+import { IManagedInstance, ObjectIdentifier } from '@midwayjs/decorator';
 import * as _ from '../common/lodashWrap';
 import { KEYS, VALUE_TYPE } from '../common/constants';
 import {
@@ -16,7 +13,7 @@ import {
   ManagedProperty,
   ManagedReference,
   ManagedSet,
-  ManagedValue
+  ManagedValue,
 } from './managed';
 import {
   IApplicationContext,
@@ -24,7 +21,7 @@ import {
   IObjectDefinition,
   REQUEST_CTX_KEY,
   REQUEST_OBJ_CTX_KEY,
-  IManagedResolverFactoryCreateOptions
+  IManagedResolverFactoryCreateOptions,
 } from '../interface';
 import { ObjectProperties } from '../definitions/properties';
 import { NotFoundError } from '../common/notFoundError';
@@ -246,7 +243,10 @@ class PropertiesResolver extends BaseManagedResolver {
     const cfg = new ObjectProperties();
     const keys = m.keys();
     for (const key of keys) {
-      cfg.setProperty(key, await this._factory.resolveManagedAsync(m.getProperty(key)));
+      cfg.setProperty(
+        key,
+        await this._factory.resolveManagedAsync(m.getProperty(key))
+      );
     }
     return cfg;
   }
@@ -303,7 +303,6 @@ export class ManagedResolverFactory {
   beforeCreateHandler = [];
 
   constructor(context: IApplicationContext) {
-
     this.context = context;
 
     // 初始化解析器
@@ -316,7 +315,7 @@ export class ManagedResolverFactory {
       props: new PropertiesResolver(this),
       property: new PropertyResolver(this),
       object: new ObjectResolver(this),
-      ref: new RefResolver(this)
+      ref: new RefResolver(this),
     };
   }
 
@@ -336,7 +335,7 @@ export class ManagedResolverFactory {
     if (typeof value === 'string' && value.indexOf('{{') > -1) {
       return _.template(value, {
         // use `{{` and `}}` as delimiters
-        interpolate: /{{([\s\S]+?)}}/g
+        interpolate: /{{([\s\S]+?)}}/g,
       })(this.props);
     }
     return value;
@@ -369,8 +368,10 @@ export class ManagedResolverFactory {
    */
   create(opt: IManagedResolverFactoryCreateOptions): any {
     const { definition, args } = opt;
-    if (definition.isSingletonScope() &&
-      this.singletonCache.has(definition.id)) {
+    if (
+      definition.isSingletonScope() &&
+      this.singletonCache.has(definition.id)
+    ) {
       return this.singletonCache.get(definition.id);
     }
     // 如果非 null 表示已经创建 proxy
@@ -407,7 +408,10 @@ export class ManagedResolverFactory {
     inst = definition.creator.doConstruct(Clzz, constructorArgs, this.context);
 
     // binding ctx object
-    if (definition.isRequestScope() && definition.constructor.name === 'ObjectDefinition') {
+    if (
+      definition.isRequestScope() &&
+      definition.constructor.name === 'ObjectDefinition'
+    ) {
       Object.defineProperty(inst, REQUEST_OBJ_CTX_KEY, {
         value: this.context.get(REQUEST_CTX_KEY),
         writable: false,
@@ -420,7 +424,7 @@ export class ManagedResolverFactory {
       for (const key of keys) {
         const identifier = definition.properties.getProperty(key);
         try {
-          inst[ key ] = this.resolveManaged(identifier);
+          inst[key] = this.resolveManaged(identifier);
         } catch (error) {
           if (NotFoundError.isClosePrototypeOf(error)) {
             const className = definition.path.name;
@@ -459,8 +463,10 @@ export class ManagedResolverFactory {
    */
   async createAsync(opt: IManagedResolverFactoryCreateOptions): Promise<any> {
     const { definition, args } = opt;
-    if (definition.isSingletonScope() &&
-      this.singletonCache.has(definition.id)) {
+    if (
+      definition.isSingletonScope() &&
+      this.singletonCache.has(definition.id)
+    ) {
       debug('id = %s from singleton cache.', definition.id);
       return this.singletonCache.get(definition.id);
     }
@@ -499,14 +505,21 @@ export class ManagedResolverFactory {
       handler.call(this, Clzz, constructorArgs, this.context);
     }
 
-    inst = await definition.creator.doConstructAsync(Clzz, constructorArgs, this.context);
+    inst = await definition.creator.doConstructAsync(
+      Clzz,
+      constructorArgs,
+      this.context
+    );
     if (!inst) {
       this.removeCreateStatus(definition, false);
       throw new Error(`${definition.id} construct return undefined`);
     }
 
     // binding ctx object
-    if (definition.isRequestScope() && definition.constructor.name === 'ObjectDefinition') {
+    if (
+      definition.isRequestScope() &&
+      definition.constructor.name === 'ObjectDefinition'
+    ) {
       debug('id = %s inject ctx', definition.id);
       Object.defineProperty(inst, REQUEST_OBJ_CTX_KEY, {
         value: this.context.get(REQUEST_CTX_KEY),
@@ -520,8 +533,13 @@ export class ManagedResolverFactory {
       for (const key of keys) {
         const identifier = definition.properties.getProperty(key);
         try {
-          debug('id = %s resolve property key = %s => %s.', definition.id, key, identifier);
-          inst[ key ] = await this.resolveManagedAsync(identifier);
+          debug(
+            'id = %s resolve property key = %s => %s.',
+            definition.id,
+            key,
+            identifier
+          );
+          inst[key] = await this.resolveManagedAsync(identifier);
         } catch (error) {
           if (NotFoundError.isClosePrototypeOf(error)) {
             const className = definition.path.name;
@@ -566,11 +584,19 @@ export class ManagedResolverFactory {
     this.creating.clear();
   }
 
-  beforeEachCreated(fn: (Clzz: any, constructorArgs: [], context: IApplicationContext) => void) {
+  beforeEachCreated(
+    fn: (Clzz: any, constructorArgs: [], context: IApplicationContext) => void
+  ) {
     this.beforeCreateHandler.push(fn);
   }
 
-  afterEachCreated(fn: (ins: any, context: IApplicationContext, definition?: IObjectDefinition) => void) {
+  afterEachCreated(
+    fn: (
+      ins: any,
+      context: IApplicationContext,
+      definition?: IObjectDefinition
+    ) => void
+  ) {
     this.afterCreateHandler.push(fn);
   }
   /**
@@ -578,7 +604,10 @@ export class ManagedResolverFactory {
    * @param definition 单例定义
    * @param success 成功 or 失败
    */
-  private removeCreateStatus(definition: IObjectDefinition, success: boolean): boolean {
+  private removeCreateStatus(
+    definition: IObjectDefinition,
+    success: boolean
+  ): boolean {
     // 如果map中存在表示需要设置状态
     if (this.creating.has(definition.id)) {
       this.creating.set(definition.id, false);
@@ -591,7 +620,10 @@ export class ManagedResolverFactory {
   }
 
   private compareAndSetCreateStatus(definition: IObjectDefinition) {
-    if (!this.creating.has(definition.id) || !this.creating.get(definition.id)) {
+    if (
+      !this.creating.has(definition.id) ||
+      !this.creating.get(definition.id)
+    ) {
       this.creating.set(definition.id, true);
     }
   }
@@ -608,27 +640,30 @@ export class ManagedResolverFactory {
         return null;
       }
       // 创建代理对象
-      return new Proxy({ __is_proxy__: true, __target_id__: definition.id }, {
-        get: (obj, prop) => {
-          let target;
-          if (definition.isRequestScope()) {
-            target = this.context.registry.getObject(definition.id);
-          } else if (definition.isSingletonScope()) {
-            target = this.singletonCache.get(definition.id);
-          } else {
-            target = this.context.get(definition.id);
-          }
-
-          if (target) {
-            if (typeof target[prop] === 'function') {
-              return target[prop].bind(target);
+      return new Proxy(
+        { __is_proxy__: true, __target_id__: definition.id },
+        {
+          get: (obj, prop) => {
+            let target;
+            if (definition.isRequestScope()) {
+              target = this.context.registry.getObject(definition.id);
+            } else if (definition.isSingletonScope()) {
+              target = this.singletonCache.get(definition.id);
+            } else {
+              target = this.context.get(definition.id);
             }
-            return target[prop];
-          }
 
-          return undefined;
+            if (target) {
+              if (typeof target[prop] === 'function') {
+                return target[prop].bind(target);
+              }
+              return target[prop];
+            }
+
+            return undefined;
+          },
         }
-      });
+      );
     }
     return null;
   }
@@ -637,13 +672,23 @@ export class ManagedResolverFactory {
    * @param identifier 目标id
    * @param definition 定义描述
    */
-  public depthFirstSearch(identifier: string, definition: IObjectDefinition, depth?: string[]): boolean {
+  public depthFirstSearch(
+    identifier: string,
+    definition: IObjectDefinition,
+    depth?: string[]
+  ): boolean {
     if (definition) {
       debug('dfs for %s == %s start.', identifier, definition.id);
       if (definition.constructorArgs) {
-        const args = definition.constructorArgs.map(val => (val as ManagedReference).name);
+        const args = definition.constructorArgs.map(
+          val => (val as ManagedReference).name
+        );
         if (args.indexOf(identifier) > -1) {
-          debug('dfs exist in constructor %s == %s.', identifier, definition.id);
+          debug(
+            'dfs exist in constructor %s == %s.',
+            identifier,
+            definition.id
+          );
           return true;
         }
       }
@@ -663,11 +708,21 @@ export class ManagedResolverFactory {
             iden = ref.name;
           }
           if (iden === identifier) {
-            debug('dfs exist in properties key %s == %s.', identifier, definition.id);
+            debug(
+              'dfs exist in properties key %s == %s.',
+              identifier,
+              definition.id
+            );
             return true;
           }
           if (depth.indexOf(iden) > -1) {
-            debug('dfs depth circular %s == %s, %s, %j.', identifier, definition.id, iden, depth);
+            debug(
+              'dfs depth circular %s == %s, %s, %j.',
+              identifier,
+              definition.id,
+              iden,
+              depth
+            );
             continue;
           } else {
             depth.push(iden);
@@ -678,7 +733,12 @@ export class ManagedResolverFactory {
             subDefinition = this.context.parent.registry.getDefinition(iden);
           }
           if (this.depthFirstSearch(identifier, subDefinition, depth)) {
-            debug('dfs exist in sub tree %s == %s subId = %s.', identifier, definition.id, subDefinition.id);
+            debug(
+              'dfs exist in sub tree %s == %s subId = %s.',
+              identifier,
+              definition.id,
+              subDefinition.id
+            );
             return true;
           }
         }

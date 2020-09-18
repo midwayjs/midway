@@ -12,19 +12,19 @@ export const parseNormalDir = (baseDir: string, isTypescript = true) => {
     if (isTypeScriptEnv) {
       return {
         baseDir: join(baseDir, 'src'),
-        appDir: baseDir
+        appDir: baseDir,
       };
     } else {
       return {
         baseDir: join(baseDir, 'dist'),
-        appDir: baseDir
+        appDir: baseDir,
       };
     }
   } else {
     // js baseDir
     return {
       baseDir,
-      appDir: baseDir
+      appDir: baseDir,
     };
   }
 };

@@ -112,7 +112,7 @@ export class ContainerLoader {
     const aspectModules = listModule(ASPECT_KEY);
     for (const module of aspectModules) {
       const data: AspectMetadata[] = getClassMetadata(ASPECT_KEY, module);
-      for(const d of data) {
+      for (const d of data) {
         await this.registerAspectToTarget(d, module);
       }
     }
@@ -121,19 +121,24 @@ export class ContainerLoader {
   private async registerAspectToTarget(aspectData, module) {
     for (const aspectTarget of aspectData.aspectTarget) {
       const names = Object.getOwnPropertyNames(module.prototype);
-      const aspectIns = await this.getApplicationContext().getAsync<IAspect>(aspectTarget);
+      const aspectIns = await this.getApplicationContext().getAsync<IAspect>(
+        aspectTarget
+      );
       const isMatch = aspectData.match ? pm(aspectData.match) : () => true;
 
       for (const name of names) {
-        if(name === 'constructor' || !isMatch(name)) {
+        if (name === 'constructor' || !isMatch(name)) {
           continue;
         }
-        const descriptor = Object.getOwnPropertyDescriptor(module.prototype, name);
-        if(!descriptor || descriptor.writable === false) {
+        const descriptor = Object.getOwnPropertyDescriptor(
+          module.prototype,
+          name
+        );
+        if (!descriptor || descriptor.writable === false) {
           continue;
         }
         const originMethod = descriptor.value;
-        if(isAsyncFunction(originMethod)) {
+        if (isAsyncFunction(originMethod)) {
           descriptor.value = async function (...args) {
             let error, result;
             const joinPoint = {
@@ -149,7 +154,10 @@ export class ContainerLoader {
               } else {
                 result = await originMethod.apply(this, joinPoint.args);
               }
-              let resultTemp = await aspectIns.afterReturn?.(joinPoint, result);
+              const resultTemp = await aspectIns.afterReturn?.(
+                joinPoint,
+                result
+              );
               result = typeof resultTemp === 'undefined' ? result : resultTemp;
               return result;
             } catch (err) {
@@ -167,13 +175,13 @@ export class ContainerLoader {
             } finally {
               await aspectIns.after?.(joinPoint, result, error);
             }
-          }
+          };
         } else {
           descriptor.value = function (...args) {
             let error, result;
             const joinPoint = {
               methodName: name,
-              target:this,
+              target: this,
               args: args,
               proceed: originMethod,
             };
@@ -184,7 +192,7 @@ export class ContainerLoader {
               } else {
                 result = originMethod.apply(this, joinPoint.args);
               }
-              let resultTemp = aspectIns.afterReturn?.(joinPoint, result);
+              const resultTemp = aspectIns.afterReturn?.(joinPoint, result);
               result = typeof resultTemp === 'undefined' ? result : resultTemp;
               return result;
             } catch (err) {
@@ -202,10 +210,10 @@ export class ContainerLoader {
             } finally {
               aspectIns.after?.(joinPoint, result, error);
             }
-          }
+          };
         }
 
-        Object.defineProperty(module.prototype, name, descriptor );
+        Object.defineProperty(module.prototype, name, descriptor);
       }
     }
   }

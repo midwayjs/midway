@@ -45,6 +45,7 @@ export class ObjectCreator implements IObjectCreator {
 
     let inst;
     if (this.definition.constructMethod) {
+      // eslint-disable-next-line prefer-spread
       inst = Clzz[this.definition.constructMethod].apply(Clzz, args);
     } else {
       inst = Reflect.construct(Clzz, args);
@@ -86,14 +87,19 @@ export class ObjectCreator implements IObjectCreator {
     const inst = obj;
     // after properties set then do init
     if (this.definition.initMethod && inst[this.definition.initMethod]) {
-      if (is.generatorFunction(inst[this.definition.initMethod])
-        || is.asyncFunction(inst[this.definition.initMethod])) {
-
-        throw new Error(`${this.definition.id} not valid by context.get, Use context.getAsync instead!`);
+      if (
+        is.generatorFunction(inst[this.definition.initMethod]) ||
+        is.asyncFunction(inst[this.definition.initMethod])
+      ) {
+        throw new Error(
+          `${this.definition.id} not valid by context.get, Use context.getAsync instead!`
+        );
       } else {
         const rt = inst[this.definition.initMethod].call(inst);
         if (is.promise(rt)) {
-          throw new Error(`${this.definition.id} not valid by context.get, Use context.getAsync instead!`);
+          throw new Error(
+            `${this.definition.id} not valid by context.get, Use context.getAsync instead!`
+          );
         }
       }
     }

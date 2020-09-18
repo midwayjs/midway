@@ -1,12 +1,26 @@
-import { IMidwayBootstrapOptions, MidwayFrameworkType, MidwayProcessTypeEnum, safelyGet } from '@midwayjs/core';
-import { CONFIG_KEY, ControllerOption, LOGGER_KEY, PLUGIN_KEY, } from '@midwayjs/decorator';
-import { IMidwayWebConfigurationOptions, } from './interface';
+import {
+  IMidwayBootstrapOptions,
+  MidwayFrameworkType,
+  MidwayProcessTypeEnum,
+  safelyGet,
+} from '@midwayjs/core';
+import {
+  CONFIG_KEY,
+  ControllerOption,
+  LOGGER_KEY,
+  PLUGIN_KEY,
+} from '@midwayjs/decorator';
+import { IMidwayWebConfigurationOptions } from './interface';
 import { MidwayKoaBaseFramework } from '@midwayjs/koa';
 import { EggRouter } from '@eggjs/router';
 import { resolve } from 'path';
 import { Application, Router, Context } from 'egg';
 
-export class MidwayWebFramework extends MidwayKoaBaseFramework<IMidwayWebConfigurationOptions, Application, Context> {
+export class MidwayWebFramework extends MidwayKoaBaseFramework<
+  IMidwayWebConfigurationOptions,
+  Application,
+  Context
+> {
   protected app: Application;
   public configurationOptions: IMidwayWebConfigurationOptions;
   public prioritySortRouters: Array<{
@@ -28,14 +42,14 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<IMidwayWebConfigu
     return this;
   }
 
-  protected async beforeInitialize(
-    options: Partial<IMidwayBootstrapOptions>
-  ) {
+  protected async beforeInitialize(options: Partial<IMidwayBootstrapOptions>) {
     options.ignore = options.ignore || [];
     options.ignore.push('**/app/extend/**');
   }
 
-  protected async afterDirectoryLoad(options: Partial<IMidwayBootstrapOptions>) {
+  protected async afterDirectoryLoad(
+    options: Partial<IMidwayBootstrapOptions>
+  ) {
     if (this.isTsMode) {
       process.env.EGG_TYPESCRIPT = 'true';
     }
@@ -95,7 +109,7 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<IMidwayWebConfigu
 
   public async run(): Promise<void> {
     if (this.configurationOptions.port) {
-      new Promise((resolve) => {
+      new Promise(resolve => {
         this.app.listen(this.configurationOptions.port, () => {
           resolve();
         });
@@ -159,8 +173,7 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<IMidwayWebConfigu
 
         // TODO 单进程模式下区分进程类型??
         return MidwayProcessTypeEnum.APPLICATION;
-      }
+      },
     });
   }
-
 }

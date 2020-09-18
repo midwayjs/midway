@@ -64,7 +64,11 @@ export function recursiveGetPrototypeOf(target: any): any[] {
  * @param metadataKey metadata's key
  * @param target the target of metadataKey
  */
-export function recursiveGetMetadata(metadataKey: any, target: any, propertyKey?: string | symbol): ReflectResult[] {
+export function recursiveGetMetadata(
+  metadataKey: any,
+  target: any,
+  propertyKey?: string | symbol
+): ReflectResult[] {
   const metadatas: ReflectResult[] = [];
 
   // get metadata value of a metadata key on the prototype

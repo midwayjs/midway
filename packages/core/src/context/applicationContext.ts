@@ -8,7 +8,7 @@ import {
   IObjectDefinition,
   IObjectDefinitionRegistry,
   IObjectFactory,
-  ObjectDependencyTree
+  ObjectDependencyTree,
 } from '../interface';
 import { ObjectProperties } from '../definitions/properties';
 import { ManagedResolverFactory } from './managedResolverFactory';
@@ -17,7 +17,9 @@ import { parsePrefix, isPathEqual } from '../common/util';
 
 const PREFIX = '_id_default_';
 
-export class ObjectDefinitionRegistry extends Map implements IObjectDefinitionRegistry {
+export class ObjectDefinitionRegistry
+  extends Map
+  implements IObjectDefinitionRegistry {
   private singletonIds = [];
 
   get identifiers() {
@@ -49,7 +51,10 @@ export class ObjectDefinitionRegistry extends Map implements IObjectDefinitionRe
     return definitions;
   }
 
-  registerDefinition(identifier: ObjectIdentifier, definition: IObjectDefinition) {
+  registerDefinition(
+    identifier: ObjectIdentifier,
+    definition: IObjectDefinition
+  ) {
     if (definition.isSingletonScope()) {
       this.singletonIds.push(identifier);
     }
@@ -96,7 +101,8 @@ export class ObjectDefinitionRegistry extends Map implements IObjectDefinitionRe
   }
 }
 
-export class BaseApplicationContext implements IApplicationContext, IObjectFactory {
+export class BaseApplicationContext
+  implements IApplicationContext, IObjectFactory {
   protected readied = false;
   private _resolverFactory: ManagedResolverFactory = null;
   private _registry: IObjectDefinitionRegistry = null;
@@ -145,8 +151,7 @@ export class BaseApplicationContext implements IApplicationContext, IObjectFacto
   /**
    * 继承实现时需要调用super
    */
-  protected init(): void {
-  }
+  protected init(): void {}
 
   async stop(): Promise<void> {
     await this.getManagedResolverFactory().destroyCache();
@@ -159,8 +164,7 @@ export class BaseApplicationContext implements IApplicationContext, IObjectFacto
     this.readied = true;
   }
 
-  protected loadDefinitions(): void {
-  }
+  protected loadDefinitions(): void {}
 
   isAsync(identifier: ObjectIdentifier): boolean {
     if (this.registry.hasDefinition(identifier)) {
@@ -224,11 +228,16 @@ export class BaseApplicationContext implements IApplicationContext, IObjectFacto
    * @param {ObjectIdentifier} identifier
    * @param {IObjectDefinition} definition
    */
-  registerDefinition(identifier: ObjectIdentifier, definition: IObjectDefinition) {
+  registerDefinition(
+    identifier: ObjectIdentifier,
+    definition: IObjectDefinition
+  ) {
     if (!this.disableConflictCheck && this.registry.hasDefinition(identifier)) {
       const def = this.registry.getDefinition(identifier);
       if (!isPathEqual(definition.srcPath, def.srcPath)) {
-        throw new Error(`${identifier} path = ${definition.srcPath} is exist (${def.srcPath})!`);
+        throw new Error(
+          `${identifier} path = ${definition.srcPath} is exist (${def.srcPath})!`
+        );
       }
     }
     this.registry.registerDefinition(identifier, definition);
@@ -248,7 +257,13 @@ export class BaseApplicationContext implements IApplicationContext, IObjectFacto
    * register handler after instance create
    * @param fn
    */
-  afterEachCreated(fn: (ins: any, context: IApplicationContext, definition?: IObjectDefinition) => void) {
+  afterEachCreated(
+    fn: (
+      ins: any,
+      context: IApplicationContext,
+      definition?: IObjectDefinition
+    ) => void
+  ) {
     this.getManagedResolverFactory().afterEachCreated(fn);
   }
 
@@ -256,26 +271,39 @@ export class BaseApplicationContext implements IApplicationContext, IObjectFacto
    * register handler before instance create
    * @param fn
    */
-  beforeEachCreated(fn: (Clzz: any, constructorArgs: any[], context: IApplicationContext) => void) {
+  beforeEachCreated(
+    fn: (
+      Clzz: any,
+      constructorArgs: any[],
+      context: IApplicationContext
+    ) => void
+  ) {
     this.getManagedResolverFactory().beforeEachCreated(fn);
   }
 
   protected createObjectDependencyTree(identifier, definition) {
     if (!this.dependencyMap.has(identifier)) {
-
       let constructorArgs = definition.constructorArgs || [];
-      constructorArgs = constructorArgs.map((ref) => {
-        return ref.name;
-      }).filter(name => {
-        return !!name;
-      });
+      constructorArgs = constructorArgs
+        .map(ref => {
+          return ref.name;
+        })
+        .filter(name => {
+          return !!name;
+        });
 
-      const properties = (definition.properties && definition.properties.keys().map((key) => {
-        return definition.properties.get(key).name;
-      })) || [];
+      const properties =
+        (definition.properties &&
+          definition.properties.keys().map(key => {
+            return definition.properties.get(key).name;
+          })) ||
+        [];
 
       this.dependencyMap.set(identifier, {
-        name: typeof definition.path !== 'string' ? definition.path.name : identifier,
+        name:
+          typeof definition.path !== 'string'
+            ? definition.path.name
+            : identifier,
         scope: definition.scope,
         constructorArgs,
         properties,

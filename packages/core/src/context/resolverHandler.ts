@@ -67,9 +67,7 @@ export class ResolverHandler {
         const propertyMeta = constructorMetaData[index];
         const hook = this.getHandler(propertyMeta.type);
         if (hook) {
-          constructorArgs[index] = hook(
-            propertyMeta.key
-          );
+          constructorArgs[index] = hook(propertyMeta.key);
         }
       }
     }

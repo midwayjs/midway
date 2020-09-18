@@ -13,6 +13,7 @@ export const safeRequire = p => {
 };
 
 export const isPath = (p): boolean => {
+  // eslint-disable-next-line no-useless-escape
   if (/(^[\.\/])|:|\\/.test(p)) {
     return true;
   }

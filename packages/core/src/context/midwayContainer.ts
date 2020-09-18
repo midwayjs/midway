@@ -62,7 +62,10 @@ export class MidwayContainer extends Container implements IMidwayContainer {
   init(): void {
     this.initService();
 
-    this.resolverHandler = new ResolverHandler(this, this.getManagedResolverFactory());
+    this.resolverHandler = new ResolverHandler(
+      this,
+      this.getManagedResolverFactory()
+    );
     // 防止直接从applicationContext.getAsync or get对象实例时依赖当前上下文信息出错
     // ctx is in requestContainer
     this.registerObject(REQUEST_CTX_KEY, this.ctx);
@@ -86,17 +89,17 @@ export class MidwayContainer extends Container implements IMidwayContainer {
     this.midwayIdentifiers.push(PIPELINE_IDENTIFIER);
     this.midwayIdentifiers.push(REQUEST_CTX_KEY);
 
-    this.debugLogger(`main:create "Main Module" and "Main Configuration"`);
+    this.debugLogger('main:create "Main Module" and "Main Configuration"');
     // create main module configuration
     const configuration = this.createConfiguration();
     configuration.namespace = MAIN_MODULE_KEY;
     this.debugLogger(`main:"Main Configuration" load from "${this.baseDir}"`);
     configuration.load(this.baseDir);
     // loadDir
-    this.debugLogger(`main:load directory`);
+    this.debugLogger('main:load directory');
     this.loadDirectory(opts);
 
-    this.debugLogger(`main:main configuration register import objects`);
+    this.debugLogger('main:main configuration register import objects');
     this.registerImportObjects(configuration.getImportObjects());
 
     // load configuration
@@ -202,7 +205,7 @@ export class MidwayContainer extends Container implements IMidwayContainer {
     // Override the default scope to request
     const objDefOptions: ObjectDefinitionOptions = getObjectDefinition(target);
     if (objDefOptions && !objDefOptions.scope) {
-      this.debugLogger(`  @scope => request`);
+      this.debugLogger('  @scope => request');
       objectDefinition.scope = ScopeEnum.Request;
     }
   }
@@ -249,7 +252,10 @@ export class MidwayContainer extends Container implements IMidwayContainer {
 
   async stop(): Promise<void> {
     const cycles = listModule(CONFIGURATION_KEY);
-    this.debugLogger('load lifecycle length => %s when stop.', cycles && cycles.length);
+    this.debugLogger(
+      'load lifecycle length => %s when stop.',
+      cycles && cycles.length
+    );
     for (const cycle of cycles) {
       const providerId = getProviderId(cycle);
       this.debugLogger('onStop lifecycle id => %s.', providerId);

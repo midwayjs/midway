@@ -11,11 +11,23 @@ import {
   PRIVATE_META_DATA_KEY,
 } from '@midwayjs/core';
 
-import { IMidwaySocketIOApplication, IMidwaySocketIOConfigurationOptions, IMidwaySocketIOContext } from './interface';
+import {
+  IMidwaySocketIOApplication,
+  IMidwaySocketIOConfigurationOptions,
+  IMidwaySocketIOContext,
+} from './interface';
 import * as SocketIO from 'socket.io';
-import { WS_CONTROLLER_KEY, WS_EVENT_KEY, WSControllerOption, WSEventInfo, WSEventTypeEnum } from '@midwayjs/decorator';
+import {
+  WS_CONTROLLER_KEY,
+  WS_EVENT_KEY,
+  WSControllerOption,
+  WSEventInfo,
+  WSEventTypeEnum,
+} from '@midwayjs/decorator';
 
-export class MidwaySocketIOFramework extends BaseFramework<IMidwaySocketIOConfigurationOptions> {
+export class MidwaySocketIOFramework extends BaseFramework<
+  IMidwaySocketIOConfigurationOptions
+> {
   protected app: IMidwaySocketIOApplication;
 
   public configure(
@@ -25,16 +37,26 @@ export class MidwaySocketIOFramework extends BaseFramework<IMidwaySocketIOConfig
     return this;
   }
 
-  protected async afterDirectoryLoad(options: Partial<IMidwayBootstrapOptions>) {
+  protected async afterDirectoryLoad(
+    options: Partial<IMidwayBootstrapOptions>
+  ) {
     if (this.configurationOptions.webServer) {
-      this.app = SocketIO(this.configurationOptions.webServer, this.configurationOptions) as unknown as IMidwaySocketIOApplication;
+      this.app = (SocketIO(
+        this.configurationOptions.webServer,
+        this.configurationOptions
+      ) as unknown) as IMidwaySocketIOApplication;
     } else {
-      this.app = SocketIO(this.configurationOptions) as unknown as IMidwaySocketIOApplication;
+      this.app = (SocketIO(
+        this.configurationOptions
+      ) as unknown) as IMidwaySocketIOApplication;
     }
 
     this.defineApplicationProperties(this.app);
     this.app.use((socket, next) => {
-      socket.requestContext = new MidwayRequestContainer(socket, this.getApplicationContext());
+      socket.requestContext = new MidwayRequestContainer(
+        socket,
+        this.getApplicationContext()
+      );
       socket.requestContext.registerObject('socket', socket);
       next();
     });
@@ -50,15 +72,18 @@ export class MidwaySocketIOFramework extends BaseFramework<IMidwaySocketIOConfig
     if (this.configurationOptions.port) {
       // if set httpServer will be listen in web framework
       if (!this.configurationOptions.webServer) {
-        new Promise((resolve) => {
-          this.app.listen(this.configurationOptions.port, this.configurationOptions);
+        new Promise(resolve => {
+          this.app.listen(
+            this.configurationOptions.port,
+            this.configurationOptions
+          );
         });
       }
     }
   }
 
   protected async beforeStop(): Promise<void> {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       this.app.close(() => {
         resolve();
       });
@@ -73,7 +98,9 @@ export class MidwaySocketIOFramework extends BaseFramework<IMidwaySocketIOConfig
     return this.app;
   }
 
-  protected defineApplicationProperties(app: IMidwaySocketIOApplication): IMidwaySocketIOApplication {
+  protected defineApplicationProperties(
+    app: IMidwaySocketIOApplication
+  ): IMidwaySocketIOApplication {
     return Object.assign(app, {
       getBaseDir: () => {
         return this.baseDir;
@@ -129,7 +156,6 @@ export class MidwaySocketIOFramework extends BaseFramework<IMidwaySocketIOConfig
     const nsp = this.app.of(controllerOption.namespace);
 
     nsp.on('connect', async (socket: IMidwaySocketIOContext) => {
-
       const wsEventInfos: WSEventInfo[] = getClassMetadata(
         WS_EVENT_KEY,
         target
@@ -139,43 +165,86 @@ export class MidwaySocketIOFramework extends BaseFramework<IMidwaySocketIOConfig
       const methodMap = {};
 
       if (wsEventInfos.length) {
-        for (let wsEventInfo of wsEventInfos) {
-          methodMap[wsEventInfo.propertyName] = methodMap[wsEventInfo.propertyName] || { responseEvents: [] };
+        for (const wsEventInfo of wsEventInfos) {
+          methodMap[wsEventInfo.propertyName] = methodMap[
+            wsEventInfo.propertyName
+          ] || { responseEvents: [] };
           const controller = await socket.requestContext.getAsync(controllerId);
           // on connection
           if (wsEventInfo.eventType === WSEventTypeEnum.ON_CONNECTION) {
-            const result = await controller[wsEventInfo.propertyName].apply(controller, [socket]);
-            await this.bindSocketResponse(result, socket, wsEventInfo.propertyName, methodMap);
+            const result = await controller[
+              wsEventInfo.propertyName
+            ].apply(controller, [socket]);
+            await this.bindSocketResponse(
+              result,
+              socket,
+              wsEventInfo.propertyName,
+              methodMap
+            );
           } else if (wsEventInfo.eventType === WSEventTypeEnum.ON_MESSAGE) {
             // on user custom event
             socket.on(wsEventInfo.messageEventName, async (...args) => {
-              const result = await controller[wsEventInfo.propertyName].apply(controller, args);
-              await this.bindSocketResponse(result, socket, wsEventInfo.propertyName, methodMap);
+              // eslint-disable-next-line prefer-spread
+              const result = await controller[wsEventInfo.propertyName].apply(
+                controller,
+                args
+              );
+              await this.bindSocketResponse(
+                result,
+                socket,
+                wsEventInfo.propertyName,
+                methodMap
+              );
             });
-          } else if (wsEventInfo.eventType === WSEventTypeEnum.ON_DISCONNECTION) {
+          } else if (
+            wsEventInfo.eventType === WSEventTypeEnum.ON_DISCONNECTION
+          ) {
             // on socket disconnect
             socket.on('disconnect', async (reason: string) => {
-              const result = await controller[wsEventInfo.propertyName].apply(controller, [reason]);
-              await this.bindSocketResponse(result, socket, wsEventInfo.propertyName, methodMap);
+              const result = await controller[
+                wsEventInfo.propertyName
+              ].apply(controller, [reason]);
+              await this.bindSocketResponse(
+                result,
+                socket,
+                wsEventInfo.propertyName,
+                methodMap
+              );
             });
-          } else if (wsEventInfo.eventType === WSEventTypeEnum.ON_SOCKET_ERROR) {
+          } else if (
+            wsEventInfo.eventType === WSEventTypeEnum.ON_SOCKET_ERROR
+          ) {
             // on socket error
-            socket.on('error', async (err) => {
-              const result = await controller[wsEventInfo.propertyName].apply(controller, [err]);
-              await this.bindSocketResponse(result, socket, wsEventInfo.propertyName, methodMap);
+            socket.on('error', async err => {
+              const result = await controller[
+                wsEventInfo.propertyName
+              ].apply(controller, [err]);
+              await this.bindSocketResponse(
+                result,
+                socket,
+                wsEventInfo.propertyName,
+                methodMap
+              );
             });
           } else {
             // 存储每个方法对应的后置响应处理，供后续快速匹配
-            methodMap[wsEventInfo.propertyName].responseEvents.push(wsEventInfo);
+            methodMap[wsEventInfo.propertyName].responseEvents.push(
+              wsEventInfo
+            );
           }
         }
       }
     });
   }
 
-  private async bindSocketResponse(result: any, socket: IMidwaySocketIOContext, propertyName: string, methodMap: {
-    responseEvents?: WSEventInfo[]
-  }) {
+  private async bindSocketResponse(
+    result: any,
+    socket: IMidwaySocketIOContext,
+    propertyName: string,
+    methodMap: {
+      responseEvents?: WSEventInfo[];
+    }
+  ) {
     if (result && methodMap[propertyName]) {
       for (const wsEventInfo of methodMap[propertyName].responseEvents) {
         if (wsEventInfo.eventType === WSEventTypeEnum.EMIT) {
@@ -184,8 +253,13 @@ export class MidwaySocketIOFramework extends BaseFramework<IMidwaySocketIOConfig
               return socket.to(name);
             }, socket);
           }
-          socket.emit.apply(socket, [wsEventInfo.messageEventName].concat(result));
+          // eslint-disable-next-line prefer-spread
+          socket.emit.apply(
+            socket,
+            [wsEventInfo.messageEventName].concat(result)
+          );
         } else if (wsEventInfo.eventType === WSEventTypeEnum.BROADCAST) {
+          // eslint-disable-next-line prefer-spread
           socket.nsp.emit.apply(socket.nsp, [].concat(result));
         }
       }

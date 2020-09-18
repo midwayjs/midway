@@ -39,9 +39,13 @@ export class ContainerConfiguration implements IContainerConfiguration {
       // for package
       const subContainerConfiguration = this.container.createConfiguration();
       const subPackageDir = this.resolvePackageBaseDir(importPackage, baseDir);
-      debug(`\n---------- start load configuration from sub package "${importPackage}" ----------`);
+      debug(
+        `\n---------- start load configuration from sub package "${importPackage}" ----------`
+      );
       subContainerConfiguration.load(subPackageDir);
-      debug(`---------- end load configuration from sub package "${importPackage}" ----------`);
+      debug(
+        `---------- end load configuration from sub package "${importPackage}" ----------`
+      );
     }
   }
 
@@ -57,7 +61,11 @@ export class ContainerConfiguration implements IContainerConfiguration {
 
   addImportConfigs(importConfigs: string[], baseDir: string) {
     if (importConfigs && importConfigs.length) {
-      debug('   import configs %j from baseDir => "%s".', importConfigs, baseDir);
+      debug(
+        '   import configs %j from baseDir => "%s".',
+        importConfigs,
+        baseDir
+      );
       this.container.getConfigService().add(
         importConfigs.map(importConfigPath => {
           if (isAbsolute(importConfigPath)) {
@@ -98,7 +106,11 @@ export class ContainerConfiguration implements IContainerConfiguration {
       debug('load configuration.ts from "%s"', packageName);
     } else {
       // package name is a normal npm package
-      debug('load configuration.ts in "%s" from "%s"', packageName, packageBaseDir);
+      debug(
+        'load configuration.ts in "%s" from "%s"',
+        packageName,
+        packageBaseDir
+      );
     }
     let pkg = safeRequire(join(packageBaseDir, 'package.json'));
     if (!pkg) {
@@ -114,7 +126,9 @@ export class ContainerConfiguration implements IContainerConfiguration {
     } else {
       // no package.json
       debug('not found package.json from "%s".', packageBaseDir);
-      debug(`will be load configuration.ts from "${packageBaseDir}/configuration" directly`);
+      debug(
+        `will be load configuration.ts from "${packageBaseDir}/configuration" directly`
+      );
     }
 
     let configuration;
@@ -145,10 +159,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
       debug('   add loadDir => "%s".', loadDir);
       debug('   add namespace => "%s".', this.namespace);
     }
-    debug(
-      '   has configuration file => %s.',
-      configuration ? true : false
-    );
+    debug('   has configuration file => %s.', configuration ? true : false);
     this.loadConfiguration(configuration, packageBaseDir, cfgFile);
   }
 
@@ -178,10 +189,14 @@ export class ContainerConfiguration implements IContainerConfiguration {
             this.container.containsConfiguration(this.packageName) &&
             this.namespace !== ''
           ) {
-            debug(`   configuration "namespace(${this.namespace})/packageName(${this.packageName})" exist than ignore.`);
+            debug(
+              `   configuration "namespace(${this.namespace})/packageName(${this.packageName})" exist than ignore.`
+            );
             return;
           } else {
-            debug(`   configuration "namespace(${this.namespace})/packageName(${this.packageName})" not exist than add.`);
+            debug(
+              `   configuration "namespace(${this.namespace})/packageName(${this.packageName})" not exist than add.`
+            );
             this.container.addConfiguration(this);
           }
           this.addImports(configurationOptions.imports, baseDir);
@@ -195,10 +210,14 @@ export class ContainerConfiguration implements IContainerConfiguration {
         this.container.containsConfiguration(this.packageName) &&
         this.namespace !== ''
       ) {
-        debug(`   configuration "namespace(${this.namespace})/packageName(${this.packageName})" exist than ignore.`);
+        debug(
+          `   configuration "namespace(${this.namespace})/packageName(${this.packageName})" exist than ignore.`
+        );
         return;
       } else {
-        debug(`   configuration "namespace(${this.namespace})/packageName(${this.packageName})" not exist than add.`);
+        debug(
+          `   configuration "namespace(${this.namespace})/packageName(${this.packageName})" not exist than add.`
+        );
         this.container.addConfiguration(this);
       }
     }

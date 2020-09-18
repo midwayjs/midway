@@ -81,6 +81,7 @@ export abstract class MidwayKoaBaseFramework<
         );
       }
       const controller = await ctx.requestContext.getAsync(controllerId);
+      // eslint-disable-next-line prefer-spread
       const result = await controller[methodName].apply(controller, args);
       if (result) {
         ctx.body = result;
@@ -215,6 +216,7 @@ export abstract class MidwayKoaBaseFramework<
           ];
 
           // apply controller from request context
+          // eslint-disable-next-line prefer-spread
           newRouter[webRouter.requestMethod].apply(newRouter, routerArgs);
         }
       }

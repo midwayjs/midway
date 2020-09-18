@@ -109,7 +109,7 @@ export class DecoratorManager extends Map {
     target: any,
     dataKey: string,
     data: any,
-    groupBy?: string,
+    groupBy?: string
   ) {
     debug(
       'attachMetadata %s on target %o with dataKey = %s.',
@@ -206,7 +206,13 @@ export class DecoratorManager extends Map {
    * @param target
    * @param propertyName
    */
-  attachMetadata(decoratorNameKey: decoratorKey, data, target, propertyName?: string, groupBy?: string) {
+  attachMetadata(
+    decoratorNameKey: decoratorKey,
+    data,
+    target,
+    propertyName?: string,
+    groupBy?: string
+  ) {
     if (propertyName) {
       const dataKey = DecoratorManager.getDecoratorMethod(
         decoratorNameKey,
@@ -298,7 +304,7 @@ export class DecoratorManager extends Map {
     data,
     target,
     propertyName,
-    groupBy?: string,
+    groupBy?: string
   ) {
     const dataKey = DecoratorManager.getDecoratorClsMethodKey(
       decoratorNameKey,
@@ -386,9 +392,15 @@ export function attachClassMetadata(
   decoratorNameKey: decoratorKey,
   data: any,
   target,
-  groupBy?: string,
+  groupBy?: string
 ) {
-  return manager.attachMetadata(decoratorNameKey, data, target, undefined, groupBy);
+  return manager.attachMetadata(
+    decoratorNameKey,
+    data,
+    target,
+    undefined,
+    groupBy
+  );
 }
 
 const testKeyMap = new Map<decoratorKey, Error>();
@@ -739,25 +751,13 @@ export function getObjectDefinition(module): ObjectDefinitionOptions {
  * get parameters type by reflect-metadata
  */
 export function getMethodParamTypes(target, propertyKey: string | symbol) {
-  return Reflect.getMetadata(
-    'design:paramtypes',
-    target,
-    propertyKey
-  );
+  return Reflect.getMetadata('design:paramtypes', target, propertyKey);
 }
 
 export function getPropertyType(target, propertyKey: string | symbol) {
-  return Reflect.getMetadata(
-    'design:type',
-    target,
-    propertyKey
-  );
+  return Reflect.getMetadata('design:type', target, propertyKey);
 }
 
 export function getMethodReturnTypes(target, propertyKey: string | symbol) {
-  return Reflect.getMetadata(
-    'design:returntype',
-    target,
-    propertyKey
-  );
+  return Reflect.getMetadata('design:returntype', target, propertyKey);
 }

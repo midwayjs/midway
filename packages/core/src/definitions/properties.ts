@@ -17,6 +17,7 @@ export class ObjectProperties implements IProperties {
   get(key: ObjectIdentifier, ...args: any[]): any {
     if (args && args.length > 0) {
       args.unshift(_.get(this.innerConfig, key));
+      // eslint-disable-next-line prefer-spread
       return format.apply(null, args);
     }
     return _.get(this.innerConfig, key);
@@ -43,8 +44,7 @@ export class ObjectProperties implements IProperties {
     const keys = props.keys();
     for (const key of keys) {
       if (typeof this.innerConfig[key] === 'object') {
-        this.set(key,
-          _.defaultsDeep(props.get(key), this.innerConfig[key]));
+        this.set(key, _.defaultsDeep(props.get(key), this.innerConfig[key]));
       } else {
         this.set(key, props.get(key));
       }

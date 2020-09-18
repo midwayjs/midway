@@ -1,5 +1,5 @@
-export function sleep(sleepTime: number = 1000) {
-  return new Promise((resolve) => {
+export function sleep(sleepTime = 1000) {
+  return new Promise(resolve => {
     setTimeout(() => {
       resolve();
     }, sleepTime);
@@ -12,7 +12,9 @@ export function sleep(sleepTime: number = 1000) {
  */
 export function getPrototypeNames(obj) {
   const enumerableOwnKeys = Object.keys(obj);
-  const ownKeysOnObjectPrototype = Object.getOwnPropertyNames(Object.getPrototypeOf({}));
+  const ownKeysOnObjectPrototype = Object.getOwnPropertyNames(
+    Object.getPrototypeOf({})
+  );
   const result = [];
   // methods on obj itself should be always included
   for (const k of enumerableOwnKeys) {
@@ -38,5 +40,5 @@ export function getPrototypeNames(obj) {
 }
 
 export function isAsyncFunction(fn) {
-  return fn[Symbol.toStringTag] === 'AsyncFunction'
+  return fn[Symbol.toStringTag] === 'AsyncFunction';
 }

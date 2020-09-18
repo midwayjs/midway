@@ -15,7 +15,7 @@ class AppBootHook {
     if (this.app.options['isClusterMode'] !== false) {
       this.framework = new Framework().configure({
         processType: 'agent',
-        app: this.app
+        app: this.app,
       });
       this.bootstrap = new BootstrapStarter();
       this.bootstrap
@@ -28,9 +28,7 @@ class AppBootHook {
     }
   }
 
-  async willReady() {
-  }
-
+  async willReady() {}
 }
 
 module.exports = AppBootHook;

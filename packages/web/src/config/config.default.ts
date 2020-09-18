@@ -1,4 +1,3 @@
-
 const path = require('path');
 const mkdirp = require('mkdirp');
 const os = require('os');
@@ -13,7 +12,7 @@ module.exports = (appInfo: EggAppInfo) => {
 
   // 修改默认的日志名
   exports.logger = {
-    appLogName: `midway-web.log`,
+    appLogName: 'midway-web.log',
     coreLogName: 'midway-core.log',
     agentLogName: 'midway-agent.log',
   };
@@ -23,7 +22,7 @@ module.exports = (appInfo: EggAppInfo) => {
   exports.security = {
     csrf: {
       ignoreJSON: false,
-    }
+    },
   };
 
   // alinode runtime 写入的日志策略是: 如果 NODE_LOG_DIR 有设置，写入 NODE_LOG_DIR 设置的目录；否则为 /tmp
@@ -40,9 +39,7 @@ module.exports = (appInfo: EggAppInfo) => {
       path.join(appInfo.root, `logs/${appInfo.pkg.name}/common-error.log`),
       path.join(appInfo.root, 'logs/stderr.log'),
     ],
-    packages: [
-      path.join(appInfo.appDir, 'package.json'),
-    ]
+    packages: [path.join(appInfo.appDir, 'package.json')],
   };
 
   return exports;
