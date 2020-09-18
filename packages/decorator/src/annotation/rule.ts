@@ -8,7 +8,7 @@ import {
 
 export function Rule(rule) {
   return function (target: any, propertyKey: string) {
-    if (!rule.isJoi) {
+    if (!joi.isSchema(rule)) {
       rule = getClassMetadata(RULES_KEY, rule);
       if (getPropertyType(target, propertyKey)?.name === 'Array') {
         rule = joi.array().items(rule).required();

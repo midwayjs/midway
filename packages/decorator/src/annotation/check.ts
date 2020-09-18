@@ -1,6 +1,6 @@
-import * as joi from 'joi';
 import { getClassMetadata, getMethodParamTypes, RULES_KEY } from '..';
 import { plainToClass } from 'class-transformer';
+import * as Joi from 'joi';
 
 export function Check(isTransform = true) {
   return function (
@@ -16,7 +16,8 @@ export function Check(isTransform = true) {
         const item = paramTypes[i];
         const rules = getClassMetadata(RULES_KEY, item);
         if (rules) {
-          const result = joi.validate(args[i], rules);
+          const schema = Joi.object(rules);
+          const result = schema.validate(args[i]);
           if (result.error) {
             throw new Error(result.error as any);
           }
