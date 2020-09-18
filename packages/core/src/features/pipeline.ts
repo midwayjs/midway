@@ -235,7 +235,7 @@ export class PipelineHandler implements IPipelineHandler {
         result.error = {
           valveName: v,
           message: e.message,
-          error: e
+          error: e,
         };
 
         return result;
@@ -281,7 +281,7 @@ export class PipelineHandler implements IPipelineHandler {
         result.error = {
           valveName: v,
           message: e.message,
-          error: e
+          error: e,
         };
 
         return result;
@@ -296,7 +296,7 @@ export class PipelineHandler implements IPipelineHandler {
     const result = await this.concatSeries<T>(opts);
     if (result.success) {
       const data = result.result;
-      result.result = data[(data as any).length - 1 ];
+      result.result = data[(data as any).length - 1];
     }
     return result;
   }
@@ -321,11 +321,13 @@ export class PipelineHandler implements IPipelineHandler {
     return newItems;
   }
 
-  private prepareParallelValves(opts: IPipelineOptions): Array<Promise<IValveResult>> {
+  private prepareParallelValves(
+    opts: IPipelineOptions
+  ): Array<Promise<IValveResult>> {
     const valves = this.mergeValves(opts.valves);
     const ctx = new PipelineContext(opts.args);
 
-    return valves.map(async (v) => {
+    return valves.map(async v => {
       const rt: IValveResult = { valveName: v, dataKey: v, data: null };
       try {
         const inst: IValveHandler = await this.applicationContext.getAsync(v);
@@ -355,7 +357,7 @@ export class PipelineHandler implements IPipelineHandler {
         result.error = {
           valveName: r.valveName,
           message: r.error.message,
-          error: r.error
+          error: r.error,
         };
 
         return result;
@@ -372,12 +374,17 @@ export class PipelineHandler implements IPipelineHandler {
   }
 }
 
-export function pipelineFactory(applicationContext: IApplicationContext, valves?: string[]) {
+export function pipelineFactory(
+  applicationContext: IApplicationContext,
+  valves?: string[]
+) {
   return new PipelineHandler(applicationContext, valves);
 }
 
-providerWrapper([{
-  id: PIPELINE_IDENTIFIER,
-  provider: pipelineFactory,
-  scope: ScopeEnum.Prototype
-}]);
+providerWrapper([
+  {
+    id: PIPELINE_IDENTIFIER,
+    provider: pipelineFactory,
+    scope: ScopeEnum.Prototype,
+  },
+]);

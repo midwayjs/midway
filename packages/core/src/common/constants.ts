@@ -41,7 +41,7 @@ export const KEYS = {
   ASPECT_ELEMENT: 'aspect',
   AROUND_ELEMENT: 'around',
   EXPRESSION_ATTRIBUTE: 'expression',
-  EXECUTE_ATTRIBUTE: 'execute'
+  EXECUTE_ATTRIBUTE: 'execute',
 };
 
 export const VALUE_TYPE = {
@@ -52,5 +52,5 @@ export const VALUE_TYPE = {
   TEMPLATE: 'template',
   MANAGED: 'managed',
   OBJECT: 'object', // 仅仅在解析时使用
-  BOOLEAN: 'boolean'
+  BOOLEAN: 'boolean',
 };

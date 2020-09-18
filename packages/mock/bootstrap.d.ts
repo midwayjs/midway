@@ -1,2 +1,1 @@
-
-export * from './dist/bootstrap'
+export * from './dist/bootstrap';

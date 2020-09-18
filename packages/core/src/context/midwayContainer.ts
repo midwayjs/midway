@@ -1,35 +1,38 @@
 import {
+  AspectMetadata,
+  CONFIGURATION_KEY,
   getObjectDefinition,
   getProviderId,
+  IMethodAspect,
+  isProvide,
+  listModule,
   ObjectDefinitionOptions,
   ObjectIdentifier,
-  ScopeEnum,
   PIPELINE_IDENTIFIER,
-  listModule,
-  CONFIGURATION_KEY,
-  isProvide,
   saveClassMetadata,
+  ScopeEnum,
 } from '@midwayjs/decorator';
 import * as is from 'is-type-of';
 import { ContainerConfiguration } from './configuration';
-import { FUNCTION_INJECT_KEY, PRIVATE_META_DATA_KEY } from '..';
+import { FUNCTION_INJECT_KEY, generateProvideId, PRIVATE_META_DATA_KEY } from '..';
 import {
-  IConfigService,
-  IEnvironmentService,
-  IMidwayContainer,
   IApplicationContext,
-  MAIN_MODULE_KEY,
+  IConfigService,
   IContainerConfiguration,
+  IEnvironmentService,
   ILifeCycle,
+  IMidwayContainer,
+  MAIN_MODULE_KEY,
   REQUEST_CTX_KEY,
 } from '../interface';
 import { MidwayConfigService } from '../service/configService';
 import { MidwayEnvironmentService } from '../service/environmentService';
 import { Container } from './container';
-import { generateProvideId } from '../common/util';
 import { pipelineFactory } from '../features/pipeline';
 import { ResolverHandler } from './resolverHandler';
 import { run } from '@midwayjs/glob';
+import { isAsyncFunction } from '../util';
+import * as pm from 'picomatch';
 
 const DEFAULT_PATTERN = ['**/**.ts', '**/**.tsx', '**/**.js'];
 const DEFAULT_IGNORE_PATTERN = [
@@ -62,7 +65,10 @@ export class MidwayContainer extends Container implements IMidwayContainer {
   init(): void {
     this.initService();
 
-    this.resolverHandler = new ResolverHandler(this, this.getManagedResolverFactory());
+    this.resolverHandler = new ResolverHandler(
+      this,
+      this.getManagedResolverFactory()
+    );
     // 防止直接从applicationContext.getAsync or get对象实例时依赖当前上下文信息出错
     // ctx is in requestContainer
     this.registerObject(REQUEST_CTX_KEY, this.ctx);
@@ -86,17 +92,17 @@ export class MidwayContainer extends Container implements IMidwayContainer {
     this.midwayIdentifiers.push(PIPELINE_IDENTIFIER);
     this.midwayIdentifiers.push(REQUEST_CTX_KEY);
 
-    this.debugLogger(`main:create "Main Module" and "Main Configuration"`);
+    this.debugLogger('main:create "Main Module" and "Main Configuration"');
     // create main module configuration
     const configuration = this.createConfiguration();
     configuration.namespace = MAIN_MODULE_KEY;
     this.debugLogger(`main:"Main Configuration" load from "${this.baseDir}"`);
     configuration.load(this.baseDir);
     // loadDir
-    this.debugLogger(`main:load directory`);
+    this.debugLogger('main:load directory');
     this.loadDirectory(opts);
 
-    this.debugLogger(`main:main configuration register import objects`);
+    this.debugLogger('main:main configuration register import objects');
     this.registerImportObjects(configuration.getImportObjects());
 
     // load configuration
@@ -188,8 +194,7 @@ export class MidwayContainer extends Container implements IMidwayContainer {
   }
 
   createChild() {
-    const child = new MidwayContainer(this.baseDir, this);
-    return child;
+    return new MidwayContainer(this.baseDir, this);
   }
 
   registerDataHandler(handlerType: string, handler: (handlerKey) => any) {
@@ -202,7 +207,7 @@ export class MidwayContainer extends Container implements IMidwayContainer {
     // Override the default scope to request
     const objDefOptions: ObjectDefinitionOptions = getObjectDefinition(target);
     if (objDefOptions && !objDefOptions.scope) {
-      this.debugLogger(`  @scope => request`);
+      this.debugLogger('  @scope => request');
       objectDefinition.scope = ScopeEnum.Request;
     }
   }
@@ -236,6 +241,97 @@ export class MidwayContainer extends Container implements IMidwayContainer {
     return this.environmentService.getCurrentEnvironment();
   }
 
+  public async addAspect(
+    aspectIns: IMethodAspect,
+    aspectData: AspectMetadata
+  ) {
+    const module = aspectData.aspectTarget;
+    const names = Object.getOwnPropertyNames(module.prototype);
+    const isMatch = aspectData.match ? pm(aspectData.match) : () => true;
+
+    for (const name of names) {
+      if (name === 'constructor' || !isMatch(name)) {
+        continue;
+      }
+      const descriptor = Object.getOwnPropertyDescriptor(
+        module.prototype,
+        name
+      );
+      if (!descriptor || descriptor.writable === false) {
+        continue;
+      }
+      const originMethod = descriptor.value;
+      if (isAsyncFunction(originMethod)) {
+        this.debugLogger(`aspect [#${module.name}:${name}], isAsync=true, aspect class=[${aspectIns.constructor.name}]`);
+        descriptor.value = async function (...args) {
+          let error, result;
+          const joinPoint = {
+            methodName: name,
+            target: this,
+            args: args,
+            proceed: originMethod,
+          };
+          try {
+            await aspectIns.before?.(joinPoint);
+            if (aspectIns.around) {
+              result = await aspectIns.around(joinPoint);
+            } else {
+              result = await originMethod.apply(this, joinPoint.args);
+            }
+            const resultTemp = await aspectIns.afterReturn?.(
+              joinPoint,
+              result
+            );
+            result = typeof resultTemp === 'undefined' ? result : resultTemp;
+            return result;
+          } catch (err) {
+            error = err;
+            if (aspectIns.afterThrow) {
+              await aspectIns.afterThrow(joinPoint, error);
+            } else {
+              throw err;
+            }
+          } finally {
+            await aspectIns.after?.(joinPoint, result, error);
+          }
+        };
+      } else {
+        this.debugLogger(`aspect [#${module.name}:${name}], isAsync=false, aspect class=[${aspectIns.constructor.name}]`);
+        descriptor.value = function (...args) {
+          let error, result;
+          const joinPoint = {
+            methodName: name,
+            target: this,
+            args: args,
+            proceed: originMethod,
+          };
+          try {
+            aspectIns.before?.(joinPoint);
+            if (aspectIns.around) {
+              result = aspectIns.around(joinPoint);
+            } else {
+              result = originMethod.apply(this, joinPoint.args);
+            }
+            const resultTemp = aspectIns.afterReturn?.(joinPoint, result);
+            result = typeof resultTemp === 'undefined' ? result : resultTemp;
+            return result;
+          } catch (err) {
+            error = err;
+            if (aspectIns.afterThrow) {
+              aspectIns.afterThrow(joinPoint, error);
+            } else {
+              throw err;
+            }
+          } finally {
+            aspectIns.after?.(joinPoint, result, error);
+          }
+        };
+      }
+
+      Object.defineProperty(module.prototype, name, descriptor);
+    }
+  }
+
   async ready() {
     super.ready();
     if (this.configService) {
@@ -249,7 +345,10 @@ export class MidwayContainer extends Container implements IMidwayContainer {
 
   async stop(): Promise<void> {
     const cycles = listModule(CONFIGURATION_KEY);
-    this.debugLogger('load lifecycle length => %s when stop.', cycles && cycles.length);
+    this.debugLogger(
+      'load lifecycle length => %s when stop.',
+      cycles && cycles.length
+    );
     for (const cycle of cycles) {
       const providerId = getProviderId(cycle);
       this.debugLogger('onStop lifecycle id => %s.', providerId);

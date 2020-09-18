@@ -25,19 +25,22 @@ import {
   WEB_RESPONSE_KEY,
   WEB_RESPONSE_REDIRECT,
   WEB_ROUTER_KEY,
-  WEB_ROUTER_PARAM_KEY
+  WEB_ROUTER_PARAM_KEY,
 } from '@midwayjs/decorator';
 import {
   IMidwayExpressApplication,
-  IMidwayExpressConfigurationOptions, Middleware,
+  IMidwayExpressConfigurationOptions,
+  Middleware,
   MiddlewareParamArray,
   WebMiddleware,
-  IMidwayExpressRequest
+  IMidwayExpressRequest,
 } from './interface';
 import type { IRouter, IRouterHandler, RequestHandler } from 'express';
 import * as express from 'express';
 
-export class MidwayExpressFramework extends BaseFramework<IMidwayExpressConfigurationOptions> {
+export class MidwayExpressFramework extends BaseFramework<
+  IMidwayExpressConfigurationOptions
+> {
   protected app: IMidwayExpressApplication;
   private controllerIds: string[] = [];
   public prioritySortRouters: Array<{
@@ -53,11 +56,16 @@ export class MidwayExpressFramework extends BaseFramework<IMidwayExpressConfigur
     return this;
   }
 
-  protected async afterDirectoryLoad(options: Partial<IMidwayBootstrapOptions>) {
-    this.app = express() as unknown as IMidwayExpressApplication;
+  protected async afterDirectoryLoad(
+    options: Partial<IMidwayBootstrapOptions>
+  ) {
+    this.app = (express() as unknown) as IMidwayExpressApplication;
     this.defineApplicationProperties(this.app);
     this.app.use((req: IMidwayExpressRequest, res, next) => {
-      req.requestContext = new MidwayRequestContainer(req, this.getApplicationContext());
+      req.requestContext = new MidwayRequestContainer(
+        req,
+        this.getApplicationContext()
+      );
       req.requestContext.registerObject('req', req);
       req.requestContext.registerObject('res', res);
       req.requestContext.ready();
@@ -73,7 +81,7 @@ export class MidwayExpressFramework extends BaseFramework<IMidwayExpressConfigur
 
   public async run(): Promise<void> {
     if (this.configurationOptions.port) {
-      new Promise((resolve) => {
+      new Promise(resolve => {
         this.app.listen(this.configurationOptions.port, () => {
           resolve();
         });
@@ -98,7 +106,7 @@ export class MidwayExpressFramework extends BaseFramework<IMidwayExpressConfigur
   public generateController(
     controllerMapping: string,
     routeArgsInfo?: RouterParamValue[],
-    routerResponseData?: any []
+    routerResponseData?: any[]
   ): IRouterHandler<any> {
     const [controllerId, methodName] = controllerMapping.split('.');
     return async (req, res, next) => {
@@ -106,11 +114,16 @@ export class MidwayExpressFramework extends BaseFramework<IMidwayExpressConfigur
       if (Array.isArray(routeArgsInfo)) {
         await Promise.all(
           routeArgsInfo.map(async ({ index, type, propertyData }) => {
-            args[index] = await extractExpressLikeValue(type, propertyData)(req, res, next);
+            args[index] = await extractExpressLikeValue(type, propertyData)(
+              req,
+              res,
+              next
+            );
           })
         );
       }
       const controller = await req.requestContext.getAsync(controllerId);
+      // eslint-disable-next-line prefer-spread
       const result = await controller[methodName].apply(controller, args);
 
       // implement response decorator
@@ -170,7 +183,9 @@ export class MidwayExpressFramework extends BaseFramework<IMidwayExpressConfigur
   }
 
   public async generateMiddleware(middlewareId: string) {
-    const mwIns = await this.getApplicationContext().getAsync<WebMiddleware>(middlewareId);
+    const mwIns = await this.getApplicationContext().getAsync<WebMiddleware>(
+      middlewareId
+    );
     return mwIns.resolve();
   }
 
@@ -186,8 +201,8 @@ export class MidwayExpressFramework extends BaseFramework<IMidwayExpressConfigur
 
     if (newRouter) {
       // implement middleware in controller
-      const middlewares =
-        controllerOption.routerOptions.middleware as unknown as MiddlewareParamArray;
+      const middlewares = (controllerOption.routerOptions
+        .middleware as unknown) as MiddlewareParamArray;
       await this.handlerWebMiddleware(
         middlewares,
         (middlewareImpl: RequestHandler) => {
@@ -207,7 +222,7 @@ export class MidwayExpressFramework extends BaseFramework<IMidwayExpressConfigur
       ) {
         for (const webRouter of webRouterInfo) {
           // get middleware
-          const middlewares2 = webRouter.middleware as unknown as MiddlewareParamArray;
+          const middlewares2 = (webRouter.middleware as unknown) as MiddlewareParamArray;
           // const methodMiddlewares: MiddlewareParamArray = [];
 
           await this.handlerWebMiddleware(
@@ -227,18 +242,19 @@ export class MidwayExpressFramework extends BaseFramework<IMidwayExpressConfigur
             ) || [];
 
           const routerResponseData =
-            getPropertyMetadata(
-              WEB_RESPONSE_KEY,
-              target,
-              webRouter.method
-            ) || [];
+            getPropertyMetadata(WEB_RESPONSE_KEY, target, webRouter.method) ||
+            [];
 
           // apply controller from request context
-          newRouter[webRouter.requestMethod].call(newRouter, webRouter.path, this.generateController(
-            `${controllerId}.${webRouter.method}`,
-            routeArgsInfo,
-            routerResponseData
-          ));
+          newRouter[webRouter.requestMethod].call(
+            newRouter,
+            webRouter.path,
+            this.generateController(
+              `${controllerId}.${webRouter.method}`,
+              routeArgsInfo,
+              routerResponseData
+            )
+          );
         }
       }
 
@@ -287,7 +303,9 @@ export class MidwayExpressFramework extends BaseFramework<IMidwayExpressConfigur
     }
   }
 
-  protected defineApplicationProperties(app: IMidwayExpressApplication): IMidwayExpressApplication {
+  protected defineApplicationProperties(
+    app: IMidwayExpressApplication
+  ): IMidwayExpressApplication {
     return Object.assign(app, {
       getBaseDir: () => {
         return this.baseDir;
@@ -323,7 +341,7 @@ export class MidwayExpressFramework extends BaseFramework<IMidwayExpressConfigur
 
       generateMiddleware: async (middlewareId: string) => {
         return this.generateMiddleware(middlewareId);
-      }
+      },
     });
   }
 }

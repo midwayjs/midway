@@ -20,12 +20,11 @@ const EGG_PATH = Symbol.for('egg#eggPath');
 
 export const createAppWorkerLoader = AppWorkerLoader => {
   class EggAppWorkerLoader extends (AppWorkerLoader as any) {
-
     app: IMidwayWebApplication & {
       appOptions: {
         typescript?: boolean;
         isTsMode?: boolean;
-      },
+      };
       appDir: string;
       baseDir: string;
       middlewares: [];
@@ -37,7 +36,10 @@ export const createAppWorkerLoader = AppWorkerLoader => {
         if (this.app.appOptions.typescript || this.app.appOptions.isTsMode) {
           process.env.EGG_TYPESCRIPT = 'true';
         }
-        const result = parseNormalDir(this.app.appOptions['baseDir'], this.app.appOptions.isTsMode);
+        const result = parseNormalDir(
+          this.app.appOptions['baseDir'],
+          this.app.appOptions.isTsMode
+        );
         this.baseDir = result.baseDir;
         this.options.baseDir = this.baseDir;
         this.appDir = this.app.appDir = result.appDir;
@@ -113,13 +115,15 @@ export const createAppWorkerLoader = AppWorkerLoader => {
         const appInfo: EggAppInfo | undefined = super.getAppInfo();
         // ROOT == HOME in prod env
         this.appInfo = extend(true, appInfo, {
-          root: appInfo.env === 'local' || appInfo.env === 'unittest' ? this.appDir : appInfo.root,
+          root:
+            appInfo.env === 'local' || appInfo.env === 'unittest'
+              ? this.appDir
+              : appInfo.root,
           appDir: this.appDir,
         });
       }
       return this.appInfo;
     }
-
   }
 
   return EggAppWorkerLoader as any;
@@ -127,13 +131,15 @@ export const createAppWorkerLoader = AppWorkerLoader => {
 
 export const createAgentWorkerLoader = AppWorkerLoader => {
   class EggAppWorkerLoader extends (AppWorkerLoader as any) {
-
     getEggPaths() {
       if (!this.appDir) {
         if (this.app.appOptions.typescript || this.app.appOptions.isTsMode) {
           process.env.EGG_TYPESCRIPT = 'true';
         }
-        const result = parseNormalDir(this.app.appOptions['baseDir'], this.app.appOptions.isTsMode);
+        const result = parseNormalDir(
+          this.app.appOptions['baseDir'],
+          this.app.appOptions.isTsMode
+        );
         this.baseDir = result.baseDir;
         this.options.baseDir = this.baseDir;
         this.appDir = this.app.appDir = result.appDir;
@@ -150,7 +156,10 @@ export const createAgentWorkerLoader = AppWorkerLoader => {
         const appInfo: EggAppInfo | undefined = super.getAppInfo();
         // ROOT == HOME in prod env
         this.appInfo = extend(true, appInfo, {
-          root: appInfo.env === 'local' || appInfo.env === 'unittest' ? this.appDir : appInfo.root,
+          root:
+            appInfo.env === 'local' || appInfo.env === 'unittest'
+              ? this.appDir
+              : appInfo.root,
           appDir: this.appDir,
         });
       }
@@ -164,6 +173,7 @@ export const createAgentWorkerLoader = AppWorkerLoader => {
 export const createEggApplication = Application => {
   class EggApplication extends (Application as any) {
     constructor(options) {
+      // eslint-disable-next-line constructor-super
       super(options);
     }
 
@@ -191,10 +201,16 @@ export const createEggApplication = Application => {
       return this.applicationContext;
     }
 
-    generateController(controllerMapping: string,
-                       routeArgsInfo?: RouterParamValue[],
-                       routerResponseData?: any []) {
-      return this.midwayWebFramework.generateController(controllerMapping, routeArgsInfo, routerResponseData);
+    generateController(
+      controllerMapping: string,
+      routeArgsInfo?: RouterParamValue[],
+      routerResponseData?: any[]
+    ) {
+      return this.midwayWebFramework.generateController(
+        controllerMapping,
+        routeArgsInfo,
+        routerResponseData
+      );
     }
 
     async generateMiddleware(middlewareId: string) {
@@ -204,7 +220,6 @@ export const createEggApplication = Application => {
     get baseDir() {
       return this.loader.baseDir;
     }
-
   }
 
   return EggApplication as any;
@@ -213,6 +228,7 @@ export const createEggApplication = Application => {
 export const createEggAgent = Agent => {
   class EggAgent extends (Agent as any) {
     constructor(options) {
+      // eslint-disable-next-line constructor-super
       super(options);
     }
 
@@ -257,7 +273,6 @@ const EggAgentWorkerLoader = createAgentWorkerLoader(AgentWorkerLoader);
 const BaseEggAgent = createEggAgent(Agent);
 
 export class EggApplication extends BaseEggApplication {
-
   get [EGG_LOADER]() {
     return EggAppWorkerLoader;
   }
@@ -268,7 +283,6 @@ export class EggApplication extends BaseEggApplication {
 }
 
 export class EggAgent extends BaseEggAgent {
-
   get [EGG_LOADER]() {
     return EggAgentWorkerLoader;
   }

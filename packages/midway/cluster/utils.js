@@ -1,8 +1,7 @@
 'use strict';
 
-const path = require('path');
-
 exports.isTypeScriptEnvironment = () => {
+  // eslint-disable-next-line node/no-deprecated-api
   return !!require.extensions['.ts'];
 };
 
@@ -11,13 +10,13 @@ exports.isTypeScriptEnvironment = () => {
  * @param options
  * @returns {*}
  */
-exports.formatOptions = (options) => {
+exports.formatOptions = options => {
   options.framework = options.framework || 'midway';
-  if(!options.baseDir) {
+  if (!options.baseDir) {
     options.baseDir = process.cwd();
   }
 
-  if(typeof options.typescript === 'undefined') {
+  if (typeof options.typescript === 'undefined') {
     options.typescript = true;
   }
 

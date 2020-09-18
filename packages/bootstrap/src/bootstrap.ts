@@ -26,7 +26,7 @@ export class BootstrapStarter {
   }
 
   public async init() {
-    this.appDir =  this.globalOptions.baseDir;
+    this.appDir = this.globalOptions.baseDir;
     await Promise.all(
       this.getActions('initialize', {
         ...this.globalOptions,
@@ -37,15 +37,11 @@ export class BootstrapStarter {
   }
 
   public async run() {
-    await Promise.all(
-      this.getActions('run', {})
-    );
+    await Promise.all(this.getActions('run', {}));
   }
 
   public async stop() {
-    await Promise.all(
-      this.getActions('stop', {})
-    );
+    await Promise.all(this.getActions('stop', {}));
   }
 
   public getActions(action: string, args?): any[] {
@@ -93,14 +89,10 @@ export class Bootstrap {
 
   static async run() {
     await this.getStarter().init();
-    return this.getStarter().run().catch(
-      console.error
-    );
+    return this.getStarter().run().catch(console.error);
   }
 
   static async stop() {
-    return this.getStarter().stop().catch(
-      console.error
-    );
+    return this.getStarter().stop().catch(console.error);
   }
 }

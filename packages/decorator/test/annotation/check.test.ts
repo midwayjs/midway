@@ -20,6 +20,42 @@ describe('/test/annotation/check.test.ts', () => {
     assert.deepEqual(result, user);
   });
 
+  it('check with check and transform object', () => {
+    class UserDTO {
+      @Rule(RuleType.number().max(10))
+      age: number;
+
+      @Rule(RuleType.string().required())
+      firstName: string;
+
+      @Rule(RuleType.string().max(10))
+      lastName: string;
+
+      getName?() {
+        return this.firstName + ' ' + this.lastName;
+      }
+
+      isAdult?() {
+        return this.age > 36 && this.age < 60;
+      }
+    }
+
+    class Hello {
+      @Check(true)
+      school(a, data: UserDTO) {
+        return data;
+      }
+    }
+    const user = {
+      age: 8,
+      firstName: 'Johny',
+      lastName: 'Cage',
+    };
+    const result = new Hello().school(1, user);
+    expect(result.getName()).toEqual('Johny Cage');
+    assert.deepEqual(result, user);
+  });
+
   it('check with no check', () => {
     class UserDTO {
       @Rule(RuleType.number().max(10))
@@ -94,8 +130,9 @@ describe('/test/annotation/check.test.ts', () => {
         age: 22,
       },
     };
-    const result = new Hello().school(1, user);
-    assert.notDeepEqual(result, user);
+    expect(() => {
+      new Hello().school(1, user);
+    }).toThrow(Error);
   });
 
   it('check with check when two level and array and not equal', () => {
@@ -126,7 +163,8 @@ describe('/test/annotation/check.test.ts', () => {
         },
       ],
     };
-    const result = new Hello().school(1, user);
-    assert.notDeepEqual(result, user);
+    expect(() => {
+      new Hello().school(1, user);
+    }).toThrow(Error);
   });
 });

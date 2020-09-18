@@ -1,5 +1,9 @@
 import { BootstrapStarter } from '@midwayjs/bootstrap';
-import { IMidwayApplication, IMidwayFramework, MidwayFrameworkType } from '@midwayjs/core';
+import {
+  IMidwayApplication,
+  IMidwayFramework,
+  MidwayFrameworkType,
+} from '@midwayjs/core';
 import { isAbsolute, join } from 'path';
 import { remove } from 'fs-extra';
 import { clearAllModule } from '@midwayjs/decorator';
@@ -18,7 +22,14 @@ function getIncludeFramework(dependencies): string {
   }
 }
 
-export async function create<T extends IMidwayFramework<U>, U = T['configurationOptions']>(baseDir: string = process.cwd(), options?: U, customFrameworkName?: string | MidwayFrameworkType | object): Promise<T> {
+export async function create<
+  T extends IMidwayFramework<U>,
+  U = T['configurationOptions']
+>(
+  baseDir: string = process.cwd(),
+  options?: U,
+  customFrameworkName?: string | MidwayFrameworkType | object
+): Promise<T> {
   clearAllModule();
   let framework: T = null;
   let DefaultFramework = null;
@@ -48,11 +59,11 @@ export async function create<T extends IMidwayFramework<U>, U = T['configuration
         plugins: {
           'egg-mock': {
             enable: true,
-            package: 'egg-mock'
+            package: 'egg-mock',
           },
           watcher: false,
           development: false,
-        }
+        },
       }) as any;
     }
     framework.configure(options);
@@ -68,7 +79,7 @@ export async function create<T extends IMidwayFramework<U>, U = T['configuration
 
   starter
     .configure({
-      baseDir
+      baseDir,
     })
     .load(framework);
 
@@ -80,9 +91,21 @@ export async function create<T extends IMidwayFramework<U>, U = T['configuration
   return framework;
 }
 
-export async function createApp<T extends IMidwayFramework<U>, U = T['configurationOptions'], Y = ReturnType<T['getApplication']>>(baseDir: string = process.cwd(), options?: U, customFrameworkName?: string | MidwayFrameworkType | object): Promise<Y> {
-  const framework: T = await create<T, U>(baseDir, options, customFrameworkName);
-  return framework.getApplication() as unknown as Y;
+export async function createApp<
+  T extends IMidwayFramework<U>,
+  U = T['configurationOptions'],
+  Y = ReturnType<T['getApplication']>
+>(
+  baseDir: string = process.cwd(),
+  options?: U,
+  customFrameworkName?: string | MidwayFrameworkType | object
+): Promise<Y> {
+  const framework: T = await create<T, U>(
+    baseDir,
+    options,
+    customFrameworkName
+  );
+  return (framework.getApplication() as unknown) as Y;
 }
 
 export async function close(app: IMidwayApplication | IMidwayFramework<any>) {

@@ -26,7 +26,7 @@ import {
   WEB_RESPONSE_KEY,
   WEB_RESPONSE_REDIRECT,
   WEB_ROUTER_KEY,
-  WEB_ROUTER_PARAM_KEY
+  WEB_ROUTER_PARAM_KEY,
 } from '@midwayjs/decorator';
 import {
   IMidwayKoaApplication,
@@ -34,13 +34,17 @@ import {
   IMidwayKoaConfigurationOptions,
   WebMiddleware,
   IMidwayKoaContext,
-  MiddlewareParamArray
+  MiddlewareParamArray,
 } from './interface';
 import * as Router from 'koa-router';
 import type { DefaultState, Middleware } from 'koa';
 import * as koa from 'koa';
 
-export abstract class MidwayKoaBaseFramework<T, U extends IMidwayApplication & IMidwayKoaApplicationPlus, CustomContext> extends BaseFramework<T> {
+export abstract class MidwayKoaBaseFramework<
+  T,
+  U extends IMidwayApplication & IMidwayKoaApplicationPlus,
+  CustomContext
+> extends BaseFramework<T> {
   protected app: U;
   private controllerIds: string[] = [];
   public prioritySortRouters: Array<{
@@ -61,19 +65,23 @@ export abstract class MidwayKoaBaseFramework<T, U extends IMidwayApplication & I
   public generateController(
     controllerMapping: string,
     routeArgsInfo?: RouterParamValue[],
-    routerResponseData?: any []
+    routerResponseData?: any[]
   ): Middleware<DefaultState, IMidwayKoaContext> {
     const [controllerId, methodName] = controllerMapping.split('.');
     return async (ctx, next) => {
       const args = [ctx, next];
       if (Array.isArray(routeArgsInfo)) {
         await Promise.all(
-          routeArgsInfo.map(async ({index, type, propertyData}) => {
-            args[index] = await extractKoaLikeValue(type, propertyData)(ctx, next);
+          routeArgsInfo.map(async ({ index, type, propertyData }) => {
+            args[index] = await extractKoaLikeValue(type, propertyData)(
+              ctx,
+              next
+            );
           })
         );
       }
       const controller = await ctx.requestContext.getAsync(controllerId);
+      // eslint-disable-next-line prefer-spread
       const result = await controller[methodName].apply(controller, args);
       if (result) {
         ctx.body = result;
@@ -102,7 +110,9 @@ export abstract class MidwayKoaBaseFramework<T, U extends IMidwayApplication & I
   }
 
   public async generateMiddleware(middlewareId: string) {
-    const mwIns = await this.getApplicationContext().getAsync<WebMiddleware>(middlewareId);
+    const mwIns = await this.getApplicationContext().getAsync<WebMiddleware>(
+      middlewareId
+    );
     return mwIns.resolve();
   }
 
@@ -151,7 +161,8 @@ export abstract class MidwayKoaBaseFramework<T, U extends IMidwayApplication & I
 
     if (newRouter) {
       // implement middleware in controller
-      const middlewares = controllerOption.routerOptions.middleware as MiddlewareParamArray;
+      const middlewares = controllerOption.routerOptions
+        .middleware as MiddlewareParamArray;
       await this.handlerWebMiddleware(
         middlewares,
         (middlewareImpl: Middleware) => {
@@ -190,11 +201,8 @@ export abstract class MidwayKoaBaseFramework<T, U extends IMidwayApplication & I
             ) || [];
 
           const routerResponseData =
-            getPropertyMetadata(
-              WEB_RESPONSE_KEY,
-              target,
-              webRouter.method
-            ) || [];
+            getPropertyMetadata(WEB_RESPONSE_KEY, target, webRouter.method) ||
+            [];
 
           const routerArgs = [
             webRouter.routerName,
@@ -208,6 +216,7 @@ export abstract class MidwayKoaBaseFramework<T, U extends IMidwayApplication & I
           ];
 
           // apply controller from request context
+          // eslint-disable-next-line prefer-spread
           newRouter[webRouter.requestMethod].apply(newRouter, routerArgs);
         }
       }
@@ -227,10 +236,10 @@ export abstract class MidwayKoaBaseFramework<T, U extends IMidwayApplication & I
   protected createRouter(controllerOption: ControllerOption): Router {
     const {
       prefix,
-      routerOptions: {sensitive},
+      routerOptions: { sensitive },
     } = controllerOption;
     if (prefix) {
-      const router = new Router({sensitive});
+      const router = new Router({ sensitive });
       router.prefix(prefix);
       return router;
     }
@@ -261,7 +270,11 @@ export abstract class MidwayKoaBaseFramework<T, U extends IMidwayApplication & I
   protected abstract defineApplicationProperties(app: U): U;
 }
 
-export class MidwayKoaFramework extends MidwayKoaBaseFramework<IMidwayKoaConfigurationOptions, IMidwayKoaApplication, IMidwayKoaContext> {
+export class MidwayKoaFramework extends MidwayKoaBaseFramework<
+  IMidwayKoaConfigurationOptions,
+  IMidwayKoaApplication,
+  IMidwayKoaContext
+> {
   public configure(
     options: IMidwayKoaConfigurationOptions
   ): MidwayKoaFramework {
@@ -269,10 +282,18 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<IMidwayKoaConfigu
     return this;
   }
 
-  protected async afterDirectoryLoad(options: Partial<IMidwayBootstrapOptions>) {
-    this.app = new koa<DefaultState, IMidwayKoaContext>() as IMidwayKoaApplication;
+  protected async afterDirectoryLoad(
+    options: Partial<IMidwayBootstrapOptions>
+  ) {
+    this.app = new koa<
+      DefaultState,
+      IMidwayKoaContext
+    >() as IMidwayKoaApplication;
     this.app.use(async (ctx, next) => {
-      ctx.requestContext = new MidwayRequestContainer(ctx, this.getApplicationContext());
+      ctx.requestContext = new MidwayRequestContainer(
+        ctx,
+        this.getApplicationContext()
+      );
       await ctx.requestContext.ready();
       await next();
     });
@@ -288,7 +309,7 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<IMidwayKoaConfigu
 
   public async run(): Promise<void> {
     if (this.configurationOptions.port) {
-      new Promise((resolve) => {
+      new Promise(resolve => {
         this.app.listen(this.configurationOptions.port, () => {
           resolve();
         });
@@ -300,7 +321,9 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<IMidwayKoaConfigu
     return MidwayFrameworkType.WEB_KOA;
   }
 
-  protected defineApplicationProperties(app: IMidwayKoaApplication): IMidwayKoaApplication {
+  protected defineApplicationProperties(
+    app: IMidwayKoaApplication
+  ): IMidwayKoaApplication {
     return Object.assign(app, {
       getBaseDir: () => {
         return this.baseDir;
@@ -336,7 +359,7 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<IMidwayKoaConfigu
 
       generateMiddleware: async (middlewareId: string) => {
         return this.generateMiddleware(middlewareId);
-      }
+      },
     });
   }
 }

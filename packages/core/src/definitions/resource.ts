@@ -93,8 +93,8 @@ export class Resource implements IResource {
       const buf = readFileSync(this.getPath());
       try {
         return JSON.parse(buf.toString());
-      } catch (e) {
-      }
+        // eslint-disable-next-line no-empty
+      } catch (e) {}
       return {};
     }
     return require(this.getPath());

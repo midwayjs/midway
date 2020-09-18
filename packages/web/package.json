@@ -38,6 +38,8 @@
     "@midwayjs/decorator": "^2.2.5",
     "@midwayjs/koa": "^2.2.5",
     "debug": "^4.1.1",
+    "egg-logger": "^2.4.2",
+    "mkdirp": "^1.0.4",
     "egg": "^2.28.0",
     "extend2": "^1.0.0"
   },

@@ -41,7 +41,9 @@ export class ManagedMap extends Map implements IManagedInstance {
   type = KEYS.MAP_ELEMENT;
 }
 
-export class ManagedProperties extends ObjectProperties implements IManagedInstance {
+export class ManagedProperties
+  extends ObjectProperties
+  implements IManagedInstance {
   type = KEYS.PROPS_ELEMENT;
 }
 

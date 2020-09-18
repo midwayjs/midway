@@ -24,6 +24,7 @@ export function resolveModule(moduleName) {
  * @return {string} path
  */
 export function retrieveModulePath(moduleName) {
+  // eslint-disable-next-line node/no-unsupported-features/node-builtins
   const paths = require.resolve.paths(moduleName);
 
   const moduleDir = paths.find(dir => {

@@ -1,5 +1,10 @@
 import * as joi from 'joi';
-import { attachClassMetadata, getClassMetadata, getPropertyType, RULES_KEY } from '..';
+import {
+  attachClassMetadata,
+  getClassMetadata,
+  getPropertyType,
+  RULES_KEY,
+} from '..';
 
 export function Rule(rule) {
   return function (target: any, propertyKey: string) {

@@ -3,5 +3,5 @@ export {
   IPipelineHandler,
   IPipelineOptions,
   IPipelineResult,
-  IValveHandler
+  IValveHandler,
 } from './pipeline';

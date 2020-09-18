@@ -1,14 +1,17 @@
-import { IManagedInstance, ObjectIdentifier, ScopeEnum } from '@midwayjs/decorator';
+import {
+  IManagedInstance,
+  ObjectIdentifier,
+  ScopeEnum,
+} from '@midwayjs/decorator';
 import {
   IProperties,
   IObjectCreator,
   IObjectDefinition,
-  IApplicationContext
+  IApplicationContext,
 } from '../interface';
 import { ObjectCreator } from './objectCreator';
 
 class FunctionWrapperCreator extends ObjectCreator {
-
   doConstruct(Clzz: any, args?: any, context?: IApplicationContext): any {
     if (!Clzz) {
       return null;
@@ -16,7 +19,11 @@ class FunctionWrapperCreator extends ObjectCreator {
     return Clzz(context, args);
   }
 
-  async doConstructAsync(Clzz: any, args?: any, context?: IApplicationContext): Promise<any> {
+  async doConstructAsync(
+    Clzz: any,
+    args?: any,
+    context?: IApplicationContext
+  ): Promise<any> {
     if (!Clzz) {
       return null;
     }
@@ -26,7 +33,6 @@ class FunctionWrapperCreator extends ObjectCreator {
 }
 
 export class FunctionDefinition implements IObjectDefinition {
-
   constructor() {
     this.creator = new FunctionWrapperCreator(this);
   }
@@ -53,8 +59,7 @@ export class FunctionDefinition implements IObjectDefinition {
     this.innerAutowire = autowire;
   }
 
-  getAttr(key: ObjectIdentifier): any {
-  }
+  getAttr(key: ObjectIdentifier): any {}
 
   hasAttr(key: ObjectIdentifier): boolean {
     return false;
@@ -96,6 +101,5 @@ export class FunctionDefinition implements IObjectDefinition {
     return this.innerScope === ScopeEnum.Request;
   }
 
-  setAttr(key: ObjectIdentifier, value: any): void {
-  }
+  setAttr(key: ObjectIdentifier, value: any): void {}
 }

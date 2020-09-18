@@ -20,50 +20,66 @@ function mockContainer(options: MidwayApplicationOptions): MockContainer {
   return new MockContainer(options);
 }
 
-const getDefaultFramework: () => string = () => resolveModule('midway') || resolveModule('midway-mirror');
+const getDefaultFramework: () => string = () =>
+  resolveModule('midway') || resolveModule('midway-mirror');
 
 export const mm = Object.assign({}, mock, {
   container: mockContainer,
 }) as MidwayMock;
 
 mm.app = (options = {}): MidwayMockApplication => {
-  if (process.env.MIDWAY_BASE_DIR && !options.baseDir) { options.baseDir = process.env.MIDWAY_BASE_DIR; }
-  if (process.env.MIDWAY_FRAMEWORK_PATH && !options.framework) { options.framework = process.env.MIDWAY_FRAMEWORK_PATH; }
-  // @ts-ignore
-  return mock.app(Object.assign({
-    framework: options.framework || getDefaultFramework(),
-    typescript: isTypeScriptEnvironment(),
-    plugins: {
-      'midway-mock': {
-        enable: true,
-        path: join(__dirname, '../')
+  if (process.env.MIDWAY_BASE_DIR && !options.baseDir) {
+    options.baseDir = process.env.MIDWAY_BASE_DIR;
+  }
+  if (process.env.MIDWAY_FRAMEWORK_PATH && !options.framework) {
+    options.framework = process.env.MIDWAY_FRAMEWORK_PATH;
+  }
+  return (mock as any).app(
+    Object.assign(
+      {
+        framework: options.framework || getDefaultFramework(),
+        typescript: isTypeScriptEnvironment(),
+        plugins: {
+          'midway-mock': {
+            enable: true,
+            path: join(__dirname, '../'),
+          },
+          watcher: false,
+          development: false,
+        },
       },
-      watcher: false,
-      development: false,
-    }
-  }, options));
+      options
+    )
+  );
 };
 
 mm.cluster = (options = {}) => {
-  if (process.env.MIDWAY_BASE_DIR && !options.baseDir) { options.baseDir = process.env.MIDWAY_BASE_DIR; }
-  if (process.env.MIDWAY_FRAMEWORK_PATH && !options.framework) { options.framework = process.env.MIDWAY_FRAMEWORK_PATH; }
-  // @ts-ignore
-  return mock.cluster(Object.assign({
-    framework: options.framework || getDefaultFramework(),
-    typescript: isTypeScriptEnvironment(),
-    plugins: {
-      'midway-mock': {
-        enable: true,
-        path: join(__dirname, '../')
+  if (process.env.MIDWAY_BASE_DIR && !options.baseDir) {
+    options.baseDir = process.env.MIDWAY_BASE_DIR;
+  }
+  if (process.env.MIDWAY_FRAMEWORK_PATH && !options.framework) {
+    options.framework = process.env.MIDWAY_FRAMEWORK_PATH;
+  }
+  return (mock as any).cluster(
+    Object.assign(
+      {
+        framework: options.framework || getDefaultFramework(),
+        typescript: isTypeScriptEnvironment(),
+        plugins: {
+          'midway-mock': {
+            enable: true,
+            path: join(__dirname, '../'),
+          },
+          watcher: false,
+          development: false,
+        },
       },
-      watcher: false,
-      development: false,
-    }
-  }, options));
+      options
+    )
+  );
 };
 
 export class MockContainer {
-
   app: MidwayMockApplication;
 
   constructor(options: MidwayApplicationOptions = {}) {

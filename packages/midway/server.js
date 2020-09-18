@@ -17,8 +17,8 @@ let options = {};
 try {
   const pkg = require(path.join(process.cwd(), 'package.json'));
   const serverOpts = pkg['midway-server-options'];
-  if(serverOpts) {
-    if(typeof serverOpts === 'string') {
+  if (serverOpts) {
+    if (typeof serverOpts === 'string') {
       options = require(path.join(process.cwd(), serverOpts));
     } else {
       options = serverOpts;

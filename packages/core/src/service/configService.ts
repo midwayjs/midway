@@ -112,6 +112,7 @@ export class MidwayConfigService implements IConfigService {
     }
     let result = exports;
     if (is.function(exports)) {
+      // eslint-disable-next-line prefer-spread
       result = await exports.apply(null, [].concat(this.container));
     }
     return result;

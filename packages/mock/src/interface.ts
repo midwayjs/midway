@@ -25,12 +25,12 @@ export type MockClassFunctionHandler = (
 ) => any;
 
 export interface MidwayMockApplication extends MockApplication {
-  applicationContext: IApplicationContext;
-  pluginContext: IApplicationContext;
+  applicationContext: IMidwayContainer;
+  pluginContext: IMidwayContainer;
   appDir: string;
   baseDir: string;
   enablePlugins: any;
-  getApplicationContext(): IApplicationContext;
+  getApplicationContext(): IMidwayContainer;
   getPluginContext(): IApplicationContext;
   getPlugin(pluginName: string): any;
   getLogger(name?: string): any;

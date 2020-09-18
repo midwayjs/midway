@@ -1,7 +1,12 @@
-import { SCHEDULE_KEY, ScheduleOpts, getClassMetadata, getProviderId, listModule } from '@midwayjs/decorator';
+import {
+  SCHEDULE_KEY,
+  ScheduleOpts,
+  getClassMetadata,
+  getProviderId,
+  listModule,
+} from '@midwayjs/decorator';
 
-export = (agent) => {
-
+export = agent => {
   if (!agent.schedule) {
     return;
   }
@@ -44,5 +49,4 @@ export = (agent) => {
       instance.start();
     }
   });
-
 };

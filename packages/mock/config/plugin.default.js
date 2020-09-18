@@ -2,9 +2,9 @@
 
 module.exports = {
   watcher: {
-    enable: false
+    enable: false,
   },
   development: {
-    enable: false
-  }
+    enable: false,
+  },
 };

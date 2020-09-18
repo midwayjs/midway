@@ -53,11 +53,12 @@ export class MessageSource extends Map implements IMessageSource {
     }
   }
 
-  getMessage(code: string,
-             args?: any[],
-             defaultMessage?: string,
-             locale?: Locale): string {
-
+  getMessage(
+    code: string,
+    args?: any[],
+    defaultMessage?: string,
+    locale?: Locale
+  ): string {
     let messages;
     if (locale) {
       messages = this.get(locale);
@@ -75,6 +76,7 @@ export class MessageSource extends Map implements IMessageSource {
 
     if (args && args.length > 0) {
       args.unshift(messages[code]);
+      // eslint-disable-next-line prefer-spread
       return format.apply(null, args);
     }
     return messages[code];

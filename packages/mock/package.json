@@ -31,13 +31,14 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/cli": "^1.0.x",
-    "@midwayjs/decorator": "^2.2.5"
+    "@midwayjs/cli": "^1.0.x"
   },
   "dependencies": {
     "@midwayjs/bootstrap": "^2.2.5",
     "@midwayjs/core": "^2.2.5",
+    "@midwayjs/decorator": "^2.2.5",
     "egg-mock": "^3.21.0",
+    "fs-extra": "^8.0.1",
     "power-assert": "^1.6.1",
     "supertest": "^4.0.2"
   },

@@ -34,7 +34,5 @@ export class APIController {
 
   @Get('/login')
   @Redirect('/')
-  async redirect() {
-  }
-
+  async redirect() {}
 }

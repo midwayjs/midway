@@ -19,8 +19,12 @@ export class MidwayRequestContainer extends MidwayContainer {
     }
 
     const resolverHandler = this.applicationContext.resolverHandler;
-    this.beforeEachCreated(resolverHandler.beforeEachCreated.bind(resolverHandler));
-    this.afterEachCreated(resolverHandler.afterEachCreated.bind(resolverHandler));
+    this.beforeEachCreated(
+      resolverHandler.beforeEachCreated.bind(resolverHandler)
+    );
+    this.afterEachCreated(
+      resolverHandler.afterEachCreated.bind(resolverHandler)
+    );
   }
 
   init() {

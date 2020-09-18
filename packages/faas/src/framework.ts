@@ -3,7 +3,7 @@ import {
   FaaSMiddleware,
   IFaaSConfigurationOptions,
   IMidwayFaaSApplication,
-  WebMiddleware
+  WebMiddleware,
 } from './interface';
 import {
   BaseFramework,
@@ -20,7 +20,7 @@ import {
 } from '@midwayjs/core';
 
 import { dirname, resolve } from 'path';
-import { FUNC_KEY, LOGGER_KEY, PLUGIN_KEY, } from '@midwayjs/decorator';
+import { FUNC_KEY, LOGGER_KEY, PLUGIN_KEY } from '@midwayjs/decorator';
 import SimpleLock from '@midwayjs/simple-lock';
 import * as compose from 'koa-compose';
 import { MidwayHooks } from './hooks';
@@ -29,7 +29,9 @@ const LOCK_KEY = '_faas_starter_start_key';
 
 // const MIDWAY_FAAS_KEY = '__midway_faas__';
 
-export class MidwayFaaSFramework extends BaseFramework<IFaaSConfigurationOptions> {
+export class MidwayFaaSFramework extends BaseFramework<
+  IFaaSConfigurationOptions
+> {
   protected defaultHandlerMethod = 'handler';
   private globalMiddleware: string[];
   protected funMappingStore: Map<string, any> = new Map();
@@ -37,7 +39,9 @@ export class MidwayFaaSFramework extends BaseFramework<IFaaSConfigurationOptions
   private lock = new SimpleLock();
   private webApplication: IMidwayFaaSApplication;
 
-  protected async beforeDirectoryLoad(options: Partial<IMidwayBootstrapOptions>) {
+  protected async beforeDirectoryLoad(
+    options: Partial<IMidwayBootstrapOptions>
+  ) {
     this.logger = options.logger || console;
     this.globalMiddleware = this.configurationOptions.middleware || [];
     this.webApplication = this.defineApplicationProperties(
@@ -80,9 +84,9 @@ export class MidwayFaaSFramework extends BaseFramework<IFaaSConfigurationOptions
           const handlerName = opts.funHandler
             ? // @Func(key), if key is set
               // or @Func({ handler })
-            opts.funHandler
+              opts.funHandler
             : // else use ClassName.mehtod as handler key
-            covertId(funModule.name, opts.key);
+              covertId(funModule.name, opts.key);
           this.funMappingStore.set(handlerName, {
             middleware: opts.middleware || [],
             mod: funModule,
@@ -100,8 +104,7 @@ export class MidwayFaaSFramework extends BaseFramework<IFaaSConfigurationOptions
     }, LOCK_KEY);
   }
 
-  public async stop(): Promise<void> {
-  }
+  public async stop(): Promise<void> {}
 
   public getApplication(): IMidwayApplication {
     return this.webApplication;
@@ -156,8 +159,12 @@ export class MidwayFaaSFramework extends BaseFramework<IFaaSConfigurationOptions
     };
   }
 
-  public async generateMiddleware(middlewareId: string): Promise<FaaSMiddleware> {
-    const mwIns = await this.getApplicationContext().getAsync<WebMiddleware>(middlewareId);
+  public async generateMiddleware(
+    middlewareId: string
+  ): Promise<FaaSMiddleware> {
+    const mwIns = await this.getApplicationContext().getAsync<WebMiddleware>(
+      middlewareId
+    );
     return mwIns.resolve();
   }
 
@@ -210,8 +217,9 @@ export class MidwayFaaSFramework extends BaseFramework<IFaaSConfigurationOptions
       return handlerMethod;
     }
     throw new Error(
-      `no handler setup on ${target.name}#${method ||
-      this.defaultHandlerMethod}`
+      `no handler setup on ${target.name}#${
+        method || this.defaultHandlerMethod
+      }`
     );
   }
 
@@ -301,7 +309,7 @@ export class MidwayFaaSFramework extends BaseFramework<IFaaSConfigurationOptions
 
       generateMiddleware: async (middlewareId: string) => {
         return this.generateMiddleware(middlewareId);
-      }
+      },
     });
   }
 
