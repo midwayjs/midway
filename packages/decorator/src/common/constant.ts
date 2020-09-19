@@ -1,5 +1,5 @@
 // got all value with no property name
-export const ALL_VALUE = 'common:all_value_key';
+export const ALL = 'common:all_value_key';
 
 // common
 export const PRIORITY_KEY = 'common:priority';

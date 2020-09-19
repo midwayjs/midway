@@ -1,7 +1,7 @@
-import { ALL_VALUE, RouteParamTypes } from '@midwayjs/decorator';
+import { ALL, RouteParamTypes } from '@midwayjs/decorator';
 
 export const extractKoaLikeValue = (key, data) => {
-  if (ALL_VALUE === data) {
+  if (ALL === data) {
     data = undefined;
   }
   return async function (ctx, next) {
@@ -31,7 +31,7 @@ export const extractKoaLikeValue = (key, data) => {
 };
 
 export const extractExpressLikeValue = (key, data) => {
-  if (ALL_VALUE === data) {
+  if (ALL === data) {
     data = undefined;
   }
   return async function (req, res, next) {
