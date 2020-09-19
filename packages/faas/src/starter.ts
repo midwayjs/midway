@@ -372,24 +372,6 @@ export class FaaSStarter implements IFaaSStarter {
       },
     });
   }
-
-  private async loadMiddleware(middlewares) {
-    const newMiddlewares = [];
-    for (const middleware of middlewares) {
-      if (typeof middleware === 'function') {
-        newMiddlewares.push(middleware);
-      } else {
-        const middlewareImpl: IMiddleware<FaaSContext> = await this.getApplicationContext().getAsync(
-          middleware
-        );
-        if (middlewareImpl && typeof middlewareImpl.resolve === 'function') {
-          newMiddlewares.push(middlewareImpl.resolve() as any);
-        }
-      }
-    }
-
-    return newMiddlewares;
-  }
 }
 
 function covertId(cls, method) {
