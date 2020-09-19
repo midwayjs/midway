@@ -1,12 +1,11 @@
 import { MidwayRequestContainer, IMidwayCoreApplication } from '@midwayjs/core';
 import { FaaSHTTPContext } from '@midwayjs/faas-typings';
 import type { MidwayHooks } from './hooks';
+import { Middleware } from './middleware';
 
 export interface IFaaSApplication extends IMidwayCoreApplication {
   getInitializeContext();
-  use(
-    middleware: (() => (context: any, next: () => Promise<any>) => any) | string
-  );
+  use(middleware: Middleware<any>);
   useMiddleware(mw: string[]);
 }
 
