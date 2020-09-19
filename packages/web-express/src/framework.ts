@@ -20,6 +20,7 @@ import {
   PRIORITY_KEY,
   RouterOption,
   RouterParamValue,
+  WEB_RESPONSE_CONTENT_TYPE,
   WEB_RESPONSE_HEADER,
   WEB_RESPONSE_HTTP_CODE,
   WEB_RESPONSE_KEY,
@@ -135,6 +136,9 @@ export class MidwayExpressFramework extends BaseFramework<
               break;
             case WEB_RESPONSE_HEADER:
               res.set(routerRes.setHeaders);
+              break;
+            case WEB_RESPONSE_CONTENT_TYPE:
+              res.type(routerRes.contentType);
               break;
             case WEB_RESPONSE_REDIRECT:
               res.redirect(routerRes.code, routerRes.url);

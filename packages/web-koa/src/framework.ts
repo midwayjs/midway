@@ -21,6 +21,7 @@ import {
   PRIORITY_KEY,
   RouterOption,
   RouterParamValue,
+  WEB_RESPONSE_CONTENT_TYPE,
   WEB_RESPONSE_HEADER,
   WEB_RESPONSE_HTTP_CODE,
   WEB_RESPONSE_KEY,
@@ -98,6 +99,9 @@ export abstract class MidwayKoaBaseFramework<
               routerRes.setHeaders.forEach((key, value) => {
                 ctx.set(key, value);
               });
+              break;
+            case WEB_RESPONSE_CONTENT_TYPE:
+              ctx.type = routerRes.contentType;
               break;
             case WEB_RESPONSE_REDIRECT:
               ctx.status = routerRes.code;
