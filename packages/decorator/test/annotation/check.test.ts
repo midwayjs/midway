@@ -1,4 +1,4 @@
-import { Check, Rule, RuleType } from '../../src';
+import { Validate, Rule, RuleType } from '../../src';
 import * as assert from 'assert';
 describe('/test/annotation/check.test.ts', () => {
   it('check with check', () => {
@@ -8,7 +8,7 @@ describe('/test/annotation/check.test.ts', () => {
     }
 
     class Hello {
-      @Check()
+      @Validate()
       school(a, data: UserDTO) {
         return data;
       }
@@ -41,7 +41,7 @@ describe('/test/annotation/check.test.ts', () => {
     }
 
     class Hello {
-      @Check(true)
+      @Validate(true)
       school(a, data: UserDTO) {
         return data;
       }
@@ -89,7 +89,7 @@ describe('/test/annotation/check.test.ts', () => {
     }
 
     class Hello {
-      @Check()
+      @Validate()
       school(a, data: UserDTO) {
         return data;
       }
@@ -119,7 +119,7 @@ describe('/test/annotation/check.test.ts', () => {
     }
 
     class Hello {
-      @Check()
+      @Validate()
       school(a, data: UserDTO) {
         return data;
       }
@@ -150,7 +150,7 @@ describe('/test/annotation/check.test.ts', () => {
     }
 
     class Hello {
-      @Check()
+      @Validate()
       school(a, data: UserDTO) {
         return data;
       }
