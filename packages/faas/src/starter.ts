@@ -20,6 +20,7 @@ import {
 import SimpleLock from '@midwayjs/simple-lock';
 import * as compose from 'koa-compose';
 import { MidwayHooks } from './hooks';
+import { loadMiddleware } from './middleware';
 
 const LOCK_KEY = '_faas_starter_start_key';
 const MIDWAY_FAAS_KEY = '__midway_faas__';
@@ -165,7 +166,10 @@ export class FaaSStarter implements IFaaSStarter {
         }
         fnMiddlewere = fnMiddlewere.concat(funOptions.middleware);
         if (fnMiddlewere.length) {
-          const mw: any[] = await this.loadMiddleware(fnMiddlewere);
+          const mw = await loadMiddleware<FaaSContext>(
+            this.getApplicationContext(),
+            fnMiddlewere
+          );
           mw.push(async (ctx, next) => {
             // invoke handler
             const result = await this.invokeHandler(funOptions, ctx, args);
@@ -357,7 +361,10 @@ export class FaaSStarter implements IFaaSStarter {
 
       useMiddleware: async middlewares => {
         if (middlewares.length) {
-          const newMiddlewares = await this.loadMiddleware(middlewares);
+          const newMiddlewares = await loadMiddleware<any>(
+            this.getApplicationContext(),
+            middlewares
+          );
           for (const mw of newMiddlewares) {
             this.webApplication.use(mw);
           }

@@ -1,8 +1,7 @@
 import { FaaSContext, IFaaSApplication } from './interface';
+import * as compose from 'koa-compose';
+import { Middleware, loadMiddleware } from './middleware';
 
-/**
- * Stability: 1 - Experimental
- */
 export class MidwayHooks {
   private readonly ctx: FaaSContext;
   private readonly app: IFaaSApplication;
@@ -30,5 +29,10 @@ export class MidwayHooks {
 
   usePlugin(key: string) {
     return this.ctx[key] || this.app[key];
+  }
+
+  async useMiddleware(middlewares: Middleware<FaaSContext>[]) {
+    const mw = await loadMiddleware(this.ctx.requestContext, middlewares);
+    await compose(mw)(this.ctx);
   }
 }
