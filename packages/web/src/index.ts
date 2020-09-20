@@ -12,6 +12,12 @@ export { Application, Agent } from './application';
 /**
  * @deprecated
  */
+import { IWebMiddleware } from './interface';
+export type WebMiddleware = IWebMiddleware;
+
+/**
+ * @deprecated
+ */
 export {
   Provide as provide,
   Inject as inject,
