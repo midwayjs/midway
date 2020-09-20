@@ -36,8 +36,8 @@
     "prettier": "prettier --write 'packages/**/*.ts'",
     "authors": "git log --format='%aN <%aE>' | sort -u > AUTHORS",
     "site": "vuepress dev docs",
-    "lint": "lerna exec mwts check",
-    "lint:fix": "lerna exec mwts fix"
+    "lint": "lerna exec mwts check --parallel",
+    "lint:fix": "lerna exec mwts fix --parallel"
   },
   "keywords": [
     "serverless",
