@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import {
-  ALL_VALUE,
+  ALL,
   Body,
   File,
   Files,
@@ -20,7 +20,7 @@ class Test {
     @Headers('tt') tt: any,
     @File({ requireFile: true }) f: any,
     @Files() files: any,
-    @Session(ALL_VALUE) bb: any
+    @Session(ALL) bb: any
   ) {}
 }
 

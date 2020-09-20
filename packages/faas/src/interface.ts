@@ -41,6 +41,6 @@ export interface IFaaSConfigurationOptions {
   };
 }
 
-export interface WebMiddleware {
+export interface IWebMiddleware {
   resolve(): FaaSMiddleware;
 }

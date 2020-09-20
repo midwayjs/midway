@@ -20,6 +20,7 @@ import {
   PRIORITY_KEY,
   RouterOption,
   RouterParamValue,
+  WEB_RESPONSE_CONTENT_TYPE,
   WEB_RESPONSE_HEADER,
   WEB_RESPONSE_HTTP_CODE,
   WEB_RESPONSE_KEY,
@@ -32,7 +33,7 @@ import {
   IMidwayExpressConfigurationOptions,
   Middleware,
   MiddlewareParamArray,
-  WebMiddleware,
+  IWebMiddleware,
   IMidwayExpressRequest,
 } from './interface';
 import type { IRouter, IRouterHandler, RequestHandler } from 'express';
@@ -136,6 +137,9 @@ export class MidwayExpressFramework extends BaseFramework<
             case WEB_RESPONSE_HEADER:
               res.set(routerRes.setHeaders);
               break;
+            case WEB_RESPONSE_CONTENT_TYPE:
+              res.type(routerRes.contentType);
+              break;
             case WEB_RESPONSE_REDIRECT:
               res.redirect(routerRes.code, routerRes.url);
               return;
@@ -183,7 +187,7 @@ export class MidwayExpressFramework extends BaseFramework<
   }
 
   public async generateMiddleware(middlewareId: string) {
-    const mwIns = await this.getApplicationContext().getAsync<WebMiddleware>(
+    const mwIns = await this.getApplicationContext().getAsync<IWebMiddleware>(
       middlewareId
     );
     return mwIns.resolve();
@@ -292,7 +296,7 @@ export class MidwayExpressFramework extends BaseFramework<
           // web function middleware
           handlerCallback(middleware);
         } else {
-          const middlewareImpl: WebMiddleware | void = await this.getApplicationContext().getAsync(
+          const middlewareImpl: IWebMiddleware | void = await this.getApplicationContext().getAsync(
             middleware
           );
           if (middlewareImpl && typeof middlewareImpl.resolve === 'function') {

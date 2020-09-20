@@ -1,5 +1,5 @@
 // got all value with no property name
-export const ALL_VALUE = 'common:all_value_key';
+export const ALL = 'common:all_value_key';
 
 // common
 export const PRIORITY_KEY = 'common:priority';
@@ -20,6 +20,9 @@ export const WEB_RESPONSE_KEY = 'web:response';
 export const WEB_RESPONSE_HTTP_CODE = 'web:response_http_code';
 export const WEB_RESPONSE_REDIRECT = 'web:response_redirect';
 export const WEB_RESPONSE_HEADER = 'web:response_header';
+export const WEB_RESPONSE_CONTENT_TYPE = 'web:response_content_type';
+export const WEB_RESPONSE_RENDER = 'web:response_render';
+
 
 // ws
 export const WS_CONTROLLER_KEY = 'ws:controller';

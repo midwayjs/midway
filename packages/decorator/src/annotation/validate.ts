@@ -2,7 +2,7 @@ import { getClassMetadata, getMethodParamTypes, RULES_KEY } from '..';
 import { plainToClass } from 'class-transformer';
 import * as Joi from 'joi';
 
-export function Check(isTransform = true) {
+export function Validate(isTransform = true) {
   return function (
     target,
     propertyKey: string | symbol,

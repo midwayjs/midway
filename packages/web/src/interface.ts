@@ -1,6 +1,6 @@
 import { Context, Application } from 'egg';
 import { IMidwayApplication, IMidwayContext } from '@midwayjs/core';
-import { IMidwayKoaConfigurationOptions, IMidwayKoaContext } from '@midwayjs/koa';
+import { IMidwayKoaConfigurationOptions, IMidwayKoaContext, IMidwayKoaNext } from '@midwayjs/koa';
 import { DefaultState, Middleware } from 'koa';
 
 declare module 'egg' {
@@ -19,6 +19,7 @@ declare module 'egg' {
 
 export type IMidwayWebApplication = Application;
 export type IMidwayWebContext = Context;
+export type IMidwayWebNext = IMidwayKoaNext;
 
 export interface IMidwayWebConfigurationOptions extends IMidwayKoaConfigurationOptions {
   app?: IMidwayWebApplication;
@@ -35,6 +36,6 @@ export interface IMidwayWebConfigurationOptions extends IMidwayKoaConfigurationO
 
 export type MidwayWebMiddleware = Middleware<DefaultState, Context>;
 
-export interface WebMiddleware {
+export interface IWebMiddleware {
   resolve(): MidwayWebMiddleware;
 }

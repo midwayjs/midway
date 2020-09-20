@@ -13,7 +13,7 @@ export function isTypeScriptEnvironment() {
 export class BootstrapStarter {
   private appDir;
   private bootstrapItems: IMidwayFramework<any>[] = [];
-  private globalOptions: Partial<IMidwayBootstrapOptions>;
+  private globalOptions: Partial<IMidwayBootstrapOptions> = {};
 
   public configure(options: Partial<IMidwayBootstrapOptions>) {
     this.globalOptions = options;
@@ -26,7 +26,7 @@ export class BootstrapStarter {
   }
 
   public async init() {
-    this.appDir = this.globalOptions.baseDir;
+    this.appDir = this.globalOptions.baseDir || process.cwd();
     await Promise.all(
       this.getActions('initialize', {
         ...this.globalOptions,
@@ -88,11 +88,54 @@ export class Bootstrap {
   }
 
   static async run() {
+    // https://nodejs.org/api/process.html#process_signal_events
+    // https://en.wikipedia.org/wiki/Unix_signal
+    // kill(2) Ctrl-C
+    process.once('SIGINT', this.onSignal.bind(this, 'SIGINT'));
+    // kill(3) Ctrl-\
+    process.once('SIGQUIT', this.onSignal.bind(this, 'SIGQUIT'));
+    // kill(15) default
+    process.once('SIGTERM', this.onSignal.bind(this, 'SIGTERM'));
+
+    process.once('exit', this.onExit.bind(this));
+
     await this.getStarter().init();
-    return this.getStarter().run().catch(console.error);
+    return this.getStarter()
+      .run()
+      .then(() => {
+        console.log('[midway] current app started');
+      })
+      .catch((err) => {
+        console.error(err);
+        process.exit(1);
+      });
   }
 
   static async stop() {
-    return this.getStarter().stop().catch(console.error);
+    return this.getStarter().stop();
+  }
+
+  /**
+   * on bootstrap receive a exit signal
+   * @param signal
+   */
+  static async onSignal(signal) {
+    console.log('[midway] receive signal %s, closing', signal);
+    try {
+      await this.stop();
+      console.log('[midway] close done, exiting with code:0');
+      process.exit(0);
+    } catch (err) {
+      console.error('[midway] close with error: ', err);
+      process.exit(1);
+    }
+  }
+
+  /**
+   * on bootstrap process exit
+   * @param code
+   */
+  static onExit(code) {
+    console.log('[midway] exit with code:%s', code);
   }
 }

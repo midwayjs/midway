@@ -260,11 +260,12 @@ export class MidwayContainer extends Container implements IMidwayContainer {
       if (!descriptor || descriptor.writable === false) {
         continue;
       }
-      const originMethod = descriptor.value;
+      let originMethod = descriptor.value;
       if (isAsyncFunction(originMethod)) {
         this.debugLogger(`aspect [#${module.name}:${name}], isAsync=true, aspect class=[${aspectIns.constructor.name}]`);
         descriptor.value = async function (...args) {
           let error, result;
+          originMethod = originMethod.bind(this);
           const joinPoint = {
             methodName: name,
             target: this,
@@ -276,7 +277,7 @@ export class MidwayContainer extends Container implements IMidwayContainer {
             if (aspectIns.around) {
               result = await aspectIns.around(joinPoint);
             } else {
-              result = await originMethod.apply(this, joinPoint.args);
+              result = await originMethod(...joinPoint.args);
             }
             const resultTemp = await aspectIns.afterReturn?.(
               joinPoint,
@@ -299,6 +300,7 @@ export class MidwayContainer extends Container implements IMidwayContainer {
         this.debugLogger(`aspect [#${module.name}:${name}], isAsync=false, aspect class=[${aspectIns.constructor.name}]`);
         descriptor.value = function (...args) {
           let error, result;
+          originMethod = originMethod.bind(this);
           const joinPoint = {
             methodName: name,
             target: this,
@@ -310,7 +312,7 @@ export class MidwayContainer extends Container implements IMidwayContainer {
             if (aspectIns.around) {
               result = aspectIns.around(joinPoint);
             } else {
-              result = originMethod.apply(this, joinPoint.args);
+              result = originMethod(...joinPoint.args);
             }
             const resultTemp = aspectIns.afterReturn?.(joinPoint, result);
             result = typeof resultTemp === 'undefined' ? result : resultTemp;

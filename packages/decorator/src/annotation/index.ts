@@ -5,6 +5,6 @@ export * from './priority';
 export * from './provide';
 export * from './schedule';
 export * from './pipeline';
-export * from './check';
+export * from './validate';
 export * from './rule';
 export * from './aspect';

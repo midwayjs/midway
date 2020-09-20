@@ -1,7 +1,7 @@
-import { config, provide, WebMiddleware } from '../../../../../../../src';
+import { config, provide, IWebMiddleware } from '../../../../../../../src';
 
 @provide()
-export class ApiMiddleware implements WebMiddleware {
+export class ApiMiddleware implements IWebMiddleware {
 
   @config('hello')
   helloConfig;

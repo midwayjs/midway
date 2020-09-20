@@ -21,6 +21,7 @@ import {
   PRIORITY_KEY,
   RouterOption,
   RouterParamValue,
+  WEB_RESPONSE_CONTENT_TYPE,
   WEB_RESPONSE_HEADER,
   WEB_RESPONSE_HTTP_CODE,
   WEB_RESPONSE_KEY,
@@ -32,7 +33,7 @@ import {
   IMidwayKoaApplication,
   IMidwayKoaApplicationPlus,
   IMidwayKoaConfigurationOptions,
-  WebMiddleware,
+  IWebMiddleware,
   IMidwayKoaContext,
   MiddlewareParamArray,
 } from './interface';
@@ -99,6 +100,9 @@ export abstract class MidwayKoaBaseFramework<
                 ctx.set(key, value);
               });
               break;
+            case WEB_RESPONSE_CONTENT_TYPE:
+              ctx.type = routerRes.contentType;
+              break;
             case WEB_RESPONSE_REDIRECT:
               ctx.status = routerRes.code;
               ctx.redirect(routerRes.url);
@@ -110,7 +114,7 @@ export abstract class MidwayKoaBaseFramework<
   }
 
   public async generateMiddleware(middlewareId: string) {
-    const mwIns = await this.getApplicationContext().getAsync<WebMiddleware>(
+    const mwIns = await this.getApplicationContext().getAsync<IWebMiddleware>(
       middlewareId
     );
     return mwIns.resolve();
@@ -256,7 +260,7 @@ export abstract class MidwayKoaBaseFramework<
           // web function middleware
           handlerCallback(middleware);
         } else {
-          const middlewareImpl: WebMiddleware | void = await this.getApplicationContext().getAsync(
+          const middlewareImpl: IWebMiddleware | void = await this.getApplicationContext().getAsync(
             middleware
           );
           if (middlewareImpl && typeof middlewareImpl.resolve === 'function') {

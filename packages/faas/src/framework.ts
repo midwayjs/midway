@@ -3,7 +3,7 @@ import {
   FaaSMiddleware,
   IFaaSConfigurationOptions,
   IMidwayFaaSApplication,
-  WebMiddleware,
+  IWebMiddleware,
 } from './interface';
 import {
   BaseFramework,
@@ -162,7 +162,7 @@ export class MidwayFaaSFramework extends BaseFramework<
   public async generateMiddleware(
     middlewareId: string
   ): Promise<FaaSMiddleware> {
-    const mwIns = await this.getApplicationContext().getAsync<WebMiddleware>(
+    const mwIns = await this.getApplicationContext().getAsync<IWebMiddleware>(
       middlewareId
     );
     return mwIns.resolve();
