@@ -33,7 +33,7 @@ import {
   IMidwayKoaApplication,
   IMidwayKoaApplicationPlus,
   IMidwayKoaConfigurationOptions,
-  WebMiddleware,
+  IWebMiddleware,
   IMidwayKoaContext,
   MiddlewareParamArray,
 } from './interface';
@@ -114,7 +114,7 @@ export abstract class MidwayKoaBaseFramework<
   }
 
   public async generateMiddleware(middlewareId: string) {
-    const mwIns = await this.getApplicationContext().getAsync<WebMiddleware>(
+    const mwIns = await this.getApplicationContext().getAsync<IWebMiddleware>(
       middlewareId
     );
     return mwIns.resolve();
@@ -260,7 +260,7 @@ export abstract class MidwayKoaBaseFramework<
           // web function middleware
           handlerCallback(middleware);
         } else {
-          const middlewareImpl: WebMiddleware | void = await this.getApplicationContext().getAsync(
+          const middlewareImpl: IWebMiddleware | void = await this.getApplicationContext().getAsync(
             middleware
           );
           if (middlewareImpl && typeof middlewareImpl.resolve === 'function') {

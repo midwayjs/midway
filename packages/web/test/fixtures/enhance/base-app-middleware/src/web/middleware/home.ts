@@ -1,7 +1,7 @@
-import { provide, WebMiddleware } from '../../../../../../../src';
+import { provide, IWebMiddleware } from '../../../../../../../src';
 
 @provide()
-export class HomeMiddleware implements WebMiddleware {
+export class HomeMiddleware implements IWebMiddleware {
 
   resolve() {
     return async function (ctx, next) {
