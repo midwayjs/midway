@@ -212,8 +212,7 @@ export class MidwayContainer extends Container implements IMidwayContainer {
   }
 
   createConfiguration(): IContainerConfiguration {
-    const containerConfiguration = new ContainerConfiguration(this);
-    return containerConfiguration;
+    return new ContainerConfiguration(this);
   }
 
   addConfiguration(configuration: IContainerConfiguration) {

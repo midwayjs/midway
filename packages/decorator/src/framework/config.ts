@@ -1,8 +1,4 @@
-import {
-  attachClassMetadata,
-  CONFIG_KEY,
-  attachConstructorDataOnClass,
-} from '../';
+import { ALL, attachClassMetadata, attachConstructorDataOnClass, CONFIG_KEY, } from '../';
 
 export function Config(identifier?: string) {
   return function (target: any, targetKey: string, index?: number): void {
@@ -11,6 +7,9 @@ export function Config(identifier?: string) {
     } else {
       if (!identifier) {
         identifier = targetKey;
+      }
+      if (identifier === ALL) {
+        identifier = '';
       }
       attachClassMetadata(
         CONFIG_KEY,
