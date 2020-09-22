@@ -19,7 +19,7 @@ export function Validate(isTransform = true) {
           const schema = Joi.object(rules);
           const result = schema.validate(args[i]);
           if (result.error) {
-            throw new Error(result.error as any);
+            throw result.error;
           }
           // passed
           if (isTransform) {
