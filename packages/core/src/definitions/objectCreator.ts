@@ -1,4 +1,4 @@
-import * as is from 'is-type-of';
+import { isAsyncFunction, isGeneratorFunction, isPromise } from '../util';
 import { IObjectCreator, IObjectDefinition } from '../interface';
 
 export class ObjectCreator implements IObjectCreator {
@@ -67,7 +67,7 @@ export class ObjectCreator implements IObjectCreator {
     let inst;
     if (this.definition.constructMethod) {
       const fn = Clzz[this.definition.constructMethod];
-      if (is.asyncFunction(fn)) {
+      if (isAsyncFunction(fn)) {
         inst = await fn.apply(Clzz, args);
       } else {
         inst = fn.apply(Clzz, args);
@@ -88,15 +88,15 @@ export class ObjectCreator implements IObjectCreator {
     // after properties set then do init
     if (this.definition.initMethod && inst[this.definition.initMethod]) {
       if (
-        is.generatorFunction(inst[this.definition.initMethod]) ||
-        is.asyncFunction(inst[this.definition.initMethod])
+        isGeneratorFunction(inst[this.definition.initMethod]) ||
+        isAsyncFunction(inst[this.definition.initMethod])
       ) {
         throw new Error(
           `${this.definition.id} not valid by context.get, Use context.getAsync instead!`
         );
       } else {
         const rt = inst[this.definition.initMethod].call(inst);
-        if (is.promise(rt)) {
+        if (isPromise(rt)) {
           throw new Error(
             `${this.definition.id} not valid by context.get, Use context.getAsync instead!`
           );
@@ -114,7 +114,7 @@ export class ObjectCreator implements IObjectCreator {
     const inst = obj;
     if (this.definition.initMethod && inst[this.definition.initMethod]) {
       const initFn = inst[this.definition.initMethod];
-      if (is.asyncFunction(initFn)) {
+      if (isAsyncFunction(initFn)) {
         await initFn.call(inst);
       } else {
         if (initFn.length === 1) {
@@ -147,7 +147,7 @@ export class ObjectCreator implements IObjectCreator {
   async doDestroyAsync(obj: any): Promise<void> {
     if (this.definition.destroyMethod && obj[this.definition.destroyMethod]) {
       const fn = obj[this.definition.destroyMethod];
-      if (is.asyncFunction(fn)) {
+      if (isAsyncFunction(fn)) {
         await fn.call(obj);
       } else {
         if (fn.length === 1) {

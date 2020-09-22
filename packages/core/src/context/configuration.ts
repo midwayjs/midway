@@ -7,7 +7,7 @@ import {
   saveModule,
   saveProviderId,
 } from '@midwayjs/decorator';
-import * as is from 'is-type-of';
+
 import { dirname, isAbsolute, join } from 'path';
 import {
   IContainerConfiguration,
@@ -15,6 +15,7 @@ import {
   MAIN_MODULE_KEY,
 } from '../interface';
 import { isPath, safeRequire, generateProvideId } from '../common/util';
+import { isClass, isFunction } from '../util';
 
 const debug = require('debug')('midway:container:configuration');
 
@@ -244,12 +245,12 @@ export class ContainerConfiguration implements IContainerConfiguration {
 
   private getConfigurationExport(exports): any[] {
     const mods = [];
-    if (is.class(exports) || is.function(exports)) {
+    if (isClass(exports) || isFunction(exports)) {
       mods.push(exports);
     } else {
       for (const m in exports) {
         const module = exports[m];
-        if (is.class(module) || is.function(module)) {
+        if (isClass(module) || isFunction(module)) {
           mods.push(module);
         }
       }

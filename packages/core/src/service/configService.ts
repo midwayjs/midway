@@ -1,9 +1,9 @@
 import * as extend from 'extend2';
-import * as is from 'is-type-of';
 import { basename, join } from 'path';
 import { IConfigService, IMidwayContainer } from '../interface';
-import { safelyGet } from '../common/util';
+import { safelyGet } from '..';
 import { readdirSync, statSync } from 'fs';
+import { isFunction } from '../util';
 
 const debug = require('debug')('midway:config');
 
@@ -111,7 +111,7 @@ export class MidwayConfigService implements IConfigService {
       exports = exports['default'];
     }
     let result = exports;
-    if (is.function(exports)) {
+    if (isFunction(exports)) {
       // eslint-disable-next-line prefer-spread
       result = await exports.apply(null, [].concat(this.container));
     }
