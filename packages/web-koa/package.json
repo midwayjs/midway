@@ -18,8 +18,8 @@
     "koa"
   ],
   "files": [
-    "src",
-    "dist"
+    "dist/**/*.js",
+    "dist/**/*.d.ts"
   ],
   "license": "MIT",
   "devDependencies": {
