@@ -12,7 +12,6 @@ import {
   saveClassMetadata,
   ScopeEnum,
 } from '@midwayjs/decorator';
-import * as is from 'is-type-of';
 import { ContainerConfiguration } from './configuration';
 import { FUNCTION_INJECT_KEY, generateProvideId, PRIVATE_META_DATA_KEY } from '..';
 import {
@@ -31,7 +30,7 @@ import { Container } from './container';
 import { pipelineFactory } from '../features/pipeline';
 import { ResolverHandler } from './resolverHandler';
 import { run } from '@midwayjs/glob';
-import { isAsyncFunction } from '../util';
+import { isAsyncFunction, isClass, isFunction } from '../util';
 import * as pm from 'picomatch';
 
 const DEFAULT_PATTERN = ['**/**.ts', '**/**.tsx', '**/**.js'];
@@ -146,12 +145,12 @@ export class MidwayContainer extends Container implements IMidwayContainer {
   }
 
   bindClass(exports, namespace = '', filePath?: string) {
-    if (is.class(exports) || is.function(exports)) {
+    if (isClass(exports) || isFunction(exports)) {
       this.bindModule(exports, namespace, filePath);
     } else {
       for (const m in exports) {
         const module = exports[m];
-        if (is.class(module) || is.function(module)) {
+        if (isClass(module) || isFunction(module)) {
           this.bindModule(module, namespace, filePath);
         }
       }
@@ -159,7 +158,7 @@ export class MidwayContainer extends Container implements IMidwayContainer {
   }
 
   protected bindModule(module, namespace = '', filePath?: string) {
-    if (is.class(module)) {
+    if (isClass(module)) {
       const providerId = isProvide(module) ? getProviderId(module) : null;
       if (providerId) {
         if (namespace) {
@@ -213,8 +212,7 @@ export class MidwayContainer extends Container implements IMidwayContainer {
   }
 
   createConfiguration(): IContainerConfiguration {
-    const containerConfiguration = new ContainerConfiguration(this);
-    return containerConfiguration;
+    return new ContainerConfiguration(this);
   }
 
   addConfiguration(configuration: IContainerConfiguration) {

@@ -21,7 +21,7 @@
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
-    "@midwayjs/cli": "^1.0.x",
+    "@midwayjs/cli": "^1.0.0",
     "mm": "^2.5.0"
   },
   "keywords": [
@@ -29,7 +29,7 @@
     "decorator"
   ],
   "engines": {
-    "node": ">= 8.0.0"
+    "node": ">= 10.0.0"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
   "repository": {

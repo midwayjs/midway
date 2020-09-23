@@ -15,7 +15,7 @@ import { BaseApplicationContext } from './applicationContext';
 import { recursiveGetMetadata } from '../common/reflectTool';
 import { generateProvideId } from '../common/util';
 
-const is = require('is-type-of');
+import { isAsyncFunction, isClass, isFunction } from '../util';
 
 export class Container extends BaseApplicationContext implements IContainer {
   id = Math.random().toString(10).slice(-5);
@@ -35,18 +35,18 @@ export class Container extends BaseApplicationContext implements IContainer {
   ): void {
     let definition;
 
-    if (is.class(identifier) || is.function(identifier)) {
+    if (isClass(identifier) || isFunction(identifier)) {
       options = target;
       target = identifier as any;
       identifier = this.getIdentifier(target);
       options = null;
     }
 
-    if (is.class(target)) {
+    if (isClass(target)) {
       definition = new ObjectDefinition();
     } else {
       definition = new FunctionDefinition();
-      if (!is.asyncFunction(target)) {
+      if (!isAsyncFunction(target)) {
         definition.asynchronous = false;
       }
     }
