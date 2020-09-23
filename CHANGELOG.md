@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.8](https://github.com/midwayjs/midway/compare/v2.2.7...v2.2.8) (2020-09-23)
+
+
+### Bug Fixes
+
+* fix validate error ([e6e58d3](https://github.com/midwayjs/midway/commit/e6e58d371cbc52ddf51a7d03de48ef44b020aaa9))
+
+
+
+
+
 ## [2.2.7](https://github.com/midwayjs/midway/compare/v2.2.6...v2.2.7) (2020-09-20)
 
 

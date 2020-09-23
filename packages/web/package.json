@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/web",
-  "version": "2.2.7",
+  "version": "2.2.8",
   "description": "Midway Web Scene",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -24,7 +24,7 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/cli": "^1.0.0",
-    "@midwayjs/mock": "^2.2.7",
+    "@midwayjs/mock": "^2.2.8",
     "egg-view-nunjucks": "^2.2.0",
     "fs-extra": "^8.0.1",
     "pedding": "^1.1.0",
@@ -33,10 +33,10 @@
   },
   "dependencies": {
     "@eggjs/router": "^2.0.0",
-    "@midwayjs/bootstrap": "^2.2.7",
-    "@midwayjs/core": "^2.2.7",
-    "@midwayjs/decorator": "^2.2.7",
-    "@midwayjs/koa": "^2.2.7",
+    "@midwayjs/bootstrap": "^2.2.8",
+    "@midwayjs/core": "^2.2.8",
+    "@midwayjs/decorator": "^2.2.8",
+    "@midwayjs/koa": "^2.2.8",
     "debug": "^4.1.1",
     "egg": "^2.28.0",
     "egg-logger": "^2.4.2",
