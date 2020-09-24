@@ -16,9 +16,8 @@
     "core"
   ],
   "files": [
-    "src",
-    "dist",
-    "d.ts"
+    "dist/**/*.js",
+    "dist/**/*.d.ts"
   ],
   "license": "MIT",
   "devDependencies": {

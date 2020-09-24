@@ -5,7 +5,7 @@ export interface JoinPoint {
   methodName: string;
   target: any;
   args: any[];
-  proceed(...args: any[]): any;
+  proceed?(...args: any[]): any;
 }
 
 export interface AspectMetadata {

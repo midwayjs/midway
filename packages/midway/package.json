@@ -26,7 +26,8 @@
   "files": [
     "bin",
     "cluster",
-    "dist",
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
     "server.js",
     "src"
   ],

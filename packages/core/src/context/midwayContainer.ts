@@ -277,6 +277,7 @@ export class MidwayContainer extends Container implements IMidwayContainer {
             } else {
               result = await originMethod(...joinPoint.args);
             }
+            joinPoint.proceed = undefined;
             const resultTemp = await aspectIns.afterReturn?.(
               joinPoint,
               result
@@ -284,6 +285,7 @@ export class MidwayContainer extends Container implements IMidwayContainer {
             result = typeof resultTemp === 'undefined' ? result : resultTemp;
             return result;
           } catch (err) {
+            joinPoint.proceed = undefined;
             error = err;
             if (aspectIns.afterThrow) {
               await aspectIns.afterThrow(joinPoint, error);

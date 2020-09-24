@@ -21,8 +21,8 @@
     "node": ">= 10"
   },
   "files": [
-    "dist",
-    "index.d.ts"
+    "dist/**/*.js",
+    "dist/**/*.d.ts"
   ],
   "keywords": [
     "serverless",
