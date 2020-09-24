@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.10](https://github.com/midwayjs/midway/compare/v2.2.9...v2.2.10) (2020-09-24)
+
+
+### Bug Fixes
+
+* query decorator with empty args ([#646](https://github.com/midwayjs/midway/issues/646)) ([815e230](https://github.com/midwayjs/midway/commit/815e2308e8f40601ee3b94a3ccb2b1567dc03b9f))
+
+
+
+
+
 ## [2.2.9](https://github.com/midwayjs/midway/compare/v2.2.8...v2.2.9) (2020-09-24)
 
 
