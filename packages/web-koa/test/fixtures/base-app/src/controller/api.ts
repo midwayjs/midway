@@ -22,14 +22,14 @@ export class APIController {
   userService: UserService;
 
   @Post()
-  async postData(@Body('bbbbb') bbbb) {
+  async postData(@Body() bbbb) {
     return 'data';
   }
 
   @Get('/', { middleware: [] })
   @HttpCode(201)
-  async home(@Query('name') name: string) {
-    return 'hello world,' + name;
+  async home(@Query() name: string, @Query() age: number) {
+    return 'hello world,' + name + age;
   }
 
   @Get('/login')

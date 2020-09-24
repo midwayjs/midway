@@ -14,9 +14,9 @@ describe('/test/feature.test.ts', () => {
     });
 
     it('test get method with return value', async () => {
-      const result = await createHttpRequest(app).get('/').query({ name: 'harry' });
+      const result = await createHttpRequest(app).get('/').query({ name: 'harry', age: 18 });
       expect(result.status).toBe(201);
-      expect(result.text).toBe('hello world,harry');
+      expect(result.text).toBe('hello world,harry18');
     });
 
     it('test get method with redirect', async () => {
