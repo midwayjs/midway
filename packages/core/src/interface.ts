@@ -309,8 +309,9 @@ export enum MidwayFrameworkType {
   WEB_KOA = '@midwayjs/web_koa',
   WEB_EXPRESS = '@midwayjs/web_express',
   FAAS = '@midwayjs/faas',
-  RPC_HSF = '',
-  RPC_GRPC = '',
+  MS_HSF = '',
+  MS_GRPC = '',
+  MS_RABBITMQ = '@midwayjs/rabbitmq',
   WS_IO = '@midwayjs/socketio',
   WSS = '',
   CUSTOM = ''

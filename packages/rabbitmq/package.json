@@ -1,0 +1,44 @@
+{
+  "name": "@midwayjs/rabbitmq",
+  "version": "2.2.10",
+  "description": "Midway Framework for rabbitmq",
+  "main": "dist/index",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "midway-bin build -c",
+    "test": "midway-bin test --forceExit",
+    "cov": "midway-bin cov --forceExit",
+    "ci": "npm run test"
+  },
+  "keywords": [
+    "midway",
+    "IoC",
+    "ws",
+    "scene",
+    "rabbitMQ"
+  ],
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@midwayjs/cli": "^1.0.0",
+    "@midwayjs/mock": "^2.2.10",
+    "fs-extra": "^8.0.1"
+  },
+  "dependencies": {
+    "@midwayjs/core": "^2.2.10",
+    "@midwayjs/decorator": "^2.2.10",
+    "@types/amqplib": "^0.5.13",
+    "@types/amqp-connection-manager": "^2.0.10",
+    "amqplib": "^0.6.0",
+    "amqp-connection-manager": "^3.2.1"
+  },
+  "author": "Harry Chen <czy88840616@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/midwayjs/midway.git"
+  },
+  "gitHead": "44c0803552baf265debed8a11a860988b7e07a85"
+}

@@ -33,6 +33,10 @@ export const HSF_KEY = 'rpc:hsf';
 export const RPC_GRPC_KEY = 'rpc:grpc';
 export const RPC_DUBBO_KEY = 'rpc:dubbo';
 
+// microservice
+export const MS_COMSUMER_KEY = 'ms:comsumer';
+export const MS_PRODUCER_KEY = 'ms:producer';
+
 // framework
 export const CONFIG_KEY = 'config';
 export const PLUGIN_KEY = 'plugin';
