@@ -6,7 +6,7 @@ import {
   IMidwayContainer, IConfigurationOptions, MidwayFrameworkType,
 } from '@midwayjs/core';
 
-class TestFrameworkUnit implements IMidwayFramework<IConfigurationOptions> {
+class TestFrameworkUnit implements IMidwayFramework<any, IConfigurationOptions> {
   configurationOptions: IConfigurationOptions;
   options;
   app;
