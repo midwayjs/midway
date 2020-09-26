@@ -18,9 +18,10 @@ import {
 } from '@midwayjs/decorator';
 import {
   IMidwayRabbitMQApplication,
-  IMidwayRabbitMQConfigurationOptions,
+  IMidwayRabbitMQConfigurationOptions, IMidwayRabbitMQContext,
 } from './interface';
 import { RabbitMQServer } from './mq';
+import { ConsumeMessage } from 'amqplib';
 
 export class MidwayRabbitMQFramework extends BaseFramework<
   IMidwayRabbitMQApplication,
@@ -100,11 +101,15 @@ export class MidwayRabbitMQFramework extends BaseFramework<
   }
 
   bindConsumerToRequestMethod(listenerOptions, providerId) {
-    return this.app.createConsumer(listenerOptions, async data => {
+    return this.app.createConsumer(listenerOptions, async (data?: ConsumeMessage) => {
+      const ctx: IMidwayRabbitMQContext = {
+        channel: this.app.getChannel(),
+      }
       const requestContainer = new MidwayRequestContainer(
-        data,
+        ctx,
         this.getApplicationContext()
       );
+      ctx.requestContext = requestContainer;
       const ins = await requestContainer.getAsync(providerId);
       await ins[listenerOptions.propertyKey].call(ins, data);
     });

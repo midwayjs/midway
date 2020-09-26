@@ -6,8 +6,8 @@
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "midway-bin build -c",
-    "test": "midway-bin test --forceExit",
-    "cov": "midway-bin cov --forceExit",
+    "test": "midway-bin test",
+    "cov": "midway-bin cov",
     "ci": "npm run test"
   },
   "keywords": [

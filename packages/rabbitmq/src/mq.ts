@@ -6,13 +6,7 @@ import { EventEmitter } from 'events';
 import * as amqp from 'amqplib';
 import { IMidwayRabbitMQConfigurationOptions, IRabbitMQApplication } from './interface';
 import { RabbitMQListenerOptions } from '@midwayjs/decorator';
-import { Replies } from 'amqplib/properties';
-
-interface SubscribeParams {
-  queue: string;
-  routingKey: string;
-  callback: (any?) => void;
-}
+import { ConsumeMessage, Replies } from 'amqplib/properties';
 
 export class RabbitMQServer extends EventEmitter implements IRabbitMQApplication {
 
@@ -21,9 +15,7 @@ export class RabbitMQServer extends EventEmitter implements IRabbitMQApplication
   private channel: amqp.Channel;
   private reconnectTimeInSeconds: number;
   private exchanges: { [exchangeName: string]: Replies.AssertExchange };
-  private queues;
-  private consumer;
-  private subscribeCallbackOptions: SubscribeParams[] = [];
+  // private consumerCallback = {};
 
   constructor(options: Partial<IMidwayRabbitMQConfigurationOptions>) {
     super();
@@ -38,13 +30,16 @@ export class RabbitMQServer extends EventEmitter implements IRabbitMQApplication
 
   async createChannel() {
     try {
-      this.channel = await this.connection.createConfirmChannel();
+      if (this.options.useConfirmChannel === false) {
+        this.channel = await this.connection.createChannel();
+      } else {
+        this.channel = await this.connection.createConfirmChannel();
+      }
       this.channel.on('close', () => this.onChannelClose(null));
       this.channel.on('error', error => this.onChannelError(error));
       this.channel.on('return', msg => this.onChannelReturn(msg));
       this.channel.on('drain', () => this.onChannelDrain());
       await this.assertAllExchange();
-      // await this.createAllBinding();
       // this.createAllConsumer();
       this.emit('ch_open', this.channel);
     } catch (err) {
@@ -109,48 +104,6 @@ export class RabbitMQServer extends EventEmitter implements IRabbitMQApplication
     return await Promise.all(exchangeList);
   }
 
-  async createAllBinding() {
-    const exchangeConfig = {};
-    Object.getOwnPropertyNames(this.exchanges).forEach(async index => {
-      const exchange = this.exchanges[index];
-      exchangeConfig[exchange.name] = exchange;
-    });
-    return await Promise.all(
-      Object.getOwnPropertyNames(this.queues).map(async index => {
-        const queue = this.queues[index];
-        const exchange = exchangeConfig[queue.exchange];
-        if (exchange) {
-          return this.createBinding(queue, exchange);
-        }
-      }),
-    );
-  }
-
-  createAllConsumer() {
-    const consumer = this.consumer.bind(this);
-    const callbackOptions = this.subscribeCallbackOptions;
-    Object.getOwnPropertyNames(this.queues).forEach(async index => {
-      const queue = this.queues[index];
-      if (!queue.autoSubscribe) {
-        return;
-      }
-      await consumer(
-        queue.name,
-        async data => {
-          const promiseArray: any[] = [];
-          callbackOptions.forEach(async option => {
-            // 如果不设置routingKey，则不作判断
-            if (option.queue === queue.name && (!option.routingKey || data.fields.routingKey === option.routingKey)) {
-              promiseArray.push(option.callback(data));
-            }
-          });
-          await Promise.all(promiseArray);
-        },
-        queue.subscribeOptions,
-      );
-    });
-  }
-
   async createBinding(queue, exchange) {
     await this.assertQueue(queue.name, queue.options);
     if (!queue.keys) {
@@ -174,7 +127,7 @@ export class RabbitMQServer extends EventEmitter implements IRabbitMQApplication
     if (!this.channel) {
       throw new Error('the channel is empty');
     }
-    return this.channel.assertQueue(queue, options);
+    await this.channel.assertQueue(queue, options);
   }
 
   async bindQueue(queue, source, pattern?, args = {}) {
@@ -186,10 +139,25 @@ export class RabbitMQServer extends EventEmitter implements IRabbitMQApplication
 
   async createConsumer(
     listenerOptions: RabbitMQListenerOptions,
-    listenerCallback
+    listenerCallback: (msg: ConsumeMessage | null) => Promise<void>
   ) {
-    // assert queue
-    await this.assertQueue(listenerOptions.queueName);
+    // bind queue to exchange
+    if (listenerOptions.exchange && this.exchanges[listenerOptions.exchange]) {
+      await this.createBinding(listenerOptions, this.exchanges[listenerOptions.exchange]);
+    }
+
+    // 默认每次只接受一条
+    await this.channel.prefetch(listenerOptions.prefetch || 1);
+    // 绑定回调
+    await this.channel.consume(listenerOptions.queueName, async msg => {
+      if (!listenerOptions.routingKey || msg.fields.routingKey === listenerOptions.routingKey) {
+        await listenerCallback(msg);
+      }
+    }, listenerOptions.consumeOptions);
+  }
+
+  getChannel() {
+    return this.channel;
   }
 
   async close() {

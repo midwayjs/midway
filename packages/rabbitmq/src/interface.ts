@@ -1,6 +1,7 @@
 import { IMidwayApplication, IMidwayContainer } from '@midwayjs/core';
-import { Options } from 'amqplib/properties';
+import { ConsumeMessage, Options } from 'amqplib/properties';
 import { RabbitMQListenerOptions } from "@midwayjs/decorator";
+import * as amqp from 'amqplib';
 
 export interface IRabbitMQApplication {
   init(): Promise<void>
@@ -8,7 +9,8 @@ export interface IRabbitMQApplication {
   createChannel(): Promise<void>;
   closeChannel(): Promise<void>;
   assertQueue(queue: string, options?): Promise<void>;
-  createConsumer(listenerOptions: RabbitMQListenerOptions, listenerCallback): Promise<void>;
+  createConsumer(listenerOptions: RabbitMQListenerOptions, listenerCallback: (msg: ConsumeMessage | null) => Promise<void>): Promise<void>;
+  getChannel(): amqp.Channel;
   close(): Promise<void>;
 }
 
@@ -25,8 +27,10 @@ export type IMidwayRabbitMQConfigurationOptions = {
   socketOptions?: any;
   reconnectTimeInSeconds?: number;
   exchanges?: IRabbitMQExchange[];
+  useConfirmChannel?: boolean;
 }
 
 export type IMidwayRabbitMQContext = {
-  requestContext: IMidwayContainer;
+  channel: amqp.Channel;
+  requestContext?: IMidwayContainer;
 };

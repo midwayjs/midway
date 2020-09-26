@@ -6,7 +6,7 @@ import { closeApp, creatApp } from './utils';
 
 async function createProducer(queueName: string) {
   const connection = await amqp.connect('amqp://localhost');
-  const ch = await connection.createChannel();
+  const ch = await connection.createConfirmChannel();
   await ch.assertQueue(queueName);
   await ch.sendToQueue(queueName, Buffer.from('something to do'));
   return ch;
