@@ -10,7 +10,7 @@ import {
   PRIVATE_META_DATA_KEY,
 } from '@midwayjs/core';
 
-import { MS_COMSUMER_KEY } from '@midwayjs/decorator';
+import { MS_CONSUMER_KEY } from '@midwayjs/decorator';
 import { IMidwayRabbitMQApplication, IMidwayRabbitMQConfigurationOptions } from './interface';
 import { RabbitMQServer } from './mq';
 
@@ -93,7 +93,7 @@ export class MidwayRabbitMQFramework extends BaseFramework<
 
   private async loadSubscriber() {
     // create room
-    const subscriberModules = listModule(MS_COMSUMER_KEY);
+    const subscriberModules = listModule(MS_CONSUMER_KEY);
     for (const module of subscriberModules) {
       let providerId = getProviderId(module);
       const meta = getClassMetadata(PRIVATE_META_DATA_KEY, module);

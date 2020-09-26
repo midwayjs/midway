@@ -1,26 +1,21 @@
-const { AmqpConnectionManager } = require('amqp-connection-manager');
-AmqpConnectionManager.prototype._connect = () => {}
+const { connect } = require('./mock');
+const amqp = require('amqplib');
+amqp.connect = connect;
+
 import { closeApp, creatApp } from './utils';
 
-async function createProducer() {
-  const connection = new AmqpConnectionManager(['amqp://localhost']);
-  const channelWrapper = connection.createChannel({
-    json: true,
-    setup: function (channel) {
-      // `channel` here is a regular amqplib `ConfirmChannel`.
-      // Note that `this` here is the channelWrapper instance.
-      return channel.assertQueue('test', { durable: true });
-    }
-  });
-  const isSuccesss = await channelWrapper.sendToQueue('test', { hello: 'world' });
-  console.log('send success', isSuccesss);
-
-  return channelWrapper;
+async function createProducer(queueName: string) {
+  const connection = await amqp.connect('amqp://localhost');
+  const ch = await connection.createChannel();
+  await ch.assertQueue(queueName);
+  await ch.sendToQueue(queueName, Buffer.from('something to do'));
+  console.log('send success');
+  return ch;
 }
 
 describe('/test/index.test.ts', () => {
   it('should test create socket app and use default namespace', async () => {
-    await createProducer();
+    await createProducer('tasks');
     const app = await creatApp('base-app', { url: 'amqp://localhost'});
     await closeApp(app);
   });

@@ -1,6 +1,6 @@
-import { Subscriber } from '@midwayjs/decorator';
+import { Consumer } from '@midwayjs/decorator';
 
-@Subscriber('user_data')
+@Consumer('user_data')
 export class UserConsumer {
 
   async gotData() {

@@ -34,7 +34,7 @@ export const RPC_GRPC_KEY = 'rpc:grpc';
 export const RPC_DUBBO_KEY = 'rpc:dubbo';
 
 // microservice
-export const MS_COMSUMER_KEY = 'ms:comsumer';
+export const MS_CONSUMER_KEY = 'ms:consumer';
 export const MS_PRODUCER_KEY = 'ms:producer';
 
 // framework
