@@ -9,7 +9,6 @@ async function createProducer(queueName: string) {
   const ch = await connection.createChannel();
   await ch.assertQueue(queueName);
   await ch.sendToQueue(queueName, Buffer.from('something to do'));
-  console.log('send success');
   return ch;
 }
 

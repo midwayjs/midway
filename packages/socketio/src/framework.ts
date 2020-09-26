@@ -6,7 +6,6 @@ import {
   IMidwayBootstrapOptions,
   listModule,
   MidwayFrameworkType,
-  MidwayProcessTypeEnum,
   MidwayRequestContainer,
   PRIVATE_META_DATA_KEY,
 } from '@midwayjs/core';
@@ -26,9 +25,10 @@ import {
 } from '@midwayjs/decorator';
 
 export class MidwaySocketIOFramework extends BaseFramework<
+  IMidwaySocketIOApplication,
   IMidwaySocketIOConfigurationOptions
 > {
-  protected app: IMidwaySocketIOApplication;
+  public app: IMidwaySocketIOApplication;
 
   public configure(
     options: IMidwaySocketIOConfigurationOptions
@@ -51,7 +51,6 @@ export class MidwaySocketIOFramework extends BaseFramework<
       ) as unknown) as IMidwaySocketIOApplication;
     }
 
-    this.defineApplicationProperties(this.app);
     this.app.use((socket, next) => {
       socket.requestContext = new MidwayRequestContainer(
         socket,
@@ -96,40 +95,6 @@ export class MidwaySocketIOFramework extends BaseFramework<
 
   public getApplication(): IMidwaySocketIOApplication {
     return this.app;
-  }
-
-  protected defineApplicationProperties(
-    app: IMidwaySocketIOApplication
-  ): IMidwaySocketIOApplication {
-    return Object.assign(app, {
-      getBaseDir: () => {
-        return this.baseDir;
-      },
-
-      getAppDir: () => {
-        return this.appDir;
-      },
-
-      getEnv: () => {
-        return this.getApplicationContext()
-          .getEnvironmentService()
-          .getCurrentEnvironment();
-      },
-
-      getConfig: (key?: string) => {
-        return this.getApplicationContext()
-          .getConfigService()
-          .getConfiguration(key);
-      },
-
-      getFrameworkType: () => {
-        return this.getFrameworkType();
-      },
-
-      getProcessType: () => {
-        return MidwayProcessTypeEnum.APPLICATION;
-      },
-    });
   }
 
   private async loadMidwayController() {

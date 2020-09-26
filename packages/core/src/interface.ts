@@ -291,13 +291,14 @@ export interface IMidwayBootstrapOptions {
 
 export interface IConfigurationOptions {}
 
-export interface IMidwayFramework<T extends IConfigurationOptions> {
+export interface IMidwayFramework<APP extends IMidwayApplication, T extends IConfigurationOptions> {
+  app: APP;
   configurationOptions: T;
-  configure(options: T): IMidwayFramework<T>;
+  configure(options: T): IMidwayFramework<APP, T>;
   initialize(options: Partial<IMidwayBootstrapOptions>): Promise<void>;
   run(): Promise<void>;
   stop(): Promise<void>;
-  getApplication(): IMidwayApplication;
+  getApplication(): APP;
   getApplicationContext(): IMidwayContainer;
   getConfiguration(key?: string): any;
   getCurrentEnvironment(): string;

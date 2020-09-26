@@ -40,9 +40,10 @@ import type { IRouter, IRouterHandler, RequestHandler } from 'express';
 import * as express from 'express';
 
 export class MidwayExpressFramework extends BaseFramework<
+  IMidwayExpressApplication,
   IMidwayExpressConfigurationOptions
 > {
-  protected app: IMidwayExpressApplication;
+  public app: IMidwayExpressApplication;
   private controllerIds: string[] = [];
   public prioritySortRouters: Array<{
     priority: number;

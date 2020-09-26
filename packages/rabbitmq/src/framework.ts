@@ -5,19 +5,29 @@ import {
   getProviderId,
   IMidwayBootstrapOptions,
   listModule,
+  listPropertyDataFromClass,
   MidwayFrameworkType,
-  MidwayProcessTypeEnum,
+  MidwayRequestContainer,
   PRIVATE_META_DATA_KEY,
 } from '@midwayjs/core';
 
-import { MS_CONSUMER_KEY } from '@midwayjs/decorator';
-import { IMidwayRabbitMQApplication, IMidwayRabbitMQConfigurationOptions } from './interface';
+import {
+  MS_CONSUMER_KEY,
+  MSListenerType,
+  RabbitMQListenerOptions,
+} from '@midwayjs/decorator';
+import {
+  IMidwayRabbitMQApplication,
+  IMidwayRabbitMQConfigurationOptions,
+} from './interface';
 import { RabbitMQServer } from './mq';
 
 export class MidwayRabbitMQFramework extends BaseFramework<
+  IMidwayRabbitMQApplication,
   IMidwayRabbitMQConfigurationOptions
-  > {
-  protected app: IMidwayRabbitMQApplication;
+> {
+  public app: IMidwayRabbitMQApplication;
+  public consumerList = [];
 
   public configure(
     options: IMidwayRabbitMQConfigurationOptions
@@ -26,12 +36,10 @@ export class MidwayRabbitMQFramework extends BaseFramework<
     return this;
   }
 
-  protected async afterDirectoryLoad(
-    options
-  ) {
-    this.app = new RabbitMQServer(this.configurationOptions) as unknown as IMidwayRabbitMQApplication;
-    this.defineApplicationProperties(this.app);
-
+  protected async afterDirectoryLoad(options) {
+    this.app = (new RabbitMQServer(
+      this.configurationOptions
+    ) as unknown) as IMidwayRabbitMQApplication;
     // init connection
     await this.app.init();
   }
@@ -43,6 +51,7 @@ export class MidwayRabbitMQFramework extends BaseFramework<
   }
 
   public async run(): Promise<void> {
+    await Promise.all(this.consumerList);
   }
 
   protected async beforeStop(): Promise<void> {
@@ -57,53 +66,47 @@ export class MidwayRabbitMQFramework extends BaseFramework<
     return this.app;
   }
 
-  protected defineApplicationProperties(
-    app: IMidwayRabbitMQApplication
-  ): IMidwayRabbitMQApplication {
-    return Object.assign(app, {
-      getBaseDir: () => {
-        return this.baseDir;
-      },
-
-      getAppDir: () => {
-        return this.appDir;
-      },
-
-      getEnv: () => {
-        return this.getApplicationContext()
-          .getEnvironmentService()
-          .getCurrentEnvironment();
-      },
-
-      getConfig: (key?: string) => {
-        return this.getApplicationContext()
-          .getConfigService()
-          .getConfiguration(key);
-      },
-
-      getFrameworkType: () => {
-        return this.getFrameworkType();
-      },
-
-      getProcessType: () => {
-        return MidwayProcessTypeEnum.APPLICATION;
-      },
-    });
-  }
-
   private async loadSubscriber() {
     // create room
     const subscriberModules = listModule(MS_CONSUMER_KEY);
     for (const module of subscriberModules) {
+      const type: MSListenerType = getClassMetadata(MS_CONSUMER_KEY, module);
+
+      if (type !== MSListenerType.RABBITMQ) {
+        continue;
+      }
+
+      // get providerId
       let providerId = getProviderId(module);
       const meta = getClassMetadata(PRIVATE_META_DATA_KEY, module);
       if (providerId && meta) {
         providerId = generateProvideId(providerId, meta.namespace);
       }
 
-      // get meta
-      // this.app.ass
+      // get listenerInfo
+      const data: RabbitMQListenerOptions[][] = listPropertyDataFromClass(
+        MS_CONSUMER_KEY,
+        module
+      );
+
+      for (const methodBindListeners of data) {
+        for (const listenerOptions of methodBindListeners) {
+          this.consumerList.push(
+            this.bindConsumerToRequestMethod(listenerOptions, providerId)
+          );
+        }
+      }
     }
   }
 
+  bindConsumerToRequestMethod(listenerOptions, providerId) {
+    return this.app.createConsumer(listenerOptions, async data => {
+      const requestContainer = new MidwayRequestContainer(
+        data,
+        this.getApplicationContext()
+      );
+      const ins = await requestContainer.getAsync(providerId);
+      await ins[listenerOptions.propertyKey].call(ins, data);
+    });
+  }
 }

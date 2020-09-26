@@ -1,16 +1,15 @@
 import { ScopeEnum, saveClassMetadata, saveModule, MS_CONSUMER_KEY } from '../';
 import { Scope } from '../annotation';
 
-export interface ConsumerOptions {
+export enum MSListenerType {
+  RABBITMQ = 'rabbitmq',
+  MTTQ = 'mttq',
 }
 
-export function Consumer(name: string, options?: ConsumerOptions): ClassDecorator {
+export function Consumer(type: MSListenerType): ClassDecorator {
   return (target: any) => {
     saveModule(MS_CONSUMER_KEY, target);
-    saveClassMetadata(MS_CONSUMER_KEY, {
-      queueName: name,
-      consumerOptions: options
-    }, target);
+    saveClassMetadata(MS_CONSUMER_KEY, type, target);
     Scope(ScopeEnum.Request)(target);
   };
 }

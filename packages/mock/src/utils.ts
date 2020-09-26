@@ -8,6 +8,7 @@ import { isAbsolute, join } from 'path';
 import { remove } from 'fs-extra';
 import { clearAllModule } from '@midwayjs/decorator';
 import * as request from 'supertest';
+import { existsSync } from "fs";
 
 process.setMaxListeners(0);
 
@@ -75,6 +76,10 @@ export async function create<
 
   if (!isAbsolute(baseDir)) {
     baseDir = join(process.cwd(), 'test', 'fixtures', baseDir);
+  }
+
+  if (!existsSync(baseDir)) {
+    throw new Error(`${baseDir} not found`);
   }
 
   starter

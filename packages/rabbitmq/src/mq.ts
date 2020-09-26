@@ -5,6 +5,8 @@
 import { EventEmitter } from 'events';
 import * as amqp from 'amqplib';
 import { IMidwayRabbitMQConfigurationOptions, IRabbitMQApplication } from './interface';
+import { RabbitMQListenerOptions } from '@midwayjs/decorator';
+import { Replies } from 'amqplib/properties';
 
 interface SubscribeParams {
   queue: string;
@@ -18,7 +20,7 @@ export class RabbitMQServer extends EventEmitter implements IRabbitMQApplication
   private connection: amqp.Connection;
   private channel: amqp.Channel;
   private reconnectTimeInSeconds: number;
-  private exchanges;
+  private exchanges: { [exchangeName: string]: Replies.AssertExchange };
   private queues;
   private consumer;
   private subscribeCallbackOptions: SubscribeParams[] = [];
@@ -26,7 +28,6 @@ export class RabbitMQServer extends EventEmitter implements IRabbitMQApplication
   constructor(options: Partial<IMidwayRabbitMQConfigurationOptions>) {
     super();
     this.options = options;
-    // this.exchanges = options.exchanges;
     // this.queues = options.queues;
     this.reconnectTimeInSeconds = options.reconnectTimeInSeconds;
   }
@@ -42,7 +43,7 @@ export class RabbitMQServer extends EventEmitter implements IRabbitMQApplication
       this.channel.on('error', error => this.onChannelError(error));
       this.channel.on('return', msg => this.onChannelReturn(msg));
       this.channel.on('drain', () => this.onChannelDrain());
-      // await this.assertAllExchange();
+      await this.assertAllExchange();
       // await this.createAllBinding();
       // this.createAllConsumer();
       this.emit('ch_open', this.channel);
@@ -94,11 +95,17 @@ export class RabbitMQServer extends EventEmitter implements IRabbitMQApplication
 
   async assertAllExchange() {
     const exchangeList: any = [];
-
-    Object.getOwnPropertyNames(this.exchanges).forEach(async index => {
-      const exchange = this.exchanges[index];
-      exchangeList.push(this.assertExchange(exchange.name, exchange.type, exchange.options));
-    });
+    for (const exchange of this.options.exchanges || []) {
+      exchangeList.push(
+        this.assertExchange(
+          exchange.name,
+          exchange.type,
+          exchange.options
+        ).then(exchangeIns => {
+          this.exchanges[exchange.name] = exchangeIns;
+        })
+      );
+    }
     return await Promise.all(exchangeList);
   }
 
@@ -175,6 +182,14 @@ export class RabbitMQServer extends EventEmitter implements IRabbitMQApplication
       throw new Error('the channel is empty');
     }
     return this.channel.bindQueue(queue, source, pattern, args);
+  }
+
+  async createConsumer(
+    listenerOptions: RabbitMQListenerOptions,
+    listenerCallback
+  ) {
+    // assert queue
+    await this.assertQueue(listenerOptions.queueName);
   }
 
   async close() {

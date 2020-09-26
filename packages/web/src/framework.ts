@@ -21,7 +21,7 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
   Application,
   Context
 > {
-  protected app: Application;
+  public app: Application;
   public configurationOptions: IMidwayWebConfigurationOptions;
   public prioritySortRouters: Array<{
     priority: number;
