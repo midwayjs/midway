@@ -15,12 +15,10 @@ export class RabbitMQServer extends EventEmitter implements IRabbitMQApplication
   private channel: amqp.Channel;
   private reconnectTimeInSeconds: number;
   private exchanges: { [exchangeName: string]: Replies.AssertExchange };
-  // private consumerCallback = {};
 
   constructor(options: Partial<IMidwayRabbitMQConfigurationOptions>) {
     super();
     this.options = options;
-    // this.queues = options.queues;
     this.reconnectTimeInSeconds = options.reconnectTimeInSeconds;
   }
 
@@ -40,7 +38,6 @@ export class RabbitMQServer extends EventEmitter implements IRabbitMQApplication
       this.channel.on('return', msg => this.onChannelReturn(msg));
       this.channel.on('drain', () => this.onChannelDrain());
       await this.assertAllExchange();
-      // this.createAllConsumer();
       this.emit('ch_open', this.channel);
     } catch (err) {
       this.emit('error', err);
