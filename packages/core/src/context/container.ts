@@ -15,10 +15,12 @@ import { BaseApplicationContext } from './applicationContext';
 import { recursiveGetMetadata } from '../common/reflectTool';
 import { generateProvideId } from '../common/util';
 import { isAsyncFunction, isClass, isFunction } from '../util';
+import * as util from 'util';
 
-const globalDebugLogger = require('debug')(`midway:container`);
+const globalDebugLogger = util.debuglog(`midway:container`);
 
 export class Container extends BaseApplicationContext implements IContainer {
+  id = Math.random().toString(10).slice(-5);
   debugLogger = globalDebugLogger;
   // 自己内部实现的，可注入的 feature(见 features)
   protected midwayIdentifiers: string[] = [];

@@ -6,13 +6,14 @@ import {
 import { ManagedResolverFactory } from './managedResolverFactory';
 import { MidwayContainer } from './midwayContainer';
 import { MIDWAY_ALL_CONFIG } from '../common/constants';
+import * as util from 'util';
 
 interface FrameworkDecoratorMetadata {
   key: string;
   propertyName: string;
 }
 
-const debug = require('debug')('midway:container');
+const debug = util.debuglog('midway:container');
 
 export type HandlerFunction = (handlerKey: string, instance?: any) => any;
 
