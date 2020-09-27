@@ -45,8 +45,8 @@ export abstract class MidwayKoaBaseFramework<
   T,
   U extends IMidwayApplication & IMidwayKoaApplicationPlus,
   CustomContext
-> extends BaseFramework<T> {
-  protected app: U;
+> extends BaseFramework<U, T> {
+  public app: U;
   private controllerIds: string[] = [];
   public prioritySortRouters: Array<{
     priority: number;

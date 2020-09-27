@@ -8,6 +8,7 @@ import { isAbsolute, join } from 'path';
 import { remove } from 'fs-extra';
 import { clearAllModule } from '@midwayjs/decorator';
 import * as request from 'supertest';
+import { existsSync } from "fs";
 
 process.setMaxListeners(0);
 
@@ -23,7 +24,7 @@ function getIncludeFramework(dependencies): string {
 }
 
 export async function create<
-  T extends IMidwayFramework<U>,
+  T extends IMidwayFramework<any, U>,
   U = T['configurationOptions']
 >(
   baseDir: string = process.cwd(),
@@ -77,6 +78,10 @@ export async function create<
     baseDir = join(process.cwd(), 'test', 'fixtures', baseDir);
   }
 
+  if (!existsSync(baseDir)) {
+    throw new Error(`${baseDir} not found`);
+  }
+
   starter
     .configure({
       baseDir,
@@ -92,7 +97,7 @@ export async function create<
 }
 
 export async function createApp<
-  T extends IMidwayFramework<U>,
+  T extends IMidwayFramework<any, U>,
   U = T['configurationOptions'],
   Y = ReturnType<T['getApplication']>
 >(
@@ -108,11 +113,11 @@ export async function createApp<
   return (framework.getApplication() as unknown) as Y;
 }
 
-export async function close(app: IMidwayApplication | IMidwayFramework<any>) {
+export async function close(app: IMidwayApplication | IMidwayFramework<any, any>) {
   if (!app) return;
   let newApp: IMidwayApplication;
-  if ((app as IMidwayFramework<any>).getApplication) {
-    newApp = (app as IMidwayFramework<any>).getApplication();
+  if ((app as IMidwayFramework<any, any>).getApplication) {
+    newApp = (app as IMidwayFramework<any, any>).getApplication();
   } else {
     newApp = app as IMidwayApplication;
   }

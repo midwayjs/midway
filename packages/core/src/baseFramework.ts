@@ -5,19 +5,23 @@ import {
   IMidwayContainer,
   IMidwayFramework,
   MidwayFrameworkType,
+  MidwayProcessTypeEnum,
 } from './interface';
 import { ContainerLoader } from './';
 import { APPLICATION_KEY, CONFIG_KEY } from '@midwayjs/decorator';
 
-export abstract class BaseFramework<T extends IConfigurationOptions>
-  implements IMidwayFramework<T> {
+export abstract class BaseFramework<
+  APP extends IMidwayApplication,
+  T extends IConfigurationOptions
+> implements IMidwayFramework<APP, T> {
   protected isTsMode = true;
   protected baseDir: string;
   protected appDir: string;
   protected containerLoader: ContainerLoader;
   public configurationOptions: T;
+  public app: APP;
 
-  public configure(options: T): BaseFramework<T> {
+  public configure(options: T): BaseFramework<APP, T> {
     this.configurationOptions = options;
     return this;
   }
@@ -62,6 +66,10 @@ export abstract class BaseFramework<T extends IConfigurationOptions>
 
     await this.afterDirectoryLoad(options);
 
+    if (!this.app.getApplicationContext) {
+      this.app = this.defineApplicationProperties(this.app);
+    }
+
     /**
      * start to load configuration and lifeCycle
      */
@@ -87,13 +95,45 @@ export abstract class BaseFramework<T extends IConfigurationOptions>
 
   public abstract getFrameworkType(): MidwayFrameworkType;
 
-  public abstract getApplication(): IMidwayApplication;
+  public abstract getApplication(): APP;
 
   public abstract run(): Promise<void>;
 
   public async stop(): Promise<void> {
     await this.beforeStop();
     await this.containerLoader.stop();
+  }
+
+  protected defineApplicationProperties(app: APP): APP {
+    return Object.assign(app, {
+      getBaseDir: () => {
+        return this.baseDir;
+      },
+
+      getAppDir: () => {
+        return this.appDir;
+      },
+
+      getEnv: () => {
+        return this.getApplicationContext()
+          .getEnvironmentService()
+          .getCurrentEnvironment();
+      },
+
+      getConfig: (key?: string) => {
+        return this.getApplicationContext()
+          .getConfigService()
+          .getConfiguration(key);
+      },
+
+      getFrameworkType: () => {
+        return this.getFrameworkType();
+      },
+
+      getProcessType: () => {
+        return MidwayProcessTypeEnum.APPLICATION;
+      },
+    });
   }
 
   protected async beforeStop(): Promise<void> {}

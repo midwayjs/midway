@@ -427,7 +427,8 @@ export function throwErrorForTest(key: decoratorKey, e: Error) {
 }
 
 /**
- * save method data to class
+ * this method has deprecated and use savePropertyDataToClass instead
+ *
  * @deprecated
  * @param decoratorNameKey
  * @param data
@@ -449,7 +450,8 @@ export function saveMethodDataToClass(
 }
 
 /**
- * attach method data to class
+ * this method has deprecated and use attachPropertyDataToClass instead
+ *
  * @deprecated
  * @param decoratorNameKey
  * @param data
@@ -471,7 +473,8 @@ export function attachMethodDataToClass(
 }
 
 /**
- * get method data from class
+ * this method has deprecated and use getPropertyDataFromClass instead
+ *
  * @deprecated
  * @param decoratorNameKey
  * @param target
