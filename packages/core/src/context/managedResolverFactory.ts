@@ -25,8 +25,9 @@ import {
 } from '../interface';
 import { ObjectProperties } from '../definitions/properties';
 import { NotFoundError } from '../common/notFoundError';
+import * as util from 'util';
 
-const debug = require('debug')('midway:managedresolver');
+const debug = util.debuglog('midway:managedresolver');
 
 /**
  * 所有解析器基类

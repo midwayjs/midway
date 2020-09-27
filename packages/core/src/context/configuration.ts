@@ -16,8 +16,9 @@ import {
 } from '../interface';
 import { isPath, safeRequire, generateProvideId } from '../common/util';
 import { isClass, isFunction } from '../util';
+import * as util from 'util';
 
-const debug = require('debug')('midway:container:configuration');
+const debug = util.debuglog('midway:container:configuration');
 
 export class ContainerConfiguration implements IContainerConfiguration {
   container: IMidwayContainer;

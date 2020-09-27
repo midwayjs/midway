@@ -4,8 +4,9 @@ import { IConfigService, IMidwayContainer } from '../interface';
 import { safelyGet } from '..';
 import { readdirSync, statSync } from 'fs';
 import { isFunction } from '../util';
+import * as util from 'util';
 
-const debug = require('debug')('midway:config');
+const debug = util.debuglog('midway:config');
 
 export class MidwayConfigService implements IConfigService {
   envDirMap: Map<string, Set<string>>;

@@ -30,7 +30,6 @@
     "@midwayjs/decorator": "^2.3.0",
     "@midwayjs/glob": "^1.0.2",
     "class-transformer": "^0.3.1",
-    "debug": "^4.1.1",
     "extend2": "^1.0.0",
     "lodash.assign": "^4.2.0",
     "lodash.clonedeep": "^4.5.0",
