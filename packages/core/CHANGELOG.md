@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.1](https://github.com/midwayjs/midway/compare/v2.3.0...v2.3.1) (2020-09-27)
+
+
+### Bug Fixes
+
+* fix debugger logger create in every request ([#648](https://github.com/midwayjs/midway/issues/648)) ([8e70fb0](https://github.com/midwayjs/midway/commit/8e70fb0b57241bb6e0b2fcca5c4fa2b26fc2eb5e))
+
+
+
+
+
 # [2.3.0](https://github.com/midwayjs/midway/compare/v2.2.10...v2.3.0) (2020-09-27)
 
 
