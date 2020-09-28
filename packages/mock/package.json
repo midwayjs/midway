@@ -30,7 +30,9 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/cli": "^1.0.0"
+    "@midwayjs/cli": "^1.0.0",
+    "@types/amqplib": "^0.5.13",
+    "amqplib": "^0.6.0"
   },
   "dependencies": {
     "@midwayjs/bootstrap": "^2.3.2",

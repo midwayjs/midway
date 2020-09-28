@@ -13,13 +13,13 @@ export class RabbitMQServer extends EventEmitter implements IRabbitMQApplication
   private options: Partial<IMidwayRabbitMQConfigurationOptions>;
   private connection: amqp.Connection;
   private channel: amqp.Channel;
-  private reconnectTimeInSeconds: number;
+  private reconnectTime: number;
   private exchanges: { [exchangeName: string]: Replies.AssertExchange };
 
   constructor(options: Partial<IMidwayRabbitMQConfigurationOptions>) {
     super();
     this.options = options;
-    this.reconnectTimeInSeconds = options.reconnectTimeInSeconds;
+    this.reconnectTime = options.reconnectTime;
   }
 
   async connect() {
@@ -43,7 +43,7 @@ export class RabbitMQServer extends EventEmitter implements IRabbitMQApplication
       this.emit('error', err);
       setTimeout(() => {
         this.createChannel();
-      }, this.reconnectTimeInSeconds);
+      }, this.reconnectTime);
     }
   }
 
@@ -74,7 +74,7 @@ export class RabbitMQServer extends EventEmitter implements IRabbitMQApplication
     await this.closeChannel();
     setTimeout(() => {
       this.createChannel();
-    }, this.reconnectTimeInSeconds);
+    }, this.reconnectTime);
   }
 
   onChannelReturn(msg) {
