@@ -1,5 +1,9 @@
 import { Context, Application } from 'egg';
-import { IMidwayApplication, IMidwayContext } from '@midwayjs/core';
+import {
+  IMidwayContainer,
+  MidwayFrameworkType,
+  MidwayProcessTypeEnum
+} from '@midwayjs/core';
 import { IMidwayKoaConfigurationOptions, IMidwayKoaContext, IMidwayKoaNext } from '@midwayjs/koa';
 import { DefaultState, Middleware } from 'koa';
 
@@ -8,12 +12,22 @@ declare module 'egg' {
     appDir: string;
   }
 
-  interface Application extends IMidwayApplication {
+  interface Application {
+    applicationContext: IMidwayContainer;
+    getBaseDir(): string;
+    getAppDir(): string;
+    getEnv(): string;
+    getFrameworkType(): MidwayFrameworkType;
+    getProcessType(): MidwayProcessTypeEnum;
+    getApplicationContext(): IMidwayContainer;
+    getConfig(key?: string): any;
     generateController?(controllerMapping: string);
     generateMiddleware?(middlewareId: string): Promise<Middleware<DefaultState, IMidwayKoaContext>>;
   }
 
-  interface Context extends IMidwayContext {
+  interface Context {
+    getRequestContext(): IMidwayContainer;
+    requestContext: IMidwayContainer;
   }
 }
 
