@@ -50,6 +50,7 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
   protected async afterDirectoryLoad(
     options: Partial<IMidwayBootstrapOptions>
   ) {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
     if (this.isTsMode) {
       process.env.EGG_TYPESCRIPT = 'true';
