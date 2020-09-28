@@ -25,7 +25,7 @@ export interface IRabbitMQExchange {
 export type IMidwayRabbitMQConfigurationOptions = {
   url: string | Options.Connect,
   socketOptions?: any;
-  reconnectTimeInSeconds?: number;
+  reconnectTime?: number;
   exchanges?: IRabbitMQExchange[];
   useConfirmChannel?: boolean;
 }

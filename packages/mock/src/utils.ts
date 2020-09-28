@@ -7,7 +7,6 @@ import {
 import { isAbsolute, join } from 'path';
 import { remove } from 'fs-extra';
 import { clearAllModule } from '@midwayjs/decorator';
-import * as request from 'supertest';
 import { existsSync } from "fs";
 
 process.setMaxListeners(0);
@@ -130,13 +129,5 @@ export async function close(app: IMidwayApplication | IMidwayFramework<any, any>
   if (MidwayFrameworkType.WEB === newApp.getFrameworkType()) {
     await remove(join(newApp.getAppDir(), 'logs'));
     await remove(join(newApp.getAppDir(), 'run'));
-  }
-}
-
-export function createHttpRequest(app: IMidwayApplication) {
-  if ((app as any).callback) {
-    return request((app as any).callback());
-  } else {
-    return request(app);
   }
 }

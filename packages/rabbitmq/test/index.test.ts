@@ -1,20 +1,14 @@
-const { connect } = require('./mock');
-const amqp = require('amqplib');
-amqp.connect = connect;
-
+import { createRabbitMQProducer } from '@midwayjs/mock';
 import { closeApp, creatApp } from './utils';
-
-async function createProducer(queueName: string) {
-  const connection = await amqp.connect('amqp://localhost');
-  const ch = await connection.createConfirmChannel();
-  await ch.assertQueue(queueName);
-  await ch.sendToQueue(queueName, Buffer.from('something to do'));
-  return ch;
-}
 
 describe('/test/index.test.ts', () => {
   it('should test create socket app and use default namespace', async () => {
-    await createProducer('tasks');
+    // create a queue and channel
+    const channel = await createRabbitMQProducer('tasks');
+    // send data to queue
+    channel.sendToQueue('tasks', Buffer.from('something to do'))
+
+    // create app and got data
     const app = await creatApp('base-app', { url: 'amqp://localhost'});
     await closeApp(app);
   });

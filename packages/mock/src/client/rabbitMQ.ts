@@ -1,3 +1,5 @@
+import { Channel } from 'amqplib';
+
 const queues = {};
 const exchanges = {};
 const eventListeners = [];
@@ -289,7 +291,7 @@ const createConfirmChannel = async () => {
   }
 };
 
-export const connect = async () => ({
+const connect = async () => ({
   createChannel,
   createConfirmChannel,
   on: () => {
@@ -298,3 +300,23 @@ export const connect = async () => ({
   }
 });
 
+
+
+const amqp = require('amqplib');
+amqp.connect = connect;
+
+export const createRabbitMQProducer = async function(queueName: string, options: {
+  url?: string;
+  isConfirmChannel?: boolean
+} = {}): Promise<Channel> {
+  const connection = await amqp.connect(options.url || 'amqp://localhost');
+  let ch;
+  if (options.isConfirmChannel === undefined || options.isConfirmChannel === false) {
+    ch = await connection.createConfirmChannel();
+  } else {
+    ch = await connection.createChannel();
+  }
+
+  await ch.assertQueue(queueName);
+  return ch;
+}
