@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.2](https://github.com/midwayjs/midway/compare/v2.3.1...v2.3.2) (2020-09-28)
+
+
+### Bug Fixes
+
+* component get config and merge egg config ([#649](https://github.com/midwayjs/midway/issues/649)) ([aa95a3e](https://github.com/midwayjs/midway/commit/aa95a3eb9ff70d691c2420e58b357e2889d03ebb))
+
+
+
+
+
 ## [2.3.1](https://github.com/midwayjs/midway/compare/v2.3.0...v2.3.1) (2020-09-27)
 
 **Note:** Version bump only for package @midwayjs/web
