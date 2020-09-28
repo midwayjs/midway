@@ -23,6 +23,7 @@ class AppBootHook {
       this.framework = new Framework().configure({
         processType: 'application',
         app: this.app,
+        globalConfig: this.app.config,
       });
       Bootstrap.configure({
         baseDir: this.app.appDir,

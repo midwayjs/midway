@@ -50,6 +50,7 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
   protected async afterDirectoryLoad(
     options: Partial<IMidwayBootstrapOptions>
   ) {
+    const self = this;
     if (this.isTsMode) {
       process.env.EGG_TYPESCRIPT = 'true';
     }
@@ -66,6 +67,21 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
         mode: 'single',
         isTsMode: this.isTsMode,
       });
+
+      this.configurationOptions.globalConfig = this.app.config;
+    }
+
+    if (this.configurationOptions.globalConfig) {
+      this.getApplicationContext()
+        .getConfigService()
+        .addObject(this.configurationOptions.globalConfig);
+
+      Object.defineProperty(this.app, 'config', {
+        get() {
+          return self.getConfiguration();
+        },
+      });
+      // this.app.config = this.getConfiguration();
     }
 
     this.defineApplicationProperties(this.app);

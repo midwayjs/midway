@@ -21,6 +21,7 @@ class AppBootHook {
       this.bootstrap
         .configure({
           baseDir: this.app.appDir,
+          globalConfig: this.app.config,
         })
         .load(this.framework);
       await this.bootstrap.init();

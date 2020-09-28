@@ -118,4 +118,8 @@ export class MidwayConfigService implements IConfigService {
     }
     return result;
   }
+
+  clearAllConfig() {
+    this.configuration.clear();
+  }
 }
