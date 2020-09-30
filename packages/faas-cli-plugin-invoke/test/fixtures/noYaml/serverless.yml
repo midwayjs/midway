@@ -1,6 +1,0 @@
-service: serverless-midway-test
-
-provider:
-  name: aliyun
-  runtime: nodejs8
-  credentials: ./.aliyun_credentials # path must be absolute
