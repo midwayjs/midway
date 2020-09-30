@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.15](https://github.com/midwayjs/midway/compare/serverless-v1.2.14...serverless-v1.2.15) (2020-09-30)
+
+**Note:** Version bump only for package midway-faas
+
+
+
+
+
 ## [1.2.14](https://github.com/midwayjs/midway/compare/serverless-v1.2.13...serverless-v1.2.14) (2020-09-14)
 
 **Note:** Version bump only for package midway-faas
