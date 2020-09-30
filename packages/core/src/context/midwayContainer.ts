@@ -13,7 +13,11 @@ import {
   ScopeEnum,
 } from '@midwayjs/decorator';
 import { ContainerConfiguration } from './configuration';
-import { FUNCTION_INJECT_KEY, generateProvideId, PRIVATE_META_DATA_KEY } from '..';
+import {
+  FUNCTION_INJECT_KEY,
+  generateProvideId,
+  PRIVATE_META_DATA_KEY,
+} from '..';
 import {
   IApplicationContext,
   IConfigService,
@@ -239,10 +243,7 @@ export class MidwayContainer extends Container implements IMidwayContainer {
     return this.environmentService.getCurrentEnvironment();
   }
 
-  public async addAspect(
-    aspectIns: IMethodAspect,
-    aspectData: AspectMetadata
-  ) {
+  public async addAspect(aspectIns: IMethodAspect, aspectData: AspectMetadata) {
     const module = aspectData.aspectTarget;
     const names = Object.getOwnPropertyNames(module.prototype);
     const isMatch = aspectData.match ? pm(aspectData.match) : () => true;
@@ -260,7 +261,9 @@ export class MidwayContainer extends Container implements IMidwayContainer {
       }
       let originMethod = descriptor.value;
       if (isAsyncFunction(originMethod)) {
-        this.debugLogger(`aspect [#${module.name}:${name}], isAsync=true, aspect class=[${aspectIns.constructor.name}]`);
+        this.debugLogger(
+          `aspect [#${module.name}:${name}], isAsync=true, aspect class=[${aspectIns.constructor.name}]`
+        );
         descriptor.value = async function (...args) {
           let error, result;
           originMethod = originMethod.bind(this);
@@ -278,10 +281,7 @@ export class MidwayContainer extends Container implements IMidwayContainer {
               result = await originMethod(...joinPoint.args);
             }
             joinPoint.proceed = undefined;
-            const resultTemp = await aspectIns.afterReturn?.(
-              joinPoint,
-              result
-            );
+            const resultTemp = await aspectIns.afterReturn?.(joinPoint, result);
             result = typeof resultTemp === 'undefined' ? result : resultTemp;
             return result;
           } catch (err) {
@@ -297,7 +297,9 @@ export class MidwayContainer extends Container implements IMidwayContainer {
           }
         };
       } else {
-        this.debugLogger(`aspect [#${module.name}:${name}], isAsync=false, aspect class=[${aspectIns.constructor.name}]`);
+        this.debugLogger(
+          `aspect [#${module.name}:${name}], isAsync=false, aspect class=[${aspectIns.constructor.name}]`
+        );
         descriptor.value = function (...args) {
           let error, result;
           originMethod = originMethod.bind(this);

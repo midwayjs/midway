@@ -1,5 +1,5 @@
 export default {
-  'static': false,
+  static: false,
   development: false,
-  watcher: false
+  watcher: false,
 };

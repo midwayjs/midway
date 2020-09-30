@@ -1,4 +1,9 @@
-import { ALL, attachClassMetadata, attachConstructorDataOnClass, CONFIG_KEY, } from '../';
+import {
+  ALL,
+  attachClassMetadata,
+  attachConstructorDataOnClass,
+  CONFIG_KEY,
+} from '../';
 
 export function Config(identifier?: string) {
   return function (target: any, targetKey: string, index?: number): void {

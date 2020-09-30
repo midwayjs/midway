@@ -1,4 +1,8 @@
-import { attachPropertyDataToClass, getParamNames, WEB_ROUTER_PARAM_KEY } from '../';
+import {
+  attachPropertyDataToClass,
+  getParamNames,
+  WEB_ROUTER_PARAM_KEY,
+} from '../';
 
 export interface GetFileStreamOptions {
   requireFile?: boolean; // required file submit, default is true

@@ -23,7 +23,6 @@ export const WEB_RESPONSE_HEADER = 'web:response_header';
 export const WEB_RESPONSE_CONTENT_TYPE = 'web:response_content_type';
 export const WEB_RESPONSE_RENDER = 'web:response_render';
 
-
 // ws
 export const WS_CONTROLLER_KEY = 'ws:controller';
 export const WS_EVENT_KEY = 'ws:event';

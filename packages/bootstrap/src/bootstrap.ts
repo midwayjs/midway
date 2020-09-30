@@ -105,7 +105,7 @@ export class Bootstrap {
       .then(() => {
         console.log('[midway] current app started');
       })
-      .catch((err) => {
+      .catch(err => {
         console.error(err);
         process.exit(1);
       });

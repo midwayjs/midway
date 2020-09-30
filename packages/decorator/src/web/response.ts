@@ -5,7 +5,7 @@ import {
   WEB_RESPONSE_HEADER,
   WEB_RESPONSE_KEY,
   WEB_RESPONSE_CONTENT_TYPE,
-  WEB_RESPONSE_RENDER
+  WEB_RESPONSE_RENDER,
 } from '..';
 
 export function Redirect(url: string, code = 302) {
@@ -82,7 +82,10 @@ export function ContentType(contentType: string) {
   };
 }
 
-export function createRender(RenderEngine: { render: () => string; renderString: () => string }) {
+export function createRender(RenderEngine: {
+  render: () => string;
+  renderString: () => string;
+}) {
   return (templateName: string) => {
     return (target, key, descriptor: PropertyDescriptor) => {
       attachPropertyMetadata(
@@ -97,5 +100,5 @@ export function createRender(RenderEngine: { render: () => string; renderString:
 
       return descriptor;
     };
-  }
+  };
 }

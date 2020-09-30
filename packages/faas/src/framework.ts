@@ -317,10 +317,7 @@ export class MidwayFaaSFramework extends BaseFramework<
     });
 
     this.containerLoader.registerHook(LOGGER_KEY, (key, target) => {
-      return (
-        target[REQUEST_OBJ_CTX_KEY]?.['logger'] ||
-        this.app.getLogger()
-      );
+      return target[REQUEST_OBJ_CTX_KEY]?.['logger'] || this.app.getLogger();
     });
   }
 
