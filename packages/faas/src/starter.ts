@@ -44,7 +44,7 @@ export class FaaSStarter implements IFaaSStarter {
   protected logger;
   protected initializeContext;
   private lock = new SimpleLock();
-  private webApplication: IFaaSApplication;
+  protected webApplication: IFaaSApplication;
 
   constructor(
     options: {
