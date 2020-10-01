@@ -302,8 +302,12 @@ const connect = async () => ({
   close: () => {},
 });
 
-const amqp = require('amqplib');
-amqp.connect = connect;
+let amqp = null;
+
+try {
+  amqp = require('amqplib');
+  amqp.connect = connect;
+} catch (err) {}
 
 export const createRabbitMQProducer = async function (
   queueName: string,
