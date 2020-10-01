@@ -4,12 +4,16 @@
 
 import { EventEmitter } from 'events';
 import * as amqp from 'amqplib';
-import { IMidwayRabbitMQConfigurationOptions, IRabbitMQApplication } from './interface';
+import {
+  IMidwayRabbitMQConfigurationOptions,
+  IRabbitMQApplication,
+} from './interface';
 import { RabbitMQListenerOptions } from '@midwayjs/decorator';
 import { ConsumeMessage, Replies } from 'amqplib/properties';
 
-export class RabbitMQServer extends EventEmitter implements IRabbitMQApplication {
-
+export class RabbitMQServer
+  extends EventEmitter
+  implements IRabbitMQApplication {
   private options: Partial<IMidwayRabbitMQConfigurationOptions>;
   private connection: amqp.Connection;
   private channel: amqp.Channel;
@@ -23,7 +27,10 @@ export class RabbitMQServer extends EventEmitter implements IRabbitMQApplication
   }
 
   async connect() {
-    this.connection = await amqp.connect(this.options.url, this.options.socketOptions);
+    this.connection = await amqp.connect(
+      this.options.url,
+      this.options.socketOptions
+    );
   }
 
   async createChannel() {
@@ -140,17 +147,27 @@ export class RabbitMQServer extends EventEmitter implements IRabbitMQApplication
   ) {
     // bind queue to exchange
     if (listenerOptions.exchange && this.exchanges[listenerOptions.exchange]) {
-      await this.createBinding(listenerOptions, this.exchanges[listenerOptions.exchange]);
+      await this.createBinding(
+        listenerOptions,
+        this.exchanges[listenerOptions.exchange]
+      );
     }
 
     // 默认每次只接受一条
     await this.channel.prefetch(listenerOptions.prefetch || 1);
     // 绑定回调
-    await this.channel.consume(listenerOptions.queueName, async msg => {
-      if (!listenerOptions.routingKey || msg.fields.routingKey === listenerOptions.routingKey) {
-        await listenerCallback(msg);
-      }
-    }, listenerOptions.consumeOptions);
+    await this.channel.consume(
+      listenerOptions.queueName,
+      async msg => {
+        if (
+          !listenerOptions.routingKey ||
+          msg.fields.routingKey === listenerOptions.routingKey
+        ) {
+          await listenerCallback(msg);
+        }
+      },
+      listenerOptions.consumeOptions
+    );
   }
 
   getChannel() {

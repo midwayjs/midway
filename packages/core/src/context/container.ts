@@ -17,7 +17,7 @@ import { generateProvideId } from '../common/util';
 import { isAsyncFunction, isClass, isFunction } from '../util';
 import * as util from 'util';
 
-const globalDebugLogger = util.debuglog(`midway:container`);
+const globalDebugLogger = util.debuglog('midway:container');
 
 export class Container extends BaseApplicationContext implements IContainer {
   id = Math.random().toString(10).slice(-5);

@@ -7,7 +7,7 @@ import {
 import { isAbsolute, join } from 'path';
 import { remove } from 'fs-extra';
 import { clearAllModule } from '@midwayjs/decorator';
-import { existsSync } from "fs";
+import { existsSync } from 'fs';
 
 process.setMaxListeners(0);
 
@@ -112,7 +112,9 @@ export async function createApp<
   return (framework.getApplication() as unknown) as Y;
 }
 
-export async function close(app: IMidwayApplication | IMidwayFramework<any, any>) {
+export async function close(
+  app: IMidwayApplication | IMidwayFramework<any, any>
+) {
   if (!app) return;
   let newApp: IMidwayApplication;
   if ((app as IMidwayFramework<any, any>).getApplication) {

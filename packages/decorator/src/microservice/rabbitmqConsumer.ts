@@ -8,7 +8,7 @@ export interface RabbitMQListenerOptions {
   durable?: boolean;
   maxPriority?: number;
   prefetch?: number;
-  keys?: {[keyName: string]: string};
+  keys?: { [keyName: string]: string };
   routingKey?: string;
   consumeOptions?: {
     consumerTag?: string;
@@ -17,7 +17,7 @@ export interface RabbitMQListenerOptions {
     exclusive?: boolean;
     priority?: number;
     arguments?: any;
-  }
+  };
 }
 
 export function RabbitMQListener(

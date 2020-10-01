@@ -25,7 +25,7 @@ const createQueue = () => {
     },
     stopConsume: () => (subscriber = null),
     getMessageCount: () => messages.length,
-    purge: () => (messages = [])
+    purge: () => (messages = []),
   };
 };
 
@@ -43,7 +43,7 @@ const createConfirmQueue = () => {
     },
     get: () => messages.shift() || false,
     addConsumer: async (consumer, waitForConfirms) => {
-      for(let item of messages) {
+      for (const item of messages) {
         await waitForConfirms(() => {
           consumer(item);
         });
@@ -53,7 +53,7 @@ const createConfirmQueue = () => {
     },
     stopConsume: () => (subscriber = null),
     getMessageCount: () => messages.length,
-    purge: () => (messages = [])
+    purge: () => (messages = []),
   };
 };
 
@@ -64,12 +64,12 @@ const createFanoutExchange = () => {
       bindings.push({
         targetQueue: queueName,
         options,
-        pattern
+        pattern,
       });
     },
     getTargetQueues: (routingKey, options = {}) => {
       return [...bindings.map(binding => binding.targetQueue)];
-    }
+    },
   };
 };
 
@@ -80,13 +80,15 @@ const createDirectExchange = () => {
       bindings.push({
         targetQueue: queueName,
         options,
-        pattern
+        pattern,
       });
     },
     getTargetQueues: (routingKey, options = {}) => {
-      const matchingBinding = bindings.find(binding => binding.pattern === routingKey);
+      const matchingBinding = bindings.find(
+        binding => binding.pattern === routingKey
+      );
       return [matchingBinding.targetQueue];
-    }
+    },
   };
 };
 
@@ -97,15 +99,19 @@ const createHeadersExchange = () => {
       bindings.push({
         targetQueue: queueName,
         options,
-        pattern
+        pattern,
       });
     },
     getTargetQueues: (routingKey, options: any = {}) => {
       const isMatching = (binding, headers) =>
-        Object.keys(binding.options).every(key => binding.options[key] === headers[key]);
-      const matchingBinding = bindings.find(binding => isMatching(binding, options.headers || {}));
+        Object.keys(binding.options).every(
+          key => binding.options[key] === headers[key]
+        );
+      const matchingBinding = bindings.find(binding =>
+        isMatching(binding, options.headers || {})
+      );
       return [matchingBinding.targetQueue];
-    }
+    },
   };
 };
 
@@ -118,7 +124,7 @@ const createChannel = async () => ({
       if (eventName === emittedEventName) {
         listener();
       }
-    })
+    });
   },
   close: () => {},
   assertQueue: async queueName => {
@@ -127,7 +133,7 @@ const createChannel = async () => ({
   assertExchange: async (exchangeName, type) => {
     let exchange;
 
-    switch(type) {
+    switch (type) {
       case 'fanout':
         exchange = createFanoutExchange();
         break;
@@ -152,12 +158,12 @@ const createChannel = async () => ({
       content,
       fields: {
         exchange: exchangeName,
-        routingKey
+        routingKey,
       },
-      properties: options
+      properties: options,
     };
 
-    for(const queueName of queueNames) {
+    for (const queueName of queueNames) {
       queues[queueName].add(message);
     }
   },
@@ -166,9 +172,9 @@ const createChannel = async () => ({
       content,
       fields: {
         exchange: '',
-        routingKey: queueName
+        routingKey: queueName,
       },
-      properties: { headers: headers || {} }
+      properties: { headers: headers || {} },
     });
   },
   get: async (queueName, { noAck }: any = {}) => {
@@ -188,12 +194,11 @@ const createChannel = async () => ({
   },
   checkQueue: queueName => ({
     queue: queueName,
-    messageCount: queues[queueName].getMessageCount()
+    messageCount: queues[queueName].getMessageCount(),
   }),
-  purgeQueue: queueName => queues[queueName].purge()
+  purgeQueue: queueName => queues[queueName].purge(),
 });
 
-// @ts-ignore
 const createConfirmChannel = async () => {
   const evt = new EventEmitter();
   return {
@@ -205,7 +210,7 @@ const createConfirmChannel = async () => {
         if (eventName === emittedEventName) {
           listener();
         }
-      })
+      });
     },
     close: () => {},
     assertQueue: async queueName => {
@@ -214,7 +219,7 @@ const createConfirmChannel = async () => {
     assertExchange: async (exchangeName, type) => {
       let exchange;
 
-      switch(type) {
+      switch (type) {
         case 'fanout':
           exchange = createFanoutExchange();
           break;
@@ -239,12 +244,12 @@ const createConfirmChannel = async () => {
         content,
         fields: {
           exchange: exchangeName,
-          routingKey
+          routingKey,
         },
-        properties: options
+        properties: options,
       };
 
-      for(const queueName of queueNames) {
+      for (const queueName of queueNames) {
         queues[queueName].add(message);
       }
     },
@@ -253,9 +258,9 @@ const createConfirmChannel = async () => {
         content,
         fields: {
           exchange: '',
-          routingKey: queueName
+          routingKey: queueName,
         },
-        properties: { headers: headers || {} }
+        properties: { headers: headers || {} },
       });
     },
     get: async (queueName, { noAck }: any = {}) => {
@@ -263,12 +268,11 @@ const createConfirmChannel = async () => {
     },
     prefetch: async () => {},
     consume: async (queueName, consumer) => {
-      // @ts-ignore
-      await queues[queueName].addConsumer(consumer, async (invokeListenerFn) => {
+      await queues[queueName].addConsumer(consumer, async invokeListenerFn => {
         return new Promise(resolve => {
           evt.on('ack', () => {
             resolve();
-          })
+          });
           invokeListenerFn();
         });
       });
@@ -285,33 +289,39 @@ const createConfirmChannel = async () => {
     },
     checkQueue: queueName => ({
       queue: queueName,
-      messageCount: queues[queueName].getMessageCount()
+      messageCount: queues[queueName].getMessageCount(),
     }),
     purgeQueue: queueName => queues[queueName].purge(),
-  }
+  };
 };
 
 const connect = async () => ({
   createChannel,
   createConfirmChannel,
-  on: () => {
-  },
-  close: () => {
-  }
+  on: () => {},
+  close: () => {},
 });
 
+let amqp = null;
 
+try {
+  amqp = require('amqplib');
+  amqp.connect = connect;
+} catch (err) {}
 
-const amqp = require('amqplib');
-amqp.connect = connect;
-
-export const createRabbitMQProducer = async function(queueName: string, options: {
-  url?: string;
-  isConfirmChannel?: boolean
-} = {}): Promise<Channel> {
+export const createRabbitMQProducer = async function (
+  queueName: string,
+  options: {
+    url?: string;
+    isConfirmChannel?: boolean;
+  } = {}
+): Promise<Channel> {
   const connection = await amqp.connect(options.url || 'amqp://localhost');
   let ch;
-  if (options.isConfirmChannel === undefined || options.isConfirmChannel === false) {
+  if (
+    options.isConfirmChannel === undefined ||
+    options.isConfirmChannel === false
+  ) {
     ch = await connection.createConfirmChannel();
   } else {
     ch = await connection.createChannel();
@@ -319,4 +329,4 @@ export const createRabbitMQProducer = async function(queueName: string, options:
 
   await ch.assertQueue(queueName);
   return ch;
-}
+};
