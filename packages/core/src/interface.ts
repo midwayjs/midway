@@ -307,8 +307,8 @@ export interface IMidwayFramework<APP extends IMidwayApplication, T extends ICon
 
 export enum MidwayFrameworkType {
   WEB = '@midwayjs/web',
-  WEB_KOA = '@midwayjs/web_koa',
-  WEB_EXPRESS = '@midwayjs/web_express',
+  WEB_KOA = '@midwayjs/koa',
+  WEB_EXPRESS = '@midwayjs/express',
   FAAS = '@midwayjs/faas',
   MS_HSF = '',
   MS_GRPC = '',
