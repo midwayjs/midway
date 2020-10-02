@@ -1,11 +1,9 @@
 import {
   CLASS_KEY_CONSTRUCTOR,
   getClassMetadata,
-  CONFIG_KEY,
 } from '@midwayjs/decorator';
 import { ManagedResolverFactory } from './managedResolverFactory';
 import { MidwayContainer } from './midwayContainer';
-import { MIDWAY_ALL_CONFIG } from '../common/constants';
 import * as util from 'util';
 
 interface FrameworkDecoratorMetadata {
@@ -20,10 +18,8 @@ export type HandlerFunction = (handlerKey: string, instance?: any) => any;
 export class ResolverHandler {
   private handlerMap: Map<string, HandlerFunction>;
   private resolverFactory: ManagedResolverFactory;
-  private container: MidwayContainer;
 
   constructor(container: MidwayContainer, factory: ManagedResolverFactory) {
-    this.container = container;
     this.resolverFactory = factory;
     this.handlerMap = new Map<string, HandlerFunction>();
     this.bindCreatedHook();
@@ -32,21 +28,6 @@ export class ResolverHandler {
   bindCreatedHook() {
     this.resolverFactory.beforeEachCreated(this.beforeEachCreated.bind(this));
     this.resolverFactory.afterEachCreated(this.afterEachCreated.bind(this));
-
-    if (this.container.configService) {
-      // register handler for container
-      this.registerHandler(CONFIG_KEY, (key: string) => {
-        if (key) {
-          if (key === MIDWAY_ALL_CONFIG) {
-            return this.container.configService.getConfiguration();
-          } else {
-            const val = this.container.configService.getConfiguration(key);
-            debug('@config key => %s value => %j.', key, val);
-            return val;
-          }
-        }
-      });
-    }
   }
   /**
    * 创建对象前

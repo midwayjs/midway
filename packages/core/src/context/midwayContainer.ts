@@ -11,12 +11,13 @@ import {
   PIPELINE_IDENTIFIER,
   saveClassMetadata,
   ScopeEnum,
+  PRIVATE_META_DATA_KEY,
+  generateProvideId,
+  MAIN_MODULE_KEY
 } from '@midwayjs/decorator';
 import { ContainerConfiguration } from './configuration';
 import {
   FUNCTION_INJECT_KEY,
-  generateProvideId,
-  PRIVATE_META_DATA_KEY,
 } from '..';
 import {
   IApplicationContext,
@@ -25,7 +26,6 @@ import {
   IEnvironmentService,
   ILifeCycle,
   IMidwayContainer,
-  MAIN_MODULE_KEY,
   REQUEST_CTX_KEY,
 } from '../interface';
 import { MidwayConfigService } from '../service/configService';

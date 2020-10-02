@@ -4,14 +4,14 @@ import {
   getClassMetadata,
   InjectionConfigurationOptions,
   LIFECYCLE_IDENTIFIER_PREFIX,
-  MODULE_NAMESPACE_KEY,
   saveModule,
   saveProviderId,
 } from '@midwayjs/decorator';
 
 import { dirname, isAbsolute, join } from 'path';
-import { IContainerConfiguration, IMidwayContainer, MAIN_MODULE_KEY, } from '../interface';
-import { generateProvideId, isPath, safeRequire } from '../common/util';
+import { MAIN_MODULE_KEY, generateProvideId } from '@midwayjs/decorator';
+import { IContainerConfiguration, IMidwayContainer, } from '../interface';
+import { isPath, safeRequire } from '../common/util';
 import { isClass, isFunction } from '../util';
 import * as util from 'util';
 
@@ -187,11 +187,6 @@ export class ContainerConfiguration implements IContainerConfiguration {
       componentObject['Configuration']
     );
     const ns = configurationOptions.namespace || MAIN_MODULE_KEY;
-    // 遍历导出的对象，存到预扫描模块
-    for( const key of Object.keys(componentObject)) {
-      componentObject[key][MODULE_NAMESPACE_KEY] = ns;
-    }
-
     this.container.bindClass(componentObject, ns);
   }
 

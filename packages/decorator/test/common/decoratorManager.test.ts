@@ -16,7 +16,8 @@ import {
   listPropertyDataFromClass,
   PRELOAD_MODULE_KEY,
   resetModule,
-  savePropertyDataToClass
+  savePropertyDataToClass,
+  generateProvideId,
 } from '../../src';
 import * as assert from 'assert';
 import { expect } from 'chai';
@@ -137,4 +138,13 @@ describe('/test/common/decoratorManager.test.ts', () => {
     const meta = getPropertyMetadata('ttt', TestTwo, 'hhh');
     expect(meta).deep.eq([{ a: 1, b: 22 }]);
   });
+
+
+  it('should generateProvideId be ok', () => {
+    const id = generateProvideId('@ok:test1', 'ok');
+    assert.deepEqual('ok:test1', id, 'provide id is not ok:test1');
+    const id2 = generateProvideId('ok:test1', 'ok');
+    assert.deepEqual('ok:test1', id2, 'provide id is not ok:test1');
+  });
+
 });

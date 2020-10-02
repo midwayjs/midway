@@ -30,6 +30,7 @@ export {
   getProviderId,
   getObjectDefinition,
   classNamed,
+  generateProvideId
 } from '@midwayjs/decorator';
 export * from './interface';
 export { ContainerLoader } from './loader';
@@ -41,7 +42,6 @@ export * from './common/constants';
 export {
   safelyGet,
   safeRequire,
-  generateProvideId,
   parsePrefix,
 } from './common/util';
 export * from './features';
