@@ -1,5 +1,4 @@
 import { dirname, resolve, sep, extname } from 'path';
-import { MAIN_MODULE_KEY } from '../interface';
 
 export const safeRequire = p => {
   if (p.startsWith(`.${sep}`) || p.startsWith(`..${sep}`)) {
@@ -50,26 +49,7 @@ export function safelyGet(list: string | string[], obj?: object): any {
 
   return willReturn;
 }
-/**
- * 生成带 namespace 的 provideId
- * @param provideId provideId
- * @param namespace namespace
- */
-export function generateProvideId(provideId: string, namespace?: string) {
-  if (namespace && namespace !== MAIN_MODULE_KEY) {
-    if (provideId.includes('@')) {
-      return provideId.substr(1);
-    }
-    if (provideId.includes(':')) {
-      return provideId;
-    }
-    if (namespace.includes('@')) {
-      namespace = namespace.substr(1);
-    }
-    return namespace + ':' + provideId;
-  }
-  return provideId;
-}
+
 /**
  * 剔除 @ 符号
  * @param provideId provideId

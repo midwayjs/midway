@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 import { join } from 'path';
-import { isPath, safeRequire, generateProvideId, safelyGet, isPathEqual } from '../src/common/util';
+import { isPath, safeRequire, safelyGet, isPathEqual } from '../src/common/util';
 
 describe('/test/util.test.ts', () => {
   it('should test is path', () => {
@@ -22,13 +22,6 @@ describe('/test/util.test.ts', () => {
     // assert.strictEqual(safeRequire(join(__dirname, './fixtures/foo')), undefined);
     assert.strictEqual(safeRequire(join(__dirname, './fixtures/dir/nok.js')), undefined);
     assert.strictEqual(safeRequire('./fixtures/dir/bbb/nok.js'), undefined);
-  });
-
-  it('should generateProvideId be ok', () => {
-    const id = generateProvideId('@ok:test1', 'ok');
-    assert.deepEqual('ok:test1', id, 'provide id is not ok:test1');
-    const id2 = generateProvideId('ok:test1', 'ok');
-    assert.deepEqual('ok:test1', id2, 'provide id is not ok:test1');
   });
 
   it('should safeGet be ok', () => {

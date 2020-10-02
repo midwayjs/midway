@@ -70,3 +70,6 @@ export const OBJ_DEF_CLS = 'injection:object_definition_class';
 export const PIPELINE_IDENTIFIER = '__pipeline_identifier__';
 // lifecycle interface
 export const LIFECYCLE_IDENTIFIER_PREFIX = '__lifecycle__';
+
+export const MAIN_MODULE_KEY = '__main__';
+export const PRIVATE_META_DATA_KEY = '__midway_private_meta_data__';
