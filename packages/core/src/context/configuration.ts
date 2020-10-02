@@ -1,30 +1,30 @@
 import {
-  CONFIGURATION_KEY,
-  InjectionConfigurationOptions,
-  getClassMetadata,
-  LIFECYCLE_IDENTIFIER_PREFIX,
   classNamed,
+  CONFIGURATION_KEY,
+  getClassMetadata,
+  InjectionConfigurationOptions,
+  LIFECYCLE_IDENTIFIER_PREFIX,
+  MODULE_NAMESPACE_KEY,
   saveModule,
   saveProviderId,
 } from '@midwayjs/decorator';
 
 import { dirname, isAbsolute, join } from 'path';
-import {
-  IContainerConfiguration,
-  IMidwayContainer,
-  MAIN_MODULE_KEY,
-} from '../interface';
-import { isPath, safeRequire, generateProvideId } from '../common/util';
+import { IContainerConfiguration, IMidwayContainer, MAIN_MODULE_KEY, } from '../interface';
+import { generateProvideId, isPath, safeRequire } from '../common/util';
 import { isClass, isFunction } from '../util';
 import * as util from 'util';
 
 const debug = util.debuglog('midway:container:configuration');
 
 export class ContainerConfiguration implements IContainerConfiguration {
-  container: IMidwayContainer;
+  container: IMidwayContainer & {
+    bindClass(exports, namespace: string)
+  };
   namespace: string;
   packageName: string;
   loadDirs: string[] = [];
+  loadModules: any[] = [];
   importObjects: object = new Map();
 
   constructor(container) {
@@ -35,19 +35,30 @@ export class ContainerConfiguration implements IContainerConfiguration {
     this.loadDirs.push(dir);
   }
 
-  addImports(imports: string[] = [], baseDir?: string) {
+  addImports(imports: any[] = [], baseDir?: string) {
     // 处理 imports
     for (const importPackage of imports) {
       // for package
       const subContainerConfiguration = this.container.createConfiguration();
-      const subPackageDir = this.resolvePackageBaseDir(importPackage, baseDir);
-      debug(
-        `\n---------- start load configuration from sub package "${importPackage}" ----------`
-      );
-      subContainerConfiguration.load(subPackageDir);
-      debug(
-        `---------- end load configuration from sub package "${importPackage}" ----------`
-      );
+      if (typeof importPackage === 'string') {
+        const subPackageDir = this.resolvePackageBaseDir(importPackage, baseDir);
+        debug(
+          `\n---------- start load configuration from sub package "${importPackage}" ----------`
+        );
+        subContainerConfiguration.load(subPackageDir);
+        debug(
+          `---------- end load configuration from sub package "${importPackage}" ----------`
+        );
+      } else {
+        // component is object
+        debug(
+          `\n---------- start load configuration from submodule" ----------`
+        );
+        subContainerConfiguration.loadComponentObject(importPackage);
+        debug(
+          `---------- end load configuration from sub package "${importPackage}" ----------`
+        );
+      }
     }
   }
 
@@ -163,6 +174,25 @@ export class ContainerConfiguration implements IContainerConfiguration {
     }
     debug('   has configuration file => %s.', !!configuration);
     this.loadConfiguration(configuration, packageBaseDir, cfgFile);
+  }
+
+  loadComponentObject(componentObject) {
+    if(!componentObject || !componentObject['Configuration']) {
+      return;
+    }
+
+    this.loadConfiguration(componentObject['Configuration'], '');
+    const configurationOptions: InjectionConfigurationOptions = getClassMetadata(
+      CONFIGURATION_KEY,
+      componentObject['Configuration']
+    );
+    const ns = configurationOptions.namespace || MAIN_MODULE_KEY;
+    // 遍历导出的对象，存到预扫描模块
+    for( const key of Object.keys(componentObject)) {
+      componentObject[key][MODULE_NAMESPACE_KEY] = ns;
+    }
+
+    this.container.bindClass(componentObject, ns);
   }
 
   loadConfiguration(configuration, baseDir, filePath?: string) {

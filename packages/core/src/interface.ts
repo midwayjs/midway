@@ -199,6 +199,7 @@ export interface IContainerConfiguration {
   addImportObjects(importObjects: any[]);
   addImportConfigs(importConfigs: string[], baseDir: string);
   load(packageName: string);
+  loadComponentObject(componentObject: any);
   loadConfiguration(
     configuration: IContainerConfiguration,
     baseDir: string,
