@@ -3,7 +3,7 @@ import { ObjectDefinitionOptions, TagClsMetadata } from '../interface';
 import { OBJ_DEF_CLS, TAGGED_CLS } from './constant';
 import { classNamed } from './utils';
 
-const debug = require('debug')('decorator:manager');
+const debug = require('util').debuglog('decorator:manager');
 
 const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/gm;
 const ARGUMENT_NAMES = /([^\s,]+)/g;
@@ -11,6 +11,7 @@ const ARGUMENT_NAMES = /([^\s,]+)/g;
 export type decoratorKey = string | symbol;
 
 export const PRELOAD_MODULE_KEY = 'INJECTION_PRELOAD_MODULE_KEY';
+export const MODULE_NAMESPACE_KEY = '_module_namespace';
 
 export class DecoratorManager extends Map {
   /**
