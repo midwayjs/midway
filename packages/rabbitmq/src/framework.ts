@@ -1,6 +1,5 @@
 import {
   BaseFramework,
-  generateProvideId,
   getClassMetadata,
   getProviderId,
   IMidwayBootstrapOptions,
@@ -8,7 +7,6 @@ import {
   listPropertyDataFromClass,
   MidwayFrameworkType,
   MidwayRequestContainer,
-  PRIVATE_META_DATA_KEY,
 } from '@midwayjs/core';
 
 import {
@@ -80,11 +78,6 @@ export class MidwayRabbitMQFramework extends BaseFramework<
 
       // get providerId
       let providerId = getProviderId(module);
-      const meta = getClassMetadata(PRIVATE_META_DATA_KEY, module);
-      if (providerId && meta) {
-        providerId = generateProvideId(providerId, meta.namespace);
-      }
-
       // get listenerInfo
       const data: RabbitMQListenerOptions[][] = listPropertyDataFromClass(
         MS_CONSUMER_KEY,

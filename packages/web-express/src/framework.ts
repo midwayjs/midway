@@ -1,7 +1,6 @@
 import {
   BaseFramework,
   extractExpressLikeValue,
-  generateProvideId,
   getClassMetadata,
   getPropertyDataFromClass,
   getPropertyMetadata,
@@ -11,7 +10,6 @@ import {
   MidwayFrameworkType,
   MidwayProcessTypeEnum,
   MidwayRequestContainer,
-  PRIVATE_META_DATA_KEY,
 } from '@midwayjs/core';
 
 import {
@@ -160,10 +158,6 @@ export class MidwayExpressFramework extends BaseFramework<
     // implement @controller
     for (const module of controllerModules) {
       let providerId = getProviderId(module);
-      const meta = getClassMetadata(PRIVATE_META_DATA_KEY, module);
-      if (providerId && meta) {
-        providerId = generateProvideId(providerId, meta.namespace);
-      }
       if (providerId) {
         if (this.controllerIds.indexOf(providerId) > -1) {
           throw new Error(`controller identifier [${providerId}] is exists!`);

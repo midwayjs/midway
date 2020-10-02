@@ -1,13 +1,11 @@
 import {
   BaseFramework,
-  generateProvideId,
   getClassMetadata,
   getProviderId,
   IMidwayBootstrapOptions,
   listModule,
   MidwayFrameworkType,
   MidwayRequestContainer,
-  PRIVATE_META_DATA_KEY,
 } from '@midwayjs/core';
 
 import {
@@ -102,10 +100,6 @@ export class MidwaySocketIOFramework extends BaseFramework<
     const controllerModules = listModule(WS_CONTROLLER_KEY);
     for (const module of controllerModules) {
       let providerId = getProviderId(module);
-      const meta = getClassMetadata(PRIVATE_META_DATA_KEY, module);
-      if (providerId && meta) {
-        providerId = generateProvideId(providerId, meta.namespace);
-      }
       if (providerId) {
         await this.addNamespace(module, providerId);
       }
