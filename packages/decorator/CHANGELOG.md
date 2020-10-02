@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.6](https://github.com/midwayjs/midway/compare/v2.3.4...v2.3.6) (2020-10-02)
+
+
+### Bug Fixes
+
+* implement optional dep for amqplib in mock package ([#654](https://github.com/midwayjs/midway/issues/654)) ([3319872](https://github.com/midwayjs/midway/commit/33198727855ff042db7d96723992b49c632aa25d))
+
+
+### Features
+
+* add request path and ip decorator ([#655](https://github.com/midwayjs/midway/issues/655)) ([3354c26](https://github.com/midwayjs/midway/commit/3354c263c92957fd68b90c383c33afc6ad9ae967))
+
+
+
+
+
 # [2.3.0](https://github.com/midwayjs/midway/compare/v2.2.10...v2.3.0) (2020-09-27)
 
 
