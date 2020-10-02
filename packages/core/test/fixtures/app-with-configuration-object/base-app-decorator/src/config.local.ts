@@ -1,0 +1,3 @@
+export = {
+  helloworld: 234
+};
