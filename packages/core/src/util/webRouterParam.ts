@@ -24,6 +24,10 @@ export const extractKoaLikeValue = (key, data) => {
         return ctx.getFileStream && ctx.getFileStream(data);
       case RouteParamTypes.FILESSTREAM:
         return ctx.multipart && ctx.multipart(data);
+      case RouteParamTypes.REQUEST_PATH:
+        return ctx['path'];
+      case RouteParamTypes.REQUEST_IP:
+        return ctx['ip'];
       default:
         return null;
     }
@@ -52,6 +56,10 @@ export const extractExpressLikeValue = (key, data) => {
         return req.getFileStream && req.getFileStream(data);
       case RouteParamTypes.FILESSTREAM:
         return req.multipart && req.multipart(data);
+      case RouteParamTypes.REQUEST_PATH:
+        return req['baseUrl'];
+      case RouteParamTypes.REQUEST_IP:
+        return req['ip'];
       default:
         return null;
     }
