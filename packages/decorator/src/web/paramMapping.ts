@@ -39,6 +39,8 @@ export enum RouteParamTypes {
   FILESTREAM,
   FILESSTREAM,
   NEXT,
+  REQUEST_PATH,
+  REQUEST_IP,
 }
 
 export interface RouterParamValue {
@@ -79,3 +81,9 @@ export const File = (property?: GetFileStreamOptions) =>
   createParamMapping(RouteParamTypes.FILESTREAM)(property);
 export const Files = (property?: GetFilesStreamOptions) =>
   createParamMapping(RouteParamTypes.FILESSTREAM)(property);
+export const RequestPath = () => {
+  createParamMapping(RouteParamTypes.REQUEST_PATH)();
+};
+export const RequestIP = () => {
+  createParamMapping(RouteParamTypes.REQUEST_IP)();
+};
