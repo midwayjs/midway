@@ -9,6 +9,7 @@ English | [简体中文](./README.zh-cn.md)
   <a href="./LICENSE" alt="GitHub license">
     <img src="https://img.shields.io/badge/license-MIT-blue.svg" />
   </a>
+<a href="https://app.fossa.com/projects/git%2Bgithub.com%2Fmidwayjs%2Fmidway?ref=badge_shield" alt="FOSSA Status"><img src="https://app.fossa.com/api/projects/git%2Bgithub.com%2Fmidwayjs%2Fmidway.svg?type=shield"/></a>
   <a href="https://github.com/midwayjs/midway/actions?query=workflow%3A%22Node.js+CI%22" alt="Node.js CI">
     <img src="https://img.shields.io/badge/Node.js%20CI-passing-brightgreen" />
   </a>
@@ -22,6 +23,9 @@ English | [简体中文](./README.zh-cn.md)
     <img src="https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod" />
   </a>
 </p>
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fmidwayjs%2Fmidway.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fmidwayjs%2Fmidway?ref=badge_large)
 
 ## Introduction
 
