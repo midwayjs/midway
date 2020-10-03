@@ -13,7 +13,9 @@ import {
   ScopeEnum,
   PRIVATE_META_DATA_KEY,
   generateProvideId,
-  MAIN_MODULE_KEY
+  MAIN_MODULE_KEY,
+  CONFIG_KEY,
+  ALL
 } from '@midwayjs/decorator';
 import { ContainerConfiguration } from './configuration';
 import {
@@ -120,6 +122,15 @@ export class MidwayContainer extends Container implements IMidwayContainer {
     for (const containerConfiguration of this.likeMainConfiguration) {
       this.loadConfiguration(opts, containerConfiguration);
     }
+
+    // register ad base config hook
+    this.registerDataHandler(CONFIG_KEY, (key: string) => {
+      if (key === ALL) {
+        return this.getConfigService().getConfiguration();
+      } else {
+        return this.getConfigService().getConfiguration(key);
+      }
+    });
   }
 
   // 加载模块

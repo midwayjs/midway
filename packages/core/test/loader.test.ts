@@ -1,10 +1,4 @@
-import {
-  CONFIG_KEY,
-  LOGGER_KEY,
-  PLUGIN_KEY,
-  Provide,
-  APPLICATION_KEY,
-} from '@midwayjs/decorator';
+import { APPLICATION_KEY, CONFIG_KEY, LOGGER_KEY, PLUGIN_KEY, Provide, } from '@midwayjs/decorator';
 import * as assert from 'assert';
 import * as path from 'path';
 import {
@@ -258,7 +252,7 @@ describe('/test/loader.test.ts', () => {
 
     const appCtx = loader.getApplicationContext();
     const replaceManager: any = await appCtx.getAsync('@ok:replaceManager');
-    assert((await replaceManager.getOne()) === 'ok');
+    expect(await replaceManager.getOne()).toEqual('ok');
   });
 
   it('should load config.*.ts by process.env', async () => {
