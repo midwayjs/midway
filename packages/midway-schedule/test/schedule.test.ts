@@ -1,26 +1,17 @@
-'use strict';
+import { createApp, mm } from '@midwayjs/mock';
+import { join  } from 'path';
 
-import { clearAllModule } from '@midwayjs/decorator';
-import { mm } from 'midway-mock';
+import { Framework } from '../../web/src';
 
 import * as path from 'path';
 const fs = require('fs');
 const assert = require('assert');
 
 describe('test/schedule.test.ts', () => {
-  let application;
-  afterEach(() => {
-    application.close();
-    clearAllModule();
-  });
 
   describe('schedule type worker', () => {
-    it('should load schedules', async () => {
-      application = mm.app({
-        baseDir: 'app-load-schedule',
-        typescript: true,
-      });
-      await application.ready();
+    it.only('should load schedules', async () => {
+      const application = await createApp(join(__dirname, 'fixtures/app-load-schedule'),  {}, Framework);
       const list = Object.keys(application.schedules).filter((key) =>
         key.includes('HelloCron'),
       );
@@ -31,7 +22,7 @@ describe('test/schedule.test.ts', () => {
 
     it('should support interval with @schedule decorator (both app/schedule & lib/schedule)', async () => {
       const name = 'worker';
-      application = mm.cluster({
+      const application = mm.cluster({
         baseDir: name,
         typescript: true,
         worker: 2,
@@ -41,32 +32,32 @@ describe('test/schedule.test.ts', () => {
       const log = getLogContent(name);
       assert(contains(log, 'hello decorator') === 4, '未正确执行 4 次');
     });
-
-    it('should support non-default class with @schedule decorator', async () => {
-      const name = 'worker-non-default-class';
-      application = mm.cluster({
-        baseDir: name,
-        typescript: true,
-        worker: 2,
-      });
-      await application.ready();
-      await sleep(5000);
-      const log = getLogContent(name);
-      assert(contains(log, 'hello decorator') === 4, '未正确执行 4 次');
-      assert(contains(log, 'hello other functions') === 4, '未正确执行 4 次');
-    });
-  });
-
-  describe('app.runSchedule', () => {
-    it('should run schedule not exist throw error', async () => {
-      application = mm.app({ baseDir: 'worker', typescript: true, });
-      await application.ready();
-      await application.runSchedule('intervalCron#IntervalCron');
-      await sleep(1000);
-      const log = getLogContent('worker');
-      // console.log(log);
-      assert(contains(log, 'hello decorator') === 1);
-    });
+  //
+  //   it('should support non-default class with @schedule decorator', async () => {
+  //     const name = 'worker-non-default-class';
+  //     application = mm.cluster({
+  //       baseDir: name,
+  //       typescript: true,
+  //       worker: 2,
+  //     });
+  //     await application.ready();
+  //     await sleep(5000);
+  //     const log = getLogContent(name);
+  //     assert(contains(log, 'hello decorator') === 4, '未正确执行 4 次');
+  //     assert(contains(log, 'hello other functions') === 4, '未正确执行 4 次');
+  //   });
+  // });
+  //
+  // describe('app.runSchedule', () => {
+  //   it('should run schedule not exist throw error', async () => {
+  //     application = mm.app({ baseDir: 'worker', typescript: true, });
+  //     await application.ready();
+  //     await application.runSchedule('intervalCron#IntervalCron');
+  //     await sleep(1000);
+  //     const log = getLogContent('worker');
+  //     // console.log(log);
+  //     assert(contains(log, 'hello decorator') === 1);
+  //   });
   });
 });
 
