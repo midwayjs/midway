@@ -20,8 +20,7 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/cli": "^1.0.0",
-    "@midwayjs/mock": "^2.3.7",
-    "fs-extra": "^8.0.1"
+    "@midwayjs/mock": "^2.3.7"
   },
   "dependencies": {
     "@midwayjs/decorator": "^2.3.7",
