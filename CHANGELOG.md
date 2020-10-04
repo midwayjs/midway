@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.7-beta.1](https://github.com/midwayjs/midway/compare/v2.3.6...v2.3.7-beta.1) (2020-10-04)
+
+
+### Bug Fixes
+
+* config loader in test ([e0b0ac8](https://github.com/midwayjs/midway/commit/e0b0ac8e6857d886d638b3378a23a15e038fca1a))
+
+
+### Features
+
+* configuration may be export in component ([3e0e769](https://github.com/midwayjs/midway/commit/3e0e769ff501f064dc186fc79c185a311f1d3577))
+
+
+
+
+
 ## [2.3.6](https://github.com/midwayjs/midway/compare/v2.3.4...v2.3.6) (2020-10-02)
 
 
