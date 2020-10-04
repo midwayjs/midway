@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.7](https://github.com/midwayjs/midway/compare/v2.3.6...v2.3.7) (2020-10-04)
+
+
+### Bug Fixes
+
+* transform type after validate ([#659](https://github.com/midwayjs/midway/issues/659)) ([2b30ba7](https://github.com/midwayjs/midway/commit/2b30ba77d0c897d84d8a6f3222b60c083ec3e869))
+
+
+
+
+
 ## [2.3.6](https://github.com/midwayjs/midway/compare/v2.3.4...v2.3.6) (2020-10-02)
 
 
