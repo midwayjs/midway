@@ -167,4 +167,23 @@ describe('/test/annotation/check.test.ts', () => {
       new Hello().school(1, user);
     }).toThrow(Error);
   });
+
+  it('should transform string to number', function () {
+    class UserNewDTO {
+      @Rule(RuleType.number().required())
+      id: number;
+    }
+
+    class Hello {
+      @Validate()
+      school(user: UserNewDTO) {
+        return user;
+      }
+    }
+
+    const data = new Hello().school({
+      id: '555'
+    } as any)
+    expect(typeof data.id).toEqual('number');
+  });
 });

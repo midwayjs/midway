@@ -20,6 +20,8 @@ export function Validate(isTransform = true) {
           const result = schema.validate(args[i]);
           if (result.error) {
             throw result.error;
+          } else {
+            args[i] = result.value;
           }
           // passed
           if (isTransform) {
