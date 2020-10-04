@@ -1,12 +1,12 @@
+'use strict';
+
 const path = require('path');
 const mkdirp = require('mkdirp');
 const os = require('os');
 const fs = require('fs');
 
-import { EggAppConfig, EggAppInfo, PowerPartial } from 'egg';
-
-module.exports = (appInfo: EggAppInfo) => {
-  const exports = {} as PowerPartial<EggAppConfig>;
+module.exports = appInfo => {
+  const exports = {};
 
   exports.rundir = path.join(appInfo.appDir, 'run');
 

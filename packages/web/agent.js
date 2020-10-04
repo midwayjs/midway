@@ -1,11 +1,9 @@
-import { BootstrapStarter } from '@midwayjs/bootstrap';
-import { Framework } from './index';
+'use strict';
+
+const { BootstrapStarter } = require('@midwayjs/bootstrap');
+const { Framework } = require('./dist/index');
 
 class AppBootHook {
-  app;
-  bootstrap;
-  framework;
-
   constructor(app) {
     this.app = app;
   }
