@@ -18,6 +18,7 @@ const cannon = () => {
     autocannon(
       {
         url: 'http://127.0.0.1:7001',
+
         connections: 100,
         pipelining: 2,
         duration: 30,
@@ -82,7 +83,7 @@ const cannon = () => {
   console.log(`third memory（after gc), rss=${format(thirdMem.rss)}, heapUsed =${format(thirdMem.heapUsed)}`);
 
   // 第一次检查，gc 后和初始化持平
-  if (thirdMem.heapUsed / firstMem.heapUsed > 1.1) {
+  if (Math.abs(thirdMem.heapUsed / firstMem.heapUsed) > 1.1) {
     throw new Error('memory leak warning');
   }
 
@@ -105,12 +106,12 @@ const cannon = () => {
   console.log(`fifth memory（after gc2), rss=${format(fifthMem.rss)}, heapUsed =${format(fifthMem.heapUsed)}`);
 
   // 第二次检查，第二次 gc 中的堆内存和第一次 gc 持平
-  if (fourthMem.heapUsed / secondMem.heapUsed > 1.1) {
+  if (Math.abs(fourthMem.heapUsed / secondMem.heapUsed) > 1.2) {
     throw new Error('memory leak warning');
   }
 
   // 第三次检查，第三次 gc 之后和第一次 gc 结果持平
-  if (fifthMem.heapUsed / thirdMem.heapUsed > 1.1) {
+  if (Math.abs(fifthMem.heapUsed / thirdMem.heapUsed) > 1.2) {
     throw new Error('memory leak warning');
   }
 
