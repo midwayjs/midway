@@ -54,6 +54,9 @@ export async function create<
   if (DefaultFramework) {
     framework = new DefaultFramework();
     if (framework.getFrameworkType() === MidwayFrameworkType.WEB) {
+      // clean first
+      await remove(join(baseDir, 'logs'));
+      await remove(join(baseDir, 'run'));
       // add egg-mock plugin for @midwayjs/web test, provide mock method
       options = Object.assign(options || {}, {
         plugins: {

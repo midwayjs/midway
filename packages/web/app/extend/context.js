@@ -1,3 +1,4 @@
+'use strict';
 const rc = Symbol('Context#RequestContext');
 const { MidwayRequestContainer } = require('@midwayjs/core');
 

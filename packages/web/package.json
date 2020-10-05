@@ -26,6 +26,7 @@
     "@midwayjs/cli": "^1.0.0",
     "@midwayjs/mock": "^2.3.7",
     "egg-view-nunjucks": "^2.2.0",
+    "midway-schedule": "^2.3.6",
     "fs-extra": "^8.0.1",
     "pedding": "^1.1.0",
     "react": "^16.13.1",

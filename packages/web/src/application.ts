@@ -4,6 +4,7 @@ import { parseNormalDir } from './utils';
 import * as extend from 'extend2';
 import { EggAppInfo } from 'egg';
 import { IMidwayWebApplication } from './interface';
+import { join } from 'path';
 
 const {
   AppWorkerLoader,
@@ -42,7 +43,8 @@ export const createAppWorkerLoader = AppWorkerLoader => {
       }
 
       if (process.env.MIDWAY_EGG_PLUGIN_PATH) {
-        return super.getEggPaths().concat(process.env.MIDWAY_EGG_PLUGIN_PATH);
+        const result = super.getEggPaths();
+        return result.concat(process.env.MIDWAY_EGG_PLUGIN_PATH);
       }
       return super.getEggPaths();
     }
@@ -215,7 +217,7 @@ export class EggApplication extends BaseEggApplication {
   }
 
   get [EGG_PATH]() {
-    return __dirname;
+    return join(__dirname, '../');
   }
 }
 
@@ -225,7 +227,7 @@ export class EggAgent extends BaseEggAgent {
   }
 
   get [EGG_PATH]() {
-    return __dirname;
+    return join(__dirname, '../');
   }
 }
 
