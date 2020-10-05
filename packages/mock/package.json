@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/mock",
-  "version": "2.3.8",
+  "version": "2.3.9",
   "description": "create your test app from midway framework",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -35,9 +35,9 @@
     "amqplib": "^0.6.0"
   },
   "dependencies": {
-    "@midwayjs/bootstrap": "^2.3.8",
-    "@midwayjs/core": "^2.3.8",
-    "@midwayjs/decorator": "^2.3.8",
+    "@midwayjs/bootstrap": "^2.3.9",
+    "@midwayjs/core": "^2.3.9",
+    "@midwayjs/decorator": "^2.3.9",
     "egg-mock": "^3.21.0",
     "fs-extra": "^8.0.1",
     "power-assert": "^1.6.1",
