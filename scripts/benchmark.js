@@ -75,7 +75,7 @@ const cannon = () => {
   await wait(10000);
 
   // 第一次 dump
-  await heapdump();
+  // await heapdump();
 
   console.log(`Running benchmark...`);
   const results = await cannon();
@@ -100,7 +100,7 @@ const cannon = () => {
   }
 
   // 第二次 dump
-  await heapdump();
+  // await heapdump();
 
   // 继续压测 30s
   console.log(`Running benchmark 2...`);
@@ -121,7 +121,7 @@ const cannon = () => {
   console.log(`fifth memory（after gc2), rss=${format(fifthMem.rss)}, heapUsed =${format(fifthMem.heapUsed)}`);
 
   // 第三次 dump
-  await heapdump();
+  // await heapdump();
 
   // 第二次检查，第二次 gc 中的堆内存和第一次 gc 持平
   if (fourthMem.heapUsed / secondMem.heapUsed > 1.1) {
@@ -133,9 +133,9 @@ const cannon = () => {
     throw new Error('memory leak warning');
   }
 
-  console.log(fs.stat(path.join(__dirname, 'midway_benchmark_1.heapsnapshot')).size);
-  console.log(fs.stat(path.join(__dirname, 'midway_benchmark_2.heapsnapshot')).size);
-  console.log(fs.stat(path.join(__dirname, 'midway_benchmark_3.heapsnapshot')).size);
+  // console.log(fs.stat(path.join(__dirname, 'midway_benchmark_1.heapsnapshot')).size);
+  // console.log(fs.stat(path.join(__dirname, 'midway_benchmark_2.heapsnapshot')).size);
+  // console.log(fs.stat(path.join(__dirname, 'midway_benchmark_3.heapsnapshot')).size);
 
 
   kill(child.pid);
