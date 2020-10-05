@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.8](https://github.com/midwayjs/midway/compare/v2.3.7...v2.3.8) (2020-10-05)
+
+
+### Bug Fixes
+
+* schedule case ([#660](https://github.com/midwayjs/midway/issues/660)) ([c9fb3fb](https://github.com/midwayjs/midway/commit/c9fb3fbe5e4edff5e89e11bfbe19c5fcc3515883))
+
+
+
+
+
 ## [2.3.7](https://github.com/midwayjs/midway/compare/v2.3.6...v2.3.7) (2020-10-04)
 
 **Note:** Version bump only for package @midwayjs/mock
