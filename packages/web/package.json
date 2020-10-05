@@ -18,6 +18,10 @@
     "eggjs"
   ],
   "files": [
+    "app",
+    "config",
+    "agent.js",
+    "app.js",
     "dist/**/*.js",
     "dist/**/*.d.ts"
   ],
