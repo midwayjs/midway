@@ -2,7 +2,6 @@
 
 const { spawn } = require('child_process');
 const autocannon = require('autocannon');
-const kill = require('tree-kill');
 
 function wait(delay) {
   return new Promise(resolve => {
@@ -115,6 +114,6 @@ const cannon = () => {
     throw new Error('memory leak warning');
   }
 
-
-  kill(child.pid);
+  child.kill();
+  process.exit(0);
 })().catch(() => {process.exit(1)});
