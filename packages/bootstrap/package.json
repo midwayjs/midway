@@ -7,7 +7,8 @@
   "scripts": {
     "build": "midway-bin build -c",
     "test": "midway-bin test",
-    "cov": "midway-bin test --cov"
+    "cov": "midway-bin test --cov",
+    "link": "npm link"
   },
   "keywords": [
     "midway",

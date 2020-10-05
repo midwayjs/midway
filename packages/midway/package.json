@@ -8,7 +8,8 @@
     "build": "midway-bin build -c",
     "test": "midway-bin test",
     "cov": "midway-bin test --cov",
-    "ci": "npm run test"
+    "ci": "npm run test",
+    "link": "npm link"
   },
   "keywords": [
     "midway",
