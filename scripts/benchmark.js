@@ -4,6 +4,7 @@ const { execSync, spawn } = require('child_process');
 const fs = require('fs');
 const autocannon = require('autocannon');
 const path = require('path');
+const kill = require('tree-kill');
 
 function wait(delay) {
   return new Promise(resolve => {
@@ -33,6 +34,8 @@ const cannon = () => {
 (async () => {
   const child = spawn('node', ['start.js'], { cwd: __dirname });
 
+  console.log(`Current pid is ${child.pid}`);
+
   child.on('error', err => {
     console.error(err);
   });
@@ -49,10 +52,12 @@ const cannon = () => {
     console.log(data.toString());
   });
 
-  console.log(`Waiting for to initialize...`);
-  await wait(10000); // wait for workers to properly initialize
+  console.log(`Waiting for to initialize after 10s...`);
+  await wait(10000);
+  const mem =
   console.log(`Running benchmark...`);
   const results = await cannon();
   console.log(console.log(`QPS:  ${results.requests.average}`));
+  kill(child.pid);
   await wait(5000);
 })().catch(e => console.error(e));

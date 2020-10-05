@@ -1,10 +1,9 @@
 #!/bin/bash
 
-npm install @midwayjs/cli autocannon
+npm install @midwayjs/cli autocannon tree-kill
 ./node_modules/.bin/mw new midway_benchmark_app
 cp ./scripts/start.js ./midway_benchmark_app/start.js
 cp ./scripts/benchmark.js ./midway_benchmark_app/benchmark.js
-echo pwd
 cd midway_benchmark_app
 npm run build
 npm i heapdump
