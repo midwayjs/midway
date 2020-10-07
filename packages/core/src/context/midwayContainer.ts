@@ -93,7 +93,6 @@ export class MidwayContainer extends Container implements IMidwayContainer {
   }) {
     // 添加全局白名单
     this.midwayIdentifiers.push(PIPELINE_IDENTIFIER);
-    this.midwayIdentifiers.push(REQUEST_CTX_KEY);
 
     this.debugLogger('main:create "Main Module" and "Main Configuration"');
     // create main module configuration
@@ -213,6 +212,13 @@ export class MidwayContainer extends Container implements IMidwayContainer {
       this.debugLogger('  @scope => request');
       objectDefinition.scope = ScopeEnum.Request;
     }
+  }
+
+  registerObject(identifier: ObjectIdentifier, target: any, registerByUser = true) {
+    if (registerByUser) {
+      this.midwayIdentifiers.push(identifier);
+    }
+    return super.registerObject(identifier, target);
   }
 
   createConfiguration(): IContainerConfiguration {
@@ -407,7 +413,7 @@ export class MidwayContainer extends Container implements IMidwayContainer {
 
     this.registerImportObjects(
       containerConfiguration.getImportObjects(),
-      containerConfiguration.namespace
+      containerConfiguration.namespace,
     );
   }
 

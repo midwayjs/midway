@@ -352,10 +352,7 @@ describe('/test/loader.test.ts', () => {
     assert((await replaceManager2.getOne()) === 'ok3');
     // 查看覆盖的情况
     const baseService: any = await appCtx.getAsync('baseService');
-    assert(
-      (await baseService.getInformation()) ===
-        'harryone article atmod,one article,ok3'
-    );
+    expect(await baseService.getInformation()).toEqual( 'harryone article atmod,one article,ok3');
 
     assert(baseService.helloworld === 234);
 
@@ -618,5 +615,20 @@ describe('/test/loader.test.ts', () => {
     expect(home.hello()).toEqual('hello worlddddfff');
     expect(await home.hello1()).toEqual('hello world 1');
     expect(await home.hello2()).toEqual('hello worldcccppp');
-  })
+  });
+
+  it('should inject global value in component', async () => {
+    const loader = new ContainerLoader({
+      baseDir: path.join(
+        __dirname,
+        './fixtures/app-with-configuration-global-inject/base-app-decorator/src'
+      )
+    });
+    loader.initialize();
+    loader.loadDirectory();
+    await loader.refresh();
+
+    const home: any = await loader.getApplicationContext().getAsync('SQL:home');
+    expect(await home.getData()).toMatch(/base-app-decorator\/src/);
+  });
 });
