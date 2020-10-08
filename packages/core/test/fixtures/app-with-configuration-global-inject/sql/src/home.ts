@@ -6,9 +6,12 @@ export class Home {
   baseDir: string;
 
   @Inject()
-  aaa;
+  aaa;      // 当前组件注册的属性
+
+  @Inject()
+  ccc;      // 全局注入的属性
 
   async getData() {
-    return this.baseDir + '/' + this.aaa;
+    return this.baseDir + '/' + this.aaa + '/' + this.ccc;
   }
 }

@@ -6,6 +6,7 @@ import { Configuration } from '@midwayjs/decorator';
   ],
 })
 export class AutoConfiguration {
-  async onReady() {
+  async onReady(container) {
+    container.registerObject('ccc', 'dddd');
   }
 }

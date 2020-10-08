@@ -220,7 +220,16 @@ export class MidwayContainer extends Container implements IMidwayContainer {
       this.midwayIdentifiers.push(identifier);
     }
     if (this?.getCurrentNamespace()) {
-      identifier = this.getCurrentNamespace() + ':' + identifier;
+      if (this?.getCurrentNamespace() === MAIN_MODULE_KEY) {
+        // 如果是 main，则同步 alias 到所有的 namespace
+        for (const value of this.configurationMap.values()) {
+          if (value.namespace !== MAIN_MODULE_KEY) {
+            super.registerObject(value.namespace + ':' + identifier, target);
+          }
+        }
+      } else {
+        identifier = this.getCurrentNamespace() + ':' + identifier;
+      }
     }
     return super.registerObject(identifier, target);
   }
@@ -441,7 +450,7 @@ export class MidwayContainer extends Container implements IMidwayContainer {
          */
         await inst.onReady(new Proxy(this, {
           get: function (target, prop, receiver) {
-            if (prop === 'getCurrentNamespace' && cycle.namespace && cycle.namespace !== MAIN_MODULE_KEY) {
+            if (prop === 'getCurrentNamespace' && cycle.namespace) {
               return () => {
                 return cycle.namespace;
               }
