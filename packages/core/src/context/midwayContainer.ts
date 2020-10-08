@@ -441,7 +441,7 @@ export class MidwayContainer extends Container implements IMidwayContainer {
          */
         await inst.onReady(new Proxy(this, {
           get: function (target, prop, receiver) {
-            if (prop === 'getCurrentNamespace' && cycle.namespace) {
+            if (prop === 'getCurrentNamespace' && cycle.namespace && cycle.namespace !== MAIN_MODULE_KEY) {
               return () => {
                 return cycle.namespace;
               }

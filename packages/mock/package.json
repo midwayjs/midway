@@ -32,12 +32,12 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/cli": "^1.0.0",
+    "@midwayjs/core": "^2.3.9",
     "@types/amqplib": "^0.5.13",
     "amqplib": "^0.6.0"
   },
   "dependencies": {
     "@midwayjs/bootstrap": "^2.3.9",
-    "@midwayjs/core": "^2.3.9",
     "@midwayjs/decorator": "^2.3.9",
     "egg-mock": "^3.21.0",
     "fs-extra": "^8.0.1",

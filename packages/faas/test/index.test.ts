@@ -64,7 +64,7 @@ describe('test/index.test.ts', () => {
     await closeApp(starter);
   });
 
-  it('invoke handler by default name', async () => {
+  it('invoke handler by another name', async () => {
     const starter = await creatStarter('base-app-route');
     const data = await starter.handleInvokeWrapper('deploy.handler9')(
       {
