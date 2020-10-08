@@ -148,7 +148,7 @@ export interface IApplicationContext extends IObjectFactory {
   dependencyMap: Map<string, ObjectDependencyTree>;
   ready(): Promise<void>;
   stop(): Promise<void>;
-  registerObject(identifier: ObjectIdentifier, target: any);
+  registerObject(identifier: ObjectIdentifier, target: any, registerByUser?: boolean);
 }
 /**
  * 解析内部管理的属性、json、ref等实例的解析器

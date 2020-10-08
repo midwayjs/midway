@@ -21,9 +21,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/cli": "^1.0.0"
-  },
-  "dependencies": {
+    "@midwayjs/cli": "^1.0.0",
     "@midwayjs/core": "^2.3.9"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",

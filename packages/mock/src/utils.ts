@@ -30,6 +30,7 @@ export async function create<
   options?: U,
   customFrameworkName?: string | MidwayFrameworkType | object
 ): Promise<T> {
+  process.env.MIDWAY_TS_MODE = 'true';
   clearAllModule();
   let framework: T = null;
   let DefaultFramework = null;

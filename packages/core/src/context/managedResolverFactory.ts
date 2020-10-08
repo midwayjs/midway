@@ -450,7 +450,7 @@ export class ManagedResolverFactory {
 
     // for request scope
     if (definition.isRequestScope() && definition.id) {
-      this.context.registry.registerObject(definition.id, inst);
+      this.context.registerObject(definition.id, inst, false);
     }
     this.removeCreateStatus(definition, true);
 
@@ -567,7 +567,7 @@ export class ManagedResolverFactory {
     // for request scope
     if (definition.isRequestScope() && definition.id) {
       debug('id = %s set to register object', definition.id);
-      this.context.registry.registerObject(definition.id, inst);
+      this.context.registerObject(definition.id, inst, false);
     }
     this.removeCreateStatus(definition, true);
 

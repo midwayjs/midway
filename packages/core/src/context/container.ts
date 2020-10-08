@@ -22,8 +22,6 @@ const globalDebugLogger = util.debuglog('midway:container');
 export class Container extends BaseApplicationContext implements IContainer {
   id = Math.random().toString(10).slice(-5);
   debugLogger = globalDebugLogger;
-  // 自己内部实现的，可注入的 feature(见 features)
-  protected midwayIdentifiers: string[] = [];
   bind<T>(target: T, options?: ObjectDefinitionOptions): void;
   bind<T>(
     identifier: ObjectIdentifier,

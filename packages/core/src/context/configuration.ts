@@ -161,7 +161,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
       debug('   add loadDir => "%s".', loadDir);
       debug('   add namespace => "%s".', this.namespace);
     }
-    debug('   has configuration file => %s.', configuration ? true : false);
+    debug('   has configuration file => %s.', !!configuration);
     this.loadConfiguration(configuration, packageBaseDir, cfgFile);
   }
 
@@ -237,7 +237,10 @@ export class ContainerConfiguration implements IContainerConfiguration {
       namespace: this.namespace,
       srcPath: filePath,
     });
-    saveModule(CONFIGURATION_KEY, clzz);
+    saveModule(CONFIGURATION_KEY, {
+      target: clzz,
+      namespace: this.namespace,
+    });
   }
 
   getImportDirectory() {

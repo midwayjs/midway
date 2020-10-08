@@ -45,6 +45,7 @@ const DEFAULT_IGNORE_PATTERN = [
   '**/public/**',
   '**/view/**',
   '**/views/**',
+  '**/app/extend/**',
 ];
 
 export class MidwayContainer extends Container implements IMidwayContainer {
@@ -93,7 +94,6 @@ export class MidwayContainer extends Container implements IMidwayContainer {
   }) {
     // 添加全局白名单
     this.midwayIdentifiers.push(PIPELINE_IDENTIFIER);
-    this.midwayIdentifiers.push(REQUEST_CTX_KEY);
 
     this.debugLogger('main:create "Main Module" and "Main Configuration"');
     // create main module configuration
@@ -215,6 +215,25 @@ export class MidwayContainer extends Container implements IMidwayContainer {
     }
   }
 
+  registerObject(identifier: ObjectIdentifier, target: any, registerByUser = true) {
+    if (registerByUser) {
+      this.midwayIdentifiers.push(identifier);
+    }
+    if (this?.getCurrentNamespace()) {
+      if (this?.getCurrentNamespace() === MAIN_MODULE_KEY) {
+        // 如果是 main，则同步 alias 到所有的 namespace
+        for (const value of this.configurationMap.values()) {
+          if (value.namespace !== MAIN_MODULE_KEY) {
+            super.registerObject(value.namespace + ':' + identifier, target);
+          }
+        }
+      } else {
+        identifier = this.getCurrentNamespace() + ':' + identifier;
+      }
+    }
+    return super.registerObject(identifier, target);
+  }
+
   createConfiguration(): IContainerConfiguration {
     return new ContainerConfiguration(this);
   }
@@ -241,6 +260,10 @@ export class MidwayContainer extends Container implements IMidwayContainer {
 
   getCurrentEnv() {
     return this.environmentService.getCurrentEnvironment();
+  }
+
+  protected getCurrentNamespace(): string {
+    return '';
   }
 
   public async addAspect(aspectIns: IMethodAspect, aspectData: AspectMetadata) {
@@ -337,7 +360,7 @@ export class MidwayContainer extends Container implements IMidwayContainer {
   }
 
   async ready() {
-    super.ready();
+    await super.ready();
     if (this.configService) {
       // 加载配置
       await this.configService.load();
@@ -348,13 +371,13 @@ export class MidwayContainer extends Container implements IMidwayContainer {
   }
 
   async stop(): Promise<void> {
-    const cycles = listModule(CONFIGURATION_KEY);
+    const cycles: Array<{ target: any, namespace: string }> = listModule(CONFIGURATION_KEY);
     this.debugLogger(
       'load lifecycle length => %s when stop.',
       cycles && cycles.length
     );
     for (const cycle of cycles) {
-      const providerId = getProviderId(cycle);
+      const providerId = getProviderId(cycle.target);
       this.debugLogger('onStop lifecycle id => %s.', providerId);
       const inst = await this.getAsync<ILifeCycle>(providerId);
       if (inst.onStop && typeof inst.onStop === 'function') {
@@ -407,19 +430,34 @@ export class MidwayContainer extends Container implements IMidwayContainer {
 
     this.registerImportObjects(
       containerConfiguration.getImportObjects(),
-      containerConfiguration.namespace
+      containerConfiguration.namespace,
     );
   }
 
   private async loadAndReadyLifeCycles() {
-    const cycles = listModule(CONFIGURATION_KEY);
+    const cycles: Array<{ target: any, namespace: string }> = listModule(CONFIGURATION_KEY);
     this.debugLogger('load lifecycle length => %s.', cycles && cycles.length);
     for (const cycle of cycles) {
-      const providerId = getProviderId(cycle);
+      const providerId = getProviderId(cycle.target);
       this.debugLogger('ready lifecycle id => %s.', providerId);
       const inst = await this.getAsync<ILifeCycle>(providerId);
       if (typeof inst.onReady === 'function') {
-        await inst.onReady(this);
+        /**
+         * 让组件能正确获取到 bind 之后 registerObject 的对象有三个方法
+         * 1、在 load 之后修改 bind，不太可行
+         * 2、每次 getAsync 的时候，去掉 namespace，同时还要查找当前全局的变量，性能差
+         * 3、一般只会在 onReady 的地方执行 registerObject（否则没有全局的意义），这个取巧的办法就是 onReady 传入一个代理，其中绑定当前的 namespace
+         */
+        await inst.onReady(new Proxy(this, {
+          get: function (target, prop, receiver) {
+            if (prop === 'getCurrentNamespace' && cycle.namespace) {
+              return () => {
+                return cycle.namespace;
+              }
+            }
+            return Reflect.get(target, prop, receiver);
+          },
+        }));
       }
     }
   }

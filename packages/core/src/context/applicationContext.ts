@@ -104,6 +104,8 @@ export class ObjectDefinitionRegistry
 export class BaseApplicationContext
   implements IApplicationContext, IObjectFactory {
   protected readied = false;
+  // 自己内部实现的，可注入的 feature(见 features)
+  protected midwayIdentifiers: string[] = [];
   private _resolverFactory: ManagedResolverFactory = null;
   private _registry: IObjectDefinitionRegistry = null;
   private _props: ObjectProperties = null;
