@@ -629,6 +629,6 @@ describe('/test/loader.test.ts', () => {
     await loader.refresh();
 
     const home: any = await loader.getApplicationContext().getAsync('SQL:home');
-    expect(await home.getData()).toMatch(/base-app-decorator\/src/);
+    expect(await home.getData()).toMatch(/base-app-decorator\/src\/bbbb/);
   });
 });

@@ -10,7 +10,8 @@ export class ContainerLifeCycle {
   @Inject()
   baseDir;
 
-  async onReady() {
+  async onReady(container) {
     console.log('---', this.baseDir);
+    container.registerObject('aaa', 'bbbb');
   }
 }

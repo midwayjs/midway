@@ -206,7 +206,7 @@ describe('/test/context/requestContainer.test.ts', () => {
     expect((one.autoScaleService as any).scaleManager.ts).eq('scale');
   });
 
-  it('test getService in requestContainer', () => {
+  it('test getService in requestContainer', async () => {
     const appCtx = new Container();
     // 合并 egg config
     const configService = appCtx.getConfigService();
@@ -214,7 +214,8 @@ describe('/test/context/requestContainer.test.ts', () => {
       name: 'zhangting',
     });
     appCtx.bind(GatewayManager);
-    appCtx.ready();
+    await appCtx.ready();
+
     const ctx1 = { a: 1 };
     const container = new RequestContainer(ctx1, appCtx);
     const defaultConfig = container.getConfigService().getConfiguration();

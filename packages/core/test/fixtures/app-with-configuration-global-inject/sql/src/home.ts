@@ -5,7 +5,10 @@ export class Home {
   @Inject()
   baseDir: string;
 
+  @Inject()
+  aaa;
+
   async getData() {
-    return this.baseDir;
+    return this.baseDir + '/' + this.aaa;
   }
 }
