@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.10](https://github.com/midwayjs/midway/compare/v2.3.9...v2.3.10) (2020-10-08)
+
+
+### Bug Fixes
+
+* component inject global object and add case ([#663](https://github.com/midwayjs/midway/issues/663)) ([e768ee8](https://github.com/midwayjs/midway/commit/e768ee872ed9855252346920318a32133328c0fe))
+
+
+### Features
+
+* replace configuration.imports to object directly and deprecated string ([#657](https://github.com/midwayjs/midway/issues/657)) ([f1b42a1](https://github.com/midwayjs/midway/commit/f1b42a1b338a69cdfaf63e2d951a65333e4f3007))
+
+
+
+
+
 ## [2.3.9](https://github.com/midwayjs/midway/compare/v2.3.8...v2.3.9) (2020-10-05)
 
 

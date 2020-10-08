@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.10](https://github.com/midwayjs/midway/compare/v2.3.9...v2.3.10) (2020-10-08)
+
+
+### Bug Fixes
+
+* component inject global object and add case ([#663](https://github.com/midwayjs/midway/issues/663)) ([e768ee8](https://github.com/midwayjs/midway/commit/e768ee872ed9855252346920318a32133328c0fe))
+
+
+
+
+
 ## [2.3.9](https://github.com/midwayjs/midway/compare/v2.3.8...v2.3.9) (2020-10-05)
 
 **Note:** Version bump only for package @midwayjs/bootstrap
