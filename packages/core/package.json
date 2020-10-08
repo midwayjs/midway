@@ -31,7 +31,6 @@
     "@midwayjs/glob": "^1.0.2",
     "class-transformer": "^0.3.1",
     "extend2": "^1.0.0",
-    "flatted": "^3.1.0",
     "lodash.assign": "^4.2.0",
     "lodash.clonedeep": "^4.5.0",
     "lodash.defaultsdeep": "^4.6.0",

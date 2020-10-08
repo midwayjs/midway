@@ -3,7 +3,6 @@ import { CONFIGURATION_KEY, getClassMetadata, InjectionConfigurationOptions } fr
 import { IConfigService, safeRequire } from '..';
 import { MidwayConfigService } from '../service/configService';
 import { isClass, isFunction } from './index';
-import * as util from 'util';
 
 export class StaticConfigLoader {
 
@@ -30,8 +29,7 @@ export class StaticConfigLoader {
       this.analyzeConfiguration(module);
     }
     await this.configService.load();
-    const result = this.configService.getConfiguration();
-    return util.inspect(result);
+    return this.configService.getConfiguration();
   }
 
   analyzeConfiguration(configurationModule) {

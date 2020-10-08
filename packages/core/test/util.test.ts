@@ -41,8 +41,16 @@ describe('/test/util.test.ts', () => {
   });
 
   it('should load static config from app', async () => {
-    const loader = new StaticConfigLoader(join(__dirname, '/fixtures/app-with-configuration-static-config-loader/base-app-decorator'), 'local');
-    const configText = await loader.getSerializeConfig();
-    console.log(configText);
+    let loader = new StaticConfigLoader(join(__dirname, '/fixtures/app-with-configuration-static-config-loader/base-app-decorator'), 'local');
+    let configText = await loader.getSerializeConfig();
+    expect(configText['helloworld']).toEqual(234);
+    expect(configText['ok']['text']).toEqual('ok3');
+    expect(configText['mock']['b']).toEqual('local');
+
+    loader = new StaticConfigLoader(join(__dirname, '/fixtures/app-with-configuration-static-config-loader/base-app-decorator'), 'production');
+    configText = await loader.getSerializeConfig();
+    expect(configText['helloworld']).toEqual(123);
+    expect(configText['ok']['text']).toEqual('ok');
+    expect(configText['mock']['b']).toEqual('test');
   });
 });
