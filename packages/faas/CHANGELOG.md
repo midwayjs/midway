@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.11](https://github.com/midwayjs/midway/compare/v2.3.10...v2.3.11) (2020-10-08)
+
+**Note:** Version bump only for package @midwayjs/faas
+
+
+
+
+
 ## [2.3.10](https://github.com/midwayjs/midway/compare/v2.3.9...v2.3.10) (2020-10-08)
 
 
