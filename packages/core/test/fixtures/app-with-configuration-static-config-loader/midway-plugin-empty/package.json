@@ -1,0 +1,4 @@
+{
+  "name": "midway-plugin-empty",
+  "main": "src/index.ts"
+}

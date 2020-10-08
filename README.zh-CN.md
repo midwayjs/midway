@@ -44,4 +44,6 @@ Midway可以使用 koa，express 或 EggJS 作为基本的 Web 框架。它还�
 
 ## License
 
-[MIT](http://github.com/midwayjs/midway/blob/master/LICENSE)
+我们的代码使用 [MIT](http://github.com/midwayjs/midway/blob/master/LICENSE) 协议，请放心使用。
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fmidwayjs%2Fmidway.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fmidwayjs%2Fmidway?ref=badge_large)

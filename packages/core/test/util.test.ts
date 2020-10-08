@@ -1,6 +1,7 @@
 import * as assert from 'assert';
 import { join } from 'path';
 import { isPath, safeRequire, safelyGet, isPathEqual } from '../src/common/util';
+import { StaticConfigLoader } from '../src/util/staticConfig';
 
 describe('/test/util.test.ts', () => {
   it('should test is path', () => {
@@ -37,5 +38,11 @@ describe('/test/util.test.ts', () => {
     assert.ok(isPathEqual('/midway-open/packages/midway-core/test/fixtures/app-with-configuration/base-app-no-package-json/src/configuration.ts', null) === false);
     assert.ok(isPathEqual(null, '/midway-open/packages/midway-core/test/fixtures/app-with-configuration/base-app-no-package-json/src/configuration') === false);
     assert.ok(isPathEqual('/midway-open/packages/midway-core/test/fixtures/app-with-configuration/base-app-no-package-json/src/configuration.ts', '/midway-open/packages/midway-core/test/fixtures/app-with-configuration/base-app-no-package-json/src/configuration'));
+  });
+
+  it('should load static config from app', async () => {
+    const loader = new StaticConfigLoader(join(__dirname, '/fixtures/app-with-configuration-static-config-loader/base-app-decorator'), 'local');
+    const configText = await loader.getSerializeConfig();
+    console.log(configText);
   });
 });

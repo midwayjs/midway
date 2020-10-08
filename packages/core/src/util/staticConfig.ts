@@ -2,7 +2,8 @@ import { join } from 'path';
 import { CONFIGURATION_KEY, getClassMetadata, InjectionConfigurationOptions } from '@midwayjs/decorator';
 import { IConfigService, safeRequire } from '..';
 import { MidwayConfigService } from '../service/configService';
-import { serialize } from 'class-transformer';
+import { isClass, isFunction } from './index';
+import * as util from 'util';
 
 export class StaticConfigLoader {
 
@@ -14,7 +15,7 @@ export class StaticConfigLoader {
     this.configService = new MidwayConfigService({getCurrentEnv() {return currentEnvironment}});
   }
 
-  getSerializeConfig(): string {
+  async getSerializeConfig(): Promise<string> {
     const mainModule = safeRequire(this.baseDir);
     let mainConfiguration;
 
@@ -23,8 +24,14 @@ export class StaticConfigLoader {
     } else {
       mainConfiguration = safeRequire(join(this.baseDir, 'src', 'configuration.ts'));
     }
-    this.analyzeConfiguration(mainConfiguration);
-    return serialize(this.configService.load());
+
+    const modules = this.getConfigurationExport(mainConfiguration);
+    for (const module of modules) {
+      this.analyzeConfiguration(module);
+    }
+    await this.configService.load();
+    const result = this.configService.getConfiguration();
+    return util.inspect(result);
   }
 
   analyzeConfiguration(configurationModule) {
@@ -34,14 +41,33 @@ export class StaticConfigLoader {
       configurationModule
     );
 
-    for (const importModule of configurationOptions.imports) {
-      if (typeof importModule !== 'string') {
-        this.analyzeConfiguration(importModule['Configuration']);
+    if (!configurationOptions) return;
+
+    if (configurationOptions.imports) {
+      for (const importModule of configurationOptions.imports) {
+        if (typeof importModule !== 'string') {
+          this.analyzeConfiguration(importModule['Configuration']);
+        }
       }
     }
 
-    if (configurationOptions.importConfigs) {
+    if (configurationOptions?.importConfigs) {
       this.configService.add(configurationOptions.importConfigs);
     }
+  }
+
+  private getConfigurationExport(exports): any[] {
+    const mods = [];
+    if (isClass(exports) || isFunction(exports)) {
+      mods.push(exports);
+    } else {
+      for (const m in exports) {
+        const module = exports[m];
+        if (isClass(module) || isFunction(module)) {
+          mods.push(module);
+        }
+      }
+    }
+    return mods;
   }
 }
