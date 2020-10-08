@@ -6,6 +6,7 @@ import {
   getObjectDefProps,
   TAGGED_PROP,
   getProviderId,
+  generateProvideId
 } from '@midwayjs/decorator';
 import { IContainer } from '../interface';
 import { ObjectDefinition } from '../definitions/objectDefinition';
@@ -13,7 +14,6 @@ import { ManagedReference, ManagedValue } from './managed';
 import { FunctionDefinition } from '../definitions/functionDefinition';
 import { BaseApplicationContext } from './applicationContext';
 import { recursiveGetMetadata } from '../common/reflectTool';
-import { generateProvideId } from '../common/util';
 import { isAsyncFunction, isClass, isFunction } from '../util';
 import * as util from 'util';
 

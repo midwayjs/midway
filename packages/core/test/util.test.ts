@@ -1,6 +1,7 @@
 import * as assert from 'assert';
 import { join } from 'path';
-import { isPath, safeRequire, generateProvideId, safelyGet, isPathEqual } from '../src/common/util';
+import { isPath, safeRequire, safelyGet, isPathEqual } from '../src/common/util';
+import { StaticConfigLoader } from '../src/util/staticConfig';
 
 describe('/test/util.test.ts', () => {
   it('should test is path', () => {
@@ -24,13 +25,6 @@ describe('/test/util.test.ts', () => {
     assert.strictEqual(safeRequire('./fixtures/dir/bbb/nok.js'), undefined);
   });
 
-  it('should generateProvideId be ok', () => {
-    const id = generateProvideId('@ok:test1', 'ok');
-    assert.deepEqual('ok:test1', id, 'provide id is not ok:test1');
-    const id2 = generateProvideId('ok:test1', 'ok');
-    assert.deepEqual('ok:test1', id2, 'provide id is not ok:test1');
-  });
-
   it('should safeGet be ok', () => {
     const fn = safelyGet(['a', 'b']);
     assert.deepEqual(2, fn({a: {b: 2}}), 'safelyGet one argument not ok');
@@ -44,5 +38,19 @@ describe('/test/util.test.ts', () => {
     assert.ok(isPathEqual('/midway-open/packages/midway-core/test/fixtures/app-with-configuration/base-app-no-package-json/src/configuration.ts', null) === false);
     assert.ok(isPathEqual(null, '/midway-open/packages/midway-core/test/fixtures/app-with-configuration/base-app-no-package-json/src/configuration') === false);
     assert.ok(isPathEqual('/midway-open/packages/midway-core/test/fixtures/app-with-configuration/base-app-no-package-json/src/configuration.ts', '/midway-open/packages/midway-core/test/fixtures/app-with-configuration/base-app-no-package-json/src/configuration'));
+  });
+
+  it('should load static config from app', async () => {
+    let loader = new StaticConfigLoader(join(__dirname, '/fixtures/app-with-configuration-static-config-loader/base-app-decorator'), 'local');
+    let configText = await loader.getSerializeConfig();
+    expect(configText['helloworld']).toEqual(234);
+    expect(configText['ok']['text']).toEqual('ok3');
+    expect(configText['mock']['b']).toEqual('local');
+
+    loader = new StaticConfigLoader(join(__dirname, '/fixtures/app-with-configuration-static-config-loader/base-app-decorator'), 'production');
+    configText = await loader.getSerializeConfig();
+    expect(configText['helloworld']).toEqual(123);
+    expect(configText['ok']['text']).toEqual('ok');
+    expect(configText['mock']['b']).toEqual('test');
   });
 });

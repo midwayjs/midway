@@ -11,12 +11,15 @@ import {
   PIPELINE_IDENTIFIER,
   saveClassMetadata,
   ScopeEnum,
+  PRIVATE_META_DATA_KEY,
+  generateProvideId,
+  MAIN_MODULE_KEY,
+  CONFIG_KEY,
+  ALL
 } from '@midwayjs/decorator';
 import { ContainerConfiguration } from './configuration';
 import {
   FUNCTION_INJECT_KEY,
-  generateProvideId,
-  PRIVATE_META_DATA_KEY,
 } from '..';
 import {
   IApplicationContext,
@@ -25,7 +28,6 @@ import {
   IEnvironmentService,
   ILifeCycle,
   IMidwayContainer,
-  MAIN_MODULE_KEY,
   REQUEST_CTX_KEY,
 } from '../interface';
 import { MidwayConfigService } from '../service/configService';
@@ -120,6 +122,15 @@ export class MidwayContainer extends Container implements IMidwayContainer {
     for (const containerConfiguration of this.likeMainConfiguration) {
       this.loadConfiguration(opts, containerConfiguration);
     }
+
+    // register ad base config hook
+    this.registerDataHandler(CONFIG_KEY, (key: string) => {
+      if (key === ALL) {
+        return this.getConfigService().getConfiguration();
+      } else {
+        return this.getConfigService().getConfiguration(key);
+      }
+    });
   }
 
   // 加载模块

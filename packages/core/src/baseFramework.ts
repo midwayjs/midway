@@ -8,7 +8,7 @@ import {
   MidwayProcessTypeEnum,
 } from './interface';
 import { ContainerLoader } from './';
-import { APPLICATION_KEY, CONFIG_KEY } from '@midwayjs/decorator';
+import { APPLICATION_KEY } from '@midwayjs/decorator';
 
 export abstract class BaseFramework<
   APP extends IMidwayApplication,
@@ -53,11 +53,6 @@ export abstract class BaseFramework<
     applicationContext.registerObject('appDir', this.appDir);
     // 如果没有关闭autoLoad 则进行load
     this.containerLoader.loadDirectory(options);
-
-    // register config
-    this.containerLoader.registerHook(CONFIG_KEY, (key: string) => {
-      return this.getConfiguration(key);
-    });
 
     // register app
     this.containerLoader.registerHook(APPLICATION_KEY, () => {

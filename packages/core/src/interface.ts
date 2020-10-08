@@ -189,7 +189,6 @@ export interface ObjectDependencyTree {
 
 export const REQUEST_CTX_KEY = 'ctx';
 export const REQUEST_OBJ_CTX_KEY = '_req_ctx';
-export const MAIN_MODULE_KEY = '__main__';
 
 export interface IContainerConfiguration {
   namespace: string;
@@ -199,6 +198,7 @@ export interface IContainerConfiguration {
   addImportObjects(importObjects: any[]);
   addImportConfigs(importConfigs: string[], baseDir: string);
   load(packageName: string);
+  loadComponentObject(componentObject: any);
   loadConfiguration(
     configuration: IContainerConfiguration,
     baseDir: string,

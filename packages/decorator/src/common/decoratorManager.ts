@@ -1,9 +1,9 @@
 import 'reflect-metadata';
 import { ObjectDefinitionOptions, TagClsMetadata } from '../interface';
-import { OBJ_DEF_CLS, TAGGED_CLS } from './constant';
+import { MAIN_MODULE_KEY, OBJ_DEF_CLS, PRIVATE_META_DATA_KEY, TAGGED_CLS } from './constant';
 import { classNamed } from './utils';
 
-const debug = require('debug')('decorator:manager');
+const debug = require('util').debuglog('decorator:manager');
 
 const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/gm;
 const ARGUMENT_NAMES = /([^\s,]+)/g;
@@ -736,10 +736,40 @@ export function getParamNames(func): string[] {
  */
 export function getProviderId(module): string {
   const metaData = Reflect.getMetadata(TAGGED_CLS, module) as TagClsMetadata;
+  let providerId;
   if (metaData) {
-    return metaData.id;
+    providerId = metaData.id;
+  } else {
+    providerId = classNamed(module.name);
   }
-  return classNamed(module.name);
+
+  const meta = getClassMetadata(PRIVATE_META_DATA_KEY, module);
+  if (providerId && meta) {
+    providerId = generateProvideId(providerId, meta.namespace);
+  }
+
+  return providerId;
+}
+
+/**
+ * 生成带 namespace 的 provideId
+ * @param provideId provideId
+ * @param namespace namespace
+ */
+export function generateProvideId(provideId: string, namespace?: string) {
+  if (namespace && namespace !== MAIN_MODULE_KEY) {
+    if (provideId.includes('@')) {
+      return provideId.substr(1);
+    }
+    if (provideId.includes(':')) {
+      return provideId;
+    }
+    if (namespace.includes('@')) {
+      namespace = namespace.substr(1);
+    }
+    return namespace + ':' + provideId;
+  }
+  return provideId;
 }
 
 /**

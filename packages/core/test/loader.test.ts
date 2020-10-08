@@ -1,10 +1,4 @@
-import {
-  CONFIG_KEY,
-  LOGGER_KEY,
-  PLUGIN_KEY,
-  Provide,
-  APPLICATION_KEY,
-} from '@midwayjs/decorator';
+import { APPLICATION_KEY, CONFIG_KEY, LOGGER_KEY, PLUGIN_KEY, Provide, } from '@midwayjs/decorator';
 import * as assert from 'assert';
 import * as path from 'path';
 import {
@@ -258,7 +252,7 @@ describe('/test/loader.test.ts', () => {
 
     const appCtx = loader.getApplicationContext();
     const replaceManager: any = await appCtx.getAsync('@ok:replaceManager');
-    assert((await replaceManager.getOne()) === 'ok');
+    expect(await replaceManager.getOne()).toEqual('ok');
   });
 
   it('should load config.*.ts by process.env', async () => {
@@ -370,6 +364,31 @@ describe('/test/loader.test.ts', () => {
       '@midway-plugin-mod:replaceManager'
     );
     assert((await repm.getOne()) === 'one article mod');
+    mm.restore();
+  });
+
+
+  it('should load configuration with object', async () => {
+    mm(process.env, 'MIDWAY_SERVER_ENV', 'local');
+    const loader = new ContainerLoader({
+      baseDir: path.join(
+        __dirname,
+        './fixtures/app-with-configuration-object/base-app-decorator/src'
+      ),
+    });
+    loader.initialize();
+    loader.loadDirectory();
+    await loader.refresh();
+
+    const appCtx = loader.getApplicationContext();
+    // 取默认 namespace
+    const replaceManager1: any = await appCtx.getAsync(
+      'replaceManager'
+    );
+    expect(await replaceManager1.getOne()).toEqual('one article');
+    // 取自定义 namespace
+    const replaceManager2: any = await appCtx.getAsync('@ok:replaceManager');
+    expect(await replaceManager2.getOne()).toEqual('ok2');
     mm.restore();
   });
 
