@@ -35,11 +35,7 @@ const registerFunctionToIoc = (container, functionName, func, argsPath) => {
   saveModule(FUNC_KEY, FunctionContainer);
   attachClassMetadata(
     FUNC_KEY,
-    {
-      funHandler: functionName,
-      key: 'handler',
-      middleware: func.middleware || [],
-    },
+    { funHandler: functionName, key: 'handler' },
     FunctionContainer
   );
 };
