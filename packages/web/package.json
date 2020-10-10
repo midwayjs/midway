@@ -45,6 +45,7 @@
     "debug": "^4.1.1",
     "egg": "^2.28.0",
     "egg-logger": "^2.4.2",
+    "egg-path-matching": "^1.0.1",
     "extend2": "^1.0.0",
     "midway-schedule": "^2.3.11",
     "mkdirp": "^1.0.4"
