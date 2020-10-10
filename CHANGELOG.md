@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.12](https://github.com/midwayjs/midway/compare/v2.3.11...v2.3.12) (2020-10-10)
+
+
+### Bug Fixes
+
+* egg framework support ignore and match ([#666](https://github.com/midwayjs/midway/issues/666)) ([b541dc0](https://github.com/midwayjs/midway/commit/b541dc0a5437c172d835d215022096bbb2a4889e))
+
+
+
+
+
 ## [2.3.11](https://github.com/midwayjs/midway/compare/v2.3.10...v2.3.11) (2020-10-08)
 
 **Note:** Version bump only for package midway
