@@ -1,0 +1,10 @@
+{
+  "name": "custom",
+  "version": "1.0.0",
+  "dependencies": {
+  },
+  "eggPlugin": {
+    "name": "custom",
+    "dep": []
+  }
+}

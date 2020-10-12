@@ -2,11 +2,12 @@ import { isTypeScriptEnvironment } from '@midwayjs/bootstrap';
 import { basename, join } from 'path';
 
 export const parseNormalDir = (baseDir: string, isTypescript = true) => {
-  const isTypeScriptEnv = isTypeScriptEnvironment();
   if (isTypescript) {
     if (/src$/.test(baseDir) || /dist$/.test(baseDir)) {
       baseDir = basename(baseDir);
     }
+
+    const isTypeScriptEnv = isTypeScriptEnvironment();
 
     if (isTypeScriptEnv) {
       return {
