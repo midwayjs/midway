@@ -16,6 +16,9 @@ import {
   MAIN_MODULE_KEY,
   CONFIG_KEY,
   ALL,
+  isAsyncFunction,
+  isClass,
+  isFunction
 } from '@midwayjs/decorator';
 import { ContainerConfiguration } from './configuration';
 import { FUNCTION_INJECT_KEY } from '..';
@@ -34,7 +37,6 @@ import { Container } from './container';
 import { pipelineFactory } from '../features/pipeline';
 import { ResolverHandler } from './resolverHandler';
 import { run } from '@midwayjs/glob';
-import { isAsyncFunction, isClass, isFunction } from '../util';
 import * as pm from 'picomatch';
 
 const DEFAULT_PATTERN = ['**/**.ts', '**/**.tsx', '**/**.js'];

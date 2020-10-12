@@ -3,7 +3,7 @@ import { basename, join } from 'path';
 import { IConfigService, IMidwayContainer } from '../interface';
 import { safelyGet } from '..';
 import { readdirSync, statSync } from 'fs';
-import { isFunction } from '../util';
+import { isFunction } from '@midwayjs/decorator';
 import * as util from 'util';
 
 const debug = util.debuglog('midway:config');

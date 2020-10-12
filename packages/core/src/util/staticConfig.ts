@@ -3,10 +3,11 @@ import {
   CONFIGURATION_KEY,
   getClassMetadata,
   InjectionConfigurationOptions,
+  isClass,
+  isFunction
 } from '@midwayjs/decorator';
 import { IConfigService, safeRequire } from '..';
 import { MidwayConfigService } from '../service/configService';
-import { isClass, isFunction } from './index';
 
 export class StaticConfigLoader {
   baseDir: string;
