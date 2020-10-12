@@ -83,5 +83,4 @@ export const Files = (property?: GetFilesStreamOptions) =>
   createParamMapping(RouteParamTypes.FILESSTREAM)(property);
 export const RequestPath = () =>
   createParamMapping(RouteParamTypes.REQUEST_PATH)();
-export const RequestIP = () =>
-  createParamMapping(RouteParamTypes.REQUEST_IP)();
+export const RequestIP = () => createParamMapping(RouteParamTypes.REQUEST_IP)();

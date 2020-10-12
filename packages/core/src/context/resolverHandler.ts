@@ -1,7 +1,4 @@
-import {
-  CLASS_KEY_CONSTRUCTOR,
-  getClassMetadata,
-} from '@midwayjs/decorator';
+import { CLASS_KEY_CONSTRUCTOR, getClassMetadata } from '@midwayjs/decorator';
 import { ManagedResolverFactory } from './managedResolverFactory';
 import { MidwayContainer } from './midwayContainer';
 import * as util from 'util';

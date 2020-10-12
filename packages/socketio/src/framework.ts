@@ -99,7 +99,7 @@ export class MidwaySocketIOFramework extends BaseFramework<
     // create room
     const controllerModules = listModule(WS_CONTROLLER_KEY);
     for (const module of controllerModules) {
-      let providerId = getProviderId(module);
+      const providerId = getProviderId(module);
       if (providerId) {
         await this.addNamespace(module, providerId);
       }

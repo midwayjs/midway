@@ -157,7 +157,7 @@ export class MidwayExpressFramework extends BaseFramework<
 
     // implement @controller
     for (const module of controllerModules) {
-      let providerId = getProviderId(module);
+      const providerId = getProviderId(module);
       if (providerId) {
         if (this.controllerIds.indexOf(providerId) > -1) {
           throw new Error(`controller identifier [${providerId}] is exists!`);

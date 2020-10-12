@@ -6,7 +6,7 @@ import {
   getObjectDefProps,
   TAGGED_PROP,
   getProviderId,
-  generateProvideId
+  generateProvideId,
 } from '@midwayjs/decorator';
 import { IContainer } from '../interface';
 import { ObjectDefinition } from '../definitions/objectDefinition';

@@ -10,7 +10,7 @@ import {
 
 import { dirname, isAbsolute, join } from 'path';
 import { MAIN_MODULE_KEY, generateProvideId } from '@midwayjs/decorator';
-import { IContainerConfiguration, IMidwayContainer, } from '../interface';
+import { IContainerConfiguration, IMidwayContainer } from '../interface';
 import { isPath, safeRequire } from '../common/util';
 import { isClass, isFunction } from '../util';
 import * as util from 'util';
@@ -19,7 +19,7 @@ const debug = util.debuglog('midway:container:configuration');
 
 export class ContainerConfiguration implements IContainerConfiguration {
   container: IMidwayContainer & {
-    bindClass(exports, namespace: string)
+    bindClass(exports, namespace: string);
   };
   namespace: string;
   packageName: string;
@@ -41,7 +41,10 @@ export class ContainerConfiguration implements IContainerConfiguration {
       // for package
       const subContainerConfiguration = this.container.createConfiguration();
       if (typeof importPackage === 'string') {
-        const subPackageDir = this.resolvePackageBaseDir(importPackage, baseDir);
+        const subPackageDir = this.resolvePackageBaseDir(
+          importPackage,
+          baseDir
+        );
         debug(
           `\n---------- start load configuration from sub package "${importPackage}" ----------`
         );
@@ -52,7 +55,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
       } else {
         // component is object
         debug(
-          `\n---------- start load configuration from submodule" ----------`
+          '\n---------- start load configuration from submodule" ----------'
         );
         subContainerConfiguration.loadComponentObject(importPackage);
         debug(
@@ -177,7 +180,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
   }
 
   loadComponentObject(componentObject) {
-    if(!componentObject || !componentObject['Configuration']) {
+    if (!componentObject || !componentObject['Configuration']) {
       return;
     }
 
