@@ -1,17 +1,24 @@
 import { join } from 'path';
-import { CONFIGURATION_KEY, getClassMetadata, InjectionConfigurationOptions } from '@midwayjs/decorator';
+import {
+  CONFIGURATION_KEY,
+  getClassMetadata,
+  InjectionConfigurationOptions,
+} from '@midwayjs/decorator';
 import { IConfigService, safeRequire } from '..';
 import { MidwayConfigService } from '../service/configService';
 import { isClass, isFunction } from './index';
 
 export class StaticConfigLoader {
-
   baseDir: string;
   configService: IConfigService;
 
   constructor(baseDir: string, currentEnvironment: string) {
     this.baseDir = baseDir;
-    this.configService = new MidwayConfigService({getCurrentEnv() {return currentEnvironment}});
+    this.configService = new MidwayConfigService({
+      getCurrentEnv() {
+        return currentEnvironment;
+      },
+    });
   }
 
   async getSerializeConfig(): Promise<string> {
@@ -21,7 +28,9 @@ export class StaticConfigLoader {
     if (mainModule && mainModule['Configuration']) {
       mainConfiguration = mainModule['Configuration'];
     } else {
-      mainConfiguration = safeRequire(join(this.baseDir, 'src', 'configuration.ts'));
+      mainConfiguration = safeRequire(
+        join(this.baseDir, 'src', 'configuration.ts')
+      );
     }
 
     const modules = this.getConfigurationExport(mainConfiguration);

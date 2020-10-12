@@ -77,7 +77,7 @@ export class MidwayRabbitMQFramework extends BaseFramework<
       }
 
       // get providerId
-      let providerId = getProviderId(module);
+      const providerId = getProviderId(module);
       // get listenerInfo
       const data: RabbitMQListenerOptions[][] = listPropertyDataFromClass(
         MS_CONSUMER_KEY,
