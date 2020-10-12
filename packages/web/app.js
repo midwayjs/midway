@@ -39,7 +39,7 @@ class AppBootHook {
       } else {
         // egg
         const options = this.app.config[name];
-        if (options.enable === false) {
+        if (options && options.enable === false) {
           continue;
         }
         // support options.match and options.ignore
