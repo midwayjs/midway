@@ -1,4 +1,5 @@
-import { Provide, Plugin } from '@midwayjs/decorator';
+import { Provide, Plugin, Config, Logger } from '@midwayjs/decorator';
+import * as assert from 'assert';
 
 @Provide()
 export class Report {
@@ -6,9 +7,16 @@ export class Report {
   @Plugin()
   custom;
 
+  @Config()
+  hello;
+
+  @Logger()
+  logger;
+
   resolve() {
     return async (ctx, next) => {
-      console.log(this.custom);
+      assert(this.logger);
+      ctx.text = this.custom['bbb'] + this.hello['a'];
       await next();
     };
   }

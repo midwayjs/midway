@@ -1,4 +1,4 @@
-import { Controller, Get, Plugin, Provide, } from '@midwayjs/decorator';
+import { Controller, Get, Inject, Plugin, Provide, } from '@midwayjs/decorator';
 
 @Provide()
 @Controller('/')
@@ -6,10 +6,12 @@ export class HomeController {
   @Plugin()
   custom: any;
 
+  @Inject()
+  ctx;
+
   @Get('/')
   async home() {
-    console.log(this.custom);
-    return 'hello world';
+    return 'hello world' + this.ctx.text + this.custom['bbb'];
   }
 
 }

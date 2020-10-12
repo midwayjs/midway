@@ -43,7 +43,7 @@ describe('/test/feature.test.ts', () => {
   it('should got plugin in app middleware and controller', async () => {
     const app = await creatApp('feature/base-app-plugin-inject');
     const result = await createHttpRequest(app).get('/');
-    expect(result.text).toEqual('hello world');
+    expect(result.text).toEqual('hello worldaaaa1aaaa');
     await closeApp(app);
   });
 });
