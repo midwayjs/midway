@@ -15,12 +15,13 @@ import {
   generateProvideId,
   MAIN_MODULE_KEY,
   CONFIG_KEY,
-  ALL
+  ALL,
+  isAsyncFunction,
+  isClass,
+  isFunction
 } from '@midwayjs/decorator';
 import { ContainerConfiguration } from './configuration';
-import {
-  FUNCTION_INJECT_KEY,
-} from '..';
+import { FUNCTION_INJECT_KEY } from '..';
 import {
   IApplicationContext,
   IConfigService,
@@ -36,7 +37,6 @@ import { Container } from './container';
 import { pipelineFactory } from '../features/pipeline';
 import { ResolverHandler } from './resolverHandler';
 import { run } from '@midwayjs/glob';
-import { isAsyncFunction, isClass, isFunction } from '../util';
 import * as pm from 'picomatch';
 
 const DEFAULT_PATTERN = ['**/**.ts', '**/**.tsx', '**/**.js'];
@@ -226,7 +226,11 @@ export class MidwayContainer extends Container implements IMidwayContainer {
     }
   }
 
-  registerObject(identifier: ObjectIdentifier, target: any, registerByUser = true) {
+  registerObject(
+    identifier: ObjectIdentifier,
+    target: any,
+    registerByUser = true
+  ) {
     if (registerByUser) {
       this.midwayIdentifiers.push(identifier);
     }
@@ -382,7 +386,9 @@ export class MidwayContainer extends Container implements IMidwayContainer {
   }
 
   async stop(): Promise<void> {
-    const cycles: Array<{ target: any, namespace: string }> = listModule(CONFIGURATION_KEY);
+    const cycles: Array<{ target: any; namespace: string }> = listModule(
+      CONFIGURATION_KEY
+    );
     this.debugLogger(
       'load lifecycle length => %s when stop.',
       cycles && cycles.length
@@ -441,12 +447,14 @@ export class MidwayContainer extends Container implements IMidwayContainer {
 
     this.registerImportObjects(
       containerConfiguration.getImportObjects(),
-      containerConfiguration.namespace,
+      containerConfiguration.namespace
     );
   }
 
   private async loadAndReadyLifeCycles() {
-    const cycles: Array<{ target: any, namespace: string }> = listModule(CONFIGURATION_KEY);
+    const cycles: Array<{ target: any; namespace: string }> = listModule(
+      CONFIGURATION_KEY
+    );
     this.debugLogger('load lifecycle length => %s.', cycles && cycles.length);
     for (const cycle of cycles) {
       const providerId = getProviderId(cycle.target);
@@ -459,16 +467,18 @@ export class MidwayContainer extends Container implements IMidwayContainer {
          * 2、每次 getAsync 的时候，去掉 namespace，同时还要查找当前全局的变量，性能差
          * 3、一般只会在 onReady 的地方执行 registerObject（否则没有全局的意义），这个取巧的办法就是 onReady 传入一个代理，其中绑定当前的 namespace
          */
-        await inst.onReady(new Proxy(this, {
-          get: function (target, prop, receiver) {
-            if (prop === 'getCurrentNamespace' && cycle.namespace) {
-              return () => {
-                return cycle.namespace;
+        await inst.onReady(
+          new Proxy(this, {
+            get: function (target, prop, receiver) {
+              if (prop === 'getCurrentNamespace' && cycle.namespace) {
+                return () => {
+                  return cycle.namespace;
+                };
               }
-            }
-            return Reflect.get(target, prop, receiver);
-          },
-        }));
+              return Reflect.get(target, prop, receiver);
+            },
+          })
+        );
       }
     }
   }

@@ -30,7 +30,7 @@ export {
   getProviderId,
   getObjectDefinition,
   classNamed,
-  generateProvideId
+  generateProvideId,
 } from '@midwayjs/decorator';
 export * from './interface';
 export { ContainerLoader } from './loader';
@@ -39,11 +39,7 @@ export { MidwayRequestContainer } from './context/requestContainer';
 export { BaseFramework } from './baseFramework';
 export * from './context/providerWrapper';
 export * from './common/constants';
-export {
-  safelyGet,
-  safeRequire,
-  parsePrefix,
-} from './common/util';
+export { safelyGet, safeRequire, parsePrefix } from './common/util';
 export * from './features';
 export * from './util/webRouterParam';
 export { plainToClass, classToPlain } from 'class-transformer';

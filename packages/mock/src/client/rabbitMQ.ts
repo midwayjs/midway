@@ -1,9 +1,11 @@
 import { Channel } from 'amqplib';
+import { debuglog } from 'util';
 
 const queues = {};
 const exchanges = {};
 const eventListeners = [];
 const EventEmitter = require('events').EventEmitter;
+const debug = debuglog('midway:mock');
 
 const createQueue = () => {
   let messages = [];
@@ -307,7 +309,9 @@ let amqp = null;
 try {
   amqp = require('amqplib');
   amqp.connect = connect;
-} catch (err) {}
+} catch (err) {
+  debug('can not found amqplib lib and skip');
+}
 
 export const createRabbitMQProducer = async function (
   queueName: string,

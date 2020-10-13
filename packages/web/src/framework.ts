@@ -2,19 +2,13 @@ import {
   IMidwayBootstrapOptions,
   MidwayFrameworkType,
   MidwayProcessTypeEnum,
-  safelyGet,
 } from '@midwayjs/core';
-import {
-  CONFIG_KEY,
-  ControllerOption,
-  LOGGER_KEY,
-  PLUGIN_KEY,
-} from '@midwayjs/decorator';
+import { ControllerOption } from '@midwayjs/decorator';
 import { IMidwayWebConfigurationOptions } from './interface';
 import { MidwayKoaBaseFramework } from '@midwayjs/koa';
 import { EggRouter } from '@eggjs/router';
 import { resolve } from 'path';
-import { Application, Router, Context } from 'egg';
+import { Application, Context, Router } from 'egg';
 
 export class MidwayWebFramework extends MidwayKoaBaseFramework<
   IMidwayWebConfigurationOptions,
@@ -86,26 +80,6 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
     }
 
     this.defineApplicationProperties(this.app);
-    // register plugin
-    this.containerLoader.registerHook(
-      PLUGIN_KEY,
-      (key: string, target: any) => {
-        return this.app[key];
-      }
-    );
-
-    // register config
-    this.containerLoader.registerHook(CONFIG_KEY, (key: string) => {
-      return key ? safelyGet(key, this.app.config) : this.app.config;
-    });
-
-    // register logger
-    this.containerLoader.registerHook(LOGGER_KEY, (key: string) => {
-      if (this.app.getLogger) {
-        return this.app.getLogger(key);
-      }
-      return this.app.coreLogger;
-    });
   }
 
   protected async afterInitialize(

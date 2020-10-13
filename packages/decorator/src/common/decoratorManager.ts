@@ -1,6 +1,11 @@
 import 'reflect-metadata';
 import { ObjectDefinitionOptions, TagClsMetadata } from '../interface';
-import { MAIN_MODULE_KEY, OBJ_DEF_CLS, PRIVATE_META_DATA_KEY, TAGGED_CLS } from './constant';
+import {
+  MAIN_MODULE_KEY,
+  OBJ_DEF_CLS,
+  PRIVATE_META_DATA_KEY,
+  TAGGED_CLS,
+} from './constant';
 import { classNamed } from './utils';
 
 const debug = require('util').debuglog('decorator:manager');
