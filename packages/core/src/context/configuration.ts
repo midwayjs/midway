@@ -6,13 +6,14 @@ import {
   LIFECYCLE_IDENTIFIER_PREFIX,
   saveModule,
   saveProviderId,
+  isClass,
+  isFunction
 } from '@midwayjs/decorator';
 
 import { dirname, isAbsolute, join } from 'path';
 import { MAIN_MODULE_KEY, generateProvideId } from '@midwayjs/decorator';
 import { IContainerConfiguration, IMidwayContainer } from '../interface';
 import { isPath, safeRequire } from '../common/util';
-import { isClass, isFunction } from '../util';
 import * as util from 'util';
 
 const debug = util.debuglog('midway:container:configuration');

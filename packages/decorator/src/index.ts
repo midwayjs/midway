@@ -21,3 +21,4 @@ export * from './ws/webSocketController';
 export * from './ws/webSocketEvent';
 export * from './microservice/consumer';
 export * from './microservice/rabbitmqListener';
+export * from './util/index';
