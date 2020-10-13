@@ -38,8 +38,8 @@ class AppBootHook {
         this.app.use(mwIns);
       } else {
         // egg
-        const options = this.app.config[name];
-        if (options && options.enable === false) {
+        const options = this.app.config[name] || {};
+        if (options.enable === false) {
           continue;
         }
         // support options.match and options.ignore
