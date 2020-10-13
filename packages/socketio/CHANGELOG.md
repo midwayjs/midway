@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.13](https://github.com/midwayjs/midway/compare/v2.3.12...v2.3.13) (2020-10-13)
+
+
+### Bug Fixes
+
+* [@plugin](https://github.com/plugin) inject undefined in web middleware ([#667](https://github.com/midwayjs/midway/issues/667)) ([cacb2fa](https://github.com/midwayjs/midway/commit/cacb2faa61258172ef445db0a86e45c3f19014a6))
+
+
+
+
+
 ## [2.3.11](https://github.com/midwayjs/midway/compare/v2.3.10...v2.3.11) (2020-10-08)
 
 **Note:** Version bump only for package @midwayjs/socketio

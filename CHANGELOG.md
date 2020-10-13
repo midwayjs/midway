@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.13](https://github.com/midwayjs/midway/compare/v2.3.12...v2.3.13) (2020-10-13)
+
+
+### Bug Fixes
+
+* [@plugin](https://github.com/plugin) inject undefined in web middleware ([#667](https://github.com/midwayjs/midway/issues/667)) ([cacb2fa](https://github.com/midwayjs/midway/commit/cacb2faa61258172ef445db0a86e45c3f19014a6))
+* when middleware config options is undefined, options.match ([#670](https://github.com/midwayjs/midway/issues/670)) ([1893049](https://github.com/midwayjs/midway/commit/18930498434d8bc0254fa1db013346443a96e9f5))
+* when middleware config options is undefined. options.enable expr… ([#668](https://github.com/midwayjs/midway/issues/668)) ([3378ea4](https://github.com/midwayjs/midway/commit/3378ea41d0715e4451fb1cda3e72612d458582b0))
+
+
+
+
+
 ## [2.3.12](https://github.com/midwayjs/midway/compare/v2.3.11...v2.3.12) (2020-10-10)
 
 
