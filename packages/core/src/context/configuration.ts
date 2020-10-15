@@ -7,7 +7,7 @@ import {
   saveModule,
   saveProviderId,
   isClass,
-  isFunction
+  isFunction,
 } from '@midwayjs/decorator';
 
 import { dirname, isAbsolute, join } from 'path';
@@ -39,6 +39,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
   addImports(imports: any[] = [], baseDir?: string) {
     // 处理 imports
     for (const importPackage of imports) {
+      if (!importPackage) continue;
       // for package
       const subContainerConfiguration = this.container.createConfiguration();
       if (typeof importPackage === 'string') {
