@@ -6,4 +6,4 @@ export const hello = {
   d: [1, 2, 3],
 };
 
-export const middleware = ['globalMiddleware2'];
+export const middleware = ['auth', 'globalMiddleware2'];

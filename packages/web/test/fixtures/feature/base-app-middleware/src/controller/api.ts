@@ -9,7 +9,7 @@ export class APIController {
 
   @Get('/', { middleware: ['globalMiddleware4'] })
   async home() {
-    return this.ctx.state['a'] + this.ctx.state['b'] + this.ctx.state['c'] + this.ctx.state['d'];
+    return this.ctx.state['a'] + this.ctx.state['b'] + this.ctx.state['c'] + this.ctx.state['d'] + this.ctx.oldData;
   }
 
 }
