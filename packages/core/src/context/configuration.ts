@@ -8,6 +8,7 @@ import {
   saveProviderId,
   isClass,
   isFunction,
+  IComponentInfo,
 } from '@midwayjs/decorator';
 
 import { dirname, isAbsolute, join } from 'path';
@@ -54,7 +55,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
         debug(
           `---------- end load configuration from sub package "${importPackage}" ----------`
         );
-      } else {
+      } else if ('Configuration' in importPackage) {
         // component is object
         debug(
           '\n---------- start load configuration from submodule" ----------'
@@ -62,6 +63,21 @@ export class ContainerConfiguration implements IContainerConfiguration {
         subContainerConfiguration.loadComponentObject(importPackage);
         debug(
           `---------- end load configuration from sub package "${importPackage}" ----------`
+        );
+      } else if ('component' in importPackage) {
+        if (
+          (importPackage as IComponentInfo)?.enabledEnvironment?.includes(
+            this.container.getCurrentEnv()
+          )
+        ) {
+          subContainerConfiguration.loadComponentObject(
+            (importPackage as IComponentInfo).component
+          );
+        }
+      } else {
+        throw new Error(
+          'import module not a midway component, module =' +
+            util.inspect(importPackage)
         );
       }
     }

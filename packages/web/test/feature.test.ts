@@ -29,7 +29,7 @@ describe('/test/feature.test.ts', () => {
   it('should test global use midway middleware id in egg', async () => {
     const app = await creatApp('feature/base-app-middleware');
     const result = await createHttpRequest(app).get('/');
-    expect(result.text).toEqual('1111222233334444');
+    expect(result.text).toEqual('1111222233334444egg_middleware');
     await closeApp(app);
   });
 

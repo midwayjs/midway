@@ -650,4 +650,22 @@ describe('/test/loader.test.ts', () => {
     const home: any = await loader.getApplicationContext().getAsync('SQL:home');
     expect(await home.getData()).toMatch(/base-app-decorator\/src\/bbbb\/dddd/);
   });
+
+  it('should load component in different type and different env', async () => {
+    mm(process.env, 'NODE_ENV', '');
+    const loader = new ContainerLoader({
+      baseDir: path.join(
+        __dirname,
+        './fixtures/app-with-configuration-load/src'
+      ),
+      disableConflictCheck: true,
+    });
+    loader.initialize();
+    loader.loadDirectory();
+    await loader.refresh();
+    const applicationContext = loader.getApplicationContext();
+    const value = applicationContext.getConfigService().getConfiguration();
+    expect(value['a']).toEqual(1);
+    mm.restore();
+  });
 });
