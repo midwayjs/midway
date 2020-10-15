@@ -15,7 +15,11 @@ export { Application, Agent } from './application';
 import { IWebMiddleware } from './interface';
 export type WebMiddleware = IWebMiddleware;
 export { MidwayWebMiddleware as Middleware } from './interface';
-
+export type KoaMiddleware<T = any> = (
+  context: T,
+  next: () => Promise<any>
+) => void;
+export { providerWrapper } from '@midwayjs/core';
 /**
  * @deprecated
  */
