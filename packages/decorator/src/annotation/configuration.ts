@@ -1,7 +1,12 @@
 import { saveClassMetadata, CONFIGURATION_KEY } from '../';
 
+export interface IComponentInfo {
+  component: any;
+  enabledEnvironment?: string[];
+}
+
 export interface InjectionConfigurationOptions {
-  imports?: string[];
+  imports?: Array<string | IComponentInfo | { Configuration: any }>;
   importObjects?: object;
   importConfigs?: string[];
   namespace?: string;
