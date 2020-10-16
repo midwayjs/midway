@@ -10,11 +10,15 @@ import {
   Redirect,
 } from '@midwayjs/decorator';
 import { UserService } from '../service/user';
-import { IMidwayExpressRequest } from '../../../../../src';
+import { IMidwayExpressContext, IMidwayExpressRequest } from '../../../../../src';
 
 @Provide()
 @Controller('/')
 export class APIController {
+
+  @Inject()
+  ctx: IMidwayExpressContext;
+
   @Inject()
   req: IMidwayExpressRequest;
 
