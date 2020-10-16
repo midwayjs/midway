@@ -67,6 +67,7 @@ export class MidwayExpressFramework extends BaseFramework<
         ctx,
         this.getApplicationContext()
       );
+      (req as any).requestContext = ctx.requestContext;
       ctx.requestContext.registerObject('req', req);
       ctx.requestContext.registerObject('res', res);
       ctx.requestContext.ready();
