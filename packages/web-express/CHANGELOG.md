@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.16](https://github.com/midwayjs/midway/compare/v2.3.15...v2.3.16) (2020-10-16)
+
+
+### Bug Fixes
+
+* use new ctx bind req and res in express ([#674](https://github.com/midwayjs/midway/issues/674)) ([1d26396](https://github.com/midwayjs/midway/commit/1d2639698e8e292fe12506a6e530a6d032f46d7e))
+
+
+
+
+
 ## [2.3.15](https://github.com/midwayjs/midway/compare/v2.3.14...v2.3.15) (2020-10-15)
 
 **Note:** Version bump only for package @midwayjs/express
