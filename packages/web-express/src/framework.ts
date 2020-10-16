@@ -32,7 +32,7 @@ import {
   Middleware,
   MiddlewareParamArray,
   IWebMiddleware,
-  IMidwayExpressRequest,
+  IMidwayExpressContext,
 } from './interface';
 import type { IRouter, IRouterHandler, RequestHandler } from 'express';
 import * as express from 'express';
@@ -61,14 +61,16 @@ export class MidwayExpressFramework extends BaseFramework<
   ) {
     this.app = (express() as unknown) as IMidwayExpressApplication;
     this.defineApplicationProperties(this.app);
-    this.app.use((req: IMidwayExpressRequest, res, next) => {
-      req.requestContext = new MidwayRequestContainer(
-        req,
+    this.app.use((req, res, next) => {
+      const ctx = { req, res } as IMidwayExpressContext;
+      ctx.requestContext = new MidwayRequestContainer(
+        ctx,
         this.getApplicationContext()
       );
-      req.requestContext.registerObject('req', req);
-      req.requestContext.registerObject('res', res);
-      req.requestContext.ready();
+      (req as any).requestContext = ctx.requestContext;
+      ctx.requestContext.registerObject('req', req);
+      ctx.requestContext.registerObject('res', res);
+      ctx.requestContext.ready();
       next();
     });
   }
