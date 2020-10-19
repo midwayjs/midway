@@ -162,7 +162,7 @@ export class DecoratorManager extends Map {
     }
 
     let m: Map<string, any>;
-    if (!Reflect.hasOwnMetadata(metaKey, target)) {
+    if (!Reflect.hasMetadata(metaKey, target)) {
       m = new Map<string, any>();
       Reflect.defineMetadata(metaKey, m, target);
     } else {
