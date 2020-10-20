@@ -98,14 +98,17 @@ export class MidwayRabbitMQFramework extends BaseFramework<
     return this.app.createConsumer(
       listenerOptions,
       async (data?: ConsumeMessage) => {
-        const ctx: IMidwayRabbitMQContext = {
+        const ctx = {
           channel: this.app.getChannel(),
-        };
+        } as IMidwayRabbitMQContext;
         const requestContainer = new MidwayRequestContainer(
           ctx,
           this.getApplicationContext()
         );
         ctx.requestContext = requestContainer;
+        ctx.getRequestContext = () => {
+          return requestContainer;
+        };
         const ins = await requestContainer.getAsync(providerId);
         await ins[listenerOptions.propertyKey].call(ins, data);
       }

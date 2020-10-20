@@ -1,7 +1,7 @@
 'use strict';
 
 const { BootstrapStarter } = require('@midwayjs/bootstrap');
-const { Framework } = require('./dist/index');
+const { MidwayWebFramework } = require('./src/framework');
 
 class AppBootHook {
   constructor(app) {
@@ -10,21 +10,19 @@ class AppBootHook {
 
   async didLoad() {
     // 这里的逻辑是为了兼容老 cluster 模式
-    if (this.app.options['isClusterMode'] !== false) {
-      this.framework = new Framework().configure({
-        processType: 'agent',
-        app: this.app,
-      });
-      this.bootstrap = new BootstrapStarter();
-      this.bootstrap
-        .configure({
-          baseDir: this.app.appDir,
-          globalConfig: this.app.config,
-        })
-        .load(this.framework);
-      await this.bootstrap.init();
-      this.app.options['webFramework'] = this.framework;
-    }
+    this.framework = new MidwayWebFramework().configure({
+      processType: 'agent',
+      app: this.app,
+    });
+    this.bootstrap = new BootstrapStarter();
+    this.bootstrap
+      .configure({
+        baseDir: this.app.appDir,
+        globalConfig: this.app.config,
+      })
+      .load(this.framework);
+    await this.bootstrap.init();
+    this.app.options['webFramework'] = this.framework;
   }
 
   async willReady() {}

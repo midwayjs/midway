@@ -8,7 +8,6 @@ import {
   IMidwayBootstrapOptions,
   listModule,
   MidwayFrameworkType,
-  MidwayProcessTypeEnum,
   MidwayRequestContainer,
 } from '@midwayjs/core';
 
@@ -60,7 +59,15 @@ export class MidwayExpressFramework extends BaseFramework<
     options: Partial<IMidwayBootstrapOptions>
   ) {
     this.app = (express() as unknown) as IMidwayExpressApplication;
-    this.defineApplicationProperties(this.app);
+    this.defineApplicationProperties({
+      generateController: (controllerMapping: string) => {
+        return this.generateController(controllerMapping);
+      },
+
+      generateMiddleware: async (middlewareId: string) => {
+        return this.generateMiddleware(middlewareId);
+      },
+    });
     this.app.use((req, res, next) => {
       const ctx = { req, res } as IMidwayExpressContext;
       ctx.requestContext = new MidwayRequestContainer(
@@ -302,47 +309,5 @@ export class MidwayExpressFramework extends BaseFramework<
         }
       }
     }
-  }
-
-  protected defineApplicationProperties(
-    app: IMidwayExpressApplication
-  ): IMidwayExpressApplication {
-    return Object.assign(app, {
-      getBaseDir: () => {
-        return this.baseDir;
-      },
-
-      getAppDir: () => {
-        return this.appDir;
-      },
-
-      getEnv: () => {
-        return this.getApplicationContext()
-          .getEnvironmentService()
-          .getCurrentEnvironment();
-      },
-
-      getConfig: (key?: string) => {
-        return this.getApplicationContext()
-          .getConfigService()
-          .getConfiguration(key);
-      },
-
-      getFrameworkType: () => {
-        return this.getFrameworkType();
-      },
-
-      getProcessType: () => {
-        return MidwayProcessTypeEnum.APPLICATION;
-      },
-
-      generateController: (controllerMapping: string) => {
-        return this.generateController(controllerMapping);
-      },
-
-      generateMiddleware: async (middlewareId: string) => {
-        return this.generateMiddleware(middlewareId);
-      },
-    });
   }
 }

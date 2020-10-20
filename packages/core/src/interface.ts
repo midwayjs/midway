@@ -256,7 +256,6 @@ export interface IMidwayLogger {
 }
 
 export interface IMidwayApplication {
-  applicationContext: IMidwayContainer;
   getBaseDir(): string;
   getAppDir(): string;
   getEnv(): string;
@@ -268,7 +267,7 @@ export interface IMidwayApplication {
 }
 
 export interface IMidwayContext {
-  getRequestContext(): IMidwayContainer;
+  getRequestContext?(): IMidwayContainer;
   requestContext: IMidwayContainer;
 }
 

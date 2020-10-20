@@ -26,7 +26,6 @@ declare module 'egg' {
   }
 
   interface Context {
-    getRequestContext(): IMidwayContainer;
     requestContext: IMidwayContainer;
   }
 }

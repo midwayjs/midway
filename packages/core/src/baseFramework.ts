@@ -62,7 +62,7 @@ export abstract class BaseFramework<
     await this.afterDirectoryLoad(options);
 
     if (!this.app.getApplicationContext) {
-      this.app = this.defineApplicationProperties(this.app);
+      this.defineApplicationProperties();
     }
 
     /**
@@ -99,8 +99,8 @@ export abstract class BaseFramework<
     await this.containerLoader.stop();
   }
 
-  protected defineApplicationProperties(app: APP): APP {
-    return Object.assign(app, {
+  protected defineApplicationProperties(applicationProperties: object = {}) {
+    const defaultApplicationProperties = {
       getBaseDir: () => {
         return this.baseDir;
       },
@@ -113,6 +113,10 @@ export abstract class BaseFramework<
         return this.getApplicationContext()
           .getEnvironmentService()
           .getCurrentEnvironment();
+      },
+
+      getApplicationContext: () => {
+        return this.getApplicationContext();
       },
 
       getConfig: (key?: string) => {
@@ -128,7 +132,12 @@ export abstract class BaseFramework<
       getProcessType: () => {
         return MidwayProcessTypeEnum.APPLICATION;
       },
-    });
+    };
+    Object.assign(
+      this.app,
+      defaultApplicationProperties,
+      applicationProperties
+    );
   }
 
   protected async beforeStop(): Promise<void> {}

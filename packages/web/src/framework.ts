@@ -7,7 +7,6 @@ import { ControllerOption } from '@midwayjs/decorator';
 import { IMidwayWebConfigurationOptions } from './interface';
 import { MidwayKoaBaseFramework } from '@midwayjs/koa';
 import { EggRouter } from '@eggjs/router';
-import { resolve } from 'path';
 import { Application, Context, Router } from 'egg';
 
 export class MidwayWebFramework extends MidwayKoaBaseFramework<
@@ -21,7 +20,6 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
     priority: number;
     router: Router;
   }> = [];
-  public isClusterMode = false;
 
   public configure(
     options: IMidwayWebConfigurationOptions
@@ -32,7 +30,6 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
     }
 
     this.app = options.app;
-    this.isClusterMode = !!this.app;
     return this;
   }
 
@@ -49,23 +46,6 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
     if (this.isTsMode) {
       process.env.EGG_TYPESCRIPT = 'true';
     }
-
-    if (!this.app) {
-      const { start } = require('egg');
-      this.app = await start({
-        baseDir: options.appDir,
-        ignoreWarning: true,
-        framework: resolve(__dirname, 'application'),
-        plugins: this.configurationOptions.plugins,
-        webFramework: this,
-        isClusterMode: this.isClusterMode,
-        mode: 'single',
-        isTsMode: this.isTsMode,
-      });
-
-      this.configurationOptions.globalConfig = this.app.config;
-    }
-
     if (this.configurationOptions.globalConfig) {
       this.getApplicationContext()
         .getConfigService()
@@ -76,10 +56,29 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
           return self.getConfiguration();
         },
       });
-      // this.app.config = this.getConfiguration();
     }
 
-    this.defineApplicationProperties(this.app);
+    this.defineApplicationProperties({
+      generateController: (controllerMapping: string) => {
+        return this.generateController(controllerMapping);
+      },
+
+      generateMiddleware: async (middlewareId: string) => {
+        return this.generateMiddleware(middlewareId);
+      },
+
+      getProcessType: () => {
+        if (this.configurationOptions.processType === 'application') {
+          return MidwayProcessTypeEnum.APPLICATION;
+        }
+        if (this.configurationOptions.processType === 'agent') {
+          return MidwayProcessTypeEnum.AGENT;
+        }
+
+        // TODO 单进程模式下区分进程类型??
+        return MidwayProcessTypeEnum.APPLICATION;
+      },
+    });
   }
 
   protected async afterInitialize(
@@ -126,45 +125,5 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
       return router;
     }
     return null;
-  }
-
-  protected defineApplicationProperties(app): Application {
-    return Object.assign(app, {
-      getBaseDir: () => {
-        return this.baseDir;
-      },
-
-      getAppDir: () => {
-        return this.appDir;
-      },
-
-      getEnv: () => {
-        return this.getApplicationContext()
-          .getEnvironmentService()
-          .getCurrentEnvironment();
-      },
-
-      getConfig: (key?: string) => {
-        return this.getApplicationContext()
-          .getConfigService()
-          .getConfiguration(key);
-      },
-
-      getFrameworkType: () => {
-        return this.getFrameworkType();
-      },
-
-      getProcessType: () => {
-        if (this.configurationOptions.processType === 'application') {
-          return MidwayProcessTypeEnum.APPLICATION;
-        }
-        if (this.configurationOptions.processType === 'agent') {
-          return MidwayProcessTypeEnum.AGENT;
-        }
-
-        // TODO 单进程模式下区分进程类型??
-        return MidwayProcessTypeEnum.APPLICATION;
-      },
-    });
   }
 }

@@ -13,7 +13,6 @@ import {
   listModule,
   listPreloadModule,
   MidwayFrameworkType,
-  MidwayProcessTypeEnum,
   MidwayRequestContainer,
   REQUEST_OBJ_CTX_KEY,
 } from '@midwayjs/core';
@@ -44,9 +43,34 @@ export class MidwayFaaSFramework extends BaseFramework<
   ) {
     this.logger = options.logger || console;
     this.globalMiddleware = this.configurationOptions.middleware || [];
-    this.app = this.defineApplicationProperties(
-      this.configurationOptions.applicationAdapter?.getApplication() || {}
-    );
+    this.app =
+      this.configurationOptions.applicationAdapter?.getApplication() ||
+      ({} as IMidwayFaaSApplication);
+
+    this.defineApplicationProperties({
+      getLogger: () => {
+        return this.logger;
+      },
+      /**
+       * return init context value such as aliyun fc
+       */
+      getInitializeContext: () => {
+        return this.configurationOptions.initializeContext;
+      },
+
+      useMiddleware: async middlewares => {
+        if (middlewares.length) {
+          const newMiddlewares = await this.loadMiddleware(middlewares);
+          for (const mw of newMiddlewares) {
+            this.app.use(mw);
+          }
+        }
+      },
+
+      generateMiddleware: async (middlewareId: string) => {
+        return this.generateMiddleware(middlewareId);
+      },
+    });
 
     this.prepareConfiguration();
   }
@@ -250,65 +274,6 @@ export class MidwayFaaSFramework extends BaseFramework<
   protected prepareConfiguration() {
     // TODO use initConfiguration
     // this.initConfiguration('./configuration', __dirname);
-  }
-
-  protected defineApplicationProperties(app): IMidwayFaaSApplication {
-    return Object.assign(app, {
-      getBaseDir: () => {
-        return this.baseDir;
-      },
-
-      getAppDir: () => {
-        return this.appDir;
-      },
-
-      getEnv: () => {
-        return this.getApplicationContext()
-          .getEnvironmentService()
-          .getCurrentEnvironment();
-      },
-
-      getConfig: (key?: string) => {
-        return this.getApplicationContext()
-          .getConfigService()
-          .getConfiguration(key);
-      },
-
-      getLogger: () => {
-        return this.logger;
-      },
-
-      getFrameworkType: () => {
-        return this.getFrameworkType();
-      },
-
-      getProcessType: () => {
-        return MidwayProcessTypeEnum.APPLICATION;
-      },
-      /**
-       * return init context value such as aliyun fc
-       */
-      getInitializeContext: () => {
-        return this.configurationOptions.initializeContext;
-      },
-
-      getApplicationContext: () => {
-        return this.getApplicationContext();
-      },
-
-      useMiddleware: async middlewares => {
-        if (middlewares.length) {
-          const newMiddlewares = await this.loadMiddleware(middlewares);
-          for (const mw of newMiddlewares) {
-            this.app.use(mw);
-          }
-        }
-      },
-
-      generateMiddleware: async (middlewareId: string) => {
-        return this.generateMiddleware(middlewareId);
-      },
-    });
   }
 
   private registerDecorator() {
