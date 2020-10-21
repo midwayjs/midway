@@ -2,6 +2,8 @@ import { parseNormalDir } from './utils';
 import * as extend from 'extend2';
 import { EggAppInfo } from 'egg';
 import { join } from 'path';
+import { BootstrapStarter } from '@midwayjs/bootstrap';
+import { MidwayWebFramework } from './framework';
 
 const {
   AppWorkerLoader,
@@ -16,6 +18,8 @@ const EGG_PATH = Symbol.for('egg#eggPath');
 export const createAppWorkerLoader = AppWorkerLoader => {
   class EggAppWorkerLoader extends (AppWorkerLoader as any) {
     app: any;
+    framework;
+    bootstrap;
 
     getEggPaths() {
       if (!this.appDir) {
@@ -52,6 +56,23 @@ export const createAppWorkerLoader = AppWorkerLoader => {
         });
       }
       return this.appInfo;
+    }
+
+    load() {
+      this.framework = new MidwayWebFramework().configure({
+        processType: 'application',
+        app: this.app,
+        globalConfig: this.app.config,
+      });
+      this.bootstrap = new BootstrapStarter();
+      this.bootstrap
+        .configure({
+          baseDir: this.app.appDir,
+        })
+        .load(this.framework);
+      this.bootstrap.init().then(() => {
+        super.load();
+      });
     }
   }
 
@@ -93,6 +114,23 @@ export const createAgentWorkerLoader = AppWorkerLoader => {
         });
       }
       return this.appInfo;
+    }
+
+    load() {
+      this.framework = new MidwayWebFramework().configure({
+        processType: 'agent',
+        app: this.app,
+        globalConfig: this.app.config,
+      });
+      this.bootstrap = new BootstrapStarter();
+      this.bootstrap
+        .configure({
+          baseDir: this.app.appDir,
+        })
+        .load(this.framework);
+      this.bootstrap.init().then(() => {
+        super.load();
+      });
     }
   }
 

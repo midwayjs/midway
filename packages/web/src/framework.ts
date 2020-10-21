@@ -30,8 +30,6 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
   public configure(
     options: IMidwayWebConfigurationOptions
   ): MidwayWebFramework {
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const self = this;
     this.configurationOptions = options;
     if (options.typescript === false) {
       this.isTsMode = false;
@@ -59,10 +57,12 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
         // TODO 单进程模式下区分进程类型??
         return MidwayProcessTypeEnum.APPLICATION;
       },
+    });
 
-      get applicationContext() {
-        return self.getApplicationContext();
-      },
+    Object.defineProperty(this.app, 'applicationContext', {
+      get() {
+        return this.getApplicationContext();
+      }
     });
 
     return this;
@@ -113,11 +113,7 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
         return MidwayProcessTypeEnum.APPLICATION;
       },
     });
-  }
 
-  protected async afterInitialize(
-    options: Partial<IMidwayBootstrapOptions>
-  ): Promise<void> {
     // register plugin
     this.containerLoader.registerHook(PLUGIN_KEY, (key, target) => {
       return this.app[key];
@@ -136,6 +132,10 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
       return this.app.coreLogger;
     });
   }
+
+  protected async afterInitialize(
+    options: Partial<IMidwayBootstrapOptions>
+  ): Promise<void> {}
 
   public getApplication(): Application {
     return this.app;
