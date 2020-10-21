@@ -1,5 +1,3 @@
-// import type { MidwayWebFramework } from './framework';
-// import { RouterParamValue } from '@midwayjs/decorator';
 import { parseNormalDir } from './utils';
 import * as extend from 'extend2';
 import { EggAppInfo } from 'egg';
@@ -115,42 +113,6 @@ export const createEggApplication = Application => {
     get [EGG_PATH]() {
       return __dirname;
     }
-    //
-    // get appOptions() {
-    //   return this.options;
-    // }
-    //
-    // get midwayWebFramework(): MidwayWebFramework {
-    //   return this.appOptions['webFramework'];
-    // }
-    //
-    // get applicationContext() {
-    //   return this.midwayWebFramework.getApplicationContext();
-    // }
-    //
-    // getApplicationContext() {
-    //   return this.applicationContext;
-    // }
-    //
-    // generateController(
-    //   controllerMapping: string,
-    //   routeArgsInfo?: RouterParamValue[],
-    //   routerResponseData?: any[]
-    // ) {
-    //   return this.midwayWebFramework.generateController(
-    //     controllerMapping,
-    //     routeArgsInfo,
-    //     routerResponseData
-    //   );
-    // }
-    //
-    // async generateMiddleware(middlewareId: string) {
-    //   return this.midwayWebFramework.generateMiddleware(middlewareId);
-    // }
-    //
-    // get baseDir() {
-    //   return this.loader.baseDir;
-    // }
   }
 
   return EggApplication as any;

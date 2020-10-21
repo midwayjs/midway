@@ -1,10 +1,6 @@
 module.exports = {
-  get appOptions() {
-    return this.options;
-  },
-
   get midwayWebFramework() {
-    return this.appOptions['webFramework'];
+    return this.options['webFramework'];
   },
 
   get applicationContext() {
