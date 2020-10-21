@@ -145,7 +145,7 @@ const EggAgentWorkerLoader = createAgentWorkerLoader(AgentWorkerLoader);
 
 const BaseEggAgent = createEggAgent(Agent);
 
-export class EggApplication extends BaseEggApplication {
+class EggApplication extends BaseEggApplication {
   get [EGG_LOADER]() {
     return EggAppWorkerLoader;
   }
@@ -155,7 +155,7 @@ export class EggApplication extends BaseEggApplication {
   }
 }
 
-export class EggAgent extends BaseEggAgent {
+class EggAgent extends BaseEggAgent {
   get [EGG_LOADER]() {
     return EggAgentWorkerLoader;
   }

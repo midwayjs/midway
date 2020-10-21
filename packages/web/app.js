@@ -8,15 +8,6 @@ class AppBootHook {
   constructor(app) {
     this.app = app;
     this.appMiddleware = [];
-  }
-
-  configDidLoad() {
-    // 先清空，防止加载到 midway 中间件出错
-    this.appMiddleware = this.app.config.appMiddleware;
-    this.app.config.appMiddleware = [];
-  }
-
-  async didLoad() {
     this.framework = new MidwayWebFramework().configure({
       processType: 'application',
       app: this.app,
@@ -28,8 +19,17 @@ class AppBootHook {
         baseDir: this.app.appDir,
       })
       .load(this.framework);
+  }
+
+  configDidLoad() {
+    // 先清空，防止加载到 midway 中间件出错
+    this.appMiddleware = this.app.config.appMiddleware;
+    this.app.config.appMiddleware = [];
+  }
+
+  async didLoad() {
     await this.bootstrap.init();
-    this.app.options['webFramework'] = this.framework;
+    // this.app.options['webFramework'] = this.framework;
 
     // 等 midway 加载完成后，再去 use 中间件
     for (const name of this.appMiddleware) {

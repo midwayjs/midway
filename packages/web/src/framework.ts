@@ -30,12 +30,41 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
   public configure(
     options: IMidwayWebConfigurationOptions
   ): MidwayWebFramework {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const self = this;
     this.configurationOptions = options;
     if (options.typescript === false) {
       this.isTsMode = false;
     }
 
     this.app = options.app;
+
+    this.defineApplicationProperties({
+      generateController: (controllerMapping: string) => {
+        return this.generateController(controllerMapping);
+      },
+
+      generateMiddleware: async (middlewareId: string) => {
+        return this.generateMiddleware(middlewareId);
+      },
+
+      getProcessType: () => {
+        if (this.configurationOptions.processType === 'application') {
+          return MidwayProcessTypeEnum.APPLICATION;
+        }
+        if (this.configurationOptions.processType === 'agent') {
+          return MidwayProcessTypeEnum.AGENT;
+        }
+
+        // TODO 单进程模式下区分进程类型??
+        return MidwayProcessTypeEnum.APPLICATION;
+      },
+
+      get applicationContext() {
+        return self.getApplicationContext();
+      },
+    });
+
     return this;
   }
 

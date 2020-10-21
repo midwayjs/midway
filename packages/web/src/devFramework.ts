@@ -56,7 +56,6 @@ export class MidwayDevFramework
       ignoreWarning: true,
       framework: resolve(__dirname, 'application'),
       plugins: this.configurationOptions.plugins,
-      webFramework: this,
       mode: 'single',
       isTsMode: this.isTsMode || true,
     });

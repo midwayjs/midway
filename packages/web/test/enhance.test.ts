@@ -7,7 +7,7 @@ import { creatApp, closeApp } from './utils';
 const mm = require('mm');
 const pedding = require('pedding');
 
-describe.skip('/test/enhance.test.ts', () => {
+describe('/test/enhance.test.ts', () => {
   describe('load ts file', () => {
     let app;
     beforeAll(async () => {
