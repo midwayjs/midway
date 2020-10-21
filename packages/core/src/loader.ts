@@ -41,7 +41,6 @@ export class ContainerLoader {
     this.isTsMode = isTsMode;
     this.preloadModules = preloadModules;
     this.disableConflictCheck = disableConflictCheck;
-    // this.duplicatedLoader = false;
   }
 
   initialize() {
@@ -81,12 +80,6 @@ export class ContainerLoader {
       ignore?: string | string[];
     } = {}
   ) {
-    // if (this.duplicatedLoader) {
-    //   debugLogger(
-    //     `This is a duplicate loader and skip loadDirectory, baseDir=${this.baseDir}`
-    //   );
-    //   return;
-    // }
     if (!this.isTsMode && loadOpts.disableAutoLoad === undefined) {
       // disable auto load in js mode by default
       loadOpts.disableAutoLoad = true;
