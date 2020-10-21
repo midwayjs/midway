@@ -10,9 +10,6 @@ import {
 } from '@midwayjs/decorator';
 import { IMidwayContainer } from './interface';
 
-import { debuglog } from 'util';
-const debugLogger = debuglog('midway:loader');
-
 function buildLoadDir(baseDir, dir) {
   if (!path.isAbsolute(dir)) {
     return path.join(baseDir, dir);
@@ -29,10 +26,10 @@ export class ContainerLoader {
   disableConflictCheck: boolean;
   duplicatedLoader: boolean;
 
-  static contextCache = new Map();
-  static clearContextCache = () => {
-    ContainerLoader.contextCache.clear();
-  }
+  /**
+   * 单个进程中上一次的 applicationContext
+   */
+  static parentApplicationContext: IMidwayContainer;
 
   constructor({
     baseDir,
@@ -44,22 +41,20 @@ export class ContainerLoader {
     this.isTsMode = isTsMode;
     this.preloadModules = preloadModules;
     this.disableConflictCheck = disableConflictCheck;
-    this.duplicatedLoader = false;
+    // this.duplicatedLoader = false;
   }
 
   initialize() {
     this.pluginContext = new Container(this.baseDir);
-    if (ContainerLoader.contextCache.has(this.baseDir)) {
-      // 标识为重复的加载器，只做简单的缓存读取，单进程同一目录只扫描一次
-      this.duplicatedLoader = true;
-      this.applicationContext = ContainerLoader.contextCache.get(this.baseDir);
-    } else {
-      this.applicationContext = new MidwayContainer(this.baseDir, undefined);
-      this.applicationContext.disableConflictCheck = this.disableConflictCheck;
-      this.applicationContext.registerObject('baseDir', this.baseDir);
-      this.applicationContext.registerObject('isTsMode', this.isTsMode);
-      ContainerLoader.contextCache.set(this.baseDir, this.applicationContext);
-    }
+    this.applicationContext = new MidwayContainer(
+      this.baseDir,
+      ContainerLoader.parentApplicationContext
+    );
+    this.applicationContext.disableConflictCheck = this.disableConflictCheck;
+    this.applicationContext.registerObject('baseDir', this.baseDir);
+    this.applicationContext.registerObject('isTsMode', this.isTsMode);
+    // 保存到最新的上下文中，供其他容器获取
+    ContainerLoader.parentApplicationContext = this.applicationContext;
   }
 
   getApplicationContext(): IMidwayContainer {
@@ -86,10 +81,12 @@ export class ContainerLoader {
       ignore?: string | string[];
     } = {}
   ) {
-    if (this.duplicatedLoader) {
-      debugLogger(`This is a duplicate loader and skip loadDirectory, baseDir=${this.baseDir}`);
-      return;
-    }
+    // if (this.duplicatedLoader) {
+    //   debugLogger(
+    //     `This is a duplicate loader and skip loadDirectory, baseDir=${this.baseDir}`
+    //   );
+    //   return;
+    // }
     if (!this.isTsMode && loadOpts.disableAutoLoad === undefined) {
       // disable auto load in js mode by default
       loadOpts.disableAutoLoad = true;
@@ -118,10 +115,6 @@ export class ContainerLoader {
 
   async refresh() {
     await this.pluginContext.ready();
-    if (this.duplicatedLoader) {
-      debugLogger(`This is a duplicate loader and skip refresh, baseDir=${this.baseDir}`);
-      return;
-    }
     await this.applicationContext.ready();
 
     // some common decorator implementation
@@ -160,11 +153,6 @@ export class ContainerLoader {
 
   async stop() {
     await this.pluginContext.stop();
-    if (this.duplicatedLoader) {
-      debugLogger(`This is a duplicate loader and skip stop, baseDir=${this.baseDir}`);
-      return;
-    }
     await this.applicationContext.stop();
   }
-
 }

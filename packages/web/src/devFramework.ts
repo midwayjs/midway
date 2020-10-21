@@ -22,7 +22,15 @@ export class MidwayDevFramework
     return MidwayFrameworkType.WEB;
   }
 
-  public async run(): Promise<void> {}
+  public async run(): Promise<void> {
+    if (this.configurationOptions.port) {
+      new Promise(resolve => {
+        this.app.listen(this.configurationOptions.port, () => {
+          resolve();
+        });
+      });
+    }
+  }
 
   configure(options: IMidwayWebConfigurationOptions): MidwayDevFramework {
     this.configurationOptions = options;

@@ -19,7 +19,7 @@ class TestModule {
 describe('/test/loader.test.ts', () => {
   beforeEach(() => {
     clearAllModule();
-    ContainerLoader.clearContextCache();
+    ContainerLoader.parentApplicationContext = null;
   });
   it('should create new loader', async () => {
     const loader = new ContainerLoader({

@@ -50,7 +50,7 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
       this.getApplicationContext()
         .getConfigService()
         .addObject(this.configurationOptions.globalConfig);
-
+      console.log('4444444');
       Object.defineProperty(this.app, 'config', {
         get() {
           return self.getConfiguration();
@@ -83,8 +83,7 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
 
   protected async afterInitialize(
     options: Partial<IMidwayBootstrapOptions>
-  ): Promise<void> {
-  }
+  ): Promise<void> {}
 
   public getApplication(): Application {
     return this.app;
@@ -97,15 +96,7 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
   /**
    * 这个方法 egg-cluster 不走，只有单进程模式使用 @midwayjs/bootstrap 才会执行
    */
-  public async run(): Promise<void> {
-    if (this.configurationOptions.port) {
-      new Promise(resolve => {
-        this.app.listen(this.configurationOptions.port, () => {
-          resolve();
-        });
-      });
-    }
-  }
+  public async run(): Promise<void> {}
 
   /**
    * 这个方法 egg-cluster 不走，只有单进程模式使用 @midwayjs/bootstrap 才会执行

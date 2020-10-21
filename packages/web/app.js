@@ -1,7 +1,7 @@
 'use strict';
 
-const { Bootstrap } = require('@midwayjs/bootstrap');
-const { MidwayWebFramework } = require('./src/framework');
+const { BootstrapStarter } = require('@midwayjs/bootstrap');
+const { MidwayWebFramework } = require('./dist/framework');
 const pathMatching = require('egg-path-matching');
 const { safelyGet } = require('@midwayjs/core');
 
@@ -25,10 +25,13 @@ class AppBootHook {
       app: this.app,
       globalConfig: this.app.config,
     });
-    Bootstrap.configure({
-      baseDir: this.app.appDir,
-    }).load(this.framework);
-    await Bootstrap.run();
+    this.bootstrap = new BootstrapStarter();
+    this.bootstrap
+      .configure({
+        baseDir: this.app.appDir,
+      })
+      .load(this.framework);
+    await this.bootstrap.init();
     this.app.options['webFramework'] = this.framework;
 
     // register plugin

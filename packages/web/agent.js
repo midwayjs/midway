@@ -1,7 +1,7 @@
 'use strict';
 
 const { BootstrapStarter } = require('@midwayjs/bootstrap');
-const { MidwayWebFramework } = require('./src/framework');
+const { MidwayWebFramework } = require('./dist/framework');
 
 class AgentBootHook {
   constructor(app) {
