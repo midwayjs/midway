@@ -5,6 +5,7 @@ import { IMidwayWebContext } from '../../../../../../src';
 export class GlobalMiddleware1 {
   resolve() {
     return async (ctx: IMidwayWebContext, next) => {
+      console.log('1///');
       ctx.state.a = '1111';
       await next();
     }

@@ -51,7 +51,6 @@ export abstract class BaseFramework<
     const applicationContext = this.containerLoader.getApplicationContext();
     applicationContext.registerObject('baseDir', this.baseDir);
     applicationContext.registerObject('appDir', this.appDir);
-    // 如果没有关闭autoLoad 则进行load
     this.containerLoader.loadDirectory(options);
 
     // register app

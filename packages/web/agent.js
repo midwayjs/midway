@@ -3,7 +3,7 @@
 const { BootstrapStarter } = require('@midwayjs/bootstrap');
 const { MidwayWebFramework } = require('./src/framework');
 
-class AppBootHook {
+class AgentBootHook {
   constructor(app) {
     this.app = app;
   }
@@ -13,12 +13,12 @@ class AppBootHook {
     this.framework = new MidwayWebFramework().configure({
       processType: 'agent',
       app: this.app,
+      globalConfig: this.app.config,
     });
     this.bootstrap = new BootstrapStarter();
     this.bootstrap
       .configure({
         baseDir: this.app.appDir,
-        globalConfig: this.app.config,
       })
       .load(this.framework);
     await this.bootstrap.init();
@@ -28,4 +28,4 @@ class AppBootHook {
   async willReady() {}
 }
 
-module.exports = AppBootHook;
+module.exports = AgentBootHook;

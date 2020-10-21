@@ -56,6 +56,7 @@ class AppBootHook {
     for (const name of this.appMiddleware) {
       if (this.app.getApplicationContext().registry.hasDefinition(name)) {
         const mwIns = await this.app.generateMiddleware(name);
+        mwIns._name = name;
         this.app.use(mwIns);
       } else {
         // egg
@@ -78,6 +79,8 @@ class AppBootHook {
         }
       }
     }
+
+    await this.framework.loadMidwayController();
   }
 
   async willReady() {}

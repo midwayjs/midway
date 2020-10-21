@@ -30,13 +30,15 @@ export class MidwayDevFramework
   }
 
   getApplicationContext(): IMidwayContainer {
-    return undefined;
+    return this.app.getApplicationContext();
   }
 
-  getConfiguration(key?: string): any {}
+  getConfiguration(key?: string): any {
+    return this.app.getConfig(key);
+  }
 
   getCurrentEnvironment(): string {
-    return '';
+    return this.app.getEnv();
   }
 
   async initialize(options: Partial<IMidwayBootstrapOptions>) {
@@ -50,11 +52,9 @@ export class MidwayDevFramework
       mode: 'single',
       isTsMode: this.isTsMode || true,
     });
-
-    this.configurationOptions.globalConfig = this.app.config;
   }
 
   async stop(): Promise<void> {
-    return Promise.resolve(undefined);
+    await this.app.close();
   }
 }

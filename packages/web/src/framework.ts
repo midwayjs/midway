@@ -84,9 +84,6 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
   protected async afterInitialize(
     options: Partial<IMidwayBootstrapOptions>
   ): Promise<void> {
-    if (this.configurationOptions.processType !== 'agent') {
-      await this.loadMidwayController();
-    }
   }
 
   public getApplication(): Application {
@@ -97,6 +94,9 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
     return MidwayFrameworkType.WEB;
   }
 
+  /**
+   * 这个方法 egg-cluster 不走，只有单进程模式使用 @midwayjs/bootstrap 才会执行
+   */
   public async run(): Promise<void> {
     if (this.configurationOptions.port) {
       new Promise(resolve => {
@@ -107,6 +107,9 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
     }
   }
 
+  /**
+   * 这个方法 egg-cluster 不走，只有单进程模式使用 @midwayjs/bootstrap 才会执行
+   */
   protected async beforeStop(): Promise<void> {
     await this.app.close();
   }
