@@ -9,19 +9,29 @@ export {
 // must export mock app here
 export { Application, Agent } from './application';
 
+import { IWebMiddleware, MidwayWebMiddleware } from './interface';
+import { providerWrapper as OriginProviderWrapper } from '@midwayjs/core';
 /**
- * @deprecated
+ * @deprecated Please use IWebMiddleware instead
  */
-import { IWebMiddleware } from './interface';
 export type WebMiddleware = IWebMiddleware;
-export { MidwayWebMiddleware as Middleware } from './interface';
+/**
+ * @deprecated Please use MidwayWebMiddleware instead
+ */
+export type Middleware = MidwayWebMiddleware;
+/**
+ * @deprecated Please use MidwayWebMiddleware instead
+ */
 export type KoaMiddleware<T = any> = (
   context: T,
   next: () => Promise<any>
 ) => void;
-export { providerWrapper } from '@midwayjs/core';
 /**
- * @deprecated
+ * @deprecated Please import from @midwayjs/core
+ */
+export const providerWrapper = OriginProviderWrapper;
+/**
+ * @deprecated Please import from @midwayjs/decorator
  */
 export {
   Provide as provide,
@@ -55,6 +65,7 @@ export {
   ControllerOption,
   ScheduleOpts,
   ScopeEnum,
+  CommonSchedule,
 } from '@midwayjs/decorator';
 
 /**
