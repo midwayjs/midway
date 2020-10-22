@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.17-beta.1](https://github.com/midwayjs/midway/compare/v2.3.16...v2.3.17-beta.1) (2020-10-22)
+
+
+### Bug Fixes
+
+* web refactor case error ([692c32c](https://github.com/midwayjs/midway/commit/692c32c744b7230a1c4a2419b605c344fee7aa92))
+
+
+
+
+
 ## [2.3.15](https://github.com/midwayjs/midway/compare/v2.3.14...v2.3.15) (2020-10-15)
 
 **Note:** Version bump only for package @midwayjs/mock
