@@ -3,18 +3,9 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [2.3.17-beta.1](https://github.com/midwayjs/midway/compare/v2.3.16...v2.3.17-beta.1) (2020-10-22)
+## [2.3.17](https://github.com/midwayjs/midway/compare/v2.3.16...v2.3.17) (2020-10-22)
 
-
-### Bug Fixes
-
-* app.generateController ([c344f42](https://github.com/midwayjs/midway/commit/c344f42b1c0df803199610870a284b2c0aedc662))
-* web refactor case error ([692c32c](https://github.com/midwayjs/midway/commit/692c32c744b7230a1c4a2419b605c344fee7aa92))
-
-
-### Features
-
-* add container cache ([92c4cb6](https://github.com/midwayjs/midway/commit/92c4cb609892d650927b777d38739225d86eee86))
+**Note:** Version bump only for package midway
 
 
 

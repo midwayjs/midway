@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/socketio",
-  "version": "2.3.17-beta.1",
+  "version": "2.3.17",
   "description": "Midway Web Framework for socket.io",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -24,15 +24,15 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/cli": "^1.0.0",
-    "@midwayjs/mock": "^2.3.17-beta.1",
+    "@midwayjs/mock": "^2.3.17",
     "@types/socket.io": "^2.1.11",
     "@types/socket.io-client": "^1.4.33",
     "fs-extra": "^8.0.1",
     "socket.io-client": "^2.3.0"
   },
   "dependencies": {
-    "@midwayjs/core": "^2.3.17-beta.1",
-    "@midwayjs/decorator": "^2.3.15",
+    "@midwayjs/core": "^2.3.17",
+    "@midwayjs/decorator": "^2.3.17",
     "socket.io": "^2.3.0"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
