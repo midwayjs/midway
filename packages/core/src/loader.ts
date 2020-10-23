@@ -1,6 +1,5 @@
 import * as path from 'path';
 import { MidwayContainer } from './context/midwayContainer';
-import { Container } from './context/container';
 import {
   ASPECT_KEY,
   getClassMetadata,
@@ -9,7 +8,7 @@ import {
   listPreloadModule,
 } from '@midwayjs/decorator';
 import { IMidwayContainer, IObjectDefinitionRegistry } from './interface';
-// import { ObjectDefinitionRegistry } from './context/applicationContext';
+import { ObjectDefinitionRegistry } from './context/applicationContext';
 
 function buildLoadDir(baseDir, dir) {
   if (!path.isAbsolute(dir)) {
@@ -20,7 +19,6 @@ function buildLoadDir(baseDir, dir) {
 
 export class ContainerLoader {
   baseDir;
-  pluginContext;
   applicationContext: MidwayContainer;
   isTsMode;
   preloadModules;
@@ -46,12 +44,13 @@ export class ContainerLoader {
   }
 
   initialize() {
-    this.pluginContext = new Container(this.baseDir);
     this.applicationContext = new MidwayContainer(this.baseDir, undefined);
-    // if (ContainerLoader.parentDefinitionRegistry) {
-    //   this.duplicatedLoader = true;
-    //   this.applicationContext.registry = new (ObjectDefinitionRegistry as any)(ContainerLoader.parentDefinitionRegistry) as ObjectDefinitionRegistry;
-    // }
+    if (ContainerLoader.parentDefinitionRegistry) {
+      this.duplicatedLoader = true;
+      this.applicationContext.registry = new (ObjectDefinitionRegistry as any)(
+        ContainerLoader.parentDefinitionRegistry
+      ) as ObjectDefinitionRegistry;
+    }
     this.applicationContext.disableConflictCheck = this.disableConflictCheck;
     this.applicationContext.registerObject('baseDir', this.baseDir);
     this.applicationContext.registerObject('isTsMode', this.isTsMode);
@@ -59,13 +58,6 @@ export class ContainerLoader {
 
   getApplicationContext(): IMidwayContainer {
     return this.applicationContext;
-  }
-
-  /**
-   * @Deprecated
-   */
-  getPluginContext() {
-    return this.pluginContext;
   }
 
   registerHook(hookKey, hookHandler) {
@@ -108,11 +100,12 @@ export class ContainerLoader {
     }
 
     // 保存到最新的上下文中，供其他容器获取
-    ContainerLoader.parentDefinitionRegistry = this.applicationContext.registry;
+    ContainerLoader.parentDefinitionRegistry = klona(
+      this.applicationContext.registry
+    );
   }
 
   async refresh() {
-    await this.pluginContext.ready();
     await this.applicationContext.ready();
 
     // some common decorator implementation
@@ -150,7 +143,6 @@ export class ContainerLoader {
   }
 
   async stop() {
-    await this.pluginContext.stop();
     await this.applicationContext.stop();
   }
 }
