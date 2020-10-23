@@ -9,7 +9,7 @@ import {
   listPreloadModule,
 } from '@midwayjs/decorator';
 import { IMidwayContainer, IObjectDefinitionRegistry } from './interface';
-import { ObjectDefinitionRegistry } from './context/applicationContext';
+// import { ObjectDefinitionRegistry } from './context/applicationContext';
 
 function buildLoadDir(baseDir, dir) {
   if (!path.isAbsolute(dir)) {
@@ -47,14 +47,11 @@ export class ContainerLoader {
 
   initialize() {
     this.pluginContext = new Container(this.baseDir);
-    this.applicationContext = new MidwayContainer(
-      this.baseDir,
-      undefined
-    );
-    if (ContainerLoader.parentDefinitionRegistry) {
-      this.duplicatedLoader = true;
-      this.applicationContext.registry = new (ObjectDefinitionRegistry as any)(ContainerLoader.parentDefinitionRegistry) as ObjectDefinitionRegistry;
-    }
+    this.applicationContext = new MidwayContainer(this.baseDir, undefined);
+    // if (ContainerLoader.parentDefinitionRegistry) {
+    //   this.duplicatedLoader = true;
+    //   this.applicationContext.registry = new (ObjectDefinitionRegistry as any)(ContainerLoader.parentDefinitionRegistry) as ObjectDefinitionRegistry;
+    // }
     this.applicationContext.disableConflictCheck = this.disableConflictCheck;
     this.applicationContext.registerObject('baseDir', this.baseDir);
     this.applicationContext.registerObject('isTsMode', this.isTsMode);

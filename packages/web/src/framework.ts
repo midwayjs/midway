@@ -30,6 +30,7 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
   public configure(
     options: IMidwayWebConfigurationOptions
   ): MidwayWebFramework {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
     this.configurationOptions = options;
     if (options.typescript === false) {
@@ -63,7 +64,7 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
     Object.defineProperty(this.app, 'applicationContext', {
       get() {
         return self.getApplicationContext();
-      }
+      },
     });
 
     return this;
