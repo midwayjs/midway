@@ -143,6 +143,10 @@ export class BaseApplicationContext
     return this._registry;
   }
 
+  set registry(registry) {
+    this._registry = registry;
+  }
+
   protected getManagedResolverFactory() {
     if (!this._resolverFactory) {
       this._resolverFactory = new ManagedResolverFactory(this);

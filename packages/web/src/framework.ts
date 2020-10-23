@@ -30,6 +30,7 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
   public configure(
     options: IMidwayWebConfigurationOptions
   ): MidwayWebFramework {
+    const self = this;
     this.configurationOptions = options;
     if (options.typescript === false) {
       this.isTsMode = false;
@@ -61,7 +62,7 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
 
     Object.defineProperty(this.app, 'applicationContext', {
       get() {
-        return this.getApplicationContext();
+        return self.getApplicationContext();
       }
     });
 
@@ -91,28 +92,6 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
         },
       });
     }
-
-    this.defineApplicationProperties({
-      generateController: (controllerMapping: string) => {
-        return this.generateController(controllerMapping);
-      },
-
-      generateMiddleware: async (middlewareId: string) => {
-        return this.generateMiddleware(middlewareId);
-      },
-
-      getProcessType: () => {
-        if (this.configurationOptions.processType === 'application') {
-          return MidwayProcessTypeEnum.APPLICATION;
-        }
-        if (this.configurationOptions.processType === 'agent') {
-          return MidwayProcessTypeEnum.AGENT;
-        }
-
-        // TODO 单进程模式下区分进程类型??
-        return MidwayProcessTypeEnum.APPLICATION;
-      },
-    });
 
     // register plugin
     this.containerLoader.registerHook(PLUGIN_KEY, (key, target) => {

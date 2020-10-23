@@ -8,7 +8,8 @@ import {
   listModule,
   listPreloadModule,
 } from '@midwayjs/decorator';
-import { IMidwayContainer } from './interface';
+import { IMidwayContainer, IObjectDefinitionRegistry } from './interface';
+import { ObjectDefinitionRegistry } from './context/applicationContext';
 
 function buildLoadDir(baseDir, dir) {
   if (!path.isAbsolute(dir)) {
@@ -27,9 +28,9 @@ export class ContainerLoader {
   duplicatedLoader: boolean;
 
   /**
-   * 单个进程中上一次的 applicationContext
+   * 单个进程中上一次的 applicationContext 的 registry
    */
-  static parentApplicationContext: IMidwayContainer;
+  static parentDefinitionRegistry: IObjectDefinitionRegistry;
 
   constructor({
     baseDir,
@@ -41,19 +42,22 @@ export class ContainerLoader {
     this.isTsMode = isTsMode;
     this.preloadModules = preloadModules;
     this.disableConflictCheck = disableConflictCheck;
+    this.duplicatedLoader = false;
   }
 
   initialize() {
     this.pluginContext = new Container(this.baseDir);
     this.applicationContext = new MidwayContainer(
       this.baseDir,
-      ContainerLoader.parentApplicationContext
+      undefined
     );
+    if (ContainerLoader.parentDefinitionRegistry) {
+      this.duplicatedLoader = true;
+      this.applicationContext.registry = new (ObjectDefinitionRegistry as any)(ContainerLoader.parentDefinitionRegistry) as ObjectDefinitionRegistry;
+    }
     this.applicationContext.disableConflictCheck = this.disableConflictCheck;
     this.applicationContext.registerObject('baseDir', this.baseDir);
     this.applicationContext.registerObject('isTsMode', this.isTsMode);
-    // 保存到最新的上下文中，供其他容器获取
-    ContainerLoader.parentApplicationContext = this.applicationContext;
   }
 
   getApplicationContext(): IMidwayContainer {
@@ -80,6 +84,7 @@ export class ContainerLoader {
       ignore?: string | string[];
     } = {}
   ) {
+    if (this.duplicatedLoader) return;
     if (!this.isTsMode && loadOpts.disableAutoLoad === undefined) {
       // disable auto load in js mode by default
       loadOpts.disableAutoLoad = true;
@@ -104,6 +109,9 @@ export class ContainerLoader {
         this.applicationContext.bindClass(preloadModule);
       }
     }
+
+    // 保存到最新的上下文中，供其他容器获取
+    ContainerLoader.parentDefinitionRegistry = this.applicationContext.registry;
   }
 
   async refresh() {

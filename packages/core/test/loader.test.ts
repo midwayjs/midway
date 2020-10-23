@@ -19,7 +19,7 @@ class TestModule {
 describe('/test/loader.test.ts', () => {
   beforeEach(() => {
     clearAllModule();
-    ContainerLoader.parentApplicationContext = null;
+    ContainerLoader.parentDefinitionRegistry = null;
   });
   it('should create new loader', async () => {
     const loader = new ContainerLoader({
