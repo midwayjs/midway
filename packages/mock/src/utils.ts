@@ -33,7 +33,7 @@ export async function create<
 ): Promise<T> {
   process.env.MIDWAY_TS_MODE = 'true';
   clearAllModule();
-  ContainerLoader.parentDefinitionRegistry = null;
+  ContainerLoader.parentDefinitionMetadata = null;
   let framework: T = null;
   let DefaultFramework = null;
 

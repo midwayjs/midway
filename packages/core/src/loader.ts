@@ -7,8 +7,7 @@ import {
   listModule,
   listPreloadModule,
 } from '@midwayjs/decorator';
-import { IMidwayContainer, IObjectDefinitionRegistry } from './interface';
-import { ObjectDefinitionRegistry } from './context/applicationContext';
+import { IMidwayContainer, IObjectDefinitionMetadata } from './interface';
 
 function buildLoadDir(baseDir, dir) {
   if (!path.isAbsolute(dir)) {
@@ -28,7 +27,7 @@ export class ContainerLoader {
   /**
    * 单个进程中上一次的 applicationContext 的 registry
    */
-  static parentDefinitionRegistry: IObjectDefinitionRegistry;
+  static parentDefinitionMetadata: IObjectDefinitionMetadata[];
 
   constructor({
     baseDir,
@@ -45,11 +44,9 @@ export class ContainerLoader {
 
   initialize() {
     this.applicationContext = new MidwayContainer(this.baseDir, undefined);
-    if (ContainerLoader.parentDefinitionRegistry) {
+    if (ContainerLoader.parentDefinitionMetadata) {
       this.duplicatedLoader = true;
-      this.applicationContext.registry = new (ObjectDefinitionRegistry as any)(
-        ContainerLoader.parentDefinitionRegistry
-      ) as ObjectDefinitionRegistry;
+      this.applicationContext.restoreDefinitions(ContainerLoader.parentDefinitionMetadata);
     }
     this.applicationContext.disableConflictCheck = this.disableConflictCheck;
     this.applicationContext.registerObject('baseDir', this.baseDir);
@@ -99,10 +96,8 @@ export class ContainerLoader {
       }
     }
 
-    // 保存到最新的上下文中，供其他容器获取
-    ContainerLoader.parentDefinitionRegistry = klona(
-      this.applicationContext.registry
-    );
+    // 保存元信息最新的上下文中，供其他容器复用，减少重复扫描
+    ContainerLoader.parentDefinitionMetadata = this.applicationContext.getDefinitionMetaList();
   }
 
   async refresh() {

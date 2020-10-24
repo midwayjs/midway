@@ -64,6 +64,30 @@ export interface IObjectDefinition {
   hasAttr(key: ObjectIdentifier): boolean;
   setAttr(key: ObjectIdentifier, value: any): void;
 }
+
+/**
+ * 对象描述元数据，用于生成对象定义
+ */
+export interface IObjectDefinitionMetadata {
+  namespace?: string;
+  id: string;
+  name: string;
+  initMethod: string;
+  destroyMethod: string;
+  constructMethod: string;
+  scope: ScopeEnum;
+  autowire: boolean;
+  srcPath: string;
+  path: any;
+  export: string;
+  dependsOn: ObjectIdentifier[];
+  constructorArgs: Array<{ value?: string; args?: any; type: string; } | undefined>;
+  asynchronous: boolean;
+  properties: any[];
+  definitionType: 'object' | 'function'
+}
+
+
 export interface IObjectCreator {
   load(): any;
   doConstruct(Clzz: any, args?: any, context?: IApplicationContext): any;
@@ -177,7 +201,6 @@ export interface IContainer extends IApplicationContext {
   ): void;
   createChild(): IContainer;
   resolve<T>(target: T): T;
-  registerCustomBinding(objectDefinition: IObjectDefinition, target): void;
 }
 
 export interface ObjectDependencyTree {

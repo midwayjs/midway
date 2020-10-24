@@ -28,7 +28,6 @@ import { childAsyncFunction,
 import { DieselCar, DieselEngine, engineFactory, PetrolEngine } from '../fixtures/mix_sample';
 import { HelloSingleton, HelloErrorInitSingleton, HelloErrorSingleton } from '../fixtures/singleton_sample';
 import { CircularOne, CircularTwo, CircularThree, TestOne, TestTwo, TestThree, TestOne1, TestTwo1, TestThree1 } from '../fixtures/circular_dependency';
-import { ManagedValue } from '../../src/context/managed';
 import { VALUE_TYPE } from '../../src';
 
 describe('/test/context/container.test.ts', () => {
@@ -59,10 +58,12 @@ describe('/test/context/container.test.ts', () => {
 
   it('should inject property', () => {
     const container = new Container();
-    const va = new ManagedValue();
-    va.value = 123;
-    va.valueType = VALUE_TYPE.INTEGER;
-    container.bind<Warrior>('warrior', Samurai as any, { constructorArgs: [ va ]});
+    container.bind<Warrior>('warrior', Samurai as any, {
+      constructorArgs: [{
+        value: 123,
+        type: VALUE_TYPE.INTEGER
+      }]
+    });
     container.bind<Warrior>('katana1', Katana as any);
     container.bind<Warrior>('katana2', Katana as any);
 

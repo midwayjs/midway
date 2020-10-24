@@ -19,7 +19,7 @@ class TestModule {
 describe('/test/loader.test.ts', () => {
   beforeEach(() => {
     clearAllModule();
-    ContainerLoader.parentDefinitionRegistry = null;
+    ContainerLoader.parentDefinitionMetadata = null;
   });
   it('should create new loader', async () => {
     const loader = new ContainerLoader({
