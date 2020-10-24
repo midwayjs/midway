@@ -10,7 +10,7 @@ import {
   ObjectDefinitionOptions,
   ObjectIdentifier,
   ScopeEnum,
-  TAGGED_PROP
+  TAGGED_PROP,
 } from '@midwayjs/decorator';
 import { IContainer, IObjectDefinitionMetadata } from '../interface';
 import { ObjectDefinition } from '../definitions/objectDefinition';
@@ -82,7 +82,7 @@ export class Container extends BaseApplicationContext implements IContainer {
         } else {
           definitionMeta.constructorArgs.push({
             type: 'value',
-            value: propertyMeta?.[0].value
+            value: propertyMeta?.[0].value,
           });
         }
       }
@@ -98,7 +98,7 @@ export class Container extends BaseApplicationContext implements IContainer {
           definitionMeta.properties.push({
             metaKey,
             args: propertyMeta.args,
-            value: propertyMeta.value
+            value: propertyMeta.value,
           });
         }
       }
@@ -131,7 +131,10 @@ export class Container extends BaseApplicationContext implements IContainer {
     this.debugLogger(`  bind id => [${definition.id}]`);
 
     // inject constructArgs
-    if(definitionMeta.constructorArgs && definitionMeta.constructorArgs.length) {
+    if (
+      definitionMeta.constructorArgs &&
+      definitionMeta.constructorArgs.length
+    ) {
       for (const constructorInfo of definitionMeta.constructorArgs) {
         if (constructorInfo.type === 'ref') {
           const refManagedIns = new ManagedReference();
@@ -174,7 +177,6 @@ export class Container extends BaseApplicationContext implements IContainer {
     definition.scope = definitionMeta.scope;
     definition.autowire = definitionMeta.autowire;
 
-
     this.registerDefinition(definitionMeta.id, definition);
   }
 
@@ -190,7 +192,10 @@ export class Container extends BaseApplicationContext implements IContainer {
     return this.definitionMetadataList;
   }
 
-  protected registerCustomBinding(objectDefinition: IObjectDefinitionMetadata, target: any) {
+  protected registerCustomBinding(
+    objectDefinition: IObjectDefinitionMetadata,
+    target: any
+  ) {
     // @async, @init, @destroy @scope
     const objDefOptions: ObjectDefinitionOptions = getObjectDefProps(target);
     this.convertOptionsToDefinition(objDefOptions, objectDefinition);

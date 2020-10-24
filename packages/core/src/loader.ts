@@ -46,7 +46,9 @@ export class ContainerLoader {
     this.applicationContext = new MidwayContainer(this.baseDir, undefined);
     if (ContainerLoader.parentDefinitionMetadata) {
       this.duplicatedLoader = true;
-      this.applicationContext.restoreDefinitions(ContainerLoader.parentDefinitionMetadata);
+      this.applicationContext.restoreDefinitions(
+        ContainerLoader.parentDefinitionMetadata
+      );
     }
     this.applicationContext.disableConflictCheck = this.disableConflictCheck;
     this.applicationContext.registerObject('baseDir', this.baseDir);

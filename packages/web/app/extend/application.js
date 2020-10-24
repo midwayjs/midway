@@ -5,5 +5,5 @@ module.exports = {
 
   get webFramework() {
     return this.loader.framework;
-  }
+  },
 };

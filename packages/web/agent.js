@@ -5,8 +5,7 @@ class AgentBootHook {
     this.app = app;
   }
 
-  async didLoad() {
-  }
+  async didLoad() {}
 
   async willReady() {}
 }

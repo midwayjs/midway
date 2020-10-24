@@ -33,7 +33,7 @@ describe('/test/feature.test.ts', () => {
     await closeApp(app);
   });
 
-  it('should got component config in app', async () => {
+  it.only('should got component config in app', async () => {
     const app = await creatApp('feature/base-app-component-config');
     const result = await createHttpRequest(app).get('/');
     expect(result.text).toEqual('hello world1');

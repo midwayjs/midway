@@ -1,4 +1,8 @@
-import { isAsyncFunction, isGeneratorFunction, isPromise } from '@midwayjs/decorator';
+import {
+  isAsyncFunction,
+  isGeneratorFunction,
+  isPromise,
+} from '@midwayjs/decorator';
 import { IObjectCreator, IObjectDefinition } from '../interface';
 
 export class ObjectCreator implements IObjectCreator {

@@ -18,7 +18,7 @@ import {
   ALL,
   isAsyncFunction,
   isClass,
-  isFunction
+  isFunction,
 } from '@midwayjs/decorator';
 import { ContainerConfiguration } from './configuration';
 import { FUNCTION_INJECT_KEY } from '..';
