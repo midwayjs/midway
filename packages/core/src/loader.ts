@@ -44,12 +44,6 @@ export class ContainerLoader {
 
   initialize() {
     this.applicationContext = new MidwayContainer(this.baseDir, undefined);
-    if (ContainerLoader.parentDefinitionMetadata) {
-      this.duplicatedLoader = true;
-      this.applicationContext.restoreDefinitions(
-        ContainerLoader.parentDefinitionMetadata
-      );
-    }
     this.applicationContext.disableConflictCheck = this.disableConflictCheck;
     this.applicationContext.registerObject('baseDir', this.baseDir);
     this.applicationContext.registerObject('isTsMode', this.isTsMode);
@@ -72,25 +66,31 @@ export class ContainerLoader {
       ignore?: string | string[];
     } = {}
   ) {
-    if (this.duplicatedLoader) return;
     if (!this.isTsMode && loadOpts.disableAutoLoad === undefined) {
       // disable auto load in js mode by default
       loadOpts.disableAutoLoad = true;
     }
 
-    // if not disable auto load
-    if (!loadOpts.disableAutoLoad) {
-      // use baseDir in parameter first
-      const baseDir = loadOpts.baseDir || this.baseDir;
-      const defaultLoadDir = this.isTsMode ? [baseDir] : [];
-      this.applicationContext.load({
-        loadDir: (loadOpts.loadDir || defaultLoadDir).map(dir => {
-          return buildLoadDir(baseDir, dir);
-        }),
-        pattern: loadOpts.pattern,
-        ignore: loadOpts.ignore,
-      });
+    if (loadOpts.disableAutoLoad) return;
+
+    // auto load cache next time when loadDirectory invoked
+    if (ContainerLoader.parentDefinitionMetadata) {
+      this.applicationContext.restoreDefinitions(
+        ContainerLoader.parentDefinitionMetadata
+      );
+      return;
     }
+
+    // use baseDir in parameter first
+    const baseDir = loadOpts.baseDir || this.baseDir;
+    const defaultLoadDir = this.isTsMode ? [baseDir] : [];
+    this.applicationContext.load({
+      loadDir: (loadOpts.loadDir || defaultLoadDir).map(dir => {
+        return buildLoadDir(baseDir, dir);
+      }),
+      pattern: loadOpts.pattern,
+      ignore: loadOpts.ignore,
+    });
 
     if (this.preloadModules && this.preloadModules.length) {
       for (const preloadModule of this.preloadModules) {

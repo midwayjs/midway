@@ -216,6 +216,7 @@ export const REQUEST_OBJ_CTX_KEY = '_req_ctx';
 export interface IContainerConfiguration {
   namespace: string;
   packageName: string;
+  newVersion: boolean;
   addLoadDir(dir: string);
   addImports(imports: string[], baseDir?: string);
   addImportObjects(importObjects: any[]);

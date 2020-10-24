@@ -112,15 +112,21 @@ export class MidwayContainer extends Container implements IMidwayContainer {
 
     // load configuration
     for (const [packageName, containerConfiguration] of this.configurationMap) {
-      // main 的需要 skip 掉
-      if (containerConfiguration.namespace === MAIN_MODULE_KEY) {
-        continue;
+      // 老版本 configuration 才加载
+      if (containerConfiguration.newVersion === false) {
+        // main 的需要 skip 掉
+        if (containerConfiguration.namespace === MAIN_MODULE_KEY) {
+          continue;
+        }
+        this.debugLogger(`main:load configuration from ${packageName}`);
+        this.loadConfiguration(opts, containerConfiguration);
       }
-      this.debugLogger(`main:load configuration from ${packageName}`);
-      this.loadConfiguration(opts, containerConfiguration);
     }
     for (const containerConfiguration of this.likeMainConfiguration) {
-      this.loadConfiguration(opts, containerConfiguration);
+      // 老版本 configuration 才加载
+      if (containerConfiguration.newVersion === false) {
+        this.loadConfiguration(opts, containerConfiguration);
+      }
     }
 
     // register ad base config hook

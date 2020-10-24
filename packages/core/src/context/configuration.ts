@@ -28,6 +28,8 @@ export class ContainerConfiguration implements IContainerConfiguration {
   loadDirs: string[] = [];
   loadModules: any[] = [];
   importObjects: object = new Map();
+  // 新版本 configuration
+  newVersion = false;
 
   constructor(container) {
     this.container = container;
@@ -44,6 +46,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
       // for package
       const subContainerConfiguration = this.container.createConfiguration();
       if (typeof importPackage === 'string') {
+        subContainerConfiguration.newVersion = false;
         const subPackageDir = this.resolvePackageBaseDir(
           importPackage,
           baseDir
@@ -56,6 +59,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
           `---------- end load configuration from sub package "${importPackage}" ----------`
         );
       } else if ('Configuration' in importPackage) {
+        subContainerConfiguration.newVersion = true;
         // component is object
         debug(
           '\n---------- start load configuration from submodule" ----------'
@@ -65,6 +69,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
           `---------- end load configuration from sub package "${importPackage}" ----------`
         );
       } else if ('component' in importPackage) {
+        subContainerConfiguration.newVersion = true;
         if (
           (importPackage as IComponentInfo)?.enabledEnvironment?.includes(
             this.container.getCurrentEnv()
