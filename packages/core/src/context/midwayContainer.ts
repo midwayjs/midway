@@ -21,7 +21,7 @@ import {
   isFunction,
 } from '@midwayjs/decorator';
 import { ContainerConfiguration } from './configuration';
-import { FUNCTION_INJECT_KEY } from '..';
+import { FUNCTION_INJECT_KEY, IObjectDefinitionMetadata } from '..';
 import {
   IApplicationContext,
   IConfigService,
@@ -60,6 +60,11 @@ export class MidwayContainer extends Container implements IMidwayContainer {
   likeMainConfiguration: IContainerConfiguration[] = [];
   configService: IConfigService;
   environmentService: IEnvironmentService;
+
+  /**
+   * 单个进程中上一次的 applicationContext 的 registry
+   */
+  static parentDefinitionMetadata: IObjectDefinitionMetadata[];
 
   constructor(
     baseDir: string = process.cwd(),
@@ -105,7 +110,17 @@ export class MidwayContainer extends Container implements IMidwayContainer {
     configuration.load(this.baseDir);
     // loadDir
     this.debugLogger('main:load directory');
-    this.loadDirectory(opts);
+
+    // auto load cache next time when loadDirectory invoked
+    if (MidwayContainer.parentDefinitionMetadata) {
+      this.restoreDefinitions(
+        MidwayContainer.parentDefinitionMetadata
+      );
+    } else {
+      this.loadDirectory(opts);
+      // 保存元信息最新的上下文中，供其他容器复用，减少重复扫描
+      MidwayContainer.parentDefinitionMetadata = this.getDefinitionMetaList();
+    }
 
     this.debugLogger('main:main configuration register import objects');
     this.registerImportObjects(configuration.getImportObjects());

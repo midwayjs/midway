@@ -7,7 +7,7 @@ import {
   listModule,
   listPreloadModule,
 } from '@midwayjs/decorator';
-import { IMidwayContainer, IObjectDefinitionMetadata } from './interface';
+import { IMidwayContainer } from './interface';
 
 function buildLoadDir(baseDir, dir) {
   if (!path.isAbsolute(dir)) {
@@ -22,12 +22,6 @@ export class ContainerLoader {
   isTsMode;
   preloadModules;
   disableConflictCheck: boolean;
-  duplicatedLoader: boolean;
-
-  /**
-   * 单个进程中上一次的 applicationContext 的 registry
-   */
-  static parentDefinitionMetadata: IObjectDefinitionMetadata[];
 
   constructor({
     baseDir,
@@ -39,7 +33,6 @@ export class ContainerLoader {
     this.isTsMode = isTsMode;
     this.preloadModules = preloadModules;
     this.disableConflictCheck = disableConflictCheck;
-    this.duplicatedLoader = false;
   }
 
   initialize() {
@@ -73,14 +66,6 @@ export class ContainerLoader {
 
     if (loadOpts.disableAutoLoad) return;
 
-    // auto load cache next time when loadDirectory invoked
-    if (ContainerLoader.parentDefinitionMetadata) {
-      this.applicationContext.restoreDefinitions(
-        ContainerLoader.parentDefinitionMetadata
-      );
-      return;
-    }
-
     // use baseDir in parameter first
     const baseDir = loadOpts.baseDir || this.baseDir;
     const defaultLoadDir = this.isTsMode ? [baseDir] : [];
@@ -97,9 +82,6 @@ export class ContainerLoader {
         this.applicationContext.bindClass(preloadModule);
       }
     }
-
-    // 保存元信息最新的上下文中，供其他容器复用，减少重复扫描
-    ContainerLoader.parentDefinitionMetadata = this.applicationContext.getDefinitionMetaList();
   }
 
   async refresh() {
