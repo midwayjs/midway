@@ -8,7 +8,7 @@ import {
   saveProviderId,
   isClass,
   isFunction,
-  IComponentInfo,
+  IComponentInfo, listModule,
 } from '@midwayjs/decorator';
 
 import { dirname, isAbsolute, join } from 'path';
@@ -288,10 +288,17 @@ export class ContainerConfiguration implements IContainerConfiguration {
       namespace: this.namespace,
       srcPath: filePath,
     });
-    saveModule(CONFIGURATION_KEY, {
-      target: clzz,
-      namespace: this.namespace,
+
+    const configurationMods = listModule(CONFIGURATION_KEY);
+    const exists = configurationMods.find(mod => {
+      return mod === clzz;
     });
+    if (!exists) {
+      saveModule(CONFIGURATION_KEY, {
+        target: clzz,
+        namespace: this.namespace,
+      });
+    }
   }
 
   getImportDirectory() {
