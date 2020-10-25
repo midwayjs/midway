@@ -189,19 +189,6 @@ export interface IManagedResolverFactoryCreateOptions {
   args?: any;
   namespace?: string;
 }
-/**
- * 提供简化的容器绑定能力
- */
-export interface IContainer extends IApplicationContext {
-  bind<T>(target: T, options?: ObjectDefinitionOptions): void;
-  bind<T>(
-    identifier: ObjectIdentifier,
-    target: T,
-    options?: ObjectDefinitionOptions
-  ): void;
-  createChild(): IContainer;
-  resolve<T>(target: T): T;
-}
 
 export interface ObjectDependencyTree {
   scope: ScopeEnum;
@@ -233,7 +220,15 @@ export interface IContainerConfiguration {
   bindConfigurationClass(clzz: any, filePath?: string);
 }
 
-export interface IMidwayContainer extends IContainer {
+export interface IMidwayContainer extends IApplicationContext {
+  bind<T>(target: T, options?: ObjectDefinitionOptions): void;
+  bind<T>(
+    identifier: ObjectIdentifier,
+    target: T,
+    options?: ObjectDefinitionOptions
+  ): void;
+  createChild(): IMidwayContainer;
+  resolve<T>(target: T): T;
   /**
    * 默认不添加创建的 configuration 到 configurations 数组中
    */

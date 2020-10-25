@@ -1,4 +1,4 @@
-import { Container } from '../../src/context/container';
+import { MidwayContainer as Container } from '../../src/context/midwayContainer';
 import { expect } from 'chai';
 import {
   Grandson,

@@ -13,7 +13,7 @@ import {
 import { ObjectProperties } from '../definitions/properties';
 import { ManagedResolverFactory } from './managedResolverFactory';
 import { NotFoundError } from '../common/notFoundError';
-import { parsePrefix, isPathEqual } from '../common/util';
+import { parsePrefix, isPathEqual } from '../util/';
 
 const PREFIX = '_id_default_';
 

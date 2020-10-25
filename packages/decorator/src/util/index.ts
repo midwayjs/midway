@@ -1,4 +1,6 @@
 import * as util from 'util';
+import * as camelcase from 'camelcase';
+
 const ToString = Function.prototype.toString;
 
 function fnBody(fn) {
@@ -54,4 +56,30 @@ export function sleep(sleepTime = 1000) {
       resolve();
     }, sleepTime);
   });
+}
+
+const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/gm;
+const ARGUMENT_NAMES = /([^\s,]+)/g;
+
+/**
+ * get parameter name from function
+ * @param func
+ */
+export function getParamNames(func): string[] {
+  const fnStr = func.toString().replace(STRIP_COMMENTS, '');
+  let result = fnStr
+    .slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')'))
+    .match(ARGUMENT_NAMES);
+  if (result === null) {
+    result = [];
+  }
+  return result;
+}
+
+/**
+ * 按照框架规则返回类名字
+ * @param name 类名称
+ */
+export function classNamed(name: string) {
+  return camelcase(name);
 }

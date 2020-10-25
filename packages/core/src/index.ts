@@ -39,7 +39,7 @@ export { MidwayRequestContainer } from './context/requestContainer';
 export { BaseFramework } from './baseFramework';
 export * from './context/providerWrapper';
 export * from './common/constants';
-export { safelyGet, safeRequire, parsePrefix } from './common/util';
+export { safelyGet, safeRequire } from './util/';
 export * from './features';
 export * from './util/webRouterParam';
 export { plainToClass, classToPlain } from 'class-transformer';

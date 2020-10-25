@@ -14,7 +14,7 @@ import {
 import { dirname, isAbsolute, join } from 'path';
 import { MAIN_MODULE_KEY, generateProvideId } from '@midwayjs/decorator';
 import { IContainerConfiguration, IMidwayContainer } from '../interface';
-import { isPath, safeRequire } from '../common/util';
+import { isPath, safeRequire } from '../util/';
 import * as util from 'util';
 
 const debug = util.debuglog('midway:container:configuration');

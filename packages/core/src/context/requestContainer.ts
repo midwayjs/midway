@@ -1,14 +1,13 @@
 import { MidwayContainer } from './midwayContainer';
 import { REQUEST_CTX_KEY } from '../interface';
-import { parsePrefix } from '../common/util';
+import { parsePrefix } from '../util/';
 import { PIPELINE_IDENTIFIER } from '@midwayjs/decorator';
 
 export class MidwayRequestContainer extends MidwayContainer {
   private applicationContext: MidwayContainer;
 
   constructor(ctx, applicationContext) {
-    super();
-    this.parent = applicationContext;
+    super(null, applicationContext);
     this.applicationContext = applicationContext;
     // register ctx
     this.registerObject(REQUEST_CTX_KEY, ctx);
