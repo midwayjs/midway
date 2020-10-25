@@ -64,7 +64,7 @@ let containerIdx = 0;
 export class MidwayContainer
   extends BaseApplicationContext
   implements IMidwayContainer {
-  public id: number;
+  public id: string;
   private debugLogger = globalDebugLogger;
   private definitionMetadataList = [];
   protected resolverHandler: ResolverHandler;
@@ -83,7 +83,7 @@ export class MidwayContainer
 
   constructor(baseDir: string = process.cwd(), parent?: IApplicationContext) {
     super(baseDir, parent);
-    this.id = this.createContainerIdx();
+    this.id = '00' + this.createContainerIdx();
   }
 
   protected createContainerIdx() {
