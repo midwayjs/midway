@@ -64,7 +64,7 @@ let containerIdx = 0;
 export class MidwayContainer
   extends BaseApplicationContext
   implements IMidwayContainer {
-  protected id: number;
+  public id: number;
   private debugLogger = globalDebugLogger;
   private definitionMetadataList = [];
   protected resolverHandler: ResolverHandler;
