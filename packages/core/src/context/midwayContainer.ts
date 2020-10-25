@@ -17,7 +17,10 @@ import {
   ALL,
   isAsyncFunction,
   isClass,
-  isFunction, getConstructorInject, TAGGED_PROP, getObjectDefProps,
+  isFunction,
+  getConstructorInject,
+  TAGGED_PROP,
+  getObjectDefProps,
 } from '@midwayjs/decorator';
 import { ContainerConfiguration } from './configuration';
 import { FUNCTION_INJECT_KEY } from '../common/constants';
@@ -27,7 +30,8 @@ import {
   IContainerConfiguration,
   IEnvironmentService,
   ILifeCycle,
-  IMidwayContainer, IObjectDefinitionMetadata,
+  IMidwayContainer,
+  IObjectDefinitionMetadata,
   REQUEST_CTX_KEY,
 } from '../interface';
 import { MidwayConfigService } from '../service/configService';
@@ -55,31 +59,35 @@ const DEFAULT_IGNORE_PATTERN = [
 ];
 
 const globalDebugLogger = util.debuglog('midway:container');
+let containerIdx = 0;
 
-export class MidwayContainer extends BaseApplicationContext implements IMidwayContainer {
-  id = Math.random().toString(10).slice(-5);
-  debugLogger = globalDebugLogger;
-  definitionMetadataList = [];
-  resolverHandler: ResolverHandler;
+export class MidwayContainer
+  extends BaseApplicationContext
+  implements IMidwayContainer {
+  protected id: number;
+  private debugLogger = globalDebugLogger;
+  private definitionMetadataList = [];
+  protected resolverHandler: ResolverHandler;
   // 仅仅用于兼容requestContainer的ctx
-  ctx = {};
-  readyBindModules: Map<string, Set<any>> = new Map();
-  configurationMap: Map<string, IContainerConfiguration> = new Map();
+  private ctx = {};
+  private configurationMap: Map<string, IContainerConfiguration> = new Map();
   // 特殊处理，按照 main 加载
-  likeMainConfiguration: IContainerConfiguration[] = [];
-  configService: IConfigService;
-  environmentService: IEnvironmentService;
+  private likeMainConfiguration: IContainerConfiguration[] = [];
+  public configService: IConfigService;
+  public environmentService: IEnvironmentService;
 
   /**
    * 单个进程中上一次的 applicationContext 的 registry
    */
   static parentDefinitionMetadata: IObjectDefinitionMetadata[];
 
-  constructor(
-    baseDir: string = process.cwd(),
-    parent?: IApplicationContext
-  ) {
+  constructor(baseDir: string = process.cwd(), parent?: IApplicationContext) {
     super(baseDir, parent);
+    this.id = this.createContainerIdx();
+  }
+
+  protected createContainerIdx() {
+    return containerIdx++;
   }
 
   init(): void {
@@ -122,9 +130,7 @@ export class MidwayContainer extends BaseApplicationContext implements IMidwayCo
 
     // auto load cache next time when loadDirectory invoked
     if (MidwayContainer.parentDefinitionMetadata) {
-      this.restoreDefinitions(
-        MidwayContainer.parentDefinitionMetadata
-      );
+      this.restoreDefinitions(MidwayContainer.parentDefinitionMetadata);
     } else {
       this.loadDirectory(opts);
       // 保存元信息最新的上下文中，供其他容器复用，减少重复扫描
@@ -744,5 +750,9 @@ export class MidwayContainer extends BaseApplicationContext implements IMidwayCo
         definition.autowire = true;
       }
     }
+  }
+
+  public getResolverHandler() {
+    return this.resolverHandler;
   }
 }

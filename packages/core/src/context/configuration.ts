@@ -8,7 +8,8 @@ import {
   saveProviderId,
   isClass,
   isFunction,
-  IComponentInfo, listModule,
+  IComponentInfo,
+  listModule,
 } from '@midwayjs/decorator';
 
 import { dirname, isAbsolute, join } from 'path';

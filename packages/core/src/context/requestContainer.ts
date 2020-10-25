@@ -1,12 +1,12 @@
 import { MidwayContainer } from './midwayContainer';
-import { REQUEST_CTX_KEY } from '../interface';
+import { REQUEST_CTX_KEY, IMidwayContainer } from '../interface';
 import { parsePrefix } from '../util/';
 import { PIPELINE_IDENTIFIER } from '@midwayjs/decorator';
 
 export class MidwayRequestContainer extends MidwayContainer {
-  private applicationContext: MidwayContainer;
+  private applicationContext: IMidwayContainer;
 
-  constructor(ctx, applicationContext) {
+  constructor(ctx, applicationContext: IMidwayContainer) {
     super(null, applicationContext);
     this.applicationContext = applicationContext;
     // register ctx
@@ -17,13 +17,17 @@ export class MidwayRequestContainer extends MidwayContainer {
       this.registerObject('logger', ctx.logger);
     }
 
-    const resolverHandler = this.applicationContext.resolverHandler;
+    const resolverHandler = this.applicationContext.getResolverHandler();
     this.beforeEachCreated(
       resolverHandler.beforeEachCreated.bind(resolverHandler)
     );
     this.afterEachCreated(
       resolverHandler.afterEachCreated.bind(resolverHandler)
     );
+  }
+  protected createContainerIdx() {
+    // requestContainer id = -1；
+    return -1;
   }
 
   init() {
@@ -96,10 +100,10 @@ export class MidwayRequestContainer extends MidwayContainer {
   }
 
   get configService() {
-    return this.applicationContext.configService;
+    return this.applicationContext.getConfigService();
   }
 
   get environmentService() {
-    return this.applicationContext.environmentService;
+    return this.applicationContext.getEnvironmentService();
   }
 }

@@ -2,6 +2,7 @@ import { CLASS_KEY_CONSTRUCTOR, getClassMetadata } from '@midwayjs/decorator';
 import { ManagedResolverFactory } from './managedResolverFactory';
 import { MidwayContainer } from './midwayContainer';
 import * as util from 'util';
+import { HandlerFunction, IResolverHandler } from '../interface';
 
 interface FrameworkDecoratorMetadata {
   key: string;
@@ -10,9 +11,7 @@ interface FrameworkDecoratorMetadata {
 
 const debug = util.debuglog('midway:container');
 
-export type HandlerFunction = (handlerKey: string, instance?: any) => any;
-
-export class ResolverHandler {
+export class ResolverHandler implements IResolverHandler {
   private handlerMap: Map<string, HandlerFunction>;
   private resolverFactory: ManagedResolverFactory;
 

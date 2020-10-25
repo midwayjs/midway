@@ -220,6 +220,16 @@ export interface IContainerConfiguration {
   bindConfigurationClass(clzz: any, filePath?: string);
 }
 
+
+export type HandlerFunction = (handlerKey: string, instance?: any) => any;
+
+export interface IResolverHandler {
+  beforeEachCreated(target, constructorArgs: any[], context);
+  afterEachCreated(instance, context, definition);
+  registerHandler(key: string, fn: HandlerFunction);
+  getHandler(key: string);
+}
+
 export interface IMidwayContainer extends IApplicationContext {
   bind<T>(target: T, options?: ObjectDefinitionOptions): void;
   bind<T>(
@@ -238,6 +248,7 @@ export interface IMidwayContainer extends IApplicationContext {
   getConfigService(): IConfigService;
   getEnvironmentService(): IEnvironmentService;
   getCurrentEnv(): string;
+  getResolverHandler(): IResolverHandler;
   addAspect(
     aspectIns: IMethodAspect,
     aspectData: AspectMetadata

@@ -4,17 +4,24 @@ import {
   ObjectIdentifier,
   ReflectResult,
   TagClsMetadata,
-  TagPropsMetadata
+  TagPropsMetadata,
 } from '../interface';
 import {
-  CLASS_KEY_CONSTRUCTOR, INJECT_TAG,
+  CLASS_KEY_CONSTRUCTOR,
+  INJECT_TAG,
   MAIN_MODULE_KEY,
   OBJ_DEF_CLS,
-  PRIVATE_META_DATA_KEY, TAGGED,
-  TAGGED_CLS, TAGGED_PROP,
+  PRIVATE_META_DATA_KEY,
+  TAGGED,
+  TAGGED_CLS,
+  TAGGED_PROP,
 } from './constant';
 
-import { DUPLICATED_INJECTABLE_DECORATOR, DUPLICATED_METADATA, INVALID_DECORATOR_OPERATION } from './errMsg';
+import {
+  DUPLICATED_INJECTABLE_DECORATOR,
+  DUPLICATED_METADATA,
+  INVALID_DECORATOR_OPERATION,
+} from './errMsg';
 import { Metadata } from './metadata';
 import { getParamNames, classNamed } from '../util';
 
@@ -791,7 +798,6 @@ export function getPropertyType(target, propertyKey: string | symbol) {
 export function getMethodReturnTypes(target, propertyKey: string | symbol) {
   return Reflect.getMetadata('design:returntype', target, propertyKey);
 }
-
 
 function _tagParameterOrProperty(
   metadataKey: string,
