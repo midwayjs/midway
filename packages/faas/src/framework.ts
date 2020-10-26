@@ -38,7 +38,7 @@ export class MidwayFaaSFramework extends BaseFramework<
   private lock = new SimpleLock();
   public app: IMidwayFaaSApplication;
 
-  protected async beforeDirectoryLoad(
+  protected async afterContainerInitialize(
     options: Partial<IMidwayBootstrapOptions>
   ) {
     this.logger = options.logger || console;
@@ -75,7 +75,9 @@ export class MidwayFaaSFramework extends BaseFramework<
     this.prepareConfiguration();
   }
 
-  protected async afterInitialize(options: Partial<IMidwayBootstrapOptions>) {
+  protected async afterContainerReady(
+    options: Partial<IMidwayBootstrapOptions>
+  ) {
     this.registerDecorator();
   }
 
@@ -253,7 +255,7 @@ export class MidwayFaaSFramework extends BaseFramework<
     if (!fileDir) {
       fileDir = dirname(resolve(filePath));
     }
-    const container = this.containerLoader.getApplicationContext();
+    const container = this.getApplicationContext();
     const cfg = container.createConfiguration();
     cfg.namespace = namespace;
     cfg.loadConfiguration(require(filePath), fileDir);
@@ -277,13 +279,19 @@ export class MidwayFaaSFramework extends BaseFramework<
   }
 
   private registerDecorator() {
-    this.containerLoader.registerHook(PLUGIN_KEY, (key, target) => {
-      return target[REQUEST_OBJ_CTX_KEY]?.[key] || this.app[key];
-    });
+    this.getApplicationContext().registerDataHandler(
+      PLUGIN_KEY,
+      (key, target) => {
+        return target[REQUEST_OBJ_CTX_KEY]?.[key] || this.app[key];
+      }
+    );
 
-    this.containerLoader.registerHook(LOGGER_KEY, (key, target) => {
-      return target[REQUEST_OBJ_CTX_KEY]?.['logger'] || this.app.getLogger();
-    });
+    this.getApplicationContext().registerDataHandler(
+      LOGGER_KEY,
+      (key, target) => {
+        return target[REQUEST_OBJ_CTX_KEY]?.['logger'] || this.app.getLogger();
+      }
+    );
   }
 
   private async loadMiddleware(middlewares) {
@@ -303,6 +311,8 @@ export class MidwayFaaSFramework extends BaseFramework<
 
     return newMiddlewares;
   }
+
+  async applicationInitialize(options: IMidwayBootstrapOptions) {}
 }
 
 function covertId(cls, method) {

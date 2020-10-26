@@ -277,9 +277,7 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<
     return this;
   }
 
-  protected async afterDirectoryLoad(
-    options: Partial<IMidwayBootstrapOptions>
-  ) {
+  async applicationInitialize(options: Partial<IMidwayBootstrapOptions>) {
     this.app = new koa<
       DefaultState,
       IMidwayKoaContext
@@ -304,7 +302,7 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<
     });
   }
 
-  protected async afterInitialize(
+  protected async afterContainerReady(
     options: Partial<IMidwayBootstrapOptions>
   ): Promise<void> {
     await this.loadMidwayController();

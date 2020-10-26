@@ -36,7 +36,7 @@ export class MidwayRabbitMQFramework extends BaseFramework<
     return this;
   }
 
-  protected async afterDirectoryLoad(options) {
+  async applicationInitialize(options) {
     this.app = (new RabbitMQServer(
       this.configurationOptions
     ) as unknown) as IMidwayRabbitMQApplication;
@@ -44,7 +44,7 @@ export class MidwayRabbitMQFramework extends BaseFramework<
     await this.app.init();
   }
 
-  protected async afterInitialize(
+  protected async afterContainerReady(
     options: Partial<IMidwayBootstrapOptions>
   ): Promise<void> {
     await this.loadSubscriber();

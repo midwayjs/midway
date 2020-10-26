@@ -70,14 +70,14 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
     return this;
   }
 
-  protected async beforeInitialize(options: Partial<IMidwayBootstrapOptions>) {
+  protected async beforeContainerInitialize(
+    options: Partial<IMidwayBootstrapOptions>
+  ) {
     options.ignore = options.ignore || [];
     options.ignore.push('**/app/extend/**');
   }
 
-  protected async afterDirectoryLoad(
-    options: Partial<IMidwayBootstrapOptions>
-  ) {
+  async applicationInitialize(options: Partial<IMidwayBootstrapOptions>) {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
     if (this.isTsMode) {
@@ -95,17 +95,20 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
     }
 
     // register plugin
-    this.containerLoader.registerHook(PLUGIN_KEY, (key, target) => {
-      return this.app[key];
-    });
+    this.getApplicationContext().registerDataHandler(
+      PLUGIN_KEY,
+      (key, target) => {
+        return this.app[key];
+      }
+    );
 
     // register config
-    this.containerLoader.registerHook(CONFIG_KEY, key => {
+    this.getApplicationContext().registerDataHandler(CONFIG_KEY, key => {
       return key ? safelyGet(key, this.app.config) : this.app.config;
     });
 
     // register logger
-    this.containerLoader.registerHook(LOGGER_KEY, key => {
+    this.getApplicationContext().registerDataHandler(LOGGER_KEY, key => {
       if (this.app.getLogger) {
         return this.app.getLogger(key);
       }
@@ -113,7 +116,7 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
     });
   }
 
-  protected async afterInitialize(
+  protected async afterContainerReady(
     options: Partial<IMidwayBootstrapOptions>
   ): Promise<void> {}
 

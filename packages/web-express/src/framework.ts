@@ -55,9 +55,7 @@ export class MidwayExpressFramework extends BaseFramework<
     return this;
   }
 
-  protected async afterDirectoryLoad(
-    options: Partial<IMidwayBootstrapOptions>
-  ) {
+  async applicationInitialize(options: Partial<IMidwayBootstrapOptions>) {
     this.app = (express() as unknown) as IMidwayExpressApplication;
     this.defineApplicationProperties({
       generateController: (controllerMapping: string) => {
@@ -82,7 +80,7 @@ export class MidwayExpressFramework extends BaseFramework<
     });
   }
 
-  protected async afterInitialize(
+  protected async afterContainerReady(
     options: Partial<IMidwayBootstrapOptions>
   ): Promise<void> {
     await this.loadMidwayController();
