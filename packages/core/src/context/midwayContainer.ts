@@ -623,9 +623,6 @@ export class MidwayContainer
       // 加载配置
       await this.configService.load();
     }
-
-    // 增加 lifecycle 支持
-    await this.loadAndReadyLifeCycles();
   }
 
   async stop(): Promise<void> {
@@ -692,38 +689,6 @@ export class MidwayContainer
       containerConfiguration.getImportObjects(),
       containerConfiguration.namespace
     );
-  }
-
-  private async loadAndReadyLifeCycles() {
-    const cycles: Array<{ target: any; namespace: string }> = listModule(
-      CONFIGURATION_KEY
-    );
-    this.debugLogger('load lifecycle length => %s.', cycles && cycles.length);
-    for (const cycle of cycles) {
-      const providerId = getProviderId(cycle.target);
-      this.debugLogger('ready lifecycle id => %s.', providerId);
-      const inst = await this.getAsync<ILifeCycle>(providerId);
-      if (typeof inst.onReady === 'function') {
-        /**
-         * 让组件能正确获取到 bind 之后 registerObject 的对象有三个方法
-         * 1、在 load 之后修改 bind，不太可行
-         * 2、每次 getAsync 的时候，去掉 namespace，同时还要查找当前全局的变量，性能差
-         * 3、一般只会在 onReady 的地方执行 registerObject（否则没有全局的意义），这个取巧的办法就是 onReady 传入一个代理，其中绑定当前的 namespace
-         */
-        await inst.onReady(
-          new Proxy(this, {
-            get: function (target, prop, receiver) {
-              if (prop === 'getCurrentNamespace' && cycle.namespace) {
-                return () => {
-                  return cycle.namespace;
-                };
-              }
-              return Reflect.get(target, prop, receiver);
-            },
-          })
-        );
-      }
-    }
   }
 
   private convertOptionsToDefinition(

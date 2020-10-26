@@ -1,5 +1,6 @@
 import {
   IConfigurationOptions,
+  ILifeCycle,
   IMidwayApplication,
   IMidwayBootstrapOptions,
   IMidwayContainer,
@@ -11,7 +12,9 @@ import { MidwayContainer } from './context/midwayContainer';
 import {
   APPLICATION_KEY,
   ASPECT_KEY,
+  CONFIGURATION_KEY,
   getClassMetadata,
+  getProviderId,
   IMethodAspect,
   listModule,
   listPreloadModule,
@@ -134,7 +137,11 @@ export abstract class BaseFramework<
     }
 
     await this.applicationContext.ready();
+    // lifecycle 支持
+    await this.loadLifeCycles();
+    // 预加载模块支持
     await this.loadPreloadModule();
+    // 切面支持
     await this.loadAspect();
   }
 
@@ -229,6 +236,40 @@ export abstract class BaseFramework<
   protected async afterContainerReady(
     options: Partial<IMidwayBootstrapOptions>
   ): Promise<void> {}
+
+  public async loadLifeCycles() {
+    // agent 不加载生命周期
+    if (this.app.getProcessType() === MidwayProcessTypeEnum.AGENT) return;
+    const cycles: Array<{ target: any; namespace: string }> = listModule(
+      CONFIGURATION_KEY
+    );
+    for (const cycle of cycles) {
+      const providerId = getProviderId(cycle.target);
+      const inst = await this.getApplicationContext().getAsync<ILifeCycle>(
+        providerId
+      );
+      if (typeof inst.onReady === 'function') {
+        /**
+         * 让组件能正确获取到 bind 之后 registerObject 的对象有三个方法
+         * 1、在 load 之后修改 bind，不太可行
+         * 2、每次 getAsync 的时候，去掉 namespace，同时还要查找当前全局的变量，性能差
+         * 3、一般只会在 onReady 的地方执行 registerObject（否则没有全局的意义），这个取巧的办法就是 onReady 传入一个代理，其中绑定当前的 namespace
+         */
+        await inst.onReady(
+          new Proxy(this.getApplicationContext(), {
+            get: function (target, prop, receiver) {
+              if (prop === 'getCurrentNamespace' && cycle.namespace) {
+                return () => {
+                  return cycle.namespace;
+                };
+              }
+              return Reflect.get(target, prop, receiver);
+            },
+          })
+        );
+      }
+    }
+  }
 
   /**
    * load preload module for container

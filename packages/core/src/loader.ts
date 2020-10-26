@@ -1,13 +1,13 @@
 import * as path from 'path';
 import { MidwayContainer } from './context/midwayContainer';
 import {
-  ASPECT_KEY,
-  getClassMetadata,
+  ASPECT_KEY, CONFIGURATION_KEY,
+  getClassMetadata, getProviderId,
   IMethodAspect,
   listModule,
   listPreloadModule,
 } from '@midwayjs/decorator';
-import { IMidwayContainer } from './interface';
+import { ILifeCycle, IMidwayContainer } from './interface';
 
 function buildLoadDir(baseDir, dir) {
   if (!path.isAbsolute(dir)) {
@@ -89,6 +89,7 @@ export class ContainerLoader {
 
   async refresh() {
     await this.applicationContext.ready();
+    await this.loadLifeCycles();
 
     // some common decorator implementation
     const modules = listPreloadModule();
@@ -126,5 +127,38 @@ export class ContainerLoader {
 
   async stop() {
     await this.applicationContext.stop();
+  }
+
+  async loadLifeCycles() {
+    // agent 不加载生命周期
+    const cycles: Array<{ target: any; namespace: string }> = listModule(
+      CONFIGURATION_KEY
+    );
+    for (const cycle of cycles) {
+      const providerId = getProviderId(cycle.target);
+      const inst = await this.getApplicationContext().getAsync<ILifeCycle>(
+        providerId
+      );
+      if (typeof inst.onReady === 'function') {
+        /**
+         * 让组件能正确获取到 bind 之后 registerObject 的对象有三个方法
+         * 1、在 load 之后修改 bind，不太可行
+         * 2、每次 getAsync 的时候，去掉 namespace，同时还要查找当前全局的变量，性能差
+         * 3、一般只会在 onReady 的地方执行 registerObject（否则没有全局的意义），这个取巧的办法就是 onReady 传入一个代理，其中绑定当前的 namespace
+         */
+        await inst.onReady(
+          new Proxy(this.getApplicationContext(), {
+            get: function (target, prop, receiver) {
+              if (prop === 'getCurrentNamespace' && cycle.namespace) {
+                return () => {
+                  return cycle.namespace;
+                };
+              }
+              return Reflect.get(target, prop, receiver);
+            },
+          })
+        );
+      }
+    }
   }
 }

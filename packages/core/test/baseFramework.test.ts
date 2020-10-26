@@ -1,4 +1,10 @@
-import { APPLICATION_KEY, Provide, } from '@midwayjs/decorator';
+import {
+  APPLICATION_KEY,
+  CONFIGURATION_KEY,
+  LIFECYCLE_IDENTIFIER_PREFIX,
+  Provide,
+  resetModule,
+} from '@midwayjs/decorator';
 import * as assert from 'assert';
 import * as path from 'path';
 import {
@@ -9,6 +15,7 @@ import {
 import * as mm from 'mm';
 import sinon = require('sinon');
 import { IMidwayApplication, IMidwayBootstrapOptions, MidwayFrameworkType } from '../src/interface';
+import { LifeCycleTest, LifeCycleTest1, TestBinding } from "./fixtures/lifecycle";
 
 type mockApp = {} & IMidwayApplication;
 type mockAppOptions = {};
@@ -92,8 +99,8 @@ describe('/test/baseFramework.test.ts', () => {
 
     const baseService: any = await appCtx.getAsync('baseService');
     assert((await baseService.getInformation()) === 'harry,one article');
-    assert.equal(baseService.getAaa(), 123);
-    assert.equal(baseService.getCcc(), 'mock');
+    assert.strictEqual(baseService.getAaa(), 123);
+    assert.strictEqual(baseService.getCcc(), 'mock');
   });
 
   it('should load config.*.ts by default env', async () => {
@@ -502,6 +509,50 @@ describe('/test/baseFramework.test.ts', () => {
 
     const value = applicationContext.getConfigService().getConfiguration();
     expect(value['a']).toEqual(1);
+    mm.restore();
+  });
+
+  it('lifecycle should be ok', async () => {
+    const framework = new MockFramework();
+    await framework.initialize({
+      baseDir: path.join(
+        __dirname,
+        './fixtures/base-app/src'
+      ),
+    });
+
+    const container = framework.getApplicationContext();
+    container.registerDataHandler(APPLICATION_KEY, () => {
+      return { hello: 123 };
+    });
+    const cfg = container.createConfiguration();
+    container.bind(TestBinding);
+    cfg.bindConfigurationClass(LifeCycleTest);
+    cfg.bindConfigurationClass(LifeCycleTest1);
+
+    await framework.loadLifeCycles();
+
+    const aa = await container.getAsync<LifeCycleTest>(LIFECYCLE_IDENTIFIER_PREFIX + 'lifeCycleTest');
+    expect(aa.ts).toEqual('hello');
+    expect(aa.ready).toBeTruthy();
+    // container.registerObject('hellotest111', '12312312');
+    expect(container.get('hellotest111')).toEqual('12312312');
+
+    const aa1 = await container.getAsync<LifeCycleTest1>(LIFECYCLE_IDENTIFIER_PREFIX + 'lifeCycleTest1');
+    expect(aa1.tts).toEqual('hello');
+    expect(aa1.ready).toBeTruthy();
+
+    const callback = sinon.spy();
+    mm(console, 'log', (m) => {
+      callback(m);
+    });
+
+    expect(container.registry.hasObject(LIFECYCLE_IDENTIFIER_PREFIX + 'lifeCycleTest')).toBeTruthy();
+    await container.stop();
+    expect(container.registry.hasObject(LIFECYCLE_IDENTIFIER_PREFIX + 'lifeCycleTest')).toBeFalsy();
+    expect(callback.withArgs('on stop').calledOnce).toBeTruthy();
+
+    resetModule(CONFIGURATION_KEY);
     mm.restore();
   });
 });
