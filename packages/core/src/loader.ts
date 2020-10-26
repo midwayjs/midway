@@ -16,6 +16,9 @@ function buildLoadDir(baseDir, dir) {
   return dir;
 }
 
+/**
+ * @deprecated
+ */
 export class ContainerLoader {
   baseDir;
   applicationContext: MidwayContainer;

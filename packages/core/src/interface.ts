@@ -231,12 +231,19 @@ export interface IResolverHandler {
 }
 
 export interface IMidwayContainer extends IApplicationContext {
+  load(opts: {
+    loadDir: string | string[];
+    pattern?: string | string[];
+    ignore?: string | string[];
+  });
   bind<T>(target: T, options?: ObjectDefinitionOptions): void;
   bind<T>(
     identifier: ObjectIdentifier,
     target: T,
     options?: ObjectDefinitionOptions
   ): void;
+  bindClass(exports, namespace?: string, filePath?: string);
+  registerDataHandler(handlerType: string, handler: (...args) => any);
   createChild(): IMidwayContainer;
   resolve<T>(target: T): T;
   /**
@@ -307,15 +314,17 @@ export interface IMidwayContext {
 export interface IMidwayCoreApplication extends IMidwayApplication {}
 
 export interface IMidwayBootstrapOptions {
-  logger: IMidwayLogger;
+  logger?: IMidwayLogger;
   baseDir: string;
-  appDir: string;
-  preloadModules: string[];
-  disableAutoLoad: boolean;
-  pattern: string[];
-  ignore: string[];
-  isTsMode: boolean;
-  middleware: string[];
+  appDir?: string;
+  preloadModules?: any[];
+  disableAutoLoad?: boolean;
+  pattern?: string[];
+  ignore?: string[];
+  isTsMode?: boolean;
+  middleware?: string[];
+  loadDir?: string[];
+  disableConflictCheck?: boolean;
 }
 
 export interface IConfigurationOptions {}

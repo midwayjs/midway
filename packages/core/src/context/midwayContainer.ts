@@ -79,7 +79,7 @@ export class MidwayContainer
   /**
    * 单个进程中上一次的 applicationContext 的 registry
    */
-  static parentDefinitionMetadata: IObjectDefinitionMetadata[];
+  static parentDefinitionMetadata: Map<string, IObjectDefinitionMetadata[]>;
 
   constructor(baseDir: string = process.cwd(), parent?: IApplicationContext) {
     super(baseDir, parent);
@@ -115,7 +115,7 @@ export class MidwayContainer
     loadDir: string | string[];
     pattern?: string | string[];
     ignore?: string | string[];
-  }) {
+  } = { loadDir: [] }) {
     // 添加全局白名单
     this.midwayIdentifiers.push(PIPELINE_IDENTIFIER);
 
@@ -129,12 +129,20 @@ export class MidwayContainer
     this.debugLogger('main:load directory');
 
     // auto load cache next time when loadDirectory invoked
-    if (MidwayContainer.parentDefinitionMetadata) {
-      this.restoreDefinitions(MidwayContainer.parentDefinitionMetadata);
+    let loadDirKey = this.baseDir;
+    const loadDirs = [].concat(opts.loadDir || []);
+    MidwayContainer.parentDefinitionMetadata = MidwayContainer.parentDefinitionMetadata || new Map();
+
+    if (loadDirs.length > 0) {
+      loadDirKey = loadDirs.join('-');
+    }
+
+    if (MidwayContainer.parentDefinitionMetadata.has(loadDirKey)) {
+      this.restoreDefinitions(MidwayContainer.parentDefinitionMetadata.get(loadDirKey));
     } else {
       this.loadDirectory(opts);
       // 保存元信息最新的上下文中，供其他容器复用，减少重复扫描
-      MidwayContainer.parentDefinitionMetadata = this.getDefinitionMetaList();
+      MidwayContainer.parentDefinitionMetadata.set(loadDirKey, this.getDefinitionMetaList());
     }
 
     this.debugLogger('main:main configuration register import objects');
@@ -413,7 +421,7 @@ export class MidwayContainer
     return new MidwayContainer(baseDir || this.baseDir, this);
   }
 
-  registerDataHandler(handlerType: string, handler: (handlerKey) => any) {
+  registerDataHandler(handlerType: string, handler: (...args) => any) {
     this.resolverHandler.registerHandler(handlerType, handler);
   }
 
