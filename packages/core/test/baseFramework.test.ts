@@ -46,7 +46,7 @@ describe('/test/baseFramework.test.ts', () => {
     MidwayContainer.parentDefinitionMetadata = null;
   });
 
-  it('should load js directory and auto disable', async () => {
+  it.skip('should load js directory and auto disable', async () => {
     const framework = new MockFramework();
     await framework.initialize({
       baseDir: path.join(__dirname, './fixtures/js-app-loader'),

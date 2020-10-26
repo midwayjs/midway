@@ -111,11 +111,13 @@ export class MidwayContainer
    * load directory and traverse file to find bind class
    * @param opts
    */
-  load(opts: {
-    loadDir: string | string[];
-    pattern?: string | string[];
-    ignore?: string | string[];
-  } = { loadDir: [] }) {
+  load(
+    opts: {
+      loadDir: string | string[];
+      pattern?: string | string[];
+      ignore?: string | string[];
+    } = { loadDir: [] }
+  ) {
     // 添加全局白名单
     this.midwayIdentifiers.push(PIPELINE_IDENTIFIER);
 
@@ -131,18 +133,24 @@ export class MidwayContainer
     // auto load cache next time when loadDirectory invoked
     let loadDirKey = this.baseDir;
     const loadDirs = [].concat(opts.loadDir || []);
-    MidwayContainer.parentDefinitionMetadata = MidwayContainer.parentDefinitionMetadata || new Map();
+    MidwayContainer.parentDefinitionMetadata =
+      MidwayContainer.parentDefinitionMetadata || new Map();
 
     if (loadDirs.length > 0) {
       loadDirKey = loadDirs.join('-');
     }
 
     if (MidwayContainer.parentDefinitionMetadata.has(loadDirKey)) {
-      this.restoreDefinitions(MidwayContainer.parentDefinitionMetadata.get(loadDirKey));
+      this.restoreDefinitions(
+        MidwayContainer.parentDefinitionMetadata.get(loadDirKey)
+      );
     } else {
       this.loadDirectory(opts);
       // 保存元信息最新的上下文中，供其他容器复用，减少重复扫描
-      MidwayContainer.parentDefinitionMetadata.set(loadDirKey, this.getDefinitionMetaList());
+      MidwayContainer.parentDefinitionMetadata.set(
+        loadDirKey,
+        this.getDefinitionMetaList()
+      );
     }
 
     this.debugLogger('main:main configuration register import objects');

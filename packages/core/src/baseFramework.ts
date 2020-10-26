@@ -14,7 +14,7 @@ import {
   getClassMetadata,
   IMethodAspect,
   listModule,
-  listPreloadModule
+  listPreloadModule,
 } from '@midwayjs/decorator';
 import { isAbsolute, join } from 'path';
 
@@ -41,9 +41,7 @@ export abstract class BaseFramework<
     return this;
   }
 
-  public async initialize(
-    options: IMidwayBootstrapOptions
-  ): Promise<void> {
+  public async initialize(options: IMidwayBootstrapOptions): Promise<void> {
     this.baseDir = options.baseDir;
     this.appDir = options.appDir;
 
@@ -90,7 +88,8 @@ export abstract class BaseFramework<
 
   protected async containerInitialize(options: IMidwayBootstrapOptions) {
     this.applicationContext = new MidwayContainer(this.baseDir, undefined);
-    this.applicationContext.disableConflictCheck = options.disableConflictCheck;
+    this.applicationContext.disableConflictCheck =
+      options.disableConflictCheck || true;
     this.applicationContext.registerObject('baseDir', this.baseDir);
     this.applicationContext.registerObject('appDir', this.appDir);
     this.applicationContext.registerObject('isTsMode', this.isTsMode);
@@ -165,7 +164,7 @@ export abstract class BaseFramework<
     for (const aspectData of aspectDataList) {
       const aspectIns = await this.getApplicationContext().getAsync<
         IMethodAspect
-        >(aspectData.aspectModule);
+      >(aspectData.aspectModule);
       await this.getApplicationContext().addAspect(aspectIns, aspectData);
     }
   }
