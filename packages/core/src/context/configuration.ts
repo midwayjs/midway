@@ -290,9 +290,10 @@ export class ContainerConfiguration implements IContainerConfiguration {
       srcPath: filePath,
     });
 
+    // configuration 手动绑定去重
     const configurationMods = listModule(CONFIGURATION_KEY);
     const exists = configurationMods.find(mod => {
-      return mod === clzz;
+      return mod.target === clzz;
     });
     if (!exists) {
       saveModule(CONFIGURATION_KEY, {
