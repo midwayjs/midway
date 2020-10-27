@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.18](https://github.com/midwayjs/midway/compare/v2.3.17...v2.3.18) (2020-10-27)
+
+
+### Bug Fixes
+
+* configuration inject plugin and more in production environment ([#680](https://github.com/midwayjs/midway/issues/680)) ([41bce5d](https://github.com/midwayjs/midway/commit/41bce5d8a60a6fde61ff62794612eecff2e260ed))
+
+
+
+
+
 ## [2.3.17](https://github.com/midwayjs/midway/compare/v2.3.16...v2.3.17) (2020-10-22)
 
 **Note:** Version bump only for package @midwayjs/rabbitmq
