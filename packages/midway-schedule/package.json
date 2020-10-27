@@ -3,9 +3,6 @@
   "version": "2.3.18-beta.4",
   "description": "",
   "main": "index.js",
-  "directories": {
-    "lib": "lib"
-  },
   "eggPlugin": {
     "name": "schedulePlus",
     "optionalDependencies": [
@@ -13,7 +10,7 @@
     ]
   },
   "scripts": {
-    "build": "midway-bin build -c",
+    "build": "../../node_modules/.bin/tsc",
     "test": "NODE_ENV=unittest midway-bin test --ts"
   },
   "keywords": [],
@@ -31,7 +28,6 @@
   },
   "files": [
     "*.d.ts",
-    "*.map",
     "agent.js",
     "app.js"
   ],
