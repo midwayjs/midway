@@ -2,12 +2,17 @@ import {
   IMidwayBootstrapOptions,
   MidwayFrameworkType,
   MidwayProcessTypeEnum,
+  safelyGet,
 } from '@midwayjs/core';
-import { ControllerOption } from '@midwayjs/decorator';
+import {
+  ControllerOption,
+  CONFIG_KEY,
+  LOGGER_KEY,
+  PLUGIN_KEY,
+} from '@midwayjs/decorator';
 import { IMidwayWebConfigurationOptions } from './interface';
 import { MidwayKoaBaseFramework } from '@midwayjs/koa';
 import { EggRouter } from '@eggjs/router';
-import { resolve } from 'path';
 import { Application, Context, Router } from 'egg';
 
 export class MidwayWebFramework extends MidwayKoaBaseFramework<
@@ -21,74 +26,99 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
     priority: number;
     router: Router;
   }> = [];
-  public isClusterMode = false;
 
   public configure(
     options: IMidwayWebConfigurationOptions
   ): MidwayWebFramework {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const self = this;
     this.configurationOptions = options;
     if (options.typescript === false) {
       this.isTsMode = false;
     }
 
     this.app = options.app;
-    this.isClusterMode = !!this.app;
+
+    this.defineApplicationProperties({
+      generateController: (controllerMapping: string) => {
+        return this.generateController(controllerMapping);
+      },
+
+      generateMiddleware: async (middlewareId: string) => {
+        return this.generateMiddleware(middlewareId);
+      },
+
+      getProcessType: () => {
+        if (this.configurationOptions.processType === 'application') {
+          return MidwayProcessTypeEnum.APPLICATION;
+        }
+        if (this.configurationOptions.processType === 'agent') {
+          return MidwayProcessTypeEnum.AGENT;
+        }
+
+        // TODO 单进程模式下区分进程类型??
+        return MidwayProcessTypeEnum.APPLICATION;
+      },
+    });
+
+    Object.defineProperty(this.app, 'applicationContext', {
+      get() {
+        return self.getApplicationContext();
+      },
+    });
+
     return this;
   }
 
-  protected async beforeInitialize(options: Partial<IMidwayBootstrapOptions>) {
+  protected async beforeContainerInitialize(
+    options: Partial<IMidwayBootstrapOptions>
+  ) {
     options.ignore = options.ignore || [];
     options.ignore.push('**/app/extend/**');
   }
 
-  protected async afterDirectoryLoad(
-    options: Partial<IMidwayBootstrapOptions>
-  ) {
+  async applicationInitialize(options: Partial<IMidwayBootstrapOptions>) {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
     if (this.isTsMode) {
       process.env.EGG_TYPESCRIPT = 'true';
     }
-
-    if (!this.app) {
-      const { start } = require('egg');
-      this.app = await start({
-        baseDir: options.appDir,
-        ignoreWarning: true,
-        framework: resolve(__dirname, 'application'),
-        plugins: this.configurationOptions.plugins,
-        webFramework: this,
-        isClusterMode: this.isClusterMode,
-        mode: 'single',
-        isTsMode: this.isTsMode,
-      });
-
-      this.configurationOptions.globalConfig = this.app.config;
-    }
-
     if (this.configurationOptions.globalConfig) {
       this.getApplicationContext()
         .getConfigService()
         .addObject(this.configurationOptions.globalConfig);
-
       Object.defineProperty(this.app, 'config', {
         get() {
           return self.getConfiguration();
         },
       });
-      // this.app.config = this.getConfiguration();
     }
 
-    this.defineApplicationProperties(this.app);
+    // register plugin
+    this.getApplicationContext().registerDataHandler(
+      PLUGIN_KEY,
+      (key, target) => {
+        return this.app[key];
+      }
+    );
+
+    // register config
+    this.getApplicationContext().registerDataHandler(CONFIG_KEY, key => {
+      return key ? safelyGet(key, this.app.config) : this.app.config;
+    });
+
+    // register logger
+    this.getApplicationContext().registerDataHandler(LOGGER_KEY, key => {
+      if (this.app.getLogger) {
+        return this.app.getLogger(key);
+      }
+      return this.app.coreLogger;
+    });
   }
 
-  protected async afterInitialize(
+  protected async afterContainerReady(
     options: Partial<IMidwayBootstrapOptions>
-  ): Promise<void> {
-    if (this.configurationOptions.processType !== 'agent') {
-      await this.loadMidwayController();
-    }
-  }
+  ): Promise<void> {}
 
   public getApplication(): Application {
     return this.app;
@@ -98,16 +128,14 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
     return MidwayFrameworkType.WEB;
   }
 
-  public async run(): Promise<void> {
-    if (this.configurationOptions.port) {
-      new Promise(resolve => {
-        this.app.listen(this.configurationOptions.port, () => {
-          resolve();
-        });
-      });
-    }
-  }
+  /**
+   * 这个方法 egg-cluster 不走，只有单进程模式使用 @midwayjs/bootstrap 才会执行
+   */
+  public async run(): Promise<void> {}
 
+  /**
+   * 这个方法 egg-cluster 不走，只有单进程模式使用 @midwayjs/bootstrap 才会执行
+   */
   protected async beforeStop(): Promise<void> {
     await this.app.close();
   }
@@ -126,45 +154,5 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
       return router;
     }
     return null;
-  }
-
-  protected defineApplicationProperties(app): Application {
-    return Object.assign(app, {
-      getBaseDir: () => {
-        return this.baseDir;
-      },
-
-      getAppDir: () => {
-        return this.appDir;
-      },
-
-      getEnv: () => {
-        return this.getApplicationContext()
-          .getEnvironmentService()
-          .getCurrentEnvironment();
-      },
-
-      getConfig: (key?: string) => {
-        return this.getApplicationContext()
-          .getConfigService()
-          .getConfiguration(key);
-      },
-
-      getFrameworkType: () => {
-        return this.getFrameworkType();
-      },
-
-      getProcessType: () => {
-        if (this.configurationOptions.processType === 'application') {
-          return MidwayProcessTypeEnum.APPLICATION;
-        }
-        if (this.configurationOptions.processType === 'agent') {
-          return MidwayProcessTypeEnum.AGENT;
-        }
-
-        // TODO 单进程模式下区分进程类型??
-        return MidwayProcessTypeEnum.APPLICATION;
-      },
-    });
   }
 }

@@ -1,4 +1,5 @@
 import { provide, inject, controller, config, get, post, query, param, files, file, session, body, headers } from '../../../../../../../src';
+import { ALL } from '@midwayjs/decorator';
 
 import * as path from 'path';
 import * as fs from 'fs';
@@ -16,12 +17,12 @@ export class ParamController {
   ctx: any;
 
   @get('/query')
-  async query(@query() query) {
-      this.ctx.body = query;
+  async query(@query(ALL) query) {
+    this.ctx.body = query;
   }
 
   @get('/:id/test')
-  async test(@query() query, @param('id') id) {
+  async test(@query(ALL) query, @param('id') id) {
     const data = {
         id,
         ...query
@@ -35,7 +36,7 @@ export class ParamController {
   }
 
   @get('/param/:id/test/:userId')
-  async param(@param() param) {
+  async param(@param(ALL) param) {
     // service,hello,a,b
     this.ctx.body = param;
   }
@@ -46,7 +47,7 @@ export class ParamController {
   }
 
   @post('/body')
-  async body(@body() body) {
+  async body(@body(ALL) body) {
     this.ctx.body = body;
   }
 
@@ -81,13 +82,13 @@ export class ParamController {
   }
 
   @get('/session')
-  async session(@session() session) {
+  async session(@session(ALL) session) {
     // service,hello,a,b
     this.ctx.body = session;
   }
 
   @get('/headers')
-  async header(@headers() headers) {
+  async header(@headers(ALL) headers) {
     // service,hello,a,b
     this.ctx.body = headers.host.substring(0, 3);
   }

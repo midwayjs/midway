@@ -1,9 +1,10 @@
 // src/configuration.ts
-import { Configuration, Config } from '@midwayjs/decorator';
+import { Configuration, Config, App } from '@midwayjs/decorator';
+import { join } from 'path';
 
 @Configuration({
   importConfigs: [
-    './config/'
+    join(__dirname, './config/')
   ],
 })
 export class ContainerLifeCycle {
@@ -11,7 +12,11 @@ export class ContainerLifeCycle {
   @Config()
   mock;
 
+  @App()
+  app;
+
   onReady() {
+    console.log(this.app);
     console.log(this.mock);
   }
 }

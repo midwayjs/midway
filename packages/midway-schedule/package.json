@@ -1,11 +1,8 @@
 {
   "name": "midway-schedule",
-  "version": "2.3.17",
+  "version": "2.3.18-beta.6",
   "description": "",
   "main": "index.js",
-  "directories": {
-    "lib": "lib"
-  },
   "eggPlugin": {
     "name": "schedulePlus",
     "optionalDependencies": [
@@ -13,17 +10,17 @@
     ]
   },
   "scripts": {
-    "build": "midway-bin build -c",
+    "build": "../../node_modules/.bin/tsc",
     "test": "NODE_ENV=unittest midway-bin test --ts"
   },
   "keywords": [],
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/cli": "^1.0.0",
-    "@midwayjs/mock": "^2.3.17"
+    "@midwayjs/mock": "^2.3.18-beta.6"
   },
   "dependencies": {
-    "@midwayjs/decorator": "^2.3.17",
+    "@midwayjs/decorator": "^2.3.18-beta.6",
     "is-type-of": "^1.2.1"
   },
   "engines": {
@@ -31,9 +28,8 @@
   },
   "files": [
     "*.d.ts",
-    "*.map",
     "agent.js",
     "app.js"
   ],
-  "gitHead": "44c0803552baf265debed8a11a860988b7e07a85"
+  "gitHead": "a603d2348d6141f8f723901498f03a162a037708"
 }

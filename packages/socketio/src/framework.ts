@@ -26,6 +26,7 @@ export class MidwaySocketIOFramework extends BaseFramework<
   IMidwaySocketIOApplication,
   IMidwaySocketIOConfigurationOptions
 > {
+  applicationInitialize(options: IMidwayBootstrapOptions) {}
   public app: IMidwaySocketIOApplication;
 
   public configure(
@@ -35,7 +36,7 @@ export class MidwaySocketIOFramework extends BaseFramework<
     return this;
   }
 
-  protected async afterDirectoryLoad(
+  protected async afterContainerDirectoryLoad(
     options: Partial<IMidwayBootstrapOptions>
   ) {
     if (this.configurationOptions.webServer) {
@@ -59,7 +60,7 @@ export class MidwaySocketIOFramework extends BaseFramework<
     });
   }
 
-  protected async afterInitialize(
+  protected async afterContainerReady(
     options: Partial<IMidwayBootstrapOptions>
   ): Promise<void> {
     await this.loadMidwayController();

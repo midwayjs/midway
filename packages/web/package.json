@@ -1,14 +1,13 @@
 {
   "name": "@midwayjs/web",
-  "version": "2.3.17",
+  "version": "2.3.18-beta.6",
   "description": "Midway Web Scene",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "midway-bin build -c",
-    "test": "midway-bin test --forceExit",
-    "cov": "midway-bin cov --forceExit",
-    "ci": "npm run test",
+    "test": "midway-bin test --ts --forceExit",
+    "cov": "midway-bin cov --ts --forceExit",
     "link": "npm link"
   },
   "keywords": [
@@ -29,7 +28,7 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/cli": "^1.0.0",
-    "@midwayjs/mock": "^2.3.17",
+    "@midwayjs/mock": "^2.3.18-beta.6",
     "egg-view-nunjucks": "^2.2.0",
     "fs-extra": "^8.0.1",
     "pedding": "^1.1.0",
@@ -38,16 +37,16 @@
   },
   "dependencies": {
     "@eggjs/router": "^2.0.0",
-    "@midwayjs/bootstrap": "^2.3.17",
-    "@midwayjs/core": "^2.3.17",
-    "@midwayjs/decorator": "^2.3.17",
-    "@midwayjs/koa": "^2.3.17",
+    "@midwayjs/bootstrap": "^2.3.18-beta.6",
+    "@midwayjs/core": "^2.3.18-beta.6",
+    "@midwayjs/decorator": "^2.3.18-beta.6",
+    "@midwayjs/koa": "^2.3.18-beta.6",
     "debug": "^4.1.1",
     "egg": "^2.28.0",
     "egg-logger": "^2.4.2",
     "egg-path-matching": "^1.0.1",
     "extend2": "^1.0.0",
-    "midway-schedule": "^2.3.17",
+    "midway-schedule": "^2.3.18-beta.6",
     "mkdirp": "^1.0.4"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
@@ -55,5 +54,5 @@
     "type": "git",
     "url": "http://github.com/midwayjs/midway.git"
   },
-  "gitHead": "44c0803552baf265debed8a11a860988b7e07a85"
+  "gitHead": "a603d2348d6141f8f723901498f03a162a037708"
 }

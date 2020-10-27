@@ -9,7 +9,6 @@ import {
   IMidwayBootstrapOptions,
   listModule,
   MidwayFrameworkType,
-  MidwayProcessTypeEnum,
   MidwayRequestContainer,
 } from '@midwayjs/core';
 
@@ -264,8 +263,6 @@ export abstract class MidwayKoaBaseFramework<
       }
     }
   }
-
-  protected abstract defineApplicationProperties(app: U): U;
 }
 
 export class MidwayKoaFramework extends MidwayKoaBaseFramework<
@@ -280,9 +277,7 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<
     return this;
   }
 
-  protected async afterDirectoryLoad(
-    options: Partial<IMidwayBootstrapOptions>
-  ) {
+  async applicationInitialize(options: Partial<IMidwayBootstrapOptions>) {
     this.app = new koa<
       DefaultState,
       IMidwayKoaContext
@@ -296,10 +291,18 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<
       await next();
     });
 
-    this.defineApplicationProperties(this.app);
+    this.defineApplicationProperties({
+      generateController: (controllerMapping: string) => {
+        return this.generateController(controllerMapping);
+      },
+
+      generateMiddleware: async (middlewareId: string) => {
+        return this.generateMiddleware(middlewareId);
+      },
+    });
   }
 
-  protected async afterInitialize(
+  protected async afterContainerReady(
     options: Partial<IMidwayBootstrapOptions>
   ): Promise<void> {
     await this.loadMidwayController();
@@ -317,47 +320,5 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<
 
   public getFrameworkType(): MidwayFrameworkType {
     return MidwayFrameworkType.WEB_KOA;
-  }
-
-  protected defineApplicationProperties(
-    app: IMidwayKoaApplication
-  ): IMidwayKoaApplication {
-    return Object.assign(app, {
-      getBaseDir: () => {
-        return this.baseDir;
-      },
-
-      getAppDir: () => {
-        return this.appDir;
-      },
-
-      getEnv: () => {
-        return this.getApplicationContext()
-          .getEnvironmentService()
-          .getCurrentEnvironment();
-      },
-
-      getConfig: (key?: string) => {
-        return this.getApplicationContext()
-          .getConfigService()
-          .getConfiguration(key);
-      },
-
-      getFrameworkType: () => {
-        return this.getFrameworkType();
-      },
-
-      getProcessType: () => {
-        return MidwayProcessTypeEnum.APPLICATION;
-      },
-
-      generateController: (controllerMapping: string) => {
-        return this.generateController(controllerMapping);
-      },
-
-      generateMiddleware: async (middlewareId: string) => {
-        return this.generateMiddleware(middlewareId);
-      },
-    });
   }
 }

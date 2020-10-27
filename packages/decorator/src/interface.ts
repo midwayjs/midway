@@ -10,6 +10,8 @@ export type ObjectIdentifier = string;
  */
 export interface IManagedInstance {
   type: string;
+  value?: any;
+  args?: any;
 }
 
 export interface ObjectDefinitionOptions {

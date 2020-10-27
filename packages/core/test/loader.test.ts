@@ -5,6 +5,7 @@ import {
   ContainerLoader,
   MidwayRequestContainer,
   clearAllModule,
+  MidwayContainer,
 } from '../src';
 import * as mm from 'mm';
 import sinon = require('sinon');
@@ -19,6 +20,7 @@ class TestModule {
 describe('/test/loader.test.ts', () => {
   beforeEach(() => {
     clearAllModule();
+    MidwayContainer.parentDefinitionMetadata = null;
   });
   it('should create new loader', async () => {
     const loader = new ContainerLoader({
@@ -29,13 +31,8 @@ describe('/test/loader.test.ts', () => {
       loadDir: ['app', 'lib', '../test_other'],
     });
     await loader.refresh();
-
     const appCtx = loader.getApplicationContext();
-    const pluginCtx = loader.getPluginContext();
-
     assert(appCtx);
-    assert(pluginCtx);
-
     assert.ok(typeof (await appCtx.getAsync('testOther')));
   });
 

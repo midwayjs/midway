@@ -1,7 +1,7 @@
 import * as extend from 'extend2';
 import { basename, join } from 'path';
 import { IConfigService, IMidwayContainer } from '../interface';
-import { safelyGet } from '..';
+import { safelyGet } from '../util';
 import { readdirSync, statSync } from 'fs';
 import { isFunction } from '@midwayjs/decorator';
 import * as util from 'util';

@@ -64,6 +64,30 @@ export interface IObjectDefinition {
   hasAttr(key: ObjectIdentifier): boolean;
   setAttr(key: ObjectIdentifier, value: any): void;
 }
+
+/**
+ * 对象描述元数据，用于生成对象定义
+ */
+export interface IObjectDefinitionMetadata {
+  namespace?: string;
+  id: string;
+  name: string;
+  initMethod: string;
+  destroyMethod: string;
+  constructMethod: string;
+  scope: ScopeEnum;
+  autowire: boolean;
+  srcPath: string;
+  path: any;
+  export: string;
+  dependsOn: ObjectIdentifier[];
+  constructorArgs: Array<{ value?: string; args?: any; type: string; } | undefined>;
+  asynchronous: boolean;
+  properties: any[];
+  definitionType: 'object' | 'function'
+}
+
+
 export interface IObjectCreator {
   load(): any;
   doConstruct(Clzz: any, args?: any, context?: IApplicationContext): any;
@@ -165,20 +189,6 @@ export interface IManagedResolverFactoryCreateOptions {
   args?: any;
   namespace?: string;
 }
-/**
- * 提供简化的容器绑定能力
- */
-export interface IContainer extends IApplicationContext {
-  bind<T>(target: T, options?: ObjectDefinitionOptions): void;
-  bind<T>(
-    identifier: ObjectIdentifier,
-    target: T,
-    options?: ObjectDefinitionOptions
-  ): void;
-  createChild(): IContainer;
-  resolve<T>(target: T): T;
-  registerCustomBinding(objectDefinition: IObjectDefinition, target): void;
-}
 
 export interface ObjectDependencyTree {
   scope: ScopeEnum;
@@ -193,6 +203,7 @@ export const REQUEST_OBJ_CTX_KEY = '_req_ctx';
 export interface IContainerConfiguration {
   namespace: string;
   packageName: string;
+  newVersion: boolean;
   addLoadDir(dir: string);
   addImports(imports: string[], baseDir?: string);
   addImportObjects(importObjects: any[]);
@@ -209,7 +220,32 @@ export interface IContainerConfiguration {
   bindConfigurationClass(clzz: any, filePath?: string);
 }
 
-export interface IMidwayContainer extends IContainer {
+
+export type HandlerFunction = (handlerKey: string, instance?: any) => any;
+
+export interface IResolverHandler {
+  beforeEachCreated(target, constructorArgs: any[], context);
+  afterEachCreated(instance, context, definition);
+  registerHandler(key: string, fn: HandlerFunction);
+  getHandler(key: string);
+}
+
+export interface IMidwayContainer extends IApplicationContext {
+  load(opts: {
+    loadDir: string | string[];
+    pattern?: string | string[];
+    ignore?: string | string[];
+  });
+  bind<T>(target: T, options?: ObjectDefinitionOptions): void;
+  bind<T>(
+    identifier: ObjectIdentifier,
+    target: T,
+    options?: ObjectDefinitionOptions
+  ): void;
+  bindClass(exports, namespace?: string, filePath?: string);
+  registerDataHandler(handlerType: string, handler: (...args) => any);
+  createChild(): IMidwayContainer;
+  resolve<T>(target: T): T;
   /**
    * 默认不添加创建的 configuration 到 configurations 数组中
    */
@@ -219,6 +255,7 @@ export interface IMidwayContainer extends IContainer {
   getConfigService(): IConfigService;
   getEnvironmentService(): IEnvironmentService;
   getCurrentEnv(): string;
+  getResolverHandler(): IResolverHandler;
   addAspect(
     aspectIns: IMethodAspect,
     aspectData: AspectMetadata
@@ -256,7 +293,6 @@ export interface IMidwayLogger {
 }
 
 export interface IMidwayApplication {
-  applicationContext: IMidwayContainer;
   getBaseDir(): string;
   getAppDir(): string;
   getEnv(): string;
@@ -268,7 +304,7 @@ export interface IMidwayApplication {
 }
 
 export interface IMidwayContext {
-  getRequestContext(): IMidwayContainer;
+  getRequestContext?(): IMidwayContainer;
   requestContext: IMidwayContainer;
 }
 
@@ -278,15 +314,17 @@ export interface IMidwayContext {
 export interface IMidwayCoreApplication extends IMidwayApplication {}
 
 export interface IMidwayBootstrapOptions {
-  logger: IMidwayLogger;
+  logger?: IMidwayLogger;
   baseDir: string;
-  appDir: string;
-  preloadModules: string[];
-  disableAutoLoad: boolean;
-  pattern: string[];
-  ignore: string[];
-  isTsMode: boolean;
-  middleware: string[];
+  appDir?: string;
+  preloadModules?: any[];
+  disableAutoLoad?: boolean;
+  pattern?: string[];
+  ignore?: string[];
+  isTsMode?: boolean;
+  middleware?: string[];
+  loadDir?: string[];
+  disableConflictCheck?: boolean;
 }
 
 export interface IConfigurationOptions {}

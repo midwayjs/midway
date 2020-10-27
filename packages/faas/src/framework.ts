@@ -13,7 +13,6 @@ import {
   listModule,
   listPreloadModule,
   MidwayFrameworkType,
-  MidwayProcessTypeEnum,
   MidwayRequestContainer,
   REQUEST_OBJ_CTX_KEY,
 } from '@midwayjs/core';
@@ -39,19 +38,46 @@ export class MidwayFaaSFramework extends BaseFramework<
   private lock = new SimpleLock();
   public app: IMidwayFaaSApplication;
 
-  protected async beforeDirectoryLoad(
+  protected async afterContainerInitialize(
     options: Partial<IMidwayBootstrapOptions>
   ) {
     this.logger = options.logger || console;
     this.globalMiddleware = this.configurationOptions.middleware || [];
-    this.app = this.defineApplicationProperties(
-      this.configurationOptions.applicationAdapter?.getApplication() || {}
-    );
+    this.app =
+      this.configurationOptions.applicationAdapter?.getApplication() ||
+      ({} as IMidwayFaaSApplication);
+
+    this.defineApplicationProperties({
+      getLogger: () => {
+        return this.logger;
+      },
+      /**
+       * return init context value such as aliyun fc
+       */
+      getInitializeContext: () => {
+        return this.configurationOptions.initializeContext;
+      },
+
+      useMiddleware: async middlewares => {
+        if (middlewares.length) {
+          const newMiddlewares = await this.loadMiddleware(middlewares);
+          for (const mw of newMiddlewares) {
+            this.app.use(mw);
+          }
+        }
+      },
+
+      generateMiddleware: async (middlewareId: string) => {
+        return this.generateMiddleware(middlewareId);
+      },
+    });
 
     this.prepareConfiguration();
   }
 
-  protected async afterInitialize(options: Partial<IMidwayBootstrapOptions>) {
+  protected async afterContainerReady(
+    options: Partial<IMidwayBootstrapOptions>
+  ) {
     this.registerDecorator();
   }
 
@@ -229,7 +255,7 @@ export class MidwayFaaSFramework extends BaseFramework<
     if (!fileDir) {
       fileDir = dirname(resolve(filePath));
     }
-    const container = this.containerLoader.getApplicationContext();
+    const container = this.getApplicationContext();
     const cfg = container.createConfiguration();
     cfg.namespace = namespace;
     cfg.loadConfiguration(require(filePath), fileDir);
@@ -252,73 +278,20 @@ export class MidwayFaaSFramework extends BaseFramework<
     // this.initConfiguration('./configuration', __dirname);
   }
 
-  protected defineApplicationProperties(app): IMidwayFaaSApplication {
-    return Object.assign(app, {
-      getBaseDir: () => {
-        return this.baseDir;
-      },
-
-      getAppDir: () => {
-        return this.appDir;
-      },
-
-      getEnv: () => {
-        return this.getApplicationContext()
-          .getEnvironmentService()
-          .getCurrentEnvironment();
-      },
-
-      getConfig: (key?: string) => {
-        return this.getApplicationContext()
-          .getConfigService()
-          .getConfiguration(key);
-      },
-
-      getLogger: () => {
-        return this.logger;
-      },
-
-      getFrameworkType: () => {
-        return this.getFrameworkType();
-      },
-
-      getProcessType: () => {
-        return MidwayProcessTypeEnum.APPLICATION;
-      },
-      /**
-       * return init context value such as aliyun fc
-       */
-      getInitializeContext: () => {
-        return this.configurationOptions.initializeContext;
-      },
-
-      getApplicationContext: () => {
-        return this.getApplicationContext();
-      },
-
-      useMiddleware: async middlewares => {
-        if (middlewares.length) {
-          const newMiddlewares = await this.loadMiddleware(middlewares);
-          for (const mw of newMiddlewares) {
-            this.app.use(mw);
-          }
-        }
-      },
-
-      generateMiddleware: async (middlewareId: string) => {
-        return this.generateMiddleware(middlewareId);
-      },
-    });
-  }
-
   private registerDecorator() {
-    this.containerLoader.registerHook(PLUGIN_KEY, (key, target) => {
-      return target[REQUEST_OBJ_CTX_KEY]?.[key] || this.app[key];
-    });
+    this.getApplicationContext().registerDataHandler(
+      PLUGIN_KEY,
+      (key, target) => {
+        return target[REQUEST_OBJ_CTX_KEY]?.[key] || this.app[key];
+      }
+    );
 
-    this.containerLoader.registerHook(LOGGER_KEY, (key, target) => {
-      return target[REQUEST_OBJ_CTX_KEY]?.['logger'] || this.app.getLogger();
-    });
+    this.getApplicationContext().registerDataHandler(
+      LOGGER_KEY,
+      (key, target) => {
+        return target[REQUEST_OBJ_CTX_KEY]?.['logger'] || this.app.getLogger();
+      }
+    );
   }
 
   private async loadMiddleware(middlewares) {
@@ -338,6 +311,8 @@ export class MidwayFaaSFramework extends BaseFramework<
 
     return newMiddlewares;
   }
+
+  async applicationInitialize(options: IMidwayBootstrapOptions) {}
 }
 
 function covertId(cls, method) {

@@ -9,12 +9,13 @@ import {
   isClass,
   isFunction,
   IComponentInfo,
+  listModule,
 } from '@midwayjs/decorator';
 
 import { dirname, isAbsolute, join } from 'path';
 import { MAIN_MODULE_KEY, generateProvideId } from '@midwayjs/decorator';
 import { IContainerConfiguration, IMidwayContainer } from '../interface';
-import { isPath, safeRequire } from '../common/util';
+import { isPath, safeRequire } from '../util/';
 import * as util from 'util';
 
 const debug = util.debuglog('midway:container:configuration');
@@ -28,6 +29,8 @@ export class ContainerConfiguration implements IContainerConfiguration {
   loadDirs: string[] = [];
   loadModules: any[] = [];
   importObjects: object = new Map();
+  // 新版本 configuration
+  newVersion = false;
 
   constructor(container) {
     this.container = container;
@@ -44,6 +47,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
       // for package
       const subContainerConfiguration = this.container.createConfiguration();
       if (typeof importPackage === 'string') {
+        subContainerConfiguration.newVersion = false;
         const subPackageDir = this.resolvePackageBaseDir(
           importPackage,
           baseDir
@@ -56,6 +60,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
           `---------- end load configuration from sub package "${importPackage}" ----------`
         );
       } else if ('Configuration' in importPackage) {
+        subContainerConfiguration.newVersion = true;
         // component is object
         debug(
           '\n---------- start load configuration from submodule" ----------'
@@ -65,6 +70,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
           `---------- end load configuration from sub package "${importPackage}" ----------`
         );
       } else if ('component' in importPackage) {
+        subContainerConfiguration.newVersion = true;
         if (
           (importPackage as IComponentInfo)?.enabledEnvironment?.includes(
             this.container.getCurrentEnv()
@@ -283,10 +289,18 @@ export class ContainerConfiguration implements IContainerConfiguration {
       namespace: this.namespace,
       srcPath: filePath,
     });
-    saveModule(CONFIGURATION_KEY, {
-      target: clzz,
-      namespace: this.namespace,
+
+    // configuration 手动绑定去重
+    const configurationMods = listModule(CONFIGURATION_KEY);
+    const exists = configurationMods.find(mod => {
+      return mod.target === clzz;
     });
+    if (!exists) {
+      saveModule(CONFIGURATION_KEY, {
+        target: clzz,
+        namespace: this.namespace,
+      });
+    }
   }
 
   getImportDirectory() {

@@ -1,10 +1,9 @@
-import type { MidwayWebFramework } from './framework';
-import { RouterParamValue } from '@midwayjs/decorator';
 import { parseNormalDir } from './utils';
 import * as extend from 'extend2';
 import { EggAppInfo } from 'egg';
-import { IMidwayWebApplication } from './interface';
 import { join } from 'path';
+import { BootstrapStarter } from '@midwayjs/bootstrap';
+import { MidwayWebFramework } from './framework';
 
 const {
   AppWorkerLoader,
@@ -18,24 +17,19 @@ const EGG_PATH = Symbol.for('egg#eggPath');
 
 export const createAppWorkerLoader = AppWorkerLoader => {
   class EggAppWorkerLoader extends (AppWorkerLoader as any) {
-    app: IMidwayWebApplication & {
-      appOptions: {
-        typescript?: boolean;
-        isTsMode?: boolean;
-      };
-      appDir: string;
-      baseDir: string;
-    };
+    app: any;
+    framework;
+    bootstrap;
 
     getEggPaths() {
       if (!this.appDir) {
         // 这里的逻辑是为了兼容老 cluster 模式
-        if (this.app.appOptions.typescript || this.app.appOptions.isTsMode) {
+        if (this.app.options.typescript || this.app.options.isTsMode) {
           process.env.EGG_TYPESCRIPT = 'true';
         }
         const result = parseNormalDir(
-          this.app.appOptions['baseDir'],
-          this.app.appOptions.isTsMode
+          this.app.options['baseDir'],
+          this.app.options.isTsMode
         );
         this.baseDir = result.baseDir;
         this.options.baseDir = this.baseDir;
@@ -63,6 +57,23 @@ export const createAppWorkerLoader = AppWorkerLoader => {
       }
       return this.appInfo;
     }
+
+    load() {
+      this.framework = new MidwayWebFramework().configure({
+        processType: 'application',
+        app: this.app,
+        globalConfig: this.app.config,
+      });
+      this.bootstrap = new BootstrapStarter();
+      this.bootstrap
+        .configure({
+          baseDir: this.app.appDir,
+        })
+        .load(this.framework);
+      this.bootstrap.init().then(() => {
+        super.load();
+      });
+    }
   }
 
   return EggAppWorkerLoader as any;
@@ -72,12 +83,12 @@ export const createAgentWorkerLoader = AppWorkerLoader => {
   class EggAppWorkerLoader extends (AppWorkerLoader as any) {
     getEggPaths() {
       if (!this.appDir) {
-        if (this.app.appOptions.typescript || this.app.appOptions.isTsMode) {
+        if (this.app.options.typescript || this.app.options.isTsMode) {
           process.env.EGG_TYPESCRIPT = 'true';
         }
         const result = parseNormalDir(
-          this.app.appOptions['baseDir'],
-          this.app.appOptions.isTsMode
+          this.app.options['baseDir'],
+          this.app.options.isTsMode
         );
         this.baseDir = result.baseDir;
         this.options.baseDir = this.baseDir;
@@ -104,6 +115,23 @@ export const createAgentWorkerLoader = AppWorkerLoader => {
       }
       return this.appInfo;
     }
+
+    load() {
+      this.framework = new MidwayWebFramework().configure({
+        processType: 'agent',
+        app: this.app,
+        globalConfig: this.app.config,
+      });
+      this.bootstrap = new BootstrapStarter();
+      this.bootstrap
+        .configure({
+          baseDir: this.app.appDir,
+        })
+        .load(this.framework);
+      this.bootstrap.init().then(() => {
+        super.load();
+      });
+    }
   }
 
   return EggAppWorkerLoader as any;
@@ -122,42 +150,6 @@ export const createEggApplication = Application => {
 
     get [EGG_PATH]() {
       return __dirname;
-    }
-
-    get appOptions() {
-      return this.options;
-    }
-
-    get midwayWebFramework(): MidwayWebFramework {
-      return this.appOptions['webFramework'];
-    }
-
-    get applicationContext() {
-      return this.midwayWebFramework.getApplicationContext();
-    }
-
-    getApplicationContext() {
-      return this.applicationContext;
-    }
-
-    generateController(
-      controllerMapping: string,
-      routeArgsInfo?: RouterParamValue[],
-      routerResponseData?: any[]
-    ) {
-      return this.midwayWebFramework.generateController(
-        controllerMapping,
-        routeArgsInfo,
-        routerResponseData
-      );
-    }
-
-    async generateMiddleware(middlewareId: string) {
-      return this.midwayWebFramework.generateMiddleware(middlewareId);
-    }
-
-    get baseDir() {
-      return this.loader.baseDir;
     }
   }
 
@@ -178,26 +170,6 @@ export const createEggAgent = Agent => {
     get [EGG_PATH]() {
       return __dirname;
     }
-
-    get appOptions() {
-      return this.options;
-    }
-
-    get midwayWebFramework(): MidwayWebFramework {
-      return this.appOptions['webFramework'];
-    }
-
-    get applicationContext() {
-      return this.midwayWebFramework.getApplicationContext();
-    }
-
-    getApplicationContext() {
-      return this.applicationContext;
-    }
-
-    get baseDir() {
-      return this.loader.baseDir;
-    }
   }
 
   return EggAgent as any;
@@ -211,7 +183,7 @@ const EggAgentWorkerLoader = createAgentWorkerLoader(AgentWorkerLoader);
 
 const BaseEggAgent = createEggAgent(Agent);
 
-export class EggApplication extends BaseEggApplication {
+class EggApplication extends BaseEggApplication {
   get [EGG_LOADER]() {
     return EggAppWorkerLoader;
   }
@@ -221,7 +193,7 @@ export class EggApplication extends BaseEggApplication {
   }
 }
 
-export class EggAgent extends BaseEggAgent {
+class EggAgent extends BaseEggAgent {
   get [EGG_LOADER]() {
     return EggAgentWorkerLoader;
   }

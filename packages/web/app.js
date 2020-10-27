@@ -1,11 +1,6 @@
 'use strict';
 
-const { Bootstrap } = require('@midwayjs/bootstrap');
-const { Framework } = require('./dist/index');
 const pathMatching = require('egg-path-matching');
-const { safelyGet } = require('@midwayjs/core');
-
-const { CONFIG_KEY, LOGGER_KEY, PLUGIN_KEY } = require('@midwayjs/decorator');
 
 class AppBootHook {
   constructor(app) {
@@ -15,50 +10,16 @@ class AppBootHook {
 
   configDidLoad() {
     // 先清空，防止加载到 midway 中间件出错
-    this.appMiddleware = this.app.config.appMiddleware;
-    this.app.config.appMiddleware = [];
+    this.appMiddleware = this.app.loader.config.appMiddleware;
+    this.app.loader.config.appMiddleware = [];
   }
 
   async didLoad() {
-    // 这里的逻辑是为了兼容老 cluster 模式
-    if (this.app.options['isClusterMode'] !== false) {
-      this.framework = new Framework().configure({
-        processType: 'application',
-        app: this.app,
-        globalConfig: this.app.config,
-      });
-      Bootstrap.configure({
-        baseDir: this.app.appDir,
-      }).load(this.framework);
-      await Bootstrap.run();
-      this.app.options['webFramework'] = this.framework;
-    }
-
-    // register plugin
-    this.app.applicationContext.registerDataHandler(
-      PLUGIN_KEY,
-      (key, target) => {
-        return this.app[key];
-      }
-    );
-
-    // register config
-    this.app.applicationContext.registerDataHandler(CONFIG_KEY, key => {
-      return key ? safelyGet(key, this.app.config) : this.app.config;
-    });
-
-    // register logger
-    this.app.applicationContext.registerDataHandler(LOGGER_KEY, key => {
-      if (this.app.getLogger) {
-        return this.app.getLogger(key);
-      }
-      return this.app.coreLogger;
-    });
-
     // 等 midway 加载完成后，再去 use 中间件
     for (const name of this.appMiddleware) {
       if (this.app.getApplicationContext().registry.hasDefinition(name)) {
         const mwIns = await this.app.generateMiddleware(name);
+        mwIns._name = name;
         this.app.use(mwIns);
       } else {
         // egg
@@ -81,6 +42,8 @@ class AppBootHook {
         }
       }
     }
+
+    await this.app.webFramework.loadMidwayController();
   }
 
   async willReady() {}

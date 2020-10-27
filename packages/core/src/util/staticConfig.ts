@@ -4,7 +4,7 @@ import {
   getClassMetadata,
   InjectionConfigurationOptions,
   isClass,
-  isFunction
+  isFunction,
 } from '@midwayjs/decorator';
 import { IConfigService, safeRequire } from '..';
 import { MidwayConfigService } from '../service/configService';

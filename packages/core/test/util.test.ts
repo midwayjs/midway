@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 import { join } from 'path';
-import { isPath, safeRequire, safelyGet, isPathEqual } from '../src/common/util';
+import { isPath, safeRequire, safelyGet, isPathEqual } from '../src/util';
 import { StaticConfigLoader } from '../src/util/staticConfig';
 
 describe('/test/util.test.ts', () => {

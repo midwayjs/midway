@@ -1,4 +1,4 @@
-import { IMidwayApplication, IMidwayContainer } from '@midwayjs/core';
+import { IMidwayApplication, IMidwayContext } from '@midwayjs/core';
 import { ConsumeMessage, Options } from 'amqplib/properties';
 import { RabbitMQListenerOptions } from '@midwayjs/decorator';
 import * as amqp from 'amqplib';
@@ -32,8 +32,7 @@ export type IMidwayRabbitMQConfigurationOptions = {
 
 export type IMidwayRabbitMQContext = {
   channel: amqp.Channel;
-  requestContext?: IMidwayContainer;
-};
+} & IMidwayContext;
 
 export enum RabbitMQChannelEvent {
   CHANNEL_CLOSE = 'ch_close',

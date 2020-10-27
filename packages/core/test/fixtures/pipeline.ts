@@ -1,6 +1,6 @@
 import { IValveHandler, IPipelineContext, IPipelineHandler } from '../../src/features/pipeline';
 import { Provide, Inject, Pipeline } from '@midwayjs/decorator';
-import { IContainer } from '../../src/interface';
+import { IMidwayContainer } from '../../src/interface';
 
 class VideoDto {
   videoId: string;
@@ -235,7 +235,7 @@ export class DataMainTest {
   }
 }
 
-export default (container: IContainer) => {
+export default (container: IMidwayContainer) => {
   container.bind(TestService);
   container.bind(VideoFeeds);
   container.bind(AccountMap);
