@@ -12,7 +12,7 @@ router.get('/get', (ctx, next) => {
 
 router.get('/get/query', (ctx, next) => {
   ctx.body = {
-    query: ctx.query
+    query: ctx.query,
   };
 });
 
@@ -22,7 +22,7 @@ router.post('/post', (ctx, next) => {
 
 router.post('/post/body', (ctx, next) => {
   ctx.body = {
-    body: ctx.request.body
+    body: ctx.request.body,
   };
 });
 
@@ -31,4 +31,6 @@ app.use(router.routes()).use(router.allowedMethods());
 
 // app.listen(3000);
 
-module.exports = app;
+module.exports = async () => {
+  return app;
+};

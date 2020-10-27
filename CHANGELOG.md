@@ -3,6 +3,86 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.15](https://github.com/midwayjs/midway/compare/serverless-v1.2.14...serverless-v1.2.15) (2020-09-30)
+
+**Note:** Version bump only for package midway-faas
+
+
+
+
+
+## [1.2.14](https://github.com/midwayjs/midway/compare/serverless-v1.2.13...serverless-v1.2.14) (2020-09-14)
+
+**Note:** Version bump only for package midway-faas
+
+
+
+
+
+## [1.2.13](https://github.com/midwayjs/midway/compare/serverless-v1.2.12...serverless-v1.2.13) (2020-09-07)
+
+
+### Bug Fixes
+
+* update header after gizp ([#629](https://github.com/midwayjs/midway/issues/629)) ([9f91985](https://github.com/midwayjs/midway/commit/9f919850af334f0c463947b2730dfafabba43f1d))
+
+
+
+
+
+## [1.2.12](https://github.com/midwayjs/midway/compare/serverless-v1.2.11...serverless-v1.2.12) (2020-09-04)
+
+
+### Bug Fixes
+
+* 支持字符串 args 传参 ([#628](https://github.com/midwayjs/midway/issues/628)) ([0f8f8ce](https://github.com/midwayjs/midway/commit/0f8f8ced40b4b38c517346c5682a20b6da990f64))
+* support npm multi plugin ([#627](https://github.com/midwayjs/midway/issues/627)) ([d2ebc2e](https://github.com/midwayjs/midway/commit/d2ebc2ec70374db5f1ea595d7ccaacbe9ef540a4))
+
+
+
+
+
+## [1.2.11](https://github.com/midwayjs/midway/compare/serverless-v1.2.10...serverless-v1.2.11) (2020-09-04)
+
+**Note:** Version bump only for package midway-faas
+
+
+
+
+
+## [1.2.10](https://github.com/midwayjs/midway/compare/serverless-v1.2.9...serverless-v1.2.10) (2020-08-30)
+
+
+### Bug Fixes
+
+* add lock init for egg app ([#622](https://github.com/midwayjs/midway/issues/622)) ([ccb5fe5](https://github.com/midwayjs/midway/commit/ccb5fe52778f19b3e66dc1d727cc38e09f2c3ed6))
+
+
+
+
+
+## [1.2.9](https://github.com/midwayjs/midway/compare/serverless-v1.2.8...serverless-v1.2.9) (2020-08-26)
+
+
+### Bug Fixes
+
+* support async  entry for  koa/express ([#621](https://github.com/midwayjs/midway/issues/621)) ([19bb466](https://github.com/midwayjs/midway/commit/19bb466e99f3c7e7cb5b755e9fb4bb89f0a65256))
+
+
+
+
+
+## [1.2.8](https://github.com/midwayjs/midway/compare/serverless-v1.2.7...serverless-v1.2.8) (2020-08-24)
+
+
+### Bug Fixes
+
+* add default env for egg module ([#618](https://github.com/midwayjs/midway/issues/618)) ([41272d0](https://github.com/midwayjs/midway/commit/41272d02c9184cb3fc1d8b457ebac8228b16f116))
+
+
+
+
+
 ## [1.2.7](https://github.com/midwayjs/midway/compare/serverless-v1.2.6...serverless-v1.2.7) (2020-08-21)
 
 

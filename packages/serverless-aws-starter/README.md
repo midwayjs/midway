@@ -1,11 +1,9 @@
-# serverless fc starter
+# serverless aws starter
 
-本模块用于包裹无法定制运行时的 FaaS 平台，比如阿里云 FC。
-
-## 阿里云 FC
+this module is a light runtime starter for amazon lambda.
 
 ```ts
-import { asyncWrapper, createRuntime } from '@midwayjs/serverless-fc-starter';
+import { asyncWrapper, createRuntime } from '@midwayjs/serverless-aws-starter';
 
 let runtime;
 export.init = asyncWrapper(async () => {

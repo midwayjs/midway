@@ -1,8 +1,0 @@
-service: serverless-midway-test
-
-provider:
-  name: aliyun
-
-functions:
-  index:
-    handler: index.handler

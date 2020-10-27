@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.10](https://github.com/midwayjs/midway-faas/compare/serverless-v1.2.9...serverless-v1.2.10) (2020-08-30)
+
+
+### Bug Fixes
+
+* add lock init for egg app ([#622](https://github.com/midwayjs/midway-faas/issues/622)) ([ccb5fe5](https://github.com/midwayjs/midway-faas/commit/ccb5fe52778f19b3e66dc1d727cc38e09f2c3ed6))
+
+
+
+
+
+## [1.2.9](https://github.com/midwayjs/midway-faas/compare/serverless-v1.2.8...serverless-v1.2.9) (2020-08-26)
+
+**Note:** Version bump only for package @midwayjs/egg-layer
+
+
+
+
+
+## [1.2.8](https://github.com/midwayjs/midway-faas/compare/serverless-v1.2.7...serverless-v1.2.8) (2020-08-24)
+
+
+### Bug Fixes
+
+* add default env for egg module ([#618](https://github.com/midwayjs/midway-faas/issues/618)) ([41272d0](https://github.com/midwayjs/midway-faas/commit/41272d02c9184cb3fc1d8b457ebac8228b16f116))
+
+
+
+
+
 ## [1.2.7](https://github.com/midwayjs/midway-faas/compare/serverless-v1.2.6...serverless-v1.2.7) (2020-08-21)
 
 **Note:** Version bump only for package @midwayjs/egg-layer

@@ -33,6 +33,7 @@ describe('/test/index.test.ts', () => {
       request(app)
         .get('/get')
         .expect('Content-Type', 'text/html; charset=utf-8')
+        .expect('x-bbbb', 'ccccccc')
         .expect(/Hello World/)
         .expect(200, done);
     });

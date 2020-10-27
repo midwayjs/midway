@@ -9,8 +9,10 @@ module.exports = engine => {
   engine.addRuntimeExtension({
     async beforeRuntimeStart(runtime) {
       const baseDir = runtime.getPropertyParser().getEntryDir();
-      const app = require(join(baseDir, 'app'));
-      // handleRequest = koaApp.callback();
+      let app = require(join(baseDir, 'app'));
+      if (typeof app === 'function' && !app['emit']) {
+        app = await app();
+      }
       if (fs.existsSync(socketPath)) {
         fs.unlinkSync(socketPath);
       }
@@ -20,6 +22,7 @@ module.exports = engine => {
     async defaultInvokeHandler(context) {
       return new Promise((resolve, reject) => {
         delete context.headers['content-length'];
+        delete context.headers['accept-encoding'];
         request(
           {
             uri: `http://unix:${socketPath}:${context.path}`,
