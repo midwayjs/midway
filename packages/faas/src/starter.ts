@@ -6,7 +6,7 @@ import {
   IMiddleware,
   listModule,
   listPreloadModule,
-  MidwayContainer,
+  IMidwayContainer,
   MidwayProcessTypeEnum,
   MidwayRequestContainer,
   REQUEST_OBJ_CTX_KEY,
@@ -286,7 +286,7 @@ export class FaaSStarter implements IFaaSStarter {
     }, LOCK_KEY);
   }
 
-  public getApplicationContext(): MidwayContainer {
+  public getApplicationContext(): IMidwayContainer {
     return this.loader.getApplicationContext();
   }
 
