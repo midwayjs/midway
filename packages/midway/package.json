@@ -1,6 +1,6 @@
 {
   "name": "midway",
-  "version": "2.3.18-beta.4",
+  "version": "2.3.18-beta.5",
   "description": "Midway Main Package",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -21,7 +21,7 @@
     "@midwayjs/cli": "^1.0.0"
   },
   "dependencies": {
-    "@midwayjs/web": "^2.3.18-beta.4",
+    "@midwayjs/web": "^2.3.18-beta.5",
     "egg-cluster": "^1.23.0"
   },
   "files": [
