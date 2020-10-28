@@ -5,11 +5,20 @@ import { attachClassMetadata, WEB_ROUTER_KEY } from '../';
 import { MiddlewareParamArray } from '../interface';
 
 export interface RouterOption {
+  // 路由
   path?: string;
+  // 请求类型
   requestMethod: string;
+  // 路由别名
   routerName?: string;
-  method: string;
+  // 装饰器附加的方法
+  method?: string;
+  // 路由附加的中间件
   middleware?: MiddlewareParamArray;
+  // 路由摘要
+  summary?: string;
+  // 路由描述
+  description?: string;
 }
 
 export const RequestMethod = {
@@ -25,25 +34,16 @@ export const RequestMethod = {
 
 const defaultMetadata = {
   path: '/',
-  method: RequestMethod.GET,
+  requestMethod: RequestMethod.GET,
   routerName: null,
   middleware: [],
 };
 
-export interface RequestMappingMetadata {
-  path?: string;
-  method: string;
-  routerName?: string;
-  middleware?: MiddlewareParamArray;
-  summary?: string;
-  description?: string;
-}
-
 export const RequestMapping = (
-  metadata: RequestMappingMetadata = defaultMetadata
+  metadata: RouterOption = defaultMetadata
 ): MethodDecorator => {
   const path = metadata.path || '/';
-  const requestMethod = metadata.method || RequestMethod.GET;
+  const requestMethod = metadata.requestMethod || RequestMethod.GET;
   const routerName = metadata.routerName;
   const middleware = metadata.middleware;
 
@@ -76,7 +76,7 @@ const createMappingDecorator = (method: string) => (
   } = { middleware: [] }
 ): MethodDecorator => {
   return RequestMapping(Object.assign(routerOptions, {
-    method,
+    requestMethod: method,
     path,
   }));
 };
