@@ -20,7 +20,6 @@ import {
   generateProvideId,
 } from '../../src';
 import * as assert from 'assert';
-import { expect } from 'chai';
 import { ManagerTest as module } from '../fixtures/decorator/customClass';
 import mm = require('mm');
 
@@ -72,7 +71,7 @@ describe('/test/common/decoratorManager.test.ts', () => {
       s = 'clear';
     });
     clearAllModule();
-    expect(s).eq('clear');
+    expect(s).toEqual('clear');
     mm.restore();
   });
 
@@ -124,7 +123,7 @@ describe('/test/common/decoratorManager.test.ts', () => {
     savePropertyDataToClass('hello1', { a: 1 }, TestOne, 'hello');
 
     const data = listPropertyDataFromClass('hello1', TestOne);
-    expect(data).deep.eq([
+    expect(data).toStrictEqual([
       {
         a: 1,
       },
@@ -136,7 +135,7 @@ describe('/test/common/decoratorManager.test.ts', () => {
     attachPropertyMetadata('ttt', { a: 1, b: 22 }, TestTwo, 'hhh');
 
     const meta = getPropertyMetadata('ttt', TestTwo, 'hhh');
-    expect(meta).deep.eq([{ a: 1, b: 22 }]);
+    expect(meta).toStrictEqual([{ a: 1, b: 22 }]);
   });
 
 

@@ -23,32 +23,29 @@ export const RequestMethod = {
   HEAD: 'head',
 };
 
-const PATH_METADATA = 'PATH_METADATA';
-const METHOD_METADATA = 'METHOD_METADATA';
-const ROUTER_NAME_METADATA = 'ROUTER_NAME_METADATA';
-const ROUTER_MIDDLEWARE = 'ROUTER_MIDDLEWARE';
-
 const defaultMetadata = {
-  [PATH_METADATA]: '/',
-  [METHOD_METADATA]: RequestMethod.GET,
-  [ROUTER_NAME_METADATA]: null,
-  [ROUTER_MIDDLEWARE]: [],
+  path: '/',
+  method: RequestMethod.GET,
+  routerName: null,
+  middleware: [],
 };
 
 export interface RequestMappingMetadata {
-  [PATH_METADATA]?: string;
-  [METHOD_METADATA]: string;
-  [ROUTER_NAME_METADATA]?: string;
-  [ROUTER_MIDDLEWARE]?: MiddlewareParamArray;
+  path?: string;
+  method: string;
+  routerName?: string;
+  middleware?: MiddlewareParamArray;
+  summary?: string;
+  description?: string;
 }
 
 export const RequestMapping = (
   metadata: RequestMappingMetadata = defaultMetadata
 ): MethodDecorator => {
-  const path = metadata[PATH_METADATA] || '/';
-  const requestMethod = metadata[METHOD_METADATA] || RequestMethod.GET;
-  const routerName = metadata[ROUTER_NAME_METADATA];
-  const middleware = metadata[ROUTER_MIDDLEWARE];
+  const path = metadata.path || '/';
+  const requestMethod = metadata.method || RequestMethod.GET;
+  const routerName = metadata.routerName;
+  const middleware = metadata.middleware;
 
   return (target, key, descriptor: PropertyDescriptor) => {
     attachClassMetadata(
@@ -59,6 +56,8 @@ export const RequestMapping = (
         routerName,
         method: key,
         middleware,
+        summary: metadata?.summary || '',
+        description: metadata?.description || '',
       } as RouterOption,
       target
     );
@@ -72,14 +71,14 @@ const createMappingDecorator = (method: string) => (
   routerOptions: {
     routerName?: string;
     middleware?: MiddlewareParamArray;
+    summary?: string;
+    description?: string;
   } = { middleware: [] }
 ): MethodDecorator => {
-  return RequestMapping({
-    [PATH_METADATA]: path || '/',
-    [METHOD_METADATA]: method,
-    [ROUTER_NAME_METADATA]: routerOptions.routerName,
-    [ROUTER_MIDDLEWARE]: routerOptions.middleware,
-  });
+  return RequestMapping(Object.assign(routerOptions, {
+    method,
+    path,
+  }));
 };
 
 /**

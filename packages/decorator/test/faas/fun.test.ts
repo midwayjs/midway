@@ -1,4 +1,3 @@
-import { expect } from 'chai';
 import {
   Func,
   listModule,
@@ -19,7 +18,7 @@ class TestFun1 {
 describe('/test/faas/fun.test.ts', () => {
   it('fun decorator should be ok', () => {
     const meta = getClassMetadata(FUNC_KEY, TestFun);
-    expect(meta).deep.eq([
+    expect(meta).toStrictEqual([
       {
         funHandler: 'index.handler',
         middleware: ['hello'],
@@ -27,7 +26,7 @@ describe('/test/faas/fun.test.ts', () => {
     ]);
 
     const c = getClassMetadata(FUNC_KEY, TestFun1);
-    expect(c).deep.eq([
+    expect(c).toStrictEqual([
       {
         descriptor: undefined,
         funHandler: 'ttt.handler',
@@ -36,11 +35,11 @@ describe('/test/faas/fun.test.ts', () => {
     ]);
 
     const def = getObjectDefProps(TestFun);
-    expect(def).deep.eq({
+    expect(def).toStrictEqual({
       scope: ScopeEnum.Request,
     });
 
     const m = listModule(FUNC_KEY);
-    expect(m.length).eq(2);
+    expect(m.length).toEqual(2);
   });
 });

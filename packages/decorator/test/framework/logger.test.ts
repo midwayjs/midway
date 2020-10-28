@@ -1,4 +1,3 @@
-import { expect } from 'chai';
 import {
   Logger,
   getClassMetadata,
@@ -21,7 +20,7 @@ class Test {
 describe('/test/framework/logger.test.ts', () => {
   it('logger decorator should be ok', () => {
     let data = getClassMetadata(CLASS_KEY_CONSTRUCTOR, Test);
-    expect(data).deep.eq({
+    expect(data).toStrictEqual({
       0: {
         key: 'aaa',
         type: LOGGER_KEY,
@@ -29,7 +28,7 @@ describe('/test/framework/logger.test.ts', () => {
     });
 
     data = getClassMetadata(LOGGER_KEY, Test);
-    expect(data).deep.eq([
+    expect(data).toStrictEqual([
       { key: 'logger', propertyName: 'logger' },
       { key: 'bbb', propertyName: 'bbb' },
     ]);

@@ -1,4 +1,3 @@
-import { expect } from 'chai';
 import { Inject, getConstructorInject, getPropertyInject } from '../../src';
 
 class Test {
@@ -12,7 +11,7 @@ class Test {
 describe('/test/annotation/inject.test.ts', () => {
   it('inject decorator should be ok', () => {
     let meta = getConstructorInject(Test);
-    expect(meta).deep.eq({
+    expect(meta).toEqual({
       0: [
         {
           args: undefined,
@@ -30,7 +29,7 @@ describe('/test/annotation/inject.test.ts', () => {
     });
 
     meta = getPropertyInject(Test);
-    expect(meta).deep.eq({
+    expect(meta).toEqual({
       aa: [
         {
           args: undefined,

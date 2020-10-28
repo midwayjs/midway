@@ -1,4 +1,3 @@
-import { expect } from 'chai';
 import {
   Async,
   Scope,
@@ -27,7 +26,7 @@ class TestOne {}
 describe('/test/annotation/objectDef.test.ts', () => {
   it('objectDef decorator should be ok', () => {
     const def = getObjectDefProps(Test);
-    expect(def).deep.eq({
+    expect(def).toStrictEqual({
       isAutowire: false,
       scope: ScopeEnum.Prototype,
       initMethod: 'init',
@@ -36,7 +35,7 @@ describe('/test/annotation/objectDef.test.ts', () => {
     });
 
     const defone = getObjectDefProps(TestOne);
-    expect(defone).deep.eq({
+    expect(defone).toStrictEqual({
       isAutowire: true,
       scope: ScopeEnum.Singleton,
     });

@@ -8,6 +8,8 @@ export interface ControllerOption {
     sensitive?: boolean;
     middleware?: MiddlewareParamArray;
     alias?: string[];
+    description?: string;
+    tagName?: string;
   };
 }
 
@@ -16,6 +18,8 @@ export function Controller(
   routerOptions: {
     sensitive?: boolean;
     middleware?: MiddlewareParamArray;
+    description?: string;
+    tagName?: string;
   } = { middleware: [], sensitive: true }
 ): ClassDecorator {
   return (target: any) => {

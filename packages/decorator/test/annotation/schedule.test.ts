@@ -1,4 +1,3 @@
-import { expect } from 'chai';
 import {
   Schedule,
   getObjectDefProps,
@@ -17,15 +16,15 @@ class Test {}
 describe('/test/annotation/schedule.test.ts', () => {
   it('schedule decorator should be ok', () => {
     const def = getObjectDefProps(Test);
-    expect(def).deep.eq({
+    expect(def).toStrictEqual({
       scope: ScopeEnum.Request,
     });
 
     const ms = listModule(SCHEDULE_KEY);
-    expect(ms.length).eq(1);
+    expect(ms.length).toEqual(1);
 
     const meta = getClassMetadata(SCHEDULE_KEY, Test);
-    expect(meta).deep.eq({
+    expect(meta).toStrictEqual({
       type: 'worker',
       interval: 2333,
     });

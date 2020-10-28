@@ -1,4 +1,3 @@
-import { expect } from 'chai';
 import {
   Config,
   getClassMetadata,
@@ -21,7 +20,7 @@ class Test {
 describe('/test/framework/config.test.ts', () => {
   it('config decorator should be ok', () => {
     let data = getClassMetadata(CLASS_KEY_CONSTRUCTOR, Test);
-    expect(data).deep.eq({
+    expect(data).toStrictEqual({
       0: {
         key: 'aaa',
         type: CONFIG_KEY,
@@ -29,7 +28,7 @@ describe('/test/framework/config.test.ts', () => {
     });
 
     data = getClassMetadata(CONFIG_KEY, Test);
-    expect(data).deep.eq([
+    expect(data).toStrictEqual([
       { key: 'hhh', propertyName: 'hhh' },
       { key: 'bbb', propertyName: 'bbb' },
     ]);

@@ -1,4 +1,3 @@
-import { expect } from 'chai';
 import {
   HSF,
   listModule,
@@ -22,7 +21,7 @@ class TestFun1 {}
 describe('/test/rpc/hsf.test.ts', () => {
   it('hsf decorator should be ok', () => {
     const meta = getClassMetadata(HSF_KEY, TestFun);
-    expect(meta).deep.eq({
+    expect(meta).toStrictEqual({
       version: '1.0.0',
       interfaceName: 'com.test.ttt.123',
       group: 'ttt',
@@ -30,14 +29,14 @@ describe('/test/rpc/hsf.test.ts', () => {
     });
 
     const m1 = getClassMetadata(HSF_KEY, TestFun1);
-    expect(m1).deep.eq({});
+    expect(m1).toStrictEqual({});
 
     const def = getObjectDefProps(TestFun);
-    expect(def).deep.eq({
+    expect(def).toStrictEqual({
       scope: ScopeEnum.Request,
     });
 
     const m = listModule(HSF_KEY);
-    expect(m.length).eq(2);
+    expect(m.length).toEqual(2);
   });
 });
