@@ -5,7 +5,9 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## [2.3.19](https://github.com/midwayjs/midway/compare/v2.3.18...v2.3.19) (2020-10-28)
 
-**Note:** Version bump only for package midway
+### Features
+
+* add swagger description meta for swagger
 
 
 
