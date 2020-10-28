@@ -1,4 +1,3 @@
-import { expect } from 'chai';
 import {
   Pipeline,
   Provide,
@@ -21,7 +20,7 @@ class Test {
 describe('/test/annotation/pipeline.test.ts', () => {
   it('pipeline decorator should be ok', () => {
     const p = getPropertyInject(Test);
-    expect(p).deep.eq({
+    expect(p).toEqual({
       dd: [
         {
           args: undefined,
@@ -31,12 +30,12 @@ describe('/test/annotation/pipeline.test.ts', () => {
       ],
     });
 
-    expect(p['dd'][0].toString()).eq(
+    expect(p['dd'][0].toString()).toEqual(
       'tagged: { key:inject, value: __pipeline_identifier__ }'
     );
 
     const c = getConstructorInject(Test);
-    expect(c).deep.eq({
+    expect(c).toEqual({
       0: [
         {
           args: undefined,
@@ -46,12 +45,12 @@ describe('/test/annotation/pipeline.test.ts', () => {
       ],
     });
 
-    expect(c[0].toString()).eq(
+    expect(c[0].toString()).toEqual(
       'tagged: { key:inject, value: __pipeline_identifier__ }'
     );
 
     const meta = c[0][0];
     meta.key = NAMED_TAG;
-    expect(meta.toString()).eq('named: __pipeline_identifier__ ');
+    expect(meta.toString()).toEqual('named: __pipeline_identifier__ ');
   });
 });

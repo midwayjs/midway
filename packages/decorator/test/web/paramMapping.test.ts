@@ -1,4 +1,3 @@
-import { expect } from 'chai';
 import {
   ALL,
   Body,
@@ -27,6 +26,6 @@ class Test {
 describe('/test/web/paramMapping.test.ts', () => {
   it('paramMapping decorator should be ok', () => {
     const meta = getPropertyDataFromClass(WEB_ROUTER_PARAM_KEY, Test, 'doget');
-    expect(meta.length).eq(7);
+    expect(meta.length).toEqual(7);
   });
 });

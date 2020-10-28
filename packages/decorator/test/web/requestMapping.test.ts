@@ -1,4 +1,3 @@
-import { expect } from 'chai';
 import {
   Get,
   Post,
@@ -16,12 +15,12 @@ class Test {
     // ignore
   }
 
-  @Post('/get', { routerName: 'post', middleware: ['hello'] })
+  @Post('/get', { routerName: 'post', middleware: ['hello'], summary: 'test post method' })
   async doPost() {
     // ignore
   }
 
-  @Options('/get', { routerName: 'options', middleware: ['hello'] })
+  @Options('/get', { routerName: 'options', middleware: ['hello'], description: 'test option method' })
   async doOptions() {
     // ignore
   }
@@ -42,41 +41,51 @@ class Test {
 describe('/test/web/requestMapping.test.ts', () => {
   it('requestMapping decorator should be ok', () => {
     const meta = getClassMetadata(WEB_ROUTER_KEY, Test);
-    expect(meta).deep.eq([
+    expect(meta).toStrictEqual([
       {
+        description: '',
         path: '/get',
         requestMethod: 'get',
         routerName: 'get',
         method: 'doGet',
         middleware: ['hello'],
+        summary: '',
       },
       {
+        description: '',
         path: '/get',
         requestMethod: 'post',
         routerName: 'post',
         method: 'doPost',
         middleware: ['hello'],
+        summary: 'test post method',
       },
       {
+        description: 'test option method',
         path: '/get',
         requestMethod: 'options',
         routerName: 'options',
         method: 'doOptions',
         middleware: ['hello'],
+        summary: '',
       },
       {
+        description: '',
         path: '/get',
         requestMethod: 'head',
         routerName: 'head',
         method: 'doHead',
         middleware: ['hello'],
+        summary: '',
       },
       {
+        description: '',
         path: '/',
         requestMethod: 'all',
         routerName: 'all',
         method: 'doAll',
         middleware: undefined,
+        summary: '',
       },
     ]);
 
@@ -84,26 +93,30 @@ describe('/test/web/requestMapping.test.ts', () => {
     dd(Test, 'ttt', null);
 
     const metadd = getClassMetadata(WEB_ROUTER_KEY, Test);
-    expect(metadd[metadd.length - 1]).deep.eq({
+    expect(metadd[metadd.length - 1]).toStrictEqual({
+      description: '',
       path: '/',
       requestMethod: 'get',
       routerName: null,
       method: 'ttt',
       middleware: [],
+      summary: '',
     });
 
     const bb = RequestMapping({
-      METHOD_METADATA: null,
+      method: null,
     });
 
     bb(Test, 'ttt', null);
     const metabb = getClassMetadata(WEB_ROUTER_KEY, Test);
-    expect(metabb[metabb.length - 1]).deep.eq({
+    expect(metabb[metabb.length - 1]).toStrictEqual({
+      description: '',
       path: '/',
       requestMethod: 'get',
       routerName: undefined,
       method: 'ttt',
       middleware: undefined,
+      summary: '',
     });
   });
 });

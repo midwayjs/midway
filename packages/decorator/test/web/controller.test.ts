@@ -1,4 +1,3 @@
-import { expect } from 'chai';
 import {
   Controller,
   CONTROLLER_KEY,
@@ -15,6 +14,8 @@ import {
 @Controller('/hhh', {
   sensitive: true,
   middleware: ['hello'],
+  description: 'my controller',
+  tagName: 'my'
 })
 class TestController {}
 
@@ -24,16 +25,18 @@ class TestOneController {}
 describe('/test/web/controller.test.ts', () => {
   it('controller decorator should be ok', () => {
     const meta = getClassMetadata(CONTROLLER_KEY, TestController);
-    expect(meta).deep.eq({
+    expect(meta).toStrictEqual({
       prefix: '/hhh',
       routerOptions: {
+        description: 'my controller',
         sensitive: true,
         middleware: ['hello'],
+        tagName: 'my',
       },
     });
 
     const metaone = getClassMetadata(CONTROLLER_KEY, TestOneController);
-    expect(metaone).deep.eq({
+    expect(metaone).toStrictEqual({
       prefix: '/tt',
       routerOptions: {
         sensitive: true,
@@ -42,17 +45,17 @@ describe('/test/web/controller.test.ts', () => {
     });
 
     const def = getObjectDefProps(TestController);
-    expect(def).deep.eq({
+    expect(def).toStrictEqual({
       scope: ScopeEnum.Request,
     });
 
     const m = listModule(CONTROLLER_KEY);
-    expect(m.length).eq(4);
+    expect(m.length).toEqual(4);
   });
 
   it('controller extends should be ok', () => {
     const metaone = getClassMetadata(CONTROLLER_KEY, ControllerOne);
-    expect(metaone).deep.eq({
+    expect(metaone).toStrictEqual({
       prefix: '/api/one',
       routerOptions: {
         sensitive: true,
@@ -61,7 +64,7 @@ describe('/test/web/controller.test.ts', () => {
     });
 
     const metatwo = getClassMetadata(CONTROLLER_KEY, ControllerTwo);
-    expect(metatwo).deep.eq({
+    expect(metatwo).toStrictEqual({
       prefix: '/api/two',
       routerOptions: {
         sensitive: true,

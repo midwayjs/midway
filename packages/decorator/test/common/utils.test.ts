@@ -14,7 +14,6 @@ import {
   saveObjectDefProps,
   getObjectDefProps,
 } from '../../src';
-import { expect } from 'chai';
 
 @Provide()
 class Test {
@@ -36,7 +35,7 @@ describe('/test/common/util.test.ts', () => {
   it('util saveProviderId should be ok', () => {
     saveProviderId('test1', Test, true);
     const t = getProviderId(Test);
-    expect(t).eq('test1');
+    expect(t).toEqual('test1');
 
     let s = '';
     try {
@@ -44,12 +43,12 @@ describe('/test/common/util.test.ts', () => {
     } catch (e) {
       s = e.message;
     }
-    expect(s).eq(DUPLICATED_INJECTABLE_DECORATOR);
+    expect(s).toEqual(DUPLICATED_INJECTABLE_DECORATOR);
   });
 
   it('util savePropertyInject should be ok', () => {
     const p = getPropertyInject(Test);
-    expect(p).deep.eq({
+    expect(p).toEqual({
       hello: [
         {
           args: undefined,
@@ -60,7 +59,7 @@ describe('/test/common/util.test.ts', () => {
     });
 
     const c = getConstructorInject(Test);
-    expect(c).deep.eq({
+    expect(c).toEqual({
       0: [
         {
           args: undefined,
@@ -85,8 +84,8 @@ describe('/test/common/util.test.ts', () => {
     } catch (e) {
       s = e.message;
     }
-    expect(s).not.eq('empty!');
-    expect(s).eq('Metadata key was used more than once in a parameter: inject');
+    expect(s).not.toEqual('empty!');
+    expect(s).toEqual('Metadata key was used more than once in a parameter: inject');
 
     s = 'empty1';
     try {
@@ -99,8 +98,8 @@ describe('/test/common/util.test.ts', () => {
     } catch (e) {
       s = e.message;
     }
-    expect(s).not.eq('empty1');
-    expect(s).eq(
+    expect(s).not.toEqual('empty1');
+    expect(s).toEqual(
       'The @inject @multiInject @tagged and @named decorators must be applied to the parameters of a class constructor or a class property.'
     );
   });
@@ -109,12 +108,12 @@ describe('/test/common/util.test.ts', () => {
     attachConstructorDataOnClass('', TestOne, 'ttt', 0);
 
     const meta = getClassMetadata(CLASS_KEY_CONSTRUCTOR, TestOne);
-    expect(meta).deep.eq({ 0: { key: 'h1', type: 'ttt' } });
+    expect(meta).toStrictEqual({ 0: { key: 'h1', type: 'ttt' } });
   });
 
   it('util saveObjectDefProps should be ok', () => {
     saveObjectDefProps(TestOne);
     const tt = getObjectDefProps(TestOne);
-    expect(tt).deep.eq({});
+    expect(tt).toStrictEqual({});
   });
 });
