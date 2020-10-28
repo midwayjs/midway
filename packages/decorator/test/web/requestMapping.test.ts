@@ -104,7 +104,7 @@ describe('/test/web/requestMapping.test.ts', () => {
     });
 
     const bb = RequestMapping({
-      method: null,
+      requestMethod: null,
     });
 
     bb(Test, 'ttt', null);
