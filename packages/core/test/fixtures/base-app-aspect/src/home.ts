@@ -1,4 +1,4 @@
-import { Provide } from '@midwayjs/decorator';
+import { Provide, Inject } from '@midwayjs/decorator';
 
 class Parent {
   ddd = 'ddd';
@@ -19,11 +19,23 @@ export class Home extends Parent {
 
   ccc: string;
 
-  hello(data1: string = 'ggg', data2 = 'fff') {
-    return 'hello world' + data1 + data2;
+  hello(data1: string = 'ggg', data2: string = 'aaa', data3 = 'fff') {
+    return 'hello world' + data1 + data2 + data3;
   }
 
   async hello2(data1: string = 'ggg', data2 = 'fff') {
     return 'hello world' + data1 + data2;
+  }
+}
+
+
+@Provide()
+export class UserController {
+
+  @Inject()
+  ctx;
+
+  async getUser() {
+    throw new Error('bbb');
   }
 }

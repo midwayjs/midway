@@ -35,5 +35,21 @@ describe('/test/issue.test.ts', () => {
     expect(result.text).toEqual('hello world');
     await closeApp(app);
   });
+
+  it('test #683 issue to change ctx correct', async () => {
+    const app = await creatApp('issue/base-app-aspect-throw');
+    let result = await createHttpRequest(app).get('/api/user/info');
+    expect(result.status).toEqual(200);
+    expect(result.text).toEqual('hello');
+
+    let result2 = await createHttpRequest(app).get('/api/user/info');
+    expect(result2.status).toEqual(200);
+    expect(result2.text).toEqual('hello');
+
+    let result3 = await createHttpRequest(app).get('/api/user/ctx_bind').query({text: 'hello'});
+    expect(result3.status).toEqual(200);
+    expect(result3.text).toEqual('hello world');
+    await closeApp(app);
+  });
 });
 
