@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/web",
-  "version": "2.3.20",
+  "version": "2.3.21",
   "description": "Midway Web Scene",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -40,7 +40,7 @@
     "@midwayjs/bootstrap": "^2.3.20",
     "@midwayjs/core": "^2.3.20",
     "@midwayjs/decorator": "^2.3.20",
-    "@midwayjs/koa": "^2.3.20",
+    "@midwayjs/koa": "^2.3.21",
     "debug": "^4.1.1",
     "egg": "^2.28.0",
     "egg-logger": "^2.4.2",

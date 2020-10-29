@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.21](https://github.com/midwayjs/midway/compare/v2.3.20...v2.3.21) (2020-10-29)
+
+
+### Bug Fixes
+
+* setHeader loop with array ([#691](https://github.com/midwayjs/midway/issues/691)) ([9ed5acc](https://github.com/midwayjs/midway/commit/9ed5acc0f136a2dc6d013b1fd0ee0ab9b7546eab))
+
+
+
+
+
 ## [2.3.20](https://github.com/midwayjs/midway/compare/v2.3.19...v2.3.20) (2020-10-29)
 
 
