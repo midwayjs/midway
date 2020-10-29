@@ -7,7 +7,7 @@ import {
   Query,
   Body,
   HttpCode,
-  Redirect,
+  Redirect, SetHeader,
 } from '@midwayjs/decorator';
 import { UserService } from '../service/user';
 import { IMidwayExpressContext, IMidwayExpressRequest } from '../../../../../src';
@@ -24,6 +24,15 @@ export class APIController {
 
   @Inject()
   userService: UserService;
+
+  @Get('/set_header')
+  @SetHeader('bbb', 'aaa')
+  @SetHeader({
+    'ccc': 'ddd'
+  })
+  async homeSet() {
+    return 'bbb';
+  }
 
   @Post()
   async postData(@Body('bbbbb') bbbb) {
