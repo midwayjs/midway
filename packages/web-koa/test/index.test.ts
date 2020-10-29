@@ -13,6 +13,16 @@ describe('/test/feature.test.ts', () => {
       await closeApp(app);
     });
 
+    it('test setHeader decorator', async () => {
+      const result = await createHttpRequest(app)
+        .get('/set_header')
+        .query({ name: 'harry' });
+      expect(result.status).toEqual(200);
+      expect(result.text).toEqual('bbb');
+      expect(result.headers['bbb']).toEqual('aaa');
+      expect(result.headers['ccc']).toEqual('ddd');
+    });
+
     it('test get method with return value', async () => {
       const result = await createHttpRequest(app).get('/').query({ name: 'harry', age: 18 });
       expect(result.status).toBe(201);

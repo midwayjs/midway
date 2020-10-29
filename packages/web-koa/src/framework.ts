@@ -93,9 +93,9 @@ export abstract class MidwayKoaBaseFramework<
               ctx.status = routerRes.code;
               break;
             case WEB_RESPONSE_HEADER:
-              routerRes.setHeaders.forEach((key, value) => {
-                ctx.set(key, value);
-              });
+              for (const key in routerRes?.setHeaders || {}) {
+                ctx.set(key, routerRes.setHeaders[key]);
+              }
               break;
             case WEB_RESPONSE_CONTENT_TYPE:
               ctx.type = routerRes.contentType;
