@@ -12,17 +12,27 @@ describe('/test/feature.test.ts', () => {
       await closeApp(app);
     });
 
+    it('test setHeader decorator', async () => {
+      const result = await createHttpRequest(app)
+        .get('/set_header')
+        .query({ name: 'harry' });
+      expect(result.status).toEqual(200);
+      expect(result.text).toEqual('bbb');
+      expect(result.headers['bbb']).toEqual('aaa');
+      expect(result.headers['ccc']).toEqual('ddd');
+    });
+
     it('test get method with return value', async () => {
       const result = await createHttpRequest(app)
         .get('/')
         .query({ name: 'harry' });
-      expect(result.status).toBe(201);
-      expect(result.text).toBe('hello world,harry');
+      expect(result.status).toEqual(201);
+      expect(result.text).toEqual('hello world,harry');
     });
 
     it('test get method with redirect', async () => {
       const result = await createHttpRequest(app).get('/login');
-      expect(result.status).toBe(302);
+      expect(result.status).toEqual(302);
     });
   });
 

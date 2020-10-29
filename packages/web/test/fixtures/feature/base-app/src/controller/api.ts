@@ -8,6 +8,7 @@ import {
   Body,
   HttpCode,
   Redirect,
+  SetHeader,
 } from '@midwayjs/decorator';
 import { UserService } from '../service/user';
 
@@ -23,6 +24,15 @@ export class APIController {
   @Post()
   async postData(@Body('bbbbb') bbbb) {
     return 'data';
+  }
+
+  @Get('/set_header')
+  @SetHeader('bbb', 'aaa')
+  @SetHeader({
+    'ccc': 'ddd'
+  })
+  async homeSet() {
+    return 'bbb';
   }
 
   @Get('/', { middleware: [] })
