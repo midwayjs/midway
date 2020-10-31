@@ -21,6 +21,7 @@ describe('/test/loader.test.ts', () => {
   beforeEach(() => {
     clearAllModule();
     MidwayContainer.parentDefinitionMetadata = null;
+    MidwayContainer.wrapperAspect = false;
   });
   it('should create new loader', async () => {
     const loader = new ContainerLoader({
@@ -628,9 +629,18 @@ describe('/test/loader.test.ts', () => {
     await loader.refresh();
 
     const home: any = await loader.getApplicationContext().getAsync('home');
-    expect(home.hello()).toEqual('hello worlddddfff');
+    expect(home.hello()).toEqual('hello worlddddccccfff');
     expect(await home.hello1()).toEqual('hello world 1');
     expect(await home.hello2()).toEqual('hello worldcccppp');
+
+    const ctx1 = {id: 1};
+    const requestContext = new MidwayRequestContainer(ctx1, loader.getApplicationContext());
+    const userController1: any = await requestContext.getAsync('userController');
+    try {
+      await userController1.getUser();
+    } catch (err) {
+      expect(err.message).toMatch('ccc');
+    }
   });
 
   it('should inject global value in component', async () => {

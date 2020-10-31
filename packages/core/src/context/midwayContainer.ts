@@ -80,6 +80,7 @@ export class MidwayContainer
    * 单个进程中上一次的 applicationContext 的 registry
    */
   static parentDefinitionMetadata: Map<string, IObjectDefinitionMetadata[]>;
+  static wrapperAspect = false;
 
   constructor(baseDir: string = process.cwd(), parent?: IApplicationContext) {
     super(baseDir, parent);
@@ -522,19 +523,21 @@ export class MidwayContainer
         );
         descriptor.value = async function (...args) {
           let error, result;
-          originMethod = originMethod.bind(this);
+          const newProceed = (...args) => {
+            return originMethod.apply(this, args);
+          }
           const joinPoint = {
             methodName: name,
             target: this,
             args: args,
-            proceed: originMethod,
+            proceed: newProceed,
           };
           try {
             await aspectIns.before?.(joinPoint);
             if (aspectIns.around) {
               result = await aspectIns.around(joinPoint);
             } else {
-              result = await originMethod(...joinPoint.args);
+              result = await originMethod.apply(this, joinPoint.args);
             }
             joinPoint.proceed = undefined;
             const resultTemp = await aspectIns.afterReturn?.(joinPoint, result);
@@ -558,19 +561,21 @@ export class MidwayContainer
         );
         descriptor.value = function (...args) {
           let error, result;
-          originMethod = originMethod.bind(this);
+          const newProceed = (...args) => {
+            return originMethod.apply(this, args);
+          }
           const joinPoint = {
             methodName: name,
             target: this,
             args: args,
-            proceed: originMethod,
+            proceed: newProceed,
           };
           try {
             aspectIns.before?.(joinPoint);
             if (aspectIns.around) {
               result = aspectIns.around(joinPoint);
             } else {
-              result = originMethod(...joinPoint.args);
+              result = originMethod.apply(this, joinPoint.args);
             }
             const resultTemp = aspectIns.afterReturn?.(joinPoint, result);
             result = typeof resultTemp === 'undefined' ? result : resultTemp;

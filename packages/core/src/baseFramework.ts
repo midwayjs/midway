@@ -289,6 +289,9 @@ export abstract class BaseFramework<
    * @private
    */
   private async loadAspect() {
+    // 每个进程只执行一次拦截器
+    if(MidwayContainer.wrapperAspect) return;
+
     // for aop implementation
     const aspectModules = listModule(ASPECT_KEY);
     // sort for aspect target
@@ -312,7 +315,9 @@ export abstract class BaseFramework<
       const aspectIns = await this.getApplicationContext().getAsync<
         IMethodAspect
       >(aspectData.aspectModule);
-      await this.getApplicationContext().addAspect(aspectIns, aspectData);
+      await this.applicationContext.addAspect(aspectIns, aspectData);
     }
+
+    MidwayContainer.wrapperAspect = true;
   }
 }

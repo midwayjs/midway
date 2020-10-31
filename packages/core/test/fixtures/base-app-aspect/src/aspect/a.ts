@@ -6,6 +6,6 @@ import { Home } from '../home';
 export class MyAspect1 implements IMethodAspect {
   before(point: JoinPoint): any {
     console.log('change args in aspect1');
-    point.args = ['ddd']
+    point.args = ['ddd', 'cccc'];
   }
 }

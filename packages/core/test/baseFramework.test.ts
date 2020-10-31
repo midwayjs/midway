@@ -11,6 +11,7 @@ import {
   BaseFramework,
   clearAllModule,
   MidwayContainer,
+  MidwayRequestContainer,
 } from '../src';
 import * as mm from 'mm';
 import sinon = require('sinon');
@@ -51,6 +52,7 @@ describe('/test/baseFramework.test.ts', () => {
   beforeEach(() => {
     clearAllModule();
     MidwayContainer.parentDefinitionMetadata = null;
+    MidwayContainer.wrapperAspect = false;
   });
 
   it.skip('should load js directory and auto disable', async () => {
@@ -476,9 +478,18 @@ describe('/test/baseFramework.test.ts', () => {
     });
 
     const home: any = await framework.getApplicationContext().getAsync('home');
-    expect(home.hello()).toEqual('hello worlddddfff');
+    expect(home.hello()).toEqual('hello worlddddccccfff');
     expect(await home.hello1()).toEqual('hello world 1');
     expect(await home.hello2()).toEqual('hello worldcccppp');
+
+    const ctx1 = {id: 1};
+    const requestContext = new MidwayRequestContainer(ctx1, framework.getApplicationContext());
+    const userController1: any = await requestContext.getAsync('userController');
+    try {
+      await userController1.getUser();
+    } catch (err) {
+      expect(err.message).toMatch('ccc');
+    }
   });
 
   it('should inject global value in component', async () => {
