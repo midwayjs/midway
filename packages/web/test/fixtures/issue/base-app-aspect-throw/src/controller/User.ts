@@ -13,7 +13,6 @@ export class UserController {
 
   @Get('/ctx_bind')
   async doTestCtxBind() {
-    console.log(this.ctx.path);
     return this.ctx.query.text;
   }
 }

@@ -80,6 +80,7 @@ export class MidwayContainer
    * 单个进程中上一次的 applicationContext 的 registry
    */
   static parentDefinitionMetadata: Map<string, IObjectDefinitionMetadata[]>;
+  static wrapperAspect = false;
 
   constructor(baseDir: string = process.cwd(), parent?: IApplicationContext) {
     super(baseDir, parent);
@@ -522,9 +523,8 @@ export class MidwayContainer
         );
         descriptor.value = async function (...args) {
           let error, result;
-          const self = this;
           const newProceed = (...args) => {
-            return originMethod.call(self, args);
+            return originMethod.apply(this, args);
           }
           const joinPoint = {
             methodName: name,
@@ -562,7 +562,7 @@ export class MidwayContainer
         descriptor.value = function (...args) {
           let error, result;
           const newProceed = (...args) => {
-            return originMethod.call(self, args);
+            return originMethod.apply(this, args);
           }
           const joinPoint = {
             methodName: name,
