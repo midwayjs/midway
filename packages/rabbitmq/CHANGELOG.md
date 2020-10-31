@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.22](https://github.com/midwayjs/midway/compare/v2.3.21...v2.3.22) (2020-10-31)
+
+**Note:** Version bump only for package @midwayjs/rabbitmq
+
+
+
+
+
 ## [2.3.20](https://github.com/midwayjs/midway/compare/v2.3.19...v2.3.20) (2020-10-29)
 
 **Note:** Version bump only for package @midwayjs/rabbitmq

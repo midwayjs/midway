@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.22](https://github.com/midwayjs/midway/compare/v2.3.21...v2.3.22) (2020-10-31)
+
+
+### Bug Fixes
+
+* aspect bind missing ctx ([#694](https://github.com/midwayjs/midway/issues/694)) ([871ea80](https://github.com/midwayjs/midway/commit/871ea80b8090e28f02dc74405de5da3969ccf5c4))
+
+
+
+
+
 ## [2.3.20](https://github.com/midwayjs/midway/compare/v2.3.19...v2.3.20) (2020-10-29)
 
 **Note:** Version bump only for package @midwayjs/mock
