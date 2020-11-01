@@ -52,7 +52,6 @@ describe('/test/baseFramework.test.ts', () => {
   beforeEach(() => {
     clearAllModule();
     MidwayContainer.parentDefinitionMetadata = null;
-    MidwayContainer.wrapperAspect = false;
   });
 
   it.skip('should load js directory and auto disable', async () => {

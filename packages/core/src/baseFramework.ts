@@ -11,11 +11,8 @@ import {
 import { MidwayContainer } from './context/midwayContainer';
 import {
   APPLICATION_KEY,
-  ASPECT_KEY,
   CONFIGURATION_KEY,
-  getClassMetadata,
   getProviderId,
-  IMethodAspect,
   listModule,
   listPreloadModule,
 } from '@midwayjs/decorator';
@@ -141,8 +138,6 @@ export abstract class BaseFramework<
     await this.loadLifeCycles();
     // 预加载模块支持
     await this.loadPreloadModule();
-    // 切面支持
-    await this.loadAspect();
   }
 
   protected async containerStop() {
@@ -282,42 +277,5 @@ export abstract class BaseFramework<
       // preload init context
       await this.getApplicationContext().getAsync(module);
     }
-  }
-
-  /**
-   * load aspect method for container
-   * @private
-   */
-  private async loadAspect() {
-    // 每个进程只执行一次拦截器
-    if(MidwayContainer.wrapperAspect) return;
-
-    // for aop implementation
-    const aspectModules = listModule(ASPECT_KEY);
-    // sort for aspect target
-    let aspectDataList = [];
-    for (const module of aspectModules) {
-      const data = getClassMetadata(ASPECT_KEY, module);
-      aspectDataList = aspectDataList.concat(
-        data.map(el => {
-          el.aspectModule = module;
-          return el;
-        })
-      );
-    }
-
-    // sort priority
-    aspectDataList.sort((pre, next) => {
-      return (next.priority || 0) - (pre.priority || 0);
-    });
-
-    for (const aspectData of aspectDataList) {
-      const aspectIns = await this.getApplicationContext().getAsync<
-        IMethodAspect
-      >(aspectData.aspectModule);
-      await this.applicationContext.addAspect(aspectIns, aspectData);
-    }
-
-    MidwayContainer.wrapperAspect = true;
   }
 }
