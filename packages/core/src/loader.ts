@@ -1,8 +1,10 @@
 import * as path from 'path';
 import { MidwayContainer } from './context/midwayContainer';
 import {
-  ASPECT_KEY, CONFIGURATION_KEY,
-  getClassMetadata, getProviderId,
+  ASPECT_KEY,
+  CONFIGURATION_KEY,
+  getClassMetadata,
+  getProviderId,
   IMethodAspect,
   listModule,
   listPreloadModule,

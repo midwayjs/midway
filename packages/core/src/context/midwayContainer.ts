@@ -77,7 +77,7 @@ export class MidwayContainer
   private likeMainConfiguration: IContainerConfiguration[] = [];
   public configService: IConfigService;
   public environmentService: IEnvironmentService;
-  private aspectMappingMap: WeakMap<object, Map<string, any[]>>;
+  public aspectMappingMap: WeakMap<object, Map<string, any[]>>;
   private aspectModuleSet: Set<any>;
 
   /**
@@ -525,24 +525,21 @@ export class MidwayContainer
       identifier = this.getIdentifier(identifier);
     }
     const ins: any = await super.getAsync<T>(identifier, args);
-    if (this.aspectMappingMap.has(ins.__proto__.constructor)) {
+    let proxy = null;
+    if (ins?.constructor && this.aspectMappingMap.has(ins.constructor)) {
       // 动态处理拦截器
-      const methodAspectCollection = this.aspectMappingMap.get(ins.__proto__.constructor);
-      for (let [method, aspectFn] of methodAspectCollection) {
-        const descriptor = Object.getOwnPropertyDescriptor(
-          ins,
-          method
-        );
-
-        // 拦截器方法已经合并过了
-        if (aspectFn.length === 1) {
-          descriptor.value = aspectFn[0](descriptor.value);
-        } else {
-          throw new Error('Aspect length error, length = ' + aspectFn.length);
-        }
-      }
+      const methodAspectCollection = this.aspectMappingMap.get(ins.constructor);
+      proxy = new Proxy(ins, {
+        get: (obj, prop) => {
+          if (typeof prop === 'string' && methodAspectCollection.has(prop)) {
+            const aspectFn = methodAspectCollection.get(prop);
+            return aspectFn[0](ins, obj[prop]);
+          }
+          return obj[prop];
+        },
+      });
     }
-    return ins;
+    return proxy || ins;
   }
 
   protected getIdentifier(target: any) {
@@ -671,7 +668,6 @@ export class MidwayContainer
     return this.resolverHandler;
   }
 
-
   /**
    * load aspect method for container
    * @private
@@ -697,35 +693,28 @@ export class MidwayContainer
     });
 
     for (const aspectData of aspectDataList) {
-      const aspectIns = await this.getAsync<
-        IMethodAspect
-        >(aspectData.aspectModule);
+      const aspectIns = await this.getAsync<IMethodAspect>(
+        aspectData.aspectModule
+      );
       await this.addAspect(aspectIns, aspectData);
     }
 
     // 合并拦截器方法，提升性能
-    for (let module of this.aspectModuleSet) {
+    for (const module of this.aspectModuleSet) {
       const aspectMapping = this.aspectMappingMap.get(module);
-      for (let [method, aspectFn] of aspectMapping) {
-        let result = (originMethod) => {
-          if (isAsyncFunction(originMethod)) {
-            return async (...args) => {
-              return originMethod.call(this, args);
-            }
-          } else {
-            return (...args) => {
-              return originMethod.call(this, args);
-            }
+      for (const [method, aspectFn] of aspectMapping) {
+        const composeFn = (ins, originMethod) => {
+          for (const fn of aspectFn) {
+            originMethod = fn(ins, originMethod);
           }
+          return originMethod;
         };
-        for (const fn of aspectFn) {
-          result = fn(result);
-        }
-        aspectMapping.set(method, [result]);
+        aspectMapping.set(method, [composeFn]);
       }
     }
+    // 绑定完后清理 set 记录
+    this.aspectModuleSet.clear();
   }
-
 
   public async addAspect(aspectIns: IMethodAspect, aspectData: AspectMetadata) {
     const module = aspectData.aspectTarget;
@@ -771,15 +760,15 @@ export class MidwayContainer
           `aspect [#${module.name}:${name}], isAsync=true, aspect class=[${aspectIns.constructor.name}]`
         );
 
-        const fn = (originMethod) => {
+        const fn = (ins, originMethod) => {
           return async (...args) => {
             let error, result;
             const newProceed = (...args) => {
-              return originMethod.apply(this, args);
-            }
+              return originMethod.apply(ins, args);
+            };
             const joinPoint = {
               methodName: name,
-              target: this,
+              target: ins,
               args: args,
               proceed: newProceed,
             };
@@ -788,10 +777,13 @@ export class MidwayContainer
               if (aspectIns.around) {
                 result = await aspectIns.around(joinPoint);
               } else {
-                result = await originMethod.apply(this, joinPoint.args);
+                result = await originMethod.apply(ins, joinPoint.args);
               }
               joinPoint.proceed = undefined;
-              const resultTemp = await aspectIns.afterReturn?.(joinPoint, result);
+              const resultTemp = await aspectIns.afterReturn?.(
+                joinPoint,
+                result
+              );
               result = typeof resultTemp === 'undefined' ? result : resultTemp;
               return result;
             } catch (err) {
@@ -806,22 +798,22 @@ export class MidwayContainer
               await aspectIns.after?.(joinPoint, result, error);
             }
           };
-        }
+        };
 
         methodAspectCollection.push(fn);
       } else {
         this.debugLogger(
           `aspect [#${module.name}:${name}], isAsync=false, aspect class=[${aspectIns.constructor.name}]`
         );
-        const fn = (originMethod) => {
+        const fn = (ins, originMethod) => {
           return (...args) => {
             let error, result;
             const newProceed = (...args) => {
-              return originMethod.apply(this, args);
-            }
+              return originMethod.apply(ins, args);
+            };
             const joinPoint = {
               methodName: name,
-              target: this,
+              target: ins,
               args: args,
               proceed: newProceed,
             };
@@ -830,7 +822,7 @@ export class MidwayContainer
               if (aspectIns.around) {
                 result = aspectIns.around(joinPoint);
               } else {
-                result = originMethod.apply(this, joinPoint.args);
+                result = originMethod.apply(ins, joinPoint.args);
               }
               const resultTemp = aspectIns.afterReturn?.(joinPoint, result);
               result = typeof resultTemp === 'undefined' ? result : resultTemp;
@@ -846,7 +838,7 @@ export class MidwayContainer
               aspectIns.after?.(joinPoint, result, error);
             }
           };
-        }
+        };
 
         methodAspectCollection.push(fn);
       }
