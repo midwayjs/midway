@@ -50,10 +50,11 @@ export class MidwayRequestContainer extends MidwayContainer {
         definition.id === PIPELINE_IDENTIFIER
       ) {
         // create object from applicationContext definition for requestScope
-        return this.getManagedResolverFactory().create({
+        const ins = this.getManagedResolverFactory().create({
           definition,
           args,
         });
+        return this.wrapperAspectToInstance(ins);
       }
     }
 
@@ -86,31 +87,7 @@ export class MidwayRequestContainer extends MidwayContainer {
           definition,
           args,
         });
-
-        let proxy = null;
-        if (
-          ins?.constructor &&
-          (this.parent as IMidwayContainer).aspectMappingMap.has(
-            ins.constructor
-          )
-        ) {
-          // 动态处理拦截器
-          const methodAspectCollection = (this
-            .parent as IMidwayContainer).aspectMappingMap.get(ins.constructor);
-          proxy = new Proxy(ins, {
-            get: (obj, prop) => {
-              if (
-                typeof prop === 'string' &&
-                methodAspectCollection.has(prop)
-              ) {
-                const aspectFn = methodAspectCollection.get(prop);
-                return aspectFn[0](ins, obj[prop]);
-              }
-              return obj[prop];
-            },
-          });
-        }
-        return proxy || ins;
+        return this.wrapperAspectToInstance(ins);
       }
     }
 

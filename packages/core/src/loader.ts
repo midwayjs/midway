@@ -1,13 +1,9 @@
 import * as path from 'path';
 import { MidwayContainer } from './context/midwayContainer';
 import {
-  ASPECT_KEY,
   CONFIGURATION_KEY,
-  getClassMetadata,
   getProviderId,
-  IMethodAspect,
   listModule,
-  listPreloadModule,
 } from '@midwayjs/decorator';
 import { ILifeCycle, IMidwayContainer } from './interface';
 
@@ -92,39 +88,6 @@ export class ContainerLoader {
   async refresh() {
     await this.applicationContext.ready();
     await this.loadLifeCycles();
-
-    // some common decorator implementation
-    const modules = listPreloadModule();
-    for (const module of modules) {
-      // preload init context
-      await this.getApplicationContext().getAsync(module);
-    }
-
-    // for aop implementation
-    const aspectModules = listModule(ASPECT_KEY);
-    // sort for aspect target
-    let aspectDataList = [];
-    for (const module of aspectModules) {
-      const data = getClassMetadata(ASPECT_KEY, module);
-      aspectDataList = aspectDataList.concat(
-        data.map(el => {
-          el.aspectModule = module;
-          return el;
-        })
-      );
-    }
-
-    // sort priority
-    aspectDataList.sort((pre, next) => {
-      return (next.priority || 0) - (pre.priority || 0);
-    });
-
-    for (const aspectData of aspectDataList) {
-      const aspectIns = await this.getApplicationContext().getAsync<
-        IMethodAspect
-      >(aspectData.aspectModule);
-      await this.getApplicationContext().addAspect(aspectIns, aspectData);
-    }
   }
 
   async stop() {

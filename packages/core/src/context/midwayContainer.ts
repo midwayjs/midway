@@ -23,6 +23,7 @@ import {
   getObjectDefProps,
   getClassMetadata,
   ASPECT_KEY,
+  listPreloadModule,
 } from '@midwayjs/decorator';
 import { ContainerConfiguration } from './configuration';
 import { FUNCTION_INJECT_KEY } from '../common/constants';
@@ -77,7 +78,7 @@ export class MidwayContainer
   private likeMainConfiguration: IContainerConfiguration[] = [];
   public configService: IConfigService;
   public environmentService: IEnvironmentService;
-  public aspectMappingMap: WeakMap<object, Map<string, any[]>>;
+  protected aspectMappingMap: WeakMap<object, Map<string, any[]>>;
   private aspectModuleSet: Set<any>;
 
   /**
@@ -517,7 +518,8 @@ export class MidwayContainer
     if (typeof identifier !== 'string') {
       identifier = this.getIdentifier(identifier);
     }
-    return super.get(identifier, args);
+    const ins: any = super.get<T>(identifier, args);
+    return this.wrapperAspectToInstance(ins);
   }
 
   async getAsync<T>(identifier: any, args?: any): Promise<T> {
@@ -525,21 +527,7 @@ export class MidwayContainer
       identifier = this.getIdentifier(identifier);
     }
     const ins: any = await super.getAsync<T>(identifier, args);
-    let proxy = null;
-    if (ins?.constructor && this.aspectMappingMap.has(ins.constructor)) {
-      // 动态处理拦截器
-      const methodAspectCollection = this.aspectMappingMap.get(ins.constructor);
-      proxy = new Proxy(ins, {
-        get: (obj, prop) => {
-          if (typeof prop === 'string' && methodAspectCollection.has(prop)) {
-            const aspectFn = methodAspectCollection.get(prop);
-            return aspectFn[0](ins, obj[prop]);
-          }
-          return obj[prop];
-        },
-      });
-    }
-    return proxy || ins;
+    return this.wrapperAspectToInstance(ins);
   }
 
   protected getIdentifier(target: any) {
@@ -553,7 +541,11 @@ export class MidwayContainer
       await this.configService.load();
     }
 
+    // 切面支持
     await this.loadAspect();
+
+    // 预加载模块支持
+    await this.loadPreloadModule();
   }
 
   async stop(): Promise<void> {
@@ -712,7 +704,7 @@ export class MidwayContainer
         aspectMapping.set(method, [composeFn]);
       }
     }
-    // 绑定完后清理 set 记录
+    // 绑定完后清理 Set 记录
     this.aspectModuleSet.clear();
   }
 
@@ -842,6 +834,54 @@ export class MidwayContainer
 
         methodAspectCollection.push(fn);
       }
+    }
+  }
+
+  /**
+   * wrapper aspect method before instance return
+   * @param ins
+   * @protected
+   */
+  protected wrapperAspectToInstance(ins) {
+    let proxy = null;
+    if (ins?.constructor) {
+      // 动态处理拦截器
+      let methodAspectCollection;
+      if (this.aspectMappingMap?.has(ins.constructor)) {
+        methodAspectCollection = this.aspectMappingMap.get(ins.constructor);
+      } else if (
+        (this?.parent as MidwayContainer)?.aspectMappingMap.has(ins.constructor)
+      ) {
+        // for requestContainer
+        methodAspectCollection = (this
+          ?.parent as MidwayContainer)?.aspectMappingMap.get(ins.constructor);
+      }
+
+      if (methodAspectCollection) {
+        proxy = new Proxy(ins, {
+          get: (obj, prop) => {
+            if (typeof prop === 'string' && methodAspectCollection.has(prop)) {
+              const aspectFn = methodAspectCollection.get(prop);
+              return aspectFn[0](ins, obj[prop]);
+            }
+            return obj[prop];
+          },
+        });
+      }
+    }
+    return proxy || ins;
+  }
+
+  /**
+   * load preload module for container
+   * @private
+   */
+  private async loadPreloadModule() {
+    // some common decorator implementation
+    const modules = listPreloadModule();
+    for (const module of modules) {
+      // preload init context
+      await this.getAsync(module);
     }
   }
 }

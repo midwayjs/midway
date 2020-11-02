@@ -231,7 +231,6 @@ export interface IResolverHandler {
 }
 
 export interface IMidwayContainer extends IApplicationContext {
-  aspectMappingMap;
   load(opts: {
     loadDir: string | string[];
     pattern?: string | string[];

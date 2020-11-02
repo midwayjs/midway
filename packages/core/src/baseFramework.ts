@@ -14,7 +14,6 @@ import {
   CONFIGURATION_KEY,
   getProviderId,
   listModule,
-  listPreloadModule,
 } from '@midwayjs/decorator';
 import { isAbsolute, join } from 'path';
 
@@ -136,8 +135,6 @@ export abstract class BaseFramework<
     await this.applicationContext.ready();
     // lifecycle 支持
     await this.loadLifeCycles();
-    // 预加载模块支持
-    await this.loadPreloadModule();
   }
 
   protected async containerStop() {
@@ -263,19 +260,6 @@ export abstract class BaseFramework<
           })
         );
       }
-    }
-  }
-
-  /**
-   * load preload module for container
-   * @private
-   */
-  private async loadPreloadModule() {
-    // some common decorator implementation
-    const modules = listPreloadModule();
-    for (const module of modules) {
-      // preload init context
-      await this.getApplicationContext().getAsync(module);
     }
   }
 }
