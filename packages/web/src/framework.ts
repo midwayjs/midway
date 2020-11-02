@@ -70,6 +70,50 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
     return this;
   }
 
+  public async initialize(options: IMidwayBootstrapOptions): Promise<void> {
+    this.baseDir = options.baseDir;
+    this.appDir = options.appDir;
+    /**
+     * before create MidwayContainer instance，can change init parameters
+     */
+    await this.beforeContainerInitialize(options);
+
+    /**
+     * initialize MidwayContainer instance
+     */
+    await this.containerInitialize(options);
+
+    /**
+     * before container load directory and bind
+     */
+    await this.afterContainerInitialize(options);
+
+    /**
+     * run container loadDirectoryLoad method to create object definition
+     */
+    await this.containerDirectoryLoad(options);
+
+    /**
+     * after container load directory and bind
+     */
+    await this.afterContainerDirectoryLoad(options);
+
+    /**
+     * Third party application initialization
+     */
+    await this.applicationInitialize(options);
+
+    /**
+     * EggJS 比较特殊，生命周期触发需要等到插件加载完才能加载
+     */
+    await this.applicationContext.ready();
+
+    /**
+     * after container refresh
+     */
+    await this.afterContainerReady(options);
+  }
+
   protected async beforeContainerInitialize(
     options: Partial<IMidwayBootstrapOptions>
   ) {

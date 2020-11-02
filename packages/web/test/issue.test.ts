@@ -59,5 +59,13 @@ describe('/test/issue.test.ts', () => {
     expect(result.text).toEqual('hello world');
     await closeApp(app);
   });
+
+  it('test #700 issue to inject plugin and app correct in configuration', async () => {
+    const app = await creatApp('issue/base-app-configuration-plugin');
+    let result = await createHttpRequest(app).get('/');
+    expect(result.status).toEqual(200);
+    expect(result.text).toEqual('hello world');
+    await closeApp(app);
+  });
 });
 

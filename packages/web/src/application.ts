@@ -73,6 +73,7 @@ export const createAppWorkerLoader = AppWorkerLoader => {
       this.app.beforeStart(async () => {
         await this.bootstrap.init();
         super.load();
+        await this.framework.loadLifeCycles();
       });
     }
   }
