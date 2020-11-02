@@ -24,6 +24,7 @@ import {
   getClassMetadata,
   ASPECT_KEY,
   listPreloadModule,
+  isProxy,
 } from '@midwayjs/decorator';
 import { ContainerConfiguration } from './configuration';
 import { FUNCTION_INJECT_KEY } from '../common/constants';
@@ -844,7 +845,7 @@ export class MidwayContainer
    */
   protected wrapperAspectToInstance(ins) {
     let proxy = null;
-    if (ins?.constructor) {
+    if (!isProxy(ins) && ins?.constructor) {
       // 动态处理拦截器
       let methodAspectCollection;
       if (this.aspectMappingMap?.has(ins.constructor)) {
