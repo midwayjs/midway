@@ -73,7 +73,7 @@ export const createAppWorkerLoader = AppWorkerLoader => {
       this.app.beforeStart(async () => {
         await this.bootstrap.init();
         super.load();
-      })
+      });
     }
   }
 
@@ -132,7 +132,7 @@ export const createAgentWorkerLoader = AppWorkerLoader => {
       this.app.beforeStart(async () => {
         await this.bootstrap.init();
         super.load();
-      })
+      });
     }
   }
 
