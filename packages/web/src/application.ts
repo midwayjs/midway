@@ -70,9 +70,10 @@ export const createAppWorkerLoader = AppWorkerLoader => {
           baseDir: this.app.appDir,
         })
         .load(this.framework);
-      this.bootstrap.init().then(() => {
+      this.app.beforeStart(async () => {
+        await this.bootstrap.init();
         super.load();
-      });
+      })
     }
   }
 
@@ -128,9 +129,10 @@ export const createAgentWorkerLoader = AppWorkerLoader => {
           baseDir: this.app.appDir,
         })
         .load(this.framework);
-      this.bootstrap.init().then(() => {
+      this.app.beforeStart(async () => {
+        await this.bootstrap.init();
         super.load();
-      });
+      })
     }
   }
 

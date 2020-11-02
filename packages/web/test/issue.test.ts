@@ -51,5 +51,13 @@ describe('/test/issue.test.ts', () => {
     expect(result3.text).toEqual('hello world');
     await closeApp(app);
   });
+
+  it('test #698 issue to fix load', async () => {
+    const app = await creatApp('issue/base-app-delay-load');
+    let result = await createHttpRequest(app).get('/');
+    expect(result.status).toEqual(200);
+    expect(result.text).toEqual('hello world');
+    await closeApp(app);
+  });
 });
 
