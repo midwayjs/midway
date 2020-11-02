@@ -75,10 +75,12 @@ const createMappingDecorator = (method: string) => (
     description?: string;
   } = { middleware: [] }
 ): MethodDecorator => {
-  return RequestMapping(Object.assign(routerOptions, {
-    requestMethod: method,
-    path,
-  }));
+  return RequestMapping(
+    Object.assign(routerOptions, {
+      requestMethod: method,
+      path,
+    })
+  );
 };
 
 /**

@@ -50,10 +50,11 @@ export class MidwayRequestContainer extends MidwayContainer {
         definition.id === PIPELINE_IDENTIFIER
       ) {
         // create object from applicationContext definition for requestScope
-        return this.getManagedResolverFactory().create({
+        const ins = this.getManagedResolverFactory().create({
           definition,
           args,
         });
+        return this.wrapperAspectToInstance(ins);
       }
     }
 
@@ -82,10 +83,11 @@ export class MidwayRequestContainer extends MidwayContainer {
         definition.id === PIPELINE_IDENTIFIER
       ) {
         // create object from applicationContext definition for requestScope
-        return this.getManagedResolverFactory().createAsync({
+        const ins = await this.getManagedResolverFactory().createAsync({
           definition,
           args,
         });
+        return this.wrapperAspectToInstance(ins);
       }
     }
 

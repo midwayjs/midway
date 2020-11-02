@@ -50,6 +50,22 @@ export function isNumber(value) {
   return typeof value === 'number';
 }
 
+export function isProxy(value) {
+  return util.types.isProxy(value);
+}
+
+export function isMap(value) {
+  return util.types.isMap(value);
+}
+
+export function isSet(value) {
+  return util.types.isSet(value);
+}
+
+export function isRegExp(value) {
+  return util.types.isRegExp(value);
+}
+
 export function sleep(sleepTime = 1000) {
   return new Promise(resolve => {
     setTimeout(() => {

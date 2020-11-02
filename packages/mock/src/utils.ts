@@ -34,7 +34,6 @@ export async function create<
   process.env.MIDWAY_TS_MODE = 'true';
   clearAllModule();
   MidwayContainer.parentDefinitionMetadata = null;
-  MidwayContainer.wrapperAspect = false;
   let framework: T = null;
   let DefaultFramework = null;
 

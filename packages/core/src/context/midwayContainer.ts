@@ -21,6 +21,10 @@ import {
   getConstructorInject,
   TAGGED_PROP,
   getObjectDefProps,
+  getClassMetadata,
+  ASPECT_KEY,
+  listPreloadModule,
+  isProxy,
 } from '@midwayjs/decorator';
 import { ContainerConfiguration } from './configuration';
 import { FUNCTION_INJECT_KEY } from '../common/constants';
@@ -75,12 +79,13 @@ export class MidwayContainer
   private likeMainConfiguration: IContainerConfiguration[] = [];
   public configService: IConfigService;
   public environmentService: IEnvironmentService;
+  protected aspectMappingMap: WeakMap<object, Map<string, any[]>>;
+  private aspectModuleSet: Set<any>;
 
   /**
    * 单个进程中上一次的 applicationContext 的 registry
    */
   static parentDefinitionMetadata: Map<string, IObjectDefinitionMetadata[]>;
-  static wrapperAspect = false;
 
   constructor(baseDir: string = process.cwd(), parent?: IApplicationContext) {
     super(baseDir, parent);
@@ -92,6 +97,9 @@ export class MidwayContainer
   }
 
   init(): void {
+    this.aspectMappingMap = new WeakMap();
+    this.aspectModuleSet = new Set();
+
     this.initService();
 
     this.resolverHandler = new ResolverHandler(
@@ -500,103 +508,6 @@ export class MidwayContainer
     return '';
   }
 
-  public async addAspect(aspectIns: IMethodAspect, aspectData: AspectMetadata) {
-    const module = aspectData.aspectTarget;
-    const names = Object.getOwnPropertyNames(module.prototype);
-    const isMatch = aspectData.match ? pm(aspectData.match) : () => true;
-
-    for (const name of names) {
-      if (name === 'constructor' || !isMatch(name)) {
-        continue;
-      }
-      const descriptor = Object.getOwnPropertyDescriptor(
-        module.prototype,
-        name
-      );
-      if (!descriptor || descriptor.writable === false) {
-        continue;
-      }
-      let originMethod = descriptor.value;
-      if (isAsyncFunction(originMethod)) {
-        this.debugLogger(
-          `aspect [#${module.name}:${name}], isAsync=true, aspect class=[${aspectIns.constructor.name}]`
-        );
-        descriptor.value = async function (...args) {
-          let error, result;
-          const newProceed = (...args) => {
-            return originMethod.apply(this, args);
-          }
-          const joinPoint = {
-            methodName: name,
-            target: this,
-            args: args,
-            proceed: newProceed,
-          };
-          try {
-            await aspectIns.before?.(joinPoint);
-            if (aspectIns.around) {
-              result = await aspectIns.around(joinPoint);
-            } else {
-              result = await originMethod.apply(this, joinPoint.args);
-            }
-            joinPoint.proceed = undefined;
-            const resultTemp = await aspectIns.afterReturn?.(joinPoint, result);
-            result = typeof resultTemp === 'undefined' ? result : resultTemp;
-            return result;
-          } catch (err) {
-            joinPoint.proceed = undefined;
-            error = err;
-            if (aspectIns.afterThrow) {
-              await aspectIns.afterThrow(joinPoint, error);
-            } else {
-              throw err;
-            }
-          } finally {
-            await aspectIns.after?.(joinPoint, result, error);
-          }
-        };
-      } else {
-        this.debugLogger(
-          `aspect [#${module.name}:${name}], isAsync=false, aspect class=[${aspectIns.constructor.name}]`
-        );
-        descriptor.value = function (...args) {
-          let error, result;
-          const newProceed = (...args) => {
-            return originMethod.apply(this, args);
-          }
-          const joinPoint = {
-            methodName: name,
-            target: this,
-            args: args,
-            proceed: newProceed,
-          };
-          try {
-            aspectIns.before?.(joinPoint);
-            if (aspectIns.around) {
-              result = aspectIns.around(joinPoint);
-            } else {
-              result = originMethod.apply(this, joinPoint.args);
-            }
-            const resultTemp = aspectIns.afterReturn?.(joinPoint, result);
-            result = typeof resultTemp === 'undefined' ? result : resultTemp;
-            return result;
-          } catch (err) {
-            error = err;
-            if (aspectIns.afterThrow) {
-              aspectIns.afterThrow(joinPoint, error);
-            } else {
-              throw err;
-            }
-          } finally {
-            aspectIns.after?.(joinPoint, result, error);
-          }
-        };
-      }
-
-      Object.defineProperty(module.prototype, name, descriptor);
-    }
-  }
-
   resolve<T>(target: T): T {
     const tempContainer = new MidwayContainer();
     tempContainer.bind<T>(target);
@@ -608,14 +519,16 @@ export class MidwayContainer
     if (typeof identifier !== 'string') {
       identifier = this.getIdentifier(identifier);
     }
-    return super.get(identifier, args);
+    const ins: any = super.get<T>(identifier, args);
+    return this.wrapperAspectToInstance(ins);
   }
 
   async getAsync<T>(identifier: any, args?: any): Promise<T> {
     if (typeof identifier !== 'string') {
       identifier = this.getIdentifier(identifier);
     }
-    return super.getAsync<T>(identifier, args);
+    const ins: any = await super.getAsync<T>(identifier, args);
+    return this.wrapperAspectToInstance(ins);
   }
 
   protected getIdentifier(target: any) {
@@ -628,6 +541,12 @@ export class MidwayContainer
       // 加载配置
       await this.configService.load();
     }
+
+    // 切面支持
+    await this.loadAspect();
+
+    // 预加载模块支持
+    await this.loadPreloadModule();
   }
 
   async stop(): Promise<void> {
@@ -740,5 +659,230 @@ export class MidwayContainer
 
   public getResolverHandler() {
     return this.resolverHandler;
+  }
+
+  /**
+   * load aspect method for container
+   * @private
+   */
+  private async loadAspect() {
+    // for aop implementation
+    const aspectModules = listModule(ASPECT_KEY);
+    // sort for aspect target
+    let aspectDataList = [];
+    for (const module of aspectModules) {
+      const data = getClassMetadata(ASPECT_KEY, module);
+      aspectDataList = aspectDataList.concat(
+        data.map(el => {
+          el.aspectModule = module;
+          return el;
+        })
+      );
+    }
+
+    // sort priority
+    aspectDataList.sort((pre, next) => {
+      return (next.priority || 0) - (pre.priority || 0);
+    });
+
+    for (const aspectData of aspectDataList) {
+      const aspectIns = await this.getAsync<IMethodAspect>(
+        aspectData.aspectModule
+      );
+      await this.addAspect(aspectIns, aspectData);
+    }
+
+    // 合并拦截器方法，提升性能
+    for (const module of this.aspectModuleSet) {
+      const aspectMapping = this.aspectMappingMap.get(module);
+      for (const [method, aspectFn] of aspectMapping) {
+        const composeFn = (ins, originMethod) => {
+          for (const fn of aspectFn) {
+            originMethod = fn(ins, originMethod);
+          }
+          return originMethod;
+        };
+        aspectMapping.set(method, [composeFn]);
+      }
+    }
+    // 绑定完后清理 Set 记录
+    this.aspectModuleSet.clear();
+  }
+
+  public async addAspect(aspectIns: IMethodAspect, aspectData: AspectMetadata) {
+    const module = aspectData.aspectTarget;
+    const names = Object.getOwnPropertyNames(module.prototype);
+    const isMatch = aspectData.match ? pm(aspectData.match) : () => true;
+
+    // 存到 set 里用来做循环
+    this.aspectModuleSet.add(module);
+
+    /**
+     * 拦截器流程
+     * 1、在每个被拦截的 class 上做拦截标记，记录哪些方法需要被拦截
+     * 2、Container 保存每个 class 的方法对应的拦截器数组
+     * 3、创建完实例后，在返回前执行包裹逻辑，把需要拦截的方法都执行一遍拦截（不对原型做修改）
+     */
+
+    for (const name of names) {
+      if (name === 'constructor' || !isMatch(name)) {
+        continue;
+      }
+      const descriptor = Object.getOwnPropertyDescriptor(
+        module.prototype,
+        name
+      );
+      if (!descriptor || descriptor.writable === false) {
+        continue;
+      }
+
+      // 把拦截器和当前容器绑定
+      if (!this.aspectMappingMap.has(module)) {
+        this.aspectMappingMap.set(module, new Map());
+      }
+
+      const mappingMap = this.aspectMappingMap.get(module);
+      if (!mappingMap.has(name)) {
+        mappingMap.set(name, []);
+      }
+      // 把拦截器本身加到数组中
+      const methodAspectCollection = mappingMap.get(name);
+
+      if (isAsyncFunction(descriptor.value)) {
+        this.debugLogger(
+          `aspect [#${module.name}:${name}], isAsync=true, aspect class=[${aspectIns.constructor.name}]`
+        );
+
+        const fn = (ins, originMethod) => {
+          return async (...args) => {
+            let error, result;
+            const newProceed = (...args) => {
+              return originMethod.apply(ins, args);
+            };
+            const joinPoint = {
+              methodName: name,
+              target: ins,
+              args: args,
+              proceed: newProceed,
+            };
+            try {
+              await aspectIns.before?.(joinPoint);
+              if (aspectIns.around) {
+                result = await aspectIns.around(joinPoint);
+              } else {
+                result = await originMethod.apply(ins, joinPoint.args);
+              }
+              joinPoint.proceed = undefined;
+              const resultTemp = await aspectIns.afterReturn?.(
+                joinPoint,
+                result
+              );
+              result = typeof resultTemp === 'undefined' ? result : resultTemp;
+              return result;
+            } catch (err) {
+              joinPoint.proceed = undefined;
+              error = err;
+              if (aspectIns.afterThrow) {
+                await aspectIns.afterThrow(joinPoint, error);
+              } else {
+                throw err;
+              }
+            } finally {
+              await aspectIns.after?.(joinPoint, result, error);
+            }
+          };
+        };
+
+        methodAspectCollection.push(fn);
+      } else {
+        this.debugLogger(
+          `aspect [#${module.name}:${name}], isAsync=false, aspect class=[${aspectIns.constructor.name}]`
+        );
+        const fn = (ins, originMethod) => {
+          return (...args) => {
+            let error, result;
+            const newProceed = (...args) => {
+              return originMethod.apply(ins, args);
+            };
+            const joinPoint = {
+              methodName: name,
+              target: ins,
+              args: args,
+              proceed: newProceed,
+            };
+            try {
+              aspectIns.before?.(joinPoint);
+              if (aspectIns.around) {
+                result = aspectIns.around(joinPoint);
+              } else {
+                result = originMethod.apply(ins, joinPoint.args);
+              }
+              const resultTemp = aspectIns.afterReturn?.(joinPoint, result);
+              result = typeof resultTemp === 'undefined' ? result : resultTemp;
+              return result;
+            } catch (err) {
+              error = err;
+              if (aspectIns.afterThrow) {
+                aspectIns.afterThrow(joinPoint, error);
+              } else {
+                throw err;
+              }
+            } finally {
+              aspectIns.after?.(joinPoint, result, error);
+            }
+          };
+        };
+
+        methodAspectCollection.push(fn);
+      }
+    }
+  }
+
+  /**
+   * wrapper aspect method before instance return
+   * @param ins
+   * @protected
+   */
+  protected wrapperAspectToInstance(ins) {
+    let proxy = null;
+    if (!isProxy(ins) && ins?.constructor) {
+      // 动态处理拦截器
+      let methodAspectCollection;
+      if (this.aspectMappingMap?.has(ins.constructor)) {
+        methodAspectCollection = this.aspectMappingMap.get(ins.constructor);
+      } else if (
+        (this?.parent as MidwayContainer)?.aspectMappingMap.has(ins.constructor)
+      ) {
+        // for requestContainer
+        methodAspectCollection = (this
+          ?.parent as MidwayContainer)?.aspectMappingMap.get(ins.constructor);
+      }
+
+      if (methodAspectCollection) {
+        proxy = new Proxy(ins, {
+          get: (obj, prop) => {
+            if (typeof prop === 'string' && methodAspectCollection.has(prop)) {
+              const aspectFn = methodAspectCollection.get(prop);
+              return aspectFn[0](ins, obj[prop]);
+            }
+            return obj[prop];
+          },
+        });
+      }
+    }
+    return proxy || ins;
+  }
+
+  /**
+   * load preload module for container
+   * @private
+   */
+  private async loadPreloadModule() {
+    // some common decorator implementation
+    const modules = listPreloadModule();
+    for (const module of modules) {
+      // preload init context
+      await this.getAsync(module);
+    }
   }
 }
