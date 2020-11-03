@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.23](https://github.com/midwayjs/midway/compare/v2.3.22...v2.3.23) (2020-11-03)
+
+
+### Bug Fixes
+
+* delay loader.load after midway bootstrap init ([#699](https://github.com/midwayjs/midway/issues/699)) ([2d12a55](https://github.com/midwayjs/midway/commit/2d12a551707099e0fc7ea188466190e63d02a29a))
+* trigger lifecycle after egg load ([#701](https://github.com/midwayjs/midway/issues/701)) ([4d63e3a](https://github.com/midwayjs/midway/commit/4d63e3ae38f9d8492894353b1794f1b571790e9d))
+
+
+
+
+
 ## [2.3.22](https://github.com/midwayjs/midway/compare/v2.3.21...v2.3.22) (2020-10-31)
 
 
