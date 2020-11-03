@@ -65,6 +65,10 @@ const DEFAULT_IGNORE_PATTERN = [
 const globalDebugLogger = util.debuglog('midway:container');
 let containerIdx = 0;
 
+export function clearContainerCache() {
+  MidwayContainer.parentDefinitionMetadata = null;
+}
+
 export class MidwayContainer
   extends BaseApplicationContext
   implements IMidwayContainer {

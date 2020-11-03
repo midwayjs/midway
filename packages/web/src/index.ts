@@ -1,5 +1,6 @@
 export * from './interface';
 export { MidwayDevFramework as Framework } from './devFramework';
+export { MidwayWebFramework } from './framework';
 export {
   createEggApplication,
   createEggAgent,

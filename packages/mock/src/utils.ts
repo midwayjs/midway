@@ -1,6 +1,6 @@
 import { BootstrapStarter } from '@midwayjs/bootstrap';
 import {
-  MidwayContainer,
+  clearContainerCache,
   IMidwayApplication,
   IMidwayFramework,
   MidwayFrameworkType,
@@ -33,7 +33,7 @@ export async function create<
 ): Promise<T> {
   process.env.MIDWAY_TS_MODE = 'true';
   clearAllModule();
-  MidwayContainer.parentDefinitionMetadata = null;
+  clearContainerCache();
   let framework: T = null;
   let DefaultFramework = null;
 

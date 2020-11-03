@@ -5,7 +5,7 @@ import {
   ContainerLoader,
   MidwayRequestContainer,
   clearAllModule,
-  MidwayContainer,
+  clearContainerCache,
 } from '../src';
 import * as mm from 'mm';
 import sinon = require('sinon');
@@ -20,7 +20,7 @@ class TestModule {
 describe('/test/loader.test.ts', () => {
   beforeEach(() => {
     clearAllModule();
-    MidwayContainer.parentDefinitionMetadata = null;
+    clearContainerCache();
   });
   it('should create new loader', async () => {
     const loader = new ContainerLoader({

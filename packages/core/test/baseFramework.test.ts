@@ -10,7 +10,7 @@ import * as path from 'path';
 import {
   BaseFramework,
   clearAllModule,
-  MidwayContainer,
+  clearContainerCache,
   MidwayRequestContainer,
 } from '../src';
 import * as mm from 'mm';
@@ -51,7 +51,7 @@ class TestModule {
 describe('/test/baseFramework.test.ts', () => {
   beforeEach(() => {
     clearAllModule();
-    MidwayContainer.parentDefinitionMetadata = null;
+    clearContainerCache();
   });
 
   it.skip('should load js directory and auto disable', async () => {

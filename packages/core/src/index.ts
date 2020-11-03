@@ -34,7 +34,7 @@ export {
 } from '@midwayjs/decorator';
 export * from './interface';
 export { ContainerLoader } from './loader';
-export { MidwayContainer } from './context/midwayContainer';
+export { MidwayContainer, clearContainerCache } from './context/midwayContainer';
 export { MidwayRequestContainer } from './context/requestContainer';
 export { BaseFramework } from './baseFramework';
 export * from './context/providerWrapper';
