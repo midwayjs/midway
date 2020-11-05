@@ -21,7 +21,7 @@ describe('/test/annotation/check.test.ts', () => {
   });
 
   it('check with check and transform object', () => {
-    class UserDTO {
+    class UserDTO1 {
       @Rule(RuleType.number().max(10))
       age: number;
 
@@ -40,9 +40,9 @@ describe('/test/annotation/check.test.ts', () => {
       }
     }
 
-    class Hello {
+    class Hello1 {
       @Validate(true)
-      school(a, data: UserDTO) {
+      school(a, data: UserDTO1) {
         return data;
       }
     }
@@ -51,26 +51,26 @@ describe('/test/annotation/check.test.ts', () => {
       firstName: 'Johny',
       lastName: 'Cage',
     };
-    const result = new Hello().school(1, user);
+    const result = new Hello1().school(1, user);
     expect(result.getName()).toEqual('Johny Cage');
     assert.deepEqual(result, user);
   });
 
   it('check with no check', () => {
-    class UserDTO {
+    class UserDTO2 {
       @Rule(RuleType.number().max(10))
       age: number;
     }
 
-    class Hello {
-      school(a, data: UserDTO) {
+    class Hello2 {
+      school(a, data: UserDTO2) {
         return data;
       }
     }
     const user = {
       age: 18,
     };
-    const result = new Hello().school(1, user);
+    const result = new Hello2().school(1, user);
     assert.deepEqual(result, user);
   });
 
@@ -80,7 +80,7 @@ describe('/test/annotation/check.test.ts', () => {
       age: number;
     }
 
-    class UserDTO {
+    class UserDTO3 {
       @Rule(RuleType.number().max(10))
       age: number;
 
@@ -88,9 +88,9 @@ describe('/test/annotation/check.test.ts', () => {
       world: WorldDTO;
     }
 
-    class Hello {
+    class Hello3 {
       @Validate()
-      school(a, data: UserDTO) {
+      school(a, data: UserDTO3) {
         return data;
       }
     }
@@ -100,27 +100,27 @@ describe('/test/annotation/check.test.ts', () => {
         age: 18,
       },
     };
-    const result = new Hello().school(1, user);
+    const result = new Hello3().school(1, user);
     assert.deepEqual(result, user);
   });
 
   it('check with check when vo have two level not equal', () => {
-    class WorldDTO {
+    class WorldDTO1 {
       @Rule(RuleType.number().max(20))
       age: number;
     }
 
-    class UserDTO {
+    class UserDTO4 {
       @Rule(RuleType.number().max(10))
       age: number;
 
-      @Rule(WorldDTO)
-      world: WorldDTO;
+      @Rule(WorldDTO1)
+      world: WorldDTO1;
     }
 
-    class Hello {
+    class Hello4 {
       @Validate()
-      school(a, data: UserDTO) {
+      school(a, data: UserDTO4) {
         return data;
       }
     }
@@ -131,27 +131,27 @@ describe('/test/annotation/check.test.ts', () => {
       },
     };
     expect(() => {
-      new Hello().school(1, user);
+      new Hello4().school(1, user);
     }).toThrow(Error);
   });
 
   it('check with check when two level and array and not equal', () => {
-    class WorldDTO {
+    class WorldDTO2 {
       @Rule(RuleType.number().max(20))
       age: number;
     }
 
-    class UserDTO {
+    class UserDTO5 {
       @Rule(RuleType.number().max(10))
       age: number;
 
-      @Rule(WorldDTO)
-      worlds: WorldDTO[];
+      @Rule(WorldDTO2)
+      worlds: WorldDTO2[];
     }
 
-    class Hello {
+    class Hello5 {
       @Validate()
-      school(a, data: UserDTO) {
+      school(a, data: UserDTO5) {
         return data;
       }
     }
@@ -164,26 +164,51 @@ describe('/test/annotation/check.test.ts', () => {
       ],
     };
     expect(() => {
-      new Hello().school(1, user);
+      new Hello5().school(1, user);
     }).toThrow(Error);
   });
 
   it('should transform string to number', function () {
-    class UserNewDTO {
+    class UserNewDTO6 {
       @Rule(RuleType.number().required())
       id: number;
     }
 
-    class Hello {
+    class Hello6 {
       @Validate()
-      school(user: UserNewDTO) {
+      school(user: UserNewDTO6) {
         return user;
       }
     }
 
-    const data = new Hello().school({
+    const data = new Hello6().school({
       id: '555'
     } as any)
     expect(typeof data.id).toEqual('number');
+  });
+
+  it('should check DTO with parent', function () {
+    class BaseAuthDTO {
+      @Rule(RuleType.string().required())
+      username: string
+
+      @Rule(RuleType.string().required())
+      password?: string
+    }
+
+    class LoginDTO extends BaseAuthDTO {}
+
+    class RegisterDTO extends BaseAuthDTO {
+      @Rule(RuleType.string().required())
+      confirm_passward: string
+    }
+
+    class Hello7 {
+      @Validate()
+      invoke(dto: LoginDTO) {}
+      invokeAnother(dto: RegisterDTO) {}
+    }
+
+    new Hello7().invoke({ username: 'xxx' });
   });
 });
