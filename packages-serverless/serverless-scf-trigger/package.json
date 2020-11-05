@@ -12,7 +12,7 @@
     "express": "^4.17.1"
   },
   "devDependencies": {
-    "midway-bin": "^2.0.0"
+    "@midwayjs/cli": "^1.0.0"
   },
   "engines": {
     "node": ">= 10"
@@ -23,10 +23,9 @@
   "scripts": {
     "build": "midway-bin build -c",
     "test": "midway-bin test --ts",
-    "debug": "midway-bin test --ts --inspect-brk=9229",
+    "debug": "midway-bin test --debug",
     "cov": "midway-bin cov --ts",
-    "clean": "midway-bin clean",
-    "autod": "midway-bin autod"
+    "clean": "midway-bin clean"
   },
   "repository": {
     "type": "git",

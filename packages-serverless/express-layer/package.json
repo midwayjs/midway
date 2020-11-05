@@ -3,16 +3,15 @@
   "version": "1.2.13",
   "main": "index.js",
   "scripts": {
-    "test": "npx midway-bin test",
-    "test-local": "midway-bin test",
-    "debug": "midway-bin test --inspect-brk=9229",
-    "cov": "midway-bin cov",
-    "autod": "midway-bin autod"
+    "test": "midway-bin test",
+    "debug": "midway-bin test",
+    "cov": "midway-bin cov"
   },
   "dependencies": {
     "request": "^2.88.2"
   },
   "devDependencies": {
+    "@midwayjs/cli": "^1.0.0",
     "@midwayjs/runtime-engine": "^1.2.9",
     "@midwayjs/runtime-mock": "^1.2.9",
     "@midwayjs/serverless-fc-starter": "^1.2.9",
@@ -21,7 +20,6 @@
     "@midwayjs/serverless-scf-trigger": "^1.2.9",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
-    "midway-bin": "^2.0.0",
     "supertest": "^4.0.2"
   },
   "engines": {

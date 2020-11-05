@@ -8,7 +8,7 @@
     "@midwayjs/serverless-http-parser": "^1.1.8"
   },
   "devDependencies": {
-    "midway-bin": "^2.0.0",
+    "@midwayjs/cli": "^1.0.0",
     "raw-body": "^2.4.1"
   },
   "engines": {
@@ -20,10 +20,9 @@
   "scripts": {
     "build": "midway-bin build -c",
     "test": "midway-bin test --ts",
-    "debug": "midway-bin test --ts --inspect-brk=9229",
+    "debug": "midway-bin test --debug",
     "cov": "midway-bin cov --ts",
-    "clean": "midway-bin clean",
-    "autod": "midway-bin autod"
+    "clean": "midway-bin clean"
   },
   "repository": {
     "type": "git",
