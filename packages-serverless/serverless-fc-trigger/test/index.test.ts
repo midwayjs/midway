@@ -45,7 +45,7 @@ describe('/test/index.test.ts', () => {
   describe('should test http trigger use app directly', () => {
     let app;
     let runtime;
-    before(async () => {
+    beforeAll(async () => {
       runtime = createRuntime({
         functionDir: join(__dirname, './fixtures/http'),
       });
@@ -53,7 +53,7 @@ describe('/test/index.test.ts', () => {
       app = await runtime.delegate(new HTTPTrigger());
     });
 
-    before(() => runtime.close());
+    beforeAll(() => runtime.close());
 
     it('should test with supertest', done => {
       request(app)

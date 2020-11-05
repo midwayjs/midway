@@ -3,9 +3,9 @@
   "version": "1.2.10",
   "main": "index.js",
   "scripts": {
-    "test": "midway-bin test",
+    "test": "midway-bin test --forceExit",
     "debug": "midway-bin test",
-    "cov": "midway-bin cov"
+    "cov": "midway-bin cov --forceExit"
   },
   "dependencies": {
     "egg": "^2.25.0",

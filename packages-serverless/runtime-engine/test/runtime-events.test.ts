@@ -13,7 +13,7 @@ const events = [
 ];
 
 describe('/test/runtime-events.test.ts', () => {
-  before(() => {
+  beforeAll(() => {
     // 设置函数执行目录
     process.env.ENTRY_DIR = path.join(__dirname, './fixtures/common');
   });

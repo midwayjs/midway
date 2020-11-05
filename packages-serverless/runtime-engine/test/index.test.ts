@@ -7,7 +7,7 @@ import { HttpEvent } from './fixtures/extension/httpEvent';
 
 describe('/test/index.test.ts', () => {
   describe('basic', () => {
-    before(() => {
+    beforeAll(() => {
       // 设置函数执行目录
       process.env.ENTRY_DIR = path.join(__dirname, './fixtures/common');
     });

@@ -11,7 +11,7 @@ describe('/test/index.test.ts', () => {
     let runtime;
     let app;
 
-    before(async () => {
+    beforeAll(async () => {
       const entryDir = join(__dirname, './fixtures/app-fc');
       process.env.ENTRY_DIR = entryDir;
       runtime = createRuntime({
@@ -21,7 +21,7 @@ describe('/test/index.test.ts', () => {
       app = await runtime.delegate(new HTTPTrigger());
     });
 
-    after(() => {
+    afterAll(() => {
       if (runtime) {
         runtime.close();
       }
@@ -73,7 +73,7 @@ describe('/test/index.test.ts', () => {
     let runtime;
     let app;
 
-    before(async () => {
+    beforeAll(async () => {
       const entryDir = join(__dirname, './fixtures/app-fc');
       process.env.ENTRY_DIR = entryDir;
       runtime = createRuntime({
@@ -83,7 +83,7 @@ describe('/test/index.test.ts', () => {
       app = await runtime.delegate(new FCApiGatewayTrigger());
     });
 
-    after(() => {
+    afterAll(() => {
       if (runtime) {
         runtime.close();
       }
@@ -133,7 +133,7 @@ describe('/test/index.test.ts', () => {
     let runtime;
     let app;
 
-    before(async () => {
+    beforeAll(async () => {
       const entryDir = join(__dirname, './fixtures/app-scf');
       process.env.ENTRY_DIR = entryDir;
       runtime = createRuntime({
@@ -143,7 +143,7 @@ describe('/test/index.test.ts', () => {
       app = await runtime.delegate(new ApiGatewayTrigger());
     });
 
-    after(() => {
+    afterAll(() => {
       if (runtime) {
         runtime.close();
       }

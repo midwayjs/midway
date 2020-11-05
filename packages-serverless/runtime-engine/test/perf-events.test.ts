@@ -4,7 +4,7 @@ import * as perfHooks from 'perf_hooks';
 import * as path from 'path';
 
 describe('/test/perf-events.test.ts', () => {
-  before(() => {
+  beforeAll(() => {
     // 设置函数执行目录
     process.env.ENTRY_DIR = path.join(__dirname, './fixtures/common');
   });
