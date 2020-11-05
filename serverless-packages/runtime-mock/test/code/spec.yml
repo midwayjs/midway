@@ -1,0 +1,21 @@
+group: market-fn
+name: empty-hsf-1
+
+runtime: nodejs10
+handler: index.handler
+
+timeout: 50000
+
+memory: 2048MB
+cpu: 0.5
+
+trigger-hsf: true # enable HSF trigger
+
+#trigger-http: # enable HTTP trigger
+#vip-server: true # whether register a VipServer domain for the function
+
+#trigger-queue:  # enable metaq trigger
+#metaq:
+#consumer-group: ginkgoMidway  # consumer group name
+#topic: greeting   # topic name
+#tags: a||b  # message tag names. optional, default value is '*'

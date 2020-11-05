@@ -1,0 +1,20 @@
+{
+  "body": "eyJjIjoiYiJ9",
+  "headers": {
+    "x-ca-dashboard-action": "DEBUG",
+    "x-ca-dashboard-uid": "125087",
+    "x-ca-stage": "RELEASE",
+    "x-ca-dashboard-role": "USER",
+    "user-agent": "Apache-HttpClient/4.5.6 (Java/1.8.0_172)",
+    "accept-encoding": "gzip,deflate",
+    "content-md5": "Kry+hjKjc2lvIrwoJqdY9Q==",
+    "content-type": "text/html; charset=utf-8"
+  },
+  "httpMethod": "POST",
+  "isBase64Encoded": true,
+  "path": "/api/321",
+  "pathParameters": {
+    "userId": "321"
+  },
+  "queryParameters": {}
+}

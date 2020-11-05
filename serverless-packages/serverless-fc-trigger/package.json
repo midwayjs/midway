@@ -1,0 +1,36 @@
+{
+  "name": "@midwayjs/serverless-fc-trigger",
+  "version": "1.2.9",
+  "main": "dist/index",
+  "typings": "dist/index.d.ts",
+  "dependencies": {
+    "@midwayjs/runtime-mock": "^1.2.9",
+    "@midwayjs/serverless-fc-starter": "^1.2.9",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "midway-bin": "^2.0.0",
+    "supertest": "^4.0.2"
+  },
+  "engines": {
+    "node": ">= 10"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "midway-bin build -c",
+    "test": "midway-bin test --ts --full-trace",
+    "debug": "midway-bin test --ts --full-trace --inspect-brk=9229",
+    "cov": "midway-bin cov --ts",
+    "clean": "midway-bin clean",
+    "autod": "midway-bin autod"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:midwayjs/midway-faas.git"
+  },
+  "license": "MIT",
+  "gitHead": "1afeb34cbb6c0ad49ccdb9cfaebd254ae73afc6a"
+}

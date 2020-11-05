@@ -1,0 +1,20 @@
+{
+  "domain": null,
+  "_events": {},
+  "_eventsCount": 0,
+  "method": "GET",
+  "clientIP": "127.0.0.1",
+  "url": "/daily/?a=1",
+  "path": "/daily/",
+  "queries": {
+    "a": "1"
+  },
+  "headers": {
+    "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
+    "accept-language": "en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7",
+    "cache-control": "max-age=0",
+    "cookie": "_ga=GA1.2.690852134.1546410522;",
+    "upgrade-insecure-requests": "1",
+    "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
+  }
+}
