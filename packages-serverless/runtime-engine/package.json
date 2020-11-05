@@ -1,13 +1,22 @@
 {
-  "name": "@midwayjs/runtime-mock",
+  "name": "@midwayjs/runtime-engine",
   "version": "1.2.9",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/runtime-engine": "^1.2.9"
+    "egg-logger": "^2.3.1",
+    "mz": "^2.7.0"
   },
   "devDependencies": {
     "midway-bin": "^2.0.0"
+  },
+  "scripts": {
+    "build": "midway-bin build -c",
+    "test": "midway-bin test --ts",
+    "debug": "midway-bin test --ts --inspect-brk=9229",
+    "cov": "midway-bin cov --ts",
+    "clean": "midway-bin clean",
+    "autod": "midway-bin autod"
   },
   "engines": {
     "node": ">= 10"
@@ -15,14 +24,6 @@
   "files": [
     "dist"
   ],
-  "scripts": {
-    "build": "midway-bin build -c",
-    "test": "midway-bin test --ts --full-trace",
-    "debug": "midway-bin test --ts --full-trace --inspect-brk=9229",
-    "cov": "midway-bin cov --ts",
-    "clean": "midway-bin clean",
-    "autod": "midway-bin autod"
-  },
   "repository": {
     "type": "git",
     "url": "git@github.com:midwayjs/midway-faas.git"

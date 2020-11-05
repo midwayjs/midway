@@ -3,9 +3,9 @@
   "version": "1.2.13",
   "main": "index.js",
   "scripts": {
-    "test": "npx midway-bin test --full-trace",
-    "test-local": "midway-bin test --full-trace",
-    "debug": "midway-bin test --full-trace --inspect-brk=9229",
+    "test": "npx midway-bin test",
+    "test-local": "midway-bin test",
+    "debug": "midway-bin test --inspect-brk=9229",
     "cov": "midway-bin cov",
     "autod": "midway-bin autod"
   },

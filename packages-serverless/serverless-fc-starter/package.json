@@ -20,8 +20,8 @@
   ],
   "scripts": {
     "build": "midway-bin build -c",
-    "test": "midway-bin test --ts --full-trace",
-    "debug": "midway-bin test --ts --full-trace --inspect-brk=9229",
+    "test": "midway-bin test --ts",
+    "debug": "midway-bin test --ts --inspect-brk=9229",
     "cov": "midway-bin cov --ts",
     "clean": "midway-bin clean",
     "autod": "midway-bin autod"
