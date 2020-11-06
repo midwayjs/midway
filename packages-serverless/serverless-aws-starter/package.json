@@ -21,9 +21,7 @@
   "scripts": {
     "build": "midway-bin build -c",
     "test": "midway-bin test --ts",
-    "debug": "midway-bin test --debug",
-    "cov": "midway-bin cov --ts",
-    "clean": "midway-bin clean"
+    "cov": "midway-bin cov --ts"
   },
   "repository": {
     "type": "git",
