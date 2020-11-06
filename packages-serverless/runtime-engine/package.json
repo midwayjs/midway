@@ -21,7 +21,8 @@
     "node": ">= 10"
   },
   "files": [
-    "dist"
+    "dist/**/*.js",
+    "dist/**/*.d.ts"
   ],
   "repository": {
     "type": "git",
