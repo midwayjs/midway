@@ -4,8 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "midway-bin test --forceExit",
-    "debug": "midway-bin test",
-    "cov": "midway-bin cov --forceExit"
+    "debug": "midway-bin test"
   },
   "dependencies": {
     "request": "^2.88.2"
