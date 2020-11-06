@@ -12,7 +12,8 @@
   },
   "scripts": {
     "build": "midway-bin build -c",
-    "test": "midway-bin test --ts"
+    "test": "midway-bin test --ts",
+    "cov": "midway-bin cov --ts"
   },
   "engines": {
     "node": ">= 10"
