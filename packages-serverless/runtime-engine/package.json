@@ -14,6 +14,7 @@
     "build": "midway-bin build -c",
     "test": "midway-bin test --ts",
     "debug": "midway-bin test --debug",
+    "cov": "midway-bin cov --ts",
     "clean": "midway-bin clean"
   },
   "engines": {
