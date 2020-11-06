@@ -5,9 +5,17 @@ import * as path from 'path';
 import { ServerlessLogger } from '../../src/lib/logger';
 import { BaseLoggerFactory } from '../../src/lib/loggerFactory';
 
+function sleep(sleepTime = 1000) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve();
+    }, sleepTime);
+  });
+}
+
 describe('logger.test.ts', () => {
   describe('logger', () => {
-    it('should log', () => {
+    it('should log', async () => {
       const logger = new ServerlessLogger({});
       logger.write('hello', 'world');
 
@@ -18,16 +26,20 @@ describe('logger.test.ts', () => {
         consoleLevel: 'NONE',
         buffer: true,
       });
+      await sleep(1000);
+      logger.close();
     });
 
-    it('should logger with file', () => {
+    it('should logger with file', async () => {
       const logger = new ServerlessLogger({
         file: path.join(os.tmpdir(), 'test.log'),
       });
       logger.write('hello');
+      await sleep(1000);
+      logger.close();
     });
 
-    it('should do logger file clear without no op', () => {
+    it('should do logger file clear without no op', async () => {
       class MyLogger extends ServerlessLogger {
         test() {
           this.options.fileClearInterval = 10;
@@ -40,9 +52,11 @@ describe('logger.test.ts', () => {
       });
       logger.write('hello, world!');
       logger.test();
+      await sleep(1000);
+      logger.close();
     });
 
-    it('should do logger file clear', () => {
+    it('should do logger file clear', async () => {
       class MyLogger extends ServerlessLogger {
         test() {
           this.options.fileClearInterval = 10;
@@ -56,9 +70,11 @@ describe('logger.test.ts', () => {
       });
       logger.write('hello, world!');
       logger.test();
+      await sleep(1000);
+      logger.close();
     });
 
-    it('should do logger file clear without log file', () => {
+    it('should do logger file clear without log file', async () => {
       class MyLogger extends ServerlessLogger {
         test() {
           this.options.fileClearInterval = 10;
@@ -71,9 +87,11 @@ describe('logger.test.ts', () => {
       });
       logger.write('hello, world!');
       logger.test();
+      await sleep(1000);
+      logger.close();
     });
 
-    it('should do logger rotateBySize without log file', () => {
+    it('should do logger rotateBySize without log file', async () => {
       class MyLogger extends ServerlessLogger {
         test() {
           this.options.file = '';
@@ -87,9 +105,11 @@ describe('logger.test.ts', () => {
       });
       logger.write('hello, world!');
       logger.test();
+      await sleep(1000);
+      logger.close();
     });
 
-    it('should do logger renameOrDelete without log file', () => {
+    it('should do logger renameOrDelete without log file', async () => {
       class MyLogger extends ServerlessLogger {
         test() {
           this.options.file = '';
@@ -103,15 +123,19 @@ describe('logger.test.ts', () => {
       });
       logger.write('hello, world!');
       logger.test();
+      await sleep(1000);
+      logger.close();
     });
   });
 
   describe('loggerFactory', () => {
-    it('should new loggerFactory', () => {
+    it('should new loggerFactory', async () => {
       const loggerFactory = new BaseLoggerFactory(__dirname);
-      loggerFactory.createLogger({
+      const logger = loggerFactory.createLogger({
         file: path.join(__dirname, 'fixtures'),
       });
+      await sleep(1000);
+      logger.close();
     });
   });
 });
