@@ -1,0 +1,18 @@
+{
+  "body": "{\"c\":\"b\"}",
+  "headers": {
+    "accept": "*/*",
+    "cache-control": "no-cache",
+    "user-agent": "PostmanRuntime/7.24.1",
+    "postman-token": "feb51b11-9103-463a-92ff-73076d37b683",
+    "accept-encoding": "gzip, deflate, br",
+    "content-type": "application/x-www-form-urlencoded"
+  },
+  "httpMethod": "POST",
+  "isBase64Encoded": false,
+  "path": "/api/321",
+  "pathParameters": {
+    "userId": "321"
+  },
+  "queryParameters": {}
+}

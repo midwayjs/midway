@@ -1,0 +1,6 @@
+service: my-egg-demo
+
+provider:
+  name: aliyun
+
+deployType: koa

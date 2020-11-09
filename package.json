@@ -5,14 +5,12 @@
   "devDependencies": {
     "@types/jest": "^26.0.10",
     "@types/node": "^10.17.21",
-    "jest": "^26.4.0",
     "lerna": "^3.20.2",
     "lerna-relinker": "^1.4.0",
     "mwts": "^1.0.5",
     "opencollective": "^1.0.3",
     "opencollective-postinstall": "^2.0.2",
-    "ts-jest": "^26.2.0",
-    "typescript": "^3.8.3"
+    "typescript": "^3.9.0"
   },
   "scripts": {
     "autod": "lerna run autod",

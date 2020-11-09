@@ -1,0 +1,21 @@
+{
+  "name": "test-app",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "koa": "^2.15.1"
+  },
+  "devDependencies": {
+  },
+  "engines": {
+    "node": ">=10.0.0"
+  },
+  "scripts": {
+    "dev": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "license": "MIT"
+}

@@ -1,0 +1,18 @@
+{
+  "path":"/api",
+  "httpMethod":"GET",
+  "headers":{
+    "Accept-Language": "en-US,en,cn",
+    "Accept": "text/html,application/xml,application/json",
+    "Host": "service-3ei3tii4-251000691.ap-guangzhou.apigateway.myqloud.com",
+    "User-Agent": "User Agent String"
+  },
+  "queryParameters":{
+    "name": "test"
+  },
+  "pathParameters":{
+    "id": "12345"
+  },
+  "body": "{\"test\":\"body\"}",
+  "isBase64Encoded": "false"
+}

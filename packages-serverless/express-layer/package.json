@@ -1,0 +1,37 @@
+{
+  "name": "@midwayjs/express-layer",
+  "version": "1.2.13",
+  "main": "index.js",
+  "scripts": {
+    "test": "midway-bin test",
+    "debug": "midway-bin test",
+    "cov": "midway-bin cov"
+  },
+  "dependencies": {
+    "request": "^2.88.2"
+  },
+  "devDependencies": {
+    "@midwayjs/cli": "^1.0.0",
+    "@midwayjs/runtime-engine": "^1.2.9",
+    "@midwayjs/runtime-mock": "^1.2.9",
+    "@midwayjs/serverless-fc-starter": "^1.2.9",
+    "@midwayjs/serverless-fc-trigger": "^1.2.9",
+    "@midwayjs/serverless-scf-starter": "^1.2.9",
+    "@midwayjs/serverless-scf-trigger": "^1.2.9",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "supertest": "^4.0.2"
+  },
+  "engines": {
+    "node": ">= 10"
+  },
+  "files": [
+    "index.js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:midwayjs/midway-faas.git"
+  },
+  "license": "MIT",
+  "gitHead": "1afeb34cbb6c0ad49ccdb9cfaebd254ae73afc6a"
+}
