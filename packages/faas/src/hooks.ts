@@ -1,13 +1,13 @@
-import { FaaSContext, IFaaSApplication } from './interface';
+import { FaaSContext, IMidwayFaaSApplication } from './interface';
 
 /**
  * Stability: 1 - Experimental
  */
 export class MidwayHooks {
   private readonly ctx: FaaSContext;
-  private readonly app: IFaaSApplication;
+  private readonly app: IMidwayFaaSApplication;
 
-  constructor(ctx: FaaSContext, app: IFaaSApplication) {
+  constructor(ctx: FaaSContext, app: IMidwayFaaSApplication) {
     this.ctx = ctx;
     this.app = app;
   }
@@ -30,5 +30,9 @@ export class MidwayHooks {
 
   usePlugin(key: string) {
     return this.ctx[key] || this.app[key];
+  }
+
+  useApp() {
+    return this.app;
   }
 }
