@@ -4,8 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "midway-bin test",
-    "debug": "midway-bin test",
-    "cov": "midway-bin cov"
+    "debug": "midway-bin test"
   },
   "dependencies": {
     "egg": "^2.28.0",
