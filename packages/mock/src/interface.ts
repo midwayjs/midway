@@ -96,8 +96,4 @@ declare module 'egg' {
      */
     mockCsrf(): Application;
   }
-
-  interface Context {
-    requestContext: IMidwayContainer;
-  }
 }
