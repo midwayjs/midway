@@ -3,9 +3,8 @@
   "version": "1.2.9",
   "main": "index.js",
   "scripts": {
-    "test": "midway-bin test",
-    "debug": "midway-bin test",
-    "cov": "midway-bin cov"
+    "test": "midway-bin test --forceExit",
+    "cov": "midway-bin cov --forceExit"
   },
   "dependencies": {
     "request": "^2.88.2"
@@ -18,9 +17,9 @@
     "@midwayjs/serverless-fc-trigger": "^1.2.9",
     "@midwayjs/serverless-scf-starter": "^1.2.9",
     "@midwayjs/serverless-scf-trigger": "^1.2.9",
-    "koa": "^2.11.0",
+    "koa": "^2.13.0",
     "koa-bodyparser": "^4.2.1",
-    "koa-router": "^9.1.0",
+    "koa-router": "^9.4.0",
     "supertest": "^4.0.2"
   },
   "engines": {

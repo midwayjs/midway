@@ -6,8 +6,8 @@
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "midway-bin build -c",
-    "test": "midway-bin test",
-    "cov": "midway-bin cov",
+    "test": "midway-bin test --ts --forceExit",
+    "cov": "midway-bin cov --ts --forceExit",
     "link": "npm link"
   },
   "keywords": [
@@ -23,7 +23,7 @@
   "devDependencies": {
     "@midwayjs/cli": "^1.0.0",
     "chai": "^4.2.0",
-    "mm": "^2.5.0",
+    "mm": "3",
     "sinon": "^7.2.2"
   },
   "dependencies": {

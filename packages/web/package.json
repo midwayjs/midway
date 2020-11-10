@@ -6,8 +6,8 @@
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "midway-bin build -c",
-    "test": "midway-bin test --ts",
-    "cov": "midway-bin cov --ts",
+    "test": "midway-bin test --ts --forceExit",
+    "cov": "midway-bin cov --ts --forceExit",
     "link": "npm link"
   },
   "keywords": [
@@ -30,6 +30,7 @@
     "@midwayjs/cli": "^1.0.0",
     "@midwayjs/mock": "^2.3.23",
     "egg-view-nunjucks": "^2.2.0",
+    "fake-egg": "1.0.0",
     "fs-extra": "^8.0.1",
     "pedding": "^1.1.0",
     "react": "^16.13.1",
