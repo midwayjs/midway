@@ -1,5 +1,5 @@
 import { closeApp, creatApp, createHttpRequest } from './utils';
-import { IMidwayWebApplication } from '../src';
+import { IMidwayWebApplication } from '../src/interface';
 
 describe('/test/feature.test.ts', () => {
   describe('test new decorator', () => {
@@ -56,4 +56,5 @@ describe('/test/feature.test.ts', () => {
     expect(result.text).toEqual('hello worldaaaa1aaaa');
     await closeApp(app);
   });
+
 });

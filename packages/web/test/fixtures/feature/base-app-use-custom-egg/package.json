@@ -1,0 +1,6 @@
+{
+  "name": "ali-demo",
+  "egg": {
+    "framework": "fake-egg"
+  }
+}

@@ -6,7 +6,7 @@ export {
   createEggAgent,
   createAppWorkerLoader,
   createAgentWorkerLoader,
-} from './application';
+} from './base';
 // must export mock app here
 export { Application, Agent } from './application';
 

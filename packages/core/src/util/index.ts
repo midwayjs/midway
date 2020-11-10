@@ -1,4 +1,5 @@
 import { dirname, resolve, sep, extname } from 'path';
+import { readFileSync } from 'fs';
 
 /**
  * get all method names from obj or it's prototype
@@ -33,12 +34,19 @@ export function getPrototypeNames(obj) {
   return result.filter(k => ownKeysOnObjectPrototype.indexOf(k) === -1);
 }
 
-export const safeRequire = p => {
+export const safeRequire = (p, enabledCache = true) => {
   if (p.startsWith(`.${sep}`) || p.startsWith(`..${sep}`)) {
     p = resolve(dirname(module.parent.filename), p);
   }
   try {
-    return require(p);
+    if (enabledCache) {
+      return require(p);
+    } else {
+      const content = readFileSync(p, {
+        encoding: 'utf-8',
+      });
+      return JSON.parse(content);
+    }
   } catch (err) {
     return undefined;
   }

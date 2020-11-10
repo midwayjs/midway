@@ -30,6 +30,7 @@
     "@midwayjs/cli": "^1.0.0",
     "@midwayjs/mock": "^2.3.23",
     "egg-view-nunjucks": "^2.2.0",
+    "fake-egg": "1.0.0",
     "fs-extra": "^8.0.1",
     "pedding": "^1.1.0",
     "react": "^16.13.1",

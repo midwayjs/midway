@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@midwayjs/cli": "^1.0.0",
-    "mm": "^2.5.0"
+    "mm": "3"
   },
   "keywords": [
     "midway",
