@@ -3,8 +3,8 @@
   "version": "1.2.10",
   "main": "index.js",
   "scripts": {
-    "test": "midway-bin test",
-    "debug": "midway-bin test"
+    "test": "midway-bin test --forceExit",
+    "cov": "midway-bin cov --forceExit"
   },
   "dependencies": {
     "egg": "^2.28.0",

@@ -12,8 +12,8 @@
   },
   "scripts": {
     "build": "midway-bin build -c",
-    "test": "midway-bin test --ts",
-    "cov": "midway-bin cov --ts"
+    "test": "midway-bin test --ts --forceExit",
+    "cov": "midway-bin cov --ts --forceExit"
   },
   "engines": {
     "node": ">= 10"

@@ -37,7 +37,8 @@
   ],
   "scripts": {
     "build": "midway-bin build -c",
-    "test": "midway-bin test"
+    "test": "midway-bin test --ts --forceExit",
+    "cov": "midway-bin cov --ts --forceExit"
   },
   "repository": {
     "type": "git",
