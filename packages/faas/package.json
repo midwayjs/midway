@@ -37,8 +37,7 @@
   ],
   "scripts": {
     "build": "midway-bin build -c",
-    "test": "midway-bin test",
-    "cov": "midway-bin test --cov"
+    "test": "midway-bin test"
   },
   "repository": {
     "type": "git",
