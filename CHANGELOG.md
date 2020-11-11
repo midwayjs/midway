@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.4.0](https://github.com/midwayjs/midway/compare/v2.3.23...v2.4.0) (2020-11-11)
+
+
+### Bug Fixes
+
+* mock method missing ([#710](https://github.com/midwayjs/midway/issues/710)) ([0088cb2](https://github.com/midwayjs/midway/commit/0088cb2253f4f99dc945a5fc99b580bfa4d4a594))
+
+
+### Features
+
+* support define custom egg framework ([#709](https://github.com/midwayjs/midway/issues/709)) ([f5baba1](https://github.com/midwayjs/midway/commit/f5baba18d10e3dc91ba9651effadd00b8f66cf8b))
+* **hooks:** use app hooks ([#708](https://github.com/midwayjs/midway/issues/708)) ([faf05c5](https://github.com/midwayjs/midway/commit/faf05c5cdba3e743568db74720f4927374c15f19))
+
+
+
+
+
 ## [2.3.23](https://github.com/midwayjs/midway/compare/v2.3.22...v2.3.23) (2020-11-03)
 
 

@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.4.0](https://github.com/midwayjs/midway/compare/v2.3.23...v2.4.0) (2020-11-11)
+
+**Note:** Version bump only for package @midwayjs/express
+
+
+
+
+
 ## [2.3.23](https://github.com/midwayjs/midway/compare/v2.3.22...v2.3.23) (2020-11-03)
 
 **Note:** Version bump only for package @midwayjs/express

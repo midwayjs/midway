@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.4.0](https://github.com/midwayjs/midway-faas/compare/v2.3.23...v2.4.0) (2020-11-11)
+
+
+### Features
+
+* support define custom egg framework ([#709](https://github.com/midwayjs/midway-faas/issues/709)) ([f5baba1](https://github.com/midwayjs/midway-faas/commit/f5baba18d10e3dc91ba9651effadd00b8f66cf8b))
+
+
+
+
+
 ## [1.1.8](https://github.com/midwayjs/midway-faas/compare/serverless-v1.1.7...serverless-v1.1.8) (2020-07-27)
 
 
