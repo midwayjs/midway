@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.4.1](https://github.com/midwayjs/midway/compare/v2.4.0...v2.4.1) (2020-11-12)
+
+
+### Bug Fixes
+
+* first schedule ignore stop other schedule ([#715](https://github.com/midwayjs/midway/issues/715)) ([d296636](https://github.com/midwayjs/midway/commit/d2966361cbaf33bc8f53c30c097bbbd3e64a139f))
+* load ignore node_modules ([#714](https://github.com/midwayjs/midway/issues/714)) ([ad13f13](https://github.com/midwayjs/midway/commit/ad13f1357263fad143ad18527a3c04bd4a629798))
+
+
+
+
+
 # [2.4.0](https://github.com/midwayjs/midway/compare/v2.3.23...v2.4.0) (2020-11-11)
 
 
