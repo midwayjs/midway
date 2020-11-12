@@ -31,7 +31,7 @@ export = app => {
         app.coreLogger.info(
           `[midway-schedule]: ignore schedule ${key} due to \`schedule.env\` not match`
         );
-        return;
+        continue;
       }
       app.schedules[key] = {
         schedule: opts,
