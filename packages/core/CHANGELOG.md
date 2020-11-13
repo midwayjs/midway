@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.4.2](https://github.com/midwayjs/midway/compare/v2.4.1...v2.4.2) (2020-11-13)
+
+
+### Bug Fixes
+
+* error pattern for ignore node_modules ([#717](https://github.com/midwayjs/midway/issues/717)) ([16f1292](https://github.com/midwayjs/midway/commit/16f1292359b8c65548eea3926de8eaaa13133538))
+
+
+
+
+
 ## [2.4.1](https://github.com/midwayjs/midway/compare/v2.4.0...v2.4.1) (2020-11-12)
 
 
