@@ -60,7 +60,7 @@ const DEFAULT_IGNORE_PATTERN = [
   '**/view/**',
   '**/views/**',
   '**/app/extend/**',
-  '**/node_modules/**/'
+  '**/node_modules/**'
 ];
 
 const globalDebugLogger = util.debuglog('midway:container');
