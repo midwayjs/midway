@@ -850,13 +850,18 @@ export class MidwayContainer
    */
   protected wrapperAspectToInstance(ins) {
     let proxy = null;
+    /**
+     * 过滤循环依赖创建的对象
+     */
     if (!isProxy(ins) && ins?.constructor) {
       // 动态处理拦截器
       let methodAspectCollection;
       if (this.aspectMappingMap?.has(ins.constructor)) {
         methodAspectCollection = this.aspectMappingMap.get(ins.constructor);
       } else if (
-        (this?.parent as MidwayContainer)?.aspectMappingMap.has(ins.constructor)
+        (this?.parent as MidwayContainer)?.aspectMappingMap?.has(
+          ins.constructor
+        )
       ) {
         // for requestContainer
         methodAspectCollection = (this
