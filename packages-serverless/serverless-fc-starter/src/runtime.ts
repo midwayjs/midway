@@ -64,8 +64,12 @@ export class FCRuntime extends ServerlessLightRuntime {
       // const rawBody = 'test';
       // req.rawBody = rawBody;
 
-      // 应用下自行解决 bodyparser 的问题
-      if (!this.isAppMode) {
+      // 如果需要解析body并且body是个stream
+      if (
+        ['post', 'put', 'delete'].indexOf(req.method.toLowerCase()) !== -1 &&
+        !req.body &&
+        typeof req.on === 'function'
+      ) {
         req.body = await getRawBody(req); // TODO: body parser
       }
       newReq = req;
