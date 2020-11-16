@@ -65,7 +65,11 @@ export class FCRuntime extends ServerlessLightRuntime {
       // req.rawBody = rawBody;
 
       // 如果需要解析body并且body是个stream
-      if (['post', 'put', 'delete'].indexOf(req.method.toLowerCase()) !== -1 && typeof req.on === 'function') {
+      if (
+        ['post', 'put', 'delete'].indexOf(req.method.toLowerCase()) !== -1 &&
+        !req.body &&
+        typeof req.on === 'function'
+      ) {
         req.body = await getRawBody(req); // TODO: body parser
       }
       newReq = req;
