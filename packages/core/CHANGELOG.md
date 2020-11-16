@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.4.3](https://github.com/midwayjs/midway/compare/v2.4.2...v2.4.3) (2020-11-16)
+
+
+### Bug Fixes
+
+* aspect mapping npe ([#722](https://github.com/midwayjs/midway/issues/722)) ([1954eed](https://github.com/midwayjs/midway/commit/1954eed145cbb8fc929394f6cb0c1bc8cb80c823))
+
+
+
+
+
 ## [2.4.2](https://github.com/midwayjs/midway/compare/v2.4.1...v2.4.2) (2020-11-13)
 
 

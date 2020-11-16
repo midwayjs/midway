@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.4.3](https://github.com/midwayjs/midway-faas/compare/v2.4.2...v2.4.3) (2020-11-16)
+
+
+### Bug Fixes
+
+* fc egg app body parse ([#719](https://github.com/midwayjs/midway-faas/issues/719)) ([18c0aad](https://github.com/midwayjs/midway-faas/commit/18c0aad1d9a187d59da6d9f11940ef82b2770ff0))
+
+
+
+
+
 # [2.4.0](https://github.com/midwayjs/midway-faas/compare/v2.3.23...v2.4.0) (2020-11-11)
 
 

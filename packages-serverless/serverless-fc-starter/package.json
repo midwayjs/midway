@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/serverless-fc-starter",
-  "version": "2.4.0",
+  "version": "2.4.3",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
