@@ -15,21 +15,16 @@ function getFramework() {
   /**
    * create real egg loader and application object
    */
-  if (process.env.MIDWAY_PROJECT_APPDIR) {
-    const pkg = safeRequire(
-      join(process.env.MIDWAY_PROJECT_APPDIR, 'package.json'),
-      false
-    );
-    customFramework = safelyGet('egg.framework', pkg);
-    if (customFramework) {
-      return customFramework;
-    } else {
-      throw new Error(
-        `customFramework not found in ${process.env.MIDWAY_PROJECT_APPDIR}`
-      );
-    }
+  const pkg = safeRequire(
+    join(process.env.MIDWAY_PROJECT_APPDIR || process.cwd(), 'package.json'),
+    false
+  );
+  customFramework = safelyGet('egg.framework', pkg);
+  if (customFramework) {
+    return customFramework;
+  } else {
+    return 'egg';
   }
-  return 'egg';
 }
 
 export const createAppWorkerLoader = () => {
