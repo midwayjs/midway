@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.4.4](https://github.com/midwayjs/midway/compare/v2.4.3...v2.4.4) (2020-11-17)
+
+
+### Bug Fixes
+
+* remove error process env branch ([#723](https://github.com/midwayjs/midway/issues/723)) ([53ddc4c](https://github.com/midwayjs/midway/commit/53ddc4caec322162889e50f21b50aef96907a607))
+
+
+
+
+
 ## [2.4.3](https://github.com/midwayjs/midway/compare/v2.4.2...v2.4.3) (2020-11-16)
 
 
