@@ -81,6 +81,18 @@ describe('/test/common/decoratorManager.test.ts', () => {
 
     args = getParamNames(() => {});
     assert(args.length === 0);
+
+    args = getParamNames((a) => {});
+    assert(args.length === 1);
+
+    args = getParamNames((a,b) => {});
+    assert(args.length === 2);
+
+    args = getParamNames((a, b=1) => {});
+    assert(args.length === 2);
+
+    args = getParamNames((a = 1, b =2, c) => {});
+    assert(args.length === 3);
   });
 
   it('should get attach data from method', () => {

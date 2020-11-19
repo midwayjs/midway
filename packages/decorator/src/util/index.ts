@@ -75,7 +75,6 @@ export function sleep(sleepTime = 1000) {
 }
 
 const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/gm;
-const ARGUMENT_NAMES = /([^\s,]+)/g;
 
 /**
  * get parameter name from function
@@ -85,8 +84,12 @@ export function getParamNames(func): string[] {
   const fnStr = func.toString().replace(STRIP_COMMENTS, '');
   let result = fnStr
     .slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')'))
-    .match(ARGUMENT_NAMES);
-  if (result === null) {
+    .split(',')
+    .map(content => {
+      return content.trim().replace(/\s?=.*$/, '');
+    });
+
+  if (result.length === 1 && result[0] === '') {
     result = [];
   }
   return result;
