@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.4.5](https://github.com/midwayjs/midway/compare/v2.4.4...v2.4.5) (2020-11-19)
+
+
+### Bug Fixes
+
+* get function args error ([#725](https://github.com/midwayjs/midway/issues/725)) ([7ec5317](https://github.com/midwayjs/midway/commit/7ec531776efc65a84d60a7c55dc29ad4e08d999a))
+
+
+
+
+
 # [2.4.0](https://github.com/midwayjs/midway/compare/v2.3.23...v2.4.0) (2020-11-11)
 
 

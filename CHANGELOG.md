@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.4.5](https://github.com/midwayjs/midway/compare/v2.4.4...v2.4.5) (2020-11-19)
+
+
+### Bug Fixes
+
+* core middleware load ([#724](https://github.com/midwayjs/midway/issues/724)) ([9697834](https://github.com/midwayjs/midway/commit/96978348412284b421adff4be1bdacc1a539fc64))
+* get function args error ([#725](https://github.com/midwayjs/midway/issues/725)) ([7ec5317](https://github.com/midwayjs/midway/commit/7ec531776efc65a84d60a7c55dc29ad4e08d999a))
+
+
+
+
+
 ## [2.4.4](https://github.com/midwayjs/midway/compare/v2.4.3...v2.4.4) (2020-11-17)
 
 

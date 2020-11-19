@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.4.5](https://github.com/midwayjs/midway/compare/v2.4.4...v2.4.5) (2020-11-19)
+
+**Note:** Version bump only for package @midwayjs/koa
+
+
+
+
+
 ## [2.4.3](https://github.com/midwayjs/midway/compare/v2.4.2...v2.4.3) (2020-11-16)
 
 **Note:** Version bump only for package @midwayjs/koa
