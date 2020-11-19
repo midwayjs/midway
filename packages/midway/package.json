@@ -17,19 +17,16 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/cli": "^1.0.0"
+    "@midwayjs/cli": "^1.0.0",
+    "@midwayjs/core": "^2.4.5"
   },
   "dependencies": {
     "@midwayjs/web": "^2.4.5",
     "egg-cluster": "^1.23.0"
   },
   "files": [
-    "bin",
-    "cluster",
     "dist/**/*.js",
-    "dist/**/*.d.ts",
-    "server.js",
-    "src"
+    "dist/**/*.d.ts"
   ],
   "engines": {
     "node": ">= 8.0.0"
