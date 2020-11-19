@@ -88,9 +88,7 @@ export function getParamNames(func): string[] {
     .map(content => {
       return content.trim().replace(/\s?=.*$/, '');
     });
-  if (result === null) {
-    result = [];
-  }
+
   if (result.length === 1 && result[0] === '') {
     result = [];
   }
