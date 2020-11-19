@@ -5,18 +5,22 @@ const pathMatching = require('egg-path-matching');
 class AppBootHook {
   constructor(app) {
     this.app = app;
+    this.coreMiddleware = [];
     this.appMiddleware = [];
   }
 
   configDidLoad() {
     // 先清空，防止加载到 midway 中间件出错
+    this.coreMiddleware = this.app.loader.config.coreMiddleware;
+    this.app.loader.config.coreMiddleware = [];
     this.appMiddleware = this.app.loader.config.appMiddleware;
     this.app.loader.config.appMiddleware = [];
   }
 
   async didLoad() {
+    const middlewareNames = this.coreMiddleware.concat(this.appMiddleware);
     // 等 midway 加载完成后，再去 use 中间件
-    for (const name of this.appMiddleware) {
+    for (const name of middlewareNames) {
       if (this.app.getApplicationContext().registry.hasDefinition(name)) {
         const mwIns = await this.app.generateMiddleware(name);
         mwIns._name = name;
@@ -28,7 +32,7 @@ class AppBootHook {
           continue;
         }
         // support options.match and options.ignore
-        const mw = this.app.middlewares[name](options);
+        const mw = this.app.middlewares[name](options, this.app);
         if (!options.match && !options.ignore) {
           this.app.use(mw);
         } else {
