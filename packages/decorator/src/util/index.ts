@@ -66,6 +66,18 @@ export function isRegExp(value) {
   return util.types.isRegExp(value);
 }
 
+export function isUndefined(value) {
+  return value === undefined;
+}
+
+export function isNull(value) {
+  return value === null;
+}
+
+export function isNullOrUndefined(value) {
+  return isUndefined(value) || isNull(value);
+}
+
 export function sleep(sleepTime = 1000) {
   return new Promise(resolve => {
     setTimeout(() => {

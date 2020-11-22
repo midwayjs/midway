@@ -23,7 +23,7 @@ import {
   INVALID_DECORATOR_OPERATION,
 } from './errMsg';
 import { Metadata } from './metadata';
-import { getParamNames, classNamed } from '../util';
+import { getParamNames, classNamed, isNullOrUndefined } from '../util';
 
 const debug = require('util').debuglog('decorator:manager');
 
@@ -784,6 +784,39 @@ export function getObjectDefinition(module): ObjectDefinitionOptions {
   return Reflect.getMetadata(OBJ_DEF_CLS, module) as ObjectDefinitionOptions;
 }
 
+export interface TSDesignType {
+  name: string;
+  originDesign: any;
+  isBaseType: boolean;
+}
+
+function transformTypeFromTSDesign(designFn): TSDesignType {
+  if (isNullOrUndefined(designFn)) {
+    return { name: 'undefined', isBaseType: true, originDesign: designFn };
+  }
+
+  switch (designFn.name) {
+    case 'String':
+      return { name: 'string', isBaseType: true, originDesign: designFn };
+    case 'Number':
+      return { name: 'number', isBaseType: true, originDesign: designFn };
+    case 'Boolean':
+      return { name: 'boolean', isBaseType: true, originDesign: designFn };
+    case 'Symbol':
+      return { name: 'symbol', isBaseType: true, originDesign: designFn };
+    case 'Object':
+      return { name: 'object', isBaseType: true, originDesign: designFn };
+    case 'Function':
+      return { name: 'function', isBaseType: true, originDesign: designFn };
+    default:
+      return {
+        name: designFn.name,
+        isBaseType: false,
+        originDesign: designFn,
+      };
+  }
+}
+
 /**
  * get parameters type by reflect-metadata
  */
@@ -792,7 +825,9 @@ export function getMethodParamTypes(target, propertyKey: string | symbol) {
 }
 
 export function getPropertyType(target, propertyKey: string | symbol) {
-  return Reflect.getMetadata('design:type', target, propertyKey);
+  return transformTypeFromTSDesign(
+    Reflect.getMetadata('design:type', target, propertyKey)
+  );
 }
 
 export function getMethodReturnTypes(target, propertyKey: string | symbol) {
