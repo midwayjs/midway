@@ -18,6 +18,8 @@ import {
   resetModule,
   savePropertyDataToClass,
   generateProvideId,
+  getPropertyType,
+  savePropertyMetadata,
 } from '../../src';
 import * as assert from 'assert';
 import { ManagerTest as module } from '../fixtures/decorator/customClass';
@@ -156,6 +158,63 @@ describe('/test/common/decoratorManager.test.ts', () => {
     assert.deepEqual('ok:test1', id, 'provide id is not ok:test1');
     const id2 = generateProvideId('ok:test1', 'ok');
     assert.deepEqual('ok:test1', id2, 'provide id is not ok:test1');
+  });
+
+  it('should test getPropertyType', function () {
+
+    function ApiProperty(): PropertyDecorator {
+      return (target, propertyName) => {
+        const data = getPropertyType(target, propertyName);
+        savePropertyMetadata('propertyType', data, target, propertyName);
+      }
+    }
+
+    class AnotherCatDTO {
+      @ApiProperty()
+      name: string;
+    }
+
+    class CreateCatDto {
+      @ApiProperty()
+      name: string;
+      @ApiProperty()
+      age: number;
+      @ApiProperty()
+      isMale: boolean;
+      @ApiProperty()
+      uniqueKey: symbol;
+      @ApiProperty()
+      emptyValue: undefined;
+      @ApiProperty()
+      extraKey: object;
+      @ApiProperty()
+      check: () => boolean;
+      @ApiProperty()
+      nullValue: null = null;
+      @ApiProperty()
+      breed: [string];
+      @ApiProperty()
+      mapObj: Map<string, any>;
+      @ApiProperty()
+      alias: AnotherCatDTO;
+    }
+
+    const catDTO = new CreateCatDto();
+    const getType = propertyName =>  {
+      return getPropertyMetadata('propertyType', catDTO, propertyName).name;
+    }
+    expect(getType('name')).toEqual('string');
+    expect(getType('age')).toEqual('number');
+    expect(getType('isMale')).toEqual('boolean');
+    expect(getType('uniqueKey')).toEqual('symbol');
+    expect(getType('emptyValue')).toEqual('undefined');
+    expect(getType('extraKey')).toEqual('object');
+    expect(getType('check')).toEqual('function');
+    // null is undefined
+    expect(getType('nullValue')).toEqual('undefined');
+    expect(getType('breed')).toEqual('Array');
+    expect(getType('mapObj')).toEqual('Map');
+    expect(getType('alias')).toEqual('AnotherCatDTO');
   });
 
 });
