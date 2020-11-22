@@ -1,0 +1,41 @@
+{
+  "name": "@midwayjs/dubbo",
+  "version": "2.4.5",
+  "description": "Midway Framework for dubbo.js",
+  "main": "dist/index",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "midway-bin build -c",
+    "test": "midway-bin test --ts --forceExit",
+    "cov": "midway-bin cov --ts --forceExit",
+    "ci": "npm run test"
+  },
+  "keywords": [
+    "midway",
+    "IoC",
+    "rpc",
+    "scene",
+    "dubbo"
+  ],
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@midwayjs/cli": "^1.0.0",
+    "@midwayjs/mock": "^2.4.5",
+    "fs-extra": "^8.0.1"
+  },
+  "dependencies": {
+    "@midwayjs/core": "^2.4.5",
+    "@midwayjs/decorator": "^2.4.5",
+    "apache-dubbo-js": "^3.0.0-rc6"
+  },
+  "author": "Harry Chen <czy88840616@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/midwayjs/midway.git"
+  },
+  "gitHead": "a603d2348d6141f8f723901498f03a162a037708"
+}
