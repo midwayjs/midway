@@ -1,14 +1,14 @@
-import { config, plugin, provide } from '../../../../../../src';
+import { Config, Plugin, Provide } from '@midwayjs/decorator';
 import { IPipelineHandler } from '@midwayjs/core';
 import { Pipeline } from '@midwayjs/decorator';
 
-@provide()
+@Provide()
 export class BaseService {
 
-  @config('hello')
+  @Config('hello')
   config;
 
-  @plugin('plugin2')
+  @Plugin('plugin2')
   plugin2;
 
   @Pipeline(['stageOne'])

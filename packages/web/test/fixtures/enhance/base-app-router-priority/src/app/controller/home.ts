@@ -1,16 +1,16 @@
-import { provide, controller, get, priority } from '../../../../../../../src/';
+import { Provide, Controller, Get, Priority } from '@midwayjs/decorator';
 
-@provide()
-@priority(-1)
-@controller('/')
+@Provide()
+@Priority(-1)
+@Controller('/')
 export class HomeController {
 
-  @get('/hello')
+  @Get('/hello')
   async index(ctx) {
     ctx.body = 'hello';
   }
 
-  @get('/*')
+  @Get('/*')
   async all(ctx) {
     ctx.body = 'world';
   }

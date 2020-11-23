@@ -1,25 +1,25 @@
 'use strict';
 
-import { inject, provide, scope, ScopeEnum, controller, get } from '../../../../../../../src/';
+import { Inject, Provide, Scope, ScopeEnum, Controller, Get } from '@midwayjs/decorator';
 
 const assert = require('assert');
 
-@provide()
-@scope(ScopeEnum.Request)
+@Provide()
+@Scope(ScopeEnum.Request)
 export class BaseApi {
   async index(ctx) {
     ctx.body = 'index';
   }
 }
 
-@provide()
-@controller('/components/')
+@Provide()
+@Controller('/components/')
 export class Api {
 
-  @inject()
+  @Inject()
   logger;
 
-  @get('/')
+  @Get('/')
   async index(ctx) {
     assert(this.logger.constructor.name === 'ContextLogger');
     ctx.body = 'hello';

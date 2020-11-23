@@ -1,12 +1,12 @@
-import { provide, controller, get, inject } from '../../../../../../../src';
+import { Provide, Controller, Get, Inject } from '@midwayjs/decorator';
 
-@provide()
-@controller('/circular')
+@Provide()
+@Controller('/circular')
 export class CircularController {
-  @inject()
+  @Inject()
   planA: any;
 
-  @get('/test')
+  @Get('/test')
   async test(ctx) {
     ctx.body = 'success';
   }

@@ -1,18 +1,18 @@
-import {provide, inject} from '../../../../../../src';
+import {Provide, Inject} from '@midwayjs/decorator';
 import { BaseService } from './service';
 
-@provide()
+@Provide()
 export class HelloService {
   xxx: string[] = ['a', 'b'];
 
   name: string;
 
-  @inject('baseService')
+  @Inject('baseService')
   service: BaseService;
 
   async say() {
     if (!this.service) {
-      throw new Error('inject baseService fail!');
+      throw new Error('Inject baseService fail!');
     }
     return `${this.xxx.join(',')}`;
   }

@@ -1,16 +1,17 @@
-import { controller, get, provide, Context, inject } from '../../../../../../../src/';
+import { Controller, Get, Provide, Inject } from '@midwayjs/decorator';
 import { Service } from '../../Service';
+import { Context } from 'egg';
 
-@provide()
-@controller('/api/user')
+@Provide()
+@Controller('/api/user')
 export class UserController {
-  @inject()
+  @Inject()
   ctx: Context;
 
-  @inject()
+  @Inject()
   service: Service;
 
-  @get('/info')
+  @Get('/info')
   async api() {
     this.ctx.body = await this.service.user.userinfo();
   }

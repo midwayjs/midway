@@ -1,4 +1,4 @@
-import { inject, provide, controller, get, post } from '../../../../../../../src/';
+import { Inject, Provide, Controller, Get, Post } from '@midwayjs/decorator';
 
 const mw = async (ctx, next) => {
   ctx.home = ctx.home + '4444';
@@ -12,15 +12,15 @@ const newMiddleware = (data) => {
   };
 };
 
-@provide()
-@controller('/', {middleware: ['homeMiddleware', mw]})
+@Provide()
+@Controller('/', {middleware: ['homeMiddleware', mw]})
 export class My {
 
-  @inject()
+  @Inject()
   ctx;
 
-  @get('/', {middleware: ['apiMiddleware', newMiddleware('5555')]})
-  @post('/api/data')
+  @Get('/', {middleware: ['apiMiddleware', newMiddleware('5555')]})
+  @Post('/api/data')
   async index() {
     this.ctx.body = this.ctx.home + (this.ctx.api || '');
   }

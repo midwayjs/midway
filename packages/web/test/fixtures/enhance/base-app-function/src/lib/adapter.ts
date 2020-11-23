@@ -1,11 +1,11 @@
-import {provide} from '../../../../../../src';
+import {Provide} from '@midwayjs/decorator';
 
-@provide()
+@Provide()
 export class GoogleAdapter {
 
 }
 
-@provide()
+@Provide()
 export class BaiduAdapter {
 
 }

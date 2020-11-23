@@ -1,9 +1,9 @@
-import { provide, inject, controller, get } from '../../../../../../../src';
+import { Provide, Inject, Controller, Get } from '@midwayjs/decorator';
 import { BaseService } from '../../lib/service';
 import { HelloService } from '../../lib/HelloService';
 
-@provide()
-@controller('/hello')
+@Provide()
+@Controller('/hello')
 export class HelloController {
   name: string[] = ['a', 'b'];
 
@@ -11,13 +11,13 @@ export class HelloController {
 
   aaaa;
 
-  @inject()
+  @Inject()
   helloService: HelloService;
 
-  @inject('baseService')
+  @Inject('baseService')
   service: BaseService;
 
-  @get('/say')
+  @Get('/say')
   async say(ctx) {
     const arr = [];
     if (this.service) {
@@ -31,7 +31,7 @@ export class HelloController {
     ctx.body = arr.join(',');
   }
 
-  @get('/stage')
+  @Get('/stage')
   async doStage(ctx) {
     ctx.body = await this.service.doStages();
   }

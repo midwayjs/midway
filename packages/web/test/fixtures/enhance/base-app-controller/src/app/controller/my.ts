@@ -1,9 +1,9 @@
-import { controller, get, provide } from '../../../../../../../src/';
+import { Controller, Get, Provide } from '@midwayjs/decorator';
 
-@provide()
-@controller('/')
+@Provide()
+@Controller('/')
 export class My {
-  @get('/')
+  @Get('/')
   async index(ctx) {
     ctx.body = 'root_test';
   }

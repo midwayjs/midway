@@ -1,16 +1,16 @@
-import { async, config, init, plugin, provide } from '../../../../../../src';
+import { Async, Config, Init, Plugin, Provide } from '@midwayjs/decorator';
 
-@async()
-@provide()
+@Async()
+@Provide()
 export class BaseService {
 
-  @config('hello')
+  @Config('hello')
   config;
 
-  @plugin('plugin2')
+  @Plugin('plugin2')
   plugin2;
 
-  @init()
+  @Init()
   async init() {
     await new Promise(resolve => {
       setTimeout(() => {

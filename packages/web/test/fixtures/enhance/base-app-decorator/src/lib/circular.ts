@@ -1,19 +1,19 @@
-import { provide, inject } from '../../../../../../src';
+import { Provide, Inject } from '@midwayjs/decorator';
 import { PlanA } from './planA';
 
-// @provide()
+// @Provide()
 // export class PlanA {
-//   @inject()
+//   @Inject()
 //   planB: any;
 // }
 
-@provide()
+@Provide()
 export class PlanB {
-  @inject()
+  @Inject()
   planA: PlanA;
-  @inject()
+  @Inject()
   helloService: any;
 
-  @inject()
+  @Inject()
   AppModel: any;
 }

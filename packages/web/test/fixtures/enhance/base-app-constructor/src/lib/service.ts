@@ -1,31 +1,31 @@
-import { async, config, init, inject, plugin, provide } from '../../../../../../src';
+import { Async, Config, Init, Inject, Plugin, Provide } from '@midwayjs/decorator';
 
-@provide()
+@Provide()
 export class A {
   config = {
     c: 20
   };
 }
 
-@provide()
+@Provide()
 export class B {
   config = {
     c: 40
   };
 }
 
-@async()
-@provide()
+@Async()
+@Provide()
 export class BaseService {
 
   config;
   plugin2;
 
   constructor(
-    @inject() a,
-    @config('hello') config,
-    @inject() b,
-    @plugin('plugin2') plugin2
+    @Inject() a,
+    @Config('hello') config,
+    @Inject() b,
+    @Plugin('plugin2') plugin2
   ) {
     this.config = Object.assign(config, {
       c: a.config.c + b.config.c + config.c
@@ -33,7 +33,7 @@ export class BaseService {
     this.plugin2 = plugin2;
   }
 
-  @init()
+  @Init()
   async init() {
     await new Promise(resolve => {
       setTimeout(() => {

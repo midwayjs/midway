@@ -1,12 +1,12 @@
-import { provide, controller, get } from '../../../../../../../src/';
+import { Provide, Controller, Get } from '@midwayjs/decorator';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/server';
 import App from '../../shared/App';
 
-@provide()
-@controller('/')
+@Provide()
+@Controller('/')
 export class My {
-  @get('/')
+  @Get('/')
   async index(ctx) {
     ctx.body = `
 <!DOCTYPE html>

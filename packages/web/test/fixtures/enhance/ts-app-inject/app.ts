@@ -1,13 +1,13 @@
-import { inject, provide } from 'injection';
+import { Inject, Provide } from 'injection';
 import { Loader } from './loader';
 
-@provide()
+@Provide()
 export class App {
 
-  @inject('easyLoader')
+  @Inject('easyLoader')
   loader: Loader;
 
-  @inject('loader')
+  @Inject('loader')
   easyLoader: Loader;
 
   getConfig() {

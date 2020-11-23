@@ -1,10 +1,10 @@
-import { inject, provide } from '../../../../../src';
+import { Inject, Provide } from '@midwayjs/decorator';
 import { CodeService } from './app/service/CodeService';
 import { UserService } from './app/service/UserService';
 
-@provide()
+@Provide()
 export class Service {
-  @inject()
+  @Inject()
   ctx: any;
 
   get code(): CodeService {

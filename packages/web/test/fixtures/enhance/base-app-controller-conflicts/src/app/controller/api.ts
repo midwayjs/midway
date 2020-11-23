@@ -2,30 +2,30 @@
 
 import { ScopeEnum } from '@midwayjs/decorator';
 import {
-  controller,
-  get,
-  inject,
-  provide,
-  scope,
-} from '../../../../../../../src/';
+  Controller,
+  Get,
+  Inject,
+  Provide,
+  Scope,
+} from '@midwayjs/decorator';
 
 const assert = require('assert');
 
-@provide()
-@scope(ScopeEnum.Request)
+@Provide()
+@Scope(ScopeEnum.Request)
 export class BaseApi {
   async index(ctx) {
     ctx.body = 'index';
   }
 }
 
-@provide()
-@controller('/components/')
+@Provide()
+@Controller('/components/')
 export class My {
-  @inject()
+  @Inject()
   logger;
 
-  @get('/')
+  @Get('/')
   async index(ctx) {
     assert(this.logger.constructor.name === 'ContextLogger');
     ctx.body = 'hello';
