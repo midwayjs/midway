@@ -158,7 +158,8 @@ export const createAgentWorkerLoader = () => {
 };
 
 export const createEggApplication = () => {
-  const Application = require(getFramework()).Application;
+  const Application =
+    require(getFramework())?.Application || require('egg').Application;
   class EggApplication extends (Application as any) {
     constructor(options) {
       // eslint-disable-next-line constructor-super
@@ -178,7 +179,7 @@ export const createEggApplication = () => {
 };
 
 export const createEggAgent = () => {
-  const Agent = require(getFramework()).Agent;
+  const Agent = require(getFramework())?.Agent || require('egg').Agent;
   class EggAgent extends (Agent as any) {
     constructor(options) {
       // eslint-disable-next-line constructor-super
