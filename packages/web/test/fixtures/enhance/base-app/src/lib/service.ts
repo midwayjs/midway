@@ -1,8 +1,8 @@
-import { provide, inject } from '../../../../../../src';
+import { Provide, Inject } from '@midwayjs/decorator';
 
-@provide()
+@Provide()
 export class UserService {
-  @inject()
+  @Inject()
   ctx;
 
   async hello() {

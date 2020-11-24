@@ -1,4 +1,4 @@
-import { logger } from '../../../../../src';
+import { Logger } from '@midwayjs/decorator';
 import { ILifeCycle, IMidwayContainer, IMidwayCoreApplication } from '@midwayjs/core';
 import { Configuration, App } from '@midwayjs/decorator';
 
@@ -11,7 +11,7 @@ import { Configuration, App } from '@midwayjs/decorator';
   ]
 })
 export class LifeCycleTest implements ILifeCycle {
-  @logger()
+  @Logger()
   logger: any;
 
   @App()

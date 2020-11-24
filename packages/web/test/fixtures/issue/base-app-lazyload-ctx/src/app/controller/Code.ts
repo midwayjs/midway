@@ -1,16 +1,17 @@
-import { controller, get, provide, Context, inject } from '../../../../../../../src/';
+import { Controller, Get, Provide, Inject } from '@midwayjs/decorator';
 import { Service } from '../../Service';
+import { Context } from 'egg';
 
-@provide()
-@controller('/api/code')
+@Provide()
+@Controller('/api/code')
 export class CodeController {
-  @inject()
+  @Inject()
   ctx: Context;
 
-  @inject()
+  @Inject()
   service: Service;
 
-  @get('/list')
+  @Get('/list')
   async api() {
     this.ctx.body = await this.service.code.list();
   }

@@ -1,4 +1,4 @@
-import { Application } from '../../../../../../../src/';
+import { Application } from 'egg';
 
 const VALIDATOR: any = Symbol('Application#_validator');
 

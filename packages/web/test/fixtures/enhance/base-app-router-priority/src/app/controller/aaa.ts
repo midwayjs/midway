@@ -1,10 +1,10 @@
-import { provide, controller, get } from '../../../../../../../src/';
+import { Provide, Controller, Get } from '@midwayjs/decorator';
 
-@provide()
-@controller('/api')
+@Provide()
+@Controller('/api')
 export class APIController {
 
-  @get('/hello')
+  @Get('/hello')
   async index(ctx) {
     ctx.body = 'api';
   }

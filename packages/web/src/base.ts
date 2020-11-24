@@ -28,7 +28,8 @@ function getFramework() {
 }
 
 export const createAppWorkerLoader = () => {
-  const AppWorkerLoader = require(getFramework()).AppWorkerLoader;
+  const AppWorkerLoader =
+    require(getFramework())?.AppWorkerLoader || require('egg').AppWorkerLoader;
   class EggAppWorkerLoader extends (AppWorkerLoader as any) {
     app: any;
     framework;
@@ -95,7 +96,9 @@ export const createAppWorkerLoader = () => {
 };
 
 export const createAgentWorkerLoader = () => {
-  const AppWorkerLoader = require(getFramework()).AgentWorkerLoader;
+  const AppWorkerLoader =
+    require(getFramework())?.AgentWorkerLoader ||
+    require('egg').AgentWorkerLoader;
   class EggAppWorkerLoader extends (AppWorkerLoader as any) {
     getEggPaths() {
       if (!this.appDir) {
@@ -155,7 +158,8 @@ export const createAgentWorkerLoader = () => {
 };
 
 export const createEggApplication = () => {
-  const Application = require(getFramework()).Application;
+  const Application =
+    require(getFramework())?.Application || require('egg').Application;
   class EggApplication extends (Application as any) {
     constructor(options) {
       // eslint-disable-next-line constructor-super
@@ -175,7 +179,7 @@ export const createEggApplication = () => {
 };
 
 export const createEggAgent = () => {
-  const Agent = require(getFramework()).Agent;
+  const Agent = require(getFramework())?.Agent || require('egg').Agent;
   class EggAgent extends (Agent as any) {
     constructor(options) {
       // eslint-disable-next-line constructor-super

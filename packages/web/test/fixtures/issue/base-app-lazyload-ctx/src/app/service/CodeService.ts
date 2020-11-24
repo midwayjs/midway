@@ -1,13 +1,13 @@
-import { inject, provide } from '../../../../../../../src';
+import { Inject, Provide } from '@midwayjs/decorator';
 import { Service } from '../../Service';
 import sleep from '../../package/Sleep';
 
-@provide()
+@Provide()
 export class CodeService {
-  @inject()
+  @Inject()
   private service: Service;
 
-  @inject()
+  @Inject()
   ctx;
 
   async list() {

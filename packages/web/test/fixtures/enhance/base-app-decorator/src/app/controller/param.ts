@@ -1,4 +1,4 @@
-import { provide, inject, controller, config, get, post, query, param, files, file, session, body, headers } from '../../../../../../../src';
+import { Provide, Inject, Controller, Config, Get, Post, Query, Param, Files, File, Session, Body, Headers } from '@midwayjs/decorator';
 import { ALL } from '@midwayjs/decorator';
 
 import * as path from 'path';
@@ -6,23 +6,23 @@ import * as fs from 'fs';
 
 import * as pump from 'mz-modules/pump';
 
-@provide()
-@controller('/param')
+@Provide()
+@Controller('/param')
 export class ParamController {
 
-  @config('baseDir')
+  @Config('baseDir')
   baseDir: string;
 
-  @inject()
+  @Inject()
   ctx: any;
 
-  @get('/query')
-  async query(@query(ALL) query) {
+  @Get('/query')
+  async query(@Query(ALL) query) {
     this.ctx.body = query;
   }
 
-  @get('/:id/test')
-  async test(@query(ALL) query, @param('id') id) {
+  @Get('/:id/test')
+  async test(@Query(ALL) query, @Param('id') id) {
     const data = {
         id,
         ...query
@@ -30,34 +30,34 @@ export class ParamController {
     this.ctx.body = data;
   }
 
-  @get('/query_id')
-  async queryId(@query('id') id) {
+  @Get('/query_id')
+  async queryId(@Query('id') id) {
     this.ctx.body = id;
   }
 
-  @get('/param/:id/test/:userId')
-  async param(@param(ALL) param) {
+  @Get('/param/:id/test/:userId')
+  async param(@Param(ALL) param) {
     // service,hello,a,b
     this.ctx.body = param;
   }
 
-  @get('/param/:id')
-  async paramId(@param('id') id) {
+  @Get('/param/:id')
+  async paramId(@Param('id') id) {
     this.ctx.body = id;
   }
 
-  @post('/body')
-  async body(@body(ALL) body) {
+  @Post('/body')
+  async body(@Body(ALL) body) {
     this.ctx.body = body;
   }
 
-  @get('/body_id')
-  async bodyId(@body('id') id) {
+  @Get('/body_id')
+  async bodyId(@Body('id') id) {
     this.ctx.body = id;
   }
 
-  @post('/file')
-  async file(@file() stream) {
+  @Post('/file')
+  async file(@File() stream) {
     const filename = encodeURIComponent(stream.fields.name) + path.extname(stream.filename).toLowerCase();
     const target = path.join(this.baseDir, 'app/public', filename);
     const writeStream = fs.createWriteStream(target);
@@ -65,8 +65,8 @@ export class ParamController {
     this.ctx.body = 'ok';
   }
 
-  @post('/files')
-  async files(@files({ autoFields: true }) parts) {
+  @Post('/files')
+  async files(@Files({ autoFields: true }) parts) {
 
     let stream = await parts();
 
@@ -81,20 +81,20 @@ export class ParamController {
     this.ctx.body = 'ok';
   }
 
-  @get('/session')
-  async session(@session(ALL) session) {
+  @Get('/session')
+  async session(@Session(ALL) session) {
     // service,hello,a,b
     this.ctx.body = session;
   }
 
-  @get('/headers')
-  async header(@headers(ALL) headers) {
+  @Get('/headers')
+  async header(@Headers(ALL) headers) {
     // service,hello,a,b
     this.ctx.body = headers.host.substring(0, 3);
   }
 
-  @get('/headers_host')
-  async headerHost(@headers('host') host) {
+  @Get('/headers_host')
+  async headerHost(@Headers('host') host) {
     // service,hello,a,b
     this.ctx.body = host.substring(0, 3);
   }

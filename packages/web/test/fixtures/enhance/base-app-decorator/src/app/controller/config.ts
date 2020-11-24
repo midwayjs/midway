@@ -1,37 +1,37 @@
-import { provide, inject, controller, get, config } from '../../../../../../../src';
+import { Provide, Inject, Controller, Get, Config } from '@midwayjs/decorator';
 
-@provide()
-@controller('/config')
+@Provide()
+@Controller('/config')
 export class ConfigController {
 
-  @inject('ctx')
+  @Inject('ctx')
   ctx: any;
 
   // should be 1
-  @config('hello.a')
+  @Config('hello.a')
   a: number;
 
   // should be 2
-  @config('hello.e.f')
+  @Config('hello.e.f')
   c: number;
 
   // should be undefined
-  @config('hello.f')
+  @Config('hello.f')
   d: number;
 
-  @config('plugins')
+  @Config('plugins')
   plugins: any;
 
   b: boolean;
 
   constructor(
       // should be true
-      @config('plugins.plugin2') pluginFlag: boolean
+      @Config('plugins.plugin2') pluginFlag: boolean
   ) {
     this.b = pluginFlag;
   }
 
-  @get('/test')
+  @Get('/test')
   async test() {
       const data =  {
           a: this.a,
@@ -42,7 +42,7 @@ export class ConfigController {
       this.ctx.body = data;
   }
 
-  @get('/test2')
+  @Get('/test2')
   async test2() {
       this.ctx.body = this.plugins;
   }

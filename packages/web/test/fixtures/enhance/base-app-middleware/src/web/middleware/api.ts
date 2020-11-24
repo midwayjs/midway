@@ -1,9 +1,10 @@
-import { config, provide, IWebMiddleware } from '../../../../../../../src';
+import { Config, Provide } from '@midwayjs/decorator';
+import { IWebMiddleware } from '../../../../../../../src';
 
-@provide()
+@Provide()
 export class ApiMiddleware implements IWebMiddleware {
 
-  @config('hello')
+  @Config('hello')
   helloConfig;
 
   resolve() {

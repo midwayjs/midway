@@ -1,9 +1,14 @@
-'use strict';
+import { join } from 'path';
 
-export const keys = 'key';
+export = (appInfo) => {
 
-export const hello = {
-  a: 1,
-  b: 2,
-  d: [1, 2, 3],
-};
+  return {
+    keys: 'key',
+    hello: {
+      a: 1,
+      b: 2,
+      d: [1, 2, 3],
+    },
+    rundir: join(appInfo.appDir, 'run')
+  }
+}

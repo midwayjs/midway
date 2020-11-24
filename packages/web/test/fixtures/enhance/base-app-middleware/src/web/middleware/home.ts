@@ -1,6 +1,7 @@
-import { provide, IWebMiddleware } from '../../../../../../../src';
+import { Provide } from '@midwayjs/decorator';
+import { IWebMiddleware } from '../../../../../../../src';
 
-@provide()
+@Provide()
 export class HomeMiddleware implements IWebMiddleware {
 
   resolve() {

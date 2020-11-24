@@ -1,10 +1,10 @@
-import { inject, provide } from '../../../../../../src';
+import { Inject, Provide } from '@midwayjs/decorator';
 import { PlanB } from './circular';
 
-@provide()
+@Provide()
 export class PlanA {
-  @inject()
+  @Inject()
   helloService: any;
-  @inject()
+  @Inject()
   planB: PlanB;
 }

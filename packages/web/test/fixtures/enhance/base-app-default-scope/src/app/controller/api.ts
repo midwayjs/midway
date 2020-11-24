@@ -1,9 +1,9 @@
 'use strict';
 
-import { controller, get, provide } from '../../../../../../../src/';
+import { Controller, Get, Provide } from '@midwayjs/decorator';
 import * as assert from 'assert';
 
-@provide()
+@Provide()
 export class BaseApi {
   async index(ctx) {
     const baseApi = await ctx.requestContext.getAsync('baseApi');
@@ -12,11 +12,11 @@ export class BaseApi {
   }
 }
 
-@provide()
-@controller('/api')
+@Provide()
+@Controller('/api')
 export class Api {
 
-  @get('/test')
+  @Get('/test')
   async index(ctx) {
     ctx.body = 'hello';
   }
