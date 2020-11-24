@@ -39,3 +39,5 @@ class EggAgent extends BaseEggAgent {
 
 export { EggApplication as Application };
 export { EggAgent as Agent };
+export { EggAppWorkerLoader as AppWorkerLoader };
+export { EggAgentWorkerLoader as AgentWorkerLoader };
