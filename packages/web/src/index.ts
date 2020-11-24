@@ -7,11 +7,5 @@ export {
   createAppWorkerLoader,
   createAgentWorkerLoader,
 } from './base';
-// must export mock app here
-export {
-  Application,
-  Agent,
-  AppWorkerLoader,
-  AgentWorkerLoader,
-} from './application';
+export { Application, Agent } from './application';
 export { startCluster } from 'egg';

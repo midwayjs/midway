@@ -28,7 +28,8 @@ function getFramework() {
 }
 
 export const createAppWorkerLoader = () => {
-  const AppWorkerLoader = require(getFramework()).AppWorkerLoader;
+  const AppWorkerLoader =
+    require(getFramework())?.AppWorkerLoader || require('egg').AppWorkerLoader;
   class EggAppWorkerLoader extends (AppWorkerLoader as any) {
     app: any;
     framework;
@@ -95,7 +96,9 @@ export const createAppWorkerLoader = () => {
 };
 
 export const createAgentWorkerLoader = () => {
-  const AppWorkerLoader = require(getFramework()).AgentWorkerLoader;
+  const AppWorkerLoader =
+    require(getFramework())?.AgentWorkerLoader ||
+    require('egg').AgentWorkerLoader;
   class EggAppWorkerLoader extends (AppWorkerLoader as any) {
     getEggPaths() {
       if (!this.appDir) {
