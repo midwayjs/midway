@@ -28,3 +28,19 @@ export const parseNormalDir = (baseDir: string, isTypescript = true) => {
     };
   }
 };
+
+export const syncEnvironment = () => {
+  const setEnv = envValue => {
+    process.env.MIDWAY_SERVER_ENV = process.env.MIDWAY_SERVER_ENV || envValue;
+    process.env.NODE_ENV = process.env.NODE_ENV || envValue;
+    process.env.EGG_SERVER_ENV = process.env.EGG_SERVER_ENV || envValue;
+  };
+
+  if (process.env.EGG_SERVER_ENV) {
+    setEnv(process.env.EGG_SERVER_ENV);
+  } else if (process.env.MIDWAY_SERVER_ENV) {
+    setEnv(process.env.MIDWAY_SERVER_ENV);
+  } else if (process.env.NODE_ENV) {
+    setEnv(process.env.NODE_ENV);
+  }
+};
