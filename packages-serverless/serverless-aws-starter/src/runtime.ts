@@ -111,6 +111,16 @@ export class AWSRuntime extends ServerlessLightRuntime {
   getApplication() {
     return this.app;
   }
+
+  getFunctionName(): string {
+    // https://docs.aws.amazon.com/zh_cn/lambda/latest/dg/configuration-envvars.html
+    return process.env.AWS_LAMBDA_FUNCTION_NAME || super.getFunctionName();
+  }
+
+  getFunctionServiceName(): string {
+    // lambda 没有服务名
+    return super.getFunctionServiceName();
+  }
 }
 
 function isHttpEvent(event): event is AWSHTTPEvent {

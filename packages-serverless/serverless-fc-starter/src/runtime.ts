@@ -254,4 +254,14 @@ export class FCRuntime extends ServerlessLightRuntime {
   getApplication() {
     return this.app;
   }
+
+  getFunctionName(): string {
+    return this.options?.initContext?.function?.name || super.getFunctionName();
+  }
+
+  getFunctionServiceName(): string {
+    return (
+      this.options?.initContext?.service?.name || super.getFunctionServiceName()
+    );
+  }
 }

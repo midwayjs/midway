@@ -140,6 +140,16 @@ export class SCFRuntime extends ServerlessLightRuntime {
   getApplication() {
     return this.app;
   }
+
+  getFunctionName(): string {
+    // https://cloud.tencent.com/document/product/583/30228
+    return process.env.SCF_FUNCTIONNAME || super.getFunctionName();
+  }
+
+  getFunctionServiceName(): string {
+    // 腾讯云没有服务名
+    return super.getFunctionServiceName();
+  }
 }
 
 function isHttpEvent(event): event is SCF.APIGatewayEvent {

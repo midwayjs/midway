@@ -7,7 +7,7 @@ import {
   PropertyParser,
   Runtime,
   FunctionEvent,
-  RuntimeOptions,
+  BootstrapOptions,
 } from './interface';
 import { join } from 'path';
 import { EnvPropertyParser } from './lib/parser';
@@ -24,7 +24,7 @@ export class ServerlessBaseRuntime extends EventEmitter implements Runtime {
   eventHandlers: FunctionEvent[] = [];
   handlerStore = new Map();
   logger = null;
-  private options: RuntimeOptions = {};
+  protected options: BootstrapOptions = {};
 
   constructor() {
     super();
@@ -261,5 +261,19 @@ export class ServerlessBaseRuntime extends EventEmitter implements Runtime {
 
   get isAppMode() {
     return !!this.options.isAppMode;
+  }
+
+  /**
+   * get function name in runtime
+   */
+  getFunctionName(): string {
+    return process.env.MIDWAY_SERVERLESS_FUNCTION_NAME || '';
+  }
+
+  /**
+   * get function service/group in runtime
+   */
+  getFunctionServiceName(): string {
+    return process.env.MIDWAY_SERVERLESS_SERVICE_NAME || '';
   }
 }
