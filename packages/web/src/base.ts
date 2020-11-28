@@ -5,6 +5,7 @@ import { BootstrapStarter } from '@midwayjs/bootstrap';
 import { MidwayWebFramework } from './framework';
 import { safelyGet, safeRequire } from '@midwayjs/core';
 import { join } from 'path';
+import { existsSync, readFileSync } from 'fs';
 
 const EGG_LOADER = Symbol.for('egg#loader');
 const EGG_PATH = Symbol.for('egg#eggPath');
@@ -72,6 +73,37 @@ export const createAppWorkerLoader = () => {
       return this.appInfo;
     }
 
+    protected getServerEnv() {
+      // 这里和 egg 不同的是，一是修改了根路径，二是增加了环境变量
+      let serverEnv = this.options.env;
+
+      let envPath = join(this.appDir, 'config/env');
+      if (!serverEnv && existsSync(envPath)) {
+        serverEnv = readFileSync(envPath, 'utf8').trim();
+      }
+
+      envPath = join(this.appDir, 'config/serverEnv');
+      if (!serverEnv && existsSync(envPath)) {
+        serverEnv = readFileSync(envPath, 'utf8').trim();
+      }
+
+      if (!serverEnv) {
+        serverEnv = process.env.MIDWAY_SERVER_ENV || process.env.EGG_SERVER_ENV;
+      }
+
+      if (!serverEnv) {
+        serverEnv = super.getServerEnv();
+      } else {
+        serverEnv = serverEnv.trim();
+      }
+
+      if (serverEnv && !process.env.MIDWAY_SERVER_ENV) {
+        process.env.MIDWAY_SERVER_ENV = serverEnv;
+      }
+
+      return serverEnv;
+    }
+
     load() {
       this.framework = new MidwayWebFramework().configure({
         processType: 'application',
@@ -133,6 +165,37 @@ export const createAgentWorkerLoader = () => {
         });
       }
       return this.appInfo;
+    }
+
+    protected getServerEnv() {
+      // 这里和 egg 不同的是，一是修改了根路径，二是增加了环境变量
+      let serverEnv = this.options.env;
+
+      let envPath = join(this.appDir, 'config/env');
+      if (!serverEnv && existsSync(envPath)) {
+        serverEnv = readFileSync(envPath, 'utf8').trim();
+      }
+
+      envPath = join(this.appDir, 'config/serverEnv');
+      if (!serverEnv && existsSync(envPath)) {
+        serverEnv = readFileSync(envPath, 'utf8').trim();
+      }
+
+      if (!serverEnv) {
+        serverEnv = process.env.MIDWAY_SERVER_ENV || process.env.EGG_SERVER_ENV;
+      }
+
+      if (!serverEnv) {
+        serverEnv = super.getServerEnv();
+      } else {
+        serverEnv = serverEnv.trim();
+      }
+
+      if (serverEnv && !process.env.MIDWAY_SERVER_ENV) {
+        process.env.MIDWAY_SERVER_ENV = serverEnv;
+      }
+
+      return serverEnv;
     }
 
     load() {
