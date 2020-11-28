@@ -33,6 +33,12 @@ describe('/test/feature.test.ts', () => {
       const result = await createHttpRequest(app).get('/login');
       expect(result.status).toBe(302);
     });
+
+    it('test get status 204', async () => {
+      const result = await createHttpRequest(app).get('/204');
+      console.log('result.status', result.status);
+      expect(result.status).toBe(204);
+    });
   });
 
 });

@@ -132,7 +132,9 @@ export class MidwayExpressFramework extends BaseFramework<
       const controller = await req.requestContext.getAsync(controllerId);
       // eslint-disable-next-line prefer-spread
       const result = await controller[methodName].apply(controller, args);
-
+      if (res.statusCode === 200 && (result === null || result === undefined)) {
+        res.status(204);
+      }
       // implement response decorator
       if (Array.isArray(routerResponseData) && routerResponseData.length) {
         for (const routerRes of routerResponseData) {
@@ -152,10 +154,7 @@ export class MidwayExpressFramework extends BaseFramework<
           }
         }
       }
-
-      if (result) {
-        res.send(result);
-      }
+      res.send(result);
     };
   }
 

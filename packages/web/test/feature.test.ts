@@ -22,6 +22,11 @@ describe('/test/feature.test.ts', () => {
       expect(result.headers['ccc']).toEqual('ddd');
     });
 
+    it('test get status 204', async () => {
+      const result = await createHttpRequest(app).get('/204');
+      expect(result.status).toEqual(204);
+    });
+
     it('test get method with return value', async () => {
       const result = await createHttpRequest(app)
         .get('/')
