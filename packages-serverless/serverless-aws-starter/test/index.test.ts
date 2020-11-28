@@ -1,6 +1,7 @@
 import * as assert from 'assert';
 import { asyncWrapper, start } from '../src';
 import { AWSBasicHTTPEvent } from '../src/interface';
+import * as mm from 'mm';
 
 class Tester {
   handler;
@@ -402,4 +403,14 @@ describe('/test/index.test.ts', () => {
       assert.equal(data.body, postData);
     });
   });
+
+  describe('test base info', () => {
+    it('should get function name and service name from environment', async () => {
+      mm(process.env, 'AWS_LAMBDA_FUNCTION_NAME',  'aaa');
+      const runtime = await start();
+      expect(runtime.getFunctionName()).toEqual('aaa');
+      expect(runtime.getFunctionServiceName()).toEqual('');
+      mm.restore();
+    });
+  })
 });

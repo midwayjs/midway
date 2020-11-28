@@ -2,6 +2,7 @@ import { createRuntime } from '@midwayjs/runtime-mock';
 import * as assert from 'assert';
 import * as events from 'events';
 import { asyncWrapper, start } from '../src';
+import * as mm from 'mm';
 // 这里不能用包引，会循环依赖
 import {
   HTTPTrigger,
@@ -498,4 +499,31 @@ describe('/test/index.test.ts', () => {
       await runtime.close();
     });
   });
+
+  describe('test entry param', () => {
+    it('should get function name and service name from init context', async () => {
+      const runtime = await start({
+        initContext:{
+          function: {
+            "name": "fc-tmallvtop",
+            "handler": "tmallvtop.handler",
+            "initializer": "tmallvtop.initializer",
+            "initializationTimeout": 3
+          },
+          service: {"name": "fc-rank-v-ald-pre", "versionId": "1"}
+        }
+      });
+      expect(runtime.getFunctionName()).toEqual('fc-tmallvtop');
+      expect(runtime.getFunctionServiceName()).toEqual('fc-rank-v-ald-pre');
+    });
+
+    it('should get function name when empty and set environment', async () => {
+      mm(process.env, 'MIDWAY_SERVERLESS_FUNCTION_NAME',  'aaa');
+      mm(process.env, 'MIDWAY_SERVERLESS_SERVICE_NAME',  'bbb');
+      const runtime = await start();
+      expect(runtime.getFunctionName()).toEqual('aaa');
+      expect(runtime.getFunctionServiceName()).toEqual('bbb');
+      mm.restore();
+    });
+  })
 });

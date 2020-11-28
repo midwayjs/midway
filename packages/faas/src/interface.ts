@@ -9,6 +9,15 @@ export interface IMidwayFaaSApplication extends IMidwayApplication {
   use(middleware: FaaSMiddleware);
   useMiddleware(mw: string[]);
   generateMiddleware(middlewareId: string): Promise<FaaSMiddleware>;
+
+  /**
+   * Get function name in serverless environment
+   */
+  getFunctionName(): string;
+  /**
+   * Get function service name in serverless environment
+   */
+  getFunctionServiceName(): string;
 }
 
 /**
@@ -38,6 +47,8 @@ export interface IFaaSConfigurationOptions {
   initializeContext?: object;
   applicationAdapter?: {
     getApplication(): IMidwayFaaSApplication;
+    getFunctionName(): string;
+    getFunctionServiceName(): string;
   };
 }
 

@@ -70,6 +70,14 @@ export class MidwayFaaSFramework extends BaseFramework<
       generateMiddleware: async (middlewareId: string) => {
         return this.generateMiddleware(middlewareId);
       },
+
+      getFunctionName: () => {
+        return this.configurationOptions.applicationAdapter?.getFunctionName();
+      },
+
+      getFunctionServiceName: () => {
+        return this.configurationOptions.applicationAdapter?.getFunctionServiceName();
+      },
     });
 
     this.prepareConfiguration();

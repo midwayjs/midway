@@ -14,8 +14,7 @@ describe('test/index.test.ts', () => {
       },
       { text: 'a' }
     );
-    assert(data === 'ahello');
-    await closeApp(starter);
+    expect(data).toEqual('ahello');
   });
 
   it('invoke different handler use @Handler', async () => {
@@ -122,6 +121,8 @@ describe('test/index.test.ts', () => {
   });
 
   it('test custom global middleware in fc', async () => {
+    mm(process.env, 'MIDWAY_SERVERLESS_FUNCTION_NAME',  'aaa');
+    mm(process.env, 'MIDWAY_SERVERLESS_SERVICE_NAME',  'bbb');
     const { start } = require('@midwayjs/serverless-fc-starter');
     const runtime = await start();
     const starter = await creatStarter('base-app-middleware', {
@@ -141,8 +142,9 @@ describe('test/index.test.ts', () => {
       { text: 'a' }
     );
 
-    assert(data.body === 'ahello555');
+    expect(data.body).toEqual('ahello555aaabbb');
     await closeApp(starter);
+    mm.restore();
   });
 
   it('test custom global middleware in scf', async () => {
