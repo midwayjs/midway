@@ -77,7 +77,12 @@ export const createAppWorkerLoader = () => {
       // 这里和 egg 不同的是，一是修改了根路径，二是增加了环境变量
       let serverEnv = this.options.env;
 
-      const envPath = join(this.appDir, 'config/env');
+      let envPath = join(this.appDir, 'config/env');
+      if (!serverEnv && existsSync(envPath)) {
+        serverEnv = readFileSync(envPath, 'utf8').trim();
+      }
+
+      envPath = join(this.appDir, 'config/serverEnv');
       if (!serverEnv && existsSync(envPath)) {
         serverEnv = readFileSync(envPath, 'utf8').trim();
       }
@@ -90,6 +95,10 @@ export const createAppWorkerLoader = () => {
         serverEnv = super.getServerEnv();
       } else {
         serverEnv = serverEnv.trim();
+      }
+
+      if (serverEnv && !process.env.MIDWAY_SERVER_ENV) {
+        process.env.MIDWAY_SERVER_ENV = serverEnv;
       }
 
       return serverEnv;
@@ -162,7 +171,12 @@ export const createAgentWorkerLoader = () => {
       // 这里和 egg 不同的是，一是修改了根路径，二是增加了环境变量
       let serverEnv = this.options.env;
 
-      const envPath = join(this.appDir, 'config/env');
+      let envPath = join(this.appDir, 'config/env');
+      if (!serverEnv && existsSync(envPath)) {
+        serverEnv = readFileSync(envPath, 'utf8').trim();
+      }
+
+      envPath = join(this.appDir, 'config/serverEnv');
       if (!serverEnv && existsSync(envPath)) {
         serverEnv = readFileSync(envPath, 'utf8').trim();
       }
@@ -175,6 +189,10 @@ export const createAgentWorkerLoader = () => {
         serverEnv = super.getServerEnv();
       } else {
         serverEnv = serverEnv.trim();
+      }
+
+      if (serverEnv && !process.env.MIDWAY_SERVER_ENV) {
+        process.env.MIDWAY_SERVER_ENV = serverEnv;
       }
 
       return serverEnv;
