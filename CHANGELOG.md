@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.5.0](https://github.com/midwayjs/midway/compare/v2.4.8...v2.5.0) (2020-11-28)
+
+
+### Bug Fixes
+
+* got egg env from serverEnv ([#735](https://github.com/midwayjs/midway/issues/735)) ([ac19c94](https://github.com/midwayjs/midway/commit/ac19c94a708cb6c5798ae43b04c7e5e5a8382b6c))
+* koa response 204 ([#733](https://github.com/midwayjs/midway/issues/733)) ([2463d77](https://github.com/midwayjs/midway/commit/2463d77cf2d9b03216acff901839816be45c5e73))
+
+
+### Features
+
+* add getFunctionName() and functionSerivceName() method to runtime and faas framework ([#734](https://github.com/midwayjs/midway/issues/734)) ([f0bc5aa](https://github.com/midwayjs/midway/commit/f0bc5aadd224e6ec85691b9c82cc7993cbc32cdb))
+
+
+
+
+
 ## [2.4.8](https://github.com/midwayjs/midway/compare/v2.4.7...v2.4.8) (2020-11-24)
 
 

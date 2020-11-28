@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.5.0](https://github.com/midwayjs/midway-faas/compare/v2.4.8...v2.5.0) (2020-11-28)
+
+
+### Features
+
+* add getFunctionName() and functionSerivceName() method to runtime and faas framework ([#734](https://github.com/midwayjs/midway-faas/issues/734)) ([f0bc5aa](https://github.com/midwayjs/midway-faas/commit/f0bc5aadd224e6ec85691b9c82cc7993cbc32cdb))
+
+
+
+
+
 # [2.4.0](https://github.com/midwayjs/midway-faas/compare/v2.3.23...v2.4.0) (2020-11-11)
 
 

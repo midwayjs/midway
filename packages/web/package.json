@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/web",
-  "version": "2.4.8",
+  "version": "2.5.0",
   "description": "Midway Web Scene",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -28,7 +28,7 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/cli": "^1.0.0",
-    "@midwayjs/mock": "^2.4.7",
+    "@midwayjs/mock": "^2.5.0",
     "egg-view-nunjucks": "^2.2.0",
     "fake-egg": "1.0.0",
     "fs-extra": "^8.0.1",
@@ -38,16 +38,16 @@
   },
   "dependencies": {
     "@eggjs/router": "^2.0.0",
-    "@midwayjs/bootstrap": "^2.4.7",
-    "@midwayjs/core": "^2.4.7",
+    "@midwayjs/bootstrap": "^2.5.0",
+    "@midwayjs/core": "^2.5.0",
     "@midwayjs/decorator": "^2.4.7",
-    "@midwayjs/koa": "^2.4.7",
+    "@midwayjs/koa": "^2.5.0",
     "debug": "^4.1.1",
     "egg": "^2.28.0",
     "egg-logger": "^2.4.2",
     "egg-path-matching": "^1.0.1",
     "extend2": "^1.0.0",
-    "midway-schedule": "^2.4.7",
+    "midway-schedule": "^2.5.0",
     "mkdirp": "^1.0.4"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
