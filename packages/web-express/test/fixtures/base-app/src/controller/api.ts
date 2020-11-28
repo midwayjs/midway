@@ -45,6 +45,11 @@ export class APIController {
     return 'hello world,' + name;
   }
 
+  @Get('/204')
+  async status204() {
+    // empty
+  }
+
   @Get('/login')
   @Redirect('/')
   async redirect() {
