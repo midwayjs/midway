@@ -46,9 +46,4 @@ export class APIController {
   async redirect() {
   }
 
-  @Get('/204')
-  async r204() {
-    //
-  }
-
 }

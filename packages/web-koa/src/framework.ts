@@ -80,7 +80,10 @@ export abstract class MidwayKoaBaseFramework<
       }
       const controller = await ctx.requestContext.getAsync(controllerId);
       // eslint-disable-next-line prefer-spread
-      ctx.body = await controller[methodName].apply(controller, args);
+      const result = await controller[methodName].apply(controller, args);
+      if (result) {
+        ctx.body = result;
+      }
 
       // implement response decorator
       if (Array.isArray(routerResponseData) && routerResponseData.length) {
