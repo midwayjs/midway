@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.5.1](https://github.com/midwayjs/midway/compare/v2.5.0...v2.5.1) (2020-11-29)
+
+
+### Bug Fixes
+
+* return ctx.body and set header after send ([#738](https://github.com/midwayjs/midway/issues/738)) ([4c8e740](https://github.com/midwayjs/midway/commit/4c8e740865ece6a62176144a877863c1d5317d65))
+
+
+
+
+
 # [2.5.0](https://github.com/midwayjs/midway/compare/v2.4.8...v2.5.0) (2020-11-28)
 
 
