@@ -51,4 +51,8 @@ export class APIController {
     //
   }
 
+  @Get('/ctx-body')
+  async getCtxBody() {
+    this.ctx.body = 'ctx-body';
+  }
 }

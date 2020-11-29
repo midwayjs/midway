@@ -49,4 +49,9 @@ export class APIController {
   @Get('/login')
   @Redirect('/')
   async redirect() {}
+
+  @Get('/ctx-body')
+  async getCtxBody() {
+    this.ctx.body = 'ctx-body';
+  }
 }

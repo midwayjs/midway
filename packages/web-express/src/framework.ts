@@ -132,6 +132,12 @@ export class MidwayExpressFramework extends BaseFramework<
       const controller = await req.requestContext.getAsync(controllerId);
       // eslint-disable-next-line prefer-spread
       const result = await controller[methodName].apply(controller, args);
+
+      if (res.headersSent) {
+        // return when response send
+        return;
+      }
+
       if (res.statusCode === 200 && (result === null || result === undefined)) {
         res.status(204);
       }
