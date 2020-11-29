@@ -55,4 +55,9 @@ export class APIController {
   async redirect() {
   }
 
+  @Get('/ctx-body')
+  async getCtxBody() {
+    this.ctx.res.send('ctx-body');
+  }
+
 }

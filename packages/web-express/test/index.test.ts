@@ -39,6 +39,11 @@ describe('/test/feature.test.ts', () => {
       console.log('result.status', result.status);
       expect(result.status).toBe(204);
     });
+
+    it('test get data with ctx.body', async () => {
+      const result = await createHttpRequest(app).get('/ctx-body');
+      expect(result.text).toEqual('ctx-body');
+    });
   });
 
 });

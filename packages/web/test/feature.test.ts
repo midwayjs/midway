@@ -39,6 +39,11 @@ describe('/test/feature.test.ts', () => {
       const result = await createHttpRequest(app).get('/login');
       expect(result.status).toEqual(302);
     });
+
+    it('test get data with ctx.body', async () => {
+      const result = await createHttpRequest(app).get('/ctx-body');
+      expect(result.text).toEqual('ctx-body');
+    });
   });
 
   it('should test global use midway middleware id in egg', async () => {
