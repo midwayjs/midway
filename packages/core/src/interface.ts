@@ -34,7 +34,9 @@ export interface IMessageSource {
 export interface IObjectFactory {
   registry: IObjectDefinitionRegistry;
   isAsync(identifier: ObjectIdentifier): boolean;
+  get<T>(identifier: new () => T, args?: any): T;
   get<T>(identifier: ObjectIdentifier, args?: any): T;
+  getAsync<T>(identifier: new () => T, args?: any): Promise<T>;
   getAsync<T>(identifier: ObjectIdentifier, args?: any): Promise<T>;
 }
 /**
