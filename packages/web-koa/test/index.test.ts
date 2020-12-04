@@ -43,6 +43,36 @@ describe('/test/feature.test.ts', () => {
       const result = await createHttpRequest(app).get('/ctx-body');
       expect(result.text).toEqual('ctx-body');
     });
+
+    describe('test 500', function () {
+      it('test status 500', async () => {
+        const result = await createHttpRequest(app).get('/case/500');
+        expect(result.status).toBe(500);
+      });
+
+      it('test status 500_1', async () => {
+        const result = await createHttpRequest(app).get('/case/500');
+        expect(result.status).toBe(500);
+      });
+
+    });
+
+    describe('test 204', function () {
+      it('test status 204', async () => {
+        const result = await createHttpRequest(app).get('/case/204');
+        expect(result.status).toBe(204);
+      });
+
+      it('test status 204_1', async () => {
+        const result = await createHttpRequest(app).get('/case/204_1');
+        expect(result.status).toBe(204);
+      });
+
+      it('test status 204_2', async () => {
+        const result = await createHttpRequest(app).get('/case/204_2');
+        expect(result.status).toBe(204);
+      });
+    });
   });
 
 });
