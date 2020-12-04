@@ -26,6 +26,7 @@ export class MidwayDevFramework
     if (this.configurationOptions.port) {
       new Promise(resolve => {
         this.app.listen(this.configurationOptions.port, () => {
+          this.app.emit('server', this.app.server);
           resolve();
         });
       });
