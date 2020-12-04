@@ -27,15 +27,15 @@ export interface IMidwayKoaConfigurationOptions {
   /**
    * https key
    */
-  key?: string;
+  key?: string | Buffer | Array<Buffer | Object>;
   /**
    * https cert
    */
-  cert?: string;
+  cert?: string | Buffer | Array<string | Buffer>;
   /**
    * https ca
    */
-  ca?: string;
+  ca?: string | Buffer | Array<string | Buffer>;
 }
 
 export type MiddlewareParamArray = Array<Middleware<DefaultState, IMidwayKoaContext>>;

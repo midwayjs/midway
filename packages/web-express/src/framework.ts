@@ -35,6 +35,8 @@ import {
 } from './interface';
 import type { IRouter, IRouterHandler, RequestHandler } from 'express';
 import * as express from 'express';
+import { readFileSync } from 'fs';
+import { Server } from 'net';
 
 export class MidwayExpressFramework extends BaseFramework<
   IMidwayExpressApplication,
@@ -47,6 +49,7 @@ export class MidwayExpressFramework extends BaseFramework<
     router: IRouter;
     prefix: string;
   }> = [];
+  private server: Server;
 
   public configure(
     options: IMidwayExpressConfigurationOptions
@@ -87,9 +90,35 @@ export class MidwayExpressFramework extends BaseFramework<
   }
 
   public async run(): Promise<void> {
+    // https config
+    if (this.configurationOptions.key && this.configurationOptions.cert) {
+      this.configurationOptions.key =
+        typeof this.configurationOptions.key === 'string'
+          ? readFileSync(this.configurationOptions.key as string)
+          : this.configurationOptions.key;
+
+      this.configurationOptions.cert =
+        typeof this.configurationOptions.cert === 'string'
+          ? readFileSync(this.configurationOptions.cert as string)
+          : this.configurationOptions.cert;
+
+      this.configurationOptions.ca =
+        this.configurationOptions.ca &&
+        (typeof this.configurationOptions.ca === 'string'
+          ? readFileSync(this.configurationOptions.ca)
+          : this.configurationOptions.ca);
+
+      this.server = require('https').createServer(
+        this.configurationOptions,
+        this.app
+      );
+    } else {
+      this.server = require('http').createServer(this.app);
+    }
+
     if (this.configurationOptions.port) {
       new Promise(resolve => {
-        this.app.listen(this.configurationOptions.port, () => {
+        this.server.listen(this.configurationOptions.port, () => {
           resolve();
         });
       });
@@ -312,5 +341,9 @@ export class MidwayExpressFramework extends BaseFramework<
         }
       }
     }
+  }
+
+  public getServer() {
+    return this.server;
   }
 }
