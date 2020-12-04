@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.5.2](https://github.com/midwayjs/midway/compare/v2.5.1...v2.5.2) (2020-12-04)
+
+
+### Bug Fixes
+
+* definition for getAsync and get ([#740](https://github.com/midwayjs/midway/issues/740)) ([d40de78](https://github.com/midwayjs/midway/commit/d40de7899f3b816c61229dce463d9b2de6842259))
+
+
+
+
+
 ## [2.5.1](https://github.com/midwayjs/midway/compare/v2.5.0...v2.5.1) (2020-11-29)
 
 **Note:** Version bump only for package midway

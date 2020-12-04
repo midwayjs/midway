@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.5.2](https://github.com/midwayjs/midway/compare/v2.5.1...v2.5.2) (2020-12-04)
+
+
+### Bug Fixes
+
+* ignore set body after user set status ([#741](https://github.com/midwayjs/midway/issues/741)) ([4fdb2a6](https://github.com/midwayjs/midway/commit/4fdb2a62c0ff694aa0b6bffaec3386a36d4334c9))
+
+
+
+
+
 ## [2.5.1](https://github.com/midwayjs/midway/compare/v2.5.0...v2.5.1) (2020-11-29)
 
 
