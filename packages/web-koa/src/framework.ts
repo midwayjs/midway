@@ -81,11 +81,11 @@ export abstract class MidwayKoaBaseFramework<
       const controller = await ctx.requestContext.getAsync(controllerId);
       // eslint-disable-next-line prefer-spread
       const result = await controller[methodName].apply(controller, args);
-      if (result) {
+      if (result !== undefined) {
         ctx.body = result;
       }
 
-      if (!ctx.body) {
+      if (ctx.body === undefined && !(ctx.response as any)._explicitStatus) {
         ctx.body = undefined;
       }
 
