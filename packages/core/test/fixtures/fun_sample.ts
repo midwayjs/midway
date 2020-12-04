@@ -45,13 +45,13 @@ export class AliSingleton {
 }
 
 export async function singletonFactory(context: IApplicationContext) {
-  const inst = await context.getAsync('aliSingleton');
-  return (inst as AliSingleton).getInstance();
+  const inst = await context.getAsync(AliSingleton);
+  return inst.getInstance();
 }
 
 export async function singletonFactory2(context: IApplicationContext) {
   return async () => {
-    const inst = await context.getAsync('aliSingleton');
-    return (inst as AliSingleton).getInstance();
+    const inst = await context.getAsync<AliSingleton>('aliSingleton');
+    return inst.getInstance();
   };
 }

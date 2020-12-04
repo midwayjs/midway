@@ -13,7 +13,6 @@ export const VERSION = require('../package.json').version;
  */
 export const RELEASE = 'WANDA';
 
-
 /**
  * @deprecated Please use IWebMiddleware instead
  */

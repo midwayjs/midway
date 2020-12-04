@@ -179,7 +179,9 @@ export class BaseApplicationContext
     return false;
   }
 
-  get<T>(identifier: ObjectIdentifier, args?: any): T {
+  get<T>(identifier: { new (): T }, args?: any): T;
+  get<T>(identifier: ObjectIdentifier, args?: any): T;
+  get(identifier: any, args?: any): any {
     // 因为在这里拿不到类名, NotFoundError 类的错误信息在 ManagedResolverFactory.ts createAsync 方法中增加错误类名
     identifier = parsePrefix(identifier);
 
@@ -197,7 +199,7 @@ export class BaseApplicationContext
         throw new Error(`${identifier} must use getAsync`);
       }
 
-      return this.parent.get<T>(identifier, args);
+      return this.parent.get(identifier, args);
     }
     if (!definition) {
       throw new NotFoundError(identifier);
@@ -205,7 +207,9 @@ export class BaseApplicationContext
     return this.getManagedResolverFactory().create({ definition, args });
   }
 
-  async getAsync<T>(identifier: ObjectIdentifier, args?: any): Promise<T> {
+  async getAsync<T>(identifier: { new (): T }, args?: any): Promise<T>;
+  async getAsync<T>(identifier: ObjectIdentifier, args?: any): Promise<T>;
+  async getAsync(identifier: any, args?: any): Promise<any> {
     // 因为在这里拿不到类名, NotFoundError 类的错误信息在 ManagedResolverFactory.ts createAsync 方法中增加错误类名
     identifier = parsePrefix(identifier);
 
@@ -215,7 +219,7 @@ export class BaseApplicationContext
 
     const definition = this.registry.getDefinition(identifier);
     if (!definition && this.parent) {
-      return this.parent.getAsync<T>(identifier, args);
+      return this.parent.getAsync(identifier, args);
     }
 
     if (!definition) {
