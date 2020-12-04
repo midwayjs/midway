@@ -1,0 +1,35 @@
+{
+  "name": "@midwayjs/logger",
+  "version": "2.5.0",
+  "main": "dist/index",
+  "typings": "dist/index.d.ts",
+  "dependencies": {
+    "egg-logger": "^2.4.2",
+    "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "@midwayjs/cli": "^1.0.0"
+  },
+  "engines": {
+    "node": ">= 10"
+  },
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts"
+  ],
+  "keywords": [
+    "midway",
+    "logger"
+  ],
+  "scripts": {
+    "build": "midway-bin build -c",
+    "test": "midway-bin test --ts",
+    "cov": "midway-bin cov --ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:midwayjs/midway.git"
+  },
+  "license": "MIT",
+  "gitHead": "a603d2348d6141f8f723901498f03a162a037708"
+}
