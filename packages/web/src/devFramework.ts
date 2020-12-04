@@ -54,6 +54,8 @@ export class MidwayDevFramework
 
     // emit `server` event in app
     this.app.emit('server', this.server);
+    // trigger server didReady
+    this.app.messenger.emit('egg-ready');
 
     if (this.configurationOptions.port) {
       new Promise(resolve => {
