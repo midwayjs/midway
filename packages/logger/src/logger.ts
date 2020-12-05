@@ -176,12 +176,18 @@ export class MidwayLogger extends EggLogger {
  *  1.2 服务器环境只输出到文件（midway-core.log)，不输出到控制台
  *  1.3 函数环境下，同本地逻辑（可配）
  *  1.4 所有的错误单独输出到 common-error.log 文件
+ *
+ *  1、egg 环境下增加代理能力
+ *  2、扩展支持框架、类等标签
+ *  3、日志切割能力
  */
-export const createFrameworkLogger = (options: {
-  dir?: string;
-  coreLogName?: string;
-  errorLogName?: string;
-}): Logger => {
+export const createFrameworkLogger = (
+  options: {
+    dir?: string;
+    coreLogName?: string;
+    errorLogName?: string;
+  } = {}
+): Logger => {
   const coreLogger = createLogger();
   options.dir = options.dir || process.cwd();
   options.coreLogName = options.coreLogName || 'midway-core.log';
