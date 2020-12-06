@@ -343,6 +343,8 @@ export interface IMidwayFramework<APP extends IMidwayApplication, T extends ICon
   getConfiguration(key?: string): any;
   getCurrentEnvironment(): string;
   getFrameworkType(): MidwayFrameworkType;
+  getAppDir(): string;
+  getBaseDir(): string;
 }
 
 export enum MidwayFrameworkType {

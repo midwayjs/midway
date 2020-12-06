@@ -1,12 +1,13 @@
-import { createFrameworkLogger } from '../src/logger';
+import { MidwayFrameworkDelegateLogger, MidwayFrameworkLogger, Logger } from '../src';
 import { join } from 'path';
 import { fileExists, includeContent, removeFileOrDir, sleep, createChildProcess } from './util';
+import { EggLogger } from 'egg-logger';
 
 describe('/test/index.test.ts', () => {
   it('should test create logger', async () => {
     const logsDir = join(__dirname, 'logs');
     await removeFileOrDir(logsDir);
-    const coreLogger = createFrameworkLogger({
+    const coreLogger = new MidwayFrameworkLogger({
       dir: logsDir,
     });
     coreLogger.info('hello world1');
@@ -33,16 +34,59 @@ describe('/test/index.test.ts', () => {
     await removeFileOrDir(logsDir);
   });
 
-  it.only('should create logger in cluster mode', async ()  => {
+  it('should create logger in cluster mode', async ()  => {
+    const logsDir = join(__dirname, 'fixtures/logs');
     const clusterFile = join(__dirname, 'fixtures/cluster.ts');
     const child = createChildProcess(clusterFile);
-    const pidList = await new Promise(resolve => {
+    const pidList: [] = await new Promise(resolve => {
       child.on('message', (pidList) => {
         resolve(pidList);
       });
     });
-    console.log(pidList)
-    await sleep(10000);
+    await sleep(5000);
     child.kill();
+
+    for (const pid of pidList) {
+      expect(includeContent(join(logsDir, 'midway-core.log'), pid)).toBeTruthy();
+    }
+
+    await removeFileOrDir(logsDir);
+  });
+
+  it('should test delegate logger to other', async () => {
+    const logsDir = join(__dirname, 'logs');
+    await removeFileOrDir(logsDir);
+    const eggLogger = new EggLogger({
+      file: join(logsDir, 'egg-logger.log'),
+      level: 'WARN'
+    });
+    const coreLogger = new MidwayFrameworkDelegateLogger({
+      delegateLogger: eggLogger,
+    });
+
+    eggLogger.info('hello egg1 from egg logger');
+    eggLogger.warn('hello egg2 from egg logger');
+    eggLogger.error('hello egg3 from egg logger');
+    coreLogger.info('hello egg1 from winston');
+    coreLogger.warn('hello egg2 from winston');
+    coreLogger.error('hello egg3 from winston');
+    eggLogger.close();
+
+    // 日志输出大于 egg-logger 落盘时间
+    await sleep(1000);
+
+    expect(includeContent(join(logsDir, 'egg-logger.log'), 'hello egg1 from egg logger')).toBeFalsy();
+    expect(includeContent(join(logsDir, 'egg-logger.log'), 'hello egg2 from egg logger')).toBeTruthy();
+    expect(includeContent(join(logsDir, 'egg-logger.log'), 'hello egg3 from egg logger')).toBeTruthy();
+    expect(includeContent(join(logsDir, 'egg-logger.log'), 'hello egg1 from winston')).toBeFalsy();
+    expect(includeContent(join(logsDir, 'egg-logger.log'), 'hello egg2 from winston')).toBeTruthy();
+    expect(includeContent(join(logsDir, 'egg-logger.log'), 'hello egg3 from winston')).toBeTruthy();
+
+    await removeFileOrDir(logsDir);
+  });
+
+  it('should create custom logger', function () {
+    const logger = new Logger();
+    logger.info('bbbbb');
   });
 });

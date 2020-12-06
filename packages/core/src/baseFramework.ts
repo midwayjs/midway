@@ -15,7 +15,9 @@ import {
   getProviderId,
   listModule,
 } from '@midwayjs/decorator';
+import { ILogger } from '@midwayjs/logger';
 import { isAbsolute, join } from 'path';
+import { createFrameworkLogger } from './logger';
 
 function buildLoadDir(baseDir, dir) {
   if (!isAbsolute(dir)) {
@@ -32,6 +34,7 @@ export abstract class BaseFramework<
   protected baseDir: string;
   protected appDir: string;
   protected applicationContext: IMidwayContainer;
+  protected logger: ILogger;
   public configurationOptions: T;
   public app: APP;
 
@@ -43,6 +46,11 @@ export abstract class BaseFramework<
   public async initialize(options: IMidwayBootstrapOptions): Promise<void> {
     this.baseDir = options.baseDir;
     this.appDir = options.appDir;
+
+    /**
+     * initialize framework logger
+     */
+    await this.initializeLogger();
 
     /**
      * before create MidwayContainer instance，can change init parameters
@@ -83,6 +91,12 @@ export abstract class BaseFramework<
      * after container refresh
      */
     await this.afterContainerReady(options);
+  }
+
+  protected async initializeLogger() {
+    if (!this.logger) {
+      this.logger = createFrameworkLogger(this);
+    }
   }
 
   protected async containerInitialize(options: IMidwayBootstrapOptions) {
@@ -168,6 +182,14 @@ export abstract class BaseFramework<
   public async stop(): Promise<void> {
     await this.beforeStop();
     await this.containerStop();
+  }
+
+  public getAppDir(): string {
+    return this.appDir;
+  }
+
+  public getBaseDir(): string {
+    return this.baseDir;
   }
 
   protected defineApplicationProperties(applicationProperties: object = {}) {

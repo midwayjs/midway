@@ -4,11 +4,13 @@
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "egg-logger": "^2.4.2",
-    "winston": "^3.3.3"
+    "winston": "^3.3.3",
+    "winston-daily-rotate-file": "^4.5.0",
+    "winston-transport": "^4.4.0"
   },
   "devDependencies": {
     "@midwayjs/cli": "^1.0.0",
+    "egg-logger": "^2.4.2",
     "fs-extra": "^8.1.0"
   },
   "engines": {

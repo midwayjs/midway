@@ -1,220 +1,91 @@
-import { EggLogger, EggLoggerOptions } from 'egg-logger';
 import { createLogger, transports, Logger, format } from 'winston';
-import { join } from 'path';
-// import * as util from 'util';
-// import fs = require('mz/fs');
+import * as DailyRotateFileTransport from 'winston-daily-rotate-file';
+import { ILogger } from './interface';
+import { DelegateTransport } from './delegateTransport';
 
-export class MidwayLogger extends EggLogger {
-  constructor(option: EggLoggerOptions) {
-    super(option);
+const WinstonLogger: Logger = (createLogger().constructor as Logger);
+
+/**
+ *  扩展支持框架、类等标签
+ */
+export class BaseLogger extends WinstonLogger {
+
+  consoleTransport;
+
+  constructor() {
+    super();
+    this.consoleTransport = new transports.Console({
+      format: format.simple(),
+      level: 'silly',
+    });
+
+    this.add(this.consoleTransport);
+  }
+
+  disableConsole() {
+    this.remove(this.consoleTransport);
   }
 }
 
-// const DEFAULT_MAX_FILE = 2;
-// const DEFAULT_MAX_FILE_SIZE = 1e8; // bytes, 100MB
-// const DEFAULT_INTERVAL = 600 * 1000; // 10min
-//
-// const debuglog = util.debuglog('midway:logger');
-
-// export class ServerlessLogger extends Logger {
-//   options;
-//
-//   constructor(options) {
-//     super(options);
-//     if (options.file) {
-//       this.set(
-//         'file',
-//         new FileTransport({
-//           file: options.file,
-//           level: options.level || 'INFO',
-//         })
-//       );
-//       this.startLogRotateBySize();
-//     }
-//   }
-//
-//   write(...args: [string, ...any[]]) {
-//     let msg = args[0];
-//     if (args.length > 1) {
-//       msg = util.format(...args);
-//     }
-//     // tracing use ALL level, but write default is NONE, will not output
-//     this.log(this.options.level === 'ALL' ? 'ALL' : 'NONE', [msg], {
-//       raw: true,
-//     });
-//   }
-//
-//   get defaults() {
-//     return {
-//       file: null,
-//       encoding: 'utf8',
-//       level: 'INFO',
-//       consoleLevel: 'NONE',
-//       buffer: true,
-//     };
-//   }
-//
-//   protected async startLogRotateBySize(): Promise<void> {
-//     const size = 100;
-//     while (true) {
-//       const dealyMs =
-//         this.options.fileClearInterval ||
-//         Number(process.env.LOG_ROTATE_INTERVAL) ||
-//         DEFAULT_INTERVAL;
-//       debuglog(`will rotate by size after ${dealyMs}ms, size: ${size}`);
-//       await this.delayOnOptimisticLock(dealyMs);
-//       /* istanbul ignore next */
-//       await this.rotateLogBySize();
-//     }
-//   }
-//
-//   /**
-//    * Produce a delay on an optimistic lock, optimistic lock can broke this delay
-//    * @param ms
-//    * @return {Promise<any>}
-//    */
-//   protected delayOnOptimisticLock(ms): Promise<any> {
-//     return new Promise(resolve => {
-//       setTimeout(resolve, ms);
-//     });
-//   }
-//
-//   /**
-//    * A cycle to find out which log file needs to cut
-//    * @return {Promise<void>}
-//    */
-//   protected async rotateLogBySize(): Promise<void> {
-//     try {
-//       const maxFileSize =
-//         this.options.maxFileSize ||
-//         Number(process.env.LOG_ROTATE_FILE_SIZE) ||
-//         DEFAULT_MAX_FILE_SIZE;
-//       const transport: any = this.get('file');
-//       if (transport?._stream?.writable) {
-//         const stat = await fs.fstat(transport._stream.fd);
-//         if (stat.size >= maxFileSize) {
-//           this.info(
-//             `File ${transport._stream.path} (fd ${transport._stream.fd}) reach the maximum file size, current size: ${stat.size}, max size: ${maxFileSize}`
-//           );
-//           await this.rotateBySize();
-//         }
-//       }
-//     } catch (e) {
-//       e.message = `${e.message}`;
-//       this.error(e);
-//     }
-//   }
-//
-//   /**
-//    * Cut log file by size
-//    * @param {RotationStrategy} strategy
-//    * @return {Promise<void>}
-//    */
-//   protected async rotateBySize(): Promise<void> {
-//     const logfile = this.options.file;
-//     const maxFiles =
-//       this.options.maxFiles ||
-//       Number(process.env.LOG_ROTATE_MAX_FILE_NUM) ||
-//       DEFAULT_MAX_FILE;
-//     const exists = await fs.exists(logfile);
-//     if (!exists) {
-//       return;
-//     }
-//     // remove max
-//     const maxFileName = `${logfile}.${maxFiles}`;
-//     const maxExists = await fs.exists(maxFileName);
-//     if (maxExists) {
-//       await fs.unlink(maxFileName);
-//     }
-//     // 2->3, 1->2
-//     for (let i = maxFiles - 1; i >= 1; i--) {
-//       await this.renameOrDelete(`${logfile}.${i}`, `${logfile}.${i + 1}`);
-//     }
-//     // logfile => logfile.1
-//     await fs.rename(logfile, `${logfile}.1`);
-//     this.reload();
-//   }
-//
-//   /**
-//    * If file exist, try backup. If backup filed, remove it.
-//    * This operation for the file size cutting only.
-//    * @param targetPath
-//    * @param backupPath
-//    * @return {Promise<void>}
-//    */
-//   protected async renameOrDelete(targetPath, backupPath): Promise<void> {
-//     const targetExists = await fs.exists(targetPath);
-//     if (!targetExists) {
-//       return;
-//     }
-//     const backupExists = await fs.exists(backupPath);
-//     /* istanbul ignore if */
-//     if (backupExists) {
-//       await fs.unlink(targetPath);
-//     } else {
-//       await fs.rename(targetPath, backupPath);
-//     }
-//   }
-// }
-
-// export class MidwayLoggers {
-//   logger;
-//   allLoggers;
-//
-//   initLoggers(LoggerOptions) {
-//     this.logger = createLogger(LoggerOptions);
-//   }
-//
-//   getLogger() {
-//
-//   }
-// }
-
 /**
- * 1、默认创建一个框架日志
+ * 框架日志
  *  1.1 本地只输出控制台，不输出到文件
  *  1.2 服务器环境只输出到文件（midway-core.log)，不输出到控制台
- *  1.3 函数环境下，同本地逻辑（可配）
- *  1.4 所有的错误单独输出到 common-error.log 文件
- *
- *  1、egg 环境下增加代理能力
- *  2、扩展支持框架、类等标签
- *  3、日志切割能力
+ *  1.3 所有的错误单独输出到 common-error.log 文件
+ *  1.4 日志切割能力
  */
-export const createFrameworkLogger = (
-  options: {
+export class MidwayFrameworkLogger extends BaseLogger {
+  constructor(options: {
     dir?: string;
     coreLogName?: string;
     errorLogName?: string;
-  } = {}
-): Logger => {
-  const coreLogger = createLogger();
-  options.dir = options.dir || process.cwd();
-  options.coreLogName = options.coreLogName || 'midway-core.log';
-  options.errorLogName = options.errorLogName || 'common-error.log';
-  coreLogger.add(
-    new transports.File({
-      filename: join(options.dir, options.errorLogName),
-      level: 'error',
-      format: format.simple(),
-    })
-  );
-  coreLogger.add(
-    new transports.File({
-      filename: join(options.dir, options.coreLogName),
-      level: 'info',
-      format: format.simple(),
-    })
-  );
-  coreLogger.add(
-    new transports.Console({
-      format: format.simple(),
-      level: 'silly',
-    })
-  );
-  return coreLogger;
-};
+    label?: string;
+  } = {}) {
+    super();
+    options.dir = options.dir || process.cwd();
+    options.coreLogName = options.coreLogName || 'midway-core.log';
+    options.errorLogName = options.errorLogName || 'common-error.log';
+    this.add(
+      new DailyRotateFileTransport({
+        dirname: options.dir,
+        filename: options.errorLogName,
+        datePattern: 'YYYY-MM-DD',
+        level: 'error',
+        format: format.simple(),
+        createSymlink: true,
+        symlinkName: options.errorLogName,
+        maxSize: '200m'
+      })
+    );
+    this.add(
+      new DailyRotateFileTransport({
+        dirname: options.dir,
+        filename: options.coreLogName,
+        datePattern: 'YYYY-MM-DD',
+        level: 'info',
+        format: format.simple(),
+        createSymlink: true,
+        symlinkName: options.coreLogName,
+        maxSize: '200m'
+      })
+    );
+  }
+}
 
-export const createConsoleLogger = () => {};
-
-export const createFileLogger = () => {};
+/**
+ * framework delegate logger, it can proxy logger output to another logger
+ */
+export class MidwayFrameworkDelegateLogger extends BaseLogger {
+  constructor(options: {
+    delegateLogger?: ILogger;
+  } = {}) {
+    super();
+    if (options.delegateLogger) {
+      this.add(
+        new DelegateTransport({
+          delegateLogger: options.delegateLogger,
+        })
+      );
+    }
+  }
+}
