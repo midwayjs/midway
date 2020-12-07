@@ -87,6 +87,12 @@ describe('/test/index.test.ts', () => {
 
   it.only('should create custom logger and output content', function () {
     const logger = new Logger();
+
+    logger.debug('test');
+    logger.info('hello world');
+    logger.warn('warn: hello world', {className: 'UserService'});
+
+    logger.info('%s %d', 'aaa', 222);
     // string
     logger.error('plain error message');
     // number

@@ -2,13 +2,19 @@ import { createLogger, transports, Logger, format } from 'winston';
 import * as DailyRotateFileTransport from 'winston-daily-rotate-file';
 import { ILogger } from './interface';
 import { DelegateTransport } from './delegateTransport';
-// import * as util from 'util';
 
 const WinstonLogger: Logger = createLogger().constructor as Logger;
 
-// const myFormat = printf(({ level, message, label, timestamp }) => {
-//   return `${timestamp} [${label}] ${level}: ${message}`;
-// });
+function joinLoggerLabel(...labels) {
+  if (labels.length === 0) {
+    return '';
+  } else {
+    const newLabels = labels.filter(label => {
+      return !!label;
+    });
+    return `[${newLabels.join(':')}]`;
+  }
+}
 
 /**
  *  扩展支持框架、类等标签
@@ -16,30 +22,34 @@ const WinstonLogger: Logger = createLogger().constructor as Logger;
 export class BaseLogger extends WinstonLogger {
   consoleTransport;
 
-  constructor() {
-    super();
-    this.consoleTransport = new transports.Console({
-      level: 'silly',
+  constructor(
+    options: {
+      frameworkType?: string;
+    } = {}
+  ) {
+    super({
+      defaultMeta: {
+        framework: options.frameworkType || '',
+      },
       format: format.combine(
-        format.align(),
-        format.colorize(),
-        format.timestamp(),
+        format.errors({ stack: true }),
+        format.timestamp({
+          format: 'YYYY-MM-DD HH:mm:ss,SSS',
+        }),
+        format.splat(),
         format.printf(
-          info => `${info.timestamp} ${info.level}: ${info.message}`
+          info =>
+            `${info.timestamp} ${info.level.toUpperCase()} ${
+              process.pid
+            } ${joinLoggerLabel(info.framework, info['className'])} ${
+              info.message
+            }${info.stack || ''}`
         )
       ),
-      // format: options => {
-      //   const args = [
-      //     '%s %s [%s] %s%s',
-      //     options.timestamp(),
-      //     reqId,
-      //     options.level,
-      //     options.message ? options.message : '',
-      //     this.errorFromMeta(options.meta)
-      //   ];
-      //
-      //   return util.format.apply(util, args);
-      // }
+    });
+    this.consoleTransport = new transports.Console({
+      level: 'silly',
+      format: format.combine(format.colorize({ all: true })),
     });
 
     this.add(this.consoleTransport);
@@ -58,12 +68,14 @@ export class BaseLogger extends WinstonLogger {
  *  1.4 日志切割能力
  */
 export class MidwayFrameworkLogger extends BaseLogger {
-  constructor(options: {
-    dir?: string;
-    coreLogName?: string;
-    errorLogName?: string;
-    label?: string;
-  } = {}) {
+  constructor(
+    options: {
+      dir?: string;
+      coreLogName?: string;
+      errorLogName?: string;
+      label?: string;
+    } = {}
+  ) {
     super();
     options.dir = options.dir || process.cwd();
     options.coreLogName = options.coreLogName || 'midway-core.log';
@@ -77,7 +89,7 @@ export class MidwayFrameworkLogger extends BaseLogger {
         format: format.simple(),
         createSymlink: true,
         symlinkName: options.errorLogName,
-        maxSize: '200m'
+        maxSize: '200m',
       })
     );
     this.add(
@@ -89,7 +101,7 @@ export class MidwayFrameworkLogger extends BaseLogger {
         format: format.simple(),
         createSymlink: true,
         symlinkName: options.coreLogName,
-        maxSize: '200m'
+        maxSize: '200m',
       })
     );
   }
@@ -99,9 +111,11 @@ export class MidwayFrameworkLogger extends BaseLogger {
  * framework delegate logger, it can proxy logger output to another logger
  */
 export class MidwayFrameworkDelegateLogger extends BaseLogger {
-  constructor(options: {
-    delegateLogger?: ILogger;
-  } = {}) {
+  constructor(
+    options: {
+      delegateLogger?: ILogger;
+    } = {}
+  ) {
     super();
     if (options.delegateLogger) {
       this.add(
