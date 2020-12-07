@@ -2,21 +2,44 @@ import { createLogger, transports, Logger, format } from 'winston';
 import * as DailyRotateFileTransport from 'winston-daily-rotate-file';
 import { ILogger } from './interface';
 import { DelegateTransport } from './delegateTransport';
+// import * as util from 'util';
 
-const WinstonLogger: Logger = (createLogger().constructor as Logger);
+const WinstonLogger: Logger = createLogger().constructor as Logger;
+
+// const myFormat = printf(({ level, message, label, timestamp }) => {
+//   return `${timestamp} [${label}] ${level}: ${message}`;
+// });
 
 /**
  *  扩展支持框架、类等标签
  */
 export class BaseLogger extends WinstonLogger {
-
   consoleTransport;
 
   constructor() {
     super();
     this.consoleTransport = new transports.Console({
-      format: format.simple(),
       level: 'silly',
+      format: format.combine(
+        format.align(),
+        format.colorize(),
+        format.timestamp(),
+        format.printf(
+          info => `${info.timestamp} ${info.level}: ${info.message}`
+        )
+      ),
+      // format: options => {
+      //   const args = [
+      //     '%s %s [%s] %s%s',
+      //     options.timestamp(),
+      //     reqId,
+      //     options.level,
+      //     options.message ? options.message : '',
+      //     this.errorFromMeta(options.meta)
+      //   ];
+      //
+      //   return util.format.apply(util, args);
+      // }
     });
 
     this.add(this.consoleTransport);

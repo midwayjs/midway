@@ -85,8 +85,23 @@ describe('/test/index.test.ts', () => {
     await removeFileOrDir(logsDir);
   });
 
-  it('should create custom logger', function () {
+  it.only('should create custom logger and output content', function () {
     const logger = new Logger();
-    logger.info('bbbbb');
+    // string
+    logger.error('plain error message');
+    // number
+    logger.error(123);
+    // array
+    logger.error(['b', 'c']);
+    // string + number
+    logger.error('plain error message', 321);
+    // error object
+    logger.error(new Error('error instance'));
+
+    // named error
+    const error = new Error('named error instance');
+    error.name = 'NamedError';
+    logger.error(error);
   });
+
 });
