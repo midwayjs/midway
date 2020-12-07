@@ -64,4 +64,12 @@ export class MidwayDevFramework
   async stop(): Promise<void> {
     await this.app.close();
   }
+
+  getBaseDir(): string {
+    return this.app.getBaseDir();
+  }
+
+  getAppDir(): string {
+    return this.app.getAppDir();
+  }
 }

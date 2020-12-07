@@ -565,4 +565,32 @@ describe('/test/baseFramework.test.ts', () => {
     resetModule(CONFIGURATION_KEY);
     mm.restore();
   });
+
+  it('should get service in a component write with app', async () => {
+    const framework = new MockFramework();
+    await framework.initialize({
+      baseDir: path.join(
+        __dirname,
+        './fixtures/app-with-custom-component-in-app/src'
+      ),
+    });
+
+    const appCtx = framework.getApplicationContext();
+    const userController = await appCtx.getAsync('userController');
+    const books = await (userController as any).getBooksByUser();
+    expect(books).toEqual([
+      {
+        "isbn": "9787115549440",
+        "name": "无限可能"
+      },
+      {
+        "isbn": "9787305236525",
+        "name": "明智的孩子"
+      },
+      {
+        "isbn": "9787020166916",
+        "name": "伊卡狛格"
+      }
+    ]);
+  });
 });
