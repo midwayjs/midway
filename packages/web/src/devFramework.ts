@@ -72,4 +72,8 @@ export class MidwayDevFramework
   getAppDir(): string {
     return this.app.getAppDir();
   }
+
+  getLogger() {
+    return this.app.coreLogger as any;
+  }
 }
