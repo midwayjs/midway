@@ -6,6 +6,7 @@ import {
   IMethodAspect,
   AspectMetadata,
 } from '@midwayjs/decorator';
+import { ILogger } from '@midwayjs/logger';
 /**
  * 生命周期定义
  */
@@ -285,14 +286,10 @@ export enum MidwayProcessTypeEnum {
   AGENT = 'AGENT',
 }
 
-export interface IMidwayLogger {
-  debug?(message?: any, ...optionalParams: any[]): void;
-  error?(message?: any, ...optionalParams: any[]): void;
-  info?(message?: any, ...optionalParams: any[]): void;
-  log?(message?: any, ...optionalParams: any[]): void;
-  warn?(message?: any, ...optionalParams: any[]): void;
-  trace?(message?: any, ...optionalParams: any[]): void;
-}
+/**
+ * @deprecated use ILogger from @midwayjs/logger
+ */
+export interface IMidwayLogger extends ILogger {}
 
 export interface IMidwayApplication {
   getBaseDir(): string;
@@ -302,7 +299,7 @@ export interface IMidwayApplication {
   getProcessType(): MidwayProcessTypeEnum;
   getApplicationContext(): IMidwayContainer;
   getConfig(key?: string): any;
-  getLogger(key?: string): Partial<IMidwayLogger>;
+  getLogger(key?: string): ILogger;
 }
 
 export interface IMidwayContext {
@@ -316,7 +313,7 @@ export interface IMidwayContext {
 export interface IMidwayCoreApplication extends IMidwayApplication {}
 
 export interface IMidwayBootstrapOptions {
-  logger?: IMidwayLogger;
+  logger?: ILogger;
   baseDir: string;
   appDir?: string;
   preloadModules?: any[];
@@ -345,6 +342,7 @@ export interface IMidwayFramework<APP extends IMidwayApplication, T extends ICon
   getFrameworkType(): MidwayFrameworkType;
   getAppDir(): string;
   getBaseDir(): string;
+  getLogger(): ILogger;
 }
 
 export enum MidwayFrameworkType {

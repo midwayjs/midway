@@ -1,3 +1,3 @@
 export * from './delegateTransport';
-export { BaseLogger as Logger, MidwayFrameworkLogger, MidwayFrameworkDelegateLogger} from './logger';
+export { EmptyLogger, MidwayBaseLogger, MidwayDelegateLogger } from './logger';
 export * from './interface';

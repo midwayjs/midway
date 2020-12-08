@@ -1,4 +1,4 @@
-import { MidwayFrameworkDelegateLogger, MidwayFrameworkLogger, Logger } from '../src';
+import { MidwayDelegateLogger, MidwayBaseLogger } from '../src';
 import { join } from 'path';
 import { fileExists, includeContent, removeFileOrDir, sleep, createChildProcess } from './util';
 import { EggLogger } from 'egg-logger';
@@ -7,7 +7,7 @@ describe('/test/index.test.ts', () => {
   it('should test create logger', async () => {
     const logsDir = join(__dirname, 'logs');
     await removeFileOrDir(logsDir);
-    const coreLogger = new MidwayFrameworkLogger({
+    const coreLogger = new MidwayBaseLogger({
       dir: logsDir,
     });
     coreLogger.info('hello world1');
@@ -60,7 +60,7 @@ describe('/test/index.test.ts', () => {
       file: join(logsDir, 'egg-logger.log'),
       level: 'WARN'
     });
-    const coreLogger = new MidwayFrameworkDelegateLogger({
+    const coreLogger = new MidwayDelegateLogger({
       delegateLogger: eggLogger,
     });
 
@@ -85,13 +85,21 @@ describe('/test/index.test.ts', () => {
     await removeFileOrDir(logsDir);
   });
 
-  it.only('should create custom logger and output content', function () {
-    const logger = new Logger();
+  it('should create custom logger and output content', async () =>{
+    const logsDir = join(__dirname, 'logs');
+    await removeFileOrDir(logsDir);
+    const logger = new MidwayBaseLogger({
+      dir: logsDir,
+      fileLogName: 'custom-logger.log',
+      disableError: true,
+    });
+
+    expect(fileExists(join(logsDir, 'custom-logger.log'))).toBeTruthy();
+    expect(fileExists(join(logsDir, 'common-error.log'))).toBeFalsy();
 
     logger.debug('test');
-    logger.info('hello world');
-    logger.warn('warn: hello world', {className: 'UserService'});
-
+    logger.info('hello world', { label: ['a', 'b']});
+    logger.warn('warn: hello world', {label: 'UserService'});
     logger.info('%s %d', 'aaa', 222);
     // string
     logger.error('plain error message');
@@ -103,11 +111,35 @@ describe('/test/index.test.ts', () => {
     logger.error('plain error message', 321);
     // error object
     logger.error(new Error('error instance'));
-
     // named error
     const error = new Error('named error instance');
     error.name = 'NamedError';
     logger.error(error);
+    // !!!!Breaking Change
+    logger.error('text before error: ', new Error('error instance after text'));
+    logger.error('format log, %j', {a: 1});
+    logger.info([ 'Jack', 'Joe' ]);
+    logger.warn({ name: 'Jack' });
+
+    await sleep();
+
+    expect(includeContent(join(logsDir, 'custom-logger.log'), 'test')).toBeTruthy();
+    expect(includeContent(join(logsDir, 'custom-logger.log'), '[a:b] hello world')).toBeTruthy();
+    expect(includeContent(join(logsDir, 'custom-logger.log'), '[UserService] warn: hello world')).toBeTruthy();
+    expect(includeContent(join(logsDir, 'custom-logger.log'), 'aaa 222')).toBeTruthy();
+    expect(includeContent(join(logsDir, 'custom-logger.log'), 'plain error message')).toBeTruthy();
+    expect(includeContent(join(logsDir, 'custom-logger.log'), '123')).toBeTruthy();
+    expect(includeContent(join(logsDir, 'custom-logger.log'), 'b,c')).toBeTruthy();
+    expect(includeContent(join(logsDir, 'custom-logger.log'), 'plain error message')).toBeTruthy();
+    expect(includeContent(join(logsDir, 'custom-logger.log'), 'at Object.<anonymous>')).toBeTruthy();
+    expect(includeContent(join(logsDir, 'custom-logger.log'), 'NamedError: named error instance')).toBeTruthy();
+    // !!!!Breaking Change
+    expect(includeContent(join(logsDir, 'custom-logger.log'), 'text before error')).toBeFalsy();
+    expect(includeContent(join(logsDir, 'custom-logger.log'), 'format log, {"a":1}')).toBeTruthy();
+    expect(includeContent(join(logsDir, 'custom-logger.log'), 'Jack,Joe')).toBeTruthy();
+    expect(includeContent(join(logsDir, 'custom-logger.log'), '[object Object]')).toBeTruthy();
+
+    await removeFileOrDir(logsDir);
   });
 
 });

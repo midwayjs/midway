@@ -13,7 +13,10 @@ export class DelegateTransport extends Transport {
   }
 
   log(info, callback) {
-    this.options.delegateLogger[info.level]?.call(this.options.delegateLogger, info.message);
+    this.options.delegateLogger[info.level]?.call(
+      this.options.delegateLogger,
+      info.message
+    );
     callback();
   }
 }

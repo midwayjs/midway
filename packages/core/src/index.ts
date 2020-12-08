@@ -46,3 +46,4 @@ export { safelyGet, safeRequire } from './util/';
 export * from './features';
 export * from './util/webRouterParam';
 export { plainToClass, classToPlain } from 'class-transformer';
+export { createFrameworkLogger, createFrameworkConsoleLogger } from './logger';

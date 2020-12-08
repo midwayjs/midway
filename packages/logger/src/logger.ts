@@ -1,9 +1,9 @@
 import { createLogger, transports, Logger, format } from 'winston';
 import * as DailyRotateFileTransport from 'winston-daily-rotate-file';
-import { ILogger } from './interface';
+import { DelegateLoggerOptions, LoggerOptions } from './interface';
 import { DelegateTransport } from './delegateTransport';
 
-const WinstonLogger: Logger = createLogger().constructor as Logger;
+export const EmptyLogger: Logger = createLogger().constructor as Logger;
 
 function joinLoggerLabel(...labels) {
   if (labels.length === 0) {
@@ -12,25 +12,105 @@ function joinLoggerLabel(...labels) {
     const newLabels = labels.filter(label => {
       return !!label;
     });
-    return `[${newLabels.join(':')}]`;
+    if (newLabels.length === 0) {
+      return '';
+    } else {
+      return `[${newLabels.join(':')}] `;
+    }
   }
 }
 
 /**
- *  扩展支持框架、类等标签
+ *  base logger with console transport and file transport
  */
-export class BaseLogger extends WinstonLogger {
+export class MidwayBaseLogger extends EmptyLogger {
   consoleTransport;
+  fileTransport;
+  errTransport;
+  loggerOptions;
+  labels = [];
 
-  constructor(
-    options: {
-      frameworkType?: string;
-    } = {}
-  ) {
-    super({
-      defaultMeta: {
-        framework: options.frameworkType || '',
-      },
+  constructor(options: LoggerOptions = {}) {
+    super();
+    this.loggerOptions = options;
+    if (this.loggerOptions.label) {
+      this.labels.push(this.loggerOptions.label);
+    }
+
+    this.configure(this.getLoggerConfigure());
+
+    this.consoleTransport = new transports.Console({
+      level: options.consoleLevel || 'silly',
+      format: format.combine(format.colorize({ all: true })),
+    });
+
+    if (options.disableConsole !== true) {
+      this.enableConsole();
+    }
+
+    options.dir = options.dir || process.cwd();
+    options.fileLogName = options.fileLogName || 'midway-core.log';
+    options.errorLogName = options.errorLogName || 'common-error.log';
+
+    if (options.disableFile !== true) {
+      this.enableFile();
+    }
+
+    if (options.disableError !== true) {
+      this.enableError();
+    }
+  }
+
+  disableConsole() {
+    this.remove(this.consoleTransport);
+  }
+
+  enableConsole() {
+    this.add(this.consoleTransport);
+  }
+
+  disableFile() {
+    this.remove(this.fileTransport);
+  }
+
+  enableFile() {
+    if (!this.fileTransport) {
+      this.fileTransport = new DailyRotateFileTransport({
+        dirname: this.loggerOptions.dir,
+        filename: this.loggerOptions.fileLogName,
+        datePattern: 'YYYY-MM-DD',
+        level: this.loggerOptions.fileLevel || 'silly',
+        createSymlink: true,
+        symlinkName: this.loggerOptions.fileLogName,
+        maxSize: this.loggerOptions.fileMaxSize || '100m',
+        maxFiles: this.loggerOptions.fileMaxFiles || null,
+      });
+    }
+    this.add(this.fileTransport);
+  }
+
+  disableError() {
+    this.remove(this.errTransport);
+  }
+
+  enableError() {
+    if (!this.errTransport) {
+      this.errTransport = new DailyRotateFileTransport({
+        dirname: this.loggerOptions.dir,
+        filename: this.loggerOptions.errorLogName,
+        datePattern: 'YYYY-MM-DD',
+        level: 'error',
+        createSymlink: true,
+        symlinkName: this.loggerOptions.errorLogName,
+        maxSize: this.loggerOptions.errMaxSize || '100m',
+        maxFiles: this.loggerOptions.errMaxFiles || null,
+      });
+    }
+    this.add(this.errTransport);
+  }
+
+  getLoggerConfigure() {
+    return {
       format: format.combine(
         format.errors({ stack: true }),
         format.timestamp({
@@ -41,88 +121,28 @@ export class BaseLogger extends WinstonLogger {
           info =>
             `${info.timestamp} ${info.level.toUpperCase()} ${
               process.pid
-            } ${joinLoggerLabel(info.framework, info['className'])} ${
-              info.message
-            }${info.stack || ''}`
+            } ${joinLoggerLabel(...this.labels, ...[].concat(info.label))}${
+              info.stack || info.message
+            }`
         )
       ),
-    });
-    this.consoleTransport = new transports.Console({
-      level: 'silly',
-      format: format.combine(format.colorize({ all: true })),
-    });
-
-    this.add(this.consoleTransport);
-  }
-
-  disableConsole() {
-    this.remove(this.consoleTransport);
-  }
-}
-
-/**
- * 框架日志
- *  1.1 本地只输出控制台，不输出到文件
- *  1.2 服务器环境只输出到文件（midway-core.log)，不输出到控制台
- *  1.3 所有的错误单独输出到 common-error.log 文件
- *  1.4 日志切割能力
- */
-export class MidwayFrameworkLogger extends BaseLogger {
-  constructor(
-    options: {
-      dir?: string;
-      coreLogName?: string;
-      errorLogName?: string;
-      label?: string;
-    } = {}
-  ) {
-    super();
-    options.dir = options.dir || process.cwd();
-    options.coreLogName = options.coreLogName || 'midway-core.log';
-    options.errorLogName = options.errorLogName || 'common-error.log';
-    this.add(
-      new DailyRotateFileTransport({
-        dirname: options.dir,
-        filename: options.errorLogName,
-        datePattern: 'YYYY-MM-DD',
-        level: 'error',
-        format: format.simple(),
-        createSymlink: true,
-        symlinkName: options.errorLogName,
-        maxSize: '200m',
-      })
-    );
-    this.add(
-      new DailyRotateFileTransport({
-        dirname: options.dir,
-        filename: options.coreLogName,
-        datePattern: 'YYYY-MM-DD',
-        level: 'info',
-        format: format.simple(),
-        createSymlink: true,
-        symlinkName: options.coreLogName,
-        maxSize: '200m',
-      })
-    );
+    };
   }
 }
 
 /**
  * framework delegate logger, it can proxy logger output to another logger
  */
-export class MidwayFrameworkDelegateLogger extends BaseLogger {
-  constructor(
-    options: {
-      delegateLogger?: ILogger;
-    } = {}
-  ) {
-    super();
-    if (options.delegateLogger) {
-      this.add(
-        new DelegateTransport({
-          delegateLogger: options.delegateLogger,
-        })
-      );
-    }
+export class MidwayDelegateLogger extends MidwayBaseLogger {
+  constructor(options: DelegateLoggerOptions) {
+    super({
+      disableConsole: true,
+      disableFile: true,
+    });
+    this.add(
+      new DelegateTransport({
+        delegateLogger: options.delegateLogger,
+      })
+    );
   }
 }

@@ -284,4 +284,8 @@ export abstract class BaseFramework<
       }
     }
   }
+
+  public getLogger() {
+    return this.logger;
+  }
 }

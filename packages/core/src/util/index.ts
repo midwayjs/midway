@@ -1,6 +1,10 @@
 import { dirname, resolve, sep, extname } from 'path';
 import { readFileSync } from 'fs';
 
+export const isDevelopmentEnvironment = env => {
+  return ['local', 'test', 'unittest'].includes(env);
+};
+
 /**
  * get all method names from obj or it's prototype
  * @param obj
