@@ -138,6 +138,7 @@ export class MidwayDelegateLogger extends MidwayBaseLogger {
     super({
       disableConsole: true,
       disableFile: true,
+      disableError: true,
     });
     this.add(
       new DelegateTransport({

@@ -6,7 +6,7 @@ import {
   IMethodAspect,
   AspectMetadata,
 } from '@midwayjs/decorator';
-import { ILogger } from '@midwayjs/logger';
+import { ILogger, LoggerOptions } from '@midwayjs/logger';
 /**
  * 生命周期定义
  */
@@ -257,6 +257,7 @@ export interface IMidwayContainer extends IApplicationContext {
   addConfiguration(configuration: IContainerConfiguration);
   getConfigService(): IConfigService;
   getEnvironmentService(): IEnvironmentService;
+  getLoggerService(): ILoggerService;
   getCurrentEnv(): string;
   getResolverHandler(): IResolverHandler;
   addAspect(
@@ -275,6 +276,14 @@ export interface IConfigService {
 export interface IEnvironmentService {
   getCurrentEnvironment(): string;
   setCurrentEnvironment(environment: string);
+}
+
+export interface ILoggerService {
+  addLogger(loggerId: string, logger: ILogger): ILogger;
+  createLogger(loggerId: string, options?: LoggerOptions): ILogger;
+  getLogger(loggerId: string): ILogger;
+  removeLogger(loggerId: string): void;
+  close(loggerId?: string): void;
 }
 
 export interface IMiddleware<T> {

@@ -31,6 +31,8 @@ describe('/test/index.test.ts', () => {
     // test error logger  file include content
     expect(includeContent(join(logsDir, 'common-error.log'), 'hello world1')).toBeFalsy();
     expect(includeContent(join(logsDir, 'common-error.log'), 'hello world5')).toBeTruthy();
+
+    coreLogger.close();
     await removeFileOrDir(logsDir);
   });
 
@@ -82,6 +84,7 @@ describe('/test/index.test.ts', () => {
     expect(includeContent(join(logsDir, 'egg-logger.log'), 'hello egg2 from winston')).toBeTruthy();
     expect(includeContent(join(logsDir, 'egg-logger.log'), 'hello egg3 from winston')).toBeTruthy();
 
+    coreLogger.close();
     await removeFileOrDir(logsDir);
   });
 
@@ -139,6 +142,7 @@ describe('/test/index.test.ts', () => {
     expect(includeContent(join(logsDir, 'custom-logger.log'), 'Jack,Joe')).toBeTruthy();
     expect(includeContent(join(logsDir, 'custom-logger.log'), '[object Object]')).toBeTruthy();
 
+    logger.close();
     await removeFileOrDir(logsDir);
   });
 

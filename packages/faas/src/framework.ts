@@ -38,19 +38,13 @@ export class MidwayFaaSFramework extends BaseFramework<
   private lock = new SimpleLock();
   public app: IMidwayFaaSApplication;
 
-  protected async afterContainerInitialize(
-    options: Partial<IMidwayBootstrapOptions>
-  ) {
-    this.logger = options.logger || console;
+  protected async afterContainerInitialize(options: IMidwayBootstrapOptions) {
     this.globalMiddleware = this.configurationOptions.middleware || [];
     this.app =
       this.configurationOptions.applicationAdapter?.getApplication() ||
       ({} as IMidwayFaaSApplication);
 
     this.defineApplicationProperties({
-      getLogger: () => {
-        return this.logger;
-      },
       /**
        * return init context value such as aliyun fc
        */
@@ -81,6 +75,13 @@ export class MidwayFaaSFramework extends BaseFramework<
     });
 
     this.prepareConfiguration();
+  }
+
+  protected async initializeLogger(options: IMidwayBootstrapOptions) {
+    if (!this.logger) {
+      this.logger = options.logger || console;
+      this.getApplicationContext().getLoggerService().addLogger('default', this.logger);
+    }
   }
 
   protected async afterContainerReady(

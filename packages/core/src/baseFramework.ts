@@ -15,8 +15,8 @@ import {
   getProviderId,
   listModule,
 } from '@midwayjs/decorator';
-import { ILogger } from '@midwayjs/logger';
-import { isAbsolute, join } from 'path';
+import { ILogger, LoggerOptions } from '@midwayjs/logger';
+import { isAbsolute, join, dirname } from 'path';
 import { createFrameworkLogger } from './logger';
 
 function buildLoadDir(baseDir, dir) {
@@ -24,6 +24,10 @@ function buildLoadDir(baseDir, dir) {
     return join(baseDir, dir);
   }
   return dir;
+}
+
+function setupAppDir(baseDir: string) {
+  return dirname(baseDir);
 }
 
 export abstract class BaseFramework<
@@ -45,12 +49,10 @@ export abstract class BaseFramework<
 
   public async initialize(options: IMidwayBootstrapOptions): Promise<void> {
     this.baseDir = options.baseDir;
+    if (!options.appDir) {
+      options.appDir = setupAppDir(options.baseDir);
+    }
     this.appDir = options.appDir;
-
-    /**
-     * initialize framework logger
-     */
-    await this.initializeLogger();
 
     /**
      * before create MidwayContainer instance，can change init parameters
@@ -93,9 +95,10 @@ export abstract class BaseFramework<
     await this.afterContainerReady(options);
   }
 
-  protected async initializeLogger() {
+  protected async initializeLogger(options: IMidwayBootstrapOptions) {
     if (!this.logger) {
       this.logger = createFrameworkLogger(this);
+      this.getApplicationContext().getLoggerService().addLogger('default', this.logger);
     }
   }
 
@@ -106,6 +109,10 @@ export abstract class BaseFramework<
     this.applicationContext.registerObject('baseDir', this.baseDir);
     this.applicationContext.registerObject('appDir', this.appDir);
     this.applicationContext.registerObject('isTsMode', this.isTsMode);
+    /**
+     * initialize framework logger
+     */
+    await this.initializeLogger(options);
   }
 
   protected async containerDirectoryLoad(options: IMidwayBootstrapOptions) {
@@ -224,6 +231,18 @@ export abstract class BaseFramework<
 
       getProcessType: () => {
         return MidwayProcessTypeEnum.APPLICATION;
+      },
+
+      createLogger: (loggerId: string, options: LoggerOptions) => {
+        return this.getApplicationContext()
+          .getLoggerService()
+          .createLogger(loggerId, options);
+      },
+
+      getLogger: (loggerId: string) => {
+        return this.getApplicationContext()
+          .getLoggerService()
+          .getLogger(loggerId);
       },
     };
     Object.assign(

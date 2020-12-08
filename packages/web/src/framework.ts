@@ -75,10 +75,6 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
     this.baseDir = options.baseDir;
     this.appDir = options.appDir;
     /**
-     * initialize framework logger
-     */
-    await this.initializeLogger();
-    /**
      * before create MidwayContainer instance，can change init parameters
      */
     await this.beforeContainerInitialize(options);
@@ -131,6 +127,7 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
       this.logger = new MidwayDelegateLogger({
         delegateLogger: this.app.coreLogger,
       });
+      this.getApplicationContext().getLoggerService().addLogger('default', this.logger);
     }
   }
 

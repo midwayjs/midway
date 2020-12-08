@@ -34,6 +34,7 @@ import {
   IContainerConfiguration,
   IEnvironmentService,
   ILifeCycle,
+  ILoggerService,
   IMidwayContainer,
   IObjectDefinitionMetadata,
   REQUEST_CTX_KEY,
@@ -50,6 +51,7 @@ import { recursiveGetMetadata } from '../common/reflectTool';
 import { ObjectDefinition } from '../definitions/objectDefinition';
 import { FunctionDefinition } from '../definitions/functionDefinition';
 import { ManagedReference, ManagedValue } from './managed';
+import { MidwayLoggerService } from '../service/loggerService';
 
 const DEFAULT_PATTERN = ['**/**.ts', '**/**.tsx', '**/**.js'];
 const DEFAULT_IGNORE_PATTERN = [
@@ -82,8 +84,9 @@ export class MidwayContainer
   private configurationMap: Map<string, IContainerConfiguration> = new Map();
   // 特殊处理，按照 main 加载
   private likeMainConfiguration: IContainerConfiguration[] = [];
-  public configService: IConfigService;
-  public environmentService: IEnvironmentService;
+  protected configService: IConfigService;
+  protected environmentService: IEnvironmentService;
+  protected loggerService: ILoggerService;
   protected aspectMappingMap: WeakMap<object, Map<string, any[]>>;
   private aspectModuleSet: Set<any>;
 
@@ -119,6 +122,7 @@ export class MidwayContainer
   initService() {
     this.environmentService = new MidwayEnvironmentService();
     this.configService = new MidwayConfigService(this);
+    this.loggerService = new MidwayLoggerService(this);
   }
 
   /**
@@ -505,6 +509,10 @@ export class MidwayContainer
     return this.environmentService;
   }
 
+  getLoggerService() {
+    return this.loggerService;
+  }
+
   getCurrentEnv() {
     return this.environmentService.getCurrentEnvironment();
   }
@@ -571,6 +579,7 @@ export class MidwayContainer
       }
     }
 
+    this.loggerService.close();
     await super.stop();
   }
   /**
