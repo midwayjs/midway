@@ -307,4 +307,8 @@ export abstract class BaseFramework<
   public getLogger() {
     return this.logger;
   }
+
+  public getLoggerInstance(loggerId: string) {
+    return this.getLogger(loggerId);
+  }
 }

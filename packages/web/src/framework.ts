@@ -127,7 +127,9 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
       this.logger = new MidwayDelegateLogger({
         delegateLogger: this.app.coreLogger,
       });
-      this.getApplicationContext().getLoggerService().addLogger('default', this.logger);
+      this.getApplicationContext()
+        .getLoggerService()
+        .addLogger('default', this.logger);
     }
   }
 

@@ -1,15 +1,6 @@
-import { ILoggerService } from '../interface';
-import { ILogger, LoggerOptions } from '@midwayjs/logger';
-import { createMidwayLogger } from '../logger';
+import { ILogger, LoggerOptions } from './interface';
 
-export class MidwayLoggerService
-  extends Map<string, ILogger>
-  implements ILoggerService {
-  container;
-  constructor(container) {
-    super();
-    this.container = container;
-  }
+export class MidwayLoggerContainer extends Map<string, ILogger> {
 
   createLogger(loggerId: string, options: LoggerOptions = {}): ILogger {
     if (!this.has(loggerId)) {
