@@ -5,16 +5,16 @@ export * from './interface';
 export * from './transport';
 export { EmptyLogger, MidwayBaseLogger, MidwayDelegateLogger } from './logger';
 export const loggers = new MidwayLoggerContainer();
-export const createLogger = (loggerId: string, options: LoggerOptions = {}) => {
-  return loggers.createLogger(loggerId, options);
+export const createLogger = (name: string, options: LoggerOptions = {}) => {
+  return loggers.createLogger(name, options);
 };
 
 export const createConsoleLogger = (
-  loggerId: string,
+  name: string,
   options: LoggerOptions = {}
 ) => {
   return loggers.createLogger(
-    loggerId,
+    name,
     Object.assign(options, {
       disableError: true,
       disableFile: true,

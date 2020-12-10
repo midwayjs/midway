@@ -113,3 +113,7 @@ export function isPathEqual(one: string, two: string) {
   const ext = extname(one);
   return one.replace(ext, '') === two;
 }
+
+export function getUserHome() {
+  return process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'];
+}

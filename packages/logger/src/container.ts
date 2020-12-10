@@ -2,46 +2,46 @@ import { ILogger, LoggerOptions } from './interface';
 import { MidwayBaseLogger } from './logger';
 
 export class MidwayLoggerContainer extends Map<string, ILogger> {
-  createLogger(loggerId: string, options: LoggerOptions = {}): ILogger {
-    if (!this.has(loggerId)) {
+  createLogger(name: string, options: LoggerOptions = {}): ILogger {
+    if (!this.has(name)) {
       const logger = new MidwayBaseLogger(options);
-      this.addLogger(loggerId, logger);
-      this.set(loggerId, logger);
+      this.addLogger(name, logger);
+      this.set(name, logger);
       return logger;
     }
 
-    return this.getLogger(loggerId);
+    return this.getLogger(name);
   }
 
-  addLogger(loggerId: string, logger: ILogger) {
-    if (!this.has(loggerId)) {
+  addLogger(name: string, logger: ILogger) {
+    if (!this.has(name)) {
       if (logger['on']) {
-        (logger as any).on('close', () => this.removeLogger(loggerId));
+        (logger as any).on('close', () => this.removeLogger(name));
       }
-      this.set(loggerId, logger);
+      this.set(name, logger);
     } else {
-      throw new Error(`logger id ${loggerId} has duplicate`);
+      throw new Error(`logger id ${name} has duplicate`);
     }
     return logger;
   }
 
-  getLogger(loggerId: string) {
-    return this.get(loggerId);
+  getLogger(name: string) {
+    return this.get(name);
   }
 
-  removeLogger(loggerId: string) {
-    this.delete(loggerId);
+  removeLogger(name: string) {
+    this.delete(name);
   }
 
   /**
-   * Closes a `Logger` instance with the specified `id` if it exists.
-   * If no `id` is supplied then all Loggers are closed.
-   * @param {?string} id - The id of the Logger instance to close.
+   * Closes a `Logger` instance with the specified `name` if it exists.
+   * If no `name` is supplied then all Loggers are closed.
+   * @param {?string} name - The id of the Logger instance to close.
    * @returns {undefined}
    */
-  close(id?: string) {
-    if (id) {
-      return this.removeLogger(id);
+  close(name?: string) {
+    if (name) {
+      return this.removeLogger(name);
     }
 
     Array.from(this.keys()).forEach(key => this.removeLogger(key));

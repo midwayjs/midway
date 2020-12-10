@@ -34,7 +34,6 @@ import {
   IContainerConfiguration,
   IEnvironmentService,
   ILifeCycle,
-  ILoggerService,
   IMidwayContainer,
   IObjectDefinitionMetadata,
   REQUEST_CTX_KEY,
@@ -85,7 +84,6 @@ export class MidwayContainer
   private likeMainConfiguration: IContainerConfiguration[] = [];
   protected configService: IConfigService;
   protected environmentService: IEnvironmentService;
-  protected loggerService: ILoggerService;
   protected aspectMappingMap: WeakMap<object, Map<string, any[]>>;
   private aspectModuleSet: Set<any>;
 
@@ -505,10 +503,6 @@ export class MidwayContainer
 
   getEnvironmentService() {
     return this.environmentService;
-  }
-
-  getLoggerService() {
-    return this.loggerService;
   }
 
   getCurrentEnv() {

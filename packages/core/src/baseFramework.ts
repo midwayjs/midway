@@ -15,14 +15,9 @@ import {
   getProviderId,
   listModule,
 } from '@midwayjs/decorator';
-import {
-  ILogger,
-  LoggerOptions,
-  createLogger,
-  loggers,
-} from '@midwayjs/logger';
+import { ILogger, loggers, LoggerOptions } from '@midwayjs/logger';
 import { isAbsolute, join, dirname } from 'path';
-import { createFrameworkLoggerOptions } from './logger';
+import { createMidwayLogger } from './logger';
 
 function buildLoadDir(baseDir, dir) {
   if (!isAbsolute(dir)) {
@@ -44,6 +39,7 @@ export abstract class BaseFramework<
   protected appDir: string;
   protected applicationContext: IMidwayContainer;
   protected logger: ILogger;
+  protected appLogger: ILogger;
   public configurationOptions: T;
   public app: APP;
 
@@ -102,10 +98,7 @@ export abstract class BaseFramework<
 
   protected async initializeLogger(options: IMidwayBootstrapOptions) {
     if (!this.logger) {
-      this.logger = createLogger(
-        'coreLogger',
-        createFrameworkLoggerOptions(this)
-      );
+      this.logger = createMidwayLogger(this, 'coreLogger');
       this.logger = new Proxy(this.logger, {
         get: (obj, prop: string) => {
           if (['log', 'info', 'warn', 'debug', 'error'].includes(prop)) {
@@ -119,9 +112,13 @@ export abstract class BaseFramework<
         },
       });
     }
+    this.appLogger = createMidwayLogger(this, 'logger', {fileLogName: 'midway-app.log'});
   }
 
   protected async containerInitialize(options: IMidwayBootstrapOptions) {
+    /**
+     * initialize container
+     */
     this.applicationContext = new MidwayContainer(this.baseDir, undefined);
     this.applicationContext.disableConflictCheck =
       options.disableConflictCheck || true;
@@ -252,17 +249,13 @@ export abstract class BaseFramework<
         return MidwayProcessTypeEnum.APPLICATION;
       },
 
-      createLogger: (loggerId: string, options: LoggerOptions) => {
-        return this.getApplicationContext()
-          .getLoggerService()
-          .createLogger(loggerId, options);
+      getLogger: (name: string) => {
+        return this.getLogger(name);
       },
 
-      getLogger: (loggerId: string) => {
-        return this.getApplicationContext()
-          .getLoggerService()
-          .getLogger(loggerId);
-      },
+      createLogger: (name: string, options: LoggerOptions = {}) => {
+        return this.createLogger(name, options);
+      }
     };
     Object.assign(
       this.app,
@@ -323,10 +316,14 @@ export abstract class BaseFramework<
     }
   }
 
-  public getLogger(loggerId?: string) {
-    if (loggerId) {
-      return loggers.getLogger(loggerId);
+  public getLogger(name?: string) {
+    if (name) {
+      return loggers.getLogger(name);
     }
     return this.logger;
+  }
+
+  public createLogger(name: string, option: LoggerOptions = {}) {
+    return createMidwayLogger(this, name, option);
   }
 }
