@@ -4,7 +4,15 @@ export interface ILogger {
   debug(msg: any, ...args: any[]): void;
   error(msg: any, ...args: any[]): void;
   warn(msg: any, ...args: any[]): void;
-  write?(msg: string): void;
+}
+
+export interface IMidwayLogger extends ILogger {
+  disableConsole();
+  enableConsole();
+  disableFile();
+  enableFile();
+  disableError();
+  enableError();
 }
 
 export type LoggerLevel = 'silly' | 'debug' | 'verbose' | 'info' | 'warn' | 'error';

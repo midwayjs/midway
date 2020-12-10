@@ -1,10 +1,10 @@
 import { ILogger, LoggerOptions } from './interface';
+import { MidwayBaseLogger } from './logger';
 
 export class MidwayLoggerContainer extends Map<string, ILogger> {
-
   createLogger(loggerId: string, options: LoggerOptions = {}): ILogger {
     if (!this.has(loggerId)) {
-      const logger = createMidwayLogger(this.container, options);
+      const logger = new MidwayBaseLogger(options);
       this.addLogger(loggerId, logger);
       this.set(loggerId, logger);
       return logger;
@@ -26,10 +26,7 @@ export class MidwayLoggerContainer extends Map<string, ILogger> {
   }
 
   getLogger(loggerId: string) {
-    if (this.has(loggerId)) {
-      return this.get(loggerId);
-    }
-    return this.get('default');
+    return this.get(loggerId);
   }
 
   removeLogger(loggerId: string) {

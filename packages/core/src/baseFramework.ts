@@ -15,9 +15,14 @@ import {
   getProviderId,
   listModule,
 } from '@midwayjs/decorator';
-import { ILogger, LoggerOptions } from '@midwayjs/logger';
+import {
+  ILogger,
+  LoggerOptions,
+  createLogger,
+  loggers,
+} from '@midwayjs/logger';
 import { isAbsolute, join, dirname } from 'path';
-import { createFrameworkLogger } from './logger';
+import { createFrameworkLoggerOptions } from './logger';
 
 function buildLoadDir(baseDir, dir) {
   if (!isAbsolute(dir)) {
@@ -97,8 +102,22 @@ export abstract class BaseFramework<
 
   protected async initializeLogger(options: IMidwayBootstrapOptions) {
     if (!this.logger) {
-      this.logger = createFrameworkLogger(this);
-      this.getApplicationContext().getLoggerService().addLogger('default', this.logger);
+      this.logger = createLogger(
+        'coreLogger',
+        createFrameworkLoggerOptions(this)
+      );
+      this.logger = new Proxy(this.logger, {
+        get: (obj, prop: string) => {
+          if (['log', 'info', 'warn', 'debug', 'error'].includes(prop)) {
+            return (...args) => {
+              return obj[prop].call(obj, ...args, {
+                label: this.getFrameworkType(),
+              });
+            };
+          }
+          return obj[prop];
+        },
+      });
     }
   }
 
@@ -304,11 +323,10 @@ export abstract class BaseFramework<
     }
   }
 
-  public getLogger() {
+  public getLogger(loggerId?: string) {
+    if (loggerId) {
+      return loggers.getLogger(loggerId);
+    }
     return this.logger;
-  }
-
-  public getLoggerInstance(loggerId: string) {
-    return this.getLogger(loggerId);
   }
 }

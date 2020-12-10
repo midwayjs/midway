@@ -3,7 +3,7 @@ import { IMidwayContainer, IMidwayFramework } from './interface';
 import { isDevelopmentEnvironment } from './util';
 import { join } from 'path';
 
-export const createFrameworkLogger = (
+export const createFrameworkLoggerOptions = (
   framework: IMidwayFramework<any, any>
 ) => {
   const isDevelopmentEnv = isDevelopmentEnvironment(
@@ -15,10 +15,10 @@ export const createFrameworkLogger = (
     disableFile: isDevelopmentEnv,
     disableError: isDevelopmentEnv,
   };
-  return new MidwayBaseLogger(loggerOptions);
+  return loggerOptions;
 };
 
-export const createFrameworkConsoleLogger = (
+export const createFrameworkConsoleLoggerOptions = (
   framework: IMidwayFramework<any, any>
 ) => {
   const loggerOptions: LoggerOptions = {
@@ -27,7 +27,7 @@ export const createFrameworkConsoleLogger = (
     disableFile: true,
     disableError: true,
   };
-  return new MidwayBaseLogger(loggerOptions);
+  return loggerOptions;
 };
 
 export const createMidwayLogger = (

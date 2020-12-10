@@ -20,3 +20,9 @@ export class DelegateTransport extends Transport {
     callback();
   }
 }
+
+export class EmptyTransport extends Transport {
+  log(info, callback) {
+    callback();
+  }
+}

@@ -51,7 +51,6 @@ import { recursiveGetMetadata } from '../common/reflectTool';
 import { ObjectDefinition } from '../definitions/objectDefinition';
 import { FunctionDefinition } from '../definitions/functionDefinition';
 import { ManagedReference, ManagedValue } from './managed';
-import { MidwayLoggerService } from '../service/loggerService';
 
 const DEFAULT_PATTERN = ['**/**.ts', '**/**.tsx', '**/**.js'];
 const DEFAULT_IGNORE_PATTERN = [
@@ -122,7 +121,6 @@ export class MidwayContainer
   initService() {
     this.environmentService = new MidwayEnvironmentService();
     this.configService = new MidwayConfigService(this);
-    this.loggerService = new MidwayLoggerService(this);
   }
 
   /**
@@ -579,7 +577,6 @@ export class MidwayContainer
       }
     }
 
-    this.loggerService.close();
     await super.stop();
   }
   /**
