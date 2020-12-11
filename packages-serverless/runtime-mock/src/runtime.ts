@@ -18,6 +18,8 @@ export interface MockRuntimeOptions {
   bootstrap?;
   events?: FunctionEvent[];
   handler?: any;
+  initHandler?: any;
+  initContext?: any;
   runtime?: Runtime;
 }
 
@@ -60,8 +62,11 @@ export class MockRuntime {
       await this.bootstrap.start();
       await sleep(500);
       this.runtime = this.bootstrap.getRuntime();
-      return this.runtime;
     }
+    if (this.options.initHandler) {
+      await this.options.initHandler(this.options.initContext);
+    }
+    return this.runtime;
   }
 
   async invoke(...args) {

@@ -5,9 +5,14 @@ const assert = require('assert');
 
 describe('/test/index.test.ts', () => {
   it('should create runtime', async () => {
+    let initHanlderResult;
     const runtime = createRuntime({
       functionDir: join(__dirname, './code'),
       events: [new HTTPEvent()],
+      initHandler: arg => {
+        initHanlderResult = arg;
+      },
+      initContext: 'test'
     });
     await runtime.start();
     const result = await runtime.invoke({
@@ -18,5 +23,6 @@ describe('/test/index.test.ts', () => {
     });
     assert.equal(result, 'hello Alan');
     await runtime.close();
+    assert.equal(initHanlderResult, 'test');
   });
 });
