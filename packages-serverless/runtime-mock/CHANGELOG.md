@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.5.3](https://github.com/midwayjs/midway-faas/compare/v2.5.2...v2.5.3) (2020-12-11)
+
+
+### Bug Fixes
+
+* runtime mock support initHandler ([#749](https://github.com/midwayjs/midway-faas/issues/749)) ([0b993be](https://github.com/midwayjs/midway-faas/commit/0b993beff72ef648dc438dda4d0214f4e3b13954))
+
+
+
+
+
 # [2.5.0](https://github.com/midwayjs/midway-faas/compare/v2.4.8...v2.5.0) (2020-11-28)
 
 **Note:** Version bump only for package @midwayjs/runtime-mock

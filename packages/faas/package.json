@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/faas",
-  "version": "2.5.2",
+  "version": "2.5.3",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
@@ -13,7 +13,7 @@
   "devDependencies": {
     "@midwayjs/cli": "^1.0.0",
     "@midwayjs/mock": "^2.5.2",
-    "@midwayjs/serverless-fc-starter": "^2.5.0",
+    "@midwayjs/serverless-fc-starter": "^2.5.3",
     "@midwayjs/serverless-scf-starter": "^2.5.0",
     "mm": "3"
   },
