@@ -1,4 +1,4 @@
-import { parseNormalDir } from './utils';
+import { findLernaRoot, parseNormalDir } from './utils';
 import * as extend from 'extend2';
 import { EggAppInfo } from 'egg';
 import { BootstrapStarter } from '@midwayjs/bootstrap';
@@ -51,11 +51,20 @@ export const createAppWorkerLoader = () => {
         this.appDir = this.app.appDir = result.appDir;
       }
 
-      if (process.env.MIDWAY_EGG_PLUGIN_PATH) {
-        const result = super.getEggPaths();
-        return result.concat(process.env.MIDWAY_EGG_PLUGIN_PATH);
+      const result = super.getEggPaths();
+      const monorepoRoot = findLernaRoot();
+      if (monorepoRoot) {
+        const monorepoEgg = join(monorepoRoot, 'node_modules/egg');
+        if (existsSync(monorepoEgg)) {
+          result.push(monorepoEgg);
+        }
       }
-      return super.getEggPaths();
+
+      if (process.env.MIDWAY_EGG_PLUGIN_PATH) {
+        result.push(process.env.MIDWAY_EGG_PLUGIN_PATH);
+      }
+      const pathSet = new Set(result);
+      return Array.from(pathSet);
     }
 
     protected getAppInfo(): EggAppInfo {
@@ -146,10 +155,21 @@ export const createAgentWorkerLoader = () => {
         this.appDir = this.app.appDir = result.appDir;
       }
 
-      if (process.env.MIDWAY_EGG_PLUGIN_PATH) {
-        return super.getEggPaths().concat(process.env.MIDWAY_EGG_PLUGIN_PATH);
+      const result = super.getEggPaths();
+      const monorepoRoot = findLernaRoot();
+      if (monorepoRoot) {
+        const monorepoEgg = join(monorepoRoot, 'node_modules/egg');
+        if (existsSync(monorepoEgg)) {
+          result.push(monorepoEgg);
+        }
       }
-      return super.getEggPaths();
+
+      if (process.env.MIDWAY_EGG_PLUGIN_PATH) {
+        result.push(process.env.MIDWAY_EGG_PLUGIN_PATH);
+      }
+
+      const pathSet = new Set(result);
+      return Array.from(pathSet);
     }
 
     protected getAppInfo(): EggAppInfo {

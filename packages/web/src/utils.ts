@@ -1,5 +1,6 @@
 import { isTypeScriptEnvironment } from '@midwayjs/bootstrap';
 import { basename, join } from 'path';
+import { sync as findUpSync, stop } from 'find-up';
 
 export const parseNormalDir = (baseDir: string, isTypescript = true) => {
   if (isTypescript) {
@@ -27,4 +28,19 @@ export const parseNormalDir = (baseDir: string, isTypescript = true) => {
       appDir: baseDir,
     };
   }
+};
+
+export const findLernaRoot = (findRoot = process.cwd()) => {
+  const userHome = process.env.HOME;
+  return findUpSync(
+    directory => {
+      if (findUpSync.exists(join(directory, 'lerna.json'))) {
+        return directory;
+      }
+      if (directory === userHome) {
+        return stop;
+      }
+    },
+    { cwd: findRoot, type: 'directory' }
+  );
 };
