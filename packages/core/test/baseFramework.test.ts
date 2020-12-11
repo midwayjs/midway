@@ -15,7 +15,7 @@ import {
 } from '../src';
 import * as mm from 'mm';
 import sinon = require('sinon');
-import { IMidwayApplication, IMidwayBootstrapOptions, MidwayFrameworkType } from '../src/interface';
+import { IMidwayApplication, IMidwayBootstrapOptions, MidwayFrameworkType } from '../src';
 import { LifeCycleTest, LifeCycleTest1, TestBinding } from "./fixtures/lifecycle";
 
 type mockApp = {} & IMidwayApplication;
