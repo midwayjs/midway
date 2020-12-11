@@ -12,7 +12,9 @@ export const createMidwayLogger = (
     framework.getCurrentEnvironment()
   );
   const loggerOptions: LoggerOptions = {
-    dir: isDevelopmentEnv ? join(framework.getAppDir(), 'logs') : join(getUserHome(), 'logs'),
+    dir: isDevelopmentEnv
+      ? join(framework.getAppDir(), 'logs')
+      : join(getUserHome(), 'logs'),
     disableFile: isDevelopmentEnv,
     disableError: isDevelopmentEnv,
   };

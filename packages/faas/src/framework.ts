@@ -22,6 +22,7 @@ import { FUNC_KEY, LOGGER_KEY, PLUGIN_KEY } from '@midwayjs/decorator';
 import SimpleLock from '@midwayjs/simple-lock';
 import * as compose from 'koa-compose';
 import { MidwayHooks } from './hooks';
+import { loggers } from '@midwayjs/logger';
 
 const LOCK_KEY = '_faas_starter_start_key';
 
@@ -79,8 +80,13 @@ export class MidwayFaaSFramework extends BaseFramework<
 
   protected async initializeLogger(options: IMidwayBootstrapOptions) {
     if (!this.logger) {
-      this.logger = options.logger || console;
-      this.getApplicationContext().getLoggerService().addLogger('default', this.logger);
+      this.logger =
+        options.logger ||
+        this.configurationOptions?.initializeContext?.['logger'] ||
+        console;
+      this.appLogger = this.logger;
+      loggers.addLogger('coreLogger', this.logger);
+      loggers.addLogger('appLogger', this.logger);
     }
   }
 

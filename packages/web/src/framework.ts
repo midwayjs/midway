@@ -14,7 +14,7 @@ import { IMidwayWebConfigurationOptions } from './interface';
 import { MidwayKoaBaseFramework } from '@midwayjs/koa';
 import { EggRouter } from '@eggjs/router';
 import { Application, Context, Router } from 'egg';
-import { MidwayDelegateLogger } from '@midwayjs/logger';
+import { loggers, MidwayDelegateLogger } from '@midwayjs/logger';
 
 export class MidwayWebFramework extends MidwayKoaBaseFramework<
   IMidwayWebConfigurationOptions,
@@ -127,9 +127,10 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
       this.logger = new MidwayDelegateLogger({
         delegateLogger: this.app.coreLogger,
       });
-      this.getApplicationContext()
-        .getLoggerService()
-        .addLogger('default', this.logger);
+      this.appLogger = new MidwayDelegateLogger({
+        delegateLogger: this.app.logger,
+      });
+      loggers.addLogger('coreLogger', this.logger);
     }
   }
 

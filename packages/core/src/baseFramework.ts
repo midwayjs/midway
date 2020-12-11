@@ -112,7 +112,9 @@ export abstract class BaseFramework<
         },
       });
     }
-    this.appLogger = createMidwayLogger(this, 'logger', {fileLogName: 'midway-app.log'});
+    this.appLogger = createMidwayLogger(this, 'logger', {
+      fileLogName: 'midway-app.log',
+    });
   }
 
   protected async containerInitialize(options: IMidwayBootstrapOptions) {
@@ -255,7 +257,7 @@ export abstract class BaseFramework<
 
       createLogger: (name: string, options: LoggerOptions = {}) => {
         return this.createLogger(name, options);
-      }
+      },
     };
     Object.assign(
       this.app,
