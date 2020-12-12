@@ -54,10 +54,7 @@ export const createAppWorkerLoader = () => {
       const result = super.getEggPaths();
       const monorepoRoot = findLernaRoot();
       if (monorepoRoot) {
-        const monorepoEgg = join(monorepoRoot, 'node_modules/egg');
-        if (existsSync(monorepoEgg)) {
-          result.push(monorepoEgg);
-        }
+        result.push(monorepoRoot);
       }
 
       if (process.env.MIDWAY_EGG_PLUGIN_PATH) {
@@ -158,10 +155,7 @@ export const createAgentWorkerLoader = () => {
       const result = super.getEggPaths();
       const monorepoRoot = findLernaRoot();
       if (monorepoRoot) {
-        const monorepoEgg = join(monorepoRoot, 'node_modules/egg');
-        if (existsSync(monorepoEgg)) {
-          result.push(monorepoEgg);
-        }
+        result.push(monorepoRoot);
       }
 
       if (process.env.MIDWAY_EGG_PLUGIN_PATH) {
