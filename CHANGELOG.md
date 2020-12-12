@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.5.4](https://github.com/midwayjs/midway/compare/v2.5.3...v2.5.4) (2020-12-12)
+
+
+### Bug Fixes
+
+* monorepo use different cwd ([#752](https://github.com/midwayjs/midway/issues/752)) ([cb3ba35](https://github.com/midwayjs/midway/commit/cb3ba35343101c1cb34cc10bdd31237c226266bb))
+
+
+
+
+
 ## [2.5.3](https://github.com/midwayjs/midway/compare/v2.5.2...v2.5.3) (2020-12-11)
 
 
