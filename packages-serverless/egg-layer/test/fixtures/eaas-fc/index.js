@@ -1,8 +1,5 @@
 'use strict';
 
-const { join } = require('path');
-process.env.EGG_FRAMEWORK_DIR = join(__dirname, '../../../node_modules/egg');
-
 const { asyncWrapper } = require('@midwayjs/runtime-engine');
 const { start } = require('@midwayjs/serverless-fc-starter');
 const eggLayer = require('../../../');
