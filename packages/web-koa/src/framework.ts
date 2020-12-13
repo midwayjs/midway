@@ -37,6 +37,7 @@ import {
 import * as Router from 'koa-router';
 import type { DefaultState, Middleware } from 'koa';
 import * as koa from 'koa';
+import { MidwayKoaContextLogger } from './logger';
 
 export abstract class MidwayKoaBaseFramework<
   T,
@@ -291,6 +292,7 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<
         ctx,
         this.getApplicationContext()
       );
+      ctx.logger = new MidwayKoaContextLogger(ctx, this.contextLogger);
       await ctx.requestContext.ready();
       await next();
     });

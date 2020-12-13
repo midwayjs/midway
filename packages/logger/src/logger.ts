@@ -1,6 +1,6 @@
 import { createLogger, transports, Logger, format } from 'winston';
 import * as DailyRotateFileTransport from 'winston-daily-rotate-file';
-import { DelegateLoggerOptions, LoggerOptions } from './interface';
+import { DelegateLoggerOptions, LoggerLevel, LoggerOptions } from './interface';
 import { DelegateTransport, EmptyTransport } from './transport';
 
 export const EmptyLogger: Logger = createLogger().constructor as Logger;
@@ -108,6 +108,12 @@ export class MidwayBaseLogger extends EmptyLogger {
       });
     }
     this.add(this.errTransport);
+  }
+
+  updateLevel(level: LoggerLevel) {
+    this.configure({
+      level,
+    });
   }
 
   getLoggerConfigure() {
