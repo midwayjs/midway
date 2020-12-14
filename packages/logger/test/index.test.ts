@@ -38,6 +38,7 @@ describe('/test/index.test.ts', () => {
 
   it('should create logger in cluster mode', async ()  => {
     const logsDir = join(__dirname, 'fixtures/logs');
+    await removeFileOrDir(logsDir);
     const clusterFile = join(__dirname, 'fixtures/cluster.ts');
     const child = createChildProcess(clusterFile);
     const pidList: [] = await new Promise(resolve => {
@@ -182,6 +183,8 @@ describe('/test/index.test.ts', () => {
     expect(includeContent(join(logsDir, 'test-logger.log'), 'this is a info message with empty label')).toBeTruthy();
     expect(includeContent(join(logsDir, 'test-logger.log'), '[ddd] this is a info message with value label')).toBeTruthy();
     expect(includeContent(join(logsDir, 'test-logger.log'), '[ccc:aaa] this is a info message with array value label')).toBeTruthy();
+
+    await removeFileOrDir(logsDir);
   });
 
   it('should create logger with label', async () => {
@@ -200,6 +203,7 @@ describe('/test/index.test.ts', () => {
     await sleep();
     expect(fileExists(join(logsDir, 'test-logger.log'))).toBeTruthy();
     expect(includeContent(join(logsDir, 'test-logger.log'), '[main label] test console error')).toBeTruthy();
+    await removeFileOrDir(logsDir);
   });
 
   it('should test container', function () {

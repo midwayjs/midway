@@ -7,7 +7,7 @@ export class MidwayKoaContextLogger extends MidwayContextLogger<IMidwayKoaContex
     // format: '[$userId/$ip/$traceId/$use_ms $method $url]'
     const userId = ctx.userId || '-';
     const traceId = (ctx.tracer && ctx.tracer.traceId) || '-';
-    const use = ctx.starttime ? Date.now() - ctx.starttime : 0;
+    const use = ctx.startTime ? Date.now() - ctx.startTime : 0;
     return (
       '[' +
       userId +

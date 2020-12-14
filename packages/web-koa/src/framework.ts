@@ -293,6 +293,7 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<
         this.getApplicationContext()
       );
       ctx.logger = new MidwayKoaContextLogger(ctx, this.contextLogger);
+      ctx.startTime = Date.now();
       await ctx.requestContext.ready();
       await next();
     });
