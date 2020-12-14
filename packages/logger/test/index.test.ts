@@ -1,4 +1,4 @@
-import { MidwayDelegateLogger, MidwayBaseLogger, clearAllLoggers, createConsoleLogger, createLogger, IMidwayLogger  } from '../src';
+import { MidwayDelegateLogger, MidwayBaseLogger, clearAllLoggers, createConsoleLogger, createLogger, IMidwayLogger, loggers } from '../src';
 import { join } from 'path';
 import { fileExists, includeContent, removeFileOrDir, sleep, createChildProcess } from './util';
 import { EggLogger } from 'egg-logger';
@@ -48,6 +48,7 @@ describe('/test/index.test.ts', () => {
     });
     await sleep(5000);
     child.kill();
+    await sleep(5000);
 
     for (const pid of pidList) {
       expect(includeContent(join(logsDir, 'midway-core.log'), pid)).toBeTruthy();
@@ -206,8 +207,15 @@ describe('/test/index.test.ts', () => {
     await removeFileOrDir(logsDir);
   });
 
-  it('should test container', function () {
-
+  it('should test container', async () => {
+    if (loggers.size > 0) {
+      clearAllLoggers();
+    }
+    createConsoleLogger('consoleLogger');
+    createConsoleLogger('anotherConsoleLogger');
+    expect(loggers.size).toBe(2);
+    clearAllLoggers();
+    expect(loggers.size).toBe(0);
   });
 
 });
