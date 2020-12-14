@@ -1,4 +1,4 @@
-import { MidwayDelegateLogger, MidwayBaseLogger } from '../src';
+import { MidwayDelegateLogger, MidwayBaseLogger, clearAllLoggers, createConsoleLogger, createLogger, IMidwayLogger  } from '../src';
 import { join } from 'path';
 import { fileExists, includeContent, removeFileOrDir, sleep, createChildProcess } from './util';
 import { EggLogger } from 'egg-logger';
@@ -144,6 +144,66 @@ describe('/test/index.test.ts', () => {
 
     logger.close();
     await removeFileOrDir(logsDir);
+  });
+
+  it('should create console file', function () {
+    const consoleLogger = createConsoleLogger('consoleLogger');
+    consoleLogger.error('test console error');
+
+    expect(fileExists(join(process.cwd(), 'common-error.log'))).toBeFalsy();
+  });
+
+  it('should create logger and update configure', async () => {
+    clearAllLoggers();
+    const logsDir = join(__dirname, 'logs');
+    await removeFileOrDir(logsDir);
+    const logger = createLogger<IMidwayLogger>('testLogger', {
+      dir: logsDir,
+      fileLogName: 'test-logger.log',
+      disableFile: true,
+      disableError: true,
+    });
+
+    logger.error(new Error('test error'));
+    await sleep();
+    expect(fileExists(join(logsDir, 'test-logger.log'))).toBeFalsy();
+    expect(includeContent(join(logsDir, 'test-logger.log'), 'test error')).toBeFalsy();
+
+    logger.enableFile();
+    logger.error(new Error('another test error'));
+    logger.info('this is a info message with empty label', { label: []})
+    logger.info('this is a info message with empty value label', { label: ''})
+    logger.info('this is a info message with value label', { label: 'ddd'})
+    logger.info('this is a info message with array value label', { label: ['ccc', 'aaa']})
+
+    await sleep();
+    expect(includeContent(join(logsDir, 'test-logger.log'), 'another test error')).toBeTruthy();
+    expect(includeContent(join(logsDir, 'test-logger.log'), 'this is a info message with empty label')).toBeTruthy();
+    expect(includeContent(join(logsDir, 'test-logger.log'), 'this is a info message with empty label')).toBeTruthy();
+    expect(includeContent(join(logsDir, 'test-logger.log'), '[ddd] this is a info message with value label')).toBeTruthy();
+    expect(includeContent(join(logsDir, 'test-logger.log'), '[ccc:aaa] this is a info message with array value label')).toBeTruthy();
+  });
+
+  it('should create logger with label', async () => {
+    clearAllLoggers();
+    const logsDir = join(__dirname, 'logs');
+    await removeFileOrDir(logsDir);
+    const logger = createLogger<IMidwayLogger>('testLogger', {
+      dir: logsDir,
+      label: 'main label',
+      fileLogName: 'test-logger.log',
+      errorLogName: 'test-error.log',
+    });
+
+    logger.error('test console error');
+
+    await sleep();
+    expect(fileExists(join(logsDir, 'test-logger.log'))).toBeTruthy();
+    expect(includeContent(join(logsDir, 'test-logger.log'), '[main label] test console error')).toBeTruthy();
+  });
+
+  it('should test container', function () {
+
   });
 
 });

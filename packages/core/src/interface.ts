@@ -275,6 +275,7 @@ export interface IConfigService {
 export interface IEnvironmentService {
   getCurrentEnvironment(): string;
   setCurrentEnvironment(environment: string);
+  isDevelopmentEnvironment(): boolean;
 }
 
 export interface IMiddleware<T> {
