@@ -50,6 +50,9 @@ describe('/test/index.test.ts', () => {
     child.kill();
     await sleep(5000);
 
+    // test logger file exist
+    expect(fileExists(join(logsDir, 'midway-core.log'))).toBeTruthy();
+
     for (const pid of pidList) {
       expect(includeContent(join(logsDir, 'midway-core.log'), pid)).toBeTruthy();
     }
