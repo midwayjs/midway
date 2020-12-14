@@ -111,9 +111,9 @@ export class MidwayBaseLogger extends EmptyLogger {
   }
 
   updateLevel(level: LoggerLevel) {
-    this.configure({
-      level,
-    });
+    this.level = level;
+    this.consoleTransport.level = level;
+    this.fileTransport.level = level;
   }
 
   getLoggerConfigure() {

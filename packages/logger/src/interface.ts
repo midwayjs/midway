@@ -13,6 +13,7 @@ export interface IMidwayLogger extends ILogger {
   enableFile();
   disableError();
   enableError();
+  updateLevel(level: LoggerLevel);
 }
 
 export type LoggerLevel = 'silly' | 'debug' | 'verbose' | 'info' | 'warn' | 'error';

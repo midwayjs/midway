@@ -207,15 +207,88 @@ describe('/test/index.test.ts', () => {
     await removeFileOrDir(logsDir);
   });
 
-  it('should test container', async () => {
+  it('should test container and create same logger', async () => {
     if (loggers.size > 0) {
       clearAllLoggers();
     }
-    createConsoleLogger('consoleLogger');
+    const logger1 = createConsoleLogger('consoleLogger');
     createConsoleLogger('anotherConsoleLogger');
+    const logger3 = createConsoleLogger('consoleLogger');
+    expect(logger1).toBe(logger3);
     expect(loggers.size).toBe(2);
     clearAllLoggers();
     expect(loggers.size).toBe(0);
+  });
+
+  it('should test container with add logger', function () {
+    if (loggers.size > 0) {
+      clearAllLoggers();
+    }
+    const originLogger = createConsoleLogger('consoleLogger');
+    expect(loggers.size).toBe(1);
+    const logger = new MidwayBaseLogger({
+      disableError: true,
+      disableFile: true
+    });
+    expect(() => {
+      loggers.addLogger('consoleLogger', logger);
+    }).toThrow();
+
+    expect(loggers.size).toBe(1);
+    const consoleLogger: any = loggers.getLogger('consoleLogger');
+    expect(originLogger).toBe(consoleLogger);
+    loggers.close('consoleLogger');
+    expect(loggers.size).toBe(0);
+  });
+
+  it('should create logger update level', async () => {
+    clearAllLoggers();
+    const logsDir = join(__dirname, 'logs');
+    await removeFileOrDir(logsDir);
+    const logger = createLogger<IMidwayLogger>('testLogger', {
+      dir: logsDir,
+      fileLogName: 'test-logger.log',
+      errorLogName: 'test-error.log',
+    });
+
+    logger.disableConsole();
+
+    logger.info('test console info');
+    logger.error('test console error');
+
+    await sleep();
+    expect(fileExists(join(logsDir, 'test-error.log'))).toBeTruthy();
+    expect(fileExists(join(logsDir, 'test-logger.log'))).toBeTruthy();
+    expect(includeContent(join(logsDir, 'test-error.log'), 'test console error')).toBeTruthy();
+    expect(includeContent(join(logsDir, 'test-logger.log'), 'test console error')).toBeTruthy();
+    expect(includeContent(join(logsDir, 'test-logger.log'), 'test console info')).toBeTruthy();
+
+    // after update level
+
+    logger.updateLevel('warn');
+
+    logger.info('test console info2');
+    logger.error('test console error2');
+
+    await sleep();
+    expect(includeContent(join(logsDir, 'test-error.log'), 'test console error2')).toBeTruthy();
+    expect(includeContent(join(logsDir, 'test-logger.log'), 'test console error2')).toBeTruthy();
+    expect(includeContent(join(logsDir, 'test-logger.log'), 'test console info2')).toBeFalsy();
+
+    // after disable error and file
+
+    logger.disableError();
+    logger.disableFile();
+
+    logger.info('test console info3');
+    logger.error('test console error3');
+    await sleep();
+    expect(includeContent(join(logsDir, 'test-error.log'), 'test console error3')).toBeFalsy();
+    expect(includeContent(join(logsDir, 'test-logger.log'), 'test console error3')).toBeFalsy();
+    expect(includeContent(join(logsDir, 'test-logger.log'), 'test console info3')).toBeFalsy();
+
+
+    await removeFileOrDir(logsDir);
   });
 
 });
