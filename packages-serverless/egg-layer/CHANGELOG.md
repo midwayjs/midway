@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.5.5](https://github.com/midwayjs/midway-faas/compare/v2.5.4...v2.5.5) (2020-12-15)
+
+**Note:** Version bump only for package @midwayjs/egg-layer
+
+
+
+
+
 ## [2.5.3](https://github.com/midwayjs/midway-faas/compare/v2.5.2...v2.5.3) (2020-12-11)
 
 **Note:** Version bump only for package @midwayjs/egg-layer
