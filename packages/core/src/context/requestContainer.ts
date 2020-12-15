@@ -1,7 +1,7 @@
 import { MidwayContainer } from './midwayContainer';
 import { REQUEST_CTX_KEY, IMidwayContainer } from '../interface';
 import { parsePrefix } from '../util/';
-import { isProxy, PIPELINE_IDENTIFIER } from '@midwayjs/decorator';
+import { PIPELINE_IDENTIFIER } from '@midwayjs/decorator';
 
 export class MidwayRequestContainer extends MidwayContainer {
   private applicationContext: IMidwayContainer;
@@ -39,7 +39,8 @@ export class MidwayRequestContainer extends MidwayContainer {
       identifier = this.getIdentifier(identifier);
     }
     if (this.registry.hasObject(identifier)) {
-      return this.registry.getObject(identifier);
+      const ins = this.registry.getObject(identifier);
+      return this.wrapperAspectToInstance(ins);
     }
     const definition = this.applicationContext.registry.getDefinition(
       identifier
@@ -54,11 +55,7 @@ export class MidwayRequestContainer extends MidwayContainer {
           definition,
           args,
         });
-        const proxy = this.wrapperAspectToInstance(ins);
-        if (isProxy(proxy) && definition.id !== PIPELINE_IDENTIFIER) {
-          this.registry.registerObject(definition.id, proxy);
-        }
-        return proxy;
+        return this.wrapperAspectToInstance(ins);
       }
     }
 
@@ -75,7 +72,8 @@ export class MidwayRequestContainer extends MidwayContainer {
     identifier = parsePrefix(identifier);
 
     if (this.registry.hasObject(identifier)) {
-      return this.registry.getObject(identifier);
+      const ins = this.registry.getObject(identifier);
+      return this.wrapperAspectToInstance(ins);
     }
 
     const definition = this.applicationContext.registry.getDefinition(
@@ -91,11 +89,7 @@ export class MidwayRequestContainer extends MidwayContainer {
           definition,
           args,
         });
-        const proxy = this.wrapperAspectToInstance(ins);
-        if (isProxy(proxy) && definition.id !== PIPELINE_IDENTIFIER) {
-          this.registry.registerObject(definition.id, proxy);
-        }
-        return proxy;
+        return this.wrapperAspectToInstance(ins);
       }
     }
 

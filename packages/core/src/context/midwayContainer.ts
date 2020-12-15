@@ -525,11 +525,7 @@ export class MidwayContainer
       identifier = this.getIdentifier(identifier);
     }
     const ins: any = super.get<T>(identifier, args);
-    const proxy = this.wrapperAspectToInstance(ins);
-    if (isProxy(proxy)) {
-      this.registry.registerObject(identifier, proxy);
-    }
-    return proxy;
+    return this.wrapperAspectToInstance(ins);
   }
 
   async getAsync<T>(identifier: any, args?: any): Promise<T> {
@@ -537,11 +533,7 @@ export class MidwayContainer
       identifier = this.getIdentifier(identifier);
     }
     const ins: any = await super.getAsync<T>(identifier, args);
-    const proxy = this.wrapperAspectToInstance(ins);
-    if (isProxy(proxy)) {
-      this.registry.registerObject(identifier, proxy);
-    }
-    return proxy;
+    return this.wrapperAspectToInstance(ins);
   }
 
   protected getIdentifier(target: any) {
