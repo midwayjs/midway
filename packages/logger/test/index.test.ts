@@ -2,6 +2,7 @@ import { MidwayDelegateLogger, MidwayBaseLogger, clearAllLoggers, createConsoleL
 import { join } from 'path';
 import { fileExists, includeContent, removeFileOrDir, sleep, createChildProcess } from './util';
 import { EggLogger } from 'egg-logger';
+import { readFileSync } from "fs";
 
 describe('/test/index.test.ts', () => {
   it('should test create logger', async () => {
@@ -36,7 +37,7 @@ describe('/test/index.test.ts', () => {
     await removeFileOrDir(logsDir);
   });
 
-  it('should create logger in cluster mode', async ()  => {
+  it.only('should create logger in cluster mode', async ()  => {
     const logsDir = join(__dirname, 'fixtures/logs');
     await removeFileOrDir(logsDir);
     const clusterFile = join(__dirname, 'fixtures/cluster.ts');
@@ -52,6 +53,10 @@ describe('/test/index.test.ts', () => {
 
     // test logger file exist
     expect(fileExists(join(logsDir, 'midway-core.log'))).toBeTruthy();
+    console.log(join(logsDir, 'midway-core.log'));
+    console.log(readFileSync(join(logsDir, 'midway-core.log'), {
+      encoding: 'utf8'
+    }));
 
     for (const pid of pidList) {
       expect(includeContent(join(logsDir, 'midway-core.log'), pid)).toBeTruthy();
