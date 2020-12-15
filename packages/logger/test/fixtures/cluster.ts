@@ -20,8 +20,15 @@ if (cluster.isMaster) {
   const logger = new MidwayBaseLogger({
     dir: join(__dirname, 'logs'),
   });
-  setInterval( () => {
+  setTimeout( () => {
     logger.error(process.pid  + ': output application error');
-  },  100);
+    logger.error(process.pid  + ': output application error');
+    logger.error(process.pid  + ': output application error');
+    logger.error(process.pid  + ': output application error');
+    logger.end();
+  },  1000);
 
+  logger.on('finish', () => {
+    process.exit(0);
+  });
 }

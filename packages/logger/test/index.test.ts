@@ -47,10 +47,13 @@ describe('/test/index.test.ts', () => {
         resolve(pidList);
       });
     });
-    await sleep(5000);
-    child.kill();
-    await sleep(5000);
 
+    await new Promise((resolve) => {
+      child.on('exit', () => {
+        // 等进程退出
+        resolve();
+      });
+    })
     // test logger file exist
     expect(fileExists(join(logsDir, 'midway-core.log'))).toBeTruthy();
     console.log(join(logsDir, 'midway-core.log'));
