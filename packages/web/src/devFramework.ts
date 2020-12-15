@@ -76,4 +76,12 @@ export class MidwayDevFramework
   getLogger() {
     return this.app.coreLogger as any;
   }
+
+  getProjectName(): string {
+    return 'test';
+  }
+
+  createLogger(name: string, options) {
+    return console;
+  }
 }

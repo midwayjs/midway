@@ -59,6 +59,14 @@ class TestFrameworkUnit implements IMidwayFramework<any, IConfigurationOptions> 
   getLogger(): any {
     return console;
   }
+
+  createLogger(name: string, options) {
+    return console;
+  }
+
+  getProjectName(): string {
+    return 'test';
+  }
 }
 
 describe('/test/index.test.ts', () => {

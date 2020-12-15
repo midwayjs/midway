@@ -39,6 +39,7 @@
   "dependencies": {
     "@midwayjs/bootstrap": "^2.5.5",
     "@midwayjs/decorator": "^2.4.7",
+    "@midwayjs/logger": "^2.5.0",
     "egg-mock": "^3.21.0",
     "fs-extra": "^8.0.1",
     "power-assert": "^1.6.1",

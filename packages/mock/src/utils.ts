@@ -9,6 +9,7 @@ import { isAbsolute, join } from 'path';
 import { remove } from 'fs-extra';
 import { clearAllModule } from '@midwayjs/decorator';
 import { existsSync } from 'fs';
+import { clearAllLoggers } from '@midwayjs/logger';
 
 process.setMaxListeners(0);
 
@@ -34,6 +35,7 @@ export async function create<
   process.env.MIDWAY_TS_MODE = 'true';
   clearAllModule();
   clearContainerCache();
+  clearAllLoggers();
   let framework: T = null;
   let DefaultFramework = null;
 

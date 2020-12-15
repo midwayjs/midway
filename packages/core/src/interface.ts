@@ -6,7 +6,7 @@ import {
   IMethodAspect,
   AspectMetadata,
 } from '@midwayjs/decorator';
-import { ILogger } from '@midwayjs/logger';
+import { ILogger, LoggerOptions } from '@midwayjs/logger';
 /**
  * 生命周期定义
  */
@@ -301,6 +301,8 @@ export interface IMidwayApplication {
   getApplicationContext(): IMidwayContainer;
   getConfig(key?: string): any;
   getLogger(key?: string): ILogger;
+  createLogger(name: string, options: LoggerOptions): ILogger;
+  getProjectName(): string;
 }
 
 export interface IMidwayContext {
@@ -344,6 +346,8 @@ export interface IMidwayFramework<APP extends IMidwayApplication, T extends ICon
   getAppDir(): string;
   getBaseDir(): string;
   getLogger(): ILogger;
+  createLogger(name: string, options: LoggerOptions): ILogger;
+  getProjectName(): string;
 }
 
 export enum MidwayFrameworkType {

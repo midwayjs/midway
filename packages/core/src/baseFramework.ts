@@ -18,6 +18,7 @@ import {
 import { ILogger, loggers, LoggerOptions } from '@midwayjs/logger';
 import { isAbsolute, join, dirname } from 'path';
 import { createMidwayLogger } from './logger';
+import { safeRequire } from "./util";
 
 function buildLoadDir(baseDir, dir) {
   if (!isAbsolute(dir)) {
@@ -43,6 +44,7 @@ export abstract class BaseFramework<
   protected contextLogger: ILogger;
   public configurationOptions: T;
   public app: APP;
+  protected pkg: object;
 
   public configure(options: T): BaseFramework<APP, T> {
     this.configurationOptions = options;
@@ -97,6 +99,12 @@ export abstract class BaseFramework<
     await this.afterContainerReady(options);
   }
 
+  protected async initializeInfo(options: IMidwayBootstrapOptions) {
+    if (!this.pkg) {
+      this.pkg = safeRequire(join(this.appDir, 'package.json'));
+    }
+  }
+
   protected async initializeLogger(options: IMidwayBootstrapOptions) {
     if (!this.logger) {
       this.logger = createMidwayLogger(this, 'coreLogger');
@@ -131,6 +139,11 @@ export abstract class BaseFramework<
     this.applicationContext.registerObject('baseDir', this.baseDir);
     this.applicationContext.registerObject('appDir', this.appDir);
     this.applicationContext.registerObject('isTsMode', this.isTsMode);
+    /**
+     * initialize base information
+     */
+    await this.initializeInfo(options);
+
     /**
      * initialize framework logger
      */
@@ -262,6 +275,10 @@ export abstract class BaseFramework<
       createLogger: (name: string, options: LoggerOptions = {}) => {
         return this.createLogger(name, options);
       },
+
+      getProjectName: () => {
+        return this.getProjectName();
+      }
     };
     Object.assign(
       this.app,
@@ -331,5 +348,9 @@ export abstract class BaseFramework<
 
   public createLogger(name: string, option: LoggerOptions = {}) {
     return createMidwayLogger(this, name, option);
+  }
+
+  public getProjectName() {
+    return this.pkg['name'] || '';
   }
 }

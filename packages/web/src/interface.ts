@@ -23,6 +23,8 @@ declare module 'egg' {
     getConfig(key?: string): any;
     generateController?(controllerMapping: string);
     generateMiddleware?(middlewareId: string): Promise<Middleware<DefaultState, IMidwayKoaContext>>;
+    createLogger(name: string, options);
+    getProjectName();
   }
 
   interface Context {
