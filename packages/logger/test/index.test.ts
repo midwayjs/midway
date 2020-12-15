@@ -37,7 +37,7 @@ describe('/test/index.test.ts', () => {
     await removeFileOrDir(logsDir);
   });
 
-  it.only('should create logger in cluster mode', async ()  => {
+  it('should create logger in cluster mode', async ()  => {
     const logsDir = join(__dirname, 'fixtures/logs');
     await removeFileOrDir(logsDir);
     const clusterFile = join(__dirname, 'fixtures/cluster.ts');
