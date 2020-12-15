@@ -1,7 +1,7 @@
 import { MidwayContainer } from './midwayContainer';
 import { REQUEST_CTX_KEY, IMidwayContainer } from '../interface';
 import { parsePrefix } from '../util/';
-import { PIPELINE_IDENTIFIER } from '@midwayjs/decorator';
+import { isProxy, PIPELINE_IDENTIFIER } from '@midwayjs/decorator';
 
 export class MidwayRequestContainer extends MidwayContainer {
   private applicationContext: IMidwayContainer;
@@ -54,7 +54,11 @@ export class MidwayRequestContainer extends MidwayContainer {
           definition,
           args,
         });
-        return this.wrapperAspectToInstance(ins);
+        const proxy = this.wrapperAspectToInstance(ins);
+        if (isProxy(proxy) && definition.id !== PIPELINE_IDENTIFIER) {
+          this.registry.registerObject(definition.id, proxy);
+        }
+        return proxy;
       }
     }
 
@@ -87,7 +91,11 @@ export class MidwayRequestContainer extends MidwayContainer {
           definition,
           args,
         });
-        return this.wrapperAspectToInstance(ins);
+        const proxy = this.wrapperAspectToInstance(ins);
+        if (isProxy(proxy) && definition.id !== PIPELINE_IDENTIFIER) {
+          this.registry.registerObject(definition.id, proxy);
+        }
+        return proxy;
       }
     }
 
