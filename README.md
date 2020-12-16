@@ -25,19 +25,19 @@ English | [简体中文](./README.zh-cn.md)
 
 ## Introduction
 
-[Detailed introduction article: Alibaba Midway Serverless release v1.0](https://medium.com/@Lellansin/alibaba-midway-serverless-v1-0-lets-building-serverless-cloud-ecosystem-with-node-js-8a6d09a777a3)， welcome Star this repository.
+[Detailed introduction article: Alibaba Midway Serverless release v1.0](https://medium.com/@Lellansin/alibaba-midway-serverless-v1-0-lets-building-serverless-cloud-ecosystem-with-node-js-8a6d09a777a3). Welcome to star this repository.
 
-Midway Serverless is a serverless framework used to build Node.js cloud functions. Helps you significantly reduce maintenance costs and focus more on product development in the cloud-native era.
+Midway Serverless is a serverless framework used to build Node.js cloud functions. Helps you to significantly reduce maintenance costs and focus more on product development in the cloud-native era.
 
-- 1、Make applications easier to maintain and delivering
+- 1、Make applications easier to maintain and faster to deliver.
   - 🐦 Provided multiple sets of integrated development solutions for community front-end React, Vue, etc.;
   - 🐯 Provides standard cloud platform function entry and exit parameter definitions;
   - 🐶 Provides TypeScript support to facilitate application expansion and definition;
   - 🐱 Provides a complete Midway system iconic dependency injection solution;
-- 2、 Ecology is more lightweight and free
+- 2、Ecosystem is more lightweight and free
   - 🦁 The function system reuses the ecological and Web middleware capabilities of koa, which is more handy when dealing with traditional Web;
   - 🐴 Provide an ecological chain of egg components reusing egg plug-ins, enterprise-level development links are simpler and smoother;
-  - 🐘 The decorator capabilities of the Midway system are unified, making the traditional Web migration to the Serverless system faster and better;
+  - 🐘 The decorator capabilities of the Midway system are unified, making the traditional Web migration to the serverless system faster and better;
 - 3、Easier migration between platforms
   - 🐒 By providing a unified configuration specification and entry smoothing mechanism, the code is basically the same on each platform;
   - 🦊 Expanding the runtime APIs of different cloud platforms can not only load common inter-platform extensions, but also access the company's internal private deployment solutions;
