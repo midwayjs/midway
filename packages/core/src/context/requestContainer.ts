@@ -39,7 +39,8 @@ export class MidwayRequestContainer extends MidwayContainer {
       identifier = this.getIdentifier(identifier);
     }
     if (this.registry.hasObject(identifier)) {
-      return this.registry.getObject(identifier);
+      const ins = this.registry.getObject(identifier);
+      return this.wrapperAspectToInstance(ins);
     }
     const definition = this.applicationContext.registry.getDefinition(
       identifier
@@ -71,7 +72,8 @@ export class MidwayRequestContainer extends MidwayContainer {
     identifier = parsePrefix(identifier);
 
     if (this.registry.hasObject(identifier)) {
-      return this.registry.getObject(identifier);
+      const ins = this.registry.getObject(identifier);
+      return this.wrapperAspectToInstance(ins);
     }
 
     const definition = this.applicationContext.registry.getDefinition(

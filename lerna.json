@@ -9,9 +9,6 @@
       "noCi": true,
       "npmClientArgs": [
         "--no-package-lock"
-      ],
-      "nohoist": [
-        "egg"
       ]
     },
     "publish": {
@@ -25,5 +22,5 @@
     }
   },
   "npmClient": "npm",
-  "version": "2.5.2"
+  "version": "2.5.5"
 }

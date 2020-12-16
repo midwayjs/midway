@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.5.5](https://github.com/midwayjs/midway/compare/v2.5.4...v2.5.5) (2020-12-15)
+
+**Note:** Version bump only for package @midwayjs/web
+
+
+
+
+
+## [2.5.4](https://github.com/midwayjs/midway/compare/v2.5.3...v2.5.4) (2020-12-12)
+
+
+### Bug Fixes
+
+* monorepo use different cwd ([#752](https://github.com/midwayjs/midway/issues/752)) ([cb3ba35](https://github.com/midwayjs/midway/commit/cb3ba35343101c1cb34cc10bdd31237c226266bb))
+
+
+
+
+
+## [2.5.3](https://github.com/midwayjs/midway/compare/v2.5.2...v2.5.3) (2020-12-11)
+
+
+### Bug Fixes
+
+* support eggjs in monorepo ([#751](https://github.com/midwayjs/midway/issues/751)) ([18c32b9](https://github.com/midwayjs/midway/commit/18c32b980167dd9a3547b0a930a043f9c37f86ad))
+
+
+
+
+
 ## [2.5.2](https://github.com/midwayjs/midway/compare/v2.5.1...v2.5.2) (2020-12-04)
 
 **Note:** Version bump only for package @midwayjs/web

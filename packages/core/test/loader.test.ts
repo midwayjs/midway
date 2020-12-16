@@ -632,11 +632,22 @@ describe('/test/loader.test.ts', () => {
     expect(await home.hello1()).toEqual('hello world 1');
     expect(await home.hello2()).toEqual('hello worldcccppp');
 
+    const home1: any = await loader.getApplicationContext().getAsync('home');
+    expect(home1.hello()).toEqual('hello worlddddccccfff');
+    expect(await home1.hello1()).toEqual('hello world 1');
+    expect(await home1.hello2()).toEqual('hello worldcccppp');
+
     const ctx1 = {id: 1};
     const requestContext = new MidwayRequestContainer(ctx1, loader.getApplicationContext());
     const userController1: any = await requestContext.getAsync('userController');
     try {
       await userController1.getUser();
+    } catch (err) {
+      expect(err.message).toMatch('ccc');
+    }
+    const userController2: any = await requestContext.getAsync('userController');
+    try {
+      await userController2.getUser();
     } catch (err) {
       expect(err.message).toMatch('ccc');
     }
