@@ -176,7 +176,7 @@ export const request = {
   },
 
   is(type, ...types) {
-    return typeis(type, ...types);
+    return typeis(this.get('content-type'), type, ...types);
   },
 
   /**
