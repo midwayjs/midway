@@ -159,7 +159,8 @@ describe('/test/index.test.ts', () => {
     await removeFileOrDir(logsDir);
   });
 
-  it('should create console file', function () {
+  it('should create console file', async () => {
+    await removeFileOrDir(join(process.cwd(), 'common-error.log'));
     const consoleLogger = createConsoleLogger('consoleLogger');
     consoleLogger.error('test console error');
 
