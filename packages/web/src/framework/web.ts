@@ -10,11 +10,11 @@ import {
   LOGGER_KEY,
   PLUGIN_KEY,
 } from '@midwayjs/decorator';
-import { IMidwayWebConfigurationOptions } from './interface';
+import { IMidwayWebConfigurationOptions } from '../interface';
 import { MidwayKoaBaseFramework } from '@midwayjs/koa';
 import { EggRouter } from '@eggjs/router';
-import { Application, Context, Router } from 'egg';
-import { loggers, MidwayDelegateLogger } from '@midwayjs/logger';
+import { Application, Context, Router, EggLogger } from 'egg';
+// import { loggers, MidwayDelegateLogger } from '@midwayjs/logger';
 
 export class MidwayWebFramework extends MidwayKoaBaseFramework<
   IMidwayWebConfigurationOptions,
@@ -27,6 +27,9 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
     priority: number;
     router: Router;
   }> = [];
+  protected loggers: {
+    [name: string]: EggLogger
+  };
 
   public configure(
     options: IMidwayWebConfigurationOptions
@@ -59,6 +62,10 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
 
         // TODO 单进程模式下区分进程类型??
         return MidwayProcessTypeEnum.APPLICATION;
+      },
+
+      getLogger: (name) => {
+        return this.app.loggers[name] || null;
       },
     });
 
@@ -123,15 +130,15 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
   }
 
   protected async initializeLogger() {
-    if (!this.logger) {
-      this.logger = new MidwayDelegateLogger({
-        delegateLogger: this.app.coreLogger,
-      });
-      this.appLogger = new MidwayDelegateLogger({
-        delegateLogger: this.app.logger,
-      });
-      loggers.addLogger('coreLogger', this.logger);
-    }
+    // if (!this.logger) {
+    //   this.logger = new MidwayDelegateLogger({
+    //     delegateLogger: this.app.coreLogger,
+    //   });
+    //   this.appLogger = new MidwayDelegateLogger({
+    //     delegateLogger: this.app.logger,
+    //   });
+    //   loggers.addLogger('coreLogger', this.logger, false);
+    // }
   }
 
   async applicationInitialize(options: Partial<IMidwayBootstrapOptions>) {
