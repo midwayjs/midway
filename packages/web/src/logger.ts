@@ -1,5 +1,6 @@
 import { EggLoggers as BaseEggLoggers, EggLogger, Transport } from 'egg-logger';
 import { loggers, ILogger } from '@midwayjs/logger';
+import { relative } from 'path';
 
 /**
  * output log into file {@link Transport}。
@@ -10,7 +11,9 @@ class WinstonTransport extends Transport {
 
   constructor(options) {
     super(options);
-    this.transportLogger = loggers.createLogger(options.transportName, options);
+    this.transportLogger = loggers.createLogger(options.transportName, Object.assign(options, {
+      disableConsole: true,
+    }));
   }
 
   /**
@@ -20,8 +23,8 @@ class WinstonTransport extends Transport {
    * @param  {Object} meta - meta information
    */
   log(level, args, meta) {
-    const msg = super.log(level, args, meta);
-    this.transportLogger.log(level.toLowerCase(), msg);
+    const msg = super.log(level, args, meta) as unknown as string;
+    this.transportLogger.log(level.toLowerCase(), msg.replace('\n', ''));
   }
 }
 
@@ -56,9 +59,12 @@ class EggLoggers extends BaseEggLoggers {
 
   updateTransport(name: string) {
     const logger = this.get(name) as EggLogger;
-    logger.delete('file');
-    logger.set(name, new WinstonTransport({
-      level: logger.level,
+    let fileLogName = relative((logger as any).options.dir, (logger as any).options.file);
+
+    logger.set('file', new WinstonTransport({
+      dir: (logger as any).options.dir,
+      fileLogName,
+      level: (logger as any).options.level,
       transportName: name,
     }));
   }
