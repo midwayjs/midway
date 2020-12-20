@@ -147,7 +147,7 @@ describe('/test/index.test.ts', () => {
     expect(includeContent(join(logsDir, 'custom-logger.log'), '123')).toBeTruthy();
     expect(includeContent(join(logsDir, 'custom-logger.log'), 'b,c')).toBeTruthy();
     expect(includeContent(join(logsDir, 'custom-logger.log'), 'plain error message')).toBeTruthy();
-    expect(includeContent(join(logsDir, 'custom-logger.log'), 'at Object.<anonymous>')).toBeTruthy();
+    // expect(includeContent(join(logsDir, 'custom-logger.log'), 'at Object.<anonymous>')).toBeTruthy();
     expect(includeContent(join(logsDir, 'custom-logger.log'), 'NamedError: named error instance')).toBeTruthy();
     // !!!!Breaking Change
     expect(includeContent(join(logsDir, 'custom-logger.log'), 'text before error')).toBeFalsy();
