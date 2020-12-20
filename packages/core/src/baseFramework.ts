@@ -351,6 +351,6 @@ export abstract class BaseFramework<
   }
 
   public getProjectName() {
-    return this.pkg['name'] || '';
+    return this.pkg?.['name'] || '';
   }
 }
