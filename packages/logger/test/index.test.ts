@@ -110,8 +110,6 @@ describe('/test/index.test.ts', () => {
       disableError: true,
     });
 
-    expect(fileExists(join(logsDir, 'custom-logger.log'))).toBeTruthy();
-    expect(fileExists(join(logsDir, 'common-error.log'))).toBeFalsy();
 
     logger.debug('test');
     logger.info('hello world', { label: ['a', 'b']});
@@ -139,6 +137,8 @@ describe('/test/index.test.ts', () => {
 
     await finishLogger(logger);
 
+    expect(fileExists(join(logsDir, 'custom-logger.log'))).toBeTruthy();
+    expect(fileExists(join(logsDir, 'common-error.log'))).toBeFalsy();
     expect(includeContent(join(logsDir, 'custom-logger.log'), 'test')).toBeTruthy();
     expect(includeContent(join(logsDir, 'custom-logger.log'), '[a:b] hello world')).toBeTruthy();
     expect(includeContent(join(logsDir, 'custom-logger.log'), '[UserService] warn: hello world')).toBeTruthy();
