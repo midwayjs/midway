@@ -1,6 +1,6 @@
 import { MidwayDelegateLogger, MidwayBaseLogger, clearAllLoggers, createConsoleLogger, createLogger, IMidwayLogger, loggers } from '../src';
 import { join } from 'path';
-import { fileExists, includeContent, removeFileOrDir, sleep, createChildProcess } from './util';
+import { fileExists, includeContent, removeFileOrDir, sleep, createChildProcess, finishLogger } from './util';
 import { EggLogger } from 'egg-logger';
 import { readFileSync } from "fs";
 
@@ -137,7 +137,7 @@ describe('/test/index.test.ts', () => {
     logger.info([ 'Jack', 'Joe' ]);
     logger.warn({ name: 'Jack' });
 
-    await sleep();
+    await finishLogger(logger);
 
     expect(includeContent(join(logsDir, 'custom-logger.log'), 'test')).toBeTruthy();
     expect(includeContent(join(logsDir, 'custom-logger.log'), '[a:b] hello world')).toBeTruthy();
@@ -154,8 +154,6 @@ describe('/test/index.test.ts', () => {
     expect(includeContent(join(logsDir, 'custom-logger.log'), 'format log, {"a":1}')).toBeTruthy();
     expect(includeContent(join(logsDir, 'custom-logger.log'), 'Jack,Joe')).toBeTruthy();
     expect(includeContent(join(logsDir, 'custom-logger.log'), '[object Object]')).toBeTruthy();
-
-    logger.close();
     await removeFileOrDir(logsDir);
   });
 

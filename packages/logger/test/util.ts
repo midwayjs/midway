@@ -35,3 +35,13 @@ export const getChildProcessPid = (moduleFile) => {
   return execSync('ps aux  | grep node');
 }
 
+export const finishLogger = async (logger) => {
+  await sleep();
+  return new Promise(resolve  => {
+    logger.on('finish', () => {
+      resolve()
+    });
+    logger.end();
+    logger.close();
+  })
+}
