@@ -101,7 +101,7 @@ describe('/test/index.test.ts', () => {
     await removeFileOrDir(logsDir);
   });
 
-  it.only('should create custom logger and output content', async () =>{
+  it('should create custom logger and output content', async () =>{
     const logsDir = join(__dirname, 'logs');
     await removeFileOrDir(logsDir);
     const logger = new MidwayBaseLogger({
@@ -109,7 +109,6 @@ describe('/test/index.test.ts', () => {
       fileLogName: 'custom-logger.log',
       disableError: true,
     });
-
 
     logger.debug('test');
     logger.info('hello world', { label: ['a', 'b']});
