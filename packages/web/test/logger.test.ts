@@ -24,6 +24,9 @@ describe('test/logger.test.js', () => {
 
     // 控制台看不见这个输出，但是文件中可以
     app.logger.info('------');
+    app.logger.error('test');
+
+    await sleep();
     await closeApp(app);
   });
 
@@ -114,7 +117,7 @@ describe('test/logger.test.js', () => {
   it('log buffer enable cache on non-local and non-unittest env', async () => {
     mm(process.env, 'EGG_LOG', 'none');
     mm(process.env, 'EGG_SERVER_ENV', 'prod');
-    mm(process.env, 'EGG_HOME', getFilepath('apps/mock-production-app/config'));
+    mm(process.env, 'EGG_HOME', getFilepath('apps/mock-production-app/src/config'));
     const app = await creatApp('apps/mock-production-app');
 
     expect(app.config.logger.disableConsoleAfterReady === true);
@@ -127,6 +130,7 @@ describe('test/logger.test.js', () => {
     console.log(logfile)
     expect(existsSync(logfile)).toBeTruthy();
     expect(readFileSync(logfile, 'utf8').includes(''));
+    await closeApp(app);
   });
 
   // it('output .json format log', async () => {

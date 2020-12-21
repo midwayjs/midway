@@ -1,6 +1,7 @@
 import { EggLoggers as BaseEggLoggers, EggLogger, Transport } from 'egg-logger';
 import { loggers, ILogger } from '@midwayjs/logger';
 import { relative } from 'path';
+import { existsSync, lstatSync, unlinkSync } from 'fs';
 
 /**
  * output log into file {@link Transport}。
@@ -60,6 +61,11 @@ class EggLoggers extends BaseEggLoggers {
   updateTransport(name: string) {
     const logger = this.get(name) as EggLogger;
     let fileLogName = relative((logger as any).options.dir, (logger as any).options.file);
+    logger.get('file').close();
+
+    if (existsSync((logger as any).options.file) && !lstatSync((logger as any).options.file).isSymbolicLink()) {
+      unlinkSync((logger as any).options.file);
+    }
 
     logger.set('file', new WinstonTransport({
       dir: (logger as any).options.dir,
