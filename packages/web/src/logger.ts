@@ -67,6 +67,11 @@ class EggLoggers extends BaseEggLoggers {
       unlinkSync((logger as any).options.file);
     }
 
+    // EggJS 的默认转发到错误日志是通过设置重复的 logger 实现的，在这种情况下代理会造成 midway 写入多个 error 日志，默认需要移除掉
+    if ((logger as any).duplicateLoggers.has('ERROR')) {
+      (logger as any).duplicateLoggers.delete('ERROR');
+    }
+
     logger.set('file', new WinstonTransport({
       dir: (logger as any).options.dir,
       fileLogName,

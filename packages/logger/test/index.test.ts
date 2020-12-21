@@ -1,6 +1,14 @@
 import { MidwayDelegateLogger, MidwayBaseLogger, clearAllLoggers, createConsoleLogger, createLogger, IMidwayLogger, loggers } from '../src';
 import { join } from 'path';
-import { fileExists, includeContent, removeFileOrDir, sleep, createChildProcess, finishLogger } from './util';
+import {
+  fileExists,
+  includeContent,
+  removeFileOrDir,
+  sleep,
+  createChildProcess,
+  finishLogger,
+  matchContentTimes
+} from './util';
 import { EggLogger } from 'egg-logger';
 import { readFileSync } from "fs";
 
@@ -296,7 +304,31 @@ describe('/test/index.test.ts', () => {
     expect(includeContent(join(logsDir, 'test-logger.log'), 'test console error3')).toBeFalsy();
     expect(includeContent(join(logsDir, 'test-logger.log'), 'test console info3')).toBeFalsy();
 
+    await removeFileOrDir(logsDir);
+  });
 
+  it('should test common-error log', async () => {
+    clearAllLoggers();
+    const logsDir = join(__dirname, 'logs');
+    await removeFileOrDir(logsDir);
+    const logger1 = createLogger<IMidwayLogger>('logger', {
+      dir: logsDir,
+      disableFile: true,
+    });
+
+    const logger2 = createLogger<IMidwayLogger>('logger', {
+      dir: logsDir,
+      disableFile: true,
+    });
+
+    expect(logger1).toEqual(logger2);
+    logger1.error('output error by logger1');
+    logger2.error('output error by logger2');
+
+    await sleep();
+
+    expect(matchContentTimes(join(logsDir, 'common-error.log'), 'output error by logger1')).toEqual(1)
+    expect(matchContentTimes(join(logsDir, 'common-error.log'), 'output error by logger2')).toEqual(1)
     await removeFileOrDir(logsDir);
   });
 

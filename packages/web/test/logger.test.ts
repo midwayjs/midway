@@ -1,4 +1,4 @@
-import { creatApp, closeApp, getFilepath, sleep } from './utils';
+import { creatApp, closeApp, getFilepath, sleep, matchContentTimes } from './utils';
 import * as mm from 'mm';
 import { levels } from 'egg-logger';
 import { join } from 'path';
@@ -23,10 +23,16 @@ describe('test/logger.test.js', () => {
     expect(app.config.logger.disableConsoleAfterReady === true);
 
     // 控制台看不见这个输出，但是文件中可以
-    app.logger.info('------');
-    app.logger.error('test');
+    app.logger.info('just show once');
+    app.logger.error('this is a test error');
 
     await sleep();
+
+    expect(matchContentTimes(join(process.env.EGG_HOME, 'logs/ali-demo/common-error.log'), 'just show once')).toEqual(0)
+    expect(matchContentTimes(join(process.env.EGG_HOME, 'logs/ali-demo/common-error.log'), 'this is a test error')).toEqual(1)
+    expect(matchContentTimes(join(process.env.EGG_HOME, 'logs/ali-demo/midway-agent.log'), 'just show once')).toEqual(1)
+    expect(matchContentTimes(join(process.env.EGG_HOME, 'logs/ali-demo/midway-agent.log'), 'this is a test error')).toEqual(1)
+
     await closeApp(app);
   });
 
