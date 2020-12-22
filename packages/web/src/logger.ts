@@ -7,14 +7,16 @@ import { existsSync, lstatSync, unlinkSync } from 'fs';
  * output log into file {@link Transport}。
  */
 class WinstonTransport extends Transport {
-
   transportLogger: ILogger;
 
   constructor(options) {
     super(options);
-    this.transportLogger = loggers.createLogger(options.transportName, Object.assign(options, {
-      disableConsole: true,
-    }));
+    this.transportLogger = loggers.createLogger(
+      options.transportName,
+      Object.assign(options, {
+        disableConsole: true,
+      })
+    );
   }
 
   /**
@@ -24,13 +26,12 @@ class WinstonTransport extends Transport {
    * @param  {Object} meta - meta information
    */
   log(level, args, meta) {
-    const msg = super.log(level, args, meta) as unknown as string;
+    const msg = (super.log(level, args, meta) as unknown) as string;
     this.transportLogger.log(level.toLowerCase(), msg.replace('\n', ''));
   }
 }
 
 class EggLoggers extends BaseEggLoggers {
-
   /**
    * @constructor
    * @param  {Object} config - egg app config
@@ -53,17 +54,23 @@ class EggLoggers extends BaseEggLoggers {
    */
   constructor(options) {
     super(options);
-    for(const name of this.keys()) {
+    for (const name of this.keys()) {
       this.updateTransport(name);
     }
   }
 
   updateTransport(name: string) {
     const logger = this.get(name) as EggLogger;
-    let fileLogName = relative((logger as any).options.dir, (logger as any).options.file);
+    const fileLogName = relative(
+      (logger as any).options.dir,
+      (logger as any).options.file
+    );
     logger.get('file').close();
 
-    if (existsSync((logger as any).options.file) && !lstatSync((logger as any).options.file).isSymbolicLink()) {
+    if (
+      existsSync((logger as any).options.file) &&
+      !lstatSync((logger as any).options.file).isSymbolicLink()
+    ) {
       unlinkSync((logger as any).options.file);
     }
 
@@ -72,20 +79,27 @@ class EggLoggers extends BaseEggLoggers {
       (logger as any).duplicateLoggers.delete('ERROR');
     }
 
-    logger.set('file', new WinstonTransport({
-      dir: (logger as any).options.dir,
-      fileLogName,
-      level: (logger as any).options.level,
-      transportName: name,
-    }));
+    logger.set(
+      'file',
+      new WinstonTransport({
+        dir: (logger as any).options.dir,
+        fileLogName,
+        level: (logger as any).options.level,
+        transportName: name,
+      })
+    );
   }
 }
 
-export const createLoggers = (app) => {
+export const createLoggers = app => {
   const loggerConfig = app.config.logger;
   loggerConfig.type = app.type;
 
-  if (app.config.env === 'prod' && loggerConfig.level === 'DEBUG' && !loggerConfig.allowDebugAtProd) {
+  if (
+    app.config.env === 'prod' &&
+    loggerConfig.level === 'DEBUG' &&
+    !loggerConfig.allowDebugAtProd
+  ) {
     loggerConfig.level = 'INFO';
   }
 
@@ -97,7 +111,10 @@ export const createLoggers = (app) => {
       loggers.disableConsole();
     }
   });
-  loggers.coreLogger.info('[egg:logger] init all loggers with options: %j', loggerConfig);
+  loggers.coreLogger.info(
+    '[egg:logger] init all loggers with options: %j',
+    loggerConfig
+  );
 
   return loggers;
 };

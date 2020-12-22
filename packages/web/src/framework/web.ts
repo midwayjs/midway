@@ -28,7 +28,7 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
     router: Router;
   }> = [];
   protected loggers: {
-    [name: string]: EggLogger
+    [name: string]: EggLogger;
   };
 
   public configure(
@@ -64,7 +64,7 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
         return MidwayProcessTypeEnum.APPLICATION;
       },
 
-      getLogger: (name) => {
+      getLogger: name => {
         return this.app.loggers[name] || null;
       },
     });

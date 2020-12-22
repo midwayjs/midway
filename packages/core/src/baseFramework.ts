@@ -18,7 +18,7 @@ import {
 import { ILogger, loggers, LoggerOptions } from '@midwayjs/logger';
 import { isAbsolute, join, dirname } from 'path';
 import { createMidwayLogger } from './logger';
-import { safeRequire } from "./util";
+import { safeRequire } from './util';
 
 function buildLoadDir(baseDir, dir) {
   if (!isAbsolute(dir)) {
@@ -278,7 +278,7 @@ export abstract class BaseFramework<
 
       getProjectName: () => {
         return this.getProjectName();
-      }
+      },
     };
     Object.assign(
       this.app,
