@@ -13,7 +13,7 @@ import {
   APPLICATION_KEY,
   CONFIGURATION_KEY,
   getProviderId,
-  listModule,
+  listModule, LOGGER_KEY,
 } from '@midwayjs/decorator';
 import { ILogger, loggers, LoggerOptions } from '@midwayjs/logger';
 import { isAbsolute, join, dirname } from 'path';
@@ -178,8 +178,14 @@ export abstract class BaseFramework<
       }
     }
 
+    // register app
     this.applicationContext.registerDataHandler(APPLICATION_KEY, () => {
       return this.getApplication();
+    });
+
+    // register logger
+    this.getApplicationContext().registerDataHandler(LOGGER_KEY, key => {
+      return this.getLogger(key);
     });
   }
 
@@ -343,7 +349,7 @@ export abstract class BaseFramework<
     if (name) {
       return loggers.getLogger(name);
     }
-    return this.logger;
+    return this.appLogger;
   }
 
   public createLogger(name: string, option: LoggerOptions = {}) {

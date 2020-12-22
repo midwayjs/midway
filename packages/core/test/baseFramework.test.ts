@@ -593,4 +593,28 @@ describe('/test/baseFramework.test.ts', () => {
       }
     ]);
   });
+
+  it('should create logger and match property between framework and app', async () => {
+    const framework = new MockFramework();
+    framework.configure({});
+    await framework.initialize({
+      baseDir: path.join(
+        __dirname,
+        './fixtures/base-app-logger/src'
+      ),
+    });
+    expect(framework.getApplication().getLogger()).toEqual(framework.getLogger());
+    expect(framework.getApplication().getLogger('coreLogger')).toEqual(framework.getLogger('coreLogger'));
+    expect(framework.getApplication().getLogger('logger')).toEqual(framework.getLogger('logger'));
+    expect(framework.getApplication().getLogger('otherLogger')).not.toBeNull();
+    expect(framework.getApplication().getLogger('otherLogger')).toEqual(framework.getLogger('otherLogger'));
+
+    expect(framework.getApplication().getAppDir()).toEqual(framework.getAppDir());
+    expect(framework.getApplication().getBaseDir()).toEqual(framework.getBaseDir());
+    expect(framework.getApplication().getApplicationContext()).toEqual(framework.getApplicationContext());
+    expect(framework.getApplication().getFrameworkType()).toEqual(framework.getFrameworkType());
+    expect(framework.getApplication().getProjectName()).toEqual(framework.getProjectName());
+
+    await framework.stop();
+  });
 });
