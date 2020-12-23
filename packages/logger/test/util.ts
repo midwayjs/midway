@@ -8,6 +8,7 @@ export const fileExists = (filePath) => {
 
 export const removeFileOrDir = async (p) => {
   await remove(p);
+  await sleep(500);
 }
 
 export const sleep = async (timeout = 1000) => {
