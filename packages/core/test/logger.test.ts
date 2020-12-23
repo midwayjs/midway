@@ -2,7 +2,7 @@ import { createMidwayLogger, MidwayContextLogger } from '../src';
 import { MockFramework } from './util';
 import { join } from 'path';
 
-describe('/test/baseFramework.test.ts', () => {
+describe('/test/logger.test.ts', () => {
   it('should create context logger', async () => {
     const framework = new MockFramework();
     await framework.initialize({

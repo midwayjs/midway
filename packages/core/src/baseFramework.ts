@@ -107,22 +107,12 @@ export abstract class BaseFramework<
   protected async initializeLogger(options: IMidwayBootstrapOptions) {
     if (!this.logger) {
       this.logger = createMidwayLogger(this, 'coreLogger');
-      this.logger = new Proxy(this.logger, {
-        get: (obj, prop: string) => {
-          if (['log', 'info', 'warn', 'debug', 'error'].includes(prop)) {
-            return (...args) => {
-              return obj[prop].call(obj, ...args, {
-                label: this.getFrameworkType(),
-              });
-            };
-          }
-          return obj[prop];
-        },
+    }
+    if (!this.appLogger) {
+      this.appLogger = createMidwayLogger(this, 'logger', {
+        fileLogName: 'midway-app.log',
       });
     }
-    this.appLogger = createMidwayLogger(this, 'logger', {
-      fileLogName: 'midway-app.log',
-    });
   }
 
   protected async containerInitialize(options: IMidwayBootstrapOptions) {
