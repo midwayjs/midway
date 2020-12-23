@@ -8,38 +8,14 @@ import {
 import * as assert from 'assert';
 import * as path from 'path';
 import {
-  BaseFramework,
   clearAllModule,
   clearContainerCache,
   MidwayRequestContainer,
 } from '../src';
 import * as mm from 'mm';
 import sinon = require('sinon');
-import { IMidwayApplication, IMidwayBootstrapOptions, MidwayFrameworkType } from '../src';
 import { LifeCycleTest, LifeCycleTest1, TestBinding } from "./fixtures/lifecycle";
-
-type mockApp = {} & IMidwayApplication;
-type mockAppOptions = {};
-
-class MockFramework extends BaseFramework<mockApp, mockAppOptions> {
-
-  getApplication(): mockApp {
-    return this.app;
-  }
-
-  getFrameworkType(): MidwayFrameworkType {
-    return MidwayFrameworkType.CUSTOM;
-  }
-
-  async run(): Promise<void> {
-
-  }
-
-  async applicationInitialize(options: IMidwayBootstrapOptions) {
-    this.app = {} as IMidwayApplication;
-  }
-
-}
+import { MockFramework } from './util';
 
 @Provide()
 class TestModule {

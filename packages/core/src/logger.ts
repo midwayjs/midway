@@ -31,43 +31,30 @@ export class MidwayContextLogger<T> {
   }
 
   log(...args) {
-    return this.contextLogger.log.apply(this, [
-      ...args,
-      {
-        label: this.formatContextLabel(),
-      },
-    ]);
+    if (!['debug', 'info', 'warn', 'error'].includes(args[0])) {
+      args.unshift('info');
+    }
+    this.transformLog('log', args);
   }
 
   debug(...args) {
-    return this.contextLogger.debug.apply(this, [
-      ...args,
-      {
-        label: this.formatContextLabel(),
-      },
-    ]);
+    this.transformLog('debug', args);
   }
 
   info(...args) {
-    return this.contextLogger.info.apply(this, [
-      ...args,
-      {
-        label: this.formatContextLabel(),
-      },
-    ]);
+    this.transformLog('info', args);
   }
 
   warn(...args) {
-    return this.contextLogger.warn.apply(this, [
-      ...args,
-      {
-        label: this.formatContextLabel(),
-      },
-    ]);
+    this.transformLog('warn', args);
   }
 
   error(...args) {
-    return this.contextLogger.error.apply(this, [
+    this.transformLog('error', args);
+  }
+
+  private transformLog(level, args) {
+    return this.contextLogger[level].apply(this.contextLogger, [
       ...args,
       {
         label: this.formatContextLabel(),

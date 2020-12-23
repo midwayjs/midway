@@ -41,7 +41,6 @@ export abstract class BaseFramework<
   protected applicationContext: IMidwayContainer;
   protected logger: ILogger;
   protected appLogger: ILogger;
-  protected contextLogger: ILogger;
   public configurationOptions: T;
   public app: APP;
   protected pkg: object;
@@ -123,9 +122,6 @@ export abstract class BaseFramework<
     }
     this.appLogger = createMidwayLogger(this, 'logger', {
       fileLogName: 'midway-app.log',
-    });
-    this.contextLogger = createMidwayLogger(this, 'contextLogger', {
-      disableFile: true,
     });
   }
 
