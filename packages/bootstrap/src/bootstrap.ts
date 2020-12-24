@@ -70,7 +70,7 @@ export class Bootstrap {
    */
   static configure(configuration: Partial<IMidwayBootstrapOptions>) {
     if (!this.logger && !configuration.logger) {
-      this.logger = createConsoleLogger('console');
+      this.logger = createConsoleLogger('bootstrapConsole');
       if (configuration.logger === false) {
         (this.logger as IMidwayLogger)?.disableConsole();
       }
