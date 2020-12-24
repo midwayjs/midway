@@ -7,6 +7,7 @@ import {
 import { IMidwayWebConfigurationOptions } from '../interface';
 import { Application } from 'egg';
 import { resolve } from 'path';
+import { LoggerOptions, loggers } from '@midwayjs/logger';
 
 export class SingleProcess
   implements IMidwayFramework<Application, IMidwayWebConfigurationOptions> {
@@ -73,15 +74,15 @@ export class SingleProcess
     return this.app.getAppDir();
   }
 
-  getLogger() {
-    return this.app.coreLogger as any;
+  getLogger(name?: string) {
+    return this.app.getLogger(name) || loggers.getLogger(name);
   }
 
   getProjectName(): string {
-    return 'test';
+    return this.app.getProjectName();
   }
 
-  createLogger(name: string, options) {
-    return console;
+  createLogger(name: string, options?: LoggerOptions) {
+    return this.app.createLogger(name, options);
   }
 }

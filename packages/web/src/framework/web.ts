@@ -14,7 +14,6 @@ import { IMidwayWebConfigurationOptions } from '../interface';
 import { MidwayKoaBaseFramework } from '@midwayjs/koa';
 import { EggRouter } from '@eggjs/router';
 import { Application, Context, Router, EggLogger } from 'egg';
-// import { loggers, MidwayDelegateLogger } from '@midwayjs/logger';
 
 export class MidwayWebFramework extends MidwayKoaBaseFramework<
   IMidwayWebConfigurationOptions,
@@ -65,7 +64,7 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
       },
 
       getLogger: name => {
-        return this.app.loggers[name] || null;
+        return this.getLogger(name);
       },
     });
 
@@ -130,15 +129,8 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
   }
 
   protected async initializeLogger() {
-    // if (!this.logger) {
-    //   this.logger = new MidwayDelegateLogger({
-    //     delegateLogger: this.app.coreLogger,
-    //   });
-    //   this.appLogger = new MidwayDelegateLogger({
-    //     delegateLogger: this.app.logger,
-    //   });
-    //   loggers.addLogger('coreLogger', this.logger, false);
-    // }
+    // eggjs 不需要在这里创建框架日志，所以置空
+    this.appLogger = this.app.logger;
   }
 
   async applicationInitialize(options: Partial<IMidwayBootstrapOptions>) {
@@ -190,6 +182,13 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
 
   public getFrameworkType(): MidwayFrameworkType {
     return MidwayFrameworkType.WEB;
+  }
+
+  public getLogger(name?: string) {
+    if (name) {
+      return this.app.loggers[name];
+    }
+    return this.appLogger;
   }
 
   /**
