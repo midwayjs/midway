@@ -20,7 +20,22 @@ export interface IMidwayKoaApplicationPlus {
 }
 
 export interface IMidwayKoaConfigurationOptions {
+  /**
+   * application http port
+   */
   port?: number;
+  /**
+   * https key
+   */
+  key?: string | Buffer | Array<Buffer | Object>;
+  /**
+   * https cert
+   */
+  cert?: string | Buffer | Array<string | Buffer>;
+  /**
+   * https ca
+   */
+  ca?: string | Buffer | Array<string | Buffer>;
 }
 
 export type MiddlewareParamArray = Array<Middleware<DefaultState, IMidwayKoaContext>>;
