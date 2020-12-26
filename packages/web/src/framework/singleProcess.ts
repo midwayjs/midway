@@ -7,7 +7,7 @@ import {
 import { IMidwayWebConfigurationOptions } from '../interface';
 import { Application } from 'egg';
 import { resolve } from 'path';
-import { LoggerOptions, loggers } from '@midwayjs/logger';
+import { LoggerOptions } from '@midwayjs/logger';
 
 export class SingleProcess
   implements IMidwayFramework<Application, IMidwayWebConfigurationOptions> {

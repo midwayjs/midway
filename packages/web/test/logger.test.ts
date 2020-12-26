@@ -7,9 +7,12 @@ import { lstatSync } from 'fs';
 
 describe('test/logger.test.js', () => {
 
-  afterEach(mm.restore);
+  afterEach(() => {
+    mm.restore();
+  });
 
   it('should backup egg logger file when start', async () => {
+    mm(process.env, 'MIDWAY_SERVER_ENV', '');
     mm(process.env, 'EGG_SERVER_ENV', 'local');
     mm(process.env, 'EGG_LOG', 'ERROR');
     const logsDir = join(__dirname, 'fixtures/apps/mock-dev-app/logs/ali-demo');
@@ -24,11 +27,11 @@ describe('test/logger.test.js', () => {
     app.coreLogger.error('aaaaa');
     const timeformat = [new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate()].join('-');
     // 备份文件存在
-    expect(existsSync(join(logsDir, 'common-error.log' + timeformat + '_eggjs_bak'))).toBeTruthy();
-    expect(existsSync(join(logsDir, 'egg-schedule.log' + timeformat + '_eggjs_bak'))).toBeTruthy();
-    expect(existsSync(join(logsDir, 'midway-agent.log' + timeformat + '_eggjs_bak'))).toBeTruthy();
-    expect(existsSync(join(logsDir, 'midway-core.log' + timeformat + '_eggjs_bak'))).toBeTruthy();
-    expect(existsSync(join(logsDir, 'midway-web.log' + timeformat + '_eggjs_bak'))).toBeTruthy();
+    expect(existsSync(join(logsDir, 'common-error.log.' + timeformat + '_eggjs_bak'))).toBeTruthy();
+    expect(existsSync(join(logsDir, 'egg-schedule.log.' + timeformat + '_eggjs_bak'))).toBeTruthy();
+    expect(existsSync(join(logsDir, 'midway-agent.log.' + timeformat + '_eggjs_bak'))).toBeTruthy();
+    expect(existsSync(join(logsDir, 'midway-core.log.' + timeformat + '_eggjs_bak'))).toBeTruthy();
+    expect(existsSync(join(logsDir, 'midway-web.log.' + timeformat + '_eggjs_bak'))).toBeTruthy();
 
     // 写入文件存在
     expect(existsSync(join(logsDir, 'common-error.log.' + timeformat))).toBeTruthy();
@@ -54,6 +57,7 @@ describe('test/logger.test.js', () => {
   });
 
   it('should got right default config on prod env', async () => {
+    mm(process.env, 'MIDWAY_SERVER_ENV', '');
     mm(process.env, 'EGG_SERVER_ENV', 'prod');
     mm(process.env, 'EGG_LOG', '');
     mm(process.env, 'EGG_HOME', getFilepath('apps/mock-production-app/src/config'));
@@ -75,13 +79,14 @@ describe('test/logger.test.js', () => {
 
     expect(matchContentTimes(join(process.env.EGG_HOME, 'logs/ali-demo/common-error.log'), 'just show once')).toEqual(0)
     expect(matchContentTimes(join(process.env.EGG_HOME, 'logs/ali-demo/common-error.log'), 'this is a test error')).toEqual(1)
-    expect(matchContentTimes(join(process.env.EGG_HOME, 'logs/ali-demo/midway-agent.log'), 'just show once')).toEqual(1)
-    expect(matchContentTimes(join(process.env.EGG_HOME, 'logs/ali-demo/midway-agent.log'), 'this is a test error')).toEqual(1)
+    expect(matchContentTimes(join(process.env.EGG_HOME, 'logs/ali-demo/midway-web.log'), 'just show once')).toEqual(1)
+    expect(matchContentTimes(join(process.env.EGG_HOME, 'logs/ali-demo/midway-web.log'), 'this is a test error')).toEqual(1)
 
-    await closeApp(app);
+    // await closeApp(app);
   });
 
   it('should got right level on prod env when set allowDebugAtProd to true', async () => {
+    mm(process.env, 'MIDWAY_SERVER_ENV', '');
     mm(process.env, 'EGG_SERVER_ENV', 'prod');
     mm(process.env, 'EGG_LOG', '');
     mm(process.env, 'EGG_HOME', getFilepath('apps/mock-production-app-do-not-force/src/config'));
@@ -100,6 +105,7 @@ describe('test/logger.test.js', () => {
   });
 
   it('should got right level on local env', async () => {
+    mm(process.env, 'MIDWAY_SERVER_ENV', '');
     mm(process.env, 'EGG_SERVER_ENV', 'local');
     mm(process.env, 'EGG_LOG', '');
     const app = await creatApp('apps/mock-dev-app');
@@ -113,6 +119,7 @@ describe('test/logger.test.js', () => {
   });
 
   it('should set EGG_LOG level on local env', async () => {
+    mm(process.env, 'MIDWAY_SERVER_ENV', '');
     mm(process.env, 'EGG_SERVER_ENV', 'local');
     mm(process.env, 'EGG_LOG', 'ERROR');
     const app = await creatApp('apps/mock-dev-app');
@@ -126,6 +133,7 @@ describe('test/logger.test.js', () => {
   });
 
   it('should got right config on unittest env', async () => {
+    mm(process.env, 'MIDWAY_SERVER_ENV', '');
     mm(process.env, 'EGG_SERVER_ENV', 'unittest');
     mm(process.env, 'EGG_LOG', '');
     const app = await creatApp('apps/mock-dev-app');
@@ -166,6 +174,7 @@ describe('test/logger.test.js', () => {
   });
 
   it('log buffer enable cache on non-local and non-unittest env', async () => {
+    mm(process.env, 'MIDWAY_SERVER_ENV', '');
     mm(process.env, 'EGG_LOG', 'none');
     mm(process.env, 'EGG_SERVER_ENV', 'prod');
     mm(process.env, 'EGG_HOME', getFilepath('apps/mock-production-app/src/config'));
