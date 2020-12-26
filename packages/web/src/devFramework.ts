@@ -7,12 +7,15 @@ import {
 import { IMidwayWebConfigurationOptions } from './interface';
 import { Application } from 'egg';
 import { resolve } from 'path';
+import { readFileSync } from 'fs';
+import { Server } from 'net';
 
 export class MidwayDevFramework
   implements IMidwayFramework<Application, IMidwayWebConfigurationOptions> {
   public app: Application;
   public configurationOptions: IMidwayWebConfigurationOptions;
-  isTsMode: boolean;
+  private isTsMode: boolean;
+  private server: Server;
 
   public getApplication(): Application {
     return this.app;
@@ -23,9 +26,40 @@ export class MidwayDevFramework
   }
 
   public async run(): Promise<void> {
+    // https config
+    if (this.configurationOptions.key && this.configurationOptions.cert) {
+      this.configurationOptions.key =
+        typeof this.configurationOptions.key === 'string'
+          ? readFileSync(this.configurationOptions.key as string)
+          : this.configurationOptions.key;
+
+      this.configurationOptions.cert =
+        typeof this.configurationOptions.cert === 'string'
+          ? readFileSync(this.configurationOptions.cert as string)
+          : this.configurationOptions.cert;
+
+      this.configurationOptions.ca =
+        this.configurationOptions.ca &&
+        (typeof this.configurationOptions.ca === 'string'
+          ? readFileSync(this.configurationOptions.ca)
+          : this.configurationOptions.ca);
+
+      this.server = require('https').createServer(
+        this.configurationOptions,
+        this.app.callback()
+      );
+    } else {
+      this.server = require('http').createServer(this.app.callback());
+    }
+
+    // emit `server` event in app
+    this.app.emit('server', this.server);
+    // trigger server didReady
+    this.app.messenger.emit('egg-ready');
+
     if (this.configurationOptions.port) {
       new Promise(resolve => {
-        this.app.listen(this.configurationOptions.port, () => {
+        this.server.listen(this.configurationOptions.port, () => {
           resolve();
         });
       });
@@ -63,5 +97,9 @@ export class MidwayDevFramework
 
   async stop(): Promise<void> {
     await this.app.close();
+  }
+
+  public getServer() {
+    return this.server;
   }
 }
