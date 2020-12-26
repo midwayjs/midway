@@ -60,6 +60,10 @@ class TestFrameworkUnit implements IMidwayFramework<any, IConfigurationOptions> 
     return console;
   }
 
+  getCoreLogger(): any {
+    return console;
+  }
+
   createLogger(name: string, options) {
     return console;
   }

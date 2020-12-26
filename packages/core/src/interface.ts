@@ -346,6 +346,7 @@ export interface IMidwayFramework<APP extends IMidwayApplication, T extends ICon
   getAppDir(): string;
   getBaseDir(): string;
   getLogger(): ILogger;
+  getCoreLogger(): ILogger;
   createLogger(name: string, options: LoggerOptions): ILogger;
   getProjectName(): string;
 }

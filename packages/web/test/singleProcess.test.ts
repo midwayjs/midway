@@ -16,6 +16,7 @@ describe('/test/singleProcess.test.ts', function () {
 
     const coreLogger = framework.getLogger('coreLogger');
     expect(coreLogger).toBeDefined();
+    expect(framework.getCoreLogger()).toEqual(coreLogger);
 
     const customLogger = framework.createLogger('customLogger', {
       disableFile: true,

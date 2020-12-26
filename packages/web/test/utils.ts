@@ -1,4 +1,4 @@
-import { IMidwayWebConfigurationOptions, Framework } from '../src';
+import { Framework } from '../src';
 import { join } from 'path';
 import { createApp, close } from '@midwayjs/mock';
 import { existsSync, readFileSync } from 'fs';
@@ -7,7 +7,7 @@ import { remove } from 'fs-extra';
 const logDir = join(__dirname, '../logs');
 process.env.NODE_LOG_DIR = logDir;
 
-export async function creatApp(name, options: IMidwayWebConfigurationOptions = {}) {
+export async function creatApp(name, options = {}) {
   return createApp<Framework>(join(__dirname, 'fixtures', name), options, Framework)
 }
 

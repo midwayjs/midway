@@ -338,6 +338,10 @@ export abstract class BaseFramework<
     return this.appLogger;
   }
 
+  public getCoreLogger() {
+    return this.logger;
+  }
+
   public createLogger(name: string, option: LoggerOptions = {}) {
     return createMidwayLogger(this, name, option);
   }

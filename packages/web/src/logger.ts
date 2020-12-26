@@ -1,7 +1,7 @@
 import { EggLoggers as BaseEggLoggers, EggLogger, Transport } from 'egg-logger';
 import { loggers, ILogger } from '@midwayjs/logger';
-import { relative } from 'path';
-import { existsSync, lstatSync, unlinkSync } from 'fs';
+import { relative, join } from 'path';
+import { existsSync, lstatSync, renameSync } from 'fs';
 
 /**
  * output log into file {@link Transport}。
@@ -31,6 +31,13 @@ class WinstonTransport extends Transport {
   }
 }
 
+function checkEggLoggerExists(dir, fileName, eggLoggerFiles) {
+  const file = join(dir, fileName);
+  if (existsSync(file) && !lstatSync(file).isSymbolicLink()) {
+    eggLoggerFiles.push(fileName);
+  }
+}
+
 class EggLoggers extends BaseEggLoggers {
   /**
    * @constructor
@@ -53,13 +60,24 @@ class EggLoggers extends BaseEggLoggers {
    * - customLogger
    */
   constructor(options) {
+    // 由于 egg 的日志生成不是软链，每次都会创建，无法覆盖这个行为。由此判断出是否是 egg 生成文件，如果是则备份
+    const eggLoggerFiles = [];
+    for (const name of [options.logger.appLogName, options.logger.coreLogName, options.logger.agentLogName, options.logger.errorLogName]) {
+      checkEggLoggerExists(options.logger.dir, name, eggLoggerFiles);
+    }
+    if (options.customLogger) {
+      for (const customLogger of Object.values(options.customLogger)) {
+        checkEggLoggerExists(customLogger['dir'] || options.logger.dir, customLogger['file'], eggLoggerFiles);
+      }
+    }
+
     super(options);
     for (const name of this.keys()) {
-      this.updateTransport(name);
+      this.updateTransport(name, eggLoggerFiles);
     }
   }
 
-  updateTransport(name: string) {
+  updateTransport(name: string, eggLoggerFiles: string[]) {
     const logger = this.get(name) as EggLogger;
     const fileLogName = relative(
       (logger as any).options.dir,
@@ -68,10 +86,11 @@ class EggLoggers extends BaseEggLoggers {
     logger.get('file').close();
 
     if (
-      existsSync((logger as any).options.file) &&
-      !lstatSync((logger as any).options.file).isSymbolicLink()
+      existsSync((logger as any).options.file) && eggLoggerFiles.includes(fileLogName)
     ) {
-      unlinkSync((logger as any).options.file);
+      const oldFileName = (logger as any).options.file;
+      const timeformat = [new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate()].join('-');
+      renameSync(oldFileName, oldFileName + timeformat + '_eggjs_bak');
     }
 
     // EggJS 的默认转发到错误日志是通过设置重复的 logger 实现的，在这种情况下代理会造成 midway 写入多个 error 日志，默认需要移除掉

@@ -2,11 +2,56 @@ import { creatApp, closeApp, getFilepath, sleep, matchContentTimes } from './uti
 import * as mm from 'mm';
 import { levels } from 'egg-logger';
 import { join } from 'path';
-import { existsSync, readFileSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync, ensureDir } from 'fs-extra';
+import { lstatSync } from 'fs';
 
 describe('test/logger.test.js', () => {
 
   afterEach(mm.restore);
+
+  it('should backup egg logger file when start', async () => {
+    mm(process.env, 'EGG_SERVER_ENV', 'local');
+    mm(process.env, 'EGG_LOG', 'ERROR');
+    const logsDir = join(__dirname, 'fixtures/apps/mock-dev-app/logs/ali-demo');
+    await ensureDir(logsDir);
+    // 先创建一些文件
+    writeFileSync(join(logsDir, 'common-error.log'), 'hello world');
+    writeFileSync(join(logsDir, 'egg-schedule.log'), 'hello world');
+    writeFileSync(join(logsDir, 'midway-agent.log'), 'hello world');
+    writeFileSync(join(logsDir, 'midway-core.log'), 'hello world');
+    writeFileSync(join(logsDir, 'midway-web.log'), 'hello world');
+    const app = await creatApp('apps/mock-dev-app', { cleanLogsDir: false});
+    app.coreLogger.error('aaaaa');
+    const timeformat = [new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate()].join('-');
+    // 备份文件存在
+    expect(existsSync(join(logsDir, 'common-error.log' + timeformat + '_eggjs_bak'))).toBeTruthy();
+    expect(existsSync(join(logsDir, 'egg-schedule.log' + timeformat + '_eggjs_bak'))).toBeTruthy();
+    expect(existsSync(join(logsDir, 'midway-agent.log' + timeformat + '_eggjs_bak'))).toBeTruthy();
+    expect(existsSync(join(logsDir, 'midway-core.log' + timeformat + '_eggjs_bak'))).toBeTruthy();
+    expect(existsSync(join(logsDir, 'midway-web.log' + timeformat + '_eggjs_bak'))).toBeTruthy();
+
+    // 写入文件存在
+    expect(existsSync(join(logsDir, 'common-error.log.' + timeformat))).toBeTruthy();
+    expect(existsSync(join(logsDir, 'egg-schedule.log.' + timeformat))).toBeTruthy();
+    expect(existsSync(join(logsDir, 'midway-agent.log.' + timeformat))).toBeTruthy();
+    expect(existsSync(join(logsDir, 'midway-core.log.' + timeformat))).toBeTruthy();
+    expect(existsSync(join(logsDir, 'midway-web.log.' + timeformat))).toBeTruthy();
+
+    // 符号文件存在
+    expect(existsSync(join(logsDir, 'common-error.log'))).toBeTruthy();
+    expect(existsSync(join(logsDir, 'egg-schedule.log'))).toBeTruthy();
+    expect(existsSync(join(logsDir, 'midway-agent.log'))).toBeTruthy();
+    expect(existsSync(join(logsDir, 'midway-core.log'))).toBeTruthy();
+    expect(existsSync(join(logsDir, 'midway-web.log'))).toBeTruthy();
+
+    // 是否是软链
+    expect(lstatSync(join(logsDir, 'common-error.log')).isSymbolicLink()).toBeTruthy();
+    expect(lstatSync(join(logsDir, 'egg-schedule.log')).isSymbolicLink()).toBeTruthy();
+    expect(lstatSync(join(logsDir, 'midway-agent.log')).isSymbolicLink()).toBeTruthy();
+    expect(lstatSync(join(logsDir, 'midway-core.log')).isSymbolicLink()).toBeTruthy();
+    expect(lstatSync(join(logsDir, 'midway-web.log')).isSymbolicLink()).toBeTruthy();
+    await closeApp(app);
+  });
 
   it('should got right default config on prod env', async () => {
     mm(process.env, 'EGG_SERVER_ENV', 'prod');

@@ -74,8 +74,12 @@ export class SingleProcess
     return this.app.getAppDir();
   }
 
-  getLogger(name?: string) {
-    return this.app.getLogger(name) || loggers.getLogger(name);
+  public getLogger(name?: string) {
+    return this.app.getLogger(name);
+  }
+
+  getCoreLogger() {
+    return this.app.coreLogger;
   }
 
   getProjectName(): string {
