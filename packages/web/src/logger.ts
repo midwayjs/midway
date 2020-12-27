@@ -5,6 +5,21 @@ import { existsSync, lstatSync, renameSync } from 'fs';
 import { Application } from 'egg';
 import { MidwayProcessTypeEnum } from '@midwayjs/core';
 
+const levelTransform = (level) => {
+  switch (level) {
+    case 0:
+      return 'debug';
+    case 1:
+      return 'info';
+    case 2:
+      return 'warn';
+    case 3:
+      return 'error';
+    default:
+      return 'silly';
+  }
+}
+
 /**
  * output log into file {@link Transport}。
  */
@@ -17,6 +32,7 @@ class WinstonTransport extends Transport {
       options.transportName,
       Object.assign(options, {
         disableConsole: true,
+        level: levelTransform(options.level),
       })
     );
   }
@@ -107,12 +123,12 @@ class EggLoggers extends BaseEggLoggers {
       eggLoggerFiles.includes(fileLogName)
     ) {
       const oldFileName = (logger as any).options.file;
-      const timeformat = [
+      const timeFormat = [
         new Date().getFullYear(),
         new Date().getMonth() + 1,
         new Date().getDate(),
       ].join('-');
-      renameSync(oldFileName, oldFileName + '.' + timeformat + '_eggjs_bak');
+      renameSync(oldFileName, oldFileName + '.' + timeFormat + '_eggjs_bak');
     }
 
     // EggJS 的默认转发到错误日志是通过设置重复的 logger 实现的，在这种情况下代理会造成 midway 写入多个 error 日志，默认需要移除掉

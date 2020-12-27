@@ -25,20 +25,20 @@ describe('test/logger.test.js', () => {
     writeFileSync(join(logsDir, 'midway-web.log'), 'hello world');
     const app = await creatApp('apps/mock-dev-app', { cleanLogsDir: false});
     app.coreLogger.error('aaaaa');
-    const timeformat = [new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate()].join('-');
+    const timeFormat = [new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate()].join('-');
     // 备份文件存在
-    expect(existsSync(join(logsDir, 'common-error.log.' + timeformat + '_eggjs_bak'))).toBeTruthy();
-    expect(existsSync(join(logsDir, 'egg-schedule.log.' + timeformat + '_eggjs_bak'))).toBeTruthy();
-    expect(existsSync(join(logsDir, 'midway-agent.log.' + timeformat + '_eggjs_bak'))).toBeTruthy();
-    expect(existsSync(join(logsDir, 'midway-core.log.' + timeformat + '_eggjs_bak'))).toBeTruthy();
-    expect(existsSync(join(logsDir, 'midway-web.log.' + timeformat + '_eggjs_bak'))).toBeTruthy();
+    expect(existsSync(join(logsDir, 'common-error.log.' + timeFormat + '_eggjs_bak'))).toBeTruthy();
+    expect(existsSync(join(logsDir, 'egg-schedule.log.' + timeFormat + '_eggjs_bak'))).toBeTruthy();
+    expect(existsSync(join(logsDir, 'midway-agent.log.' + timeFormat + '_eggjs_bak'))).toBeTruthy();
+    expect(existsSync(join(logsDir, 'midway-core.log.' + timeFormat + '_eggjs_bak'))).toBeTruthy();
+    expect(existsSync(join(logsDir, 'midway-web.log.' + timeFormat + '_eggjs_bak'))).toBeTruthy();
 
     // 写入文件存在
-    expect(existsSync(join(logsDir, 'common-error.log.' + timeformat))).toBeTruthy();
-    expect(existsSync(join(logsDir, 'egg-schedule.log.' + timeformat))).toBeTruthy();
-    expect(existsSync(join(logsDir, 'midway-agent.log.' + timeformat))).toBeTruthy();
-    expect(existsSync(join(logsDir, 'midway-core.log.' + timeformat))).toBeTruthy();
-    expect(existsSync(join(logsDir, 'midway-web.log.' + timeformat))).toBeTruthy();
+    expect(existsSync(join(logsDir, 'common-error.log.' + timeFormat))).toBeTruthy();
+    expect(existsSync(join(logsDir, 'egg-schedule.log.' + timeFormat))).toBeTruthy();
+    expect(existsSync(join(logsDir, 'midway-agent.log.' + timeFormat))).toBeTruthy();
+    expect(existsSync(join(logsDir, 'midway-core.log.' + timeFormat))).toBeTruthy();
+    expect(existsSync(join(logsDir, 'midway-web.log.' + timeFormat))).toBeTruthy();
 
     // 符号文件存在
     expect(existsSync(join(logsDir, 'common-error.log'))).toBeTruthy();
@@ -82,7 +82,7 @@ describe('test/logger.test.js', () => {
     expect(matchContentTimes(join(process.env.EGG_HOME, 'logs/ali-demo/midway-web.log'), 'just show once')).toEqual(1)
     expect(matchContentTimes(join(process.env.EGG_HOME, 'logs/ali-demo/midway-web.log'), 'this is a test error')).toEqual(1)
 
-    // await closeApp(app);
+    await closeApp(app);
   });
 
   it('should got right level on prod env when set allowDebugAtProd to true', async () => {
