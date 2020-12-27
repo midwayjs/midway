@@ -32,6 +32,8 @@ export type IMidwayRabbitMQConfigurationOptions = {
 
 export type IMidwayRabbitMQContext = {
   channel: amqp.Channel;
+  startTime: number;
+  queueName: string;
 } & IMidwayContext;
 
 export enum RabbitMQChannelEvent {

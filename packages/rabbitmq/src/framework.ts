@@ -21,6 +21,7 @@ import {
 } from './interface';
 import { RabbitMQServer } from './mq';
 import { ConsumeMessage } from 'amqplib';
+import { MidwayRabbitMQContextLogger } from './logger';
 
 export class MidwayRabbitMQFramework extends BaseFramework<
   IMidwayRabbitMQApplication,
@@ -100,7 +101,10 @@ export class MidwayRabbitMQFramework extends BaseFramework<
       async (data?: ConsumeMessage) => {
         const ctx = {
           channel: this.app.getChannel(),
+          startTime: Date.now(),
+          queueName: listenerOptions.queueName,
         } as IMidwayRabbitMQContext;
+        ctx.logger = new MidwayRabbitMQContextLogger(ctx, this.appLogger);
         const requestContainer = new MidwayRequestContainer(
           ctx,
           this.getApplicationContext()

@@ -37,6 +37,7 @@ import type { IRouter, IRouterHandler, RequestHandler } from 'express';
 import * as express from 'express';
 import { readFileSync } from 'fs';
 import { Server } from 'net';
+import { MidwayExpressContextLogger } from './logger';
 
 export class MidwayExpressFramework extends BaseFramework<
   IMidwayExpressApplication,
@@ -71,6 +72,8 @@ export class MidwayExpressFramework extends BaseFramework<
     });
     this.app.use((req, res, next) => {
       const ctx = { req, res } as IMidwayExpressContext;
+      ctx.logger = new MidwayExpressContextLogger(ctx, this.appLogger);
+      ctx.startTime = Date.now();
       ctx.requestContext = new MidwayRequestContainer(
         ctx,
         this.getApplicationContext()

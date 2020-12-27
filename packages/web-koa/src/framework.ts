@@ -292,12 +292,12 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<
       IMidwayKoaContext
     >() as IMidwayKoaApplication;
     this.app.use(async (ctx, next) => {
+      ctx.logger = new MidwayKoaContextLogger(ctx, this.appLogger);
+      ctx.startTime = Date.now();
       ctx.requestContext = new MidwayRequestContainer(
         ctx,
         this.getApplicationContext()
       );
-      ctx.logger = new MidwayKoaContextLogger(ctx, this.appLogger);
-      ctx.startTime = Date.now();
       await ctx.requestContext.ready();
       await next();
     });

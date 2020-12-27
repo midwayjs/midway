@@ -308,6 +308,7 @@ export interface IMidwayApplication {
 export interface IMidwayContext {
   getRequestContext?(): IMidwayContainer;
   requestContext: IMidwayContainer;
+  logger: ILogger;
 }
 
 /**
