@@ -2,32 +2,38 @@ import { format } from 'winston';
 import { inspect, types } from 'util';
 const { LEVEL, MESSAGE, SPLAT } = require('triple-beam');
 
-export const displayCommonMessage = format(info => {
-
+export const displayCommonMessage = format((info, opts: {
+  uppercaseLevel?: boolean;
+  defaultMeta?: {[key: string]: any};
+}) => {
   if (!info.pid) {
     info.pid = process.pid;
   }
 
-  if (!info.LEVEL) {
+  if (!info.LEVEL && opts.uppercaseLevel) {
     info.LEVEL = info.level.toUpperCase();
   }
 
   if (info instanceof Error) {
     // 参数只是 error 的情况
-    return {
+    return Object.assign({
       level: info.level,
       [LEVEL]: info[LEVEL] || info['level'],
       message: info.stack,
-      [MESSAGE]: info[MESSAGE] || info.message,
+      [MESSAGE]: info[MESSAGE] || info.stack,
       originError: info,
       stack: info.stack,
       pid: info.pid,
       LEVEL: info.LEVEL,
-    };
+    }, opts.defaultMeta);
   }
 
   // 处理数组，Map，Set 的 message
-  if (Array.isArray(info.message) || types.isSet(info.message) || types.isMap(info.message)) {
+  if (
+    Array.isArray(info.message) ||
+    types.isSet(info.message) ||
+    types.isMap(info.message)
+  ) {
     info.message = inspect(info.message);
   }
 
@@ -37,16 +43,16 @@ export const displayCommonMessage = format(info => {
     const err = info[SPLAT][info[SPLAT].length - 1];
     if (err instanceof Error) {
       info.message = info.message.replace(err.message, '') + err.stack;
-      info[MESSAGE] = info[MESSAGE] || (info.message + err.stack);
+      info[MESSAGE] = info[MESSAGE] || info.message + err.stack;
       info.originError = err;
       info.stack = err.stack;
     }
   }
 
-  return info;
+  return Object.assign(info, opts.defaultMeta);
 });
 
-function joinLoggerLabel(...labels) {
+function joinLoggerLabel(labelSplit, ...labels) {
   if (labels.length === 0) {
     return '';
   } else {
@@ -56,12 +62,17 @@ function joinLoggerLabel(...labels) {
     if (newLabels.length === 0) {
       return '';
     } else {
-      return `[${newLabels.join(':')}] `;
+      return `[${newLabels.join(labelSplit)}] `;
     }
   }
 }
 
-export const displayLabelText = format((info, opts) => {
-  info.labelText = joinLoggerLabel(...opts.labels, ...[].concat(info.label));
+export const displayLabels = format((info, opts) => {
+  opts.labelSplit = opts.labelSplit || ':';
+  info.labelText = joinLoggerLabel(
+    opts.labelSplit,
+    ...opts.defaultLabels,
+    ...[].concat(info.label)
+  );
   return info;
 });

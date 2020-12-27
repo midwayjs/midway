@@ -1,4 +1,14 @@
-import { MidwayDelegateLogger, MidwayBaseLogger, clearAllLoggers, createConsoleLogger, createLogger, IMidwayLogger, loggers } from '../src';
+import {
+  MidwayDelegateLogger,
+  MidwayBaseLogger,
+  clearAllLoggers,
+  createConsoleLogger,
+  createLogger,
+  IMidwayLogger,
+  loggers,
+  format,
+  displayCommonMessage
+} from '../src';
 import { join } from 'path';
 import {
   fileExists,
@@ -219,13 +229,92 @@ describe('/test/index.test.ts', () => {
     await removeFileOrDir(logsDir);
   });
 
+  it('should create logger use different options', async () => {
+    clearAllLoggers();
+    const logsDir = join(__dirname, 'logs');
+    await removeFileOrDir(logsDir);
+    const logger = createLogger<IMidwayLogger>('testLogger', {
+      dir: logsDir,
+      fileLogName: 'test-logger.log',
+      disableError: true,
+      defaultMeta: {
+        name: 'my-site',
+        group: 'my-group',
+      },
+      printFormat: info => {
+        return `${info.group}.${info.name} ${info.level} ${info.message}`
+      }
+    });
+
+    // 用户的 meta 优先级更高
+    logger.error('first message', new Error('my error'), {
+      group: 'bbb'
+    });
+    await sleep();
+    expect(fileExists(join(logsDir, 'test-logger.log'))).toBeTruthy();
+    expect(includeContent(join(logsDir, 'test-logger.log'), 'bbb.my-site error first message my error')).toBeTruthy();
+
+    const customFormatLogger = createLogger<IMidwayLogger>('testLogger1', {
+      dir: logsDir,
+      fileLogName: 'test-logger1.log',
+      disableError: true,
+      defaultMeta: {
+        name: 'my-site',
+        group: 'my-group',
+      },
+      format: format.combine(
+        displayCommonMessage(),
+        format.json()
+      ),
+    });
+
+    customFormatLogger.info(123);
+    customFormatLogger.error({
+      user: 123,
+      msg: {
+        data: 'hello',
+      },
+    });
+    await sleep();
+    expect(fileExists(join(logsDir, 'test-logger1.log'))).toBeTruthy();
+    expect(includeContent(join(logsDir, 'test-logger1.log'), '{"message":123,"level":"info"')).toBeTruthy();
+    expect(includeContent(join(logsDir, 'test-logger1.log'), '{"message":{"user":123,"msg":{"data":"hello"}},"level":"error"')).toBeTruthy();
+
+    await removeFileOrDir(logsDir);
+  });
+
+  it('should create logger with no symlink', async () => {
+    clearAllLoggers();
+    const logsDir = join(__dirname, 'logs');
+    await removeFileOrDir(logsDir);
+    const timeFormat = [new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate()].join('-');
+    const logger = createLogger<IMidwayLogger>('testLogger', {
+      dir: logsDir,
+      fileLogName: 'test-logger.log',
+      errorLogName: 'test-error.log',
+      disableErrorSymlink: true,
+      disableFileSymlink: true,
+    });
+
+    logger.error('test console error');
+
+    await sleep();
+    expect(fileExists(join(logsDir, 'test-logger.log'))).toBeFalsy();
+    expect(fileExists(join(logsDir, 'test-error.log'))).toBeFalsy();
+    expect(fileExists(join(logsDir, 'test-logger.log.' + timeFormat))).toBeTruthy();
+    expect(fileExists(join(logsDir, 'test-error.log.'+ timeFormat))).toBeTruthy();
+    expect(includeContent(join(logsDir, 'test-logger.log.' + timeFormat), `ERROR ${process.pid} test console error`)).toBeTruthy();
+    expect(includeContent(join(logsDir, 'test-logger.log.' + timeFormat), `ERROR ${process.pid} test console error`)).toBeTruthy();
+    await removeFileOrDir(logsDir);
+  });
+
   it('should create logger with label', async () => {
     clearAllLoggers();
     const logsDir = join(__dirname, 'logs');
     await removeFileOrDir(logsDir);
     const logger = createLogger<IMidwayLogger>('testLogger', {
       dir: logsDir,
-      label: 'main label',
+      defaultLabel: 'main label',
       fileLogName: 'test-logger.log',
       errorLogName: 'test-error.log',
     });

@@ -72,12 +72,21 @@ class EggLoggers extends BaseEggLoggers {
      * 3、如果之前已经是 midway 的日志，则文本为软链，egg 也不会新创文件，则不作处理
      */
     const eggLoggerFiles = [];
-    for (const name of [options.logger.appLogName, options.logger.coreLogName, options.logger.agentLogName, options.logger.errorLogName]) {
+    for (const name of [
+      options.logger.appLogName,
+      options.logger.coreLogName,
+      options.logger.agentLogName,
+      options.logger.errorLogName,
+    ]) {
       checkEggLoggerExists(options.logger.dir, name, eggLoggerFiles);
     }
     if (options.customLogger) {
       for (const customLogger of Object.values(options.customLogger)) {
-        checkEggLoggerExists(customLogger['dir'] || options.logger.dir, customLogger['file'], eggLoggerFiles);
+        checkEggLoggerExists(
+          customLogger['dir'] || options.logger.dir,
+          customLogger['file'],
+          eggLoggerFiles
+        );
       }
     }
     for (const name of this.keys()) {
@@ -94,11 +103,16 @@ class EggLoggers extends BaseEggLoggers {
     logger.get('file').close();
 
     if (
-      existsSync((logger as any).options.file) && eggLoggerFiles.includes(fileLogName)
+      existsSync((logger as any).options.file) &&
+      eggLoggerFiles.includes(fileLogName)
     ) {
       const oldFileName = (logger as any).options.file;
-      const timeformat = [new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate()].join('-');
-      renameSync(oldFileName,  oldFileName + '.' + timeformat + '_eggjs_bak');
+      const timeformat = [
+        new Date().getFullYear(),
+        new Date().getMonth() + 1,
+        new Date().getDate(),
+      ].join('-');
+      renameSync(oldFileName, oldFileName + '.' + timeformat + '_eggjs_bak');
     }
 
     // EggJS 的默认转发到错误日志是通过设置重复的 logger 实现的，在这种情况下代理会造成 midway 写入多个 error 日志，默认需要移除掉

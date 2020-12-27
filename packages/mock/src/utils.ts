@@ -27,7 +27,7 @@ function getIncludeFramework(dependencies): string {
 export type MockAppConfigurationOptions = {
   cleanLogsDir?: boolean;
   cleanTempDir?: boolean;
-}
+};
 
 export async function create<
   T extends IMidwayFramework<any, U>,

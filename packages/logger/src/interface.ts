@@ -1,3 +1,5 @@
+import * as logform from 'logform';
+
 export interface ILogger {
   log?(msg: any, ...args: any[]): void;
   info(msg: any, ...args: any[]): void;
@@ -19,13 +21,19 @@ export interface IMidwayLogger extends ILogger {
 export type LoggerLevel = 'silly' | 'debug' | 'verbose' | 'info' | 'warn' | 'error';
 
 export interface LoggerOptions {
+  format?: logform.Format;
+  level?: string;
+  defaultMeta?: object;
+  printFormat?: (info: any) => string;
   dir?: string;
   fileLogName?: string;
   errorLogName?: string;
-  label?: string;
+  defaultLabel?: string;
   disableConsole?: boolean;
   disableFile?: boolean;
   disableError?: boolean;
+  disableFileSymlink?: boolean;
+  disableErrorSymlink?: boolean;
   consoleLevel?: LoggerLevel;
   fileLevel?: LoggerLevel;
   fileMaxSize?: string;

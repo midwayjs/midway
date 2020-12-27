@@ -2,10 +2,7 @@ import { createLogger, transports, Logger, format } from 'winston';
 import * as DailyRotateFileTransport from 'winston-daily-rotate-file';
 import { DelegateLoggerOptions, LoggerLevel, LoggerOptions } from './interface';
 import { DelegateTransport, EmptyTransport } from './transport';
-import {
-  displayLabelText,
-  displayCommonMessage,
-} from './format';
+import { displayLabels, displayCommonMessage } from './format';
 
 export const EmptyLogger: Logger = createLogger().constructor as Logger;
 
@@ -16,23 +13,31 @@ export class MidwayBaseLogger extends EmptyLogger {
   consoleTransport;
   fileTransport;
   errTransport;
-  loggerOptions;
+  loggerOptions: LoggerOptions;
   labels = [];
 
   constructor(options: LoggerOptions = {}) {
-    super();
+    super(options);
     this.loggerOptions = options;
-    if (this.loggerOptions.label) {
-      this.labels.push(this.loggerOptions.label);
+    if (this.loggerOptions.defaultLabel) {
+      this.labels.push(this.loggerOptions.defaultLabel);
     }
 
-    this.configure(this.getLoggerConfigure());
+    if(this.loggerOptions.format) {
+      this.configure({
+        format: this.loggerOptions.format,
+      });
+    } else {
+      this.configure(this.getDefaultLoggerConfigure());
+    }
+
+    this.configure(Object.assign({}, this.getDefaultLoggerConfigure(), {
+      format: this.loggerOptions.format,
+    }));
 
     this.consoleTransport = new transports.Console({
-      level: options.consoleLevel || 'silly',
-      format: format.combine(
-        format.colorize({ all: true }),
-      ),
+      level: options.consoleLevel || options.level || 'silly',
+      format: format.combine(format.colorize({ all: true })),
     });
 
     if (options.disableConsole !== true) {
@@ -53,6 +58,11 @@ export class MidwayBaseLogger extends EmptyLogger {
     this.add(new EmptyTransport());
   }
 
+  // @ts-ignore
+  log(...args) {
+    super.log.apply(this, args);
+  }
+
   disableConsole() {
     this.remove(this.consoleTransport);
   }
@@ -71,9 +81,9 @@ export class MidwayBaseLogger extends EmptyLogger {
         dirname: this.loggerOptions.dir,
         filename: this.loggerOptions.fileLogName,
         datePattern: 'YYYY-MM-DD',
-        level: this.loggerOptions.fileLevel || 'silly',
+        level: this.loggerOptions.fileLevel || this.loggerOptions.level || 'silly',
         createSymlink: true,
-        symlinkName: this.loggerOptions.fileLogName,
+        symlinkName: this.loggerOptions.disableFileSymlink ? undefined: this.loggerOptions.fileLogName,
         maxSize: this.loggerOptions.fileMaxSize || '100m',
         maxFiles: this.loggerOptions.fileMaxFiles || null,
       });
@@ -93,7 +103,7 @@ export class MidwayBaseLogger extends EmptyLogger {
         datePattern: 'YYYY-MM-DD',
         level: 'error',
         createSymlink: true,
-        symlinkName: this.loggerOptions.errorLogName,
+        symlinkName: this.loggerOptions.disableErrorSymlink ? undefined: this.loggerOptions.errorLogName,
         maxSize: this.loggerOptions.errMaxSize || '100m',
         maxFiles: this.loggerOptions.errMaxFiles || null,
       });
@@ -107,20 +117,25 @@ export class MidwayBaseLogger extends EmptyLogger {
     this.fileTransport.level = level;
   }
 
-  getLoggerConfigure() {
+  getDefaultLoggerConfigure() {
     return {
       format: format.combine(
-        displayCommonMessage(),
-        displayLabelText({
-          labels: this.labels
+        displayCommonMessage({
+          uppercaseLevel: true,
+          defaultMeta: this.loggerOptions.defaultMeta,
+        }),
+        displayLabels({
+          defaultLabels: this.labels,
         }),
         format.timestamp({
           format: 'YYYY-MM-DD HH:mm:ss,SSS',
         }),
         format.splat(),
         format.printf(
-          info =>
-            `${info.timestamp} ${info.LEVEL} ${info.pid} ${info.labelText}${info.message}`
+          this.loggerOptions.printFormat
+            ? this.loggerOptions.printFormat
+            : info =>
+                `${info.timestamp} ${info.LEVEL} ${info.pid} ${info.labelText}${info.message}`
         )
       ),
     };

@@ -4,11 +4,7 @@ import {
   MidwayProcessTypeEnum,
   safelyGet,
 } from '@midwayjs/core';
-import {
-  ControllerOption,
-  CONFIG_KEY,
-  PLUGIN_KEY,
-} from '@midwayjs/decorator';
+import { ControllerOption, CONFIG_KEY, PLUGIN_KEY } from '@midwayjs/decorator';
 import { IMidwayWebConfigurationOptions } from '../interface';
 import { MidwayKoaBaseFramework } from '@midwayjs/koa';
 import { EggRouter } from '@eggjs/router';
@@ -192,8 +188,7 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
   /**
    * 这个方法 egg-cluster 不走，只有单进程模式使用 @midwayjs/bootstrap 才会执行
    */
-  protected async beforeStop(): Promise<void> {
-  }
+  protected async beforeStop(): Promise<void> {}
 
   /**
    * @param controllerOption

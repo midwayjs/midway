@@ -1,6 +1,8 @@
 import { ILogger, LoggerOptions } from './interface';
 import { MidwayLoggerContainer } from './container';
 
+export { format } from 'winston';
+export { displayCommonMessage, displayLabels } from './format';
 export * from './interface';
 export * from './transport';
 export { EmptyLogger, MidwayBaseLogger, MidwayDelegateLogger } from './logger';

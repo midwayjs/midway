@@ -13,7 +13,8 @@ import {
   APPLICATION_KEY,
   CONFIGURATION_KEY,
   getProviderId,
-  listModule, LOGGER_KEY,
+  listModule,
+  LOGGER_KEY,
 } from '@midwayjs/decorator';
 import { ILogger, loggers, LoggerOptions } from '@midwayjs/logger';
 import { isAbsolute, join, dirname } from 'path';
