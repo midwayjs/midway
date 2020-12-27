@@ -2,23 +2,12 @@ import { createLogger, transports, Logger, format } from 'winston';
 import * as DailyRotateFileTransport from 'winston-daily-rotate-file';
 import { DelegateLoggerOptions, LoggerLevel, LoggerOptions } from './interface';
 import { DelegateTransport, EmptyTransport } from './transport';
+import {
+  displayLabelText,
+  displayCommonMessage,
+} from './format';
 
 export const EmptyLogger: Logger = createLogger().constructor as Logger;
-
-function joinLoggerLabel(...labels) {
-  if (labels.length === 0) {
-    return '';
-  } else {
-    const newLabels = labels.filter(label => {
-      return !!label;
-    });
-    if (newLabels.length === 0) {
-      return '';
-    } else {
-      return `[${newLabels.join(':')}] `;
-    }
-  }
-}
 
 /**
  *  base logger with console transport and file transport
@@ -41,7 +30,9 @@ export class MidwayBaseLogger extends EmptyLogger {
 
     this.consoleTransport = new transports.Console({
       level: options.consoleLevel || 'silly',
-      format: format.combine(format.colorize({ all: true })),
+      format: format.combine(
+        format.colorize({ all: true }),
+      ),
     });
 
     if (options.disableConsole !== true) {
@@ -119,18 +110,17 @@ export class MidwayBaseLogger extends EmptyLogger {
   getLoggerConfigure() {
     return {
       format: format.combine(
-        format.errors({ stack: true }),
+        displayCommonMessage(),
+        displayLabelText({
+          labels: this.labels
+        }),
         format.timestamp({
           format: 'YYYY-MM-DD HH:mm:ss,SSS',
         }),
         format.splat(),
         format.printf(
           info =>
-            `${info.timestamp} ${info.level.toUpperCase()} ${
-              process.pid
-            } ${joinLoggerLabel(...this.labels, ...[].concat(info.label))}${
-              info.stack || info.message
-            }`
+            `${info.timestamp} ${info.LEVEL} ${info.pid} ${info.labelText}${info.message}`
         )
       ),
     };

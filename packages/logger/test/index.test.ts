@@ -130,17 +130,29 @@ describe('/test/index.test.ts', () => {
     logger.error(['b', 'c']);
     // string + number
     logger.error('plain error message', 321);
+    // format
+    logger.error('format log, %j', {a: 1});
+    // array
+    logger.info([ 'Jack', 'Joe' ]);
+    // set
+    logger.info(new Set([2, 3, 4]));
+    // map
+    logger.info(new Map([['key1', 'value1'], ['key2', 'value2']]));
+    // warn object
+    logger.warn({ name: 'Jack' });
     // error object
     logger.error(new Error('error instance'));
     // named error
     const error = new Error('named error instance');
     error.name = 'NamedError';
+    // 直接输出 error
     logger.error(error);
-    // !!!!Breaking Change
-    logger.error('text before error: ', new Error('error instance after text'));
-    logger.error('format log, %j', {a: 1});
-    logger.info([ 'Jack', 'Joe' ]);
-    logger.warn({ name: 'Jack' });
+    // 文本在前，加上 error 实例
+    logger.info([1,2,3]);
+    logger.info(new Error('info - error instance'));
+    logger.info('info - text before error', new Error('error instance after text'));
+    logger.error('error - text before error', new Error('error instance after text'));
+
 
     await finishLogger(logger);
 
@@ -152,15 +164,17 @@ describe('/test/index.test.ts', () => {
     expect(includeContent(join(logsDir, 'custom-logger.log'), 'aaa 222')).toBeTruthy();
     expect(includeContent(join(logsDir, 'custom-logger.log'), 'plain error message')).toBeTruthy();
     expect(includeContent(join(logsDir, 'custom-logger.log'), '123')).toBeTruthy();
-    expect(includeContent(join(logsDir, 'custom-logger.log'), 'b,c')).toBeTruthy();
+    expect(includeContent(join(logsDir, 'custom-logger.log'), '[ \'b\', \'c\' ]')).toBeTruthy();
+    expect(includeContent(join(logsDir, 'custom-logger.log'), 'Set(3) { 2, 3, 4 }')).toBeTruthy();
+    expect(includeContent(join(logsDir, 'custom-logger.log'), 'Map(2) { \'key1\' => \'value1\', \'key2\' => \'value2\' }')).toBeTruthy();
     expect(includeContent(join(logsDir, 'custom-logger.log'), 'plain error message')).toBeTruthy();
-    // expect(includeContent(join(logsDir, 'custom-logger.log'), 'at Object.<anonymous>')).toBeTruthy();
-    expect(includeContent(join(logsDir, 'custom-logger.log'), 'NamedError: named error instance')).toBeTruthy();
-    // !!!!Breaking Change
-    expect(includeContent(join(logsDir, 'custom-logger.log'), 'text before error')).toBeFalsy();
     expect(includeContent(join(logsDir, 'custom-logger.log'), 'format log, {"a":1}')).toBeTruthy();
-    expect(includeContent(join(logsDir, 'custom-logger.log'), 'Jack,Joe')).toBeTruthy();
+    expect(includeContent(join(logsDir, 'custom-logger.log'), '[ \'Jack\', \'Joe\' ]')).toBeTruthy();
     expect(includeContent(join(logsDir, 'custom-logger.log'), '[object Object]')).toBeTruthy();
+    // error
+    expect(includeContent(join(logsDir, 'custom-logger.log'), 'NamedError: named error instance')).toBeTruthy();
+    expect(includeContent(join(logsDir, 'custom-logger.log'), 'info - text before error')).toBeTruthy();
+    expect(includeContent(join(logsDir, 'custom-logger.log'), 'error - text before error')).toBeTruthy();
     await removeFileOrDir(logsDir);
   });
 
