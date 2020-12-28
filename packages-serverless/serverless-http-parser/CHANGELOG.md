@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.6.0](https://github.com/midwayjs/midway-faas/compare/v2.5.5...v2.6.0) (2020-12-28)
+
+
+### Bug Fixes
+
+* parse http is type ([#763](https://github.com/midwayjs/midway-faas/issues/763)) ([ee77af5](https://github.com/midwayjs/midway-faas/commit/ee77af5e32b36807ddc5d05555826b8562ec6769))
+
+
+
+
+
 # [2.4.0](https://github.com/midwayjs/midway-faas/compare/v2.3.23...v2.4.0) (2020-11-11)
 
 

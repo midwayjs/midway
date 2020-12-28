@@ -1,13 +1,13 @@
 {
   "name": "@midwayjs/logger",
-  "version": "2.5.0",
+  "version": "2.6.0",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
+    "triple-beam": "^1.3.0",
     "winston": "^3.3.3",
     "winston-daily-rotate-file": "^4.5.0",
-    "winston-transport": "^4.4.0",
-    "triple-beam": "^1.3.0"
+    "winston-transport": "^4.4.0"
   },
   "devDependencies": {
     "@midwayjs/cli": "^1.0.0",

@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.6.0](https://github.com/midwayjs/midway-faas/compare/v2.5.5...v2.6.0) (2020-12-28)
+
+
+### Bug Fixes
+
+* egg layer x forwarded for ([#768](https://github.com/midwayjs/midway-faas/issues/768)) ([568379f](https://github.com/midwayjs/midway-faas/commit/568379fca58744410b273cc6fdb40cec83700d08))
+* ouput console in serverless environment ([#759](https://github.com/midwayjs/midway-faas/issues/759)) ([bad20d7](https://github.com/midwayjs/midway-faas/commit/bad20d7950d1ed96a0448aedfac5ae8f909a7960))
+
+
+### Features
+
+* add midway logger ([#743](https://github.com/midwayjs/midway-faas/issues/743)) ([13e8cc7](https://github.com/midwayjs/midway-faas/commit/13e8cc753d994e6f9f073688e22527f75d39984a))
+
+
+
+
+
 ## [2.5.5](https://github.com/midwayjs/midway-faas/compare/v2.5.4...v2.5.5) (2020-12-15)
 
 **Note:** Version bump only for package @midwayjs/egg-layer
