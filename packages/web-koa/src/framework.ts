@@ -37,6 +37,7 @@ import {
 import * as Router from 'koa-router';
 import type { DefaultState, Middleware } from 'koa';
 import * as koa from 'koa';
+import { MidwayKoaContextLogger } from './logger';
 import { readFileSync } from 'fs';
 import { Server } from 'net';
 
@@ -291,6 +292,8 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<
       IMidwayKoaContext
     >() as IMidwayKoaApplication;
     this.app.use(async (ctx, next) => {
+      ctx.logger = new MidwayKoaContextLogger(ctx, this.appLogger);
+      ctx.startTime = Date.now();
       ctx.requestContext = new MidwayRequestContainer(
         ctx,
         this.getApplicationContext()

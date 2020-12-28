@@ -5,6 +5,7 @@ import {
   IMidwayBootstrapOptions,
   IMidwayContainer, IConfigurationOptions, MidwayFrameworkType,
 } from '@midwayjs/core';
+import { clearAllLoggers } from '@midwayjs/logger';
 
 class TestFrameworkUnit implements IMidwayFramework<any, IConfigurationOptions> {
   configurationOptions: IConfigurationOptions;
@@ -46,10 +47,35 @@ class TestFrameworkUnit implements IMidwayFramework<any, IConfigurationOptions> 
   getFrameworkType(): MidwayFrameworkType {
     return MidwayFrameworkType.CUSTOM;
   }
+
+  getAppDir(): string {
+    return __dirname;
+  }
+
+  getBaseDir(): string {
+    return __dirname;
+  }
+
+  getLogger(): any {
+    return console;
+  }
+
+  getCoreLogger(): any {
+    return console;
+  }
+
+  createLogger(name: string, options) {
+    return console;
+  }
+
+  getProjectName(): string {
+    return 'test';
+  }
 }
 
 describe('/test/index.test.ts', () => {
-  it('create case', async () => {
+  it('create bootstrap case', async () => {
+    clearAllLoggers();
     const bootstrap = Bootstrap.configure({
       baseDir: __dirname,
     });
@@ -69,5 +95,16 @@ describe('/test/index.test.ts', () => {
     // Bootstrap.configure({})
     //   .load(new TestFrameworkUnit().configure({port: 7001}))
     //   .run();
+  });
+
+  it('should bootstrap with no console', async () => {
+    clearAllLoggers();
+    Bootstrap.logger = null;
+    const bootstrap = Bootstrap.configure({
+      baseDir: __dirname,
+      logger: false
+    });
+    expect(bootstrap);
+    await bootstrap.run();
   });
 });

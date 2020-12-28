@@ -7,7 +7,9 @@ import {
   Query,
   Body,
   HttpCode,
-  Redirect, SetHeader,
+  Redirect,
+  SetHeader,
+  Logger,
 } from '@midwayjs/decorator';
 import { UserService } from '../service/user';
 import { IMidwayExpressContext, IMidwayExpressRequest } from '../../../../../src';
@@ -21,6 +23,12 @@ export class APIController {
 
   @Inject()
   req: IMidwayExpressRequest;
+
+  @Logger()
+  logger;
+
+  @Inject('logger')
+  ctxLogger;
 
   @Inject()
   userService: UserService;
@@ -42,6 +50,9 @@ export class APIController {
   @Get('/', { middleware: [] })
   @HttpCode(201)
   async home(@Query('name') name: string) {
+    this.ctx.logger.info('my home router');
+    this.ctxLogger.info('another ctx logger');
+    this.logger.warn('my home warn router')
     return 'hello world,' + name;
   }
 

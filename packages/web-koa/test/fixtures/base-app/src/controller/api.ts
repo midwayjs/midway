@@ -7,7 +7,9 @@ import {
   Query,
   Body,
   HttpCode,
-  Redirect, SetHeader,
+  Redirect,
+  SetHeader,
+  Logger,
 } from '@midwayjs/decorator';
 import { UserService } from '../service/user';
 import { IMidwayKoaContext } from '../../../../../src';
@@ -20,6 +22,9 @@ export class APIController {
 
   @Inject()
   userService: UserService;
+
+  @Logger()
+  logger;
 
   @Get('/set_header')
   @SetHeader('bbb', 'aaa')
@@ -38,6 +43,8 @@ export class APIController {
   @Get('/', { middleware: [] })
   @HttpCode(201)
   async home(@Query() name: string, @Query() age: number) {
+    this.ctx.logger.info('my home router');
+    this.logger.warn('my home warn router')
     return 'hello world,' + name + age;
   }
 

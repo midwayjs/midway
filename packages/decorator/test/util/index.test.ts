@@ -35,6 +35,7 @@ describe('/test/util/index.test.ts', () => {
     expect(isProxy(new Proxy({}, {}))).toBeTruthy();
     const startTime = Date.now();
     await sleep(500);
-    expect(Date.now() - startTime).toBeGreaterThanOrEqual(500);
+    // 这里设置 490 是因为毫秒数有一定的偏差
+    expect(Date.now() - startTime).toBeGreaterThanOrEqual(490);
   });
 });

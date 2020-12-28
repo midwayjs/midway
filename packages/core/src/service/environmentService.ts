@@ -1,4 +1,5 @@
 import { IEnvironmentService } from '../interface';
+import { isDevelopmentEnvironment } from '../util';
 
 export class MidwayEnvironmentService implements IEnvironmentService {
   environment: string;
@@ -13,5 +14,9 @@ export class MidwayEnvironmentService implements IEnvironmentService {
 
   setCurrentEnvironment(environment: string) {
     this.environment = environment;
+  }
+
+  isDevelopmentEnvironment() {
+    return isDevelopmentEnvironment(this.environment);
   }
 }

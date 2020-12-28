@@ -2,13 +2,15 @@ import { findLernaRoot, parseNormalDir } from './utils';
 import * as extend from 'extend2';
 import { EggAppInfo } from 'egg';
 import { BootstrapStarter } from '@midwayjs/bootstrap';
-import { MidwayWebFramework } from './framework';
+import { MidwayWebFramework } from './framework/web';
 import { safelyGet, safeRequire } from '@midwayjs/core';
 import { join } from 'path';
 import { existsSync, readFileSync } from 'fs';
+import { createLoggers } from './logger';
 
 const EGG_LOADER = Symbol.for('egg#loader');
 const EGG_PATH = Symbol.for('egg#eggPath');
+const LOGGERS = Symbol('EggApplication#loggers');
 
 let customFramework = null;
 function getFramework() {
@@ -250,6 +252,16 @@ export const createEggApplication = () => {
     get [EGG_PATH]() {
       return __dirname;
     }
+
+    get loggers() {
+      // @ts-ignore
+      if (!this[LOGGERS]) {
+        // @ts-ignore
+        this[LOGGERS] = createLoggers(this);
+      }
+      // @ts-ignore
+      return this[LOGGERS];
+    }
   }
 
   return EggApplication as any;
@@ -269,6 +281,16 @@ export const createEggAgent = () => {
 
     get [EGG_PATH]() {
       return __dirname;
+    }
+
+    get loggers() {
+      // @ts-ignore
+      if (!this[LOGGERS]) {
+        // @ts-ignore
+        this[LOGGERS] = createLoggers(this);
+      }
+      // @ts-ignore
+      return this[LOGGERS];
     }
   }
 

@@ -15,7 +15,7 @@ describe('/test/new.test.ts', () => {
   });
 
   it('should test create another app', async () => {
-    const app = await createApp<KoaFramework>(join(__dirname, 'fixtures/base-app-new'), {}, KoaFramework);
+    const app = await createApp<KoaFramework>(join(__dirname, 'fixtures/base-app-new'), { cleanLogsDir: true }, KoaFramework);
     const result = await createHttpRequest(app).get('/').query({ name: 'harry' });
     expect(result.status).toBe(200);
     expect(result.text).toBe('hello world, harry');

@@ -73,6 +73,18 @@ describe('/test/feature.test.ts', () => {
         expect(result.status).toBe(204);
       });
     });
+
+    describe('test aspect in controller', () => {
+      it('should catch error in aspect', async () => {
+        const result = await createHttpRequest(app).get('/user/catchThrow');
+        expect(result.status).toBe(500);
+      });
+
+      it('should catch error in aspect with validate', async () => {
+        const result = await createHttpRequest(app).post('/user/catchThrowWithValidate');
+        expect(result.status).toBe(500);
+      });
+    });
   });
 
 });

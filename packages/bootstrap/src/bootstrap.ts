@@ -1,5 +1,6 @@
 import { IMidwayFramework, IMidwayBootstrapOptions } from '@midwayjs/core';
 import { join } from 'path';
+import { createConsoleLogger, ILogger, IMidwayLogger } from '@midwayjs/logger';
 
 export function isTypeScriptEnvironment() {
   const TS_MODE_PROCESS_FLAG: string = process.env.MIDWAY_TS_MODE;
@@ -61,12 +62,20 @@ export class BootstrapStarter {
 
 export class Bootstrap {
   static starter: BootstrapStarter;
+  static logger: ILogger;
 
   /**
    * set global configuration for midway
    * @param configuration
    */
   static configure(configuration: Partial<IMidwayBootstrapOptions>) {
+    if (!this.logger && !configuration.logger) {
+      this.logger = createConsoleLogger('bootstrapConsole');
+      if (configuration.logger === false) {
+        (this.logger as IMidwayLogger)?.disableConsole();
+      }
+      configuration.logger = this.logger;
+    }
     this.getStarter().configure(configuration);
     return this;
   }
@@ -103,10 +112,10 @@ export class Bootstrap {
     return this.getStarter()
       .run()
       .then(() => {
-        console.log('[midway] current app started');
+        this.logger.info('[midway:bootstrap] current app started');
       })
       .catch(err => {
-        console.error(err);
+        this.logger.error(err);
         process.exit(1);
       });
   }
@@ -120,13 +129,13 @@ export class Bootstrap {
    * @param signal
    */
   static async onSignal(signal) {
-    console.log('[midway] receive signal %s, closing', signal);
+    this.logger.info('[midway:bootstrap] receive signal %s, closing', signal);
     try {
       await this.stop();
-      console.log('[midway] close done, exiting with code:0');
+      this.logger.info('[midway:bootstrap] close done, exiting with code:0');
       process.exit(0);
     } catch (err) {
-      console.error('[midway] close with error: ', err);
+      this.logger.error('[midway:bootstrap] close with error: ', err);
       process.exit(1);
     }
   }
@@ -136,6 +145,6 @@ export class Bootstrap {
    * @param code
    */
   static onExit(code) {
-    console.log('[midway] exit with code:%s', code);
+    this.logger.info('[midway:bootstrap] exit with code:%s', code);
   }
 }

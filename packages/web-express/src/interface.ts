@@ -15,8 +15,9 @@ export type IMidwayExpressResponse = Response;
  */
 export type IMidwayExpressNext = NextFunction;
 export type IMidwayExpressContext = IMidwayContext & {
-  req: Request,
-  res: Response,
+  req: Request;
+  res: Response;
+  startTime: number;
 }
 export type IMidwayExpressApplication = IMidwayApplication & Application & {
   generateController(

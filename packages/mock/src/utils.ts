@@ -9,6 +9,7 @@ import { isAbsolute, join } from 'path';
 import { remove } from 'fs-extra';
 import { clearAllModule } from '@midwayjs/decorator';
 import { existsSync } from 'fs';
+import { clearAllLoggers } from '@midwayjs/logger';
 
 process.setMaxListeners(0);
 
@@ -23,17 +24,23 @@ function getIncludeFramework(dependencies): string {
   }
 }
 
+export type MockAppConfigurationOptions = {
+  cleanLogsDir?: boolean;
+  cleanTempDir?: boolean;
+};
+
 export async function create<
   T extends IMidwayFramework<any, U>,
   U = T['configurationOptions']
 >(
   baseDir: string = process.cwd(),
-  options?: U,
+  options?: U & MockAppConfigurationOptions,
   customFrameworkName?: string | MidwayFrameworkType | object
 ): Promise<T> {
   process.env.MIDWAY_TS_MODE = 'true';
   clearAllModule();
   clearContainerCache();
+  clearAllLoggers();
   let framework: T = null;
   let DefaultFramework = null;
 
@@ -58,8 +65,12 @@ export async function create<
     framework = new DefaultFramework();
     if (framework.getFrameworkType() === MidwayFrameworkType.WEB) {
       // clean first
-      await remove(join(baseDir, 'logs'));
-      await remove(join(baseDir, 'run'));
+      if (options.cleanLogsDir !== false) {
+        await remove(join(baseDir, 'logs'));
+      }
+      if (options.cleanTempDir !== false) {
+        await remove(join(baseDir, 'run'));
+      }
       // add egg-mock plugin for @midwayjs/web test, provide mock method
       options = Object.assign(options || {}, {
         plugins: {
@@ -107,7 +118,7 @@ export async function createApp<
   Y = ReturnType<T['getApplication']>
 >(
   baseDir: string = process.cwd(),
-  options?: U,
+  options?: U & MockAppConfigurationOptions,
   customFrameworkName?: string | MidwayFrameworkType | object
 ): Promise<Y> {
   const framework: T = await create<T, U>(

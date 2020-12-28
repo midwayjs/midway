@@ -4,13 +4,14 @@ import {
   IMidwayFramework,
   MidwayFrameworkType,
 } from '@midwayjs/core';
-import { IMidwayWebConfigurationOptions } from './interface';
+import { IMidwayWebConfigurationOptions } from '../interface';
 import { Application } from 'egg';
 import { resolve } from 'path';
 import { readFileSync } from 'fs';
 import { Server } from 'net';
+import { LoggerOptions } from '@midwayjs/logger';
 
-export class MidwayDevFramework
+export class SingleProcess
   implements IMidwayFramework<Application, IMidwayWebConfigurationOptions> {
   public app: Application;
   public configurationOptions: IMidwayWebConfigurationOptions;
@@ -66,7 +67,7 @@ export class MidwayDevFramework
     }
   }
 
-  configure(options: IMidwayWebConfigurationOptions): MidwayDevFramework {
+  configure(options: IMidwayWebConfigurationOptions): SingleProcess {
     this.configurationOptions = options;
     return this;
   }
@@ -88,7 +89,7 @@ export class MidwayDevFramework
     this.app = await start({
       baseDir: options.appDir,
       ignoreWarning: true,
-      framework: resolve(__dirname, 'application'),
+      framework: resolve(__dirname, '../application'),
       plugins: this.configurationOptions.plugins,
       mode: 'single',
       isTsMode: this.isTsMode || true,
@@ -97,6 +98,30 @@ export class MidwayDevFramework
 
   async stop(): Promise<void> {
     await this.app.close();
+  }
+
+  getBaseDir(): string {
+    return this.app.getBaseDir();
+  }
+
+  getAppDir(): string {
+    return this.app.getAppDir();
+  }
+
+  public getLogger(name?: string) {
+    return this.app.getLogger(name);
+  }
+
+  getCoreLogger() {
+    return this.app.coreLogger;
+  }
+
+  getProjectName(): string {
+    return this.app.getProjectName();
+  }
+
+  createLogger(name: string, options?: LoggerOptions) {
+    return this.app.createLogger(name, options);
   }
 
   public getServer() {

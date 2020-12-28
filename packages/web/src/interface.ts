@@ -6,6 +6,7 @@ import {
 } from '@midwayjs/core';
 import { IMidwayKoaConfigurationOptions, IMidwayKoaContext, IMidwayKoaNext } from '@midwayjs/koa';
 import { DefaultState, Middleware } from 'koa';
+import { LoggerOptions } from '@midwayjs/logger';
 
 declare module 'egg' {
   interface EggAppInfo {
@@ -23,6 +24,8 @@ declare module 'egg' {
     getConfig(key?: string): any;
     generateController?(controllerMapping: string);
     generateMiddleware?(middlewareId: string): Promise<Middleware<DefaultState, IMidwayKoaContext>>;
+    createLogger(name: string, options: LoggerOptions);
+    getProjectName();
   }
 
   interface Context {

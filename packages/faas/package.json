@@ -7,6 +7,7 @@
     "@midwayjs/core": "^2.5.5",
     "@midwayjs/decorator": "^2.4.7",
     "@midwayjs/faas-typings": "^2.4.0",
+    "@midwayjs/logger": "^2.5.0",
     "@midwayjs/simple-lock": "^1.1.4",
     "koa-compose": "^4.1.0"
   },

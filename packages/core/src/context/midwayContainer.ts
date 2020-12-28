@@ -82,8 +82,8 @@ export class MidwayContainer
   private configurationMap: Map<string, IContainerConfiguration> = new Map();
   // 特殊处理，按照 main 加载
   private likeMainConfiguration: IContainerConfiguration[] = [];
-  public configService: IConfigService;
-  public environmentService: IEnvironmentService;
+  protected configService: IConfigService;
+  protected environmentService: IEnvironmentService;
   protected aspectMappingMap: WeakMap<object, Map<string, any[]>>;
   private aspectModuleSet: Set<any>;
 

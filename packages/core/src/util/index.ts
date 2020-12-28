@@ -1,38 +1,9 @@
 import { dirname, resolve, sep, extname } from 'path';
 import { readFileSync } from 'fs';
 
-/**
- * get all method names from obj or it's prototype
- * @param obj
- */
-export function getPrototypeNames(obj) {
-  const enumerableOwnKeys = Object.keys(obj);
-  const ownKeysOnObjectPrototype = Object.getOwnPropertyNames(
-    Object.getPrototypeOf({})
-  );
-  const result = [];
-  // methods on obj itself should be always included
-  for (const k of enumerableOwnKeys) {
-    if (typeof obj[k] === 'function') {
-      result.push(k);
-    }
-  }
-  // searching prototype chain for methods
-  let proto = obj;
-  do {
-    proto = Object.getPrototypeOf(proto);
-    const allOwnKeysOnPrototype = Object.getOwnPropertyNames(proto);
-    // get methods from es6 class
-    for (const k of allOwnKeysOnPrototype) {
-      if (typeof obj[k] === 'function' && k !== 'constructor') {
-        result.push(k);
-      }
-    }
-  } while (proto && proto !== Object.prototype);
-
-  // leave out those methods on Object's prototype
-  return result.filter(k => ownKeysOnObjectPrototype.indexOf(k) === -1);
-}
+export const isDevelopmentEnvironment = env => {
+  return ['local', 'test', 'unittest'].includes(env);
+};
 
 export const safeRequire = (p, enabledCache = true) => {
   if (p.startsWith(`.${sep}`) || p.startsWith(`..${sep}`)) {
@@ -108,4 +79,8 @@ export function isPathEqual(one: string, two: string) {
   }
   const ext = extname(one);
   return one.replace(ext, '') === two;
+}
+
+export function getUserHome() {
+  return process.env[process.platform === 'win32' ? 'USERPROFILE' : 'HOME'];
 }
