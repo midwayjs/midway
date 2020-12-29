@@ -1,19 +1,29 @@
 import { EggLoggers as BaseEggLoggers, EggLogger, Transport } from 'egg-logger';
 import { loggers, ILogger } from '@midwayjs/logger';
 import { relative, join } from 'path';
-import { existsSync, lstatSync, renameSync } from 'fs';
+import { existsSync, lstatSync, readFileSync, renameSync, unlinkSync } from 'fs';
 import { Application } from 'egg';
 import { MidwayProcessTypeEnum } from '@midwayjs/core';
 
 const levelTransform = (level) => {
   switch (level) {
+    case Infinity:      // egg logger 的 none 是这个等级
+      return null;
     case 0:
+    case 'DEBUG':
+    case 'debug':
       return 'debug';
     case 1:
+    case 'INFO':
+    case 'info':
       return 'info';
     case 2:
+    case 'WARN':
+    case 'warn':
       return 'warn';
     case 3:
+    case 'ERROR':
+    case 'error':
       return 'error';
     default:
       return 'silly';
@@ -45,14 +55,29 @@ class WinstonTransport extends Transport {
    */
   log(level, args, meta) {
     const msg = (super.log(level, args, meta) as unknown) as string;
-    this.transportLogger.log(level.toLowerCase(), msg.replace('\n', ''));
+    const winstonLevel = levelTransform(level);
+    if (winstonLevel) {
+      this.transportLogger.log(winstonLevel, msg.replace('\n', ''));
+    }
   }
+}
+
+
+function cleanEmptyFile(p: string) {
+  let content = readFileSync(p, {
+    encoding: 'utf8'
+  });
+  return content === null || content === undefined || content === '';
 }
 
 function checkEggLoggerExists(dir, fileName, eggLoggerFiles) {
   const file = join(dir, fileName);
   if (existsSync(file) && !lstatSync(file).isSymbolicLink()) {
-    eggLoggerFiles.push(fileName);
+    if (cleanEmptyFile(file)) {
+      unlinkSync(file);
+    } else {
+      eggLoggerFiles.push(fileName);
+    }
   }
 }
 
@@ -60,7 +85,6 @@ class EggLoggers extends BaseEggLoggers {
   app: Application;
   /**
    * @constructor
-   * @param  {Object} config - egg app config
    * - logger
    *   - {String} env - egg app runtime env string, detail please see `app.config.env`
    *   - {String} type - current process type, `application` or `agent`
@@ -77,6 +101,8 @@ class EggLoggers extends BaseEggLoggers {
    *   - {String} eol - end of line char
    *   - {String} [concentrateError = duplicate] - whether write error logger to common-error.log, `duplicate` / `redirect` / `ignore`
    * - customLogger
+   * @param options
+   * @param app
    */
   constructor(options, app: Application) {
     super(options);
