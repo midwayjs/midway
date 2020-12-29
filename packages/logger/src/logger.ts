@@ -58,11 +58,6 @@ export class MidwayBaseLogger extends EmptyLogger {
     this.add(new EmptyTransport());
   }
 
-  // @ts-ignore
-  log(...args) {
-    super.log.apply(this, args);
-  }
-
   disableConsole() {
     this.remove(this.consoleTransport);
   }
