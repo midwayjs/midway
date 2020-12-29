@@ -1,6 +1,6 @@
 import { EggLoggers as BaseEggLoggers, EggLogger, Transport } from 'egg-logger';
 import { loggers, ILogger } from '@midwayjs/logger';
-import { relative, join, isAbsolute } from 'path';
+import { relative, join, isAbsolute, dirname, basename } from 'path';
 import { existsSync, lstatSync, readFileSync, renameSync, unlinkSync } from 'fs';
 import { Application } from 'egg';
 import { MidwayProcessTypeEnum } from '@midwayjs/core';
@@ -42,6 +42,7 @@ class WinstonTransport extends Transport {
       options.transportName,
       Object.assign(options, {
         disableConsole: true,
+        disableError: true,   // EggJS 的默认转发到错误日志是通过设置重复的 logger 实现的，在这种情况下代理会造成 midway 写入多个 error 日志，默认需要移除掉
         level: levelTransform(options.level),
       })
     );
@@ -78,6 +79,9 @@ function checkEggLoggerExists(dir, fileName, eggLoggerFiles) {
       unlinkSync(file);
     } else {
       eggLoggerFiles.push(fileName);
+      if (!isAbsolute(fileName)) {
+        eggLoggerFiles.push(join(dir, fileName));
+      }
     }
   }
 }
@@ -139,28 +143,31 @@ class EggLoggers extends BaseEggLoggers {
 
   updateTransport(name: string, eggLoggerFiles: string[]) {
     const logger = this.get(name) as EggLogger;
-    const fileLogName = relative(
-      (logger as any).options.dir,
-      (logger as any).options.file
-    );
+    const eggLogFile = (logger as any).options.file;
+    let fileLogName;
+    let logDir;
+    if (isAbsolute(eggLogFile)) {
+      logDir = dirname(eggLogFile);
+      fileLogName = basename(eggLogFile);
+    } else {
+      logDir = (logger as any).options.dir;
+      fileLogName = relative(logDir, eggLogFile);
+    }
+
+    // 关闭日志
     logger.get('file').close();
 
+    // 备份老 egg 日志
     if (
-      existsSync((logger as any).options.file) &&
-      eggLoggerFiles.includes(fileLogName)
+      existsSync(eggLogFile) &&
+      eggLoggerFiles.includes(eggLogFile)
     ) {
-      const oldFileName = (logger as any).options.file;
       const timeFormat = [
         new Date().getFullYear(),
         new Date().getMonth() + 1,
         new Date().getDate(),
       ].join('-');
-      renameSync(oldFileName, oldFileName + '.' + timeFormat + '_eggjs_bak');
-    }
-
-    // EggJS 的默认转发到错误日志是通过设置重复的 logger 实现的，在这种情况下代理会造成 midway 写入多个 error 日志，默认需要移除掉
-    if ((logger as any).duplicateLoggers.has('ERROR')) {
-      (logger as any).duplicateLoggers.delete('ERROR');
+      renameSync(eggLogFile, eggLogFile + '.' + timeFormat + '_eggjs_bak');
     }
 
     if (this.app.getProcessType() === MidwayProcessTypeEnum.AGENT) {
@@ -173,7 +180,7 @@ class EggLoggers extends BaseEggLoggers {
     logger.set(
       'file',
       new WinstonTransport({
-        dir: (logger as any).options.dir,
+        dir: logDir,
         fileLogName,
         level: (logger as any).options.level,
         transportName: name,
