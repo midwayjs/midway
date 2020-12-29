@@ -18,6 +18,7 @@ export class MidwayBaseLogger extends EmptyLogger {
 
   constructor(options: LoggerOptions = {}) {
     super(options);
+    this.exitOnError = false;
     this.loggerOptions = options;
     if (this.loggerOptions.defaultLabel) {
       this.labels.push(this.loggerOptions.defaultLabel);
