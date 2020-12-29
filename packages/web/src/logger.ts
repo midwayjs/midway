@@ -1,6 +1,6 @@
 import { EggLoggers as BaseEggLoggers, EggLogger, Transport } from 'egg-logger';
 import { loggers, ILogger } from '@midwayjs/logger';
-import { relative, join } from 'path';
+import { relative, join, isAbsolute } from 'path';
 import { existsSync, lstatSync, readFileSync, renameSync, unlinkSync } from 'fs';
 import { Application } from 'egg';
 import { MidwayProcessTypeEnum } from '@midwayjs/core';
@@ -63,7 +63,7 @@ class WinstonTransport extends Transport {
 }
 
 
-function cleanEmptyFile(p: string) {
+function isEmptyFile(p: string) {
   let content = readFileSync(p, {
     encoding: 'utf8'
   });
@@ -71,9 +71,10 @@ function cleanEmptyFile(p: string) {
 }
 
 function checkEggLoggerExists(dir, fileName, eggLoggerFiles) {
-  const file = join(dir, fileName);
+  const file = isAbsolute(fileName) ? fileName : join(dir, fileName);
   if (existsSync(file) && !lstatSync(file).isSymbolicLink()) {
-    if (cleanEmptyFile(file)) {
+    // 如果是空文件，则直接删了，否则加入备份队列
+    if (isEmptyFile(file)) {
       unlinkSync(file);
     } else {
       eggLoggerFiles.push(fileName);

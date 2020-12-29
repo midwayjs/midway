@@ -75,14 +75,19 @@ describe('test/logger.test.js', () => {
     app.logger.info('just show once');
     app.logger.error('this is a test error');
 
+    const middlewareLogger = app.getLogger('middlewareLogger');
+    middlewareLogger.info('xxxxx');
+
     await sleep();
 
-    expect(matchContentTimes(join(process.env.EGG_HOME, 'logs/ali-demo/common-error.log'), 'just show once')).toEqual(0)
-    expect(matchContentTimes(join(process.env.EGG_HOME, 'logs/ali-demo/common-error.log'), 'this is a test error')).toEqual(1)
-    expect(matchContentTimes(join(process.env.EGG_HOME, 'logs/ali-demo/midway-web.log'), 'just show once')).toEqual(1)
-    expect(matchContentTimes(join(process.env.EGG_HOME, 'logs/ali-demo/midway-web.log'), 'this is a test error')).toEqual(1)
+    expect(matchContentTimes(join(app.getAppDir(), 'logs/middleware.log'), 'xxxxx')).toEqual(1);
 
-    await closeApp(app);
+    expect(matchContentTimes(join(process.env.EGG_HOME, 'logs/ali-demo/common-error.log'), 'just show once')).toEqual(0);
+    expect(matchContentTimes(join(process.env.EGG_HOME, 'logs/ali-demo/common-error.log'), 'this is a test error')).toEqual(1);
+    expect(matchContentTimes(join(process.env.EGG_HOME, 'logs/ali-demo/midway-web.log'), 'just show once')).toEqual(1);
+    expect(matchContentTimes(join(process.env.EGG_HOME, 'logs/ali-demo/midway-web.log'), 'this is a test error')).toEqual(1);
+
+    // await closeApp(app);
   });
 
   it('should got right level on prod env when set allowDebugAtProd to true', async () => {
