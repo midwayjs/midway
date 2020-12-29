@@ -77,8 +77,8 @@ export class MidwayBaseLogger extends EmptyLogger {
         filename: this.loggerOptions.fileLogName,
         datePattern: 'YYYY-MM-DD',
         level: this.loggerOptions.fileLevel || this.loggerOptions.level || 'silly',
-        createSymlink: true,
-        symlinkName: this.loggerOptions.disableFileSymlink ? undefined: this.loggerOptions.fileLogName,
+        createSymlink: this.loggerOptions.disableFileSymlink !== true,
+        symlinkName: this.loggerOptions.fileLogName,
         maxSize: this.loggerOptions.fileMaxSize || '100m',
         maxFiles: this.loggerOptions.fileMaxFiles || null,
       });
@@ -97,8 +97,8 @@ export class MidwayBaseLogger extends EmptyLogger {
         filename: this.loggerOptions.errorLogName,
         datePattern: 'YYYY-MM-DD',
         level: 'error',
-        createSymlink: true,
-        symlinkName: this.loggerOptions.disableErrorSymlink ? undefined: this.loggerOptions.errorLogName,
+        createSymlink: this.loggerOptions.disableErrorSymlink !== true,
+        symlinkName: this.loggerOptions.errorLogName,
         maxSize: this.loggerOptions.errMaxSize || '100m',
         maxFiles: this.loggerOptions.errMaxFiles || null,
       });
