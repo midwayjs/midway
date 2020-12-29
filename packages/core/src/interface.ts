@@ -359,7 +359,7 @@ export enum MidwayFrameworkType {
   WEB_EXPRESS = '@midwayjs/express',
   FAAS = '@midwayjs/faas',
   MS_HSF = '',
-  MS_GRPC = '',
+  MS_GRPC = '@midwayjs/grpc',
   MS_RABBITMQ = '@midwayjs/rabbitmq',
   WS_IO = '@midwayjs/socketio',
   WSS = '',
