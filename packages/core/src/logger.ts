@@ -15,8 +15,6 @@ export const createMidwayLogger = (
     dir: isDevelopmentEnv
       ? join(framework.getAppDir(), 'logs', framework.getProjectName())
       : join(getUserHome(), 'logs', framework.getProjectName()),
-    disableFile: isDevelopmentEnv,
-    disableError: isDevelopmentEnv,
     level: isDevelopmentEnv ? 'info': 'warn',
   };
   return createLogger(name, Object.assign({}, loggerOptions, options));

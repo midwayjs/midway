@@ -192,6 +192,14 @@ describe('/test/index.test.ts', () => {
     await removeFileOrDir(join(process.cwd(), 'common-error.log'));
     const consoleLogger = createConsoleLogger('consoleLogger');
     consoleLogger.error('test console error');
+    const err = new Error('custom error');
+    err.name = 'MyCustomError';
+    consoleLogger.error(err);
+    consoleLogger.error('before:', err);
+    consoleLogger.info('启动耗时 %d ms', 111);
+    consoleLogger.info('%j', {a: 1});
+    consoleLogger.debug('1', '2', '3');
+    consoleLogger.info('plain error message', 321);
 
     expect(fileExists(join(process.cwd(), 'common-error.log'))).toBeFalsy();
   });

@@ -37,7 +37,7 @@ export interface LoggerOptions {
   consoleLevel?: LoggerLevel;
   fileLevel?: LoggerLevel;
   fileMaxSize?: string;
-  fileMaxFiles?: string;
+  fileMaxFiles?: number | string;
   errMaxSize?: string;
   errMaxFiles?: string;
 }
