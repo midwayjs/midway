@@ -80,8 +80,8 @@ export class MidwayBaseLogger extends EmptyLogger {
         level: this.loggerOptions.fileLevel || this.loggerOptions.level || 'silly',
         createSymlink: this.loggerOptions.disableFileSymlink !== true,
         symlinkName: this.loggerOptions.fileLogName,
-        maxSize: this.loggerOptions.fileMaxSize || '100m',
-        maxFiles: this.loggerOptions.fileMaxFiles || null,
+        maxSize: this.loggerOptions.fileMaxSize || '200m',
+        maxFiles: this.loggerOptions.fileMaxFiles || '31d',
       });
     }
     this.add(this.fileTransport);
@@ -100,8 +100,8 @@ export class MidwayBaseLogger extends EmptyLogger {
         level: 'error',
         createSymlink: this.loggerOptions.disableErrorSymlink !== true,
         symlinkName: this.loggerOptions.errorLogName,
-        maxSize: this.loggerOptions.errMaxSize || '100m',
-        maxFiles: this.loggerOptions.errMaxFiles || null,
+        maxSize: this.loggerOptions.errMaxSize || '200m',
+        maxFiles: this.loggerOptions.errMaxFiles || '31d',
       });
     }
     this.add(this.errTransport);
