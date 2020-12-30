@@ -181,6 +181,7 @@ class EggLoggers extends BaseEggLoggers {
       'file',
       new WinstonTransport({
         dir: logDir,
+        file: eggLogFile,     // 原来 egg 的 file
         fileLogName,
         level: (logger as any).options.level,
         transportName: name,
