@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.6.2](https://github.com/midwayjs/midway-faas/compare/v2.6.1...v2.6.2) (2020-12-30)
+
+**Note:** Version bump only for package @midwayjs/runtime-mock
+
+
+
+
+
 ## [2.6.1](https://github.com/midwayjs/midway-faas/compare/v2.6.0...v2.6.1) (2020-12-29)
 
 **Note:** Version bump only for package @midwayjs/runtime-mock

@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/express-layer",
-  "version": "2.6.1",
+  "version": "2.6.2",
   "main": "index.js",
   "scripts": {
     "test": "midway-bin test --forceExit",
@@ -11,12 +11,12 @@
   },
   "devDependencies": {
     "@midwayjs/cli": "^1.0.0",
-    "@midwayjs/runtime-engine": "^2.6.1",
-    "@midwayjs/runtime-mock": "^2.6.1",
-    "@midwayjs/serverless-fc-starter": "^2.6.1",
-    "@midwayjs/serverless-fc-trigger": "^2.6.1",
-    "@midwayjs/serverless-scf-starter": "^2.6.1",
-    "@midwayjs/serverless-scf-trigger": "^2.6.1",
+    "@midwayjs/runtime-engine": "^2.6.2",
+    "@midwayjs/runtime-mock": "^2.6.2",
+    "@midwayjs/serverless-fc-starter": "^2.6.2",
+    "@midwayjs/serverless-fc-trigger": "^2.6.2",
+    "@midwayjs/serverless-scf-starter": "^2.6.2",
+    "@midwayjs/serverless-scf-trigger": "^2.6.2",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "supertest": "^4.0.2"
