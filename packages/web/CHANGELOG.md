@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.6.3](https://github.com/midwayjs/midway/compare/v2.6.2...v2.6.3) (2020-12-30)
+
+
+### Bug Fixes
+
+* add more args for egg transport ([#782](https://github.com/midwayjs/midway/issues/782)) ([adbbfc9](https://github.com/midwayjs/midway/commit/adbbfc9f98c0e9d5617e37232113e7f1e2f92a15))
+
+
+
+
+
 ## [2.6.2](https://github.com/midwayjs/midway/compare/v2.6.1...v2.6.2) (2020-12-30)
 
 
