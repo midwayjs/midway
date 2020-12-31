@@ -4,6 +4,7 @@ import {
   IMidwayApplication,
   IMidwayFramework,
   MidwayFrameworkType,
+  safeRequire,
 } from '@midwayjs/core';
 import { isAbsolute, join } from 'path';
 import { remove } from 'fs-extra';
@@ -41,6 +42,8 @@ export async function create<
   clearAllModule();
   clearContainerCache();
   clearAllLoggers();
+  safeRequire(`${baseDir}/src/interface`);
+
   let framework: T = null;
   let DefaultFramework = null;
 
