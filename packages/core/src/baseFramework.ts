@@ -265,7 +265,7 @@ export abstract class BaseFramework<
         return this.getCoreLogger();
       },
 
-      getLogger: (name: string) => {
+      getLogger: (name?: string) => {
         return this.getLogger(name);
       },
 
