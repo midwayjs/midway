@@ -28,5 +28,5 @@ export const createConsoleLogger = (
 };
 
 export const clearAllLoggers = () => {
-  loggers.close();
+  loggers.reset();
 };

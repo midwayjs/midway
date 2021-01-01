@@ -64,4 +64,9 @@ export class MidwayLoggerContainer extends Map<string, ILogger> {
   updateContainerOption(options: LoggerOptions) {
     this.containerOptions = Object.assign(this.containerOptions, options);
   }
+
+  reset() {
+    this.close();
+    this.containerOptions = {};
+  }
 }
