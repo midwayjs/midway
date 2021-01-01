@@ -7,6 +7,7 @@ import {
 } from './interface';
 import {
   BaseFramework,
+  createMidwayLogger,
   getClassMetadata,
   IMiddleware,
   IMidwayBootstrapOptions,
@@ -22,7 +23,7 @@ import { FUNC_KEY, LOGGER_KEY, PLUGIN_KEY } from '@midwayjs/decorator';
 import SimpleLock from '@midwayjs/simple-lock';
 import * as compose from 'koa-compose';
 import { MidwayHooks } from './hooks';
-import { loggers } from '@midwayjs/logger';
+import { LoggerOptions, loggers } from '@midwayjs/logger';
 
 const LOCK_KEY = '_faas_starter_start_key';
 
@@ -328,6 +329,14 @@ export class MidwayFaaSFramework extends BaseFramework<
   }
 
   async applicationInitialize(options: IMidwayBootstrapOptions) {}
+
+  public createLogger(name: string, option: LoggerOptions = {}) {
+    // 覆盖基类的创建日志对象，函数场景下的日志，即使自定义，也只启用控制台输出
+    return createMidwayLogger(this, name, Object.assign(option, {
+      disableFile: true,
+      disableError: true,
+    }));
+  }
 }
 
 function covertId(cls, method) {
