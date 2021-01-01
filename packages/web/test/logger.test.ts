@@ -4,6 +4,7 @@ import { levels } from 'egg-logger';
 import { join } from 'path';
 import { existsSync, readFileSync, writeFileSync, ensureDir } from 'fs-extra';
 import { lstatSync } from 'fs';
+import { getCurrentDateString } from '../src/utils';
 
 describe('test/logger.test.js', () => {
 
@@ -25,7 +26,7 @@ describe('test/logger.test.js', () => {
     writeFileSync(join(logsDir, 'midway-web.log'), 'hello world');
     const app = await creatApp('apps/mock-dev-app', { cleanLogsDir: false});
     app.coreLogger.error('aaaaa');
-    const timeFormat = [new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate()].join('-');
+    const timeFormat = getCurrentDateString();
     // 备份文件存在
     expect(existsSync(join(logsDir, 'common-error.log.' + timeFormat + '_eggjs_bak'))).toBeTruthy();
     expect(existsSync(join(logsDir, 'egg-schedule.log.' + timeFormat + '_eggjs_bak'))).toBeTruthy();

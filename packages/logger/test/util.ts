@@ -70,3 +70,7 @@ export const finishLogger = async (logger) => {
     logger.close();
   })
 }
+
+export const getCurrentDateString = () => {
+  return new Date().toISOString().split('T')[0];
+};

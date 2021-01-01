@@ -4,6 +4,7 @@ import { relative, join, isAbsolute, dirname, basename } from 'path';
 import { existsSync, lstatSync, readFileSync, renameSync, unlinkSync } from 'fs';
 import { Application } from 'egg';
 import { MidwayProcessTypeEnum } from '@midwayjs/core';
+import { getCurrentDateString } from './utils';
 
 const levelTransform = (level) => {
   switch (level) {
@@ -162,11 +163,7 @@ class EggLoggers extends BaseEggLoggers {
       existsSync(eggLogFile) &&
       eggLoggerFiles.includes(eggLogFile)
     ) {
-      const timeFormat = [
-        new Date().getFullYear(),
-        new Date().getMonth() + 1,
-        new Date().getDate(),
-      ].join('-');
+      const timeFormat = getCurrentDateString();
       renameSync(eggLogFile, eggLogFile + '.' + timeFormat + '_eggjs_bak');
     }
 
