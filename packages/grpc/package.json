@@ -25,8 +25,7 @@
   "devDependencies": {
     "@midwayjs/cli": "^1.0.0",
     "@midwayjs/mock": "^2.5.5",
-    "@types/google-protobuf": "^3.7.4",
-    "google-protobuf": "^3.14.0",
+    "@grpc/proto-loader": "^0.5.5",
     "fs-extra": "^8.0.1"
   },
   "dependencies": {

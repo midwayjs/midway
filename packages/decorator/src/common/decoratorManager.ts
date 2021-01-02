@@ -715,8 +715,13 @@ export function saveModule(decoratorNameKey: decoratorKey, target) {
  * list module from decorator key
  * @param decoratorNameKey
  */
-export function listModule(decoratorNameKey: decoratorKey): any[] {
-  return manager.listModule(decoratorNameKey);
+export function listModule(decoratorNameKey: decoratorKey, filter?:(module) => boolean): any[] {
+  const modules = manager.listModule(decoratorNameKey);
+  if (filter)  {
+    return modules.filter(filter);
+  } else {
+    return modules;
+  }
 }
 
 /**

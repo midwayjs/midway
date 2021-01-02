@@ -1,8 +1,7 @@
 import { Server, ServerCredentials, loadPackageDefinition, setLogger } from '@grpc/grpc-js';
-
+import * as grpc from '@grpc/grpc-js';
 import {
   BaseFramework,
-  extractExpressLikeValue,
   getClassMetadata,
   getPropertyDataFromClass,
   getPropertyMetadata,
@@ -14,18 +13,7 @@ import {
 } from '@midwayjs/core';
 
 import {
-  CONTROLLER_KEY,
-  ControllerOption,
-  PRIORITY_KEY,
-  RouterOption,
-  RouterParamValue,
-  WEB_RESPONSE_CONTENT_TYPE,
-  WEB_RESPONSE_HEADER,
-  WEB_RESPONSE_HTTP_CODE,
-  WEB_RESPONSE_KEY,
-  WEB_RESPONSE_REDIRECT,
-  WEB_ROUTER_KEY,
-  WEB_ROUTER_PARAM_KEY,
+  MS_PRODUCER_KEY, MSProducerType
 } from '@midwayjs/decorator';
 import {
   IMidwayGRPCApplication, IMidwayGRPConfigurationOptions,
@@ -56,20 +44,22 @@ export class MidwayGRPCFramework extends BaseFramework<
 
     this.app = server as IMidwayGRPCApplication;
     this.server = server;
-    this.app.use((req, res, next) => {
-      const ctx = { req, res } as IMidwayExpressContext;
-      ctx.logger = new MidwayGRPCContextLogger(ctx, this.appLogger);
-      ctx.startTime = Date.now();
-      ctx.requestContext = new MidwayRequestContainer(
-        ctx,
-        this.getApplicationContext()
-      );
-      (req as any).requestContext = ctx.requestContext;
-      ctx.requestContext.registerObject('req', req);
-      ctx.requestContext.registerObject('res', res);
-      ctx.requestContext.ready();
-      next();
-    });
+    // this.app.use((req, res, next) => {
+    //   const ctx = { req, res } as IMidwayExpressContext;
+    //   ctx.logger = new MidwayGRPCContextLogger(ctx, this.appLogger);
+    //   ctx.startTime = Date.now();
+    //   ctx.requestContext = new MidwayRequestContainer(
+    //     ctx,
+    //     this.getApplicationContext()
+    //   );
+    //   (req as any).requestContext = ctx.requestContext;
+    //   ctx.requestContext.registerObject('req', req);
+    //   ctx.requestContext.registerObject('res', res);
+    //   ctx.requestContext.ready();
+    //   next();
+    // });
+
+    await this.loadService();
   }
 
   protected async afterContainerReady(
@@ -79,7 +69,26 @@ export class MidwayGRPCFramework extends BaseFramework<
   }
 
   protected async loadService() {
-    this.server.addService()
+    const gRPCModules = listModule(MS_PRODUCER_KEY, (module) => {
+      const type = getClassMetadata(MS_PRODUCER_KEY, module);
+      return type === MSProducerType.GRPC;
+    });
+
+    console.log(gRPCModules);
+
+    if (this.configurationOptions.packageDefinition) {
+      const definitions = grpc.loadPackageDefinition(this.configurationOptions.packageDefinition);
+      const protoModule = definitions[this.configurationOptions.package];
+
+      for (const protoService in protoModule) {
+        // TODO get service from container
+        // TODO find method
+        // binding service to server
+        this.server.addService(protoService['service'], {sayHello: sayHello});
+      }
+    }
+
+
   }
 
   public async run(): Promise<void> {

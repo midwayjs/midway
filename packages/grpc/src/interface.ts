@@ -15,4 +15,11 @@ export interface IMidwayGRPConfigurationOptions {
    * proto path
    */
   protoPath?: string;
+
+  /**
+   * protobuf package name
+   */
+  package: string;
+
+  packageDefinition?: any;
 }
