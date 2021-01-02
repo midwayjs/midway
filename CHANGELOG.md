@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.6.4](https://github.com/midwayjs/midway/compare/v2.6.3...v2.6.4) (2021-01-02)
+
+
+### Bug Fixes
+
+* definition fix for getLogger and getCoreLogger ([#783](https://github.com/midwayjs/midway/issues/783)) ([264b481](https://github.com/midwayjs/midway/commit/264b4819f8f96dccabd1e5cd6ad2c7b3b8277136))
+
+
+
+
+
 ## [2.6.3](https://github.com/midwayjs/midway/compare/v2.6.2...v2.6.3) (2020-12-30)
 
 
