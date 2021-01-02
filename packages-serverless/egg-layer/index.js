@@ -13,7 +13,7 @@ module.exports = engine => {
     async beforeRuntimeStart(runtime) {
       let framework = '';
       const baseDir = runtime.getPropertyParser().getEntryDir();
-      // 从 packagejson 中获取 egg 框架
+      // 从 package.json 中获取 egg 框架
       const packageJSON = require(resolve(baseDir, 'package.json'));
       framework = packageJSON.egg && packageJSON.egg.framework;
       const localFrameWorkPath = resolve(__dirname, 'framework');
