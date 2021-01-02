@@ -1,9 +1,26 @@
 import { EggLoggers as BaseEggLoggers, EggLogger, Transport } from 'egg-logger';
-import { loggers, ILogger } from '@midwayjs/logger';
+import { loggers, MidwayBaseLogger, transports } from '@midwayjs/logger';
 import { relative, join, isAbsolute, dirname, basename } from 'path';
 import { existsSync, lstatSync, readFileSync, renameSync, unlinkSync } from 'fs';
 import { Application } from 'egg';
-import { MidwayProcessTypeEnum } from '@midwayjs/core';
+import { MidwayFrameworkType, MidwayProcessTypeEnum } from '@midwayjs/core';
+import { getCurrentDateString } from './utils';
+
+export class WebConsoleTransport extends transports.Console {
+
+  app: Application;
+  constructor(app: Application) {
+    super();
+    this.app = app;
+  }
+
+  log(info, callback) {
+    if (this.app.getFrameworkType() === MidwayFrameworkType.WEB) {
+      return;
+    }
+    return super.log(info, callback);
+  }
+}
 
 const levelTransform = (level) => {
   switch (level) {
@@ -34,7 +51,7 @@ const levelTransform = (level) => {
  * output log into file {@link Transport}。
  */
 class WinstonTransport extends Transport {
-  transportLogger: ILogger;
+  transportLogger: MidwayBaseLogger;
 
   constructor(options) {
     super(options);
@@ -45,7 +62,10 @@ class WinstonTransport extends Transport {
         disableError: true,   // EggJS 的默认转发到错误日志是通过设置重复的 logger 实现的，在这种情况下代理会造成 midway 写入多个 error 日志，默认需要移除掉
         level: levelTransform(options.level),
       })
-    );
+    ) as MidwayBaseLogger;
+    // 由于现在的日志是个大池子，其他框架也会和 egg 复用日志对象，在这种场景下，如果和 egg 复用（socket）Logger，那么池子里存在的，可能只有 fileLogger，不会输出控制台日志。
+    // 解决的方法是，添加一个 transport，其中判断如果 app 是非 egg 的时候则输出
+    this.transportLogger.add(new WebConsoleTransport(options.app));
   }
 
   /**
@@ -162,11 +182,7 @@ class EggLoggers extends BaseEggLoggers {
       existsSync(eggLogFile) &&
       eggLoggerFiles.includes(eggLogFile)
     ) {
-      const timeFormat = [
-        new Date().getFullYear(),
-        new Date().getMonth() + 1,
-        new Date().getDate(),
-      ].join('-');
+      const timeFormat = getCurrentDateString();
       renameSync(eggLogFile, eggLogFile + '.' + timeFormat + '_eggjs_bak');
     }
 
@@ -185,6 +201,7 @@ class EggLoggers extends BaseEggLoggers {
         fileLogName,
         level: (logger as any).options.level,
         transportName: name,
+        app: this.app,
       })
     );
   }

@@ -17,7 +17,8 @@ import {
   sleep,
   createChildProcess,
   finishLogger,
-  matchContentTimes
+  matchContentTimes,
+  getCurrentDateString
 } from './util';
 import { EggLogger } from 'egg-logger';
 import { readFileSync } from "fs";
@@ -295,7 +296,7 @@ describe('/test/index.test.ts', () => {
     clearAllLoggers();
     const logsDir = join(__dirname, 'logs');
     await removeFileOrDir(logsDir);
-    const timeFormat = [new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate()].join('-');
+    const timeFormat = getCurrentDateString();
     const logger = createLogger<IMidwayLogger>('testLogger', {
       dir: logsDir,
       fileLogName: 'test-logger.log',
@@ -367,6 +368,24 @@ describe('/test/index.test.ts', () => {
     expect(originLogger).toBe(consoleLogger);
     loggers.close('consoleLogger');
     expect(loggers.size).toBe(0);
+  });
+
+  it('should create container with options and add logger', async () => {
+    clearAllLoggers();
+    loggers.updateContainerOption({
+      level: 'warn',
+      disableFile: true,
+      disableError: true,
+    })
+    const customLogger: any = loggers.createLogger('customLogger', {
+      level: 'info',
+      dir: __dirname,
+      fileLogName: 'custom.log',
+    });
+    customLogger.info('11111');
+    customLogger.warn('222');
+    await sleep();
+    expect(!fileExists(join(__dirname, 'custom.log'))).toBeTruthy();
   });
 
   it('should create logger update level', async () => {

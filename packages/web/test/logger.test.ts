@@ -2,8 +2,9 @@ import { creatApp, closeApp, getFilepath, sleep, matchContentTimes } from './uti
 import * as mm from 'mm';
 import { levels } from 'egg-logger';
 import { join } from 'path';
-import { existsSync, readFileSync, writeFileSync, ensureDir } from 'fs-extra';
+import { existsSync, readFileSync, writeFileSync, ensureDir, remove } from 'fs-extra';
 import { lstatSync } from 'fs';
+import { getCurrentDateString } from '../src/utils';
 
 describe('test/logger.test.js', () => {
 
@@ -25,7 +26,7 @@ describe('test/logger.test.js', () => {
     writeFileSync(join(logsDir, 'midway-web.log'), 'hello world');
     const app = await creatApp('apps/mock-dev-app', { cleanLogsDir: false});
     app.coreLogger.error('aaaaa');
-    const timeFormat = [new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate()].join('-');
+    const timeFormat = getCurrentDateString();
     // 备份文件存在
     expect(existsSync(join(logsDir, 'common-error.log.' + timeFormat + '_eggjs_bak'))).toBeTruthy();
     expect(existsSync(join(logsDir, 'egg-schedule.log.' + timeFormat + '_eggjs_bak'))).toBeTruthy();
@@ -61,6 +62,7 @@ describe('test/logger.test.js', () => {
     mm(process.env, 'EGG_SERVER_ENV', 'prod');
     mm(process.env, 'EGG_LOG', '');
     mm(process.env, 'EGG_HOME', getFilepath('apps/mock-production-app/src/config'));
+    await remove(join(getFilepath('apps/mock-production-app/src/config'), 'logs'));
     const app = await creatApp('apps/mock-production-app');
 
     // 生产环境默认 _level = info
@@ -96,6 +98,7 @@ describe('test/logger.test.js', () => {
     mm(process.env, 'EGG_SERVER_ENV', 'prod');
     mm(process.env, 'EGG_LOG', '');
     mm(process.env, 'EGG_HOME', getFilepath('apps/mock-production-app-do-not-force/src/config'));
+    await remove(join(getFilepath('apps/mock-production-app-do-not-force/src/config'), 'logs'));
     const app = await creatApp('apps/mock-production-app-do-not-force');
 
     expect(app.config.logger.allowDebugAtProd).toBeTruthy();
@@ -114,6 +117,7 @@ describe('test/logger.test.js', () => {
     mm(process.env, 'MIDWAY_SERVER_ENV', '');
     mm(process.env, 'EGG_SERVER_ENV', 'local');
     mm(process.env, 'EGG_LOG', '');
+    await remove(join(getFilepath('apps/mock-dev-app'), 'logs'));
     const app = await creatApp('apps/mock-dev-app');
 
     expect((app.logger.get('file') as any).options.level === levels.INFO);
@@ -128,6 +132,7 @@ describe('test/logger.test.js', () => {
     mm(process.env, 'MIDWAY_SERVER_ENV', '');
     mm(process.env, 'EGG_SERVER_ENV', 'local');
     mm(process.env, 'EGG_LOG', 'ERROR');
+    await remove(join(getFilepath('apps/mock-dev-app'), 'logs'));
     const app = await creatApp('apps/mock-dev-app');
 
     expect((app.logger.get('file') as any).options.level === levels.INFO);
@@ -142,6 +147,7 @@ describe('test/logger.test.js', () => {
     mm(process.env, 'MIDWAY_SERVER_ENV', '');
     mm(process.env, 'EGG_SERVER_ENV', 'unittest');
     mm(process.env, 'EGG_LOG', '');
+    await remove(join(getFilepath('apps/mock-dev-app'), 'logs'));
     const app = await creatApp('apps/mock-dev-app');
 
     expect((app.logger.get('file') as any).options.level === levels.INFO);
@@ -154,6 +160,7 @@ describe('test/logger.test.js', () => {
 
   it('should set log.consoleLevel to env.EGG_LOG', async () => {
     mm(process.env, 'EGG_LOG', 'ERROR');
+    await remove(join(getFilepath('apps/mock-dev-app'), 'logs'));
     const app = await creatApp('apps/mock-dev-app');
 
     expect((app.logger.get('file') as any).options.level === levels.INFO);
@@ -163,6 +170,7 @@ describe('test/logger.test.js', () => {
 
   xit('log buffer disable cache on local and unittest env', async () => {
     mm(process.env, 'EGG_LOG', 'NONE');
+    await remove(join(getFilepath('apps/nobuffer-logger'), 'logs'));
     const app = await creatApp('apps/nobuffer-logger');
 
     expect(app.config.logger.disableConsoleAfterReady === false);

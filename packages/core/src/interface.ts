@@ -300,7 +300,8 @@ export interface IMidwayApplication {
   getProcessType(): MidwayProcessTypeEnum;
   getApplicationContext(): IMidwayContainer;
   getConfig(key?: string): any;
-  getLogger(key?: string): ILogger;
+  getLogger(name?: string): ILogger;
+  getCoreLogger(): ILogger;
   createLogger(name: string, options: LoggerOptions): ILogger;
   getProjectName(): string;
 }
@@ -346,7 +347,7 @@ export interface IMidwayFramework<APP extends IMidwayApplication, T extends ICon
   getFrameworkType(): MidwayFrameworkType;
   getAppDir(): string;
   getBaseDir(): string;
-  getLogger(): ILogger;
+  getLogger(name?: string): ILogger;
   getCoreLogger(): ILogger;
   createLogger(name: string, options: LoggerOptions): ILogger;
   getProjectName(): string;

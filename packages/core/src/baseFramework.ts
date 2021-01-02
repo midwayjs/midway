@@ -261,7 +261,11 @@ export abstract class BaseFramework<
         return MidwayProcessTypeEnum.APPLICATION;
       },
 
-      getLogger: (name: string) => {
+      getCoreLogger: () => {
+        return this.getCoreLogger();
+      },
+
+      getLogger: (name?: string) => {
         return this.getLogger(name);
       },
 

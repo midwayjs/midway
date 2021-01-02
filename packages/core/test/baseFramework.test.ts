@@ -581,6 +581,8 @@ describe('/test/baseFramework.test.ts', () => {
     });
     expect(framework.getApplication().getLogger()).toEqual(framework.getLogger());
     expect(framework.getApplication().getLogger('coreLogger')).toEqual(framework.getLogger('coreLogger'));
+    expect(framework.getApplication().getCoreLogger()).toEqual(framework.getLogger('coreLogger'));
+    expect(framework.getApplication().getCoreLogger()).toEqual(framework.getCoreLogger());
     expect(framework.getApplication().getLogger('logger')).toEqual(framework.getLogger('logger'));
     expect(framework.getApplication().getLogger('otherLogger')).not.toBeNull();
     expect(framework.getApplication().getLogger('otherLogger')).toEqual(framework.getLogger('otherLogger'));
