@@ -74,17 +74,6 @@ export async function create<
   if (DefaultFramework) {
     framework = new DefaultFramework();
     if (framework.getFrameworkType() === MidwayFrameworkType.WEB) {
-      if (isTestEnvironment()) {
-        options.cleanLogsDir = true;
-        options.cleanTempDir = true;
-      }
-      // clean first
-      if (options.cleanLogsDir) {
-        await remove(join(baseDir, 'logs'));
-      }
-      if (options.cleanTempDir) {
-        await remove(join(baseDir, 'run'));
-      }
       // add egg-mock plugin for @midwayjs/web test, provide mock method
       options = Object.assign(options || {}, {
         plugins: {
@@ -144,9 +133,11 @@ export async function createApp<
 }
 
 export async function close(
-  app: IMidwayApplication | IMidwayFramework<any, any>
+  app: IMidwayApplication | IMidwayFramework<any, any>,
+  options?: any
 ) {
   if (!app) return;
+  options = options || {};
   let newApp: IMidwayApplication;
   if ((app as IMidwayFramework<any, any>).getApplication) {
     newApp = (app as IMidwayFramework<any, any>).getApplication();
@@ -159,8 +150,15 @@ export async function close(
     appMap.delete(starter);
   }
 
-  if (MidwayFrameworkType.WEB === newApp.getFrameworkType()) {
-    await remove(join(newApp.getAppDir(), 'logs'));
-    await remove(join(newApp.getAppDir(), 'run'));
+  if (isTestEnvironment()) {
+    if (MidwayFrameworkType.WEB === newApp.getFrameworkType()) {
+      // clean first
+      if (options.cleanLogsDir !== false) {
+        await remove(join(newApp.getAppDir(), 'logs'));
+      }
+      if (options.cleanTempDir !== false) {
+        await remove(join(newApp.getAppDir(), 'run'));
+      }
+    }
   }
 }
