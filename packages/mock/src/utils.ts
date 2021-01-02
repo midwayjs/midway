@@ -14,6 +14,13 @@ import { clearAllLoggers } from '@midwayjs/logger';
 
 process.setMaxListeners(0);
 
+function isTestEnvironment() {
+  const testEnv = ['test', 'unittest'];
+  return testEnv.includes(process.env.MIDWAY_SERVER_ENV)
+    || testEnv.includes(process.env.EGG_SERVER_ENV)
+    || testEnv.includes(process.env.NODE_ENV);
+}
+
 const appMap = new WeakMap();
 
 function getIncludeFramework(dependencies): string {
@@ -67,11 +74,15 @@ export async function create<
   if (DefaultFramework) {
     framework = new DefaultFramework();
     if (framework.getFrameworkType() === MidwayFrameworkType.WEB) {
+      if (isTestEnvironment()) {
+        options.cleanLogsDir = true;
+        options.cleanTempDir = true;
+      }
       // clean first
-      if (options.cleanLogsDir !== false) {
+      if (options.cleanLogsDir) {
         await remove(join(baseDir, 'logs'));
       }
-      if (options.cleanTempDir !== false) {
+      if (options.cleanTempDir) {
         await remove(join(baseDir, 'run'));
       }
       // add egg-mock plugin for @midwayjs/web test, provide mock method
