@@ -1,11 +1,7 @@
-import { Server, ServerCredentials, loadPackageDefinition, setLogger } from '@grpc/grpc-js';
-import * as grpc from '@grpc/grpc-js';
+import { Server, ServerCredentials, setLogger, loadPackageDefinition } from '@grpc/grpc-js';
 import {
   BaseFramework,
   getClassMetadata,
-  getPropertyDataFromClass,
-  getPropertyMetadata,
-  getProviderId,
   IMidwayBootstrapOptions,
   listModule,
   MidwayFrameworkType,
@@ -13,12 +9,16 @@ import {
 } from '@midwayjs/core';
 
 import {
-  MS_PRODUCER_KEY, MSProducerType
+  getProviderId,
+  MS_PRODUCER_KEY,
+  MSProducerType
 } from '@midwayjs/decorator';
 import {
   IMidwayGRPCApplication, IMidwayGRPConfigurationOptions,
 } from './interface';
 import { MidwayGRPCContextLogger } from './logger';
+import { pascalCase } from 'pascal-case';
+import * as camelCase from 'camelcase';
 
 export class MidwayGRPCFramework extends BaseFramework<
   IMidwayGRPCApplication,
@@ -44,22 +44,6 @@ export class MidwayGRPCFramework extends BaseFramework<
 
     this.app = server as IMidwayGRPCApplication;
     this.server = server;
-    // this.app.use((req, res, next) => {
-    //   const ctx = { req, res } as IMidwayExpressContext;
-    //   ctx.logger = new MidwayGRPCContextLogger(ctx, this.appLogger);
-    //   ctx.startTime = Date.now();
-    //   ctx.requestContext = new MidwayRequestContainer(
-    //     ctx,
-    //     this.getApplicationContext()
-    //   );
-    //   (req as any).requestContext = ctx.requestContext;
-    //   ctx.requestContext.registerObject('req', req);
-    //   ctx.requestContext.registerObject('res', res);
-    //   ctx.requestContext.ready();
-    //   next();
-    // });
-
-    await this.loadService();
   }
 
   protected async afterContainerReady(
@@ -74,31 +58,52 @@ export class MidwayGRPCFramework extends BaseFramework<
       return type === MSProducerType.GRPC;
     });
 
-    console.log(gRPCModules);
-
     if (this.configurationOptions.packageDefinition) {
-      const definitions = grpc.loadPackageDefinition(this.configurationOptions.packageDefinition);
+      const definitions = loadPackageDefinition(this.configurationOptions.packageDefinition);
       const protoModule = definitions[this.configurationOptions.package];
 
-      for (const protoService in protoModule) {
-        // TODO get service from container
-        // TODO find method
-        // binding service to server
-        this.server.addService(protoService['service'], {sayHello: sayHello});
+      for (const module of gRPCModules) {
+        const provideId = getProviderId(module);
+        let serviceName = pascalCase(provideId);
+
+        if (protoModule[serviceName]) {
+          const protoService = protoModule[serviceName]['service'];
+          const serviceInstance = {};
+          for (const method in protoService) {
+            serviceInstance[method] = async (...args) => {
+              const ctx = {} as any;
+              ctx.requestContext = new MidwayRequestContainer(ctx, this.getApplicationContext());
+              ctx.logger = new MidwayGRPCContextLogger(ctx, this.appLogger);
+
+              const service = await ctx.requestContext.getAsync(gRPCModules);
+              return service[camelCase(method)]?.apply(this, args);
+            };
+          }
+          this.server.addService(protoService, serviceInstance);
+        } else {
+          this.logger.warn(`Proto ${serviceName} not found and not add to gRPC server`, {label: 'midway:gRPC'});
+        }
       }
     }
-
-
   }
 
   public async run(): Promise<void> {
-    this.server.bindAsync(`0.0.0.0:${this.configurationOptions.port}`, ServerCredentials.createInsecure(), (err: Error | null, bindPort: number) => {
-      if (err) {
-        throw err;
-      }
+    return new Promise((resolve, reject) => {
+      this.server.bindAsync(`127.0.0.1:${this.configurationOptions.port || 6565}`, ServerCredentials.createInsecure(), (err: Error | null, bindPort: number) => {
+        if (err) {
+          reject(err);
+        }
 
-      this.logger.info(`gRPC:Server:${bindPort}`, new Date().toLocaleString());
-      this.server.start();
+        this.server.start();
+        this.logger.info(`Server port = ${bindPort} start success`, {label: 'midway:gRPC'});
+        resolve();
+      });
+    })
+  }
+
+  public async beforeStop() {
+    this.server.tryShutdown(() => {
+      this.logger.info('Server shutdown success', { label: 'midway:gRPC' });
     });
   }
 

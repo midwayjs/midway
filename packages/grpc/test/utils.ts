@@ -9,7 +9,7 @@ import * as protoLoader from '@grpc/proto-loader';
  * @param name
  * @param options
  */
-export async function creatApp(name: string, options: IMidwayGRPConfigurationOptions = {}): Promise<IMidwayGRPCApplication> {
+export async function createServer(name: string, options: IMidwayGRPConfigurationOptions = {}): Promise<IMidwayGRPCApplication> {
   options.packageDefinition = protoLoader.loadSync(options.protoPath, {
     keepCase: true,
     longs: String,

@@ -19,7 +19,7 @@ export interface IMidwayGRPConfigurationOptions {
   /**
    * protobuf package name
    */
-  package: string;
+  package?: string;
 
   packageDefinition?: any;
 }
