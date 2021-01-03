@@ -346,6 +346,10 @@ export class MidwayExpressFramework extends BaseFramework<
     }
   }
 
+  public async beforeStop() {
+    this.server.close();
+  }
+
   public getServer() {
     return this.server;
   }

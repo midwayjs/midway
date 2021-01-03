@@ -7,7 +7,7 @@ import { close, createApp } from '@midwayjs/mock';
  * @param name
  * @param options
  */
-export async function creatApp(name: string, options: IMidwaySocketIOConfigurationOptions = {}): Promise<IMidwaySocketIOApplication> {
+export async function createServer(name: string, options: IMidwaySocketIOConfigurationOptions = {}): Promise<IMidwaySocketIOApplication> {
   return createApp<Framework>(join(__dirname, 'fixtures', name), options, Framework);
 }
 
