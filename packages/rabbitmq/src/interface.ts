@@ -1,4 +1,4 @@
-import { IMidwayApplication, IMidwayContext } from '@midwayjs/core';
+import { IConfigurationOptions, IMidwayApplication, IMidwayContext } from '@midwayjs/core';
 import { ConsumeMessage, Options } from 'amqplib/properties';
 import { RabbitMQListenerOptions } from '@midwayjs/decorator';
 import * as amqp from 'amqplib';
@@ -22,7 +22,7 @@ export interface IRabbitMQExchange {
   options?: Options.AssertExchange
 }
 
-export type IMidwayRabbitMQConfigurationOptions = {
+export interface IMidwayRabbitMQConfigurationOptions extends IConfigurationOptions {
   url: string | Options.Connect,
   socketOptions?: any;
   reconnectTime?: number;

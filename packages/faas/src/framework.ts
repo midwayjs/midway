@@ -337,6 +337,10 @@ export class MidwayFaaSFramework extends BaseFramework<
       disableError: true,
     }));
   }
+
+  public getFrameworkName() {
+    return 'midway:faas'
+  }
 }
 
 function covertId(cls, method) {

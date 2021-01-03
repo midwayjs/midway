@@ -16,7 +16,7 @@ import {
   listModule,
   LOGGER_KEY,
 } from '@midwayjs/decorator';
-import { ILogger, loggers, LoggerOptions } from '@midwayjs/logger';
+import { ILogger, loggers, LoggerOptions, IMidwayLogger } from '@midwayjs/logger';
 import { isAbsolute, join, dirname } from 'path';
 import { createMidwayLogger } from './logger';
 import { safeRequire } from './util';
@@ -48,6 +48,8 @@ export abstract class BaseFramework<
 
   public configure(options: T): BaseFramework<APP, T> {
     this.configurationOptions = options;
+    this.logger = options.logger;
+    this.appLogger = options.appLogger;
     return this;
   }
 
@@ -108,11 +110,12 @@ export abstract class BaseFramework<
   protected async initializeLogger(options: IMidwayBootstrapOptions) {
     if (!this.logger) {
       this.logger = createMidwayLogger(this, 'coreLogger');
+      (this.logger as IMidwayLogger).updateDefaultLabel(this.getFrameworkName());
     }
     if (!this.appLogger) {
       this.appLogger = createMidwayLogger(this, 'logger', {
         fileLogName: 'midway-app.log',
-      });
+      }) as IMidwayLogger;
     }
   }
 
@@ -353,5 +356,9 @@ export abstract class BaseFramework<
 
   public getProjectName() {
     return this.pkg?.['name'] || '';
+  }
+
+  public getFrameworkName() {
+    return this.getFrameworkType().toString();
   }
 }

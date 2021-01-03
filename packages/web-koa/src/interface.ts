@@ -1,4 +1,4 @@
-import { IMidwayApplication, IMidwayContext } from '@midwayjs/core';
+import { IConfigurationOptions, IMidwayApplication, IMidwayContext } from '@midwayjs/core';
 import * as koa from 'koa';
 import { Context, DefaultState, Middleware, Next } from 'koa';
 import { RouterParamValue } from '@midwayjs/decorator';
@@ -19,7 +19,7 @@ export interface IMidwayKoaApplicationPlus {
   use(...args);
 }
 
-export interface IMidwayKoaConfigurationOptions {
+export interface IMidwayKoaConfigurationOptions extends IConfigurationOptions {
   /**
    * application http port
    */

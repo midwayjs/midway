@@ -331,7 +331,10 @@ export interface IMidwayBootstrapOptions {
   disableConflictCheck?: boolean;
 }
 
-export interface IConfigurationOptions {}
+export interface IConfigurationOptions {
+  logger?: ILogger;
+  appLogger?: ILogger;
+}
 
 export interface IMidwayFramework<APP extends IMidwayApplication, T extends IConfigurationOptions> {
   app: APP;
@@ -345,6 +348,7 @@ export interface IMidwayFramework<APP extends IMidwayApplication, T extends ICon
   getConfiguration(key?: string): any;
   getCurrentEnvironment(): string;
   getFrameworkType(): MidwayFrameworkType;
+  getFrameworkName(): string;
   getAppDir(): string;
   getBaseDir(): string;
   getLogger(name?: string): ILogger;

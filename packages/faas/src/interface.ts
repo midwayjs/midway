@@ -1,6 +1,7 @@
-import { MidwayRequestContainer, IMidwayApplication, IMidwayLogger } from '@midwayjs/core';
+import { MidwayRequestContainer, IMidwayApplication, IConfigurationOptions } from '@midwayjs/core';
 import { FaaSHTTPContext } from '@midwayjs/faas-typings';
 import type { MidwayHooks } from './hooks';
+import { ILogger } from '@midwayjs/logger';
 
 export type FaaSMiddleware = (() => (context: FaaSContext, next: () => Promise<any>) => any) | string;
 
@@ -34,14 +35,14 @@ export interface FunctionHandler {
 }
 
 export interface FaaSContext extends FaaSHTTPContext {
-  logger: IMidwayLogger;
+  logger: ILogger;
   env: string;
   requestContext: MidwayRequestContainer;
   originContext: any;
   hooks: MidwayHooks;
 }
 
-export interface IFaaSConfigurationOptions {
+export interface IFaaSConfigurationOptions extends IConfigurationOptions {
   config?: object;
   middleware?: string[];
   initializeContext?: object;

@@ -362,6 +362,10 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<
     return MidwayFrameworkType.WEB_KOA;
   }
 
+  public getFrameworkName() {
+    return 'midway:koa';
+  }
+
   public getServer() {
     return this.server;
   }

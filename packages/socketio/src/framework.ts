@@ -225,4 +225,8 @@ export class MidwaySocketIOFramework extends BaseFramework<
       }
     }
   }
+
+  public getFrameworkName() {
+    return 'midway:socketIO'
+  }
 }

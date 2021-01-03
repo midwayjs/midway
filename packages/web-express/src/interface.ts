@@ -1,4 +1,4 @@
-import { IMidwayApplication, IMidwayContext } from '@midwayjs/core';
+import { IConfigurationOptions, IMidwayApplication, IMidwayContext } from '@midwayjs/core';
 import { Application, Request, Response, RequestHandler, NextFunction } from 'express';
 import { RouterParamValue } from "@midwayjs/decorator";
 
@@ -27,7 +27,7 @@ export type IMidwayExpressApplication = IMidwayApplication & Application & {
   ): Middleware;
 };
 
-export interface IMidwayExpressConfigurationOptions {
+export interface IMidwayExpressConfigurationOptions extends IConfigurationOptions {
   /**
    * application http port
    */

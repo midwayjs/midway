@@ -1,5 +1,5 @@
 import * as SocketIO from 'socket.io';
-import { IMidwayApplication, IMidwayContext } from '@midwayjs/core';
+import { IConfigurationOptions, IMidwayApplication, IMidwayContext } from '@midwayjs/core';
 import { Server as HttpServer } from 'http';
 import { Server as HttpsServer } from 'https';
 
@@ -10,6 +10,6 @@ export type IMidwaySocketIOApplication = IMidwayApplication & {
 export type IMidwaySocketIOConfigurationOptions = {
   port?: number;
   webServer?: HttpServer | HttpsServer;
-} & SocketIO.ServerOptions;
+} & SocketIO.ServerOptions & IConfigurationOptions;
 
 export type IMidwaySocketIOContext = SocketIO.Socket & IMidwayContext;

@@ -127,4 +127,8 @@ export class SingleProcess
   public getServer() {
     return this.server;
   }
+
+  public getFrameworkName() {
+    return 'midway:web'
+  }
 }

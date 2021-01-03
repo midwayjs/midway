@@ -118,4 +118,8 @@ export class MidwayRabbitMQFramework extends BaseFramework<
       }
     );
   }
+
+  public getFrameworkName() {
+    return 'midway:rabbitmq'
+  }
 }
