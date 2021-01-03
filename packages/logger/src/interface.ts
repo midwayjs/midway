@@ -15,6 +15,10 @@ export interface IMidwayLogger extends ILogger {
   disableError();
   enableError();
   updateLevel(level: LoggerLevel);
+  updateDefaultLabel(defaultLabel: string);
+  updateDefaultMeta(defaultMeta: object);
+  getDefaultLabel(): string;
+  getDefaultMeta(): object;
 }
 
 export type LoggerLevel = 'silly' | 'debug' | 'verbose' | 'info' | 'warn' | 'error';
