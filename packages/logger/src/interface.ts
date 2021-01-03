@@ -21,7 +21,7 @@ export interface IMidwayLogger extends ILogger {
   getDefaultMeta(): object;
 }
 
-export type LoggerLevel = 'silly' | 'debug' | 'verbose' | 'info' | 'warn' | 'error';
+export type LoggerLevel = 'silly' | 'debug' | 'info' | 'warn' | 'error';
 
 export interface LoggerOptions {
   format?: logform.Format;
