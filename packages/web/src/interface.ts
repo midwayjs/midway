@@ -22,7 +22,7 @@ declare module 'egg' {
     getProcessType(): MidwayProcessTypeEnum;
     getApplicationContext(): IMidwayContainer;
     getConfig(key?: string): any;
-    getLogger(name?: string): EggLogger | ILogger;
+    getLogger(name?: string): EggLogger & ILogger;
     getCoreLogger(): EggLogger;
     generateController?(controllerMapping: string);
     generateMiddleware?(middlewareId: string): Promise<Middleware<DefaultState, IMidwayKoaContext>>;
