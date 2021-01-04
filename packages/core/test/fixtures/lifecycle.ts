@@ -20,7 +20,7 @@ export class LifeCycleTest implements ILifeCycle {
   async onReady(container: IMidwayContainer) {
     this.ts = await this.testBinding.doReady();
     container.registerObject('hellotest111', '12312312');
-    await new Promise(resolve => {
+    await new Promise<void>(resolve => {
       setTimeout(() => {
         this.ready = true;
         resolve();
@@ -52,7 +52,7 @@ export class LifeCycleTest1 implements ILifeCycle {
   async onReady() {
     this.tts = await this.testBinding.doReady();
 
-    await new Promise(resolve => {
+    await new Promise<void>(resolve => {
       setTimeout(() => {
         this.ready = true;
         resolve();

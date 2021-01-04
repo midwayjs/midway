@@ -12,7 +12,7 @@ export class BaseService {
 
   @Init()
   async init() {
-    await new Promise(resolve => {
+    await new Promise<void>(resolve => {
       setTimeout(() => {
         this.config.c = 10;
         resolve();

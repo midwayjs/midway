@@ -35,7 +35,7 @@ export class BaseService {
 
   @Init()
   async init() {
-    await new Promise(resolve => {
+    await new Promise<void>(resolve => {
       setTimeout(() => {
         resolve();
       }, 100);

@@ -206,7 +206,7 @@ export abstract class BaseFramework<
       .getCurrentEnvironment();
   }
 
-  public abstract async applicationInitialize(options: IMidwayBootstrapOptions);
+  public abstract applicationInitialize(options: IMidwayBootstrapOptions);
 
   public abstract getFrameworkType(): MidwayFrameworkType;
 

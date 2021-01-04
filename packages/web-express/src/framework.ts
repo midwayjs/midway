@@ -120,7 +120,7 @@ export class MidwayExpressFramework extends BaseFramework<
     }
 
     if (this.configurationOptions.port) {
-      new Promise(resolve => {
+      new Promise<void>(resolve => {
         this.server.listen(this.configurationOptions.port, () => {
           resolve();
         });

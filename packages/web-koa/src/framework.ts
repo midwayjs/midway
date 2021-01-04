@@ -346,7 +346,7 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<
       this.server = require('http').createServer(this.app.callback());
     }
     if (this.configurationOptions.port) {
-      new Promise(resolve => {
+      new Promise<void>(resolve => {
         this.server.listen(this.configurationOptions.port, () => {
           resolve();
         });
