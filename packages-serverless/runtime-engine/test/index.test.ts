@@ -66,7 +66,7 @@ describe('/test/index.test.ts', () => {
       runtimeEngine.add(engine => {
         engine.addRuntimeExtension({
           async beforeRuntimeStart(runtime: Runtime) {
-            return new Promise(resolve => setImmediate(() => resolve()));
+            return new Promise<void>(resolve => setImmediate(() => resolve()));
           },
         });
       });
@@ -89,7 +89,7 @@ describe('/test/index.test.ts', () => {
       runtimeEngine.add(engine => {
         engine.addRuntimeExtension({
           async beforeRuntimeStart(runtime: Runtime) {
-            return new Promise(resolve => setImmediate(() => resolve()));
+            return new Promise<void>(resolve => setImmediate(() => resolve()));
           },
         });
       });
@@ -149,10 +149,10 @@ describe('/test/index.test.ts', () => {
         let server;
         engine.addRuntimeExtension({
           async beforeClose() {
-            return new Promise(resolve => server.close(() => resolve()));
+            return new Promise<void>(resolve => server.close(() => resolve()));
           },
           async beforeRuntimeStart(runtime: Runtime) {
-            return new Promise(resolve => {
+            return new Promise<void>(resolve => {
               server = http
                 .createServer(async (request, response) => {
                   response.writeHead(200, { 'Content-Type': 'text/plain' });
@@ -204,10 +204,10 @@ describe('/test/index.test.ts', () => {
         let server;
         engine.addRuntimeExtension({
           async beforeClose() {
-            return new Promise(resolve => server.close(() => resolve()));
+            return new Promise<void>(resolve => server.close(() => resolve()));
           },
           async beforeRuntimeStart(runtime: Runtime) {
-            return new Promise(resolve => {
+            return new Promise<void>(resolve => {
               server = http
                 .createServer(async (request, response) => {
                   response.writeHead(200, { 'Content-Type': 'text/plain' });
@@ -260,10 +260,10 @@ describe('/test/index.test.ts', () => {
         let server;
         engine.addRuntimeExtension({
           async beforeClose() {
-            return new Promise(resolve => server.close(() => resolve()));
+            return new Promise<void>(resolve => server.close(() => resolve()));
           },
           async beforeRuntimeStart(runtime: Runtime) {
-            return new Promise(resolve => {
+            return new Promise<void>(resolve => {
               server = http
                 .createServer(async (request, response) => {
                   response.writeHead(200, { 'Content-Type': 'text/plain' });
@@ -303,10 +303,10 @@ describe('/test/index.test.ts', () => {
         let server;
         engine.addRuntimeExtension({
           async beforeClose() {
-            return new Promise(resolve => server.close(() => resolve()));
+            return new Promise<void>(resolve => server.close(() => resolve()));
           },
           async beforeRuntimeStart(runtime: Runtime) {
-            return new Promise(resolve => {
+            return new Promise<void>(resolve => {
               server = http
                 .createServer(async (request, response) => {
                   response.writeHead(200, { 'Content-Type': 'text/plain' });
@@ -353,10 +353,10 @@ describe('/test/index.test.ts', () => {
         let server;
         engine.addRuntimeExtension({
           async beforeClose() {
-            return new Promise(resolve => server.close(() => resolve()));
+            return new Promise<void>(resolve => server.close(() => resolve()));
           },
           async beforeRuntimeStart(runtime: Runtime) {
-            return new Promise(resolve => {
+            return new Promise<void>(resolve => {
               server = http
                 .createServer(async (request, response) => {
                   response.writeHead(200, { 'Content-Type': 'text/plain' });

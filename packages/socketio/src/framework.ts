@@ -81,7 +81,7 @@ export class MidwaySocketIOFramework extends BaseFramework<
   }
 
   protected async beforeStop(): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise<void>(resolve => {
       this.app.close(() => {
         resolve();
       });

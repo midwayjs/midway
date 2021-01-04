@@ -62,7 +62,7 @@ export const getChildProcessPid = (moduleFile) => {
 
 export const finishLogger = async (logger) => {
   await sleep(5000);
-  return new Promise(resolve  => {
+  return new Promise<void>(resolve  => {
     logger.on('finish', () => {
       resolve()
     });

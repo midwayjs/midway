@@ -10,7 +10,7 @@
     "express": "^4.17.1"
   },
   "devDependencies": {
-    "@midwayjs/cli": "^1.0.0",
+    "@midwayjs/cli": "^1.2.36",
     "supertest": "^4.0.2"
   },
   "engines": {

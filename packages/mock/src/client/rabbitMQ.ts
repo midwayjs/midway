@@ -271,7 +271,7 @@ const createConfirmChannel = async () => {
     prefetch: async () => {},
     consume: async (queueName, consumer) => {
       await queues[queueName].addConsumer(consumer, async invokeListenerFn => {
-        return new Promise(resolve => {
+        return new Promise<void>(resolve => {
           evt.on('ack', () => {
             resolve();
           });

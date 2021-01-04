@@ -67,7 +67,7 @@ describe('/test/index.test.ts', () => {
       });
     });
 
-    await new Promise((resolve) => {
+    await new Promise<void>((resolve) => {
       child.on('exit', () => {
         // 等进程退出
         resolve();

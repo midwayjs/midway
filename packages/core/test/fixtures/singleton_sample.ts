@@ -8,9 +8,9 @@ export class HelloSingleton {
   end: number;
 
   @Init()
-  async doinit(): Promise<true> {
+  async doinit(): Promise<void> {
     this.ts = Date.now();
-    return new Promise(resolve => {
+    return new Promise<void>(resolve => {
       setTimeout(() => {
         this.end = Date.now();
         resolve();
@@ -46,9 +46,9 @@ export class HelloErrorInitSingleton {
   public helloErrorSingleton;
 
   @Init()
-  async doinit(): Promise<true> {
+  async doinit(): Promise<void> {
     this.ts = Date.now();
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       setTimeout(() => {
         this.end = Date.now();
         resolve();

@@ -21,7 +21,7 @@ export class MidwayHooks {
   }
 
   useConfig(key?: string) {
-    return this.ctx.requestContext.configService.getConfiguration(key);
+    return this.ctx.requestContext.getConfigService().getConfiguration(key);
   }
 
   useLogger() {

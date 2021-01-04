@@ -8,7 +8,7 @@
     "@midwayjs/serverless-http-parser": "^2.6.5"
   },
   "devDependencies": {
-    "@midwayjs/cli": "^1.0.0",
+    "@midwayjs/cli": "^1.2.36",
     "@midwayjs/faas-typings": "^2.6.5"
   },
   "engines": {

@@ -59,7 +59,7 @@ export class SingleProcess
     this.app.messenger.emit('egg-ready');
 
     if (this.configurationOptions.port) {
-      new Promise(resolve => {
+      new Promise<void>(resolve => {
         this.server.listen(this.configurationOptions.port, () => {
           resolve();
         });
