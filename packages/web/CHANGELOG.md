@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.6.5](https://github.com/midwayjs/midway/compare/v2.6.4...v2.6.5) (2021-01-04)
+
+
+### Bug Fixes
+
+* egg logger definition ([#788](https://github.com/midwayjs/midway/issues/788)) ([a5464f4](https://github.com/midwayjs/midway/commit/a5464f48f5e7f7aee71fadf8e26b187b5802fe24))
+
+
+
+
+
 ## [2.6.4](https://github.com/midwayjs/midway/compare/v2.6.3...v2.6.4) (2021-01-02)
 
 
