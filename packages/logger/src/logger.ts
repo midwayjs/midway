@@ -3,6 +3,11 @@ import * as DailyRotateFileTransport from 'winston-daily-rotate-file';
 import { DelegateLoggerOptions, LoggerLevel, LoggerOptions } from './interface';
 import { DelegateTransport, EmptyTransport } from './transport';
 import { displayLabels, displayCommonMessage } from './format';
+import * as os from 'os';
+
+function isWin32() {
+  return os.platform() === 'win32';
+}
 
 export const EmptyLogger: Logger = createLogger().constructor as Logger;
 
@@ -19,6 +24,10 @@ export class MidwayBaseLogger extends EmptyLogger {
   constructor(options: LoggerOptions = {}) {
     super(options);
     this.exitOnError = false;
+    if (isWin32()) {
+      options.disableErrorSymlink = true;
+      options.disableFileSymlink = true;
+    }
     this.loggerOptions = options;
     if (this.loggerOptions.defaultLabel) {
       this.labels.push(this.loggerOptions.defaultLabel);

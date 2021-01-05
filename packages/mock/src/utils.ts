@@ -154,10 +154,14 @@ export async function close(
     if (MidwayFrameworkType.WEB === newApp.getFrameworkType()) {
       // clean first
       if (options.cleanLogsDir !== false) {
-        await remove(join(newApp.getAppDir(), 'logs'));
+        try {
+          await remove(join(newApp.getAppDir(), 'logs'));
+        } catch (e) {}
       }
       if (options.cleanTempDir !== false) {
-        await remove(join(newApp.getAppDir(), 'run'));
+        try {
+          await remove(join(newApp.getAppDir(), 'run'));
+        } catch (e) {}
       }
     }
   }
