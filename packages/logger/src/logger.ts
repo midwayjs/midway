@@ -5,9 +5,7 @@ import { DelegateTransport, EmptyTransport } from './transport';
 import { displayLabels, displayCommonMessage } from './format';
 import * as os from 'os';
 
-function isWin32() {
-  return os.platform() === 'win32';
-}
+const isWindows = os.platform() === 'win32';
 
 export const EmptyLogger: Logger = createLogger().constructor as Logger;
 
@@ -24,7 +22,7 @@ export class MidwayBaseLogger extends EmptyLogger {
   constructor(options: LoggerOptions = {}) {
     super(options);
     this.exitOnError = false;
-    if (isWin32()) {
+    if (isWindows) {
       options.disableErrorSymlink = true;
       options.disableFileSymlink = true;
     }
