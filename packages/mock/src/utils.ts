@@ -11,6 +11,7 @@ import { remove } from 'fs-extra';
 import { clearAllModule } from '@midwayjs/decorator';
 import { existsSync } from 'fs';
 import { clearAllLoggers } from '@midwayjs/logger';
+import * as os from 'os';
 
 process.setMaxListeners(0);
 
@@ -19,6 +20,10 @@ function isTestEnvironment() {
   return testEnv.includes(process.env.MIDWAY_SERVER_ENV)
     || testEnv.includes(process.env.EGG_SERVER_ENV)
     || testEnv.includes(process.env.NODE_ENV);
+}
+
+function isWin32() {
+  return os.platform() === 'win32';
 }
 
 const appMap = new WeakMap();
@@ -153,10 +158,10 @@ export async function close(
   if (isTestEnvironment()) {
     if (MidwayFrameworkType.WEB === newApp.getFrameworkType()) {
       // clean first
-      if (options.cleanLogsDir !== false) {
+      if (options.cleanLogsDir !== false && !isWin32()) {
         await remove(join(newApp.getAppDir(), 'logs'));
       }
-      if (options.cleanTempDir !== false) {
+      if (options.cleanTempDir !== false && !isWin32()) {
         await remove(join(newApp.getAppDir(), 'run'));
       }
     }
