@@ -7,6 +7,8 @@ import { MidwayFrameworkType, MidwayProcessTypeEnum } from '@midwayjs/core';
 import { getCurrentDateString } from './utils';
 import * as os from 'os';
 
+const isWindows = os.platform() === 'win32';
+
 export class WebConsoleTransport extends transports.Console {
 
   app: Application;
@@ -92,17 +94,13 @@ function isEmptyFile(p: string) {
   return content === null || content === undefined || content === '';
 }
 
-function isWin32() {
-  return os.platform() === 'win32';
-}
-
 function checkEggLoggerExists(dir, fileName, eggLoggerFiles) {
   const file = isAbsolute(fileName) ? fileName : join(dir, fileName);
   if (existsSync(file) && !lstatSync(file).isSymbolicLink()) {
     // 如果是空文件，则直接删了，否则加入备份队列
     if (isEmptyFile(file)) {
       // midway 的软链在 windows 底下也不会创建出来，在 windows 底下就不做文件删除了
-      if (!isWin32()) {
+      if (!isWindows) {
         unlinkSync(file);
       }
     } else {
