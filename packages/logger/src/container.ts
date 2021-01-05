@@ -21,15 +21,17 @@ export class MidwayLoggerContainer extends Map<string, ILogger> {
     return this.getLogger(name);
   }
 
-  addLogger(name: string, logger: ILogger, replaceError = true) {
+  addLogger(name: string, logger: ILogger, errorWhenReplace = true) {
     if (!this.has(name)) {
       if (logger['on']) {
         (logger as any).on('close', () => this.delete(name));
       }
       this.set(name, logger);
     } else {
-      if (replaceError) {
+      if (errorWhenReplace) {
         throw new Error(`logger id ${name} has duplicate`);
+      } else {
+        return this.addLogger(name, logger, false);
       }
     }
     return this.get(name);

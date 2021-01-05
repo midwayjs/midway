@@ -86,8 +86,8 @@ export class MidwayFaaSFramework extends BaseFramework<
         this.configurationOptions?.initializeContext?.['logger'] ||
         console;
       this.appLogger = this.logger;
-      loggers.addLogger('coreLogger', this.logger);
-      loggers.addLogger('appLogger', this.logger);
+      loggers.addLogger('coreLogger', this.logger, false);
+      loggers.addLogger('appLogger', this.logger, false);
     }
   }
 
