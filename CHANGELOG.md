@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.6.7](https://github.com/midwayjs/midway/compare/v2.6.6...v2.6.7) (2021-01-05)
+
+
+### Bug Fixes
+
+* can't throw error in faas ([#790](https://github.com/midwayjs/midway/issues/790)) ([e740cda](https://github.com/midwayjs/midway/commit/e740cdaec5fbae0c4addb1eefbb428ea0a50d3eb))
+* remove error and symbol link in windows ([#792](https://github.com/midwayjs/midway/issues/792)) ([7434724](https://github.com/midwayjs/midway/commit/7434724a2cf422724ea143032ecb6ccb601d7d7f))
+* remove log method in ILogger definition ([#791](https://github.com/midwayjs/midway/issues/791)) ([e716349](https://github.com/midwayjs/midway/commit/e71634957c3e3f183c3f7c03e32db27e9ac82017))
+
+
+
+
+
 ## [2.6.6](https://github.com/midwayjs/midway/compare/v2.6.5...v2.6.6) (2021-01-04)
 
 **Note:** Version bump only for package midway

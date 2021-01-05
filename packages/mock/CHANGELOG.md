@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.6.7](https://github.com/midwayjs/midway/compare/v2.6.6...v2.6.7) (2021-01-05)
+
+
+### Bug Fixes
+
+* remove error and symbol link in windows ([#792](https://github.com/midwayjs/midway/issues/792)) ([7434724](https://github.com/midwayjs/midway/commit/7434724a2cf422724ea143032ecb6ccb601d7d7f))
+
+
+
+
+
 ## [2.6.6](https://github.com/midwayjs/midway/compare/v2.6.5...v2.6.6) (2021-01-04)
 
 **Note:** Version bump only for package @midwayjs/mock
