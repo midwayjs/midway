@@ -22,17 +22,16 @@ export class MidwayLoggerContainer extends Map<string, ILogger> {
   }
 
   addLogger(name: string, logger: ILogger, errorWhenReplace = true) {
-    if (!this.has(name)) {
-      if (logger['on']) {
-        (logger as any).on('close', () => this.delete(name));
+    if (!errorWhenReplace || !this.has(name)) {
+      // 同一个实例就不需要再添加了
+      if (this.get(name) !== logger) {
+        if (logger['on']) {
+          (logger as any).on('close', () => this.delete(name));
+        }
+        this.set(name, logger);
       }
-      this.set(name, logger);
     } else {
-      if (errorWhenReplace) {
-        throw new Error(`logger id ${name} has duplicate`);
-      } else {
-        return this.addLogger(name, logger, false);
-      }
+      throw new Error(`logger id ${name} has duplicate`);
     }
     return this.get(name);
   }
