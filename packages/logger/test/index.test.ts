@@ -22,6 +22,7 @@ import {
 } from './util';
 import { EggLogger } from 'egg-logger';
 import { readFileSync } from "fs";
+import { ILogger } from '../dist';
 
 describe('/test/index.test.ts', () => {
   it('should test create logger', async () => {
@@ -343,31 +344,44 @@ describe('/test/index.test.ts', () => {
     const logger1 = createConsoleLogger('consoleLogger');
     createConsoleLogger('anotherConsoleLogger');
     const logger3 = createConsoleLogger('consoleLogger');
-    expect(logger1).toBe(logger3);
-    expect(loggers.size).toBe(2);
+    expect(logger1).toEqual(logger3);
+    expect(loggers.size).toEqual(2);
     clearAllLoggers();
-    expect(loggers.size).toBe(0);
+    expect(loggers.size).toEqual(0);
   });
 
   it('should test container with add logger', function () {
     if (loggers.size > 0) {
       clearAllLoggers();
     }
-    const originLogger = createConsoleLogger('consoleLogger');
-    expect(loggers.size).toBe(1);
+    const originLogger: any = createConsoleLogger('consoleLogger');
+    expect(loggers.size).toEqual(1);
     const logger = new MidwayBaseLogger({
       disableError: true,
       disableFile: true
     });
+    // 重复添加会报错
     expect(() => {
       loggers.addLogger('consoleLogger', logger);
     }).toThrow();
+    expect(loggers.size).toEqual(1);
+    let consoleLogger: ILogger = loggers.getLogger('consoleLogger');
+    expect(originLogger).toEqual(consoleLogger);
 
-    expect(loggers.size).toBe(1);
-    const consoleLogger: any = loggers.getLogger('consoleLogger');
-    expect(originLogger).toBe(consoleLogger);
+    // 允许重复添加，且直接返回原对象
+    loggers.addLogger('consoleLogger', originLogger, false);
+    expect(loggers.size).toEqual(1);
+    consoleLogger = loggers.getLogger('consoleLogger');
+    expect(originLogger).toEqual(consoleLogger);
+
+    // 允许重复添加，且替换原来的对象
+    loggers.addLogger('consoleLogger', logger, false);
+    expect(loggers.size).toEqual(1);
+    consoleLogger = loggers.getLogger('consoleLogger');
+    expect(logger).toEqual(consoleLogger);
+
     loggers.close('consoleLogger');
-    expect(loggers.size).toBe(0);
+    expect(loggers.size).toEqual(0);
   });
 
   it('should create container with options and add logger', async () => {
