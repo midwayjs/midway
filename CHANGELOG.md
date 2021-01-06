@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.6.8](https://github.com/midwayjs/midway/compare/v2.6.7...v2.6.8) (2021-01-06)
+
+
+### Bug Fixes
+
+* force add logger ([#793](https://github.com/midwayjs/midway/issues/793)) ([f095543](https://github.com/midwayjs/midway/commit/f0955438ba5645daf62b107700f2b01537ecf827))
+
+
+
+
+
 ## [2.6.7](https://github.com/midwayjs/midway/compare/v2.6.6...v2.6.7) (2021-01-05)
 
 
