@@ -3,14 +3,14 @@
 //   ServerUnaryCall,
 // } from '@grpc/grpc-js';
 
-import { MSProducerType, Producer, Provide, GrpcMethod } from '@midwayjs/decorator';
+import { MSProviderType, Provider, Provide, GrpcMethod } from '@midwayjs/decorator';
 
 /**
  * package helloworld
  * service Greeter
  */
 @Provide()
-@Producer(MSProducerType.GRPC)
+@Provider(MSProviderType.GRPC)
 export class Greeter {
 
   @GrpcMethod()

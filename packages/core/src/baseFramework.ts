@@ -109,7 +109,7 @@ export abstract class BaseFramework<
 
   protected async initializeLogger(options: IMidwayBootstrapOptions) {
     if (!this.logger) {
-      this.logger = createMidwayLogger(this, 'coreLogger');
+      this.logger = new Proxy(createMidwayLogger(this, 'coreLogger'), {});
       (this.logger as IMidwayLogger).updateDefaultLabel(this.getFrameworkName());
     }
     if (!this.appLogger) {

@@ -1,5 +1,5 @@
 import { MidwayContextLogger } from '@midwayjs/core';
-import { IMidwayGRPCContext } from './interface';
+import { IMidwayGRPCContext } from '../interface';
 
 export class MidwayGRPCContextLogger extends MidwayContextLogger<
   IMidwayGRPCContext

@@ -10,13 +10,13 @@ import {
 } from '../';
 import { Scope } from '../annotation';
 
-export enum MSProducerType {
+export enum MSProviderType {
   DUBBO = 'dubbo',
   GRPC = 'gRPC',
   HSF = 'hsf',
 }
 
-export function Producer(type: MSProducerType): ClassDecorator {
+export function Provider(type: MSProviderType): ClassDecorator {
   return (target: any) => {
     saveModule(MS_PRODUCER_KEY, target);
     saveClassMetadata(MS_PRODUCER_KEY, type, target);

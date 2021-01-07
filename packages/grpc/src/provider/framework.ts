@@ -15,7 +15,7 @@ import {
 } from '@midwayjs/decorator';
 import {
   IMidwayGRPCApplication, IMidwayGRPConfigurationOptions,
-} from './interface';
+} from '../interface';
 import { MidwayGRPCContextLogger } from './logger';
 import { pascalCase } from 'pascal-case';
 import * as camelCase from 'camelcase';
@@ -88,22 +88,22 @@ export class MidwayGRPCFramework extends BaseFramework<
   }
 
   public async run(): Promise<void> {
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       this.server.bindAsync(`127.0.0.1:${this.configurationOptions.port || 6565}`, ServerCredentials.createInsecure(), (err: Error | null, bindPort: number) => {
         if (err) {
           reject(err);
         }
 
         this.server.start();
-        this.logger.info(`Server port = ${bindPort} start success`, {label: 'midway:gRPC'});
+        this.logger.info(`Server port = ${bindPort} start success`);
         resolve();
       });
-    })
+    });
   }
 
   public async beforeStop() {
     this.server.tryShutdown(() => {
-      this.logger.info('Server shutdown success', { label: 'midway:gRPC' });
+      this.logger.info('Server shutdown success');
     });
   }
 
