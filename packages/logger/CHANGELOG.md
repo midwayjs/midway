@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.6.9](https://github.com/midwayjs/midway/compare/v2.6.8...v2.6.9) (2021-01-08)
+
+
+### Bug Fixes
+
+* remove array type for label and remove verbose level ([#795](https://github.com/midwayjs/midway/issues/795)) ([622163c](https://github.com/midwayjs/midway/commit/622163c30bd3bf89423850caa39ea58433f18df3))
+
+
+
+
+
 ## [2.6.8](https://github.com/midwayjs/midway/compare/v2.6.7...v2.6.8) (2021-01-06)
 
 
