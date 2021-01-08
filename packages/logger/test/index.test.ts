@@ -260,9 +260,18 @@ describe('/test/index.test.ts', () => {
     logger.error('first message', new Error('my error'), {
       group: 'bbb'
     });
+
+    logger.updateDefaultMeta({
+      name: 'my-another-site',
+      group: 'my-another-group'
+    });
+
+    logger.error('second message', new Error('my error'));
+
     await sleep();
     expect(fileExists(join(logsDir, 'test-logger.log'))).toBeTruthy();
     expect(includeContent(join(logsDir, 'test-logger.log'), 'bbb.my-site error first message my error')).toBeTruthy();
+    expect(includeContent(join(logsDir, 'test-logger.log'), 'my-another-group.my-another-site error second message Error: my error')).toBeTruthy();
 
     const customFormatLogger = createLogger<IMidwayLogger>('testLogger1', {
       dir: logsDir,
@@ -330,10 +339,13 @@ describe('/test/index.test.ts', () => {
     });
 
     logger.error('test console error');
+    logger.updateDefaultLabel('sandbox');
+    logger.info('test change label');
 
     await sleep();
     expect(fileExists(join(logsDir, 'test-logger.log'))).toBeTruthy();
     expect(includeContent(join(logsDir, 'test-logger.log'), '[main label] test console error')).toBeTruthy();
+    expect(includeContent(join(logsDir, 'test-logger.log'), '[sandbox] test change label')).toBeTruthy();
     await removeFileOrDir(logsDir);
   });
 

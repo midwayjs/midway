@@ -1,6 +1,6 @@
 import { createLogger, transports, Logger, format } from 'winston';
 import * as DailyRotateFileTransport from 'winston-daily-rotate-file';
-import { DelegateLoggerOptions, LoggerLevel, LoggerOptions } from './interface';
+import { DelegateLoggerOptions, LoggerLevel, LoggerOptions, IMidwayLogger } from './interface';
 import { DelegateTransport, EmptyTransport } from './transport';
 import { displayLabels, displayCommonMessage } from './format';
 import * as os from 'os';
@@ -12,12 +12,13 @@ export const EmptyLogger: Logger = createLogger().constructor as Logger;
 /**
  *  base logger with console transport and file transport
  */
-export class MidwayBaseLogger extends EmptyLogger {
+export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
   consoleTransport;
   fileTransport;
   errTransport;
   loggerOptions: LoggerOptions;
-  labels = [];
+  defaultLabel: string = '';
+  defaultMetadata: object = {};
 
   constructor(options: LoggerOptions = {}) {
     super(options);
@@ -28,7 +29,11 @@ export class MidwayBaseLogger extends EmptyLogger {
     }
     this.loggerOptions = options;
     if (this.loggerOptions.defaultLabel) {
-      this.labels.push(this.loggerOptions.defaultLabel);
+      this.defaultLabel = this.loggerOptions.defaultLabel;
+    }
+
+    if (this.loggerOptions.defaultMeta) {
+      this.defaultMetadata = this.loggerOptions.defaultMeta;
     }
 
     if(this.loggerOptions.format) {
@@ -120,16 +125,21 @@ export class MidwayBaseLogger extends EmptyLogger {
     this.fileTransport.level = level;
   }
 
+  updateDefaultLabel(defaultLabel: string) {
+    this.defaultLabel = defaultLabel;
+  }
+
+  updateDefaultMeta(defaultMetadata: object) {
+    this.defaultMetadata = defaultMetadata;
+  }
+
   getDefaultLoggerConfigure() {
     return {
       format: format.combine(
         displayCommonMessage({
-          uppercaseLevel: true,
-          defaultMeta: this.loggerOptions.defaultMeta,
+          target: this,
         }),
-        displayLabels({
-          defaultLabels: this.labels,
-        }),
+        displayLabels(),
         format.timestamp({
           format: 'YYYY-MM-DD HH:mm:ss,SSS',
         }),
@@ -142,6 +152,14 @@ export class MidwayBaseLogger extends EmptyLogger {
         )
       ),
     };
+  }
+
+  getDefaultLabel(): string {
+    return this.defaultLabel;
+  }
+
+  getDefaultMeta(): object {
+    return this.defaultMetadata;
   }
 }
 

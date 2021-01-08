@@ -1,17 +1,23 @@
 import { format } from 'winston';
 import { inspect, types } from 'util';
+import { IMidwayLogger } from './interface';
 const { LEVEL, MESSAGE, SPLAT } = require('triple-beam');
 
 export const displayCommonMessage = format((info, opts: {
-  uppercaseLevel?: boolean;
-  defaultMeta?: {[key: string]: any};
+  defaultLabel?: string;
+  defaultMeta?: object;
+  target?: IMidwayLogger;
 }) => {
   if (!info.pid) {
     info.pid = process.pid;
   }
 
-  if (!info.LEVEL && opts.uppercaseLevel) {
+  if (!info.LEVEL) {
     info.LEVEL = info.level.toUpperCase();
+  }
+
+  if (!info.defaultLabel) {
+    info.defaultLabel = opts.defaultLabel || opts.target?.getDefaultLabel() || '';
   }
 
   if (info instanceof Error) {
@@ -25,7 +31,8 @@ export const displayCommonMessage = format((info, opts: {
       stack: info.stack,
       pid: info.pid,
       LEVEL: info.LEVEL,
-    }, opts.defaultMeta);
+      defaultLabel: info.defaultLabel,
+    }, (opts.defaultMeta || opts.target?.getDefaultMeta() || {}));
   }
 
   // 处理数组，Map，Set 的 message
@@ -49,7 +56,7 @@ export const displayCommonMessage = format((info, opts: {
     }
   }
 
-  return Object.assign(info, opts.defaultMeta);
+  return Object.assign(info, (opts.defaultMeta || opts.target?.getDefaultMeta() || {}));
 });
 
 function joinLoggerLabel(labelSplit, ...labels) {
@@ -71,7 +78,7 @@ export const displayLabels = format((info, opts) => {
   opts.labelSplit = opts.labelSplit || ':';
   info.labelText = joinLoggerLabel(
     opts.labelSplit,
-    ...opts.defaultLabels,
+    info.defaultLabel,
     ...[].concat(info.label)
   );
   return info;
