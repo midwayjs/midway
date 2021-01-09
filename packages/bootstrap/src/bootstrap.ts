@@ -16,7 +16,7 @@ export class BootstrapStarter {
   private bootstrapItems: IMidwayFramework<any, any>[] = [];
   private globalOptions: Partial<IMidwayBootstrapOptions> = {};
 
-  public configure(options: Partial<IMidwayBootstrapOptions>) {
+  public configure(options: IMidwayBootstrapOptions) {
     this.globalOptions = options;
     return this;
   }
@@ -27,7 +27,7 @@ export class BootstrapStarter {
   }
 
   public async init() {
-    this.appDir = this.globalOptions.baseDir || process.cwd();
+    this.appDir = this.globalOptions.appDir || process.cwd();
     await Promise.all(
       this.getActions('initialize', {
         ...this.globalOptions,
@@ -52,6 +52,9 @@ export class BootstrapStarter {
   }
 
   private getBaseDir() {
+    if (this.globalOptions.baseDir) {
+      return this.globalOptions.baseDir;
+    }
     if (isTypeScriptEnvironment()) {
       return join(this.appDir, 'src');
     } else {
@@ -63,18 +66,22 @@ export class BootstrapStarter {
 export class Bootstrap {
   static starter: BootstrapStarter;
   static logger: ILogger;
+  static configured = false;
 
   /**
    * set global configuration for midway
    * @param configuration
    */
-  static configure(configuration: Partial<IMidwayBootstrapOptions>) {
+  static configure(configuration: IMidwayBootstrapOptions = {}) {
+    this.configured = true;
     if (!this.logger && !configuration.logger) {
       this.logger = createConsoleLogger('bootstrapConsole');
       if (configuration.logger === false) {
         (this.logger as IMidwayLogger)?.disableConsole();
       }
       configuration.logger = this.logger;
+    } else {
+      this.logger = this.logger || configuration.logger as ILogger;
     }
     this.getStarter().configure(configuration);
     return this;
@@ -97,6 +104,9 @@ export class Bootstrap {
   }
 
   static async run() {
+    if (!this.configured) {
+      this.configure();
+    }
     // https://nodejs.org/api/process.html#process_signal_events
     // https://en.wikipedia.org/wiki/Unix_signal
     // kill(2) Ctrl-C
@@ -121,7 +131,13 @@ export class Bootstrap {
   }
 
   static async stop() {
-    return this.getStarter().stop();
+    await this.getStarter().stop();
+  }
+
+  static reset() {
+    this.logger = null;
+    this.configured = false;
+    this.starter = null;
   }
 
   /**

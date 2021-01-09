@@ -319,7 +319,7 @@ export interface IMidwayCoreApplication extends IMidwayApplication {}
 
 export interface IMidwayBootstrapOptions {
   logger?: ILogger | boolean;
-  baseDir: string;
+  baseDir?: string;
   appDir?: string;
   preloadModules?: any[];
   disableAutoLoad?: boolean;
