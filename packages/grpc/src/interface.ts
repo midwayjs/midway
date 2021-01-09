@@ -6,7 +6,8 @@ export type IMidwayGRPCContext = IMidwayContext & {
 }
 export type IMidwayGRPCApplication = IMidwayApplication & Server;
 
-export interface IMidwayGRPConfigurationOptions extends IConfigurationOptions {
+export interface IMidwayGRPFrameworkOptions extends IConfigurationOptions {
+  host?: string;
   /**
    * application gRPC port
    */
@@ -24,4 +25,6 @@ export interface IMidwayGRPConfigurationOptions extends IConfigurationOptions {
   packageDefinition?: any;
 }
 
-export interface IMidwayGRPCOptions extends IMidwayGRPConfigurationOptions {}
+export interface IMidwayGRPCConfigOptions {
+  clients: IMidwayGRPFrameworkOptions[];
+}

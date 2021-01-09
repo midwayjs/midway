@@ -81,7 +81,7 @@ export class MidwayGRPCFramework extends BaseFramework<
           }
           this.server.addService(protoService, serviceInstance);
         } else {
-          this.logger.warn(`Proto ${serviceName} not found and not add to gRPC server`, {label: 'midway:gRPC'});
+          this.logger.warn(`Proto ${serviceName} not found and not add to gRPC server`);
         }
       }
     }
