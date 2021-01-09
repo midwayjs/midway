@@ -10,8 +10,8 @@ import {
 
 import {
   getProviderId,
-  MS_PRODUCER_KEY,
-  MSProducerType
+  MS_PROVIDER_KEY,
+  MSProviderType
 } from '@midwayjs/decorator';
 import {
   IMidwayGRPCApplication, IMidwayGRPConfigurationOptions,
@@ -53,9 +53,9 @@ export class MidwayGRPCFramework extends BaseFramework<
   }
 
   protected async loadService() {
-    const gRPCModules = listModule(MS_PRODUCER_KEY, (module) => {
-      const type = getClassMetadata(MS_PRODUCER_KEY, module);
-      return type === MSProducerType.GRPC;
+    const gRPCModules = listModule(MS_PROVIDER_KEY, (module) => {
+      const type = getClassMetadata(MS_PROVIDER_KEY, module);
+      return type === MSProviderType.GRPC;
     });
 
     if (this.configurationOptions.packageDefinition) {

@@ -18,7 +18,7 @@ export * from './framework/plugin';
 export * from './framework/app';
 export * from './ws/webSocketController';
 export * from './ws/webSocketEvent';
-export * from './microservice/producer';
+export * from './microservice/provider';
 export * from './microservice/consumer';
 export * from './microservice/rabbitmqListener';
 export * from './util/index';

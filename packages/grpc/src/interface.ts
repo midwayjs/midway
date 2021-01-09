@@ -23,3 +23,5 @@ export interface IMidwayGRPConfigurationOptions extends IConfigurationOptions {
 
   packageDefinition?: any;
 }
+
+export interface IMidwayGRPCOptions extends IMidwayGRPConfigurationOptions {}

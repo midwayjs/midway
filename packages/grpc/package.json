@@ -6,8 +6,8 @@
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "midway-bin build -c",
-    "test": "midway-bin test --forceExit",
-    "cov": "midway-bin cov --forceExit",
+    "test": "midway-bin test --ts",
+    "cov": "midway-bin cov --ts",
     "ci": "npm run test"
   },
   "keywords": [
@@ -23,14 +23,15 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/cli": "^1.0.0",
-    "@midwayjs/mock": "^2.5.5",
+    "@midwayjs/cli": "^1.2.36",
+    "@midwayjs/mock": "^2.6.8",
     "@grpc/proto-loader": "^0.5.5",
     "fs-extra": "^8.0.1"
   },
   "dependencies": {
-    "@midwayjs/core": "^2.5.5",
-    "@midwayjs/decorator": "^2.4.7",
+    "@midwayjs/core": "^2.6.8",
+    "@midwayjs/decorator": "^2.4.8",
+    "@midwayjs/logger": "^2.6.8",
     "@grpc/grpc-js": "^1.2.1",
     "camelcase": "^6.2.0",
     "pascal-case": "^3.1.2"

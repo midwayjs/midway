@@ -1,8 +1,8 @@
-import { GrpcMethod, MSProducerType, Producer, Provide } from '@midwayjs/decorator';
+import { GrpcMethod, MSProviderType, Provider, Provide } from '@midwayjs/decorator';
 import { hero } from '../interface';
 
 @Provide()
-@Producer(MSProducerType.GRPC)
+@Provider(MSProviderType.GRPC)
 export class HeroService implements hero.HeroService{
   @GrpcMethod()
   async findOne(data, metadata) {
