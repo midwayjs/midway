@@ -121,7 +121,7 @@ export const createAppWorkerLoader = () => {
       this.bootstrap = new BootstrapStarter();
       this.bootstrap
         .configure({
-          baseDir: this.app.appDir,
+          appDir: this.app.appDir,
         })
         .load(this.framework);
       this.app.beforeStart(async () => {
@@ -223,7 +223,7 @@ export const createAgentWorkerLoader = () => {
       this.bootstrap = new BootstrapStarter();
       this.bootstrap
         .configure({
-          baseDir: this.app.appDir,
+          appDir: this.app.appDir,
         })
         .load(this.framework);
       this.app.beforeStart(async () => {

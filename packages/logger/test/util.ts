@@ -12,7 +12,7 @@ export const removeFileOrDir = async (p) => {
 }
 
 export const sleep = async (timeout = 1000) => {
-  return new Promise(resolve =>  {
+  return new Promise<void>(resolve =>  {
     setTimeout(resolve, timeout);
   });
 }

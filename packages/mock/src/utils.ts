@@ -108,7 +108,7 @@ export async function create<
 
   starter
     .configure({
-      baseDir,
+      appDir: baseDir,
     })
     .load(framework);
 

@@ -3,16 +3,30 @@ import {
   IMidwayFramework,
   IMidwayApplication,
   IMidwayBootstrapOptions,
-  IMidwayContainer, IConfigurationOptions, MidwayFrameworkType,
+  IMidwayContainer,
+  IConfigurationOptions,
+  MidwayFrameworkType,
 } from '@midwayjs/core';
 import { clearAllLoggers } from '@midwayjs/logger';
+import { join } from 'path';
 
-class TestFrameworkUnit implements IMidwayFramework<any, IConfigurationOptions> {
-  configurationOptions: IConfigurationOptions;
+interface MockConfigurationOptions extends IConfigurationOptions {
+  port?: number;
+}
+
+export const sleep = async (timeout = 1000) => {
+  return new Promise<void>(resolve =>  {
+    setTimeout(resolve, timeout);
+  });
+}
+
+class TestFrameworkUnit implements IMidwayFramework<any, MockConfigurationOptions> {
+  configurationOptions: MockConfigurationOptions;
+  bootstrapOptions: IMidwayBootstrapOptions;
   options;
   app;
 
-  configure(options: IConfigurationOptions): TestFrameworkUnit {
+  configure(options: MockConfigurationOptions): TestFrameworkUnit {
     this.options = options;
     return this;
   }
@@ -26,6 +40,7 @@ class TestFrameworkUnit implements IMidwayFramework<any, IConfigurationOptions> 
 
   async initialize(options: IMidwayBootstrapOptions): Promise<void> {
     this.app = {bbb: 22};
+    this.bootstrapOptions = options;
   }
 
   getApplicationContext(): IMidwayContainer {
@@ -49,11 +64,11 @@ class TestFrameworkUnit implements IMidwayFramework<any, IConfigurationOptions> 
   }
 
   getAppDir(): string {
-    return __dirname;
+    return this.bootstrapOptions.appDir;
   }
 
   getBaseDir(): string {
-    return __dirname;
+    return this.bootstrapOptions.baseDir;
   }
 
   getLogger(): any {
@@ -71,13 +86,23 @@ class TestFrameworkUnit implements IMidwayFramework<any, IConfigurationOptions> 
   getProjectName(): string {
     return 'test';
   }
+
+  getFrameworkName() {
+    return 'midway:mock'
+  }
 }
 
 describe('/test/index.test.ts', () => {
-  it('create bootstrap case', async () => {
+
+  beforeEach(() => {
+    Bootstrap.reset();
     clearAllLoggers();
+  })
+
+  it('create bootstrap case', async () => {
+    process.env.MIDWAY_TS_MODE = 'true';
     const bootstrap = Bootstrap.configure({
-      baseDir: __dirname,
+      appDir: __dirname,
     });
 
     expect(bootstrap);
@@ -87,6 +112,8 @@ describe('/test/index.test.ts', () => {
     });
     await bootstrap.load(framework).run();
     expect(framework);
+    expect(framework.getAppDir()).toEqual(__dirname);
+    expect(framework.getBaseDir()).toEqual(join(__dirname, 'src'));
     expect(framework.getApplicationContext()).toStrictEqual({a: 1});
     expect(framework.app).toStrictEqual({bbb: 22});
     expect(framework.getApplication()).toStrictEqual({bbb: 22});
@@ -95,16 +122,29 @@ describe('/test/index.test.ts', () => {
     // Bootstrap.configure({})
     //   .load(new TestFrameworkUnit().configure({port: 7001}))
     //   .run();
+    await bootstrap.stop();
+    process.env.MIDWAY_TS_MODE = '';
+    // await bootstrap.reset();
   });
 
   it('should bootstrap with no console', async () => {
-    clearAllLoggers();
-    Bootstrap.logger = null;
     const bootstrap = Bootstrap.configure({
-      baseDir: __dirname,
+      appDir: __dirname,
       logger: false
     });
     expect(bootstrap);
     await bootstrap.run();
+    await bootstrap.stop();
+  });
+
+  it('should start bootstrap with not configure', async () => {
+    const framework = new TestFrameworkUnit().configure({
+      port: 7001,
+    });
+    await Bootstrap.load(framework).run();
+    expect(framework.getAppDir()).toEqual(process.cwd());
+    // 因为 jest 环境认不出 ts-node
+    expect(framework.getBaseDir()).toEqual(join(process.cwd(), 'dist'));
+    await Bootstrap.stop();
   });
 });
