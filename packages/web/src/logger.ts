@@ -137,7 +137,11 @@ class EggLoggers extends BaseEggLoggers {
    */
   constructor(options, app: Application) {
     super(options);
-    this.app = app;
+    // 这么改是为了防止 egg 日志切割时遍历属性，导致报错
+    Object.defineProperty(this, 'app', {
+      value: app,
+      enumerable: false,
+    });
     /**
      * 由于 egg 的日志生成不是软链，每次都会创建，无法覆盖这个行为
      * 1、如果以前存在老的 egg 日志，必然存在非软链文件，则重命名备份
