@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.6.10](https://github.com/midwayjs/midway/compare/v2.6.9...v2.6.10) (2021-01-10)
+
+
+### Bug Fixes
+
+* bootstrap missing create logger ([#797](https://github.com/midwayjs/midway/issues/797)) ([f7aac5f](https://github.com/midwayjs/midway/commit/f7aac5fcd9a59a3a36856af58c17ee1d0c9dfca4))
+* disable logrotator and avoid file exists error ([#798](https://github.com/midwayjs/midway/issues/798)) ([64ac85c](https://github.com/midwayjs/midway/commit/64ac85c68bf479e9474de9ac8f22c491d8bfce39))
+
+
+
+
+
 ## [2.6.9](https://github.com/midwayjs/midway/compare/v2.6.8...v2.6.9) (2021-01-08)
 
 
