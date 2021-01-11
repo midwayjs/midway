@@ -9,6 +9,6 @@ exports.handler = asyncWrapper(async (...args) => {
     runtime = await start();
   }
   return runtime.asyncEvent(async function (ctx) {
-    ctx.body = 'Alan';
+    ctx.body = 'Alan|' + ctx.originContext.requestId;
   })(...args);
 });
