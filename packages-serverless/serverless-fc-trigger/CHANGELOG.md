@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.6.11](https://github.com/midwayjs/midway-faas/compare/v2.6.10...v2.6.11) (2021-01-11)
+
+**Note:** Version bump only for package @midwayjs/serverless-fc-trigger
+
+
+
+
+
 ## [2.6.8](https://github.com/midwayjs/midway-faas/compare/v2.6.7...v2.6.8) (2021-01-06)
 
 **Note:** Version bump only for package @midwayjs/serverless-fc-trigger

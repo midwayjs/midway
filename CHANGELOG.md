@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.6.11](https://github.com/midwayjs/midway/compare/v2.6.10...v2.6.11) (2021-01-11)
+
+
+### Bug Fixes
+
+* missing originContext property  in http trigger ([#799](https://github.com/midwayjs/midway/issues/799)) ([5cd96a0](https://github.com/midwayjs/midway/commit/5cd96a00bdbd733d89dbcb50e460e4a9392679d5))
+
+
+
+
+
 ## [2.6.10](https://github.com/midwayjs/midway/compare/v2.6.9...v2.6.10) (2021-01-10)
 
 
