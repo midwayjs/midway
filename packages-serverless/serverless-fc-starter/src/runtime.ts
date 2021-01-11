@@ -60,6 +60,9 @@ export class FCRuntime extends ServerlessLightRuntime {
     const newRes = new HTTPResponse();
 
     if (isHTTPMode) {
+      req.getOriginContext = () => {
+        return context;
+      }
       // http
       // const rawBody = 'test';
       // req.rawBody = rawBody;
