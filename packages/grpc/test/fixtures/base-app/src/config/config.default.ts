@@ -1,11 +1,12 @@
 import { IMidwayGRPCConfigOptions } from '../../../../../src';
+import { join } from 'path';
 
 export const grpc = {
   clients: [
     {
       host: 'localhost',
       port: 50051,
-      protoPath: ''
+      protoPath: join(__dirname, '../proto/helloworld.proto')
     }
   ]
 } as IMidwayGRPCConfigOptions;

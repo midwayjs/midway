@@ -1,5 +1,5 @@
 import { IConfigurationOptions, IMidwayApplication, IMidwayContext } from '@midwayjs/core';
-import { Server } from '@grpc/grpc-js';
+import { Server, ServerCredentials } from '@grpc/grpc-js';
 
 export type IMidwayGRPCContext = IMidwayContext & {
   startTime: number;
@@ -22,7 +22,9 @@ export interface IMidwayGRPFrameworkOptions extends IConfigurationOptions {
    */
   package?: string;
 
-  packageDefinition?: any;
+  loaderOptions?: object;
+
+  credentials?: ServerCredentials;
 }
 
 export interface IMidwayGRPCConfigOptions {

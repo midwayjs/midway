@@ -1,4 +1,4 @@
-import { Server, ServerCredentials, setLogger, loadPackageDefinition } from '@grpc/grpc-js';
+import { Server, ServerCredentials, setLogger } from '@grpc/grpc-js';
 import {
   BaseFramework,
   getClassMetadata,
@@ -14,21 +14,22 @@ import {
   MSProviderType
 } from '@midwayjs/decorator';
 import {
-  IMidwayGRPCApplication, IMidwayGRPConfigurationOptions,
+  IMidwayGRPCApplication, IMidwayGRPFrameworkOptions,
 } from '../interface';
 import { MidwayGRPCContextLogger } from './logger';
 import { pascalCase } from 'pascal-case';
 import * as camelCase from 'camelcase';
+import { loadProto } from '../util';
 
 export class MidwayGRPCFramework extends BaseFramework<
   IMidwayGRPCApplication,
-  IMidwayGRPConfigurationOptions
+  IMidwayGRPFrameworkOptions
   > {
   public app: IMidwayGRPCApplication;
   private server: Server;
 
   public configure(
-    options: IMidwayGRPConfigurationOptions
+    options: IMidwayGRPFrameworkOptions
   ): MidwayGRPCFramework {
     this.configurationOptions = options;
     return this;
@@ -58,31 +59,29 @@ export class MidwayGRPCFramework extends BaseFramework<
       return type === MSProviderType.GRPC;
     });
 
-    if (this.configurationOptions.packageDefinition) {
-      const definitions = loadPackageDefinition(this.configurationOptions.packageDefinition);
-      const protoModule = definitions[this.configurationOptions.package];
+    const definitions = await loadProto(this.configurationOptions);
+    const protoModule = definitions[this.configurationOptions.package];
 
-      for (const module of gRPCModules) {
-        const provideId = getProviderId(module);
-        let serviceName = pascalCase(provideId);
+    for (const module of gRPCModules) {
+      const provideId = getProviderId(module);
+      let serviceName = pascalCase(provideId);
 
-        if (protoModule[serviceName]) {
-          const protoService = protoModule[serviceName]['service'];
-          const serviceInstance = {};
-          for (const method in protoService) {
-            serviceInstance[method] = async (...args) => {
-              const ctx = {} as any;
-              ctx.requestContext = new MidwayRequestContainer(ctx, this.getApplicationContext());
-              ctx.logger = new MidwayGRPCContextLogger(ctx, this.appLogger);
+      if (protoModule[serviceName]) {
+        const protoService = protoModule[serviceName]['service'];
+        const serviceInstance = {};
+        for (const method in protoService) {
+          serviceInstance[method] = async (...args) => {
+            const ctx = {} as any;
+            ctx.requestContext = new MidwayRequestContainer(ctx, this.getApplicationContext());
+            ctx.logger = new MidwayGRPCContextLogger(ctx, this.appLogger);
 
-              const service = await ctx.requestContext.getAsync(gRPCModules);
-              return service[camelCase(method)]?.apply(this, args);
-            };
-          }
-          this.server.addService(protoService, serviceInstance);
-        } else {
-          this.logger.warn(`Proto ${serviceName} not found and not add to gRPC server`);
+            const service = await ctx.requestContext.getAsync(gRPCModules);
+            return service[camelCase(method)]?.apply(this, args);
+          };
         }
+        this.server.addService(protoService, serviceInstance);
+      } else {
+        this.logger.warn(`Proto ${serviceName} not found and not add to gRPC server`);
       }
     }
   }

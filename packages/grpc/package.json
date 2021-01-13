@@ -25,7 +25,6 @@
   "devDependencies": {
     "@midwayjs/cli": "^1.2.36",
     "@midwayjs/mock": "^2.6.9",
-    "@grpc/proto-loader": "^0.5.5",
     "fs-extra": "^8.0.1"
   },
   "dependencies": {
@@ -33,6 +32,7 @@
     "@midwayjs/decorator": "^2.4.8",
     "@midwayjs/logger": "^2.6.9",
     "@grpc/grpc-js": "^1.2.1",
+    "@grpc/proto-loader": "^0.5.5",
     "camelcase": "^6.2.0",
     "pascal-case": "^3.1.2"
   },

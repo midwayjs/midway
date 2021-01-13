@@ -1,22 +1,13 @@
-import { Framework, IMidwayGRPCApplication, IMidwayGRPConfigurationOptions } from '../src';
+import { Framework, IMidwayGRPCApplication, IMidwayGRPFrameworkOptions } from '../src';
 import { join } from 'path';
 import { close, createApp } from '@midwayjs/mock';
-
-import * as protoLoader from '@grpc/proto-loader';
 
 /**
  * create a gRPC server
  * @param name
  * @param options
  */
-export async function createServer(name: string, options: IMidwayGRPConfigurationOptions = {}): Promise<IMidwayGRPCApplication> {
-  options.packageDefinition = protoLoader.loadSync(options.protoPath, {
-    keepCase: true,
-    longs: String,
-    enums: String,
-    defaults: true,
-    oneofs: true
-  });
+export async function createServer(name: string, options: IMidwayGRPFrameworkOptions = {}): Promise<IMidwayGRPCApplication> {
   return createApp<Framework>(join(__dirname, 'fixtures', name), options, Framework);
 }
 
