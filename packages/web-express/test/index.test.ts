@@ -15,7 +15,7 @@ describe('/test/feature.test.ts', () => {
 
     it('test setHeader decorator', async () => {
       const result = await createHttpRequest(app)
-        .get('/set_header')
+        .get('/api/set_header')
         .query({ name: 'harry' });
       expect(result.status).toEqual(200);
       expect(result.text).toEqual('bbb');
@@ -24,24 +24,24 @@ describe('/test/feature.test.ts', () => {
     });
 
     it('test get method with return value', async () => {
-      const result = await createHttpRequest(app).get('/').query({ name: 'harry' });
+      const result = await createHttpRequest(app).get('/api/').query({ name: 'harry' });
       expect(result.status).toBe(201);
       expect(result.text).toBe('hello world,harry');
     });
 
     it('test get method with redirect', async () => {
-      const result = await createHttpRequest(app).get('/login');
+      const result = await createHttpRequest(app).get('/api/login');
       expect(result.status).toBe(302);
     });
 
     it('test get status 204', async () => {
-      const result = await createHttpRequest(app).get('/204');
+      const result = await createHttpRequest(app).get('/api/204');
       console.log('result.status', result.status);
       expect(result.status).toBe(204);
     });
 
     it('test get data with ctx.body', async () => {
-      const result = await createHttpRequest(app).get('/ctx-body');
+      const result = await createHttpRequest(app).get('/api/ctx-body');
       expect(result.text).toEqual('ctx-body');
     });
   });
