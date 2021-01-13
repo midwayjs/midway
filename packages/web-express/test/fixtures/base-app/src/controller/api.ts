@@ -15,7 +15,7 @@ import { UserService } from '../service/user';
 import { IMidwayExpressContext, IMidwayExpressRequest } from '../../../../../src';
 
 @Provide()
-@Controller('/')
+@Controller('/api')
 export class APIController {
 
   @Inject()
