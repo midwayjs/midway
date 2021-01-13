@@ -1,9 +1,8 @@
-import { Config, Init, Provide, Scope, ScopeEnum } from "@midwayjs/decorator";
-import * as amqp from 'amqplib'
+import { Config, Init, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import * as amqp from 'amqplib';
 @Scope(ScopeEnum.Singleton)
 @Provide()
-export class RabbitmqProducer{
-
+export class RabbitmqProducer {
   @Config('rabbitmq')
   options;
 
@@ -11,22 +10,24 @@ export class RabbitmqProducer{
 
   channel: amqp.Channel;
 
-  async getMQConnection(options) {
-    let connection = await amqp.connect(options)
+  async getMQConnection(
+    options: string | amqp.Options.Connect
+  ): Promise<amqp.Connection> {
+    const connection = await amqp.connect(options);
     this.channel = await connection.createChannel();
     return connection;
   }
 
-  getConnection(){
+  getConnection(): amqp.Connection {
     return this.client;
   }
 
-  getChannel(): amqp.Channel{
+  getChannel(): amqp.Channel {
     return this.channel;
   }
 
   @Init()
-  async connect() {
-    this.client = await this.getMQConnection(this.options)
+  async connect(): Promise<void> {
+    this.client = await this.getMQConnection(this.options);
   }
 }

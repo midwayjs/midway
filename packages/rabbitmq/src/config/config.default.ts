@@ -1,1 +1,1 @@
-export const rabbitmq = { url: 'amqp://localhost'};
+export const rabbitmq = { url: 'amqp://localhost' };

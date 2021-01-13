@@ -8,7 +8,8 @@
     "build": "midway-bin build -c",
     "test": "midway-bin test --ts --forceExit",
     "cov": "midway-bin cov --ts --forceExit",
-    "ci": "npm run test"
+    "ci": "npm run test",
+    "lint:fix": "../../node_modules/.bin/mwts fix"
   },
   "keywords": [
     "midway",
