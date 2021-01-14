@@ -1,8 +1,10 @@
 import { Configuration } from '@midwayjs/decorator';
 import * as mongoose from '../../../../src';
+import path from 'path'
 
 @Configuration({
-  imports: [mongoose]
+  imports: [mongoose],
+  importConfigs: [path.join(__dirname, 'config')]
 })
 export class AutoConfiguration {
 
