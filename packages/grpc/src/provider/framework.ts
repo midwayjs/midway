@@ -60,16 +60,15 @@ export class MidwayGRPCFramework extends BaseFramework<
     });
 
     const definitions = await loadProto(this.configurationOptions);
-    const protoModule = definitions[this.configurationOptions.package];
 
     for (const module of gRPCModules) {
       const provideId = getProviderId(module);
       let serviceName = pascalCase(provideId);
+      const serviceDefinition: any = definitions[`${this.configurationOptions.package}.${serviceName}`];
 
-      if (protoModule[serviceName]) {
-        const protoService = protoModule[serviceName]['service'];
+      if (serviceDefinition) {
         const serviceInstance = {};
-        for (const method in protoService) {
+        for (const method in serviceDefinition) {
           serviceInstance[method] = async (...args) => {
             const ctx = {} as any;
             ctx.requestContext = new MidwayRequestContainer(ctx, this.getApplicationContext());
@@ -79,9 +78,8 @@ export class MidwayGRPCFramework extends BaseFramework<
             return service[camelCase(method)]?.apply(this, args);
           };
         }
-        this.server.addService(protoService, serviceInstance);
-      } else {
-        this.logger.warn(`Proto ${serviceName} not found and not add to gRPC server`);
+        this.server.addService(serviceDefinition, serviceInstance);
+        this.logger.info(`Proto ${this.configurationOptions.package}.${serviceName} found and add to gRPC server`);
       }
     }
   }

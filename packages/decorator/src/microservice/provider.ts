@@ -2,7 +2,7 @@ import {
   ScopeEnum,
   saveClassMetadata,
   saveModule,
-  MS_PRODUCER_KEY,
+  MS_PROVIDER_KEY,
   attachClassMetadata,
   MS_GRPC_METHOD_KEY,
   MS_DUBBO_METHOD_KEY,
@@ -18,8 +18,8 @@ export enum MSProviderType {
 
 export function Provider(type: MSProviderType): ClassDecorator {
   return (target: any) => {
-    saveModule(MS_PRODUCER_KEY, target);
-    saveClassMetadata(MS_PRODUCER_KEY, type, target);
+    saveModule(MS_PROVIDER_KEY, target);
+    saveClassMetadata(MS_PROVIDER_KEY, type, target);
     Scope(ScopeEnum.Request)(target);
   };
 }

@@ -1,10 +1,9 @@
-import { Config, Init, Provide, Scope, ScopeEnum, Autoload } from '@midwayjs/decorator';
-import { credentials } from '@grpc/grpc-js';
+import { Config, Init, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { credentials, loadPackageDefinition } from '@grpc/grpc-js';
 import { IMidwayGRPCConfigOptions } from '../interface';
 import { loadProto } from '../util';
 
 @Provide('clients')
-@Autoload()
 @Scope(ScopeEnum.Singleton)
 export class GRPCClients extends Map {
 
@@ -15,11 +14,13 @@ export class GRPCClients extends Map {
   async initService() {
     for(const cfg of this.grpcConfig['clients']) {
       const packageDefinition = await loadProto(cfg);
-      const packageProtos = packageDefinition[cfg.package];
-      for(const serviceName in packageProtos) {
-        const ProtoService = packageProtos[serviceName]['service'];
-        const connectionService = new ProtoService(cfg.host + ':' + cfg.port, credentials.createInsecure());
-        this.set(serviceName, connectionService)
+      const packageProto: any = loadPackageDefinition(packageDefinition)[cfg.package];
+      for (const definition in packageDefinition) {
+        if (!packageDefinition[definition]['format']) {
+          const serviceName = definition.replace(`${cfg.package}.`, '');
+          const connectionService = new packageProto[serviceName](cfg.host + ':' + cfg.port, credentials.createInsecure());
+          this.set(serviceName, connectionService)
+        }
       }
     }
   }

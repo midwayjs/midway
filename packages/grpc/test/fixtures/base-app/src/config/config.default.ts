@@ -6,7 +6,8 @@ export const grpc = {
     {
       host: 'localhost',
       port: 50051,
-      protoPath: join(__dirname, '../proto/helloworld.proto')
+      protoPath: join(__dirname, '../../../proto/helloworld.proto'),
+      package: 'helloworld'
     }
   ]
 } as IMidwayGRPCConfigOptions;
