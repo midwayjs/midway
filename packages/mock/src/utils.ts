@@ -86,6 +86,10 @@ export async function create<
             enable: true,
             package: 'egg-mock',
           },
+          'midway-mock': {
+            enable: true,
+            package: '@midwayjs/mock',
+          },
           watcher: false,
           development: false,
         },
