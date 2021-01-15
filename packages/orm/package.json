@@ -1,0 +1,34 @@
+{
+  "name": "@midwayjs/orm",
+  "version": "1.3.0",
+  "main": "dist/index",
+  "typings": "dist/index.d.ts",
+  "dependencies": {
+    "typeorm": "^0.2.25"
+  },
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts"
+  ],
+  "devDependencies": {
+    "@midwayjs/cli": "^1.0.0",
+    "@midwayjs/core": "^2.3.0",
+    "@midwayjs/decorator": "^2.3.0",
+    "sqlite3": "^5.0.0"
+  },
+  "author": {
+    "name": "Kurten Chan",
+    "email": "chinkurten@gmail.com"
+  },
+  "license": "MIT",
+  "scripts": {
+    "build": "midway-bin build -c",
+    "test": "midway-bin test --ts",
+    "cov": "midway-bin cov --ts",
+    "ci": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/midwayjs/midway-component.git"
+  }
+}
