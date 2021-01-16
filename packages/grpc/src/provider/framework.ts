@@ -1,4 +1,4 @@
-import { Server, ServerCredentials, setLogger } from '@grpc/grpc-js';
+import { Server, ServerCredentials, setLogger, ServerUnaryCall, sendUnaryData } from '@grpc/grpc-js';
 import {
   BaseFramework,
   getClassMetadata,
@@ -69,13 +69,18 @@ export class MidwayGRPCFramework extends BaseFramework<
       if (serviceDefinition) {
         const serviceInstance = {};
         for (const method in serviceDefinition) {
-          serviceInstance[method] = async (...args) => {
-            const ctx = {} as any;
+          serviceInstance[method] = async (call: ServerUnaryCall<any, any>, callback: sendUnaryData<any>) => {
+            const ctx = { metadata: call.metadata} as any;
             ctx.requestContext = new MidwayRequestContainer(ctx, this.getApplicationContext());
             ctx.logger = new MidwayGRPCContextLogger(ctx, this.appLogger);
 
-            const service = await ctx.requestContext.getAsync(gRPCModules);
-            return service[camelCase(method)]?.apply(this, args);
+            try {
+              const service = await ctx.requestContext.getAsync(module);
+              const result = await service[camelCase(method)]?.apply(this, [call.request]);
+              callback(null, result);
+            } catch (err) {
+              callback(err);
+            }
           };
         }
         this.server.addService(serviceDefinition, serviceInstance);

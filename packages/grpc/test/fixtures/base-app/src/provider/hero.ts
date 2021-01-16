@@ -18,12 +18,12 @@ export class HeroService implements hero.HeroService {
 
   @GrpcMethod()
   async findOne(data, metadata) {
-    const result = await this.greeterService.sayHello({
-      name: 'harry'
-    });
+    // const result = await this.greeterService.sayHello({
+    //   name: 'harry'
+    // });
     return {
       id: 1,
-      name: result.message,
+      name: 'bbbb',
     };
   }
 }
