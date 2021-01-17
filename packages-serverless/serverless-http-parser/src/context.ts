@@ -63,6 +63,10 @@ export const context = {
     return this.request.hostname;
   },
 
+  get files() {
+    return this.request.files;
+  },
+
   get(field) {
     return this.request.get(field);
   },

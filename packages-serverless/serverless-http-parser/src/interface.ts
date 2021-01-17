@@ -70,4 +70,16 @@ export interface SCFContext {
   namespace: string;
 }
 
-export type GatewayEvent = FCAPIGatewayEvent & SCFAPIGatewayEvent & FCHTTPEvent;
+export interface UploadEvent {
+  files: {
+    filename: string;
+    fieldname: string;
+    mimtType: string;
+    data: Buffer;
+  }[];
+}
+
+export type GatewayEvent = FCAPIGatewayEvent &
+  SCFAPIGatewayEvent &
+  FCHTTPEvent &
+  UploadEvent;

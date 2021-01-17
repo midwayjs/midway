@@ -24,6 +24,7 @@ exports.handler = asyncWrapper(async (...args) => {
       path: ctx.path,
       body: ctx.request.body,
       params: ctx.params,
+      files: ctx.files
     };
   })(...args);
 });

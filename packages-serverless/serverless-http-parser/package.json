@@ -19,7 +19,10 @@
   },
   "devDependencies": {
     "@midwayjs/cli": "^1.2.36",
-    "mm": "3"
+    "raw-body": "^2.4.1",
+    "express": "^4.17.1",
+    "mm": "3",
+    "supertest": "^4.0.2"
   },
   "engines": {
     "node": ">= 10"

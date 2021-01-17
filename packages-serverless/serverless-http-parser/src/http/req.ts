@@ -3,11 +3,12 @@ import { is as typeis } from 'type-is';
 import * as qs from 'querystring';
 import * as parseurl from 'parseurl';
 import { GatewayEvent } from '../interface';
-import { isPlainObject } from '../util';
+import { isPlainObject, parseMultipart } from '../util';
 
 const EVENT = Symbol.for('ctx#event');
 const EVENT_PARSED = Symbol.for('ctx#event_parsed');
 const BODY = Symbol.for('ctx#body');
+const FILES = Symbol.for('ctx#files');
 
 export class HTTPRequest {
   private originContext;
@@ -90,12 +91,17 @@ export class HTTPRequest {
     return this[EVENT].clientIP || this[EVENT].requestContext?.sourceIp || '';
   }
 
+  get files() {
+    this.body;
+    return this[FILES];
+  }
+
   get body() {
     if (this.bodyParsed) {
       return this[BODY];
     }
 
-    let body = this[EVENT].body;
+    let body: any = this[EVENT].body;
     if (isPlainObject(body)) {
       // body has been parsed in express environment
       this.bodyParsed = true;
@@ -106,7 +112,17 @@ export class HTTPRequest {
       this[EVENT].isBase64Encoded === 'true' ||
       this[EVENT].isBase64Encoded === true
     ) {
-      body = Buffer.from(body, 'base64').toString();
+      body = Buffer.from(body, 'base64');
+    }
+
+    const { parsedMultipart, files, body: newBody } = parseMultipart({
+      ...this[EVENT],
+      body,
+    });
+
+    if (parsedMultipart) {
+      body = newBody;
+      this[FILES] = files;
     }
 
     if (Buffer.isBuffer(body)) {

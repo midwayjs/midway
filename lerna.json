@@ -21,6 +21,6 @@
       "createRelease": "github"
     }
   },
-  "npmClient": "npm",
+  "npmClient": "cnpm",
   "version": "2.6.12"
 }
