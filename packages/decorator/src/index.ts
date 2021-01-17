@@ -1,6 +1,6 @@
 export * from './interface';
 export * from './annotation';
-export * from './common/constant';
+export * from './constant';
 export * from './common/decoratorManager';
 export * from './common/errMsg';
 export * from './common/metadata';

@@ -15,7 +15,7 @@ import {
   TAGGED,
   TAGGED_CLS,
   TAGGED_PROP,
-} from './constant';
+} from '../constant';
 
 import {
   DUPLICATED_INJECTABLE_DECORATOR,

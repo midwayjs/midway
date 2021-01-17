@@ -6,12 +6,11 @@ export type IMidwayGRPCContext = IMidwayContext & {
 }
 export type IMidwayGRPCApplication = IMidwayApplication & Server;
 
-export interface IMidwayGRPFrameworkOptions extends IConfigurationOptions {
-  host?: string;
+export interface IGRPCServiceOptions {
   /**
-   * application gRPC port
+   * application gRPC connection string
    */
-  port?: number;
+  url?: string;
   /**
    * proto path
    */
@@ -27,6 +26,15 @@ export interface IMidwayGRPFrameworkOptions extends IConfigurationOptions {
   credentials?: ServerCredentials;
 }
 
-export interface IMidwayGRPCConfigOptions {
-  clients: IMidwayGRPFrameworkOptions[];
+export interface IMidwayGRPFrameworkOptions extends IConfigurationOptions {
+  /**
+   * gRPC Server connection url, default is localhost:6565
+   */
+  url?: string;
+  services: Pick<IGRPCServiceOptions, 'protoPath' | 'package'>[];
+  loaderOptions?: object;
+}
+
+export interface IMidwayGRPCConfigOptions extends IConfigurationOptions {
+  services: IGRPCServiceOptions[];
 }

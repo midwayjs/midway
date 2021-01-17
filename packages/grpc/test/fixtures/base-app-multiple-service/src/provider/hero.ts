@@ -3,7 +3,7 @@ import { helloworld, hero } from '../interface';
 import { Clients } from '../../../../../src';
 
 @Provide()
-@Provider(MSProviderType.GRPC)
+@Provider(MSProviderType.GRPC, { package: 'hero' })
 export class HeroService implements hero.HeroService {
 
   @Inject('grpc:clients')
@@ -13,17 +13,17 @@ export class HeroService implements hero.HeroService {
 
   @Init()
   async init() {
-    this.greeterService = this.grpcClients.getService<helloworld.Greeter>('Greeter');
+    this.greeterService = this.grpcClients.getService<helloworld.Greeter>('helloworld.Greeter');
   }
 
   @GrpcMethod()
-  async findOne(data, metadata) {
-    // const result = await this.greeterService.sayHello({
-    //   name: 'harry'
-    // });
+  async findOne(data) {
+    const result = await this.greeterService.sayHello({
+      name: 'harry'
+    });
     return {
       id: 1,
-      name: 'bbbb',
+      name: 'bbbb-' + result.message,
     };
   }
 }

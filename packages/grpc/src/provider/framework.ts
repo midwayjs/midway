@@ -9,6 +9,7 @@ import {
 } from '@midwayjs/core';
 
 import {
+  DecoratorMetadata,
   getProviderId,
   MS_PROVIDER_KEY,
   MSProviderType
@@ -20,6 +21,7 @@ import { MidwayGRPCContextLogger } from './logger';
 import { pascalCase } from 'pascal-case';
 import * as camelCase from 'camelcase';
 import { loadProto } from '../util';
+import { PackageDefinition } from '@grpc/proto-loader';
 
 export class MidwayGRPCFramework extends BaseFramework<
   IMidwayGRPCApplication,
@@ -54,20 +56,35 @@ export class MidwayGRPCFramework extends BaseFramework<
   }
 
   protected async loadService() {
+    // find all code service
     const gRPCModules = listModule(MS_PROVIDER_KEY, (module) => {
-      const type = getClassMetadata(MS_PROVIDER_KEY, module);
-      return type === MSProviderType.GRPC;
+      const info: DecoratorMetadata.ProviderClassMetadata = getClassMetadata(MS_PROVIDER_KEY, module);
+      return info.type === MSProviderType.GRPC;
     });
 
-    const definitions = await loadProto(this.configurationOptions);
+    this.logger.info(`Find ${gRPCModules.length} class has gRPC provider decorator`);
 
+    // get definition from proto file
+    const serviceClassDefinition: Map<string, PackageDefinition> = new Map();
+    for (const service of this.configurationOptions.services) {
+      const definitions = await loadProto({
+        protoPath: service.protoPath,
+        loaderOptions: this.configurationOptions.loaderOptions,
+      });
+      serviceClassDefinition.set(service.package, definitions);
+    }
+
+    // register method to service
     for (const module of gRPCModules) {
       const provideId = getProviderId(module);
-      let serviceName = pascalCase(provideId);
-      const serviceDefinition: any = definitions[`${this.configurationOptions.package}.${serviceName}`];
+      const info: DecoratorMetadata.ProviderClassMetadata = getClassMetadata(MS_PROVIDER_KEY, module);
+      const classMetadata = info.metadata as DecoratorMetadata.GRPCClassMetadata;
+      let serviceName = classMetadata.serviceName || pascalCase(provideId);
 
-      if (serviceDefinition) {
+      if (serviceClassDefinition.has(classMetadata?.package)) {
         const serviceInstance = {};
+        const serviceDefinition: any = serviceClassDefinition.get(classMetadata.package)[`${classMetadata?.package}.${serviceName}`];
+
         for (const method in serviceDefinition) {
           serviceInstance[method] = async (call: ServerUnaryCall<any, any>, callback: sendUnaryData<any>) => {
             const ctx = { metadata: call.metadata} as any;
@@ -76,7 +93,7 @@ export class MidwayGRPCFramework extends BaseFramework<
 
             try {
               const service = await ctx.requestContext.getAsync(module);
-              const result = await service[camelCase(method)]?.apply(this, [call.request]);
+              const result = await service[camelCase(method)]?.apply(service, [call.request]);
               callback(null, result);
             } catch (err) {
               callback(err);
@@ -84,14 +101,14 @@ export class MidwayGRPCFramework extends BaseFramework<
           };
         }
         this.server.addService(serviceDefinition, serviceInstance);
-        this.logger.info(`Proto ${this.configurationOptions.package}.${serviceName} found and add to gRPC server`);
+        this.logger.info(`Proto ${classMetadata?.package}.${serviceName} found and add to gRPC server`);
       }
     }
   }
 
   public async run(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-      this.server.bindAsync(`127.0.0.1:${this.configurationOptions.port || 6565}`, ServerCredentials.createInsecure(), (err: Error | null, bindPort: number) => {
+      this.server.bindAsync(`${this.configurationOptions.url || 'localhost:6565'}`, ServerCredentials.createInsecure(), (err: Error | null, bindPort: number) => {
         if (err) {
           reject(err);
         }

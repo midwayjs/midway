@@ -7,19 +7,19 @@ import {
   MS_GRPC_METHOD_KEY,
   MS_DUBBO_METHOD_KEY,
   MS_HSF_METHOD_KEY,
+  MSProviderType,
+  DecoratorMetadata,
 } from '../';
 import { Scope } from '../annotation';
 
-export enum MSProviderType {
-  DUBBO = 'dubbo',
-  GRPC = 'gRPC',
-  HSF = 'hsf',
-}
-
-export function Provider(type: MSProviderType): ClassDecorator {
+export function Provider(type: MSProviderType.GRPC, metadata?: DecoratorMetadata.GRPCClassMetadata): ClassDecorator;
+export function Provider(type: MSProviderType, metadata: any = {}): ClassDecorator {
   return (target: any) => {
     saveModule(MS_PROVIDER_KEY, target);
-    saveClassMetadata(MS_PROVIDER_KEY, type, target);
+    saveClassMetadata(MS_PROVIDER_KEY, {
+      type,
+      metadata,
+    }, target);
     Scope(ScopeEnum.Request)(target);
   };
 }
