@@ -109,12 +109,12 @@ export class HTTPRequest {
       body = Buffer.from(body, 'base64').toString();
     }
 
-    if (Buffer.isBuffer(body)) {
-      body = Buffer.from(body).toString();
-    }
 
     switch (typeis(this.getHeader('content-type'), ['urlencoded', 'json'])) {
       case 'json':
+        if (Buffer.isBuffer(body)) {
+          body = Buffer.from(body).toString();
+        }
         try {
           this[BODY] = JSON.parse(body);
         } catch {
@@ -122,6 +122,9 @@ export class HTTPRequest {
         }
         break;
       case 'urlencoded':
+        if (Buffer.isBuffer(body)) {
+          body = Buffer.from(body).toString();
+        }
         try {
           // fc apigw use this
           this[BODY] = JSON.parse(body);

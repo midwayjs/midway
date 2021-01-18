@@ -144,13 +144,11 @@ export const request = {
       return this[BODY];
     }
 
-    // fc http parser 会走到这里，因为 req.body 是 buffer，且不会被处理
-    if (Buffer.isBuffer(body)) {
-      body = Buffer.from(body).toString();
-    }
-
     switch (typeis(this.get('content-type'), ['urlencoded', 'json'])) {
       case 'json':
+        if (Buffer.isBuffer(body)) {
+          body = Buffer.from(body).toString();
+        }
         try {
           this[BODY] = JSON.parse(body);
         } catch {
@@ -158,6 +156,9 @@ export const request = {
         }
         break;
       case 'urlencoded':
+        if (Buffer.isBuffer(body)) {
+          body = Buffer.from(body).toString();
+        }
         try {
           this[BODY] = qs.parse(body);
         } catch {
