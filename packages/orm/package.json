@@ -14,7 +14,9 @@
     "@midwayjs/cli": "^1.0.0",
     "@midwayjs/core": "^2.3.0",
     "@midwayjs/decorator": "^2.3.0",
-    "sqlite3": "^5.0.0"
+    "sqlite3": "^5.0.0",
+    "@midwayjs/faas": "^1.0.0",
+    "@midwayjs/serverless-invoke": "^1.2.37"
   },
   "author": {
     "name": "Kurten Chan",

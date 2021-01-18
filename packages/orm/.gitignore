@@ -1,0 +1,3 @@
+default.sqlite
+test.sqlite
+.faas_debug_tmp
