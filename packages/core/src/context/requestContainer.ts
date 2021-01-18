@@ -9,6 +9,9 @@ export class MidwayRequestContainer extends MidwayContainer {
   constructor(ctx, applicationContext: IMidwayContainer) {
     super(null, applicationContext);
     this.applicationContext = applicationContext;
+    this.configService = this.applicationContext.getConfigService();
+    this.environmentService = this.applicationContext.getEnvironmentService();
+
     // register ctx
     this.registerObject(REQUEST_CTX_KEY, ctx);
 
@@ -103,11 +106,11 @@ export class MidwayRequestContainer extends MidwayContainer {
     // ignore other things
   }
 
-  get configService() {
-    return this.applicationContext.getConfigService();
+  getConfigService() {
+    return this.configService;
   }
 
-  get environmentService() {
-    return this.applicationContext.getEnvironmentService();
+  getEnvironmentService() {
+    return this.environmentService;
   }
 }

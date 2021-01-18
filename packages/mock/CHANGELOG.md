@@ -3,6 +3,118 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.6.12](https://github.com/midwayjs/midway/compare/v2.6.11...v2.6.12) (2021-01-15)
+
+
+### Bug Fixes
+
+* mockClassFunction missing ([#807](https://github.com/midwayjs/midway/issues/807)) ([88fa763](https://github.com/midwayjs/midway/commit/88fa7636dbfaba89fb420b70f96cd904630e687c))
+* rabbitmq client mock ([#801](https://github.com/midwayjs/midway/issues/801)) ([18d0fcd](https://github.com/midwayjs/midway/commit/18d0fcd24df722ec5a58775fd4d795f22c4e4725))
+
+
+
+
+
+## [2.6.10](https://github.com/midwayjs/midway/compare/v2.6.9...v2.6.10) (2021-01-10)
+
+
+### Bug Fixes
+
+* bootstrap missing create logger ([#797](https://github.com/midwayjs/midway/issues/797)) ([f7aac5f](https://github.com/midwayjs/midway/commit/f7aac5fcd9a59a3a36856af58c17ee1d0c9dfca4))
+
+
+
+
+
+## [2.6.9](https://github.com/midwayjs/midway/compare/v2.6.8...v2.6.9) (2021-01-08)
+
+**Note:** Version bump only for package @midwayjs/mock
+
+
+
+
+
+## [2.6.8](https://github.com/midwayjs/midway/compare/v2.6.7...v2.6.8) (2021-01-06)
+
+**Note:** Version bump only for package @midwayjs/mock
+
+
+
+
+
+## [2.6.7](https://github.com/midwayjs/midway/compare/v2.6.6...v2.6.7) (2021-01-05)
+
+
+### Bug Fixes
+
+* remove error and symbol link in windows ([#792](https://github.com/midwayjs/midway/issues/792)) ([7434724](https://github.com/midwayjs/midway/commit/7434724a2cf422724ea143032ecb6ccb601d7d7f))
+
+
+
+
+
+## [2.6.6](https://github.com/midwayjs/midway/compare/v2.6.5...v2.6.6) (2021-01-04)
+
+**Note:** Version bump only for package @midwayjs/mock
+
+
+
+
+
+## [2.6.5](https://github.com/midwayjs/midway/compare/v2.6.4...v2.6.5) (2021-01-04)
+
+**Note:** Version bump only for package @midwayjs/mock
+
+
+
+
+
+## [2.6.4](https://github.com/midwayjs/midway/compare/v2.6.3...v2.6.4) (2021-01-02)
+
+
+### Bug Fixes
+
+* definition fix for getLogger and getCoreLogger ([#783](https://github.com/midwayjs/midway/issues/783)) ([264b481](https://github.com/midwayjs/midway/commit/264b4819f8f96dccabd1e5cd6ad2c7b3b8277136))
+
+
+
+
+
+## [2.6.3](https://github.com/midwayjs/midway/compare/v2.6.2...v2.6.3) (2020-12-30)
+
+**Note:** Version bump only for package @midwayjs/mock
+
+
+
+
+
+## [2.6.2](https://github.com/midwayjs/midway/compare/v2.6.1...v2.6.2) (2020-12-30)
+
+**Note:** Version bump only for package @midwayjs/mock
+
+
+
+
+
+## [2.6.1](https://github.com/midwayjs/midway/compare/v2.6.0...v2.6.1) (2020-12-29)
+
+**Note:** Version bump only for package @midwayjs/mock
+
+
+
+
+
+# [2.6.0](https://github.com/midwayjs/midway/compare/v2.5.5...v2.6.0) (2020-12-28)
+
+
+### Features
+
+* add midway logger ([#743](https://github.com/midwayjs/midway/issues/743)) ([13e8cc7](https://github.com/midwayjs/midway/commit/13e8cc753d994e6f9f073688e22527f75d39984a))
+
+
+
+
+
 ## [2.5.5](https://github.com/midwayjs/midway/compare/v2.5.4...v2.5.5) (2020-12-15)
 
 **Note:** Version bump only for package @midwayjs/mock

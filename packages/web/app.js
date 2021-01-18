@@ -51,6 +51,10 @@ class AppBootHook {
   }
 
   async willReady() {}
+
+  async beforeClose() {
+    await this.app.webFramework.stop();
+  }
 }
 
 module.exports = AppBootHook;

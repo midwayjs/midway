@@ -271,7 +271,7 @@ const createConfirmChannel = async () => {
     prefetch: async () => {},
     consume: async (queueName, consumer) => {
       await queues[queueName].addConsumer(consumer, async invokeListenerFn => {
-        return new Promise(resolve => {
+        return new Promise<void>(resolve => {
           evt.on('ack', () => {
             resolve();
           });
@@ -304,22 +304,28 @@ const connect = async () => ({
   close: () => {},
 });
 
-let amqp = null;
-
-try {
-  amqp = require('amqplib');
-  amqp.connect = connect;
-} catch (err) {
-  debug('can not found amqplib lib and skip');
-}
 
 export const createRabbitMQProducer = async function (
   queueName: string,
   options: {
     url?: string;
     isConfirmChannel?: boolean;
-  } = {}
+    mock?: boolean;
+  } = {
+    mock: true
+  }
 ): Promise<Channel> {
+
+  let amqp = null;
+
+  if(options.mock){
+    try {
+      amqp = require('amqplib');
+      amqp.connect = connect;
+    } catch (err) {
+      debug('can not found amqplib lib and skip');
+    }
+  }
   const connection = await amqp.connect(options.url || 'amqp://localhost');
   let ch;
   if (

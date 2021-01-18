@@ -8,38 +8,14 @@ import {
 import * as assert from 'assert';
 import * as path from 'path';
 import {
-  BaseFramework,
   clearAllModule,
   clearContainerCache,
   MidwayRequestContainer,
 } from '../src';
 import * as mm from 'mm';
 import sinon = require('sinon');
-import { IMidwayApplication, IMidwayBootstrapOptions, MidwayFrameworkType } from '../src/interface';
 import { LifeCycleTest, LifeCycleTest1, TestBinding } from "./fixtures/lifecycle";
-
-type mockApp = {} & IMidwayApplication;
-type mockAppOptions = {};
-
-class MockFramework extends BaseFramework<mockApp, mockAppOptions> {
-
-  getApplication(): mockApp {
-    return this.app;
-  }
-
-  getFrameworkType(): MidwayFrameworkType {
-    return MidwayFrameworkType.CUSTOM;
-  }
-
-  async run(): Promise<void> {
-
-  }
-
-  async applicationInitialize(options: IMidwayBootstrapOptions) {
-    this.app = {} as IMidwayApplication;
-  }
-
-}
+import { MockFramework } from './util';
 
 @Provide()
 class TestModule {
@@ -564,5 +540,59 @@ describe('/test/baseFramework.test.ts', () => {
 
     resetModule(CONFIGURATION_KEY);
     mm.restore();
+  });
+
+  it('should get service in a component write with app', async () => {
+    const framework = new MockFramework();
+    await framework.initialize({
+      baseDir: path.join(
+        __dirname,
+        './fixtures/app-with-custom-component-in-app/src'
+      ),
+    });
+
+    const appCtx = framework.getApplicationContext();
+    const userController = await appCtx.getAsync('userController');
+    const books = await (userController as any).getBooksByUser();
+    expect(books).toEqual([
+      {
+        "isbn": "9787115549440",
+        "name": "无限可能"
+      },
+      {
+        "isbn": "9787305236525",
+        "name": "明智的孩子"
+      },
+      {
+        "isbn": "9787020166916",
+        "name": "伊卡狛格"
+      }
+    ]);
+  });
+
+  it('should create logger and match property between framework and app', async () => {
+    const framework = new MockFramework();
+    framework.configure({});
+    await framework.initialize({
+      baseDir: path.join(
+        __dirname,
+        './fixtures/base-app-logger/src'
+      ),
+    });
+    expect(framework.getApplication().getLogger()).toEqual(framework.getLogger());
+    expect(framework.getApplication().getLogger('coreLogger')).toEqual(framework.getLogger('coreLogger'));
+    expect(framework.getApplication().getCoreLogger()).toEqual(framework.getLogger('coreLogger'));
+    expect(framework.getApplication().getCoreLogger()).toEqual(framework.getCoreLogger());
+    expect(framework.getApplication().getLogger('logger')).toEqual(framework.getLogger('logger'));
+    expect(framework.getApplication().getLogger('otherLogger')).not.toBeNull();
+    expect(framework.getApplication().getLogger('otherLogger')).toEqual(framework.getLogger('otherLogger'));
+
+    expect(framework.getApplication().getAppDir()).toEqual(framework.getAppDir());
+    expect(framework.getApplication().getBaseDir()).toEqual(framework.getBaseDir());
+    expect(framework.getApplication().getApplicationContext()).toEqual(framework.getApplicationContext());
+    expect(framework.getApplication().getFrameworkType()).toEqual(framework.getFrameworkType());
+    expect(framework.getApplication().getProjectName()).toEqual(framework.getProjectName());
+
+    await framework.stop();
   });
 });

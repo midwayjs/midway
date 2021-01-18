@@ -4,16 +4,12 @@ import {
   MidwayProcessTypeEnum,
   safelyGet,
 } from '@midwayjs/core';
-import {
-  ControllerOption,
-  CONFIG_KEY,
-  LOGGER_KEY,
-  PLUGIN_KEY,
-} from '@midwayjs/decorator';
-import { IMidwayWebConfigurationOptions } from './interface';
+import { ControllerOption, CONFIG_KEY, PLUGIN_KEY } from '@midwayjs/decorator';
+import { IMidwayWebConfigurationOptions } from '../interface';
 import { MidwayKoaBaseFramework } from '@midwayjs/koa';
 import { EggRouter } from '@eggjs/router';
-import { Application, Context, Router } from 'egg';
+import { Application, Context, Router, EggLogger } from 'egg';
+import { loggers } from '@midwayjs/logger';
 
 export class MidwayWebFramework extends MidwayKoaBaseFramework<
   IMidwayWebConfigurationOptions,
@@ -26,6 +22,9 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
     priority: number;
     router: Router;
   }> = [];
+  protected loggers: {
+    [name: string]: EggLogger;
+  };
 
   public configure(
     options: IMidwayWebConfigurationOptions
@@ -58,6 +57,10 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
 
         // TODO 单进程模式下区分进程类型??
         return MidwayProcessTypeEnum.APPLICATION;
+      },
+
+      getLogger: name => {
+        return this.getLogger(name);
       },
     });
 
@@ -121,6 +124,12 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
     options.ignore.push('**/app/extend/**');
   }
 
+  protected async initializeLogger() {
+    // 不需要在这里创建框架日志，从 egg 代理过来
+    this.logger = this.app.coreLogger;
+    this.appLogger = this.app.logger;
+  }
+
   async applicationInitialize(options: Partial<IMidwayBootstrapOptions>) {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
@@ -150,14 +159,6 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
     this.getApplicationContext().registerDataHandler(CONFIG_KEY, key => {
       return key ? safelyGet(key, this.app.config) : this.app.config;
     });
-
-    // register logger
-    this.getApplicationContext().registerDataHandler(LOGGER_KEY, key => {
-      if (this.app.getLogger) {
-        return this.app.getLogger(key);
-      }
-      return this.app.coreLogger;
-    });
   }
 
   protected async afterContainerReady(
@@ -172,6 +173,13 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
     return MidwayFrameworkType.WEB;
   }
 
+  public getLogger(name?: string) {
+    if (name) {
+      return this.app.loggers[name] || loggers.getLogger(name);
+    }
+    return this.appLogger;
+  }
+
   /**
    * 这个方法 egg-cluster 不走，只有单进程模式使用 @midwayjs/bootstrap 才会执行
    */
@@ -180,9 +188,7 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
   /**
    * 这个方法 egg-cluster 不走，只有单进程模式使用 @midwayjs/bootstrap 才会执行
    */
-  protected async beforeStop(): Promise<void> {
-    await this.app.close();
-  }
+  protected async beforeStop(): Promise<void> {}
 
   /**
    * @param controllerOption

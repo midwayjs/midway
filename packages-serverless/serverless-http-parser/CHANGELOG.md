@@ -3,6 +3,81 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.6.8](https://github.com/midwayjs/midway-faas/compare/v2.6.7...v2.6.8) (2021-01-06)
+
+**Note:** Version bump only for package @midwayjs/serverless-http-parser
+
+
+
+
+
+## [2.6.7](https://github.com/midwayjs/midway-faas/compare/v2.6.6...v2.6.7) (2021-01-05)
+
+**Note:** Version bump only for package @midwayjs/serverless-http-parser
+
+
+
+
+
+## [2.6.6](https://github.com/midwayjs/midway-faas/compare/v2.6.5...v2.6.6) (2021-01-04)
+
+**Note:** Version bump only for package @midwayjs/serverless-http-parser
+
+
+
+
+
+## [2.6.5](https://github.com/midwayjs/midway-faas/compare/v2.6.4...v2.6.5) (2021-01-04)
+
+**Note:** Version bump only for package @midwayjs/serverless-http-parser
+
+
+
+
+
+## [2.6.4](https://github.com/midwayjs/midway-faas/compare/v2.6.3...v2.6.4) (2021-01-02)
+
+**Note:** Version bump only for package @midwayjs/serverless-http-parser
+
+
+
+
+
+## [2.6.3](https://github.com/midwayjs/midway-faas/compare/v2.6.2...v2.6.3) (2020-12-30)
+
+**Note:** Version bump only for package @midwayjs/serverless-http-parser
+
+
+
+
+
+## [2.6.2](https://github.com/midwayjs/midway-faas/compare/v2.6.1...v2.6.2) (2020-12-30)
+
+**Note:** Version bump only for package @midwayjs/serverless-http-parser
+
+
+
+
+
+## [2.6.1](https://github.com/midwayjs/midway-faas/compare/v2.6.0...v2.6.1) (2020-12-29)
+
+**Note:** Version bump only for package @midwayjs/serverless-http-parser
+
+
+
+
+
+# [2.6.0](https://github.com/midwayjs/midway-faas/compare/v2.5.5...v2.6.0) (2020-12-28)
+
+
+### Bug Fixes
+
+* parse http is type ([#763](https://github.com/midwayjs/midway-faas/issues/763)) ([ee77af5](https://github.com/midwayjs/midway-faas/commit/ee77af5e32b36807ddc5d05555826b8562ec6769))
+
+
+
+
+
 # [2.4.0](https://github.com/midwayjs/midway-faas/compare/v2.3.23...v2.4.0) (2020-11-11)
 
 

@@ -15,8 +15,9 @@ export type IMidwayExpressResponse = Response;
  */
 export type IMidwayExpressNext = NextFunction;
 export type IMidwayExpressContext = IMidwayContext & {
-  req: Request,
-  res: Response,
+  req: Request;
+  res: Response;
+  startTime: number;
 }
 export type IMidwayExpressApplication = IMidwayApplication & Application & {
   generateController(
@@ -27,7 +28,22 @@ export type IMidwayExpressApplication = IMidwayApplication & Application & {
 };
 
 export interface IMidwayExpressConfigurationOptions {
+  /**
+   * application http port
+   */
   port?: number;
+  /**
+   * https key
+   */
+  key?: string | Buffer | Array<Buffer | Object>;
+  /**
+   * https cert
+   */
+  cert?: string | Buffer | Array<string | Buffer>;
+  /**
+   * https ca
+   */
+  ca?: string | Buffer | Array<string | Buffer>;
 }
 
 export type MiddlewareParamArray = RequestHandler[];

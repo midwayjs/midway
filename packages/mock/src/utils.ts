@@ -4,13 +4,27 @@ import {
   IMidwayApplication,
   IMidwayFramework,
   MidwayFrameworkType,
+  safeRequire,
 } from '@midwayjs/core';
 import { isAbsolute, join } from 'path';
 import { remove } from 'fs-extra';
 import { clearAllModule } from '@midwayjs/decorator';
 import { existsSync } from 'fs';
+import { clearAllLoggers } from '@midwayjs/logger';
+import * as os from 'os';
 
 process.setMaxListeners(0);
+
+function isTestEnvironment() {
+  const testEnv = ['test', 'unittest'];
+  return testEnv.includes(process.env.MIDWAY_SERVER_ENV)
+    || testEnv.includes(process.env.EGG_SERVER_ENV)
+    || testEnv.includes(process.env.NODE_ENV);
+}
+
+function isWin32() {
+  return os.platform() === 'win32';
+}
 
 const appMap = new WeakMap();
 
@@ -23,17 +37,25 @@ function getIncludeFramework(dependencies): string {
   }
 }
 
+export type MockAppConfigurationOptions = {
+  cleanLogsDir?: boolean;
+  cleanTempDir?: boolean;
+};
+
 export async function create<
   T extends IMidwayFramework<any, U>,
   U = T['configurationOptions']
 >(
   baseDir: string = process.cwd(),
-  options?: U,
+  options?: U & MockAppConfigurationOptions,
   customFrameworkName?: string | MidwayFrameworkType | object
 ): Promise<T> {
   process.env.MIDWAY_TS_MODE = 'true';
   clearAllModule();
   clearContainerCache();
+  clearAllLoggers();
+  safeRequire(`${baseDir}/src/interface`);
+
   let framework: T = null;
   let DefaultFramework = null;
 
@@ -57,15 +79,16 @@ export async function create<
   if (DefaultFramework) {
     framework = new DefaultFramework();
     if (framework.getFrameworkType() === MidwayFrameworkType.WEB) {
-      // clean first
-      await remove(join(baseDir, 'logs'));
-      await remove(join(baseDir, 'run'));
       // add egg-mock plugin for @midwayjs/web test, provide mock method
       options = Object.assign(options || {}, {
         plugins: {
           'egg-mock': {
             enable: true,
             package: 'egg-mock',
+          },
+          'midway-mock': {
+            enable: true,
+            package: '@midwayjs/mock',
           },
           watcher: false,
           development: false,
@@ -89,7 +112,7 @@ export async function create<
 
   starter
     .configure({
-      baseDir,
+      appDir: baseDir,
     })
     .load(framework);
 
@@ -107,7 +130,7 @@ export async function createApp<
   Y = ReturnType<T['getApplication']>
 >(
   baseDir: string = process.cwd(),
-  options?: U,
+  options?: U & MockAppConfigurationOptions,
   customFrameworkName?: string | MidwayFrameworkType | object
 ): Promise<Y> {
   const framework: T = await create<T, U>(
@@ -119,9 +142,11 @@ export async function createApp<
 }
 
 export async function close(
-  app: IMidwayApplication | IMidwayFramework<any, any>
+  app: IMidwayApplication | IMidwayFramework<any, any>,
+  options?: any
 ) {
   if (!app) return;
+  options = options || {};
   let newApp: IMidwayApplication;
   if ((app as IMidwayFramework<any, any>).getApplication) {
     newApp = (app as IMidwayFramework<any, any>).getApplication();
@@ -134,8 +159,15 @@ export async function close(
     appMap.delete(starter);
   }
 
-  if (MidwayFrameworkType.WEB === newApp.getFrameworkType()) {
-    await remove(join(newApp.getAppDir(), 'logs'));
-    await remove(join(newApp.getAppDir(), 'run'));
+  if (isTestEnvironment()) {
+    if (MidwayFrameworkType.WEB === newApp.getFrameworkType()) {
+      // clean first
+      if (options.cleanLogsDir !== false && !isWin32()) {
+        await remove(join(newApp.getAppDir(), 'logs'));
+      }
+      if (options.cleanTempDir !== false && !isWin32()) {
+        await remove(join(newApp.getAppDir(), 'run'));
+      }
+    }
   }
 }

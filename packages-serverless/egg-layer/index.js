@@ -13,7 +13,7 @@ module.exports = engine => {
     async beforeRuntimeStart(runtime) {
       let framework = '';
       const baseDir = runtime.getPropertyParser().getEntryDir();
-      // 从 packagejson 中获取 egg 框架
+      // 从 package.json 中获取 egg 框架
       const packageJSON = require(resolve(baseDir, 'package.json'));
       framework = packageJSON.egg && packageJSON.egg.framework;
       const localFrameWorkPath = resolve(__dirname, 'framework');
@@ -45,6 +45,14 @@ module.exports = engine => {
     async defaultInvokeHandler(context) {
       return new Promise((resolve, reject) => {
         delete context.headers['content-length'];
+        if (
+          eggApp &&
+          eggApp.config &&
+          eggApp.config.proxy &&
+          !context.headers['X-Forwarded-For']
+        ) {
+          context.headers['X-Forwarded-For'] = context.ip;
+        }
         request(
           {
             uri: `http://unix:${socketPath}:${context.path}`,

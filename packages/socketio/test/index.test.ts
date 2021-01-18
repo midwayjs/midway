@@ -15,7 +15,7 @@ describe('/test/index.test.ts', () => {
     const client = await createClient({
       port: '3000',
     });
-    await new Promise(resolve =>  {
+    await new Promise<void>(resolve =>  {
       client.on('ok', (data) => {
         console.log(data);
         resolve();

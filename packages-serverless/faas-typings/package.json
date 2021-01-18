@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/faas-typings",
-  "version": "2.4.0",
+  "version": "2.6.8",
   "typings": "index.d.ts",
   "engines": {
     "node": ">= 10"

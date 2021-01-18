@@ -8,4 +8,5 @@ module.exports = {
     enable: true,
     package: 'midway-schedule',
   },
+  logrotator: false,
 };

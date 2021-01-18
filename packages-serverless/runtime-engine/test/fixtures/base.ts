@@ -4,7 +4,7 @@ import * as http from 'http';
 let server;
 export const testExtension = {
   async beforeClose(runtime: Runtime) {
-    return new Promise(resolve => {
+    return new Promise<void>(resolve => {
       server.close(() => {
         runtime.debugLogger.log('server closed');
         resolve();
@@ -12,7 +12,7 @@ export const testExtension = {
     });
   },
   async beforeRuntimeStart(runtime: Runtime) {
-    return new Promise(resolve => {
+    return new Promise<void>(resolve => {
       server = http
         .createServer((request, response) => {
           response.writeHead(200, { 'Content-Type': 'text/plain' });

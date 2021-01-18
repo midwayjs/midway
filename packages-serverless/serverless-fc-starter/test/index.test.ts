@@ -420,7 +420,7 @@ describe('/test/index.test.ts', () => {
           method: 'GET',
         })
       );
-      assert.equal(result.body, 'Alan');
+      assert.equal(result.body, 'Alan|b1c5100f-819d-c421-3a5e-7782a27d8a33');
       await runtime.close();
     });
 

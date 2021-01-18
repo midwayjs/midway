@@ -95,5 +95,7 @@ declare module 'egg' {
      * mock csrf
      */
     mockCsrf(): Application;
+
+    mockClassFunction(className: string, methodName: string, fnOrData: any): Application;
   }
 }

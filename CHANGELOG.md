@@ -3,6 +3,159 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.6.12](https://github.com/midwayjs/midway/compare/v2.6.11...v2.6.12) (2021-01-15)
+
+
+### Bug Fixes
+
+* express router missing ([#804](https://github.com/midwayjs/midway/issues/804)) ([30cd26c](https://github.com/midwayjs/midway/commit/30cd26cc505ea91fb7d0796c59238962c5045b3d))
+* mockClassFunction missing ([#807](https://github.com/midwayjs/midway/issues/807)) ([88fa763](https://github.com/midwayjs/midway/commit/88fa7636dbfaba89fb420b70f96cd904630e687c))
+* rabbitmq client mock ([#801](https://github.com/midwayjs/midway/issues/801)) ([18d0fcd](https://github.com/midwayjs/midway/commit/18d0fcd24df722ec5a58775fd4d795f22c4e4725))
+
+
+
+
+
+## [2.6.11](https://github.com/midwayjs/midway/compare/v2.6.10...v2.6.11) (2021-01-11)
+
+
+### Bug Fixes
+
+* missing originContext property  in http trigger ([#799](https://github.com/midwayjs/midway/issues/799)) ([5cd96a0](https://github.com/midwayjs/midway/commit/5cd96a00bdbd733d89dbcb50e460e4a9392679d5))
+
+
+
+
+
+## [2.6.10](https://github.com/midwayjs/midway/compare/v2.6.9...v2.6.10) (2021-01-10)
+
+
+### Bug Fixes
+
+* bootstrap missing create logger ([#797](https://github.com/midwayjs/midway/issues/797)) ([f7aac5f](https://github.com/midwayjs/midway/commit/f7aac5fcd9a59a3a36856af58c17ee1d0c9dfca4))
+* disable logrotator and avoid file exists error ([#798](https://github.com/midwayjs/midway/issues/798)) ([64ac85c](https://github.com/midwayjs/midway/commit/64ac85c68bf479e9474de9ac8f22c491d8bfce39))
+
+
+
+
+
+## [2.6.9](https://github.com/midwayjs/midway/compare/v2.6.8...v2.6.9) (2021-01-08)
+
+
+### Bug Fixes
+
+* remove array type for label and remove verbose level ([#795](https://github.com/midwayjs/midway/issues/795)) ([622163c](https://github.com/midwayjs/midway/commit/622163c30bd3bf89423850caa39ea58433f18df3))
+
+
+
+
+
+## [2.6.8](https://github.com/midwayjs/midway/compare/v2.6.7...v2.6.8) (2021-01-06)
+
+
+### Bug Fixes
+
+* force add logger ([#793](https://github.com/midwayjs/midway/issues/793)) ([f095543](https://github.com/midwayjs/midway/commit/f0955438ba5645daf62b107700f2b01537ecf827))
+
+
+
+
+
+## [2.6.7](https://github.com/midwayjs/midway/compare/v2.6.6...v2.6.7) (2021-01-05)
+
+
+### Bug Fixes
+
+* can't throw error in faas ([#790](https://github.com/midwayjs/midway/issues/790)) ([e740cda](https://github.com/midwayjs/midway/commit/e740cdaec5fbae0c4addb1eefbb428ea0a50d3eb))
+* remove error and symbol link in windows ([#792](https://github.com/midwayjs/midway/issues/792)) ([7434724](https://github.com/midwayjs/midway/commit/7434724a2cf422724ea143032ecb6ccb601d7d7f))
+* remove log method in ILogger definition ([#791](https://github.com/midwayjs/midway/issues/791)) ([e716349](https://github.com/midwayjs/midway/commit/e71634957c3e3f183c3f7c03e32db27e9ac82017))
+
+
+
+
+
+## [2.6.6](https://github.com/midwayjs/midway/compare/v2.6.5...v2.6.6) (2021-01-04)
+
+**Note:** Version bump only for package midway
+
+
+
+
+
+## [2.6.5](https://github.com/midwayjs/midway/compare/v2.6.4...v2.6.5) (2021-01-04)
+
+
+### Bug Fixes
+
+* egg logger definition ([#788](https://github.com/midwayjs/midway/issues/788)) ([a5464f4](https://github.com/midwayjs/midway/commit/a5464f48f5e7f7aee71fadf8e26b187b5802fe24))
+
+
+
+
+
+## [2.6.4](https://github.com/midwayjs/midway/compare/v2.6.3...v2.6.4) (2021-01-02)
+
+
+### Bug Fixes
+
+* definition fix for getLogger and getCoreLogger ([#783](https://github.com/midwayjs/midway/issues/783)) ([264b481](https://github.com/midwayjs/midway/commit/264b4819f8f96dccabd1e5cd6ad2c7b3b8277136))
+
+
+
+
+
+## [2.6.3](https://github.com/midwayjs/midway/compare/v2.6.2...v2.6.3) (2020-12-30)
+
+
+### Bug Fixes
+
+* add more args for egg transport ([#782](https://github.com/midwayjs/midway/issues/782)) ([adbbfc9](https://github.com/midwayjs/midway/commit/adbbfc9f98c0e9d5617e37232113e7f1e2f92a15))
+
+
+
+
+
+## [2.6.2](https://github.com/midwayjs/midway/compare/v2.6.1...v2.6.2) (2020-12-30)
+
+
+### Bug Fixes
+
+* output logs dir when development env ([#780](https://github.com/midwayjs/midway/issues/780)) ([557d874](https://github.com/midwayjs/midway/commit/557d8743cf5183740b25a987b1a1135ea09c9d28))
+
+
+
+
+
+## [2.6.1](https://github.com/midwayjs/midway/compare/v2.6.0...v2.6.1) (2020-12-29)
+
+
+### Bug Fixes
+
+* logger build ([#779](https://github.com/midwayjs/midway/issues/779)) ([ee3589e](https://github.com/midwayjs/midway/commit/ee3589e0bed5d79fade9c2067de1452eeb718da4))
+
+
+
+
+
+# [2.6.0](https://github.com/midwayjs/midway/compare/v2.5.5...v2.6.0) (2020-12-28)
+
+
+### Bug Fixes
+
+* egg layer x forwarded for ([#768](https://github.com/midwayjs/midway/issues/768)) ([568379f](https://github.com/midwayjs/midway/commit/568379fca58744410b273cc6fdb40cec83700d08))
+* ouput console in serverless environment ([#759](https://github.com/midwayjs/midway/issues/759)) ([bad20d7](https://github.com/midwayjs/midway/commit/bad20d7950d1ed96a0448aedfac5ae8f909a7960))
+* parse http is type ([#763](https://github.com/midwayjs/midway/issues/763)) ([ee77af5](https://github.com/midwayjs/midway/commit/ee77af5e32b36807ddc5d05555826b8562ec6769))
+
+
+### Features
+
+* add midway logger ([#743](https://github.com/midwayjs/midway/issues/743)) ([13e8cc7](https://github.com/midwayjs/midway/commit/13e8cc753d994e6f9f073688e22527f75d39984a))
+* support https config for web/koa/express ([#742](https://github.com/midwayjs/midway/issues/742)) ([a0c07b9](https://github.com/midwayjs/midway/commit/a0c07b9e3cc2eec7e88e49085f1e66242fa1ec50))
+
+
+
+
+
 ## [2.5.5](https://github.com/midwayjs/midway/compare/v2.5.4...v2.5.5) (2020-12-15)
 
 

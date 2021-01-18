@@ -6,6 +6,7 @@ import {
   IMethodAspect,
   AspectMetadata,
 } from '@midwayjs/decorator';
+import { ILogger, LoggerOptions } from '@midwayjs/logger';
 /**
  * 生命周期定义
  */
@@ -274,6 +275,7 @@ export interface IConfigService {
 export interface IEnvironmentService {
   getCurrentEnvironment(): string;
   setCurrentEnvironment(environment: string);
+  isDevelopmentEnvironment(): boolean;
 }
 
 export interface IMiddleware<T> {
@@ -285,14 +287,10 @@ export enum MidwayProcessTypeEnum {
   AGENT = 'AGENT',
 }
 
-export interface IMidwayLogger {
-  debug?(message?: any, ...optionalParams: any[]): void;
-  error?(message?: any, ...optionalParams: any[]): void;
-  info?(message?: any, ...optionalParams: any[]): void;
-  log?(message?: any, ...optionalParams: any[]): void;
-  warn?(message?: any, ...optionalParams: any[]): void;
-  trace?(message?: any, ...optionalParams: any[]): void;
-}
+/**
+ * @deprecated use ILogger from @midwayjs/logger
+ */
+export interface IMidwayLogger extends ILogger {}
 
 export interface IMidwayApplication {
   getBaseDir(): string;
@@ -302,12 +300,16 @@ export interface IMidwayApplication {
   getProcessType(): MidwayProcessTypeEnum;
   getApplicationContext(): IMidwayContainer;
   getConfig(key?: string): any;
-  getLogger(key?: string): Partial<IMidwayLogger>;
+  getLogger(name?: string): ILogger;
+  getCoreLogger(): ILogger;
+  createLogger(name: string, options: LoggerOptions): ILogger;
+  getProjectName(): string;
 }
 
 export interface IMidwayContext {
   getRequestContext?(): IMidwayContainer;
   requestContext: IMidwayContainer;
+  logger: ILogger;
 }
 
 /**
@@ -316,8 +318,8 @@ export interface IMidwayContext {
 export interface IMidwayCoreApplication extends IMidwayApplication {}
 
 export interface IMidwayBootstrapOptions {
-  logger?: IMidwayLogger;
-  baseDir: string;
+  logger?: ILogger | boolean;
+  baseDir?: string;
   appDir?: string;
   preloadModules?: any[];
   disableAutoLoad?: boolean;
@@ -343,6 +345,12 @@ export interface IMidwayFramework<APP extends IMidwayApplication, T extends ICon
   getConfiguration(key?: string): any;
   getCurrentEnvironment(): string;
   getFrameworkType(): MidwayFrameworkType;
+  getAppDir(): string;
+  getBaseDir(): string;
+  getLogger(name?: string): ILogger;
+  getCoreLogger(): ILogger;
+  createLogger(name: string, options: LoggerOptions): ILogger;
+  getProjectName(): string;
 }
 
 export enum MidwayFrameworkType {

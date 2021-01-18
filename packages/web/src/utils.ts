@@ -44,3 +44,7 @@ export const findLernaRoot = (findRoot = process.cwd()) => {
     { cwd: findRoot, type: 'directory' }
   );
 };
+
+export const getCurrentDateString = () => {
+  return new Date().toISOString().split('T')[0];
+};
