@@ -144,11 +144,12 @@ export const request = {
       return this[BODY];
     }
 
+    if (Buffer.isBuffer(body)) {
+      body = Buffer.from(body).toString();
+    }
+
     switch (typeis(this.get('content-type'), ['urlencoded', 'json'])) {
       case 'json':
-        if (Buffer.isBuffer(body)) {
-          body = Buffer.from(body).toString();
-        }
         try {
           this[BODY] = JSON.parse(body);
         } catch {
@@ -156,9 +157,6 @@ export const request = {
         }
         break;
       case 'urlencoded':
-        if (Buffer.isBuffer(body)) {
-          body = Buffer.from(body).toString();
-        }
         try {
           this[BODY] = qs.parse(body);
         } catch {
