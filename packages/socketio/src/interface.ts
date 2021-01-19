@@ -13,3 +13,8 @@ export type IMidwaySocketIOConfigurationOptions = {
 } & SocketIO.ServerOptions & IConfigurationOptions;
 
 export type IMidwaySocketIOContext = SocketIO.Socket & IMidwayContext;
+
+
+export type Application = IMidwaySocketIOApplication;
+
+export type Context = IMidwaySocketIOContext;

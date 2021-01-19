@@ -1,5 +1,5 @@
 import { IConfigurationOptions, IMidwayApplication, IMidwayContext } from '@midwayjs/core';
-import { Application, Request, Response, RequestHandler, NextFunction } from 'express';
+import { Application as ExpressApplication, Request, Response, RequestHandler, NextFunction } from 'express';
 import { RouterParamValue } from "@midwayjs/decorator";
 
 /**
@@ -19,7 +19,7 @@ export type IMidwayExpressContext = IMidwayContext & {
   res: Response;
   startTime: number;
 }
-export type IMidwayExpressApplication = IMidwayApplication & Application & {
+export type IMidwayExpressApplication = IMidwayApplication & ExpressApplication & {
   generateController(
     controllerMapping: string,
     routeArgsInfo?: RouterParamValue[],
@@ -53,3 +53,7 @@ export type Middleware = RequestHandler;
 export interface IWebMiddleware {
   resolve(): Middleware;
 }
+
+export type Application = IMidwayExpressApplication;
+
+export type Context = IMidwayExpressContext;

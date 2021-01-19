@@ -1,9 +1,9 @@
 import { IConfigurationOptions, IMidwayApplication, IMidwayContext } from '@midwayjs/core';
 import * as koa from 'koa';
-import { Context, DefaultState, Middleware, Next } from 'koa';
+import { Context as KoaContext, DefaultState, Middleware, Next } from 'koa';
 import { RouterParamValue } from '@midwayjs/decorator';
 
-export type IMidwayKoaContext = IMidwayContext & Context;
+export type IMidwayKoaContext = IMidwayContext & KoaContext;
 export type IMidwayKoaApplication = IMidwayApplication & koa<DefaultState, IMidwayKoaContext> & {
   generateController(
     controllerMapping: string,
@@ -43,3 +43,7 @@ export type MiddlewareParamArray = Array<Middleware<DefaultState, IMidwayKoaCont
 export interface IWebMiddleware {
   resolve(): koa.Middleware<DefaultState, IMidwayKoaContext>;
 }
+
+export type Application = IMidwayKoaApplication;
+
+export type Context = IMidwayKoaContext;

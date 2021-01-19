@@ -42,6 +42,10 @@ export interface FaaSContext extends FaaSHTTPContext {
   hooks: MidwayHooks;
 }
 
+export type Application = IMidwayFaaSApplication;
+
+export type Context = FaaSContext;
+
 export interface IFaaSConfigurationOptions extends IConfigurationOptions {
   config?: object;
   middleware?: string[];

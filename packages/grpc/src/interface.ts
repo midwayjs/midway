@@ -6,6 +6,10 @@ export type IMidwayGRPCContext = IMidwayContext & {
 }
 export type IMidwayGRPCApplication = IMidwayApplication & Server;
 
+export type Application = IMidwayGRPCApplication;
+
+export type Context = IMidwayGRPCContext;
+
 export interface IGRPCServiceOptions {
   /**
    * application gRPC connection string

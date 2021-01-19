@@ -43,3 +43,7 @@ export enum RabbitMQChannelEvent {
   CHANNEL_OPEN = 'ch_open',
   CHANNEL_DRAIN = 'ch_drain',
 }
+
+export type Application = IMidwayRabbitMQApplication;
+
+export type Context = IMidwayRabbitMQContext;
