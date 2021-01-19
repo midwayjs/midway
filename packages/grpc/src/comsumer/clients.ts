@@ -1,6 +1,6 @@
 import { Config, Init, Logger, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
 import { credentials, loadPackageDefinition } from '@grpc/grpc-js';
-import { IMidwayGRPCConfigOptions } from '../interface';
+import { DefaultConfig } from '../interface';
 import { loadProto } from '../util';
 import * as camelCase from 'camelcase';
 import { ILogger } from '@midwayjs/logger';
@@ -10,7 +10,7 @@ import { ILogger } from '@midwayjs/logger';
 export class GRPCClients extends Map {
 
   @Config('grpc')
-  grpcConfig: IMidwayGRPCConfigOptions;
+  grpcConfig: DefaultConfig;
 
   @Logger()
   logger: ILogger;

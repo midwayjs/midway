@@ -1,4 +1,4 @@
-import { IMidwayGRPCConfigOptions } from '../../../../../src';
+import { DefaultConfig } from '../../../../../src';
 import { join } from 'path';
 
 export const grpc = {
@@ -9,4 +9,4 @@ export const grpc = {
       package: 'helloworld'
     }
   ]
-} as IMidwayGRPCConfigOptions;
+} as DefaultConfig;

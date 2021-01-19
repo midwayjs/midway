@@ -39,6 +39,6 @@ export interface IMidwayGRPFrameworkOptions extends IConfigurationOptions {
   loaderOptions?: object;
 }
 
-export interface IMidwayGRPCConfigOptions extends IConfigurationOptions {
+export interface DefaultConfig extends IConfigurationOptions {
   services: IGRPCServiceOptions[];
 }
