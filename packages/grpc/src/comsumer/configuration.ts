@@ -14,8 +14,7 @@ export class AutoConfiguration {
   @Logger()
   logger: ILogger;
 
-  async onReady(container) {
+  async onReady() {
     setLogger(this.logger);
-    await container.getAsync('grpc:clients');
   }
 }

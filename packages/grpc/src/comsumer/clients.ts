@@ -1,10 +1,11 @@
-import { Config, Init, Logger, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { Autoload, Config, Init, Logger, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
 import { credentials, loadPackageDefinition } from '@grpc/grpc-js';
 import { DefaultConfig } from '../interface';
 import { loadProto } from '../util';
 import * as camelCase from 'camelcase';
 import { ILogger } from '@midwayjs/logger';
 
+@Autoload()
 @Provide('clients')
 @Scope(ScopeEnum.Singleton)
 export class GRPCClients extends Map {
