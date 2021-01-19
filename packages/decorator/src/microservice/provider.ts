@@ -13,6 +13,7 @@ import {
 import { Scope } from '../annotation';
 
 export function Provider(type: MSProviderType.GRPC, metadata?: DecoratorMetadata.GRPCClassMetadata): ClassDecorator;
+export function Provider(type: MSProviderType.DUBBO, metadata?: any): ClassDecorator;
 export function Provider(type: MSProviderType, metadata: any = {}): ClassDecorator {
   return (target: any) => {
     saveModule(MS_PROVIDER_KEY, target);
