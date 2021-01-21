@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.6.13](https://github.com/midwayjs/midway-faas/compare/v2.6.12...v2.6.13) (2021-01-21)
+
+
+### Bug Fixes
+
+* fc runtime default ctx ([#813](https://github.com/midwayjs/midway-faas/issues/813)) ([23ad9a2](https://github.com/midwayjs/midway-faas/commit/23ad9a281cbba0e37e3356b15151d8bf08937662))
+
+
+
+
+
 ## [2.6.11](https://github.com/midwayjs/midway-faas/compare/v2.6.10...v2.6.11) (2021-01-11)
 
 

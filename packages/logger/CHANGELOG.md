@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.6.13](https://github.com/midwayjs/midway/compare/v2.6.12...v2.6.13) (2021-01-21)
+
+
+### Bug Fixes
+
+* winston-transport build error when enable esModuleInterop ([#814](https://github.com/midwayjs/midway/issues/814)) ([da6e762](https://github.com/midwayjs/midway/commit/da6e762fe32df37307c4f805a38a79f84c36af16))
+
+
+
+
+
 ## [2.6.10](https://github.com/midwayjs/midway/compare/v2.6.9...v2.6.10) (2021-01-10)
 
 

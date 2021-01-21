@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.6.13](https://github.com/midwayjs/midway/compare/v2.6.12...v2.6.13) (2021-01-21)
+
+
+### Bug Fixes
+
+* file transport context formatter missing ([#815](https://github.com/midwayjs/midway/issues/815)) ([45bd3d5](https://github.com/midwayjs/midway/commit/45bd3d58104e859805f0d7feb84ff17c136966c9))
+
+
+
+
+
 ## [2.6.12](https://github.com/midwayjs/midway/compare/v2.6.11...v2.6.12) (2021-01-15)
 
 **Note:** Version bump only for package @midwayjs/web

@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/rabbitmq",
-  "version": "2.6.12",
+  "version": "2.6.13",
   "description": "Midway Framework for rabbitmq",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -24,11 +24,11 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/cli": "^1.2.36",
-    "@midwayjs/mock": "^2.6.12",
+    "@midwayjs/mock": "^2.6.13",
     "fs-extra": "^8.0.1"
   },
   "dependencies": {
-    "@midwayjs/core": "^2.6.10",
+    "@midwayjs/core": "^2.6.13",
     "@midwayjs/decorator": "^2.6.8",
     "@types/amqplib": "^0.5.13",
     "amqplib": "^0.6.0"
