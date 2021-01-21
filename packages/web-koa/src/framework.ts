@@ -132,7 +132,7 @@ export abstract class MidwayKoaBaseFramework<
       const providerId = getProviderId(module);
       if (providerId) {
         if (this.controllerIds.indexOf(providerId) > -1) {
-          throw new Error(`controller identifier [${providerId}] is exists!`);
+          throw new Error(`controller identifier [${providerId}] already exists!`);
         }
         this.controllerIds.push(providerId);
         await this.preRegisterRouter(module, providerId);
