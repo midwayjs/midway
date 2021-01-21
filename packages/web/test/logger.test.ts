@@ -12,6 +12,21 @@ describe('test/logger.test.js', () => {
     mm.restore();
   });
 
+  it('should output app logger and context logger with timestamp in console and file', async () => {
+    mm(process.env, 'MIDWAY_SERVER_ENV', '');
+    mm(process.env, 'EGG_SERVER_ENV', 'local');
+    mm(process.env, 'EGG_LOG', 'WARN');
+    const logsDir = join(__dirname, 'fixtures/apps/mock-dev-app-logger/logs/ali-demo');
+    await ensureDir(logsDir);
+    const app = await creatApp('apps/mock-dev-app-logger', { cleanLogsDir: false});
+    app.coreLogger.warn('custom content');
+    app.createAnonymousContext().logger.warn('custom content in context');
+    await sleep();
+    const timeFormat = getCurrentDateString();
+    expect(matchContentTimes(join(logsDir, 'midway-web.log'), timeFormat)).toEqual(1);
+    await closeApp(app);
+  });
+
   it('should backup egg logger file when start', async () => {
     mm(process.env, 'MIDWAY_SERVER_ENV', '');
     mm(process.env, 'EGG_SERVER_ENV', 'local');
