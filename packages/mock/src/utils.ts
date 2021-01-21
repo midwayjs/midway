@@ -75,6 +75,8 @@ export async function create<
     DefaultFramework = require(customFrameworkName as string).Framework;
   }
 
+  options = options ?? {} as U;
+
   // got options from framework
   if (DefaultFramework) {
     framework = new DefaultFramework();
