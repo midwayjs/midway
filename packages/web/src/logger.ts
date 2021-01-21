@@ -212,12 +212,16 @@ class EggLoggers extends BaseEggLoggers {
         level: (logger as any).options.level,
         transportName: name,
         app: this.app,
+        contextFormatter(meta) {
+          return meta.paddingMessage + ' ' + meta.message;
+        }
       })
     );
   }
 }
 
 export const createLoggers = (app: Application) => {
+
   const loggerConfig = app.config.logger as any;
   loggerConfig.type = app.type;
 
