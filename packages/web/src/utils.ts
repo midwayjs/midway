@@ -1,6 +1,7 @@
 import { isTypeScriptEnvironment } from '@midwayjs/bootstrap';
 import { basename, join } from 'path';
 import { sync as findUpSync, stop } from 'find-up';
+import * as dayjs from 'dayjs';
 
 export const parseNormalDir = (baseDir: string, isTypescript = true) => {
   if (isTypescript) {
@@ -46,7 +47,5 @@ export const findLernaRoot = (findRoot = process.cwd()) => {
 };
 
 export const getCurrentDateString = (timestamp: number = Date.now()) => {
-  // example: 01/23/2021
-  const d = new Date(timestamp);
-  return `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}-${(d.getDate()).toString().padStart(2, '0')}`
+  return dayjs(timestamp).format('YYYY-MM-DD');
 };

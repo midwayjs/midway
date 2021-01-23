@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from 'fs';
 import { remove } from 'fs-extra';
 import { fork, execSync } from 'child_process';
+import * as dayjs from 'dayjs';
 
 export const fileExists = (filePath) => {
   return existsSync(filePath);
@@ -72,7 +73,5 @@ export const finishLogger = async (logger) => {
 }
 
 export const getCurrentDateString = () => {
-  // example: 01/23/2021
-  const d = new Date();
-  return `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}-${(d.getDate()).toString().padStart(2, '0')}`
+  return dayjs().format('YYYY-MM-DD');
 };
