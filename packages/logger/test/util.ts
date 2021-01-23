@@ -72,5 +72,8 @@ export const finishLogger = async (logger) => {
 }
 
 export const getCurrentDateString = () => {
-  return new Date().toISOString().split('T')[0];
+  // example: 01/23/2021
+  const dateString = new Date().toLocaleString('en-us', { year: 'numeric', month: '2-digit', day: '2-digit' });
+  const arr = dateString.split('/');
+  return `${arr[2]}-${arr[0]}-${arr[1]}`;
 };
