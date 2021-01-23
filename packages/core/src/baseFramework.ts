@@ -297,10 +297,16 @@ export abstract class BaseFramework<
 
       createAnonymousContext(extendCtx?: CTX) {
         const ctx = extendCtx || Object.create(self.defaultContext);
-        ctx.startTime = ctx.startTime || Date.now();
-        ctx.logger = ctx.logger || self.createContextLogger(ctx);
-        ctx.requestContext = new MidwayRequestContainer(ctx, this.getApplicationContext());
-        ctx.requestContext.ready();
+        if (!ctx.startTime) {
+          ctx.startTime = Date.now();
+        }
+        if (!ctx.logger) {
+          ctx.logger = self.createContextLogger(ctx);
+        }
+        if (!ctx.requestContext) {
+          ctx.requestContext = new MidwayRequestContainer(ctx, this.getApplicationContext());
+          ctx.requestContext.ready();
+        }
         if (!ctx.getLogger) {
           ctx.getLogger = (name) => {
             return self.createContextLogger(ctx, name);
