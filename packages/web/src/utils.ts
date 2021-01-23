@@ -45,7 +45,7 @@ export const findLernaRoot = (findRoot = process.cwd()) => {
   );
 };
 
-export const getCurrentDateString = (timestamp?: number) => {
+export const getCurrentDateString = (timestamp: number = Date.now()) => {
   // example: 01/23/2021
   const dateString = new Date(timestamp).toLocaleString('en-us', { year: 'numeric', month: '2-digit', day: '2-digit' });
   const arr = dateString.split('/');
