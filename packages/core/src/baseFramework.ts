@@ -3,7 +3,7 @@ import {
   ILifeCycle,
   IMidwayApplication,
   IMidwayBootstrapOptions,
-  IMidwayContainer,
+  IMidwayContainer, IMidwayContext,
   IMidwayFramework,
   MidwayFrameworkType,
   MidwayProcessTypeEnum,
@@ -18,8 +18,9 @@ import {
 } from '@midwayjs/decorator';
 import { ILogger, loggers, LoggerOptions, IMidwayLogger } from '@midwayjs/logger';
 import { isAbsolute, join, dirname } from 'path';
-import { createMidwayLogger } from './logger';
+import { createMidwayLogger, MidwayContextLogger } from './logger';
 import { safeRequire } from './util';
+import { MidwayRequestContainer } from './context/requestContainer';
 
 function buildLoadDir(baseDir, dir) {
   if (!isAbsolute(dir)) {
@@ -33,21 +34,25 @@ function setupAppDir(baseDir: string) {
 }
 
 export abstract class BaseFramework<
-  APP extends IMidwayApplication,
-  T extends IConfigurationOptions
-> implements IMidwayFramework<APP, T> {
+  APP extends IMidwayApplication<CTX>,
+  CTX extends IMidwayContext,
+  OPT extends IConfigurationOptions,
+> implements IMidwayFramework<APP, OPT> {
   protected isTsMode = true;
   protected baseDir: string;
   protected appDir: string;
   protected applicationContext: IMidwayContainer;
   protected logger: ILogger;
   protected appLogger: ILogger;
-  public configurationOptions: T;
+  public configurationOptions: OPT;
   public app: APP;
   protected pkg: object;
+  protected defaultContext = {};
+  protected BaseContextLoggerClass: any;
 
-  public configure(options: T): BaseFramework<APP, T> {
+  public configure(options: OPT): BaseFramework<APP, CTX, OPT> {
     this.configurationOptions = options;
+    this.BaseContextLoggerClass = options.ContextLoggerClass || this.getDefaultContextLoggerClass();
     this.logger = options.logger;
     this.appLogger = options.appLogger;
     return this;
@@ -217,6 +222,15 @@ export abstract class BaseFramework<
 
   public abstract run(): Promise<void>;
 
+  protected setContextLoggerClass(BaseContextLogger: any) {
+    this.BaseContextLoggerClass = BaseContextLogger;
+  }
+
+  protected createContextLogger(ctx: CTX, name?: string): ILogger {
+    const appLogger = this.getLogger(name);
+    return new this.BaseContextLoggerClass(ctx, appLogger);
+  }
+
   public async stop(): Promise<void> {
     await this.beforeStop();
     await this.containerStop();
@@ -230,7 +244,8 @@ export abstract class BaseFramework<
     return this.baseDir;
   }
 
-  protected defineApplicationProperties(applicationProperties: object = {}) {
+  protected defineApplicationProperties(applicationProperties: object = {}, whiteList = []) {
+    const self = this;
     const defaultApplicationProperties = {
       getBaseDir: () => {
         return this.baseDir;
@@ -279,7 +294,29 @@ export abstract class BaseFramework<
       getProjectName: () => {
         return this.getProjectName();
       },
+
+      createAnonymousContext(extendCtx?: CTX) {
+        const ctx = extendCtx || Object.create(self.defaultContext);
+        ctx.startTime = ctx.startTime || Date.now();
+        ctx.logger = ctx.logger || self.createContextLogger(ctx);
+        ctx.requestContext = new MidwayRequestContainer(ctx, this.getApplicationContext());
+        ctx.requestContext.ready();
+        if (!ctx.getLogger) {
+          ctx.getLogger = (name) => {
+            return self.createContextLogger(ctx, name);
+          };
+        }
+        return ctx;
+      },
+
+      setContextLoggerClass(BaseContextLogger: any) {
+        return self.setContextLoggerClass(BaseContextLogger);
+      },
+
     };
+    for (const method of whiteList) {
+      delete defaultApplicationProperties[method];
+    }
     Object.assign(
       this.app,
       defaultApplicationProperties,
@@ -361,4 +398,9 @@ export abstract class BaseFramework<
   public getFrameworkName() {
     return this.getFrameworkType().toString();
   }
+
+  public getDefaultContextLoggerClass(): any {
+    return MidwayContextLogger;
+  }
+
 }

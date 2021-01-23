@@ -17,9 +17,8 @@ export type IMidwayExpressNext = NextFunction;
 export type IMidwayExpressContext = IMidwayContext & {
   req: Request;
   res: Response;
-  startTime: number;
 }
-export type IMidwayExpressApplication = IMidwayApplication & ExpressApplication & {
+export type IMidwayExpressApplication = IMidwayApplication<IMidwayExpressContext> & ExpressApplication & {
   generateController(
     controllerMapping: string,
     routeArgsInfo?: RouterParamValue[],

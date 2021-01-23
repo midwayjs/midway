@@ -1,10 +1,8 @@
 import { IConfigurationOptions, IMidwayApplication, IMidwayContext } from '@midwayjs/core';
 import { Server, ServerCredentials } from '@grpc/grpc-js';
 
-export type IMidwayGRPCContext = IMidwayContext & {
-  startTime: number;
-}
-export type IMidwayGRPCApplication = IMidwayApplication & Server;
+export type IMidwayGRPCContext = IMidwayContext;
+export type IMidwayGRPCApplication = IMidwayApplication<IMidwayGRPCContext> & Server;
 
 export type Application = IMidwayGRPCApplication;
 

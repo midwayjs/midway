@@ -14,7 +14,7 @@ export interface IRabbitMQApplication {
   close(): Promise<void>;
 }
 
-export type IMidwayRabbitMQApplication = IMidwayApplication & IRabbitMQApplication;
+export type IMidwayRabbitMQApplication = IMidwayApplication<IMidwayRabbitMQContext> & IRabbitMQApplication;
 
 export interface IRabbitMQExchange {
   name: string,

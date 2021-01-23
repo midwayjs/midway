@@ -5,7 +5,6 @@ import {
   IMidwayBootstrapOptions,
   listModule,
   MidwayFrameworkType,
-  MidwayRequestContainer,
 } from '@midwayjs/core';
 
 import {
@@ -15,7 +14,7 @@ import {
   MSProviderType
 } from '@midwayjs/decorator';
 import {
-  IMidwayGRPCApplication, IMidwayGRPFrameworkOptions,
+  IMidwayGRPCApplication, IMidwayGRPCContext, IMidwayGRPFrameworkOptions,
 } from '../interface';
 import { MidwayGRPCContextLogger } from './logger';
 import { pascalCase } from 'pascal-case';
@@ -25,17 +24,11 @@ import { PackageDefinition } from '@grpc/proto-loader';
 
 export class MidwayGRPCFramework extends BaseFramework<
   IMidwayGRPCApplication,
+  IMidwayGRPCContext,
   IMidwayGRPFrameworkOptions
   > {
   public app: IMidwayGRPCApplication;
   private server: Server;
-
-  public configure(
-    options: IMidwayGRPFrameworkOptions
-  ): MidwayGRPCFramework {
-    this.configurationOptions = options;
-    return this;
-  }
 
   async applicationInitialize(options: Partial<IMidwayBootstrapOptions>) {
     // set logger to grpc server
@@ -88,9 +81,7 @@ export class MidwayGRPCFramework extends BaseFramework<
         for (const method in serviceDefinition) {
           serviceInstance[method] = async (call: ServerUnaryCall<any, any>, callback: sendUnaryData<any>) => {
             const ctx = { metadata: call.metadata} as any;
-            ctx.requestContext = new MidwayRequestContainer(ctx, this.getApplicationContext());
-            ctx.logger = new MidwayGRPCContextLogger(ctx, this.appLogger);
-
+            this.app.createAnonymousContext(ctx);
             try {
               const service = await ctx.requestContext.getAsync(module);
               const result = await service[camelCase(method)]?.apply(service, [call.request]);
@@ -140,5 +131,9 @@ export class MidwayGRPCFramework extends BaseFramework<
 
   public getFrameworkName() {
     return 'midway:gRPC'
+  }
+
+  public getDefaultContextLoggerClass(): any {
+    return MidwayGRPCContextLogger;
   }
 }

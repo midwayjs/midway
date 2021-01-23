@@ -23,4 +23,8 @@ export class MidwayGRPCContextLogger extends MidwayContextLogger<
     //   req.url
     return '';
   }
+
+  setFormatter() {
+
+  }
 }

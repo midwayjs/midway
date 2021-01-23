@@ -14,7 +14,6 @@ import {
   listModule,
   listPreloadModule,
   MidwayFrameworkType,
-  MidwayRequestContainer,
   REQUEST_OBJ_CTX_KEY,
 } from '@midwayjs/core';
 
@@ -31,6 +30,7 @@ const LOCK_KEY = '_faas_starter_start_key';
 
 export class MidwayFaaSFramework extends BaseFramework<
   IMidwayFaaSApplication,
+  FaaSContext,
   IFaaSConfigurationOptions
 > {
   protected defaultHandlerMethod = 'handler';
@@ -214,18 +214,13 @@ export class MidwayFaaSFramework extends BaseFramework<
         .getEnvironmentService()
         .getCurrentEnvironment();
     }
-    if (!context.logger) {
-      context.logger = this.logger;
-    }
-    if (!context.requestContext) {
-      context.requestContext = new MidwayRequestContainer(
-        context,
-        this.getApplicationContext()
-      );
-    }
     if (!context.hooks) {
       context.hooks = new MidwayHooks(context, this.app);
     }
+    if (!context.logger) {
+      context.logger = this.logger;
+    }
+    this.app.createAnonymousContext(context);
     return context;
   }
 

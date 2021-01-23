@@ -292,7 +292,18 @@ export enum MidwayProcessTypeEnum {
  */
 export interface IMidwayLogger extends ILogger {}
 
-export interface IMidwayApplication {
+export interface IMidwayContext {
+  /**
+   * Custom properties.
+   */
+  [key: string]: any;
+  requestContext: IMidwayContainer;
+  logger: ILogger;
+  getLogger(name?: string): ILogger;
+  startTime: number;
+}
+
+export interface IMidwayApplication<T extends IMidwayContext = IMidwayContext> {
   getBaseDir(): string;
   getAppDir(): string;
   getEnv(): string;
@@ -304,12 +315,8 @@ export interface IMidwayApplication {
   getCoreLogger(): ILogger;
   createLogger(name: string, options: LoggerOptions): ILogger;
   getProjectName(): string;
-}
-
-export interface IMidwayContext {
-  getRequestContext?(): IMidwayContainer;
-  requestContext: IMidwayContainer;
-  logger: ILogger;
+  createAnonymousContext(...args): T;
+  setContextLoggerClass(BaseContextLoggerClass: any): void;
 }
 
 /**
@@ -334,6 +341,7 @@ export interface IMidwayBootstrapOptions {
 export interface IConfigurationOptions {
   logger?: ILogger;
   appLogger?: ILogger;
+  ContextLoggerClass?: any;
 }
 
 export interface IMidwayFramework<APP extends IMidwayApplication, T extends IConfigurationOptions> {
@@ -355,6 +363,7 @@ export interface IMidwayFramework<APP extends IMidwayApplication, T extends ICon
   getCoreLogger(): ILogger;
   createLogger(name: string, options: LoggerOptions): ILogger;
   getProjectName(): string;
+  getDefaultContextLoggerClass(): any;
 }
 
 export enum MidwayFrameworkType {

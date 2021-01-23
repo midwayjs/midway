@@ -3,7 +3,7 @@ import { IConfigurationOptions, IMidwayApplication, IMidwayContext } from '@midw
 import { Server as HttpServer } from 'http';
 import { Server as HttpsServer } from 'https';
 
-export type IMidwaySocketIOApplication = IMidwayApplication & {
+export type IMidwaySocketIOApplication = IMidwayApplication<IMidwaySocketIOContext> & {
   use(fn: (socket: IMidwaySocketIOContext, fn: (err?: any) => void) => void): SocketIO.Namespace;
 } & SocketIO.Server;
 
