@@ -80,7 +80,7 @@ export class MidwayGRPCFramework extends BaseFramework<
 
         for (const method in serviceDefinition) {
           serviceInstance[method] = async (call: ServerUnaryCall<any, any>, callback: sendUnaryData<any>) => {
-            const ctx = { metadata: call.metadata} as any;
+            const ctx = { method, metadata: call.metadata } as any;
             this.app.createAnonymousContext(ctx);
             try {
               const service = await ctx.requestContext.getAsync(module);

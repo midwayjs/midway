@@ -5,26 +5,13 @@ export class MidwayGRPCContextLogger extends MidwayContextLogger<
   IMidwayGRPCContext
   > {
   formatContextLabel() {
-    // format: '[$userId/$ip/$traceId/$use_ms $method $url]'
-    // const userId = req?.['session']?.['userId'] || '-';
-    // const traceId = '-';
-    // const use = Date.now() - this.ctx.startTime;
-    // return (
-    //   userId +
-    //   '/' +
-    //   req.ip +
-    //   '/' +
-    //   traceId +
-    //   '/' +
-    //   use +
-    //   'ms ' +
-    //   req.method +
-    //   ' ' +
-    //   req.url
-    return '';
-  }
-
-  setFormatter() {
-
+    const ctx = this.ctx;
+    const use = Date.now() - ctx.startTime;
+    return (
+      ctx.method +
+      '/' +
+      use +
+      'ms'
+    );
   }
 }

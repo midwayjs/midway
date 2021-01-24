@@ -1,7 +1,10 @@
 import { IConfigurationOptions, IMidwayApplication, IMidwayContext } from '@midwayjs/core';
-import { Server, ServerCredentials } from '@grpc/grpc-js';
+import { Server, ServerCredentials, Metadata } from '@grpc/grpc-js';
 
-export type IMidwayGRPCContext = IMidwayContext;
+export interface IMidwayGRPCContext extends IMidwayContext {
+  metadata: Metadata;
+  method: string;
+}
 export type IMidwayGRPCApplication = IMidwayApplication<IMidwayGRPCContext> & Server;
 
 export type Application = IMidwayGRPCApplication;
