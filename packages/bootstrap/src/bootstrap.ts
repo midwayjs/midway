@@ -39,6 +39,15 @@ export class BootstrapStarter {
 
   public async run() {
     await Promise.all(this.getActions('run', {}));
+    if (global['MIDWAY_BOOTSTRAP_APP_SET']) {
+      // for test/dev
+      this.bootstrapItems.forEach(item => {
+        global['MIDWAY_BOOTSTRAP_APP_SET'].add({
+          framework: item,
+          starter: this,
+        });
+      });
+    }
   }
 
   public async stop() {

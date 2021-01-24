@@ -6,7 +6,7 @@ import {
   MidwayFrameworkType,
   safeRequire,
 } from '@midwayjs/core';
-import { isAbsolute, join } from 'path';
+import { isAbsolute, join, resolve } from 'path';
 import { remove } from 'fs-extra';
 import { clearAllModule } from '@midwayjs/decorator';
 import { existsSync } from 'fs';
@@ -27,6 +27,10 @@ function isWin32() {
 }
 
 const appMap = new WeakMap();
+const bootstrapAppSet = global['MIDWAY_BOOTSTRAP_APP_SET'] = new Set<{
+  framework: IMidwayFramework<any, any>;
+  starter: BootstrapStarter;
+}>();
 
 function getIncludeFramework(dependencies): string {
   const values: string[] = Object.values(MidwayFrameworkType);
@@ -37,9 +41,18 @@ function getIncludeFramework(dependencies): string {
   }
 }
 
+function formatPath(baseDir, p) {
+  if (isAbsolute(p)) {
+    return p;
+  } else {
+    return resolve(baseDir, p);
+  }
+}
+
 export type MockAppConfigurationOptions = {
   cleanLogsDir?: boolean;
   cleanTempDir?: boolean;
+  entryFile?: string;
 };
 
 export async function create<
@@ -55,6 +68,38 @@ export async function create<
   clearContainerCache();
   clearAllLoggers();
   safeRequire(`${baseDir}/src/interface`);
+
+  if (options.entryFile) {
+    // start from entry file, like bootstrap.js
+    options.entryFile = formatPath(baseDir, options.entryFile);
+    // set app in @midwayjs/bootstrap
+    require(options.entryFile);
+
+    let currentFramework;
+    // get app by framework
+    if (bootstrapAppSet.size === 1) {
+      currentFramework = Array.from(bootstrapAppSet.values())[0].framework;
+    } else if (customFrameworkName) {
+      for (const value of bootstrapAppSet.values()) {
+        if (customFrameworkName === value.framework.getFrameworkName()
+          || customFrameworkName === value.framework.getFrameworkType()) {
+          currentFramework = value.framework;
+        }
+      }
+    }
+
+    if (!currentFramework) {
+      throw new Error('framework not found');
+    }
+
+    // set framework to current weakMap
+    for (const value of bootstrapAppSet.values()) {
+      appMap.set(value.framework, value.starter);
+    }
+    bootstrapAppSet.clear();
+
+    return currentFramework;
+  }
 
   let framework: T = null;
   let DefaultFramework = null;
@@ -158,7 +203,7 @@ export async function close(
   const starter = appMap.get(newApp);
   if (starter) {
     await starter.stop();
-    appMap.delete(starter);
+    appMap.delete(newApp);
   }
 
   if (isTestEnvironment()) {
