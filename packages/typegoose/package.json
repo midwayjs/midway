@@ -23,7 +23,7 @@
     "@midwayjs/mock": "^2.6.10",
     "@types/mongoose": "~5.10.3",
     "@typegoose/typegoose": "^7.4.7",
-    "mongoose": "^5.10.18"
+    "mongoose": "5.10.18"
   },
   "dependencies": {
     "@midwayjs/core": "^2.6.10",
