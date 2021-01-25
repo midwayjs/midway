@@ -7,5 +7,8 @@ const { Bootstrap } = require('@midwayjs/bootstrap');
 
 // 加载框架并执行
 Bootstrap
+  .configure({
+    baseDir: __dirname
+  })
   .load(web)
   .run();

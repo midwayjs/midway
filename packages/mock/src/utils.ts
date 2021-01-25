@@ -63,7 +63,7 @@ export async function create<
 >(
   baseDir: string = process.cwd(),
   options?: U & MockAppConfigurationOptions,
-  customFrameworkName?: string | MidwayFrameworkType
+  customFrameworkName?: string | MidwayFrameworkType | any
 ): Promise<T> {
   process.env.MIDWAY_TS_MODE = 'true';
   clearAllModule();
@@ -119,7 +119,7 @@ export async function create<
   }
 
   let framework: T = null;
-  let DefaultFramework = null;
+  let DefaultFramework;
 
   // find framework
   if (customFrameworkName) {
@@ -195,7 +195,7 @@ export async function createApp<
 >(
   baseDir: string = process.cwd(),
   options?: U & MockAppConfigurationOptions,
-  customFrameworkName?: string | MidwayFrameworkType
+  customFrameworkName?: string | MidwayFrameworkType | any
 ): Promise<Y> {
   const framework: T = await create<T, U>(
     baseDir,
@@ -221,6 +221,7 @@ export async function close(
   if (starter) {
     await starter.stop();
     appMap.delete(newApp);
+    bootstrapAppSet.clear();
   }
 
   if (isTestEnvironment()) {
