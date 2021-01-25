@@ -43,3 +43,5 @@ export enum RabbitMQChannelEvent {
   CHANNEL_OPEN = 'ch_open',
   CHANNEL_DRAIN = 'ch_drain',
 }
+
+export type ConfigType = string | amqp.Options.Connect;
