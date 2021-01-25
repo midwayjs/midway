@@ -4,7 +4,6 @@ import * as mongoose from 'mongoose';
 @Provide('mongooseService')
 @Scope(ScopeEnum.Singleton)
 export class MongooseService {
-
   @Config('mongoose')
   config;
 

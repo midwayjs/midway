@@ -38,7 +38,7 @@ export function Func(
       Scope(ScopeEnum.Request)(target);
     } else {
       // If target is instance, @Func annotate class member method
-      saveModule(FUNC_KEY, (target as object).constructor);
+      saveModule(FUNC_KEY, (target as Record<string, unknown>).constructor);
       attachClassMetadata(
         FUNC_KEY,
         Object.assign(

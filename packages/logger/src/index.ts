@@ -17,7 +17,7 @@ export const createLogger = <T extends ILogger>(
 export const createConsoleLogger = (
   name: string,
   options: LoggerOptions = {}
-) => {
+): ILogger => {
   return loggers.createLogger(
     name,
     Object.assign(options, {
@@ -27,6 +27,6 @@ export const createConsoleLogger = (
   );
 };
 
-export const clearAllLoggers = () => {
+export const clearAllLoggers = (): void => {
   loggers.reset();
 };

@@ -91,7 +91,7 @@ export class Bootstrap {
       }
       configuration.logger = this.logger;
     } else {
-      this.logger = this.logger || configuration.logger as ILogger;
+      this.logger = this.logger || (configuration.logger as ILogger);
     }
     this.getStarter().configure(configuration);
     return this;

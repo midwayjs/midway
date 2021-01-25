@@ -1,6 +1,11 @@
 import { createLogger, transports, Logger, format } from 'winston';
 import * as DailyRotateFileTransport from 'winston-daily-rotate-file';
-import { DelegateLoggerOptions, LoggerLevel, LoggerOptions, IMidwayLogger } from './interface';
+import {
+  DelegateLoggerOptions,
+  LoggerLevel,
+  LoggerOptions,
+  IMidwayLogger,
+} from './interface';
 import { DelegateTransport, EmptyTransport } from './transport';
 import { displayLabels, displayCommonMessage } from './format';
 import * as os from 'os';
@@ -18,8 +23,8 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
   fileTransport;
   errTransport;
   loggerOptions: LoggerOptions;
-  defaultLabel: string = '';
-  defaultMetadata: object = {};
+  defaultLabel = '';
+  defaultMetadata = {};
 
   constructor(options: LoggerOptions = {}) {
     super(options);
@@ -37,7 +42,7 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
       this.defaultMetadata = this.loggerOptions.defaultMeta;
     }
 
-    if(this.loggerOptions.format) {
+    if (this.loggerOptions.format) {
       this.configure({
         format: this.loggerOptions.format,
       });
@@ -45,9 +50,11 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
       this.configure(this.getDefaultLoggerConfigure());
     }
 
-    this.configure(Object.assign({}, this.getDefaultLoggerConfigure(), {
-      format: this.loggerOptions.format,
-    }));
+    this.configure(
+      Object.assign({}, this.getDefaultLoggerConfigure(), {
+        format: this.loggerOptions.format,
+      })
+    );
 
     this.consoleTransport = new transports.Console({
       level: options.consoleLevel || options.level || 'silly',
@@ -84,25 +91,26 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
     this.add(new EmptyTransport());
   }
 
-  disableConsole() {
+  disableConsole(): void {
     this.remove(this.consoleTransport);
   }
 
-  enableConsole() {
+  enableConsole(): void {
     this.add(this.consoleTransport);
   }
 
-  disableFile() {
+  disableFile(): void {
     this.remove(this.fileTransport);
   }
 
-  enableFile() {
+  enableFile(): void {
     if (!this.fileTransport) {
       this.fileTransport = new DailyRotateFileTransport({
         dirname: this.loggerOptions.dir,
         filename: this.loggerOptions.fileLogName,
         datePattern: 'YYYY-MM-DD',
-        level: this.loggerOptions.fileLevel || this.loggerOptions.level || 'silly',
+        level:
+          this.loggerOptions.fileLevel || this.loggerOptions.level || 'silly',
         createSymlink: this.loggerOptions.disableFileSymlink !== true,
         symlinkName: this.loggerOptions.fileLogName,
         maxSize: this.loggerOptions.fileMaxSize || '200m',
@@ -112,11 +120,11 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
     this.add(this.fileTransport);
   }
 
-  disableError() {
+  disableError(): void {
     this.remove(this.errTransport);
   }
 
-  enableError() {
+  enableError(): void {
     if (!this.errTransport) {
       this.errTransport = new DailyRotateFileTransport({
         dirname: this.loggerOptions.errorDir || this.loggerOptions.dir,
@@ -132,25 +140,25 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
     this.add(this.errTransport);
   }
 
-  updateLevel(level: LoggerLevel) {
+  updateLevel(level: LoggerLevel): void {
     this.level = level;
     this.consoleTransport.level = level;
     this.fileTransport.level = level;
   }
 
-  updateFileLevel(level: LoggerLevel) {
+  updateFileLevel(level: LoggerLevel): void {
     this.fileTransport.level = level;
   }
 
-  updateConsoleLevel(level: LoggerLevel) {
+  updateConsoleLevel(level: LoggerLevel): void {
     this.consoleTransport.level = level;
   }
 
-  updateDefaultLabel(defaultLabel: string) {
+  updateDefaultLabel(defaultLabel: string): void {
     this.defaultLabel = defaultLabel;
   }
 
-  updateDefaultMeta(defaultMetadata: object) {
+  updateDefaultMeta(defaultMetadata: Record<string, unknown>): void {
     this.defaultMetadata = defaultMetadata;
   }
 
@@ -179,7 +187,7 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
     return this.defaultLabel;
   }
 
-  getDefaultMeta(): object {
+  getDefaultMeta(): Record<string, unknown> {
     return this.defaultMetadata;
   }
 }

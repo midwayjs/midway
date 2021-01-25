@@ -3,7 +3,8 @@ import {
   ILifeCycle,
   IMidwayApplication,
   IMidwayBootstrapOptions,
-  IMidwayContainer, IMidwayContext,
+  IMidwayContainer,
+  IMidwayContext,
   IMidwayFramework,
   MidwayFrameworkType,
   MidwayProcessTypeEnum,
@@ -16,7 +17,12 @@ import {
   listModule,
   LOGGER_KEY,
 } from '@midwayjs/decorator';
-import { ILogger, loggers, LoggerOptions, IMidwayLogger } from '@midwayjs/logger';
+import {
+  ILogger,
+  loggers,
+  LoggerOptions,
+  IMidwayLogger,
+} from '@midwayjs/logger';
 import { isAbsolute, join, dirname } from 'path';
 import { createMidwayLogger, MidwayContextLogger } from './logger';
 import { safeRequire } from './util';
@@ -36,7 +42,7 @@ function setupAppDir(baseDir: string) {
 export abstract class BaseFramework<
   APP extends IMidwayApplication<CTX>,
   CTX extends IMidwayContext,
-  OPT extends IConfigurationOptions,
+  OPT extends IConfigurationOptions
 > implements IMidwayFramework<APP, OPT> {
   protected isTsMode = true;
   protected baseDir: string;
@@ -46,13 +52,14 @@ export abstract class BaseFramework<
   protected appLogger: ILogger;
   public configurationOptions: OPT;
   public app: APP;
-  protected pkg: object;
+  protected pkg: Record<string, unknown>;
   protected defaultContext = {};
   protected BaseContextLoggerClass: any;
 
   public configure(options: OPT): BaseFramework<APP, CTX, OPT> {
     this.configurationOptions = options;
-    this.BaseContextLoggerClass = options.ContextLoggerClass || this.getDefaultContextLoggerClass();
+    this.BaseContextLoggerClass =
+      options.ContextLoggerClass || this.getDefaultContextLoggerClass();
     this.logger = options.logger;
     this.appLogger = options.appLogger;
     return this;
@@ -115,7 +122,9 @@ export abstract class BaseFramework<
   protected async initializeLogger(options: IMidwayBootstrapOptions) {
     if (!this.logger) {
       this.logger = new Proxy(createMidwayLogger(this, 'coreLogger'), {});
-      (this.logger as IMidwayLogger).updateDefaultLabel(this.getFrameworkName());
+      (this.logger as IMidwayLogger).updateDefaultLabel(
+        this.getFrameworkName()
+      );
     }
     if (!this.appLogger) {
       this.appLogger = createMidwayLogger(this, 'logger', {
@@ -244,8 +253,10 @@ export abstract class BaseFramework<
     return this.baseDir;
   }
 
-  protected defineApplicationProperties(applicationProperties: object = {}, whiteList = []) {
-    const self = this;
+  protected defineApplicationProperties(
+    applicationProperties = {},
+    whiteList: string[] = []
+  ) {
     const defaultApplicationProperties = {
       getBaseDir: () => {
         return this.baseDir;
@@ -295,30 +306,32 @@ export abstract class BaseFramework<
         return this.getProjectName();
       },
 
-      createAnonymousContext(extendCtx?: CTX) {
-        const ctx = extendCtx || Object.create(self.defaultContext);
+      createAnonymousContext: (extendCtx?: CTX) => {
+        const ctx = extendCtx || Object.create(this.defaultContext);
         if (!ctx.startTime) {
           ctx.startTime = Date.now();
         }
         if (!ctx.logger) {
-          ctx.logger = self.createContextLogger(ctx);
+          ctx.logger = this.createContextLogger(ctx);
         }
         if (!ctx.requestContext) {
-          ctx.requestContext = new MidwayRequestContainer(ctx, this.getApplicationContext());
+          ctx.requestContext = new MidwayRequestContainer(
+            ctx,
+            this.getApplicationContext()
+          );
           ctx.requestContext.ready();
         }
         if (!ctx.getLogger) {
-          ctx.getLogger = (name) => {
-            return self.createContextLogger(ctx, name);
+          ctx.getLogger = name => {
+            return this.createContextLogger(ctx, name);
           };
         }
         return ctx;
       },
 
-      setContextLoggerClass(BaseContextLogger: any) {
-        return self.setContextLoggerClass(BaseContextLogger);
+      setContextLoggerClass: (BaseContextLogger: any) => {
+        return this.setContextLoggerClass(BaseContextLogger);
       },
-
     };
     for (const method of whiteList) {
       delete defaultApplicationProperties[method];
@@ -398,7 +411,7 @@ export abstract class BaseFramework<
   }
 
   public getProjectName() {
-    return this.pkg?.['name'] || '';
+    return (this.pkg?.['name'] as string) || '';
   }
 
   public getFrameworkName() {
@@ -408,5 +421,4 @@ export abstract class BaseFramework<
   public getDefaultContextLoggerClass(): any {
     return MidwayContextLogger;
   }
-
 }

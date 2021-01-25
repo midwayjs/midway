@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 
 export type DefaultConfig = {
-  uri: string,
+  uri: string;
   options: mongoose.ConnectionOptions;
-}
+};

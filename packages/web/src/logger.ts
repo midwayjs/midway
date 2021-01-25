@@ -1,7 +1,13 @@
 import { EggLoggers } from 'egg-logger';
 import { loggers, ILogger, IMidwayLogger } from '@midwayjs/logger';
 import { join, isAbsolute } from 'path';
-import { existsSync, lstatSync, readFileSync, renameSync, unlinkSync } from 'fs';
+import {
+  existsSync,
+  lstatSync,
+  readFileSync,
+  renameSync,
+  unlinkSync,
+} from 'fs';
 import { Application } from 'egg';
 import { MidwayProcessTypeEnum } from '@midwayjs/core';
 import { getCurrentDateString } from './utils';
@@ -9,10 +15,10 @@ import * as os from 'os';
 
 const isWindows = os.platform() === 'win32';
 
-const levelTransform = (level) => {
+const levelTransform = level => {
   switch (level) {
     case 'NONE':
-    case Infinity:      // egg logger 的 none 是这个等级
+    case Infinity:  // egg logger 的 none 是这个等级
       return null;
     case 0:
     case 'DEBUG':
@@ -33,11 +39,11 @@ const levelTransform = (level) => {
     default:
       return 'silly';
   }
-}
+};
 
 function isEmptyFile(p: string) {
-  let content = readFileSync(p, {
-    encoding: 'utf8'
+  const content = readFileSync(p, {
+    encoding: 'utf8',
   });
   return content === null || content === undefined || content === '';
 }

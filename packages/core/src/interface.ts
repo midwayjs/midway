@@ -209,7 +209,7 @@ export interface IContainerConfiguration {
   newVersion: boolean;
   addLoadDir(dir: string);
   addImports(imports: string[], baseDir?: string);
-  addImportObjects(importObjects: any[]);
+  addImportObjects(importObjects: Record<string, unknown>);
   addImportConfigs(importConfigs: string[], baseDir: string);
   load(packageName: string);
   loadComponentObject(componentObject: any);

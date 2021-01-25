@@ -327,14 +327,18 @@ export class MidwayFaaSFramework extends BaseFramework<
 
   public createLogger(name: string, option: LoggerOptions = {}) {
     // 覆盖基类的创建日志对象，函数场景下的日志，即使自定义，也只启用控制台输出
-    return createMidwayLogger(this, name, Object.assign(option, {
-      disableFile: true,
-      disableError: true,
-    }));
+    return createMidwayLogger(
+      this,
+      name,
+      Object.assign(option, {
+        disableFile: true,
+        disableError: true,
+      })
+    );
   }
 
   public getFrameworkName() {
-    return 'midway:faas'
+    return 'midway:faas';
   }
 }
 

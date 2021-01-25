@@ -17,9 +17,11 @@ process.setMaxListeners(0);
 
 function isTestEnvironment() {
   const testEnv = ['test', 'unittest'];
-  return testEnv.includes(process.env.MIDWAY_SERVER_ENV)
-    || testEnv.includes(process.env.EGG_SERVER_ENV)
-    || testEnv.includes(process.env.NODE_ENV);
+  return (
+    testEnv.includes(process.env.MIDWAY_SERVER_ENV) ||
+    testEnv.includes(process.env.EGG_SERVER_ENV) ||
+    testEnv.includes(process.env.NODE_ENV)
+  );
 }
 
 function isWin32() {
@@ -27,10 +29,10 @@ function isWin32() {
 }
 
 const appMap = new WeakMap();
-const bootstrapAppSet = global['MIDWAY_BOOTSTRAP_APP_SET'] = new Set<{
+const bootstrapAppSet = (global['MIDWAY_BOOTSTRAP_APP_SET'] = new Set<{
   framework: IMidwayFramework<any, any>;
   starter: BootstrapStarter;
-}>();
+}>());
 
 function getIncludeFramework(dependencies): string {
   const values: string[] = Object.values(MidwayFrameworkType);
@@ -61,7 +63,7 @@ export async function create<
 >(
   baseDir: string = process.cwd(),
   options?: U & MockAppConfigurationOptions,
-  customFrameworkName?: string | MidwayFrameworkType | object
+  customFrameworkName?: string | MidwayFrameworkType
 ): Promise<T> {
   process.env.MIDWAY_TS_MODE = 'true';
   clearAllModule();
@@ -72,7 +74,7 @@ export async function create<
   if (options.entryFile) {
     // start from entry file, like bootstrap.js
     options.entryFile = formatPath(baseDir, options.entryFile);
-    global['MIDWAY_BOOTSTRAP_APP_READY'] = false
+    global['MIDWAY_BOOTSTRAP_APP_READY'] = false;
     // set app in @midwayjs/bootstrap
     require(options.entryFile);
 
@@ -94,8 +96,10 @@ export async function create<
       currentFramework = Array.from(bootstrapAppSet.values())[0].framework;
     } else if (customFrameworkName) {
       for (const value of bootstrapAppSet.values()) {
-        if (customFrameworkName === value.framework.getFrameworkName()
-          || customFrameworkName === value.framework.getFrameworkType()) {
+        if (
+          customFrameworkName === value.framework.getFrameworkName() ||
+          customFrameworkName === value.framework.getFrameworkType()
+        ) {
           currentFramework = value.framework;
         }
       }
@@ -133,7 +137,7 @@ export async function create<
     DefaultFramework = require(customFrameworkName as string).Framework;
   }
 
-  options = options ?? {} as U;
+  options = options ?? ({} as U);
 
   // got options from framework
   if (DefaultFramework) {
@@ -191,7 +195,7 @@ export async function createApp<
 >(
   baseDir: string = process.cwd(),
   options?: U & MockAppConfigurationOptions,
-  customFrameworkName?: string | MidwayFrameworkType | object
+  customFrameworkName?: string | MidwayFrameworkType
 ): Promise<Y> {
   const framework: T = await create<T, U>(
     baseDir,

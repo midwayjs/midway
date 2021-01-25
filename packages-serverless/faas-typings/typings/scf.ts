@@ -104,7 +104,7 @@ export namespace SCF {
     /**
      * 记录实际请求的完整 Header 内容
      */
-    headers: object;
+    headers: Record<string, unknown>;
     /**
      * 记录实际请求的完整 Body 内容
      */
@@ -112,15 +112,15 @@ export namespace SCF {
     /**
      * 记录在 API 网关中配置过的 Path 参数以及实际取值
      */
-    pathParameters: object;
+    pathParameters: Record<string, unknown>;
     /**
      * 记录在 API 网关中配置过的 Query 参数以及实际取值
      */
-    queryStringParameters: object;
+    queryStringParameters: Record<string, unknown>;
     /**
      * 记录在 API 网关中配置过的 Header 参数以及实际取值
      */
-    headerParameters: object;
+    headerParameters: Record<string, unknown>;
     stageVariables: {
       stage: string;
     };
@@ -131,14 +131,14 @@ export namespace SCF {
     /**
      * 请求地址的查询参数
      */
-    queryString: object;
+    queryString: Record<string, unknown>;
     httpMethod: string;
   }
 
   export interface APIGatewayResponse {
     isBase64Encoded: boolean;
     statusCode: number;
-    headers: object;
+    headers: Record<string, unknown>;
     body: string;
   }
 

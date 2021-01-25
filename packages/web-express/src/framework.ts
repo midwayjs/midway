@@ -191,7 +191,9 @@ export class MidwayExpressFramework extends BaseFramework<
       const providerId = getProviderId(module);
       if (providerId) {
         if (this.controllerIds.indexOf(providerId) > -1) {
-          throw new Error(`controller identifier [${providerId}] already exists!`);
+          throw new Error(
+            `controller identifier [${providerId}] already exists!`
+          );
         }
         this.controllerIds.push(providerId);
         this.logger.info(`Load Controller "${providerId}"`);
@@ -276,7 +278,9 @@ export class MidwayExpressFramework extends BaseFramework<
             getPropertyMetadata(WEB_RESPONSE_KEY, target, webRouter.method) ||
             [];
 
-          this.logger.info(`Load Router "${webRouter.requestMethod} ${webRouter.path}"`);
+          this.logger.info(
+            `Load Router "${webRouter.requestMethod} ${webRouter.path}"`
+          );
           // apply controller from request context
           newRouter[webRouter.requestMethod].call(
             newRouter,
@@ -344,7 +348,7 @@ export class MidwayExpressFramework extends BaseFramework<
   }
 
   public getFrameworkName() {
-    return 'midway:express'
+    return 'midway:express';
   }
 
   public getDefaultContextLoggerClass() {

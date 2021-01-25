@@ -104,7 +104,7 @@ export class MidwayRabbitMQFramework extends BaseFramework<
   }
 
   public getFrameworkName() {
-    return 'midway:rabbitmq'
+    return 'midway:rabbitmq';
   }
 
   public getDefaultContextLoggerClass(): any {

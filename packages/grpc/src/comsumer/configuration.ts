@@ -5,12 +5,9 @@ import { join } from 'path';
 
 @Configuration({
   namespace: 'grpc',
-  importConfigs: [
-    join(__dirname, 'config.default'),
-  ]
+  importConfigs: [join(__dirname, 'config.default')],
 })
 export class AutoConfiguration {
-
   @Logger()
   logger: ILogger;
 

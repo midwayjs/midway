@@ -715,9 +715,12 @@ export function saveModule(decoratorNameKey: DecoratorKey, target) {
  * list module from decorator key
  * @param decoratorNameKey
  */
-export function listModule(decoratorNameKey: DecoratorKey, filter?:(module) => boolean): any[] {
+export function listModule(
+  decoratorNameKey: DecoratorKey,
+  filter?: (module) => boolean
+): any[] {
   const modules = manager.listModule(decoratorNameKey);
-  if (filter)  {
+  if (filter) {
     return modules.filter(filter);
   } else {
     return modules;
@@ -978,7 +981,7 @@ export function getPropertyInject(target: any): TagPropsMetadata[] {
  * @param target class
  * @param props 属性
  */
-export function saveObjectDefProps(target: any, props: object = {}) {
+export function saveObjectDefProps(target: any, props = {}) {
   if (Reflect.hasMetadata(OBJ_DEF_CLS, target)) {
     const originProps = Reflect.getMetadata(OBJ_DEF_CLS, target);
 
