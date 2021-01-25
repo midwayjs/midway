@@ -1,9 +1,10 @@
-import { BaseFramework, IMidwayApplication, IMidwayBootstrapOptions, MidwayFrameworkType } from '../src';
+import { BaseFramework, IMidwayApplication, IMidwayBootstrapOptions, MidwayFrameworkType, IMidwayContext } from '../src';
 
 type mockApp = {} & IMidwayApplication;
 type mockAppOptions = {};
+type mockContext = IMidwayContext;
 
-export class MockFramework extends BaseFramework<mockApp, mockAppOptions> {
+export class MockFramework extends BaseFramework<mockApp, mockContext, mockAppOptions> {
 
   getApplication(): mockApp {
     return this.app;
@@ -21,4 +22,7 @@ export class MockFramework extends BaseFramework<mockApp, mockAppOptions> {
     this.app = {} as IMidwayApplication;
   }
 
+  getDefaultContextLoggerClass() {
+    return super.getDefaultContextLoggerClass();
+  }
 }

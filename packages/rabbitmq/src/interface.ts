@@ -1,4 +1,4 @@
-import { IMidwayApplication, IMidwayContext } from '@midwayjs/core';
+import { IConfigurationOptions, IMidwayApplication, IMidwayContext } from '@midwayjs/core';
 import { ConsumeMessage, Options } from 'amqplib/properties';
 import { RabbitMQListenerOptions } from '@midwayjs/decorator';
 import * as amqp from 'amqplib';
@@ -14,7 +14,7 @@ export interface IRabbitMQApplication {
   close(): Promise<void>;
 }
 
-export type IMidwayRabbitMQApplication = IMidwayApplication & IRabbitMQApplication;
+export type IMidwayRabbitMQApplication = IMidwayApplication<IMidwayRabbitMQContext> & IRabbitMQApplication;
 
 export interface IRabbitMQExchange {
   name: string,
@@ -22,7 +22,7 @@ export interface IRabbitMQExchange {
   options?: Options.AssertExchange
 }
 
-export type IMidwayRabbitMQConfigurationOptions = {
+export interface IMidwayRabbitMQConfigurationOptions extends IConfigurationOptions {
   url: string | Options.Connect,
   socketOptions?: any;
   reconnectTime?: number;
@@ -44,4 +44,6 @@ export enum RabbitMQChannelEvent {
   CHANNEL_DRAIN = 'ch_drain',
 }
 
+export type Application = IMidwayRabbitMQApplication;
+export type Context = IMidwayRabbitMQContext;
 export type ConfigType = string | amqp.Options.Connect;

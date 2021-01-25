@@ -8,7 +8,6 @@ import {
   IMidwayBootstrapOptions,
   listModule,
   MidwayFrameworkType,
-  MidwayRequestContainer,
 } from '@midwayjs/core';
 
 import {
@@ -41,6 +40,7 @@ import { MidwayExpressContextLogger } from './logger';
 
 export class MidwayExpressFramework extends BaseFramework<
   IMidwayExpressApplication,
+  IMidwayExpressContext,
   IMidwayExpressConfigurationOptions
 > {
   public app: IMidwayExpressApplication;
@@ -51,13 +51,6 @@ export class MidwayExpressFramework extends BaseFramework<
     prefix: string;
   }> = [];
   private server: Server;
-
-  public configure(
-    options: IMidwayExpressConfigurationOptions
-  ): MidwayExpressFramework {
-    this.configurationOptions = options;
-    return this;
-  }
 
   async applicationInitialize(options: Partial<IMidwayBootstrapOptions>) {
     this.app = (express() as unknown) as IMidwayExpressApplication;
@@ -72,16 +65,10 @@ export class MidwayExpressFramework extends BaseFramework<
     });
     this.app.use((req, res, next) => {
       const ctx = { req, res } as IMidwayExpressContext;
-      ctx.logger = new MidwayExpressContextLogger(ctx, this.appLogger);
-      ctx.startTime = Date.now();
-      ctx.requestContext = new MidwayRequestContainer(
-        ctx,
-        this.getApplicationContext()
-      );
+      this.app.createAnonymousContext(ctx);
       (req as any).requestContext = ctx.requestContext;
       ctx.requestContext.registerObject('req', req);
       ctx.requestContext.registerObject('res', res);
-      ctx.requestContext.ready();
       next();
     });
   }
@@ -204,7 +191,7 @@ export class MidwayExpressFramework extends BaseFramework<
       const providerId = getProviderId(module);
       if (providerId) {
         if (this.controllerIds.indexOf(providerId) > -1) {
-          throw new Error(`controller identifier [${providerId}] is exists!`);
+          throw new Error(`controller identifier [${providerId}] already exists!`);
         }
         this.controllerIds.push(providerId);
         await this.preRegisterRouter(module, providerId);
@@ -346,7 +333,19 @@ export class MidwayExpressFramework extends BaseFramework<
     }
   }
 
+  public async beforeStop() {
+    this.server.close();
+  }
+
   public getServer() {
     return this.server;
+  }
+
+  public getFrameworkName() {
+    return 'midway:express'
+  }
+
+  public getDefaultContextLoggerClass() {
+    return MidwayExpressContextLogger;
   }
 }

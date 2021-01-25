@@ -32,6 +32,7 @@
   "dependencies": {
     "@midwayjs/core": "^2.6.13",
     "@midwayjs/decorator": "^2.6.8",
+    "@midwayjs/logger": "^2.6.9",
     "koa": "^2.13.0",
     "koa-router": "^9.4.0"
   },

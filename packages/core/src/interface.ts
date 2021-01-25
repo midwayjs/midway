@@ -292,7 +292,18 @@ export enum MidwayProcessTypeEnum {
  */
 export interface IMidwayLogger extends ILogger {}
 
-export interface IMidwayApplication {
+export interface IMidwayContext {
+  /**
+   * Custom properties.
+   */
+  [key: string]: any;
+  requestContext: IMidwayContainer;
+  logger: ILogger;
+  getLogger(name?: string): ILogger;
+  startTime: number;
+}
+
+export interface IMidwayApplication<T extends IMidwayContext = IMidwayContext> {
   getBaseDir(): string;
   getAppDir(): string;
   getEnv(): string;
@@ -304,12 +315,8 @@ export interface IMidwayApplication {
   getCoreLogger(): ILogger;
   createLogger(name: string, options: LoggerOptions): ILogger;
   getProjectName(): string;
-}
-
-export interface IMidwayContext {
-  getRequestContext?(): IMidwayContainer;
-  requestContext: IMidwayContainer;
-  logger: ILogger;
+  createAnonymousContext(...args): T;
+  setContextLoggerClass(BaseContextLoggerClass: any): void;
 }
 
 /**
@@ -331,7 +338,11 @@ export interface IMidwayBootstrapOptions {
   disableConflictCheck?: boolean;
 }
 
-export interface IConfigurationOptions {}
+export interface IConfigurationOptions {
+  logger?: ILogger;
+  appLogger?: ILogger;
+  ContextLoggerClass?: any;
+}
 
 export interface IMidwayFramework<APP extends IMidwayApplication, T extends IConfigurationOptions> {
   app: APP;
@@ -345,12 +356,14 @@ export interface IMidwayFramework<APP extends IMidwayApplication, T extends ICon
   getConfiguration(key?: string): any;
   getCurrentEnvironment(): string;
   getFrameworkType(): MidwayFrameworkType;
+  getFrameworkName(): string;
   getAppDir(): string;
   getBaseDir(): string;
   getLogger(name?: string): ILogger;
   getCoreLogger(): ILogger;
   createLogger(name: string, options: LoggerOptions): ILogger;
   getProjectName(): string;
+  getDefaultContextLoggerClass(): any;
 }
 
 export enum MidwayFrameworkType {
@@ -359,7 +372,7 @@ export enum MidwayFrameworkType {
   WEB_EXPRESS = '@midwayjs/express',
   FAAS = '@midwayjs/faas',
   MS_HSF = '',
-  MS_GRPC = '',
+  MS_GRPC = '@midwayjs/grpc',
   MS_RABBITMQ = '@midwayjs/rabbitmq',
   WS_IO = '@midwayjs/socketio',
   WSS = '',

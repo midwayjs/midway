@@ -12,9 +12,9 @@ import { Application, Context, Router, EggLogger } from 'egg';
 import { loggers } from '@midwayjs/logger';
 
 export class MidwayWebFramework extends MidwayKoaBaseFramework<
-  IMidwayWebConfigurationOptions,
   Application,
-  Context
+  Context,
+  IMidwayWebConfigurationOptions
 > {
   public app: Application;
   public configurationOptions: IMidwayWebConfigurationOptions;
@@ -58,11 +58,7 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
         // TODO 单进程模式下区分进程类型??
         return MidwayProcessTypeEnum.APPLICATION;
       },
-
-      getLogger: name => {
-        return this.getLogger(name);
-      },
-    });
+    }, ['createAnonymousContext']);
 
     Object.defineProperty(this.app, 'applicationContext', {
       get() {

@@ -5,7 +5,6 @@ import {
   IMidwayBootstrapOptions,
   listModule,
   MidwayFrameworkType,
-  MidwayRequestContainer,
 } from '@midwayjs/core';
 
 import {
@@ -21,20 +20,15 @@ import {
   WSEventInfo,
   WSEventTypeEnum,
 } from '@midwayjs/decorator';
+import { MidwaySocketIOContextLogger } from './logger';
 
 export class MidwaySocketIOFramework extends BaseFramework<
   IMidwaySocketIOApplication,
+  IMidwaySocketIOContext,
   IMidwaySocketIOConfigurationOptions
 > {
   applicationInitialize(options: IMidwayBootstrapOptions) {}
   public app: IMidwaySocketIOApplication;
-
-  public configure(
-    options: IMidwaySocketIOConfigurationOptions
-  ): MidwaySocketIOFramework {
-    this.configurationOptions = options;
-    return this;
-  }
 
   protected async afterContainerDirectoryLoad(
     options: Partial<IMidwayBootstrapOptions>
@@ -51,10 +45,7 @@ export class MidwaySocketIOFramework extends BaseFramework<
     }
 
     this.app.use((socket, next) => {
-      socket.requestContext = new MidwayRequestContainer(
-        socket,
-        this.getApplicationContext()
-      );
+      this.app.createAnonymousContext(socket);
       socket.requestContext.registerObject('socket', socket);
       next();
     });
@@ -224,5 +215,13 @@ export class MidwaySocketIOFramework extends BaseFramework<
         }
       }
     }
+  }
+
+  public getFrameworkName() {
+    return 'midway:socketIO'
+  }
+
+  public getDefaultContextLoggerClass(): any {
+    return MidwaySocketIOContextLogger
   }
 }

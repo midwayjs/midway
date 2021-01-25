@@ -10,6 +10,7 @@ import * as path from 'path';
 import {
   clearAllModule,
   clearContainerCache,
+  MidwayContextLogger,
   MidwayRequestContainer,
 } from '../src';
 import * as mm from 'mm';
@@ -244,7 +245,7 @@ describe('/test/baseFramework.test.ts', () => {
   //     __dirname,
   //     './fixtures/app-with-conflict/base-app-decorator/src/lib/'
   //   );
-  //   const s = `baseService path = ${p}/userManager.ts is exist (${p}/service.ts)!`;
+  //   const s = `baseService path = ${p}/userManager.ts already exist (${p}/service.ts)!`;
   //   assert.ok(callback.withArgs(s).calledOnce);
   // });
 
@@ -592,6 +593,20 @@ describe('/test/baseFramework.test.ts', () => {
     expect(framework.getApplication().getApplicationContext()).toEqual(framework.getApplicationContext());
     expect(framework.getApplication().getFrameworkType()).toEqual(framework.getFrameworkType());
     expect(framework.getApplication().getProjectName()).toEqual(framework.getProjectName());
+
+    // test context
+    class CustomContextLogger extends MidwayContextLogger<any> {
+      formatContextLabel(): string {
+        return 'bbbb';
+      }
+    }
+    framework.getApplication().setContextLoggerClass(CustomContextLogger);
+    expect(framework.getApplication().createAnonymousContext().startTime).toBeDefined();
+    const ctxLogger = framework.getApplication().createAnonymousContext().getLogger();
+    ctxLogger.info('ctx logger');
+
+    expect(framework.getApplication().createAnonymousContext().requestContext).toBeDefined();
+    expect(framework.getApplication().createAnonymousContext().logger).toBeDefined();
 
     await framework.stop();
   });

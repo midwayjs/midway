@@ -1,15 +1,20 @@
 import * as SocketIO from 'socket.io';
-import { IMidwayApplication, IMidwayContext } from '@midwayjs/core';
+import { IConfigurationOptions, IMidwayApplication, IMidwayContext } from '@midwayjs/core';
 import { Server as HttpServer } from 'http';
 import { Server as HttpsServer } from 'https';
 
-export type IMidwaySocketIOApplication = IMidwayApplication & {
+export type IMidwaySocketIOApplication = IMidwayApplication<IMidwaySocketIOContext> & {
   use(fn: (socket: IMidwaySocketIOContext, fn: (err?: any) => void) => void): SocketIO.Namespace;
 } & SocketIO.Server;
 
 export type IMidwaySocketIOConfigurationOptions = {
   port?: number;
   webServer?: HttpServer | HttpsServer;
-} & SocketIO.ServerOptions;
+} & SocketIO.ServerOptions & IConfigurationOptions;
 
 export type IMidwaySocketIOContext = SocketIO.Socket & IMidwayContext;
+
+
+export type Application = IMidwaySocketIOApplication;
+
+export type Context = IMidwaySocketIOContext;

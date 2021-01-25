@@ -10,6 +10,7 @@ import { resolve } from 'path';
 import { readFileSync } from 'fs';
 import { Server } from 'net';
 import { LoggerOptions } from '@midwayjs/logger';
+import { MidwayKoaContextLogger } from '@midwayjs/koa';
 
 export class SingleProcess
   implements IMidwayFramework<Application, IMidwayWebConfigurationOptions> {
@@ -126,5 +127,13 @@ export class SingleProcess
 
   public getServer() {
     return this.server;
+  }
+
+  public getFrameworkName() {
+    return 'midway:web'
+  }
+
+  public getDefaultContextLoggerClass() {
+    return MidwayKoaContextLogger;
   }
 }

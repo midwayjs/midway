@@ -6,6 +6,7 @@ import {
   IMidwayContainer,
   IConfigurationOptions,
   MidwayFrameworkType,
+  MidwayContextLogger
 } from '@midwayjs/core';
 import { clearAllLoggers } from '@midwayjs/logger';
 import { join } from 'path';
@@ -89,6 +90,10 @@ class TestFrameworkUnit implements IMidwayFramework<any, MockConfigurationOption
 
   getFrameworkName() {
     return 'midway:mock'
+  }
+
+  getDefaultContextLoggerClass() {
+    return MidwayContextLogger
   }
 }
 

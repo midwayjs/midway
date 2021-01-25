@@ -162,11 +162,11 @@ export async function close(
   }
 
   if (isTestEnvironment()) {
+    // clean first
+    if (options.cleanLogsDir !== false && !isWin32()) {
+      await remove(join(newApp.getAppDir(), 'logs'));
+    }
     if (MidwayFrameworkType.WEB === newApp.getFrameworkType()) {
-      // clean first
-      if (options.cleanLogsDir !== false && !isWin32()) {
-        await remove(join(newApp.getAppDir(), 'logs'));
-      }
       if (options.cleanTempDir !== false && !isWin32()) {
         await remove(join(newApp.getAppDir(), 'run'));
       }
