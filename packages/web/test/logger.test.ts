@@ -76,6 +76,9 @@ describe('test/logger.test.js', () => {
     const app = await creatApp('apps/mock-dev-app', { cleanLogsDir: false});
     app.coreLogger.error('aaaaa');
     const timeFormat = getCurrentDateString();
+
+    await sleep(1000);
+
     // 备份文件存在
     expect(existsSync(join(logsDir, 'common-error.log.' + timeFormat + '_eggjs_bak'))).toBeTruthy();
     expect(existsSync(join(logsDir, 'egg-schedule.log.' + timeFormat + '_eggjs_bak'))).toBeTruthy();

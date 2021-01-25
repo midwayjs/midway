@@ -47,6 +47,7 @@ export class BootstrapStarter {
           starter: this,
         });
       });
+      global['MIDWAY_BOOTSTRAP_APP_READY'] = true;
     }
   }
 

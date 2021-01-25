@@ -72,9 +72,22 @@ export async function create<
   if (options.entryFile) {
     // start from entry file, like bootstrap.js
     options.entryFile = formatPath(baseDir, options.entryFile);
+    global['MIDWAY_BOOTSTRAP_APP_READY'] = false
     // set app in @midwayjs/bootstrap
     require(options.entryFile);
 
+    await new Promise<void>((resolve, reject) => {
+      const timeoutHandler = setTimeout(() => {
+        clearInterval(internalHandler);
+        reject(new Error('[midway]: bootstrap timeout'));
+      }, 30 * 1000);
+      const internalHandler = setInterval(() => {
+        global['MIDWAY_BOOTSTRAP_APP_READY'] = true;
+        clearInterval(internalHandler);
+        clearTimeout(timeoutHandler);
+        resolve();
+      }, 200);
+    });
     let currentFramework;
     // get app by framework
     if (bootstrapAppSet.size === 1) {
@@ -89,7 +102,7 @@ export async function create<
     }
 
     if (!currentFramework) {
-      throw new Error('framework not found');
+      throw new Error('[midway]: framework not found');
     }
 
     // set framework to current weakMap

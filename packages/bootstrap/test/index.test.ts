@@ -152,4 +152,13 @@ describe('/test/index.test.ts', () => {
     expect(framework.getBaseDir()).toEqual(join(process.cwd(), 'dist'));
     await Bootstrap.stop();
   });
+
+  it('should test bootstrap run with mock', async () => {
+    global['MIDWAY_BOOTSTRAP_APP_SET'] = new Set();
+    const framework = new TestFrameworkUnit().configure({});
+    await Bootstrap.load(framework).run();
+    expect(global['MIDWAY_BOOTSTRAP_APP_SET'].size).toEqual(1);
+    await Bootstrap.stop();
+    global['MIDWAY_BOOTSTRAP_APP_SET'] = null;
+  });
 });
