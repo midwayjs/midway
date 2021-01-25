@@ -194,6 +194,7 @@ export class MidwayExpressFramework extends BaseFramework<
           throw new Error(`controller identifier [${providerId}] already exists!`);
         }
         this.controllerIds.push(providerId);
+        this.logger.info(`Load Controller "${providerId}"`);
         await this.preRegisterRouter(module, providerId);
       }
     }
@@ -275,6 +276,7 @@ export class MidwayExpressFramework extends BaseFramework<
             getPropertyMetadata(WEB_RESPONSE_KEY, target, webRouter.method) ||
             [];
 
+          this.logger.info(`Load Router "${webRouter.requestMethod} ${webRouter.path}"`);
           // apply controller from request context
           newRouter[webRouter.requestMethod].call(
             newRouter,
