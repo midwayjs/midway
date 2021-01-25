@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 
-export type ConfigType = {
+export type DefaultConfig = {
   uri: string,
   options: mongoose.ConnectionOptions;
 }
