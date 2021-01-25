@@ -1,0 +1,32 @@
+{
+  "name": "@midwayjs/mongoose",
+  "version": "2.6.10",
+  "description": "",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "midway-bin build -c",
+    "test": "midway-bin test --ts --forceExit",
+    "cov": "midway-bin cov --ts --forceExit",
+    "ci": "npm run test"
+  },
+  "keywords": [],
+  "author": "",
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts"
+  ],
+  "license": "ISC",
+  "devDependencies": {
+    "@midwayjs/cli": "^1.2.38",
+    "@midwayjs/koa": "^2.6.10",
+    "@midwayjs/mock": "^2.6.10",
+    "@types/mongoose": "~5.10.3",
+    "@typegoose/typegoose": "^7.4.7",
+    "mongoose": "5.10.18"
+  },
+  "dependencies": {
+    "@midwayjs/core": "^2.6.10",
+    "@midwayjs/decorator": "^2.6.8"
+  }
+}

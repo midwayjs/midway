@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.6.13](https://github.com/midwayjs/midway/compare/v2.6.12...v2.6.13) (2021-01-21)
+
+
+### Bug Fixes
+
+* fc runtime default ctx ([#813](https://github.com/midwayjs/midway/issues/813)) ([23ad9a2](https://github.com/midwayjs/midway/commit/23ad9a281cbba0e37e3356b15151d8bf08937662))
+* file transport context formatter missing ([#815](https://github.com/midwayjs/midway/issues/815)) ([45bd3d5](https://github.com/midwayjs/midway/commit/45bd3d58104e859805f0d7feb84ff17c136966c9))
+* optional options ([#811](https://github.com/midwayjs/midway/issues/811)) ([ed3f659](https://github.com/midwayjs/midway/commit/ed3f6594efc32cf2bc9930a687836ae014cb7d90))
+* winston-transport build error when enable esModuleInterop ([#814](https://github.com/midwayjs/midway/issues/814)) ([da6e762](https://github.com/midwayjs/midway/commit/da6e762fe32df37307c4f805a38a79f84c36af16))
+
+
+
+
+
+## [2.6.12](https://github.com/midwayjs/midway/compare/v2.6.11...v2.6.12) (2021-01-15)
+
+
+### Bug Fixes
+
+* express router missing ([#804](https://github.com/midwayjs/midway/issues/804)) ([30cd26c](https://github.com/midwayjs/midway/commit/30cd26cc505ea91fb7d0796c59238962c5045b3d))
+* mockClassFunction missing ([#807](https://github.com/midwayjs/midway/issues/807)) ([88fa763](https://github.com/midwayjs/midway/commit/88fa7636dbfaba89fb420b70f96cd904630e687c))
+* rabbitmq client mock ([#801](https://github.com/midwayjs/midway/issues/801)) ([18d0fcd](https://github.com/midwayjs/midway/commit/18d0fcd24df722ec5a58775fd4d795f22c4e4725))
+
+
+
+
+
 ## [2.6.11](https://github.com/midwayjs/midway/compare/v2.6.10...v2.6.11) (2021-01-11)
 
 

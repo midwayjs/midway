@@ -207,7 +207,7 @@ export class MidwayExpressFramework extends BaseFramework<
       );
 
       this.prioritySortRouters.forEach(prioritySortRouter => {
-        this.app.use(prioritySortRouter.router);
+        this.app.use(prioritySortRouter.prefix, prioritySortRouter.router);
       });
     }
   }

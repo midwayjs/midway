@@ -75,6 +75,8 @@ export async function create<
     DefaultFramework = require(customFrameworkName as string).Framework;
   }
 
+  options = options ?? {} as U;
+
   // got options from framework
   if (DefaultFramework) {
     framework = new DefaultFramework();
@@ -85,6 +87,10 @@ export async function create<
           'egg-mock': {
             enable: true,
             package: 'egg-mock',
+          },
+          'midway-mock': {
+            enable: true,
+            package: '@midwayjs/mock',
           },
           watcher: false,
           development: false,

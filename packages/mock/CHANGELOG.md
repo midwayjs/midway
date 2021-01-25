@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.6.13](https://github.com/midwayjs/midway/compare/v2.6.12...v2.6.13) (2021-01-21)
+
+
+### Bug Fixes
+
+* optional options ([#811](https://github.com/midwayjs/midway/issues/811)) ([ed3f659](https://github.com/midwayjs/midway/commit/ed3f6594efc32cf2bc9930a687836ae014cb7d90))
+
+
+
+
+
+## [2.6.12](https://github.com/midwayjs/midway/compare/v2.6.11...v2.6.12) (2021-01-15)
+
+
+### Bug Fixes
+
+* mockClassFunction missing ([#807](https://github.com/midwayjs/midway/issues/807)) ([88fa763](https://github.com/midwayjs/midway/commit/88fa7636dbfaba89fb420b70f96cd904630e687c))
+* rabbitmq client mock ([#801](https://github.com/midwayjs/midway/issues/801)) ([18d0fcd](https://github.com/midwayjs/midway/commit/18d0fcd24df722ec5a58775fd4d795f22c4e4725))
+
+
+
+
+
 ## [2.6.10](https://github.com/midwayjs/midway/compare/v2.6.9...v2.6.10) (2021-01-10)
 
 

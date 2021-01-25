@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/rabbitmq",
-  "version": "2.6.10",
+  "version": "2.6.13",
   "description": "Midway Framework for rabbitmq",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -8,7 +8,8 @@
     "build": "midway-bin build -c",
     "test": "midway-bin test --ts --forceExit",
     "cov": "midway-bin cov --ts --forceExit",
-    "ci": "npm run test"
+    "ci": "npm run test",
+    "lint:fix": "../../node_modules/.bin/mwts fix"
   },
   "keywords": [
     "midway",
@@ -24,11 +25,11 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/cli": "^1.2.36",
-    "@midwayjs/mock": "^2.6.10",
+    "@midwayjs/mock": "^2.6.13",
     "fs-extra": "^8.0.1"
   },
   "dependencies": {
-    "@midwayjs/core": "^2.6.10",
+    "@midwayjs/core": "^2.6.13",
     "@midwayjs/decorator": "^2.6.8",
     "@midwayjs/logger": "^2.6.9",
     "@types/amqplib": "^0.5.13",

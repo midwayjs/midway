@@ -1,11 +1,11 @@
-import * as Transport from 'winston-transport';
+import TransportStream = require('winston-transport');
 import { ILogger } from './interface';
 
 export interface DelegateTransportOptions {
   delegateLogger: ILogger;
 }
 
-export class DelegateTransport extends Transport {
+export class DelegateTransport extends TransportStream {
   options;
   constructor(options: DelegateTransportOptions) {
     super();
@@ -21,7 +21,7 @@ export class DelegateTransport extends Transport {
   }
 }
 
-export class EmptyTransport extends Transport {
+export class EmptyTransport extends TransportStream {
   log(info, callback) {
     callback();
   }

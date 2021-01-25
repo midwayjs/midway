@@ -45,5 +45,5 @@ export enum RabbitMQChannelEvent {
 }
 
 export type Application = IMidwayRabbitMQApplication;
-
 export type Context = IMidwayRabbitMQContext;
+export type ConfigType = string | amqp.Options.Connect;
