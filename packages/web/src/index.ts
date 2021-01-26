@@ -9,4 +9,3 @@ export {
 } from './base';
 export { Application, Agent } from './application';
 export { startCluster } from 'egg';
-export { MidwayWebContextLogger } from './logger';

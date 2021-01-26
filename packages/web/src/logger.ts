@@ -1,9 +1,9 @@
 import { EggLoggers } from 'egg-logger';
-import { loggers } from '@midwayjs/logger';
+import { loggers, ILogger, IMidwayLogger } from '@midwayjs/logger';
 import { join, isAbsolute } from 'path';
 import { existsSync, lstatSync, readFileSync, renameSync, unlinkSync } from 'fs';
-import { Application, Context } from 'egg';
-import { MidwayProcessTypeEnum, MidwayContextLogger } from '@midwayjs/core';
+import { Application } from 'egg';
+import { MidwayProcessTypeEnum } from '@midwayjs/core';
 import { getCurrentDateString } from './utils';
 import * as os from 'os';
 
@@ -58,7 +58,7 @@ export function checkEggLoggerExistsAndBackup(dir, fileName) {
   }
 }
 
-class MidwayLoggers extends Map {
+class MidwayLoggers extends Map<string, ILogger> {
   app: Application;
 
   /**
@@ -122,7 +122,7 @@ class MidwayLoggers extends Map {
     const consoleLevel = options.consoleLevel ? levelTransform(options.consoleLevel) : levelTransform(defaultLoggerOptions.consoleLevel);
     const dir = options['dir'] || defaultLoggerOptions.dir;
 
-    const logger = loggers.createLogger(createLoggerKey || loggerKey, {
+    const logger: ILogger = loggers.createLogger(createLoggerKey || loggerKey, {
       dir,
       fileLogName: options.file,
       errorLogName: defaultLoggerOptions.errorLogName,
@@ -135,6 +135,12 @@ class MidwayLoggers extends Map {
     this[loggerKey] = logger;
     this.set(loggerKey, logger);
     return logger;
+  }
+
+  disableConsole() {
+    for (let value of this.values()) {
+      (value as IMidwayLogger)?.disableConsole();
+    }
   }
 }
 
@@ -171,27 +177,3 @@ export const createLoggers = (app: Application) => {
 
   return loggers;
 };
-
-
-export class MidwayWebContextLogger extends MidwayContextLogger<Context> {
-  formatContextLabel() {
-    const ctx = this.ctx;
-    // format: '[$userId/$ip/$traceId/$use_ms $method $url]'
-    const userId = ctx.userId || '-';
-    const traceId = (ctx.tracer && ctx.tracer.traceId) || '-';
-    const use = Date.now() - ctx.startTime;
-    return (
-      userId +
-      '/' +
-      ctx.ip +
-      '/' +
-      traceId +
-      '/' +
-      use +
-      'ms ' +
-      ctx.method +
-      ' ' +
-      ctx.url
-    );
-  }
-}
