@@ -7,3 +7,7 @@ export const hello = {
   b: 2,
   d: [1, 2, 3],
 };
+
+export const logger = {
+  midwayMode: true,
+}

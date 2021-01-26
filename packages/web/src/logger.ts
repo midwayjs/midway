@@ -42,7 +42,7 @@ function isEmptyFile(p: string) {
   return content === null || content === undefined || content === '';
 }
 
-export function checkEggLoggerExistsAndBackup(dir, fileName) {
+function checkEggLoggerExistsAndBackup(dir, fileName) {
   const file = isAbsolute(fileName) ? fileName : join(dir, fileName);
   if (existsSync(file) && !lstatSync(file).isSymbolicLink()) {
     // 如果是空文件，则直接删了，否则加入备份队列
@@ -55,6 +55,25 @@ export function checkEggLoggerExistsAndBackup(dir, fileName) {
       const timeFormat = getCurrentDateString();
       renameSync(file, file + '.' + timeFormat + '_eggjs_bak');
     }
+  }
+}
+
+function removeSymbol(dir, fileName) {
+  const file = isAbsolute(fileName) ? fileName : join(dir, fileName);
+  if (existsSync(file) && lstatSync(file).isSymbolicLink()) {
+    if (!isWindows) {
+      unlinkSync(file);
+    }
+  }
+}
+
+function checkMidwayLoggerSymbolExistsAndRemove(appConfig: any) {
+  removeSymbol(appConfig.logger['dir'], appConfig.logger['appLogName']);
+  removeSymbol(appConfig.logger['dir'], appConfig.logger['coreLogName']);
+  removeSymbol(appConfig.logger['dir'], appConfig.logger['agentLogName']);
+  removeSymbol(appConfig.logger['dir'], appConfig.logger['errorLogName']);
+  for (const loggerOption in appConfig['customLogger']) {
+    removeSymbol(appConfig.logger['dir'], appConfig['customLogger'][loggerOption].file);
   }
 }
 
@@ -162,18 +181,19 @@ export const createLoggers = (app: Application) => {
   if (app.config.logger['midwayMode'] === true) {
     loggers = new MidwayLoggers(app.config, app);
   } else {
+    checkMidwayLoggerSymbolExistsAndRemove(app.config);
     loggers = new EggLoggers(app.config as any);
-    // won't print to console after started, except for local and unittest
-    app.ready(() => {
-      if (loggerConfig.disableConsoleAfterReady) {
-        loggers.disableConsole();
-      }
-    });
-    loggers.coreLogger.info(
-      '[egg:logger] init all loggers with options: %j',
-      loggerConfig
-    );
   }
+  // won't print to console after started, except for local and unittest
+  app.ready(() => {
+    if (loggerConfig.disableConsoleAfterReady) {
+      loggers.disableConsole();
+    }
+  });
+  loggers.coreLogger.info(
+    '[egg:logger] init all loggers with options: %j',
+    loggerConfig
+  );
 
   return loggers;
 };

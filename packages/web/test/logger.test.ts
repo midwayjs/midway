@@ -1,7 +1,7 @@
 import { creatApp, closeApp, getFilepath, sleep, matchContentTimes } from './utils';
 import * as mm from 'mm';
 import { join } from 'path';
-import { existsSync, readFileSync, writeFileSync, ensureDir, remove } from 'fs-extra';
+import { existsSync, readFileSync, writeFileSync, ensureDir, remove, symlinkSync } from 'fs-extra';
 import { lstatSync } from 'fs';
 import { getCurrentDateString } from '../src/utils';
 
@@ -23,6 +23,31 @@ describe('test/logger.test.js', () => {
     await sleep();
     const timeFormat = getCurrentDateString();
     expect(matchContentTimes(join(logsDir, 'midway-web.log'), timeFormat)).toEqual(1);
+    await closeApp(app);
+  });
+
+  it('should remove symbol link created by midway logger when started', async () => {
+    mm(process.env, 'MIDWAY_SERVER_ENV', '');
+    mm(process.env, 'EGG_SERVER_ENV', 'local');
+    mm(process.env, 'EGG_LOG', 'ERROR');
+    const logsDir = join(__dirname, 'fixtures/apps/mock-dev-app-egg-logger/logs/ali-demo');
+    await remove(logsDir);
+    await ensureDir(logsDir);
+
+    writeFileSync(join(logsDir, 'base.log'), 'hello world');
+    // 先创建一些软链
+    symlinkSync(join(logsDir, 'base.log'), join(logsDir, 'common-error.log'));
+    symlinkSync(join(logsDir, 'base.log'), join(logsDir, 'egg-schedule.log'));
+    symlinkSync(join(logsDir, 'base.log'), join(logsDir, 'midway-agent.log'));
+    symlinkSync(join(logsDir, 'base.log'), join(logsDir, 'midway-core.log'));
+    symlinkSync(join(logsDir, 'base.log'), join(logsDir, 'midway-web.log'));
+    const app = await creatApp('apps/mock-dev-app-egg-logger', {cleanLogsDir: false});
+    app.coreLogger.error('aaaaa');
+    expect(lstatSync(join(logsDir, 'common-error.log')).isSymbolicLink()).toBeFalsy();
+    expect(lstatSync(join(logsDir, 'egg-schedule.log')).isSymbolicLink()).toBeFalsy();
+    expect(lstatSync(join(logsDir, 'midway-agent.log')).isSymbolicLink()).toBeFalsy();
+    expect(lstatSync(join(logsDir, 'midway-core.log')).isSymbolicLink()).toBeFalsy();
+    expect(lstatSync(join(logsDir, 'midway-web.log')).isSymbolicLink()).toBeFalsy();
     await closeApp(app);
   });
 
