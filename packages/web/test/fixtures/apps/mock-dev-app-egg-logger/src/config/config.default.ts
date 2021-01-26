@@ -1,4 +1,4 @@
 exports.keys = 'd';
-exports.logger = {
-  midwayMode: false
+export const midwayFeature = {
+  replaceEggLogger: false,
 }

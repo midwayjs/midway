@@ -8,6 +8,6 @@ export const hello = {
   d: [1, 2, 3],
 };
 
-export const logger = {
-  midwayMode: true,
+export const midwayFeature = {
+  replaceEggLogger: true,
 }

@@ -8,6 +8,6 @@ export const hello = {
 
 export const middleware = ['auth', 'globalMiddleware2'];
 
-export const logger = {
-  midwayMode: true,
+export const midwayFeature = {
+  replaceEggLogger: true,
 }

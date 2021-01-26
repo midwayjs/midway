@@ -7,8 +7,11 @@ exports.watcher = {
 
 exports.logger = {
   level: 'DEBUG',
-  midwayMode: true
 };
+
+export const midwayFeature = {
+  replaceEggLogger: true,
+}
 
 exports.customLogger = {
   middlewareLogger: {

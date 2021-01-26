@@ -194,7 +194,7 @@ export const createLoggers = (app: Application) => {
 
   let loggers;
 
-  if (app.config.logger['midwayMode'] === true) {
+  if (app.config.midwayFeature['replaceEggLogger']) {
     loggers = new MidwayLoggers(app.config, app);
   } else {
     checkMidwayLoggerSymbolExistsAndRemove(app.config);

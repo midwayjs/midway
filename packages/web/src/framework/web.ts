@@ -60,13 +60,12 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
       },
     }, ['createAnonymousContext']);
 
-    if (this.app.config.logger['midwayMode']) {
+    if (this.app.config.midwayFeature['replaceEggLogger']) {
       Object.defineProperty(this.app, 'ContextLogger', {
         get() {
           return MidwayKoaContextLogger;
         },
       });
-
     }
 
     Object.defineProperty(this.app, 'applicationContext', {

@@ -10,6 +10,6 @@ export const hello = {
 
 export const middleware = ['report'];
 
-export const logger = {
-  midwayMode: true,
+export const midwayFeature = {
+  replaceEggLogger: true,
 }

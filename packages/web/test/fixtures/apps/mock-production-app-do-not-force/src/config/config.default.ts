@@ -6,7 +6,10 @@ exports.watcher = {
 exports.logger = {
   level: 'DEBUG',
   allowDebugAtProd: true,
-  midwayMode: true,
 };
+
+export const midwayFeature = {
+  replaceEggLogger: true,
+}
 
 exports.keys = 'foo';
