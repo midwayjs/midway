@@ -36,6 +36,17 @@ describe('/test/index.test.ts', () => {
     coreLogger.info('hello world3');
     coreLogger.warn('hello world4');
     coreLogger.error('hello world5');
+    // 调整完之后控制台应该看不见了，但是文件还写入
+    coreLogger.updateConsoleLevel('warn');
+    coreLogger.info('hello world6');
+    coreLogger.info('hello world7');
+    coreLogger.info('hello world8');
+
+    // 文件也不会写入了
+    coreLogger.updateFileLevel('warn');
+    coreLogger.info('hello world9');
+    coreLogger.info('hello world10');
+    coreLogger.info('hello world11');
 
     await sleep();
     // test logger file exist
@@ -48,6 +59,14 @@ describe('/test/index.test.ts', () => {
     expect(includeContent(join(logsDir, 'midway-core.log'), 'hello world3')).toBeTruthy();
     expect(includeContent(join(logsDir, 'midway-core.log'), 'hello world4')).toBeTruthy();
     expect(includeContent(join(logsDir, 'midway-core.log'), 'hello world5')).toBeTruthy();
+
+    expect(includeContent(join(logsDir, 'midway-core.log'), 'hello world6')).toBeTruthy();
+    expect(includeContent(join(logsDir, 'midway-core.log'), 'hello world7')).toBeTruthy();
+    expect(includeContent(join(logsDir, 'midway-core.log'), 'hello world8')).toBeTruthy();
+
+    expect(includeContent(join(logsDir, 'midway-core.log'), 'hello world9')).toBeFalsy();
+    expect(includeContent(join(logsDir, 'midway-core.log'), 'hello world10')).toBeFalsy();
+    expect(includeContent(join(logsDir, 'midway-core.log'), 'hello world11')).toBeFalsy();
 
     // test error logger  file include content
     expect(includeContent(join(logsDir, 'common-error.log'), 'hello world1')).toBeFalsy();
