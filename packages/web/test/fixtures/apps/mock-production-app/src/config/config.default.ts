@@ -7,6 +7,7 @@ exports.watcher = {
 
 exports.logger = {
   level: 'DEBUG',
+  midwayMode: true
 };
 
 exports.customLogger = {

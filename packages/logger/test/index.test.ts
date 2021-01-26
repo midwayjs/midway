@@ -34,7 +34,7 @@ describe('/test/index.test.ts', () => {
     coreLogger.info('hello world1');
     coreLogger.info('hello world2');
     coreLogger.info('hello world3');
-    coreLogger.info('hello world4');
+    coreLogger.warn('hello world4');
     coreLogger.error('hello world5');
 
     await sleep();

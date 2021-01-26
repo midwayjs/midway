@@ -15,6 +15,8 @@ export interface IMidwayLogger extends ILogger {
   disableError();
   enableError();
   updateLevel(level: LoggerLevel);
+  updateFileLevel(level: LoggerLevel);
+  updateConsoleLevel(level: LoggerLevel);
   updateDefaultLabel(defaultLabel: string);
   updateDefaultMeta(defaultMeta: object);
   getDefaultLabel(): string;
@@ -25,10 +27,11 @@ export type LoggerLevel = 'silly' | 'debug' | 'info' | 'warn' | 'error';
 
 export interface LoggerOptions {
   format?: logform.Format;
-  level?: string;
+  level?: LoggerLevel;
   defaultMeta?: object;
   printFormat?: (info: any) => string;
   dir?: string;
+  errorDir?: string;
   fileLogName?: string;
   errorLogName?: string;
   defaultLabel?: string;

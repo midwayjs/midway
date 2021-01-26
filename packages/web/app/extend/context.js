@@ -10,4 +10,7 @@ module.exports = {
     }
     return this[rc];
   },
+  get startTime() {
+    return this['starttime'];
+  }
 };
