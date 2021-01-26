@@ -161,6 +161,10 @@ class MidwayLoggers extends Map<string, ILogger> {
       (value as IMidwayLogger)?.disableConsole();
     }
   }
+
+  reload() {
+    // empty method for egg logrotator
+  }
 }
 
 export const createLoggers = (app: Application) => {

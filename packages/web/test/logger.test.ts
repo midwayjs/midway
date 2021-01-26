@@ -53,7 +53,7 @@ describe('test/logger.test.js', () => {
 
   it('should backup egg logger file when start', async () => {
     mm(process.env, 'MIDWAY_SERVER_ENV', '');
-    mm(process.env, 'EGG_SERVER_ENV', 'local'                                                          );
+    mm(process.env, 'EGG_SERVER_ENV', 'local');
     mm(process.env, 'EGG_LOG', 'ERROR');
     const logsDir = join(__dirname, 'fixtures/apps/mock-dev-app/logs/ali-demo');
     await remove(logsDir);
