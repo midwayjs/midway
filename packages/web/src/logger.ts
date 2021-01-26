@@ -151,6 +151,18 @@ class MidwayLoggers extends Map<string, ILogger> {
       disableConsole: consoleLevel === null,
       errorDir: dir,
     });
+
+    // overwrite values for pandora collect
+    (logger as any).values = () => {
+      return [
+        {
+          options: {
+            file: options.file,
+          }
+        }
+      ];
+    }
+
     this[loggerKey] = logger;
     this.set(loggerKey, logger);
     return logger;

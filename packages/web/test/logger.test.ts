@@ -19,6 +19,15 @@ describe('test/logger.test.js', () => {
     await ensureDir(logsDir);
     const app = await creatApp('apps/mock-dev-app-logger', { cleanLogsDir: false});
     app.coreLogger.warn('custom content');
+
+    // for test pandora collect
+    for(const name of app.loggers.keys()) {
+      const logger = app.loggers.get(name);
+      for (const transport of logger.values()) {
+        console.log((transport as any).options.file);
+      }
+    }
+
     app.createAnonymousContext().logger.warn('custom content in context');
     await sleep();
     const timeFormat = getCurrentDateString();
