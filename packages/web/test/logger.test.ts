@@ -70,7 +70,7 @@ describe('test/logger.test.js', () => {
     // 先创建一些文件
     writeFileSync(join(logsDir, 'common-error.log'), 'hello world');
     writeFileSync(join(logsDir, 'egg-schedule.log'), 'hello world');
-    writeFileSync(join(logsDir, 'midway-agent.log'), 'hello world');
+    writeFileSync(join(logsDir, 'midway-agent.log'), '');
     writeFileSync(join(logsDir, 'midway-core.log'), 'hello world');
     writeFileSync(join(logsDir, 'midway-web.log'), 'hello world');
     const app = await creatApp('apps/mock-dev-app', { cleanLogsDir: false});
@@ -79,7 +79,8 @@ describe('test/logger.test.js', () => {
     // 备份文件存在
     expect(existsSync(join(logsDir, 'common-error.log.' + timeFormat + '_eggjs_bak'))).toBeTruthy();
     expect(existsSync(join(logsDir, 'egg-schedule.log.' + timeFormat + '_eggjs_bak'))).toBeTruthy();
-    expect(existsSync(join(logsDir, 'midway-agent.log.' + timeFormat + '_eggjs_bak'))).toBeTruthy();
+    // 这个文件被删了，不需要备份
+    // expect(existsSync(join(logsDir, 'midway-agent.log.' + timeFormat + '_eggjs_bak'))).toBeTruthy();
     expect(existsSync(join(logsDir, 'midway-core.log.' + timeFormat + '_eggjs_bak'))).toBeTruthy();
     expect(existsSync(join(logsDir, 'midway-web.log.' + timeFormat + '_eggjs_bak'))).toBeTruthy();
 
