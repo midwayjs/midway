@@ -1,6 +1,6 @@
 {
   "name": "midway",
-  "version": "2.6.13",
+  "version": "2.7.0",
   "description": "Midway Main Package",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -18,13 +18,13 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/cli": "^1.2.36",
-    "@midwayjs/decorator": "^2.6.8",
-    "@midwayjs/core": "^2.6.13",
+    "@midwayjs/core": "^2.7.0",
+    "@midwayjs/decorator": "^2.7.0",
     "egg": "^2.28.0",
     "egg-logger": "^2.4.2"
   },
   "dependencies": {
-    "@midwayjs/web": "^2.6.13",
+    "@midwayjs/web": "^2.7.0",
     "egg-cluster": "^1.23.0"
   },
   "files": [

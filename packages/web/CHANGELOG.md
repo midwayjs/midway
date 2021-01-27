@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.7.0](https://github.com/midwayjs/midway/compare/v2.6.13...v2.7.0) (2021-01-27)
+
+
+### Bug Fixes
+
+* add info level for core logger in local env ([#826](https://github.com/midwayjs/midway/issues/826)) ([8e8fc59](https://github.com/midwayjs/midway/commit/8e8fc59435bd77c917d7ce7bdf4e486492455a61))
+* date string error in ISO pattern ([#817](https://github.com/midwayjs/midway/issues/817)) ([6557e95](https://github.com/midwayjs/midway/commit/6557e95f70517900df113aa44d1dc42ee1435e9b))
+* midway logger and mixin egg logger will be missing log ([#823](https://github.com/midwayjs/midway/issues/823)) ([ac33af2](https://github.com/midwayjs/midway/commit/ac33af217f59a4b06224cb5d6f7eead007a4da41))
+
+
+### Features
+
+* add midway gRPC framework ([#786](https://github.com/midwayjs/midway/issues/786)) ([d90362c](https://github.com/midwayjs/midway/commit/d90362c6bf15c00621ffc2981f19842f216395f8))
+* support entry file in bootstrap ([#819](https://github.com/midwayjs/midway/issues/819)) ([49a5ff6](https://github.com/midwayjs/midway/commit/49a5ff662134bdd42dc3a80738b44a05138f8f7c))
+
+
+
+
+
 ## [2.6.13](https://github.com/midwayjs/midway/compare/v2.6.12...v2.6.13) (2021-01-21)
 
 
