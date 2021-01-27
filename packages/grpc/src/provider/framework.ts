@@ -24,7 +24,6 @@ import {
   IMidwayGRPCContext,
   IMidwayGRPFrameworkOptions,
 } from '../interface';
-import { MidwayGRPCContextLogger } from './logger';
 import { pascalCase } from 'pascal-case';
 import * as camelCase from 'camelcase';
 import { loadProto } from '../util';
@@ -160,9 +159,5 @@ export class MidwayGRPCFramework extends BaseFramework<
 
   public getFrameworkName() {
     return 'midway:gRPC';
-  }
-
-  public getDefaultContextLoggerClass(): any {
-    return MidwayGRPCContextLogger;
   }
 }
