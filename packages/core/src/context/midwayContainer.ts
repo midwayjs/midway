@@ -84,7 +84,7 @@ export class MidwayContainer
   private likeMainConfiguration: IContainerConfiguration[] = [];
   protected configService: IConfigService;
   protected environmentService: IEnvironmentService;
-  protected aspectMappingMap: WeakMap<object, Map<string, any[]>>;
+  protected aspectMappingMap: WeakMap<any, Map<string, any[]>>;
   private aspectModuleSet: Set<any>;
 
   /**

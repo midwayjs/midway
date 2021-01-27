@@ -218,10 +218,10 @@ export class MidwaySocketIOFramework extends BaseFramework<
   }
 
   public getFrameworkName() {
-    return 'midway:socketIO'
+    return 'midway:socketIO';
   }
 
   public getDefaultContextLoggerClass(): any {
-    return MidwaySocketIOContextLogger
+    return MidwaySocketIOContextLogger;
   }
 }

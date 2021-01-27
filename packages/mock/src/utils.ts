@@ -6,7 +6,7 @@ import {
   MidwayFrameworkType,
   safeRequire,
 } from '@midwayjs/core';
-import { isAbsolute, join } from 'path';
+import { isAbsolute, join, resolve } from 'path';
 import { remove } from 'fs-extra';
 import { clearAllModule } from '@midwayjs/decorator';
 import { existsSync } from 'fs';
@@ -17,9 +17,11 @@ process.setMaxListeners(0);
 
 function isTestEnvironment() {
   const testEnv = ['test', 'unittest'];
-  return testEnv.includes(process.env.MIDWAY_SERVER_ENV)
-    || testEnv.includes(process.env.EGG_SERVER_ENV)
-    || testEnv.includes(process.env.NODE_ENV);
+  return (
+    testEnv.includes(process.env.MIDWAY_SERVER_ENV) ||
+    testEnv.includes(process.env.EGG_SERVER_ENV) ||
+    testEnv.includes(process.env.NODE_ENV)
+  );
 }
 
 function isWin32() {
@@ -27,6 +29,10 @@ function isWin32() {
 }
 
 const appMap = new WeakMap();
+const bootstrapAppSet = (global['MIDWAY_BOOTSTRAP_APP_SET'] = new Set<{
+  framework: IMidwayFramework<any, any>;
+  starter: BootstrapStarter;
+}>());
 
 function getIncludeFramework(dependencies): string {
   const values: string[] = Object.values(MidwayFrameworkType);
@@ -37,9 +43,18 @@ function getIncludeFramework(dependencies): string {
   }
 }
 
+function formatPath(baseDir, p) {
+  if (isAbsolute(p)) {
+    return p;
+  } else {
+    return resolve(baseDir, p);
+  }
+}
+
 export type MockAppConfigurationOptions = {
   cleanLogsDir?: boolean;
   cleanTempDir?: boolean;
+  entryFile?: string;
 };
 
 export async function create<
@@ -48,7 +63,7 @@ export async function create<
 >(
   baseDir: string = process.cwd(),
   options?: U & MockAppConfigurationOptions,
-  customFrameworkName?: string | MidwayFrameworkType | object
+  customFrameworkName?: string | MidwayFrameworkType | any
 ): Promise<T> {
   process.env.MIDWAY_TS_MODE = 'true';
   clearAllModule();
@@ -56,8 +71,55 @@ export async function create<
   clearAllLoggers();
   safeRequire(`${baseDir}/src/interface`);
 
+  if (options.entryFile) {
+    // start from entry file, like bootstrap.js
+    options.entryFile = formatPath(baseDir, options.entryFile);
+    global['MIDWAY_BOOTSTRAP_APP_READY'] = false;
+    // set app in @midwayjs/bootstrap
+    require(options.entryFile);
+
+    await new Promise<void>((resolve, reject) => {
+      const timeoutHandler = setTimeout(() => {
+        clearInterval(internalHandler);
+        reject(new Error('[midway]: bootstrap timeout'));
+      }, 30 * 1000);
+      const internalHandler = setInterval(() => {
+        global['MIDWAY_BOOTSTRAP_APP_READY'] = true;
+        clearInterval(internalHandler);
+        clearTimeout(timeoutHandler);
+        resolve();
+      }, 200);
+    });
+    let currentFramework;
+    // get app by framework
+    if (bootstrapAppSet.size === 1) {
+      currentFramework = Array.from(bootstrapAppSet.values())[0].framework;
+    } else if (customFrameworkName) {
+      for (const value of bootstrapAppSet.values()) {
+        if (
+          customFrameworkName === value.framework.getFrameworkName() ||
+          customFrameworkName === value.framework.getFrameworkType()
+        ) {
+          currentFramework = value.framework;
+        }
+      }
+    }
+
+    if (!currentFramework) {
+      throw new Error('[midway]: framework not found');
+    }
+
+    // set framework to current weakMap
+    for (const value of bootstrapAppSet.values()) {
+      appMap.set(value.framework, value.starter);
+    }
+    bootstrapAppSet.clear();
+
+    return currentFramework;
+  }
+
   let framework: T = null;
-  let DefaultFramework = null;
+  let DefaultFramework;
 
   // find framework
   if (customFrameworkName) {
@@ -75,7 +137,7 @@ export async function create<
     DefaultFramework = require(customFrameworkName as string).Framework;
   }
 
-  options = options ?? {} as U;
+  options = options ?? ({} as U);
 
   // got options from framework
   if (DefaultFramework) {
@@ -133,7 +195,7 @@ export async function createApp<
 >(
   baseDir: string = process.cwd(),
   options?: U & MockAppConfigurationOptions,
-  customFrameworkName?: string | MidwayFrameworkType | object
+  customFrameworkName?: string | MidwayFrameworkType | any
 ): Promise<Y> {
   const framework: T = await create<T, U>(
     baseDir,
@@ -158,7 +220,8 @@ export async function close(
   const starter = appMap.get(newApp);
   if (starter) {
     await starter.stop();
-    appMap.delete(starter);
+    appMap.delete(newApp);
+    bootstrapAppSet.clear();
   }
 
   if (isTestEnvironment()) {

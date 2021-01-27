@@ -12,5 +12,5 @@ module.exports = {
   },
   get startTime() {
     return this['starttime'];
-  }
+  },
 };

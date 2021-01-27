@@ -1,9 +1,7 @@
 import { MidwayContextLogger } from '@midwayjs/core';
 import { IMidwayKoaContext } from './interface';
 
-export class MidwayKoaContextLogger extends MidwayContextLogger<
-  IMidwayKoaContext
-> {
+export class MidwayKoaContextLogger extends MidwayContextLogger<IMidwayKoaContext> {
   formatContextLabel() {
     const ctx = this.ctx;
     // format: '[$userId/$ip/$traceId/$use_ms $method $url]'

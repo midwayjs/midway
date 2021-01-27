@@ -1,7 +1,13 @@
 import { EggLoggers } from 'egg-logger';
 import { loggers, ILogger, IMidwayLogger } from '@midwayjs/logger';
 import { join, isAbsolute } from 'path';
-import { existsSync, lstatSync, readFileSync, renameSync, unlinkSync } from 'fs';
+import {
+  existsSync,
+  lstatSync,
+  readFileSync,
+  renameSync,
+  unlinkSync,
+} from 'fs';
 import { Application } from 'egg';
 import { MidwayProcessTypeEnum } from '@midwayjs/core';
 import { getCurrentDateString } from './utils';
@@ -9,10 +15,10 @@ import * as os from 'os';
 
 const isWindows = os.platform() === 'win32';
 
-const levelTransform = (level) => {
+const levelTransform = level => {
   switch (level) {
     case 'NONE':
-    case Infinity:      // egg logger 的 none 是这个等级
+    case Infinity: // egg logger 的 none 是这个等级
       return null;
     case 0:
     case 'DEBUG':
@@ -33,11 +39,11 @@ const levelTransform = (level) => {
     default:
       return 'silly';
   }
-}
+};
 
 function isEmptyFile(p: string) {
-  let content = readFileSync(p, {
-    encoding: 'utf8'
+  const content = readFileSync(p, {
+    encoding: 'utf8',
   });
   return content === null || content === undefined || content === '';
 }
@@ -73,7 +79,10 @@ function checkMidwayLoggerSymbolExistsAndRemove(appConfig: any) {
   removeSymbol(appConfig.logger['dir'], appConfig.logger['agentLogName']);
   removeSymbol(appConfig.logger['dir'], appConfig.logger['errorLogName']);
   for (const loggerOption in appConfig['customLogger']) {
-    removeSymbol(appConfig.logger['dir'], appConfig['customLogger'][loggerOption].file);
+    removeSymbol(
+      appConfig.logger['dir'],
+      appConfig['customLogger'][loggerOption].file
+    );
   }
 }
 
@@ -121,24 +130,56 @@ class MidwayLoggers extends Map<string, ILogger> {
     }
     // 创建标准的日志
     if (this.app.getProcessType() === MidwayProcessTypeEnum.AGENT) {
-      this.createLogger('coreLogger', {file: options.logger.agentLogName}, options.logger, 'agent:coreLogger');
-      this.createLogger('logger', {file: options.logger.appLogName}, options.logger, 'agent:logger');
+      this.createLogger(
+        'coreLogger',
+        { file: options.logger.agentLogName },
+        options.logger,
+        'agent:coreLogger'
+      );
+      this.createLogger(
+        'logger',
+        { file: options.logger.appLogName },
+        options.logger,
+        'agent:logger'
+      );
     } else {
-      this.createLogger('coreLogger', {file: options.logger.coreLogName}, options.logger, 'coreLogger');
-      this.createLogger('logger', {file: options.logger.appLogName}, options.logger, 'logger');
+      this.createLogger(
+        'coreLogger',
+        { file: options.logger.coreLogName },
+        options.logger,
+        'coreLogger'
+      );
+      this.createLogger(
+        'logger',
+        { file: options.logger.appLogName },
+        options.logger,
+        'logger'
+      );
     }
     if (options.customLogger) {
       for (const loggerKey in options.customLogger) {
         const customLogger = options.customLogger[loggerKey];
-        checkEggLoggerExistsAndBackup(customLogger['dir'] || options.logger.dir, customLogger['file']);
+        checkEggLoggerExistsAndBackup(
+          customLogger['dir'] || options.logger.dir,
+          customLogger['file']
+        );
         this.createLogger(loggerKey, customLogger, options.logger);
       }
     }
   }
 
-  createLogger(loggerKey, options, defaultLoggerOptions, createLoggerKey?: string) {
-    const level = options.level ? levelTransform(options.level) : levelTransform(defaultLoggerOptions.level);
-    const consoleLevel = options.consoleLevel ? levelTransform(options.consoleLevel) : levelTransform(defaultLoggerOptions.consoleLevel);
+  createLogger(
+    loggerKey,
+    options,
+    defaultLoggerOptions,
+    createLoggerKey?: string
+  ) {
+    const level = options.level
+      ? levelTransform(options.level)
+      : levelTransform(defaultLoggerOptions.level);
+    const consoleLevel = options.consoleLevel
+      ? levelTransform(options.consoleLevel)
+      : levelTransform(defaultLoggerOptions.consoleLevel);
     const dir = options['dir'] || defaultLoggerOptions.dir;
 
     const logger: ILogger = loggers.createLogger(createLoggerKey || loggerKey, {
@@ -158,10 +199,10 @@ class MidwayLoggers extends Map<string, ILogger> {
         {
           options: {
             file: options.file,
-          }
-        }
+          },
+        },
       ];
-    }
+    };
 
     this[loggerKey] = logger;
     this.set(loggerKey, logger);
@@ -169,7 +210,7 @@ class MidwayLoggers extends Map<string, ILogger> {
   }
 
   disableConsole() {
-    for (let value of this.values()) {
+    for (const value of this.values()) {
       (value as IMidwayLogger)?.disableConsole();
     }
   }
@@ -180,7 +221,6 @@ class MidwayLoggers extends Map<string, ILogger> {
 }
 
 export const createLoggers = (app: Application) => {
-
   const loggerConfig = app.config.logger as any;
   loggerConfig.type = app.type;
 

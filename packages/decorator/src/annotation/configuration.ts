@@ -7,7 +7,7 @@ export interface IComponentInfo {
 
 export interface InjectionConfigurationOptions {
   imports?: Array<string | IComponentInfo | { Configuration: any }>;
-  importObjects?: object;
+  importObjects?: Record<string, unknown>;
   importConfigs?: string[];
   namespace?: string;
 }

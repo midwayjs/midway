@@ -38,27 +38,30 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
 
     this.app = options.app;
 
-    this.defineApplicationProperties({
-      generateController: (controllerMapping: string) => {
-        return this.generateController(controllerMapping);
-      },
+    this.defineApplicationProperties(
+      {
+        generateController: (controllerMapping: string) => {
+          return this.generateController(controllerMapping);
+        },
 
-      generateMiddleware: async (middlewareId: string) => {
-        return this.generateMiddleware(middlewareId);
-      },
+        generateMiddleware: async (middlewareId: string) => {
+          return this.generateMiddleware(middlewareId);
+        },
 
-      getProcessType: () => {
-        if (this.configurationOptions.processType === 'application') {
+        getProcessType: () => {
+          if (this.configurationOptions.processType === 'application') {
+            return MidwayProcessTypeEnum.APPLICATION;
+          }
+          if (this.configurationOptions.processType === 'agent') {
+            return MidwayProcessTypeEnum.AGENT;
+          }
+
+          // TODO 单进程模式下区分进程类型??
           return MidwayProcessTypeEnum.APPLICATION;
-        }
-        if (this.configurationOptions.processType === 'agent') {
-          return MidwayProcessTypeEnum.AGENT;
-        }
-
-        // TODO 单进程模式下区分进程类型??
-        return MidwayProcessTypeEnum.APPLICATION;
+        },
       },
-    }, ['createAnonymousContext']);
+      ['createAnonymousContext']
+    );
 
     if (this.app.config.midwayFeature['replaceEggLogger']) {
       Object.defineProperty(this.app, 'ContextLogger', {

@@ -13,7 +13,7 @@ export class MidwayConfigService implements IConfigService {
   configuration;
   isReady = false;
   container: IMidwayContainer;
-  externalObject: object[] = [];
+  externalObject: Record<string, unknown>[] = [];
 
   constructor(container) {
     this.container = container;
@@ -42,7 +42,7 @@ export class MidwayConfigService implements IConfigService {
     }
   }
 
-  addObject(obj: object) {
+  addObject(obj: Record<string, unknown>) {
     if (this.isReady) {
       extend(true, this.configuration, obj);
     } else {
@@ -105,7 +105,7 @@ export class MidwayConfigService implements IConfigService {
     return this.configuration;
   }
 
-  async loadConfig(configFilename): Promise<object> {
+  async loadConfig(configFilename): Promise<Record<string, unknown>> {
     debug('load config %s.', configFilename);
     let exports = require(configFilename);
     if (exports && exports['default'] && Object.keys(exports).length === 1) {

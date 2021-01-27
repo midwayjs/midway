@@ -130,7 +130,7 @@ export class SingleProcess
   }
 
   public getFrameworkName() {
-    return 'midway:web'
+    return 'midway:web';
   }
 
   public getDefaultContextLoggerClass() {

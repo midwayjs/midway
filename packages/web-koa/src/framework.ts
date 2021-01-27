@@ -5,7 +5,8 @@ import {
   getPropertyDataFromClass,
   getPropertyMetadata,
   getProviderId,
-  IMidwayBootstrapOptions, IMidwayContext,
+  IMidwayBootstrapOptions,
+  IMidwayContext,
   listModule,
   MidwayFrameworkType,
 } from '@midwayjs/core';
@@ -130,9 +131,12 @@ export abstract class MidwayKoaBaseFramework<
       const providerId = getProviderId(module);
       if (providerId) {
         if (this.controllerIds.indexOf(providerId) > -1) {
-          throw new Error(`controller identifier [${providerId}] already exists!`);
+          throw new Error(
+            `Controller identifier [${providerId}] already exists!`
+          );
         }
         this.controllerIds.push(providerId);
+        this.logger.info(`Load Controller "${providerId}"`);
         await this.preRegisterRouter(module, providerId);
       }
     }
@@ -216,6 +220,10 @@ export abstract class MidwayKoaBaseFramework<
               routerResponseData
             ),
           ];
+
+          this.logger.info(
+            `Load Router "${webRouter.requestMethod} ${webRouter.path}"`
+          );
 
           // apply controller from request context
           // eslint-disable-next-line prefer-spread

@@ -104,7 +104,7 @@ export namespace FC {
   export type MNSEvent = string | MNSStreamEvent | MNSJSONEvent;
 
   export interface SLSEvent {
-    parameter: object;
+    parameter: Record<string, unknown>;
     source: {
       endpoint: string;
       projectName: string;
@@ -141,7 +141,7 @@ export namespace FC {
   export interface APIGatewayResponse {
     isBase64Encoded: boolean;
     statusCode: number;
-    headers: object;
+    headers: Record<string, unknown>;
     body: string;
   }
 

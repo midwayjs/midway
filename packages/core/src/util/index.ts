@@ -39,9 +39,12 @@ export const isPath = (p): boolean => {
  *  safelyGet('a.b',{a: {b: 2}})  // => 2
  *  safelyGet('a.b',{c: {b: 2}})  // => undefined
  */
-export function safelyGet(list: string | string[], obj?: object): any {
+export function safelyGet(
+  list: string | string[],
+  obj?: Record<string, unknown>
+): any {
   if (arguments.length === 1) {
-    return (_obj: object) => safelyGet(list, _obj);
+    return (_obj: Record<string, unknown>) => safelyGet(list, _obj);
   }
 
   if (typeof obj === 'undefined' || typeof obj !== 'object' || obj === null) {

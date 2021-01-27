@@ -254,13 +254,10 @@ export const createEggApplication = () => {
     }
 
     get loggers() {
-      // @ts-ignore
-      if (!this[LOGGERS]) {
-        // @ts-ignore
-        this[LOGGERS] = createLoggers(this);
+      if (!(this as any)[LOGGERS]) {
+        (this as any)[LOGGERS] = createLoggers(this as any);
       }
-      // @ts-ignore
-      return this[LOGGERS];
+      return (this as any)[LOGGERS];
     }
   }
 
@@ -284,13 +281,10 @@ export const createEggAgent = () => {
     }
 
     get loggers() {
-      // @ts-ignore
-      if (!this[LOGGERS]) {
-        // @ts-ignore
-        this[LOGGERS] = createLoggers(this);
+      if (!(this as any)[LOGGERS]) {
+        (this as any)[LOGGERS] = createLoggers(this as any);
       }
-      // @ts-ignore
-      return this[LOGGERS];
+      return (this as any)[LOGGERS];
     }
   }
 

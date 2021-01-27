@@ -12,25 +12,38 @@ import {
 } from '../';
 import { Scope } from '../annotation';
 
-export function Provider(type: MSProviderType.GRPC, metadata?: DecoratorMetadata.GRPCClassMetadata): ClassDecorator;
-export function Provider(type: MSProviderType.DUBBO, metadata?: any): ClassDecorator;
-export function Provider(type: MSProviderType, metadata: any = {}): ClassDecorator {
+export function Provider(
+  type: MSProviderType.GRPC,
+  metadata?: DecoratorMetadata.GRPCClassMetadata
+): ClassDecorator;
+export function Provider(
+  type: MSProviderType.DUBBO,
+  metadata?: any
+): ClassDecorator;
+export function Provider(
+  type: MSProviderType,
+  metadata: any = {}
+): ClassDecorator {
   return (target: any) => {
     saveModule(MS_PROVIDER_KEY, target);
-    saveClassMetadata(MS_PROVIDER_KEY, {
-      type,
-      metadata,
-    }, target);
+    saveClassMetadata(
+      MS_PROVIDER_KEY,
+      {
+        type,
+        metadata,
+      },
+      target
+    );
     Scope(ScopeEnum.Request)(target);
   };
 }
 
-export function GrpcMethod(methodName?: string): MethodDecorator  {
+export function GrpcMethod(methodName?: string): MethodDecorator {
   return (target, propertyName, descriptor: PropertyDescriptor) => {
     attachClassMetadata(
       MS_GRPC_METHOD_KEY,
       {
-        methodName: methodName || propertyName
+        methodName: methodName || propertyName,
       },
       target
     );
@@ -39,12 +52,12 @@ export function GrpcMethod(methodName?: string): MethodDecorator  {
   };
 }
 
-export function DubboMethod(methodName?: string): MethodDecorator  {
+export function DubboMethod(methodName?: string): MethodDecorator {
   return (target, propertyName, descriptor: PropertyDescriptor) => {
     attachClassMetadata(
       MS_DUBBO_METHOD_KEY,
       {
-        methodName: methodName || propertyName
+        methodName: methodName || propertyName,
       },
       target
     );
@@ -53,12 +66,12 @@ export function DubboMethod(methodName?: string): MethodDecorator  {
   };
 }
 
-export function HSFMethod(methodName?: string): MethodDecorator  {
+export function HSFMethod(methodName?: string): MethodDecorator {
   return (target, propertyName, descriptor: PropertyDescriptor) => {
     attachClassMetadata(
       MS_HSF_METHOD_KEY,
       {
-        methodName: methodName || propertyName
+        methodName: methodName || propertyName,
       },
       target
     );

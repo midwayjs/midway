@@ -20,7 +20,6 @@ import {
 } from './interface';
 import { RabbitMQServer } from './mq';
 import { ConsumeMessage } from 'amqplib';
-import { MidwayRabbitMQContextLogger } from './logger';
 
 export class MidwayRabbitMQFramework extends BaseFramework<
   IMidwayRabbitMQApplication,
@@ -104,10 +103,6 @@ export class MidwayRabbitMQFramework extends BaseFramework<
   }
 
   public getFrameworkName() {
-    return 'midway:rabbitmq'
-  }
-
-  public getDefaultContextLoggerClass(): any {
-    return MidwayRabbitMQContextLogger;
+    return 'midway:rabbitmq';
   }
 }

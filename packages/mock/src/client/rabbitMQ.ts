@@ -304,7 +304,6 @@ const connect = async () => ({
   close: () => {},
 });
 
-
 export const createRabbitMQProducer = async function (
   queueName: string,
   options: {
@@ -312,13 +311,12 @@ export const createRabbitMQProducer = async function (
     isConfirmChannel?: boolean;
     mock?: boolean;
   } = {
-    mock: true
+    mock: true,
   }
 ): Promise<Channel> {
-
   let amqp = null;
 
-  if(options.mock){
+  if (options.mock) {
     try {
       amqp = require('amqplib');
       amqp.connect = connect;
