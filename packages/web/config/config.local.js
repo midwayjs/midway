@@ -1,5 +1,5 @@
 exports.logger = {
   coreLogger: {
-    consoleLevel: 'INFO'
-  }
-}
+    consoleLevel: 'INFO',
+  },
+};
