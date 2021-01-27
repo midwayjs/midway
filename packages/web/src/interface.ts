@@ -36,6 +36,12 @@ declare module 'egg' {
     getLogger(name?: string): EggLogger & ILogger;
     startTime: number;
   }
+
+  interface EggAppConfig {
+    midwayFeature: {
+      replaceEggLogger: boolean;
+    }
+  }
 }
 
 export type IMidwayWebApplication = Application;

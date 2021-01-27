@@ -6,7 +6,7 @@ import {
 } from '@midwayjs/core';
 import { ControllerOption, CONFIG_KEY, PLUGIN_KEY } from '@midwayjs/decorator';
 import { IMidwayWebConfigurationOptions } from '../interface';
-import { MidwayKoaBaseFramework } from '@midwayjs/koa';
+import { MidwayKoaBaseFramework, MidwayKoaContextLogger } from '@midwayjs/koa';
 import { EggRouter } from '@eggjs/router';
 import { Application, Context, Router, EggLogger } from 'egg';
 import { loggers } from '@midwayjs/logger';
@@ -59,6 +59,14 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
         return MidwayProcessTypeEnum.APPLICATION;
       },
     }, ['createAnonymousContext']);
+
+    if (this.app.config.midwayFeature['replaceEggLogger']) {
+      Object.defineProperty(this.app, 'ContextLogger', {
+        get() {
+          return MidwayKoaContextLogger;
+        },
+      });
+    }
 
     Object.defineProperty(this.app, 'applicationContext', {
       get() {
