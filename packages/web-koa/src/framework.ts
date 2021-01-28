@@ -222,7 +222,9 @@ export abstract class MidwayKoaBaseFramework<
           ];
 
           this.logger.info(
-            `Load Router "${webRouter.requestMethod.toUpperCase()} ${webRouter.path}"`
+            `Load Router "${webRouter.requestMethod.toUpperCase()} ${
+              webRouter.path
+            }"`
           );
 
           // apply controller from request context

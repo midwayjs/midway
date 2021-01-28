@@ -279,7 +279,9 @@ export class MidwayExpressFramework extends BaseFramework<
             [];
 
           this.logger.info(
-            `Load Router "${webRouter.requestMethod.toUpperCase()} ${webRouter.path}"`
+            `Load Router "${webRouter.requestMethod.toUpperCase()} ${
+              webRouter.path
+            }"`
           );
           // apply controller from request context
           newRouter[webRouter.requestMethod].call(
