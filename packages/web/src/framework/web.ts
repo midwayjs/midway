@@ -32,6 +32,10 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
     this.configurationOptions = options;
+    // set default context logger
+    this.BaseContextLoggerClass =
+      options.ContextLoggerClass || this.getDefaultContextLoggerClass();
+
     if (options.typescript === false) {
       this.isTsMode = false;
     }
@@ -64,6 +68,7 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
     );
 
     if (this.app.config.midwayFeature['replaceEggLogger']) {
+      // if use midway logger will be use midway custom context logger
       Object.defineProperty(this.app, 'ContextLogger', {
         get() {
           return self.BaseContextLoggerClass;
