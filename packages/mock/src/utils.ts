@@ -70,6 +70,7 @@ export async function create<
   clearContainerCache();
   clearAllLoggers();
   safeRequire(`${baseDir}/src/interface`);
+  options = options || {} as any;
 
   if (options.entryFile) {
     // start from entry file, like bootstrap.js
