@@ -1,5 +1,6 @@
-import { closeApp, creatApp, createHttpRequest } from './utils';
+import { closeApp, creatApp, createHttpRequest, matchContentTimes } from './utils';
 import { IMidwayWebApplication } from '../src/interface';
+import { join } from 'path';
 
 describe('/test/feature.test.ts', () => {
   describe('test new decorator', () => {
@@ -64,6 +65,17 @@ describe('/test/feature.test.ts', () => {
     const app = await creatApp('feature/base-app-plugin-inject');
     const result = await createHttpRequest(app).get('/');
     expect(result.text).toEqual('hello worldaaaa1aaaa');
+    await closeApp(app);
+  });
+
+  it('should test set custom logger in egg by midway logger', async () => {
+    const app = await creatApp('feature/base-app-set-ctx-logger');
+    const result = await createHttpRequest(app)
+      .get('/')
+      .query({ name: 'harry' });
+    expect(result.status).toEqual(200);
+    expect(result.text).toEqual('hello world,harry');
+    expect(matchContentTimes(join(app.getAppDir(), 'logs', 'ali-demo', 'midway-web.log'), 'custom label')).toEqual(1);
     await closeApp(app);
   });
 

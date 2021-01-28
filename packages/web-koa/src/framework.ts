@@ -222,7 +222,7 @@ export abstract class MidwayKoaBaseFramework<
           ];
 
           this.logger.info(
-            `Load Router "${webRouter.requestMethod} ${webRouter.path}"`
+            `Load Router "${webRouter.requestMethod.toUpperCase()} ${webRouter.path}"`
           );
 
           // apply controller from request context
@@ -275,6 +275,10 @@ export abstract class MidwayKoaBaseFramework<
         }
       }
     }
+  }
+
+  public getDefaultContextLoggerClass() {
+    return MidwayKoaContextLogger;
   }
 }
 
@@ -361,9 +365,5 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<
 
   public getServer() {
     return this.server;
-  }
-
-  public getDefaultContextLoggerClass() {
-    return MidwayKoaContextLogger;
   }
 }
