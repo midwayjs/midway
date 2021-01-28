@@ -23,7 +23,7 @@ import {
   INVALID_DECORATOR_OPERATION,
 } from './errMsg';
 import { Metadata } from './metadata';
-import { getParamNames, classNamed, isNullOrUndefined } from '../util';
+import { getParamNames, classNamed, isNullOrUndefined, isClass } from '../util';
 
 const debug = require('util').debuglog('decorator:manager');
 
@@ -958,7 +958,12 @@ export function getConstructorInject(target: any): TagPropsMetadata[] {
 export function savePropertyInject(opts: InjectOptions) {
   let identifier = opts.identifier;
   if (!identifier) {
-    identifier = opts.targetKey;
+    const type = getPropertyType(opts.target, opts.targetKey);
+    if (!type.isBaseType && isClass(type.originDesign)) {
+      identifier = getProviderId(type.originDesign);
+    } else {
+      identifier = opts.targetKey;
+    }
   }
   if (identifier.includes('@') && !identifier.includes(':')) {
     identifier = `${identifier}:${opts.targetKey}`;

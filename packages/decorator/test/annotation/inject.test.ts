@@ -1,11 +1,19 @@
-import { Inject, getConstructorInject, getPropertyInject } from '../../src';
+import { Provide, Inject, getConstructorInject, getPropertyInject } from '../../src';
+
+@Provide()
+class InjectChild {
+}
 
 class Test {
-  constructor(@Inject() bb: any, @Inject() cc: any) {
+  constructor(@Inject() bb: any, @Inject() cc: any, @Inject() dd: InjectChild) {
     // ignore
   }
+
   @Inject()
   aa: any;
+
+  @Inject()
+  ee: InjectChild;
 }
 
 describe('/test/annotation/inject.test.ts', () => {
@@ -26,6 +34,12 @@ describe('/test/annotation/inject.test.ts', () => {
           value: 'cc',
         },
       ],
+      2: [
+        {
+          key: 'inject',
+          value: 'dd'
+        }
+      ]
     });
 
     meta = getPropertyInject(Test);
@@ -37,6 +51,12 @@ describe('/test/annotation/inject.test.ts', () => {
           value: 'aa',
         },
       ],
+      'ee': [
+        {
+          'key': 'inject',
+          'value': 'injectChild'
+        }
+      ]
     });
   });
 });
