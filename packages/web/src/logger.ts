@@ -132,7 +132,11 @@ class MidwayLoggers extends Map<string, ILogger> {
     if (this.app.getProcessType() === MidwayProcessTypeEnum.AGENT) {
       this.createLogger(
         'coreLogger',
-        { file: options.logger.agentLogName },
+        {
+          file: options.logger.agentLogName,
+          level: options.logger?.coreLogger?.level,
+          consoleLevel: options.logger?.coreLogger?.consoleLevel,
+        },
         options.logger,
         'agent:coreLogger'
       );
@@ -145,7 +149,11 @@ class MidwayLoggers extends Map<string, ILogger> {
     } else {
       this.createLogger(
         'coreLogger',
-        { file: options.logger.coreLogName },
+        {
+          file: options.logger.coreLogName,
+          level: options.logger?.coreLogger?.level,
+          consoleLevel: options.logger?.coreLogger?.consoleLevel,
+        },
         options.logger,
         'coreLogger'
       );
