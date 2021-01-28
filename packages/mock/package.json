@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/mock",
-  "version": "2.7.0",
+  "version": "2.7.2",
   "description": "create your test app from midway framework",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
