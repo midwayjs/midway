@@ -961,7 +961,8 @@ export function savePropertyInject(opts: InjectOptions) {
     const type = getPropertyType(opts.target, opts.targetKey);
     if (!type.isBaseType && isClass(type.originDesign)) {
       identifier = getProviderId(type.originDesign);
-    } else {
+    }
+    if (!identifier) {
       identifier = opts.targetKey;
     }
   }

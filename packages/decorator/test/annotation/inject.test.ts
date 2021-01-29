@@ -4,6 +4,10 @@ import { Provide, Inject, getConstructorInject, getPropertyInject } from '../../
 class InjectChild {
 }
 
+class InjectChild2 {
+}
+
+
 class Test {
   constructor(@Inject() bb: any, @Inject() cc: any, @Inject() dd: InjectChild) {
     // ignore
@@ -14,6 +18,9 @@ class Test {
 
   @Inject()
   ee: InjectChild;
+
+  @Inject()
+  ff: InjectChild2;
 }
 
 describe('/test/annotation/inject.test.ts', () => {
@@ -51,10 +58,16 @@ describe('/test/annotation/inject.test.ts', () => {
           value: 'aa',
         },
       ],
-      'ee': [
+      ee: [
         {
           'key': 'inject',
           'value': 'injectChild'
+        }
+      ],
+      ff: [
+        {
+          'key': 'inject',
+          'value': 'ff'
         }
       ]
     });
