@@ -130,6 +130,13 @@ export const createAppWorkerLoader = () => {
         await this.framework.loadLifeCycles();
       });
     }
+
+    loadMiddleware() {
+      super.loadMiddleware();
+      const sessionMiddleware = this.app.middlewares['session'](this.app.config['session'], this.app);
+      sessionMiddleware._name = 'session';
+      this.app.use(sessionMiddleware);
+    }
   }
 
   return EggAppWorkerLoader as any;
