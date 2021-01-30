@@ -20,7 +20,7 @@ class AppBootHook {
   async didLoad() {
     if (this.app.loader['useEggSocketIO']) {
       // socketio 下会提前加入 session 中间件，这里删除，防止重复加载
-      if (this.app.middleware.length && this.app.middleware[this.app.middleware.length - 1]?._name === 'session') {
+      if (this.app.middleware.length && this.app.middleware[this.app.middleware.length - 1]._name === 'session') {
         this.app.middleware.pop();
       }
     }
