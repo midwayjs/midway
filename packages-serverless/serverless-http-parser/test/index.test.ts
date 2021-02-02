@@ -124,6 +124,15 @@ describe('test http parser', () => {
     // assert(context.res.headers['set-cookie'].length === 2);
   });
 
+  it('body should undefined when method not post', () => {
+    const app = new Application();
+    const req = require('./resource/fc_http.json');
+    req.headers['Content-Type'] = 'application/json';
+    const res = new HTTPResponse();
+    const context = app.createContext(req, res);
+    assert(!context.request.body);
+  });
+
   it('should parser fc http event', () => {
     const app = new Application();
     const req = Object.assign(require('./resource/fc_http.json'), {
@@ -158,7 +167,7 @@ describe('test http parser', () => {
       a: '1',
     });
 
-    assert.deepStrictEqual(context.request.body, '{"a":"1"}');
+    assert.deepStrictEqual(context.request.body, undefined);
 
     assert(context.cookies.get('_ga') === 'GA1.2.690852134.1546410522');
 
@@ -207,8 +216,8 @@ describe('test http parser', () => {
     assert(context.headers === context.req.headers);
 
     // request
-    assert(context.method === 'GET');
-    assert(context.request.method === 'GET');
+    assert(context.method === 'POST');
+    assert(context.request.method === 'POST');
     assert(context.path === '/api');
     assert(context.request.path === '/api');
     assert(context.url === '/api?name=test');

@@ -52,7 +52,7 @@ export class HTTPRequest {
 
   get url() {
     if (!this[EVENT].url) {
-      const querystirng = qs.stringify(this.query || {});
+      const querystirng = (qs as any).stringify(this.query || {});
       this[EVENT].url = this.path + (querystirng ? '?' + querystirng : '');
     }
     return this[EVENT].url;
@@ -91,6 +91,10 @@ export class HTTPRequest {
   }
 
   get body() {
+    const method = this.method.toLowerCase();
+    if (['get', 'head', 'delete', 'options'].includes(method)) {
+      return undefined;
+    }
     if (this.bodyParsed) {
       return this[BODY];
     }

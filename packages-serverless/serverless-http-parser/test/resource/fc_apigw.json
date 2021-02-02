@@ -1,6 +1,6 @@
 {
   "path":"/api",
-  "httpMethod":"GET",
+  "httpMethod":"POST",
   "headers":{
     "Accept-Language": "en-US,en,cn",
     "Accept": "text/html,application/xml,application/json",

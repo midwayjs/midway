@@ -128,6 +128,10 @@ export const request = {
   },
 
   get body() {
+    const method = this.method.toLowerCase();
+    if (['get', 'head', 'delete', 'options'].includes(method)) {
+      return undefined;
+    }
     if (this[BODY]) {
       return this[BODY];
     }
