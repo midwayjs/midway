@@ -93,7 +93,7 @@ export class HTTPRequest {
   get body() {
     const method = this.method.toLowerCase();
     if (['get', 'head', 'delete', 'options'].includes(method)) {
-      return;
+      return undefined;
     }
     if (this.bodyParsed) {
       return this[BODY];
