@@ -37,6 +37,7 @@ export const createAppWorkerLoader = () => {
     app: any;
     framework;
     bootstrap;
+    useEggSocketIO = false;
 
     getEggPaths() {
       if (!this.appDir) {
@@ -129,6 +130,19 @@ export const createAppWorkerLoader = () => {
         super.load();
         await this.framework.loadLifeCycles();
       });
+    }
+
+    loadMiddleware() {
+      super.loadMiddleware();
+      if (this.plugins['io']) {
+        this.useEggSocketIO = true;
+        const sessionMiddleware = this.app.middlewares['session'](
+          this.app.config['session'],
+          this.app
+        );
+        sessionMiddleware._name = 'session';
+        this.app.use(sessionMiddleware);
+      }
     }
   }
 
