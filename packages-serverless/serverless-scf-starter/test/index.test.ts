@@ -376,7 +376,7 @@ describe('/test/index.test.ts', () => {
       const runtime = await start();
       const handle = asyncWrapper(async (...args) => {
         return runtime.asyncEvent(async ctx => {
-          return 'hello world ' + ctx.req.body.user;
+          return 'hello world';
         })(...args);
       });
       const event = {
@@ -387,7 +387,7 @@ describe('/test/index.test.ts', () => {
         body: 'user=harry',
       };
       const data = await test(handle).runHttp(event, {});
-      assert(data.body === 'hello world harry');
+      assert(data.body === 'hello world');
     });
 
     it('should ok with asyncWrap use appoint args in event', async () => {
