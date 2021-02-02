@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/typegoose",
-  "version": "2.7.2",
+  "version": "2.7.3",
   "description": "Midway Component for typegoose",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",

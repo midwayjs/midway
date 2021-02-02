@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/web",
-  "version": "2.7.2",
+  "version": "2.7.3",
   "description": "Midway Web Framework for Egg.js",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -30,8 +30,8 @@
     "@midwayjs/cli": "^1.2.36",
     "@midwayjs/mock": "^2.7.2",
     "dayjs": "^1.10.4",
-    "egg-view-nunjucks": "^2.2.0",
     "egg-socket.io": "^4.1.6",
+    "egg-view-nunjucks": "^2.2.0",
     "fake-egg": "1.0.0",
     "fs-extra": "^8.0.1",
     "pedding": "^1.1.0",

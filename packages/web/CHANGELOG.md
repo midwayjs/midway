@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.7.3](https://github.com/midwayjs/midway/compare/v2.7.2...v2.7.3) (2021-02-02)
+
+
+### Bug Fixes
+
+* context logger mixin ([#836](https://github.com/midwayjs/midway/issues/836)) ([21c78c2](https://github.com/midwayjs/midway/commit/21c78c2a6d3d313d5e504394abdf2d4e91b71b24))
+* egg socket io missing session middleware ([#835](https://github.com/midwayjs/midway/issues/835)) ([6e605a1](https://github.com/midwayjs/midway/commit/6e605a15b64bf51182b393b68d66d0867c571b94))
+
+
+
+
+
 ## [2.7.2](https://github.com/midwayjs/midway/compare/v2.7.1...v2.7.2) (2021-01-28)
 
 **Note:** Version bump only for package @midwayjs/web
