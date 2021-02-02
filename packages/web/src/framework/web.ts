@@ -69,10 +69,8 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
 
     if (this.app.config.midwayFeature['replaceEggLogger']) {
       // if use midway logger will be use midway custom context logger
-      Object.defineProperty(this.app, 'ContextLogger', {
-        get() {
-          return self.BaseContextLoggerClass;
-        },
+      this.app.beforeStart(() => {
+        this.app.ContextLogger = self.BaseContextLoggerClass;
       });
     }
 
