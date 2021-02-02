@@ -6,6 +6,7 @@ import {
   IMidwayContainer,
   IConfigurationOptions,
   MidwayFrameworkType,
+  MidwayContextLogger
 } from '@midwayjs/core';
 import { clearAllLoggers } from '@midwayjs/logger';
 import { join } from 'path';
@@ -90,6 +91,10 @@ class TestFrameworkUnit implements IMidwayFramework<any, MockConfigurationOption
   getFrameworkName() {
     return 'midway:mock'
   }
+
+  getDefaultContextLoggerClass() {
+    return MidwayContextLogger
+  }
 }
 
 describe('/test/index.test.ts', () => {
@@ -146,5 +151,14 @@ describe('/test/index.test.ts', () => {
     // 因为 jest 环境认不出 ts-node
     expect(framework.getBaseDir()).toEqual(join(process.cwd(), 'dist'));
     await Bootstrap.stop();
+  });
+
+  it('should test bootstrap run with mock', async () => {
+    global['MIDWAY_BOOTSTRAP_APP_SET'] = new Set();
+    const framework = new TestFrameworkUnit().configure({});
+    await Bootstrap.load(framework).run();
+    expect(global['MIDWAY_BOOTSTRAP_APP_SET'].size).toEqual(1);
+    await Bootstrap.stop();
+    global['MIDWAY_BOOTSTRAP_APP_SET'] = null;
   });
 });

@@ -208,4 +208,14 @@ describe('/test/context/midwayContainer.test.ts', () => {
     expect(sapp.getConfig().a).to.equal(3);
   });
 
+  it('should test autoload', async () => {
+    const container = new MidwayContainer();
+    container.load({
+      loadDir: path.join(__dirname, '../fixtures/base-app-autoload/src'),
+    });
+
+    await container.ready();
+    assert((container.registry as unknown as Map<string, any>).has('userService'));
+  });
+
 });

@@ -246,7 +246,7 @@ export class BaseApplicationContext
       const def = this.registry.getDefinition(identifier);
       if (!isPathEqual(definition.srcPath, def.srcPath)) {
         throw new Error(
-          `${identifier} path = ${definition.srcPath} is exist (${def.srcPath})!`
+          `${identifier} path = ${definition.srcPath} already exist (${def.srcPath})!`
         );
       }
     }

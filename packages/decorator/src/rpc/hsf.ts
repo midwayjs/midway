@@ -8,6 +8,11 @@ export interface HSFOpts {
   namespace?: string;
 }
 
+/**
+ * @deprecated
+ * @param hsfOption
+ * @constructor
+ */
 export function HSF(hsfOption: HSFOpts = {}): ClassDecorator {
   return (target: any) => {
     saveModule(HSF_KEY, target);

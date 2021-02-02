@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.7.2](https://github.com/midwayjs/midway/compare/v2.7.1...v2.7.2) (2021-01-28)
+
+**Note:** Version bump only for package midway-schedule
+
+
+
+
+
+# [2.7.0](https://github.com/midwayjs/midway/compare/v2.6.13...v2.7.0) (2021-01-27)
+
+**Note:** Version bump only for package midway-schedule
+
+
+
+
+
+## [2.6.13](https://github.com/midwayjs/midway/compare/v2.6.12...v2.6.13) (2021-01-21)
+
+**Note:** Version bump only for package midway-schedule
+
+
+
+
+
 ## [2.6.12](https://github.com/midwayjs/midway/compare/v2.6.11...v2.6.12) (2021-01-15)
 
 **Note:** Version bump only for package midway-schedule

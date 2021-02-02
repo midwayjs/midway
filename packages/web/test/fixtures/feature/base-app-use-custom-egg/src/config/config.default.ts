@@ -9,6 +9,9 @@ export = (appInfo) => {
       b: 2,
       d: [1, 2, 3],
     },
-    rundir: join(appInfo.appDir, 'run')
+    rundir: join(appInfo.appDir, 'run'),
+    midwayFeature: {
+      replaceEggLogger: true,
+    }
   }
 }

@@ -62,7 +62,7 @@ export class FCRuntime extends ServerlessLightRuntime {
     if (isHTTPMode) {
       req.getOriginContext = () => {
         return context;
-      }
+      };
       // http
       // const rawBody = 'test';
       // req.rawBody = rawBody;
@@ -214,7 +214,7 @@ export class FCRuntime extends ServerlessLightRuntime {
     ]);
   }
 
-  async wrapperEventInvoker(handler, event, context) {
+  async wrapperEventInvoker(handler, event, context: any = {}) {
     const args = [context];
     if (event && event[FAAS_ARGS_KEY]) {
       args.push(event[FAAS_ARGS_KEY]);

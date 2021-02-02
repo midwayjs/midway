@@ -9,6 +9,10 @@ exports.logger = {
   level: 'DEBUG',
 };
 
+export const midwayFeature = {
+  replaceEggLogger: true,
+}
+
 exports.customLogger = {
   middlewareLogger: {
     consoleLevel: 'NONE',

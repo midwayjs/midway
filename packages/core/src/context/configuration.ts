@@ -28,7 +28,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
   packageName: string;
   loadDirs: string[] = [];
   loadModules: any[] = [];
-  importObjects: object = new Map();
+  importObjects = {};
   // 新版本 configuration
   newVersion = false;
 
@@ -89,7 +89,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
     }
   }
 
-  addImportObjects(importObjects: object) {
+  addImportObjects(importObjects: Record<string, unknown>) {
     if (importObjects) {
       this.importObjects = importObjects;
     }

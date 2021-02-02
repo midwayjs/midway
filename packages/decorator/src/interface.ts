@@ -40,3 +40,25 @@ export interface TagClsMetadata {
 export interface ReflectResult {
   [key: string]: TagPropsMetadata[];
 }
+
+export enum MSProviderType {
+  DUBBO = 'dubbo',
+  GRPC = 'gRPC',
+  HSF = 'hsf',
+}
+
+/**
+ * all decorator metadata format
+ */
+export namespace DecoratorMetadata {
+
+  export interface GRPCClassMetadata {
+    serviceName?: string;
+    package?: string;
+  }
+
+  export interface ProviderClassMetadata {
+    type: MSProviderType,
+    metadata: GRPCClassMetadata
+  }
+}

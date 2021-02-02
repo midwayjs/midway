@@ -3,6 +3,40 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.7.2](https://github.com/midwayjs/midway/compare/v2.7.1...v2.7.2) (2021-01-28)
+
+
+### Bug Fixes
+
+* mock empty options ([#831](https://github.com/midwayjs/midway/issues/831)) ([7668461](https://github.com/midwayjs/midway/commit/7668461c6ba6097cba9f132fc868f180c66b57d8))
+
+
+
+
+
+# [2.7.0](https://github.com/midwayjs/midway/compare/v2.6.13...v2.7.0) (2021-01-27)
+
+
+### Features
+
+* add midway gRPC framework ([#786](https://github.com/midwayjs/midway/issues/786)) ([d90362c](https://github.com/midwayjs/midway/commit/d90362c6bf15c00621ffc2981f19842f216395f8))
+* support entry file in bootstrap ([#819](https://github.com/midwayjs/midway/issues/819)) ([49a5ff6](https://github.com/midwayjs/midway/commit/49a5ff662134bdd42dc3a80738b44a05138f8f7c))
+
+
+
+
+
+## [2.6.13](https://github.com/midwayjs/midway/compare/v2.6.12...v2.6.13) (2021-01-21)
+
+
+### Bug Fixes
+
+* optional options ([#811](https://github.com/midwayjs/midway/issues/811)) ([ed3f659](https://github.com/midwayjs/midway/commit/ed3f6594efc32cf2bc9930a687836ae014cb7d90))
+
+
+
+
+
 ## [2.6.12](https://github.com/midwayjs/midway/compare/v2.6.11...v2.6.12) (2021-01-15)
 
 

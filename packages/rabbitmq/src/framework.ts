@@ -6,7 +6,6 @@ import {
   listModule,
   listPropertyDataFromClass,
   MidwayFrameworkType,
-  MidwayRequestContainer,
 } from '@midwayjs/core';
 
 import {
@@ -21,21 +20,14 @@ import {
 } from './interface';
 import { RabbitMQServer } from './mq';
 import { ConsumeMessage } from 'amqplib';
-import { MidwayRabbitMQContextLogger } from './logger';
 
 export class MidwayRabbitMQFramework extends BaseFramework<
   IMidwayRabbitMQApplication,
+  IMidwayRabbitMQContext,
   IMidwayRabbitMQConfigurationOptions
 > {
   public app: IMidwayRabbitMQApplication;
   public consumerList = [];
-
-  public configure(
-    options: IMidwayRabbitMQConfigurationOptions
-  ): MidwayRabbitMQFramework {
-    this.configurationOptions = options;
-    return this;
-  }
 
   async applicationInitialize(options) {
     this.app = (new RabbitMQServer(
@@ -101,21 +93,16 @@ export class MidwayRabbitMQFramework extends BaseFramework<
       async (data?: ConsumeMessage) => {
         const ctx = {
           channel: this.app.getChannel(),
-          startTime: Date.now(),
           queueName: listenerOptions.queueName,
         } as IMidwayRabbitMQContext;
-        ctx.logger = new MidwayRabbitMQContextLogger(ctx, this.appLogger);
-        const requestContainer = new MidwayRequestContainer(
-          ctx,
-          this.getApplicationContext()
-        );
-        ctx.requestContext = requestContainer;
-        ctx.getRequestContext = () => {
-          return requestContainer;
-        };
-        const ins = await requestContainer.getAsync(providerId);
+        this.app.createAnonymousContext(ctx);
+        const ins = await ctx.requestContext.getAsync(providerId);
         await ins[listenerOptions.propertyKey].call(ins, data);
       }
     );
+  }
+
+  public getFrameworkName() {
+    return 'midway:rabbitmq';
   }
 }

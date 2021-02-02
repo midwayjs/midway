@@ -15,7 +15,7 @@ export const createMidwayLogger = (
     dir: isDevelopmentEnv
       ? join(framework.getAppDir(), 'logs', framework.getProjectName())
       : join(getUserHome(), 'logs', framework.getProjectName()),
-    level: isDevelopmentEnv ? 'info': 'warn',
+    level: isDevelopmentEnv ? 'info' : 'warn',
   };
   return createLogger(name, Object.assign({}, loggerOptions, options));
 };
@@ -24,7 +24,7 @@ export class MidwayContextLogger<T> {
   protected contextLogger: ILogger;
   public ctx: T;
 
-  constructor(ctx, contextLogger: ILogger) {
+  constructor(ctx, contextLogger: ILogger, contextLabelHandler?) {
     this.ctx = ctx;
     this.contextLogger = contextLogger;
   }

@@ -39,6 +39,16 @@ export class BootstrapStarter {
 
   public async run() {
     await Promise.all(this.getActions('run', {}));
+    if (global['MIDWAY_BOOTSTRAP_APP_SET']) {
+      // for test/dev
+      this.bootstrapItems.forEach(item => {
+        global['MIDWAY_BOOTSTRAP_APP_SET'].add({
+          framework: item,
+          starter: this,
+        });
+      });
+      global['MIDWAY_BOOTSTRAP_APP_READY'] = true;
+    }
   }
 
   public async stop() {
@@ -81,7 +91,7 @@ export class Bootstrap {
       }
       configuration.logger = this.logger;
     } else {
-      this.logger = this.logger || configuration.logger as ILogger;
+      this.logger = this.logger || (configuration.logger as ILogger);
     }
     this.getStarter().configure(configuration);
     return this;

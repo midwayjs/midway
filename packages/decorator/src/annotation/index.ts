@@ -8,3 +8,4 @@ export * from './pipeline';
 export * from './validate';
 export * from './rule';
 export * from './aspect';
+export * from './autoload';

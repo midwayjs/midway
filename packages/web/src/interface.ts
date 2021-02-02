@@ -27,11 +27,20 @@ declare module 'egg' {
     generateController?(controllerMapping: string);
     generateMiddleware?(middlewareId: string): Promise<Middleware<DefaultState, IMidwayKoaContext>>;
     createLogger(name: string, options: LoggerOptions);
-    getProjectName();
+    getProjectName(): string;
+    setContextLoggerClass(BaseContextLoggerClass: any): void;
   }
 
   interface Context {
     requestContext: IMidwayContainer;
+    getLogger(name?: string): EggLogger & ILogger;
+    startTime: number;
+  }
+
+  interface EggAppConfig {
+    midwayFeature: {
+      replaceEggLogger: boolean;
+    }
   }
 }
 

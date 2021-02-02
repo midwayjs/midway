@@ -14,21 +14,24 @@ export interface IMidwayLogger extends ILogger {
   enableFile();
   disableError();
   enableError();
-  updateLevel(level: LoggerLevel);
-  updateDefaultLabel(defaultLabel: string);
-  updateDefaultMeta(defaultMeta: object);
+  updateLevel(level: LoggerLevel): void;
+  updateFileLevel(level: LoggerLevel): void;
+  updateConsoleLevel(level: LoggerLevel): void;
+  updateDefaultLabel(defaultLabel: string): void;
+  updateDefaultMeta(defaultMeta: object): void;
   getDefaultLabel(): string;
-  getDefaultMeta(): object;
+  getDefaultMeta(): Record<string, unknown>;
 }
 
 export type LoggerLevel = 'silly' | 'debug' | 'info' | 'warn' | 'error';
 
 export interface LoggerOptions {
   format?: logform.Format;
-  level?: string;
+  level?: LoggerLevel;
   defaultMeta?: object;
   printFormat?: (info: any) => string;
   dir?: string;
+  errorDir?: string;
   fileLogName?: string;
   errorLogName?: string;
   defaultLabel?: string;

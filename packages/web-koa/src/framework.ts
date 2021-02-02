@@ -5,11 +5,10 @@ import {
   getPropertyDataFromClass,
   getPropertyMetadata,
   getProviderId,
-  IMidwayApplication,
   IMidwayBootstrapOptions,
+  IMidwayContext,
   listModule,
   MidwayFrameworkType,
-  MidwayRequestContainer,
 } from '@midwayjs/core';
 
 import {
@@ -42,18 +41,18 @@ import { readFileSync } from 'fs';
 import { Server } from 'net';
 
 export abstract class MidwayKoaBaseFramework<
-  T,
-  U extends IMidwayApplication & IMidwayKoaApplicationPlus,
-  CustomContext
-> extends BaseFramework<U, T> {
-  public app: U;
+  APP extends IMidwayKoaApplicationPlus<CTX>,
+  CTX extends IMidwayContext,
+  OPT
+> extends BaseFramework<APP, CTX, OPT> {
+  public app: APP;
   private controllerIds: string[] = [];
   public prioritySortRouters: Array<{
     priority: number;
     router: Router;
   }> = [];
 
-  public getApplication(): U {
+  public getApplication(): APP {
     return this.app;
   }
 
@@ -132,9 +131,12 @@ export abstract class MidwayKoaBaseFramework<
       const providerId = getProviderId(module);
       if (providerId) {
         if (this.controllerIds.indexOf(providerId) > -1) {
-          throw new Error(`controller identifier [${providerId}] is exists!`);
+          throw new Error(
+            `Controller identifier [${providerId}] already exists!`
+          );
         }
         this.controllerIds.push(providerId);
+        this.logger.info(`Load Controller "${providerId}"`);
         await this.preRegisterRouter(module, providerId);
       }
     }
@@ -219,6 +221,12 @@ export abstract class MidwayKoaBaseFramework<
             ),
           ];
 
+          this.logger.info(
+            `Load Router "${webRouter.requestMethod.toUpperCase()} ${
+              webRouter.path
+            }"`
+          );
+
           // apply controller from request context
           // eslint-disable-next-line prefer-spread
           newRouter[webRouter.requestMethod].apply(newRouter, routerArgs);
@@ -270,21 +278,18 @@ export abstract class MidwayKoaBaseFramework<
       }
     }
   }
+
+  public getDefaultContextLoggerClass() {
+    return MidwayKoaContextLogger;
+  }
 }
 
 export class MidwayKoaFramework extends MidwayKoaBaseFramework<
-  IMidwayKoaConfigurationOptions,
   IMidwayKoaApplication,
-  IMidwayKoaContext
+  IMidwayKoaContext,
+  IMidwayKoaConfigurationOptions
 > {
   private server: Server;
-
-  public configure(
-    options: IMidwayKoaConfigurationOptions
-  ): MidwayKoaFramework {
-    this.configurationOptions = options;
-    return this;
-  }
 
   async applicationInitialize(options: Partial<IMidwayBootstrapOptions>) {
     this.app = new koa<
@@ -292,13 +297,7 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<
       IMidwayKoaContext
     >() as IMidwayKoaApplication;
     this.app.use(async (ctx, next) => {
-      ctx.logger = new MidwayKoaContextLogger(ctx, this.appLogger);
-      ctx.startTime = Date.now();
-      ctx.requestContext = new MidwayRequestContainer(
-        ctx,
-        this.getApplicationContext()
-      );
-      await ctx.requestContext.ready();
+      this.app.createAnonymousContext(ctx);
       await next();
     });
 
@@ -354,8 +353,16 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<
     }
   }
 
+  public async beforeStop() {
+    this.server.close();
+  }
+
   public getFrameworkType(): MidwayFrameworkType {
     return MidwayFrameworkType.WEB_KOA;
+  }
+
+  public getFrameworkName() {
+    return 'midway:koa';
   }
 
   public getServer() {

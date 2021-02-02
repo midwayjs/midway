@@ -26,7 +26,7 @@ export class SCFRuntime extends ServerlessLightRuntime {
    * @param handler
    */
   asyncEvent(handler) {
-    return (event: object = {}, context = {} as SCF.RequestContext) => {
+    return (event = {}, context = {} as SCF.RequestContext) => {
       if (isHttpEvent(event)) {
         return this.wrapperWebInvoker(handler, event, context);
       }

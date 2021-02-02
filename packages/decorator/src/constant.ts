@@ -35,6 +35,12 @@ export const RPC_DUBBO_KEY = 'rpc:dubbo';
 // microservice
 export const MS_CONSUMER_KEY = 'ms:consumer';
 export const MS_PRODUCER_KEY = 'ms:producer';
+export const MS_PROVIDER_KEY = 'ms:provider';
+
+// rpc method
+export const MS_GRPC_METHOD_KEY = 'ms:grpc:method';
+export const MS_DUBBO_METHOD_KEY = 'ms:dubbo:method';
+export const MS_HSF_METHOD_KEY = 'ms:hsf:method';
 
 // framework
 export const CONFIG_KEY = 'config';

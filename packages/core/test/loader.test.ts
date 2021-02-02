@@ -409,7 +409,7 @@ describe('/test/loader.test.ts', () => {
       __dirname,
       './fixtures/app-with-conflict/base-app-decorator/src/lib/'
     );
-    const s = `baseService path = ${p}/userManager.ts is exist (${p}/service.ts)!`;
+    const s = `baseService path = ${p}/userManager.ts already exist (${p}/service.ts)!`;
     assert.ok(callback.withArgs(s).calledOnce);
   });
 

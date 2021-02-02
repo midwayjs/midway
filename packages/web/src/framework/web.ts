@@ -12,9 +12,9 @@ import { Application, Context, Router, EggLogger } from 'egg';
 import { loggers } from '@midwayjs/logger';
 
 export class MidwayWebFramework extends MidwayKoaBaseFramework<
-  IMidwayWebConfigurationOptions,
   Application,
-  Context
+  Context,
+  IMidwayWebConfigurationOptions
 > {
   public app: Application;
   public configurationOptions: IMidwayWebConfigurationOptions;
@@ -32,37 +32,49 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
     this.configurationOptions = options;
+    // set default context logger
+    this.BaseContextLoggerClass =
+      options.ContextLoggerClass || this.getDefaultContextLoggerClass();
+
     if (options.typescript === false) {
       this.isTsMode = false;
     }
 
     this.app = options.app;
 
-    this.defineApplicationProperties({
-      generateController: (controllerMapping: string) => {
-        return this.generateController(controllerMapping);
-      },
+    this.defineApplicationProperties(
+      {
+        generateController: (controllerMapping: string) => {
+          return this.generateController(controllerMapping);
+        },
 
-      generateMiddleware: async (middlewareId: string) => {
-        return this.generateMiddleware(middlewareId);
-      },
+        generateMiddleware: async (middlewareId: string) => {
+          return this.generateMiddleware(middlewareId);
+        },
 
-      getProcessType: () => {
-        if (this.configurationOptions.processType === 'application') {
+        getProcessType: () => {
+          if (this.configurationOptions.processType === 'application') {
+            return MidwayProcessTypeEnum.APPLICATION;
+          }
+          if (this.configurationOptions.processType === 'agent') {
+            return MidwayProcessTypeEnum.AGENT;
+          }
+
+          // TODO 单进程模式下区分进程类型??
           return MidwayProcessTypeEnum.APPLICATION;
-        }
-        if (this.configurationOptions.processType === 'agent') {
-          return MidwayProcessTypeEnum.AGENT;
-        }
-
-        // TODO 单进程模式下区分进程类型??
-        return MidwayProcessTypeEnum.APPLICATION;
+        },
       },
+      ['createAnonymousContext']
+    );
 
-      getLogger: name => {
-        return this.getLogger(name);
-      },
-    });
+    if (this.app.config.midwayFeature['replaceEggLogger']) {
+      // if use midway logger will be use midway custom context logger
+      Object.defineProperty(this.app, 'ContextLogger', {
+        get() {
+          return self.BaseContextLoggerClass;
+        },
+      });
+    }
 
     Object.defineProperty(this.app, 'applicationContext', {
       get() {
