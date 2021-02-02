@@ -124,6 +124,15 @@ describe('test http parser', () => {
     // assert(context.res.headers['set-cookie'].length === 2);
   });
 
+  it('body should undefined when method not post', () => {
+    const app = new Application();
+    const req = require('./resource/fc_http.json');
+    req.headers['Content-Type'] = 'application/json';
+    const res = new HTTPResponse();
+    const context = app.createContext(req, res);
+    assert(!context.request.body);
+  });
+
   it('should parser fc http event', () => {
     const app = new Application();
     const req = Object.assign(require('./resource/fc_http.json'), {
