@@ -43,6 +43,18 @@ export const displayCommonMessage = format(
       );
     }
 
+    // error(new Error(''), {label: 1}) 的情况
+    if (info.message['stack'] && info.message['message']) {
+      // info.message = info.message.replace(err.message, '') + err.stack;
+      const err = new Error(info.message['message']);
+      err.name = info.message['name'];
+      err.stack = info.message['stack'];
+      info.originError = err;
+      info.stack = info.message['stack'];
+      info.message = err.stack;
+      info[MESSAGE] = info[MESSAGE] || info.message;
+    }
+
     // 处理数组，Map，Set 的 message
     if (
       Array.isArray(info.message) ||
