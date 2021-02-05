@@ -24,7 +24,7 @@ import {
   getClassMetadata,
   ASPECT_KEY,
   listPreloadModule,
-  isProxy,
+  isProxy, ResolveFilter, isRegExp,
 } from '@midwayjs/decorator';
 import { ContainerConfiguration } from './configuration';
 import { FUNCTION_INJECT_KEY } from '../common/constants';
@@ -86,6 +86,7 @@ export class MidwayContainer
   protected environmentService: IEnvironmentService;
   protected aspectMappingMap: WeakMap<any, Map<string, any[]>>;
   private aspectModuleSet: Set<any>;
+  private directoryFilterArray: ResolveFilter[] = [];
 
   /**
    * 单个进程中上一次的 applicationContext 的 registry
@@ -218,9 +219,24 @@ export class MidwayContainer
         this.debugLogger(`\nmain:*********** binding "${file}" ***********`);
         this.debugLogger(`  namespace => "${opts.namespace}"`);
         const exports = require(file);
-        // add module to set
-        this.bindClass(exports, opts.namespace, file);
-        this.debugLogger(`  binding "${file}" end`);
+
+        if (this.directoryFilterArray.length) {
+          for (const resolveFilter of this.directoryFilterArray) {
+            if (typeof resolveFilter.pattern === 'string' && file.include(resolveFilter.pattern)) {
+              resolveFilter.filter(exports, file, this.bindModule);
+            } else if (isRegExp(resolveFilter.pattern) && file.include(resolveFilter.pattern)) {
+              resolveFilter.filter(exports, file, this.bindModule);
+            } else {
+              // add module to set
+              this.bindClass(exports, opts.namespace, file);
+              this.debugLogger(`  binding "${file}" end`);
+            }
+          }
+        } else {
+          // add module to set
+          this.bindClass(exports, opts.namespace, file);
+          this.debugLogger(`  binding "${file}" end`);
+        }
       }
     }
   }
@@ -894,5 +910,9 @@ export class MidwayContainer
       // preload init context
       await this.getAsync(module);
     }
+  }
+
+  public addDirectoryFilter(directoryFilter) {
+    this.directoryFilterArray = this.directoryFilterArray.concat(directoryFilter);
   }
 }
