@@ -4,7 +4,8 @@ import {
   ScopeEnum,
   ObjectDefinitionOptions,
   IMethodAspect,
-  AspectMetadata, ResolveFilter,
+  AspectMetadata,
+  ResolveFilter,
 } from '@midwayjs/decorator';
 import { ILogger, LoggerOptions } from '@midwayjs/logger';
 /**

@@ -3,8 +3,8 @@ import {
   FUNCTION_INJECT_KEY,
 } from '../../../../../../../src';
 
-import { ScopeEnum, CONTROLLER_KEY, Provide, Inject } from '@midwayjs/decorator';
-import { saveClassMetadata, saveModule } from '../../../../../../../../decorator/dist/.mwcc-cache';
+import { saveClassMetadata, saveModule, ScopeEnum, CONTROLLER_KEY, Provide, Inject } from '@midwayjs/decorator';
+import { IMidwayContainer } from '../../../../../../../dist';
 
 @Provide()
 export class FunctionContainer {
@@ -12,7 +12,7 @@ export class FunctionContainer {
   ctx;
 
   async getFunction() {
-    return this.ctx.requestContext.getAsync(fnName);
+    return this.ctx.requestContext.getAsync('');
   }
 }
 
@@ -22,19 +22,18 @@ export const createHooks = (hooksOptions) => {
     namespace: 'hooks',
     directoryResolveFilter: [
       {
-        pattern: hooksOptions.pattern,
-        filter: (module, filePath, bindModule) => {
-          for(const fnName of module) {
+        pattern: hooksOptions.routes[0].loadDir,
+        filter: (module, filePath, container: IMidwayContainer) => {
+          for(const fnName in module) {
             module[fnName][FUNCTION_INJECT_KEY] = {
               id: fnName,
-              provider:  (requestContainer) => {
+              provider:  async (requestContainer) => {
                 return module[fnName];
               },
               scope: ScopeEnum.Request,
-              isAutowire: true,
             }
 
-            bindModule(module[fnName]);
+            container.bindClass(module[fnName]);
             // register controller
 
             saveModule(CONTROLLER_KEY, FunctionContainer);
@@ -46,6 +45,10 @@ export const createHooks = (hooksOptions) => {
         }
       }
     ]
+  }).onReady(async () => {
+    console.log('on ready in hooks');
+  }).onStop(async () => {
+    console.log('on ready in hooks');
   });
 
   return {

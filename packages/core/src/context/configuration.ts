@@ -17,6 +17,7 @@ import { MAIN_MODULE_KEY, generateProvideId } from '@midwayjs/decorator';
 import { IContainerConfiguration, IMidwayContainer } from '../interface';
 import { isPath, safeRequire } from '../util/';
 import * as util from 'util';
+import { FunctionalConfiguration } from '../functional/configuration';
 
 const debug = util.debuglog('midway:container:configuration');
 
@@ -209,10 +210,18 @@ export class ContainerConfiguration implements IContainerConfiguration {
     }
 
     this.loadConfiguration(componentObject['Configuration'], '');
-    const configurationOptions: InjectionConfigurationOptions = getClassMetadata(
-      CONFIGURATION_KEY,
-      componentObject['Configuration']
-    );
+    let configurationOptions: InjectionConfigurationOptions;
+    if (componentObject['Configuration'] instanceof FunctionalConfiguration) {
+      // 函数式写法
+      configurationOptions = componentObject['Configuration'].getConfigurationOptions();
+    } else {
+      // 普通类写法
+      configurationOptions = getClassMetadata(
+        CONFIGURATION_KEY,
+        componentObject['Configuration']
+      );
+    }
+
     const ns = configurationOptions.namespace || MAIN_MODULE_KEY;
     this.container.bindClass(componentObject, ns);
   }
@@ -222,10 +231,18 @@ export class ContainerConfiguration implements IContainerConfiguration {
       // 可能导出多个
       const configurationExports = this.getConfigurationExport(configuration);
       for (const configurationExport of configurationExports) {
-        const configurationOptions: InjectionConfigurationOptions = getClassMetadata(
-          CONFIGURATION_KEY,
-          configurationExport
-        );
+        let configurationOptions: InjectionConfigurationOptions;
+        if (configurationExport instanceof FunctionalConfiguration) {
+          // 函数式写法
+          configurationOptions = configurationExport.getConfigurationOptions();
+        } else {
+          // 普通类写法
+          configurationOptions = getClassMetadata(
+            CONFIGURATION_KEY,
+            configurationExport
+          );
+        }
+
         debug('   configuration export %j.', configurationOptions);
         if (configurationOptions) {
           if (
@@ -252,6 +269,9 @@ export class ContainerConfiguration implements IContainerConfiguration {
               `   configuration "namespace(${this.namespace})/packageName(${this.packageName})" not exist than add.`
             );
             this.container.addConfiguration(this);
+          }
+          if (configurationOptions.directoryResolveFilter) {
+            this.container.addDirectoryFilter(configurationOptions.directoryResolveFilter);
           }
           this.addImports(configurationOptions.imports, baseDir);
           this.addImportObjects(configurationOptions.importObjects);
@@ -282,13 +302,18 @@ export class ContainerConfiguration implements IContainerConfiguration {
    * @param clzz configuration class
    */
   bindConfigurationClass(clzz, filePath?: string) {
-    const clzzName = `${LIFECYCLE_IDENTIFIER_PREFIX}${classNamed(clzz.name)}`;
-    const id = generateProvideId(clzzName, this.namespace);
-    saveProviderId(id, clzz, true);
-    this.container.bind(id, clzz, {
-      namespace: this.namespace,
-      srcPath: filePath,
-    });
+    if (clzz instanceof FunctionalConfiguration) {
+      // 函数式写法不需要绑定到容器
+    } else {
+      // 普通类写法
+      const clzzName = `${LIFECYCLE_IDENTIFIER_PREFIX}${classNamed(clzz.name)}`;
+      const id = generateProvideId(clzzName, this.namespace);
+      saveProviderId(id, clzz, true);
+      this.container.bind(id, clzz, {
+        namespace: this.namespace,
+        srcPath: filePath,
+      });
+    }
 
     // configuration 手动绑定去重
     const configurationMods = listModule(CONFIGURATION_KEY);
@@ -309,12 +334,12 @@ export class ContainerConfiguration implements IContainerConfiguration {
 
   private getConfigurationExport(exports): any[] {
     const mods = [];
-    if (isClass(exports) || isFunction(exports)) {
+    if (isClass(exports) || isFunction(exports) || exports instanceof FunctionalConfiguration) {
       mods.push(exports);
     } else {
       for (const m in exports) {
         const module = exports[m];
-        if (isClass(module) || isFunction(module)) {
+        if (isClass(module) || isFunction(module) || module instanceof FunctionalConfiguration) {
           mods.push(module);
         }
       }

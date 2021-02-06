@@ -24,7 +24,9 @@ import {
   getClassMetadata,
   ASPECT_KEY,
   listPreloadModule,
-  isProxy, ResolveFilter, isRegExp,
+  isProxy,
+  ResolveFilter,
+  isRegExp,
 } from '@midwayjs/decorator';
 import { ContainerConfiguration } from './configuration';
 import { FUNCTION_INJECT_KEY } from '../common/constants';
@@ -50,6 +52,7 @@ import { recursiveGetMetadata } from '../common/reflectTool';
 import { ObjectDefinition } from '../definitions/objectDefinition';
 import { FunctionDefinition } from '../definitions/functionDefinition';
 import { ManagedReference, ManagedValue } from './managed';
+import { FunctionalConfiguration } from '../functional/configuration';
 
 const DEFAULT_PATTERN = ['**/**.ts', '**/**.tsx', '**/**.js'];
 const DEFAULT_IGNORE_PATTERN = [
@@ -190,7 +193,7 @@ export class MidwayContainer
       }
     }
 
-    // register ad base config hook
+    // register base config hook
     this.registerDataHandler(CONFIG_KEY, (key: string) => {
       if (key === ALL) {
         return this.getConfigService().getConfiguration();
@@ -222,10 +225,10 @@ export class MidwayContainer
 
         if (this.directoryFilterArray.length) {
           for (const resolveFilter of this.directoryFilterArray) {
-            if (typeof resolveFilter.pattern === 'string' && file.include(resolveFilter.pattern)) {
-              resolveFilter.filter(exports, file, this.bindModule);
-            } else if (isRegExp(resolveFilter.pattern) && file.include(resolveFilter.pattern)) {
-              resolveFilter.filter(exports, file, this.bindModule);
+            if (typeof resolveFilter.pattern === 'string' && file.includes(resolveFilter.pattern)) {
+              resolveFilter.filter(exports, file, this);
+            } else if (isRegExp(resolveFilter.pattern) && (resolveFilter.pattern as RegExp).test(file)) {
+              resolveFilter.filter(exports, file, this);
             } else {
               // add module to set
               this.bindClass(exports, opts.namespace, file);
@@ -476,12 +479,9 @@ export class MidwayContainer
 
   registerObject(
     identifier: ObjectIdentifier,
-    target: any,
-    registerByUser = true
+    target: any
   ) {
-    if (registerByUser) {
-      this.midwayIdentifiers.push(identifier);
-    }
+    this.midwayIdentifiers.push(identifier);
     if (this?.getCurrentNamespace()) {
       if (this?.getCurrentNamespace() === MAIN_MODULE_KEY) {
         // 如果是 main，则同步 alias 到所有的 namespace
@@ -579,9 +579,16 @@ export class MidwayContainer
       cycles && cycles.length
     );
     for (const cycle of cycles) {
-      const providerId = getProviderId(cycle.target);
-      this.debugLogger('onStop lifecycle id => %s.', providerId);
-      const inst = await this.getAsync<ILifeCycle>(providerId);
+      let inst;
+      if (cycle.target instanceof FunctionalConfiguration) {
+        // 函数式写法
+        inst = cycle.target;
+      } else {
+        const providerId = getProviderId(cycle.target);
+        this.debugLogger('onStop lifecycle id => %s.', providerId);
+        inst = await this.getAsync<ILifeCycle>(providerId);
+      }
+
       if (inst.onStop && typeof inst.onStop === 'function') {
         await inst.onStop(this);
       }

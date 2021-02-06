@@ -1,31 +1,41 @@
-import { ILifeCycle, IMidwayContainer } from '../interface';
-import { Configuration, InjectionConfigurationOptions } from '@midwayjs/decorator';
+import { IMidwayContainer } from '../interface';
+import {
+  InjectionConfigurationOptions,
+} from '@midwayjs/decorator';
 
-export class FunctionalConfiguration implements ILifeCycle {
+export class FunctionalConfiguration {
 
-  private static readHandler;
-  private static stopHandler;
+  private readHandler;
+  private stopHandler;
+  private options: InjectionConfigurationOptions;
 
-  static onReady(readyHandler: (container: IMidwayContainer) => void) {
-    this.readHandler = readyHandler;
+  constructor(options: InjectionConfigurationOptions) {
+    this.options = options;
+  }
+
+  onReady(readyHandler: ((container: IMidwayContainer) => void) | IMidwayContainer) {
+    if (typeof readyHandler === 'function') {
+      this.readHandler = readyHandler;
+    } else {
+      this.readHandler(readyHandler);
+    }
     return this;
   }
 
-  static onStop(stopHandler: (container: IMidwayContainer) => void) {
-    this.stopHandler = stopHandler;
+  onStop(stopHandler: ((container: IMidwayContainer) => void) | IMidwayContainer) {
+    if (typeof stopHandler === 'function') {
+      this.stopHandler = stopHandler;
+    } else {
+      this.stopHandler(stopHandler);
+    }
     return this;
   }
 
-  onReady(container?: IMidwayContainer): Promise<void> {
-    return FunctionalConfiguration.readHandler.call(this, container);
-  }
-
-  onStop(container?: IMidwayContainer): Promise<void> {
-    return FunctionalConfiguration.stopHandler.call(this, container);
+  getConfigurationOptions () {
+    return this.options;
   }
 }
 
 export const createConfiguration = (options: InjectionConfigurationOptions) => {
-  Configuration(options)(FunctionalConfiguration);
-  return FunctionalConfiguration;
+  return new FunctionalConfiguration(options);
 }
