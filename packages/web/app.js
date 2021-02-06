@@ -24,6 +24,10 @@ class AppBootHook {
         this.app.middleware.pop();
       }
     }
+  }
+
+  async willReady() {
+    await this.app.webFramework.loadLifeCycles();
     const middlewareNames = this.coreMiddleware.concat(this.appMiddleware);
     // 等 midway 加载完成后，再去 use 中间件
     for (const name of middlewareNames) {
@@ -55,8 +59,6 @@ class AppBootHook {
 
     await this.app.webFramework.loadMidwayController();
   }
-
-  async willReady() {}
 
   async beforeClose() {
     await this.app.webFramework.stop();
