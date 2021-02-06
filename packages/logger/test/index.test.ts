@@ -213,10 +213,13 @@ describe('/test/index.test.ts', () => {
     await removeFileOrDir(join(process.cwd(), 'common-error.log'));
     const consoleLogger = createConsoleLogger('consoleLogger');
     consoleLogger.error('test console error');
+    console.log('---');
     const err = new Error('custom error');
     err.name = 'MyCustomError';
     consoleLogger.error(err);
+    consoleLogger.error(err, { label: 123});
     consoleLogger.error('before:', err);
+    console.log('---');
     consoleLogger.info('启动耗时 %d ms', 111);
     consoleLogger.info('%j', {a: 1});
     consoleLogger.debug('1', '2', '3');
