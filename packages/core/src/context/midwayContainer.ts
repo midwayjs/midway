@@ -225,9 +225,15 @@ export class MidwayContainer
 
         if (this.directoryFilterArray.length) {
           for (const resolveFilter of this.directoryFilterArray) {
-            if (typeof resolveFilter.pattern === 'string' && file.includes(resolveFilter.pattern)) {
+            if (
+              typeof resolveFilter.pattern === 'string' &&
+              file.includes(resolveFilter.pattern)
+            ) {
               resolveFilter.filter(exports, file, this);
-            } else if (isRegExp(resolveFilter.pattern) && (resolveFilter.pattern as RegExp).test(file)) {
+            } else if (
+              isRegExp(resolveFilter.pattern) &&
+              (resolveFilter.pattern as RegExp).test(file)
+            ) {
               resolveFilter.filter(exports, file, this);
             } else {
               // add module to set
@@ -477,10 +483,7 @@ export class MidwayContainer
     }
   }
 
-  registerObject(
-    identifier: ObjectIdentifier,
-    target: any
-  ) {
+  registerObject(identifier: ObjectIdentifier, target: any) {
     this.midwayIdentifiers.push(identifier);
     if (this?.getCurrentNamespace()) {
       if (this?.getCurrentNamespace() === MAIN_MODULE_KEY) {
@@ -920,6 +923,8 @@ export class MidwayContainer
   }
 
   public addDirectoryFilter(directoryFilter) {
-    this.directoryFilterArray = this.directoryFilterArray.concat(directoryFilter);
+    this.directoryFilterArray = this.directoryFilterArray.concat(
+      directoryFilter
+    );
   }
 }

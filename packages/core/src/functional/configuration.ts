@@ -1,10 +1,7 @@
 import { IMidwayContainer } from '../interface';
-import {
-  InjectionConfigurationOptions,
-} from '@midwayjs/decorator';
+import { InjectionConfigurationOptions } from '@midwayjs/decorator';
 
 export class FunctionalConfiguration {
-
   private readHandler;
   private stopHandler;
   private options: InjectionConfigurationOptions;
@@ -13,7 +10,9 @@ export class FunctionalConfiguration {
     this.options = options;
   }
 
-  onReady(readyHandler: ((container: IMidwayContainer) => void) | IMidwayContainer) {
+  onReady(
+    readyHandler: ((container: IMidwayContainer) => void) | IMidwayContainer
+  ) {
     if (typeof readyHandler === 'function') {
       this.readHandler = readyHandler;
     } else {
@@ -22,7 +21,9 @@ export class FunctionalConfiguration {
     return this;
   }
 
-  onStop(stopHandler: ((container: IMidwayContainer) => void) | IMidwayContainer) {
+  onStop(
+    stopHandler: ((container: IMidwayContainer) => void) | IMidwayContainer
+  ) {
     if (typeof stopHandler === 'function') {
       this.stopHandler = stopHandler;
     } else {
@@ -31,11 +32,11 @@ export class FunctionalConfiguration {
     return this;
   }
 
-  getConfigurationOptions () {
+  getConfigurationOptions() {
     return this.options;
   }
 }
 
 export const createConfiguration = (options: InjectionConfigurationOptions) => {
   return new FunctionalConfiguration(options);
-}
+};

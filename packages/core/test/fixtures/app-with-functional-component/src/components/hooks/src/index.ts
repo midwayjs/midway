@@ -1,10 +1,10 @@
 import {
   createConfiguration,
   FUNCTION_INJECT_KEY,
+  IMidwayContainer,
 } from '../../../../../../../src';
 
 import { saveClassMetadata, saveModule, ScopeEnum, CONTROLLER_KEY, Provide, Inject } from '@midwayjs/decorator';
-import { IMidwayContainer } from '../../../../../../../dist';
 
 @Provide()
 export class FunctionContainer {

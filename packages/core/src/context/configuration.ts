@@ -213,7 +213,9 @@ export class ContainerConfiguration implements IContainerConfiguration {
     let configurationOptions: InjectionConfigurationOptions;
     if (componentObject['Configuration'] instanceof FunctionalConfiguration) {
       // 函数式写法
-      configurationOptions = componentObject['Configuration'].getConfigurationOptions();
+      configurationOptions = componentObject[
+        'Configuration'
+      ].getConfigurationOptions();
     } else {
       // 普通类写法
       configurationOptions = getClassMetadata(
@@ -271,7 +273,9 @@ export class ContainerConfiguration implements IContainerConfiguration {
             this.container.addConfiguration(this);
           }
           if (configurationOptions.directoryResolveFilter) {
-            this.container.addDirectoryFilter(configurationOptions.directoryResolveFilter);
+            this.container.addDirectoryFilter(
+              configurationOptions.directoryResolveFilter
+            );
           }
           this.addImports(configurationOptions.imports, baseDir);
           this.addImportObjects(configurationOptions.importObjects);
@@ -334,12 +338,20 @@ export class ContainerConfiguration implements IContainerConfiguration {
 
   private getConfigurationExport(exports): any[] {
     const mods = [];
-    if (isClass(exports) || isFunction(exports) || exports instanceof FunctionalConfiguration) {
+    if (
+      isClass(exports) ||
+      isFunction(exports) ||
+      exports instanceof FunctionalConfiguration
+    ) {
       mods.push(exports);
     } else {
       for (const m in exports) {
         const module = exports[m];
-        if (isClass(module) || isFunction(module) || module instanceof FunctionalConfiguration) {
+        if (
+          isClass(module) ||
+          isFunction(module) ||
+          module instanceof FunctionalConfiguration
+        ) {
           mods.push(module);
         }
       }
