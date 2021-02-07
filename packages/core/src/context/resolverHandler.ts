@@ -3,6 +3,7 @@ import { ManagedResolverFactory } from './managedResolverFactory';
 import { MidwayContainer } from './midwayContainer';
 import * as util from 'util';
 import { HandlerFunction, IResolverHandler } from '../interface';
+import { recursiveGetPrototypeOf } from '../common/reflectTool';
 
 interface FrameworkDecoratorMetadata {
   key: string;
@@ -57,18 +58,24 @@ export class ResolverHandler implements IResolverHandler {
    * @param definition 定义
    */
   afterEachCreated(instance, context, definition) {
+    const instances = recursiveGetPrototypeOf(instance);
+    instances.push(instance);
+
     const iter = this.handlerMap.keys();
     for (const key of iter) {
-      // 处理配置装饰器
-      const setterProps: FrameworkDecoratorMetadata[] = getClassMetadata(
-        key,
-        instance
-      );
-      this.defineGetterPropertyValue(
-        setterProps,
-        instance,
-        this.getHandler(key)
-      );
+      for (const inst of instances) {
+        // 处理配置装饰器
+        const setterProps: FrameworkDecoratorMetadata[] = getClassMetadata(
+          key,
+          inst
+        );
+        // 定义到当前的对象中
+        this.defineGetterPropertyValue(
+          setterProps,
+          instance,
+          this.getHandler(key)
+        );
+      }
     }
   }
   /**
