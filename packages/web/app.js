@@ -15,6 +15,10 @@ class AppBootHook {
     this.app.loader.config.coreMiddleware = [];
     this.appMiddleware = this.app.loader.config.appMiddleware;
     this.app.loader.config.appMiddleware = [];
+    if (this.app.config.midwayFeature['replaceEggLogger']) {
+      // if use midway logger will be use midway custom context logger
+      this.app.ContextLogger = this.app.webFramework.BaseContextLoggerClass;
+    }
   }
 
   async didLoad() {
