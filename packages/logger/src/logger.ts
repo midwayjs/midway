@@ -23,7 +23,7 @@ const midwayLogLevels = {
   verbose: 4,
   debug: 5,
   silly: 6,
-}
+};
 
 /**
  *  base logger with console transport and file transport
@@ -37,9 +37,11 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
   defaultMetadata = {};
 
   constructor(options: LoggerOptions = {}) {
-    super(Object.assign(options, {
-      levels: midwayLogLevels,
-    }));
+    super(
+      Object.assign(options, {
+        levels: midwayLogLevels,
+      })
+    );
     this.exitOnError = false;
     if (isWindows) {
       options.disableErrorSymlink = true;
@@ -187,8 +189,8 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
     const printInfo = this.loggerOptions.printFormat
       ? this.loggerOptions.printFormat
       : info => {
-        return `${info.timestamp} ${info.LEVEL} ${info.pid} ${info.labelText}${info.message}`
-      }
+          return `${info.timestamp} ${info.LEVEL} ${info.pid} ${info.labelText}${info.message}`;
+        };
 
     return {
       format: format.combine(
@@ -205,7 +207,7 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
             return info.message;
           }
           return printInfo(info);
-        }),
+        })
       ),
     };
   }
@@ -219,8 +221,11 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
   }
 
   write(...args): any {
-    if (args.length === 1 && typeof args[0] !== 'object' || !args[0]['level']) {
-      return super.log.apply(this, ['all', ...args, {ignoreFormat: true}]);
+    if (
+      (args.length === 1 && typeof args[0] !== 'object') ||
+      !args[0]['level']
+    ) {
+      return super.log.apply(this, ['all', ...args, { ignoreFormat: true }]);
     } else {
       return super.write.apply(this, args);
     }
