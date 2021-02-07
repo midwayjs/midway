@@ -16,6 +16,10 @@ export const displayCommonMessage = format(
       info.pid = process.pid;
     }
 
+    if (!info.ignoreFormat) {
+      info.ignoreFormat = false;
+    }
+
     if (!info.LEVEL) {
       info.LEVEL = info.level.toUpperCase();
     }
@@ -38,6 +42,7 @@ export const displayCommonMessage = format(
           pid: info.pid,
           LEVEL: info.LEVEL,
           defaultLabel: info.defaultLabel,
+          ignoreFormat: info.ignoreFormat,
         },
         opts.defaultMeta || opts.target?.getDefaultMeta() || {}
       );

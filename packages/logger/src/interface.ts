@@ -21,6 +21,7 @@ export interface IMidwayLogger extends ILogger {
   updateDefaultMeta(defaultMeta: object): void;
   getDefaultLabel(): string;
   getDefaultMeta(): Record<string, unknown>;
+  write(...args): boolean;
 }
 
 export type LoggerLevel = 'silly' | 'debug' | 'info' | 'warn' | 'error';
