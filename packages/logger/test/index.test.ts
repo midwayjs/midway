@@ -510,4 +510,22 @@ describe('/test/index.test.ts', () => {
     await removeFileOrDir(logsDir);
   });
 
+  it('should use write method to file', async () => {
+    clearAllLoggers();
+    const logsDir = join(__dirname, 'logs');
+    await removeFileOrDir(logsDir);
+    const logger = createLogger<IMidwayLogger>('logger', {
+      dir: logsDir,
+      disableError: true,
+    });
+    logger.write('hello world');
+    const buffer = Buffer.from('hello world', 'utf-8');
+    logger.write(buffer);
+
+    await sleep();
+    expect(matchContentTimes(join(logsDir, 'midway-core.log'), process.pid.toString())).toEqual(0);
+    expect(matchContentTimes(join(logsDir, 'midway-core.log'), 'hello world')).toEqual(2);
+    await removeFileOrDir(logsDir);
+  });
+
 });

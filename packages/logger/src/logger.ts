@@ -15,6 +15,16 @@ const isWindows = os.platform() === 'win32';
 
 export const EmptyLogger: Logger = createLogger().constructor as Logger;
 
+const midwayLogLevels = {
+  all: 0,
+  error: 1,
+  warn: 2,
+  info: 3,
+  verbose: 4,
+  debug: 5,
+  silly: 6,
+}
+
 /**
  *  base logger with console transport and file transport
  */
@@ -27,7 +37,9 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
   defaultMetadata = {};
 
   constructor(options: LoggerOptions = {}) {
-    super(options);
+    super(Object.assign(options, {
+      levels: midwayLogLevels,
+    }));
     this.exitOnError = false;
     if (isWindows) {
       options.disableErrorSymlink = true;
@@ -62,7 +74,13 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
         format.colorize({
           all: true,
           colors: {
+            all: 'reset',
+            error: 'red',
+            warn: 'yellow',
             info: 'reset',
+            verbose: 'reset',
+            debug: 'blue',
+            silly: 'reset',
           },
         })
       ),
@@ -166,6 +184,12 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
   }
 
   getDefaultLoggerConfigure() {
+    const printInfo = this.loggerOptions.printFormat
+      ? this.loggerOptions.printFormat
+      : info => {
+        return `${info.timestamp} ${info.LEVEL} ${info.pid} ${info.labelText}${info.message}`
+      }
+
     return {
       format: format.combine(
         displayCommonMessage({
@@ -176,12 +200,12 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
           format: 'YYYY-MM-DD HH:mm:ss,SSS',
         }),
         format.splat(),
-        format.printf(
-          this.loggerOptions.printFormat
-            ? this.loggerOptions.printFormat
-            : info =>
-                `${info.timestamp} ${info.LEVEL} ${info.pid} ${info.labelText}${info.message}`
-        )
+        format.printf(info => {
+          if (info.ignoreFormat) {
+            return info.message;
+          }
+          return printInfo(info);
+        }),
       ),
     };
   }
@@ -192,6 +216,14 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
 
   getDefaultMeta(): Record<string, unknown> {
     return this.defaultMetadata;
+  }
+
+  write(...args): any {
+    if (args.length === 1 && typeof args[0] !== 'object' || !args[0]['level']) {
+      return super.log.apply(this, ['all', ...args, {ignoreFormat: true}]);
+    } else {
+      return super.write.apply(this, args);
+    }
   }
 }
 

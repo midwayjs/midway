@@ -45,7 +45,7 @@ export const matchContentTimes = (p: string, matchString: string | RegExp) => {
   }
 
   if (typeof matchString === 'string') {
-    matchString = new RegExp(matchString);
+    matchString = new RegExp(matchString, 'g');
   }
 
   const result = content.match(matchString) || [];
