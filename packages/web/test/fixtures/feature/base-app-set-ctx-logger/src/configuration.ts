@@ -11,6 +11,8 @@ export class ContainerConfiguration {
   app: any;
 
   async onReady() {
+    this.app.createAnonymousContext().logger.warn('aaaaa');
     this.app.setContextLoggerClass(MidwayCustomContextLogger);
+    this.app.createAnonymousContext().logger.warn('ccccc');
   }
 }

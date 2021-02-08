@@ -215,4 +215,9 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
     }
     return null;
   }
+
+  protected setContextLoggerClass(BaseContextLogger: any) {
+    this.BaseContextLoggerClass = BaseContextLogger;
+    this.app.ContextLogger = BaseContextLogger;
+  }
 }
