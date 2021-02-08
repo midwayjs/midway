@@ -163,6 +163,18 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
     this.add(this.errTransport);
   }
 
+  isEnableFile(): boolean {
+    return !!this.fileTransport;
+  }
+
+  isEnableConsole(): boolean {
+    return !!this.consoleTransport;
+  }
+
+  isEnableError(): boolean {
+    return !!this.errTransport;
+  }
+
   updateLevel(level: LoggerLevel): void {
     this.level = level;
     this.consoleTransport.level = level;
@@ -229,6 +241,18 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
     } else {
       return super.write.apply(this, args);
     }
+  }
+
+  add(transport): any {
+    return super.add(transport);
+  }
+
+  remove(transport: any): any {
+    return super.remove(transport);
+  }
+
+  close(): any {
+    return super.close();
   }
 }
 

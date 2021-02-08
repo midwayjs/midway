@@ -24,7 +24,7 @@ export class MidwayContextLogger<T> {
   protected contextLogger: ILogger;
   public ctx: T;
 
-  constructor(ctx, contextLogger: ILogger, contextLabelHandler?) {
+  constructor(ctx, contextLogger: ILogger) {
     this.ctx = ctx;
     this.contextLogger = contextLogger;
   }
@@ -57,6 +57,7 @@ export class MidwayContextLogger<T> {
       ...args,
       {
         label: this.formatContextLabel(),
+        ctx: this.ctx,
       },
     ]);
   }

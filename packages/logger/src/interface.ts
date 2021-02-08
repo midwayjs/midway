@@ -14,6 +14,9 @@ export interface IMidwayLogger extends ILogger {
   enableFile();
   disableError();
   enableError();
+  isEnableFile(): boolean ;
+  isEnableConsole(): boolean;
+  isEnableError(): boolean ;
   updateLevel(level: LoggerLevel): void;
   updateFileLevel(level: LoggerLevel): void;
   updateConsoleLevel(level: LoggerLevel): void;
@@ -22,6 +25,9 @@ export interface IMidwayLogger extends ILogger {
   getDefaultLabel(): string;
   getDefaultMeta(): Record<string, unknown>;
   write(...args): boolean;
+  add(transport: any): any;
+  remove(transport: any): any;
+  close(): any;
 }
 
 export type LoggerLevel = 'silly' | 'debug' | 'info' | 'warn' | 'error';

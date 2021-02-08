@@ -20,6 +20,10 @@ export const displayCommonMessage = format(
       info.ignoreFormat = false;
     }
 
+    if (!info.ctx) {
+      info.ctx = null;
+    }
+
     if (!info.LEVEL) {
       info.LEVEL = info.level.toUpperCase();
     }
@@ -43,6 +47,7 @@ export const displayCommonMessage = format(
           LEVEL: info.LEVEL,
           defaultLabel: info.defaultLabel,
           ignoreFormat: info.ignoreFormat,
+          ctx: null,
         },
         opts.defaultMeta || opts.target?.getDefaultMeta() || {}
       );
