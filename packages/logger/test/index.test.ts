@@ -549,6 +549,11 @@ describe('/test/index.test.ts', () => {
       disableError: true,
       level: 'info',
     });
+
+    expect(logger.isEnableConsole()).toBeTruthy();
+    expect(logger.isEnableFile()).toBeTruthy();
+    expect(logger.isEnableError()).toBeFalsy();
+
     const customTransport = new CustomTransport({
       level: 'warn'
     });
