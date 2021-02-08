@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.7.5](https://github.com/midwayjs/midway/compare/v2.7.4...v2.7.5) (2021-02-08)
+
+
+### Bug Fixes
+
+* ctx logger overwrite in egg extend ([#846](https://github.com/midwayjs/midway/issues/846)) ([a9d7a0d](https://github.com/midwayjs/midway/commit/a9d7a0dab8db24c970fe6528deb62afcf24c11b0))
+* load ready after super.load ([#840](https://github.com/midwayjs/midway/issues/840)) ([e329333](https://github.com/midwayjs/midway/commit/e3293338514909179da31847027f46f23cdc1759))
+* stack missing in context logger ([#841](https://github.com/midwayjs/midway/issues/841)) ([7b27145](https://github.com/midwayjs/midway/commit/7b27145ec49c1f89740f8d6f811a00308e90e498))
+
+
+### Features
+
+* add configuration functional support ([#843](https://github.com/midwayjs/midway/issues/843)) ([bfaa0aa](https://github.com/midwayjs/midway/commit/bfaa0aad9e8ce667a4bb98af60f1c706e09e7810))
+* add enable method ([#847](https://github.com/midwayjs/midway/issues/847)) ([a85b99d](https://github.com/midwayjs/midway/commit/a85b99dd775b9cf69dec3a7fa78248d4d82ad814))
+* add logger.write method ([#844](https://github.com/midwayjs/midway/issues/844)) ([0051d07](https://github.com/midwayjs/midway/commit/0051d07d22e9cf88828b723861925d75b00a985f))
+
+
+
+
+
 ## [2.7.4](https://github.com/midwayjs/midway/compare/v2.7.3...v2.7.4) (2021-02-03)
 
 

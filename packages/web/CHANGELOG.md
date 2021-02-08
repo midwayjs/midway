@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.7.5](https://github.com/midwayjs/midway/compare/v2.7.4...v2.7.5) (2021-02-08)
+
+
+### Bug Fixes
+
+* ctx logger overwrite in egg extend ([#846](https://github.com/midwayjs/midway/issues/846)) ([a9d7a0d](https://github.com/midwayjs/midway/commit/a9d7a0dab8db24c970fe6528deb62afcf24c11b0))
+* load ready after super.load ([#840](https://github.com/midwayjs/midway/issues/840)) ([e329333](https://github.com/midwayjs/midway/commit/e3293338514909179da31847027f46f23cdc1759))
+
+
+
+
+
 ## [2.7.3](https://github.com/midwayjs/midway/compare/v2.7.2...v2.7.3) (2021-02-02)
 
 

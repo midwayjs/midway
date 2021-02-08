@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.7.5](https://github.com/midwayjs/midway/compare/v2.7.4...v2.7.5) (2021-02-08)
+
+
+### Bug Fixes
+
+* stack missing in context logger ([#841](https://github.com/midwayjs/midway/issues/841)) ([7b27145](https://github.com/midwayjs/midway/commit/7b27145ec49c1f89740f8d6f811a00308e90e498))
+
+
+### Features
+
+* add enable method ([#847](https://github.com/midwayjs/midway/issues/847)) ([a85b99d](https://github.com/midwayjs/midway/commit/a85b99dd775b9cf69dec3a7fa78248d4d82ad814))
+* add logger.write method ([#844](https://github.com/midwayjs/midway/issues/844)) ([0051d07](https://github.com/midwayjs/midway/commit/0051d07d22e9cf88828b723861925d75b00a985f))
+
+
+
+
+
 # [2.7.0](https://github.com/midwayjs/midway/compare/v2.6.13...v2.7.0) (2021-01-27)
 
 
