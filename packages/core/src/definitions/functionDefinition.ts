@@ -8,6 +8,7 @@ import {
   IObjectCreator,
   IObjectDefinition,
   IApplicationContext,
+  HandlerProp
 } from '../interface';
 import { ObjectCreator } from './objectCreator';
 
@@ -51,6 +52,7 @@ export class FunctionDefinition implements IObjectDefinition {
   properties: IProperties;
   namespace = '';
   asynchronous = true;
+  handlerProps: HandlerProp[] = [];
   // 函数工厂创建的对象默认不需要自动装配
   protected innerAutowire = false;
   protected innerScope: ScopeEnum = ScopeEnum.Singleton;
