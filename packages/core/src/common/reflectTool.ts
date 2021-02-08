@@ -59,10 +59,11 @@ export function recursiveGetPrototypeOf(target: any): any[] {
   return properties;
 }
 
-export function getOwnMetadata(metadataKey: any,
-    target: any,
-    propertyKey?: string | symbol
-  ): ReflectResult {
+export function getOwnMetadata(
+  metadataKey: any,
+  target: any,
+  propertyKey?: string | symbol
+): ReflectResult {
   return Reflect.getOwnMetadata(metadataKey, target, propertyKey);
 }
 

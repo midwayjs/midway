@@ -351,13 +351,18 @@ export class MidwayContainer
 
       const meta = getOwnMetadata(INJECT_CLASS_KEY_PREFIX, p) as any;
       if (meta) {
-        for (let [key, vals] of meta) {
+        for (const [key, vals] of meta) {
           if (Array.isArray(vals)) {
             for (const val of vals) {
-              if (typeof val.key === 'string' && typeof val.propertyName === 'string') {
+              if (
+                typeof val.key === 'string' &&
+                typeof val.propertyName === 'string'
+              ) {
                 definitionMeta.handlerProps.push({
-                  handlerKey: DecoratorManager.removeDecoratorClassKeySuffix(key),
-                  prop: val
+                  handlerKey: DecoratorManager.removeDecoratorClassKeySuffix(
+                    key
+                  ),
+                  prop: val,
                 });
               }
             }
@@ -365,7 +370,6 @@ export class MidwayContainer
         }
       }
     }
-
 
     this.convertOptionsToDefinition(options, definitionMeta);
     // 对象自定义的annotations可以覆盖默认的属性

@@ -8,7 +8,7 @@ import {
   IObjectCreator,
   IObjectDefinition,
   IApplicationContext,
-  HandlerProp
+  HandlerProp,
 } from '../interface';
 import { ObjectCreator } from './objectCreator';
 

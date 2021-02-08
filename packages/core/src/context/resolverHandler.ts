@@ -2,7 +2,12 @@ import { CLASS_KEY_CONSTRUCTOR, getClassMetadata } from '@midwayjs/decorator';
 import { ManagedResolverFactory } from './managedResolverFactory';
 import { MidwayContainer } from './midwayContainer';
 import * as util from 'util';
-import { HandlerFunction, IResolverHandler, FrameworkDecoratorMetadata, IObjectDefinition } from '../interface';
+import {
+  HandlerFunction,
+  IResolverHandler,
+  FrameworkDecoratorMetadata,
+  IObjectDefinition,
+} from '../interface';
 
 const debug = util.debuglog('midway:container');
 
@@ -55,7 +60,11 @@ export class ResolverHandler implements IResolverHandler {
     if (Array.isArray(definition.handlerProps)) {
       // 已经预先在 bind 时处理
       for (const item of definition.handlerProps) {
-        this.defineGetterPropertyValue(item.prop, instance, this.getHandler(item.handlerKey));
+        this.defineGetterPropertyValue(
+          item.prop,
+          instance,
+          this.getHandler(item.handlerKey)
+        );
       }
     }
   }
