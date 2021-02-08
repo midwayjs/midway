@@ -2,13 +2,7 @@ import { CLASS_KEY_CONSTRUCTOR, getClassMetadata } from '@midwayjs/decorator';
 import { ManagedResolverFactory } from './managedResolverFactory';
 import { MidwayContainer } from './midwayContainer';
 import * as util from 'util';
-import { HandlerFunction, IResolverHandler } from '../interface';
-import { recursiveGetPrototypeOf } from '../common/reflectTool';
-
-interface FrameworkDecoratorMetadata {
-  key: string;
-  propertyName: string;
-}
+import { HandlerFunction, IResolverHandler, FrameworkDecoratorMetadata, IObjectDefinition } from '../interface';
 
 const debug = util.debuglog('midway:container');
 
@@ -57,24 +51,11 @@ export class ResolverHandler implements IResolverHandler {
    * @param context 上下文
    * @param definition 定义
    */
-  afterEachCreated(instance, context, definition) {
-    const instances = recursiveGetPrototypeOf(instance);
-    instances.push(instance);
-
-    const iter = this.handlerMap.keys();
-    for (const key of iter) {
-      for (const inst of instances) {
-        // 处理配置装饰器
-        const setterProps: FrameworkDecoratorMetadata[] = getClassMetadata(
-          key,
-          inst
-        );
-        // 定义到当前的对象中
-        this.defineGetterPropertyValue(
-          setterProps,
-          instance,
-          this.getHandler(key)
-        );
+  afterEachCreated(instance, context, definition: IObjectDefinition) {
+    if (Array.isArray(definition.handlerProps)) {
+      // 已经预先在 bind 时处理
+      for (const item of definition.handlerProps) {
+        this.defineGetterPropertyValue(item.prop, instance, this.getHandler(item.handlerKey));
       }
     }
   }
@@ -86,19 +67,17 @@ export class ResolverHandler implements IResolverHandler {
    * @param getterHandler
    */
   private defineGetterPropertyValue(
-    setterProps: FrameworkDecoratorMetadata[],
+    prop: FrameworkDecoratorMetadata,
     instance,
     getterHandler
   ) {
-    if (setterProps && getterHandler) {
-      for (const prop of setterProps) {
-        if (prop.propertyName) {
-          Object.defineProperty(instance, prop.propertyName, {
-            get: () => getterHandler(prop.key, instance),
-            configurable: true, // 继承对象有可能会有相同属性，这里需要配置成 true
-            enumerable: true,
-          });
-        }
+    if (prop && getterHandler) {
+      if (prop.propertyName) {
+        Object.defineProperty(instance, prop.propertyName, {
+          get: () => getterHandler(prop.key, instance),
+          configurable: true, // 继承对象有可能会有相同属性，这里需要配置成 true
+          enumerable: true,
+        });
       }
     }
   }

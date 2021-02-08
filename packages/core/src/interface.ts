@@ -66,6 +66,13 @@ export interface IObjectDefinition {
   getAttr(key: ObjectIdentifier): any;
   hasAttr(key: ObjectIdentifier): boolean;
   setAttr(key: ObjectIdentifier, value: any): void;
+  // 暂存依赖的 key、propertyName
+  handlerProps: HandlerProp[];
+}
+
+export interface HandlerProp {
+  handlerKey: string;
+  prop: FrameworkDecoratorMetadata;
 }
 
 /**
@@ -87,9 +94,15 @@ export interface IObjectDefinitionMetadata {
   constructorArgs: Array<{ value?: string; args?: any; type: string; } | undefined>;
   asynchronous: boolean;
   properties: any[];
-  definitionType: 'object' | 'function'
+  definitionType: 'object' | 'function';
+  // 暂存依赖的 key、propertyName
+  handlerProps: HandlerProp[];
 }
 
+export interface FrameworkDecoratorMetadata {
+  key: string;
+  propertyName: string;
+}
 
 export interface IObjectCreator {
   load(): any;

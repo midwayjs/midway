@@ -31,11 +31,13 @@ export type DecoratorKey = string | symbol;
 
 export const PRELOAD_MODULE_KEY = 'INJECTION_PRELOAD_MODULE_KEY';
 
+export const INJECT_CLASS_KEY_PREFIX = 'INJECTION_CLASS_META_DATA';
+
 export class DecoratorManager extends Map {
   /**
    * the key for meta data store in class
    */
-  injectClassKeyPrefix = 'INJECTION_CLASS_META_DATA';
+  injectClassKeyPrefix = INJECT_CLASS_KEY_PREFIX;
   /**
    * the key for method meta data store in class
    */
@@ -59,6 +61,10 @@ export class DecoratorManager extends Map {
 
   static getDecoratorClassKey(decoratorNameKey: DecoratorKey) {
     return decoratorNameKey.toString() + '_CLS';
+  }
+
+  static removeDecoratorClassKeySuffix(decoratorNameKey: DecoratorKey) {
+    return decoratorNameKey.toString().replace('_CLS', '');
   }
 
   static getDecoratorMethodKey(decoratorNameKey: DecoratorKey) {

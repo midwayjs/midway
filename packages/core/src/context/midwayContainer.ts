@@ -25,6 +25,8 @@ import {
   ASPECT_KEY,
   listPreloadModule,
   isProxy,
+  INJECT_CLASS_KEY_PREFIX,
+  DecoratorManager
 } from '@midwayjs/decorator';
 import { ContainerConfiguration } from './configuration';
 import { FUNCTION_INJECT_KEY } from '../common/constants';
@@ -46,7 +48,7 @@ import { run } from '@midwayjs/glob';
 import * as pm from 'picomatch';
 import { BaseApplicationContext } from './applicationContext';
 import * as util from 'util';
-import { recursiveGetMetadata } from '../common/reflectTool';
+import { getOwnMetadata, recursiveGetPrototypeOf } from '../common/reflectTool';
 import { ObjectDefinition } from '../definitions/objectDefinition';
 import { FunctionDefinition } from '../definitions/functionDefinition';
 import { ManagedReference, ManagedValue } from './managed';
@@ -301,20 +303,44 @@ export class MidwayContainer
     }
 
     // inject properties
-    const metaDatas = recursiveGetMetadata(TAGGED_PROP, target);
+    const props = recursiveGetPrototypeOf(target);
+    props.push(target);
+
     definitionMeta.properties = [];
-    for (const metaData of metaDatas) {
-      this.debugLogger(`  inject properties => [${Object.keys(metaData)}]`);
-      for (const metaKey in metaData) {
-        for (const propertyMeta of metaData[metaKey]) {
-          definitionMeta.properties.push({
-            metaKey,
-            args: propertyMeta.args,
-            value: propertyMeta.value,
-          });
+    definitionMeta.handlerProps = [];
+    for (const p of props) {
+      const metaData = getOwnMetadata(TAGGED_PROP, p);
+
+      if (metaData) {
+        this.debugLogger(`  inject properties => [${Object.keys(metaData)}]`);
+        for (const metaKey in metaData) {
+          for (const propertyMeta of metaData[metaKey]) {
+            definitionMeta.properties.push({
+              metaKey,
+              args: propertyMeta.args,
+              value: propertyMeta.value,
+            });
+          }
+        }
+      }
+
+      const meta = getOwnMetadata(INJECT_CLASS_KEY_PREFIX, p) as any;
+      if (meta) {
+        for (let [key, vals] of meta) {
+          if (Array.isArray(vals)) {
+            for (const val of vals) {
+              if (typeof val.key === 'string' && typeof val.propertyName === 'string') {
+                definitionMeta.handlerProps.push({
+                  handlerKey: DecoratorManager.removeDecoratorClassKeySuffix(key),
+                  prop: val
+                });
+              }
+            }
+          }
         }
       }
     }
+
 
     this.convertOptionsToDefinition(options, definitionMeta);
     // 对象自定义的annotations可以覆盖默认的属性
@@ -388,6 +414,7 @@ export class MidwayContainer
     definition.destroyMethod = definitionMeta.destroyMethod;
     definition.scope = definitionMeta.scope;
     definition.autowire = definitionMeta.autowire;
+    definition.handlerProps = definitionMeta.handlerProps;
 
     this.registerDefinition(definitionMeta.id, definition);
   }

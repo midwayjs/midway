@@ -1,4 +1,4 @@
-import { IObjectCreator, IObjectDefinition } from '../interface';
+import { IObjectCreator, IObjectDefinition, HandlerProp } from '../interface';
 import { ScopeEnum, ObjectIdentifier } from '@midwayjs/decorator';
 import { ObjectProperties } from './properties';
 import { ObjectCreator } from './objectCreator';
@@ -23,6 +23,7 @@ export class ObjectDefinition implements IObjectDefinition {
   dependsOn: ObjectIdentifier[] = [];
   properties = new ObjectProperties();
   namespace = '';
+  handlerProps: HandlerProp[] = [];
 
   constructor() {
     this.creator = new ObjectCreator(this);
