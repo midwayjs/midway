@@ -47,3 +47,4 @@ export * from './features';
 export * from './util/webRouterParam';
 export { plainToClass, classToPlain } from 'class-transformer';
 export * from './logger';
+export { createConfiguration } from './functional/configuration';

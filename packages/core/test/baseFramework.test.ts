@@ -610,4 +610,18 @@ describe('/test/baseFramework.test.ts', () => {
 
     await framework.stop();
   });
+
+  it('should support functional configuration and hook load', async () => {
+    const framework = new MockFramework();
+    await framework.initialize({
+      baseDir: path.join(
+        __dirname,
+        './fixtures/app-with-functional-component/src'
+      ),
+    });
+
+    await framework.stop();
+
+    // const appCtx = framework.getApplicationContext();
+  });
 });
