@@ -7,7 +7,9 @@ import {
   IMidwayLogger,
   loggers,
   format,
-  displayCommonMessage
+  displayCommonMessage,
+  EmptyTransport,
+  ILogger
 } from '../src';
 import { join } from 'path';
 import {
@@ -21,8 +23,7 @@ import {
   getCurrentDateString
 } from './util';
 import { EggLogger } from 'egg-logger';
-import { readFileSync } from "fs";
-import { ILogger } from '../dist';
+import { readFileSync, writeFileSync } from 'fs';
 
 describe('/test/index.test.ts', () => {
   it('should test create logger', async () => {
@@ -525,6 +526,47 @@ describe('/test/index.test.ts', () => {
     await sleep();
     expect(matchContentTimes(join(logsDir, 'midway-core.log'), process.pid.toString())).toEqual(0);
     expect(matchContentTimes(join(logsDir, 'midway-core.log'), 'hello world')).toEqual(2);
+    await removeFileOrDir(logsDir);
+  });
+
+  it('should custom transport', async () => {
+    clearAllLoggers();
+    const logsDir = join(__dirname, 'logs');
+    await removeFileOrDir(logsDir);
+
+    class CustomTransport extends EmptyTransport {
+      log(info, callback) {
+        const levelLowerCase = info.level;
+        if (levelLowerCase === 'error' || levelLowerCase === 'warn') {
+          writeFileSync(join(logsDir, 'test.log'), info.message);
+        }
+        callback();
+      }
+    }
+
+    const logger = createLogger<IMidwayLogger>('logger', {
+      dir: logsDir,
+      disableError: true,
+      level: 'info',
+    });
+    const customTransport = new CustomTransport({
+      level: 'warn'
+    });
+    logger.add(customTransport);
+    logger.info('hello world info');
+    logger.warn('hello world warn');
+    logger.remove(customTransport);
+    logger.warn('hello world another warn');
+    await sleep();
+
+    expect(matchContentTimes(join(logsDir, 'midway-core.log'), 'hello world info')).toEqual(1);
+    expect(matchContentTimes(join(logsDir, 'midway-core.log'), 'hello world warn')).toEqual(1);
+    expect(matchContentTimes(join(logsDir, 'midway-core.log'), 'hello world another warn')).toEqual(1);
+
+    expect(matchContentTimes(join(logsDir, 'test.log'), 'hello world info')).toEqual(0);
+    expect(matchContentTimes(join(logsDir, 'test.log'), 'hello world warn')).toEqual(1);
+    expect(matchContentTimes(join(logsDir, 'test.log'), 'hello world another warn')).toEqual(0);
+
     await removeFileOrDir(logsDir);
   });
 
