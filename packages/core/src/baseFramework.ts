@@ -27,6 +27,7 @@ import { isAbsolute, join, dirname } from 'path';
 import { createMidwayLogger, MidwayContextLogger } from './logger';
 import { safeRequire } from './util';
 import { MidwayRequestContainer } from './context/requestContainer';
+import { FunctionalConfiguration } from './functional/configuration';
 
 function buildLoadDir(baseDir, dir) {
   if (!isAbsolute(dir)) {
@@ -368,10 +369,18 @@ export abstract class BaseFramework<
       CONFIGURATION_KEY
     );
     for (const cycle of cycles) {
-      const providerId = getProviderId(cycle.target);
-      const inst = await this.getApplicationContext().getAsync<ILifeCycle>(
-        providerId
-      );
+      let inst;
+      if (cycle.target instanceof FunctionalConfiguration) {
+        // 函数式写法
+        inst = cycle.target;
+      } else {
+        // 普通类写法
+        const providerId = getProviderId(cycle.target);
+        inst = await this.getApplicationContext().getAsync<ILifeCycle>(
+          providerId
+        );
+      }
+
       if (typeof inst.onReady === 'function') {
         /**
          * 让组件能正确获取到 bind 之后 registerObject 的对象有三个方法

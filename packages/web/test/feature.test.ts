@@ -1,5 +1,5 @@
 import { closeApp, creatApp, createHttpRequest, matchContentTimes, sleep } from './utils';
-import { IMidwayWebApplication } from '../src/interface';
+import { IMidwayWebApplication } from '../src';
 import { join } from 'path';
 
 describe('/test/feature.test.ts', () => {
@@ -76,7 +76,8 @@ describe('/test/feature.test.ts', () => {
     expect(result.status).toEqual(200);
     expect(result.text).toEqual('hello world,harry');
     await sleep();
-    expect(matchContentTimes(join(app.getAppDir(), 'logs', 'ali-demo', 'midway-web.log'), 'custom label')).toEqual(1);
+    expect(matchContentTimes(join(app.getAppDir(), 'logs', 'ali-demo', 'midway-web.log'), 'GET /] aaaaa')).toEqual(3);
+    expect(matchContentTimes(join(app.getAppDir(), 'logs', 'ali-demo', 'midway-web.log'), 'abcde] custom label')).toEqual(1);
     await closeApp(app);
   });
 

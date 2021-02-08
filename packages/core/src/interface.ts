@@ -5,6 +5,7 @@ import {
   ObjectDefinitionOptions,
   IMethodAspect,
   AspectMetadata,
+  ResolveFilter,
 } from '@midwayjs/decorator';
 import { ILogger, LoggerOptions } from '@midwayjs/logger';
 /**
@@ -236,7 +237,6 @@ export interface IContainerConfiguration {
   bindConfigurationClass(clzz: any, filePath?: string);
 }
 
-
 export type HandlerFunction = (handlerKey: string, instance?: any) => any;
 
 export interface IResolverHandler {
@@ -275,7 +275,8 @@ export interface IMidwayContainer extends IApplicationContext {
   addAspect(
     aspectIns: IMethodAspect,
     aspectData: AspectMetadata
-  )
+  );
+  addDirectoryFilter(filter: ResolveFilter[]);
 }
 
 export interface IConfigService {
