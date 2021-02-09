@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.7.6](https://github.com/midwayjs/midway/compare/v2.7.5...v2.7.6) (2021-02-09)
+
+
+### Bug Fixes
+
+* loggers with egg logger instance and invoke disableConsole method ([#849](https://github.com/midwayjs/midway/issues/849)) ([b5d18e2](https://github.com/midwayjs/midway/commit/b5d18e22764b06b0a9f95e924c475678e78f6b42))
+
+
+
+
+
 ## [2.7.5](https://github.com/midwayjs/midway/compare/v2.7.4...v2.7.5) (2021-02-08)
 
 
