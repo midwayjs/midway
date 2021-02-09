@@ -8,7 +8,7 @@ import {
   renameSync,
   unlinkSync,
 } from 'fs';
-import { Application } from 'egg';
+import { Application, EggLogger } from 'egg';
 import { MidwayProcessTypeEnum } from '@midwayjs/core';
 import { getCurrentDateString } from './utils';
 import * as os from 'os';
@@ -219,12 +219,21 @@ class MidwayLoggers extends Map<string, ILogger> {
 
   disableConsole() {
     for (const value of this.values()) {
-      (value as IMidwayLogger)?.disableConsole();
+      if ((value as IMidwayLogger)?.disableConsole) {
+        (value as IMidwayLogger)?.disableConsole();
+      } else if ((value as EggLogger).disable) {
+        (value as EggLogger).disable('console');
+      }
     }
   }
 
   reload() {
-    // empty method for egg logrotator
+    // 忽略 midway logger，只有 egg logger 需要做切割
+    for (const value of this.values()) {
+      if ((value as EggLogger).reload) {
+        (value as EggLogger).reload();
+      }
+    }
   }
 }
 
