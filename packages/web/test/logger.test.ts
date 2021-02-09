@@ -4,6 +4,7 @@ import { join } from 'path';
 import { existsSync, readFileSync, writeFileSync, ensureDir, remove, symlinkSync } from 'fs-extra';
 import { lstatSync } from 'fs';
 import { getCurrentDateString } from '../src/utils';
+import { EggLogger } from 'egg-logger';
 
 describe('test/logger.test.js', () => {
 
@@ -248,6 +249,12 @@ describe('test/logger.test.js', () => {
     mm(process.env, 'EGG_HOME', getFilepath('apps/mock-production-app/src/config'));
     const app = await creatApp('apps/mock-production-app');
 
+    app.loggers.set('anotherLogger', new EggLogger({
+      file: join(process.env['EGG_HOME'],'another.log'),
+    }));
+
+    app.loggers.disableConsole();
+
     expect(app.config.logger.disableConsoleAfterReady === true);
     const ctx = app.mockContext();
     const logfile = join(app.config.logger.dir, 'common-error.log');
@@ -258,6 +265,8 @@ describe('test/logger.test.js', () => {
     console.log(logfile)
     expect(existsSync(logfile)).toBeTruthy();
     expect(readFileSync(logfile, 'utf8').includes(''));
+
+    app.loggers.reload();
     await closeApp(app);
   });
 
