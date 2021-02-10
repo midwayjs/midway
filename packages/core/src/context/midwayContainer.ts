@@ -355,7 +355,8 @@ export class MidwayContainer
           if (Array.isArray(vals)) {
             for (const val of vals) {
               if (
-                typeof val.key === 'string' &&
+                val.key !== undefined &&
+                val.key !== null &&
                 typeof val.propertyName === 'string'
               ) {
                 definitionMeta.handlerProps.push({

@@ -1,4 +1,4 @@
-import {Async, Destroy, Init, Inject, Provide} from '@midwayjs/decorator';
+import {App, Async, Config, Destroy, Init, Inject, Provide, Plugin} from '@midwayjs/decorator';
 
 export interface Warrior {
   katana1;
@@ -88,4 +88,26 @@ export class SubChild {
 export class SubParent {
   @Inject()
   subChild: SubChild;
+}
+
+export class ParentCustom {
+  @Config('hello')
+  hello: any;
+
+  @App()
+  a: any;
+
+  @Plugin('hh')
+  p: any;
+}
+@Provide('subCustom')
+export class SubCustom extends ParentCustom {
+  @Config('tt')
+  tt: any;
+
+  @App()
+  a: any;
+
+  @Plugin()
+  bb: any;
 }

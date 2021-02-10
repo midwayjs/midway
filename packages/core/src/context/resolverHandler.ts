@@ -57,7 +57,7 @@ export class ResolverHandler implements IResolverHandler {
    * @param definition 定义
    */
   afterEachCreated(instance, context, definition: IObjectDefinition) {
-    if (Array.isArray(definition.handlerProps)) {
+    if (this.handlerMap.size > 0 && Array.isArray(definition.handlerProps)) {
       // 已经预先在 bind 时处理
       for (const item of definition.handlerProps) {
         this.defineGetterPropertyValue(
