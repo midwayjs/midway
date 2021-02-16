@@ -49,6 +49,7 @@ export class FaaSStarter implements IFaaSStarter {
   constructor(
     options: {
       baseDir?: string;
+      codeDir?: string;
       config?: object;
       middleware?: string[];
       typescript?: boolean;
@@ -67,7 +68,7 @@ export class FaaSStarter implements IFaaSStarter {
      */
     this.globalMiddleware = options.middleware || [];
     this.logger = options.logger || console;
-    this.baseDir = this.getFaaSBaseDir();
+    this.baseDir = options.codeDir || this.getFaaSBaseDir();
     this.initializeContext = options.initializeContext || {};
     this.webApplication = this.defineApplicationProperties(
       options.applicationAdapter?.getApplication() || {}
