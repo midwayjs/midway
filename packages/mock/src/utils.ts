@@ -85,10 +85,11 @@ export async function create<
         reject(new Error('[midway]: bootstrap timeout'));
       }, 30 * 1000);
       const internalHandler = setInterval(() => {
-        global['MIDWAY_BOOTSTRAP_APP_READY'] = true;
-        clearInterval(internalHandler);
-        clearTimeout(timeoutHandler);
-        resolve();
+        if (global['MIDWAY_BOOTSTRAP_APP_READY'] === true) {
+          clearInterval(internalHandler);
+          clearTimeout(timeoutHandler);
+          resolve();
+        }
       }, 200);
     });
     let currentFramework;
