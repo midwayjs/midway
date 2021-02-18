@@ -45,6 +45,7 @@ export * from './common/constants';
 export { safelyGet, safeRequire } from './util/';
 export * from './features';
 export * from './util/webRouterParam';
+export * from './util/webRouterCollector';
 export { plainToClass, classToPlain } from 'class-transformer';
 export * from './logger';
 export { createConfiguration } from './functional/configuration';

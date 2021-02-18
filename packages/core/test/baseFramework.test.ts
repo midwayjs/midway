@@ -16,7 +16,7 @@ import {
 import * as mm from 'mm';
 import sinon = require('sinon');
 import { LifeCycleTest, LifeCycleTest1, TestBinding } from "./fixtures/lifecycle";
-import { MockFramework } from './util';
+import { EmptyFramework } from '../src/util/emptyFramework';
 
 @Provide()
 class TestModule {
@@ -32,7 +32,7 @@ describe('/test/baseFramework.test.ts', () => {
   });
 
   it.skip('should load js directory and auto disable', async () => {
-    const framework = new MockFramework();
+    const framework = new EmptyFramework();
     await framework.initialize({
       baseDir: path.join(__dirname, './fixtures/js-app-loader'),
       isTsMode: false,
@@ -47,7 +47,7 @@ describe('/test/baseFramework.test.ts', () => {
   });
 
   it('should load preload module', async () => {
-    const framework = new MockFramework();
+    const framework = new EmptyFramework();
     await framework.initialize({
       baseDir: path.join(__dirname, './fixtures/base-app/src'),
       preloadModules: [TestModule],
@@ -59,7 +59,7 @@ describe('/test/baseFramework.test.ts', () => {
   });
 
   it('should load configuration', async () => {
-    const framework = new MockFramework();
+    const framework = new EmptyFramework();
     await framework.initialize({
       baseDir: path.join(
         __dirname,
@@ -82,7 +82,7 @@ describe('/test/baseFramework.test.ts', () => {
   });
 
   it('should load config.*.ts by default env', async () => {
-    const framework = new MockFramework();
+    const framework = new EmptyFramework();
     await framework.initialize({
       baseDir: path.join(
         __dirname,
@@ -98,7 +98,7 @@ describe('/test/baseFramework.test.ts', () => {
 
   it('should load config.*.ts by process.env', async () => {
     mm(process.env, 'NODE_ENV', 'local');
-    const framework = new MockFramework();
+    const framework = new EmptyFramework();
     await framework.initialize({
       baseDir: path.join(
         __dirname,
@@ -118,7 +118,7 @@ describe('/test/baseFramework.test.ts', () => {
       callback(m);
     });
 
-    const framework = new MockFramework();
+    const framework = new EmptyFramework();
     await framework.initialize({
       baseDir: path.join(
         __dirname,
@@ -137,7 +137,7 @@ describe('/test/baseFramework.test.ts', () => {
 
   it('should load with no package.json', async () => {
     mm(process.env, 'MIDWAY_SERVER_ENV', 'local');
-    const framework = new MockFramework();
+    const framework = new EmptyFramework();
     await framework.initialize({
       baseDir: path.join(
         __dirname,
@@ -160,7 +160,7 @@ describe('/test/baseFramework.test.ts', () => {
 
   it('should load configuration with namespace', async () => {
     mm(process.env, 'MIDWAY_SERVER_ENV', 'local');
-    const framework = new MockFramework();
+    const framework = new EmptyFramework();
     await framework.initialize({
       baseDir: path.join(
         __dirname,
@@ -203,7 +203,7 @@ describe('/test/baseFramework.test.ts', () => {
 
   it('should load configuration with object', async () => {
     mm(process.env, 'MIDWAY_SERVER_ENV', 'local');
-    const framework = new MockFramework();
+    const framework = new EmptyFramework();
     await framework.initialize({
       baseDir: path.join(
         __dirname,
@@ -250,7 +250,7 @@ describe('/test/baseFramework.test.ts', () => {
   // });
 
   it('should load conflict without error', async () => {
-    const framework = new MockFramework();
+    const framework = new EmptyFramework();
     await framework.initialize({
       baseDir: path.join(
         __dirname,
@@ -268,7 +268,7 @@ describe('/test/baseFramework.test.ts', () => {
     it('load default env', async () => {
       mm(process.env, 'NODE_ENV', '');
       mm(process.env, 'MIDWAY_SERVER_ENV', '');
-      const framework = new MockFramework();
+      const framework = new EmptyFramework();
       await framework.initialize({
         baseDir: path.join(
           __dirname,
@@ -285,7 +285,7 @@ describe('/test/baseFramework.test.ts', () => {
     it('load prod env', async () => {
       mm(process.env, 'NODE_ENV', 'prod');
       mm(process.env, 'MIDWAY_SERVER_ENV', '');
-      const framework = new MockFramework();
+      const framework = new EmptyFramework();
       await framework.initialize({
         baseDir: path.join(
           __dirname,
@@ -302,7 +302,7 @@ describe('/test/baseFramework.test.ts', () => {
 
     it('load daily env', async () => {
       mm(process.env, 'NODE_ENV', 'daily');
-      const framework = new MockFramework();
+      const framework = new EmptyFramework();
       await framework.initialize({
         baseDir: path.join(
           __dirname,
@@ -320,7 +320,7 @@ describe('/test/baseFramework.test.ts', () => {
     it('load pre env', async () => {
       mm(process.env, 'NODE_ENV', 'pre');
       mm(process.env, 'MIDWAY_SERVER_ENV', '');
-      const framework = new MockFramework();
+      const framework = new EmptyFramework();
       await framework.initialize({
         baseDir: path.join(
           __dirname,
@@ -339,7 +339,7 @@ describe('/test/baseFramework.test.ts', () => {
     it('load local env', async () => {
       mm(process.env, 'NODE_ENV', 'local');
       mm(process.env, 'MIDWAY_SERVER_ENV', '');
-      const framework = new MockFramework();
+      const framework = new EmptyFramework();
       await framework.initialize({
         baseDir: path.join(
           __dirname,
@@ -362,7 +362,7 @@ describe('/test/baseFramework.test.ts', () => {
     it('load default env', async () => {
       mm(process.env, 'NODE_ENV', '');
       mm(process.env, 'MIDWAY_SERVER_ENV', '');
-      const framework = new MockFramework();
+      const framework = new EmptyFramework();
       await framework.initialize({
         baseDir: path.join(
           __dirname,
@@ -388,7 +388,7 @@ describe('/test/baseFramework.test.ts', () => {
     it('load prod env', async () => {
       mm(process.env, 'NODE_ENV', 'prod');
       mm(process.env, 'MIDWAY_SERVER_ENV', '');
-      const framework = new MockFramework();
+      const framework = new EmptyFramework();
       await framework.initialize({
         baseDir: path.join(
           __dirname,
@@ -407,7 +407,7 @@ describe('/test/baseFramework.test.ts', () => {
     it('load daily env', async () => {
       mm(process.env, 'NODE_ENV', 'daily');
       mm(process.env, 'MIDWAY_SERVER_ENV', '');
-      const framework = new MockFramework();
+      const framework = new EmptyFramework();
       await framework.initialize({
         baseDir: path.join(
           __dirname,
@@ -426,7 +426,7 @@ describe('/test/baseFramework.test.ts', () => {
     it('load pre env', async () => {
       mm(process.env, 'NODE_ENV', 'pre');
       mm(process.env, 'MIDWAY_SERVER_ENV', '');
-      const framework = new MockFramework();
+      const framework = new EmptyFramework();
       await framework.initialize({
         baseDir: path.join(
           __dirname,
@@ -445,7 +445,7 @@ describe('/test/baseFramework.test.ts', () => {
   });
 
   it('should test aspect decorator', async () => {
-    const framework = new MockFramework();
+    const framework = new EmptyFramework();
     await framework.initialize({
       baseDir: path.join(
         __dirname,
@@ -469,7 +469,7 @@ describe('/test/baseFramework.test.ts', () => {
   });
 
   it('should inject global value in component', async () => {
-    const framework = new MockFramework();
+    const framework = new EmptyFramework();
     await framework.initialize({
       baseDir: path.join(
         __dirname,
@@ -484,7 +484,7 @@ describe('/test/baseFramework.test.ts', () => {
   it('should load component in different type and different env', async () => {
     mm(process.env, 'NODE_ENV', '');
     mm(process.env, 'MIDWAY_SERVER_ENV', '');
-    const framework = new MockFramework();
+    const framework = new EmptyFramework();
     await framework.initialize({
       baseDir: path.join(
         __dirname,
@@ -500,7 +500,7 @@ describe('/test/baseFramework.test.ts', () => {
   });
 
   it('lifecycle should be ok', async () => {
-    const framework = new MockFramework();
+    const framework = new EmptyFramework();
     await framework.initialize({
       baseDir: path.join(
         __dirname,
@@ -544,7 +544,7 @@ describe('/test/baseFramework.test.ts', () => {
   });
 
   it('should get service in a component write with app', async () => {
-    const framework = new MockFramework();
+    const framework = new EmptyFramework();
     await framework.initialize({
       baseDir: path.join(
         __dirname,
@@ -572,7 +572,7 @@ describe('/test/baseFramework.test.ts', () => {
   });
 
   it('should create logger and match property between framework and app', async () => {
-    const framework = new MockFramework();
+    const framework = new EmptyFramework();
     framework.configure({});
     await framework.initialize({
       baseDir: path.join(
@@ -612,7 +612,7 @@ describe('/test/baseFramework.test.ts', () => {
   });
 
   it('should support functional configuration and hook load', async () => {
-    const framework = new MockFramework();
+    const framework = new EmptyFramework();
     await framework.initialize({
       baseDir: path.join(
         __dirname,
