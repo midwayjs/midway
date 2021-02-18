@@ -1,6 +1,7 @@
 import { createServer, closeApp } from './utils';
 import { join } from 'path';
 import { createGRPCConsumer } from '../src';
+import { math } from './fixtures/base-app-stream/src/interface';
 
 export namespace hero {
   export interface HeroService {
@@ -38,12 +39,14 @@ describe('/test/index.test.ts', function () {
           protoPath: join(__dirname, 'fixtures/proto/helloworld.proto'),
           package: 'helloworld',
         }
-      ]
+      ],
+      url: 'localhost:6565'
     });
 
     const service = await createGRPCConsumer<helloworld.Greeter>({
       package: 'helloworld',
       protoPath: join(__dirname, 'fixtures/proto/helloworld.proto'),
+      url: 'localhost:6565'
     });
 
     const result = await service.sayHello({
@@ -65,19 +68,51 @@ describe('/test/index.test.ts', function () {
           protoPath: join(__dirname, 'fixtures/proto/helloworld.proto'),
           package: 'helloworld',
         }
-      ]
+      ],
+      url: 'localhost:6565'
     });
 
     const service: any = await createGRPCConsumer({
       package: 'hero',
       protoPath: join(__dirname, 'fixtures/proto/hero.proto'),
+      url: 'localhost:6565'
     });
 
     const result = await service.findOne({
       id: 123
+    }, (metadata) => {
+
     });
 
     expect(result).toEqual({ id: 1, name: 'bbbb-Hello harry' })
+    await closeApp(app);
+  });
+
+  it('should support publish stream gRPC server', async () => {
+    const app = await createServer('base-app-stream', {
+      services: [
+        {
+          protoPath: join(__dirname, 'fixtures/proto/math.proto'),
+          package: 'math',
+        }
+      ],
+      url: 'localhost:6565'
+    });
+
+    const service = await createGRPCConsumer<math.Math>({
+      package: 'math',
+      protoPath: join(__dirname, 'fixtures/proto/math.proto'),
+      url: 'localhost:6565'
+    });
+
+    const result = await service.div({
+      dividend: 222,
+    });
+
+    expect(result).toEqual({
+      'quotient': '1',
+      'remainder': '2'
+    })
     await closeApp(app);
   });
 });

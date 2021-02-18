@@ -100,7 +100,12 @@ export class MidwayGRPCFramework extends BaseFramework<
             call: ServerUnaryCall<any, any>,
             callback: sendUnaryData<any>
           ) => {
-            const ctx = { method, metadata: call.metadata } as any;
+            const ctx = {
+              method,
+              call,
+              metadata: call.metadata,
+              sendMetadata: call.sendMetadata,
+            } as any;
             this.app.createAnonymousContext(ctx);
             try {
               const service = await ctx.requestContext.getAsync(module);
@@ -122,21 +127,23 @@ export class MidwayGRPCFramework extends BaseFramework<
   }
 
   public async run(): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-      this.server.bindAsync(
-        `${this.configurationOptions.url || 'localhost:6565'}`,
-        ServerCredentials.createInsecure(),
-        (err: Error | null, bindPort: number) => {
-          if (err) {
-            reject(err);
-          }
+    if (this.configurationOptions.url) {
+      return new Promise<void>((resolve, reject) => {
+        this.server.bindAsync(
+          `${this.configurationOptions.url}`,
+          ServerCredentials.createInsecure(),
+          (err: Error | null, bindPort: number) => {
+            if (err) {
+              reject(err);
+            }
 
-          this.server.start();
-          this.logger.info(`Server port = ${bindPort} start success`);
-          resolve();
-        }
-      );
-    });
+            this.server.start();
+            this.logger.info(`Server port = ${bindPort} start success`);
+            resolve();
+          }
+        );
+      });
+    }
   }
 
   public async beforeStop() {

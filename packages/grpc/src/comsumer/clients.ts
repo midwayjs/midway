@@ -57,7 +57,9 @@ export class GRPCClients extends Map {
                     }
                     resolve(response);
                   }
-                );
+                ).on('metadata', (metadata) => {
+                  console.log(metadata);
+                });
               });
             };
             connectionService[camelCase(methodName)] =
