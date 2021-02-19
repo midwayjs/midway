@@ -1,0 +1,21 @@
+{
+  "body": "eyJjIjoiYiJ9",
+  "headers": {
+    "X-Ca-Dashboard-Action": "DEBUG",
+    "X-Ca-Dashboard-Uid": "125087",
+    "X-Ca-Stage": "RELEASE",
+    "X-Ca-Dashboard-Role": "USER",
+    "User-Agent": "Apache-HttpClient/4.5.6 (Java/1.8.0_172)",
+    "Accept-Encoding": "gzip,deflate",
+    "Content-MD5": "Kry+hjKjc2lvIrwoJqdY9Q==",
+    "Content-Type": "application/json; charset=utf-8",
+    "X-Forwarded-Proto": "https"
+  },
+  "httpMethod": "POST",
+  "isBase64Encoded": true,
+  "path": "/api/321",
+  "pathParameters": {
+    "userId": "321"
+  },
+  "queryParameters": {}
+}

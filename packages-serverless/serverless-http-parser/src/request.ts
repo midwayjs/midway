@@ -239,7 +239,6 @@ export const request = {
   },
 
   get protocol() {
-    // TODO 现在函数没有透出协议
     const proto = this.get('X-Forwarded-Proto');
     return proto ? proto.split(/\s*,\s*/, 1)[0] : 'http';
   },
@@ -254,7 +253,6 @@ export const request = {
    */
 
   get secure() {
-    // TODO 现在函数没有透出协议
-    return false;
+    return this.protocol === 'https';
   },
 };

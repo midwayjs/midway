@@ -319,6 +319,32 @@ describe('test http parser', () => {
       assert.deepStrictEqual(context.request.body, { c: 'b' });
     });
 
+    it('should parse application/json and got json body(https)', () => {
+      const app = new Application();
+      const req = new HTTPRequest(
+        require('./resource/fc_apigw_post_json_https.json'),
+        require('./resource/fc_ctx.json')
+      );
+      const res = new HTTPResponse();
+      const context = app.createContext(req, res);
+
+      // alias
+      assert(context.req !== context.request);
+      assert(context.res !== context.response);
+      assert(context.header === context.headers);
+      assert(context.headers === context.req.headers);
+
+      // request
+      assert(context.method === 'POST');
+      assert(context.request.method === 'POST');
+      assert(context.path === '/api/321');
+      assert(context.request.path === '/api/321');
+
+      // test parser body, it's string because content-type is text/html
+      assert.deepStrictEqual(context.request.body, { c: 'b' });
+      assert(context.request.secure);
+    });
+
     it('should parse form-urlencoded and got json body', () => {
       const app = new Application();
       const req = new HTTPRequest(
