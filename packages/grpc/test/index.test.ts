@@ -1,7 +1,12 @@
 import { createServer, closeApp } from './utils';
 import { join } from 'path';
-import { createGRPCConsumer } from '../src';
-import { math } from './fixtures/base-app-stream/src/interface';
+import {
+  createGRPCConsumer,
+  IClientDuplexStreamService,
+  IClientReadableStreamService,
+  IClientUnaryService,
+  IClientWritableStreamService
+} from '../src';
 
 export namespace hero {
   export interface HeroService {
@@ -29,6 +34,37 @@ export namespace helloworld {
     message: string;
   }
 }
+
+
+export namespace math {
+  export interface DivArgs {
+    dividend?: number;
+    divisor?: number;
+  }
+  export interface DivReply {
+    quotient?: number;
+    remainder?: number;
+  }
+  export interface FibArgs {
+    limit?: number;
+  }
+  export interface Num {
+    num?: number;
+  }
+  export interface FibReply {
+    count?: number;
+  }
+
+  export interface MathClient {
+    div(): IClientUnaryService<DivArgs, DivReply>;
+    divMany(): Promise<IClientDuplexStreamService<DivReply, DivArgs>>;
+    // 服务端推，客户端读
+    fib(): IClientReadableStreamService<FibArgs, Num>;
+    // 客户端端推，服务端读
+    sum(): IClientWritableStreamService<Num, Num>;
+  }
+}
+
 
 describe('/test/index.test.ts', function () {
 
@@ -99,20 +135,82 @@ describe('/test/index.test.ts', function () {
       url: 'localhost:6565'
     });
 
-    const service = await createGRPCConsumer<math.Math>({
+    const service = await createGRPCConsumer<math.MathClient>({
       package: 'math',
       protoPath: join(__dirname, 'fixtures/proto/math.proto'),
       url: 'localhost:6565'
     });
 
-    const result = await service.div({
-      dividend: 222,
+    // 一元操作
+    // let result: any = await service.div({
+    //   dividend: 222,
+    // });
+    //
+    // expect(result).toEqual({
+    //   'quotient': 1,
+    //   'remainder': 2,
+    // });
+
+    // 使用发送消息的写法
+    // let result1 = await service.div().sendMessage({
+    //   dividend: 222,
+    // });
+    //
+    // expect(result1.quotient).toEqual(1);
+    //
+    //
+    // // 服务端推送
+    // let total = 0;
+    // let result2 = await service.fib().sendMessage({
+    //   limit: 1,
+    // });
+    //
+    // result2.forEach(data => {
+    //   total += data.num;
+    // });
+    //
+    // expect(total).toEqual(9);
+
+    // 客户端推送
+
+    // const data = await service.sum()
+    //   .sendMessage({num: 1})
+    //   .sendMessage({num: 2})
+    //   .sendMessage({num: 3})
+    //   .end();
+    //
+    // expect(data.num).toEqual(6);
+
+    // const ser = service.sum();
+    // ser.sendMessage({num: 1});
+    // ser.sendMessage({num: 2});
+    // ser.sendMessage({num: 3});
+    //
+    // ser.end().then((res) => {
+    //   console.log(res)
+    // });
+
+
+    // 双向流
+    const t = await service.divMany();
+
+    await new Promise<void>((resolve, reject) => {
+      t.sendMessage({})
+        .then(res => {
+          console.log('Client: Stream Message Received = ', res); // Client: Stream Message Received = {id: 0}
+        })
+        .catch(err => console.error(err))
+      ;
+      t.sendMessage({})
+        .then(res => {
+          console.log('Client: Stream Message Received = ', res); // Client: Stream Message Received = {id: 1}
+          resolve();
+        })
+        .catch(err => console.error(err))
+      ;
+      t.end();
     });
 
-    expect(result).toEqual({
-      'quotient': '1',
-      'remainder': '2'
-    })
     await closeApp(app);
   });
 });

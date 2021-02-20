@@ -1,11 +1,9 @@
 import { IConfigurationOptions, IMidwayApplication, IMidwayContext } from '@midwayjs/core';
-import { Server, ServerCredentials, Metadata, ServerUnaryCall } from '@grpc/grpc-js';
+import { Server, ServerCredentials, Metadata, ServerUnaryCall, ClientWritableStream, /*ClientUnaryCall, ClientReadableStream, ClientWritableStream, ClientDuplexStream*/ } from '@grpc/grpc-js';
 
-export interface IMidwayGRPCContext extends IMidwayContext {
+export interface IMidwayGRPCContext extends ServerUnaryCall<any, any>, IMidwayContext {
   metadata: Metadata;
   method: string;
-  sendMetadata(metadata: Metadata): void;
-  call: ServerUnaryCall<any, any>;
 }
 export type IMidwayGRPCApplication = IMidwayApplication<IMidwayGRPCContext> & Server;
 
@@ -44,4 +42,30 @@ export interface IMidwayGRPFrameworkOptions extends IConfigurationOptions {
 
 export interface DefaultConfig extends IConfigurationOptions {
   services: IGRPCServiceOptions[];
+}
+
+export interface IClientUnaryService<reqType, resType> {
+  sendMetadata(Metadata): IClientUnaryService<reqType, resType>;
+  sendMessage(reqData: reqType): Promise<resType>;
+  // getCall(): ClientUnaryCall;
+}
+
+export interface IClientReadableStreamService<reqType, resType> {
+  sendMetadata(metadata: Metadata): IClientReadableStreamService<reqType, resType>;
+  sendMessage(reqData: reqType): Promise<resType[]>;
+  // getCall(): ClientReadableStream<resType>;
+}
+
+export interface IClientWritableStreamService<reqType, resType> {
+  sendMetadata(metadata: Metadata): IClientWritableStreamService<reqType, resType>;
+  sendMessage(reqData: reqType): IClientWritableStreamService<reqType, resType>;
+  end(): Promise<resType>;
+  getCall(): ClientWritableStream<reqType>;
+}
+
+export interface IClientDuplexStreamService<reqType, resType> {
+  sendMetadata(metadata: Metadata): IClientDuplexStreamService<reqType, resType>;
+  sendMessage(reqData: reqType): Promise<resType>;
+  // getCall(): ClientDuplexStream<reqType, resType>;
+  end(): void;
 }

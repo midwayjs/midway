@@ -1,4 +1,9 @@
-import { Metadata, ServerDuplexStream, ServerReadableStream, ServerWritableStream } from '@grpc/grpc-js';
+import {
+  IClientDuplexStreamService,
+  IClientReadableStreamService,
+  IClientUnaryService,
+  IClientWritableStreamService
+} from '../../../../src';
 
 export namespace math {
   export interface DivArgs {
@@ -18,10 +23,28 @@ export namespace math {
   export interface FibReply {
     count?: number;
   }
+
+  /**
+   * server interface
+   */
   export interface Math {
-    div(data: DivArgs, metadata?: Metadata): Promise<DivReply>;
-    divMany(requestStream: ServerDuplexStream<DivArgs, DivReply>, metadata?: Metadata): ServerDuplexStream<DivArgs, DivReply>;
-    fib(requestStream: ServerReadableStream<FibArgs, any>, metadata?: Metadata): void;
-    sum(metadata?: Metadata): ServerWritableStream<Num, any>;
+    div(data: math.DivArgs): Promise<DivReply>;
+    divMany(data: any): void;
+    // 服务端推，客户端读
+    fib(fibArgs: math.FibArgs): Promise<void>
+    // 客户端端推，服务端读
+    sum(num: Num): Promise<void>;
+  }
+
+  /**
+   * client interface
+   */
+  export interface MathClient {
+    div(): IClientUnaryService<DivArgs, DivReply>;
+    divMany(): Promise<IClientDuplexStreamService<DivReply, DivArgs>>;
+    // 服务端推，客户端读
+    fib(): IClientReadableStreamService<FibArgs, Num>;
+    // 客户端端推，服务端读
+    sum(): IClientWritableStreamService<any, Num>;
   }
 }

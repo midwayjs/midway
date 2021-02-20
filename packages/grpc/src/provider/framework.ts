@@ -1,29 +1,18 @@
-import {
-  Server,
-  ServerCredentials,
-  setLogger,
-  ServerUnaryCall,
-  sendUnaryData,
-} from '@grpc/grpc-js';
-import {
-  BaseFramework,
-  getClassMetadata,
-  IMidwayBootstrapOptions,
-  listModule,
-  MidwayFrameworkType,
-} from '@midwayjs/core';
+import { sendUnaryData, Server, ServerCredentials, ServerUnaryCall, setLogger, } from '@grpc/grpc-js';
+import { BaseFramework, IMidwayBootstrapOptions, MidwayFrameworkType, } from '@midwayjs/core';
 
 import {
   DecoratorMetadata,
+  getClassMetadata,
+  getPropertyMetadata,
   getProviderId,
+  GrpcStreamTypeEnum,
+  listModule,
+  MS_GRPC_METHOD_KEY,
   MS_PROVIDER_KEY,
   MSProviderType,
 } from '@midwayjs/decorator';
-import {
-  IMidwayGRPCApplication,
-  IMidwayGRPCContext,
-  IMidwayGRPFrameworkOptions,
-} from '../interface';
+import { Context, IMidwayGRPCApplication, IMidwayGRPCContext, IMidwayGRPFrameworkOptions, } from '../interface';
 import { pascalCase } from 'pascal-case';
 import * as camelCase from 'camelcase';
 import { loadProto } from '../util';
@@ -98,23 +87,58 @@ export class MidwayGRPCFramework extends BaseFramework<
         for (const method in serviceDefinition) {
           serviceInstance[method] = async (
             call: ServerUnaryCall<any, any>,
-            callback: sendUnaryData<any>
+            callback?: sendUnaryData<any>
           ) => {
-            const ctx = {
-              method,
-              call,
-              metadata: call.metadata,
-              sendMetadata: call.sendMetadata,
-            } as any;
+            // merge ctx and call
+            const ctx = call as any;
+            ctx.method = method;
             this.app.createAnonymousContext(ctx);
-            try {
-              const service = await ctx.requestContext.getAsync(module);
-              const result = await service[camelCase(method)]?.apply(service, [
-                call.request,
-              ]);
-              callback(null, result);
-            } catch (err) {
-              callback(err);
+
+            // get service from request container
+            const service = await ctx.requestContext.getAsync(module);
+
+            // get metadata from decorator
+            const grpcMethodData: {
+              methodName: string;
+              type: GrpcStreamTypeEnum;
+              onEnd: string;
+            } = getPropertyMetadata(
+              MS_GRPC_METHOD_KEY,
+              module,
+              camelCase(method),
+            );
+
+            if (grpcMethodData.type === GrpcStreamTypeEnum.DUPLEX
+              || grpcMethodData.type === GrpcStreamTypeEnum.READABLE) {
+              // listen data and trigger binding method
+              call.on('data', async (data) => {
+                await this.handleContextMethod({
+                  service,
+                  ctx,
+                  callback,
+                  data,
+                  grpcMethodData,
+                });
+              });
+              call.on('end', async () => {
+                if (grpcMethodData.onEnd) {
+                  try {
+                    const endResult = await service[grpcMethodData.onEnd]();
+                    callback && callback(null, endResult);
+                  } catch (err) {
+                    callback && callback(err);
+                  }
+                }
+              });
+            } else {
+              // writable and base type will be got data directly
+              await this.handleContextMethod({
+                service,
+                ctx,
+                callback,
+                data: call.request,
+                grpcMethodData,
+              });
             }
           };
         }
@@ -123,6 +147,27 @@ export class MidwayGRPCFramework extends BaseFramework<
           `Proto ${classMetadata?.package}.${serviceName} found and add to gRPC server`
         );
       }
+    }
+  }
+
+  protected async handleContextMethod(options: {
+    service, ctx: Context, callback, data: any, grpcMethodData: {
+      methodName: string;
+      type: GrpcStreamTypeEnum;
+      onEnd: string;
+    }
+  }) {
+    let result;
+    const {service, ctx, callback, data, grpcMethodData} = options;
+
+    try {
+      result = await service[camelCase(ctx.method)]?.call(service, data);
+      if (grpcMethodData.type === GrpcStreamTypeEnum.BASE) {
+        // base 才返回，其他的要等服务端自己 end，或者等客户端 end 事件才结束
+        callback && callback(null, result);
+      }
+    } catch (err) {
+      callback && callback(err);
     }
   }
 

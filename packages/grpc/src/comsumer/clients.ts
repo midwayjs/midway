@@ -12,6 +12,11 @@ import { DefaultConfig } from '../interface';
 import { loadProto } from '../util';
 import * as camelCase from 'camelcase';
 import { ILogger } from '@midwayjs/logger';
+import { ClientUnaryRequest } from './type/unary-request';
+import { ClientDuplexStreamRequest } from './type/duplex-request';
+import { ClientReadableRequest } from './type/readable-request';
+import { ClientWritableRequest } from './type/writeable-request';
+
 
 @Autoload()
 @Provide('clients')
@@ -46,24 +51,10 @@ export class GRPCClients extends Map {
           );
           for (const methodName of Object.keys(packageDefinition[definition])) {
             const originMethod = connectionService[methodName];
-            connectionService[methodName] = async (...args) => {
-              return new Promise((resolve, reject) => {
-                originMethod.call(
-                  connectionService,
-                  args[0],
-                  (err, response) => {
-                    if (err) {
-                      reject(err);
-                    }
-                    resolve(response);
-                  }
-                ).on('metadata', (metadata) => {
-                  console.log(metadata);
-                });
-              });
-            };
-            connectionService[camelCase(methodName)] =
-              connectionService[methodName];
+            connectionService[methodName] = () => {
+              return this.getClientRequestImpl(connectionService, originMethod);
+            }
+            connectionService[camelCase(methodName)] = connectionService[methodName];
           }
           this.set(definition, connectionService);
         }
@@ -73,5 +64,28 @@ export class GRPCClients extends Map {
 
   getService<T>(serviceName: string): T {
     return this.get(serviceName);
+  }
+
+  getClientRequestImpl(client, originalFunction, options = {}) {
+    const genericFunctionSelector =
+      (originalFunction.requestStream ? 2 : 0) | (originalFunction.responseStream ? 1 : 0);
+
+    let genericFunctionName;
+    switch (genericFunctionSelector) {
+      case 0:
+        genericFunctionName = new ClientUnaryRequest(client, originalFunction, options);
+        break;
+      case 1:
+        genericFunctionName = new ClientReadableRequest(client, originalFunction, options);
+        break;
+      case 2:
+        genericFunctionName = new ClientWritableRequest(client, originalFunction, options);
+        break;
+      case 3:
+        genericFunctionName = new ClientDuplexStreamRequest(client, originalFunction, options);
+        break;
+    }
+
+    return genericFunctionName;
   }
 }
