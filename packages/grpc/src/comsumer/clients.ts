@@ -7,7 +7,7 @@ import {
   Scope,
   ScopeEnum,
 } from '@midwayjs/decorator';
-import { credentials, loadPackageDefinition } from '@grpc/grpc-js';
+import { credentials, loadPackageDefinition, Metadata } from '@grpc/grpc-js';
 import { DefaultConfig } from '../interface';
 import { loadProto } from '../util';
 import * as camelCase from 'camelcase';
@@ -16,7 +16,6 @@ import { ClientUnaryRequest } from './type/unary-request';
 import { ClientDuplexStreamRequest } from './type/duplex-request';
 import { ClientReadableRequest } from './type/readable-request';
 import { ClientWritableRequest } from './type/writeable-request';
-
 
 @Autoload()
 @Provide('clients')
@@ -51,8 +50,11 @@ export class GRPCClients extends Map {
           );
           for (const methodName of Object.keys(packageDefinition[definition])) {
             const originMethod = connectionService[methodName];
-            connectionService[methodName] = () => {
-              return this.getClientRequestImpl(connectionService, originMethod);
+            connectionService[methodName] = (clientOptions: {
+              metadata?: Metadata;
+              timeout?: number;
+            }) => {
+              return this.getClientRequestImpl(connectionService, originMethod, clientOptions);
             }
             connectionService[camelCase(methodName)] = connectionService[methodName];
           }

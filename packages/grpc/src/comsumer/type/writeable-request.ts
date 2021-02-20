@@ -33,10 +33,6 @@ export class ClientWritableRequest<reqType, resType> implements IClientWritableS
     });
   }
 
-  sendMetadata(metadata: Metadata): IClientWritableStreamService<reqType, resType> {
-    return this;
-  }
-
   sendMessage(content: reqType): IClientWritableStreamService<reqType, resType> {
     this.stream.write(content);
     return this;

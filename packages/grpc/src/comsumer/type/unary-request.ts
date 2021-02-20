@@ -18,10 +18,6 @@ export class ClientUnaryRequest<reqType, resType> implements IClientUnaryService
     this.original_function = original_function;
   }
 
-  sendMetadata(Metadata): IClientUnaryService<reqType, resType> {
-    return this;
-  }
-
   sendMessage(content: reqType): Promise<resType> {
     return new Promise<resType>((resolve, reject) => {
       // Deadline is advisable to be set

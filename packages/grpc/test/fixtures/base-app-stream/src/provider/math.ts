@@ -15,18 +15,17 @@ export class Math implements math.Math {
   sumDataList = [];
 
   @GrpcMethod()
-  async div(data: math.DivArgs): Promise<math.DivReply> {
+  async add(data: math.AddArgs): Promise<math.Num> {
     return {
-      quotient: 1,
-      remainder: 2,
+      num: data.num + 2,
     }
   }
 
   @GrpcMethod({type: GrpcStreamTypeEnum.DUPLEX, onEnd: 'duplexEnd' })
-  async divMany(message)  {
+  async addMore(message: math.AddArgs)  {
     this.ctx.write({
       id: message.id,
-      num: 1
+      num: message.num + 10
     });
   }
 
@@ -35,15 +34,15 @@ export class Math implements math.Math {
   }
 
   @GrpcMethod({type: GrpcStreamTypeEnum.WRITEABLE })
-  async fib(fibArgs: math.FibArgs) {
+  async sumMany(args: math.AddArgs) {
     this.ctx.write({
-      num: 1 + fibArgs.limit
+      num: 1 + args.num
     });
     this.ctx.write({
-      num: 2 + fibArgs.limit
+      num: 2 + args.num
     });
     this.ctx.write({
-      num: 3 + fibArgs.limit
+      num: 3 + args.num
     });
 
     const meta = new Metadata();
@@ -54,7 +53,7 @@ export class Math implements math.Math {
   }
 
   @GrpcMethod({type: GrpcStreamTypeEnum.READABLE, onEnd: 'sumEnd' })
-  async sum(data: math.Num) {
+  async addMany(data: math.Num) {
     this.sumDataList.push(data);
   }
 
@@ -63,7 +62,7 @@ export class Math implements math.Math {
       return {
         num: pre.num + cur.num,
       }
-    })
+    });
     return total;
   }
 

@@ -21,10 +21,6 @@ export class ClientReadableRequest<reqType, resType> implements IClientReadableS
     this.original_function = original_function;
   }
 
-  sendMetadata(metadata: Metadata): IClientReadableStreamService<reqType, resType> {
-    return this;
-  }
-
   sendMessage(content: reqType): Promise<resType[]> {
     return new Promise((resolve, reject) => {
       // Deadline is advisable to be set
@@ -44,6 +40,10 @@ export class ClientReadableRequest<reqType, resType> implements IClientReadableS
         resolve(this.queue);
       });
     });
+  }
+
+  getCall() {
+    return this.stream;
   }
 
 }

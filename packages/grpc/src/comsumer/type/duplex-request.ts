@@ -11,6 +11,7 @@ export class ClientDuplexStreamRequest<reqType, resType> implements IClientDuple
   timeout;
   stream;
   promise;
+  messageKey: string;
 
   static get MAX_INT32() {
     return 2147483647;
@@ -19,12 +20,14 @@ export class ClientDuplexStreamRequest<reqType, resType> implements IClientDuple
   constructor(client, original_function, options: {
     metadata?: Metadata;
     timeout?: number;
-    timeout_message?: number;
+    timeoutMessage?: number;
+    messageKey?: string;
   } = {}) {
     this.queue = {};
     this.correlationId = 0;
-    this.timeout_message = options.timeout_message || 1000;
+    this.timeout_message = options.timeoutMessage || 1000;
     this.metadata = options.metadata || new Metadata();
+    this.messageKey = options.messageKey || 'id';
 
     // Deadline is advisable to be set
     // It should be a timestamp value in milliseconds
@@ -37,10 +40,10 @@ export class ClientDuplexStreamRequest<reqType, resType> implements IClientDuple
     this.stream.on('error', () => {
     });
     this.stream.on('data', data => {
-      if (this.queue[data.id]) {
-        clearTimeout(this.queue[data.id]['timeout']);
-        this.queue[data.id]['cb'](null, data);
-        delete this.queue[data.id];
+      if (this.queue[data[this.messageKey]]) {
+        clearTimeout(this.queue[data[this.messageKey]]['timeout']);
+        this.queue[data[this.messageKey]]['cb'](null, data);
+        delete this.queue[data[this.messageKey]];
       }
     });
   }
@@ -50,10 +53,6 @@ export class ClientDuplexStreamRequest<reqType, resType> implements IClientDuple
       this.correlationId = 0;
     }
     return this.correlationId++;
-  }
-
-  sendMetadata(metadata: Metadata): IClientDuplexStreamService<reqType, resType> {
-    return this;
   }
 
   sendMessage(content: reqType = ({} as any)): Promise<resType> {
@@ -79,13 +78,17 @@ export class ClientDuplexStreamRequest<reqType, resType> implements IClientDuple
           cb(new Error(`provider response timeout in ${this.timeout_message}`));
         }, this.timeout_message)
       };
-      content['_id'] = id;
+      content[this.messageKey] = id;
       this.stream.write(content);
     });
   }
 
   end(): void {
     return this.stream.end();
+  }
+
+  getCall() {
+    return this.stream;
   }
 
 }

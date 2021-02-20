@@ -37,31 +37,23 @@ export namespace helloworld {
 
 
 export namespace math {
-  export interface DivArgs {
-    dividend?: number;
-    divisor?: number;
-  }
-  export interface DivReply {
-    quotient?: number;
-    remainder?: number;
-  }
-  export interface FibArgs {
-    limit?: number;
+  export interface AddArgs {
+    num?: number;
   }
   export interface Num {
     num?: number;
   }
-  export interface FibReply {
-    count?: number;
-  }
 
+  /**
+   * client interface
+   */
   export interface MathClient {
-    div(): IClientUnaryService<DivArgs, DivReply>;
-    divMany(): Promise<IClientDuplexStreamService<DivReply, DivArgs>>;
+    add(): IClientUnaryService<AddArgs, Num>;
+    addMore(): IClientDuplexStreamService<AddArgs, Num>;
     // 服务端推，客户端读
-    fib(): IClientReadableStreamService<FibArgs, Num>;
+    sumMany(): IClientReadableStreamService<AddArgs, Num>;
     // 客户端端推，服务端读
-    sum(): IClientWritableStreamService<Num, Num>;
+    addMany(): IClientWritableStreamService<any, Num>;
   }
 }
 
@@ -141,65 +133,90 @@ describe('/test/index.test.ts', function () {
       url: 'localhost:6565'
     });
 
-    // 一元操作
-    // let result: any = await service.div({
-    //   dividend: 222,
-    // });
-    //
-    // expect(result).toEqual({
-    //   'quotient': 1,
-    //   'remainder': 2,
-    // });
-
     // 使用发送消息的写法
-    // let result1 = await service.div().sendMessage({
-    //   dividend: 222,
-    // });
-    //
-    // expect(result1.quotient).toEqual(1);
-    //
-    //
-    // // 服务端推送
-    // let total = 0;
-    // let result2 = await service.fib().sendMessage({
-    //   limit: 1,
-    // });
-    //
-    // result2.forEach(data => {
-    //   total += data.num;
-    // });
-    //
-    // expect(total).toEqual(9);
-    //
-    // // 客户端推送
-    // const data = await service.sum()
-    //   .sendMessage({num: 1})
-    //   .sendMessage({num: 2})
-    //   .sendMessage({num: 3})
-    //   .end();
-    //
-    // expect(data.num).toEqual(6);
+    let result1 = await service.add().sendMessage({
+      num: 2,
+    });
+
+    expect(result1.num).toEqual(4);
+
+    // 服务端推送
+    let total = 0;
+    let result2 = await service.sumMany().sendMessage({
+      num: 1,
+    });
+
+    result2.forEach(data => {
+      total += data.num;
+    });
+
+    expect(total).toEqual(9);
+
+    // 客户端推送
+    const data = await service.addMany()
+      .sendMessage({num: 1})
+      .sendMessage({num: 2})
+      .sendMessage({num: 3})
+      .end();
+
+    expect(data.num).toEqual(6);
+
+    // 双向流
+    const result3= await new Promise<number>((resolve, reject) => {
+      const clientStream = service.addMore();
+      const duplexCall = clientStream.getCall();
+      total = 0;
+      let idx = 0;
+
+      duplexCall.on('data', (data: math.Num) => {
+        total += data.num;
+        idx++;
+        if (idx === 2) {
+          clientStream.end();
+          resolve(total);
+        }
+      });
+
+      duplexCall.write({
+        num: 3,
+      });
+
+      duplexCall.write({
+        num: 6,
+      });
+    });
+
+    expect(result3).toEqual(29);
 
 
     // 双向流
-    const t = await service.divMany();
+    const t = service.addMore();
 
-    await new Promise<void>((resolve, reject) => {
-      t.sendMessage({})
+    const result4 = await new Promise<number>((resolve, reject) => {
+      total = 0;
+      t.sendMessage({
+        num: 2
+      })
         .then(res => {
-          console.log('Client: Stream Message Received = ', res); // Client: Stream Message Received = {id: 0}
+          expect(res.num).toEqual(12);
+          total += res.num;
         })
         .catch(err => console.error(err))
       ;
-      t.sendMessage({})
+      t.sendMessage({
+        num: 5
+      })
         .then(res => {
-          console.log('Client: Stream Message Received = ', res); // Client: Stream Message Received = {id: 1}
-          resolve();
+          expect(res.num).toEqual(15);
+          total += res.num;
+          resolve(total);
         })
         .catch(err => console.error(err))
       ;
       t.end();
     });
+
+    expect(result4).toEqual(27);
 
     await closeApp(app);
   });

@@ -192,9 +192,24 @@ export class MidwayGRPCFramework extends BaseFramework<
   }
 
   public async beforeStop() {
-    this.server.tryShutdown(() => {
-      this.logger.info('Server shutdown success');
-    });
+    await new Promise<void>(resolve => {
+      const shutdownTimer = setTimeout(() => {
+        this.server.forceShutdown();
+        resolve();
+      }, 2000);
+
+      this.server.tryShutdown((err) => {
+        clearTimeout(shutdownTimer);
+        if (err) {
+          this.logger.error('Server shutdown error and will invoke force shutdown, err=' + err.message);
+          this.server.forceShutdown();
+          resolve();
+        } else {
+          this.logger.info('Server shutdown success');
+          resolve();
+        }
+      });
+    })
   }
 
   public getFrameworkType(): MidwayFrameworkType {
