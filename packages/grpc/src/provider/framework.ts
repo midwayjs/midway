@@ -1,5 +1,15 @@
-import { sendUnaryData, Server, ServerCredentials, ServerUnaryCall, setLogger, } from '@grpc/grpc-js';
-import { BaseFramework, IMidwayBootstrapOptions, MidwayFrameworkType, } from '@midwayjs/core';
+import {
+  sendUnaryData,
+  Server,
+  ServerCredentials,
+  ServerUnaryCall,
+  setLogger,
+} from '@grpc/grpc-js';
+import {
+  BaseFramework,
+  IMidwayBootstrapOptions,
+  MidwayFrameworkType,
+} from '@midwayjs/core';
 
 import {
   DecoratorMetadata,
@@ -12,7 +22,12 @@ import {
   MS_PROVIDER_KEY,
   MSProviderType,
 } from '@midwayjs/decorator';
-import { Context, IMidwayGRPCApplication, IMidwayGRPCContext, IMidwayGRPFrameworkOptions, } from '../interface';
+import {
+  Context,
+  IMidwayGRPCApplication,
+  IMidwayGRPCContext,
+  IMidwayGRPFrameworkOptions,
+} from '../interface';
 import { pascalCase } from 'pascal-case';
 import * as camelCase from 'camelcase';
 import { loadProto } from '../util';
@@ -105,13 +120,15 @@ export class MidwayGRPCFramework extends BaseFramework<
             } = getPropertyMetadata(
               MS_GRPC_METHOD_KEY,
               module,
-              camelCase(method),
+              camelCase(method)
             );
 
-            if (grpcMethodData.type === GrpcStreamTypeEnum.DUPLEX
-              || grpcMethodData.type === GrpcStreamTypeEnum.READABLE) {
+            if (
+              grpcMethodData.type === GrpcStreamTypeEnum.DUPLEX ||
+              grpcMethodData.type === GrpcStreamTypeEnum.READABLE
+            ) {
               // listen data and trigger binding method
-              call.on('data', async (data) => {
+              call.on('data', async data => {
                 await this.handleContextMethod({
                   service,
                   ctx,
@@ -151,14 +168,18 @@ export class MidwayGRPCFramework extends BaseFramework<
   }
 
   protected async handleContextMethod(options: {
-    service, ctx: Context, callback, data: any, grpcMethodData: {
+    service;
+    ctx: Context;
+    callback;
+    data: any;
+    grpcMethodData: {
       methodName: string;
       type: GrpcStreamTypeEnum;
       onEnd: string;
-    }
+    };
   }) {
     let result;
-    const {service, ctx, callback, data, grpcMethodData} = options;
+    const { service, ctx, callback, data, grpcMethodData } = options;
 
     try {
       result = await service[camelCase(ctx.method)]?.call(service, data);
@@ -198,10 +219,13 @@ export class MidwayGRPCFramework extends BaseFramework<
         resolve();
       }, 2000);
 
-      this.server.tryShutdown((err) => {
+      this.server.tryShutdown(err => {
         clearTimeout(shutdownTimer);
         if (err) {
-          this.logger.error('Server shutdown error and will invoke force shutdown, err=' + err.message);
+          this.logger.error(
+            'Server shutdown error and will invoke force shutdown, err=' +
+              err.message
+          );
           this.server.forceShutdown();
           resolve();
         } else {
@@ -209,7 +233,7 @@ export class MidwayGRPCFramework extends BaseFramework<
           resolve();
         }
       });
-    })
+    });
   }
 
   public getFrameworkType(): MidwayFrameworkType {

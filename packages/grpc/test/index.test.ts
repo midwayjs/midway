@@ -5,12 +5,13 @@ import {
   IClientDuplexStreamService,
   IClientReadableStreamService,
   IClientUnaryService,
-  IClientWritableStreamService
+  IClientWritableStreamService,
+  IClientOptions
 } from '../src';
 
 export namespace hero {
-  export interface HeroService {
-    findOne(data: HeroById): Promise<Hero>;
+  export interface HeroServiceClient {
+    findOne(options?: IClientOptions): IClientUnaryService<HeroById, Hero>;
   }
   export interface HeroById {
     id?: number;
@@ -22,8 +23,8 @@ export namespace hero {
 }
 
 export namespace helloworld {
-  export interface Greeter {
-    sayHello (request: HelloRequest): Promise<HelloReply>
+  export interface GreeterClient {
+    sayHello (options?: IClientOptions): IClientUnaryService<HelloRequest, HelloReply>
   }
 
   export interface HelloRequest {
@@ -48,12 +49,12 @@ export namespace math {
    * client interface
    */
   export interface MathClient {
-    add(): IClientUnaryService<AddArgs, Num>;
-    addMore(): IClientDuplexStreamService<AddArgs, Num>;
+    add(options?: IClientOptions): IClientUnaryService<AddArgs, Num>;
+    addMore(options?: IClientOptions): IClientDuplexStreamService<AddArgs, Num>;
     // 服务端推，客户端读
-    sumMany(): IClientReadableStreamService<AddArgs, Num>;
+    sumMany(options?: IClientOptions): IClientReadableStreamService<AddArgs, Num>;
     // 客户端端推，服务端读
-    addMany(): IClientWritableStreamService<any, Num>;
+    addMany(options?: IClientOptions): IClientWritableStreamService<any, Num>;
   }
 }
 
@@ -71,13 +72,13 @@ describe('/test/index.test.ts', function () {
       url: 'localhost:6565'
     });
 
-    const service = await createGRPCConsumer<helloworld.Greeter>({
+    const service = await createGRPCConsumer<helloworld.GreeterClient>({
       package: 'helloworld',
       protoPath: join(__dirname, 'fixtures/proto/helloworld.proto'),
       url: 'localhost:6565'
     });
 
-    const result = await service.sayHello({
+    const result = await service.sayHello().sendMessage({
       name: 'harry'
     });
 
@@ -106,10 +107,8 @@ describe('/test/index.test.ts', function () {
       url: 'localhost:6565'
     });
 
-    const result = await service.findOne({
+    const result = await service.findOne().sendMessage({
       id: 123
-    }, (metadata) => {
-
     });
 
     expect(result).toEqual({ id: 1, name: 'bbbb-Hello harry' })

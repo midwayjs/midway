@@ -46,11 +46,13 @@ export enum GrpcStreamTypeEnum {
   WRITEABLE = 'ServerWritableStream',
 }
 
-export function GrpcMethod(methodOptions: {
-  methodName?: string;
-  type?: GrpcStreamTypeEnum;
-  onEnd?: string;
-} = {}): MethodDecorator {
+export function GrpcMethod(
+  methodOptions: {
+    methodName?: string;
+    type?: GrpcStreamTypeEnum;
+    onEnd?: string;
+  } = {}
+): MethodDecorator {
   return (target, propertyName, descriptor: PropertyDescriptor) => {
     if (!methodOptions.type) {
       methodOptions.type = GrpcStreamTypeEnum.BASE;
@@ -63,7 +65,7 @@ export function GrpcMethod(methodOptions: {
         onEnd: methodOptions.onEnd,
       },
       target,
-      propertyName,
+      propertyName
     );
 
     return descriptor;

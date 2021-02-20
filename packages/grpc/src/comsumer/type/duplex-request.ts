@@ -1,8 +1,8 @@
 import { Metadata } from '@grpc/grpc-js';
 import { IClientDuplexStreamService } from '../../interface';
 
-export class ClientDuplexStreamRequest<reqType, resType> implements IClientDuplexStreamService<reqType, resType> {
-
+export class ClientDuplexStreamRequest<reqType, resType>
+  implements IClientDuplexStreamService<reqType, resType> {
   correlationId: number;
   timeout_message;
   queue;
@@ -17,12 +17,16 @@ export class ClientDuplexStreamRequest<reqType, resType> implements IClientDuple
     return 2147483647;
   }
 
-  constructor(client, original_function, options: {
-    metadata?: Metadata;
-    timeout?: number;
-    timeoutMessage?: number;
-    messageKey?: string;
-  } = {}) {
+  constructor(
+    client,
+    original_function,
+    options: {
+      metadata?: Metadata;
+      timeout?: number;
+      timeoutMessage?: number;
+      messageKey?: string;
+    } = {}
+  ) {
     this.queue = {};
     this.correlationId = 0;
     this.timeout_message = options.timeoutMessage || 1000;
@@ -35,10 +39,11 @@ export class ClientDuplexStreamRequest<reqType, resType> implements IClientDuple
     if (options.timeout !== undefined) {
       deadline = Date.now() + options.timeout;
     }
-    this.stream = original_function.call(client, this.metadata, {deadline: deadline});
-
-    this.stream.on('error', () => {
+    this.stream = original_function.call(client, this.metadata, {
+      deadline: deadline,
     });
+
+    this.stream.on('error', () => {});
     this.stream.on('data', data => {
       if (this.queue[data[this.messageKey]]) {
         clearTimeout(this.queue[data[this.messageKey]]['timeout']);
@@ -55,7 +60,7 @@ export class ClientDuplexStreamRequest<reqType, resType> implements IClientDuple
     return this.correlationId++;
   }
 
-  sendMessage(content: reqType = ({} as any)): Promise<resType> {
+  sendMessage(content: reqType = {} as any): Promise<resType> {
     return new Promise((resolve, reject) => {
       const id = this._nextId();
 
@@ -76,7 +81,7 @@ export class ClientDuplexStreamRequest<reqType, resType> implements IClientDuple
         timeout: setTimeout(() => {
           delete this.queue[id];
           cb(new Error(`provider response timeout in ${this.timeout_message}`));
-        }, this.timeout_message)
+        }, this.timeout_message),
       };
       content[this.messageKey] = id;
       this.stream.write(content);
@@ -90,5 +95,4 @@ export class ClientDuplexStreamRequest<reqType, resType> implements IClientDuple
   getCall() {
     return this.stream;
   }
-
 }

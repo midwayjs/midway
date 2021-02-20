@@ -1,4 +1,4 @@
-import { MSProviderType, Provider, Provide, Inject } from '@midwayjs/decorator';
+import { MSProviderType, Provider, Provide, Inject, GrpcMethod } from '@midwayjs/decorator';
 import { helloworld } from '../interface';
 import { ILogger } from '@midwayjs/logger';
 import { Context } from '../../../../../src';
@@ -21,6 +21,7 @@ export class Greeter implements helloworld.Greeter {
   /**
    * Implements the SayHello RPC method.
    */
+  @GrpcMethod()
   async sayHello(request: helloworld.HelloRequest) {
     this.logger.info('this is a context logger');
     const serverMetadata = new Metadata();

@@ -25,12 +25,12 @@ export class Math implements math.Math {
   async addMore(message: math.AddArgs)  {
     this.ctx.write({
       id: message.id,
-      num: message.num + 10
+      num: message.num + 10,
     });
   }
 
   async duplexEnd() {
-
+    console.log('got client end message');
   }
 
   @GrpcMethod({type: GrpcStreamTypeEnum.WRITEABLE })

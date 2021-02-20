@@ -1,8 +1,8 @@
 import { Metadata } from '@grpc/grpc-js';
 import { IClientReadableStreamService } from '../../interface';
 
-export class ClientReadableRequest<reqType, resType> implements IClientReadableStreamService<reqType, resType> {
-
+export class ClientReadableRequest<reqType, resType>
+  implements IClientReadableStreamService<reqType, resType> {
   client;
   metadata;
   timeout;
@@ -10,10 +10,14 @@ export class ClientReadableRequest<reqType, resType> implements IClientReadableS
   queue;
   original_function;
 
-  constructor(client, original_function, options: {
-    metadata?: Metadata;
-    timeout?: number;
-  } = {}) {
+  constructor(
+    client,
+    original_function,
+    options: {
+      metadata?: Metadata;
+      timeout?: number;
+    } = {}
+  ) {
     this.queue = [];
     this.client = client;
     this.metadata = options.metadata || new Metadata();
@@ -29,7 +33,12 @@ export class ClientReadableRequest<reqType, resType> implements IClientReadableS
       if (this.timeout !== undefined) {
         deadline = Date.now() + this.timeout;
       }
-      this.stream = this.original_function.call(this.client, content, this.metadata, {deadline: deadline});
+      this.stream = this.original_function.call(
+        this.client,
+        content,
+        this.metadata,
+        { deadline: deadline }
+      );
       this.stream.on('error', error => {
         reject(error);
       });
@@ -45,5 +54,4 @@ export class ClientReadableRequest<reqType, resType> implements IClientReadableS
   getCall() {
     return this.stream;
   }
-
 }

@@ -7,8 +7,8 @@ import {
   Scope,
   ScopeEnum,
 } from '@midwayjs/decorator';
-import { credentials, loadPackageDefinition, Metadata } from '@grpc/grpc-js';
-import { DefaultConfig } from '../interface';
+import { credentials, loadPackageDefinition } from '@grpc/grpc-js';
+import { DefaultConfig, IClientOptions } from '../interface';
 import { loadProto } from '../util';
 import * as camelCase from 'camelcase';
 import { ILogger } from '@midwayjs/logger';
@@ -50,13 +50,17 @@ export class GRPCClients extends Map {
           );
           for (const methodName of Object.keys(packageDefinition[definition])) {
             const originMethod = connectionService[methodName];
-            connectionService[methodName] = (clientOptions: {
-              metadata?: Metadata;
-              timeout?: number;
-            }) => {
-              return this.getClientRequestImpl(connectionService, originMethod, clientOptions);
-            }
-            connectionService[camelCase(methodName)] = connectionService[methodName];
+            connectionService[methodName] = (
+              clientOptions: IClientOptions = {}
+            ) => {
+              return this.getClientRequestImpl(
+                connectionService,
+                originMethod,
+                clientOptions
+              );
+            };
+            connectionService[camelCase(methodName)] =
+              connectionService[methodName];
           }
           this.set(definition, connectionService);
         }
@@ -70,21 +74,38 @@ export class GRPCClients extends Map {
 
   getClientRequestImpl(client, originalFunction, options = {}) {
     const genericFunctionSelector =
-      (originalFunction.requestStream ? 2 : 0) | (originalFunction.responseStream ? 1 : 0);
+      (originalFunction.requestStream ? 2 : 0) |
+      (originalFunction.responseStream ? 1 : 0);
 
     let genericFunctionName;
     switch (genericFunctionSelector) {
       case 0:
-        genericFunctionName = new ClientUnaryRequest(client, originalFunction, options);
+        genericFunctionName = new ClientUnaryRequest(
+          client,
+          originalFunction,
+          options
+        );
         break;
       case 1:
-        genericFunctionName = new ClientReadableRequest(client, originalFunction, options);
+        genericFunctionName = new ClientReadableRequest(
+          client,
+          originalFunction,
+          options
+        );
         break;
       case 2:
-        genericFunctionName = new ClientWritableRequest(client, originalFunction, options);
+        genericFunctionName = new ClientWritableRequest(
+          client,
+          originalFunction,
+          options
+        );
         break;
       case 3:
-        genericFunctionName = new ClientDuplexStreamRequest(client, originalFunction, options);
+        genericFunctionName = new ClientDuplexStreamRequest(
+          client,
+          originalFunction,
+          options
+        );
         break;
     }
 

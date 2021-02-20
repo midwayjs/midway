@@ -1,5 +1,5 @@
 import { IConfigurationOptions, IMidwayApplication, IMidwayContext } from '@midwayjs/core';
-import { Server, ServerCredentials, Metadata, ServerUnaryCall, ClientWritableStream, ClientDuplexStream, ClientReadableStream /*ClientUnaryCall, ClientReadableStream, ClientWritableStream, ClientDuplexStream*/ } from '@grpc/grpc-js';
+import { Server, ServerCredentials, Metadata, ServerUnaryCall, ClientWritableStream, ClientDuplexStream, ClientReadableStream /*ClientUnaryCall*/ } from '@grpc/grpc-js';
 
 export interface IMidwayGRPCContext extends ServerUnaryCall<any, any>, IMidwayContext {
   metadata: Metadata;
@@ -64,4 +64,11 @@ export interface IClientDuplexStreamService<reqType, resType> {
   sendMessage(reqData: reqType): Promise<resType>;
   getCall(): ClientDuplexStream<reqType, resType>;
   end(): void;
+}
+
+export interface IClientOptions {
+  metadata?: Metadata;
+  timeout?: number;
+  timeoutMessage?: number;
+  messageKey?: string;
 }

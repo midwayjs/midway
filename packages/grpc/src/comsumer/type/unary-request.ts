@@ -1,17 +1,21 @@
 import { Metadata } from '@grpc/grpc-js';
 import { IClientUnaryService } from '../../interface';
 
-export class ClientUnaryRequest<reqType, resType> implements IClientUnaryService<reqType, resType> {
-
+export class ClientUnaryRequest<reqType, resType>
+  implements IClientUnaryService<reqType, resType> {
   client;
   metadata;
   timeout;
   original_function;
 
-  constructor(client, original_function, options: {
-    metadata?: Metadata;
-    timeout?: number;
-  } = {}) {
+  constructor(
+    client,
+    original_function,
+    options: {
+      metadata?: Metadata;
+      timeout?: number;
+    } = {}
+  ) {
     this.client = client;
     this.metadata = options.metadata || new Metadata();
     this.timeout = options.timeout || undefined;
@@ -26,7 +30,11 @@ export class ClientUnaryRequest<reqType, resType> implements IClientUnaryService
       if (this.timeout !== undefined) {
         deadline = Date.now() + this.timeout;
       }
-      this.original_function.call(this.client, content, this.metadata, {deadline: deadline},
+      this.original_function.call(
+        this.client,
+        content,
+        this.metadata,
+        { deadline: deadline },
         (error, response) => {
           if (error) {
             reject(error);
@@ -37,5 +45,4 @@ export class ClientUnaryRequest<reqType, resType> implements IClientUnaryService
       );
     });
   }
-
 }
