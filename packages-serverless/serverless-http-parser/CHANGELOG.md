@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.7.7](https://github.com/midwayjs/midway-faas/compare/v2.7.6...v2.7.7) (2021-02-20)
+
+
+### Bug Fixes
+
+* add request secure ([#854](https://github.com/midwayjs/midway-faas/issues/854)) ([800d30b](https://github.com/midwayjs/midway-faas/commit/800d30bc0374b208434f328efeeb0c9239063520))
+
+
+
+
+
 ## [2.7.4](https://github.com/midwayjs/midway-faas/compare/v2.7.3...v2.7.4) (2021-02-03)
 
 
