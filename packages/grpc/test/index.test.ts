@@ -170,9 +170,8 @@ describe('/test/index.test.ts', function () {
     // });
     //
     // expect(total).toEqual(9);
-
-    // 客户端推送
-
+    //
+    // // 客户端推送
     // const data = await service.sum()
     //   .sendMessage({num: 1})
     //   .sendMessage({num: 2})
@@ -180,15 +179,6 @@ describe('/test/index.test.ts', function () {
     //   .end();
     //
     // expect(data.num).toEqual(6);
-
-    // const ser = service.sum();
-    // ser.sendMessage({num: 1});
-    // ser.sendMessage({num: 2});
-    // ser.sendMessage({num: 3});
-    //
-    // ser.end().then((res) => {
-    //   console.log(res)
-    // });
 
 
     // 双向流
