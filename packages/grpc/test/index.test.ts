@@ -71,7 +71,7 @@ describe('/test/index.test.ts', function () {
           package: 'helloworld',
         }
       ],
-      url: 'localhost:6565'
+      url: 'localhost:6565',
     });
 
     const service = await createGRPCConsumer<helloworld.GreeterClient>({

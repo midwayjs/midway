@@ -23,9 +23,8 @@ import {
   MSProviderType,
 } from '@midwayjs/decorator';
 import {
-  Context,
   IMidwayGRPCApplication,
-  IMidwayGRPCContext,
+  Context,
   IMidwayGRPFrameworkOptions,
 } from '../interface';
 import { pascalCase } from 'pascal-case';
@@ -35,7 +34,7 @@ import { PackageDefinition } from '@grpc/proto-loader';
 
 export class MidwayGRPCFramework extends BaseFramework<
   IMidwayGRPCApplication,
-  IMidwayGRPCContext,
+  Context,
   IMidwayGRPFrameworkOptions
 > {
   public app: IMidwayGRPCApplication;
@@ -197,7 +196,8 @@ export class MidwayGRPCFramework extends BaseFramework<
       return new Promise<void>((resolve, reject) => {
         this.server.bindAsync(
           `${this.configurationOptions.url}`,
-          ServerCredentials.createInsecure(),
+          this.configurationOptions.credentials ||
+            ServerCredentials.createInsecure(),
           (err: Error | null, bindPort: number) => {
             if (err) {
               reject(err);

@@ -1,5 +1,4 @@
 import {
-  Autoload,
   Config,
   Init,
   Logger,
@@ -17,7 +16,6 @@ import { ClientDuplexStreamRequest } from './type/duplex-request';
 import { ClientReadableRequest } from './type/readable-request';
 import { ClientWritableRequest } from './type/writeable-request';
 
-@Autoload()
 @Provide('clients')
 @Scope(ScopeEnum.Singleton)
 export class GRPCClients extends Map {
@@ -30,7 +28,7 @@ export class GRPCClients extends Map {
   @Init()
   async initService() {
     if (!this.grpcConfig['services']) {
-      this.logger.error('Please set gRPC services in your config["grpc"]');
+      this.logger.debug('Please set gRPC services in your config["grpc"]');
       return;
     }
     for (const cfg of this.grpcConfig['services']) {

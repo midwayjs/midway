@@ -1,21 +1,15 @@
 import { IConfigurationOptions, IMidwayApplication, IMidwayContext } from '@midwayjs/core';
 import { Server, ServerCredentials, Metadata, ServerUnaryCall, ClientWritableStream, ClientDuplexStream, ClientReadableStream, ClientUnaryCall } from '@grpc/grpc-js';
 
-export interface IMidwayGRPCContext extends ServerUnaryCall<any, any>, IMidwayContext {
+export interface Context extends ServerUnaryCall<any, any>, IMidwayContext {
   metadata: Metadata;
   method: string;
 }
-export type IMidwayGRPCApplication = IMidwayApplication<IMidwayGRPCContext> & Server;
+export type IMidwayGRPCApplication = IMidwayApplication<Context> & Server;
 
 export type Application = IMidwayGRPCApplication;
 
-export interface Context extends IMidwayGRPCContext {}
-
 export interface IGRPCServiceOptions {
-  /**
-   * application gRPC connection string
-   */
-  url?: string;
   /**
    * proto path
    */
@@ -25,23 +19,42 @@ export interface IGRPCServiceOptions {
    * protobuf package name
    */
   package?: string;
+}
 
+export interface IGRPCClientServiceOptions extends IGRPCServiceOptions {
+  /**
+   * application gRPC connection string
+   */
+  url: string;
+  /**
+   * proto file loader options. Optional
+   */
   loaderOptions?: object;
 
+  /**
+   * Server credentials. Optional.
+   */
   credentials?: ServerCredentials;
 }
 
 export interface IMidwayGRPFrameworkOptions extends IConfigurationOptions {
   /**
-   * gRPC Server connection url, default is localhost:6565
+   * gRPC Server connection url, like 'localhost:6565'
    */
   url?: string;
-  services: Pick<IGRPCServiceOptions, 'protoPath' | 'package'>[];
+  services: IGRPCServiceOptions[];
+  /**
+   * proto file loader options. Optional
+   */
   loaderOptions?: object;
+  /**
+   * Server credentials. Optional.
+   */
+  credentials?: ServerCredentials;
 }
 
 export interface DefaultConfig extends IConfigurationOptions {
-  services: IGRPCServiceOptions[];
+  services: IGRPCClientServiceOptions[];
 }
 
 export interface IClientUnaryService<reqType, resType> {

@@ -1,5 +1,5 @@
 import * as protoLoader from '@grpc/proto-loader';
-import { IGRPCServiceOptions } from './interface';
+import { IGRPCClientServiceOptions } from './interface';
 import { GRPCClients } from './comsumer/clients';
 
 export const loadProto = (options: {
@@ -22,7 +22,7 @@ export const loadProto = (options: {
 };
 
 export const createGRPCConsumer = async <T>(
-  options: IGRPCServiceOptions
+  options: IGRPCClientServiceOptions
 ): Promise<T> => {
   const clients = new GRPCClients();
   options.url = options.url || 'localhost:6565';

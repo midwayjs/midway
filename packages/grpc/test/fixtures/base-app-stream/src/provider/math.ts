@@ -1,5 +1,5 @@
 import { GrpcMethod, GrpcStreamTypeEnum, Inject, MSProviderType, Provide, Provider } from '@midwayjs/decorator';
-import { IMidwayGRPCContext } from '../../../../../src';
+import { Context } from '../../../../../src';
 import { math } from '../interface';
 import { Metadata } from '@grpc/grpc-js';
 
@@ -10,7 +10,7 @@ import { Metadata } from '@grpc/grpc-js';
 export class Math implements math.Math {
 
   @Inject()
-  ctx: IMidwayGRPCContext;
+  ctx: Context;
 
   sumDataList = [];
 
