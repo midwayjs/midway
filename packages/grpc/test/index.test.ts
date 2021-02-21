@@ -9,6 +9,8 @@ import {
   IClientOptions
 } from '../src';
 
+import { Metadata } from '@grpc/grpc-js';
+
 export namespace hero {
   export interface HeroServiceClient {
     findOne(options?: IClientOptions): IClientUnaryService<HeroById, Hero>;
@@ -78,11 +80,31 @@ describe('/test/index.test.ts', function () {
       url: 'localhost:6565'
     });
 
-    const result = await service.sayHello().sendMessage({
+    const meta = new Metadata();
+    meta.add('key', 'value');
+
+    const result = await service.sayHello({
+      metadata: meta,
+    }).sendMessage({
       name: 'harry'
     });
 
-    expect(result).toEqual({ message: 'Hello harry' })
+    expect(result).toEqual({ message: 'Hello harry' });
+
+    const serverMetadata = await new Promise<Metadata>((resolve, reject) => {
+      const call = service.sayHello().sendMessageWithCallback({
+        name: 'zhangting'
+      }, (err) => {
+        if (err) {
+          reject(err);
+        }
+      });
+      call.on('metadata', (meta) => {
+        resolve(meta);
+      });
+    })
+
+    expect(serverMetadata.get('Set-Cookie')[0]).toEqual('yummy_cookie=choco');
     await closeApp(app);
   });
 
@@ -188,7 +210,7 @@ describe('/test/index.test.ts', function () {
     expect(result3).toEqual(29);
 
 
-    // 双向流
+    // 保证顺序的双向流
     const t = service.addMore();
 
     const result4 = await new Promise<number>((resolve, reject) => {

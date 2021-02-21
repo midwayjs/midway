@@ -1,4 +1,4 @@
-import { Metadata } from '@grpc/grpc-js';
+import { Metadata, ClientUnaryCall } from '@grpc/grpc-js';
 import { IClientUnaryService } from '../../interface';
 
 export class ClientUnaryRequest<reqType, resType>
@@ -22,7 +22,7 @@ export class ClientUnaryRequest<reqType, resType>
     this.original_function = original_function;
   }
 
-  sendMessage(content: reqType): Promise<resType> {
+  sendMessage(content: reqType, handler?: (call: ClientUnaryCall) => void): Promise<resType> {
     return new Promise<resType>((resolve, reject) => {
       // Deadline is advisable to be set
       // It should be a timestamp value in milliseconds
@@ -30,7 +30,7 @@ export class ClientUnaryRequest<reqType, resType>
       if (this.timeout !== undefined) {
         deadline = Date.now() + this.timeout;
       }
-      this.original_function.call(
+      const call = this.original_function.call(
         this.client,
         content,
         this.metadata,
@@ -43,6 +43,23 @@ export class ClientUnaryRequest<reqType, resType>
           }
         }
       );
+      handler && handler(call);
     });
+  }
+
+  sendMessageWithCallback(content: reqType, callback): ClientUnaryCall {
+    // Deadline is advisable to be set
+    // It should be a timestamp value in milliseconds
+    let deadline = undefined;
+    if (this.timeout !== undefined) {
+      deadline = Date.now() + this.timeout;
+    }
+    return this.original_function.call(
+      this.client,
+      content,
+      this.metadata,
+      { deadline: deadline },
+      callback
+    );
   }
 }

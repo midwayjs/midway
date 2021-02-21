@@ -1,5 +1,5 @@
 import { IConfigurationOptions, IMidwayApplication, IMidwayContext } from '@midwayjs/core';
-import { Server, ServerCredentials, Metadata, ServerUnaryCall, ClientWritableStream, ClientDuplexStream, ClientReadableStream /*ClientUnaryCall*/ } from '@grpc/grpc-js';
+import { Server, ServerCredentials, Metadata, ServerUnaryCall, ClientWritableStream, ClientDuplexStream, ClientReadableStream, ClientUnaryCall } from '@grpc/grpc-js';
 
 export interface IMidwayGRPCContext extends ServerUnaryCall<any, any>, IMidwayContext {
   metadata: Metadata;
@@ -45,8 +45,8 @@ export interface DefaultConfig extends IConfigurationOptions {
 }
 
 export interface IClientUnaryService<reqType, resType> {
-  sendMessage(reqData: reqType): Promise<resType>;
-  // getCall(): ClientUnaryCall;
+  sendMessage(reqData: reqType, handler?: (call: ClientUnaryCall) => void): Promise<resType>;
+  sendMessageWithCallback(content: reqType, callback): ClientUnaryCall;
 }
 
 export interface IClientReadableStreamService<reqType, resType> {

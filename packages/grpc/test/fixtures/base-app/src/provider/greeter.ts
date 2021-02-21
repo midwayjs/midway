@@ -24,9 +24,11 @@ export class Greeter implements helloworld.Greeter {
   @GrpcMethod()
   async sayHello(request: helloworld.HelloRequest) {
     this.logger.info('this is a context logger');
-    const serverMetadata = new Metadata();
-    serverMetadata.add('Set-Cookie', 'yummy_cookie=choco');
-    this.ctx.sendMetadata(serverMetadata);
-    return { message: 'Hello ' + request.name }
+    if (request.name === 'zhangting') {
+      const serverMetadata = new Metadata();
+      serverMetadata.add('Set-Cookie', 'yummy_cookie=choco');
+      this.ctx.sendMetadata(serverMetadata);
+    }
+    return { message: 'Hello ' + request.name };
   }
 }
