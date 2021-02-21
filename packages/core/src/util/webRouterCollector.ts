@@ -5,7 +5,7 @@ import {
   getClassMetadata,
   listModule,
   RouterOption,
-  WEB_ROUTER_KEY
+  WEB_ROUTER_KEY,
 } from '@midwayjs/decorator';
 
 export class WebRouterCollector {
@@ -44,15 +44,15 @@ export class WebRouterCollector {
       module
     );
 
-    if (
-      webRouterInfo &&
-      typeof webRouterInfo[Symbol.iterator] === 'function'
-    ) {
+    if (webRouterInfo && typeof webRouterInfo[Symbol.iterator] === 'function') {
       for (const webRouter of webRouterInfo) {
         this.routes.push({
+          name: webRouter.routerName,
           url: prefix + webRouter.path,
           method: webRouter.method,
-        })
+          description: webRouter.description || '',
+          summary: webRouter.summary || '',
+        });
       }
     }
   }
