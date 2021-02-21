@@ -4,6 +4,7 @@ import {
   saveModule,
   MS_PROVIDER_KEY,
   attachClassMetadata,
+  savePropertyMetadata,
   MS_GRPC_METHOD_KEY,
   MS_DUBBO_METHOD_KEY,
   MS_HSF_METHOD_KEY,
@@ -38,14 +39,33 @@ export function Provider(
   };
 }
 
-export function GrpcMethod(methodName?: string): MethodDecorator {
+export enum GrpcStreamTypeEnum {
+  BASE = 'base',
+  DUPLEX = 'ServerDuplexStream',
+  READABLE = 'ServerReadableStream',
+  WRITEABLE = 'ServerWritableStream',
+}
+
+export function GrpcMethod(
+  methodOptions: {
+    methodName?: string;
+    type?: GrpcStreamTypeEnum;
+    onEnd?: string;
+  } = {}
+): MethodDecorator {
   return (target, propertyName, descriptor: PropertyDescriptor) => {
-    attachClassMetadata(
+    if (!methodOptions.type) {
+      methodOptions.type = GrpcStreamTypeEnum.BASE;
+    }
+    savePropertyMetadata(
       MS_GRPC_METHOD_KEY,
       {
-        methodName: methodName || propertyName,
+        methodName: methodOptions.methodName || propertyName,
+        type: methodOptions.type,
+        onEnd: methodOptions.onEnd,
       },
-      target
+      target,
+      propertyName
     );
 
     return descriptor;

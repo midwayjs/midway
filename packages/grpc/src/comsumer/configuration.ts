@@ -2,6 +2,7 @@ import { Configuration, Logger } from '@midwayjs/decorator';
 import { setLogger } from '@grpc/grpc-js';
 import { ILogger } from '@midwayjs/logger';
 import { join } from 'path';
+import { IMidwayContainer } from '@midwayjs/core';
 
 @Configuration({
   namespace: 'grpc',
@@ -11,7 +12,8 @@ export class AutoConfiguration {
   @Logger()
   logger: ILogger;
 
-  async onReady() {
+  async onReady(container: IMidwayContainer) {
     setLogger(this.logger);
+    await container.getAsync('grpc:clients');
   }
 }

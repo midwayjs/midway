@@ -9,16 +9,16 @@ export class HeroService implements hero.HeroService {
   @Inject('grpc:clients')
   grpcClients: Clients;
 
-  greeterService: helloworld.Greeter;
+  greeterService: helloworld.GreeterClient;
 
   @Init()
   async init() {
-    this.greeterService = this.grpcClients.getService<helloworld.Greeter>('helloworld.Greeter');
+    this.greeterService = this.grpcClients.getService<helloworld.GreeterClient>('helloworld.Greeter');
   }
 
   @GrpcMethod()
   async findOne(data) {
-    const result = await this.greeterService.sayHello({
+    const result = await this.greeterService.sayHello().sendMessage({
       name: 'harry'
     });
     return {
