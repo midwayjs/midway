@@ -22,7 +22,10 @@ export class ClientUnaryRequest<reqType, resType>
     this.original_function = original_function;
   }
 
-  sendMessage(content: reqType, handler?: (call: ClientUnaryCall) => void): Promise<resType> {
+  sendMessage(
+    content: reqType,
+    handler?: (call: ClientUnaryCall) => void
+  ): Promise<resType> {
     return new Promise<resType>((resolve, reject) => {
       // Deadline is advisable to be set
       // It should be a timestamp value in milliseconds
