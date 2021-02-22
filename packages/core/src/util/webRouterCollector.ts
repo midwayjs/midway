@@ -2,10 +2,10 @@ import { EmptyFramework } from './emptyFramework';
 import {
   CONTROLLER_KEY,
   ControllerOption,
-  getClassMetadata, getProviderId,
+  getClassMetadata, getPropertyDataFromClass, getPropertyMetadata, getProviderId,
   listModule, PRIORITY_KEY,
-  RouterOption,
-  WEB_ROUTER_KEY,
+  RouterOption, WEB_RESPONSE_KEY,
+  WEB_ROUTER_KEY, WEB_ROUTER_PARAM_KEY,
 } from '@midwayjs/decorator';
 
 export interface RouterInfo {
@@ -20,7 +20,7 @@ export interface RouterInfo {
   /**
    * router path, without prefix
    */
-  url: string;
+  url: string | RegExp;
   /**
    * request method for http, like get/post/delete
    */
@@ -35,11 +35,26 @@ export interface RouterInfo {
    * router handler function key，for IoC container load
    */
   handlerName: string;
+  /**
+   * router middleware
+   */
+  middleware: any[];
+
+  /**
+   * request args metadata
+   */
+  requestMetadata: any[];
+
+  /**
+   * response data metadata
+   */
+  responseMetadata: any[];
 }
 
 export interface RouterPriority {
   prefix: string;
   priority: number;
+  middleware: any[];
 }
 
 export class WebRouterCollector {
@@ -85,6 +100,8 @@ export class WebRouterCollector {
 
     // sort for priority
     const priority = getClassMetadata(PRIORITY_KEY, module);
+    // implement middleware in controller
+    const middlewares = controllerOption.routerOptions.middleware;
 
     const prefix = controllerOption.prefix  || '/';
     if (!this.routes.has(prefix)) {
@@ -92,6 +109,7 @@ export class WebRouterCollector {
       this.routesPriority.push({
         prefix,
         priority,
+        middleware: middlewares,
       });
     }
 
@@ -102,6 +120,17 @@ export class WebRouterCollector {
 
     if (webRouterInfo && typeof webRouterInfo[Symbol.iterator] === 'function') {
       for (const webRouter of webRouterInfo) {
+        const routeArgsInfo =
+          getPropertyDataFromClass(
+            WEB_ROUTER_PARAM_KEY,
+            module,
+            webRouter.method
+          ) || [];
+
+        const routerResponseData =
+          getPropertyMetadata(WEB_RESPONSE_KEY, module, webRouter.method) ||
+          [];
+
         this.routes.get(prefix).push({
           prefix,
           routerName: webRouter.routerName || '',
@@ -111,6 +140,9 @@ export class WebRouterCollector {
           description: webRouter.description || '',
           summary: webRouter.summary || '',
           handlerName: `${controllerId}.${webRouter.method}`,
+          middleware: webRouter.middleware,
+          requestMetadata: routeArgsInfo,
+          responseMetadata: routerResponseData,
         });
       }
     }
