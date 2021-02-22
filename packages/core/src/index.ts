@@ -43,6 +43,7 @@ export { BaseFramework } from './baseFramework';
 export * from './context/providerWrapper';
 export * from './common/constants';
 export { safelyGet, safeRequire } from './util/';
+export * from './util/pathFileUtil';
 export * from './features';
 export * from './util/webRouterParam';
 export * from './util/webRouterCollector';

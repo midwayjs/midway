@@ -15,7 +15,8 @@ import {
 import { dirname, isAbsolute, join } from 'path';
 import { MAIN_MODULE_KEY, generateProvideId } from '@midwayjs/decorator';
 import { IContainerConfiguration, IMidwayContainer } from '../interface';
-import { isPath, safeRequire } from '../util/';
+import { safeRequire } from '../util/';
+import { PathFileUtil } from '../util/pathFileUtil';
 import * as util from 'util';
 import { FunctionalConfiguration } from '../functional/configuration';
 
@@ -121,7 +122,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
 
   private resolvePackageBaseDir(packageName: string, baseDir?: string) {
     // 把相对路径转为绝对路径
-    if (isPath(packageName)) {
+    if (PathFileUtil.isPath(packageName)) {
       if (!isAbsolute(packageName)) {
         packageName = join(baseDir || this.container.baseDir, packageName);
       }

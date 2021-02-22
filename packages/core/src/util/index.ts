@@ -1,4 +1,4 @@
-import { dirname, resolve, sep, extname } from 'path';
+import { dirname, resolve, sep } from 'path';
 import { readFileSync } from 'fs';
 
 export const isDevelopmentEnvironment = env => {
@@ -21,14 +21,6 @@ export const safeRequire = (p, enabledCache = true) => {
   } catch (err) {
     return undefined;
   }
-};
-
-export const isPath = (p): boolean => {
-  // eslint-disable-next-line no-useless-escape
-  if (/(^[\.\/])|:|\\/.test(p)) {
-    return true;
-  }
-  return false;
 };
 
 /**
@@ -74,14 +66,6 @@ export function parsePrefix(provideId: string) {
     return provideId.substr(1);
   }
   return provideId;
-}
-
-export function isPathEqual(one: string, two: string) {
-  if (!one || !two) {
-    return false;
-  }
-  const ext = extname(one);
-  return one.replace(ext, '') === two;
 }
 
 export function getUserHome() {

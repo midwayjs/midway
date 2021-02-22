@@ -2,21 +2,57 @@ import { EmptyFramework } from './emptyFramework';
 import {
   CONTROLLER_KEY,
   ControllerOption,
-  getClassMetadata,
-  listModule,
+  getClassMetadata, getProviderId,
+  listModule, PRIORITY_KEY,
   RouterOption,
   WEB_ROUTER_KEY,
 } from '@midwayjs/decorator';
 
-export class WebRouterCollector {
-  baseDir: string;
-  routes = [];
+export interface RouterInfo {
+  /**
+   * router prefix
+   */
+  prefix: string;
+  /**
+   * router alias name
+   */
+  routerName: string;
+  /**
+   * router path, without prefix
+   */
+  url: string;
+  /**
+   * request method for http, like get/post/delete
+   */
+  requestMethod: string;
+  /**
+   * invoke function method
+   */
+  method: string;
+  description: string;
+  summary: string;
+  /**
+   * router handler function key，for IoC container load
+   */
+  handlerName: string;
+}
 
-  constructor(baseDir: string) {
-    this.baseDir = baseDir;
+export interface RouterPriority {
+  prefix: string;
+  priority: number;
+}
+
+export class WebRouterCollector {
+  private readonly baseDir: string;
+  private routes = new Map<string, RouterInfo[]>();
+  private routesPriority: RouterPriority[] = [];
+  private isReady = false;
+
+  constructor(baseDir?: string) {
+    this.baseDir = baseDir || '';
   }
 
-  async analyze() {
+  protected async analyze() {
     const framework = new EmptyFramework();
     await framework.initialize({
       baseDir: this.baseDir,
@@ -28,16 +64,36 @@ export class WebRouterCollector {
       this.collectRoute(module);
     }
 
-    return this.routes;
+    // sort router
+    for (const prefix of this.routes.keys()) {
+      const routerInfo = this.routes.get(prefix);
+      this.routes.set(prefix, this.sortRouter(routerInfo));
+    }
+
+    // sort prefix
+    this.routesPriority = this.routesPriority.sort((routeA, routeB) => {
+      return routeB.priority - routeA.priority;
+    });
   }
 
-  collectRoute(module) {
+  protected collectRoute(module) {
+    const controllerId = getProviderId(module);
     const controllerOption: ControllerOption = getClassMetadata(
       CONTROLLER_KEY,
       module
     );
 
-    const prefix = controllerOption.prefix;
+    // sort for priority
+    const priority = getClassMetadata(PRIORITY_KEY, module);
+
+    const prefix = controllerOption.prefix  || '/';
+    if (!this.routes.has(prefix)) {
+      this.routes.set(prefix, []);
+      this.routesPriority.push({
+        prefix,
+        priority,
+      });
+    }
 
     const webRouterInfo: RouterOption[] = getClassMetadata(
       WEB_ROUTER_KEY,
@@ -46,14 +102,67 @@ export class WebRouterCollector {
 
     if (webRouterInfo && typeof webRouterInfo[Symbol.iterator] === 'function') {
       for (const webRouter of webRouterInfo) {
-        this.routes.push({
-          name: webRouter.routerName,
-          url: prefix + webRouter.path,
+        this.routes.get(prefix).push({
+          prefix,
+          routerName: webRouter.routerName || '',
+          url: webRouter.path,
+          requestMethod: webRouter.requestMethod,
           method: webRouter.method,
           description: webRouter.description || '',
           summary: webRouter.summary || '',
+          handlerName: `${controllerId}.${webRouter.method}`,
         });
       }
     }
+  }
+
+  protected sortRouter(urlMatchList: RouterInfo[]) {
+    // 1. 绝对路径规则优先级最高如 /ab/cb/e
+    // 2. 星号只能出现最后且必须在/后面，如 /ab/cb/**
+    // 3. 如果绝对路径和通配都能匹配一个路径时，绝对规则优先级高
+    // 4. 有多个通配能匹配一个路径时，最长的规则匹配，如 /ab/** 和 /ab/cd/** 在匹配 /ab/cd/f 时命中 /ab/cd/**
+    // 5. 如果 / 与 /* 都能匹配 / ,但 / 的优先级高于 /*
+    return urlMatchList
+      .map(item => {
+        return {
+          ...item,
+          pureRouter: item.url.replace(/\**$/, ''),
+          level: item.url.split('/').length - 1,
+        };
+      })
+      .sort((handlerA, handlerB) => {
+        if (handlerA.pureRouter === handlerB.pureRouter) {
+          return handlerA.url.length - handlerB.url.length;
+        }
+        return handlerB.level - handlerA.level;
+      });
+  }
+
+  async getRoutePriorityList(): Promise<RouterPriority[]> {
+    if (!this.isReady) {
+      await this.analyze();
+      this.isReady = true;
+    }
+    return this.routesPriority;
+  }
+
+  async getRouterTable(): Promise<Map<string, RouterInfo[]>> {
+    if (!this.isReady) {
+      await this.analyze();
+      this.isReady = true;
+    }
+    return this.routes;
+  }
+
+  async getFlattenRouterTable(): Promise<RouterInfo[]> {
+    if (!this.isReady) {
+      await this.analyze();
+      this.isReady = true;
+    }
+    let routeArr = [];
+    for (const routerInfo of this.routes.values()) {
+      routeArr = routeArr.concat(routerInfo);
+    }
+    return routeArr;
   }
 }

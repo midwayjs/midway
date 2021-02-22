@@ -9,6 +9,7 @@ import {
   IMidwayContext,
   listModule,
   MidwayFrameworkType,
+  PathFileUtil,
 } from '@midwayjs/core';
 
 import {
@@ -37,7 +38,6 @@ import * as Router from 'koa-router';
 import type { DefaultState, Middleware } from 'koa';
 import * as koa from 'koa';
 import { MidwayKoaContextLogger } from './logger';
-import { readFileSync } from 'fs';
 import { Server } from 'net';
 
 export abstract class MidwayKoaBaseFramework<
@@ -321,21 +321,15 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<
   public async run(): Promise<void> {
     // https config
     if (this.configurationOptions.key && this.configurationOptions.cert) {
-      this.configurationOptions.key =
-        typeof this.configurationOptions.key === 'string'
-          ? readFileSync(this.configurationOptions.key as string)
-          : this.configurationOptions.key;
-
-      this.configurationOptions.cert =
-        typeof this.configurationOptions.cert === 'string'
-          ? readFileSync(this.configurationOptions.cert as string)
-          : this.configurationOptions.cert;
-
-      this.configurationOptions.ca =
-        this.configurationOptions.ca &&
-        (typeof this.configurationOptions.ca === 'string'
-          ? readFileSync(this.configurationOptions.ca)
-          : this.configurationOptions.ca);
+      this.configurationOptions.key = PathFileUtil.getFileContentSync(
+        this.configurationOptions.key
+      );
+      this.configurationOptions.cert = PathFileUtil.getFileContentSync(
+        this.configurationOptions.cert
+      );
+      this.configurationOptions.ca = PathFileUtil.getFileContentSync(
+        this.configurationOptions.ca
+      );
 
       this.server = require('https').createServer(
         this.configurationOptions,
