@@ -6,7 +6,7 @@ import { MiddlewareParamArray } from '../interface';
 
 export interface RouterOption {
   // 路由
-  path?: string;
+  path?: string | RegExp;
   // 请求类型
   requestMethod: string;
   // 路由别名
@@ -67,7 +67,7 @@ export const RequestMapping = (
 };
 
 const createMappingDecorator = (method: string) => (
-  path?: string,
+  path?: string | RegExp,
   routerOptions: {
     routerName?: string;
     middleware?: MiddlewareParamArray;
