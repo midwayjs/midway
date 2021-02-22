@@ -34,7 +34,7 @@ import {
   IMidwayKoaContext,
   MiddlewareParamArray,
 } from './interface';
-import * as Router from 'koa-router';
+import * as Router from '@koa/router';
 import type { DefaultState, Middleware } from 'koa';
 import * as koa from 'koa';
 import { MidwayKoaContextLogger } from './logger';
