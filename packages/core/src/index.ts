@@ -48,3 +48,7 @@ export * from './util/webRouterParam';
 export { plainToClass, classToPlain } from 'class-transformer';
 export * from './logger';
 export { createConfiguration } from './functional/configuration';
+/**
+ * @deprecated please import from @midwayjs/logger
+ */
+export { MidwayContextLogger } from '@midwayjs/logger';
