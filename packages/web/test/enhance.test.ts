@@ -225,6 +225,26 @@ describe('/test/enhance.test.ts', () => {
         .expect(200)
         .expect('127');
 
+      await request(app.callback())
+        .get('/param/param_queries')
+        .query('name=harry&name=zhangting')
+        .expect(200)
+        .expect([
+          "harry",
+          "zhangting"
+        ]);
+
+      await request(app.callback())
+        .get('/param/param_queries_all')
+        .query('name=harry&name=zhangting')
+        .expect(200)
+        .expect({
+          name: [
+            "harry",
+            "zhangting"
+          ]
+        });
+
       const imagePath = path.join(
         __dirname,
         'fixtures/enhance',
