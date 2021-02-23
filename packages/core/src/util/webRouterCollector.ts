@@ -2,10 +2,16 @@ import { EmptyFramework } from './emptyFramework';
 import {
   CONTROLLER_KEY,
   ControllerOption,
-  getClassMetadata, getPropertyDataFromClass, getPropertyMetadata, getProviderId,
-  listModule, PRIORITY_KEY,
-  RouterOption, WEB_RESPONSE_KEY,
-  WEB_ROUTER_KEY, WEB_ROUTER_PARAM_KEY,
+  getClassMetadata,
+  getPropertyDataFromClass,
+  getPropertyMetadata,
+  getProviderId,
+  listModule,
+  PRIORITY_KEY,
+  RouterOption,
+  WEB_RESPONSE_KEY,
+  WEB_ROUTER_KEY,
+  WEB_ROUTER_PARAM_KEY,
 } from '@midwayjs/decorator';
 
 export interface RouterInfo {
@@ -35,6 +41,11 @@ export interface RouterInfo {
    * router handler function key，for IoC container load
    */
   handlerName: string;
+
+  /**
+   * controller provideId
+   */
+  controllerId: string;
   /**
    * router middleware
    */
@@ -99,16 +110,20 @@ export class WebRouterCollector {
     );
 
     // sort for priority
-    const priority = getClassMetadata(PRIORITY_KEY, module);
+    let priority = getClassMetadata(PRIORITY_KEY, module);
     // implement middleware in controller
     const middlewares = controllerOption.routerOptions.middleware;
 
-    const prefix = controllerOption.prefix  || '/';
+    const prefix = controllerOption.prefix || '/';
+    if (prefix === '/' && priority === undefined) {
+      priority = -999;
+    }
+
     if (!this.routes.has(prefix)) {
       this.routes.set(prefix, []);
       this.routesPriority.push({
         prefix,
-        priority,
+        priority: priority || 0,
         middleware: middlewares,
       });
     }
@@ -128,8 +143,7 @@ export class WebRouterCollector {
           ) || [];
 
         const routerResponseData =
-          getPropertyMetadata(WEB_RESPONSE_KEY, module, webRouter.method) ||
-          [];
+          getPropertyMetadata(WEB_RESPONSE_KEY, module, webRouter.method) || [];
 
         this.routes.get(prefix).push({
           prefix,
@@ -140,6 +154,7 @@ export class WebRouterCollector {
           description: webRouter.description || '',
           summary: webRouter.summary || '',
           handlerName: `${controllerId}.${webRouter.method}`,
+          controllerId,
           middleware: webRouter.middleware,
           requestMetadata: routeArgsInfo,
           responseMetadata: routerResponseData,
@@ -158,13 +173,18 @@ export class WebRouterCollector {
       .map(item => {
         return {
           ...item,
-          pureRouter: item.url.replace(/\**$/, ''),
-          level: item.url.split('/').length - 1,
+          pureRouter: item.url.toString().replace(/\**$/, ''),
+          level: item.url.toString().split('/').length - 1,
         };
       })
       .sort((handlerA, handlerB) => {
-        if (handlerA.pureRouter === handlerB.pureRouter) {
-          return handlerA.url.length - handlerB.url.length;
+        if (handlerA.level === handlerB.level) {
+          if (handlerB.pureRouter === handlerA.pureRouter) {
+            return (
+              handlerA.url.toString().length - handlerB.url.toString().length
+            );
+          }
+          return handlerB.pureRouter.length - handlerA.pureRouter.length;
         }
         return handlerB.level - handlerA.level;
       });
