@@ -1,40 +1,28 @@
 import {
   BaseFramework,
   extractExpressLikeValue,
-  getClassMetadata,
-  getPropertyDataFromClass,
-  getPropertyMetadata,
-  getProviderId,
   IMidwayBootstrapOptions,
-  listModule,
   MidwayFrameworkType,
+  PathFileUtil,
+  WebRouterCollector,
 } from '@midwayjs/core';
 
 import {
-  CONTROLLER_KEY,
-  ControllerOption,
-  PRIORITY_KEY,
-  RouterOption,
   RouterParamValue,
   WEB_RESPONSE_CONTENT_TYPE,
   WEB_RESPONSE_HEADER,
   WEB_RESPONSE_HTTP_CODE,
-  WEB_RESPONSE_KEY,
   WEB_RESPONSE_REDIRECT,
-  WEB_ROUTER_KEY,
-  WEB_ROUTER_PARAM_KEY,
 } from '@midwayjs/decorator';
 import {
   IMidwayExpressApplication,
   IMidwayExpressConfigurationOptions,
-  Middleware,
   MiddlewareParamArray,
   IWebMiddleware,
   IMidwayExpressContext,
 } from './interface';
 import type { IRouter, IRouterHandler, RequestHandler } from 'express';
 import * as express from 'express';
-import { readFileSync } from 'fs';
 import { Server } from 'net';
 import { MidwayExpressContextLogger } from './logger';
 
@@ -82,21 +70,15 @@ export class MidwayExpressFramework extends BaseFramework<
   public async run(): Promise<void> {
     // https config
     if (this.configurationOptions.key && this.configurationOptions.cert) {
-      this.configurationOptions.key =
-        typeof this.configurationOptions.key === 'string'
-          ? readFileSync(this.configurationOptions.key as string)
-          : this.configurationOptions.key;
-
-      this.configurationOptions.cert =
-        typeof this.configurationOptions.cert === 'string'
-          ? readFileSync(this.configurationOptions.cert as string)
-          : this.configurationOptions.cert;
-
-      this.configurationOptions.ca =
-        this.configurationOptions.ca &&
-        (typeof this.configurationOptions.ca === 'string'
-          ? readFileSync(this.configurationOptions.ca)
-          : this.configurationOptions.ca);
+      this.configurationOptions.key = PathFileUtil.getFileContentSync(
+        this.configurationOptions.key
+      );
+      this.configurationOptions.cert = PathFileUtil.getFileContentSync(
+        this.configurationOptions.cert
+      );
+      this.configurationOptions.ca = PathFileUtil.getFileContentSync(
+        this.configurationOptions.ca
+      );
 
       this.server = require('https').createServer(
         this.configurationOptions,
@@ -184,34 +166,64 @@ export class MidwayExpressFramework extends BaseFramework<
   }
 
   public async loadMidwayController(): Promise<void> {
-    const controllerModules = listModule(CONTROLLER_KEY);
+    const collector = new WebRouterCollector();
+    const routerTable = await collector.getRouterTable();
+    const routerList = await collector.getRoutePriorityList();
 
-    // implement @controller
-    for (const module of controllerModules) {
-      const providerId = getProviderId(module);
-      if (providerId) {
-        if (this.controllerIds.indexOf(providerId) > -1) {
-          throw new Error(
-            `controller identifier [${providerId}] already exists!`
-          );
-        }
-        this.controllerIds.push(providerId);
-        this.logger.info(`Load Controller "${providerId}"`);
-        await this.preRegisterRouter(module, providerId);
+    for (const routerInfo of routerList) {
+      const providerId = routerInfo.controllerId;
+      // controller id check
+      if (this.controllerIds.indexOf(providerId) > -1) {
+        throw new Error(
+          `Controller identifier [${providerId}] already exists!`
+        );
       }
-    }
+      this.controllerIds.push(providerId);
+      this.logger.info(
+        `Load Controller "${providerId}", prefix=${routerInfo.prefix}`
+      );
 
-    // implement @priority
-    if (this.prioritySortRouters.length) {
-      this.prioritySortRouters = this.prioritySortRouters.sort(
-        (routerA, routerB) => {
-          return routerB.priority - routerA.priority;
+      // new router
+      const newRouter = this.createRouter(routerInfo.routerOptions);
+
+      // add router middleware
+      await this.handlerWebMiddleware(
+        routerInfo.middleware,
+        (middlewareImpl: RequestHandler) => {
+          newRouter.use(middlewareImpl);
         }
       );
 
-      this.prioritySortRouters.forEach(prioritySortRouter => {
-        this.app.use(prioritySortRouter.prefix, prioritySortRouter.router);
-      });
+      // add route
+      const routes = routerTable.get(routerInfo.prefix);
+      for (const routeInfo of routes) {
+        // router middleware
+        await this.handlerWebMiddleware(
+          routeInfo.middleware,
+          (middlewareImpl: RequestHandler) => {
+            newRouter.use(middlewareImpl);
+          }
+        );
+
+        this.logger.info(
+          `Load Router "${routeInfo.requestMethod.toUpperCase()} ${
+            routeInfo.url
+          }"`
+        );
+
+        // apply controller from request context
+        newRouter[routeInfo.requestMethod].call(
+          newRouter,
+          routeInfo.url,
+          this.generateController(
+            routeInfo.handlerName,
+            routeInfo.requestMetadata,
+            routeInfo.responseMetadata
+          )
+        );
+      }
+
+      this.app.use(routerInfo.prefix, newRouter);
     }
   }
 
@@ -222,102 +234,11 @@ export class MidwayExpressFramework extends BaseFramework<
     return mwIns.resolve();
   }
 
-  protected async preRegisterRouter(
-    target: any,
-    controllerId: string
-  ): Promise<void> {
-    const controllerOption: ControllerOption = getClassMetadata(
-      CONTROLLER_KEY,
-      target
-    );
-    const newRouter = this.createRouter(controllerOption);
-
-    if (newRouter) {
-      // implement middleware in controller
-      const middlewares = (controllerOption.routerOptions
-        .middleware as unknown) as MiddlewareParamArray;
-      await this.handlerWebMiddleware(
-        middlewares,
-        (middlewareImpl: RequestHandler) => {
-          newRouter.use(middlewareImpl);
-        }
-      );
-
-      // implement @get @post
-      const webRouterInfo: RouterOption[] = getClassMetadata(
-        WEB_ROUTER_KEY,
-        target
-      );
-
-      if (
-        webRouterInfo &&
-        typeof webRouterInfo[Symbol.iterator] === 'function'
-      ) {
-        for (const webRouter of webRouterInfo) {
-          // get middleware
-          const middlewares2 = (webRouter.middleware as unknown) as MiddlewareParamArray;
-          // const methodMiddlewares: MiddlewareParamArray = [];
-
-          await this.handlerWebMiddleware(
-            middlewares2,
-            (middlewareImpl: Middleware) => {
-              // methodMiddlewares.push(middlewareImpl);
-              newRouter.use(middlewareImpl);
-            }
-          );
-
-          // implement @body @query @param @body
-          const routeArgsInfo =
-            getPropertyDataFromClass(
-              WEB_ROUTER_PARAM_KEY,
-              target,
-              webRouter.method
-            ) || [];
-
-          const routerResponseData =
-            getPropertyMetadata(WEB_RESPONSE_KEY, target, webRouter.method) ||
-            [];
-
-          this.logger.info(
-            `Load Router "${webRouter.requestMethod.toUpperCase()} ${
-              webRouter.path
-            }"`
-          );
-          // apply controller from request context
-          newRouter[webRouter.requestMethod].call(
-            newRouter,
-            webRouter.path,
-            this.generateController(
-              `${controllerId}.${webRouter.method}`,
-              routeArgsInfo,
-              routerResponseData
-            )
-          );
-        }
-      }
-
-      // sort for priority
-      const priority = getClassMetadata(PRIORITY_KEY, target);
-      this.prioritySortRouters.push({
-        priority: priority || 0,
-        router: newRouter,
-        prefix: controllerOption.prefix,
-      });
-    }
-  }
-
   /**
    * @param controllerOption
    */
-  protected createRouter(controllerOption: ControllerOption): IRouter {
-    const {
-      prefix,
-      routerOptions: { sensitive },
-    } = controllerOption;
-    if (prefix) {
-      return express.Router({ caseSensitive: sensitive });
-    }
-    return null;
+  protected createRouter(routerOptions: { sensitive }): IRouter {
+    return express.Router({ caseSensitive: routerOptions.sensitive });
   }
 
   private async handlerWebMiddleware(

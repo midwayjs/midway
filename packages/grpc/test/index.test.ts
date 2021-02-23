@@ -56,7 +56,7 @@ export namespace math {
     // 服务端推，客户端读
     sumMany(options?: IClientOptions): IClientReadableStreamService<AddArgs, Num>;
     // 客户端端推，服务端读
-    addMany(options?: IClientOptions): IClientWritableStreamService<any, Num>;
+    addMany(options?: IClientOptions): IClientWritableStreamService<AddArgs, Num>;
   }
 }
 

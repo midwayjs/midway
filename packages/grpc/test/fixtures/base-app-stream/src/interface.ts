@@ -20,7 +20,7 @@ export namespace math {
    */
   export interface Math {
     add(data: AddArgs): Promise<Num>;
-    addMore(data: AddArgs): void;
+    addMore(data: AddArgs): Promise<void>;
     // 服务端推，客户端读
     sumMany(fibArgs: AddArgs): Promise<void>
     // 客户端端推，服务端读
@@ -36,6 +36,6 @@ export namespace math {
     // 服务端推，客户端读
     sumMany(): IClientReadableStreamService<AddArgs, Num>;
     // 客户端端推，服务端读
-    addMany(): IClientWritableStreamService<any, Num>;
+    addMany(): IClientWritableStreamService<AddArgs, Num>;
   }
 }

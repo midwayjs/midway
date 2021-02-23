@@ -5,6 +5,8 @@ import {
   FUNC_KEY,
   attachClassMetadata,
   MiddlewareParamArray,
+  WEB_ROUTER_KEY,
+  RouterOption,
 } from '..';
 
 export interface FuncParams {
@@ -51,6 +53,21 @@ export function Func(
         ),
         target.constructor
       );
+
+      // support run in 2.0
+      if (functionOptions) {
+        attachClassMetadata(
+          WEB_ROUTER_KEY,
+          {
+            path: functionOptions.path,
+            requestMethod: functionOptions.method,
+            routerName: '',
+            method: key,
+            middleware: functionOptions.middleware,
+          } as RouterOption,
+          target
+        );
+      }
     }
   };
 }

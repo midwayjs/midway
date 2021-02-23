@@ -1,29 +1,19 @@
 import {
   BaseFramework,
   extractKoaLikeValue,
-  getClassMetadata,
-  getPropertyDataFromClass,
-  getPropertyMetadata,
-  getProviderId,
   IMidwayBootstrapOptions,
   IMidwayContext,
-  listModule,
   MidwayFrameworkType,
+  PathFileUtil,
+  WebRouterCollector,
 } from '@midwayjs/core';
 
 import {
-  CONTROLLER_KEY,
-  ControllerOption,
-  PRIORITY_KEY,
-  RouterOption,
   RouterParamValue,
   WEB_RESPONSE_CONTENT_TYPE,
   WEB_RESPONSE_HEADER,
   WEB_RESPONSE_HTTP_CODE,
-  WEB_RESPONSE_KEY,
   WEB_RESPONSE_REDIRECT,
-  WEB_ROUTER_KEY,
-  WEB_ROUTER_PARAM_KEY,
 } from '@midwayjs/decorator';
 import {
   IMidwayKoaApplication,
@@ -33,11 +23,10 @@ import {
   IMidwayKoaContext,
   MiddlewareParamArray,
 } from './interface';
-import * as Router from 'koa-router';
+import * as Router from '@koa/router';
 import type { DefaultState, Middleware } from 'koa';
 import * as koa from 'koa';
 import { MidwayKoaContextLogger } from './logger';
-import { readFileSync } from 'fs';
 import { Server } from 'net';
 
 export abstract class MidwayKoaBaseFramework<
@@ -124,51 +113,31 @@ export abstract class MidwayKoaBaseFramework<
   }
 
   public async loadMidwayController(): Promise<void> {
-    const controllerModules = listModule(CONTROLLER_KEY);
+    const collector = new WebRouterCollector();
+    const routerTable = await collector.getRouterTable();
+    const routerList = await collector.getRoutePriorityList();
 
-    // implement @controller
-    for (const module of controllerModules) {
-      const providerId = getProviderId(module);
-      if (providerId) {
-        if (this.controllerIds.indexOf(providerId) > -1) {
-          throw new Error(
-            `Controller identifier [${providerId}] already exists!`
-          );
-        }
-        this.controllerIds.push(providerId);
-        this.logger.info(`Load Controller "${providerId}"`);
-        await this.preRegisterRouter(module, providerId);
+    for (const routerInfo of routerList) {
+      const providerId = routerInfo.controllerId;
+      // controller id check
+      if (this.controllerIds.indexOf(providerId) > -1) {
+        throw new Error(
+          `Controller identifier [${providerId}] already exists!`
+        );
       }
-    }
-
-    // implement @priority
-    if (this.prioritySortRouters.length) {
-      this.prioritySortRouters = this.prioritySortRouters.sort(
-        (routerA, routerB) => {
-          return routerB.priority - routerA.priority;
-        }
+      this.controllerIds.push(providerId);
+      this.logger.info(
+        `Load Controller "${providerId}", prefix=${routerInfo.prefix}`
       );
 
-      this.prioritySortRouters.forEach(prioritySortRouter => {
-        this.app.use(prioritySortRouter.router.middleware());
+      // new router
+      const newRouter = this.createRouter({
+        prefix: routerInfo.prefix,
+        ...routerInfo.routerOptions,
       });
-    }
-  }
 
-  protected async preRegisterRouter(
-    target: any,
-    controllerId: string
-  ): Promise<void> {
-    const controllerOption: ControllerOption = getClassMetadata(
-      CONTROLLER_KEY,
-      target
-    );
-    const newRouter = this.createRouter(controllerOption);
-
-    if (newRouter) {
-      // implement middleware in controller
-      const middlewares = controllerOption.routerOptions
-        .middleware as MiddlewareParamArray;
+      // add router middleware
+      const middlewares = routerInfo.middleware as MiddlewareParamArray;
       await this.handlerWebMiddleware(
         middlewares,
         (middlewareImpl: Middleware) => {
@@ -176,86 +145,50 @@ export abstract class MidwayKoaBaseFramework<
         }
       );
 
-      // implement @get @post
-      const webRouterInfo: RouterOption[] = getClassMetadata(
-        WEB_ROUTER_KEY,
-        target
-      );
+      // add route
+      const routes = routerTable.get(routerInfo.prefix);
+      for (const routeInfo of routes) {
+        // get middleware
+        const middlewares2 = routeInfo.middleware as MiddlewareParamArray;
+        const methodMiddlewares: Middleware[] = [];
 
-      if (
-        webRouterInfo &&
-        typeof webRouterInfo[Symbol.iterator] === 'function'
-      ) {
-        for (const webRouter of webRouterInfo) {
-          // get middleware
-          const middlewares2 = webRouter.middleware as MiddlewareParamArray;
-          const methodMiddlewares: Middleware[] = [];
+        await this.handlerWebMiddleware(
+          middlewares2,
+          (middlewareImpl: Middleware) => {
+            methodMiddlewares.push(middlewareImpl);
+          }
+        );
 
-          await this.handlerWebMiddleware(
-            middlewares2,
-            (middlewareImpl: Middleware) => {
-              methodMiddlewares.push(middlewareImpl);
-            }
-          );
+        const routerArgs = [
+          routeInfo.routerName,
+          routeInfo.url,
+          ...methodMiddlewares,
+          this.generateController(
+            routeInfo.handlerName,
+            routeInfo.requestMetadata,
+            routeInfo.responseMetadata
+          ),
+        ];
 
-          // implement @body @query @param @body
-          const routeArgsInfo =
-            getPropertyDataFromClass(
-              WEB_ROUTER_PARAM_KEY,
-              target,
-              webRouter.method
-            ) || [];
+        this.logger.info(
+          `Load Router "${routeInfo.requestMethod.toUpperCase()} ${
+            routeInfo.url
+          }"`
+        );
 
-          const routerResponseData =
-            getPropertyMetadata(WEB_RESPONSE_KEY, target, webRouter.method) ||
-            [];
-
-          const routerArgs = [
-            webRouter.routerName,
-            webRouter.path,
-            ...methodMiddlewares,
-            this.generateController(
-              `${controllerId}.${webRouter.method}`,
-              routeArgsInfo,
-              routerResponseData
-            ),
-          ];
-
-          this.logger.info(
-            `Load Router "${webRouter.requestMethod.toUpperCase()} ${
-              webRouter.path
-            }"`
-          );
-
-          // apply controller from request context
-          // eslint-disable-next-line prefer-spread
-          newRouter[webRouter.requestMethod].apply(newRouter, routerArgs);
-        }
+        // apply controller from request context
+        // eslint-disable-next-line prefer-spread
+        newRouter[routeInfo.requestMethod].apply(newRouter, routerArgs);
       }
 
-      // sort for priority
-      const priority = getClassMetadata(PRIORITY_KEY, target);
-      this.prioritySortRouters.push({
-        priority: priority || 0,
-        router: newRouter,
-      });
+      this.app.use(newRouter.middleware());
     }
   }
 
-  /**
-   * @param controllerOption
-   */
-  protected createRouter(controllerOption: ControllerOption): Router {
-    const {
-      prefix,
-      routerOptions: { sensitive },
-    } = controllerOption;
-    if (prefix) {
-      const router = new Router({ sensitive });
-      router.prefix(prefix);
-      return router;
-    }
-    return null;
+  protected createRouter(routerOptions): Router {
+    const router = new Router(routerOptions);
+    router.prefix(routerOptions.prefix);
+    return router;
   }
 
   private async handlerWebMiddleware(
@@ -321,21 +254,15 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<
   public async run(): Promise<void> {
     // https config
     if (this.configurationOptions.key && this.configurationOptions.cert) {
-      this.configurationOptions.key =
-        typeof this.configurationOptions.key === 'string'
-          ? readFileSync(this.configurationOptions.key as string)
-          : this.configurationOptions.key;
-
-      this.configurationOptions.cert =
-        typeof this.configurationOptions.cert === 'string'
-          ? readFileSync(this.configurationOptions.cert as string)
-          : this.configurationOptions.cert;
-
-      this.configurationOptions.ca =
-        this.configurationOptions.ca &&
-        (typeof this.configurationOptions.ca === 'string'
-          ? readFileSync(this.configurationOptions.ca)
-          : this.configurationOptions.ca);
+      this.configurationOptions.key = PathFileUtil.getFileContentSync(
+        this.configurationOptions.key
+      );
+      this.configurationOptions.cert = PathFileUtil.getFileContentSync(
+        this.configurationOptions.cert
+      );
+      this.configurationOptions.ca = PathFileUtil.getFileContentSync(
+        this.configurationOptions.ca
+      );
 
       this.server = require('https').createServer(
         this.configurationOptions,

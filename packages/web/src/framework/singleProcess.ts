@@ -3,11 +3,11 @@ import {
   IMidwayContainer,
   IMidwayFramework,
   MidwayFrameworkType,
+  PathFileUtil,
 } from '@midwayjs/core';
 import { IMidwayWebConfigurationOptions } from '../interface';
 import { Application } from 'egg';
 import { resolve } from 'path';
-import { readFileSync } from 'fs';
 import { Server } from 'net';
 import { LoggerOptions } from '@midwayjs/logger';
 import { MidwayKoaContextLogger } from '@midwayjs/koa';
@@ -30,21 +30,15 @@ export class SingleProcess
   public async run(): Promise<void> {
     // https config
     if (this.configurationOptions.key && this.configurationOptions.cert) {
-      this.configurationOptions.key =
-        typeof this.configurationOptions.key === 'string'
-          ? readFileSync(this.configurationOptions.key as string)
-          : this.configurationOptions.key;
-
-      this.configurationOptions.cert =
-        typeof this.configurationOptions.cert === 'string'
-          ? readFileSync(this.configurationOptions.cert as string)
-          : this.configurationOptions.cert;
-
-      this.configurationOptions.ca =
-        this.configurationOptions.ca &&
-        (typeof this.configurationOptions.ca === 'string'
-          ? readFileSync(this.configurationOptions.ca)
-          : this.configurationOptions.ca);
+      this.configurationOptions.key = PathFileUtil.getFileContentSync(
+        this.configurationOptions.key
+      );
+      this.configurationOptions.cert = PathFileUtil.getFileContentSync(
+        this.configurationOptions.cert
+      );
+      this.configurationOptions.ca = PathFileUtil.getFileContentSync(
+        this.configurationOptions.ca
+      );
 
       this.server = require('https').createServer(
         this.configurationOptions,

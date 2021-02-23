@@ -1,19 +1,10 @@
 import * as assert from 'assert';
 import { join } from 'path';
-import { isPath, safeRequire, safelyGet, isPathEqual } from '../src/util';
+import { safeRequire, safelyGet } from '../src/util';
+import { PathFileUtil } from '../src/';
 import { StaticConfigLoader } from '../src/util/staticConfig';
 
 describe('/test/util.test.ts', () => {
-  it('should test is path', () => {
-    assert(isPath('@ali/abc') === false);
-    assert(isPath('def') === false);
-    assert(isPath('bbb-ccc') === false);
-    assert(isPath('./hello') === true);
-    assert(isPath('../hello') === true);
-    assert(isPath('../../bbb') === true);
-    assert(isPath('/home/admin/logs') === true);
-    assert(isPath('C:\\Program Files') === true);
-  });
 
   it('should test safeRequire', () => {
     // assert(safeRequire('@ali/abc') === undefined);
@@ -33,13 +24,6 @@ describe('/test/util.test.ts', () => {
     assert.deepEqual(undefined, safelyGet(['a', 'b2'], {a: 2}), 'safelyGet obj is number not ok');
   });
 
-  it('should isPathEqual be ok', () => {
-    assert.ok(isPathEqual(null, null) === false);
-    assert.ok(isPathEqual('/midway-open/packages/midway-core/test/fixtures/app-with-configuration/base-app-no-package-json/src/configuration.ts', null) === false);
-    assert.ok(isPathEqual(null, '/midway-open/packages/midway-core/test/fixtures/app-with-configuration/base-app-no-package-json/src/configuration') === false);
-    assert.ok(isPathEqual('/midway-open/packages/midway-core/test/fixtures/app-with-configuration/base-app-no-package-json/src/configuration.ts', '/midway-open/packages/midway-core/test/fixtures/app-with-configuration/base-app-no-package-json/src/configuration'));
-  });
-
   it('should load static config from app', async () => {
     let loader = new StaticConfigLoader(join(__dirname, '/fixtures/app-with-configuration-static-config-loader/base-app-decorator'), 'local');
     let configText = await loader.getSerializeConfig();
@@ -53,4 +37,25 @@ describe('/test/util.test.ts', () => {
     expect(configText['ok']['text']).toEqual('ok');
     expect(configText['mock']['b']).toEqual('test');
   });
+});
+
+describe('/test/pathFileUtil.test.ts', () => {
+  it('should test is path', () => {
+    assert(PathFileUtil.isPath('@ali/abc') === false);
+    assert(PathFileUtil.isPath('def') === false);
+    assert(PathFileUtil.isPath('bbb-ccc') === false);
+    assert(PathFileUtil.isPath('./hello') === true);
+    assert(PathFileUtil.isPath('../hello') === true);
+    assert(PathFileUtil.isPath('../../bbb') === true);
+    assert(PathFileUtil.isPath('/home/admin/logs') === true);
+    assert(PathFileUtil.isPath('C:\\Program Files') === true);
+  });
+
+  it('should isPathEqual be ok', () => {
+    assert.ok(PathFileUtil.isPathEqual(null, null) === false);
+    assert.ok(PathFileUtil.isPathEqual('/midway-open/packages/midway-core/test/fixtures/app-with-configuration/base-app-no-package-json/src/configuration.ts', null) === false);
+    assert.ok(PathFileUtil.isPathEqual(null, '/midway-open/packages/midway-core/test/fixtures/app-with-configuration/base-app-no-package-json/src/configuration') === false);
+    assert.ok(PathFileUtil.isPathEqual('/midway-open/packages/midway-core/test/fixtures/app-with-configuration/base-app-no-package-json/src/configuration.ts', '/midway-open/packages/midway-core/test/fixtures/app-with-configuration/base-app-no-package-json/src/configuration'));
+  });
+
 });

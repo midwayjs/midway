@@ -13,7 +13,8 @@ import {
 import { ObjectProperties } from '../definitions/properties';
 import { ManagedResolverFactory } from './managedResolverFactory';
 import { NotFoundError } from '../common/notFoundError';
-import { parsePrefix, isPathEqual } from '../util/';
+import { parsePrefix } from '../util/';
+import { PathFileUtil } from '../util/pathFileUtil';
 
 const PREFIX = '_id_default_';
 
@@ -244,7 +245,7 @@ export class BaseApplicationContext
   ) {
     if (!this.disableConflictCheck && this.registry.hasDefinition(identifier)) {
       const def = this.registry.getDefinition(identifier);
-      if (!isPathEqual(definition.srcPath, def.srcPath)) {
+      if (!PathFileUtil.isPathEqual(definition.srcPath, def.srcPath)) {
         throw new Error(
           `${identifier} path = ${definition.srcPath} already exist (${def.srcPath})!`
         );

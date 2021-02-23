@@ -4,7 +4,7 @@ import {
   MidwayProcessTypeEnum,
   safelyGet,
 } from '@midwayjs/core';
-import { ControllerOption, CONFIG_KEY, PLUGIN_KEY } from '@midwayjs/decorator';
+import { CONFIG_KEY, PLUGIN_KEY } from '@midwayjs/decorator';
 import { IMidwayWebConfigurationOptions } from '../interface';
 import { MidwayKoaBaseFramework } from '@midwayjs/koa';
 import { EggRouter } from '@eggjs/router';
@@ -200,20 +200,10 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
    */
   protected async beforeStop(): Promise<void> {}
 
-  /**
-   * @param controllerOption
-   */
-  protected createRouter(controllerOption: ControllerOption): Router {
-    const {
-      prefix,
-      routerOptions: { sensitive },
-    } = controllerOption;
-    if (prefix) {
-      const router = new EggRouter({ sensitive }, this.app);
-      router.prefix(prefix);
-      return router;
-    }
-    return null;
+  protected createRouter(routerOptions): Router {
+    const router = new EggRouter(routerOptions, this.app);
+    router.prefix(routerOptions.prefix);
+    return router;
   }
 
   protected setContextLoggerClass(BaseContextLogger: any) {
