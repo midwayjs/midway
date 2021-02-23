@@ -6,9 +6,8 @@ import {
   IMidwayContainer,
   IConfigurationOptions,
   MidwayFrameworkType,
-  MidwayContextLogger
 } from '@midwayjs/core';
-import { clearAllLoggers } from '@midwayjs/logger';
+import { clearAllLoggers, MidwayContextLogger } from '@midwayjs/logger';
 import { join } from 'path';
 
 interface MockConfigurationOptions extends IConfigurationOptions {

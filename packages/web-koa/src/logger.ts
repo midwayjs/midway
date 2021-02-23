@@ -1,4 +1,4 @@
-import { MidwayContextLogger } from '@midwayjs/core';
+import { MidwayContextLogger } from '@midwayjs/logger';
 import { IMidwayKoaContext } from './interface';
 
 export class MidwayKoaContextLogger extends MidwayContextLogger<IMidwayKoaContext> {

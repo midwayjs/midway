@@ -1,4 +1,4 @@
-import { MidwayContextLogger } from '@midwayjs/core';
+import { MidwayContextLogger } from '@midwayjs/logger';
 import { IMidwaySocketIOContext } from './interface';
 
 export class MidwaySocketIOContextLogger extends MidwayContextLogger<IMidwaySocketIOContext> {

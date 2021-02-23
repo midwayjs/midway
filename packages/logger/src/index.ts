@@ -6,6 +6,7 @@ export { displayCommonMessage, displayLabels } from './format';
 export * from './interface';
 export * from './transport';
 export { EmptyLogger, MidwayBaseLogger, MidwayDelegateLogger } from './logger';
+export { MidwayContextLogger } from './contextLogger';
 export const loggers = new MidwayLoggerContainer();
 export const createLogger = <T extends ILogger>(
   name: string,
@@ -23,6 +24,19 @@ export const createConsoleLogger = (
     Object.assign(options, {
       disableError: true,
       disableFile: true,
+    })
+  );
+};
+
+export const createFileLogger = (
+  name: string,
+  options: LoggerOptions = {}
+): ILogger => {
+  return loggers.createLogger(
+    name,
+    Object.assign(options, {
+      disableConsole: true,
+      disableError: true,
     })
   );
 };
