@@ -13,6 +13,7 @@ import {
   WEB_ROUTER_KEY,
   WEB_ROUTER_PARAM_KEY,
 } from '@midwayjs/decorator';
+import { MidwayContainer } from '../context/midwayContainer';
 
 export interface RouterInfo {
   /**
@@ -66,6 +67,8 @@ export interface RouterPriority {
   prefix: string;
   priority: number;
   middleware: any[];
+  routerOptions: any;
+  controllerId: string;
 }
 
 export class WebRouterCollector {
@@ -79,10 +82,12 @@ export class WebRouterCollector {
   }
 
   protected async analyze() {
-    const framework = new EmptyFramework();
-    await framework.initialize({
-      baseDir: this.baseDir,
-    });
+    if (!MidwayContainer.parentDefinitionMetadata) {
+      const framework = new EmptyFramework();
+      await framework.initialize({
+        baseDir: this.baseDir,
+      });
+    }
 
     const controllerModules = listModule(CONTROLLER_KEY);
 
@@ -112,7 +117,7 @@ export class WebRouterCollector {
     // sort for priority
     let priority = getClassMetadata(PRIORITY_KEY, module);
     // implement middleware in controller
-    const middlewares = controllerOption.routerOptions.middleware;
+    const middleware = controllerOption.routerOptions.middleware;
 
     const prefix = controllerOption.prefix || '/';
     if (prefix === '/' && priority === undefined) {
@@ -124,7 +129,9 @@ export class WebRouterCollector {
       this.routesPriority.push({
         prefix,
         priority: priority || 0,
-        middleware: middlewares,
+        middleware,
+        routerOptions: controllerOption.routerOptions,
+        controllerId,
       });
     }
 
