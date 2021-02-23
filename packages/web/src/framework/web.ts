@@ -4,7 +4,7 @@ import {
   MidwayProcessTypeEnum,
   safelyGet,
 } from '@midwayjs/core';
-import { ControllerOption, CONFIG_KEY, PLUGIN_KEY } from '@midwayjs/decorator';
+import { CONFIG_KEY, PLUGIN_KEY } from '@midwayjs/decorator';
 import { IMidwayWebConfigurationOptions } from '../interface';
 import { MidwayKoaBaseFramework } from '@midwayjs/koa';
 import { EggRouter } from '@eggjs/router';
