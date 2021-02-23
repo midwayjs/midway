@@ -202,7 +202,7 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
 
   protected createRouter(routerOptions): Router {
     const router = new EggRouter(routerOptions, this.app);
-    router.prefix(routerOptions);
+    router.prefix(routerOptions.prefix);
     return router;
   }
 
