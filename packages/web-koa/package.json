@@ -27,7 +27,9 @@
     "@midwayjs/mock": "^2.7.7",
     "@types/koa": "^2.11.4",
     "@types/koa-router": "^7.4.1",
-    "fs-extra": "^8.0.1"
+    "fs-extra": "^8.0.1",
+    "koa-bodyparser": "^4.3.0",
+    "koa-qs": "^3.0.0"
   },
   "dependencies": {
     "@midwayjs/core": "^2.7.5",
