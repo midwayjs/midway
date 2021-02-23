@@ -22,9 +22,10 @@ import {
   loggers,
   LoggerOptions,
   IMidwayLogger,
+  MidwayContextLogger,
 } from '@midwayjs/logger';
 import { isAbsolute, join, dirname } from 'path';
-import { createMidwayLogger, MidwayContextLogger } from './logger';
+import { createMidwayLogger } from './logger';
 import { safeRequire } from './util';
 import { MidwayRequestContainer } from './context/requestContainer';
 import { FunctionalConfiguration } from './functional/configuration';

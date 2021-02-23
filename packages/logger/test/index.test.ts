@@ -3,13 +3,15 @@ import {
   MidwayBaseLogger,
   clearAllLoggers,
   createConsoleLogger,
+  createFileLogger,
   createLogger,
   IMidwayLogger,
   loggers,
   format,
   displayCommonMessage,
   EmptyTransport,
-  ILogger
+  ILogger,
+  MidwayContextLogger,
 } from '../src';
 import { join } from 'path';
 import {
@@ -573,6 +575,51 @@ describe('/test/index.test.ts', () => {
     expect(matchContentTimes(join(logsDir, 'test.log'), 'hello world another warn')).toEqual(0);
 
     await removeFileOrDir(logsDir);
+  });
+
+  it('should test contextLogger', async () => {
+    clearAllLoggers();
+    const logsDir = join(__dirname, 'logs');
+    await removeFileOrDir(logsDir);
+    const logger = createLogger<IMidwayLogger>('testLogger', {
+      dir: logsDir,
+      fileLogName: 'test-logger.log',
+      disableError: true,
+      printFormat: (info) => {
+        return info.ctx.data + ' ' + info.message;
+      }
+    });
+
+    const ctx = {data: 'custom data'};
+    const contextLogger = new MidwayContextLogger(ctx, logger);
+
+    contextLogger.info('hello world');
+    contextLogger.debug('hello world');
+    contextLogger.warn('hello world');
+    contextLogger.error('hello world');
+    contextLogger.log('hello world');
+    contextLogger.log('info', 'hello world');
+
+    await removeFileOrDir(logsDir);
+  });
+
+  it('should test createFileLogger', async () => {
+    clearAllLoggers();
+    const logsDir = join(__dirname, 'logs');
+    await removeFileOrDir(logsDir);
+
+    const logger = createFileLogger('file', {
+      dir: logsDir,
+      fileLogName: 'test-logger.log',
+    });
+
+    logger.info('file logger');
+    await sleep();
+
+    expect(matchContentTimes(join(logsDir, 'test-logger.log'), 'file logger')).toEqual(1);
+
+    await removeFileOrDir(logsDir);
+
   });
 
 });

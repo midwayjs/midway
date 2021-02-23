@@ -1,4 +1,5 @@
-import { createMidwayLogger, MidwayContextLogger } from '../src';
+import { createMidwayLogger } from '../src';
+import { MidwayContextLogger } from '@midwayjs/logger';
 import { MockFramework } from './util';
 import { join } from 'path';
 
