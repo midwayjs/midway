@@ -41,6 +41,7 @@ export enum RouteParamTypes {
   NEXT,
   REQUEST_PATH,
   REQUEST_IP,
+  QUERIES,
 }
 
 export interface RouterParamValue {
@@ -84,3 +85,5 @@ export const Files = (property?: GetFilesStreamOptions) =>
 export const RequestPath = () =>
   createParamMapping(RouteParamTypes.REQUEST_PATH)();
 export const RequestIP = () => createParamMapping(RouteParamTypes.REQUEST_IP)();
+export const Queries = (property?: string) =>
+  createParamMapping(RouteParamTypes.QUERIES)(property);

@@ -28,6 +28,12 @@ export const extractKoaLikeValue = (key, data) => {
         return ctx['path'];
       case RouteParamTypes.REQUEST_IP:
         return ctx['ip'];
+      case RouteParamTypes.QUERIES:
+        if (ctx.queries) {
+          return data ? ctx.queries[data] : ctx.queries;
+        } else {
+          return data ? ctx.query[data] : ctx.query;
+        }
       default:
         return null;
     }
@@ -60,6 +66,12 @@ export const extractExpressLikeValue = (key, data) => {
         return req['baseUrl'];
       case RouteParamTypes.REQUEST_IP:
         return req['ip'];
+      case RouteParamTypes.QUERIES:
+        if (req.queries) {
+          return data ? req.queries[data] : req.queries;
+        } else {
+          return data ? req.query[data] : req.query;
+        }
       default:
         return null;
     }
