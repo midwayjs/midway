@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.8.0](https://github.com/midwayjs/midway/compare/v2.7.7...v2.8.0) (2021-02-24)
+
+
+### Features
+
+* add router collector and export router table ([#852](https://github.com/midwayjs/midway/issues/852)) ([3641ac9](https://github.com/midwayjs/midway/commit/3641ac9c78ed9888525ce0c87415b961d4602fa8))
+* support gRPC stream API ([#855](https://github.com/midwayjs/midway/issues/855)) ([bd51c46](https://github.com/midwayjs/midway/commit/bd51c46a1986d9a0666d6af2a1f053ad74560dcc))
+
+
+
+
+
 ## [2.7.7](https://github.com/midwayjs/midway/compare/v2.7.6...v2.7.7) (2021-02-20)
 
 **Note:** Version bump only for package @midwayjs/grpc
