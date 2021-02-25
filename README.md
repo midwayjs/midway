@@ -2,7 +2,7 @@
   <a href="https://midwayjs.org/" target="blank"><img src="https://gw.alicdn.com/tfs/TB1OlNIUAL0gK0jSZFtXXXQCXXa-564-135.png" width="300" alt="Midway Logo" /></a>
 </p>
 
-<p align="center">A <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building Serverless services, traditional server-side applications, microservices, and small programs.</p>
+<p align="center">Midway 是一个适用于构建 Serverless 服务，传统应用、微服务，小程序后端的 <a href="http://nodejs.org" target="_blank">Node.js</a> 框架。</p>
 <p align="center">
     <a href="https://github.com/midwayjs/midway/blob/master/LICENSE" target="_blank"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="GitHub license" /></a>
     <a href=""><img src="https://img.shields.io/github/tag/midwayjs/midway.svg" alt="GitHub tag"></a>
@@ -17,115 +17,41 @@
     <a href="https://github.com/midwayjs/mwts"><img src="https://img.shields.io/badge/code%20style-midwayjs-brightgreen.svg" alt="Code Style: MidwayJS"></a>
 </p>
 
+[English](./README.en-US.md) | 简体中文
 
-## Description
+## 特性
 
-Midway is a Node.js framework for building Serverless Services, traditional server-side applications, microservices and small programs.It written by typescript, which uses the IoC injection mechanism to decouple the business logic of the application and make the development of large Node.js application easier and more natural.
+- [x] **跨平台**：支持阿里云、腾讯云等多平台的Serverless框架
+- [x] **场景多样化**：Midway支持传统应用、Serverless函数、微服务、小程序后端等多种场景
+- [x] **插件多样化**：支持Koa、express、egg等多种插件
+- [x] **示例丰富**: 官方提供多种Node场景的示例代码，方便开发者快速上手。
 
-Midway can use koa, express or EggJS as the basic web framework. It also provides basic solutions for independent use such as Socket.io, GRPC, Dubbo.js, and RabbitMQ.
+## 描述
 
-In addition, Midway is also a Node.js serverless framework for front-end/full-stack developers. Build applications for the next decade. It can run on AWS, Alibaba Cloud, Tencent Cloud and traditional VM/container. Easily integrate with React and Vue. 🌈
+Midway 是一个适用于构建 Serverless 服务，传统应用、微服务，小程序后端的 Node.js 框架。
 
+Midway可以使用 koa，express 或 EggJS 作为基本的 Web 框架。它还提供了独立使用的基本解决方案，例如 Socket.io，GRPC，Dubbo.js 和 RabbitMQ 等。
 
-## Features
+此外，Midway 也适用于前端/全栈开发人员的Node.js无服务器框架。构建下一个十年的应用程序。可在AWS，阿里云，腾讯云和传统VM /容器上运行。与 React 和 Vue 轻松集成。 🌈
 
-- ✔︎ Sophisticated group Middleware Architecture and compatibility
-- ✔︎ Scalable plug-in capabilities and group plug-in Ecology
-- ✔︎ Good application layering and decoupling capability
-- ✔︎ Good development experience for the future
-- ✔︎ Support Egg plugins and koa middleware
+## 文档和社区
 
-## Getting Started
+- [官网](https://midwayj.org)
+- 要查看 v2 中文文档, 请访问 [中文文档](https://www.yuque.com/midwayjs/midway_v2) 📚
+- 要查看 v1 中文文档, 请访问 [中文文档](https://www.yuque.com/midwayjs/midway_v1) 📚
 
-- Midway v2  [中文文档](https://www.yuque.com/midwayjs/midway_v2) 📚
-- Midway Serverless [中文文档](https://www.yuque.com/midwayjs/faas) 📚
-- Midway v1 [中文文档](https://www.yuque.com/midwayjs/midway_v1) 📚
+## 示例
 
-## Framework Ecosystem
+请访问 [midway-examples](http://demo.midwayjs.org/).
 
-| Project                  | Version                                                            | Description                                                             |
-| ------------------------ | ------------------------------------------------------------------ | ----------------------------------------------------------------------- |
-| [@midwayjs/web]          | [![web-status]][web-package]                                       | Midway framework for EggJS                                              |
-| [@midwayjs/koa]          | [![koa-status]][koa-package]                                       | Midway framework for Koa                                                |
-| [@midwayjs/express]      | [![express-status]][express-package]                               | Midway framework for Express                                            |
-| [@midwayjs/faas]         | [![faas-status]][faas-package]                                     | Midway framework for FaaS in Serverless environment                     |
-| [@midwayjs/rabbitmq]     | [![rabbitmq-status]][rabbitmq-package]                             | Midway framework for rabbitMQ service                                   |
-| [@midwayjs/socketio]     | [![socketio-status]][socketio-package]                             | Midway framework for Socket.io server                                   |
-| [@midwayjs/grpc]         | [![grpc-status]][grpc-package]                                     | Midway framework for gRPC service                                       |
+## 贡献
 
+请告知我们可以为你做些什么，不过在此之前，请检查一下是否有 [已经存在的Bug或者意见](http://github.com/midwayjs/midway/issues)。
 
-[@midwayjs/faas]: https://github.com/midwayjs/midway/tree/2.x/packages/faas
-[@midwayjs/web]: https://github.com/midwayjs/midway/tree/2.x/packages/web
-[@midwayjs/koa]: https://github.com/midwayjs/midway/tree/2.x/packages/web-koa
-[@midwayjs/express]: https://github.com/midwayjs/midway/tree/2.x/packages/web-express
-[@midwayjs/rabbitmq]: https://github.com/midwayjs/midway/tree/2.x/packages/rabbitmq
-[@midwayjs/socketio]: https://github.com/midwayjs/midway/tree/2.x/packages/socketio
-[@midwayjs/grpc]: https://github.com/midwayjs/midway/tree/2.x/packages/faas
-
-[web-status]: https://img.shields.io/npm/v/@midwayjs/web.svg
-[koa-status]: https://img.shields.io/npm/v/@midwayjs/koa.svg
-[express-status]: https://img.shields.io/npm/v/@midwayjs/express.svg
-[faas-status]: https://img.shields.io/npm/v/@midwayjs/faas.svg
-[rabbitmq-status]: https://img.shields.io/npm/v/@midwayjs/rabbitmq.svg
-[socketio-status]: https://img.shields.io/npm/v/@midwayjs/socketio.svg
-[grpc-status]: https://img.shields.io/npm/v/@midwayjs/grpc.svg
-
-[web-package]: https://npmjs.com/package/@midwayjs/web
-[koa-package]: https://npmjs.com/package/@midwayjs/koa
-[express-package]: https://npmjs.com/package/@midwayjs/express
-[faas-package]: https://npmjs.com/package/@midwayjs/faas
-[rabbitmq-package]: https://npmjs.com/package/@midwayjs/rabbitmq
-[socketio-package]: https://npmjs.com/package/@midwayjs/socketio
-[grpc-package]: https://npmjs.com/package/@midwayjs/grpc
-
-## Tool and Runtime Ecosystem
-
-| Project                  | Version                                                            | Description                                                             |
-| ------------------------ | ------------------------------------------------------------------ | ----------------------------------------------------------------------- |
-| [@midwayjs/cli]         | [![midway-cli-status]][midway-cli-package]                 | Midway common cli tool                                         |
-| [@midwayjs/faas-cli]         | [![midway-faas-cli-status]][midway-faas-cli-package]                 | Midway faas cli tool                                         |
-| [@midwayjs/runtime-engine]         | [![runtime-engine-status]][runtime-engine-package]                 | Common basic Serverless runtime                                         |
-| [@midwayjs/serverless-fc-starter]  | [![serverless-fc-starter-status]][serverless-fc-starter-package]   | Alibaba Cloud FC function launcher                                      |
-| [@midwayjs/serverless-scf-starter] | [![serverless-scf-starter-status]][serverless-scf-starter-package] | Tencent Cloud SCF Function Launcher                                     |
-
-[@midwayjs/cli]: https://github.com/midwayjs/cli/tree/master/packages/cli
-[@midwayjs/faas-cli]: https://github.com/midwayjs/cli/tree/serverless/packages/faas-cli
-[@midwayjs/runtime-engine]: https://github.com/midwayjs/midway/tree/2.x/packages-serverless/runtime-engine
-[@midwayjs/serverless-fc-starter]: https://github.com/midwayjs/midway/tree/2.x/packages-serverless/serverless-fc-starter
-[@midwayjs/serverless-scf-starter]: https://github.com/midwayjs/midway/tree/2.x/packages-serverless/serverless-scf-starter
-
-[midway-cli-status]: https://img.shields.io/npm/v/@midwayjs/cli.svg
-[midway-faas-cli-status]: https://img.shields.io/npm/v/@midwayjs/faas-cli.svg
-[runtime-engine-status]: https://img.shields.io/npm/v/@midwayjs/runtime-engine.svg
-[serverless-fc-starter-status]: https://img.shields.io/npm/v/@midwayjs/runtime-engine.svg
-[serverless-scf-starter-status]: https://img.shields.io/npm/v/@midwayjs/runtime-engine.svg
-
-[midway-cli-package]: https://npmjs.com/package/@midwayjs/cli
-[midway-faas-cli-package]: https://npmjs.com/package/@midwayjs/faas-cli
-[runtime-engine-package]: https://npmjs.com/package/@midwayjs/runtime-engine
-[serverless-fc-starter-package]: https://npmjs.com/package/@midwayjs/serverless-fc-starter
-[serverless-scf-starter-package]: https://npmjs.com/package/@midwayjs/serverless-scf-starter
-
-
-## Examples
-
-See [midway-examples](https://github.com/midwayjs/midway-examples).
-
-## Issues
-
-Please make sure to read the [Issue Reporting Checklist](CONTRIBUTING.md#reporting-new-issues) before opening an issue. Issues not conforming to the guidelines may be closed immediately.
-
-## Contributors
-
-Please let us know how can we help. Do check out [issues](http://github.com/midwayjs/midway/issues) for bug reports or suggestions first.
-
-To become a contributor, please follow our contributing guide.
-
-This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
-<a href="https://github.com/midwayjs/midway/graphs/contributors"><img src="https://opencollective.com/midway/contributors.svg?width=890&button=false" /></a>
+如果你是一个代码贡献者，请参考代码贡献规范。
 
 ## License
 
-The code in this project is released under the [MIT License](LICENSE).
+我们的代码使用 [MIT](http://github.com/midwayjs/midway/blob/master/LICENSE) 协议，请放心使用。
 
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fmidwayjs%2Fmidway.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fmidwayjs%2Fmidway?ref=badge_large)
