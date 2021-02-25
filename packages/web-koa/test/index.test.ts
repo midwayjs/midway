@@ -173,4 +173,30 @@ describe('/test/feature.test.ts', () => {
     });
   });
 
+  describe('test function router', function () {
+    let app: IMidwayKoaApplication;
+    beforeAll(async () => {
+      app = await creatApp('base-app-func-router');
+    });
+
+    afterAll(async () => {
+      await closeApp(app);
+    });
+
+    it('test root path', async () => {
+      const result = await createHttpRequest(app)
+        .get('/')
+        .query({ name: 'harry' });
+      expect(result.status).toEqual(200);
+      expect(result.text).toEqual('bbb');
+    });
+
+    it('should return function router', async () => {
+      const result = await createHttpRequest(app)
+        .get('/other')
+        .query({ name: 'harry' });
+      expect(result.status).toEqual(200);
+      expect(result.body.query).toEqual({name: 'harry'});
+    });
+  });
 });

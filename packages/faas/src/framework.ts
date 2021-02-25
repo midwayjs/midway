@@ -117,7 +117,8 @@ export class MidwayFaaSFramework extends BaseFramework<
       for (const funModule of funModules) {
         const funOptions: Array<{
           funHandler;
-          key;
+          key
+          method: string;
           descriptor;
           middleware: string[];
         }> = getClassMetadata(FUNC_KEY, funModule);
