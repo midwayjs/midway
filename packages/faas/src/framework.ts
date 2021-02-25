@@ -8,17 +8,28 @@ import {
 import {
   BaseFramework,
   createMidwayLogger,
+  extractKoaLikeValue,
   getClassMetadata,
   IMiddleware,
   IMidwayBootstrapOptions,
   listModule,
-  listPreloadModule,
   MidwayFrameworkType,
   REQUEST_OBJ_CTX_KEY,
+  RouterInfo,
+  WebRouterCollector,
 } from '@midwayjs/core';
 
 import { dirname, resolve } from 'path';
-import { FUNC_KEY, LOGGER_KEY, PLUGIN_KEY } from '@midwayjs/decorator';
+import {
+  FUNC_KEY,
+  LOGGER_KEY,
+  PLUGIN_KEY,
+  getProviderId,
+  WEB_RESPONSE_HTTP_CODE,
+  WEB_RESPONSE_HEADER,
+  WEB_RESPONSE_CONTENT_TYPE,
+  WEB_RESPONSE_REDIRECT,
+} from '@midwayjs/decorator';
 import SimpleLock from '@midwayjs/simple-lock';
 import * as compose from 'koa-compose';
 import { MidwayHooks } from './hooks';
@@ -35,7 +46,7 @@ export class MidwayFaaSFramework extends BaseFramework<
 > {
   protected defaultHandlerMethod = 'handler';
   private globalMiddleware: string[];
-  protected funMappingStore: Map<string, any> = new Map();
+  protected funMappingStore: Map<string, RouterInfo> = new Map();
   protected logger;
   private lock = new SimpleLock();
   public app: IMidwayFaaSApplication;
@@ -111,38 +122,52 @@ export class MidwayFaaSFramework extends BaseFramework<
       // set app keys
       this.app['keys'] = this.app.getConfig('keys') || '';
 
-      // store all function entry
+      // store all http function entry
+      const collector = new WebRouterCollector();
+      const routerTable = await collector.getFlattenRouterTable();
+
+      for (const routerInfo of routerTable) {
+        this.funMappingStore.set(routerInfo.funcHandlerName, routerInfo);
+      }
+
+      // 兼容老代码
       const funModules = listModule(FUNC_KEY);
 
       for (const funModule of funModules) {
         const funOptions: Array<{
           funHandler;
-          key
+          key;
           method: string;
-          descriptor;
           middleware: string[];
         }> = getClassMetadata(FUNC_KEY, funModule);
         funOptions.map(opts => {
           // { method: 'handler', data: 'index.handler' }
-          const handlerName = opts.funHandler
-            ? // @Func(key), if key is set
-              // or @Func({ handler })
-              opts.funHandler
-            : // else use ClassName.mehtod as handler key
-              covertId(funModule.name, opts.key);
-          this.funMappingStore.set(handlerName, {
-            middleware: opts.middleware || [],
-            mod: funModule,
-            method: opts.key,
-            descriptor: opts.descriptor,
-          });
-        });
-      }
+          // const handlerName = opts.funHandler
+          //   ? // @Func(key), if key is set
+          //     // or @Func({ handler })
+          //   opts.funHandler
+          //   : // else use ClassName.mehtod as handler key
+          //   covertId(funModule.name, opts.key);
 
-      const modules = listPreloadModule();
-      for (const module of modules) {
-        // preload init context
-        await this.getApplicationContext().getAsync(module);
+          if (!this.funMappingStore.has(opts.funHandler)) {
+            const controllerId = getProviderId(funModule);
+            this.funMappingStore.set(opts.funHandler, {
+              prefix: '/',
+              routerName: '',
+              url: '',
+              requestMethod: '',
+              method: opts.key,
+              description: '',
+              summary: '',
+              handlerName: `${controllerId}.${opts.key}`,
+              funcHandlerName: opts.funHandler,
+              controllerId: getProviderId(funModule),
+              middleware: opts.middleware || [],
+              requestMetadata: [],
+              responseMetadata: [],
+            });
+          }
+        });
       }
     }, LOCK_KEY);
   }
@@ -156,12 +181,7 @@ export class MidwayFaaSFramework extends BaseFramework<
   }
 
   public handleInvokeWrapper(handlerMapping: string) {
-    const funOptions: {
-      mod: any;
-      middleware: Array<IMiddleware<FaaSContext>>;
-      method: string;
-      descriptor: any;
-    } = this.funMappingStore.get(handlerMapping);
+    const funOptions: RouterInfo = this.funMappingStore.get(handlerMapping);
 
     return async (...args) => {
       if (args.length === 0) {
@@ -170,7 +190,7 @@ export class MidwayFaaSFramework extends BaseFramework<
 
       const context: FaaSContext = this.getContext(args.shift());
 
-      if (funOptions && funOptions.mod) {
+      if (funOptions) {
         let fnMiddlewere = [];
         // invoke middleware, just for http
         if (context.headers && context.get) {
@@ -178,12 +198,41 @@ export class MidwayFaaSFramework extends BaseFramework<
         }
         fnMiddlewere = fnMiddlewere.concat(funOptions.middleware);
         if (fnMiddlewere.length) {
+          // TODO 加载 controller 中间件
           const mw: any[] = await this.loadMiddleware(fnMiddlewere);
           mw.push(async (ctx, next) => {
             // invoke handler
-            const result = await this.invokeHandler(funOptions, ctx, args);
-            if (!ctx.body) {
+            const result = await this.invokeHandler(
+              funOptions,
+              ctx,
+              next,
+              args
+            );
+            if (result !== undefined) {
               ctx.body = result;
+            }
+            // implement response decorator
+            const routerResponseData = funOptions.responseMetadata;
+            if (routerResponseData.length) {
+              for (const routerRes of routerResponseData) {
+                switch (routerRes.type) {
+                  case WEB_RESPONSE_HTTP_CODE:
+                    ctx.status = routerRes.code;
+                    break;
+                  case WEB_RESPONSE_HEADER:
+                    for (const key in routerRes?.setHeaders || {}) {
+                      ctx.set(key, routerRes.setHeaders[key]);
+                    }
+                    break;
+                  case WEB_RESPONSE_CONTENT_TYPE:
+                    ctx.type = routerRes.contentType;
+                    break;
+                  case WEB_RESPONSE_REDIRECT:
+                    ctx.status = routerRes.code;
+                    ctx.redirect(routerRes.url);
+                    return;
+                }
+              }
             }
             return next();
           });
@@ -192,7 +241,7 @@ export class MidwayFaaSFramework extends BaseFramework<
           });
         } else {
           // invoke handler
-          return this.invokeHandler(funOptions, context, args);
+          return this.invokeHandler(funOptions, context, null, args);
         }
       }
 
@@ -225,18 +274,24 @@ export class MidwayFaaSFramework extends BaseFramework<
     return context;
   }
 
-  private async invokeHandler(
-    funOptions: {
-      mod: any;
-      middleware: Array<IMiddleware<FaaSContext>>;
-      method: string;
-    },
-    context,
-    args
-  ) {
-    const funModule = await context.requestContext.getAsync(funOptions.mod);
+  private async invokeHandler(routerInfo: RouterInfo, context, next, args) {
+    if (Array.isArray(routerInfo.requestMetadata)) {
+      await Promise.all(
+        routerInfo.requestMetadata.map(
+          async ({ index, type, propertyData }) => {
+            args[index] = await extractKoaLikeValue(type, propertyData)(
+              context,
+              next
+            );
+          }
+        )
+      );
+    }
+    const funModule = await context.requestContext.getAsync(
+      routerInfo.controllerId
+    );
     const handlerName =
-      this.getFunctionHandler(context, args, funModule, funOptions.method) ||
+      this.getFunctionHandler(context, args, funModule, routerInfo.method) ||
       this.defaultHandlerMethod;
     if (funModule[handlerName]) {
       // invoke real method
@@ -341,8 +396,4 @@ export class MidwayFaaSFramework extends BaseFramework<
   public getFrameworkName() {
     return 'midway:faas';
   }
-}
-
-function covertId(cls, method) {
-  return cls.replace(/^[A-Z]/, c => c.toLowerCase()) + '.' + method;
 }

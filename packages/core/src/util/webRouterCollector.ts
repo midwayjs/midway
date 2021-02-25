@@ -1,7 +1,8 @@
 import { EmptyFramework } from './emptyFramework';
 import {
   CONTROLLER_KEY,
-  ControllerOption, FUNC_KEY,
+  ControllerOption,
+  FUNC_KEY,
   getClassMetadata,
   getPropertyDataFromClass,
   getPropertyMetadata,
@@ -170,7 +171,7 @@ export class WebRouterCollector {
           description: webRouter.description || '',
           summary: webRouter.summary || '',
           handlerName: `${controllerId}.${webRouter.method}`,
-          funcHandlerName:`${controllerId}.${webRouter.method}`,
+          funcHandlerName: `${controllerId}.${webRouter.method}`,
           controllerId,
           middleware: webRouter.middleware,
           requestMetadata: routeArgsInfo,
@@ -216,9 +217,10 @@ export class WebRouterCollector {
           description: '',
           summary: '',
           handlerName: `${controllerId}.${webRouter.key}`,
-          funcHandlerName: webRouter.funHandler,
+          funcHandlerName:
+            webRouter.funHandler || `${controllerId}.${webRouter.key}`,
           controllerId,
-          middleware: webRouter.middleware,
+          middleware: webRouter.middleware || [],
           requestMetadata: [],
           responseMetadata: [],
         });
