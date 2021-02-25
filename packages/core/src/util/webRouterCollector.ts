@@ -55,7 +55,10 @@ export interface RouterInfo {
    * router middleware
    */
   middleware: any[];
-
+  /**
+   * controller middleware in this router
+   */
+  controllerMiddleware: any[];
   /**
    * request args metadata
    */
@@ -173,7 +176,8 @@ export class WebRouterCollector {
           handlerName: `${controllerId}.${webRouter.method}`,
           funcHandlerName: `${controllerId}.${webRouter.method}`,
           controllerId,
-          middleware: webRouter.middleware,
+          middleware: webRouter.middleware || [],
+          controllerMiddleware: middleware || [],
           requestMetadata: routeArgsInfo,
           responseMetadata: routerResponseData,
         });
@@ -221,6 +225,7 @@ export class WebRouterCollector {
             webRouter.funHandler || `${controllerId}.${webRouter.key}`,
           controllerId,
           middleware: webRouter.middleware || [],
+          controllerMiddleware: [],
           requestMetadata: [],
           responseMetadata: [],
         });

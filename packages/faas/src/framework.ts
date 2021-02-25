@@ -141,14 +141,6 @@ export class MidwayFaaSFramework extends BaseFramework<
           middleware: string[];
         }> = getClassMetadata(FUNC_KEY, funModule);
         funOptions.map(opts => {
-          // { method: 'handler', data: 'index.handler' }
-          // const handlerName = opts.funHandler
-          //   ? // @Func(key), if key is set
-          //     // or @Func({ handler })
-          //   opts.funHandler
-          //   : // else use ClassName.mehtod as handler key
-          //   covertId(funModule.name, opts.key);
-
           if (!this.funMappingStore.has(opts.funHandler)) {
             const controllerId = getProviderId(funModule);
             this.funMappingStore.set(opts.funHandler, {
@@ -163,6 +155,7 @@ export class MidwayFaaSFramework extends BaseFramework<
               funcHandlerName: opts.funHandler,
               controllerId: getProviderId(funModule),
               middleware: opts.middleware || [],
+              controllerMiddleware: [],
               requestMetadata: [],
               responseMetadata: [],
             });
@@ -194,11 +187,12 @@ export class MidwayFaaSFramework extends BaseFramework<
         let fnMiddlewere = [];
         // invoke middleware, just for http
         if (context.headers && context.get) {
-          fnMiddlewere = fnMiddlewere.concat(this.globalMiddleware);
+          fnMiddlewere = fnMiddlewere
+            .concat(this.globalMiddleware)
+            .concat(funOptions.controllerMiddleware);
         }
         fnMiddlewere = fnMiddlewere.concat(funOptions.middleware);
         if (fnMiddlewere.length) {
-          // TODO 加载 controller 中间件
           const mw: any[] = await this.loadMiddleware(fnMiddlewere);
           mw.push(async (ctx, next) => {
             // invoke handler
@@ -210,29 +204,6 @@ export class MidwayFaaSFramework extends BaseFramework<
             );
             if (result !== undefined) {
               ctx.body = result;
-            }
-            // implement response decorator
-            const routerResponseData = funOptions.responseMetadata;
-            if (routerResponseData.length) {
-              for (const routerRes of routerResponseData) {
-                switch (routerRes.type) {
-                  case WEB_RESPONSE_HTTP_CODE:
-                    ctx.status = routerRes.code;
-                    break;
-                  case WEB_RESPONSE_HEADER:
-                    for (const key in routerRes?.setHeaders || {}) {
-                      ctx.set(key, routerRes.setHeaders[key]);
-                    }
-                    break;
-                  case WEB_RESPONSE_CONTENT_TYPE:
-                    ctx.type = routerRes.contentType;
-                    break;
-                  case WEB_RESPONSE_REDIRECT:
-                    ctx.status = routerRes.code;
-                    ctx.redirect(routerRes.url);
-                    return;
-                }
-              }
             }
             return next();
           });
@@ -295,7 +266,31 @@ export class MidwayFaaSFramework extends BaseFramework<
       this.defaultHandlerMethod;
     if (funModule[handlerName]) {
       // invoke real method
-      return funModule[handlerName](...args);
+      const result = await funModule[handlerName](...args);
+      // implement response decorator
+      const routerResponseData = routerInfo.responseMetadata;
+      if (context.headers && routerResponseData.length) {
+        for (const routerRes of routerResponseData) {
+          switch (routerRes.type) {
+            case WEB_RESPONSE_HTTP_CODE:
+              context.status = routerRes.code;
+              break;
+            case WEB_RESPONSE_HEADER:
+              for (const key in routerRes?.setHeaders || {}) {
+                context.set(key, routerRes.setHeaders[key]);
+              }
+              break;
+            case WEB_RESPONSE_CONTENT_TYPE:
+              context.type = routerRes.contentType;
+              break;
+            case WEB_RESPONSE_REDIRECT:
+              context.status = routerRes.code;
+              context.redirect(routerRes.url);
+              return;
+          }
+        }
+      }
+      return result;
     }
   }
 
