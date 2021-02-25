@@ -25,6 +25,7 @@
 - [x] **场景多样化**：Midway支持传统应用、Serverless函数、微服务、小程序后端等多种场景
 - [x] **插件多样化**：支持Koa、express、egg等多种插件
 - [x] **示例丰富**: 官方提供多种Node场景的示例代码，方便开发者快速上手。
+- [x] **维护成本低**：良好的应用程序分层和解耦能力
 
 ## 描述
 
@@ -36,11 +37,15 @@ Midway可以使用 koa，express 或 EggJS 作为基本的 Web 框架。它还�
 
 ## 文档和社区
 
+![](https://img.alicdn.com/imgextra/i2/O1CN01LCCXpo1ZXw3Ee0TDk_!!6000000003205-0-tps-3336-1390.jpg)
+
 - [官网](https://midwayj.org)
 - 要查看 v2 中文文档, 请访问 [中文文档](https://www.yuque.com/midwayjs/midway_v2) 📚
 - 要查看 v1 中文文档, 请访问 [中文文档](https://www.yuque.com/midwayjs/midway_v1) 📚
 
 ## 示例
+
+![midway-examples](https://img.alicdn.com/imgextra/i1/O1CN01Q0M4Ma27FnIgiXE4a_!!6000000007768-0-tps-3802-1996.jpg)
 
 请访问 [midway-examples](http://demo.midwayjs.org/).
 
