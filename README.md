@@ -35,6 +35,20 @@ Midway可以使用 koa，express 或 EggJS 作为基本的 Web 框架。它还�
 
 此外，Midway 也适用于前端/全栈开发人员的Node.js无服务器框架。构建下一个十年的应用程序。可在AWS，阿里云，腾讯云和传统VM /容器上运行。与 React 和 Vue 轻松集成。 🌈
 
+## 快速上手
+
+```bash
+npm i @midwayjs/cli -g --registry=https://registry.npm.taobao.org
+
+## 创建项目
+mw new helloworld
+
+## 进入项目路径
+cd helloworld && npm run dev
+```
+
+你也可以在阿里云官网知行实验室，学习 Midway [相关的课程](https://start.aliyun.com/handson-lab)。
+
 ## 文档和社区
 
 ![](https://img.alicdn.com/imgextra/i2/O1CN01LCCXpo1ZXw3Ee0TDk_!!6000000003205-0-tps-3336-1390.jpg)
