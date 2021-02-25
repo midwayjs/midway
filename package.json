@@ -29,6 +29,7 @@
     "build": "sh scripts/build.sh",
     "authors": "git log --format='%aN <%aE>' | sort -u > AUTHORS",
     "postinstall": "opencollective-postinstall",
+    "postversion": "node ./scripts/generate_rollback.js",
     "lint": "lerna exec mwts check",
     "lint:fix": "lerna exec mwts fix"
   },

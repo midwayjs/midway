@@ -184,8 +184,7 @@ describe('/test/index.test.ts', function () {
 
     // 双向流
     const result3= await new Promise<number>((resolve, reject) => {
-      const clientStream = service.addMore();
-      const duplexCall = clientStream.getCall();
+      const duplexCall = service.addMore().getCall();
       total = 0;
       let idx = 0;
 
@@ -193,7 +192,7 @@ describe('/test/index.test.ts', function () {
         total += data.num;
         idx++;
         if (idx === 2) {
-          clientStream.end();
+          duplexCall.end();
           resolve(total);
         }
       });
@@ -211,7 +210,9 @@ describe('/test/index.test.ts', function () {
 
 
     // 保证顺序的双向流
-    const t = service.addMore();
+    const t = service.addMore({
+      messageKey: 'id'
+    });
 
     const result4 = await new Promise<number>((resolve, reject) => {
       total = 0;
