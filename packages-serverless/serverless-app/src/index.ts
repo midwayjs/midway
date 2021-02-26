@@ -52,7 +52,7 @@ export class Framework
     return this.innerApp.getAppDir();
   }
 
-  public getLogger(name?: string) {
+  getLogger(name?: string): any {
     return this.innerApp.getLogger(name);
   }
   getBaseDir(): string {
@@ -61,7 +61,7 @@ export class Framework
   getCoreLogger() {
     return (this.innerApp as any).coreLogger;
   }
-  createLogger(name: string, options?: any) {
+  createLogger(name: string, options?: any): any {
     return this.innerApp.createLogger(name, options);
   }
   getProjectName(): string {
