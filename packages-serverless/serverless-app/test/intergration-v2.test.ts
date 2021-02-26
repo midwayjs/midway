@@ -1,7 +1,7 @@
 'use strict';
 import { join } from 'path';
 import * as assert from 'assert';
-import { createApp, close } from '@midwayjs/mock';
+import { createApp, close } from '../../../packages/mock';
 const request = require('supertest');
 const cwd = join(__dirname, 'fixtures/integration-v2');
 describe('test/index.test.ts', () => {
