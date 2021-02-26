@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://midwayjs.org/" target="blank"><img src="https://gw.alicdn.com/tfs/TB1OlNIUAL0gK0jSZFtXXXQCXXa-564-135.png" width="300" alt="Midway Logo" /></a>
+  <a href="https://midwayjs.org/" target="blank"><img src="https://img.alicdn.com/imgextra/i1/O1CN01xQLU011T2R7PHksIv_!!6000000002324-2-tps-1200-616.png" width="1000" alt="Midway Logo" /></a>
 </p>
 
 <p align="center">A <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building Serverless services, traditional server-side applications, microservices, and small programs.</p>
