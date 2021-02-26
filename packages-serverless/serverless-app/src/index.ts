@@ -1,13 +1,14 @@
 import {
-  BaseFramework,
+  IMidwayContainer,
+  IMidwayApplication,
   IMidwayBootstrapOptions,
+  IMidwayFramework,
   MidwayFrameworkType,
+  IMidwayContext,
 } from '@midwayjs/core';
 
 import { Server } from 'net';
-import { readFileSync } from 'fs';
-import { join } from 'path';
-import { start1, start2 } from './start';
+import { start2 } from './start';
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import { getSpecFile, loadSpec } from '@midwayjs/serverless-spec-builder';
@@ -16,10 +17,60 @@ import { findNpmModule, output404 } from './utils';
 import { Locator } from '@midwayjs/locate';
 import { StarterMap, TriggerMap } from './platform';
 
-export class Framework extends BaseFramework<any, any, any> {
+import { IServerlessApp, IServerlessAppOptions } from './interface';
+export * from './interface';
+export class Framework
+  implements IMidwayFramework<IServerlessApp, IServerlessAppOptions> {
+  app: IServerlessApp;
+  configurationOptions: IServerlessAppOptions;
+  private innerApp: IMidwayApplication;
+  private innerFramework: IMidwayFramework<any, any>;
+  private runtime: any;
   private server: Server;
   private bootstrapOptions;
   private spec;
+  configure(options: IServerlessAppOptions) {
+    this.configurationOptions = options;
+    return this;
+  }
+  async stop() {
+    this.server.close();
+  }
+
+  getApplicationContext(): IMidwayContainer {
+    return this.innerApp.getApplicationContext();
+  }
+
+  getConfiguration(key?: string): any {
+    return this.innerApp.getConfig(key);
+  }
+
+  getCurrentEnvironment(): string {
+    return this.innerApp.getEnv();
+  }
+  getAppDir(): string {
+    return this.innerApp.getAppDir();
+  }
+
+  public getLogger(name?: string) {
+    return this.innerApp.getLogger(name);
+  }
+  getBaseDir(): string {
+    return this.innerApp.getBaseDir();
+  }
+  getCoreLogger() {
+    return (this.innerApp as any).coreLogger;
+  }
+  createLogger(name: string, options?: any) {
+    return this.innerApp.createLogger(name, options);
+  }
+  getProjectName(): string {
+    return this.innerApp.getProjectName();
+  }
+  public getDefaultContextLoggerClass() {
+    return this.innerFramework.getDefaultContextLoggerClass();
+  }
+
   async applicationInitialize(options: IMidwayBootstrapOptions) {}
 
   public getFrameworkName() {
@@ -29,11 +80,15 @@ export class Framework extends BaseFramework<any, any, any> {
   public getFrameworkType(): MidwayFrameworkType {
     return MidwayFrameworkType.FAAS;
   }
-  public getApplication() {
+  public getApplication(): IServerlessApp {
     return this.app;
   }
 
-  getStarterName() {
+  public getServer() {
+    return this.server;
+  }
+
+  private getStarterName() {
     const starter = this.spec?.provider?.starterModule;
     if (starter) {
       return require.resolve(starter);
@@ -58,7 +113,7 @@ export class Framework extends BaseFramework<any, any, any> {
     );
   }
 
-  getTriggerMap() {
+  private getTriggerMap() {
     const trigger = this.spec?.provider?.triggerModule;
     if (trigger) {
       return require(trigger);
@@ -83,7 +138,18 @@ export class Framework extends BaseFramework<any, any, any> {
     );
   }
 
-  getPlatform() {
+  private async getServerlessInstance<T>(cls: any): Promise<T> {
+    // 如何传initializeContext
+    const context: IMidwayContext = await new Promise(resolve => {
+      this.runtime.asyncEvent(async ctx => {
+        resolve((this.innerFramework as any).getContext(ctx));
+      })({}, this.configurationOptions.initContext || {});
+    });
+
+    return context.requestContext.getAsync(cls);
+  }
+
+  private getPlatform() {
     const provider = this.spec?.provider?.name;
     if (provider) {
       if (provider === 'fc' || provider === 'aliyun') {
@@ -99,7 +165,7 @@ export class Framework extends BaseFramework<any, any, any> {
     process.env.MIDWAY_SERVER_ENV = process.env.MIDWAY_SERVER_ENV || 'local';
     this.bootstrapOptions = options;
     this.getFaaSSpec();
-    this.app = express();
+    this.app = express() as any;
     const { appDir, baseDir } = options;
 
     const faasModule = '@midwayjs/faas';
@@ -123,48 +189,24 @@ export class Framework extends BaseFramework<any, any, any> {
     const midwayLocatorResult = await locator.run({});
     const triggerMap = this.getTriggerMap();
 
-    // 获取midwayjs/faas 的版本，不同版本使用不同的启动方式
-    let version = process.env.DEV_MIDWAY_FAAS_VERSION;
-    if (!version) {
-      const pkgJson = JSON.parse(
-        readFileSync(join(faasModulePath, 'package.json')).toString()
-      );
-      version = pkgJson.version;
-    }
-    let startResult;
-    if (version[0] === '2') {
-      const { Framework } = require(usageFaasModulePath);
-      startResult = await start2({
-        appDir,
-        baseDir: midwayLocatorResult.tsCodeRoot || baseDir,
-        framework: Framework,
-        starter: require(starterName),
-        initializeContext: undefined,
-      });
-    } else if (version[0] === '1') {
-      const faasModule = require(usageFaasModulePath);
-      const FaaSStarterName = this.getFaasStarterName();
-      startResult = await start1({
-        appDir,
-        baseDir: appDir,
-        tsCoodRoot: midwayLocatorResult.tsCodeRoot,
-        faasModule: faasModule[FaaSStarterName],
-        starter: require(starterName),
-        initializeContext: undefined,
-      });
-    }
-
-    if (!startResult) {
-      throw new Error('This Project not support');
-    }
-
+    const { Framework } = require(usageFaasModulePath);
+    const startResult = await start2({
+      appDir,
+      baseDir: midwayLocatorResult.tsCodeRoot || baseDir,
+      framework: Framework,
+      starter: require(starterName),
+      initializeContext: undefined,
+    });
+    this.innerFramework = startResult.framework;
+    this.runtime = startResult.runtime;
+    this.innerApp = startResult.framework.getApplication();
     const invoke = startResult.invoke;
     const httpFuncSpec = await startResult.getFunctionsFromDecorator();
     if (!this.spec.functions) {
       this.spec.functions = {};
     }
     Object.assign(this.spec.functions, httpFuncSpec);
-    this.app.invoke = invoke;
+    this.app.getServerlessInstance = this.getServerlessInstance.bind(this);
     this.app.use(bodyParser.urlencoded({ extended: false }));
     this.app.use(bodyParser.json());
     this.app.use((req, res, next) => {

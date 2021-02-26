@@ -37,51 +37,8 @@ export const start2 = async options => {
     initContext: initializeContext,
   });
   return {
-    // ast 分析装饰器上面的函数表
-    getFunctionsFromDecorator: async () => {
-      return analysisDecorator(appDir);
-    },
-    invoke: async (handlerName: string, trigger: any[]) => {
-      return runtime.asyncEvent(async ctx => {
-        return starterInstance.handleInvokeWrapper(handlerName)(ctx);
-      })(...trigger);
-    },
-  };
-};
-
-export const start1 = async options => {
-  const {
-    appDir,
-    baseDir,
-    tsCoodRoot,
-    starter,
-    faasModule,
-    layers = [],
-    initializeContext,
-    preloadModules,
-  } = options;
-  const { start } = starter;
-  let starterInstance;
-  layers.unshift(engine => {
-    engine.addRuntimeExtension({
-      async beforeFunctionStart(runtime) {
-        starterInstance = new faasModule({
-          baseDir,
-          initializeContext,
-          applicationAdapter: runtime,
-          preloadModules,
-        });
-        await starterInstance.start({
-          baseDir: tsCoodRoot,
-        });
-      },
-    });
-  });
-  const runtime = await start({
-    layers: layers,
-    initContext: initializeContext,
-  });
-  return {
+    runtime,
+    framework: starterInstance,
     // ast 分析装饰器上面的函数表
     getFunctionsFromDecorator: async () => {
       return analysisDecorator(appDir);

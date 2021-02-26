@@ -2,12 +2,14 @@
 import { join } from 'path';
 import * as assert from 'assert';
 import { createApp, close } from '../../../packages/mock';
+import { Framework, IServerlessApp } from '../src';
+import { EventService } from './fixtures/faas-v2/src/event';
 const request = require('supertest');
 const cwd = join(__dirname, 'fixtures/faas-v2');
 describe('test/faas-v2.test.ts', () => {
-  let app;
+  let app: IServerlessApp;
   beforeAll(async () => {
-    app = await createApp(cwd, {}, join(__dirname, '../src'));
+    app = await createApp<Framework>(cwd, {}, join(__dirname, '../src'));
   });
   afterAll(async () => {
     await close(app);
@@ -58,4 +60,9 @@ describe('test/faas-v2.test.ts', () => {
       })
       .catch(err => done(err));
   });
+  it('oth event trigger', async () => {
+    const instance = await app.getServerlessInstance<EventService>(EventService);
+    const result = instance.handler({ name: 123 });
+    assert(result.name === 123);
+  })
 });
