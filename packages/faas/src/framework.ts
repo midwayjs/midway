@@ -229,7 +229,7 @@ export class MidwayFaaSFramework extends BaseFramework<
     return mwIns.resolve();
   }
 
-  protected getContext(context) {
+  public getContext(context) {
     if (!context.env) {
       context.env = this.getApplicationContext()
         .getEnvironmentService()
@@ -246,7 +246,10 @@ export class MidwayFaaSFramework extends BaseFramework<
   }
 
   private async invokeHandler(routerInfo: RouterInfo, context, next, args) {
-    if (Array.isArray(routerInfo.requestMetadata)) {
+    if (
+      Array.isArray(routerInfo.requestMetadata) &&
+      routerInfo.requestMetadata.length
+    ) {
       await Promise.all(
         routerInfo.requestMetadata.map(
           async ({ index, type, propertyData }) => {

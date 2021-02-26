@@ -64,5 +64,5 @@ describe('test/faas-v2.test.ts', () => {
     const instance = await app.getServerlessInstance<EventService>(EventService);
     const result = instance.handler({ name: 123 });
     assert(result.name === 123);
-  })
+  });
 });

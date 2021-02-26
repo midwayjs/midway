@@ -276,12 +276,21 @@ describe('test/index.test.ts', () => {
     );
     expect(data).toEqual('ahello');
 
+    let ctx = {
+      text: 'hello',
+      httpMethod: 'GET',
+      headers: {},
+      set(key, value) {
+        ctx.headers[key] = value;
+      }
+    }
+
     data = await starter.handleInvokeWrapper('apiController.homeSet')(
-      {
-        text: 'hello',
-      },
+      ctx,
       { text: 'a' }
     );
     expect(data).toEqual('bbb');
+    expect(ctx.headers['ccc']).toEqual('ddd');
+    expect(ctx.headers['bbb']).toEqual('aaa');
   });
 });
