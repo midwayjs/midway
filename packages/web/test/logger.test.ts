@@ -61,6 +61,32 @@ describe('test/logger.test.js', () => {
     await closeApp(app);
   });
 
+  it('should test util', async () => {
+    mm(process.env, 'MIDWAY_SERVER_ENV', '');
+    mm(process.env, 'EGG_SERVER_ENV', 'local');
+    mm(process.env, 'EGG_LOG', 'ERROR');
+    const logsDir = join(__dirname, 'fixtures/apps/mock-dev-app/logs/ali-demo');
+    await remove(logsDir);
+    await ensureDir(logsDir);
+
+    const app = await creatApp('apps/mock-dev-app', { cleanLogsDir: false});
+    const list = [];
+
+    for (const key in app.loggers) {
+      if (!app.loggers.hasOwnProperty(key)) {
+        continue;
+      }
+      const registeredLogger = app.loggers[key];
+      for (const transport of registeredLogger.values()) {
+        const file = transport.options.file;
+        if (file) {
+          list.push(file);
+        }
+      }
+    }
+    expect(list.length).toEqual(0);
+  });
+
   it('should backup egg logger file when start', async () => {
     mm(process.env, 'MIDWAY_SERVER_ENV', '');
     mm(process.env, 'EGG_SERVER_ENV', 'local');
