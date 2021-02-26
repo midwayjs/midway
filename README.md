@@ -54,7 +54,7 @@ cd helloworld && npm run dev
 
 ![](https://img.alicdn.com/imgextra/i2/O1CN01LCCXpo1ZXw3Ee0TDk_!!6000000003205-0-tps-3336-1390.jpg)
 
-- [官网](https://midwayj.org)
+- [官网](https://midwayjs.org)
 - 要查看 v2 中文文档, 请访问 [中文文档](https://www.yuque.com/midwayjs/midway_v2) 📚
 - 要查看 v1 中文文档, 请访问 [中文文档](https://www.yuque.com/midwayjs/midway_v1) 📚
 
