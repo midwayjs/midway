@@ -1,0 +1,50 @@
+{
+  "name": "@midwayjs/serverless-app",
+  "version": "2.6.8",
+  "main": "dist/index",
+  "typings": "dist/index.d.ts",
+  "dependencies": {
+    "@midwayjs/bootstrap": "^2.8.0",
+    "@midwayjs/core": "^2.8.0",
+    "@midwayjs/locate": "^1.4.1",
+    "@midwayjs/gateway-common-http": "^1.2.42",
+    "@midwayjs/serverless-spec-builder": "^1.2.42",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@midwayjs/cli": "^1.2.36",
+    "@midwayjs/faas": "^2.8.0",
+    "@midwayjs/faas-middleware-upload": "^0.0.5",
+    "@midwayjs/mock": "^2.8.0",
+    "@midwayjs/test-faas-version-1": "^1.0.2",
+    "supertest": "^6.1.3",
+    "typescript": "^4.1.0",
+    "@midwayjs/serverless-fc-starter": "^2.7.0",
+    "@midwayjs/serverless-fc-trigger": "^2.7.0",
+    "@midwayjs/serverless-scf-starter": "^2.7.0",
+    "@midwayjs/serverless-scf-trigger": "^2.7.0"
+  },
+  "engines": {
+    "node": ">= 10"
+  },
+  "files": [
+    "plugin.json",
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "midway-bin build -c",
+    "test": "midway-bin test --ts --forceExit",
+    "cov": "midway-bin cov --ts --forceExit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:midwayjs/midway.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT",
+  "gitHead": "58706de896b8e3b50605bb29f40ff29abe43924d"
+}
