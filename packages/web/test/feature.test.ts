@@ -46,7 +46,6 @@ describe('/test/feature.test.ts', () => {
       expect(result.text).toEqual('ctx-body');
     });
 
-
     it('should compatible old get router method', async () => {
       const prioritySortRouters = (app.loader as any).framework.prioritySortRouters;
       for (const router of prioritySortRouters) {
@@ -58,7 +57,6 @@ describe('/test/feature.test.ts', () => {
         }
       }
     });
-
   });
 
   it('should test global use midway middleware id in egg', async () => {
