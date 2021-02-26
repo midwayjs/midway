@@ -45,6 +45,20 @@ describe('/test/feature.test.ts', () => {
       const result = await createHttpRequest(app).get('/ctx-body');
       expect(result.text).toEqual('ctx-body');
     });
+
+
+    it('should compatible old get router method', async () => {
+      const prioritySortRouters = (app.loader as any).framework.prioritySortRouters;
+      for (const router of prioritySortRouters) {
+        for (const layer of router['router'].stack) {
+          console.log(layer.paramNames);
+          console.log(layer.name);
+          console.log(layer.path);
+          console.log(layer.methods);
+        }
+      }
+    });
+
   });
 
   it('should test global use midway middleware id in egg', async () => {
