@@ -206,7 +206,7 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
     this.prioritySortRouters.push({
       priority: 0,
       router,
-    })
+    });
     return router;
   }
 
