@@ -35,7 +35,9 @@ export class Framework
     return this;
   }
   async stop() {
-    this.server.close();
+    if (this.server?.close) {
+      this.server.close();
+    }
   }
 
   getApplicationContext(): IMidwayContainer {
@@ -253,7 +255,9 @@ export class Framework
       res.send(output404(req.path, this.spec.functions));
     });
 
-    this.listenMessage();
+    if (process.env.IN_CHILD_PROCESS) {
+      this.listenMessage();
+    }
   }
 
   protected getFaaSModule() {
