@@ -1,10 +1,10 @@
 import {
-  IMidwayContainer,
   IMidwayApplication,
   IMidwayBootstrapOptions,
+  IMidwayContainer,
+  IMidwayContext,
   IMidwayFramework,
   MidwayFrameworkType,
-  IMidwayContext,
 } from '@midwayjs/core';
 
 import { Server } from 'net';
@@ -18,6 +18,7 @@ import { Locator } from '@midwayjs/locate';
 import { StarterMap, TriggerMap } from './platform';
 
 import { IServerlessApp, IServerlessAppOptions } from './interface';
+
 export * from './interface';
 export class Framework
   implements IMidwayFramework<IServerlessApp, IServerlessAppOptions> {
@@ -100,8 +101,7 @@ export class Framework
     }
     for (const mod of starterModList) {
       try {
-        const starter = require.resolve(mod);
-        return starter;
+        return require.resolve(mod);
       } catch {
         // continue
       }
@@ -125,8 +125,7 @@ export class Framework
     }
     for (const mod of triggerModList) {
       try {
-        const trigger = require(mod);
-        return trigger;
+        return require(mod);
       } catch {
         // continue
       }
