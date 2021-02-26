@@ -1,6 +1,4 @@
 import { Provide, Func, Inject } from '@midwayjs/decorator';
-console.log(require('@midwayjs/decorator').version);
-console.log(require.resolve('@midwayjs/decorator'));
 @Provide()
 export class HelloHttpService {
   @Inject()

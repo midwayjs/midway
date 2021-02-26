@@ -4,7 +4,6 @@ export const start2 = async options => {
   const {
     appDir,
     baseDir,
-    tsCoodRoot,
     framework,
     starter,
     layers = [],
@@ -40,7 +39,7 @@ export const start2 = async options => {
   return {
     // ast 分析装饰器上面的函数表
     getFunctionsFromDecorator: async () => {
-      return analysisDecorator(appDir, tsCoodRoot || baseDir);
+      return analysisDecorator(appDir);
     },
     invoke: async (handlerName: string, trigger: any[]) => {
       return runtime.asyncEvent(async ctx => {
@@ -85,7 +84,7 @@ export const start1 = async options => {
   return {
     // ast 分析装饰器上面的函数表
     getFunctionsFromDecorator: async () => {
-      return analysisDecorator(appDir, tsCoodRoot || baseDir);
+      return analysisDecorator(appDir);
     },
     invoke: async (handlerName: string, trigger: any[]) => {
       return runtime.asyncEvent(async ctx => {

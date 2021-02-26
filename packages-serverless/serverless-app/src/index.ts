@@ -100,10 +100,6 @@ export class Framework extends BaseFramework<any, any, any> {
       throw new Error(`Module '${faasModule}' not found`);
     }
     const starterName = this.getStarterName();
-    if (!starterName) {
-      throw new Error('Starter not found');
-    }
-
     const usageFaaSModule = this.getFaaSModule();
 
     let usageFaasModulePath = faasModulePath;
@@ -133,7 +129,6 @@ export class Framework extends BaseFramework<any, any, any> {
       startResult = await start2({
         appDir,
         baseDir: midwayLocatorResult.tsCodeRoot || baseDir,
-        tsCoodRoot: midwayLocatorResult.tsCodeRoot,
         framework: Framework,
         starter: require(starterName),
         initializeContext: undefined,
@@ -156,13 +151,14 @@ export class Framework extends BaseFramework<any, any, any> {
     }
 
     const invoke = startResult.invoke;
-    const decorator = await startResult.getFunctionsFromDecorator();;
+    const decorator = await startResult.getFunctionsFromDecorator();
+    console.log('decorator info', decorator);
     this.app.invoke = invoke;
     this.app.use(bodyParser.urlencoded({ extended: false }));
     this.app.use(bodyParser.json());
     this.app.use((req, res, next) => {
       const gateway = createExpressGateway({
-        functionDir: this.appDir,
+        functionDir: appDir,
       });
       gateway.transform(req, res, next, async () => {
         return {
