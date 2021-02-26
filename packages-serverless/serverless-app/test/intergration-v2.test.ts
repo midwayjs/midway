@@ -4,7 +4,7 @@ import * as assert from 'assert';
 import { createApp, close } from '../../../packages/mock';
 const request = require('supertest');
 const cwd = join(__dirname, 'fixtures/integration-v2');
-describe.skip('test/index.test.ts', () => {
+describe('test/index.test.ts', () => {
   let app;
   beforeAll(async () => {
     app = await createApp(cwd, {}, join(__dirname, '../src'));

@@ -35,7 +35,7 @@
   "scripts": {
     "build": "midway-bin build -c",
     "test": "midway-bin test --ts",
-    "cov": "GENERATE_SOURCEMAP=false midway-bin cov --ts"
+    "cov": "midway-bin test --ts"
   },
   "repository": {
     "type": "git",

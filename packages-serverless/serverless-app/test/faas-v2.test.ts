@@ -14,7 +14,7 @@ describe('test/faas-v2.test.ts', () => {
   afterAll(async () => {
     await close(app);
   });
-  it.only('http get', async done => {
+  it('http get', async done => {
     request(app)
       .get('/hello?name=test&age=123')
       .expect(200)
