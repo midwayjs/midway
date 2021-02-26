@@ -203,13 +203,7 @@ class MidwayLoggers extends Map<string, ILogger> {
 
     // overwrite values for pandora collect
     (logger as any).values = () => {
-      return [
-        {
-          options: {
-            file: options.file,
-          },
-        },
-      ];
+      return [];
     };
 
     this[loggerKey] = logger;
