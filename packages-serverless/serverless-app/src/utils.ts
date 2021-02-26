@@ -66,10 +66,10 @@ export const analysisDecorator = async (cwd: string) => {
             http: {
               method: [].concat(func.requestMethod || 'get'),
               path: (func.prefix + func.url).replace(/\/{1,}/g, '/'),
-            }
-          }
-        ]
-      }
+            },
+          },
+        ],
+      };
     });
   }
   return allFunc;

@@ -161,7 +161,7 @@ export class Framework extends BaseFramework<any, any, any> {
     const invoke = startResult.invoke;
     const httpFuncSpec = await startResult.getFunctionsFromDecorator();
     if (!this.spec.functions) {
-      this.spec.functions = {}
+      this.spec.functions = {};
     }
     Object.assign(this.spec.functions, httpFuncSpec);
     this.app.invoke = invoke;
