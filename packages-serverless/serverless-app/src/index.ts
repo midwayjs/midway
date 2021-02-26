@@ -43,15 +43,19 @@ export class Framework extends BaseFramework<any, any, any> {
     if (!starterModList || !starterModList.length) {
       throw new Error(`Current provider '${platform}' not support(no starter)`);
     }
-    for(const mod of starterModList) {
+    for (const mod of starterModList) {
       try {
         const starter = require.resolve(mod);
-        return starter
+        return starter;
       } catch {
         // continue
       }
     }
-    throw new Error(`Platform starter '${starterModList[starterModList.length - 1]}' not found`);
+    throw new Error(
+      `Platform starter '${
+        starterModList[starterModList.length - 1]
+      }' not found`
+    );
   }
 
   getTriggerMap() {
@@ -64,15 +68,19 @@ export class Framework extends BaseFramework<any, any, any> {
     if (!triggerModList || !triggerModList.length) {
       throw new Error(`Current provider '${platform}' not support(no trigger)`);
     }
-    for(const mod of triggerModList) {
+    for (const mod of triggerModList) {
       try {
         const trigger = require(mod);
-        return trigger
+        return trigger;
       } catch {
         // continue
       }
     }
-    throw new Error(`Platform trigger '${triggerModList[triggerModList.length - 1]}' not found`);
+    throw new Error(
+      `Platform trigger '${
+        triggerModList[triggerModList.length - 1]
+      }' not found`
+    );
   }
 
   getPlatform() {
@@ -151,8 +159,11 @@ export class Framework extends BaseFramework<any, any, any> {
     }
 
     const invoke = startResult.invoke;
-    const decorator = await startResult.getFunctionsFromDecorator();
-    console.log('decorator info', decorator);
+    const httpFuncSpec = await startResult.getFunctionsFromDecorator();
+    if (!this.spec.functions) {
+      this.spec.functions = {}
+    }
+    Object.assign(this.spec.functions, httpFuncSpec);
     this.app.invoke = invoke;
     this.app.use(bodyParser.urlencoded({ extended: false }));
     this.app.use(bodyParser.json());

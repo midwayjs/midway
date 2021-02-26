@@ -3,14 +3,3 @@ service: serverless-midway-test
 provider:
   name: aliyun
   runtime: nodejs8
-
-
-functions:
-  http:
-    handler: http.handler
-    events:
-      - http:
-          method:
-            - get
-            - post
-          path: /hello
