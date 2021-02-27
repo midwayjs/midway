@@ -535,7 +535,7 @@ describe('/test/baseFramework.test.ts', () => {
     });
 
     expect(container.registry.hasObject(LIFECYCLE_IDENTIFIER_PREFIX + 'lifeCycleTest')).toBeTruthy();
-    await container.stop();
+    await framework.stop();
     expect(container.registry.hasObject(LIFECYCLE_IDENTIFIER_PREFIX + 'lifeCycleTest')).toBeFalsy();
     expect(callback.withArgs('on stop').calledOnce).toBeTruthy();
 
