@@ -238,3 +238,19 @@ export async function close(
     }
   }
 }
+
+export async function createFunctionApp<
+  T extends IMidwayFramework<any, U>,
+  U = T['configurationOptions'],
+  Y = ReturnType<T['getApplication']>
+>(
+  baseDir: string = process.cwd(),
+  options?: U & MockAppConfigurationOptions
+): Promise<Y> {
+  const framework: T = await create<T, U>(
+    baseDir,
+    options,
+    '@midwayjs/serverless-app'
+  );
+  return (framework.getApplication() as unknown) as Y;
+}

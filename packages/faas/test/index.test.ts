@@ -265,4 +265,32 @@ describe('test/index.test.ts', () => {
     assert(loggerExist);
     await closeApp(starter);
   });
+
+  it('invoke controller handler', async () => {
+    const starter = await creatStarter('base-app-controller');
+    let data = await starter.handleInvokeWrapper('index.handler')(
+      {
+        text: 'hello',
+      },
+      { text: 'a' }
+    );
+    expect(data).toEqual('ahello');
+
+    let ctx = {
+      text: 'hello',
+      httpMethod: 'GET',
+      headers: {},
+      set(key, value) {
+        ctx.headers[key] = value;
+      }
+    }
+
+    data = await starter.handleInvokeWrapper('apiController.homeSet')(
+      ctx,
+      { text: 'a' }
+    );
+    expect(data).toEqual('bbb');
+    expect(ctx.headers['ccc']).toEqual('ddd');
+    expect(ctx.headers['bbb']).toEqual('aaa');
+  });
 });
