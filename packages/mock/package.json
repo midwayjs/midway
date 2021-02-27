@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/mock",
-  "version": "2.8.0",
+  "version": "2.8.2",
   "description": "create your test app from midway framework",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -32,14 +32,14 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/cli": "^1.2.36",
-    "@midwayjs/core": "^2.8.0",
+    "@midwayjs/core": "^2.8.2",
     "@types/amqplib": "^0.5.13",
     "amqplib": "^0.6.0"
   },
   "dependencies": {
-    "@midwayjs/bootstrap": "^2.8.0",
-    "@midwayjs/decorator": "^2.8.0",
-    "@midwayjs/logger": "^2.8.0",
+    "@midwayjs/bootstrap": "^2.8.2",
+    "@midwayjs/decorator": "^2.8.2",
+    "@midwayjs/logger": "^2.8.2",
     "egg-mock": "^3.21.0",
     "fs-extra": "^8.0.1",
     "power-assert": "^1.6.1",

@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.8.2](https://github.com/midwayjs/midway/compare/v2.8.0...v2.8.2) (2021-02-27)
+
+
+### Bug Fixes
+
+* remove file options ([#869](https://github.com/midwayjs/midway/issues/869)) ([2287e00](https://github.com/midwayjs/midway/commit/2287e00f617b365ac28b6b2d01d3cf89d0935f9b))
+
+
+### Features
+
+* support fun router ([#867](https://github.com/midwayjs/midway/issues/867)) ([01e673f](https://github.com/midwayjs/midway/commit/01e673f50d48d302e449ab88c2e419bcaeab1458))
+
+
+
+
+
 # [2.8.0](https://github.com/midwayjs/midway/compare/v2.7.7...v2.8.0) (2021-02-24)
 
 

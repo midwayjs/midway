@@ -1,17 +1,17 @@
 {
   "name": "@midwayjs/serverless-fc-starter",
-  "version": "2.7.7",
+  "version": "2.8.2",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/runtime-engine": "^2.6.8",
-    "@midwayjs/serverless-http-parser": "^2.7.7"
+    "@midwayjs/runtime-engine": "^2.8.2",
+    "@midwayjs/serverless-http-parser": "^2.8.2"
   },
   "devDependencies": {
-    "@midwayjs/core": "^2.8.0",
-    "@midwayjs/decorator": "^2.8.0",
     "@midwayjs/cli": "^1.2.36",
-    "@midwayjs/runtime-mock": "^2.6.8",
+    "@midwayjs/core": "^2.8.2",
+    "@midwayjs/decorator": "^2.8.2",
+    "@midwayjs/runtime-mock": "^2.8.2",
     "raw-body": "^2.4.1"
   },
   "engines": {
