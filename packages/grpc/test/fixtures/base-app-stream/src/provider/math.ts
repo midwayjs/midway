@@ -46,7 +46,7 @@ export class Math implements math.Math {
     });
 
     const meta = new Metadata();
-    this.ctx.metadata.add('xxx', 'bbb');
+    meta.add('xxx', 'bbb');
 
     this.ctx.sendMetadata(meta);
     this.ctx.end();

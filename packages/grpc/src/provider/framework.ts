@@ -192,24 +192,22 @@ export class MidwayGRPCFramework extends BaseFramework<
   }
 
   public async run(): Promise<void> {
-    if (this.configurationOptions.url) {
-      return new Promise<void>((resolve, reject) => {
-        this.server.bindAsync(
-          `${this.configurationOptions.url}`,
-          this.configurationOptions.credentials ||
-            ServerCredentials.createInsecure(),
-          (err: Error | null, bindPort: number) => {
-            if (err) {
-              reject(err);
-            }
-
-            this.server.start();
-            this.logger.info(`Server port = ${bindPort} start success`);
-            resolve();
+    return new Promise<void>((resolve, reject) => {
+      this.server.bindAsync(
+        `${this.configurationOptions.url || 'localhost:6565'}`,
+        this.configurationOptions.credentials ||
+          ServerCredentials.createInsecure(),
+        (err: Error | null, bindPort: number) => {
+          if (err) {
+            reject(err);
           }
-        );
-      });
-    }
+
+          this.server.start();
+          this.logger.info(`Server port = ${bindPort} start success`);
+          resolve();
+        }
+      );
+    });
   }
 
   public async beforeStop() {
