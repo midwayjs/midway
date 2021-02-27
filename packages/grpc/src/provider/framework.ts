@@ -196,7 +196,7 @@ export class MidwayGRPCFramework extends BaseFramework<
       this.server.bindAsync(
         `${this.configurationOptions.url || 'localhost:6565'}`,
         this.configurationOptions.credentials ||
-        ServerCredentials.createInsecure(),
+          ServerCredentials.createInsecure(),
         (err: Error | null, bindPort: number) => {
           if (err) {
             reject(err);
