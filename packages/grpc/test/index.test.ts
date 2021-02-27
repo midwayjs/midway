@@ -71,7 +71,6 @@ describe('/test/index.test.ts', function () {
           package: 'helloworld',
         }
       ],
-      url: 'localhost:6565',
     });
 
     const service = await createGRPCConsumer<helloworld.GreeterClient>({
@@ -120,7 +119,6 @@ describe('/test/index.test.ts', function () {
           package: 'helloworld',
         }
       ],
-      url: 'localhost:6565'
     });
 
     const service: any = await createGRPCConsumer({
@@ -145,7 +143,6 @@ describe('/test/index.test.ts', function () {
           package: 'math',
         }
       ],
-      url: 'localhost:6565'
     });
 
     const service = await createGRPCConsumer<math.MathClient>({
