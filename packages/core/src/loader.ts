@@ -121,7 +121,7 @@ export class ContainerLoader {
               }
               return Reflect.get(target, prop, receiver);
             },
-          })
+          }),
         );
       }
     }

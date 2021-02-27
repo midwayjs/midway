@@ -1,6 +1,5 @@
 import {
   AspectMetadata,
-  CONFIGURATION_KEY,
   getProviderId,
   IMethodAspect,
   isProvide,
@@ -35,7 +34,6 @@ import {
   IConfigService,
   IContainerConfiguration,
   IEnvironmentService,
-  ILifeCycle,
   IMidwayContainer,
   IObjectDefinitionMetadata,
   REQUEST_CTX_KEY,
@@ -52,7 +50,6 @@ import { recursiveGetMetadata } from '../common/reflectTool';
 import { ObjectDefinition } from '../definitions/objectDefinition';
 import { FunctionDefinition } from '../definitions/functionDefinition';
 import { ManagedReference, ManagedValue } from './managed';
-import { FunctionalConfiguration } from '../functional/configuration';
 
 const DEFAULT_PATTERN = ['**/**.ts', '**/**.tsx', '**/**.js'];
 const DEFAULT_IGNORE_PATTERN = [
@@ -574,29 +571,6 @@ export class MidwayContainer
   }
 
   async stop(): Promise<void> {
-    const cycles: Array<{ target: any; namespace: string }> = listModule(
-      CONFIGURATION_KEY
-    );
-    this.debugLogger(
-      'load lifecycle length => %s when stop.',
-      cycles && cycles.length
-    );
-    for (const cycle of cycles) {
-      let inst;
-      if (cycle.target instanceof FunctionalConfiguration) {
-        // 函数式写法
-        inst = cycle.target;
-      } else {
-        const providerId = getProviderId(cycle.target);
-        this.debugLogger('onStop lifecycle id => %s.', providerId);
-        inst = await this.getAsync<ILifeCycle>(providerId);
-      }
-
-      if (inst.onStop && typeof inst.onStop === 'function') {
-        await inst.onStop(this);
-      }
-    }
-
     await super.stop();
   }
   /**
