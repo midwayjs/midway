@@ -5,6 +5,10 @@ import { createApp, close } from '../../../packages/mock';
 const request = require('supertest');
 const cwd = join(__dirname, 'fixtures/integration-v2');
 describe('test/index.test.ts', () => {
+  if (/^v10/.test(process.version)) {
+    it('skip node v10 other', () => {});
+    return;
+  }
   let app;
   beforeAll(async () => {
     app = await createApp(cwd, {}, join(__dirname, '../src'));
