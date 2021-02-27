@@ -244,6 +244,7 @@ export abstract class BaseFramework<
 
   public async stop(): Promise<void> {
     await this.beforeStop();
+    await this.stopLifeCycles();
     await this.containerStop();
   }
 
@@ -399,8 +400,29 @@ export abstract class BaseFramework<
               }
               return Reflect.get(target, prop, receiver);
             },
-          })
+          }),
+          this.app
         );
+      }
+    }
+  }
+
+  protected async stopLifeCycles() {
+    const cycles: Array<{ target: any; namespace: string }> = listModule(
+      CONFIGURATION_KEY
+    );
+    for (const cycle of cycles) {
+      let inst;
+      if (cycle.target instanceof FunctionalConfiguration) {
+        // 函数式写法
+        inst = cycle.target;
+      } else {
+        const providerId = getProviderId(cycle.target);
+        inst = await this.applicationContext.getAsync<ILifeCycle>(providerId);
+      }
+
+      if (inst.onStop && typeof inst.onStop === 'function') {
+        await inst.onStop(this, this.app);
       }
     }
   }

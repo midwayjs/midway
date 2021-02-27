@@ -12,8 +12,8 @@ import { ILogger, LoggerOptions } from '@midwayjs/logger';
  * 生命周期定义
  */
 export interface ILifeCycle {
-  onReady(container?: IMidwayContainer): Promise<void>;
-  onStop?(container?: IMidwayContainer): Promise<void>;
+  onReady(container: IMidwayContainer, app?: IMidwayApplication): Promise<void>;
+  onStop?(container: IMidwayContainer, app?: IMidwayApplication): Promise<void>;
 }
 
 export type Locale = string;
