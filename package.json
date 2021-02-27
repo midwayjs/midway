@@ -1,5 +1,5 @@
 {
-  "name": "midway",
+  "name": "midway_project",
   "description": "a web framework for complex Node.js application",
   "version": "1.0.0",
   "devDependencies": {
@@ -29,7 +29,7 @@
     "build": "sh scripts/build.sh",
     "authors": "git log --format='%aN <%aE>' | sort -u > AUTHORS",
     "postinstall": "opencollective-postinstall",
-    "postversion": "node ./scripts/generate_rollback.js && node ./scripts/generate_version.js",
+    "version": "node ./scripts/generate_rollback.js && node ./scripts/generate_version.js && git add .",
     "lint": "lerna exec mwts check",
     "lint:fix": "lerna exec mwts fix"
   },
