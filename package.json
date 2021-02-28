@@ -31,7 +31,8 @@
     "postinstall": "opencollective-postinstall",
     "version": "node ./scripts/generate_rollback.js && node ./scripts/generate_version.js && git add .",
     "lint": "lerna exec mwts check",
-    "lint:fix": "lerna exec mwts fix"
+    "lint:fix": "lerna exec mwts fix",
+    "typedoc": "typedoc && cp ./scripts/custom.css ./docs/api-reference/assets/css"
   },
   "keywords": [
     "container",
