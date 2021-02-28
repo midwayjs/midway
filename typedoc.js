@@ -60,7 +60,7 @@ module.exports = {
   ],
   customStyles: [
     {
-      'path': '/assets/css/custom.css'
+      'path': '/api-reference/assets/css/custom.css'
     }
   ]
 };
