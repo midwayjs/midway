@@ -1,0 +1,3 @@
+.tsd-navigation.primary > a:nth-child(1) {
+  display: none;
+}

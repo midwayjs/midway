@@ -10,6 +10,9 @@
     "mwts": "^1.0.5",
     "opencollective": "^1.0.3",
     "opencollective-postinstall": "^2.0.2",
+    "typedoc": "^0.19.2",
+    "typedoc-neo-theme": "^1.1.0",
+    "typedoc-plugin-lerna-packages": "^0.3.1",
     "typescript": "^4.1.0"
   },
   "scripts": {
@@ -31,7 +34,8 @@
     "postinstall": "opencollective-postinstall",
     "version": "node ./scripts/generate_rollback.js && node ./scripts/generate_version.js && git add .",
     "lint": "lerna exec mwts check",
-    "lint:fix": "lerna exec mwts fix"
+    "lint:fix": "lerna exec mwts fix",
+    "typedoc": "typedoc && cp ./scripts/custom.css ./docs/api-reference/assets/css"
   },
   "keywords": [
     "container",
