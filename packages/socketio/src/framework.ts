@@ -13,6 +13,7 @@ import {
   IMidwaySocketIOContext,
 } from './interface';
 import * as SocketIO from 'socket.io';
+import { createAdapter } from 'socket.io-redis';
 import {
   WS_CONTROLLER_KEY,
   WS_EVENT_KEY,
@@ -58,6 +59,17 @@ export class MidwaySocketIOFramework extends BaseFramework<
   }
 
   public async run(): Promise<void> {
+    if (this.configurationOptions.pubClient && this.configurationOptions.subClient) {
+      const pubClient = this.configurationOptions.pubClient;
+      const subClient = this.configurationOptions.subClient;
+      const adapter = createAdapter({ pubClient, subClient });
+      adapter.on('error', err => {
+        this.logger.error(err);
+      });
+      this.app.adapter(adapter);
+      this.logger.debug('init socket.io-redis ready!');
+    }
+
     if (this.configurationOptions.port) {
       // if set httpServer will be listen in web framework
       if (!this.configurationOptions.webServer) {

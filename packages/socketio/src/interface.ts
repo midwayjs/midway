@@ -10,10 +10,11 @@ export type IMidwaySocketIOApplication = IMidwayApplication<IMidwaySocketIOConte
 export type IMidwaySocketIOConfigurationOptions = {
   port?: number;
   webServer?: HttpServer | HttpsServer;
+  pubClient?: any;
+  subClient?: any;
 } & SocketIO.ServerOptions & IConfigurationOptions;
 
 export type IMidwaySocketIOContext = SocketIO.Socket & IMidwayContext;
-
 
 export type Application = IMidwaySocketIOApplication;
 
