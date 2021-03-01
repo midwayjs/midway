@@ -959,7 +959,7 @@ export function savePropertyInject(opts: InjectOptions) {
   let identifier = opts.identifier;
   if (!identifier) {
     const type = getPropertyType(opts.target, opts.targetKey);
-    if (!type.isBaseType && isClass(type.originDesign)) {
+    if (!type.isBaseType && isClass(type.originDesign) && isProvide(type.originDesign)) {
       identifier = getProviderId(type.originDesign);
     }
     if (!identifier) {
