@@ -67,7 +67,7 @@ describe('/test/annotation/inject.test.ts', () => {
       ff: [
         {
           'key': 'inject',
-          'value': 'injectChild2'
+          'value': 'ff'
         }
       ]
     });
