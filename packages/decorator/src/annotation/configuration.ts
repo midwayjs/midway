@@ -10,7 +10,7 @@ export interface ResolveFilter {
   filter: (module, filter, bindModule) => any;
 }
 
-export enum ApplicationScopeEnum {
+export enum ContainerScopeEnum {
   GLOBAL = 'global',
   CONTAINER = 'container',
 }
@@ -21,7 +21,7 @@ export interface InjectionConfigurationOptions {
   importConfigs?: string[];
   namespace?: string;
   directoryResolveFilter?: ResolveFilter[];
-  applicationContextScope?: ApplicationScopeEnum,
+  containerScope?: ContainerScopeEnum;
   conflictCheck?: boolean;
 }
 
