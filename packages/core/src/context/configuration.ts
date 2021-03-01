@@ -278,9 +278,10 @@ export class ContainerConfiguration implements IContainerConfiguration {
               configurationOptions.directoryResolveFilter
             );
           }
-          if (configurationOptions.conflictCheck) {
-            this.container.disableConflictCheck = !configurationOptions.conflictCheck;
+          if (configurationOptions.conflictCheck === undefined) {
+            configurationOptions.conflictCheck = false;
           }
+          this.container.disableConflictCheck = !configurationOptions.conflictCheck;
           this.addImports(configurationOptions.imports, baseDir);
           this.addImportObjects(configurationOptions.importObjects);
           this.addImportConfigs(configurationOptions.importConfigs, baseDir);
