@@ -243,7 +243,9 @@ export class WebRouterCollector {
       .map(item => {
         const urlString = item.url.toString();
         let category = 2;
-        const paramString = urlString.includes(':') ?  urlString.replace(/:.+$/, '') : '';
+        const paramString = urlString.includes(':')
+          ? urlString.replace(/:.+$/, '')
+          : '';
         if (paramString) {
           category = 1;
         }
