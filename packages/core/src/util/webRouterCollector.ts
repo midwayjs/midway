@@ -233,7 +233,7 @@ export class WebRouterCollector {
     }
   }
 
-  protected sortRouter(urlMatchList: RouterInfo[]) {
+  public sortRouter(urlMatchList: RouterInfo[]) {
     // 1. 绝对路径规则优先级最高如 /ab/cb/e
     // 2. 星号只能出现最后且必须在/后面，如 /ab/cb/**
     // 3. 如果绝对路径和通配都能匹配一个路径时，绝对规则优先级高
@@ -241,13 +241,28 @@ export class WebRouterCollector {
     // 5. 如果 / 与 /* 都能匹配 / ,但 / 的优先级高于 /*
     return urlMatchList
       .map(item => {
+        const urlString = item.url.toString();
+        let category = 2;
+        const paramString = urlString.includes(':') ?  urlString.replace(/:.+$/, '') : '';
+        if (paramString) {
+          category = 1;
+        }
+        if (urlString.includes('*')) {
+          category = 0;
+        }
         return {
           ...item,
-          _pureRouter: item.url.toString().replace(/\**$/, ''),
-          _level: item.url.toString().split('/').length - 1,
+          _pureRouter: urlString.replace(/\**$/, '').replace(/:\w+/, '123'),
+          _level: urlString.split('/').length - 1,
+          _paramString: paramString,
+          _category: category,
         };
       })
       .sort((handlerA, handlerB) => {
+        // 不同一层级的对比
+        if (handlerA._category !== handlerB._category) {
+          return handlerB._category - handlerA._category;
+        }
         if (handlerA._level === handlerB._level) {
           if (handlerB._pureRouter === handlerA._pureRouter) {
             return (
