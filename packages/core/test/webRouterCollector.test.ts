@@ -27,4 +27,23 @@ describe('/test/webRouterCollector.test.ts', function () {
     const result = await collector.getFlattenRouterTable();
     expect(result.length === 2).toBeTruthy();
   });
+
+  it('should sort param', function () {
+    const collector = new WebRouterCollector();
+    const result = collector.sortRouter(require('./router').routerList1);
+    expect(result[0].url).toEqual('/json');
+    expect(result[1].url).toEqual('/');
+    expect(result[2].url).toEqual('/:abc/123');
+    expect(result[3].url).toEqual('/:fileName');
+    expect(result[4].url).toEqual('/abc/*');
+    expect(result[5].url).toEqual('/*');
+  });
+
+  it('should sort wildcard', function () {
+    const collector = new WebRouterCollector();
+    const result = collector.sortRouter(require('./router').routerList2);
+    expect(result[0].url).toEqual('/update');
+    expect(result[1].url).toEqual('/');
+    expect(result[2].url).toEqual('/*');
+  });
 });
