@@ -55,13 +55,14 @@ export type MockAppConfigurationOptions = {
   cleanLogsDir?: boolean;
   cleanTempDir?: boolean;
   entryFile?: string;
+  baseDir?: string;
 };
 
 export async function create<
   T extends IMidwayFramework<any, U>,
   U = T['configurationOptions']
 >(
-  baseDir: string = process.cwd(),
+  appDir: string = process.cwd(),
   options?: U & MockAppConfigurationOptions,
   customFrameworkName?: string | MidwayFrameworkType | any
 ): Promise<T> {
@@ -69,12 +70,17 @@ export async function create<
   clearAllModule();
   clearContainerCache();
   clearAllLoggers();
-  safeRequire(`${baseDir}/src/interface`);
+
   options = options || ({} as any);
+  if (options.baseDir) {
+    safeRequire(join(`${options.baseDir}`, 'interface'));
+  } else {
+    safeRequire(join(`${appDir}`, 'src/interface'));
+  }
 
   if (options.entryFile) {
     // start from entry file, like bootstrap.js
-    options.entryFile = formatPath(baseDir, options.entryFile);
+    options.entryFile = formatPath(appDir, options.entryFile);
     global['MIDWAY_BOOTSTRAP_APP_READY'] = false;
     // set app in @midwayjs/bootstrap
     require(options.entryFile);
@@ -132,7 +138,7 @@ export async function create<
     }
   } else {
     // find default framework from pkg
-    const pkg = require(join(baseDir, 'package.json'));
+    const pkg = require(join(appDir, 'package.json'));
     if (pkg.dependencies) {
       customFrameworkName = getIncludeFramework(pkg.dependencies);
     }
@@ -168,17 +174,18 @@ export async function create<
 
   const starter = new BootstrapStarter();
 
-  if (!isAbsolute(baseDir)) {
-    baseDir = join(process.cwd(), 'test', 'fixtures', baseDir);
+  if (!isAbsolute(appDir)) {
+    appDir = join(process.cwd(), 'test', 'fixtures', appDir);
   }
 
-  if (!existsSync(baseDir)) {
-    throw new Error(`${baseDir} not found`);
+  if (!existsSync(appDir)) {
+    throw new Error(`${appDir} not found`);
   }
 
   starter
     .configure({
-      appDir: baseDir,
+      appDir,
+      baseDir: options.baseDir,
     })
     .load(framework);
 
