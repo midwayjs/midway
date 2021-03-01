@@ -245,10 +245,12 @@ export class BaseApplicationContext
   ) {
     if (!this.disableConflictCheck && this.registry.hasDefinition(identifier)) {
       const def = this.registry.getDefinition(identifier);
-      if (!PathFileUtil.isPathEqual(definition.srcPath, def.srcPath)) {
-        throw new Error(
-          `${identifier} path = ${definition.srcPath} already exist (${def.srcPath})!`
-        );
+      if (definition.srcPath && def.srcPath) {
+        if (!PathFileUtil.isPathEqual(definition.srcPath, def.srcPath)) {
+          throw new Error(
+            `${identifier} path = ${definition.srcPath} already exist (${def.srcPath})!`
+          );
+        }
       }
     }
     this.registry.registerDefinition(identifier, definition);

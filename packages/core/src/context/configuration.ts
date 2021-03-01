@@ -289,6 +289,9 @@ export class ContainerConfiguration implements IContainerConfiguration {
         }
       }
     } else {
+      if (this.namespace === MAIN_MODULE_KEY) {
+        this.container.disableConflictCheck = true;
+      }
       if (
         this.container.containsConfiguration(this.packageName) &&
         this.namespace !== ''
