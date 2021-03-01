@@ -10,12 +10,19 @@ export interface ResolveFilter {
   filter: (module, filter, bindModule) => any;
 }
 
+export enum ApplicationScopeEnum {
+  GLOBAL = 'global',
+  CONTAINER = 'container',
+}
+
 export interface InjectionConfigurationOptions {
   imports?: Array<string | IComponentInfo | { Configuration: any }>;
   importObjects?: Record<string, unknown>;
   importConfigs?: string[];
   namespace?: string;
   directoryResolveFilter?: ResolveFilter[];
+  applicationContextScope?: ApplicationScopeEnum,
+  conflictCheck?: boolean;
 }
 
 export function Configuration(

@@ -70,6 +70,7 @@ let containerIdx = 0;
 
 export function clearContainerCache() {
   MidwayContainer.parentDefinitionMetadata = null;
+  MidwayContainer.parentApplicationContext = null;
 }
 
 export class MidwayContainer
@@ -94,10 +95,17 @@ export class MidwayContainer
    * 单个进程中上一次的 applicationContext 的 registry
    */
   static parentDefinitionMetadata: Map<string, IObjectDefinitionMetadata[]>;
+  /**
+   * 单进程中上一次的 applicationContext
+   */
+  static parentApplicationContext: IMidwayContainer;
 
   constructor(baseDir: string = process.cwd(), parent?: IApplicationContext) {
     super(baseDir, parent);
     this.id = '00' + this.createContainerIdx();
+    if (!MidwayContainer.parentApplicationContext) {
+      MidwayContainer.parentApplicationContext = this;
+    }
   }
 
   protected createContainerIdx() {

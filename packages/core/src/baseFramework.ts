@@ -139,12 +139,17 @@ export abstract class BaseFramework<
     /**
      * initialize container
      */
-    this.applicationContext = new MidwayContainer(this.baseDir, undefined);
-    this.applicationContext.disableConflictCheck =
-      options.disableConflictCheck || true;
-    this.applicationContext.registerObject('baseDir', this.baseDir);
-    this.applicationContext.registerObject('appDir', this.appDir);
-    this.applicationContext.registerObject('isTsMode', this.isTsMode);
+
+    if (MidwayContainer.parentApplicationContext) {
+      this.applicationContext = new MidwayContainer(this.baseDir, undefined);
+      this.applicationContext.parent = MidwayContainer.parentApplicationContext;
+    } else {
+      this.applicationContext = new MidwayContainer(this.baseDir, undefined);
+      this.applicationContext.registerObject('baseDir', this.baseDir);
+      this.applicationContext.registerObject('appDir', this.appDir);
+      this.applicationContext.registerObject('isTsMode', this.isTsMode);
+    }
+
     /**
      * initialize base information
      */
