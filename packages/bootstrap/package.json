@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/bootstrap",
-  "version": "2.8.2",
+  "version": "2.8.3",
   "description": "midwayjs bootstrap",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -22,7 +22,7 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/cli": "^1.2.36",
-    "@midwayjs/core": "^2.8.2",
+    "@midwayjs/core": "^2.8.3",
     "@midwayjs/logger": "^2.8.2"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",

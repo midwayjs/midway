@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.8.3](https://github.com/midwayjs/midway/compare/v2.8.2...v2.8.3) (2021-03-01)
+
+
+### Bug Fixes
+
+* router sort with param ([#877](https://github.com/midwayjs/midway/issues/877)) ([7405745](https://github.com/midwayjs/midway/commit/7405745330cbeedc74829bc7683686866d91b633))
+
+
+
+
+
 ## [2.8.2](https://github.com/midwayjs/midway/compare/v2.8.0...v2.8.2) (2021-02-27)
 
 
