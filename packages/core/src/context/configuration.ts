@@ -1,19 +1,21 @@
 import {
   classNamed,
   CONFIGURATION_KEY,
+  FrameworkContainerScopeEnum,
+  generateProvideId,
   getClassMetadata,
+  IComponentInfo,
   InjectionConfigurationOptions,
-  LIFECYCLE_IDENTIFIER_PREFIX,
-  saveModule,
-  saveProviderId,
   isClass,
   isFunction,
-  IComponentInfo,
+  LIFECYCLE_IDENTIFIER_PREFIX,
   listModule,
+  MAIN_MODULE_KEY,
+  saveModule,
+  saveProviderId,
 } from '@midwayjs/decorator';
 
 import { dirname, isAbsolute, join } from 'path';
-import { MAIN_MODULE_KEY, generateProvideId } from '@midwayjs/decorator';
 import { IContainerConfiguration, IMidwayContainer } from '../interface';
 import { safeRequire } from '../util/';
 import { PathFileUtil } from '../util/pathFileUtil';
@@ -278,10 +280,16 @@ export class ContainerConfiguration implements IContainerConfiguration {
               configurationOptions.directoryResolveFilter
             );
           }
-          if (configurationOptions.conflictCheck === undefined) {
-            configurationOptions.conflictCheck = false;
+          if (this.namespace === MAIN_MODULE_KEY) {
+            // set conflictCheck
+            if (configurationOptions.conflictCheck === undefined) {
+              configurationOptions.conflictCheck = false;
+            }
+            this.container.disableConflictCheck = !configurationOptions.conflictCheck;
+            // set applicationContext scope
+            this.container.setFrameworkContainerScope(configuration.frameworkContainerScope || FrameworkContainerScopeEnum.GLOBAL);
           }
-          this.container.disableConflictCheck = !configurationOptions.conflictCheck;
+
           this.addImports(configurationOptions.imports, baseDir);
           this.addImportObjects(configurationOptions.importObjects);
           this.addImportConfigs(configurationOptions.importConfigs, baseDir);

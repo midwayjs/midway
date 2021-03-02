@@ -624,4 +624,56 @@ describe('/test/baseFramework.test.ts', () => {
 
     // const appCtx = framework.getApplicationContext();
   });
+
+  it('should run multi framework in one process and use cache', async () => {
+    const framework1 = new EmptyFramework();
+    framework1.configure({});
+    await framework1.initialize({
+      baseDir: path.join(
+        __dirname,
+        './fixtures/base-app-multi-framework-shared/src'
+      ),
+    });
+
+    const framework2 = new EmptyFramework();
+    framework2.configure({});
+    await framework2.initialize({
+      baseDir: path.join(
+        __dirname,
+        './fixtures/base-app-multi-framework-shared/src'
+      ),
+    });
+
+    expect(framework1.getApplicationContext()).not.toEqual(framework2.getApplicationContext());
+    // share application context data
+    const userService1 = await framework1.getApplicationContext().getAsync('userService');
+    const userService2 = await framework2.getApplicationContext().getAsync('userService');
+    expect(userService1).toEqual(userService2);
+  });
+
+  it('should run multi framework in one process and container independent', async () => {
+    const framework1 = new EmptyFramework();
+    framework1.configure({});
+    await framework1.initialize({
+      baseDir: path.join(
+        __dirname,
+        './fixtures/base-app-multi-framework-independent/src'
+      ),
+    });
+
+    const framework2 = new EmptyFramework();
+    framework2.configure({});
+    await framework2.initialize({
+      baseDir: path.join(
+        __dirname,
+        './fixtures/base-app-multi-framework-independent/src'
+      ),
+    });
+
+    expect(framework1.getApplicationContext()).not.toEqual(framework2.getApplicationContext());
+    // share application context data
+    const userService1 = await framework1.getApplicationContext().getAsync('userService');
+    const userService2 = await framework2.getApplicationContext().getAsync('userService');
+    expect(userService1).toEqual(userService2);
+  });
 });

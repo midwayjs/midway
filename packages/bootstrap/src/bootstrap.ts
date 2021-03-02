@@ -28,6 +28,7 @@ export class BootstrapStarter {
 
   public async init() {
     this.appDir = this.globalOptions.appDir || process.cwd();
+    // TODO 要把第一个抽出来先执行，其他的并发
     await Promise.all(
       this.getActions('initialize', {
         ...this.globalOptions,

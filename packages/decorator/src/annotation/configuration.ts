@@ -1,4 +1,5 @@
 import { saveClassMetadata, CONFIGURATION_KEY } from '../';
+import { MidwayFrameworkType } from '../../../core';
 
 export interface IComponentInfo {
   component: any;
@@ -8,11 +9,12 @@ export interface IComponentInfo {
 export interface ResolveFilter {
   pattern: string | RegExp;
   filter: (module, filter, bindModule) => any;
+  ignoreRequire?: boolean;
 }
 
-export enum ContainerScopeEnum {
+export enum FrameworkContainerScopeEnum {
   GLOBAL = 'global',
-  CONTAINER = 'container',
+  FRAMEWORK = 'framework',
 }
 
 export interface InjectionConfigurationOptions {
@@ -21,7 +23,8 @@ export interface InjectionConfigurationOptions {
   importConfigs?: string[];
   namespace?: string;
   directoryResolveFilter?: ResolveFilter[];
-  containerScope?: ContainerScopeEnum;
+  frameworkContainerScope?: FrameworkContainerScopeEnum;
+  framework?: MidwayFrameworkType;
   conflictCheck?: boolean;
 }
 

@@ -5,7 +5,7 @@ import {
   ObjectDefinitionOptions,
   IMethodAspect,
   AspectMetadata,
-  ResolveFilter,
+  ResolveFilter, FrameworkContainerScopeEnum,
 } from '@midwayjs/decorator';
 import { ILogger, LoggerOptions } from '@midwayjs/logger';
 /**
@@ -277,6 +277,8 @@ export interface IMidwayContainer extends IApplicationContext {
     aspectData: AspectMetadata
   );
   addDirectoryFilter(filter: ResolveFilter[]);
+  setFrameworkContainerScope(frameworkContainerScope: FrameworkContainerScopeEnum);
+  getFrameworkContainerScope(): FrameworkContainerScopeEnum;
 }
 
 export interface IConfigService {
@@ -380,15 +382,16 @@ export interface IMidwayFramework<APP extends IMidwayApplication, T extends ICon
   getDefaultContextLoggerClass(): any;
 }
 
-export enum MidwayFrameworkType {
-  WEB = '@midwayjs/web',
-  WEB_KOA = '@midwayjs/koa',
-  WEB_EXPRESS = '@midwayjs/express',
-  FAAS = '@midwayjs/faas',
-  MS_HSF = '',
-  MS_GRPC = '@midwayjs/grpc',
-  MS_RABBITMQ = '@midwayjs/rabbitmq',
-  WS_IO = '@midwayjs/socketio',
-  WSS = '',
-  CUSTOM = ''
+export class MidwayFrameworkType {
+  static WEB = '@midwayjs/web';
+  static WEB_KOA = '@midwayjs/koa';
+  static WEB_EXPRESS = '@midwayjs/express';
+  static FAAS = '@midwayjs/faas';
+  static MS_HSF = '';
+  static MS_GRPC = '@midwayjs/grpc';
+  static MS_RABBITMQ = '@midwayjs/rabbitmq';
+  static WS_IO = '@midwayjs/socketio';
+  static WSS = '';
+  static SERVERLESS_APP = '@midwayjs/serverless-app';
+  static CUSTOM = '';
 }
