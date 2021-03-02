@@ -625,7 +625,7 @@ describe('/test/baseFramework.test.ts', () => {
     // const appCtx = framework.getApplicationContext();
   });
 
-  it('should run multi framework in one process and use cache', async () => {
+  it.skip('should run multi framework in one process and use cache', async () => {
     const framework1 = new EmptyFramework();
     framework1.configure({});
     await framework1.initialize({
