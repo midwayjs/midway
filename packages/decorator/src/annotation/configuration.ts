@@ -1,5 +1,5 @@
 import { saveClassMetadata, CONFIGURATION_KEY } from '../';
-import { MidwayFrameworkType } from '../../../core';
+import { MidwayFrameworkType } from '../interface';
 
 export interface IComponentInfo {
   component: any;

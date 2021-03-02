@@ -6,7 +6,6 @@ import {
   IMidwayContainer,
   IMidwayContext,
   IMidwayFramework,
-  MidwayFrameworkType,
   MidwayProcessTypeEnum,
 } from './interface';
 import { MidwayContainer } from './context/midwayContainer';
@@ -17,6 +16,7 @@ import {
   getProviderId,
   listModule,
   LOGGER_KEY,
+  MidwayFrameworkType,
 } from '@midwayjs/decorator';
 import {
   ILogger,
@@ -140,7 +140,6 @@ export abstract class BaseFramework<
     /**
      * initialize container
      */
-
     if (
       MidwayContainer.parentApplicationContext &&
       MidwayContainer.parentApplicationContext.getFrameworkContainerScope() ===

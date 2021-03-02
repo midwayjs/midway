@@ -3,6 +3,7 @@ export {
   ObjectDefinitionOptions,
   IManagedInstance,
   ScopeEnum,
+  MidwayFrameworkType,
   saveClassMetadata,
   attachClassMetadata,
   getClassMetadata,

@@ -1,9 +1,6 @@
 import { BaseFramework } from '../baseFramework';
-import {
-  IMidwayApplication,
-  IMidwayBootstrapOptions,
-  MidwayFrameworkType,
-} from '../interface';
+import { IMidwayApplication, IMidwayBootstrapOptions } from '../interface';
+import { MidwayFrameworkType } from '@midwayjs/decorator';
 
 export class EmptyFramework extends BaseFramework<any, any, any> {
   getApplication(): any {

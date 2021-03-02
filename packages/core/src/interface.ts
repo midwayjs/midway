@@ -6,6 +6,7 @@ import {
   IMethodAspect,
   AspectMetadata,
   ResolveFilter, FrameworkContainerScopeEnum,
+  MidwayFrameworkType
 } from '@midwayjs/decorator';
 import { ILogger, LoggerOptions } from '@midwayjs/logger';
 /**
@@ -380,18 +381,4 @@ export interface IMidwayFramework<APP extends IMidwayApplication, T extends ICon
   createLogger(name: string, options: LoggerOptions): ILogger;
   getProjectName(): string;
   getDefaultContextLoggerClass(): any;
-}
-
-export class MidwayFrameworkType {
-  static WEB = '@midwayjs/web';
-  static WEB_KOA = '@midwayjs/koa';
-  static WEB_EXPRESS = '@midwayjs/express';
-  static FAAS = '@midwayjs/faas';
-  static MS_HSF = '';
-  static MS_GRPC = '@midwayjs/grpc';
-  static MS_RABBITMQ = '@midwayjs/rabbitmq';
-  static WS_IO = '@midwayjs/socketio';
-  static WSS = '';
-  static SERVERLESS_APP = '@midwayjs/serverless-app';
-  static CUSTOM = '';
 }

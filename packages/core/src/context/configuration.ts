@@ -235,7 +235,10 @@ export class ContainerConfiguration implements IContainerConfiguration {
     if (configuration) {
       // 可能导出多个
       const configurationExports = this.getConfigurationExport(configuration);
-      for (const configurationExport of configurationExports) {
+      if (!configurationExports.length) return;
+      // 多个的情况，数据交给第一个保存
+      for (let i = 0; i < configurationExports.length; i++) {
+        const configurationExport = configurationExports[i];
         let configurationOptions: InjectionConfigurationOptions;
         if (configurationExport instanceof FunctionalConfiguration) {
           // 函数式写法
@@ -262,6 +265,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
           }
 
           if (
+            i === 0 &&
             this.container.containsConfiguration(this.packageName) &&
             this.namespace !== ''
           ) {
@@ -280,7 +284,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
               configurationOptions.directoryResolveFilter
             );
           }
-          if (this.namespace === MAIN_MODULE_KEY) {
+          if (i === 0 && this.namespace === MAIN_MODULE_KEY) {
             // set conflictCheck
             if (configurationOptions.conflictCheck === undefined) {
               configurationOptions.conflictCheck = false;
@@ -288,7 +292,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
             this.container.disableConflictCheck = !configurationOptions.conflictCheck;
             // set applicationContext scope
             this.container.setFrameworkContainerScope(
-              configuration.frameworkContainerScope ||
+              configurationOptions.frameworkContainerScope ||
                 FrameworkContainerScopeEnum.GLOBAL
             );
           }
