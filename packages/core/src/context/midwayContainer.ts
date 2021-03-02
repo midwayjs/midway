@@ -27,7 +27,8 @@ import {
   INJECT_CLASS_KEY_PREFIX,
   DecoratorManager,
   ResolveFilter,
-  isRegExp, FrameworkContainerScopeEnum,
+  isRegExp,
+  FrameworkContainerScopeEnum,
 } from '@midwayjs/decorator';
 import { ContainerConfiguration } from './configuration';
 import { FUNCTION_INJECT_KEY } from '../common/constants';
@@ -234,12 +235,16 @@ export class MidwayContainer
           for (const resolveFilter of this.directoryFilterArray) {
             if (typeof resolveFilter.pattern === 'string') {
               if (file.includes(resolveFilter.pattern)) {
-                const exports = resolveFilter.ignoreRequire ? undefined: require(file);
+                const exports = resolveFilter.ignoreRequire
+                  ? undefined
+                  : require(file);
                 resolveFilter.filter(exports, file, this);
               }
             } else if (isRegExp(resolveFilter.pattern)) {
               if ((resolveFilter.pattern as RegExp).test(file)) {
-                const exports = resolveFilter.ignoreRequire ? undefined: require(file);
+                const exports = resolveFilter.ignoreRequire
+                  ? undefined
+                  : require(file);
                 resolveFilter.filter(exports, file, this);
               }
             } else {
@@ -944,7 +949,9 @@ export class MidwayContainer
     );
   }
 
-  public setFrameworkContainerScope(frameworkContainerScope: FrameworkContainerScopeEnum) {
+  public setFrameworkContainerScope(
+    frameworkContainerScope: FrameworkContainerScopeEnum
+  ) {
     this.frameworkContainerScope = frameworkContainerScope;
   }
 

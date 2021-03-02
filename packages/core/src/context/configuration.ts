@@ -287,7 +287,10 @@ export class ContainerConfiguration implements IContainerConfiguration {
             }
             this.container.disableConflictCheck = !configurationOptions.conflictCheck;
             // set applicationContext scope
-            this.container.setFrameworkContainerScope(configuration.frameworkContainerScope || FrameworkContainerScopeEnum.GLOBAL);
+            this.container.setFrameworkContainerScope(
+              configuration.frameworkContainerScope ||
+                FrameworkContainerScopeEnum.GLOBAL
+            );
           }
 
           this.addImports(configurationOptions.imports, baseDir);

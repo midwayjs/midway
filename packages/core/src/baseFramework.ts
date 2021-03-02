@@ -18,7 +18,13 @@ import {
   listModule,
   LOGGER_KEY,
 } from '@midwayjs/decorator';
-import { ILogger, IMidwayLogger, LoggerOptions, loggers, MidwayContextLogger, } from '@midwayjs/logger';
+import {
+  ILogger,
+  IMidwayLogger,
+  LoggerOptions,
+  loggers,
+  MidwayContextLogger,
+} from '@midwayjs/logger';
 import { dirname, isAbsolute, join } from 'path';
 import { createMidwayLogger } from './logger';
 import { safeRequire } from './util';
@@ -135,7 +141,11 @@ export abstract class BaseFramework<
      * initialize container
      */
 
-    if (MidwayContainer.parentApplicationContext && MidwayContainer.parentApplicationContext.getFrameworkContainerScope() === FrameworkContainerScopeEnum.GLOBAL) {
+    if (
+      MidwayContainer.parentApplicationContext &&
+      MidwayContainer.parentApplicationContext.getFrameworkContainerScope() ===
+        FrameworkContainerScopeEnum.GLOBAL
+    ) {
       this.applicationContext = new MidwayContainer(this.baseDir, undefined);
       this.applicationContext.parent = MidwayContainer.parentApplicationContext;
     } else {
