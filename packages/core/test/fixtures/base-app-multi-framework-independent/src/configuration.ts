@@ -1,7 +1,9 @@
-import { Configuration, FrameworkContainerScopeEnum, App } from '@midwayjs/decorator';
+import { App, Configuration, FrameworkContainerScopeEnum, MidwayFrameworkType } from '@midwayjs/decorator';
+import * as assert from 'assert';
 
 @Configuration({
   frameworkContainerScope: FrameworkContainerScopeEnum.FRAMEWORK,
+  framework: MidwayFrameworkType.CUSTOM,
 })
 export class AutoConfiguration {
 
@@ -10,10 +12,12 @@ export class AutoConfiguration {
 
   async onReady() {
     console.log('a');
+    assert(this.app.getFrameworkType() === MidwayFrameworkType.CUSTOM);
   }
 }
 
 @Configuration({
+  framework: MidwayFrameworkType.MS_GRPC,
 })
 export class AutoConfiguration1 {
 
@@ -22,5 +26,6 @@ export class AutoConfiguration1 {
 
   async onReady() {
     console.log('b');
+    assert(this.app.getFrameworkType() === MidwayFrameworkType.MS_GRPC);
   }
 }

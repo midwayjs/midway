@@ -635,7 +635,16 @@ describe('/test/baseFramework.test.ts', () => {
       ),
     });
 
-    const framework2 = new EmptyFramework();
+    class CustomTwoFramework extends EmptyFramework {
+      async applicationInitialize(options: IMidwayBootstrapOptions) {
+        this.app = {} as IMidwayApplication;
+      }
+      getFrameworkType(): MidwayFrameworkType {
+        return MidwayFrameworkType.MS_GRPC;
+      }
+    }
+
+    const framework2 = new CustomTwoFramework();
     framework2.configure({});
     await framework2.initialize({
       baseDir: path.join(
@@ -650,6 +659,11 @@ describe('/test/baseFramework.test.ts', () => {
     const userService2 = await framework2.getApplicationContext().getAsync('userService');
     // 相同实例
     expect(userService1['id']).toEqual(userService2['id']);
+
+    expect(framework1.getApplicationContext().get('total')['num']).toEqual(2);
+    expect(framework2.getApplicationContext().get('total')['num']).toEqual(2);
+
+    expect(framework2.getApplicationContext().get('total2')['num']).toEqual(1);
   });
 
   it('should run multi framework in one process and container independent', async () => {
