@@ -19,8 +19,8 @@ import {
   IMidwayKoaApplication,
   IMidwayKoaApplicationPlus,
   IMidwayKoaConfigurationOptions,
-  IWebMiddleware,
   IMidwayKoaContext,
+  IWebMiddleware,
   MiddlewareParamArray,
 } from './interface';
 import * as Router from '@koa/router';
@@ -158,6 +158,12 @@ export abstract class MidwayKoaBaseFramework<
             methodMiddlewares.push(middlewareImpl);
           }
         );
+
+        if (this.getFrameworkType() === MidwayFrameworkType.WEB_KOA) {
+          if (typeof routeInfo.url === 'string' && /\*$/.test(routeInfo.url)) {
+            routeInfo.url = routeInfo.url.replace('*', '(.*)');
+          }
+        }
 
         const routerArgs = [
           routeInfo.routerName,
