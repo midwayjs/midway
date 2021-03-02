@@ -625,7 +625,7 @@ describe('/test/baseFramework.test.ts', () => {
     // const appCtx = framework.getApplicationContext();
   });
 
-  it.skip('should run multi framework in one process and use cache', async () => {
+  it('should run multi framework in one process and use cache', async () => {
     const framework1 = new EmptyFramework();
     framework1.configure({});
     await framework1.initialize({
@@ -649,7 +649,7 @@ describe('/test/baseFramework.test.ts', () => {
     const userService1 = await framework1.getApplicationContext().getAsync('userService');
     const userService2 = await framework2.getApplicationContext().getAsync('userService');
     // 相同实例
-    expect(userService1 == userService2).toBeTruthy();
+    expect(userService1['id']).toEqual(userService2['id']);
   });
 
   it('should run multi framework in one process and container independent', async () => {
@@ -684,7 +684,7 @@ describe('/test/baseFramework.test.ts', () => {
     // share application context data
     const userService1 = await framework1.getApplicationContext().getAsync('userService');
     const userService2 = await framework2.getApplicationContext().getAsync('userService');
-    // 不同引用
-    expect(userService1).not.toBe(userService2);
+    // 不同实例
+    expect(userService1['id']).not.toEqual(userService2['id']);
   });
 });

@@ -595,6 +595,7 @@ export class MidwayContainer
     if (typeof identifier !== 'string') {
       identifier = this.getIdentifier(identifier);
     }
+
     const ins: any = await super.getAsync<T>(identifier, args);
     return this.wrapperAspectToInstance(ins);
   }
