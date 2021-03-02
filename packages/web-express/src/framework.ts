@@ -179,7 +179,7 @@ export class MidwayExpressFramework extends BaseFramework<
         );
       }
       this.controllerIds.push(providerId);
-      this.logger.info(
+      this.logger.debug(
         `Load Controller "${providerId}", prefix=${routerInfo.prefix}`
       );
 
@@ -205,7 +205,7 @@ export class MidwayExpressFramework extends BaseFramework<
           }
         );
 
-        this.logger.info(
+        this.logger.debug(
           `Load Router "${routeInfo.requestMethod.toUpperCase()} ${
             routeInfo.url
           }"`

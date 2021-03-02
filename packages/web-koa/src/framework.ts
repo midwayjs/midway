@@ -126,7 +126,7 @@ export abstract class MidwayKoaBaseFramework<
         );
       }
       this.controllerIds.push(providerId);
-      this.logger.info(
+      this.logger.debug(
         `Load Controller "${providerId}", prefix=${routerInfo.prefix}`
       );
 
@@ -170,7 +170,7 @@ export abstract class MidwayKoaBaseFramework<
           ),
         ];
 
-        this.logger.info(
+        this.logger.debug(
           `Load Router "${routeInfo.requestMethod.toUpperCase()} ${
             routeInfo.url
           }"`
