@@ -6,14 +6,14 @@ import {
   IMidwayFramework,
   MidwayFrameworkType,
 } from '@midwayjs/core';
-
+import { isTypeScriptEnvironment } from '@midwayjs/bootstrap';
 import { Server } from 'net';
 import { start2 } from './start';
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import { getSpecFile, loadSpec } from '@midwayjs/serverless-spec-builder';
 import { createExpressGateway } from '@midwayjs/gateway-common-http';
-import { findNpmModule, output404, isTypeScriptEnvironment } from './utils';
+import { findNpmModule, output404 } from './utils';
 import { Locator } from '@midwayjs/locate';
 import { StarterMap, TriggerMap } from './platform';
 

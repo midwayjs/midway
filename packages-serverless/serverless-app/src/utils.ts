@@ -74,12 +74,3 @@ export const analysisDecorator = async (cwd: string) => {
   }
   return allFunc;
 };
-
-export function isTypeScriptEnvironment() {
-  const TS_MODE_PROCESS_FLAG: string = process.env.MIDWAY_TS_MODE;
-  if ('false' === TS_MODE_PROCESS_FLAG) {
-    return false;
-  }
-  // eslint-disable-next-line node/no-deprecated-api
-  return TS_MODE_PROCESS_FLAG === 'true' || !!require.extensions['.ts'];
-}
