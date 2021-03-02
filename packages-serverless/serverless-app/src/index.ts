@@ -6,7 +6,7 @@ import {
   IMidwayFramework,
   MidwayFrameworkType,
 } from '@midwayjs/core';
-
+import { isTypeScriptEnvironment } from '@midwayjs/bootstrap';
 import { Server } from 'net';
 import { start2 } from './start';
 import * as express from 'express';
@@ -186,14 +186,19 @@ export class Framework
     }
 
     // 分析项目结构
-    const locator = new Locator(appDir);
-    const midwayLocatorResult = await locator.run({});
+    let currentBaseDir = baseDir;
+    if (isTypeScriptEnvironment()) {
+      const locator = new Locator(appDir);
+      const midwayLocatorResult = await locator.run({});
+      currentBaseDir = midwayLocatorResult.tsCodeRoot;
+    }
+
     const triggerMap = this.getTriggerMap();
 
     const { Framework } = require(usageFaasModulePath);
     const startResult = await start2({
       appDir,
-      baseDir: midwayLocatorResult.tsCodeRoot || baseDir,
+      baseDir: currentBaseDir,
       framework: Framework,
       starter: require(starterName),
       initializeContext: undefined,
