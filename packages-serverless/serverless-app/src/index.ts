@@ -13,7 +13,7 @@ import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import { getSpecFile, loadSpec } from '@midwayjs/serverless-spec-builder';
 import { createExpressGateway } from '@midwayjs/gateway-common-http';
-import { findNpmModule, output404 } from './utils';
+import { findNpmModule, output404, isTypeScriptEnvironment } from './utils';
 import { Locator } from '@midwayjs/locate';
 import { StarterMap, TriggerMap } from './platform';
 
@@ -186,14 +186,19 @@ export class Framework
     }
 
     // 分析项目结构
-    const locator = new Locator(appDir);
-    const midwayLocatorResult = await locator.run({});
+    let currentBaseDir = baseDir;
+    if (isTypeScriptEnvironment()) {
+      const locator = new Locator(appDir);
+      const midwayLocatorResult = await locator.run({});
+      currentBaseDir = midwayLocatorResult.tsCodeRoot;
+    }
+
     const triggerMap = this.getTriggerMap();
 
     const { Framework } = require(usageFaasModulePath);
     const startResult = await start2({
       appDir,
-      baseDir: midwayLocatorResult.tsCodeRoot || baseDir,
+      baseDir: currentBaseDir,
       framework: Framework,
       starter: require(starterName),
       initializeContext: undefined,
