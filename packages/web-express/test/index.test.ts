@@ -46,4 +46,43 @@ describe('/test/feature.test.ts', () => {
     });
   });
 
+  describe('test wildcard router', function () {
+    let app: IMidwayExpressApplication;
+    beforeAll(async () => {
+      app = await creatApp('base-app-wildcard');
+    });
+
+    afterAll(async () => {
+      await closeApp(app);
+    });
+
+    it('test root path 1', async () => {
+      const result = await createHttpRequest(app)
+        .get('/');
+      expect(result.status).toEqual(200);
+      expect(result.text).toEqual('hello world');
+    });
+
+    it('test root path 2', async () => {
+      const result = await createHttpRequest(app)
+        .get('/123');
+      expect(result.status).toEqual(200);
+      expect(result.text).toEqual('hello world');
+    });
+
+    it('test root path 3', async () => {
+      const result = await createHttpRequest(app)
+        .get('/abc/');
+      expect(result.status).toEqual(200);
+      expect(result.text).toEqual('hello worldabc');
+    });
+
+    it('test root path 4', async () => {
+      const result = await createHttpRequest(app)
+        .get('/abc/123');
+      expect(result.status).toEqual(200);
+      expect(result.text).toEqual('hello worldabc');
+    });
+  });
+
 });
