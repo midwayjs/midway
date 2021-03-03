@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.8.5](https://github.com/midwayjs/midway/compare/v2.8.4...v2.8.5) (2021-03-03)
+
+
+### Bug Fixes
+
+* empty framework ready ([#882](https://github.com/midwayjs/midway/issues/882)) ([a2dc36f](https://github.com/midwayjs/midway/commit/a2dc36f8dd785e7dce3a5499f5774b990dfd33c4))
+
+
+
+
+
 ## [2.8.4](https://github.com/midwayjs/midway/compare/v2.8.3...v2.8.4) (2021-03-03)
 
 
