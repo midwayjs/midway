@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.8.6](https://github.com/midwayjs/midway/compare/v2.8.5...v2.8.6) (2021-03-03)
+
+
+### Bug Fixes
+
+* load custom framework in midwayjs/web ([#883](https://github.com/midwayjs/midway/issues/883)) ([7a11cac](https://github.com/midwayjs/midway/commit/7a11cac1cea753e781ac358a75277400f8aa87bf))
+
+
+
+
+
 ## [2.8.5](https://github.com/midwayjs/midway/compare/v2.8.4...v2.8.5) (2021-03-03)
 
 
