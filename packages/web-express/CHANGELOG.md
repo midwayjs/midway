@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.8.4](https://github.com/midwayjs/midway/compare/v2.8.3...v2.8.4) (2021-03-03)
+
+
+### Bug Fixes
+
+* koa-router support wildcard ([#881](https://github.com/midwayjs/midway/issues/881)) ([0321497](https://github.com/midwayjs/midway/commit/0321497421de648dc791ceb60316c78026dc3cf9))
+
+
+### Features
+
+* add conflictCheck ([#876](https://github.com/midwayjs/midway/issues/876)) ([673470a](https://github.com/midwayjs/midway/commit/673470a14e3f5a159bf7a2f1e56cbf27cc3b6b21))
+
+
+
+
+
 ## [2.8.3](https://github.com/midwayjs/midway/compare/v2.8.2...v2.8.3) (2021-03-01)
 
 **Note:** Version bump only for package @midwayjs/express

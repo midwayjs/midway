@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.8.4](https://github.com/midwayjs/midway/compare/v2.8.3...v2.8.4) (2021-03-03)
+
+
+### Bug Fixes
+
+* multi framework run configuration ([db98d6a](https://github.com/midwayjs/midway/commit/db98d6aba820aa86982b491835bb4167b3a1b6b2))
+* property decorator and class decorator extends ([#845](https://github.com/midwayjs/midway/issues/845)) ([8d0227d](https://github.com/midwayjs/midway/commit/8d0227dfe946af6fefa832d574cdcfe976ed8ce2))
+
+
+### Features
+
+* add conflictCheck ([2e08976](https://github.com/midwayjs/midway/commit/2e0897671fd4cb4b36ab351b626347e2f17ace56))
+* add conflictCheck ([a892223](https://github.com/midwayjs/midway/commit/a8922234abb2c585d59e37aaa443b14d73a14b2f))
+
+
+
+
+
 ## [2.8.3](https://github.com/midwayjs/midway/compare/v2.8.2...v2.8.3) (2021-03-01)
 
 

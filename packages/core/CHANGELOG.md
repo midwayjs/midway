@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.8.4](https://github.com/midwayjs/midway/compare/v2.8.3...v2.8.4) (2021-03-03)
+
+
+### Bug Fixes
+
+* case ([df2efb6](https://github.com/midwayjs/midway/commit/df2efb6837ee1bdb877825bc7869b82d9e220fb1))
+* check case ([4df51ed](https://github.com/midwayjs/midway/commit/4df51ed64157a7b3f76bc050825cf2b59182cc07))
+* get singleton from shared context ([3ebcf13](https://github.com/midwayjs/midway/commit/3ebcf13ab0f4151e507b51cda219682859f648d3))
+* multi framework run configuration ([44abb6c](https://github.com/midwayjs/midway/commit/44abb6c710e044d9256325c721cdeb8d9a7e0a7a))
+* multi framework run configuration ([db98d6a](https://github.com/midwayjs/midway/commit/db98d6aba820aa86982b491835bb4167b3a1b6b2))
+* property decorator and class decorator extends ([#845](https://github.com/midwayjs/midway/issues/845)) ([8d0227d](https://github.com/midwayjs/midway/commit/8d0227dfe946af6fefa832d574cdcfe976ed8ce2))
+
+
+### Features
+
+* add conflictCheck ([a892223](https://github.com/midwayjs/midway/commit/a8922234abb2c585d59e37aaa443b14d73a14b2f))
+
+
+
+
+
 ## [2.8.3](https://github.com/midwayjs/midway/compare/v2.8.2...v2.8.3) (2021-03-01)
 
 
