@@ -16,7 +16,7 @@ import {
 import * as mm from 'mm';
 import sinon = require('sinon');
 import { LifeCycleTest, LifeCycleTest1, TestBinding } from "./fixtures/lifecycle";
-import { EmptyFramework, LightFramework } from '../src/util/emptyFramework';
+import { LightFramework } from '../src/util/emptyFramework';
 
 @Provide()
 class TestModule {
