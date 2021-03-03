@@ -1,7 +1,7 @@
 import {
   APPLICATION_KEY,
   CONFIGURATION_KEY,
-  LIFECYCLE_IDENTIFIER_PREFIX,
+  LIFECYCLE_IDENTIFIER_PREFIX, MidwayFrameworkType,
   Provide,
   resetModule,
 } from '@midwayjs/decorator';
@@ -10,7 +10,7 @@ import * as assert from 'assert';
 import * as path from 'path';
 import {
   clearAllModule,
-  clearContainerCache,
+  clearContainerCache, IMidwayApplication, IMidwayBootstrapOptions,
   MidwayRequestContainer,
 } from '../src';
 import * as mm from 'mm';
@@ -623,5 +623,82 @@ describe('/test/baseFramework.test.ts', () => {
     await framework.stop();
 
     // const appCtx = framework.getApplicationContext();
+  });
+
+  it('should run multi framework in one process and use cache', async () => {
+    const framework1 = new EmptyFramework();
+    framework1.configure({});
+    await framework1.initialize({
+      baseDir: path.join(
+        __dirname,
+        './fixtures/base-app-multi-framework-shared/src'
+      ),
+    });
+
+    class CustomTwoFramework extends EmptyFramework {
+      async applicationInitialize(options: IMidwayBootstrapOptions) {
+        this.app = {} as IMidwayApplication;
+      }
+      getFrameworkType(): MidwayFrameworkType {
+        return MidwayFrameworkType.MS_GRPC;
+      }
+    }
+
+    const framework2 = new CustomTwoFramework();
+    framework2.configure({});
+    await framework2.initialize({
+      baseDir: path.join(
+        __dirname,
+        './fixtures/base-app-multi-framework-shared/src'
+      ),
+    });
+
+    expect(framework1.getApplicationContext()).not.toBe(framework2.getApplicationContext());
+    // share application context data
+    const userService1 = await framework1.getApplicationContext().getAsync('userService');
+    const userService2 = await framework2.getApplicationContext().getAsync('userService');
+    // 相同实例
+    expect(userService1['id']).toEqual(userService2['id']);
+
+    expect(framework1.getApplicationContext().get('total')['num']).toEqual(2);
+    expect(framework2.getApplicationContext().get('total')['num']).toEqual(2);
+
+    expect(framework2.getApplicationContext().get('total2')['num']).toEqual(1);
+  });
+
+  it('should run multi framework in one process and container independent', async () => {
+    const framework1 = new EmptyFramework();
+    framework1.configure({});
+    await framework1.initialize({
+      baseDir: path.join(
+        __dirname,
+        './fixtures/base-app-multi-framework-independent/src'
+      ),
+    });
+
+    class CustomTwoFramework extends EmptyFramework {
+      async applicationInitialize(options: IMidwayBootstrapOptions) {
+        this.app = {} as IMidwayApplication;
+      }
+      getFrameworkType(): MidwayFrameworkType {
+        return MidwayFrameworkType.MS_GRPC;
+      }
+    }
+
+    const framework2 = new CustomTwoFramework();
+    framework2.configure({});
+    await framework2.initialize({
+      baseDir: path.join(
+        __dirname,
+        './fixtures/base-app-multi-framework-independent/src'
+      ),
+    });
+
+    expect(framework1.getApplicationContext()).not.toBe(framework2.getApplicationContext());
+    // share application context data
+    const userService1 = await framework1.getApplicationContext().getAsync('userService');
+    const userService2 = await framework2.getApplicationContext().getAsync('userService');
+    // 不同实例
+    expect(userService1['id']).not.toEqual(userService2['id']);
   });
 });

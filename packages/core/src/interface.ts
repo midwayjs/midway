@@ -5,7 +5,8 @@ import {
   ObjectDefinitionOptions,
   IMethodAspect,
   AspectMetadata,
-  ResolveFilter,
+  ResolveFilter, FrameworkContainerScopeEnum,
+  MidwayFrameworkType
 } from '@midwayjs/decorator';
 import { ILogger, LoggerOptions } from '@midwayjs/logger';
 /**
@@ -277,6 +278,8 @@ export interface IMidwayContainer extends IApplicationContext {
     aspectData: AspectMetadata
   );
   addDirectoryFilter(filter: ResolveFilter[]);
+  setFrameworkContainerScope(frameworkContainerScope: FrameworkContainerScopeEnum);
+  getFrameworkContainerScope(): FrameworkContainerScopeEnum;
 }
 
 export interface IConfigService {
@@ -378,17 +381,4 @@ export interface IMidwayFramework<APP extends IMidwayApplication, T extends ICon
   createLogger(name: string, options: LoggerOptions): ILogger;
   getProjectName(): string;
   getDefaultContextLoggerClass(): any;
-}
-
-export enum MidwayFrameworkType {
-  WEB = '@midwayjs/web',
-  WEB_KOA = '@midwayjs/koa',
-  WEB_EXPRESS = '@midwayjs/express',
-  FAAS = '@midwayjs/faas',
-  MS_HSF = '',
-  MS_GRPC = '@midwayjs/grpc',
-  MS_RABBITMQ = '@midwayjs/rabbitmq',
-  WS_IO = '@midwayjs/socketio',
-  WSS = '',
-  CUSTOM = ''
 }

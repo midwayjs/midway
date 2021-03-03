@@ -6,25 +6,28 @@ import {
   IMidwayContainer,
   IMidwayContext,
   IMidwayFramework,
-  MidwayFrameworkType,
   MidwayProcessTypeEnum,
 } from './interface';
 import { MidwayContainer } from './context/midwayContainer';
 import {
   APPLICATION_KEY,
   CONFIGURATION_KEY,
+  FrameworkContainerScopeEnum,
+  getClassMetadata,
   getProviderId,
+  InjectionConfigurationOptions,
   listModule,
   LOGGER_KEY,
+  MidwayFrameworkType,
 } from '@midwayjs/decorator';
 import {
   ILogger,
-  loggers,
-  LoggerOptions,
   IMidwayLogger,
+  LoggerOptions,
+  loggers,
   MidwayContextLogger,
 } from '@midwayjs/logger';
-import { isAbsolute, join, dirname } from 'path';
+import { dirname, isAbsolute, join } from 'path';
 import { createMidwayLogger } from './logger';
 import { safeRequire } from './util';
 import { MidwayRequestContainer } from './context/requestContainer';
@@ -139,12 +142,20 @@ export abstract class BaseFramework<
     /**
      * initialize container
      */
-    this.applicationContext = new MidwayContainer(this.baseDir, undefined);
-    this.applicationContext.disableConflictCheck =
-      options.disableConflictCheck || true;
-    this.applicationContext.registerObject('baseDir', this.baseDir);
-    this.applicationContext.registerObject('appDir', this.appDir);
-    this.applicationContext.registerObject('isTsMode', this.isTsMode);
+    if (
+      MidwayContainer.parentApplicationContext &&
+      MidwayContainer.parentApplicationContext.getFrameworkContainerScope() ===
+        FrameworkContainerScopeEnum.GLOBAL
+    ) {
+      this.applicationContext = new MidwayContainer(this.baseDir, undefined);
+      this.applicationContext.parent = MidwayContainer.parentApplicationContext;
+    } else {
+      this.applicationContext = new MidwayContainer(this.baseDir, undefined);
+      this.applicationContext.registerObject('baseDir', this.baseDir);
+      this.applicationContext.registerObject('appDir', this.appDir);
+      this.applicationContext.registerObject('isTsMode', this.isTsMode);
+    }
+
     /**
      * initialize base information
      */
@@ -364,12 +375,34 @@ export abstract class BaseFramework<
     options: Partial<IMidwayBootstrapOptions>
   ): Promise<void> {}
 
+  private getCurrentFrameworkLifeCycles(): Array<{
+    target: any;
+    namespace: string;
+  }> {
+    return listModule(CONFIGURATION_KEY, module => {
+      // 过滤出符合当前 framework 的生命周期
+      let configurationOptions: InjectionConfigurationOptions;
+      if (module.target instanceof FunctionalConfiguration) {
+        // 函数式写法
+        configurationOptions = module.target.getConfigurationOptions();
+      } else {
+        // 普通类写法
+        configurationOptions = getClassMetadata(
+          CONFIGURATION_KEY,
+          module.target
+        );
+      }
+      if (configurationOptions?.framework !== undefined) {
+        return configurationOptions.framework === this.getFrameworkType();
+      } else {
+        return true;
+      }
+    });
+  }
   public async loadLifeCycles() {
     // agent 不加载生命周期
     if (this.app.getProcessType() === MidwayProcessTypeEnum.AGENT) return;
-    const cycles: Array<{ target: any; namespace: string }> = listModule(
-      CONFIGURATION_KEY
-    );
+    const cycles = this.getCurrentFrameworkLifeCycles();
     for (const cycle of cycles) {
       let inst;
       if (cycle.target instanceof FunctionalConfiguration) {
@@ -408,9 +441,7 @@ export abstract class BaseFramework<
   }
 
   protected async stopLifeCycles() {
-    const cycles: Array<{ target: any; namespace: string }> = listModule(
-      CONFIGURATION_KEY
-    );
+    const cycles = this.getCurrentFrameworkLifeCycles();
     for (const cycle of cycles) {
       let inst;
       if (cycle.target instanceof FunctionalConfiguration) {

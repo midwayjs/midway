@@ -1,19 +1,21 @@
 import {
   classNamed,
   CONFIGURATION_KEY,
+  FrameworkContainerScopeEnum,
+  generateProvideId,
   getClassMetadata,
+  IComponentInfo,
   InjectionConfigurationOptions,
-  LIFECYCLE_IDENTIFIER_PREFIX,
-  saveModule,
-  saveProviderId,
   isClass,
   isFunction,
-  IComponentInfo,
+  LIFECYCLE_IDENTIFIER_PREFIX,
   listModule,
+  MAIN_MODULE_KEY,
+  saveModule,
+  saveProviderId,
 } from '@midwayjs/decorator';
 
 import { dirname, isAbsolute, join } from 'path';
-import { MAIN_MODULE_KEY, generateProvideId } from '@midwayjs/decorator';
 import { IContainerConfiguration, IMidwayContainer } from '../interface';
 import { safeRequire } from '../util/';
 import { PathFileUtil } from '../util/pathFileUtil';
@@ -233,7 +235,10 @@ export class ContainerConfiguration implements IContainerConfiguration {
     if (configuration) {
       // 可能导出多个
       const configurationExports = this.getConfigurationExport(configuration);
-      for (const configurationExport of configurationExports) {
+      if (!configurationExports.length) return;
+      // 多个的情况，数据交给第一个保存
+      for (let i = 0; i < configurationExports.length; i++) {
+        const configurationExport = configurationExports[i];
         let configurationOptions: InjectionConfigurationOptions;
         if (configurationExport instanceof FunctionalConfiguration) {
           // 函数式写法
@@ -260,6 +265,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
           }
 
           if (
+            i === 0 &&
             this.container.containsConfiguration(this.packageName) &&
             this.namespace !== ''
           ) {
@@ -278,6 +284,19 @@ export class ContainerConfiguration implements IContainerConfiguration {
               configurationOptions.directoryResolveFilter
             );
           }
+          if (i === 0 && this.namespace === MAIN_MODULE_KEY) {
+            // set conflictCheck
+            if (configurationOptions.conflictCheck === undefined) {
+              configurationOptions.conflictCheck = false;
+            }
+            this.container.disableConflictCheck = !configurationOptions.conflictCheck;
+            // set applicationContext scope
+            this.container.setFrameworkContainerScope(
+              configurationOptions.frameworkContainerScope ||
+                FrameworkContainerScopeEnum.GLOBAL
+            );
+          }
+
           this.addImports(configurationOptions.imports, baseDir);
           this.addImportObjects(configurationOptions.importObjects);
           this.addImportConfigs(configurationOptions.importConfigs, baseDir);
@@ -285,6 +304,9 @@ export class ContainerConfiguration implements IContainerConfiguration {
         }
       }
     } else {
+      if (this.namespace === MAIN_MODULE_KEY) {
+        this.container.disableConflictCheck = true;
+      }
       if (
         this.container.containsConfiguration(this.packageName) &&
         this.namespace !== ''

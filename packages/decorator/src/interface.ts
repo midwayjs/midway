@@ -62,3 +62,17 @@ export namespace DecoratorMetadata {
     metadata: GRPCClassMetadata
   }
 }
+
+export enum MidwayFrameworkType {
+  WEB = '@midwayjs/web',
+  WEB_KOA = '@midwayjs/koa',
+  WEB_EXPRESS = '@midwayjs/express',
+  FAAS = '@midwayjs/faas',
+  MS_HSF = '',
+  MS_GRPC = '@midwayjs/grpc',
+  MS_RABBITMQ = '@midwayjs/rabbitmq',
+  WS_IO = '@midwayjs/socketio',
+  WSS = '',
+  SERVERLESS_APP = '@midwayjs/serverless-app',
+  CUSTOM = '',
+}

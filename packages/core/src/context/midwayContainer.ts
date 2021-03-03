@@ -28,6 +28,7 @@ import {
   DecoratorManager,
   ResolveFilter,
   isRegExp,
+  FrameworkContainerScopeEnum,
 } from '@midwayjs/decorator';
 import { ContainerConfiguration } from './configuration';
 import { FUNCTION_INJECT_KEY } from '../common/constants';
@@ -70,6 +71,7 @@ let containerIdx = 0;
 
 export function clearContainerCache() {
   MidwayContainer.parentDefinitionMetadata = null;
+  MidwayContainer.parentApplicationContext = null;
 }
 
 export class MidwayContainer
@@ -89,15 +91,23 @@ export class MidwayContainer
   protected aspectMappingMap: WeakMap<any, Map<string, any[]>>;
   private aspectModuleSet: Set<any>;
   private directoryFilterArray: ResolveFilter[] = [];
+  private frameworkContainerScope: FrameworkContainerScopeEnum;
 
   /**
    * 单个进程中上一次的 applicationContext 的 registry
    */
   static parentDefinitionMetadata: Map<string, IObjectDefinitionMetadata[]>;
+  /**
+   * 单进程中上一次的 applicationContext
+   */
+  static parentApplicationContext: IMidwayContainer;
 
   constructor(baseDir: string = process.cwd(), parent?: IApplicationContext) {
     super(baseDir, parent);
     this.id = '00' + this.createContainerIdx();
+    if (!MidwayContainer.parentApplicationContext) {
+      MidwayContainer.parentApplicationContext = this;
+    }
   }
 
   protected createContainerIdx() {
@@ -220,27 +230,32 @@ export class MidwayContainer
       for (const file of fileResults) {
         this.debugLogger(`\nmain:*********** binding "${file}" ***********`);
         this.debugLogger(`  namespace => "${opts.namespace}"`);
-        const exports = require(file);
 
         if (this.directoryFilterArray.length) {
           for (const resolveFilter of this.directoryFilterArray) {
-            if (
-              typeof resolveFilter.pattern === 'string' &&
-              file.includes(resolveFilter.pattern)
-            ) {
-              resolveFilter.filter(exports, file, this);
-            } else if (
-              isRegExp(resolveFilter.pattern) &&
-              (resolveFilter.pattern as RegExp).test(file)
-            ) {
-              resolveFilter.filter(exports, file, this);
+            if (typeof resolveFilter.pattern === 'string') {
+              if (file.includes(resolveFilter.pattern)) {
+                const exports = resolveFilter.ignoreRequire
+                  ? undefined
+                  : require(file);
+                resolveFilter.filter(exports, file, this);
+              }
+            } else if (isRegExp(resolveFilter.pattern)) {
+              if ((resolveFilter.pattern as RegExp).test(file)) {
+                const exports = resolveFilter.ignoreRequire
+                  ? undefined
+                  : require(file);
+                resolveFilter.filter(exports, file, this);
+              }
             } else {
+              const exports = require(file);
               // add module to set
               this.bindClass(exports, opts.namespace, file);
               this.debugLogger(`  binding "${file}" end`);
             }
           }
         } else {
+          const exports = require(file);
           // add module to set
           this.bindClass(exports, opts.namespace, file);
           this.debugLogger(`  binding "${file}" end`);
@@ -580,6 +595,7 @@ export class MidwayContainer
     if (typeof identifier !== 'string') {
       identifier = this.getIdentifier(identifier);
     }
+
     const ins: any = await super.getAsync<T>(identifier, args);
     return this.wrapperAspectToInstance(ins);
   }
@@ -932,5 +948,15 @@ export class MidwayContainer
     this.directoryFilterArray = this.directoryFilterArray.concat(
       directoryFilter
     );
+  }
+
+  public setFrameworkContainerScope(
+    frameworkContainerScope: FrameworkContainerScopeEnum
+  ) {
+    this.frameworkContainerScope = frameworkContainerScope;
+  }
+
+  public getFrameworkContainerScope() {
+    return this.frameworkContainerScope;
   }
 }

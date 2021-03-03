@@ -219,6 +219,16 @@ export class BaseApplicationContext
     }
 
     const definition = this.registry.getDefinition(identifier);
+    if (definition && definition.isSingletonScope() && this.parent) {
+      /**
+       * 1、请求作用域不允许有多层 applicationContext，这里要保证请求作用域容器对应的 applicationContext 只有一层
+       * 2、如果有 parent，且单例在当前容器没有，那么则要做同步
+       */
+      const instance = this.parent.getAsync(identifier, args);
+      this.registry.registerObject(identifier, instance);
+      return instance;
+    }
+
     if (!definition && this.parent) {
       return this.parent.getAsync(identifier, args);
     }
@@ -245,10 +255,12 @@ export class BaseApplicationContext
   ) {
     if (!this.disableConflictCheck && this.registry.hasDefinition(identifier)) {
       const def = this.registry.getDefinition(identifier);
-      if (!PathFileUtil.isPathEqual(definition.srcPath, def.srcPath)) {
-        throw new Error(
-          `${identifier} path = ${definition.srcPath} already exist (${def.srcPath})!`
-        );
+      if (definition.srcPath && def.srcPath) {
+        if (!PathFileUtil.isPathEqual(definition.srcPath, def.srcPath)) {
+          throw new Error(
+            `${identifier} path = ${definition.srcPath} already exist (${def.srcPath})!`
+          );
+        }
       }
     }
     this.registry.registerDefinition(identifier, definition);
