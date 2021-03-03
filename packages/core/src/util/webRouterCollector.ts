@@ -1,4 +1,4 @@
-import { LightFramework } from './emptyFramework';
+import { EmptyFramework } from './emptyFramework';
 import {
   CONTROLLER_KEY,
   ControllerOption,
@@ -90,7 +90,7 @@ export class WebRouterCollector {
 
   protected async analyze() {
     if (!MidwayContainer.parentDefinitionMetadata) {
-      const framework = new LightFramework();
+      const framework = new EmptyFramework();
       await framework.initialize({
         baseDir: this.baseDir,
       });

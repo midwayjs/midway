@@ -16,6 +16,14 @@ module.exports = engine => {
       // 从 package.json 中获取 egg 框架
       const packageJSON = require(resolve(baseDir, 'package.json'));
       framework = packageJSON.egg && packageJSON.egg.framework;
+      // 支持自定义框架
+      if (
+        packageJSON['dependencies'] &&
+        packageJSON['dependencies']['@midwayjs/web'] &&
+        framework !== '@midwayjs/web'
+      ) {
+        framework = '@midwayjs/web';
+      }
       const localFrameWorkPath = resolve(__dirname, 'framework');
       require(localFrameWorkPath).getFramework(
         process.env.EGG_FRAMEWORK_DIR ||
