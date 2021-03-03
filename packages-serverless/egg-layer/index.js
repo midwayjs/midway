@@ -17,7 +17,11 @@ module.exports = engine => {
       const packageJSON = require(resolve(baseDir, 'package.json'));
       framework = packageJSON.egg && packageJSON.egg.framework;
       // 支持自定义框架
-      if (packageJSON['dependencies'] && packageJSON['dependencies']['@midwayjs/web'] && framework !== '@midwayjs/web') {
+      if (
+        packageJSON['dependencies'] &&
+        packageJSON['dependencies']['@midwayjs/web'] &&
+        framework !== '@midwayjs/web'
+      ) {
         framework = '@midwayjs/web';
       }
       const localFrameWorkPath = resolve(__dirname, 'framework');
