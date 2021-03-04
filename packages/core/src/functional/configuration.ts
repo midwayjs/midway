@@ -2,12 +2,14 @@ import { IMidwayApplication, IMidwayContainer } from '../interface';
 import { InjectionConfigurationOptions } from '@midwayjs/decorator';
 
 export class FunctionalConfiguration {
-  private readHandler;
+  private readyHandler;
   private stopHandler;
   private options: InjectionConfigurationOptions;
 
   constructor(options: InjectionConfigurationOptions) {
     this.options = options;
+    this.readyHandler = () => {};
+    this.stopHandler = () => {};
   }
 
   onReady(
@@ -17,9 +19,9 @@ export class FunctionalConfiguration {
     app?: IMidwayApplication
   ) {
     if (typeof readyHandler === 'function') {
-      this.readHandler = readyHandler;
+      this.readyHandler = readyHandler;
     } else {
-      this.readHandler(readyHandler, app);
+      this.readyHandler(readyHandler, app);
     }
     return this;
   }
