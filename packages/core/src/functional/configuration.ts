@@ -13,12 +13,13 @@ export class FunctionalConfiguration {
   onReady(
     readyHandler:
       | ((container: IMidwayContainer, app: IMidwayApplication) => void)
-      | IMidwayContainer
+      | IMidwayContainer,
+    app?: IMidwayApplication
   ) {
     if (typeof readyHandler === 'function') {
       this.readHandler = readyHandler;
     } else {
-      this.readHandler(readyHandler);
+      this.readHandler(readyHandler, app);
     }
     return this;
   }
@@ -26,12 +27,13 @@ export class FunctionalConfiguration {
   onStop(
     stopHandler:
       | ((container: IMidwayContainer, app: IMidwayApplication) => void)
-      | IMidwayContainer
+      | IMidwayContainer,
+    app?: IMidwayApplication
   ) {
     if (typeof stopHandler === 'function') {
       this.stopHandler = stopHandler;
     } else {
-      this.stopHandler(stopHandler);
+      this.stopHandler(stopHandler, app);
     }
     return this;
   }
