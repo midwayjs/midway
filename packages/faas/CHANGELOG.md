@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.8.7](https://github.com/midwayjs/midway/compare/v2.8.6...v2.8.7) (2021-03-04)
+
+
+### Bug Fixes
+
+* exports missing ([#884](https://github.com/midwayjs/midway/issues/884)) ([a360a0e](https://github.com/midwayjs/midway/commit/a360a0e645a9551cb9d90ceaf7871f3e0ab5b4d3))
+
+
+
+
+
 ## [2.8.6](https://github.com/midwayjs/midway/compare/v2.8.5...v2.8.6) (2021-03-03)
 
 **Note:** Version bump only for package @midwayjs/faas
