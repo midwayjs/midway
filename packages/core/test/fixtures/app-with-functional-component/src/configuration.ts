@@ -11,7 +11,7 @@ export default createConfiguration({
     })
   ]
 }).onReady(async (container, app) => {
-  console.log('on ready');
-}).onStop(async (container) => {
-  console.log('on stop');
+  console.log('on ready', app);
+}).onStop(async (container, app) => {
+  console.log('on stop', app);
 });
