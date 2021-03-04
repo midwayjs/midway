@@ -45,7 +45,7 @@ export interface FunctionHandler {
 
 export type Application = IMidwayFaaSApplication;
 
-export type Context = FaaSContext;
+export interface Context extends FaaSContext {};
 
 export interface IFaaSConfigurationOptions extends IConfigurationOptions {
   config?: object;
