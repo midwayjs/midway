@@ -3,6 +3,7 @@
   "description": "a web framework for complex Node.js application",
   "version": "1.0.0",
   "devDependencies": {
+    "@midwayjs/cli": "^1.2.36",
     "@types/jest": "^26.0.10",
     "@types/node": "^10.17.21",
     "lerna": "^3.20.2",
