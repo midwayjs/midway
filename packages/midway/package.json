@@ -17,7 +17,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/cli": "^1.2.36",
+    "@midwayjs/cli": "^1.2.48-beta.1",
     "@midwayjs/core": "^2.8.7",
     "@midwayjs/decorator": "^2.8.4",
     "egg": "^2.28.0",
