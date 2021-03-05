@@ -8,7 +8,7 @@
     "mz": "^2.7.0"
   },
   "devDependencies": {
-    "@midwayjs/cli": "^1.2.48-beta.1"
+    "@midwayjs/cli": "^1.2.48-beta.10"
   },
   "scripts": {
     "build": "midway-bin build -c",

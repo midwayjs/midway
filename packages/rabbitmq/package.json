@@ -24,7 +24,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/cli": "^1.2.48-beta.1",
+    "@midwayjs/cli": "^1.2.48-beta.10",
     "@midwayjs/mock": "^2.8.7",
     "fs-extra": "^8.0.1"
   },

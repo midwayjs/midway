@@ -18,7 +18,7 @@
     "vary": "^1.1.2"
   },
   "devDependencies": {
-    "@midwayjs/cli": "^1.2.48-beta.1",
+    "@midwayjs/cli": "^1.2.48-beta.10",
     "mm": "3"
   },
   "engines": {
