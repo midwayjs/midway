@@ -84,16 +84,15 @@ export class Framework
     return MidwayFrameworkType.FAAS;
   }
   public getApplication(): IServerlessApp {
-    const _this = this;
     return new Proxy(this.app, {
-      get(target, key) {
+      get: (target, key) => {
         if (target[key]) {
           return target[key];
         }
-        if (_this[key]) {
-          return _this[key];
+        if (this[key]) {
+          return this[key];
         }
-      }
+      },
     });
   }
 
