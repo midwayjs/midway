@@ -11,7 +11,7 @@
     "@midwayjs/cli": "^1.2.36"
   },
   "scripts": {
-    "build": "ls -al ./node_modules && ls -al ./node_modules/.bin/ && midway-bin build -c",
+    "build": "midway-bin build -c",
     "test": "midway-bin test --ts --forceExit",
     "cov": "midway-bin cov --ts --forceExit"
   },

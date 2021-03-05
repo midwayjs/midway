@@ -5,6 +5,7 @@
   "devDependencies": {
     "@midwayjs/cli": "^1.2.36",
     "@midwayjs/cli-plugin-build": "^1.2.36",
+    "@midwayjs/cli-plugin-test": "^1.2.36",
     "@types/jest": "^26.0.10",
     "@types/node": "^10.17.21",
     "lerna": "^3.20.2",
@@ -56,8 +57,5 @@
   "collective": {
     "type": "opencollective",
     "url": "https://opencollective.com/midway"
-  },
-  "dependencies": {
-    "codecov": "^3.8.1"
   }
 }

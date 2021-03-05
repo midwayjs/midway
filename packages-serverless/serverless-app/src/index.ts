@@ -90,7 +90,6 @@ export class Framework
         if (target[key]) {
           return target[key];
         }
-        console.log('this', this);
         if (_this[key]) {
           return _this[key];
         }
