@@ -10,7 +10,7 @@
     "winston-transport": "^4.4.0"
   },
   "devDependencies": {
-    "@midwayjs/cli": "^1.2.48-beta.13",
+    "@midwayjs/cli": "^1.2.36",
     "egg-logger": "^2.4.2",
     "fs-extra": "^8.0.1"
   },

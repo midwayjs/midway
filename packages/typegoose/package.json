@@ -18,7 +18,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/cli": "^1.2.48-beta.13",
+    "@midwayjs/cli": "^1.2.36",
     "@midwayjs/koa": "^2.8.7",
     "@midwayjs/mock": "^2.8.7",
     "@typegoose/typegoose": "^7.4.7",

@@ -21,7 +21,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/cli": "^1.2.48-beta.13",
+    "@midwayjs/cli": "^1.2.36",
     "chai": "^4.2.0",
     "mm": "3",
     "sinon": "^7.2.2"
