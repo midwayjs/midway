@@ -42,7 +42,6 @@ export interface FunctionHandler {
   handler(...args);
 }
 
-
 export type Application = IMidwayFaaSApplication;
 
 export interface Context extends FaaSContext {};
