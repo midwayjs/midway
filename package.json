@@ -3,7 +3,7 @@
   "description": "a web framework for complex Node.js application",
   "version": "1.0.0",
   "devDependencies": {
-    "@midwayjs/cli": "^1.2.48-beta.10",
+    "@midwayjs/cli": "^1.2.48-beta.12",
     "@midwayjs/cli-plugin-build": "^1.2.47",
     "@types/jest": "^26.0.10",
     "@types/node": "^10.17.21",

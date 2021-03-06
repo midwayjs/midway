@@ -5,7 +5,7 @@
   "private": true,
   "dependencies": {
     "midway": "1",
-    "@midwayjs/cli": "^1.2.48-beta.10",
+    "@midwayjs/cli": "^1.2.48-beta.12",
     "@midwayjs/cli-plugin-build": "^1.2.47",
     "pandora": "^1.8.27"
   },

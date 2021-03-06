@@ -8,7 +8,7 @@
     "@midwayjs/serverless-http-parser": "^2.8.2"
   },
   "devDependencies": {
-    "@midwayjs/cli": "^1.2.48-beta.10",
+    "@midwayjs/cli": "^1.2.48-beta.12",
     "raw-body": "^2.4.1"
   },
   "engines": {
