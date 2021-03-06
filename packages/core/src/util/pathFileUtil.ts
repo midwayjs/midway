@@ -18,7 +18,7 @@ export const PathFileUtil = {
     return one.replace(ext, '') === two;
   },
 
-  getFileContentSync(filePath: any, encoding?: string) {
+  getFileContentSync(filePath: any, encoding?) {
     return typeof filePath === 'string'
       ? readFileSync(filePath, encoding)
       : filePath;
