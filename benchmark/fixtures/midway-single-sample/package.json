@@ -5,7 +5,7 @@
   "private": true,
   "dependencies": {
     "midway": "^0.2.11",
-    "@midwayjs/cli": "^1.2.48-beta.12",
+    "@midwayjs/cli": "^1.2.48-beta.13",
     "@midwayjs/cli-plugin-build": "^1.2.47",
     "egg-scripts": "^2.5.0"
   },

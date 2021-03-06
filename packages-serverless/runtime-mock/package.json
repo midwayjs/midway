@@ -7,7 +7,7 @@
     "@midwayjs/runtime-engine": "^2.8.2"
   },
   "devDependencies": {
-    "@midwayjs/cli": "^1.2.48-beta.12"
+    "@midwayjs/cli": "^1.2.48-beta.13"
   },
   "engines": {
     "node": ">= 10"
