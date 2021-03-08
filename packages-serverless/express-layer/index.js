@@ -31,14 +31,20 @@ module.exports = engine => {
           headers: context.headers,
           followRedirect: false,
         };
-        if ((context.headers['content-type'] || '').indexOf('application/json') >= 0) {
+        if (
+          (context.headers['content-type'] || '').indexOf('application/json') >=
+          0
+        ) {
           // post json
           if (typeof context.request.body !== 'string') {
-            requestOption.body = JSON.stringify(context.request.body)
+            requestOption.body = JSON.stringify(context.request.body);
           } else {
-            requestOption.body = context.request.body
+            requestOption.body = context.request.body;
           }
-        } else if ((context.headers['content-type'] || '').indexOf('form-urlencoded') >= 0) {
+        } else if (
+          (context.headers['content-type'] || '').indexOf('form-urlencoded') >=
+          0
+        ) {
           // post formdata
           requestOption.form = context.request.body;
         } else if (context.request.body) {
