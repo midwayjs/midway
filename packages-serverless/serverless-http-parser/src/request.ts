@@ -129,7 +129,7 @@ export const request = {
 
   get body() {
     const method = this.method.toLowerCase();
-    if (['get', 'head', 'delete', 'options'].includes(method)) {
+    if (['get', 'head', 'options'].includes(method)) {
       return undefined;
     }
     if (this[BODY]) {

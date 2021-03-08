@@ -68,6 +68,15 @@ describe('/test/index.test.ts', () => {
         .expect(200, done);
     });
 
+    it('should test with post form body', (done) => {
+      request(app)
+        .post('/post/formBody')
+        .send('b=1')
+        .expect('Content-Type', 'application/json; charset=utf-8')
+        .expect(/{"body":{"b":"1"}}/)
+        .expect(200, done);
+    });
+
     it('should test static file', done => {
       request(app)
         .get('/public/news.css')
@@ -81,6 +90,17 @@ describe('/test/index.test.ts', () => {
         .get('/')
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(301, done);
+    });
+
+    it('should test throw error', done => {
+      request(app)
+        .get('/error')
+        .expect('Content-Type', 'text/html; charset=utf-8')
+        .expect(500, (err, res) => {
+          expect(res.statusCode).toEqual(500);
+          expect(res.text).toMatch('custom error');
+          done();
+        });
     });
   });
 

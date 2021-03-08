@@ -67,6 +67,15 @@ describe('/test/index.test.ts', () => {
         .expect(/{"body":{"b":1}}/)
         .expect(200, done);
     });
+
+    it('should test with post form body', (done) => {
+      request(app)
+        .post('/post/formBody')
+        .send('b=1')
+        .expect('Content-Type', 'application/json; charset=utf-8')
+        .expect(/{"body":{"b":"1"}}/)
+        .expect(200, done);
+    });
   });
 
   describe('FC test with api gateway', () => {

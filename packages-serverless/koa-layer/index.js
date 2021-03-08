@@ -23,27 +23,42 @@ module.exports = engine => {
     async defaultInvokeHandler(context) {
       return new Promise((resolve, reject) => {
         delete context.headers['content-length'];
-        request(
-          {
-            uri: `http://unix:${socketPath}:${context.path}`,
-            qs: context.query,
-            method: context.method,
-            body:
-              typeof context.request.body === 'string'
-                ? context.request.body
-                : JSON.stringify(context.request.body),
-            headers: context.headers,
-            followRedirect: false,
-          },
-          (error, response, body) => {
+        const requestOption = {
+          uri: `http://unix:${socketPath}:${context.path}`,
+          qs: context.query,
+          method: context.method,
+          headers: context.headers,
+          followRedirect: false,
+        };
+        if ((context.headers['content-type'] || '').indexOf('application/json') >= 0) {
+          // post json
+          if (typeof context.request.body !== 'string') {
+            requestOption.body = JSON.stringify(context.request.body)
+          } else {
+            requestOption.body = context.request.body
+          }
+        } else if ((context.headers['content-type'] || '').indexOf('form-urlencoded') >= 0) {
+          // post formdata
+          requestOption.form = context.request.body;
+        } else if (context.request.body) {
+          if (typeof context.request.body !== 'string') {
+            requestOption.form = context.request.body;
+          } else {
+            requestOption.body = context.request.body;
+          }
+        }
+        request(requestOption, (error, response, body) => {
+          context.res = response;
+          context.status = response.statusCode;
+          if (error) {
+            console.error('[koa-layer]' + error);
+            resolve('Internal Server Error');
+          } else {
             context.res = response;
             context.status = response.statusCode;
-            if (error) {
-              reject(error);
-            }
             resolve(body);
           }
-        );
+        });
       });
     },
   });
