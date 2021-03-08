@@ -2,7 +2,7 @@
   <a href="https://midwayjs.org/" target="blank"><img src="https://img.alicdn.com/imgextra/i1/O1CN01xQLU011T2R7PHksIv_!!6000000002324-2-tps-1200-616.png" width="1000" alt="Midway Logo" /></a>
 </p>
 
-<p align="center">Midway 是一个适用于构建 Serverless 服务，传统应用、微服务，小程序后端的 <a href="http://nodejs.org" target="_blank">Node.js</a> 框架。</p>
+<p align="center">Midway - 一个面向未来的云端一体 <a href="http://nodejs.org" target="_blank">Node.js</a> 框架</p>
 <p align="center">
     <a href="https://github.com/midwayjs/midway/blob/master/LICENSE" target="_blank"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="GitHub license" /></a>
     <a href=""><img src="https://img.shields.io/github/tag/midwayjs/midway.svg" alt="GitHub tag"></a>
@@ -21,20 +21,65 @@
 
 ## 特性
 
-- [x] **跨平台**：支持阿里云、腾讯云等多平台的Serverless框架
-- [x] **场景多样化**：Midway支持传统应用、Serverless函数、微服务、小程序后端等多种场景
-- [x] **插件多样化**：支持Koa、express、egg等多种插件
-- [x] **示例丰富**: 官方提供多种Node场景的示例代码，方便开发者快速上手。
-- [x] **维护成本低**：良好的应用程序分层和解耦能力
-- [x] **丰富的开发者工具**: 官方提供了vscode插件来提升开发效率。
+- [x] **全功能**：支持 Web 应用/Serverless/微服务/小程序后端等多种场景
+- [x] **前端集成**：全新的应用研发体验，通过 全栈 | 函数式 | 使用 "React Hooks" 开发前后端一体化应用
+- [x] **跨平台**：支持部署至 Server 或 Serverless
+- [x] **插件**：支持使用 Koa/Express/Egg.js 生态插件
+- [x] **示例**: 官方提供多种 Node 场景的示例代码，方便开发者快速上手
 
 ## 描述
 
 Midway 是一个适用于构建 Serverless 服务，传统应用、微服务，小程序后端的 Node.js 框架。
 
-Midway可以使用 koa，express 或 EggJS 作为基本的 Web 框架。它还提供了独立使用的基本解决方案，例如 Socket.io，GRPC，Dubbo.js 和 RabbitMQ 等。
+Midway 可以使用 Koa，Express 或 Egg.js 作为基础 Web 框架。它还提供了独立使用的基本解决方案，例如 Socket.io，GRPC，Dubbo.js 和 RabbitMQ 等。
 
-此外，Midway 也适用于前端/全栈开发人员的Node.js无服务器框架。构建下一个十年的应用程序。可在AWS，阿里云，腾讯云和传统VM /容器上运行。与 React 和 Vue 轻松集成。 🌈
+此外，Midway 也适用于前端/全栈开发人员的 Node.js 无服务器框架。构建下一个十年的应用程序。可在 AWS，阿里云，腾讯云和传统 VM /容器上运行。与 React 和 Vue 轻松集成。 🌈
+
+## Demo
+
+### 使用装饰器开发 Web 应用
+
+```ts
+import { Controller, Get, Provide } from 'midway';
+
+@Provide()
+@Controller('/')
+export class HomeController {
+
+  @Get('/')
+  async index(ctx) {
+    ctx.body = `Welcome to midwayjs!`;
+  }
+}
+```
+
+### 使用函数开发全栈应用
+
+> 后端代码
+> src/apis/lambda/index.ts
+
+```typescript
+import { useContext } from '@midwayjs/hooks'
+
+export async function getPath() {
+  // 获取请求 HTTP Context
+  const ctx = useContext()
+  return ctx.path
+}
+```
+
+> 前端调用
+> src/page/index.tsx
+
+```typescript
+import { getPath } from './apis/lambda'
+
+getPath().then((path) => {
+  // 发送 GET 请求到 /api/getPath
+  // 返回值: /api/getPath
+  console.log(path)
+})
+```
 
 ## 快速上手
 
