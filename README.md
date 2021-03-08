@@ -72,6 +72,14 @@ cd helloworld && npm run dev
 
 群里会有热心的朋友，也会有新版本发布推送。钉钉扫码加入答疑群
 
+
+二群
+
+![](https://img.alicdn.com/imgextra/i3/O1CN01GY6N6x1Sylx7mjGyf_!!6000000002316-2-tps-314-402.png)
+
+
+一群（已满）
+
 ![](https://img.alicdn.com/imgextra/i2/O1CN01ofEEAL2AEpJHbpse5_!!6000000008172-2-tps-311-401.png)
 
 ## 贡献
