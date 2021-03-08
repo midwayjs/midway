@@ -26,6 +26,12 @@ app.post('/post/body', (req, res) => {
   });
 });
 
+app.post('/post/formBody', (req, res) => {
+  res.send({
+    body: req.body,
+  });
+});
+
 // app.listen(3000);
 
 module.exports = async () => {

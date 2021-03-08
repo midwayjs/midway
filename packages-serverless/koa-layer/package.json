@@ -3,8 +3,8 @@
   "version": "2.8.8",
   "main": "index.js",
   "scripts": {
-    "test": "midway-bin test --forceExit",
-    "cov": "midway-bin cov --forceExit"
+    "test": "midway-bin test",
+    "cov": "midway-bin cov"
   },
   "dependencies": {
     "request": "^2.88.2"

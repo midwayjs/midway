@@ -26,6 +26,12 @@ router.post('/post/body', (ctx, next) => {
   };
 });
 
+router.post('/post/formBody', (ctx, next) => {
+  ctx.body = {
+    body: ctx.request.body,
+  };
+});
+
 app.use(bodyParser());
 app.use(router.routes()).use(router.allowedMethods());
 
