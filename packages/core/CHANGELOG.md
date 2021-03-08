@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.8.9](https://github.com/midwayjs/midway/compare/v2.8.8...v2.8.9) (2021-03-08)
+
+
+### Bug Fixes
+
+* delete method parse body and form body ([#891](https://github.com/midwayjs/midway/issues/891)) ([f5c1e70](https://github.com/midwayjs/midway/commit/f5c1e7042ed85656e323563421391a719999979e))
+
+
+
+
+
 ## [2.8.8](https://github.com/midwayjs/midway/compare/v2.8.7...v2.8.8) (2021-03-06)
 
 

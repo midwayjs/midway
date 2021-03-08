@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.8.9](https://github.com/midwayjs/midway-faas/compare/v2.8.8...v2.8.9) (2021-03-08)
+
+
+### Bug Fixes
+
+* delete method parse body and form body ([#891](https://github.com/midwayjs/midway-faas/issues/891)) ([f5c1e70](https://github.com/midwayjs/midway-faas/commit/f5c1e7042ed85656e323563421391a719999979e))
+
+
+
+
+
 ## [2.8.2](https://github.com/midwayjs/midway-faas/compare/v2.8.0...v2.8.2) (2021-02-27)
 
 **Note:** Version bump only for package @midwayjs/faas-typings
