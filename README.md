@@ -19,6 +19,8 @@
 
 [English](./README.en-US.md) | 简体中文
 
+🥳 欢迎观看 Midway Serverless 2.0 发布会回放：https://live.bilibili.com/record/R1Vx411w7yp
+
 ## 特性
 
 - 🐘 **全功能**：支持 Web 应用/Serverless/FaaS/微服务/小程序后端等多种场景，基于装饰器和依赖注入开发企业级应用
@@ -29,8 +31,6 @@
 - 🛡 TypeScript 全面支持
 
 ## 描述
-
-🥳 欢迎观看 Midway Serverless 2.0 发布会回放：https://live.bilibili.com/record/R1Vx411w7yp
 
 Midway 是一个适用于构建 Serverless 服务，传统应用、微服务，小程序后端的 Node.js 框架。
 
