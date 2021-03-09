@@ -5,7 +5,7 @@
   "@midwayjs/koa-layer": "2.8.9",
   "@midwayjs/runtime-engine": "2.8.2",
   "@midwayjs/runtime-mock": "2.8.2",
-  "@midwayjs/serverless-app": "2.8.9",
+  "@midwayjs/serverless-app": "2.8.10",
   "@midwayjs/serverless-aws-starter": "2.8.9",
   "@midwayjs/serverless-fc-starter": "2.8.9",
   "@midwayjs/serverless-fc-trigger": "2.8.9",
