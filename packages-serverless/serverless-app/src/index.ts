@@ -203,12 +203,13 @@ export class Framework
     }
 
     const triggerMap = this.getTriggerMap();
-
+    const layers = this.getLayers();
     const { Framework } = require(usageFaasModulePath);
     const startResult = await start2({
       appDir,
       baseDir: currentBaseDir,
       framework: Framework,
+      layers: layers,
       starter: require(starterName),
       initializeContext: undefined,
     });
@@ -313,5 +314,29 @@ export class Framework
       }
       process.send({ type: 'dev:' + type, data, id: msg.id });
     });
+  }
+
+  private getLayers() {
+    const specLayers = [];
+    if (this.configurationOptions.layers) {
+      this.configurationOptions.layers.forEach(path => {
+        const layer = require(path);
+        specLayers.push(layer);
+      });
+    }
+    if (this.spec?.layers) {
+      Object.keys(this.spec.layers).forEach(layerName => {
+        const info = this.spec.layers[layerName];
+        if (!info?.path) {
+          return;
+        }
+        const [type, path] = info.path.split(':');
+        if (type === 'npm') {
+          const layer = require(path);
+          specLayers.push(layer);
+        }
+      });
+    }
+    return specLayers;
   }
 }

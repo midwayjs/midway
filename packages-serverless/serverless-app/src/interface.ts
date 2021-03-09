@@ -10,4 +10,5 @@ export interface IServerlessApp extends IMidwayApplication {
 export interface IServerlessAppOptions extends IConfigurationOptions {
   port?: string | number;
   initContext?: any;
+  layers?: string[];
 }
