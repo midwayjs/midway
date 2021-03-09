@@ -120,7 +120,7 @@ cd helloworld && npm run dev
 
 二群
 
-![](https://img.alicdn.com/imgextra/i3/O1CN01GY6N6x1Sylx7mjGyf_!!6000000002316-2-tps-314-402.png)
+![](https://img.alicdn.com/imgextra/i2/O1CN01SRJO0P1YaqxhtPU2X_!!6000000003076-2-tps-305-391.png)
 
 
 一群（已满）
