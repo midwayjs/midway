@@ -22,10 +22,12 @@
 ## 特性
 
 - 🐘 **全功能**：支持 Web 应用/Serverless/微服务/小程序后端等多种场景
-- 🐦 **前端集成**：全新的应用研发体验，通过 全栈 | 函数式 | 使用 "React Hooks" 开发前后端一体化应用
-- 🐴 **跨平台**：支持部署至 Server 或 Serverless
-- 🐶 **插件**：支持使用 Koa/Express/Egg.js 生态插件
+- 🐦 **前端集成**：全新的云端一体应用研发体验，零 API 调用，使用 "React Hooks | Vue composition Api" 开发后端
+- 🐴 **跨平台**：支持部署至普通 Server 或 Serverless/FaaS 环境
+- 🐶 **扩展**：多款组件化扩展能力，另外支持使用 Koa/Express/Egg.js 生态插件
 - 🐂 **示例**: 官方提供多种 Node 场景的示例代码，方便开发者快速上手
+- 🛡 TypeScript 全面支持
+
 
 ## 描述
 
@@ -93,7 +95,9 @@ mw new helloworld
 cd helloworld && npm run dev
 ```
 
-你也可以在阿里云官网知行实验室，学习 Midway [相关的课程](https://start.aliyun.com/handson-lab)。
+如何部署等更多进阶请访问 [中文文档](https://www.yuque.com/midwayjs/midway_v2)。
+
+<!--同时你也可以在阿里云官网知行实验室，学习 Midway [相关的课程](https://start.aliyun.com/handson-lab)。-->
 
 ## 文档和社区
 
