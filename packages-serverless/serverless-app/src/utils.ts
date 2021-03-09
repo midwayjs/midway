@@ -36,7 +36,7 @@ export const output404 = (path, functionsMap) => {
     <div style="padding: 48px 24px 0 24px;font-size: 24px;color: #333;line-height: 24px;">404</div>
     <div style="padding: 0 24px;font-size: 14px;color: #666;line-height: 48px;">path '${path}' not found</div>
     ${
-      allPath.length
+      process.env.NODE_ENV === 'development' && allPath.length
         ? `<div style="padding: 24px;font-size: 13px;line-height: 18px;">
       <div>You can visit:</div>
       ${allPath
