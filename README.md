@@ -21,7 +21,7 @@
 
 ## 特性
 
-- 🐘 **全功能**：支持 Web 应用/Serverless/FaaS/微服务/小程序后端等多种场景，基于装饰器和依赖诸如开发企业级应用
+- 🐘 **全功能**：支持 Web 应用/Serverless/FaaS/微服务/小程序后端等多种场景，基于装饰器和依赖注入开发企业级应用
 - 🐦 **前端集成**：全新的云端一体应用研发体验，零 API 调用，使用 "React Hooks | Vue composition Api" 开发后端
 - 🐴 **跨平台**：支持部署至普通 Server 或 Serverless/FaaS 环境
 - 🐶 **扩展**：组件化扩展能力，另外支持使用 Koa/Express/Egg.js 生态插件
