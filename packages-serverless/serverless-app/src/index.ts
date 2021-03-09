@@ -324,7 +324,7 @@ export class Framework
         specLayers.push(layer);
       });
     }
-    if (this.spec.layers) {
+    if (this.spec?.layers) {
       Object.keys(this.spec.layers).forEach(layerName => {
         const info = this.spec.layers[layerName];
         if (!info?.path) {
