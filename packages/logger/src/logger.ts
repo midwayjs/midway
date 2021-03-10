@@ -201,7 +201,7 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
     this.defaultMetadata = defaultMetadata;
   }
 
-  updateInfo(customInfoHandler: (info: any) => any) {
+  updateTransformableInfo(customInfoHandler: (info: any) => any) {
     this.customInfoHandler = customInfoHandler;
   }
 
