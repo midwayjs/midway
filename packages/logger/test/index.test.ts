@@ -632,7 +632,7 @@ describe('/test/index.test.ts', () => {
       fileLogName: 'test-logger.log',
     });
 
-    (logger as IMidwayLogger).updateInfo(info => {
+    (logger as IMidwayLogger).updateTransformableInfo(info => {
       info.timestamp = 'bbbb';
     });
     logger.info('file logger');
