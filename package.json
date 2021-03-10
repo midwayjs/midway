@@ -5,7 +5,7 @@
   "devDependencies": {
     "@types/jest": "^26.0.10",
     "@types/node": "^10.17.21",
-    "lerna": "^3.20.2",
+    "lerna": "^4.0.0",
     "lerna-relinker": "^1.4.0",
     "mwts": "^1.0.5",
     "opencollective": "^1.0.3",
