@@ -14,6 +14,10 @@ export class MidwayConfigService implements IConfigService {
   isReady = false;
   container: IMidwayContainer;
   externalObject: Record<string, unknown>[] = [];
+  aliasMap = {
+    prod: 'production',
+    unittest: 'test',
+  };
 
   constructor(container) {
     this.container = container;
@@ -27,6 +31,9 @@ export class MidwayConfigService implements IConfigService {
         const env = this.getConfigEnv(dir);
         const envSet = this.getEnvSet(env);
         envSet.add(dir);
+        if (this.aliasMap[env]) {
+          this.getEnvSet(this.aliasMap[env]).add(dir);
+        }
       } else {
         // directory
         const fileStat = statSync(dir);
