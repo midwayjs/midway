@@ -622,4 +622,27 @@ describe('/test/index.test.ts', () => {
 
   });
 
+  it('should dynamic change info data', async  ()  => {
+    clearAllLoggers();
+    const logsDir = join(__dirname, 'logs');
+    await removeFileOrDir(logsDir);
+
+    const logger = createFileLogger('file', {
+      dir: logsDir,
+      fileLogName: 'test-logger.log',
+    });
+
+    (logger as IMidwayLogger).updateInfo(info => {
+      info.timestamp = 'bbbb';
+    });
+    logger.info('file logger');
+    logger.info('file logger1');
+    logger.info('file logger2');
+    await sleep();
+
+    expect(matchContentTimes(join(logsDir, 'test-logger.log'), 'bbbb')).toEqual(3);
+
+    await removeFileOrDir(logsDir);
+  });
+
 });

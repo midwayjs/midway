@@ -24,7 +24,7 @@
     "beta": "sh scripts/publish.sh --npm-tag beta --force-publish=*",
     "next": "sh scripts/publish.sh --npm-tag next",
     "release": "rm -f ./packages/.DS* && sh scripts/publish.sh",
-    "bootstrap": "rm -f ./packages/.DS* && lerna bootstrap",
+    "bootstrap": "rm -f ./packages/.DS* && lerna bootstrap --concurrency 4",
     "clean": "lerna clean --yes && rm -rf ./packages/**/package-lock.json && rm -f package-lock.json",
     "build": "sh scripts/build.sh",
     "authors": "git log --format='%aN <%aE>' | sort -u > AUTHORS",
