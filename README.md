@@ -138,6 +138,11 @@ cd helloworld && npm run dev
 
 如果你是一个代码贡献者，请参考代码贡献规范。
 
+## 谁在使用
+
+![image](https://user-images.githubusercontent.com/629202/110626857-352f1b80-81dc-11eb-934d-94c1307f1bc0.png)
+
+
 ## License
 
 我们的代码使用 [MIT](http://github.com/midwayjs/midway/blob/master/LICENSE) 协议，请放心使用。
