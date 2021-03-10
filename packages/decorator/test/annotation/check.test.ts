@@ -29,6 +29,37 @@ describe('/test/annotation/check.test.ts', () => {
     assert.deepEqual(result, user);
   });
 
+  it('check with check with extends', () => {
+    class TO{
+
+    }
+
+    @Rule(TO)
+    class UserDTO extends TO{
+      @Rule(RuleType.number().max(10))
+      age: number;
+    }
+
+    @Rule(UserDTO)
+    class HelloDTO extends UserDTO{
+
+      @Rule(RuleType.number().min(4))
+      age: number;
+    }
+
+    class Hello {
+      @Validate()
+      school(a, data: HelloDTO) {
+        return data;
+      }
+    }
+    const user = {
+      age: 11
+    };
+    const result = new Hello().school(1, user);
+    assert.deepEqual(result, user);
+  });
+
   it('check with check and transform object', () => {
     class UserDTO {
       @Rule(RuleType.number().max(10))
