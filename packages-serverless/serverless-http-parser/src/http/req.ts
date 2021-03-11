@@ -69,6 +69,10 @@ export class HTTPRequest {
     return this[EVENT].path;
   }
 
+  set path(value) {
+    this[EVENT].path = value;
+  }
+
   get pathParameters() {
     return this[EVENT].pathParameters || {};
   }

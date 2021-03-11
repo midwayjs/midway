@@ -1,5 +1,5 @@
 {
-  "name": "@midwayjs/koa-layer",
+  "name": "@midwayjs/static-layer",
   "version": "2.8.9",
   "main": "index.js",
   "scripts": {
@@ -7,6 +7,9 @@
     "cov": "midway-bin cov"
   },
   "dependencies": {
+    "koa": "^2.13.0",
+    "koa-static-cache": "^5.1.4",
+    "koa-rewrite": "^3.0.1",
     "request": "^2.88.2"
   },
   "devDependencies": {
@@ -17,9 +20,6 @@
     "@midwayjs/serverless-fc-trigger": "^2.8.9",
     "@midwayjs/serverless-scf-starter": "^2.8.9",
     "@midwayjs/serverless-scf-trigger": "^2.8.9",
-    "koa": "^2.13.0",
-    "koa-bodyparser": "^4.3.0",
-    "koa-router": "^9.4.0",
     "supertest": "^4.0.2"
   },
   "engines": {

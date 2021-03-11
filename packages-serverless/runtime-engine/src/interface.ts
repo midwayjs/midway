@@ -59,11 +59,13 @@ export interface Runtime extends RuntimeExtension {
   setOptions(RuntimeOptions): void;
   getFunctionName(): string;
   getFunctionServiceName(): string;
+  getRuntimeConfig(): any;
 }
 
 export interface LightRuntime extends Runtime {
   invokeHandlerWrapper(context, invokeHandler);
   asyncEvent(handler: handlerWrapper): (...args) => void;
+  getApplication(): any;
 }
 
 export interface IServerlessLogger {
@@ -120,4 +122,5 @@ export interface BootstrapOptions {
   runtime?: Runtime;
   initContext?: any;
   isAppMode?: boolean;
+  runtimeConfig?: any;
 }

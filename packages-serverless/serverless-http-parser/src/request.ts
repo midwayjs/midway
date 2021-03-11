@@ -111,6 +111,10 @@ export const request = {
     return this.req.path;
   },
 
+  set path(value) {
+    this.req.path = value;
+  },
+
   get method() {
     return this.req.method;
   },

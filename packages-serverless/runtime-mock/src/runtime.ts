@@ -42,6 +42,7 @@ export class MockRuntime {
         : new BaseBootstrap({
             runtime: this.options.runtime,
             layers: this.options.layers,
+            runtimeConfig: this.options.runtimeConfig,
           });
       this.engine = this.bootstrap.getRuntimeEngine();
     }
