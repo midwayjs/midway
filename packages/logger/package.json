@@ -15,7 +15,7 @@
     "fs-extra": "^8.0.1"
   },
   "engines": {
-    "node": ">= 10"
+    "node": ">= 12.13.0"
   },
   "files": [
     "dist/**/*.js",

@@ -32,7 +32,7 @@
     "dist/**/*.d.ts"
   ],
   "engines": {
-    "node": ">= 8.0.0"
+    "node": ">= 12.13.0"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
   "repository": {
