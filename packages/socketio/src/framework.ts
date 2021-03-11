@@ -59,7 +59,10 @@ export class MidwaySocketIOFramework extends BaseFramework<
   }
 
   public async run(): Promise<void> {
-    if (this.configurationOptions.pubClient && this.configurationOptions.subClient) {
+    if (
+      this.configurationOptions.pubClient &&
+      this.configurationOptions.subClient
+    ) {
       const pubClient = this.configurationOptions.pubClient;
       const subClient = this.configurationOptions.subClient;
       const adapter = createAdapter({ pubClient, subClient });
