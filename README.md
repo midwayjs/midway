@@ -19,7 +19,7 @@
 
 [English](./README.en-US.md) | 简体中文
 
-🥳 欢迎观看 Midway Serverless 2.0 发布会回放： 地址修复中，先看下面文字版
+🥳 欢迎观看 Midway Serverless 2.0 发布会回放： https://www.bilibili.com/video/BV17A411T7Md
 
 [《Midway Serverless 发布 2.0，一体化让前端研发再次提效》](https://zhuanlan.zhihu.com/p/355768659)
 
