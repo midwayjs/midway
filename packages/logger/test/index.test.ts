@@ -634,6 +634,7 @@ describe('/test/index.test.ts', () => {
 
     (logger as IMidwayLogger).updateTransformableInfo(info => {
       info.timestamp = 'bbbb';
+      return info
     });
     logger.info('file logger');
     logger.info('file logger1');
