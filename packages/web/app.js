@@ -61,6 +61,7 @@ class AppBootHook {
       }
     }
 
+    this.app.use(this.app.router.middleware());
     await this.app.webFramework.loadMidwayController();
   }
 
