@@ -140,8 +140,7 @@ cd helloworld && npm run dev
 
 ## 谁在使用
 
-![image](https://user-images.githubusercontent.com/629202/110627825-63612b00-81dd-11eb-9bb8-f9228a6f72b1.png)
-
+![image](https://user-images.githubusercontent.com/629202/110743837-a968ce00-8273-11eb-8284-f5749335fe70.png)
 
 ## License
 
