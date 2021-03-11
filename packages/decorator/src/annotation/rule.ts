@@ -9,7 +9,7 @@ import {
 
 export function Rule(rule) {
   return function (...args) {
-    if(args[1]){
+    if (args[1]) {
       // 函数装饰器
       const [target, propertyKey] = args;
       if (!joi.isSchema(rule)) {
@@ -22,13 +22,14 @@ export function Rule(rule) {
       }
 
       attachClassMetadata(RULES_KEY, rule, target, propertyKey);
-    }else{ //类的装饰器
+    } else {
+      //类的装饰器
       const rules = getClassMetadata(RULES_KEY, rule);
-      if(rules){
+      if (rules) {
         let currentRule = getClassMetadata(RULES_KEY, args[0]);
         currentRule = currentRule ?? {};
-        Object.keys(rules).map((item)=>{
-          if(!currentRule[item]){
+        Object.keys(rules).map(item => {
+          if (!currentRule[item]) {
             currentRule[item] = rules[item];
           }
         });
