@@ -1,5 +1,5 @@
 const { execSync } = require('child_process');
-const { writeFileSync } = require('fs');
+const { writeFileSync, existsSync } = require('fs');
 const { join } = require('path');
 
 const originData = execSync('npx lerna ls --json').toString();
@@ -10,4 +10,21 @@ for (const info of data) {
   result[info.name] = info.version;
 }
 
-writeFileSync(join(__dirname, '../packages/decorator/version.json'), JSON.stringify(result, null, 2));
+const key = result['@midwayjs/decorator'].replace('.', '_') + '-' + result['@midwayjs/core'].replace('.', '_');
+
+const versionFile = join(__dirname, '../packages/version', `${key}.json`);
+
+if (existsSync(versionFile)) {
+  const originData = require(versionFile);
+  for (const pkgName in result) {
+    if (typeof originData[pkgName] === 'string') {
+      originData[pkgName] = [originData[pkgName], result[pkgName]];
+    } else {
+      // array
+      originData[pkgName].push(result[pkgName]);
+    }
+  }
+  writeFileSync(versionFile, JSON.stringify(originData, null, 2));
+} else {
+  writeFileSync(versionFile, JSON.stringify(result, null, 2));
+}
