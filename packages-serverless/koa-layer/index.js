@@ -29,6 +29,7 @@ module.exports = engine => {
           method: context.method,
           headers: context.headers,
           followRedirect: false,
+          encoding: null,
         };
         if (
           (context.headers['content-type'] || '').indexOf('application/json') >=
