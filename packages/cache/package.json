@@ -37,7 +37,9 @@
     "jest": "^26.4.0",
     "mwts": "^1.0.5",
     "ts-jest": "^26.2.0",
-    "typescript": "^4.0.0"
+    "typescript": "^4.0.0",
+    "@types/cache-manager": "^3.4.0",
+    "cache-manager": "^3.4.1"
   },
   "peerDependencies": {
     "@types/cache-manager": "^3.4.0",
