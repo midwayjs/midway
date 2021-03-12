@@ -2,6 +2,7 @@ import assert = require('assert');
 import { resolve, join } from 'path';
 import { MidwayContainer } from '../../src';
 import { MidwayConfigService } from '../../src/service/configService';
+import * as mm from 'mm';
 
 describe('/test/services/configService.test.ts', () => {
   it('configService should be ok', () => {
@@ -67,5 +68,61 @@ describe('/test/services/configService.test.ts', () => {
     assert.ok(Object.keys(cfg.configuration).length === 2);
     assert.ok(cfg.configuration.bb === 222);
     assert.ok(cfg.configuration.aa === 1);
+  });
+
+  it('should test default', async () => {
+    const container = new MidwayContainer();
+    const cfg = new MidwayConfigService(container);
+
+    const configFile = resolve(join(__dirname, './fixtures/default_case', 'config.default'));
+    const result = await cfg.loadConfig(configFile);
+    expect(result.parent).toEqual({a: 1, b:2});
+    const configFileLocal = resolve(join(__dirname, './fixtures/default_case', 'config.local'));
+    const resultLocal = await cfg.loadConfig(configFileLocal);
+    expect(resultLocal.parent).toEqual({a: 1});
+  });
+
+  it('should compatible old production', async () => {
+    mm(process.env, 'MIDWAY_SERVER_ENV', 'production');
+    const container = new MidwayContainer();
+    const cfg = new MidwayConfigService(container);
+
+    cfg.add([
+      join(__dirname, './fixtures/compatible_production'),
+    ]);
+
+    await cfg.load();
+
+    expect(cfg.configuration).toEqual({
+      key: {
+        data: 123,
+      },
+      bbb: {
+        data: 123,
+      }
+    })
+    mm.restore()
+  });
+
+  it('should compatible old test', async () => {
+    mm(process.env, 'MIDWAY_SERVER_ENV', 'test');
+    const container = new MidwayContainer();
+    const cfg = new MidwayConfigService(container);
+
+    cfg.add([
+      join(__dirname, './fixtures/compatible_production'),
+    ]);
+
+    await cfg.load();
+
+    expect(cfg.configuration).toEqual({
+      key: {
+        data: 123,
+      },
+      bbb: {
+        data: 321,
+      }
+    })
+    mm.restore()
   });
 });
