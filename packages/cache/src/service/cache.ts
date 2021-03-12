@@ -3,7 +3,7 @@ import * as cacheManager from 'cache-manager';
 
 @Scope(ScopeEnum.Singleton)
 @Provide()
-export class Cache {
+export class CacheManager {
 
   cache: cacheManager.Cache;
 
