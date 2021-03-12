@@ -193,7 +193,7 @@ export class Framework
     }
 
     // 分析项目结构
-    let currentBaseDir = baseDir;
+    const currentBaseDir = baseDir;
 
     const triggerMap = this.getTriggerMap();
     const layers = this.getLayers();
