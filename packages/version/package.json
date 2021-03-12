@@ -2,12 +2,12 @@
   "name": "@midwayjs/version",
   "version": "2.8.11",
   "description": "Midway Package Version Manager",
-  "main": "dist/index",
+  "main": "index.js",
   "scripts": {
-    "build": "midway-bin build -c",
-    "test": "midway-bin test --ts --forceExit",
-    "cov": "midway-bin cov --ts --forceExit",
-    "ci": "npm run test"
+    "build": "",
+    "test": "",
+    "cov": "",
+    "ci": ""
   },
   "keywords": [
     "midway",
@@ -16,7 +16,8 @@
     "version"
   ],
   "files": [
-    "version"
+    "versions",
+    "index.js"
   ],
   "license": "MIT",
   "author": "Harry Chen <czy88840616@gmail.com>",

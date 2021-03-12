@@ -10,18 +10,25 @@ for (const info of data) {
   result[info.name] = info.version;
 }
 
-const key = result['@midwayjs/decorator'].replace('.', '_') + '-' + result['@midwayjs/core'].replace('.', '_');
+const key = result['@midwayjs/decorator'].replace(/\./g, '_') + '-' + result['@midwayjs/core'].replace(/\./g, '_');
 
-const versionFile = join(__dirname, '../packages/version', `${key}.json`);
+const versionFile = join(__dirname, '../packages/version/versions', `${key}.json`);
 
 if (existsSync(versionFile)) {
   const originData = require(versionFile);
   for (const pkgName in result) {
-    if (typeof originData[pkgName] === 'string') {
-      originData[pkgName] = [originData[pkgName], result[pkgName]];
+    if (!originData[pkgName]) {
+      originData[pkgName] = result[pkgName];
+    } else if (typeof originData[pkgName] === 'string') {
+      // 去重
+      if (originData[pkgName] !== result[pkgName]) {
+        originData[pkgName] = [originData[pkgName], result[pkgName]];
+      }
     } else {
       // array
-      originData[pkgName].push(result[pkgName]);
+      if (!originData[pkgName].includes(result[pkgName])) {
+        originData[pkgName].push(result[pkgName]);
+      }
     }
   }
   writeFileSync(versionFile, JSON.stringify(originData, null, 2));

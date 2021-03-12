@@ -27,5 +27,6 @@
   "@midwayjs/typegoose": "2.8.11",
   "@midwayjs/express": "2.8.11",
   "@midwayjs/koa": "2.8.11",
-  "@midwayjs/web": "2.8.11"
+  "@midwayjs/web": "2.8.11",
+  "@midwayjs/version": "2.8.11"
 }
