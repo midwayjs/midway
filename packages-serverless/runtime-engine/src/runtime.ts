@@ -263,6 +263,10 @@ export class ServerlessBaseRuntime extends EventEmitter implements Runtime {
     return !!this.options.isAppMode;
   }
 
+  getRuntimeConfig() {
+    return this.options?.runtimeConfig || {};
+  }
+
   /**
    * get function name in runtime
    */

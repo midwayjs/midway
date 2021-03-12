@@ -39,6 +39,10 @@ export const context = {
     return this.request.path;
   },
 
+  set path(value) {
+    this.request.path = value;
+  },
+
   get query() {
     return this.request.query;
   },

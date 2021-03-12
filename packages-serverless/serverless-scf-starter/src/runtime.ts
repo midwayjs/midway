@@ -62,7 +62,7 @@ export class SCFRuntime extends ServerlessLightRuntime {
               ctx.body = result;
             }
 
-            if (!ctx.response.explicitStatus) {
+            if (!ctx.response._explicitStatus) {
               if (ctx.body === null || ctx.body === 'undefined') {
                 ctx.body = '';
                 ctx.type = 'text';

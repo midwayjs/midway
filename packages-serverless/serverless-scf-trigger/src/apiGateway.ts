@@ -53,7 +53,12 @@ export class ApiGatewayTrigger extends SCFBaseTrigger {
             body: any;
           }) => {
             res.set(result.headers);
-            res.status(result.statusCode).send(result.body);
+            res.status(result.statusCode);
+            if (result.isBase64Encoded) {
+              res.send(Buffer.from(result.body, 'base64'));
+            } else {
+              res.send(result.body);
+            }
           }
         );
       });

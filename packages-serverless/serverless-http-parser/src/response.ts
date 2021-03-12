@@ -8,7 +8,7 @@ import * as only from 'only';
 import * as vary from 'vary';
 
 export const response = {
-  explicitStatus: null,
+  _explicitStatus: false,
   _body: null,
   res: null,
   ctx: null,
@@ -62,7 +62,7 @@ export const response = {
     }
 
     // set the status
-    if (!this.explicitStatus) this.status = 200;
+    if (!this._explicitStatus) this.status = 200;
 
     // set the content-type only if not yet set
     const setType = !this.has('Content-Type');
@@ -247,7 +247,7 @@ export const response = {
   set status(code) {
     assert(Number.isInteger(code), 'status code must be a number');
     assert(code >= 100 && code <= 999, `invalid status code: ${code}`);
-    this.explicitStatus = true;
+    this._explicitStatus = true;
     this.res.statusCode = code;
     if (this.body && statuses.empty[code]) this.body = null;
   },

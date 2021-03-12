@@ -34,4 +34,5 @@ export abstract class ServerlessLightRuntime
   }
 
   abstract asyncEvent(handler): (...args) => void;
+  abstract getApplication(): any;
 }
