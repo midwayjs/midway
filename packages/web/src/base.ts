@@ -7,7 +7,9 @@ import { safelyGet, safeRequire } from '@midwayjs/core';
 import { join } from 'path';
 import { existsSync, readFileSync } from 'fs';
 import { createLoggers } from './logger';
+import { EggRouter as Router } from '@eggjs/router';
 
+const ROUTER = Symbol('EggCore#router');
 const EGG_LOADER = Symbol.for('egg#loader');
 const EGG_PATH = Symbol.for('egg#eggPath');
 const LOGGERS = Symbol('EggApplication#loggers');
@@ -271,6 +273,17 @@ export const createEggApplication = () => {
         (this as any)[LOGGERS] = createLoggers(this as any);
       }
       return (this as any)[LOGGERS];
+    }
+
+    get router() {
+      if ((this as any)[ROUTER]) {
+        return (this as any)[ROUTER];
+      }
+      const router = ((this as any)[ROUTER] = new Router(
+        { sensitive: true },
+        this
+      ));
+      return router;
     }
   }
 
