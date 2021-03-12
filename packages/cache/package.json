@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@midwayjs/cli": "^1.2.38",
-    "@midwayjs/core": "^2.3.0",
+    "@midwayjs/core": "^2.8.11",
     "@midwayjs/decorator": "^2.3.0",
     "@types/jest": "^26.0.10",
     "@types/node": "14",
