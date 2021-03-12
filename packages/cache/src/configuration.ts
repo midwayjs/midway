@@ -4,10 +4,6 @@ import { join } from 'path';
 
 @Configuration({
   namespace: 'cache',
-  importConfigs: [
-    join(__dirname, 'config')
-  ]
+  importConfigs: [join(__dirname, 'config')],
 })
-export class AutoConfiguration {
-
-}
+export class AutoConfiguration {}
