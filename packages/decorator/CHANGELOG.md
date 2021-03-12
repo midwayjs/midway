@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.8.11](https://github.com/midwayjs/midway/compare/v2.8.10...v2.8.11) (2021-03-12)
+
+
+### Bug Fixes
+
+* validator class extends ([#896](https://github.com/midwayjs/midway/issues/896)) ([ea2edfe](https://github.com/midwayjs/midway/commit/ea2edfe86f19de983dc634c2e53d750feec906ee))
+
+
+
+
+
 ## [2.8.4](https://github.com/midwayjs/midway/compare/v2.8.3...v2.8.4) (2021-03-03)
 
 

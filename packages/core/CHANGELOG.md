@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.8.11](https://github.com/midwayjs/midway/compare/v2.8.10...v2.8.11) (2021-03-12)
+
+
+### Features
+
+* compatible read config.prod and config.unittest ([#899](https://github.com/midwayjs/midway/issues/899)) ([f90cfe3](https://github.com/midwayjs/midway/commit/f90cfe3a28912ad43f371aff66d4a52e9efa3a68))
+
+
+
+
+
 ## [2.8.9](https://github.com/midwayjs/midway/compare/v2.8.8...v2.8.9) (2021-03-08)
 
 

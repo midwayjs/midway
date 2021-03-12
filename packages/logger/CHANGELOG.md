@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.8.11](https://github.com/midwayjs/midway/compare/v2.8.10...v2.8.11) (2021-03-12)
+
+
+### Features
+
+* add logger dynamic change info method ([#897](https://github.com/midwayjs/midway/issues/897)) ([5a11374](https://github.com/midwayjs/midway/commit/5a113744da64ca31c5e0a1eb18af2fd5739f4c43))
+
+
+
+
+
 ## [2.8.2](https://github.com/midwayjs/midway/compare/v2.8.0...v2.8.2) (2021-02-27)
 
 **Note:** Version bump only for package @midwayjs/logger

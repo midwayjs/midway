@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.8.11](https://github.com/midwayjs/midway/compare/v2.8.10...v2.8.11) (2021-03-12)
+
+
+### Bug Fixes
+
+* load egg router before midway container ready ([#909](https://github.com/midwayjs/midway/issues/909)) ([4640674](https://github.com/midwayjs/midway/commit/4640674c752122ef4706282b55cff2deb097867e))
+* validator class extends ([#896](https://github.com/midwayjs/midway/issues/896)) ([ea2edfe](https://github.com/midwayjs/midway/commit/ea2edfe86f19de983dc634c2e53d750feec906ee))
+
+
+### Features
+
+* add logger dynamic change info method ([#897](https://github.com/midwayjs/midway/issues/897)) ([5a11374](https://github.com/midwayjs/midway/commit/5a113744da64ca31c5e0a1eb18af2fd5739f4c43))
+* compatible read config.prod and config.unittest ([#899](https://github.com/midwayjs/midway/issues/899)) ([f90cfe3](https://github.com/midwayjs/midway/commit/f90cfe3a28912ad43f371aff66d4a52e9efa3a68))
+* complete static-layer ([#908](https://github.com/midwayjs/midway/issues/908)) ([75033b5](https://github.com/midwayjs/midway/commit/75033b51c89e51e573c0789ec2466447918bcd61))
+
+
+
+
+
 ## [2.8.10](https://github.com/midwayjs/midway/compare/v2.8.9...v2.8.10) (2021-03-09)
 
 

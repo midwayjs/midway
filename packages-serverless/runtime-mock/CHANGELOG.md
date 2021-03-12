@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.8.11](https://github.com/midwayjs/midway-faas/compare/v2.8.10...v2.8.11) (2021-03-12)
+
+
+### Features
+
+* complete static-layer ([#908](https://github.com/midwayjs/midway-faas/issues/908)) ([75033b5](https://github.com/midwayjs/midway-faas/commit/75033b51c89e51e573c0789ec2466447918bcd61))
+
+
+
+
+
 ## [2.8.2](https://github.com/midwayjs/midway-faas/compare/v2.8.0...v2.8.2) (2021-02-27)
 
 **Note:** Version bump only for package @midwayjs/runtime-mock
