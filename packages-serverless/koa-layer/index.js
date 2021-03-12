@@ -29,8 +29,11 @@ module.exports = engine => {
           method: context.method,
           headers: context.headers,
           followRedirect: false,
-          encoding: null,
         };
+        if (context.method === 'GET') {
+          // get 统一使用 buffer 返回，避免静态资源无法展示
+          requestOption.encoding = null;
+        }
         if (
           (context.headers['content-type'] || '').indexOf('application/json') >=
           0
