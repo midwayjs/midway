@@ -5,6 +5,8 @@ import {
   LoggerLevel,
   LoggerOptions,
   IMidwayLogger,
+  MidwayTransformableInfo,
+  LoggerCustomInfoHandler,
 } from './interface';
 import { DelegateTransport, EmptyTransport } from './transport';
 import { displayLabels, displayCommonMessage } from './format';
@@ -35,6 +37,9 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
   loggerOptions: LoggerOptions;
   defaultLabel = '';
   defaultMetadata = {};
+  customInfoHandler: LoggerCustomInfoHandler = info => {
+    return info;
+  };
 
   constructor(options: LoggerOptions = {}) {
     super(
@@ -197,10 +202,14 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
     this.defaultMetadata = defaultMetadata;
   }
 
+  updateTransformableInfo(customInfoHandler: LoggerCustomInfoHandler): void {
+    this.customInfoHandler = customInfoHandler;
+  }
+
   getDefaultLoggerConfigure() {
     const printInfo = this.loggerOptions.printFormat
       ? this.loggerOptions.printFormat
-      : info => {
+      : (info: MidwayTransformableInfo): string => {
           return `${info.timestamp} ${info.LEVEL} ${info.pid} ${info.labelText}${info.message}`;
         };
 
@@ -218,7 +227,10 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
           if (info.ignoreFormat) {
             return info.message;
           }
-          return printInfo(info);
+          const newInfo = this.customInfoHandler(
+            info as MidwayTransformableInfo
+          );
+          return printInfo(newInfo || info);
         })
       ),
     };

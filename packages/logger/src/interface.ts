@@ -7,6 +7,11 @@ export interface ILogger {
   warn(msg: any, ...args: any[]): void;
 }
 
+
+export type LoggerCustomInfoHandler = (
+  info: MidwayTransformableInfo
+) => MidwayTransformableInfo;
+
 export interface IMidwayLogger extends ILogger {
   disableConsole();
   enableConsole();
@@ -22,6 +27,7 @@ export interface IMidwayLogger extends ILogger {
   updateConsoleLevel(level: LoggerLevel): void;
   updateDefaultLabel(defaultLabel: string): void;
   updateDefaultMeta(defaultMeta: object): void;
+  updateTransformableInfo(customInfoHandler: LoggerCustomInfoHandler): void;
   getDefaultLabel(): string;
   getDefaultMeta(): Record<string, unknown>;
   write(...args): boolean;
@@ -57,4 +63,19 @@ export interface LoggerOptions {
 
 export interface DelegateLoggerOptions {
   delegateLogger: ILogger;
+}
+
+export interface MidwayTransformableInfo {
+  [key: string]: any;
+  level: string;
+  timestamp: string;
+  LEVEL: string;
+  pid: number;
+  labelText: string;
+  message: string;
+  ctx: any;
+  ignoreFormat: boolean;
+  defaultLabel: string;
+  originError?: Error;
+  stack?: string;
 }
