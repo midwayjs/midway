@@ -45,15 +45,15 @@ Midway 可以使用 Koa，Express 或 Egg.js 作为基础 Web 框架。它还提
 ### 使用装饰器开发 Web 应用
 
 ```ts
-import { Controller, Get, Provide } from 'midway';
+import { Controller, Get, Provide } from '@midwayjs/decorator';
 
 @Provide()
 @Controller('/')
 export class HomeController {
 
   @Get('/')
-  async index(ctx) {
-    ctx.body = `Welcome to midwayjs!`;
+  async home() {
+    return `Welcome to midwayjs!`;
   }
 }
 ```
