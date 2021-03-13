@@ -10,7 +10,7 @@ import {
 } from '../src';
 
 import { Metadata } from '@grpc/grpc-js';
-import { hello } from './fixtures/base-app-multi-package/src/interface';
+import { hello } from './fixtures/base-app-multiple-package/src/interface';
 
 export namespace hero {
   export interface HeroServiceClient {
