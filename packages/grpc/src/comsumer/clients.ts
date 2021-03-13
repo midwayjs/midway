@@ -8,7 +8,7 @@ import {
 } from '@midwayjs/decorator';
 import { credentials, loadPackageDefinition } from '@grpc/grpc-js';
 import { DefaultConfig, IClientOptions } from '../interface';
-import { loadProto } from '../util';
+import { finePackageProto, loadProto } from '../util';
 import * as camelCase from 'camelcase';
 import { ILogger } from '@midwayjs/logger';
 import { ClientUnaryRequest } from './type/unary-request';
@@ -36,9 +36,8 @@ export class GRPCClients extends Map {
         loaderOptions: cfg.loaderOptions,
         protoPath: cfg.protoPath,
       });
-      const packageProto: any = loadPackageDefinition(packageDefinition)[
-        cfg.package
-      ];
+      const allProto = loadPackageDefinition(packageDefinition);
+      const packageProto: any = finePackageProto(allProto, cfg.package);
       for (const definition in packageDefinition) {
         if (!packageDefinition[definition]['format']) {
           const serviceName = definition.replace(`${cfg.package}.`, '');

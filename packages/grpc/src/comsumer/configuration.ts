@@ -12,7 +12,7 @@ export class AutoConfiguration {
   @Logger()
   logger: ILogger;
 
-  async onReady(container: IMidwayContainer) {
+  async onReady(container: IMidwayContainer, app) {
     setLogger(this.logger);
     await container.getAsync('grpc:clients');
   }
