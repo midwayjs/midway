@@ -35,3 +35,7 @@ if (existsSync(versionFile)) {
 } else {
   writeFileSync(versionFile, JSON.stringify(result, null, 2));
 }
+
+const versionEntryFile = join(__dirname, '../packages/version/index.js');
+// generate timestamp
+writeFileSync(versionEntryFile, `console.log('${Date.now()}');`);
