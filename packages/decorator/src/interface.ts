@@ -80,10 +80,11 @@ export enum MidwayFrameworkType {
 }
 
 export enum ServerlessTriggerType {
-  FC_HTTP = 'fc_http',
-  FC_APIGateway = 'fc_api_gateway',
-  FC_OSS = 'fc_oss',
-  FC_CDN = 'fc_cdn',
-  FC_SLS = 'fc_sls',
-  FC_TIMER = 'fc_timer',
+  HTTP = 'http',
+  API_GATEWAY = 'api_gateway',
+  OS = 'oss',
+  CDN = 'cdn',
+  SLS = 'sls',
+  TIMER = 'timer',
+  MQ = 'scf_cmq',
 }
