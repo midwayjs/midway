@@ -33,3 +33,14 @@ export const createGRPCConsumer = async <T>(
   await clients.initService();
   return Array.from(clients.values())[0];
 };
+
+export const finePackageProto = (allProto: any, packageName: string) => {
+  const packages = packageName.split('.');
+  let currentProto = allProto;
+  for (const pkg of packages) {
+    if (currentProto[pkg]) {
+      currentProto = currentProto[pkg];
+    }
+  }
+  return currentProto;
+};

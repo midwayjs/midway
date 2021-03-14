@@ -10,6 +10,7 @@ import {
 } from '../src';
 
 import { Metadata } from '@grpc/grpc-js';
+import { hello } from './fixtures/base-app-multiple-package/src/interface';
 
 export namespace hero {
   export interface HeroServiceClient {
@@ -237,6 +238,30 @@ describe('/test/index.test.ts', function () {
 
     expect(result4).toEqual(27);
 
+    await closeApp(app);
+  });
+
+  it('should test multi-package service', async () => {
+    const app = await createServer('base-app-multiple-package', {
+      services: [
+        {
+          protoPath: join(__dirname, 'fixtures/proto/hello_world.proto'),
+          package: 'hello.world',
+        }
+      ],
+    });
+
+    const service = await createGRPCConsumer<hello.world.GreeterClient>({
+      package: 'hello.world',
+      protoPath: join(__dirname, 'fixtures/proto/hello_world.proto'),
+      url: 'localhost:6565'
+    });
+
+    const result = await service.sayHello().sendMessage({
+      name: 'harry'
+    });
+
+    expect(result).toEqual({ message: 'Hello harry' });
     await closeApp(app);
   });
 });
