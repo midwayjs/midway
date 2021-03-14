@@ -5,7 +5,10 @@
   "@midwayjs/koa-layer": "2.8.11",
   "@midwayjs/runtime-engine": "2.8.11",
   "@midwayjs/runtime-mock": "2.8.11",
-  "@midwayjs/serverless-app": "2.8.11",
+  "@midwayjs/serverless-app": [
+    "2.8.11",
+    "2.8.12"
+  ],
   "@midwayjs/serverless-aws-starter": "2.8.11",
   "@midwayjs/serverless-fc-starter": "2.8.11",
   "@midwayjs/serverless-fc-trigger": "2.8.11",
@@ -17,7 +20,10 @@
   "@midwayjs/core": "2.8.11",
   "@midwayjs/decorator": "2.8.11",
   "@midwayjs/faas": "2.8.11",
-  "@midwayjs/grpc": "2.8.11",
+  "@midwayjs/grpc": [
+    "2.8.11",
+    "2.8.12"
+  ],
   "@midwayjs/logger": "2.8.11",
   "midway-schedule": "2.8.11",
   "midway": "2.8.11",
@@ -28,5 +34,8 @@
   "@midwayjs/express": "2.8.11",
   "@midwayjs/koa": "2.8.11",
   "@midwayjs/web": "2.8.11",
-  "@midwayjs/version": "2.8.11"
+  "@midwayjs/version": [
+    "2.8.11",
+    "2.8.12"
+  ]
 }
