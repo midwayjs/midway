@@ -11,7 +11,9 @@ describe('test/index.test.ts', () => {
   }
   let app;
   beforeAll(async () => {
-    app = await createApp(cwd, {}, join(__dirname, '../src'));
+    app = await createApp(cwd, {
+      baseDir: join(cwd, 'src/apis'),
+    }, join(__dirname, '../src'));
   });
   afterAll(async () => {
     await close(app);
