@@ -1,0 +1,29 @@
+{
+  "name": "@midwayjs/version",
+  "version": "2.8.11",
+  "description": "Midway Package Version Manager",
+  "main": "index.js",
+  "scripts": {
+    "build": "",
+    "test": "",
+    "cov": "",
+    "ci": ""
+  },
+  "keywords": [
+    "midway",
+    "IoC",
+    "web",
+    "version"
+  ],
+  "files": [
+    "versions",
+    "index.js"
+  ],
+  "license": "MIT",
+  "author": "Harry Chen <czy88840616@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/midwayjs/midway.git"
+  },
+  "gitHead": "a603d2348d6141f8f723901498f03a162a037708"
+}
