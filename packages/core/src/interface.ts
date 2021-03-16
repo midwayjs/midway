@@ -5,7 +5,7 @@ import {
   ObjectDefinitionOptions,
   IMethodAspect,
   AspectMetadata,
-  ResolveFilter, FrameworkContainerScopeEnum,
+  ResolveFilter,
   MidwayFrameworkType
 } from '@midwayjs/decorator';
 import { ILogger, LoggerOptions } from '@midwayjs/logger';
@@ -278,8 +278,6 @@ export interface IMidwayContainer extends IApplicationContext {
     aspectData: AspectMetadata
   );
   addDirectoryFilter(filter: ResolveFilter[]);
-  setFrameworkContainerScope(frameworkContainerScope: FrameworkContainerScopeEnum);
-  getFrameworkContainerScope(): FrameworkContainerScopeEnum;
 }
 
 export interface IConfigService {
@@ -353,6 +351,8 @@ export interface IMidwayBootstrapOptions {
   middleware?: string[];
   loadDir?: string[];
   disableConflictCheck?: boolean;
+  applicationContext?: IMidwayContainer;
+  isMainFramework?: boolean;
 }
 
 export interface IConfigurationOptions {

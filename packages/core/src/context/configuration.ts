@@ -1,7 +1,6 @@
 import {
   classNamed,
   CONFIGURATION_KEY,
-  FrameworkContainerScopeEnum,
   generateProvideId,
   getClassMetadata,
   IComponentInfo,
@@ -290,11 +289,6 @@ export class ContainerConfiguration implements IContainerConfiguration {
               configurationOptions.conflictCheck = false;
             }
             this.container.disableConflictCheck = !configurationOptions.conflictCheck;
-            // set applicationContext scope
-            this.container.setFrameworkContainerScope(
-              configurationOptions.frameworkContainerScope ||
-                FrameworkContainerScopeEnum.GLOBAL
-            );
           }
 
           this.addImports(configurationOptions.imports, baseDir);

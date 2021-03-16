@@ -28,7 +28,6 @@ import {
   DecoratorManager,
   ResolveFilter,
   isRegExp,
-  FrameworkContainerScopeEnum,
 } from '@midwayjs/decorator';
 import { ContainerConfiguration } from './configuration';
 import { FUNCTION_INJECT_KEY } from '../common/constants';
@@ -91,7 +90,6 @@ export class MidwayContainer
   protected aspectMappingMap: WeakMap<any, Map<string, any[]>>;
   private aspectModuleSet: Set<any>;
   private directoryFilterArray: ResolveFilter[] = [];
-  private frameworkContainerScope: FrameworkContainerScopeEnum;
 
   /**
    * 单个进程中上一次的 applicationContext 的 registry
@@ -950,13 +948,4 @@ export class MidwayContainer
     );
   }
 
-  public setFrameworkContainerScope(
-    frameworkContainerScope: FrameworkContainerScopeEnum
-  ) {
-    this.frameworkContainerScope = frameworkContainerScope;
-  }
-
-  public getFrameworkContainerScope() {
-    return this.frameworkContainerScope;
-  }
 }

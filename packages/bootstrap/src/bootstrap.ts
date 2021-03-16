@@ -1,4 +1,10 @@
-import { IMidwayFramework, IMidwayBootstrapOptions } from '@midwayjs/core';
+import {
+  IMidwayFramework,
+  IMidwayBootstrapOptions,
+  MidwayContainer,
+  IMidwayContainer,
+  MidwayFrameworkType,
+} from '@midwayjs/core';
 import { join } from 'path';
 import { createConsoleLogger, ILogger, IMidwayLogger } from '@midwayjs/logger';
 
@@ -12,9 +18,12 @@ export function isTypeScriptEnvironment() {
 }
 
 export class BootstrapStarter {
-  private appDir;
+  private appDir: string;
+  private baseDir: string;
   private bootstrapItems: IMidwayFramework<any, any>[] = [];
   private globalOptions: Partial<IMidwayBootstrapOptions> = {};
+  private globalContainer: IMidwayContainer;
+  private isTsMode = true;
 
   public configure(options: IMidwayBootstrapOptions) {
     this.globalOptions = options;
@@ -28,28 +37,51 @@ export class BootstrapStarter {
 
   public async init() {
     this.appDir = this.globalOptions.appDir || process.cwd();
-    // TODO 要把第一个抽出来先执行，其他的并发
+    this.baseDir = this.getBaseDir();
+    this.globalContainer = new MidwayContainer(this.baseDir);
+    this.globalContainer.registerObject('baseDir', this.baseDir);
+    this.globalContainer.registerObject('appDir', this.appDir);
+    this.globalContainer.registerObject('isTsMode', this.isTsMode);
+
+    global['MIDWAY_BOOTSTRAP_APP_SET'] = new Set<{
+      framework: IMidwayFramework<any, any>;
+      starter: BootstrapStarter;
+    }>();
+    global['MIDWAY_BOOTSTRAP_APP_MAP'] = new Map<MidwayFrameworkType, IMidwayFramework<any, any>>();
+
+    await this.getFirstActions('initialize', {
+      ...this.globalOptions,
+      baseDir: this.baseDir,
+      appDir: this.appDir,
+      applicationContext: this.globalContainer,
+      isMainFramework: true,
+    });
+
     await Promise.all(
-      this.getActions('initialize', {
+      this.getTailActions('initialize', {
         ...this.globalOptions,
-        baseDir: this.getBaseDir(),
+        baseDir: this.baseDir,
         appDir: this.appDir,
+        applicationContext: this.globalContainer,
+        isMainFramework: false,
       })
     );
+
+    this.bootstrapItems.forEach(item => {
+      global['MIDWAY_BOOTSTRAP_APP_SET'].add({
+        framework: item,
+        starter: this,
+      });
+      global['MIDWAY_BOOTSTRAP_APP_MAP'].set(item.getFrameworkType(), item);
+    });
+
+    await this.getFirstActions('loadLifeCycles');
+    await this.getFirstActions('afterContainerReady');
   }
 
   public async run() {
     await Promise.all(this.getActions('run', {}));
-    if (global['MIDWAY_BOOTSTRAP_APP_SET']) {
-      // for test/dev
-      this.bootstrapItems.forEach(item => {
-        global['MIDWAY_BOOTSTRAP_APP_SET'].add({
-          framework: item,
-          starter: this,
-        });
-      });
-      global['MIDWAY_BOOTSTRAP_APP_READY'] = true;
-    }
+    global['MIDWAY_BOOTSTRAP_APP_READY'] = true;
   }
 
   public async stop() {
@@ -58,6 +90,16 @@ export class BootstrapStarter {
 
   public getActions(action: string, args?): any[] {
     return this.bootstrapItems.map(item => {
+      return item[action](args);
+    });
+  }
+
+  public async getFirstActions(action: string, args?) {
+    return this.bootstrapItems[0][action](args);
+  }
+
+  public getTailActions(action: string, args?): any[] {
+    return this.bootstrapItems.slice(1).map(item => {
       return item[action](args);
     });
   }
