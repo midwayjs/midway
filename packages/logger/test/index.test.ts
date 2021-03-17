@@ -84,7 +84,7 @@ describe('/test/index.test.ts', () => {
     await removeFileOrDir(logsDir);
     const clusterFile = join(__dirname, 'fixtures/cluster.ts');
     const child = createChildProcess(clusterFile);
-    const pidList: [] = await new Promise(resolve => {
+    const pidList = await new Promise<any>(resolve => {
       child.on('message', (pidList) => {
         resolve(pidList);
       });
