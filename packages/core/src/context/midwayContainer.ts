@@ -519,7 +519,7 @@ export class MidwayContainer
     const objDefOptions: ObjectDefinitionOptions = getObjectDefProps(target);
     this.convertOptionsToDefinition(objDefOptions, objectDefinition);
 
-    if (objDefOptions && !objDefOptions.scope) {
+    if (objectDefinition && !objectDefinition.scope) {
       this.debugLogger('  @scope => request');
       objectDefinition.scope = ScopeEnum.Request;
     }
