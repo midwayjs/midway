@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.8.13](https://github.com/midwayjs/midway/compare/v2.8.12...v2.8.13) (2021-03-17)
+
+
+### Bug Fixes
+
+* add missing typings ([#924](https://github.com/midwayjs/midway/issues/924)) ([a17c8d8](https://github.com/midwayjs/midway/commit/a17c8d8655d3f7a93469b922529b7a1aba212c10))
+
+
+
+
+
 ## [2.8.11](https://github.com/midwayjs/midway/compare/v2.8.10...v2.8.11) (2021-03-12)
 
 
