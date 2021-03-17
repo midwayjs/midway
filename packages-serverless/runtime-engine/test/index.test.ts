@@ -61,6 +61,7 @@ describe('/test/index.test.ts', () => {
       const bak = process.kill;
       process.kill = () => {
         flag = true;
+        return true;
       };
       const runtimeEngine = new BaseRuntimeEngine();
       runtimeEngine.add(engine => {
@@ -84,6 +85,7 @@ describe('/test/index.test.ts', () => {
       const bak = process.kill;
       process.kill = () => {
         flag = true;
+        return true;
       };
       const runtimeEngine = new BaseRuntimeEngine();
       runtimeEngine.add(engine => {
