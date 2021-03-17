@@ -12,8 +12,11 @@ export function App(type?: MidwayFrameworkType) {
       attachClassMetadata(
         APPLICATION_KEY,
         {
-          key: type,
+          key: APPLICATION_KEY,
           propertyName: targetKey,
+          meta: {
+            type,
+          }
         },
         target
       );

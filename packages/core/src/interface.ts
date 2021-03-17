@@ -104,6 +104,7 @@ export interface IObjectDefinitionMetadata {
 export interface FrameworkDecoratorMetadata {
   key: string;
   propertyName: string;
+  meta: any;
 }
 
 export interface IObjectCreator {
