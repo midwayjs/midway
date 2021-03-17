@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "devDependencies": {
     "@types/jest": "^26.0.10",
-    "@types/node": "^10.17.21",
+    "@types/node": "^14.14.35",
     "lerna": "^3.20.2",
     "lerna-relinker": "^1.4.0",
     "mwts": "^1.0.5",
