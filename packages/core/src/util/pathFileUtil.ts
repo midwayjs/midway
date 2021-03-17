@@ -21,8 +21,8 @@ export const PathFileUtil = {
   getFileContentSync(filePath: any, encoding?: BufferEncoding) {
     return typeof filePath === 'string'
       ? readFileSync(filePath, {
-        encoding
-      })
+          encoding,
+        })
       : filePath;
   },
 };
