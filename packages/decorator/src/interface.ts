@@ -52,15 +52,20 @@ export enum MSProviderType {
  */
 export namespace DecoratorMetadata {
 
-  export interface GRPCClassMetadata {
+  export interface GRPCProviderOption {
     serviceName?: string;
     package?: string;
   }
 
   export interface ProviderClassMetadata {
     type: MSProviderType,
-    metadata: GRPCClassMetadata
+    metadata: GRPCProviderOption
   }
+
+  export interface FaaSHTTPTriggerMetadata {
+
+  }
+
 }
 
 export enum MidwayFrameworkType {
@@ -86,5 +91,5 @@ export enum ServerlessTriggerType {
   CDN = 'cdn',
   SLS = 'sls',
   TIMER = 'timer',
-  MQ = 'scf_cmq',
+  MQ = 'mq',
 }

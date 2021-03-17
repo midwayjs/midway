@@ -5,6 +5,7 @@ import {
   FUNC_KEY,
   attachClassMetadata,
   MiddlewareParamArray,
+  ServerlessTriggerType,
 } from '..';
 
 export interface FuncParams {
@@ -15,10 +16,13 @@ export interface FuncParams {
   middleware?: MiddlewareParamArray;
 }
 
+
+
+export function Func(type: ServerlessTriggerType, metadata: {}): MethodDecorator;
 export function Func(
   funHandler: string | FuncParams,
   functionOptions?: FuncParams
-) {
+): any {
   if (typeof funHandler !== 'string' && functionOptions === undefined) {
     functionOptions = funHandler;
     funHandler = functionOptions.funHandler || '';
