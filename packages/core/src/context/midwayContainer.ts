@@ -534,12 +534,18 @@ export class MidwayContainer
         // 如果是 main，则同步 alias 到所有的 namespace
         for (const value of this.configurationMap.values()) {
           if (value.namespace !== MAIN_MODULE_KEY) {
-            const key = identifier.indexOf(value.namespace + ':') > -1 ? identifier : value.namespace + ':' + identifier;
+            const key =
+              identifier.indexOf(value.namespace + ':') > -1
+                ? identifier
+                : value.namespace + ':' + identifier;
             super.registerObject(key, target);
           }
         }
       } else {
-        const key = identifier.indexOf(this.getCurrentNamespace() + ':') > -1 ? identifier : this.getCurrentNamespace() + ':' + identifier;
+        const key =
+          identifier.indexOf(this.getCurrentNamespace() + ':') > -1
+            ? identifier
+            : this.getCurrentNamespace() + ':' + identifier;
         identifier = key;
       }
     }
