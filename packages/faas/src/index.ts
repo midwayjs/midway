@@ -1,5 +1,4 @@
 export * from './interface';
-export * from '@midwayjs/faas-typings';
 export { MidwayFaaSFramework as Framework } from './framework';
 export {
   Func as func,
