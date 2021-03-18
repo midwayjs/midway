@@ -197,9 +197,9 @@ export abstract class BaseFramework<
     }
 
     // register app
-    this.applicationContext.registerDataHandler(APPLICATION_KEY, key => {
-      if (key && global['MIDWAY_BOOTSTRAP_APP_MAP']) {
-        return global['MIDWAY_BOOTSTRAP_APP_MAP'].get(key);
+    this.applicationContext.registerDataHandler(APPLICATION_KEY, (key, meta) => {
+      if (meta?.type && options.globalApplicationHandler) {
+        return options.globalApplicationHandler(meta.type);
       } else {
         return this.getApplication();
       }
@@ -382,8 +382,8 @@ export abstract class BaseFramework<
     options: Partial<IMidwayBootstrapOptions>
   ): Promise<void> {}
 
-  public async loadLifeCycles() {
-    if (this.isMainFramework !== undefined) {
+  public async loadLifeCycles(isForce: boolean = false) {
+    if (!isForce && this.isMainFramework !== undefined) {
       // 多框架场景，由 bootstrap 执行生命周期
       return;
     }

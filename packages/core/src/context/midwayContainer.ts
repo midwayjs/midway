@@ -282,9 +282,9 @@ export class MidwayContainer
     options?: ObjectDefinitionOptions
   ): void;
   bind<T>(
-    identifier: ObjectIdentifier,
-    target: T,
-    options?: ObjectDefinitionOptions
+    identifier: any,
+    target: any,
+    options?: any
   ): void {
     const definitionMeta = {} as IObjectDefinitionMetadata;
     this.definitionMetadataList.push(definitionMeta);
@@ -293,7 +293,6 @@ export class MidwayContainer
       options = target;
       target = identifier as any;
       identifier = this.getIdentifier(target);
-      options = null;
     }
 
     if (isClass(target)) {
@@ -309,7 +308,7 @@ export class MidwayContainer
     definitionMeta.id = identifier;
     definitionMeta.srcPath = options?.srcPath || null;
     definitionMeta.namespace = options?.namespace || '';
-    definitionMeta.scope = options?.scope || ScopeEnum.Singleton;
+    definitionMeta.scope = options?.scope || ScopeEnum.Request;
     definitionMeta.autowire = options?.isAutowire !== false;
 
     this.debugLogger(`  bind id => [${definitionMeta.id}]`);

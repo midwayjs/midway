@@ -1,8 +1,6 @@
 import {
   IMidwayFramework,
   IMidwayBootstrapOptions,
-  MidwayContainer,
-  IMidwayContainer,
   MidwayFrameworkType,
 } from '@midwayjs/core';
 import { join } from 'path';
@@ -22,8 +20,7 @@ export class BootstrapStarter {
   private baseDir: string;
   private bootstrapItems: IMidwayFramework<any, any>[] = [];
   private globalOptions: Partial<IMidwayBootstrapOptions> = {};
-  private globalContainer: IMidwayContainer;
-  private isTsMode = true;
+  private globalAppMap = new Map<MidwayFrameworkType, IMidwayFramework<any, any>>();
 
   public configure(options: IMidwayBootstrapOptions) {
     this.globalOptions = options;
@@ -38,44 +35,49 @@ export class BootstrapStarter {
   public async init() {
     this.appDir = this.globalOptions.appDir || process.cwd();
     this.baseDir = this.getBaseDir();
-    this.globalContainer = new MidwayContainer(this.baseDir);
-    this.globalContainer.registerObject('baseDir', this.baseDir);
-    this.globalContainer.registerObject('appDir', this.appDir);
-    this.globalContainer.registerObject('isTsMode', this.isTsMode);
 
     global['MIDWAY_BOOTSTRAP_APP_SET'] = new Set<{
       framework: IMidwayFramework<any, any>;
       starter: BootstrapStarter;
     }>();
-    global['MIDWAY_BOOTSTRAP_APP_MAP'] = new Map<MidwayFrameworkType, IMidwayFramework<any, any>>();
 
     await this.getFirstActions('initialize', {
       ...this.globalOptions,
       baseDir: this.baseDir,
       appDir: this.appDir,
-      applicationContext: this.globalContainer,
       isMainFramework: true,
+      globalApplicationHandler: (type: MidwayFrameworkType) => {
+        return this.globalAppMap.get(type);
+      }
     });
+
+    const applicationContext = await this.getFirstActions('getApplicationContext');
 
     await Promise.all(
       this.getTailActions('initialize', {
         ...this.globalOptions,
         baseDir: this.baseDir,
         appDir: this.appDir,
-        applicationContext: this.globalContainer,
+        applicationContext,
         isMainFramework: false,
       })
     );
 
     this.bootstrapItems.forEach(item => {
-      global['MIDWAY_BOOTSTRAP_APP_SET'].add({
-        framework: item,
-        starter: this,
-      });
-      global['MIDWAY_BOOTSTRAP_APP_MAP'].set(item.getFrameworkType(), item);
+      this.globalAppMap.set(item.getFrameworkType(), item.getApplication());
+      if (global['MIDWAY_BOOTSTRAP_APP_SET']) {
+        // for test/dev
+        this.bootstrapItems.forEach(item => {
+          global['MIDWAY_BOOTSTRAP_APP_SET'].add({
+            framework: item,
+            starter: this,
+          });
+        });
+        global['MIDWAY_BOOTSTRAP_APP_READY'] = true;
+      }
     });
 
-    await this.getFirstActions('loadLifeCycles');
+    await this.getFirstActions('loadLifeCycles', true);
     await this.getFirstActions('afterContainerReady');
   }
 

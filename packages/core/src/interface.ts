@@ -354,6 +354,7 @@ export interface IMidwayBootstrapOptions {
   disableConflictCheck?: boolean;
   applicationContext?: IMidwayContainer;
   isMainFramework?: boolean;
+  globalApplicationHandler?: (type: MidwayFrameworkType) => IMidwayApplication;
 }
 
 export interface IConfigurationOptions {
