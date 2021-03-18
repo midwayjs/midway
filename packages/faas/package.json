@@ -1,21 +1,21 @@
 {
   "name": "@midwayjs/faas",
-  "version": "2.8.11",
+  "version": "2.8.13",
   "main": "dist/index",
-  "typings": "dist/index.d.ts",
+  "typings": "index.d.ts",
   "dependencies": {
-    "@midwayjs/core": "^2.8.11",
+    "@midwayjs/core": "^2.8.13",
     "@midwayjs/decorator": "^2.8.11",
     "@midwayjs/faas-typings": "^2.8.9",
-    "@midwayjs/logger": "^2.8.11",
+    "@midwayjs/logger": "^2.8.13",
     "@midwayjs/simple-lock": "^1.1.4",
     "koa-compose": "^4.1.0"
   },
   "devDependencies": {
     "@midwayjs/cli": "^1.2.36",
-    "@midwayjs/mock": "^2.8.11",
-    "@midwayjs/serverless-fc-starter": "^2.8.11",
-    "@midwayjs/serverless-scf-starter": "^2.8.11",
+    "@midwayjs/mock": "^2.8.13",
+    "@midwayjs/serverless-fc-starter": "^2.8.13",
+    "@midwayjs/serverless-scf-starter": "^2.8.13",
     "mm": "3"
   },
   "engines": {
@@ -23,7 +23,8 @@
   },
   "files": [
     "dist/**/*.js",
-    "dist/**/*.d.ts"
+    "dist/**/*.d.ts",
+    "index.d.ts"
   ],
   "keywords": [
     "serverless",

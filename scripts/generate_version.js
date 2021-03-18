@@ -38,4 +38,4 @@ if (existsSync(versionFile)) {
 
 const versionEntryFile = join(__dirname, '../packages/version/index.js');
 // generate timestamp
-writeFileSync(versionEntryFile, `console.log('${Date.now()}');\r\n`);
+writeFileSync(versionEntryFile, `console.log('${Date.now()}');\n`);
