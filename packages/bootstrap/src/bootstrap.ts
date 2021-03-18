@@ -16,11 +16,11 @@ export function isTypeScriptEnvironment() {
 }
 
 export class BootstrapStarter {
-  private appDir: string;
-  private baseDir: string;
-  private bootstrapItems: IMidwayFramework<any, any>[] = [];
-  private globalOptions: Partial<IMidwayBootstrapOptions> = {};
-  private globalAppMap = new Map<MidwayFrameworkType, IMidwayFramework<any, any>>();
+  protected appDir: string;
+  protected baseDir: string;
+  protected bootstrapItems: IMidwayFramework<any, any>[] = [];
+  protected globalOptions: Partial<IMidwayBootstrapOptions> = {};
+  protected globalAppMap = new Map<MidwayFrameworkType, IMidwayFramework<any, any>>();
 
   public configure(options: IMidwayBootstrapOptions) {
     this.globalOptions = options;
@@ -106,7 +106,7 @@ export class BootstrapStarter {
     });
   }
 
-  private getBaseDir() {
+  protected getBaseDir() {
     if (this.globalOptions.baseDir) {
       return this.globalOptions.baseDir;
     }

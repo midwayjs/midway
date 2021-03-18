@@ -1,13 +1,13 @@
 import { findLernaRoot, parseNormalDir } from './utils';
 import * as extend from 'extend2';
 import { EggAppInfo } from 'egg';
-import { BootstrapStarter } from '@midwayjs/bootstrap';
 import { MidwayWebFramework } from './framework/web';
 import { safelyGet, safeRequire } from '@midwayjs/core';
 import { join } from 'path';
 import { existsSync, readFileSync } from 'fs';
 import { createLoggers } from './logger';
 import { EggRouter as Router } from '@eggjs/router';
+import { WebBootstrapStarter } from './BootstrapStarter';
 
 const ROUTER = Symbol('EggCore#router');
 const EGG_LOADER = Symbol.for('egg#loader');
@@ -121,7 +121,7 @@ export const createAppWorkerLoader = () => {
         app: this.app,
         globalConfig: this.app.config,
       });
-      this.bootstrap = new BootstrapStarter();
+      this.bootstrap = new WebBootstrapStarter();
       this.bootstrap
         .configure({
           appDir: this.app.appDir,
@@ -235,7 +235,7 @@ export const createAgentWorkerLoader = () => {
         app: this.app,
         globalConfig: this.app.config,
       });
-      this.bootstrap = new BootstrapStarter();
+      this.bootstrap = new WebBootstrapStarter();
       this.bootstrap
         .configure({
           appDir: this.app.appDir,
