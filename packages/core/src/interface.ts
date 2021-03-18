@@ -305,7 +305,7 @@ export enum MidwayProcessTypeEnum {
 }
 
 /**
- * @deprecated use ILogger from @midwayjs/logger
+ * @deprecated use IMidwayLogger or ILogger from \@midwayjs/logger
  */
 export interface IMidwayLogger extends ILogger {}
 
