@@ -130,4 +130,6 @@ export class SingleProcess
   public getDefaultContextLoggerClass() {
     return MidwayKoaContextLogger;
   }
+
+  public loadLifeCycles() {}
 }

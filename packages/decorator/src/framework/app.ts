@@ -1,7 +1,8 @@
 import {
   attachClassMetadata,
   APPLICATION_KEY,
-  attachConstructorDataOnClass, MidwayFrameworkType,
+  attachConstructorDataOnClass,
+  MidwayFrameworkType,
 } from '../';
 
 export function App(type?: MidwayFrameworkType) {
@@ -16,7 +17,7 @@ export function App(type?: MidwayFrameworkType) {
           propertyName: targetKey,
           meta: {
             type,
-          }
+          },
         },
         target
       );

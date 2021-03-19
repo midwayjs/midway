@@ -197,13 +197,16 @@ export abstract class BaseFramework<
     }
 
     // register app
-    this.applicationContext.registerDataHandler(APPLICATION_KEY, (key, meta) => {
-      if (meta?.type && options.globalApplicationHandler) {
-        return options.globalApplicationHandler(meta.type);
-      } else {
-        return this.getApplication();
+    this.applicationContext.registerDataHandler(
+      APPLICATION_KEY,
+      (key, meta) => {
+        if (meta?.type && options.globalApplicationHandler) {
+          return options.globalApplicationHandler(meta.type);
+        } else {
+          return this.getApplication();
+        }
       }
-    });
+    );
 
     // register logger
     this.getApplicationContext().registerDataHandler(LOGGER_KEY, key => {
@@ -382,7 +385,7 @@ export abstract class BaseFramework<
     options: Partial<IMidwayBootstrapOptions>
   ): Promise<void> {}
 
-  public async loadLifeCycles(isForce: boolean = false) {
+  public async loadLifeCycles(isForce = false) {
     if (!isForce && this.isMainFramework !== undefined) {
       // 多框架场景，由 bootstrap 执行生命周期
       return;

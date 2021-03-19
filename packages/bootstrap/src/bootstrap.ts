@@ -20,7 +20,10 @@ export class BootstrapStarter {
   protected baseDir: string;
   protected bootstrapItems: IMidwayFramework<any, any>[] = [];
   protected globalOptions: Partial<IMidwayBootstrapOptions> = {};
-  protected globalAppMap = new Map<MidwayFrameworkType, IMidwayFramework<any, any>>();
+  protected globalAppMap = new Map<
+    MidwayFrameworkType,
+    IMidwayFramework<any, any>
+  >();
 
   public configure(options: IMidwayBootstrapOptions) {
     this.globalOptions = options;
@@ -48,10 +51,12 @@ export class BootstrapStarter {
       isMainFramework: true,
       globalApplicationHandler: (type: MidwayFrameworkType) => {
         return this.globalAppMap.get(type);
-      }
+      },
     });
 
-    const applicationContext = await this.getFirstActions('getApplicationContext');
+    const applicationContext = await this.getFirstActions(
+      'getApplicationContext'
+    );
 
     await Promise.all(
       this.getTailActions('initialize', {
@@ -97,12 +102,12 @@ export class BootstrapStarter {
   }
 
   public async getFirstActions(action: string, args?) {
-    return this.bootstrapItems[0][action](args);
+    return this.bootstrapItems[0][action]?.(args);
   }
 
   public getTailActions(action: string, args?): any[] {
     return this.bootstrapItems.slice(1).map(item => {
-      return item[action](args);
+      return item[action]?.(args);
     });
   }
 

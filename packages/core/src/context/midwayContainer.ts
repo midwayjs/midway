@@ -281,11 +281,7 @@ export class MidwayContainer
     target: T,
     options?: ObjectDefinitionOptions
   ): void;
-  bind<T>(
-    identifier: any,
-    target: any,
-    options?: any
-  ): void {
+  bind<T>(identifier: any, target: any, options?: any): void {
     const definitionMeta = {} as IObjectDefinitionMetadata;
     this.definitionMetadataList.push(definitionMeta);
 
@@ -946,5 +942,4 @@ export class MidwayContainer
       directoryFilter
     );
   }
-
 }
