@@ -39,11 +39,6 @@ export class BootstrapStarter {
     this.appDir = this.globalOptions.appDir || process.cwd();
     this.baseDir = this.getBaseDir();
 
-    global['MIDWAY_BOOTSTRAP_APP_SET'] = new Set<{
-      framework: IMidwayFramework<any, any>;
-      starter: BootstrapStarter;
-    }>();
-
     await this.getFirstActions('initialize', {
       ...this.globalOptions,
       baseDir: this.baseDir,
