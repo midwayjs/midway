@@ -102,13 +102,18 @@ export class BootstrapStarter {
   }
 
   public async getFirstActions(action: string, args?) {
-    return this.bootstrapItems[0][action]?.(args);
+    if (this.bootstrapItems.length) {
+      return this.bootstrapItems[0][action]?.(args);
+    }
   }
 
   public getTailActions(action: string, args?): any[] {
-    return this.bootstrapItems.slice(1).map(item => {
-      return item[action]?.(args);
-    });
+    if (this.bootstrapItems.length > 1) {
+      return this.bootstrapItems.slice(1).map(item => {
+        return item[action]?.(args);
+      });
+    }
+    return [];
   }
 
   protected getBaseDir() {
