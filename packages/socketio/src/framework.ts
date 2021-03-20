@@ -2,6 +2,7 @@ import {
   BaseFramework,
   getClassMetadata,
   getProviderId,
+  HTTP_SERVER_KEY,
   IMidwayBootstrapOptions,
   listModule,
   MidwayFrameworkType,
@@ -13,7 +14,6 @@ import {
   IMidwaySocketIOContext,
 } from './interface';
 import { Server } from 'socket.io';
-import { createAdapter } from 'socket.io-redis';
 import {
   WS_CONTROLLER_KEY,
   WS_EVENT_KEY,
@@ -28,17 +28,17 @@ export class MidwaySocketIOFramework extends BaseFramework<
   IMidwaySocketIOContext,
   IMidwaySocketIOConfigurationOptions
 > {
-  applicationInitialize(options: IMidwayBootstrapOptions) {}
-  public app: IMidwaySocketIOApplication;
+  private useOuterHTTPServer = false;
+  private namespaceList = [];
 
-  protected async afterContainerDirectoryLoad(
-    options: Partial<IMidwayBootstrapOptions>
-  ) {
-    if (this.configurationOptions.httpServer) {
+  applicationInitialize(options: IMidwayBootstrapOptions) {
+    if (this.applicationContext.registry.hasObject(HTTP_SERVER_KEY)) {
       this.app = new Server(
-        this.configurationOptions.httpServer,
+        this.applicationContext.get(HTTP_SERVER_KEY),
         this.configurationOptions
       ) as IMidwaySocketIOApplication;
+      // use outer http server
+      this.useOuterHTTPServer = true;
     } else {
       this.app = new Server(
         this.configurationOptions
@@ -51,6 +51,7 @@ export class MidwaySocketIOFramework extends BaseFramework<
       next();
     });
   }
+  public app: IMidwaySocketIOApplication;
 
   protected async afterContainerReady(
     options: Partial<IMidwayBootstrapOptions>
@@ -59,37 +60,28 @@ export class MidwaySocketIOFramework extends BaseFramework<
   }
 
   public async run(): Promise<void> {
-    if (
-      this.configurationOptions.pubClient &&
-      this.configurationOptions.subClient
-    ) {
-      const pubClient = this.configurationOptions.pubClient;
-      const subClient = this.configurationOptions.subClient;
-      const adapter = createAdapter({ pubClient, subClient });
-      adapter.on('error', err => {
-        this.logger.error(err);
-      });
-      this.app.adapter(adapter);
+    if (this.configurationOptions.adapter) {
+      this.app.adapter(this.configurationOptions.adapter);
       this.logger.debug('init socket.io-redis ready!');
     }
 
-    if (this.configurationOptions.port) {
-      // if set httpServer will be listen in web framework
-      if (!this.configurationOptions.httpServer) {
-        new Promise(resolve => {
-          this.app.listen(
-            this.configurationOptions.port,
-            this.configurationOptions
-          );
-        });
-      }
+    // listen port when http server not exist
+    if (this.configurationOptions.port && !this.useOuterHTTPServer) {
+      new Promise(resolve => {
+        this.app.listen(
+          this.configurationOptions.port,
+          this.configurationOptions
+        );
+      });
     }
   }
 
   protected async beforeStop(): Promise<void> {
     return new Promise<void>(resolve => {
       this.app.close(() => {
-        resolve();
+        setTimeout(() => {
+          resolve();
+        }, 1000);
       });
     });
   }
@@ -120,6 +112,7 @@ export class MidwaySocketIOFramework extends BaseFramework<
     );
 
     const nsp = this.app.of(controllerOption.namespace);
+    this.namespaceList.push(controllerOption.namespace);
 
     nsp.on('connect', async (socket: IMidwaySocketIOContext) => {
       const wsEventInfos: WSEventInfo[] = getClassMetadata(
@@ -201,6 +194,12 @@ export class MidwaySocketIOFramework extends BaseFramework<
         }
       }
     });
+
+    if (nsp.adapter) {
+      nsp.adapter.on('error', err => {
+        this.logger.error(err);
+      });
+    }
   }
 
   private async bindSocketResponse(

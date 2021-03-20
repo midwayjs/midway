@@ -46,4 +46,4 @@ export interface IWebMiddleware {
 
 export type Application = IMidwayKoaApplication;
 
-export type Context = IMidwayKoaContext;
+export interface Context extends IMidwayKoaContext {}

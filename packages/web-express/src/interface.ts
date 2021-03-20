@@ -55,4 +55,4 @@ export interface IWebMiddleware {
 
 export type Application = IMidwayExpressApplication;
 
-export type Context = IMidwayExpressContext;
+export interface Context extends IMidwayExpressContext {}
