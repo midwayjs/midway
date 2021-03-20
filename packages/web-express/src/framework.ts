@@ -1,6 +1,7 @@
 import {
   BaseFramework,
   extractExpressLikeValue,
+  HTTP_SERVER_KEY,
   IMidwayBootstrapOptions,
   MidwayFrameworkType,
   PathFileUtil,
@@ -59,15 +60,6 @@ export class MidwayExpressFramework extends BaseFramework<
       ctx.requestContext.registerObject('res', res);
       next();
     });
-  }
-
-  protected async afterContainerReady(
-    options: Partial<IMidwayBootstrapOptions>
-  ): Promise<void> {
-    await this.loadMidwayController();
-  }
-
-  public async run(): Promise<void> {
     // https config
     if (this.configurationOptions.key && this.configurationOptions.cert) {
       this.configurationOptions.key = PathFileUtil.getFileContentSync(
@@ -87,7 +79,17 @@ export class MidwayExpressFramework extends BaseFramework<
     } else {
       this.server = require('http').createServer(this.app);
     }
+    // register httpServer to applicationContext
+    this.applicationContext.registerObject(HTTP_SERVER_KEY, this.server);
+  }
 
+  protected async afterContainerReady(
+    options: Partial<IMidwayBootstrapOptions>
+  ): Promise<void> {
+    await this.loadMidwayController();
+  }
+
+  public async run(): Promise<void> {
     if (this.configurationOptions.port) {
       new Promise<void>(resolve => {
         this.server.listen(this.configurationOptions.port, () => {

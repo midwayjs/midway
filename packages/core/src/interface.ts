@@ -218,6 +218,7 @@ export interface ObjectDependencyTree {
 
 export const REQUEST_CTX_KEY = 'ctx';
 export const REQUEST_OBJ_CTX_KEY = '_req_ctx';
+export const HTTP_SERVER_KEY = '_midway_http_server';
 
 export interface IContainerConfiguration {
   namespace: string;

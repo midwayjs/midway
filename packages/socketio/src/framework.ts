@@ -2,6 +2,7 @@ import {
   BaseFramework,
   getClassMetadata,
   getProviderId,
+  HTTP_SERVER_KEY,
   IMidwayBootstrapOptions,
   listModule,
   MidwayFrameworkType,
@@ -12,7 +13,7 @@ import {
   IMidwaySocketIOConfigurationOptions,
   IMidwaySocketIOContext,
 } from './interface';
-import * as SocketIO from 'socket.io';
+import { Server } from 'socket.io';
 import {
   WS_CONTROLLER_KEY,
   WS_EVENT_KEY,
@@ -27,22 +28,12 @@ export class MidwaySocketIOFramework extends BaseFramework<
   IMidwaySocketIOContext,
   IMidwaySocketIOConfigurationOptions
 > {
-  applicationInitialize(options: IMidwayBootstrapOptions) {}
-  public app: IMidwaySocketIOApplication;
+  private namespaceList = [];
 
-  protected async afterContainerDirectoryLoad(
-    options: Partial<IMidwayBootstrapOptions>
-  ) {
-    if (this.configurationOptions.webServer) {
-      this.app = (SocketIO(
-        this.configurationOptions.webServer,
-        this.configurationOptions
-      ) as unknown) as IMidwaySocketIOApplication;
-    } else {
-      this.app = (SocketIO(
-        this.configurationOptions
-      ) as unknown) as IMidwaySocketIOApplication;
-    }
+  applicationInitialize(options: IMidwayBootstrapOptions) {
+    this.app = new Server(
+      this.configurationOptions
+    ) as IMidwaySocketIOApplication;
 
     this.app.use((socket, next) => {
       this.app.createAnonymousContext(socket);
@@ -50,6 +41,7 @@ export class MidwaySocketIOFramework extends BaseFramework<
       next();
     });
   }
+  public app: IMidwaySocketIOApplication;
 
   protected async afterContainerReady(
     options: Partial<IMidwayBootstrapOptions>
@@ -58,15 +50,23 @@ export class MidwaySocketIOFramework extends BaseFramework<
   }
 
   public async run(): Promise<void> {
-    if (this.configurationOptions.port) {
-      // if set httpServer will be listen in web framework
-      if (!this.configurationOptions.webServer) {
-        new Promise(resolve => {
-          this.app.listen(
-            this.configurationOptions.port,
-            this.configurationOptions
-          );
-        });
+    if (this.configurationOptions.adapter) {
+      this.app.adapter(this.configurationOptions.adapter);
+      this.logger.debug('init socket.io-redis ready!');
+    }
+
+    if (this.applicationContext.registry.hasObject(HTTP_SERVER_KEY)) {
+      this.app.attach(
+        this.applicationContext.get(HTTP_SERVER_KEY),
+        this.configurationOptions
+      );
+    } else {
+      // listen port when http server not exist
+      if (this.configurationOptions.port) {
+        this.app.listen(
+          this.configurationOptions.port,
+          this.configurationOptions
+        );
       }
     }
   }
@@ -74,7 +74,9 @@ export class MidwaySocketIOFramework extends BaseFramework<
   protected async beforeStop(): Promise<void> {
     return new Promise<void>(resolve => {
       this.app.close(() => {
-        resolve();
+        setTimeout(() => {
+          resolve();
+        }, 1000);
       });
     });
   }
@@ -105,6 +107,7 @@ export class MidwaySocketIOFramework extends BaseFramework<
     );
 
     const nsp = this.app.of(controllerOption.namespace);
+    this.namespaceList.push(controllerOption.namespace);
 
     nsp.on('connect', async (socket: IMidwaySocketIOContext) => {
       const wsEventInfos: WSEventInfo[] = getClassMetadata(
@@ -186,6 +189,12 @@ export class MidwaySocketIOFramework extends BaseFramework<
         }
       }
     });
+
+    if (nsp.adapter) {
+      nsp.adapter.on('error', err => {
+        this.logger.error(err);
+      });
+    }
   }
 
   private async bindSocketResponse(

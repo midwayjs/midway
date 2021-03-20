@@ -1,6 +1,7 @@
 import {
   BaseFramework,
   extractKoaLikeValue,
+  HTTP_SERVER_KEY,
   IMidwayBootstrapOptions,
   IMidwayContext,
   MidwayFrameworkType,
@@ -249,15 +250,7 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<
         return this.generateMiddleware(middlewareId);
       },
     });
-  }
 
-  protected async afterContainerReady(
-    options: Partial<IMidwayBootstrapOptions>
-  ): Promise<void> {
-    await this.loadMidwayController();
-  }
-
-  public async run(): Promise<void> {
     // https config
     if (this.configurationOptions.key && this.configurationOptions.cert) {
       this.configurationOptions.key = PathFileUtil.getFileContentSync(
@@ -277,6 +270,17 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<
     } else {
       this.server = require('http').createServer(this.app.callback());
     }
+    // register httpServer to applicationContext
+    this.applicationContext.registerObject(HTTP_SERVER_KEY, this.server);
+  }
+
+  protected async afterContainerReady(
+    options: Partial<IMidwayBootstrapOptions>
+  ): Promise<void> {
+    await this.loadMidwayController();
+  }
+
+  public async run(): Promise<void> {
     if (this.configurationOptions.port) {
       new Promise<void>(resolve => {
         this.server.listen(this.configurationOptions.port, () => {
