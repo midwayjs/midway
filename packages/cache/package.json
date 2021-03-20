@@ -1,0 +1,49 @@
+{
+  "name": "@midwayjs/cache",
+  "version": "2.8.11",
+  "description": "",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "midway-bin build -c",
+    "test": "midway-bin test --ts",
+    "cov": "midway-bin cov --ts",
+    "ci": "npm run cov",
+    "lint": "mwts check"
+  },
+  "author": "",
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:midwayjs/midway.git"
+  },
+  "keywords": [
+    "midway",
+    "cache"
+  ],
+  "engines": {
+    "node": ">= 10"
+  },
+  "devDependencies": {
+    "@midwayjs/cli": "^1.2.38",
+    "@midwayjs/core": "^2.8.11",
+    "@midwayjs/decorator": "^2.3.0",
+    "@types/jest": "^26.0.10",
+    "@types/node": "14",
+    "cross-env": "^6.0.0",
+    "jest": "^26.4.0",
+    "mwts": "^1.0.5",
+    "ts-jest": "^26.2.0",
+    "typescript": "^4.0.0",
+    "@types/cache-manager": "^3.4.0",
+    "cache-manager": "^3.4.1"
+  },
+  "peerDependencies": {
+    "@types/cache-manager": "^3.4.0",
+    "cache-manager": "^3.4.1"
+  }
+}
