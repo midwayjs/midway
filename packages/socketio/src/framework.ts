@@ -28,22 +28,12 @@ export class MidwaySocketIOFramework extends BaseFramework<
   IMidwaySocketIOContext,
   IMidwaySocketIOConfigurationOptions
 > {
-  private useOuterHTTPServer = false;
   private namespaceList = [];
 
   applicationInitialize(options: IMidwayBootstrapOptions) {
-    if (this.applicationContext.registry.hasObject(HTTP_SERVER_KEY)) {
-      this.app = new Server(
-        this.applicationContext.get(HTTP_SERVER_KEY),
-        this.configurationOptions
-      ) as IMidwaySocketIOApplication;
-      // use outer http server
-      this.useOuterHTTPServer = true;
-    } else {
-      this.app = new Server(
-        this.configurationOptions
-      ) as IMidwaySocketIOApplication;
-    }
+    this.app = new Server(
+      this.configurationOptions
+    ) as IMidwaySocketIOApplication;
 
     this.app.use((socket, next) => {
       this.app.createAnonymousContext(socket);
@@ -65,14 +55,19 @@ export class MidwaySocketIOFramework extends BaseFramework<
       this.logger.debug('init socket.io-redis ready!');
     }
 
-    // listen port when http server not exist
-    if (this.configurationOptions.port && !this.useOuterHTTPServer) {
-      new Promise(resolve => {
+    if (this.applicationContext.registry.hasObject(HTTP_SERVER_KEY)) {
+      this.app.attach(
+        this.applicationContext.get(HTTP_SERVER_KEY),
+        this.configurationOptions
+      );
+    } else {
+      // listen port when http server not exist
+      if (this.configurationOptions.port) {
         this.app.listen(
           this.configurationOptions.port,
           this.configurationOptions
         );
-      });
+      }
     }
   }
 
