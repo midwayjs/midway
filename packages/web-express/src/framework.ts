@@ -1,6 +1,7 @@
 import {
   BaseFramework,
   extractExpressLikeValue,
+  HTTP_SERVER_KEY,
   IMidwayBootstrapOptions,
   MidwayFrameworkType,
   PathFileUtil,
@@ -78,7 +79,8 @@ export class MidwayExpressFramework extends BaseFramework<
     } else {
       this.server = require('http').createServer(this.app);
     }
-
+    // register httpServer to applicationContext
+    this.applicationContext.registerObject(HTTP_SERVER_KEY, this.server);
   }
 
   protected async afterContainerReady(

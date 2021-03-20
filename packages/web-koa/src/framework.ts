@@ -1,6 +1,7 @@
 import {
   BaseFramework,
   extractKoaLikeValue,
+  HTTP_SERVER_KEY,
   IMidwayBootstrapOptions,
   IMidwayContext,
   MidwayFrameworkType,
@@ -269,6 +270,8 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<
     } else {
       this.server = require('http').createServer(this.app.callback());
     }
+    // register httpServer to applicationContext
+    this.applicationContext.registerObject(HTTP_SERVER_KEY, this.server);
   }
 
   protected async afterContainerReady(

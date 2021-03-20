@@ -1,4 +1,5 @@
 import {
+  HTTP_SERVER_KEY,
   IMidwayBootstrapOptions,
   IMidwayContainer,
   IMidwayFramework,
@@ -89,6 +90,8 @@ export class SingleProcess
 
     // emit `server` event in app
     this.app.emit('server', this.server);
+    // register httpServer to applicationContext
+    this.getApplicationContext().registerObject(HTTP_SERVER_KEY, this.server);
   }
 
   async stop(): Promise<void> {

@@ -12,7 +12,7 @@ import {
   IMidwaySocketIOConfigurationOptions,
   IMidwaySocketIOContext,
 } from './interface';
-import { Server } from "socket.io";
+import { Server } from 'socket.io';
 import { createAdapter } from 'socket.io-redis';
 import {
   WS_CONTROLLER_KEY,
@@ -40,7 +40,9 @@ export class MidwaySocketIOFramework extends BaseFramework<
         this.configurationOptions
       ) as IMidwaySocketIOApplication;
     } else {
-      this.app = new Server(this.configurationOptions) as IMidwaySocketIOApplication;
+      this.app = new Server(
+        this.configurationOptions
+      ) as IMidwaySocketIOApplication;
     }
 
     this.app.use((socket, next) => {
