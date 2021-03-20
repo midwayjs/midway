@@ -28,28 +28,6 @@ export class SingleProcess
   }
 
   public async run(): Promise<void> {
-    // https config
-    if (this.configurationOptions.key && this.configurationOptions.cert) {
-      this.configurationOptions.key = PathFileUtil.getFileContentSync(
-        this.configurationOptions.key
-      );
-      this.configurationOptions.cert = PathFileUtil.getFileContentSync(
-        this.configurationOptions.cert
-      );
-      this.configurationOptions.ca = PathFileUtil.getFileContentSync(
-        this.configurationOptions.ca
-      );
-
-      this.server = require('https').createServer(
-        this.configurationOptions,
-        this.app.callback()
-      );
-    } else {
-      this.server = require('http').createServer(this.app.callback());
-    }
-
-    // emit `server` event in app
-    this.app.emit('server', this.server);
     // trigger server didReady
     this.app.messenger.emit('egg-ready');
 
@@ -89,6 +67,28 @@ export class SingleProcess
       mode: 'single',
       isTsMode: this.isTsMode || true,
     });
+    // https config
+    if (this.configurationOptions.key && this.configurationOptions.cert) {
+      this.configurationOptions.key = PathFileUtil.getFileContentSync(
+        this.configurationOptions.key
+      );
+      this.configurationOptions.cert = PathFileUtil.getFileContentSync(
+        this.configurationOptions.cert
+      );
+      this.configurationOptions.ca = PathFileUtil.getFileContentSync(
+        this.configurationOptions.ca
+      );
+
+      this.server = require('https').createServer(
+        this.configurationOptions,
+        this.app.callback()
+      );
+    } else {
+      this.server = require('http').createServer(this.app.callback());
+    }
+
+    // emit `server` event in app
+    this.app.emit('server', this.server);
   }
 
   async stop(): Promise<void> {

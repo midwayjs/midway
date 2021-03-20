@@ -12,7 +12,7 @@ import {
   IMidwaySocketIOConfigurationOptions,
   IMidwaySocketIOContext,
 } from './interface';
-import * as SocketIO from 'socket.io';
+import { Server } from "socket.io";
 import { createAdapter } from 'socket.io-redis';
 import {
   WS_CONTROLLER_KEY,
@@ -34,15 +34,13 @@ export class MidwaySocketIOFramework extends BaseFramework<
   protected async afterContainerDirectoryLoad(
     options: Partial<IMidwayBootstrapOptions>
   ) {
-    if (this.configurationOptions.webServer) {
-      this.app = (SocketIO(
-        this.configurationOptions.webServer,
+    if (this.configurationOptions.httpServer) {
+      this.app = new Server(
+        this.configurationOptions.httpServer,
         this.configurationOptions
-      ) as unknown) as IMidwaySocketIOApplication;
+      ) as IMidwaySocketIOApplication;
     } else {
-      this.app = (SocketIO(
-        this.configurationOptions
-      ) as unknown) as IMidwaySocketIOApplication;
+      this.app = new Server(this.configurationOptions) as IMidwaySocketIOApplication;
     }
 
     this.app.use((socket, next) => {
@@ -75,7 +73,7 @@ export class MidwaySocketIOFramework extends BaseFramework<
 
     if (this.configurationOptions.port) {
       // if set httpServer will be listen in web framework
-      if (!this.configurationOptions.webServer) {
+      if (!this.configurationOptions.httpServer) {
         new Promise(resolve => {
           this.app.listen(
             this.configurationOptions.port,

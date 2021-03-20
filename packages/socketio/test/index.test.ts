@@ -26,4 +26,23 @@ describe('/test/index.test.ts', () => {
     await client.close();
     await closeApp(app);
   });
+
+  it('should test create socket app and with redis adapter', async () => {
+    const app = await createServer('base-app-redis', {
+      port: 3000,
+    });
+    const client = await createClient({
+      port: '3000',
+    });
+    await new Promise<void>(resolve =>  {
+      client.on('ok', (data) => {
+        console.log(data);
+        resolve();
+      })
+      client.emit('my');
+    });
+
+    await client.close();
+    await closeApp(app);
+  });
 });
