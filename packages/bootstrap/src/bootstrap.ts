@@ -2,6 +2,7 @@ import {
   IMidwayFramework,
   IMidwayBootstrapOptions,
   MidwayFrameworkType,
+  EmptyFramework,
 } from '@midwayjs/core';
 import { join } from 'path';
 import { createConsoleLogger, ILogger, IMidwayLogger } from '@midwayjs/logger';
@@ -24,13 +25,16 @@ export class BootstrapStarter {
     MidwayFrameworkType,
     IMidwayFramework<any, any>
   >();
+  protected globalConfig: any;
 
   public configure(options: IMidwayBootstrapOptions) {
     this.globalOptions = options;
     return this;
   }
 
-  public load(unit: IMidwayFramework<any, any>) {
+  public load(unit: (globalConfig: any) => IMidwayFramework<any, any>)
+  public load(unit: IMidwayFramework<any, any>)
+  public load(unit: any) {
     this.bootstrapItems.push(unit);
     return this;
   }
@@ -38,6 +42,14 @@ export class BootstrapStarter {
   public async init() {
     this.appDir = this.globalOptions.appDir || process.cwd();
     this.baseDir = this.getBaseDir();
+
+    const framework = new EmptyFramework();
+    await framework.initialize({
+      baseDir: this.baseDir,
+    });
+
+    this.globalConfig = framework.getApplicationContext().getConfigService().getConfiguration() || {};
+    this.refreshBootstrapItems();
 
     await this.getFirstActions('initialize', {
       ...this.globalOptions,
@@ -109,6 +121,15 @@ export class BootstrapStarter {
       });
     }
     return [];
+  }
+
+  protected refreshBootstrapItems() {
+    this.bootstrapItems = this.bootstrapItems.map(bootstrapItem => {
+      if (typeof bootstrapItem === 'function') {
+        return (bootstrapItem as any)(this.globalConfig);
+      }
+      return bootstrapItem;
+    });
   }
 
   protected getBaseDir() {
