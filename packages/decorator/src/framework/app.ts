@@ -2,9 +2,10 @@ import {
   attachClassMetadata,
   APPLICATION_KEY,
   attachConstructorDataOnClass,
+  MidwayFrameworkType,
 } from '../';
 
-export function App() {
+export function App(type?: MidwayFrameworkType) {
   return function (target: any, targetKey: string, index?: number): void {
     if (typeof index === 'number') {
       attachConstructorDataOnClass(targetKey, target, APPLICATION_KEY, index);
@@ -14,6 +15,9 @@ export function App() {
         {
           key: APPLICATION_KEY,
           propertyName: targetKey,
+          meta: {
+            type,
+          },
         },
         target
       );

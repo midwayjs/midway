@@ -1,7 +1,8 @@
 import {
   APPLICATION_KEY,
   CONFIGURATION_KEY,
-  LIFECYCLE_IDENTIFIER_PREFIX, MidwayFrameworkType,
+  LIFECYCLE_IDENTIFIER_PREFIX,
+  MidwayFrameworkType,
   Provide,
   resetModule,
 } from '@midwayjs/decorator';
@@ -10,13 +11,15 @@ import * as assert from 'assert';
 import * as path from 'path';
 import {
   clearAllModule,
-  clearContainerCache, IMidwayApplication, IMidwayBootstrapOptions,
+  clearContainerCache,
+  IMidwayApplication,
+  IMidwayBootstrapOptions,
   MidwayRequestContainer,
 } from '../src';
 import * as mm from 'mm';
-import sinon = require('sinon');
-import { LifeCycleTest, LifeCycleTest1, TestBinding } from "./fixtures/lifecycle";
+import { LifeCycleTest, LifeCycleTest1, TestBinding } from './fixtures/lifecycle';
 import { LightFramework } from '../src/util/emptyFramework';
+import sinon = require('sinon');
 
 @Provide()
 class TestModule {
@@ -534,9 +537,9 @@ describe('/test/baseFramework.test.ts', () => {
       callback(m);
     });
 
-    expect(container.registry.hasObject(LIFECYCLE_IDENTIFIER_PREFIX + 'lifeCycleTest')).toBeTruthy();
+    expect(container.registry.hasDefinition(LIFECYCLE_IDENTIFIER_PREFIX + 'lifeCycleTest')).toBeTruthy();
     await framework.stop();
-    expect(container.registry.hasObject(LIFECYCLE_IDENTIFIER_PREFIX + 'lifeCycleTest')).toBeFalsy();
+    expect(container.registry.hasDefinition(LIFECYCLE_IDENTIFIER_PREFIX + 'lifeCycleTest')).toBeFalsy();
     expect(callback.withArgs('on stop').calledOnce).toBeTruthy();
 
     resetModule(CONFIGURATION_KEY);
@@ -626,6 +629,8 @@ describe('/test/baseFramework.test.ts', () => {
   });
 
   it('should run multi framework in one process and use cache', async () => {
+    const appMap = new Map();
+
     const framework1 = new LightFramework();
     framework1.configure({});
     await framework1.initialize({
@@ -633,6 +638,10 @@ describe('/test/baseFramework.test.ts', () => {
         __dirname,
         './fixtures/base-app-multi-framework-shared/src'
       ),
+      isMainFramework: true,
+      globalApplicationHandler: (type: MidwayFrameworkType) => {
+        return appMap.get(type);
+      }
     });
 
     class CustomTwoFramework extends LightFramework {
@@ -651,54 +660,25 @@ describe('/test/baseFramework.test.ts', () => {
         __dirname,
         './fixtures/base-app-multi-framework-shared/src'
       ),
+      isMainFramework: false,
+      applicationContext: framework1.getApplicationContext(),
     });
 
-    expect(framework1.getApplicationContext()).not.toBe(framework2.getApplicationContext());
+    appMap.set(framework1.getFrameworkType(), framework1.getApplication());
+    appMap.set(framework2.getFrameworkType(), framework2.getApplication());
+
+    await framework1.loadLifeCycles(true);
+
+    expect(framework1.getApplicationContext()).toEqual(framework2.getApplicationContext());
     // share application context data
     const userService1 = await framework1.getApplicationContext().getAsync('userService');
     const userService2 = await framework2.getApplicationContext().getAsync('userService');
     // 相同实例
     expect(userService1['id']).toEqual(userService2['id']);
 
-    expect(framework1.getApplicationContext().get('total')['num']).toEqual(2);
-    expect(framework2.getApplicationContext().get('total')['num']).toEqual(2);
+    expect(framework1.getApplicationContext().get('total')['num']).toEqual(1);
+    expect(framework2.getApplicationContext().get('total')['num']).toEqual(1);
 
-    expect(framework2.getApplicationContext().get('total2')['num']).toEqual(1);
-  });
-
-  it('should run multi framework in one process and container independent', async () => {
-    const framework1 = new LightFramework();
-    framework1.configure({});
-    await framework1.initialize({
-      baseDir: path.join(
-        __dirname,
-        './fixtures/base-app-multi-framework-independent/src'
-      ),
-    });
-
-    class CustomTwoFramework extends LightFramework {
-      async applicationInitialize(options: IMidwayBootstrapOptions) {
-        this.app = {} as IMidwayApplication;
-      }
-      getFrameworkType(): MidwayFrameworkType {
-        return MidwayFrameworkType.MS_GRPC;
-      }
-    }
-
-    const framework2 = new CustomTwoFramework();
-    framework2.configure({});
-    await framework2.initialize({
-      baseDir: path.join(
-        __dirname,
-        './fixtures/base-app-multi-framework-independent/src'
-      ),
-    });
-
-    expect(framework1.getApplicationContext()).not.toBe(framework2.getApplicationContext());
-    // share application context data
-    const userService1 = await framework1.getApplicationContext().getAsync('userService');
-    const userService2 = await framework2.getApplicationContext().getAsync('userService');
-    // 不同实例
-    expect(userService1['id']).not.toEqual(userService2['id']);
+    expect(framework2.getApplicationContext().get('total2')['num']).toEqual(0);
   });
 });

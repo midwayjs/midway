@@ -12,7 +12,7 @@ export class ContainerConfiguration {
   @App()
   app;
 
-  async onReady() {
+  async onReady(container) {
     this.app.keys = ['some secret hurr'];
 
     this.app.use(session({

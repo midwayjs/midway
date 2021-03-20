@@ -47,7 +47,7 @@ describe('/test/enhance.test.ts', () => {
 
     afterAll(async () => {
       await closeApp(app);
-    })
+    });
 
     it('should load controller from requestContext', done => {
       request(app.callback())

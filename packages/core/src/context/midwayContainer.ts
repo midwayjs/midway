@@ -28,7 +28,6 @@ import {
   DecoratorManager,
   ResolveFilter,
   isRegExp,
-  FrameworkContainerScopeEnum,
 } from '@midwayjs/decorator';
 import { ContainerConfiguration } from './configuration';
 import { FUNCTION_INJECT_KEY } from '../common/constants';
@@ -91,7 +90,6 @@ export class MidwayContainer
   protected aspectMappingMap: WeakMap<any, Map<string, any[]>>;
   private aspectModuleSet: Set<any>;
   private directoryFilterArray: ResolveFilter[] = [];
-  private frameworkContainerScope: FrameworkContainerScopeEnum;
 
   /**
    * 单个进程中上一次的 applicationContext 的 registry
@@ -283,11 +281,7 @@ export class MidwayContainer
     target: T,
     options?: ObjectDefinitionOptions
   ): void;
-  bind<T>(
-    identifier: ObjectIdentifier,
-    target: T,
-    options?: ObjectDefinitionOptions
-  ): void {
+  bind<T>(identifier: any, target: any, options?: any): void {
     const definitionMeta = {} as IObjectDefinitionMetadata;
     this.definitionMetadataList.push(definitionMeta);
 
@@ -295,7 +289,6 @@ export class MidwayContainer
       options = target;
       target = identifier as any;
       identifier = this.getIdentifier(target);
-      options = null;
     }
 
     if (isClass(target)) {
@@ -311,7 +304,7 @@ export class MidwayContainer
     definitionMeta.id = identifier;
     definitionMeta.srcPath = options?.srcPath || null;
     definitionMeta.namespace = options?.namespace || '';
-    definitionMeta.scope = options?.scope || ScopeEnum.Singleton;
+    definitionMeta.scope = options?.scope || ScopeEnum.Request;
     definitionMeta.autowire = options?.isAutowire !== false;
 
     this.debugLogger(`  bind id => [${definitionMeta.id}]`);
@@ -521,7 +514,7 @@ export class MidwayContainer
     const objDefOptions: ObjectDefinitionOptions = getObjectDefProps(target);
     this.convertOptionsToDefinition(objDefOptions, objectDefinition);
 
-    if (objDefOptions && !objDefOptions.scope) {
+    if (objectDefinition && !objectDefinition.scope) {
       this.debugLogger('  @scope => request');
       objectDefinition.scope = ScopeEnum.Request;
     }
@@ -948,15 +941,5 @@ export class MidwayContainer
     this.directoryFilterArray = this.directoryFilterArray.concat(
       directoryFilter
     );
-  }
-
-  public setFrameworkContainerScope(
-    frameworkContainerScope: FrameworkContainerScopeEnum
-  ) {
-    this.frameworkContainerScope = frameworkContainerScope;
-  }
-
-  public getFrameworkContainerScope() {
-    return this.frameworkContainerScope;
   }
 }

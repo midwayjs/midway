@@ -45,7 +45,7 @@ describe('/test/loader.test.ts', () => {
     await loader.refresh();
 
     // register handler for container
-    loader.registerHook(CONFIG_KEY, (key, target) => {
+    loader.registerHook(CONFIG_KEY, (key, meta, target) => {
       assert(
         target instanceof
           require('./fixtures/base-app-decorator/src/lib/service')[
@@ -55,11 +55,11 @@ describe('/test/loader.test.ts', () => {
       return 'hello';
     });
 
-    loader.registerHook(PLUGIN_KEY, (key, target) => {
+    loader.registerHook(PLUGIN_KEY, (key, meta, target) => {
       return { b: 2 };
     });
 
-    loader.registerHook(LOGGER_KEY, (key, target) => {
+    loader.registerHook(LOGGER_KEY, (key, meta, target) => {
       return console;
     });
 
@@ -91,7 +91,7 @@ describe('/test/loader.test.ts', () => {
     loader.registerHook(APPLICATION_KEY, () => tt);
     await loader.refresh();
     // register handler for container
-    loader.registerHook(CONFIG_KEY, (key, target) => {
+    loader.registerHook(CONFIG_KEY, (key, meta, target) => {
       assert(
         target instanceof
           require('./fixtures/base-app-forbindapp/src/lib/service')[
@@ -101,11 +101,11 @@ describe('/test/loader.test.ts', () => {
       return 'hello';
     });
 
-    loader.registerHook(PLUGIN_KEY, (key, target) => {
+    loader.registerHook(PLUGIN_KEY, (key, meta, target) => {
       return { b: 2 };
     });
 
-    loader.registerHook(LOGGER_KEY, (key, target) => {
+    loader.registerHook(LOGGER_KEY, (key, meta, target) => {
       return console;
     });
 

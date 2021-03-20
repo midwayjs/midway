@@ -1,4 +1,8 @@
-import { IMidwayFramework, IMidwayBootstrapOptions } from '@midwayjs/core';
+import {
+  IMidwayFramework,
+  IMidwayBootstrapOptions,
+  MidwayFrameworkType,
+} from '@midwayjs/core';
 import { join } from 'path';
 import { createConsoleLogger, ILogger, IMidwayLogger } from '@midwayjs/logger';
 
@@ -12,9 +16,14 @@ export function isTypeScriptEnvironment() {
 }
 
 export class BootstrapStarter {
-  private appDir;
-  private bootstrapItems: IMidwayFramework<any, any>[] = [];
-  private globalOptions: Partial<IMidwayBootstrapOptions> = {};
+  protected appDir: string;
+  protected baseDir: string;
+  protected bootstrapItems: IMidwayFramework<any, any>[] = [];
+  protected globalOptions: Partial<IMidwayBootstrapOptions> = {};
+  protected globalAppMap = new Map<
+    MidwayFrameworkType,
+    IMidwayFramework<any, any>
+  >();
 
   public configure(options: IMidwayBootstrapOptions) {
     this.globalOptions = options;
@@ -28,28 +37,53 @@ export class BootstrapStarter {
 
   public async init() {
     this.appDir = this.globalOptions.appDir || process.cwd();
-    // TODO 要把第一个抽出来先执行，其他的并发
+    this.baseDir = this.getBaseDir();
+
+    await this.getFirstActions('initialize', {
+      ...this.globalOptions,
+      baseDir: this.baseDir,
+      appDir: this.appDir,
+      isMainFramework: true,
+      globalApplicationHandler: (type: MidwayFrameworkType) => {
+        return this.globalAppMap.get(type);
+      },
+    });
+
+    const applicationContext = await this.getFirstActions(
+      'getApplicationContext'
+    );
+
     await Promise.all(
-      this.getActions('initialize', {
+      this.getTailActions('initialize', {
         ...this.globalOptions,
-        baseDir: this.getBaseDir(),
+        baseDir: this.baseDir,
         appDir: this.appDir,
+        applicationContext,
+        isMainFramework: false,
       })
     );
+
+    this.bootstrapItems.forEach(item => {
+      this.globalAppMap.set(item.getFrameworkType(), item.getApplication());
+      if (global['MIDWAY_BOOTSTRAP_APP_SET']) {
+        // for test/dev
+        this.bootstrapItems.forEach(item => {
+          global['MIDWAY_BOOTSTRAP_APP_SET'].add({
+            framework: item,
+            starter: this,
+          });
+        });
+        global['MIDWAY_BOOTSTRAP_APP_READY'] = true;
+      }
+    });
+
+    await this.getFirstActions('loadLifeCycles', true);
+    await this.getFirstActions('afterContainerReady');
   }
 
   public async run() {
     await Promise.all(this.getActions('run', {}));
-    if (global['MIDWAY_BOOTSTRAP_APP_SET']) {
-      // for test/dev
-      this.bootstrapItems.forEach(item => {
-        global['MIDWAY_BOOTSTRAP_APP_SET'].add({
-          framework: item,
-          starter: this,
-        });
-      });
-      global['MIDWAY_BOOTSTRAP_APP_READY'] = true;
-    }
+    global['MIDWAY_BOOTSTRAP_APP_READY'] = true;
   }
 
   public async stop() {
@@ -62,7 +96,22 @@ export class BootstrapStarter {
     });
   }
 
-  private getBaseDir() {
+  public async getFirstActions(action: string, args?) {
+    if (this.bootstrapItems.length) {
+      return this.bootstrapItems[0][action]?.(args);
+    }
+  }
+
+  public getTailActions(action: string, args?): any[] {
+    if (this.bootstrapItems.length > 1) {
+      return this.bootstrapItems.slice(1).map(item => {
+        return item[action]?.(args);
+      });
+    }
+    return [];
+  }
+
+  protected getBaseDir() {
     if (this.globalOptions.baseDir) {
       return this.globalOptions.baseDir;
     }

@@ -1,7 +1,6 @@
 import {
   classNamed,
   CONFIGURATION_KEY,
-  FrameworkContainerScopeEnum,
   generateProvideId,
   getClassMetadata,
   IComponentInfo,
@@ -13,6 +12,7 @@ import {
   MAIN_MODULE_KEY,
   saveModule,
   saveProviderId,
+  ScopeEnum,
 } from '@midwayjs/decorator';
 
 import { dirname, isAbsolute, join } from 'path';
@@ -290,11 +290,6 @@ export class ContainerConfiguration implements IContainerConfiguration {
               configurationOptions.conflictCheck = false;
             }
             this.container.disableConflictCheck = !configurationOptions.conflictCheck;
-            // set applicationContext scope
-            this.container.setFrameworkContainerScope(
-              configurationOptions.frameworkContainerScope ||
-                FrameworkContainerScopeEnum.GLOBAL
-            );
           }
 
           this.addImports(configurationOptions.imports, baseDir);
@@ -339,6 +334,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
       this.container.bind(id, clzz, {
         namespace: this.namespace,
         srcPath: filePath,
+        scope: ScopeEnum.Singleton,
       });
     }
 

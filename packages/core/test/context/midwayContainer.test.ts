@@ -40,7 +40,7 @@ describe('/test/context/midwayContainer.test.ts', () => {
       loadDir: path.join(__dirname, '../fixtures/base-app-decorator/src')
     });
     // register handler for container
-    container.registerDataHandler(CONFIG_KEY, (key, target) => {
+    container.registerDataHandler(CONFIG_KEY, (key, meta, target) => {
       assert(
         target instanceof
         require('../fixtures/base-app-decorator/src/lib/service')[
@@ -50,11 +50,11 @@ describe('/test/context/midwayContainer.test.ts', () => {
       return 'hello';
     });
 
-    container.registerDataHandler(PLUGIN_KEY, (key, target) => {
+    container.registerDataHandler(PLUGIN_KEY, (key, meta, target) => {
       return { b: 2 };
     });
 
-    container.registerDataHandler(LOGGER_KEY, (key, target) => {
+    container.registerDataHandler(LOGGER_KEY, (key, meta, target) => {
       return console;
     });
 
@@ -88,7 +88,7 @@ describe('/test/context/midwayContainer.test.ts', () => {
     container.registerDataHandler(APPLICATION_KEY, () => tt);
     await container.ready();
     // register handler for container
-    container.registerDataHandler(CONFIG_KEY, (key, target) => {
+    container.registerDataHandler(CONFIG_KEY, (key, meta, target) => {
       assert(
         target instanceof
         require('../fixtures/base-app-forbindapp/src/lib/service')[
@@ -98,11 +98,11 @@ describe('/test/context/midwayContainer.test.ts', () => {
       return 'hello';
     });
 
-    container.registerDataHandler(PLUGIN_KEY, (key, target) => {
+    container.registerDataHandler(PLUGIN_KEY, (key, meta, target) => {
       return { b: 2 };
     });
 
-    container.registerDataHandler(LOGGER_KEY, (key, target) => {
+    container.registerDataHandler(LOGGER_KEY, (key, meta, target) => {
       return console;
     });
 

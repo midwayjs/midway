@@ -83,7 +83,7 @@ export class ResolverHandler implements IResolverHandler {
     if (prop && getterHandler) {
       if (prop.propertyName) {
         Object.defineProperty(instance, prop.propertyName, {
-          get: () => getterHandler(prop.key, instance),
+          get: () => getterHandler(prop.key, prop.meta, instance),
           configurable: true, // 继承对象有可能会有相同属性，这里需要配置成 true
           enumerable: true,
         });

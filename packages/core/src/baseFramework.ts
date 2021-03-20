@@ -12,10 +12,7 @@ import { MidwayContainer } from './context/midwayContainer';
 import {
   APPLICATION_KEY,
   CONFIGURATION_KEY,
-  FrameworkContainerScopeEnum,
-  getClassMetadata,
   getProviderId,
-  InjectionConfigurationOptions,
   listModule,
   LOGGER_KEY,
   MidwayFrameworkType,
@@ -60,6 +57,7 @@ export abstract class BaseFramework<
   protected pkg: Record<string, unknown>;
   protected defaultContext = {};
   protected BaseContextLoggerClass: any;
+  protected isMainFramework: boolean;
 
   public configure(options: OPT): BaseFramework<APP, CTX, OPT> {
     this.configurationOptions = options;
@@ -76,6 +74,7 @@ export abstract class BaseFramework<
       options.appDir = setupAppDir(options.baseDir);
     }
     this.appDir = options.appDir;
+    this.isMainFramework = options.isMainFramework;
 
     /**
      * before create MidwayContainer instance，can change init parameters
@@ -115,6 +114,10 @@ export abstract class BaseFramework<
     /**
      * after container refresh
      */
+    if (this.isMainFramework !== undefined) {
+      // 多框架场景，由 bootstrap 执行生命周期
+      return;
+    }
     await this.afterContainerReady(options);
   }
 
@@ -142,13 +145,8 @@ export abstract class BaseFramework<
     /**
      * initialize container
      */
-    if (
-      MidwayContainer.parentApplicationContext &&
-      MidwayContainer.parentApplicationContext.getFrameworkContainerScope() ===
-        FrameworkContainerScopeEnum.GLOBAL
-    ) {
-      this.applicationContext = new MidwayContainer(this.baseDir, undefined);
-      this.applicationContext.parent = MidwayContainer.parentApplicationContext;
+    if (options.applicationContext) {
+      this.applicationContext = options.applicationContext;
     } else {
       this.applicationContext = new MidwayContainer(this.baseDir, undefined);
       this.applicationContext.registerObject('baseDir', this.baseDir);
@@ -168,6 +166,9 @@ export abstract class BaseFramework<
   }
 
   protected async containerDirectoryLoad(options: IMidwayBootstrapOptions) {
+    if (this.isMainFramework === false) {
+      return;
+    }
     /**
      * load directory and bind files to ioc container
      */
@@ -196,9 +197,16 @@ export abstract class BaseFramework<
     }
 
     // register app
-    this.applicationContext.registerDataHandler(APPLICATION_KEY, () => {
-      return this.getApplication();
-    });
+    this.applicationContext.registerDataHandler(
+      APPLICATION_KEY,
+      (key, meta) => {
+        if (meta?.type && options.globalApplicationHandler) {
+          return options.globalApplicationHandler(meta.type);
+        } else {
+          return this.getApplication();
+        }
+      }
+    );
 
     // register logger
     this.getApplicationContext().registerDataHandler(LOGGER_KEY, key => {
@@ -255,8 +263,10 @@ export abstract class BaseFramework<
 
   public async stop(): Promise<void> {
     await this.beforeStop();
-    await this.stopLifeCycles();
-    await this.containerStop();
+    if (this.isMainFramework === true || this.isMainFramework === undefined) {
+      await this.stopLifeCycles();
+      await this.containerStop();
+    }
   }
 
   public getAppDir(): string {
@@ -375,34 +385,14 @@ export abstract class BaseFramework<
     options: Partial<IMidwayBootstrapOptions>
   ): Promise<void> {}
 
-  private getCurrentFrameworkLifeCycles(): Array<{
-    target: any;
-    namespace: string;
-  }> {
-    return listModule(CONFIGURATION_KEY, module => {
-      // 过滤出符合当前 framework 的生命周期
-      let configurationOptions: InjectionConfigurationOptions;
-      if (module.target instanceof FunctionalConfiguration) {
-        // 函数式写法
-        configurationOptions = module.target.getConfigurationOptions();
-      } else {
-        // 普通类写法
-        configurationOptions = getClassMetadata(
-          CONFIGURATION_KEY,
-          module.target
-        );
-      }
-      if (configurationOptions?.framework !== undefined) {
-        return configurationOptions.framework === this.getFrameworkType();
-      } else {
-        return true;
-      }
-    });
-  }
-  public async loadLifeCycles() {
+  public async loadLifeCycles(isForce = false) {
+    if (!isForce && this.isMainFramework !== undefined) {
+      // 多框架场景，由 bootstrap 执行生命周期
+      return;
+    }
     // agent 不加载生命周期
     if (this.app.getProcessType() === MidwayProcessTypeEnum.AGENT) return;
-    const cycles = this.getCurrentFrameworkLifeCycles();
+    const cycles = listModule(CONFIGURATION_KEY);
     for (const cycle of cycles) {
       let inst;
       if (cycle.target instanceof FunctionalConfiguration) {
@@ -441,7 +431,7 @@ export abstract class BaseFramework<
   }
 
   protected async stopLifeCycles() {
-    const cycles = this.getCurrentFrameworkLifeCycles();
+    const cycles = listModule(CONFIGURATION_KEY);
     for (const cycle of cycles) {
       let inst;
       if (cycle.target instanceof FunctionalConfiguration) {

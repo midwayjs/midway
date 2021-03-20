@@ -25,6 +25,6 @@ describe('/test/framework/config.test.ts', () => {
     });
 
     data = getClassMetadata(APPLICATION_KEY, Test);
-    expect(data).toStrictEqual([{ key: APPLICATION_KEY, propertyName: 'hhh' }]);
+    expect(data).toStrictEqual([{key: APPLICATION_KEY, meta: {type: undefined}, propertyName: 'hhh'}]);
   });
 });
