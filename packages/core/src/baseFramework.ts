@@ -115,10 +115,6 @@ export abstract class BaseFramework<
     /**
      * after container refresh
      */
-    if (this.isMainFramework !== undefined) {
-      // 多框架场景，由 bootstrap 执行生命周期
-      return;
-    }
     await this.afterContainerReady(options);
   }
 

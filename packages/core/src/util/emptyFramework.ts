@@ -57,10 +57,6 @@ export class ConfigFramework extends BaseFramework<any, any, any> {
 
   async containerReady() {
     await this.applicationContext.ready();
-    if (this.applicationContext.getConfigService()) {
-      // 加载配置
-      await this.applicationContext.getConfigService().load();
-    }
   }
 
   async afterContainerReady() {}

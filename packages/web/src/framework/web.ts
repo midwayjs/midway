@@ -117,9 +117,6 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
      */
     await this.applicationInitialize(options);
 
-    // 设置 configService 已经 ready 了，不需要再执行加载了
-    this.applicationContext.getConfigService().setReady(true);
-
     /**
      * EggJS 比较特殊，生命周期触发需要等到插件加载完才能加载
      */

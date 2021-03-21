@@ -1,7 +1,8 @@
 import { fork } from 'child_process';
 import { join } from 'path';
-import * as http from 'http';
 import { sleep } from '@midwayjs/decorator';
+import * as request from 'request';
+import * as socketClient from 'socket.io-client';
 
 describe('/test/bootstrap.test.ts', () => {
   it('should bootstrap multi framework', async () => {
@@ -23,18 +24,31 @@ describe('/test/bootstrap.test.ts', () => {
       });
     });
 
-    await sleep(10000);
+    await sleep(1000);
 
-    await new Promise<void>(resolve => {
-      http.get({
-        hostname: 'localhost',
-        port: 8080,
-        path: '/',
-      }, (res) => {
-        console.log(res);
-        resolve();
+    // test http
+    const httpResult = await new Promise<string>(resolve => {
+      request({
+        uri: `http://localhost:8080/`,
+        method: 'get',
+      }, (error, response, body) => {
+        resolve(body);
       });
-    })
+    });
+    expect(httpResult).toEqual('hello world');
+
+    // test socket.io
+    let url = 'http://127.0.0.1:8080';
+    const client = socketClient(url, {});
+    const socketData = await new Promise<{name: string}>(resolve =>  {
+      client.on('returnValue', (data) => {
+        resolve(data);
+      })
+      client.emit('my');
+    });
+    await client.close();
+    expect(socketData.name).toEqual('harry');
+
     child.kill();
   });
 });
