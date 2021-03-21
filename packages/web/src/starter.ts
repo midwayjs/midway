@@ -2,6 +2,7 @@ import { BootstrapStarter } from '@midwayjs/bootstrap';
 
 interface WebStarterOptions {
   isWorker: boolean;
+  applicationContext?: any;
 }
 
 export class WebBootstrapStarter extends BootstrapStarter {
@@ -21,6 +22,7 @@ export class WebBootstrapStarter extends BootstrapStarter {
       baseDir: this.baseDir,
       appDir: this.appDir,
       isMainFramework: this.options.isWorker ? true : undefined,
+      applicationContext: this.options.applicationContext,
     });
   }
 }

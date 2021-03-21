@@ -23,7 +23,11 @@
   "devDependencies": {
     "@midwayjs/cli": "^1.2.36",
     "@midwayjs/core": "^2.8.13",
-    "@midwayjs/logger": "^2.8.13"
+    "@midwayjs/decorator": "^2.8.11",
+    "@midwayjs/logger": "^2.8.13",
+    "request": "^2.88.2",
+    "@types/socket.io-client": "^1.4.36",
+    "socket.io-client": "^4.0.0"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
   "repository": {

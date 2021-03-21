@@ -123,6 +123,7 @@ export const createAppWorkerLoader = () => {
       });
       this.bootstrap = new WebBootstrapStarter({
         isWorker: true,
+        applicationContext: this.app.options.applicationContext,
       });
       this.bootstrap
         .configure({

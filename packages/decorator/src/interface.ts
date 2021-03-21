@@ -75,4 +75,6 @@ export enum MidwayFrameworkType {
   WSS = '',
   SERVERLESS_APP = '@midwayjs/serverless-app',
   CUSTOM = '',
+  EMPTY = '',
+  LIGHT = '',
 }

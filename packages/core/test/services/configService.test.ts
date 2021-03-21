@@ -65,9 +65,9 @@ describe('/test/services/configService.test.ts', () => {
 
     await cfg.load();
 
-    assert.ok(Object.keys(cfg.configuration).length === 2);
-    assert.ok(cfg.configuration.bb === 222);
-    assert.ok(cfg.configuration.aa === 1);
+    assert.ok(Object.keys(cfg.getConfiguration()).length === 2);
+    assert.ok(cfg.getConfiguration().bb === 222);
+    assert.ok(cfg.getConfiguration().aa === 1);
   });
 
   it('should test default', async () => {
@@ -93,7 +93,7 @@ describe('/test/services/configService.test.ts', () => {
 
     await cfg.load();
 
-    expect(cfg.configuration).toEqual({
+    expect(cfg.getConfiguration()).toEqual({
       key: {
         data: 123,
       },
@@ -115,7 +115,7 @@ describe('/test/services/configService.test.ts', () => {
 
     await cfg.load();
 
-    expect(cfg.configuration).toEqual({
+    expect(cfg.getConfiguration()).toEqual({
       key: {
         data: 123,
       },

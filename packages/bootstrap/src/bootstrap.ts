@@ -2,6 +2,7 @@ import {
   IMidwayFramework,
   IMidwayBootstrapOptions,
   MidwayFrameworkType,
+  ConfigFramework,
 } from '@midwayjs/core';
 import { join } from 'path';
 import { createConsoleLogger, ILogger, IMidwayLogger } from '@midwayjs/logger';
@@ -24,13 +25,16 @@ export class BootstrapStarter {
     MidwayFrameworkType,
     IMidwayFramework<any, any>
   >();
+  protected globalConfig: any;
 
   public configure(options: IMidwayBootstrapOptions) {
     this.globalOptions = options;
     return this;
   }
 
-  public load(unit: IMidwayFramework<any, any>) {
+  public load(unit: (globalConfig: unknown) => IMidwayFramework<any, any>);
+  public load(unit: IMidwayFramework<any, any>);
+  public load(unit: any) {
     this.bootstrapItems.push(unit);
     return this;
   }
@@ -38,6 +42,17 @@ export class BootstrapStarter {
   public async init() {
     this.appDir = this.globalOptions.appDir || process.cwd();
     this.baseDir = this.getBaseDir();
+
+    const framework = new ConfigFramework();
+    await framework.initialize({
+      baseDir: this.baseDir,
+      appDir: this.appDir,
+    });
+
+    this.globalConfig =
+      framework.getApplicationContext().getConfigService().getConfiguration() ||
+      {};
+    this.refreshBootstrapItems();
 
     await this.getFirstActions('initialize', {
       ...this.globalOptions,
@@ -78,7 +93,7 @@ export class BootstrapStarter {
     });
 
     await this.getFirstActions('loadLifeCycles', true);
-    await this.getFirstActions('afterContainerReady');
+    await this.getActions('afterContainerReady');
   }
 
   public async run() {
@@ -92,23 +107,36 @@ export class BootstrapStarter {
 
   public getActions(action: string, args?): any[] {
     return this.bootstrapItems.map(item => {
-      return item[action](args);
+      if (item[action]) {
+        return item[action](args);
+      }
     });
   }
 
   public async getFirstActions(action: string, args?) {
-    if (this.bootstrapItems.length) {
-      return this.bootstrapItems[0][action]?.(args);
+    if (this.bootstrapItems.length && this.bootstrapItems[0][action]) {
+      return this.bootstrapItems[0][action](args);
     }
   }
 
   public getTailActions(action: string, args?): any[] {
     if (this.bootstrapItems.length > 1) {
       return this.bootstrapItems.slice(1).map(item => {
-        return item[action]?.(args);
+        if (item[action]) {
+          return item[action](args);
+        }
       });
     }
     return [];
+  }
+
+  protected refreshBootstrapItems() {
+    this.bootstrapItems = this.bootstrapItems.map(bootstrapItem => {
+      if (typeof bootstrapItem === 'function') {
+        return (bootstrapItem as any)(this.globalConfig);
+      }
+      return bootstrapItem;
+    });
   }
 
   protected getBaseDir() {
@@ -151,7 +179,9 @@ export class Bootstrap {
    * load midway framework unit
    * @param unit
    */
-  static load(unit: IMidwayFramework<any, any>) {
+  static load(unit: (globalConfig: unknown) => IMidwayFramework<any, any>);
+  static load(unit: IMidwayFramework<any, any>);
+  static load(unit: any) {
     this.getStarter().load(unit);
     return this;
   }

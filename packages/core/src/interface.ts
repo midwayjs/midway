@@ -287,6 +287,7 @@ export interface IConfigService {
   addObject(obj: object);
   load();
   getConfiguration(configKey?: string);
+  clearAllConfig();
 }
 
 export interface IEnvironmentService {
