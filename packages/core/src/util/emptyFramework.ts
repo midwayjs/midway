@@ -8,7 +8,7 @@ const noop = {
   error() {},
   debug() {},
   write() {},
-}
+};
 
 /**
  * 一个不 ready 的空框架

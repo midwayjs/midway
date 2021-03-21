@@ -32,8 +32,8 @@ export class BootstrapStarter {
     return this;
   }
 
-  public load(unit: (globalConfig: any) => IMidwayFramework<any, any>)
-  public load(unit: IMidwayFramework<any, any>)
+  public load(unit: (globalConfig: any) => IMidwayFramework<any, any>);
+  public load(unit: IMidwayFramework<any, any>);
   public load(unit: any) {
     this.bootstrapItems.push(unit);
     return this;
@@ -48,7 +48,9 @@ export class BootstrapStarter {
       baseDir: this.baseDir,
     });
 
-    this.globalConfig = framework.getApplicationContext().getConfigService().getConfiguration() || {};
+    this.globalConfig =
+      framework.getApplicationContext().getConfigService().getConfiguration() ||
+      {};
     this.refreshBootstrapItems();
 
     await this.getFirstActions('initialize', {
