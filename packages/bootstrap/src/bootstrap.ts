@@ -46,11 +46,13 @@ export class BootstrapStarter {
     const framework = new EmptyFramework();
     await framework.initialize({
       baseDir: this.baseDir,
+      appDir: this.appDir,
     });
 
+    const applicationContext = framework.getApplicationContext();
+
     this.globalConfig =
-      framework.getApplicationContext().getConfigService().getConfiguration() ||
-      {};
+      applicationContext.getConfigService().getConfiguration() || {};
     this.refreshBootstrapItems();
 
     await this.getFirstActions('initialize', {
@@ -58,14 +60,11 @@ export class BootstrapStarter {
       baseDir: this.baseDir,
       appDir: this.appDir,
       isMainFramework: true,
+      applicationContext,
       globalApplicationHandler: (type: MidwayFrameworkType) => {
         return this.globalAppMap.get(type);
       },
     });
-
-    const applicationContext = await this.getFirstActions(
-      'getApplicationContext'
-    );
 
     await Promise.all(
       this.getTailActions('initialize', {
