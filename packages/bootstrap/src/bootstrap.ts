@@ -50,7 +50,8 @@ export class BootstrapStarter {
     });
 
     this.globalConfig =
-      framework.getApplicationContext().getConfigService().getConfiguration() || {};
+      framework.getApplicationContext().getConfigService().getConfiguration() ||
+      {};
     this.refreshBootstrapItems();
 
     await this.getFirstActions('initialize', {
