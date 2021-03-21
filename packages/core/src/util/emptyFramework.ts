@@ -30,11 +30,38 @@ export class EmptyFramework extends BaseFramework<any, any, any> {
     this.app = {} as IMidwayApplication;
   }
 
-  getDefaultContextLoggerClass() {
-    return super.getDefaultContextLoggerClass();
+  async containerReady() {}
+
+  async afterContainerReady() {}
+}
+
+/**
+ * 一个只加载配置的框架
+ */
+export class ConfigFramework extends BaseFramework<any, any, any> {
+  logger = noop;
+  appLogger = noop;
+  getApplication(): any {
+    return this.app;
   }
 
-  async containerReady() {}
+  getFrameworkType(): MidwayFrameworkType {
+    return MidwayFrameworkType.EMPTY;
+  }
+
+  async run(): Promise<void> {}
+
+  async applicationInitialize(options: IMidwayBootstrapOptions) {
+    this.app = {} as IMidwayApplication;
+  }
+
+  async containerReady() {
+    await this.applicationContext.ready();
+    if (this.applicationContext.getConfigService()) {
+      // 加载配置
+      await this.applicationContext.getConfigService().load();
+    }
+  }
 
   async afterContainerReady() {}
 }
@@ -55,9 +82,5 @@ export class LightFramework extends BaseFramework<any, any, any> {
 
   async applicationInitialize(options: IMidwayBootstrapOptions) {
     this.app = {} as IMidwayApplication;
-  }
-
-  getDefaultContextLoggerClass() {
-    return super.getDefaultContextLoggerClass();
   }
 }

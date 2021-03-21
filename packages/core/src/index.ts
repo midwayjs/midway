@@ -52,6 +52,8 @@ export * from './util/emptyFramework';
 export { plainToClass, classToPlain } from 'class-transformer';
 export * from './logger';
 export { createConfiguration } from './functional/configuration';
+export { MidwayConfigService } from './service/configService';
+export { MidwayEnvironmentService } from './service/environmentService';
 /**
  * @deprecated please import from @midwayjs/logger
  */

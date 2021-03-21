@@ -1,11 +1,10 @@
-import { createMidwayLogger } from '../src';
+import { createMidwayLogger, EmptyFramework } from '../src';
 import { MidwayContextLogger } from '@midwayjs/logger';
-import { MockFramework } from './util';
 import { join } from 'path';
 
 describe('/test/logger.test.ts', () => {
   it('should create context logger', async () => {
-    const framework = new MockFramework();
+    const framework = new EmptyFramework();
     await framework.initialize({
       baseDir: join(
         __dirname,

@@ -2,7 +2,7 @@ import {
   IMidwayFramework,
   IMidwayBootstrapOptions,
   MidwayFrameworkType,
-  EmptyFramework,
+  ConfigFramework,
 } from '@midwayjs/core';
 import { join } from 'path';
 import { createConsoleLogger, ILogger, IMidwayLogger } from '@midwayjs/logger';
@@ -32,7 +32,7 @@ export class BootstrapStarter {
     return this;
   }
 
-  public load(unit: (globalConfig: any) => IMidwayFramework<any, any>);
+  public load(unit: (globalConfig: unknown) => IMidwayFramework<any, any>);
   public load(unit: IMidwayFramework<any, any>);
   public load(unit: any) {
     this.bootstrapItems.push(unit);
@@ -43,7 +43,7 @@ export class BootstrapStarter {
     this.appDir = this.globalOptions.appDir || process.cwd();
     this.baseDir = this.getBaseDir();
 
-    const framework = new EmptyFramework();
+    const framework = new ConfigFramework();
     await framework.initialize({
       baseDir: this.baseDir,
       appDir: this.appDir,
@@ -173,7 +173,9 @@ export class Bootstrap {
    * load midway framework unit
    * @param unit
    */
-  static load(unit: IMidwayFramework<any, any>) {
+  static load(unit: (globalConfig: unknown) => IMidwayFramework<any, any>);
+  static load(unit: IMidwayFramework<any, any>);
+  static load(unit: any) {
     this.getStarter().load(unit);
     return this;
   }

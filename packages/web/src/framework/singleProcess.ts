@@ -41,7 +41,7 @@ export class SingleProcess
     }
   }
 
-  configure(options: IMidwayWebConfigurationOptions): SingleProcess {
+  configure(options: IMidwayWebConfigurationOptions = {}): SingleProcess {
     this.configurationOptions = options;
     return this;
   }
@@ -67,6 +67,7 @@ export class SingleProcess
       plugins: this.configurationOptions.plugins,
       mode: 'single',
       isTsMode: this.isTsMode || true,
+      applicationContext: options.applicationContext,
     });
     // https config
     if (this.configurationOptions.key && this.configurationOptions.cert) {

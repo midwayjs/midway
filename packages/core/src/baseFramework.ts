@@ -59,12 +59,13 @@ export abstract class BaseFramework<
   protected BaseContextLoggerClass: any;
   protected isMainFramework: boolean;
 
-  public configure(options: OPT): BaseFramework<APP, CTX, OPT> {
-    this.configurationOptions = options;
+  public configure(options?: OPT): BaseFramework<APP, CTX, OPT> {
+    this.configurationOptions = options || ({} as OPT);
     this.BaseContextLoggerClass =
-      options.ContextLoggerClass || this.getDefaultContextLoggerClass();
-    this.logger = options.logger;
-    this.appLogger = options.appLogger;
+      this.configurationOptions.ContextLoggerClass ||
+      this.getDefaultContextLoggerClass();
+    this.logger = this.configurationOptions.logger;
+    this.appLogger = this.configurationOptions.appLogger;
     return this;
   }
 
