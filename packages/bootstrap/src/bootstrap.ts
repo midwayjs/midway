@@ -93,7 +93,7 @@ export class BootstrapStarter {
     });
 
     await this.getFirstActions('loadLifeCycles', true);
-    await this.getFirstActions('afterContainerReady');
+    await this.getActions('afterContainerReady');
   }
 
   public async run() {
@@ -107,20 +107,24 @@ export class BootstrapStarter {
 
   public getActions(action: string, args?): any[] {
     return this.bootstrapItems.map(item => {
-      return item[action](args);
+      if (item[action]) {
+        return item[action](args);
+      }
     });
   }
 
   public async getFirstActions(action: string, args?) {
-    if (this.bootstrapItems.length) {
-      return this.bootstrapItems[0][action]?.(args);
+    if (this.bootstrapItems.length && this.bootstrapItems[0][action]) {
+      return this.bootstrapItems[0][action](args);
     }
   }
 
   public getTailActions(action: string, args?): any[] {
     if (this.bootstrapItems.length > 1) {
       return this.bootstrapItems.slice(1).map(item => {
-        return item[action]?.(args);
+        if (item[action]) {
+          return item[action](args);
+        }
       });
     }
     return [];
