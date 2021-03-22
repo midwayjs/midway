@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.9.0](https://github.com/midwayjs/midway/compare/v2.8.13...v2.9.0) (2021-03-22)
+
+**Note:** Version bump only for package @midwayjs/grpc
+
+
+
+
+
 ## [2.8.13](https://github.com/midwayjs/midway/compare/v2.8.12...v2.8.13) (2021-03-17)
 
 **Note:** Version bump only for package @midwayjs/grpc

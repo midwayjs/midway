@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.9.0](https://github.com/midwayjs/midway/compare/v2.8.13...v2.9.0) (2021-03-22)
+
+
+### Features
+
+* add socket.io-redis support ([#874](https://github.com/midwayjs/midway/issues/874)) ([2818920](https://github.com/midwayjs/midway/commit/2818920b9d3391c81666c5b8587a899b9b237d9e))
+* run multi framework in one process ([#925](https://github.com/midwayjs/midway/issues/925)) ([330555f](https://github.com/midwayjs/midway/commit/330555f93b9af2a783771edd58bb9431a325938f))
+* support bootstrap load config first ([#931](https://github.com/midwayjs/midway/issues/931)) ([ae9ed26](https://github.com/midwayjs/midway/commit/ae9ed261aacdb483d3a9a612be79fff384503bcc))
+
+
+
+
+
 ## [2.8.11](https://github.com/midwayjs/midway/compare/v2.8.10...v2.8.11) (2021-03-12)
 
 

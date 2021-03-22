@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/serverless-fc-starter",
-  "version": "2.8.13",
+  "version": "2.9.0",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
@@ -9,8 +9,8 @@
   },
   "devDependencies": {
     "@midwayjs/cli": "^1.2.36",
-    "@midwayjs/core": "^2.8.13",
-    "@midwayjs/decorator": "^2.8.11",
+    "@midwayjs/core": "^2.9.0",
+    "@midwayjs/decorator": "^2.9.0",
     "@midwayjs/runtime-mock": "^2.8.13",
     "raw-body": "^2.4.1"
   },

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.9.0](https://github.com/midwayjs/midway/compare/v2.8.13...v2.9.0) (2021-03-22)
+
+
+### Features
+
+* run multi framework in one process ([#925](https://github.com/midwayjs/midway/issues/925)) ([330555f](https://github.com/midwayjs/midway/commit/330555f93b9af2a783771edd58bb9431a325938f))
+* support bootstrap load config first ([#931](https://github.com/midwayjs/midway/issues/931)) ([ae9ed26](https://github.com/midwayjs/midway/commit/ae9ed261aacdb483d3a9a612be79fff384503bcc))
+
+
+
+
+
 ## [2.8.13](https://github.com/midwayjs/midway/compare/v2.8.12...v2.8.13) (2021-03-17)
 
 **Note:** Version bump only for package @midwayjs/bootstrap

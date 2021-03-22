@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.9.0](https://github.com/midwayjs/midway/compare/v2.8.13...v2.9.0) (2021-03-22)
+
+
+### Bug Fixes
+
+* create log dir in serverless environment ([#935](https://github.com/midwayjs/midway/issues/935)) ([8a15f69](https://github.com/midwayjs/midway/commit/8a15f694a19a6274bce5172f1dce716ef3d8c0a8))
+* providerWrapper get empty object in component ([#926](https://github.com/midwayjs/midway/issues/926)) ([5e46d19](https://github.com/midwayjs/midway/commit/5e46d19386ae91820e9df71a02a3de7b3f54d3dc))
+
+
+### Features
+
+* add midway cache ([#911](https://github.com/midwayjs/midway/issues/911)) ([cc49eee](https://github.com/midwayjs/midway/commit/cc49eee739ba6d2c37b9270b6cf5239afde4a912))
+* add socket.io-redis support ([#874](https://github.com/midwayjs/midway/issues/874)) ([2818920](https://github.com/midwayjs/midway/commit/2818920b9d3391c81666c5b8587a899b9b237d9e))
+* run multi framework in one process ([#925](https://github.com/midwayjs/midway/issues/925)) ([330555f](https://github.com/midwayjs/midway/commit/330555f93b9af2a783771edd58bb9431a325938f))
+* support bootstrap load config first ([#931](https://github.com/midwayjs/midway/issues/931)) ([ae9ed26](https://github.com/midwayjs/midway/commit/ae9ed261aacdb483d3a9a612be79fff384503bcc))
+
+
+
+
+
 ## [2.8.13](https://github.com/midwayjs/midway/compare/v2.8.12...v2.8.13) (2021-03-17)
 
 

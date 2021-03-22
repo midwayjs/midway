@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.9.0](https://github.com/midwayjs/midway-faas/compare/v2.8.13...v2.9.0) (2021-03-22)
+
+
+### Bug Fixes
+
+* create log dir in serverless environment ([#935](https://github.com/midwayjs/midway-faas/issues/935)) ([8a15f69](https://github.com/midwayjs/midway-faas/commit/8a15f694a19a6274bce5172f1dce716ef3d8c0a8))
+
+
+
+
+
 ## [2.8.13](https://github.com/midwayjs/midway-faas/compare/v2.8.12...v2.8.13) (2021-03-17)
 
 **Note:** Version bump only for package @midwayjs/express-layer
