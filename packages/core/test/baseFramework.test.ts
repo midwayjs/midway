@@ -15,10 +15,10 @@ import {
   IMidwayApplication,
   IMidwayBootstrapOptions,
   MidwayRequestContainer,
+  LightFramework,
 } from '../src';
 import * as mm from 'mm';
 import { LifeCycleTest, LifeCycleTest1, TestBinding } from './fixtures/lifecycle';
-import { LightFramework } from '../src/util/emptyFramework';
 import sinon = require('sinon');
 
 @Provide()

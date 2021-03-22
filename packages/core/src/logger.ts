@@ -1,5 +1,5 @@
 import { createLogger, LoggerOptions } from '@midwayjs/logger';
-import { IMidwayFramework } from './interface';
+import { IMidwayFramework, MIDWAY_LOGGER_WRITEABLE_DIR } from './interface';
 import { isDevelopmentEnvironment, getUserHome } from './util';
 import { join } from 'path';
 
@@ -17,5 +17,12 @@ export const createMidwayLogger = (
       : join(getUserHome(), 'logs', framework.getProjectName()),
     level: isDevelopmentEnv ? 'info' : 'warn',
   };
+  if (process.env[MIDWAY_LOGGER_WRITEABLE_DIR]) {
+    loggerOptions.dir = join(
+      process.env[MIDWAY_LOGGER_WRITEABLE_DIR],
+      'logs',
+      framework.getProjectName()
+    );
+  }
   return createLogger(name, Object.assign({}, loggerOptions, options));
 };
