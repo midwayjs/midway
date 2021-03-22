@@ -4,6 +4,9 @@ const fs = require('fs');
 const request = require('request');
 
 const socketPath = join(os.tmpdir(), `server-${Date.now()}.sock`);
+const logDir = join(os.tmpdir(), `app-${Date.now()}`);
+
+process.env.MIDWAY_LOGGER_WRITEABLE_DIR = logDir;
 
 module.exports = engine => {
   engine.addRuntimeExtension({

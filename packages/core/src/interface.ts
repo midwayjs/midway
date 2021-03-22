@@ -386,3 +386,5 @@ export interface IMidwayFramework<APP extends IMidwayApplication, T extends ICon
   getProjectName(): string;
   getDefaultContextLoggerClass(): any;
 }
+
+export const MIDWAY_LOGGER_WRITEABLE_DIR = 'MIDWAY_LOGGER_WRITEABLE_DIR';
