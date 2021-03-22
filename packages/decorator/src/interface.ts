@@ -48,21 +48,83 @@ export enum MSProviderType {
 }
 
 /**
- * all decorator metadata format
+ * grpc decorator metadata format
  */
-export namespace DecoratorMetadata {
-
-  export interface GRPCProviderOption {
+export namespace GRPCMetadata {
+  export interface ProviderOptions {
     serviceName?: string;
     package?: string;
   }
 
-  export interface ProviderClassMetadata {
+  export interface ProviderMetadata {
     type: MSProviderType,
-    metadata: GRPCProviderOption
+    metadata: ProviderOptions
+  }
+}
+
+export namespace FaaSMetadata {
+
+  export interface EventTriggerOptions {
+
   }
 
-  export interface FaaSHTTPTriggerMetadata {
+  export interface EventTriggerMetadata {
+
+  }
+
+  export interface HTTPTriggerOptions {
+
+  }
+
+  export interface HTTPTriggerMetadata {
+
+  }
+
+  export interface APIGatewayTriggerOptions {
+
+  }
+
+  export interface APIGatewayTriggerMetadata {
+
+  }
+
+  export interface OSTriggerOptions {
+
+  }
+
+  export interface OSTriggerMetadata {
+
+  }
+
+  export interface CDNTriggerOptions {
+
+  }
+
+  export interface CDNTriggerMetadata {
+
+  }
+
+  export interface SLSTriggerOptions {
+
+  }
+
+  export interface SLSTriggerMetadata {
+
+  }
+
+  export interface TimerTriggerOptions {
+
+  }
+
+  export interface TimerTriggerMetadata {
+
+  }
+
+  export interface MQTriggerOptions {
+
+  }
+
+  export interface MQTriggerMetadata {
 
   }
 
@@ -80,11 +142,12 @@ export enum MidwayFrameworkType {
   WSS = '',
   SERVERLESS_APP = '@midwayjs/serverless-app',
   CUSTOM = '',
-  EMPTY = '',
-  LIGHT = '',
+  EMPTY = 'empty',
+  LIGHT = 'light',
 }
 
 export enum ServerlessTriggerType {
+  EVENT = 'event',
   HTTP = 'http',
   API_GATEWAY = 'api_gateway',
   OS = 'oss',
