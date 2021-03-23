@@ -34,6 +34,16 @@ describe('test/faas-v2.test.ts', () => {
       })
       .catch(err => done(err));
   });
+  it('http get controller', async done => {
+    request(app)
+      .get('/user')
+      .expect(200)
+      .then(response => {
+        assert(response.text === 'user');
+        done();
+      })
+      .catch(err => done(err));
+  });
   it('http post', async done => {
     await request(app)
       .post('/hello')
