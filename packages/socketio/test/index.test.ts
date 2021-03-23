@@ -1,9 +1,12 @@
 import * as socketClient from 'socket.io-client';
 import { closeApp, createServer } from './utils';
-import { createRedisAdapter } from '../src/util';
+import { createRedisAdapter } from '../src';
 
 function createClient(opts: SocketIOClient.ConnectOpts) {
   let url = 'http://127.0.0.1:' + opts.port;
+  if (opts.path) {
+    url += opts.path;
+  }
   if (opts.query) {
     url += '?' + opts.query;
   }
@@ -14,14 +17,17 @@ describe('/test/index.test.ts', () => {
   it('should test create socket app and use default namespace', async () => {
     const app = await createServer('base-app', { port: 3000});
     const client = await createClient({
-      port: '3000',
+      port: '3000/test',
     });
+
     await new Promise<void>(resolve =>  {
-      client.on('ok', (data) => {
-        console.log(data);
-        resolve();
+      client.on('connect', () => {
+        client.on('ok', (data) => {
+          console.log(data);
+          resolve();
+        })
+        client.emit('my');
       })
-      client.emit('my');
     });
 
     await client.close();

@@ -109,6 +109,12 @@ export class MidwaySocketIOFramework extends BaseFramework<
     const nsp = this.app.of(controllerOption.namespace);
     this.namespaceList.push(controllerOption.namespace);
 
+    nsp.use((socket: any, next) => {
+      this.app.createAnonymousContext(socket);
+      socket.requestContext.registerObject('socket', socket);
+      next();
+    });
+
     nsp.on('connect', async (socket: IMidwaySocketIOContext) => {
       const wsEventInfos: WSEventInfo[] = getClassMetadata(
         WS_EVENT_KEY,
