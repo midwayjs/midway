@@ -132,12 +132,12 @@ export class FaaSStarter implements IFaaSStarter {
       return this.webApplication;
     });
     this.loader.registerHook(PLUGIN_KEY, (key, target) => {
-      return target[REQUEST_OBJ_CTX_KEY]?.[key] || this.webApplication[key];
+      return target?.[REQUEST_OBJ_CTX_KEY]?.[key] || this.webApplication[key];
     });
 
     this.loader.registerHook(LOGGER_KEY, (key, target) => {
       return (
-        target[REQUEST_OBJ_CTX_KEY]?.['logger'] ||
+        target?.[REQUEST_OBJ_CTX_KEY]?.['logger'] ||
         this.webApplication.getLogger()
       );
     });
