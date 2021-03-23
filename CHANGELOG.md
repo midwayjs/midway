@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.16](https://github.com/midwayjs/midway/compare/serverless-v1.2.15...serverless-v1.2.16) (2021-03-23)
+
+
+### Bug Fixes
+
+*  faas npe ([d9bb501](https://github.com/midwayjs/midway/commit/d9bb501edd71e48b70ff2c2fc0d1115a5f674ab9))
+* support user config code dir ([#850](https://github.com/midwayjs/midway/issues/850)) ([6ca9a25](https://github.com/midwayjs/midway/commit/6ca9a258b8710150be811919cd51672014ab87cd))
+
+
+
+
+
 ## [1.2.15](https://github.com/midwayjs/midway/compare/serverless-v1.2.14...serverless-v1.2.15) (2020-09-30)
 
 **Note:** Version bump only for package midway-faas
