@@ -347,14 +347,16 @@ export class MidwayFaaSFramework extends BaseFramework<
     this.getApplicationContext().registerDataHandler(
       PLUGIN_KEY,
       (key, meta, target) => {
-        return target[REQUEST_OBJ_CTX_KEY]?.[key] || this.app[key];
+        return target?.[REQUEST_OBJ_CTX_KEY]?.[key] || this.app[key];
       }
     );
 
     this.getApplicationContext().registerDataHandler(
       LOGGER_KEY,
       (key, meta, target) => {
-        return target[REQUEST_OBJ_CTX_KEY]?.['logger'] || this.app.getLogger();
+        return (
+          target?.[REQUEST_OBJ_CTX_KEY]?.['logger'] || this.app.getLogger()
+        );
       }
     );
   }
