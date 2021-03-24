@@ -34,6 +34,9 @@ export const start2 = async options => {
   });
   const runtime = await start({
     layers: layers,
+    getApp: () => {
+      return starterInstance && starterInstance.getApplication();
+    },
     initContext: initializeContext,
   });
   return {
