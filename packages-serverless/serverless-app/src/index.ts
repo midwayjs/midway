@@ -204,7 +204,7 @@ export class Framework
       framework: Framework,
       layers: layers,
       starter: require(starterName),
-      initializeContext: undefined,
+      initializeContext: this.configurationOptions?.initContext,
     });
     this.innerFramework = startResult.framework;
     this.runtime = startResult.runtime;

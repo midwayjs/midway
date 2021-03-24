@@ -27,9 +27,8 @@
     "node": ">= 10"
   },
   "files": [
-    "plugin.json",
-    "dist",
-    "src"
+    "dist/**/*.js",
+    "dist/**/*.d.ts"
   ],
   "scripts": {
     "build": "midway-bin build -c",
