@@ -3,6 +3,7 @@ import {
   IMidwayBootstrapOptions,
   MidwayFrameworkType,
   ConfigFramework,
+  IMidwayApplication,
 } from '@midwayjs/core';
 import { join } from 'path';
 import { createConsoleLogger, ILogger, IMidwayLogger } from '@midwayjs/logger';
@@ -23,7 +24,7 @@ export class BootstrapStarter {
   protected globalOptions: Partial<IMidwayBootstrapOptions> = {};
   protected globalAppMap = new Map<
     MidwayFrameworkType,
-    IMidwayFramework<any, any>
+    IMidwayApplication<any>
   >();
   protected globalConfig: any;
 
@@ -148,6 +149,10 @@ export class BootstrapStarter {
     } else {
       return join(this.appDir, 'dist');
     }
+  }
+
+  public getBootstrapAppMap() {
+    return this.globalAppMap;
   }
 }
 

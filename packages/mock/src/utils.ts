@@ -1,4 +1,4 @@
-import { BootstrapStarter } from '@midwayjs/bootstrap';
+import { Bootstrap, BootstrapStarter } from '@midwayjs/bootstrap';
 import {
   clearContainerCache,
   IMidwayApplication,
@@ -187,7 +187,7 @@ export async function create<
       appDir,
       baseDir: options.baseDir,
     })
-    .load(framework);
+    .load(framework as any);
 
   await starter.init();
   await starter.run();
@@ -260,4 +260,24 @@ export async function createFunctionApp<
     '@midwayjs/serverless-app'
   );
   return (framework.getApplication() as unknown) as Y;
+}
+
+class BootstrapAppStarter {
+  getApp(type: MidwayFrameworkType): IMidwayApplication<any> {
+    const appMap = Bootstrap.starter.getBootstrapAppMap();
+    return appMap.get(type);
+  }
+
+  async close() {
+    return Bootstrap.stop();
+  }
+}
+
+export async function createBootstrap(
+  entryFile: string
+): Promise<BootstrapAppStarter> {
+  await create(undefined, {
+    entryFile,
+  });
+  return new BootstrapAppStarter();
 }
