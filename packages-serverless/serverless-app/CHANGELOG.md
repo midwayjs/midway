@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.9.1](https://github.com/midwayjs/midway/compare/v2.9.0...v2.9.1) (2021-03-24)
+
+
+### Bug Fixes
+
+* /user/ => /user ([#941](https://github.com/midwayjs/midway/issues/941)) ([6883400](https://github.com/midwayjs/midway/commit/688340021d145c9ce07a05fdda0c1ad8788959df))
+
+
+
+
+
 # [2.9.0](https://github.com/midwayjs/midway/compare/v2.8.13...v2.9.0) (2021-03-22)
 
 **Note:** Version bump only for package @midwayjs/serverless-app
