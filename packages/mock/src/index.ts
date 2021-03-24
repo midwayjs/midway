@@ -1,4 +1,10 @@
-export { create, close, createApp, createFunctionApp } from './utils';
+export {
+  create,
+  close,
+  createApp,
+  createFunctionApp,
+  createBootstrap,
+} from './utils';
 export * from './client/http';
 export * from './client/rabbitMQ';
 

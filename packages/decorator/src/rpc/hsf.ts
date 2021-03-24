@@ -9,7 +9,6 @@ export interface HSFOpts {
 }
 
 /**
- * @deprecated
  * @param hsfOption
  * @constructor
  */
