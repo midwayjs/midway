@@ -1,24 +1,14 @@
-import * as socketClient from 'socket.io-client';
 import { closeApp, createServer } from './utils';
 import { createRedisAdapter } from '../src';
-
-function createClient(opts: SocketIOClient.ConnectOpts) {
-  let url = 'http://127.0.0.1:' + opts.port;
-  if (opts.path) {
-    url += opts.path;
-  }
-  if (opts.query) {
-    url += '?' + opts.query;
-  }
-  return socketClient(url, opts);
-}
+import { createSocketIOClient } from '@midwayjs/mock';
 
 describe('/test/index.test.ts', () => {
   it('should test create socket app and use default namespace', async () => {
     const app = await createServer('base-app', { port: 3000});
-    const client = await createClient({
-      port: '3000/test',
-    });
+    const client = createSocketIOClient({
+      port: 3000,
+      namespace: '/test',
+    })
 
     await new Promise<void>(resolve =>  {
       client.on('connect', () => {
@@ -39,7 +29,7 @@ describe('/test/index.test.ts', () => {
       port: 3000,
       adapter: createRedisAdapter({ host: '127.0.0.1', port: 6379}),
     });
-    const client = await createClient({
+    const client = await createSocketIOClient({
       port: '3000',
     });
     await new Promise<void>(resolve =>  {
