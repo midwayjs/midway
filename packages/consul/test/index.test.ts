@@ -30,8 +30,37 @@ describe('/test/feature.test.ts', () => {
 
     it('should get balancer from ioc container', async () => {
       const balancerService = await app.getApplicationContext().getAsync<IConsulBalancer>('consul:balancerService');
-      const service = await balancerService.getBalancer().select(app.getProjectName());
-      // const service = await balancerService.getBalancer().select(app.getProjectName(),false);
+      expect(balancerService).toBeDefined();
+    });
+
+    it('should throw error when not imeplements balancer', async () => {
+      const balancerService = await app.getApplicationContext().getAsync<IConsulBalancer>('consul:balancerService');
+      try {
+        await balancerService.getServiceBalancer('noexists');
+      } catch (e) {
+        expect(e).toBeDefined();
+      }
+    });
+
+    it('should throw error when lookup not exist service', async () => {
+      const balancerService = await app.getApplicationContext().getAsync<IConsulBalancer>('consul:balancerService');
+      try {
+        await balancerService.getServiceBalancer().select('noexists');
+      } catch (e) {
+        expect(e).toBeDefined();
+      }
+    });
+
+    it('should lookup consul service by name', async () => {
+      const balancerService = await app.getApplicationContext().getAsync<IConsulBalancer>('consul:balancerService');
+      const service = await balancerService.getServiceBalancer().select(app.getProjectName(), false);
+      expect(service['ServiceAddress']).toBe('127.0.0.1');
+      expect(service['ServicePort']).toBe(7001);
+    });
+
+    it('should lookup consul service which check-passing', async () => {
+      const balancerService = await app.getApplicationContext().getAsync<IConsulBalancer>('consul:balancerService');
+      const service = await balancerService.getServiceBalancer().select(app.getProjectName());
       expect(service['ServiceAddress']).toBe('127.0.0.1');
       expect(service['ServicePort']).toBe(7001);
     });

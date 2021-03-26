@@ -10,8 +10,7 @@ export class TestController {
   // @ts-ignore
   @Get('/balancer/lookup/:serviceName')
   async lookupConsulService(@Param() serviceName: string) {
-    const balancer = this.balancerService.getBalancer();
+    const balancer = this.balancerService.getServiceBalancer();
     return await balancer.select(serviceName);
-    // return await balancer.select(serviceName, false);
   }
 }

@@ -1,25 +1,25 @@
 import * as Consul from 'consul';
-import { IBalancer, IConsulBalancer } from '../interface';
+import { IServiceBalancer, IConsulBalancer } from '../interface';
 
-abstract class Balancer implements IBalancer {
+abstract class Balancer implements IServiceBalancer {
   protected constructor(protected consul: Consul.Consul) {
     //
   }
 
   async select(serviceName: string, passingOnly = true): Promise<any | never> {
-    throw new Error('not implemented');
+    // throw new Error('not implemented');
   }
 
-  async loadServices(serviceName: string, passingOnly = true) {
-    if (passingOnly) return this.loadPassing(serviceName);
-    return this.loadAll(serviceName);
+  async loadServices(serviceName: string, passingOnly = true): Promise<any[]> {
+    if (passingOnly) return await this.loadPassing(serviceName);
+    return await this.loadAll(serviceName);
   }
 
-  private async loadAll(serviceName: string) {
-    return (await this.consul.catalog.service.nodes(serviceName)) as Array<any>;
+  private async loadAll(serviceName: string): Promise<any[]> {
+    return (await this.consul.catalog.service.nodes(serviceName)) as any[];
   }
 
-  private async loadPassing(serviceName: string) {
+  private async loadPassing(serviceName: string): Promise<any[]> {
     const passingIds = [];
     const checks = (await this.consul.health.checks(serviceName)) as any[];
 
@@ -35,21 +35,6 @@ abstract class Balancer implements IBalancer {
   }
 }
 
-class DefaultBalancer extends Balancer {
-  constructor(consul: Consul.Consul) {
-    super(consul);
-  }
-
-  async select(serviceName: string, passingOnly = true): Promise<any | never> {
-    const instances = await this.loadServices(serviceName, passingOnly);
-    if (instances.length > 0) {
-      return instances[0];
-    }
-
-    throw new Error('no avaiable instance named ' + serviceName);
-  }
-}
-
 class RandomBalancer extends Balancer {
   constructor(consul: Consul.Consul) {
     super(consul);
@@ -62,7 +47,7 @@ class RandomBalancer extends Balancer {
       return instances[Math.floor(Math.random() * instances.length)];
     }
 
-    throw new Error('no avaiable instance named ' + serviceName);
+    throw new Error('no available instance named ' + serviceName);
   }
 
   /**
@@ -88,10 +73,8 @@ export class ConsulBalancer implements IConsulBalancer {
     //
   }
 
-  getBalancer(strategy?: string): IBalancer {
+  getServiceBalancer(strategy?: string): IServiceBalancer {
     switch (strategy) {
-      case 'default':
-        return new DefaultBalancer(this.consul);
       case 'random':
         return new RandomBalancer(this.consul);
     }

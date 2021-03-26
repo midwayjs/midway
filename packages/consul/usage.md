@@ -4,7 +4,6 @@
 
 ```shell
 npm i @midwayjs/consul -S
-# optional
 npm i @types/consul -D
 ```
 
@@ -44,7 +43,7 @@ consul: {
     host: '192.168.0.10',
     // consul server 端口
     port: 8500,
-    // 调用服务的策略(default 默认选取，random 具有随机性)
+    // 调用服务的策略(默认选取 random 具有随机性)
     strategy: 'random',
   },
   service: {

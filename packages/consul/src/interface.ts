@@ -2,7 +2,7 @@ import * as Consul from "consul";
 import { ConsulOptions } from "consul";
 import RegisterOptions = Consul.Agent.Service.RegisterOptions;
 
-export interface IBalancer {
+export interface IServiceBalancer {
   /**
    * 根据服务名称选择实例
    * @param serviceName 注册的服务名称
@@ -14,9 +14,9 @@ export interface IBalancer {
 export interface IConsulBalancer {
   /**
    * 根绝策略返回负载均衡器
-   * @param strategy
+   * @param strategy 负载均衡策略
    */
-  getBalancer(strategy?: string): IBalancer;
+  getServiceBalancer(strategy?: string): IServiceBalancer;
 }
 
 export interface IConsulProviderInfoOptions extends ConsulOptions {

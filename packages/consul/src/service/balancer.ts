@@ -1,7 +1,7 @@
 import { Init, Inject, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
 import { ConsulBalancer } from '../lib/balancer';
 import * as Consul from 'consul';
-import { IBalancer, IConsulBalancer } from '../interface';
+import { IServiceBalancer, IConsulBalancer } from '../interface';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -16,7 +16,7 @@ export class BalancerService implements IConsulBalancer {
     this.consulBalancer = new ConsulBalancer(this.consul);
   }
 
-  getBalancer(strategy = 'random'): IBalancer {
-    return this.consulBalancer.getBalancer(strategy);
+  getServiceBalancer(strategy = 'random'): IServiceBalancer {
+    return this.consulBalancer.getServiceBalancer(strategy);
   }
 }

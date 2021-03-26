@@ -33,15 +33,17 @@ export class ConsulKoaFramework extends Framework {
     });
 
     // 注册服务
-    object['nock'].put('/v1/agent/service/register').reply(200);
+    object['nock'].persist().put('/v1/agent/service/register').reply(200);
 
     // 反注册服务
-    object['nock'].put('/v1/agent/service/deregister/ali-demo:127.0.0.1:7001').reply(200);
+    object['nock'].persist().put('/v1/agent/service/deregister/ali-demo:127.0.0.1:7001').reply(200);
 
     // 查询服务
-    object['nock'].get('/v1/catalog/service/ali-demo').reply(200, services);
+    object['nock'].persist().get('/v1/catalog/service/ali-demo').reply(200, services);
+    object['nock'].persist().get('/v1/catalog/service/noexists').reply(200, []);
 
     // 健康检查
-    object['nock'].get('/v1/health/checks/ali-demo').reply(200, checks);
+    object['nock'].persist().get('/v1/health/checks/ali-demo').reply(200, checks);
+    object['nock'].persist().get('/v1/health/checks/noexists').reply(200, []);
   }
 }
