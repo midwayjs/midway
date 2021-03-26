@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.17](https://github.com/midwayjs/midway-faas/compare/serverless-v1.2.16...serverless-v1.2.17) (2021-03-26)
+
+
+### Bug Fixes
+
+* register handler meta ([#952](https://github.com/midwayjs/midway-faas/issues/952)) ([3b12c9e](https://github.com/midwayjs/midway-faas/commit/3b12c9efb346fff2c3b69a4b6332821a2cfef6f8))
+
+
+
+
+
 ## [1.2.16](https://github.com/midwayjs/midway-faas/compare/serverless-v1.2.15...serverless-v1.2.16) (2021-03-23)
 
 
