@@ -1,24 +1,19 @@
 import { closeApp, createServer } from './utils';
 import { createRedisAdapter } from '../src';
 import { createSocketIOClient } from '@midwayjs/mock';
+import { once } from 'events';
 
 describe('/test/index.test.ts', () => {
   it('should test create socket app and use default namespace', async () => {
     const app = await createServer('base-app', { port: 3000});
-    const client = createSocketIOClient({
+    const client = await createSocketIOClient({
       port: 3000,
       namespace: '/test',
-    })
-
-    await new Promise<void>(resolve =>  {
-      client.on('connect', () => {
-        client.on('ok', (data) => {
-          console.log(data);
-          resolve();
-        })
-        client.emit('my');
-      })
     });
+
+    const data = await once(client as any, 'ok');
+    console.log(data)
+    client.send('my');
 
     await client.close();
     await closeApp(app);
@@ -32,13 +27,9 @@ describe('/test/index.test.ts', () => {
     const client = await createSocketIOClient({
       port: '3000',
     });
-    await new Promise<void>(resolve =>  {
-      client.on('ok', (data) => {
-        console.log(data);
-        resolve();
-      })
-      client.emit('my');
-    });
+    const data = await once(client as any, 'ok');
+    console.log(data)
+    client.send('my');
 
     await client.close();
     await closeApp(app);

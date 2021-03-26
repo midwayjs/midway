@@ -24,10 +24,16 @@ describe('/test/client.tes.ts', function () {
     expect(data1).toEqual({});
     expect(data2).toEqual('abc');
 
+    socket.on('xxx2', (data, callback) => {
+      callback({
+        status: 'ok'
+      })
+    });
 
-    // client.onMessage('got', () => {
-    //
-    // });
+    const result = await client.sendWithAck('xxx2', 'test');
+    expect(result).toEqual({
+      status: 'ok'
+    });
 
     client.close();
     server.close();

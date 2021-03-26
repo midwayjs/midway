@@ -27,7 +27,7 @@ export class SocketIOWrapperClient {
     this.socket.emit(eventName, ...args);
   }
 
-  onMessage(eventName: string, handler) {
+  on(eventName: string, handler) {
     this.socket.on(eventName, handler);
   }
 
