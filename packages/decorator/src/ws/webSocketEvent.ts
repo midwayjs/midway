@@ -29,7 +29,7 @@ export interface WSEventInfo {
   roomName?: string[];
 }
 
-export function OnConnection(): MethodDecorator {
+export function OnWSConnection(): MethodDecorator {
   return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
     attachClassMetadata(
       WS_EVENT_KEY,
@@ -43,7 +43,7 @@ export function OnConnection(): MethodDecorator {
   };
 }
 
-export function OnDisConnection(): MethodDecorator {
+export function OnWSDisConnection(): MethodDecorator {
   return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
     attachClassMetadata(
       WS_EVENT_KEY,
@@ -57,7 +57,7 @@ export function OnDisConnection(): MethodDecorator {
   };
 }
 
-export function OnMessage(eventName: string): MethodDecorator {
+export function OnWSMessage(eventName: string): MethodDecorator {
   return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
     attachClassMetadata(
       WS_EVENT_KEY,
@@ -72,22 +72,7 @@ export function OnMessage(eventName: string): MethodDecorator {
   };
 }
 
-export function OnSocketError(eventName: string): MethodDecorator {
-  return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
-    attachClassMetadata(
-      WS_EVENT_KEY,
-      {
-        eventType: WSEventTypeEnum.ON_SOCKET_ERROR,
-        messageEventName: eventName,
-        propertyName: propertyKey,
-        descriptor,
-      },
-      target.constructor
-    );
-  };
-}
-
-export function Emit(
+export function WSEmit(
   messageName: string,
   roomName: string | string[] = []
 ): MethodDecorator {
@@ -106,16 +91,19 @@ export function Emit(
   };
 }
 
-export function Broadcast(): MethodDecorator {
-  return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
-    attachClassMetadata(
-      WS_EVENT_KEY,
-      {
-        eventType: WSEventTypeEnum.BROADCAST,
-        propertyName: propertyKey,
-        descriptor,
-      },
-      target.constructor
-    );
-  };
-}
+/**
+ * @deprecated please use @OnWSDisConnection
+ */
+export const OnMessage = OnWSMessage;
+/**
+ * @deprecated please use @WSEmit
+ */
+export const Emit = WSEmit;
+/**
+ * @deprecated please use @OnWSDisConnection
+ */
+export const OnDisConnection = OnWSDisConnection;
+/**
+ * @deprecated please use @OnWSConnection
+ */
+export const OnConnection = OnWSConnection;

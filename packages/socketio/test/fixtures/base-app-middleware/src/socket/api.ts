@@ -11,7 +11,7 @@ import { UserService } from '../service/user';
 import { IMidwaySocketIOContext } from '../../../../../src';
 
 @Provide()
-@WSController('/')
+@WSController('/', { middleware: []})
 export class APIController {
   @Inject()
   ctx: IMidwaySocketIOContext;
@@ -26,8 +26,8 @@ export class APIController {
 
   @OnWSMessage('my')
   @WSEmit('ok')
-  async gotMyMessage(payload) {
-    return { name: 'harry' };
+  async gotMyMessage(data1, data2, data3) {
+    return { name: 'harry', result: data1 + data2 + data3 };
   }
 
   @OnWSDisConnection()

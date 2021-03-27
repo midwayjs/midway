@@ -5,7 +5,6 @@ import {
   OnWSMessage,
   Provide,
   WSController,
-  WSEmit,
 } from '@midwayjs/decorator';
 import { UserService } from '../service/user';
 import { IMidwaySocketIOContext } from '../../../../../src';
@@ -25,9 +24,8 @@ export class APIController {
   }
 
   @OnWSMessage('my')
-  @WSEmit('ok')
-  async gotMyMessage(payload) {
-    return { name: 'harry' };
+  async gotMyMessage(data1, data2, data3) {
+    return { name: 'harry', result: data1 + data2 + data3 };
   }
 
   @OnWSDisConnection()

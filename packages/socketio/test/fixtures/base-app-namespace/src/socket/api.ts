@@ -11,7 +11,7 @@ import { UserService } from '../service/user';
 import { IMidwaySocketIOContext } from '../../../../../src';
 
 @Provide()
-@WSController('/')
+@WSController('/test')
 export class APIController {
   @Inject()
   ctx: IMidwaySocketIOContext;

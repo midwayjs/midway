@@ -26,8 +26,8 @@ export class APIController {
 
   @OnWSMessage('my')
   @WSEmit('ok')
-  async gotMyMessage(payload) {
-    return { name: 'harry' };
+  async gotMyMessage(data1, data2, data3) {
+    throw new Error('throw a custom error');
   }
 
   @OnWSDisConnection()
