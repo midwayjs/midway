@@ -1,8 +1,8 @@
 import {
   Inject,
-  OnConnection,
-  OnDisConnection,
-  OnMessage,
+  OnWSConnection,
+  OnWSDisConnection,
+  OnWSMessage,
   Provide,
   WSController,
 } from '@midwayjs/decorator';
@@ -18,17 +18,17 @@ export class APIController {
   @Inject()
   userService: UserService;
 
-  @OnConnection()
+  @OnWSConnection()
   init() {
     console.log(`namespace / got a connection ${this.ctx.id}`);
   }
 
-  @OnMessage('my')
+  @OnWSMessage('my')
   async gotMyMessage(data1, data2, data3) {
     return { name: 'harry', result: data1 + data2 + data3 };
   }
 
-  @OnDisConnection()
+  @OnWSDisConnection()
   disconnect(reason: string) {
     console.log(this.ctx.id + ' disconnect ' + reason);
   }

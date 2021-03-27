@@ -1,11 +1,11 @@
 import {
-  Emit,
   Inject,
-  OnConnection,
-  OnDisConnection,
-  OnMessage,
+  OnWSConnection,
+  OnWSDisConnection,
+  OnWSMessage,
   Provide,
   WSController,
+  WSEmit,
 } from '@midwayjs/decorator';
 import { UserService } from '../service/user';
 import { IMidwaySocketIOContext } from '../../../../../src';
@@ -19,18 +19,18 @@ export class APIController {
   @Inject()
   userService: UserService;
 
-  @OnConnection()
+  @OnWSConnection()
   init() {
     console.log(`namespace / got a connection ${this.ctx.id}`);
   }
 
-  @OnMessage('my')
-  @Emit('ok')
+  @OnWSMessage('my')
+  @WSEmit('ok')
   async gotMyMessage(payload) {
     return { name: 'harry' };
   }
 
-  @OnDisConnection()
+  @OnWSDisConnection()
   disconnect(reason: string) {
     console.log(this.ctx.id + ' disconnect ' + reason);
   }

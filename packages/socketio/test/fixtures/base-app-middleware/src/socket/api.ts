@@ -11,8 +11,8 @@ import { UserService } from '../service/user';
 import { IMidwaySocketIOContext } from '../../../../../src';
 
 @Provide()
-@WSController('/test2')
-export class API2Controller {
+@WSController('/', { middleware: []})
+export class APIController {
   @Inject()
   ctx: IMidwaySocketIOContext;
 
@@ -21,13 +21,13 @@ export class API2Controller {
 
   @OnWSConnection()
   init() {
-    console.log(`namespace / got a api2 connection ${this.ctx.id}`);
+    console.log(`namespace / got a connection ${this.ctx.id}`);
   }
 
   @OnWSMessage('my')
   @WSEmit('ok')
-  async gotMyMessage(payload) {
-    return { name: 'harry 2' };
+  async gotMyMessage(data1, data2, data3) {
+    return { name: 'harry', result: data1 + data2 + data3 };
   }
 
   @OnWSDisConnection()

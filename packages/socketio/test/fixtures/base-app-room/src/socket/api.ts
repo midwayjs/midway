@@ -1,8 +1,8 @@
 import {
   Inject,
-  OnConnection,
-  OnDisConnection,
-  OnMessage,
+  OnWSConnection,
+  OnWSDisConnection,
+  OnWSMessage,
   Provide,
   WSController,
 } from '@midwayjs/decorator';
@@ -18,25 +18,25 @@ export class APIController {
   @Inject()
   userService: UserService;
 
-  @OnConnection()
+  @OnWSConnection()
   init() {
     console.log(`namespace / got a connection ${this.ctx.id}`);
   }
 
-  @OnMessage('joinRoom')
+  @OnWSMessage('joinRoom')
   async joinRoom(roomId) {
     console.log(this.ctx.id + ' join ' + roomId);
     this.ctx.join(roomId);
     this.ctx.join('defaultRoom');
   }
 
-  @OnMessage('leaveRoom')
+  @OnWSMessage('leaveRoom')
   async leaveRoom(roomId) {
     this.ctx.leave(roomId);
     this.ctx.leave('defaultRoom');
   }
 
-  @OnMessage('broadcast')
+  @OnWSMessage('broadcast')
   async gotMyMessage(roomId) {
     if (roomId === 'room1') {
       this.ctx.app.to(roomId).emit('broadcastResult', { msg: roomId + ' got message' });
@@ -45,7 +45,7 @@ export class APIController {
     }
   }
 
-  @OnDisConnection()
+  @OnWSDisConnection()
   disconnect(reason: string) {
     console.log(this.ctx.id + ' disconnect ' + reason);
   }
