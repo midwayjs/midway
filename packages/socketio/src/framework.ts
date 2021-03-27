@@ -7,6 +7,8 @@ import {
   listModule,
   MidwayFrameworkType,
 } from '@midwayjs/core';
+import { debuglog } from 'util';
+const debug = debuglog('midway:socket.io');
 
 import {
   IMidwaySocketIOApplication,
@@ -34,12 +36,6 @@ export class MidwaySocketIOFramework extends BaseFramework<
     this.app = new Server(
       this.configurationOptions
     ) as IMidwaySocketIOApplication;
-
-    this.app.use((socket, next) => {
-      this.app.createAnonymousContext(socket);
-      socket.requestContext.registerObject('socket', socket);
-      next();
-    });
   }
   public app: IMidwaySocketIOApplication;
 
@@ -112,6 +108,7 @@ export class MidwaySocketIOFramework extends BaseFramework<
     nsp.use((socket: any, next) => {
       this.app.createAnonymousContext(socket);
       socket.requestContext.registerObject('socket', socket);
+      socket.app = this.app;
       next();
     });
 
@@ -132,59 +129,63 @@ export class MidwaySocketIOFramework extends BaseFramework<
           const controller = await socket.requestContext.getAsync(controllerId);
           // on connection
           if (wsEventInfo.eventType === WSEventTypeEnum.ON_CONNECTION) {
-            const result = await controller[
-              wsEventInfo.propertyName
-            ].apply(controller, [socket]);
-            await this.bindSocketResponse(
-              result,
-              socket,
-              wsEventInfo.propertyName,
-              methodMap
-            );
-          } else if (wsEventInfo.eventType === WSEventTypeEnum.ON_MESSAGE) {
-            // on user custom event
-            socket.on(wsEventInfo.messageEventName, async (...args) => {
-              // eslint-disable-next-line prefer-spread
-              const result = await controller[wsEventInfo.propertyName].apply(
-                controller,
-                args
-              );
+            try {
+              const result = await controller[
+                wsEventInfo.propertyName
+              ].apply(controller, [socket]);
               await this.bindSocketResponse(
                 result,
                 socket,
                 wsEventInfo.propertyName,
                 methodMap
               );
+            } catch (err) {
+              this.logger.error(err);
+            }
+          } else if (wsEventInfo.eventType === WSEventTypeEnum.ON_MESSAGE) {
+            // on user custom event
+            socket.on(wsEventInfo.messageEventName, async (...args) => {
+              debug('got message', wsEventInfo.messageEventName, args);
+              try {
+                // eslint-disable-next-line prefer-spread
+                const result = await controller[wsEventInfo.propertyName].apply(
+                  controller,
+                  args
+                );
+                if (typeof args[args.length - 1] === 'function') {
+                  // ack
+                  args[args.length - 1](result);
+                } else {
+                  // emit
+                  await this.bindSocketResponse(
+                    result,
+                    socket,
+                    wsEventInfo.propertyName,
+                    methodMap
+                  );
+                }
+              } catch (err) {
+                this.logger.error(err);
+              }
             });
           } else if (
             wsEventInfo.eventType === WSEventTypeEnum.ON_DISCONNECTION
           ) {
             // on socket disconnect
             socket.on('disconnect', async (reason: string) => {
-              const result = await controller[
-                wsEventInfo.propertyName
-              ].apply(controller, [reason]);
-              await this.bindSocketResponse(
-                result,
-                socket,
-                wsEventInfo.propertyName,
-                methodMap
-              );
-            });
-          } else if (
-            wsEventInfo.eventType === WSEventTypeEnum.ON_SOCKET_ERROR
-          ) {
-            // on socket error
-            socket.on('error', async err => {
-              const result = await controller[
-                wsEventInfo.propertyName
-              ].apply(controller, [err]);
-              await this.bindSocketResponse(
-                result,
-                socket,
-                wsEventInfo.propertyName,
-                methodMap
-              );
+              try {
+                const result = await controller[
+                  wsEventInfo.propertyName
+                ].apply(controller, [reason]);
+                await this.bindSocketResponse(
+                  result,
+                  socket,
+                  wsEventInfo.propertyName,
+                  methodMap
+                );
+              } catch (err) {
+                this.logger.error(err);
+              }
             });
           } else {
             // 存储每个方法对应的后置响应处理，供后续快速匹配
