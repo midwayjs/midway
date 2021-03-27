@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.9.2](https://github.com/midwayjs/midway/compare/v2.9.1...v2.9.2) (2021-03-27)
+
+**Note:** Version bump only for package @midwayjs/cache
+
+
+
+
+
 ## [2.9.1](https://github.com/midwayjs/midway/compare/v2.9.0...v2.9.1) (2021-03-24)
 
 **Note:** Version bump only for package @midwayjs/cache

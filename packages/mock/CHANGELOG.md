@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.9.2](https://github.com/midwayjs/midway/compare/v2.9.1...v2.9.2) (2021-03-27)
+
+
+### Bug Fixes
+
+* framework find and sort ([#946](https://github.com/midwayjs/midway/issues/946)) ([2aac414](https://github.com/midwayjs/midway/commit/2aac4142178417ccd0a60a1007e8ce8b53ed4d4f))
+* missing namespace requestContainer ([#942](https://github.com/midwayjs/midway/issues/942)) ([92e4ee6](https://github.com/midwayjs/midway/commit/92e4ee638d657677b1295bb71c033471b850990b))
+
+
+
+
+
 ## [2.9.1](https://github.com/midwayjs/midway/compare/v2.9.0...v2.9.1) (2021-03-24)
 
 **Note:** Version bump only for package @midwayjs/mock
