@@ -35,10 +35,19 @@ const bootstrapAppSet = (global['MIDWAY_BOOTSTRAP_APP_SET'] = new Set<{
 }>());
 
 function getIncludeFramework(dependencies): string {
-  const values: string[] = Object.values(MidwayFrameworkType);
-  for (const name of Object.keys(dependencies)) {
-    if (values.includes(name)) {
-      return name;
+  const currentFramework = [
+    '@midwayjs/web',
+    '@midwayjs/koa',
+    '@midwayjs/express',
+    '@midwayjs/serverless-app',
+    '@midwayjs/grpc',
+    '@midwayjs/rabbitmq',
+    '@midwayjs/socketio',
+    '@midwayjs/faas',
+  ];
+  for (const frameworkName of currentFramework) {
+    if (dependencies[frameworkName]) {
+      return frameworkName;
     }
   }
 }
@@ -139,8 +148,10 @@ export async function create<
   } else {
     // find default framework from pkg
     const pkg = require(join(appDir, 'package.json'));
-    if (pkg.dependencies) {
-      customFrameworkName = getIncludeFramework(pkg.dependencies);
+    if (pkg.dependencies || pkg.devDependencies) {
+      customFrameworkName = getIncludeFramework(
+        Object.assign({}, pkg.dependencies || {}, pkg.devDependencies || {})
+      );
     }
     DefaultFramework = require(customFrameworkName as string).Framework;
   }
