@@ -1,10 +1,9 @@
 import {
-  Broadcast,
-  Emit,
+  WSEmit,
   getClassMetadata,
-  OnConnection,
-  OnDisConnection,
-  OnMessage, OnSocketError,
+  OnWSConnection,
+  OnWSDisConnection,
+  OnWSMessage,
   WS_EVENT_KEY,
   WSController,
   WSEventTypeEnum
@@ -12,28 +11,18 @@ import {
 
 @WSController('bbb')
 class TestFun {
-  @OnConnection()
+  @OnWSConnection()
   init() {
   }
 
-  @OnMessage('my')
-  @Emit('ok')
+  @OnWSMessage('my')
+  @WSEmit('ok')
   async gotMyMessage(payload) {
     return { name: 'harry' };
   }
 
-  @OnDisConnection()
+  @OnWSDisConnection()
   disconnect(reason: string) {
-  }
-
-  @Broadcast()
-  broadcast() {
-    return 'ok';
-  }
-
-  @OnSocketError('err')
-  error() {
-
   }
 }
 
@@ -53,12 +42,5 @@ describe('/test/ws/event.test.ts', function () {
 
     expect(data[3].eventType).toEqual(WSEventTypeEnum.ON_DISCONNECTION);
     expect(data[3].propertyName).toEqual('disconnect');
-
-    expect(data[4].eventType).toEqual(WSEventTypeEnum.BROADCAST);
-    expect(data[4].propertyName).toEqual('broadcast');
-
-    expect(data[5].eventType).toEqual(WSEventTypeEnum.ON_SOCKET_ERROR);
-    expect(data[5].propertyName).toEqual('error');
-    expect(data[5].messageEventName).toEqual('err');
   });
 });
