@@ -42,7 +42,7 @@ export const start2 = async options => {
   return {
     runtime,
     framework: starterInstance,
-    // ast 分析装饰器上面的函数表
+    // 分析装饰器上面的函数表
     getFunctionsFromDecorator: async () => {
       return analysisDecorator(appDir);
     },

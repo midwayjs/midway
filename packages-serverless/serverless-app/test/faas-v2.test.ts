@@ -2,7 +2,7 @@
 import { join } from 'path';
 import * as assert from 'assert';
 import { createApp, close } from '../../../packages/mock';
-import { Framework, IServerlessApp } from '../src';
+import { Framework, Application } from '../src';
 import { EventService } from './fixtures/faas-v2/src/event';
 const request = require('supertest');
 const cwd = join(__dirname, 'fixtures/faas-v2');
@@ -13,7 +13,7 @@ describe('test/faas-v2.test.ts', () => {
     return;
   }
 
-  let app: IServerlessApp;
+  let app: Application;
   beforeAll(async () => {
     app = await createApp<Framework>(cwd, {}, join(__dirname, '../src'));
   });

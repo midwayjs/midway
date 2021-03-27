@@ -1,14 +1,17 @@
 import {
-  IMidwayApplication,
   IConfigurationOptions
 } from '@midwayjs/core';
-export interface IServerlessApp extends IMidwayApplication {
+import { Application as FaaSApplication, Context as FaaSContext } from '@midwayjs/faas';
+
+export interface Application extends FaaSApplication {
   use: any;
   getServerlessInstance<T>(cls: any): Promise<T>;
-} 
+}
 
 export interface IServerlessAppOptions extends IConfigurationOptions {
   port?: string | number;
   initContext?: any;
   layers?: string[];
 }
+
+export interface Context extends FaaSContext {}
