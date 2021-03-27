@@ -33,11 +33,15 @@ export class SocketIOWrapperClient {
   }
 
   once(eventName: string, handler) {
-    this.socket.once(eventName, handler);
+    return this.socket.once(eventName, handler);
+  }
+
+  removeListener(event: string, fn?) {
+    return this.socket.removeListener(event, fn);
   }
 
   emit(eventName: string, ...args) {
-    this.socket.emit(eventName, ...args);
+    return this.socket.emit(eventName, ...args);
   }
 
   async sendWithAck(eventName: string, ...args) {
