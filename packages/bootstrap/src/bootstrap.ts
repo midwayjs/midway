@@ -83,11 +83,9 @@ export class BootstrapStarter {
       this.globalAppMap.set(item.getFrameworkType(), item.getApplication());
       if (global['MIDWAY_BOOTSTRAP_APP_SET']) {
         // for test/dev
-        this.bootstrapItems.forEach(item => {
-          global['MIDWAY_BOOTSTRAP_APP_SET'].add({
-            framework: item,
-            starter: this,
-          });
+        global['MIDWAY_BOOTSTRAP_APP_SET'].add({
+          framework: item,
+          starter: this,
         });
         global['MIDWAY_BOOTSTRAP_APP_READY'] = true;
       }
