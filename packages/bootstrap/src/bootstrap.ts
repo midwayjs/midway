@@ -87,7 +87,6 @@ export class BootstrapStarter {
           framework: item,
           starter: this,
         });
-        global['MIDWAY_BOOTSTRAP_APP_READY'] = true;
       }
     });
 

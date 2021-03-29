@@ -13,7 +13,7 @@ import { Server } from 'net';
 import { LoggerOptions } from '@midwayjs/logger';
 import { MidwayKoaContextLogger } from '@midwayjs/koa';
 
-export class SingleProcess
+export class MidwayWebSingleProcessFramework
   implements IMidwayFramework<Application, IMidwayWebConfigurationOptions> {
   public app: Application;
   public configurationOptions: IMidwayWebConfigurationOptions;
@@ -41,7 +41,9 @@ export class SingleProcess
     }
   }
 
-  configure(options: IMidwayWebConfigurationOptions = {}): SingleProcess {
+  configure(
+    options: IMidwayWebConfigurationOptions = {}
+  ): MidwayWebSingleProcessFramework {
     this.configurationOptions = options;
     return this;
   }
