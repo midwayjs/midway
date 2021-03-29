@@ -109,7 +109,7 @@ export async function create<
     });
     // 这里为了兼容下 cli 的老逻辑
     if (bootstrapAppSet.size) {
-      return bootstrapAppSet.values()[0];
+      return bootstrapAppSet.values().next().value;
     }
     return;
   }
