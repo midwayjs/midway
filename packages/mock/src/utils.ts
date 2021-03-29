@@ -107,32 +107,11 @@ export async function create<
         }
       }, 200);
     });
-    let currentFramework;
-    // get app by framework
-    if (bootstrapAppSet.size === 1) {
-      currentFramework = Array.from(bootstrapAppSet.values())[0].framework;
-    } else if (customFrameworkName) {
-      for (const value of bootstrapAppSet.values()) {
-        if (
-          customFrameworkName === value.framework.getFrameworkName() ||
-          customFrameworkName === value.framework.getFrameworkType()
-        ) {
-          currentFramework = value.framework;
-        }
-      }
+    // 这里为了兼容下 cli 的老逻辑
+    if (bootstrapAppSet.size) {
+      return bootstrapAppSet.values()[0];
     }
-
-    if (!currentFramework) {
-      throw new Error('[midway]: framework not found');
-    }
-
-    // set framework to current weakMap
-    for (const value of bootstrapAppSet.values()) {
-      appMap.set(value.framework, value.starter);
-    }
-    bootstrapAppSet.clear();
-
-    return currentFramework;
+    return;
   }
 
   let framework: T = null;
