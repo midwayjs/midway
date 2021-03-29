@@ -4,6 +4,7 @@ import {
   getClassMetadata,
   listModule,
   getProviderId,
+  isClass,
 } from '@midwayjs/decorator';
 import * as is from 'is-type-of';
 
@@ -11,6 +12,14 @@ export = app => {
   // egg-schedule 的 app 里没有 schedule
   if (!app.runSchedule) {
     return;
+  }
+
+  const originMethod = app.runSchedule;
+  app.runSchedule = (...args) => {
+    if (isClass(args[0])) {
+      args[0] = getProviderId(args[0]) + '#' + args[0].name;
+    }
+    return originMethod.call(app, ...args);
   }
 
   const schedules: any[] = listModule(SCHEDULE_KEY);
