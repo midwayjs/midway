@@ -53,12 +53,7 @@ module.exports = engine => {
     async defaultInvokeHandler(context) {
       return new Promise((resolve, reject) => {
         delete context.headers['content-length'];
-        if (
-          eggApp &&
-          eggApp.config &&
-          eggApp.config.proxy &&
-          !context.headers['X-Forwarded-For']
-        ) {
+        if (eggApp.config.proxy && !context.headers['X-Forwarded-For']) {
           context.headers['X-Forwarded-For'] = context.ip;
         }
         const requestOption = {
@@ -100,9 +95,8 @@ module.exports = engine => {
           }
         }
         request(requestOption, (error, response, body) => {
-          context.res = response;
-          context.status = response.statusCode;
           if (error) {
+            context.status = 500;
             console.error('[egg-layer]' + error);
             resolve('Internal Server Error');
           } else {

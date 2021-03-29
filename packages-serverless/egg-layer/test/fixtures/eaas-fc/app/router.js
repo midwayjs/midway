@@ -13,4 +13,5 @@ module.exports = app => {
   router.post('/post/formBody', controller.home.postFormBodyMethod);
   router.get('/buffer', controller.home.buffer);
   router.get('/error', controller.home.gotError);
+  router.get('/got_ip', controller.home.gotIP);
 };

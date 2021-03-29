@@ -26,6 +26,11 @@ app.post('/post/body', (req, res) => {
   });
 });
 
+app.get('/get_ip', (req, res) => {
+  res.type('text')
+  res.send('ip=' + req.ip);
+});
+
 // app.listen(3000);
 
 module.exports = app;

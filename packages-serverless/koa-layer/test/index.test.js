@@ -195,5 +195,13 @@ describe('/test/index.test.ts', () => {
         .expect(/{"body":{"b":1}}/)
         .expect(200, done);
     });
+
+    it('should test got ip', done => {
+      request(app)
+        .get('/get_ip')
+        .expect('Content-Type', 'text/plain; charset=utf-8')
+        .expect('ip=42.120.74.90')
+        .expect(200, done);
+    });
   });
 });

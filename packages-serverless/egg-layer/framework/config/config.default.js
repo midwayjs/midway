@@ -9,3 +9,5 @@ exports.rundir = os.tmpdir();
 exports.static = {
   buffer: true,
 };
+
+exports.proxy = true;
