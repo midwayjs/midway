@@ -20,7 +20,7 @@ export = app => {
       args[0] = getProviderId(args[0]) + '#' + args[0].name;
     }
     return originMethod.call(app, ...args);
-  }
+  };
 
   const schedules: any[] = listModule(SCHEDULE_KEY);
   for (const scheduleModule of schedules) {
