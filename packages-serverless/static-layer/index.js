@@ -93,9 +93,8 @@ module.exports = engine => {
           encoding: null,
         };
         request(requestOption, (error, response, body) => {
-          context.res = response;
-          context.status = response.statusCode;
           if (error) {
+            context.status = 500;
             console.error('[static-layer]' + error);
             resolve('Internal Server Error');
           } else {

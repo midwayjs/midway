@@ -30,6 +30,10 @@ class HomeController extends Controller {
     // assert
     ctx.body = Buffer.from('hi, egg');
   }
+  async gotIP() {
+    const { ctx } = this;
+    ctx.body = 'ip=' + ctx.ip;
+  }
 }
 
 module.exports = HomeController;

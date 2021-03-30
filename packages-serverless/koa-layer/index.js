@@ -16,6 +16,7 @@ module.exports = engine => {
       if (typeof app === 'function') {
         app = await app();
       }
+      app.proxy = true;
       // handleRequest = koaApp.callback();
       if (fs.existsSync(socketPath)) {
         fs.unlinkSync(socketPath);
@@ -26,6 +27,10 @@ module.exports = engine => {
     async defaultInvokeHandler(context) {
       return new Promise((resolve, reject) => {
         delete context.headers['content-length'];
+
+        if (!context.headers['X-Forwarded-For']) {
+          context.headers['X-Forwarded-For'] = context.ip;
+        }
         const requestOption = {
           uri: `http://unix:${socketPath}:${context.path}`,
           qs: context.query,
@@ -61,9 +66,8 @@ module.exports = engine => {
           }
         }
         request(requestOption, (error, response, body) => {
-          context.res = response;
-          context.status = response.statusCode;
           if (error) {
+            context.status = response.statusCode;
             console.error('[koa-layer]' + error);
             resolve('Internal Server Error');
           } else {

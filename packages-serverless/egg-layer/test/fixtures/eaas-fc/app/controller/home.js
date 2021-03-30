@@ -41,6 +41,11 @@ class HomeController extends Controller {
   async gotError() {
     throw new Error('custom error');
   }
+
+  async gotIP() {
+    const { ctx } = this;
+    ctx.body = 'ip=' + ctx.ip;
+  }
 }
 
 module.exports = HomeController;

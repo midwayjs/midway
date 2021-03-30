@@ -102,6 +102,14 @@ describe('/test/index.test.ts', () => {
           done();
         });
     });
+
+    it('should test got ip', done => {
+      request(app)
+        .get('/got_ip')
+        .expect('Content-Type', 'text/plain; charset=utf-8')
+        .expect('ip=127.0.0.1')
+        .expect(200, done);
+    });
   });
 
   describe('FC test with api gateway', () => {
@@ -177,6 +185,14 @@ describe('/test/index.test.ts', () => {
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(301, done);
     });
+
+    it('should test got ip in api gateway', done => {
+      request(app)
+        .get('/got_ip')
+        .expect('Content-Type', 'text/plain; charset=utf-8')
+        .expect('ip=undefined')
+        .expect(200, done);
+    });
   });
 
   describe('SCF test with api gateway', () => {
@@ -251,6 +267,14 @@ describe('/test/index.test.ts', () => {
         .get('/')
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(301, done);
+    });
+
+    it('should test got ip in scf', done => {
+      request(app)
+        .get('/got_ip')
+        .expect('Content-Type', 'text/plain; charset=utf-8')
+        .expect('ip=42.120.74.90')
+        .expect(200, done);
     });
   });
 });

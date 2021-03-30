@@ -26,6 +26,10 @@ router.post('/post/body', (ctx, next) => {
   };
 });
 
+router.get('/get_ip', (ctx, next) => {
+  ctx.body = 'ip=' + ctx.request.ip;
+});
+
 app.use(bodyParser());
 app.use(router.routes()).use(router.allowedMethods());
 
