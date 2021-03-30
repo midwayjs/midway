@@ -17,18 +17,16 @@ export interface FuncParams {
   middleware?: MiddlewareParamArray;
 }
 
-export function Func(type: ServerlessTriggerType.EVENT, metadata: FaaSMetadata.EventTriggerOptions): MethodDecorator;
-export function Func(type: ServerlessTriggerType.HTTP, metadata: FaaSMetadata.HTTPTriggerMetadata): MethodDecorator;
-export function Func(type: ServerlessTriggerType.API_GATEWAY, metadata: FaaSMetadata.APIGatewayTriggerOptions): MethodDecorator;
-export function Func(type: ServerlessTriggerType.OS, metadata: FaaSMetadata.OSTriggerOptions): MethodDecorator;
-export function Func(type: ServerlessTriggerType.CDN, metadata: FaaSMetadata.CDNTriggerOptions): MethodDecorator;
-export function Func(type: ServerlessTriggerType.SLS, metadata: FaaSMetadata.SLSTriggerOptions): MethodDecorator;
-export function Func(type: ServerlessTriggerType.TIMER, metadata: FaaSMetadata.TimerTriggerOptions): MethodDecorator;
-export function Func(type: ServerlessTriggerType.MQ, metadata: FaaSMetadata.MQTriggerOptions): MethodDecorator;
-export function Func(
-  funHandler: string | FuncParams,
-  functionOptions?: FuncParams
-): any {
+export function Func(type: ServerlessTriggerType.EVENT, metadata?: FaaSMetadata.EventTriggerOptions): MethodDecorator;
+export function Func(type: ServerlessTriggerType.HTTP, metadata?: FaaSMetadata.HTTPTriggerMetadata): MethodDecorator;
+export function Func(type: ServerlessTriggerType.API_GATEWAY, metadata?: FaaSMetadata.APIGatewayTriggerOptions): MethodDecorator;
+export function Func(type: ServerlessTriggerType.OS, metadata?: FaaSMetadata.OSTriggerOptions): MethodDecorator;
+export function Func(type: ServerlessTriggerType.CDN, metadata?: FaaSMetadata.CDNTriggerOptions): MethodDecorator;
+export function Func(type: ServerlessTriggerType.SLS, metadata?: FaaSMetadata.SLSTriggerOptions): MethodDecorator;
+export function Func(type: ServerlessTriggerType.TIMER, metadata?: FaaSMetadata.TimerTriggerOptions): MethodDecorator;
+export function Func(type: ServerlessTriggerType.MQ, metadata?: FaaSMetadata.MQTriggerOptions): MethodDecorator;
+export function Func(funHandler: string | FuncParams, functionOptions?: FuncParams): any;
+export function Func(funHandler: any, functionOptions?: any): any {
   if (typeof funHandler !== 'string' && functionOptions === undefined) {
     functionOptions = funHandler;
     funHandler = functionOptions.funHandler || '';

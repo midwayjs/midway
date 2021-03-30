@@ -64,7 +64,11 @@ export namespace GRPCMetadata {
 
 export namespace FaaSMetadata {
 
-  export interface EventTriggerOptions {
+  interface TriggerCommonOptions {
+    functionName?: string;
+  }
+
+  export interface EventTriggerOptions extends TriggerCommonOptions {
 
   }
 
@@ -72,23 +76,27 @@ export namespace FaaSMetadata {
 
   }
 
-  export interface HTTPTriggerOptions {
-
+  export interface HTTPTriggerOptions extends TriggerCommonOptions  {
+    path: string;
+    method: string;
+    middleware: any[];
   }
 
   export interface HTTPTriggerMetadata {
 
   }
 
-  export interface APIGatewayTriggerOptions {
-
+  export interface APIGatewayTriggerOptions extends TriggerCommonOptions  {
+    path: string;
+    method: string;
+    middleware: any[];
   }
 
   export interface APIGatewayTriggerMetadata {
 
   }
 
-  export interface OSTriggerOptions {
+  export interface OSTriggerOptions extends TriggerCommonOptions  {
 
   }
 
@@ -96,7 +104,7 @@ export namespace FaaSMetadata {
 
   }
 
-  export interface CDNTriggerOptions {
+  export interface CDNTriggerOptions extends TriggerCommonOptions  {
 
   }
 
@@ -104,7 +112,7 @@ export namespace FaaSMetadata {
 
   }
 
-  export interface SLSTriggerOptions {
+  export interface SLSTriggerOptions extends TriggerCommonOptions  {
 
   }
 
@@ -112,7 +120,7 @@ export namespace FaaSMetadata {
 
   }
 
-  export interface TimerTriggerOptions {
+  export interface TimerTriggerOptions extends TriggerCommonOptions  {
 
   }
 
@@ -120,7 +128,7 @@ export namespace FaaSMetadata {
 
   }
 
-  export interface MQTriggerOptions {
+  export interface MQTriggerOptions extends TriggerCommonOptions  {
 
   }
 
