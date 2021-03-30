@@ -78,18 +78,15 @@ export namespace FaaSMetadata {
 
   export interface HTTPTriggerOptions extends TriggerCommonOptions  {
     path: string;
-    method: string;
-    middleware: any[];
+    method?: string;
+    middleware?: any[];
   }
 
   export interface HTTPTriggerMetadata {
 
   }
 
-  export interface APIGatewayTriggerOptions extends TriggerCommonOptions  {
-    path: string;
-    method: string;
-    middleware: any[];
+  export interface APIGatewayTriggerOptions extends HTTPTriggerOptions  {
   }
 
   export interface APIGatewayTriggerMetadata {
@@ -97,31 +94,34 @@ export namespace FaaSMetadata {
   }
 
   export interface OSTriggerOptions extends TriggerCommonOptions  {
-
+    bucket: string;
+    events: string;
+    filter?: {
+      prefix: string;
+      suffix: string;
+    };
   }
 
   export interface OSTriggerMetadata {
 
   }
 
-  export interface CDNTriggerOptions extends TriggerCommonOptions  {
-
+  export interface LogTriggerOptions extends TriggerCommonOptions  {
+    source: string;
+    project: string;
+    log: string;
+    retryTime?: number;
+    interval?: number;
   }
 
-  export interface CDNTriggerMetadata {
-
-  }
-
-  export interface SLSTriggerOptions extends TriggerCommonOptions  {
-
-  }
-
-  export interface SLSTriggerMetadata {
+  export interface LogTriggerMetadata {
 
   }
 
   export interface TimerTriggerOptions extends TriggerCommonOptions  {
-
+    type: 'cron' | 'every';
+    value: string;
+    payload: string;
   }
 
   export interface TimerTriggerMetadata {
@@ -129,7 +129,10 @@ export namespace FaaSMetadata {
   }
 
   export interface MQTriggerOptions extends TriggerCommonOptions  {
-
+    topic: string;
+    tags?: string;
+    region?: string;
+    strategy?: 'BACKOFF_RETRY' | 'EXPONENTIAL_DECAY_RETRY';
   }
 
   export interface MQTriggerMetadata {
@@ -160,7 +163,7 @@ export enum ServerlessTriggerType {
   API_GATEWAY = 'api_gateway',
   OS = 'oss',
   CDN = 'cdn',
-  SLS = 'sls',
+  LOG = 'log',
   TIMER = 'timer',
   MQ = 'mq',
 }
