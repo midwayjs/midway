@@ -63,6 +63,8 @@ const DEFAULT_IGNORE_PATTERN = [
   '**/views/**',
   '**/app/extend/**',
   '**/node_modules/**',
+  '**/**.test.ts',
+  '**/__test__/**',
 ];
 
 const globalDebugLogger = util.debuglog('midway:container');
@@ -237,6 +239,7 @@ export class MidwayContainer
                   ? undefined
                   : require(file);
                 resolveFilter.filter(exports, file, this);
+                continue;
               }
             } else if (isRegExp(resolveFilter.pattern)) {
               if ((resolveFilter.pattern as RegExp).test(file)) {
@@ -244,13 +247,14 @@ export class MidwayContainer
                   ? undefined
                   : require(file);
                 resolveFilter.filter(exports, file, this);
+                continue;
               }
-            } else {
-              const exports = require(file);
-              // add module to set
-              this.bindClass(exports, opts.namespace, file);
-              this.debugLogger(`  binding "${file}" end`);
             }
+
+            const exports = require(file);
+            // add module to set
+            this.bindClass(exports, opts.namespace, file);
+            this.debugLogger(`  binding "${file}" end`);
           }
         } else {
           const exports = require(file);
