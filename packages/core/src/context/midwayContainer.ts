@@ -64,6 +64,7 @@ const DEFAULT_IGNORE_PATTERN = [
   '**/app/extend/**',
   '**/node_modules/**',
   '**/**.test.ts',
+  '**/**.test.js',
   '**/__test__/**',
 ];
 
