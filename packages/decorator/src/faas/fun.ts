@@ -17,14 +17,47 @@ export interface FuncParams {
   middleware?: MiddlewareParamArray;
 }
 
-export function Func(type: ServerlessTriggerType.EVENT, metadata?: FaaSMetadata.EventTriggerOptions): MethodDecorator;
-export function Func(type: ServerlessTriggerType.HTTP, metadata?: FaaSMetadata.HTTPTriggerMetadata): MethodDecorator;
-export function Func(type: ServerlessTriggerType.API_GATEWAY, metadata?: FaaSMetadata.APIGatewayTriggerOptions): MethodDecorator;
-export function Func(type: ServerlessTriggerType.OS, metadata?: FaaSMetadata.OSTriggerOptions): MethodDecorator;
-export function Func(type: ServerlessTriggerType.LOG, metadata?: FaaSMetadata.LogTriggerOptions): MethodDecorator;
-export function Func(type: ServerlessTriggerType.TIMER, metadata?: FaaSMetadata.TimerTriggerOptions): MethodDecorator;
-export function Func(type: ServerlessTriggerType.MQ, metadata?: FaaSMetadata.MQTriggerOptions): MethodDecorator;
-export function Func(type: string | FuncParams, functionOptions?: FuncParams): any;
+export function Func(
+  type: ServerlessTriggerType.EVENT,
+  metadata?: FaaSMetadata.EventTriggerOptions
+): MethodDecorator;
+export function Func(
+  type: ServerlessTriggerType.HTTP,
+  metadata?: FaaSMetadata.HTTPTriggerOptions
+): MethodDecorator;
+export function Func(
+  type: ServerlessTriggerType.API_GATEWAY,
+  metadata?: FaaSMetadata.APIGatewayTriggerOptions
+): MethodDecorator;
+export function Func(
+  type: ServerlessTriggerType.OS,
+  metadata?: FaaSMetadata.OSTriggerOptions
+): MethodDecorator;
+export function Func(
+  type: ServerlessTriggerType.LOG,
+  metadata?: FaaSMetadata.LogTriggerOptions
+): MethodDecorator;
+export function Func(
+  type: ServerlessTriggerType.TIMER,
+  metadata?: FaaSMetadata.TimerTriggerOptions
+): MethodDecorator;
+export function Func(
+  type: ServerlessTriggerType.MQ,
+  metadata?: FaaSMetadata.MQTriggerOptions
+): MethodDecorator;
+/**
+ * @deprecated Please upgrade to midway serverless v2.0 and put this decorator to method
+ * @example '@Func(ServerlessTriggerType.HTTP, { path: '/'})'
+ */
+export function Func(type?: string): ClassDecorator;
+/**
+ * @deprecated Please upgrade to midway serverless v2.0 and use ServerlessTriggerType
+ * @example '@Func(ServerlessTriggerType.HTTP, { path: '/'})'
+ */
+export function Func(
+  type: string | FuncParams,
+  functionOptions?: FuncParams
+): MethodDecorator;
 export function Func(funHandler: any, functionOptions?: any): any {
   if (typeof funHandler !== 'string' && functionOptions === undefined) {
     functionOptions = funHandler;
@@ -35,19 +68,7 @@ export function Func(funHandler: any, functionOptions?: any): any {
     if (descriptor) {
       // method decorator
       saveModule(FUNC_KEY, (target as Record<string, unknown>).constructor);
-      if (ServerlessTriggerType[funHandler]) {
-        // new method decorator
-        attachClassMetadata(
-          FUNC_KEY,
-          {
-            type: funHandler,
-            methodName: key,
-            descriptor,
-            ...functionOptions
-          },
-          target.constructor
-        );
-      } else {
+      if (/\./.test(funHandler)) {
         // old method decorator
         attachClassMetadata(
           FUNC_KEY,
@@ -55,7 +76,20 @@ export function Func(funHandler: any, functionOptions?: any): any {
             funHandler,
             key,
             descriptor,
-            ...functionOptions
+            ...functionOptions,
+          },
+          target.constructor
+        );
+      } else {
+        // new method decorator
+        functionOptions = functionOptions || {};
+        attachClassMetadata(
+          FUNC_KEY,
+          {
+            type: funHandler,
+            methodName: key,
+            functionName: functionOptions['functionName'],
+            metadata: functionOptions,
           },
           target.constructor
         );

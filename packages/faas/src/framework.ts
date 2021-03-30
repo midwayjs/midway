@@ -9,22 +9,18 @@ import {
   BaseFramework,
   createMidwayLogger,
   extractKoaLikeValue,
-  getClassMetadata,
   IMiddleware,
   IMidwayBootstrapOptions,
-  listModule,
   MidwayFrameworkType,
   REQUEST_OBJ_CTX_KEY,
   RouterInfo,
-  WebRouterCollector,
+  ServerlessTriggerCollector,
 } from '@midwayjs/core';
 
 import { dirname, resolve } from 'path';
 import {
-  FUNC_KEY,
   LOGGER_KEY,
   PLUGIN_KEY,
-  getProviderId,
   WEB_RESPONSE_HTTP_CODE,
   WEB_RESPONSE_HEADER,
   WEB_RESPONSE_CONTENT_TYPE,
@@ -124,44 +120,11 @@ export class MidwayFaaSFramework extends BaseFramework<
       this.app['keys'] = this.app.getConfig('keys') || '';
 
       // store all http function entry
-      const collector = new WebRouterCollector();
-      const routerTable = await collector.getFlattenRouterTable();
+      const collector = new ServerlessTriggerCollector();
+      const functionList = await collector.getFunctionList();
 
-      for (const routerInfo of routerTable) {
-        this.funMappingStore.set(routerInfo.funcHandlerName, routerInfo);
-      }
-
-      // 兼容老代码
-      const funModules = listModule(FUNC_KEY);
-
-      for (const funModule of funModules) {
-        const funOptions: Array<{
-          funHandler;
-          key;
-          method: string;
-          middleware: string[];
-        }> = getClassMetadata(FUNC_KEY, funModule);
-        funOptions.map(opts => {
-          if (!this.funMappingStore.has(opts.funHandler)) {
-            const controllerId = getProviderId(funModule);
-            this.funMappingStore.set(opts.funHandler, {
-              prefix: '/',
-              routerName: '',
-              url: '',
-              requestMethod: '',
-              method: opts.key,
-              description: '',
-              summary: '',
-              handlerName: `${controllerId}.${opts.key}`,
-              funcHandlerName: opts.funHandler,
-              controllerId: getProviderId(funModule),
-              middleware: opts.middleware || [],
-              controllerMiddleware: [],
-              requestMetadata: [],
-              responseMetadata: [],
-            });
-          }
-        });
+      for (const funcInfo of functionList) {
+        this.funMappingStore.set(funcInfo.funcHandlerName, funcInfo);
       }
     }, LOCK_KEY);
   }

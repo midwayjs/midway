@@ -72,25 +72,13 @@ export namespace FaaSMetadata {
 
   }
 
-  export interface EventTriggerMetadata {
-
-  }
-
   export interface HTTPTriggerOptions extends TriggerCommonOptions  {
     path: string;
     method?: string;
     middleware?: any[];
   }
 
-  export interface HTTPTriggerMetadata {
-
-  }
-
   export interface APIGatewayTriggerOptions extends HTTPTriggerOptions  {
-  }
-
-  export interface APIGatewayTriggerMetadata {
-
   }
 
   export interface OSTriggerOptions extends TriggerCommonOptions  {
@@ -102,10 +90,6 @@ export namespace FaaSMetadata {
     };
   }
 
-  export interface OSTriggerMetadata {
-
-  }
-
   export interface LogTriggerOptions extends TriggerCommonOptions  {
     source: string;
     project: string;
@@ -114,18 +98,10 @@ export namespace FaaSMetadata {
     interval?: number;
   }
 
-  export interface LogTriggerMetadata {
-
-  }
-
   export interface TimerTriggerOptions extends TriggerCommonOptions  {
     type: 'cron' | 'every';
     value: string;
     payload: string;
-  }
-
-  export interface TimerTriggerMetadata {
-
   }
 
   export interface MQTriggerOptions extends TriggerCommonOptions  {
@@ -135,8 +111,11 @@ export namespace FaaSMetadata {
     strategy?: 'BACKOFF_RETRY' | 'EXPONENTIAL_DECAY_RETRY';
   }
 
-  export interface MQTriggerMetadata {
-
+  export interface TriggerMetadata {
+    type: string | ServerlessTriggerType;
+    functionName?: string;
+    methodName: string,
+    metadata: EventTriggerOptions | HTTPTriggerOptions | APIGatewayTriggerOptions | OSTriggerOptions | LogTriggerOptions | TimerTriggerOptions | MQTriggerOptions;
   }
 
 }

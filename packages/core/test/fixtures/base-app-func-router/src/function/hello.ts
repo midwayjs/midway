@@ -1,4 +1,4 @@
-import { Provide, Func, Inject } from '@midwayjs/decorator';
+import { Func, Inject, Provide, ServerlessTriggerType } from '@midwayjs/decorator';
 
 @Provide()
 export class HelloHttpService {
@@ -17,6 +17,7 @@ export class HelloHttpService {
   }
 
   @Func('http.upload', { middleware: ['fmw:upload'] })
+  @Func(ServerlessTriggerType.HTTP, { path: '/'})
   upload() {
     const { files, fields } = this.ctx;
     return {

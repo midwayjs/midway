@@ -15,7 +15,7 @@ import { Scope } from '../annotation';
 
 export function Provider(
   type: MSProviderType.GRPC,
-  metadata?: GRPCMetadata.ProviderMetadata,
+  metadata?: GRPCMetadata.ProviderMetadata
 ): ClassDecorator;
 export function Provider(
   type: MSProviderType.DUBBO,

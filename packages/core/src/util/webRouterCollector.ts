@@ -2,6 +2,7 @@ import { EmptyFramework } from './emptyFramework';
 import {
   CONTROLLER_KEY,
   ControllerOption,
+  FaaSMetadata,
   FUNC_KEY,
   getClassMetadata,
   getPropertyDataFromClass,
@@ -79,10 +80,10 @@ export interface RouterPriority {
 }
 
 export class WebRouterCollector {
-  private readonly baseDir: string;
+  protected readonly baseDir: string;
+  private isReady = false;
   private routes = new Map<string, RouterInfo[]>();
   private routesPriority: RouterPriority[] = [];
-  private isReady = false;
 
   constructor(baseDir?: string) {
     this.baseDir = baseDir || '';
@@ -185,15 +186,19 @@ export class WebRouterCollector {
     }
   }
 
-  protected collectFunctionRoute(module) {
-    const webRouterInfo: Array<{
-      funHandler?: string;
-      event: string;
-      method: string;
-      path: string;
-      key: string;
-      middleware: string[];
-    }> = getClassMetadata(FUNC_KEY, module);
+  protected collectFunctionRoute(module, isIncludeAll = false) {
+    // 老的函数路由
+    const webRouterInfo: Array<
+      | {
+          funHandler?: string;
+          event: string;
+          method: string;
+          path: string;
+          key: string;
+          middleware: string[];
+        }
+      | FaaSMetadata.TriggerMetadata
+    > = getClassMetadata(FUNC_KEY, module);
 
     const controllerId = getProviderId(module);
 
@@ -211,24 +216,89 @@ export class WebRouterCollector {
     }
 
     for (const webRouter of webRouterInfo) {
-      if (webRouter.path) {
-        this.routes.get(prefix).push({
-          prefix,
-          routerName: '',
-          url: webRouter.path,
-          requestMethod: webRouter.method,
-          method: webRouter.key,
-          description: '',
-          summary: '',
-          handlerName: `${controllerId}.${webRouter.key}`,
-          funcHandlerName:
-            webRouter.funHandler || `${controllerId}.${webRouter.key}`,
-          controllerId,
-          middleware: webRouter.middleware || [],
-          controllerMiddleware: [],
-          requestMetadata: [],
-          responseMetadata: [],
-        });
+      if (webRouter['type']) {
+        if (webRouter['metadata']?.['path']) {
+          // 新 http/apigateway 函数
+          this.routes.get(prefix).push({
+            prefix,
+            routerName: '',
+            url: webRouter['metadata']['path'],
+            requestMethod: webRouter['metadata']?.['method'],
+            method: webRouter['methodName'],
+            description: '',
+            summary: '',
+            handlerName: `${controllerId}.${webRouter['methodName']}`,
+            funcHandlerName: `${controllerId}.${webRouter['methodName']}`,
+            controllerId,
+            middleware: webRouter['metadata']?.['middleware'] || [],
+            controllerMiddleware: [],
+            requestMetadata: [],
+            responseMetadata: [],
+          });
+        } else {
+          if (isIncludeAll) {
+            // 其他类型的函数
+            this.routes.get(prefix).push({
+              prefix,
+              routerName: '',
+              url: '',
+              requestMethod: '',
+              method: webRouter['methodName'],
+              description: '',
+              summary: '',
+              handlerName: `${controllerId}.${webRouter['methodName']}`,
+              funcHandlerName: `${controllerId}.${webRouter['methodName']}`,
+              controllerId,
+              middleware: [],
+              controllerMiddleware: [],
+              requestMetadata: [],
+              responseMetadata: [],
+            });
+          }
+        }
+      } else {
+        if (webRouter['path']) {
+          // 老函数的 http
+          this.routes.get(prefix).push({
+            prefix,
+            routerName: '',
+            url: webRouter['path'],
+            requestMethod: webRouter['method'],
+            method: webRouter['key'],
+            description: '',
+            summary: '',
+            handlerName: `${controllerId}.${webRouter['key']}`,
+            funcHandlerName:
+              webRouter['funHandler'] || `${controllerId}.${webRouter['key']}`,
+            controllerId,
+            middleware: webRouter['middleware'] || [],
+            controllerMiddleware: [],
+            requestMetadata: [],
+            responseMetadata: [],
+          });
+        } else {
+          if (isIncludeAll) {
+            // 非 http
+            this.routes.get(prefix).push({
+              prefix,
+              routerName: '',
+              url: '',
+              requestMethod: '',
+              method: webRouter['key'],
+              description: '',
+              summary: '',
+              handlerName: `${controllerId}.${webRouter['key']}`,
+              funcHandlerName:
+                webRouter['funHandler'] ||
+                `${controllerId}.${webRouter['key']}`,
+              controllerId,
+              middleware: webRouter['middleware'] || [],
+              controllerMiddleware: [],
+              requestMetadata: [],
+              responseMetadata: [],
+            });
+          }
+        }
       }
     }
   }
