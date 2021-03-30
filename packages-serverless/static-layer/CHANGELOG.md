@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.9.3](https://github.com/midwayjs/midway-faas/compare/v2.9.2...v2.9.3) (2021-03-30)
+
+
+### Bug Fixes
+
+* client ip proxy to real server ([#956](https://github.com/midwayjs/midway-faas/issues/956)) ([fa6d53c](https://github.com/midwayjs/midway-faas/commit/fa6d53cde0f8bcbca875cf69faa08a708746c0bc))
+
+
+
+
+
 ## [2.9.2](https://github.com/midwayjs/midway-faas/compare/v2.9.1...v2.9.2) (2021-03-27)
 
 **Note:** Version bump only for package @midwayjs/static-layer

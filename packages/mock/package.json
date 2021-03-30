@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/mock",
-  "version": "2.9.2",
+  "version": "2.9.3",
   "description": "create your test app from midway framework",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -39,7 +39,7 @@
     "socket.io-client": "^4.0.0"
   },
   "dependencies": {
-    "@midwayjs/bootstrap": "^2.9.2",
+    "@midwayjs/bootstrap": "^2.9.3",
     "@midwayjs/decorator": "^2.9.2",
     "@midwayjs/logger": "^2.8.13",
     "egg-mock": "^3.21.0",

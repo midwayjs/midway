@@ -1,6 +1,6 @@
 {
   "name": "midway",
-  "version": "2.9.2",
+  "version": "2.9.3",
   "description": "A Node.js Serverless Framework for front-end/full-stack developers. Build the application for next decade.",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -35,7 +35,7 @@
     "egg-logger": "^2.4.2"
   },
   "dependencies": {
-    "@midwayjs/web": "^2.9.2",
+    "@midwayjs/web": "^2.9.3",
     "egg-cluster": "^1.23.0"
   },
   "files": [
