@@ -25,7 +25,53 @@ describe('/test/webRouterCollector.test.ts', function () {
     clearContainerCache();
     const collector = new WebRouterCollector(join(__dirname, './fixtures/base-app-func-router'));
     const result = await collector.getFlattenRouterTable();
-    expect(result.length === 2).toBeTruthy();
+    expect(result.length).toEqual(5);
+    expect(result[0]).toMatchObject({
+      'controllerId': 'helloHttpService',
+      'funcHandlerName': 'helloHttpService.upload',
+      'handlerName': 'helloHttpService.upload',
+      'method': 'upload',
+      'prefix': '/',
+      'requestMethod': 'get',
+      'routerName': '',
+      'url': '/upload',
+    });
+    expect(result[1]).toMatchObject({
+      "prefix": "/",
+      "url": "/update",
+      "requestMethod": "post",
+      "method": "invoke",
+      "handlerName": "helloHttpService.invoke",
+      "funcHandlerName": "helloHttpService.invoke",
+      "controllerId": "helloHttpService",
+    });
+    expect(result[2]).toMatchObject({
+      "prefix": "/",
+      "url": "/invoke",
+      "requestMethod": "get",
+      "method": "invoke",
+      "handlerName": "helloHttpService.invoke",
+      "funcHandlerName": "helloHttpService.invoke",
+      "controllerId": "helloHttpService",
+    });
+    expect(result[3]).toMatchObject({
+      "prefix": "/",
+      "url": "/other",
+      "requestMethod": "all",
+      "method": "handler",
+      "handlerName": "helloHttpService.handler",
+      "funcHandlerName": "http.handler",
+      "controllerId": "helloHttpService",
+    });
+    expect(result[4]).toMatchObject({
+      "prefix": "/",
+      "url": "/",
+      "requestMethod": "get",
+      "method": "homeSet",
+      "handlerName": "apiController.homeSet",
+      "funcHandlerName": "apiController.homeSet",
+      "controllerId": "apiController",
+    });
   });
 
   it('should sort param', function () {

@@ -64,11 +64,22 @@ export interface RouterInfo {
    * request args metadata
    */
   requestMetadata: any[];
-
   /**
    * response data metadata
    */
   responseMetadata: any[];
+  /**
+   * serverless function name
+   */
+  functionName?: string;
+  /**
+   * serverless trigger name
+   */
+  functionTriggerName?: string;
+  /**
+   * serverless function trigger metadata
+   */
+  functionTriggerMetadata?: any;
 }
 
 export interface RouterPriority {
@@ -186,7 +197,7 @@ export class WebRouterCollector {
     }
   }
 
-  protected collectFunctionRoute(module, isIncludeAll = false) {
+  protected collectFunctionRoute(module, includeAllFunction = false) {
     // 老的函数路由
     const webRouterInfo: Array<
       | {
@@ -219,11 +230,11 @@ export class WebRouterCollector {
       if (webRouter['type']) {
         if (webRouter['metadata']?.['path']) {
           // 新 http/apigateway 函数
-          this.routes.get(prefix).push({
+          const data: RouterInfo = {
             prefix,
             routerName: '',
             url: webRouter['metadata']['path'],
-            requestMethod: webRouter['metadata']?.['method'],
+            requestMethod: webRouter['metadata']?.['method'] ?? 'get',
             method: webRouter['methodName'],
             description: '',
             summary: '',
@@ -234,9 +245,15 @@ export class WebRouterCollector {
             controllerMiddleware: [],
             requestMetadata: [],
             responseMetadata: [],
-          });
+          };
+          if (includeAllFunction) {
+            data.functionName = webRouter['functionName'];
+            data.functionTriggerName = webRouter['type'];
+            data.functionTriggerMetadata = webRouter['metadata'];
+          }
+          this.routes.get(prefix).push(data);
         } else {
-          if (isIncludeAll) {
+          if (includeAllFunction) {
             // 其他类型的函数
             this.routes.get(prefix).push({
               prefix,
@@ -253,17 +270,19 @@ export class WebRouterCollector {
               controllerMiddleware: [],
               requestMetadata: [],
               responseMetadata: [],
+              functionName: webRouter['functionName'],
+              functionTriggerName: webRouter['type'],
+              functionTriggerMetadata: webRouter['metadata'],
             });
           }
         }
       } else {
         if (webRouter['path']) {
-          // 老函数的 http
-          this.routes.get(prefix).push({
+          const data: RouterInfo = {
             prefix,
             routerName: '',
             url: webRouter['path'],
-            requestMethod: webRouter['method'],
+            requestMethod: webRouter['method'] ?? 'get',
             method: webRouter['key'],
             description: '',
             summary: '',
@@ -275,9 +294,16 @@ export class WebRouterCollector {
             controllerMiddleware: [],
             requestMetadata: [],
             responseMetadata: [],
-          });
+          };
+          if (includeAllFunction) {
+            data.functionName = webRouter['functionName'];
+            data.functionTriggerName = webRouter['type'];
+            data.functionTriggerMetadata = webRouter['metadata'];
+          }
+          // 老函数的 http
+          this.routes.get(prefix).push(data);
         } else {
-          if (isIncludeAll) {
+          if (includeAllFunction) {
             // 非 http
             this.routes.get(prefix).push({
               prefix,
@@ -296,6 +322,9 @@ export class WebRouterCollector {
               controllerMiddleware: [],
               requestMetadata: [],
               responseMetadata: [],
+              functionName: webRouter['functionName'],
+              functionTriggerName: webRouter['type'],
+              functionTriggerMetadata: webRouter['metadata'],
             });
           }
         }

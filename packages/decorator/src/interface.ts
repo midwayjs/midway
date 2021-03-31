@@ -74,7 +74,7 @@ export namespace FaaSMetadata {
 
   export interface HTTPTriggerOptions extends TriggerCommonOptions  {
     path: string;
-    method?: string;
+    method?: 'get' | 'post' | 'delete' | 'put' | 'head' | 'patch' | 'all';
     middleware?: any[];
   }
 
@@ -99,9 +99,9 @@ export namespace FaaSMetadata {
   }
 
   export interface TimerTriggerOptions extends TriggerCommonOptions  {
-    type: 'cron' | 'every';
+    type: 'cron' | 'every' | 'interval';
     value: string;
-    payload: string;
+    payload?: string;
   }
 
   export interface MQTriggerOptions extends TriggerCommonOptions  {
@@ -111,11 +111,22 @@ export namespace FaaSMetadata {
     strategy?: 'BACKOFF_RETRY' | 'EXPONENTIAL_DECAY_RETRY';
   }
 
+  export interface HSFTriggerOptions extends TriggerCommonOptions  {
+  }
+
+  export interface MTopTriggerOptions extends TriggerCommonOptions  {
+  }
+
+  export interface CDNTriggerOptions extends TriggerCommonOptions  {
+  }
+
+  export type EventTriggerUnionOptions = EventTriggerOptions | HTTPTriggerOptions | APIGatewayTriggerOptions | OSTriggerOptions | CDNTriggerOptions | LogTriggerOptions | TimerTriggerOptions | MQTriggerOptions | HSFTriggerOptions | MTopTriggerOptions;
+
   export interface TriggerMetadata {
-    type: string | ServerlessTriggerType;
+    type: ServerlessTriggerType;
     functionName?: string;
     methodName: string,
-    metadata: EventTriggerOptions | HTTPTriggerOptions | APIGatewayTriggerOptions | OSTriggerOptions | LogTriggerOptions | TimerTriggerOptions | MQTriggerOptions;
+    metadata: EventTriggerUnionOptions;
   }
 
 }
@@ -139,10 +150,12 @@ export enum MidwayFrameworkType {
 export enum ServerlessTriggerType {
   EVENT = 'event',
   HTTP = 'http',
-  API_GATEWAY = 'api_gateway',
-  OS = 'oss',
+  API_GATEWAY = 'apigw',
+  OS = 'os',
   CDN = 'cdn',
   LOG = 'log',
   TIMER = 'timer',
   MQ = 'mq',
+  HSF = 'hsf',
+  MTOP = 'mtop',
 }
