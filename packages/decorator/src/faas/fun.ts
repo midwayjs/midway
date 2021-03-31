@@ -113,8 +113,8 @@ export function ServerlessTrigger(
     }
     metadata['functionName'] =
       metadata['functionName'] ??
-      getProviderId(target.constructor).replace(/[:#]/g, '_') +
-        '_' +
+      getProviderId(target.constructor).replace(/[:#]/g, '-') +
+        '-' +
         functionName;
     saveModule(FUNC_KEY, target.constructor);
     // new method decorator
