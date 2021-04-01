@@ -2,6 +2,7 @@ import { WebRouterCollector } from './webRouterCollector';
 
 export class ServerlessTriggerCollector extends WebRouterCollector {
   collectRoute(module) {
+    this.options.includeFunctionRouter = true;
     super.collectRoute(module, true);
   }
 

@@ -92,14 +92,20 @@ export interface RouterPriority {
   controllerId: string;
 }
 
+export interface RouterCollectorOptions {
+  includeFunctionRouter?: boolean;
+}
+
 export class WebRouterCollector {
   protected readonly baseDir: string;
   private isReady = false;
   private routes = new Map<string, RouterInfo[]>();
   private routesPriority: RouterPriority[] = [];
+  protected options: RouterCollectorOptions;
 
-  constructor(baseDir?: string) {
-    this.baseDir = baseDir || '';
+  constructor(baseDir = '', options: RouterCollectorOptions = {}) {
+    this.baseDir = baseDir;
+    this.options = options;
   }
 
   protected async analyze() {
@@ -116,10 +122,11 @@ export class WebRouterCollector {
       this.collectRoute(module);
     }
 
-    const fnModules = listModule(FUNC_KEY);
-
-    for (const module of fnModules) {
-      this.collectFunctionRoute(module);
+    if (this.options.includeFunctionRouter) {
+      const fnModules = listModule(FUNC_KEY);
+      for (const module of fnModules) {
+        this.collectFunctionRoute(module);
+      }
     }
 
     // sort router
@@ -134,7 +141,7 @@ export class WebRouterCollector {
     });
   }
 
-  protected collectRoute(module, includeAllFunction = false) {
+  protected collectRoute(module, functionMeta = false) {
     const controllerId = getProviderId(module);
     const controllerOption: ControllerOption = getClassMetadata(
       CONTROLLER_KEY,
@@ -196,7 +203,7 @@ export class WebRouterCollector {
           responseMetadata: routerResponseData,
         };
 
-        if (includeAllFunction) {
+        if (functionMeta) {
           // get function information
           data.functionName = controllerId + '-' + webRouter.method;
           data.functionTriggerName = ServerlessTriggerType.HTTP;

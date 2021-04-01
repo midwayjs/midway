@@ -24,7 +24,7 @@ describe('/test/webRouterCollector.test.ts', function () {
   it('should test with function router', async () => {
     clearAllModule();
     clearContainerCache();
-    const collector = new WebRouterCollector(join(__dirname, './fixtures/base-app-func-router'));
+    const collector = new WebRouterCollector(join(__dirname, './fixtures/base-app-func-router'), { includeFunctionRouter: true});
     const result = await collector.getFlattenRouterTable();
     expect(result.length).toEqual(6);
     expect(matchObjectPropertyInArray(result, {
