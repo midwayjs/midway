@@ -1,5 +1,5 @@
 {
-  "name": "@midwayjs/metrics",
+  "name": "@midwayjs/prometheus",
   "version": "2.9.3",
   "description": "",
   "main": "dist/index.js",

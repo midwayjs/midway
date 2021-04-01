@@ -3,7 +3,7 @@ import * as PromClient from 'prom-client';
 
 @Provide()
 @Controller('/')
-export class MetricsControlelr {
+export class PrometheusControlelr {
   @Inject()
   ctx;
 
