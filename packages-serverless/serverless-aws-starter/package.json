@@ -1,11 +1,11 @@
 {
   "name": "@midwayjs/serverless-aws-starter",
-  "version": "2.8.13",
+  "version": "2.10.0-beta.2",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/runtime-engine": "^2.8.13",
-    "@midwayjs/serverless-http-parser": "^2.8.11"
+    "@midwayjs/runtime-engine": "^2.10.0-beta.2",
+    "@midwayjs/serverless-http-parser": "^2.10.0-beta.2"
   },
   "devDependencies": {
     "@midwayjs/cli": "^1.2.36",
