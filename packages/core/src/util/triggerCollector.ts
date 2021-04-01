@@ -1,8 +1,12 @@
 import { WebRouterCollector } from './webRouterCollector';
 
 export class ServerlessTriggerCollector extends WebRouterCollector {
-  collectRoute(module) {
+  protected async analyze() {
     this.options.includeFunctionRouter = true;
+    return super.analyze();
+  }
+
+  protected collectRoute(module) {
     super.collectRoute(module, true);
   }
 

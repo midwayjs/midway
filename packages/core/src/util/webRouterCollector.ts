@@ -218,7 +218,7 @@ export class WebRouterCollector {
     }
   }
 
-  protected collectFunctionRoute(module, includeAllFunction = false) {
+  protected collectFunctionRoute(module, functionMeta = false) {
     // 老的函数路由
     const webRouterInfo: Array<
       | {
@@ -281,14 +281,14 @@ export class WebRouterCollector {
             requestMetadata: routeArgsInfo,
             responseMetadata: routerResponseData,
           };
-          if (includeAllFunction) {
+          if (functionMeta) {
             data.functionName = webRouter['functionName'];
             data.functionTriggerName = webRouter['type'];
             data.functionTriggerMetadata = webRouter['metadata'];
           }
           this.routes.get(prefix).push(data);
         } else {
-          if (includeAllFunction) {
+          if (functionMeta) {
             // 其他类型的函数
             this.routes.get(prefix).push({
               prefix,
@@ -331,7 +331,7 @@ export class WebRouterCollector {
             requestMetadata: [],
             responseMetadata: [],
           };
-          if (includeAllFunction) {
+          if (functionMeta) {
             // get function information
             data.functionName = controllerId + '-' + webRouter['key'];
             data.functionTriggerName = ServerlessTriggerType.HTTP;
@@ -343,7 +343,7 @@ export class WebRouterCollector {
           // 老函数的 http
           this.routes.get(prefix).push(data);
         } else {
-          if (includeAllFunction) {
+          if (functionMeta) {
             // 非 http
             this.routes.get(prefix).push({
               prefix,
