@@ -10,7 +10,7 @@ export class ServerlessTriggerCollector extends WebRouterCollector {
     super.collectRoute(module, true);
   }
 
-  collectFunctionRoute(module) {
+  protected collectFunctionRoute(module) {
     super.collectFunctionRoute(module, true);
   }
 
