@@ -191,12 +191,11 @@ describe('/test/feature.test.ts', () => {
       expect(result.text).toEqual('bbb');
     });
 
-    it('should return function router', async () => {
+    it('should not return function router', async () => {
       const result = await createHttpRequest(app)
         .get('/other')
         .query({ name: 'harry' });
-      expect(result.status).toEqual(200);
-      expect(result.body.query).toEqual({name: 'harry'});
+      expect(result.status).toEqual(404);
     });
   });
 
