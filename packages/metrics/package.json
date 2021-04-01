@@ -1,6 +1,6 @@
 {
-  "name": "midway-custom-component",
-  "version": "1.0.0",
+  "name": "@midwayjs/metrics",
+  "version": "2.9.3",
   "description": "",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
