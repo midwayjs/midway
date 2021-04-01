@@ -53,9 +53,9 @@ export const output404 = (path, functionsMap) => {
 // 分析装饰器上面的函数信息
 export const analysisDecorator = async (cwd: string) => {
   const midwayCoreMod = findNpmModule(cwd, '@midwayjs/core');
-  const { WebRouterCollector } = require(midwayCoreMod);
-  const collector = new WebRouterCollector();
-  const result = await collector.getFlattenRouterTable();
+  const { ServerlessTriggerCollector } = require(midwayCoreMod);
+  const collector = new ServerlessTriggerCollector();
+  const result = await collector.getFunctionList();
   const allFunc = {};
   if (Array.isArray(result)) {
     result.forEach(func => {
