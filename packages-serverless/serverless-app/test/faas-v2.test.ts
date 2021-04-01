@@ -1,10 +1,9 @@
 'use strict';
 import { join } from 'path';
 import * as assert from 'assert';
-import { createApp, close } from '../../../packages/mock';
+import { createApp, close, createHttpRequest } from '@midwayjs/mock';
 import { Framework, Application } from '../src';
 import { EventService } from './fixtures/faas-v2/src/event';
-const request = require('supertest');
 const cwd = join(__dirname, 'fixtures/faas-v2');
 describe('test/faas-v2.test.ts', () => {
 
@@ -21,7 +20,7 @@ describe('test/faas-v2.test.ts', () => {
     await close(app);
   });
   it('http get', async done => {
-    request(app)
+    createHttpRequest(app)
       .get('/hello?name=test&age=123')
       .expect(200)
       .then(response => {
@@ -35,7 +34,7 @@ describe('test/faas-v2.test.ts', () => {
       .catch(err => done(err));
   });
   it('http get controller', async done => {
-    request(app)
+    createHttpRequest(app)
       .get('/user')
       .expect(200)
       .then(response => {
@@ -45,7 +44,7 @@ describe('test/faas-v2.test.ts', () => {
       .catch(err => done(err));
   });
   it('http get controller params', async done => {
-    request(app)
+    createHttpRequest(app)
       .get('/user/midway')
       .expect(200)
       .then(response => {
@@ -55,7 +54,7 @@ describe('test/faas-v2.test.ts', () => {
       .catch(err => done(err));
   });
   it('http post', async done => {
-    await request(app)
+    await createHttpRequest(app)
       .post('/hello')
       .type('form')
       .send({ id: '1' })
@@ -71,9 +70,10 @@ describe('test/faas-v2.test.ts', () => {
       })
       .catch(err => done(err));
   });
+
   it('http post upload', async done => {
     const imagePath = join(cwd, '1.jpg');
-    await request(app)
+    await createHttpRequest(app)
       .post('/upload')
       .field('name', 'form')
       .attach('file', imagePath)
@@ -86,9 +86,19 @@ describe('test/faas-v2.test.ts', () => {
       })
       .catch(err => done(err));
   });
+
   it('oth event trigger', async () => {
     const instance = await app.getServerlessInstance<EventService>(EventService);
     const result = instance.handler({ name: 123 });
     assert(result.name === 123);
+  });
+
+  it('should use @ServerlessTrigger with http event', async () => {
+    const result = await createHttpRequest(app)
+      .get('/func/http/get')
+      .query({
+        name: 'zhangting'
+      });
+    expect(result.text).toEqual('user:zhangting');
   });
 });

@@ -1,4 +1,4 @@
-import { dirname, resolve, sep } from 'path';
+import { dirname, resolve, sep, posix } from 'path';
 import { readFileSync } from 'fs';
 
 export const isDevelopmentEnvironment = env => {
@@ -70,4 +70,16 @@ export function parsePrefix(provideId: string) {
 
 export function getUserHome() {
   return process.env[process.platform === 'win32' ? 'USERPROFILE' : 'HOME'];
+}
+
+export function joinURLPath(...strArray) {
+  if (strArray.length === 0) {
+    return '';
+  }
+  let p = posix.join(...strArray);
+  p = p.replace(/\/+$/, '');
+  if (!/^\//.test(p)) {
+    p = '/' + p;
+  }
+  return p;
 }

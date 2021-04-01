@@ -11,11 +11,13 @@ import {
   listModule,
   PRIORITY_KEY,
   RouterOption,
+  ServerlessTriggerType,
   WEB_RESPONSE_KEY,
   WEB_ROUTER_KEY,
   WEB_ROUTER_PARAM_KEY,
 } from '@midwayjs/decorator';
 import { MidwayContainer } from '../context/midwayContainer';
+import { joinURLPath } from './index';
 
 export interface RouterInfo {
   /**
@@ -132,7 +134,7 @@ export class WebRouterCollector {
     });
   }
 
-  protected collectRoute(module) {
+  protected collectRoute(module, includeAllFunction = false) {
     const controllerId = getProviderId(module);
     const controllerOption: ControllerOption = getClassMetadata(
       CONTROLLER_KEY,
@@ -177,7 +179,7 @@ export class WebRouterCollector {
         const routerResponseData =
           getPropertyMetadata(WEB_RESPONSE_KEY, module, webRouter.method) || [];
 
-        this.routes.get(prefix).push({
+        const data: RouterInfo = {
           prefix,
           routerName: webRouter.routerName || '',
           url: webRouter.path,
@@ -192,7 +194,19 @@ export class WebRouterCollector {
           controllerMiddleware: middleware || [],
           requestMetadata: routeArgsInfo,
           responseMetadata: routerResponseData,
-        });
+        };
+
+        if (includeAllFunction) {
+          // get function information
+          data.functionName = controllerId + '-' + webRouter.method;
+          data.functionTriggerName = ServerlessTriggerType.HTTP;
+          data.functionTriggerMetadata = {
+            path: joinURLPath(prefix, webRouter.path.toString()),
+            method: webRouter.requestMethod,
+          } as FaaSMetadata.HTTPTriggerOptions;
+        }
+
+        this.routes.get(prefix).push(data);
       }
     }
   }
@@ -228,7 +242,21 @@ export class WebRouterCollector {
 
     for (const webRouter of webRouterInfo) {
       if (webRouter['type']) {
+        // 新的 @ServerlessTrigger 写法
         if (webRouter['metadata']?.['path']) {
+          const routeArgsInfo =
+            getPropertyDataFromClass(
+              WEB_ROUTER_PARAM_KEY,
+              module,
+              webRouter['methodName']
+            ) || [];
+
+          const routerResponseData =
+            getPropertyMetadata(
+              WEB_RESPONSE_KEY,
+              module,
+              webRouter['methodName']
+            ) || [];
           // 新 http/apigateway 函数
           const data: RouterInfo = {
             prefix,
@@ -243,8 +271,8 @@ export class WebRouterCollector {
             controllerId,
             middleware: webRouter['metadata']?.['middleware'] || [],
             controllerMiddleware: [],
-            requestMetadata: [],
-            responseMetadata: [],
+            requestMetadata: routeArgsInfo,
+            responseMetadata: routerResponseData,
           };
           if (includeAllFunction) {
             data.functionName = webRouter['functionName'];
@@ -277,11 +305,12 @@ export class WebRouterCollector {
           }
         }
       } else {
-        if (webRouter['path']) {
+        // 老的 @Func 写法
+        if (webRouter['path'] || webRouter['middleware']) {
           const data: RouterInfo = {
             prefix,
             routerName: '',
-            url: webRouter['path'],
+            url: webRouter['path'] ?? '/',
             requestMethod: webRouter['method'] ?? 'get',
             method: webRouter['key'],
             description: '',
@@ -296,9 +325,13 @@ export class WebRouterCollector {
             responseMetadata: [],
           };
           if (includeAllFunction) {
-            data.functionName = webRouter['functionName'];
-            data.functionTriggerName = webRouter['type'];
-            data.functionTriggerMetadata = webRouter['metadata'];
+            // get function information
+            data.functionName = controllerId + '-' + webRouter['key'];
+            data.functionTriggerName = ServerlessTriggerType.HTTP;
+            data.functionTriggerMetadata = {
+              path: webRouter['path'] ?? '/',
+              method: webRouter['method'] ?? 'get',
+            };
           }
           // 老函数的 http
           this.routes.get(prefix).push(data);

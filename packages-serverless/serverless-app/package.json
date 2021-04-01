@@ -16,12 +16,11 @@
     "@midwayjs/decorator": "^2.9.2",
     "@midwayjs/faas": "^2.9.3",
     "@midwayjs/faas-middleware-upload": "^0.0.5",
+    "@midwayjs/mock": "^2.9.3",
     "@midwayjs/serverless-fc-starter": "^2.9.2",
     "@midwayjs/serverless-fc-trigger": "^2.9.2",
     "@midwayjs/serverless-scf-starter": "^2.8.13",
-    "@midwayjs/serverless-scf-trigger": "^2.9.2",
-    "supertest": "^4.0.2",
-    "typescript": "^4.1.0"
+    "@midwayjs/serverless-scf-trigger": "^2.9.2"
   },
   "engines": {
     "node": ">= 10"
@@ -38,9 +37,6 @@
   "repository": {
     "type": "git",
     "url": "git@github.com:midwayjs/midway.git"
-  },
-  "publishConfig": {
-    "access": "public"
   },
   "license": "MIT",
   "gitHead": "58706de896b8e3b50605bb29f40ff29abe43924d"
