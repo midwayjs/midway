@@ -2,6 +2,7 @@ import { WebRouterCollector } from '../src';
 import { join } from 'path';
 import { clearAllModule } from '@midwayjs/decorator';
 import { clearContainerCache } from '../src';
+import { matchObjectPropertyInArray } from './util';
 
 describe('/test/webRouterCollector.test.ts', function () {
 
@@ -25,8 +26,8 @@ describe('/test/webRouterCollector.test.ts', function () {
     clearContainerCache();
     const collector = new WebRouterCollector(join(__dirname, './fixtures/base-app-func-router'));
     const result = await collector.getFlattenRouterTable();
-    expect(result.length).toEqual(5);
-    expect(result[0]).toMatchObject({
+    expect(result.length).toEqual(6);
+    expect(matchObjectPropertyInArray(result, {
       'controllerId': 'helloHttpService',
       'funcHandlerName': 'helloHttpService.upload',
       'handlerName': 'helloHttpService.upload',
@@ -35,8 +36,9 @@ describe('/test/webRouterCollector.test.ts', function () {
       'requestMethod': 'get',
       'routerName': '',
       'url': '/upload',
-    });
-    expect(result[1]).toMatchObject({
+    })).toBeTruthy();
+
+    expect(matchObjectPropertyInArray(result, {
       "prefix": "/",
       "url": "/update",
       "requestMethod": "post",
@@ -44,8 +46,9 @@ describe('/test/webRouterCollector.test.ts', function () {
       "handlerName": "helloHttpService.invoke",
       "funcHandlerName": "helloHttpService.invoke",
       "controllerId": "helloHttpService",
-    });
-    expect(result[2]).toMatchObject({
+    })).toBeTruthy();
+
+    expect(matchObjectPropertyInArray(result, {
       "prefix": "/",
       "url": "/invoke",
       "requestMethod": "get",
@@ -53,8 +56,9 @@ describe('/test/webRouterCollector.test.ts', function () {
       "handlerName": "helloHttpService.invoke",
       "funcHandlerName": "helloHttpService.invoke",
       "controllerId": "helloHttpService",
-    });
-    expect(result[3]).toMatchObject({
+    })).toBeTruthy();
+
+    expect(matchObjectPropertyInArray(result, {
       "prefix": "/",
       "url": "/other",
       "requestMethod": "all",
@@ -62,8 +66,9 @@ describe('/test/webRouterCollector.test.ts', function () {
       "handlerName": "helloHttpService.handler",
       "funcHandlerName": "http.handler",
       "controllerId": "helloHttpService",
-    });
-    expect(result[4]).toMatchObject({
+    })).toBeTruthy();
+
+    expect(matchObjectPropertyInArray(result, {
       "prefix": "/",
       "url": "/",
       "requestMethod": "get",
@@ -71,7 +76,8 @@ describe('/test/webRouterCollector.test.ts', function () {
       "handlerName": "apiController.homeSet",
       "funcHandlerName": "apiController.homeSet",
       "controllerId": "apiController",
-    });
+    })).toBeTruthy();
+
   });
 
   it('should sort param', function () {
