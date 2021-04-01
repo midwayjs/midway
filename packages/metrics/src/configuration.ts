@@ -5,7 +5,7 @@ import * as PromClient from 'prom-client';
 
 @Configuration({
   namespace: 'metrics',
-  importConfigs: [join(__dirname, 'config')]
+  importConfigs: [join(__dirname, 'config')],
 })
 export class AutoConfiguration {
   @Config('metrics')
