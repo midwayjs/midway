@@ -1,3 +1,3 @@
-import { DefaultMetricsCollectorConfiguration } from 'prom-client';
+import { DefaultMetricsCollectorConfiguration as DefaultConfig } from 'prom-client';
 
-export const metrics: DefaultMetricsCollectorConfiguration = {};
+export const metrics: DefaultConfig = {};
