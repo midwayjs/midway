@@ -7,7 +7,6 @@ export class ControllerTestService {
   @Inject()
   ctx;
 
-
   @Get('/')
   async handler() {
     return 'user'

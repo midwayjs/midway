@@ -48,19 +48,87 @@ export enum MSProviderType {
 }
 
 /**
- * all decorator metadata format
+ * grpc decorator metadata format
  */
-export namespace DecoratorMetadata {
-
-  export interface GRPCClassMetadata {
+export namespace GRPCMetadata {
+  export interface ProviderOptions {
     serviceName?: string;
     package?: string;
   }
 
-  export interface ProviderClassMetadata {
+  export interface ProviderMetadata {
     type: MSProviderType,
-    metadata: GRPCClassMetadata
+    metadata: ProviderOptions
   }
+}
+
+export namespace FaaSMetadata {
+
+  interface TriggerCommonOptions {
+    functionName?: string;
+  }
+
+  export interface EventTriggerOptions extends TriggerCommonOptions {
+
+  }
+
+  export interface HTTPTriggerOptions extends TriggerCommonOptions  {
+    path: string;
+    method?: 'get' | 'post' | 'delete' | 'put' | 'head' | 'patch' | 'all';
+    middleware?: any[];
+  }
+
+  export interface APIGatewayTriggerOptions extends HTTPTriggerOptions  {
+  }
+
+  export interface OSTriggerOptions extends TriggerCommonOptions  {
+    bucket: string;
+    events: string;
+    filter?: {
+      prefix: string;
+      suffix: string;
+    };
+  }
+
+  export interface LogTriggerOptions extends TriggerCommonOptions  {
+    source: string;
+    project: string;
+    log: string;
+    retryTime?: number;
+    interval?: number;
+  }
+
+  export interface TimerTriggerOptions extends TriggerCommonOptions  {
+    type: 'cron' | 'every' | 'interval';
+    value: string;
+    payload?: string;
+  }
+
+  export interface MQTriggerOptions extends TriggerCommonOptions  {
+    topic: string;
+    tags?: string;
+    region?: string;
+    strategy?: 'BACKOFF_RETRY' | 'EXPONENTIAL_DECAY_RETRY';
+  }
+
+  export interface HSFTriggerOptions extends TriggerCommonOptions  {
+  }
+
+  export interface MTopTriggerOptions extends TriggerCommonOptions  {
+  }
+
+  export interface CDNTriggerOptions extends TriggerCommonOptions  {
+  }
+
+  export type EventTriggerUnionOptions = EventTriggerOptions | HTTPTriggerOptions | APIGatewayTriggerOptions | OSTriggerOptions | CDNTriggerOptions | LogTriggerOptions | TimerTriggerOptions | MQTriggerOptions | HSFTriggerOptions | MTopTriggerOptions;
+
+  export interface TriggerMetadata {
+    type: ServerlessTriggerType;
+    functionName?: string;
+    methodName: string,
+    metadata: EventTriggerUnionOptions;
+  }
+
 }
 
 export enum MidwayFrameworkType {
@@ -75,6 +143,19 @@ export enum MidwayFrameworkType {
   WSS = '',
   SERVERLESS_APP = '@midwayjs/serverless-app',
   CUSTOM = '',
-  EMPTY = '',
-  LIGHT = '',
+  EMPTY = 'empty',
+  LIGHT = 'light',
+}
+
+export enum ServerlessTriggerType {
+  EVENT = 'event',
+  HTTP = 'http',
+  API_GATEWAY = 'apigw',
+  OS = 'os',
+  CDN = 'cdn',
+  LOG = 'log',
+  TIMER = 'timer',
+  MQ = 'mq',
+  HSF = 'hsf',
+  MTOP = 'mtop',
 }

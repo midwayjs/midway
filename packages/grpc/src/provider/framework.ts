@@ -12,7 +12,7 @@ import {
 } from '@midwayjs/core';
 
 import {
-  DecoratorMetadata,
+  GRPCMetadata,
   getClassMetadata,
   getPropertyMetadata,
   getProviderId,
@@ -61,7 +61,7 @@ export class MidwayGRPCFramework extends BaseFramework<
   protected async loadService() {
     // find all code service
     const gRPCModules = listModule(MS_PROVIDER_KEY, module => {
-      const info: DecoratorMetadata.ProviderClassMetadata = getClassMetadata(
+      const info: GRPCMetadata.ProviderMetadata = getClassMetadata(
         MS_PROVIDER_KEY,
         module
       );
@@ -85,11 +85,11 @@ export class MidwayGRPCFramework extends BaseFramework<
     // register method to service
     for (const module of gRPCModules) {
       const provideId = getProviderId(module);
-      const info: DecoratorMetadata.ProviderClassMetadata = getClassMetadata(
+      const info: GRPCMetadata.ProviderMetadata = getClassMetadata(
         MS_PROVIDER_KEY,
         module
       );
-      const classMetadata = info.metadata as DecoratorMetadata.GRPCClassMetadata;
+      const classMetadata = info.metadata;
       const serviceName = classMetadata.serviceName || pascalCase(provideId);
 
       if (serviceClassDefinition.has(classMetadata?.package)) {

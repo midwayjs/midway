@@ -8,7 +8,7 @@ import {
 import { UserService } from '../service/user';
 
 @Provide()
-@Controller('/')
+@Controller('/api', { middleware: ['auth'] })
 export class APIController {
   @Inject()
   ctx: any;
@@ -19,7 +19,7 @@ export class APIController {
   @Logger()
   logger;
 
-  @Get('/')
+  @Get('/', { middleware: ['auth2'] })
   async homeSet() {
     return 'bbb';
   }

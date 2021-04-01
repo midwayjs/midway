@@ -2,6 +2,7 @@ import { WebRouterCollector } from '../src';
 import { join } from 'path';
 import { clearAllModule } from '@midwayjs/decorator';
 import { clearContainerCache } from '../src';
+import { matchObjectPropertyInArray } from './util';
 
 describe('/test/webRouterCollector.test.ts', function () {
 
@@ -23,9 +24,60 @@ describe('/test/webRouterCollector.test.ts', function () {
   it('should test with function router', async () => {
     clearAllModule();
     clearContainerCache();
-    const collector = new WebRouterCollector(join(__dirname, './fixtures/base-app-func-router'));
+    const collector = new WebRouterCollector(join(__dirname, './fixtures/base-app-func-router'), { includeFunctionRouter: true});
     const result = await collector.getFlattenRouterTable();
-    expect(result.length === 2).toBeTruthy();
+    expect(result.length).toEqual(6);
+    expect(matchObjectPropertyInArray(result, {
+      'controllerId': 'helloHttpService',
+      'funcHandlerName': 'helloHttpService.upload',
+      'handlerName': 'helloHttpService.upload',
+      'method': 'upload',
+      'prefix': '/',
+      'requestMethod': 'get',
+      'routerName': '',
+      'url': '/upload',
+    })).toBeTruthy();
+
+    expect(matchObjectPropertyInArray(result, {
+      "prefix": "/",
+      "url": "/update",
+      "requestMethod": "post",
+      "method": "invoke",
+      "handlerName": "helloHttpService.invoke",
+      "funcHandlerName": "helloHttpService.invoke",
+      "controllerId": "helloHttpService",
+    })).toBeTruthy();
+
+    expect(matchObjectPropertyInArray(result, {
+      "prefix": "/",
+      "url": "/invoke",
+      "requestMethod": "get",
+      "method": "invoke",
+      "handlerName": "helloHttpService.invoke",
+      "funcHandlerName": "helloHttpService.invoke",
+      "controllerId": "helloHttpService",
+    })).toBeTruthy();
+
+    expect(matchObjectPropertyInArray(result, {
+      "prefix": "/",
+      "url": "/other",
+      "requestMethod": "all",
+      "method": "handler",
+      "handlerName": "helloHttpService.handler",
+      "funcHandlerName": "http.handler",
+      "controllerId": "helloHttpService",
+    })).toBeTruthy();
+
+    expect(matchObjectPropertyInArray(result, {
+      "prefix": "/",
+      "url": "/",
+      "requestMethod": "get",
+      "method": "homeSet",
+      "handlerName": "apiController.homeSet",
+      "funcHandlerName": "apiController.homeSet",
+      "controllerId": "apiController",
+    })).toBeTruthy();
+
   });
 
   it('should sort param', function () {

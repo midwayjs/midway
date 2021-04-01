@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 import { join } from 'path';
-import { safeRequire, safelyGet } from '../src/util';
+import { safeRequire, safelyGet, joinURLPath } from '../src/util';
 import { PathFileUtil } from '../src/';
 import { StaticConfigLoader } from '../src/util/staticConfig';
 
@@ -56,6 +56,20 @@ describe('/test/pathFileUtil.test.ts', () => {
     assert.ok(PathFileUtil.isPathEqual('/midway-open/packages/midway-core/test/fixtures/app-with-configuration/base-app-no-package-json/src/configuration.ts', null) === false);
     assert.ok(PathFileUtil.isPathEqual(null, '/midway-open/packages/midway-core/test/fixtures/app-with-configuration/base-app-no-package-json/src/configuration') === false);
     assert.ok(PathFileUtil.isPathEqual('/midway-open/packages/midway-core/test/fixtures/app-with-configuration/base-app-no-package-json/src/configuration.ts', '/midway-open/packages/midway-core/test/fixtures/app-with-configuration/base-app-no-package-json/src/configuration'));
+  });
+
+  it('should test join url path', function () {
+    expect(joinURLPath('/api', '/')).toEqual('/api');
+    expect(joinURLPath('/api/', '/')).toEqual('/api');
+    expect(joinURLPath('//api', '/')).toEqual('/api');
+    expect(joinURLPath('/api', '//')).toEqual('/api');
+    expect(joinURLPath('api', '//')).toEqual('/api');
+    expect(joinURLPath('api', '*')).toEqual('/api/*');
+    expect(joinURLPath('/:api/:name', '*')).toEqual('/:api/:name/*');
+    expect(joinURLPath('/api/:name', '*')).toEqual('/api/:name/*');
+    expect(joinURLPath('*')).toEqual('/*');
+    expect(joinURLPath('/', '*')).toEqual('/*');
+    expect(joinURLPath('/', '/*')).toEqual('/*');
   });
 
 });

@@ -2,6 +2,7 @@ import { EmptyFramework } from './emptyFramework';
 import {
   CONTROLLER_KEY,
   ControllerOption,
+  FaaSMetadata,
   FUNC_KEY,
   getClassMetadata,
   getPropertyDataFromClass,
@@ -10,11 +11,13 @@ import {
   listModule,
   PRIORITY_KEY,
   RouterOption,
+  ServerlessTriggerType,
   WEB_RESPONSE_KEY,
   WEB_ROUTER_KEY,
   WEB_ROUTER_PARAM_KEY,
 } from '@midwayjs/decorator';
 import { MidwayContainer } from '../context/midwayContainer';
+import { joinURLPath } from './index';
 
 export interface RouterInfo {
   /**
@@ -63,11 +66,22 @@ export interface RouterInfo {
    * request args metadata
    */
   requestMetadata: any[];
-
   /**
    * response data metadata
    */
   responseMetadata: any[];
+  /**
+   * serverless function name
+   */
+  functionName?: string;
+  /**
+   * serverless trigger name
+   */
+  functionTriggerName?: string;
+  /**
+   * serverless function trigger metadata
+   */
+  functionTriggerMetadata?: any;
 }
 
 export interface RouterPriority {
@@ -78,14 +92,20 @@ export interface RouterPriority {
   controllerId: string;
 }
 
+export interface RouterCollectorOptions {
+  includeFunctionRouter?: boolean;
+}
+
 export class WebRouterCollector {
-  private readonly baseDir: string;
+  protected readonly baseDir: string;
+  private isReady = false;
   private routes = new Map<string, RouterInfo[]>();
   private routesPriority: RouterPriority[] = [];
-  private isReady = false;
+  protected options: RouterCollectorOptions;
 
-  constructor(baseDir?: string) {
-    this.baseDir = baseDir || '';
+  constructor(baseDir = '', options: RouterCollectorOptions = {}) {
+    this.baseDir = baseDir;
+    this.options = options;
   }
 
   protected async analyze() {
@@ -102,10 +122,11 @@ export class WebRouterCollector {
       this.collectRoute(module);
     }
 
-    const fnModules = listModule(FUNC_KEY);
-
-    for (const module of fnModules) {
-      this.collectFunctionRoute(module);
+    if (this.options.includeFunctionRouter) {
+      const fnModules = listModule(FUNC_KEY);
+      for (const module of fnModules) {
+        this.collectFunctionRoute(module);
+      }
     }
 
     // sort router
@@ -120,7 +141,7 @@ export class WebRouterCollector {
     });
   }
 
-  protected collectRoute(module) {
+  protected collectRoute(module, functionMeta = false) {
     const controllerId = getProviderId(module);
     const controllerOption: ControllerOption = getClassMetadata(
       CONTROLLER_KEY,
@@ -165,7 +186,7 @@ export class WebRouterCollector {
         const routerResponseData =
           getPropertyMetadata(WEB_RESPONSE_KEY, module, webRouter.method) || [];
 
-        this.routes.get(prefix).push({
+        const data: RouterInfo = {
           prefix,
           routerName: webRouter.routerName || '',
           url: webRouter.path,
@@ -180,20 +201,36 @@ export class WebRouterCollector {
           controllerMiddleware: middleware || [],
           requestMetadata: routeArgsInfo,
           responseMetadata: routerResponseData,
-        });
+        };
+
+        if (functionMeta) {
+          // get function information
+          data.functionName = controllerId + '-' + webRouter.method;
+          data.functionTriggerName = ServerlessTriggerType.HTTP;
+          data.functionTriggerMetadata = {
+            path: joinURLPath(prefix, webRouter.path.toString()),
+            method: webRouter.requestMethod,
+          } as FaaSMetadata.HTTPTriggerOptions;
+        }
+
+        this.routes.get(prefix).push(data);
       }
     }
   }
 
-  protected collectFunctionRoute(module) {
-    const webRouterInfo: Array<{
-      funHandler?: string;
-      event: string;
-      method: string;
-      path: string;
-      key: string;
-      middleware: string[];
-    }> = getClassMetadata(FUNC_KEY, module);
+  protected collectFunctionRoute(module, functionMeta = false) {
+    // 老的函数路由
+    const webRouterInfo: Array<
+      | {
+          funHandler?: string;
+          event: string;
+          method: string;
+          path: string;
+          key: string;
+          middleware: string[];
+        }
+      | FaaSMetadata.TriggerMetadata
+    > = getClassMetadata(FUNC_KEY, module);
 
     const controllerId = getProviderId(module);
 
@@ -211,24 +248,126 @@ export class WebRouterCollector {
     }
 
     for (const webRouter of webRouterInfo) {
-      if (webRouter.path) {
-        this.routes.get(prefix).push({
-          prefix,
-          routerName: '',
-          url: webRouter.path,
-          requestMethod: webRouter.method,
-          method: webRouter.key,
-          description: '',
-          summary: '',
-          handlerName: `${controllerId}.${webRouter.key}`,
-          funcHandlerName:
-            webRouter.funHandler || `${controllerId}.${webRouter.key}`,
-          controllerId,
-          middleware: webRouter.middleware || [],
-          controllerMiddleware: [],
-          requestMetadata: [],
-          responseMetadata: [],
-        });
+      if (webRouter['type']) {
+        // 新的 @ServerlessTrigger 写法
+        if (webRouter['metadata']?.['path']) {
+          const routeArgsInfo =
+            getPropertyDataFromClass(
+              WEB_ROUTER_PARAM_KEY,
+              module,
+              webRouter['methodName']
+            ) || [];
+
+          const routerResponseData =
+            getPropertyMetadata(
+              WEB_RESPONSE_KEY,
+              module,
+              webRouter['methodName']
+            ) || [];
+          // 新 http/apigateway 函数
+          const data: RouterInfo = {
+            prefix,
+            routerName: '',
+            url: webRouter['metadata']['path'],
+            requestMethod: webRouter['metadata']?.['method'] ?? 'get',
+            method: webRouter['methodName'],
+            description: '',
+            summary: '',
+            handlerName: `${controllerId}.${webRouter['methodName']}`,
+            funcHandlerName: `${controllerId}.${webRouter['methodName']}`,
+            controllerId,
+            middleware: webRouter['metadata']?.['middleware'] || [],
+            controllerMiddleware: [],
+            requestMetadata: routeArgsInfo,
+            responseMetadata: routerResponseData,
+          };
+          if (functionMeta) {
+            data.functionName = webRouter['functionName'];
+            data.functionTriggerName = webRouter['type'];
+            data.functionTriggerMetadata = webRouter['metadata'];
+          }
+          this.routes.get(prefix).push(data);
+        } else {
+          if (functionMeta) {
+            // 其他类型的函数
+            this.routes.get(prefix).push({
+              prefix,
+              routerName: '',
+              url: '',
+              requestMethod: '',
+              method: webRouter['methodName'],
+              description: '',
+              summary: '',
+              handlerName: `${controllerId}.${webRouter['methodName']}`,
+              funcHandlerName: `${controllerId}.${webRouter['methodName']}`,
+              controllerId,
+              middleware: [],
+              controllerMiddleware: [],
+              requestMetadata: [],
+              responseMetadata: [],
+              functionName: webRouter['functionName'],
+              functionTriggerName: webRouter['type'],
+              functionTriggerMetadata: webRouter['metadata'],
+            });
+          }
+        }
+      } else {
+        // 老的 @Func 写法
+        if (webRouter['path'] || webRouter['middleware']) {
+          const data: RouterInfo = {
+            prefix,
+            routerName: '',
+            url: webRouter['path'] ?? '/',
+            requestMethod: webRouter['method'] ?? 'get',
+            method: webRouter['key'],
+            description: '',
+            summary: '',
+            handlerName: `${controllerId}.${webRouter['key']}`,
+            funcHandlerName:
+              webRouter['funHandler'] || `${controllerId}.${webRouter['key']}`,
+            controllerId,
+            middleware: webRouter['middleware'] || [],
+            controllerMiddleware: [],
+            requestMetadata: [],
+            responseMetadata: [],
+          };
+          if (functionMeta) {
+            // get function information
+            data.functionName = controllerId + '-' + webRouter['key'];
+            data.functionTriggerName = ServerlessTriggerType.HTTP;
+            data.functionTriggerMetadata = {
+              path: webRouter['path'] ?? '/',
+              method: webRouter['method'] ?? 'get',
+            };
+          }
+          // 老函数的 http
+          this.routes.get(prefix).push(data);
+        } else {
+          if (functionMeta) {
+            // 非 http
+            this.routes.get(prefix).push({
+              prefix,
+              routerName: '',
+              url: '',
+              requestMethod: '',
+              method: webRouter['key'],
+              description: '',
+              summary: '',
+              handlerName: `${controllerId}.${webRouter['key']}`,
+              funcHandlerName:
+                webRouter['funHandler'] ||
+                `${controllerId}.${webRouter['key']}`,
+              controllerId,
+              middleware: webRouter['middleware'] || [],
+              controllerMiddleware: [],
+              requestMetadata: [],
+              responseMetadata: [],
+              functionName: webRouter['functionName'],
+              functionTriggerName: webRouter['type'],
+              functionTriggerMetadata: webRouter['metadata'],
+            });
+          }
+        }
       }
     }
   }

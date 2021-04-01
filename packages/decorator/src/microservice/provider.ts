@@ -9,13 +9,13 @@ import {
   MS_DUBBO_METHOD_KEY,
   MS_HSF_METHOD_KEY,
   MSProviderType,
-  DecoratorMetadata,
+  GRPCMetadata,
 } from '../';
 import { Scope } from '../annotation';
 
 export function Provider(
   type: MSProviderType.GRPC,
-  metadata?: DecoratorMetadata.GRPCClassMetadata
+  metadata?: GRPCMetadata.ProviderOptions
 ): ClassDecorator;
 export function Provider(
   type: MSProviderType.DUBBO,

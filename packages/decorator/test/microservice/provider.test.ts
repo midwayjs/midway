@@ -4,11 +4,10 @@ import {
   listModule,
   MS_PROVIDER_KEY,
   ScopeEnum,
-  DecoratorMetadata,
   MSProviderType,
-  Provider
+  Provider,
+  GRPCMetadata
 } from '../../src';
-import ProviderClassMetadata = DecoratorMetadata.ProviderClassMetadata;
 
 @Provider(MSProviderType.GRPC, { package: 'test' })
 class TestFun {
@@ -20,10 +19,10 @@ class TestFun1 {
 
 describe('/test/microservice/provider.test.ts', () => {
   it('test consumer decorator', () => {
-    const meta: ProviderClassMetadata = getClassMetadata(MS_PROVIDER_KEY, TestFun);
+    const meta: GRPCMetadata.ProviderMetadata = getClassMetadata(MS_PROVIDER_KEY, TestFun);
     expect(meta).toEqual({ type: MSProviderType.GRPC, metadata: { package: 'test' } });
 
-    const meta2: ProviderClassMetadata = getClassMetadata(MS_PROVIDER_KEY, TestFun1);
+    const meta2 = getClassMetadata(MS_PROVIDER_KEY, TestFun1);
     expect(meta2).toEqual({ type: MSProviderType.DUBBO, metadata: {} });
 
     const def = getObjectDefProps(TestFun);

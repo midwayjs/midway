@@ -48,6 +48,7 @@ export * from './util/pathFileUtil';
 export * from './features';
 export * from './util/webRouterParam';
 export * from './util/webRouterCollector';
+export * from './util/triggerCollector';
 export * from './util/emptyFramework';
 export { plainToClass, classToPlain } from 'class-transformer';
 export * from './logger';
