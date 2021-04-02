@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/koa-layer",
-  "version": "2.9.3",
+  "version": "2.10.0-beta.4",
   "main": "index.js",
   "scripts": {
     "test": "midway-bin test",
@@ -11,12 +11,12 @@
   },
   "devDependencies": {
     "@midwayjs/cli": "^1.2.36",
-    "@midwayjs/runtime-engine": "^2.8.13",
-    "@midwayjs/runtime-mock": "^2.8.13",
-    "@midwayjs/serverless-fc-starter": "^2.9.2",
-    "@midwayjs/serverless-fc-trigger": "^2.9.2",
-    "@midwayjs/serverless-scf-starter": "^2.8.13",
-    "@midwayjs/serverless-scf-trigger": "^2.9.2",
+    "@midwayjs/runtime-engine": "^2.10.0-beta.4",
+    "@midwayjs/runtime-mock": "^2.10.0-beta.4",
+    "@midwayjs/serverless-fc-starter": "^2.10.0-beta.4",
+    "@midwayjs/serverless-fc-trigger": "^2.10.0-beta.4",
+    "@midwayjs/serverless-scf-starter": "^2.10.0-beta.4",
+    "@midwayjs/serverless-scf-trigger": "^2.10.0-beta.4",
     "koa": "^2.13.0",
     "koa-bodyparser": "^4.3.0",
     "koa-router": "^9.4.0",

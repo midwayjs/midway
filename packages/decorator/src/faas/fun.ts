@@ -89,16 +89,20 @@ export function ServerlessTrigger(
   metadata: FaaSMetadata.MQTriggerOptions
 ): MethodDecorator;
 export function ServerlessTrigger(
-  type: ServerlessTriggerType.CDN
+  type: ServerlessTriggerType.CDN,
+  metadata?: FaaSMetadata.CDNTriggerOptions
 ): MethodDecorator;
 export function ServerlessTrigger(
-  type: ServerlessTriggerType.HSF
+  type: ServerlessTriggerType.HSF,
+  metadata?: FaaSMetadata.HSFTriggerOptions
 ): MethodDecorator;
 export function ServerlessTrigger(
-  type: ServerlessTriggerType.MTOP
+  type: ServerlessTriggerType.MTOP,
+  metadata?: FaaSMetadata.MTopTriggerOptions
 ): MethodDecorator;
 export function ServerlessTrigger(
-  type: ServerlessTriggerType.EVENT
+  type: ServerlessTriggerType.EVENT,
+  metadata?: FaaSMetadata.EventTriggerOptions
 ): MethodDecorator;
 export function ServerlessTrigger(
   type: ServerlessTriggerType,
