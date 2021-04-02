@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.10.0](https://github.com/midwayjs/midway-faas/compare/v2.9.3...v2.10.0) (2021-04-02)
+
+**Note:** Version bump only for package @midwayjs/static-layer
+
+
+
+
+
 ## [2.9.3](https://github.com/midwayjs/midway-faas/compare/v2.9.2...v2.9.3) (2021-03-30)
 
 

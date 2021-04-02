@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.10.0](https://github.com/midwayjs/midway/compare/v2.9.3...v2.10.0) (2021-04-02)
+
+
+### Bug Fixes
+
+* directory filter and ignore test pattern ([#957](https://github.com/midwayjs/midway/issues/957)) ([dbd1a5a](https://github.com/midwayjs/midway/commit/dbd1a5a4bc712a5ce14c409a7f2aee96e34eea4f))
+
+
+### Features
+
+* use @ServerlessTrigger replace functions in f.yml ([#919](https://github.com/midwayjs/midway/issues/919)) ([a85af14](https://github.com/midwayjs/midway/commit/a85af14e06231e8cd82eff8755794ffd13c3ad95))
+
+
+
+
+
 ## [2.9.2](https://github.com/midwayjs/midway/compare/v2.9.1...v2.9.2) (2021-03-27)
 
 **Note:** Version bump only for package @midwayjs/core
