@@ -8,7 +8,7 @@ import {
 } from '@midwayjs/core';
 import { isAbsolute, join, resolve } from 'path';
 import { remove } from 'fs-extra';
-import { clearAllModule } from '@midwayjs/decorator';
+import { clearAllModule, sleep } from '@midwayjs/decorator';
 import { existsSync } from 'fs';
 import { clearAllLoggers } from '@midwayjs/logger';
 import * as os from 'os';
@@ -207,7 +207,11 @@ export async function createApp<
 
 export async function close(
   app: IMidwayApplication | IMidwayFramework<any, any>,
-  options?: any
+  options?: {
+    cleanLogsDir?: boolean;
+    cleanTempDir?: boolean;
+    sleep?: number;
+  }
 ) {
   if (!app) return;
   options = options || {};
@@ -234,6 +238,9 @@ export async function close(
         await remove(join(newApp.getAppDir(), 'run'));
       }
     }
+    if (options.sleep > 0) {
+      await sleep(options.sleep);
+    }
   }
 }
 
@@ -259,8 +266,13 @@ class BootstrapAppStarter {
     return appMap.get(type);
   }
 
-  async close() {
-    return Bootstrap.stop();
+  async close(options:{
+    sleep?: number;
+  } = {}) {
+    await Bootstrap.stop();
+    if (options.sleep > 0) {
+      await sleep(options.sleep);
+    }
   }
 }
 

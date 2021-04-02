@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/static-layer",
-  "version": "2.10.0-beta.3",
+  "version": "2.10.0-beta.4",
   "main": "index.js",
   "scripts": {
     "test": "midway-bin test",
@@ -14,12 +14,12 @@
   },
   "devDependencies": {
     "@midwayjs/cli": "^1.2.36",
-    "@midwayjs/runtime-engine": "^2.10.0-beta.3",
-    "@midwayjs/runtime-mock": "^2.10.0-beta.3",
-    "@midwayjs/serverless-fc-starter": "^2.10.0-beta.3",
-    "@midwayjs/serverless-fc-trigger": "^2.10.0-beta.3",
-    "@midwayjs/serverless-scf-starter": "^2.10.0-beta.3",
-    "@midwayjs/serverless-scf-trigger": "^2.10.0-beta.3",
+    "@midwayjs/runtime-engine": "^2.10.0-beta.4",
+    "@midwayjs/runtime-mock": "^2.10.0-beta.4",
+    "@midwayjs/serverless-fc-starter": "^2.10.0-beta.4",
+    "@midwayjs/serverless-fc-trigger": "^2.10.0-beta.4",
+    "@midwayjs/serverless-scf-starter": "^2.10.0-beta.4",
+    "@midwayjs/serverless-scf-trigger": "^2.10.0-beta.4",
     "supertest": "^4.0.2"
   },
   "engines": {
