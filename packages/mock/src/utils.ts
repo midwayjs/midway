@@ -266,9 +266,11 @@ class BootstrapAppStarter {
     return appMap.get(type);
   }
 
-  async close(options:{
-    sleep?: number;
-  } = {}) {
+  async close(
+    options: {
+      sleep?: number;
+    } = {}
+  ) {
     await Bootstrap.stop();
     if (options.sleep > 0) {
       await sleep(options.sleep);

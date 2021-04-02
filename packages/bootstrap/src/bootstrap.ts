@@ -173,6 +173,12 @@ export class Bootstrap {
     } else {
       this.logger = this.logger || (configuration.logger as ILogger);
     }
+
+    // 处理三方框架内部依赖 process.cwd 来查找 node_modules 等问题
+    if (configuration.appDir && configuration.appDir !== process.cwd()) {
+      process.chdir(configuration.appDir);
+    }
+
     this.getStarter().configure(configuration);
     return this;
   }
