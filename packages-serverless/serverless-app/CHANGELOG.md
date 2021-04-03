@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.10.1](https://github.com/midwayjs/midway/compare/v2.10.0...v2.10.1) (2021-04-03)
+
+
+### Bug Fixes
+
+* remove MIDWAY_SERVER_ENV default value ([#966](https://github.com/midwayjs/midway/issues/966)) ([e9f7165](https://github.com/midwayjs/midway/commit/e9f71653612142204c1160efaedc909b41621c3a))
+
+
+
+
+
 # [2.10.0](https://github.com/midwayjs/midway/compare/v2.9.3...v2.10.0) (2021-04-02)
 
 
