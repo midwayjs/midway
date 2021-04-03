@@ -18,7 +18,8 @@
     },
     "version": {
       "conventionalCommits": true,
-      "createRelease": "github"
+      "createRelease": "github",
+      "forcePublish": "@midwayjs/version"
     }
   },
   "npmClient": "npm",
