@@ -168,7 +168,6 @@ export class Framework
   }
 
   async initialize(options: Partial<IMidwayBootstrapOptions>) {
-    process.env.MIDWAY_SERVER_ENV = process.env.MIDWAY_SERVER_ENV || 'local';
     this.bootstrapOptions = options;
     this.getFaaSSpec();
     this.app = express() as any;
