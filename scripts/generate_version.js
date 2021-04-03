@@ -2,6 +2,13 @@ const { execSync } = require('child_process');
 const { writeFileSync, existsSync } = require('fs');
 const { join } = require('path');
 
+if (process.env.LERNA_RELEASE) {
+  const versionEntryFile = join(__dirname, '../packages/version/index.js');
+  // generate timestamp
+  writeFileSync(versionEntryFile, `console.log('${Date.now()}');\n`);
+  return;
+}
+
 const currentVersion = require('../lerna.json').version;
 if (/beta/.test(currentVersion)) {
   return;
