@@ -39,7 +39,9 @@ export class FCBaseTrigger extends BaseTrigger {
     };
   }
 
-  getEvent() {}
+  getEvent() {
+    return this.triggerOptions;
+  }
 }
 
 export const event = FCBaseTrigger;
