@@ -35,4 +35,4 @@ export class CKafkaTrigger extends SCFBaseTrigger {
 export const ckafka = CKafkaTrigger;
 export const createCKafkaEvent = (data: any = {}): SCF.CKafkaEvent => {
   return extend(true, new CKafkaTrigger().getEvent(), data);
-}
+};

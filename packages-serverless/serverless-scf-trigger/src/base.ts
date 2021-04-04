@@ -28,4 +28,4 @@ export class SCFBaseTrigger extends BaseTrigger {
 
 export const createInitializeContext = (ctx: any = {}): SCF.RequestContext => {
   return extend(true, new SCFBaseTrigger().createContext(), ctx);
-}
+};

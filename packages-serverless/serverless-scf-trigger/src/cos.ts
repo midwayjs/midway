@@ -57,4 +57,4 @@ export const cos = COSTrigger;
 export const oss = COSTrigger;
 export const createCOSEvent = (data: any = {}): SCF.COSEvent => {
   return extend(true, new COSTrigger().getEvent(), data);
-}
+};

@@ -18,4 +18,4 @@ export class TimerTrigger extends SCFBaseTrigger {
 export const timer = TimerTrigger;
 export const createTimerEvent = (data: any = {}): SCF.TimerEvent => {
   return extend(true, new TimerTrigger().getEvent(), data);
-}
+};

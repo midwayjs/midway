@@ -31,4 +31,4 @@ export const mq = CMQTrigger;
 export const cmq = CMQTrigger;
 export const createCMQEvent = (data: any = {}): SCF.CMQEvent => {
   return extend(true, new CMQTrigger().getEvent(), data);
-}
+};
