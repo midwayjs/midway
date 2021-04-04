@@ -1,5 +1,6 @@
 // src/service/bookService
-import { Provide } from '@midwayjs/decorator';
+import { Provide, ScopeEnum } from '@midwayjs/decorator';
+import { providerWrapper, IMidwayContainer } from '@midwayjs/core';
 
 @Provide()
 export class BookService {
@@ -21,3 +22,17 @@ export class BookService {
     ]
   }
 }
+
+export async function dynamicCacheServiceHandler(container: IMidwayContainer) {
+  return () => {
+    return 'abc';
+  }
+}
+
+providerWrapper([
+  {
+    id: 'dynamicCacheService',
+    provider: dynamicCacheServiceHandler,
+    scope: ScopeEnum.Singleton,
+  }
+]);
