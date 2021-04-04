@@ -51,4 +51,4 @@ export const cos = OSSTrigger;
 
 export const createOSSEvent = (data: any = {}): FC.OSSEvent => {
   return extend(true, new OSSTrigger().getEvent(), data);
-}
+};

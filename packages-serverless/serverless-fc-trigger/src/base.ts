@@ -39,11 +39,12 @@ export class FCBaseTrigger extends BaseTrigger {
     };
   }
 
-  getEvent() {
-  }
+  getEvent() {}
 }
 
 export const event = FCBaseTrigger;
-export const createInitializeContext = (ctx: any = {}): FC.InitializeContext => {
+export const createInitializeContext = (
+  ctx: any = {}
+): FC.InitializeContext => {
   return extend(true, new FCBaseTrigger().createContext(), ctx);
-}
+};

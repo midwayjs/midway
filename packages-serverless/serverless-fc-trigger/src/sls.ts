@@ -26,4 +26,4 @@ export class SLSTrigger extends FCBaseTrigger {
 export const sls = SLSTrigger;
 export const createSLSEvent = (data: any = {}): FC.SLSEvent => {
   return extend(true, new SLSTrigger().getEvent(), data);
-}
+};

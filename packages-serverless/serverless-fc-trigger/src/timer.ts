@@ -17,4 +17,4 @@ export const timer = TimerTrigger;
 export const createTimerEvent = (data: any = {}): FC.TimerEvent => {
   const result = {};
   return extend(true, result, new TimerTrigger().getEvent(), data);
-}
+};

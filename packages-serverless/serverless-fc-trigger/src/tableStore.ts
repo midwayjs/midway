@@ -30,11 +30,11 @@ export class TableStoreTrigger extends FCBaseTrigger {
           ],
         },
       ],
-    }
+    };
   }
 }
 
 export const tableStore = TableStoreTrigger;
 export const createTableStoreEvent = (data: any = {}): FC.TableStoreEvent => {
   return extend(true, new TableStoreTrigger().getEvent(), data);
-}
+};

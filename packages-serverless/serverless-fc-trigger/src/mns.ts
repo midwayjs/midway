@@ -23,4 +23,4 @@ export class MNSTrigger extends FCBaseTrigger {
 export const mq = MNSTrigger;
 export const createMNSEvent = (data: any = {}): FC.MNSEvent => {
   return extend(true, new MNSTrigger().getEvent(), data);
-}
+};

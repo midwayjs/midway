@@ -38,4 +38,4 @@ export class CDNTrigger extends FCBaseTrigger {
 export const cdn = CDNTrigger;
 export const createCDNEvent = (data: any = {}): FC.CDNEvent => {
   return extend(true, new CDNTrigger().getEvent(), data);
-}
+};
