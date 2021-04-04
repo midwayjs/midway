@@ -95,7 +95,7 @@ describe('test/faas-v2.test.ts', () => {
   it('oth event trigger', async () => {
     const instance = await app.getServerlessInstance<EventService>(EventService);
     const result = await instance.handler(createTimerEvent());
-    expect(result.payload).toEqual('test');
+    expect(result.triggerName).toEqual('timer');
   });
 
   it('should use @ServerlessTrigger with http event', async () => {

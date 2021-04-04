@@ -7,7 +7,7 @@ import { FC } from '@midwayjs/faas-typings';
 export class TimerTrigger extends FCBaseTrigger {
   getEvent() {
     return {
-      triggerTime: '2019-12-01T16:00:00Z',
+      triggerTime: new Date().toJSON(),
       triggerName: 'timer',
       payload: '',
     };

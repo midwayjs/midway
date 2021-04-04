@@ -8,7 +8,7 @@ export class TimerTrigger extends SCFBaseTrigger {
   getEvent() {
     return {
       Message: '',
-      Time: '2019-11-19T03:33:00Z',
+      Time: new Date().toJSON(),
       TriggerName: 'test',
       Type: 'Timer',
     };
