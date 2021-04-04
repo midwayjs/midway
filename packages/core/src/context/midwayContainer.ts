@@ -476,7 +476,7 @@ export class MidwayContainer
       const providerId = isProvide(module) ? getProviderId(module) : null;
       if (providerId) {
         if (namespace) {
-          saveClassMetadata(PRIVATE_META_DATA_KEY, { namespace }, module);
+          saveClassMetadata(PRIVATE_META_DATA_KEY, { namespace, providerId }, module);
         }
         this.bind(generateProvideId(providerId, namespace), module, {
           namespace,
