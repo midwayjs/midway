@@ -8,7 +8,7 @@ export interface FaaSContext extends FaaSHTTPContext, IMidwayContext {
   env: string;
   requestContext: MidwayRequestContainer;
   originContext: any;
-  hooks: MidwayHooks;
+  hooks?: MidwayHooks;
 }
 
 export type FaaSMiddleware = (() => (context: FaaSContext, next: () => Promise<any>) => any) | string;

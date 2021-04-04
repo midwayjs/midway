@@ -1,14 +1,13 @@
 import { SCFBaseTrigger } from './base';
 import { SCF } from '@midwayjs/faas-typings';
+import * as extend from 'extend2';
 
 /**
  * https://cloud.tencent.com/document/product/583/11517
  */
 export class CMQTrigger extends SCFBaseTrigger {
-  handler;
-
-  async toArgs() {
-    const event: SCF.CMQEvent = {
+  getEvent() {
+    return {
       Records: [
         {
           CMQ: {
@@ -25,10 +24,11 @@ export class CMQTrigger extends SCFBaseTrigger {
         },
       ],
     };
-
-    return [event, this.createContext()];
   }
 }
 
 export const mq = CMQTrigger;
 export const cmq = CMQTrigger;
+export const createCMQEvent = (data: any = {}): SCF.CMQEvent => {
+  return extend(true, new CMQTrigger().getEvent(), data);
+}

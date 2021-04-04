@@ -144,12 +144,12 @@ export class Framework
     );
   }
 
-  private async getServerlessInstance<T>(cls: any): Promise<T> {
+  async getServerlessInstance<T>(cls: any): Promise<T> {
     // 如何传initializeContext
     const context: IMidwayContext = await new Promise(resolve => {
       this.runtime.asyncEvent(async ctx => {
         resolve((this.innerFramework as any).getContext(ctx));
-      })({}, this.configurationOptions.initContext || {});
+      })({}, this.configurationOptions.initContext ?? {});
     });
 
     return context.requestContext.getAsync(cls);

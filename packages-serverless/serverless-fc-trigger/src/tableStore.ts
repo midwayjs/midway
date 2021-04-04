@@ -1,13 +1,12 @@
 import { FCBaseTrigger } from './base';
-
+import * as extend from 'extend2';
+import { FC } from '@midwayjs/faas-typings';
 /**
  * https://help.aliyun.com/document_detail/100092.html
  */
 export class TableStoreTrigger extends FCBaseTrigger {
-  handler;
-
-  async toArgs(): Promise<any[]> {
-    const event = {
+  getEvent() {
+    return {
       Version: 'string',
       Records: [
         {
@@ -31,10 +30,11 @@ export class TableStoreTrigger extends FCBaseTrigger {
           ],
         },
       ],
-    };
-
-    return [event, this.createContext()];
+    }
   }
 }
 
 export const tableStore = TableStoreTrigger;
+export const createTableStoreEvent = (data: any = {}): FC.TableStoreEvent => {
+  return extend(true, new TableStoreTrigger().getEvent(), data);
+}

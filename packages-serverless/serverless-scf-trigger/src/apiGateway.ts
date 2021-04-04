@@ -7,8 +7,6 @@ import * as expressBodyParser from 'body-parser';
  * https://cloud.tencent.com/document/product/583/12513
  */
 export class ApiGatewayTrigger extends SCFBaseTrigger {
-  handler;
-
   app: express.Application;
 
   async delegate(invokeWrapper: (invokeArgs: any[]) => any) {

@@ -1,14 +1,12 @@
 import { SCFBaseTrigger } from './base';
 import { SCF } from '@midwayjs/faas-typings';
-
+import * as extend from 'extend2';
 /**
  * https://cloud.tencent.com/document/product/583/9707
  */
 export class COSTrigger extends SCFBaseTrigger {
-  handler;
-
-  async toArgs() {
-    const event: SCF.COSEvent = {
+  getEvent() {
+    return {
       Records: [
         {
           cos: {
@@ -51,11 +49,12 @@ export class COSTrigger extends SCFBaseTrigger {
         },
       ],
     };
-
-    return [event, this.createContext()];
   }
 }
 
 export const os = COSTrigger;
 export const cos = COSTrigger;
 export const oss = COSTrigger;
+export const createCOSEvent = (data: any = {}): SCF.COSEvent => {
+  return extend(true, new COSTrigger().getEvent(), data);
+}
