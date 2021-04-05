@@ -31,7 +31,7 @@ class AppBootHook {
   }
 
   async willReady() {
-    await this.app.webFramework.loadLifeCycles(true);
+    await this.app.webFramework.loadExtension();
     const middlewareNames = this.coreMiddleware.concat(this.appMiddleware);
     // 等 midway 加载完成后，再去 use 中间件
     for (const name of middlewareNames) {

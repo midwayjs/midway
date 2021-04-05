@@ -76,6 +76,7 @@ export class MidwayConfigService implements IConfigService {
   }
 
   async load() {
+    if (this.isReady) return;
     // get default
     const defaultSet = this.getEnvSet('default');
     // get current set

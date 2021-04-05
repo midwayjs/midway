@@ -31,8 +31,8 @@ export class EmptyFramework extends BaseFramework<any, any, any> {
   }
 
   async containerReady() {}
-
   async afterContainerReady() {}
+  async loadExtension() {}
 }
 
 /**
@@ -58,8 +58,8 @@ export class ConfigFramework extends BaseFramework<any, any, any> {
   async containerReady() {
     await this.applicationContext.ready();
   }
-
   async afterContainerReady() {}
+  async loadExtension() {}
 }
 
 /**

@@ -14,6 +14,7 @@ import {
   CONFIGURATION_KEY,
   getProviderId,
   listModule,
+  listPreloadModule,
   LOGGER_KEY,
   MidwayFrameworkType,
 } from '@midwayjs/decorator';
@@ -112,13 +113,18 @@ export abstract class BaseFramework<
      */
     await this.containerReady(options);
 
-    /**
-     * after container refresh
-     */
     if (this.isMainFramework !== undefined) {
       // 多框架场景，由 bootstrap 执行后续流程
       return;
     }
+    /**
+     * load extensions and lifeCycle
+     */
+    await this.loadExtension();
+
+    /**
+     * after container refresh
+     */
     await this.afterContainerReady(options);
   }
 
@@ -219,8 +225,14 @@ export abstract class BaseFramework<
     if (!this.app.getApplicationContext) {
       this.defineApplicationProperties();
     }
-
     await this.applicationContext.ready();
+  }
+
+  public async loadExtension() {
+    // 切面支持
+    await this.applicationContext.getAspectService().loadAspect();
+    // 预加载模块支持
+    await this.loadPreloadModule();
     // lifecycle 支持
     await this.loadLifeCycles();
   }
@@ -357,6 +369,10 @@ export abstract class BaseFramework<
       setContextLoggerClass: (BaseContextLogger: any) => {
         return this.setContextLoggerClass(BaseContextLogger);
       },
+
+      addConfigObject(obj: any) {
+        this.getApplicationContext().getConfigService().addObject(obj);
+      },
     };
     for (const method of whiteList) {
       delete defaultApplicationProperties[method];
@@ -387,10 +403,6 @@ export abstract class BaseFramework<
   ): Promise<void> {}
 
   public async loadLifeCycles(isForce = false) {
-    if (!isForce && this.isMainFramework !== undefined) {
-      // 多框架场景，由 bootstrap 执行生命周期
-      return;
-    }
     // agent 不加载生命周期
     if (this.app.getProcessType() === MidwayProcessTypeEnum.AGENT) return;
     const cycles = listModule(CONFIGURATION_KEY);
@@ -446,6 +458,19 @@ export abstract class BaseFramework<
       if (inst.onStop && typeof inst.onStop === 'function') {
         await inst.onStop(this, this.app);
       }
+    }
+  }
+
+  /**
+   * load preload module for container
+   * @private
+   */
+  protected async loadPreloadModule() {
+    // some common decorator implementation
+    const modules = listPreloadModule();
+    for (const module of modules) {
+      // preload init context
+      await this.applicationContext.getAsync(module);
     }
   }
 

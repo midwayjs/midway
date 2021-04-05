@@ -29,6 +29,7 @@ declare module 'egg' {
     createLogger(name: string, options: LoggerOptions);
     getProjectName(): string;
     setContextLoggerClass(BaseContextLoggerClass: any): void;
+    addConfigObject(obj: any);
   }
 
   interface Context {

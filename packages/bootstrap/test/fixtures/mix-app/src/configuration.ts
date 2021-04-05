@@ -1,5 +1,6 @@
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration, Config, ALL } from '@midwayjs/decorator';
 import { join } from 'path';
+import * as assert from 'assert';
 
 @Configuration({
   importConfigs: [
@@ -7,7 +8,11 @@ import { join } from 'path';
   ],
 })
 export class AutoConfiguration {
+  @Config(ALL)
+  prepareConfig;
+
   async onReady() {
     console.log('ready');
+    assert(this.prepareConfig['prepare'] === 'remote data');
   }
 }
