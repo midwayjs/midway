@@ -681,4 +681,32 @@ describe('/test/baseFramework.test.ts', () => {
 
     expect(framework2.getApplicationContext().get('total2')['num']).toEqual(0);
   });
+
+  it('should inject component service with class', async () => {
+    const framework = new LightFramework();
+    await framework.initialize({
+      baseDir: path.join(
+        __dirname,
+        './fixtures/app-with-component-inject-with-class/main/src'
+      ),
+    });
+
+    const appCtx = framework.getApplicationContext();
+    const userController = await appCtx.getAsync('userController');
+    const books = await (userController as any).getBooksByUser();
+    expect(books).toEqual([
+      {
+        "isbn": "9787115549440",
+        "name": "无限可能"
+      },
+      {
+        "isbn": "9787305236525",
+        "name": "明智的孩子"
+      },
+      {
+        "isbn": "9787020166916",
+        "name": "伊卡狛格"
+      }
+    ]);
+  });
 });
