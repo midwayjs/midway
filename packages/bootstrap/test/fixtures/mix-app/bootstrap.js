@@ -30,8 +30,7 @@ Bootstrap
   })
   .before(async (container) => {
     const configService = await container.getAsync('remoteConfigService');
-    const data = await configService.getRemoteConfig();
-    container.getConfigService().addObject(data);
+    await configService.getRemoteConfig();
   })
   .run();
 

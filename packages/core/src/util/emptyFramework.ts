@@ -53,6 +53,7 @@ export class ConfigFramework extends BaseFramework<any, any, any> {
 
   async applicationInitialize(options: IMidwayBootstrapOptions) {
     this.app = {} as IMidwayApplication;
+    this.defineApplicationProperties();
   }
 
   async containerReady() {
@@ -78,5 +79,6 @@ export class LightFramework extends BaseFramework<any, any, any> {
 
   async applicationInitialize(options: IMidwayBootstrapOptions) {
     this.app = {} as IMidwayApplication;
+    this.defineApplicationProperties();
   }
 }
