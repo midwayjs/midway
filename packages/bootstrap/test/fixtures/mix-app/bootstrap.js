@@ -1,6 +1,6 @@
 const WebFramemwork = require('../../../../web/').Framework;
 const SocketFramemwork = require('../../../../socketio/').Framework;
-const Bootstrap = require('../../../dist/').Bootstrap;
+const Bootstrap = require('../../../src/').Bootstrap;
 
 const timeoutHandler = setTimeout(() => {
   clearInterval(internalHandler);
@@ -27,6 +27,10 @@ Bootstrap
     const framework = new SocketFramemwork();
     framework.configure();
     return framework;
+  })
+  .before(async (container) => {
+    const configService = await container.getAsync('remoteConfigService');
+    await configService.getRemoteConfig();
   })
   .run();
 

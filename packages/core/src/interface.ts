@@ -273,12 +273,9 @@ export interface IMidwayContainer extends IApplicationContext {
   addConfiguration(configuration: IContainerConfiguration);
   getConfigService(): IConfigService;
   getEnvironmentService(): IEnvironmentService;
+  getAspectService(): IAspectService;
   getCurrentEnv(): string;
   getResolverHandler(): IResolverHandler;
-  addAspect(
-    aspectIns: IMethodAspect,
-    aspectData: AspectMetadata
-  );
   addDirectoryFilter(filter: ResolveFilter[]);
 }
 
@@ -294,6 +291,13 @@ export interface IEnvironmentService {
   getCurrentEnvironment(): string;
   setCurrentEnvironment(environment: string);
   isDevelopmentEnvironment(): boolean;
+}
+
+export interface IAspectService {
+  loadAspect();
+  addAspect(aspectIns: IMethodAspect, aspectData: AspectMetadata);
+  wrapperAspectToInstance(ins);
+  hasAspect(module): boolean;
 }
 
 export interface IMiddleware<T> {
@@ -335,6 +339,7 @@ export interface IMidwayApplication<T extends IMidwayContext = IMidwayContext> {
   getProjectName(): string;
   createAnonymousContext(...args): T;
   setContextLoggerClass(BaseContextLoggerClass: any): void;
+  addConfigObject(obj: any);
 }
 
 /**
@@ -357,6 +362,7 @@ export interface IMidwayBootstrapOptions {
   applicationContext?: IMidwayContainer;
   isMainFramework?: boolean;
   globalApplicationHandler?: (type: MidwayFrameworkType) => IMidwayApplication;
+  globalConfig?: any;
 }
 
 export interface IConfigurationOptions {

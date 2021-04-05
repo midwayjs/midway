@@ -4,6 +4,7 @@ import {
   MidwayFrameworkType,
   ConfigFramework,
   IMidwayApplication,
+  IMidwayContainer,
 } from '@midwayjs/core';
 import { join } from 'path';
 import { createConsoleLogger, ILogger, IMidwayLogger } from '@midwayjs/logger';
@@ -50,24 +51,29 @@ export class BootstrapStarter {
       appDir: this.appDir,
     });
 
+    if (this.globalOptions['beforeHandler']) {
+      await this.globalOptions['beforeHandler'](
+        framework.getApplicationContext()
+      );
+    }
+
     this.globalConfig =
       framework.getApplicationContext().getConfigService().getConfiguration() ||
       {};
     this.refreshBootstrapItems();
+
+    const applicationContext = framework.getApplicationContext();
 
     await this.getFirstActions('initialize', {
       ...this.globalOptions,
       baseDir: this.baseDir,
       appDir: this.appDir,
       isMainFramework: true,
+      applicationContext,
       globalApplicationHandler: (type: MidwayFrameworkType) => {
         return this.globalAppMap.get(type);
       },
     });
-
-    const applicationContext = await this.getFirstActions(
-      'getApplicationContext'
-    );
 
     await Promise.all(
       this.getTailActions('initialize', {
@@ -90,7 +96,7 @@ export class BootstrapStarter {
       }
     });
 
-    await this.getFirstActions('loadLifeCycles', true);
+    await this.getFirstActions('loadExtension');
     await this.getActions('afterContainerReady');
   }
 
@@ -157,6 +163,7 @@ export class Bootstrap {
   static starter: BootstrapStarter;
   static logger: ILogger;
   static configured = false;
+  static beforeHandler;
 
   /**
    * set global configuration for midway
@@ -179,6 +186,7 @@ export class Bootstrap {
       process.chdir(configuration.appDir);
     }
 
+    configuration['beforeHandler'] = this.beforeHandler;
     this.getStarter().configure(configuration);
     return this;
   }
@@ -199,6 +207,11 @@ export class Bootstrap {
       this.starter = new BootstrapStarter();
     }
     return this.starter;
+  }
+
+  static before(beforeHandler: (container: IMidwayContainer) => void) {
+    this.beforeHandler = beforeHandler;
+    return this;
   }
 
   static async run() {

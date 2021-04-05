@@ -87,6 +87,7 @@ export class ContainerLoader {
 
   async refresh() {
     await this.applicationContext.ready();
+    await this.applicationContext.getAspectService().loadAspect();
     await this.loadLifeCycles();
   }
 

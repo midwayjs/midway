@@ -31,8 +31,8 @@ export class EmptyFramework extends BaseFramework<any, any, any> {
   }
 
   async containerReady() {}
-
   async afterContainerReady() {}
+  async loadExtension() {}
 }
 
 /**
@@ -53,13 +53,14 @@ export class ConfigFramework extends BaseFramework<any, any, any> {
 
   async applicationInitialize(options: IMidwayBootstrapOptions) {
     this.app = {} as IMidwayApplication;
+    this.defineApplicationProperties();
   }
 
   async containerReady() {
     await this.applicationContext.ready();
   }
-
   async afterContainerReady() {}
+  async loadExtension() {}
 }
 
 /**
@@ -78,5 +79,6 @@ export class LightFramework extends BaseFramework<any, any, any> {
 
   async applicationInitialize(options: IMidwayBootstrapOptions) {
     this.app = {} as IMidwayApplication;
+    this.defineApplicationProperties();
   }
 }
