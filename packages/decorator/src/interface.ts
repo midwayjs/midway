@@ -83,7 +83,7 @@ export namespace FaaSMetadata {
 
   export interface OSTriggerOptions extends TriggerCommonOptions  {
     bucket: string;
-    events: string;
+    events: string | string[];
     filter?: {
       prefix: string;
       suffix: string;

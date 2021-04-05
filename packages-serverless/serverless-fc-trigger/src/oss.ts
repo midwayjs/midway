@@ -1,13 +1,12 @@
 import { FCBaseTrigger } from './base';
-
+import * as extend from 'extend2';
+import { FC } from '@midwayjs/faas-typings';
 /**
  * https://help.aliyun.com/document_detail/62922.html
  */
 export class OSSTrigger extends FCBaseTrigger {
-  handler;
-
-  async toArgs(): Promise<any[]> {
-    const event = {
+  getEvent() {
+    return {
       events: [
         {
           eventName: 'ObjectCreated:PutObject',
@@ -43,11 +42,13 @@ export class OSSTrigger extends FCBaseTrigger {
         },
       ],
     };
-
-    return [event, this.createContext()];
   }
 }
 
 export const oss = OSSTrigger;
 export const os = OSSTrigger;
 export const cos = OSSTrigger;
+
+export const createOSSEvent = (data: any = {}): FC.OSSEvent => {
+  return extend(true, new OSSTrigger().getEvent(), data);
+};

@@ -1,14 +1,13 @@
 import { SCFBaseTrigger } from './base';
+import * as extend from 'extend2';
 import { SCF } from '@midwayjs/faas-typings';
 
 /**
  * https://cloud.tencent.com/document/product/583/17530
  */
 export class CKafkaTrigger extends SCFBaseTrigger {
-  handler;
-
-  async toArgs() {
-    const event: SCF.CKafkaEvent = {
+  getEvent() {
+    return {
       Records: [
         {
           Ckafka: {
@@ -30,9 +29,10 @@ export class CKafkaTrigger extends SCFBaseTrigger {
         },
       ],
     };
-
-    return [event, this.createContext()];
   }
 }
 
 export const ckafka = CKafkaTrigger;
+export const createCKafkaEvent = (data: any = {}): SCF.CKafkaEvent => {
+  return extend(true, new CKafkaTrigger().getEvent(), data);
+};

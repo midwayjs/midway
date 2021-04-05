@@ -1,7 +1,15 @@
 import { BaseTrigger } from '@midwayjs/runtime-mock';
+import * as extend from 'extend2';
+import { FC } from '@midwayjs/faas-typings';
 
 export class FCBaseTrigger extends BaseTrigger {
   useCallback = true;
+  triggerOptions: any;
+
+  constructor(triggerOptions = {}) {
+    super();
+    this.triggerOptions = triggerOptions;
+  }
 
   createContext() {
     return {
@@ -31,9 +39,14 @@ export class FCBaseTrigger extends BaseTrigger {
     };
   }
 
-  async toArgs(): Promise<any[]> {
-    return [this.triggerOptions, this.createContext()];
+  getEvent() {
+    return this.triggerOptions;
   }
 }
 
 export const event = FCBaseTrigger;
+export const createInitializeContext = (
+  ctx: any = {}
+): FC.InitializeContext => {
+  return extend(true, new FCBaseTrigger().createContext(), ctx);
+};

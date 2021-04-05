@@ -23,7 +23,7 @@ describe('/test/index.test.ts', () => {
         bbb: 111,
       })
     );
-    assert.deepEqual(result, { bbb: 111 });
+    expect(result).toEqual({ bbb: 111 });
     await runtime.close();
   });
 

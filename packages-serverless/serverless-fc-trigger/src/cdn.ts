@@ -1,13 +1,12 @@
 import { FCBaseTrigger } from './base';
-
+import * as extend from 'extend2';
+import { FC } from '@midwayjs/faas-typings';
 /**
  * https://help.aliyun.com/document_detail/62922.html
  */
 export class CDNTrigger extends FCBaseTrigger {
-  handler;
-
-  async toArgs(): Promise<any[]> {
-    const event = {
+  getEvent() {
+    return {
       events: [
         {
           eventName: 'LogFileCreated',
@@ -33,9 +32,10 @@ export class CDNTrigger extends FCBaseTrigger {
         },
       ],
     };
-
-    return [event, this.createContext()];
   }
 }
 
 export const cdn = CDNTrigger;
+export const createCDNEvent = (data: any = {}): FC.CDNEvent => {
+  return extend(true, new CDNTrigger().getEvent(), data);
+};
