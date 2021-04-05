@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/runtime-mock",
-  "version": "2.10.0",
+  "version": "2.10.2",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {

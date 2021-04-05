@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.10.2](https://github.com/midwayjs/midway/compare/v2.10.1...v2.10.2) (2021-04-05)
+
+
+### Bug Fixes
+
+* load config once and support load singleton service before framework start ([#970](https://github.com/midwayjs/midway/issues/970)) ([201dd59](https://github.com/midwayjs/midway/commit/201dd5930bd97f62e5717777b2941b47b54d68c6))
+
+
+
+
+
 # [2.10.0](https://github.com/midwayjs/midway/compare/v2.9.3...v2.10.0) (2021-04-02)
 
 

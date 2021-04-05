@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.10.2](https://github.com/midwayjs/midway/compare/v2.10.1...v2.10.2) (2021-04-05)
+
+
+### Bug Fixes
+
+* load config once and support load singleton service before framework start ([#970](https://github.com/midwayjs/midway/issues/970)) ([201dd59](https://github.com/midwayjs/midway/commit/201dd5930bd97f62e5717777b2941b47b54d68c6))
+* serverless event test ([#967](https://github.com/midwayjs/midway/issues/967)) ([e0c15e3](https://github.com/midwayjs/midway/commit/e0c15e316c2813fd574f38bdf6a16a339bfede18))
+
+
+
+
+
 ## [2.10.1](https://github.com/midwayjs/midway/compare/v2.10.0...v2.10.1) (2021-04-03)
 
 
