@@ -1,4 +1,4 @@
-import { Get, Body, Inject, Provide, Query, ServerlessTrigger, ServerlessTriggerType, ALL } from '@midwayjs/decorator';
+import { Get, Body, Inject, Provide, Query, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/decorator';
 
 @Provide()
 export class FuncService {
