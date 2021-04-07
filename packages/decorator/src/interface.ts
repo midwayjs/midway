@@ -66,6 +66,16 @@ export namespace FaaSMetadata {
 
   interface TriggerCommonOptions {
     functionName?: string;
+    description?: string;
+    memorySize?: number;
+    timeout?: number;
+    runtime?: string;
+    initTimeout?: number;
+    concurrency?: number;
+    stage?: string;
+    environment?: any;
+    role?: string;
+    version?: string;
   }
 
   export interface EventTriggerOptions extends TriggerCommonOptions {

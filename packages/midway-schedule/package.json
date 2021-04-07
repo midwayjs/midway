@@ -17,10 +17,10 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/cli": "^1.2.36",
+    "@midwayjs/decorator": "^2.10.2",
     "@midwayjs/mock": "^2.10.2"
   },
   "dependencies": {
-    "@midwayjs/decorator": "^2.10.2",
     "is-type-of": "^1.2.1"
   },
   "engines": {

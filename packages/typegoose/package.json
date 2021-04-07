@@ -19,6 +19,8 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/cli": "^1.2.36",
+    "@midwayjs/core": "^2.10.2",
+    "@midwayjs/decorator": "^2.10.2",
     "@midwayjs/koa": "^2.10.2",
     "@midwayjs/mock": "^2.10.2",
     "@typegoose/typegoose": "^7.4.7",
@@ -26,7 +28,5 @@
     "mongoose": "5.10.18"
   },
   "dependencies": {
-    "@midwayjs/core": "^2.10.2",
-    "@midwayjs/decorator": "^2.10.2"
   }
 }
