@@ -18,7 +18,7 @@ export class FuncService {
     method: 'post',
     path: '/func/http/post'
   })
-  async handler2(@Body(ALL) name) {
+  async handler2(@Body() name) {
     return 'user:' + name;
   }
 
