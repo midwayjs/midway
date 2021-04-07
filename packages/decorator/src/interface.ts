@@ -73,6 +73,7 @@ export namespace FaaSMetadata {
     initTimeout?: number;
     concurrency?: number;
     stage?: string;
+    environment?: any;
     role?: string;
     version?: string;
   }
