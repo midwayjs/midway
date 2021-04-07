@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.10.3](https://github.com/midwayjs/midway/compare/v2.10.2...v2.10.3) (2021-04-07)
+
+
+### Bug Fixes
+
+* scf starter name error ([#972](https://github.com/midwayjs/midway/issues/972)) ([4e5de60](https://github.com/midwayjs/midway/commit/4e5de60e73eaf0722c5bc4efad776c55d73077cf))
+
+
+
+
+
 ## [2.10.2](https://github.com/midwayjs/midway/compare/v2.10.1...v2.10.2) (2021-04-05)
 
 

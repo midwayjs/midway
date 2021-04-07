@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/core",
-  "version": "2.10.2",
+  "version": "2.10.3",
   "description": "midway core",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -27,7 +27,7 @@
     "sinon": "^7.2.2"
   },
   "dependencies": {
-    "@midwayjs/decorator": "^2.10.2",
+    "@midwayjs/decorator": "^2.10.3",
     "@midwayjs/glob": "^1.0.2",
     "@midwayjs/logger": "^2.10.0",
     "class-transformer": "^0.3.1",
