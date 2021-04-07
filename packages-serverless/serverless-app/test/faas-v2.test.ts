@@ -106,4 +106,13 @@ describe('test/faas-v2.test.ts', () => {
       });
     expect(result.text).toEqual('user:zhangting');
   });
+
+  it('should use @ServerlessTrigger with http post event', async () => {
+    const result = await createHttpRequest(app)
+      .post('/func/http/post')
+      .send({
+        name: 'zhangting'
+      });
+    expect(result.text).toEqual('user:zhangting');
+  });
 });

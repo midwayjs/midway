@@ -1,4 +1,4 @@
-import { Get, Inject, Provide, Query, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/decorator';
+import { Get, Body, Inject, Provide, Query, ServerlessTrigger, ServerlessTriggerType, ALL } from '@midwayjs/decorator';
 
 @Provide()
 export class FuncService {
@@ -11,6 +11,14 @@ export class FuncService {
     path: '/func/http/get'
   })
   async handler(@Query() name) {
+    return 'user:' + name;
+  }
+
+  @ServerlessTrigger(ServerlessTriggerType.HTTP, {
+    method: 'post',
+    path: '/func/http/post'
+  })
+  async handler2(@Body(ALL) name) {
     return 'user:' + name;
   }
 
