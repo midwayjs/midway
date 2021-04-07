@@ -1,6 +1,6 @@
 export const StarterMap = {
   aliyun: ['@ali/serverless-fc-starter', '@midwayjs/serverless-fc-starter'],
-  tencent: ['@midwayjs/serverless-scf-trigger'],
+  tencent: ['@midwayjs/serverless-scf-starter'],
   gaia: ['@ali/serverless-gaia-starter'],
   ginkgo: ['@ali/serverless-ginkgo-starter'],
 };
