@@ -44,19 +44,30 @@ export class BootstrapStarter {
   public async init() {
     this.appDir = this.globalOptions.appDir || process.cwd();
     this.baseDir = this.getBaseDir();
+    let mainApp; // eslint-disable-line prefer-const
 
+    // 初始化一个只读配置的空框架，并且初始化容器和扫描
     const framework = new ConfigFramework();
     await framework.initialize({
       baseDir: this.baseDir,
       appDir: this.appDir,
+      globalApplicationHandler: (type: MidwayFrameworkType) => {
+        if (type) {
+          return this.globalAppMap.get(type);
+        } else {
+          return mainApp;
+        }
+      },
     });
 
+    // 调用 bootstrap 的 before 逻辑
     if (this.globalOptions['beforeHandler']) {
       await this.globalOptions['beforeHandler'](
         framework.getApplicationContext()
       );
     }
 
+    // 获取全局配置
     this.globalConfig =
       framework.getApplicationContext().getConfigService().getConfiguration() ||
       {};
@@ -64,17 +75,18 @@ export class BootstrapStarter {
 
     const applicationContext = framework.getApplicationContext();
 
+    // 初始化主框架
     await this.getFirstActions('initialize', {
       ...this.globalOptions,
       baseDir: this.baseDir,
       appDir: this.appDir,
       isMainFramework: true,
       applicationContext,
-      globalApplicationHandler: (type: MidwayFrameworkType) => {
-        return this.globalAppMap.get(type);
-      },
     });
 
+    mainApp = await this.getFirstActions('getApplication');
+
+    // 初始化其余的副框架
     await Promise.all(
       this.getTailActions('initialize', {
         ...this.globalOptions,
@@ -96,6 +108,7 @@ export class BootstrapStarter {
       }
     });
 
+    // 等所有框架初始化完之后，开始执行生命周期
     await this.getFirstActions('loadExtension');
     await this.getActions('afterContainerReady');
   }

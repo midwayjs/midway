@@ -5,7 +5,8 @@ import * as session from 'koa-session';
 @Configuration({
   importConfigs: [
     './config'
-  ]
+  ],
+  conflictCheck: true,
 })
 export class ContainerConfiguration {
 
