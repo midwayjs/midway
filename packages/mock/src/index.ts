@@ -14,4 +14,3 @@ export * from './client/socketio';
  */
 export * from 'egg-mock';
 export * from './interface';
-export * from './mock';
