@@ -55,10 +55,6 @@ export class MidwayRabbitMQFramework extends BaseFramework<
     return MidwayFrameworkType.WS_IO;
   }
 
-  public getApplication(): IMidwayRabbitMQApplication {
-    return this.app;
-  }
-
   private async loadSubscriber() {
     // create room
     const subscriberModules = listModule(MS_CONSUMER_KEY);

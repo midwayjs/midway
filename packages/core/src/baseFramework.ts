@@ -257,11 +257,13 @@ export abstract class BaseFramework<
       .getCurrentEnvironment();
   }
 
+  public getApplication(): APP {
+    return this.app;
+  }
+
   public abstract applicationInitialize(options: IMidwayBootstrapOptions);
 
   public abstract getFrameworkType(): MidwayFrameworkType;
-
-  public abstract getApplication(): APP;
 
   public abstract run(): Promise<void>;
 

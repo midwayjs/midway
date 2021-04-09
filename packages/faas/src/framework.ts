@@ -129,10 +129,6 @@ export class MidwayFaaSFramework extends BaseFramework<
     }, LOCK_KEY);
   }
 
-  public getApplication() {
-    return this.app;
-  }
-
   public getFrameworkType(): MidwayFrameworkType {
     return MidwayFrameworkType.FAAS;
   }

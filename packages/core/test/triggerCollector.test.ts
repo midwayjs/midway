@@ -8,7 +8,7 @@ describe('/test/triggerCollector.test.ts', function () {
   it('should test with function router', async () => {
     clearAllModule();
     clearContainerCache();
-    const collector = new ServerlessTriggerCollector(join(__dirname, './fixtures/base-app-func-router'));
+    const collector = new ServerlessTriggerCollector(join(__dirname, './fixtures/base-app-func-router/src'));
     const result = await collector.getFunctionList();
     expect(result).toEqual([
       {
@@ -260,6 +260,14 @@ describe('/test/triggerCollector.test.ts', function () {
         "url": ""
       }
     ]);
+  });
+
+  it('should test with serverless trigger', async () => {
+    clearAllModule();
+    clearContainerCache();
+    const collector = new ServerlessTriggerCollector(join(__dirname, './fixtures/app-with-serverless-trigger/src'));
+    const result = await collector.getFunctionList();
+    console.log(result);
   });
 
 });

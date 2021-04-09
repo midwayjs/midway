@@ -238,10 +238,6 @@ export class MidwayGRPCFramework extends BaseFramework<
     return MidwayFrameworkType.MS_GRPC;
   }
 
-  public getApplication(): IMidwayGRPCApplication {
-    return this.app;
-  }
-
   public getServer() {
     return this.server;
   }

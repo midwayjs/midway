@@ -76,6 +76,9 @@ export async function create<
   customFrameworkName?: string | MidwayFrameworkType | any
 ): Promise<T> {
   process.env.MIDWAY_TS_MODE = 'true';
+  if (jest) {
+    jest.resetModules();
+  }
   clearAllModule();
   clearContainerCache();
   clearAllLoggers();
