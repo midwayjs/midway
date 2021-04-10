@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.10.4](https://github.com/midwayjs/midway/compare/v2.10.3...v2.10.4) (2021-04-10)
+
+
+### Bug Fixes
+
+* clear container cache when test ([#978](https://github.com/midwayjs/midway/issues/978)) ([a202075](https://github.com/midwayjs/midway/commit/a202075b52d281e06f1ed7c6139e968fafc960f6))
+
+
+
+
+
 ## [2.10.3](https://github.com/midwayjs/midway/compare/v2.10.2...v2.10.3) (2021-04-07)
 
 **Note:** Version bump only for package @midwayjs/mock

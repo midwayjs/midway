@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/cache",
-  "version": "2.10.3",
+  "version": "2.10.4",
   "description": "midway cache manager",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "@midwayjs/cli": "^1.2.36",
-    "@midwayjs/core": "^2.10.3",
+    "@midwayjs/core": "^2.10.4",
     "@midwayjs/decorator": "^2.10.3"
   },
   "dependencies": {
