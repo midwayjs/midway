@@ -130,10 +130,22 @@ export const createAppWorkerLoader = () => {
           appDir: this.app.appDir,
         })
         .load(this.framework);
-      this.app.beforeStart(async () => {
-        await this.bootstrap.init();
-        super.load();
-      });
+
+      if (this.app.options['mode'] !== 'single') {
+        // 这个代码只会在 egg-cluster 模式下执行
+        this.app.beforeStart(async () => {
+          await this.bootstrap.init();
+          super.load();
+        });
+      }
+    }
+
+    /**
+     * 这个代码只会在单进程 bootstrap.js 模式下执行
+     */
+    async loadOrigin() {
+      await this.bootstrap.init();
+      super.load();
     }
 
     loadMiddleware() {

@@ -481,10 +481,7 @@ export abstract class BaseFramework<
   }
 
   public getLogger(name?: string) {
-    if (name) {
-      return loggers.getLogger(name);
-    }
-    return this.appLogger;
+    return loggers.getLogger(name) ?? this.appLogger;
   }
 
   public getCoreLogger() {

@@ -1,6 +1,7 @@
 import { closeApp, creatApp, createHttpRequest, matchContentTimes, sleep } from './utils';
 import { IMidwayWebApplication } from '../src';
 import { join } from 'path';
+import { remove } from 'fs-extra';
 
 describe('/test/feature.test.ts', () => {
   describe('test new decorator', () => {
@@ -81,6 +82,7 @@ describe('/test/feature.test.ts', () => {
   });
 
   it('should test set custom logger in egg by midway logger', async () => {
+    await remove(join(__dirname, 'fixtures/feature/base-app-set-ctx-logger', 'logs'));
     const app = await creatApp('feature/base-app-set-ctx-logger');
     const result = await createHttpRequest(app)
       .get('/')
