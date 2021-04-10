@@ -47,7 +47,7 @@ export class MidwayFaaSFramework extends BaseFramework<
   private lock = new SimpleLock();
   public app: IMidwayFaaSApplication;
 
-  protected async afterContainerInitialize(options: IMidwayBootstrapOptions) {
+  async applicationInitialize(options: IMidwayBootstrapOptions) {
     this.globalMiddleware = this.configurationOptions.middleware || [];
     this.app =
       this.configurationOptions.applicationAdapter?.getApplication() ||
@@ -82,8 +82,6 @@ export class MidwayFaaSFramework extends BaseFramework<
         return this.configurationOptions.applicationAdapter?.getFunctionServiceName();
       },
     });
-
-    this.prepareConfiguration();
   }
 
   protected async initializeLogger(options: IMidwayBootstrapOptions) {
@@ -127,10 +125,6 @@ export class MidwayFaaSFramework extends BaseFramework<
         this.funMappingStore.set(funcInfo.funcHandlerName, funcInfo);
       }
     }, LOCK_KEY);
-  }
-
-  public getApplication() {
-    return this.app;
   }
 
   public getFrameworkType(): MidwayFrameworkType {
@@ -298,15 +292,6 @@ export class MidwayFaaSFramework extends BaseFramework<
     this.addConfiguration(filePath, fileDir);
   }
 
-  /**
-   * @deprecated
-   * use this.addConfiguration
-   */
-  protected prepareConfiguration() {
-    // TODO use initConfiguration
-    // this.initConfiguration('./configuration', __dirname);
-  }
-
   private registerDecorator() {
     this.getApplicationContext().registerDataHandler(
       PLUGIN_KEY,
@@ -342,8 +327,6 @@ export class MidwayFaaSFramework extends BaseFramework<
 
     return newMiddlewares;
   }
-
-  async applicationInitialize(options: IMidwayBootstrapOptions) {}
 
   public createLogger(name: string, option: LoggerOptions = {}) {
     // 覆盖基类的创建日志对象，函数场景下的日志，即使自定义，也只启用控制台输出

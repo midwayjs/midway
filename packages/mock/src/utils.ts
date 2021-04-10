@@ -9,7 +9,6 @@ import {
 import { isAbsolute, join, resolve } from 'path';
 import { remove } from 'fs-extra';
 import { clearAllModule, sleep } from '@midwayjs/decorator';
-import { existsSync } from 'fs';
 import { clearAllLoggers } from '@midwayjs/logger';
 import * as os from 'os';
 
@@ -67,6 +66,8 @@ export type MockAppConfigurationOptions = {
   baseDir?: string;
 };
 
+let lastAppDir;
+
 export async function create<
   T extends IMidwayFramework<any, U>,
   U = T['configurationOptions']
@@ -76,7 +77,17 @@ export async function create<
   customFrameworkName?: string | MidwayFrameworkType | any
 ): Promise<T> {
   process.env.MIDWAY_TS_MODE = 'true';
-  clearAllModule();
+
+  // 处理测试的 fixtures
+  if (!isAbsolute(appDir)) {
+    appDir = join(process.cwd(), 'test', 'fixtures', appDir);
+  }
+
+  if (lastAppDir && lastAppDir !== appDir) {
+    // 当目录不同才清理缓存，相同目录的装饰器只加载一次，清理了就没了
+    clearAllModule();
+  }
+  lastAppDir = appDir;
   clearContainerCache();
   clearAllLoggers();
 
@@ -164,15 +175,6 @@ export async function create<
   }
 
   const starter = new BootstrapStarter();
-
-  if (!isAbsolute(appDir)) {
-    appDir = join(process.cwd(), 'test', 'fixtures', appDir);
-  }
-
-  if (!existsSync(appDir)) {
-    throw new Error(`${appDir} not found`);
-  }
-
   starter
     .configure({
       appDir,

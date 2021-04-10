@@ -173,7 +173,8 @@ export abstract class BaseFramework<
   }
 
   protected async containerDirectoryLoad(options: IMidwayBootstrapOptions) {
-    if (this.isMainFramework === false) {
+    if (options.applicationContext) {
+      // 如果有传入全局容器，就不需要再次扫描了
       return;
     }
     /**
@@ -207,8 +208,11 @@ export abstract class BaseFramework<
     this.applicationContext.registerDataHandler(
       APPLICATION_KEY,
       (key, meta) => {
-        if (meta?.type && options.globalApplicationHandler) {
-          return options.globalApplicationHandler(meta.type);
+        if (options.globalApplicationHandler) {
+          return (
+            options.globalApplicationHandler(meta?.type) ??
+            this.getApplication()
+          );
         } else {
           return this.getApplication();
         }
@@ -257,11 +261,13 @@ export abstract class BaseFramework<
       .getCurrentEnvironment();
   }
 
+  public getApplication(): APP {
+    return this.app;
+  }
+
   public abstract applicationInitialize(options: IMidwayBootstrapOptions);
 
   public abstract getFrameworkType(): MidwayFrameworkType;
-
-  public abstract getApplication(): APP;
 
   public abstract run(): Promise<void>;
 
@@ -475,10 +481,7 @@ export abstract class BaseFramework<
   }
 
   public getLogger(name?: string) {
-    if (name) {
-      return loggers.getLogger(name);
-    }
-    return this.appLogger;
+    return loggers.getLogger(name) ?? this.appLogger;
   }
 
   public getCoreLogger() {

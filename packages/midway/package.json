@@ -35,8 +35,7 @@
     "egg-logger": "^2.4.2"
   },
   "dependencies": {
-    "@midwayjs/web": "^2.10.3",
-    "egg-cluster": "^1.23.0"
+    "@midwayjs/web": "^2.10.3"
   },
   "files": [
     "dist/**/*.js",

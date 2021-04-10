@@ -1,8 +1,6 @@
-import { join } from 'path';
 import * as assert from 'assert';
 import * as mm from 'mm';
 import { creatStarter, closeApp } from './utils';
-import { Framework } from '../src';
 
 describe('test/index.test.ts', () => {
 
@@ -97,26 +95,6 @@ describe('test/index.test.ts', () => {
       { text: 'ab' }
     );
     assert(data === 'abhello');
-    await closeApp(starter);
-  });
-
-  it('configuration test should be ok', async () => {
-    mm(process.env, 'NODE_ENV', '');
-    class TestFaaSStarter extends Framework {
-      prepareConfiguration() {
-        this.initConfiguration(
-          join(__dirname, './configuration'),
-          join(__dirname, 'fixtures/midway-plugin-mod')
-        );
-      }
-    }
-    const starter = await creatStarter('base-app-configuration', {}, TestFaaSStarter);
-    const data = await starter.handleInvokeWrapper('index.handler')(
-      {},
-      { text: 'ab' }
-    );
-    assert(data === '5321abone articlereplace managerprod');
-    mm.restore();
     await closeApp(starter);
   });
 

@@ -61,16 +61,23 @@ export class MidwayWebSingleProcessFramework
   }
 
   async initialize(options: Partial<IMidwayBootstrapOptions>) {
-    const { start } = require('egg');
-    this.app = await start({
+    const opts = {
       baseDir: options.appDir,
-      ignoreWarning: true,
       framework: resolve(__dirname, '../application'),
       plugins: this.configurationOptions.plugins,
       mode: 'single',
       isTsMode: this.isTsMode || true,
       applicationContext: options.applicationContext,
-    });
+    };
+
+    const Agent = require(opts.framework).Agent;
+    const Application = require(opts.framework).Application;
+    const agent = new Agent(Object.assign({}, opts));
+    await agent.ready();
+    const application = (this.app = new Application(Object.assign({}, opts)));
+    application.agent = agent;
+    agent.application = application;
+
     // https config
     if (this.configurationOptions.key && this.configurationOptions.cert) {
       this.configurationOptions.key = PathFileUtil.getFileContentSync(
@@ -90,6 +97,19 @@ export class MidwayWebSingleProcessFramework
     } else {
       this.server = require('http').createServer(this.app.callback());
     }
+
+    if (options.isMainFramework === undefined) {
+      await this.loadExtension();
+    }
+  }
+
+  async loadExtension() {
+    // 延迟加载 egg 的 load 方法
+    await (this.app.loader as any).loadOrigin();
+    await this.app.ready();
+
+    // emit egg-ready message in agent and application
+    this.app.messenger.broadcast('egg-ready', undefined);
 
     // emit `server` event in app
     this.app.emit('server', this.server);

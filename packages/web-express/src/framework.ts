@@ -103,10 +103,6 @@ export class MidwayExpressFramework extends BaseFramework<
     return MidwayFrameworkType.WEB_EXPRESS;
   }
 
-  public getApplication(): IMidwayExpressApplication {
-    return this.app;
-  }
-
   /**
    * wrap controller string to middleware function
    * @param controllerMapping like FooController.index

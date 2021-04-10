@@ -24,9 +24,13 @@ describe('/test/index.test.ts', () => {
   });
 
   it('should test create socket app and with emit ack', async () => {
-    const app = await createServer('base-app-ack', { port: 3000});
+    const app = await createServer('base-app-ack', {
+      port: 3000,
+      path: '/test'
+    });
     const client = await createSocketIOClient({
       port: 3000,
+      path: '/test'
     });
 
     const result = await client.sendWithAck('my', 1, 2, 3);

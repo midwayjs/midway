@@ -81,10 +81,6 @@ export class MidwaySocketIOFramework extends BaseFramework<
     return MidwayFrameworkType.WS_IO;
   }
 
-  public getApplication(): IMidwaySocketIOApplication {
-    return this.app;
-  }
-
   private async loadMidwayController() {
     // create room
     const controllerModules = listModule(WS_CONTROLLER_KEY);

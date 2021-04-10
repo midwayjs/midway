@@ -16,9 +16,6 @@ const noop = {
 export class EmptyFramework extends BaseFramework<any, any, any> {
   logger = noop;
   appLogger = noop;
-  getApplication(): any {
-    return this.app;
-  }
 
   getFrameworkType(): MidwayFrameworkType {
     return MidwayFrameworkType.EMPTY;
@@ -41,9 +38,6 @@ export class EmptyFramework extends BaseFramework<any, any, any> {
 export class ConfigFramework extends BaseFramework<any, any, any> {
   logger = noop;
   appLogger = noop;
-  getApplication(): any {
-    return this.app;
-  }
 
   getFrameworkType(): MidwayFrameworkType {
     return MidwayFrameworkType.EMPTY;
@@ -67,10 +61,6 @@ export class ConfigFramework extends BaseFramework<any, any, any> {
  * 一个全量的空框架
  */
 export class LightFramework extends BaseFramework<any, any, any> {
-  getApplication(): any {
-    return this.app;
-  }
-
   getFrameworkType(): MidwayFrameworkType {
     return MidwayFrameworkType.LIGHT;
   }
