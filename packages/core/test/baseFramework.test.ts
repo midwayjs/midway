@@ -20,6 +20,7 @@ import {
 import * as mm from 'mm';
 import { LifeCycleTest, LifeCycleTest1, TestBinding } from './fixtures/lifecycle';
 import sinon = require('sinon');
+import { getCurrentApplicationContext, getCurrentMainApp, getCurrentMainFramework } from '../src/util/contextUtil';
 
 @Provide()
 class TestModule {
@@ -709,4 +710,22 @@ describe('/test/baseFramework.test.ts', () => {
       }
     ]);
   });
+
+
+  it('should test global framework', async () => {
+    const framework = new LightFramework();
+    await framework.initialize({
+      baseDir: path.join(__dirname, './fixtures/base-app/src'),
+    });
+
+    mm(global, 'MIDWAY_MAIN_FRAMEWORK', framework);
+
+    const appCtx = framework.getApplicationContext();
+    expect(getCurrentMainFramework()).toEqual(framework);
+    expect(getCurrentApplicationContext()).toEqual(appCtx);
+    expect(getCurrentMainApp()).toEqual(framework.getApplication());
+
+    mm.restore();
+  });
+
 });

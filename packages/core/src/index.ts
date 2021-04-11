@@ -51,10 +51,11 @@ export * from './util/webRouterCollector';
 export * from './util/triggerCollector';
 export * from './util/emptyFramework';
 export { plainToClass, classToPlain } from 'class-transformer';
-export * from './logger';
 export { createConfiguration } from './functional/configuration';
 export { MidwayConfigService } from './service/configService';
 export { MidwayEnvironmentService } from './service/environmentService';
+export * from './logger';
+export * from './util/contextUtil';
 /**
  * @deprecated please import from @midwayjs/logger
  */
