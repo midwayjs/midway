@@ -68,6 +68,7 @@ export class MidwayWebSingleProcessFramework
       mode: 'single',
       isTsMode: this.isTsMode || true,
       applicationContext: options.applicationContext,
+      midwaySingleton: true,
     };
 
     const Agent = require(opts.framework).Agent;

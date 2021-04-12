@@ -131,7 +131,7 @@ export const createAppWorkerLoader = () => {
         })
         .load(this.framework);
 
-      if (this.app.options['mode'] !== 'single') {
+      if (this.app.options['midwaySingleton'] !== true) {
         // 这个代码只会在 egg-cluster 模式下执行
         this.app.beforeStart(async () => {
           await this.bootstrap.init();
