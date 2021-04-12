@@ -3,6 +3,7 @@ import { Framework } from '../../web/src';
 import { Framework as KoaFramework } from '../../web-koa/src';
 import { join } from 'path';
 import { MidwayFrameworkType } from '@midwayjs/decorator';
+import { existsSync } from 'fs';
 
 describe('/test/new.test.ts', () => {
   it('should test create app', async () => {
@@ -10,7 +11,9 @@ describe('/test/new.test.ts', () => {
     const result = await createHttpRequest(app).get('/').query({ name: 'harry' });
     expect(result.status).toBe(200);
     expect(result.text).toBe('hello world, harry');
-    await close(app);
+    await close(app, { cleanLogsDir: true, cleanTempDir: true });
+    expect(existsSync(join(__dirname, 'fixtures/base-app-decorator/logs'))).toBeFalsy();
+    expect(existsSync(join(__dirname, 'fixtures/base-app-decorator/run'))).toBeFalsy();
   });
 
   it('should test create another app', async () => {
@@ -18,7 +21,7 @@ describe('/test/new.test.ts', () => {
     const result = await createHttpRequest(app).get('/').query({ name: 'harry' });
     expect(result.status).toBe(200);
     expect(result.text).toBe('hello world, harry');
-    await close(app);
+    await close(app, { sleep: 200});
   });
 
   it('should test with entry file', async () => {
