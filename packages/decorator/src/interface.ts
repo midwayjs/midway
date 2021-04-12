@@ -65,16 +65,53 @@ export namespace GRPCMetadata {
 export namespace FaaSMetadata {
 
   interface TriggerCommonOptions {
+    /**
+     * function name
+     */
     functionName?: string;
+    /**
+     * function description
+     */
     description?: string;
+    /**
+     * function memory size, unit: M
+     */
     memorySize?: number;
+    /**
+     * serverless event name
+     */
+    triggerName?: string;
+    /**
+     * function timeout value, unit: seconds
+     */
     timeout?: number;
-    runtime?: string;
+    /**
+     * function init timeout, just for aliyun
+     */
     initTimeout?: number;
+    /**
+     * function runtime, nodejs10, nodejs12, nodejs14
+     */
+    runtime?: string;
+    /**
+     * invoke concurrency, just for aliyun
+     */
     concurrency?: number;
+    /**
+     * function invoke stage, like env, just for tencent
+     */
     stage?: string;
+    /**
+     * environment variable, key-value
+     */
     environment?: any;
+    /**
+     * function invoke role, just for aliyun
+     */
     role?: string;
+    /**
+     * function publish version, just for aliyun
+     */
     version?: string;
   }
 
