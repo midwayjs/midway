@@ -22,6 +22,8 @@ export interface IMidwayLogger extends ILogger {
   isEnableFile(): boolean ;
   isEnableConsole(): boolean;
   isEnableError(): boolean ;
+  getConsoleLevel(): LoggerLevel;
+  getFileLevel(): LoggerLevel;
   updateLevel(level: LoggerLevel): void;
   updateFileLevel(level: LoggerLevel): void;
   updateConsoleLevel(level: LoggerLevel): void;

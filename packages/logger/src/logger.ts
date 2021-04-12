@@ -180,6 +180,14 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
     return !!this.errTransport;
   }
 
+  getConsoleLevel(): LoggerLevel {
+    return this.consoleTransport.level;
+  }
+
+  getFileLevel(): LoggerLevel {
+    return this.fileTransport.level;
+  }
+
   updateLevel(level: LoggerLevel): void {
     this.level = level;
     this.consoleTransport.level = level;
