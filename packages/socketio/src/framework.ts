@@ -56,12 +56,18 @@ export class MidwaySocketIOFramework extends BaseFramework<
         this.applicationContext.get(HTTP_SERVER_KEY),
         this.configurationOptions
       );
+      this.logger.info(
+        'Socket.io server start success and attach to web server'
+      );
     } else {
       // listen port when http server not exist
       if (this.configurationOptions.port) {
         this.app.listen(
           this.configurationOptions.port,
           this.configurationOptions
+        );
+        this.logger.info(
+          `Socket.io server port = ${this.configurationOptions.port} start success`
         );
       }
     }

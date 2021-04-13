@@ -17,6 +17,7 @@ describe('test/logger.test.js', () => {
     mm(process.env, 'EGG_SERVER_ENV', 'local');
     mm(process.env, 'EGG_LOG', 'WARN');
     const logsDir = join(__dirname, 'fixtures/apps/mock-dev-app-logger/logs/ali-demo');
+    await remove(logsDir);
     await ensureDir(logsDir);
     const app = await creatApp('apps/mock-dev-app-logger', { cleanLogsDir: false});
     app.coreLogger.warn('custom content');

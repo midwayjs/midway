@@ -11,20 +11,47 @@ export = agent => {
     return;
   }
 
+  const STRATEGY = Object.getOwnPropertySymbols(agent.schedule)[0];
+  const STRATEGY_INSTANCE = Object.getOwnPropertySymbols(agent.schedule)[1];
+
   // ugly!! just support all and worker strategy
   class AllStrategy extends agent['TimerScheduleStrategy'] {
+    timer;
     handler() {
       this.sendAll();
+    }
+
+    safeTimeout(...args) {
+      this.timer = super.safeTimeout(...args);
+      return this.timer;
+    }
+    close() {
+      clearTimeout(this.timer);
     }
   }
 
   class WorkerStrategy extends agent['TimerScheduleStrategy'] {
+    timer;
     handler() {
       this.sendOne();
     }
+    safeTimeout(...args) {
+      this.timer = super.safeTimeout(...args);
+      return this.timer;
+    }
+    close() {
+      clearTimeout(this.timer);
+    }
   }
 
-  const strategyMap = new Map();
+  agent.schedule.close = () => {
+    agent.schedule.closed = true;
+    for (const instance of agent.schedule[STRATEGY_INSTANCE].values()) {
+      instance.close();
+    }
+  };
+
+  const strategyMap = agent.schedule[STRATEGY];
   strategyMap.set('worker', WorkerStrategy);
   strategyMap.set('all', AllStrategy);
 

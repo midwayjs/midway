@@ -44,10 +44,11 @@ describe('test/schedule.test.ts', () => {
       await application.runSchedule('intervalCron#IntervalCron');
       await application.runSchedule(IntervalCron2 as any);
       await sleep(1000);
-      const log = getLogContent('worker-other');
+
       // console.log(log);
-      expect(contains(log, 'hello decorator')).toEqual(1);
-      expect(contains(log, 'hello decorator2')).toEqual(1);
+      const log = getLogContent('worker-other');
+      expect(contains(log, 'hello decorator')).toBeGreaterThanOrEqual(1);
+      expect(contains(log, 'hello decorator2')).toBeGreaterThanOrEqual(1);
       await closeApp(application);
     });
   });

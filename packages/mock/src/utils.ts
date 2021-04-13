@@ -88,6 +88,7 @@ export async function create<
     clearAllModule();
   }
   lastAppDir = appDir;
+  global['MIDWAY_BOOTSTRAP_APP_SET'].clear();
   clearContainerCache();
   clearAllLoggers();
 
