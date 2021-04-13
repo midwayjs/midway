@@ -61,6 +61,7 @@ export interface LoggerOptions {
   fileMaxFiles?: number | string;
   errMaxSize?: string;
   errMaxFiles?: string;
+  eol?: string;
 }
 
 export interface DelegateLoggerOptions {
