@@ -16,6 +16,7 @@ import { MidwayKoaContextLogger } from '@midwayjs/koa';
 export class MidwayWebSingleProcessFramework
   implements IMidwayFramework<Application, IMidwayWebConfigurationOptions> {
   public app: Application;
+  public agent;
   public configurationOptions: IMidwayWebConfigurationOptions;
   private isTsMode: boolean;
   private server: Server;
@@ -73,7 +74,7 @@ export class MidwayWebSingleProcessFramework
 
     const Agent = require(opts.framework).Agent;
     const Application = require(opts.framework).Application;
-    const agent = new Agent(Object.assign({}, opts));
+    const agent = this.agent = new Agent(Object.assign({}, opts));
     await agent.ready();
     const application = (this.app = new Application(Object.assign({}, opts)));
     application.agent = agent;
@@ -120,6 +121,7 @@ export class MidwayWebSingleProcessFramework
 
   async stop(): Promise<void> {
     await this.app.close();
+    await this.agent.close();
   }
 
   getBaseDir(): string {
