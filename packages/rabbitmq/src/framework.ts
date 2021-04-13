@@ -45,6 +45,7 @@ export class MidwayRabbitMQFramework extends BaseFramework<
 
   public async run(): Promise<void> {
     await Promise.all(this.consumerList);
+    this.logger.info('Rabbitmq server start success');
   }
 
   protected async beforeStop(): Promise<void> {
