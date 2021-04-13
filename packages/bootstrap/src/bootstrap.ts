@@ -120,7 +120,6 @@ export class BootstrapStarter {
 
   public async stop() {
     await Promise.all(this.getActions('stop', {}));
-    global['MIDWAY_BOOTSTRAP_APP_SET'].clear();
     global['MIDWAY_BOOTSTRAP_APP_READY'] = false;
   }
 
