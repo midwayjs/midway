@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.10.5](https://github.com/midwayjs/midway/compare/v2.10.4...v2.10.5) (2021-04-13)
+
+
+### Bug Fixes
+
+* serverless app stop ([#988](https://github.com/midwayjs/midway/issues/988)) ([279a3c5](https://github.com/midwayjs/midway/commit/279a3c5682786be8ec5ec34081c8ef700afa2ec9))
+
+
+
+
+
 ## [2.10.4](https://github.com/midwayjs/midway/compare/v2.10.3...v2.10.4) (2021-04-10)
 
 

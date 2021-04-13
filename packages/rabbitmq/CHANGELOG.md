@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.10.5](https://github.com/midwayjs/midway/compare/v2.10.4...v2.10.5) (2021-04-13)
+
+
+### Bug Fixes
+
+* delay load without layer and egg-cluster ([#985](https://github.com/midwayjs/midway/issues/985)) ([52ba60d](https://github.com/midwayjs/midway/commit/52ba60d67d6e2df7a53609f72ec067dc083317ce))
+
+
+
+
+
 ## [2.10.4](https://github.com/midwayjs/midway/compare/v2.10.3...v2.10.4) (2021-04-10)
 
 

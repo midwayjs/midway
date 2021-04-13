@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.10.5](https://github.com/midwayjs/midway/compare/v2.10.4...v2.10.5) (2021-04-13)
+
+
+### Bug Fixes
+
+* configuration file path join on windows ([#984](https://github.com/midwayjs/midway/issues/984)) ([099e76c](https://github.com/midwayjs/midway/commit/099e76ca892decd02b536b97494590f598d140ac))
+
+
+### Features
+
+* support getCurrentApplicationContext API ([#981](https://github.com/midwayjs/midway/issues/981)) ([dd6ce11](https://github.com/midwayjs/midway/commit/dd6ce11d6f8eb2884eb1b03b171a069f55aec04f))
+
+
+
+
+
 ## [2.10.4](https://github.com/midwayjs/midway/compare/v2.10.3...v2.10.4) (2021-04-10)
 
 
