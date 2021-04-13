@@ -14,7 +14,6 @@ export = agent => {
   const STRATEGY = Object.getOwnPropertySymbols(agent.schedule)[0];
   const STRATEGY_INSTANCE = Object.getOwnPropertySymbols(agent.schedule)[1];
 
-
   // ugly!! just support all and worker strategy
   class AllStrategy extends agent['TimerScheduleStrategy'] {
     timer;
@@ -42,7 +41,6 @@ export = agent => {
     }
     close() {
       clearTimeout(this.timer);
-
     }
   }
 
@@ -51,7 +49,7 @@ export = agent => {
     for (const instance of agent.schedule[STRATEGY_INSTANCE].values()) {
       instance.close();
     }
-  }
+  };
 
   const strategyMap = agent.schedule[STRATEGY];
   strategyMap.set('worker', WorkerStrategy);

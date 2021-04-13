@@ -74,7 +74,7 @@ export class MidwayWebSingleProcessFramework
 
     const Agent = require(opts.framework).Agent;
     const Application = require(opts.framework).Application;
-    const agent = this.agent = new Agent(Object.assign({}, opts));
+    const agent = (this.agent = new Agent(Object.assign({}, opts)));
     await agent.ready();
     const application = (this.app = new Application(Object.assign({}, opts)));
     application.agent = agent;
