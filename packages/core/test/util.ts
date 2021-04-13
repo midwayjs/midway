@@ -3,7 +3,7 @@ export function matchObjectPropertyInArray(arr, matchObject): boolean {
   for (let item of arr) {
     let num = Object.keys(matchObject).length;
     for (const property in matchObject) {
-      if (JSON.stringify(item[property]) === JSON.stringify(matchObject[property])) {
+      if (deepEqual(item[property], matchObject[property])) {
         num--;
       } else {
         break;
@@ -14,4 +14,12 @@ export function matchObjectPropertyInArray(arr, matchObject): boolean {
     }
   }
   return matched;
+}
+
+function deepEqual(x, y) {
+  const ok = Object.keys, tx = typeof x, ty = typeof y;
+  return x && y && tx === 'object' && tx === ty ? (
+    ok(x).length === ok(y).length &&
+    ok(x).every(key => deepEqual(x[key], y[key]))
+  ) : (x === y);
 }
