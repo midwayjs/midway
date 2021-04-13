@@ -189,7 +189,7 @@ describe('/test/triggerCollector.test.ts', function () {
     clearContainerCache();
     const collector = new ServerlessTriggerCollector(join(__dirname, './fixtures/app-with-serverless-trigger/src'));
     const result = await collector.getFunctionList();
-    console.log(result);
+    // console.log(result);
 
     expect(matchObjectPropertyInArray(result, {
       functionName: 'helloAliyunService-handleTimerEvent',
