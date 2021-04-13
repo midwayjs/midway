@@ -3,6 +3,9 @@ export function matchObjectPropertyInArray(arr, matchObject): boolean {
   for (let item of arr) {
     let num = Object.keys(matchObject).length;
     for (const property in matchObject) {
+      console.log('start match ' + property);
+      console.log('result data', JSON.stringify(item[property]));
+      console.log('result data', JSON.stringify(matchObject[property]));
       if (deepEqual(item[property], matchObject[property])) {
         num--;
       } else {
