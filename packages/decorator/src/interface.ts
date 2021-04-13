@@ -80,7 +80,7 @@ export namespace FaaSMetadata {
     /**
      * serverless event name
      */
-    triggerName?: string;
+    name?: string;
     /**
      * function timeout value, unit: seconds
      */
