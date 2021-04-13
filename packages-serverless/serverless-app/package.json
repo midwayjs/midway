@@ -18,6 +18,7 @@
     "@midwayjs/faas": "^2.10.4",
     "@midwayjs/faas-middleware-upload": "^0.0.5",
     "@midwayjs/mock": "^2.10.4",
+    "fs-extra": "^8.0.1",
     "@midwayjs/serverless-fc-starter": "^2.10.4",
     "@midwayjs/serverless-fc-trigger": "^2.10.4",
     "@midwayjs/serverless-scf-starter": "^2.10.0",
@@ -32,7 +33,7 @@
   ],
   "scripts": {
     "build": "midway-bin build -c",
-    "test": "midway-bin test --ts",
+    "test": "midway-bin test -f ./test/faas-start-end.test.ts --ts",
     "cov": "midway-bin cov --ts"
   },
   "repository": {

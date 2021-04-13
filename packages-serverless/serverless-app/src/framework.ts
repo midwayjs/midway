@@ -22,10 +22,12 @@ export class Framework
   configurationOptions: IServerlessAppOptions;
   private innerApp: IMidwayApplication;
   private innerFramework: IMidwayFramework<any, any>;
+  private innerBootStarter;
   private runtime: any;
   private server: Server;
   private bootstrapOptions;
   private spec;
+  private proxyApp;
   configure(options: IServerlessAppOptions) {
     this.configurationOptions = options;
     return this;
@@ -33,6 +35,9 @@ export class Framework
   async stop() {
     if (this.server?.close) {
       this.server.close();
+    }
+    if (this.innerBootStarter) {
+      await this.innerBootStarter.stop();
     }
   }
 
@@ -80,16 +85,19 @@ export class Framework
     return MidwayFrameworkType.SERVERLESS_APP;
   }
   public getApplication() {
-    return new Proxy(this.app, {
-      get: (target, key) => {
-        if (target[key]) {
-          return target[key];
-        }
-        if (this[key]) {
-          return this[key];
-        }
-      },
-    });
+    if (!this.proxyApp) {
+      this.proxyApp = new Proxy(this.app, {
+        get: (target, key) => {
+          if (target[key]) {
+            return target[key];
+          }
+          if (this[key]) {
+            return this[key];
+          }
+        },
+      });
+    }
+    return this.proxyApp;
   }
 
   public getServer() {
@@ -204,6 +212,7 @@ export class Framework
       initializeContext: this.configurationOptions?.initContext,
     });
     this.innerFramework = startResult.framework;
+    this.innerBootStarter = startResult.innerBootStarter;
     this.runtime = startResult.runtime;
     this.innerApp = startResult.framework.getApplication();
     const invoke = startResult.invoke;
