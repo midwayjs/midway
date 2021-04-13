@@ -205,7 +205,7 @@ export class WebRouterCollector {
 
         if (functionMeta) {
           // get function information
-          data.functionName = controllerId + '_' + webRouter.method;
+          data.functionName = controllerId + '-' + webRouter.method;
           data.functionTriggerName = ServerlessTriggerType.HTTP;
           data.functionTriggerMetadata = {
             path: joinURLPath(prefix, webRouter.path.toString()),
