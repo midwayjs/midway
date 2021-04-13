@@ -59,6 +59,12 @@ export const analysisDecorator = async (cwd: string) => {
   const allFunc = {};
   if (Array.isArray(result)) {
     result.forEach(func => {
+      if (
+        func.functionTriggerName !== 'http' &&
+        func.functionTriggerName !== 'apigw'
+      ) {
+        return;
+      }
       allFunc[func.funcHandlerName] = {
         handler: func.funcHandlerName,
         events: [

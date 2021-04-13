@@ -12,6 +12,7 @@ export const start2 = async options => {
   } = options;
   const { start } = starter;
   let starterInstance;
+  let boot;
   layers.unshift(engine => {
     engine.addRuntimeExtension({
       async beforeFunctionStart(runtime) {
@@ -21,7 +22,7 @@ export const start2 = async options => {
           preloadModules,
           applicationAdapter: runtime,
         });
-        const boot = new BootstrapStarter();
+        boot = new BootstrapStarter();
         boot
           .configure({
             baseDir,
@@ -42,6 +43,7 @@ export const start2 = async options => {
   return {
     runtime,
     framework: starterInstance,
+    innerBootStarter: boot,
     // 分析装饰器上面的函数表
     getFunctionsFromDecorator: async () => {
       return analysisDecorator(appDir);
