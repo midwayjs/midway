@@ -84,6 +84,7 @@ export class BootstrapStarter {
       applicationContext,
     });
 
+    global['MIDWAY_MAIN_FRAMEWORK'] = this.getMainFramework();
     mainApp = await this.getFirstActions('getApplication');
 
     // 初始化其余的副框架
@@ -146,6 +147,10 @@ export class BootstrapStarter {
       });
     }
     return [];
+  }
+
+  protected getMainFramework() {
+    return this.bootstrapItems[0];
   }
 
   protected refreshBootstrapItems() {
