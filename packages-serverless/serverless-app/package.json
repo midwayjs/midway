@@ -33,7 +33,7 @@
   ],
   "scripts": {
     "build": "midway-bin build -c",
-    "test": "midway-bin test -f ./test/faas-start-end.test.ts --ts",
+    "test": "midway-bin test --ts",
     "cov": "midway-bin cov --ts"
   },
   "repository": {
