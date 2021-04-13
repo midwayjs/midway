@@ -193,7 +193,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
       }
     }
     if (!configuration) {
-      cfgFile = `${packageBaseDir}/configuration`;
+      cfgFile = join(packageBaseDir, 'configuration');
       configuration = safeRequire(cfgFile);
       debug('current case 2 => configuration file "%s".', cfgFile);
       loadDir = packageBaseDir;
