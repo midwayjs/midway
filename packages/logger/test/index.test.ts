@@ -34,19 +34,26 @@ describe('/test/index.test.ts', () => {
     const coreLogger = new MidwayBaseLogger({
       dir: logsDir,
     });
+
+    expect(coreLogger.getConsoleLevel()).toEqual('silly');
+    expect(coreLogger.getFileLevel()).toEqual('silly');
+
     coreLogger.info('hello world1');
     coreLogger.info('hello world2');
     coreLogger.info('hello world3');
     coreLogger.warn('hello world4');
     coreLogger.error('hello world5');
     // 调整完之后控制台应该看不见了，但是文件还写入
+
     coreLogger.updateConsoleLevel('warn');
+    expect(coreLogger.getConsoleLevel()).toEqual('warn');
     coreLogger.info('hello world6');
     coreLogger.info('hello world7');
     coreLogger.info('hello world8');
 
     // 文件也不会写入了
     coreLogger.updateFileLevel('warn');
+    expect(coreLogger.getFileLevel()).toEqual('warn');
     coreLogger.info('hello world9');
     coreLogger.info('hello world10');
     coreLogger.info('hello world11');
@@ -485,6 +492,16 @@ describe('/test/index.test.ts', () => {
     expect(includeContent(join(logsDir, 'test-logger.log'), 'test console error3')).toBeFalsy();
     expect(includeContent(join(logsDir, 'test-logger.log'), 'test console info3')).toBeFalsy();
 
+    // logger.enableFile();
+    // logger.enableError();
+    //
+    // logger.warn('test console info4');
+    // logger.error('test console error4');
+    // await sleep();
+    // expect(includeContent(join(logsDir, 'test-error.log'), 'test console error4')).toBeTruthy();
+    // expect(includeContent(join(logsDir, 'test-logger.log'), 'test console error4')).toBeTruthy();
+    // expect(includeContent(join(logsDir, 'test-logger.log'), 'test console info4')).toBeTruthy();
+
     await removeFileOrDir(logsDir);
   });
 
@@ -644,6 +661,59 @@ describe('/test/index.test.ts', () => {
     expect(matchContentTimes(join(logsDir, 'test-logger.log'), 'bbbb')).toEqual(3);
 
     await removeFileOrDir(logsDir);
+  });
+
+  it.skip('should test container set level and disable api', async () => {
+    if (loggers.size > 0) {
+      clearAllLoggers();
+    }
+    const logger1 = createConsoleLogger('consoleLogger');
+    loggers.disableConsole();
+    // 后面的控制台输出应该都看不见
+    logger1.info('aaaa');
+    const logger2 = createConsoleLogger('anotherConsoleLogger');
+    logger2.info('bbbb');
+
+    // 恢复输出
+    loggers.restore();
+    logger1.info('cccc');
+    logger2.info('dddd');
+
+    clearAllLoggers();
+
+    const logsDir = join(__dirname, 'logs');
+    await removeFileOrDir(logsDir);
+
+    const logger3 = createFileLogger('fileLogger', {
+      dir: logsDir,
+      fileLogName: 'test-logger.log',
+    });
+
+    loggers.disableFile();
+    // 后面的文件应该不存在
+    logger3.info('aaaa');
+    const logger4 = createFileLogger('anotherFileLogger', {
+      dir: logsDir,
+      fileLogName: 'test-logger.log',
+    });
+    logger4.info('bbbb');
+
+    await sleep();
+    expect(matchContentTimes(join(logsDir, 'test-logger.log'), 'aaaa')).toEqual(0);
+    expect(matchContentTimes(join(logsDir, 'test-logger.log'), 'bbbb')).toEqual(0);
+
+    // 恢复输出
+    loggers.restore();
+    logger3.info('eeee');
+    logger4.info('ffff');
+
+    await sleep(2000);
+
+    expect(matchContentTimes(join(logsDir, 'test-logger.log'), 'eeee')).toEqual(1);
+    expect(matchContentTimes(join(logsDir, 'test-logger.log'), 'ffff')).toEqual(1);
+
+    await removeFileOrDir(logsDir);
+
   });
 
 });

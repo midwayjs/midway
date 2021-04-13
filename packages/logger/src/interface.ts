@@ -22,6 +22,8 @@ export interface IMidwayLogger extends ILogger {
   isEnableFile(): boolean ;
   isEnableConsole(): boolean;
   isEnableError(): boolean ;
+  getConsoleLevel(): LoggerLevel;
+  getFileLevel(): LoggerLevel;
   updateLevel(level: LoggerLevel): void;
   updateFileLevel(level: LoggerLevel): void;
   updateConsoleLevel(level: LoggerLevel): void;
@@ -59,6 +61,7 @@ export interface LoggerOptions {
   fileMaxFiles?: number | string;
   errMaxSize?: string;
   errMaxFiles?: string;
+  eol?: string;
 }
 
 export interface DelegateLoggerOptions {

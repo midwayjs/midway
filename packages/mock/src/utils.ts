@@ -232,16 +232,18 @@ export async function close(
 
   if (isTestEnvironment()) {
     // clean first
-    if (options.cleanLogsDir !== false && !isWin32()) {
+    if (options.cleanLogsDir && !isWin32()) {
       await remove(join(newApp.getAppDir(), 'logs'));
     }
     if (MidwayFrameworkType.WEB === newApp.getFrameworkType()) {
-      if (options.cleanTempDir !== false && !isWin32()) {
+      if (options.cleanTempDir && !isWin32()) {
         await remove(join(newApp.getAppDir(), 'run'));
       }
     }
     if (options.sleep > 0) {
       await sleep(options.sleep);
+    } else {
+      await sleep(50);
     }
   }
 }
@@ -276,6 +278,8 @@ class BootstrapAppStarter {
     await Bootstrap.stop();
     if (options.sleep > 0) {
       await sleep(options.sleep);
+    } else {
+      await sleep(50);
     }
   }
 }

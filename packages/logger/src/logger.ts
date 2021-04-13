@@ -143,6 +143,7 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
         symlinkName: this.loggerOptions.fileLogName,
         maxSize: this.loggerOptions.fileMaxSize || '200m',
         maxFiles: this.loggerOptions.fileMaxFiles || '31d',
+        eol: this.loggerOptions.eol,
       });
     }
     this.add(this.fileTransport);
@@ -163,6 +164,7 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
         symlinkName: this.loggerOptions.errorLogName,
         maxSize: this.loggerOptions.errMaxSize || '200m',
         maxFiles: this.loggerOptions.errMaxFiles || '31d',
+        eol: this.loggerOptions.eol,
       });
     }
     this.add(this.errTransport);
@@ -178,6 +180,14 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
 
   isEnableError(): boolean {
     return !!this.errTransport;
+  }
+
+  getConsoleLevel(): LoggerLevel {
+    return this.consoleTransport.level;
+  }
+
+  getFileLevel(): LoggerLevel {
+    return this.fileTransport.level;
   }
 
   updateLevel(level: LoggerLevel): void {
