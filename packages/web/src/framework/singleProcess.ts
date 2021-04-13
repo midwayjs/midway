@@ -120,6 +120,9 @@ export class MidwayWebSingleProcessFramework
   }
 
   async stop(): Promise<void> {
+    await new Promise((resolve) => {
+      this.server.close(resolve);
+    });
     await this.app.close();
     await this.agent.close();
   }
