@@ -2,6 +2,7 @@ import { ServerlessTriggerCollector } from '../src';
 import { join } from 'path';
 import { clearAllModule } from '@midwayjs/decorator';
 import { clearContainerCache } from '../src';
+import { matchObjectPropertyInArray } from './util';
 
 describe('/test/triggerCollector.test.ts', function () {
 
@@ -268,6 +269,17 @@ describe('/test/triggerCollector.test.ts', function () {
     const collector = new ServerlessTriggerCollector(join(__dirname, './fixtures/app-with-serverless-trigger/src'));
     const result = await collector.getFunctionList();
     console.log(result);
+
+    expect(matchObjectPropertyInArray(result, {
+      functionName: 'helloAliyunService-handleTimerEvent',
+      functionTriggerName: 'timer',
+      functionTriggerMetadata: {
+        type: 'cron',
+        value: '0 0 4 * * *',
+        name: 'custom_timer',
+        functionName: 'helloAliyunService-handleTimerEvent'
+      }
+    })).toBeTruthy();
   });
 
 });
