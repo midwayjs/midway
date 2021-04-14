@@ -7,6 +7,7 @@ const { join } = require('path');
 const request = require('supertest');
 
 describe('/test/index.test.ts', () => {
+
   describe('FC test with http trigger', () => {
     let runtime;
     let app;
@@ -274,6 +275,42 @@ describe('/test/index.test.ts', () => {
         .get('/got_ip')
         .expect('Content-Type', 'text/plain; charset=utf-8')
         .expect('ip=42.120.74.90')
+        .expect(200, done);
+    });
+  });
+
+
+  describe('FC test with midway app use http trigger', () => {
+    let runtime;
+    let app;
+
+    beforeAll(async () => {
+      // set midway framework dir
+      process.env.EGG_FRAMEWORK_DIR = join(__dirname, '../node_modules/@midwayjs/web');
+      const entryDir = join(__dirname, './fixtures/midway-fc');
+      process.env.ENTRY_DIR = entryDir;
+      runtime = createRuntime({
+        functionDir: entryDir,
+      });
+      await runtime.start();
+      app = await runtime.delegate(new HTTPTrigger());
+    });
+
+    afterEach(() => {
+      if (runtime) {
+        runtime.close();
+      }
+      process.env.ENTRY_DIR = '';
+    });
+
+    it('should test with get', done => {
+      request(app)
+        .post('/api')
+        .send({
+          bbbbb: 'ccc'
+        })
+        .expect('Content-Type', 'text/plain; charset=utf-8')
+        .expect(/dataccc/)
         .expect(200, done);
     });
   });
