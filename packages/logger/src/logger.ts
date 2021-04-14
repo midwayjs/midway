@@ -143,7 +143,6 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
         symlinkName: this.loggerOptions.fileLogName,
         maxSize: this.loggerOptions.fileMaxSize || '200m',
         maxFiles: this.loggerOptions.fileMaxFiles || '31d',
-        eol: this.loggerOptions.eol,
       });
     }
     this.add(this.fileTransport);
