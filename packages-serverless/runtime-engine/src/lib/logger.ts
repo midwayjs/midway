@@ -11,6 +11,7 @@ const debuglog = util.debuglog('RuntimeEngine:Logger');
 
 export class ServerlessLogger extends Logger implements IServerlessLogger {
   options;
+  private waiting = false;
 
   constructor(options) {
     super(options);
@@ -83,8 +84,14 @@ export class ServerlessLogger extends Logger implements IServerlessLogger {
         if (transport._stream.fd) {
           await this.checkAndRotate(transport);
         } else {
+          if (this.waiting) {
+            debuglog('rotateLogBySize waiting for open fd');
+            return;
+          }
+          this.waiting = true;
           // 如果没有 fd，这里需要监听 open 事件，这时候才会有 fd，否则直接抛异常了
           transport._stream.on('open', async (fd: number) => {
+            this.waiting = false;
             await this.checkAndRotate(transport);
           });
         }
