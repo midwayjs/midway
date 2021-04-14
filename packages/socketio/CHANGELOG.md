@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.10.6](https://github.com/midwayjs/midway/compare/v2.10.5...v2.10.6) (2021-04-14)
+
+**Note:** Version bump only for package @midwayjs/socketio
+
+
+
+
+
 ## [2.10.5](https://github.com/midwayjs/midway/compare/v2.10.4...v2.10.5) (2021-04-13)
 
 
