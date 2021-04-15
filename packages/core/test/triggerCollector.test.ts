@@ -208,6 +208,7 @@ describe('/test/triggerCollector.test.ts', function () {
       })).toBeTruthy();
     } catch (e) {
       console.error(e);
+      throw e;
     }
 
   });
