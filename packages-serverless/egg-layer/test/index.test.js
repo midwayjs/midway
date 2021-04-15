@@ -309,7 +309,7 @@ describe('/test/index.test.ts', () => {
         .send({
           bbbbb: 'ccc'
         })
-        .expect('Content-Type', 'text/plain; charset=utf-8')
+        .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(/dataccc/)
         .expect(200, done);
     });

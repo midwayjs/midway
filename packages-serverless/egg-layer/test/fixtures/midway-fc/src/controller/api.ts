@@ -3,7 +3,7 @@ import {
   Post,
   Provide,
   Inject,
-  Body,
+  Body, ContentType,
 } from '@midwayjs/decorator';
 import { UserService } from '../service/user';
 
@@ -17,6 +17,7 @@ export class APIController {
   userService: UserService;
 
   @Post('/api')
+  @ContentType('html')
   async postData(@Body('bbbbb') bbbb) {
     return 'data' + bbbb;
   }
