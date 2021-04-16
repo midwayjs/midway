@@ -266,7 +266,6 @@ export class Bootstrap {
   }
 
   static reset() {
-    this.logger = null;
     this.configured = false;
     this.starter = null;
   }
