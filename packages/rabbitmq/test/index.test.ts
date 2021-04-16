@@ -2,7 +2,7 @@ import { createRabbitMQProducer } from '@midwayjs/mock';
 import { closeApp, creatApp } from './utils';
 
 describe('/test/index.test.ts', () => {
-  it('should test create socket app and use default namespace', async () => {
+  it('should test create channel', async () => {
     // create a queue and channel
     const channel = await createRabbitMQProducer('tasks');
     // send data to queue
