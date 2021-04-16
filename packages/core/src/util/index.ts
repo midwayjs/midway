@@ -22,6 +22,7 @@ export const safeRequire = (p, enabledCache = true) => {
       return JSON.parse(content);
     }
   } catch (err) {
+    debug('SafeRequire Warning');
     debug(err);
     return undefined;
   }
