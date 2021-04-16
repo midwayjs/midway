@@ -158,22 +158,6 @@ export class MidwayContainer
       loadDirKey = loadDirs.join('-');
     }
 
-    if (MidwayContainer.parentDefinitionMetadata.has(loadDirKey)) {
-      this.restoreDefinitions(
-        MidwayContainer.parentDefinitionMetadata.get(loadDirKey)
-      );
-    } else {
-      this.loadDirectory(opts);
-      // 保存元信息最新的上下文中，供其他容器复用，减少重复扫描
-      MidwayContainer.parentDefinitionMetadata.set(
-        loadDirKey,
-        this.getDefinitionMetaList()
-      );
-    }
-
-    this.debugLogger('main:main configuration register import objects');
-    this.registerImportObjects(configuration.getImportObjects());
-
     // load configuration
     for (const [packageName, containerConfiguration] of this.configurationMap) {
       // 老版本 configuration 才加载
@@ -192,6 +176,22 @@ export class MidwayContainer
         this.loadConfiguration(opts, containerConfiguration);
       }
     }
+
+    if (MidwayContainer.parentDefinitionMetadata.has(loadDirKey)) {
+      this.restoreDefinitions(
+        MidwayContainer.parentDefinitionMetadata.get(loadDirKey)
+      );
+    } else {
+      this.loadDirectory(opts);
+      // 保存元信息最新的上下文中，供其他容器复用，减少重复扫描
+      MidwayContainer.parentDefinitionMetadata.set(
+        loadDirKey,
+        this.getDefinitionMetaList()
+      );
+    }
+
+    this.debugLogger('main:main configuration register import objects');
+    this.registerImportObjects(configuration.getImportObjects());
 
     // register base config hook
     this.registerDataHandler(CONFIG_KEY, (key: string) => {
