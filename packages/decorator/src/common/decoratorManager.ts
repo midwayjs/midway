@@ -391,6 +391,13 @@ export class DecoratorManager extends Map {
 }
 
 const manager = new DecoratorManager();
+if (global['MIDWAY_GLOBAL_DECORATOR_MANAGER']) {
+  console.warn(
+    'DecoratorManager not singleton and please check @midwayjs/decorator version by "npm ls @midwayjs/decorator"'
+  );
+} else {
+  global['MIDWAY_GLOBAL_DECORATOR_MANAGER'] = manager;
+}
 
 /**
  * save data to class
