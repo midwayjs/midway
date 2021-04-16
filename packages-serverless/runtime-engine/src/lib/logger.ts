@@ -11,6 +11,7 @@ const debuglog = util.debuglog('RuntimeEngine:Logger');
 
 export class ServerlessLogger extends Logger implements IServerlessLogger {
   options;
+  private waiting = false;
 
   constructor(options) {
     super(options);
@@ -78,23 +79,41 @@ export class ServerlessLogger extends Logger implements IServerlessLogger {
    */
   protected async rotateLogBySize(): Promise<void> {
     try {
-      const maxFileSize =
-        this.options.maxFileSize ||
-        Number(process.env.LOG_ROTATE_FILE_SIZE) ||
-        DEFAULT_MAX_FILE_SIZE;
       const transport: any = this.get('file');
       if (transport?._stream?.writable) {
-        const stat = await fs.fstat(transport._stream.fd);
-        if (stat.size >= maxFileSize) {
-          this.info(
-            `File ${transport._stream.path} (fd ${transport._stream.fd}) reach the maximum file size, current size: ${stat.size}, max size: ${maxFileSize}`
-          );
-          await this.rotateBySize();
+        if (transport._stream.fd) {
+          await this.checkAndRotate(transport);
+        } else {
+          if (this.waiting) {
+            debuglog('rotateLogBySize waiting for open fd');
+            return;
+          }
+          this.waiting = true;
+          // 如果没有 fd，这里需要监听 open 事件，这时候才会有 fd，否则直接抛异常了
+          transport._stream.on('open', async (fd: number) => {
+            this.waiting = false;
+            await this.checkAndRotate(transport);
+          });
         }
       }
     } catch (e) {
+      debuglog('rotateLogBySize error =>' + e.stack);
       e.message = `${e.message}`;
       this.error(e);
+    }
+  }
+
+  protected async checkAndRotate(transport) {
+    const maxFileSize =
+      this.options.maxFileSize ||
+      Number(process.env.LOG_ROTATE_FILE_SIZE) ||
+      DEFAULT_MAX_FILE_SIZE;
+    const stat = await fs.fstat(transport._stream.fd);
+    if (stat.size >= maxFileSize) {
+      this.info(
+        `File ${transport._stream.path} (fd ${transport._stream.fd}) reach the maximum file size, current size: ${stat.size}, max size: ${maxFileSize}`
+      );
+      await this.rotateBySize();
     }
   }
 
