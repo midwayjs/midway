@@ -1,6 +1,6 @@
 // src/service/bookService
 import { Provide, ScopeEnum } from '@midwayjs/decorator';
-import { providerWrapper, IMidwayContainer } from '@midwayjs/core';
+import { providerWrapper, IMidwayContainer } from '../../../../../src';
 
 @Provide()
 export class BookService {

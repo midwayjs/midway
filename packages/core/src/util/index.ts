@@ -1,5 +1,8 @@
 import { dirname, resolve, sep, posix } from 'path';
 import { readFileSync } from 'fs';
+import { debuglog } from 'util';
+
+const debug = debuglog('midway:container:util');
 
 export const isDevelopmentEnvironment = env => {
   return ['local', 'test', 'unittest'].includes(env);
@@ -19,6 +22,7 @@ export const safeRequire = (p, enabledCache = true) => {
       return JSON.parse(content);
     }
   } catch (err) {
+    debug(err);
     return undefined;
   }
 };
