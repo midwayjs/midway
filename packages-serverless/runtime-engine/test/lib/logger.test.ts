@@ -114,4 +114,24 @@ describe('logger.test.ts', () => {
       });
     });
   });
+
+  describe('logger benchmark', () => {
+    it('logger benchmark should be ok', async () => {
+      const loggerFactory = new BaseLoggerFactory(__dirname);
+      const log = (loggerFactory as any).createLogger(path.join(__dirname, '_benchmarks/test.log'), {
+        fileClearInterval: 100,
+        maxFileSize: 1,
+        maxFiles: 2,
+      });
+
+      for (let i = 0; i < 100000; i++) {
+        log.info('asjdfaoj230u4u9rpasdjfasjdfpoaiweurpoqwurapsjf;lasdjfopasiefpoqwuerpoajsdpfjasdjfa;lsdjfaosdfjpawierpqoiwe ==> i = %s', i);
+        log.error('asjdfaoj230u4u9rpasdjfasjdfpoaiweurpoqwurapsjf;lasdjfopasiefpoqwuerpoajsdpfjasdjfa;lsdjfaosdfjpawierpqoiwe ==> i = %s', i);
+
+        // await new Promise<void>(resolve => {
+        //   setTimeout(() => resolve(), 50);
+        // });
+      }
+    });
+  });
 });
