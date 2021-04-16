@@ -98,29 +98,38 @@ export class UserService {
 让用户定义任务
 
 ```typescript
+
+@Queue()
 @Provide()
 export class HelloTask{
 
   @Inject()
   service;
 
-
-  Queue()
-  async xxx(params){
-    const xxx = 
+  async excute(params){
+    console.log(params);
   }
-
-  @Queue()  // redis
-  async data()
 }
 ```
 
-@Controller()
+```typescript
+import { QueueService } from '@midwayjs/task';
+@Provide()
+export class UserTask{
 
-/hello
-  console.log(this.xxx)
-  ->调用扩容接口
-  this.queueService.add(HelloTask.xxx, params, {deplay: 1min}); //立马执行
+  @Inject()
+  service;
+
+  @Inject()
+  queueService: QueueService;
+
+  async excute(params){
+    // 3秒后触发分布式任务调度。
+    const xxx = this.queueService.excute(HelloTask, params, {delay: 3000});
+  }
+}
+
+```
 ## 其他
 
 关于task任务的配置：
