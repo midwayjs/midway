@@ -9,7 +9,6 @@ import {
   ScopeEnum,
   ServerlessTriggerType,
 } from '..';
-import EventTriggerUnionOptions = FaaSMetadata.EventTriggerUnionOptions;
 
 export interface FuncParams {
   funHandler?: string;
@@ -69,10 +68,6 @@ export function ServerlessTrigger(
   metadata: FaaSMetadata.HTTPTriggerOptions
 ): MethodDecorator;
 export function ServerlessTrigger(
-  type: ServerlessTriggerType.API_GATEWAY,
-  metadata?: FaaSMetadata.APIGatewayTriggerOptions
-): MethodDecorator;
-export function ServerlessTrigger(
   type: ServerlessTriggerType.OS,
   metadata: FaaSMetadata.OSTriggerOptions
 ): MethodDecorator;
@@ -93,6 +88,10 @@ export function ServerlessTrigger(
   metadata?: FaaSMetadata.CDNTriggerOptions
 ): MethodDecorator;
 export function ServerlessTrigger(
+  type: ServerlessTriggerType.API_GATEWAY,
+  metadata?: FaaSMetadata.APIGatewayTriggerOptions
+): MethodDecorator;
+export function ServerlessTrigger(
   type: ServerlessTriggerType.HSF,
   metadata?: FaaSMetadata.HSFTriggerOptions
 ): MethodDecorator;
@@ -105,8 +104,8 @@ export function ServerlessTrigger(
   metadata?: FaaSMetadata.EventTriggerOptions
 ): MethodDecorator;
 export function ServerlessTrigger(
-  type: ServerlessTriggerType,
-  metadata: EventTriggerUnionOptions = {}
+  type: any,
+  metadata: any = {}
 ): MethodDecorator {
   return (target, functionName: string, descriptor) => {
     if (

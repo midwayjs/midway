@@ -1,6 +1,6 @@
 {
   "name": "worker-other",
 	"scripts": {
-		"build": "midway-bin build -c"
+		"build": "tsc"
 	}
 }

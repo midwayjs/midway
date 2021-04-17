@@ -12,8 +12,7 @@
     "extend2": "^1.0.0"
   },
   "devDependencies": {
-    "@midwayjs/cli": "^1.2.36",
-    "supertest": "^4.0.2"
+"supertest": "^4.0.2"
   },
   "engines": {
     "node": ">= 10"
@@ -23,9 +22,9 @@
     "dist/**/*.d.ts"
   ],
   "scripts": {
-    "build": "midway-bin build -c",
-    "test": "midway-bin test --ts --forceExit",
-    "cov": "midway-bin cov --ts --forceExit"
+    "build": "tsc",
+    "test": "node --require=ts-node/register ../../node_modules/.bin/jest",
+    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --coverage --forceExit"
   },
   "repository": {
     "type": "git",

@@ -11,8 +11,7 @@
     "request": "^2.88.2"
   },
   "devDependencies": {
-    "@midwayjs/cli": "^1.2.36",
-    "@midwayjs/decorator": "^2.10.3",
+"@midwayjs/decorator": "^2.10.3",
     "@midwayjs/runtime-engine": "^2.10.0",
     "@midwayjs/runtime-mock": "^2.10.2",
     "@midwayjs/serverless-fc-starter": "^2.10.6",

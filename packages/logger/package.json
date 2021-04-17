@@ -10,8 +10,7 @@
     "winston-transport": "^4.4.0"
   },
   "devDependencies": {
-    "@midwayjs/cli": "^1.2.36",
-    "egg-logger": "^2.4.2",
+"egg-logger": "^2.4.2",
     "fs-extra": "^8.0.1"
   },
   "engines": {
@@ -26,9 +25,9 @@
     "logger"
   ],
   "scripts": {
-    "build": "midway-bin build -c",
-    "test": "midway-bin test --ts",
-    "cov": "midway-bin cov --ts"
+    "build": "tsc",
+    "test": "node --require=ts-node/register ../../node_modules/.bin/jest",
+    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --coverage --forceExit"
   },
   "repository": {
     "type": "git",

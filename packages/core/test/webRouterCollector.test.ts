@@ -72,10 +72,10 @@ describe('/test/webRouterCollector.test.ts', function () {
       "prefix": "/",
       "url": "/",
       "requestMethod": "get",
-      "method": "homeSet",
-      "handlerName": "apiController.homeSet",
-      "funcHandlerName": "apiController.homeSet",
-      "controllerId": "apiController",
+      "method": "upload",
+      "handlerName": "helloHttpService.upload",
+      "funcHandlerName": "http.upload",
+      "controllerId": "helloHttpService",
     })).toBeTruthy();
 
   });

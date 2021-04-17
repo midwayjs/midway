@@ -1,6 +1,6 @@
 import {
-  Emit,
-  OnMessage,
+  WSEmit,
+  OnWSMessage,
   Provide,
   WSController,
 } from '@midwayjs/decorator';
@@ -8,8 +8,8 @@ import {
 @Provide()
 @WSController()
 export class APIController {
-  @OnMessage('my')
-  @Emit('returnValue')
+  @OnWSMessage('my')
+  @WSEmit('returnValue')
   async gotMyMessage(payload) {
     return { name: 'harry' };
   }
