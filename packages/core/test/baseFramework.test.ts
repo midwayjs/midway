@@ -573,6 +573,7 @@ describe('/test/baseFramework.test.ts', () => {
         "name": "伊卡狛格"
       }
     ]);
+    await framework.stop();
   });
 
   it('should create logger and match property between framework and app', async () => {
@@ -696,6 +697,18 @@ describe('/test/baseFramework.test.ts', () => {
     const userController = await appCtx.getAsync('userController');
     const books = await (userController as any).getBooksByUser();
     expect(books).toEqual([
+      {
+        "name": "无限可能str",
+        "isbn": "9787115549440str"
+      },
+      {
+        "name": "明智的孩子str",
+        "isbn": "9787305236525str"
+      },
+      {
+        "name": "伊卡狛格str",
+        "isbn": "9787020166916str"
+      },
       {
         "isbn": "9787115549440",
         "name": "无限可能"
