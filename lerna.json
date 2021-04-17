@@ -1,7 +1,6 @@
 {
   "packages": [
-    "packages/*",
-    "packages-serverless/*"
+    "packages/*"
   ],
   "command": {
     "bootstrap": {
