@@ -20,7 +20,7 @@
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
-"mm": "3"
+    "mm": "3"
   },
   "keywords": [
     "midway",

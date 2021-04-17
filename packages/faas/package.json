@@ -12,7 +12,7 @@
     "koa-compose": "^4.1.0"
   },
   "devDependencies": {
-"@midwayjs/mock": "^2.10.6",
+    "@midwayjs/mock": "^2.10.6",
     "@midwayjs/serverless-fc-starter": "^2.10.6",
     "@midwayjs/serverless-scf-starter": "^2.10.0",
     "mm": "3"

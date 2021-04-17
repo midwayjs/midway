@@ -9,7 +9,7 @@
     "dist/**/*.d.ts"
   ],
   "devDependencies": {
-"@midwayjs/core": "^2.10.6",
+    "@midwayjs/core": "^2.10.6",
     "@midwayjs/decorator": "^2.10.3",
     "@midwayjs/koa": "^2.10.6",
     "@midwayjs/mock": "^2.10.6",

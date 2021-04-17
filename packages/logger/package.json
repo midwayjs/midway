@@ -10,7 +10,7 @@
     "winston-transport": "^4.4.0"
   },
   "devDependencies": {
-"egg-logger": "^2.4.2",
+    "egg-logger": "^2.4.2",
     "fs-extra": "^8.0.1"
   },
   "engines": {

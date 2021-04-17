@@ -27,7 +27,7 @@
     "node": ">= 10"
   },
   "devDependencies": {
-"@midwayjs/core": "^2.10.6",
+    "@midwayjs/core": "^2.10.6",
     "@midwayjs/decorator": "^2.10.3"
   },
   "dependencies": {
