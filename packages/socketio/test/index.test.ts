@@ -145,7 +145,7 @@ describe('/test/index.test.ts', () => {
     await closeApp(app);
   });
 
-  it('should test create socket app and with redis adapter', async () => {
+  it.skip('should test create socket app and with redis adapter', async () => {
     const app = await createServer('base-app-redis', {
       port: 3000,
       adapter: createRedisAdapter({ host: '127.0.0.1', port: 6379}),
