@@ -16,7 +16,7 @@
     "autod": "lerna run autod",
     "test": "lerna run test",
     "link": "lerna run link",
-    "cov": "lerna run cov --concurrency=1",
+    "cov": "NODE_DEBUG=midway* lerna run cov --concurrency=1",
     "ci": "npm run build && npm run cov",
     "purge": "npm run clean && rm -rf node_modules",
     "reset": "npm run purge && npm i && npm run ci",
