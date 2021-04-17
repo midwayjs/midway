@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.10.7](https://github.com/midwayjs/midway-faas/compare/v2.10.6...v2.10.7) (2021-04-17)
+
+
+### Bug Fixes
+
+* add event name args ([#986](https://github.com/midwayjs/midway-faas/issues/986)) ([bfd8232](https://github.com/midwayjs/midway-faas/commit/bfd82320aee8600d8fa30bd2821a0e68c80fd755))
+* serverless logger rotator error ([#992](https://github.com/midwayjs/midway-faas/issues/992)) ([df681b3](https://github.com/midwayjs/midway-faas/commit/df681b34136e66c8bed0f85711163bc4ffb27867))
+
+
+
+
+
 # [2.10.0](https://github.com/midwayjs/midway-faas/compare/v2.9.3...v2.10.0) (2021-04-02)
 
 **Note:** Version bump only for package @midwayjs/runtime-engine

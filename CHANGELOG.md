@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.10.7](https://github.com/midwayjs/midway/compare/v2.10.6...v2.10.7) (2021-04-17)
+
+
+### Bug Fixes
+
+* add event name args ([#986](https://github.com/midwayjs/midway/issues/986)) ([bfd8232](https://github.com/midwayjs/midway/commit/bfd82320aee8600d8fa30bd2821a0e68c80fd755))
+* add midway case for egg-layer and add warn for DecoratorManager ([#994](https://github.com/midwayjs/midway/issues/994)) ([3d601aa](https://github.com/midwayjs/midway/commit/3d601aa19104081870eb32ba09170357a9da4d03))
+* format ([#997](https://github.com/midwayjs/midway/issues/997)) ([456cc14](https://github.com/midwayjs/midway/commit/456cc14513bdb000d1aa3130e9719caf7a8a803f))
+* inject class when use component by import string ([#996](https://github.com/midwayjs/midway/issues/996)) ([8bfda7d](https://github.com/midwayjs/midway/commit/8bfda7da4b4a0d34bf0b0d0291416ef4655fb8a5))
+* remove reset bootstrap logger ([#993](https://github.com/midwayjs/midway/issues/993)) ([9dc9596](https://github.com/midwayjs/midway/commit/9dc9596fffb6b76897b28ba51d4a1af3e8c6544c))
+* serverless logger rotator error ([#992](https://github.com/midwayjs/midway/issues/992)) ([df681b3](https://github.com/midwayjs/midway/commit/df681b34136e66c8bed0f85711163bc4ffb27867))
+
+
+### Features
+
+* add midway task component ([#995](https://github.com/midwayjs/midway/issues/995)) ([befb81d](https://github.com/midwayjs/midway/commit/befb81dee90f01a20bba2c1835e8685cf85a76e7))
+
+
+
+
+
 ## [2.10.6](https://github.com/midwayjs/midway/compare/v2.10.5...v2.10.6) (2021-04-14)
 
 
