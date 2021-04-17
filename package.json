@@ -10,7 +10,8 @@
     "mwts": "^1.0.5",
     "opencollective": "^1.0.3",
     "opencollective-postinstall": "^2.0.2",
-    "typescript": "^4.1.0"
+    "typescript": "^4.1.0",
+    "ts-node": "^9.1.1"
   },
   "scripts": {
     "autod": "lerna run autod",
