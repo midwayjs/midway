@@ -1,6 +1,5 @@
 import { ILifeCycle, IMidwayContainer } from '../../src';
-import { Provide, Inject, Configuration } from '@midwayjs/decorator';
-import { App } from '@midwayjs/decorator/src';
+import { Provide, Inject, Configuration, App } from '@midwayjs/decorator';
 
 @Provide()
 export class TestBinding {

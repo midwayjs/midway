@@ -76,7 +76,7 @@ describe('test/faas-v2.test.ts', () => {
       .catch(err => done(err));
   });
 
-  it('http post upload', async done => {
+  it.skip('http post upload', async done => {
     const imagePath = join(cwd, '1.jpg');
     await createHttpRequest(app)
       .post('/upload')

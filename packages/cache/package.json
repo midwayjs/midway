@@ -5,9 +5,9 @@
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
-    "build": "midway-bin build -c",
-    "test": "midway-bin test --ts",
-    "cov": "midway-bin cov --ts"
+    "build": "tsc",
+    "test": "node --require=ts-node/register ../../node_modules/.bin/jest",
+    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --coverage --forceExit"
   },
   "author": "",
   "files": [
@@ -27,8 +27,7 @@
     "node": ">= 10"
   },
   "devDependencies": {
-    "@midwayjs/cli": "^1.2.36",
-    "@midwayjs/core": "^2.10.6",
+"@midwayjs/core": "^2.10.6",
     "@midwayjs/decorator": "^2.10.3"
   },
   "dependencies": {

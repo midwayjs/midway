@@ -1,6 +1,6 @@
 {
   "name": "worker-non-default-class",
 	"scripts": {
-		"build": "midway-bin build -c"
+		"build": "tsc"
 	}
 }

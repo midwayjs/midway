@@ -1,10 +1,4 @@
-import {
-  Provide,
-  Inject,
-  ServerlessTrigger,
-  ServerlessTriggerType,
-  Query,
-} from '@midwayjs/decorator';
+import { Inject, Provide, Query, ServerlessTrigger, ServerlessTriggerType, } from '@midwayjs/decorator';
 
 @Provide()
 export class HelloAliyunService {
@@ -20,6 +14,10 @@ export class HelloAliyunService {
     path: '/api_gateway_aliyun',
     method: 'post',
   })
+  @ServerlessTrigger(ServerlessTriggerType.API_GATEWAY, {
+    path: '/api_another',
+    method: 'post',
+  })
   async handleAPIGatewayEvent(@Query() name) {
     return `hello ${name}`;
   }
@@ -27,6 +25,11 @@ export class HelloAliyunService {
   @ServerlessTrigger(ServerlessTriggerType.TIMER, {
     type: 'cron', // or every
     value: '0 0 4 * * *', // or 1m
+    name: 'custom_timer',
+  })
+  @ServerlessTrigger(ServerlessTriggerType.TIMER, {
+    type: 'cron', // or every
+    value: '0 0 1 * * *', // or 1m
   })
   async handleTimerEvent(event) {
     return 'hello world';
