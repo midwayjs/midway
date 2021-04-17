@@ -5,7 +5,7 @@
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "scripts": {
-    "build": "midway-bin build -c",
+    "build": "tsc",
     "test": "node --require=ts-node/register ../../node_modules/.bin/jest",
     "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --coverage --forceExit",
     "ci": "npm run test",
@@ -24,8 +24,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/cli": "^1.2.36",
-    "@midwayjs/mock": "^2.10.6",
+"@midwayjs/mock": "^2.10.6",
     "fs-extra": "^8.0.1"
   },
   "dependencies": {

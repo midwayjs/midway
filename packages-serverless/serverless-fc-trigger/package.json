@@ -12,8 +12,7 @@
     "extend2": "^1.0.0"
   },
   "devDependencies": {
-    "@midwayjs/cli": "^1.2.36",
-    "supertest": "^4.0.2"
+"supertest": "^4.0.2"
   },
   "engines": {
     "node": ">= 10"

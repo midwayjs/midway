@@ -13,8 +13,7 @@
     "express": "^4.17.1"
   },
   "devDependencies": {
-    "@midwayjs/cli": "^1.2.36",
-    "@midwayjs/decorator": "^2.10.3",
+"@midwayjs/decorator": "^2.10.3",
     "@midwayjs/faas": "^2.10.6",
     "@midwayjs/faas-middleware-upload": "^0.0.5",
     "@midwayjs/mock": "^2.10.6",
