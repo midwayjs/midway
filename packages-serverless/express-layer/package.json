@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "midway-bin test --forceExit",
-    "cov": "midway-bin cov --forceExit"
+    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --coverage --forceExit"
   },
   "dependencies": {
     "request": "^2.88.2"

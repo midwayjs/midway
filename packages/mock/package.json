@@ -6,9 +6,9 @@
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "midway-bin build -c",
-    "test": "midway-bin test --ts --forceExit",
-    "cov": "midway-bin cov --ts --forceExit",
-    "ci": "midway-bin test",
+    "test": "node --require=ts-node/register ../../node_modules/.bin/jest",
+    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --coverage --forceExit",
+    "ci": "node --require=ts-node/register ../../node_modules/.bin/jest",
     "link": "npm link"
   },
   "keywords": [
