@@ -8,7 +8,7 @@
     "@midwayjs/serverless-http-parser": "^2.10.0"
   },
   "devDependencies": {
-"raw-body": "^2.4.1"
+    "raw-body": "^2.4.1"
   },
   "engines": {
     "node": ">= 10"

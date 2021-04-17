@@ -27,7 +27,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
-"@midwayjs/mock": "^2.10.6",
+    "@midwayjs/mock": "^2.10.6",
     "dayjs": "^1.10.4",
     "egg-socket.io": "^4.1.6",
     "egg-view-nunjucks": "^2.2.0",

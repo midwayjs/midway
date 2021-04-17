@@ -16,7 +16,7 @@
   "keywords": [],
   "license": "MIT",
   "devDependencies": {
-"@midwayjs/decorator": "^2.10.3",
+    "@midwayjs/decorator": "^2.10.3",
     "@midwayjs/mock": "^2.10.6"
   },
   "dependencies": {
