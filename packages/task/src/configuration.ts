@@ -44,7 +44,7 @@ export class AutoConfiguration {
 
   async onStop() {
     this.queueList.map(queue => {
-      queue.stop();
+      queue.close();
     });
     this.jobList.map(job => {
       job.stop();

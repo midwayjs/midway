@@ -8,7 +8,7 @@ export function Queue(options?: any) {
       MODULE_TASK_QUEUE_OPTIONS,
       {
         options,
-        name: target.constructor.name,
+        name: target.name,
       },
       target
     );

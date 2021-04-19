@@ -1,4 +1,4 @@
-import { App, Provide } from "@midwayjs/decorator";
+import { App, Provide, Task } from "@midwayjs/decorator";
 import { Application } from "@midwayjs/koa";
 import { TaskLocal } from "@midwayjs/decorator";
 
@@ -8,8 +8,15 @@ export class HelloTask{
   @App()
   app: Application;
 
-  @TaskLocal('*/5 * * * * *')
+  @TaskLocal('*/2 * * * * *')
   async hello(){
     this.app.getApplicationContext().registerObject(`name`, 'taskLocal');
+  }
+
+  @Task({
+    repeat: { cron: '*/3 * * * * *'}
+  })
+  async task(){
+    this.app.getApplicationContext().registerObject(`task`, 'task');
   }
 }

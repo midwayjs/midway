@@ -7,13 +7,11 @@ export class QueueService {
   queueMap;
 
   async excute(queueName: any, data: any, options: JobOptions) {
-    const queue = this.queueMap[
-      `${queueName.constructor.name}:excute`
-    ] as Queue;
+    const queue = this.queueMap[`${queueName.name}:excute`] as Queue;
     return await queue.add(data, options);
   }
 
   getClassQueue(queueName: any): Queue {
-    return this.queueMap[`${queueName.constructor.name}:excute`] as Queue;
+    return this.queueMap[`${queueName.name}:excute`] as Queue;
   }
 }
