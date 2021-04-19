@@ -1,5 +1,5 @@
-import { saveModule, saveClassMetadata } from '@midwayjs/core';
-import { MODULE_TASK_QUEUE_KEY, MODULE_TASK_QUEUE_OPTIONS } from '../const';
+import { saveModule, saveClassMetadata } from '../';
+import { MODULE_TASK_QUEUE_KEY, MODULE_TASK_QUEUE_OPTIONS } from '../constant';
 
 export function Queue(options?: any) {
   return function (target) {

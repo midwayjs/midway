@@ -1,8 +1,8 @@
-import { saveModule, attachClassMetadata } from '@midwayjs/core';
+import { saveModule, attachClassMetadata } from '../';
 import {
   MODULE_TASK_TASK_LOCAL_KEY,
   MODULE_TASK_TASK_LOCAL_OPTIONS,
-} from '../const';
+} from '../constant';
 
 export function TaskLocal(options) {
   return function (

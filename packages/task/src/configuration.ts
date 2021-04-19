@@ -15,7 +15,7 @@ import {
   MODULE_TASK_QUEUE_OPTIONS,
   MODULE_TASK_TASK_LOCAL_KEY,
   MODULE_TASK_TASK_LOCAL_OPTIONS,
-} from './const';
+} from '@midwayjs/decorator';
 import * as Bull from 'bull';
 import { CronJob } from 'cron';
 
