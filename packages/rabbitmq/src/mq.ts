@@ -24,6 +24,7 @@ export class RabbitMQServer
     super();
     this.options = options;
     this.reconnectTime = options.reconnectTime;
+    this.exchanges = options.exchanges || [];
   }
 
   async connect() {
@@ -109,14 +110,14 @@ export class RabbitMQServer
   }
 
   async createBinding(queue, exchange) {
-    await this.assertQueue(queue.name, queue.options);
+    await this.assertQueue(queue.queueName, queue.options);
     if (!queue.keys) {
-      await this.bindQueue(queue.name, exchange.name);
+      await this.bindQueue(queue.queueName, exchange.exchange);
       return;
     }
     for (const index in queue.keys) {
       const key = queue.keys[index];
-      await this.bindQueue(queue.name, exchange.name, key);
+      await this.bindQueue(queue.queueName, exchange.exchange, key);
     }
   }
 
