@@ -7,7 +7,11 @@ import {
   RULES_KEY,
 } from '..';
 
-export function Rule(rule) {
+export interface RuleOptions{
+  required?: boolean
+}
+
+export function Rule(rule, options?: RuleOptions) {
   return function (...args) {
     if (args[1]) {
       // 函数装饰器
@@ -15,9 +19,12 @@ export function Rule(rule) {
       if (!joi.isSchema(rule)) {
         rule = getClassMetadata(RULES_KEY, rule);
         if (getPropertyType(target, propertyKey)?.name === 'Array') {
-          rule = joi.array().items(rule).required();
+          rule = joi.array().items(rule);
         } else {
-          rule = joi.object(rule).required();
+          rule = joi.object(rule);
+        }
+        if(!(options?.required === false)){
+          rule = rule.required();
         }
       }
 
