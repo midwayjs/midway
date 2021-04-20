@@ -7,8 +7,8 @@ import {
   RULES_KEY,
 } from '..';
 
-export interface RuleOptions{
-  required?: boolean
+export interface RuleOptions {
+  required?: boolean;
 }
 
 export function Rule(rule, options?: RuleOptions) {
@@ -23,7 +23,7 @@ export function Rule(rule, options?: RuleOptions) {
         } else {
           rule = joi.object(rule);
         }
-        if(!(options?.required === false)){
+        if (!(options?.required === false)) {
           rule = rule.required();
         }
       }
