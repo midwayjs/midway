@@ -87,6 +87,28 @@ describe('/test/annotation/check.test.ts', () => {
     assert.deepEqual(result, user);
   });
 
+  it('check with check allowUnknown', () => {
+    class UserDTO {
+      @Rule(RuleType.number().max(10))
+      age: number;
+
+      world: string;
+    }
+
+    class Hello {
+      @Validate()
+      school(a, data: UserDTO) {
+        return data;
+      }
+    }
+    const user = {
+      age: 10,
+      world: '123'
+    };
+    const result = new Hello().school(1, user);
+    assert.deepEqual(result, user);
+  });
+
   it('check with check with array', () => {
     class WorldDTO {
       @Rule(RuleType.number().max(20))

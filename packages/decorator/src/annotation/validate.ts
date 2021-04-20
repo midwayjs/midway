@@ -17,7 +17,7 @@ export function Validate(isTransform = true) {
         const rules = getClassMetadata(RULES_KEY, item);
         if (rules) {
           const schema = Joi.object(rules);
-          const result = schema.validate(args[i]);
+          const result = schema.validate(args[i], { allowUnknown: true });
           if (result.error) {
             throw result.error;
           } else {
