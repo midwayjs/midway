@@ -9,8 +9,6 @@
     "lerna": "^3.20.2",
     "lerna-relinker": "^1.4.0",
     "mwts": "^1.0.5",
-    "opencollective": "^1.0.3",
-    "opencollective-postinstall": "^2.0.2",
     "typescript": "^4.1.0",
     "ts-jest": "^26.5.5",
     "ts-node": "^9.1.1"
@@ -31,7 +29,6 @@
     "clean": "lerna clean --yes && rm -rf ./packages/**/package-lock.json && rm -f package-lock.json",
     "build": "sh scripts/build.sh",
     "authors": "git log --format='%aN <%aE>' | sort -u > AUTHORS",
-    "postinstall": "opencollective-postinstall",
     "version": "node ./scripts/generate_rollback.js && node ./scripts/generate_version.js && git add .",
     "lint": "lerna exec mwts check",
     "lint:fix": "lerna exec mwts fix",
