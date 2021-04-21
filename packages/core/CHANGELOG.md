@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.10.9](https://github.com/midwayjs/midway/compare/v2.10.8...v2.10.9) (2021-04-21)
+
+
+### Bug Fixes
+
+* revert missing code ([#1006](https://github.com/midwayjs/midway/issues/1006)) ([132bdbb](https://github.com/midwayjs/midway/commit/132bdbb96a88b92b7635072840e58c011ebfcb13))
+
+
+
+
+
 ## [2.10.8](https://github.com/midwayjs/midway/compare/v2.10.7...v2.10.8) (2021-04-21)
 
 **Note:** Version bump only for package @midwayjs/core

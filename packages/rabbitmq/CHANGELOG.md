@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.10.9](https://github.com/midwayjs/midway/compare/v2.10.8...v2.10.9) (2021-04-21)
+
+
+### Bug Fixes
+
+* rabbitmq parameter error ([#1002](https://github.com/midwayjs/midway/issues/1002)) ([cdbd5f9](https://github.com/midwayjs/midway/commit/cdbd5f9e5ba3b1d1e2cf26cb59eaec9447514416))
+
+
+
+
+
 ## [2.10.8](https://github.com/midwayjs/midway/compare/v2.10.7...v2.10.8) (2021-04-21)
 
 **Note:** Version bump only for package @midwayjs/rabbitmq
