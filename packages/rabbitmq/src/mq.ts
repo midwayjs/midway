@@ -7,9 +7,10 @@ import * as amqp from 'amqplib';
 import {
   IMidwayRabbitMQConfigurationOptions,
   IRabbitMQApplication,
+  IRabbitMQExchange,
 } from './interface';
 import { RabbitMQListenerOptions } from '@midwayjs/decorator';
-import { ConsumeMessage, Replies } from 'amqplib/properties';
+import { ConsumeMessage } from 'amqplib/properties';
 
 export class RabbitMQServer
   extends EventEmitter
@@ -18,12 +19,13 @@ export class RabbitMQServer
   private connection: amqp.Connection;
   private channel: amqp.Channel;
   private reconnectTime: number;
-  private exchanges: { [exchangeName: string]: Replies.AssertExchange };
+  private exchanges: IRabbitMQExchange[];
 
   constructor(options: Partial<IMidwayRabbitMQConfigurationOptions>) {
     super();
     this.options = options;
     this.reconnectTime = options.reconnectTime;
+    this.exchanges = options.exchanges || [];
   }
 
   async connect() {
@@ -109,14 +111,14 @@ export class RabbitMQServer
   }
 
   async createBinding(queue, exchange) {
-    await this.assertQueue(queue.name, queue.options);
+    await this.assertQueue(queue.queueName, queue.options);
     if (!queue.keys) {
-      await this.bindQueue(queue.name, exchange.name);
+      await this.bindQueue(queue.queueName, exchange.exchange);
       return;
     }
     for (const index in queue.keys) {
       const key = queue.keys[index];
-      await this.bindQueue(queue.name, exchange.name, key);
+      await this.bindQueue(queue.queueName, exchange.exchange, key);
     }
   }
 
