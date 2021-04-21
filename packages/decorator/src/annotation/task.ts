@@ -1,5 +1,5 @@
-import { saveModule, attachClassMetadata } from '@midwayjs/core';
-import { MODULE_TASK_KEY, MODULE_TASK_METADATA } from '../const';
+import { saveModule, attachClassMetadata } from '../';
+import { MODULE_TASK_KEY, MODULE_TASK_METADATA } from '../constant';
 
 export function Task(options) {
   return function (

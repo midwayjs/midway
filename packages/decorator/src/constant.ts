@@ -23,6 +23,14 @@ export const WEB_RESPONSE_HEADER = 'web:response_header';
 export const WEB_RESPONSE_CONTENT_TYPE = 'web:response_content_type';
 export const WEB_RESPONSE_RENDER = 'web:response_render';
 
+// task
+export const MODULE_TASK_KEY = 'task:task';
+export const MODULE_TASK_METADATA = 'task:task:options';
+export const MODULE_TASK_TASK_LOCAL_KEY = 'task:task:task_local';
+export const MODULE_TASK_TASK_LOCAL_OPTIONS = 'task:task:task_local:options';
+export const MODULE_TASK_QUEUE_KEY = 'task:task:queue';
+export const MODULE_TASK_QUEUE_OPTIONS = 'task:task:queue:options';
+
 // ws
 export const WS_CONTROLLER_KEY = 'ws:controller';
 export const WS_EVENT_KEY = 'ws:event';

@@ -33,7 +33,7 @@ export class AutoConfiguration{
 
 ```typescript
 export const taskConfig = {
-  redis: `redis://127.0.0.1:32768`,
+  redis: `redis://127.0.0.1:6379`,
   prefix: 'midway-task',
   defaultJobOptions: {
     repeat: {
