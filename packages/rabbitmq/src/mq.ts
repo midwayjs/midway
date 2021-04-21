@@ -7,9 +7,10 @@ import * as amqp from 'amqplib';
 import {
   IMidwayRabbitMQConfigurationOptions,
   IRabbitMQApplication,
+  IRabbitMQExchange,
 } from './interface';
 import { RabbitMQListenerOptions } from '@midwayjs/decorator';
-import { ConsumeMessage, Replies } from 'amqplib/properties';
+import { ConsumeMessage } from 'amqplib/properties';
 
 export class RabbitMQServer
   extends EventEmitter
@@ -18,7 +19,7 @@ export class RabbitMQServer
   private connection: amqp.Connection;
   private channel: amqp.Channel;
   private reconnectTime: number;
-  private exchanges: { [exchangeName: string]: Replies.AssertExchange };
+  private exchanges: IRabbitMQExchange[];
 
   constructor(options: Partial<IMidwayRabbitMQConfigurationOptions>) {
     super();
