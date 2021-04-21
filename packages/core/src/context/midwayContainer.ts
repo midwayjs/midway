@@ -46,7 +46,7 @@ import { FunctionDefinition } from '../definitions/functionDefinition';
 import { ManagedReference, ManagedValue } from './managed';
 import { MidwayAspectService } from '../service/aspectService';
 
-const DEFAULT_PATTERN = ['**/**.ts', '**/**.tsx', '**/**.js'];
+const DEFAULT_PATTERN = [];
 const DEFAULT_IGNORE_PATTERN = [
   '**/**.d.ts',
   '**/logs/**',
