@@ -7,7 +7,7 @@ import {
   getClassMetadata,
   getPropertyDataFromClass,
   getPropertyMetadata,
-  getProviderId,
+  getProviderId, isRegExp,
   listModule,
   PRIORITY_KEY,
   RouterOption,
@@ -381,6 +381,17 @@ export class WebRouterCollector {
     return urlMatchList
       .map(item => {
         const urlString = item.url.toString();
+        const weightArr = isRegExp(item.url) ? urlString.split('\/') : urlString.split('/');
+        let weight = 0;
+        // 权重，比如通配的不加权，非通配加权，防止通配出现在最前面
+        for (let fragment of weightArr) {
+          if (fragment.includes(':') || fragment.includes('*')) {
+            weight += 0;
+          } else {
+            weight += 1;
+          }
+        }
+
         let category = 2;
         const paramString = urlString.includes(':')
           ? urlString.replace(/:.+$/, '')
@@ -397,6 +408,7 @@ export class WebRouterCollector {
           _level: urlString.split('/').length - 1,
           _paramString: paramString,
           _category: category,
+          _weight: weight,
         };
       })
       .sort((handlerA, handlerB) => {
@@ -404,7 +416,13 @@ export class WebRouterCollector {
         if (handlerA._category !== handlerB._category) {
           return handlerB._category - handlerA._category;
         }
+        // 不同长度
         if (handlerA._level === handlerB._level) {
+          // 不同权重
+          if (handlerA._weight !== handlerB._weight) {
+            return handlerB._weight - handlerA._weight;
+          }
+
           if (handlerB._pureRouter === handlerA._pureRouter) {
             return (
               handlerA.url.toString().length - handlerB.url.toString().length

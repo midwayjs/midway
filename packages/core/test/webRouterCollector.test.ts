@@ -98,4 +98,17 @@ describe('/test/webRouterCollector.test.ts', function () {
     expect(result[1].url).toEqual('/');
     expect(result[2].url).toEqual('/*');
   });
+
+  it('fix issue 1008', function () {
+    const collector = new WebRouterCollector();
+    const result1 = collector.sortRouter(require('./router').routerList3);
+    expect(result1[0].url).toEqual('/:page/page');
+    expect(result1[1].url).toEqual('/page/:page');
+    expect(result1[2].url).toEqual('/:category/:slug');
+
+    const result2 = collector.sortRouter(require('./router').routerList4);
+    expect(result2[0].url).toEqual('/page/:page');
+    expect(result2[1].url).toEqual('/:page/page');
+    expect(result2[2].url).toEqual('/:category/:slug');
+  });
 });
