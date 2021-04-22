@@ -7,7 +7,8 @@ import {
   getClassMetadata,
   getPropertyDataFromClass,
   getPropertyMetadata,
-  getProviderId, isRegExp,
+  getProviderId,
+  isRegExp,
   listModule,
   PRIORITY_KEY,
   RouterOption,
@@ -381,10 +382,12 @@ export class WebRouterCollector {
     return urlMatchList
       .map(item => {
         const urlString = item.url.toString();
-        const weightArr = isRegExp(item.url) ? urlString.split('\/') : urlString.split('/');
+        const weightArr = isRegExp(item.url)
+          ? urlString.split('/')
+          : urlString.split('/');
         let weight = 0;
         // 权重，比如通配的不加权，非通配加权，防止通配出现在最前面
-        for (let fragment of weightArr) {
+        for (const fragment of weightArr) {
           if (fragment.includes(':') || fragment.includes('*')) {
             weight += 0;
           } else {
