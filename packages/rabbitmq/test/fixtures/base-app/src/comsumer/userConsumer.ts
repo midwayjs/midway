@@ -14,8 +14,13 @@ export class UserConsumer {
 
   @RabbitMQListener('tasks')
   async gotData(msg: ConsumeMessage) {
-    this.logger.info('test output');
-    this.ctx.channel.ack(msg);
+    this.logger.info('test output =>', msg);
+    console.log('will be ack');
+    try {
+      this.ctx.channel.ack(msg);
+    } catch (e) {
+      console.log(e)
+    }
   }
 
 }

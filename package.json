@@ -57,5 +57,8 @@
   "collective": {
     "type": "opencollective",
     "url": "https://opencollective.com/midway"
+  },
+  "dependencies": {
+    "why-is-node-running": "^2.2.0"
   }
 }

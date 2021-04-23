@@ -21,19 +21,34 @@ export class RabbitMQServer
   private channel: amqp.Channel;
   private reconnectTime: number;
   private exchanges: IRabbitMQExchange[];
+  private logger;
+  private readyClose = false;
 
   constructor(options: Partial<IMidwayRabbitMQConfigurationOptions>) {
     super();
     this.options = options;
-    this.reconnectTime = options.reconnectTime;
+    this.reconnectTime = options.reconnectTime ?? 10000;
     this.exchanges = options.exchanges || [];
+    this.logger = options.logger;
+    this.on('reconnect', async () => {
+      this.logger.info('Reconnect RabbitMQ Server');
+      await this.connect();
+    });
   }
 
   async connect() {
-    this.connection = await amqp.connect(
-      this.options.url,
-      this.options.socketOptions
-    );
+    try {
+      this.connection = await amqp.connect(
+        this.options.url,
+        this.options.socketOptions
+      );
+    } catch (error) {
+      this.logger.error('Connect fail and reconnect after timeout', error);
+      await this.tryCloseConnection();
+      setTimeout(() => {
+        this.emit('reconnect');
+      }, this.reconnectTime);
+    }
   }
 
   async createChannel() {
@@ -59,7 +74,9 @@ export class RabbitMQServer
 
   async init() {
     await this.connect(); // 创建连接
-    await this.createChannel(); // 创建channel
+    if (this.connection) {
+      await this.createChannel(); // 创建channel
+    }
   }
 
   async closeChannel() {
@@ -81,10 +98,12 @@ export class RabbitMQServer
 
   async onChannelClose(error) {
     this.emit('ch_close', error);
-    await this.closeChannel();
-    setTimeout(() => {
-      this.createChannel();
-    }, this.reconnectTime);
+    // 执行应用关闭逻辑，就不做重连了
+    if (!this.readyClose) {
+      setTimeout(() => {
+        this.createChannel();
+      }, this.reconnectTime);
+    }
   }
 
   onChannelReturn(msg) {
@@ -177,12 +196,23 @@ export class RabbitMQServer
     return this.channel;
   }
 
-  async close() {
+  async tryCloseConnection() {
     try {
-      this.connection && (await this.connection.close());
+      await this.closeChannel();
+      if (this.connection) {
+        await this.connection.close();
+      }
+      this.logger.debug('RabbitMQ connection close success');
     } catch (err) {
-      console.error(err);
+      this.logger.error('RabbitMQ connection close error', err);
+    } finally {
+      this.connection = null;
     }
-    this.connection = null;
+  }
+
+  async close() {
+    this.logger.debug('RabbitMQ app will be close');
+    this.readyClose = true;
+    await this.tryCloseConnection();
   }
 }

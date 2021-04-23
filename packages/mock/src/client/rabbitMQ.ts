@@ -316,19 +316,21 @@ export const createRabbitMQProducer = async function (
 ): Promise<Channel> {
   let amqp = null;
 
-  if (options.mock) {
-    try {
-      amqp = require('amqplib');
-      amqp.connect = connect;
-    } catch (err) {
-      debug('can not found amqplib lib and skip');
-    }
+  try {
+    amqp = require('amqplib');
+  } catch (err) {
+    debug('can not found amqplib lib and skip');
   }
+
+  if (options.mock) {
+    amqp.connect = connect;
+  }
+
   const connection = await amqp.connect(options.url || 'amqp://localhost');
   let ch;
   if (
     options.isConfirmChannel === undefined ||
-    options.isConfirmChannel === false
+    options.isConfirmChannel === true
   ) {
     ch = await connection.createConfirmChannel();
   } else {
