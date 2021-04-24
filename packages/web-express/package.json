@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/express",
-  "version": "2.10.9",
+  "version": "2.10.10",
   "description": "Midway Web Framework for Express",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -23,12 +23,12 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/mock": "^2.10.9",
+    "@midwayjs/mock": "^2.10.10",
     "@types/express": "^4.17.8",
     "fs-extra": "^8.0.1"
   },
   "dependencies": {
-    "@midwayjs/core": "^2.10.9",
+    "@midwayjs/core": "^2.10.10",
     "@midwayjs/decorator": "^2.10.8",
     "@midwayjs/logger": "^2.10.7",
     "express": "^4.17.1"

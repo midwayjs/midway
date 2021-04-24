@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.10.10](https://github.com/midwayjs/midway/compare/v2.10.9...v2.10.10) (2021-04-24)
+
+
+### Bug Fixes
+
+* router sort ([#1009](https://github.com/midwayjs/midway/issues/1009)) ([e9bf8ed](https://github.com/midwayjs/midway/commit/e9bf8ed0a6537714e3004a334e417994ea369aa9))
+
+
+
+
+
 ## [2.10.9](https://github.com/midwayjs/midway/compare/v2.10.8...v2.10.9) (2021-04-21)
 
 
