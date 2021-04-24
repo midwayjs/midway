@@ -64,6 +64,7 @@ export type MockAppConfigurationOptions = {
   cleanTempDir?: boolean;
   entryFile?: string;
   baseDir?: string;
+  bootstrapTimeout?: number;
 };
 
 let lastAppDir;
@@ -110,7 +111,7 @@ export async function create<
       const timeoutHandler = setTimeout(() => {
         clearInterval(internalHandler);
         reject(new Error('[midway]: bootstrap timeout'));
-      }, 30 * 1000);
+      }, options.bootstrapTimeout || 30 * 1000);
       const internalHandler = setInterval(() => {
         if (global['MIDWAY_BOOTSTRAP_APP_READY'] === true) {
           clearInterval(internalHandler);
