@@ -54,19 +54,16 @@ export class MidwayRabbitMQFramework extends BaseFramework<
   }
 
   public getFrameworkType(): MidwayFrameworkType {
-    return MidwayFrameworkType.WS_IO;
+    return MidwayFrameworkType.MS_RABBITMQ;
   }
 
   private async loadSubscriber() {
     // create room
-    const subscriberModules = listModule(MS_CONSUMER_KEY);
-    for (const module of subscriberModules) {
+    const subscriberModules = listModule(MS_CONSUMER_KEY, module => {
       const type: MSListenerType = getClassMetadata(MS_CONSUMER_KEY, module);
-
-      if (type !== MSListenerType.RABBITMQ) {
-        continue;
-      }
-
+      return type === MSListenerType.RABBITMQ;
+    });
+    for (const module of subscriberModules) {
       // get providerId
       const providerId = getProviderId(module);
       // get listenerInfo

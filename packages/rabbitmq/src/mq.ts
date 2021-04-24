@@ -23,6 +23,7 @@ export class RabbitMQServer
   private exchanges: IRabbitMQExchange[];
   private logger;
   private readyClose = false;
+  private refHandlerList = new Set();
 
   constructor(options: Partial<IMidwayRabbitMQConfigurationOptions>) {
     super();
@@ -33,6 +34,9 @@ export class RabbitMQServer
     this.on('reconnect', async () => {
       this.logger.info('Reconnect RabbitMQ Server');
       await this.connect();
+    });
+    this.on('error', err => {
+      this.logger.error(err);
     });
   }
 
@@ -45,9 +49,11 @@ export class RabbitMQServer
     } catch (error) {
       this.logger.error('Connect fail and reconnect after timeout', error);
       await this.tryCloseConnection();
-      setTimeout(() => {
+      const handler = setTimeout(() => {
+        this.refHandlerList.delete(handler);
         this.emit('reconnect');
       }, this.reconnectTime);
+      this.refHandlerList.add(handler);
     }
   }
 
@@ -66,9 +72,28 @@ export class RabbitMQServer
       this.emit('ch_open', this.channel);
     } catch (err) {
       this.emit('error', err);
-      setTimeout(() => {
-        this.createChannel();
-      }, this.reconnectTime);
+      if (!this.readyClose) {
+        const handler = setTimeout(async () => {
+          this.refHandlerList.delete(handler);
+          await this.closeChannel();
+          await this.createChannel();
+        }, this.reconnectTime);
+        this.logger.info(`RabbitMQ got create channel error and retry create channel after ${this.reconnectTime}`);
+        this.refHandlerList.add(handler);
+      }
+    }
+  }
+
+  async closeChannel() {
+    try {
+      if (this.channel) {
+        await this.channel.close();
+      }
+      this.logger.debug('RabbitMQ channel close success');
+    } catch (err) {
+      this.logger.error('RabbitMQ channel close error', err);
+    } finally {
+      this.channel = null;
     }
   }
 
@@ -79,31 +104,25 @@ export class RabbitMQServer
     }
   }
 
-  async closeChannel() {
-    if (!this.channel) {
-      return;
-    }
-    try {
-      await this.channel.close();
-    } catch (err) {
-      console.error(err);
-    }
-    this.channel = null;
-  }
-
   async onChannelError(error) {
     this.emit('ch_error', error);
-    // await this.closeChannel();
+    // https://github.com/squaremo/amqp.node/issues/108
+    // if close by server and try to reconnect channel
+    if (/Channel closed by server/.test(error.message)) {
+      if (!this.readyClose) {
+        const handler = setTimeout(async () => {
+          this.refHandlerList.delete(handler);
+          await this.closeChannel();
+          await this.createChannel();
+        }, this.reconnectTime);
+        this.logger.info(`RabbitMQ got onChannelError event and retry create channel after ${this.reconnectTime}`);
+        this.refHandlerList.add(handler);
+      }
+    }
   }
 
   async onChannelClose(error) {
     this.emit('ch_close', error);
-    // 执行应用关闭逻辑，就不做重连了
-    if (!this.readyClose) {
-      setTimeout(() => {
-        this.createChannel();
-      }, this.reconnectTime);
-    }
   }
 
   onChannelReturn(msg) {
@@ -167,29 +186,33 @@ export class RabbitMQServer
     listenerOptions: RabbitMQListenerOptions,
     listenerCallback: (msg: ConsumeMessage | null) => Promise<void>
   ) {
-    // bind queue to exchange
-    if (listenerOptions.exchange && this.exchanges[listenerOptions.exchange]) {
-      await this.createBinding(
-        listenerOptions,
-        this.exchanges[listenerOptions.exchange]
-      );
-    }
+    try {
+      // bind queue to exchange
+      if (listenerOptions.exchange && this.exchanges[listenerOptions.exchange]) {
+        await this.createBinding(
+          listenerOptions,
+          this.exchanges[listenerOptions.exchange]
+        );
+      }
 
-    // 默认每次只接受一条
-    await this.channel.prefetch(listenerOptions.prefetch || 1);
-    // 绑定回调
-    await this.channel.consume(
-      listenerOptions.queueName,
-      async msg => {
-        if (
-          !listenerOptions.routingKey ||
-          msg.fields.routingKey === listenerOptions.routingKey
-        ) {
-          await listenerCallback(msg);
-        }
-      },
-      listenerOptions.consumeOptions
-    );
+      // 默认每次只接受一条
+      await this.channel.prefetch(listenerOptions.prefetch || 1);
+      // 绑定回调
+      await this.channel.consume(
+        listenerOptions.queueName,
+        async msg => {
+          if (
+            !listenerOptions.routingKey ||
+            msg.fields.routingKey === listenerOptions.routingKey
+          ) {
+            await listenerCallback(msg);
+          }
+        },
+        listenerOptions.consumeOptions
+      );
+    } catch (err) {
+      this.logger.error(err);
+    }
   }
 
   getChannel() {
@@ -211,8 +234,11 @@ export class RabbitMQServer
   }
 
   async close() {
-    this.logger.debug('RabbitMQ app will be close');
     this.readyClose = true;
+    this.logger.debug('RabbitMQ app will be close');
+    this.refHandlerList.forEach((handler: any) => {
+      clearTimeout(handler);
+    });
     await this.tryCloseConnection();
   }
 }
