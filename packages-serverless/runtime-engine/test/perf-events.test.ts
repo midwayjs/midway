@@ -10,29 +10,36 @@ describe('/test/perf-events.test.ts', () => {
   });
 
   it('should call all events', async () => {
-    let actualEvents = [];
-    const observer = new perfHooks.PerformanceObserver(entryList => {
-      actualEvents = actualEvents.concat(entryList.getEntries());
+    const expectedMeasurementCount = 6;
+    const actualEventsFuture = new Promise<string[]>(resolve => {
+      let actualEvents = [];
+
+      const observer = new perfHooks.PerformanceObserver(entryList => {
+        actualEvents = actualEvents.concat(entryList.getEntries().map(it => it.name));
+        if (actualEvents.length >= expectedMeasurementCount) {
+          resolve(actualEvents);
+          observer.disconnect();
+        }
+      });
+      observer.observe({ entryTypes: ['measure'], buffered: false });
     });
-    observer.observe({ entryTypes: ['measure'] });
 
     const runtimeEngine = new BaseRuntimeEngine();
 
     await runtimeEngine.ready();
     await runtimeEngine.close();
+    const actualEvents = await actualEventsFuture;
 
     assert.deepStrictEqual(
-      actualEvents.map(it => it.name),
+      actualEvents,
       [
         'midway-faas:runtimeStart:measure',
-        'midway-faas:functionStart:measure',
         'midway-faas:beforeRuntimeStartHandler:measure',
         'midway-faas:afterRuntimeStartHandler:measure',
+        'midway-faas:functionStart:measure',
         'midway-faas:beforeFunctionStartHandler:measure',
         'midway-faas:afterFunctionStartHandler:measure',
       ]
     );
-
-    observer.disconnect();
   });
 });
