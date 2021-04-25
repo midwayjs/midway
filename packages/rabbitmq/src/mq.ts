@@ -57,9 +57,13 @@ export class RabbitMQServer
     }
   }
 
-  async createChannel() {
+  async createConfirmChannel() {
+    return this.createChannel(true);
+  }
+
+  async createChannel(isConfirmChannel = false) {
     try {
-      if (this.options.useConfirmChannel === false) {
+      if (this.options.useConfirmChannel === false || isConfirmChannel === false) {
         this.channel = await this.connection.createChannel();
       } else {
         this.channel = await this.connection.createConfirmChannel();

@@ -7,6 +7,7 @@ export interface IRabbitMQApplication {
   init(): Promise<void>
   connect(): Promise<void>;
   createChannel(): Promise<void>;
+  createConfirmChannel(): Promise<void>;
   closeChannel(): Promise<void>;
   assertQueue(queue: string, options?): Promise<void>;
   createConsumer(listenerOptions: RabbitMQListenerOptions, listenerCallback: (msg: ConsumeMessage | null) => Promise<void>): Promise<void>;
