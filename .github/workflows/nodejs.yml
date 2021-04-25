@@ -42,6 +42,8 @@ jobs:
     - run: npm run cov
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
+      env:
+        RABBITMQ_URL: amqp://localhost:${{ job.services.rabbitmq.ports[5672] }}
 
 #
 #   build-windows:
