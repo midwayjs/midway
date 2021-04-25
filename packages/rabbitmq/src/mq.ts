@@ -153,15 +153,15 @@ export class RabbitMQServer
     return await Promise.all(exchangeList);
   }
 
-  async createBinding(queue, exchange) {
-    await this.assertQueue(queue.queueName, queue.options);
-    if (!queue.keys) {
-      await this.bindQueue(queue.queueName, exchange.exchange);
+  async createBinding(options: RabbitMQListenerOptions, exchange) {
+    await this.assertQueue(options.queueName, options);
+    if (!options.keys) {
+      await this.bindQueue(options.queueName, exchange.exchange);
       return;
     }
-    for (const index in queue.keys) {
-      const key = queue.keys[index];
-      await this.bindQueue(queue.queueName, exchange.exchange, key);
+    for (const index in options.keys) {
+      const key = options.keys[index];
+      await this.bindQueue(options.queueName, exchange.exchange, key);
     }
   }
 
