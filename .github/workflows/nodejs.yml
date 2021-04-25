@@ -35,6 +35,8 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+      env:
+        RABBITMQ_URL: amqp://localhost:${{ job.services.rabbitmq.ports[5672] }}
     - run: npm install && npm install codecov
     - run: npm run bootstrap
     - run: npm run build --if-present
@@ -42,8 +44,6 @@ jobs:
     - run: npm run cov
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
-      env:
-        RABBITMQ_URL: amqp://localhost:${{ job.services.rabbitmq.ports[5672] }}
 
 #
 #   build-windows:
