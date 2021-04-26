@@ -39,6 +39,9 @@ export class Framework
     if (this.innerBootStarter) {
       await this.innerBootStarter.stop();
     }
+    if (this.runtime) {
+      await this.runtime.close();
+    }
   }
 
   getApplicationContext(): IMidwayContainer {
