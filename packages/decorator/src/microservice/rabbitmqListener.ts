@@ -1,24 +1,4 @@
-import { MS_CONSUMER_KEY, attachPropertyDataToClass } from '../';
-
-export interface RabbitMQListenerOptions {
-  propertyKey?: string;
-  queueName?: string;
-  exchange?: string;
-  exclusive?: boolean;
-  durable?: boolean;
-  maxPriority?: number;
-  prefetch?: number;
-  keys?: { [keyName: string]: string };
-  routingKey?: string;
-  consumeOptions?: {
-    consumerTag?: string;
-    noLocal?: boolean;
-    noAck?: boolean;
-    exclusive?: boolean;
-    priority?: number;
-    arguments?: any;
-  };
-}
+import { MS_CONSUMER_KEY, attachPropertyDataToClass, RabbitMQListenerOptions } from '../';
 
 export function RabbitMQListener(
   queueName: string,
