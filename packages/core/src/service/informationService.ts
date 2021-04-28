@@ -1,6 +1,6 @@
 import { IInformationService } from '../interface';
 import { safeRequire } from '../util';
-import { join } from 'path';
+import { dirname, join } from 'path';
 
 export class MidwayInformationService implements IInformationService {
   protected pkg: Record<string, unknown>;
@@ -8,9 +8,12 @@ export class MidwayInformationService implements IInformationService {
   private readonly baseDir: string;
 
   constructor(options: { baseDir?: string; appDir?: string }) {
-    this.appDir = options.appDir;
     this.baseDir = options.baseDir;
-    this.pkg = safeRequire(join(this.appDir, 'package.json'));
+    this.appDir = options.appDir;
+    if (!this.appDir) {
+      this.appDir = dirname(this.baseDir);
+    }
+    this.pkg = safeRequire(join(this.appDir, 'package.json')) || {};
   }
 
   getAppDir(): string {
