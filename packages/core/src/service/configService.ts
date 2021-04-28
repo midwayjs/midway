@@ -123,7 +123,7 @@ export class MidwayConfigService implements IConfigService {
     if (isFunction(exports)) {
       const informationService = this.container.getInformationService();
       // eslint-disable-next-line prefer-spread
-      result = await exports.apply(null, [
+      result = exports.apply(null, [
         {
           pkg: informationService.getPkg(),
           name: informationService.getProjectName(),
