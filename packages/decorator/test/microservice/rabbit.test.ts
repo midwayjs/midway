@@ -7,8 +7,8 @@ import {
   RabbitMQListener,
   OnQueueConnect,
   QueuePattern,
-  onQueueReconnect,
-  onQueueClose, OnQueueError, MS_CONSUMER_QUEUE_METADATA
+  OnQueueReconnect,
+  OnQueueClose, OnQueueError, MS_CONSUMER_QUEUE_METADATA
 } from '../../src';
 
 @Consumer(MSListenerType.RABBITMQ)
@@ -32,11 +32,11 @@ class NewTestFun {
   async onConnect() {
   }
 
-  @onQueueReconnect()
+  @OnQueueClose()
   async onReConnect() {
   }
 
-  @onQueueClose()
+  @OnQueueReconnect()
   async onClose() {
   }
 

@@ -48,3 +48,7 @@ export enum RabbitMQChannelEvent {
 export type Application = IMidwayRabbitMQApplication;
 export interface Context extends IMidwayRabbitMQContext {}
 export type DefaultConfig = string | amqp.Options.Connect;
+
+export interface ListenerOptions extends RabbitMQListenerOptions {
+  queueName: string;
+}

@@ -47,6 +47,13 @@ export enum MSProviderType {
   HSF = 'hsf',
 }
 
+export enum MSListenerType {
+  RABBITMQ = 'rabbitmq',
+  MTTQ = 'mttq',
+  KAFKA = 'kafka',
+  REDIS = 'redis',
+}
+
 export namespace ConsumerMetadata {
 
   export enum QueueMethodEnum {
@@ -55,6 +62,11 @@ export namespace ConsumerMetadata {
     ON_QUEUE_RECONNECT = 'on_queue_reconnect',
     ON_QUEUE_CLOSE = 'on_queue_close',
     ON_QUEUE_ERROR = 'on_queue_error',
+  }
+
+  export interface ConsumerMetadata {
+    type: MSListenerType,
+    metadata: any;
   }
 
   export interface QueueMetadata {

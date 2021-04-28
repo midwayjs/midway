@@ -4,21 +4,12 @@ import {
   saveModule,
   MS_CONSUMER_KEY,
   attachClassMetadata,
-  MS_CONSUMER_QUEUE_METADATA, ConsumerMetadata
+  MS_CONSUMER_QUEUE_METADATA, ConsumerMetadata, MSListenerType
 } from '../';
 import { Scope } from '../annotation';
 import QueueMethodEnum = ConsumerMetadata.QueueMethodEnum;
 
-export enum MSListenerType {
-  RABBITMQ = 'rabbitmq',
-  MTTQ = 'mttq',
-  KAFKA = 'kafka',
-  REDIS = 'redis',
-}
-
 export interface RabbitMQListenerOptions {
-  propertyKey?: string;
-  queueName?: string;
   exchange?: string;
   exclusive?: boolean;
   durable?: boolean;
@@ -40,7 +31,10 @@ export function Consumer(type: MSListenerType.RABBITMQ, options?: RabbitMQListen
 export function Consumer(type: any, options: any = {}): ClassDecorator {
   return (target: any) => {
     saveModule(MS_CONSUMER_KEY, target);
-    saveClassMetadata(MS_CONSUMER_KEY, type, target);
+    saveClassMetadata(MS_CONSUMER_KEY, {
+      type,
+      metadata: options
+    }, target);
     Scope(ScopeEnum.Request)(target);
   };
 }
@@ -68,7 +62,7 @@ export function OnQueueConnect() : MethodDecorator {
 }
 
 
-export function onQueueReconnect(): MethodDecorator {
+export function OnQueueReconnect(): MethodDecorator {
   return ((target, propertyKey, descriptor) => {
     attachClassMetadata(MS_CONSUMER_QUEUE_METADATA, {
       methodName: propertyKey,
@@ -78,7 +72,7 @@ export function onQueueReconnect(): MethodDecorator {
   });
 }
 
-export function onQueueClose(): MethodDecorator {
+export function OnQueueClose(): MethodDecorator {
   return ((target, propertyKey, descriptor) => {
     attachClassMetadata(MS_CONSUMER_QUEUE_METADATA, {
       methodName: propertyKey,

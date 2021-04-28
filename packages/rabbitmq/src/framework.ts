@@ -9,8 +9,8 @@ import {
 } from '@midwayjs/core';
 
 import {
-  MS_CONSUMER_KEY,
-  MSListenerType,
+  ConsumerMetadata,
+  MS_CONSUMER_KEY, MS_CONSUMER_QUEUE_METADATA, MSListenerType,
   RabbitMQListenerOptions,
 } from '@midwayjs/decorator';
 import {
@@ -58,27 +58,16 @@ export class MidwayRabbitMQFramework extends BaseFramework<
   }
 
   private async loadSubscriber() {
-    // create room
+    // create channel
     const subscriberModules = listModule(MS_CONSUMER_KEY, module => {
       const type: MSListenerType = getClassMetadata(MS_CONSUMER_KEY, module);
       return type === MSListenerType.RABBITMQ;
     });
     for (const module of subscriberModules) {
-      // get providerId
-      const providerId = getProviderId(module);
-      // get listenerInfo
-      const data: RabbitMQListenerOptions[][] = listPropertyDataFromClass(
-        MS_CONSUMER_KEY,
-        module
-      );
-
-      for (const methodBindListeners of data) {
-        for (const listenerOptions of methodBindListeners) {
-          this.consumerList.push(
-            this.bindConsumerToRequestMethod(listenerOptions, providerId)
-          );
-        }
-      }
+      // old method
+      this.legacyBindQueue(module);
+      // new method
+      this.bindQueueProperty(module);
     }
   }
 
@@ -99,5 +88,31 @@ export class MidwayRabbitMQFramework extends BaseFramework<
 
   public getFrameworkName() {
     return 'midway:rabbitmq';
+  }
+
+  private legacyBindQueue(module) {
+    const providerId = getProviderId(module);
+    const data: RabbitMQListenerOptions[][] = listPropertyDataFromClass(
+      MS_CONSUMER_KEY,
+      module
+    );
+
+    for (const methodBindListeners of data) {
+      for (const listenerOptions of methodBindListeners) {
+        this.consumerList.push(
+          this.bindConsumerToRequestMethod(listenerOptions, providerId)
+        );
+      }
+    }
+  }
+
+  private bindQueueProperty(module) {
+    // const providerId = getProviderId(module);
+    const metadata: ConsumerMetadata.ConsumerMetadata = getClassMetadata(MS_CONSUMER_KEY, module);
+    const data: ConsumerMetadata.QueueMetadata[] = listPropertyDataFromClass(
+      MS_CONSUMER_QUEUE_METADATA,
+      module
+    );
+    console.log(metadata, data);
   }
 }

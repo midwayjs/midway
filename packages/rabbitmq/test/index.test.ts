@@ -4,7 +4,7 @@ import { loggers } from '@midwayjs/logger';
 import { sleep } from '@midwayjs/decorator';
 
 describe('/test/legacy.test.ts', () => {
-  it('should test create channel with old mock method', async () => {
+  it('should test create channel with legacy method', async () => {
     loggers.updateConsoleLevel('silly');
     // create a queue and channel
     const channel = await createRabbitMQProducer('tasks', {
@@ -16,7 +16,7 @@ describe('/test/legacy.test.ts', () => {
     channel.sendToQueue('tasks', Buffer.from('something to do'));
 
     // create app and got data
-    const app = await creatApp('base-app', { url: process.env.RABBITMQ_URL || 'amqp://localhost'});
+    const app = await creatApp('base-app-legacy', { url: process.env.RABBITMQ_URL || 'amqp://localhost'});
     // will be close app wait a moment(after ack)
     await sleep();
 

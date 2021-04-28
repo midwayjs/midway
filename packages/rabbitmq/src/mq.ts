@@ -7,12 +7,33 @@ import * as amqp from 'amqplib';
 import {
   IMidwayRabbitMQConfigurationOptions,
   IRabbitMQApplication,
-  IRabbitMQExchange,
+  IRabbitMQExchange, ListenerOptions,
 } from './interface';
-import { RabbitMQListenerOptions } from '@midwayjs/decorator';
 import { ConsumeMessage } from 'amqplib/properties';
+import { QueueManager } from './queueManager';
 
-export class RabbitMQServer
+export class RabbitMQServer extends QueueManager<amqp.Connection, amqp.Channel> {
+
+  createChannel(isConfirmChannel = false): Promise<any> {
+    if (!isConfirmChannel) {
+      return this.connection.createChannel();
+    } else {
+      return this.connection.createConfirmChannel();
+    }
+  }
+
+  createConnection(): Promise<any> {
+    return amqp.connect(
+      this.options.url,
+      this.options.socketOptions
+    );
+  }
+
+}
+
+
+
+export class RabbitMQServerBak
   extends EventEmitter
   implements IRabbitMQApplication
 {
@@ -153,7 +174,7 @@ export class RabbitMQServer
     return await Promise.all(exchangeList);
   }
 
-  async createBinding(options: RabbitMQListenerOptions, exchange) {
+  async createBinding(options: ListenerOptions, exchange) {
     await this.assertQueue(options.queueName, options);
     if (!options.keys) {
       await this.bindQueue(options.queueName, exchange.exchange);
@@ -187,7 +208,7 @@ export class RabbitMQServer
   }
 
   async createConsumer(
-    listenerOptions: RabbitMQListenerOptions,
+    listenerOptions: ListenerOptions,
     listenerCallback: (msg: ConsumeMessage | null) => Promise<void>
   ) {
     try {
