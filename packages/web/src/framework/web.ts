@@ -84,8 +84,6 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
   }
 
   public async initialize(options: IMidwayBootstrapOptions): Promise<void> {
-    this.baseDir = options.baseDir;
-    this.appDir = options.appDir;
     this.isMainFramework = options.isMainFramework;
     /**
      * before create MidwayContainer instance，can change init parameters

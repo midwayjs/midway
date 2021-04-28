@@ -121,8 +121,18 @@ export class MidwayConfigService implements IConfigService {
     }
     let result = exports;
     if (isFunction(exports)) {
+      const informationService = this.container.getInformationService();
       // eslint-disable-next-line prefer-spread
-      result = await exports.apply(null, [].concat(this.container));
+      result = await exports.apply(null, [
+        {
+          pkg: informationService.getPkg(),
+          name: informationService.getProjectName(),
+          baseDir: informationService.getBaseDir(),
+          appDir: informationService.getAppDir(),
+          HOME: informationService.getHome(),
+          root: informationService.getRoot(),
+        },
+      ]);
     }
     return result;
   }
