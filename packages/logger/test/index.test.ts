@@ -26,6 +26,7 @@ import {
 } from './util';
 import { EggLogger } from 'egg-logger';
 import { readFileSync, writeFileSync } from 'fs';
+import * as os from 'os';
 
 describe('/test/index.test.ts', () => {
   it('should test create logger', async () => {
@@ -81,6 +82,10 @@ describe('/test/index.test.ts', () => {
     // test error logger  file include content
     expect(includeContent(join(logsDir, 'common-error.log'), 'hello world1')).toBeFalsy();
     expect(includeContent(join(logsDir, 'common-error.log'), 'hello world5')).toBeTruthy();
+
+    // test default eol
+    expect(includeContent(join(logsDir, 'midway-core.log'), os.EOL)).toBeTruthy();
+    expect(includeContent(join(logsDir, 'common-error.log'), os.EOL)).toBeTruthy();
 
     coreLogger.close();
     await removeFileOrDir(logsDir);
