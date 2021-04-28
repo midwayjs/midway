@@ -1,5 +1,10 @@
 import { IInformationService } from '../interface';
-import { safeRequire } from '../util';
+import {
+  getCurrentEnvironment,
+  getUserHome,
+  isDevelopmentEnvironment,
+  safeRequire,
+} from '../util';
 import { dirname, join } from 'path';
 
 export class MidwayInformationService implements IInformationService {
@@ -25,18 +30,19 @@ export class MidwayInformationService implements IInformationService {
   }
 
   getHome(): string {
-    return '';
+    return getUserHome();
   }
 
   getPkg(): any {
     return this.pkg;
   }
 
-  getProjectName(): any {
+  getProjectName(): string {
     return (this.pkg?.['name'] as string) || '';
   }
 
   getRoot(): string {
-    return '';
+    const isDevelopmentEnv = isDevelopmentEnvironment(getCurrentEnvironment());
+    return isDevelopmentEnv ? this.getAppDir() : this.getHome();
   }
 }
