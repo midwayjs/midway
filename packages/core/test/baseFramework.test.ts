@@ -722,6 +722,9 @@ describe('/test/baseFramework.test.ts', () => {
         "name": "伊卡狛格"
       }
     ]);
+
+    await framework.stop();
+    expect((global as any).container_not_null).toBeTruthy();
   });
 
 

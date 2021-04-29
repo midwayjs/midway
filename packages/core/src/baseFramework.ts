@@ -459,7 +459,19 @@ export abstract class BaseFramework<
       }
 
       if (inst.onStop && typeof inst.onStop === 'function') {
-        await inst.onStop(this, this.app);
+        await inst.onStop(
+          new Proxy(this.getApplicationContext(), {
+            get: function (target, prop, receiver) {
+              if (prop === 'getCurrentNamespace' && cycle.namespace) {
+                return () => {
+                  return cycle.namespace;
+                };
+              }
+              return Reflect.get(target, prop, receiver);
+            },
+          }),
+          this.app
+        );
       }
     }
   }
