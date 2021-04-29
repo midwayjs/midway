@@ -26,6 +26,7 @@ import {
 } from './util';
 import { EggLogger } from 'egg-logger';
 import { readFileSync, writeFileSync } from 'fs';
+import * as os from 'os';
 
 describe('/test/index.test.ts', () => {
   it('should test create logger', async () => {
@@ -81,6 +82,10 @@ describe('/test/index.test.ts', () => {
     // test error logger  file include content
     expect(includeContent(join(logsDir, 'common-error.log'), 'hello world1')).toBeFalsy();
     expect(includeContent(join(logsDir, 'common-error.log'), 'hello world5')).toBeTruthy();
+
+    // test default eol
+    expect(includeContent(join(logsDir, 'midway-core.log'), os.EOL)).toBeTruthy();
+    expect(includeContent(join(logsDir, 'common-error.log'), os.EOL)).toBeTruthy();
 
     coreLogger.close();
     await removeFileOrDir(logsDir);
@@ -714,6 +719,27 @@ describe('/test/index.test.ts', () => {
 
     await removeFileOrDir(logsDir);
 
+  });
+
+  it('should change eol', async  ()  => {
+    clearAllLoggers();
+    const logsDir = join(__dirname, 'logs');
+    await removeFileOrDir(logsDir);
+
+    const logger = createFileLogger('file', {
+      dir: logsDir,
+      fileLogName: 'test-logger.log',
+      eol: 'bbb\n'
+    });
+
+    logger.info('file logger');
+    logger.info('file logger1');
+    logger.info('file logger2');
+    await sleep();
+
+    expect(matchContentTimes(join(logsDir, 'test-logger.log'), 'bbb\n')).toEqual(3);
+
+    await removeFileOrDir(logsDir);
   });
 
 });
