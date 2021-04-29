@@ -721,4 +721,25 @@ describe('/test/index.test.ts', () => {
 
   });
 
+  it('should change eol', async  ()  => {
+    clearAllLoggers();
+    const logsDir = join(__dirname, 'logs');
+    await removeFileOrDir(logsDir);
+
+    const logger = createFileLogger('file', {
+      dir: logsDir,
+      fileLogName: 'test-logger.log',
+      eol: 'bbb\n'
+    });
+
+    logger.info('file logger');
+    logger.info('file logger1');
+    logger.info('file logger2');
+    await sleep();
+
+    expect(matchContentTimes(join(logsDir, 'test-logger.log'), 'bbb\n')).toEqual(3);
+
+    await removeFileOrDir(logsDir);
+  });
+
 });
