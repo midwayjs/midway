@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.10.11](https://github.com/midwayjs/midway/compare/v2.10.10...v2.10.11) (2021-04-29)
+
+
+### Bug Fixes
+
+* logger eol with default value ([#1018](https://github.com/midwayjs/midway/issues/1018)) ([7d3f58d](https://github.com/midwayjs/midway/commit/7d3f58d4841fab12c229591b94f5a488f1841827))
+
+
+
+
+
 ## [2.10.7](https://github.com/midwayjs/midway/compare/v2.10.6...v2.10.7) (2021-04-17)
 
 

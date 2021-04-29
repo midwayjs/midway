@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/core",
-  "version": "2.10.10",
+  "version": "2.10.11",
   "description": "midway core",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -28,7 +28,7 @@
   "dependencies": {
     "@midwayjs/decorator": "^2.10.8",
     "@midwayjs/glob": "^1.0.2",
-    "@midwayjs/logger": "^2.10.7",
+    "@midwayjs/logger": "^2.10.11",
     "class-transformer": "^0.3.1",
     "extend2": "^1.0.0",
     "lodash.assign": "^4.2.0",

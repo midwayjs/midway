@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.10.11](https://github.com/midwayjs/midway/compare/v2.10.10...v2.10.11) (2021-04-29)
+
+
+### Bug Fixes
+
+* lifecycle missing container when run onStop method ([#1016](https://github.com/midwayjs/midway/issues/1016)) ([3b6303c](https://github.com/midwayjs/midway/commit/3b6303c7bba0d28e821da8062ae71aa4c1029d63))
+* load functional config ([#1017](https://github.com/midwayjs/midway/issues/1017)) ([51566c0](https://github.com/midwayjs/midway/commit/51566c08124275798b92d3c931b27a86a48a2ba7))
+* logger eol with default value ([#1018](https://github.com/midwayjs/midway/issues/1018)) ([7d3f58d](https://github.com/midwayjs/midway/commit/7d3f58d4841fab12c229591b94f5a488f1841827))
+* serverless-app stop need close runtime ([#1015](https://github.com/midwayjs/midway/issues/1015)) ([1bef223](https://github.com/midwayjs/midway/commit/1bef223b5c6bf8225c5ca24f6ff0eeec957d2ac8))
+
+
+
+
+
 ## [2.10.10](https://github.com/midwayjs/midway/compare/v2.10.9...v2.10.10) (2021-04-24)
 
 
