@@ -6,6 +6,7 @@ import {
   listModule,
 } from '@midwayjs/decorator';
 import { ILifeCycle, IMidwayContainer } from './interface';
+import { MidwayInformationService } from './service/informationService';
 
 function buildLoadDir(baseDir, dir) {
   if (!path.isAbsolute(dir)) {
@@ -38,6 +39,11 @@ export class ContainerLoader {
 
   initialize() {
     this.applicationContext = new MidwayContainer(this.baseDir, undefined);
+    this.applicationContext.setInformationService(
+      new MidwayInformationService({
+        baseDir: this.baseDir,
+      })
+    );
     this.applicationContext.disableConflictCheck = this.disableConflictCheck;
     this.applicationContext.registerObject('baseDir', this.baseDir);
     this.applicationContext.registerObject('isTsMode', this.isTsMode);

@@ -1,13 +1,12 @@
 import { IEnvironmentService } from '../interface';
-import { isDevelopmentEnvironment } from '../util';
+import { isDevelopmentEnvironment, getCurrentEnvironment } from '../util';
 
 export class MidwayEnvironmentService implements IEnvironmentService {
   environment: string;
 
   getCurrentEnvironment() {
     if (!this.environment) {
-      this.environment =
-        process.env['MIDWAY_SERVER_ENV'] || process.env['NODE_ENV'] || 'prod';
+      this.environment = getCurrentEnvironment();
     }
     return this.environment;
   }

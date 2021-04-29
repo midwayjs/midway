@@ -3,10 +3,16 @@ import { resolve, join } from 'path';
 import { MidwayContainer } from '../../src';
 import { MidwayConfigService } from '../../src/service/configService';
 import * as mm from 'mm';
+import { MidwayInformationService } from '../../dist/service/informationService';
 
 describe('/test/services/configService.test.ts', () => {
+  const informationService = new MidwayInformationService({
+    baseDir: join(__dirname, 'fixtures/default_case'),
+    appDir: join(__dirname, 'fixtures/default_case'),
+  })
   it('configService should be ok', () => {
     const container = new MidwayContainer();
+    container.setInformationService(informationService);
     const cfg = new MidwayConfigService(container);
     cfg.isReady = true;
     cfg.configuration = {t: 1};
@@ -24,6 +30,7 @@ describe('/test/services/configService.test.ts', () => {
 
   it('load config should be ok', async () => {
     const container = new MidwayContainer();
+    container.setInformationService(informationService);
     const cfg = new MidwayConfigService(container);
     const configFile = resolve(join(__dirname, '../fixtures/config', 'config.default'));
     const result = await cfg.loadConfig(configFile);
@@ -52,6 +59,7 @@ describe('/test/services/configService.test.ts', () => {
 
   it('load should be ok', async () => {
     const container = new MidwayContainer();
+    container.setInformationService(informationService);
     const cfg = new MidwayConfigService(container);
 
     cfg.addObject({bb: 222});

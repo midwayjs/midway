@@ -54,6 +54,7 @@ export { plainToClass, classToPlain } from 'class-transformer';
 export { createConfiguration } from './functional/configuration';
 export { MidwayConfigService } from './service/configService';
 export { MidwayEnvironmentService } from './service/environmentService';
+export { MidwayInformationService } from './service/informationService';
 export * from './logger';
 export * from './util/contextUtil';
 /**

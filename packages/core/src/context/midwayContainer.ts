@@ -29,6 +29,7 @@ import {
   IConfigService,
   IContainerConfiguration,
   IEnvironmentService,
+  IInformationService,
   IMidwayContainer,
   IObjectDefinitionMetadata,
   REQUEST_CTX_KEY,
@@ -83,6 +84,7 @@ export class MidwayContainer
   private likeMainConfiguration: IContainerConfiguration[] = [];
   protected configService: IConfigService;
   protected environmentService: IEnvironmentService;
+  protected informationService: IInformationService;
   protected aspectService;
   private directoryFilterArray: ResolveFilter[] = [];
 
@@ -566,6 +568,14 @@ export class MidwayContainer
 
   getEnvironmentService() {
     return this.environmentService;
+  }
+
+  getInformationService() {
+    return this.informationService;
+  }
+
+  setInformationService(informationService) {
+    this.informationService = informationService;
   }
 
   getAspectService() {
