@@ -82,7 +82,7 @@ export class ServerlessLogger extends Logger implements IServerlessLogger {
     try {
       const transport: any = this.get('file');
       if (transport?._stream?.writable) {
-        if (transport._stream.fd) {
+        if (transport?._stream?.fd) {
           await this.checkAndRotate(transport);
         } else {
           if (this.waiting) {
@@ -109,12 +109,14 @@ export class ServerlessLogger extends Logger implements IServerlessLogger {
       this.options.maxFileSize ||
       Number(process.env.LOG_ROTATE_FILE_SIZE) ||
       DEFAULT_MAX_FILE_SIZE;
-    const stat = await fs.fstat(transport._stream.fd);
-    if (stat.size >= maxFileSize) {
-      this.info(
-        `File ${transport._stream.path} (fd ${transport._stream.fd}) reach the maximum file size, current size: ${stat.size}, max size: ${maxFileSize}`
-      );
-      await this.rotateBySize();
+    if (transport._stream?.fd) {
+      const stat = await fs.fstat(transport._stream.fd);
+      if (stat.size >= maxFileSize) {
+        this.info(
+          `File ${transport._stream.path} (fd ${transport._stream.fd}) reach the maximum file size, current size: ${stat.size}, max size: ${maxFileSize}`
+        );
+        await this.rotateBySize();
+      }
     }
   }
 
@@ -170,6 +172,7 @@ export class ServerlessLogger extends Logger implements IServerlessLogger {
   }
 
   close() {
+    this.reload();
     super.close();
     if (this.handler) {
       clearTimeout(this.handler);
