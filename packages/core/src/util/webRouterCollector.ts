@@ -214,7 +214,7 @@ export class WebRouterCollector {
           } as FaaSMetadata.HTTPTriggerOptions;
         }
 
-        this.routes.get(prefix).push(data);
+        this.checkDuplicateAndPush(prefix, data);
       }
     }
   }
@@ -265,7 +265,7 @@ export class WebRouterCollector {
               module,
               webRouter['methodName']
             ) || [];
-          // 新 http/apigateway 函数
+          // 新 http/api gateway 函数
           const data: RouterInfo = {
             prefix,
             routerName: '',
@@ -287,11 +287,11 @@ export class WebRouterCollector {
             data.functionTriggerName = webRouter['type'];
             data.functionTriggerMetadata = webRouter['metadata'];
           }
-          this.routes.get(prefix).push(data);
+          this.checkDuplicateAndPush(prefix, data);
         } else {
           if (functionMeta) {
             // 其他类型的函数
-            this.routes.get(prefix).push({
+            this.checkDuplicateAndPush(prefix, {
               prefix,
               routerName: '',
               url: '',
@@ -342,11 +342,11 @@ export class WebRouterCollector {
             };
           }
           // 老函数的 http
-          this.routes.get(prefix).push(data);
+          this.checkDuplicateAndPush(prefix, data);
         } else {
           if (functionMeta) {
             // 非 http
-            this.routes.get(prefix).push({
+            this.checkDuplicateAndPush(prefix, {
               prefix,
               routerName: '',
               url: '',
@@ -463,5 +463,16 @@ export class WebRouterCollector {
       routeArr = routeArr.concat(routerInfo);
     }
     return routeArr;
+  }
+
+  private checkDuplicateAndPush(prefix, routerInfo: RouterInfo) {
+    const prefixList = this.routes.get(prefix);
+    const matched = prefixList.filter(item => {
+      return item.url === routerInfo.url && item.requestMethod === routerInfo.requestMethod
+    })
+    if (matched && matched.length) {
+      throw new Error(`Duplicate router "${routerInfo.requestMethod} ${routerInfo.url}" at "${matched[0].handlerName}" and "${routerInfo.handlerName}"`);
+    }
+    prefixList.push(routerInfo);
   }
 }

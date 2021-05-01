@@ -1,13 +1,13 @@
-import { WebRouterCollector } from '../src';
+import { WebRouterCollector } from '../../src';
 import { join } from 'path';
 import { clearAllModule } from '@midwayjs/decorator';
-import { clearContainerCache } from '../src';
-import { matchObjectPropertyInArray } from './util';
+import { clearContainerCache } from '../../src';
+import { matchObjectPropertyInArray } from '../util';
 
-describe('/test/webRouterCollector.test.ts', function () {
+describe('/test/util/webRouterCollector.test.ts', function () {
 
   it('should test generate router', async () => {
-    const collector = new WebRouterCollector(join(__dirname, './fixtures/base-app-controller'));
+    const collector = new WebRouterCollector(join(__dirname, '../fixtures/base-app-controller'));
     const result = await collector.getRouterTable();
     expect(result.size).toEqual(3);
 
@@ -16,7 +16,7 @@ describe('/test/webRouterCollector.test.ts', function () {
   });
 
   it('should test generate flatten router', async () => {
-    const collector = new WebRouterCollector(join(__dirname, './fixtures/base-app-controller'));
+    const collector = new WebRouterCollector(join(__dirname, '../fixtures/base-app-controller'));
     const result = await collector.getFlattenRouterTable();
     expect(result.length > 0).toBeTruthy();
   });
@@ -24,7 +24,7 @@ describe('/test/webRouterCollector.test.ts', function () {
   it('should test with function router', async () => {
     clearAllModule();
     clearContainerCache();
-    const collector = new WebRouterCollector(join(__dirname, './fixtures/base-app-func-router'), { includeFunctionRouter: true});
+    const collector = new WebRouterCollector(join(__dirname, '../fixtures/base-app-func-router'), { includeFunctionRouter: true});
     const result = await collector.getFlattenRouterTable();
     expect(result.length).toEqual(6);
     expect(matchObjectPropertyInArray(result, {
@@ -111,4 +111,5 @@ describe('/test/webRouterCollector.test.ts', function () {
     expect(result2[1].url).toEqual('/:page/page');
     expect(result2[2].url).toEqual('/:category/:slug');
   });
+
 });
