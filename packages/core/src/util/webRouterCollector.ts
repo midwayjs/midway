@@ -468,10 +468,17 @@ export class WebRouterCollector {
   private checkDuplicateAndPush(prefix, routerInfo: RouterInfo) {
     const prefixList = this.routes.get(prefix);
     const matched = prefixList.filter(item => {
-      return item.url === routerInfo.url && item.requestMethod === routerInfo.requestMethod
-    })
+      return (
+        routerInfo.url &&
+        routerInfo.requestMethod &&
+        item.url === routerInfo.url &&
+        item.requestMethod === routerInfo.requestMethod
+      );
+    });
     if (matched && matched.length) {
-      throw new Error(`Duplicate router "${routerInfo.requestMethod} ${routerInfo.url}" at "${matched[0].handlerName}" and "${routerInfo.handlerName}"`);
+      throw new Error(
+        `Duplicate router "${routerInfo.requestMethod} ${routerInfo.url}" at "${matched[0].handlerName}" and "${routerInfo.handlerName}"`
+      );
     }
     prefixList.push(routerInfo);
   }

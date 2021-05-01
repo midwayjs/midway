@@ -1,9 +1,7 @@
 import assert = require('assert');
 import { resolve, join } from 'path';
-import { MidwayContainer } from '../../src';
-import { MidwayConfigService } from '../../src/service/configService';
+import { MidwayContainer, MidwayConfigService, MidwayInformationService } from '../../src';
 import * as mm from 'mm';
-import { MidwayInformationService } from '../../dist/service/informationService';
 
 describe('/test/services/configService.test.ts', () => {
   const informationService = new MidwayInformationService({

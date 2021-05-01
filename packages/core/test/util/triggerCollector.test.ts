@@ -205,9 +205,7 @@ describe('/test/util/triggerCollector.test.ts', function () {
     clearAllModule();
     clearContainerCache();
     const collector = new ServerlessTriggerCollector(join(__dirname, '../fixtures/app-with-duplicate-router/src'));
-    const result = await collector.getFunctionList();
-    console.log(result);
-    // expect(result).toMatchSnapshot();
+    await expect(collector.getFunctionList()).rejects.toThrow('Duplicate router')
   });
 
 });
