@@ -24,7 +24,9 @@ export class ServerlessLogger extends Logger implements IServerlessLogger {
           level: options.level || 'INFO',
         })
       );
-      this.startLogRotateBySize();
+      this.startLogRotateBySize().catch(err => {
+        console.error(err);
+      });
     }
   }
 
@@ -172,7 +174,6 @@ export class ServerlessLogger extends Logger implements IServerlessLogger {
   }
 
   close() {
-    this.reload();
     super.close();
     if (this.handler) {
       clearTimeout(this.handler);
