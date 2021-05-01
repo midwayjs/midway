@@ -107,6 +107,9 @@ export class ServerlessBaseRuntime extends EventEmitter implements Runtime {
 
   async close() {
     await this.handlerInvokerWrapper('beforeCloseHandler', [this]);
+    if (this.logger) {
+      this.logger.close();
+    }
   }
 
   createEnvParser(): PropertyParser<string> {

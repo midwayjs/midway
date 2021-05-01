@@ -11,6 +11,7 @@ const debuglog = util.debuglog('RuntimeEngine:Logger');
 
 export class ServerlessLogger extends Logger implements IServerlessLogger {
   options;
+  handler;
   private waiting = false;
 
   constructor(options) {
@@ -69,7 +70,7 @@ export class ServerlessLogger extends Logger implements IServerlessLogger {
    */
   protected delayOnOptimisticLock(ms): Promise<any> {
     return new Promise(resolve => {
-      setTimeout(resolve, ms);
+      this.handler = setTimeout(resolve, ms);
     });
   }
 
@@ -165,6 +166,13 @@ export class ServerlessLogger extends Logger implements IServerlessLogger {
       await fs.unlink(targetPath);
     } else {
       await fs.rename(targetPath, backupPath);
+    }
+  }
+
+  close() {
+    super.close();
+    if (this.handler) {
+      clearTimeout(this.handler);
     }
   }
 }
