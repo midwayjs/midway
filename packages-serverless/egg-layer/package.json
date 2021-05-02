@@ -19,7 +19,7 @@
     "@midwayjs/serverless-scf-starter": "^2.10.10",
     "@midwayjs/serverless-scf-trigger": "^2.10.11",
     "@midwayjs/web": "^2.10.11",
-    "supertest": "^4.0.2"
+    "supertest": "^6.0.0"
   },
   "engines": {
     "node": ">= 10"
