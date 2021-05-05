@@ -97,6 +97,9 @@ export class SCFRuntime extends ServerlessLightRuntime {
               }
             }
 
+            // 不再等待事件循环
+            // https://cloud.tencent.com/document/product/583/11060
+            context.callbackWaitsForEmptyEventLoop = false;
             return {
               isBase64Encoded: encoded,
               statusCode: ctx.status,
@@ -106,6 +109,7 @@ export class SCFRuntime extends ServerlessLightRuntime {
           })
           .catch(err => {
             ctx.logger.error(err);
+            context.callbackWaitsForEmptyEventLoop = false;
             return {
               isBase64Encoded: false,
               statusCode: 500,
