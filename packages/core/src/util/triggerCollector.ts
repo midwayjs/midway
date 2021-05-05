@@ -3,7 +3,23 @@ import { WebRouterCollector } from './webRouterCollector';
 export class ServerlessTriggerCollector extends WebRouterCollector {
   protected async analyze() {
     this.options.includeFunctionRouter = true;
-    return super.analyze();
+    await super.analyze();
+    // requestMethod all transform to other method
+    for (const routerInfo of this.routes.values()) {
+      for (const info of routerInfo) {
+        if (info.requestMethod === 'all') {
+          info.functionTriggerMetadata.method = [
+            'get',
+            'post',
+            'put',
+            'delete',
+            'head',
+            'patch',
+            'options',
+          ];
+        }
+      }
+    }
   }
 
   protected collectRoute(module) {

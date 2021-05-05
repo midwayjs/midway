@@ -130,7 +130,7 @@ describe('/test/util/triggerCollector.test.ts', function () {
       "funcHandlerName": "http.handler",
       "functionName": "helloHttpService-handler",
       "functionTriggerMetadata": {
-        "method": "all",
+        "method": ['get', 'post', 'put', 'delete', 'head', 'patch', 'options'],
         "path": "/other"
       },
       "functionTriggerName": "http",
