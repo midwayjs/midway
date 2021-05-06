@@ -4,7 +4,7 @@ import {
   MidwayProcessTypeEnum,
   safelyGet,
 } from '@midwayjs/core';
-import { CONFIG_KEY, PLUGIN_KEY } from '@midwayjs/decorator';
+import { CONFIG_KEY, PLUGIN_KEY, LOGGER_KEY } from '@midwayjs/decorator';
 import { IMidwayWebConfigurationOptions } from '../interface';
 import { MidwayKoaBaseFramework } from '@midwayjs/koa';
 import { EggRouter } from '@eggjs/router';
@@ -167,6 +167,11 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
     // register config
     this.getApplicationContext().registerDataHandler(CONFIG_KEY, key => {
       return key ? safelyGet(key, this.app.config) : this.app.config;
+    });
+
+    // register logger
+    this.getApplicationContext().registerDataHandler(LOGGER_KEY, key => {
+      return this.getLogger(key);
     });
   }
 
