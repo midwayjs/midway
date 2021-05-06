@@ -1,5 +1,5 @@
 import { createLogger, transports, Logger, format } from 'winston';
-import * as DailyRotateFileTransport from 'winston-daily-rotate-file';
+import { DailyRotateFileTransport } from './rotate';
 import {
   DelegateLoggerOptions,
   LoggerLevel,
