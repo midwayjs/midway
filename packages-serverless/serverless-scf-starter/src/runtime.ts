@@ -9,10 +9,10 @@ import {
 const isOutputError = () => {
   return (
     process.env.SERVERLESS_OUTPUT_ERROR_STACK === 'true' ||
-    ['local', 'development', 'prepub'].includes(
+    ['local', 'development'].includes(
       process.env.MIDWAY_SERVER_ENV
     ) ||
-    ['local', 'development', 'prepub'].includes(process.env.NODE_ENV)
+    ['local', 'development'].includes(process.env.NODE_ENV)
   );
 };
 
