@@ -98,6 +98,7 @@ export class MidwayRabbitMQFramework extends BaseFramework<
     );
 
     for (const methodBindListeners of data) {
+      // 循环绑定的方法和监听的配置信息
       for (const listenerOptions of methodBindListeners) {
         this.consumerList.push(
           this.bindConsumerToRequestMethod(listenerOptions, providerId)

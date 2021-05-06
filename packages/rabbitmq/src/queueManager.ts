@@ -37,7 +37,7 @@ export abstract class QueueManager<Connection extends IQueueConnection, Channel 
       this.connection = await this.createConnection();
     } catch (error) {
       this.logger.error('Connect fail and reconnect after timeout', error);
-      await this.tryCloseConnection();
+      await this.closeConnection();
       const handler = setTimeout(() => {
         this.refHandlerList.delete(handler);
         this.emit('reconnect');
@@ -59,7 +59,7 @@ export abstract class QueueManager<Connection extends IQueueConnection, Channel 
     try {
       if (this.channelManagerSet.size) {
         for (const item of this.channelManagerSet) {
-          await this.item.close();
+          await this.closeChannel(item);
         }
       }
       this.logger.debug('RabbitMQ channel close success');
@@ -70,7 +70,7 @@ export abstract class QueueManager<Connection extends IQueueConnection, Channel 
     }
   }
 
-  protected async tryCloseConnection() {
+  protected async closeConnection() {
     try {
       await this.closeAllChannel();
       if (this.connection) {
@@ -81,6 +81,16 @@ export abstract class QueueManager<Connection extends IQueueConnection, Channel 
       this.logger.error('RabbitMQ connection close error', err);
     } finally {
       this.connection = null;
+    }
+  }
+
+  protected async closeChannel(channel) {
+    try {
+      await channel.close();
+      this.channelManagerSet.delete(channel);
+      this.logger.debug('Channel close success');
+    } catch (err) {
+      this.logger.error('Channel close error', err);
     }
   }
 
@@ -97,7 +107,7 @@ export abstract class QueueManager<Connection extends IQueueConnection, Channel 
     this.refHandlerList.forEach((handler: any) => {
       clearTimeout(handler);
     });
-    await this.tryCloseConnection();
+    await this.closeConnection();
   }
 
 }
