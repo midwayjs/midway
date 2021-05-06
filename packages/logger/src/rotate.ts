@@ -70,7 +70,7 @@ export class DailyRotateFileTransport extends Transport {
   filename: string;
 
   constructor(options: GeneralDailyRotateFileTransportOptions = {}) {
-    super();
+    super(options);
     this.options = Object.assign({}, loggerDefaults, options);
 
     if (options.stream) {
