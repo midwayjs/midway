@@ -19,7 +19,7 @@
     "koa": "^2.13.0",
     "koa-bodyparser": "^4.3.0",
     "koa-router": "^9.4.0",
-    "supertest": "^4.0.2"
+    "supertest": "^6.0.0"
   },
   "engines": {
     "node": ">= 10"
