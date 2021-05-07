@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.10.12](https://github.com/midwayjs/midway-faas/compare/v2.10.11...v2.10.12) (2021-05-07)
+
+
+### Bug Fixes
+
+* output serverless error in some environment ([#1030](https://github.com/midwayjs/midway-faas/issues/1030)) ([b162b89](https://github.com/midwayjs/midway-faas/commit/b162b897812d1a1a5e981328fbbb43aa75eacf10))
+
+
+
+
+
 ## [2.10.11](https://github.com/midwayjs/midway-faas/compare/v2.10.10...v2.10.11) (2021-04-29)
 
 **Note:** Version bump only for package @midwayjs/serverless-fc-starter

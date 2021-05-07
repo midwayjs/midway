@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.10.12](https://github.com/midwayjs/midway/compare/v2.10.11...v2.10.12) (2021-05-07)
+
+
+### Bug Fixes
+
+* remove winston-daily-rotate-file ([#1032](https://github.com/midwayjs/midway/issues/1032)) ([ae242c1](https://github.com/midwayjs/midway/commit/ae242c10439b035e42634e723af0a0f9b92da239))
+
+
+
+
+
 ## [2.10.11](https://github.com/midwayjs/midway/compare/v2.10.10...v2.10.11) (2021-04-29)
 
 
