@@ -15,7 +15,7 @@ async function checkSyncStatus(pkg) {
   console.log(`[${finished.length}/${data.length}] ---->`, pkg);
   if (npmVersion.stdout !== tnpmVersion.stdout) {
     console.log(`===> npm: ${npmVersion.stdout}, tnpm: ${tnpmVersion.stdout}`);
-    failed.push(item.name);
+    failed.push(pkg);
   }
 }
 
