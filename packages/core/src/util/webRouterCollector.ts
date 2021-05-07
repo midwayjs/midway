@@ -100,7 +100,7 @@ export interface RouterCollectorOptions {
 export class WebRouterCollector {
   protected readonly baseDir: string;
   private isReady = false;
-  private routes = new Map<string, RouterInfo[]>();
+  protected routes = new Map<string, RouterInfo[]>();
   private routesPriority: RouterPriority[] = [];
   protected options: RouterCollectorOptions;
 
