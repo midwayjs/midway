@@ -20,7 +20,7 @@ export interface FuncParams {
 
 /**
  * @deprecated Please upgrade to midway serverless v2.0 and use ServerlessTriggerType
- * @example '@Func(ServerlessTriggerType.HTTP, { path: '/'})'
+ * @example '@Func('index.handler')'
  */
 export function Func(
   funHandler: string | FuncParams,
