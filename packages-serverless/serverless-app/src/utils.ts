@@ -93,9 +93,6 @@ export const analysisDecorator = async (cwd: string) => {
         allFunc[funcName].handler = handler;
       }
 
-      delete func.functionTriggerMetadata.functionName;
-      delete func.functionTriggerMetadata.middware;
-
       const trigger = func.functionTriggerName;
       let isAddToTrigger = false;
       const { path, method } = func.functionTriggerMetadata;
