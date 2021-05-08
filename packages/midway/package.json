@@ -1,6 +1,6 @@
 {
   "name": "midway",
-  "version": "2.10.12",
+  "version": "2.10.13",
   "description": "A Node.js Serverless Framework for front-end/full-stack developers. Build the application for next decade.",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -28,13 +28,13 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/core": "^2.10.12",
+    "@midwayjs/core": "^2.10.13",
     "@midwayjs/decorator": "^2.10.12",
     "egg": "^2.28.0",
     "egg-logger": "^2.4.2"
   },
   "dependencies": {
-    "@midwayjs/web": "^2.10.12"
+    "@midwayjs/web": "^2.10.13"
   },
   "files": [
     "dist/**/*.js",

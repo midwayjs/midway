@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.10.13](https://github.com/midwayjs/midway-faas/compare/v2.10.12...v2.10.13) (2021-05-08)
+
+
+### Bug Fixes
+
+* remove zlib ([#1035](https://github.com/midwayjs/midway-faas/issues/1035)) ([cc2cd40](https://github.com/midwayjs/midway-faas/commit/cc2cd405a104b3388d93a09d981b59b472fd8ea1))
+
+
+
+
+
 ## [2.10.12](https://github.com/midwayjs/midway-faas/compare/v2.10.11...v2.10.12) (2021-05-07)
 
 
