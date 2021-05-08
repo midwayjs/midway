@@ -21,12 +21,15 @@
   ],
   "license": "MIT",
   "devDependencies": {
+    "@midwayjs/decorator": "^2.10.12",
     "chai": "^4.2.0",
     "mm": "3",
     "sinon": "^7.2.2"
   },
+  "peerDependencies": {
+    "@midwayjs/decorator": "^2.10.12"
+  },
   "dependencies": {
-    "@midwayjs/decorator": "^2.10.12",
     "@midwayjs/glob": "^1.0.2",
     "@midwayjs/logger": "^2.10.12",
     "class-transformer": "^0.3.1",

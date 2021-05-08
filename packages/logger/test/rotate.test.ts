@@ -174,27 +174,5 @@ describe('winston/transports/daily-rotate-file', function () {
       sendLogItem(transport, 'info', randomString(1056));
       transport.close();
     });
-
-    describe('when setting zippedArchive', function () {
-      it('should archive the log after rotating', function (done) {
-        const opts: any = Object.assign({}, options);
-        opts.zippedArchive = true;
-        opts.maxSize = '1k';
-
-        transport = new DailyRotateFile(opts);
-
-        transport.on('finish', function () {
-          fs.readdir(logDir, function (err, files) {
-            expect(files.filter(function (file) {
-              return path.extname(file) === '.gz';
-            }).length).toEqual(1);
-            done();
-          });
-        });
-        sendLogItem(transport, 'info', randomString(1056));
-        sendLogItem(transport, 'info', randomString(1056));
-        transport.close();
-      });
-    });
   });
 });
