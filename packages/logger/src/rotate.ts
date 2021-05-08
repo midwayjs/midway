@@ -1,7 +1,6 @@
 import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
-import * as zlib from 'zlib';
 import * as hash from 'object-hash';
 import { MESSAGE } from 'triple-beam';
 import { PassThrough } from 'stream';
@@ -132,29 +131,6 @@ export class DailyRotateFileTransport extends Transport {
         }
         this.emit('logRemoved', params.name);
       });
-
-      if (options.zippedArchive) {
-        this.logStream.on('rotate', oldFile => {
-          const oldFileExist = fs.existsSync(oldFile);
-          const gzExist = fs.existsSync(oldFile + '.gz');
-          if (!oldFileExist || gzExist) {
-            return;
-          }
-
-          const gzip = zlib.createGzip();
-          const inp = fs.createReadStream(oldFile);
-          const out = fs.createWriteStream(oldFile + '.gz');
-          inp
-            .pipe(gzip)
-            .pipe(out)
-            .on('finish', () => {
-              if (fs.existsSync(oldFile)) {
-                fs.unlinkSync(oldFile);
-              }
-              this.emit('archive', oldFile + '.gz');
-            });
-        });
-      }
     }
   }
 
