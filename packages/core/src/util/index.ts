@@ -8,6 +8,10 @@ export const isDevelopmentEnvironment = env => {
   return ['local', 'test', 'unittest'].includes(env);
 };
 
+export const getCurrentEnvironment = () => {
+  return process.env['MIDWAY_SERVER_ENV'] || process.env['NODE_ENV'] || 'prod';
+};
+
 export const safeRequire = (p, enabledCache = true) => {
   if (p.startsWith(`.${sep}`) || p.startsWith(`..${sep}`)) {
     p = resolve(dirname(module.parent.filename), p);

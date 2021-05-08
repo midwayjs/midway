@@ -27,9 +27,9 @@ import {
 } from '@midwayjs/logger';
 import { dirname, isAbsolute, join } from 'path';
 import { createMidwayLogger } from './logger';
-import { safeRequire } from './util';
 import { MidwayRequestContainer } from './context/requestContainer';
 import { FunctionalConfiguration } from './functional/configuration';
+import { MidwayInformationService } from './service/informationService';
 
 function buildLoadDir(baseDir, dir) {
   if (!isAbsolute(dir)) {
@@ -48,14 +48,11 @@ export abstract class BaseFramework<
   OPT extends IConfigurationOptions
 > implements IMidwayFramework<APP, OPT> {
   protected isTsMode = true;
-  protected baseDir: string;
-  protected appDir: string;
   protected applicationContext: IMidwayContainer;
   protected logger: ILogger;
   protected appLogger: ILogger;
   public configurationOptions: OPT;
   public app: APP;
-  protected pkg: Record<string, unknown>;
   protected defaultContext = {};
   protected BaseContextLoggerClass: any;
   protected isMainFramework: boolean;
@@ -71,11 +68,6 @@ export abstract class BaseFramework<
   }
 
   public async initialize(options: IMidwayBootstrapOptions): Promise<void> {
-    this.baseDir = options.baseDir;
-    if (!options.appDir) {
-      options.appDir = setupAppDir(options.baseDir);
-    }
-    this.appDir = options.appDir;
     this.isMainFramework = options.isMainFramework;
 
     /**
@@ -129,8 +121,9 @@ export abstract class BaseFramework<
   }
 
   protected async initializeInfo(options: IMidwayBootstrapOptions) {
-    if (!this.pkg) {
-      this.pkg = safeRequire(join(this.appDir, 'package.json'));
+    if (!this.applicationContext.getInformationService()) {
+      const informationService = new MidwayInformationService(options);
+      this.applicationContext.setInformationService(informationService);
     }
   }
 
@@ -149,15 +142,18 @@ export abstract class BaseFramework<
   }
 
   protected async containerInitialize(options: IMidwayBootstrapOptions) {
+    if (!options.appDir) {
+      options.appDir = setupAppDir(options.baseDir);
+    }
     /**
      * initialize container
      */
     if (options.applicationContext) {
       this.applicationContext = options.applicationContext;
     } else {
-      this.applicationContext = new MidwayContainer(this.baseDir, undefined);
-      this.applicationContext.registerObject('baseDir', this.baseDir);
-      this.applicationContext.registerObject('appDir', this.appDir);
+      this.applicationContext = new MidwayContainer(options.baseDir, undefined);
+      this.applicationContext.registerObject('baseDir', options.baseDir);
+      this.applicationContext.registerObject('appDir', options.appDir);
       this.applicationContext.registerObject('isTsMode', this.isTsMode);
     }
 
@@ -188,11 +184,10 @@ export abstract class BaseFramework<
     if (options.disableAutoLoad) return;
 
     // use baseDir in parameter first
-    const baseDir = options.baseDir || this.baseDir;
-    const defaultLoadDir = this.isTsMode ? [baseDir] : [];
+    const defaultLoadDir = this.isTsMode ? [options.baseDir] : [];
     this.applicationContext.load({
       loadDir: (options.loadDir || defaultLoadDir).map(dir => {
-        return buildLoadDir(baseDir, dir);
+        return buildLoadDir(options.baseDir, dir);
       }),
       pattern: options.pattern,
       ignore: options.ignore,
@@ -289,11 +284,11 @@ export abstract class BaseFramework<
   }
 
   public getAppDir(): string {
-    return this.appDir;
+    return this.applicationContext.getInformationService().getAppDir();
   }
 
   public getBaseDir(): string {
-    return this.baseDir;
+    return this.applicationContext.getInformationService().getBaseDir();
   }
 
   protected defineApplicationProperties(
@@ -302,11 +297,13 @@ export abstract class BaseFramework<
   ) {
     const defaultApplicationProperties = {
       getBaseDir: () => {
-        return this.baseDir;
+        return this.getApplicationContext()
+          .getInformationService()
+          .getBaseDir();
       },
 
       getAppDir: () => {
-        return this.appDir;
+        return this.getApplicationContext().getInformationService().getAppDir();
       },
 
       getEnv: () => {
@@ -462,7 +459,19 @@ export abstract class BaseFramework<
       }
 
       if (inst.onStop && typeof inst.onStop === 'function') {
-        await inst.onStop(this, this.app);
+        await inst.onStop(
+          new Proxy(this.getApplicationContext(), {
+            get: function (target, prop, receiver) {
+              if (prop === 'getCurrentNamespace' && cycle.namespace) {
+                return () => {
+                  return cycle.namespace;
+                };
+              }
+              return Reflect.get(target, prop, receiver);
+            },
+          }),
+          this.app
+        );
       }
     }
   }
@@ -493,7 +502,7 @@ export abstract class BaseFramework<
   }
 
   public getProjectName() {
-    return (this.pkg?.['name'] as string) || '';
+    return this.applicationContext.getInformationService().getProjectName();
   }
 
   public getFrameworkName() {

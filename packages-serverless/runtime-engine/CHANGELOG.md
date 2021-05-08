@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.10.12](https://github.com/midwayjs/midway-faas/compare/v2.10.11...v2.10.12) (2021-05-07)
+
+
+### Bug Fixes
+
+* serverless logger close when runtime stop ([#1022](https://github.com/midwayjs/midway-faas/issues/1022)) ([28548da](https://github.com/midwayjs/midway-faas/commit/28548da888005047123523066ca47207f02eb1c8))
+
+
+
+
+
+## [2.10.10](https://github.com/midwayjs/midway-faas/compare/v2.10.9...v2.10.10) (2021-04-24)
+
+**Note:** Version bump only for package @midwayjs/runtime-engine
+
+
+
+
+
 ## [2.10.7](https://github.com/midwayjs/midway-faas/compare/v2.10.6...v2.10.7) (2021-04-17)
 
 

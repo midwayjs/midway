@@ -273,6 +273,8 @@ export interface IMidwayContainer extends IApplicationContext {
   addConfiguration(configuration: IContainerConfiguration);
   getConfigService(): IConfigService;
   getEnvironmentService(): IEnvironmentService;
+  getInformationService(): IInformationService;
+  setInformationService(service: IInformationService): void;
   getAspectService(): IAspectService;
   getCurrentEnv(): string;
   getResolverHandler(): IResolverHandler;
@@ -285,6 +287,15 @@ export interface IConfigService {
   load();
   getConfiguration(configKey?: string);
   clearAllConfig();
+}
+
+export interface IInformationService {
+  getPkg(): any;
+  getProjectName(): any;
+  getBaseDir(): string;
+  getAppDir(): string;
+  getHome(): string;
+  getRoot(): string;
 }
 
 export interface IEnvironmentService {

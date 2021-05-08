@@ -118,7 +118,7 @@ export class MidwayFaaSFramework extends BaseFramework<
       this.app['keys'] = this.app.getConfig('keys') || '';
 
       // store all http function entry
-      const collector = new ServerlessTriggerCollector(this.baseDir);
+      const collector = new ServerlessTriggerCollector(this.getBaseDir());
       const functionList = await collector.getFunctionList();
 
       for (const funcInfo of functionList) {

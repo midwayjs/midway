@@ -158,3 +158,34 @@ exports.routerList2 = [
     '_level': 1
   }
 ];
+
+exports.routerList3 = [
+  {
+    prefix: '/',
+    url: '/:page/page'
+  },
+  {
+    prefix: '/',
+    url: '/page/:page'
+  },
+  {
+    prefix: '/',
+    url: '/:category/:slug'
+  }
+];
+
+exports.routerList4 = [
+  {
+    prefix: '/',
+    url: '/page/:page'
+  },
+  {
+    prefix: '/',
+    url: '/:page/page'
+  },
+  {
+    prefix: '/',
+    url: '/:category/:slug'
+  }
+];
+

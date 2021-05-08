@@ -1,5 +1,5 @@
 import { createLogger, transports, Logger, format } from 'winston';
-import * as DailyRotateFileTransport from 'winston-daily-rotate-file';
+import { DailyRotateFileTransport } from './rotate';
 import {
   DelegateLoggerOptions,
   LoggerLevel,
@@ -143,6 +143,7 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
         symlinkName: this.loggerOptions.fileLogName,
         maxSize: this.loggerOptions.fileMaxSize || '200m',
         maxFiles: this.loggerOptions.fileMaxFiles || '31d',
+        eol: this.loggerOptions.eol || os.EOL,
       });
     }
     this.add(this.fileTransport);
@@ -163,6 +164,7 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
         symlinkName: this.loggerOptions.errorLogName,
         maxSize: this.loggerOptions.errMaxSize || '200m',
         maxFiles: this.loggerOptions.errMaxFiles || '31d',
+        eol: this.loggerOptions.eol || os.EOL,
       });
     }
     this.add(this.errTransport);

@@ -352,11 +352,15 @@ describe('/test/baseFramework.test.ts', () => {
       });
 
       const applicationContext = framework.getApplicationContext();
-
-      const value = applicationContext
+      expect(applicationContext
         .getConfigService()
-        .getConfiguration('env');
-      assert(value === 'local');
+        .getConfiguration('env')).toEqual('local');
+      expect(applicationContext
+        .getConfigService()
+        .getConfiguration('in')).toEqual(2);
+      expect(applicationContext
+        .getConfigService()
+        .getConfiguration('out')).toEqual(1);
     });
   });
 
@@ -722,6 +726,9 @@ describe('/test/baseFramework.test.ts', () => {
         "name": "伊卡狛格"
       }
     ]);
+
+    await framework.stop();
+    expect((global as any).container_not_null).toBeTruthy();
   });
 
 

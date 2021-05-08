@@ -3,6 +3,49 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.10.12](https://github.com/midwayjs/midway/compare/v2.10.11...v2.10.12) (2021-05-07)
+
+
+### Bug Fixes
+
+* change all requestMethod to real method for serverless http request ([#1028](https://github.com/midwayjs/midway/issues/1028)) ([23e2943](https://github.com/midwayjs/midway/commit/23e29436e3a1b3ab10484171f0dfcd5de068f124))
+* disable wait event loop in tencent serverless ([#1029](https://github.com/midwayjs/midway/issues/1029)) ([89d5c2e](https://github.com/midwayjs/midway/commit/89d5c2ec9b83f619d72b31cc003a41bc691a1f19))
+* output serverless error in some environment ([#1030](https://github.com/midwayjs/midway/issues/1030)) ([b162b89](https://github.com/midwayjs/midway/commit/b162b897812d1a1a5e981328fbbb43aa75eacf10))
+* remove winston-daily-rotate-file ([#1032](https://github.com/midwayjs/midway/issues/1032)) ([ae242c1](https://github.com/midwayjs/midway/commit/ae242c10439b035e42634e723af0a0f9b92da239))
+* serverless logger close when runtime stop ([#1022](https://github.com/midwayjs/midway/issues/1022)) ([28548da](https://github.com/midwayjs/midway/commit/28548da888005047123523066ca47207f02eb1c8))
+* throw error when router duplicate ([#1023](https://github.com/midwayjs/midway/issues/1023)) ([61bc58d](https://github.com/midwayjs/midway/commit/61bc58d29d637f1c9e54fec0a09f24d90c1286c9))
+* use egg-logger got empty logger ([#1031](https://github.com/midwayjs/midway/issues/1031)) ([4077c70](https://github.com/midwayjs/midway/commit/4077c70a71507477c7a5fa15449771cc395bc0c0))
+
+
+
+
+
+## [2.10.11](https://github.com/midwayjs/midway/compare/v2.10.10...v2.10.11) (2021-04-29)
+
+
+### Bug Fixes
+
+* lifecycle missing container when run onStop method ([#1016](https://github.com/midwayjs/midway/issues/1016)) ([3b6303c](https://github.com/midwayjs/midway/commit/3b6303c7bba0d28e821da8062ae71aa4c1029d63))
+* load functional config ([#1017](https://github.com/midwayjs/midway/issues/1017)) ([51566c0](https://github.com/midwayjs/midway/commit/51566c08124275798b92d3c931b27a86a48a2ba7))
+* logger eol with default value ([#1018](https://github.com/midwayjs/midway/issues/1018)) ([7d3f58d](https://github.com/midwayjs/midway/commit/7d3f58d4841fab12c229591b94f5a488f1841827))
+* serverless-app stop need close runtime ([#1015](https://github.com/midwayjs/midway/issues/1015)) ([1bef223](https://github.com/midwayjs/midway/commit/1bef223b5c6bf8225c5ca24f6ff0eeec957d2ac8))
+
+
+
+
+
+## [2.10.10](https://github.com/midwayjs/midway/compare/v2.10.9...v2.10.10) (2021-04-24)
+
+
+### Bug Fixes
+
+* router sort ([#1009](https://github.com/midwayjs/midway/issues/1009)) ([e9bf8ed](https://github.com/midwayjs/midway/commit/e9bf8ed0a6537714e3004a334e417994ea369aa9))
+* serverless app support serverless dev ([#1010](https://github.com/midwayjs/midway/issues/1010)) ([bbeeda5](https://github.com/midwayjs/midway/commit/bbeeda5055cfd9dd6988c484354ac701121ae9da))
+
+
+
+
+
 ## [2.10.9](https://github.com/midwayjs/midway/compare/v2.10.8...v2.10.9) (2021-04-21)
 
 

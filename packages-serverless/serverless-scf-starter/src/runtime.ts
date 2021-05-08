@@ -6,10 +6,13 @@ import {
   HTTPResponse,
 } from '@midwayjs/serverless-http-parser';
 
-const isLocalEnv = () => {
+const isOutputError = () => {
   return (
-    process.env.MIDWAY_SERVER_ENV === 'local' ||
-    process.env.NODE_ENV === 'local'
+    process.env.SERVERLESS_OUTPUT_ERROR_STACK === 'true' ||
+    ['local', 'development'].includes(
+      process.env.MIDWAY_SERVER_ENV
+    ) ||
+    ['local', 'development'].includes(process.env.NODE_ENV)
   );
 };
 
@@ -97,6 +100,9 @@ export class SCFRuntime extends ServerlessLightRuntime {
               }
             }
 
+            // 不再等待事件循环
+            // https://cloud.tencent.com/document/product/583/11060
+            context.callbackWaitsForEmptyEventLoop = false;
             return {
               isBase64Encoded: encoded,
               statusCode: ctx.status,
@@ -106,11 +112,12 @@ export class SCFRuntime extends ServerlessLightRuntime {
           })
           .catch(err => {
             ctx.logger.error(err);
+            context.callbackWaitsForEmptyEventLoop = false;
             return {
               isBase64Encoded: false,
               statusCode: 500,
               headers: {},
-              body: isLocalEnv() ? err.stack : 'Internal Server Error',
+              body: isOutputError() ? err.stack : 'Internal Server Error',
             };
           });
       },

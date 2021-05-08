@@ -12,8 +12,14 @@ import { StarterMap, TriggerMap } from './platform';
 import * as express from 'express';
 import { findNpmModule, output404 } from './utils';
 import { start2 } from './start';
+import { existsSync, readFileSync } from 'fs';
+import { resolve } from 'path';
 import * as bodyParser from 'body-parser';
-import { getSpecFile, loadSpec } from '@midwayjs/serverless-spec-builder';
+import {
+  getSpecFile,
+  loadSpec,
+  parse,
+} from '@midwayjs/serverless-spec-builder';
 import { createExpressGateway } from '@midwayjs/gateway-common-http';
 
 export class Framework
@@ -38,6 +44,9 @@ export class Framework
     }
     if (this.innerBootStarter) {
       await this.innerBootStarter.stop();
+    }
+    if (this.runtime) {
+      await this.runtime.close();
     }
   }
 
@@ -284,8 +293,20 @@ export class Framework
 
   private getFaaSSpec() {
     const { appDir } = this.bootstrapOptions;
-    const specFileInfo = getSpecFile(appDir);
-    this.spec = loadSpec(appDir, specFileInfo);
+
+    const syamlPath = resolve(appDir, 's.yaml');
+    if (existsSync(syamlPath)) {
+      const file = parse(syamlPath, readFileSync(syamlPath).toString());
+      if (file?.services) {
+        const allApps = Object.keys(file.services);
+        if (allApps.length) {
+          this.spec = file.services[allApps[0]].props;
+        }
+      }
+    } else {
+      const specFileInfo = getSpecFile(appDir);
+      this.spec = loadSpec(appDir, specFileInfo);
+    }
   }
 
   public async run() {

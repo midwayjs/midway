@@ -1,4 +1,5 @@
 import { Configuration } from '@midwayjs/decorator';
+import { join } from 'path';
 
 @Configuration({
   importConfigs: [
@@ -7,8 +8,9 @@ import { Configuration } from '@midwayjs/decorator';
     './config/config.daily',
     './config/config.pre',
     './config/config.prod',
+    join(__dirname, '../custom.default')
   ],
 })
-class AutoConfiguraion {}
+class AutoConfiguration {}
 
-module.exports = AutoConfiguraion;
+module.exports = AutoConfiguration;

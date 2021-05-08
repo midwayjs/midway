@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.10.12](https://github.com/midwayjs/midway/compare/v2.10.11...v2.10.12) (2021-05-07)
+
+
+### Bug Fixes
+
+* use egg-logger got empty logger ([#1031](https://github.com/midwayjs/midway/issues/1031)) ([4077c70](https://github.com/midwayjs/midway/commit/4077c70a71507477c7a5fa15449771cc395bc0c0))
+
+
+
+
+
 ## [2.10.8](https://github.com/midwayjs/midway/compare/v2.10.7...v2.10.8) (2021-04-21)
 
 **Note:** Version bump only for package @midwayjs/decorator

@@ -1,19 +1,19 @@
 import * as assert from 'assert';
 import { join } from 'path';
-import { safeRequire, safelyGet, joinURLPath } from '../src/util';
-import { PathFileUtil } from '../src/';
-import { StaticConfigLoader } from '../src/util/staticConfig';
+import { safeRequire, safelyGet, joinURLPath } from '../../src/util';
+import { PathFileUtil } from '../../src';
+import { StaticConfigLoader } from '../../src/util/staticConfig';
 
-describe('/test/util.test.ts', () => {
+describe('/test/util/util.test.ts', () => {
 
   it('should test safeRequire', () => {
     // assert(safeRequire('@ali/abc') === undefined);
     // assert(safeRequire('url') === require('url'));
     //
-    // assert.strictEqual(safeRequire(join(__dirname, './fixtures/dir/ok')), require('./fixtures/dir/ok'));
-    // assert.strictEqual(safeRequire(join(__dirname, './fixtures/foo')), undefined);
-    assert.strictEqual(safeRequire(join(__dirname, './fixtures/dir/nok.js')), undefined);
-    assert.strictEqual(safeRequire('./fixtures/dir/bbb/nok.js'), undefined);
+    // assert.strictEqual(safeRequire(join(__dirname, '../fixtures/dir/ok')), require('./fixtures/dir/ok'));
+    // assert.strictEqual(safeRequire(join(__dirname, '../fixtures/foo')), undefined);
+    assert.strictEqual(safeRequire(join(__dirname, '../fixtures/dir/nok.js')), undefined);
+    assert.strictEqual(safeRequire('../fixtures/dir/bbb/nok.js'), undefined);
   });
 
   it('should safeGet be ok', () => {
@@ -25,13 +25,13 @@ describe('/test/util.test.ts', () => {
   });
 
   it('should load static config from app', async () => {
-    let loader = new StaticConfigLoader(join(__dirname, '/fixtures/app-with-configuration-static-config-loader/base-app-decorator'), 'local');
+    let loader = new StaticConfigLoader(join(__dirname, '../fixtures/app-with-configuration-static-config-loader/base-app-decorator'), 'local');
     let configText = await loader.getSerializeConfig();
     expect(configText['helloworld']).toEqual(234);
     expect(configText['ok']['text']).toEqual('ok3');
     expect(configText['mock']['b']).toEqual('local');
 
-    loader = new StaticConfigLoader(join(__dirname, '/fixtures/app-with-configuration-static-config-loader/base-app-decorator'), 'production');
+    loader = new StaticConfigLoader(join(__dirname, '../fixtures/app-with-configuration-static-config-loader/base-app-decorator'), 'production');
     configText = await loader.getSerializeConfig();
     expect(configText['helloworld']).toEqual(123);
     expect(configText['ok']['text']).toEqual('ok');

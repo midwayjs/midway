@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.10.12](https://github.com/midwayjs/midway-faas/compare/v2.10.11...v2.10.12) (2021-05-07)
+
+
+### Bug Fixes
+
+* disable wait event loop in tencent serverless ([#1029](https://github.com/midwayjs/midway-faas/issues/1029)) ([89d5c2e](https://github.com/midwayjs/midway-faas/commit/89d5c2ec9b83f619d72b31cc003a41bc691a1f19))
+* output serverless error in some environment ([#1030](https://github.com/midwayjs/midway-faas/issues/1030)) ([b162b89](https://github.com/midwayjs/midway-faas/commit/b162b897812d1a1a5e981328fbbb43aa75eacf10))
+
+
+
+
+
+## [2.10.10](https://github.com/midwayjs/midway-faas/compare/v2.10.9...v2.10.10) (2021-04-24)
+
+**Note:** Version bump only for package @midwayjs/serverless-scf-starter
+
+
+
+
+
 ## [2.10.7](https://github.com/midwayjs/midway-faas/compare/v2.10.6...v2.10.7) (2021-04-17)
 
 

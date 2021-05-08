@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.10.12](https://github.com/midwayjs/midway/compare/v2.10.11...v2.10.12) (2021-05-07)
+
+**Note:** Version bump only for package @midwayjs/serverless-app
+
+
+
+
+
+## [2.10.11](https://github.com/midwayjs/midway/compare/v2.10.10...v2.10.11) (2021-04-29)
+
+
+### Bug Fixes
+
+* serverless-app stop need close runtime ([#1015](https://github.com/midwayjs/midway/issues/1015)) ([1bef223](https://github.com/midwayjs/midway/commit/1bef223b5c6bf8225c5ca24f6ff0eeec957d2ac8))
+
+
+
+
+
+## [2.10.10](https://github.com/midwayjs/midway/compare/v2.10.9...v2.10.10) (2021-04-24)
+
+
+### Bug Fixes
+
+* serverless app support serverless dev ([#1010](https://github.com/midwayjs/midway/issues/1010)) ([bbeeda5](https://github.com/midwayjs/midway/commit/bbeeda5055cfd9dd6988c484354ac701121ae9da))
+
+
+
+
+
 ## [2.10.9](https://github.com/midwayjs/midway/compare/v2.10.8...v2.10.9) (2021-04-21)
 
 **Note:** Version bump only for package @midwayjs/serverless-app
