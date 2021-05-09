@@ -18,13 +18,14 @@ const isWindows = os.platform() === 'win32';
 export const EmptyLogger: Logger = createLogger().constructor as Logger;
 
 const midwayLogLevels = {
-  all: 0,
+  none: 0,
   error: 1,
   warn: 2,
   info: 3,
   verbose: 4,
   debug: 5,
   silly: 6,
+  all: 7,
 };
 
 /**
@@ -81,13 +82,14 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
         format.colorize({
           all: true,
           colors: {
-            all: 'reset',
+            none: 'reset',
             error: 'red',
             warn: 'yellow',
             info: 'reset',
             verbose: 'reset',
             debug: 'blue',
             silly: 'reset',
+            all: 'reset',
           },
         })
       ),
@@ -144,6 +146,7 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
         maxSize: this.loggerOptions.fileMaxSize || '200m',
         maxFiles: this.loggerOptions.fileMaxFiles || '31d',
         eol: this.loggerOptions.eol || os.EOL,
+        zippedArchive: this.loggerOptions.fileZippedArchive,
       });
     }
     this.add(this.fileTransport);
@@ -165,6 +168,7 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
         maxSize: this.loggerOptions.errMaxSize || '200m',
         maxFiles: this.loggerOptions.errMaxFiles || '31d',
         eol: this.loggerOptions.eol || os.EOL,
+        zippedArchive: this.loggerOptions.errZippedArchive,
       });
     }
     this.add(this.errTransport);
@@ -259,7 +263,8 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
       (args.length === 1 && typeof args[0] !== 'object') ||
       !args[0]['level']
     ) {
-      return super.log.apply(this, ['all', ...args, { ignoreFormat: true }]);
+      // 这里必须要用 none
+      return super.log.apply(this, ['none', ...args, { ignoreFormat: true }]);
     } else {
       return super.write.apply(this, args);
     }

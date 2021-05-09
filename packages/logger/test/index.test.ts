@@ -742,4 +742,45 @@ describe('/test/index.test.ts', () => {
     await removeFileOrDir(logsDir);
   });
 
+  it('should no output when level = none', async  ()  => {
+    clearAllLoggers();
+    const logsDir = join(__dirname, 'logs');
+    await removeFileOrDir(logsDir);
+
+    const logger = createFileLogger('file', {
+      dir: logsDir,
+      fileLogName: 'test-logger.log',
+      level: 'none',
+    });
+
+    logger.info('file logger');
+    logger.info('file logger1');
+    logger.info('file logger2');
+    await sleep();
+
+    expect(matchContentTimes(join(logsDir, 'test-logger.log'), 'file logger')).toEqual(0);
+    await removeFileOrDir(logsDir);
+  });
+
+  it('should no output when level = all', async  ()  => {
+    clearAllLoggers();
+    const logsDir = join(__dirname, 'logs');
+    await removeFileOrDir(logsDir);
+
+    const logger = createFileLogger('file', {
+      dir: logsDir,
+      fileLogName: 'test-logger.log',
+      level: 'all',
+    });
+
+    logger.info('file logger');
+    logger.info('file logger1');
+    logger.info('file logger2');
+    await sleep();
+
+    expect(matchContentTimes(join(logsDir, 'test-logger.log'), 'file logger')).toEqual(3);
+    await removeFileOrDir(logsDir);
+  });
+
+
 });
