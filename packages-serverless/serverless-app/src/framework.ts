@@ -209,6 +209,7 @@ export class Framework
 
     // 分析项目结构
     const currentBaseDir = baseDir;
+    const platform = this.getPlatform();
 
     const triggerMap = this.getTriggerMap();
     const layers = this.getLayers();
@@ -235,6 +236,22 @@ export class Framework
     this.app.use(bodyParser.urlencoded({ extended: false }));
     this.app.use(bodyParser.json());
     this.app.use((req, res, next) => {
+      // for ali fc
+      if (platform === 'aliyun') {
+        if (!this.spec.experimentalFeatures?.forceFCCORS) {
+          const origin = req.get('origin');
+          if (origin) {
+            res.setHeader('Access-Control-Allow-Origin', origin);
+            res.setHeader('Access-Control-Allow-Credentials', 'true');
+            res.setHeader('Access-Control-Allow-Methods', '*');
+            res.setHeader('Access-Control-Allow-Headers', '*');
+            if (req.method.toLowerCase() === 'options') {
+              res.send('');
+              return;
+            }
+          }
+        }
+      }
       const gateway = createExpressGateway({
         functionDir: appDir,
       });
