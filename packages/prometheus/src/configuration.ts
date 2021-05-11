@@ -85,7 +85,7 @@ export class AutoConfiguration {
     });
   }
 
-  async onClose() {
+  async onStop() {
     if (isMaster()) {
       this.http_server.close();
     }
