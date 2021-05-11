@@ -44,10 +44,8 @@ export class StaticConfigLoader {
 
   analyzeConfiguration(configurationModule) {
     if (!configurationModule) return;
-    const configurationOptions: InjectionConfigurationOptions = getClassMetadata(
-      CONFIGURATION_KEY,
-      configurationModule
-    );
+    const configurationOptions: InjectionConfigurationOptions =
+      getClassMetadata(CONFIGURATION_KEY, configurationModule);
 
     if (!configurationOptions) return;
 

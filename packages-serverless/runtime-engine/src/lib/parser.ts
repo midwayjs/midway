@@ -15,7 +15,8 @@ export enum EnvPropertyKey {
 
 export class EnvPropertyParser<T>
   extends Map<string, T>
-  implements PropertyParser<T> {
+  implements PropertyParser<T>
+{
   setProperty(propertyKey: string, value) {
     process.env[propertyKey] = value;
   }

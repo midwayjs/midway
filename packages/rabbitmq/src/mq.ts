@@ -14,7 +14,8 @@ import { ConsumeMessage } from 'amqplib/properties';
 
 export class RabbitMQServer
   extends EventEmitter
-  implements IRabbitMQApplication {
+  implements IRabbitMQApplication
+{
   private options: Partial<IMidwayRabbitMQConfigurationOptions>;
   private connection: amqp.Connection;
   private channel: amqp.Channel;

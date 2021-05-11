@@ -2,7 +2,8 @@ import { Metadata } from '@grpc/grpc-js';
 import { IClientWritableStreamService } from '../../interface';
 
 export class ClientWritableRequest<reqType, resType>
-  implements IClientWritableStreamService<reqType, resType> {
+  implements IClientWritableStreamService<reqType, resType>
+{
   client;
   metadata;
   timeout;

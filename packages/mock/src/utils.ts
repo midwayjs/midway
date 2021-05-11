@@ -206,7 +206,7 @@ export async function createApp<
     options,
     customFrameworkName
   );
-  return (framework.getApplication() as unknown) as Y;
+  return framework.getApplication() as unknown as Y;
 }
 
 export async function close(
@@ -263,7 +263,7 @@ export async function createFunctionApp<
     options,
     '@midwayjs/serverless-app'
   );
-  return (framework.getApplication() as unknown) as Y;
+  return framework.getApplication() as unknown as Y;
 }
 
 class BootstrapAppStarter {

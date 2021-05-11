@@ -8,7 +8,8 @@ import { LightRuntime } from './interface';
  */
 export abstract class ServerlessLightRuntime
   extends ServerlessBaseRuntime
-  implements LightRuntime {
+  implements LightRuntime
+{
   async invokeHandlerWrapper(context, invokeHandler) {
     // load context extension
     for (const contextExtension of this.getContextExtensions() || []) {

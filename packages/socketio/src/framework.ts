@@ -132,9 +132,10 @@ export class MidwaySocketIOFramework extends BaseFramework<
           // on connection
           if (wsEventInfo.eventType === WSEventTypeEnum.ON_CONNECTION) {
             try {
-              const result = await controller[
-                wsEventInfo.propertyName
-              ].apply(controller, [socket]);
+              const result = await controller[wsEventInfo.propertyName].apply(
+                controller,
+                [socket]
+              );
               await this.bindSocketResponse(
                 result,
                 socket,
@@ -176,9 +177,10 @@ export class MidwaySocketIOFramework extends BaseFramework<
             // on socket disconnect
             socket.on('disconnect', async (reason: string) => {
               try {
-                const result = await controller[
-                  wsEventInfo.propertyName
-                ].apply(controller, [reason]);
+                const result = await controller[wsEventInfo.propertyName].apply(
+                  controller,
+                  [reason]
+                );
                 await this.bindSocketResponse(
                   result,
                   socket,
