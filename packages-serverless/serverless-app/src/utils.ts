@@ -96,32 +96,19 @@ export const analysisDecorator = async (cwd: string) => {
       const trigger = func.functionTriggerName;
       let isAddToTrigger = false;
       const { path, method } = func.functionTriggerMetadata;
-      let methodList = [].concat(method || []);
-      if (methodList.includes('any') || methodList.includes('all')) {
-        func.functionTriggerMetadata.method = 'any';
-        methodList = ['any'];
-      } else {
-        func.functionTriggerMetadata.method = methodList;
-      }
+      func.functionTriggerMetadata.method = [].concat(method || []);
       // 避免重复路径创建多个trigger
       const httpTrigger = allFunc[funcName].events.find(event => {
         return event.http?.path === path || event.apigw?.path === path;
       });
       if (httpTrigger) {
-        if (
-          httpTrigger.http.method === 'any' ||
-          func.functionTriggerMetadata.method === 'any'
-        ) {
-          httpTrigger.http.method = 'any';
-        } else {
-          httpTrigger.http.method = [].concat(httpTrigger.http.method || []);
-          if (method) {
-            [].concat(method).forEach(methodItem => {
-              if (!httpTrigger.http.method.includes(methodItem)) {
-                httpTrigger.http.method.push(methodItem);
-              }
-            });
-          }
+        httpTrigger.http.method = [].concat(httpTrigger.http.method || []);
+        if (method) {
+          [].concat(method).forEach(methodItem => {
+            if (!httpTrigger.http.method.includes(methodItem)) {
+              httpTrigger.http.method.push(methodItem);
+            }
+          });
         }
         isAddToTrigger = true;
       }
