@@ -42,7 +42,7 @@ export class MidwayExpressFramework extends BaseFramework<
   private server: Server;
 
   async applicationInitialize(options: Partial<IMidwayBootstrapOptions>) {
-    this.app = (express() as unknown) as IMidwayExpressApplication;
+    this.app = express() as unknown as IMidwayExpressApplication;
     this.defineApplicationProperties({
       generateController: (controllerMapping: string) => {
         return this.generateController(controllerMapping);
@@ -249,9 +249,8 @@ export class MidwayExpressFramework extends BaseFramework<
           // web function middleware
           handlerCallback(middleware);
         } else {
-          const middlewareImpl: IWebMiddleware | void = await this.getApplicationContext().getAsync(
-            middleware
-          );
+          const middlewareImpl: IWebMiddleware | void =
+            await this.getApplicationContext().getAsync(middleware);
           if (middlewareImpl && typeof middlewareImpl.resolve === 'function') {
             handlerCallback(middlewareImpl.resolve());
           }

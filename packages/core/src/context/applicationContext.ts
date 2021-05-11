@@ -20,7 +20,8 @@ const PREFIX = '_id_default_';
 
 export class ObjectDefinitionRegistry
   extends Map
-  implements IObjectDefinitionRegistry {
+  implements IObjectDefinitionRegistry
+{
   private singletonIds = [];
 
   get identifiers() {
@@ -103,7 +104,8 @@ export class ObjectDefinitionRegistry
 }
 
 export class BaseApplicationContext
-  implements IApplicationContext, IObjectFactory {
+  implements IApplicationContext, IObjectFactory
+{
   protected readied = false;
   // 自己内部实现的，可注入的 feature(见 features)
   protected midwayIdentifiers: string[] = [];

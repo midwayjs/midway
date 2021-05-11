@@ -65,21 +65,63 @@ export const analysisDecorator = async (cwd: string) => {
       ) {
         return;
       }
-      allFunc[func.funcHandlerName] = {
-        handler: func.funcHandlerName,
-        events: [
-          {
-            http: {
-              method: [].concat(func.requestMethod || 'get'),
-              path: (func.prefix + (func.url === '/' ? '' : func.url)).replace(
-                /\/{1,}/g,
-                '/'
-              ),
-            },
-          },
-        ],
-      };
+      const handler = func.funcHandlerName;
+      if (!handler) {
+        return;
+      }
+
+      if (!func.functionTriggerMetadata) {
+        func.functionTriggerMetadata = {};
+      }
+
+      const funcName =
+        func.functionTriggerMetadata.functionName ||
+        func.functionName ||
+        handler.replace(/[^\w]/g, '-');
+      if (!allFunc[funcName]) {
+        allFunc[funcName] = {
+          handler,
+          events: [],
+        };
+      }
+
+      if (!allFunc[funcName].events) {
+        allFunc[funcName].events = [];
+      }
+
+      if (!allFunc[funcName].handler) {
+        allFunc[funcName].handler = handler;
+      }
+
+      const trigger = func.functionTriggerName;
+      let isAddToTrigger = false;
+      const { path, method } = func.functionTriggerMetadata;
+      func.functionTriggerMetadata.method = [].concat(method || []);
+      // 避免重复路径创建多个trigger
+      const httpTrigger = allFunc[funcName].events.find(event => {
+        return event.http?.path === path || event.apigw?.path === path;
+      });
+      if (httpTrigger) {
+        httpTrigger.http.method = [].concat(httpTrigger.http.method || []);
+        if (method) {
+          [].concat(method).forEach(methodItem => {
+            if (!httpTrigger.http.method.includes(methodItem)) {
+              httpTrigger.http.method.push(methodItem);
+            }
+          });
+        }
+        isAddToTrigger = true;
+      }
+
+      if (!isAddToTrigger) {
+        const triggerIsBoolean = !Object.keys(func.functionTriggerMetadata)
+          .length;
+        allFunc[funcName].events.push({
+          [trigger]: triggerIsBoolean ? true : func.functionTriggerMetadata,
+        });
+      }
     });
   }
+
   return allFunc;
 };

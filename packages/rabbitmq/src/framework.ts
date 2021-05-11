@@ -30,9 +30,9 @@ export class MidwayRabbitMQFramework extends BaseFramework<
   public consumerList = [];
 
   async applicationInitialize(options) {
-    this.app = (new RabbitMQServer(
+    this.app = new RabbitMQServer(
       this.configurationOptions
-    ) as unknown) as IMidwayRabbitMQApplication;
+    ) as unknown as IMidwayRabbitMQApplication;
     // init connection
     await this.app.init();
   }

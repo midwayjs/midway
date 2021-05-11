@@ -72,7 +72,8 @@ export function clearContainerCache() {
 
 export class MidwayContainer
   extends BaseApplicationContext
-  implements IMidwayContainer {
+  implements IMidwayContainer
+{
   public id: string;
   private debugLogger = globalDebugLogger;
   private definitionMetadataList = [];
@@ -362,9 +363,8 @@ export class MidwayContainer
                 typeof val.propertyName === 'string'
               ) {
                 definitionMeta.handlerProps.push({
-                  handlerKey: DecoratorManager.removeDecoratorClassKeySuffix(
-                    key
-                  ),
+                  handlerKey:
+                    DecoratorManager.removeDecoratorClassKeySuffix(key),
                   prop: val,
                 });
               }
@@ -722,8 +722,7 @@ export class MidwayContainer
   }
 
   public addDirectoryFilter(directoryFilter) {
-    this.directoryFilterArray = this.directoryFilterArray.concat(
-      directoryFilter
-    );
+    this.directoryFilterArray =
+      this.directoryFilterArray.concat(directoryFilter);
   }
 }

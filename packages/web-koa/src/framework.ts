@@ -208,9 +208,8 @@ export abstract class MidwayKoaBaseFramework<
           // web function middleware
           handlerCallback(middleware);
         } else {
-          const middlewareImpl: IWebMiddleware | void = await this.getApplicationContext().getAsync(
-            middleware
-          );
+          const middlewareImpl: IWebMiddleware | void =
+            await this.getApplicationContext().getAsync(middleware);
           if (middlewareImpl && typeof middlewareImpl.resolve === 'function') {
             handlerCallback(middlewareImpl.resolve());
           }

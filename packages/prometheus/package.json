@@ -22,11 +22,11 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/core": "^2.10.13",
     "@types/request": "^2.48.5",
-    "@midwayjs/decorator": "^2.10.12",
-    "@midwayjs/koa": "^2.10.13",
-    "@midwayjs/mock": "^2.10.13"
+    "@midwayjs/core": "^2.10.14",
+    "@midwayjs/decorator": "^2.10.14",
+    "@midwayjs/koa": "^2.10.14",
+    "@midwayjs/mock": "^2.10.14"
   },
   "dependencies": {
     "prom-client": "^13.1.0",
