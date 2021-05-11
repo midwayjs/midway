@@ -5,10 +5,8 @@ import {
   MS_CONSUMER_KEY,
   MSListenerType,
   RabbitMQListener,
-  OnQueueConnect,
-  QueuePattern,
-  OnQueueReconnect,
-  OnQueueClose, OnQueueError, MS_CONSUMER_QUEUE_METADATA
+  ConsumerQueuePattern,
+  MS_CONSUMER_QUEUE_METADATA
 } from '../../src';
 
 @Consumer(MSListenerType.RABBITMQ)
@@ -24,31 +22,15 @@ class TestFun {
 })
 class NewTestFun {
 
-  @QueuePattern('tasks')
+  @ConsumerQueuePattern('tasks')
   async gotEvent() {
-  }
-
-  @OnQueueConnect()
-  async onConnect() {
-  }
-
-  @OnQueueClose()
-  async onReConnect() {
-  }
-
-  @OnQueueReconnect()
-  async onClose() {
-  }
-
-  @OnQueueError()
-  async onError() {
   }
 }
 
 describe('/test/microservice/rabbit.test.ts', () => {
   it('test rabbit listener decorator', () => {
     const meta = getClassMetadata(MS_CONSUMER_KEY, TestFun);
-    expect(meta).toEqual('rabbitmq');
+    expect(meta).toEqual({"metadata": {}, "type": "rabbitmq"});
 
     const data = getPropertyDataFromClass(MS_CONSUMER_KEY, TestFun, 'gotEvent');
     expect(data[0]).toEqual({ 'propertyKey': 'gotEvent', 'queueName': 'tasks' });

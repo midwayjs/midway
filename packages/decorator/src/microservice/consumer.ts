@@ -39,7 +39,7 @@ export function Consumer(type: any, options: any = {}): ClassDecorator {
   };
 }
 
-export function QueuePattern(queueNamePattern: string): MethodDecorator {
+export function ConsumerQueuePattern(queueNamePattern: string): MethodDecorator {
   return ((target, propertyKey, descriptor) => {
     attachClassMetadata(MS_CONSUMER_QUEUE_METADATA, {
       methodName: propertyKey,
@@ -50,45 +50,3 @@ export function QueuePattern(queueNamePattern: string): MethodDecorator {
     }, target);
   });
 }
-
-export function OnQueueConnect() : MethodDecorator {
-  return ((target, propertyKey, descriptor) => {
-    attachClassMetadata(MS_CONSUMER_QUEUE_METADATA, {
-      methodName: propertyKey,
-      metadata: {},
-      queueMethodName: QueueMethodEnum.ON_QUEUE_CONNECT,
-    }, target);
-  });
-}
-
-
-export function OnQueueReconnect(): MethodDecorator {
-  return ((target, propertyKey, descriptor) => {
-    attachClassMetadata(MS_CONSUMER_QUEUE_METADATA, {
-      methodName: propertyKey,
-      metadata: {},
-      queueMethodName: QueueMethodEnum.ON_QUEUE_RECONNECT,
-    }, target);
-  });
-}
-
-export function OnQueueClose(): MethodDecorator {
-  return ((target, propertyKey, descriptor) => {
-    attachClassMetadata(MS_CONSUMER_QUEUE_METADATA, {
-      methodName: propertyKey,
-      metadata: {},
-      queueMethodName: QueueMethodEnum.ON_QUEUE_CLOSE,
-    }, target);
-  });
-}
-
-export function OnQueueError(): MethodDecorator {
-  return ((target, propertyKey, descriptor) => {
-    attachClassMetadata(MS_CONSUMER_QUEUE_METADATA, {
-      methodName: propertyKey,
-      queueMethodName: QueueMethodEnum.ON_QUEUE_ERROR,
-      metadata: {},
-    }, target);
-  });
-}
-

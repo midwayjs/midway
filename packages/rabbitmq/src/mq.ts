@@ -9,6 +9,8 @@ import { ConsumeMessage } from 'amqplib/properties';
 
 export class RabbitMQServer extends QueueManager<amqp.Connection, amqp.Channel> implements IRabbitMQApplication {
 
+  exchanges;
+
   createChannel(isConfirmChannel = false): Promise<any> {
     if (!isConfirmChannel) {
       return this.connection.createChannel();

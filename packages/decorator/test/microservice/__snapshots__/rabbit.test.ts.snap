@@ -9,25 +9,5 @@ Array [
     "methodName": "gotEvent",
     "queueMethodName": "queue_pattern",
   },
-  Object {
-    "metadata": Object {},
-    "methodName": "onConnect",
-    "queueMethodName": "on_queue_connect",
-  },
-  Object {
-    "metadata": Object {},
-    "methodName": "onReConnect",
-    "queueMethodName": "on_queue_reconnect",
-  },
-  Object {
-    "metadata": Object {},
-    "methodName": "onClose",
-    "queueMethodName": "on_queue_close",
-  },
-  Object {
-    "metadata": Object {},
-    "methodName": "onError",
-    "queueMethodName": "on_queue_error",
-  },
 ]
 `;
