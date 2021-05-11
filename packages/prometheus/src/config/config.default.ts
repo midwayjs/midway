@@ -2,6 +2,6 @@ import { DefaultMetricsCollectorConfiguration as DefaultConfig } from 'prom-clie
 
 export const prometheus: DefaultConfig = {
   labels: {
-    APP_NAME: 'default'
-  }
+    APP_NAME: 'default',
+  },
 };
