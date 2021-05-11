@@ -86,7 +86,6 @@ export class AutoConfiguration {
   }
 
   async onClose() {
-    console.log('====>close');
     if (isMaster()) {
       this.http_server.close();
     }
