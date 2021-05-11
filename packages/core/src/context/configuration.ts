@@ -216,9 +216,8 @@ export class ContainerConfiguration implements IContainerConfiguration {
     let configurationOptions: InjectionConfigurationOptions;
     if (componentObject['Configuration'] instanceof FunctionalConfiguration) {
       // 函数式写法
-      configurationOptions = componentObject[
-        'Configuration'
-      ].getConfigurationOptions();
+      configurationOptions =
+        componentObject['Configuration'].getConfigurationOptions();
     } else {
       // 普通类写法
       configurationOptions = getClassMetadata(
@@ -289,7 +288,8 @@ export class ContainerConfiguration implements IContainerConfiguration {
             if (configurationOptions.conflictCheck === undefined) {
               configurationOptions.conflictCheck = false;
             }
-            this.container.disableConflictCheck = !configurationOptions.conflictCheck;
+            this.container.disableConflictCheck =
+              !configurationOptions.conflictCheck;
           }
 
           this.addImports(configurationOptions.imports, baseDir);

@@ -316,9 +316,8 @@ export class MidwayFaaSFramework extends BaseFramework<
       if (typeof middleware === 'function') {
         newMiddlewares.push(middleware);
       } else {
-        const middlewareImpl: IMiddleware<FaaSContext> = await this.getApplicationContext().getAsync(
-          middleware
-        );
+        const middlewareImpl: IMiddleware<FaaSContext> =
+          await this.getApplicationContext().getAsync(middleware);
         if (middlewareImpl && typeof middlewareImpl.resolve === 'function') {
           newMiddlewares.push(middlewareImpl.resolve() as any);
         }

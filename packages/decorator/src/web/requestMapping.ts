@@ -66,22 +66,24 @@ export const RequestMapping = (
   };
 };
 
-const createMappingDecorator = (method: string) => (
-  path?: string | RegExp,
-  routerOptions: {
-    routerName?: string;
-    middleware?: MiddlewareParamArray;
-    summary?: string;
-    description?: string;
-  } = { middleware: [] }
-): MethodDecorator => {
-  return RequestMapping(
-    Object.assign(routerOptions, {
-      requestMethod: method,
-      path,
-    })
-  );
-};
+const createMappingDecorator =
+  (method: string) =>
+  (
+    path?: string | RegExp,
+    routerOptions: {
+      routerName?: string;
+      middleware?: MiddlewareParamArray;
+      summary?: string;
+      description?: string;
+    } = { middleware: [] }
+  ): MethodDecorator => {
+    return RequestMapping(
+      Object.assign(routerOptions, {
+        requestMethod: method,
+        path,
+      })
+    );
+  };
 
 /**
  * Routes HTTP POST requests to the specified path.

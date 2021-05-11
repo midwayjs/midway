@@ -46,7 +46,8 @@ export abstract class BaseFramework<
   APP extends IMidwayApplication<CTX>,
   CTX extends IMidwayContext,
   OPT extends IConfigurationOptions
-> implements IMidwayFramework<APP, OPT> {
+> implements IMidwayFramework<APP, OPT>
+{
   protected isTsMode = true;
   protected applicationContext: IMidwayContainer;
   protected logger: ILogger;

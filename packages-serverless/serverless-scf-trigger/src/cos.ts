@@ -12,8 +12,7 @@ export class COSTrigger extends SCFBaseTrigger {
           cos: {
             cosSchemaVersion: '1.0',
             cosObject: {
-              url:
-                'http://testpic-1253970026.cos.ap-chengdu.myqcloud.com/testfile',
+              url: 'http://testpic-1253970026.cos.ap-chengdu.myqcloud.com/testfile',
               meta: {
                 'x-cos-request-id': 'NWMxOWY4MGFfMjViMjU4NjRfMTUyMV8yNzhhZjM=',
                 'Content-Type': '',

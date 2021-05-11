@@ -23,7 +23,8 @@ import {
 import { createExpressGateway } from '@midwayjs/gateway-common-http';
 
 export class Framework
-  implements IMidwayFramework<Application, IServerlessAppOptions> {
+  implements IMidwayFramework<Application, IServerlessAppOptions>
+{
   app: Application;
   configurationOptions: IServerlessAppOptions;
   private innerApp: IMidwayApplication;

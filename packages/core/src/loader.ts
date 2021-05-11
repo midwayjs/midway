@@ -103,9 +103,8 @@ export class ContainerLoader {
 
   async loadLifeCycles() {
     // agent 不加载生命周期
-    const cycles: Array<{ target: any; namespace: string }> = listModule(
-      CONFIGURATION_KEY
-    );
+    const cycles: Array<{ target: any; namespace: string }> =
+      listModule(CONFIGURATION_KEY);
     for (const cycle of cycles) {
       const providerId = getProviderId(cycle.target);
       const inst = await this.getApplicationContext().getAsync<ILifeCycle>(
