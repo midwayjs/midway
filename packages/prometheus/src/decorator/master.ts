@@ -13,8 +13,7 @@ export function Master() {
   ) {
     saveModule('prometheus:master', target.constructor);
     const sockFile = path.join(os.tmpdir(), 'midway-master.sock');
-    if (isMaster()) {
-    } else {
+    if (!isMaster()) {
       descriptor.value = (...args) => {
         const params = {
           path: `${target.constructor.name}_${propertyKey}`,

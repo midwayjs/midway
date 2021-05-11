@@ -73,12 +73,12 @@ export class AutoConfiguration {
         } else {
           await next();
         }
-        var diff = process.hrtime(startAt);
-        var time = diff[0] * 1e3 + diff[1] * 1e-6;
+        const diff = process.hrtime(startAt);
+        const time = diff[0] * 1e3 + diff[1] * 1e-6;
         service.getUser(ctx.method, '200', ctx.path, time);
       } catch (e) {
-        var diff = process.hrtime(startAt);
-        var time = diff[0] * 1e3 + diff[1] * 1e-6;
+        const diff = process.hrtime(startAt);
+        const time = diff[0] * 1e3 + diff[1] * 1e-6;
         service.getUser(ctx.method, '500', ctx.path, time);
         throw e;
       }
