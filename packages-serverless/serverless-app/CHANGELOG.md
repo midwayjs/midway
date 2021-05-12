@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.10.15](https://github.com/midwayjs/midway/compare/v2.10.14...v2.10.15) (2021-05-12)
+
+
+### Bug Fixes
+
+* support aliyun fc cors in local env ([#1041](https://github.com/midwayjs/midway/issues/1041)) ([245925a](https://github.com/midwayjs/midway/commit/245925aaf1a2568c3c90a7d03bc1c6df468b8950))
+
+
+
+
+
 ## [2.10.14](https://github.com/midwayjs/midway/compare/v2.10.13...v2.10.14) (2021-05-11)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/serverless-app",
-  "version": "2.10.14",
+  "version": "2.10.15",
   "main": "dist/index",
   "typings": "index.d.ts",
   "dependencies": {
