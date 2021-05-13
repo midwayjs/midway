@@ -3,29 +3,34 @@ import * as path from 'path';
 import * as os from 'os';
 import * as fs from 'fs';
 
-var gfp = null;
-var bInit = false;
+let gfp = null;
+let bInit = false;
 const ppid = process.ppid;
 const now = new Date();
-const lockFile = path.join(os.tmpdir(), `midway-master-${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}-${ppid}.lock`);
+const lockFile = path.join(
+  os.tmpdir(),
+  `midway-master-${now.getFullYear()}-${
+    now.getMonth() + 1
+  }-${now.getDate()}-${ppid}.lock`
+);
 export function isMaster() {
   if (cluster.isMaster) {
     return true;
   }
 
-  if(process.env[`_`].indexOf('egg-scripts')>=0){
+  if (process.env['_'].indexOf('egg-scripts') >= 0) {
     // Is run with egg-scripts
-    if(bInit && gfp){
+    if (bInit && gfp) {
       return true;
-    }else if(bInit){
+    } else if (bInit) {
       return false;
-    }else{
+    } else {
       bInit = true;
-      try{
-        let result = fs.openSync(lockFile,"wx");
+      try {
+        const result = fs.openSync(lockFile, 'wx');
         gfp = result;
         return true;
-      }catch(e){
+      } catch (e) {
         return false;
       }
     }
@@ -41,8 +46,8 @@ export function isMaster() {
   return false;
 }
 
-export function closeLock(){
-  if(gfp){
+export function closeLock() {
+  if (gfp) {
     fs.closeSync(gfp);
     fs.unlinkSync(lockFile);
     gfp = null;
