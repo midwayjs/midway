@@ -7,7 +7,7 @@ import {
 } from '@midwayjs/decorator';
 import { join } from 'path';
 import * as PromClient from 'prom-client';
-import { isMaster } from './utils/utils';
+import { isMaster, closeLock } from './utils/utils';
 import * as os from 'os';
 import * as path from 'path';
 import * as fs from 'fs';
@@ -87,6 +87,7 @@ export class AutoConfiguration {
 
   async onStop() {
     if (isMaster()) {
+      closeLock();
       this.http_server.close();
     }
   }
