@@ -18,7 +18,7 @@ export function isMaster() {
     return true;
   }
 
-  if (process.env['_'].indexOf('egg-scripts') >= 0) {
+  if (process.argv[1].indexOf('egg-cluster') >= 0) {
     // Is run with egg-scripts
     if (bInit && gfp) {
       return true;

@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/prometheus",
-  "version": "2.10.15",
+  "version": "2.10.15-beta.3",
   "description": "midway component for prometheus",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",

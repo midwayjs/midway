@@ -31,8 +31,12 @@ export class AutoConfiguration {
     PromClient.collectDefaultMetrics(this.prometheusConfig);
     const modules = listModule('prometheus:master');
     const handlers = {};
-    const sockFile = path.join(os.tmpdir(), 'midway-master.sock');
-    if (modules.length > 0) {
+    let sockFile = path.join(os.tmpdir(), 'midway-master.sock');
+    if (process.platform === 'win32') {
+      sockFile =
+        '\\\\.\\pipe\\' + sockFile.replace(/^\//, '').replace(/\//g, '-');
+    }
+    if (modules.length > 0 && process.platform != 'win32') {
       if (isMaster()) {
         if (fs.existsSync(sockFile)) {
           fs.unlinkSync(sockFile);
