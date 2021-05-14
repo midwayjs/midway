@@ -36,7 +36,7 @@ export class AutoConfiguration {
       sockFile =
         '\\\\.\\pipe\\' + sockFile.replace(/^\//, '').replace(/\//g, '-');
     }
-    if (modules.length > 0 && process.platform != 'win32') {
+    if (modules.length > 0 && process.platform !== 'win32') {
       if (isMaster()) {
         if (fs.existsSync(sockFile)) {
           fs.unlinkSync(sockFile);

@@ -14,8 +14,7 @@ import { LoggerOptions } from '@midwayjs/logger';
 import { MidwayKoaContextLogger } from '@midwayjs/koa';
 
 export class MidwayWebSingleProcessFramework
-  implements IMidwayFramework<Application, IMidwayWebConfigurationOptions>
-{
+  implements IMidwayFramework<Application, IMidwayWebConfigurationOptions> {
   public app: Application;
   public agent;
   public configurationOptions: IMidwayWebConfigurationOptions;
