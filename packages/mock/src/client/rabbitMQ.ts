@@ -316,7 +316,8 @@ class ChannelManager {
   }
 
   async createConfirmChannel(queueName) {
-    const channel = (this.channel = await this.connection.createConfirmChannel());
+    const channel = (this.channel =
+      await this.connection.createConfirmChannel());
     this.channelList.push(channel);
     await this.channel.assertQueue(queueName);
     return this.channel;

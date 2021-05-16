@@ -35,7 +35,7 @@ export interface RabbitMQListenerOptions {
     autoDelete?: boolean;
     alternateExchange?: string;
     arguments?: any;
-  }
+  };
   /**
    * consumeOptions
    */

@@ -4,8 +4,9 @@ interface IQueueConnection {
   close();
 }
 
-export abstract class QueueManager<Connection extends IQueueConnection> extends EventEmitter {
-
+export abstract class QueueManager<
+  Connection extends IQueueConnection
+> extends EventEmitter {
   protected readyClose = false;
   protected connection: Connection = null;
   protected reconnectTime;
@@ -22,7 +23,7 @@ export abstract class QueueManager<Connection extends IQueueConnection> extends 
     try {
       this.connection = await this.createConnection(...args);
       (this.connection as any).on('connect', () => {
-        this.logger.info('Message Queue connected!')
+        this.logger.info('Message Queue connected!');
       });
       (this.connection as any).on('disconnect', err => {
         if (err) {
@@ -62,5 +63,4 @@ export abstract class QueueManager<Connection extends IQueueConnection> extends 
     this.logger.debug('Message Queue will be close');
     await this.closeConnection();
   }
-
 }

@@ -8,7 +8,8 @@ import {
 } from '@midwayjs/core';
 
 import {
-  MS_CONSUMER_KEY, MSListenerType,
+  MS_CONSUMER_KEY,
+  MSListenerType,
   RabbitMQListenerOptions,
 } from '@midwayjs/decorator';
 import {
@@ -29,15 +30,18 @@ export class MidwayRabbitMQFramework extends BaseFramework<
 
   async applicationInitialize(options) {
     // Create a connection manager
-    this.app = (new RabbitMQServer({
+    this.app = new RabbitMQServer({
       logger: this.logger,
       ...this.configurationOptions,
-    }) as unknown) as IMidwayRabbitMQApplication;
+    }) as unknown as IMidwayRabbitMQApplication;
   }
 
   public async run(): Promise<void> {
     // init connection
-    await this.app.connect(this.configurationOptions.url, this.configurationOptions.socketOptions);
+    await this.app.connect(
+      this.configurationOptions.url,
+      this.configurationOptions.socketOptions
+    );
     await this.loadSubscriber();
     this.logger.info('Rabbitmq server start success');
   }
@@ -72,9 +76,9 @@ export class MidwayRabbitMQFramework extends BaseFramework<
               const ctx = {
                 channel,
                 queueName: listenerOptions.queueName,
-                ack: (data) => {
+                ack: data => {
                   return channelWrapper.ack(data);
-                }
+                },
               } as IMidwayRabbitMQContext;
               this.app.createAnonymousContext(ctx);
               const ins = await ctx.requestContext.getAsync(providerId);
