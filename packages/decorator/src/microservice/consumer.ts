@@ -9,25 +9,7 @@ import {
 import { Scope } from '../annotation';
 import QueueMethodEnum = ConsumerMetadata.QueueMethodEnum;
 
-export interface RabbitMQListenerOptions {
-  exchange?: string;
-  exclusive?: boolean;
-  durable?: boolean;
-  maxPriority?: number;
-  prefetch?: number;
-  keys?: { [keyName: string]: string };
-  routingKey?: string;
-  consumeOptions?: {
-    consumerTag?: string;
-    noLocal?: boolean;
-    noAck?: boolean;
-    exclusive?: boolean;
-    priority?: number;
-    arguments?: any;
-  };
-}
-
-export function Consumer(type: MSListenerType.RABBITMQ, options?: RabbitMQListenerOptions): ClassDecorator;
+export function Consumer(type: MSListenerType.RABBITMQ): ClassDecorator;
 export function Consumer(type: any, options: any = {}): ClassDecorator {
   return (target: any) => {
     saveModule(MS_CONSUMER_KEY, target);

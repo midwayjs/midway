@@ -4,17 +4,10 @@ interface IQueueConnection {
   close();
 }
 
-interface IQueueChannel {
-  close();
-}
-
-
-export abstract class QueueManager<Connection extends IQueueConnection, Channel extends IQueueChannel> extends EventEmitter {
+export abstract class QueueManager<Connection extends IQueueConnection> extends EventEmitter {
 
   protected readyClose = false;
-  private refHandlerList = new Set();
   protected connection: Connection = null;
-  protected channelManagerSet: Set<Channel> = new Set();
   protected reconnectTime;
   protected logger;
 
@@ -25,24 +18,22 @@ export abstract class QueueManager<Connection extends IQueueConnection, Channel 
     this.bindError();
   }
 
-  async init() {
-    await this.connect(); // 创建连接
-    if (this.connection) {
-      await this.createChannel(); // 创建channel
-    }
-  }
-
-  async connect() {
+  async connect(...args) {
     try {
-      this.connection = await this.createConnection();
+      this.connection = await this.createConnection(...args);
+      (this.connection as any).on('connect', () => {
+        this.logger.info('Message Queue connected!')
+      });
+      (this.connection as any).on('disconnect', err => {
+        if (err) {
+          this.logger.error('Message Queue disconnected', err);
+        } else {
+          this.logger.info('Message Queue disconnected!');
+        }
+      });
     } catch (error) {
-      this.logger.error('Connect fail and reconnect after timeout', error);
+      this.logger.error('Message Queue connect fail', error);
       await this.closeConnection();
-      const handler = setTimeout(() => {
-        this.refHandlerList.delete(handler);
-        this.emit('reconnect');
-      }, this.reconnectTime);
-      this.refHandlerList.add(handler);
     }
   }
 
@@ -52,61 +43,23 @@ export abstract class QueueManager<Connection extends IQueueConnection, Channel 
     });
   }
 
-  abstract createChannel(...args): Promise<Channel>;
   abstract createConnection(...args): Promise<Connection>;
-
-  protected async closeAllChannel() {
-    try {
-      if (this.channelManagerSet.size) {
-        for (const item of this.channelManagerSet) {
-          await this.closeChannel(item);
-        }
-      }
-      this.logger.debug('RabbitMQ channel close success');
-    } catch (err) {
-      this.logger.error('RabbitMQ channel close error', err);
-    } finally {
-      this.channelManagerSet.clear();
-    }
-  }
 
   protected async closeConnection() {
     try {
-      await this.closeAllChannel();
       if (this.connection) {
         await this.connection.close();
       }
-      this.logger.debug('RabbitMQ connection close success');
+      this.logger.debug('Message Queue connection close success');
     } catch (err) {
-      this.logger.error('RabbitMQ connection close error', err);
+      this.logger.error('Message Queue connection close error', err);
     } finally {
       this.connection = null;
     }
   }
 
-  protected async closeChannel(channel) {
-    try {
-      await channel.close();
-      this.channelManagerSet.delete(channel);
-      this.logger.debug('Channel close success');
-    } catch (err) {
-      this.logger.error('Channel close error', err);
-    }
-  }
-
-  async addChannel() {
-    const channel = await this.createChannel();
-    this.channelManagerSet.add(channel);
-  }
-
   async close() {
-    await this.connection.close();
-    this.refHandlerList.clear();
-    this.readyClose = true;
-    this.logger.debug('RabbitMQ app will be close');
-    this.refHandlerList.forEach((handler: any) => {
-      clearTimeout(handler);
-    });
+    this.logger.debug('Message Queue will be close');
     await this.closeConnection();
   }
 

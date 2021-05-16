@@ -1,4 +1,4 @@
-import { Provide, Consumer, MSListenerType, Inject, ConsumerQueuePattern } from '@midwayjs/decorator';
+import { Provide, Consumer, MSListenerType, RabbitMQListener, Inject } from '@midwayjs/decorator';
 import { IMidwayRabbitMQContext } from '../../../../../src';
 import { ConsumeMessage } from 'amqplib';
 
@@ -12,10 +12,10 @@ export class UserConsumer {
   @Inject()
   logger;
 
-  @ConsumerQueuePattern('tasks')
+  @RabbitMQListener('tasks')
   async gotData(msg: ConsumeMessage) {
     this.logger.info('test output =>', msg.content.toString('utf8'));
-    this.ctx.channel.ack(msg);
+    this.ctx.ack(msg);
   }
 
 }
