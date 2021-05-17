@@ -7,7 +7,7 @@ import {
 } from '@midwayjs/decorator';
 import { join } from 'path';
 import * as PromClient from 'prom-client';
-import { isMaster } from './utils/utils';
+import { isMaster, closeLock } from './utils/utils';
 import * as os from 'os';
 import * as path from 'path';
 import * as fs from 'fs';
@@ -31,8 +31,12 @@ export class AutoConfiguration {
     PromClient.collectDefaultMetrics(this.prometheusConfig);
     const modules = listModule('prometheus:master');
     const handlers = {};
-    const sockFile = path.join(os.tmpdir(), 'midway-master.sock');
-    if (modules.length > 0) {
+    let sockFile = path.join(os.tmpdir(), 'midway-master.sock');
+    if (process.platform === 'win32') {
+      sockFile =
+        '\\\\.\\pipe\\' + sockFile.replace(/^\//, '').replace(/\//g, '-');
+    }
+    if (modules.length > 0 && process.platform !== 'win32') {
       if (isMaster()) {
         if (fs.existsSync(sockFile)) {
           fs.unlinkSync(sockFile);
@@ -87,6 +91,7 @@ export class AutoConfiguration {
 
   async onStop() {
     if (isMaster()) {
+      closeLock();
       this.http_server.close();
     }
   }

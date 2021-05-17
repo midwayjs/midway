@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/prometheus",
-  "version": "2.10.15",
+  "version": "2.10.15-beta.3",
   "description": "midway component for prometheus",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -31,5 +31,8 @@
   "dependencies": {
     "prom-client": "^13.1.0",
     "request": "^2.88.2"
+  },
+  "engines": {
+    "node": ">= 12.0.0"
   }
 }
