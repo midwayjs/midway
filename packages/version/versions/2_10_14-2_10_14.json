@@ -29,15 +29,20 @@
   "@midwayjs/mock": "2.10.14",
   "@midwayjs/prometheus": [
     "2.10.14",
-    "2.10.15"
+    "2.10.15",
+    "2.10.16"
   ],
   "@midwayjs/rabbitmq": "2.10.14",
   "@midwayjs/socketio": "2.10.14",
-  "@midwayjs/task": "2.10.14",
+  "@midwayjs/task": [
+    "2.10.14",
+    "2.10.16"
+  ],
   "@midwayjs/typegoose": "2.10.14",
   "@midwayjs/version": [
     "2.10.14",
-    "2.10.15"
+    "2.10.15",
+    "2.10.16"
   ],
   "@midwayjs/express": "2.10.14",
   "@midwayjs/koa": "2.10.14",

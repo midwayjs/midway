@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.10.16](https://github.com/midwayjs/midway/compare/v2.10.15...v2.10.16) (2021-05-17)
+
+
+### Bug Fixes
+
+* **prometheus:** bootstrap for egg ([#1045](https://github.com/midwayjs/midway/issues/1045)) ([aeb0888](https://github.com/midwayjs/midway/commit/aeb0888930d35a3e13a139f30ce4c39710823cfa))
+
+
+
+
+
 ## [2.10.15](https://github.com/midwayjs/midway/compare/v2.10.14...v2.10.15) (2021-05-12)
 
 

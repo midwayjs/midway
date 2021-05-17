@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.10.16](https://github.com/midwayjs/midway/compare/v2.10.15...v2.10.16) (2021-05-17)
+
+
+### Features
+
+* **task:** add job parameter for task execute ([#1044](https://github.com/midwayjs/midway/issues/1044)) ([314a1f0](https://github.com/midwayjs/midway/commit/314a1f08dea08ca10ac64a4a408997eefa4352f5))
+
+
+
+
+
 ## [2.10.14](https://github.com/midwayjs/midway/compare/v2.10.13...v2.10.14) (2021-05-11)
 
 **Note:** Version bump only for package @midwayjs/task
