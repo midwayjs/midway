@@ -1,9 +1,11 @@
-import { close, createApp, createBootstrap, createHttpRequest } from '../src';
+import { close, createApp, createBootstrap, createHttpRequest, createFunctionApp } from '../src';
 import { Framework } from '../../web/src';
 import { Framework as KoaFramework } from '../../web-koa/src';
+import { Framework as ServerlessFramework } from '../../../packages-serverless/serverless-app/src';
 import { join } from 'path';
 import { MidwayFrameworkType } from '@midwayjs/decorator';
 import { existsSync } from 'fs';
+import { EventService } from './fixtures/base-faas/src/event';
 
 describe('/test/new.test.ts', () => {
   it('should test create app', async () => {
@@ -32,5 +34,14 @@ describe('/test/new.test.ts', () => {
     expect(result.status).toBe(200);
     expect(result.text).toBe('hello world, harry');
     await bootstrap.close();
+  });
+
+  it('should test with createFunctionApp', async () => {
+    const app = await createFunctionApp<ServerlessFramework>(join(__dirname, 'fixtures/base-faas'), {}, ServerlessFramework);
+    const instance: EventService = await app.getServerlessInstance(EventService);
+    const result = await instance.handleEvent();
+
+    expect(result).toEqual('hello world');
+    await close(app, { cleanLogsDir: true, cleanTempDir: true });
   });
 });

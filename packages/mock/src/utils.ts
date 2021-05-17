@@ -268,9 +268,10 @@ export async function createFunctionApp<
   Y = ReturnType<T['getApplication']>
 >(
   baseDir: string = process.cwd(),
-  options?: U & MockAppConfigurationOptions
+  options?: U & MockAppConfigurationOptions,
+  customFrameworkName?: string | MidwayFrameworkType | any
 ): Promise<Y> {
-  const customFramework = findFirstExistModule([
+  const customFramework = customFrameworkName ?? findFirstExistModule([
     process.env.MIDWAY_SERVERLESS_APP_NAME,
     '@ali/serverless-app',
     '@midwayjs/serverless-app',
