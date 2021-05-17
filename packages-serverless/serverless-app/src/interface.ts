@@ -11,7 +11,6 @@ export interface Application extends FaaSApplication {
 export interface IServerlessAppOptions extends IConfigurationOptions {
   port?: string | number;
   initContext?: any;
-  layers?: string[];
 }
 
 export interface Context extends FaaSContext {}

@@ -354,14 +354,8 @@ export class Framework
     });
   }
 
-  private getLayers() {
+  protected getLayers() {
     const specLayers = [];
-    if (this.configurationOptions.layers) {
-      this.configurationOptions.layers.forEach(path => {
-        const layer = require(path);
-        specLayers.push(layer);
-      });
-    }
     if (this.spec?.layers) {
       Object.keys(this.spec.layers).forEach(layerName => {
         const info = this.spec.layers[layerName];
