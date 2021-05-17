@@ -104,7 +104,7 @@ export class AutoConfiguration {
       queue.process(async job => {
         const ctx = this.app.createAnonymousContext();
         const service = await ctx.requestContext.getAsync(module);
-        await service.excute.call(service, job.data);
+        await service.excute.call(service, job.data, job);
       });
       queueMap[`${rule.name}:excute`] = queue;
       this.queueList.push(queue);
