@@ -192,7 +192,8 @@ export class Framework
     const { appDir, baseDir } = options;
 
     const faasModule = '@midwayjs/faas';
-    const faasModulePath = findNpmModule(appDir, faasModule);
+    const faasModulePath =
+      process.env.MIDWAY_FAAS_PATH ?? findNpmModule(appDir, faasModule);
     if (!faasModulePath) {
       throw new Error(`Module '${faasModule}' not found`);
     }
