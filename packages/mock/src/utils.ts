@@ -29,6 +29,7 @@ function isWin32() {
 
 function findFirstExistModule(moduleList): string {
   for (const name of moduleList) {
+    if (!name) continue;
     try {
       require.resolve(name);
       return name;
@@ -271,6 +272,7 @@ export async function createFunctionApp<
 ): Promise<Y> {
   const customFramework = findFirstExistModule([
     process.env.MIDWAY_SERVERLESS_APP_NAME,
+    '@ali/serverless-app',
     '@midwayjs/serverless-app',
   ]);
 
