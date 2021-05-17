@@ -356,13 +356,6 @@ export class Framework
 
   private getLayers() {
     const specLayers = [];
-    if (process.env.SERVERLESS_APP_LAYERS) {
-      const layers = process.env.SERVERLESS_APP_LAYERS.split(',');
-      layers.forEach(path => {
-        const layer = require(path);
-        specLayers.push(layer);
-      });
-    }
     if (this.spec?.layers) {
       Object.keys(this.spec.layers).forEach(layerName => {
         const info = this.spec.layers[layerName];
