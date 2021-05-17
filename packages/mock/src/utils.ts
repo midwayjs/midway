@@ -27,6 +27,17 @@ function isWin32() {
   return os.platform() === 'win32';
 }
 
+function findFirstExistModule(moduleList): string {
+  for (const name of moduleList) {
+    try {
+      require.resolve(name);
+      return name;
+    } catch (e) {
+      // ignore
+    }
+  }
+}
+
 const appMap = new WeakMap();
 const bootstrapAppSet = (global['MIDWAY_BOOTSTRAP_APP_SET'] = new Set<{
   framework: IMidwayFramework<any, any>;
@@ -258,11 +269,12 @@ export async function createFunctionApp<
   baseDir: string = process.cwd(),
   options?: U & MockAppConfigurationOptions
 ): Promise<Y> {
-  const framework: T = await create<T, U>(
-    baseDir,
-    options,
-    '@midwayjs/serverless-app'
-  );
+  const customFramework = findFirstExistModule([
+    process.env.MIDWAY_SERVERLESS_APP_NAME,
+    '@midwayjs/serverless-app',
+  ]);
+
+  const framework: T = await create<T, U>(baseDir, options, customFramework);
   return framework.getApplication() as unknown as Y;
 }
 
