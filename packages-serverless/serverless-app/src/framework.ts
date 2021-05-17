@@ -354,7 +354,7 @@ export class Framework
     });
   }
 
-  private getLayers() {
+  protected getLayers() {
     const specLayers = [];
     if (this.spec?.layers) {
       Object.keys(this.spec.layers).forEach(layerName => {
