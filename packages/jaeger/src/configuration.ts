@@ -3,7 +3,7 @@
 import { join } from 'path';
 
 import { App, Config, Configuration } from '@midwayjs/decorator';
-import type { Application } from 'egg';
+import { Application } from '@midwayjs/web';
 import { JaegerTracer } from 'jaeger-client';
 
 import { initTracer } from './lib/tracer';

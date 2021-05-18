@@ -1,4 +1,4 @@
-import type { Application } from 'egg';
+import { Application } from '@midwayjs/web';
 import {
   initTracer as initJaegerTracer,
   JaegerTracer,

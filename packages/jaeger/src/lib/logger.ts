@@ -1,5 +1,5 @@
 import { Inject, Provide } from '@midwayjs/decorator';
-import type { Context } from 'egg';
+import { IMidwayWebContext } from '@midwayjs/web';
 
 import { TracerManager } from './tracer';
 
@@ -18,7 +18,7 @@ interface ILogger {
  */
 @Provide()
 export class Logger implements ILogger {
-  @Inject() protected readonly ctx: Context;
+  @Inject() protected readonly ctx: IMidwayWebContext;
 
   @Inject() protected readonly ctxLogger: ILogger;
 

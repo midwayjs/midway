@@ -1,10 +1,10 @@
 import { Provide } from '@midwayjs/decorator';
 import {
-  IWebMiddleware,
+  IMidwayWebContext,
   IMidwayWebNext,
+  IWebMiddleware,
   MidwayWebMiddleware,
 } from '@midwayjs/web';
-import type { Context } from 'egg';
 import { globalTracer, Tags, FORMAT_HTTP_HEADERS } from 'opentracing';
 
 import { SpanLogInput, TracerConfig, TracerLog, TracerTag } from '../lib/types';
@@ -24,7 +24,7 @@ export class TracerMiddleware implements IWebMiddleware {
  * - 对异常链路进行上报
  */
 async function tracerMiddleware(
-  ctx: Context,
+  ctx: IMidwayWebContext,
   next: IMidwayWebNext
 ): Promise<unknown> {
   if (ctx.tracerManager) {
@@ -43,7 +43,7 @@ async function tracerMiddleware(
   return next();
 }
 
-function startSpan(ctx: Context): void {
+function startSpan(ctx: IMidwayWebContext): void {
   // 开启第一个span并入栈
   const tracerManager = new TracerManager(true);
   const requestSpanCtx =
@@ -74,7 +74,7 @@ function startSpan(ctx: Context): void {
   ctx.tracerManager = tracerManager;
 }
 
-function finishSpan(ctx: Context) {
+function finishSpan(ctx: IMidwayWebContext) {
   const { tracerManager } = ctx;
   const { status } = ctx.response;
 
@@ -113,7 +113,7 @@ function finishSpan(ctx: Context) {
 }
 
 function processCustomFailure(
-  ctx: Context<string | Record<string, unknown>>,
+  ctx: IMidwayWebContext,
   trm: TracerManager
 ): void {
   const { body } = ctx;
@@ -147,7 +147,7 @@ function processPriority(options: ProcessPriorityOpts): number | undefined {
   return cost;
 }
 
-function setLogForCustomCode(ctx: Context, trm: TracerManager): void {
+function setLogForCustomCode(ctx: IMidwayWebContext, trm: TracerManager): void {
   const input: SpanLogInput = {
     event: TracerLog.error,
   };
