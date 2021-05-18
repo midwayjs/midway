@@ -14,4 +14,5 @@ declare module 'egg' {
 
 export { AutoConfiguration as Configuration } from './configuration';
 export { TracerMiddleware } from './middleware/tracer.middleware';
+export { Logger } from './lib/logger';
 export * from './lib/types';
