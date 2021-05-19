@@ -1,0 +1,41 @@
+{
+  "name": "@midwayjs/ws",
+  "version": "2.10.14",
+  "description": "Midway Web Framework for ws",
+  "main": "dist/index",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "node --require=ts-node/register ../../node_modules/.bin/jest",
+    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --coverage --forceExit",
+    "ci": "npm run test"
+  },
+  "keywords": [
+    "midway",
+    "IoC",
+    "ws",
+    "scene"
+  ],
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@midwayjs/decorator": "^2.10.14",
+    "@midwayjs/mock": "^2.10.14",
+    "@types/ws": "^7.4.4",
+    "fs-extra": "^8.0.1"
+  },
+  "dependencies": {
+    "@midwayjs/core": "^2.10.14",
+    "@midwayjs/logger": "^2.10.14",
+    "ws": "^7.4.5"
+  },
+  "author": "Harry Chen <czy88840616@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/midwayjs/midway.git"
+  },
+  "gitHead": "a603d2348d6141f8f723901498f03a162a037708"
+}
