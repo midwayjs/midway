@@ -53,10 +53,10 @@ function startSpan(ctx: IMidwayWebContext): void {
   tracerManager.setSpanTag(Tags.HTTP_METHOD, ctx.req.method ?? 'n/a');
   ctx.reqId && tracerManager.setSpanTag(TracerTag.reqId, ctx.reqId);
 
-  const { pkgJson } = ctx.app.config;
-  tracerManager.setSpanTag(TracerTag.svcName, pkgJson.name);
-  if (pkgJson.version) {
-    tracerManager.setSpanTag(TracerTag.svcVer, pkgJson.version);
+  const pkg = ctx.app.getConfig('pkg');
+  tracerManager.setSpanTag(TracerTag.svcName, pkg.name);
+  if (pkg.version) {
+    tracerManager.setSpanTag(TracerTag.svcVer, pkg.version);
   }
 
   retrieveExternalNetWorkInfo().forEach(ipInfo => {

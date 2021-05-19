@@ -19,7 +19,7 @@ import { SpanHeaderInit, SpanLogInput } from './types';
  */
 export function initTracer(app: Application): JaegerTracer {
   const config: TracingConfig = {
-    serviceName: app.config.pkgJson.name,
+    serviceName: app.getConfig('pkg').name,
     ...app.config.tracer.tracingConfig,
   };
   const tracer = initJaegerTracer(config, {});
