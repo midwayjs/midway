@@ -7,6 +7,7 @@ export * from './interface';
 export * from './transport';
 export { EmptyLogger, MidwayBaseLogger, MidwayDelegateLogger } from './logger';
 export { MidwayContextLogger } from './contextLogger';
+export { MidwayLoggerContainer } from './container';
 export const loggers = new MidwayLoggerContainer();
 export const createLogger = <T extends ILogger>(
   name: string,
