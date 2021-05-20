@@ -11,6 +11,8 @@ import { SpanLogInput, TracerConfig, TracerLog, TracerTag } from '../lib/types';
 import { retrieveExternalNetWorkInfo } from '../util/common';
 import { TracerManager } from '../lib/tracer';
 
+const netInfo = retrieveExternalNetWorkInfo()
+
 @Provide()
 export class TracerMiddleware implements IWebMiddleware {
   resolve(): MidwayWebMiddleware {
@@ -59,7 +61,7 @@ function startSpan(ctx: IMidwayWebContext): void {
     tracerManager.setSpanTag(TracerTag.svcVer, pkg.version);
   }
 
-  retrieveExternalNetWorkInfo().forEach(ipInfo => {
+  netInfo.forEach(ipInfo => {
     if (ipInfo.family === 'IPv4') {
       tracerManager.setSpanTag(TracerTag.svcIp4, ipInfo.cidr);
     }
