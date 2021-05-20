@@ -24,7 +24,7 @@ export class APIController {
     console.log(`namespace / got a connection ${this.ctx.id}`);
   }
 
-  @OnWSMessage('my')
+  @OnWSMessage('message')
   @WSEmit('ok')
   async gotMyMessage(data1, data2, data3) {
     return { name: 'harry', result: data1 + data2 + data3 };

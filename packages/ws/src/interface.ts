@@ -9,9 +9,7 @@ export type IMidwayWSConfigurationOptions = {
   subClient?: any;
 } & Partial<WebSocket.ServerOptions> & IConfigurationOptions;
 
-export type IMidwayWSContext = SocketIO.Socket & IMidwayContext & {
-  app: IMidwayWSApplication
-};
+export type IMidwayWSContext = WebSocket & IMidwayContext;
 
 export type Application = IMidwayWSApplication;
 

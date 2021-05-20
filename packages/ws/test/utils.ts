@@ -1,13 +1,13 @@
-import { Framework, IMidwaySocketIOApplication, IMidwaySocketIOConfigurationOptions } from '../src';
+import { Framework, IMidwayWSApplication, IMidwayWSConfigurationOptions } from '../src';
 import { join } from 'path';
 import { close, createApp } from '@midwayjs/mock';
 
 /**
- * create a socket.io app
+ * create a WebSocket app
  * @param name
  * @param options
  */
-export async function createServer(name: string, options: IMidwaySocketIOConfigurationOptions = {}): Promise<IMidwaySocketIOApplication> {
+export async function createServer(name: string, options: IMidwayWSConfigurationOptions = {}): Promise<IMidwayWSApplication> {
   return createApp<Framework>(join(__dirname, 'fixtures', name), options, Framework);
 }
 

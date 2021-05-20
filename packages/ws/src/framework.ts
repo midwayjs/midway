@@ -20,21 +20,20 @@ import * as WebSocket from 'ws';
 import {
   WS_CONTROLLER_KEY,
   WS_EVENT_KEY,
-  WSControllerOption,
   WSEventInfo,
   WSEventTypeEnum,
 } from '@midwayjs/decorator';
 
-export class MidwaySocketIOFramework extends BaseFramework<
+export class MidwayWSFramework extends BaseFramework<
   IMidwayWSApplication,
   IMidwayWSContext,
   IMidwayWSConfigurationOptions
 > {
-  private namespaceList = [];
 
   applicationInitialize(options: IMidwayBootstrapOptions) {
-    this.configurationOptions.noServer = false;
-    this.app = new WebSocket.Server(this.configurationOptions) as IMidwayWSApplication;
+    this.configurationOptions.noServer = true;
+    const opts = Object.assign({}, this.configurationOptions, {port: null});
+    this.app = new WebSocket.Server(opts) as IMidwayWSApplication;
   }
   public app: IMidwayWSApplication;
 
@@ -45,9 +44,11 @@ export class MidwaySocketIOFramework extends BaseFramework<
   }
 
   public async run(): Promise<void> {
-    let server: http.Server = this.applicationContext.get(HTTP_SERVER_KEY);
-    if (!server) {
-      server = http.createServer();
+    let server: http.Server;
+    if (!this.configurationOptions.port) {
+      server = this.applicationContext.get(HTTP_SERVER_KEY);
+    } else {
+      server = this.configurationOptions.server ?? http.createServer();
     }
 
     server.on('upgrade', (request, socket, head) => {
@@ -85,27 +86,19 @@ export class MidwaySocketIOFramework extends BaseFramework<
     const controllerModules = listModule(WS_CONTROLLER_KEY);
     if (controllerModules.length > 0) {
       // ws just one namespace
-      await this.addNamespace(module, getProviderId(controllerModules[0]));
+      await this.addNamespace(controllerModules[0], getProviderId(controllerModules[0]));
     }
   }
 
   private async addNamespace(target: any, controllerId: string) {
-    const controllerOption: WSControllerOption = getClassMetadata(
-      WS_CONTROLLER_KEY,
-      target
-    );
+    // nsp.use((socket: any, next) => {
+    //   this.app.createAnonymousContext(socket);
+    //   socket.requestContext.registerObject('socket', socket);
+    //   socket.app = this.app;
+    //   next();
+    // });
 
-    const nsp = this.app.of(controllerOption.namespace);
-    this.namespaceList.push(controllerOption.namespace);
-
-    nsp.use((socket: any, next) => {
-      this.app.createAnonymousContext(socket);
-      socket.requestContext.registerObject('socket', socket);
-      socket.app = this.app;
-      next();
-    });
-
-    nsp.on('connect', async (socket: IMidwayWSContext) => {
+    this.app.on('connection', async (socket: IMidwayWSContext) => {
       const wsEventInfos: WSEventInfo[] = getClassMetadata(
         WS_EVENT_KEY,
         target
@@ -166,7 +159,7 @@ export class MidwaySocketIOFramework extends BaseFramework<
             wsEventInfo.eventType === WSEventTypeEnum.ON_DISCONNECTION
           ) {
             // on socket disconnect
-            socket.on('disconnect', async (reason: string) => {
+            socket.on('close', async (reason: string) => {
               try {
                 const result = await controller[wsEventInfo.propertyName].apply(
                   controller,
@@ -191,17 +184,11 @@ export class MidwaySocketIOFramework extends BaseFramework<
         }
       }
     });
-
-    if (nsp.adapter) {
-      nsp.adapter.on('error', err => {
-        this.logger.error(err);
-      });
-    }
   }
 
   private async bindSocketResponse(
     result: any,
-    socket: IMidwaySocketIOContext,
+    socket: IMidwayWSContext,
     propertyName: string,
     methodMap: {
       responseEvents?: WSEventInfo[];
@@ -210,11 +197,6 @@ export class MidwaySocketIOFramework extends BaseFramework<
     if (result && methodMap[propertyName]) {
       for (const wsEventInfo of methodMap[propertyName].responseEvents) {
         if (wsEventInfo.eventType === WSEventTypeEnum.EMIT) {
-          if (wsEventInfo.roomName.length) {
-            socket = wsEventInfo.roomName.reduce((socket, name) => {
-              return socket.to(name);
-            }, socket);
-          }
           // eslint-disable-next-line prefer-spread
           socket.emit.apply(
             socket,
@@ -222,7 +204,7 @@ export class MidwaySocketIOFramework extends BaseFramework<
           );
         } else if (wsEventInfo.eventType === WSEventTypeEnum.BROADCAST) {
           // eslint-disable-next-line prefer-spread
-          socket.nsp.emit.apply(socket.nsp, [].concat(result));
+          this.app.emit.apply(socket.nsp, [].concat(result));
         }
       }
     }

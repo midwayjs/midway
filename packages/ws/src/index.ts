@@ -1,3 +1,2 @@
-export { MidwaySocketIOFramework as Framework } from './framework';
-export { createRedisAdapter } from './util';
+export { MidwayWSFramework as Framework } from './framework';
 export * from './interface';
