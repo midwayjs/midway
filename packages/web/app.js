@@ -46,6 +46,9 @@ class AppBootHook {
           continue;
         }
         // support options.match and options.ignore
+        if (typeof this.app.middlewares[name] !== 'function') {
+          throw new TypeError('this.app.middlewares.' + name + '() is not a function')
+        }
         const mw = this.app.middlewares[name](options, this.app);
         if (!options.match && !options.ignore) {
           this.app.use(mw);
