@@ -110,11 +110,22 @@ cd helloworld && npm run dev
 - 要查看 v2 中文文档, 请访问 [中文文档](https://www.yuque.com/midwayjs/midway_v2) 📚
 - 要查看 v1 中文文档, 请访问 [中文文档](https://www.yuque.com/midwayjs/midway_v1) 📚
 
-## 示例
+## 官方示例
 
 ![midway-examples](https://img.alicdn.com/imgextra/i1/O1CN01Q0M4Ma27FnIgiXE4a_!!6000000007768-0-tps-3802-1996.jpg)
 
 请访问 [midway-examples](http://demo.midwayjs.org/).
+
+
+## 社区优秀示例展示
+
+**1、Cool-Admin - 一个很酷的后台权限管理框架**
+
+![image](https://user-images.githubusercontent.com/418820/118931341-73ce1880-b979-11eb-90c6-1758762ce338.png)
+
+- 官网：https://cool-js.com/
+
+
 
 ## VSC Plugin
 
