@@ -542,6 +542,7 @@ describe('/test/index.test.ts', () => {
     const logger = createLogger<IMidwayLogger>('logger', {
       dir: logsDir,
       disableError: true,
+      level: 'error',
     });
     logger.write('hello world');
     const buffer = Buffer.from('hello world', 'utf-8');
