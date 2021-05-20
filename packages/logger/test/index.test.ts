@@ -762,7 +762,7 @@ describe('/test/index.test.ts', () => {
     await removeFileOrDir(logsDir);
   });
 
-  it('should no output when level = all', async  ()  => {
+  it('should output all level when level = all', async  ()  => {
     clearAllLoggers();
     const logsDir = join(__dirname, 'logs');
     await removeFileOrDir(logsDir);
