@@ -83,11 +83,9 @@ export class MidwaySocketIOFramework extends BaseFramework<
   private async loadMidwayController() {
     // create room
     const controllerModules = listModule(WS_CONTROLLER_KEY);
-    for (const module of controllerModules) {
-      const providerId = getProviderId(module);
-      if (providerId) {
-        await this.addNamespace(module, providerId);
-      }
+    if (controllerModules.length > 0) {
+      // ws just one namespace
+      await this.addNamespace(module, getProviderId(controllerModules[0]));
     }
   }
 
