@@ -1,4 +1,4 @@
-import { Application } from '@midwayjs/web';
+import { IMidwayApplication } from '@midwayjs/core';
 import {
   initTracer as initJaegerTracer,
   JaegerTracer,
@@ -17,10 +17,10 @@ import { SpanHeaderInit, SpanLogInput } from './types';
 /**
  * 初始化 tracer 单例
  */
-export function initTracer(app: Application): JaegerTracer {
+export function initTracer(app: IMidwayApplication): JaegerTracer {
   const config: TracingConfig = {
     serviceName: app.getConfig('pkg').name,
-    ...app.config.tracer.tracingConfig,
+    ...app.getConfig('tracer').tracingConfig,
   };
   const tracer = initJaegerTracer(config, {});
   initGlobalTracer(tracer);

@@ -3,37 +3,52 @@
 import { join } from 'path';
 
 import { App, Config, Configuration } from '@midwayjs/decorator';
-import { Application } from '@midwayjs/web';
+import { IMidwayWebApplication } from '@midwayjs/web';
 import { JaegerTracer } from 'jaeger-client';
 
 import { initTracer } from './lib/tracer';
 import { TracerConfig } from './lib/types';
+import { tracerMiddleware } from './middleware/tracer.middleware';
 
 @Configuration({
-  namespace: 'jaeger',
+  // namespace: 'jaeger', // 指定后会导致中间件无法正常加载!
   importConfigs: [join(__dirname, 'config')],
 })
 export class AutoConfiguration {
-  @App() readonly app: Application;
+  @App() readonly app: IMidwayWebApplication;
 
   @Config('tracer') readonly tracerConfig: TracerConfig;
 
   private tracer: JaegerTracer;
 
   async onReady(): Promise<void> {
-    const { middleWareName } = this.tracerConfig;
-    if (middleWareName) {
-      /**
-       * - 应于 error-handler.middleware 之后，由其对 ctx._internalError 进行赋值
-       * - 应于 request-id.middleware 之后，由其对 ctx.reqId 进行赋值
-       * - 应于 其它中间件（包括 body-parse）之前，以便追踪覆盖更大范围
-       */
-      this.app.config.coreMiddleware.unshift(middleWareName);
-    }
     this.tracer = initTracer(this.app);
+    registerMiddleware(this.app, this.tracerConfig);
   }
 
   async onStop(): Promise<void> {
     this.tracer.close();
   }
+}
+
+export function registerMiddleware(
+  app: IMidwayWebApplication,
+  tracerConfig: TracerConfig
+): void {
+  const { enableMiddleWare } = tracerConfig;
+  if (!enableMiddleWare) {
+    return;
+  }
+
+  const appMiddleware = app.getConfig('middleware') as string[];
+  if (Array.isArray(appMiddleware)) {
+    appMiddleware.push('tracerExtMiddleware');
+  } else {
+    throw new TypeError('appMiddleware is not valid Array');
+  }
+
+  /**
+   * 应于所有中间件之前，以便追踪覆盖更大范围
+   */
+  app.use(tracerMiddleware);
 }

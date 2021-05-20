@@ -10,11 +10,27 @@ export interface TracerConfig {
   reqThrottleMsForPriority: number;
   tracingConfig: TracingConfig;
   /**
-   * Used to `app.config.coreMiddleware.unshift('tracerMiddleware')`
-   *
-   * @default 'tracerMiddleware' for ./middleware/tracer.middleware.ts
+   * Use integrated tracer middleware,
+   * set to false if custom tracer middleware enabled
+   * @default true
    */
-  middleWareName: string;
+  enableMiddleWare: boolean;
+  /**
+   * Catch and sample error,
+   * set to false if other tracer middleware log the error
+   * @default true
+   */
+  enableCatchError: boolean;
+  /**
+   * - GET: request.query
+   * - POST: request.body (only when content-type: 'application/json')
+   * @default false
+   */
+  isLogginInputQuery: boolean;
+  /**
+   * @default false
+   */
+  isLoggingOutputBody: boolean;
 }
 
 export interface SpanHeaderInit {
@@ -57,6 +73,8 @@ export enum TracerLog {
   error = 'error',
   requestBegin = 'tracer-request-begin',
   requestEnd = 'tracer-request-end',
+  preProcessFinish = 'pre-process-finish',
+  postProcessBegin = 'post-process-begin',
 
   fetchStart = 'fetch-start',
   fetchFinish = 'fetch-finish',

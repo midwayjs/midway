@@ -3,7 +3,10 @@ import { TracerConfig } from '../lib/types';
 export const tracer: TracerConfig = {
   whiteList: ['/favicon.ico', '/favicon.png'],
   reqThrottleMsForPriority: 10,
-  middleWareName: 'tracerMiddleware',
+  enableMiddleWare: true,
+  enableCatchError: true,
+  isLogginInputQuery: true,
+  isLoggingOutputBody: true,
   tracingConfig: {
     sampler: {
       type: 'probabilistic',
