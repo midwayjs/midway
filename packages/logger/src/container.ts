@@ -115,8 +115,9 @@ export class MidwayLoggerContainer extends Map<string, ILogger> {
     this.loggerOriginData[name] = this.loggerOriginData[name] || {};
     if (logger[methodName]) {
       // store origin status
-      this.loggerOriginData[name][methodName] =
-        logger[statusMapping[methodName][0]].call(logger);
+      this.loggerOriginData[name][methodName] = logger[
+        statusMapping[methodName][0]
+      ].call(logger);
       // set new value
       logger[methodName].call(logger, value);
     }
