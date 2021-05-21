@@ -18,6 +18,7 @@ import {
 } from './interface';
 import * as WebSocket from 'ws';
 import {
+  isObject,
   WS_CONTROLLER_KEY,
   WS_EVENT_KEY,
   WSEventInfo,
@@ -29,6 +30,8 @@ export class MidwayWSFramework extends BaseFramework<
   IMidwayWSContext,
   IMidwayWSConfigurationOptions
 > {
+
+  server: http.Server;
 
   applicationInitialize(options: IMidwayBootstrapOptions) {
     this.configurationOptions.noServer = true;
@@ -57,6 +60,8 @@ export class MidwayWSFramework extends BaseFramework<
       });
     });
 
+    this.server = server;
+
     await new Promise<void>(resolve => {
       server.listen(this.configurationOptions.port, () => {
         this.logger.info(
@@ -74,6 +79,7 @@ export class MidwayWSFramework extends BaseFramework<
           resolve();
         }, 1000);
       });
+      this.server.close();
     });
   }
 
@@ -91,14 +97,12 @@ export class MidwayWSFramework extends BaseFramework<
   }
 
   private async addNamespace(target: any, controllerId: string) {
-    // nsp.use((socket: any, next) => {
-    //   this.app.createAnonymousContext(socket);
-    //   socket.requestContext.registerObject('socket', socket);
-    //   socket.app = this.app;
-    //   next();
-    // });
+    this.app.on('connection', async (socket: IMidwayWSContext, request: http.IncomingMessage) => {
+      // create request context
+      this.app.createAnonymousContext(socket);
+      socket.requestContext.registerObject('socket', socket);
+      socket.app = this.app;
 
-    this.app.on('connection', async (socket: IMidwayWSContext) => {
       const wsEventInfos: WSEventInfo[] = getClassMetadata(
         WS_EVENT_KEY,
         target
@@ -118,7 +122,7 @@ export class MidwayWSFramework extends BaseFramework<
             try {
               const result = await controller[wsEventInfo.propertyName].apply(
                 controller,
-                [socket]
+                [socket, request]
               );
               await this.bindSocketResponse(
                 result,
@@ -184,6 +188,14 @@ export class MidwayWSFramework extends BaseFramework<
         }
       }
     });
+
+    this.app.on('error', (err) => {
+      this.logger.error('socket server close');
+    });
+
+    this.app.on('close', () => {
+      this.logger.info('socket server close');
+    });
   }
 
   private async bindSocketResponse(
@@ -194,19 +206,22 @@ export class MidwayWSFramework extends BaseFramework<
       responseEvents?: WSEventInfo[];
     }
   ) {
-    if (result && methodMap[propertyName]) {
+    if (!result) return;
+    if (methodMap[propertyName]) {
       for (const wsEventInfo of methodMap[propertyName].responseEvents) {
         if (wsEventInfo.eventType === WSEventTypeEnum.EMIT) {
-          // eslint-disable-next-line prefer-spread
-          socket.emit.apply(
-            socket,
-            [wsEventInfo.messageEventName].concat(result)
-          );
+          socket.send(isObject(result) ? JSON.stringify(result) : result);
         } else if (wsEventInfo.eventType === WSEventTypeEnum.BROADCAST) {
-          // eslint-disable-next-line prefer-spread
-          this.app.emit.apply(socket.nsp, [].concat(result));
+          this.app.clients.forEach(client => {
+            if (client.readyState === WebSocket.OPEN) {
+              client.send(result);
+            }
+          });
         }
       }
+    } else {
+      // just send
+      socket.send(isObject(result) ? JSON.stringify(result) : result);
     }
   }
 
