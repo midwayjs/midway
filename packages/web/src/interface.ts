@@ -32,7 +32,7 @@ declare module 'egg' {
     addConfigObject(obj: any);
   }
 
-  interface Context {
+  interface Context <ResponseBodyT = any> {
     requestContext: IMidwayContainer;
     getLogger(name?: string): EggLogger & ILogger;
     startTime: number;
@@ -46,7 +46,7 @@ declare module 'egg' {
 }
 
 export type IMidwayWebApplication = Application;
-export type IMidwayWebContext = Context;
+export type IMidwayWebContext <ResponseBodyT = unknown> = Context<ResponseBodyT>;
 export type IMidwayWebNext = IMidwayKoaNext;
 
 export interface IMidwayWebConfigurationOptions extends IMidwayKoaConfigurationOptions {
