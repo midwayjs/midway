@@ -8,6 +8,7 @@ describe('/test/index.test.ts', () => {
     const app = await createServer('base-app', { port: 3000});
     const client = await createWebSocketClient(`ws://localhost:3000`);
 
+    client.send(1);
     let gotEvent = once(client, 'message');
     let [data] = await gotEvent;
     expect(JSON.parse(data)).toEqual({
@@ -16,7 +17,6 @@ describe('/test/index.test.ts', () => {
     });
 
     client.send(2);
-
     gotEvent = once(client, 'message');
     [data] = await gotEvent;
     expect(JSON.parse(data)).toEqual({
