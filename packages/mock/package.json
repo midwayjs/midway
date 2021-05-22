@@ -34,7 +34,8 @@
     "@types/amqplib": "*",
     "amqplib": "*",
     "socket.io": "^4.0.0",
-    "socket.io-client": "^4.0.0"
+    "socket.io-client": "^4.0.0",
+    "ws": "^7.4.5"
   },
   "dependencies": {
     "@midwayjs/bootstrap": "^2.10.18",

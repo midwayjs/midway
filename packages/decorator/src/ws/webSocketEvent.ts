@@ -91,6 +91,25 @@ export function WSEmit(
   };
 }
 
+export function WSBroadCast(
+  messageName = '',
+  roomName: string | string[] = []
+): MethodDecorator {
+  return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
+    attachClassMetadata(
+      WS_EVENT_KEY,
+      {
+        eventType: WSEventTypeEnum.BROADCAST,
+        propertyName: propertyKey,
+        messageEventName: messageName,
+        roomName: [].concat(roomName),
+        descriptor,
+      },
+      target.constructor
+    );
+  };
+}
+
 /**
  * @deprecated please use @OnWSDisConnection
  */
