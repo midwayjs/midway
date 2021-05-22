@@ -325,7 +325,8 @@ export enum MidwayProcessTypeEnum {
  */
 export interface IMidwayLogger extends ILogger {}
 
-export interface IMidwayContext {
+export type IMidwayContext<FrameworkContext = unknown> = IMidwayBaseContext & FrameworkContext;
+export interface IMidwayBaseContext {
   /**
    * Custom properties.
    */
