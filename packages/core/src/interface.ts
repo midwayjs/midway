@@ -10,7 +10,8 @@ import {
   MidwayFrameworkType
 } from '@midwayjs/decorator';
 import { ILogger, LoggerOptions } from '@midwayjs/logger';
-import * as MC from 'MidwayCore'
+import * as MC from '@midwayjs/core'
+
 
 /**
  * 生命周期定义

@@ -1,4 +1,5 @@
-declare module 'MidwayCore' {
+
+declare module '@midwayjs/core' {
   export interface IMidwayBaseContext {
     /**
      * Custom properties.
@@ -10,5 +11,3 @@ declare module 'MidwayCore' {
     startTime: number;
   }
 }
-
-
