@@ -330,7 +330,6 @@ export interface Context {
   /**
    * Custom properties.
    */
-  [key: string]: unknown;
   requestContext: IMidwayContainer;
   logger: ILogger;
   getLogger(name?: string): ILogger;
