@@ -4,14 +4,14 @@ import { Context as KoaContext, DefaultState, Middleware, Next } from 'koa';
 import { RouterParamValue } from '@midwayjs/decorator';
 
 export type IMidwayKoaContext = IMidwayContext<KoaContext>;
-export type IMidwayKoaApplication = IMidwayApplication<IMidwayKoaContext> & koa<DefaultState, IMidwayKoaContext> & {
+export type IMidwayKoaApplication = IMidwayApplication<IMidwayKoaContext, koa<DefaultState, IMidwayKoaContext> & {
   generateController(
     controllerMapping: string,
     routeArgsInfo?: RouterParamValue[],
     routerResponseData?: any []
   ): Middleware<DefaultState, IMidwayKoaContext>;
   generateMiddleware(middlewareId: string): Promise<Middleware<DefaultState, IMidwayKoaContext>>;
-};
+}>;
 
 export type IMidwayKoaNext = Next;
 

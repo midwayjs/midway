@@ -5,7 +5,7 @@ export interface Context extends IMidwayContext<ServerDuplexStream<any, any>> {
   metadata: Metadata;
   method: string;
 }
-export type IMidwayGRPCApplication = IMidwayApplication<Context> & Server;
+export type IMidwayGRPCApplication = IMidwayApplication<Context, Server>;
 
 export type Application = IMidwayGRPCApplication;
 

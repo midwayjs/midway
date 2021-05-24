@@ -1,9 +1,9 @@
 import * as SocketIO from 'socket.io';
 import { IConfigurationOptions, IMidwayApplication, IMidwayContext } from '@midwayjs/core';
 
-export type IMidwaySocketIOApplication = IMidwayApplication<IMidwaySocketIOContext> & {
+export type IMidwaySocketIOApplication = IMidwayApplication<IMidwaySocketIOContext, {
   use(fn: (socket: IMidwaySocketIOContext, fn: (err?: any) => void) => void): SocketIO.Namespace;
-} & SocketIO.Server;
+} & SocketIO.Server>;
 
 export type IMidwaySocketIOConfigurationOptions = {
   port?: number;

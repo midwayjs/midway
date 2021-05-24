@@ -13,7 +13,7 @@ export interface FaaSContext extends IMidwayContext<FaaSHTTPContext> {
 
 export type FaaSMiddleware = (() => (context: FaaSContext, next: () => Promise<any>) => any) | string;
 
-export interface IMidwayFaaSApplication extends IMidwayApplication<FaaSContext> {
+export type IMidwayFaaSApplication = IMidwayApplication<FaaSContext, {
   getInitializeContext();
   use(middleware: FaaSMiddleware);
   useMiddleware(mw: string[]);
@@ -27,7 +27,7 @@ export interface IMidwayFaaSApplication extends IMidwayApplication<FaaSContext> 
    * Get function service name in serverless environment
    */
   getFunctionServiceName(): string;
-}
+}>;
 
 /**
  * @deprecated

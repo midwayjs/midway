@@ -336,9 +336,9 @@ export interface Context {
   startTime: number;
 }
 
-export type IMidwayContext<FrameworkContext = unknown> = FrameworkContext & Context;
+export type IMidwayContext<FrameworkContext = unknown> = Context & FrameworkContext;
 
-export interface IMidwayApplication<T extends IMidwayContext = IMidwayContext> {
+export interface IMidwayBaseApplication<T extends IMidwayContext = IMidwayContext> {
   getBaseDir(): string;
   getAppDir(): string;
   getEnv(): string;
@@ -354,6 +354,8 @@ export interface IMidwayApplication<T extends IMidwayContext = IMidwayContext> {
   setContextLoggerClass(BaseContextLoggerClass: any): void;
   addConfigObject(obj: any);
 }
+
+export type IMidwayApplication<T extends IMidwayContext = IMidwayContext, FrameworkApplication = unknown> = IMidwayBaseApplication<T> & FrameworkApplication;
 
 /**
  * @deprecated
