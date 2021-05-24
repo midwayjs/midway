@@ -1,4 +1,4 @@
-import { Context as EggContext, Application, EggLogger } from 'egg';
+import { Context as EggContext, Application as EggApplication, EggLogger } from 'egg';
 import {
   IMidwayContainer,
   IMidwayContext,
@@ -37,7 +37,8 @@ declare module 'egg' {
   }
 }
 
-export type IMidwayWebApplication = IMidwayApplication<Context, Application & IMidwayWebBaseApplication>;
+export type IMidwayWebApplication = IMidwayApplication<Context, EggApplication & IMidwayWebBaseApplication>;
+export interface Application extends IMidwayWebApplication {}
 export interface Context <ResponseBodyT = unknown> extends IMidwayWebContext <ResponseBodyT> {}
 export type IMidwayWebContext <ResponseBodyT = unknown> = IMidwayContext<EggContext<ResponseBodyT>>;
 export type IMidwayWebNext = IMidwayKoaNext;
