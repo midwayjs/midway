@@ -1,6 +1,7 @@
-import { Context, Application } from 'egg';
+import { Context as EggContext, Application } from 'egg';
 import {
   IMidwayContainer,
+  IMidwayContext,
   MidwayFrameworkType,
   MidwayProcessTypeEnum
 } from '@midwayjs/core';
@@ -32,7 +33,7 @@ declare module 'egg' {
     addConfigObject(obj: any);
   }
 
-  interface Context {
+  interface Context <ResponseBodyT = any> {
     requestContext: IMidwayContainer;
     getLogger(name?: string): EggLogger & ILogger;
     startTime: number;
@@ -46,7 +47,8 @@ declare module 'egg' {
 }
 
 export type IMidwayWebApplication = Application;
-export type IMidwayWebContext = Context;
+export interface Context <ResponseBodyT = unknown> extends IMidwayWebContext <ResponseBodyT> {}
+export type IMidwayWebContext <ResponseBodyT = unknown> = IMidwayContext<EggContext<ResponseBodyT>>;
 export type IMidwayWebNext = IMidwayKoaNext;
 
 export interface IMidwayWebConfigurationOptions extends IMidwayKoaConfigurationOptions {
