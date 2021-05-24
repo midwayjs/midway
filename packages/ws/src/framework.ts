@@ -83,7 +83,7 @@ export class MidwayWSFramework extends BaseFramework<
   }
 
   public getFrameworkType(): MidwayFrameworkType {
-    return MidwayFrameworkType.WSS;
+    return MidwayFrameworkType.WS;
   }
 
   private async loadMidwayController() {
