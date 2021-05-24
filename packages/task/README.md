@@ -106,7 +106,7 @@ export class HelloTask{
   @Inject()
   service;
 
-  async excute(params){
+  async execute(params){
     console.log(params);
   }
 }
@@ -123,9 +123,9 @@ export class UserTask{
   @Inject()
   queueService: QueueService;
 
-  async excute(params){
+  async execute(params){
     // 3秒后触发分布式任务调度。
-    const xxx = this.queueService.excute(HelloTask, params, {delay: 3000});
+    const xxx = this.queueService.execute(HelloTask, params, {delay: 3000});
   }
 }
 

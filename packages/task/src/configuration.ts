@@ -100,13 +100,13 @@ export class AutoConfiguration {
     delete config.defaultJobOptions.repeat;
     for (const module of modules) {
       const rule = getClassMetadata(MODULE_TASK_QUEUE_OPTIONS, module);
-      const queue = new Bull(`${rule.name}:excute`, config);
+      const queue = new Bull(`${rule.name}:execute`, config);
       queue.process(async job => {
         const ctx = this.app.createAnonymousContext();
         const service = await ctx.requestContext.getAsync(module);
-        await service.excute.call(service, job.data, job);
+        await service.execute.call(service, job.data, job);
       });
-      queueMap[`${rule.name}:excute`] = queue;
+      queueMap[`${rule.name}:execute`] = queue;
       this.queueList.push(queue);
     }
     container.registerObject('queueMap', queueMap);
