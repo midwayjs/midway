@@ -6,14 +6,18 @@ import {
   MidwayFrameworkType,
   PathFileUtil,
 } from '@midwayjs/core';
-import { IMidwayWebConfigurationOptions, IMidwayWebApplication } from '../interface';
+import {
+  IMidwayWebConfigurationOptions,
+  IMidwayWebApplication,
+} from '../interface';
 import { resolve } from 'path';
 import { Server } from 'net';
 import { LoggerOptions } from '@midwayjs/logger';
 import { MidwayKoaContextLogger } from '@midwayjs/koa';
 
 export class MidwayWebSingleProcessFramework
-  implements IMidwayFramework<IMidwayWebApplication, IMidwayWebConfigurationOptions>
+  implements
+    IMidwayFramework<IMidwayWebApplication, IMidwayWebConfigurationOptions>
 {
   public app: IMidwayWebApplication;
   public agent;
