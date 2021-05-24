@@ -1,7 +1,7 @@
 import { IConfigurationOptions, IMidwayApplication, IMidwayContext } from '@midwayjs/core';
-import { Server, ServerCredentials, Metadata, ServerUnaryCall, ClientWritableStream, ClientDuplexStream, ClientReadableStream, ClientUnaryCall } from '@grpc/grpc-js';
+import { Server, ServerCredentials, Metadata, ServerDuplexStream, ClientWritableStream, ClientDuplexStream, ClientReadableStream, ClientUnaryCall } from '@grpc/grpc-js';
 
-export interface Context extends IMidwayContext<ServerUnaryCall<any, any>> {
+export interface Context extends IMidwayContext<ServerDuplexStream<any, any>> {
   metadata: Metadata;
   method: string;
 }
