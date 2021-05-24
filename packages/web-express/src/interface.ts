@@ -14,10 +14,10 @@ export type IMidwayExpressResponse = Response;
  * @deprecated use NextFunction from express
  */
 export type IMidwayExpressNext = NextFunction;
-export type IMidwayExpressContext = IMidwayContext & {
+export type IMidwayExpressContext = IMidwayContext<{
   req: Request;
   res: Response;
-}
+}>
 export type IMidwayExpressApplication = IMidwayApplication<IMidwayExpressContext> & ExpressApplication & {
   generateController(
     controllerMapping: string,

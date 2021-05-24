@@ -3,7 +3,8 @@ import {
   IMidwayContainer,
   IMidwayContext,
   MidwayFrameworkType,
-  MidwayProcessTypeEnum
+  MidwayProcessTypeEnum,
+  Context as IMidwayBaseContext
 } from '@midwayjs/core';
 import { IMidwayKoaConfigurationOptions, IMidwayKoaContext, IMidwayKoaNext } from '@midwayjs/koa';
 import { DefaultState, Middleware } from 'koa';
@@ -33,10 +34,8 @@ declare module 'egg' {
     addConfigObject(obj: any);
   }
 
-  interface Context <ResponseBodyT = any> {
-    requestContext: IMidwayContainer;
+  interface Context <ResponseBodyT = any> extends IMidwayBaseContext {
     getLogger(name?: string): EggLogger & ILogger;
-    startTime: number;
   }
 
   interface EggAppConfig {

@@ -11,9 +11,9 @@ export type IMidwaySocketIOConfigurationOptions = {
   subClient?: any;
 } & Partial<SocketIO.ServerOptions> & IConfigurationOptions;
 
-export type IMidwaySocketIOContext = SocketIO.Socket & IMidwayContext & {
+export type IMidwaySocketIOContext = IMidwayContext<SocketIO.Socket & {
   app: IMidwaySocketIOApplication
-};
+}>;
 
 export type Application = IMidwaySocketIOApplication;
 

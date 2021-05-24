@@ -3,7 +3,7 @@ import { FaaSHTTPContext } from '@midwayjs/faas-typings';
 import type { MidwayHooks } from './hooks';
 import { ILogger } from '@midwayjs/logger';
 
-export interface FaaSContext extends FaaSHTTPContext, IMidwayContext {
+export interface FaaSContext extends IMidwayContext<FaaSHTTPContext> {
   logger: ILogger;
   env: string;
   requestContext: MidwayRequestContainer;

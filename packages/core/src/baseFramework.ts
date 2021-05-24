@@ -4,7 +4,7 @@ import {
   IMidwayApplication,
   IMidwayBootstrapOptions,
   IMidwayContainer,
-  IMidwayBaseContext,
+  IMidwayContext,
   IMidwayFramework,
   MidwayProcessTypeEnum,
 } from './interface';
@@ -44,7 +44,7 @@ function setupAppDir(baseDir: string) {
 
 export abstract class BaseFramework<
   APP extends IMidwayApplication<CTX>,
-  CTX extends IMidwayBaseContext,
+  CTX extends IMidwayContext,
   OPT extends IConfigurationOptions
 > implements IMidwayFramework<APP, OPT>
 {

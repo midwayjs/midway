@@ -1,4 +1,3 @@
-/// <reference path="module.d.ts" />
 import {
   ObjectIdentifier,
   IManagedInstance,
@@ -10,8 +9,6 @@ import {
   MidwayFrameworkType
 } from '@midwayjs/decorator';
 import { ILogger, LoggerOptions } from '@midwayjs/logger';
-import * as MC from '@midwayjs/core'
-
 
 /**
  * 生命周期定义
@@ -329,8 +326,18 @@ export enum MidwayProcessTypeEnum {
  */
 export interface IMidwayLogger extends ILogger {}
 
-export type IMidwayContext<FrameworkContext = unknown> = IMidwayBaseContext & FrameworkContext;
-export interface IMidwayBaseContext extends MC.IMidwayBaseContext {}
+export interface Context {
+  /**
+   * Custom properties.
+   */
+  [key: string]: unknown;
+  requestContext: IMidwayContainer;
+  logger: ILogger;
+  getLogger(name?: string): ILogger;
+  startTime: number;
+}
+
+export type IMidwayContext<FrameworkContext = unknown> = FrameworkContext & Context;
 
 export interface IMidwayApplication<T extends IMidwayContext = IMidwayContext> {
   getBaseDir(): string;
