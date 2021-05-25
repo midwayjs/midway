@@ -9,6 +9,7 @@ import {
   MidwayFrameworkType
 } from '@midwayjs/decorator';
 import { ILogger, LoggerOptions } from '@midwayjs/logger';
+
 /**
  * 生命周期定义
  */
@@ -325,18 +326,19 @@ export enum MidwayProcessTypeEnum {
  */
 export interface IMidwayLogger extends ILogger {}
 
-export interface IMidwayContext {
+export interface Context {
   /**
    * Custom properties.
    */
-  [key: string]: any;
   requestContext: IMidwayContainer;
   logger: ILogger;
   getLogger(name?: string): ILogger;
   startTime: number;
 }
 
-export interface IMidwayApplication<T extends IMidwayContext = IMidwayContext> {
+export type IMidwayContext<FrameworkContext = unknown> = Context & FrameworkContext;
+
+export interface IMidwayBaseApplication<T extends IMidwayContext = IMidwayContext> {
   getBaseDir(): string;
   getAppDir(): string;
   getEnv(): string;
@@ -352,6 +354,8 @@ export interface IMidwayApplication<T extends IMidwayContext = IMidwayContext> {
   setContextLoggerClass(BaseContextLoggerClass: any): void;
   addConfigObject(obj: any);
 }
+
+export type IMidwayApplication<T extends IMidwayContext = IMidwayContext, FrameworkApplication = unknown> = IMidwayBaseApplication<T> & FrameworkApplication;
 
 /**
  * @deprecated

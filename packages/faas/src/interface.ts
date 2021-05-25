@@ -3,7 +3,7 @@ import { FaaSHTTPContext } from '@midwayjs/faas-typings';
 import type { MidwayHooks } from './hooks';
 import { ILogger } from '@midwayjs/logger';
 
-export interface FaaSContext extends FaaSHTTPContext, IMidwayContext {
+export interface FaaSContext extends IMidwayContext<FaaSHTTPContext> {
   logger: ILogger;
   env: string;
   requestContext: MidwayRequestContainer;
@@ -13,7 +13,7 @@ export interface FaaSContext extends FaaSHTTPContext, IMidwayContext {
 
 export type FaaSMiddleware = (() => (context: FaaSContext, next: () => Promise<any>) => any) | string;
 
-export interface IMidwayFaaSApplication extends IMidwayApplication<FaaSContext> {
+export type IMidwayFaaSApplication = IMidwayApplication<FaaSContext, {
   getInitializeContext();
   use(middleware: FaaSMiddleware);
   useMiddleware(mw: string[]);
@@ -27,7 +27,7 @@ export interface IMidwayFaaSApplication extends IMidwayApplication<FaaSContext> 
    * Get function service name in serverless environment
    */
   getFunctionServiceName(): string;
-}
+}>;
 
 /**
  * @deprecated
