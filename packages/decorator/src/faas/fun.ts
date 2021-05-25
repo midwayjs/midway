@@ -1,6 +1,7 @@
 import { Scope } from '../annotation';
 import {
   attachClassMetadata,
+  savePropertyMetadata,
   FaaSMetadata,
   FUNC_KEY,
   SERVERLESS_FUNC_KEY,
@@ -64,17 +65,11 @@ export function Func(funHandler: any, functionOptions?: any): any {
   };
 }
 
-export function ServerlessFunction(options: FaaSMetadata.ServerlessFunctionOptions): MethodDecorator {
+export function ServerlessFunction(
+  options: FaaSMetadata.ServerlessFunctionOptions
+): MethodDecorator {
   return (target, key, descriptor) => {
-    // save target
-    saveModule(SERVERLESS_FUNC_KEY, target);
-    attachClassMetadata(
-      SERVERLESS_FUNC_KEY,
-      {
-        metadata: options,
-      },
-      target
-    );
+    savePropertyMetadata(SERVERLESS_FUNC_KEY, options, target, key);
   };
 }
 

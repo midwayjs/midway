@@ -10,9 +10,10 @@ import {
   getProviderId,
   isRegExp,
   listModule,
-  PRIORITY_KEY,
   RouterOption,
   ServerlessTriggerType,
+  PRIORITY_KEY,
+  SERVERLESS_FUNC_KEY,
   WEB_RESPONSE_KEY,
   WEB_ROUTER_KEY,
   WEB_ROUTER_PARAM_KEY,
@@ -84,6 +85,10 @@ export interface RouterInfo {
    * serverless function trigger metadata
    */
   functionTriggerMetadata?: any;
+  /**
+   * serverless function metadata
+   */
+  functionMetadata?: any;
 }
 
 export interface RouterPriority {
@@ -222,6 +227,9 @@ export class WebRouterCollector {
             path: joinURLPath(prefix, webRouter.path.toString()),
             method: webRouter.requestMethod,
           } as FaaSMetadata.HTTPTriggerOptions;
+          data.functionMetadata = {
+            functionName: data.functionName,
+          };
         }
 
         this.checkDuplicateAndPush(prefix, data);
@@ -296,10 +304,28 @@ export class WebRouterCollector {
             data.functionName = webRouter['functionName'];
             data.functionTriggerName = webRouter['type'];
             data.functionTriggerMetadata = webRouter['metadata'];
+            const functionMeta =
+              getPropertyMetadata(
+                SERVERLESS_FUNC_KEY,
+                module,
+                webRouter['methodName']
+              ) || {};
+            data.functionMetadata = Object.assign(
+              {
+                functionName: webRouter['functionName'],
+              },
+              functionMeta
+            );
           }
           this.checkDuplicateAndPush(prefix, data);
         } else {
           if (functionMeta) {
+            const functionMeta =
+              getPropertyMetadata(
+                SERVERLESS_FUNC_KEY,
+                module,
+                webRouter['methodName']
+              ) || {};
             // 其他类型的函数
             this.checkDuplicateAndPush(prefix, {
               prefix,
@@ -319,6 +345,12 @@ export class WebRouterCollector {
               functionName: webRouter['functionName'],
               functionTriggerName: webRouter['type'],
               functionTriggerMetadata: webRouter['metadata'],
+              functionMetadata: Object.assign(
+                {
+                  functionName: webRouter['functionName'],
+                },
+                functionMeta
+              ),
             });
           }
         }
@@ -350,6 +382,9 @@ export class WebRouterCollector {
               path: webRouter['path'] ?? '/',
               method: webRouter['method'] ?? 'get',
             };
+            data.functionMetadata = {
+              functionName: data.functionName,
+            };
           }
           // 老函数的 http
           this.checkDuplicateAndPush(prefix, data);
@@ -376,6 +411,9 @@ export class WebRouterCollector {
               functionName: webRouter['functionName'],
               functionTriggerName: webRouter['type'],
               functionTriggerMetadata: webRouter['metadata'],
+              functionMetadata: {
+                functionName: webRouter['functionName'],
+              },
             });
           }
         }
