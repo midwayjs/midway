@@ -19,6 +19,7 @@ import {
 } from '@midwayjs/decorator';
 import { MidwayContainer } from '../context/midwayContainer';
 import { joinURLPath } from './index';
+import { IMidwayContainer } from '../interface';
 
 export interface RouterInfo {
   /**
@@ -103,6 +104,7 @@ export class WebRouterCollector {
   protected routes = new Map<string, RouterInfo[]>();
   private routesPriority: RouterPriority[] = [];
   protected options: RouterCollectorOptions;
+  private applicationContext: IMidwayContainer;
 
   constructor(baseDir = '', options: RouterCollectorOptions = {}) {
     this.baseDir = baseDir;
@@ -115,6 +117,10 @@ export class WebRouterCollector {
       await framework.initialize({
         baseDir: this.baseDir,
       });
+
+      this.applicationContext = framework.getApplicationContext();
+    } else {
+      this.applicationContext = MidwayContainer.parentApplicationContext;
     }
 
     const controllerModules = listModule(CONTROLLER_KEY);
@@ -140,6 +146,10 @@ export class WebRouterCollector {
     this.routesPriority = this.routesPriority.sort((routeA, routeB) => {
       return routeB.priority - routeA.priority;
     });
+  }
+
+  public getApplicationContext() {
+    return this.applicationContext;
   }
 
   protected collectRoute(module, functionMeta = false) {

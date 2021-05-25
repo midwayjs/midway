@@ -11,6 +11,9 @@ describe('/test/util/triggerCollector.test.ts', function () {
     clearContainerCache();
     const collector = new ServerlessTriggerCollector(join(__dirname, '../fixtures/base-app-func-router/src'));
     const result = await collector.getFunctionList();
+    expect(collector.getApplicationContext()).not.toBeNull();
+    expect(collector.getApplicationContext()).not.toBeUndefined();
+
     expect(matchObjectPropertyInArray(result, {
       "controllerId": "apiController",
       "controllerMiddleware": [
