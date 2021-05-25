@@ -104,7 +104,7 @@ export class WebRouterCollector {
   protected routes = new Map<string, RouterInfo[]>();
   private routesPriority: RouterPriority[] = [];
   protected options: RouterCollectorOptions;
-  public applicationContext: IMidwayContainer;
+  private applicationContext: IMidwayContainer;
 
   constructor(baseDir = '', options: RouterCollectorOptions = {}) {
     this.baseDir = baseDir;
@@ -146,6 +146,10 @@ export class WebRouterCollector {
     this.routesPriority = this.routesPriority.sort((routeA, routeB) => {
       return routeB.priority - routeA.priority;
     });
+  }
+
+  public getApplicationContext() {
+    return this.applicationContext;
   }
 
   protected collectRoute(module, functionMeta = false) {
