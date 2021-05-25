@@ -12,7 +12,10 @@ import { Scope } from '../annotation';
 import QueueMethodEnum = ConsumerMetadata.QueueMethodEnum;
 
 export function Consumer(type: MSListenerType.MQTT): ClassDecorator;
-export function Consumer(type: MSListenerType.RABBITMQ, options?: any): ClassDecorator;
+export function Consumer(
+  type: MSListenerType.RABBITMQ,
+  options?: any
+): ClassDecorator;
 export function Consumer(type: any, options: any = {}): ClassDecorator {
   return (target: any) => {
     saveModule(MS_CONSUMER_KEY, target);
