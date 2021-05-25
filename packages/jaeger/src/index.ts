@@ -3,13 +3,13 @@ import { TracerConfig } from './lib/types';
 
 declare module 'egg' {
   interface EggAppConfig {
-    coreMiddleware: string[]
-    tracer: TracerConfig
+    coreMiddleware: string[];
+    tracer: TracerConfig;
   }
 }
 declare module '@midwayjs/core' {
   interface Context {
-    tracerManager: TracerManager
+    tracerManager: TracerManager;
   }
 }
 

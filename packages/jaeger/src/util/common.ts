@@ -25,7 +25,10 @@ export function retrieveExternalNetWorkInfo(): NetworkInterfaceInfo[] {
   );
 }
 
-export function pathMatched(path: string, rules: TracerConfig['whiteList']): boolean {
+export function pathMatched(
+  path: string,
+  rules: TracerConfig['whiteList']
+): boolean {
   const ret = rules.some(rule => {
     if (!rule) {
       return;

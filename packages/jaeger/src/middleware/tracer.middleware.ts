@@ -86,19 +86,19 @@ function finishSpan(ctx: IMidwayWebContext<JsonResp | string>) {
   // [Tag] 请求参数和响应数据
   if (tracerConfig.isLogginInputQuery) {
     if (ctx.method === 'GET') {
-      const { query } = ctx.request
-      if (typeof query === 'string' && query
-        || typeof query === 'object' && Object.keys(query).length
+      const { query } = ctx.request;
+      if ((typeof query === 'string' && query)
+        || (typeof query === 'object' && Object.keys(query).length)
       ) {
-        tracerManager.setSpanTag(TracerTag.reqQuery, query)
+        tracerManager.setSpanTag(TracerTag.reqQuery, query);
       }
     }
     else if (ctx.method === 'POST' && ctx.request.type === 'application/json') {
-      const { query: body } = ctx.request
+      const { query: body } = ctx.request;
       if (typeof body === 'string' && body
         || typeof body === 'object' && Object.keys(body).length
       ) {
-        tracerManager.setSpanTag(TracerTag.reqBody, body)
+        tracerManager.setSpanTag(TracerTag.reqBody, body);
       }
     }
   }
@@ -149,7 +149,6 @@ function processPriority(options: ProcessPriorityOpts): number | undefined {
   }
   return cost;
 }
-
 
 export type JsonResp<T = never> = {
   /** 0: no error */

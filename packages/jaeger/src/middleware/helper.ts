@@ -5,10 +5,10 @@ import { SpanLogInput, TracerLog, TracerTag } from '../lib/types';
 import { retrieveExternalNetWorkInfo } from '../util/common';
 import { TracerManager } from '../lib/tracer';
 
-const netInfo = retrieveExternalNetWorkInfo()
+const netInfo = retrieveExternalNetWorkInfo();
 
 export function updateSpan(ctx: IMidwayWebContext): void {
-  const { tracerManager } = ctx
+  const { tracerManager } = ctx;
 
   ctx.reqId && tracerManager.setSpanTag(TracerTag.reqId, ctx.reqId);
   tracerManager.setSpanTag(Tags.HTTP_METHOD, ctx.req.method ?? 'n/a');
@@ -30,7 +30,6 @@ export function updateSpan(ctx: IMidwayWebContext): void {
 
   tracerManager.setSpanTag(Tags.PEER_HOST_IPV4, ctx.request.ip);
 }
-
 
 export function logError(trm: TracerManager, err: Error): void {
   const input: SpanLogInput = {
