@@ -5,6 +5,7 @@ import {
   getObjectDefProps,
   listModule,
   ScopeEnum,
+  ServerlessFunction,
   ServerlessTrigger
 } from '../../src';
 import { ServerlessTriggerType } from '../../dist';
@@ -15,6 +16,9 @@ class TestFun {
 
 class TestFun1 {
   @Func('ttt.handler')
+  @ServerlessFunction({
+    functionName: 'abcde'
+  })
   @ServerlessTrigger(ServerlessTriggerType.HTTP, { method: 'get', path: '/' })
   @ServerlessTrigger(ServerlessTriggerType.API_GATEWAY, { method: 'get', path: '/' })
   @ServerlessTrigger(ServerlessTriggerType.MTOP)
@@ -59,7 +63,7 @@ describe('/test/faas/fun.test.ts', () => {
     ]);
 
     const c = getClassMetadata(FUNC_KEY, TestFun1);
-    expect(JSON.stringify(c)).toEqual(JSON.stringify([{"type":"timer","methodName":"invoke","functionName":"testFun1-invoke","metadata":{"type":"every","value":"5m","functionName":"testFun1-invoke"}},{"type":"os","methodName":"invoke","functionName":"testFun1-invoke","metadata":{"bucket":"","events":"","filter":{"prefix":"","suffix":""},"functionName":"testFun1-invoke"}},{"type":"mq","methodName":"invoke","functionName":"testFun1-invoke","metadata":{"topic":"","tags":"","region":"","strategy":"BACKOFF_RETRY","functionName":"testFun1-invoke"}},{"type":"log","methodName":"invoke","functionName":"testFun1-invoke","metadata":{"source":"","project":"","log":"","functionName":"testFun1-invoke"}},{"type":"cdn","methodName":"invoke","functionName":"testFun1-invoke","metadata":{"functionName":"testFun1-invoke"}},{"type":"event","methodName":"invoke","functionName":"testFun1-invoke","metadata":{"functionName":"testFun1-invoke"}},{"type":"hsf","methodName":"invoke","functionName":"testFun1-invoke","metadata":{"functionName":"testFun1-invoke"}},{"type":"mtop","methodName":"invoke","functionName":"testFun1-invoke","metadata":{"functionName":"testFun1-invoke"}},{"type":"apigw","methodName":"invoke","functionName":"testFun1-invoke","metadata":{"method":"get","path":"/","functionName":"testFun1-invoke"}},{"type":"http","methodName":"invoke","functionName":"testFun1-invoke","metadata":{"method":"get","path":"/","functionName":"testFun1-invoke"}},{"funHandler":"ttt.handler","key":"invoke","descriptor":{"writable":true,"enumerable":false,"configurable":true}}]));
+    expect(c).toMatchSnapshot();
 
     const def = getObjectDefProps(TestFun);
     expect(def).toStrictEqual({

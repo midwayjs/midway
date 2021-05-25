@@ -1,0 +1,115 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`/test/faas/fun.test.ts fun decorator should be ok 1`] = `
+Array [
+  Object {
+    "functionName": "testFun1-invoke",
+    "metadata": Object {
+      "functionName": "testFun1-invoke",
+      "type": "every",
+      "value": "5m",
+    },
+    "methodName": "invoke",
+    "type": "timer",
+  },
+  Object {
+    "functionName": "testFun1-invoke",
+    "metadata": Object {
+      "bucket": "",
+      "events": "",
+      "filter": Object {
+        "prefix": "",
+        "suffix": "",
+      },
+      "functionName": "testFun1-invoke",
+    },
+    "methodName": "invoke",
+    "type": "os",
+  },
+  Object {
+    "functionName": "testFun1-invoke",
+    "metadata": Object {
+      "functionName": "testFun1-invoke",
+      "region": "",
+      "strategy": "BACKOFF_RETRY",
+      "tags": "",
+      "topic": "",
+    },
+    "methodName": "invoke",
+    "type": "mq",
+  },
+  Object {
+    "functionName": "testFun1-invoke",
+    "metadata": Object {
+      "functionName": "testFun1-invoke",
+      "log": "",
+      "project": "",
+      "source": "",
+    },
+    "methodName": "invoke",
+    "type": "log",
+  },
+  Object {
+    "functionName": "testFun1-invoke",
+    "metadata": Object {
+      "functionName": "testFun1-invoke",
+    },
+    "methodName": "invoke",
+    "type": "cdn",
+  },
+  Object {
+    "functionName": "testFun1-invoke",
+    "metadata": Object {
+      "functionName": "testFun1-invoke",
+    },
+    "methodName": "invoke",
+    "type": "event",
+  },
+  Object {
+    "functionName": "testFun1-invoke",
+    "metadata": Object {
+      "functionName": "testFun1-invoke",
+    },
+    "methodName": "invoke",
+    "type": "hsf",
+  },
+  Object {
+    "functionName": "testFun1-invoke",
+    "metadata": Object {
+      "functionName": "testFun1-invoke",
+    },
+    "methodName": "invoke",
+    "type": "mtop",
+  },
+  Object {
+    "functionName": "testFun1-invoke",
+    "metadata": Object {
+      "functionName": "testFun1-invoke",
+      "method": "get",
+      "path": "/",
+    },
+    "methodName": "invoke",
+    "type": "apigw",
+  },
+  Object {
+    "functionName": "testFun1-invoke",
+    "metadata": Object {
+      "functionName": "testFun1-invoke",
+      "method": "get",
+      "path": "/",
+    },
+    "methodName": "invoke",
+    "type": "http",
+  },
+  Object {
+    "descriptor": Object {
+      "configurable": true,
+      "enumerable": false,
+      "value": [Function],
+      "writable": true,
+    },
+    "funHandler": "ttt.handler",
+    "key": "invoke",
+  },
+]
+`;

@@ -3,6 +3,7 @@ import {
   attachClassMetadata,
   FaaSMetadata,
   FUNC_KEY,
+  SERVERLESS_FUNC_KEY,
   getProviderId,
   MiddlewareParamArray,
   saveModule,
@@ -60,6 +61,20 @@ export function Func(funHandler: any, functionOptions?: any): any {
         target.constructor
       );
     }
+  };
+}
+
+export function ServerlessFunction(options: FaaSMetadata.ServerlessFunctionOptions): MethodDecorator {
+  return (target, key, descriptor) => {
+    // save target
+    saveModule(SERVERLESS_FUNC_KEY, target);
+    attachClassMetadata(
+      SERVERLESS_FUNC_KEY,
+      {
+        metadata: options,
+      },
+      target
+    );
   };
 }
 
