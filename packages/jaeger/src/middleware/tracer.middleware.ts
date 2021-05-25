@@ -7,9 +7,10 @@ import {
 } from '@midwayjs/web';
 import { globalTracer, Tags, FORMAT_HTTP_HEADERS } from 'opentracing';
 
+import { TracerManager } from '../lib/tracer';
 import { TracerConfig, TracerLog, TracerTag } from '../lib/types';
 import { pathMatched } from '../util/common';
-import { TracerManager } from '../lib/tracer';
+
 import { logError } from './helper';
 
 @Provide()
@@ -25,7 +26,7 @@ export class TracerMiddleware implements IWebMiddleware {
  * - 对异常链路进行上报
  */
 export async function tracerMiddleware(
-  ctx: IMidwayWebContext,
+  ctx: IMidwayWebContext<JsonResp | string>,
   next: IMidwayWebNext
 ): Promise<unknown> {
   if (ctx.tracerManager) {
@@ -44,7 +45,7 @@ export async function tracerMiddleware(
   return next();
 }
 
-function startSpan(ctx: IMidwayWebContext): void {
+function startSpan(ctx: IMidwayWebContext<JsonResp | string>): void {
   // 开启第一个span并入栈
   const tracerManager = new TracerManager(true);
   const requestSpanCtx =
@@ -56,7 +57,7 @@ function startSpan(ctx: IMidwayWebContext): void {
   ctx.tracerManager = tracerManager;
 }
 
-function finishSpan(ctx: IMidwayWebContext) {
+function finishSpan(ctx: IMidwayWebContext<JsonResp | string>) {
   const { tracerManager } = ctx;
   const { status } = ctx.response;
   const tracerConfig = ctx.app.config.tracer;
@@ -85,12 +86,20 @@ function finishSpan(ctx: IMidwayWebContext) {
   // [Tag] 请求参数和响应数据
   if (tracerConfig.isLogginInputQuery) {
     if (ctx.method === 'GET') {
-      tracerManager.setSpanTag(TracerTag.reqQuery, ctx.request.query);
-    } else if (
-      ctx.method === 'POST' &&
-      ctx.request.type === 'application/json'
-    ) {
-      tracerManager.setSpanTag(TracerTag.reqBody, ctx.request.body);
+      const { query } = ctx.request
+      if (typeof query === 'string' && query
+        || typeof query === 'object' && Object.keys(query).length
+      ) {
+        tracerManager.setSpanTag(TracerTag.reqQuery, query)
+      }
+    }
+    else if (ctx.method === 'POST' && ctx.request.type === 'application/json') {
+      const { query: body } = ctx.request
+      if (typeof body === 'string' && body
+        || typeof body === 'object' && Object.keys(body).length
+      ) {
+        tracerManager.setSpanTag(TracerTag.reqBody, body)
+      }
     }
   }
   if (tracerConfig.isLoggingOutputBody) {
@@ -104,7 +113,7 @@ function finishSpan(ctx: IMidwayWebContext) {
 }
 
 function processCustomFailure(
-  ctx: IMidwayWebContext,
+  ctx: IMidwayWebContext<JsonResp | string>,
   trm: TracerManager
 ): void {
   const { body } = ctx;
@@ -140,3 +149,22 @@ function processPriority(options: ProcessPriorityOpts): number | undefined {
   }
   return cost;
 }
+
+
+export type JsonResp<T = never> = {
+  /** 0: no error */
+  code: number;
+  /**
+   * keyof typeof ErrorCode, eg. 'E_Not_Found'
+   */
+  codeKey?: string;
+  msg?: string | null;
+  /** Request id */
+  reqId?: string;
+} & ([T] extends [never] ? {
+  /** payload */
+  dat?: unknown;
+} : {
+  /** payload */
+  dat: T;
+});

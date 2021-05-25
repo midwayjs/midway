@@ -1,14 +1,7 @@
+import { Context } from '@midwayjs/core';
 import { Inject, Provide } from '@midwayjs/decorator';
-import { IMidwayWebContext } from '@midwayjs/web';
 
 import { TracerManager } from './tracer';
-
-interface ILogger {
-  info(msg: unknown, ...args: unknown[]): void;
-  debug(msg: unknown, ...args: unknown[]): void;
-  error(msg: unknown, ...args: unknown[]): void;
-  warn(msg: unknown, ...args: unknown[]): void;
-}
 
 /**
  * 自定义 Context Logger
@@ -18,7 +11,7 @@ interface ILogger {
  */
 @Provide()
 export class Logger implements ILogger {
-  @Inject() protected readonly ctx: IMidwayWebContext;
+  @Inject() protected readonly ctx: Context;
 
   @Inject() protected readonly ctxLogger: ILogger;
 
@@ -74,4 +67,11 @@ function tracerLogger(options: LogOptions): void {
   const { tracerManager, ctxLogger, level, msg, args } = options;
   ctxLogger[level](msg, ...args);
   tracerManager.spanLog({ [level]: [msg, ...args] });
+}
+
+interface ILogger {
+  info(msg: unknown, ...args: unknown[]): void;
+  debug(msg: unknown, ...args: unknown[]): void;
+  error(msg: unknown, ...args: unknown[]): void;
+  warn(msg: unknown, ...args: unknown[]): void;
 }
