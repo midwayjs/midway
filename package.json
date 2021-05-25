@@ -12,7 +12,7 @@
     "opencollective": "^1.0.3",
     "opencollective-postinstall": "^2.0.2",
     "ts-jest": "^26.5.5",
-    "ts-node": "^9.1.1",
+    "ts-node": "^10.0.0",
     "typescript": "^4.1.0"
   },
   "scripts": {

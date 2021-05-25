@@ -3,8 +3,7 @@
   "compileOnSave": true,
   "compilerOptions": {
     "rootDir": "src",
-    "outDir": "dist",
-    "jsx": "react"
+    "outDir": "dist"
   },
   "include": [
     "./src/**/*.ts"
