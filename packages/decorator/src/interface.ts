@@ -49,7 +49,7 @@ export enum MSProviderType {
 
 export enum MSListenerType {
   RABBITMQ = 'rabbitmq',
-  MTTQ = 'mttq',
+  MQTT = 'mqtt',
   KAFKA = 'kafka',
   REDIS = 'redis',
 }
