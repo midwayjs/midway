@@ -87,16 +87,20 @@ function finishSpan(ctx: IMidwayWebContext<JsonResp | string>) {
   if (tracerConfig.isLogginInputQuery) {
     if (ctx.method === 'GET') {
       const { query } = ctx.request;
-      if ((typeof query === 'string' && query)
-        || (typeof query === 'object' && Object.keys(query).length)
+      if (
+        (typeof query === 'string' && query) ||
+        (typeof query === 'object' && Object.keys(query).length)
       ) {
         tracerManager.setSpanTag(TracerTag.reqQuery, query);
       }
-    }
-    else if (ctx.method === 'POST' && ctx.request.type === 'application/json') {
+    } else if (
+      ctx.method === 'POST' &&
+      ctx.request.type === 'application/json'
+    ) {
       const { query: body } = ctx.request;
-      if (typeof body === 'string' && body
-        || typeof body === 'object' && Object.keys(body).length
+      if (
+        (typeof body === 'string' && body) ||
+        (typeof body === 'object' && Object.keys(body).length)
       ) {
         tracerManager.setSpanTag(TracerTag.reqBody, body);
       }
@@ -160,10 +164,12 @@ export type JsonResp<T = never> = {
   msg?: string | null;
   /** Request id */
   reqId?: string;
-} & ([T] extends [never] ? {
-  /** payload */
-  dat?: unknown;
-} : {
-  /** payload */
-  dat: T;
-});
+} & ([T] extends [never]
+  ? {
+      /** payload */
+      dat?: unknown;
+    }
+  : {
+      /** payload */
+      dat: T;
+    });
