@@ -32,7 +32,8 @@
     "@midwayjs/decorator": "^2.10.14",
     "@midwayjs/koa": "^2.10.14",
     "@midwayjs/mock": "^2.10.14",
-    "@midwayjs/web": "^2.10.14"
+    "@midwayjs/web": "^2.10.14",
+    "egg": "^2.29.0"
   },
   "author": "waiting <1661926154@qq.com>",
   "engines": {
