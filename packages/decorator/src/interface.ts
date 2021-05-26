@@ -64,7 +64,7 @@ export namespace GRPCMetadata {
 
 export namespace FaaSMetadata {
 
-  interface TriggerCommonOptions {
+  export interface ServerlessFunctionOptions {
     /**
      * function name
      */
@@ -77,10 +77,6 @@ export namespace FaaSMetadata {
      * function memory size, unit: M
      */
     memorySize?: number;
-    /**
-     * serverless event name
-     */
-    name?: string;
     /**
      * function timeout value, unit: seconds
      */
@@ -106,6 +102,21 @@ export namespace FaaSMetadata {
      */
     environment?: any;
     /**
+     * deploy or not
+     */
+    isDeploy?: boolean;
+  }
+
+  interface TriggerCommonOptions {
+    /**
+     * function name
+     */
+    functionName?: string;
+    /**
+     * serverless event name
+     */
+    name?: string;
+    /**
      * function invoke role, just for aliyun
      */
     role?: string;
@@ -113,6 +124,10 @@ export namespace FaaSMetadata {
      * function publish version, just for aliyun
      */
     version?: string;
+    /**
+     * deploy or not
+     */
+    isDeploy?: boolean;
   }
 
   export interface EventTriggerOptions extends TriggerCommonOptions {

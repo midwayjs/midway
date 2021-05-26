@@ -202,6 +202,13 @@ describe('/test/util/triggerCollector.test.ts', function () {
         functionName: 'helloAliyunService-handleTimerEvent'
       }
     })).toBeTruthy();
+    expect(matchObjectPropertyInArray(result, {
+      functionName: 'helloAliyunService-handleEvent',
+      functionMetadata: {
+        functionName: 'hello_bbb',
+        concurrency: 2,
+      }
+    })).toBeTruthy();
   });
 
   it('should test duplicate router', async () => {

@@ -1,10 +1,21 @@
-import { Inject, Provide, Query, ServerlessTrigger, ServerlessTriggerType, } from '@midwayjs/decorator';
+import {
+  Inject,
+  Provide,
+  Query,
+  ServerlessFunction,
+  ServerlessTrigger,
+  ServerlessTriggerType,
+} from '@midwayjs/decorator';
 
 @Provide()
 export class HelloAliyunService {
   @Inject()
   ctx: any;
 
+  @ServerlessFunction({
+    functionName: 'hello_bbb',
+    concurrency: 2
+  })
   @ServerlessTrigger(ServerlessTriggerType.EVENT)
   async handleEvent(event: any) {
     return event;

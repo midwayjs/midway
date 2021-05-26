@@ -11,6 +11,7 @@ export const ASPECT_KEY = 'common:aspect';
 // faas
 export const FUNC_KEY = 'faas:func';
 export const HANDLER_KEY = 'faas:handler';
+export const SERVERLESS_FUNC_KEY = 'faas:serverless:function';
 
 // web
 export const CONTROLLER_KEY = 'web:controller';
