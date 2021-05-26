@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.10.18](https://github.com/midwayjs/midway/compare/v2.10.17...v2.10.18) (2021-05-26)
+
+
+### Bug Fixes
+
+* task execute typo ([#1068](https://github.com/midwayjs/midway/issues/1068)) ([20b424d](https://github.com/midwayjs/midway/commit/20b424d9bf7eeca0e9247571000d02d44f342ad9))
+
+
+
+
+
 ## [2.10.16](https://github.com/midwayjs/midway/compare/v2.10.15...v2.10.16) (2021-05-17)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.10.18](https://github.com/midwayjs/midway/compare/v2.10.17...v2.10.18) (2021-05-26)
+
+
+### Features
+
+* add zlib logger file ([#1038](https://github.com/midwayjs/midway/issues/1038)) ([2ae9131](https://github.com/midwayjs/midway/commit/2ae9131b8c8745d2840c40a5d50aa2d3f73bafbf))
+
+
+
+
+
 ## [2.10.16](https://github.com/midwayjs/midway/compare/v2.10.15...v2.10.16) (2021-05-17)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.10.18](https://github.com/midwayjs/midway/compare/v2.10.17...v2.10.18) (2021-05-26)
+
+
+### Features
+
+* add decorator metadata ([#1072](https://github.com/midwayjs/midway/issues/1072)) ([db4de9c](https://github.com/midwayjs/midway/commit/db4de9cd787bdbe1effca61dfe162f6678ad5d66))
+
+
+
+
+
 ## [2.10.14](https://github.com/midwayjs/midway/compare/v2.10.13...v2.10.14) (2021-05-11)
 
 
