@@ -8,7 +8,7 @@ export class QueueTask{
   @App()
   app: Application;
 
-  async excute(params){
+  async execute(params){
     this.app.getApplicationContext().registerObject(`queueConfig`, JSON.stringify(params));
   }
 }

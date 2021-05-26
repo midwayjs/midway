@@ -36,7 +36,7 @@ describe(`midway task`, ()=>{
     let params: any = {
       name: 'stone-jin'
     };
-    (service as any).excute(QueueTask, params, {delay: 1000});
+    (service as any).execute(QueueTask, params, {delay: 1000});
     setTimeout(()=>{
       expect(app.getApplicationContext().get(`queueConfig`)).toBe(JSON.stringify(params));
       done();

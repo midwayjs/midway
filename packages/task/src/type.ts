@@ -1,3 +1,3 @@
 export interface IQueue {
-  excute(data): Promise<void>;
+  execute(data): Promise<void>;
 }
