@@ -310,12 +310,10 @@ export class WebRouterCollector {
                 module,
                 webRouter['methodName']
               ) || {};
-            data.functionMetadata = Object.assign(
-              {
-                functionName: webRouter['functionName'],
-              },
-              functionMeta
-            );
+            data.functionMetadata = {
+              functionName: webRouter['functionName'],
+              ...functionMeta
+            };
           }
           this.checkDuplicateAndPush(prefix, data);
         } else {
@@ -345,12 +343,10 @@ export class WebRouterCollector {
               functionName: webRouter['functionName'],
               functionTriggerName: webRouter['type'],
               functionTriggerMetadata: webRouter['metadata'],
-              functionMetadata: Object.assign(
-                {
-                  functionName: webRouter['functionName'],
-                },
-                functionMeta
-              ),
+              functionMetadata: {
+                functionName: webRouter['functionName'],
+                ...functionMeta
+              },
             });
           }
         }
