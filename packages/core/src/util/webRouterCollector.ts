@@ -312,7 +312,7 @@ export class WebRouterCollector {
               ) || {};
             data.functionMetadata = {
               functionName: webRouter['functionName'],
-              ...functionMeta
+              ...functionMeta,
             };
           }
           this.checkDuplicateAndPush(prefix, data);
@@ -345,7 +345,7 @@ export class WebRouterCollector {
               functionTriggerMetadata: webRouter['metadata'],
               functionMetadata: {
                 functionName: webRouter['functionName'],
-                ...functionMeta
+                ...functionMeta,
               },
             });
           }
