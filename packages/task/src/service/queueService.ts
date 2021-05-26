@@ -6,6 +6,9 @@ export class QueueService {
   @Inject('queueMap')
   queueMap;
 
+  /**
+   * @deprecated please use execute method
+   */
   async excute(queueName: any, data: any, options: JobOptions) {
     return this.execute(queueName, data, options);
   }
