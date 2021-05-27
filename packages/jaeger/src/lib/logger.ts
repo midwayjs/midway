@@ -1,5 +1,6 @@
 import { Context } from '@midwayjs/core';
-import { Inject, Provide } from '@midwayjs/decorator';
+import { Inject, Logger as _Logger, Provide } from '@midwayjs/decorator';
+import { ILogger } from '@midwayjs/logger';
 
 import { TracerManager } from './tracer';
 
@@ -13,42 +14,42 @@ import { TracerManager } from './tracer';
 export class Logger implements ILogger {
   @Inject() protected readonly ctx: Context;
 
-  @Inject() protected readonly ctxLogger: ILogger;
+  @_Logger() protected readonly logger: ILogger;
 
-  debug(msg: unknown, ...args: unknown[]) {
+  debug(msg: unknown, ...args: unknown[]): void {
     tracerLogger({
       tracerManager: this.ctx.tracerManager,
-      ctxLogger: this.ctxLogger,
+      ctxLogger: this.logger,
       level: 'debug',
       msg,
       args,
     });
   }
 
-  info(msg: unknown, ...args: unknown[]) {
+  info(msg: unknown, ...args: unknown[]): void {
     tracerLogger({
       tracerManager: this.ctx.tracerManager,
-      ctxLogger: this.ctxLogger,
+      ctxLogger: this.logger,
       level: 'info',
       msg,
       args,
     });
   }
 
-  warn(msg: unknown, ...args: unknown[]) {
+  warn(msg: unknown, ...args: unknown[]): void {
     tracerLogger({
       tracerManager: this.ctx.tracerManager,
-      ctxLogger: this.ctxLogger,
+      ctxLogger: this.logger,
       level: 'warn',
       msg,
       args,
     });
   }
 
-  error(msg: unknown, ...args: unknown[]) {
+  error(msg: unknown, ...args: unknown[]): void {
     tracerLogger({
       tracerManager: this.ctx.tracerManager,
-      ctxLogger: this.ctxLogger,
+      ctxLogger: this.logger,
       level: 'error',
       msg,
       args,
@@ -67,11 +68,4 @@ function tracerLogger(options: LogOptions): void {
   const { tracerManager, ctxLogger, level, msg, args } = options;
   ctxLogger[level](msg, ...args);
   tracerManager.spanLog({ [level]: [msg, ...args] });
-}
-
-interface ILogger {
-  info(msg: unknown, ...args: unknown[]): void;
-  debug(msg: unknown, ...args: unknown[]): void;
-  error(msg: unknown, ...args: unknown[]): void;
-  warn(msg: unknown, ...args: unknown[]): void;
 }
