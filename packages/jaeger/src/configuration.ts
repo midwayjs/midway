@@ -10,8 +10,10 @@ import { initTracer } from './lib/tracer';
 import { TracerConfig } from './lib/types';
 import { tracerMiddleware } from './middleware/tracer.middleware';
 
+const namespace = 'jaeger';
+
 @Configuration({
-  // namespace: 'jaeger', // 指定后会导致中间件无法正常加载!
+  namespace,
   importConfigs: [join(__dirname, 'config')],
 })
 export class AutoConfiguration {
@@ -42,9 +44,10 @@ export function registerMiddleware(
 
   const appMiddleware = app.getConfig('middleware') as string[];
   if (Array.isArray(appMiddleware)) {
-    appMiddleware.push('tracerExtMiddleware');
+    appMiddleware.push(namespace + ':tracerExtMiddleware');
   } else {
-    throw new TypeError('appMiddleware is not valid Array');
+    app.logger.warn('appMiddleware is not valid Array');
+    // throw new TypeError('appMiddleware is not valid Array');
   }
 
   /**
