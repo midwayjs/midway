@@ -32,7 +32,7 @@ export type IMidwayRabbitMQContext = {
   startTime: number;
   queueName: string;
   ack: (data: any) => void;
-} & IMidwayContext;
+};
 
 export type Application = IMidwayRabbitMQApplication;
 export interface Context extends IMidwayRabbitMQContext {}
