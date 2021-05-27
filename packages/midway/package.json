@@ -1,6 +1,6 @@
 {
   "name": "midway",
-  "version": "2.10.18",
+  "version": "2.10.19",
   "description": "A Node.js Serverless Framework for front-end/full-stack developers. Build the application for next decade.",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -34,7 +34,7 @@
     "egg-logger": "^2.4.2"
   },
   "dependencies": {
-    "@midwayjs/web": "^2.10.18"
+    "@midwayjs/web": "^2.10.19"
   },
   "files": [
     "dist/**/*.js",

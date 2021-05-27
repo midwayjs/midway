@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.10.19](https://github.com/midwayjs/midway/compare/v2.10.18...v2.10.19) (2021-05-27)
+
+
+### Bug Fixes
+
+* declare definition error in schedule ([#1076](https://github.com/midwayjs/midway/issues/1076)) ([ec8af5a](https://github.com/midwayjs/midway/commit/ec8af5a35a270855c22b8875c11a0c01a0e78188))
+
+
+
+
+
 ## [2.10.18](https://github.com/midwayjs/midway/compare/v2.10.17...v2.10.18) (2021-05-26)
 
 
