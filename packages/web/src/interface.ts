@@ -24,7 +24,13 @@ declare module 'egg' {
     appDir: string;
   }
 
-  interface Application extends IMidwayBaseApplication, IMidwayWebBaseApplication {}
+  // 这里再次覆盖和 egg 不同的定义，不然 egg 插件里可能会报错
+  interface Application extends IMidwayBaseApplication, IMidwayWebBaseApplication {
+    createAnonymousContext(...args: any[]): EggContext;
+    getCoreLogger(): EggLogger & ILogger;
+    getLogger(name?: string): EggLogger & ILogger;
+    createLogger(name: string, options: LoggerOptions): EggLogger & ILogger;
+  }
 
   interface Context <ResponseBodyT = any> extends IMidwayBaseContext {
     getLogger(name?: string): EggLogger & ILogger;
