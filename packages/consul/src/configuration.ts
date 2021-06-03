@@ -66,15 +66,17 @@ export class AutoConfiguration implements ILifeCycle {
 
       config.check =
         config.check ||
-        (app.getFrameworkType() === MidwayFrameworkType.WEB
-          ? {
-              http: `http://${address}:${port}/consul/health/self/check`,
-              interval: '3s',
-            }
-          : {
-              tcp: `${address}:${port}`,
-              interval: '3s',
-            });
+        (config.check === false
+          ? void 0
+          : (app.getFrameworkType() === MidwayFrameworkType.WEB
+            ? {
+                http: `http://${address}:${port}/consul/health/self/check`,
+                interval: '3s',
+              }
+            : {
+                tcp: `${address}:${port}`,
+                interval: '3s',
+              }));
 
       Object.assign(this.consulRegisterConfig, config);
 
