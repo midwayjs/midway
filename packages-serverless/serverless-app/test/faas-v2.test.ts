@@ -24,7 +24,7 @@ describe('test/faas-v2.test.ts', () => {
   afterAll(async () => {
     await close(app);
   });
-  it('http get', async done => {
+  it('http get',  done => {
     createHttpRequest(app)
       .get('/hello?name=test&age=123')
       .expect(200)
@@ -38,7 +38,7 @@ describe('test/faas-v2.test.ts', () => {
       })
       .catch(err => done(err));
   });
-  it('http get controller', async done => {
+  it('http get controller',  done => {
     createHttpRequest(app)
       .get('/user')
       .expect(200)
@@ -48,7 +48,7 @@ describe('test/faas-v2.test.ts', () => {
       })
       .catch(err => done(err));
   });
-  it('http get controller params', async done => {
+  it('http get controller params',  done => {
     createHttpRequest(app)
       .get('/user/midway')
       .expect(200)
@@ -58,8 +58,8 @@ describe('test/faas-v2.test.ts', () => {
       })
       .catch(err => done(err));
   });
-  it('http post', async done => {
-    await createHttpRequest(app)
+  it('http post',  done => {
+    createHttpRequest(app)
       .post('/hello')
       .type('form')
       .send({ id: '1' })
@@ -76,9 +76,9 @@ describe('test/faas-v2.test.ts', () => {
       .catch(err => done(err));
   });
 
-  it.skip('http post upload', async done => {
+  it.skip('http post upload', done => {
     const imagePath = join(cwd, '1.jpg');
-    await createHttpRequest(app)
+    createHttpRequest(app)
       .post('/upload')
       .field('name', 'form')
       .attach('file', imagePath)
