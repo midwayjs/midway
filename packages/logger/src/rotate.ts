@@ -173,6 +173,8 @@ export class DailyRotateFileTransport extends Transport {
       this.logStream.end(() => {
         this.emit('finish');
       });
+      // 处理重复调用 close
+      this.logStream = null;
     }
   }
 }
