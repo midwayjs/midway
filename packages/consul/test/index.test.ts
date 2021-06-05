@@ -1,9 +1,10 @@
 import {close, createApp, createHttpRequest} from '@midwayjs/mock';
-import {IMidwayApplication} from "@midwayjs/core";
-import {IConsulBalancer} from "../src";
-import {ConsulKoaFramework} from "./consul.framework";
+import {IMidwayApplication} from '@midwayjs/core';
+import {IConsulBalancer} from '../src';
+import {ConsulKoaFramework} from './consul.framework';
 import * as Consul from 'consul';
 import { join } from 'path';
+import * as nock from 'nock';
 
 describe('/test/feature.test.ts', () => {
 
@@ -20,6 +21,7 @@ describe('/test/feature.test.ts', () => {
 
     afterAll(async () => {
       await close(app);
+      nock.cleanAll();
     });
 
     it('should provide health check route', async () => {
