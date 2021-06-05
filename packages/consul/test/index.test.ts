@@ -1,8 +1,10 @@
 import {close, createApp, createHttpRequest} from '@midwayjs/mock';
-import {IMidwayApplication} from "@midwayjs/core";
-import {IConsulBalancer} from "../src";
-import {ConsulKoaFramework} from "./consul.framework";
+import {IMidwayApplication} from '@midwayjs/core';
+import {IConsulBalancer} from '../src';
+import {ConsulKoaFramework} from './consul.framework';
 import * as Consul from 'consul';
+import { join } from 'path';
+import * as nock from 'nock';
 
 describe('/test/feature.test.ts', () => {
 
@@ -14,11 +16,12 @@ describe('/test/feature.test.ts', () => {
       // 如果使用真实的 server (consul agent --dev) 测试打开下面一行
       // 同时记得修改配置中的 consul.provide.host 参数
       // app = await createApp('base-app', {}, '@midwayjs/koa');
-      app = await createApp('base-app', {}, ConsulKoaFramework);
+      app = await createApp(join(__dirname, 'fixtures', 'base-app'), {}, ConsulKoaFramework);
     });
 
     afterAll(async () => {
       await close(app);
+      nock.cleanAll();
     });
 
     it('should provide health check route', async () => {

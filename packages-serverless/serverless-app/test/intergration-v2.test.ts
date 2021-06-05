@@ -18,7 +18,7 @@ describe('test/index.test.ts', () => {
   afterAll(async () => {
     await close(app);
   });
-  it('http get no-yml', async done => {
+  it('http get no-yml', done => {
     request(app)
       .get('/hello?name=test&age=123')
       .expect(200)

@@ -1,5 +1,5 @@
 import { Configuration } from '@midwayjs/decorator';
-import { ILifeCycle } from '@midwayjs/core';
+import { ILifeCycle } from '../../../../src';
 import { join } from 'path';
 
 @Configuration({

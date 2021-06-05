@@ -24,6 +24,7 @@
     "@midwayjs/mock": "^2.10.18",
     "@typegoose/typegoose": "^7.4.7",
     "@types/mongoose": "~5.10.3",
-    "mongoose": "5.10.18"
+    "mongoose": "5.10.18",
+    "mongodb-memory-server": "^6.9.6"
   }
 }

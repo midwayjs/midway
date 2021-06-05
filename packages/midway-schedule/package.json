@@ -17,7 +17,8 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/decorator": "^2.10.18",
-    "@midwayjs/mock": "^2.10.18"
+    "@midwayjs/mock": "^2.10.18",
+    "@types/sinon": "^10.0.2"
   },
   "dependencies": {
     "is-type-of": "^1.2.1"
