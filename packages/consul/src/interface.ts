@@ -64,7 +64,7 @@ export interface IConsulRegisterInfoOptions extends RegisterOptions {
   tags?: string[];
 
   /**
-   * 健康检查配置，组件默认会配置一个(检查间隔是3秒)
+   * 健康检查配置，组件默认会配置一个(检查间隔是3秒)，如果指定 check=false 则关闭 consul 健康检查
    */
   check?: {
     tcp?: string;
