@@ -27,9 +27,8 @@ export interface IMidwayRabbitMQConfigurationOptions extends IConfigurationOptio
   useConfirmChannel?: boolean;
 }
 
-export type IMidwayRabbitMQContext = {
+export type IMidwayRabbitMQContext = IMidwayContext<{
   channel: amqp.Channel;
-  startTime: number;
   queueName: string;
   ack: (data: any) => void;
 }>;
