@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`/test/microservice/rabbit.test.ts should got method from decorator 1`] = `
+Array [
+  Object {
+    "metadata": Object {
+      "pattern": "tasks",
+    },
+    "methodName": "gotEvent",
+    "queueMethodName": "queue_pattern",
+  },
+]
+`;

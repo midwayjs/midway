@@ -21,6 +21,11 @@ jobs:
           --health-retries 5
         ports:
           - 6379:6379
+      rabbitmq:
+        image: rabbitmq:latest
+        ports:
+          - 5672/tcp
+        options: --health-cmd "rabbitmqctl node_health_check" --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
     - name: Git checkout
@@ -35,6 +40,8 @@ jobs:
     - run: npm run build --if-present
     - run: npm run lint
     - run: npm run cov
+      env:
+        RABBITMQ_URL: amqp://localhost:${{ job.services.rabbitmq.ports[5672] }}
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
 

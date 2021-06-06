@@ -2,7 +2,6 @@ import {
   BaseFramework,
   getClassMetadata,
   getProviderId,
-  IMidwayBootstrapOptions,
   listModule,
   listPropertyDataFromClass,
   MidwayFrameworkType,
@@ -27,24 +26,23 @@ export class MidwayRabbitMQFramework extends BaseFramework<
   IMidwayRabbitMQConfigurationOptions
 > {
   public app: IMidwayRabbitMQApplication;
-  public consumerList = [];
+  public consumerHandlerList = [];
 
   async applicationInitialize(options) {
-    this.app = new RabbitMQServer(
-      this.configurationOptions
-    ) as unknown as IMidwayRabbitMQApplication;
-    // init connection
-    await this.app.init();
-  }
-
-  protected async afterContainerReady(
-    options: Partial<IMidwayBootstrapOptions>
-  ): Promise<void> {
-    await this.loadSubscriber();
+    // Create a connection manager
+    this.app = new RabbitMQServer({
+      logger: this.logger,
+      ...this.configurationOptions,
+    }) as unknown as IMidwayRabbitMQApplication;
   }
 
   public async run(): Promise<void> {
-    await Promise.all(this.consumerList);
+    // init connection
+    await this.app.connect(
+      this.configurationOptions.url,
+      this.configurationOptions.socketOptions
+    );
+    await this.loadSubscriber();
     this.logger.info('Rabbitmq server start success');
   }
 
@@ -53,50 +51,43 @@ export class MidwayRabbitMQFramework extends BaseFramework<
   }
 
   public getFrameworkType(): MidwayFrameworkType {
-    return MidwayFrameworkType.WS_IO;
+    return MidwayFrameworkType.MS_RABBITMQ;
   }
 
   private async loadSubscriber() {
-    // create room
-    const subscriberModules = listModule(MS_CONSUMER_KEY);
-    for (const module of subscriberModules) {
+    // create channel
+    const subscriberModules = listModule(MS_CONSUMER_KEY, module => {
       const type: MSListenerType = getClassMetadata(MS_CONSUMER_KEY, module);
-
-      if (type !== MSListenerType.RABBITMQ) {
-        continue;
-      }
-
-      // get providerId
+      return type === MSListenerType.RABBITMQ;
+    });
+    for (const module of subscriberModules) {
       const providerId = getProviderId(module);
-      // get listenerInfo
       const data: RabbitMQListenerOptions[][] = listPropertyDataFromClass(
         MS_CONSUMER_KEY,
         module
       );
 
       for (const methodBindListeners of data) {
+        // 循环绑定的方法和监听的配置信息
         for (const listenerOptions of methodBindListeners) {
-          this.consumerList.push(
-            this.bindConsumerToRequestMethod(listenerOptions, providerId)
+          this.app.createConsumer(
+            listenerOptions,
+            async (data: ConsumeMessage, channel, channelWrapper) => {
+              const ctx = {
+                channel,
+                queueName: listenerOptions.queueName,
+                ack: data => {
+                  return channelWrapper.ack(data);
+                },
+              } as IMidwayRabbitMQContext;
+              this.app.createAnonymousContext(ctx);
+              const ins = await ctx.requestContext.getAsync(providerId);
+              await ins[listenerOptions.propertyKey].call(ins, data);
+            }
           );
         }
       }
     }
-  }
-
-  bindConsumerToRequestMethod(listenerOptions, providerId) {
-    return this.app.createConsumer(
-      listenerOptions,
-      async (data?: ConsumeMessage) => {
-        const ctx = {
-          channel: this.app.getChannel(),
-          queueName: listenerOptions.queueName,
-        } as IMidwayRabbitMQContext;
-        this.app.createAnonymousContext(ctx);
-        const ins = await ctx.requestContext.getAsync(providerId);
-        await ins[listenerOptions.propertyKey].call(ins, data);
-      }
-    );
   }
 
   public getFrameworkName() {

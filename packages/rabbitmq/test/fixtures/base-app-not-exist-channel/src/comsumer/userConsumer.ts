@@ -12,10 +12,9 @@ export class UserConsumer {
   @Inject()
   logger;
 
-  @RabbitMQListener('tasks')
+  @RabbitMQListener('non-exist')
   async gotData(msg: ConsumeMessage) {
     this.logger.info('test output =>', msg.content.toString('utf8'));
-    this.ctx.ack(msg);
   }
 
 }
