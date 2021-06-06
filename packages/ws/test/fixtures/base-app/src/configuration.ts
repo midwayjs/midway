@@ -1,13 +1,13 @@
 import { Configuration, App } from '@midwayjs/decorator';
 import { ILifeCycle } from '@midwayjs/core';
-import { IMidwaySocketIOApplication } from '../../../../src';
+import { Application } from '../../../../src';
 
 
 @Configuration()
 export class AutoConfiguration implements ILifeCycle {
 
   @App()
-  app: IMidwaySocketIOApplication;
+  app: Application;
 
   async onReady() {
   }
