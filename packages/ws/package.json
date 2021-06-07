@@ -1,47 +1,36 @@
 {
-  "name": "@midwayjs/mock",
-  "version": "2.10.18",
-  "description": "create your test app from midway framework",
+  "name": "@midwayjs/ws",
+  "version": "2.10.14",
+  "description": "Midway Web Framework for ws",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "test": "node --require=ts-node/register ../../node_modules/.bin/jest",
     "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --coverage --forceExit",
-    "link": "npm link"
+    "ci": "npm run test"
   },
   "keywords": [
     "midway",
     "IoC",
-    "mock",
-    "plugin",
-    "bootstrap"
+    "ws",
+    "scene"
   ],
   "files": [
     "dist/**/*.js",
-    "dist/**/*.d.ts",
-    "app",
-    "config"
+    "dist/**/*.d.ts"
   ],
-  "eggPlugin": {
-    "name": "midway-mock"
-  },
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/core": "^2.10.18",
-    "@midwayjs/decorator": "^2.10.18",
-    "@midwayjs/logger": "^2.10.18",
-    "@types/amqplib": "*",
-    "amqplib": "*",
-    "socket.io": "^4.0.0",
-    "socket.io-client": "^4.0.0",
-    "ws": "^7.4.5"
+    "@midwayjs/decorator": "^2.10.14",
+    "@midwayjs/mock": "^2.10.14",
+    "@types/ws": "^7.4.4",
+    "fs-extra": "^8.0.1"
   },
   "dependencies": {
-    "@midwayjs/bootstrap": "^2.10.18",
-    "egg-mock": "^3.21.0",
-    "fs-extra": "^8.0.1",
-    "supertest": "^6.0.0"
+    "@midwayjs/core": "^2.10.14",
+    "@midwayjs/logger": "^2.10.14",
+    "ws": "^7.4.5"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
   "repository": {
