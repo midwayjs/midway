@@ -338,6 +338,23 @@ class ChannelManager {
     return this.channel.sendToQueue(queueName, content, options);
   }
 
+  sendToExchange(
+    exchange: string,
+    routingKey: string,
+    content: Buffer,
+    options?: Options.Publish
+  ) {
+    return this.channel.publish(exchange, routingKey, content, options);
+  }
+
+  assertExchange(
+    exchange: string,
+    type: 'direct' | 'topic' | 'headers' | 'fanout' | 'match' | string,
+    options?: Options.AssertExchange
+  ) {
+    return this.channel.assertExchange(exchange, type, options);
+  }
+
   async close() {
     await Promise.all(
       this.channelList.map(channel => {

@@ -27,6 +27,9 @@ export abstract class QueueManager<
       });
       (this.connection as any).on('disconnect', err => {
         if (err) {
+          if (err.err) {
+            err = err.err;
+          }
           this.logger.error('Message Queue disconnected', err);
         } else {
           this.logger.info('Message Queue disconnected!');

@@ -38,20 +38,40 @@ export class RabbitMQServer
     const channelWrapper = this.connection.createChannel({
       setup: (channel: Channel) => {
         // `channel` here is a regular amqplib `ConfirmChannel`.
-        return Promise.all([
-          channel.assertQueue(listenerOptions.queueName, listenerOptions),
-          channel.assertExchange(
-            listenerOptions.exchange,
-            listenerOptions.exchangeOptions.type ?? 'topic',
-            listenerOptions.exchangeOptions
-          ),
-          channel.prefetch(listenerOptions.prefetch ?? 1),
-          channel.bindQueue(
+        const channelHandlers = [];
+
+        // create queue
+        channelHandlers.push(
+          channel.assertQueue(
             listenerOptions.queueName,
-            listenerOptions.exchange,
-            listenerOptions.pattern,
-            listenerOptions.exchangeOptions
-          ),
+            Object.assign({ durable: true }, listenerOptions)
+          )
+        );
+
+        if (listenerOptions.exchange) {
+          // create exchange
+          channelHandlers.push(
+            channel.assertExchange(
+              listenerOptions.exchange,
+              listenerOptions.exchangeOptions?.type ?? 'topic',
+              listenerOptions.exchangeOptions
+            )
+          );
+          // bind exchange and queue
+          channelHandlers.push(
+            channel.bindQueue(
+              listenerOptions.queueName,
+              listenerOptions.exchange,
+              listenerOptions.pattern,
+              listenerOptions.exchangeOptions
+            )
+          );
+        }
+
+        channelHandlers.push(channel.prefetch(listenerOptions.prefetch ?? 1));
+
+        // listen queue
+        channelHandlers.push(
           channel.consume(
             listenerOptions.queueName,
             async msg => {
@@ -63,8 +83,10 @@ export class RabbitMQServer
               }
             },
             listenerOptions.consumeOptions
-          ),
-        ]);
+          )
+        );
+
+        return Promise.all(channelHandlers);
       },
       json: true,
     });

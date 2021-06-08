@@ -55,4 +55,39 @@ describe('/test/legacy.test.ts', () => {
     // 应该能看到两条错误输出
     await closeApp(app);
   });
+
+  it('should test fanout publish and subscribe', async () => {
+
+    const manager = await createRabbitMQProducer('tasks-fanout', {
+      isConfirmChannel: false,
+      mock: false,
+      url: process.env.RABBITMQ_URL || 'amqp://localhost',
+    });
+
+    // Name of the exchange
+    const ex = 'logs';
+    // Write a message
+    const msg = "Hello World!";
+
+    // Declare the exchange
+    manager.assertExchange(ex, 'fanout', { durable: false }) // 'fanout' will broadcast all messages to all the queues it knows
+
+
+    const app = await creatApp('base-app-fanout', {
+      url: process.env.RABBITMQ_URL || 'amqp://localhost',
+      reconnectTime: 2000
+    });
+
+    // 由于不持久化，需要等订阅服务起来之后再发
+    // Send message to the exchange
+    manager.sendToExchange(ex, '', Buffer.from(msg))
+
+    // will be close app wait a moment
+    await sleep(5000);
+
+    expect(app.getAttr('total')).toEqual(2);
+
+    await manager.close();
+    await closeApp(app);
+  });
 });
