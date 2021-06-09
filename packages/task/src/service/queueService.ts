@@ -25,7 +25,7 @@ export class QueueService {
     return this.queueMap[`${queueName.name}:execute`] as Queue;
   }
 
-  getQueueTask(queueClass: string, queueName: string): Queue{
+  getQueueTask(queueClass: string, queueName: string): Queue {
     return this.queueTaskMap[`${queueClass}:${queueName}`] as Queue;
   }
 }

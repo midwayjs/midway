@@ -67,10 +67,15 @@ export class AutoConfiguration {
           rule.value.call(service, job.data);
         });
         queueTaskMap[`${rule.name}:${rule.propertyKey}`] = queue;
-        let allJobs = await queue.getRepeatableJobs();
-        if(allJobs.length > 0){
-          if(!(allJobs.length === 1 && allJobs[0].cron === rule.options.repeat.cron)){
-            for(let item of allJobs){
+        const allJobs = await queue.getRepeatableJobs();
+        if (allJobs.length > 0) {
+          if (
+            !(
+              allJobs.length === 1 &&
+              allJobs[0].cron === rule.options.repeat.cron
+            )
+          ) {
+            for (const item of allJobs) {
               await queue.removeRepeatableByKey(item.key);
             }
           }
