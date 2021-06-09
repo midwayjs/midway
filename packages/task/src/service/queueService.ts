@@ -12,11 +12,11 @@ export class QueueService {
   /**
    * @deprecated please use execute method
    */
-  async excute(queueName: any, data: any, options: JobOptions) {
+  async excute(queueName: any, data: any, options: JobOptions = {}) {
     return this.execute(queueName, data, options);
   }
 
-  async execute(queueName: any, data: any, options: JobOptions) {
+  async execute(queueName: any, data: any, options: JobOptions = {}) {
     const queue = this.queueMap[`${queueName.name}:execute`] as Queue;
     return await queue.add(data, options);
   }
