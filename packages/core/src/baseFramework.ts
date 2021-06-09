@@ -379,11 +379,11 @@ export abstract class BaseFramework<
       },
 
       setAttr(key: string, value: any) {
-        this.getApplicationContext().registry.registerObject(key, value);
+        this.getApplicationContext().setAttr(key, value);
       },
 
       getAttr<T>(key: string): T {
-        return this.getApplicationContext().registry.getObject(key);
+        return this.getApplicationContext().getAttr(key);
       },
     };
     for (const method of whiteList) {

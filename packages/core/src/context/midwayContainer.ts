@@ -88,6 +88,7 @@ export class MidwayContainer
   protected informationService: IInformationService;
   protected aspectService;
   private directoryFilterArray: ResolveFilter[] = [];
+  private attrMap: Map<string, any> = new Map();
 
   /**
    * 单个进程中上一次的 applicationContext 的 registry
@@ -724,5 +725,13 @@ export class MidwayContainer
   public addDirectoryFilter(directoryFilter) {
     this.directoryFilterArray =
       this.directoryFilterArray.concat(directoryFilter);
+  }
+
+  public setAttr(key: string, value) {
+    this.attrMap.set(key, value);
+  }
+
+  public getAttr<T>(key: string): T {
+    return this.attrMap.get(key);
   }
 }
