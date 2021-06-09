@@ -37,7 +37,7 @@ export class AutoConfiguration {
     container: IMidwayContainer,
     app: IMidwayApplication
   ): Promise<void> {
-    await this.loadTask();
+    await this.loadTask(container);
     await this.loadLocalTask();
     await this.loadQueue(container);
   }
@@ -51,8 +51,9 @@ export class AutoConfiguration {
     });
   }
 
-  async loadTask() {
+  async loadTask(container) {
     const modules = listModule(MODULE_TASK_KEY);
+    const queueTaskMap = {};
     for (const module of modules) {
       const rules = getClassMetadata(MODULE_TASK_METADATA, module);
       for (const rule of rules) {
@@ -65,10 +66,20 @@ export class AutoConfiguration {
           const service = await ctx.requestContext.getAsync(module);
           rule.value.call(service, job.data);
         });
+        queueTaskMap[`${rule.name}:${rule.propertyKey}`] = queue;
+        let allJobs = await queue.getRepeatableJobs();
+        if(allJobs.length > 0){
+          if(!(allJobs.length === 1 && allJobs[0].cron === rule.options.repeat.cron)){
+            for(let item of allJobs){
+              await queue.removeRepeatableByKey(item.key);
+            }
+          }
+        }
         queue.add({}, rule.options);
         this.queueList.push(queue);
       }
     }
+    container.registerObject('queueTaskMap', queueTaskMap);
   }
 
   async loadLocalTask() {

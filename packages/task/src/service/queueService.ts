@@ -6,6 +6,9 @@ export class QueueService {
   @Inject('queueMap')
   queueMap;
 
+  @Inject('queueTaskMap')
+  queueTaskMap;
+
   /**
    * @deprecated please use execute method
    */
@@ -20,5 +23,9 @@ export class QueueService {
 
   getClassQueue(queueName: any): Queue {
     return this.queueMap[`${queueName.name}:execute`] as Queue;
+  }
+
+  getQueueTask(queueClass: string, queueName: string): Queue{
+    return this.queueTaskMap[`${queueClass}:${queueName}`] as Queue;
   }
 }
