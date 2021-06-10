@@ -60,6 +60,64 @@ describe('/test/annotation/check.test.ts', () => {
     assert.deepEqual(result, user);
   });
 
+  it('check with check with options', () => {
+    class WorldDTO {
+      @Rule(RuleType.number().max(20))
+      age: number;
+    }
+
+    class UserDTO {
+      @Rule(RuleType.number().max(10))
+      age: number;
+
+      @Rule(WorldDTO, {required: false})
+      world?: WorldDTO;
+    }
+
+    class Hello {
+      @Validate()
+      school(a, data: UserDTO) {
+        return data;
+      }
+    }
+    const user = {
+      age: 10
+    };
+    const result = new Hello().school(1, user);
+    assert.deepEqual(result, user);
+  });
+
+  it('check with check with array', () => {
+    class WorldDTO {
+      @Rule(RuleType.number().max(20))
+      age: number;
+    }
+
+    class UserDTO {
+      @Rule(RuleType.number().max(10))
+      age: number;
+
+      @Rule(WorldDTO)
+      world: WorldDTO[];
+    }
+
+    class Hello {
+      @Validate()
+      school(a, data: UserDTO) {
+        return data;
+      }
+    }
+    const user = {
+      age: 10,
+      world: [{
+        age: 10
+      }, {
+        age: 22
+      }]
+    };
+    expect(()=> new Hello().school(1, user)).toThrow();
+  });
+
   it('check with check and transform object', () => {
     class UserDTO {
       @Rule(RuleType.number().max(10))
