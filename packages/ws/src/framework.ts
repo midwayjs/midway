@@ -148,18 +148,13 @@ export class MidwayWSFramework extends BaseFramework<
                   const result = await controller[
                     wsEventInfo.propertyName
                   ].apply(controller, args);
-                  if (typeof args[args.length - 1] === 'function') {
-                    // ack
-                    args[args.length - 1](result);
-                  } else {
-                    // emit
-                    await this.bindSocketResponse(
-                      result,
-                      socket,
-                      wsEventInfo.propertyName,
-                      methodMap
-                    );
-                  }
+                  // emit
+                  await this.bindSocketResponse(
+                    result,
+                    socket,
+                    wsEventInfo.propertyName,
+                    methodMap
+                  );
                 } catch (err) {
                   this.logger.error(err);
                 }
@@ -223,6 +218,10 @@ export class MidwayWSFramework extends BaseFramework<
             }
           });
         }
+      }
+      if (methodMap[propertyName].responseEvents.length === 0) {
+        // no emit decorator
+        socket.send(formatResult(result));
       }
     } else {
       // just send
