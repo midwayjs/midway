@@ -3,17 +3,34 @@
  */
 
 import * as amqp from 'amqp-connection-manager';
-import { QueueManager } from './queueManager';
 import { IRabbitMQApplication } from './interface';
 import { ConsumeMessage } from 'amqplib/properties';
 import { RabbitMQListenerOptions } from '@midwayjs/decorator';
 import { Channel } from 'amqplib';
+import { ILogger } from '@midwayjs/logger';
+import { EventEmitter } from 'events';
 
 export class RabbitMQServer
-  extends QueueManager<amqp.Connection>
+  extends EventEmitter
   implements IRabbitMQApplication
 {
   protected channelManagerSet: Set<Channel> = new Set();
+  protected connection: amqp.Connection = null;
+  protected logger: ILogger;
+  protected reconnectTime;
+
+  constructor(options: any = {}) {
+    super();
+    this.logger = options.logger;
+    this.reconnectTime = options.reconnectTime ?? 10 * 1000;
+    this.bindError();
+  }
+
+  bindError() {
+    this.on('error', err => {
+      this.logger.error(err);
+    });
+  }
 
   createChannel(isConfirmChannel = false): Promise<any> {
     if (!isConfirmChannel) {
@@ -23,8 +40,26 @@ export class RabbitMQServer
     }
   }
 
-  async createConnection(url, socketOptions): Promise<any> {
-    return amqp.connect(url, socketOptions);
+  async connect(url, socketOptions) {
+    try {
+      this.connection = await amqp.connect(url, socketOptions);
+      (this.connection as any).on('connect', () => {
+        this.logger.info('Message Queue connected!');
+      });
+      (this.connection as any).on('disconnect', err => {
+        if (err) {
+          if (err.err) {
+            err = err.err;
+          }
+          this.logger.error('Message Queue disconnected', err);
+        } else {
+          this.logger.info('Message Queue disconnected!');
+        }
+      });
+    } catch (error) {
+      this.logger.error('Message Queue connect fail', error);
+      await this.closeConnection();
+    }
   }
 
   async createConsumer(
@@ -38,36 +73,71 @@ export class RabbitMQServer
     const channelWrapper = this.connection.createChannel({
       setup: (channel: Channel) => {
         // `channel` here is a regular amqplib `ConfirmChannel`.
-        return Promise.all([
-          channel.assertQueue(listenerOptions.queueName, listenerOptions),
-          channel.assertExchange(
-            listenerOptions.exchange,
-            listenerOptions.exchangeOptions.type ?? 'topic',
-            listenerOptions.exchangeOptions
-          ),
-          channel.prefetch(listenerOptions.prefetch ?? 1),
-          channel.bindQueue(
+        const channelHandlers = [];
+
+        // create queue
+        channelHandlers.push(
+          channel.assertQueue(
             listenerOptions.queueName,
-            listenerOptions.exchange,
-            listenerOptions.pattern,
-            listenerOptions.exchangeOptions
-          ),
+            Object.assign({ durable: true }, listenerOptions)
+          )
+        );
+
+        if (listenerOptions.exchange) {
+          // create exchange
+          channelHandlers.push(
+            channel.assertExchange(
+              listenerOptions.exchange,
+              listenerOptions.exchangeOptions?.type ?? 'topic',
+              listenerOptions.exchangeOptions
+            )
+          );
+          // bind exchange and queue
+          channelHandlers.push(
+            channel.bindQueue(
+              listenerOptions.queueName,
+              listenerOptions.exchange,
+              listenerOptions.routingKey || listenerOptions.pattern,
+              listenerOptions.exchangeOptions
+            )
+          );
+        }
+
+        channelHandlers.push(channel.prefetch(listenerOptions.prefetch ?? 1));
+
+        // listen queue
+        channelHandlers.push(
           channel.consume(
             listenerOptions.queueName,
             async msg => {
-              if (
-                !listenerOptions.routingKey ||
-                msg.fields.routingKey === listenerOptions.routingKey
-              ) {
-                await listenerCallback(msg, channel, channelWrapper);
-              }
+              await listenerCallback(msg, channel, channelWrapper);
             },
             listenerOptions.consumeOptions
-          ),
-        ]);
+          )
+        );
+
+        return Promise.all(channelHandlers);
       },
       json: true,
     });
     return channelWrapper.waitForConnect();
+  }
+
+  protected async closeConnection() {
+    try {
+      if (this.connection) {
+        await this.connection.close();
+      }
+      this.logger.debug('Message Queue connection close success');
+    } catch (err) {
+      this.logger.error('Message Queue connection close error', err);
+    } finally {
+      this.connection = null;
+    }
+  }
+
+  async close() {
+    this.logger.debug('Message Queue will be close');
+    await this.closeConnection();
   }
 }

@@ -280,6 +280,18 @@ export interface IMidwayContainer extends IApplicationContext {
   getCurrentEnv(): string;
   getResolverHandler(): IResolverHandler;
   addDirectoryFilter(filter: ResolveFilter[]);
+  /**
+   * Set value to app attribute map
+   * @param key
+   * @param value
+   */
+  setAttr(key: string, value: any);
+
+  /**
+   * Get value from app attribute map
+   * @param key
+   */
+  getAttr<T>(key: string): T;
 }
 
 export interface IConfigService {
@@ -353,6 +365,19 @@ export interface IMidwayBaseApplication<T extends IMidwayContext = IMidwayContex
   createAnonymousContext(...args): T;
   setContextLoggerClass(BaseContextLoggerClass: any): void;
   addConfigObject(obj: any);
+
+  /**
+   * Set value to app attribute map
+   * @param key
+   * @param value
+   */
+  setAttr(key: string, value: any);
+
+  /**
+   * Get value from app attribute map
+   * @param key
+   */
+  getAttr<T>(key: string): T;
 }
 
 export type IMidwayApplication<T extends IMidwayContext = IMidwayContext, FrameworkApplication = unknown> = IMidwayBaseApplication<T> & FrameworkApplication;

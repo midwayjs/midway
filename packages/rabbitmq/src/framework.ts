@@ -8,6 +8,7 @@ import {
 } from '@midwayjs/core';
 
 import {
+  ConsumerMetadata,
   MS_CONSUMER_KEY,
   MSListenerType,
   RabbitMQListenerOptions,
@@ -57,8 +58,11 @@ export class MidwayRabbitMQFramework extends BaseFramework<
   private async loadSubscriber() {
     // create channel
     const subscriberModules = listModule(MS_CONSUMER_KEY, module => {
-      const type: MSListenerType = getClassMetadata(MS_CONSUMER_KEY, module);
-      return type === MSListenerType.RABBITMQ;
+      const metadata: ConsumerMetadata.ConsumerMetadata = getClassMetadata(
+        MS_CONSUMER_KEY,
+        module
+      );
+      return metadata.type === MSListenerType.RABBITMQ;
     });
     for (const module of subscriberModules) {
       const providerId = getProviderId(module);
@@ -70,7 +74,7 @@ export class MidwayRabbitMQFramework extends BaseFramework<
       for (const methodBindListeners of data) {
         // 循环绑定的方法和监听的配置信息
         for (const listenerOptions of methodBindListeners) {
-          this.app.createConsumer(
+          await this.app.createConsumer(
             listenerOptions,
             async (data: ConsumeMessage, channel, channelWrapper) => {
               const ctx = {

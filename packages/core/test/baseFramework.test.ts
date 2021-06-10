@@ -748,4 +748,21 @@ describe('/test/baseFramework.test.ts', () => {
     mm.restore();
   });
 
+  it('should test attr api', async () => {
+    const framework = new LightFramework();
+    await framework.initialize({
+      baseDir: path.join(__dirname, './fixtures/base-app/src'),
+    });
+
+    framework.getApplicationContext().setAttr('bcd', 1);
+    expect(framework.getApplicationContext().getAttr('bcd')).toEqual(1);
+
+    const app = framework.getApplication();
+    app.setAttr('abc', 1);
+    expect(app.getAttr('abc')).toEqual(1);
+
+    framework.getApplicationContext().setAttr('abc', 2);
+    expect(app.getAttr('abc')).toEqual(2);
+  });
+
 });

@@ -377,6 +377,14 @@ export abstract class BaseFramework<
       addConfigObject(obj: any) {
         this.getApplicationContext().getConfigService().addObject(obj);
       },
+
+      setAttr(key: string, value: any) {
+        this.getApplicationContext().setAttr(key, value);
+      },
+
+      getAttr<T>(key: string): T {
+        return this.getApplicationContext().getAttr(key);
+      },
     };
     for (const method of whiteList) {
       delete defaultApplicationProperties[method];
