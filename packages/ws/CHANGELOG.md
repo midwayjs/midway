@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.11.0](https://github.com/midwayjs/midway/compare/v2.10.19...v2.11.0) (2021-06-10)
+
+
+### Features
+
+* add ws support ([#1058](https://github.com/midwayjs/midway/issues/1058)) ([e73cfcb](https://github.com/midwayjs/midway/commit/e73cfcb0ede82244a4eb8fe7c7612adf5586f47d))
+
+
+
+
+
 ## [2.10.14](https://github.com/midwayjs/midway/compare/v2.10.13...v2.10.14) (2021-05-11)
 
 

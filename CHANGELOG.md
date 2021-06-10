@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.11.0](https://github.com/midwayjs/midway/compare/v2.10.19...v2.11.0) (2021-06-10)
+
+
+### Bug Fixes
+
+* rabbitmq reconnection and test ([#1012](https://github.com/midwayjs/midway/issues/1012)) ([c2bea86](https://github.com/midwayjs/midway/commit/c2bea861430a13e53e5b100ea3935f20889c1fff))
+* rule required options ([#1000](https://github.com/midwayjs/midway/issues/1000)) ([d76e9f7](https://github.com/midwayjs/midway/commit/d76e9f7473bfe79ff6f07452a2ebad74cce19981))
+
+
+### Features
+
+* add ws support ([#1058](https://github.com/midwayjs/midway/issues/1058)) ([e73cfcb](https://github.com/midwayjs/midway/commit/e73cfcb0ede82244a4eb8fe7c7612adf5586f47d))
+* support close consul service check ([#1083](https://github.com/midwayjs/midway/issues/1083)) ([a632bae](https://github.com/midwayjs/midway/commit/a632bae4c87eeed77b448a65cd2164a9d4f59779))
+
+
+
+
+
 ## [2.10.19](https://github.com/midwayjs/midway/compare/v2.10.18...v2.10.19) (2021-05-27)
 
 

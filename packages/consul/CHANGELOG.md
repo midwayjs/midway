@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.11.0](https://github.com/midwayjs/midway/compare/v2.10.19...v2.11.0) (2021-06-10)
+
+
+### Features
+
+* support close consul service check ([#1083](https://github.com/midwayjs/midway/issues/1083)) ([a632bae](https://github.com/midwayjs/midway/commit/a632bae4c87eeed77b448a65cd2164a9d4f59779))
+
+
+
+
+
 ## [2.10.18](https://github.com/midwayjs/midway/compare/v2.10.17...v2.10.18) (2021-05-26)
 
 **Note:** Version bump only for package @midwayjs/consul

@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.11.0](https://github.com/midwayjs/midway/compare/v2.10.19...v2.11.0) (2021-06-10)
+
+
+### Bug Fixes
+
+* rabbitmq reconnection and test ([#1012](https://github.com/midwayjs/midway/issues/1012)) ([c2bea86](https://github.com/midwayjs/midway/commit/c2bea861430a13e53e5b100ea3935f20889c1fff))
+
+
+### Features
+
+* add ws support ([#1058](https://github.com/midwayjs/midway/issues/1058)) ([e73cfcb](https://github.com/midwayjs/midway/commit/e73cfcb0ede82244a4eb8fe7c7612adf5586f47d))
+
+
+
+
+
 ## [2.10.18](https://github.com/midwayjs/midway/compare/v2.10.17...v2.10.18) (2021-05-26)
 
 **Note:** Version bump only for package @midwayjs/mock

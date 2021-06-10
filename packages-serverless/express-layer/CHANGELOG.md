@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.11.0](https://github.com/midwayjs/midway-faas/compare/v2.10.19...v2.11.0) (2021-06-10)
+
+**Note:** Version bump only for package @midwayjs/express-layer
+
+
+
+
+
 ## [2.10.18](https://github.com/midwayjs/midway-faas/compare/v2.10.17...v2.10.18) (2021-05-26)
 
 **Note:** Version bump only for package @midwayjs/express-layer
