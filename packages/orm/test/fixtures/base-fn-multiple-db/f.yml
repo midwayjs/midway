@@ -1,0 +1,13 @@
+service: aliyun-test
+
+provider:
+  name: aliyun
+  runtime: nodejs10
+
+functions:
+  test1:
+    handler: index.handler
+    events:
+      - http:
+          path: /
+          method: get

@@ -1,0 +1,7 @@
+{
+  "name": "base-fn",
+  "version": "1.0.0",
+  "dependencies": {
+    "@ali/midway-faas": "*"
+  }
+}
