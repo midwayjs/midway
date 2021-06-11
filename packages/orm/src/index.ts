@@ -49,7 +49,7 @@ export function EntityModel(
     if (typeof target === 'function') {
       saveModule(ENTITY_MODEL_KEY, target);
     } else {
-      saveModule(ENTITY_MODEL_KEY, (target as object).constructor);
+      saveModule(ENTITY_MODEL_KEY, (target as any).constructor);
     }
 
     getMetadataArgsStorage().tables.push({
@@ -99,7 +99,7 @@ export function EntityView(
     if (typeof target === 'function') {
       saveModule(ENTITY_MODEL_KEY, target);
     } else {
-      saveModule(ENTITY_MODEL_KEY, (target as object).constructor);
+      saveModule(ENTITY_MODEL_KEY, (target as any).constructor);
     }
 
     getMetadataArgsStorage().tables.push({
@@ -140,7 +140,7 @@ export function EventSubscriberModel(): ClassDecorator {
     if (typeof target === 'function') {
       saveModule(EVENT_SUBSCRIBER_KEY, target);
     } else {
-      saveModule(EVENT_SUBSCRIBER_KEY, (target as object).constructor);
+      saveModule(EVENT_SUBSCRIBER_KEY, (target as any).constructor);
     }
 
     getMetadataArgsStorage().entitySubscribers.push({ target });

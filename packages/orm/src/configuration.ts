@@ -52,7 +52,9 @@ export class OrmConfiguration implements ILifeCycle {
         if (conn.isConnected) {
           isConnected = true;
         }
-      } catch {}
+      } catch {
+        /* ignore */
+      }
       if (!isConnected) {
         const rtOpt = await this.beforeCreate(container, connectionOption);
         const con = await createConnection(rtOpt);

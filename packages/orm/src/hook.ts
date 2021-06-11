@@ -18,7 +18,7 @@ export function OrmHook(): ClassDecorator {
     if (typeof target === 'function') {
       saveModule(ORM_HOOK_KEY, target);
     } else {
-      saveModule(ORM_HOOK_KEY, (target as object).constructor);
+      saveModule(ORM_HOOK_KEY, (target as any).constructor);
     }
   };
 }
