@@ -18,3 +18,4 @@ package-lock.json
 .tmp
 packages/midway/_package.json
 midway_benchmark_app
+*.sqlite
