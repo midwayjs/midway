@@ -11,6 +11,7 @@ import {
 } from 'typeorm';
 import { ViewEntityOptions } from 'typeorm/decorator/options/ViewEntityOptions';
 import { saveModule, attachClassMetadata } from '@midwayjs/core';
+import { saveClassMetadata } from '@midwayjs/decorator';
 
 export const CONNECTION_KEY = 'orm:getConnection';
 export const ENTITY_MODEL_KEY = 'entity_model_key';
@@ -135,15 +136,12 @@ export function InjectEntityModel(modelKey?: any, connectionName = 'default') {
  * EventSubscriber - typeorm
  * implements EntitySubscriberInterface
  */
-export function EventSubscriberModel(): ClassDecorator {
+export function EventSubscriberModel(
+  options: { connectionName?: string } = {}
+): ClassDecorator {
   return function (target) {
-    if (typeof target === 'function') {
-      saveModule(EVENT_SUBSCRIBER_KEY, target);
-    } else {
-      saveModule(EVENT_SUBSCRIBER_KEY, (target as any).constructor);
-    }
-
-    getMetadataArgsStorage().entitySubscribers.push({ target });
+    saveModule(EVENT_SUBSCRIBER_KEY, target);
+    saveClassMetadata(EVENT_SUBSCRIBER_KEY, options, target);
   };
 }
 

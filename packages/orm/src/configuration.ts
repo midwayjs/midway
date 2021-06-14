@@ -1,16 +1,21 @@
 import { ILifeCycle, IMidwayContainer } from '@midwayjs/core';
-import { Configuration, listModule, Config } from '@midwayjs/decorator';
 import {
+  Config,
+  Configuration,
+  getClassMetadata,
+  listModule,
+} from '@midwayjs/decorator';
+import {
+  Connection,
+  ConnectionOptions,
   createConnection,
   getConnection,
   getRepository,
-  ConnectionOptions,
-  Connection,
 } from 'typeorm';
 import {
+  CONNECTION_KEY,
   ENTITY_MODEL_KEY,
   EVENT_SUBSCRIBER_KEY,
-  CONNECTION_KEY,
   ORM_MODEL_KEY,
 } from '.';
 import { ORM_HOOK_KEY, OrmConnectionHook } from './hook';
@@ -31,8 +36,7 @@ export class OrmConfiguration implements ILifeCycle {
       ORM_MODEL_KEY,
       (key: { modelKey; connectionName }) => {
         // return getConnection(key.connectionName).getRepository(key.modelKey);
-        const repo = getRepository(key.modelKey, key.connectionName);
-        return repo;
+        return getRepository(key.modelKey, key.connectionName);
       }
     );
 
@@ -68,6 +72,19 @@ export class OrmConfiguration implements ILifeCycle {
       }
       return getConnection(instanceName);
     });
+
+    // get event model
+    const eventModules = listModule(EVENT_SUBSCRIBER_KEY);
+    for (const eventModule of eventModules) {
+      const eventModuleMetadata = getClassMetadata(
+        EVENT_SUBSCRIBER_KEY,
+        eventModule
+      );
+      const module = await container.getAsync(eventModule);
+      getConnection(
+        eventModuleMetadata.connectionName || 'default'
+      ).subscribers.push(module);
+    }
   }
 
   async onStop(container: IMidwayContainer) {
