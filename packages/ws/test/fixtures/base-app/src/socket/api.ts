@@ -5,7 +5,6 @@ import {
   OnWSMessage,
   Provide,
   WSController,
-  WSEmit,
 } from '@midwayjs/decorator';
 import { UserService } from '../service/user';
 import { IMidwayWSContext } from '../../../../../src';
@@ -28,7 +27,6 @@ export class APIController {
   }
 
   @OnWSMessage('message')
-  @WSEmit('ok')
   async gotMyMessage(data) {
     return { name: 'harry', result: parseInt(data) + 5 };
   }
