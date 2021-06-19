@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/grpc",
-  "version": "2.11.0",
+  "version": "2.11.1",
   "description": "Midway Framework for gRPC",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -23,15 +23,15 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/core": "^2.11.0",
-    "@midwayjs/decorator": "^2.11.0",
-    "@midwayjs/mock": "^2.11.0",
+    "@midwayjs/core": "^2.11.1",
+    "@midwayjs/decorator": "^2.11.1",
+    "@midwayjs/mock": "^2.11.1",
     "fs-extra": "^8.0.1"
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.2.1",
     "@grpc/proto-loader": "^0.5.5",
-    "@midwayjs/logger": "^2.11.0",
+    "@midwayjs/logger": "^2.11.1",
     "camelcase": "^6.2.0",
     "pascal-case": "^3.1.2"
   },

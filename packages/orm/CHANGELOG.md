@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.11.1](https://github.com/midwayjs/midway/compare/v2.11.0...v2.11.1) (2021-06-19)
+
+
+### Features
+
+* support EventSubscriberModel with provide ([#1095](https://github.com/midwayjs/midway/issues/1095)) ([05431d2](https://github.com/midwayjs/midway/commit/05431d28b9812cf6f658945b3fe7f69801224559))
+
+
+
+
+
 # [1.3.0](https://github.com/midwayjs/midway-component/compare/@midwayjs/orm@1.2.1...@midwayjs/orm@1.3.0) (2020-11-10)
 
 
