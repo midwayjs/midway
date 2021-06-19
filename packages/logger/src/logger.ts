@@ -138,7 +138,7 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
       this.fileTransport = new DailyRotateFileTransport({
         dirname: this.loggerOptions.dir,
         filename: this.loggerOptions.fileLogName,
-        datePattern: 'YYYY-MM-DD',
+        datePattern: this.loggerOptions.fileDatePattern || 'YYYY-MM-DD',
         level:
           this.loggerOptions.fileLevel || this.loggerOptions.level || 'silly',
         createSymlink: this.loggerOptions.disableFileSymlink !== true,
@@ -161,7 +161,7 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
       this.errTransport = new DailyRotateFileTransport({
         dirname: this.loggerOptions.errorDir || this.loggerOptions.dir,
         filename: this.loggerOptions.errorLogName,
-        datePattern: 'YYYY-MM-DD',
+        datePattern: this.loggerOptions.errDatePattern || 'YYYY-MM-DD',
         level: 'error',
         createSymlink: this.loggerOptions.disableErrorSymlink !== true,
         symlinkName: this.loggerOptions.errorLogName,

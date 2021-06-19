@@ -64,6 +64,8 @@ export interface LoggerOptions {
   eol?: string;
   fileZippedArchive?: boolean;
   errZippedArchive?: boolean;
+  fileDatePattern?: string;
+  errDatePattern?: string;
 }
 
 export interface DelegateLoggerOptions {
