@@ -75,10 +75,12 @@ export const displayCommonMessage = format(
 
     // error 参数在最后的情况
     if (info[SPLAT] && info[SPLAT].length > 0) {
-      // 目前只会有一个 error，只会在最后一个参数
-      const err = info[SPLAT][info[SPLAT].length - 1];
-      if (err instanceof Error) {
-        info.message = info.message.replace(err.message, '') + err.stack;
+      // err 位置不定
+      const err = info[SPLAT].find(el => {
+        return el instanceof Error;
+      });
+      if (err) {
+        info.message = info.message.replace(err.message, '') + ' ' + err.stack;
         info[MESSAGE] = info[MESSAGE] || info.message + err.stack;
         info.originError = err;
         info.stack = err.stack;

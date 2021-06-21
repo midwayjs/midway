@@ -12,10 +12,27 @@ import { DelegateTransport, EmptyTransport } from './transport';
 import { displayLabels, displayCommonMessage } from './format';
 import * as os from 'os';
 import { basename, dirname, isAbsolute } from 'path';
+import * as util from 'util';
 
 const isWindows = os.platform() === 'win32';
 
-export const EmptyLogger: Logger = createLogger().constructor as Logger;
+export function isPlainObject(value) {
+  if (Object.prototype.toString.call(value) !== '[object Object]') {
+    return false;
+  }
+
+  const prototype = Object.getPrototypeOf(value);
+  return prototype === null || prototype === Object.prototype;
+}
+
+type NewLogger = Omit<Logger, 'log' | 'add' | 'close' | 'remove' | 'write'>;
+
+export const EmptyLogger = createLogger().constructor as unknown as {
+  new (options?: LoggerOptions): IMidwayLogger &
+    NewLogger & {
+      log(...args): any;
+    };
+} & NewLogger;
 
 const midwayLogLevels = {
   none: 0,
@@ -119,6 +136,27 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
       this.enableError();
     }
     this.add(new EmptyTransport());
+  }
+
+  log(level, msg, ...splat) {
+    if (splat && splat.length > 2) {
+      /**
+       * 这里如果少于 3 个参数，直接走 format 中的逻辑
+       *
+       * 1、如果最后一个是纯对象，认为是 {label: xxxx}，那么保留最后两个参数，前面的合并，变为 msg, msg2, {label: xxx}
+       * 2、如果最后一个非纯对象，但是是错误对象，那么错误对象之前的参数全部合并，变为 msg, err
+       * 3、如果最后一个非纯对象，也不是错误对象（错误对象必须在最后），那么所有的参数都做合并，变为 msg
+       * 4、这样 format 中最多只处理三个参数的情况
+       */
+      if (isPlainObject(splat[splat.length - 1])) {
+        msg = util.format(msg, ...splat.slice(0, -2));
+      } else if (splat[splat.length - 1] instanceof Error) {
+        msg = util.format(msg, ...splat.slice(0, -1));
+      } else {
+        msg = util.format(msg, ...splat);
+      }
+    }
+    return super.log(level, msg, ...splat);
   }
 
   disableConsole(): void {

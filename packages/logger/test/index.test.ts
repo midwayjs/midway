@@ -164,7 +164,9 @@ describe('/test/index.test.ts', () => {
       disableError: true,
     });
 
-    logger.debug('test');
+    logger.debug('test', 'test1', 'test2', 'test3');
+    logger.warn('test', 'test4', 'test5', 123, new Error('bcd'));
+    logger.error('test2', 'test6', 123, 'test7', new Error('ef'), { label: '123' });
     logger.info('hello world', { label: ['a', 'b']});
     logger.warn('warn: hello world', {label: 'UserService'});
     logger.info('%s %d', 'aaa', 222);
@@ -204,7 +206,9 @@ describe('/test/index.test.ts', () => {
 
     expect(fileExists(join(logsDir, 'custom-logger.log'))).toBeTruthy();
     expect(fileExists(join(logsDir, 'common-error.log'))).toBeFalsy();
-    expect(includeContent(join(logsDir, 'custom-logger.log'), 'test')).toBeTruthy();
+    expect(includeContent(join(logsDir, 'custom-logger.log'), 'test test1 test2 test3')).toBeTruthy();
+    expect(includeContent(join(logsDir, 'custom-logger.log'), 'test test4 test5 123 Error: bcd')).toBeTruthy();
+    expect(includeContent(join(logsDir, 'custom-logger.log'), 'test2 test6 123 test7 Error: ef')).toBeTruthy();
     expect(includeContent(join(logsDir, 'custom-logger.log'), '[a:b] hello world')).toBeTruthy();
     expect(includeContent(join(logsDir, 'custom-logger.log'), '[UserService] warn: hello world')).toBeTruthy();
     expect(includeContent(join(logsDir, 'custom-logger.log'), 'aaa 222')).toBeTruthy();
@@ -227,6 +231,7 @@ describe('/test/index.test.ts', () => {
   it('should create console file', async () => {
     await removeFileOrDir(join(process.cwd(), 'common-error.log'));
     const consoleLogger = createConsoleLogger('consoleLogger');
+    consoleLogger.debug('test', 'test1', 'test2', 'test3');
     consoleLogger.error('test console error');
     console.log('---');
     const err = new Error('custom error');
