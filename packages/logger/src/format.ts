@@ -80,7 +80,7 @@ export const displayCommonMessage = format(
         return el instanceof Error;
       });
       if (err) {
-        info.message = info.message.replace(err.message, '') + ' ' + err.stack;
+        info.message = info.message.replace(err.message, '').trimEnd() + ' ' + err.stack;
         info[MESSAGE] = info[MESSAGE] || info.message + err.stack;
         info.originError = err;
         info.stack = err.stack;

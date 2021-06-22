@@ -312,7 +312,7 @@ describe('/test/index.test.ts', () => {
 
     await sleep();
     expect(fileExists(join(logsDir, 'test-logger.log'))).toBeTruthy();
-    expect(includeContent(join(logsDir, 'test-logger.log'), 'bbb.my-site error first message my error')).toBeTruthy();
+    expect(includeContent(join(logsDir, 'test-logger.log'), 'bbb.my-site error first message Error: my error')).toBeTruthy();
     expect(includeContent(join(logsDir, 'test-logger.log'), 'my-another-group.my-another-site error second message Error: my error')).toBeTruthy();
 
     const customFormatLogger = createLogger<IMidwayLogger>('testLogger1', {
