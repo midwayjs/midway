@@ -93,7 +93,8 @@ describe('/test/index.test.ts', () => {
     error.name = 'NamedError';
     // 直接输出 error
     logger.error(error);
-    expect(fn.mock.calls[15][0].message).toContain('Error [NamedError]: named error instance');
+    expect(fn.mock.calls[15][0].message).toContain('NamedError');
+    expect(fn.mock.calls[15][0].message).toContain('named error instance');
   });
 
   it('should test create logger', async () => {
@@ -404,7 +405,7 @@ describe('/test/index.test.ts', () => {
     expect(
       includeContent(
         join(logsDir, 'custom-logger.log'),
-        '[NamedError]: named error instance'
+        'named error instance'
       )
     ).toBeTruthy();
     expect(
