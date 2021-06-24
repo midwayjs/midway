@@ -25,7 +25,20 @@ export function isPlainObject(value) {
   return prototype === null || prototype === Object.prototype;
 }
 
-type NewLogger = Omit<Logger, 'log' | 'add' | 'close' | 'remove' | 'write'>;
+type NewLogger = Omit<
+  Logger,
+  | 'log'
+  | 'add'
+  | 'close'
+  | 'remove'
+  | 'write'
+  | 'info'
+  | 'warn'
+  | 'debug'
+  | 'error'
+  | 'verbose'
+  | 'silly'
+>;
 
 export const EmptyLogger = createLogger().constructor as unknown as {
   new (options?: LoggerOptions): IMidwayLogger &
@@ -138,25 +151,23 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
     this.add(new EmptyTransport());
   }
 
-  log(level, msg, ...splat) {
-    if (splat && splat.length > 2) {
-      /**
-       * 这里如果少于 3 个参数，直接走 format 中的逻辑
-       *
-       * 1、如果最后一个是纯对象，认为是 {label: xxxx}，那么保留最后两个参数，前面的合并，变为 msg, msg2, {label: xxx}
-       * 2、如果最后一个非纯对象，但是是错误对象，那么错误对象之前的参数全部合并，变为 msg, err
-       * 3、如果最后一个非纯对象，也不是错误对象（错误对象必须在最后），那么所有的参数都做合并，变为 msg
-       * 4、这样 format 中最多只处理三个参数的情况
-       */
-      if (isPlainObject(splat[splat.length - 1])) {
-        msg = util.format(msg, ...splat.slice(0, -2));
-      } else if (splat[splat.length - 1] instanceof Error) {
-        msg = util.format(msg, ...splat.slice(0, -1));
-      } else {
-        msg = util.format(msg, ...splat);
-      }
+  log(level, ...args) {
+    let meta, msg;
+    if (args.length > 1 && isPlainObject(args[args.length - 1])) {
+      meta = args.pop();
+    } else {
+      meta = {};
     }
-    return super.log(level, msg, ...splat);
+
+    const last = args.pop();
+    if (last instanceof Error) {
+      msg = util.format(...args, last);
+      meta['originError'] = last;
+    } else {
+      msg = util.format(...args, last);
+    }
+
+    return super.log(level, msg, meta);
   }
 
   disableConsole(): void {
@@ -318,6 +329,25 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
 
   close(): any {
     return super.close();
+  }
+
+  debug(...args) {
+    this.log('debug', ...args);
+  }
+  info(...args) {
+    this.log('info', ...args);
+  }
+  warn(...args) {
+    this.log('warn', ...args);
+  }
+  error(...args) {
+    this.log('error', ...args);
+  }
+  verbose(...args) {
+    this.log('verbose', ...args);
+  }
+  silly(...args) {
+    this.log('silly', ...args);
   }
 }
 
