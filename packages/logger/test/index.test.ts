@@ -81,7 +81,7 @@ describe('/test/index.test.ts', () => {
         ['key2', 'value2'],
       ])
     );
-    expect(fn.mock.calls[12][0].message).toEqual('{ \'key1\' => \'value1\', \'key2\' => \'value2\' }');
+    expect(fn.mock.calls[12][0].message).toContain('{ \'key1\' => \'value1\', \'key2\' => \'value2\' }');
     // warn object
     logger.warn({ name: 'Jack' });
     expect(fn.mock.calls[13][0].message).toEqual('{ name: \'Jack\' }');
