@@ -74,9 +74,7 @@ export class MidwayLoggerContainer extends Map<string, ILogger> {
 
   removeLogger(name: string) {
     const logger = this.get(name);
-    if (logger['close']) {
-      (logger as any).close();
-    }
+    logger?.['close']();
     this.delete(name);
     delete this.loggerOriginData[name];
   }

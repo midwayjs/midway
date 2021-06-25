@@ -7,7 +7,6 @@ import {
 } from './interface';
 import {
   BaseFramework,
-  createMidwayLogger,
   extractKoaLikeValue,
   IMiddleware,
   IMidwayBootstrapOptions,
@@ -29,7 +28,7 @@ import {
 import SimpleLock from '@midwayjs/simple-lock';
 import * as compose from 'koa-compose';
 import { MidwayHooks } from './hooks';
-import { LoggerOptions, loggers } from '@midwayjs/logger';
+import { createConsoleLogger, LoggerOptions, loggers } from '@midwayjs/logger';
 
 const LOCK_KEY = '_faas_starter_start_key';
 
@@ -46,6 +45,7 @@ export class MidwayFaaSFramework extends BaseFramework<
   protected logger;
   private lock = new SimpleLock();
   public app: IMidwayFaaSApplication;
+  private isReplaceLogger = process.env['MIDWAY_SERVERLESS_REPLACE_LOGGER'] === 'true';
 
   async applicationInitialize(options: IMidwayBootstrapOptions) {
     this.globalMiddleware = this.configurationOptions.middleware || [];
@@ -87,9 +87,12 @@ export class MidwayFaaSFramework extends BaseFramework<
   protected async initializeLogger(options: IMidwayBootstrapOptions) {
     if (!this.logger) {
       this.logger =
-        options.logger ||
-        this.configurationOptions?.initializeContext?.['logger'] ||
-        console;
+        options.logger ||  createConsoleLogger('midwayServerlessLogger', {
+          printFormat: info => {
+            const requestId = info.ctx['requestId'] ?? info.ctx['request_id'] ?? '';
+            return `${new Date().toISOString()} ${requestId} [${info.level}] ${info.message}`;
+          }
+        });
       this.appLogger = this.logger;
       loggers.addLogger('coreLogger', this.logger, false);
       loggers.addLogger('appLogger', this.logger, false);
@@ -196,8 +199,11 @@ export class MidwayFaaSFramework extends BaseFramework<
     if (!context.hooks) {
       context.hooks = new MidwayHooks(context, this.app);
     }
-    if (!context.logger) {
-      context.logger = this.logger;
+    if (this.isReplaceLogger || !context.logger) {
+      /**
+       * 由于 fc 的 logger 有 bug，FC公有云环境我们会默认替换掉，其他平台后续视情况而定
+       */
+      context.logger = this.createContextLogger(context);
     }
     this.app.createAnonymousContext(context);
     return context;
@@ -329,14 +335,7 @@ export class MidwayFaaSFramework extends BaseFramework<
 
   public createLogger(name: string, option: LoggerOptions = {}) {
     // 覆盖基类的创建日志对象，函数场景下的日志，即使自定义，也只启用控制台输出
-    return createMidwayLogger(
-      this,
-      name,
-      Object.assign(option, {
-        disableFile: true,
-        disableError: true,
-      })
-    );
+    return createConsoleLogger(name, option);
   }
 
   public getFrameworkName() {

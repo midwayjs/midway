@@ -10,6 +10,8 @@ export const start = async (options: any = {}) => {
   if (!process.env.NODE_ENV) {
     process.env.NODE_ENV = 'production';
   }
+  // 用于替换默认的上下文日志
+  process.env['MIDWAY_SERVERLESS_REPLACE_LOGGER'] = 'true';
   bootstrap = new BaseBootstrap(
     Object.assign(
       {
