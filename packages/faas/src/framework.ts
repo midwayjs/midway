@@ -45,7 +45,8 @@ export class MidwayFaaSFramework extends BaseFramework<
   protected logger;
   private lock = new SimpleLock();
   public app: IMidwayFaaSApplication;
-  private isReplaceLogger = process.env['MIDWAY_SERVERLESS_REPLACE_LOGGER'] === 'true';
+  private isReplaceLogger =
+    process.env['MIDWAY_SERVERLESS_REPLACE_LOGGER'] === 'true';
 
   async applicationInitialize(options: IMidwayBootstrapOptions) {
     this.globalMiddleware = this.configurationOptions.middleware || [];
@@ -87,11 +88,15 @@ export class MidwayFaaSFramework extends BaseFramework<
   protected async initializeLogger(options: IMidwayBootstrapOptions) {
     if (!this.logger) {
       this.logger =
-        options.logger ||  createConsoleLogger('midwayServerlessLogger', {
+        options.logger ||
+        createConsoleLogger('midwayServerlessLogger', {
           printFormat: info => {
-            const requestId = info.ctx['requestId'] ?? info.ctx['request_id'] ?? '';
-            return `${new Date().toISOString()} ${requestId} [${info.level}] ${info.message}`;
-          }
+            const requestId =
+              info.ctx['requestId'] ?? info.ctx['request_id'] ?? '';
+            return `${new Date().toISOString()} ${requestId} [${info.level}] ${
+              info.message
+            }`;
+          },
         });
       this.appLogger = this.logger;
       loggers.addLogger('coreLogger', this.logger, false);
