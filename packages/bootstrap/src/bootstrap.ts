@@ -269,7 +269,10 @@ export class Bootstrap {
   static async stop() {
     await this.getStarter().stop();
     process.removeListener('uncaughtException', this.uncaughtExceptionHandler);
-    process.removeListener('unhandledRejection', this.unhandledRejectionHandler);
+    process.removeListener(
+      'unhandledRejection',
+      this.unhandledRejectionHandler
+    );
     this.reset();
   }
 
