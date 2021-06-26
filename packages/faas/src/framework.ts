@@ -205,10 +205,15 @@ export class MidwayFaaSFramework extends BaseFramework<
       context.hooks = new MidwayHooks(context, this.app);
     }
     if (this.isReplaceLogger || !context.logger) {
+      context._serverlessLogger = this.createContextLogger(context);
       /**
        * 由于 fc 的 logger 有 bug，FC公有云环境我们会默认替换掉，其他平台后续视情况而定
        */
-      context.logger = this.createContextLogger(context);
+      Object.defineProperty(context, 'logger', {
+        get() {
+          return context._serverlessLogger;
+        },
+      });
     }
     this.app.createAnonymousContext(context);
     return context;
