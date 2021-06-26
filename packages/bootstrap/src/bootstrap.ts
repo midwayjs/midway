@@ -7,7 +7,7 @@ import {
   IMidwayContainer,
 } from '@midwayjs/core';
 import { join } from 'path';
-import { createConsoleLogger, ILogger, IMidwayLogger } from '@midwayjs/logger';
+import { createConsoleLogger, ILogger } from '@midwayjs/logger';
 
 export function isTypeScriptEnvironment() {
   const TS_MODE_PROCESS_FLAG: string = process.env.MIDWAY_TS_MODE;
@@ -193,7 +193,7 @@ export class Bootstrap {
     if (!this.logger && !configuration.logger) {
       this.logger = createConsoleLogger('bootstrapConsole');
       if (configuration.logger === false) {
-        (this.logger as IMidwayLogger)?.disableConsole();
+        this.logger?.['disableConsole']();
       }
       configuration.logger = this.logger;
     } else {
@@ -249,6 +249,7 @@ export class Bootstrap {
     process.once('exit', this.onExit.bind(this));
 
     this.uncaughtExceptionHandler = this.uncaughtExceptionHandler.bind(this);
+    console.log('-----process.on')
     process.on('uncaughtException', this.uncaughtExceptionHandler);
 
     this.unhandledRejectionHandler = this.unhandledRejectionHandler.bind(this);
