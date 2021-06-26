@@ -12,10 +12,40 @@ import { DelegateTransport, EmptyTransport } from './transport';
 import { displayLabels, displayCommonMessage } from './format';
 import * as os from 'os';
 import { basename, dirname, isAbsolute } from 'path';
+import * as util from 'util';
 
 const isWindows = os.platform() === 'win32';
 
-export const EmptyLogger: Logger = createLogger().constructor as Logger;
+export function isPlainObject(value) {
+  if (Object.prototype.toString.call(value) !== '[object Object]') {
+    return false;
+  }
+
+  const prototype = Object.getPrototypeOf(value);
+  return prototype === null || prototype === Object.prototype;
+}
+
+type NewLogger = Omit<
+  Logger,
+  | 'log'
+  | 'add'
+  | 'close'
+  | 'remove'
+  | 'write'
+  | 'info'
+  | 'warn'
+  | 'debug'
+  | 'error'
+  | 'verbose'
+  | 'silly'
+>;
+
+export const EmptyLogger = createLogger().constructor as unknown as {
+  new (options?: LoggerOptions): IMidwayLogger &
+    NewLogger & {
+      log(...args): any;
+    };
+} & NewLogger;
 
 const midwayLogLevels = {
   none: 0,
@@ -119,6 +149,25 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
       this.enableError();
     }
     this.add(new EmptyTransport());
+  }
+
+  log(level, ...args) {
+    let meta, msg;
+    if (args.length > 1 && isPlainObject(args[args.length - 1])) {
+      meta = args.pop();
+    } else {
+      meta = {};
+    }
+
+    const last = args.pop();
+    if (last instanceof Error) {
+      msg = util.format(...args, last);
+      meta['originError'] = last;
+    } else {
+      msg = util.format(...args, last);
+    }
+
+    return super.log(level, msg, meta);
   }
 
   disableConsole(): void {
@@ -280,6 +329,25 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
 
   close(): any {
     return super.close();
+  }
+
+  debug(...args) {
+    this.log('debug', ...args);
+  }
+  info(...args) {
+    this.log('info', ...args);
+  }
+  warn(...args) {
+    this.log('warn', ...args);
+  }
+  error(...args) {
+    this.log('error', ...args);
+  }
+  verbose(...args) {
+    this.log('verbose', ...args);
+  }
+  silly(...args) {
+    this.log('silly', ...args);
   }
 }
 

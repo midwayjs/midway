@@ -11,8 +11,9 @@ export abstract class ServerlessLightRuntime
   implements LightRuntime
 {
   async invokeHandlerWrapper(context, invokeHandler) {
+    const contextExtensions = this.getContextExtensions() || [];
     // load context extension
-    for (const contextExtension of this.getContextExtensions() || []) {
+    for (const contextExtension of contextExtensions) {
       await contextExtension(context, this);
     }
     try {
