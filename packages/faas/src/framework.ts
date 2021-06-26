@@ -92,7 +92,9 @@ export class MidwayFaaSFramework extends BaseFramework<
         createConsoleLogger('midwayServerlessLogger', {
           printFormat: info => {
             const requestId =
-              info.ctx?.['originContext']?.['requestId'] ?? info.ctx?.['originContext']?.['request_id'] ?? '';
+              info.ctx?.['originContext']?.['requestId'] ??
+              info.ctx?.['originContext']?.['request_id'] ??
+              '';
             return `${new Date().toISOString()} ${requestId} [${info.level}] ${
               info.message
             }`;
