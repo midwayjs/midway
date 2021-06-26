@@ -96,6 +96,16 @@ class TestFrameworkUnit implements IMidwayFramework<any, MockConfigurationOption
   }
 }
 
+const a = null;
+
+class PromiseErrorFramework extends TestFrameworkUnit {
+  async run(): Promise<any> {
+    setTimeout(()  => {
+      a();
+    }, 100);
+  }
+}
+
 describe('/test/index.test.ts', () => {
 
   beforeEach(() => {
@@ -159,5 +169,16 @@ describe('/test/index.test.ts', () => {
     expect(global['MIDWAY_BOOTSTRAP_APP_SET'].size).toEqual(1);
     await Bootstrap.stop();
     global['MIDWAY_BOOTSTRAP_APP_SET'] = null;
+  });
+
+  it.skip('should catch promise error when start', async () => {
+    // can't trigger in jest
+    const framework = new PromiseErrorFramework().configure({
+      port: 7001,
+    });
+    const spy = jest.spyOn(process, 'on');
+    await Bootstrap.load(framework).run();
+    await sleep(2000);
+    expect(spy).toHaveBeenCalled();
   });
 });
