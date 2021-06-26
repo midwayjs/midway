@@ -100,19 +100,11 @@ const a = null;
 
 class PromiseErrorFramework extends TestFrameworkUnit {
   async run(): Promise<any> {
-    console.log('-----start timeout')
     setTimeout(()  => {
-      console.log('-----start throw err')
       a();
     }, 100);
   }
 }
-
-// class ErrorFramework extends TestFrameworkUnit {
-//   async run(): Promise<any> {
-//     return 'bbb';
-//   }
-// }
 
 describe('/test/index.test.ts', () => {
 
@@ -179,13 +171,14 @@ describe('/test/index.test.ts', () => {
     global['MIDWAY_BOOTSTRAP_APP_SET'] = null;
   });
 
-  it('should catch promise error when start', async () => {
+  it.skip('should catch promise error when start', async () => {
+    // can't trigger in jest
     const framework = new PromiseErrorFramework().configure({
       port: 7001,
     });
+    const spy = jest.spyOn(process, 'on');
     await Bootstrap.load(framework).run();
     await sleep(2000);
-    console.log('---start stop')
-    await Bootstrap.stop();
+    expect(spy).toHaveBeenCalled();
   });
 });

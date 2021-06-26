@@ -249,7 +249,6 @@ export class Bootstrap {
     process.once('exit', this.onExit.bind(this));
 
     this.uncaughtExceptionHandler = this.uncaughtExceptionHandler.bind(this);
-    console.log('-----process.on')
     process.on('uncaughtException', this.uncaughtExceptionHandler);
 
     this.unhandledRejectionHandler = this.unhandledRejectionHandler.bind(this);
