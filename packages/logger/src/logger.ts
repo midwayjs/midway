@@ -109,19 +109,21 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
     this.consoleTransport = new transports.Console({
       level: options.consoleLevel || options.level || 'silly',
       format: format.combine(
-        format.colorize({
-          all: true,
-          colors: {
-            none: 'reset',
-            error: 'red',
-            warn: 'yellow',
-            info: 'reset',
-            verbose: 'reset',
-            debug: 'blue',
-            silly: 'reset',
-            all: 'reset',
-          },
-        })
+        process.env.MIDWAY_LOGGER_DISABLE_COLORS !== 'true'
+          ? format.colorize({
+              all: true,
+              colors: {
+                none: 'reset',
+                error: 'red',
+                warn: 'yellow',
+                info: 'reset',
+                verbose: 'reset',
+                debug: 'blue',
+                silly: 'reset',
+                all: 'reset',
+              },
+            })
+          : format(i => i)()
       ),
     });
 
