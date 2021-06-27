@@ -12,6 +12,10 @@ export const start = async (options: any = {}) => {
   }
   // 用于替换默认的上下文日志
   process.env['MIDWAY_SERVERLESS_REPLACE_LOGGER'] = 'true';
+  // 移除控制台颜色，fc 控制台无法探测是否支持，日志采集也必须把颜色禁用掉
+  if (process.env.NODE_ENV !== 'local') {
+    process.env['MIDWAY_LOGGER_DISABLE_COLORS'] = 'true';
+  }
   bootstrap = new BaseBootstrap(
     Object.assign(
       {

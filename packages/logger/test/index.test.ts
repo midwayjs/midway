@@ -1118,10 +1118,11 @@ describe('/test/index.test.ts', () => {
 
   it('should test no color with console', function () {
     clearAllLoggers();
-    process.env.MIDWAY_LOGGER_ENABLE_COLORS = 'true';
+    process.env.MIDWAY_LOGGER_DISABLE_COLORS = 'true';
+    const fn = jest.spyOn(process.stdout, '_write');
     const consoleLogger = createConsoleLogger('consoleLogger');
     consoleLogger.debug('test', 'test1', 'test2', 'test3');
-    consoleLogger.error('test console error');
-    process.env.MIDWAY_LOGGER_ENABLE_COLORS = '';
+    process.env.MIDWAY_LOGGER_DISABLE_COLORS = '';
+    expect(fn.mock.calls[0][0]).not.toContain('\x1B');
   });
 });
