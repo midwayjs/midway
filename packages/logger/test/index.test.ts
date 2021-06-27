@@ -1115,4 +1115,13 @@ describe('/test/index.test.ts', () => {
     ).toEqual(3);
     await removeFileOrDir(logsDir);
   });
+
+  it('should test no color with console', function () {
+    clearAllLoggers();
+    process.env.MIDWAY_LOGGER_ENABLE_COLORS = 'true';
+    const consoleLogger = createConsoleLogger('consoleLogger');
+    consoleLogger.debug('test', 'test1', 'test2', 'test3');
+    consoleLogger.error('test console error');
+    process.env.MIDWAY_LOGGER_ENABLE_COLORS = '';
+  });
 });
