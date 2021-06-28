@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/egg-layer",
-  "version": "2.11.1",
+  "version": "2.11.2",
   "main": "index.js",
   "scripts": {
     "test": "node --require=ts-node/register ../../node_modules/.bin/jest",
@@ -12,13 +12,13 @@
   },
   "devDependencies": {
     "@midwayjs/decorator": "^2.11.1",
-    "@midwayjs/runtime-engine": "^2.11.1",
-    "@midwayjs/runtime-mock": "^2.11.1",
-    "@midwayjs/serverless-fc-starter": "^2.11.1",
-    "@midwayjs/serverless-fc-trigger": "^2.11.1",
-    "@midwayjs/serverless-scf-starter": "^2.11.1",
-    "@midwayjs/serverless-scf-trigger": "^2.11.1",
-    "@midwayjs/web": "^2.11.1",
+    "@midwayjs/runtime-engine": "^2.11.2",
+    "@midwayjs/runtime-mock": "^2.11.2",
+    "@midwayjs/serverless-fc-starter": "^2.11.2",
+    "@midwayjs/serverless-fc-trigger": "^2.11.2",
+    "@midwayjs/serverless-scf-starter": "^2.11.2",
+    "@midwayjs/serverless-scf-trigger": "^2.11.2",
+    "@midwayjs/web": "^2.11.2",
     "supertest": "^6.0.0"
   },
   "engines": {

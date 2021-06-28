@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.11.2](https://github.com/midwayjs/midway-faas/compare/v2.11.1...v2.11.2) (2021-06-28)
+
+
+### Bug Fixes
+
+* logger parameter join output ([#1104](https://github.com/midwayjs/midway-faas/issues/1104)) ([e85e5f1](https://github.com/midwayjs/midway-faas/commit/e85e5f1184e69b0a9aceaabf7f22a4a3df6f0b8f))
+
+
+
+
+
 ## [2.11.1](https://github.com/midwayjs/midway-faas/compare/v2.11.0...v2.11.1) (2021-06-19)
 
 **Note:** Version bump only for package @midwayjs/runtime-engine
