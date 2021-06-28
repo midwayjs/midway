@@ -1,3 +1,4 @@
+/* eslint-disable node/no-unpublished-require */
 const egg = require('egg');
 
 const EGG_PATH = Symbol.for('egg#eggPath');
