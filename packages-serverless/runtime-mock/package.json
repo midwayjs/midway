@@ -1,10 +1,10 @@
 {
   "name": "@midwayjs/runtime-mock",
-  "version": "2.11.1",
+  "version": "2.11.2",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/runtime-engine": "^2.11.1"
+    "@midwayjs/runtime-engine": "^2.11.2"
   },
   "engines": {
     "node": ">= 10"

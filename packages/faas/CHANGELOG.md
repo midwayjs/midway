@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.11.2](https://github.com/midwayjs/midway/compare/v2.11.1...v2.11.2) (2021-06-28)
+
+
+### Bug Fixes
+
+* replace ctx.logger in fc serverless environment ([#1112](https://github.com/midwayjs/midway/issues/1112)) ([8ac87b8](https://github.com/midwayjs/midway/commit/8ac87b832154f2ec0fe82df1ec31e283f03b9b2f))
+
+
+
+
+
 ## [2.11.1](https://github.com/midwayjs/midway/compare/v2.11.0...v2.11.1) (2021-06-19)
 
 **Note:** Version bump only for package @midwayjs/faas
