@@ -765,4 +765,13 @@ describe('/test/baseFramework.test.ts', () => {
     expect(app.getAttr('abc')).toEqual(2);
   });
 
+  it('should test component load another component', async () => {
+    const framework = new LightFramework();
+    await framework.initialize({
+      baseDir: path.join(__dirname, './fixtures/component-load-component/src'),
+    });
+
+    await framework.loadLifeCycles();
+  });
+
 });
