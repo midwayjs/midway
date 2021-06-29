@@ -13,6 +13,7 @@ import { displayLabels, displayCommonMessage } from './format';
 import * as os from 'os';
 import { basename, dirname, isAbsolute } from 'path';
 import * as util from 'util';
+import { ORIGIN_ARGS, ORIGIN_ERROR } from './constant';
 
 const isWindows = os.platform() === 'win32';
 
@@ -154,6 +155,7 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
   }
 
   log(level, ...args) {
+    const originArgs = args;
     let meta, msg;
     if (args.length > 1 && isPlainObject(args[args.length - 1])) {
       meta = args.pop();
@@ -164,11 +166,12 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
     const last = args.pop();
     if (last instanceof Error) {
       msg = util.format(...args, last);
-      meta['originError'] = last;
+      meta[ORIGIN_ERROR] = last;
     } else {
       msg = util.format(...args, last);
     }
 
+    meta[ORIGIN_ARGS] = originArgs;
     return super.log(level, msg, meta);
   }
 

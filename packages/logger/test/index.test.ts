@@ -70,7 +70,7 @@ describe('/test/index.test.ts', () => {
     expect(fn.mock.calls[9][0].message).toEqual('plain error message 321');
     // format
     logger.error('format log, %j', { a: 1 });
-    expect(fn.mock.calls[10][0].message).toEqual('format log, {\"a\":1}');
+    expect(fn.mock.calls[10][0].message).toEqual('format log, {"a":1}');
     // set
     logger.info(new Set([2, 3, 4]));
     expect(fn.mock.calls[11][0].message).toContain('{ 2, 3, 4 }');

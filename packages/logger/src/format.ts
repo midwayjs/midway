@@ -1,5 +1,6 @@
 import { format } from 'winston';
 import { IMidwayLogger } from './interface';
+import { ORIGIN_ARGS, ORIGIN_ERROR } from './constant';
 
 export const displayCommonMessage = format(
   (
@@ -12,6 +13,14 @@ export const displayCommonMessage = format(
   ) => {
     if (!info.pid) {
       info.pid = process.pid;
+    }
+
+    if (info[ORIGIN_ERROR as any]) {
+      info.originError = info[ORIGIN_ERROR as any];
+    }
+
+    if (info[ORIGIN_ARGS as any]) {
+      info.originArgs = info[ORIGIN_ARGS as any];
     }
 
     if (!info.ignoreFormat) {
