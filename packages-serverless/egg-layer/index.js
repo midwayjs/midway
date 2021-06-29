@@ -1,4 +1,5 @@
 const { resolve, join } = require('path');
+/* eslint-disable node/no-unpublished-require */
 const { start } = require('egg');
 const os = require('os');
 const fs = require('fs');
