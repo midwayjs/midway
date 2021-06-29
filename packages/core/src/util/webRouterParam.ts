@@ -17,7 +17,7 @@ export const extractKoaLikeValue = (key, data) => {
       case RouteParamTypes.QUERY:
         return data ? ctx.query[data] : ctx.query;
       case RouteParamTypes.HEADERS:
-        return data ? ctx.headers[data] : ctx.headers;
+        return data ? ctx.get(data) : ctx.headers;
       case RouteParamTypes.SESSION:
         return data ? ctx.session[data] : ctx.session;
       case RouteParamTypes.FILESTREAM:
@@ -55,7 +55,7 @@ export const extractExpressLikeValue = (key, data) => {
       case RouteParamTypes.QUERY:
         return data ? req.query[data] : req.query;
       case RouteParamTypes.HEADERS:
-        return data ? req.headers[data] : req.headers;
+        return data ? req.get(data) : req.headers;
       case RouteParamTypes.SESSION:
         return data ? req.session[data] : req.session;
       case RouteParamTypes.FILESTREAM:
