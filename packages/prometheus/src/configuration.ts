@@ -92,7 +92,7 @@ export class AutoConfiguration {
   async onStop() {
     if (isMaster()) {
       closeLock();
-      this.http_server.close();
+      this.http_server && this.http_server.close();
     }
   }
 }
