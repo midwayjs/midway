@@ -23,6 +23,12 @@ describe('/test/feature.test.ts', () => {
       expect(result.headers['ccc']).toEqual('ddd');
     });
 
+    it('should test get header with upper case', async () => {
+      const result = await createHttpRequest(app).get('/api/header-upper').set('x-abc', '321');
+      expect(result.status).toBe(200);
+      expect(result.text).toBe('321');
+    });
+
     it('test get method with return value', async () => {
       const result = await createHttpRequest(app).get('/api/').query({ name: 'harry' });
       expect(result.status).toBe(201);
