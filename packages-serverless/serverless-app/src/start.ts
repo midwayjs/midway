@@ -49,8 +49,8 @@ export const start2 = async options => {
       return analysisDecorator(appDir);
     },
     invoke: async (handlerName: string, trigger: any[]) => {
-      return runtime.asyncEvent(async ctx => {
-        return starterInstance.handleInvokeWrapper(handlerName)(ctx);
+      return runtime.asyncEvent(async (...args) => {
+        return starterInstance.handleInvokeWrapper(handlerName)(...args);
       })(...trigger);
     },
   };
