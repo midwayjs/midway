@@ -32,9 +32,10 @@ export class Framework
   private innerBootStarter;
   private runtime: any;
   private server: Server;
-  private bootstrapOptions;
   private spec;
   private proxyApp;
+  protected bootstrapOptions;
+  protected invokeFun;
   configure(options: IServerlessAppOptions) {
     this.configurationOptions = options;
     return this;
@@ -210,9 +211,6 @@ export class Framework
 
     // 分析项目结构
     const currentBaseDir = baseDir;
-    const platform = this.getPlatform();
-
-    const triggerMap = this.getTriggerMap();
     const layers = this.getLayers();
     const { Framework } = require(usageFaasModulePath);
     const startResult = await start2({
@@ -227,71 +225,16 @@ export class Framework
     this.innerBootStarter = startResult.innerBootStarter;
     this.runtime = startResult.runtime;
     this.innerApp = startResult.framework.getApplication();
-    const invoke = startResult.invoke;
-    const httpFuncSpec = await startResult.getFunctionsFromDecorator();
+    this.invokeFun = startResult.invoke;
+    const funcSpec = await startResult.getFunctionsFromDecorator();
     if (!this.spec.functions) {
       this.spec.functions = {};
     }
-    Object.assign(this.spec.functions, httpFuncSpec);
+    Object.assign(this.spec.functions, funcSpec);
     this.app.getServerlessInstance = this.getServerlessInstance.bind(this);
     this.app.use(bodyParser.urlencoded({ extended: false }));
     this.app.use(bodyParser.json());
-    this.app.use((req, res, next) => {
-      // for ali fc
-      if (platform === 'aliyun') {
-        if (!this.spec.experimentalFeatures?.forceFCCORS) {
-          const origin = req.get('origin');
-          if (origin) {
-            res.setHeader('Access-Control-Allow-Origin', origin);
-            res.setHeader('Access-Control-Allow-Credentials', 'true');
-            res.setHeader('Access-Control-Allow-Methods', '*');
-            res.setHeader('Access-Control-Allow-Headers', '*');
-            if (req.method.toLowerCase() === 'options') {
-              res.send('');
-              return;
-            }
-          }
-        }
-      }
-      const gateway = createExpressGateway({
-        functionDir: appDir,
-      });
-      gateway.transform(req, res, next, async () => {
-        return {
-          functionList: this.spec.functions,
-          invoke: async args => {
-            const trigger = [new triggerMap.http(...args.data)];
-            let newArgs = trigger;
-            let callBackTrigger;
-            if (newArgs?.[0] && typeof newArgs[0].toArgs === 'function') {
-              callBackTrigger = trigger[0];
-              newArgs = await trigger[0].toArgs();
-            }
-            const result = await new Promise((resolve, reject) => {
-              if (callBackTrigger?.useCallback) {
-                // 这个地方 callback 得调用 resolve
-                const cb = callBackTrigger.createCallback((err, result) => {
-                  if (err) {
-                    return reject(err);
-                  }
-                  return resolve(result);
-                });
-                newArgs.push(cb);
-              }
-              Promise.resolve(invoke(args.functionHandler, newArgs)).then(
-                resolve,
-                reject
-              );
-            });
-            if (callBackTrigger?.close) {
-              await callBackTrigger.close();
-            }
-            return result;
-          },
-        };
-      });
-    });
-
+    this.app.use(this.faasInvokeMiddleware.bind(this));
     this.app.use((req, res) => {
       res.statusCode = 404;
       res.send(output404(req.path, this.spec.functions));
@@ -300,6 +243,65 @@ export class Framework
     if (process.env.IN_CHILD_PROCESS) {
       this.listenMessage();
     }
+  }
+
+  protected async faasInvokeMiddleware(req, res, next) {
+    const { appDir } = this.bootstrapOptions;
+    const platform = this.getPlatform();
+    const triggerMap = this.getTriggerMap();
+    // for ali fc
+    if (platform === 'aliyun') {
+      if (!this.spec.experimentalFeatures?.forceFCCORS) {
+        const origin = req.get('origin');
+        if (origin) {
+          res.setHeader('Access-Control-Allow-Origin', origin);
+          res.setHeader('Access-Control-Allow-Credentials', 'true');
+          res.setHeader('Access-Control-Allow-Methods', '*');
+          res.setHeader('Access-Control-Allow-Headers', '*');
+          if (req.method.toLowerCase() === 'options') {
+            res.send('');
+            return;
+          }
+        }
+      }
+    }
+    const gateway = createExpressGateway({
+      functionDir: appDir,
+    });
+    gateway.transform(req, res, next, async () => {
+      return {
+        functionList: this.spec.functions,
+        invoke: async args => {
+          const trigger = [new triggerMap.http(...args.data)];
+          let newArgs = trigger;
+          let callBackTrigger;
+          if (newArgs?.[0] && typeof newArgs[0].toArgs === 'function') {
+            callBackTrigger = trigger[0];
+            newArgs = await trigger[0].toArgs();
+          }
+          const result = await new Promise((resolve, reject) => {
+            if (callBackTrigger?.useCallback) {
+              // 这个地方 callback 得调用 resolve
+              const cb = callBackTrigger.createCallback((err, result) => {
+                if (err) {
+                  return reject(err);
+                }
+                return resolve(result);
+              });
+              newArgs.push(cb);
+            }
+            Promise.resolve(this.invokeFun(args.functionHandler, newArgs)).then(
+              resolve,
+              reject
+            );
+          });
+          if (callBackTrigger?.close) {
+            await callBackTrigger.close();
+          }
+          return result;
+        },
+      };
+    });
   }
 
   protected getFaaSModule() {
