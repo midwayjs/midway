@@ -242,12 +242,26 @@ export class FCRuntime extends ServerlessLightRuntime {
     // format context
     const newCtx = {
       logger: context.logger || console,
+      originEvent: event,
       originContext: context,
     };
     // 其他事件场景
     return this.invokeHandlerWrapper(newCtx, async () => {
       args[0] = newCtx;
-      return handler.apply(handler, args);
+
+      try {
+        if (!handler) {
+          return await this.defaultInvokeHandler(...args);
+        } else {
+          return await handler.apply(handler, args);
+        }
+      } catch (err) {
+        if (isOutputError()) {
+          throw err;
+        } else {
+          throw new Error('Internal Server Error');
+        }
+      }
     });
   }
 

@@ -126,15 +126,25 @@ export class SCFRuntime extends ServerlessLightRuntime {
     // format context
     const newCtx = {
       logger: console,
+      originEvent: event,
       originContext: context,
     };
     const args = [newCtx, event];
     // 其他事件场景
     return this.invokeHandlerWrapper(context, async () => {
-      if (!handler) {
-        return this.defaultInvokeHandler(...args);
+      try {
+        if (!handler) {
+          return await this.defaultInvokeHandler(...args);
+        } else {
+          return await handler.apply(handler, args);
+        }
+      } catch (err) {
+        if (isOutputError()) {
+          throw err;
+        } else {
+          throw new Error('Internal Server Error');
+        }
       }
-      return handler.apply(handler, args);
     });
   }
 
