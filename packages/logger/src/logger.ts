@@ -155,7 +155,7 @@ export class MidwayBaseLogger extends EmptyLogger implements IMidwayLogger {
   }
 
   log(level, ...args) {
-    const originArgs = args;
+    const originArgs = [...args];
     let meta, msg;
     if (args.length > 1 && isPlainObject(args[args.length - 1])) {
       meta = args.pop();
