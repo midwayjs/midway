@@ -58,6 +58,11 @@ function send(request: events.EventEmitter, data: string) {
 }
 
 describe('/test/index.test.ts', () => {
+
+  afterEach(() => {
+    jest.restoreAllMocks()
+  });
+
   describe('wrapper normal event', () => {
     it('should wrap in init function', async () => {
       const handle = asyncWrapper(async context => {
@@ -76,6 +81,38 @@ describe('/test/index.test.ts', () => {
       });
       const res: any = await test(handle).run({ data: 1 }, {});
       assert.equal(res, 1);
+    });
+
+    it('should wrap with event and throw error', async () => {
+      const runtime = await start({});
+
+      let err;
+
+      try {
+        await runtime.asyncEvent(async (ctx, event) => {
+          throw new Error('abc');
+        })();
+      } catch (error) {
+        err = error;
+      }
+      expect(err.message).toEqual('Internal Server Error');
+    });
+
+    it('should wrap with event and throw real error with env', async () => {
+      process.env.SERVERLESS_OUTPUT_ERROR_STACK = 'true';
+      const runtime = await start({});
+
+      let err;
+
+      try {
+        await runtime.asyncEvent(async (ctx, event) => {
+          throw new Error('abc');
+        })();
+      } catch (error) {
+        err = error;
+      }
+      expect(err.message).toEqual('abc');
+      process.env.SERVERLESS_OUTPUT_ERROR_STACK = '';
     });
   });
 
@@ -500,7 +537,14 @@ describe('/test/index.test.ts', () => {
     });
   });
 
-  describe('test entry param', () => {
+  describe('test new property', () => {
+
+    it('should get app', async () => {
+      const runtime = await start();
+      const app = runtime.getApplication();
+      expect(app.use).toBeDefined();
+    });
+
     it('should get function name and service name from init context', async () => {
       const runtime = await start({
         initContext:{

@@ -134,9 +134,9 @@ export class SCFRuntime extends ServerlessLightRuntime {
     return this.invokeHandlerWrapper(context, async () => {
       try {
         if (!handler) {
-          return this.defaultInvokeHandler(...args);
+          return await this.defaultInvokeHandler(...args);
         } else {
-          return handler.apply(handler, args);
+          return await handler.apply(handler, args);
         }
       } catch (err) {
         if (isOutputError()) {
