@@ -232,7 +232,7 @@ describe('/test/index.test.ts', () => {
       }
 
       assert.ok(err);
-      assert.equal(err.message, 'ooops!');
+      assert.equal(err.message, 'Internal Server Error');
     });
 
     it('should ok with asyncWrap when not async functions', async () => {
