@@ -37,9 +37,9 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Start MongoDB
-        uses: supercharge/mongodb-github-action@1.6.0
-        with:
-          mongodb-version: 4.2
+      uses: supercharge/mongodb-github-action@1.6.0
+      with:
+        mongodb-version: 4.2
 
     - run: npm install && npm install codecov
     - run: npm run bootstrap
