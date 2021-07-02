@@ -1,0 +1,21 @@
+service: my-static-demo       ## 应用发布到云平台的名字
+
+provider:
+  name: aliyun                ## 发布的云平台，aliyun，tencent 等
+
+deployType:
+  type: static
+  config:
+    rootDir: build
+    rewrite:
+      '@not /static/(.*)': /index.html
+
+package:
+  include:
+    - build                   ## 需要拷贝的目录
+  exclude:
+    - package-lock.json       ## 忽略 package-lock.json 文件
+
+custom:
+  customDomain:
+    domainName: auto
