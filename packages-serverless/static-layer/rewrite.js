@@ -1,9 +1,9 @@
-'use strict'
+'use strict';
 /**
  * Module dependencies.
  */
 
-const { pathToRegexp } = require('path-to-regexp')
+const { pathToRegexp } = require('path-to-regexp');
 
 /**
  * Rwrite `src` to `dst`.
@@ -14,15 +14,15 @@ const { pathToRegexp } = require('path-to-regexp')
  * @api public
  */
 
-module.exports = function rewrite (src, dst) {
+module.exports = function rewrite(src, dst) {
   const keys = [];
   let isNot = false;
   if (/^@not /.test(src)) {
     isNot = true;
     src = src.replace('@not ', '');
   }
-  const re = pathToRegexp(src, keys)
-  const map = toMap(keys)
+  const re = pathToRegexp(src, keys);
+  const map = toMap(keys);
 
   return function (ctx, next) {
     const orig = ctx.url;
@@ -33,18 +33,18 @@ module.exports = function rewrite (src, dst) {
 
     if (m) {
       ctx.url = dst.replace(/\$(\d+)|(?::(\w+))/g, (_, n, name) => {
-        if (name) return m[map[name].index + 1] || ''
-        return m[n] || ''
-      })
+        if (name) return m[map[name].index + 1] || '';
+        return m[n] || '';
+      });
 
       return next().then(() => {
-        ctx.url = orig
-      })
+        ctx.url = orig;
+      });
     }
 
-    return next()
-  }
-}
+    return next();
+  };
+};
 
 /**
  * Turn params array into a map for quick lookup.
@@ -54,13 +54,13 @@ module.exports = function rewrite (src, dst) {
  * @api private
  */
 
-function toMap (params) {
-  const map = {}
+function toMap(params) {
+  const map = {};
 
   params.forEach((param, i) => {
-    param.index = i
-    map[param.name] = param
-  })
+    param.index = i;
+    map[param.name] = param;
+  });
 
-  return map
+  return map;
 }
