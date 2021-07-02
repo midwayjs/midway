@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.11.3](https://github.com/midwayjs/midway-faas/compare/v2.11.2...v2.11.3) (2021-07-02)
+
+
+### Bug Fixes
+
+* remove egg dep ([#1118](https://github.com/midwayjs/midway-faas/issues/1118)) ([633cb17](https://github.com/midwayjs/midway-faas/commit/633cb1773dd2133811fe8b500502cabbd3ef0375))
+
+
+
+
+
 ## [2.11.2](https://github.com/midwayjs/midway-faas/compare/v2.11.1...v2.11.2) (2021-06-28)
 
 **Note:** Version bump only for package @midwayjs/egg-layer

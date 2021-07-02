@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.11.3](https://github.com/midwayjs/midway/compare/v2.11.2...v2.11.3) (2021-07-02)
+
+
+### Bug Fixes
+
+* add origin args ([#1120](https://github.com/midwayjs/midway/issues/1120)) ([fe593fc](https://github.com/midwayjs/midway/commit/fe593fcdbc91f86eb8402f94e12f9ee5d23b1719))
+* get complete origin args ([#1130](https://github.com/midwayjs/midway/issues/1130)) ([d652016](https://github.com/midwayjs/midway/commit/d65201666eb4d0326aaecee29e4a91e2f0805245))
+* hide real error when user code throw error ([#1128](https://github.com/midwayjs/midway/issues/1128)) ([e728b0b](https://github.com/midwayjs/midway/commit/e728b0b80956c09cfb856ffe082f44fa29cfeb82))
+* remove egg dep ([#1118](https://github.com/midwayjs/midway/issues/1118)) ([633cb17](https://github.com/midwayjs/midway/commit/633cb1773dd2133811fe8b500502cabbd3ef0375))
+* serverless app invoke args ([#1127](https://github.com/midwayjs/midway/issues/1127)) ([3467b73](https://github.com/midwayjs/midway/commit/3467b73994f755e230e34de36d24b810a65ab854))
+* uppercase for header decorator ([#1123](https://github.com/midwayjs/midway/issues/1123)) ([cfcfb1f](https://github.com/midwayjs/midway/commit/cfcfb1fb8860b110e2671e9bff57f6c537f11f90))
+* **prometheus:** this.http_server may undefined onStop ([#1124](https://github.com/midwayjs/midway/issues/1124)) ([300a3ec](https://github.com/midwayjs/midway/commit/300a3ec9d308e4f32b7b266f41370dd920145e0b))
+
+
+
+
+
 ## [2.11.2](https://github.com/midwayjs/midway/compare/v2.11.1...v2.11.2) (2021-06-28)
 
 

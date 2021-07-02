@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.11.3](https://github.com/midwayjs/midway/compare/v2.11.2...v2.11.3) (2021-07-02)
+
+
+### Bug Fixes
+
+* add origin args ([#1120](https://github.com/midwayjs/midway/issues/1120)) ([fe593fc](https://github.com/midwayjs/midway/commit/fe593fcdbc91f86eb8402f94e12f9ee5d23b1719))
+* get complete origin args ([#1130](https://github.com/midwayjs/midway/issues/1130)) ([d652016](https://github.com/midwayjs/midway/commit/d65201666eb4d0326aaecee29e4a91e2f0805245))
+
+
+
+
+
 ## [2.11.2](https://github.com/midwayjs/midway/compare/v2.11.1...v2.11.2) (2021-06-28)
 
 

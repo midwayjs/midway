@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.11.3](https://github.com/midwayjs/midway/compare/v2.11.2...v2.11.3) (2021-07-02)
+
+
+### Bug Fixes
+
+* serverless app invoke args ([#1127](https://github.com/midwayjs/midway/issues/1127)) ([3467b73](https://github.com/midwayjs/midway/commit/3467b73994f755e230e34de36d24b810a65ab854))
+
+
+
+
+
 ## [2.11.2](https://github.com/midwayjs/midway/compare/v2.11.1...v2.11.2) (2021-06-28)
 
 **Note:** Version bump only for package @midwayjs/serverless-app
