@@ -32,14 +32,14 @@ describe('/test/index.test.ts', () => {
   it('should test logger output format', function () {
     const logger = createConsoleLogger(
       'globalOutputConsoleLogger'
-    ) as IMidwayLogger;
+    ) as MidwayBaseLogger;
 
     const fn = jest.spyOn(logger, 'write');
 
-    logger.info('test', 'test1', 'test2', 'test3');
+    logger.verbose('test', 'test1', 'test2', 'test3');
     expect(fn.mock.calls[0][0].message).toEqual('test test1 test2 test3');
 
-    logger.info('test', 123, 'test2', 'test3');
+    logger.silly('test', 123, 'test2', 'test3');
     expect(fn.mock.calls[1][0].message).toEqual('test 123 test2 test3');
 
     logger.info('test', 123, [3,2,1], 'test3', new Error('abc'));
@@ -1124,5 +1124,26 @@ describe('/test/index.test.ts', () => {
     consoleLogger.debug('test', 'test1', 'test2', 'test3');
     process.env.MIDWAY_LOGGER_DISABLE_COLORS = '';
     expect(fn.mock.calls[0][0]).not.toContain('\x1B');
+  });
+
+  it('should check info content', function () {
+    const fn = jest.fn();
+    const logger = createConsoleLogger(
+      'globalOutputConsoleLogger',
+      {
+        printFormat: fn,
+      }
+    ) as ILogger;
+
+    logger.info('test', 'test1', 'test2', 'test3');
+    expect(fn.mock.calls[0][0].originArgs).toEqual(['test', 'test1', 'test2', 'test3']);
+
+    const err = new Error('abc');
+    logger.info(err);
+    expect(fn.mock.calls[1][0].originError).toEqual(err);
+
+    const err2 = new Error('abc2');
+    logger.info('abc', err2);
+    expect(fn.mock.calls[2][0].originError).toEqual(err2);
   });
 });
