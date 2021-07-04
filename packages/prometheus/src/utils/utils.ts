@@ -14,7 +14,8 @@ const lockFile = path.join(
   }-${now.getDate()}-${ppid}.lock`
 );
 export function isMaster() {
-  if (cluster.isMaster) {
+  // in node v16 Deprecated alias for cluster.isPrimary.
+  if ((cluster as any).isPrimary || (cluster as any).isMaster) {
     return true;
   }
 
