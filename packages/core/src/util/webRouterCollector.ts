@@ -353,6 +353,9 @@ export class WebRouterCollector {
       } else {
         // 老的 @Func 写法
         if (webRouter['path'] || webRouter['middleware']) {
+          if (!webRouter['key']) {
+            continue;
+          }
           const data: RouterInfo = {
             prefix,
             routerName: '',
