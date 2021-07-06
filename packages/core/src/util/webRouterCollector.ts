@@ -356,9 +356,9 @@ export class WebRouterCollector {
           const data: RouterInfo = {
             prefix,
             routerName: '',
-            url: webRouter['path'] ?? '/',
+            url: webRouter['path'] ?? '',
             requestMethod: webRouter['method'] ?? 'get',
-            method: webRouter['key'],
+            method: webRouter['key'] ?? '',
             description: '',
             summary: '',
             handlerName: `${controllerId}.${webRouter['key']}`,
@@ -372,7 +372,7 @@ export class WebRouterCollector {
           };
           if (functionMeta) {
             // get function information
-            data.functionName = controllerId + '-' + webRouter['key'];
+            data.functionName = controllerId + '-' + (webRouter['key'] ?? '');
             data.functionTriggerName = ServerlessTriggerType.HTTP;
             data.functionTriggerMetadata = {
               path: webRouter['path'] ?? '/',
