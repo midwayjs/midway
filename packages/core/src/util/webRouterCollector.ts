@@ -359,7 +359,7 @@ export class WebRouterCollector {
           const data: RouterInfo = {
             prefix,
             routerName: '',
-            url: webRouter['path'] ?? '/',
+            url: webRouter['path'] ?? '',
             requestMethod: webRouter['method'] ?? 'get',
             method: webRouter['key'],
             description: '',

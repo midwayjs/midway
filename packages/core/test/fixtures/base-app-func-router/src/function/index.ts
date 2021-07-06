@@ -19,7 +19,7 @@ export class IndexOneHandler {
   /**
    * @param event
    */
-  @Func('indexone.handler')
+  @Func('indexone.handler', { middleware: ['bottleServiceMiddleware'] })
   async handlerone(event) {
     return {
       data: 'hello world one'
