@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.11.4](https://github.com/midwayjs/midway-faas/compare/v2.11.3...v2.11.4) (2021-07-06)
+
+
+### Bug Fixes
+
+* add target parameter ([#1139](https://github.com/midwayjs/midway-faas/issues/1139)) ([5be4757](https://github.com/midwayjs/midway-faas/commit/5be475710ee19e16a99643a355f7f1774f3435bc))
+
+
+
+
+
 ## [2.11.1](https://github.com/midwayjs/midway-faas/compare/v2.11.0...v2.11.1) (2021-06-19)
 
 **Note:** Version bump only for package @midwayjs/serverless-http-parser

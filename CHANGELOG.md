@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.11.4](https://github.com/midwayjs/midway/compare/v2.11.3...v2.11.4) (2021-07-06)
+
+
+### Bug Fixes
+
+* @Func decorator with empty metadata ([#1137](https://github.com/midwayjs/midway/issues/1137)) ([621a99a](https://github.com/midwayjs/midway/commit/621a99a9ee77a8f370a28a395363f585057bd054))
+* add target parameter ([#1139](https://github.com/midwayjs/midway/issues/1139)) ([5be4757](https://github.com/midwayjs/midway/commit/5be475710ee19e16a99643a355f7f1774f3435bc))
+* remove port with other framework ([#1140](https://github.com/midwayjs/midway/issues/1140)) ([88fec38](https://github.com/midwayjs/midway/commit/88fec380ec410bc4c44b30d4d5a751d5341b266f))
+* support ignore dsl ([#1133](https://github.com/midwayjs/midway/issues/1133)) ([3ca6c23](https://github.com/midwayjs/midway/commit/3ca6c236d97853fcd7eaed7732fa782b74b45c07))
+
+
+
+
+
 ## [2.11.3](https://github.com/midwayjs/midway/compare/v2.11.2...v2.11.3) (2021-07-02)
 
 

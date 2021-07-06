@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.11.4](https://github.com/midwayjs/midway-faas/compare/v2.11.3...v2.11.4) (2021-07-06)
+
+
+### Bug Fixes
+
+* support ignore dsl ([#1133](https://github.com/midwayjs/midway-faas/issues/1133)) ([3ca6c23](https://github.com/midwayjs/midway-faas/commit/3ca6c236d97853fcd7eaed7732fa782b74b45c07))
+
+
+
+
+
 ## [2.11.3](https://github.com/midwayjs/midway-faas/compare/v2.11.2...v2.11.3) (2021-07-02)
 
 **Note:** Version bump only for package @midwayjs/static-layer

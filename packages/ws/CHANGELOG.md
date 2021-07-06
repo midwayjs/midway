@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.11.4](https://github.com/midwayjs/midway/compare/v2.11.3...v2.11.4) (2021-07-06)
+
+
+### Bug Fixes
+
+* remove port with other framework ([#1140](https://github.com/midwayjs/midway/issues/1140)) ([88fec38](https://github.com/midwayjs/midway/commit/88fec380ec410bc4c44b30d4d5a751d5341b266f))
+
+
+
+
+
 ## [2.11.3](https://github.com/midwayjs/midway/compare/v2.11.2...v2.11.3) (2021-07-02)
 
 **Note:** Version bump only for package @midwayjs/ws
