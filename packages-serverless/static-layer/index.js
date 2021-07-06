@@ -1,7 +1,7 @@
 const staticCache = require('koa-static-cache');
 const { join } = require('path');
 const { readFileSync, existsSync, unlinkSync } = require('fs');
-const rewrite = require('koa-rewrite');
+const rewrite = require('./rewrite');
 const request = require('request');
 const KOA = require('koa');
 const os = require('os');

@@ -109,4 +109,41 @@ describe('/test/index.test.ts', () => {
     });
 
   });
+
+  describe('FC test with rewrite', () => {
+    let runtime;
+    let app;
+
+    beforeAll(async () => {
+      const entryDir = join(__dirname, './fixtures/app-fc-rewrite');
+      process.env.ENTRY_DIR = entryDir;
+      runtime = createRuntime({
+        functionDir: entryDir,
+      });
+      await runtime.start();
+      app = await runtime.delegate(new FCApiGatewayTrigger());
+    });
+
+    afterAll(() => {
+      if (runtime) {
+        runtime.close();
+      }
+      process.env.ENTRY_DIR = '';
+    });
+
+    it('should test rewrite to index', done => {
+      request(app)
+        .get('/api')
+        .expect(/in root html/)
+        .expect(200, done);
+    });
+
+    it('should test match rewrite rule', done => {
+      request(app)
+        .get('/static/index.html')
+        .expect(/in static html/)
+        .expect(200, done);
+    });
+
+  });
 });
