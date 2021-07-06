@@ -353,15 +353,12 @@ export class WebRouterCollector {
       } else {
         // 老的 @Func 写法
         if (webRouter['path'] || webRouter['middleware']) {
-          if (!webRouter['key']) {
-            continue;
-          }
           const data: RouterInfo = {
             prefix,
             routerName: '',
             url: webRouter['path'] ?? '',
             requestMethod: webRouter['method'] ?? 'get',
-            method: webRouter['key'],
+            method: webRouter['key'] ?? '',
             description: '',
             summary: '',
             handlerName: `${controllerId}.${webRouter['key']}`,
@@ -375,7 +372,7 @@ export class WebRouterCollector {
           };
           if (functionMeta) {
             // get function information
-            data.functionName = controllerId + '-' + webRouter['key'];
+            data.functionName = controllerId + '-' + (webRouter['key'] ?? '');
             data.functionTriggerName = ServerlessTriggerType.HTTP;
             data.functionTriggerMetadata = {
               path: webRouter['path'] ?? '/',

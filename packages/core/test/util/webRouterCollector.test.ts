@@ -26,7 +26,7 @@ describe('/test/util/webRouterCollector.test.ts', function () {
     clearContainerCache();
     const collector = new WebRouterCollector(join(__dirname, '../fixtures/base-app-func-router'), { includeFunctionRouter: true});
     const result = await collector.getFlattenRouterTable();
-    expect(result.length).toEqual(7);
+    expect(result.length).toEqual(8);
     expect(matchObjectPropertyInArray(result, {
       'controllerId': 'helloHttpService',
       'funcHandlerName': 'helloHttpService.upload',
