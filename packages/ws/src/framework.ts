@@ -61,14 +61,16 @@ export class MidwayWSFramework extends BaseFramework<
 
     this.server = server;
 
-    await new Promise<void>(resolve => {
-      server.listen(this.configurationOptions.port, () => {
-        this.logger.info(
-          `WebSocket server port = ${this.configurationOptions.port} start success`
-        );
-        resolve();
+    if (this.configurationOptions.port) {
+      await new Promise<void>(resolve => {
+        server.listen(this.configurationOptions.port, () => {
+          this.logger.info(
+            `WebSocket server port = ${this.configurationOptions.port} start success`
+          );
+          resolve();
+        });
       });
-    });
+    }
   }
 
   protected async beforeStop(): Promise<void> {
