@@ -9,3 +9,4 @@ export {
   Logger as logger,
   Init as init,
 } from '@midwayjs/decorator';
+export * from './util';

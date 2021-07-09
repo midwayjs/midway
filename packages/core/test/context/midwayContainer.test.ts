@@ -1,7 +1,5 @@
-import { expect } from 'chai';
-
 import * as path from 'path';
-import { clearAllModule, MidwayContainer, MidwayRequestContainer } from '../../src';
+import { clearAllModule, MidwayContainer, MidwayRequestContainer, DirectoryFileDetector } from '../../src';
 import { App } from '../fixtures/ts-app-inject/app';
 import { TestCons } from '../fixtures/ts-app-inject/test';
 import * as decs from '@midwayjs/decorator';
@@ -23,22 +21,24 @@ describe('/test/context/midwayContainer.test.ts', () => {
 
   beforeEach(() => {
     clearAllModule();
-    MidwayContainer.parentDefinitionMetadata = null;
+    // MidwayContainer.parentDefinitionMetadata = null;
   });
 
   it('should create new loader', async () => {
     const container = new MidwayContainer();
-    container.load({
+    container.setFileDetector(new DirectoryFileDetector({
       loadDir: buildLoadDir(['app', 'lib', '../test_other'], path.join(__dirname, '../fixtures/base-app/src')),
-    });
+    }));
+    await container.ready();
     assert.ok(typeof (await container.getAsync('testOther')));
   });
 
   it('should load ts file and use config, plugin decorator', async () => {
     const container = new MidwayContainer();
-    container.load({
+    container.setFileDetector(new DirectoryFileDetector({
       loadDir: path.join(__dirname, '../fixtures/base-app-decorator/src')
-    });
+    }));
+
     // register handler for container
     container.registerDataHandler(CONFIG_KEY, (key, meta, target) => {
       assert(
@@ -57,7 +57,7 @@ describe('/test/context/midwayContainer.test.ts', () => {
     container.registerDataHandler(LOGGER_KEY, (key, meta, target) => {
       return console;
     });
-
+    await container.ready();
     const appCtx = container;
     const baseService: any = await appCtx.getAsync('baseService');
     assert(baseService.config === 'hello');
@@ -76,9 +76,9 @@ describe('/test/context/midwayContainer.test.ts', () => {
 
   it('should load ts file and bindapp success', async () => {
     const container = new MidwayContainer();
-    container.load({
+    container.setFileDetector(new DirectoryFileDetector({
       loadDir: path.join(__dirname, '../fixtures/base-app-forbindapp/src')
-    });
+    }));
 
     const tt: any = {
       getBaseDir() {
@@ -86,7 +86,6 @@ describe('/test/context/midwayContainer.test.ts', () => {
       }
     };
     container.registerDataHandler(APPLICATION_KEY, () => tt);
-    await container.ready();
     // register handler for container
     container.registerDataHandler(CONFIG_KEY, (key, meta, target) => {
       assert(
@@ -105,7 +104,7 @@ describe('/test/context/midwayContainer.test.ts', () => {
     container.registerDataHandler(LOGGER_KEY, (key, meta, target) => {
       return console;
     });
-
+    await container.ready();
     const appCtx = container;
     const baseService: any = await appCtx.getAsync('baseService');
     assert(baseService.config === 'hello');
@@ -116,11 +115,9 @@ describe('/test/context/midwayContainer.test.ts', () => {
 
   it('load ts file support constructor inject', async () => {
     const container = new MidwayContainer();
-    container.load({
+    container.setFileDetector(new DirectoryFileDetector({
       loadDir: path.join(__dirname, '../fixtures/base-app-constructor/src'),
-    });
-
-    await container.ready();
+    }));
 
     // register handler for container
     container.registerDataHandler(CONFIG_KEY, key => {
@@ -152,11 +149,9 @@ describe('/test/context/midwayContainer.test.ts', () => {
 
   it('should auto load function file and inject by function name', async () => {
     const container = new MidwayContainer();
-    container.load({
+    container.setFileDetector(new DirectoryFileDetector({
       loadDir: path.join(__dirname, '../fixtures/base-app-function/src'),
-    });
-
-    await container.ready();
+    }));
 
     // register handler for container
     container.registerDataHandler(CONFIG_KEY, key => {
@@ -180,39 +175,30 @@ describe('/test/context/midwayContainer.test.ts', () => {
     assert(baseServiceCtx.factory('google'));
   });
 
-  it('should scan app dir and inject automatic', () => {
+  it('should scan app dir and inject automatic', async () => {
     const container = new MidwayContainer();
-    container.load({
+    container.setFileDetector(new DirectoryFileDetector({
       loadDir: path.join(__dirname, '../fixtures/ts-app-inject')
-    });
-
-    (decs as any).throwErrorForTest(decs.CLASS_KEY_CONSTRUCTOR, new Error('mock error'));
+    }));
 
     const tt = container.get<TestCons>('testCons');
-    expect(tt.ts).gt(0);
-
-    (decs as any).throwErrorForTest(decs.CLASS_KEY_CONSTRUCTOR);
+    expect(tt.ts).toBeGreaterThan(0);
 
     const app = container.get('app') as App;
-    expect(app.loader).not.to.be.undefined;
-    expect(app.getConfig().a).to.equal(3);
+    expect(app.loader).toBeDefined();
+    expect(app.getConfig().a).toEqual(3);
     // 其实这里循环依赖了
-    expect(app.easyLoader.getConfig().a).to.equal(1);
+    expect(app.easyLoader.getConfig().a).toEqual(1);
 
-    expect(container.getEnvironmentService()).is.not.undefined;
-    expect(container.getEnvironmentService().getCurrentEnvironment()).eq('test');
-
-    const subContainer = container.createChild();
-    const sapp = subContainer.get('app') as App;
-    expect(sapp.loader).not.to.be.undefined;
-    expect(sapp.getConfig().a).to.equal(3);
+    expect(container.getEnvironmentService()).toBeDefined();
+    expect(container.getEnvironmentService().getCurrentEnvironment()).toEqual('test');
   });
 
   it('should test autoload', async () => {
     const container = new MidwayContainer();
-    container.load({
+    container.setFileDetector(new DirectoryFileDetector({
       loadDir: path.join(__dirname, '../fixtures/base-app-autoload/src'),
-    });
+    }));
 
     await container.ready();
     assert((container.registry as unknown as Map<string, any>).has('userService'));

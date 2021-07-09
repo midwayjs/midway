@@ -1,8 +1,8 @@
-import { ServerlessBaseRuntime} from '../../../src';
 import assert = require('assert');
+import { ServerlessAbstractRuntime } from '../../../src';
 
 export const initialize = (runtime) => {
-  assert(runtime instanceof ServerlessBaseRuntime)
+  assert(runtime instanceof ServerlessAbstractRuntime)
 };
 
 export const handler = async ctx => {

@@ -44,9 +44,20 @@ export class WorkerRuntime extends ServerlessLightRuntime {
       this.respond = this.app.callback();
     }
 
-    const bodyText = await request.text();
+    const url = new URL(request.url);
+    let bodyParsed = false;
+    let body = await request.text();
+    if (url.protocol === 'event:') {
+      // 阿里云无触发器，入参可能是 json
+      try {
+        body = JSON.parse(body);
+        bodyParsed = true;
+      } catch (_err) {
+        /** ignore */
+      }
+    }
 
-    const koaReq = new HTTPRequest(request, bodyText);
+    const koaReq = new HTTPRequest(request, body, bodyParsed);
     const koaRes = new HTTPResponse();
 
     return this.respond.apply(this.respond, [

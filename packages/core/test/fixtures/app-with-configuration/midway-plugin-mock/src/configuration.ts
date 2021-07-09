@@ -6,4 +6,4 @@ import { Configuration } from '@midwayjs/decorator';
     cc: 'mock'
   }
 })
-export class AutoConfiguraion {}
+export class AutoConfiguration {}

@@ -8,11 +8,12 @@ const kPath = Symbol.for('ctx#path');
 
 export class HTTPRequest {
   private readonly originEvent: Request;
-  public bodyParsed = false;
+  public bodyParsed;
 
-  constructor(request, bodyText) {
+  constructor(request, bodyText, bodyParsed = false) {
     this.originEvent = request;
     this[kBody] = bodyText;
+    this.bodyParsed = bodyParsed;
   }
 
   getOriginEvent() {

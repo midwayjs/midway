@@ -450,15 +450,6 @@ export function getClassMetadata(decoratorNameKey: DecoratorKey, target) {
   return manager.getMetadata(decoratorNameKey, target);
 }
 
-// TODO 因 https://github.com/microsoft/TypeScript/issues/38820 等 4.0 发布移除掉
-export function throwErrorForTest(key: DecoratorKey, e: Error) {
-  if (e) {
-    testKeyMap.set(key, e);
-  } else {
-    testKeyMap.delete(key);
-  }
-}
-
 /**
  * this method has deprecated and use savePropertyDataToClass instead
  *

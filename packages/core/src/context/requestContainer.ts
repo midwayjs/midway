@@ -1,10 +1,10 @@
-import { MidwayContainer } from './midwayContainer';
+import { MidwayContainer } from './container';
 import { REQUEST_CTX_KEY, IMidwayContainer } from '../interface';
 import { parsePrefix } from '../util/';
-import { PIPELINE_IDENTIFIER } from '@midwayjs/decorator';
+import { getProviderId, PIPELINE_IDENTIFIER } from '@midwayjs/decorator';
 
 export class MidwayRequestContainer extends MidwayContainer {
-  private applicationContext: IMidwayContainer;
+  private readonly applicationContext: IMidwayContainer;
 
   constructor(ctx, applicationContext: IMidwayContainer) {
     super(null, applicationContext);
@@ -30,10 +30,6 @@ export class MidwayRequestContainer extends MidwayContainer {
       resolverHandler.afterEachCreated.bind(resolverHandler)
     );
   }
-  protected createContainerIdx() {
-    // requestContainer id = -1；
-    return -1;
-  }
 
   init() {
     // do nothing
@@ -41,7 +37,7 @@ export class MidwayRequestContainer extends MidwayContainer {
 
   get<T = any>(identifier: any, args?: any): T {
     if (typeof identifier !== 'string') {
-      identifier = this.getIdentifier(identifier);
+      identifier = getProviderId(identifier);
     }
     if (this.registry.hasObject(identifier)) {
       const ins = this.registry.getObject(identifier);
@@ -70,7 +66,7 @@ export class MidwayRequestContainer extends MidwayContainer {
 
   async getAsync<T = any>(identifier: any, args?: any): Promise<T> {
     if (typeof identifier !== 'string') {
-      identifier = this.getIdentifier(identifier);
+      identifier = getProviderId(identifier);
     }
 
     identifier = parsePrefix(identifier);

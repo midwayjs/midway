@@ -26,7 +26,7 @@
     "ci": "npm run build && npm run cov",
     "purge": "npm run clean && rm -rf node_modules",
     "reset": "npm run purge && npm i && npm run ci",
-    "canary": "sh scripts/publish.sh --canary",
+    "canary": "npm run build && lerna publish --canary --preid alpha --dist-tag alpha",
     "beta": "sh scripts/publish.sh --npm-tag beta --force-publish=*",
     "next": "sh scripts/publish.sh --npm-tag next",
     "release": "rm -f ./packages/.DS* && sh scripts/publish.sh",

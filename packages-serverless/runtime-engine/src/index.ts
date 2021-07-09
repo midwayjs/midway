@@ -4,8 +4,6 @@ export * from './engine';
 export * from './lib/parser';
 export * from './lib/debug';
 export * from './lightRuntime';
-export * from './lib/loggerFactory';
-export * from './lib/logger';
 export * from './error';
 export * from './bootstrap';
 export * from './util';

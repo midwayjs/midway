@@ -16,7 +16,6 @@ import {
   ServerlessTriggerCollector,
 } from '@midwayjs/core';
 
-import { dirname, resolve } from 'path';
 import {
   LOGGER_KEY,
   PLUGIN_KEY,
@@ -31,8 +30,6 @@ import { MidwayHooks } from './hooks';
 import { createConsoleLogger, LoggerOptions, loggers } from '@midwayjs/logger';
 
 const LOCK_KEY = '_faas_starter_start_key';
-
-// const MIDWAY_FAAS_KEY = '__midway_faas__';
 
 export class MidwayFaaSFramework extends BaseFramework<
   IMidwayFaaSApplication,
@@ -128,7 +125,7 @@ export class MidwayFaaSFramework extends BaseFramework<
       this.app['keys'] = this.app.getConfig('keys') || '';
 
       // store all http function entry
-      const collector = new ServerlessTriggerCollector(this.getBaseDir());
+      const collector = new ServerlessTriggerCollector();
       const functionList = await collector.getFunctionList();
 
       for (const funcInfo of functionList) {
@@ -286,28 +283,6 @@ export class MidwayFaaSFramework extends BaseFramework<
         method || this.defaultHandlerMethod
       }`
     );
-  }
-
-  protected addConfiguration(
-    filePath: string,
-    fileDir?: string,
-    namespace?: string
-  ) {
-    if (!fileDir) {
-      fileDir = dirname(resolve(filePath));
-    }
-    const container = this.getApplicationContext();
-    const cfg = container.createConfiguration();
-    cfg.namespace = namespace;
-    cfg.loadConfiguration(require(filePath), fileDir);
-  }
-
-  /**
-   * @deprecated
-   * use this.addConfiguration
-   */
-  protected initConfiguration(filePath: string, fileDir?: string) {
-    this.addConfiguration(filePath, fileDir);
   }
 
   private registerDecorator() {

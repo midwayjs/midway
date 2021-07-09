@@ -1,6 +1,5 @@
 import { Bootstrap, BootstrapStarter } from '@midwayjs/bootstrap';
 import {
-  clearContainerCache,
   IMidwayApplication,
   IMidwayFramework,
   MidwayFrameworkType,
@@ -102,7 +101,7 @@ export async function create<
   }
   lastAppDir = appDir;
   global['MIDWAY_BOOTSTRAP_APP_SET'].clear();
-  clearContainerCache();
+  // clearContainerCache();
   clearAllLoggers();
 
   options = options || ({} as any);

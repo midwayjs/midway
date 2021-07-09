@@ -9,14 +9,23 @@ import {
   FunctionEvent,
   BootstrapOptions,
 } from './interface';
-import { join } from 'path';
 import { EnvPropertyParser } from './lib/parser';
 import { DebugLogger } from './lib/debug';
-import { BaseLoggerFactory } from './lib/loggerFactory';
-import { fileExists, getHandlerMeta, getHandlerMethod } from './util';
+import { getHandlerMeta } from './util';
 import { performance } from 'perf_hooks';
 
-export class ServerlessBaseRuntime extends EventEmitter implements Runtime {
+export class BaseLoggerFactory implements LoggerFactory {
+  createLogger(...args) {
+    return console;
+  }
+
+  close() {}
+}
+
+export abstract class ServerlessAbstractRuntime
+  extends EventEmitter
+  implements Runtime
+{
   propertyParser: PropertyParser<string>;
   debugLogger = new DebugLogger('base_runtime');
   loggerFactory: LoggerFactory;
@@ -107,9 +116,7 @@ export class ServerlessBaseRuntime extends EventEmitter implements Runtime {
 
   async close() {
     await this.handlerInvokerWrapper('beforeCloseHandler', [this]);
-    if (this.logger) {
-      this.logger.close();
-    }
+    this.loggerFactory.close();
   }
 
   createEnvParser(): PropertyParser<string> {
@@ -121,73 +128,12 @@ export class ServerlessBaseRuntime extends EventEmitter implements Runtime {
   }
 
   createLoggerFactory() {
-    const homeDir = this.getProperty('HOME');
-    return new BaseLoggerFactory(homeDir || process.cwd(), this.propertyParser);
+    return new BaseLoggerFactory();
   }
 
-  async invokeInitHandler(...args) {
-    let func;
-    const entryDir = this.propertyParser.getEntryDir();
-    const { fileName, handler } = getHandlerMeta(
-      this.propertyParser.getInitHandler()
-    );
-    if (await fileExists(entryDir, fileName)) {
-      try {
-        func = getHandlerMethod(join(entryDir, fileName), handler);
-        this.debugLogger.log('invoke init handler');
-        if (func) {
-          this.debugLogger.log('found handler and call');
-          return await new Promise((resolve, reject) => {
-            const timer = setTimeout(() => {
-              // TODO error stack
-              reject(new Error('timeout'));
-            }, Number(this.propertyParser.getInitTimeout()));
-            Promise.resolve(func.call(this, this, ...args))
-              .then(res => {
-                clearTimeout(timer);
-                resolve(res);
-              })
-              .catch(err => {
-                clearTimeout(timer);
-                reject(err);
-              });
-          });
-        }
-      } catch (err) {
-        err.message = `function init error with: ${err.message}`;
-        throw err;
-      }
-    } else {
-      this.debugLogger.log('no init handler found');
-    }
-  }
+  abstract invokeInitHandler(...args);
 
-  async invokeDataHandler(...args) {
-    const entryDir = this.propertyParser.getEntryDir();
-    const { fileName, handler } = getHandlerMeta(
-      this.propertyParser.getFunctionHandler()
-    );
-    let error = new Error(`invoke handler not found: ${fileName}.${handler}`);
-    try {
-      let func;
-      const flag = await fileExists(entryDir, fileName);
-      if (flag) {
-        this.debugLogger.log('invoke data handler');
-        func = getHandlerMethod(join(entryDir, fileName), handler);
-      }
-      if (flag && func) {
-        this.debugLogger.log('found handler and call');
-        return func.apply(this, args);
-      } else {
-        return this.defaultInvokeHandler(...args);
-      }
-    } catch (err) {
-      error = err;
-      this.logger.error(err);
-    }
-
-    return Promise.reject(error);
-  }
+  abstract invokeDataHandler(...args);
 
   async triggerRoute(payload): Promise<FunctionEvent> {
     for (const event of this.eventHandlers) {
@@ -283,4 +229,9 @@ export class ServerlessBaseRuntime extends EventEmitter implements Runtime {
   getFunctionServiceName(): string {
     return process.env.MIDWAY_SERVERLESS_SERVICE_NAME || '';
   }
+}
+
+export class ServerlessBaseRuntime extends ServerlessAbstractRuntime {
+  async invokeDataHandler(...args) {}
+  async invokeInitHandler(...args) {}
 }

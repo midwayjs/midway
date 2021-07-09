@@ -38,7 +38,7 @@ export class StaticConfigLoader {
     for (const module of modules) {
       this.analyzeConfiguration(module);
     }
-    await this.configService.load();
+    this.configService.load();
     return this.configService.getConfiguration();
   }
 

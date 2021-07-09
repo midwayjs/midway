@@ -35,11 +35,6 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
     // set default context logger
     this.BaseContextLoggerClass =
       options.ContextLoggerClass || this.getDefaultContextLoggerClass();
-
-    if (options.typescript === false) {
-      this.isTsMode = false;
-    }
-
     this.app = options.app;
 
     this.defineApplicationProperties(
@@ -142,9 +137,7 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
   async applicationInitialize(options: Partial<IMidwayBootstrapOptions>) {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
-    if (this.isTsMode) {
-      process.env.EGG_TYPESCRIPT = 'true';
-    }
+    process.env.EGG_TYPESCRIPT = 'true';
     if (this.configurationOptions.globalConfig) {
       this.getApplicationContext()
         .getConfigService()

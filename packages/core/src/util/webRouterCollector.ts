@@ -1,4 +1,3 @@
-import { EmptyFramework } from './emptyFramework';
 import {
   CONTROLLER_KEY,
   ControllerOption,
@@ -18,9 +17,9 @@ import {
   WEB_ROUTER_KEY,
   WEB_ROUTER_PARAM_KEY,
 } from '@midwayjs/decorator';
-import { MidwayContainer } from '../context/midwayContainer';
 import { joinURLPath } from './index';
-import { IMidwayContainer } from '../interface';
+import { MidwayContainer } from '../context/container';
+import { DirectoryFileDetector } from './fileDetector';
 
 export interface RouterInfo {
   /**
@@ -109,7 +108,6 @@ export class WebRouterCollector {
   protected routes = new Map<string, RouterInfo[]>();
   private routesPriority: RouterPriority[] = [];
   protected options: RouterCollectorOptions;
-  private applicationContext: IMidwayContainer;
 
   constructor(baseDir = '', options: RouterCollectorOptions = {}) {
     this.baseDir = baseDir;
@@ -117,17 +115,15 @@ export class WebRouterCollector {
   }
 
   protected async analyze() {
-    if (!MidwayContainer.parentDefinitionMetadata) {
-      const framework = new EmptyFramework();
-      await framework.initialize({
-        baseDir: this.baseDir,
-      });
-
-      this.applicationContext = framework.getApplicationContext();
-    } else {
-      this.applicationContext = MidwayContainer.parentApplicationContext;
+    if (this.baseDir) {
+      const container = new MidwayContainer();
+      container.setFileDetector(
+        new DirectoryFileDetector({
+          loadDir: this.baseDir,
+        })
+      );
+      await container.ready();
     }
-
     const controllerModules = listModule(CONTROLLER_KEY);
 
     for (const module of controllerModules) {
@@ -151,10 +147,6 @@ export class WebRouterCollector {
     this.routesPriority = this.routesPriority.sort((routeA, routeB) => {
       return routeB.priority - routeA.priority;
     });
-  }
-
-  public getApplicationContext() {
-    return this.applicationContext;
   }
 
   protected collectRoute(module, functionMeta = false) {

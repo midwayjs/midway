@@ -29,19 +29,6 @@ export type IMidwayFaaSApplication = IMidwayApplication<FaaSContext, {
   getFunctionServiceName(): string;
 }>;
 
-/**
- * @deprecated
- * use IMidwayFaaSApplication instead
- */
-export type IFaaSApplication = IMidwayFaaSApplication;
-
-/**
- * @deprecated
- */
-export interface FunctionHandler {
-  handler(...args);
-}
-
 export interface Application extends IMidwayFaaSApplication {}
 
 export interface Context extends FaaSContext {}

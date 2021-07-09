@@ -1,7 +1,7 @@
 import * as assert from 'assert';
 import { join } from 'path';
 import { safeRequire, safelyGet, joinURLPath } from '../../src/util';
-import { PathFileUtil } from '../../src';
+import { createDirectoryGlobContainer, createModuleContainer, PathFileUtil } from '../../src';
 import { StaticConfigLoader } from '../../src/util/staticConfig';
 
 describe('/test/util/util.test.ts', () => {
@@ -72,4 +72,28 @@ describe('/test/pathFileUtil.test.ts', () => {
     expect(joinURLPath('/', '/*')).toEqual('/*');
   });
 
+});
+
+describe('/test/util/containerUtil', () => {
+  it('should test createModuleContainer', async () => {
+    class A {}
+    class B {}
+    const container = createModuleContainer({
+      modules: [
+        A,
+        B
+      ],
+      entry: {
+        Configuration: {}
+      }
+    });
+    expect(container).toBeDefined();
+  });
+
+  it('should test createDirectoryGlobContainer', async () => {
+    const container = createDirectoryGlobContainer({
+      baseDir: __dirname
+    });
+    expect(container).toBeDefined();
+  });
 });
