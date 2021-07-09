@@ -162,25 +162,6 @@ export class MidwayContainer
       loadDirKey = loadDirs.join('-');
     }
 
-    // load configuration
-    for (const [packageName, containerConfiguration] of this.configurationMap) {
-      // 老版本 configuration 才加载
-      if (containerConfiguration.newVersion === false) {
-        // main 的需要 skip 掉
-        if (containerConfiguration.namespace === MAIN_MODULE_KEY) {
-          continue;
-        }
-        this.debugLogger(`main:load configuration from ${packageName}`);
-        this.loadConfiguration(opts, containerConfiguration);
-      }
-    }
-    for (const containerConfiguration of this.likeMainConfiguration) {
-      // 老版本 configuration 才加载
-      if (containerConfiguration.newVersion === false) {
-        this.loadConfiguration(opts, containerConfiguration);
-      }
-    }
-
     if (MidwayContainer.parentDefinitionMetadata.has(loadDirKey)) {
       this.restoreDefinitions(
         MidwayContainer.parentDefinitionMetadata.get(loadDirKey)
@@ -650,30 +631,6 @@ export class MidwayContainer
   loadDefinitions() {
     // 默认加载 pipeline
     this.bindModule(pipelineFactory);
-  }
-
-  private loadConfiguration(
-    opts: any,
-    containerConfiguration: IContainerConfiguration
-  ) {
-    const subDirs = containerConfiguration.getImportDirectory();
-    if (subDirs && subDirs.length > 0) {
-      this.debugLogger(
-        'load configuration dir => %j, namespace => %s.',
-        subDirs,
-        containerConfiguration.namespace
-      );
-      this.loadDirectory({
-        ...opts,
-        loadDir: subDirs,
-        namespace: containerConfiguration.namespace,
-      });
-    }
-
-    this.registerImportObjects(
-      containerConfiguration.getImportObjects(),
-      containerConfiguration.namespace
-    );
   }
 
   private convertOptionsToDefinition(

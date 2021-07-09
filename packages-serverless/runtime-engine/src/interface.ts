@@ -1,5 +1,3 @@
-import { LoggerOptions } from 'egg-logger';
-
 export type ContextExtensionHandler = (ctx, runtime: Runtime) => Promise<void>;
 export type HealthExtensionHandler = (ctx, runtime: Runtime) => Promise<void>;
 export type EventExtensionHandler = (
@@ -91,14 +89,9 @@ export interface PropertyParser<T> {
   getLoggerLevel(): T;
 }
 
-export interface ServerlessLoggerOptions extends LoggerOptions {
-  file?: string;
-  eol?: string;
-  formatter?: any;
-}
-
 export interface LoggerFactory {
-  createLogger(options?);
+  createLogger(...args);
+  close();
 }
 
 export interface FunctionEvent {

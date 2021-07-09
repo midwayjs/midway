@@ -7,13 +7,6 @@ export {
   saveClassMetadata,
   attachClassMetadata,
   getClassMetadata,
-  saveMethodDataToClass,
-  attachMethodDataToClass,
-  getMethodDataFromClass,
-  listMethodDataFromClass,
-  saveMethodMetadata,
-  attachMethodMetadata,
-  getMethodMetadata,
   savePropertyDataToClass,
   attachPropertyDataToClass,
   getPropertyDataFromClass,
@@ -34,7 +27,6 @@ export {
   generateProvideId,
 } from '@midwayjs/decorator';
 export * from './interface';
-export { ContainerLoader } from './loader';
 export {
   MidwayContainer,
   clearContainerCache,
