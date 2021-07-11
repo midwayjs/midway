@@ -609,18 +609,21 @@ export function savePropertyDataToClass(
  * @param data
  * @param target
  * @param propertyName
+ * @param groupBy
  */
 export function attachPropertyDataToClass(
   decoratorNameKey: DecoratorKey,
   data,
   target,
-  propertyName
+  propertyName,
+  groupBy?: string
 ) {
   return manager.attachPropertyDataToClass(
     decoratorNameKey,
     data,
     target,
-    propertyName
+    propertyName,
+    groupBy
   );
 }
 
