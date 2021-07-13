@@ -5,7 +5,6 @@ import { PIPELINE_IDENTIFIER } from '@midwayjs/decorator';
 
 export class MidwayRequestContainer extends MidwayContainer {
   private applicationContext: IMidwayContainer;
-  private readonly ctx;
 
   constructor(ctx, applicationContext: IMidwayContainer) {
     super(null, applicationContext);
