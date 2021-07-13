@@ -22,6 +22,7 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/decorator": "^2.11.1",
+    "@midwayjs-test/test-2": "^1.0.0",
     "chai": "^4.2.0",
     "mm": "3",
     "sinon": "^7.2.2"
