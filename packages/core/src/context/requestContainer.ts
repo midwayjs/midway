@@ -5,6 +5,7 @@ import { PIPELINE_IDENTIFIER } from '@midwayjs/decorator';
 
 export class MidwayRequestContainer extends MidwayContainer {
   private applicationContext: IMidwayContainer;
+  private readonly ctx;
 
   constructor(ctx, applicationContext: IMidwayContainer) {
     super(null, applicationContext);
@@ -13,6 +14,7 @@ export class MidwayRequestContainer extends MidwayContainer {
     this.environmentService = this.applicationContext.getEnvironmentService();
     this.aspectService = this.applicationContext.getAspectService();
 
+    this.ctx = ctx;
     // register ctx
     this.registerObject(REQUEST_CTX_KEY, ctx);
 
@@ -111,5 +113,9 @@ export class MidwayRequestContainer extends MidwayContainer {
 
   getEnvironmentService() {
     return this.environmentService;
+  }
+
+  getContext() {
+    return this.ctx;
   }
 }
