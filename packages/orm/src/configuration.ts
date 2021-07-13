@@ -3,23 +3,23 @@ import {
   Config,
   Configuration,
   getClassMetadata,
-  listModule,
+  listModule
 } from '@midwayjs/decorator';
+import { join } from 'path';
 import {
   Connection,
   ConnectionOptions,
   createConnection,
   getConnection,
-  getRepository,
+  getRepository
 } from 'typeorm';
 import {
   CONNECTION_KEY,
   ENTITY_MODEL_KEY,
   EVENT_SUBSCRIBER_KEY,
-  ORM_MODEL_KEY,
+  ORM_MODEL_KEY
 } from '.';
-import { ORM_HOOK_KEY, OrmConnectionHook } from './hook';
-import { join } from 'path';
+import { OrmConnectionHook, ORM_HOOK_KEY } from './hook';
 
 @Configuration({
   importConfigs: [join(__dirname, './config')],
@@ -43,12 +43,22 @@ export class OrmConfiguration implements ILifeCycle {
     const entities = listModule(ENTITY_MODEL_KEY);
     const eventSubs = listModule(EVENT_SUBSCRIBER_KEY);
 
+    const connectionNameMap = {};
+
+    for(const entity of entities) {
+      let _connectionName = getClassMetadata(ENTITY_MODEL_KEY, entity).connectionName;
+      if(!connectionNameMap[_connectionName]) {
+        connectionNameMap[_connectionName] = [];
+      }
+      connectionNameMap[_connectionName].push(entity)
+    }
+
     const opts = this.formatConfig();
 
     for (const connectionOption of opts) {
-      connectionOption.entities = entities || [];
-      connectionOption.subscribers = eventSubs || [];
       const name = connectionOption.name || 'default';
+      connectionOption.entities = connectionOption.entities ? connectionOption.entities : (connectionNameMap[name] || []);
+      connectionOption.subscribers = eventSubs || [];
       this.connectionNames.push(name);
       let isConnected = false;
       try {

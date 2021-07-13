@@ -1,17 +1,10 @@
+import { attachClassMetadata, saveModule } from '@midwayjs/core';
+import { saveClassMetadata } from '@midwayjs/decorator';
 import {
-  EntityOptions,
-  getMetadataArgsStorage,
-  ObjectType,
-  EntitySchema,
-  Repository,
-  TreeRepository,
-  MongoRepository,
-  Connection,
-  getRepository,
+  Connection, EntityOptions, EntitySchema, getMetadataArgsStorage, getRepository, MongoRepository, ObjectType, Repository,
+  TreeRepository
 } from 'typeorm';
 import { ViewEntityOptions } from 'typeorm/decorator/options/ViewEntityOptions';
-import { saveModule, attachClassMetadata } from '@midwayjs/core';
-import { saveClassMetadata } from '@midwayjs/decorator';
 
 export const CONNECTION_KEY = 'orm:getConnection';
 export const ENTITY_MODEL_KEY = 'entity_model_key';
@@ -21,15 +14,15 @@ export const ORM_MODEL_KEY = '__orm_model_key__';
  * Entity - typeorm
  * @param options EntityOptions
  */
-export function EntityModel(options?: EntityOptions): ClassDecorator;
+export function EntityModel(options?: EntityOptions & { connectionName: string }): ClassDecorator;
 /**
  * Entity - typeorm
  * @param name string
- * @param options EntityOptions
+ * @param options EntityOptions & connectionName
  */
 export function EntityModel(
   name?: string,
-  options?: EntityOptions
+  options?: EntityOptions & { connectionName: string }
 ): ClassDecorator;
 /**
  * Entity - typeorm
@@ -37,20 +30,23 @@ export function EntityModel(
  * @param maybeOptions EntityOptions
  */
 export function EntityModel(
-  nameOrOptions?: string | EntityOptions,
-  maybeOptions?: EntityOptions
+  nameOrOptions?: string | EntityOptions & { connectionName: string },
+  maybeOptions?: EntityOptions & { connectionName: string }
 ): ClassDecorator {
   const options =
     (typeof nameOrOptions === 'object'
-      ? (nameOrOptions as EntityOptions)
+      ? (nameOrOptions as EntityOptions & { connectionName: string })
       : maybeOptions) || {};
   const name = typeof nameOrOptions === 'string' ? nameOrOptions : options.name;
-
+  const connectionName = options?.connectionName || 'default';
+  
   return function (target) {
     if (typeof target === 'function') {
       saveModule(ENTITY_MODEL_KEY, target);
+      saveClassMetadata(ENTITY_MODEL_KEY, { connectionName }, target);
     } else {
       saveModule(ENTITY_MODEL_KEY, (target as any).constructor);
+      saveClassMetadata(ENTITY_MODEL_KEY, { connectionName}, (target as any).constructor);
     }
 
     getMetadataArgsStorage().tables.push({
@@ -170,8 +166,9 @@ export type getMongoRepository = <Entity>(
  */
 export type getCustomRepository = <T>(customRepository: ObjectType<T>) => T;
 
-export * from './repository';
+export { OrmConfiguration as Configuration } from './configuration';
 export * from './hook';
+export * from './repository';
 
 export type GetConnection = (instanceName?: string) => Connection;
 
@@ -187,4 +184,4 @@ export function useEntityModel<Entity>(
   return getRepository<Entity>(clz, connectionName);
 }
 
-export { OrmConfiguration as Configuration } from './configuration';
+
