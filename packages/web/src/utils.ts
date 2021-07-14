@@ -1,10 +1,12 @@
 import { isTypeScriptEnvironment } from '@midwayjs/bootstrap';
 import { basename, join } from 'path';
 import { sync as findUpSync, stop } from 'find-up';
+import { existsSync } from 'fs';
 
 export const parseNormalDir = (baseDir: string, isTypescript = true) => {
   if (isTypescript) {
-    if (/src$/.test(baseDir) || /dist$/.test(baseDir)) {
+    // 这里要么就是 src 目录，要么就已经是根目录
+    if (!existsSync(join(baseDir, 'package.json'))) {
       baseDir = basename(baseDir);
     }
 
