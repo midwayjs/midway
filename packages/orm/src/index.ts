@@ -19,7 +19,7 @@ export const EVENT_SUBSCRIBER_KEY = 'event_subscriber_key';
 export const ORM_MODEL_KEY = '__orm_model_key__';
 
 export interface EntityOptions extends BaseEntityOptions {
-  connectionName: string;
+  connectionName?: string;
 }
 
 /**
@@ -50,11 +50,7 @@ export function EntityModel(
       ? (nameOrOptions as EntityOptions)
       : maybeOptions) || ({} as any);
   const name = typeof nameOrOptions === 'string' ? nameOrOptions : options.name;
-  const connectionName =
-    typeof nameOrOptions === 'string'
-      ? 'default'
-      : options?.connectionName || 'default';
-
+  const connectionName = options?.connectionName || 'ALL';
   return function (target) {
     if (typeof target === 'function') {
       saveModule(ENTITY_MODEL_KEY, target);

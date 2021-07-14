@@ -43,8 +43,7 @@ export class OrmConfiguration implements ILifeCycle {
     const entities = listModule(ENTITY_MODEL_KEY);
     const eventSubs = listModule(EVENT_SUBSCRIBER_KEY);
 
-    const connectionNameMap = {};
-
+    const connectionNameMap = { ALL: [] };
     for (const entity of entities) {
       const _connectionName = getClassMetadata(
         ENTITY_MODEL_KEY,
@@ -61,12 +60,14 @@ export class OrmConfiguration implements ILifeCycle {
     for (const connectionOption of opts) {
       const name = connectionOption.name || 'default';
       const connectionEntities = [
-        ...connectionNameMap['default'],
+        ...connectionNameMap['ALL'],
         ...(connectionNameMap[name] || []),
       ];
+
       connectionOption.entities = connectionOption.entities
         ? connectionOption.entities
         : connectionEntities || [];
+
       connectionOption.subscribers = eventSubs || [];
       this.connectionNames.push(name);
       let isConnected = false;
