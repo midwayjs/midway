@@ -46,7 +46,7 @@ export class OrmConfiguration implements ILifeCycle {
     const connectionNameMap = {};
 
     for (const entity of entities) {
-      let _connectionName = getClassMetadata(
+      const _connectionName = getClassMetadata(
         ENTITY_MODEL_KEY,
         entity
       ).connectionName;
