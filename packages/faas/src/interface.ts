@@ -17,7 +17,7 @@ export type IMidwayFaaSApplication = IMidwayApplication<FaaSContext, {
   getInitializeContext();
   use(middleware: FaaSMiddleware);
   useMiddleware(mw: string[]);
-  generateMiddleware(middlewareId: string): Promise<FaaSMiddleware>;
+  generateMiddleware(middlewareId: any): Promise<FaaSMiddleware>;
 
   /**
    * Get function name in serverless environment
