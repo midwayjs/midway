@@ -259,6 +259,14 @@ export class Framework
           res.setHeader('Access-Control-Allow-Methods', '*');
           res.setHeader('Access-Control-Allow-Headers', '*');
           if (req.method.toLowerCase() === 'options') {
+            res.setHeader(
+              'Access-Control-Allow-Methods',
+              req.get('Access-Control-Request-Method') || '*'
+            );
+            res.setHeader(
+              'Access-Control-Allow-Headers',
+              req.get('Access-Control-Request-Headers') || '*'
+            );
             res.send('');
             return;
           }
