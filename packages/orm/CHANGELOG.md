@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.11.5](https://github.com/midwayjs/midway/compare/v2.11.4...v2.11.5) (2021-07-15)
+
+
+### Features
+
+* Optimize typeorm to initialize loading entities ([#1150](https://github.com/midwayjs/midway/issues/1150)) ([f0faf2f](https://github.com/midwayjs/midway/commit/f0faf2f1fbdb14f26f157eb554520377c06e6ef8))
+
+
+
+
+
 ## [2.11.4](https://github.com/midwayjs/midway/compare/v2.11.3...v2.11.4) (2021-07-06)
 
 **Note:** Version bump only for package @midwayjs/orm

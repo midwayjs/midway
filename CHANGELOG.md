@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.11.5](https://github.com/midwayjs/midway/compare/v2.11.4...v2.11.5) (2021-07-15)
+
+
+### Bug Fixes
+
+* add missing arg "groupBy?" at exported attachPropertyDataToClass in decoratorManager ([#1146](https://github.com/midwayjs/midway/issues/1146)) ([f4f7a55](https://github.com/midwayjs/midway/commit/f4f7a55d9329cd9167b5a5aa2b58a29db16e1e23))
+* cors and trigger bugs in serverless ([#1156](https://github.com/midwayjs/midway/issues/1156)) ([2df53c2](https://github.com/midwayjs/midway/commit/2df53c277bb33d31b5a86cd3daa04b937caedc48))
+* find baseDir in egg ([#1154](https://github.com/midwayjs/midway/issues/1154)) ([2fc9a44](https://github.com/midwayjs/midway/commit/2fc9a44fbf20ee6d4da00555114bf5e9e44eb5df))
+
+
+### Features
+
+* Optimize typeorm to initialize loading entities ([#1150](https://github.com/midwayjs/midway/issues/1150)) ([f0faf2f](https://github.com/midwayjs/midway/commit/f0faf2f1fbdb14f26f157eb554520377c06e6ef8))
+
+
+
+
+
 ## [2.11.4](https://github.com/midwayjs/midway/compare/v2.11.3...v2.11.4) (2021-07-06)
 
 

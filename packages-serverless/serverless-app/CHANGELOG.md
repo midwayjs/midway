@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.11.5](https://github.com/midwayjs/midway/compare/v2.11.4...v2.11.5) (2021-07-15)
+
+
+### Bug Fixes
+
+* cors and trigger bugs in serverless ([#1156](https://github.com/midwayjs/midway/issues/1156)) ([2df53c2](https://github.com/midwayjs/midway/commit/2df53c277bb33d31b5a86cd3daa04b937caedc48))
+
+
+
+
+
 ## [2.11.4](https://github.com/midwayjs/midway/compare/v2.11.3...v2.11.4) (2021-07-06)
 
 **Note:** Version bump only for package @midwayjs/serverless-app
