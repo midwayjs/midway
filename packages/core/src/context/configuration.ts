@@ -285,6 +285,12 @@ export class ContainerConfiguration implements IContainerConfiguration {
           }
           if (i === 0 && this.namespace === MAIN_MODULE_KEY) {
             // set conflictCheck
+
+            if (process.env.MIDWAY_ENABLE_CONFLICT_CHECK) {
+              configurationOptions.conflictCheck =
+                process.env.MIDWAY_ENABLE_CONFLICT_CHECK === 'true';
+            }
+
             if (configurationOptions.conflictCheck === undefined) {
               configurationOptions.conflictCheck = false;
             }
