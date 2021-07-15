@@ -77,9 +77,8 @@ export abstract class MidwayKoaBaseFramework<
         ctx.body = result;
       }
 
-      if (ctx.body === undefined && !(ctx.response as any)._explicitStatus) {
-        ctx.body = undefined;
-      }
+      // 设置匹配到了路由
+      ctx._explicitRouter = true;
 
       // implement response decorator
       if (Array.isArray(routerResponseData) && routerResponseData.length) {
@@ -238,6 +237,10 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<
     this.app.use(async (ctx, next) => {
       this.app.createAnonymousContext(ctx);
       await next();
+      // 当匹配到路由，并且路由或中间件返回明确的 undefined，才设置body和204
+      if (ctx.body === undefined && !(ctx.response as any)._explicitStatus && ctx._explicitRouter) {
+        ctx.body = undefined;
+      }
     });
 
     this.defineApplicationProperties({

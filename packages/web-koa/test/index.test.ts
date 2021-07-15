@@ -243,4 +243,12 @@ describe('/test/feature.test.ts', () => {
       expect(result.text).toEqual('hello worldabc');
     });
   });
+
+  it('test #1152 issue response undefined and got 204', async () => {
+    const app = await creatApp('base-app-response');
+    let result = await createHttpRequest(app).get('/api/user/info');
+    expect(result.text).toMatch('middleware data');
+    expect(result.status).toEqual(200);
+    await closeApp(app);
+  });
 });

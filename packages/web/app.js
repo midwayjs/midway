@@ -31,6 +31,14 @@ class AppBootHook {
   }
 
   async willReady() {
+    // 这个内置中间件必须在生命周期之前加载
+    this.app.use(async (ctx, next) => {
+      await next();
+      // 当匹配到路由，并且路由或中间件返回明确的 undefined，才设置body和204
+      if (ctx.body === undefined && !ctx.response._explicitStatus && ctx._explicitRouter) {
+        ctx.body = undefined;
+      }
+    });
     await this.app.webFramework.loadExtension();
     const middlewareNames = this.coreMiddleware.concat(this.appMiddleware);
     // 等 midway 加载完成后，再去 use 中间件
