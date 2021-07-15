@@ -238,7 +238,11 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<
       this.app.createAnonymousContext(ctx);
       await next();
       // 当匹配到路由，并且路由或中间件返回明确的 undefined，才设置body和204
-      if (ctx.body === undefined && !(ctx.response as any)._explicitStatus && ctx._explicitRouter) {
+      if (
+        ctx.body === undefined &&
+        !(ctx.response as any)._explicitStatus &&
+        ctx._explicitRouter
+      ) {
         ctx.body = undefined;
       }
     });
