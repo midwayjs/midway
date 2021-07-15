@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.json",
+  "compileOnSave": true,
+  "compilerOptions": {
+    "lib": ["WebWorker", "Webworker.Iterable", "ES2019"],
+    "rootDir": "src",
+    "outDir": "dist"
+  },
+  "include": [
+    "./src/**/*.ts"
+  ]
+}
