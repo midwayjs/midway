@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.11.6](https://github.com/midwayjs/midway/compare/v2.11.5...v2.11.6) (2021-07-16)
+
+
+### Features
+
+* support ssl ([#1160](https://github.com/midwayjs/midway/issues/1160)) ([2e442ae](https://github.com/midwayjs/midway/commit/2e442ae0c67af93df4f8d2f82cb213744befa8d2))
+
+
+
+
+
 ## [2.11.5](https://github.com/midwayjs/midway/compare/v2.11.4...v2.11.5) (2021-07-15)
 
 
