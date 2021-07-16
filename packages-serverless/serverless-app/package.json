@@ -27,6 +27,7 @@
     "node": ">= 10"
   },
   "files": [
+    "ssl",
     "dist/**/*.js",
     "dist/**/*.d.ts",
     "index.d.ts"
