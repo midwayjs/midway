@@ -343,8 +343,8 @@ export class Framework
       if (this.configurationOptions.ssl) {
         this.server = require('https').createServer(
           {
-            key: readFileSync(join(__dirname, './ssl/ssl.key'), 'utf8'),
-            cert: readFileSync(join(__dirname, './ssl/ssl.pem'), 'utf8'),
+            key: readFileSync(join(__dirname, '../ssl/ssl.key'), 'utf8'),
+            cert: readFileSync(join(__dirname, '../ssl/ssl.pem'), 'utf8'),
           },
           this.app
         );
