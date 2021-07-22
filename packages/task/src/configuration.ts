@@ -20,6 +20,23 @@ import * as Bull from 'bull';
 import { CronJob } from 'cron';
 import { v4 } from 'uuid';
 
+function isAsync(fn) {
+  return fn[Symbol.toStringTag] === 'AsyncFunction';
+}
+
+function wrapAsync(fn){
+  return async function (...args){
+    if(isAsync(fn)){
+      await fn.call(...args);
+    }else{
+      let result = fn.call(...args);
+      if(result && result.then){
+        await result;
+      }
+    }
+  }
+}
+
 @Configuration({
   namespace: 'task',
   importConfigs: [join(__dirname, 'config')],
@@ -76,7 +93,7 @@ export class AutoConfiguration {
             const ctx = this.app.createAnonymousContext();
             ctx.traceId = job.id;
             const service = await ctx.requestContext.getAsync(module);
-            rule.value.call(service, job.data);
+            await wrapAsync(rule.value)(service, job.data);
           }catch(e){
             this.app.getLogger('midway-task').error(`[Task][${job.id}][${rule.name}:${rule.propertyKey}] ${e.stack}`)
           }
@@ -117,9 +134,9 @@ export class AutoConfiguration {
               const ctx = this.app.createAnonymousContext();
               ctx.traceId = requestId;
               const service = await ctx.requestContext.getAsync(module);
-              rule.value.call(service);
+              await wrapAsync(rule.value)(service);
             }catch(e){
-              this.app.getLogger('midway-task').error(`[Task][${requestId}][${module.name}] ${e.stack}`)
+              this.app.getLogger('midway-task').error(`[LocalTask][${requestId}][${module.name}] ${e.stack}`)
             }
             this.app.getLogger('midway-task').info(`[LocalTask][${requestId}][${module.name}] local task end.`)
           },
@@ -147,7 +164,7 @@ export class AutoConfiguration {
           const ctx = this.app.createAnonymousContext();
           ctx.traceId = job.id;
           const service = await ctx.requestContext.getAsync(module);
-          await service.execute.call(service, job.data, job);
+          await wrapAsync(service.execute)(service, job.data, job);
         }catch(e){
           this.app.getLogger('midway-task').error(`[Queue][${job.id}][${module.name}] ${e.stack}`)
         }
