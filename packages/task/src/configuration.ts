@@ -144,7 +144,7 @@ export class AutoConfiguration {
             this.app
               .getLogger('midway-task')
               .info(
-                `[LocalTask][${requestId}][${module.name}] local task start.`
+                `[LocalTask][${requestId}][${module.name}:${rule.propertyKey}] local task start.`
               );
             try {
               const ctx = this.app.createAnonymousContext();
@@ -154,12 +154,12 @@ export class AutoConfiguration {
             } catch (e) {
               this.app
                 .getLogger('midway-task')
-                .error(`[LocalTask][${requestId}][${module.name}] ${e.stack}`);
+                .error(`[LocalTask][${requestId}][${module.name}:${rule.propertyKey}] ${e.stack}`);
             }
             this.app
               .getLogger('midway-task')
               .info(
-                `[LocalTask][${requestId}][${module.name}] local task end.`
+                `[LocalTask][${requestId}][${module.name}:${rule.propertyKey}] local task end.`
               );
           },
           null,
