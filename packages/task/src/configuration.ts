@@ -53,7 +53,7 @@ export class AutoConfiguration {
 
   async onReady(
     container: IMidwayContainer,
-    app: IMidwayApplication
+    _: IMidwayApplication
   ): Promise<void> {
     this.createLogger();
     await this.loadTask(container);
