@@ -154,7 +154,9 @@ export class AutoConfiguration {
             } catch (e) {
               this.app
                 .getLogger('midway-task')
-                .error(`[LocalTask][${requestId}][${module.name}:${rule.propertyKey}] ${e.stack}`);
+                .error(
+                  `[LocalTask][${requestId}][${module.name}:${rule.propertyKey}] ${e.stack}`
+                );
             }
             this.app
               .getLogger('midway-task')
