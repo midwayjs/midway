@@ -4,7 +4,6 @@
 import { ObjectIdentifier } from '@midwayjs/decorator';
 import {
   IApplicationContext,
-  IMessageSource,
   IObjectDefinition,
   IObjectDefinitionRegistry,
   IObjectFactory,
@@ -115,7 +114,6 @@ export class BaseApplicationContext
   private _dependencyMap: Map<string, ObjectDependencyTree> = null;
   baseDir: string = null;
   parent: IApplicationContext = null;
-  messageSource: IMessageSource = null;
   disableConflictCheck = false;
 
   constructor(baseDir = '', parent?: IApplicationContext) {

@@ -1,15 +1,3 @@
-import { exists } from 'mz/fs';
-import { join } from 'path';
-
-export const isTsEnv = () => {
-  const TS_MODE_PROCESS_FLAG = process.env.MIDWAY_TS_MODE;
-  if ('false' === TS_MODE_PROCESS_FLAG) {
-    return false;
-  }
-  // eslint-disable-next-line node/no-deprecated-api
-  return TS_MODE_PROCESS_FLAG === 'true' || !!require.extensions['.ts'];
-};
-
 export const asyncWrapper = handler => {
   return (...args) => {
     if (typeof args[args.length - 1] === 'function') {
@@ -35,6 +23,18 @@ export const asyncWrapper = handler => {
 
 export const isDebug = () => {
   return process.env['FAAS_DEBUG'] === 'true';
+};
+
+/**
+ * get handler function with file path and method name
+ * @param filePath
+ * @param handler
+ */
+export const getHandlerMethod = (filePath, handler) => {
+  const mod = require(filePath);
+  if (mod && mod[handler]) {
+    return mod[handler].bind(mod);
+  }
 };
 
 /**
@@ -94,18 +94,6 @@ export const completeAssign = function (...sources) {
 };
 
 /**
- * get handler function with file path and method name
- * @param filePath
- * @param handler
- */
-export const getHandlerMethod = (filePath, handler) => {
-  const mod = require(filePath);
-  if (mod && mod[handler]) {
-    return mod[handler].bind(mod);
-  }
-};
-
-/**
  * parse handler file name and method name
  * @param handlerName
  */
@@ -117,16 +105,5 @@ export const getHandlerMeta = (
     return { fileName: meta[0], handler: meta[1] };
   } else {
     // error
-  }
-};
-
-export const fileExists = (entryDir, fileName) => {
-  const jsFile = join(entryDir, fileName + '.js');
-  const tsFile = join(entryDir, fileName + '.ts');
-  if (isTsEnv()) {
-    return exists(tsFile);
-  } else {
-    /* istanbul ignore next */
-    return exists(jsFile);
   }
 };
