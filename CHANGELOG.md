@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.11.7](https://github.com/midwayjs/midway/compare/v2.11.6...v2.11.7) (2021-07-24)
+
+
+### Bug Fixes
+
+* add generateMiddleware definition for express app ([#1170](https://github.com/midwayjs/midway/issues/1170)) ([246a244](https://github.com/midwayjs/midway/commit/246a244add49cc1f87b8707bc6403dae8a7b5dae))
+* socket listen sequelize ([#1175](https://github.com/midwayjs/midway/issues/1175)) ([84f9b68](https://github.com/midwayjs/midway/commit/84f9b68def0761d48242fa73d64f83de03f582ab))
+* test error ([#1174](https://github.com/midwayjs/midway/issues/1174)) ([9f47f64](https://github.com/midwayjs/midway/commit/9f47f64fb2a6388d8b3e1b015c0de40949aa3bdc))
+
+
+
+
+
 ## [2.11.6](https://github.com/midwayjs/midway/compare/v2.11.5...v2.11.6) (2021-07-16)
 
 
