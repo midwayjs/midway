@@ -51,7 +51,16 @@ export class MidwaySocketIOFramework extends BaseFramework<
       this.logger.debug('init socket.io-redis ready!');
     }
 
-    if (this.applicationContext.registry.hasObject(HTTP_SERVER_KEY)) {
+    // listen port when http server not exist
+    if (this.configurationOptions.port) {
+      this.app.listen(
+        this.configurationOptions.port,
+        this.configurationOptions
+      );
+      this.logger.info(
+        `Socket.io server port = ${this.configurationOptions.port} start success`
+      );
+    } else if (this.applicationContext.registry.hasObject(HTTP_SERVER_KEY)) {
       this.app.attach(
         this.applicationContext.get(HTTP_SERVER_KEY),
         this.configurationOptions
@@ -59,17 +68,6 @@ export class MidwaySocketIOFramework extends BaseFramework<
       this.logger.info(
         'Socket.io server start success and attach to web server'
       );
-    } else {
-      // listen port when http server not exist
-      if (this.configurationOptions.port) {
-        this.app.listen(
-          this.configurationOptions.port,
-          this.configurationOptions
-        );
-        this.logger.info(
-          `Socket.io server port = ${this.configurationOptions.port} start success`
-        );
-      }
     }
   }
 
