@@ -1,5 +1,5 @@
 import { LightFramework } from '@midwayjs/core';
-import { ContextHttpService, HttpService } from '../src';
+import { HttpService } from '../src';
 
 describe('/test/index.test.ts', () => {
 
@@ -23,7 +23,8 @@ describe('/test/index.test.ts', () => {
 
   it('should test context http service', async () => {
     const ctx = framework.getApplication().createAnonymousContext();
-    const httpService = await ctx.requestContext.getAsync(ContextHttpService);
-    expect(httpService).toBeDefined();
+    const httpServiceWithRequest = await ctx.requestContext.getAsync(HttpService);
+    expect(httpServiceWithRequest).toBeDefined();
+    expect(httpServiceWithRequest).not.toEqual(httpService);
   });
 });
