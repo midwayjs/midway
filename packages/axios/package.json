@@ -1,6 +1,6 @@
 {
-  "name": "@midwayjs/http-client",
-  "description": "midway http client",
+  "name": "@midwayjs/axios",
+  "description": "midway http client with axios",
   "version": "2.11.0",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
