@@ -1,4 +1,5 @@
 import { LightFramework } from '@midwayjs/core';
+import { join } from 'path';
 import { HttpService } from '../src';
 
 describe('/test/index.test.ts', () => {
@@ -10,7 +11,7 @@ describe('/test/index.test.ts', () => {
   beforeAll(async () => {
     framework = new LightFramework();
     framework.configure();
-    await framework.initialize({ baseDir: process.cwd() });
+    await framework.initialize({ baseDir: join(__dirname, './fixtures/base-app/src') });
     container = framework.getApplicationContext();
     httpService = await container.getAsync(HttpService);
   });

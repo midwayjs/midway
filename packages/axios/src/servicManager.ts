@@ -13,7 +13,7 @@ export class HttpService implements AxiosHttpService {
   @App()
   app: IMidwayApplication;
 
-  @Config()
+  @Config('axios')
   httpConfig: AxiosRequestConfig;
 
   get interceptors() {
@@ -25,6 +25,7 @@ export class HttpService implements AxiosHttpService {
     if (
       !this.app.getApplicationContext().registry.hasObject(AXIOS_INSTANCE_KEY)
     ) {
+      // 动态往全局容器中创建一个单例
       const instance = axios.create(this.httpConfig ?? {});
 
       // Add a request interceptor
