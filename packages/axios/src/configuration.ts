@@ -4,9 +4,7 @@ import { HttpService } from './servicManager';
 
 @Configuration({
   namespace: 'httpClient',
-  importConfigs: [
-    join(__dirname, './config.default'),
-  ]
+  importConfigs: [join(__dirname, './config.default')],
 })
 export class AutoConfiguration {
   async onReady(container) {

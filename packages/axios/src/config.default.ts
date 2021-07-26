@@ -1,2 +1,1 @@
-export const axios = {
-}
+export const axios = {};
