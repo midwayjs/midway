@@ -57,6 +57,7 @@ export { MidwayEnvironmentService } from './service/environmentService';
 export { MidwayInformationService } from './service/informationService';
 export * from './logger';
 export * from './util/contextUtil';
+export * from './util/serviceFactory';
 /**
  * @deprecated please import from @midwayjs/logger
  */
