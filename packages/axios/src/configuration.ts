@@ -3,7 +3,7 @@ import { join } from 'path';
 import { HttpService } from './servicManager';
 
 @Configuration({
-  namespace: 'httpClient',
+  namespace: 'axios',
   importConfigs: [join(__dirname, './config.default')],
 })
 export class AutoConfiguration {
