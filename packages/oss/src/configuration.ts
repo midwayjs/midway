@@ -4,9 +4,7 @@ import { OSSServiceFactory } from './manager';
 
 @Configuration({
   namespace: 'oss',
-  importConfigs: [
-    join(__dirname, './config.default'),
-  ]
+  importConfigs: [join(__dirname, './config.default')],
 })
 export class AutoConfiguration {
   async onReady(container) {
