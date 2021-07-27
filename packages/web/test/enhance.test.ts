@@ -225,14 +225,15 @@ describe('/test/enhance.test.ts', () => {
         .expect(200)
         .expect('127');
 
-      await request(app.callback())
+      const result = await request(app.callback())
         .get('/param/param_queries')
-        .query('name=harry&name=zhangting')
-        .expect(200)
-        .expect([
-          "harry",
-          "zhangting"
-        ]);
+        .query('name=harry&name=zhangting');
+
+      expect(result.status).toEqual(200);
+      expect(result.body).toEqual([
+        "harry",
+        "zhangting"
+      ]);
 
       await request(app.callback())
         .get('/param/param_queries_all')

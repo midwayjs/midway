@@ -1,5 +1,8 @@
 {
-  "@midwayjs/egg-layer": "2.11.6",
+  "@midwayjs/egg-layer": [
+    "2.11.6",
+    "2.11.7"
+  ],
   "@midwayjs/express-layer": "2.11.6",
   "@midwayjs/faas-typings": "2.11.1",
   "@midwayjs/koa-layer": "2.11.6",
@@ -22,17 +25,32 @@
   "@midwayjs/grpc": "2.11.6",
   "@midwayjs/logger": "2.11.3",
   "midway-schedule": "2.11.6",
-  "midway": "2.11.6",
+  "midway": [
+    "2.11.6",
+    "2.11.7"
+  ],
   "@midwayjs/mock": "2.11.6",
   "@midwayjs/orm": "2.11.6",
   "@midwayjs/prometheus": "2.11.6",
   "@midwayjs/rabbitmq": "2.11.6",
-  "@midwayjs/socketio": "2.11.6",
+  "@midwayjs/socketio": [
+    "2.11.6",
+    "2.11.7"
+  ],
   "@midwayjs/task": "2.11.6",
   "@midwayjs/typegoose": "2.11.6",
-  "@midwayjs/version": "2.11.6",
-  "@midwayjs/express": "2.11.6",
+  "@midwayjs/version": [
+    "2.11.6",
+    "2.11.7"
+  ],
+  "@midwayjs/express": [
+    "2.11.6",
+    "2.11.7"
+  ],
   "@midwayjs/koa": "2.11.6",
-  "@midwayjs/web": "2.11.6",
+  "@midwayjs/web": [
+    "2.11.6",
+    "2.11.7"
+  ],
   "@midwayjs/ws": "2.11.6"
 }

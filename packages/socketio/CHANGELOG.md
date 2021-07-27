@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.11.7](https://github.com/midwayjs/midway/compare/v2.11.6...v2.11.7) (2021-07-24)
+
+
+### Bug Fixes
+
+* socket listen sequelize ([#1175](https://github.com/midwayjs/midway/issues/1175)) ([84f9b68](https://github.com/midwayjs/midway/commit/84f9b68def0761d48242fa73d64f83de03f582ab))
+
+
+
+
+
 ## [2.11.6](https://github.com/midwayjs/midway/compare/v2.11.5...v2.11.6) (2021-07-16)
 
 **Note:** Version bump only for package @midwayjs/socketio
