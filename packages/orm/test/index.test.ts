@@ -26,6 +26,16 @@ describe('/test/index.test.ts', () => {
     expect(result.includes('hello world')).toBeTruthy();
     expect(result).toEqual('hello world[[{"id":1,"name":"oneuser1"}],1]');
   });
+
+  it('test single table inheritance', async () => {
+    cleanFile(join(__dirname, 'fixtures/base-fn-multiple-db', 'test.sqlite'));
+
+    const app: IMidwayApplication = await createApp(join(__dirname, 'fixtures/base-fn-single-table'), {}, LightFramework);
+    const result = app.getAttr<string>('result');
+
+    expect(result.includes('hello world')).toBeTruthy();
+    expect(result).toEqual('hello world[[{"id":1,"title":"new photo","description":"","size":"100"}],1]');
+  });
 });
 
 function cleanFile(file) {

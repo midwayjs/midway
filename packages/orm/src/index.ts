@@ -15,6 +15,7 @@ import { ViewEntityOptions } from 'typeorm/decorator/options/ViewEntityOptions';
 
 export const CONNECTION_KEY = 'orm:getConnection';
 export const ENTITY_MODEL_KEY = 'entity_model_key';
+export const CHILD_ENTITY_MODEL_KEY = 'child_entity_model_key';
 export const EVENT_SUBSCRIBER_KEY = 'event_subscriber_key';
 export const ORM_MODEL_KEY = '__orm_model_key__';
 
@@ -75,6 +76,34 @@ export function EntityModel(
       synchronize: options.synchronize,
       withoutRowid: options.withoutRowid,
     });
+  };
+}
+
+/**
+ * Special type of the table used in the single-table inherited tables.
+ */
+export function ChildEntityModel(
+  discriminatorValue?: any,
+  options: {
+    connectionName?;
+  } = {}
+): ClassDecorator {
+  options.connectionName = options.connectionName || 'ALL';
+  return function (target) {
+    saveModule(CHILD_ENTITY_MODEL_KEY, target);
+    saveClassMetadata(CHILD_ENTITY_MODEL_KEY, options, target);
+    // register a table metadata
+    getMetadataArgsStorage().tables.push({
+      target: target,
+      type: 'entity-child',
+    });
+    // register discriminator value if it was provided
+    if (typeof discriminatorValue !== 'undefined') {
+      getMetadataArgsStorage().discriminatorValues.push({
+        target: target,
+        value: discriminatorValue,
+      });
+    }
   };
 }
 

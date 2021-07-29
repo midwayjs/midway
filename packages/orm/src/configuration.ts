@@ -14,6 +14,7 @@ import {
   getRepository,
 } from 'typeorm';
 import {
+  CHILD_ENTITY_MODEL_KEY,
   CONNECTION_KEY,
   ENTITY_MODEL_KEY,
   EVENT_SUBSCRIBER_KEY,
@@ -41,14 +42,26 @@ export class OrmConfiguration implements ILifeCycle {
     );
 
     const entities = listModule(ENTITY_MODEL_KEY);
+    const childEntities = listModule(CHILD_ENTITY_MODEL_KEY);
     const eventSubs = listModule(EVENT_SUBSCRIBER_KEY);
 
+    // put entity to different connection
     const connectionNameMap = { ALL: [] };
     for (const entity of entities) {
       const _connectionName = getClassMetadata(
         ENTITY_MODEL_KEY,
         entity
       ).connectionName;
+      if (!connectionNameMap[_connectionName]) {
+        connectionNameMap[_connectionName] = [];
+      }
+      connectionNameMap[_connectionName].push(entity);
+    }
+
+    for (const entity of childEntities) {
+      const _connectionName =
+        getClassMetadata(CHILD_ENTITY_MODEL_KEY, entity)?.connectionName ||
+        'ALL';
       if (!connectionNameMap[_connectionName]) {
         connectionNameMap[_connectionName] = [];
       }
