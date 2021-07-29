@@ -10,6 +10,10 @@ export class DataService {
 
   responseHistogram: Client.Histogram<any>;
 
+  userDefinedMetrics: any = {};
+
+  metrics: any;
+
   @Config('prometheus')
   prometheusConfig;
 
@@ -61,6 +65,21 @@ export class DataService {
         ...(Object.values(this.prometheusConfig.labels) as string[])
       )
       .observe(time);
+  }
+
+  async define(name, type, options){
+    options.labelNames = options.labelNames ? [...options.labelNames, ...Object.keys(this.prometheusConfig.labels)]: Object.keys(this.prometheusConfig.labels);
+    this.userDefinedMetrics[name] = new Client[type](options);
+  }
+
+  @Master()
+  async inc(name, labels, value = 1){
+    this.userDefinedMetrics[name].inc({...labels, ...this.prometheusConfig.labels}, value);
+  }
+
+  @Master()
+  async set(name, value){
+    this.userDefinedMetrics[name].set({...this.prometheusConfig.labels}, value);
   }
 
   @Master()
