@@ -10,7 +10,7 @@
     "pretty": true,
     "declaration": true,
     "sourceMap": true,
-    "libcheck": false
+    "skipLibCheck": true
   },
   "exclude": [
     "dist",
