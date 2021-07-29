@@ -31,7 +31,11 @@ export class CacheManager {
   }
 
   // 设置cache
-  async set<T>(key: string, value: T, options?: cacheManager.CachingConfig): Promise<T> {
+  async set<T>(
+    key: string,
+    value: T,
+    options?: cacheManager.CachingConfig
+  ): Promise<T> {
     return await this.cache.set(key, value, options);
   }
 
