@@ -26,7 +26,6 @@
     "@midwayjs/decorator": "^2.11.5",
     "@midwayjs/koa": "^2.11.6",
     "@midwayjs/mock": "^2.11.6",
-    "@types/node": "^12.12.6",
     "@types/request": "^2.48.5"
   },
   "dependencies": {
