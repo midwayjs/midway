@@ -48,6 +48,15 @@ jobs:
     - run: npm run cov
       env:
         RABBITMQ_URL: amqp://localhost:${{ job.services.rabbitmq.ports[5672] }}
+        ALI_SDK_OSS_REGION: ${{ secrets.ALI_SDK_OSS_REGION }}
+        ALI_SDK_OSS_ENDPOINT: ${{ secrets.ALI_SDK_OSS_ENDPOINT }}
+        ALI_SDK_OSS_ID: ${{ secrets.ALI_SDK_OSS_ID }}
+        ALI_SDK_OSS_SECRET: ${{ secrets.ALI_SDK_OSS_SECRET }}
+        ALI_SDK_OSS_BUCKET: ${{ secrets.ALI_SDK_OSS_BUCKET }}
+        ALI_SDK_STS_ID: ${{ secrets.ALI_SDK_STS_ID }}
+        ALI_SDK_STS_SECRET: ${{ secrets.ALI_SDK_STS_SECRET }}
+        ALI_SDK_STS_BUCKET: ${{ secrets.ALI_SDK_STS_BUCKET }}
+        ALI_SDK_STS_ROLE: ${{ secrets.ALI_SDK_STS_ROLE }}
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
 
