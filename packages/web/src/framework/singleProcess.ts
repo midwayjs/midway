@@ -39,9 +39,13 @@ export class MidwayWebSingleProcessFramework
 
     if (this.configurationOptions.port) {
       new Promise<void>(resolve => {
-        this.server.listen(this.configurationOptions.port, () => {
-          resolve();
-        });
+        this.server.listen(
+          this.configurationOptions.port,
+          this.configurationOptions.hostname || '127.0.0.1',
+          () => {
+            resolve();
+          }
+        );
       });
     }
   }
