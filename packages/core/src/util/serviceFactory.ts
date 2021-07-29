@@ -29,14 +29,14 @@ export abstract class ServiceFactory<T> {
     }
   }
 
-  get(id = 'default') {
-    return this.clients.get(id);
+  get<U = T>(id = 'default'): U {
+    return this.clients.get(id) as unknown as U;
   }
 
   async createInstance(config, clientName) {
     // options.default will be merge in to options.clients[id]
     config = Object.assign({}, this.options.default, config);
-    const client = this.createClient(config);
+    const client = await this.createClient(config);
     this.clients.set(clientName, client);
     return client;
   }

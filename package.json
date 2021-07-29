@@ -6,6 +6,7 @@
     "@types/jest": "^26.0.23",
     "@types/node": "^15.0.1",
     "@vercel/ncc": "^0.29.0",
+    "dotenv": "^10.0.0",
     "jest": "^27.0.3",
     "lerna": "^3.20.2",
     "lerna-relinker": "^1.4.0",

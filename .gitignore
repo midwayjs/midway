@@ -19,3 +19,4 @@ package-lock.json
 packages/midway/_package.json
 midway_benchmark_app
 *.sqlite
+.env
