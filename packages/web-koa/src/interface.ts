@@ -25,6 +25,10 @@ export interface IMidwayKoaConfigurationOptions extends IConfigurationOptions {
    */
   port?: number;
   /**
+   * application hostname, 127.0.0.1 as default
+   */
+  hostname?: string;
+  /**
    * https key
    */
   key?: string | Buffer | Array<Buffer | Object>;
