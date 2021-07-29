@@ -33,6 +33,10 @@ export interface IMidwayExpressConfigurationOptions extends IConfigurationOption
    */
   port?: number;
   /**
+   * application hostname, 127.0.0.1 as default
+   */
+  hostname?: string;
+  /**
    * https key
    */
   key?: string | Buffer | Array<Buffer | Object>;
