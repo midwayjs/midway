@@ -19,6 +19,7 @@ import {
 import * as Bull from 'bull';
 import { CronJob } from 'cron';
 import { v4 } from 'uuid';
+import { ScheduleContextLogger } from './service/scheduleContextLogger';
 
 function isAsync(fn) {
   return fn[Symbol.toStringTag] === 'AsyncFunction';
@@ -65,6 +66,9 @@ export class AutoConfiguration {
     this.app.createLogger('midway-task', {
       fileLogName: 'midway-task.log',
       errorLogName: 'midway-task-error.log',
+      printFormat: (info)=>{
+        return `${info.timestamp} ${info.LEVEL} ${info.pid} ${info.label} ${info.message}`
+      }
     });
   }
 
@@ -75,6 +79,13 @@ export class AutoConfiguration {
     this.jobList.map(job => {
       job.stop();
     });
+  }
+
+  getContext(options: {type: string, id: any, trigger: string}){
+    const ctx = this.app.createAnonymousContext({logger: console});
+    ctx.logger = new ScheduleContextLogger(ctx, this.app.getLogger('midway-task'));
+    ctx.taskInfo = options;
+    return ctx;
   }
 
   async loadTask(container) {
@@ -88,28 +99,16 @@ export class AutoConfiguration {
           this.taskConfig
         );
         queue.process(async job => {
-          this.app
-            .getLogger('midway-task')
-            .info(
-              `[Task][${job.id}][${rule.name}:${rule.propertyKey}] task start.`
-            );
+          const ctx = this.getContext({type: 'Task', id: job.id, trigger: `${rule.name}:${rule.propertyKey}`});
+          const {logger} = ctx;
           try {
-            const ctx = this.app.createAnonymousContext();
-            ctx.traceId = job.id;
+            logger.info(`task start.`)
             const service = await ctx.requestContext.getAsync(module);
             await wrapAsync(rule.value)(service, job.data);
           } catch (e) {
-            this.app
-              .getLogger('midway-task')
-              .error(
-                `[Task][${job.id}][${rule.name}:${rule.propertyKey}] ${e.stack}`
-              );
+            logger.error(`${e.stack}`)
           }
-          this.app
-            .getLogger('midway-task')
-            .info(
-              `[Task][${job.id}][${rule.name}:${rule.propertyKey}] task end.`
-            );
+          logger.info(`task end.`);
         });
         queueTaskMap[`${rule.name}:${rule.propertyKey}`] = queue;
         const allJobs = await queue.getRepeatableJobs();
@@ -141,28 +140,16 @@ export class AutoConfiguration {
           rule.options,
           async () => {
             const requestId = v4();
-            this.app
-              .getLogger('midway-task')
-              .info(
-                `[LocalTask][${requestId}][${module.name}:${rule.propertyKey}] local task start.`
-              );
+            const ctx = this.getContext({type: 'LocalTask', id: requestId, trigger: `${module.name}:${rule.propertyKey}`})
+            const {logger} = ctx;
             try {
-              const ctx = this.app.createAnonymousContext();
-              ctx.traceId = requestId;
               const service = await ctx.requestContext.getAsync(module);
+              logger.info(`local task start.`);
               await wrapAsync(rule.value)(service);
             } catch (e) {
-              this.app
-                .getLogger('midway-task')
-                .error(
-                  `[LocalTask][${requestId}][${module.name}:${rule.propertyKey}] ${e.stack}`
-                );
+              logger.error(`${e.stack}`);
             }
-            this.app
-              .getLogger('midway-task')
-              .info(
-                `[LocalTask][${requestId}][${module.name}:${rule.propertyKey}] local task end.`
-              );
+            logger.info(`local task end.`);
           },
           null,
           true,
@@ -183,22 +170,16 @@ export class AutoConfiguration {
       const rule = getClassMetadata(MODULE_TASK_QUEUE_OPTIONS, module);
       const queue = new Bull(`${rule.name}:execute`, config);
       queue.process(async job => {
-        this.app
-          .getLogger('midway-task')
-          .info(`[Queue][${job.id}][${module.name}] queue process start.`);
+        const ctx = this.getContext({type: 'Queue', id: job.id, trigger: `${module.name}`})
+        const {logger} = ctx;
         try {
-          const ctx = this.app.createAnonymousContext();
-          ctx.traceId = job.id;
+          logger.info(`queue process start.`)
           const service = await ctx.requestContext.getAsync(module);
           await wrapAsync(service.execute)(service, job.data, job);
         } catch (e) {
-          this.app
-            .getLogger('midway-task')
-            .error(`[Queue][${job.id}][${module.name}] ${e.stack}`);
+          logger.error(`${e.stack}`)
         }
-        this.app
-          .getLogger('midway-task')
-          .info(`[Queue][${job.id}][${module.name}] queue process end.`);
+        logger.info(`queue process end.`)
       });
       queueMap[`${rule.name}:execute`] = queue;
       this.queueList.push(queue);
