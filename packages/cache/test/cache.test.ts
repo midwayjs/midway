@@ -17,6 +17,8 @@ describe(`test.cache`, ()=>{
     assert((await userService.getUser(`name`)) === undefined)
     await userService.setUser('name', 'stone-jin')
     assert((await userService.getUser(`name`)) === 'stone-jin')
+    await userService.setUser('name', {name: '123'});
+    assert(JSON.stringify(await userService.getUser('name'))===JSON.stringify({name: '123'}))
     await userService.reset();
     assert((await userService.getUser(`name`)) === undefined)
   })
