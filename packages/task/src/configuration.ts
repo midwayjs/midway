@@ -66,9 +66,9 @@ export class AutoConfiguration {
     this.app.createLogger('midway-task', {
       fileLogName: 'midway-task.log',
       errorLogName: 'midway-task-error.log',
-      printFormat: (info)=>{
-        return `${info.timestamp} ${info.LEVEL} ${info.pid} ${info.label} ${info.message}`
-      }
+      printFormat: info => {
+        return `${info.timestamp} ${info.LEVEL} ${info.pid} ${info.label} ${info.message}`;
+      },
     });
   }
 
@@ -81,9 +81,12 @@ export class AutoConfiguration {
     });
   }
 
-  getContext(options: {type: string, id: any, trigger: string}){
-    const ctx = this.app.createAnonymousContext({logger: console});
-    ctx.logger = new ScheduleContextLogger(ctx, this.app.getLogger('midway-task'));
+  getContext(options: { type: string; id: any; trigger: string }) {
+    const ctx = this.app.createAnonymousContext({ logger: console });
+    ctx.logger = new ScheduleContextLogger(
+      ctx,
+      this.app.getLogger('midway-task')
+    );
     ctx.taskInfo = options;
     return ctx;
   }
@@ -99,16 +102,20 @@ export class AutoConfiguration {
           this.taskConfig
         );
         queue.process(async job => {
-          const ctx = this.getContext({type: 'Task', id: job.id, trigger: `${rule.name}:${rule.propertyKey}`});
-          const {logger} = ctx;
+          const ctx = this.getContext({
+            type: 'Task',
+            id: job.id,
+            trigger: `${rule.name}:${rule.propertyKey}`,
+          });
+          const { logger } = ctx;
           try {
-            logger.info(`task start.`)
+            logger.info('task start.');
             const service = await ctx.requestContext.getAsync(module);
             await wrapAsync(rule.value)(service, job.data);
           } catch (e) {
-            logger.error(`${e.stack}`)
+            logger.error(`${e.stack}`);
           }
-          logger.info(`task end.`);
+          logger.info('task end.');
         });
         queueTaskMap[`${rule.name}:${rule.propertyKey}`] = queue;
         const allJobs = await queue.getRepeatableJobs();
@@ -140,16 +147,20 @@ export class AutoConfiguration {
           rule.options,
           async () => {
             const requestId = v4();
-            const ctx = this.getContext({type: 'LocalTask', id: requestId, trigger: `${module.name}:${rule.propertyKey}`})
-            const {logger} = ctx;
+            const ctx = this.getContext({
+              type: 'LocalTask',
+              id: requestId,
+              trigger: `${module.name}:${rule.propertyKey}`,
+            });
+            const { logger } = ctx;
             try {
               const service = await ctx.requestContext.getAsync(module);
-              logger.info(`local task start.`);
+              logger.info('local task start.');
               await wrapAsync(rule.value)(service);
             } catch (e) {
               logger.error(`${e.stack}`);
             }
-            logger.info(`local task end.`);
+            logger.info('local task end.');
           },
           null,
           true,
@@ -170,16 +181,20 @@ export class AutoConfiguration {
       const rule = getClassMetadata(MODULE_TASK_QUEUE_OPTIONS, module);
       const queue = new Bull(`${rule.name}:execute`, config);
       queue.process(async job => {
-        const ctx = this.getContext({type: 'Queue', id: job.id, trigger: `${module.name}`})
-        const {logger} = ctx;
+        const ctx = this.getContext({
+          type: 'Queue',
+          id: job.id,
+          trigger: `${module.name}`,
+        });
+        const { logger } = ctx;
         try {
-          logger.info(`queue process start.`)
+          logger.info('queue process start.');
           const service = await ctx.requestContext.getAsync(module);
           await wrapAsync(service.execute)(service, job.data, job);
         } catch (e) {
-          logger.error(`${e.stack}`)
+          logger.error(`${e.stack}`);
         }
-        logger.info(`queue process end.`)
+        logger.info('queue process end.');
       });
       queueMap[`${rule.name}:execute`] = queue;
       this.queueList.push(queue);
