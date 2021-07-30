@@ -4,7 +4,7 @@ import { HttpService } from '../src';
 
 describe('/test/index.test.ts', () => {
 
-  let httpService;
+  let httpService: any;
   let container;
   let framework;
 
@@ -27,5 +27,32 @@ describe('/test/index.test.ts', () => {
     const httpServiceWithRequest = await ctx.requestContext.getAsync(HttpService);
     expect(httpServiceWithRequest).toBeDefined();
     expect(httpServiceWithRequest).not.toEqual(httpService);
+  });
+
+  it('should test proxy method', function () {
+    const proxyMethods = [
+      'getUri',
+      'request',
+      'get',
+      'delete',
+      'head',
+      'options',
+      'post',
+      'put',
+      'patch',
+    ];
+
+    for (const method of proxyMethods) {
+      const fn = jest.spyOn(httpService['instance'], method).mockImplementation(() => {
+        return 'hello world'
+      });
+      httpService[method].call(httpService);
+      expect(fn).toHaveBeenCalled();
+    }
+  });
+
+  it('should test get method', async () => {
+    const result = await httpService.get('https://api.github.com/users/octocat/orgs');
+    expect(result.status).toEqual(200);
   });
 });

@@ -8,20 +8,24 @@ export class HttpService implements AxiosHttpService {
   private instance: AxiosInstance;
 
   @Inject()
-  ctx: any;
+  protected ctx: any;
 
   @App()
-  app: IMidwayApplication;
+  protected app: IMidwayApplication;
 
   @Config('axios')
-  httpConfig: AxiosRequestConfig;
+  protected httpConfig: AxiosRequestConfig;
 
   get interceptors() {
     return this.instance.interceptors;
   }
 
+  emit() {
+
+  }
+
   @Init()
-  async init() {
+  protected async init() {
     if (
       !this.app.getApplicationContext().registry.hasObject(AXIOS_INSTANCE_KEY)
     ) {
@@ -32,6 +36,14 @@ export class HttpService implements AxiosHttpService {
       instance.interceptors.request.use(
         config => {
           // Do something before request is sent
+          const reqMeta = {
+            requestId: reqId,
+            url: parsedUrl.href,
+            args: args,
+            ctx: args.ctx,
+          };
+          this.emit('request', {});
+          console.log('----', config)
           return config;
         },
         error => {
