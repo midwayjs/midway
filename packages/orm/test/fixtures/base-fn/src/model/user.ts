@@ -3,7 +3,7 @@ import { PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Message } from './message';
 
 @EntityModel('test_user')
-export class User {
+export class User2 {
   @PrimaryGeneratedColumn({ name: "id" })
   id: number;
 
