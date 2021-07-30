@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.12.0](https://github.com/midwayjs/midway/compare/v2.11.7...v2.12.0) (2021-07-30)
+
+
+### Features
+
+* add task log ([#1173](https://github.com/midwayjs/midway/issues/1173)) ([00ca5e8](https://github.com/midwayjs/midway/commit/00ca5e8028141db94d8e2ed0ca2729efdc449e75))
+
+
+
+
+
 ## [2.11.6](https://github.com/midwayjs/midway/compare/v2.11.5...v2.11.6) (2021-07-16)
 
 **Note:** Version bump only for package @midwayjs/task

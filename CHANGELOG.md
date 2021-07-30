@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.12.0](https://github.com/midwayjs/midway/compare/v2.11.7...v2.12.0) (2021-07-30)
+
+
+### Features
+
+* add oss component ([#1181](https://github.com/midwayjs/midway/issues/1181)) ([e83171c](https://github.com/midwayjs/midway/commit/e83171c73cdc1098796f06919dc652a6d83c3af4))
+* add support hostname to http-listening ([#1186](https://github.com/midwayjs/midway/issues/1186)) ([6f8356f](https://github.com/midwayjs/midway/commit/6f8356f610c49f87ce8fb9e7d1e60fbd0527d97c))
+* add task log ([#1173](https://github.com/midwayjs/midway/issues/1173)) ([00ca5e8](https://github.com/midwayjs/midway/commit/00ca5e8028141db94d8e2ed0ca2729efdc449e75))
+* enhance cache for [#1103](https://github.com/midwayjs/midway/issues/1103) ([#1189](https://github.com/midwayjs/midway/issues/1189)) ([562236c](https://github.com/midwayjs/midway/commit/562236cfa5970d47454f26d92c350165d73a63cd))
+
+
+
+
+
 ## [2.11.7](https://github.com/midwayjs/midway/compare/v2.11.6...v2.11.7) (2021-07-24)
 
 
