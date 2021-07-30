@@ -86,7 +86,7 @@ export class AutoConfiguration {
     ctx.logger = new ScheduleContextLogger(
       ctx,
       this.app.getLogger('midway-task')
-    )
+    );
     ctx.requestContext.registerObject('logger', ctx.logger);
     ctx.taskInfo = options;
     return ctx;
