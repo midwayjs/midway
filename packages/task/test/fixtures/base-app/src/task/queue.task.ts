@@ -9,10 +9,10 @@ export class QueueTask{
   app: Application;
 
   @Inject()
-  ctx;
+  logger;
 
   async execute(params){
-    this.ctx.logger.info(`====>QueueTask execute`)
+    this.logger.info(`====>QueueTask execute`)
     this.app.getApplicationContext().registerObject(`queueConfig`, JSON.stringify(params));
   }
 }
