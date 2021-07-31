@@ -23,7 +23,7 @@ function checkBucketConfig(config) {
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
-export class OSSServiceFactory<T = OSS | OSS.STS> extends ServiceFactory<T> {
+export class OSSServiceFactory<T = OSS> extends ServiceFactory<T> {
   @Config('oss')
   ossConfig;
 
