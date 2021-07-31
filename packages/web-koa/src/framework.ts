@@ -282,13 +282,14 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<
   public async run(): Promise<void> {
     if (this.configurationOptions.port) {
       new Promise<void>(resolve => {
-        this.server.listen(
-          this.configurationOptions.port,
-          this.configurationOptions.hostname || '127.0.0.1',
-          () => {
-            resolve();
-          }
-        );
+        const args: any[] = [this.configurationOptions.port];
+        if (this.configurationOptions.hostname) {
+          args.push(this.configurationOptions.hostname);
+        }
+        args.push(() => {
+          resolve();
+        });
+        this.server.listen(...args);
       });
     }
   }
