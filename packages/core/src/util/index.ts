@@ -92,3 +92,18 @@ export function joinURLPath(...strArray) {
   }
   return p;
 }
+
+export function delegateTargetPrototypeMethod(
+  derivedCtor: any,
+  constructors: any[]
+) {
+  constructors.forEach(baseCtor => {
+    Object.getOwnPropertyNames(baseCtor.prototype).forEach(name => {
+      if (name !== 'constructor' && !/^_/.test(name)) {
+        derivedCtor.prototype[name] = async function (...args) {
+          return this.instance[name](...args);
+        };
+      }
+    });
+  });
+}
