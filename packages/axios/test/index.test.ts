@@ -48,6 +48,7 @@ describe('/test/index.test.ts', () => {
       });
       httpService[method].call(httpService);
       expect(fn).toHaveBeenCalled();
+      jest.restoreAllMocks();
     }
   });
 
