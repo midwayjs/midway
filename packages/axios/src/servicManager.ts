@@ -20,10 +20,6 @@ export class HttpService implements AxiosHttpService {
     return this.instance.interceptors;
   }
 
-  emit() {
-
-  }
-
   @Init()
   protected async init() {
     if (
@@ -36,14 +32,6 @@ export class HttpService implements AxiosHttpService {
       instance.interceptors.request.use(
         config => {
           // Do something before request is sent
-          const reqMeta = {
-            requestId: reqId,
-            url: parsedUrl.href,
-            args: args,
-            ctx: args.ctx,
-          };
-          this.emit('request', {});
-          console.log('----', config)
           return config;
         },
         error => {
