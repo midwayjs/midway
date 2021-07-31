@@ -177,6 +177,9 @@ describe('/test/index.test.ts', () => {
 
     const roleArn = require('./sts_config').roleArn;
     const client1 = ossServiceFactory.get<OSSSTSService>('client1');
+    const client2 = ossServiceFactory.get('client2');
+
+    expect(client2.put).toBeDefined();
 
     const result = await client1.assumeRole(roleArn);
     expect((result as any).res.status).toEqual(200);
