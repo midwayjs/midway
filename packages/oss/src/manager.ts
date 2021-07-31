@@ -8,7 +8,7 @@ import {
 } from '@midwayjs/decorator';
 import * as OSS from 'ali-oss';
 import * as assert from 'assert';
-import { ServiceFactory } from '@midwayjs/core';
+import { ServiceFactory, delegateTargetPrototypeMethod } from '@midwayjs/core';
 
 function checkBucketConfig(config) {
   assert(
@@ -71,19 +71,7 @@ export interface OSSService extends OSS {
   // empty
 }
 
-function applyMixins(derivedCtor: any, constructors: any[]) {
-  constructors.forEach(baseCtor => {
-    Object.getOwnPropertyNames(baseCtor.prototype).forEach(name => {
-      if (name !== 'constructor' && !/^_/.test(name)) {
-        derivedCtor.prototype[name] = async function (...args) {
-          return this.instance[name](...args);
-        };
-      }
-    });
-  });
-}
-
-applyMixins(OSSService, [OSS]);
+delegateTargetPrototypeMethod(OSSService, [OSS]);
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
