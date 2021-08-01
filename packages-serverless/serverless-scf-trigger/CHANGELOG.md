@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.12.1](https://github.com/midwayjs/midway-faas/compare/v2.12.0...v2.12.1) (2021-08-01)
+
+**Note:** Version bump only for package @midwayjs/serverless-scf-trigger
+
+
+
+
+
 # [2.12.0](https://github.com/midwayjs/midway-faas/compare/v2.11.7...v2.12.0) (2021-07-30)
 
 **Note:** Version bump only for package @midwayjs/serverless-scf-trigger
