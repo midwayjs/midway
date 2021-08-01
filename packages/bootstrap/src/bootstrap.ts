@@ -5,6 +5,7 @@ import {
   ConfigFramework,
   IMidwayApplication,
   IMidwayContainer,
+  MidwayContainer,
 } from '@midwayjs/core';
 import { join } from 'path';
 import { createConsoleLogger, ILogger } from '@midwayjs/logger';
@@ -46,12 +47,14 @@ export class BootstrapStarter {
     this.baseDir = this.getBaseDir();
     let mainApp; // eslint-disable-line prefer-const
 
+    const applicationContext = new MidwayContainer();
     // 初始化一个只读配置的空框架，并且初始化容器和扫描
     const framework = new ConfigFramework();
     await framework.initialize({
       ...this.globalOptions,
       baseDir: this.baseDir,
       appDir: this.appDir,
+      applicationContext,
       globalApplicationHandler: (type: MidwayFrameworkType) => {
         if (type) {
           return this.globalAppMap.get(type);
@@ -63,18 +66,13 @@ export class BootstrapStarter {
 
     // 调用 bootstrap 的 before 逻辑
     if (this.globalOptions['beforeHandler']) {
-      await this.globalOptions['beforeHandler'](
-        framework.getApplicationContext()
-      );
+      await this.globalOptions['beforeHandler'](applicationContext);
     }
 
     // 获取全局配置
-    this.globalConfig =
-      framework.getApplicationContext().getConfigService().getConfiguration() ||
+    this.globalConfig = applicationContext.getConfigService().getConfiguration() ||
       {};
     this.refreshBootstrapItems();
-
-    const applicationContext = framework.getApplicationContext();
 
     // 初始化主框架
     await this.getFirstActions('initialize', {
