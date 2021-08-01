@@ -161,7 +161,9 @@ describe('/test/index.test.ts', () => {
     const accessKeySecret = result.credentials.AccessKeySecret;
     const stsToken = result.credentials.SecurityToken;
 
+    console.time('sts');
     const client = createSTSClient(accessKeyId, accessKeySecret, stsToken);
+    console.timeEnd('sts');
     const list = await client.list();
     expect(list.objects).toBeDefined();
 
@@ -188,7 +190,10 @@ describe('/test/index.test.ts', () => {
     const accessKeySecret = result.credentials.AccessKeySecret;
     const stsToken = result.credentials.SecurityToken;
 
+    console.time('sts');
     const client = createSTSClient(accessKeyId, accessKeySecret, stsToken);
+    console.timeEnd('sts');
+
     const list = await client.list();
     expect(list.objects).toBeDefined();
 
