@@ -7,7 +7,7 @@ export function createSTSClient(accessKeyId, accessKeySecret, stsToken) {
     stsToken,
     region: process.env.ALI_SDK_OSS_REGION,
     bucket: process.env.ALI_SDK_OSS_BUCKET,
-    endpoint: process.env.ALI_SDK_STS_ENDPOINT,
+    endpoint: process.env.ALI_SDK_OSS_ENDPOINT,
     secure: true,
   });
 }
