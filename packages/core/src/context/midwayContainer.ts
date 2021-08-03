@@ -824,7 +824,11 @@ export class MidwayContainer
               }
               const resultTemp = aspectIns.afterReturn?.(joinPoint, result);
               result = typeof resultTemp === 'undefined' ? result : resultTemp;
-              return result;
+              // 解决链式调用的时候的问题, 原有代码: return result;
+              // 案例: await this.userService.test1().test2().getUser({ uid })
+              // return result后不触发重新检测后面的方法, 会中断掉aspect,改为wrapperAspectToInstance后可以重新Proxy检测
+              // 测试后不影响使用
+              return this.wrapperAspectToInstance(ins);
             } catch (err) {
               error = err;
               if (aspectIns.afterThrow) {

@@ -11,4 +11,9 @@ export class MyAspect3 implements IMethodAspect {
       throw new Error('ccc');
     }
   }
+  async before(point: JoinPoint) {
+    console.log('before around in aspect3');
+    console.log('before methodName:', point.methodName);
+    point.args = ['before test user'];
+  }
 }
