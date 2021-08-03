@@ -18,4 +18,71 @@ describe('/test/index.test.ts', () => {
     assert.equal(JSON.parse(result.body).path, '/help');
     await runtime.close();
   });
+  it('should get string response', async () => {
+    const runtime = createRuntime({
+      functionDir: join(__dirname, './fixtures/http'),
+    });
+    await runtime.start();
+    const trigger = new HTTPTrigger({
+      path: '/help',
+      method: 'GET',
+      query: {
+        str: true
+      }
+    });
+    const result = await runtime.invoke(trigger);
+    assert.equal(result.body, '123');
+    assert(result.headers['content-type'].includes('text/plain'));
+    await runtime.close();
+  });
+  it('should get buffer response', async () => {
+    const runtime = createRuntime({
+      functionDir: join(__dirname, './fixtures/http'),
+    });
+    await runtime.start();
+    const trigger = new HTTPTrigger({
+      path: '/help',
+      method: 'GET',
+      query: {
+        buffer: true
+      }
+    });
+    const result = await runtime.invoke(trigger);
+    assert.equal(result.body, '123');
+    assert.equal(result.statusCode, 401);
+    assert.equal(result.headers['content-type'], 'application/octet-stream');
+    await runtime.close();
+  });
+  it('should get empty response', async () => {
+    const runtime = createRuntime({
+      functionDir: join(__dirname, './fixtures/http'),
+    });
+    await runtime.start();
+    const trigger = new HTTPTrigger({
+      path: '/help',
+      method: 'GET',
+      query: {
+        noReturn: true
+      }
+    });
+    const result = await runtime.invoke(trigger);
+    assert.equal(result.statusCode, 204);
+    await runtime.close();
+  });
+  it('should get error', async () => {
+    const runtime = createRuntime({
+      functionDir: join(__dirname, './fixtures/http'),
+    });
+    await runtime.start();
+    const trigger = new HTTPTrigger({
+      path: '/help',
+      method: 'GET',
+      query: {
+        error: true
+      }
+    });
+    const result = await runtime.invoke(trigger);
+    assert.equal(result.statusCode, 500);
+    await runtime.close();
+  });
 });

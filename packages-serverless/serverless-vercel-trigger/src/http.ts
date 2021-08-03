@@ -91,7 +91,7 @@ class Response {
     this._res.end();
   }
 
-  setStatusCode(statusCode) {
+  status(statusCode) {
     this.statusCode = statusCode;
   }
 
@@ -105,9 +105,11 @@ class Response {
     if (typeof this.body === 'string') {
       body = this.body;
     } else if (Buffer.isBuffer(this.body)) {
-      body = this.body.toString('base64');
+      body = this.body.toString();
+      headers['content-type'] = 'application/octet-stream';
     } else {
       body = JSON.stringify(this.body);
+      headers['content-type'] = 'application/json';
     }
 
     // Orignal data

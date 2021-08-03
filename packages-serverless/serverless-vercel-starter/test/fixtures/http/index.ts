@@ -9,6 +9,19 @@ exports.handler = asyncWrapper(async (...args) => {
     runtime = await start();
   }
   return runtime.asyncEvent(async function (ctx) {
-    ctx.body = { path: ctx.path }
+    if (ctx.query?.str) {
+      return '123';
+    }
+    if (ctx.query?.noReturn) {
+      return;
+    }
+    if (ctx.query?.error) {
+      throw new Error('error')
+    }
+    if (ctx.query?.buffer) {
+      ctx.status = 401;
+      return Buffer.from('123');
+    }
+    return { path: ctx.path };
   })(...args);
 });

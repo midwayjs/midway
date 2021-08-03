@@ -87,33 +87,7 @@ export class VercelRuntime extends ServerlessLightRuntime {
               }
             }
 
-            let data = ctx.body;
-            if (typeof data === 'string') {
-              if (!ctx.type) {
-                ctx.type = 'text/plain';
-              }
-              ctx.body = data;
-            } else if (Buffer.isBuffer(data)) {
-              if (!ctx.type) {
-                ctx.type = 'application/octet-stream';
-              }
-              ctx.body = data;
-            } else if (typeof data === 'object') {
-              if (!ctx.type) {
-                ctx.type = 'application/json';
-              }
-              // set data to string
-              ctx.body = data = JSON.stringify(data);
-            } else {
-              if (!ctx.type) {
-                ctx.type = 'text/plain';
-              }
-              // set data to string
-              ctx.body = data = data + '';
-            }
-
             const newHeader = {};
-
             for (const key in ctx.res.headers) {
               // The length after base64 is wrong.
               if (!['content-length'].includes(key)) {
@@ -128,7 +102,8 @@ export class VercelRuntime extends ServerlessLightRuntime {
             if (res.statusCode !== ctx.status) {
               res.status(ctx.status);
             }
-            res.send(data);
+            // vercel support object/string/buffer
+            res.send(ctx.body);
           })
           .catch(err => {
             ctx.logger.error(err);
