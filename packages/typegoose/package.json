@@ -16,6 +16,9 @@
     "dist/**/*.js",
     "dist/**/*.d.ts"
   ],
+  "engines": {
+    "node": ">= 12.13.0"
+  },
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/core": "^2.12.1",
