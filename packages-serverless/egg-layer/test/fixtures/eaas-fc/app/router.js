@@ -10,5 +10,8 @@ module.exports = app => {
   router.get('/get/query', controller.home.getQueryMethod);
   router.post('/post', controller.home.postMethod);
   router.post('/post/body', controller.home.postBodyMethod);
+  router.post('/post/formBody', controller.home.postFormBodyMethod);
   router.get('/buffer', controller.home.buffer);
+  router.get('/error', controller.home.gotError);
+  router.get('/got_ip', controller.home.gotIP);
 };

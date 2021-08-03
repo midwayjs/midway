@@ -11,6 +11,8 @@ const debuglog = util.debuglog('RuntimeEngine:Logger');
 
 export class ServerlessLogger extends Logger implements IServerlessLogger {
   options;
+  handler;
+  private waiting = false;
 
   constructor(options) {
     super(options);
@@ -22,7 +24,9 @@ export class ServerlessLogger extends Logger implements IServerlessLogger {
           level: options.level || 'INFO',
         })
       );
-      this.startLogRotateBySize();
+      this.startLogRotateBySize().catch(err => {
+        console.error(err);
+      });
     }
   }
 
@@ -68,7 +72,7 @@ export class ServerlessLogger extends Logger implements IServerlessLogger {
    */
   protected delayOnOptimisticLock(ms): Promise<any> {
     return new Promise(resolve => {
-      setTimeout(resolve, ms);
+      this.handler = setTimeout(resolve, ms);
     });
   }
 
@@ -78,23 +82,43 @@ export class ServerlessLogger extends Logger implements IServerlessLogger {
    */
   protected async rotateLogBySize(): Promise<void> {
     try {
-      const maxFileSize =
-        this.options.maxFileSize ||
-        Number(process.env.LOG_ROTATE_FILE_SIZE) ||
-        DEFAULT_MAX_FILE_SIZE;
       const transport: any = this.get('file');
       if (transport?._stream?.writable) {
-        const stat = await fs.fstat(transport._stream.fd);
-        if (stat.size >= maxFileSize) {
-          this.info(
-            `File ${transport._stream.path} (fd ${transport._stream.fd}) reach the maximum file size, current size: ${stat.size}, max size: ${maxFileSize}`
-          );
-          await this.rotateBySize();
+        if (transport?._stream?.fd) {
+          await this.checkAndRotate(transport);
+        } else {
+          if (this.waiting) {
+            debuglog('rotateLogBySize waiting for open fd');
+            return;
+          }
+          this.waiting = true;
+          // 如果没有 fd，这里需要监听 open 事件，这时候才会有 fd，否则直接抛异常了
+          transport._stream.on('open', async (fd: number) => {
+            this.waiting = false;
+            await this.checkAndRotate(transport);
+          });
         }
       }
     } catch (e) {
+      debuglog('rotateLogBySize error =>' + e.stack);
       e.message = `${e.message}`;
       this.error(e);
+    }
+  }
+
+  protected async checkAndRotate(transport) {
+    const maxFileSize =
+      this.options.maxFileSize ||
+      Number(process.env.LOG_ROTATE_FILE_SIZE) ||
+      DEFAULT_MAX_FILE_SIZE;
+    if (transport._stream?.fd) {
+      const stat = await fs.fstat(transport._stream.fd);
+      if (stat.size >= maxFileSize) {
+        this.info(
+          `File ${transport._stream.path} (fd ${transport._stream.fd}) reach the maximum file size, current size: ${stat.size}, max size: ${maxFileSize}`
+        );
+        await this.rotateBySize();
+      }
     }
   }
 
@@ -146,6 +170,13 @@ export class ServerlessLogger extends Logger implements IServerlessLogger {
       await fs.unlink(targetPath);
     } else {
       await fs.rename(targetPath, backupPath);
+    }
+  }
+
+  close() {
+    super.close();
+    if (this.handler) {
+      clearTimeout(this.handler);
     }
   }
 }

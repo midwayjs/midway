@@ -1,0 +1,37 @@
+{
+  "name": "@midwayjs/oss",
+  "description": "midway oss component",
+  "version": "2.12.1",
+  "main": "dist/index",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts"
+  ],
+  "devDependencies": {
+    "@midwayjs/core": "^2.12.1",
+    "@midwayjs/decorator": "^2.11.0",
+    "@midwayjs/mock": "^2.12.1",
+    "@types/ali-oss": "^6.0.10"
+  },
+  "dependencies": {
+    "ali-oss": "^6.16.0"
+  },
+  "keywords": [
+    "aliyun",
+    "oss"
+  ],
+  "author": "czy88840616 <czy88840616@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "test": "node --require=ts-node/register ../../node_modules/.bin/jest",
+    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --coverage --forceExit",
+    "ci": "npm run test",
+    "lint": "mwts check"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/midwayjs/midway.git"
+  }
+}

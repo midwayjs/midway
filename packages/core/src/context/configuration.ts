@@ -1,22 +1,26 @@
 import {
   classNamed,
   CONFIGURATION_KEY,
+  generateProvideId,
   getClassMetadata,
+  IComponentInfo,
   InjectionConfigurationOptions,
-  LIFECYCLE_IDENTIFIER_PREFIX,
-  saveModule,
-  saveProviderId,
   isClass,
   isFunction,
-  IComponentInfo,
+  LIFECYCLE_IDENTIFIER_PREFIX,
   listModule,
+  MAIN_MODULE_KEY,
+  saveModule,
+  saveProviderId,
+  ScopeEnum,
 } from '@midwayjs/decorator';
 
 import { dirname, isAbsolute, join } from 'path';
-import { MAIN_MODULE_KEY, generateProvideId } from '@midwayjs/decorator';
 import { IContainerConfiguration, IMidwayContainer } from '../interface';
-import { isPath, safeRequire } from '../util/';
+import { safeRequire } from '../util/';
+import { PathFileUtil } from '../util/pathFileUtil';
 import * as util from 'util';
+import { FunctionalConfiguration } from '../functional/configuration';
 
 const debug = util.debuglog('midway:container:configuration');
 
@@ -28,7 +32,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
   packageName: string;
   loadDirs: string[] = [];
   loadModules: any[] = [];
-  importObjects: object = new Map();
+  importObjects = {};
   // 新版本 configuration
   newVersion = false;
 
@@ -89,7 +93,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
     }
   }
 
-  addImportObjects(importObjects: object) {
+  addImportObjects(importObjects: Record<string, unknown>) {
     if (importObjects) {
       this.importObjects = importObjects;
     }
@@ -120,7 +124,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
 
   private resolvePackageBaseDir(packageName: string, baseDir?: string) {
     // 把相对路径转为绝对路径
-    if (isPath(packageName)) {
+    if (PathFileUtil.isPath(packageName)) {
       if (!isAbsolute(packageName)) {
         packageName = join(baseDir || this.container.baseDir, packageName);
       }
@@ -189,7 +193,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
       }
     }
     if (!configuration) {
-      cfgFile = `${packageBaseDir}/configuration`;
+      cfgFile = join(packageBaseDir, 'configuration');
       configuration = safeRequire(cfgFile);
       debug('current case 2 => configuration file "%s".', cfgFile);
       loadDir = packageBaseDir;
@@ -209,10 +213,19 @@ export class ContainerConfiguration implements IContainerConfiguration {
     }
 
     this.loadConfiguration(componentObject['Configuration'], '');
-    const configurationOptions: InjectionConfigurationOptions = getClassMetadata(
-      CONFIGURATION_KEY,
-      componentObject['Configuration']
-    );
+    let configurationOptions: InjectionConfigurationOptions;
+    if (componentObject['Configuration'] instanceof FunctionalConfiguration) {
+      // 函数式写法
+      configurationOptions =
+        componentObject['Configuration'].getConfigurationOptions();
+    } else {
+      // 普通类写法
+      configurationOptions = getClassMetadata(
+        CONFIGURATION_KEY,
+        componentObject['Configuration']
+      );
+    }
+
     const ns = configurationOptions.namespace || MAIN_MODULE_KEY;
     this.container.bindClass(componentObject, ns);
   }
@@ -221,11 +234,22 @@ export class ContainerConfiguration implements IContainerConfiguration {
     if (configuration) {
       // 可能导出多个
       const configurationExports = this.getConfigurationExport(configuration);
-      for (const configurationExport of configurationExports) {
-        const configurationOptions: InjectionConfigurationOptions = getClassMetadata(
-          CONFIGURATION_KEY,
-          configurationExport
-        );
+      if (!configurationExports.length) return;
+      // 多个的情况，数据交给第一个保存
+      for (let i = 0; i < configurationExports.length; i++) {
+        const configurationExport = configurationExports[i];
+        let configurationOptions: InjectionConfigurationOptions;
+        if (configurationExport instanceof FunctionalConfiguration) {
+          // 函数式写法
+          configurationOptions = configurationExport.getConfigurationOptions();
+        } else {
+          // 普通类写法
+          configurationOptions = getClassMetadata(
+            CONFIGURATION_KEY,
+            configurationExport
+          );
+        }
+
         debug('   configuration export %j.', configurationOptions);
         if (configurationOptions) {
           if (
@@ -240,6 +264,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
           }
 
           if (
+            i === 0 &&
             this.container.containsConfiguration(this.packageName) &&
             this.namespace !== ''
           ) {
@@ -253,6 +278,26 @@ export class ContainerConfiguration implements IContainerConfiguration {
             );
             this.container.addConfiguration(this);
           }
+          if (configurationOptions.directoryResolveFilter) {
+            this.container.addDirectoryFilter(
+              configurationOptions.directoryResolveFilter
+            );
+          }
+          if (i === 0 && this.namespace === MAIN_MODULE_KEY) {
+            // set conflictCheck
+
+            if (process.env.MIDWAY_ENABLE_CONFLICT_CHECK) {
+              configurationOptions.conflictCheck =
+                process.env.MIDWAY_ENABLE_CONFLICT_CHECK === 'true';
+            }
+
+            if (configurationOptions.conflictCheck === undefined) {
+              configurationOptions.conflictCheck = false;
+            }
+            this.container.disableConflictCheck =
+              !configurationOptions.conflictCheck;
+          }
+
           this.addImports(configurationOptions.imports, baseDir);
           this.addImportObjects(configurationOptions.importObjects);
           this.addImportConfigs(configurationOptions.importConfigs, baseDir);
@@ -260,6 +305,9 @@ export class ContainerConfiguration implements IContainerConfiguration {
         }
       }
     } else {
+      if (this.namespace === MAIN_MODULE_KEY) {
+        this.container.disableConflictCheck = true;
+      }
       if (
         this.container.containsConfiguration(this.packageName) &&
         this.namespace !== ''
@@ -282,13 +330,19 @@ export class ContainerConfiguration implements IContainerConfiguration {
    * @param clzz configuration class
    */
   bindConfigurationClass(clzz, filePath?: string) {
-    const clzzName = `${LIFECYCLE_IDENTIFIER_PREFIX}${classNamed(clzz.name)}`;
-    const id = generateProvideId(clzzName, this.namespace);
-    saveProviderId(id, clzz, true);
-    this.container.bind(id, clzz, {
-      namespace: this.namespace,
-      srcPath: filePath,
-    });
+    if (clzz instanceof FunctionalConfiguration) {
+      // 函数式写法不需要绑定到容器
+    } else {
+      // 普通类写法
+      const clzzName = `${LIFECYCLE_IDENTIFIER_PREFIX}${classNamed(clzz.name)}`;
+      const id = generateProvideId(clzzName, this.namespace);
+      saveProviderId(id, clzz, true);
+      this.container.bind(id, clzz, {
+        namespace: this.namespace,
+        srcPath: filePath,
+        scope: ScopeEnum.Singleton,
+      });
+    }
 
     // configuration 手动绑定去重
     const configurationMods = listModule(CONFIGURATION_KEY);
@@ -309,12 +363,20 @@ export class ContainerConfiguration implements IContainerConfiguration {
 
   private getConfigurationExport(exports): any[] {
     const mods = [];
-    if (isClass(exports) || isFunction(exports)) {
+    if (
+      isClass(exports) ||
+      isFunction(exports) ||
+      exports instanceof FunctionalConfiguration
+    ) {
       mods.push(exports);
     } else {
       for (const m in exports) {
         const module = exports[m];
-        if (isClass(module) || isFunction(module)) {
+        if (
+          isClass(module) ||
+          isFunction(module) ||
+          module instanceof FunctionalConfiguration
+        ) {
           mods.push(module);
         }
       }

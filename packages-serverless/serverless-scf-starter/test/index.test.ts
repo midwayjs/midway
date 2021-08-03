@@ -36,6 +36,11 @@ function test(handler) {
 }
 
 describe('/test/index.test.ts', () => {
+
+  afterEach(() => {
+    jest.restoreAllMocks()
+  });
+
   describe('wrapper normal event', () => {
     it('should wrap in init function', async () => {
       const handle = asyncWrapper(async context => {
@@ -54,6 +59,38 @@ describe('/test/index.test.ts', () => {
       });
       const res: any = await test(handle).run({ data: 1 }, {});
       assert.equal(res, 1);
+    });
+
+    it('should wrap with event and throw error', async () => {
+      const runtime = await start({});
+
+      let err;
+
+      try {
+        await runtime.asyncEvent(async (ctx, event) => {
+          throw new Error('abc');
+        })();
+      } catch (error) {
+        err = error;
+      }
+      expect(err.message).toEqual('Internal Server Error');
+    });
+
+    it('should wrap with event and throw real error with env', async () => {
+      process.env.SERVERLESS_OUTPUT_ERROR_STACK = 'true';
+      const runtime = await start({});
+
+      let err;
+
+      try {
+        await runtime.asyncEvent(async (ctx, event) => {
+          throw new Error('abc');
+        })();
+      } catch (error) {
+        err = error;
+      }
+      expect(err.message).toEqual('abc');
+      process.env.SERVERLESS_OUTPUT_ERROR_STACK = '';
     });
   });
 
@@ -376,7 +413,7 @@ describe('/test/index.test.ts', () => {
       const runtime = await start();
       const handle = asyncWrapper(async (...args) => {
         return runtime.asyncEvent(async ctx => {
-          return 'hello world ' + ctx.req.body.user;
+          return 'hello world';
         })(...args);
       });
       const event = {
@@ -387,7 +424,7 @@ describe('/test/index.test.ts', () => {
         body: 'user=harry',
       };
       const data = await test(handle).runHttp(event, {});
-      assert(data.body === 'hello world harry');
+      assert(data.body === 'hello world');
     });
 
     it('should ok with asyncWrap use appoint args in event', async () => {
@@ -435,6 +472,12 @@ describe('/test/index.test.ts', () => {
       expect(runtime.getFunctionName()).toEqual('aaa');
       expect(runtime.getFunctionServiceName()).toEqual('');
       mm.restore();
+    });
+
+    it('should get app', async () => {
+      const runtime = await start();
+      const app = runtime.getApplication();
+      expect(app.use).toBeDefined();
     });
   })
 });

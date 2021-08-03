@@ -82,7 +82,7 @@ export class Resource implements IResource {
     return readFileSync(this.getPath());
   }
 
-  getContentAsJSON(): object {
+  getContentAsJSON(): Record<string, unknown> {
     if (!this.exists()) {
       throw new Error(`${this.getPath()} not found!`);
     }

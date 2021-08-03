@@ -1,0 +1,38 @@
+{
+  "name": "@midwayjs/task",
+  "version": "2.12.1",
+  "description": "",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "node --require=ts-node/register ../../node_modules/.bin/jest",
+    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --coverage --forceExit"
+  },
+  "keywords": [
+    "midway",
+    "IoC",
+    "task",
+    "plugin"
+  ],
+  "author": "",
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@midwayjs/core": "^2.12.1",
+    "@midwayjs/decorator": "^2.11.5",
+    "@midwayjs/koa": "^2.12.1",
+    "@midwayjs/logger": "^2.11.3",
+    "@midwayjs/mock": "^2.12.1",
+    "@types/bull": "^3.15.0",
+    "@types/cron": "^1.7.2"
+  },
+  "dependencies": {
+    "bull": "^3.22.0",
+    "cron": "^1.8.2",
+    "uuid": "^8.3.2"
+  }
+}

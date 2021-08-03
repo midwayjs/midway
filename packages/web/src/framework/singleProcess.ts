@@ -1,24 +1,31 @@
 import {
+  HTTP_SERVER_KEY,
   IMidwayBootstrapOptions,
   IMidwayContainer,
   IMidwayFramework,
   MidwayFrameworkType,
+  PathFileUtil,
 } from '@midwayjs/core';
-import { IMidwayWebConfigurationOptions } from '../interface';
-import { Application } from 'egg';
+import {
+  IMidwayWebConfigurationOptions,
+  IMidwayWebApplication,
+} from '../interface';
 import { resolve } from 'path';
-import { readFileSync } from 'fs';
 import { Server } from 'net';
 import { LoggerOptions } from '@midwayjs/logger';
+import { MidwayKoaContextLogger } from '@midwayjs/koa';
 
-export class SingleProcess
-  implements IMidwayFramework<Application, IMidwayWebConfigurationOptions> {
-  public app: Application;
+export class MidwayWebSingleProcessFramework
+  implements
+    IMidwayFramework<IMidwayWebApplication, IMidwayWebConfigurationOptions>
+{
+  public app: IMidwayWebApplication;
+  public agent;
   public configurationOptions: IMidwayWebConfigurationOptions;
   private isTsMode: boolean;
   private server: Server;
 
-  public getApplication(): Application {
+  public getApplication() {
     return this.app;
   }
 
@@ -27,47 +34,26 @@ export class SingleProcess
   }
 
   public async run(): Promise<void> {
-    // https config
-    if (this.configurationOptions.key && this.configurationOptions.cert) {
-      this.configurationOptions.key =
-        typeof this.configurationOptions.key === 'string'
-          ? readFileSync(this.configurationOptions.key as string)
-          : this.configurationOptions.key;
-
-      this.configurationOptions.cert =
-        typeof this.configurationOptions.cert === 'string'
-          ? readFileSync(this.configurationOptions.cert as string)
-          : this.configurationOptions.cert;
-
-      this.configurationOptions.ca =
-        this.configurationOptions.ca &&
-        (typeof this.configurationOptions.ca === 'string'
-          ? readFileSync(this.configurationOptions.ca)
-          : this.configurationOptions.ca);
-
-      this.server = require('https').createServer(
-        this.configurationOptions,
-        this.app.callback()
-      );
-    } else {
-      this.server = require('http').createServer(this.app.callback());
-    }
-
-    // emit `server` event in app
-    this.app.emit('server', this.server);
     // trigger server didReady
     this.app.messenger.emit('egg-ready');
 
     if (this.configurationOptions.port) {
       new Promise<void>(resolve => {
-        this.server.listen(this.configurationOptions.port, () => {
+        const args: any[] = [this.configurationOptions.port];
+        if (this.configurationOptions.hostname) {
+          args.push(this.configurationOptions.hostname);
+        }
+        args.push(() => {
           resolve();
         });
+        this.server.listen(...args);
       });
     }
   }
 
-  configure(options: IMidwayWebConfigurationOptions): SingleProcess {
+  configure(
+    options: IMidwayWebConfigurationOptions = {}
+  ): MidwayWebSingleProcessFramework {
     this.configurationOptions = options;
     return this;
   }
@@ -85,19 +71,69 @@ export class SingleProcess
   }
 
   async initialize(options: Partial<IMidwayBootstrapOptions>) {
-    const { start } = require('egg');
-    this.app = await start({
+    const opts = {
       baseDir: options.appDir,
-      ignoreWarning: true,
       framework: resolve(__dirname, '../application'),
       plugins: this.configurationOptions.plugins,
       mode: 'single',
       isTsMode: this.isTsMode || true,
-    });
+      applicationContext: options.applicationContext,
+      midwaySingleton: true,
+    };
+
+    const Agent = require(opts.framework).Agent;
+    const Application = require(opts.framework).Application;
+    const agent = (this.agent = new Agent(Object.assign({}, opts)));
+    await agent.ready();
+    const application = (this.app = new Application(Object.assign({}, opts)));
+    application.agent = agent;
+    agent.application = application;
+
+    // https config
+    if (this.configurationOptions.key && this.configurationOptions.cert) {
+      this.configurationOptions.key = PathFileUtil.getFileContentSync(
+        this.configurationOptions.key
+      );
+      this.configurationOptions.cert = PathFileUtil.getFileContentSync(
+        this.configurationOptions.cert
+      );
+      this.configurationOptions.ca = PathFileUtil.getFileContentSync(
+        this.configurationOptions.ca
+      );
+
+      this.server = require('https').createServer(
+        this.configurationOptions,
+        this.app.callback()
+      );
+    } else {
+      this.server = require('http').createServer(this.app.callback());
+    }
+
+    if (options.isMainFramework === undefined) {
+      await this.loadExtension();
+    }
+  }
+
+  async loadExtension() {
+    // 延迟加载 egg 的 load 方法
+    await (this.app.loader as any).loadOrigin();
+    await this.app.ready();
+
+    // emit egg-ready message in agent and application
+    this.app.messenger.broadcast('egg-ready', undefined);
+
+    // emit `server` event in app
+    this.app.emit('server', this.server);
+    // register httpServer to applicationContext
+    this.getApplicationContext().registerObject(HTTP_SERVER_KEY, this.server);
   }
 
   async stop(): Promise<void> {
+    await new Promise(resolve => {
+      this.server.close(resolve);
+    });
     await this.app.close();
+    await this.agent.close();
   }
 
   getBaseDir(): string {
@@ -127,4 +163,14 @@ export class SingleProcess
   public getServer() {
     return this.server;
   }
+
+  public getFrameworkName() {
+    return 'midway:web';
+  }
+
+  public getDefaultContextLoggerClass() {
+    return MidwayKoaContextLogger;
+  }
+
+  public loadLifeCycles() {}
 }

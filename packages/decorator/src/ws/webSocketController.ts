@@ -15,7 +15,7 @@ export interface WSControllerOption {
 }
 
 export function WSController(
-  namespace: string,
+  namespace: string | RegExp = '/',
   routerOptions: {
     middleware?: MiddlewareParamArray;
   } = { middleware: [] }

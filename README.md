@@ -1,131 +1,159 @@
 <p align="center">
-  <a href="https://midwayjs.org/" target="blank"><img src="https://gw.alicdn.com/tfs/TB1OlNIUAL0gK0jSZFtXXXQCXXa-564-135.png" width="300" alt="Midway Logo" /></a>
+  <a href="https://midwayjs.org/" target="blank"><img src="https://img.alicdn.com/imgextra/i1/O1CN01xQLU011T2R7PHksIv_!!6000000002324-2-tps-1200-616.png" width="1000" alt="Midway Logo" /></a>
 </p>
 
-<p align="center">A <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building Serverless services, traditional server-side applications, microservices, and small programs.</p>
+<p align="center">Midway - 一个面向未来的云端一体 <a href="http://nodejs.org" target="_blank">Node.js</a> 框架</p>
 <p align="center">
     <a href="https://github.com/midwayjs/midway/blob/master/LICENSE" target="_blank"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="GitHub license" /></a>
     <a href=""><img src="https://img.shields.io/github/tag/midwayjs/midway.svg" alt="GitHub tag"></a>
-    <a href="https://travis-ci.org/midwayjs/midway"><img src="https://travis-ci.org/midwayjs/midway.svg?branch=develop" alt="Build Status"></a>
+    <a href="#"><img src="https://github.com/midwayjs/midway/actions/workflows/nodejs.yml/badge.svg?branch=2.x" alt="Build Status"></a>
     <a href="https://codecov.io/gh/midwayjs/midway/branch/master"><img src="https://img.shields.io/codecov/c/github/midwayjs/midway/master.svg" alt="Test Coverage"></a>
     <a href="https://lernajs.io/"><img src="https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg" alt="lerna"></a>
-    <a href="https://snyk.io/test/npm/midway"><img src="https://snyk.io/test/npm/midway/badge.svg" alt="Known Vulnerabilities"></a>
     <a href="https://github.com/midwayjs/midway/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"></a>
-    <a href="https://www.codacy.com/app/czy88840616/midway?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=midwayjs/midway&amp;utm_campaign=Badge_Grade"><img src="https://api.codacy.com/project/badge/Grade/856737478fa94e78bce39d5fc2315cec" alt="Codacy Badge"></a>
-    <a href="#backers"><img src="https://opencollective.com/midway/backers/badge.svg" alt="Backers on Open Collective"></a> <a href="#sponsors"><img src="https://opencollective.com/midway/sponsors/badge.svg" alt="Sponsors on Open Collective"></a>
     <a href="https://gitpod.io/#https://github.com/midwayjs/midway"><img src="https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod" alt="Gitpod Ready-to-Code"></a>
     <a href="https://github.com/midwayjs/mwts"><img src="https://img.shields.io/badge/code%20style-midwayjs-brightgreen.svg" alt="Code Style: MidwayJS"></a>
 </p>
 
+[English](./README.en-US.md) | 简体中文
 
-## Description
+🥳 欢迎观看 Midway Serverless 2.0 发布会回放： https://www.bilibili.com/video/BV17A411T7Md
 
-Midway is a Node.js framework for building Serverless Services, traditional server-side applications, microservices and small programs.It written by typescript, which uses the IoC injection mechanism to decouple the business logic of the application and make the development of large Node.js application easier and more natural.
+[《Midway Serverless 发布 2.0，一体化让前端研发再次提效》](https://zhuanlan.zhihu.com/p/355768659)
 
-Midway can use koa, express or EggJS as the basic web framework. It also provides basic solutions for independent use such as Socket.io, GRPC, Dubbo.js, and RabbitMQ.
+## 特性
 
-In addition, Midway is also a Node.js serverless framework for front-end/full-stack developers. Build applications for the next decade. It can run on AWS, Alibaba Cloud, Tencent Cloud and traditional VM/container. Easily integrate with React and Vue. 🌈
+- 🐘 **全功能**：支持 Web 应用/Serverless/FaaS/微服务/小程序后端等多种场景，基于装饰器和依赖注入开发企业级应用
+- 🐦 **前端集成**：全新的云端一体应用研发体验，零 API 调用，使用 "React Hooks " 风格一体研发
+- 🐴 **跨平台**：支持部署至普通 Server 或 Serverless/FaaS 环境
+- 🐶 **扩展**：组件化扩展能力，另外支持使用 Koa/Express/Egg.js 生态插件
+- 🐂 **示例**: 官方提供多种场景的示例代码，方便开发者快速上手
+- 🛡 TypeScript 全面支持
+
+## 描述
+
+Midway 是一个适用于构建 Serverless 服务，传统应用、微服务，小程序后端的 Node.js 框架。
+
+Midway 可以使用 Koa，Express 或 Egg.js 作为基础 Web 框架。它还提供了独立使用的基本解决方案，例如 Socket.io，GRPC，Dubbo.js 和 RabbitMQ 等。
+
+此外，Midway 也适用于前端/全栈开发人员的 Node.js 无服务器框架。构建下一个十年的应用程序。可在 AWS，阿里云，腾讯云和传统 VM /容器上运行。与 React 和 Vue 轻松集成。 🌈
+
+## Demo
+
+### 使用装饰器开发 Web 应用
+
+```ts
+import { Controller, Get, Provide } from '@midwayjs/decorator';
+
+@Provide()
+@Controller('/')
+export class HomeController {
+
+  @Get('/')
+  async home() {
+    return `Welcome to midwayjs!`;
+  }
+}
+```
+
+### 使用函数开发全栈应用
+
+> 后端代码
+> src/apis/lambda/index.ts
+
+```typescript
+import { useContext } from '@midwayjs/hooks'
+
+export async function getPath() {
+  // 获取请求 HTTP Context
+  const ctx = useContext()
+  return ctx.path
+}
+```
+
+> 前端调用
+> src/page/index.tsx
+
+```typescript
+import { getPath } from './apis/lambda'
+
+getPath().then((path) => {
+  // 发送 GET 请求到 /api/getPath
+  // 返回值: /api/getPath
+  console.log(path)
+})
+```
+
+## 快速上手
+
+```bash
+npm i @midwayjs/cli -g --registry=https://registry.npm.taobao.org
+
+## 创建项目
+mw new helloworld
+
+## 进入项目路径
+cd helloworld && npm run dev
+```
+
+如何部署等更多进阶请访问 [中文文档](https://www.yuque.com/midwayjs/midway_v2)。
+
+<!--同时你也可以在阿里云官网知行实验室，学习 Midway [相关的课程](https://start.aliyun.com/handson-lab)。-->
+
+## 文档和社区
+
+![](https://img.alicdn.com/imgextra/i2/O1CN01LCCXpo1ZXw3Ee0TDk_!!6000000003205-0-tps-3336-1390.jpg)
+
+- [官网](https://midwayjs.org)
+- 要查看 v2 中文文档, 请访问 [中文文档](https://www.yuque.com/midwayjs/midway_v2) 📚
+- 要查看 v1 中文文档, 请访问 [中文文档](https://www.yuque.com/midwayjs/midway_v1) 📚
+
+## 官方示例
+
+![midway-examples](https://img.alicdn.com/imgextra/i1/O1CN01Q0M4Ma27FnIgiXE4a_!!6000000007768-0-tps-3802-1996.jpg)
+
+请访问 [midway-examples](http://demo.midwayjs.org/).
 
 
-## Features
+## 社区优秀示例展示
 
-- ✔︎ Sophisticated group Middleware Architecture and compatibility
-- ✔︎ Scalable plug-in capabilities and group plug-in Ecology
-- ✔︎ Good application layering and decoupling capability
-- ✔︎ Good development experience for the future
-- ✔︎ Support Egg plugins and koa middleware
+**1、Cool-Admin - 一个很酷的后台权限管理框架**
 
-## Getting Started
+![image](https://user-images.githubusercontent.com/418820/118931341-73ce1880-b979-11eb-90c6-1758762ce338.png)
 
-- Midway v2  [中文文档](https://www.yuque.com/midwayjs/midway_v2) 📚
-- Midway Serverless [中文文档](https://www.yuque.com/midwayjs/faas) 📚
-- Midway v1 [中文文档](https://www.yuque.com/midwayjs/midway_v1) 📚
-
-## Framework Ecosystem
-
-| Project                  | Version                                                            | Description                                                             |
-| ------------------------ | ------------------------------------------------------------------ | ----------------------------------------------------------------------- |
-| [@midwayjs/web]          | [![web-status]][web-package]                                       | Midway framework for EggJS                                              |
-| [@midwayjs/koa]          | [![koa-status]][koa-package]                                       | Midway framework for Koa                                                |
-| [@midwayjs/express]      | [![express-status]][express-package]                               | Midway framework for Express                                            |
-| [@midwayjs/faas]         | [![faas-status]][faas-package]                                     | Midway framework for FaaS in Serverless environment                     |
-| [@midwayjs/rabbitmq]     | [![rabbitmq-status]][rabbitmq-package]                             | Midway framework for rabbitMQ service                                   |
-| [@midwayjs/socketio]     | [![socketio-status]][socketio-package]                             | Midway framework for Socket.io server                                   |
-| [@midwayjs/grpc]         | [![grpc-status]][grpc-package]                                     | Midway framework for gRPC service                                       |
+- 官网：https://cool-js.com/
 
 
-[@midwayjs/faas]: https://github.com/midwayjs/midway/tree/2.x/packages/faas
-[@midwayjs/web]: https://github.com/midwayjs/midway/tree/2.x/packages/web
-[@midwayjs/koa]: https://github.com/midwayjs/midway/tree/2.x/packages/web-koa
-[@midwayjs/express]: https://github.com/midwayjs/midway/tree/2.x/packages/web-express
-[@midwayjs/rabbitmq]: https://github.com/midwayjs/midway/tree/2.x/packages/rabbitmq
-[@midwayjs/socketio]: https://github.com/midwayjs/midway/tree/2.x/packages/socketio
-[@midwayjs/grpc]: https://github.com/midwayjs/midway/tree/2.x/packages/faas
 
-[web-status]: https://img.shields.io/npm/v/@midwayjs/web.svg
-[koa-status]: https://img.shields.io/npm/v/@midwayjs/koa.svg
-[express-status]: https://img.shields.io/npm/v/@midwayjs/express.svg
-[faas-status]: https://img.shields.io/npm/v/@midwayjs/faas.svg
-[rabbitmq-status]: https://img.shields.io/npm/v/@midwayjs/rabbitmq.svg
-[socketio-status]: https://img.shields.io/npm/v/@midwayjs/socketio.svg
-[grpc-status]: https://img.shields.io/npm/v/@midwayjs/grpc.svg
+## VSC Plugin
 
-[web-package]: https://npmjs.com/package/@midwayjs/web
-[koa-package]: https://npmjs.com/package/@midwayjs/koa
-[express-package]: https://npmjs.com/package/@midwayjs/express
-[faas-package]: https://npmjs.com/package/@midwayjs/faas
-[rabbitmq-package]: https://npmjs.com/package/@midwayjs/rabbitmq
-[socketio-package]: https://npmjs.com/package/@midwayjs/socketio
-[grpc-package]: https://npmjs.com/package/@midwayjs/grpc
+![](https://camo.githubusercontent.com/7819739b6a9eb3d673124817b0d40e46dc963993/68747470733a2f2f63646e2e6e6c61726b2e636f6d2f79757175652f302f323032302f6769662f3530313430382f313539333636313634363431362d35636238663637392d336331302d343638392d386465612d6530313731326438653231662e67696623616c69676e3d6c65667426646973706c61793d696e6c696e65266865696768743d383731266d617267696e3d2535426f626a6563742532304f626a656374253544266e616d653d323032302d30372d303225323031312d34342d32382e323032302d30372d303225323031315f34365f34302e676966266f726967696e4865696768743d383731266f726967696e57696474683d313036302673697a653d373438353839267374617475733d646f6e65267374796c653d6e6f6e652677696474683d31303630)
 
-## Tool and Runtime Ecosystem
+## 答疑
 
-| Project                  | Version                                                            | Description                                                             |
-| ------------------------ | ------------------------------------------------------------------ | ----------------------------------------------------------------------- |
-| [@midwayjs/cli]         | [![midway-cli-status]][midway-cli-package]                 | Midway common cli tool                                         |
-| [@midwayjs/faas-cli]         | [![midway-faas-cli-status]][midway-faas-cli-package]                 | Midway faas cli tool                                         |
-| [@midwayjs/runtime-engine]         | [![runtime-engine-status]][runtime-engine-package]                 | Common basic Serverless runtime                                         |
-| [@midwayjs/serverless-fc-starter]  | [![serverless-fc-starter-status]][serverless-fc-starter-package]   | Alibaba Cloud FC function launcher                                      |
-| [@midwayjs/serverless-scf-starter] | [![serverless-scf-starter-status]][serverless-scf-starter-package] | Tencent Cloud SCF Function Launcher                                     |
-
-[@midwayjs/cli]: https://github.com/midwayjs/cli/tree/master/packages/cli
-[@midwayjs/faas-cli]: https://github.com/midwayjs/cli/tree/serverless/packages/faas-cli
-[@midwayjs/runtime-engine]: https://github.com/midwayjs/midway/tree/2.x/packages-serverless/runtime-engine
-[@midwayjs/serverless-fc-starter]: https://github.com/midwayjs/midway/tree/2.x/packages-serverless/serverless-fc-starter
-[@midwayjs/serverless-scf-starter]: https://github.com/midwayjs/midway/tree/2.x/packages-serverless/serverless-scf-starter
-
-[midway-cli-status]: https://img.shields.io/npm/v/@midwayjs/cli.svg
-[midway-faas-cli-status]: https://img.shields.io/npm/v/@midwayjs/faas-cli.svg
-[runtime-engine-status]: https://img.shields.io/npm/v/@midwayjs/runtime-engine.svg
-[serverless-fc-starter-status]: https://img.shields.io/npm/v/@midwayjs/runtime-engine.svg
-[serverless-scf-starter-status]: https://img.shields.io/npm/v/@midwayjs/runtime-engine.svg
-
-[midway-cli-package]: https://npmjs.com/package/@midwayjs/cli
-[midway-faas-cli-package]: https://npmjs.com/package/@midwayjs/faas-cli
-[runtime-engine-package]: https://npmjs.com/package/@midwayjs/runtime-engine
-[serverless-fc-starter-package]: https://npmjs.com/package/@midwayjs/serverless-fc-starter
-[serverless-scf-starter-package]: https://npmjs.com/package/@midwayjs/serverless-scf-starter
+群里会有热心的朋友，也会有新版本发布推送。钉钉扫码加入答疑群
 
 
-## Examples
+二群
 
-See [midway-examples](https://github.com/midwayjs/midway-examples).
+![](https://img.alicdn.com/imgextra/i2/O1CN01SRJO0P1YaqxhtPU2X_!!6000000003076-2-tps-305-391.png)
 
-## Issues
 
-Please make sure to read the [Issue Reporting Checklist](CONTRIBUTING.md#reporting-new-issues) before opening an issue. Issues not conforming to the guidelines may be closed immediately.
+一群（已满）
 
-## Contributors
+![](https://img.alicdn.com/imgextra/i2/O1CN01ofEEAL2AEpJHbpse5_!!6000000008172-2-tps-311-401.png)
 
-Please let us know how can we help. Do check out [issues](http://github.com/midwayjs/midway/issues) for bug reports or suggestions first.
+## 贡献
 
-To become a contributor, please follow our contributing guide.
+请告知我们可以为你做些什么，不过在此之前，请检查一下是否有 [已经存在的Bug或者意见](http://github.com/midwayjs/midway/issues)。
 
-This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
-<a href="https://github.com/midwayjs/midway/graphs/contributors"><img src="https://opencollective.com/midway/contributors.svg?width=890&button=false" /></a>
+如果你是一个代码贡献者，请参考代码贡献规范。
+
+## 谁在使用
+
+![image](https://user-images.githubusercontent.com/629202/110743837-a968ce00-8273-11eb-8284-f5749335fe70.png)
 
 ## License
 
-The code in this project is released under the [MIT License](LICENSE).
+我们的代码使用 [MIT](http://github.com/midwayjs/midway/blob/master/LICENSE) 协议，请放心使用。
 
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fmidwayjs%2Fmidway.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fmidwayjs%2Fmidway?ref=badge_large)

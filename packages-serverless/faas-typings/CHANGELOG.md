@@ -3,6 +3,60 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.11.1](https://github.com/midwayjs/midway-faas/compare/v2.11.0...v2.11.1) (2021-06-19)
+
+**Note:** Version bump only for package @midwayjs/faas-typings
+
+
+
+
+
+## [2.10.7](https://github.com/midwayjs/midway-faas/compare/v2.10.6...v2.10.7) (2021-04-17)
+
+**Note:** Version bump only for package @midwayjs/faas-typings
+
+
+
+
+
+# [2.10.0](https://github.com/midwayjs/midway-faas/compare/v2.9.3...v2.10.0) (2021-04-02)
+
+**Note:** Version bump only for package @midwayjs/faas-typings
+
+
+
+
+
+## [2.8.9](https://github.com/midwayjs/midway-faas/compare/v2.8.8...v2.8.9) (2021-03-08)
+
+
+### Bug Fixes
+
+* delete method parse body and form body ([#891](https://github.com/midwayjs/midway-faas/issues/891)) ([f5c1e70](https://github.com/midwayjs/midway-faas/commit/f5c1e7042ed85656e323563421391a719999979e))
+
+
+
+
+
+## [2.8.2](https://github.com/midwayjs/midway-faas/compare/v2.8.0...v2.8.2) (2021-02-27)
+
+**Note:** Version bump only for package @midwayjs/faas-typings
+
+
+
+
+
+# [2.7.0](https://github.com/midwayjs/midway-faas/compare/v2.6.13...v2.7.0) (2021-01-27)
+
+
+### Features
+
+* support entry file in bootstrap ([#819](https://github.com/midwayjs/midway-faas/issues/819)) ([49a5ff6](https://github.com/midwayjs/midway-faas/commit/49a5ff662134bdd42dc3a80738b44a05138f8f7c))
+
+
+
+
+
 ## [2.6.8](https://github.com/midwayjs/midway-faas/compare/v2.6.7...v2.6.8) (2021-01-06)
 
 **Note:** Version bump only for package @midwayjs/faas-typings

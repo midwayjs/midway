@@ -1,0 +1,6 @@
+{
+  "name": "hello-demo",
+  "dependencies": {
+    "@midwayjs/faas": "^2.8.0"
+  }
+}

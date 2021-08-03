@@ -23,6 +23,12 @@ describe('/test/feature.test.ts', () => {
       expect(result.headers['ccc']).toEqual('ddd');
     });
 
+    it('should test get header with upper case', async () => {
+      const result = await createHttpRequest(app).get('/api/header-upper').set('x-abc', '321');
+      expect(result.status).toBe(200);
+      expect(result.text).toBe('321');
+    });
+
     it('test get method with return value', async () => {
       const result = await createHttpRequest(app).get('/api/').query({ name: 'harry' });
       expect(result.status).toBe(201);
@@ -43,6 +49,45 @@ describe('/test/feature.test.ts', () => {
     it('test get data with ctx.body', async () => {
       const result = await createHttpRequest(app).get('/api/ctx-body');
       expect(result.text).toEqual('ctx-body');
+    });
+  });
+
+  describe('test wildcard router', function () {
+    let app: IMidwayExpressApplication;
+    beforeAll(async () => {
+      app = await creatApp('base-app-wildcard');
+    });
+
+    afterAll(async () => {
+      await closeApp(app);
+    });
+
+    it('test root path 1', async () => {
+      const result = await createHttpRequest(app)
+        .get('/');
+      expect(result.status).toEqual(200);
+      expect(result.text).toEqual('hello world');
+    });
+
+    it('test root path 2', async () => {
+      const result = await createHttpRequest(app)
+        .get('/123');
+      expect(result.status).toEqual(200);
+      expect(result.text).toEqual('hello world');
+    });
+
+    it('test root path 3', async () => {
+      const result = await createHttpRequest(app)
+        .get('/abc/');
+      expect(result.status).toEqual(200);
+      expect(result.text).toEqual('hello worldabc');
+    });
+
+    it('test root path 4', async () => {
+      const result = await createHttpRequest(app)
+        .get('/abc/123');
+      expect(result.status).toEqual(200);
+      expect(result.text).toEqual('hello worldabc');
     });
   });
 

@@ -10,10 +10,11 @@ import {
 } from '@midwayjs/serverless-http-parser';
 import * as util from 'util';
 
-const isLocalEnv = () => {
+const isOutputError = () => {
   return (
-    process.env.MIDWAY_SERVER_ENV === 'local' ||
-    process.env.NODE_ENV === 'local'
+    process.env.SERVERLESS_OUTPUT_ERROR_STACK === 'true' ||
+    ['local', 'development'].includes(process.env.MIDWAY_SERVER_ENV) ||
+    ['local', 'development'].includes(process.env.NODE_ENV)
   );
 };
 
@@ -62,7 +63,7 @@ export class FCRuntime extends ServerlessLightRuntime {
     if (isHTTPMode) {
       req.getOriginContext = () => {
         return context;
-      }
+      };
       // http
       // const rawBody = 'test';
       // req.rawBody = rawBody;
@@ -111,7 +112,7 @@ export class FCRuntime extends ServerlessLightRuntime {
               ctx.body = result;
             }
 
-            if (!ctx.response.explicitStatus) {
+            if (!ctx.response._explicitStatus) {
               if (ctx.body === null || ctx.body === 'undefined') {
                 ctx.body = '';
                 ctx.type = 'text';
@@ -201,13 +202,13 @@ export class FCRuntime extends ServerlessLightRuntime {
             ctx.logger.error(err);
             if (res.send) {
               res.setStatusCode(500);
-              res.send(isLocalEnv() ? err.stack : 'Internal Server Error');
+              res.send(isOutputError() ? err.stack : 'Internal Server Error');
             }
             return {
               isBase64Encoded: false,
               statusCode: 500,
               headers: {},
-              body: isLocalEnv() ? err.stack : 'Internal Server Error',
+              body: isOutputError() ? err.stack : 'Internal Server Error',
             };
           });
       },
@@ -241,12 +242,26 @@ export class FCRuntime extends ServerlessLightRuntime {
     // format context
     const newCtx = {
       logger: context.logger || console,
+      originEvent: event,
       originContext: context,
     };
     // 其他事件场景
     return this.invokeHandlerWrapper(newCtx, async () => {
       args[0] = newCtx;
-      return handler.apply(handler, args);
+
+      try {
+        if (!handler) {
+          return await this.defaultInvokeHandler(...args);
+        } else {
+          return await handler.apply(handler, args);
+        }
+      } catch (err) {
+        if (isOutputError()) {
+          throw err;
+        } else {
+          throw new Error('Internal Server Error');
+        }
+      }
     });
   }
 

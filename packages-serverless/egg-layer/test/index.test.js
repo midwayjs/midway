@@ -7,6 +7,7 @@ const { join } = require('path');
 const request = require('supertest');
 
 describe('/test/index.test.ts', () => {
+
   describe('FC test with http trigger', () => {
     let runtime;
     let app;
@@ -68,6 +69,15 @@ describe('/test/index.test.ts', () => {
         .expect(200, done);
     });
 
+    it('should test with post form body', (done) => {
+      request(app)
+        .post('/post/formBody')
+        .send('b=1')
+        .expect('Content-Type', 'application/json; charset=utf-8')
+        .expect(/{"body":{"b":"1"}}/)
+        .expect(200, done);
+    });
+
     it('should test static file', done => {
       request(app)
         .get('/public/news.css')
@@ -81,6 +91,25 @@ describe('/test/index.test.ts', () => {
         .get('/')
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(301, done);
+    });
+
+    it('should test throw error', done => {
+      request(app)
+        .get('/error')
+        .expect('Content-Type', 'text/html; charset=utf-8')
+        .expect(500, (err, res) => {
+          expect(res.statusCode).toEqual(500);
+          expect(res.text).toMatch('custom error');
+          done();
+        });
+    });
+
+    it('should test got ip', done => {
+      request(app)
+        .get('/got_ip')
+        .expect('Content-Type', 'text/plain; charset=utf-8')
+        .expect('ip=127.0.0.1')
+        .expect(200, done);
     });
   });
 
@@ -157,6 +186,14 @@ describe('/test/index.test.ts', () => {
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(301, done);
     });
+
+    it('should test got ip in api gateway', done => {
+      request(app)
+        .get('/got_ip')
+        .expect('Content-Type', 'text/plain; charset=utf-8')
+        .expect('ip=undefined')
+        .expect(200, done);
+    });
   });
 
   describe('SCF test with api gateway', () => {
@@ -231,6 +268,50 @@ describe('/test/index.test.ts', () => {
         .get('/')
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(301, done);
+    });
+
+    it('should test got ip in scf', done => {
+      request(app)
+        .get('/got_ip')
+        .expect('Content-Type', 'text/plain; charset=utf-8')
+        .expect('ip=42.120.74.90')
+        .expect(200, done);
+    });
+  });
+
+
+  describe('FC test with midway app use http trigger', () => {
+    let runtime;
+    let app;
+
+    beforeAll(async () => {
+      // set midway framework dir
+      process.env.EGG_FRAMEWORK_DIR = join(__dirname, '../node_modules/@midwayjs/web');
+      const entryDir = join(__dirname, './fixtures/midway-fc');
+      process.env.ENTRY_DIR = entryDir;
+      runtime = createRuntime({
+        functionDir: entryDir,
+      });
+      await runtime.start();
+      app = await runtime.delegate(new HTTPTrigger());
+    });
+
+    afterEach(() => {
+      if (runtime) {
+        runtime.close();
+      }
+      process.env.ENTRY_DIR = '';
+    });
+
+    it('should test with get', done => {
+      request(app)
+        .post('/api')
+        .send({
+          bbbbb: 'ccc'
+        })
+        .expect('Content-Type', 'text/html; charset=utf-8')
+        .expect(/dataccc/)
+        .expect(200, done);
     });
   });
 });

@@ -1,42 +1,52 @@
-import { Context, Application } from 'egg';
+import { Context as EggContext, Application as EggApplication, EggLogger } from 'egg';
 import {
   IMidwayContainer,
-  MidwayFrameworkType,
-  MidwayProcessTypeEnum
+  IMidwayContext,
+  Context as IMidwayBaseContext,
+  IMidwayApplication,
+  IMidwayBaseApplication
 } from '@midwayjs/core';
 import { IMidwayKoaConfigurationOptions, IMidwayKoaContext, IMidwayKoaNext } from '@midwayjs/koa';
 import { DefaultState, Middleware } from 'koa';
 import { ILogger, LoggerOptions } from '@midwayjs/logger';
+
+export interface IMidwayWebBaseApplication {
+  applicationContext: IMidwayContainer;
+  getLogger(name?: string): EggLogger & ILogger;
+  getCoreLogger(): EggLogger & ILogger;
+  generateController?(controllerMapping: string);
+  generateMiddleware?(middlewareId: string): Promise<Middleware<DefaultState, IMidwayKoaContext>>;
+  createLogger(name: string, options: LoggerOptions): EggLogger & ILogger;
+}
 
 declare module 'egg' {
   interface EggAppInfo {
     appDir: string;
   }
 
-  interface Application {
-    applicationContext: IMidwayContainer;
-    getBaseDir(): string;
-    getAppDir(): string;
-    getEnv(): string;
-    getFrameworkType(): MidwayFrameworkType;
-    getProcessType(): MidwayProcessTypeEnum;
-    getApplicationContext(): IMidwayContainer;
-    getConfig(key?: string): any;
+  // 这里再次覆盖和 egg 不同的定义，不然 egg 插件里可能会报错
+  interface Application extends IMidwayBaseApplication, IMidwayWebBaseApplication {
+    createAnonymousContext(...args: any[]): EggContext;
+    getCoreLogger(): EggLogger & ILogger;
     getLogger(name?: string): EggLogger & ILogger;
-    getCoreLogger(): EggLogger;
-    generateController?(controllerMapping: string);
-    generateMiddleware?(middlewareId: string): Promise<Middleware<DefaultState, IMidwayKoaContext>>;
-    createLogger(name: string, options: LoggerOptions);
-    getProjectName();
+    createLogger(name: string, options: LoggerOptions): EggLogger & ILogger;
   }
 
-  interface Context {
-    requestContext: IMidwayContainer;
+  interface Context <ResponseBodyT = any> extends IMidwayBaseContext {
+    getLogger(name?: string): EggLogger & ILogger;
+  }
+
+  interface EggAppConfig {
+    midwayFeature: {
+      replaceEggLogger: boolean;
+    }
   }
 }
 
-export type IMidwayWebApplication = Application;
-export type IMidwayWebContext = Context;
+export type IMidwayWebApplication = IMidwayApplication<Context, EggApplication & IMidwayWebBaseApplication>;
+export interface Application extends IMidwayWebApplication {}
+export interface Context <ResponseBodyT = unknown> extends IMidwayWebContext <ResponseBodyT> {}
+export type IMidwayWebContext <ResponseBodyT = unknown> = IMidwayContext<EggContext<ResponseBodyT>>;
 export type IMidwayWebNext = IMidwayKoaNext;
 
 export interface IMidwayWebConfigurationOptions extends IMidwayKoaConfigurationOptions {

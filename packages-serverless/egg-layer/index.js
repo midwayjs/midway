@@ -1,4 +1,5 @@
 const { resolve, join } = require('path');
+/* eslint-disable node/no-unpublished-require */
 const { start } = require('egg');
 const os = require('os');
 const fs = require('fs');
@@ -16,6 +17,14 @@ module.exports = engine => {
       // 从 package.json 中获取 egg 框架
       const packageJSON = require(resolve(baseDir, 'package.json'));
       framework = packageJSON.egg && packageJSON.egg.framework;
+      // 支持自定义框架
+      if (
+        packageJSON['dependencies'] &&
+        packageJSON['dependencies']['@midwayjs/web'] &&
+        framework !== '@midwayjs/web'
+      ) {
+        framework = '@midwayjs/web';
+      }
       const localFrameWorkPath = resolve(__dirname, 'framework');
       require(localFrameWorkPath).getFramework(
         process.env.EGG_FRAMEWORK_DIR ||
@@ -45,35 +54,58 @@ module.exports = engine => {
     async defaultInvokeHandler(context) {
       return new Promise((resolve, reject) => {
         delete context.headers['content-length'];
-        if (
-          eggApp &&
-          eggApp.config &&
-          eggApp.config.proxy &&
-          !context.headers['X-Forwarded-For']
-        ) {
+        if (eggApp.config.proxy && !context.headers['X-Forwarded-For']) {
           context.headers['X-Forwarded-For'] = context.ip;
         }
-        request(
-          {
-            uri: `http://unix:${socketPath}:${context.path}`,
-            qs: context.query,
-            method: context.method,
-            body:
-              typeof context.request.body === 'string'
-                ? context.request.body
-                : JSON.stringify(context.request.body),
-            headers: context.headers,
-            followRedirect: false,
-          },
-          (error, response, body) => {
+        const requestOption = {
+          uri: `http://unix:${socketPath}:${context.path}`,
+          qs: context.query,
+          method: context.method,
+          headers: context.headers,
+          followRedirect: false,
+        };
+        if (context.method === 'GET') {
+          // get 统一使用 buffer 返回，避免静态资源无法展示
+          requestOption.encoding = null;
+        }
+        if (
+          (context.headers['content-type'] || '').indexOf('application/json') >=
+          0
+        ) {
+          // post json
+          if (typeof context.request.body !== 'string') {
+            requestOption.body = JSON.stringify(context.request.body);
+          } else {
+            requestOption.body = context.request.body;
+          }
+        } else if (
+          (context.headers['content-type'] || '').indexOf('form-urlencoded') >=
+          0
+        ) {
+          // post formdata
+          requestOption.form = context.request.body;
+        } else if (context.request.body) {
+          console.warn(
+            '[egg-layer] unknown content-type:',
+            context.headers['content-type']
+          );
+          if (typeof context.request.body !== 'string') {
+            requestOption.form = context.request.body;
+          } else {
+            requestOption.body = context.request.body;
+          }
+        }
+        request(requestOption, (error, response, body) => {
+          if (error) {
+            context.status = 500;
+            console.error('[egg-layer]' + error);
+            resolve('Internal Server Error');
+          } else {
             context.res = response;
             context.status = response.statusCode;
-            if (error) {
-              reject(error);
-            }
             resolve(body);
           }
-        );
+        });
       });
     },
   });

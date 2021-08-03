@@ -25,11 +25,26 @@ class HomeController extends Controller {
       body: ctx.request.body,
     };
   }
+  async postFormBodyMethod() {
+    const { ctx } = this;
+    ctx.body = {
+      body: ctx.request.body
+    };
+  }
   async buffer() {
     const { ctx } = this;
     ctx.setHeader('x-res', 'buffer');
     // assert
     ctx.body = Buffer.from('hi, egg');
+  }
+
+  async gotError() {
+    throw new Error('custom error');
+  }
+
+  async gotIP() {
+    const { ctx } = this;
+    ctx.body = 'ip=' + ctx.ip;
   }
 }
 

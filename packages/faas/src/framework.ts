@@ -7,23 +7,28 @@ import {
 } from './interface';
 import {
   BaseFramework,
-  createMidwayLogger,
-  getClassMetadata,
+  extractKoaLikeValue,
   IMiddleware,
   IMidwayBootstrapOptions,
-  listModule,
-  listPreloadModule,
   MidwayFrameworkType,
-  MidwayRequestContainer,
   REQUEST_OBJ_CTX_KEY,
+  RouterInfo,
+  ServerlessTriggerCollector,
 } from '@midwayjs/core';
 
 import { dirname, resolve } from 'path';
-import { FUNC_KEY, LOGGER_KEY, PLUGIN_KEY } from '@midwayjs/decorator';
+import {
+  LOGGER_KEY,
+  PLUGIN_KEY,
+  WEB_RESPONSE_HTTP_CODE,
+  WEB_RESPONSE_HEADER,
+  WEB_RESPONSE_CONTENT_TYPE,
+  WEB_RESPONSE_REDIRECT,
+} from '@midwayjs/decorator';
 import SimpleLock from '@midwayjs/simple-lock';
 import * as compose from 'koa-compose';
 import { MidwayHooks } from './hooks';
-import { LoggerOptions, loggers } from '@midwayjs/logger';
+import { createConsoleLogger, LoggerOptions, loggers } from '@midwayjs/logger';
 
 const LOCK_KEY = '_faas_starter_start_key';
 
@@ -31,16 +36,19 @@ const LOCK_KEY = '_faas_starter_start_key';
 
 export class MidwayFaaSFramework extends BaseFramework<
   IMidwayFaaSApplication,
+  FaaSContext,
   IFaaSConfigurationOptions
 > {
   protected defaultHandlerMethod = 'handler';
   private globalMiddleware: string[];
-  protected funMappingStore: Map<string, any> = new Map();
+  protected funMappingStore: Map<string, RouterInfo> = new Map();
   protected logger;
   private lock = new SimpleLock();
   public app: IMidwayFaaSApplication;
+  private isReplaceLogger =
+    process.env['MIDWAY_SERVERLESS_REPLACE_LOGGER'] === 'true';
 
-  protected async afterContainerInitialize(options: IMidwayBootstrapOptions) {
+  async applicationInitialize(options: IMidwayBootstrapOptions) {
     this.globalMiddleware = this.configurationOptions.middleware || [];
     this.app =
       this.configurationOptions.applicationAdapter?.getApplication() ||
@@ -75,19 +83,27 @@ export class MidwayFaaSFramework extends BaseFramework<
         return this.configurationOptions.applicationAdapter?.getFunctionServiceName();
       },
     });
-
-    this.prepareConfiguration();
   }
 
   protected async initializeLogger(options: IMidwayBootstrapOptions) {
     if (!this.logger) {
       this.logger =
         options.logger ||
-        this.configurationOptions?.initializeContext?.['logger'] ||
-        console;
+        createConsoleLogger('midwayServerlessLogger', {
+          printFormat: info => {
+            const requestId =
+              info.ctx?.['originContext']?.['requestId'] ??
+              info.ctx?.['originContext']?.['request_id'] ??
+              '';
+            return `${new Date().toISOString()} ${requestId} [${info.level}] ${
+              info.message
+            }`;
+          },
+        });
       this.appLogger = this.logger;
       loggers.addLogger('coreLogger', this.logger, false);
       loggers.addLogger('appLogger', this.logger, false);
+      loggers.addLogger('logger', this.logger, false);
     }
   }
 
@@ -111,43 +127,14 @@ export class MidwayFaaSFramework extends BaseFramework<
       // set app keys
       this.app['keys'] = this.app.getConfig('keys') || '';
 
-      // store all function entry
-      const funModules = listModule(FUNC_KEY);
+      // store all http function entry
+      const collector = new ServerlessTriggerCollector(this.getBaseDir());
+      const functionList = await collector.getFunctionList();
 
-      for (const funModule of funModules) {
-        const funOptions: Array<{
-          funHandler;
-          key;
-          descriptor;
-          middleware: string[];
-        }> = getClassMetadata(FUNC_KEY, funModule);
-        funOptions.map(opts => {
-          // { method: 'handler', data: 'index.handler' }
-          const handlerName = opts.funHandler
-            ? // @Func(key), if key is set
-              // or @Func({ handler })
-              opts.funHandler
-            : // else use ClassName.mehtod as handler key
-              covertId(funModule.name, opts.key);
-          this.funMappingStore.set(handlerName, {
-            middleware: opts.middleware || [],
-            mod: funModule,
-            method: opts.key,
-            descriptor: opts.descriptor,
-          });
-        });
-      }
-
-      const modules = listPreloadModule();
-      for (const module of modules) {
-        // preload init context
-        await this.getApplicationContext().getAsync(module);
+      for (const funcInfo of functionList) {
+        this.funMappingStore.set(funcInfo.funcHandlerName, funcInfo);
       }
     }, LOCK_KEY);
-  }
-
-  public getApplication() {
-    return this.app;
   }
 
   public getFrameworkType(): MidwayFrameworkType {
@@ -155,12 +142,7 @@ export class MidwayFaaSFramework extends BaseFramework<
   }
 
   public handleInvokeWrapper(handlerMapping: string) {
-    const funOptions: {
-      mod: any;
-      middleware: Array<IMiddleware<FaaSContext>>;
-      method: string;
-      descriptor: any;
-    } = this.funMappingStore.get(handlerMapping);
+    const funOptions: RouterInfo = this.funMappingStore.get(handlerMapping);
 
     return async (...args) => {
       if (args.length === 0) {
@@ -169,19 +151,26 @@ export class MidwayFaaSFramework extends BaseFramework<
 
       const context: FaaSContext = this.getContext(args.shift());
 
-      if (funOptions && funOptions.mod) {
+      if (funOptions) {
         let fnMiddlewere = [];
         // invoke middleware, just for http
         if (context.headers && context.get) {
-          fnMiddlewere = fnMiddlewere.concat(this.globalMiddleware);
+          fnMiddlewere = fnMiddlewere
+            .concat(this.globalMiddleware)
+            .concat(funOptions.controllerMiddleware);
         }
         fnMiddlewere = fnMiddlewere.concat(funOptions.middleware);
         if (fnMiddlewere.length) {
           const mw: any[] = await this.loadMiddleware(fnMiddlewere);
           mw.push(async (ctx, next) => {
             // invoke handler
-            const result = await this.invokeHandler(funOptions, ctx, args);
-            if (!ctx.body) {
+            const result = await this.invokeHandler(
+              funOptions,
+              ctx,
+              next,
+              args
+            );
+            if (result !== undefined) {
               ctx.body = result;
             }
             return next();
@@ -191,7 +180,7 @@ export class MidwayFaaSFramework extends BaseFramework<
           });
         } else {
           // invoke handler
-          return this.invokeHandler(funOptions, context, args);
+          return this.invokeHandler(funOptions, context, null, args);
         }
       }
 
@@ -208,43 +197,79 @@ export class MidwayFaaSFramework extends BaseFramework<
     return mwIns.resolve();
   }
 
-  protected getContext(context) {
+  public getContext(context) {
     if (!context.env) {
       context.env = this.getApplicationContext()
         .getEnvironmentService()
         .getCurrentEnvironment();
     }
-    if (!context.logger) {
-      context.logger = this.logger;
-    }
-    if (!context.requestContext) {
-      context.requestContext = new MidwayRequestContainer(
-        context,
-        this.getApplicationContext()
-      );
-    }
     if (!context.hooks) {
       context.hooks = new MidwayHooks(context, this.app);
     }
+    if (this.isReplaceLogger || !context.logger) {
+      context._serverlessLogger = this.createContextLogger(context);
+      /**
+       * 由于 fc 的 logger 有 bug，FC公有云环境我们会默认替换掉，其他平台后续视情况而定
+       */
+      Object.defineProperty(context, 'logger', {
+        get() {
+          return context._serverlessLogger;
+        },
+      });
+    }
+    this.app.createAnonymousContext(context);
     return context;
   }
 
-  private async invokeHandler(
-    funOptions: {
-      mod: any;
-      middleware: Array<IMiddleware<FaaSContext>>;
-      method: string;
-    },
-    context,
-    args
-  ) {
-    const funModule = await context.requestContext.getAsync(funOptions.mod);
+  private async invokeHandler(routerInfo: RouterInfo, context, next, args) {
+    if (
+      Array.isArray(routerInfo.requestMetadata) &&
+      routerInfo.requestMetadata.length
+    ) {
+      await Promise.all(
+        routerInfo.requestMetadata.map(
+          async ({ index, type, propertyData }) => {
+            args[index] = await extractKoaLikeValue(type, propertyData)(
+              context,
+              next
+            );
+          }
+        )
+      );
+    }
+    const funModule = await context.requestContext.getAsync(
+      routerInfo.controllerId
+    );
     const handlerName =
-      this.getFunctionHandler(context, args, funModule, funOptions.method) ||
+      this.getFunctionHandler(context, args, funModule, routerInfo.method) ||
       this.defaultHandlerMethod;
     if (funModule[handlerName]) {
       // invoke real method
-      return funModule[handlerName](...args);
+      const result = await funModule[handlerName](...args);
+      // implement response decorator
+      const routerResponseData = routerInfo.responseMetadata;
+      if (context.headers && routerResponseData.length) {
+        for (const routerRes of routerResponseData) {
+          switch (routerRes.type) {
+            case WEB_RESPONSE_HTTP_CODE:
+              context.status = routerRes.code;
+              break;
+            case WEB_RESPONSE_HEADER:
+              for (const key in routerRes?.setHeaders || {}) {
+                context.set(key, routerRes.setHeaders[key]);
+              }
+              break;
+            case WEB_RESPONSE_CONTENT_TYPE:
+              context.type = routerRes.contentType;
+              break;
+            case WEB_RESPONSE_REDIRECT:
+              context.status = routerRes.code;
+              context.redirect(routerRes.url);
+              return;
+          }
+        }
+      }
+      return result;
     }
   }
 
@@ -285,27 +310,20 @@ export class MidwayFaaSFramework extends BaseFramework<
     this.addConfiguration(filePath, fileDir);
   }
 
-  /**
-   * @deprecated
-   * use this.addConfiguration
-   */
-  protected prepareConfiguration() {
-    // TODO use initConfiguration
-    // this.initConfiguration('./configuration', __dirname);
-  }
-
   private registerDecorator() {
     this.getApplicationContext().registerDataHandler(
       PLUGIN_KEY,
-      (key, target) => {
-        return target[REQUEST_OBJ_CTX_KEY]?.[key] || this.app[key];
+      (key, meta, target) => {
+        return target?.[REQUEST_OBJ_CTX_KEY]?.[key] || this.app[key];
       }
     );
 
     this.getApplicationContext().registerDataHandler(
       LOGGER_KEY,
-      (key, target) => {
-        return target[REQUEST_OBJ_CTX_KEY]?.['logger'] || this.app.getLogger();
+      (key, meta, target) => {
+        return (
+          target?.[REQUEST_OBJ_CTX_KEY]?.['logger'] || this.app.getLogger()
+        );
       }
     );
   }
@@ -316,9 +334,8 @@ export class MidwayFaaSFramework extends BaseFramework<
       if (typeof middleware === 'function') {
         newMiddlewares.push(middleware);
       } else {
-        const middlewareImpl: IMiddleware<FaaSContext> = await this.getApplicationContext().getAsync(
-          middleware
-        );
+        const middlewareImpl: IMiddleware<FaaSContext> =
+          await this.getApplicationContext().getAsync(middleware);
         if (middlewareImpl && typeof middlewareImpl.resolve === 'function') {
           newMiddlewares.push(middlewareImpl.resolve() as any);
         }
@@ -328,17 +345,12 @@ export class MidwayFaaSFramework extends BaseFramework<
     return newMiddlewares;
   }
 
-  async applicationInitialize(options: IMidwayBootstrapOptions) {}
-
   public createLogger(name: string, option: LoggerOptions = {}) {
     // 覆盖基类的创建日志对象，函数场景下的日志，即使自定义，也只启用控制台输出
-    return createMidwayLogger(this, name, Object.assign(option, {
-      disableFile: true,
-      disableError: true,
-    }));
+    return createConsoleLogger(name, option);
   }
-}
 
-function covertId(cls, method) {
-  return cls.replace(/^[A-Z]/, c => c.toLowerCase()) + '.' + method;
+  public getFrameworkName() {
+    return 'midway:faas';
+  }
 }

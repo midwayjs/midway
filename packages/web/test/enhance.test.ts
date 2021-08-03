@@ -47,7 +47,7 @@ describe('/test/enhance.test.ts', () => {
 
     afterAll(async () => {
       await closeApp(app);
-    })
+    });
 
     it('should load controller from requestContext', done => {
       request(app.callback())
@@ -224,6 +224,27 @@ describe('/test/enhance.test.ts', () => {
         .get('/param/headers_host')
         .expect(200)
         .expect('127');
+
+      const result = await request(app.callback())
+        .get('/param/param_queries')
+        .query('name=harry&name=zhangting');
+
+      expect(result.status).toEqual(200);
+      expect(result.body).toEqual([
+        "harry",
+        "zhangting"
+      ]);
+
+      await request(app.callback())
+        .get('/param/param_queries_all')
+        .query('name=harry&name=zhangting')
+        .expect(200)
+        .expect({
+          name: [
+            "harry",
+            "zhangting"
+          ]
+        });
 
       const imagePath = path.join(
         __dirname,

@@ -1,18 +1,55 @@
 import {
   Func,
-  listModule,
   FUNC_KEY,
   getClassMetadata,
   getObjectDefProps,
+  listModule,
   ScopeEnum,
+  ServerlessFunction,
+  ServerlessTrigger
 } from '../../src';
+import { ServerlessTriggerType } from '../../dist';
 
 @Func('index.handler', { middleware: ['hello'] })
-class TestFun {}
+class TestFun {
+}
 
 class TestFun1 {
   @Func('ttt.handler')
-  fff: any;
+  @ServerlessFunction({
+    functionName: 'abcde'
+  })
+  @ServerlessTrigger(ServerlessTriggerType.HTTP, { method: 'get', path: '/' })
+  @ServerlessTrigger(ServerlessTriggerType.API_GATEWAY, { method: 'get', path: '/' })
+  @ServerlessTrigger(ServerlessTriggerType.MTOP)
+  @ServerlessTrigger(ServerlessTriggerType.HSF)
+  @ServerlessTrigger(ServerlessTriggerType.EVENT)
+  @ServerlessTrigger(ServerlessTriggerType.CDN)
+  @ServerlessTrigger(ServerlessTriggerType.LOG, {
+    source: '',
+    project: '',
+    log: ''
+  })
+  @ServerlessTrigger(ServerlessTriggerType.MQ, {
+    topic: '',
+    tags: '',
+    region: '',
+    strategy: 'BACKOFF_RETRY'
+  })
+  @ServerlessTrigger(ServerlessTriggerType.OS, {
+    bucket: '',
+    events: '',
+    filter: {
+      prefix: '',
+      suffix: ''
+    }
+  })
+  @ServerlessTrigger(ServerlessTriggerType.TIMER, {
+    type: 'every',
+    value: '5m',
+  })
+  invoke() {
+  }
 }
 
 describe('/test/faas/fun.test.ts', () => {
@@ -26,13 +63,7 @@ describe('/test/faas/fun.test.ts', () => {
     ]);
 
     const c = getClassMetadata(FUNC_KEY, TestFun1);
-    expect(c).toStrictEqual([
-      {
-        descriptor: undefined,
-        funHandler: 'ttt.handler',
-        key: 'fff',
-      },
-    ]);
+    expect(c).toMatchSnapshot();
 
     const def = getObjectDefProps(TestFun);
     expect(def).toStrictEqual({

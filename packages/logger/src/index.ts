@@ -6,6 +6,8 @@ export { displayCommonMessage, displayLabels } from './format';
 export * from './interface';
 export * from './transport';
 export { EmptyLogger, MidwayBaseLogger, MidwayDelegateLogger } from './logger';
+export { MidwayContextLogger } from './contextLogger';
+export { MidwayLoggerContainer } from './container';
 export const loggers = new MidwayLoggerContainer();
 export const createLogger = <T extends ILogger>(
   name: string,
@@ -17,7 +19,7 @@ export const createLogger = <T extends ILogger>(
 export const createConsoleLogger = (
   name: string,
   options: LoggerOptions = {}
-) => {
+): ILogger => {
   return loggers.createLogger(
     name,
     Object.assign(options, {
@@ -27,6 +29,19 @@ export const createConsoleLogger = (
   );
 };
 
-export const clearAllLoggers = () => {
+export const createFileLogger = (
+  name: string,
+  options: LoggerOptions = {}
+): ILogger => {
+  return loggers.createLogger(
+    name,
+    Object.assign(options, {
+      disableConsole: true,
+      disableError: true,
+    })
+  );
+};
+
+export const clearAllLoggers = (): void => {
   loggers.reset();
 };

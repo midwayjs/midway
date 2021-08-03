@@ -14,7 +14,7 @@ export interface ControllerOption {
 }
 
 export function Controller(
-  prefix: string,
+  prefix = '/',
   routerOptions: {
     sensitive?: boolean;
     middleware?: MiddlewareParamArray;
@@ -24,14 +24,15 @@ export function Controller(
 ): ClassDecorator {
   return (target: any) => {
     saveModule(CONTROLLER_KEY, target);
-    saveClassMetadata(
-      CONTROLLER_KEY,
-      {
-        prefix,
-        routerOptions,
-      } as ControllerOption,
-      target
-    );
+    if (prefix)
+      saveClassMetadata(
+        CONTROLLER_KEY,
+        {
+          prefix,
+          routerOptions,
+        } as ControllerOption,
+        target
+      );
     Scope(ScopeEnum.Request)(target);
   };
 }

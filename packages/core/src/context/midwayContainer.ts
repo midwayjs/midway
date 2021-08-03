@@ -1,10 +1,6 @@
 import {
-  AspectMetadata,
-  CONFIGURATION_KEY,
   getProviderId,
-  IMethodAspect,
   isProvide,
-  listModule,
   ObjectDefinitionOptions,
   ObjectIdentifier,
   PIPELINE_IDENTIFIER,
@@ -21,10 +17,10 @@ import {
   getConstructorInject,
   TAGGED_PROP,
   getObjectDefProps,
-  getClassMetadata,
-  ASPECT_KEY,
-  listPreloadModule,
-  isProxy,
+  INJECT_CLASS_KEY_PREFIX,
+  DecoratorManager,
+  ResolveFilter,
+  isRegExp,
 } from '@midwayjs/decorator';
 import { ContainerConfiguration } from './configuration';
 import { FUNCTION_INJECT_KEY } from '../common/constants';
@@ -33,7 +29,7 @@ import {
   IConfigService,
   IContainerConfiguration,
   IEnvironmentService,
-  ILifeCycle,
+  IInformationService,
   IMidwayContainer,
   IObjectDefinitionMetadata,
   REQUEST_CTX_KEY,
@@ -43,13 +39,13 @@ import { MidwayEnvironmentService } from '../service/environmentService';
 import { pipelineFactory } from '../features/pipeline';
 import { ResolverHandler } from './resolverHandler';
 import { run } from '@midwayjs/glob';
-import * as pm from 'picomatch';
 import { BaseApplicationContext } from './applicationContext';
 import * as util from 'util';
-import { recursiveGetMetadata } from '../common/reflectTool';
+import { getOwnMetadata, recursiveGetPrototypeOf } from '../common/reflectTool';
 import { ObjectDefinition } from '../definitions/objectDefinition';
 import { FunctionDefinition } from '../definitions/functionDefinition';
 import { ManagedReference, ManagedValue } from './managed';
+import { MidwayAspectService } from '../service/aspectService';
 
 const DEFAULT_PATTERN = ['**/**.ts', '**/**.tsx', '**/**.js'];
 const DEFAULT_IGNORE_PATTERN = [
@@ -57,10 +53,13 @@ const DEFAULT_IGNORE_PATTERN = [
   '**/logs/**',
   '**/run/**',
   '**/public/**',
-  '**/view/**',
-  '**/views/**',
+  '**/app/view/**',
+  '**/app/views/**',
   '**/app/extend/**',
   '**/node_modules/**',
+  '**/**.test.ts',
+  '**/**.test.js',
+  '**/__test__/**',
 ];
 
 const globalDebugLogger = util.debuglog('midway:container');
@@ -68,33 +67,44 @@ let containerIdx = 0;
 
 export function clearContainerCache() {
   MidwayContainer.parentDefinitionMetadata = null;
+  MidwayContainer.parentApplicationContext = null;
 }
 
 export class MidwayContainer
   extends BaseApplicationContext
-  implements IMidwayContainer {
+  implements IMidwayContainer
+{
   public id: string;
   private debugLogger = globalDebugLogger;
   private definitionMetadataList = [];
   protected resolverHandler: ResolverHandler;
   // 仅仅用于兼容requestContainer的ctx
-  private ctx = {};
+  protected ctx = {};
   private configurationMap: Map<string, IContainerConfiguration> = new Map();
   // 特殊处理，按照 main 加载
   private likeMainConfiguration: IContainerConfiguration[] = [];
   protected configService: IConfigService;
   protected environmentService: IEnvironmentService;
-  protected aspectMappingMap: WeakMap<object, Map<string, any[]>>;
-  private aspectModuleSet: Set<any>;
+  protected informationService: IInformationService;
+  protected aspectService;
+  private directoryFilterArray: ResolveFilter[] = [];
+  private attrMap: Map<string, any> = new Map();
 
   /**
    * 单个进程中上一次的 applicationContext 的 registry
    */
   static parentDefinitionMetadata: Map<string, IObjectDefinitionMetadata[]>;
+  /**
+   * 单进程中上一次的 applicationContext
+   */
+  static parentApplicationContext: IMidwayContainer;
 
   constructor(baseDir: string = process.cwd(), parent?: IApplicationContext) {
     super(baseDir, parent);
     this.id = '00' + this.createContainerIdx();
+    if (!MidwayContainer.parentApplicationContext) {
+      MidwayContainer.parentApplicationContext = this;
+    }
   }
 
   protected createContainerIdx() {
@@ -102,9 +112,6 @@ export class MidwayContainer
   }
 
   init(): void {
-    this.aspectMappingMap = new WeakMap();
-    this.aspectModuleSet = new Set();
-
     this.initService();
 
     this.resolverHandler = new ResolverHandler(
@@ -119,6 +126,7 @@ export class MidwayContainer
   initService() {
     this.environmentService = new MidwayEnvironmentService();
     this.configService = new MidwayConfigService(this);
+    this.aspectService = new MidwayAspectService(this);
   }
 
   /**
@@ -154,22 +162,6 @@ export class MidwayContainer
       loadDirKey = loadDirs.join('-');
     }
 
-    if (MidwayContainer.parentDefinitionMetadata.has(loadDirKey)) {
-      this.restoreDefinitions(
-        MidwayContainer.parentDefinitionMetadata.get(loadDirKey)
-      );
-    } else {
-      this.loadDirectory(opts);
-      // 保存元信息最新的上下文中，供其他容器复用，减少重复扫描
-      MidwayContainer.parentDefinitionMetadata.set(
-        loadDirKey,
-        this.getDefinitionMetaList()
-      );
-    }
-
-    this.debugLogger('main:main configuration register import objects');
-    this.registerImportObjects(configuration.getImportObjects());
-
     // load configuration
     for (const [packageName, containerConfiguration] of this.configurationMap) {
       // 老版本 configuration 才加载
@@ -189,7 +181,23 @@ export class MidwayContainer
       }
     }
 
-    // register ad base config hook
+    if (MidwayContainer.parentDefinitionMetadata.has(loadDirKey)) {
+      this.restoreDefinitions(
+        MidwayContainer.parentDefinitionMetadata.get(loadDirKey)
+      );
+    } else {
+      this.loadDirectory(opts);
+      // 保存元信息最新的上下文中，供其他容器复用，减少重复扫描
+      MidwayContainer.parentDefinitionMetadata.set(
+        loadDirKey,
+        this.getDefinitionMetaList()
+      );
+    }
+
+    this.debugLogger('main:main configuration register import objects');
+    this.registerImportObjects(configuration.getImportObjects());
+
+    // register base config hook
     this.registerDataHandler(CONFIG_KEY, (key: string) => {
       if (key === ALL) {
         return this.getConfigService().getConfiguration();
@@ -217,10 +225,38 @@ export class MidwayContainer
       for (const file of fileResults) {
         this.debugLogger(`\nmain:*********** binding "${file}" ***********`);
         this.debugLogger(`  namespace => "${opts.namespace}"`);
-        const exports = require(file);
-        // add module to set
-        this.bindClass(exports, opts.namespace, file);
-        this.debugLogger(`  binding "${file}" end`);
+
+        if (this.directoryFilterArray.length) {
+          for (const resolveFilter of this.directoryFilterArray) {
+            if (typeof resolveFilter.pattern === 'string') {
+              if (file.includes(resolveFilter.pattern)) {
+                const exports = resolveFilter.ignoreRequire
+                  ? undefined
+                  : require(file);
+                resolveFilter.filter(exports, file, this);
+                continue;
+              }
+            } else if (isRegExp(resolveFilter.pattern)) {
+              if ((resolveFilter.pattern as RegExp).test(file)) {
+                const exports = resolveFilter.ignoreRequire
+                  ? undefined
+                  : require(file);
+                resolveFilter.filter(exports, file, this);
+                continue;
+              }
+            }
+
+            const exports = require(file);
+            // add module to set
+            this.bindClass(exports, opts.namespace, file);
+            this.debugLogger(`  binding "${file}" end`);
+          }
+        } else {
+          const exports = require(file);
+          // add module to set
+          this.bindClass(exports, opts.namespace, file);
+          this.debugLogger(`  binding "${file}" end`);
+        }
       }
     }
   }
@@ -244,11 +280,7 @@ export class MidwayContainer
     target: T,
     options?: ObjectDefinitionOptions
   ): void;
-  bind<T>(
-    identifier: ObjectIdentifier,
-    target: T,
-    options?: ObjectDefinitionOptions
-  ): void {
+  bind<T>(identifier: any, target: any, options?: any): void {
     const definitionMeta = {} as IObjectDefinitionMetadata;
     this.definitionMetadataList.push(definitionMeta);
 
@@ -256,7 +288,6 @@ export class MidwayContainer
       options = target;
       target = identifier as any;
       identifier = this.getIdentifier(target);
-      options = null;
     }
 
     if (isClass(target)) {
@@ -272,7 +303,7 @@ export class MidwayContainer
     definitionMeta.id = identifier;
     definitionMeta.srcPath = options?.srcPath || null;
     definitionMeta.namespace = options?.namespace || '';
-    definitionMeta.scope = options?.scope || ScopeEnum.Singleton;
+    definitionMeta.scope = options?.scope || ScopeEnum.Request;
     definitionMeta.autowire = options?.isAutowire !== false;
 
     this.debugLogger(`  bind id => [${definitionMeta.id}]`);
@@ -301,17 +332,45 @@ export class MidwayContainer
     }
 
     // inject properties
-    const metaDatas = recursiveGetMetadata(TAGGED_PROP, target);
+    const props = recursiveGetPrototypeOf(target);
+    props.push(target);
+
     definitionMeta.properties = [];
-    for (const metaData of metaDatas) {
-      this.debugLogger(`  inject properties => [${Object.keys(metaData)}]`);
-      for (const metaKey in metaData) {
-        for (const propertyMeta of metaData[metaKey]) {
-          definitionMeta.properties.push({
-            metaKey,
-            args: propertyMeta.args,
-            value: propertyMeta.value,
-          });
+    definitionMeta.handlerProps = [];
+    for (const p of props) {
+      const metaData = getOwnMetadata(TAGGED_PROP, p);
+
+      if (metaData) {
+        this.debugLogger(`  inject properties => [${Object.keys(metaData)}]`);
+        for (const metaKey in metaData) {
+          for (const propertyMeta of metaData[metaKey]) {
+            definitionMeta.properties.push({
+              metaKey,
+              args: propertyMeta.args,
+              value: propertyMeta.value,
+            });
+          }
+        }
+      }
+
+      const meta = getOwnMetadata(INJECT_CLASS_KEY_PREFIX, p) as any;
+      if (meta) {
+        for (const [key, vals] of meta) {
+          if (Array.isArray(vals)) {
+            for (const val of vals) {
+              if (
+                val.key !== undefined &&
+                val.key !== null &&
+                typeof val.propertyName === 'string'
+              ) {
+                definitionMeta.handlerProps.push({
+                  handlerKey:
+                    DecoratorManager.removeDecoratorClassKeySuffix(key),
+                  prop: val,
+                });
+              }
+            }
+          }
         }
       }
     }
@@ -388,6 +447,7 @@ export class MidwayContainer
     definition.destroyMethod = definitionMeta.destroyMethod;
     definition.scope = definitionMeta.scope;
     definition.autowire = definitionMeta.autowire;
+    definition.handlerProps = definitionMeta.handlerProps;
 
     this.registerDefinition(definitionMeta.id, definition);
   }
@@ -409,7 +469,11 @@ export class MidwayContainer
       const providerId = isProvide(module) ? getProviderId(module) : null;
       if (providerId) {
         if (namespace) {
-          saveClassMetadata(PRIVATE_META_DATA_KEY, { namespace }, module);
+          saveClassMetadata(
+            PRIVATE_META_DATA_KEY,
+            { namespace, providerId, srcPath: filePath },
+            module
+          );
         }
         this.bind(generateProvideId(providerId, namespace), module, {
           namespace,
@@ -452,30 +516,32 @@ export class MidwayContainer
     const objDefOptions: ObjectDefinitionOptions = getObjectDefProps(target);
     this.convertOptionsToDefinition(objDefOptions, objectDefinition);
 
-    if (objDefOptions && !objDefOptions.scope) {
+    if (objectDefinition && !objectDefinition.scope) {
       this.debugLogger('  @scope => request');
       objectDefinition.scope = ScopeEnum.Request;
     }
   }
 
-  registerObject(
-    identifier: ObjectIdentifier,
-    target: any,
-    registerByUser = true
-  ) {
-    if (registerByUser) {
-      this.midwayIdentifiers.push(identifier);
-    }
+  registerObject(identifier: ObjectIdentifier, target: any) {
+    this.midwayIdentifiers.push(identifier);
     if (this?.getCurrentNamespace()) {
       if (this?.getCurrentNamespace() === MAIN_MODULE_KEY) {
         // 如果是 main，则同步 alias 到所有的 namespace
         for (const value of this.configurationMap.values()) {
           if (value.namespace !== MAIN_MODULE_KEY) {
-            super.registerObject(value.namespace + ':' + identifier, target);
+            const key =
+              identifier.indexOf(value.namespace + ':') > -1
+                ? identifier
+                : value.namespace + ':' + identifier;
+            super.registerObject(key, target);
           }
         }
       } else {
-        identifier = this.getCurrentNamespace() + ':' + identifier;
+        const key =
+          identifier.indexOf(this.getCurrentNamespace() + ':') > -1
+            ? identifier
+            : this.getCurrentNamespace() + ':' + identifier;
+        identifier = key;
       }
     }
     return super.registerObject(identifier, target);
@@ -505,6 +571,18 @@ export class MidwayContainer
     return this.environmentService;
   }
 
+  getInformationService() {
+    return this.informationService;
+  }
+
+  setInformationService(informationService) {
+    this.informationService = informationService;
+  }
+
+  getAspectService() {
+    return this.aspectService;
+  }
+
   getCurrentEnv() {
     return this.environmentService.getCurrentEnvironment();
   }
@@ -525,15 +603,16 @@ export class MidwayContainer
       identifier = this.getIdentifier(identifier);
     }
     const ins: any = super.get<T>(identifier, args);
-    return this.wrapperAspectToInstance(ins);
+    return this.aspectService.wrapperAspectToInstance(ins);
   }
 
   async getAsync<T>(identifier: any, args?: any): Promise<T> {
     if (typeof identifier !== 'string') {
       identifier = this.getIdentifier(identifier);
     }
+
     const ins: any = await super.getAsync<T>(identifier, args);
-    return this.wrapperAspectToInstance(ins);
+    return this.aspectService.wrapperAspectToInstance(ins);
   }
 
   protected getIdentifier(target: any) {
@@ -541,36 +620,13 @@ export class MidwayContainer
   }
 
   async ready() {
+    if (this.readied) return;
     await super.ready();
-    if (this.configService) {
-      // 加载配置
-      await this.configService.load();
-    }
-
-    // 切面支持
-    await this.loadAspect();
-
-    // 预加载模块支持
-    await this.loadPreloadModule();
+    // 加载配置
+    await this.configService.load();
   }
 
   async stop(): Promise<void> {
-    const cycles: Array<{ target: any; namespace: string }> = listModule(
-      CONFIGURATION_KEY
-    );
-    this.debugLogger(
-      'load lifecycle length => %s when stop.',
-      cycles && cycles.length
-    );
-    for (const cycle of cycles) {
-      const providerId = getProviderId(cycle.target);
-      this.debugLogger('onStop lifecycle id => %s.', providerId);
-      const inst = await this.getAsync<ILifeCycle>(providerId);
-      if (inst.onStop && typeof inst.onStop === 'function') {
-        await inst.onStop(this);
-      }
-    }
-
     await super.stop();
   }
   /**
@@ -665,7 +721,6 @@ export class MidwayContainer
   public getResolverHandler() {
     return this.resolverHandler;
   }
-
   /**
    * load aspect method for container
    * @private
@@ -845,58 +900,16 @@ export class MidwayContainer
         methodAspectCollection.push(fn);
       }
     }
+  public addDirectoryFilter(directoryFilter) {
+    this.directoryFilterArray =
+      this.directoryFilterArray.concat(directoryFilter);
   }
 
-  /**
-   * wrapper aspect method before instance return
-   * @param ins
-   * @protected
-   */
-  protected wrapperAspectToInstance(ins) {
-    let proxy = null;
-    /**
-     * 过滤循环依赖创建的对象
-     */
-    if (!isProxy(ins) && ins?.constructor) {
-      // 动态处理拦截器
-      let methodAspectCollection;
-      if (this.aspectMappingMap?.has(ins.constructor)) {
-        methodAspectCollection = this.aspectMappingMap.get(ins.constructor);
-      } else if (
-        (this?.parent as MidwayContainer)?.aspectMappingMap?.has(
-          ins.constructor
-        )
-      ) {
-        // for requestContainer
-        methodAspectCollection = (this
-          ?.parent as MidwayContainer)?.aspectMappingMap.get(ins.constructor);
-      }
-
-      if (methodAspectCollection) {
-        proxy = new Proxy(ins, {
-          get: (obj, prop) => {
-            if (typeof prop === 'string' && methodAspectCollection.has(prop)) {
-              const aspectFn = methodAspectCollection.get(prop);
-              return aspectFn[0](ins, obj[prop]);
-            }
-            return obj[prop];
-          },
-        });
-      }
-    }
-    return proxy || ins;
+  public setAttr(key: string, value) {
+    this.attrMap.set(key, value);
   }
 
-  /**
-   * load preload module for container
-   * @private
-   */
-  private async loadPreloadModule() {
-    // some common decorator implementation
-    const modules = listPreloadModule();
-    for (const module of modules) {
-      // preload init context
-      await this.getAsync(module);
-    }
+  public getAttr<T>(key: string): T {
+    return this.attrMap.get(key);
   }
 }

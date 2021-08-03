@@ -7,4 +7,4 @@ import { Configuration } from '@midwayjs/decorator';
     './config/config.local'
   ]
 })
-export class AutoConfiguraion {}
+export class AutoConfiguraion2 {}

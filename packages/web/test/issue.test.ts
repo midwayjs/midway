@@ -67,5 +67,25 @@ describe('/test/issue.test.ts', () => {
     expect(result.text).toEqual('hello world');
     await closeApp(app);
   });
+
+  it('test #825 issue load socket io plugin error in egg.js', async () => {
+    const app = await creatApp('issue/base-app-socketio');
+    let result = await createHttpRequest(app).get('/');
+    expect(result.status).toEqual(200);
+    expect(result.text).toEqual('Hello Midwayjs!');
+    await closeApp(app);
+  });
+
+  it('test #894 issue load egg router after midway container ready', async () => {
+    const app = await creatApp('issue/base-app-egg-router');
+    let result = await createHttpRequest(app).get('/');
+    expect(result.status).toEqual(200);
+    expect(result.text).toMatch('来自 ClientCheckerMiddleware 的值');
+
+    result = await createHttpRequest(app).get('/api/egg-test');
+    expect(result.status).toEqual(200);
+    expect(result.text).toMatch('来自 ClientCheckerMiddleware 的值');
+    await closeApp(app);
+  });
 });
 

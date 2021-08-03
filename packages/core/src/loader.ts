@@ -6,6 +6,7 @@ import {
   listModule,
 } from '@midwayjs/decorator';
 import { ILifeCycle, IMidwayContainer } from './interface';
+import { MidwayInformationService } from './service/informationService';
 
 function buildLoadDir(baseDir, dir) {
   if (!path.isAbsolute(dir)) {
@@ -38,6 +39,11 @@ export class ContainerLoader {
 
   initialize() {
     this.applicationContext = new MidwayContainer(this.baseDir, undefined);
+    this.applicationContext.setInformationService(
+      new MidwayInformationService({
+        baseDir: this.baseDir,
+      })
+    );
     this.applicationContext.disableConflictCheck = this.disableConflictCheck;
     this.applicationContext.registerObject('baseDir', this.baseDir);
     this.applicationContext.registerObject('isTsMode', this.isTsMode);
@@ -87,6 +93,7 @@ export class ContainerLoader {
 
   async refresh() {
     await this.applicationContext.ready();
+    await this.applicationContext.getAspectService().loadAspect();
     await this.loadLifeCycles();
   }
 
@@ -96,9 +103,8 @@ export class ContainerLoader {
 
   async loadLifeCycles() {
     // agent 不加载生命周期
-    const cycles: Array<{ target: any; namespace: string }> = listModule(
-      CONFIGURATION_KEY
-    );
+    const cycles: Array<{ target: any; namespace: string }> =
+      listModule(CONFIGURATION_KEY);
     for (const cycle of cycles) {
       const providerId = getProviderId(cycle.target);
       const inst = await this.getApplicationContext().getAsync<ILifeCycle>(

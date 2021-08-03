@@ -1,5 +1,7 @@
-import { closeApp, creatApp, createHttpRequest } from './utils';
-import { IMidwayWebApplication } from '../src/interface';
+import { closeApp, creatApp, createHttpRequest, matchContentTimes, sleep } from './utils';
+import { IMidwayWebApplication } from '../src';
+import { join } from 'path';
+import { remove } from 'fs-extra';
 
 describe('/test/feature.test.ts', () => {
   describe('test new decorator', () => {
@@ -44,12 +46,24 @@ describe('/test/feature.test.ts', () => {
       const result = await createHttpRequest(app).get('/ctx-body');
       expect(result.text).toEqual('ctx-body');
     });
+
+    it('should compatible old get router method', async () => {
+      const prioritySortRouters = (app.loader as any).framework.prioritySortRouters;
+      for (const router of prioritySortRouters) {
+        for (const layer of router['router'].stack) {
+          console.log(layer.paramNames);
+          console.log(layer.name);
+          console.log(layer.path);
+          console.log(layer.methods);
+        }
+      }
+    });
   });
 
   it('should test global use midway middleware id in egg', async () => {
     const app = await creatApp('feature/base-app-middleware');
     const result = await createHttpRequest(app).get('/');
-    expect(result.text).toEqual('1111222233334444egg_middleware');
+    expect(result.text).toEqual('11112222333344445555egg_middleware');
     await closeApp(app);
   });
 
@@ -64,6 +78,25 @@ describe('/test/feature.test.ts', () => {
     const app = await creatApp('feature/base-app-plugin-inject');
     const result = await createHttpRequest(app).get('/');
     expect(result.text).toEqual('hello worldaaaa1aaaa');
+    await closeApp(app);
+  });
+
+  it('should test set custom logger in egg by midway logger', async () => {
+    await remove(join(__dirname, 'fixtures/feature/base-app-set-ctx-logger', 'logs'));
+    const app = await creatApp('feature/base-app-set-ctx-logger');
+    const result = await createHttpRequest(app)
+      .get('/')
+      .query({ name: 'harry' });
+    expect(result.status).toEqual(200);
+    expect(result.text).toEqual('hello world,harry');
+    await sleep();
+    expect(matchContentTimes(join(app.getAppDir(), 'logs', 'ali-demo', 'midway-web.log'), 'GET /] aaaaa')).toEqual(3);
+    expect(matchContentTimes(join(app.getAppDir(), 'logs', 'ali-demo', 'midway-web.log'), 'abcde] custom label')).toEqual(1);
+    await closeApp(app);
+  });
+
+  it('should use egg-logger', async () => {
+    const app = await creatApp('feature/base-app-egg-logger');
     await closeApp(app);
   });
 

@@ -25,7 +25,7 @@ export class AWSRuntime extends ServerlessLightRuntime {
     if (handler.constructor.name !== 'AsyncFunction') {
       throw new TypeError('Must be an AsyncFunction');
     }
-    return (event: object, context?: AWSContext) => {
+    return (event = {}, context?: AWSContext) => {
       if (isHttpEvent(event)) {
         return this.wrapperWebInvoker(handler, event, context);
       }

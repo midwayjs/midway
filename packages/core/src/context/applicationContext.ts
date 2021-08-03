@@ -13,13 +13,15 @@ import {
 import { ObjectProperties } from '../definitions/properties';
 import { ManagedResolverFactory } from './managedResolverFactory';
 import { NotFoundError } from '../common/notFoundError';
-import { parsePrefix, isPathEqual } from '../util/';
+import { parsePrefix } from '../util/';
+import { PathFileUtil } from '../util/pathFileUtil';
 
 const PREFIX = '_id_default_';
 
 export class ObjectDefinitionRegistry
   extends Map
-  implements IObjectDefinitionRegistry {
+  implements IObjectDefinitionRegistry
+{
   private singletonIds = [];
 
   get identifiers() {
@@ -102,7 +104,8 @@ export class ObjectDefinitionRegistry
 }
 
 export class BaseApplicationContext
-  implements IApplicationContext, IObjectFactory {
+  implements IApplicationContext, IObjectFactory
+{
   protected readied = false;
   // 自己内部实现的，可注入的 feature(见 features)
   protected midwayIdentifiers: string[] = [];
@@ -244,10 +247,12 @@ export class BaseApplicationContext
   ) {
     if (!this.disableConflictCheck && this.registry.hasDefinition(identifier)) {
       const def = this.registry.getDefinition(identifier);
-      if (!isPathEqual(definition.srcPath, def.srcPath)) {
-        throw new Error(
-          `${identifier} path = ${definition.srcPath} is exist (${def.srcPath})!`
-        );
+      if (definition.srcPath && def.srcPath) {
+        if (!PathFileUtil.isPathEqual(definition.srcPath, def.srcPath)) {
+          throw new Error(
+            `${identifier} path = ${definition.srcPath} already exist (${def.srcPath})!`
+          );
+        }
       }
     }
     this.registry.registerDefinition(identifier, definition);

@@ -7,7 +7,7 @@ import {
   IConfigurationOptions,
   MidwayFrameworkType,
 } from '@midwayjs/core';
-import { clearAllLoggers } from '@midwayjs/logger';
+import { clearAllLoggers, MidwayContextLogger } from '@midwayjs/logger';
 import { join } from 'path';
 
 interface MockConfigurationOptions extends IConfigurationOptions {
@@ -90,6 +90,20 @@ class TestFrameworkUnit implements IMidwayFramework<any, MockConfigurationOption
   getFrameworkName() {
     return 'midway:mock'
   }
+
+  getDefaultContextLoggerClass() {
+    return MidwayContextLogger
+  }
+}
+
+const a = null;
+
+class PromiseErrorFramework extends TestFrameworkUnit {
+  async run(): Promise<any> {
+    setTimeout(()  => {
+      a();
+    }, 100);
+  }
 }
 
 describe('/test/index.test.ts', () => {
@@ -146,5 +160,25 @@ describe('/test/index.test.ts', () => {
     // 因为 jest 环境认不出 ts-node
     expect(framework.getBaseDir()).toEqual(join(process.cwd(), 'dist'));
     await Bootstrap.stop();
+  });
+
+  it('should test bootstrap run with mock', async () => {
+    global['MIDWAY_BOOTSTRAP_APP_SET'] = new Set();
+    const framework = new TestFrameworkUnit().configure({});
+    await Bootstrap.load(framework).run();
+    expect(global['MIDWAY_BOOTSTRAP_APP_SET'].size).toEqual(1);
+    await Bootstrap.stop();
+    global['MIDWAY_BOOTSTRAP_APP_SET'] = null;
+  });
+
+  it.skip('should catch promise error when start', async () => {
+    // can't trigger in jest
+    const framework = new PromiseErrorFramework().configure({
+      port: 7001,
+    });
+    const spy = jest.spyOn(process, 'on');
+    await Bootstrap.load(framework).run();
+    await sleep(2000);
+    expect(spy).toHaveBeenCalled();
   });
 });

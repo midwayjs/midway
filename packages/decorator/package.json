@@ -1,26 +1,25 @@
 {
   "name": "@midwayjs/decorator",
-  "version": "2.6.8",
+  "version": "2.11.5",
   "description": "definition decorator for midway project",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "scripts": {
-    "build": "midway-bin build -c",
-    "test": "midway-bin test --ts --forceExit",
-    "cov": "midway-bin cov --ts --forceExit",
+    "build": "tsc",
+    "test": "node --require=ts-node/register ../../node_modules/.bin/jest",
+    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --coverage --forceExit",
     "ci": "npm run test",
     "link": "npm link"
   },
   "dependencies": {
     "@types/express": "^4.17.8",
     "@types/koa": "^2.11.4",
-    "camelcase": "^5.0.0",
+    "camelcase": "^6.2.0",
     "class-transformer": "^0.3.1",
     "joi": "^17.2.1",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
-    "@midwayjs/cli": "^1.2.36",
     "mm": "3"
   },
   "keywords": [

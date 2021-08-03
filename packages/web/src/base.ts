@@ -1,13 +1,15 @@
 import { findLernaRoot, parseNormalDir } from './utils';
 import * as extend from 'extend2';
 import { EggAppInfo } from 'egg';
-import { BootstrapStarter } from '@midwayjs/bootstrap';
 import { MidwayWebFramework } from './framework/web';
 import { safelyGet, safeRequire } from '@midwayjs/core';
 import { join } from 'path';
 import { existsSync, readFileSync } from 'fs';
 import { createLoggers } from './logger';
+import { EggRouter as Router } from '@eggjs/router';
+import { WebBootstrapStarter } from './starter';
 
+const ROUTER = Symbol('EggCore#router');
 const EGG_LOADER = Symbol.for('egg#loader');
 const EGG_PATH = Symbol.for('egg#eggPath');
 const LOGGERS = Symbol('EggApplication#loggers');
@@ -37,6 +39,7 @@ export const createAppWorkerLoader = () => {
     app: any;
     framework;
     bootstrap;
+    useEggSocketIO = false;
 
     getEggPaths() {
       if (!this.appDir) {
@@ -118,17 +121,44 @@ export const createAppWorkerLoader = () => {
         app: this.app,
         globalConfig: this.app.config,
       });
-      this.bootstrap = new BootstrapStarter();
+      this.bootstrap = new WebBootstrapStarter({
+        isWorker: true,
+        applicationContext: this.app.options.applicationContext,
+      });
       this.bootstrap
         .configure({
           appDir: this.app.appDir,
         })
         .load(this.framework);
-      this.app.beforeStart(async () => {
-        await this.bootstrap.init();
-        super.load();
-        await this.framework.loadLifeCycles();
-      });
+
+      if (this.app.options['midwaySingleton'] !== true) {
+        // 这个代码只会在 egg-cluster 模式下执行
+        this.app.beforeStart(async () => {
+          await this.bootstrap.init();
+          super.load();
+        });
+      }
+    }
+
+    /**
+     * 这个代码只会在单进程 bootstrap.js 模式下执行
+     */
+    async loadOrigin() {
+      await this.bootstrap.init();
+      super.load();
+    }
+
+    loadMiddleware() {
+      super.loadMiddleware();
+      if (this.plugins['io']) {
+        this.useEggSocketIO = true;
+        const sessionMiddleware = this.app.middlewares['session'](
+          this.app.config['session'],
+          this.app
+        );
+        sessionMiddleware._name = 'session';
+        this.app.use(sessionMiddleware);
+      }
     }
   }
 
@@ -220,7 +250,9 @@ export const createAgentWorkerLoader = () => {
         app: this.app,
         globalConfig: this.app.config,
       });
-      this.bootstrap = new BootstrapStarter();
+      this.bootstrap = new WebBootstrapStarter({
+        isWorker: false,
+      });
       this.bootstrap
         .configure({
           appDir: this.app.appDir,
@@ -254,13 +286,21 @@ export const createEggApplication = () => {
     }
 
     get loggers() {
-      // @ts-ignore
-      if (!this[LOGGERS]) {
-        // @ts-ignore
-        this[LOGGERS] = createLoggers(this);
+      if (!(this as any)[LOGGERS]) {
+        (this as any)[LOGGERS] = createLoggers(this as any);
       }
-      // @ts-ignore
-      return this[LOGGERS];
+      return (this as any)[LOGGERS];
+    }
+
+    get router() {
+      if ((this as any)[ROUTER]) {
+        return (this as any)[ROUTER];
+      }
+      const router = ((this as any)[ROUTER] = new Router(
+        { sensitive: true },
+        this
+      ));
+      return router;
     }
   }
 
@@ -284,13 +324,10 @@ export const createEggAgent = () => {
     }
 
     get loggers() {
-      // @ts-ignore
-      if (!this[LOGGERS]) {
-        // @ts-ignore
-        this[LOGGERS] = createLoggers(this);
+      if (!(this as any)[LOGGERS]) {
+        (this as any)[LOGGERS] = createLoggers(this as any);
       }
-      // @ts-ignore
-      return this[LOGGERS];
+      return (this as any)[LOGGERS];
     }
   }
 

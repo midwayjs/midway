@@ -1,28 +1,40 @@
 {
   "name": "midway",
-  "version": "2.6.13",
-  "description": "Midway Main Package",
+  "version": "2.12.1",
+  "description": "A Node.js Serverless Framework for front-end/full-stack developers. Build the application for next decade.",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "scripts": {
-    "build": "midway-bin build -c",
-    "test": "midway-bin test --ts --forceExit",
-    "cov": "midway-bin cov --ts --forceExit",
+    "build": "tsc",
+    "test": "node --require=ts-node/register ../../node_modules/.bin/jest",
+    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --coverage --forceExit",
     "link": "npm link"
   },
   "keywords": [
     "midway",
     "IoC",
-    "webframework"
+    "web",
+    "express",
+    "koa",
+    "framework",
+    "grpc",
+    "socket.io",
+    "rest",
+    "restful",
+    "router",
+    "app",
+    "api",
+    "serverless"
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/cli": "^1.2.36",
-    "@midwayjs/core": "^2.6.13"
+    "@midwayjs/core": "^2.12.1",
+    "@midwayjs/decorator": "^2.11.5",
+    "egg": "^2.28.0",
+    "egg-logger": "^2.4.2"
   },
   "dependencies": {
-    "@midwayjs/web": "^2.6.13",
-    "egg-cluster": "^1.23.0"
+    "@midwayjs/web": "^2.12.1"
   },
   "files": [
     "dist/**/*.js",

@@ -1,10 +1,12 @@
 import { isTypeScriptEnvironment } from '@midwayjs/bootstrap';
 import { basename, join } from 'path';
 import { sync as findUpSync, stop } from 'find-up';
+import { existsSync } from 'fs';
 
 export const parseNormalDir = (baseDir: string, isTypescript = true) => {
   if (isTypescript) {
-    if (/src$/.test(baseDir) || /dist$/.test(baseDir)) {
+    // 这里要么就是 src 目录，要么就已经是根目录
+    if (!existsSync(join(baseDir, 'package.json'))) {
       baseDir = basename(baseDir);
     }
 
@@ -45,6 +47,9 @@ export const findLernaRoot = (findRoot = process.cwd()) => {
   );
 };
 
-export const getCurrentDateString = () => {
-  return new Date().toISOString().split('T')[0];
+export const getCurrentDateString = (timestamp: number = Date.now()) => {
+  const d = new Date(timestamp);
+  return `${d.getFullYear()}-${(d.getMonth() + 1)
+    .toString()
+    .padStart(2, '0')}-${d.getDate().toString().padStart(2, '0')}`;
 };

@@ -11,16 +11,16 @@ import {
 @Consumer(MSListenerType.RABBITMQ)
 class TestFun {}
 
-@Consumer(MSListenerType.MTTQ)
+@Consumer(MSListenerType.MQTT)
 class TestFun1 {}
 
 describe('/test/microservice/consumer.test.ts', () => {
   it('test consumer decorator', () => {
     const meta = getClassMetadata(MS_CONSUMER_KEY, TestFun);
-    expect(meta).toEqual('rabbitmq')
+    expect(meta).toEqual({"metadata": {}, "type": "rabbitmq"})
 
     const meta2 = getClassMetadata(MS_CONSUMER_KEY, TestFun1);
-    expect(meta2).toEqual('mttq')
+    expect(meta2).toEqual({"metadata": {}, "type": "mqtt"})
 
     const def = getObjectDefProps(TestFun);
     expect(def).toEqual({

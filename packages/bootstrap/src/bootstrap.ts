@@ -1,6 +1,13 @@
-import { IMidwayFramework, IMidwayBootstrapOptions } from '@midwayjs/core';
+import {
+  IMidwayFramework,
+  IMidwayBootstrapOptions,
+  MidwayFrameworkType,
+  ConfigFramework,
+  IMidwayApplication,
+  IMidwayContainer,
+} from '@midwayjs/core';
 import { join } from 'path';
-import { createConsoleLogger, ILogger, IMidwayLogger } from '@midwayjs/logger';
+import { createConsoleLogger, ILogger } from '@midwayjs/logger';
 
 export function isTypeScriptEnvironment() {
   const TS_MODE_PROCESS_FLAG: string = process.env.MIDWAY_TS_MODE;
@@ -12,46 +19,151 @@ export function isTypeScriptEnvironment() {
 }
 
 export class BootstrapStarter {
-  private appDir;
-  private bootstrapItems: IMidwayFramework<any, any>[] = [];
-  private globalOptions: Partial<IMidwayBootstrapOptions> = {};
+  protected appDir: string;
+  protected baseDir: string;
+  protected bootstrapItems: IMidwayFramework<any, any>[] = [];
+  protected globalOptions: Partial<IMidwayBootstrapOptions> = {};
+  protected globalAppMap = new Map<
+    MidwayFrameworkType,
+    IMidwayApplication<any>
+  >();
+  protected globalConfig: any;
 
   public configure(options: IMidwayBootstrapOptions) {
     this.globalOptions = options;
     return this;
   }
 
-  public load(unit: IMidwayFramework<any, any>) {
+  public load(unit: (globalConfig: unknown) => IMidwayFramework<any, any>);
+  public load(unit: IMidwayFramework<any, any>);
+  public load(unit: any) {
     this.bootstrapItems.push(unit);
     return this;
   }
 
   public async init() {
     this.appDir = this.globalOptions.appDir || process.cwd();
+    this.baseDir = this.getBaseDir();
+    let mainApp; // eslint-disable-line prefer-const
+
+    // 初始化一个只读配置的空框架，并且初始化容器和扫描
+    const framework = new ConfigFramework();
+    await framework.initialize({
+      ...this.globalOptions,
+      baseDir: this.baseDir,
+      appDir: this.appDir,
+      globalApplicationHandler: (type: MidwayFrameworkType) => {
+        if (type) {
+          return this.globalAppMap.get(type);
+        } else {
+          return mainApp;
+        }
+      },
+    });
+
+    // 调用 bootstrap 的 before 逻辑
+    if (this.globalOptions['beforeHandler']) {
+      await this.globalOptions['beforeHandler'](
+        framework.getApplicationContext()
+      );
+    }
+
+    // 获取全局配置
+    this.globalConfig =
+      framework.getApplicationContext().getConfigService().getConfiguration() ||
+      {};
+    this.refreshBootstrapItems();
+
+    const applicationContext = framework.getApplicationContext();
+
+    // 初始化主框架
+    await this.getFirstActions('initialize', {
+      ...this.globalOptions,
+      baseDir: this.baseDir,
+      appDir: this.appDir,
+      isMainFramework: true,
+      applicationContext,
+    });
+
+    global['MIDWAY_MAIN_FRAMEWORK'] = this.getMainFramework();
+    mainApp = await this.getFirstActions('getApplication');
+
+    // 初始化其余的副框架
     await Promise.all(
-      this.getActions('initialize', {
+      this.getTailActions('initialize', {
         ...this.globalOptions,
-        baseDir: this.getBaseDir(),
+        baseDir: this.baseDir,
         appDir: this.appDir,
+        applicationContext,
+        isMainFramework: false,
       })
     );
+
+    this.bootstrapItems.forEach(item => {
+      this.globalAppMap.set(item.getFrameworkType(), item.getApplication());
+      if (global['MIDWAY_BOOTSTRAP_APP_SET']) {
+        // for test/dev
+        global['MIDWAY_BOOTSTRAP_APP_SET'].add({
+          framework: item,
+          starter: this,
+        });
+      }
+    });
+
+    // 等所有框架初始化完之后，开始执行生命周期
+    await this.getFirstActions('loadExtension');
+    await this.getActions('afterContainerReady');
   }
 
   public async run() {
     await Promise.all(this.getActions('run', {}));
+    global['MIDWAY_BOOTSTRAP_APP_READY'] = true;
   }
 
   public async stop() {
     await Promise.all(this.getActions('stop', {}));
+    global['MIDWAY_BOOTSTRAP_APP_READY'] = false;
   }
 
   public getActions(action: string, args?): any[] {
     return this.bootstrapItems.map(item => {
-      return item[action](args);
+      if (item[action]) {
+        return item[action](args);
+      }
     });
   }
 
-  private getBaseDir() {
+  public async getFirstActions(action: string, args?) {
+    if (this.bootstrapItems.length && this.bootstrapItems[0][action]) {
+      return this.bootstrapItems[0][action](args);
+    }
+  }
+
+  public getTailActions(action: string, args?): any[] {
+    if (this.bootstrapItems.length > 1) {
+      return this.bootstrapItems.slice(1).map(item => {
+        if (item[action]) {
+          return item[action](args);
+        }
+      });
+    }
+    return [];
+  }
+
+  protected getMainFramework() {
+    return this.bootstrapItems[0];
+  }
+
+  protected refreshBootstrapItems() {
+    this.bootstrapItems = this.bootstrapItems.map(bootstrapItem => {
+      if (typeof bootstrapItem === 'function') {
+        return (bootstrapItem as any)(this.globalConfig);
+      }
+      return bootstrapItem;
+    });
+  }
+
+  protected getBaseDir() {
     if (this.globalOptions.baseDir) {
       return this.globalOptions.baseDir;
     }
@@ -61,12 +173,17 @@ export class BootstrapStarter {
       return join(this.appDir, 'dist');
     }
   }
+
+  public getBootstrapAppMap() {
+    return this.globalAppMap;
+  }
 }
 
 export class Bootstrap {
   static starter: BootstrapStarter;
   static logger: ILogger;
   static configured = false;
+  static beforeHandler;
 
   /**
    * set global configuration for midway
@@ -77,12 +194,19 @@ export class Bootstrap {
     if (!this.logger && !configuration.logger) {
       this.logger = createConsoleLogger('bootstrapConsole');
       if (configuration.logger === false) {
-        (this.logger as IMidwayLogger)?.disableConsole();
+        this.logger?.['disableConsole']();
       }
       configuration.logger = this.logger;
     } else {
-      this.logger = this.logger || configuration.logger as ILogger;
+      this.logger = this.logger || (configuration.logger as ILogger);
     }
+
+    // 处理三方框架内部依赖 process.cwd 来查找 node_modules 等问题
+    if (configuration.appDir && configuration.appDir !== process.cwd()) {
+      process.chdir(configuration.appDir);
+    }
+
+    configuration['beforeHandler'] = this.beforeHandler;
     this.getStarter().configure(configuration);
     return this;
   }
@@ -91,7 +215,9 @@ export class Bootstrap {
    * load midway framework unit
    * @param unit
    */
-  static load(unit: IMidwayFramework<any, any>) {
+  static load(unit: (globalConfig: unknown) => IMidwayFramework<any, any>);
+  static load(unit: IMidwayFramework<any, any>);
+  static load(unit: any) {
     this.getStarter().load(unit);
     return this;
   }
@@ -101,6 +227,11 @@ export class Bootstrap {
       this.starter = new BootstrapStarter();
     }
     return this.starter;
+  }
+
+  static before(beforeHandler: (container: IMidwayContainer) => void) {
+    this.beforeHandler = beforeHandler;
+    return this;
   }
 
   static async run() {
@@ -118,6 +249,12 @@ export class Bootstrap {
 
     process.once('exit', this.onExit.bind(this));
 
+    this.uncaughtExceptionHandler = this.uncaughtExceptionHandler.bind(this);
+    process.on('uncaughtException', this.uncaughtExceptionHandler);
+
+    this.unhandledRejectionHandler = this.unhandledRejectionHandler.bind(this);
+    process.on('unhandledRejection', this.unhandledRejectionHandler);
+
     await this.getStarter().init();
     return this.getStarter()
       .run()
@@ -132,10 +269,15 @@ export class Bootstrap {
 
   static async stop() {
     await this.getStarter().stop();
+    process.removeListener('uncaughtException', this.uncaughtExceptionHandler);
+    process.removeListener(
+      'unhandledRejection',
+      this.unhandledRejectionHandler
+    );
+    this.reset();
   }
 
   static reset() {
-    this.logger = null;
     this.configured = false;
     this.starter = null;
   }
@@ -162,5 +304,32 @@ export class Bootstrap {
    */
   static onExit(code) {
     this.logger.info('[midway:bootstrap] exit with code:%s', code);
+  }
+
+  static uncaughtExceptionHandler(err) {
+    if (!(err instanceof Error)) {
+      err = new Error(String(err));
+    }
+    if (err.name === 'Error') {
+      err.name = 'unhandledExceptionError';
+    }
+    this.logger.error(err);
+  }
+
+  static unhandledRejectionHandler(err) {
+    if (!(err instanceof Error)) {
+      const newError = new Error(String(err));
+      // err maybe an object, try to copy the name, message and stack to the new error instance
+      if (err) {
+        if (err.name) newError.name = err.name;
+        if (err.message) newError.message = err.message;
+        if (err.stack) newError.stack = err.stack;
+      }
+      err = newError;
+    }
+    if (err.name === 'Error') {
+      err.name = 'unhandledRejectionError';
+    }
+    this.logger.error(err);
   }
 }

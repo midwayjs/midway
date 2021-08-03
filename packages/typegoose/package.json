@@ -1,0 +1,29 @@
+{
+  "name": "@midwayjs/typegoose",
+  "version": "2.12.1",
+  "description": "Midway Component for typegoose",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "node --require=ts-node/register ../../node_modules/.bin/jest",
+    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --coverage --forceExit",
+    "ci": "npm run test"
+  },
+  "keywords": [],
+  "author": "",
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@midwayjs/core": "^2.12.1",
+    "@midwayjs/decorator": "^2.11.5",
+    "@midwayjs/koa": "^2.12.1",
+    "@midwayjs/mock": "^2.12.1",
+    "@typegoose/typegoose": "^7.4.7",
+    "mongodb-memory-server": "^6.9.6",
+    "mongoose": "^5.10.18"
+  }
+}

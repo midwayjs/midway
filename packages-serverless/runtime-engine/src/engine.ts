@@ -86,9 +86,9 @@ export class BaseRuntimeEngine implements RuntimeEngine {
   private measureMarksOnReady() {
     [
       'runtimeStart',
-      'functionStart',
       'beforeRuntimeStartHandler',
       'afterRuntimeStartHandler',
+      'functionStart',
       'beforeFunctionStartHandler',
       'afterFunctionStartHandler',
     ].forEach(it => {

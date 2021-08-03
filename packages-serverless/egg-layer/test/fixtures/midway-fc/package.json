@@ -1,0 +1,6 @@
+{
+  "name": "ali-demo",
+  "dependencies": {
+    "@midwayjs/web": "*"
+  }
+}

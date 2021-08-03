@@ -11,10 +11,11 @@ import {
   Samurai,
   Warrior,
   SubParent,
-  SubChild
+  SubChild,
+  SubCustom
 } from '../fixtures/class_sample';
 import { recursiveGetMetadata } from '../../src/common/reflectTool';
-import { TAGGED_PROP } from '@midwayjs/decorator';
+import { APPLICATION_KEY, CONFIG_KEY, PLUGIN_KEY, TAGGED_PROP } from '@midwayjs/decorator';
 import 'reflect-metadata';
 
 import { BMWX1, Car, Electricity, Gas, Tesla, Turbo } from '../fixtures/class_sample_car';
@@ -134,6 +135,39 @@ describe('/test/context/container.test.ts', () => {
       childMetadata.ownMetadata,
       ...parentMetadata.recursiveMetadata
     ]);
+  });
+
+  it('should extends base with decorator be ok', async () => {
+    const container = new Container();
+    container.bind(SubCustom);
+
+    container.registerDataHandler(APPLICATION_KEY, () => {
+      return {appName: 'hello'};
+    });
+    container.registerDataHandler(PLUGIN_KEY, (key) => {
+      if (key === 'hh') {
+        return {hh: 123};
+      }
+      return {d: 'hello'};
+    });
+    container.registerDataHandler(CONFIG_KEY, (key) => {
+      if (key === 'hello') {
+        return {hello: 'this is hello config'}
+      }
+
+      if (key === 'tt') {
+        return 'this is tt config';
+      }
+
+      return {};
+    });
+
+    const inst: SubCustom = await container.getAsync('subCustom');
+    expect(inst.a).deep.eq({ appName: 'hello'});
+    expect(inst.bb).deep.eq({ d: 'hello' });
+    expect(inst.hello).deep.eq({hello: 'this is hello config'});
+    expect(inst.p).deep.eq({hh: 123});
+    expect(inst.tt).eq('this is tt config');
   });
 
   it('should throw error with class name when injected property error', async () => {

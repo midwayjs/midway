@@ -3,6 +3,414 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.12.1](https://github.com/midwayjs/midway/compare/v2.12.0...v2.12.1) (2021-08-01)
+
+
+### Bug Fixes
+
+* server hostname args ([#1196](https://github.com/midwayjs/midway/issues/1196)) ([b9d73f0](https://github.com/midwayjs/midway/commit/b9d73f036befd13c1db28f967fb769459237c52e))
+
+
+
+
+
+# [2.12.0](https://github.com/midwayjs/midway/compare/v2.11.7...v2.12.0) (2021-07-30)
+
+
+### Features
+
+* add support hostname to http-listening ([#1186](https://github.com/midwayjs/midway/issues/1186)) ([6f8356f](https://github.com/midwayjs/midway/commit/6f8356f610c49f87ce8fb9e7d1e60fbd0527d97c))
+
+
+
+
+
+## [2.11.6](https://github.com/midwayjs/midway/compare/v2.11.5...v2.11.6) (2021-07-16)
+
+**Note:** Version bump only for package @midwayjs/koa
+
+
+
+
+
+## [2.11.5](https://github.com/midwayjs/midway/compare/v2.11.4...v2.11.5) (2021-07-15)
+
+**Note:** Version bump only for package @midwayjs/koa
+
+
+
+
+
+## [2.11.4](https://github.com/midwayjs/midway/compare/v2.11.3...v2.11.4) (2021-07-06)
+
+**Note:** Version bump only for package @midwayjs/koa
+
+
+
+
+
+## [2.11.3](https://github.com/midwayjs/midway/compare/v2.11.2...v2.11.3) (2021-07-02)
+
+
+### Bug Fixes
+
+* uppercase for header decorator ([#1123](https://github.com/midwayjs/midway/issues/1123)) ([cfcfb1f](https://github.com/midwayjs/midway/commit/cfcfb1fb8860b110e2671e9bff57f6c537f11f90))
+
+
+
+
+
+## [2.11.2](https://github.com/midwayjs/midway/compare/v2.11.1...v2.11.2) (2021-06-28)
+
+**Note:** Version bump only for package @midwayjs/koa
+
+
+
+
+
+## [2.11.1](https://github.com/midwayjs/midway/compare/v2.11.0...v2.11.1) (2021-06-19)
+
+**Note:** Version bump only for package @midwayjs/koa
+
+
+
+
+
+# [2.11.0](https://github.com/midwayjs/midway/compare/v2.10.19...v2.11.0) (2021-06-10)
+
+**Note:** Version bump only for package @midwayjs/koa
+
+
+
+
+
+## [2.10.18](https://github.com/midwayjs/midway/compare/v2.10.17...v2.10.18) (2021-05-26)
+
+
+### Features
+
+* add zlib logger file ([#1038](https://github.com/midwayjs/midway/issues/1038)) ([2ae9131](https://github.com/midwayjs/midway/commit/2ae9131b8c8745d2840c40a5d50aa2d3f73bafbf))
+
+
+
+
+
+## [2.10.14](https://github.com/midwayjs/midway/compare/v2.10.13...v2.10.14) (2021-05-11)
+
+
+### Bug Fixes
+
+* serverless app more method ([#1034](https://github.com/midwayjs/midway/issues/1034)) ([9c44c3f](https://github.com/midwayjs/midway/commit/9c44c3f58930d0c12464d00eceee93cb9e7aaa62))
+
+
+
+
+
+## [2.10.13](https://github.com/midwayjs/midway/compare/v2.10.12...v2.10.13) (2021-05-08)
+
+
+### Bug Fixes
+
+* remove zlib ([#1035](https://github.com/midwayjs/midway/issues/1035)) ([cc2cd40](https://github.com/midwayjs/midway/commit/cc2cd405a104b3388d93a09d981b59b472fd8ea1))
+
+
+
+
+
+## [2.10.12](https://github.com/midwayjs/midway/compare/v2.10.11...v2.10.12) (2021-05-07)
+
+**Note:** Version bump only for package @midwayjs/koa
+
+
+
+
+
+## [2.10.11](https://github.com/midwayjs/midway/compare/v2.10.10...v2.10.11) (2021-04-29)
+
+**Note:** Version bump only for package @midwayjs/koa
+
+
+
+
+
+## [2.10.10](https://github.com/midwayjs/midway/compare/v2.10.9...v2.10.10) (2021-04-24)
+
+**Note:** Version bump only for package @midwayjs/koa
+
+
+
+
+
+## [2.10.9](https://github.com/midwayjs/midway/compare/v2.10.8...v2.10.9) (2021-04-21)
+
+**Note:** Version bump only for package @midwayjs/koa
+
+
+
+
+
+## [2.10.8](https://github.com/midwayjs/midway/compare/v2.10.7...v2.10.8) (2021-04-21)
+
+**Note:** Version bump only for package @midwayjs/koa
+
+
+
+
+
+## [2.10.7](https://github.com/midwayjs/midway/compare/v2.10.6...v2.10.7) (2021-04-17)
+
+
+### Bug Fixes
+
+* add event name args ([#986](https://github.com/midwayjs/midway/issues/986)) ([bfd8232](https://github.com/midwayjs/midway/commit/bfd82320aee8600d8fa30bd2821a0e68c80fd755))
+* add midway case for egg-layer and add warn for DecoratorManager ([#994](https://github.com/midwayjs/midway/issues/994)) ([3d601aa](https://github.com/midwayjs/midway/commit/3d601aa19104081870eb32ba09170357a9da4d03))
+* format ([#997](https://github.com/midwayjs/midway/issues/997)) ([456cc14](https://github.com/midwayjs/midway/commit/456cc14513bdb000d1aa3130e9719caf7a8a803f))
+
+
+
+
+
+## [2.10.6](https://github.com/midwayjs/midway/compare/v2.10.5...v2.10.6) (2021-04-14)
+
+**Note:** Version bump only for package @midwayjs/koa
+
+
+
+
+
+## [2.10.5](https://github.com/midwayjs/midway/compare/v2.10.4...v2.10.5) (2021-04-13)
+
+**Note:** Version bump only for package @midwayjs/koa
+
+
+
+
+
+## [2.10.4](https://github.com/midwayjs/midway/compare/v2.10.3...v2.10.4) (2021-04-10)
+
+
+### Bug Fixes
+
+* clear container cache when test ([#978](https://github.com/midwayjs/midway/issues/978)) ([a202075](https://github.com/midwayjs/midway/commit/a202075b52d281e06f1ed7c6139e968fafc960f6))
+
+
+
+
+
+## [2.10.3](https://github.com/midwayjs/midway/compare/v2.10.2...v2.10.3) (2021-04-07)
+
+**Note:** Version bump only for package @midwayjs/koa
+
+
+
+
+
+## [2.10.2](https://github.com/midwayjs/midway/compare/v2.10.1...v2.10.2) (2021-04-05)
+
+**Note:** Version bump only for package @midwayjs/koa
+
+
+
+
+
+# [2.10.0](https://github.com/midwayjs/midway/compare/v2.9.3...v2.10.0) (2021-04-02)
+
+
+### Features
+
+* use @ServerlessTrigger replace functions in f.yml ([#919](https://github.com/midwayjs/midway/issues/919)) ([a85af14](https://github.com/midwayjs/midway/commit/a85af14e06231e8cd82eff8755794ffd13c3ad95))
+
+
+
+
+
+## [2.9.3](https://github.com/midwayjs/midway/compare/v2.9.2...v2.9.3) (2021-03-30)
+
+**Note:** Version bump only for package @midwayjs/koa
+
+
+
+
+
+## [2.9.2](https://github.com/midwayjs/midway/compare/v2.9.1...v2.9.2) (2021-03-27)
+
+**Note:** Version bump only for package @midwayjs/koa
+
+
+
+
+
+## [2.9.1](https://github.com/midwayjs/midway/compare/v2.9.0...v2.9.1) (2021-03-24)
+
+**Note:** Version bump only for package @midwayjs/koa
+
+
+
+
+
+# [2.9.0](https://github.com/midwayjs/midway/compare/v2.8.13...v2.9.0) (2021-03-22)
+
+
+### Features
+
+* add socket.io-redis support ([#874](https://github.com/midwayjs/midway/issues/874)) ([2818920](https://github.com/midwayjs/midway/commit/2818920b9d3391c81666c5b8587a899b9b237d9e))
+* run multi framework in one process ([#925](https://github.com/midwayjs/midway/issues/925)) ([330555f](https://github.com/midwayjs/midway/commit/330555f93b9af2a783771edd58bb9431a325938f))
+
+
+
+
+
+## [2.8.13](https://github.com/midwayjs/midway/compare/v2.8.12...v2.8.13) (2021-03-17)
+
+**Note:** Version bump only for package @midwayjs/koa
+
+
+
+
+
+## [2.8.11](https://github.com/midwayjs/midway/compare/v2.8.10...v2.8.11) (2021-03-12)
+
+**Note:** Version bump only for package @midwayjs/koa
+
+
+
+
+
+## [2.8.9](https://github.com/midwayjs/midway/compare/v2.8.8...v2.8.9) (2021-03-08)
+
+**Note:** Version bump only for package @midwayjs/koa
+
+
+
+
+
+## [2.8.8](https://github.com/midwayjs/midway/compare/v2.8.7...v2.8.8) (2021-03-06)
+
+**Note:** Version bump only for package @midwayjs/koa
+
+
+
+
+
+## [2.8.7](https://github.com/midwayjs/midway/compare/v2.8.6...v2.8.7) (2021-03-04)
+
+**Note:** Version bump only for package @midwayjs/koa
+
+
+
+
+
+## [2.8.6](https://github.com/midwayjs/midway/compare/v2.8.5...v2.8.6) (2021-03-03)
+
+**Note:** Version bump only for package @midwayjs/koa
+
+
+
+
+
+## [2.8.5](https://github.com/midwayjs/midway/compare/v2.8.4...v2.8.5) (2021-03-03)
+
+**Note:** Version bump only for package @midwayjs/koa
+
+
+
+
+
+## [2.8.4](https://github.com/midwayjs/midway/compare/v2.8.3...v2.8.4) (2021-03-03)
+
+
+### Bug Fixes
+
+* koa-router support wildcard ([#881](https://github.com/midwayjs/midway/issues/881)) ([0321497](https://github.com/midwayjs/midway/commit/0321497421de648dc791ceb60316c78026dc3cf9))
+
+
+### Features
+
+* add conflictCheck ([#876](https://github.com/midwayjs/midway/issues/876)) ([673470a](https://github.com/midwayjs/midway/commit/673470a14e3f5a159bf7a2f1e56cbf27cc3b6b21))
+
+
+
+
+
+## [2.8.3](https://github.com/midwayjs/midway/compare/v2.8.2...v2.8.3) (2021-03-01)
+
+**Note:** Version bump only for package @midwayjs/koa
+
+
+
+
+
+## [2.8.2](https://github.com/midwayjs/midway/compare/v2.8.0...v2.8.2) (2021-02-27)
+
+
+### Features
+
+* support fun router ([#867](https://github.com/midwayjs/midway/issues/867)) ([01e673f](https://github.com/midwayjs/midway/commit/01e673f50d48d302e449ab88c2e419bcaeab1458))
+
+
+
+
+
+# [2.8.0](https://github.com/midwayjs/midway/compare/v2.7.7...v2.8.0) (2021-02-24)
+
+
+### Features
+
+* add router collector and export router table ([#852](https://github.com/midwayjs/midway/issues/852)) ([3641ac9](https://github.com/midwayjs/midway/commit/3641ac9c78ed9888525ce0c87415b961d4602fa8))
+* move context logger to @midwayjs/logger and add createFileL… ([#859](https://github.com/midwayjs/midway/issues/859)) ([49f568f](https://github.com/midwayjs/midway/commit/49f568f372b610494d59fa415f4f241c400c7db0))
+* support queries decorator ([#858](https://github.com/midwayjs/midway/issues/858)) ([ddb080b](https://github.com/midwayjs/midway/commit/ddb080bbba0b24a4c1f826d8552966275f31ebeb))
+
+
+
+
+
+## [2.7.7](https://github.com/midwayjs/midway/compare/v2.7.6...v2.7.7) (2021-02-20)
+
+**Note:** Version bump only for package @midwayjs/koa
+
+
+
+
+
+## [2.7.5](https://github.com/midwayjs/midway/compare/v2.7.4...v2.7.5) (2021-02-08)
+
+**Note:** Version bump only for package @midwayjs/koa
+
+
+
+
+
+## [2.7.2](https://github.com/midwayjs/midway/compare/v2.7.1...v2.7.2) (2021-01-28)
+
+**Note:** Version bump only for package @midwayjs/koa
+
+
+
+
+
+## [2.7.1](https://github.com/midwayjs/midway/compare/v2.7.0...v2.7.1) (2021-01-28)
+
+
+### Bug Fixes
+
+* disable coreLogger info console output in local env ([#829](https://github.com/midwayjs/midway/issues/829)) ([adaaaea](https://github.com/midwayjs/midway/commit/adaaaeaa9694c072de709c6643c0d7cffbdf3065))
+
+
+
+
+
+# [2.7.0](https://github.com/midwayjs/midway/compare/v2.6.13...v2.7.0) (2021-01-27)
+
+
+### Features
+
+* add midway gRPC framework ([#786](https://github.com/midwayjs/midway/issues/786)) ([d90362c](https://github.com/midwayjs/midway/commit/d90362c6bf15c00621ffc2981f19842f216395f8))
+* support entry file in bootstrap ([#819](https://github.com/midwayjs/midway/issues/819)) ([49a5ff6](https://github.com/midwayjs/midway/commit/49a5ff662134bdd42dc3a80738b44a05138f8f7c))
+
+
+
+
+
 ## [2.6.13](https://github.com/midwayjs/midway/compare/v2.6.12...v2.6.13) (2021-01-21)
 
 **Note:** Version bump only for package @midwayjs/koa

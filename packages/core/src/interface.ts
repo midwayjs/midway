@@ -5,14 +5,17 @@ import {
   ObjectDefinitionOptions,
   IMethodAspect,
   AspectMetadata,
+  ResolveFilter,
+  MidwayFrameworkType
 } from '@midwayjs/decorator';
 import { ILogger, LoggerOptions } from '@midwayjs/logger';
+
 /**
  * 生命周期定义
  */
 export interface ILifeCycle {
-  onReady(container?: IMidwayContainer): Promise<void>;
-  onStop?(container?: IMidwayContainer): Promise<void>;
+  onReady(container: IMidwayContainer, app?: IMidwayApplication): Promise<void>;
+  onStop?(container: IMidwayContainer, app?: IMidwayApplication): Promise<void>;
 }
 
 export type Locale = string;
@@ -66,6 +69,13 @@ export interface IObjectDefinition {
   getAttr(key: ObjectIdentifier): any;
   hasAttr(key: ObjectIdentifier): boolean;
   setAttr(key: ObjectIdentifier, value: any): void;
+  // 暂存依赖的 key、propertyName
+  handlerProps: HandlerProp[];
+}
+
+export interface HandlerProp {
+  handlerKey: string;
+  prop: FrameworkDecoratorMetadata;
 }
 
 /**
@@ -87,9 +97,16 @@ export interface IObjectDefinitionMetadata {
   constructorArgs: Array<{ value?: string; args?: any; type: string; } | undefined>;
   asynchronous: boolean;
   properties: any[];
-  definitionType: 'object' | 'function'
+  definitionType: 'object' | 'function';
+  // 暂存依赖的 key、propertyName
+  handlerProps: HandlerProp[];
 }
 
+export interface FrameworkDecoratorMetadata {
+  key: string;
+  propertyName: string;
+  meta: any;
+}
 
 export interface IObjectCreator {
   load(): any;
@@ -202,6 +219,7 @@ export interface ObjectDependencyTree {
 
 export const REQUEST_CTX_KEY = 'ctx';
 export const REQUEST_OBJ_CTX_KEY = '_req_ctx';
+export const HTTP_SERVER_KEY = '_midway_http_server';
 
 export interface IContainerConfiguration {
   namespace: string;
@@ -209,7 +227,7 @@ export interface IContainerConfiguration {
   newVersion: boolean;
   addLoadDir(dir: string);
   addImports(imports: string[], baseDir?: string);
-  addImportObjects(importObjects: any[]);
+  addImportObjects(importObjects: Record<string, unknown>);
   addImportConfigs(importConfigs: string[], baseDir: string);
   load(packageName: string);
   loadComponentObject(componentObject: any);
@@ -222,7 +240,6 @@ export interface IContainerConfiguration {
   getImportObjects(): any;
   bindConfigurationClass(clzz: any, filePath?: string);
 }
-
 
 export type HandlerFunction = (handlerKey: string, instance?: any) => any;
 
@@ -257,12 +274,24 @@ export interface IMidwayContainer extends IApplicationContext {
   addConfiguration(configuration: IContainerConfiguration);
   getConfigService(): IConfigService;
   getEnvironmentService(): IEnvironmentService;
+  getInformationService(): IInformationService;
+  setInformationService(service: IInformationService): void;
+  getAspectService(): IAspectService;
   getCurrentEnv(): string;
   getResolverHandler(): IResolverHandler;
-  addAspect(
-    aspectIns: IMethodAspect,
-    aspectData: AspectMetadata
-  )
+  addDirectoryFilter(filter: ResolveFilter[]);
+  /**
+   * Set value to app attribute map
+   * @param key
+   * @param value
+   */
+  setAttr(key: string, value: any);
+
+  /**
+   * Get value from app attribute map
+   * @param key
+   */
+  getAttr<T>(key: string): T;
 }
 
 export interface IConfigService {
@@ -270,12 +299,29 @@ export interface IConfigService {
   addObject(obj: object);
   load();
   getConfiguration(configKey?: string);
+  clearAllConfig();
+}
+
+export interface IInformationService {
+  getPkg(): any;
+  getProjectName(): any;
+  getBaseDir(): string;
+  getAppDir(): string;
+  getHome(): string;
+  getRoot(): string;
 }
 
 export interface IEnvironmentService {
   getCurrentEnvironment(): string;
   setCurrentEnvironment(environment: string);
   isDevelopmentEnvironment(): boolean;
+}
+
+export interface IAspectService {
+  loadAspect();
+  addAspect(aspectIns: IMethodAspect, aspectData: AspectMetadata);
+  wrapperAspectToInstance(ins);
+  hasAspect(module): boolean;
 }
 
 export interface IMiddleware<T> {
@@ -288,11 +334,23 @@ export enum MidwayProcessTypeEnum {
 }
 
 /**
- * @deprecated use ILogger from @midwayjs/logger
+ * @deprecated use IMidwayLogger or ILogger from \@midwayjs/logger
  */
 export interface IMidwayLogger extends ILogger {}
 
-export interface IMidwayApplication {
+export interface Context {
+  /**
+   * Custom properties.
+   */
+  requestContext: IMidwayContainer;
+  logger: ILogger;
+  getLogger(name?: string): ILogger;
+  startTime: number;
+}
+
+export type IMidwayContext<FrameworkContext = unknown> = Context & FrameworkContext;
+
+export interface IMidwayBaseApplication<T extends IMidwayContext = IMidwayContext> {
   getBaseDir(): string;
   getAppDir(): string;
   getEnv(): string;
@@ -304,13 +362,25 @@ export interface IMidwayApplication {
   getCoreLogger(): ILogger;
   createLogger(name: string, options: LoggerOptions): ILogger;
   getProjectName(): string;
+  createAnonymousContext(...args): T;
+  setContextLoggerClass(BaseContextLoggerClass: any): void;
+  addConfigObject(obj: any);
+
+  /**
+   * Set value to app attribute map
+   * @param key
+   * @param value
+   */
+  setAttr(key: string, value: any);
+
+  /**
+   * Get value from app attribute map
+   * @param key
+   */
+  getAttr<T>(key: string): T;
 }
 
-export interface IMidwayContext {
-  getRequestContext?(): IMidwayContainer;
-  requestContext: IMidwayContainer;
-  logger: ILogger;
-}
+export type IMidwayApplication<T extends IMidwayContext = IMidwayContext, FrameworkApplication = unknown> = IMidwayBaseApplication<T> & FrameworkApplication;
 
 /**
  * @deprecated
@@ -329,9 +399,17 @@ export interface IMidwayBootstrapOptions {
   middleware?: string[];
   loadDir?: string[];
   disableConflictCheck?: boolean;
+  applicationContext?: IMidwayContainer;
+  isMainFramework?: boolean;
+  globalApplicationHandler?: (type: MidwayFrameworkType) => IMidwayApplication;
+  globalConfig?: any;
 }
 
-export interface IConfigurationOptions {}
+export interface IConfigurationOptions {
+  logger?: ILogger;
+  appLogger?: ILogger;
+  ContextLoggerClass?: any;
+}
 
 export interface IMidwayFramework<APP extends IMidwayApplication, T extends IConfigurationOptions> {
   app: APP;
@@ -345,23 +423,14 @@ export interface IMidwayFramework<APP extends IMidwayApplication, T extends ICon
   getConfiguration(key?: string): any;
   getCurrentEnvironment(): string;
   getFrameworkType(): MidwayFrameworkType;
+  getFrameworkName(): string;
   getAppDir(): string;
   getBaseDir(): string;
   getLogger(name?: string): ILogger;
   getCoreLogger(): ILogger;
   createLogger(name: string, options: LoggerOptions): ILogger;
   getProjectName(): string;
+  getDefaultContextLoggerClass(): any;
 }
 
-export enum MidwayFrameworkType {
-  WEB = '@midwayjs/web',
-  WEB_KOA = '@midwayjs/koa',
-  WEB_EXPRESS = '@midwayjs/express',
-  FAAS = '@midwayjs/faas',
-  MS_HSF = '',
-  MS_GRPC = '',
-  MS_RABBITMQ = '@midwayjs/rabbitmq',
-  WS_IO = '@midwayjs/socketio',
-  WSS = '',
-  CUSTOM = ''
-}
+export const MIDWAY_LOGGER_WRITEABLE_DIR = 'MIDWAY_LOGGER_WRITEABLE_DIR';

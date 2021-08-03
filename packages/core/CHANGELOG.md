@@ -3,6 +3,458 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.12.1](https://github.com/midwayjs/midway/compare/v2.12.0...v2.12.1) (2021-08-01)
+
+
+### Features
+
+* add http client component ([#1098](https://github.com/midwayjs/midway/issues/1098)) ([4e2f90a](https://github.com/midwayjs/midway/commit/4e2f90a9de946fa5abc2af4cd8a0ad9ee4188991))
+
+
+
+
+
+# [2.12.0](https://github.com/midwayjs/midway/compare/v2.11.7...v2.12.0) (2021-07-30)
+
+
+### Features
+
+* add oss component ([#1181](https://github.com/midwayjs/midway/issues/1181)) ([e83171c](https://github.com/midwayjs/midway/commit/e83171c73cdc1098796f06919dc652a6d83c3af4))
+
+
+
+
+
+## [2.11.6](https://github.com/midwayjs/midway/compare/v2.11.5...v2.11.6) (2021-07-16)
+
+**Note:** Version bump only for package @midwayjs/core
+
+
+
+
+
+## [2.11.5](https://github.com/midwayjs/midway/compare/v2.11.4...v2.11.5) (2021-07-15)
+
+**Note:** Version bump only for package @midwayjs/core
+
+
+
+
+
+## [2.11.4](https://github.com/midwayjs/midway/compare/v2.11.3...v2.11.4) (2021-07-06)
+
+
+### Bug Fixes
+
+* @Func decorator with empty metadata ([#1137](https://github.com/midwayjs/midway/issues/1137)) ([621a99a](https://github.com/midwayjs/midway/commit/621a99a9ee77a8f370a28a395363f585057bd054))
+* add target parameter ([#1139](https://github.com/midwayjs/midway/issues/1139)) ([5be4757](https://github.com/midwayjs/midway/commit/5be475710ee19e16a99643a355f7f1774f3435bc))
+
+
+
+
+
+## [2.11.3](https://github.com/midwayjs/midway/compare/v2.11.2...v2.11.3) (2021-07-02)
+
+
+### Bug Fixes
+
+* uppercase for header decorator ([#1123](https://github.com/midwayjs/midway/issues/1123)) ([cfcfb1f](https://github.com/midwayjs/midway/commit/cfcfb1fb8860b110e2671e9bff57f6c537f11f90))
+
+
+
+
+
+## [2.11.2](https://github.com/midwayjs/midway/compare/v2.11.1...v2.11.2) (2021-06-28)
+
+**Note:** Version bump only for package @midwayjs/core
+
+
+
+
+
+## [2.11.1](https://github.com/midwayjs/midway/compare/v2.11.0...v2.11.1) (2021-06-19)
+
+
+### Bug Fixes
+
+* ignore directory with app prefix ([#1100](https://github.com/midwayjs/midway/issues/1100)) ([0911635](https://github.com/midwayjs/midway/commit/09116355bf7f34892d1c7ad975047ed20e65bee5))
+
+
+
+
+
+# [2.11.0](https://github.com/midwayjs/midway/compare/v2.10.19...v2.11.0) (2021-06-10)
+
+**Note:** Version bump only for package @midwayjs/core
+
+
+
+
+
+## [2.10.18](https://github.com/midwayjs/midway/compare/v2.10.17...v2.10.18) (2021-05-26)
+
+
+### Features
+
+* add decorator metadata ([#1072](https://github.com/midwayjs/midway/issues/1072)) ([db4de9c](https://github.com/midwayjs/midway/commit/db4de9cd787bdbe1effca61dfe162f6678ad5d66))
+
+
+
+
+
+## [2.10.14](https://github.com/midwayjs/midway/compare/v2.10.13...v2.10.14) (2021-05-11)
+
+
+### Bug Fixes
+
+* serverless app more method ([#1034](https://github.com/midwayjs/midway/issues/1034)) ([9c44c3f](https://github.com/midwayjs/midway/commit/9c44c3f58930d0c12464d00eceee93cb9e7aaa62))
+
+
+
+
+
+## [2.10.13](https://github.com/midwayjs/midway/compare/v2.10.12...v2.10.13) (2021-05-08)
+
+
+### Bug Fixes
+
+* remove zlib ([#1035](https://github.com/midwayjs/midway/issues/1035)) ([cc2cd40](https://github.com/midwayjs/midway/commit/cc2cd405a104b3388d93a09d981b59b472fd8ea1))
+
+
+
+
+
+## [2.10.12](https://github.com/midwayjs/midway/compare/v2.10.11...v2.10.12) (2021-05-07)
+
+
+### Bug Fixes
+
+* change all requestMethod to real method for serverless http request ([#1028](https://github.com/midwayjs/midway/issues/1028)) ([23e2943](https://github.com/midwayjs/midway/commit/23e29436e3a1b3ab10484171f0dfcd5de068f124))
+* throw error when router duplicate ([#1023](https://github.com/midwayjs/midway/issues/1023)) ([61bc58d](https://github.com/midwayjs/midway/commit/61bc58d29d637f1c9e54fec0a09f24d90c1286c9))
+
+
+
+
+
+## [2.10.11](https://github.com/midwayjs/midway/compare/v2.10.10...v2.10.11) (2021-04-29)
+
+
+### Bug Fixes
+
+* lifecycle missing container when run onStop method ([#1016](https://github.com/midwayjs/midway/issues/1016)) ([3b6303c](https://github.com/midwayjs/midway/commit/3b6303c7bba0d28e821da8062ae71aa4c1029d63))
+* load functional config ([#1017](https://github.com/midwayjs/midway/issues/1017)) ([51566c0](https://github.com/midwayjs/midway/commit/51566c08124275798b92d3c931b27a86a48a2ba7))
+
+
+
+
+
+## [2.10.10](https://github.com/midwayjs/midway/compare/v2.10.9...v2.10.10) (2021-04-24)
+
+
+### Bug Fixes
+
+* router sort ([#1009](https://github.com/midwayjs/midway/issues/1009)) ([e9bf8ed](https://github.com/midwayjs/midway/commit/e9bf8ed0a6537714e3004a334e417994ea369aa9))
+
+
+
+
+
+## [2.10.9](https://github.com/midwayjs/midway/compare/v2.10.8...v2.10.9) (2021-04-21)
+
+
+### Bug Fixes
+
+* revert missing code ([#1006](https://github.com/midwayjs/midway/issues/1006)) ([132bdbb](https://github.com/midwayjs/midway/commit/132bdbb96a88b92b7635072840e58c011ebfcb13))
+
+
+
+
+
+## [2.10.8](https://github.com/midwayjs/midway/compare/v2.10.7...v2.10.8) (2021-04-21)
+
+**Note:** Version bump only for package @midwayjs/core
+
+
+
+
+
+## [2.10.7](https://github.com/midwayjs/midway/compare/v2.10.6...v2.10.7) (2021-04-17)
+
+
+### Bug Fixes
+
+* add event name args ([#986](https://github.com/midwayjs/midway/issues/986)) ([bfd8232](https://github.com/midwayjs/midway/commit/bfd82320aee8600d8fa30bd2821a0e68c80fd755))
+* format ([#997](https://github.com/midwayjs/midway/issues/997)) ([456cc14](https://github.com/midwayjs/midway/commit/456cc14513bdb000d1aa3130e9719caf7a8a803f))
+* inject class when use component by import string ([#996](https://github.com/midwayjs/midway/issues/996)) ([8bfda7d](https://github.com/midwayjs/midway/commit/8bfda7da4b4a0d34bf0b0d0291416ef4655fb8a5))
+
+
+
+
+
+## [2.10.6](https://github.com/midwayjs/midway/compare/v2.10.5...v2.10.6) (2021-04-14)
+
+**Note:** Version bump only for package @midwayjs/core
+
+
+
+
+
+## [2.10.5](https://github.com/midwayjs/midway/compare/v2.10.4...v2.10.5) (2021-04-13)
+
+
+### Bug Fixes
+
+* configuration file path join on windows ([#984](https://github.com/midwayjs/midway/issues/984)) ([099e76c](https://github.com/midwayjs/midway/commit/099e76ca892decd02b536b97494590f598d140ac))
+
+
+### Features
+
+* support getCurrentApplicationContext API ([#981](https://github.com/midwayjs/midway/issues/981)) ([dd6ce11](https://github.com/midwayjs/midway/commit/dd6ce11d6f8eb2884eb1b03b171a069f55aec04f))
+
+
+
+
+
+## [2.10.4](https://github.com/midwayjs/midway/compare/v2.10.3...v2.10.4) (2021-04-10)
+
+
+### Bug Fixes
+
+* clear container cache when test ([#978](https://github.com/midwayjs/midway/issues/978)) ([a202075](https://github.com/midwayjs/midway/commit/a202075b52d281e06f1ed7c6139e968fafc960f6))
+
+
+
+
+
+## [2.10.3](https://github.com/midwayjs/midway/compare/v2.10.2...v2.10.3) (2021-04-07)
+
+**Note:** Version bump only for package @midwayjs/core
+
+
+
+
+
+## [2.10.2](https://github.com/midwayjs/midway/compare/v2.10.1...v2.10.2) (2021-04-05)
+
+
+### Bug Fixes
+
+* load config once and support load singleton service before framework start ([#970](https://github.com/midwayjs/midway/issues/970)) ([201dd59](https://github.com/midwayjs/midway/commit/201dd5930bd97f62e5717777b2941b47b54d68c6))
+
+
+
+
+
+# [2.10.0](https://github.com/midwayjs/midway/compare/v2.9.3...v2.10.0) (2021-04-02)
+
+
+### Bug Fixes
+
+* directory filter and ignore test pattern ([#957](https://github.com/midwayjs/midway/issues/957)) ([dbd1a5a](https://github.com/midwayjs/midway/commit/dbd1a5a4bc712a5ce14c409a7f2aee96e34eea4f))
+
+
+### Features
+
+* use @ServerlessTrigger replace functions in f.yml ([#919](https://github.com/midwayjs/midway/issues/919)) ([a85af14](https://github.com/midwayjs/midway/commit/a85af14e06231e8cd82eff8755794ffd13c3ad95))
+
+
+
+
+
+## [2.9.2](https://github.com/midwayjs/midway/compare/v2.9.1...v2.9.2) (2021-03-27)
+
+**Note:** Version bump only for package @midwayjs/core
+
+
+
+
+
+## [2.9.1](https://github.com/midwayjs/midway/compare/v2.9.0...v2.9.1) (2021-03-24)
+
+**Note:** Version bump only for package @midwayjs/core
+
+
+
+
+
+# [2.9.0](https://github.com/midwayjs/midway/compare/v2.8.13...v2.9.0) (2021-03-22)
+
+
+### Bug Fixes
+
+* create log dir in serverless environment ([#935](https://github.com/midwayjs/midway/issues/935)) ([8a15f69](https://github.com/midwayjs/midway/commit/8a15f694a19a6274bce5172f1dce716ef3d8c0a8))
+* providerWrapper get empty object in component ([#926](https://github.com/midwayjs/midway/issues/926)) ([5e46d19](https://github.com/midwayjs/midway/commit/5e46d19386ae91820e9df71a02a3de7b3f54d3dc))
+
+
+### Features
+
+* add midway cache ([#911](https://github.com/midwayjs/midway/issues/911)) ([cc49eee](https://github.com/midwayjs/midway/commit/cc49eee739ba6d2c37b9270b6cf5239afde4a912))
+* add socket.io-redis support ([#874](https://github.com/midwayjs/midway/issues/874)) ([2818920](https://github.com/midwayjs/midway/commit/2818920b9d3391c81666c5b8587a899b9b237d9e))
+* run multi framework in one process ([#925](https://github.com/midwayjs/midway/issues/925)) ([330555f](https://github.com/midwayjs/midway/commit/330555f93b9af2a783771edd58bb9431a325938f))
+* support bootstrap load config first ([#931](https://github.com/midwayjs/midway/issues/931)) ([ae9ed26](https://github.com/midwayjs/midway/commit/ae9ed261aacdb483d3a9a612be79fff384503bcc))
+
+
+
+
+
+## [2.8.13](https://github.com/midwayjs/midway/compare/v2.8.12...v2.8.13) (2021-03-17)
+
+
+### Bug Fixes
+
+* add missing typings ([#924](https://github.com/midwayjs/midway/issues/924)) ([a17c8d8](https://github.com/midwayjs/midway/commit/a17c8d8655d3f7a93469b922529b7a1aba212c10))
+
+
+
+
+
+## [2.8.11](https://github.com/midwayjs/midway/compare/v2.8.10...v2.8.11) (2021-03-12)
+
+
+### Features
+
+* compatible read config.prod and config.unittest ([#899](https://github.com/midwayjs/midway/issues/899)) ([f90cfe3](https://github.com/midwayjs/midway/commit/f90cfe3a28912ad43f371aff66d4a52e9efa3a68))
+
+
+
+
+
+## [2.8.9](https://github.com/midwayjs/midway/compare/v2.8.8...v2.8.9) (2021-03-08)
+
+
+### Bug Fixes
+
+* delete method parse body and form body ([#891](https://github.com/midwayjs/midway/issues/891)) ([f5c1e70](https://github.com/midwayjs/midway/commit/f5c1e7042ed85656e323563421391a719999979e))
+
+
+
+
+
+## [2.8.8](https://github.com/midwayjs/midway/compare/v2.8.7...v2.8.8) (2021-03-06)
+
+
+### Bug Fixes
+
+* app proxy ([#886](https://github.com/midwayjs/midway/issues/886)) ([e8fba77](https://github.com/midwayjs/midway/commit/e8fba77ea9920a9bc0b48011f85d77717cab77fd))
+* handler ([#885](https://github.com/midwayjs/midway/issues/885)) ([89c6b53](https://github.com/midwayjs/midway/commit/89c6b53d2de8601394d1799c914dbf8177d37f5b))
+
+
+
+
+
+## [2.8.7](https://github.com/midwayjs/midway/compare/v2.8.6...v2.8.7) (2021-03-04)
+
+
+### Bug Fixes
+
+* exports missing ([#884](https://github.com/midwayjs/midway/issues/884)) ([a360a0e](https://github.com/midwayjs/midway/commit/a360a0e645a9551cb9d90ceaf7871f3e0ab5b4d3))
+
+
+
+
+
+## [2.8.6](https://github.com/midwayjs/midway/compare/v2.8.5...v2.8.6) (2021-03-03)
+
+
+### Bug Fixes
+
+* load custom framework in midwayjs/web ([#883](https://github.com/midwayjs/midway/issues/883)) ([7a11cac](https://github.com/midwayjs/midway/commit/7a11cac1cea753e781ac358a75277400f8aa87bf))
+
+
+
+
+
+## [2.8.5](https://github.com/midwayjs/midway/compare/v2.8.4...v2.8.5) (2021-03-03)
+
+
+### Bug Fixes
+
+* empty framework ready ([#882](https://github.com/midwayjs/midway/issues/882)) ([a2dc36f](https://github.com/midwayjs/midway/commit/a2dc36f8dd785e7dce3a5499f5774b990dfd33c4))
+
+
+
+
+
+## [2.8.4](https://github.com/midwayjs/midway/compare/v2.8.3...v2.8.4) (2021-03-03)
+
+
+### Bug Fixes
+
+* case ([df2efb6](https://github.com/midwayjs/midway/commit/df2efb6837ee1bdb877825bc7869b82d9e220fb1))
+* check case ([4df51ed](https://github.com/midwayjs/midway/commit/4df51ed64157a7b3f76bc050825cf2b59182cc07))
+* get singleton from shared context ([3ebcf13](https://github.com/midwayjs/midway/commit/3ebcf13ab0f4151e507b51cda219682859f648d3))
+* multi framework run configuration ([44abb6c](https://github.com/midwayjs/midway/commit/44abb6c710e044d9256325c721cdeb8d9a7e0a7a))
+* multi framework run configuration ([db98d6a](https://github.com/midwayjs/midway/commit/db98d6aba820aa86982b491835bb4167b3a1b6b2))
+* property decorator and class decorator extends ([#845](https://github.com/midwayjs/midway/issues/845)) ([8d0227d](https://github.com/midwayjs/midway/commit/8d0227dfe946af6fefa832d574cdcfe976ed8ce2))
+
+
+### Features
+
+* add conflictCheck ([a892223](https://github.com/midwayjs/midway/commit/a8922234abb2c585d59e37aaa443b14d73a14b2f))
+
+
+
+
+
+## [2.8.3](https://github.com/midwayjs/midway/compare/v2.8.2...v2.8.3) (2021-03-01)
+
+
+### Bug Fixes
+
+* router sort with param ([#877](https://github.com/midwayjs/midway/issues/877)) ([7405745](https://github.com/midwayjs/midway/commit/7405745330cbeedc74829bc7683686866d91b633))
+
+
+
+
+
+## [2.8.2](https://github.com/midwayjs/midway/compare/v2.8.0...v2.8.2) (2021-02-27)
+
+
+### Features
+
+* support fun router ([#867](https://github.com/midwayjs/midway/issues/867)) ([01e673f](https://github.com/midwayjs/midway/commit/01e673f50d48d302e449ab88c2e419bcaeab1458))
+
+
+
+
+
+# [2.8.0](https://github.com/midwayjs/midway/compare/v2.7.7...v2.8.0) (2021-02-24)
+
+
+### Features
+
+* add router collector and export router table ([#852](https://github.com/midwayjs/midway/issues/852)) ([3641ac9](https://github.com/midwayjs/midway/commit/3641ac9c78ed9888525ce0c87415b961d4602fa8))
+* move context logger to @midwayjs/logger and add createFileL… ([#859](https://github.com/midwayjs/midway/issues/859)) ([49f568f](https://github.com/midwayjs/midway/commit/49f568f372b610494d59fa415f4f241c400c7db0))
+* support queries decorator ([#858](https://github.com/midwayjs/midway/issues/858)) ([ddb080b](https://github.com/midwayjs/midway/commit/ddb080bbba0b24a4c1f826d8552966275f31ebeb))
+
+
+
+
+
+## [2.7.5](https://github.com/midwayjs/midway/compare/v2.7.4...v2.7.5) (2021-02-08)
+
+
+### Features
+
+* add configuration functional support ([#843](https://github.com/midwayjs/midway/issues/843)) ([bfaa0aa](https://github.com/midwayjs/midway/commit/bfaa0aad9e8ce667a4bb98af60f1c706e09e7810))
+* add enable method ([#847](https://github.com/midwayjs/midway/issues/847)) ([a85b99d](https://github.com/midwayjs/midway/commit/a85b99dd775b9cf69dec3a7fa78248d4d82ad814))
+
+
+
+
+
+# [2.7.0](https://github.com/midwayjs/midway/compare/v2.6.13...v2.7.0) (2021-01-27)
+
+
+### Features
+
+* add midway gRPC framework ([#786](https://github.com/midwayjs/midway/issues/786)) ([d90362c](https://github.com/midwayjs/midway/commit/d90362c6bf15c00621ffc2981f19842f216395f8))
+* support entry file in bootstrap ([#819](https://github.com/midwayjs/midway/issues/819)) ([49a5ff6](https://github.com/midwayjs/midway/commit/49a5ff662134bdd42dc3a80738b44a05138f8f7c))
+
+
+
+
+
 ## [2.6.13](https://github.com/midwayjs/midway/compare/v2.6.12...v2.6.13) (2021-01-21)
 
 **Note:** Version bump only for package @midwayjs/core

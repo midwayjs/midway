@@ -3,6 +3,165 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.11.4](https://github.com/midwayjs/midway-faas/compare/v2.11.3...v2.11.4) (2021-07-06)
+
+**Note:** Version bump only for package @midwayjs/serverless-scf-starter
+
+
+
+
+
+## [2.11.3](https://github.com/midwayjs/midway-faas/compare/v2.11.2...v2.11.3) (2021-07-02)
+
+
+### Bug Fixes
+
+* hide real error when user code throw error ([#1128](https://github.com/midwayjs/midway-faas/issues/1128)) ([e728b0b](https://github.com/midwayjs/midway-faas/commit/e728b0b80956c09cfb856ffe082f44fa29cfeb82))
+
+
+
+
+
+## [2.11.2](https://github.com/midwayjs/midway-faas/compare/v2.11.1...v2.11.2) (2021-06-28)
+
+**Note:** Version bump only for package @midwayjs/serverless-scf-starter
+
+
+
+
+
+## [2.11.1](https://github.com/midwayjs/midway-faas/compare/v2.11.0...v2.11.1) (2021-06-19)
+
+**Note:** Version bump only for package @midwayjs/serverless-scf-starter
+
+
+
+
+
+## [2.10.14](https://github.com/midwayjs/midway-faas/compare/v2.10.13...v2.10.14) (2021-05-11)
+
+**Note:** Version bump only for package @midwayjs/serverless-scf-starter
+
+
+
+
+
+## [2.10.13](https://github.com/midwayjs/midway-faas/compare/v2.10.12...v2.10.13) (2021-05-08)
+
+
+### Bug Fixes
+
+* remove zlib ([#1035](https://github.com/midwayjs/midway-faas/issues/1035)) ([cc2cd40](https://github.com/midwayjs/midway-faas/commit/cc2cd405a104b3388d93a09d981b59b472fd8ea1))
+
+
+
+
+
+## [2.10.12](https://github.com/midwayjs/midway-faas/compare/v2.10.11...v2.10.12) (2021-05-07)
+
+
+### Bug Fixes
+
+* disable wait event loop in tencent serverless ([#1029](https://github.com/midwayjs/midway-faas/issues/1029)) ([89d5c2e](https://github.com/midwayjs/midway-faas/commit/89d5c2ec9b83f619d72b31cc003a41bc691a1f19))
+* output serverless error in some environment ([#1030](https://github.com/midwayjs/midway-faas/issues/1030)) ([b162b89](https://github.com/midwayjs/midway-faas/commit/b162b897812d1a1a5e981328fbbb43aa75eacf10))
+
+
+
+
+
+## [2.10.10](https://github.com/midwayjs/midway-faas/compare/v2.10.9...v2.10.10) (2021-04-24)
+
+**Note:** Version bump only for package @midwayjs/serverless-scf-starter
+
+
+
+
+
+## [2.10.7](https://github.com/midwayjs/midway-faas/compare/v2.10.6...v2.10.7) (2021-04-17)
+
+
+### Bug Fixes
+
+* add event name args ([#986](https://github.com/midwayjs/midway-faas/issues/986)) ([bfd8232](https://github.com/midwayjs/midway-faas/commit/bfd82320aee8600d8fa30bd2821a0e68c80fd755))
+* format ([#997](https://github.com/midwayjs/midway-faas/issues/997)) ([456cc14](https://github.com/midwayjs/midway-faas/commit/456cc14513bdb000d1aa3130e9719caf7a8a803f))
+
+
+
+
+
+# [2.10.0](https://github.com/midwayjs/midway-faas/compare/v2.9.3...v2.10.0) (2021-04-02)
+
+**Note:** Version bump only for package @midwayjs/serverless-scf-starter
+
+
+
+
+
+## [2.8.13](https://github.com/midwayjs/midway-faas/compare/v2.8.12...v2.8.13) (2021-03-17)
+
+**Note:** Version bump only for package @midwayjs/serverless-scf-starter
+
+
+
+
+
+## [2.8.11](https://github.com/midwayjs/midway-faas/compare/v2.8.10...v2.8.11) (2021-03-12)
+
+
+### Features
+
+* complete static-layer ([#908](https://github.com/midwayjs/midway-faas/issues/908)) ([75033b5](https://github.com/midwayjs/midway-faas/commit/75033b51c89e51e573c0789ec2466447918bcd61))
+
+
+
+
+
+## [2.8.9](https://github.com/midwayjs/midway-faas/compare/v2.8.8...v2.8.9) (2021-03-08)
+
+**Note:** Version bump only for package @midwayjs/serverless-scf-starter
+
+
+
+
+
+## [2.8.2](https://github.com/midwayjs/midway-faas/compare/v2.8.0...v2.8.2) (2021-02-27)
+
+**Note:** Version bump only for package @midwayjs/serverless-scf-starter
+
+
+
+
+
+## [2.7.7](https://github.com/midwayjs/midway-faas/compare/v2.7.6...v2.7.7) (2021-02-20)
+
+**Note:** Version bump only for package @midwayjs/serverless-scf-starter
+
+
+
+
+
+## [2.7.4](https://github.com/midwayjs/midway-faas/compare/v2.7.3...v2.7.4) (2021-02-03)
+
+
+### Bug Fixes
+
+* http parser get body ([#837](https://github.com/midwayjs/midway-faas/issues/837)) ([9afdbbb](https://github.com/midwayjs/midway-faas/commit/9afdbbbd201834ec989f45a4d54cb26883d812e6))
+
+
+
+
+
+# [2.7.0](https://github.com/midwayjs/midway-faas/compare/v2.6.13...v2.7.0) (2021-01-27)
+
+
+### Features
+
+* support entry file in bootstrap ([#819](https://github.com/midwayjs/midway-faas/issues/819)) ([49a5ff6](https://github.com/midwayjs/midway-faas/commit/49a5ff662134bdd42dc3a80738b44a05138f8f7c))
+
+
+
+
+
 ## [2.6.8](https://github.com/midwayjs/midway-faas/compare/v2.6.7...v2.6.8) (2021-01-06)
 
 **Note:** Version bump only for package @midwayjs/serverless-scf-starter

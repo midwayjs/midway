@@ -11,7 +11,9 @@ export class MidwayRequestContainer extends MidwayContainer {
     this.applicationContext = applicationContext;
     this.configService = this.applicationContext.getConfigService();
     this.environmentService = this.applicationContext.getEnvironmentService();
+    this.aspectService = this.applicationContext.getAspectService();
 
+    this.ctx = ctx;
     // register ctx
     this.registerObject(REQUEST_CTX_KEY, ctx);
 
@@ -43,11 +45,10 @@ export class MidwayRequestContainer extends MidwayContainer {
     }
     if (this.registry.hasObject(identifier)) {
       const ins = this.registry.getObject(identifier);
-      return this.wrapperAspectToInstance(ins);
+      return this.aspectService.wrapperAspectToInstance(ins);
     }
-    const definition = this.applicationContext.registry.getDefinition(
-      identifier
-    );
+    const definition =
+      this.applicationContext.registry.getDefinition(identifier);
     if (definition) {
       if (
         definition.isRequestScope() ||
@@ -58,7 +59,7 @@ export class MidwayRequestContainer extends MidwayContainer {
           definition,
           args,
         });
-        return this.wrapperAspectToInstance(ins);
+        return this.aspectService.wrapperAspectToInstance(ins);
       }
     }
 
@@ -76,12 +77,11 @@ export class MidwayRequestContainer extends MidwayContainer {
 
     if (this.registry.hasObject(identifier)) {
       const ins = this.registry.getObject(identifier);
-      return this.wrapperAspectToInstance(ins);
+      return this.aspectService.wrapperAspectToInstance(ins);
     }
 
-    const definition = this.applicationContext.registry.getDefinition(
-      identifier
-    );
+    const definition =
+      this.applicationContext.registry.getDefinition(identifier);
     if (definition) {
       if (
         definition.isRequestScope() ||
@@ -92,7 +92,7 @@ export class MidwayRequestContainer extends MidwayContainer {
           definition,
           args,
         });
-        return this.wrapperAspectToInstance(ins);
+        return this.aspectService.wrapperAspectToInstance(ins);
       }
     }
 
@@ -112,5 +112,9 @@ export class MidwayRequestContainer extends MidwayContainer {
 
   getEnvironmentService() {
     return this.environmentService;
+  }
+
+  getContext() {
+    return this.ctx;
   }
 }

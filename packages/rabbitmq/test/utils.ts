@@ -3,7 +3,7 @@ import { join } from 'path';
 import { close, createApp } from '@midwayjs/mock';
 
 /**
- * create a socket.io app
+ * create a rabbitMQ app
  * @param name
  * @param options
  */

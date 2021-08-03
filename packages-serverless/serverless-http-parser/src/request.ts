@@ -111,6 +111,10 @@ export const request = {
     return this.req.path;
   },
 
+  set path(value) {
+    this.req.path = value;
+  },
+
   get method() {
     return this.req.method;
   },
@@ -128,6 +132,10 @@ export const request = {
   },
 
   get body() {
+    const method = this.method.toLowerCase();
+    if (['get', 'head', 'options'].includes(method)) {
+      return undefined;
+    }
     if (this[BODY]) {
       return this[BODY];
     }
@@ -235,7 +243,6 @@ export const request = {
   },
 
   get protocol() {
-    // TODO 现在函数没有透出协议
     const proto = this.get('X-Forwarded-Proto');
     return proto ? proto.split(/\s*,\s*/, 1)[0] : 'http';
   },
@@ -250,7 +257,6 @@ export const request = {
    */
 
   get secure() {
-    // TODO 现在函数没有透出协议
-    return false;
+    return this.protocol === 'https';
   },
 };

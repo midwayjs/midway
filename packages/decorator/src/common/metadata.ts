@@ -1,4 +1,4 @@
-import { NAMED_TAG } from './constant';
+import { NAMED_TAG } from '../constant';
 import { TagPropsMetadata } from '../interface';
 
 export class Metadata implements TagPropsMetadata {

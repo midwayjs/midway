@@ -17,6 +17,10 @@ module.exports = appInfo => {
     agentLogName: 'midway-agent.log',
   };
 
+  exports.midwayFeature = {
+    replaceEggLogger: false,
+  };
+
   exports.pluginOverwrite = false;
 
   exports.security = {

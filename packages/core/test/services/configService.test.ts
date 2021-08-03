@@ -1,11 +1,16 @@
 import assert = require('assert');
 import { resolve, join } from 'path';
-import { MidwayContainer } from '../../src';
-import { MidwayConfigService } from '../../src/service/configService';
+import { MidwayContainer, MidwayConfigService, MidwayInformationService } from '../../src';
+import * as mm from 'mm';
 
 describe('/test/services/configService.test.ts', () => {
+  const informationService = new MidwayInformationService({
+    baseDir: join(__dirname, 'fixtures/default_case'),
+    appDir: join(__dirname, 'fixtures/default_case'),
+  })
   it('configService should be ok', () => {
     const container = new MidwayContainer();
+    container.setInformationService(informationService);
     const cfg = new MidwayConfigService(container);
     cfg.isReady = true;
     cfg.configuration = {t: 1};
@@ -23,6 +28,7 @@ describe('/test/services/configService.test.ts', () => {
 
   it('load config should be ok', async () => {
     const container = new MidwayContainer();
+    container.setInformationService(informationService);
     const cfg = new MidwayConfigService(container);
     const configFile = resolve(join(__dirname, '../fixtures/config', 'config.default'));
     const result = await cfg.loadConfig(configFile);
@@ -51,6 +57,7 @@ describe('/test/services/configService.test.ts', () => {
 
   it('load should be ok', async () => {
     const container = new MidwayContainer();
+    container.setInformationService(informationService);
     const cfg = new MidwayConfigService(container);
 
     cfg.addObject({bb: 222});
@@ -64,8 +71,64 @@ describe('/test/services/configService.test.ts', () => {
 
     await cfg.load();
 
-    assert.ok(Object.keys(cfg.configuration).length === 2);
-    assert.ok(cfg.configuration.bb === 222);
-    assert.ok(cfg.configuration.aa === 1);
+    assert.ok(Object.keys(cfg.getConfiguration()).length === 2);
+    assert.ok(cfg.getConfiguration().bb === 222);
+    assert.ok(cfg.getConfiguration().aa === 1);
+  });
+
+  it('should test default', async () => {
+    const container = new MidwayContainer();
+    const cfg = new MidwayConfigService(container);
+
+    const configFile = resolve(join(__dirname, './fixtures/default_case', 'config.default'));
+    const result = await cfg.loadConfig(configFile);
+    expect(result.parent).toEqual({a: 1, b:2});
+    const configFileLocal = resolve(join(__dirname, './fixtures/default_case', 'config.local'));
+    const resultLocal = await cfg.loadConfig(configFileLocal);
+    expect(resultLocal.parent).toEqual({a: 1});
+  });
+
+  it('should compatible old production', async () => {
+    mm(process.env, 'MIDWAY_SERVER_ENV', 'production');
+    const container = new MidwayContainer();
+    const cfg = new MidwayConfigService(container);
+
+    cfg.add([
+      join(__dirname, './fixtures/compatible_production'),
+    ]);
+
+    await cfg.load();
+
+    expect(cfg.getConfiguration()).toEqual({
+      key: {
+        data: 123,
+      },
+      bbb: {
+        data: 123,
+      }
+    })
+    mm.restore()
+  });
+
+  it('should compatible old test', async () => {
+    mm(process.env, 'MIDWAY_SERVER_ENV', 'test');
+    const container = new MidwayContainer();
+    const cfg = new MidwayConfigService(container);
+
+    cfg.add([
+      join(__dirname, './fixtures/compatible_production'),
+    ]);
+
+    await cfg.load();
+
+    expect(cfg.getConfiguration()).toEqual({
+      key: {
+        data: 123,
+      },
+      bbb: {
+        data: 321,
+      }
+    })
+    mm.restore()
   });
 });

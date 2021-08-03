@@ -67,6 +67,15 @@ describe('/test/index.test.ts', () => {
         .expect(/{"body":{"b":1}}/)
         .expect(200, done);
     });
+
+    it('should test with post form body', (done) => {
+      request(app)
+        .post('/post/formBody')
+        .send('b=1')
+        .expect('Content-Type', 'application/json; charset=utf-8')
+        .expect(/{"body":{"b":"1"}}/)
+        .expect(200, done);
+    });
   });
 
   describe('FC test with api gateway', () => {
@@ -185,6 +194,14 @@ describe('/test/index.test.ts', () => {
         })
         .expect('Content-Type', 'application/json; charset=utf-8')
         .expect(/{"body":{"b":1}}/)
+        .expect(200, done);
+    });
+
+    it('should test got ip', done => {
+      request(app)
+        .get('/get_ip')
+        .expect('Content-Type', 'text/plain; charset=utf-8')
+        .expect('ip=42.120.74.90')
         .expect(200, done);
     });
   });

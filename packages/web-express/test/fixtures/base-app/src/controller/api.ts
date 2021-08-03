@@ -10,6 +10,7 @@ import {
   Redirect,
   SetHeader,
   Logger,
+  Headers,
 } from '@midwayjs/decorator';
 import { UserService } from '../service/user';
 import { IMidwayExpressContext, IMidwayExpressRequest } from '../../../../../src';
@@ -69,6 +70,11 @@ export class APIController {
   @Get('/ctx-body')
   async getCtxBody() {
     this.ctx.res.send('ctx-body');
+  }
+
+  @Get('/header-upper')
+  async getHeaderWithUppercase(@Headers('X-ABC') abc) {
+    return abc;
   }
 
 }

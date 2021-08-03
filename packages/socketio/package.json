@@ -1,13 +1,13 @@
 {
   "name": "@midwayjs/socketio",
-  "version": "2.6.13",
+  "version": "2.12.1",
   "description": "Midway Web Framework for socket.io",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "scripts": {
-    "build": "midway-bin build -c",
-    "test": "midway-bin test --ts --forceExit",
-    "cov": "midway-bin cov --ts --forceExit",
+    "build": "tsc",
+    "test": "node --require=ts-node/register ../../node_modules/.bin/jest",
+    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --coverage --forceExit",
     "ci": "npm run test"
   },
   "keywords": [
@@ -23,17 +23,17 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/cli": "^1.2.36",
-    "@midwayjs/mock": "^2.6.13",
-    "@types/socket.io": "^2.1.11",
-    "@types/socket.io-client": "^1.4.33",
+    "@midwayjs/decorator": "^2.11.5",
+    "@midwayjs/mock": "^2.12.1",
+    "@types/socket.io-client": "^1.4.36",
     "fs-extra": "^8.0.1",
-    "socket.io-client": "^2.3.0"
+    "socket.io-client": "^4.0.0"
   },
   "dependencies": {
-    "@midwayjs/core": "^2.6.13",
-    "@midwayjs/decorator": "^2.6.8",
-    "socket.io": "^2.3.0"
+    "@midwayjs/core": "^2.12.1",
+    "@midwayjs/logger": "^2.11.3",
+    "socket.io": "^4.0.0",
+    "socket.io-redis": "^6.1.0"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
   "repository": {

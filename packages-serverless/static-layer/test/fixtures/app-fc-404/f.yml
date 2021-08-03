@@ -1,0 +1,11 @@
+service: my-static-demo
+
+provider:
+  name: aliyun
+
+deployType:
+  type: static
+  config:
+    rootDir: build
+    prefix: /
+    notFoundUrl: /404.html

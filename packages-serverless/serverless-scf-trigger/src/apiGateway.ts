@@ -7,8 +7,6 @@ import * as expressBodyParser from 'body-parser';
  * https://cloud.tencent.com/document/product/583/12513
  */
 export class ApiGatewayTrigger extends SCFBaseTrigger {
-  handler;
-
   app: express.Application;
 
   async delegate(invokeWrapper: (invokeArgs: any[]) => any) {
@@ -53,7 +51,12 @@ export class ApiGatewayTrigger extends SCFBaseTrigger {
             body: any;
           }) => {
             res.set(result.headers);
-            res.status(result.statusCode).send(result.body);
+            res.status(result.statusCode);
+            if (result.isBase64Encoded) {
+              res.send(Buffer.from(result.body, 'base64'));
+            } else {
+              res.send(result.body);
+            }
           }
         );
       });

@@ -9,13 +9,9 @@ export function Handler(
     functionOptions = funHandler;
     funHandler = functionOptions.funHandler;
   }
-  return (
-    target: object,
-    propertyKey: string,
-    descriptor: PropertyDescriptor
-  ) => {
+  return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
     // If target is instance, @Func annotate class member method
-    saveModule(FUNC_KEY, (target as object).constructor);
+    saveModule(FUNC_KEY, (target as Record<string, unknown>).constructor);
     attachClassMetadata(
       FUNC_KEY,
       Object.assign(

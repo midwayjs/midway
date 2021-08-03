@@ -9,6 +9,9 @@
       "noCi": true,
       "npmClientArgs": [
         "--no-package-lock"
+      ],
+      "nohoist": [
+        "@midwayjs/faas-middleware-upload"
       ]
     },
     "publish": {
@@ -18,9 +21,10 @@
     },
     "version": {
       "conventionalCommits": true,
-      "createRelease": "github"
+      "createRelease": "github",
+      "forcePublish": "@midwayjs/version"
     }
   },
   "npmClient": "npm",
-  "version": "2.6.13"
+  "version": "2.12.1"
 }

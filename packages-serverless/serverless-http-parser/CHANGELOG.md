@@ -3,6 +3,105 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.11.4](https://github.com/midwayjs/midway-faas/compare/v2.11.3...v2.11.4) (2021-07-06)
+
+
+### Bug Fixes
+
+* add target parameter ([#1139](https://github.com/midwayjs/midway-faas/issues/1139)) ([5be4757](https://github.com/midwayjs/midway-faas/commit/5be475710ee19e16a99643a355f7f1774f3435bc))
+
+
+
+
+
+## [2.11.1](https://github.com/midwayjs/midway-faas/compare/v2.11.0...v2.11.1) (2021-06-19)
+
+**Note:** Version bump only for package @midwayjs/serverless-http-parser
+
+
+
+
+
+## [2.10.7](https://github.com/midwayjs/midway-faas/compare/v2.10.6...v2.10.7) (2021-04-17)
+
+
+### Bug Fixes
+
+* add event name args ([#986](https://github.com/midwayjs/midway-faas/issues/986)) ([bfd8232](https://github.com/midwayjs/midway-faas/commit/bfd82320aee8600d8fa30bd2821a0e68c80fd755))
+* format ([#997](https://github.com/midwayjs/midway-faas/issues/997)) ([456cc14](https://github.com/midwayjs/midway-faas/commit/456cc14513bdb000d1aa3130e9719caf7a8a803f))
+
+
+
+
+
+# [2.10.0](https://github.com/midwayjs/midway-faas/compare/v2.9.3...v2.10.0) (2021-04-02)
+
+**Note:** Version bump only for package @midwayjs/serverless-http-parser
+
+
+
+
+
+## [2.8.11](https://github.com/midwayjs/midway-faas/compare/v2.8.10...v2.8.11) (2021-03-12)
+
+
+### Features
+
+* complete static-layer ([#908](https://github.com/midwayjs/midway-faas/issues/908)) ([75033b5](https://github.com/midwayjs/midway-faas/commit/75033b51c89e51e573c0789ec2466447918bcd61))
+
+
+
+
+
+## [2.8.9](https://github.com/midwayjs/midway-faas/compare/v2.8.8...v2.8.9) (2021-03-08)
+
+
+### Bug Fixes
+
+* delete method parse body and form body ([#891](https://github.com/midwayjs/midway-faas/issues/891)) ([f5c1e70](https://github.com/midwayjs/midway-faas/commit/f5c1e7042ed85656e323563421391a719999979e))
+
+
+
+
+
+## [2.8.2](https://github.com/midwayjs/midway-faas/compare/v2.8.0...v2.8.2) (2021-02-27)
+
+**Note:** Version bump only for package @midwayjs/serverless-http-parser
+
+
+
+
+
+## [2.7.7](https://github.com/midwayjs/midway-faas/compare/v2.7.6...v2.7.7) (2021-02-20)
+
+
+### Bug Fixes
+
+* add request secure ([#854](https://github.com/midwayjs/midway-faas/issues/854)) ([800d30b](https://github.com/midwayjs/midway-faas/commit/800d30bc0374b208434f328efeeb0c9239063520))
+
+
+
+
+
+## [2.7.4](https://github.com/midwayjs/midway-faas/compare/v2.7.3...v2.7.4) (2021-02-03)
+
+
+### Bug Fixes
+
+* http parser get body ([#837](https://github.com/midwayjs/midway-faas/issues/837)) ([9afdbbb](https://github.com/midwayjs/midway-faas/commit/9afdbbbd201834ec989f45a4d54cb26883d812e6))
+
+
+
+
+
+# [2.7.0](https://github.com/midwayjs/midway-faas/compare/v2.6.13...v2.7.0) (2021-01-27)
+
+**Note:** Version bump only for package @midwayjs/serverless-http-parser
+
+
+
+
+
 ## [2.6.8](https://github.com/midwayjs/midway-faas/compare/v2.6.7...v2.6.8) (2021-01-06)
 
 **Note:** Version bump only for package @midwayjs/serverless-http-parser

@@ -2,9 +2,76 @@ import { Validate, Rule, RuleType } from '../../src';
 import * as assert from 'assert';
 describe('/test/annotation/check.test.ts', () => {
   it('check with check', () => {
+    class TO{
+
+    }
+
+    @Rule(TO)
+    class UserDTO extends TO{
+      @Rule(RuleType.number().max(10))
+      age: number;
+    }
+
+    @Rule(UserDTO)
+    class HelloDTO extends UserDTO{
+    }
+
+    class Hello {
+      @Validate()
+      school(a, data: HelloDTO) {
+        return data;
+      }
+    }
+    const user = {
+      age: 8
+    };
+    const result = new Hello().school(1, user);
+    assert.deepEqual(result, user);
+  });
+
+  it('check with check with extends', () => {
+    class TO{
+
+    }
+
+    @Rule(TO)
+    class UserDTO extends TO{
+      @Rule(RuleType.number().max(10))
+      age: number;
+    }
+
+    @Rule(UserDTO)
+    class HelloDTO extends UserDTO{
+
+      @Rule(RuleType.number().min(4))
+      age: number;
+    }
+
+    class Hello {
+      @Validate()
+      school(a, data: HelloDTO) {
+        return data;
+      }
+    }
+    const user = {
+      age: 11
+    };
+    const result = new Hello().school(1, user);
+    assert.deepEqual(result, user);
+  });
+
+  it('check with check with options', () => {
+    class WorldDTO {
+      @Rule(RuleType.number().max(20))
+      age: number;
+    }
+
     class UserDTO {
       @Rule(RuleType.number().max(10))
       age: number;
+
+      @Rule(WorldDTO, {required: false})
+      world?: WorldDTO;
     }
 
     class Hello {
@@ -14,10 +81,41 @@ describe('/test/annotation/check.test.ts', () => {
       }
     }
     const user = {
-      age: 8,
+      age: 10
     };
     const result = new Hello().school(1, user);
     assert.deepEqual(result, user);
+  });
+
+  it('check with check with array', () => {
+    class WorldDTO {
+      @Rule(RuleType.number().max(20))
+      age: number;
+    }
+
+    class UserDTO {
+      @Rule(RuleType.number().max(10))
+      age: number;
+
+      @Rule(WorldDTO)
+      world: WorldDTO[];
+    }
+
+    class Hello {
+      @Validate()
+      school(a, data: UserDTO) {
+        return data;
+      }
+    }
+    const user = {
+      age: 10,
+      world: [{
+        age: 10
+      }, {
+        age: 22
+      }]
+    };
+    expect(()=> new Hello().school(1, user)).toThrow();
   });
 
   it('check with check and transform object', () => {

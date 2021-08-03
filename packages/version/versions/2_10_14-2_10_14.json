@@ -1,0 +1,52 @@
+{
+  "@midwayjs/egg-layer": "2.10.14",
+  "@midwayjs/express-layer": "2.10.14",
+  "@midwayjs/faas-typings": "2.10.7",
+  "@midwayjs/koa-layer": "2.10.14",
+  "@midwayjs/runtime-engine": "2.10.14",
+  "@midwayjs/runtime-mock": "2.10.14",
+  "@midwayjs/serverless-app": [
+    "2.10.14",
+    "2.10.15",
+    "2.10.17"
+  ],
+  "@midwayjs/serverless-aws-starter": "2.10.14",
+  "@midwayjs/serverless-fc-starter": "2.10.14",
+  "@midwayjs/serverless-fc-trigger": "2.10.14",
+  "@midwayjs/serverless-http-parser": "2.10.7",
+  "@midwayjs/serverless-scf-starter": "2.10.14",
+  "@midwayjs/serverless-scf-trigger": "2.10.14",
+  "@midwayjs/static-layer": "2.10.14",
+  "@midwayjs/bootstrap": "2.10.14",
+  "@midwayjs/cache": "2.10.14",
+  "@midwayjs/consul": "2.10.14",
+  "@midwayjs/core": "2.10.14",
+  "@midwayjs/decorator": "2.10.14",
+  "@midwayjs/faas": "2.10.14",
+  "@midwayjs/grpc": "2.10.14",
+  "@midwayjs/logger": "2.10.14",
+  "midway-schedule": "2.10.14",
+  "midway": "2.10.14",
+  "@midwayjs/mock": "2.10.14",
+  "@midwayjs/prometheus": [
+    "2.10.14",
+    "2.10.15",
+    "2.10.16"
+  ],
+  "@midwayjs/rabbitmq": "2.10.14",
+  "@midwayjs/socketio": "2.10.14",
+  "@midwayjs/task": [
+    "2.10.14",
+    "2.10.16"
+  ],
+  "@midwayjs/typegoose": "2.10.14",
+  "@midwayjs/version": [
+    "2.10.14",
+    "2.10.15",
+    "2.10.16",
+    "2.10.17"
+  ],
+  "@midwayjs/express": "2.10.14",
+  "@midwayjs/koa": "2.10.14",
+  "@midwayjs/web": "2.10.14"
+}

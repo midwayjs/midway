@@ -1,5 +1,20 @@
-import { Provide, Inject, Controller, Config, Get, Post, Query, Param, Files, File, Session, Body, Headers } from '@midwayjs/decorator';
-import { ALL } from '@midwayjs/decorator';
+import {
+  Provide,
+  Inject,
+  Controller,
+  Config,
+  Get,
+  Post,
+  Query,
+  Param,
+  Files,
+  File,
+  Session,
+  Body,
+  Headers,
+  Queries,
+  ALL
+} from '@midwayjs/decorator';
 
 import * as path from 'path';
 import * as fs from 'fs';
@@ -97,6 +112,16 @@ export class ParamController {
   async headerHost(@Headers('host') host) {
     // service,hello,a,b
     this.ctx.body = host.substring(0, 3);
+  }
+
+  @Get('/param_queries')
+  async param_queries(@Queries() name: string) {
+    return name;
+  }
+
+  @Get('/param_queries_all')
+  async param_queries_all(@Queries(ALL) name: string) {
+    return name;
   }
 
 }

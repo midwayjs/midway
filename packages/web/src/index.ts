@@ -1,5 +1,5 @@
 export * from './interface';
-export { SingleProcess as Framework } from './framework/singleProcess';
+export { MidwayWebSingleProcessFramework as Framework } from './framework/singleProcess';
 export { MidwayWebFramework } from './framework/web';
 export {
   createEggApplication,

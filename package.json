@@ -1,22 +1,28 @@
 {
-  "name": "midway",
+  "name": "midway_project",
   "description": "a web framework for complex Node.js application",
   "version": "1.0.0",
   "devDependencies": {
-    "@types/jest": "^26.0.10",
-    "@types/node": "^10.17.21",
+    "@types/jest": "^26.0.23",
+    "@types/node": "^15.0.1",
+    "@vercel/ncc": "^0.29.0",
+    "dotenv": "^10.0.0",
+    "jest": "^27.0.3",
     "lerna": "^3.20.2",
     "lerna-relinker": "^1.4.0",
     "mwts": "^1.0.5",
     "opencollective": "^1.0.3",
     "opencollective-postinstall": "^2.0.2",
-    "typescript": "^4.1.0"
+    "ts-jest": "^27.0.2",
+    "ts-node": "^10.0.0",
+    "typescript": "^4.1.0",
+    "why-is-node-running": "^2.2.0"
   },
   "scripts": {
     "autod": "lerna run autod",
     "test": "lerna run test",
     "link": "lerna run link",
-    "cov": "lerna run cov --concurrency=1",
+    "cov": "lerna run cov --concurrency=2 --stream",
     "ci": "npm run build && npm run cov",
     "purge": "npm run clean && rm -rf node_modules",
     "reset": "npm run purge && npm i && npm run ci",
@@ -24,13 +30,15 @@
     "beta": "sh scripts/publish.sh --npm-tag beta --force-publish=*",
     "next": "sh scripts/publish.sh --npm-tag next",
     "release": "rm -f ./packages/.DS* && sh scripts/publish.sh",
-    "bootstrap": "rm -f ./packages/.DS* && lerna bootstrap",
+    "bootstrap": "rm -f ./packages/.DS* && lerna bootstrap --concurrency 4",
     "clean": "lerna clean --yes && rm -rf ./packages/**/package-lock.json && rm -f package-lock.json",
     "build": "sh scripts/build.sh",
     "authors": "git log --format='%aN <%aE>' | sort -u > AUTHORS",
     "postinstall": "opencollective-postinstall",
+    "version": "node ./scripts/generate_rollback.js && node ./scripts/generate_version.js && git add .",
     "lint": "lerna exec mwts check",
-    "lint:fix": "lerna exec mwts fix"
+    "lint:fix": "lerna exec mwts fix",
+    "typedoc": "typedoc && cp ./scripts/custom.css ./docs/api-reference/assets/css"
   },
   "keywords": [
     "container",

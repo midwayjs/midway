@@ -1,6 +1,6 @@
 {
   "name": "midway-schedule",
-  "version": "2.6.13",
+  "version": "2.12.1",
   "description": "",
   "main": "index.js",
   "eggPlugin": {
@@ -10,17 +10,17 @@
     ]
   },
   "scripts": {
-    "build": "../../node_modules/.bin/tsc",
-    "test": "NODE_ENV=unittest midway-bin test --ts"
+    "build": "tsc",
+    "test": "NODE_ENV=unittest node --require=ts-node/register ../../node_modules/.bin/jest"
   },
   "keywords": [],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/cli": "^1.2.36",
-    "@midwayjs/mock": "^2.6.13"
+    "@midwayjs/decorator": "^2.11.5",
+    "@midwayjs/mock": "^2.12.1",
+    "@types/sinon": "^10.0.2"
   },
   "dependencies": {
-    "@midwayjs/decorator": "^2.6.8",
     "is-type-of": "^1.2.1"
   },
   "engines": {

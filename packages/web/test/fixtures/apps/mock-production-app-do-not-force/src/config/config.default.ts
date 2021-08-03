@@ -8,4 +8,8 @@ exports.logger = {
   allowDebugAtProd: true,
 };
 
+export const midwayFeature = {
+  replaceEggLogger: true,
+}
+
 exports.keys = 'foo';

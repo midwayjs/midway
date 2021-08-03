@@ -45,7 +45,7 @@ export const matchContentTimes = (p: string, matchString: string | RegExp) => {
   }
 
   if (typeof matchString === 'string') {
-    matchString = new RegExp(matchString);
+    matchString = new RegExp(matchString, 'g');
   }
 
   const result = content.match(matchString) || [];
@@ -72,5 +72,6 @@ export const finishLogger = async (logger) => {
 }
 
 export const getCurrentDateString = () => {
-  return new Date().toISOString().split('T')[0];
+  const d = new Date();
+  return `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}-${(d.getDate()).toString().padStart(2, '0')}`
 };

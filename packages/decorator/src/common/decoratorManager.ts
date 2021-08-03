@@ -15,7 +15,7 @@ import {
   TAGGED,
   TAGGED_CLS,
   TAGGED_PROP,
-} from './constant';
+} from '../constant';
 
 import {
   DUPLICATED_INJECTABLE_DECORATOR,
@@ -23,19 +23,21 @@ import {
   INVALID_DECORATOR_OPERATION,
 } from './errMsg';
 import { Metadata } from './metadata';
-import { getParamNames, classNamed, isNullOrUndefined } from '../util';
+import { getParamNames, classNamed, isNullOrUndefined, isClass } from '../util';
 
 const debug = require('util').debuglog('decorator:manager');
 
-export type decoratorKey = string | symbol;
+export type DecoratorKey = string | symbol;
 
 export const PRELOAD_MODULE_KEY = 'INJECTION_PRELOAD_MODULE_KEY';
+
+export const INJECT_CLASS_KEY_PREFIX = 'INJECTION_CLASS_META_DATA';
 
 export class DecoratorManager extends Map {
   /**
    * the key for meta data store in class
    */
-  injectClassKeyPrefix = 'INJECTION_CLASS_META_DATA';
+  injectClassKeyPrefix = INJECT_CLASS_KEY_PREFIX;
   /**
    * the key for method meta data store in class
    */
@@ -57,21 +59,25 @@ export class DecoratorManager extends Map {
     this.set(key, new Set());
   }
 
-  static getDecoratorClassKey(decoratorNameKey: decoratorKey) {
+  static getDecoratorClassKey(decoratorNameKey: DecoratorKey) {
     return decoratorNameKey.toString() + '_CLS';
   }
 
-  static getDecoratorMethodKey(decoratorNameKey: decoratorKey) {
+  static removeDecoratorClassKeySuffix(decoratorNameKey: DecoratorKey) {
+    return decoratorNameKey.toString().replace('_CLS', '');
+  }
+
+  static getDecoratorMethodKey(decoratorNameKey: DecoratorKey) {
     return decoratorNameKey.toString() + '_METHOD';
   }
 
-  static getDecoratorClsMethodPrefix(decoratorNameKey: decoratorKey) {
+  static getDecoratorClsMethodPrefix(decoratorNameKey: DecoratorKey) {
     return decoratorNameKey.toString() + '_CLS_METHOD';
   }
 
   static getDecoratorClsMethodKey(
-    decoratorNameKey: decoratorKey,
-    methodKey: decoratorKey
+    decoratorNameKey: DecoratorKey,
+    methodKey: DecoratorKey
   ) {
     return (
       DecoratorManager.getDecoratorClsMethodPrefix(decoratorNameKey) +
@@ -81,8 +87,8 @@ export class DecoratorManager extends Map {
   }
 
   static getDecoratorMethod(
-    decoratorNameKey: decoratorKey,
-    methodKey: decoratorKey
+    decoratorNameKey: DecoratorKey,
+    methodKey: DecoratorKey
   ) {
     return (
       DecoratorManager.getDecoratorMethodKey(decoratorNameKey) +
@@ -195,7 +201,7 @@ export class DecoratorManager extends Map {
    * @param target target class
    * @param propertyName
    */
-  saveMetadata(decoratorNameKey: decoratorKey, data, target, propertyName?) {
+  saveMetadata(decoratorNameKey: DecoratorKey, data, target, propertyName?) {
     if (propertyName) {
       const dataKey = DecoratorManager.getDecoratorMethod(
         decoratorNameKey,
@@ -226,7 +232,7 @@ export class DecoratorManager extends Map {
    * @param propertyName
    */
   attachMetadata(
-    decoratorNameKey: decoratorKey,
+    decoratorNameKey: DecoratorKey,
     data,
     target,
     propertyName?: string,
@@ -262,7 +268,7 @@ export class DecoratorManager extends Map {
    * @param target
    * @param propertyName
    */
-  getMetadata(decoratorNameKey: decoratorKey, target, propertyName?) {
+  getMetadata(decoratorNameKey: DecoratorKey, target, propertyName?) {
     if (propertyName) {
       const dataKey = DecoratorManager.getDecoratorMethod(
         decoratorNameKey,
@@ -293,7 +299,7 @@ export class DecoratorManager extends Map {
    * @param propertyName
    */
   savePropertyDataToClass(
-    decoratorNameKey: decoratorKey,
+    decoratorNameKey: DecoratorKey,
     data,
     target,
     propertyName
@@ -319,7 +325,7 @@ export class DecoratorManager extends Map {
    * @param groupBy
    */
   attachPropertyDataToClass(
-    decoratorNameKey: decoratorKey,
+    decoratorNameKey: DecoratorKey,
     data,
     target,
     propertyName,
@@ -345,7 +351,7 @@ export class DecoratorManager extends Map {
    * @param propertyName
    */
   getPropertyDataFromClass(
-    decoratorNameKey: decoratorKey,
+    decoratorNameKey: DecoratorKey,
     target,
     propertyName
   ) {
@@ -365,7 +371,7 @@ export class DecoratorManager extends Map {
    * @param decoratorNameKey
    * @param target
    */
-  listPropertyDataFromClass(decoratorNameKey: decoratorKey, target) {
+  listPropertyDataFromClass(decoratorNameKey: DecoratorKey, target) {
     const originMap = DecoratorManager.getMetadata(
       this.injectClassMethodKeyPrefix,
       target
@@ -385,6 +391,13 @@ export class DecoratorManager extends Map {
 }
 
 const manager = new DecoratorManager();
+if (global['MIDWAY_GLOBAL_DECORATOR_MANAGER']) {
+  console.warn(
+    'DecoratorManager not singleton and please check @midwayjs/decorator version by "npm ls @midwayjs/decorator"'
+  );
+} else {
+  global['MIDWAY_GLOBAL_DECORATOR_MANAGER'] = manager;
+}
 
 /**
  * save data to class
@@ -393,7 +406,7 @@ const manager = new DecoratorManager();
  * @param target
  */
 export function saveClassMetadata(
-  decoratorNameKey: decoratorKey,
+  decoratorNameKey: DecoratorKey,
   data,
   target
 ) {
@@ -408,7 +421,7 @@ export function saveClassMetadata(
  * @param groupBy
  */
 export function attachClassMetadata(
-  decoratorNameKey: decoratorKey,
+  decoratorNameKey: DecoratorKey,
   data: any,
   target,
   groupBy?: string
@@ -422,14 +435,14 @@ export function attachClassMetadata(
   );
 }
 
-const testKeyMap = new Map<decoratorKey, Error>();
+const testKeyMap = new Map<DecoratorKey, Error>();
 
 /**
  * get data from class
  * @param decoratorNameKey
  * @param target
  */
-export function getClassMetadata(decoratorNameKey: decoratorKey, target) {
+export function getClassMetadata(decoratorNameKey: DecoratorKey, target) {
   if (testKeyMap.size > 0 && testKeyMap.has(decoratorNameKey)) {
     throw testKeyMap.get(decoratorNameKey);
   }
@@ -437,7 +450,7 @@ export function getClassMetadata(decoratorNameKey: decoratorKey, target) {
 }
 
 // TODO 因 https://github.com/microsoft/TypeScript/issues/38820 等 4.0 发布移除掉
-export function throwErrorForTest(key: decoratorKey, e: Error) {
+export function throwErrorForTest(key: DecoratorKey, e: Error) {
   if (e) {
     testKeyMap.set(key, e);
   } else {
@@ -455,7 +468,7 @@ export function throwErrorForTest(key: decoratorKey, e: Error) {
  * @param method
  */
 export function saveMethodDataToClass(
-  decoratorNameKey: decoratorKey,
+  decoratorNameKey: DecoratorKey,
   data,
   target,
   method
@@ -478,7 +491,7 @@ export function saveMethodDataToClass(
  * @param method
  */
 export function attachMethodDataToClass(
-  decoratorNameKey: decoratorKey,
+  decoratorNameKey: DecoratorKey,
   data,
   target,
   method
@@ -500,7 +513,7 @@ export function attachMethodDataToClass(
  * @param method
  */
 export function getMethodDataFromClass(
-  decoratorNameKey: decoratorKey,
+  decoratorNameKey: DecoratorKey,
   target,
   method
 ) {
@@ -514,7 +527,7 @@ export function getMethodDataFromClass(
  * @param target
  */
 export function listMethodDataFromClass(
-  decoratorNameKey: decoratorKey,
+  decoratorNameKey: DecoratorKey,
   target
 ) {
   return manager.listPropertyDataFromClass(decoratorNameKey, target);
@@ -529,7 +542,7 @@ export function listMethodDataFromClass(
  * @param method
  */
 export function saveMethodMetadata(
-  decoratorNameKey: decoratorKey,
+  decoratorNameKey: DecoratorKey,
   data,
   target,
   method
@@ -546,7 +559,7 @@ export function saveMethodMetadata(
  * @param method
  */
 export function attachMethodMetadata(
-  decoratorNameKey: decoratorKey,
+  decoratorNameKey: DecoratorKey,
   data,
   target,
   method
@@ -562,7 +575,7 @@ export function attachMethodMetadata(
  * @param method
  */
 export function getMethodMetadata(
-  decoratorNameKey: decoratorKey,
+  decoratorNameKey: DecoratorKey,
   target,
   method
 ) {
@@ -577,7 +590,7 @@ export function getMethodMetadata(
  * @param propertyName
  */
 export function savePropertyDataToClass(
-  decoratorNameKey: decoratorKey,
+  decoratorNameKey: DecoratorKey,
   data,
   target,
   propertyName
@@ -596,18 +609,21 @@ export function savePropertyDataToClass(
  * @param data
  * @param target
  * @param propertyName
+ * @param groupBy
  */
 export function attachPropertyDataToClass(
-  decoratorNameKey: decoratorKey,
+  decoratorNameKey: DecoratorKey,
   data,
   target,
-  propertyName
+  propertyName,
+  groupBy?: string
 ) {
   return manager.attachPropertyDataToClass(
     decoratorNameKey,
     data,
     target,
-    propertyName
+    propertyName,
+    groupBy
   );
 }
 
@@ -618,7 +634,7 @@ export function attachPropertyDataToClass(
  * @param propertyName
  */
 export function getPropertyDataFromClass(
-  decoratorNameKey: decoratorKey,
+  decoratorNameKey: DecoratorKey,
   target,
   propertyName
 ) {
@@ -635,7 +651,7 @@ export function getPropertyDataFromClass(
  * @param target
  */
 export function listPropertyDataFromClass(
-  decoratorNameKey: decoratorKey,
+  decoratorNameKey: DecoratorKey,
   target
 ) {
   return manager.listPropertyDataFromClass(decoratorNameKey, target);
@@ -649,7 +665,7 @@ export function listPropertyDataFromClass(
  * @param propertyName
  */
 export function savePropertyMetadata(
-  decoratorNameKey: decoratorKey,
+  decoratorNameKey: DecoratorKey,
   data,
   target,
   propertyName
@@ -665,7 +681,7 @@ export function savePropertyMetadata(
  * @param propertyName
  */
 export function attachPropertyMetadata(
-  decoratorNameKey: decoratorKey,
+  decoratorNameKey: DecoratorKey,
   data,
   target,
   propertyName
@@ -680,7 +696,7 @@ export function attachPropertyMetadata(
  * @param propertyName
  */
 export function getPropertyMetadata(
-  decoratorNameKey: decoratorKey,
+  decoratorNameKey: DecoratorKey,
   target,
   propertyName
 ) {
@@ -699,7 +715,7 @@ export function savePreloadModule(target) {
  * list preload module
  */
 export function listPreloadModule(): any[] {
-  return manager.listModule(PRELOAD_MODULE_KEY);
+  return listModule(PRELOAD_MODULE_KEY);
 }
 
 /**
@@ -707,7 +723,7 @@ export function listPreloadModule(): any[] {
  * @param decoratorNameKey
  * @param target
  */
-export function saveModule(decoratorNameKey: decoratorKey, target) {
+export function saveModule(decoratorNameKey: DecoratorKey, target) {
   return manager.saveModule(decoratorNameKey, target);
 }
 
@@ -715,15 +731,23 @@ export function saveModule(decoratorNameKey: decoratorKey, target) {
  * list module from decorator key
  * @param decoratorNameKey
  */
-export function listModule(decoratorNameKey: decoratorKey): any[] {
-  return manager.listModule(decoratorNameKey);
+export function listModule(
+  decoratorNameKey: DecoratorKey,
+  filter?: (module) => boolean
+): any[] {
+  const modules = manager.listModule(decoratorNameKey);
+  if (filter) {
+    return modules.filter(filter);
+  } else {
+    return modules;
+  }
 }
 
 /**
  * reset module
  * @param decoratorNameKey
  */
-export function resetModule(decoratorNameKey: decoratorKey): void {
+export function resetModule(decoratorNameKey: DecoratorKey): void {
   return manager.resetModule(decoratorNameKey);
 }
 
@@ -950,7 +974,17 @@ export function getConstructorInject(target: any): TagPropsMetadata[] {
 export function savePropertyInject(opts: InjectOptions) {
   let identifier = opts.identifier;
   if (!identifier) {
-    identifier = opts.targetKey;
+    const type = getPropertyType(opts.target, opts.targetKey);
+    if (
+      !type.isBaseType &&
+      isClass(type.originDesign) &&
+      isProvide(type.originDesign)
+    ) {
+      identifier = getProviderId(type.originDesign);
+    }
+    if (!identifier) {
+      identifier = opts.targetKey;
+    }
   }
   if (identifier.includes('@') && !identifier.includes(':')) {
     identifier = `${identifier}:${opts.targetKey}`;
@@ -973,7 +1007,7 @@ export function getPropertyInject(target: any): TagPropsMetadata[] {
  * @param target class
  * @param props 属性
  */
-export function saveObjectDefProps(target: any, props: object = {}) {
+export function saveObjectDefProps(target: any, props = {}) {
   if (Reflect.hasMetadata(OBJ_DEF_CLS, target)) {
     const originProps = Reflect.getMetadata(OBJ_DEF_CLS, target);
 

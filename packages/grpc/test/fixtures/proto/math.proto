@@ -1,0 +1,30 @@
+
+syntax = "proto3";
+
+package math;
+
+message AddArgs {
+  int32 id = 1;
+  int32 num = 2;
+}
+
+message Num {
+  int32 id = 1;
+  int32 num = 2;
+}
+
+service Math {
+  rpc Add (AddArgs) returns (Num) {
+  }
+
+  rpc AddMore (stream AddArgs) returns (stream Num) {
+  }
+
+  // 服务端往客户端推
+  rpc SumMany (AddArgs) returns (stream Num) {
+  }
+
+  // 客户端往服务端推
+  rpc AddMany (stream AddArgs) returns (Num) {
+  }
+}

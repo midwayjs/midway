@@ -3,6 +3,412 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.12.1](https://github.com/midwayjs/midway/compare/v2.12.0...v2.12.1) (2021-08-01)
+
+**Note:** Version bump only for package @midwayjs/faas
+
+
+
+
+
+# [2.12.0](https://github.com/midwayjs/midway/compare/v2.11.7...v2.12.0) (2021-07-30)
+
+**Note:** Version bump only for package @midwayjs/faas
+
+
+
+
+
+## [2.11.6](https://github.com/midwayjs/midway/compare/v2.11.5...v2.11.6) (2021-07-16)
+
+**Note:** Version bump only for package @midwayjs/faas
+
+
+
+
+
+## [2.11.5](https://github.com/midwayjs/midway/compare/v2.11.4...v2.11.5) (2021-07-15)
+
+**Note:** Version bump only for package @midwayjs/faas
+
+
+
+
+
+## [2.11.4](https://github.com/midwayjs/midway/compare/v2.11.3...v2.11.4) (2021-07-06)
+
+
+### Bug Fixes
+
+* @Func decorator with empty metadata ([#1137](https://github.com/midwayjs/midway/issues/1137)) ([621a99a](https://github.com/midwayjs/midway/commit/621a99a9ee77a8f370a28a395363f585057bd054))
+
+
+
+
+
+## [2.11.3](https://github.com/midwayjs/midway/compare/v2.11.2...v2.11.3) (2021-07-02)
+
+**Note:** Version bump only for package @midwayjs/faas
+
+
+
+
+
+## [2.11.2](https://github.com/midwayjs/midway/compare/v2.11.1...v2.11.2) (2021-06-28)
+
+
+### Bug Fixes
+
+* replace ctx.logger in fc serverless environment ([#1112](https://github.com/midwayjs/midway/issues/1112)) ([8ac87b8](https://github.com/midwayjs/midway/commit/8ac87b832154f2ec0fe82df1ec31e283f03b9b2f))
+
+
+
+
+
+## [2.11.1](https://github.com/midwayjs/midway/compare/v2.11.0...v2.11.1) (2021-06-19)
+
+**Note:** Version bump only for package @midwayjs/faas
+
+
+
+
+
+# [2.11.0](https://github.com/midwayjs/midway/compare/v2.10.19...v2.11.0) (2021-06-10)
+
+**Note:** Version bump only for package @midwayjs/faas
+
+
+
+
+
+## [2.10.18](https://github.com/midwayjs/midway/compare/v2.10.17...v2.10.18) (2021-05-26)
+
+**Note:** Version bump only for package @midwayjs/faas
+
+
+
+
+
+## [2.10.14](https://github.com/midwayjs/midway/compare/v2.10.13...v2.10.14) (2021-05-11)
+
+
+### Bug Fixes
+
+* serverless app more method ([#1034](https://github.com/midwayjs/midway/issues/1034)) ([9c44c3f](https://github.com/midwayjs/midway/commit/9c44c3f58930d0c12464d00eceee93cb9e7aaa62))
+
+
+
+
+
+## [2.10.13](https://github.com/midwayjs/midway/compare/v2.10.12...v2.10.13) (2021-05-08)
+
+**Note:** Version bump only for package @midwayjs/faas
+
+
+
+
+
+## [2.10.12](https://github.com/midwayjs/midway/compare/v2.10.11...v2.10.12) (2021-05-07)
+
+**Note:** Version bump only for package @midwayjs/faas
+
+
+
+
+
+## [2.10.11](https://github.com/midwayjs/midway/compare/v2.10.10...v2.10.11) (2021-04-29)
+
+
+### Bug Fixes
+
+* load functional config ([#1017](https://github.com/midwayjs/midway/issues/1017)) ([51566c0](https://github.com/midwayjs/midway/commit/51566c08124275798b92d3c931b27a86a48a2ba7))
+
+
+
+
+
+## [2.10.10](https://github.com/midwayjs/midway/compare/v2.10.9...v2.10.10) (2021-04-24)
+
+**Note:** Version bump only for package @midwayjs/faas
+
+
+
+
+
+## [2.10.9](https://github.com/midwayjs/midway/compare/v2.10.8...v2.10.9) (2021-04-21)
+
+**Note:** Version bump only for package @midwayjs/faas
+
+
+
+
+
+## [2.10.8](https://github.com/midwayjs/midway/compare/v2.10.7...v2.10.8) (2021-04-21)
+
+**Note:** Version bump only for package @midwayjs/faas
+
+
+
+
+
+## [2.10.7](https://github.com/midwayjs/midway/compare/v2.10.6...v2.10.7) (2021-04-17)
+
+
+### Bug Fixes
+
+* add event name args ([#986](https://github.com/midwayjs/midway/issues/986)) ([bfd8232](https://github.com/midwayjs/midway/commit/bfd82320aee8600d8fa30bd2821a0e68c80fd755))
+* format ([#997](https://github.com/midwayjs/midway/issues/997)) ([456cc14](https://github.com/midwayjs/midway/commit/456cc14513bdb000d1aa3130e9719caf7a8a803f))
+
+
+
+
+
+## [2.10.6](https://github.com/midwayjs/midway/compare/v2.10.5...v2.10.6) (2021-04-14)
+
+**Note:** Version bump only for package @midwayjs/faas
+
+
+
+
+
+## [2.10.5](https://github.com/midwayjs/midway/compare/v2.10.4...v2.10.5) (2021-04-13)
+
+**Note:** Version bump only for package @midwayjs/faas
+
+
+
+
+
+## [2.10.4](https://github.com/midwayjs/midway/compare/v2.10.3...v2.10.4) (2021-04-10)
+
+
+### Bug Fixes
+
+* clear container cache when test ([#978](https://github.com/midwayjs/midway/issues/978)) ([a202075](https://github.com/midwayjs/midway/commit/a202075b52d281e06f1ed7c6139e968fafc960f6))
+
+
+
+
+
+## [2.10.3](https://github.com/midwayjs/midway/compare/v2.10.2...v2.10.3) (2021-04-07)
+
+**Note:** Version bump only for package @midwayjs/faas
+
+
+
+
+
+## [2.10.2](https://github.com/midwayjs/midway/compare/v2.10.1...v2.10.2) (2021-04-05)
+
+
+### Bug Fixes
+
+* serverless event test ([#967](https://github.com/midwayjs/midway/issues/967)) ([e0c15e3](https://github.com/midwayjs/midway/commit/e0c15e316c2813fd574f38bdf6a16a339bfede18))
+
+
+
+
+
+# [2.10.0](https://github.com/midwayjs/midway/compare/v2.9.3...v2.10.0) (2021-04-02)
+
+
+### Features
+
+* use @ServerlessTrigger replace functions in f.yml ([#919](https://github.com/midwayjs/midway/issues/919)) ([a85af14](https://github.com/midwayjs/midway/commit/a85af14e06231e8cd82eff8755794ffd13c3ad95))
+
+
+
+
+
+## [2.9.3](https://github.com/midwayjs/midway/compare/v2.9.2...v2.9.3) (2021-03-30)
+
+
+### Bug Fixes
+
+* set error logger key ([#953](https://github.com/midwayjs/midway/issues/953)) ([25b4302](https://github.com/midwayjs/midway/commit/25b4302b16431031aa2c20304848db9a14a8babb))
+
+
+
+
+
+## [2.9.2](https://github.com/midwayjs/midway/compare/v2.9.1...v2.9.2) (2021-03-27)
+
+
+### Bug Fixes
+
+* interface in serverless-app ([#947](https://github.com/midwayjs/midway/issues/947)) ([0b56648](https://github.com/midwayjs/midway/commit/0b566483d92d0ddac516e49dccc9218e05019220))
+
+
+
+
+
+## [2.9.1](https://github.com/midwayjs/midway/compare/v2.9.0...v2.9.1) (2021-03-24)
+
+
+### Bug Fixes
+
+* npe for faas ([#943](https://github.com/midwayjs/midway/issues/943)) ([8c062f9](https://github.com/midwayjs/midway/commit/8c062f994b89a129a710586e517003f9e6524c31))
+
+
+
+
+
+# [2.9.0](https://github.com/midwayjs/midway/compare/v2.8.13...v2.9.0) (2021-03-22)
+
+
+### Features
+
+* add socket.io-redis support ([#874](https://github.com/midwayjs/midway/issues/874)) ([2818920](https://github.com/midwayjs/midway/commit/2818920b9d3391c81666c5b8587a899b9b237d9e))
+* run multi framework in one process ([#925](https://github.com/midwayjs/midway/issues/925)) ([330555f](https://github.com/midwayjs/midway/commit/330555f93b9af2a783771edd58bb9431a325938f))
+
+
+
+
+
+## [2.8.13](https://github.com/midwayjs/midway/compare/v2.8.12...v2.8.13) (2021-03-17)
+
+
+### Bug Fixes
+
+* add missing typings ([#924](https://github.com/midwayjs/midway/issues/924)) ([a17c8d8](https://github.com/midwayjs/midway/commit/a17c8d8655d3f7a93469b922529b7a1aba212c10))
+
+
+
+
+
+## [2.8.11](https://github.com/midwayjs/midway/compare/v2.8.10...v2.8.11) (2021-03-12)
+
+**Note:** Version bump only for package @midwayjs/faas
+
+
+
+
+
+## [2.8.9](https://github.com/midwayjs/midway/compare/v2.8.8...v2.8.9) (2021-03-08)
+
+**Note:** Version bump only for package @midwayjs/faas
+
+
+
+
+
+## [2.8.8](https://github.com/midwayjs/midway/compare/v2.8.7...v2.8.8) (2021-03-06)
+
+
+### Bug Fixes
+
+* handler ([#885](https://github.com/midwayjs/midway/issues/885)) ([89c6b53](https://github.com/midwayjs/midway/commit/89c6b53d2de8601394d1799c914dbf8177d37f5b))
+
+
+
+
+
+## [2.8.7](https://github.com/midwayjs/midway/compare/v2.8.6...v2.8.7) (2021-03-04)
+
+
+### Bug Fixes
+
+* exports missing ([#884](https://github.com/midwayjs/midway/issues/884)) ([a360a0e](https://github.com/midwayjs/midway/commit/a360a0e645a9551cb9d90ceaf7871f3e0ab5b4d3))
+
+
+
+
+
+## [2.8.6](https://github.com/midwayjs/midway/compare/v2.8.5...v2.8.6) (2021-03-03)
+
+**Note:** Version bump only for package @midwayjs/faas
+
+
+
+
+
+## [2.8.5](https://github.com/midwayjs/midway/compare/v2.8.4...v2.8.5) (2021-03-03)
+
+**Note:** Version bump only for package @midwayjs/faas
+
+
+
+
+
+## [2.8.4](https://github.com/midwayjs/midway/compare/v2.8.3...v2.8.4) (2021-03-03)
+
+**Note:** Version bump only for package @midwayjs/faas
+
+
+
+
+
+## [2.8.3](https://github.com/midwayjs/midway/compare/v2.8.2...v2.8.3) (2021-03-01)
+
+**Note:** Version bump only for package @midwayjs/faas
+
+
+
+
+
+## [2.8.2](https://github.com/midwayjs/midway/compare/v2.8.0...v2.8.2) (2021-02-27)
+
+
+### Features
+
+* support fun router ([#867](https://github.com/midwayjs/midway/issues/867)) ([01e673f](https://github.com/midwayjs/midway/commit/01e673f50d48d302e449ab88c2e419bcaeab1458))
+
+
+
+
+
+# [2.8.0](https://github.com/midwayjs/midway/compare/v2.7.7...v2.8.0) (2021-02-24)
+
+**Note:** Version bump only for package @midwayjs/faas
+
+
+
+
+
+## [2.7.7](https://github.com/midwayjs/midway/compare/v2.7.6...v2.7.7) (2021-02-20)
+
+**Note:** Version bump only for package @midwayjs/faas
+
+
+
+
+
+## [2.7.5](https://github.com/midwayjs/midway/compare/v2.7.4...v2.7.5) (2021-02-08)
+
+**Note:** Version bump only for package @midwayjs/faas
+
+
+
+
+
+## [2.7.4](https://github.com/midwayjs/midway/compare/v2.7.3...v2.7.4) (2021-02-03)
+
+**Note:** Version bump only for package @midwayjs/faas
+
+
+
+
+
+## [2.7.2](https://github.com/midwayjs/midway/compare/v2.7.1...v2.7.2) (2021-01-28)
+
+**Note:** Version bump only for package @midwayjs/faas
+
+
+
+
+
+# [2.7.0](https://github.com/midwayjs/midway/compare/v2.6.13...v2.7.0) (2021-01-27)
+
+
+### Features
+
+* add midway gRPC framework ([#786](https://github.com/midwayjs/midway/issues/786)) ([d90362c](https://github.com/midwayjs/midway/commit/d90362c6bf15c00621ffc2981f19842f216395f8))
+* support entry file in bootstrap ([#819](https://github.com/midwayjs/midway/issues/819)) ([49a5ff6](https://github.com/midwayjs/midway/commit/49a5ff662134bdd42dc3a80738b44a05138f8f7c))
+
+
+
+
+
 ## [2.6.13](https://github.com/midwayjs/midway/compare/v2.6.12...v2.6.13) (2021-01-21)
 
 **Note:** Version bump only for package @midwayjs/faas

@@ -23,7 +23,7 @@ describe('/test/web/paramMapping.test.ts', () => {
     expect(meta.length).eq(9);
   });
 
-  it('extract koa value shoule be ok', async () => {
+  it('extract koa value should be ok', async () => {
     let fn = extractKoaLikeValue(RouteParamTypes.NEXT, {});
     expect(await fn({}, 'next')).eq('next');
 
@@ -40,7 +40,13 @@ describe('/test/web/paramMapping.test.ts', () => {
     fn = extractKoaLikeValue(RouteParamTypes.QUERY, null);
     expect(await fn({query: { body : {aaa: 111}}}, 'next')).deep.eq({ body : {aaa: 111}});
     fn = extractKoaLikeValue(RouteParamTypes.HEADERS, 'body');
-    expect(await fn({headers: { body : {aaa: 111}}}, 'next')).deep.eq({aaa: 111});
+    const ctx = {
+      headers: { body : {aaa: 111}},
+      get(key) {
+        return ctx.headers[key];
+      }
+    };
+    expect(await fn(ctx, 'next')).deep.eq({aaa: 111});
     fn = extractKoaLikeValue(RouteParamTypes.HEADERS, null);
     expect(await fn({headers: { body : {aaa: 111}}}, 'next')).deep.eq({ body : {aaa: 111}});
     fn = extractKoaLikeValue(RouteParamTypes.SESSION, null);
@@ -68,7 +74,7 @@ describe('/test/web/paramMapping.test.ts', () => {
     expect(await fn({ip: '127.0.0.1'}, 'next')).deep.eq('127.0.0.1');
   });
 
-  it('extract express value shoule be ok', async () => {
+  it('extract express value should be ok', async () => {
     let fn = extractExpressLikeValue(RouteParamTypes.NEXT, {});
     expect(await fn({}, {}, 'next')).eq('next');
 
@@ -84,8 +90,16 @@ describe('/test/web/paramMapping.test.ts', () => {
     expect(await fn({query: { body : {aaa: 111}}}, {}, 'next')).deep.eq({aaa: 111});
     fn = extractExpressLikeValue(RouteParamTypes.QUERY, null);
     expect(await fn({query: { body : {aaa: 111}}}, {}, 'next')).deep.eq({ body : {aaa: 111}});
+
+    const req = {
+      headers: { body : {aaa: 111}},
+      get(key) {
+        return req.headers[key];
+      }
+    };
+
     fn = extractExpressLikeValue(RouteParamTypes.HEADERS, 'body');
-    expect(await fn({headers: { body : {aaa: 111}}}, {}, 'next')).deep.eq({aaa: 111});
+    expect(await fn(req, {}, 'next')).deep.eq({aaa: 111});
     fn = extractExpressLikeValue(RouteParamTypes.HEADERS, null);
     expect(await fn({headers: { body : {aaa: 111}}}, {}, 'next')).deep.eq({ body : {aaa: 111}});
     fn = extractExpressLikeValue(RouteParamTypes.SESSION, null);

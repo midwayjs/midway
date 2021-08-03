@@ -9,18 +9,54 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x, 14.x, 15.x]
+        node-version: [10.x, 12.x, 14.x, 16.x]
+
+    services:
+      redis:
+        image: redis
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+      rabbitmq:
+        image: rabbitmq:latest
+        ports:
+          - 5672/tcp
+        options: --health-cmd "rabbitmqctl node_health_check" --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Git checkout
+      uses: actions/checkout@v2
+
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+
+    - name: Start MongoDB
+      uses: supercharge/mongodb-github-action@1.6.0
+      with:
+        mongodb-version: 4.2
+
     - run: npm install && npm install codecov
     - run: npm run bootstrap
     - run: npm run build --if-present
+    - run: npm run lint
     - run: npm run cov
+      env:
+        RABBITMQ_URL: amqp://localhost:${{ job.services.rabbitmq.ports[5672] }}
+        ALI_SDK_OSS_REGION: ${{ secrets.ALI_SDK_OSS_REGION }}
+        ALI_SDK_OSS_ENDPOINT: ${{ secrets.ALI_SDK_OSS_ENDPOINT }}
+        ALI_SDK_OSS_ID: ${{ secrets.ALI_SDK_OSS_ID }}
+        ALI_SDK_OSS_SECRET: ${{ secrets.ALI_SDK_OSS_SECRET }}
+        ALI_SDK_OSS_BUCKET: ${{ secrets.ALI_SDK_OSS_BUCKET }}
+        ALI_SDK_STS_ID: ${{ secrets.ALI_SDK_STS_ID }}
+        ALI_SDK_STS_SECRET: ${{ secrets.ALI_SDK_STS_SECRET }}
+        ALI_SDK_STS_BUCKET: ${{ secrets.ALI_SDK_STS_BUCKET }}
+        ALI_SDK_STS_ROLE: ${{ secrets.ALI_SDK_STS_ROLE }}
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
 

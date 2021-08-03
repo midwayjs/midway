@@ -1,30 +1,30 @@
 import { expect } from 'chai';
 import {
   MidwayContainer as Container,
-  REQUEST_OBJ_CTX_KEY,
   MidwayRequestContainer as RequestContainer,
+  REQUEST_OBJ_CTX_KEY,
   ScopeEnum,
 } from '../../src';
 import { Inject, Provide, Scope } from '@midwayjs/decorator';
 import {
+  AppService,
+  AutoScaleService,
+  CCController,
   CircularOne,
-  CircularTwo,
   CircularThree,
-  TestOne,
-  TestTwo,
-  TestThree,
-  TestOne1,
-  TestTwo1,
-  TestThree1,
+  CircularTwo,
+  FunService,
   GatewayManager,
   GatewayService,
   GroupService,
-  FunService,
-  AppService,
-  TenService,
   ScaleManager,
-  AutoScaleService,
-  CCController,
+  TenService,
+  TestOne,
+  TestOne1,
+  TestThree,
+  TestThree1,
+  TestTwo,
+  TestTwo1,
 } from '../fixtures/circular_dependency';
 
 class Tracer {
@@ -65,7 +65,9 @@ class ChildTracer extends Tracer {
 describe('/test/context/requestContainer.test.ts', () => {
   it('should create request container more then once and get same value from parent', async () => {
     const appCtx = new Container();
-    appCtx.bind(DataCollector);
+    appCtx.bind(DataCollector,{
+      scope: ScopeEnum.Singleton
+    });
     appCtx.bind(ChildTracer);
 
     const reqCtx1 = new RequestContainer({}, appCtx);
@@ -80,7 +82,9 @@ describe('/test/context/requestContainer.test.ts', () => {
 
   it('should get same object in same request context', async () => {
     const appCtx = new Container();
-    appCtx.bind(DataCollector);
+    appCtx.bind(DataCollector, {
+      scope: ScopeEnum.Singleton
+    });
     appCtx.bind(ChildTracer);
 
     const reqCtx = new RequestContainer({}, appCtx);
@@ -120,7 +124,9 @@ describe('/test/context/requestContainer.test.ts', () => {
 
   it('should get singleton object in different request scope object', async () => {
     const appCtx = new Container();
-    appCtx.bind(DataCollector);
+    appCtx.bind(DataCollector, {
+      scope: ScopeEnum.Singleton
+    });
     appCtx.bind(ChildTracer);
 
     const reqCtx1 = new RequestContainer({}, appCtx);
@@ -138,7 +144,9 @@ describe('/test/context/requestContainer.test.ts', () => {
 
   it('should get ctx from object in requestContainer', async () => {
     const appCtx = new Container();
-    appCtx.bind(DataCollector);
+    appCtx.bind(DataCollector,{
+      scope: ScopeEnum.Singleton
+    });
     appCtx.bind(ChildTracer);
 
     const ctx1 = { a: 1 };

@@ -16,9 +16,9 @@ class TestFun {
 }
 
 describe('/test/microservice/rabbit.test.ts', () => {
-  it('test rabbit listner decorator', () => {
+  it('test rabbit listener decorator', () => {
     const meta = getClassMetadata(MS_CONSUMER_KEY, TestFun);
-    expect(meta).toEqual('rabbitmq');
+    expect(meta).toEqual({"metadata": {}, "type": "rabbitmq"});
 
     const data = getPropertyDataFromClass(MS_CONSUMER_KEY, TestFun, 'gotEvent');
     expect(data[0]).toEqual({ 'propertyKey': 'gotEvent', 'queueName': 'tasks' });

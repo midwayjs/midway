@@ -10,8 +10,8 @@ const EVENT_PARSED = Symbol.for('ctx#event_parsed');
 const BODY = Symbol.for('ctx#body');
 
 export class HTTPRequest {
-  private originContext;
-  private originEvent;
+  private readonly originContext;
+  private readonly originEvent;
   public bodyParsed = false;
 
   constructor(event, context) {
@@ -52,8 +52,8 @@ export class HTTPRequest {
 
   get url() {
     if (!this[EVENT].url) {
-      const querystirng = qs.stringify(this.query || {});
-      this[EVENT].url = this.path + (querystirng ? '?' + querystirng : '');
+      const querystring = (qs as any).stringify(this.query || {});
+      this[EVENT].url = this.path + (querystring ? '?' + querystring : '');
     }
     return this[EVENT].url;
   }
@@ -67,6 +67,10 @@ export class HTTPRequest {
 
   get path() {
     return this[EVENT].path;
+  }
+
+  set path(value) {
+    this[EVENT].path = value;
   }
 
   get pathParameters() {
@@ -91,6 +95,10 @@ export class HTTPRequest {
   }
 
   get body() {
+    const method = this.method.toLowerCase();
+    if (['get', 'head', 'options'].includes(method)) {
+      return undefined;
+    }
     if (this.bodyParsed) {
       return this[BODY];
     }

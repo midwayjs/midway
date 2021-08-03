@@ -239,6 +239,11 @@ interface ContextDelegatedRequest {
    * Get parsed query-string.
    */
   query: { [key: string]: any };
+
+  /**
+   * Get parsed params
+   */
+  params: { [key: string]: string };
 }
 
 export interface FaaSHTTPRequest extends ContextDelegatedRequest {

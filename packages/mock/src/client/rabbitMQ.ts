@@ -1,11 +1,9 @@
-import { Channel } from 'amqplib';
-import { debuglog } from 'util';
+import { Channel, Options } from 'amqplib';
 
 const queues = {};
 const exchanges = {};
 const eventListeners = [];
 const EventEmitter = require('events').EventEmitter;
-const debug = debuglog('midway:mock');
 
 const createQueue = () => {
   let messages = [];
@@ -304,39 +302,107 @@ const connect = async () => ({
   close: () => {},
 });
 
+class ChannelManager {
+  private connection;
+  private channel: Channel;
+  private channelList: Channel[] = [];
 
-export const createRabbitMQProducer = async function (
+  constructor(connection) {
+    this.connection = connection;
+  }
+
+  async assertQueue(queue: string, options?: Options.AssertQueue) {
+    return this.channel.assertQueue(queue, options);
+  }
+
+  async createConfirmChannel(queueName) {
+    const channel = (this.channel =
+      await this.connection.createConfirmChannel());
+    this.channelList.push(channel);
+    await this.channel.assertQueue(queueName);
+    return this.channel;
+  }
+
+  async createChannel(queueName) {
+    const channel = (this.channel = await this.connection.createChannel());
+    this.channelList.push(channel);
+    await this.channel.assertQueue(queueName);
+    return this.channel;
+  }
+
+  sendToQueue(
+    queueName: string,
+    content: Buffer,
+    options?: Options.Publish
+  ): boolean {
+    return this.channel.sendToQueue(queueName, content, options);
+  }
+
+  sendToExchange(
+    exchange: string,
+    routingKey: string,
+    content: Buffer,
+    options?: Options.Publish
+  ) {
+    return this.channel.publish(exchange, routingKey, content, options);
+  }
+
+  assertExchange(
+    exchange: string,
+    type: 'direct' | 'topic' | 'headers' | 'fanout' | 'match' | string,
+    options?: Options.AssertExchange
+  ) {
+    return this.channel.assertExchange(exchange, type, options);
+  }
+
+  async close() {
+    await Promise.all(
+      this.channelList.map(channel => {
+        return channel.close();
+      })
+    );
+    await this.connection.close();
+  }
+}
+
+export async function createRabbitMQProducer(options: {
+  url?: string;
+}): Promise<ChannelManager>;
+export async function createRabbitMQProducer(
   queueName: string,
   options: {
     url?: string;
     isConfirmChannel?: boolean;
     mock?: boolean;
-  } = {
-    mock: true
   }
-): Promise<Channel> {
-
-  let amqp = null;
-
-  if(options.mock){
-    try {
-      amqp = require('amqplib');
-      amqp.connect = connect;
-    } catch (err) {
-      debug('can not found amqplib lib and skip');
-    }
+): Promise<ChannelManager>;
+export async function createRabbitMQProducer(
+  queueName: any,
+  options: any = {
+    mock: true,
   }
-  const connection = await amqp.connect(options.url || 'amqp://localhost');
-  let ch;
-  if (
-    options.isConfirmChannel === undefined ||
-    options.isConfirmChannel === false
-  ) {
-    ch = await connection.createConfirmChannel();
+): Promise<ChannelManager> {
+  const amqp = require('amqplib');
+
+  if (typeof queueName !== 'string') {
+    // 新方法
+    options = queueName;
+    const connection = await amqp.connect(options.url || 'amqp://localhost');
+    return new ChannelManager(connection);
   } else {
-    ch = await connection.createChannel();
+    if (options.mock) {
+      amqp.connect = connect;
+    }
+    const connection = await amqp.connect(options.url || 'amqp://localhost');
+    const channelManager = new ChannelManager(connection);
+    if (
+      options.isConfirmChannel === undefined ||
+      options.isConfirmChannel === true
+    ) {
+      await channelManager.createConfirmChannel(queueName);
+    } else {
+      await channelManager.createChannel(queueName);
+    }
+    return channelManager;
   }
-
-  await ch.assertQueue(queueName);
-  return ch;
-};
+}

@@ -2,20 +2,25 @@ import {
   APPLICATION_KEY,
   CONFIGURATION_KEY,
   LIFECYCLE_IDENTIFIER_PREFIX,
+  MidwayFrameworkType,
   Provide,
   resetModule,
 } from '@midwayjs/decorator';
+import { MidwayContextLogger } from '@midwayjs/logger';
 import * as assert from 'assert';
 import * as path from 'path';
 import {
   clearAllModule,
   clearContainerCache,
+  IMidwayApplication,
+  IMidwayBootstrapOptions,
   MidwayRequestContainer,
+  LightFramework,
 } from '../src';
 import * as mm from 'mm';
+import { LifeCycleTest, LifeCycleTest1, TestBinding } from './fixtures/lifecycle';
 import sinon = require('sinon');
-import { LifeCycleTest, LifeCycleTest1, TestBinding } from "./fixtures/lifecycle";
-import { MockFramework } from './util';
+import { getCurrentApplicationContext, getCurrentMainApp, getCurrentMainFramework } from '../src/util/contextUtil';
 
 @Provide()
 class TestModule {
@@ -31,7 +36,7 @@ describe('/test/baseFramework.test.ts', () => {
   });
 
   it.skip('should load js directory and auto disable', async () => {
-    const framework = new MockFramework();
+    const framework = new LightFramework();
     await framework.initialize({
       baseDir: path.join(__dirname, './fixtures/js-app-loader'),
       isTsMode: false,
@@ -46,7 +51,7 @@ describe('/test/baseFramework.test.ts', () => {
   });
 
   it('should load preload module', async () => {
-    const framework = new MockFramework();
+    const framework = new LightFramework();
     await framework.initialize({
       baseDir: path.join(__dirname, './fixtures/base-app/src'),
       preloadModules: [TestModule],
@@ -58,7 +63,7 @@ describe('/test/baseFramework.test.ts', () => {
   });
 
   it('should load configuration', async () => {
-    const framework = new MockFramework();
+    const framework = new LightFramework();
     await framework.initialize({
       baseDir: path.join(
         __dirname,
@@ -81,7 +86,7 @@ describe('/test/baseFramework.test.ts', () => {
   });
 
   it('should load config.*.ts by default env', async () => {
-    const framework = new MockFramework();
+    const framework = new LightFramework();
     await framework.initialize({
       baseDir: path.join(
         __dirname,
@@ -97,7 +102,7 @@ describe('/test/baseFramework.test.ts', () => {
 
   it('should load config.*.ts by process.env', async () => {
     mm(process.env, 'NODE_ENV', 'local');
-    const framework = new MockFramework();
+    const framework = new LightFramework();
     await framework.initialize({
       baseDir: path.join(
         __dirname,
@@ -117,7 +122,7 @@ describe('/test/baseFramework.test.ts', () => {
       callback(m);
     });
 
-    const framework = new MockFramework();
+    const framework = new LightFramework();
     await framework.initialize({
       baseDir: path.join(
         __dirname,
@@ -136,7 +141,7 @@ describe('/test/baseFramework.test.ts', () => {
 
   it('should load with no package.json', async () => {
     mm(process.env, 'MIDWAY_SERVER_ENV', 'local');
-    const framework = new MockFramework();
+    const framework = new LightFramework();
     await framework.initialize({
       baseDir: path.join(
         __dirname,
@@ -159,7 +164,7 @@ describe('/test/baseFramework.test.ts', () => {
 
   it('should load configuration with namespace', async () => {
     mm(process.env, 'MIDWAY_SERVER_ENV', 'local');
-    const framework = new MockFramework();
+    const framework = new LightFramework();
     await framework.initialize({
       baseDir: path.join(
         __dirname,
@@ -202,7 +207,7 @@ describe('/test/baseFramework.test.ts', () => {
 
   it('should load configuration with object', async () => {
     mm(process.env, 'MIDWAY_SERVER_ENV', 'local');
-    const framework = new MockFramework();
+    const framework = new LightFramework();
     await framework.initialize({
       baseDir: path.join(
         __dirname,
@@ -244,12 +249,12 @@ describe('/test/baseFramework.test.ts', () => {
   //     __dirname,
   //     './fixtures/app-with-conflict/base-app-decorator/src/lib/'
   //   );
-  //   const s = `baseService path = ${p}/userManager.ts is exist (${p}/service.ts)!`;
+  //   const s = `baseService path = ${p}/userManager.ts already exist (${p}/service.ts)!`;
   //   assert.ok(callback.withArgs(s).calledOnce);
   // });
 
   it('should load conflict without error', async () => {
-    const framework = new MockFramework();
+    const framework = new LightFramework();
     await framework.initialize({
       baseDir: path.join(
         __dirname,
@@ -267,7 +272,7 @@ describe('/test/baseFramework.test.ts', () => {
     it('load default env', async () => {
       mm(process.env, 'NODE_ENV', '');
       mm(process.env, 'MIDWAY_SERVER_ENV', '');
-      const framework = new MockFramework();
+      const framework = new LightFramework();
       await framework.initialize({
         baseDir: path.join(
           __dirname,
@@ -284,7 +289,7 @@ describe('/test/baseFramework.test.ts', () => {
     it('load prod env', async () => {
       mm(process.env, 'NODE_ENV', 'prod');
       mm(process.env, 'MIDWAY_SERVER_ENV', '');
-      const framework = new MockFramework();
+      const framework = new LightFramework();
       await framework.initialize({
         baseDir: path.join(
           __dirname,
@@ -301,7 +306,7 @@ describe('/test/baseFramework.test.ts', () => {
 
     it('load daily env', async () => {
       mm(process.env, 'NODE_ENV', 'daily');
-      const framework = new MockFramework();
+      const framework = new LightFramework();
       await framework.initialize({
         baseDir: path.join(
           __dirname,
@@ -319,7 +324,7 @@ describe('/test/baseFramework.test.ts', () => {
     it('load pre env', async () => {
       mm(process.env, 'NODE_ENV', 'pre');
       mm(process.env, 'MIDWAY_SERVER_ENV', '');
-      const framework = new MockFramework();
+      const framework = new LightFramework();
       await framework.initialize({
         baseDir: path.join(
           __dirname,
@@ -338,7 +343,7 @@ describe('/test/baseFramework.test.ts', () => {
     it('load local env', async () => {
       mm(process.env, 'NODE_ENV', 'local');
       mm(process.env, 'MIDWAY_SERVER_ENV', '');
-      const framework = new MockFramework();
+      const framework = new LightFramework();
       await framework.initialize({
         baseDir: path.join(
           __dirname,
@@ -347,11 +352,15 @@ describe('/test/baseFramework.test.ts', () => {
       });
 
       const applicationContext = framework.getApplicationContext();
-
-      const value = applicationContext
+      expect(applicationContext
         .getConfigService()
-        .getConfiguration('env');
-      assert(value === 'local');
+        .getConfiguration('env')).toEqual('local');
+      expect(applicationContext
+        .getConfigService()
+        .getConfiguration('in')).toEqual(2);
+      expect(applicationContext
+        .getConfigService()
+        .getConfiguration('out')).toEqual(1);
     });
   });
 
@@ -361,7 +370,7 @@ describe('/test/baseFramework.test.ts', () => {
     it('load default env', async () => {
       mm(process.env, 'NODE_ENV', '');
       mm(process.env, 'MIDWAY_SERVER_ENV', '');
-      const framework = new MockFramework();
+      const framework = new LightFramework();
       await framework.initialize({
         baseDir: path.join(
           __dirname,
@@ -387,7 +396,7 @@ describe('/test/baseFramework.test.ts', () => {
     it('load prod env', async () => {
       mm(process.env, 'NODE_ENV', 'prod');
       mm(process.env, 'MIDWAY_SERVER_ENV', '');
-      const framework = new MockFramework();
+      const framework = new LightFramework();
       await framework.initialize({
         baseDir: path.join(
           __dirname,
@@ -406,7 +415,7 @@ describe('/test/baseFramework.test.ts', () => {
     it('load daily env', async () => {
       mm(process.env, 'NODE_ENV', 'daily');
       mm(process.env, 'MIDWAY_SERVER_ENV', '');
-      const framework = new MockFramework();
+      const framework = new LightFramework();
       await framework.initialize({
         baseDir: path.join(
           __dirname,
@@ -425,7 +434,7 @@ describe('/test/baseFramework.test.ts', () => {
     it('load pre env', async () => {
       mm(process.env, 'NODE_ENV', 'pre');
       mm(process.env, 'MIDWAY_SERVER_ENV', '');
-      const framework = new MockFramework();
+      const framework = new LightFramework();
       await framework.initialize({
         baseDir: path.join(
           __dirname,
@@ -444,7 +453,7 @@ describe('/test/baseFramework.test.ts', () => {
   });
 
   it('should test aspect decorator', async () => {
-    const framework = new MockFramework();
+    const framework = new LightFramework();
     await framework.initialize({
       baseDir: path.join(
         __dirname,
@@ -471,7 +480,7 @@ describe('/test/baseFramework.test.ts', () => {
   });
 
   it('should inject global value in component', async () => {
-    const framework = new MockFramework();
+    const framework = new LightFramework();
     await framework.initialize({
       baseDir: path.join(
         __dirname,
@@ -486,7 +495,7 @@ describe('/test/baseFramework.test.ts', () => {
   it('should load component in different type and different env', async () => {
     mm(process.env, 'NODE_ENV', '');
     mm(process.env, 'MIDWAY_SERVER_ENV', '');
-    const framework = new MockFramework();
+    const framework = new LightFramework();
     await framework.initialize({
       baseDir: path.join(
         __dirname,
@@ -502,7 +511,7 @@ describe('/test/baseFramework.test.ts', () => {
   });
 
   it('lifecycle should be ok', async () => {
-    const framework = new MockFramework();
+    const framework = new LightFramework();
     await framework.initialize({
       baseDir: path.join(
         __dirname,
@@ -536,9 +545,9 @@ describe('/test/baseFramework.test.ts', () => {
       callback(m);
     });
 
-    expect(container.registry.hasObject(LIFECYCLE_IDENTIFIER_PREFIX + 'lifeCycleTest')).toBeTruthy();
-    await container.stop();
-    expect(container.registry.hasObject(LIFECYCLE_IDENTIFIER_PREFIX + 'lifeCycleTest')).toBeFalsy();
+    expect(container.registry.hasDefinition(LIFECYCLE_IDENTIFIER_PREFIX + 'lifeCycleTest')).toBeTruthy();
+    await framework.stop();
+    expect(container.registry.hasDefinition(LIFECYCLE_IDENTIFIER_PREFIX + 'lifeCycleTest')).toBeFalsy();
     expect(callback.withArgs('on stop').calledOnce).toBeTruthy();
 
     resetModule(CONFIGURATION_KEY);
@@ -546,7 +555,7 @@ describe('/test/baseFramework.test.ts', () => {
   });
 
   it('should get service in a component write with app', async () => {
-    const framework = new MockFramework();
+    const framework = new LightFramework();
     await framework.initialize({
       baseDir: path.join(
         __dirname,
@@ -571,10 +580,11 @@ describe('/test/baseFramework.test.ts', () => {
         "name": "伊卡狛格"
       }
     ]);
+    await framework.stop();
   });
 
   it('should create logger and match property between framework and app', async () => {
-    const framework = new MockFramework();
+    const framework = new LightFramework();
     framework.configure({});
     await framework.initialize({
       baseDir: path.join(
@@ -596,6 +606,166 @@ describe('/test/baseFramework.test.ts', () => {
     expect(framework.getApplication().getFrameworkType()).toEqual(framework.getFrameworkType());
     expect(framework.getApplication().getProjectName()).toEqual(framework.getProjectName());
 
+    // test context
+    class CustomContextLogger extends MidwayContextLogger<any> {
+      formatContextLabel(): string {
+        return 'bbbb';
+      }
+    }
+    framework.getApplication().setContextLoggerClass(CustomContextLogger);
+    expect(framework.getApplication().createAnonymousContext().startTime).toBeDefined();
+    const ctxLogger = framework.getApplication().createAnonymousContext().getLogger();
+    ctxLogger.info('ctx logger');
+
+    expect(framework.getApplication().createAnonymousContext().requestContext).toBeDefined();
+    expect(framework.getApplication().createAnonymousContext().logger).toBeDefined();
+
     await framework.stop();
   });
+
+  it('should support functional configuration and hook load', async () => {
+    const framework = new LightFramework();
+    await framework.initialize({
+      baseDir: path.join(
+        __dirname,
+        './fixtures/app-with-functional-component/src'
+      ),
+    });
+
+    await framework.stop();
+
+    // const appCtx = framework.getApplicationContext();
+  });
+
+  it('should run multi framework in one process and use cache', async () => {
+    const appMap = new Map();
+
+    const framework1 = new LightFramework();
+    framework1.configure({});
+    await framework1.initialize({
+      baseDir: path.join(
+        __dirname,
+        './fixtures/base-app-multi-framework-shared/src'
+      ),
+      isMainFramework: true,
+      globalApplicationHandler: (type: MidwayFrameworkType) => {
+        return appMap.get(type);
+      }
+    });
+
+    class CustomTwoFramework extends LightFramework {
+      async applicationInitialize(options: IMidwayBootstrapOptions) {
+        this.app = {} as IMidwayApplication;
+      }
+      getFrameworkType(): MidwayFrameworkType {
+        return MidwayFrameworkType.MS_GRPC;
+      }
+    }
+
+    const framework2 = new CustomTwoFramework();
+    framework2.configure({});
+    await framework2.initialize({
+      baseDir: path.join(
+        __dirname,
+        './fixtures/base-app-multi-framework-shared/src'
+      ),
+      isMainFramework: false,
+      applicationContext: framework1.getApplicationContext(),
+    });
+
+    appMap.set(framework1.getFrameworkType(), framework1.getApplication());
+    appMap.set(framework2.getFrameworkType(), framework2.getApplication());
+
+    await framework1.loadLifeCycles(true);
+
+    expect(framework1.getApplicationContext()).toEqual(framework2.getApplicationContext());
+    // share application context data
+    const userService1 = await framework1.getApplicationContext().getAsync('userService');
+    const userService2 = await framework2.getApplicationContext().getAsync('userService');
+    // 相同实例
+    expect(userService1['id']).toEqual(userService2['id']);
+
+    expect(framework1.getApplicationContext().get('total')['num']).toEqual(1);
+    expect(framework2.getApplicationContext().get('total')['num']).toEqual(1);
+
+    expect(framework2.getApplicationContext().get('total2')['num']).toEqual(0);
+  });
+
+  it('should inject component service with class', async () => {
+    const framework = new LightFramework();
+    await framework.initialize({
+      baseDir: path.join(
+        __dirname,
+        './fixtures/app-with-component-inject-with-class/main/src'
+      ),
+    });
+
+    const appCtx = framework.getApplicationContext();
+    const userController = await appCtx.getAsync('userController');
+    const books = await (userController as any).getBooksByUser();
+    expect(books).toEqual([
+      {
+        "name": "无限可能str",
+        "isbn": "9787115549440str"
+      },
+      {
+        "name": "明智的孩子str",
+        "isbn": "9787305236525str"
+      },
+      {
+        "name": "伊卡狛格str",
+        "isbn": "9787020166916str"
+      },
+      {
+        "isbn": "9787115549440",
+        "name": "无限可能"
+      },
+      {
+        "isbn": "9787305236525",
+        "name": "明智的孩子"
+      },
+      {
+        "isbn": "9787020166916",
+        "name": "伊卡狛格"
+      }
+    ]);
+
+    await framework.stop();
+    expect((global as any).container_not_null).toBeTruthy();
+  });
+
+
+  it('should test global framework', async () => {
+    const framework = new LightFramework();
+    await framework.initialize({
+      baseDir: path.join(__dirname, './fixtures/base-app/src'),
+    });
+
+    mm(global, 'MIDWAY_MAIN_FRAMEWORK', framework);
+
+    const appCtx = framework.getApplicationContext();
+    expect(getCurrentMainFramework()).toEqual(framework);
+    expect(getCurrentApplicationContext()).toEqual(appCtx);
+    expect(getCurrentMainApp()).toEqual(framework.getApplication());
+
+    mm.restore();
+  });
+
+  it('should test attr api', async () => {
+    const framework = new LightFramework();
+    await framework.initialize({
+      baseDir: path.join(__dirname, './fixtures/base-app/src'),
+    });
+
+    framework.getApplicationContext().setAttr('bcd', 1);
+    expect(framework.getApplicationContext().getAttr('bcd')).toEqual(1);
+
+    const app = framework.getApplication();
+    app.setAttr('abc', 1);
+    expect(app.getAttr('abc')).toEqual(1);
+
+    framework.getApplicationContext().setAttr('abc', 2);
+    expect(app.getAttr('abc')).toEqual(2);
+  });
+
 });

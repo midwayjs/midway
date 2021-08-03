@@ -1,13 +1,13 @@
 {
   "name": "@midwayjs/bootstrap",
-  "version": "2.6.13",
+  "version": "2.12.1",
   "description": "midwayjs bootstrap",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "scripts": {
-    "build": "midway-bin build -c",
-    "test": "midway-bin test --ts",
-    "cov": "midway-bin cov --ts",
+    "build": "tsc",
+    "test": "node --require=ts-node/register ../../node_modules/.bin/jest",
+    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --coverage --forceExit",
     "link": "npm link"
   },
   "keywords": [
@@ -21,9 +21,12 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/cli": "^1.2.36",
-    "@midwayjs/core": "^2.6.13",
-    "@midwayjs/logger": "^2.6.13"
+    "@midwayjs/core": "^2.12.1",
+    "@midwayjs/decorator": "^2.11.5",
+    "@midwayjs/logger": "^2.11.3",
+    "@types/socket.io-client": "^1.4.36",
+    "request": "^2.88.2",
+    "socket.io-client": "^4.0.0"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
   "repository": {

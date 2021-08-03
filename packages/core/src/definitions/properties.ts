@@ -51,7 +51,7 @@ export class ObjectProperties implements IProperties {
     }
   }
 
-  putObject(props: object, needClone = false) {
+  putObject(props: Record<string, unknown>, needClone = false) {
     if (needClone) {
       const tmp = _.cloneDeep(props);
       _.defaultsDeep(tmp, this.innerConfig);
@@ -86,7 +86,7 @@ export class ObjectProperties implements IProperties {
     this.innerConfig = {};
   }
 
-  toJSON(): object {
+  toJSON(): Record<string, unknown> {
     return JSON.parse(JSON.stringify(this.innerConfig));
   }
 

@@ -2,18 +2,20 @@ import {
   BaseFramework,
   getClassMetadata,
   getProviderId,
+  HTTP_SERVER_KEY,
   IMidwayBootstrapOptions,
   listModule,
   MidwayFrameworkType,
-  MidwayRequestContainer,
 } from '@midwayjs/core';
+import { debuglog } from 'util';
+const debug = debuglog('midway:socket.io');
 
 import {
   IMidwaySocketIOApplication,
   IMidwaySocketIOConfigurationOptions,
   IMidwaySocketIOContext,
 } from './interface';
-import * as SocketIO from 'socket.io';
+import { Server } from 'socket.io';
 import {
   WS_CONTROLLER_KEY,
   WS_EVENT_KEY,
@@ -21,44 +23,21 @@ import {
   WSEventInfo,
   WSEventTypeEnum,
 } from '@midwayjs/decorator';
+import { MidwaySocketIOContextLogger } from './logger';
 
 export class MidwaySocketIOFramework extends BaseFramework<
   IMidwaySocketIOApplication,
+  IMidwaySocketIOContext,
   IMidwaySocketIOConfigurationOptions
 > {
-  applicationInitialize(options: IMidwayBootstrapOptions) {}
+  private namespaceList = [];
+
+  applicationInitialize(options: IMidwayBootstrapOptions) {
+    this.app = new Server(
+      this.configurationOptions
+    ) as IMidwaySocketIOApplication;
+  }
   public app: IMidwaySocketIOApplication;
-
-  public configure(
-    options: IMidwaySocketIOConfigurationOptions
-  ): MidwaySocketIOFramework {
-    this.configurationOptions = options;
-    return this;
-  }
-
-  protected async afterContainerDirectoryLoad(
-    options: Partial<IMidwayBootstrapOptions>
-  ) {
-    if (this.configurationOptions.webServer) {
-      this.app = (SocketIO(
-        this.configurationOptions.webServer,
-        this.configurationOptions
-      ) as unknown) as IMidwaySocketIOApplication;
-    } else {
-      this.app = (SocketIO(
-        this.configurationOptions
-      ) as unknown) as IMidwaySocketIOApplication;
-    }
-
-    this.app.use((socket, next) => {
-      socket.requestContext = new MidwayRequestContainer(
-        socket,
-        this.getApplicationContext()
-      );
-      socket.requestContext.registerObject('socket', socket);
-      next();
-    });
-  }
 
   protected async afterContainerReady(
     options: Partial<IMidwayBootstrapOptions>
@@ -67,33 +46,43 @@ export class MidwaySocketIOFramework extends BaseFramework<
   }
 
   public async run(): Promise<void> {
+    if (this.configurationOptions.adapter) {
+      this.app.adapter(this.configurationOptions.adapter);
+      this.logger.debug('init socket.io-redis ready!');
+    }
+
+    // listen port when http server not exist
     if (this.configurationOptions.port) {
-      // if set httpServer will be listen in web framework
-      if (!this.configurationOptions.webServer) {
-        new Promise(resolve => {
-          this.app.listen(
-            this.configurationOptions.port,
-            this.configurationOptions
-          );
-        });
-      }
+      this.app.listen(
+        this.configurationOptions.port,
+        this.configurationOptions
+      );
+      this.logger.info(
+        `Socket.io server port = ${this.configurationOptions.port} start success`
+      );
+    } else if (this.applicationContext.registry.hasObject(HTTP_SERVER_KEY)) {
+      this.app.attach(
+        this.applicationContext.get(HTTP_SERVER_KEY),
+        this.configurationOptions
+      );
+      this.logger.info(
+        'Socket.io server start success and attach to web server'
+      );
     }
   }
 
   protected async beforeStop(): Promise<void> {
     return new Promise<void>(resolve => {
       this.app.close(() => {
-        resolve();
+        setTimeout(() => {
+          resolve();
+        }, 1000);
       });
     });
   }
 
   public getFrameworkType(): MidwayFrameworkType {
     return MidwayFrameworkType.WS_IO;
-  }
-
-  public getApplication(): IMidwaySocketIOApplication {
-    return this.app;
   }
 
   private async loadMidwayController() {
@@ -114,6 +103,14 @@ export class MidwaySocketIOFramework extends BaseFramework<
     );
 
     const nsp = this.app.of(controllerOption.namespace);
+    this.namespaceList.push(controllerOption.namespace);
+
+    nsp.use((socket: any, next) => {
+      this.app.createAnonymousContext(socket);
+      socket.requestContext.registerObject('socket', socket);
+      socket.app = this.app;
+      next();
+    });
 
     nsp.on('connect', async (socket: IMidwaySocketIOContext) => {
       const wsEventInfos: WSEventInfo[] = getClassMetadata(
@@ -132,22 +129,10 @@ export class MidwaySocketIOFramework extends BaseFramework<
           const controller = await socket.requestContext.getAsync(controllerId);
           // on connection
           if (wsEventInfo.eventType === WSEventTypeEnum.ON_CONNECTION) {
-            const result = await controller[
-              wsEventInfo.propertyName
-            ].apply(controller, [socket]);
-            await this.bindSocketResponse(
-              result,
-              socket,
-              wsEventInfo.propertyName,
-              methodMap
-            );
-          } else if (wsEventInfo.eventType === WSEventTypeEnum.ON_MESSAGE) {
-            // on user custom event
-            socket.on(wsEventInfo.messageEventName, async (...args) => {
-              // eslint-disable-next-line prefer-spread
+            try {
               const result = await controller[wsEventInfo.propertyName].apply(
                 controller,
-                args
+                [socket]
               );
               await this.bindSocketResponse(
                 result,
@@ -155,36 +140,54 @@ export class MidwaySocketIOFramework extends BaseFramework<
                 wsEventInfo.propertyName,
                 methodMap
               );
+            } catch (err) {
+              this.logger.error(err);
+            }
+          } else if (wsEventInfo.eventType === WSEventTypeEnum.ON_MESSAGE) {
+            // on user custom event
+            socket.on(wsEventInfo.messageEventName, async (...args) => {
+              debug('got message', wsEventInfo.messageEventName, args);
+              try {
+                // eslint-disable-next-line prefer-spread
+                const result = await controller[wsEventInfo.propertyName].apply(
+                  controller,
+                  args
+                );
+                if (typeof args[args.length - 1] === 'function') {
+                  // ack
+                  args[args.length - 1](result);
+                } else {
+                  // emit
+                  await this.bindSocketResponse(
+                    result,
+                    socket,
+                    wsEventInfo.propertyName,
+                    methodMap
+                  );
+                }
+              } catch (err) {
+                this.logger.error(err);
+              }
             });
           } else if (
             wsEventInfo.eventType === WSEventTypeEnum.ON_DISCONNECTION
           ) {
             // on socket disconnect
             socket.on('disconnect', async (reason: string) => {
-              const result = await controller[
-                wsEventInfo.propertyName
-              ].apply(controller, [reason]);
-              await this.bindSocketResponse(
-                result,
-                socket,
-                wsEventInfo.propertyName,
-                methodMap
-              );
-            });
-          } else if (
-            wsEventInfo.eventType === WSEventTypeEnum.ON_SOCKET_ERROR
-          ) {
-            // on socket error
-            socket.on('error', async err => {
-              const result = await controller[
-                wsEventInfo.propertyName
-              ].apply(controller, [err]);
-              await this.bindSocketResponse(
-                result,
-                socket,
-                wsEventInfo.propertyName,
-                methodMap
-              );
+              try {
+                const result = await controller[wsEventInfo.propertyName].apply(
+                  controller,
+                  [reason]
+                );
+                await this.bindSocketResponse(
+                  result,
+                  socket,
+                  wsEventInfo.propertyName,
+                  methodMap
+                );
+              } catch (err) {
+                this.logger.error(err);
+              }
             });
           } else {
             // 存储每个方法对应的后置响应处理，供后续快速匹配
@@ -195,6 +198,12 @@ export class MidwaySocketIOFramework extends BaseFramework<
         }
       }
     });
+
+    if (nsp.adapter) {
+      nsp.adapter.on('error', err => {
+        this.logger.error(err);
+      });
+    }
   }
 
   private async bindSocketResponse(
@@ -224,5 +233,13 @@ export class MidwaySocketIOFramework extends BaseFramework<
         }
       }
     }
+  }
+
+  public getFrameworkName() {
+    return 'midway:socketIO';
+  }
+
+  public getDefaultContextLoggerClass(): any {
+    return MidwaySocketIOContextLogger;
   }
 }

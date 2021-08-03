@@ -1,5 +1,6 @@
 import { closeApp, create } from './utils';
 import * as path from 'path';
+import IntervalCron2 from './fixtures/worker-other/src/schedule/interval_2';
 const fs = require('fs');
 const assert = require('assert');
 
@@ -41,10 +42,13 @@ describe('test/schedule.test.ts', () => {
     it('should run schedule not exist throw error', async () => {
       const application = await create('worker-other',  {});
       await application.runSchedule('intervalCron#IntervalCron');
+      await application.runSchedule(IntervalCron2 as any);
       await sleep(1000);
-      const log = getLogContent('worker-other');
+
       // console.log(log);
-      expect(contains(log, 'hello decorator')).toEqual(1);
+      const log = getLogContent('worker-other');
+      expect(contains(log, 'hello decorator')).toBeGreaterThanOrEqual(1);
+      expect(contains(log, 'hello decorator2')).toBeGreaterThanOrEqual(1);
       await closeApp(application);
     });
   });

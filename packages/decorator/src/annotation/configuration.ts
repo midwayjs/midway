@@ -5,11 +5,19 @@ export interface IComponentInfo {
   enabledEnvironment?: string[];
 }
 
+export interface ResolveFilter {
+  pattern: string | RegExp;
+  filter: (module, filter, bindModule) => any;
+  ignoreRequire?: boolean;
+}
+
 export interface InjectionConfigurationOptions {
   imports?: Array<string | IComponentInfo | { Configuration: any }>;
-  importObjects?: object;
+  importObjects?: Record<string, unknown>;
   importConfigs?: string[];
   namespace?: string;
+  directoryResolveFilter?: ResolveFilter[];
+  conflictCheck?: boolean;
 }
 
 export function Configuration(

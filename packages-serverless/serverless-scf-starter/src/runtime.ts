@@ -6,10 +6,11 @@ import {
   HTTPResponse,
 } from '@midwayjs/serverless-http-parser';
 
-const isLocalEnv = () => {
+const isOutputError = () => {
   return (
-    process.env.MIDWAY_SERVER_ENV === 'local' ||
-    process.env.NODE_ENV === 'local'
+    process.env.SERVERLESS_OUTPUT_ERROR_STACK === 'true' ||
+    ['local', 'development'].includes(process.env.MIDWAY_SERVER_ENV) ||
+    ['local', 'development'].includes(process.env.NODE_ENV)
   );
 };
 
@@ -26,7 +27,7 @@ export class SCFRuntime extends ServerlessLightRuntime {
    * @param handler
    */
   asyncEvent(handler) {
-    return (event: object = {}, context = {} as SCF.RequestContext) => {
+    return (event = {}, context = {} as SCF.RequestContext) => {
       if (isHttpEvent(event)) {
         return this.wrapperWebInvoker(handler, event, context);
       }
@@ -62,7 +63,7 @@ export class SCFRuntime extends ServerlessLightRuntime {
               ctx.body = result;
             }
 
-            if (!ctx.response.explicitStatus) {
+            if (!ctx.response._explicitStatus) {
               if (ctx.body === null || ctx.body === 'undefined') {
                 ctx.body = '';
                 ctx.type = 'text';
@@ -97,6 +98,9 @@ export class SCFRuntime extends ServerlessLightRuntime {
               }
             }
 
+            // 不再等待事件循环
+            // https://cloud.tencent.com/document/product/583/11060
+            context.callbackWaitsForEmptyEventLoop = false;
             return {
               isBase64Encoded: encoded,
               statusCode: ctx.status,
@@ -106,11 +110,12 @@ export class SCFRuntime extends ServerlessLightRuntime {
           })
           .catch(err => {
             ctx.logger.error(err);
+            context.callbackWaitsForEmptyEventLoop = false;
             return {
               isBase64Encoded: false,
               statusCode: 500,
               headers: {},
-              body: isLocalEnv() ? err.stack : 'Internal Server Error',
+              body: isOutputError() ? err.stack : 'Internal Server Error',
             };
           });
       },
@@ -121,15 +126,25 @@ export class SCFRuntime extends ServerlessLightRuntime {
     // format context
     const newCtx = {
       logger: console,
+      originEvent: event,
       originContext: context,
     };
     const args = [newCtx, event];
     // 其他事件场景
     return this.invokeHandlerWrapper(context, async () => {
-      if (!handler) {
-        return this.defaultInvokeHandler(...args);
+      try {
+        if (!handler) {
+          return await this.defaultInvokeHandler(...args);
+        } else {
+          return await handler.apply(handler, args);
+        }
+      } catch (err) {
+        if (isOutputError()) {
+          throw err;
+        } else {
+          throw new Error('Internal Server Error');
+        }
       }
-      return handler.apply(handler, args);
     });
   }
 

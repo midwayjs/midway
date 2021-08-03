@@ -7,7 +7,7 @@ import { FunctionHandler } from '../../../../src';
 })
 export class HelloService implements FunctionHandler {
   @Inject()
-  ctx; // context
+  ctx: any; // context
 
   async handler(event) {
     return event.text + this.ctx.text;

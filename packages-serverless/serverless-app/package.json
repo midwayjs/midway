@@ -1,0 +1,46 @@
+{
+  "name": "@midwayjs/serverless-app",
+  "version": "2.12.1",
+  "main": "dist/index",
+  "typings": "index.d.ts",
+  "dependencies": {
+    "@midwayjs/bootstrap": "^2.12.1",
+    "@midwayjs/core": "^2.12.1",
+    "@midwayjs/faas-typings": "^2.11.1",
+    "@midwayjs/gateway-common-http": "^1.2.41",
+    "@midwayjs/serverless-spec-builder": "^1.2.41",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@midwayjs/decorator": "^2.11.5",
+    "@midwayjs/faas": "^2.12.1",
+    "@midwayjs/faas-middleware-upload": "^0.0.5",
+    "@midwayjs/mock": "^2.12.1",
+    "@midwayjs/serverless-fc-starter": "^2.12.1",
+    "@midwayjs/serverless-fc-trigger": "^2.12.1",
+    "@midwayjs/serverless-scf-starter": "^2.11.4",
+    "@midwayjs/serverless-scf-trigger": "^2.12.1",
+    "fs-extra": "^8.0.1"
+  },
+  "engines": {
+    "node": ">= 10"
+  },
+  "files": [
+    "ssl",
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "index.d.ts"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "node --require=ts-node/register ../../node_modules/.bin/jest",
+    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --coverage --forceExit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:midwayjs/midway.git"
+  },
+  "license": "MIT",
+  "gitHead": "58706de896b8e3b50605bb29f40ff29abe43924d"
+}
