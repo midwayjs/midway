@@ -5,7 +5,6 @@ import {
   ObjectDefinitionOptions,
   IMethodAspect,
   AspectMetadata,
-  ResolveFilter,
   MidwayFrameworkType
 } from '@midwayjs/decorator';
 import { ILogger, LoggerOptions } from '@midwayjs/logger';
@@ -249,11 +248,11 @@ export interface IResolverHandler {
 }
 
 export interface IMidwayContainer extends IApplicationContext {
-  load(opts: {
-    loadDir: string | string[];
-    pattern?: string | string[];
-    ignore?: string | string[];
-  });
+  // load(opts: {
+  //   loadDir: string | string[];
+  //   pattern?: string | string[];
+  //   ignore?: string | string[];
+  // });
   bind<T>(target: T, options?: ObjectDefinitionOptions): void;
   bind<T>(
     identifier: ObjectIdentifier,
@@ -261,15 +260,17 @@ export interface IMidwayContainer extends IApplicationContext {
     options?: ObjectDefinitionOptions
   ): void;
   bindClass(exports, namespace?: string, filePath?: string);
+  getDebugLogger();
+  setFileDetector(fileDetector: IFileDetector);
   registerDataHandler(handlerType: string, handler: (...args) => any);
-  createChild(): IMidwayContainer;
-  resolve<T>(target: T): T;
+  // createChild(): IMidwayContainer;
+  // resolve<T>(target: T): T;
   /**
    * 默认不添加创建的 configuration 到 configurations 数组中
    */
-  createConfiguration(): IContainerConfiguration;
-  containsConfiguration(namespace: string): boolean;
-  addConfiguration(configuration: IContainerConfiguration);
+  // createConfiguration(): IContainerConfiguration;
+  // containsConfiguration(namespace: string): boolean;
+  // addConfiguration(configuration: IContainerConfiguration);
   getConfigService(): IConfigService;
   getEnvironmentService(): IEnvironmentService;
   getInformationService(): IInformationService;
@@ -277,7 +278,7 @@ export interface IMidwayContainer extends IApplicationContext {
   getAspectService(): IAspectService;
   getCurrentEnv(): string;
   getResolverHandler(): IResolverHandler;
-  addDirectoryFilter(filter: ResolveFilter[]);
+  // addDirectoryFilter(filter: ResolveFilter[]);
   /**
    * Set value to app attribute map
    * @param key
@@ -290,6 +291,17 @@ export interface IMidwayContainer extends IApplicationContext {
    * @param key
    */
   getAttr<T>(key: string): T;
+}
+
+export interface IFileDetector {
+  run(container: IApplicationContext);
+}
+
+export interface IFileDetectorOptions {
+  loadDir: string | string[];
+  pattern: string | string[];
+  ignore: string | string[];
+  namespace: string;
 }
 
 export interface IConfigService {

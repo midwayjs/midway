@@ -5,7 +5,7 @@ import {
   ConfigFramework,
   IMidwayApplication,
   IMidwayContainer,
-  MidwayContainer,
+  MidwayContainer, DirectoryFileDetector,
 } from '@midwayjs/core';
 import { join } from 'path';
 import { createConsoleLogger, ILogger } from '@midwayjs/logger';
@@ -48,6 +48,11 @@ export class BootstrapStarter {
     let mainApp; // eslint-disable-line prefer-const
 
     const applicationContext = new MidwayContainer();
+    applicationContext.setFileDetector(
+      new DirectoryFileDetector({
+        baseDir: this.baseDir,
+      })
+    );
     // 初始化一个只读配置的空框架，并且初始化容器和扫描
     const framework = new ConfigFramework();
     await framework.initialize({
@@ -70,8 +75,8 @@ export class BootstrapStarter {
     }
 
     // 获取全局配置
-    this.globalConfig = applicationContext.getConfigService().getConfiguration() ||
-      {};
+    this.globalConfig =
+      applicationContext.getConfigService().getConfiguration() || {};
     this.refreshBootstrapItems();
 
     // 初始化主框架

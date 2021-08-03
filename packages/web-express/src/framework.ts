@@ -170,7 +170,7 @@ export class MidwayExpressFramework extends BaseFramework<
   }
 
   public async loadMidwayController(): Promise<void> {
-    const collector = new WebRouterCollector(this.getBaseDir());
+    const collector = new WebRouterCollector();
     const routerTable = await collector.getRouterTable();
     const routerList = await collector.getRoutePriorityList();
 

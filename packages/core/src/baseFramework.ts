@@ -8,7 +8,7 @@ import {
   IMidwayFramework,
   MidwayProcessTypeEnum,
 } from './interface';
-import { MidwayContainer } from './context/midwayContainer';
+import { MidwayContainer } from './context/container';
 import {
   APPLICATION_KEY,
   CONFIGURATION_KEY,
@@ -25,18 +25,18 @@ import {
   loggers,
   MidwayContextLogger,
 } from '@midwayjs/logger';
-import { dirname, isAbsolute, join } from 'path';
+import { dirname } from 'path';
 import { createMidwayLogger } from './logger';
 import { MidwayRequestContainer } from './context/requestContainer';
 import { FunctionalConfiguration } from './functional/configuration';
 import { MidwayInformationService } from './service/informationService';
 
-function buildLoadDir(baseDir, dir) {
-  if (!isAbsolute(dir)) {
-    return join(baseDir, dir);
-  }
-  return dir;
-}
+// function buildLoadDir(baseDir, dir) {
+//   if (!isAbsolute(dir)) {
+//     return join(baseDir, dir);
+//   }
+//   return dir;
+// }
 
 function setupAppDir(baseDir: string) {
   return dirname(baseDir);
@@ -185,14 +185,14 @@ export abstract class BaseFramework<
     if (options.disableAutoLoad) return;
 
     // use baseDir in parameter first
-    const defaultLoadDir = this.isTsMode ? [options.baseDir] : [];
-    this.applicationContext.load({
-      loadDir: (options.loadDir || defaultLoadDir).map(dir => {
-        return buildLoadDir(options.baseDir, dir);
-      }),
-      pattern: options.pattern,
-      ignore: options.ignore,
-    });
+    // const defaultLoadDir = this.isTsMode ? [options.baseDir] : [];
+    // this.applicationContext.load({
+    //   loadDir: (options.loadDir || defaultLoadDir).map(dir => {
+    //     return buildLoadDir(options.baseDir, dir);
+    //   }),
+    //   pattern: options.pattern,
+    //   ignore: options.ignore,
+    // });
 
     if (options.preloadModules && options.preloadModules.length) {
       for (const preloadModule of options.preloadModules) {

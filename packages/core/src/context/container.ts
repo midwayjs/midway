@@ -1,18 +1,31 @@
 import {
+  ALL,
   classNamed,
-  CONFIGURATION_KEY, DecoratorManager,
+  CONFIG_KEY,
+  CONFIGURATION_KEY,
+  DecoratorManager,
   generateProvideId,
-  getClassMetadata, getConstructorInject, getProviderId,
-  IComponentInfo, INJECT_CLASS_KEY_PREFIX,
-  InjectionConfigurationOptions, isAsyncFunction,
+  getClassMetadata,
+  getConstructorInject,
+  getProviderId,
+  IComponentInfo,
+  INJECT_CLASS_KEY_PREFIX,
+  InjectionConfigurationOptions,
+  isAsyncFunction,
   isClass,
-  isFunction, isProvide,
+  isFunction,
+  isProvide,
   LIFECYCLE_IDENTIFIER_PREFIX,
   listModule,
-  MAIN_MODULE_KEY, ObjectDefinitionOptions, ObjectIdentifier, PRIVATE_META_DATA_KEY, saveClassMetadata,
+  MAIN_MODULE_KEY,
+  ObjectDefinitionOptions,
+  ObjectIdentifier,
+  PRIVATE_META_DATA_KEY,
+  saveClassMetadata,
   saveModule,
   saveProviderId,
-  ScopeEnum, TAGGED_PROP,
+  ScopeEnum,
+  TAGGED_PROP,
 } from '@midwayjs/decorator';
 import { FunctionalConfiguration } from '../functional/configuration';
 import * as util from 'util';
@@ -20,9 +33,12 @@ import { BaseApplicationContext } from './applicationContext';
 import {
   IApplicationContext,
   IConfigService,
-  IEnvironmentService, IInformationService,
+  IEnvironmentService,
+  IFileDetector,
+  IInformationService,
+  IMidwayContainer,
   IObjectDefinitionMetadata,
-  REQUEST_CTX_KEY
+  REQUEST_CTX_KEY,
 } from '../interface';
 import { getOwnMetadata, recursiveGetPrototypeOf } from '../common/reflectTool';
 import { FUNCTION_INJECT_KEY } from '../common/constants';
@@ -171,8 +187,10 @@ class ContainerConfiguration {
   }
 }
 
-export class MidwayContainer extends BaseApplicationContext {
-
+export class MidwayContainer
+  extends BaseApplicationContext
+  implements IMidwayContainer
+{
   private debugLogger = globalDebugLogger;
   private definitionMetadataList = [];
   protected resolverHandler: ResolverHandler;
@@ -182,6 +200,8 @@ export class MidwayContainer extends BaseApplicationContext {
   protected environmentService: IEnvironmentService;
   protected informationService: IInformationService;
   protected aspectService;
+  private fileDetector: IFileDetector;
+  private attrMap: Map<string, any> = new Map();
 
   init(): void {
     this.initService();
@@ -202,8 +222,20 @@ export class MidwayContainer extends BaseApplicationContext {
   }
 
   load(module) {
+    // load configuration
     const configuration = this.createConfiguration();
     configuration.load(module);
+    // load project file
+    this.fileDetector?.run(this);
+
+    // register base config hook
+    this.registerDataHandler(CONFIG_KEY, (key: string) => {
+      if (key === ALL) {
+        return this.getConfigService().getConfiguration();
+      } else {
+        return this.getConfigService().getConfiguration(key);
+      }
+    });
   }
 
   createConfiguration() {
@@ -460,4 +492,51 @@ export class MidwayContainer extends BaseApplicationContext {
     }
   }
 
+  getDebugLogger() {
+    return this.debugLogger;
+  }
+
+  setFileDetector(fileDetector: IFileDetector) {
+    this.fileDetector = fileDetector;
+  }
+
+  registerDataHandler(handlerType: string, handler: (...args) => any) {
+    this.resolverHandler.registerHandler(handlerType, handler);
+  }
+
+  getConfigService() {
+    return this.configService;
+  }
+
+  getEnvironmentService() {
+    return this.environmentService;
+  }
+
+  getInformationService() {
+    return this.informationService;
+  }
+
+  setInformationService(informationService) {
+    this.informationService = informationService;
+  }
+
+  getAspectService() {
+    return this.aspectService;
+  }
+
+  getCurrentEnv() {
+    return this.environmentService.getCurrentEnvironment();
+  }
+
+  public getResolverHandler() {
+    return this.resolverHandler;
+  }
+
+  public setAttr(key: string, value) {
+    this.attrMap.set(key, value);
+  }
+
+  public getAttr<T>(key: string): T {
+    return this.attrMap.get(key);
+  }
 }

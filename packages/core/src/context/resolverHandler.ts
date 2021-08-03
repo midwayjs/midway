@@ -5,7 +5,8 @@ import {
   HandlerFunction,
   IResolverHandler,
   FrameworkDecoratorMetadata,
-  IObjectDefinition, IApplicationContext,
+  IObjectDefinition,
+  IApplicationContext,
 } from '../interface';
 
 const debug = util.debuglog('midway:container');
