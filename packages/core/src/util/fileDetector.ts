@@ -1,8 +1,4 @@
-import {
-  IFileDetector,
-  IFileDetectorOptions,
-  IMidwayContainer,
-} from '../interface';
+import { IFileDetector, IMidwayContainer } from '../interface';
 import { isRegExp, ResolveFilter } from '@midwayjs/decorator';
 import { run } from '@midwayjs/glob';
 
@@ -30,7 +26,12 @@ const DEFAULT_IGNORE_PATTERN = [
   '**/__test__/**',
 ];
 
-export class DirectoryFileDetector extends AbstractFileDetector<IFileDetectorOptions> {
+export class DirectoryFileDetector extends AbstractFileDetector<{
+  loadDir: string | string[];
+  pattern: string | string[];
+  ignore: string | string[];
+  namespace: string;
+}> {
   private directoryFilterArray: ResolveFilter[] = [];
 
   run(container) {
@@ -82,6 +83,17 @@ export class DirectoryFileDetector extends AbstractFileDetector<IFileDetectorOpt
           debugLogger(`  binding "${file}" end`);
         }
       }
+    }
+  }
+}
+
+export class CustomModuleDetector extends AbstractFileDetector<{
+  modules: any[];
+  namespace: string;
+}> {
+  run(container) {
+    for (const module of this.options.modules) {
+      container.bindClass(module, this.options.namespace);
     }
   }
 }

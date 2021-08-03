@@ -297,13 +297,6 @@ export interface IFileDetector {
   run(container: IApplicationContext);
 }
 
-export interface IFileDetectorOptions {
-  loadDir: string | string[];
-  pattern: string | string[];
-  ignore: string | string[];
-  namespace: string;
-}
-
 export interface IConfigService {
   add(configFilePaths: string[]);
   addObject(obj: object);
