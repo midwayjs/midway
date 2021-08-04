@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-alpha.1](https://github.com/midwayjs/midway/compare/v2.12.1...v3.0.0-alpha.1) (2021-08-04)
+
+
+### Bug Fixes
+
+* refactor directory file detector ([259a142](https://github.com/midwayjs/midway/commit/259a1425024acc172a40df474173fd34c35c70d1))
+* refactor directory file detector ([f869942](https://github.com/midwayjs/midway/commit/f869942589a4985dfc59457fa80b536be7bdc19f))
+
+
+
+
+
 ## [2.12.1](https://github.com/midwayjs/midway/compare/v2.12.0...v2.12.1) (2021-08-01)
 
 

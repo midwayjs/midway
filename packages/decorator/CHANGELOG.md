@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-alpha.1](https://github.com/midwayjs/midway/compare/v2.12.1...v3.0.0-alpha.1) (2021-08-04)
+
+
+### Bug Fixes
+
+* remove check ([6a52e19](https://github.com/midwayjs/midway/commit/6a52e197bd3ae2274b7ced3f1704972f5f4058f2))
+
+
+
+
+
 ## [2.11.5](https://github.com/midwayjs/midway/compare/v2.11.4...v2.11.5) (2021-07-15)
 
 

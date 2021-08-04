@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/runtime-engine",
-  "version": "2.11.2",
+  "version": "3.0.0-alpha.1",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "scripts": {
