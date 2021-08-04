@@ -70,6 +70,7 @@ export abstract class BaseFramework<
 
   public async initialize(options: IMidwayBootstrapOptions): Promise<void> {
     this.isMainFramework = options.isMainFramework;
+    this.configurationOptions = this.configurationOptions || ({} as OPT);
 
     /**
      * before create MidwayContainer instance，can change init parameters

@@ -202,6 +202,7 @@ export class MidwayContainer
   protected aspectService;
   private fileDetector: IFileDetector;
   private attrMap: Map<string, any> = new Map();
+  private isLoad = false;
 
   init(): void {
     this.initService();
@@ -221,10 +222,14 @@ export class MidwayContainer
     this.aspectService = new MidwayAspectService(this);
   }
 
-  load(module) {
-    // load configuration
-    const configuration = this.createConfiguration();
-    configuration.load(module);
+  load(module?) {
+    this.isLoad = true;
+    if (module) {
+      // load configuration
+      const configuration = this.createConfiguration();
+      configuration.load(module);
+    }
+
     // load project file
     this.fileDetector?.run(this);
 
@@ -247,6 +252,9 @@ export class MidwayContainer
   }
 
   async ready() {
+    if (!this.isLoad) {
+      this.load();
+    }
     return super.ready();
   }
 

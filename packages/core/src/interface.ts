@@ -248,11 +248,7 @@ export interface IResolverHandler {
 }
 
 export interface IMidwayContainer extends IApplicationContext {
-  // load(opts: {
-  //   loadDir: string | string[];
-  //   pattern?: string | string[];
-  //   ignore?: string | string[];
-  // });
+  load(module?: any);
   bind<T>(target: T, options?: ObjectDefinitionOptions): void;
   bind<T>(
     identifier: ObjectIdentifier,
