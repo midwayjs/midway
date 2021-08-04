@@ -58,9 +58,10 @@ export class BootstrapStarter {
           baseDir: this.baseDir,
         })
       );
+      this.applicationContext.load(
+        require(join(this.baseDir, 'configuration'))
+      );
     }
-
-    this.applicationContext.load(require(join(this.baseDir, 'configuration')));
 
     // 初始化一个只读配置的空框架，并且初始化容器和扫描
     const framework = new ConfigFramework();
