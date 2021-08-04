@@ -4,7 +4,6 @@ import {
   getClassMetadata,
   IMethodAspect,
   isAsyncFunction,
-  isProxy,
   listModule,
 } from '@midwayjs/decorator';
 import * as pm from 'picomatch';
@@ -210,7 +209,7 @@ export class MidwayAspectService implements IAspectService {
     /**
      * 过滤循环依赖创建的对象
      */
-    if (!isProxy(ins) && ins?.constructor) {
+    if (!ins['__is_proxy__'] && ins?.constructor) {
       // 动态处理拦截器
       let methodAspectCollection;
       if (this.aspectMappingMap?.has(ins.constructor)) {
