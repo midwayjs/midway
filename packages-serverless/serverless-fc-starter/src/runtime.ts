@@ -75,8 +75,8 @@ export class FCRuntime extends ServerlessLightRuntime {
         typeof req.on === 'function'
       ) {
         req.body = await getRawBody(req, {
-          limit: '10mb'
-        }); // TODO: body parser
+          limit: '10mb',
+        });
       }
       newReq = req;
     } else {
