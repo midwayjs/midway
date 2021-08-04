@@ -1,4 +1,4 @@
-import { asyncWrapper, start, close } from '../../../src';
+import { asyncWrapper, start, close } from '../../../../serverless-vercel-starter/src';
 
 let runtime;
 let inited;
@@ -15,19 +15,11 @@ exports.handler = asyncWrapper(async (...args) => {
     if (ctx.query?.str) {
       return '123';
     }
-    if (ctx.query?.noReturn) {
-      return;
-    }
-    if (ctx.query?.undefined) {
-      return undefined;
-    }
-    if (ctx.query?.error) {
-      throw new Error('error')
-    }
     if (ctx.query?.buffer) {
       ctx.status = 401;
       return Buffer.from('123');
     }
+    ctx.status = 401;
     return { path: ctx.path, functionName, functionServiceName, isExistsApp: !!app  };
   })(...args);
   await close();

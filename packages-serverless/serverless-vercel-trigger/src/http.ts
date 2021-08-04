@@ -64,20 +64,6 @@ class Response {
     return this._headers;
   }
 
-  set headers(json) {
-    const keys = Object.keys(json);
-    const map = {};
-    for (const key of keys) {
-      const item = json[key];
-      if (Array.isArray(item)) {
-        map[key] = item;
-      } else {
-        map[key] = [item];
-      }
-    }
-    this._headers = map;
-  }
-
   setHeader(key, value) {
     this._headers[key] = value;
   }
@@ -93,10 +79,6 @@ class Response {
 
   status(statusCode) {
     this.statusCode = statusCode;
-  }
-
-  end(data) {
-    this.send(data);
   }
 
   toJSON() {
