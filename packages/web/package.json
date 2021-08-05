@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/web",
-  "version": "3.0.0-alpha.1",
+  "version": "3.0.0-alpha.2",
   "description": "Midway Web Framework for Egg.js",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -27,8 +27,8 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/decorator": "^3.0.0-alpha.1",
-    "@midwayjs/mock": "^3.0.0-alpha.1",
+    "@midwayjs/decorator": "^3.0.0-alpha.2",
+    "@midwayjs/mock": "^3.0.0-alpha.2",
     "dayjs": "^1.10.4",
     "egg-socket.io": "^4.1.6",
     "egg-view-nunjucks": "^2.2.0",
@@ -41,9 +41,9 @@
   },
   "dependencies": {
     "@eggjs/router": "^2.0.0",
-    "@midwayjs/bootstrap": "^3.0.0-alpha.1",
-    "@midwayjs/core": "^3.0.0-alpha.1",
-    "@midwayjs/koa": "^3.0.0-alpha.1",
+    "@midwayjs/bootstrap": "^3.0.0-alpha.2",
+    "@midwayjs/core": "^3.0.0-alpha.2",
+    "@midwayjs/koa": "^3.0.0-alpha.2",
     "@midwayjs/logger": "^2.11.3",
     "debug": "^4.1.1",
     "egg": "^2.28.0",
@@ -51,7 +51,7 @@
     "egg-path-matching": "^1.0.1",
     "extend2": "^1.0.0",
     "find-up": "^5.0.0",
-    "midway-schedule": "^3.0.0-alpha.1",
+    "midway-schedule": "^3.0.0-alpha.2",
     "mkdirp": "^1.0.4"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",

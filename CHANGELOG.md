@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-alpha.2](https://github.com/midwayjs/midway/compare/v3.0.0-alpha.1...v3.0.0-alpha.2) (2021-08-05)
+
+
+### Bug Fixes
+
+* configuration required ([69c9e63](https://github.com/midwayjs/midway/commit/69c9e6323c5bff816e7570600bba314b17039a7d))
+* npe ([b54305c](https://github.com/midwayjs/midway/commit/b54305c500ebead7e98ca8cd21f6e0738a1a050d))
+* proxy ([e1601af](https://github.com/midwayjs/midway/commit/e1601afb24b91887736ea32a576019ba3224bf62))
+
+
+
+
+
 # [3.0.0-alpha.1](https://github.com/midwayjs/midway/compare/v2.12.1...v3.0.0-alpha.1) (2021-08-04)
 
 
