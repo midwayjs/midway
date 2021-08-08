@@ -295,7 +295,7 @@ export interface IMidwayContainer extends IApplicationContext {
 }
 
 export interface IConfigService {
-  add(configFilePaths: string[]);
+  add(configFilePaths: any[]);
   addObject(obj: object);
   load();
   getConfiguration(configKey?: string);
