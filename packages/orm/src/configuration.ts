@@ -1,8 +1,14 @@
-import { ILifeCycle, IMidwayContainer } from '@midwayjs/core';
 import {
+  ILifeCycle,
+  IMidwayApplication,
+  IMidwayContainer,
+} from '@midwayjs/core';
+import {
+  App,
   Config,
   Configuration,
   getClassMetadata,
+  Init,
   listModule,
 } from '@midwayjs/decorator';
 import { join } from 'path';
@@ -29,17 +35,25 @@ export class OrmConfiguration implements ILifeCycle {
   @Config('orm')
   private ormConfig: any;
 
+  @App()
+  app: IMidwayApplication;
+
   private connectionNames: string[] = [];
 
-  async onReady(container: IMidwayContainer) {
-    (container as any).registerDataHandler(
-      ORM_MODEL_KEY,
-      (key: { modelKey; connectionName }) => {
-        // return getConnection(key.connectionName).getRepository(key.modelKey);
-        return getRepository(key.modelKey, key.connectionName);
-      }
-    );
+  @Init()
+  async init() {
+    this.app
+      .getApplicationContext()
+      .registerDataHandler(
+        ORM_MODEL_KEY,
+        (key: { modelKey; connectionName }) => {
+          // return getConnection(key.connectionName).getRepository(key.modelKey);
+          return getRepository(key.modelKey, key.connectionName);
+        }
+      );
+  }
 
+  async onReady(container: IMidwayContainer) {
     const entities = listModule(ENTITY_MODEL_KEY);
     const eventSubs = listModule(EVENT_SUBSCRIBER_KEY);
 
