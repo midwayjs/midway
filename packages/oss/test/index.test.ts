@@ -3,7 +3,6 @@ import { join, basename } from 'path';
 import { OSSService, OSSSTSService, OSSServiceFactory } from '../src';
 import { createReadStream } from 'fs';
 import { createSTSClient } from './sts_client';
-import { roleArn } from './sts_config';
 
 async function retry(fn) {
   return await Promise.resolve(fn()).catch(fn()).catch(fn());
