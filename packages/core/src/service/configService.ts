@@ -9,7 +9,7 @@ import * as util from 'util';
 const debug = util.debuglog('midway:config');
 
 export class MidwayConfigService implements IConfigService {
-  private envDirMap: Map<string, Set<string>>;
+  private envDirMap: Map<string, Set<any>>;
   private container: IMidwayContainer;
   private aliasMap = {
     prod: 'production',
@@ -24,26 +24,34 @@ export class MidwayConfigService implements IConfigService {
     this.envDirMap = new Map();
   }
 
-  add(configFilePaths: string[]) {
+  add(configFilePaths: any[]) {
     for (const dir of configFilePaths) {
-      if (/\.\w+$/.test(dir)) {
-        // file
-        const env = this.getConfigEnv(dir);
-        const envSet = this.getEnvSet(env);
-        envSet.add(dir);
-        if (this.aliasMap[env]) {
-          this.getEnvSet(this.aliasMap[env]).add(dir);
+      if (typeof dir === 'string') {
+        if (/\.\w+$/.test(dir)) {
+          // file
+          const env = this.getConfigEnv(dir);
+          const envSet = this.getEnvSet(env);
+          envSet.add(dir);
+          if (this.aliasMap[env]) {
+            this.getEnvSet(this.aliasMap[env]).add(dir);
+          }
+        } else {
+          // directory
+          const fileStat = statSync(dir);
+          if (fileStat.isDirectory()) {
+            const files = readdirSync(dir);
+            this.add(
+              files.map(file => {
+                return join(dir, file);
+              })
+            );
+          }
         }
       } else {
-        // directory
-        const fileStat = statSync(dir);
-        if (fileStat.isDirectory()) {
-          const files = readdirSync(dir);
-          this.add(
-            files.map(file => {
-              return join(dir, file);
-            })
-          );
+        // object add
+        for (const env in dir) {
+          const envSet = this.getEnvSet(env);
+          envSet.add(dir[env]);
         }
       }
     }
@@ -84,7 +92,10 @@ export class MidwayConfigService implements IConfigService {
     // merge set
     const target = {};
     for (const filename of [...defaultSet, ...currentEnvSet]) {
-      const config = await this.loadConfig(filename, target);
+      let config = filename;
+      if (typeof filename === 'string') {
+        config = await this.loadConfig(filename, target);
+      }
 
       if (!config) {
         continue;

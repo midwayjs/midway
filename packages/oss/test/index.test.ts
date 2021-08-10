@@ -4,6 +4,10 @@ import { OSSService, OSSSTSService, OSSServiceFactory } from '../src';
 import { createReadStream } from 'fs';
 import { createSTSClient } from './sts_client';
 
+async function retry(fn) {
+  return await Promise.resolve(fn()).catch(fn()).catch(fn());
+}
+
 describe('/test/index.test.ts', () => {
 
   it('should throw error when missing endpoint or region', async () => {
@@ -154,7 +158,9 @@ describe('/test/index.test.ts', () => {
     const ossSTSService = await container.getAsync(OSSSTSService);
 
     const roleArn = require('./sts_config').roleArn;
-    const result: any = await ossSTSService.assumeRole(roleArn);
+    let result = await retry(async () => {
+      return ossSTSService.assumeRole(roleArn);
+    });
     expect(result.res.status).toEqual(200);
 
     const accessKeyId = result.credentials.AccessKeyId;
@@ -183,7 +189,10 @@ describe('/test/index.test.ts', () => {
 
     expect(client2.put).toBeDefined();
 
-    const result = await client1.assumeRole(roleArn);
+    let result = await retry(async () => {
+      return client1.assumeRole(roleArn);
+    });
+
     expect((result as any).res.status).toEqual(200);
 
     const accessKeyId = result.credentials.AccessKeyId;

@@ -3,6 +3,7 @@ export const StarterMap = {
   tencent: ['@midwayjs/serverless-scf-starter'],
   gaia: ['@ali/serverless-gaia-starter'],
   ginkgo: ['@ali/serverless-ginkgo-starter'],
+  vercel: ['@ali/serverless-vercel-starter'],
 };
 
 export const TriggerMap = {
@@ -10,4 +11,5 @@ export const TriggerMap = {
   tencent: ['@midwayjs/serverless-scf-trigger'],
   gaia: ['@ali/serverless-gaia-trigger'],
   ginkgo: ['@ali/serverless-ginkgo-trigger'],
+  vercel: ['@ali/serverless-vercel-trigger'],
 };
