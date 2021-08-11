@@ -11,7 +11,7 @@ export interface FaaSContext extends IMidwayContext<FaaSHTTPContext> {
   hooks?: MidwayHooks;
 }
 
-export type FaaSMiddleware = (() => (context: FaaSContext, next: () => Promise<any>) => any) | string;
+export type FaaSMiddleware = ((context: FaaSContext, next: () => Promise<any>) => any) | string;
 
 export type IMidwayFaaSApplication = IMidwayApplication<FaaSContext, {
   getInitializeContext();
