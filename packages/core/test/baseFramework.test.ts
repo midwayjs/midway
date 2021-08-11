@@ -462,7 +462,7 @@ describe('/test/baseFramework.test.ts', () => {
     });
 
     const home: any = await framework.getApplicationContext().getAsync('home');
-    expect(home.hello()).toEqual('hello worlddddccccfff');
+    expect(home.hello()).toEqual({"bbb": "aaa", "ddd": "ddd"});
     expect(await home.hello1()).toEqual('hello world 1');
     expect(await home.hello2()).toEqual('hello worldcccppp');
 

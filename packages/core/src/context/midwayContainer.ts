@@ -721,7 +721,7 @@ export class MidwayContainer
   public getResolverHandler() {
     return this.resolverHandler;
   }
-  
+
   public addDirectoryFilter(directoryFilter) {
     this.directoryFilterArray =
       this.directoryFilterArray.concat(directoryFilter);

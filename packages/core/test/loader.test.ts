@@ -629,12 +629,12 @@ describe('/test/loader.test.ts', () => {
     await loader.refresh();
 
     const home: any = await loader.getApplicationContext().getAsync('home');
-    expect(home.hello()).toEqual('hello worlddddccccfff');
+    expect(home.hello()).toEqual({"bbb": "aaa", "ddd": "ddd"});
     expect(await home.hello1()).toEqual('hello world 1');
     expect(await home.hello2()).toEqual('hello worldcccppp');
 
     const home1: any = await loader.getApplicationContext().getAsync('home');
-    expect(home1.hello()).toEqual('hello worlddddccccfff');
+    expect(home1.hello()).toEqual(({"bbb": "aaa", "ddd": "ddd"}));
     expect(await home1.hello1()).toEqual('hello world 1');
     expect(await home1.hello2()).toEqual('hello worldcccppp');
 
