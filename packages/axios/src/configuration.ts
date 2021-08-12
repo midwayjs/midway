@@ -1,6 +1,6 @@
 import { Configuration } from '@midwayjs/decorator';
 import { join } from 'path';
-import { HttpService } from './servicManager';
+import { HttpService } from './serviceManager';
 
 @Configuration({
   namespace: 'axios',
