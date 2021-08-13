@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/serverless-app",
-  "version": "2.12.3",
+  "version": "2.12.4",
   "main": "dist/index",
   "typings": "index.d.ts",
   "dependencies": {
@@ -14,7 +14,7 @@
   },
   "devDependencies": {
     "@midwayjs/decorator": "^2.12.3",
-    "@midwayjs/faas": "^2.12.3",
+    "@midwayjs/faas": "^2.12.4",
     "@midwayjs/faas-middleware-upload": "^0.0.5",
     "@midwayjs/mock": "^2.12.3",
     "@midwayjs/serverless-fc-starter": "^2.12.3",

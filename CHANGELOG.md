@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.12.4](https://github.com/midwayjs/midway/compare/v2.12.3...v2.12.4) (2021-08-13)
+
+
+### Bug Fixes
+
+* post missing data ([#1225](https://github.com/midwayjs/midway/issues/1225)) ([ca99368](https://github.com/midwayjs/midway/commit/ca9936839d407c4c6e1a279eb57338e30a8cbb62))
+* update FaasMddleware interface.ts ([#1219](https://github.com/midwayjs/midway/issues/1219)) ([190a729](https://github.com/midwayjs/midway/commit/190a7292d495ebf2af8c66a2257fef41f3362ad1))
+
+
+
+
+
 ## [2.12.3](https://github.com/midwayjs/midway/compare/v2.12.2...v2.12.3) (2021-08-09)
 
 
