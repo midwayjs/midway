@@ -57,8 +57,10 @@ module.exports = engine => {
         if (eggApp.config.proxy && !context.headers['X-Forwarded-For']) {
           context.headers['X-Forwarded-For'] = context.ip;
         }
+        // fix path for special characters, eg chinese.
+        const path = encodeURI(context.path);
         const requestOption = {
-          uri: `http://unix:${socketPath}:${context.path}`,
+          uri: `http://unix:${socketPath}:${path}`,
           qs: context.query,
           method: context.method,
           headers: context.headers,

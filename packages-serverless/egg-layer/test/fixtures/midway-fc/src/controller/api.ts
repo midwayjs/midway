@@ -3,7 +3,10 @@ import {
   Post,
   Provide,
   Inject,
-  Body, ContentType,
+  Body,
+  ContentType,
+  Param,
+  Get,
 } from '@midwayjs/decorator';
 import { UserService } from '../service/user';
 
@@ -22,4 +25,9 @@ export class APIController {
     return 'data' + bbbb;
   }
 
+  @Get('/echo/:param')
+  async echoParam(@Param() param: string) {
+    console.log('[echo param]', param);
+    return param;
+  }
 }

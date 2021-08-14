@@ -1,13 +1,12 @@
 const { createRuntime } = require('@midwayjs/runtime-mock');
 const { HTTPTrigger } = require('@midwayjs/serverless-fc-trigger');
-const FCApiGatewayTrigger = require('@midwayjs/serverless-fc-trigger')
-  .ApiGatewayTrigger;
+const FCApiGatewayTrigger =
+  require('@midwayjs/serverless-fc-trigger').ApiGatewayTrigger;
 const { ApiGatewayTrigger } = require('@midwayjs/serverless-scf-trigger');
 const { join } = require('path');
 const request = require('supertest');
 
 describe('/test/index.test.ts', () => {
-
   describe('FC test with http trigger', () => {
     let runtime;
     let app;
@@ -69,7 +68,7 @@ describe('/test/index.test.ts', () => {
         .expect(200, done);
     });
 
-    it('should test with post form body', (done) => {
+    it('should test with post form body', done => {
       request(app)
         .post('/post/formBody')
         .send('b=1')
@@ -279,14 +278,17 @@ describe('/test/index.test.ts', () => {
     });
   });
 
-
   describe('FC test with midway app use http trigger', () => {
     let runtime;
     let app;
+    jest.setTimeout(100 * 60 * 1000);
 
     beforeAll(async () => {
       // set midway framework dir
-      process.env.EGG_FRAMEWORK_DIR = join(__dirname, '../node_modules/@midwayjs/web');
+      process.env.EGG_FRAMEWORK_DIR = join(
+        __dirname,
+        '../node_modules/@midwayjs/web'
+      );
       const entryDir = join(__dirname, './fixtures/midway-fc');
       process.env.ENTRY_DIR = entryDir;
       runtime = createRuntime({
@@ -303,14 +305,22 @@ describe('/test/index.test.ts', () => {
       process.env.ENTRY_DIR = '';
     });
 
-    it('should test with get', done => {
+    it('should test payload with post', done => {
       request(app)
         .post('/api')
         .send({
-          bbbbb: 'ccc'
+          bbbbb: 'ccc',
         })
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(/dataccc/)
+        .expect(200, done);
+    });
+
+    it('should test param with get', done => {
+      request(app)
+        .get('/echo/%E6%B5%8B%E8%AF%95')
+        .expect('Content-Type', 'text/plain; charset=utf-8')
+        .expect('测试')
         .expect(200, done);
     });
   });
