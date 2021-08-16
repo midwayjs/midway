@@ -474,6 +474,9 @@ describe('/test/baseFramework.test.ts', () => {
     } catch (err) {
       expect(err.message).toMatch('ccc');
     }
+    // aspect chain
+    const result = await userController1.test1().test2().getUser1();
+    expect(result).toEqual('before test user');
   });
 
   it('should inject global value in component', async () => {

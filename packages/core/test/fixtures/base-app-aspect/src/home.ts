@@ -8,13 +8,12 @@ class Parent {
   }
 
   async hello1() {
-    return 'hello world 1'
+    return 'hello world 1';
   }
 }
 
 @Provide()
 export class Home extends Parent {
-
   bbb = 'aaa';
 
   ccc: string;
@@ -28,14 +27,24 @@ export class Home extends Parent {
   }
 }
 
-
 @Provide()
 export class UserController {
-
   @Inject()
   ctx;
 
   async getUser() {
     throw new Error('bbb');
+  }
+
+  async getUser1(uid = 'user1') {
+    return uid;
+  }
+
+  test1() {
+    return this;
+  }
+
+  test2() {
+    return this;
   }
 }

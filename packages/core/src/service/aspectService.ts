@@ -6,6 +6,7 @@ import {
   isAsyncFunction,
   isProxy,
   listModule,
+  isClass,
 } from '@midwayjs/decorator';
 import * as pm from 'picomatch';
 import { IAspectService, IMidwayContainer } from '../interface';
@@ -181,7 +182,11 @@ export class MidwayAspectService implements IAspectService {
               }
               const resultTemp = aspectIns.afterReturn?.(joinPoint, result);
               result = typeof resultTemp === 'undefined' ? result : resultTemp;
-              return result;
+              if (result && isClass(result.constructor)) {
+                return this.wrapperAspectToInstance(ins);
+              } else {
+                return result;
+              }
             } catch (err) {
               error = err;
               if (aspectIns.afterThrow) {
