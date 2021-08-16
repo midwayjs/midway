@@ -181,7 +181,8 @@ export class AutoConfiguration {
     for (const module of modules) {
       const rule = getClassMetadata(MODULE_TASK_QUEUE_OPTIONS, module);
       const queue = new Bull(`${rule.name}:execute`, config);
-      queue.process(async job => {
+      const concurrency = config.concurrency || 1;
+      queue.process(concurrency || 1, async job => {
         const ctx = this.getContext({
           type: 'Queue',
           id: job.id,

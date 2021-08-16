@@ -6,4 +6,5 @@ export const taskConfig = {
       tz: 'Asia/Shanghai',
     },
   },
+  concurrency: 1,
 };
