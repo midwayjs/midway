@@ -427,11 +427,13 @@ export abstract class BaseFramework<
       } else {
         // 普通类写法
         const providerId = getProviderId(cycle.target);
-        cycle.instance =
-          await this.getApplicationContext().getAsync<ILifeCycle>(providerId);
+        if (this.getApplicationContext().registry.hasDefinition(providerId)) {
+          cycle.instance =
+            await this.getApplicationContext().getAsync<ILifeCycle>(providerId);
+        }
       }
 
-      lifecycleInstanceList.push(cycle);
+      cycle.instance && lifecycleInstanceList.push(cycle);
     }
 
     // exec onConfigLoad()
