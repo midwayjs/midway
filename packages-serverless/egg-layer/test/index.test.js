@@ -318,9 +318,9 @@ describe('/test/index.test.ts', () => {
 
     it('should test param with get', done => {
       request(app)
-        .get('/echo/%E6%B5%8B%E8%AF%95')
+        .get('/echo/' + encodeURI('测试'))
         .expect('Content-Type', 'text/plain; charset=utf-8')
-        .expect('测试')
+        .expect('%E6%B5%8B%E8%AF%95')
         .expect(200, done);
     });
   });
