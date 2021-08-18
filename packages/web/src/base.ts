@@ -199,6 +199,10 @@ export const createAgentWorkerLoader = () => {
         result.push(process.env.MIDWAY_EGG_PLUGIN_PATH);
       }
 
+      if (process.cwd() !== this.appDir) {
+        result.push(this.appDir);
+      }
+
       const pathSet = new Set(result);
       return Array.from(pathSet);
     }
