@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.12.6](https://github.com/midwayjs/midway/compare/v2.12.5...v2.12.6) (2021-08-18)
+
+
+### Bug Fixes
+
+* find egg plugin in cwd ([#1236](https://github.com/midwayjs/midway/issues/1236)) ([ac9a79f](https://github.com/midwayjs/midway/commit/ac9a79ffa90f3f9d7984b24084aa7ac9a307fc98))
+
+
+
+
+
 ## [2.12.5](https://github.com/midwayjs/midway/compare/v2.12.4...v2.12.5) (2021-08-18)
 
 
