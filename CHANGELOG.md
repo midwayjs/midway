@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.12.5](https://github.com/midwayjs/midway/compare/v2.12.4...v2.12.5) (2021-08-18)
+
+
+### Bug Fixes
+
+* component env filter ([#1234](https://github.com/midwayjs/midway/issues/1234)) ([bfb44b7](https://github.com/midwayjs/midway/commit/bfb44b75da26ca21f576c305786e205cf7e3f3ff))
+* correct aspect chain bug ([#1204](https://github.com/midwayjs/midway/issues/1204)) ([5de5284](https://github.com/midwayjs/midway/commit/5de5284c70b44acc73eaaad651fd2edc72d54f28))
+* encode request path in serverless ([#1230](https://github.com/midwayjs/midway/issues/1230)) ([c826e68](https://github.com/midwayjs/midway/commit/c826e6899c884af9f3365ab77b95449a68889afe))
+
+
+### Features
+
+* queue support concurrency config ([#1231](https://github.com/midwayjs/midway/issues/1231)) ([67bb7f5](https://github.com/midwayjs/midway/commit/67bb7f50b3dcf80439d1b4b4b9c06f930a8b4468))
+
+
+
+
+
 ## [2.12.4](https://github.com/midwayjs/midway/compare/v2.12.3...v2.12.4) (2021-08-13)
 
 

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.12.5](https://github.com/midwayjs/midway-faas/compare/v2.12.4...v2.12.5) (2021-08-18)
+
+
+### Bug Fixes
+
+* component env filter ([#1234](https://github.com/midwayjs/midway-faas/issues/1234)) ([bfb44b7](https://github.com/midwayjs/midway-faas/commit/bfb44b75da26ca21f576c305786e205cf7e3f3ff))
+* encode request path in serverless ([#1230](https://github.com/midwayjs/midway-faas/issues/1230)) ([c826e68](https://github.com/midwayjs/midway-faas/commit/c826e6899c884af9f3365ab77b95449a68889afe))
+
+
+
+
+
 ## [2.12.3](https://github.com/midwayjs/midway-faas/compare/v2.12.2...v2.12.3) (2021-08-09)
 
 **Note:** Version bump only for package @midwayjs/egg-layer

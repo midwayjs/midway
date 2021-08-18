@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.12.5](https://github.com/midwayjs/midway/compare/v2.12.4...v2.12.5) (2021-08-18)
+
+
+### Features
+
+* queue support concurrency config ([#1231](https://github.com/midwayjs/midway/issues/1231)) ([67bb7f5](https://github.com/midwayjs/midway/commit/67bb7f50b3dcf80439d1b4b4b9c06f930a8b4468))
+
+
+
+
+
 ## [2.12.3](https://github.com/midwayjs/midway/compare/v2.12.2...v2.12.3) (2021-08-09)
 
 **Note:** Version bump only for package @midwayjs/task
