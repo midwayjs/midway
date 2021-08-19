@@ -1,7 +1,8 @@
-import { createModuleContainer } from '@midwayjs/core';
+import { createModuleContainer, MidwayContainer } from '@midwayjs/core';
 import { Framework } from './index';
 
 export const createModuleServerlessFramework = async (options: {
+  container?: MidwayContainer,
   modules: any[];
   entry: { Configuration: any };
 }) => {
