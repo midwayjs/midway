@@ -35,7 +35,7 @@ export abstract class ServiceFactory<T> {
 
   async createInstance(config, clientName) {
     // options.default will be merge in to options.clients[id]
-    config = Object.assign({}, this.options.default, config);
+    config = Object.assign({}, this.options?.default, config);
     const client = await this.createClient(config);
     this.clients.set(clientName, client);
     return client;
