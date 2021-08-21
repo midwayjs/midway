@@ -72,12 +72,23 @@ export class MidwayExpressFramework extends BaseFramework<
         this.configurationOptions.ca
       );
 
-      this.server = require('https').createServer(
-        this.configurationOptions,
-        this.app
-      );
+      if (this.configurationOptions.http2) {
+        this.server = require('http2').createSecureServer(
+          this.configurationOptions,
+          this.app
+        );
+      } else {
+        this.server = require('https').createServer(
+          this.configurationOptions,
+          this.app
+        );
+      }
     } else {
-      this.server = require('http').createServer(this.app);
+      if (this.configurationOptions.http2) {
+        this.server = require('http2').createServer(this.app);
+      } else {
+        this.server = require('http').createServer(this.app);
+      }
     }
     // register httpServer to applicationContext
     this.applicationContext.registerObject(HTTP_SERVER_KEY, this.server);

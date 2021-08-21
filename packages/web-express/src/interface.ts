@@ -48,6 +48,10 @@ export interface IMidwayExpressConfigurationOptions extends IConfigurationOption
    * https ca
    */
   ca?: string | Buffer | Array<string | Buffer>;
+  /**
+   * http2 support
+   */
+  http2?: boolean;
 }
 
 export type MiddlewareParamArray = RequestHandler[];
