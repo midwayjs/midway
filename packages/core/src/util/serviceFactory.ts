@@ -5,7 +5,7 @@ import * as assert from 'assert';
  */
 export abstract class ServiceFactory<T> {
   private clients: Map<string, T> = new Map();
-  private options;
+  private options = {};
 
   async initClients(options) {
     this.options = options;
@@ -25,7 +25,6 @@ export abstract class ServiceFactory<T> {
       for (const id of Object.keys(options.clients)) {
         await this.createInstance(options.clients[id], id);
       }
-      return;
     }
   }
 
@@ -33,11 +32,13 @@ export abstract class ServiceFactory<T> {
     return this.clients.get(id) as unknown as U;
   }
 
-  async createInstance(config, clientName) {
+  async createInstance(config, clientName?) {
     // options.default will be merge in to options.clients[id]
-    config = Object.assign({}, this.options.default, config);
+    config = Object.assign({}, this.options['default'], config);
     const client = await this.createClient(config);
-    this.clients.set(clientName, client);
+    if (clientName) {
+      this.clients.set(clientName, client);
+    }
     return client;
   }
 
