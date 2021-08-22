@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.12.7](https://github.com/midwayjs/midway/compare/v2.12.6...v2.12.7) (2021-08-22)
+
+
+### Bug Fixes
+
+* empty options in default ([#1241](https://github.com/midwayjs/midway/issues/1241)) ([22dd502](https://github.com/midwayjs/midway/commit/22dd50220192aa1a03f15745afd8f680913c4cbb))
+
+
+
+
+
 ## [2.12.5](https://github.com/midwayjs/midway/compare/v2.12.4...v2.12.5) (2021-08-18)
 
 
