@@ -2,9 +2,10 @@ import { MidwayContainer } from '../context/container';
 import { DirectoryFileDetector, CustomModuleDetector } from './fileDetector';
 import { join } from 'path';
 import { safeRequire } from './index';
+import { IMidwayContainer } from '../interface';
 
 export const createModuleContainer = (options: {
-  container?: MidwayContainer;
+  container?: IMidwayContainer;
   modules: any[];
   entry: { Configuration: any };
 }) => {
