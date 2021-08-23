@@ -232,8 +232,17 @@ export class Framework
     }
     Object.assign(this.spec.functions, funcSpec);
     this.app.getServerlessInstance = this.getServerlessInstance.bind(this);
-    this.app.use(bodyParser.urlencoded({ extended: false }));
-    this.app.use(bodyParser.json());
+    this.app.use(
+      bodyParser.urlencoded({
+        extended: false,
+        limit: '2mb',
+      })
+    );
+    this.app.use(
+      bodyParser.json({
+        limit: '2mb',
+      })
+    );
     this.app.use(this.faasInvokeMiddleware.bind(this));
     this.app.use((req, res) => {
       res.statusCode = 404;
