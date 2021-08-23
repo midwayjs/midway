@@ -4,10 +4,11 @@ import { join } from 'path';
 import { safeRequire } from './index';
 
 export const createModuleContainer = (options: {
+  container?: MidwayContainer;
   modules: any[];
   entry: { Configuration: any };
 }) => {
-  const applicationContext = new MidwayContainer();
+  const applicationContext = options.container || new MidwayContainer();
   applicationContext.setFileDetector(
     new CustomModuleDetector({
       modules: options.modules,
