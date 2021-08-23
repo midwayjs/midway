@@ -1,14 +1,18 @@
-import { createModuleContainer, MidwayContainer } from '@midwayjs/core';
-import { Framework } from './index';
+import { createModuleContainer, IMidwayContainer } from '@midwayjs/core';
+import { Framework, IFaaSConfigurationOptions } from './index';
 
-export const createModuleServerlessFramework = async (options: {
-  container?: MidwayContainer,
+export interface CreateOptions extends IFaaSConfigurationOptions {
+  container?: IMidwayContainer;
   modules: any[];
   entry: { Configuration: any };
-}) => {
+}
+
+export const createModuleServerlessFramework = async (
+  options: CreateOptions
+) => {
   const container = createModuleContainer(options);
   const framework = new Framework();
-  framework.configure({});
+  framework.configure(options);
   await framework.initialize({
     applicationContext: container,
     baseDir: '',
