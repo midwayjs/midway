@@ -27,7 +27,6 @@ import {
 } from '@midwayjs/decorator';
 import SimpleLock from '@midwayjs/simple-lock';
 import * as compose from 'koa-compose';
-import { MidwayHooks } from './hooks';
 import { createConsoleLogger, LoggerOptions, loggers } from '@midwayjs/logger';
 
 const LOCK_KEY = '_faas_starter_start_key';
@@ -203,9 +202,7 @@ export class MidwayFaaSFramework extends BaseFramework<
         .getEnvironmentService()
         .getCurrentEnvironment();
     }
-    if (!context.hooks) {
-      context.hooks = new MidwayHooks(context, this.app);
-    }
+
     if (this.isReplaceLogger || !context.logger) {
       context._serverlessLogger = this.createContextLogger(context);
       /**
