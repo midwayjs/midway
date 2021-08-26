@@ -71,6 +71,10 @@ export class DecoratorManager extends Map {
     return decoratorNameKey.toString() + '_METHOD';
   }
 
+  static getDecoratorClsExtendedKey(decoratorNameKey: DecoratorKey) {
+    return decoratorNameKey.toString() + '_EXT';
+  }
+
   static getDecoratorClsMethodPrefix(decoratorNameKey: DecoratorKey) {
     return decoratorNameKey.toString() + '_CLS_METHOD';
   }
@@ -436,6 +440,52 @@ export function attachClassMetadata(
 }
 
 const testKeyMap = new Map<DecoratorKey, Error>();
+
+/**
+ * get data from class assign
+ * @param decoratorNameKey
+ * @param target
+ */
+export function getClassExtendedMetadata(
+  decoratorNameKey: DecoratorKey,
+  target
+) {
+  if (testKeyMap.size > 0 && testKeyMap.has(decoratorNameKey)) {
+    throw testKeyMap.get(decoratorNameKey);
+  }
+  const extKey = DecoratorManager.getDecoratorClsExtendedKey(decoratorNameKey);
+  let metadata = manager.getMetadata(extKey, target);
+  if (metadata === undefined) {
+    const metaChain = [manager.getMetadata(decoratorNameKey, target)];
+    let father = Reflect.getPrototypeOf(target);
+    while (father.constructor !== Object) {
+      metaChain.push(manager.getMetadata(decoratorNameKey, father));
+      father = Reflect.getPrototypeOf(father);
+    }
+    for (let i = metaChain.length - 1; i >= 0; i--) {
+      metadata = mergeMeta(metadata, metaChain[i]);
+    }
+    manager.saveMetadata(extKey, metadata || null, target);
+  }
+  return metadata;
+}
+
+function mergeMeta(target: any, src: any) {
+  if (!target) {
+    target = src;
+    src = null;
+  }
+  if (!target) {
+    return null;
+  }
+  if (Array.isArray(target)) {
+    return target.concat(src || []);
+  }
+  if (typeof target === 'object') {
+    return Object.assign({}, target, src);
+  }
+  throw new Error('can not merge meta that type of ' + typeof target);
+}
 
 /**
  * get data from class
