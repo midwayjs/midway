@@ -86,13 +86,16 @@ getPath().then((path) => {
 ## 快速上手
 
 ```bash
-npm i @midwayjs/cli -g --registry=https://registry.npm.taobao.org
+$ npm -v
 
-## 创建项目
-mw new helloworld
+# 如果是 npm v6
+$ npm init midway --type=web my_midway_app
+
+# 如果是 npm v7
+$ npm init midway -- --type=web my_midway_app
 
 ## 进入项目路径
-cd helloworld && npm run dev
+cd my_midway_app && npm run dev
 ```
 
 如何部署等更多进阶请访问 [中文文档](https://www.yuque.com/midwayjs/midway_v2)。
