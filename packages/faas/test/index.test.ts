@@ -221,29 +221,6 @@ describe('test/index.test.ts', () => {
     await closeApp(starter);
   });
 
-  it('test midway-hooks', async () => {
-    mm(process.env, 'NODE_ENV', 'sh');
-    const starter = await creatStarter('midway-hooks');
-    const data1 = await starter.handleInvokeWrapper('index.handler')({}, {});
-    const data2 = await starter.handleInvokeWrapper('inject.handler')({}, {});
-
-    assert(data1);
-    assert(data2);
-
-    const config = await starter.handleInvokeWrapper('config.handler')({}, {});
-    const applicationContext = starter.getApplicationContext();
-    const value = applicationContext.getConfigService().getConfiguration('env');
-
-    assert(config === value);
-
-    const loggerExist = await starter.handleInvokeWrapper('logger.handler')(
-      {},
-      {}
-    );
-    assert(loggerExist);
-    await closeApp(starter);
-  });
-
   it('invoke controller handler', async () => {
     const starter = await creatStarter('base-app-controller');
     let data = await starter.handleInvokeWrapper('index.handler')(

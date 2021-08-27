@@ -1,6 +1,5 @@
 import { MidwayRequestContainer, IMidwayApplication, IConfigurationOptions, IMidwayContext } from '@midwayjs/core';
 import { FaaSHTTPContext } from '@midwayjs/faas-typings';
-import type { MidwayHooks } from './hooks';
 import { ILogger } from '@midwayjs/logger';
 
 export interface FaaSContext extends IMidwayContext<FaaSHTTPContext> {
@@ -8,7 +7,6 @@ export interface FaaSContext extends IMidwayContext<FaaSHTTPContext> {
   env: string;
   requestContext: MidwayRequestContainer;
   originContext: any;
-  hooks?: MidwayHooks;
 }
 
 export type FaaSMiddleware = ((context: FaaSContext, next: () => Promise<any>) => any) | string;
