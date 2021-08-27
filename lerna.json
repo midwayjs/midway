@@ -16,7 +16,10 @@
     },
     "publish": {
       "ignoreChanges": [
-        "*.md"
+        "*.md",
+        "**/test/**",
+        "jest.config.js",
+        "jest.setup.js"
       ]
     },
     "version": {
