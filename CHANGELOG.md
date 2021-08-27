@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.12.8](https://github.com/midwayjs/midway/compare/v2.12.7...v2.12.8) (2021-08-27)
+
+
+### Bug Fixes
+
+* ci、build and type error with rabbitmq ([#1253](https://github.com/midwayjs/midway/issues/1253)) ([dff7b06](https://github.com/midwayjs/midway/commit/dff7b0670fdca8d209a424ce4fd5bc61464764cc))
+* serverless local dev bodyparser limit ([#1245](https://github.com/midwayjs/midway/issues/1245)) ([49575f9](https://github.com/midwayjs/midway/commit/49575f98f8694968e5c86680ad98d619621aefef))
+
+
+
+
+
 ## [2.12.7](https://github.com/midwayjs/midway/compare/v2.12.6...v2.12.7) (2021-08-22)
 
 

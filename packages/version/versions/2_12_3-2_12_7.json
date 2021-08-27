@@ -5,7 +5,10 @@
   "@midwayjs/koa-layer": "2.12.7",
   "@midwayjs/runtime-engine": "2.11.2",
   "@midwayjs/runtime-mock": "2.11.2",
-  "@midwayjs/serverless-app": "2.12.7",
+  "@midwayjs/serverless-app": [
+    "2.12.7",
+    "2.12.8"
+  ],
   "@midwayjs/serverless-aws-starter": "2.11.4",
   "@midwayjs/serverless-fc-starter": "2.12.7",
   "@midwayjs/serverless-fc-trigger": "2.12.7",
@@ -30,11 +33,17 @@
   "@midwayjs/orm": "2.12.7",
   "@midwayjs/oss": "2.12.7",
   "@midwayjs/prometheus": "2.12.7",
-  "@midwayjs/rabbitmq": "2.12.7",
+  "@midwayjs/rabbitmq": [
+    "2.12.7",
+    "2.12.8"
+  ],
   "@midwayjs/socketio": "2.12.7",
   "@midwayjs/task": "2.12.7",
   "@midwayjs/typegoose": "2.12.7",
-  "@midwayjs/version": "2.12.7",
+  "@midwayjs/version": [
+    "2.12.7",
+    "2.12.8"
+  ],
   "@midwayjs/express": "2.12.7",
   "@midwayjs/koa": "2.12.7",
   "@midwayjs/web": "2.12.7",
