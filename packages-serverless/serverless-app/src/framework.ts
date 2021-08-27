@@ -36,7 +36,7 @@ export class Framework
   private proxyApp;
   protected bootstrapOptions;
   protected invokeFun;
-  configure(options: IServerlessAppOptions) {
+  configure(options: IServerlessAppOptions = {}) {
     this.configurationOptions = options;
     return this;
   }
@@ -235,12 +235,12 @@ export class Framework
     this.app.use(
       bodyParser.urlencoded({
         extended: false,
-        limit: '2mb',
+        limit: this.configurationOptions.bodyParserLimit ?? '2mb',
       })
     );
     this.app.use(
       bodyParser.json({
-        limit: '2mb',
+        limit: this.configurationOptions.bodyParserLimit ?? '2mb',
       })
     );
     this.app.use(this.faasInvokeMiddleware.bind(this));
