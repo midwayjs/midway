@@ -6,7 +6,7 @@ import * as amqp from 'amqp-connection-manager';
 import { IRabbitMQApplication } from './interface';
 import { ConsumeMessage } from 'amqplib/properties';
 import { RabbitMQListenerOptions } from '@midwayjs/decorator';
-import { Channel } from 'amqplib';
+import type { Channel } from 'amqplib';
 import { ILogger } from '@midwayjs/logger';
 import { EventEmitter } from 'events';
 
@@ -15,7 +15,7 @@ export class RabbitMQServer
   implements IRabbitMQApplication
 {
   protected channelManagerSet: Set<Channel> = new Set();
-  protected connection: amqp.Connection = null;
+  protected connection: amqp.AmqpConnectionManager = null;
   protected logger: ILogger;
   protected reconnectTime;
 
@@ -34,22 +34,22 @@ export class RabbitMQServer
 
   createChannel(isConfirmChannel = false): Promise<any> {
     if (!isConfirmChannel) {
-      return this.connection.createChannel();
+      return this.connection.connection.createChannel();
     } else {
-      return this.connection.createConfirmChannel();
+      return this.connection.connection.createConfirmChannel();
     }
   }
 
   async connect(url, socketOptions) {
     try {
       this.connection = await amqp.connect(url, socketOptions);
-      (this.connection as any).on('connect', () => {
+      this.connection.on('connect', () => {
         this.logger.info('Message Queue connected!');
       });
-      (this.connection as any).on('disconnect', err => {
+      this.connection.on('disconnect', err => {
         if (err) {
           if (err.err) {
-            err = err.err;
+            err = err.err as any;
           }
           this.logger.error('Message Queue disconnected', err);
         } else {
