@@ -3,6 +3,68 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.12.7](https://github.com/midwayjs/midway/compare/v2.12.6...v2.12.7) (2021-08-22)
+
+**Note:** Version bump only for package @midwayjs/ws
+
+
+
+
+
+## [2.12.5](https://github.com/midwayjs/midway/compare/v2.12.4...v2.12.5) (2021-08-18)
+
+
+### Bug Fixes
+
+* correct aspect chain bug ([#1204](https://github.com/midwayjs/midway/issues/1204)) ([5de5284](https://github.com/midwayjs/midway/commit/5de5284c70b44acc73eaaad651fd2edc72d54f28))
+
+
+
+
+
+## [2.12.3](https://github.com/midwayjs/midway/compare/v2.12.2...v2.12.3) (2021-08-09)
+
+
+### Bug Fixes
+
+* decorator manager singleton ([#1211](https://github.com/midwayjs/midway/issues/1211)) ([7e9150e](https://github.com/midwayjs/midway/commit/7e9150ef6805389a1a550361f78e3bb997ae9196))
+
+
+
+
+
+## [2.12.1](https://github.com/midwayjs/midway/compare/v2.12.0...v2.12.1) (2021-08-01)
+
+**Note:** Version bump only for package @midwayjs/ws
+
+
+
+
+
+# [2.12.0](https://github.com/midwayjs/midway/compare/v2.11.7...v2.12.0) (2021-07-30)
+
+**Note:** Version bump only for package @midwayjs/ws
+
+
+
+
+
+## [2.11.6](https://github.com/midwayjs/midway/compare/v2.11.5...v2.11.6) (2021-07-16)
+
+**Note:** Version bump only for package @midwayjs/ws
+
+
+
+
+
+## [2.11.5](https://github.com/midwayjs/midway/compare/v2.11.4...v2.11.5) (2021-07-15)
+
+**Note:** Version bump only for package @midwayjs/ws
+
+
+
+
+
 ## [2.11.4](https://github.com/midwayjs/midway/compare/v2.11.3...v2.11.4) (2021-07-06)
 
 

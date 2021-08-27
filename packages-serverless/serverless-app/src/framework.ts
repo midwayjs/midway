@@ -13,7 +13,7 @@ import * as express from 'express';
 import { findNpmModule, output404 } from './utils';
 import { start2 } from './start';
 import { existsSync, readFileSync } from 'fs';
-import { resolve } from 'path';
+import { resolve, join } from 'path';
 import * as bodyParser from 'body-parser';
 import {
   getSpecFile,
@@ -259,6 +259,14 @@ export class Framework
           res.setHeader('Access-Control-Allow-Methods', '*');
           res.setHeader('Access-Control-Allow-Headers', '*');
           if (req.method.toLowerCase() === 'options') {
+            res.setHeader(
+              'Access-Control-Allow-Methods',
+              req.get('Access-Control-Request-Method') || '*'
+            );
+            res.setHeader(
+              'Access-Control-Allow-Headers',
+              req.get('Access-Control-Request-Headers') || '*'
+            );
             res.send('');
             return;
           }
@@ -332,7 +340,18 @@ export class Framework
 
   public async run() {
     if (this.configurationOptions.port) {
-      this.server = require('http').createServer(this.app);
+      if (this.configurationOptions.ssl) {
+        this.server = require('https').createServer(
+          {
+            key: readFileSync(join(__dirname, '../ssl/ssl.key'), 'utf8'),
+            cert: readFileSync(join(__dirname, '../ssl/ssl.pem'), 'utf8'),
+          },
+          this.app
+        );
+      } else {
+        this.server = require('http').createServer(this.app);
+      }
+
       await new Promise<void>(resolve => {
         this.server.listen(this.configurationOptions.port, () => {
           resolve();

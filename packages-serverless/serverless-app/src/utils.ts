@@ -92,9 +92,11 @@ export const analysisDecorator = async (cwd: string) => {
       const { path, method } = func.functionTriggerMetadata;
       func.functionTriggerMetadata.method = [].concat(method || []);
       // 避免重复路径创建多个trigger
-      const httpTrigger = allFunc[funcName].events.find(event => {
-        return event.http?.path === path || event.apigw?.path === path;
-      });
+      const httpTrigger =
+        path &&
+        allFunc[funcName].events.find(event => {
+          return event.http?.path === path || event.apigw?.path === path;
+        });
       if (httpTrigger) {
         httpTrigger.http.method = [].concat(httpTrigger.http.method || []);
         if (method) {

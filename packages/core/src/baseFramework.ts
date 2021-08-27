@@ -418,27 +418,45 @@ export abstract class BaseFramework<
     // agent 不加载生命周期
     if (this.app.getProcessType() === MidwayProcessTypeEnum.AGENT) return;
     const cycles = listModule(CONFIGURATION_KEY);
+
+    const lifecycleInstanceList = [];
     for (const cycle of cycles) {
-      let inst;
       if (cycle.target instanceof FunctionalConfiguration) {
         // 函数式写法
-        inst = cycle.target;
+        cycle.instance = cycle.target;
       } else {
         // 普通类写法
         const providerId = getProviderId(cycle.target);
-        inst = await this.getApplicationContext().getAsync<ILifeCycle>(
-          providerId
-        );
+        if (this.getApplicationContext().registry.hasDefinition(providerId)) {
+          cycle.instance =
+            await this.getApplicationContext().getAsync<ILifeCycle>(providerId);
+        }
       }
 
-      if (typeof inst.onReady === 'function') {
+      cycle.instance && lifecycleInstanceList.push(cycle);
+    }
+
+    // exec onConfigLoad()
+    for (const cycle of lifecycleInstanceList) {
+      if (typeof cycle.instance.onConfigLoad === 'function') {
+        const configData = await cycle.instance.onConfigLoad(
+          this.getApplicationContext()
+        );
+        if (configData) {
+          this.getApplicationContext().getConfigService().addObject(configData);
+        }
+      }
+    }
+
+    for (const cycle of lifecycleInstanceList) {
+      if (typeof cycle.instance.onReady === 'function') {
         /**
          * 让组件能正确获取到 bind 之后 registerObject 的对象有三个方法
          * 1、在 load 之后修改 bind，不太可行
          * 2、每次 getAsync 的时候，去掉 namespace，同时还要查找当前全局的变量，性能差
          * 3、一般只会在 onReady 的地方执行 registerObject（否则没有全局的意义），这个取巧的办法就是 onReady 传入一个代理，其中绑定当前的 namespace
          */
-        await inst.onReady(
+        await cycle.instance.onReady(
           new Proxy(this.getApplicationContext(), {
             get: function (target, prop, receiver) {
               if (prop === 'getCurrentNamespace' && cycle.namespace) {

@@ -474,6 +474,9 @@ describe('/test/baseFramework.test.ts', () => {
     } catch (err) {
       expect(err.message).toMatch('ccc');
     }
+    // aspect chain
+    const result = await userController1.test1().test2().getUser1();
+    expect(result).toEqual('before test user');
   });
 
   it('should inject global value in component', async () => {
@@ -763,6 +766,29 @@ describe('/test/baseFramework.test.ts', () => {
 
     framework.getApplicationContext().setAttr('abc', 2);
     expect(app.getAttr('abc')).toEqual(2);
+  });
+
+  it('should test object config load', async () => {
+    mm(process.env, 'NODE_ENV', 'unittest');
+    const framework = new LightFramework();
+    await framework.initialize({
+      baseDir: path.join(__dirname, './fixtures/base-app-config-object/src'),
+    });
+
+    const config = framework.getConfiguration();
+    expect(config.hello.a).toEqual(1);
+    expect(config.hello.b).toEqual(4);
+    mm.restore();
+  });
+
+  it('should test load async config', async () => {
+    const framework = new LightFramework();
+    await framework.initialize({
+      baseDir: path.join(__dirname, './fixtures/base-app-config-async-load/src'),
+    });
+
+    const config = framework.getConfiguration();
+    expect(config.e).toEqual(333);
   });
 
 });

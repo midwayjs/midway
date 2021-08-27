@@ -18,6 +18,25 @@ import {
 } from '@midwayjs/decorator';
 import * as Bull from 'bull';
 import { CronJob } from 'cron';
+import { v4 } from 'uuid';
+import { ScheduleContextLogger } from './service/scheduleContextLogger';
+
+function isAsync(fn) {
+  return fn[Symbol.toStringTag] === 'AsyncFunction';
+}
+
+function wrapAsync(fn) {
+  return async function (...args) {
+    if (isAsync(fn)) {
+      await fn.call(...args);
+    } else {
+      const result = fn.call(...args);
+      if (result && result.then) {
+        await result;
+      }
+    }
+  };
+}
 
 @Configuration({
   namespace: 'task',
@@ -35,11 +54,22 @@ export class AutoConfiguration {
 
   async onReady(
     container: IMidwayContainer,
-    app: IMidwayApplication
+    _: IMidwayApplication
   ): Promise<void> {
+    this.createLogger();
     await this.loadTask(container);
     await this.loadLocalTask();
     await this.loadQueue(container);
+  }
+
+  createLogger() {
+    this.app.createLogger('midway-task', {
+      fileLogName: 'midway-task.log',
+      errorLogName: 'midway-task-error.log',
+      printFormat: info => {
+        return `${info.timestamp} ${info.LEVEL} ${info.pid} ${info.label} ${info.message}`;
+      },
+    });
   }
 
   async onStop() {
@@ -49,6 +79,17 @@ export class AutoConfiguration {
     this.jobList.map(job => {
       job.stop();
     });
+  }
+
+  getContext(options: { type: string; id: any; trigger: string }) {
+    const ctx = this.app.createAnonymousContext({ logger: console });
+    ctx.logger = new ScheduleContextLogger(
+      ctx,
+      this.app.getLogger('midway-task')
+    );
+    ctx.requestContext.registerObject('logger', ctx.logger);
+    ctx.taskInfo = options;
+    return ctx;
   }
 
   async loadTask(container) {
@@ -62,9 +103,20 @@ export class AutoConfiguration {
           this.taskConfig
         );
         queue.process(async job => {
-          const ctx = this.app.createAnonymousContext();
-          const service = await ctx.requestContext.getAsync(module);
-          rule.value.call(service, job.data);
+          const ctx = this.getContext({
+            type: 'Task',
+            id: job.id,
+            trigger: `${rule.name}:${rule.propertyKey}`,
+          });
+          const { logger } = ctx;
+          try {
+            logger.info('task start.');
+            const service = await ctx.requestContext.getAsync(module);
+            await wrapAsync(rule.value)(service, job.data);
+          } catch (e) {
+            logger.error(`${e.stack}`);
+          }
+          logger.info('task end.');
         });
         queueTaskMap[`${rule.name}:${rule.propertyKey}`] = queue;
         const allJobs = await queue.getRepeatableJobs();
@@ -95,9 +147,21 @@ export class AutoConfiguration {
         const job = new CronJob(
           rule.options,
           async () => {
-            const ctx = this.app.createAnonymousContext();
-            const service = await ctx.requestContext.getAsync(module);
-            rule.value.call(service);
+            const requestId = v4();
+            const ctx = this.getContext({
+              type: 'LocalTask',
+              id: requestId,
+              trigger: `${module.name}:${rule.propertyKey}`,
+            });
+            const { logger } = ctx;
+            try {
+              const service = await ctx.requestContext.getAsync(module);
+              logger.info('local task start.');
+              await wrapAsync(rule.value)(service);
+            } catch (e) {
+              logger.error(`${e.stack}`);
+            }
+            logger.info('local task end.');
           },
           null,
           true,
@@ -113,14 +177,26 @@ export class AutoConfiguration {
     const modules = listModule(MODULE_TASK_QUEUE_KEY);
     const queueMap = {};
     const config = JSON.parse(JSON.stringify(this.taskConfig));
+    const concurrency = config.concurrency || 1;
     delete config.defaultJobOptions.repeat;
     for (const module of modules) {
       const rule = getClassMetadata(MODULE_TASK_QUEUE_OPTIONS, module);
       const queue = new Bull(`${rule.name}:execute`, config);
-      queue.process(async job => {
-        const ctx = this.app.createAnonymousContext();
-        const service = await ctx.requestContext.getAsync(module);
-        await service.execute.call(service, job.data, job);
+      queue.process(concurrency, async job => {
+        const ctx = this.getContext({
+          type: 'Queue',
+          id: job.id,
+          trigger: `${module.name}`,
+        });
+        const { logger } = ctx;
+        try {
+          logger.info('queue process start.');
+          const service = await ctx.requestContext.getAsync(module);
+          await wrapAsync(service.execute)(service, job.data, job);
+        } catch (e) {
+          logger.error(`${e.stack}`);
+        }
+        logger.info('queue process end.');
       });
       queueMap[`${rule.name}:execute`] = queue;
       this.queueList.push(queue);

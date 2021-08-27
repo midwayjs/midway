@@ -3,6 +3,96 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.12.7](https://github.com/midwayjs/midway/compare/v2.12.6...v2.12.7) (2021-08-22)
+
+**Note:** Version bump only for package @midwayjs/web
+
+
+
+
+
+## [2.12.6](https://github.com/midwayjs/midway/compare/v2.12.5...v2.12.6) (2021-08-18)
+
+
+### Bug Fixes
+
+* find egg plugin in cwd ([#1236](https://github.com/midwayjs/midway/issues/1236)) ([ac9a79f](https://github.com/midwayjs/midway/commit/ac9a79ffa90f3f9d7984b24084aa7ac9a307fc98))
+
+
+
+
+
+## [2.12.5](https://github.com/midwayjs/midway/compare/v2.12.4...v2.12.5) (2021-08-18)
+
+**Note:** Version bump only for package @midwayjs/web
+
+
+
+
+
+## [2.12.3](https://github.com/midwayjs/midway/compare/v2.12.2...v2.12.3) (2021-08-09)
+
+
+### Bug Fixes
+
+* task redefine context logger ([#1213](https://github.com/midwayjs/midway/issues/1213)) ([f8887c9](https://github.com/midwayjs/midway/commit/f8887c94b234b0156b8b4c6ad728c97a748c5a4f))
+
+
+
+
+
+## [2.12.1](https://github.com/midwayjs/midway/compare/v2.12.0...v2.12.1) (2021-08-01)
+
+
+### Bug Fixes
+
+* server hostname args ([#1196](https://github.com/midwayjs/midway/issues/1196)) ([b9d73f0](https://github.com/midwayjs/midway/commit/b9d73f036befd13c1db28f967fb769459237c52e))
+
+
+
+
+
+# [2.12.0](https://github.com/midwayjs/midway/compare/v2.11.7...v2.12.0) (2021-07-30)
+
+
+### Features
+
+* add support hostname to http-listening ([#1186](https://github.com/midwayjs/midway/issues/1186)) ([6f8356f](https://github.com/midwayjs/midway/commit/6f8356f610c49f87ce8fb9e7d1e60fbd0527d97c))
+
+
+
+
+
+## [2.11.7](https://github.com/midwayjs/midway/compare/v2.11.6...v2.11.7) (2021-07-24)
+
+
+### Bug Fixes
+
+* test error ([#1174](https://github.com/midwayjs/midway/issues/1174)) ([9f47f64](https://github.com/midwayjs/midway/commit/9f47f64fb2a6388d8b3e1b015c0de40949aa3bdc))
+
+
+
+
+
+## [2.11.6](https://github.com/midwayjs/midway/compare/v2.11.5...v2.11.6) (2021-07-16)
+
+**Note:** Version bump only for package @midwayjs/web
+
+
+
+
+
+## [2.11.5](https://github.com/midwayjs/midway/compare/v2.11.4...v2.11.5) (2021-07-15)
+
+
+### Bug Fixes
+
+* find baseDir in egg ([#1154](https://github.com/midwayjs/midway/issues/1154)) ([2fc9a44](https://github.com/midwayjs/midway/commit/2fc9a44fbf20ee6d4da00555114bf5e9e44eb5df))
+
+
+
+
+
 ## [2.11.4](https://github.com/midwayjs/midway/compare/v2.11.3...v2.11.4) (2021-07-06)
 
 **Note:** Version bump only for package @midwayjs/web

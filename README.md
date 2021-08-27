@@ -6,13 +6,10 @@
 <p align="center">
     <a href="https://github.com/midwayjs/midway/blob/master/LICENSE" target="_blank"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="GitHub license" /></a>
     <a href=""><img src="https://img.shields.io/github/tag/midwayjs/midway.svg" alt="GitHub tag"></a>
-    <a href="https://travis-ci.org/midwayjs/midway"><img src="https://travis-ci.org/midwayjs/midway.svg?branch=develop" alt="Build Status"></a>
+    <a href="#"><img src="https://github.com/midwayjs/midway/actions/workflows/nodejs.yml/badge.svg?branch=2.x" alt="Build Status"></a>
     <a href="https://codecov.io/gh/midwayjs/midway/branch/master"><img src="https://img.shields.io/codecov/c/github/midwayjs/midway/master.svg" alt="Test Coverage"></a>
     <a href="https://lernajs.io/"><img src="https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg" alt="lerna"></a>
-    <a href="https://snyk.io/test/npm/midway"><img src="https://snyk.io/test/npm/midway/badge.svg" alt="Known Vulnerabilities"></a>
     <a href="https://github.com/midwayjs/midway/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"></a>
-    <a href="https://www.codacy.com/app/czy88840616/midway?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=midwayjs/midway&amp;utm_campaign=Badge_Grade"><img src="https://api.codacy.com/project/badge/Grade/856737478fa94e78bce39d5fc2315cec" alt="Codacy Badge"></a>
-    <a href="#backers"><img src="https://opencollective.com/midway/backers/badge.svg" alt="Backers on Open Collective"></a> <a href="#sponsors"><img src="https://opencollective.com/midway/sponsors/badge.svg" alt="Sponsors on Open Collective"></a>
     <a href="https://gitpod.io/#https://github.com/midwayjs/midway"><img src="https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod" alt="Gitpod Ready-to-Code"></a>
     <a href="https://github.com/midwayjs/mwts"><img src="https://img.shields.io/badge/code%20style-midwayjs-brightgreen.svg" alt="Code Style: MidwayJS"></a>
 </p>
@@ -89,13 +86,16 @@ getPath().then((path) => {
 ## 快速上手
 
 ```bash
-npm i @midwayjs/cli -g --registry=https://registry.npm.taobao.org
+$ npm -v
 
-## 创建项目
-mw new helloworld
+# 如果是 npm v6
+$ npm init midway --type=web my_midway_app
+
+# 如果是 npm v7
+$ npm init midway -- --type=web my_midway_app
 
 ## 进入项目路径
-cd helloworld && npm run dev
+cd my_midway_app && npm run dev
 ```
 
 如何部署等更多进阶请访问 [中文文档](https://www.yuque.com/midwayjs/midway_v2)。

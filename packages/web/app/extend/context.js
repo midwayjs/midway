@@ -1,5 +1,6 @@
 'use strict';
 const rc = Symbol('Context#RequestContext');
+const ctxLogger = Symbol('Context#ContextLogger');
 const { MidwayRequestContainer } = require('@midwayjs/core');
 
 module.exports = {
@@ -12,5 +13,16 @@ module.exports = {
   },
   get startTime() {
     return this['starttime'];
+  },
+
+  get logger() {
+    if (this[ctxLogger]) {
+      return this[ctxLogger];
+    }
+    return this.getLogger('logger');
+  },
+
+  set logger(customLogger) {
+    this[ctxLogger] = customLogger;
   },
 };

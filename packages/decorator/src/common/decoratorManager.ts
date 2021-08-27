@@ -394,11 +394,12 @@ export class DecoratorManager extends Map {
   }
 }
 
-const manager = new DecoratorManager();
+let manager = new DecoratorManager();
 if (global['MIDWAY_GLOBAL_DECORATOR_MANAGER']) {
   console.warn(
     'DecoratorManager not singleton and please check @midwayjs/decorator version by "npm ls @midwayjs/decorator"'
   );
+  manager = global['MIDWAY_GLOBAL_DECORATOR_MANAGER'];
 } else {
   global['MIDWAY_GLOBAL_DECORATOR_MANAGER'] = manager;
 }
@@ -659,18 +660,21 @@ export function savePropertyDataToClass(
  * @param data
  * @param target
  * @param propertyName
+ * @param groupBy
  */
 export function attachPropertyDataToClass(
   decoratorNameKey: DecoratorKey,
   data,
   target,
-  propertyName
+  propertyName,
+  groupBy?: string
 ) {
   return manager.attachPropertyDataToClass(
     decoratorNameKey,
     data,
     target,
-    propertyName
+    propertyName,
+    groupBy
   );
 }
 

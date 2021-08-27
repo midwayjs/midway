@@ -3,6 +3,65 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.12.7](https://github.com/midwayjs/midway/compare/v2.12.6...v2.12.7) (2021-08-22)
+
+**Note:** Version bump only for package @midwayjs/cache
+
+
+
+
+
+## [2.12.5](https://github.com/midwayjs/midway/compare/v2.12.4...v2.12.5) (2021-08-18)
+
+**Note:** Version bump only for package @midwayjs/cache
+
+
+
+
+
+## [2.12.3](https://github.com/midwayjs/midway/compare/v2.12.2...v2.12.3) (2021-08-09)
+
+**Note:** Version bump only for package @midwayjs/cache
+
+
+
+
+
+## [2.12.1](https://github.com/midwayjs/midway/compare/v2.12.0...v2.12.1) (2021-08-01)
+
+**Note:** Version bump only for package @midwayjs/cache
+
+
+
+
+
+# [2.12.0](https://github.com/midwayjs/midway/compare/v2.11.7...v2.12.0) (2021-07-30)
+
+
+### Features
+
+* enhance cache for [#1103](https://github.com/midwayjs/midway/issues/1103) ([#1189](https://github.com/midwayjs/midway/issues/1189)) ([562236c](https://github.com/midwayjs/midway/commit/562236cfa5970d47454f26d92c350165d73a63cd))
+
+
+
+
+
+## [2.11.6](https://github.com/midwayjs/midway/compare/v2.11.5...v2.11.6) (2021-07-16)
+
+**Note:** Version bump only for package @midwayjs/cache
+
+
+
+
+
+## [2.11.5](https://github.com/midwayjs/midway/compare/v2.11.4...v2.11.5) (2021-07-15)
+
+**Note:** Version bump only for package @midwayjs/cache
+
+
+
+
+
 ## [2.11.4](https://github.com/midwayjs/midway/compare/v2.11.3...v2.11.4) (2021-07-06)
 
 **Note:** Version bump only for package @midwayjs/cache

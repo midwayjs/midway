@@ -14,6 +14,7 @@ import { ILogger, LoggerOptions } from '@midwayjs/logger';
  * 生命周期定义
  */
 export interface ILifeCycle {
+  onConfigLoad?(container: IMidwayContainer, app?: IMidwayApplication): Promise<void>;
   onReady(container: IMidwayContainer, app?: IMidwayApplication): Promise<void>;
   onStop?(container: IMidwayContainer, app?: IMidwayApplication): Promise<void>;
 }
@@ -295,7 +296,7 @@ export interface IMidwayContainer extends IApplicationContext {
 }
 
 export interface IConfigService {
-  add(configFilePaths: string[]);
+  add(configFilePaths: any[]);
   addObject(obj: object);
   load();
   getConfiguration(configKey?: string);

@@ -43,7 +43,7 @@ export { MidwayRequestContainer } from './context/requestContainer';
 export { BaseFramework } from './baseFramework';
 export * from './context/providerWrapper';
 export * from './common/constants';
-export { safelyGet, safeRequire } from './util/';
+export { safelyGet, safeRequire, delegateTargetPrototypeMethod } from './util/';
 export * from './util/pathFileUtil';
 export * from './features';
 export * from './util/webRouterParam';
@@ -57,6 +57,7 @@ export { MidwayEnvironmentService } from './service/environmentService';
 export { MidwayInformationService } from './service/informationService';
 export * from './logger';
 export * from './util/contextUtil';
+export * from './util/serviceFactory';
 /**
  * @deprecated please import from @midwayjs/logger
  */

@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.12.3](https://github.com/midwayjs/midway/compare/v2.12.2...v2.12.3) (2021-08-09)
+
+
+### Bug Fixes
+
+* decorator manager singleton ([#1211](https://github.com/midwayjs/midway/issues/1211)) ([7e9150e](https://github.com/midwayjs/midway/commit/7e9150ef6805389a1a550361f78e3bb997ae9196))
+
+
+### Features
+
+* support object config load and async config ([#1212](https://github.com/midwayjs/midway/issues/1212)) ([a035ccb](https://github.com/midwayjs/midway/commit/a035ccbb513b0ba423bd2b48bc228b5e916c89e8))
+
+
+
+
+
+## [2.11.5](https://github.com/midwayjs/midway/compare/v2.11.4...v2.11.5) (2021-07-15)
+
+
+### Bug Fixes
+
+* add missing arg "groupBy?" at exported attachPropertyDataToClass in decoratorManager ([#1146](https://github.com/midwayjs/midway/issues/1146)) ([f4f7a55](https://github.com/midwayjs/midway/commit/f4f7a55d9329cd9167b5a5aa2b58a29db16e1e23))
+
+
+
+
+
 ## [2.11.1](https://github.com/midwayjs/midway/compare/v2.11.0...v2.11.1) (2021-06-19)
 
 **Note:** Version bump only for package @midwayjs/decorator

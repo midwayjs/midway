@@ -32,7 +32,7 @@ module.exports = engine => {
         }
 
         const requestOption = {
-          uri: `http://unix:${socketPath}:${context.path}`,
+          uri: `http://unix:${socketPath}:${encodeURI(context.path)}`,
           qs: context.query,
           method: context.method,
           headers: context.headers,

@@ -3,6 +3,78 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.12.7](https://github.com/midwayjs/midway/compare/v2.12.6...v2.12.7) (2021-08-22)
+
+
+### Bug Fixes
+
+* empty options in default ([#1241](https://github.com/midwayjs/midway/issues/1241)) ([22dd502](https://github.com/midwayjs/midway/commit/22dd50220192aa1a03f15745afd8f680913c4cbb))
+
+
+
+
+
+## [2.12.5](https://github.com/midwayjs/midway/compare/v2.12.4...v2.12.5) (2021-08-18)
+
+
+### Bug Fixes
+
+* component env filter ([#1234](https://github.com/midwayjs/midway/issues/1234)) ([bfb44b7](https://github.com/midwayjs/midway/commit/bfb44b75da26ca21f576c305786e205cf7e3f3ff))
+* correct aspect chain bug ([#1204](https://github.com/midwayjs/midway/issues/1204)) ([5de5284](https://github.com/midwayjs/midway/commit/5de5284c70b44acc73eaaad651fd2edc72d54f28))
+
+
+
+
+
+## [2.12.3](https://github.com/midwayjs/midway/compare/v2.12.2...v2.12.3) (2021-08-09)
+
+
+### Features
+
+* support object config load and async config ([#1212](https://github.com/midwayjs/midway/issues/1212)) ([a035ccb](https://github.com/midwayjs/midway/commit/a035ccbb513b0ba423bd2b48bc228b5e916c89e8))
+
+
+
+
+
+## [2.12.1](https://github.com/midwayjs/midway/compare/v2.12.0...v2.12.1) (2021-08-01)
+
+
+### Features
+
+* add http client component ([#1098](https://github.com/midwayjs/midway/issues/1098)) ([4e2f90a](https://github.com/midwayjs/midway/commit/4e2f90a9de946fa5abc2af4cd8a0ad9ee4188991))
+
+
+
+
+
+# [2.12.0](https://github.com/midwayjs/midway/compare/v2.11.7...v2.12.0) (2021-07-30)
+
+
+### Features
+
+* add oss component ([#1181](https://github.com/midwayjs/midway/issues/1181)) ([e83171c](https://github.com/midwayjs/midway/commit/e83171c73cdc1098796f06919dc652a6d83c3af4))
+
+
+
+
+
+## [2.11.6](https://github.com/midwayjs/midway/compare/v2.11.5...v2.11.6) (2021-07-16)
+
+**Note:** Version bump only for package @midwayjs/core
+
+
+
+
+
+## [2.11.5](https://github.com/midwayjs/midway/compare/v2.11.4...v2.11.5) (2021-07-15)
+
+**Note:** Version bump only for package @midwayjs/core
+
+
+
+
+
 ## [2.11.4](https://github.com/midwayjs/midway/compare/v2.11.3...v2.11.4) (2021-07-06)
 
 

@@ -18,9 +18,9 @@ export class CacheManager {
   }
 
   // 获取key
-  async get(key: string) {
+  async get<T>(key: string): Promise<T> {
     return new Promise((resolve, reject) => {
-      this.cache.get(key, (err, result) => {
+      this.cache.get<T>(key, (err, result) => {
         if (err) {
           reject(err);
           return;
@@ -31,7 +31,11 @@ export class CacheManager {
   }
 
   // 设置cache
-  async set(key: string, value: string, options?: cacheManager.CachingConfig) {
+  async set<T>(
+    key: string,
+    value: T,
+    options?: cacheManager.CachingConfig
+  ): Promise<T> {
     return await this.cache.set(key, value, options);
   }
 

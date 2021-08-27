@@ -103,7 +103,7 @@ export class ContainerConfiguration implements IContainerConfiguration {
     return this.importObjects;
   }
 
-  addImportConfigs(importConfigs: string[], baseDir: string) {
+  addImportConfigs(importConfigs: any[], baseDir: string) {
     if (importConfigs && importConfigs.length) {
       debug(
         '   import configs %j from baseDir => "%s".',
@@ -112,10 +112,14 @@ export class ContainerConfiguration implements IContainerConfiguration {
       );
       this.container.getConfigService().add(
         importConfigs.map(importConfigPath => {
-          if (isAbsolute(importConfigPath)) {
-            return importConfigPath;
+          if (typeof importConfigPath === 'string') {
+            if (isAbsolute(importConfigPath)) {
+              return importConfigPath;
+            } else {
+              return join(baseDir || this.container.baseDir, importConfigPath);
+            }
           } else {
-            return join(baseDir || this.container.baseDir, importConfigPath);
+            return importConfigPath;
           }
         })
       );
@@ -285,6 +289,12 @@ export class ContainerConfiguration implements IContainerConfiguration {
           }
           if (i === 0 && this.namespace === MAIN_MODULE_KEY) {
             // set conflictCheck
+
+            if (process.env.MIDWAY_ENABLE_CONFLICT_CHECK) {
+              configurationOptions.conflictCheck =
+                process.env.MIDWAY_ENABLE_CONFLICT_CHECK === 'true';
+            }
+
             if (configurationOptions.conflictCheck === undefined) {
               configurationOptions.conflictCheck = false;
             }

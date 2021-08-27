@@ -24,6 +24,7 @@ export type IMidwayExpressApplication = IMidwayApplication<IMidwayExpressContext
     routeArgsInfo?: RouterParamValue[],
     routerResponseData?: any []
   ): Middleware;
+  generateMiddleware(middlewareId: string): Promise<Middleware>;
 }>;
 
 export interface IMidwayExpressConfigurationOptions extends IConfigurationOptions {
@@ -31,6 +32,10 @@ export interface IMidwayExpressConfigurationOptions extends IConfigurationOption
    * application http port
    */
   port?: number;
+  /**
+   * application hostname, 127.0.0.1 as default
+   */
+  hostname?: string;
   /**
    * https key
    */

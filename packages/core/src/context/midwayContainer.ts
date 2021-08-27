@@ -79,7 +79,7 @@ export class MidwayContainer
   private definitionMetadataList = [];
   protected resolverHandler: ResolverHandler;
   // 仅仅用于兼容requestContainer的ctx
-  private ctx = {};
+  protected ctx = {};
   private configurationMap: Map<string, IContainerConfiguration> = new Map();
   // 特殊处理，按照 main 加载
   private likeMainConfiguration: IContainerConfiguration[] = [];
