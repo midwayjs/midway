@@ -1,12 +1,11 @@
 import { IConfigurationOptions, IMidwayApplication, IMidwayContext } from '@midwayjs/core';
 import { ConsumeMessage, Options } from 'amqplib/properties';
 import { RabbitMQListenerOptions } from '@midwayjs/decorator';
-import * as amqp from 'amqplib';
-import { Channel } from 'amqplib';
+import type { ConfirmChannel, Channel, Options as AmqpOptions } from 'amqplib';
 
 export interface IRabbitMQApplication {
   connect(...args): Promise<void>;
-  createChannel(): Promise<void>;
+  createChannel(): Promise<Channel | ConfirmChannel>;
   createConsumer(listenerOptions: RabbitMQListenerOptions, listenerCallback: (msg: ConsumeMessage | null, channel: Channel, channelWrapper) => Promise<void>): Promise<void>;
   close(): Promise<void>;
 }
@@ -28,11 +27,11 @@ export interface IMidwayRabbitMQConfigurationOptions extends IConfigurationOptio
 }
 
 export type IMidwayRabbitMQContext = IMidwayContext<{
-  channel: amqp.Channel;
+  channel: Channel;
   queueName: string;
   ack: (data: any) => void;
 }>;
 
 export type Application = IMidwayRabbitMQApplication;
 export interface Context extends IMidwayRabbitMQContext {}
-export type DefaultConfig = string | amqp.Options.Connect;
+export type DefaultConfig = string | AmqpOptions.Connect;
