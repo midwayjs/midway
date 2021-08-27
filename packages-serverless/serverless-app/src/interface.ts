@@ -12,6 +12,7 @@ export interface IServerlessAppOptions extends IConfigurationOptions {
   port?: string | number;
   ssl?: boolean;
   initContext?: any;
+  bodyParserLimit?: string;
 }
 
 export interface Context extends FaaSContext {}
