@@ -28,7 +28,8 @@
   },
   "devDependencies": {
     "@midwayjs/core": "^3.0.0-alpha.2",
-    "@midwayjs/decorator": "^3.0.0-alpha.2"
+    "@midwayjs/decorator": "^3.0.0-alpha.2",
+    "@midwayjs/mock": "^3.0.0-alpha.2"
   },
   "dependencies": {
     "@types/cache-manager": "^3.4.0",

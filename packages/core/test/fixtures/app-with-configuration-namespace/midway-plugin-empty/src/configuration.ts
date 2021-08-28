@@ -4,6 +4,7 @@ import { Configuration } from '@midwayjs/decorator';
   importConfigs: [
     './config/config.default',
     './config/config.local'
-  ]
+  ],
+  namespace: 'empty'
 })
 export class AutoConfiguraione {}

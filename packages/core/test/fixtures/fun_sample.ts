@@ -2,7 +2,7 @@ import { IApplicationContext, ScopeEnum } from '../../src';
 import { Provide, Scope, Init } from '@midwayjs/decorator';
 
 export function testInjectFunction(context: IApplicationContext) {
-  const child: any = context.get('child');
+  const child: any = context.get('childFn');
   return child.a + child.b;
 }
 

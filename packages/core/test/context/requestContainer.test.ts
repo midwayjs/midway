@@ -26,12 +26,14 @@ import {
   TestTwo1,
 } from '../fixtures/circular_dependency';
 
+@Provide()
 class Tracer {
   get parentId() {
     return '321';
   }
 }
 
+@Provide()
 class DataCollector {
   id = Math.random();
 

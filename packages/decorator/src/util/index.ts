@@ -1,5 +1,6 @@
 import * as util from 'util';
 import * as camelcase from 'camelcase';
+import * as crypto from 'crypto';
 
 const ToString = Function.prototype.toString;
 
@@ -113,4 +114,12 @@ export function getParamNames(func): string[] {
  */
 export function classNamed(name: string) {
   return camelcase(name);
+}
+
+/**
+ * generate a lightweight random id, enough for ioc container
+ */
+export function generateRandomId(): string {
+  // => f9b327e70bbcf42494ccb28b2d98e00e
+  return crypto.randomBytes(16).toString('hex');
 }

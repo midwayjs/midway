@@ -81,7 +81,10 @@ export class AutoConfiguration implements ILifeCycle {
       Object.assign(this.consulRegisterConfig, config);
 
       // 把原始的 consul 对象注入到容器
-      container.registerObject('consul', this.consulProvider.getConsul());
+      container.registerObject(
+        'consul:consul',
+        this.consulProvider.getConsul()
+      );
       await this.consulProvider.registerService(this.consulRegisterConfig);
     }
   }

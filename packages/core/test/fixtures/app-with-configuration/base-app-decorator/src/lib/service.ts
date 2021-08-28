@@ -12,7 +12,7 @@ export class BaseService {
   @Inject('aa')
   aa: any;
 
-  @Inject('@midway-plugin-mock:cc')
+  @Inject('cc')
   cc: any;
 
   async getInformation() {

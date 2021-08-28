@@ -1,7 +1,11 @@
-import { MidwayContainer } from './container';
+import { MidwayContainer } from './midwayContainer';
 import { REQUEST_CTX_KEY, IMidwayContainer } from '../interface';
 import { parsePrefix } from '../util/';
-import { getProviderId, PIPELINE_IDENTIFIER } from '@midwayjs/decorator';
+import {
+  getIdentifierMapping,
+  hasIdentifierMapping,
+  PIPELINE_IDENTIFIER,
+} from '@midwayjs/decorator';
 
 export class MidwayRequestContainer extends MidwayContainer {
   private readonly applicationContext: IMidwayContainer;
@@ -36,12 +40,25 @@ export class MidwayRequestContainer extends MidwayContainer {
   }
 
   get<T = any>(identifier: any, args?: any): T {
+    // 处理传入类，获取 uuid
     if (typeof identifier !== 'string') {
-      identifier = getProviderId(identifier);
+      identifier = this.getIdentifier(identifier);
+    } else {
+      // 处理字符串返回明确的缓存的对象
+      if (this.registry.hasObject(identifier)) {
+        return this.findRegisterObject(identifier);
+      }
     }
+
+    identifier = parsePrefix(identifier);
+
+    // 处理传入的如果是老的字符串 id，找到 uuid
+    if (hasIdentifierMapping(identifier)) {
+      identifier = getIdentifierMapping(identifier);
+    }
+
     if (this.registry.hasObject(identifier)) {
-      const ins = this.registry.getObject(identifier);
-      return this.aspectService.wrapperAspectToInstance(ins);
+      return this.findRegisterObject(identifier);
     }
     const definition =
       this.applicationContext.registry.getDefinition(identifier);
@@ -65,15 +82,25 @@ export class MidwayRequestContainer extends MidwayContainer {
   }
 
   async getAsync<T = any>(identifier: any, args?: any): Promise<T> {
+    // 处理传入类，获取 uuid
     if (typeof identifier !== 'string') {
-      identifier = getProviderId(identifier);
+      identifier = this.getIdentifier(identifier);
+    } else {
+      // 处理字符串返回明确的缓存的对象
+      if (this.registry.hasObject(identifier)) {
+        return this.findRegisterObject(identifier);
+      }
     }
 
     identifier = parsePrefix(identifier);
 
+    // 处理传入的如果是老的字符串 id，找到 uuid
+    if (hasIdentifierMapping(identifier)) {
+      identifier = getIdentifierMapping(identifier);
+    }
+
     if (this.registry.hasObject(identifier)) {
-      const ins = this.registry.getObject(identifier);
-      return this.aspectService.wrapperAspectToInstance(ins);
+      return this.findRegisterObject(identifier);
     }
 
     const definition =

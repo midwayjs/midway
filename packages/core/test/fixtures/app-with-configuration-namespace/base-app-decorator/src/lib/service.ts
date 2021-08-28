@@ -6,7 +6,7 @@ export class BaseService {
   @Inject()
   userManager;
 
-  @Inject('articleManager')
+  @Inject('empty:articleManager')
   articleManager1;
 
   @Inject('articleManagera')

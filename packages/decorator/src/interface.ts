@@ -35,6 +35,7 @@ export interface TagPropsMetadata {
 export interface TagClsMetadata {
   id: string;
   originName: string;
+  uuid: string;
 }
 
 export interface ReflectResult {

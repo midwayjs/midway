@@ -23,7 +23,13 @@ import {
   INVALID_DECORATOR_OPERATION,
 } from './errMsg';
 import { Metadata } from './metadata';
-import { getParamNames, classNamed, isNullOrUndefined, isClass } from '../util';
+import {
+  getParamNames,
+  classNamed,
+  isNullOrUndefined,
+  isClass,
+  generateRandomId,
+} from '../util';
 
 const debug = require('util').debuglog('decorator:manager');
 
@@ -32,6 +38,8 @@ export type DecoratorKey = string | symbol;
 export const PRELOAD_MODULE_KEY = 'INJECTION_PRELOAD_MODULE_KEY';
 
 export const INJECT_CLASS_KEY_PREFIX = 'INJECTION_CLASS_META_DATA';
+
+export const MODULE_MAPPING_PREFIX = 'MODULE_MAPPING_PREFIX';
 
 export class DecoratorManager extends Map {
   /**
@@ -48,6 +56,22 @@ export class DecoratorManager extends Map {
    */
   injectMethodKeyPrefix = 'INJECTION_METHOD_META_DATA';
 
+  identifierUUIDRelationShipMapping = new Map();
+
+  saveIdentifierMapping(identifier, uuid) {
+    if (identifier !== uuid) {
+      return this.identifierUUIDRelationShipMapping.set(identifier, uuid);
+    }
+  }
+
+  getIdentifierMapping(identifier) {
+    return this.identifierUUIDRelationShipMapping.get(identifier);
+  }
+
+  hasIdentifierMapping(identifier) {
+    return this.identifierUUIDRelationShipMapping.has(identifier);
+  }
+
   saveModule(key, module) {
     if (!this.has(key)) {
       this.set(key, new Set());
@@ -57,6 +81,11 @@ export class DecoratorManager extends Map {
 
   resetModule(key) {
     this.set(key, new Set());
+  }
+
+  clear() {
+    this.identifierUUIDRelationShipMapping.clear();
+    super.clear();
   }
 
   static getDecoratorClassKey(decoratorNameKey: DecoratorKey) {
@@ -817,12 +846,23 @@ export function getProviderId(module): string {
   return providerId;
 }
 
+export function getProviderUUId(module): string {
+  const metaData = Reflect.getMetadata(TAGGED_CLS, module) as TagClsMetadata;
+  if (metaData && metaData.uuid) {
+    return metaData.uuid;
+  }
+}
+
 /**
  * 生成带 namespace 的 provideId
  * @param provideId provideId
  * @param namespace namespace
  */
 export function generateProvideId(provideId: string, namespace?: string) {
+  // 如果是 uuid，直接返回
+  if (!hasIdentifierMapping(provideId)) {
+    return provideId;
+  }
   if (namespace && namespace !== MAIN_MODULE_KEY) {
     if (provideId.includes('@')) {
       return provideId.substr(1);
@@ -1018,7 +1058,7 @@ export function savePropertyInject(opts: InjectOptions) {
       isClass(type.originDesign) &&
       isProvide(type.originDesign)
     ) {
-      identifier = getProviderId(type.originDesign);
+      identifier = getProviderUUId(type.originDesign);
     }
     if (!identifier) {
       identifier = opts.targetKey;
@@ -1063,6 +1103,32 @@ export function saveObjectDefProps(target: any, props = {}) {
 export function getObjectDefProps(target: any): ObjectDefinitionOptions {
   return Reflect.getMetadata(OBJ_DEF_CLS, target);
 }
+
+/**
+ * save identifier and uuid relationship
+ * @param identifier
+ * @param uuid
+ */
+export function saveIdentifierMapping(identifier, uuid) {
+  return manager.saveIdentifierMapping(identifier, uuid);
+}
+
+/**
+ * get uuid from identifier
+ * @param identifier
+ */
+export function getIdentifierMapping(identifier) {
+  return manager.getIdentifierMapping(identifier);
+}
+
+/**
+ * find identifier mapping exists
+ * @param identifier
+ */
+export function hasIdentifierMapping(identifier) {
+  return manager.hasIdentifierMapping(identifier);
+}
+
 /**
  * class provider id
  * @param identifier id
@@ -1082,11 +1148,16 @@ export function saveProviderId(
     identifier = classNamed(target.name);
   }
 
+  const uuid = generateRandomId();
+  // save identifier and uuid relationship
+  manager.saveIdentifierMapping(identifier, uuid);
+
   Reflect.defineMetadata(
     TAGGED_CLS,
     {
       id: identifier,
       originName: target.name,
+      uuid,
     },
     target
   );

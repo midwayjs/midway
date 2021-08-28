@@ -3,7 +3,7 @@ import { clearAllModule, MidwayContainer, MidwayRequestContainer, DirectoryFileD
 import { App } from '../fixtures/ts-app-inject/app';
 import { TestCons } from '../fixtures/ts-app-inject/test';
 import * as decs from '@midwayjs/decorator';
-import { CONFIG_KEY, LOGGER_KEY, PLUGIN_KEY } from '@midwayjs/decorator';
+import { CONFIG_KEY, getIdentifierMapping, LOGGER_KEY, PLUGIN_KEY } from '@midwayjs/decorator';
 import * as assert from 'assert';
 
 const { APPLICATION_KEY } = decs;
@@ -201,7 +201,7 @@ describe('/test/context/midwayContainer.test.ts', () => {
     }));
 
     await container.ready();
-    assert((container.registry as unknown as Map<string, any>).has('userService'));
+    assert((container.registry as unknown as Map<string, any>).has(getIdentifierMapping('userService')));
   });
 
 });

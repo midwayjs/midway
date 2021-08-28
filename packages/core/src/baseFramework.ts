@@ -11,7 +11,7 @@ import {
 import {
   APPLICATION_KEY,
   CONFIGURATION_KEY,
-  getProviderId,
+  getProviderUUId,
   listModule,
   listPreloadModule,
   LOGGER_KEY,
@@ -395,7 +395,7 @@ export abstract class BaseFramework<
         cycle.instance = cycle.target;
       } else {
         // 普通类写法
-        const providerId = getProviderId(cycle.target);
+        const providerId = getProviderUUId(cycle.target);
         if (this.getApplicationContext().registry.hasDefinition(providerId)) {
           cycle.instance =
             await this.getApplicationContext().getAsync<ILifeCycle>(providerId);
@@ -419,25 +419,7 @@ export abstract class BaseFramework<
 
     for (const cycle of lifecycleInstanceList) {
       if (typeof cycle.instance.onReady === 'function') {
-        /**
-         * 让组件能正确获取到 bind 之后 registerObject 的对象有三个方法
-         * 1、在 load 之后修改 bind，不太可行
-         * 2、每次 getAsync 的时候，去掉 namespace，同时还要查找当前全局的变量，性能差
-         * 3、一般只会在 onReady 的地方执行 registerObject（否则没有全局的意义），这个取巧的办法就是 onReady 传入一个代理，其中绑定当前的 namespace
-         */
-        await cycle.instance.onReady(
-          new Proxy(this.getApplicationContext(), {
-            get: function (target, prop, receiver) {
-              if (prop === 'getCurrentNamespace' && cycle.namespace) {
-                return () => {
-                  return cycle.namespace;
-                };
-              }
-              return Reflect.get(target, prop, receiver);
-            },
-          }),
-          this.app
-        );
+        await cycle.instance.onReady(this.getApplicationContext(), this.app);
       }
     }
   }
@@ -450,24 +432,12 @@ export abstract class BaseFramework<
         // 函数式写法
         inst = cycle.target;
       } else {
-        const providerId = getProviderId(cycle.target);
+        const providerId = getProviderUUId(cycle.target);
         inst = await this.applicationContext.getAsync<ILifeCycle>(providerId);
       }
 
       if (inst.onStop && typeof inst.onStop === 'function') {
-        await inst.onStop(
-          new Proxy(this.getApplicationContext(), {
-            get: function (target, prop, receiver) {
-              if (prop === 'getCurrentNamespace' && cycle.namespace) {
-                return () => {
-                  return cycle.namespace;
-                };
-              }
-              return Reflect.get(target, prop, receiver);
-            },
-          }),
-          this.app
-        );
+        await inst.onStop(this.getApplicationContext(), this.app);
       }
     }
   }
