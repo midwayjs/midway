@@ -334,20 +334,6 @@ export class ContainerConfiguration implements IContainerConfiguration {
    * @param clzz configuration class
    */
   bindConfigurationClass(clzz, filePath?: string) {
-    if (clzz instanceof FunctionalConfiguration) {
-      // 函数式写法不需要绑定到容器
-    } else {
-      // 普通类写法
-      const clzzName = `${LIFECYCLE_IDENTIFIER_PREFIX}${classNamed(clzz.name)}`;
-      const id = generateProvideId(clzzName, this.namespace);
-      saveProviderId(id, clzz, true);
-      this.container.bind(id, clzz, {
-        namespace: this.namespace,
-        srcPath: filePath,
-        scope: ScopeEnum.Singleton,
-      });
-    }
-
     // configuration 手动绑定去重
     const configurationMods = listModule(CONFIGURATION_KEY);
     const exists = configurationMods.find(mod => {
@@ -358,6 +344,21 @@ export class ContainerConfiguration implements IContainerConfiguration {
         target: clzz,
         namespace: this.namespace,
       });
+      if (clzz instanceof FunctionalConfiguration) {
+        // 函数式写法不需要绑定到容器
+      } else {
+        // 普通类写法
+        const clzzName = `${LIFECYCLE_IDENTIFIER_PREFIX}${classNamed(
+          clzz.name
+        )}`;
+        const id = generateProvideId(clzzName, this.namespace);
+        saveProviderId(id, clzz, true);
+        this.container.bind(id, clzz, {
+          namespace: this.namespace,
+          srcPath: filePath,
+          scope: ScopeEnum.Singleton,
+        });
+      }
     }
   }
 

@@ -21,6 +21,10 @@ import {
   DecoratorManager,
   ResolveFilter,
   isRegExp,
+  getProviderUUId,
+  getIdentifierMapping,
+  hasIdentifierMapping,
+  saveIdentifierMapping,
 } from '@midwayjs/decorator';
 import { ContainerConfiguration } from './configuration';
 import { FUNCTION_INJECT_KEY } from '../common/constants';
@@ -46,6 +50,7 @@ import { ObjectDefinition } from '../definitions/objectDefinition';
 import { FunctionDefinition } from '../definitions/functionDefinition';
 import { ManagedReference, ManagedValue } from './managed';
 import { MidwayAspectService } from '../service/aspectService';
+import { parsePrefix } from '../util';
 
 const DEFAULT_PATTERN = ['**/**.ts', '**/**.tsx', '**/**.js'];
 const DEFAULT_IGNORE_PATTERN = [
@@ -288,10 +293,21 @@ export class MidwayContainer
       options = target;
       target = identifier as any;
       identifier = this.getIdentifier(target);
+      // 保存旧字符串 id 和 uuid 之间的映射，这里保存的是带 namespace，和 require 时不同
+      saveIdentifierMapping(getProviderId(target), identifier);
     }
 
     if (isClass(target)) {
       definitionMeta.definitionType = 'object';
+      const originIdentifier = identifier;
+      identifier = this.getIdentifier(target);
+      if (originIdentifier === identifier) {
+        // 额外保存原始的类名 id
+        saveIdentifierMapping(getProviderId(target), identifier);
+      } else {
+        // 自定义字符串 id
+        saveIdentifierMapping(originIdentifier, identifier);
+      }
     } else {
       definitionMeta.definitionType = 'function';
       if (!isAsyncFunction(target)) {
@@ -344,10 +360,15 @@ export class MidwayContainer
         this.debugLogger(`  inject properties => [${Object.keys(metaData)}]`);
         for (const metaKey in metaData) {
           for (const propertyMeta of metaData[metaKey]) {
+            // find legacy name mapping to uuid
+            let mappingUUID = propertyMeta.value;
+            if (hasIdentifierMapping(mappingUUID)) {
+              mappingUUID = getIdentifierMapping(mappingUUID);
+            }
             definitionMeta.properties.push({
               metaKey,
               args: propertyMeta.args,
-              value: propertyMeta.value,
+              value: mappingUUID,
             });
           }
         }
@@ -466,7 +487,7 @@ export class MidwayContainer
 
   protected bindModule(module, namespace = '', filePath?: string) {
     if (isClass(module)) {
-      const providerId = isProvide(module) ? getProviderId(module) : null;
+      const providerId = isProvide(module) ? getProviderUUId(module) : null;
       if (providerId) {
         if (namespace) {
           saveClassMetadata(
@@ -475,7 +496,13 @@ export class MidwayContainer
             module
           );
         }
-        this.bind(generateProvideId(providerId, namespace), module, {
+        // 保存旧字符串 id 和 uuid 之间的映射
+        const generatedProvideId = generateProvideId(
+          getProviderId(module),
+          namespace
+        );
+        saveIdentifierMapping(generatedProvideId, providerId);
+        this.bind(providerId, module, {
           namespace,
           srcPath: filePath,
         });
@@ -599,16 +626,50 @@ export class MidwayContainer
   }
 
   get<T>(identifier: any, args?: any): T {
+    // 处理传入类，获取 uuid
     if (typeof identifier !== 'string') {
       identifier = this.getIdentifier(identifier);
+    } else {
+      // 处理字符串返回明确的缓存的对象
+      if (this.registry.hasObject(identifier)) {
+        return this.findRegisterObject(identifier);
+      }
+    }
+
+    identifier = parsePrefix(identifier);
+
+    // 处理传入的如果是老的字符串 id，找到 uuid
+    if (hasIdentifierMapping(identifier)) {
+      identifier = getIdentifierMapping(identifier);
+    }
+
+    if (this.registry.hasObject(identifier)) {
+      return this.findRegisterObject(identifier);
     }
     const ins: any = super.get<T>(identifier, args);
     return this.aspectService.wrapperAspectToInstance(ins);
   }
 
   async getAsync<T>(identifier: any, args?: any): Promise<T> {
+    // 处理传入类，获取 uuid
     if (typeof identifier !== 'string') {
       identifier = this.getIdentifier(identifier);
+    } else {
+      // 处理字符串返回明确的缓存的对象
+      if (this.registry.hasObject(identifier)) {
+        return this.findRegisterObject(identifier);
+      }
+    }
+
+    identifier = parsePrefix(identifier);
+
+    // 处理传入的如果是老的字符串 id，找到 uuid
+    if (hasIdentifierMapping(identifier)) {
+      identifier = getIdentifierMapping(identifier);
+    }
+
+    if (this.registry.hasObject(identifier)) {
+      return this.findRegisterObject(identifier);
     }
 
     const ins: any = await super.getAsync<T>(identifier, args);
@@ -616,7 +677,12 @@ export class MidwayContainer
   }
 
   protected getIdentifier(target: any) {
-    return getProviderId(target);
+    return getProviderUUId(target);
+  }
+
+  protected findRegisterObject(identifier) {
+    const ins = this.registry.getObject(identifier);
+    return this.aspectService.wrapperAspectToInstance(ins);
   }
 
   async ready() {

@@ -21,3 +21,5 @@ if (!fs.existsSync(envFile)) {
   );
   console.log('please set oss ak in .env file');
 }
+
+require('dotenv').config();

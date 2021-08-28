@@ -20,6 +20,7 @@ import {
   generateProvideId,
   getPropertyType,
   savePropertyMetadata,
+  saveIdentifierMapping,
 } from '../../src';
 import * as assert from 'assert';
 import { ManagerTest as module } from '../fixtures/decorator/customClass';
@@ -154,10 +155,12 @@ describe('/test/common/decoratorManager.test.ts', () => {
 
 
   it('should generateProvideId be ok', () => {
+    saveIdentifierMapping('@ok:test1', '123');
     const id = generateProvideId('@ok:test1', 'ok');
     assert.deepEqual('ok:test1', id, 'provide id is not ok:test1');
     const id2 = generateProvideId('ok:test1', 'ok');
     assert.deepEqual('ok:test1', id2, 'provide id is not ok:test1');
+    clearAllModule();
   });
 
   it('should test getPropertyType', function () {

@@ -1,6 +1,7 @@
 'use strict';
 
 const pathMatching = require('egg-path-matching');
+const { hasIdentifierMapping } = require('@midwayjs/decorator');
 
 class AppBootHook {
   constructor(app) {
@@ -35,7 +36,7 @@ class AppBootHook {
     const middlewareNames = this.coreMiddleware.concat(this.appMiddleware);
     // 等 midway 加载完成后，再去 use 中间件
     for (const name of middlewareNames) {
-      if (this.app.getApplicationContext().registry.hasDefinition(name)) {
+      if (hasIdentifierMapping(name)) {
         const mwIns = await this.app.generateMiddleware(name);
         mwIns._name = name;
         this.app.use(mwIns);

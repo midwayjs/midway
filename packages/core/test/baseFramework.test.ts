@@ -1,6 +1,7 @@
 import {
   APPLICATION_KEY,
   CONFIGURATION_KEY,
+  getIdentifierMapping,
   LIFECYCLE_IDENTIFIER_PREFIX,
   MidwayFrameworkType,
   Provide,
@@ -545,9 +546,9 @@ describe('/test/baseFramework.test.ts', () => {
       callback(m);
     });
 
-    expect(container.registry.hasDefinition(LIFECYCLE_IDENTIFIER_PREFIX + 'lifeCycleTest')).toBeTruthy();
+    expect(container.registry.hasDefinition(getIdentifierMapping(LIFECYCLE_IDENTIFIER_PREFIX + 'lifeCycleTest'))).toBeTruthy();
     await framework.stop();
-    expect(container.registry.hasDefinition(LIFECYCLE_IDENTIFIER_PREFIX + 'lifeCycleTest')).toBeFalsy();
+    expect(container.registry.hasDefinition(getIdentifierMapping(LIFECYCLE_IDENTIFIER_PREFIX + 'lifeCycleTest'))).toBeFalsy();
     expect(callback.withArgs('on stop').calledOnce).toBeTruthy();
 
     resetModule(CONFIGURATION_KEY);

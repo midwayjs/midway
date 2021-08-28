@@ -15,7 +15,7 @@ import {
   SubCustom
 } from '../fixtures/class_sample';
 import { recursiveGetMetadata } from '../../src/common/reflectTool';
-import { APPLICATION_KEY, CONFIG_KEY, PLUGIN_KEY, TAGGED_PROP } from '@midwayjs/decorator';
+import { APPLICATION_KEY, CONFIG_KEY, getIdentifierMapping, PLUGIN_KEY, TAGGED_PROP } from '@midwayjs/decorator';
 import 'reflect-metadata';
 
 import { BMWX1, Car, Electricity, Gas, Tesla, Turbo } from '../fixtures/class_sample_car';
@@ -100,7 +100,7 @@ describe('/test/context/container.test.ts', () => {
     container.bind<Grandson>('katana2', Katana as any);
     container.bind<Grandson>('katana3', Katana as any);
     const metadatas = ['grandson', 'child', 'parent'].map(function (identifier) {
-      const defition = container.registry.getDefinition(identifier);
+      const defition = container.registry.getDefinition(getIdentifierMapping(identifier));
       const tareget = defition.path;
       return {
         recursiveMetadata: recursiveGetMetadata(TAGGED_PROP, tareget),
@@ -266,9 +266,9 @@ describe('/test/context/container.test.ts', () => {
 
     it('should get function module', () => {
       const container = new Container();
-      container.bind('parent', testInjectFunction);
-      container.bind('child', childFunction);
-      const result = container.get('parent');
+      container.bind('parentFn', testInjectFunction);
+      container.bind('childFn', childFunction);
+      const result = container.get('parentFn');
       expect(result).to.equal(3);
     });
 

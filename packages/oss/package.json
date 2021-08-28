@@ -12,7 +12,8 @@
     "@midwayjs/core": "^2.12.7",
     "@midwayjs/decorator": "^2.12.3",
     "@midwayjs/mock": "^2.12.7",
-    "@types/ali-oss": "^6.0.10"
+    "@types/ali-oss": "^6.0.10",
+    "dotenv": "^10.0.0"
   },
   "dependencies": {
     "ali-oss": "^6.16.0"

@@ -32,19 +32,19 @@ export function getCustomRepository(context: IMidwayContainer, args?: any) {
 
 providerWrapper([
   {
-    id: 'getRepository',
+    id: 'orm:getRepository',
     provider: getRepository,
   },
   {
-    id: 'getTreeRepository',
+    id: 'orm:getTreeRepository',
     provider: getTreeRepository,
   },
   {
-    id: 'getMongoRepository',
+    id: 'orm:getMongoRepository',
     provider: getMongoRepository,
   },
   {
-    id: 'getCustomRepository',
+    id: 'orm:getCustomRepository',
     provider: getCustomRepository,
   },
 ]);

@@ -13,7 +13,6 @@ import {
 import { ObjectProperties } from '../definitions/properties';
 import { ManagedResolverFactory } from './managedResolverFactory';
 import { NotFoundError } from '../common/notFoundError';
-import { parsePrefix } from '../util/';
 import { PathFileUtil } from '../util/pathFileUtil';
 
 const PREFIX = '_id_default_';
@@ -185,9 +184,6 @@ export class BaseApplicationContext
   get<T>(identifier: { new (): T }, args?: any): T;
   get<T>(identifier: ObjectIdentifier, args?: any): T;
   get(identifier: any, args?: any): any {
-    // 因为在这里拿不到类名, NotFoundError 类的错误信息在 ManagedResolverFactory.ts createAsync 方法中增加错误类名
-    identifier = parsePrefix(identifier);
-
     if (this.registry.hasObject(identifier)) {
       return this.registry.getObject(identifier);
     }
@@ -213,9 +209,6 @@ export class BaseApplicationContext
   async getAsync<T>(identifier: { new (): T }, args?: any): Promise<T>;
   async getAsync<T>(identifier: ObjectIdentifier, args?: any): Promise<T>;
   async getAsync(identifier: any, args?: any): Promise<any> {
-    // 因为在这里拿不到类名, NotFoundError 类的错误信息在 ManagedResolverFactory.ts createAsync 方法中增加错误类名
-    identifier = parsePrefix(identifier);
-
     if (this.registry.hasObject(identifier)) {
       return this.registry.getObject(identifier);
     }
