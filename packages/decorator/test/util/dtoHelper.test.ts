@@ -7,7 +7,16 @@ import {
   OmitDto,
 } from '../../src';
 
-class TestDto {
+class BaseDto {
+  hello(): string {
+    return 'hello midway';
+  }
+
+  @Rule(RuleType.number().integer())
+  baseAttr: number;
+}
+
+class TestDto extends BaseDto {
   @Rule(RuleType.date())
   createTime: Date;
 
@@ -19,6 +28,11 @@ class TestDto {
 
   @Rule(RuleType.number().integer())
   quantity: number;
+
+  addPrice(p: number): number {
+    this.price += p;
+    return this.price;
+  }
 }
 
 describe('/test/util/dtoHelper.test.ts', () => {
@@ -27,7 +41,7 @@ describe('/test/util/dtoHelper.test.ts', () => {
       @Rule(RuleType.number().integer())
       id: number;
 
-      @Rule(RuleType.number().integer().max(5))
+      @Rule(RuleType.string())
       quantity: number;
 
       @Rule(RuleType.string())
@@ -35,10 +49,12 @@ describe('/test/util/dtoHelper.test.ts', () => {
     }
     const rules = getClassExtendedMetadata(RULES_KEY, ChildDto);
     const ruleKeys = Object.keys(rules);
-    expect(ruleKeys.length).toBe(6);
+    expect(ruleKeys.length).toBe(7);
     expect(ruleKeys.includes('id')).toBeTruthy();
     expect(ruleKeys.includes('price')).toBeTruthy();
     expect(ruleKeys.includes('quantity')).toBeTruthy();
+    expect(ruleKeys.includes('baseAttr')).toBeTruthy();
+    expect(rules.quantity.type).toEqual('string');
   });
 
   it('should test PickDto', async () => {
@@ -51,11 +67,28 @@ describe('/test/util/dtoHelper.test.ts', () => {
   });
 
   it('should test OmitDto', async () => {
-    class PickedDto extends OmitDto(TestDto, ['productName']) {}
-    const rules = getClassExtendedMetadata(RULES_KEY, PickedDto);
+    class OmittedDto extends OmitDto(TestDto, ['productName']) {}
+    const rules = getClassExtendedMetadata(RULES_KEY, OmittedDto);
     const ruleKeys = Object.keys(rules);
-    expect(ruleKeys.length).toBe(3);
+    expect(ruleKeys.length).toBe(4);
     expect(ruleKeys.includes('productName')).toBeFalsy();
     expect(ruleKeys.includes('quantity')).toBeTruthy();
+  });
+
+  it('should test method extend', async () => {
+    class PickedDto extends PickDto(TestDto, ['price', 'addPrice', 'hello']) {}
+    class OmittedDto extends OmitDto(TestDto, ['productName']) {}
+    const pInst = new PickedDto();
+    pInst.price = 10;
+    expect(pInst.hello()).toEqual('hello midway');
+    expect(pInst.addPrice(20)).toEqual(30);
+
+    const oInst = new OmittedDto();
+    oInst.price = 100;
+    expect(oInst.hello()).toEqual('hello midway');
+    expect(oInst.addPrice(-20)).toEqual(80);
+
+    expect(pInst instanceof BaseDto).toBeTruthy();
+    expect(oInst instanceof BaseDto).toBeTruthy();
   });
 });

@@ -456,18 +456,17 @@ export function getClassExtendedMetadata(
   }
   const extKey = DecoratorManager.getDecoratorClsExtendedKey(decoratorNameKey);
   let metadata = manager.getMetadata(extKey, target);
-  if (metadata === undefined) {
-    const metaChain = [manager.getMetadata(decoratorNameKey, target)];
-    let father = Reflect.getPrototypeOf(target);
-    while (father.constructor !== Object) {
-      metaChain.push(manager.getMetadata(decoratorNameKey, father));
-      father = Reflect.getPrototypeOf(father);
-    }
-    for (let i = metaChain.length - 1; i >= 0; i--) {
-      metadata = mergeMeta(metadata, metaChain[i]);
-    }
-    manager.saveMetadata(extKey, metadata || null, target);
+  if (metadata !== undefined) {
+    return metadata;
   }
+  const father = Reflect.getPrototypeOf(target);
+  if (father.constructor !== Object) {
+    metadata = mergeMeta(
+      getClassExtendedMetadata(decoratorNameKey, father),
+      manager.getMetadata(decoratorNameKey, target)
+    );
+  }
+  manager.saveMetadata(extKey, metadata || null, target);
   return metadata;
 }
 
