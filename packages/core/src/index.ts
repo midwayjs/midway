@@ -1,31 +1,4 @@
-export {
-  ObjectIdentifier,
-  ObjectDefinitionOptions,
-  IManagedInstance,
-  ScopeEnum,
-  MidwayFrameworkType,
-  saveClassMetadata,
-  attachClassMetadata,
-  getClassMetadata,
-  savePropertyDataToClass,
-  attachPropertyDataToClass,
-  getPropertyDataFromClass,
-  listPropertyDataFromClass,
-  savePropertyMetadata,
-  attachPropertyMetadata,
-  getPropertyMetadata,
-  savePreloadModule,
-  listPreloadModule,
-  saveModule,
-  listModule,
-  resetModule,
-  clearAllModule,
-  getParamNames,
-  getProviderId,
-  getObjectDefinition,
-  classNamed,
-  generateProvideId,
-} from '@midwayjs/decorator';
+export { MidwayFrameworkType } from '@midwayjs/decorator';
 export * from './interface';
 export * from './context/container';
 export { MidwayRequestContainer } from './context/requestContainer';
