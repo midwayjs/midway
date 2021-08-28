@@ -4,6 +4,7 @@ import { exec } from 'child_process';
 import * as assert from 'assert';
 import { testExtension } from './fixtures/base';
 import { HttpEvent } from './fixtures/extension/httpEvent';
+import { TestRuntime } from './TestRuntime';
 
 describe('/test/index.test.ts', () => {
   describe('basic', () => {
@@ -14,6 +15,7 @@ describe('/test/index.test.ts', () => {
 
     it('start a mock runtime with a server', async () => {
       const runtimeEngine = new BaseRuntimeEngine();
+      runtimeEngine.addBaseRuntime(new TestRuntime());
       runtimeEngine.add(engine => {
         engine.addRuntimeExtension(testExtension);
       });
@@ -36,6 +38,7 @@ describe('/test/index.test.ts', () => {
 
     it('start a runtime and create a trigger', async () => {
       const runtimeEngine = new BaseRuntimeEngine();
+      runtimeEngine.addBaseRuntime(new TestRuntime());
       runtimeEngine.add(engine => {
         engine.addRuntimeExtension(testExtension);
       });
@@ -64,6 +67,7 @@ describe('/test/index.test.ts', () => {
         return true;
       };
       const runtimeEngine = new BaseRuntimeEngine();
+      runtimeEngine.addBaseRuntime(new TestRuntime());
       runtimeEngine.add(engine => {
         engine.addRuntimeExtension({
           async beforeRuntimeStart(runtime: Runtime) {
@@ -88,6 +92,7 @@ describe('/test/index.test.ts', () => {
         return true;
       };
       const runtimeEngine = new BaseRuntimeEngine();
+      runtimeEngine.addBaseRuntime(new TestRuntime());
       runtimeEngine.add(engine => {
         engine.addRuntimeExtension({
           async beforeRuntimeStart(runtime: Runtime) {
@@ -113,6 +118,7 @@ describe('/test/index.test.ts', () => {
       process.env.test = dir;
       process.env.ENTRY_DIR = entryDir;
       const runtimeEngine = new BaseRuntimeEngine();
+      runtimeEngine.addBaseRuntime(new TestRuntime());
       runtimeEngine.ready();
       const runtime = runtimeEngine.getCurrentRuntime();
       runtime.getPropertyParser();
@@ -145,6 +151,7 @@ describe('/test/index.test.ts', () => {
     it('should test with extension', async () => {
       process.env.ENTRY_DIR = path.join(__dirname, './fixtures/extension');
       const runtimeEngine = new BaseRuntimeEngine();
+      runtimeEngine.addBaseRuntime(new TestRuntime());
       const httpEvent = new HttpEvent({ logger: console.log });
       runtimeEngine.add(engine => {
         const http = require('http');
@@ -199,6 +206,7 @@ describe('/test/index.test.ts', () => {
     it('should test extension without args format', async () => {
       process.env.ENTRY_DIR = path.join(__dirname, './fixtures/extension');
       const runtimeEngine = new BaseRuntimeEngine();
+      runtimeEngine.addBaseRuntime(new TestRuntime());
       const httpEvent = new HttpEvent({ logger: console.log });
       httpEvent.transformInvokeArgs = () => null;
       runtimeEngine.add(engine => {
@@ -256,6 +264,7 @@ describe('/test/index.test.ts', () => {
     it('should invoke defaultInvokeHandler handler with error', async () => {
       process.env.ENTRY_DIR = path.join(__dirname, './fixtures/no-exists');
       const runtimeEngine = new BaseRuntimeEngine();
+      runtimeEngine.addBaseRuntime(new TestRuntime());
       const httpEvent = new HttpEvent({ logger: console.log });
       runtimeEngine.add(engine => {
         const http = require('http');
@@ -298,6 +307,7 @@ describe('/test/index.test.ts', () => {
     it('should invoke error', async () => {
       process.env.ENTRY_DIR = path.join(__dirname, './fixtures/error');
       const runtimeEngine = new BaseRuntimeEngine();
+      runtimeEngine.addBaseRuntime(new TestRuntime());
       let errorLogged = false;
       const httpEvent = new HttpEvent({ logger: console.log });
       runtimeEngine.add(engine => {
@@ -349,6 +359,7 @@ describe('/test/index.test.ts', () => {
     it('should load function crash', async () => {
       process.env.ENTRY_DIR = path.join(__dirname, './fixtures/crash');
       const runtimeEngine = new BaseRuntimeEngine();
+      runtimeEngine.addBaseRuntime(new TestRuntime());
       const httpEvent = new HttpEvent({ logger: console.log });
       runtimeEngine.add(engine => {
         const http = require('http');

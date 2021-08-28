@@ -5,7 +5,7 @@ const abPath = path.resolve(path.join(__dirname, './config/config.default'));
   namespace: 'midway-plugin-no-pkg-json',
   importConfigs: [
     abPath,
-    './config/config.local'
+    path.join(__dirname, './config/config.local')
   ]
 })
 export class AutoConfiguraion {}

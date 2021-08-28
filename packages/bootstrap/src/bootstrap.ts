@@ -2,9 +2,10 @@ import {
   IMidwayFramework,
   IMidwayBootstrapOptions,
   MidwayFrameworkType,
-  ConfigFramework,
   IMidwayApplication,
   IMidwayContainer,
+  MidwayContainer,
+  DirectoryFileDetector,
 } from '@midwayjs/core';
 import { join } from 'path';
 import { createConsoleLogger, ILogger } from '@midwayjs/logger';
@@ -28,6 +29,7 @@ export class BootstrapStarter {
     IMidwayApplication<any>
   >();
   protected globalConfig: any;
+  private applicationContext: IMidwayContainer;
 
   public configure(options: IMidwayBootstrapOptions) {
     this.globalOptions = options;
@@ -46,35 +48,30 @@ export class BootstrapStarter {
     this.baseDir = this.getBaseDir();
     let mainApp; // eslint-disable-line prefer-const
 
-    // 初始化一个只读配置的空框架，并且初始化容器和扫描
-    const framework = new ConfigFramework();
-    await framework.initialize({
-      ...this.globalOptions,
-      baseDir: this.baseDir,
-      appDir: this.appDir,
-      globalApplicationHandler: (type: MidwayFrameworkType) => {
-        if (type) {
-          return this.globalAppMap.get(type);
-        } else {
-          return mainApp;
-        }
-      },
-    });
+    if (this.globalOptions.applicationContext) {
+      this.applicationContext = this.globalOptions.applicationContext;
+    } else {
+      this.applicationContext = new MidwayContainer();
+      this.applicationContext.setFileDetector(
+        new DirectoryFileDetector({
+          baseDir: this.baseDir,
+        })
+      );
+      this.applicationContext.load(
+        require(join(this.baseDir, 'configuration'))
+      );
+      await this.applicationContext.ready();
+    }
 
     // 调用 bootstrap 的 before 逻辑
     if (this.globalOptions['beforeHandler']) {
-      await this.globalOptions['beforeHandler'](
-        framework.getApplicationContext()
-      );
+      await this.globalOptions['beforeHandler'](this.applicationContext);
     }
 
     // 获取全局配置
     this.globalConfig =
-      framework.getApplicationContext().getConfigService().getConfiguration() ||
-      {};
+      this.applicationContext.getConfigService().getConfiguration() || {};
     this.refreshBootstrapItems();
-
-    const applicationContext = framework.getApplicationContext();
 
     // 初始化主框架
     await this.getFirstActions('initialize', {
@@ -82,7 +79,14 @@ export class BootstrapStarter {
       baseDir: this.baseDir,
       appDir: this.appDir,
       isMainFramework: true,
-      applicationContext,
+      applicationContext: this.applicationContext,
+      globalApplicationHandler: (type: MidwayFrameworkType) => {
+        if (type) {
+          return this.globalAppMap.get(type);
+        } else {
+          return mainApp;
+        }
+      },
     });
 
     global['MIDWAY_MAIN_FRAMEWORK'] = this.getMainFramework();
@@ -94,7 +98,7 @@ export class BootstrapStarter {
         ...this.globalOptions,
         baseDir: this.baseDir,
         appDir: this.appDir,
-        applicationContext,
+        applicationContext: this.applicationContext,
         isMainFramework: false,
       })
     );

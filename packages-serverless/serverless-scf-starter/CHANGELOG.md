@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-alpha.2](https://github.com/midwayjs/midway-faas/compare/v3.0.0-alpha.1...v3.0.0-alpha.2) (2021-08-05)
+
+**Note:** Version bump only for package @midwayjs/serverless-scf-starter
+
+
+
+
+
+# [3.0.0-alpha.1](https://github.com/midwayjs/midway-faas/compare/v2.12.1...v3.0.0-alpha.1) (2021-08-04)
+
+**Note:** Version bump only for package @midwayjs/serverless-scf-starter
+
+
+
+
+
 ## [2.11.4](https://github.com/midwayjs/midway-faas/compare/v2.11.3...v2.11.4) (2021-07-06)
 
 **Note:** Version bump only for package @midwayjs/serverless-scf-starter

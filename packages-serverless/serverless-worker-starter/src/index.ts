@@ -1,11 +1,11 @@
-import { BaseBootstrap } from '@midwayjs/runtime-engine';
+import { BaseBootstrap, BootstrapOptions } from '@midwayjs/runtime-engine';
 import { WorkerRuntime } from './runtime';
 
 export * from './runtime';
 
 let bootstrap;
 
-export const start = async (options: any = {}) => {
+export const start = async (options: BootstrapOptions = {}) => {
   if (!process.env.NODE_ENV) {
     process.env.NODE_ENV = 'production';
   }

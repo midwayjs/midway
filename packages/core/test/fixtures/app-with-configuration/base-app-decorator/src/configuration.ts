@@ -3,17 +3,17 @@ import { Configuration } from '@midwayjs/decorator';
 
 @Configuration({
   imports: [
-    '../../midway-plugin-mock/src',
-    '../../midway-plugin-ok/src'
+    require('../../midway-plugin-mock/src/configuration'),
+    require('../../midway-plugin-ok/src/configuration')
   ],
   importObjects: {
     aa: 123
   }
 })
-class AutoConfiguraion implements ILifeCycle {
+class AutoConfiguration implements ILifeCycle {
   async onReady() {
     console.log('------auto configuration ready now');
   }
 }
 
-module.exports = AutoConfiguraion;
+module.exports = AutoConfiguration;

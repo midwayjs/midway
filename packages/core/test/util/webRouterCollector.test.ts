@@ -1,7 +1,7 @@
 import { WebRouterCollector } from '../../src';
 import { join } from 'path';
 import { clearAllModule } from '@midwayjs/decorator';
-import { clearContainerCache } from '../../src';
+// import { clearContainerCache } from '../../src';
 import { matchObjectPropertyInArray } from '../util';
 
 describe('/test/util/webRouterCollector.test.ts', function () {
@@ -23,7 +23,7 @@ describe('/test/util/webRouterCollector.test.ts', function () {
 
   it('should test with function router', async () => {
     clearAllModule();
-    clearContainerCache();
+    // clearContainerCache();
     const collector = new WebRouterCollector(join(__dirname, '../fixtures/base-app-func-router'), { includeFunctionRouter: true});
     const result = await collector.getFlattenRouterTable();
     expect(result.length).toEqual(8);

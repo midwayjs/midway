@@ -1,12 +1,12 @@
 import { CLASS_KEY_CONSTRUCTOR, getClassMetadata } from '@midwayjs/decorator';
 import { ManagedResolverFactory } from './managedResolverFactory';
-import { MidwayContainer } from './midwayContainer';
 import * as util from 'util';
 import {
   HandlerFunction,
   IResolverHandler,
   FrameworkDecoratorMetadata,
   IObjectDefinition,
+  IApplicationContext,
 } from '../interface';
 
 const debug = util.debuglog('midway:container');
@@ -15,7 +15,7 @@ export class ResolverHandler implements IResolverHandler {
   private handlerMap: Map<string, HandlerFunction>;
   private resolverFactory: ManagedResolverFactory;
 
-  constructor(container: MidwayContainer, factory: ManagedResolverFactory) {
+  constructor(container: IApplicationContext, factory: ManagedResolverFactory) {
     this.resolverFactory = factory;
     this.handlerMap = new Map<string, HandlerFunction>();
     this.bindCreatedHook();
@@ -93,6 +93,10 @@ export class ResolverHandler implements IResolverHandler {
 
   registerHandler(key: string, fn: HandlerFunction) {
     this.handlerMap.set(key, fn);
+  }
+
+  hasHandler(key: string) {
+    return this.handlerMap.has(key);
   }
 
   getHandler(key: string) {

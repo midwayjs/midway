@@ -7,13 +7,6 @@ export {
   saveClassMetadata,
   attachClassMetadata,
   getClassMetadata,
-  saveMethodDataToClass,
-  attachMethodDataToClass,
-  getMethodDataFromClass,
-  listMethodDataFromClass,
-  saveMethodMetadata,
-  attachMethodMetadata,
-  getMethodMetadata,
   savePropertyDataToClass,
   attachPropertyDataToClass,
   getPropertyDataFromClass,
@@ -34,11 +27,7 @@ export {
   generateProvideId,
 } from '@midwayjs/decorator';
 export * from './interface';
-export { ContainerLoader } from './loader';
-export {
-  MidwayContainer,
-  clearContainerCache,
-} from './context/midwayContainer';
+export * from './context/container';
 export { MidwayRequestContainer } from './context/requestContainer';
 export { BaseFramework } from './baseFramework';
 export * from './context/providerWrapper';
@@ -58,7 +47,5 @@ export { MidwayInformationService } from './service/informationService';
 export * from './logger';
 export * from './util/contextUtil';
 export * from './util/serviceFactory';
-/**
- * @deprecated please import from @midwayjs/logger
- */
-export { MidwayContextLogger } from '@midwayjs/logger';
+export * from './util/fileDetector';
+export * from './util/containerUtil';

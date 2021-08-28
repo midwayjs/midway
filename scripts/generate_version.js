@@ -3,7 +3,7 @@ const { writeFileSync, existsSync } = require('fs');
 const { join } = require('path');
 
 const currentVersion = require('../lerna.json').version;
-if (/beta/.test(currentVersion)) {
+if (/beta/.test(currentVersion) || /alpha/.test(currentVersion)) {
   return;
 }
 

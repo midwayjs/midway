@@ -1,4 +1,3 @@
-import { expect } from 'chai';
 import {
   MidwayContainer as Container,
   MidwayRequestContainer as RequestContainer,
@@ -72,10 +71,10 @@ describe('/test/context/requestContainer.test.ts', () => {
 
     const reqCtx1 = new RequestContainer({}, appCtx);
     const reqCtx2 = new RequestContainer({}, appCtx);
-    expect(reqCtx1.get<Tracer>(ChildTracer).parentId).to.equal(
+    expect(reqCtx1.get<Tracer>(ChildTracer).parentId).toEqual(
       reqCtx2.get<Tracer>(ChildTracer).parentId
     );
-    expect((await reqCtx1.getAsync(ChildTracer)).parentId).to.equal(
+    expect((await reqCtx1.getAsync(ChildTracer)).parentId).toEqual(
       (await reqCtx2.getAsync(ChildTracer)).parentId
     );
   });
@@ -91,14 +90,14 @@ describe('/test/context/requestContainer.test.ts', () => {
 
     const tracer1 = await reqCtx.getAsync('tracer');
     const tracer2 = await reqCtx.getAsync('tracer');
-    expect(tracer1.traceId).to.equal(tracer2.traceId);
+    expect(tracer1.traceId).toEqual(tracer2.traceId);
 
     const reqCtx2 = new RequestContainer({}, appCtx);
     const tracer3 = await reqCtx2.getAsync('tracer');
     const tracer4 = await reqCtx2.getAsync('tracer');
-    expect(tracer3.traceId).to.equal(tracer4.traceId);
-    expect(tracer1.traceId).to.not.equal(tracer3.traceId);
-    expect(tracer2.traceId).to.not.equal(tracer4.traceId);
+    expect(tracer3.traceId).toEqual(tracer4.traceId);
+    expect(tracer1.traceId).not.toEqual(tracer3.traceId);
+    expect(tracer2.traceId).not.toEqual(tracer4.traceId);
   });
 
   it('should get different property value in different request context', async () => {
@@ -106,9 +105,6 @@ describe('/test/context/requestContainer.test.ts', () => {
     appCtx.bind('tracer', Tracer);
 
     const reqCtx1 = new RequestContainer({}, appCtx);
-    await reqCtx1.ready();
-    expect(reqCtx1.isReady).true;
-
     reqCtx1.registerObject('tracer', new ChildTracer());
     const reqCtx2 = new RequestContainer({}, appCtx);
     reqCtx2.registerObject('tracer', new ChildTracer());
@@ -116,10 +112,10 @@ describe('/test/context/requestContainer.test.ts', () => {
     const tracer1 = await reqCtx1.getAsync('tracer');
     const tracer2 = await reqCtx2.getAsync('tracer');
 
-    expect(tracer1.parentId).to.equal('123');
-    expect(tracer2.parentId).to.equal('123');
+    expect(tracer1.parentId).toEqual('123');
+    expect(tracer2.parentId).toEqual('123');
 
-    expect(tracer1.traceId).to.not.equal(tracer2.traceId);
+    expect(tracer1.traceId).not.toEqual(tracer2.traceId);
   });
 
   it('should get singleton object in different request scope object', async () => {
@@ -135,11 +131,11 @@ describe('/test/context/requestContainer.test.ts', () => {
     const tracer1 = await reqCtx1.getAsync('tracer');
     const tracer2 = await reqCtx2.getAsync('tracer');
 
-    expect(tracer1.parentId).to.equal('123');
-    expect(tracer2.parentId).to.equal('123');
+    expect(tracer1.parentId).toEqual('123');
+    expect(tracer2.parentId).toEqual('123');
 
-    expect(tracer1.traceId).to.not.equal(tracer2.traceId);
-    expect(tracer1.getData()).to.equal(tracer2.getData());
+    expect(tracer1.traceId).not.toEqual(tracer2.traceId);
+    expect(tracer1.getData()).toEqual(tracer2.getData());
   });
 
   it('should get ctx from object in requestContainer', async () => {
@@ -157,8 +153,8 @@ describe('/test/context/requestContainer.test.ts', () => {
     const tracer1 = await reqCtx1.getAsync('tracer');
     const tracer2 = await reqCtx2.getAsync('tracer');
 
-    expect(tracer1[REQUEST_OBJ_CTX_KEY]).to.equal(ctx1);
-    expect(tracer2[REQUEST_OBJ_CTX_KEY]).to.equal(ctx2);
+    expect(tracer1[REQUEST_OBJ_CTX_KEY]).toEqual(ctx1);
+    expect(tracer2[REQUEST_OBJ_CTX_KEY]).toEqual(ctx2);
   });
 
   it('circular should be ok in requestContainer', async () => {
@@ -177,18 +173,18 @@ describe('/test/context/requestContainer.test.ts', () => {
     const ctx1 = { a: 1 };
     const container = new RequestContainer(ctx1, appCtx);
     const circularTwo: CircularTwo = await container.getAsync(CircularTwo);
-    expect(circularTwo.test2).eq('this is two');
-    expect((circularTwo.circularOne as CircularOne).test1).eq('this is one');
+    expect(circularTwo.test2).toEqual('this is two');
+    expect((circularTwo.circularOne as CircularOne).test1).toEqual('this is one');
     expect(
       ((circularTwo.circularOne as CircularOne).circularTwo as CircularTwo)
         .test2
-    ).eq('this is two');
+    ).toEqual('this is two');
 
     const one = await container.getAsync<TestOne1>(TestOne1);
-    expect(one).not.null;
-    expect(one).not.undefined;
-    expect(one.name).eq('one');
-    expect((one.two as TestTwo1).name).eq('two');
+    expect(one).toBeDefined();
+    expect(one).toBeDefined();
+    expect(one.name).toEqual('one');
+    expect((one.two as TestTwo1).name).toEqual('two');
   });
 
   it('circular depth should be ok in requestContainer', async () => {
@@ -206,12 +202,12 @@ describe('/test/context/requestContainer.test.ts', () => {
     const ctx1 = { a: 1 };
     const container = new RequestContainer(ctx1, appCtx);
     const one = await container.getAsync<CCController>(CCController);
-    expect(one).not.null;
-    expect(one).not.undefined;
-    expect(one.ts).eq('controller');
+    expect(one).toBeDefined();
+    expect(one).toBeDefined();
+    expect(one.ts).toEqual('controller');
 
-    expect((one.autoScaleService as any).ts).eq('ascale');
-    expect((one.autoScaleService as any).scaleManager.ts).eq('scale');
+    expect((one.autoScaleService as any).ts).toEqual('ascale');
+    expect((one.autoScaleService as any).scaleManager.ts).toEqual('scale');
   });
 
   it('test getService in requestContainer', async () => {
@@ -227,12 +223,122 @@ describe('/test/context/requestContainer.test.ts', () => {
     const ctx1 = { a: 1 };
     const container = new RequestContainer(ctx1, appCtx);
     const defaultConfig = container.getConfigService().getConfiguration();
-    expect(defaultConfig.name).to.equal('zhangting');
+    expect(defaultConfig.name).toEqual('zhangting');
     const defaultEnv = container
       .getEnvironmentService()
       .getCurrentEnvironment();
-    const currentEnv = container.getCurrentEnv();
-    expect(defaultEnv).to.equal('test');
-    expect(currentEnv).to.equal(defaultEnv);
+    expect(defaultEnv).toEqual('test');
+  });
+
+  it('test request scope inject request scope', async () => {
+    @Provide()
+    @Scope(ScopeEnum.Request)
+    class B {
+      bid = Math.random();
+      @Inject()
+      ctx;
+    }
+
+    @Provide()
+    @Scope(ScopeEnum.Request)
+    class A {
+      aid = Math.random();
+      @Inject()
+      b: B;
+      @Inject()
+      ctx;
+    }
+
+    const appCtx = new Container();
+    appCtx.bind(A);
+    appCtx.bind(B);
+
+    const a1 = await appCtx.getAsync(A);
+
+    // 创建请求作用域
+    const requestContainer = new RequestContainer({c:1}, appCtx);
+    const a2 = await requestContainer.getAsync(A);
+    // 请求 ctx 是否正确
+    expect(a2.ctx.c).toEqual(1);
+    expect(a2.b.ctx.c).toEqual(1);
+    // 单例和请求作用域非同一实例
+    expect(a1.aid).not.toEqual(a2.aid);
+    expect(a1.b.bid).not.toEqual(a2.b.bid);
+  });
+
+  it('should test request scope inject singleton scope', async () => {
+    @Provide()
+    @Scope(ScopeEnum.Singleton)
+    class B {
+      bid = Math.random();
+      @Inject()
+      ctx;
+    }
+
+    @Provide()
+    @Scope(ScopeEnum.Request)
+    class A {
+      aid = Math.random();
+      @Inject()
+      b: B;
+      @Inject()
+      ctx;
+    }
+
+    const appCtx = new Container();
+    appCtx.bind(A);
+    appCtx.bind(B);
+
+    // 创建请求作用域
+    const requestContainer1 = new RequestContainer({c:1}, appCtx);
+    const a1 = await requestContainer1.getAsync(A);
+    const requestContainer2 = new RequestContainer({d:1}, appCtx);
+    const a2 = await requestContainer2.getAsync(A);
+    // 请求 ctx 是否正确
+    expect(a1.ctx.c).toEqual(1);
+    expect(a1.b.ctx).toBeUndefined();
+    expect(a2.ctx.d).toEqual(1);
+    expect(a2.b.ctx).toBeUndefined();
+    // 是否同一单例
+    expect(a1.aid).not.toEqual(a2.aid);
+    expect(a1.b.bid).toEqual(a2.b.bid);
+  });
+
+  it('should test singleton scope inject request scope', async () => {
+    @Provide()
+    @Scope(ScopeEnum.Request)
+    class B {
+      bid = Math.random();
+      @Inject()
+      ctx;
+    }
+
+    @Provide()
+    @Scope(ScopeEnum.Singleton)
+    class A {
+      aid = Math.random();
+      @Inject()
+      b: B;
+      @Inject()
+      ctx;
+    }
+
+    const appCtx = new Container();
+    appCtx.bind(A);
+    appCtx.bind(B);
+
+    // 创建请求作用域
+    const requestContainer1 = new RequestContainer({c:1}, appCtx);
+    const a1 = await requestContainer1.getAsync(A);
+    const requestContainer2 = new RequestContainer({d:1}, appCtx);
+    const a2 = await requestContainer2.getAsync(A);
+    // 请求 ctx 是否正确
+    expect(a1.ctx).toBeUndefined();
+    expect(a1.b.ctx).toBeUndefined();
+    expect(a2.ctx).toBeUndefined();
+    expect(a2.b.ctx).toBeUndefined();
+    // 是否同一单例
+    expect(a1.aid).toEqual(a2.aid);
+    expect(a1.b.bid).toEqual(a2.b.bid);
   });
 });

@@ -1,4 +1,4 @@
-import { ALL, Aspect, Controller, Get, Body, IMethodAspect, JoinPoint, Post, Provide, Validate } from '@midwayjs/decorator';
+import { ALL, Aspect, Controller, Get, Body, IMethodAspect, JoinPoint, Post, Provide } from '@midwayjs/decorator';
 
 export class BaseUserController {
 }
@@ -13,7 +13,7 @@ export class UserController extends BaseUserController {
   }
 
   @Post('/catchThrowWithValidate')
-  @Validate()
+  // @Validate()
   async aspectWithValidate(@Body(ALL) bodyData) {
     throw new Error('my post error');
   }

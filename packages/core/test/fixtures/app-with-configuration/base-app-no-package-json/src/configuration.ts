@@ -2,10 +2,10 @@ import { Configuration } from '@midwayjs/decorator';
 
 @Configuration({
   imports: [
-    '../../midway-plugin-mock/src',
-    '../../midway-plugin-ok/src',
-    '../../midway-plugin-no-pkg-json/dist',
-    '../../midway-plugin-oktwo/src'
+    require('../../midway-plugin-mock/src'),
+    require('../../midway-plugin-ok/src'),
+    require('../../midway-plugin-no-pkg-json/dist'),
+    require('../../midway-plugin-oktwo/src')
   ],
   importObjects: {
     aa: 123

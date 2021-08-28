@@ -1,19 +1,19 @@
 {
   "name": "@midwayjs/serverless-worker-starter",
-  "version": "2.11.4",
+  "version": "3.0.0-alpha.2",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/runtime-engine": "^2.11.2",
-    "@midwayjs/serverless-http-parser": "^2.11.4",
+    "@midwayjs/runtime-engine": "^3.0.0-alpha.2",
+    "@midwayjs/serverless-http-parser": "^3.0.0-alpha.2",
     "type-is": "^1.6.18"
   },
   "devDependencies": {
-    "@midwayjs/core": "^2.11.4",
-    "@midwayjs/decorator": "^2.11.1",
+    "@midwayjs/core": "^3.0.0-alpha.2",
+    "@midwayjs/decorator": "^3.0.0-alpha.2",
     "@midwayjs/jest-environment-service-worker": "^0.0.1-alpha.5",
     "@midwayjs/jsdom-service-worker": "^0.0.1-alpha.5",
-    "@midwayjs/runtime-mock": "^2.11.2"
+    "@midwayjs/runtime-mock": "^3.0.0-alpha.2"
   },
   "engines": {
     "node": ">= 12"

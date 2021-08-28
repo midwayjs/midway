@@ -1,5 +1,4 @@
-import { MidwayContainer as Container } from '../../src/context/midwayContainer';
-import { expect } from 'chai';
+import { MidwayContainer as Container } from '../../src';
 import {
   Grandson,
   Child,
@@ -8,10 +7,6 @@ import {
   BaseServiceAsync,
   Katana,
   Ninja,
-  Samurai,
-  Warrior,
-  SubParent,
-  SubChild,
   SubCustom
 } from '../fixtures/class_sample';
 import { recursiveGetMetadata } from '../../src/common/reflectTool';
@@ -29,7 +24,6 @@ import { childAsyncFunction,
 import { DieselCar, DieselEngine, engineFactory, PetrolEngine } from '../fixtures/mix_sample';
 import { HelloSingleton, HelloErrorInitSingleton, HelloErrorSingleton } from '../fixtures/singleton_sample';
 import { CircularOne, CircularTwo, CircularThree, TestOne, TestTwo, TestThree, TestOne1, TestTwo1, TestThree1 } from '../fixtures/circular_dependency';
-import { VALUE_TYPE } from '../../src';
 
 describe('/test/context/container.test.ts', () => {
 
@@ -38,43 +32,7 @@ describe('/test/context/container.test.ts', () => {
     const container = new Container();
     container.bind<Ninja>(ninjaId, Ninja as any);
     const ninja = container.get(ninjaId);
-    expect(ninja instanceof Ninja).to.be.true;
-  });
-
-  it('Should have an unique identifier', () => {
-    const container1 = new Container();
-    container1.id = Math.random().toString(36).substr(2).slice(0, 10);
-    if (container1.id.length < 10) {
-      container1.id += '1';
-    }
-    const container2 = new Container();
-    container2.id = Math.random().toString(36).substr(2).slice(0, 10);
-    if (container2.id.length < 10) {
-      container2.id += '1';
-    }
-    expect(container1.id.length).eql(10);
-    expect(container2.id.length).eql(10);
-    expect(container1.id).not.eql(container2.id);
-  });
-
-  it('should inject property', () => {
-    const container = new Container();
-    container.bind<Warrior>('warrior', Samurai as any, {
-      constructorArgs: [{
-        value: 123,
-        type: VALUE_TYPE.INTEGER
-      }]
-    });
-    container.bind<Warrior>('katana1', Katana as any);
-    container.bind<Warrior>('katana2', Katana as any);
-
-    const subContainer = container.createChild();
-
-    const warrior = subContainer.get<Warrior>('warrior');
-    expect(warrior instanceof Samurai).to.be.true;
-    expect(warrior.katana1).not.to.be.undefined;
-    expect(warrior.katana2).not.to.be.undefined;
-    expect((warrior as any).args).eq(123);
+    expect(ninja instanceof Ninja).toBeTruthy();
   });
 
   it('should inject attributes that on the prototype chain and property', () => {
@@ -84,11 +42,11 @@ describe('/test/context/container.test.ts', () => {
     container.bind<Grandson>('katana2', Katana as any);
     container.bind<Grandson>('katana3', Katana as any);
     const grandson = container.get<Grandson>('grandson');
-    expect(grandson instanceof Child).to.be.true;
-    expect(grandson instanceof Parent).to.be.true;
-    expect(grandson.katana1).not.to.be.undefined;
-    expect(grandson.katana2).not.to.be.undefined;
-    expect(grandson.katana3).not.to.be.undefined;
+    expect(grandson instanceof Child).toBeTruthy();
+    expect(grandson instanceof Parent).toBeTruthy();
+    expect(grandson.katana1).toBeDefined();
+    expect(grandson.katana2).toBeDefined();
+    expect(grandson.katana3).toBeDefined();
   });
 
   it('should get all metaDatas that on the prototype chain and property', () => {
@@ -111,26 +69,23 @@ describe('/test/context/container.test.ts', () => {
     const childMetadata = metadatas[1];
     const parentMetadata = metadatas[2];
 
-    expect(grandsonMetadata.recursiveMetadata)
-      .to.have.lengthOf(3)
-      .include(grandsonMetadata.ownMetadata);
-    expect(childMetadata.recursiveMetadata)
-      .to.have.lengthOf(2)
-      .include(childMetadata.ownMetadata);
-    expect(parentMetadata.recursiveMetadata)
-      .to.have.lengthOf(1)
-      .include(parentMetadata.ownMetadata);
+    expect(grandsonMetadata.recursiveMetadata).toHaveLength(3);
+    expect(grandsonMetadata.recursiveMetadata).toContain(grandsonMetadata.ownMetadata);
+    expect(childMetadata.recursiveMetadata).toHaveLength(2);
+    expect(childMetadata.recursiveMetadata).toContain(childMetadata.ownMetadata);
+    expect(parentMetadata.recursiveMetadata).toHaveLength(1);
+    expect(parentMetadata.recursiveMetadata).toContain(parentMetadata.ownMetadata);
 
-    expect(grandsonMetadata.recursiveMetadata).to.deep.equal([
+    expect(grandsonMetadata.recursiveMetadata).toStrictEqual([
       grandsonMetadata.ownMetadata,
       childMetadata.ownMetadata,
       parentMetadata.ownMetadata
     ]);
-    expect(grandsonMetadata.recursiveMetadata).to.deep.equal([
+    expect(grandsonMetadata.recursiveMetadata).toStrictEqual([
       grandsonMetadata.ownMetadata,
       ...childMetadata.recursiveMetadata,
     ]);
-    expect(grandsonMetadata.recursiveMetadata).to.deep.equal([
+    expect(grandsonMetadata.recursiveMetadata).toStrictEqual([
       grandsonMetadata.ownMetadata,
       childMetadata.ownMetadata,
       ...parentMetadata.recursiveMetadata
@@ -163,29 +118,29 @@ describe('/test/context/container.test.ts', () => {
     });
 
     const inst: SubCustom = await container.getAsync('subCustom');
-    expect(inst.a).deep.eq({ appName: 'hello'});
-    expect(inst.bb).deep.eq({ d: 'hello' });
-    expect(inst.hello).deep.eq({hello: 'this is hello config'});
-    expect(inst.p).deep.eq({hh: 123});
-    expect(inst.tt).eq('this is tt config');
+    expect(inst.a).toStrictEqual({ appName: 'hello'});
+    expect(inst.bb).toStrictEqual({ d: 'hello' });
+    expect(inst.hello).toStrictEqual({hello: 'this is hello config'});
+    expect(inst.p).toStrictEqual({hh: 123});
+    expect(inst.tt).toEqual('this is tt config');
   });
 
   it('should throw error with class name when injected property error', async () => {
     const container = new Container();
     container.bind<Grandson>('grandson', Grandson as any);
 
-    expect(function () { container.get('grandson'); }).to.throw(Error, /Grandson/);
-    expect(function () { container.get('nograndson'); }).to.throw(Error, /nograndson/);
+    expect(function () { container.get('grandson'); }).toThrow(/Grandson/);
+    expect(function () { container.get('nograndson'); }).toThrow(/nograndson/);
 
     try {
       await container.getAsync('grandson');
     } catch (error) {
-      expect(function () { throw error; }).to.throw(Error, /Grandson/);
+      expect(function () { throw error; }).toThrow(/Grandson/);
     }
     try {
       await container.getAsync('nograndson');
     } catch (error) {
-      expect(function () { throw error; }).to.throw(Error, /nograndson/);
+      expect(function () { throw error; }).toThrow(/nograndson/);
     }
   });
 
@@ -194,38 +149,21 @@ describe('/test/context/container.test.ts', () => {
     container.bind(Katana);
     const ins1 = container.get(Katana);
     const ins2 = container.get('katana');
-    expect(ins1).to.equal(ins2);
-  });
-
-  it('should resolve instance', async() => {
-    const container = new Container();
-    const ins1 = container.resolve(Katana);
-    expect(ins1 instanceof Katana).to.be.true;
-    expect(() => {
-      container.get(Katana);
-    }).to.throw(/is not valid in current context/);
-
-    container.bind<SubChild>('subChild', SubChild as any);
-    container.bind<SubParent>('subParent', SubParent as any);
-    try {
-      await container.getAsync('subParent');
-    } catch (error) {
-      expect(function () { throw error; }).to.throw(/is not valid in current context/);
-    }
+    expect(ins1).toEqual(ins2);
   });
 
   it('should use get async method replace get', async () => {
     const container = new Container();
     container.bind(BaseService);
     const ins = await container.getAsync(BaseService);
-    expect(ins instanceof BaseService).to.be.true;
+    expect(ins instanceof BaseService).toBeTruthy();
   });
 
   it('should execute async init method when object created', async () => {
     const container = new Container();
     container.bind(BaseServiceAsync);
     const ins = await container.getAsync(BaseServiceAsync) as BaseServiceAsync;
-    expect(ins.foodNumber).to.equal(20);
+    expect(ins.foodNumber).toEqual(20);
   });
 
   it('should support constructor inject', async () => {
@@ -236,7 +174,7 @@ describe('/test/context/container.test.ts', () => {
 
     const car = await container.getAsync(Car) as Car;
     car.run();
-    expect(car.getFuelCapacity()).to.equal(35);
+    expect(car.getFuelCapacity()).toEqual(35);
   });
 
   it('should support constructor inject from parent', async () => {
@@ -247,8 +185,8 @@ describe('/test/context/container.test.ts', () => {
 
     const car = await container.getAsync(BMWX1) as Car;
     car.run();
-    expect(car.getFuelCapacity()).to.equal(35);
-    expect(car.getBrand()).to.equal('bmw');
+    expect(car.getFuelCapacity()).toEqual(35);
+    expect(car.getBrand()).toEqual('bmw');
   });
 
   it('should inject constructor parameter in order', async () => {
@@ -259,7 +197,7 @@ describe('/test/context/container.test.ts', () => {
 
     const car = await container.getAsync(Tesla) as Car;
     car.run();
-    expect(car.getFuelCapacity()).to.equal(130);
+    expect(car.getFuelCapacity()).toEqual(130);
   });
 
   describe('inject function', () => {
@@ -269,7 +207,7 @@ describe('/test/context/container.test.ts', () => {
       container.bind('parent', testInjectFunction);
       container.bind('child', childFunction);
       const result = container.get('parent');
-      expect(result).to.equal(3);
+      expect(result).toEqual(3);
     });
 
     it('should get async function module', async () => {
@@ -277,7 +215,7 @@ describe('/test/context/container.test.ts', () => {
       container.bind('parentAsync', testInjectAsyncFunction);
       container.bind('childAsync', childAsyncFunction);
       const result = await container.getAsync('parentAsync');
-      expect(result).to.equal(7);
+      expect(result).toEqual(7);
     });
   });
 
@@ -291,8 +229,8 @@ describe('/test/context/container.test.ts', () => {
       container.bind(DieselEngine);
       const result = container.get<DieselCar>(DieselCar);
       result.run();
-      expect(result.dieselEngine.capacity).to.equal(15);
-      expect(result.backUpDieselEngine.capacity).to.equal(20);
+      expect(result.dieselEngine.capacity).toEqual(15);
+      expect(result.backUpDieselEngine.capacity).toEqual(20);
     });
 
   });
@@ -322,8 +260,8 @@ describe('/test/context/container.test.ts', () => {
         container.getAsync(HelloSingleton), container.getAsync(HelloSingleton), later()]);
       const inst0 = <HelloSingleton>arr[0];
       const inst1 = <HelloSingleton>arr[3][0];
-      expect(inst0.ts).eq(inst1.ts);
-      expect(inst0.end).eq(inst1.end);
+      expect(inst0.ts).toEqual(inst1.ts);
+      expect(inst0.end).toEqual(inst1.end);
       */
 
       const arr1 = await Promise.all([
@@ -333,12 +271,10 @@ describe('/test/context/container.test.ts', () => {
       const inst: HelloErrorSingleton = arr1[0] as HelloErrorSingleton;
       const inst2: HelloErrorInitSingleton = arr1[1] as HelloErrorInitSingleton;
 
-      expect(inst).is.a('object');
-      expect(inst2).is.a('object');
-      expect(inst.ts).eq(inst2.helloErrorSingleton.ts);
-      expect(inst.end).eq(inst2.helloErrorSingleton.end);
-      expect(inst2.ts).eq(inst.helloErrorInitSingleton.ts);
-      expect(inst2.end).eq(inst.helloErrorInitSingleton.end);
+      expect(inst.ts).toEqual(inst2.helloErrorSingleton.ts);
+      expect(inst.end).toEqual(inst2.helloErrorSingleton.end);
+      expect(inst2.ts).toEqual(inst.helloErrorInitSingleton.ts);
+      expect(inst2.end).toEqual(inst.helloErrorInitSingleton.end);
     });
   });
 
@@ -354,22 +290,22 @@ describe('/test/context/container.test.ts', () => {
       const circularTwo: CircularTwo = await container.getAsync(CircularTwo);
       const circularThree: CircularThree = await container.getAsync(CircularThree);
 
-      expect(circularTwo.test2).eq('this is two');
-      expect((circularTwo.circularOne as CircularOne).test1).eq('this is one');
-      expect(((circularTwo.circularOne as CircularOne).circularTwo as CircularTwo).test2).eq('this is two');
-      expect(circularThree.circularTwo.test2).eq('this is two');
-      expect(circularTwo.ts).eq(((circularTwo.circularOne as CircularOne).circularTwo as CircularTwo).ts);
-      expect(circularTwo.ttest2('try ttest2')).eq('try ttest2twoone');
-      expect(await circularTwo.ctest2('try ttest2')).eq('try ttest2twoone');
-      expect(await ((circularTwo.circularOne as CircularOne).circularTwo as CircularTwo).ctest2('try ttest2')).eq('try ttest2twoone');
+      expect(circularTwo.test2).toEqual('this is two');
+      expect((circularTwo.circularOne as CircularOne).test1).toEqual('this is one');
+      expect(((circularTwo.circularOne as CircularOne).circularTwo as CircularTwo).test2).toEqual('this is two');
+      expect(circularThree.circularTwo.test2).toEqual('this is two');
+      expect(circularTwo.ts).toEqual(((circularTwo.circularOne as CircularOne).circularTwo as CircularTwo).ts);
+      expect(circularTwo.ttest2('try ttest2')).toEqual('try ttest2twoone');
+      expect(await circularTwo.ctest2('try ttest2')).toEqual('try ttest2twoone');
+      expect(await ((circularTwo.circularOne as CircularOne).circularTwo as CircularTwo).ctest2('try ttest2')).toEqual('try ttest2twoone');
 
       const circularTwoSync: CircularTwo = container.get(CircularTwo);
       const circularOneSync: CircularOne = container.get(CircularOne);
 
-      expect(circularTwoSync.test2).eq('this is two');
-      expect(circularOneSync.test1).eq('this is one');
-      expect(circularTwoSync.ttest2('try ttest2')).eq('try ttest2twoone');
-      expect(await circularTwoSync.ctest2('try ttest2')).eq('try ttest2twoone');
+      expect(circularTwoSync.test2).toEqual('this is two');
+      expect(circularOneSync.test1).toEqual('this is one');
+      expect(circularTwoSync.ttest2('try ttest2')).toEqual('try ttest2twoone');
+      expect(await circularTwoSync.ctest2('try ttest2')).toEqual('try ttest2twoone');
     });
 
     it('alias circular should be ok', async () => {
@@ -384,15 +320,15 @@ describe('/test/context/container.test.ts', () => {
       container.bind(CircularThree);
 
       const circularTwo: CircularTwo = await container.getAsync(CircularTwo);
-      expect(circularTwo.test2).eq('this is two');
-      expect((circularTwo.circularOne as CircularOne).test1).eq('this is one');
-      expect(((circularTwo.circularOne as CircularOne).circularTwo as CircularTwo).test2).eq('this is two');
+      expect(circularTwo.test2).toEqual('this is two');
+      expect((circularTwo.circularOne as CircularOne).test1).toEqual('this is one');
+      expect(((circularTwo.circularOne as CircularOne).circularTwo as CircularTwo).test2).toEqual('this is two');
 
       const one = await container.getAsync<TestOne1>(TestOne1);
-      expect(one).not.null;
-      expect(one).not.undefined;
-      expect(one.name).eq('one');
-      expect((one.two as TestTwo1).name).eq('two');
+      expect(one).toBeDefined();
+      expect(one).toBeDefined();
+      expect(one.name).toEqual('one');
+      expect((one.two as TestTwo1).name).toEqual('two');
     });
   });
 
@@ -408,14 +344,14 @@ describe('/test/context/container.test.ts', () => {
       const circularTwo: CircularTwo = container.get(CircularTwo);
       const circularThree: CircularThree = container.get(CircularThree);
 
-      expect(circularTwo.test2).eq('this is two');
-      expect((circularTwo.circularOne as CircularOne).test1).eq('this is one');
-      expect(((circularTwo.circularOne as CircularOne).circularTwo as CircularTwo).test2).eq('this is two');
-      expect(circularThree.circularTwo.test2).eq('this is two');
-      expect(circularTwo.ts).eq(((circularTwo.circularOne as CircularOne).circularTwo as CircularTwo).ts);
-      expect(circularTwo.ttest2('try ttest2')).eq('try ttest2twoone');
-      expect(await circularTwo.ctest2('try ttest2')).eq('try ttest2twoone');
-      expect(await ((circularTwo.circularOne as CircularOne).circularTwo as CircularTwo).ctest2('try ttest2')).eq('try ttest2twoone');
+      expect(circularTwo.test2).toEqual('this is two');
+      expect((circularTwo.circularOne as CircularOne).test1).toEqual('this is one');
+      expect(((circularTwo.circularOne as CircularOne).circularTwo as CircularTwo).test2).toEqual('this is two');
+      expect(circularThree.circularTwo.test2).toEqual('this is two');
+      expect(circularTwo.ts).toEqual(((circularTwo.circularOne as CircularOne).circularTwo as CircularTwo).ts);
+      expect(circularTwo.ttest2('try ttest2')).toEqual('try ttest2twoone');
+      expect(await circularTwo.ctest2('try ttest2')).toEqual('try ttest2twoone');
+      expect(await ((circularTwo.circularOne as CircularOne).circularTwo as CircularTwo).ctest2('try ttest2')).toEqual('try ttest2twoone');
     });
   });
 
@@ -430,13 +366,13 @@ describe('/test/context/container.test.ts', () => {
       sub.bind(TestThree);
 
       const three = sub.get<TestThree>('testThree');
-      expect(three.ts).eq('this is three');
-      expect(three.one.ts).eq('this is one');
+      expect(three.ts).toEqual('this is three');
+      expect(three.one.ts).toEqual('this is one');
 
       const one = sub.get<TestOne>('testOne');
-      expect(one.ts).eq('this is one');
-      expect(one.one.ts).eq('this is one');
-      expect(one.testTwo.ts).eq('this is two');
+      expect(one.ts).toEqual('this is one');
+      expect(one.one.ts).toEqual('this is one');
+      expect(one.testTwo.ts).toEqual('this is two');
     });
   });
 
@@ -456,8 +392,8 @@ describe('/test/context/container.test.ts', () => {
 
       const s = arr[0] as AliSingleton;
       const fn = arr[2] as any;
-      expect(s.getInstance()).eq('alisingleton');
-      expect(await fn()).eq('alisingleton');
+      expect(s.getInstance()).toEqual('alisingleton');
+      expect(await fn()).toEqual('alisingleton');
     });
   });
 });

@@ -8,7 +8,6 @@ import {
   IMidwayFramework,
   MidwayProcessTypeEnum,
 } from './interface';
-import { MidwayContainer } from './context/midwayContainer';
 import {
   APPLICATION_KEY,
   CONFIGURATION_KEY,
@@ -25,22 +24,11 @@ import {
   loggers,
   MidwayContextLogger,
 } from '@midwayjs/logger';
-import { dirname, isAbsolute, join } from 'path';
 import { createMidwayLogger } from './logger';
 import { MidwayRequestContainer } from './context/requestContainer';
 import { FunctionalConfiguration } from './functional/configuration';
 import { MidwayInformationService } from './service/informationService';
-
-function buildLoadDir(baseDir, dir) {
-  if (!isAbsolute(dir)) {
-    return join(baseDir, dir);
-  }
-  return dir;
-}
-
-function setupAppDir(baseDir: string) {
-  return dirname(baseDir);
-}
+import { createDirectoryGlobContainer } from './util/containerUtil';
 
 export abstract class BaseFramework<
   APP extends IMidwayApplication<CTX>,
@@ -48,7 +36,6 @@ export abstract class BaseFramework<
   OPT extends IConfigurationOptions
 > implements IMidwayFramework<APP, OPT>
 {
-  protected isTsMode = true;
   protected applicationContext: IMidwayContainer;
   protected logger: ILogger;
   protected appLogger: ILogger;
@@ -70,6 +57,7 @@ export abstract class BaseFramework<
 
   public async initialize(options: IMidwayBootstrapOptions): Promise<void> {
     this.isMainFramework = options.isMainFramework;
+    this.configurationOptions = this.configurationOptions || ({} as OPT);
 
     /**
      * before create MidwayContainer instance，can change init parameters
@@ -102,7 +90,7 @@ export abstract class BaseFramework<
     await this.applicationInitialize(options);
 
     /**
-     * start to load configuration and lifeCycle
+     * start container ready
      */
     await this.containerReady(options);
 
@@ -143,20 +131,19 @@ export abstract class BaseFramework<
   }
 
   protected async containerInitialize(options: IMidwayBootstrapOptions) {
-    if (!options.appDir) {
-      options.appDir = setupAppDir(options.baseDir);
-    }
     /**
      * initialize container
      */
     if (options.applicationContext) {
       this.applicationContext = options.applicationContext;
     } else {
-      this.applicationContext = new MidwayContainer(options.baseDir, undefined);
-      this.applicationContext.registerObject('baseDir', options.baseDir);
-      this.applicationContext.registerObject('appDir', options.appDir);
-      this.applicationContext.registerObject('isTsMode', this.isTsMode);
+      this.applicationContext = createDirectoryGlobContainer({
+        baseDir: options.baseDir,
+      });
     }
+
+    this.applicationContext.registerObject('baseDir', options.baseDir);
+    this.applicationContext.registerObject('appDir', options.appDir);
 
     /**
      * initialize base information
@@ -174,26 +161,8 @@ export abstract class BaseFramework<
       // 如果有传入全局容器，就不需要再次扫描了
       return;
     }
-    /**
-     * load directory and bind files to ioc container
-     */
-    if (!this.isTsMode && options.disableAutoLoad === undefined) {
-      // disable auto load in js mode by default
-      options.disableAutoLoad = true;
-    }
 
-    if (options.disableAutoLoad) return;
-
-    // use baseDir in parameter first
-    const defaultLoadDir = this.isTsMode ? [options.baseDir] : [];
-    this.applicationContext.load({
-      loadDir: (options.loadDir || defaultLoadDir).map(dir => {
-        return buildLoadDir(options.baseDir, dir);
-      }),
-      pattern: options.pattern,
-      ignore: options.ignore,
-    });
-
+    // 废弃 deprecated
     if (options.preloadModules && options.preloadModules.length) {
       for (const preloadModule of options.preloadModules) {
         this.applicationContext.bindClass(preloadModule);

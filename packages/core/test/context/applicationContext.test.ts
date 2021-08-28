@@ -1,7 +1,6 @@
 import { ObjectDefinition } from '../../src/definitions/objectDefinition';
 import { ObjectDefinitionRegistry, BaseApplicationContext } from '../../src/context/applicationContext';
 import sinon = require('sinon');
-import { expect } from 'chai';
 
 describe('/test/context/applicationContext.test.ts', () => {
   describe('ObjectDefinitionRegistry', () => {
@@ -19,45 +18,45 @@ describe('/test/context/applicationContext.test.ts', () => {
       registry.registerDefinition(definition1.id, definition1);
 
       let ids = registry.getSingletonDefinitionIds();
-      expect(ids).is.an('array');
-      expect(ids[0]).eq('hello2');
+      expect(Array.isArray(ids)).toBeTruthy();
+      expect(ids[0]).toEqual('hello2');
 
       const defs = registry.getDefinitionByName('helloworld1');
-      expect(defs).is.an('array');
-      expect(defs.length).eq(1);
-      expect(defs[0].name).eq('helloworld1');
+      expect(Array.isArray(defs)).toBeTruthy();
+      expect(defs.length).toEqual(1);
+      expect(defs[0].name).toEqual('helloworld1');
 
-      expect(registry.hasDefinition(definition.id)).true;
-      expect(registry.getDefinition(definition.id)).not.null;
-      expect(registry.identifiers).deep.eq([definition.id, definition1.id]);
-      expect(registry.count).eq(2);
-      expect(registry.getDefinitionByPath(definition1.path)).not.null;
-      expect(registry.getDefinitionByPath('/test')).is.null;
+      expect(registry.hasDefinition(definition.id)).toBeTruthy();
+      expect(registry.getDefinition(definition.id)).toBeDefined()
+      expect(registry.identifiers).toStrictEqual([definition.id, definition1.id]);
+      expect(registry.count).toEqual(2);
+      expect(registry.getDefinitionByPath(definition1.path)).toBeDefined()
+      expect(registry.getDefinitionByPath('/test')).toBeNull();
 
       registry.clearAll();
-      expect(registry.count).eq(0);
+      expect(registry.count).toEqual(0);
       ids = registry.getSingletonDefinitionIds();
-      expect(ids).deep.eq([]);
+      expect(ids).toStrictEqual([]);
 
-      expect(registry.getDefinition(definition.id)).is.undefined;
+      expect(registry.getDefinition(definition.id)).toBeUndefined();
 
       registry.registerDefinition(definition1.id, definition1);
-      expect(registry.hasDefinition(definition1.id)).true;
+      expect(registry.hasDefinition(definition1.id)).toBeTruthy();
       registry.removeDefinition(definition1.id);
-      expect(registry.hasDefinition(definition1.id)).false;
+      expect(registry.hasDefinition(definition1.id)).toBeFalsy();
 
       const obj = {
         aa: 1,
         bb: [22, 'asdfa']
       };
       registry.registerObject('he1', obj);
-      expect(registry.hasObject('he1')).true;
-      expect(registry.getObject('he1')).deep.eq({
+      expect(registry.hasObject('he1')).toBeTruthy();
+      expect(registry.getObject('he1')).toStrictEqual({
         aa: 1,
         bb: [22, 'asdfa']
       });
 
-      expect(registry.identifiers).deep.eq([]);
+      expect(registry.identifiers).toStrictEqual([]);
     });
   });
   describe('BaseApplicationContext', () => {
@@ -83,16 +82,16 @@ describe('/test/context/applicationContext.test.ts', () => {
       app.registerDefinition(definition.id, definition);
       app.registerDefinition(definition1.id, definition1);
 
-      expect(app.isReady).false;
+      expect(app.isReady).toBeFalsy();
       await app.ready();
-      expect(app.isReady).true;
+      expect(app.isReady).toBeTruthy();
 
       try {
         app.get('hello2');
       } catch (e) {
         callback(e.message);
       }
-      expect(callback.withArgs('hello2 must use getAsync').calledOnce).true;
+      expect(callback.withArgs('hello2 must use getAsync').calledOnce).toBeTruthy();
 
       const subApp = new BaseApplicationContext(__dirname, app);
       try {
@@ -100,20 +99,20 @@ describe('/test/context/applicationContext.test.ts', () => {
       } catch (e) {
         callback(e.message + 1);
       }
-      expect(callback.withArgs('hello2 must use getAsync1').calledOnce).true;
+      expect(callback.withArgs('hello2 must use getAsync1').calledOnce).toBeTruthy();
 
       const d: any = await subApp.getAsync('hello2');
-      expect(d).not.null;
-      expect(d).not.undefined;
-      expect(d.aa).eq(123);
+      expect(d).toBeDefined()
+      expect(d).toBeDefined();
+      expect(d.aa).toEqual(123);
 
       const b: any = subApp.get('hello1');
-      expect(b).not.null;
-      expect(b).not.undefined;
-      expect(b.aa).eq(1231);
+      expect(b).toBeDefined()
+      expect(b).toBeDefined();
+      expect(b.aa).toEqual(1231);
 
       await app.stop();
-      expect(app.registry.identifiers.length).eq(0);
+      expect(app.registry.identifiers.length).toEqual(0);
     });
   });
 });
