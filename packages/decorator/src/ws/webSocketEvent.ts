@@ -111,7 +111,7 @@ export function WSBroadCast(
 }
 
 /**
- * @deprecated please use @OnWSDisConnection
+ * @deprecated please use @OnWSMessage
  */
 export const OnMessage = OnWSMessage;
 /**
