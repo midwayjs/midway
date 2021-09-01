@@ -1,6 +1,0 @@
-{
-  "name": "worker-other",
-	"scripts": {
-		"build": "tsc"
-	}
-}
