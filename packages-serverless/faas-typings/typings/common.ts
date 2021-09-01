@@ -432,6 +432,28 @@ export interface FaaSHTTPContext
    * FaaS Cookies Object
    */
   cookies: Cookies;
+
+  /**
+   * Throw an error with `msg` and optional `status`
+   * defaulting to 500. Note that these are user-level
+   * errors, and the message may be exposed to the client.
+   *
+   *    this.throw(403)
+   *    this.throw('name required', 400)
+   *    this.throw(400, 'name required')
+   *    this.throw('something exploded')
+   *    this.throw(new Error('invalid'), 400);
+   *    this.throw(400, new Error('invalid'));
+   *
+   * See: https://github.com/jshttp/http-errors
+   */
+  throw(
+    message: string,
+    code?: number,
+    properties?: Record<string, unknown>
+  ): never;
+  throw(status: number): never;
+  throw(...properties: Array<number | string | Record<string, unknown>>): never;
 }
 
 export type FaaSOriginContext = FC.RequestContext | SCF.RequestContext;

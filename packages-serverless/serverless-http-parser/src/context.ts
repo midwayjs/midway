@@ -1,5 +1,6 @@
 import { FaaSOriginContext } from '@midwayjs/faas-typings';
 import * as util from 'util';
+import * as createError from 'http-errors';
 const Cookies = require('cookies');
 
 const COOKIES = Symbol('context#cookies');
@@ -154,6 +155,31 @@ export const context = {
 
   acceptsLanguages(...args): any {
     return this.request.acceptsLanguages(...args);
+  },
+
+  /**
+   * Throw an error with `status` (default 500) and
+   * `msg`. Note that these are user-level
+   * errors, and the message may be exposed to the client.
+   *
+   *    this.throw(403)
+   *    this.throw(400, 'name required')
+   *    this.throw('something exploded')
+   *    this.throw(new Error('invalid'))
+   *    this.throw(400, new Error('invalid'))
+   *
+   * See: https://github.com/jshttp/http-errors
+   *
+   * Note: `status` should only be passed as the first parameter.
+   *
+   * @param {String|Number|Error} err, msg or status
+   * @param {String|Number|Error} [err, msg or status]
+   * @param {Object} [props]
+   * @api public
+   */
+
+  throw(...args) {
+    throw createError(...args);
   },
 
   onerror(err) {
