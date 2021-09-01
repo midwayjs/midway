@@ -607,6 +607,21 @@ describe('test http parser', () => {
       app.onerror(err);
       assert(msg === '  Error: mock stack null');
     });
+    it('should test ctx.throw', function () {
+      const app = new Application();
+      const req = new HTTPRequest(
+        require('./resource/scf_apigw.json'),
+        require('./resource/scf_ctx.json')
+      );
+      const res = new HTTPResponse();
+      const ctx: FaaSHTTPContext = app.createContext(req, res);
+      try {
+        ctx.throw(403, 'throw error');
+      } catch (er) {
+        // got err
+      }
+      assert('run here');
+    });
   });
 });
 
