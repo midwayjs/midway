@@ -1,5 +1,8 @@
-import { attachClassMetadata, saveModule } from '@midwayjs/core';
-import { saveClassMetadata } from '@midwayjs/decorator';
+import {
+  saveClassMetadata,
+  attachClassMetadata,
+  saveModule,
+} from '@midwayjs/decorator';
 import {
   Connection,
   EntityOptions as BaseEntityOptions,

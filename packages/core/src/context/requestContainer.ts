@@ -1,4 +1,4 @@
-import { MidwayContainer } from './midwayContainer';
+import { MidwayContainer } from './container';
 import { REQUEST_CTX_KEY, IMidwayContainer } from '../interface';
 import { parsePrefix } from '../util/';
 import {

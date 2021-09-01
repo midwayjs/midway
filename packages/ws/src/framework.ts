@@ -1,10 +1,7 @@
 import {
   BaseFramework,
-  getClassMetadata,
-  getProviderId,
   HTTP_SERVER_KEY,
   IMidwayBootstrapOptions,
-  listModule,
   MidwayFrameworkType,
 } from '@midwayjs/core';
 import * as http from 'http';
@@ -23,6 +20,9 @@ import {
   WS_EVENT_KEY,
   WSEventInfo,
   WSEventTypeEnum,
+  getClassMetadata,
+  getProviderId,
+  listModule,
 } from '@midwayjs/decorator';
 
 export class MidwayWSFramework extends BaseFramework<

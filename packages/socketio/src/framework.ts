@@ -1,10 +1,7 @@
 import {
   BaseFramework,
-  getClassMetadata,
-  getProviderId,
   HTTP_SERVER_KEY,
   IMidwayBootstrapOptions,
-  listModule,
   MidwayFrameworkType,
 } from '@midwayjs/core';
 import { debuglog } from 'util';
@@ -22,6 +19,9 @@ import {
   WSControllerOption,
   WSEventInfo,
   WSEventTypeEnum,
+  getClassMetadata,
+  getProviderId,
+  listModule,
 } from '@midwayjs/decorator';
 import { MidwaySocketIOContextLogger } from './logger';
 

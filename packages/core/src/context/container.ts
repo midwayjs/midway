@@ -27,6 +27,10 @@ import {
   saveProviderId,
   ScopeEnum,
   TAGGED_PROP,
+  saveIdentifierMapping,
+  hasIdentifierMapping,
+  getIdentifierMapping,
+  getProviderUUId,
 } from '@midwayjs/decorator';
 import { FunctionalConfiguration } from '../functional/configuration';
 import * as util from 'util';
@@ -291,11 +295,22 @@ export class MidwayContainer
     if (isClass(identifier) || isFunction(identifier)) {
       options = target;
       target = identifier as any;
-      identifier = getProviderId(target);
+      identifier = this.getIdentifier(target);
+      // 保存旧字符串 id 和 uuid 之间的映射，这里保存的是带 namespace，和 require 时不同
+      saveIdentifierMapping(getProviderId(target), identifier);
     }
 
     if (isClass(target)) {
       definitionMeta.definitionType = 'object';
+      const originIdentifier = identifier;
+      identifier = this.getIdentifier(target);
+      if (originIdentifier === identifier) {
+        // 额外保存原始的类名 id
+        saveIdentifierMapping(getProviderId(target), identifier);
+      } else {
+        // 自定义字符串 id
+        saveIdentifierMapping(originIdentifier, identifier);
+      }
     } else {
       definitionMeta.definitionType = 'function';
       if (!isAsyncFunction(target)) {
@@ -348,10 +363,15 @@ export class MidwayContainer
         this.debugLogger(`  inject properties => [${Object.keys(metaData)}]`);
         for (const metaKey in metaData) {
           for (const propertyMeta of metaData[metaKey]) {
+            // find legacy name mapping to uuid
+            let mappingUUID = propertyMeta.value;
+            if (hasIdentifierMapping(mappingUUID)) {
+              mappingUUID = getIdentifierMapping(mappingUUID);
+            }
             definitionMeta.properties.push({
               metaKey,
               args: propertyMeta.args,
-              value: propertyMeta.value,
+              value: mappingUUID,
             });
           }
         }
@@ -486,7 +506,7 @@ export class MidwayContainer
 
   protected bindModule(module, namespace = '', filePath?: string) {
     if (isClass(module)) {
-      const providerId = isProvide(module) ? getProviderId(module) : null;
+      const providerId = isProvide(module) ? getProviderUUId(module) : null;
       if (providerId) {
         if (namespace) {
           saveClassMetadata(
@@ -495,7 +515,13 @@ export class MidwayContainer
             module
           );
         }
-        this.bind(generateProvideId(providerId, namespace), module, {
+        // 保存旧字符串 id 和 uuid 之间的映射
+        const generatedProvideId = generateProvideId(
+          getProviderId(module),
+          namespace
+        );
+        saveIdentifierMapping(generatedProvideId, providerId);
+        this.bind(providerId, module, {
           namespace,
           srcPath: filePath,
         });
@@ -573,5 +599,14 @@ export class MidwayContainer
 
   public getAttr<T>(key: string): T {
     return this.attrMap.get(key);
+  }
+
+  protected getIdentifier(target: any) {
+    return getProviderUUId(target);
+  }
+
+  protected findRegisterObject(identifier) {
+    const ins = this.registry.getObject(identifier);
+    return this.aspectService.wrapperAspectToInstance(ins);
   }
 }

@@ -1,18 +1,15 @@
 import {
-  BaseFramework,
   getClassMetadata,
   getProviderId,
   listModule,
   listPropertyDataFromClass,
   MidwayFrameworkType,
-} from '@midwayjs/core';
-
-import {
   ConsumerMetadata,
   MS_CONSUMER_KEY,
   MSListenerType,
   RabbitMQListenerOptions,
 } from '@midwayjs/decorator';
+import { BaseFramework } from '@midwayjs/core';
 import {
   IMidwayRabbitMQApplication,
   IMidwayRabbitMQConfigurationOptions,

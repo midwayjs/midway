@@ -5,8 +5,6 @@ export * from './common/decoratorManager';
 export * from './common/errMsg';
 export * from './common/metadata';
 export * from './common/scopeEnum';
-export * from './faas/fun';
-export * from './faas/handler';
 export * from './web/requestMapping';
 export * from './web/paramMapping';
 export * from './web/controller';
