@@ -1,6 +1,6 @@
 const OSS = require('ali-oss');
 
-export function createSTSClient(accessKeyId, accessKeySecret, stsToken) {
+function createClient(accessKeyId, accessKeySecret, stsToken) {
   return new OSS({
     accessKeyId,
     accessKeySecret,
@@ -10,4 +10,16 @@ export function createSTSClient(accessKeyId, accessKeySecret, stsToken) {
     endpoint: process.env.ALI_SDK_OSS_ENDPOINT,
     secure: true,
   });
+}
+
+export function createSTSClient(accessKeyId, accessKeySecret, stsToken) {
+  let client;
+  try {
+    client = createClient(accessKeyId, accessKeySecret, stsToken);
+  } catch (err) {
+    console.warn('create sts client error and retry');
+    client = createClient(accessKeyId, accessKeySecret, stsToken);
+  }
+
+  return client;
 }
