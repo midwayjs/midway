@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.12.9](https://github.com/midwayjs/midway/compare/v2.12.8...v2.12.9) (2021-09-01)
+
+
+### Features
+
+* add ctx.throw for serverless app ([#1262](https://github.com/midwayjs/midway/issues/1262)) ([da58bf6](https://github.com/midwayjs/midway/commit/da58bf647f23077fc4142f6454cd6c40d8a82e96))
+* add setDiff ([#1263](https://github.com/midwayjs/midway/issues/1263)) ([2bf7844](https://github.com/midwayjs/midway/commit/2bf78440fce627bdb8d282c6da89c59479dc992d))
+
+
+
+
+
 ## [2.12.8](https://github.com/midwayjs/midway/compare/v2.12.7...v2.12.8) (2021-08-27)
 
 

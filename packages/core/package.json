@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/core",
-  "version": "2.12.7",
+  "version": "2.12.9",
   "description": "midway core",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -21,7 +21,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/decorator": "^2.12.3",
+    "@midwayjs/decorator": "^2.12.9",
     "chai": "^4.2.0",
     "mm": "3",
     "sinon": "^7.2.2"

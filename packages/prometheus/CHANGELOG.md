@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.12.9](https://github.com/midwayjs/midway/compare/v2.12.8...v2.12.9) (2021-09-01)
+
+
+### Features
+
+* add setDiff ([#1263](https://github.com/midwayjs/midway/issues/1263)) ([2bf7844](https://github.com/midwayjs/midway/commit/2bf78440fce627bdb8d282c6da89c59479dc992d))
+
+
+
+
+
 ## [2.12.7](https://github.com/midwayjs/midway/compare/v2.12.6...v2.12.7) (2021-08-22)
 
 **Note:** Version bump only for package @midwayjs/prometheus

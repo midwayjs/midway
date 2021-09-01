@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/static-layer",
-  "version": "2.12.7",
+  "version": "2.12.9",
   "main": "dist/index.js",
   "scripts": {
     "test": "node --require=ts-node/register ../../node_modules/.bin/jest",
@@ -10,10 +10,10 @@
   "devDependencies": {
     "@midwayjs/runtime-engine": "^2.11.2",
     "@midwayjs/runtime-mock": "^2.11.2",
-    "@midwayjs/serverless-fc-starter": "^2.12.7",
-    "@midwayjs/serverless-fc-trigger": "^2.12.7",
-    "@midwayjs/serverless-scf-starter": "^2.11.4",
-    "@midwayjs/serverless-scf-trigger": "^2.12.7",
+    "@midwayjs/serverless-fc-starter": "^2.12.9",
+    "@midwayjs/serverless-fc-trigger": "^2.12.9",
+    "@midwayjs/serverless-scf-starter": "^2.12.9",
+    "@midwayjs/serverless-scf-trigger": "^2.12.9",
     "koa": "^2.13.0",
     "koa-static-cache": "^5.1.4",
     "path-to-regexp": "^6.2.0",

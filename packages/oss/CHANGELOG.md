@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.12.9](https://github.com/midwayjs/midway/compare/v2.12.8...v2.12.9) (2021-09-01)
+
+
+### Features
+
+* add ctx.throw for serverless app ([#1262](https://github.com/midwayjs/midway/issues/1262)) ([da58bf6](https://github.com/midwayjs/midway/commit/da58bf647f23077fc4142f6454cd6c40d8a82e96))
+
+
+
+
+
 ## [2.12.7](https://github.com/midwayjs/midway/compare/v2.12.6...v2.12.7) (2021-08-22)
 
 **Note:** Version bump only for package @midwayjs/oss
