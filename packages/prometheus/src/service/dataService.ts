@@ -91,10 +91,10 @@ export class DataService {
   }
 
   @Master()
-  async setDiff(name, diff){
-    let current = await this.userDefinedMetrics[name].get();
+  async setDiff(name, diff) {
+    const current = await this.userDefinedMetrics[name].get();
     let value = diff;
-    if(current.values.length != 0){
+    if (current.values.length !== 0) {
       value = current.values[0].value + diff;
     }
     this.userDefinedMetrics[name].set(
