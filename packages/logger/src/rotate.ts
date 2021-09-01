@@ -8,7 +8,7 @@ import * as hash from 'object-hash';
 import { MESSAGE } from 'triple-beam';
 import { PassThrough } from 'stream';
 import Transport = require('winston-transport');
-import rotator = require('file-stream-rotator');
+import { getStream } from './fileStreamRotator';
 import { GeneralDailyRotateFileTransportOptions } from './interface';
 
 const loggerDefaults = {
@@ -89,7 +89,7 @@ export class DailyRotateFileTransport extends Transport {
         throw new Error('Your path or filename contain an invalid character.');
       }
 
-      this.logStream = rotator.getStream({
+      this.logStream = getStream({
         filename: path.join(this.dirname, this.filename),
         frequency: options.frequency ? options.frequency : 'custom',
         date_format: options.datePattern ? options.datePattern : 'YYYY-MM-DD',
