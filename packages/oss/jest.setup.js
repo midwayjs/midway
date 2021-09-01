@@ -2,7 +2,7 @@ const path = require('path');
 const fs = require('fs');
 
 process.env.MIDWAY_TS_MODE = 'true';
-jest.setTimeout(30000);
+jest.setTimeout(60000);
 
 const envFile = path.join(__dirname, '.env');
 if (!fs.existsSync(envFile)) {
