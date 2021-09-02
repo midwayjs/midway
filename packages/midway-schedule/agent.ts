@@ -73,6 +73,7 @@ export = agent => {
       }
 
       const instance = new Strategy(opts, agent, key);
+      agent.schedule[STRATEGY_INSTANCE].set(key, instance);
       instance.start();
     }
   });
