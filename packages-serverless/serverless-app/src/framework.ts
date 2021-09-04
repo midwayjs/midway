@@ -370,7 +370,7 @@ export class Framework
   }
 
   private listenMessage() {
-    process.on('message', async msg => {
+    process.on('message', async (msg: any) => {
       if (!msg || !msg.type) {
         return;
       }
