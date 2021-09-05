@@ -1,6 +1,6 @@
 {
-  "name": "@midwayjs/redis",
-  "description": "midway redis component",
+  "name": "@midwayjs/cos",
+  "description": "midway cos component",
   "version": "2.12.9",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -12,13 +12,14 @@
     "@midwayjs/core": "^2.12.9",
     "@midwayjs/decorator": "^2.12.9",
     "@midwayjs/mock": "^2.12.9",
-    "@types/ioredis": "^4.27.1"
+    "dotenv": "^10.0.0"
   },
   "dependencies": {
-    "ioredis": "^4.27.1"
+    "cos-nodejs-sdk-v5": "^2.10.0"
   },
   "keywords": [
-    "redis"
+    "tencent",
+    "cos"
   ],
   "author": "czy88840616 <czy88840616@gmail.com>",
   "license": "MIT",

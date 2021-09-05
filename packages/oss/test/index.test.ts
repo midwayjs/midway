@@ -11,6 +11,8 @@ if (process.env.GITHUB_JOB && !process.env.ALI_SDK_OSS_ID) {
       console.log('skip in pr');
     });
   });
+  // @ts-ignore
+  return;
 }
 
 async function retry(fn) {
