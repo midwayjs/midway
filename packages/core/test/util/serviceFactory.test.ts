@@ -12,6 +12,10 @@ describe('test/util/serviceFactory.test.ts', () => {
     getName() {
       return 'test';
     }
+
+    async initClients(options) {
+      return super.initClients(options);
+    }
   }
 
   it('should test service factory', async () => {
