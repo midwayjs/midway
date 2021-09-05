@@ -14,7 +14,7 @@ describe('/test/perf-events.test.ts', () => {
     const actualEventsFuture = new Promise<string[]>(resolve => {
       let actualEvents = [];
 
-      const observer = new perfHooks.PerformanceObserver(entryList => {
+      const observer: any = new perfHooks.PerformanceObserver(entryList => {
         actualEvents = actualEvents.concat(entryList.getEntries().map(it => it.name));
         if (actualEvents.length >= expectedMeasurementCount) {
           resolve(actualEvents);
