@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 export = {
   accessKeyId: process.env.ALI_SDK_OSS_ID,
   accessKeySecret: process.env.ALI_SDK_OSS_SECRET,

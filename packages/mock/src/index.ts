@@ -4,6 +4,7 @@ export {
   createApp,
   createFunctionApp,
   createBootstrap,
+  createLightApp,
 } from './utils';
 export * from './client/http';
 export * from './client/rabbitMQ';

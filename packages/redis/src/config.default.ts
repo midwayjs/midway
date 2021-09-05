@@ -1,6 +1,5 @@
 export const redis = {
-  default: {
-  },
+  default: {},
   // redis client will try to use TIME command to detect client is ready or not
   // if your redis server not support TIME command, please set this config to false
   // see https://redis.io/commands/time

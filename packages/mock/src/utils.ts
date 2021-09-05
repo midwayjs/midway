@@ -3,6 +3,7 @@ import {
   clearContainerCache,
   IMidwayApplication,
   IMidwayFramework,
+  LightFramework,
   MidwayFrameworkType,
   safeRequire,
 } from '@midwayjs/core';
@@ -281,6 +282,13 @@ export async function createFunctionApp<
 
   const framework: T = await create<T, U>(baseDir, options, customFramework);
   return framework.getApplication() as unknown as Y;
+}
+
+export async function createLightApp(
+  baseDir: string = process.cwd(),
+  options?: MockAppConfigurationOptions
+): Promise<IMidwayApplication> {
+  return await createApp(baseDir, options, LightFramework);
 }
 
 class BootstrapAppStarter {
