@@ -1,18 +1,16 @@
-import { LightFramework } from '@midwayjs/core';
 import { join } from 'path';
 import { HttpService } from '../src';
+import { createLightApp } from '@midwayjs/mock';
 
 describe('/test/index.test.ts', () => {
 
   let httpService: any;
   let container;
-  let framework;
+  let app;
 
   beforeAll(async () => {
-    framework = new LightFramework();
-    framework.configure();
-    await framework.initialize({ baseDir: join(__dirname, './fixtures/base-app/src') });
-    container = framework.getApplicationContext();
+    app = await createLightApp(join(__dirname, './fixtures/base-app'));
+    container = app.getApplicationContext();
     httpService = await container.getAsync(HttpService);
   });
 
@@ -23,7 +21,7 @@ describe('/test/index.test.ts', () => {
   });
 
   it('should test context http service', async () => {
-    const ctx = framework.getApplication().createAnonymousContext();
+    const ctx = app.createAnonymousContext();
     const httpServiceWithRequest = await ctx.requestContext.getAsync(HttpService);
     expect(httpServiceWithRequest).toBeDefined();
     expect(httpServiceWithRequest).not.toEqual(httpService);

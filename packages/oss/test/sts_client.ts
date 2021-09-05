@@ -9,6 +9,8 @@ function createClient(accessKeyId, accessKeySecret, stsToken) {
     bucket: process.env.ALI_SDK_OSS_BUCKET,
     endpoint: process.env.ALI_SDK_OSS_ENDPOINT,
     secure: true,
+    refreshSTSToken: true,
+    refreshSTSTokenInterval: 5000,
   });
 }
 
