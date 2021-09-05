@@ -262,12 +262,23 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<
         this.configurationOptions.ca
       );
 
-      this.server = require('https').createServer(
-        this.configurationOptions,
-        this.app.callback()
-      );
+      if (this.configurationOptions.http2) {
+        this.server = require('http2').createSecureServer(
+          this.configurationOptions,
+          this.app.callback()
+        );
+      } else {
+        this.server = require('https').createServer(
+          this.configurationOptions,
+          this.app.callback()
+        );
+      }
     } else {
-      this.server = require('http').createServer(this.app.callback());
+      if (this.configurationOptions.http2) {
+        this.server = require('http2').createServer(this.app.callback());
+      } else {
+        this.server = require('http').createServer(this.app.callback());
+      }
     }
     // register httpServer to applicationContext
     this.applicationContext.registerObject(HTTP_SERVER_KEY, this.server);
