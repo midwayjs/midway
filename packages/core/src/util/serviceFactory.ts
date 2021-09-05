@@ -7,7 +7,7 @@ export abstract class ServiceFactory<T> {
   private clients: Map<string, T> = new Map();
   private options = {};
 
-  async initClients(options) {
+  protected async initClients(options) {
     this.options = options;
     assert(
       !(options.client && options.clients),
@@ -28,11 +28,11 @@ export abstract class ServiceFactory<T> {
     }
   }
 
-  get<U = T>(id = 'default'): U {
+  public get<U = T>(id = 'default'): U {
     return this.clients.get(id) as unknown as U;
   }
 
-  async createInstance(config, clientName?) {
+  public async createInstance(config, clientName?) {
     // options.default will be merge in to options.clients[id]
     config = Object.assign({}, this.options['default'], config);
     const client = await this.createClient(config);
@@ -42,6 +42,13 @@ export abstract class ServiceFactory<T> {
     return client;
   }
 
-  abstract getName();
+  public abstract getName();
   protected abstract createClient(config);
+  protected async destroyClient(client: T): Promise<void> {}
+
+  public async stop() {
+    for (const value of this.clients.values()) {
+      await this.destroyClient(value);
+    }
+  }
 }

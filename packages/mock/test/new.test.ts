@@ -6,6 +6,7 @@ import { join } from 'path';
 import { MidwayFrameworkType } from '@midwayjs/decorator';
 import { existsSync } from 'fs';
 import { EventService } from './fixtures/base-faas/src/event';
+import { createLightApp } from '../dist';
 
 describe('/test/new.test.ts', () => {
   it('should test create app', async () => {
@@ -43,5 +44,11 @@ describe('/test/new.test.ts', () => {
 
     expect(result).toEqual('hello world');
     await close(app, { cleanLogsDir: true, cleanTempDir: true });
+  });
+
+  it('should test createLightApp', async () => {
+    const app = await createLightApp(join(__dirname, 'fixtures/base-app-light'));
+    expect(app).toBeDefined();
+    await close(app);
   });
 });
