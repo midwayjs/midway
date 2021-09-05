@@ -14,7 +14,8 @@ const lockFile = path.join(
   }-${now.getDate()}-${ppid}.lock`
 );
 export function isMaster() {
-  if (cluster.isMaster) {
+  // fix for node v16
+  if (cluster['isPrimary'] || cluster['isMaster']) {
     return true;
   }
 
