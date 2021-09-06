@@ -6,9 +6,9 @@ import {
   listModule,
   ScopeEnum,
   ServerlessFunction,
-  ServerlessTrigger
+  ServerlessTrigger,
+  ServerlessTriggerType,
 } from '../../src';
-import { ServerlessTriggerType } from '../../dist';
 
 @Func('index.handler', { middleware: ['hello'] })
 class TestFun {
