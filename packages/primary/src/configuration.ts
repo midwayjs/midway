@@ -15,13 +15,12 @@ import * as qs from 'querystring';
   namespace: 'primary',
 })
 export class AutoConfiguration {
-
   http_server: any;
 
   @App()
   app;
 
-  async onReady(contanier) {
+  async onReady() {
     const modules = listModule('primary:primary');
     const handlers = {};
     let sockFile = path.join(os.tmpdir(), 'midway-primary.sock');

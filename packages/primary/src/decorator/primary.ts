@@ -6,7 +6,11 @@ import { isPrimary } from '../utils/utils';
 import * as qs from 'querystring';
 
 export function RunInPrimary() {
-  return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+  return function (
+    target: any,
+    propertyKey: string,
+    descriptor: PropertyDescriptor
+  ) {
     saveModule('primary:primary', target.constructor);
     const sockFile = path.join(os.tmpdir(), 'midway-primary.sock');
     if (!isPrimary()) {
@@ -21,7 +25,7 @@ export function RunInPrimary() {
               uri: `http://unix:${sockFile}:/?${qs.stringify(params)}`,
             },
             (err, res, body) => {
-              if(err){
+              if (err) {
                 reject(err);
                 return;
               }
