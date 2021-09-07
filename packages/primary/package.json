@@ -5,9 +5,10 @@
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
-    "build": "midway-bin build -c",
-    "test": "midway-bin test --ts",
-    "cov": "midway-bin cov --ts"
+    "build": "tsc",
+    "test": "node --require=ts-node/register ../../node_modules/.bin/jest",
+    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --coverage --forceExit",
+    "lint:fix": "../../node_modules/.bin/mwts fix"
   },
   "keywords": [
     "midway",
@@ -25,6 +26,10 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@midwayjs/core": "^2.12.9",
+    "@midwayjs/decorator": "^2.12.9",
+    "@midwayjs/koa": "^2.12.9",
+    "@midwayjs/mock": "^2.12.9"
   },
   "dependencies": {
     "request": "^2.88.2"
