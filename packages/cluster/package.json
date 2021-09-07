@@ -1,5 +1,5 @@
 {
-  "name": "@midwayjs/primary",
+  "name": "@midwayjs/cluster",
   "version": "2.12.9",
   "description": "",
   "main": "dist/index.js",
