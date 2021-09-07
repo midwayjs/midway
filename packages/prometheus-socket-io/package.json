@@ -1,0 +1,37 @@
+{
+  "name": "@midwayjs/prometheus-socket-io",
+  "version": "2.12.9",
+  "description": "midway component for prometheus",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "node --require=ts-node/register ../../node_modules/.bin/jest",
+    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --coverage --forceExit",
+    "ci": "npm run cov --ts"
+  },
+  "keywords": [
+    "midway",
+    "IoC",
+    "plugin",
+    "prometheus"
+  ],
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@midwayjs/core": "^2.12.9",
+    "@midwayjs/decorator": "^2.12.9",
+    "@midwayjs/koa": "^2.12.9",
+    "@midwayjs/mock": "^2.12.9",
+    "@midwayjs/socketio": "^2.12.9",
+    "@midwayjs/prometheus": "^2.12.9"
+  },
+  "dependencies": {
+  },
+  "engines": {
+    "node": ">= 12.0.0"
+  }
+}

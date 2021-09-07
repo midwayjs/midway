@@ -1,0 +1,55 @@
+{
+  "name": "my-midway-project",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "dependencies": {
+    "@midwayjs/bootstrap": "^2.3.0",
+    "@midwayjs/core": "^2.3.0",
+    "@midwayjs/decorator": "^2.3.0",
+    "@midwayjs/socketio": "^2.3.0"
+  },
+  "devDependencies": {
+    "@midwayjs/cli": "^1.0.0",
+    "@midwayjs/luckyeye": "^1.0.0",
+    "@midwayjs/mock": "^2.3.0",
+    "@types/jest": "^26.0.10",
+    "@types/node": "14",
+    "@types/socket.io-client": "^1.4.36",
+    "cross-env": "^6.0.0",
+    "jest": "^26.4.0",
+    "mwts": "^1.0.5",
+    "socket.io-client": "^4.0.0",
+    "ts-jest": "^26.2.0",
+    "typescript": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "scripts": {
+    "start": "NODE_ENV=production node ./bootstrap.js",
+    "dev": "cross-env NODE_ENV=local midway-bin dev --ts --entryFlie=bootstrap.js",
+    "test": "midway-bin test --ts",
+    "cov": "midway-bin cov --ts",
+    "lint": "mwts check",
+    "lint:fix": "mwts fix",
+    "ci": "npm run cov",
+    "build": "midway-bin build -c",
+    "check": "luckyeye"
+  },
+  "midway-bin-clean": [
+    ".vscode/.tsbuildinfo",
+    "dist"
+  ],
+  "midway-luckyeye": {
+    "packages": [
+      "midway_v2"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "anonymous",
+  "license": "MIT"
+}
