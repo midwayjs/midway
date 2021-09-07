@@ -21,6 +21,7 @@ import {
   DecoratorManager,
   ResolveFilter,
   isRegExp,
+  getProviderUUId,
 } from '@midwayjs/decorator';
 import { ContainerConfiguration } from './configuration';
 import { FUNCTION_INJECT_KEY } from '../common/constants';
@@ -450,6 +451,11 @@ export class MidwayContainer
     definition.handlerProps = definitionMeta.handlerProps;
 
     this.registerDefinition(definitionMeta.id, definition);
+    // 用 uuid 多保存一个副本
+    const uuid = getProviderUUId(definitionMeta.path);
+    if (uuid) {
+      this.registerDefinition(getProviderUUId(definitionMeta.path), definition);
+    }
   }
 
   protected restoreDefinitions(definitionMetadataList) {
@@ -602,6 +608,7 @@ export class MidwayContainer
     if (typeof identifier !== 'string') {
       identifier = this.getIdentifier(identifier);
     }
+
     const ins: any = super.get<T>(identifier, args);
     return this.aspectService.wrapperAspectToInstance(ins);
   }

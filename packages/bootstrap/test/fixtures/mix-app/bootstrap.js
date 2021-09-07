@@ -1,5 +1,5 @@
-const WebFramemwork = require('../../../../web/').Framework;
-const SocketFramemwork = require('../../../../socketio/').Framework;
+const WebFramework = require('../../../../web/').Framework;
+const SocketFramework = require('../../../../socketio/').Framework;
 const Bootstrap = require('../../../src/').Bootstrap;
 
 const timeoutHandler = setTimeout(() => {
@@ -18,13 +18,13 @@ const internalHandler = setInterval(() => {
 Bootstrap
   .load(globalConfig => {
     // 加载主 web 框架
-    const framework = new WebFramemwork();
+    const framework = new WebFramework();
     framework.configure(globalConfig.cluster);
     return framework;
   })
   .load(globalConfig => {
     // 加载副 socket.io 框架
-    const framework = new SocketFramemwork();
+    const framework = new SocketFramework();
     framework.configure();
     return framework;
   })

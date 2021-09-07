@@ -15,7 +15,7 @@ import {
   SubCustom
 } from '../fixtures/class_sample';
 import { recursiveGetMetadata } from '../../src/common/reflectTool';
-import { APPLICATION_KEY, CONFIG_KEY, PLUGIN_KEY, TAGGED_PROP } from '@midwayjs/decorator';
+import { APPLICATION_KEY, CONFIG_KEY, getProviderUUId, PLUGIN_KEY, TAGGED_PROP } from '@midwayjs/decorator';
 import 'reflect-metadata';
 
 import { BMWX1, Car, Electricity, Gas, Tesla, Turbo } from '../fixtures/class_sample_car';
@@ -306,6 +306,12 @@ describe('/test/context/container.test.ts', () => {
       container.bind(HelloErrorInitSingleton);
 
       await container.ready();
+
+      const ins1 = await container.getAsync(HelloSingleton);
+      const ins2 = await container.getAsync('helloSingleton');
+      const ins3 = await container.getAsync(getProviderUUId(HelloSingleton));
+      expect(ins1).to.equal(ins2);
+      expect(ins1).to.equal(ins3);
 
       /*
       const later = async () => {

@@ -23,7 +23,13 @@ import {
   INVALID_DECORATOR_OPERATION,
 } from './errMsg';
 import { Metadata } from './metadata';
-import { getParamNames, classNamed, isNullOrUndefined, isClass } from '../util';
+import {
+  getParamNames,
+  classNamed,
+  isNullOrUndefined,
+  isClass,
+  generateRandomId,
+} from '../util';
 
 const debug = require('util').debuglog('decorator:manager');
 
@@ -981,7 +987,8 @@ export function savePropertyInject(opts: InjectOptions) {
       isClass(type.originDesign) &&
       isProvide(type.originDesign)
     ) {
-      identifier = getProviderId(type.originDesign);
+      identifier =
+        getProviderUUId(type.originDesign) ?? getProviderId(type.originDesign);
     }
     if (!identifier) {
       identifier = opts.targetKey;
@@ -1045,11 +1052,14 @@ export function saveProviderId(
     identifier = classNamed(target.name);
   }
 
+  const uuid = generateRandomId();
+
   Reflect.defineMetadata(
     TAGGED_CLS,
     {
       id: identifier,
       originName: target.name,
+      uuid,
     },
     target
   );
@@ -1066,4 +1076,14 @@ export function saveProviderId(
  */
 export function isProvide(target: any): boolean {
   return Reflect.hasOwnMetadata(TAGGED_CLS, target);
+}
+
+export function getProviderUUId(module): string {
+  const metaData: any = Reflect.getMetadata(
+    TAGGED_CLS,
+    module
+  ) as TagClsMetadata;
+  if (metaData && metaData.uuid) {
+    return metaData.uuid;
+  }
 }
