@@ -27,7 +27,9 @@
     "@midwayjs/koa": "^2.12.9",
     "@midwayjs/mock": "^2.12.9",
     "@midwayjs/socketio": "^2.12.9",
-    "@midwayjs/prometheus": "^2.12.9"
+    "@midwayjs/prometheus": "^2.12.9",
+    "@midwayjs/web": "^2.12.9",
+    "@midwayjs/bootstrap": "^2.12.9"
   },
   "dependencies": {
   },

@@ -7,10 +7,13 @@
     "@midwayjs/bootstrap": "^2.3.0",
     "@midwayjs/core": "^2.3.0",
     "@midwayjs/decorator": "^2.3.0",
-    "@midwayjs/socketio": "^2.3.0"
+    "@midwayjs/socketio": "^2.3.0",
+    "@midwayjs/web": "^2.3.0",
+    "egg": "^2.0.0"
   },
   "devDependencies": {
     "@midwayjs/cli": "^1.0.0",
+    "@midwayjs/egg-ts-helper": "^1.0.1",
     "@midwayjs/luckyeye": "^1.0.0",
     "@midwayjs/mock": "^2.3.0",
     "@types/jest": "^26.0.10",
@@ -28,8 +31,8 @@
   },
   "scripts": {
     "start": "NODE_ENV=production node ./bootstrap.js",
-    "dev": "cross-env NODE_ENV=local midway-bin dev --ts --entryFlie=bootstrap.js",
-    "test": "midway-bin test --ts",
+    "dev": "cross-env ets && cross-env NODE_ENV=local midway-bin dev --ts --entryFile=bootstrap.js",
+    "test": "midway-bin test --ts --runInBand",
     "cov": "midway-bin cov --ts",
     "lint": "mwts check",
     "lint:fix": "mwts fix",
