@@ -5,6 +5,7 @@ export class Metadata implements TagPropsMetadata {
   public key: string | number | symbol;
   public value: any;
   public args?: any;
+  public originDesign?: any;
 
   public constructor(key: string | number | symbol, value: any) {
     this.key = key;

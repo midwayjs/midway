@@ -1,4 +1,5 @@
 import {
+  getPropertyInject,
   getProviderId,
   isProvide,
   ObjectDefinitionOptions,
@@ -428,16 +429,23 @@ export class MidwayContainer
     }
 
     // inject properties
+    const properties = getPropertyInject(definition.path)
     for (const propertyMeta of definitionMeta.properties) {
       const refManaged = new ManagedReference();
       refManaged.args = propertyMeta.args;
       if (this.midwayIdentifiers.includes(propertyMeta.value)) {
         refManaged.name = propertyMeta.value;
       } else {
-        refManaged.name = generateProvideId(
-          propertyMeta.value,
-          definition.namespace
-        );
+        if (properties && 
+          properties[propertyMeta.metaKey][0] &&
+          properties[propertyMeta.metaKey][0].originDesign &&
+          isClass(properties[propertyMeta.metaKey][0].originDesign) &&
+          isProvide(properties[propertyMeta.metaKey][0].originDesign)) {
+          let identifier = getProviderId(properties[propertyMeta.metaKey][0].originDesign);
+          refManaged.name = generateProvideId(identifier);
+        } else {
+          refManaged.name = generateProvideId(propertyMeta.value, definition.namespace);
+        }
       }
       definition.properties.set(propertyMeta.metaKey, refManaged);
     }

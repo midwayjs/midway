@@ -974,6 +974,7 @@ export function getConstructorInject(target: any): TagPropsMetadata[] {
  */
 export function savePropertyInject(opts: InjectOptions) {
   let identifier = opts.identifier;
+  let originDesign;
   if (!identifier) {
     const type = getPropertyType(opts.target, opts.targetKey);
     if (
@@ -982,6 +983,7 @@ export function savePropertyInject(opts: InjectOptions) {
       isProvide(type.originDesign)
     ) {
       identifier = getProviderId(type.originDesign);
+      originDesign = type.originDesign;
     }
     if (!identifier) {
       identifier = opts.targetKey;
@@ -992,6 +994,7 @@ export function savePropertyInject(opts: InjectOptions) {
   }
   const metadata = new Metadata(INJECT_TAG, identifier);
   metadata.args = opts.args;
+  metadata.originDesign = originDesign;
   _tagParameterOrProperty(
     TAGGED_PROP,
     opts.target.constructor,

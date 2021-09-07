@@ -30,6 +30,7 @@ export interface TagPropsMetadata {
   key: string | number | symbol;
   value: any;
   args?: any;
+  originDesign?: any;
 }
 
 export interface TagClsMetadata {
