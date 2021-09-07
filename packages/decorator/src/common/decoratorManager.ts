@@ -451,9 +451,6 @@ export function getClassExtendedMetadata(
   decoratorNameKey: DecoratorKey,
   target
 ) {
-  if (testKeyMap.size > 0 && testKeyMap.has(decoratorNameKey)) {
-    throw testKeyMap.get(decoratorNameKey);
-  }
   const extKey = DecoratorManager.getDecoratorClsExtendedKey(decoratorNameKey);
   let metadata = manager.getMetadata(extKey, target);
   if (metadata !== undefined) {
