@@ -196,7 +196,14 @@ export class BaseApplicationContext
       throw new Error(`${identifier} must use getAsync`);
     }
 
-    const definition = this.registry.getDefinition(identifier);
+    let definition = this.registry.getDefinition(identifier);
+
+    // find uuid
+    if (!definition && /:/.test(identifier)) {
+      identifier = identifier.replace(/^.*?:/, '');
+      definition = this.registry.getDefinition(identifier);
+    }
+
     if (!definition && this.parent) {
       if (this.parent.isAsync(identifier)) {
         throw new Error(`${identifier} must use getAsync`);
@@ -220,7 +227,14 @@ export class BaseApplicationContext
       return this.registry.getObject(identifier);
     }
 
-    const definition = this.registry.getDefinition(identifier);
+    let definition = this.registry.getDefinition(identifier);
+
+    // find uuid
+    if (!definition && /:/.test(identifier)) {
+      identifier = identifier.replace(/^.*?:/, '');
+      definition = this.registry.getDefinition(identifier);
+    }
+
     if (!definition && this.parent) {
       return this.parent.getAsync(identifier, args);
     }

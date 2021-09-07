@@ -608,6 +608,7 @@ export class MidwayContainer
     if (typeof identifier !== 'string') {
       identifier = this.getIdentifier(identifier);
     }
+
     const ins: any = super.get<T>(identifier, args);
     return this.aspectService.wrapperAspectToInstance(ins);
   }
