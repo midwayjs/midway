@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.13.0](https://github.com/midwayjs/midway/compare/v2.12.9...v2.13.0) (2021-09-07)
+
+
+### Bug Fixes
+
+* can't found id in test case ([#1274](https://github.com/midwayjs/midway/issues/1274)) ([9bd1b96](https://github.com/midwayjs/midway/commit/9bd1b96d02ea08f6f1c80f5cef9f68a605cea2ca))
+* midway-schedule can't find schedule by key ([#1266](https://github.com/midwayjs/midway/issues/1266)) ([1c256f2](https://github.com/midwayjs/midway/commit/1c256f2eba415a82d84bd4d0e766cab622f5e359))
+* node v16 typings ([#1269](https://github.com/midwayjs/midway/issues/1269)) ([59d0ee7](https://github.com/midwayjs/midway/commit/59d0ee71215587fd22b3627faa5c1bf26b1dd0e2))
+* winston rotate log size limit in cluster mode ([#1268](https://github.com/midwayjs/midway/issues/1268)) ([3299506](https://github.com/midwayjs/midway/commit/32995064f05955ab4d438741d056e819481ef30e))
+
+
+### Features
+
+* add cos component ([#1271](https://github.com/midwayjs/midway/issues/1271)) ([c070e01](https://github.com/midwayjs/midway/commit/c070e019d20ad7a106f594f114325e5b7e6d26ad))
+* add http2 support ([#1242](https://github.com/midwayjs/midway/issues/1242)) ([e1eab02](https://github.com/midwayjs/midway/commit/e1eab0280b306a30984ea35ce31390cd0507d1a0))
+* add prometheus-socket-io ([#1275](https://github.com/midwayjs/midway/issues/1275)) ([70f4310](https://github.com/midwayjs/midway/commit/70f43104bd43b2e0bed3b79608d938956f186890))
+* add redis component ([#1270](https://github.com/midwayjs/midway/issues/1270)) ([cea81a8](https://github.com/midwayjs/midway/commit/cea81a8a1a775be90863b40616f8b86d0df6ec06))
+
+
+
+
+
 ## [2.12.9](https://github.com/midwayjs/midway/compare/v2.12.8...v2.12.9) (2021-09-01)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.13.0](https://github.com/midwayjs/midway/compare/v2.12.9...v2.13.0) (2021-09-07)
+
+
+### Bug Fixes
+
+* node v16 typings ([#1269](https://github.com/midwayjs/midway/issues/1269)) ([59d0ee7](https://github.com/midwayjs/midway/commit/59d0ee71215587fd22b3627faa5c1bf26b1dd0e2))
+
+
+
+
+
 ## [2.12.9](https://github.com/midwayjs/midway/compare/v2.12.8...v2.12.9) (2021-09-01)
 
 

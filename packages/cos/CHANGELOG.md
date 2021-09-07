@@ -1,0 +1,11 @@
+# Change Log
+
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+# [2.13.0](https://github.com/midwayjs/midway/compare/v2.12.9...v2.13.0) (2021-09-07)
+
+
+### Features
+
+* add cos component ([#1271](https://github.com/midwayjs/midway/issues/1271)) ([c070e01](https://github.com/midwayjs/midway/commit/c070e019d20ad7a106f594f114325e5b7e6d26ad))

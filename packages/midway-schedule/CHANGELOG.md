@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.13.0](https://github.com/midwayjs/midway/compare/v2.12.9...v2.13.0) (2021-09-07)
+
+
+### Bug Fixes
+
+* midway-schedule can't find schedule by key ([#1266](https://github.com/midwayjs/midway/issues/1266)) ([1c256f2](https://github.com/midwayjs/midway/commit/1c256f2eba415a82d84bd4d0e766cab622f5e359))
+
+
+
+
+
 ## [2.12.9](https://github.com/midwayjs/midway/compare/v2.12.8...v2.12.9) (2021-09-01)
 
 **Note:** Version bump only for package midway-schedule

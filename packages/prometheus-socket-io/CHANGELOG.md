@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.13.0](https://github.com/midwayjs/midway/compare/v2.12.9...v2.13.0) (2021-09-07)
+
+
+### Features
+
+* add prometheus-socket-io ([#1275](https://github.com/midwayjs/midway/issues/1275)) ([70f4310](https://github.com/midwayjs/midway/commit/70f43104bd43b2e0bed3b79608d938956f186890))
+
+
+
+
+
 ## [2.12.9](https://github.com/midwayjs/midway/compare/v2.12.8...v2.12.9) (2021-09-01)
 
 

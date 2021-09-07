@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.13.0](https://github.com/midwayjs/midway/compare/v2.12.9...v2.13.0) (2021-09-07)
+
+
+### Features
+
+* add http2 support ([#1242](https://github.com/midwayjs/midway/issues/1242)) ([e1eab02](https://github.com/midwayjs/midway/commit/e1eab0280b306a30984ea35ce31390cd0507d1a0))
+
+
+
+
+
 ## [2.12.9](https://github.com/midwayjs/midway/compare/v2.12.8...v2.12.9) (2021-09-01)
 
 **Note:** Version bump only for package @midwayjs/web
