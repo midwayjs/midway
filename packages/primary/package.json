@@ -1,0 +1,39 @@
+{
+  "name": "@midwayjs/primary",
+  "version": "2.12.9",
+  "description": "",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "midway-bin build -c",
+    "test": "midway-bin test --ts",
+    "cov": "midway-bin cov --ts",
+    "lint": "mwts check",
+    "lint:fix": "mwts fix"
+  },
+  "keywords": [
+    "midway",
+    "IoC",
+    "plugin",
+    "primary"
+  ],
+  "author": "",
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@midwayjs/core": "^2.3.0",
+    "@midwayjs/decorator": "^2.3.0",
+    "@midwayjs/cli": "^1.2.38",
+    "@types/jest": "^26.0.10",
+    "@types/node": "14",
+    "@midwayjs/koa": "^2.0.0",
+    "cross-env": "^6.0.0",
+    "jest": "^26.4.0",
+    "mwts": "^1.0.5",
+    "ts-jest": "^26.2.0",
+    "typescript": "^4.0.0"
+  }
+}
