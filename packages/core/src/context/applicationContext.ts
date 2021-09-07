@@ -185,6 +185,7 @@ export class BaseApplicationContext
   get<T>(identifier: { new (): T }, args?: any): T;
   get<T>(identifier: ObjectIdentifier, args?: any): T;
   get(identifier: any, args?: any): any {
+    const originIdentifier = identifier;
     // 因为在这里拿不到类名, NotFoundError 类的错误信息在 ManagedResolverFactory.ts createAsync 方法中增加错误类名
     identifier = parsePrefix(identifier);
 
@@ -212,7 +213,7 @@ export class BaseApplicationContext
       return this.parent.get(identifier, args);
     }
     if (!definition) {
-      throw new NotFoundError(identifier);
+      throw new NotFoundError(originIdentifier);
     }
     return this.getManagedResolverFactory().create({ definition, args });
   }
@@ -220,6 +221,7 @@ export class BaseApplicationContext
   async getAsync<T>(identifier: { new (): T }, args?: any): Promise<T>;
   async getAsync<T>(identifier: ObjectIdentifier, args?: any): Promise<T>;
   async getAsync(identifier: any, args?: any): Promise<any> {
+    const originIdentifier = identifier;
     // 因为在这里拿不到类名, NotFoundError 类的错误信息在 ManagedResolverFactory.ts createAsync 方法中增加错误类名
     identifier = parsePrefix(identifier);
 
@@ -240,7 +242,7 @@ export class BaseApplicationContext
     }
 
     if (!definition) {
-      throw new NotFoundError(identifier);
+      throw new NotFoundError(originIdentifier);
     }
 
     return this.getManagedResolverFactory().createAsync({ definition, args });
