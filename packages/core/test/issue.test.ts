@@ -1,5 +1,5 @@
 import { join } from 'path';
-import { HomeControlelr } from 'midway-test-component';
+import { HomeController } from 'midway-test-component';
 import { LightFramework } from '../src';
 
 describe('/test/issue.test.ts', () => {
@@ -13,7 +13,7 @@ describe('/test/issue.test.ts', () => {
       ),
     });
     const app = framework.getApplication();
-    const homeController = await app.createAnonymousContext().requestContext.getAsync(HomeControlelr);
+    const homeController = await app.createAnonymousContext().requestContext.getAsync(HomeController);
     expect(homeController.bookService.ctx).toBeDefined();
   });
 });
