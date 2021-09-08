@@ -8,6 +8,7 @@ export const start2 = async options => {
     starter,
     layers = [],
     initializeContext,
+    applicationContext,
     preloadModules,
   } = options;
   const { start } = starter;
@@ -26,6 +27,7 @@ export const start2 = async options => {
         boot
           .configure({
             baseDir,
+            applicationContext,
           })
           .load(starterInstance);
         await boot.init();
