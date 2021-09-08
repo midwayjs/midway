@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/axios",
   "description": "midway http client with axios",
-  "version": "2.13.0",
+  "version": "2.13.1",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "files": [
@@ -9,9 +9,9 @@
     "dist/**/*.d.ts"
   ],
   "devDependencies": {
-    "@midwayjs/core": "^2.13.0",
+    "@midwayjs/core": "^2.13.1",
     "@midwayjs/decorator": "^2.13.0",
-    "@midwayjs/mock": "^2.13.0"
+    "@midwayjs/mock": "^2.13.1"
   },
   "dependencies": {
     "axios": "^0.21.1"
