@@ -12,7 +12,7 @@ import * as http from 'http';
 import * as qs from 'querystring';
 
 @Configuration({
-  namespace: 'primary',
+  namespace: 'process-agent',
 })
 export class AutoConfiguration {
   http_server: any;

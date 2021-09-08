@@ -1,5 +1,5 @@
 {
-  "name": "@midwayjs/cluster",
+  "name": "@midwayjs/process-agent",
   "version": "2.12.9",
   "description": "",
   "main": "dist/index.js",
@@ -7,14 +7,13 @@
   "scripts": {
     "build": "tsc",
     "test": "node --require=ts-node/register ../../node_modules/.bin/jest",
-    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --coverage --forceExit",
-    "lint:fix": "../../node_modules/.bin/mwts fix"
+    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --coverage --forceExit"
   },
   "keywords": [
     "midway",
     "IoC",
     "plugin",
-    "primary"
+    "process management"
   ],
   "author": "",
   "files": [
