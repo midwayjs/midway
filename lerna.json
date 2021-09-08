@@ -11,7 +11,8 @@
         "--no-package-lock"
       ],
       "nohoist": [
-        "@midwayjs/faas-middleware-upload"
+        "@midwayjs/faas-middleware-upload",
+        "midway-test-component"
       ]
     },
     "publish": {

@@ -40,7 +40,8 @@
     "lodash.set": "^4.3.2",
     "lodash.template": "^4.4.0",
     "picomatch": "^2.2.2",
-    "reflect-metadata": "^0.1.13"
+    "reflect-metadata": "^0.1.13",
+    "midway-test-component": "*"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
   "repository": {

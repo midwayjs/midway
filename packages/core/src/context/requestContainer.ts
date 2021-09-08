@@ -47,8 +47,13 @@ export class MidwayRequestContainer extends MidwayContainer {
       const ins = this.registry.getObject(identifier);
       return this.aspectService.wrapperAspectToInstance(ins);
     }
-    const definition =
+    let definition =
       this.applicationContext.registry.getDefinition(identifier);
+    // find uuid
+    if (!definition && /:/.test(identifier)) {
+      identifier = identifier.replace(/^.*?:/, '');
+      definition = this.applicationContext.registry.getDefinition(identifier);
+    }
     if (definition) {
       if (
         definition.isRequestScope() ||
@@ -80,8 +85,13 @@ export class MidwayRequestContainer extends MidwayContainer {
       return this.aspectService.wrapperAspectToInstance(ins);
     }
 
-    const definition =
+    let definition =
       this.applicationContext.registry.getDefinition(identifier);
+    // find uuid
+    if (!definition && /:/.test(identifier)) {
+      identifier = identifier.replace(/^.*?:/, '');
+      definition = this.applicationContext.registry.getDefinition(identifier);
+    }
     if (definition) {
       if (
         definition.isRequestScope() ||
