@@ -47,8 +47,7 @@ export class MidwayRequestContainer extends MidwayContainer {
       const ins = this.registry.getObject(identifier);
       return this.aspectService.wrapperAspectToInstance(ins);
     }
-    let definition =
-      this.applicationContext.registry.getDefinition(identifier);
+    let definition = this.applicationContext.registry.getDefinition(identifier);
     // find uuid
     if (!definition && /:/.test(identifier)) {
       identifier = identifier.replace(/^.*?:/, '');
@@ -85,8 +84,7 @@ export class MidwayRequestContainer extends MidwayContainer {
       return this.aspectService.wrapperAspectToInstance(ins);
     }
 
-    let definition =
-      this.applicationContext.registry.getDefinition(identifier);
+    let definition = this.applicationContext.registry.getDefinition(identifier);
     // find uuid
     if (!definition && /:/.test(identifier)) {
       identifier = identifier.replace(/^.*?:/, '');
