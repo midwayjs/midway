@@ -40,6 +40,7 @@ export class MidwayRequestContainer extends MidwayContainer {
   }
 
   get<T = any>(identifier: any, args?: any): T {
+    const originIdentifier = identifier;
     if (typeof identifier !== 'string') {
       identifier = this.getIdentifier(identifier);
     }
@@ -68,11 +69,12 @@ export class MidwayRequestContainer extends MidwayContainer {
     }
 
     if (this.parent) {
-      return this.parent.get(identifier, args);
+      return this.parent.get(originIdentifier, args);
     }
   }
 
   async getAsync<T = any>(identifier: any, args?: any): Promise<T> {
+    const originIdentifier = identifier;
     if (typeof identifier !== 'string') {
       identifier = this.getIdentifier(identifier);
     }
@@ -105,7 +107,7 @@ export class MidwayRequestContainer extends MidwayContainer {
     }
 
     if (this.parent) {
-      return this.parent.getAsync<T>(identifier, args);
+      return this.parent.getAsync<T>(originIdentifier, args);
     }
   }
 
