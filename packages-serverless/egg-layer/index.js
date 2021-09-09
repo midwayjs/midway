@@ -81,6 +81,11 @@ module.exports = engine => {
             requestOption.body = context.request.body;
           }
         } else if (
+          (context.headers['content-type'] || '').indexOf('multipart/') >= 0
+        ) {
+          // use buffer from context.req.body
+          requestOption.body = context.req.body;
+        } else if (
           (context.headers['content-type'] || '').indexOf('form-urlencoded') >=
           0
         ) {
