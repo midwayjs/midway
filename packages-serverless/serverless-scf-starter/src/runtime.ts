@@ -139,6 +139,7 @@ export class SCFRuntime extends ServerlessLightRuntime {
           return await handler.apply(handler, args);
         }
       } catch (err) {
+        newCtx.logger.error(err);
         if (isOutputError()) {
           throw err;
         } else {
@@ -148,9 +149,9 @@ export class SCFRuntime extends ServerlessLightRuntime {
     });
   }
 
-  async beforeInvokeHandler(context) {}
+  async beforeInvokeHandler(context) { }
 
-  async afterInvokeHandler(err, result, context) {}
+  async afterInvokeHandler(err, result, context) { }
 
   getApplication() {
     return this.app;
