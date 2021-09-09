@@ -1140,9 +1140,9 @@ export function saveProviderId(
   target: any,
   override?: boolean
 ) {
-  if (Reflect.hasOwnMetadata(TAGGED_CLS, target) && !override) {
-    throw new Error(DUPLICATED_INJECTABLE_DECORATOR);
-  }
+  // if (Reflect.hasOwnMetadata(TAGGED_CLS, target) && !override) {
+  //   throw new Error(DUPLICATED_INJECTABLE_DECORATOR);
+  // }
 
   if (!identifier) {
     identifier = classNamed(target.name);
@@ -1150,9 +1150,10 @@ export function saveProviderId(
 
   const uuid = generateRandomId();
   // save identifier and uuid relationship
-  manager.saveIdentifierMapping(identifier, uuid);
+  saveIdentifierMapping(identifier, uuid);
 
-  Reflect.defineMetadata(
+  // save class id and uuid
+  saveClassMetadata(
     TAGGED_CLS,
     {
       id: identifier,
@@ -1162,10 +1163,8 @@ export function saveProviderId(
     target
   );
 
-  if (!Reflect.hasMetadata(OBJ_DEF_CLS, target)) {
-    Reflect.defineMetadata(OBJ_DEF_CLS, {}, target);
-  }
-
+  // save object definition
+  saveClassMetadata(OBJ_DEF_CLS, {}, target);
   return target;
 }
 /**
@@ -1173,5 +1172,5 @@ export function saveProviderId(
  * @param target class
  */
 export function isProvide(target: any): boolean {
-  return Reflect.hasOwnMetadata(TAGGED_CLS, target);
+  return getClassMetadata(TAGGED_CLS, target);
 }
