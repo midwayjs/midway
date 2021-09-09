@@ -258,6 +258,7 @@ export class FCRuntime extends ServerlessLightRuntime {
           return await handler.apply(handler, args);
         }
       } catch (err) {
+        newCtx.logger.error(err);
         if (isOutputError()) {
           throw err;
         } else {
