@@ -54,7 +54,7 @@ export class BootstrapStarter {
       this.applicationContext = new MidwayContainer();
       this.applicationContext.setFileDetector(
         new DirectoryFileDetector({
-          baseDir: this.baseDir,
+          loadDir: this.baseDir,
         })
       );
       this.applicationContext.load(
