@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.13.2](https://github.com/midwayjs/midway/compare/v2.13.1...v2.13.2) (2021-09-09)
+
+
+### Bug Fixes
+
+* add log for 'Internal Server Error' ([#1282](https://github.com/midwayjs/midway/issues/1282)) ([1ae11c3](https://github.com/midwayjs/midway/commit/1ae11c343d1e335a77b72de5764f7af01ee28d3e))
+* form-data for egg-layer ([#1097](https://github.com/midwayjs/midway/issues/1097)) ([c8a9433](https://github.com/midwayjs/midway/commit/c8a943366d64a42809a2a91f160a1efc505f3970))
+* remove testKeyMap in testKeyMap ([901dad1](https://github.com/midwayjs/midway/commit/901dad177e07732748d169868a38a9c5813a82a7))
+
+
+### Features
+
+* add a process agent component ([#1278](https://github.com/midwayjs/midway/issues/1278)) ([4800068](https://github.com/midwayjs/midway/commit/48000687b884c019879df287f6aaf64a7a0306a2))
+* add sequelize component ([#1283](https://github.com/midwayjs/midway/issues/1283)) ([05a3b9b](https://github.com/midwayjs/midway/commit/05a3b9b396f6a49ee394f183f44ad5cba91ba29c))
+* dto helper ([9f64ec1](https://github.com/midwayjs/midway/commit/9f64ec110b16371dc2e9492601d04e9fdd95082b))
+* dto helper support extend method ([5f32bd5](https://github.com/midwayjs/midway/commit/5f32bd55c23e76d5edbef6c2f07a900bd304573a))
+
+
+
+
+
 ## [2.13.1](https://github.com/midwayjs/midway/compare/v2.13.0...v2.13.1) (2021-09-08)
 
 

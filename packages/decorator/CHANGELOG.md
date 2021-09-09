@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.13.2](https://github.com/midwayjs/midway/compare/v2.13.1...v2.13.2) (2021-09-09)
+
+
+### Bug Fixes
+
+* remove testKeyMap in testKeyMap ([901dad1](https://github.com/midwayjs/midway/commit/901dad177e07732748d169868a38a9c5813a82a7))
+
+
+### Features
+
+* dto helper ([9f64ec1](https://github.com/midwayjs/midway/commit/9f64ec110b16371dc2e9492601d04e9fdd95082b))
+* dto helper support extend method ([5f32bd5](https://github.com/midwayjs/midway/commit/5f32bd55c23e76d5edbef6c2f07a900bd304573a))
+
+
+
+
+
 # [2.13.0](https://github.com/midwayjs/midway/compare/v2.12.9...v2.13.0) (2021-09-07)
 
 

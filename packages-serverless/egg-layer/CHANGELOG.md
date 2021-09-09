@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.13.2](https://github.com/midwayjs/midway-faas/compare/v2.13.1...v2.13.2) (2021-09-09)
+
+
+### Bug Fixes
+
+* form-data for egg-layer ([#1097](https://github.com/midwayjs/midway-faas/issues/1097)) ([c8a9433](https://github.com/midwayjs/midway-faas/commit/c8a943366d64a42809a2a91f160a1efc505f3970))
+
+
+
+
+
 ## [2.13.1](https://github.com/midwayjs/midway-faas/compare/v2.13.0...v2.13.1) (2021-09-08)
 
 **Note:** Version bump only for package @midwayjs/egg-layer

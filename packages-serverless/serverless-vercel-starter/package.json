@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/serverless-vercel-starter",
-  "version": "2.13.1",
+  "version": "2.13.2",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
@@ -9,8 +9,8 @@
     "parseurl": "^1.3.3"
   },
   "devDependencies": {
-    "@midwayjs/core": "^2.13.1",
-    "@midwayjs/decorator": "^2.13.0",
+    "@midwayjs/core": "^2.13.2",
+    "@midwayjs/decorator": "^2.13.2",
     "@midwayjs/runtime-mock": "^2.11.2",
     "raw-body": "^2.4.1"
   },
