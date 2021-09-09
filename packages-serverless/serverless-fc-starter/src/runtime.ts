@@ -268,9 +268,9 @@ export class FCRuntime extends ServerlessLightRuntime {
     });
   }
 
-  async beforeInvokeHandler(context) { }
+  async beforeInvokeHandler(context) {}
 
-  async afterInvokeHandler(err, result, context) { }
+  async afterInvokeHandler(err, result, context) {}
 
   getApplication() {
     return this.app;
