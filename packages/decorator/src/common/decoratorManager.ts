@@ -77,6 +77,10 @@ export class DecoratorManager extends Map {
     return decoratorNameKey.toString() + '_METHOD';
   }
 
+  static getDecoratorClsExtendedKey(decoratorNameKey: DecoratorKey) {
+    return decoratorNameKey.toString() + '_EXT';
+  }
+
   static getDecoratorClsMethodPrefix(decoratorNameKey: DecoratorKey) {
     return decoratorNameKey.toString() + '_CLS_METHOD';
   }
@@ -443,6 +447,48 @@ export function attachClassMetadata(
 }
 
 const testKeyMap = new Map<DecoratorKey, Error>();
+
+/**
+ * get data from class assign
+ * @param decoratorNameKey
+ * @param target
+ */
+export function getClassExtendedMetadata(
+  decoratorNameKey: DecoratorKey,
+  target
+) {
+  const extKey = DecoratorManager.getDecoratorClsExtendedKey(decoratorNameKey);
+  let metadata = manager.getMetadata(extKey, target);
+  if (metadata !== undefined) {
+    return metadata;
+  }
+  const father = Reflect.getPrototypeOf(target);
+  if (father.constructor !== Object) {
+    metadata = mergeMeta(
+      getClassExtendedMetadata(decoratorNameKey, father),
+      manager.getMetadata(decoratorNameKey, target)
+    );
+  }
+  manager.saveMetadata(extKey, metadata || null, target);
+  return metadata;
+}
+
+function mergeMeta(target: any, src: any) {
+  if (!target) {
+    target = src;
+    src = null;
+  }
+  if (!target) {
+    return null;
+  }
+  if (Array.isArray(target)) {
+    return target.concat(src || []);
+  }
+  if (typeof target === 'object') {
+    return Object.assign({}, target, src);
+  }
+  throw new Error('can not merge meta that type of ' + typeof target);
+}
 
 /**
  * get data from class

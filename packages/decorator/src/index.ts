@@ -22,3 +22,4 @@ export * from './microservice/provider';
 export * from './microservice/consumer';
 export * from './microservice/rabbitmqListener';
 export * from './util/index';
+export * from './util/dtoHelper';
