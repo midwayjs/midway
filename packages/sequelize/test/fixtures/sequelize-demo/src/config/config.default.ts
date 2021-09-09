@@ -5,5 +5,5 @@ export const sequelize = {
     dialect: 'sqlite',
     storage: path.join(__dirname, '../../', 'database.sqlite')
   },
-  sync: false
+  sync: true
 }
