@@ -4,21 +4,21 @@ import * as path from 'path';
 
 @Configuration({
   namespace: 'sequelize',
-  importConfigs: [path.join(__dirname, 'config')]
+  importConfigs: [path.join(__dirname, 'config')],
 })
 export class SequelizeConfiguration {
   instance: Sequelize;
 
-  @Config("sequelize")
+  @Config('sequelize')
   sequelizeConfig;
 
   async onReady() {
     const options = this.sequelizeConfig.options;
     this.instance = new Sequelize(options);
-    const entities = listModule(`sequelize:core`);
-    this.instance.addModels(entities)
+    const entities = listModule('sequelize:core');
+    this.instance.addModels(entities);
     await this.instance.authenticate();
-    if(this.sequelizeConfig.sync){
+    if (this.sequelizeConfig.sync) {
       await this.instance.sync();
     }
   }
