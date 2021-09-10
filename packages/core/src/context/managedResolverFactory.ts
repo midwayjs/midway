@@ -708,6 +708,21 @@ export class ManagedResolverFactory {
           if (ref && ref.name) {
             iden = ref.name;
           }
+          let subDefinition = this.context.registry.getDefinition(iden);
+          if (!subDefinition && this.context.parent) {
+            subDefinition = this.context.parent.registry.getDefinition(iden);
+          }
+          // find uuid
+          if (!subDefinition && /:/.test(iden)) {
+            iden = iden.replace(/^.*?:/, '');
+            subDefinition = this.context.registry.getDefinition(iden);
+            if (!subDefinition && this.context.parent) {
+              subDefinition = this.context.parent.registry.getDefinition(iden);
+            }
+          }
+          if (subDefinition) {
+            iden = subDefinition.id;
+          }
           if (iden === identifier) {
             debug(
               'dfs exist in properties key %s == %s.',
@@ -728,10 +743,6 @@ export class ManagedResolverFactory {
           } else {
             depth.push(iden);
             debug('dfs depth push %s == %s, %j.', identifier, iden, depth);
-          }
-          let subDefinition = this.context.registry.getDefinition(iden);
-          if (!subDefinition && this.context.parent) {
-            subDefinition = this.context.parent.registry.getDefinition(iden);
           }
           if (this.depthFirstSearch(identifier, subDefinition, depth)) {
             debug(
