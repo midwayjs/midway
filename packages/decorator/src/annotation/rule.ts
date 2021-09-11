@@ -9,6 +9,8 @@
 //
 // export interface RuleOptions {
 //   required?: boolean;
+//   min?: number;
+//   max?: number;
 // }
 //
 // export function Rule(rule, options: RuleOptions = { required: true }) {
@@ -17,11 +19,17 @@
 //       // 函数装饰器
 //       const [target, propertyKey] = args;
 //       if (!joi.isSchema(rule)) {
-//         rule = getClassMetadata(RULES_KEY, rule);
+//         rule = joi
+//           .object(getClassMetadata(RULES_KEY, rule))
+//           .meta({ id: rule.name });
 //         if (getPropertyType(target, propertyKey).name === 'Array') {
 //           rule = joi.array().items(rule);
-//         } else {
-//           rule = joi.object(rule);
+//           if (options.min) {
+//             rule = rule.min(options.min);
+//           }
+//           if (options.max) {
+//             rule = rule.max(options.max);
+//           }
 //         }
 //         if (options.required) {
 //           rule = rule.required();
