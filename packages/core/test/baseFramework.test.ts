@@ -466,7 +466,7 @@ describe('/test/baseFramework.test.ts', () => {
     expect(await home.hello1()).toEqual('hello world 1');
     expect(await home.hello2()).toEqual('hello worldcccppp');
 
-    const ctx1 = {id: 1};
+    const ctx1 = { id: 1 };
     const requestContext = new MidwayRequestContainer(ctx1, framework.getApplicationContext());
     const userController1: any = await requestContext.getAsync('userController');
     try {
@@ -734,6 +734,21 @@ describe('/test/baseFramework.test.ts', () => {
     expect((global as any).container_not_null).toBeTruthy();
   });
 
+  it('component circular dependency should be ok', async () => {
+    const framework = new LightFramework();
+    await framework.initialize({
+      baseDir: path.join(
+        __dirname,
+        './fixtures/app-with-component-inject-with-class/main/src'
+      ),
+    });
+
+    const appCtx = framework.getApplicationContext();
+    const circularService = await appCtx.getAsync('circular:circularService');
+
+    expect(circularService).not.toBeNull();
+    await framework.stop();
+  });
 
   it('should test global framework', async () => {
     const framework = new LightFramework();
