@@ -154,7 +154,7 @@ describe('/test/index.test.ts', () => {
     await close(app);
   });
 
-  it('should assumeRole with oss sts', async () => {
+  it.skip('should assumeRole with oss sts', async () => {
     let app = await createLightApp(join(__dirname, './fixtures/base-app-sts'));
     const container = app.getApplicationContext();
     const ossSTSService = await container.getAsync(OSSSTSService);
@@ -178,7 +178,7 @@ describe('/test/index.test.ts', () => {
     await close(app);
   });
 
-  it('should assumeRole with oss sts clients', async () => {
+  it.skip('should assumeRole with oss sts clients', async () => {
     let app = await createLightApp(join(__dirname, './fixtures/base-app-sts-clients'));
     const container = app.getApplicationContext();
     const ossServiceFactory = await container.getAsync<OSSServiceFactory>(OSSServiceFactory);
