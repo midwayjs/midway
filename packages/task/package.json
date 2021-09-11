@@ -25,7 +25,7 @@
     "@midwayjs/core": "^3.0.0-alpha.2",
     "@midwayjs/decorator": "^3.0.0-alpha.2",
     "@midwayjs/koa": "^3.0.0-alpha.2",
-    "@midwayjs/logger": "^2.11.3",
+    "@midwayjs/logger": "^2.13.0",
     "@midwayjs/mock": "^3.0.0-alpha.2",
     "@types/bull": "^3.15.0",
     "@types/cron": "^1.7.2"

@@ -14,7 +14,7 @@
     "@midwayjs/core": "^3.0.0-alpha.2",
     "@midwayjs/decorator": "^3.0.0-alpha.2",
     "@midwayjs/mock": "^3.0.0-alpha.2",
-    "sqlite3": "^5.0.0",
+    "sqlite3": "^5.0.2",
     "typeorm": "*"
   },
   "author": {

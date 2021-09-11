@@ -23,13 +23,13 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/core": "^2.12.9",
-    "@midwayjs/decorator": "^2.12.9",
-    "@midwayjs/koa": "^2.12.9",
-    "@midwayjs/mock": "^2.12.9",
-    "@midwayjs/socketio": "^2.12.9",
-    "@midwayjs/prometheus": "^2.12.9",
-    "@midwayjs/web": "^2.12.9",
-    "@midwayjs/bootstrap": "^2.12.9"
+    "@midwayjs/decorator": "^3.0.0-alpha.2",
+    "@midwayjs/koa": "^3.0.0-alpha.2",
+    "@midwayjs/mock": "^3.0.0-alpha.2",
+    "@midwayjs/socketio": "^3.0.0-alpha.2",
+    "@midwayjs/prometheus": "^3.0.0-alpha.2",
+    "@midwayjs/web": "^3.0.0-alpha.2",
+    "@midwayjs/bootstrap": "^3.0.0-alpha.2"
   },
   "dependencies": {
   },

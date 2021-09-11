@@ -44,7 +44,7 @@
     "@midwayjs/bootstrap": "^3.0.0-alpha.2",
     "@midwayjs/core": "^3.0.0-alpha.2",
     "@midwayjs/koa": "^3.0.0-alpha.2",
-    "@midwayjs/logger": "^2.11.3",
+    "@midwayjs/logger": "^2.13.0",
     "debug": "^4.1.1",
     "egg": "^2.28.0",
     "egg-logger": "^2.4.2",
