@@ -4,7 +4,7 @@ import {
   listModule,
   getClassMetadata,
   ScopeEnum,
-  getObjectDefProps,
+  getObjectDefinition,
 } from '../../src';
 import {
   ControllerOne,
@@ -44,7 +44,7 @@ describe('/test/web/controller.test.ts', () => {
       },
     });
 
-    const def = getObjectDefProps(TestController);
+    const def = getObjectDefinition(TestController);
     expect(def).toStrictEqual({
       scope: ScopeEnum.Request,
     });

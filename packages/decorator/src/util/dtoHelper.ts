@@ -1,7 +1,7 @@
 import {
   getClassExtendedMetadata,
   saveClassMetadata,
-} from '../common/decoratorManager';
+} from '../decoratorManager';
 import { RULES_KEY } from '../constant';
 
 export interface Dto<T> extends Function {

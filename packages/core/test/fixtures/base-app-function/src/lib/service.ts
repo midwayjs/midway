@@ -2,7 +2,6 @@ import {
   Config,
   Plugin,
   Provide,
-  Async,
   Init,
   Inject,
 } from '@midwayjs/decorator';
@@ -21,14 +20,12 @@ export class B {
   };
 }
 
-@Async()
 @Provide()
 export class BaseService {
   config;
 
   @Config('adapterName')
   adapterName;
-  plugin2;
 
   @Inject('adapterFactory')
   factory;
@@ -44,20 +41,16 @@ export class BaseService {
   other3;
   adapter;
 
-  constructor(
-    @Inject() a,
-    @Config('hello') config,
-    @Inject() b,
-    @Plugin('plugin2') plugin2
-  ) {
-    this.config = Object.assign(config, {
-      c: a.config.c + b.config.c + config.c,
-    });
-    this.plugin2 = plugin2;
-  }
+  @Config('hello') innerConfig;
+  @Inject() a;
+  @Inject() b;
+  @Plugin('plugin2') plugin2;
 
   @Init()
   async init() {
+    this.config = Object.assign(this.innerConfig, {
+      c: this.a.config.c + this.b.config.c + this.innerConfig.c,
+    });
     this.adapter = await this.factory(this.adapterName);
   }
 

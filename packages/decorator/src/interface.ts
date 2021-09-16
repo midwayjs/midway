@@ -1,9 +1,14 @@
-import { ScopeEnum } from './common/scopeEnum';
 import { Middleware } from 'koa';
 import { RequestHandler } from 'express';
 
 export type MiddlewareParamArray = Array<Middleware | RequestHandler | string>;
-export type ObjectIdentifier = string;
+export type ObjectIdentifier = string | Symbol;
+
+export enum ScopeEnum {
+  Singleton = 'Singleton',
+  Request = 'Request',
+  Prototype = 'Prototype',
+}
 
 /**
  * 内部管理的属性、json、ref等解析实例存储
@@ -20,8 +25,6 @@ export interface ObjectDefinitionOptions {
   destroyMethod?: string;
   scope?: ScopeEnum;
   constructorArgs?: IManagedInstance[];
-  // 是否自动装配
-  isAutowire?: boolean;
   namespace?: string;
   srcPath?: string;
 }
@@ -36,10 +39,11 @@ export interface TagClsMetadata {
   id: string;
   originName: string;
   uuid: string;
+  name: string;
 }
 
 export interface ReflectResult {
-  [key: string]: TagPropsMetadata[];
+  [key: string]: any[];
 }
 
 export enum MSProviderType {

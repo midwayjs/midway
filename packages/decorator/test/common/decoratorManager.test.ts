@@ -3,42 +3,37 @@ import {
   clearAllModule,
   DecoratorManager,
   getClassMetadata,
-  getMethodDataFromClass,
-  getMethodMetadata,
   getObjectDefinition,
   getParamNames,
   getPropertyDataFromClass,
   getPropertyMetadata,
   getProviderId,
-  listMethodDataFromClass,
   listModule,
   listPreloadModule,
   listPropertyDataFromClass,
   PRELOAD_MODULE_KEY,
   resetModule,
   savePropertyDataToClass,
-  generateProvideId,
   getPropertyType,
-  savePropertyMetadata,
-  saveIdentifierMapping,
+  savePropertyMetadata, getProviderName,
 } from '../../src';
 import * as assert from 'assert';
-import { ManagerTest as module } from '../fixtures/decorator/customClass';
+import { ManagerTest } from '../fixtures/decorator/customClass';
 import mm = require('mm');
 
 describe('/test/common/decoratorManager.test.ts', () => {
   it('should save data on class and get it', () => {
-    assert(getClassMetadata('custom', module) === 'test');
-    assert(getClassMetadata('custom_method', module) === 'testSomething');
+    assert(getClassMetadata('custom', ManagerTest) === 'test');
+    assert(getClassMetadata('custom_method', ManagerTest) === 'testSomething');
   });
 
   it('should save data to class and list it', () => {
-    const dataRes = listMethodDataFromClass('custom', module);
+    const dataRes = listPropertyDataFromClass('custom', ManagerTest);
     assert(dataRes.length === 1);
 
-    const { method, data } = getMethodDataFromClass(
+    const { method, data } = getPropertyDataFromClass(
       'custom',
-      module,
+      ManagerTest,
       'testSomething'
     );
     assert(dataRes[0].method === method);
@@ -46,9 +41,9 @@ describe('/test/common/decoratorManager.test.ts', () => {
   });
 
   it('should get method meta data from method', () => {
-    const m = new module();
+    const m = new ManagerTest();
     // 挂载到方法上的元信息必须有实例
-    assert(getMethodMetadata('custom', m, 'testSomething') === 'methodData');
+    assert(getPropertyMetadata('custom', m, 'testSomething') === 'methodData');
   });
 
   it('should list preload module', () => {
@@ -99,38 +94,42 @@ describe('/test/common/decoratorManager.test.ts', () => {
   });
 
   it('should get attach data from method', () => {
-    const m = new module();
-    assert(getMethodMetadata('custom_attach', m, 'index').length === 3);
+    const m = new ManagerTest();
+    assert(getPropertyMetadata('custom_attach', m, 'index').length === 3);
     assert(
-      getMethodDataFromClass('custom_attach_to_class', module, 'index')
+      getPropertyDataFromClass('custom_attach_to_class', ManagerTest, 'index')
         .length === 3
     );
   });
 
   it('should get attach data from class', () => {
-    assert(getClassMetadata('custom_class_attach', module).length === 4);
+    assert(getClassMetadata('custom_class_attach', ManagerTest).length === 4);
+  });
+
+  it('should get name from class', () => {
+    expect(ManagerTest.name).toEqual('ManagerTest');
+    expect(getProviderName(ManagerTest)).toEqual('managerTest');
+    expect(getProviderName(class Test {})).toBeUndefined();
   });
 
   it('should get id from class', () => {
-    assert(module.name === 'ManagerTest');
-    assert(getProviderId(module) === 'managerTest');
-
-    assert(getProviderId(class Test {}) === 'test');
+    expect(getProviderId(ManagerTest)).toEqual('123');
   });
 
   it('should get property data', () => {
-    const m = new module();
+    const m = new ManagerTest();
     assert(
       getPropertyMetadata('custom_property', m, 'testProperty') === 'property_a'
     );
     assert(
-      getPropertyDataFromClass('custom_property_class', module, 'testProperty')
+      getPropertyDataFromClass('custom_property_class', ManagerTest, 'testProperty')
         .length === 3
     );
   });
 
   it('should get object definition metadata', () => {
-    assert(getObjectDefinition(module).scope === 'Singleton');
+    const objDefinition = getObjectDefinition(ManagerTest);
+    expect(objDefinition.scope).toEqual('Singleton');
   });
 
   it('savePropertyDataToClass should be ok', () => {
@@ -154,14 +153,14 @@ describe('/test/common/decoratorManager.test.ts', () => {
   });
 
 
-  it('should generateProvideId be ok', () => {
-    saveIdentifierMapping('@ok:test1', '123');
-    const id = generateProvideId('@ok:test1', 'ok');
-    assert.deepEqual('ok:test1', id, 'provide id is not ok:test1');
-    const id2 = generateProvideId('ok:test1', 'ok');
-    assert.deepEqual('ok:test1', id2, 'provide id is not ok:test1');
-    clearAllModule();
-  });
+  // it('should generateProvideId be ok', () => {
+  //   saveIdentifierMapping('@ok:test1', '123');
+  //   const id = generateProvideId('@ok:test1', 'ok');
+  //   assert.deepEqual('ok:test1', id, 'provide id is not ok:test1');
+  //   const id2 = generateProvideId('ok:test1', 'ok');
+  //   assert.deepEqual('ok:test1', id2, 'provide id is not ok:test1');
+  //   clearAllModule();
+  // });
 
   it('should test getPropertyType', function () {
 

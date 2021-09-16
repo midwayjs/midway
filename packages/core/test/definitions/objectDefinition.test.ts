@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { ObjectDefinition } from '../../src/definitions/objectDefinition';
-import { ScopeEnum } from '../../src';
+import { ScopeEnum } from '@midwayjs/decorator';
 
 describe('/test/definitions/objectDefinition.test.ts', () => {
   it('definition should be ok', () => {
@@ -8,9 +8,6 @@ describe('/test/definitions/objectDefinition.test.ts', () => {
     expect(definition.isAsync()).false;
     definition.asynchronous = true;
     expect(definition.isAsync()).true;
-    expect(definition.isAutowire()).true;
-    definition.autowire = true;
-    expect(definition.isAutowire()).true;
 
     definition.scope = ScopeEnum.Prototype;
     expect(definition.isRequestScope()).false;

@@ -1,6 +1,6 @@
-import { Config, Plugin, Logger, Provide, Async, App } from '@midwayjs/decorator';
-import { IMidwayCoreApplication } from '../../../../../src';
-@Async()
+import { Config, Plugin, Logger, Provide, App } from '@midwayjs/decorator';
+import { IMidwayApplication } from '../../../../../src';
+
 @Provide()
 export class BaseService {
   @Config('hello')
@@ -13,5 +13,5 @@ export class BaseService {
   logger;
 
   @App()
-  test: IMidwayCoreApplication;
+  test: IMidwayApplication;
 }

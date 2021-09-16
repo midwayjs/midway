@@ -1,4 +1,4 @@
-import {App, Async, Config, Destroy, Init, Inject, Provide, Plugin} from '@midwayjs/decorator';
+import {App, Config, Destroy, Init, Inject, Provide, Plugin} from '@midwayjs/decorator';
 
 export interface Warrior {
   katana1;
@@ -34,7 +34,6 @@ export class BaseService {
   }
 }
 
-@Async()
 @Provide('serviceAsync')
 export class BaseServiceAsync {
 
@@ -50,7 +49,6 @@ export class BaseServiceAsync {
   }
 }
 
-@Async()
 @Provide('serviceGenerator')
 export class BaseServiceGenerator {
 

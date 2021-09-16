@@ -4,7 +4,7 @@ import { Configuration } from '@midwayjs/decorator';
   imports: [
     require('../../midway-plugin-mock/src'),
     require('../../midway-plugin-ok/src'),
-    require('../../midway-plugin-no-pkg-json/dist'),
+    require('../../midway-plugin-no-pkg-json/dist/configuration'),
     require('../../midway-plugin-oktwo/src')
   ],
   importObjects: {

@@ -2,7 +2,6 @@
 export const ALL = 'common:all_value_key';
 
 // common
-export const PRIORITY_KEY = 'common:priority';
 export const SCHEDULE_KEY = 'common:schedule';
 export const CONFIGURATION_KEY = 'common:configuration';
 export const RULES_KEY = 'common:rules';
@@ -10,7 +9,6 @@ export const ASPECT_KEY = 'common:aspect';
 
 // faas
 export const FUNC_KEY = 'faas:func';
-export const HANDLER_KEY = 'faas:handler';
 export const SERVERLESS_FUNC_KEY = 'faas:serverless:function';
 
 // web
@@ -66,12 +64,14 @@ export const NAMED_TAG = 'named';
 
 // The name of the target at design time
 export const INJECT_TAG = 'inject';
-
-// used to store constructor arguments tags
-export const TAGGED = 'injection:tagged';
-
-// used to store class properties tags
-export const TAGGED_PROP = 'injection:tagged_props';
+// The name inject custom decorator with resolver
+export const INJECT_CUSTOM_TAG = 'inject_custom_tag';
+//
+// // used to store constructor arguments tags
+// export const TAGGED = 'injection:tagged';
+//
+// // used to store class properties tags
+// export const TAGGED_PROP = 'injection:tagged_props';
 
 // used to store class to be injected
 export const TAGGED_CLS = 'injection:tagged_class';

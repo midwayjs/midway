@@ -1,4 +1,4 @@
-import { providerWrapper, IApplicationContext } from '../../../../../src/';
+import { providerWrapper, IMidwayContainer } from '../../../../../src/';
 
 class MyTestObj {
   _notfound = null;
@@ -28,23 +28,23 @@ class MyTestAuto {
   }
 }
 
-export function otherFactory(context: IApplicationContext) {
+export function otherFactory(context: IMidwayContainer) {
   return async (adapterName: string) => {
     return new MyTestObj(adapterName);
   };
 }
 
-export function otherFactory1(context: IApplicationContext) {
+export function otherFactory1(context: IMidwayContainer) {
   return new MyTestObj('adapterName');
 }
 
-export function otherFactory2(context: IApplicationContext) {
+export function otherFactory2(context: IMidwayContainer) {
   return async (adapterName: string) => {
     return new MyTestAuto(adapterName);
   };
 }
 
-export function otherFactory3(context: IApplicationContext) {
+export function otherFactory3(context: IMidwayContainer) {
   return new MyTestAuto('test');
 }
 
@@ -61,12 +61,10 @@ providerWrapper([
     // 用于测试自动装配是否成功
     id: 'otherFactory2',
     provider: otherFactory2,
-    isAutowire: true,
   },
   {
     // 用于测试自动装配是否成功
     id: 'otherFactory3',
     provider: otherFactory3,
-    isAutowire: true,
   },
 ]);

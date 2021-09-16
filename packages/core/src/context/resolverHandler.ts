@@ -6,7 +6,7 @@ import {
   IResolverHandler,
   FrameworkDecoratorMetadata,
   IObjectDefinition,
-  IApplicationContext,
+  IMidwayContainer,
 } from '../interface';
 
 const debug = util.debuglog('midway:container');
@@ -15,7 +15,7 @@ export class ResolverHandler implements IResolverHandler {
   private handlerMap: Map<string, HandlerFunction>;
   private resolverFactory: ManagedResolverFactory;
 
-  constructor(container: IApplicationContext, factory: ManagedResolverFactory) {
+  constructor(container: IMidwayContainer, factory: ManagedResolverFactory) {
     this.resolverFactory = factory;
     this.handlerMap = new Map<string, HandlerFunction>();
     this.bindCreatedHook();
@@ -83,7 +83,7 @@ export class ResolverHandler implements IResolverHandler {
     if (prop && getterHandler) {
       if (prop.propertyName) {
         Object.defineProperty(instance, prop.propertyName, {
-          get: () => getterHandler(prop.key, prop.meta, instance),
+          get: () => getterHandler(prop.targetKey, prop.meta, instance),
           configurable: true, // 继承对象有可能会有相同属性，这里需要配置成 true
           enumerable: true,
         });

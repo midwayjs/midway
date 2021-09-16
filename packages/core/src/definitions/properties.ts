@@ -4,7 +4,7 @@ import { format } from 'util';
 import { IProperties } from '../interface';
 
 export class ObjectProperties implements IProperties {
-  private innerConfig = {};
+  private innerConfig: Map<ObjectIdentifier, any> = new Map();
 
   get size(): number {
     return this.keys().length;
@@ -31,7 +31,7 @@ export class ObjectProperties implements IProperties {
   }
 
   has(key: ObjectIdentifier): boolean {
-    return this.innerConfig[key] !== undefined;
+    return this.innerConfig.get(key) !== undefined;
   }
 
   set(key: ObjectIdentifier, value: any): any {
@@ -43,22 +43,14 @@ export class ObjectProperties implements IProperties {
   putAll(props: IProperties): void {
     const keys = props.keys();
     for (const key of keys) {
-      if (typeof this.innerConfig[key] === 'object') {
-        this.set(key, _.defaultsDeep(props.get(key), this.innerConfig[key]));
+      if (typeof this.innerConfig.get(key) === 'object') {
+        this.set(
+          key,
+          _.defaultsDeep(props.get(key), this.innerConfig.get(key))
+        );
       } else {
         this.set(key, props.get(key));
       }
-    }
-  }
-
-  putObject(props: Record<string, unknown>, needClone = false) {
-    if (needClone) {
-      const tmp = _.cloneDeep(props);
-      _.defaultsDeep(tmp, this.innerConfig);
-      this.innerConfig = tmp;
-    } else {
-      _.defaultsDeep(props, this.innerConfig);
-      this.innerConfig = props;
     }
   }
 
@@ -83,16 +75,10 @@ export class ObjectProperties implements IProperties {
   }
 
   clear(): void {
-    this.innerConfig = {};
+    this.innerConfig.clear();
   }
 
   toJSON(): Record<string, unknown> {
     return JSON.parse(JSON.stringify(this.innerConfig));
-  }
-
-  clone(): IProperties {
-    const cfg = new ObjectProperties();
-    cfg.putObject(this.toJSON());
-    return cfg;
   }
 }

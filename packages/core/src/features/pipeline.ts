@@ -132,7 +132,7 @@ export interface IPipelineHandler {
 
 ////////////// implements ///////////////////////
 
-import { IApplicationContext } from '../interface';
+import { IMidwayContainer } from '../interface';
 import { providerWrapper } from '../context/providerWrapper';
 
 export class PipelineContext implements IPipelineContext {
@@ -176,10 +176,10 @@ interface IValveResult {
 }
 
 export class PipelineHandler implements IPipelineHandler {
-  private applicationContext: IApplicationContext;
+  private applicationContext: IMidwayContainer;
   // 默认的 valves (@Pipeline(['test1', 'test2']))
   private valves: string[];
-  constructor(applicationContext: IApplicationContext, valves?: string[]) {
+  constructor(applicationContext: IMidwayContainer, valves?: string[]) {
     this.applicationContext = applicationContext;
     this.valves = valves;
   }
@@ -375,7 +375,7 @@ export class PipelineHandler implements IPipelineHandler {
 }
 
 export function pipelineFactory(
-  applicationContext: IApplicationContext,
+  applicationContext: IMidwayContainer,
   valves?: string[]
 ) {
   return new PipelineHandler(applicationContext, valves);

@@ -11,7 +11,6 @@ import {
   listModule,
   RouterOption,
   ServerlessTriggerType,
-  PRIORITY_KEY,
   SERVERLESS_FUNC_KEY,
   WEB_RESPONSE_KEY,
   WEB_ROUTER_KEY,
@@ -156,8 +155,7 @@ export class WebRouterCollector {
       module
     );
 
-    // sort for priority
-    let priority = getClassMetadata(PRIORITY_KEY, module);
+    let priority;
     // implement middleware in controller
     const middleware = controllerOption.routerOptions.middleware;
 

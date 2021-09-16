@@ -1,12 +1,9 @@
 import * as path from 'path';
-import { clearAllModule, MidwayContainer, MidwayRequestContainer, DirectoryFileDetector } from '../../src';
+import { MidwayContainer, MidwayRequestContainer, DirectoryFileDetector } from '../../src';
 import { App } from '../fixtures/ts-app-inject/app';
 import { TestCons } from '../fixtures/ts-app-inject/test';
-import * as decs from '@midwayjs/decorator';
-import { CONFIG_KEY, getIdentifierMapping, LOGGER_KEY, PLUGIN_KEY } from '@midwayjs/decorator';
+import { APPLICATION_KEY, clearAllModule, CONFIG_KEY, LOGGER_KEY, PLUGIN_KEY } from '@midwayjs/decorator';
 import * as assert from 'assert';
-
-const { APPLICATION_KEY } = decs;
 
 function buildLoadDir(arr, baseDir) {
   return arr.map(dir => {
@@ -132,16 +129,15 @@ describe('/test/context/midwayContainer.test.ts', () => {
       return console;
     });
 
+    await container.ready();
+
     const context = { logger: console };
     const requestCtx = new MidwayRequestContainer(
       context,
       container
     );
-    const module = require(path.join(
-      __dirname,
-      '../fixtures/base-app-constructor/src/lib/service'
-    ));
-    const baseServiceCtx = await requestCtx.getAsync(module['BaseService']);
+    const module = require('../fixtures/base-app-constructor/src/lib/service');
+    const baseServiceCtx = await requestCtx.getAsync(module.BaseService);
     assert(baseServiceCtx.config.c === 120);
     assert(baseServiceCtx.plugin2.text === 2);
     assert(baseServiceCtx.logger === console);
@@ -166,6 +162,8 @@ describe('/test/context/midwayContainer.test.ts', () => {
       return console;
     });
 
+    await container.ready();
+
     const context = { logger: console };
     const requestCtx = new MidwayRequestContainer(
       context,
@@ -180,6 +178,8 @@ describe('/test/context/midwayContainer.test.ts', () => {
     container.setFileDetector(new DirectoryFileDetector({
       loadDir: path.join(__dirname, '../fixtures/ts-app-inject')
     }));
+
+    await container.ready();
 
     const tt = container.get<TestCons>('testCons');
     expect(tt.ts).toBeGreaterThan(0);
@@ -201,7 +201,7 @@ describe('/test/context/midwayContainer.test.ts', () => {
     }));
 
     await container.ready();
-    assert((container.registry as unknown as Map<string, any>).has(getIdentifierMapping('userService')));
+    expect(container.registry.hasObject('userService')).toBeTruthy();
   });
 
 });

@@ -1,13 +1,12 @@
 import { ObjectIdentifier, ScopeEnum } from '@midwayjs/decorator';
-import { IApplicationContext } from '../interface';
+import { IMidwayContainer } from '../interface';
 import { FUNCTION_INJECT_KEY } from '../common/constants';
 
 export function providerWrapper(
   wrapperInfo: Array<{
     id: ObjectIdentifier;
-    provider: (context: IApplicationContext, args?: any) => any;
+    provider: (context: IMidwayContainer, args?: any) => any;
     scope?: ScopeEnum;
-    isAutowire?: boolean;
   }>
 ): void {
   for (const info of wrapperInfo) {

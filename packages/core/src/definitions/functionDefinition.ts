@@ -7,13 +7,13 @@ import {
   IProperties,
   IObjectCreator,
   IObjectDefinition,
-  IApplicationContext,
+  IMidwayContainer,
   HandlerProp,
 } from '../interface';
 import { ObjectCreator } from './objectCreator';
 
 class FunctionWrapperCreator extends ObjectCreator {
-  doConstruct(Clzz: any, args?: any, context?: IApplicationContext): any {
+  doConstruct(Clzz: any, args?: any, context?: IMidwayContainer): any {
     if (!Clzz) {
       return null;
     }
@@ -23,7 +23,7 @@ class FunctionWrapperCreator extends ObjectCreator {
   async doConstructAsync(
     Clzz: any,
     args?: any,
-    context?: IApplicationContext
+    context?: IMidwayContainer
   ): Promise<any> {
     if (!Clzz) {
       return null;
@@ -57,10 +57,6 @@ export class FunctionDefinition implements IObjectDefinition {
   protected innerAutowire = false;
   protected innerScope: ScopeEnum = ScopeEnum.Singleton;
 
-  set autowire(autowire: boolean) {
-    this.innerAutowire = autowire;
-  }
-
   getAttr(key: ObjectIdentifier): any {}
 
   hasAttr(key: ObjectIdentifier): boolean {
@@ -77,10 +73,6 @@ export class FunctionDefinition implements IObjectDefinition {
 
   isAsync(): boolean {
     return this.asynchronous;
-  }
-
-  isAutowire(): boolean {
-    return this.innerAutowire;
   }
 
   isDirect(): boolean {

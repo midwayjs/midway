@@ -3,27 +3,15 @@
  */
 import { IManagedInstance, ObjectIdentifier } from '@midwayjs/decorator';
 import * as _ from '../common/lodashWrap';
-import { KEYS, VALUE_TYPE } from '../common/constants';
+import { KEYS } from '../common/constants';
 import {
-  ManagedJSON,
-  ManagedList,
-  ManagedMap,
-  ManagedObject,
-  ManagedProperties,
-  ManagedProperty,
-  ManagedReference,
-  ManagedSet,
-  ManagedValue,
-} from './managed';
-import {
-  IApplicationContext,
   IManagedResolver,
   IObjectDefinition,
   REQUEST_CTX_KEY,
   REQUEST_OBJ_CTX_KEY,
   IManagedResolverFactoryCreateOptions,
+  IMidwayContainer,
 } from '../interface';
-import { ObjectProperties } from '../definitions/properties';
 import { NotFoundError } from '../common/notFoundError';
 import * as util from 'util';
 
@@ -52,73 +40,10 @@ export class BaseManagedResolver implements IManagedResolver {
   }
 }
 
-/**
- * 解析json
- */
-class JSONResolver extends BaseManagedResolver {
-  get type(): string {
-    return KEYS.JSON_ELEMENT;
-  }
-
-  resolve(managed: IManagedInstance): any {
-    const mjson = managed as ManagedJSON;
-    return JSON.parse(this._factory.tpl(mjson.value));
-  }
-
-  async resolveAsync(managed: IManagedInstance): Promise<any> {
-    return this.resolve(managed);
-  }
-}
-
-/**
- * 解析值
- */
-class ValueResolver extends BaseManagedResolver {
-  get type(): string {
-    return KEYS.VALUE_ELEMENT;
-  }
-
-  /**
-   * 解析不通类型的值
-   * @param managed 类型接口
-   * @param props 注入的属性值
-   */
-  _resolveCommon(managed: IManagedInstance): any {
-    const mv = managed as ManagedValue;
-    switch (mv.valueType) {
-      case VALUE_TYPE.STRING:
-      case VALUE_TYPE.TEMPLATE:
-        return this._factory.tpl(mv.value);
-      case VALUE_TYPE.NUMBER:
-        return Number(this._factory.tpl(mv.value));
-      case VALUE_TYPE.INTEGER:
-        return parseInt(this._factory.tpl(mv.value), 10);
-      case VALUE_TYPE.DATE:
-        return new Date(this._factory.tpl(mv.value));
-      case VALUE_TYPE.BOOLEAN:
-        return mv.value === 'true';
-    }
-
-    return mv.value;
-  }
-
-  resolve(managed: IManagedInstance): any {
-    const mv = managed as ManagedValue;
-    if (mv.valueType === VALUE_TYPE.MANAGED) {
-      return this._factory.resolveManaged(mv.value);
-    } else {
-      return this._resolveCommon(managed);
-    }
-  }
-
-  async resolveAsync(managed: IManagedInstance): Promise<any> {
-    const mv = managed as ManagedValue;
-    if (mv.valueType === VALUE_TYPE.MANAGED) {
-      return this._factory.resolveManagedAsync(mv.value);
-    } else {
-      return this._resolveCommon(managed);
-    }
-  }
+export class ManagedReference implements IManagedInstance {
+  type = KEYS.REF_ELEMENT;
+  name: string;
+  args?: any;
 }
 
 /**
@@ -141,205 +66,23 @@ class RefResolver extends BaseManagedResolver {
 }
 
 /**
- * 解析 list
- */
-class ListResolver extends BaseManagedResolver {
-  get type(): string {
-    return KEYS.LIST_ELEMENT;
-  }
-
-  resolve(managed: IManagedInstance): any {
-    const ml = managed as ManagedList;
-    const arr = [];
-    for (const item of ml) {
-      arr.push(this._factory.resolveManaged(item));
-    }
-    return arr;
-  }
-
-  async resolveAsync(managed: IManagedInstance): Promise<any> {
-    const ml = managed as ManagedList;
-    const arr = [];
-    for (const item of ml) {
-      arr.push(await this._factory.resolveManagedAsync(item));
-    }
-    return arr;
-  }
-}
-
-/**
- * 解析set
- */
-class SetResolver extends BaseManagedResolver {
-  get type(): string {
-    return KEYS.SET_ELEMENT;
-  }
-
-  resolve(managed: IManagedInstance): any {
-    const ms = managed as ManagedSet;
-    const s = new Set();
-    for (const item of ms) {
-      s.add(this._factory.resolveManaged(item));
-    }
-    return s;
-  }
-
-  async resolveAsync(managed: IManagedInstance): Promise<any> {
-    const ms = managed as ManagedSet;
-    const s = new Set();
-    for (const item of ms) {
-      s.add(await this._factory.resolveManagedAsync(item));
-    }
-    return s;
-  }
-}
-
-/**
- * 解析map
- */
-class MapResolver extends BaseManagedResolver {
-  get type(): string {
-    return KEYS.MAP_ELEMENT;
-  }
-
-  resolve(managed: IManagedInstance): any {
-    const mm = managed as ManagedMap;
-    const m = new Map();
-    for (const key of mm.keys()) {
-      m.set(key, this._factory.resolveManaged(mm.get(key)));
-    }
-    return m;
-  }
-
-  async resolveAsync(managed: IManagedInstance): Promise<any> {
-    const mm = managed as ManagedMap;
-    const m = new Map();
-    for (const key of mm.keys()) {
-      m.set(key, await this._factory.resolveManagedAsync(mm.get(key)));
-    }
-    return m;
-  }
-}
-
-/**
- * 解析properties
- */
-class PropertiesResolver extends BaseManagedResolver {
-  get type(): string {
-    return KEYS.PROPS_ELEMENT;
-  }
-
-  resolve(managed: IManagedInstance): any {
-    const m = managed as ManagedProperties;
-    const cfg = new ObjectProperties();
-    const keys = m.keys();
-    for (const key of keys) {
-      cfg.setProperty(key, this._factory.resolveManaged(m.getProperty(key)));
-    }
-    return cfg;
-  }
-
-  async resolveAsync(managed: IManagedInstance): Promise<any> {
-    const m = managed as ManagedProperties;
-    const cfg = new ObjectProperties();
-    const keys = m.keys();
-    for (const key of keys) {
-      cfg.setProperty(
-        key,
-        await this._factory.resolveManagedAsync(m.getProperty(key))
-      );
-    }
-    return cfg;
-  }
-}
-
-/**
- * 解析property
- */
-class PropertyResolver extends BaseManagedResolver {
-  get type(): string {
-    return KEYS.PROPERTY_ELEMENT;
-  }
-
-  resolve(managed: IManagedInstance): any {
-    const mp = managed as ManagedProperty;
-    return this._factory.resolveManaged(mp.value);
-  }
-
-  async resolveAsync(managed: IManagedInstance): Promise<any> {
-    const mp = managed as ManagedProperty;
-    return this._factory.resolveManagedAsync(mp.value);
-  }
-}
-
-/**
- * 解析 object
- */
-class ObjectResolver extends BaseManagedResolver {
-  get type(): string {
-    return KEYS.OBJECT_ELEMENT;
-  }
-
-  resolve(managed: IManagedInstance): any {
-    const mo = managed as ManagedObject;
-    return this._factory.create({ definition: mo.definition });
-  }
-
-  async resolveAsync(managed: IManagedInstance): Promise<any> {
-    const mo = managed as ManagedObject;
-    return this._factory.createAsync({ definition: mo.definition });
-  }
-}
-
-/**
  * 解析工厂
  */
 export class ManagedResolverFactory {
   private resolvers = {};
-  private _props = null;
   private creating = new Map<string, boolean>();
   singletonCache = new Map<ObjectIdentifier, any>();
-  context: IApplicationContext;
+  context: IMidwayContainer;
   afterCreateHandler = [];
   beforeCreateHandler = [];
 
-  constructor(context: IApplicationContext) {
+  constructor(context: IMidwayContainer) {
     this.context = context;
 
     // 初始化解析器
     this.resolvers = {
-      json: new JSONResolver(this),
-      value: new ValueResolver(this),
-      list: new ListResolver(this),
-      set: new SetResolver(this),
-      map: new MapResolver(this),
-      props: new PropertiesResolver(this),
-      property: new PropertyResolver(this),
-      object: new ObjectResolver(this),
       ref: new RefResolver(this),
     };
-  }
-
-  get props() {
-    if (!this._props) {
-      this._props = this.context.props.toJSON();
-    }
-    return this._props;
-  }
-
-  /**
-   * 用于解析模版化的值
-   * example: {{aaa.bbb.ccc}}
-   * @param value 配置的模版值
-   */
-  tpl(value) {
-    if (typeof value === 'string' && value.indexOf('{{') > -1) {
-      return _.template(value, {
-        // use `{{` and `}}` as delimiters
-        interpolate: /{{([\s\S]+?)}}/g,
-      })(this.props);
-    }
-    return value;
   }
 
   registerResolver(resolver: IManagedResolver) {
@@ -364,8 +107,7 @@ export class ManagedResolverFactory {
 
   /**
    * 同步创建对象
-   * @param definition 对象定义
-   * @param args 参数
+   * @param opt
    */
   create(opt: IManagedResolverFactoryCreateOptions): any {
     const { definition, args } = opt;
@@ -394,12 +136,6 @@ export class ManagedResolverFactory {
     let constructorArgs = [];
     if (args && _.isArray(args) && args.length > 0) {
       constructorArgs = args;
-    } else {
-      if (definition.constructorArgs) {
-        for (const arg of definition.constructorArgs) {
-          constructorArgs.push(this.resolveManaged(arg));
-        }
-      }
     }
 
     for (const handler of this.beforeCreateHandler) {
@@ -421,11 +157,10 @@ export class ManagedResolverFactory {
     }
 
     if (definition.properties) {
-      const keys = definition.properties.keys();
+      const keys = definition.properties.keys() as string[];
       for (const key of keys) {
-        const identifier = definition.properties.getProperty(key);
         try {
-          inst[key] = this.resolveManaged(identifier);
+          inst[key] = this.resolveManaged(definition.properties.get(key));
         } catch (error) {
           if (NotFoundError.isClosePrototypeOf(error)) {
             const className = definition.path.name;
@@ -459,8 +194,7 @@ export class ManagedResolverFactory {
 
   /**
    * 异步创建对象
-   * @param definition 对象定义
-   * @param args 参数
+   * @param opt
    */
   async createAsync(opt: IManagedResolverFactoryCreateOptions): Promise<any> {
     const { definition, args } = opt;
@@ -489,17 +223,9 @@ export class ManagedResolverFactory {
     }
 
     const Clzz = definition.creator.load();
-    let constructorArgs;
+    let constructorArgs = [];
     if (args && _.isArray(args) && args.length > 0) {
       constructorArgs = args;
-    } else {
-      if (definition.constructorArgs) {
-        constructorArgs = [];
-        for (const arg of definition.constructorArgs) {
-          debug('id = %s resolve constructor arg %s.', definition.id, arg);
-          constructorArgs.push(await this.resolveManagedAsync(arg));
-        }
-      }
     }
 
     for (const handler of this.beforeCreateHandler) {
@@ -530,17 +256,12 @@ export class ManagedResolverFactory {
     }
 
     if (definition.properties) {
-      const keys = definition.properties.keys();
+      const keys = definition.properties.keys() as string[];
       for (const key of keys) {
-        const identifier = definition.properties.getProperty(key);
         try {
-          debug(
-            'id = %s resolve property key = %s => %s.',
-            definition.id,
-            key,
-            identifier
+          inst[key] = await this.resolveManagedAsync(
+            definition.properties.get(key)
           );
-          inst[key] = await this.resolveManagedAsync(identifier);
         } catch (error) {
           if (NotFoundError.isClosePrototypeOf(error)) {
             const className = definition.path.name;
@@ -586,7 +307,7 @@ export class ManagedResolverFactory {
   }
 
   beforeEachCreated(
-    fn: (Clzz: any, constructorArgs: [], context: IApplicationContext) => void
+    fn: (Clzz: any, constructorArgs: [], context: IMidwayContainer) => void
   ) {
     this.beforeCreateHandler.push(fn);
   }
@@ -594,7 +315,7 @@ export class ManagedResolverFactory {
   afterEachCreated(
     fn: (
       ins: any,
-      context: IApplicationContext,
+      context: IMidwayContainer,
       definition?: IObjectDefinition
     ) => void
   ) {
@@ -672,6 +393,7 @@ export class ManagedResolverFactory {
    * 遍历依赖树判断是否循环依赖
    * @param identifier 目标id
    * @param definition 定义描述
+   * @param depth
    */
   public depthFirstSearch(
     identifier: string,
@@ -680,21 +402,21 @@ export class ManagedResolverFactory {
   ): boolean {
     if (definition) {
       debug('dfs for %s == %s start.', identifier, definition.id);
-      if (definition.constructorArgs) {
-        const args = definition.constructorArgs.map(
-          val => (val as ManagedReference).name
-        );
-        if (args.indexOf(identifier) > -1) {
-          debug(
-            'dfs exist in constructor %s == %s.',
-            identifier,
-            definition.id
-          );
-          return true;
-        }
-      }
+      // if (definition.constructorArgs) {
+      //   const args = definition.constructorArgs.map(
+      //     val => (val as ManagedReference).name
+      //   );
+      //   if (args.indexOf(identifier) > -1) {
+      //     debug(
+      //       'dfs exist in constructor %s == %s.',
+      //       identifier,
+      //       definition.id
+      //     );
+      //     return true;
+      //   }
+      // }
       if (definition.properties) {
-        const keys = definition.properties.keys();
+        const keys = definition.properties.keys() as string[];
         if (keys.indexOf(identifier) > -1) {
           debug('dfs exist in properties %s == %s.', identifier, definition.id);
           return true;
@@ -706,7 +428,8 @@ export class ManagedResolverFactory {
           let iden = key;
           const ref: ManagedReference = definition.properties.get(key);
           if (ref && ref.name) {
-            iden = ref.name;
+            iden =
+              this.context.identifierMapping.getRelation(ref.name) ?? ref.name;
           }
           if (iden === identifier) {
             debug(

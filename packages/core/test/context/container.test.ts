@@ -9,9 +9,7 @@ import {
   Ninja,
   SubCustom
 } from '../fixtures/class_sample';
-import { recursiveGetMetadata } from '../../src/common/reflectTool';
-import { APPLICATION_KEY, CONFIG_KEY, PLUGIN_KEY, TAGGED_PROP } from '@midwayjs/decorator';
-import 'reflect-metadata';
+import { APPLICATION_KEY, CONFIG_KEY, PLUGIN_KEY, INJECT_TAG, getClassExtendedMetadata } from '@midwayjs/decorator';
 
 import { BMWX1, Car, Electricity, Gas, Tesla, Turbo } from '../fixtures/class_sample_car';
 import { childAsyncFunction,
@@ -61,35 +59,16 @@ describe('/test/context/container.test.ts', () => {
       const defition = container.registry.getDefinition(identifier);
       const tareget = defition.path;
       return {
-        recursiveMetadata: recursiveGetMetadata(TAGGED_PROP, tareget),
-        ownMetadata: Reflect.getOwnMetadata(TAGGED_PROP, tareget),
+        recursiveMetadata: getClassExtendedMetadata(INJECT_TAG, tareget),
       };
     });
     const grandsonMetadata = metadatas[0];
     const childMetadata = metadatas[1];
     const parentMetadata = metadatas[2];
 
-    expect(grandsonMetadata.recursiveMetadata).toHaveLength(3);
-    expect(grandsonMetadata.recursiveMetadata).toContain(grandsonMetadata.ownMetadata);
-    expect(childMetadata.recursiveMetadata).toHaveLength(2);
-    expect(childMetadata.recursiveMetadata).toContain(childMetadata.ownMetadata);
-    expect(parentMetadata.recursiveMetadata).toHaveLength(1);
-    expect(parentMetadata.recursiveMetadata).toContain(parentMetadata.ownMetadata);
-
-    expect(grandsonMetadata.recursiveMetadata).toStrictEqual([
-      grandsonMetadata.ownMetadata,
-      childMetadata.ownMetadata,
-      parentMetadata.ownMetadata
-    ]);
-    expect(grandsonMetadata.recursiveMetadata).toStrictEqual([
-      grandsonMetadata.ownMetadata,
-      ...childMetadata.recursiveMetadata,
-    ]);
-    expect(grandsonMetadata.recursiveMetadata).toStrictEqual([
-      grandsonMetadata.ownMetadata,
-      childMetadata.ownMetadata,
-      ...parentMetadata.recursiveMetadata
-    ]);
+    expect(Object.keys(grandsonMetadata.recursiveMetadata)).toEqual(["katana1", "katana2", "katana3"]);
+    expect(Object.keys(childMetadata.recursiveMetadata)).toEqual(["katana1", "katana2"]);
+    expect(Object.keys(parentMetadata.recursiveMetadata)).toEqual(["katana1"]);
   });
 
   it('should extends base with decorator be ok', async () => {

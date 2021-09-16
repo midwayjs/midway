@@ -37,7 +37,6 @@ export interface IMessageSource {
  */
 export interface IObjectFactory {
   registry: IObjectDefinitionRegistry;
-  isAsync(identifier: ObjectIdentifier): boolean;
   get<T>(identifier: new () => T, args?: any): T;
   get<T>(identifier: ObjectIdentifier, args?: any): T;
   getAsync<T>(identifier: new () => T, args?: any): Promise<T>;
@@ -60,7 +59,6 @@ export interface IObjectDefinition {
   dependsOn: ObjectIdentifier[];
   constructorArgs: IManagedInstance[];
   properties: IProperties;
-  isAutowire(): boolean;
   isAsync(): boolean;
   isSingletonScope(): boolean;
   isRequestScope(): boolean;
@@ -83,13 +81,12 @@ export interface HandlerProp {
  */
 export interface IObjectDefinitionMetadata {
   namespace?: string;
-  id: string;
+  id: ObjectIdentifier;
   name: string;
   initMethod: string;
   destroyMethod: string;
   constructMethod: string;
   scope: ScopeEnum;
-  autowire: boolean;
   srcPath: string;
   path: any;
   export: string;
@@ -104,17 +101,18 @@ export interface IObjectDefinitionMetadata {
 
 export interface FrameworkDecoratorMetadata {
   key: string;
+  targetKey: string;
   propertyName: string;
   meta: any;
 }
 
 export interface IObjectCreator {
   load(): any;
-  doConstruct(Clzz: any, args?: any, context?: IApplicationContext): any;
+  doConstruct(Clzz: any, args?: any, context?: IMidwayContainer): any;
   doConstructAsync(
     Clzz: any,
     args?: any,
-    context?: IApplicationContext
+    context?: IMidwayContainer
   ): Promise<any>;
   doInit(obj: any): void;
   doInitAsync(obj: any): Promise<void>;
@@ -133,7 +131,6 @@ export interface IObjectDefinitionRegistry {
   );
   getSingletonDefinitionIds(): ObjectIdentifier[];
   getDefinition(identifier: ObjectIdentifier): IObjectDefinition;
-  getDefinitionByPath(path: string): IObjectDefinition;
   getDefinitionByName(name: string): IObjectDefinition[];
   removeDefinition(identifier: ObjectIdentifier): void;
   hasDefinition(identifier: ObjectIdentifier): boolean;
@@ -141,6 +138,8 @@ export interface IObjectDefinitionRegistry {
   hasObject(identifier: ObjectIdentifier): boolean;
   registerObject(identifier: ObjectIdentifier, target: any);
   getObject(identifier: ObjectIdentifier): any;
+  getIdentifierRelation(): IIdentifierRelationShip;
+  setIdentifierRelation(identifierRelation: IIdentifierRelationShip);
 }
 /**
  * 属性配置抽象
@@ -159,7 +158,6 @@ export interface IProperties {
   addProperty(key: ObjectIdentifier, value: any): void;
   setProperty(key: ObjectIdentifier, value: any): any;
   clear(): void;
-  clone(): IProperties;
 }
 /**
  * 资源配置抽象
@@ -180,19 +178,7 @@ export interface IResource {
   getSubResources(): IResource[];
   createRelative(path: string): IResource;
 }
-/**
- * IoC上下文抽象
- */
-export interface IApplicationContext extends IObjectFactory {
-  disableConflictCheck: boolean;
-  baseDir: string;
-  parent: IApplicationContext;
-  props: IProperties;
-  dependencyMap: Map<string, ObjectDependencyTree>;
-  ready();
-  stop(): Promise<void>;
-  registerObject(identifier: ObjectIdentifier, target: any);
-}
+
 /**
  * 解析内部管理的属性、json、ref等实例的解析器
  * 同时创建这些对象的实际使用的对象
@@ -249,7 +235,19 @@ export interface IResolverHandler {
   getHandler(key: string);
 }
 
-export interface IMidwayContainer extends IApplicationContext {
+export interface IIdentifierRelationShip {
+  saveClassRelation(module: any, namespace?: string);
+  saveFunctionRelation(ObjectIdentifier, uuid);
+  hasRelation(id: ObjectIdentifier): boolean;
+  getRelation(id: ObjectIdentifier): string;
+}
+
+export interface IMidwayContainer extends IObjectFactory {
+  parent: IMidwayContainer;
+  identifierMapping: IIdentifierRelationShip;
+  ready();
+  stop(): Promise<void>;
+  registerObject(identifier: ObjectIdentifier, target: any);
   load(module?: any);
   bind<T>(target: T, options?: ObjectDefinitionOptions): void;
   bind<T>(
@@ -262,13 +260,6 @@ export interface IMidwayContainer extends IApplicationContext {
   setFileDetector(fileDetector: IFileDetector);
   registerDataHandler(handlerType: string, handler: (...args) => any);
   createChild(): IMidwayContainer;
-  // resolve<T>(target: T): T;
-  /**
-   * 默认不添加创建的 configuration 到 configurations 数组中
-   */
-  // createConfiguration(): IContainerConfiguration;
-  // containsConfiguration(namespace: string): boolean;
-  // addConfiguration(configuration: IContainerConfiguration);
   getConfigService(): IConfigService;
   getEnvironmentService(): IEnvironmentService;
   getInformationService(): IInformationService;
@@ -276,7 +267,6 @@ export interface IMidwayContainer extends IApplicationContext {
   getAspectService(): IAspectService;
   getCurrentEnv(): string;
   getResolverHandler(): IResolverHandler;
-  // addDirectoryFilter(filter: ResolveFilter[]);
   /**
    * Set value to app attribute map
    * @param key
@@ -292,7 +282,7 @@ export interface IMidwayContainer extends IApplicationContext {
 }
 
 export interface IFileDetector {
-  run(container: IApplicationContext);
+  run(container: IMidwayContainer);
 }
 
 export interface IConfigService {
@@ -382,11 +372,6 @@ export interface IMidwayBaseApplication<T extends IMidwayContext = IMidwayContex
 }
 
 export type IMidwayApplication<T extends IMidwayContext = IMidwayContext, FrameworkApplication = unknown> = IMidwayBaseApplication<T> & FrameworkApplication;
-
-/**
- * @deprecated
- */
-export interface IMidwayCoreApplication extends IMidwayApplication {}
 
 export interface IMidwayBootstrapOptions {
   logger?: ILogger | boolean;

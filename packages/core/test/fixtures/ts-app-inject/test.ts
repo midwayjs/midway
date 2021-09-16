@@ -2,9 +2,6 @@ import { Config, Provide } from '@midwayjs/decorator';
 
 @Provide()
 export class TestCons {
-  constructor(@Config() aa: any) {
-    // ignore
-  }
-
+  @Config() aa: any;
   ts = Date.now();
 }

@@ -1,4 +1,4 @@
-import { Inject, Provide } from '@midwayjs/decorator';
+import { Inject, Provide, Init } from '@midwayjs/decorator';
 
 export interface Engine {
   start(fuel: Fuel);
@@ -46,16 +46,13 @@ export class Electricity implements Fuel {
 
 @Provide()
 export class Car {
-
+  @Inject('engine')
   private engine: Engine;
+  @Inject()
   protected fuel: Fuel;
 
-  constructor(
-    @Inject('engine') engine: Engine,
-    @Inject() fuel: Fuel
-  ) {
-    this.engine = engine;
-    this.fuel = fuel;
+  @Init()
+  init() {
     this.fuel.add(40);
   }
 
@@ -76,12 +73,15 @@ export class Tesla extends Car {
   private computer;
 
   constructor(
-    @Inject('engine') engine: Engine,
     computer,
-    @Inject() fuel: Fuel
   ) {
-    super(engine, fuel);
+    super();
     this.computer = computer;
+  }
+
+  @Init()
+  init() {
+    super.init();
     this.fuel.add(40);
   }
 
@@ -96,6 +96,13 @@ export class Tesla extends Car {
 
 @Provide()
 export class BMWX1 extends Car {
+
+  // TODO 继承 @Init 装饰器
+  // @Init()
+  // init() {
+  //   this.fuel.add(40);
+  // }
+
   getBrand() {
     return 'bmw';
   }

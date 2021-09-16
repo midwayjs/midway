@@ -123,3 +123,20 @@ export function generateRandomId(): string {
   // => f9b327e70bbcf42494ccb28b2d98e00e
   return crypto.randomBytes(16).toString('hex');
 }
+
+export function merge(target: any, src: any) {
+  if (!target) {
+    target = src;
+    src = null;
+  }
+  if (!target) {
+    return null;
+  }
+  if (Array.isArray(target)) {
+    return target.concat(src || []);
+  }
+  if (typeof target === 'object') {
+    return Object.assign({}, target, src);
+  }
+  throw new Error('can not merge meta that type of ' + typeof target);
+}

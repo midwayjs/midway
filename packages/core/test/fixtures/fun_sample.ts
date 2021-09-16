@@ -1,8 +1,8 @@
-import { IApplicationContext, ScopeEnum } from '../../src';
-import { Provide, Scope, Init } from '@midwayjs/decorator';
+import { IMidwayContainer } from '../../src';
+import { Provide, Scope, Init, ScopeEnum } from '@midwayjs/decorator';
 
-export function testInjectFunction(context: IApplicationContext) {
-  const child: any = context.get('childFn');
+export function testInjectFunction(context: IMidwayContainer) {
+  const child: any = context.get('child');
   return child.a + child.b;
 }
 
@@ -13,12 +13,12 @@ export function childFunction() {
   };
 }
 
-export async function testInjectAsyncFunction(context: IApplicationContext) {
+export async function testInjectAsyncFunction(context: IMidwayContainer) {
   const child: any = await context.getAsync('childAsync');
   return child.c + child.d;
 }
 
-export async function childAsyncFunction(context: IApplicationContext) {
+export async function childAsyncFunction(context: IMidwayContainer) {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve({
@@ -44,12 +44,12 @@ export class AliSingleton {
   }
 }
 
-export async function singletonFactory(context: IApplicationContext) {
+export async function singletonFactory(context: IMidwayContainer) {
   const inst = await context.getAsync(AliSingleton);
   return inst.getInstance();
 }
 
-export async function singletonFactory2(context: IApplicationContext) {
+export async function singletonFactory2(context: IMidwayContainer) {
   return async () => {
     const inst = await context.getAsync<AliSingleton>('aliSingleton');
     return inst.getInstance();

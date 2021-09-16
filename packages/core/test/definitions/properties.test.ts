@@ -43,40 +43,5 @@ describe('/test/definitions/properties.test.ts', () => {
       config1.set('ccc', 'this is %s-%s test');
       expect(config1.get('ccc', 'mf', 'hhh')).eq('this is mf-hhh test');
     });
-    it('test clone should be ok', () => {
-      const config1 = new ObjectProperties();
-      config1.set('aa', 22);
-      config1.set('bb', '1243');
-      config1.set('ee', {dd: '222', ff: 123});
-
-      const config2 = config1.clone();
-      expect(config2.get('aa')).eq(22);
-      expect(config2.get('bb')).eq('1243');
-      expect(config2.set('bb', '111')).eq('1243');
-      expect(config2.get('ee')).deep.eq({dd: '222', ff: 123});
-    });
-    it('test putObject needClone should be ok', () => {
-      const config1 = new ObjectProperties();
-      config1.set('aa', 22);
-      config1.set('bb', '1243');
-      const aa = {
-        b: 1,
-        c: {a: '232'}
-      };
-      config1.putObject(aa, true);
-      aa.c.a = '123';
-      expect(config1.get('c.a')).eq('232');
-
-      const bb = {
-        bb: 1,
-        cc: {aaa: '232'}
-      };
-      config1.putObject(bb);
-      bb.cc.aaa = '123';
-      expect(config1.get('cc.aaa')).eq('123');
-
-      expect(config1.stringPropertyNames()).deep.eq(['bb', 'cc', 'b', 'c', 'aa']);
-      expect(config1.getProperty('jjj', 123)).eq(123);
-    });
   });
 });

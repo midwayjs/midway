@@ -1,5 +1,5 @@
-import {Provide, Inject, Scope} from '@midwayjs/decorator';
-import { ScopeEnum } from '../../src';
+import { Provide, Inject, Scope, ScopeEnum } from '@midwayjs/decorator';
+
 @Provide()
 export class TestOne1 {
   name = 'one';
@@ -24,10 +24,10 @@ export class TestThree1 {
 @Provide()
 @Scope(ScopeEnum.Request)
 export class CircularTwo {
+  @Inject('circularOne')
   public ooo;
-  constructor(@Inject() circularOne: any) {
+  constructor() {
     this.ts = Date.now();
-    this.ooo = circularOne;
   }
   @Inject()
   public circularOne: any;
@@ -90,10 +90,8 @@ export class TestOne {
 @Provide()
 export class TestTwo {
   ts = 'this is two';
+  @Inject('testOne')
   one: any;
-  constructor(@Inject() testOne: TestOne) {
-    this.one = testOne;
-  }
 
   @Inject('testOne')
   one1: any;

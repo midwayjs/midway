@@ -1,7 +1,7 @@
 
 import { expect } from 'chai';
-import { Param, Session, Query, Body, Headers, File, Files, WEB_ROUTER_PARAM_KEY, RouteParamTypes, RequestIP, RequestPath } from '@midwayjs/decorator';
-import { getPropertyDataFromClass, extractKoaLikeValue, extractExpressLikeValue } from '../src';
+import { Param, Session, Query, Body, Headers, File, Files, WEB_ROUTER_PARAM_KEY, RouteParamTypes, RequestIP, RequestPath, getPropertyDataFromClass } from '@midwayjs/decorator';
+import { extractKoaLikeValue, extractExpressLikeValue } from '../src';
 
 class Test {
   async doget(@Param('aa')aa: any,

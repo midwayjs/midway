@@ -1,21 +1,21 @@
 import { MidwayContainer } from './container';
 import { REQUEST_CTX_KEY, IMidwayContainer } from '../interface';
-import { parsePrefix } from '../util/';
-import {
-  getIdentifierMapping,
-  hasIdentifierMapping,
-  PIPELINE_IDENTIFIER,
-} from '@midwayjs/decorator';
+import { PIPELINE_IDENTIFIER } from '@midwayjs/decorator';
 
 export class MidwayRequestContainer extends MidwayContainer {
   private readonly applicationContext: IMidwayContainer;
 
   constructor(ctx, applicationContext: IMidwayContainer) {
-    super(null, applicationContext);
+    super(applicationContext);
     this.applicationContext = applicationContext;
     this.configService = this.applicationContext.getConfigService();
     this.environmentService = this.applicationContext.getEnvironmentService();
     this.aspectService = this.applicationContext.getAspectService();
+
+    // update legacy relationship
+    this.registry.setIdentifierRelation(
+      this.applicationContext.registry.getIdentifierRelation()
+    );
 
     this.ctx = ctx;
     // register ctx
@@ -40,26 +40,14 @@ export class MidwayRequestContainer extends MidwayContainer {
   }
 
   get<T = any>(identifier: any, args?: any): T {
-    // 处理传入类，获取 uuid
     if (typeof identifier !== 'string') {
       identifier = this.getIdentifier(identifier);
-    } else {
-      // 处理字符串返回明确的缓存的对象
-      if (this.registry.hasObject(identifier)) {
-        return this.findRegisterObject(identifier);
-      }
-    }
-
-    identifier = parsePrefix(identifier);
-
-    // 处理传入的如果是老的字符串 id，找到 uuid
-    if (hasIdentifierMapping(identifier)) {
-      identifier = getIdentifierMapping(identifier);
     }
 
     if (this.registry.hasObject(identifier)) {
       return this.findRegisterObject(identifier);
     }
+
     const definition =
       this.applicationContext.registry.getDefinition(identifier);
     if (definition) {
@@ -82,21 +70,8 @@ export class MidwayRequestContainer extends MidwayContainer {
   }
 
   async getAsync<T = any>(identifier: any, args?: any): Promise<T> {
-    // 处理传入类，获取 uuid
     if (typeof identifier !== 'string') {
       identifier = this.getIdentifier(identifier);
-    } else {
-      // 处理字符串返回明确的缓存的对象
-      if (this.registry.hasObject(identifier)) {
-        return this.findRegisterObject(identifier);
-      }
-    }
-
-    identifier = parsePrefix(identifier);
-
-    // 处理传入的如果是老的字符串 id，找到 uuid
-    if (hasIdentifierMapping(identifier)) {
-      identifier = getIdentifierMapping(identifier);
     }
 
     if (this.registry.hasObject(identifier)) {
@@ -125,7 +100,6 @@ export class MidwayRequestContainer extends MidwayContainer {
   }
 
   async ready() {
-    this.readied = true;
     // ignore other things
   }
 

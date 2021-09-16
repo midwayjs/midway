@@ -1,5 +1,8 @@
 import 'reflect-metadata';
-import { ReflectResult } from '@midwayjs/decorator';
+
+export interface ReflectResult {
+  [key: string]: any[];
+}
 
 const functionPrototype = Object.getPrototypeOf(Function);
 

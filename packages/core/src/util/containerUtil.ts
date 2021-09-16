@@ -20,7 +20,7 @@ export const createModuleContainer = (options: {
 };
 
 export const createDirectoryGlobContainer = options => {
-  const applicationContext = new MidwayContainer(options.baseDir, undefined);
+  const applicationContext = new MidwayContainer();
   applicationContext.setFileDetector(
     new DirectoryFileDetector({
       loadDir: options.baseDir,

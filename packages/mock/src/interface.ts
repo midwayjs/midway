@@ -1,5 +1,5 @@
 import { MockApplication, MockOption } from 'egg-mock';
-import { IApplicationContext, IMidwayContainer } from '@midwayjs/core';
+import { IMidwayContainer } from '@midwayjs/core';
 
 /**
  * @deprecated
@@ -43,7 +43,7 @@ export interface MidwayMockApplication extends MockApplication {
   baseDir: string;
   enablePlugins: any;
   getApplicationContext(): IMidwayContainer;
-  getPluginContext(): IApplicationContext;
+  getPluginContext(): IMidwayContainer;
   getPlugin(pluginName: string): any;
   getLogger(name?: string): any;
   getConfig(key?: string): any;

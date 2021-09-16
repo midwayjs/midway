@@ -1,15 +1,15 @@
-import { getClassMetadata, getObjectDefProps, listModule, ScopeEnum, WS_CONTROLLER_KEY, WSController } from '../../src';
+import { getClassMetadata, getObjectDefinition, listModule, ScopeEnum, WS_CONTROLLER_KEY, WSController } from '../../src';
 
 @WSController('bbb')
 class TestFun {
 }
 
-describe('/test/ws/wscontroller.test.ts', function () {
+describe('/test/ws/wsController.test.ts', function () {
   it('test ws controller decorator', () => {
     const meta = getClassMetadata(WS_CONTROLLER_KEY, TestFun);
     expect(meta['namespace']).toEqual('bbb')
 
-    const def = getObjectDefProps(TestFun);
+    const def = getObjectDefinition(TestFun);
     expect(def).toEqual({
       scope: ScopeEnum.Request,
     });

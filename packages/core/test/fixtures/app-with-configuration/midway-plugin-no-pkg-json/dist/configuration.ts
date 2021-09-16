@@ -8,4 +8,4 @@ const abPath = path.resolve(path.join(__dirname, './config/config.default'));
     path.join(__dirname, './config/config.local')
   ]
 })
-export class AutoConfiguraion {}
+export class AutoConfiguration {}

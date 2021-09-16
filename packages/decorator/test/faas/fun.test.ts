@@ -1,21 +1,15 @@
 import {
-  Func,
   FUNC_KEY,
+  Provide,
   getClassMetadata,
-  getObjectDefProps,
   listModule,
-  ScopeEnum,
   ServerlessFunction,
   ServerlessTrigger,
   ServerlessTriggerType,
 } from '../../src';
 
-@Func('index.handler', { middleware: ['hello'] })
-class TestFun {
-}
-
+@Provide()
 class TestFun1 {
-  @Func('ttt.handler')
   @ServerlessFunction({
     functionName: 'abcde'
   })
@@ -54,23 +48,10 @@ class TestFun1 {
 
 describe('/test/faas/fun.test.ts', () => {
   it('fun decorator should be ok', () => {
-    const meta = getClassMetadata(FUNC_KEY, TestFun);
-    expect(meta).toStrictEqual([
-      {
-        funHandler: 'index.handler',
-        middleware: ['hello'],
-      },
-    ]);
-
     const c = getClassMetadata(FUNC_KEY, TestFun1);
     expect(c).toMatchSnapshot();
 
-    const def = getObjectDefProps(TestFun);
-    expect(def).toStrictEqual({
-      scope: ScopeEnum.Request,
-    });
-
     const m = listModule(FUNC_KEY);
-    expect(m.length).toEqual(2);
+    expect(m.length).toEqual(1);
   });
 });

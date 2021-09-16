@@ -157,18 +157,6 @@ export abstract class BaseFramework<
   }
 
   protected async containerDirectoryLoad(options: IMidwayBootstrapOptions) {
-    if (options.applicationContext) {
-      // 如果有传入全局容器，就不需要再次扫描了
-      return;
-    }
-
-    // 废弃 deprecated
-    if (options.preloadModules && options.preloadModules.length) {
-      for (const preloadModule of options.preloadModules) {
-        this.applicationContext.bindClass(preloadModule);
-      }
-    }
-
     // register app
     this.applicationContext.registerDataHandler(
       APPLICATION_KEY,

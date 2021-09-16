@@ -4,14 +4,12 @@ import {
   // LIFECYCLE_IDENTIFIER_PREFIX,
   MidwayFrameworkType,
   Provide,
-  // resetModule,
+  clearAllModule,
 } from '@midwayjs/decorator';
 import { MidwayContextLogger } from '@midwayjs/logger';
 import * as assert from 'assert';
 import * as path from 'path';
 import {
-  clearAllModule,
-  // clearContainerCache,
   IMidwayApplication,
   IMidwayBootstrapOptions,
   MidwayRequestContainer,
