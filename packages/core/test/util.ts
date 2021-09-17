@@ -1,6 +1,16 @@
-export function matchObjectPropertyInArray(arr, matchObject): boolean {
+/**
+ * 任意一个数组中的对象，和预期的对象属性一致即可
+ * @param arr
+ * @param matchObject
+ * @param ignoreProperties
+ */
+export function matchObjectPropertyInArray(arr, matchObject, debug = false): boolean {
   let matched = false;
+  let idx = 0;
   for (let item of arr) {
+    if (debug) {
+      console.log('check idx = ' + idx++);
+    }
     let num = Object.keys(matchObject).length;
     for (const property in matchObject) {
       // console.log('start match ' + property);
@@ -9,6 +19,9 @@ export function matchObjectPropertyInArray(arr, matchObject): boolean {
       if (deepEqual(item[property], matchObject[property])) {
         num--;
       } else {
+        if (debug) {
+          console.log(`property ${property} not match, 预期=${matchObject[property]}, 实际=${item[property]}`);
+        }
         break;
       }
     }

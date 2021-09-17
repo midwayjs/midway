@@ -157,6 +157,11 @@ export abstract class BaseFramework<
   }
 
   protected async containerDirectoryLoad(options: IMidwayBootstrapOptions) {
+    if (options.preloadModules && options.preloadModules.length) {
+      for (const preloadModule of options.preloadModules) {
+        this.applicationContext.bindClass(preloadModule);
+      }
+    }
     // register app
     this.applicationContext.registerDataHandler(
       APPLICATION_KEY,

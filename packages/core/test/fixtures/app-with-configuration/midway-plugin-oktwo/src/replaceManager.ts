@@ -2,10 +2,9 @@ import { Config, Provide, Inject} from '@midwayjs/decorator';
 
 @Provide()
 export class ReplaceManagerTwo {
-  hello;
-  constructor(@Inject() ctx: any) {
-    this.hello = ctx;
-  }
+
+  @Inject('ctx') hello: any;
+
   @Inject()
   ctx: any;
 

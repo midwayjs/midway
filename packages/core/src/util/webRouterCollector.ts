@@ -6,7 +6,8 @@ import {
   getClassMetadata,
   getPropertyDataFromClass,
   getPropertyMetadata,
-  getProviderId,
+  getProviderName,
+  getProviderUUId,
   isRegExp,
   listModule,
   RouterOption,
@@ -21,6 +22,10 @@ import { MidwayContainer } from '../context/container';
 import { DirectoryFileDetector } from './fileDetector';
 
 export interface RouterInfo {
+  /**
+   * uuid
+   */
+  id: string;
   /**
    * router prefix
    */
@@ -149,7 +154,8 @@ export class WebRouterCollector {
   }
 
   protected collectRoute(module, functionMeta = false) {
-    const controllerId = getProviderId(module);
+    const controllerId = getProviderName(module);
+    const id = getProviderUUId(module);
     const controllerOption: ControllerOption = getClassMetadata(
       CONTROLLER_KEY,
       module
@@ -193,6 +199,7 @@ export class WebRouterCollector {
           getPropertyMetadata(WEB_RESPONSE_KEY, module, webRouter.method) || [];
 
         const data: RouterInfo = {
+          id,
           prefix,
           routerName: webRouter.routerName || '',
           url: webRouter.path,
@@ -228,20 +235,14 @@ export class WebRouterCollector {
   }
 
   protected collectFunctionRoute(module, functionMeta = false) {
-    // 老的函数路由
-    const webRouterInfo: Array<
-      | {
-          funHandler?: string;
-          event: string;
-          method: string;
-          path: string;
-          key: string;
-          middleware: string[];
-        }
-      | FaaSMetadata.TriggerMetadata
-    > = getClassMetadata(FUNC_KEY, module);
+    // serverlessTrigger metadata
+    const webRouterInfo: Array<FaaSMetadata.TriggerMetadata> = getClassMetadata(
+      FUNC_KEY,
+      module
+    );
 
-    const controllerId = getProviderId(module);
+    const controllerId = getProviderName(module);
+    const id = getProviderUUId(module);
 
     const prefix = '/';
 
@@ -257,151 +258,96 @@ export class WebRouterCollector {
     }
 
     for (const webRouter of webRouterInfo) {
-      if (webRouter['type']) {
-        // 新的 @ServerlessTrigger 写法
-        if (webRouter['metadata']?.['path']) {
-          const routeArgsInfo =
-            getPropertyDataFromClass(
-              WEB_ROUTER_PARAM_KEY,
-              module,
-              webRouter['methodName']
-            ) || [];
+      // 新的 @ServerlessTrigger 写法
+      if (webRouter['metadata']?.['path']) {
+        const routeArgsInfo =
+          getPropertyDataFromClass(
+            WEB_ROUTER_PARAM_KEY,
+            module,
+            webRouter['methodName']
+          ) || [];
 
-          const routerResponseData =
+        const routerResponseData =
+          getPropertyMetadata(
+            WEB_RESPONSE_KEY,
+            module,
+            webRouter['methodName']
+          ) || [];
+        // 新 http/api gateway 函数
+        const data: RouterInfo = {
+          id,
+          prefix,
+          routerName: '',
+          url: webRouter['metadata']['path'],
+          requestMethod: webRouter['metadata']?.['method'] ?? 'get',
+          method: webRouter['methodName'],
+          description: '',
+          summary: '',
+          handlerName: `${controllerId}.${webRouter['methodName']}`,
+          funcHandlerName: `${controllerId}.${webRouter['methodName']}`,
+          controllerId,
+          middleware: webRouter['metadata']?.['middleware'] || [],
+          controllerMiddleware: [],
+          requestMetadata: routeArgsInfo,
+          responseMetadata: routerResponseData,
+        };
+        if (functionMeta) {
+          const functionMeta =
             getPropertyMetadata(
-              WEB_RESPONSE_KEY,
+              SERVERLESS_FUNC_KEY,
               module,
               webRouter['methodName']
-            ) || [];
-          // 新 http/api gateway 函数
-          const data: RouterInfo = {
+            ) || {};
+          const functionName =
+            functionMeta['functionName'] ??
+            webRouter['functionName'] ??
+            createFunctionName(module, webRouter['methodName']);
+          data.functionName = functionName;
+          data.functionTriggerName = webRouter['type'];
+          data.functionTriggerMetadata = webRouter['metadata'];
+          data.functionMetadata = {
+            functionName,
+            ...functionMeta,
+          };
+        }
+        this.checkDuplicateAndPush(prefix, data);
+      } else {
+        if (functionMeta) {
+          const functionMeta =
+            getPropertyMetadata(
+              SERVERLESS_FUNC_KEY,
+              module,
+              webRouter['methodName']
+            ) || {};
+          const functionName =
+            functionMeta['functionName'] ??
+            webRouter['functionName'] ??
+            createFunctionName(module, webRouter['methodName']);
+          // 其他类型的函数
+          this.checkDuplicateAndPush(prefix, {
+            id,
             prefix,
             routerName: '',
-            url: webRouter['metadata']['path'],
-            requestMethod: webRouter['metadata']?.['method'] ?? 'get',
+            url: '',
+            requestMethod: '',
             method: webRouter['methodName'],
             description: '',
             summary: '',
             handlerName: `${controllerId}.${webRouter['methodName']}`,
             funcHandlerName: `${controllerId}.${webRouter['methodName']}`,
             controllerId,
-            middleware: webRouter['metadata']?.['middleware'] || [],
-            controllerMiddleware: [],
-            requestMetadata: routeArgsInfo,
-            responseMetadata: routerResponseData,
-          };
-          if (functionMeta) {
-            data.functionName = webRouter['functionName'];
-            data.functionTriggerName = webRouter['type'];
-            data.functionTriggerMetadata = webRouter['metadata'];
-            const functionMeta =
-              getPropertyMetadata(
-                SERVERLESS_FUNC_KEY,
-                module,
-                webRouter['methodName']
-              ) || {};
-            data.functionMetadata = {
-              functionName: webRouter['functionName'],
-              ...functionMeta,
-            };
-          }
-          this.checkDuplicateAndPush(prefix, data);
-        } else {
-          if (functionMeta) {
-            const functionMeta =
-              getPropertyMetadata(
-                SERVERLESS_FUNC_KEY,
-                module,
-                webRouter['methodName']
-              ) || {};
-            // 其他类型的函数
-            this.checkDuplicateAndPush(prefix, {
-              prefix,
-              routerName: '',
-              url: '',
-              requestMethod: '',
-              method: webRouter['methodName'],
-              description: '',
-              summary: '',
-              handlerName: `${controllerId}.${webRouter['methodName']}`,
-              funcHandlerName: `${controllerId}.${webRouter['methodName']}`,
-              controllerId,
-              middleware: [],
-              controllerMiddleware: [],
-              requestMetadata: [],
-              responseMetadata: [],
-              functionName: webRouter['functionName'],
-              functionTriggerName: webRouter['type'],
-              functionTriggerMetadata: webRouter['metadata'],
-              functionMetadata: {
-                functionName: webRouter['functionName'],
-                ...functionMeta,
-              },
-            });
-          }
-        }
-      } else {
-        // 老的 @Func 写法
-        if (webRouter['path'] || webRouter['middleware']) {
-          const data: RouterInfo = {
-            prefix,
-            routerName: '',
-            url: webRouter['path'] ?? '',
-            requestMethod: webRouter['method'] ?? 'get',
-            method: webRouter['key'] ?? '',
-            description: '',
-            summary: '',
-            handlerName: `${controllerId}.${webRouter['key']}`,
-            funcHandlerName:
-              webRouter['funHandler'] || `${controllerId}.${webRouter['key']}`,
-            controllerId,
-            middleware: webRouter['middleware'] || [],
+            middleware: [],
             controllerMiddleware: [],
             requestMetadata: [],
             responseMetadata: [],
-          };
-          if (functionMeta) {
-            // get function information
-            data.functionName = controllerId + '-' + (webRouter['key'] ?? '');
-            data.functionTriggerName = ServerlessTriggerType.HTTP;
-            data.functionTriggerMetadata = {
-              path: webRouter['path'] ?? '/',
-              method: webRouter['method'] ?? 'get',
-            };
-            data.functionMetadata = {
-              functionName: data.functionName,
-            };
-          }
-          // 老函数的 http
-          this.checkDuplicateAndPush(prefix, data);
-        } else {
-          if (functionMeta) {
-            // 非 http
-            this.checkDuplicateAndPush(prefix, {
-              prefix,
-              routerName: '',
-              url: '',
-              requestMethod: '',
-              method: webRouter['key'],
-              description: '',
-              summary: '',
-              handlerName: `${controllerId}.${webRouter['key']}`,
-              funcHandlerName:
-                webRouter['funHandler'] ||
-                `${controllerId}.${webRouter['key']}`,
-              controllerId,
-              middleware: webRouter['middleware'] || [],
-              controllerMiddleware: [],
-              requestMetadata: [],
-              responseMetadata: [],
-              functionName: webRouter['functionName'],
-              functionTriggerName: webRouter['type'],
-              functionTriggerMetadata: webRouter['metadata'],
-              functionMetadata: {
-                functionName: webRouter['functionName'],
-              },
-            });
-          }
+            functionName,
+            functionTriggerName: webRouter['type'],
+            functionTriggerMetadata: webRouter['metadata'],
+            functionMetadata: {
+              functionName,
+              ...functionMeta,
+            },
+          });
         }
       }
     }
@@ -516,4 +462,8 @@ export class WebRouterCollector {
     }
     prefixList.push(routerInfo);
   }
+}
+
+function createFunctionName(target, functionName) {
+  return getProviderName(target).replace(/[:#]/g, '-') + '-' + functionName;
 }

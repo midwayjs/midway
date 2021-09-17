@@ -94,7 +94,7 @@ describe('/test/baseFramework.test.ts', () => {
 
     const appCtx = framework.getApplicationContext();
 
-    const replaceManager: any = await appCtx.getAsync('@ok:replaceManager');
+    const replaceManager: any = await appCtx.getAsync('ok:replaceManager');
     expect(await replaceManager.getOne()).toEqual('ok');
   });
 
@@ -108,7 +108,7 @@ describe('/test/baseFramework.test.ts', () => {
       ),
     });
     const appCtx = framework.getApplicationContext();
-    const replaceManager: any = await appCtx.getAsync('@ok:replaceManager');
+    const replaceManager: any = await appCtx.getAsync('ok:replaceManager');
     assert((await replaceManager.getOne()) === 'ok1');
     mm.restore();
   });
@@ -129,7 +129,7 @@ describe('/test/baseFramework.test.ts', () => {
     });
 
     const appCtx = framework.getApplicationContext();
-    const replaceManager: any = await appCtx.getAsync('@ok:replaceManager');
+    const replaceManager: any = await appCtx.getAsync('ok:replaceManager');
     assert((await replaceManager.getOne()) === 'ok1');
     assert.ok(
       callback.withArgs('------auto configuration ready now').calledOnce
@@ -148,60 +148,17 @@ describe('/test/baseFramework.test.ts', () => {
     });
 
     const appCtx = framework.getApplicationContext();
-    const replaceManager: any = await appCtx.getAsync('@ok:replaceManager');
+    const replaceManager: any = await appCtx.getAsync('ok:replaceManager');
     assert((await replaceManager.getOne()) === 'oktwo');
     const replaceManagerno: any = await appCtx.getAsync(
-      '@midway-plugin-no-pkg-json:replaceManager'
+      'midway-plugin-no-pkg-json:replaceManager'
     );
     assert((await replaceManagerno.getOne()) === 'oktwo');
 
-    const replaceManagerTwo: any = await appCtx.getAsync('@ok:replaceManagerTwo');
+    const replaceManagerTwo: any = await appCtx.getAsync('ok:replaceManagerTwo');
     assert((await replaceManagerTwo.getOne()) === 'oktwo');
     mm.restore();
   });
-
-  it('should load configuration with namespace', async () => {
-    mm(process.env, 'MIDWAY_SERVER_ENV', 'local');
-    const framework = new LightFramework();
-    await framework.initialize({
-      baseDir: path.join(
-        __dirname,
-        './fixtures/app-with-configuration-namespace/base-app-decorator/src'
-      ),
-    });
-
-    const appCtx = framework.getApplicationContext();
-    // 取默认 namespace
-    const replaceManager1: any = await appCtx.getAsync(
-      '@midway-plugin-mock:replaceManager'
-    );
-    assert((await replaceManager1.getOne()) === 'one article');
-    // 取自定义 namespace
-    const replaceManager2: any = await appCtx.getAsync('@ok:replaceManager');
-    assert((await replaceManager2.getOne()) === 'ok3');
-    // 查看覆盖的情况
-    const baseService: any = await appCtx.getAsync('baseService');
-    expect(await baseService.getInformation()).toEqual('harryone article atmod,one article,ok3');
-
-    assert(baseService.helloworld === 234);
-
-    assert(baseService.articleManager1);
-    assert((await baseService.articleManager1.getOne()) === 'ok3empty');
-
-    assert(baseService.articleManager2);
-    assert((await baseService.articleManager2.getOne()) === 'ok3emptytwo');
-
-    const userManager: any = await appCtx.getAsync('userManager');
-    assert((await userManager.getUser()) === 'harryone article atmod');
-    assert((await userManager.getTest()) === 'testone article atmod bt');
-
-    const repm: any = await appCtx.getAsync(
-      '@midway-plugin-mod:replaceManager'
-    );
-    assert((await repm.getOne()) === 'one article mod');
-    mm.restore();
-  });
-
 
   it('should load configuration with object', async () => {
     mm(process.env, 'MIDWAY_SERVER_ENV', 'local');
@@ -220,7 +177,7 @@ describe('/test/baseFramework.test.ts', () => {
     );
     expect(await replaceManager1.getOne()).toEqual('one article');
     // 取自定义 namespace
-    const replaceManager2: any = await appCtx.getAsync('@ok:replaceManager');
+    const replaceManager2: any = await appCtx.getAsync('ok:replaceManager');
     expect(await replaceManager2.getOne()).toEqual('ok2');
     mm.restore();
   });
@@ -805,6 +762,18 @@ describe('/test/baseFramework.test.ts', () => {
 
     const config = framework.getConfiguration();
     expect(config.e).toEqual(333);
+  });
+
+
+  it('should test autoload', async () => {
+    const framework = new LightFramework();
+    await framework.initialize({
+      baseDir: path.join(__dirname, './fixtures/base-app-autoload/src'),
+    });
+
+    const applicationContext: any = framework.getApplicationContext();
+    const rid = applicationContext.identifierMapping.getRelation('userService');
+    expect(applicationContext.getManagedResolverFactory().singletonCache.has(rid)).toBeTruthy();
   });
 
 });

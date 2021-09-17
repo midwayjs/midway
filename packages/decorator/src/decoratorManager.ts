@@ -36,22 +36,6 @@ export class DecoratorManager extends Map {
    */
   injectMethodKeyPrefix = 'INJECTION_METHOD_META_DATA';
 
-  identifierUUIDRelationShipMapping = new Map();
-
-  saveIdentifierMapping(identifier, uuid) {
-    if (identifier !== uuid) {
-      return this.identifierUUIDRelationShipMapping.set(identifier, uuid);
-    }
-  }
-
-  getIdentifierMapping(identifier) {
-    return this.identifierUUIDRelationShipMapping.get(identifier);
-  }
-
-  hasIdentifierMapping(identifier) {
-    return this.identifierUUIDRelationShipMapping.has(identifier);
-  }
-
   saveModule(key, module) {
     if (!this.has(key)) {
       this.set(key, new Set());
@@ -61,11 +45,6 @@ export class DecoratorManager extends Map {
 
   resetModule(key) {
     this.set(key, new Set());
-  }
-
-  clear() {
-    this.identifierUUIDRelationShipMapping.clear();
-    super.clear();
   }
 
   static getDecoratorClassKey(decoratorNameKey: ObjectIdentifier) {

@@ -194,14 +194,4 @@ describe('/test/context/midwayContainer.test.ts', () => {
     expect(container.getEnvironmentService().getCurrentEnvironment()).toEqual('test');
   });
 
-  it('should test autoload', async () => {
-    const container = new MidwayContainer();
-    container.setFileDetector(new DirectoryFileDetector({
-      loadDir: path.join(__dirname, '../fixtures/base-app-autoload/src'),
-    }));
-
-    await container.ready();
-    expect(container.registry.hasObject('userService')).toBeTruthy();
-  });
-
 });

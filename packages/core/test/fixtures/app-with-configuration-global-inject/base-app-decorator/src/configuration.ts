@@ -2,7 +2,7 @@ import { Configuration } from '@midwayjs/decorator';
 
 @Configuration({
   imports: [
-    '../../sql/',
+    require('../../sql/'),
   ],
 })
 export class AutoConfiguration {

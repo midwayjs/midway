@@ -41,7 +41,6 @@ describe('/test/util/triggerCollector.test.ts', function () {
       "funcHandlerName": "helloHttpService.upload",
       "functionName": "helloHttpService-upload",
       "functionTriggerMetadata": {
-        "functionName": "helloHttpService-upload",
         "method": "get",
         "middleware": [
           "fmw:upload"
@@ -62,6 +61,9 @@ describe('/test/util/triggerCollector.test.ts', function () {
           "type": 0
         }
       ],
+      "functionMetadata": {
+        "functionName": "helloHttpService-upload",
+      }
     })).toBeTruthy();
 
     expect(matchObjectPropertyInArray(result, {
@@ -71,7 +73,6 @@ describe('/test/util/triggerCollector.test.ts', function () {
       "funcHandlerName": "helloHttpService.invoke",
       "functionName": "helloHttpService-invoke",
       "functionTriggerMetadata": {
-        "functionName": "helloHttpService-invoke",
         "method": "post",
         "middleware": [
           "auth"
@@ -96,7 +97,10 @@ describe('/test/util/triggerCollector.test.ts', function () {
       "responseMetadata": [],
       "routerName": "",
       "summary": "",
-      "url": "/update"
+      "url": "/update",
+      "functionMetadata": {
+        "functionName": "helloHttpService-invoke",
+      },
     })).toBeTruthy();
 
     expect(matchObjectPropertyInArray(result, {
@@ -105,7 +109,6 @@ describe('/test/util/triggerCollector.test.ts', function () {
       "funcHandlerName": "helloHttpService.invoke",
       "functionName": "helloHttpService-invoke",
       "functionTriggerMetadata": {
-        "functionName": "helloHttpService-invoke",
         "method": "get",
         "path": "/invoke"
       },
@@ -121,65 +124,35 @@ describe('/test/util/triggerCollector.test.ts', function () {
           'type': 1,
         },
       ],
-    })).toBeTruthy();
-
-    expect(matchObjectPropertyInArray(result, {
-      "controllerId": "helloHttpService",
-      "controllerMiddleware": [],
-      "funcHandlerName": "http.handler",
-      "functionName": "helloHttpService-handler",
-      "functionTriggerMetadata": {
-        "method": ['get', 'post', 'put', 'delete', 'head', 'patch', 'options'],
-        "path": "/other"
-      },
-      "functionTriggerName": "http",
-      "handlerName": "helloHttpService.handler",
-      "method": "handler",
-      "middleware": [
-        "auth"
-      ],
-      "prefix": "/",
-      "requestMetadata": [],
-      "requestMethod": "all",
-      "responseMetadata": [],
-      "routerName": "",
-      "summary": "",
-      "url": "/other"
-    })).toBeTruthy();
-
-    expect(matchObjectPropertyInArray(result, {
-      "controllerId": "helloHttpService",
-      "controllerMiddleware": [],
-      "funcHandlerName": "http.upload",
-      "functionName": "helloHttpService-upload",
-      "functionTriggerMetadata": {
-        "method": "get",
-        "path": "/"
+      "functionMetadata": {
+        "functionName": "helloHttpService-invoke",
       },
     })).toBeTruthy();
 
     expect(matchObjectPropertyInArray(result, {
       "funcHandlerName": "helloHttpService.upload",
       "functionName": "helloHttpService-upload",
-      "functionTriggerMetadata": {
-        "functionName": "helloHttpService-upload"
-      },
       "functionTriggerName": "hsf",
       "handlerName": "helloHttpService.upload",
       "method": "upload",
+      "functionMetadata": {
+        "functionName": "helloHttpService-upload",
+      }
     })).toBeTruthy();
 
     expect(matchObjectPropertyInArray(result, {
       "funcHandlerName": "helloHttpService.invoke",
       "functionName": "helloHttpService-invoke",
       "functionTriggerMetadata": {
-        "functionName": "helloHttpService-invoke",
         "payload": "",
         "type": "every",
         "value": "5m"
       },
       "functionTriggerName": "timer",
       "handlerName": "helloHttpService.invoke",
+      "functionMetadata": {
+        "functionName": "helloHttpService-invoke",
+      }
     })).toBeTruthy();
   });
 
@@ -194,15 +167,17 @@ describe('/test/util/triggerCollector.test.ts', function () {
         type: 'cron',
         value: '0 0 4 * * *',
         name: 'custom_timer',
+      },
+      functionMetadata: {
         functionName: 'helloAliyunService-handleTimerEvent'
       }
     })).toBeTruthy();
     expect(matchObjectPropertyInArray(result, {
-      functionName: 'helloAliyunService-handleEvent',
+      functionName: 'hello_bbb',
       functionMetadata: {
         functionName: 'hello_bbb',
         concurrency: 2,
-      }
+      },
     })).toBeTruthy();
   });
 

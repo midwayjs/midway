@@ -53,17 +53,23 @@ const debug = util.debuglog('midway:container:configuration');
 const globalDebugLogger = util.debuglog('midway:container');
 
 class ContainerConfiguration {
-  private namespace;
-
+  loadedMap = new WeakMap();
   constructor(readonly container: IMidwayContainer) {}
 
   load(module) {
+    let namespace = MAIN_MODULE_KEY;
     // 可能导出多个
     const configurationExports = this.getConfigurationExport(module);
     if (!configurationExports.length) return;
     // 多个的情况，数据交给第一个保存
     for (let i = 0; i < configurationExports.length; i++) {
       const configurationExport = configurationExports[i];
+
+      if (this.loadedMap.get(configurationExport)) {
+        // 已经加载过就跳过循环
+        continue;
+      }
+
       let configurationOptions: InjectionConfigurationOptions;
       if (configurationExport instanceof FunctionalConfiguration) {
         // 函数式写法
@@ -76,23 +82,23 @@ class ContainerConfiguration {
         );
       }
 
+      // 已加载标记，防止死循环
+      this.loadedMap.set(configurationExport, true);
+
       debug('   configuration export %j.', configurationOptions);
       if (configurationOptions) {
-        if (
-          this.namespace !== MAIN_MODULE_KEY &&
-          configurationOptions.namespace !== undefined
-        ) {
-          this.namespace = configurationOptions.namespace;
+        if (configurationOptions.namespace !== undefined) {
+          namespace = configurationOptions.namespace;
         }
         this.addImports(configurationOptions.imports);
         this.addImportObjects(configurationOptions.importObjects);
         this.addImportConfigs(configurationOptions.importConfigs);
-        this.bindConfigurationClass(configurationExport);
+        this.bindConfigurationClass(configurationExport, namespace);
       }
     }
 
     // bind module
-    this.container.bindClass(module, this.namespace);
+    this.container.bindClass(module, namespace);
   }
 
   addImportConfigs(importConfigs: string[]) {
@@ -109,16 +115,12 @@ class ContainerConfiguration {
       if (typeof importPackage === 'string') {
         importPackage = require(importPackage);
       }
-      // for package
-      const subContainerConfiguration = new ContainerConfiguration(
-        this.container
-      );
       if ('Configuration' in importPackage) {
         // component is object
         debug(
           '\n---------- start load configuration from submodule" ----------'
         );
-        subContainerConfiguration.load(importPackage);
+        this.load(importPackage);
         debug(
           `---------- end load configuration from sub package "${importPackage}" ----------`
         );
@@ -128,12 +130,10 @@ class ContainerConfiguration {
             this.container.getCurrentEnv()
           )
         ) {
-          subContainerConfiguration.load(
-            (importPackage as IComponentInfo).component
-          );
+          this.load((importPackage as IComponentInfo).component);
         }
       } else {
-        subContainerConfiguration.load(importPackage);
+        this.load(importPackage);
       }
     }
   }
@@ -153,7 +153,7 @@ class ContainerConfiguration {
     }
   }
 
-  bindConfigurationClass(clzz, filePath?: string) {
+  bindConfigurationClass(clzz, namespace) {
     if (clzz instanceof FunctionalConfiguration) {
       // 函数式写法不需要绑定到容器
     } else {
@@ -161,8 +161,7 @@ class ContainerConfiguration {
       saveProviderId(undefined, clzz);
       const id = getProviderUUId(clzz);
       this.container.bind(id, clzz, {
-        namespace: this.namespace,
-        srcPath: filePath,
+        namespace: namespace,
         scope: ScopeEnum.Singleton,
       });
     }
@@ -175,7 +174,7 @@ class ContainerConfiguration {
     if (!exists) {
       saveModule(CONFIGURATION_KEY, {
         target: clzz,
-        namespace: this.namespace,
+        namespace: namespace,
       });
     }
   }

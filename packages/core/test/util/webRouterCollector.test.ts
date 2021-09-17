@@ -1,7 +1,6 @@
 import { WebRouterCollector } from '../../src';
 import { join } from 'path';
 import { clearAllModule } from '@midwayjs/decorator';
-// import { clearContainerCache } from '../../src';
 import { matchObjectPropertyInArray } from '../util';
 
 describe('/test/util/webRouterCollector.test.ts', function () {
@@ -26,7 +25,7 @@ describe('/test/util/webRouterCollector.test.ts', function () {
     // clearContainerCache();
     const collector = new WebRouterCollector(join(__dirname, '../fixtures/base-app-func-router'), { includeFunctionRouter: true});
     const result = await collector.getFlattenRouterTable();
-    expect(result.length).toEqual(8);
+    expect(result.length).toEqual(4);
     expect(matchObjectPropertyInArray(result, {
       'controllerId': 'helloHttpService',
       'funcHandlerName': 'helloHttpService.upload',
@@ -57,27 +56,6 @@ describe('/test/util/webRouterCollector.test.ts', function () {
       "funcHandlerName": "helloHttpService.invoke",
       "controllerId": "helloHttpService",
     })).toBeTruthy();
-
-    expect(matchObjectPropertyInArray(result, {
-      "prefix": "/",
-      "url": "/other",
-      "requestMethod": "all",
-      "method": "handler",
-      "handlerName": "helloHttpService.handler",
-      "funcHandlerName": "http.handler",
-      "controllerId": "helloHttpService",
-    })).toBeTruthy();
-
-    expect(matchObjectPropertyInArray(result, {
-      "prefix": "/",
-      "url": "",
-      "requestMethod": "get",
-      "method": "upload",
-      "handlerName": "helloHttpService.upload",
-      "funcHandlerName": "http.upload",
-      "controllerId": "helloHttpService",
-    })).toBeTruthy();
-
   });
 
   it('should sort param', function () {
