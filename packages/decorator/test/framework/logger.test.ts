@@ -1,7 +1,7 @@
 import {
   Logger,
   getClassMetadata,
-  LOGGER_KEY,
+  INJECT_CUSTOM_TAG,
 } from '../../src';
 
 class Test {
@@ -14,10 +14,7 @@ class Test {
 
 describe('/test/framework/logger.test.ts', () => {
   it('logger decorator should be ok', () => {
-    let data = getClassMetadata(LOGGER_KEY, Test);
-    expect(data).toStrictEqual([
-      { key: 'logger', propertyName: 'logger' },
-      { key: 'bbb', propertyName: 'bbb' },
-    ]);
+    let data = getClassMetadata(INJECT_CUSTOM_TAG, Test);
+    expect(data).toMatchSnapshot();
   });
 });

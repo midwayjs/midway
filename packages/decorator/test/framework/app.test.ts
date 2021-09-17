@@ -1,7 +1,7 @@
 import {
   App,
   getClassMetadata,
-  APPLICATION_KEY,
+  INJECT_CUSTOM_TAG,
 } from '../../src';
 
 class Test {
@@ -9,9 +9,9 @@ class Test {
   hhh: any;
 }
 
-describe('/test/framework/config.test.ts', () => {
-  it('config decorator should be ok', () => {
-    let data = getClassMetadata(APPLICATION_KEY, Test);
-    expect(data).toStrictEqual([{key: APPLICATION_KEY, meta: {type: undefined}, propertyName: 'hhh'}]);
+describe('/test/framework/app.test.ts', () => {
+  it('app decorator should be ok', () => {
+    let data = getClassMetadata(INJECT_CUSTOM_TAG, Test);
+    expect(data).toMatchSnapshot();
   });
 });

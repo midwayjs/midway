@@ -1,7 +1,7 @@
 import {
   getClassMetadata,
-  PLUGIN_KEY,
   Plugin,
+  INJECT_CUSTOM_TAG
 } from '../../src';
 
 class Test {
@@ -14,10 +14,7 @@ class Test {
 
 describe('/test/framework/plugin.test.ts', () => {
   it('plugin decorator should be ok', () => {
-    let data = getClassMetadata(PLUGIN_KEY, Test);
-    expect(data).toStrictEqual([
-      { key: 'test', propertyName: 'test' },
-      { key: 'bbb', propertyName: 'bbb' },
-    ]);
+    let data = getClassMetadata(INJECT_CUSTOM_TAG, Test);
+    expect(data).toMatchSnapshot();
   });
 });

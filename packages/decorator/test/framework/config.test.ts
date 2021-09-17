@@ -1,7 +1,7 @@
 import {
   Config,
   getClassMetadata,
-  CONFIG_KEY,
+  INJECT_CUSTOM_TAG,
 } from '../../src';
 
 class Test {
@@ -14,10 +14,7 @@ class Test {
 
 describe('/test/framework/config.test.ts', () => {
   it('config decorator should be ok', () => {
-    let data = getClassMetadata(CONFIG_KEY, Test);
-    expect(data).toStrictEqual([
-      { key: 'hhh', propertyName: 'hhh' },
-      { key: 'bbb', propertyName: 'bbb' },
-    ]);
+    let data = getClassMetadata(INJECT_CUSTOM_TAG, Test);
+    expect(data).toMatchSnapshot();
   });
 });

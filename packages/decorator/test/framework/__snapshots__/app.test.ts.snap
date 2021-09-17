@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`/test/framework/app.test.ts app decorator should be ok 1`] = `
+Object {
+  "hhh": Object {
+    "key": "__midway_framework_app__",
+    "meta": Object {
+      "type": undefined,
+    },
+    "propertyName": "hhh",
+  },
+}
+`;

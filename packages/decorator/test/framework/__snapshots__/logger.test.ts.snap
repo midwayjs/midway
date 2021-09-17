@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`/test/framework/logger.test.ts logger decorator should be ok 1`] = `
+Object {
+  "bbb": Object {
+    "key": "logger",
+    "propertyName": "bbb",
+    "targetKey": "bbb",
+  },
+  "logger": Object {
+    "key": "logger",
+    "propertyName": "logger",
+    "targetKey": "logger",
+  },
+}
+`;
