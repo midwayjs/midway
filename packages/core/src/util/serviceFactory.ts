@@ -4,8 +4,8 @@ import * as assert from 'assert';
  * 多客户端工厂实现
  */
 export abstract class ServiceFactory<T> {
-  private clients: Map<string, T> = new Map();
-  private options = {};
+  protected clients: Map<string, T> = new Map();
+  protected options = {};
 
   protected async initClients(options) {
     this.options = options;
