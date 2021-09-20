@@ -58,14 +58,10 @@ export class BootstrapStarter {
         })
       );
       this.applicationContext.load(
-        require(join(this.baseDir, 'configuration'))
+        this.globalOptions.configurationModule ??
+          require(join(this.baseDir, 'configuration'))
       );
       await this.applicationContext.ready();
-    }
-
-    // 调用 bootstrap 的 before 逻辑
-    if (this.globalOptions['beforeHandler']) {
-      await this.globalOptions['beforeHandler'](this.applicationContext);
     }
 
     // 获取全局配置
@@ -187,7 +183,6 @@ export class Bootstrap {
   static starter: BootstrapStarter;
   static logger: ILogger;
   static configured = false;
-  static beforeHandler;
 
   /**
    * set global configuration for midway
@@ -210,7 +205,6 @@ export class Bootstrap {
       process.chdir(configuration.appDir);
     }
 
-    configuration['beforeHandler'] = this.beforeHandler;
     this.getStarter().configure(configuration);
     return this;
   }
@@ -219,7 +213,6 @@ export class Bootstrap {
    * load midway framework unit
    * @param unit
    */
-  static load(unit: (globalConfig: unknown) => IMidwayFramework<any, any>);
   static load(unit: IMidwayFramework<any, any>);
   static load(unit: any) {
     this.getStarter().load(unit);
@@ -231,11 +224,6 @@ export class Bootstrap {
       this.starter = new BootstrapStarter();
     }
     return this.starter;
-  }
-
-  static before(beforeHandler: (container: IMidwayContainer) => void) {
-    this.beforeHandler = beforeHandler;
-    return this;
   }
 
   static async run() {

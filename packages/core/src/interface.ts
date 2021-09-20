@@ -386,6 +386,7 @@ export interface IMidwayBootstrapOptions {
   loadDir?: string[];
   disableConflictCheck?: boolean;
   applicationContext?: IMidwayContainer;
+  configurationModule?: any;
   isMainFramework?: boolean;
   globalApplicationHandler?: (type: MidwayFrameworkType) => IMidwayApplication;
   globalConfig?: any;

@@ -1,6 +1,6 @@
 import { Bootstrap, BootstrapStarter } from '@midwayjs/bootstrap';
 import {
-  IMidwayApplication,
+  IMidwayApplication, IMidwayContainer,
   IMidwayFramework,
   LightFramework,
   MidwayFrameworkType,
@@ -77,6 +77,8 @@ export type MockAppConfigurationOptions = {
   entryFile?: string;
   baseDir?: string;
   bootstrapTimeout?: number;
+  applicationContext?: IMidwayContainer;
+  configurationModule?: any;
 };
 
 let lastAppDir;
@@ -193,6 +195,8 @@ export async function create<
     .configure({
       appDir,
       baseDir: options.baseDir,
+      applicationContext: options.applicationContext,
+      configurationModule: options.configurationModule,
     })
     .load(framework as any);
 
