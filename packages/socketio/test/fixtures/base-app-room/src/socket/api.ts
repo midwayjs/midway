@@ -5,15 +5,19 @@ import {
   OnWSMessage,
   Provide,
   WSController,
+  App
 } from '@midwayjs/decorator';
 import { UserService } from '../service/user';
-import { Context } from '../../../../../src';
+import { Context, Application } from '../../../../../src';
 
 @Provide()
 @WSController('/')
 export class APIController {
   @Inject()
   ctx: Context;
+
+  @App()
+  app: Application;
 
   @Inject()
   userService: UserService;
@@ -28,6 +32,7 @@ export class APIController {
     console.log(this.ctx.id + ' join ' + roomId);
     this.ctx.join(roomId);
     this.ctx.join('defaultRoom');
+    console.log(this.app.sockets.adapter.rooms);
   }
 
   @OnWSMessage('leaveRoom')
