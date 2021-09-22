@@ -13,6 +13,8 @@ export class AutoConfiguration {
 
   async onStop(container): Promise<void> {
     const factory = await container.getAsync(RedisServiceFactory);
-    await factory.stop();
+    factory.clients.forEach(client=>{
+        client.disconnect();
+    });
   }
 }
