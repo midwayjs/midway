@@ -632,6 +632,8 @@ describe('/test/baseFramework.test.ts', () => {
       ),
     });
 
+    expect(framework.getConfiguration('a')).toEqual(1);
+
     await framework.stop();
 
     // const appCtx = framework.getApplicationContext();
