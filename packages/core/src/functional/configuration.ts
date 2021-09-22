@@ -4,12 +4,28 @@ import { InjectionConfigurationOptions } from '@midwayjs/decorator';
 export class FunctionalConfiguration {
   private readyHandler;
   private stopHandler;
+  private configLoadHandler;
   private options: InjectionConfigurationOptions;
 
   constructor(options: InjectionConfigurationOptions) {
     this.options = options;
     this.readyHandler = () => {};
     this.stopHandler = () => {};
+    this.configLoadHandler = () => {};
+  }
+
+  onConfigLoad(
+    configLoadHandler:
+      | ((container: IMidwayContainer, app: IMidwayApplication) => any)
+      | IMidwayContainer,
+    app?: IMidwayApplication
+  ) {
+    if (typeof configLoadHandler === 'function') {
+      this.configLoadHandler = configLoadHandler;
+    } else {
+      return this.configLoadHandler(configLoadHandler, app);
+    }
+    return this;
   }
 
   onReady(
@@ -21,7 +37,7 @@ export class FunctionalConfiguration {
     if (typeof readyHandler === 'function') {
       this.readyHandler = readyHandler;
     } else {
-      this.readyHandler(readyHandler, app);
+      return this.readyHandler(readyHandler, app);
     }
     return this;
   }
@@ -35,7 +51,7 @@ export class FunctionalConfiguration {
     if (typeof stopHandler === 'function') {
       this.stopHandler = stopHandler;
     } else {
-      this.stopHandler(stopHandler, app);
+      return this.stopHandler(stopHandler, app);
     }
     return this;
   }
