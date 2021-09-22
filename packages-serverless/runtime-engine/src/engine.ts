@@ -8,7 +8,7 @@ import {
 } from './interface';
 import { ServerlessBaseRuntime } from './runtime';
 import { completeAssign } from './util';
-import { performance } from 'perf_hooks';
+import performance from './lib/performance';
 
 export class BaseRuntimeEngine implements RuntimeEngine {
   runtimeExtensions = [];
@@ -98,5 +98,7 @@ export class BaseRuntimeEngine implements RuntimeEngine {
         `midway-faas:${it}:end`
       );
     });
+    // Disable midway performance marks.
+    performance.disable();
   }
 }

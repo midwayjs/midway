@@ -14,7 +14,7 @@ import { EnvPropertyParser } from './lib/parser';
 import { DebugLogger } from './lib/debug';
 import { BaseLoggerFactory } from './lib/loggerFactory';
 import { fileExists, getHandlerMeta, getHandlerMethod } from './util';
-import { performance } from 'perf_hooks';
+import performance from './lib/performance';
 
 export class ServerlessBaseRuntime extends EventEmitter implements Runtime {
   propertyParser: PropertyParser<string>;
