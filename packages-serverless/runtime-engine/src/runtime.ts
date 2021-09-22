@@ -12,7 +12,7 @@ import {
 import { EnvPropertyParser } from './lib/parser';
 import { DebugLogger } from './lib/debug';
 import { getHandlerMeta } from './util';
-import { performance } from 'perf_hooks';
+import performance from './lib/performance';
 
 export class BaseLoggerFactory implements LoggerFactory {
   createLogger(...args) {
