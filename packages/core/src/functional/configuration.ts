@@ -23,7 +23,7 @@ export class FunctionalConfiguration {
     if (typeof configLoadHandler === 'function') {
       this.configLoadHandler = configLoadHandler;
     } else {
-      this.configLoadHandler(configLoadHandler, app);
+      return this.configLoadHandler(configLoadHandler, app);
     }
     return this;
   }
@@ -37,7 +37,7 @@ export class FunctionalConfiguration {
     if (typeof readyHandler === 'function') {
       this.readyHandler = readyHandler;
     } else {
-      this.readyHandler(readyHandler, app);
+      return this.readyHandler(readyHandler, app);
     }
     return this;
   }
@@ -51,7 +51,7 @@ export class FunctionalConfiguration {
     if (typeof stopHandler === 'function') {
       this.stopHandler = stopHandler;
     } else {
-      this.stopHandler(stopHandler, app);
+      return this.stopHandler(stopHandler, app);
     }
     return this;
   }

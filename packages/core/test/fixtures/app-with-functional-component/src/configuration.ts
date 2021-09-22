@@ -1,5 +1,6 @@
 import { createConfiguration } from '../../../../src'
 import { createHooks } from './components/hooks';
+import { sleep } from '@midwayjs/decorator';
 
 export default createConfiguration({
   imports: [
@@ -15,6 +16,7 @@ export default createConfiguration({
 }).onStop(async (container, app) => {
   console.log('on stop', app);
 }).onConfigLoad(async () => {
+  await sleep(50);
   return {
     a: 1
   }
