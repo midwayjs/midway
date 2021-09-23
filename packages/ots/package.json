@@ -1,6 +1,6 @@
 {
-  "name": "@midwayjs/ots",
-  "description": "midway ots component",
+  "name": "@midwayjs/tablestore",
+  "description": "midway tablestore component",
   "version": "2.13.0",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -18,7 +18,7 @@
   },
   "keywords": [
     "aliyun",
-    "ots"
+    "tablestore"
   ],
   "author": "czy88840616 <czy88840616@gmail.com>",
   "license": "MIT",
