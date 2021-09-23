@@ -15,12 +15,12 @@ import { TableStoreClient } from './interface';
 export class TableStoreServiceFactory<
   T = TableStoreClient
 > extends ServiceFactory<T> {
-  @Config('ots')
-  otsConfig;
+  @Config('tableStore')
+  tableStoreConfig;
 
   @Init()
   async init() {
-    await this.initClients(this.otsConfig);
+    await this.initClients(this.tableStoreConfig);
   }
 
   async createClient(config): Promise<T> {
@@ -28,7 +28,7 @@ export class TableStoreServiceFactory<
   }
 
   getName() {
-    return 'ots';
+    return 'tableStore';
   }
 }
 

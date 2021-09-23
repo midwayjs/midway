@@ -9,6 +9,6 @@
 //   maxRetries: undefined,
 //   instancename: undefined,
 //   computeChecksums: true,
-export const ots = {
+export const tableStore = {
   default: {},
 };
