@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/core",
-  "version": "3.0.0-alpha.2",
+  "version": "3.0.0-alpha.41",
   "description": "midway core",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -21,7 +21,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/decorator": "^3.0.0-alpha.2",
+    "@midwayjs/decorator": "^3.0.0-alpha.41",
     "chai": "^4.2.0",
     "midway-test-component": "*",
     "mm": "3",
@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@midwayjs/glob": "^1.0.2",
-    "@midwayjs/logger": "^2.13.0",
+    "@midwayjs/logger": "^3.0.0-alpha.41",
     "class-transformer": "^0.3.1",
     "extend2": "^1.0.0",
     "lodash.clonedeep": "^4.5.0",
@@ -40,9 +40,9 @@
     "lodash.get": "^4.4.2",
     "lodash.set": "^4.3.2",
     "lodash.template": "^4.4.0",
+    "midway-test-component": "*",
     "picomatch": "^2.2.2",
-    "reflect-metadata": "^0.1.13",
-    "midway-test-component": "*"
+    "reflect-metadata": "^0.1.13"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
   "repository": {
