@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/express-layer",
-  "version": "3.0.0-alpha.41",
+  "version": "3.0.0-alpha.42",
   "main": "index.js",
   "scripts": {
     "test": "node --require=ts-node/register ../../node_modules/.bin/jest",
@@ -10,12 +10,12 @@
     "request": "^2.88.2"
   },
   "devDependencies": {
-    "@midwayjs/runtime-engine": "^3.0.0-alpha.41",
-    "@midwayjs/runtime-mock": "^3.0.0-alpha.41",
-    "@midwayjs/serverless-fc-starter": "^3.0.0-alpha.41",
-    "@midwayjs/serverless-fc-trigger": "^3.0.0-alpha.41",
-    "@midwayjs/serverless-scf-starter": "^3.0.0-alpha.41",
-    "@midwayjs/serverless-scf-trigger": "^3.0.0-alpha.41",
+    "@midwayjs/runtime-engine": "^3.0.0-alpha.42",
+    "@midwayjs/runtime-mock": "^3.0.0-alpha.42",
+    "@midwayjs/serverless-fc-starter": "^3.0.0-alpha.42",
+    "@midwayjs/serverless-fc-trigger": "^3.0.0-alpha.42",
+    "@midwayjs/serverless-scf-starter": "^3.0.0-alpha.42",
+    "@midwayjs/serverless-scf-trigger": "^3.0.0-alpha.42",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "supertest": "^6.0.0"

@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/typegoose",
-  "version": "3.0.0-alpha.41",
+  "version": "3.0.0-alpha.42",
   "description": "Midway Component for typegoose",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -24,9 +24,9 @@
     "@midwayjs/mongoose": "^2.13.0"
   },
   "devDependencies": {
-    "@midwayjs/core": "^3.0.0-alpha.41",
-    "@midwayjs/decorator": "^3.0.0-alpha.41",
-    "@midwayjs/mock": "^3.0.0-alpha.41",
+    "@midwayjs/core": "^3.0.0-alpha.42",
+    "@midwayjs/decorator": "^3.0.0-alpha.42",
+    "@midwayjs/mock": "^3.0.0-alpha.42",
     "@typegoose/typegoose": "^9.0.0",
     "mongoose": "~6.0.11"
   }

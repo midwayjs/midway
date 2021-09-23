@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/core",
-  "version": "3.0.0-alpha.41",
+  "version": "3.0.0-alpha.42",
   "description": "midway core",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -21,7 +21,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/decorator": "^3.0.0-alpha.41",
+    "@midwayjs/decorator": "^3.0.0-alpha.42",
     "chai": "^4.2.0",
     "midway-test-component": "*",
     "mm": "3",
@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@midwayjs/glob": "^1.0.2",
-    "@midwayjs/logger": "^3.0.0-alpha.41",
+    "@midwayjs/logger": "^3.0.0-alpha.42",
     "class-transformer": "^0.3.1",
     "extend2": "^1.0.0",
     "lodash.clonedeep": "^4.5.0",

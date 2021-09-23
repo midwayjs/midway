@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/egg-layer",
-  "version": "3.0.0-alpha.41",
+  "version": "3.0.0-alpha.42",
   "main": "index.js",
   "scripts": {
     "test": "node --require=ts-node/register ../../node_modules/.bin/jest",
@@ -10,14 +10,14 @@
     "request": "^2.88.2"
   },
   "devDependencies": {
-    "@midwayjs/decorator": "^3.0.0-alpha.41",
-    "@midwayjs/runtime-engine": "^3.0.0-alpha.41",
-    "@midwayjs/runtime-mock": "^3.0.0-alpha.41",
-    "@midwayjs/serverless-fc-starter": "^3.0.0-alpha.41",
-    "@midwayjs/serverless-fc-trigger": "^3.0.0-alpha.41",
-    "@midwayjs/serverless-scf-starter": "^3.0.0-alpha.41",
-    "@midwayjs/serverless-scf-trigger": "^3.0.0-alpha.41",
-    "@midwayjs/web": "^3.0.0-alpha.41",
+    "@midwayjs/decorator": "^3.0.0-alpha.42",
+    "@midwayjs/runtime-engine": "^3.0.0-alpha.42",
+    "@midwayjs/runtime-mock": "^3.0.0-alpha.42",
+    "@midwayjs/serverless-fc-starter": "^3.0.0-alpha.42",
+    "@midwayjs/serverless-fc-trigger": "^3.0.0-alpha.42",
+    "@midwayjs/serverless-scf-starter": "^3.0.0-alpha.42",
+    "@midwayjs/serverless-scf-trigger": "^3.0.0-alpha.42",
+    "@midwayjs/web": "^3.0.0-alpha.42",
     "egg": "^2.28.0",
     "supertest": "^6.0.0"
   },

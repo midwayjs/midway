@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/web",
-  "version": "3.0.0-alpha.41",
+  "version": "3.0.0-alpha.42",
   "description": "Midway Web Framework for Egg.js",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -27,8 +27,8 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/decorator": "^3.0.0-alpha.41",
-    "@midwayjs/mock": "^3.0.0-alpha.41",
+    "@midwayjs/decorator": "^3.0.0-alpha.42",
+    "@midwayjs/mock": "^3.0.0-alpha.42",
     "dayjs": "^1.10.4",
     "egg-socket.io": "^4.1.6",
     "egg-view-nunjucks": "^2.3.0",
@@ -41,10 +41,10 @@
   },
   "dependencies": {
     "@eggjs/router": "^2.0.0",
-    "@midwayjs/bootstrap": "^3.0.0-alpha.41",
-    "@midwayjs/core": "^3.0.0-alpha.41",
-    "@midwayjs/koa": "^3.0.0-alpha.41",
-    "@midwayjs/logger": "^3.0.0-alpha.41",
+    "@midwayjs/bootstrap": "^3.0.0-alpha.42",
+    "@midwayjs/core": "^3.0.0-alpha.42",
+    "@midwayjs/koa": "^3.0.0-alpha.42",
+    "@midwayjs/logger": "^3.0.0-alpha.42",
     "debug": "^4.1.1",
     "egg": "^2.28.0",
     "egg-logger": "^2.4.2",
