@@ -209,7 +209,8 @@ export interface DescribeTableParams {
   tableName: string;
 }
 
-export interface ColumnCondition {}
+export interface ColumnCondition {
+}
 
 export interface GetRowParams {
   tableName: string;
@@ -237,9 +238,9 @@ export type AttributeColumn = {
 };
 
 export type UpdateColumn = {
-  // TODO
-  // [key: UpdateType.DELETE_ALL]: string[];
-  // [key: Exclude<UpdateType, UpdateType.DELETE_ALL>]: AttributeColumn[];
+  [key in UpdateType.DELETE_ALL]?: string[];
+} & {
+  [key in Exclude<UpdateType, UpdateType.DELETE_ALL>]?: AttributeColumn[];
 };
 
 export interface PutRowParams {
@@ -312,14 +313,14 @@ export interface BatchGetRowParams {
   transactionId?: string;
 }
 
-export  type BatchWriteRowItem = (
+export type BatchWriteRowItem = (
   | {
   type: 'PUT' | 'DELETE';
   attributeColumns?: AttributeColumn[];
 }
   | {
   type: 'UPDATE';
-  attributeColumns: UpdateColumn[];
+  updateOfAttributeColumns: UpdateColumn[];
 }) & {
   primaryKey: PrimaryKey[];
   condition?: TableStoreCondition | null;
@@ -371,7 +372,7 @@ export interface SearchIndexSetting {
 
 export type SearchIndexQuery =
   | {
-  type?: QueryType.MATCH_QUERY;
+  queryType?: QueryType.MATCH_QUERY;
   query?: {
     fieldName: string;
     text?: string;
@@ -380,21 +381,21 @@ export type SearchIndexQuery =
   };
 }
   | {
-  type?: QueryType.MATCH_PHRASE_QUERY;
+  queryType?: QueryType.MATCH_PHRASE_QUERY;
   query?: {
     fieldName: string;
     text?: string;
   };
 }
   | {
-  type?: QueryType.TERM_QUERY;
+  queryType?: QueryType.TERM_QUERY;
   query?: {
     fieldName: string;
     term: ColumnValue;
   };
 }
   | {
-  type?: QueryType.RANGE_QUERY;
+  queryType?: QueryType.RANGE_QUERY;
   query?: {
     fieldName: string;
     rangeFrom?: ColumnValue;
@@ -404,14 +405,14 @@ export type SearchIndexQuery =
   };
 }
   | {
-  type?: QueryType.PREFIX_QUERY;
+  queryType?: QueryType.PREFIX_QUERY;
   query?: {
     fieldName: string;
     prefix?: string;
   };
 }
   | {
-  type?: QueryType.BOOL_QUERY;
+  queryType?: QueryType.BOOL_QUERY;
   query?: {
     mustQueries?: SearchIndexQuery[];
     mustNotQueries?: SearchIndexQuery[];
@@ -421,13 +422,13 @@ export type SearchIndexQuery =
   };
 }
   | {
-  type?: QueryType.CONST_SCORE_QUERY;
+  queryType?: QueryType.CONST_SCORE_QUERY;
   query?: {
     filter: SearchIndexQuery;
   };
 }
   | {
-  type?: QueryType.FUNCTION_SCORE_QUERY;
+  queryType?: QueryType.FUNCTION_SCORE_QUERY;
   query?: {
     query: SearchIndexQuery;
     fieldValueFactor: { fieldName: string };
@@ -446,18 +447,18 @@ export type SearchIndexQuery =
   };
 }
   | {
-  type?: QueryType.WILDCARD_QUERY;
+  queryType?: QueryType.WILDCARD_QUERY;
   query?: {
     fieldName: string;
     value?: string;
   };
 }
   | {
-  type?: QueryType.MATCH_ALL_QUERY;
+  queryType?: QueryType.MATCH_ALL_QUERY;
   query?: {};
 }
   | {
-  type?: QueryType.GEO_BOUNDING_BOX_QUERY;
+  queryType?: QueryType.GEO_BOUNDING_BOX_QUERY;
   query?: {
     fieldName: string;
     topLeft?: string;
@@ -465,7 +466,7 @@ export type SearchIndexQuery =
   };
 }
   | {
-  type?: QueryType.GEO_DISTANCE_QUERY;
+  queryType?: QueryType.GEO_DISTANCE_QUERY;
   query?: {
     fieldName: string;
     centerPoint?: string;
@@ -473,21 +474,21 @@ export type SearchIndexQuery =
   };
 }
   | {
-  type?: QueryType.GEO_POLYGON_QUERY;
+  queryType?: QueryType.GEO_POLYGON_QUERY;
   query?: {
     fieldName: string;
     points?: string[];
   };
 }
   | {
-  type?: QueryType.TERMS_QUERY;
+  queryType?: QueryType.TERMS_QUERY;
   query?: {
     fieldName: string;
     terms?: ColumnValue[];
   };
 }
   | {
-  type?: QueryType.EXISTS_QUERY;
+  queryType?: QueryType.EXISTS_QUERY;
   query?: {
     fieldName: string;
   };
@@ -741,39 +742,52 @@ export enum ComparatorType {
 
 export interface TableStoreCompositeCondition {
   sub_conditions: ColumnCondition[];
+
   getType(): FilterType.FT_COMPOSITE_COLUMN_VALUE;
+
   setCombinator(combinator: LogicalOperator): void;
+
   getCombinator(): LogicalOperator;
+
   addSubCondition(condition: ColumnCondition): void;
+
   clearSubCondition(): void;
 }
 
 export interface TableStoreCondition {
   columnCondition: ColumnCondition | null;
   rowExistenceExpectation: RowExistenceExpectation;
+
   setRowExistenceExpectation(rowExistenceExpectation: RowExistenceExpectation): void;
+
   getRowExistenceExpectation(): RowExistenceExpectation;
+
   setColumnCondition(columnCondition: ColumnCondition): void;
+
   getColumnCondition(): ColumnCondition;
 }
 
 export interface TableStoreLong {
   int64?: Int64LE;
+
   fromNumber(num: number): Int64LE;
+
   fromString(str: string): Int64LE;
+
   toBuffer(): Buffer;
+
   toNumber(): number;
 }
 
-export interface TableStoreSingleColumnCondition<
-  T extends ColumnValue = ColumnValue
-  > extends ColumnCondition {
+export interface TableStoreSingleColumnCondition<T extends ColumnValue = ColumnValue> extends ColumnCondition {
   columnName: string;
   columnValue: T;
   comparator: ComparatorType;
   passIfMissing: boolean;
   latestVersionOnly: boolean;
+
   getType(): FilterType.FT_SINGLE_COLUMN_VALUE;
+
   /**
    * 设置 `passIfMissing`
    * 由于OTS一行的属性列不固定，有可能存在有condition条件的列在该行不存在的情况，这时
@@ -783,13 +797,21 @@ export interface TableStoreSingleColumnCondition<
    * 默认值为True。
    */
   setPassIfMissing(passIfMissing: boolean): void;
+
   getPassIfMissing(): boolean;
+
   setLatestVersionOnly(latestVersionOnly: boolean): void;
+
   getLatestVersionOnly(): boolean;
+
   setColumnName(columnName: string): void;
+
   getColumnName(): string;
+
   setColumnValue(columnValue: T): void;
+
   getColumnValue(): T;
+
   setComparator(comparator: ComparatorType): void;
 }
 

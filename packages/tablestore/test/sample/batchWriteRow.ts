@@ -16,7 +16,10 @@ import { Long, TableStoreService, Condition, RowExistenceExpectation, ReturnType
             type: 'UPDATE',
             condition: new Condition(RowExistenceExpectation.IGNORE, null),
             primaryKey: [{ 'gid': Long.fromNumber(8) }, { 'uid': Long.fromNumber(80) }],
-            attributeColumns: [{ 'PUT': [{ 'attrCol1': 'test3' }, { 'attrCol2': 'test4' }] }],
+            // 有 issue 说这里的属性名是 updateOfAttributeColumns，所以我们修改了定义 https://github.com/aliyun/aliyun-tablestore-nodejs-sdk/issues/40
+            updateOfAttributeColumns: [
+              { 'PUT': [{ 'attrCol1': 'test3' }, { 'attrCol2': 'test4' }] }
+            ],
             returnContent: { returnType: 1 }
           },
           {

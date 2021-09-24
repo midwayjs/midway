@@ -12,9 +12,7 @@ import { TableStoreClient } from './interface';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
-export class TableStoreServiceFactory<
-  T = TableStoreClient
-> extends ServiceFactory<T> {
+export class TableStoreServiceFactory extends ServiceFactory<TableStoreClient> {
   @Config('tableStore')
   tableStoreConfig;
 
@@ -23,7 +21,7 @@ export class TableStoreServiceFactory<
     await this.initClients(this.tableStoreConfig);
   }
 
-  async createClient(config): Promise<T> {
+  async createClient(config): Promise<TableStoreClient> {
     return new TableStore.Client(config) as any;
   }
 
@@ -36,7 +34,7 @@ export class TableStoreServiceFactory<
 @Scope(ScopeEnum.Singleton)
 export class TableStoreService implements TableStoreClient {
   @Inject()
-  private serviceFactory: TableStoreServiceFactory<TableStoreClient>;
+  private serviceFactory: TableStoreServiceFactory;
 
   // @ts-expect-error used
   private instance: OSS;

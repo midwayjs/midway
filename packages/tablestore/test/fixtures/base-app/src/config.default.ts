@@ -1,2 +1,5 @@
-export const ots = {
+export const tableStore = {
+  client: {
+    accessKeyId: 'abcde'
+  }
 };

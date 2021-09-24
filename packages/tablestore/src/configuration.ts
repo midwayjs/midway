@@ -3,10 +3,10 @@ import { join } from 'path';
 import { TableStoreServiceFactory } from './manager';
 
 @Configuration({
-  namespace: 'ots',
+  namespace: 'tableStore',
   importConfigs: [join(__dirname, './config.default')],
 })
-export class OTSConfiguration {
+export class TableStoreConfiguration {
   async onReady(container) {
     await container.getAsync(TableStoreServiceFactory);
   }
