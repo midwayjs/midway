@@ -100,6 +100,10 @@ export interface RouterPriority {
   middleware: any[];
   routerOptions: any;
   controllerId: string;
+  /**
+   * 路由控制器或者函数 module 本身
+   */
+  routerModule: any;
 }
 
 export interface RouterCollectorOptions {
@@ -110,6 +114,7 @@ export class WebRouterCollector {
   protected readonly baseDir: string;
   private isReady = false;
   protected routes = new Map<string, RouterInfo[]>();
+  protected routerModules = new Set();
   private routesPriority: RouterPriority[] = [];
   protected options: RouterCollectorOptions;
 
@@ -178,7 +183,9 @@ export class WebRouterCollector {
         middleware,
         routerOptions: controllerOption.routerOptions,
         controllerId,
+        routerModule: module,
       });
+      this.routerModules.add(module);
     }
 
     const webRouterInfo: RouterOption[] = getClassMetadata(
@@ -254,7 +261,9 @@ export class WebRouterCollector {
         middleware: [],
         routerOptions: {},
         controllerId,
+        routerModule: module,
       });
+      this.routerModules.add(module);
     }
 
     for (const webRouter of webRouterInfo) {
@@ -443,6 +452,14 @@ export class WebRouterCollector {
       routeArr = routeArr.concat(routerInfo);
     }
     return routeArr;
+  }
+
+  async getRouterModules(): Promise<any[]> {
+    if (!this.isReady) {
+      await this.analyze();
+      this.isReady = true;
+    }
+    return Array.from(this.routerModules);
   }
 
   private checkDuplicateAndPush(prefix, routerInfo: RouterInfo) {

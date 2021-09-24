@@ -119,6 +119,9 @@ export abstract class MidwayKoaBaseFramework<
     const routerList = await collector.getRoutePriorityList();
 
     for (const routerInfo of routerList) {
+      // bind controller first
+      this.getApplicationContext().bindClass(routerInfo.routerModule);
+
       const providerId = routerInfo.controllerId;
       // controller id check
       if (this.controllerIds.indexOf(providerId) > -1) {
