@@ -1,16 +1,25 @@
 import * as extend from 'extend2';
 import { basename, join } from 'path';
-import { IConfigService, IMidwayContainer } from '../interface';
+import { IConfigService } from '../interface';
 import { safelyGet } from '../util';
 import { readdirSync, statSync } from 'fs';
-import { isFunction } from '@midwayjs/decorator';
+import {
+  Inject,
+  isFunction,
+  Provide,
+  Scope,
+  ScopeEnum,
+} from '@midwayjs/decorator';
 import * as util from 'util';
+import { MidwayEnvironmentService } from './environmentService';
+import { MidwayInformationService } from './informationService';
 
 const debug = util.debuglog('midway:config');
 
+@Provide()
+@Scope(ScopeEnum.Singleton)
 export class MidwayConfigService implements IConfigService {
-  private envDirMap: Map<string, Set<any>>;
-  private container: IMidwayContainer;
+  private envDirMap: Map<string, Set<any>> = new Map();
   private aliasMap = {
     prod: 'production',
     unittest: 'test',
@@ -19,10 +28,11 @@ export class MidwayConfigService implements IConfigService {
   isReady = false;
   externalObject: Record<string, unknown>[] = [];
 
-  constructor(container) {
-    this.container = container;
-    this.envDirMap = new Map();
-  }
+  @Inject()
+  environmentService: MidwayEnvironmentService;
+
+  @Inject()
+  informationService: MidwayInformationService;
 
   add(configFilePaths: any[]) {
     for (const dir of configFilePaths) {
@@ -88,7 +98,9 @@ export class MidwayConfigService implements IConfigService {
     // get default
     const defaultSet = this.getEnvSet('default');
     // get current set
-    const currentEnvSet = this.getEnvSet(this.container.getCurrentEnv());
+    const currentEnvSet = this.getEnvSet(
+      this.environmentService.getCurrentEnvironment()
+    );
     // merge set
     const target = {};
     for (const filename of [...defaultSet, ...currentEnvSet]) {
@@ -132,16 +144,16 @@ export class MidwayConfigService implements IConfigService {
     }
     let result = exports;
     if (isFunction(exports)) {
-      const informationService = this.container.getInformationService();
       // eslint-disable-next-line prefer-spread
       result = exports.apply(null, [
         {
-          pkg: informationService.getPkg(),
-          name: informationService.getProjectName(),
-          baseDir: informationService.getBaseDir(),
-          appDir: informationService.getAppDir(),
-          HOME: informationService.getHome(),
-          root: informationService.getRoot(),
+          pkg: this.informationService.getPkg(),
+          name: this.informationService.getProjectName(),
+          baseDir: this.informationService.getBaseDir(),
+          appDir: this.informationService.getAppDir(),
+          HOME: this.informationService.getHome(),
+          root: this.informationService.getRoot(),
+          env: this.environmentService.getCurrentEnvironment(),
         },
         target,
       ]);

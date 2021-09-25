@@ -1,6 +1,6 @@
 import { BaseFramework } from '../baseFramework';
 import { IMidwayApplication, IMidwayBootstrapOptions } from '../interface';
-import { MidwayFrameworkType } from '@midwayjs/decorator';
+import { MidwayFrameworkType, Provide, Framework } from '@midwayjs/decorator';
 
 const noop = {
   info() {},
@@ -13,6 +13,8 @@ const noop = {
 /**
  * 一个不 ready 的空框架
  */
+@Provide()
+@Framework()
 export class EmptyFramework extends BaseFramework<any, any, any> {
   logger = noop;
   appLogger = noop;
@@ -26,15 +28,13 @@ export class EmptyFramework extends BaseFramework<any, any, any> {
   async applicationInitialize(options: IMidwayBootstrapOptions) {
     this.app = {} as IMidwayApplication;
   }
-
-  async containerReady() {}
-  async afterContainerReady() {}
-  async loadExtension() {}
 }
 
 /**
  * 一个只加载配置的框架
  */
+@Provide()
+@Framework()
 export class ConfigFramework extends BaseFramework<any, any, any> {
   logger = noop;
   appLogger = noop;
@@ -49,17 +49,13 @@ export class ConfigFramework extends BaseFramework<any, any, any> {
     this.app = {} as IMidwayApplication;
     this.defineApplicationProperties();
   }
-
-  async containerReady() {
-    await this.applicationContext.ready();
-  }
-  async afterContainerReady() {}
-  async loadExtension() {}
 }
 
 /**
  * 一个全量的空框架
  */
+@Provide()
+@Framework()
 export class LightFramework extends BaseFramework<any, any, any> {
   getFrameworkType(): MidwayFrameworkType {
     return MidwayFrameworkType.LIGHT;

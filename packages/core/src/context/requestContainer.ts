@@ -8,9 +8,6 @@ export class MidwayRequestContainer extends MidwayContainer {
   constructor(ctx, applicationContext: IMidwayContainer) {
     super(applicationContext);
     this.applicationContext = applicationContext;
-    this.configService = this.applicationContext.getConfigService();
-    this.environmentService = this.applicationContext.getEnvironmentService();
-    this.aspectService = this.applicationContext.getAspectService();
 
     // update legacy relationship
     this.registry.setIdentifierRelation(
@@ -101,14 +98,6 @@ export class MidwayRequestContainer extends MidwayContainer {
 
   async ready() {
     // ignore other things
-  }
-
-  getConfigService() {
-    return this.configService;
-  }
-
-  getEnvironmentService() {
-    return this.environmentService;
   }
 
   getContext() {

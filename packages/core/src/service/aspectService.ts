@@ -6,6 +6,9 @@ import {
   isAsyncFunction,
   listModule,
   isClass,
+  Provide,
+  Scope,
+  ScopeEnum,
 } from '@midwayjs/decorator';
 import * as pm from 'picomatch';
 import { IAspectService, IMidwayContainer } from '../interface';
@@ -13,6 +16,8 @@ import * as util from 'util';
 
 const debugLogger = util.debuglog('midway:container:aspect');
 
+@Provide()
+@Scope(ScopeEnum.Singleton)
 export class MidwayAspectService implements IAspectService {
   protected aspectMappingMap: WeakMap<any, Map<string, any[]>>;
   private aspectModuleSet: Set<any>;
@@ -217,18 +222,18 @@ export class MidwayAspectService implements IAspectService {
     if (!ins['__is_proxy__'] && ins?.constructor) {
       // 动态处理拦截器
       let methodAspectCollection;
-      if (this.aspectMappingMap?.has(ins.constructor)) {
-        methodAspectCollection = this.aspectMappingMap.get(ins.constructor);
-      } else if (
-        (this.container?.parent as IMidwayContainer)
-          ?.getAspectService()
-          .hasAspect(ins.constructor)
-      ) {
-        // for requestContainer
-        methodAspectCollection = (this.container?.parent as IMidwayContainer)
-          ?.getAspectService()
-          .hasAspect(ins.constructor);
-      }
+      // if (this.aspectMappingMap?.has(ins.constructor)) {
+      //   methodAspectCollection = this.aspectMappingMap.get(ins.constructor);
+      // } else if (
+      //   (this.container?.parent as IMidwayContainer)
+      //     ?.getAspectService()
+      //     .hasAspect(ins.constructor)
+      // ) {
+      //   // for requestContainer
+      //   methodAspectCollection = (this.container?.parent as IMidwayContainer)
+      //     ?.getAspectService()
+      //     .hasAspect(ins.constructor);
+      // }
 
       if (methodAspectCollection) {
         proxy = new Proxy(ins, {

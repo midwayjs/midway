@@ -1,6 +1,9 @@
 import { IEnvironmentService } from '../interface';
 import { isDevelopmentEnvironment, getCurrentEnvironment } from '../util';
+import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
 
+@Provide()
+@Scope(ScopeEnum.Singleton)
 export class MidwayEnvironmentService implements IEnvironmentService {
   environment: string;
 

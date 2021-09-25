@@ -3,7 +3,7 @@ import * as assert from 'assert';
 /**
  * 多客户端工厂实现
  */
-export abstract class ServiceFactory<T, U = T> {
+export abstract class ServiceFactory<T> {
   protected clients: Map<string, T> = new Map();
   protected options = {};
 
@@ -36,7 +36,7 @@ export abstract class ServiceFactory<T, U = T> {
     // options.default will be merge in to options.clients[id]
     config = Object.assign({}, this.options['default'], config);
     const client = await this.createClient(config, clientName);
-    if (clientName) {
+    if (client && clientName) {
       this.clients.set(clientName, client);
     }
     return client;

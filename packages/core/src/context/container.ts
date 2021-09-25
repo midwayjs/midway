@@ -1,6 +1,4 @@
 import {
-  ALL,
-  CONFIG_KEY,
   CONFIGURATION_KEY,
   getClassMetadata,
   IComponentInfo,
@@ -40,14 +38,13 @@ import { FUNCTION_INJECT_KEY } from '../common/constants';
 import { ObjectDefinition } from '../definitions/objectDefinition';
 import { FunctionDefinition } from '../definitions/functionDefinition';
 import { ResolverHandler } from './resolverHandler';
-import { MidwayEnvironmentService } from '../service/environmentService';
-import { MidwayConfigService } from '../service/configService';
-import { MidwayAspectService } from '../service/aspectService';
 import {
   ManagedReference,
   ManagedResolverFactory,
 } from './managedResolverFactory';
 import { NotFoundError } from '../common/notFoundError';
+import { MidwayEnvironmentService } from '../service/environmentService';
+import { MidwayConfigService } from '../service/configService';
 
 const debug = util.debuglog('midway:container:configuration');
 const globalDebugLogger = util.debuglog('midway:container');
@@ -104,7 +101,7 @@ class ContainerConfiguration {
   addImportConfigs(importConfigs: string[]) {
     if (importConfigs && importConfigs.length) {
       debug('   import configs %j".', importConfigs);
-      this.container.getConfigService().add(importConfigs);
+      this.container.get(MidwayConfigService).add(importConfigs);
     }
   }
 
@@ -127,7 +124,7 @@ class ContainerConfiguration {
       } else if ('component' in importPackage) {
         if (
           (importPackage as IComponentInfo)?.enabledEnvironment?.includes(
-            this.container.getCurrentEnv()
+            this.container.get(MidwayEnvironmentService).getCurrentEnvironment()
           )
         ) {
           this.load((importPackage as IComponentInfo).component);
@@ -226,7 +223,6 @@ export class MidwayContainer implements IMidwayContainer {
   }
 
   protected init() {
-    this.initService();
     this.resolverHandler = new ResolverHandler(
       this,
       this.managedResolverFactory
@@ -261,29 +257,12 @@ export class MidwayContainer implements IMidwayContainer {
     return this._identifierMapping;
   }
 
-  protected initService() {
-    this.environmentService = new MidwayEnvironmentService();
-    this.configService = new MidwayConfigService(this);
-    this.aspectService = new MidwayAspectService(this);
-  }
-
   load(module?) {
     this.isLoad = true;
     if (module) {
       // load configuration
       const configuration = new ContainerConfiguration(this);
       configuration.load(module);
-    }
-
-    // register base config hook
-    if (!this.resolverHandler.hasHandler(CONFIG_KEY)) {
-      this.registerDataHandler(CONFIG_KEY, (key: string) => {
-        if (key === ALL) {
-          return this.getConfigService().getConfiguration();
-        } else {
-          return this.getConfigService().getConfiguration(key);
-        }
-      });
     }
   }
 
@@ -293,8 +272,6 @@ export class MidwayContainer implements IMidwayContainer {
     }
     // load project file
     this.fileDetector?.run(this);
-    // init config service
-    this.configService.load();
   }
 
   bindClass(exports, namespace = '', filePath?: string) {
@@ -441,30 +418,6 @@ export class MidwayContainer implements IMidwayContainer {
 
   registerDataHandler(handlerType: string, handler: (...args) => any) {
     this.resolverHandler.registerHandler(handlerType, handler);
-  }
-
-  getConfigService() {
-    return this.configService;
-  }
-
-  getEnvironmentService() {
-    return this.environmentService;
-  }
-
-  getInformationService() {
-    return this.informationService;
-  }
-
-  setInformationService(informationService) {
-    this.informationService = informationService;
-  }
-
-  getAspectService() {
-    return this.aspectService;
-  }
-
-  getCurrentEnv() {
-    return this.environmentService.getCurrentEnvironment();
   }
 
   public getResolverHandler() {

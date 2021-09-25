@@ -15,6 +15,7 @@ import { ILogger, LoggerOptions } from '@midwayjs/logger';
 export interface ILifeCycle {
   onConfigLoad?(container: IMidwayContainer, app?: IMidwayApplication): Promise<any>;
   onReady(container: IMidwayContainer, app?: IMidwayApplication): Promise<void>;
+  onServerReady?(container: IMidwayContainer, app?: IMidwayApplication): Promise<void>;
   onStop?(container: IMidwayContainer, app?: IMidwayApplication): Promise<void>;
 }
 
@@ -260,12 +261,6 @@ export interface IMidwayContainer extends IObjectFactory {
   setFileDetector(fileDetector: IFileDetector);
   registerDataHandler(handlerType: string, handler: (...args) => any);
   createChild(): IMidwayContainer;
-  getConfigService(): IConfigService;
-  getEnvironmentService(): IEnvironmentService;
-  getInformationService(): IInformationService;
-  setInformationService(service: IInformationService): void;
-  getAspectService(): IAspectService;
-  getCurrentEnv(): string;
   getResolverHandler(): IResolverHandler;
   /**
    * Set value to app attribute map
@@ -324,11 +319,6 @@ export enum MidwayProcessTypeEnum {
   AGENT = 'AGENT',
 }
 
-/**
- * @deprecated use IMidwayLogger or ILogger from \@midwayjs/logger
- */
-export interface IMidwayLogger extends ILogger {}
-
 export interface Context {
   /**
    * Custom properties.
@@ -374,22 +364,11 @@ export interface IMidwayBaseApplication<T extends IMidwayContext = IMidwayContex
 export type IMidwayApplication<T extends IMidwayContext = IMidwayContext, FrameworkApplication = unknown> = IMidwayBaseApplication<T> & FrameworkApplication;
 
 export interface IMidwayBootstrapOptions {
-  logger?: ILogger | boolean;
   baseDir?: string;
   appDir?: string;
-  preloadModules?: any[];
-  disableAutoLoad?: boolean;
-  pattern?: string[];
-  ignore?: string[];
-  isTsMode?: boolean;
-  middleware?: string[];
-  loadDir?: string[];
-  disableConflictCheck?: boolean;
   applicationContext?: IMidwayContainer;
+  preloadModules?: any[];
   configurationModule?: any;
-  isMainFramework?: boolean;
-  globalApplicationHandler?: (type: MidwayFrameworkType) => IMidwayApplication;
-  globalConfig?: any;
 }
 
 export interface IConfigurationOptions {
@@ -421,3 +400,13 @@ export interface IMidwayFramework<APP extends IMidwayApplication, T extends ICon
 }
 
 export const MIDWAY_LOGGER_WRITEABLE_DIR = 'MIDWAY_LOGGER_WRITEABLE_DIR';
+
+export interface MidwayAppInfo {
+  pkg: Record<string, any>;
+  name: string;
+  baseDir: string;
+  appDir: string;
+  HOME: string;
+  root: string;
+  env: string;
+}

@@ -402,19 +402,6 @@ export class ManagedResolverFactory {
   ): boolean {
     if (definition) {
       debug('dfs for %s == %s start.', identifier, definition.id);
-      // if (definition.constructorArgs) {
-      //   const args = definition.constructorArgs.map(
-      //     val => (val as ManagedReference).name
-      //   );
-      //   if (args.indexOf(identifier) > -1) {
-      //     debug(
-      //       'dfs exist in constructor %s == %s.',
-      //       identifier,
-      //       definition.id
-      //     );
-      //     return true;
-      //   }
-      // }
       if (definition.properties) {
         const keys = definition.properties.keys() as string[];
         if (keys.indexOf(identifier) > -1) {
