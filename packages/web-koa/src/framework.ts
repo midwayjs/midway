@@ -10,6 +10,8 @@ import {
 } from '@midwayjs/core';
 
 import {
+  Provide,
+  Framework,
   RouterParamValue,
   WEB_RESPONSE_CONTENT_TYPE,
   WEB_RESPONSE_HEADER,
@@ -226,6 +228,8 @@ export abstract class MidwayKoaBaseFramework<
   }
 }
 
+@Provide()
+@Framework()
 export class MidwayKoaFramework extends MidwayKoaBaseFramework<
   IMidwayKoaApplication,
   IMidwayKoaContext,
@@ -317,7 +321,7 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<
   }
 
   public getFrameworkName() {
-    return 'midway:koa';
+    return 'koa';
   }
 
   public getServer() {

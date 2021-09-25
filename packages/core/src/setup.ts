@@ -31,6 +31,7 @@ export async function initializeGlobalApplicationContext(
 ) {
   const appDir = globalOptions.appDir ?? '';
   const baseDir = globalOptions.baseDir ?? '';
+  // new container
   const applicationContext = new MidwayContainer();
 
   if (!globalOptions.preloadModules && baseDir) {
