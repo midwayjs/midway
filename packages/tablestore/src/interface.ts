@@ -15,9 +15,9 @@ export type PrimaryKey = {
  * metadata
  */
 export enum RowExistenceExpectation {
-  IGNORE = 'IGNORE',
-  EXPECT_EXIST = 'EXPECT_EXIST',
-  EXPECT_NOT_EXIST = 'EXPECT_NOT_EXIST',
+  IGNORE = 0,
+  EXPECT_EXIST = 1,
+  EXPECT_NOT_EXIST = 2,
 }
 
 export enum Direction {
