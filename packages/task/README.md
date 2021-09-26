@@ -72,7 +72,7 @@ export class UserService {
   helloService: HelloService;
 
   // 例如下面是每分钟执行一次
-  @TaskLocal('* * * * * *')
+  @TaskLocal('* * * * *')
   async test(){
     console.log(this.helloService.getName())
   }
@@ -88,7 +88,7 @@ export class UserService {
   helloService: HelloService;
 
   // 例如下面是每分钟执行一次
-  @TaskLocal('* * * * * *')
+  @TaskLocal('* * * * *')
   async test(){
     console.log(this.helloService.getName())
   }
