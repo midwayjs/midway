@@ -23,6 +23,7 @@
   "devDependencies": {
     "@midwayjs/decorator": "^3.0.0-alpha.2",
     "chai": "^4.2.0",
+    "midway-test-component": "*",
     "mm": "3",
     "sinon": "^7.2.2"
   },
