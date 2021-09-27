@@ -1,5 +1,4 @@
 import { providerWrapper, IMidwayContainer } from '@midwayjs/core';
-import { Connection } from 'typeorm';
 import { CONNECTION_KEY, GetConnection } from '.';
 
 export function getRepository(context: IMidwayContainer, args?: any) {
@@ -11,22 +10,22 @@ export function getRepository(context: IMidwayContainer, args?: any) {
 
 export function getTreeRepository(context: IMidwayContainer, args?: any) {
   return clzz => {
-    const connection = context.get<Connection>(CONNECTION_KEY);
-    return connection.getTreeRepository(clzz);
+    const getConnection = context.get<GetConnection>(CONNECTION_KEY);
+    return getConnection().getTreeRepository(clzz);
   };
 }
 
 export function getMongoRepository(context: IMidwayContainer, args?: any) {
   return clzz => {
-    const connection = context.get<Connection>(CONNECTION_KEY);
-    return connection.getMongoRepository(clzz);
+    const getConnection = context.get<GetConnection>(CONNECTION_KEY);
+    return getConnection().getMongoRepository(clzz);
   };
 }
 
 export function getCustomRepository(context: IMidwayContainer, args?: any) {
   return clzz => {
-    const connection = context.get<Connection>(CONNECTION_KEY);
-    return connection.getCustomRepository(clzz);
+    const getConnection = context.get<GetConnection>(CONNECTION_KEY);
+    return getConnection().getCustomRepository(clzz);
   };
 }
 
