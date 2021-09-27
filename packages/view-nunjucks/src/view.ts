@@ -1,5 +1,4 @@
 export class NunjucksView {
-
   ctx;
   app;
 

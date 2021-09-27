@@ -1,15 +1,23 @@
-import { ALL, App, Config, Init, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import {
+  ALL,
+  App,
+  Config,
+  Init,
+  Provide,
+  Scope,
+  ScopeEnum,
+} from '@midwayjs/decorator';
 import { Environment, FileSystemLoader, runtime } from 'nunjucks';
 
 class MidwayNunjucksEnvironment extends Environment {
   constructor(fileLoader, config) {
     super(fileLoader, {
-      noCache: config.noCache
+      noCache: config.noCache,
     });
 
     // http://disse.cting.org/2016/08/02/2016-08-02-sandbox-break-out-nunjucks-template-engine
     const originMemberLookup = runtime.memberLookup;
-    runtime.memberLookup = function(...args) {
+    runtime.memberLookup = function (...args) {
       const val = args[1];
       if (val === 'prototype' || val === 'constructor') return null;
       return originMemberLookup(...args);
@@ -20,7 +28,6 @@ class MidwayNunjucksEnvironment extends Environment {
 @Provide()
 @Scope(ScopeEnum.Singleton)
 export class NunjucksEnvironment {
-
   protected nunjucksEnvironment;
 
   @App()
@@ -33,14 +40,20 @@ export class NunjucksEnvironment {
   protected async init() {
     const coreLogger = this.app.getCoreLogger();
     const viewPaths = this.globalConfig.view.root;
-    coreLogger.info('[@midwayjs/view-nunjucks] loading templates from %j', viewPaths);
+    coreLogger.info(
+      '[@midwayjs/view-nunjucks] loading templates from %j',
+      viewPaths
+    );
 
     const config = this.globalConfig['nunjucks'];
     config.noCache = !config.cache;
     delete config.cache;
 
     const fileLoader = new FileSystemLoader(this.globalConfig.view.root);
-    this.nunjucksEnvironment = new MidwayNunjucksEnvironment(fileLoader, config);
+    this.nunjucksEnvironment = new MidwayNunjucksEnvironment(
+      fileLoader,
+      config
+    );
   }
 
   render(name, locals, cb) {

@@ -18,9 +18,9 @@ export class ViewConfiguration {
     completeAssign(this.app.context, require('egg-view/app/extend/context'));
     (this.app as any).view = await container.getAsync(ViewManager);
     if (!(this.app as any).toAsyncFunction) {
-      (this.app as any).toAsyncFunction = (method) => {
+      (this.app as any).toAsyncFunction = method => {
         return method;
-      }
+      };
     }
   }
 }

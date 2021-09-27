@@ -1,5 +1,4 @@
 export default {
-
   /**
    * nunjucks config
    * @member Config#nunjucks
@@ -16,5 +15,4 @@ export default {
     lstripBlocks: false,
     cache: true,
   },
-
 };
