@@ -20,7 +20,8 @@
   "author": "",
   "files": [
     "dist/**/*.js",
-    "dist/**/*.d.ts"
+    "dist/**/*.d.ts",
+    "index.d.ts"
   ],
   "engines": {
     "node": ">= 12.13.0"
