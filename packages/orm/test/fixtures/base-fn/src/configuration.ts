@@ -1,11 +1,22 @@
 import { App, Configuration, Inject } from '@midwayjs/decorator';
 import * as orm from '../../../../src';
 import { join } from 'path';
-import { getRepository, InjectEntityModel, useEntityModel } from '../../../../src';
+import { getRepository, getCustomRepository, InjectEntityModel, useEntityModel } from '../../../../src';
 import { User } from './model/user';
-import { Repository } from 'typeorm';
+import { EntityRepository, Repository } from 'typeorm';
 import * as assert from 'assert';
 import { IMidwayApplication } from '@midwayjs/core';
+
+@EntityRepository(User)
+class UserRepository extends Repository<User> {
+  findMyPost() {
+    return this.findOne();
+  }
+
+  createSave(u: any) {
+    return this.manager.save(u);
+  }
+}
 
 @Configuration({
   imports: [
@@ -19,6 +30,9 @@ export class ContainerConfiguration {
 
   @Inject('orm:getRepository')
   getRepo: getRepository;
+
+  @Inject('orm:getCustomRepository')
+  getCustomRepo: getCustomRepository;
 
   @InjectEntityModel(User)
   userModel: Repository<User>;
@@ -41,6 +55,13 @@ export class ContainerConfiguration {
     const newUsers = await userModel.findAndCount(user);
 
     assert.deepStrictEqual(users, newUsers);
+
+    const newUser = this.getCustomRepo(UserRepository);
+    const ttu = (newUser as any).create(); 
+    ttu.name = 'ttt' + Date.now();
+    await (newUser as any).createSave(ttu);
+    const ret = await newUser.find({ name: ttu.name});
+    assert.ok(ret.length > 0);
 
     const aa = await container.getAsync('baseFnHook');
     assert.equal(aa.bcreate, 1);
