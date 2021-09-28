@@ -51,15 +51,16 @@ export abstract class BaseFramework<
     this.configure(
       this.configService.getConfiguration(this.getFrameworkName())
     );
-  }
-
-  public configure(options?: OPT): BaseFramework<APP, CTX, OPT> {
-    this.configurationOptions = options || ({} as OPT);
     this.BaseContextLoggerClass =
       this.configurationOptions.ContextLoggerClass ||
       this.getDefaultContextLoggerClass();
     this.logger = this.loggerService.getLogger('coreLogger');
     this.appLogger = this.loggerService.getLogger('appLogger');
+    return this;
+  }
+
+  public configure(options?: OPT): BaseFramework<APP, CTX, OPT> {
+    this.configurationOptions = options || ({} as OPT);
     return this;
   }
 
@@ -88,7 +89,6 @@ export abstract class BaseFramework<
       this.defineApplicationProperties();
     }
   }
-  protected async containerStop() {}
 
   public getApplicationContext(): IMidwayContainer {
     return this.applicationContext;
@@ -124,7 +124,6 @@ export abstract class BaseFramework<
   @Destroy()
   public async stop(): Promise<void> {
     await this.beforeStop();
-    await this.containerStop();
   }
 
   public getAppDir(): string {

@@ -1,3 +1,15 @@
+import {
+  BaseFramework,
+  IMidwayApplication,
+  IMidwayBootstrapOptions,
+  initializeGlobalApplicationContext,
+  MidwayFrameworkType,
+  IMidwayFramework,
+  safeRequire, destroyGlobalApplicationContext
+} from '../src';
+import { join } from 'path';
+import { Configuration, Framework, Inject, Provide } from '@midwayjs/decorator';
+
 /**
  * 任意一个数组中的对象，和预期的对象属性一致即可
  * @param arr
@@ -38,4 +50,47 @@ function deepEqual(x, y) {
     ok(x).length === ok(y).length &&
     ok(x).every(key => deepEqual(x[key], y[key]))
   ) : (x === y);
+}
+
+export async function createLightFramework(baseDir: string): Promise<IMidwayFramework<any, any>> {
+  /**
+   * 一个全量的空框架
+   */
+  @Provide()
+  @Framework()
+  class EmptyFramework extends BaseFramework<any, any, any> {
+    getFrameworkType(): MidwayFrameworkType {
+      return MidwayFrameworkType.EMPTY;
+    }
+
+    async run(): Promise<void> {
+    }
+
+    async applicationInitialize(options: IMidwayBootstrapOptions) {
+      this.app = {} as IMidwayApplication;
+      this.defineApplicationProperties();
+    }
+
+    async beforeStop() {
+      await destroyGlobalApplicationContext(this.applicationContext);
+    }
+  }
+
+  @Configuration()
+  class EmptyConfiguration {
+
+    @Inject()
+    customFramework: EmptyFramework;
+
+    async onServerReady() {
+      await this.customFramework.run();
+    }
+  }
+
+  const container = await initializeGlobalApplicationContext({
+    baseDir,
+    configurationModule: [safeRequire(join(baseDir, 'configuration')), EmptyConfiguration]
+  });
+
+  return container.get(EmptyFramework);
 }

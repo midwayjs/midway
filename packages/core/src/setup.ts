@@ -10,11 +10,13 @@ import {
   IMidwayFramework,
   MidwayFrameworkType,
   IMidwayApplication,
+  MidwayLoggerService,
+  getCurrentMainApp,
 } from '../src';
-import { join } from 'path';
 import { MidwayAspectService } from './service/aspectService';
 import {
   listModule,
+  listPreloadModule,
   APPLICATION_KEY,
   CONFIGURATION_KEY,
   LOGGER_KEY,
@@ -22,7 +24,6 @@ import {
   ALL,
   FRAMEWORK_KEY,
 } from '@midwayjs/decorator';
-import { MidwayLoggerService } from './service/loggerService';
 import { FunctionalConfiguration } from './functional/configuration';
 import defaultConfig from './config/config.default';
 
@@ -56,7 +57,7 @@ export async function initializeGlobalApplicationContext(
   // bind preload module
   if (globalOptions.preloadModules && globalOptions.preloadModules.length) {
     for (const preloadModule of globalOptions.preloadModules) {
-      this.applicationContext.bindClass(preloadModule);
+      applicationContext.bindClass(preloadModule);
     }
   }
 
@@ -68,10 +69,12 @@ export async function initializeGlobalApplicationContext(
     },
   ]);
 
-  // load configuration and component
-  applicationContext.load(
-    globalOptions.configurationModule ?? require(join(baseDir, 'configuration'))
-  );
+  for (const configurationModule of [].concat(
+    globalOptions.configurationModule
+  )) {
+    // load configuration and component
+    applicationContext.load(configurationModule);
+  }
 
   // bind user code module
   await applicationContext.ready();
@@ -81,6 +84,18 @@ export async function initializeGlobalApplicationContext(
 
   // init logger
   const loggerService = await applicationContext.getAsync(MidwayLoggerService);
+  applicationContext.registerObject(
+    'coreLogger',
+    loggerService.getLogger('coreLogger')
+  );
+  applicationContext.registerObject(
+    'logger',
+    loggerService.getLogger('appLogger')
+  );
+  applicationContext.registerObject(
+    'appLogger',
+    loggerService.getLogger('appLogger')
+  );
 
   // 切面支持
   const aspectService = await applicationContext.getAsync(MidwayAspectService);
@@ -88,29 +103,33 @@ export async function initializeGlobalApplicationContext(
 
   const frameworks = listModule(FRAMEWORK_KEY);
   const globalAppMap = new Map<MidwayFrameworkType, IMidwayApplication<any>>();
+  let mainApp;
 
-  // init framework and app
-  const frameworkInstances: IMidwayFramework<any, any>[] =
-    await initializeFramework(applicationContext, globalOptions, frameworks);
+  if (frameworks.length) {
+    // init framework and app
+    const frameworkInstances: IMidwayFramework<any, any>[] =
+      await initializeFramework(applicationContext, globalOptions, frameworks);
 
-  for (const frameworkInstance of frameworkInstances) {
-    // app init
-    globalAppMap.set(
-      frameworkInstance.getFrameworkType(),
-      frameworkInstance.getApplication()
-    );
-  }
-
-  const mainApp = frameworkInstances[0].getApplication();
-
-  // register @App decorator handler
-  applicationContext.registerDataHandler(APPLICATION_KEY, type => {
-    if (type) {
-      return globalAppMap.get(type);
-    } else {
-      return mainApp;
+    for (const frameworkInstance of frameworkInstances) {
+      // app init
+      globalAppMap.set(
+        frameworkInstance.getFrameworkType(),
+        frameworkInstance.getApplication()
+      );
     }
-  });
+
+    global['MIDWAY_MAIN_FRAMEWORK'] = frameworkInstances[0];
+    mainApp = frameworkInstances[0].getApplication();
+
+    // register @App decorator handler
+    applicationContext.registerDataHandler(APPLICATION_KEY, type => {
+      if (type) {
+        return globalAppMap.get(type);
+      } else {
+        return mainApp;
+      }
+    });
+  }
 
   // register base config hook
   applicationContext.registerDataHandler(CONFIG_KEY, (key: string) => {
@@ -126,6 +145,13 @@ export async function initializeGlobalApplicationContext(
     return loggerService.getLogger(key);
   });
 
+  // some preload module init
+  const modules = listPreloadModule();
+  for (const module of modules) {
+    // preload init context
+    await applicationContext.getAsync(module);
+  }
+
   // run lifecycle
   const cycles = listModule(CONFIGURATION_KEY);
 
@@ -136,11 +162,9 @@ export async function initializeGlobalApplicationContext(
       cycle.instance = cycle.target;
     } else {
       // 普通类写法
-      if (applicationContext.registry.hasDefinition(cycle.target)) {
-        cycle.instance = await applicationContext.getAsync<ILifeCycle>(
-          cycle.target
-        );
-      }
+      cycle.instance = await applicationContext.getAsync<ILifeCycle>(
+        cycle.target
+      );
     }
 
     cycle.instance && lifecycleInstanceList.push(cycle);
@@ -151,7 +175,7 @@ export async function initializeGlobalApplicationContext(
     if (typeof cycle.instance.onConfigLoad === 'function') {
       const configData = await cycle.instance.onConfigLoad(applicationContext);
       if (configData) {
-        this.getApplicationContext().getConfigService().addObject(configData);
+        configService.addObject(configData);
       }
     }
   }
@@ -159,14 +183,14 @@ export async function initializeGlobalApplicationContext(
   // exec onReady()
   for (const cycle of lifecycleInstanceList) {
     if (typeof cycle.instance.onReady === 'function') {
-      await cycle.instance.onReady(applicationContext, this.app);
+      await cycle.instance.onReady(applicationContext, mainApp);
     }
   }
 
   // exec onServerReady()
   for (const cycle of lifecycleInstanceList) {
     if (typeof cycle.instance.onServerReady === 'function') {
-      await cycle.instance.onServerReady(applicationContext, this.app);
+      await cycle.instance.onServerReady(applicationContext, mainApp);
     }
   }
 
@@ -188,7 +212,7 @@ export async function destroyGlobalApplicationContext(
     }
 
     if (inst.onStop && typeof inst.onStop === 'function') {
-      await inst.onStop(applicationContext, this.app);
+      await inst.onStop(applicationContext, getCurrentMainApp());
     }
   }
   // stop container
@@ -202,12 +226,17 @@ async function initializeFramework(
 ): Promise<IMidwayFramework<any, any>[]> {
   return Promise.all(
     frameworks.map(framework => {
+      // bind first
+      applicationContext.bindClass(framework);
       return (async () => {
         const frameworkInstance = (await applicationContext.getAsync(
           framework
         )) as IMidwayFramework<any, any>;
         // app init
-        await frameworkInstance.initialize(globalOptions);
+        await frameworkInstance.initialize({
+          applicationContext,
+          ...globalOptions,
+        });
         return frameworkInstance;
       })();
     })

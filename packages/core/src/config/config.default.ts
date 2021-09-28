@@ -1,5 +1,5 @@
 import { MIDWAY_LOGGER_WRITEABLE_DIR, MidwayAppInfo } from '../interface';
-import { isDevelopmentEnvironment } from '../util/';
+import { getCurrentEnvironment, isDevelopmentEnvironment } from '../util/';
 import { join } from 'path';
 
 export default (appInfo: MidwayAppInfo) => {
@@ -11,13 +11,15 @@ export default (appInfo: MidwayAppInfo) => {
           'logs',
           appInfo.name
         ),
-        level: isDevelopmentEnvironment ? 'info' : 'warn',
+        level: isDevelopmentEnvironment(getCurrentEnvironment())
+          ? 'info'
+          : 'warn',
       },
       clients: {
         coreLogger: {
           fileLogName: 'midway-core.log',
         },
-        logger: {
+        appLogger: {
           fileLogName: 'midway-app.log',
         },
       },

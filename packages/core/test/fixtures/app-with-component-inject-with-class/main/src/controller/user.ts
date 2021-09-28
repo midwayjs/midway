@@ -1,6 +1,6 @@
 import { Provide, Controller, Inject, Get } from '@midwayjs/decorator';
 import { BookService, dynamicCacheServiceHandler } from '../../../book';
-import { BookServiceOne } from '../../../bookstr/src/bookService';
+import { BookServiceOne } from '../../../bookstr';
 
 @Provide()
 @Controller('/user')

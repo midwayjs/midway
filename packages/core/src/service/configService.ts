@@ -106,7 +106,22 @@ export class MidwayConfigService implements IConfigService {
     for (const filename of [...defaultSet, ...currentEnvSet]) {
       let config = filename;
       if (typeof filename === 'string') {
-        config = await this.loadConfig(filename, target);
+        config = await this.loadConfig(filename);
+      }
+      if (isFunction(config)) {
+        // eslint-disable-next-line prefer-spread
+        config = config.apply(null, [
+          {
+            pkg: this.informationService.getPkg(),
+            name: this.informationService.getProjectName(),
+            baseDir: this.informationService.getBaseDir(),
+            appDir: this.informationService.getAppDir(),
+            HOME: this.informationService.getHome(),
+            root: this.informationService.getRoot(),
+            env: this.environmentService.getCurrentEnvironment(),
+          },
+          target,
+        ]);
       }
 
       if (!config) {
@@ -136,29 +151,13 @@ export class MidwayConfigService implements IConfigService {
     return this.configuration;
   }
 
-  async loadConfig(configFilename, target?): Promise<Record<string, unknown>> {
+  async loadConfig(configFilename): Promise<Record<string, unknown>> {
     debug('load config %s.', configFilename);
     let exports = require(configFilename);
     if (exports && exports['default'] && Object.keys(exports).length === 1) {
       exports = exports['default'];
     }
-    let result = exports;
-    if (isFunction(exports)) {
-      // eslint-disable-next-line prefer-spread
-      result = exports.apply(null, [
-        {
-          pkg: this.informationService.getPkg(),
-          name: this.informationService.getProjectName(),
-          baseDir: this.informationService.getBaseDir(),
-          appDir: this.informationService.getAppDir(),
-          HOME: this.informationService.getHome(),
-          root: this.informationService.getRoot(),
-          env: this.environmentService.getCurrentEnvironment(),
-        },
-        target,
-      ]);
-    }
-    return result;
+    return exports;
   }
 
   clearAllConfig() {
