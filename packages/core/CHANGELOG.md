@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.13.3](https://github.com/midwayjs/midway/compare/v2.13.2...v2.13.3) (2021-09-28)
+
+
+### Bug Fixes
+
+* circular inject for provide uuid ([#1285](https://github.com/midwayjs/midway/issues/1285)) ([29a7ab7](https://github.com/midwayjs/midway/commit/29a7ab742359f7803f5dc562329e887b191a2d63))
+* functional configuration load async code ([#1300](https://github.com/midwayjs/midway/issues/1300)) ([8cb4bd6](https://github.com/midwayjs/midway/commit/8cb4bd679e7e731f8649466cfb7f6a4b35ba2683))
+
+
+
+
+
 ## [2.13.2](https://github.com/midwayjs/midway/compare/v2.13.1...v2.13.2) (2021-09-09)
 
 **Note:** Version bump only for package @midwayjs/core

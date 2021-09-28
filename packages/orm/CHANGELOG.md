@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.13.3](https://github.com/midwayjs/midway/compare/v2.13.2...v2.13.3) (2021-09-28)
+
+
+### Bug Fixes
+
+* getCustomRepository bug ([#1309](https://github.com/midwayjs/midway/issues/1309)) ([ec77a7b](https://github.com/midwayjs/midway/commit/ec77a7b6e9d34d28f78c5e1acf7b877209539345))
+
+
+
+
+
 ## [2.13.2](https://github.com/midwayjs/midway/compare/v2.13.1...v2.13.2) (2021-09-09)
 
 **Note:** Version bump only for package @midwayjs/orm

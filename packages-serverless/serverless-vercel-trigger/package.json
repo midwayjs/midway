@@ -1,10 +1,10 @@
 {
   "name": "@midwayjs/serverless-vercel-trigger",
-  "version": "2.12.3",
+  "version": "2.13.3",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
-    "@midwayjs/runtime-mock": "^2.11.2"
+    "@midwayjs/runtime-mock": "^2.13.3"
   },
   "engines": {
     "node": ">= 10"

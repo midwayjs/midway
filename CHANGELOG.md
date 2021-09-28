@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.13.3](https://github.com/midwayjs/midway/compare/v2.13.2...v2.13.3) (2021-09-28)
+
+
+### Bug Fixes
+
+* circular inject for provide uuid ([#1285](https://github.com/midwayjs/midway/issues/1285)) ([29a7ab7](https://github.com/midwayjs/midway/commit/29a7ab742359f7803f5dc562329e887b191a2d63))
+* disable performance marking for invoke handlers ([#1299](https://github.com/midwayjs/midway/issues/1299)) ([727a252](https://github.com/midwayjs/midway/commit/727a252ccfe232d144487eaf2a3310a34d277477))
+* functional configuration load async code ([#1300](https://github.com/midwayjs/midway/issues/1300)) ([8cb4bd6](https://github.com/midwayjs/midway/commit/8cb4bd679e7e731f8649466cfb7f6a4b35ba2683))
+* getCustomRepository bug ([#1309](https://github.com/midwayjs/midway/issues/1309)) ([ec77a7b](https://github.com/midwayjs/midway/commit/ec77a7b6e9d34d28f78c5e1acf7b877209539345))
+
+
+### Features
+
+* add tablestore component and typescript definition ([#1302](https://github.com/midwayjs/midway/issues/1302)) ([094b027](https://github.com/midwayjs/midway/commit/094b0277ff0fed969d438e85b62cf99e06b024c3))
+* add view, view-ejs and view-nunjucks ([#1308](https://github.com/midwayjs/midway/issues/1308)) ([2621ae1](https://github.com/midwayjs/midway/commit/2621ae1a82c5c4a4c4347b9bbb4349c8a75bee00))
+
+
+
+
+
 ## [2.13.2](https://github.com/midwayjs/midway/compare/v2.13.1...v2.13.2) (2021-09-09)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.13.3](https://github.com/midwayjs/midway/compare/v2.13.2...v2.13.3) (2021-09-28)
+
+
+### Features
+
+* add view, view-ejs and view-nunjucks ([#1308](https://github.com/midwayjs/midway/issues/1308)) ([2621ae1](https://github.com/midwayjs/midway/commit/2621ae1a82c5c4a4c4347b9bbb4349c8a75bee00))
+
+
+
+
+
 ## [2.13.2](https://github.com/midwayjs/midway/compare/v2.13.1...v2.13.2) (2021-09-09)
 
 **Note:** Version bump only for package @midwayjs/web
