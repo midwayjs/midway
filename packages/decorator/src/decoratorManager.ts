@@ -869,17 +869,3 @@ export function getPropertyType(target, methodName: string | symbol) {
 export function getMethodReturnTypes(target, methodName: string | symbol) {
   return Reflect.getMetadata('design:returntype', target, methodName);
 }
-
-/**
- * 以数组形式返回所有原型，数组第一个元素是距离 o 最近的原型
- * @param target 对象，class 或者 function
- */
-export function recursiveGetPrototypeOf(target: any): any[] {
-  const properties = [];
-  let parent = Reflect.getPrototypeOf(target);
-  while (parent !== null) {
-    properties.push(parent);
-    parent = Reflect.getPrototypeOf(parent);
-  }
-  return properties;
-}

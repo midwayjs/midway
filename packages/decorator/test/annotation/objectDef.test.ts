@@ -6,10 +6,12 @@ import {
   getObjectDefinition,
 } from '../../src';
 
+class Parent {}
+
 @Scope(ScopeEnum.Prototype)
-class Test {
+class Test extends Parent {
   @Init()
-  init() {}
+  async abcde() {}
 
   @Destroy()
   destroy() {}
@@ -23,7 +25,7 @@ describe('/test/annotation/objectDef.test.ts', () => {
     const def = getObjectDefinition(Test);
     expect(def).toStrictEqual({
       scope: ScopeEnum.Prototype,
-      initMethod: 'init',
+      initMethod: 'abcde',
       destroyMethod: 'destroy',
     });
 

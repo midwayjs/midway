@@ -152,16 +152,6 @@ describe('/test/common/decoratorManager.test.ts', () => {
     expect(meta).toStrictEqual([{ a: 1, b: 22 }]);
   });
 
-
-  // it('should generateProvideId be ok', () => {
-  //   saveIdentifierMapping('@ok:test1', '123');
-  //   const id = generateProvideId('@ok:test1', 'ok');
-  //   assert.deepEqual('ok:test1', id, 'provide id is not ok:test1');
-  //   const id2 = generateProvideId('ok:test1', 'ok');
-  //   assert.deepEqual('ok:test1', id2, 'provide id is not ok:test1');
-  //   clearAllModule();
-  // });
-
   it('should test getPropertyType', function () {
 
     function ApiProperty(): PropertyDecorator {

@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/prometheus-socket-io",
-  "version": "2.12.9",
+  "version": "3.0.0-alpha.42",
   "description": "midway component for prometheus",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",

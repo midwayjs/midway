@@ -40,7 +40,6 @@
     "lodash.get": "^4.4.2",
     "lodash.set": "^4.3.2",
     "lodash.template": "^4.4.0",
-    "midway-test-component": "*",
     "picomatch": "^2.2.2",
     "reflect-metadata": "^0.1.13"
   },

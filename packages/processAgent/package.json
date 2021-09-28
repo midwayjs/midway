@@ -25,7 +25,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/core": "^2.12.9",
+    "@midwayjs/core": "^3.0.0-alpha.42",
     "@midwayjs/decorator": "^3.0.0-alpha.42",
     "@midwayjs/koa": "^3.0.0-alpha.42",
     "@midwayjs/mock": "^3.0.0-alpha.42"
