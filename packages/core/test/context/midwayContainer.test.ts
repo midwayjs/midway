@@ -189,9 +189,6 @@ describe('/test/context/midwayContainer.test.ts', () => {
     expect(app.getConfig().a).toEqual(3);
     // 其实这里循环依赖了
     expect(app.easyLoader.getConfig().a).toEqual(1);
-
-    expect(container.getEnvironmentService()).toBeDefined();
-    expect(container.getEnvironmentService().getCurrentEnvironment()).toEqual('test');
   });
 
 });

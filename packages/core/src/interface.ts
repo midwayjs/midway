@@ -19,19 +19,6 @@ export interface ILifeCycle {
   onStop?(container: IMidwayContainer, app?: IMidwayApplication): Promise<void>;
 }
 
-export type Locale = string;
-
-/**
- * 多语言支持接口
- */
-export interface IMessageSource {
-  get(
-    code: string,
-    args?: any[],
-    defaultMessage?: string,
-    locale?: Locale
-  ): string;
-}
 /**
  * 对象容器抽象
  * 默认用Xml容器实现一个
@@ -75,29 +62,6 @@ export interface IObjectDefinition {
 export interface HandlerProp {
   handlerKey: string;
   prop: FrameworkDecoratorMetadata;
-}
-
-/**
- * 对象描述元数据，用于生成对象定义
- */
-export interface IObjectDefinitionMetadata {
-  namespace?: string;
-  id: ObjectIdentifier;
-  name: string;
-  initMethod: string;
-  destroyMethod: string;
-  constructMethod: string;
-  scope: ScopeEnum;
-  srcPath: string;
-  path: any;
-  export: string;
-  dependsOn: ObjectIdentifier[];
-  constructorArgs: Array<{ value?: string; args?: any; type: string; } | undefined>;
-  asynchronous: boolean;
-  properties: any[];
-  definitionType: 'object' | 'function';
-  // 暂存依赖的 key、propertyName
-  handlerProps: HandlerProp[];
 }
 
 export interface FrameworkDecoratorMetadata {
@@ -146,38 +110,19 @@ export interface IObjectDefinitionRegistry {
  * 属性配置抽象
  */
 export interface IProperties {
-  readonly size: number;
+  // readonly size: number;
   keys(): ObjectIdentifier[];
   get(key: ObjectIdentifier, ...args: any[]): any;
-  dup(key: ObjectIdentifier): any;
-  has(key: ObjectIdentifier): boolean;
+  // dup(key: ObjectIdentifier): any;
+  // has(key: ObjectIdentifier): boolean;
   set(key: ObjectIdentifier, value: any): any;
-  putAll(props: IProperties): void;
-  toJSON(): object;
-  stringPropertyNames(): ObjectIdentifier[];
-  getProperty(key: ObjectIdentifier, defaultValue?: any): any;
-  addProperty(key: ObjectIdentifier, value: any): void;
-  setProperty(key: ObjectIdentifier, value: any): any;
-  clear(): void;
-}
-/**
- * 资源配置抽象
- */
-export interface IResource {
-  readonly name: string;
-  readonly contentLength: number;
-  readonly lastModified: number;
-  encoding: string;
-  exists(): boolean;
-  isDir(): boolean;
-  isFile(): boolean;
-  isURL(): boolean;
-  getURL(): any;
-  getPath(): string;
-  getContent(): Buffer;
-  getContentAsJSON(): object;
-  getSubResources(): IResource[];
-  createRelative(path: string): IResource;
+  // putAll(props: IProperties): void;
+  // toJSON(): object;
+  // stringPropertyNames(): ObjectIdentifier[];
+  // getProperty(key: ObjectIdentifier, defaultValue?: any): any;
+  // addProperty(key: ObjectIdentifier, value: any): void;
+  // setProperty(key: ObjectIdentifier, value: any): any;
+  // clear(): void;
 }
 
 /**

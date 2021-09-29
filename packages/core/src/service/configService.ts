@@ -151,7 +151,7 @@ export class MidwayConfigService implements IConfigService {
     return this.configuration;
   }
 
-  async loadConfig(configFilename): Promise<Record<string, unknown>> {
+  private async loadConfig(configFilename): Promise<Record<string, unknown>> {
     debug('load config %s.', configFilename);
     let exports = require(configFilename);
     if (exports && exports['default'] && Object.keys(exports).length === 1) {
