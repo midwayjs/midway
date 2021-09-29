@@ -18,7 +18,6 @@ export class MidwayLoggerService extends ServiceFactory<ILogger> {
 
   @Init()
   async init() {
-    console.log('----');
     await this.initClients(this.configService.getConfiguration('midwayLogger'));
   }
 

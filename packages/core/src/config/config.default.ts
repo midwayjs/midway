@@ -19,7 +19,7 @@ export default (appInfo: MidwayAppInfo) => {
         coreLogger: {
           fileLogName: 'midway-core.log',
         },
-        appLogger: {
+        logger: {
           fileLogName: 'midway-app.log',
         },
       },

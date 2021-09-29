@@ -1,4 +1,4 @@
-import { Scope } from '../../decorator';
+import { Scope } from '../objectDef';
 import {
   ScopeEnum,
   saveClassMetadata,

@@ -1,6 +1,5 @@
 import { Destroy, Init, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
 import { MidwayContainer, MidwayLoggerService, MidwayConfigService, MidwayEnvironmentService, MidwayInformationService } from '../src';
-import { MidwayAspectService } from '../src/service/aspectService';
 
 class Parent {}
 
@@ -12,27 +11,31 @@ class Test extends Parent {
     console.log('run');
   }
 
+  get() {
+    return 'hello world'
+  }
+
   @Destroy()
   destroy() {}
 }
 
-describe('/test/index.test.ts', () => {
+describe('/test/init.test.ts', () => {
   it('test init method', async () => {
     const container = new MidwayContainer();
     container.bindClass(Test);
     const t = await container.getAsync(Test);
-    console.log(t['init']);
+    // const t = Reflect.construct(Test, []);
+    expect(t['init']).toBeDefined();
 
     container.bindClass(MidwayEnvironmentService);
     container.bindClass(MidwayInformationService);
     container.bindClass(MidwayConfigService);
-    container.bindClass(MidwayAspectService);
     container.bindClass(MidwayLoggerService);
 
     container.registerObject('baseDir', '');
     container.registerObject('appDir', '');
 
     const loggerService = await container.getAsync(MidwayLoggerService);
-    console.log(loggerService['init']);
+    expect(loggerService['init']).toBeDefined();
   });
 });

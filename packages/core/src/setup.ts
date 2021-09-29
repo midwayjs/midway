@@ -84,16 +84,10 @@ export async function initializeGlobalApplicationContext(
 
   // init logger
   const loggerService = await applicationContext.getAsync(MidwayLoggerService);
-  applicationContext.registerObject(
-    'coreLogger',
-    loggerService.getLogger('coreLogger')
-  );
+
+  // alias inject logger
   applicationContext.registerObject(
     'logger',
-    loggerService.getLogger('appLogger')
-  );
-  applicationContext.registerObject(
-    'appLogger',
     loggerService.getLogger('appLogger')
   );
 

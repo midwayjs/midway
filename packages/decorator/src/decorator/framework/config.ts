@@ -5,7 +5,7 @@ import {
   INJECT_CUSTOM_TAG,
 } from '../../';
 
-export function Config(identifier?: string) {
+export function Config(identifier?: string): PropertyDecorator {
   return function (target: any, targetKey: string): void {
     if (!identifier) {
       identifier = targetKey;

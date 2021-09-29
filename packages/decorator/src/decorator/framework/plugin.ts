@@ -1,6 +1,6 @@
 import { attachClassMetadata, INJECT_CUSTOM_TAG, PLUGIN_KEY } from '../../';
 
-export function Plugin(identifier?: string) {
+export function Plugin(identifier?: string): PropertyDecorator {
   return function (target: any, targetKey: string): void {
     if (!identifier) {
       identifier = targetKey;

@@ -55,7 +55,7 @@ export abstract class BaseFramework<
       this.configurationOptions.ContextLoggerClass ||
       this.getDefaultContextLoggerClass();
     this.logger = this.loggerService.getLogger('coreLogger');
-    this.appLogger = this.loggerService.getLogger('appLogger');
+    this.appLogger = this.loggerService.getLogger('logger');
     return this;
   }
 

@@ -10,31 +10,33 @@ import { Configuration, Framework, Inject, Provide } from '@midwayjs/decorator';
 
 describe('/test/setup.test.ts', () => {
   it('should test setup and config', async () => {
-
+    const baseDir = join(
+      __dirname,
+      './fixtures/base-app-config/src'
+    );
     const container = await initializeGlobalApplicationContext({
-      baseDir: join(
-        __dirname,
-        './fixtures/base-app-config/src'
-      )
+      baseDir,
+      configurationModule: [require(join(baseDir, 'configuration'))]
     });
 
     const configService = await container.getAsync(MidwayConfigService);
-    expect(configService.getConfiguration()).toEqual({
-      "hello": {
-        "a": 1,
-        "b": 4,
-        "c": 3,
-        "d": [
+    const config = configService.getConfiguration();
+    expect(config).toHaveProperty('hello',
+      {
+        'a': 1,
+        'b': 4,
+        'c': 3,
+        'd': [
           1,
           2,
           3
         ]
-      },
-      "keys": "key",
-      "plugins": {
-        "bucLogin": false
-      }
-    });
+      });
+
+    expect(config).toHaveProperty('plugins',
+      {
+        'bucLogin': false
+      });
   });
 
   it('should test setup a framework and get from container', async () => {
@@ -48,7 +50,8 @@ describe('/test/setup.test.ts', () => {
         return MidwayFrameworkType.EMPTY;
       }
 
-      async run(): Promise<void> {}
+      async run(): Promise<void> {
+      }
 
       async applicationInitialize(options: IMidwayBootstrapOptions) {
         this.app = {} as IMidwayApplication;
@@ -77,22 +80,23 @@ describe('/test/setup.test.ts', () => {
     });
 
     const configService = await container.getAsync(MidwayConfigService);
-    expect(configService.getConfiguration()).toEqual({
-      "hello": {
-        "a": 1,
-        "b": 4,
-        "c": 3,
-        "d": [
+    const config = configService.getConfiguration();
+    expect(config).toHaveProperty('hello',
+      {
+        'a': 1,
+        'b': 4,
+        'c': 3,
+        'd': [
           1,
           2,
           3
         ]
-      },
-      "keys": "key",
-      "plugins": {
-        "bucLogin": false
-      }
-    });
+      });
+
+    expect(config).toHaveProperty('plugins',
+      {
+        'bucLogin': false
+      });
 
     // test applicationContext set
     const framework = await container.getAsync(EmptyFramework);

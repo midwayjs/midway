@@ -14,15 +14,17 @@ export class MidwayInformationService implements IInformationService {
   private pkg: Record<string, unknown>;
 
   @Inject()
-  private appDir: string;
+  protected appDir: string;
 
   @Inject()
-  private baseDir: string;
+  protected baseDir: string;
 
   @Init()
-  init() {
-    if (!this.appDir && this.baseDir) {
-      this.appDir = dirname(this.baseDir);
+  protected init() {
+    if (this.baseDir) {
+      if (!this.appDir) {
+        this.appDir = dirname(this.baseDir);
+      }
       this.pkg = safeRequire(join(this.appDir, 'package.json')) || {};
     } else {
       this.pkg = {};

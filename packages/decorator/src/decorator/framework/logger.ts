@@ -1,6 +1,6 @@
 import { attachClassMetadata, INJECT_CUSTOM_TAG, LOGGER_KEY } from '../../';
 
-export function Logger(identifier?: string) {
+export function Logger(identifier?: string): PropertyDecorator {
   return function (target: any, targetKey: string): void {
     if (!identifier) {
       identifier = targetKey;

@@ -7,7 +7,7 @@ export abstract class ServiceFactory<T> {
   protected clients: Map<string, T> = new Map();
   protected options = {};
 
-  protected async initClients(options): Promise<void> {
+  protected async initClients(options: any = {}): Promise<void> {
     this.options = options;
     assert(
       !(options.client && options.clients),

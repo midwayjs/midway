@@ -24,15 +24,15 @@ export class MidwayConfigService implements IConfigService {
     prod: 'production',
     unittest: 'test',
   };
-  configuration;
-  isReady = false;
-  externalObject: Record<string, unknown>[] = [];
+  protected configuration;
+  protected isReady = false;
+  protected externalObject: Record<string, unknown>[] = [];
 
   @Inject()
-  environmentService: MidwayEnvironmentService;
+  protected environmentService: MidwayEnvironmentService;
 
   @Inject()
-  informationService: MidwayInformationService;
+  protected informationService: MidwayInformationService;
 
   add(configFilePaths: any[]) {
     for (const dir of configFilePaths) {
@@ -75,14 +75,14 @@ export class MidwayConfigService implements IConfigService {
     }
   }
 
-  getEnvSet(env) {
+  private getEnvSet(env) {
     if (!this.envDirMap.has(env)) {
       this.envDirMap.set(env, new Set());
     }
     return this.envDirMap.get(env);
   }
 
-  getConfigEnv(configFilePath) {
+  private getConfigEnv(configFilePath) {
     // parse env
     const configFileBaseName = basename(configFilePath);
     const splits = configFileBaseName.split('.');
