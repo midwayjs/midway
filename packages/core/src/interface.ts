@@ -109,20 +109,10 @@ export interface IObjectDefinitionRegistry {
 /**
  * 属性配置抽象
  */
-export interface IProperties {
-  // readonly size: number;
-  keys(): ObjectIdentifier[];
-  get(key: ObjectIdentifier, ...args: any[]): any;
-  // dup(key: ObjectIdentifier): any;
-  // has(key: ObjectIdentifier): boolean;
-  set(key: ObjectIdentifier, value: any): any;
-  // putAll(props: IProperties): void;
-  // toJSON(): object;
-  // stringPropertyNames(): ObjectIdentifier[];
-  // getProperty(key: ObjectIdentifier, defaultValue?: any): any;
-  // addProperty(key: ObjectIdentifier, value: any): void;
-  // setProperty(key: ObjectIdentifier, value: any): any;
-  // clear(): void;
+export interface IProperties extends Map<ObjectIdentifier, any> {
+  getProperty(key: ObjectIdentifier, defaultValue?: any): any;
+  setProperty(key: ObjectIdentifier, value: any): any;
+  propertyKeys(): ObjectIdentifier[];
 }
 
 /**

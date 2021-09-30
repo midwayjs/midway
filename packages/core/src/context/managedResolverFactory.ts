@@ -2,7 +2,6 @@
  * 管理对象解析构建
  */
 import { IManagedInstance, ObjectIdentifier } from '@midwayjs/decorator';
-import * as _ from '../common/lodashWrap';
 import { KEYS } from '../common/constants';
 import {
   IManagedResolver,
@@ -134,7 +133,7 @@ export class ManagedResolverFactory {
     const Clzz = definition.creator.load();
 
     let constructorArgs = [];
-    if (args && _.isArray(args) && args.length > 0) {
+    if (args && Array.isArray(args) && args.length > 0) {
       constructorArgs = args;
     }
 
@@ -157,7 +156,7 @@ export class ManagedResolverFactory {
     }
 
     if (definition.properties) {
-      const keys = definition.properties.keys() as string[];
+      const keys = definition.properties.propertyKeys() as string[];
       for (const key of keys) {
         try {
           inst[key] = this.resolveManaged(definition.properties.get(key));
@@ -224,7 +223,7 @@ export class ManagedResolverFactory {
 
     const Clzz = definition.creator.load();
     let constructorArgs = [];
-    if (args && _.isArray(args) && args.length > 0) {
+    if (args && Array.isArray(args) && args.length > 0) {
       constructorArgs = args;
     }
 
@@ -256,7 +255,7 @@ export class ManagedResolverFactory {
     }
 
     if (definition.properties) {
-      const keys = definition.properties.keys() as string[];
+      const keys = definition.properties.propertyKeys() as string[];
       for (const key of keys) {
         try {
           inst[key] = await this.resolveManagedAsync(
@@ -403,7 +402,7 @@ export class ManagedResolverFactory {
     if (definition) {
       debug('dfs for %s == %s start.', identifier, definition.id);
       if (definition.properties) {
-        const keys = definition.properties.keys() as string[];
+        const keys = definition.properties.propertyKeys() as string[];
         if (keys.indexOf(identifier) > -1) {
           debug('dfs exist in properties %s == %s.', identifier, definition.id);
           return true;
