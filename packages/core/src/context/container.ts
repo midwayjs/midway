@@ -45,6 +45,7 @@ import {
 import { NotFoundError } from '../common/notFoundError';
 import { MidwayEnvironmentService } from '../service/environmentService';
 import { MidwayConfigService } from '../service/configService';
+import { MidwayAspectService } from '../service/aspectService';
 
 const debug = util.debuglog('midway:container:configuration');
 const globalDebugLogger = util.debuglog('midway:container');
@@ -212,7 +213,6 @@ export class MidwayContainer implements IMidwayContainer {
   protected configService: IConfigService;
   protected environmentService: IEnvironmentService;
   protected informationService: IInformationService;
-  protected aspectService;
   private fileDetector: IFileDetector;
   private attrMap: Map<string, any> = new Map();
   private isLoad = false;
@@ -255,6 +255,10 @@ export class MidwayContainer implements IMidwayContainer {
       this._identifierMapping = this.registry.getIdentifierRelation();
     }
     return this._identifierMapping;
+  }
+
+  get aspectService() {
+    return this.get(MidwayAspectService);
   }
 
   load(module?) {

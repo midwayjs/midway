@@ -29,6 +29,40 @@ export class ObjectProperties implements IProperties {
     return origin;
   }
 
+  putAll(props: IProperties): void {
+    const keys = props.keys();
+    for (const key of keys) {
+      if (typeof this.innerConfig.get(key) === 'object') {
+        this.set(
+          key,
+          _.defaultsDeep(props.get(key), this.innerConfig.get(key))
+        );
+      } else {
+        this.set(key, props.get(key));
+      }
+    }
+  }
+
+  stringPropertyNames(): ObjectIdentifier[] {
+    return this.keys();
+  }
+
+  getProperty(key: ObjectIdentifier, defaultValue?: any): any {
+    if (this.has(key)) {
+      return this.get(key);
+    }
+
+    return defaultValue;
+  }
+
+  addProperty(key: ObjectIdentifier, value: any): void {
+    this.set(key, value);
+  }
+
+  setProperty(key: ObjectIdentifier, value: any): any {
+    return this.set(key, value);
+  }
+
   clear(): void {
     this.innerConfig.clear();
   }
