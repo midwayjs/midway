@@ -92,7 +92,9 @@ export async function initializeGlobalApplicationContext(
   );
 
   // 切面支持
-  const aspectService = await applicationContext.getAsync(MidwayAspectService);
+  const aspectService = await applicationContext.getAsync(MidwayAspectService, [
+    applicationContext,
+  ]);
   await aspectService.loadAspect();
 
   const frameworks = listModule(FRAMEWORK_KEY);

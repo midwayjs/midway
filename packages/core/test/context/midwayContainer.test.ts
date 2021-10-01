@@ -18,7 +18,6 @@ describe('/test/context/midwayContainer.test.ts', () => {
 
   beforeEach(() => {
     clearAllModule();
-    // MidwayContainer.parentDefinitionMetadata = null;
   });
 
   it('should create new loader', async () => {

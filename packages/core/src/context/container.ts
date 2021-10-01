@@ -24,14 +24,12 @@ import { FunctionalConfiguration } from '../functional/configuration';
 import * as util from 'util';
 import { ObjectDefinitionRegistry } from './definitionRegistry';
 import {
-  IConfigService,
-  IEnvironmentService,
   IFileDetector,
   IIdentifierRelationShip,
-  IInformationService,
   IMidwayContainer,
   IObjectDefinition,
   IObjectDefinitionRegistry,
+  ObjectCreateEvent,
   REQUEST_CTX_KEY,
 } from '../interface';
 import { FUNCTION_INJECT_KEY } from '../common/constants';
@@ -45,7 +43,6 @@ import {
 import { NotFoundError } from '../common/notFoundError';
 import { MidwayEnvironmentService } from '../service/environmentService';
 import { MidwayConfigService } from '../service/configService';
-import { MidwayAspectService } from '../service/aspectService';
 
 const debug = util.debuglog('midway:container:configuration');
 const globalDebugLogger = util.debuglog('midway:container');
@@ -96,7 +93,9 @@ class ContainerConfiguration {
     }
 
     // bind module
-    this.container.bindClass(module, namespace);
+    this.container.bindClass(module, {
+      namespace,
+    });
   }
 
   addImportConfigs(importConfigs: string[]) {
@@ -210,9 +209,6 @@ export class MidwayContainer implements IMidwayContainer {
   protected resolverHandler: ResolverHandler;
   // 仅仅用于兼容requestContainer的ctx
   protected ctx = {};
-  protected configService: IConfigService;
-  protected environmentService: IEnvironmentService;
-  protected informationService: IInformationService;
   private fileDetector: IFileDetector;
   private attrMap: Map<string, any> = new Map();
   private isLoad = false;
@@ -257,10 +253,6 @@ export class MidwayContainer implements IMidwayContainer {
     return this._identifierMapping;
   }
 
-  get aspectService() {
-    return this.get(MidwayAspectService);
-  }
-
   load(module?) {
     this.isLoad = true;
     if (module) {
@@ -278,20 +270,14 @@ export class MidwayContainer implements IMidwayContainer {
     this.fileDetector?.run(this);
   }
 
-  bindClass(exports, namespace = '', filePath?: string) {
+  bindClass(exports, options?: ObjectDefinitionOptions) {
     if (isClass(exports) || isFunction(exports)) {
-      this.bindModule(exports, {
-        namespace,
-        srcPath: filePath,
-      });
+      this.bindModule(exports, options);
     } else {
       for (const m in exports) {
         const module = exports[m];
         if (isClass(module) || isFunction(module)) {
-          this.bindModule(module, {
-            namespace,
-            srcPath: filePath,
-          });
+          this.bindModule(module, options);
         }
       }
     }
@@ -440,11 +426,6 @@ export class MidwayContainer implements IMidwayContainer {
     return getProviderUUId(target);
   }
 
-  protected findRegisterObject(identifier) {
-    const ins = this.registry.getObject(identifier);
-    return this.aspectService.wrapperAspectToInstance(ins);
-  }
-
   protected getManagedResolverFactory() {
     if (!this._resolverFactory) {
       this._resolverFactory = new ManagedResolverFactory(this);
@@ -533,5 +514,15 @@ export class MidwayContainer implements IMidwayContainer {
     fn: (Clzz: any, constructorArgs: any[], context: IMidwayContainer) => void
   ) {
     this.managedResolverFactory.beforeEachCreated(fn);
+  }
+
+  onObjectCreated(
+    fn: (
+      ins: any,
+      context: IMidwayContainer,
+      definition: IObjectDefinition
+    ) => void
+  ) {
+    this.managedResolverFactory.on(ObjectCreateEvent.AFTER_CREATED, fn);
   }
 }

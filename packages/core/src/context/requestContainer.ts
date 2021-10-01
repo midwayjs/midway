@@ -42,7 +42,7 @@ export class MidwayRequestContainer extends MidwayContainer {
     }
 
     if (this.registry.hasObject(identifier)) {
-      return this.findRegisterObject(identifier);
+      return this.registry.getObject(identifier);
     }
 
     const definition =
@@ -53,11 +53,10 @@ export class MidwayRequestContainer extends MidwayContainer {
         definition.id === PIPELINE_IDENTIFIER
       ) {
         // create object from applicationContext definition for requestScope
-        const ins = this.getManagedResolverFactory().create({
+        return this.getManagedResolverFactory().create({
           definition,
           args,
         });
-        return this.aspectService.wrapperAspectToInstance(ins);
       }
     }
 
@@ -72,7 +71,7 @@ export class MidwayRequestContainer extends MidwayContainer {
     }
 
     if (this.registry.hasObject(identifier)) {
-      return this.findRegisterObject(identifier);
+      return this.registry.getObject(identifier);
     }
 
     const definition =
@@ -83,11 +82,10 @@ export class MidwayRequestContainer extends MidwayContainer {
         definition.id === PIPELINE_IDENTIFIER
       ) {
         // create object from applicationContext definition for requestScope
-        const ins = await this.getManagedResolverFactory().createAsync({
+        return this.getManagedResolverFactory().createAsync({
           definition,
           args,
         });
-        return this.aspectService.wrapperAspectToInstance(ins);
       }
     }
 

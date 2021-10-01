@@ -1,6 +1,7 @@
 import { Bootstrap, BootstrapStarter } from '@midwayjs/bootstrap';
 import {
-  IMidwayApplication, IMidwayContainer,
+  IMidwayApplication,
+  IMidwayContainer,
   IMidwayFramework,
   LightFramework,
   MidwayFrameworkType,

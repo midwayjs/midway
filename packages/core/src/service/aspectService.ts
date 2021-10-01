@@ -9,6 +9,7 @@ import {
   Provide,
   Scope,
   ScopeEnum,
+  Init,
 } from '@midwayjs/decorator';
 import * as pm from 'picomatch';
 import { IAspectService, IMidwayContainer } from '../interface';
@@ -19,15 +20,18 @@ const debugLogger = util.debuglog('midway:container:aspect');
 @Provide()
 @Scope(ScopeEnum.Singleton)
 export class MidwayAspectService implements IAspectService {
-  protected aspectMappingMap: WeakMap<any, Map<string, any[]>>;
-  private aspectModuleSet: Set<any>;
-  private container: IMidwayContainer;
+  protected aspectMappingMap: WeakMap<any, Map<string, any[]>> = new WeakMap();
+  private aspectModuleSet: Set<any> = new Set();
 
-  constructor(container) {
-    this.container = container;
-    this.aspectMappingMap = new WeakMap();
-    this.aspectModuleSet = new Set();
+  constructor(readonly applicationContext: IMidwayContainer) {}
+
+  @Init()
+  async init() {
+    this.applicationContext.onObjectCreated((ins, context, definition) => {
+      this.wrapperAspectToInstance(ins);
+    });
   }
+
   /**
    * load aspect method for container
    * @private
@@ -53,7 +57,7 @@ export class MidwayAspectService implements IAspectService {
     });
 
     for (const aspectData of aspectDataList) {
-      const aspectIns = await this.container.getAsync<IMethodAspect>(
+      const aspectIns = await this.applicationContext.getAsync<IMethodAspect>(
         aspectData.aspectModule
       );
       await this.addAspect(aspectIns, aspectData);
@@ -222,18 +226,9 @@ export class MidwayAspectService implements IAspectService {
     if (!ins['__is_proxy__'] && ins?.constructor) {
       // 动态处理拦截器
       let methodAspectCollection;
-      // if (this.aspectMappingMap?.has(ins.constructor)) {
-      //   methodAspectCollection = this.aspectMappingMap.get(ins.constructor);
-      // } else if (
-      //   (this.container?.parent as IMidwayContainer)
-      //     ?.getAspectService()
-      //     .hasAspect(ins.constructor)
-      // ) {
-      //   // for requestContainer
-      //   methodAspectCollection = (this.container?.parent as IMidwayContainer)
-      //     ?.getAspectService()
-      //     .hasAspect(ins.constructor);
-      // }
+      if (this.hasAspect(ins.constructor)) {
+        methodAspectCollection = this.aspectMappingMap.get(ins.constructor);
+      }
 
       if (methodAspectCollection) {
         proxy = new Proxy(ins, {

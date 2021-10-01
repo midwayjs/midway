@@ -1,5 +1,8 @@
 import { saveModule, saveClassMetadata } from '../../';
-import { MODULE_TASK_QUEUE_KEY, MODULE_TASK_QUEUE_OPTIONS } from '../../constant';
+import {
+  MODULE_TASK_QUEUE_KEY,
+  MODULE_TASK_QUEUE_OPTIONS,
+} from '../../constant';
 
 export function Queue(options?: any) {
   return function (target) {

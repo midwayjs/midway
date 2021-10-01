@@ -10,9 +10,11 @@ import {
   REQUEST_OBJ_CTX_KEY,
   IManagedResolverFactoryCreateOptions,
   IMidwayContainer,
+  ObjectCreateEvent,
 } from '../interface';
 import { NotFoundError } from '../common/notFoundError';
 import * as util from 'util';
+import * as EventEmitter from 'events';
 
 const debug = util.debuglog('midway:managedresolver');
 
@@ -67,7 +69,7 @@ class RefResolver extends BaseManagedResolver {
 /**
  * 解析工厂
  */
-export class ManagedResolverFactory {
+export class ManagedResolverFactory extends EventEmitter {
   private resolvers = {};
   private creating = new Map<string, boolean>();
   singletonCache = new Map<ObjectIdentifier, any>();
@@ -76,6 +78,7 @@ export class ManagedResolverFactory {
   beforeCreateHandler = [];
 
   constructor(context: IMidwayContainer) {
+    super();
     this.context = context;
 
     // 初始化解析器
@@ -137,6 +140,13 @@ export class ManagedResolverFactory {
       constructorArgs = args;
     }
 
+    this.emit(
+      ObjectCreateEvent.BEFORE_CREATED,
+      Clzz,
+      constructorArgs,
+      this.context
+    );
+
     for (const handler of this.beforeCreateHandler) {
       handler.call(this, Clzz, constructorArgs, this.context);
     }
@@ -171,12 +181,16 @@ export class ManagedResolverFactory {
       }
     }
 
+    this.emit(ObjectCreateEvent.AFTER_CREATED, inst, this.context, definition);
+
     for (const handler of this.afterCreateHandler) {
       handler.call(this, inst, this.context, definition);
     }
 
     // after properties set then do init
     definition.creator.doInit(inst);
+
+    this.emit(ObjectCreateEvent.AFTER_INIT, inst, this.context, definition);
 
     if (definition.isSingletonScope() && definition.id) {
       this.singletonCache.set(definition.id, inst);
@@ -227,6 +241,13 @@ export class ManagedResolverFactory {
       constructorArgs = args;
     }
 
+    this.emit(
+      ObjectCreateEvent.BEFORE_CREATED,
+      Clzz,
+      constructorArgs,
+      this.context
+    );
+
     for (const handler of this.beforeCreateHandler) {
       handler.call(this, Clzz, constructorArgs, this.context);
     }
@@ -272,12 +293,16 @@ export class ManagedResolverFactory {
       }
     }
 
+    this.emit(ObjectCreateEvent.AFTER_CREATED, inst, this.context, definition);
+
     for (const handler of this.afterCreateHandler) {
       handler.call(this, inst, this.context, definition);
     }
 
     // after properties set then do init
     await definition.creator.doInitAsync(inst);
+
+    this.emit(ObjectCreateEvent.AFTER_INIT, inst, this.context, definition);
 
     if (definition.isSingletonScope() && definition.id) {
       debug('id = %s set to singleton cache', definition.id);

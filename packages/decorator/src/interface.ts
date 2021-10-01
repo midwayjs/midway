@@ -24,7 +24,7 @@ export interface ObjectDefinitionOptions {
   initMethod?: string;
   destroyMethod?: string;
   scope?: ScopeEnum;
-  constructorArgs?: IManagedInstance[];
+  constructorArgs?: any[];
   namespace?: string;
   srcPath?: string;
 }

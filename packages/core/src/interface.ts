@@ -30,6 +30,13 @@ export interface IObjectFactory {
   getAsync<T>(identifier: new () => T, args?: any): Promise<T>;
   getAsync<T>(identifier: ObjectIdentifier, args?: any): Promise<T>;
 }
+
+export enum ObjectCreateEvent {
+  BEFORE_CREATED = 'beforeObjectCreated',
+  AFTER_CREATED = 'afterObjectCreated',
+  AFTER_INIT = 'afterObjectInit',
+}
+
 /**
  * 对象描述定义
  */
@@ -191,12 +198,17 @@ export interface IMidwayContainer extends IObjectFactory {
     target: T,
     options?: ObjectDefinitionOptions
   ): void;
-  bindClass(exports, namespace?: string, filePath?: string);
+  bindClass(exports, options?: ObjectDefinitionOptions);
   getDebugLogger();
   setFileDetector(fileDetector: IFileDetector);
   registerDataHandler(handlerType: string, handler: (...args) => any);
   createChild(): IMidwayContainer;
   getResolverHandler(): IResolverHandler;
+  onObjectCreated(fn: (
+    ins: any,
+    context: IMidwayContainer,
+    definition: IObjectDefinition
+  ) => void);
   /**
    * Set value to app attribute map
    * @param key
