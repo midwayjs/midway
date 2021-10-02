@@ -1,5 +1,4 @@
 import { NotFoundError } from '../../src/common/notFoundError';
-import { expect } from 'chai';
 
 describe('/test/common/notFoundError.test.ts', () => {
   it('should test not found error', function () {
@@ -13,31 +12,31 @@ describe('/test/common/notFoundError.test.ts', () => {
     try {
       creatNormalError('');
     } catch (error) {
-      expect(error).to.instanceOf(Error);
-      expect(NotFoundError.isClosePrototypeOf(error)).to.false;
+      expect(error instanceof Error).toBeTruthy();
+      expect(NotFoundError.isClosePrototypeOf(error)).toBeFalsy();
     }
 
     try {
       creatNotFoundError('');
     } catch (error) {
-      expect(error).to.instanceOf(Error);
-      expect(error).to.instanceOf(NotFoundError);
-      expect(NotFoundError.isClosePrototypeOf(error)).to.true;
+      expect(error instanceof Error).toBeTruthy();
+      expect(error instanceof NotFoundError).toBeTruthy();
+      expect(NotFoundError.isClosePrototypeOf(error)).toBeTruthy();
       expect(() => {
         throw error;
-      }).to.throw(/is not valid in current context/);
+      }).toThrow(/is not valid in current context/);
     }
 
     try {
       creatNotFoundError('testKey');
     } catch (error) {
-      expect(error).to.instanceOf(Error);
-      expect(error).to.instanceOf(NotFoundError);
-      expect(NotFoundError.isClosePrototypeOf(error)).to.true;
+      expect(error instanceof Error).toBeTruthy();
+      expect(error instanceof NotFoundError).toBeTruthy();
+      expect(NotFoundError.isClosePrototypeOf(error)).toBeTruthy();
       error.updateErrorMsg('TestClass');
       expect(() => {
         throw error;
-      }).to.throw('testKey in class TestClass is not valid in current context');
+      }).toThrow('testKey in class TestClass is not valid in current context');
     }
   });
 });

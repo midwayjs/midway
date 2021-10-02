@@ -1,6 +1,5 @@
 import bindClass, { DataMainTest } from '../fixtures/pipeline';
 import { MidwayContainer } from '../../src';
-import { expect } from 'chai';
 
 describe('/test/features/pipeline.test.ts', () => {
   const container = new MidwayContainer();
@@ -12,27 +11,26 @@ describe('/test/features/pipeline.test.ts', () => {
 
     const dataMainTest: DataMainTest = await container.getAsync<DataMainTest>('dataMainTest');
 
-    expect(dataMainTest.ss).not.null;
-    expect(dataMainTest.ss).not.undefined;
+    expect(dataMainTest.ss).toBeDefined();
 
     let r = await dataMainTest.runParallel();
-    expect(r).is.not.null;
-    expect(r).is.not.undefined;
-    expect(r.account).deep.eq({
+    expect(r).toBeDefined();
+    expect(r).toBeDefined();
+    expect(r.account).toStrictEqual({
       id: 'test_account_id',
       nick: 'test hello',
       isFollow: true
     });
 
     r = await dataMainTest.runSeries();
-    expect(r.tab).deep.eq({
+    expect(r.tab).toStrictEqual({
       title: 'test tab',
       tabId: 'firstTab',
       index: 0
     });
 
     let rArr = await dataMainTest.runConcat();
-    expect(rArr[0]).deep.eq([{
+    expect(rArr[0]).toStrictEqual([{
       videoId: '123',
       videoUrl: 'https://www.taobao.com/xxx.mp4',
       videoTitle: 'test 1 video'
@@ -47,7 +45,7 @@ describe('/test/features/pipeline.test.ts', () => {
     }]);
 
     rArr = await dataMainTest.runSeriesConcat();
-    expect(rArr[0]).deep.eq([{
+    expect(rArr[0]).toStrictEqual([{
       videoId: '123',
       videoUrl: 'https://www.taobao.com/xxx.mp4',
       videoTitle: 'test 1 video'
@@ -62,36 +60,33 @@ describe('/test/features/pipeline.test.ts', () => {
     }]);
 
     r = await dataMainTest.runWaterfall();
-    expect(r).deep.eq({
+    expect(r).toStrictEqual({
       id: 'test_account_id',
       nick: 'test hello',
       isFollow: true
     });
 
     let rr = await dataMainTest.runError();
-    expect(rr.success).false;
-    expect(rr.error).not.null;
-    expect(rr.error).not.undefined;
-    expect(rr.error.message).eq('this is error feeds');
-    expect(rr.error.valveName).eq('errorFeeds');
+    expect(rr.success).toBeFalsy();
+    expect(rr.error).toBeDefined();
+    expect(rr.error.message).toEqual('this is error feeds');
+    expect(rr.error.valveName).toEqual('errorFeeds');
 
     rr = await dataMainTest.runParallelError();
-    expect(rr.success).false;
-    expect(rr.error).not.null;
-    expect(rr.error).not.undefined;
-    expect(rr.error.message).eq('this is error feeds');
-    expect(rr.error.valveName).eq('errorFeeds');
+    expect(rr.success).toBeFalsy();
+    expect(rr.error).toBeDefined();
+    expect(rr.error.message).toEqual('this is error feeds');
+    expect(rr.error.valveName).toEqual('errorFeeds');
 
     rr = await dataMainTest.runSeriesError();
-    expect(rr.success).false;
-    expect(rr.error).not.null;
-    expect(rr.error).not.undefined;
-    expect(rr.error.message).eq('this is error feeds');
-    expect(rr.error.valveName).eq('errorFeeds');
+    expect(rr.success).toBeFalsy();
+    expect(rr.error).toBeDefined();
+    expect(rr.error.message).toEqual('this is error feeds');
+    expect(rr.error.valveName).toEqual('errorFeeds');
 
     const rw = await dataMainTest.runStagesWaterfall();
-    expect(!rw.error).true;
-    expect(rw.result).eq('stagetwo');
+    expect(!rw.error).toBeTruthy();
+    expect(rw.result).toEqual('stagetwo');
   });
 
 });

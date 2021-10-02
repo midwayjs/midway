@@ -1,4 +1,9 @@
-import { MidwayContainer as Container } from '../../src';
+import {
+  MidwayConfigService,
+  MidwayContainer as Container, MidwayEnvironmentService,
+  MidwayFrameworkService, MidwayInformationService,
+  MidwayLoggerService
+} from '../../src';
 import {
   Grandson,
   Child,
@@ -75,16 +80,28 @@ describe('/test/context/container.test.ts', () => {
     const container = new Container();
     container.bind(SubCustom);
 
-    container.registerDataHandler(APPLICATION_KEY, () => {
+    container.bind(MidwayFrameworkService);
+    container.bind(MidwayConfigService);
+    container.bind(MidwayLoggerService);
+    container.bind(MidwayEnvironmentService);
+    container.bind(MidwayInformationService);
+    container.registerObject('appDir', '');
+    container.registerObject('baseDir', '');
+
+    const frameworkService = await container.getAsync(MidwayFrameworkService, [
+      container
+    ]);
+
+    frameworkService.registerHandler(APPLICATION_KEY, () => {
       return {appName: 'hello'};
     });
-    container.registerDataHandler(PLUGIN_KEY, (key) => {
+    frameworkService.registerHandler(PLUGIN_KEY, (key) => {
       if (key === 'hh') {
         return {hh: 123};
       }
       return {d: 'hello'};
     });
-    container.registerDataHandler(CONFIG_KEY, (key) => {
+    frameworkService.registerHandler(CONFIG_KEY, (key) => {
       if (key === 'hello') {
         return {hello: 'this is hello config'}
       }

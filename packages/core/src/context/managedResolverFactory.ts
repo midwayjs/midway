@@ -69,16 +69,13 @@ class RefResolver extends BaseManagedResolver {
 /**
  * 解析工厂
  */
-export class ManagedResolverFactory extends EventEmitter {
+export class ManagedResolverFactory {
   private resolvers = {};
   private creating = new Map<string, boolean>();
   singletonCache = new Map<ObjectIdentifier, any>();
   context: IMidwayContainer;
-  afterCreateHandler = [];
-  beforeCreateHandler = [];
 
   constructor(context: IMidwayContainer) {
-    super();
     this.context = context;
 
     // 初始化解析器
@@ -140,16 +137,10 @@ export class ManagedResolverFactory extends EventEmitter {
       constructorArgs = args;
     }
 
-    this.emit(
-      ObjectCreateEvent.BEFORE_CREATED,
-      Clzz,
+    this.getObjectEventTarget().emit(ObjectCreateEvent.BEFORE_CREATED, Clzz, {
       constructorArgs,
-      this.context
-    );
-
-    for (const handler of this.beforeCreateHandler) {
-      handler.call(this, Clzz, constructorArgs, this.context);
-    }
+      context: this.context,
+    });
 
     inst = definition.creator.doConstruct(Clzz, constructorArgs, this.context);
 
@@ -181,16 +172,21 @@ export class ManagedResolverFactory extends EventEmitter {
       }
     }
 
-    this.emit(ObjectCreateEvent.AFTER_CREATED, inst, this.context, definition);
-
-    for (const handler of this.afterCreateHandler) {
-      handler.call(this, inst, this.context, definition);
-    }
+    this.getObjectEventTarget().emit(ObjectCreateEvent.AFTER_CREATED, inst, {
+      context: this.context,
+      definition,
+      replaceCallback: ins => {
+        inst = ins;
+      },
+    });
 
     // after properties set then do init
     definition.creator.doInit(inst);
 
-    this.emit(ObjectCreateEvent.AFTER_INIT, inst, this.context, definition);
+    this.getObjectEventTarget().emit(ObjectCreateEvent.AFTER_INIT, inst, {
+      context: this.context,
+      definition,
+    });
 
     if (definition.isSingletonScope() && definition.id) {
       this.singletonCache.set(definition.id, inst);
@@ -215,14 +211,16 @@ export class ManagedResolverFactory extends EventEmitter {
       definition.isSingletonScope() &&
       this.singletonCache.has(definition.id)
     ) {
-      debug('id = %s from singleton cache.', definition.id);
+      debug(
+        `id = ${definition.id}(${definition.name}) get from singleton cache.`
+      );
       return this.singletonCache.get(definition.id);
     }
 
     // 如果非 null 表示已经创建 proxy
     let inst = this.createProxyReference(definition);
     if (inst) {
-      debug('id = %s from proxy reference.', definition.id);
+      debug(`id = ${definition.id}(${definition.name}) from proxy reference.`);
       return inst;
     }
 
@@ -241,16 +239,10 @@ export class ManagedResolverFactory extends EventEmitter {
       constructorArgs = args;
     }
 
-    this.emit(
-      ObjectCreateEvent.BEFORE_CREATED,
-      Clzz,
+    this.getObjectEventTarget().emit(ObjectCreateEvent.BEFORE_CREATED, Clzz, {
       constructorArgs,
-      this.context
-    );
-
-    for (const handler of this.beforeCreateHandler) {
-      handler.call(this, Clzz, constructorArgs, this.context);
-    }
+      context: this.context,
+    });
 
     inst = await definition.creator.doConstructAsync(
       Clzz,
@@ -293,25 +285,30 @@ export class ManagedResolverFactory extends EventEmitter {
       }
     }
 
-    this.emit(ObjectCreateEvent.AFTER_CREATED, inst, this.context, definition);
-
-    for (const handler of this.afterCreateHandler) {
-      handler.call(this, inst, this.context, definition);
-    }
+    this.getObjectEventTarget().emit(ObjectCreateEvent.AFTER_CREATED, inst, {
+      context: this.context,
+      definition,
+      replaceCallback: ins => {
+        inst = ins;
+      },
+    });
 
     // after properties set then do init
     await definition.creator.doInitAsync(inst);
 
-    this.emit(ObjectCreateEvent.AFTER_INIT, inst, this.context, definition);
+    this.getObjectEventTarget().emit(ObjectCreateEvent.AFTER_INIT, inst, {
+      context: this.context,
+      definition,
+    });
 
     if (definition.isSingletonScope() && definition.id) {
-      debug('id = %s set to singleton cache', definition.id);
+      debug(`id = ${definition.id}(${definition.name}) set to singleton cache`);
       this.singletonCache.set(definition.id, inst);
     }
 
     // for request scope
     if (definition.isRequestScope() && definition.id) {
-      debug('id = %s set to register object', definition.id);
+      debug(`id = ${definition.id}(${definition.name}) set to register object`);
       this.context.registerObject(definition.id, inst);
     }
     this.removeCreateStatus(definition, true);
@@ -323,28 +320,22 @@ export class ManagedResolverFactory extends EventEmitter {
     for (const key of this.singletonCache.keys()) {
       const definition = this.context.registry.getDefinition(key);
       if (definition.creator) {
-        await definition.creator.doDestroyAsync(this.singletonCache.get(key));
+        const inst = this.singletonCache.get(key);
+        this.getObjectEventTarget().emit(
+          ObjectCreateEvent.BEFORE_DESTROY,
+          inst,
+          {
+            context: this.context,
+            definition,
+          }
+        );
+        await definition.creator.doDestroyAsync(inst);
       }
     }
     this.singletonCache.clear();
     this.creating.clear();
   }
 
-  beforeEachCreated(
-    fn: (Clzz: any, constructorArgs: [], context: IMidwayContainer) => void
-  ) {
-    this.beforeCreateHandler.push(fn);
-  }
-
-  afterEachCreated(
-    fn: (
-      ins: any,
-      context: IMidwayContainer,
-      definition?: IObjectDefinition
-    ) => void
-  ) {
-    this.afterCreateHandler.push(fn);
-  }
   /**
    * 触发单例初始化结束事件
    * @param definition 单例定义
@@ -481,5 +472,12 @@ export class ManagedResolverFactory extends EventEmitter {
       debug('dfs for %s == %s end.', identifier, definition.id);
     }
     return false;
+  }
+
+  private getObjectEventTarget(): EventEmitter {
+    if (this.context.parent) {
+      return this.context.parent.objectCreateEventTarget;
+    }
+    return this.context.objectCreateEventTarget;
   }
 }

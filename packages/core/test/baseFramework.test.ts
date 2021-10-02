@@ -8,7 +8,7 @@ import * as assert from 'assert';
 import * as path from 'path';
 import * as mm from 'mm';
 import sinon = require('sinon');
-import { MidwayRequestContainer, getCurrentApplicationContext, getCurrentMainApp, getCurrentMainFramework } from '../src';
+import { MidwayRequestContainer, getCurrentApplicationContext, getCurrentMainApp, getCurrentMainFramework, MidwayFrameworkService } from '../src';
 import { createLightFramework } from './util';
 
 @Provide()
@@ -36,7 +36,8 @@ describe('/test/baseFramework.test.ts', () => {
       __dirname,
       './fixtures/app-with-configuration/base-app-decorator/src'
     ));
-    framework.getApplicationContext().registerDataHandler(APPLICATION_KEY, () => ({
+    const frameworkService = await framework.getApplicationContext().getAsync(MidwayFrameworkService);
+    frameworkService.registerHandler(APPLICATION_KEY, () => ({
       getBaseDir() {
         return 'base dir';
       }

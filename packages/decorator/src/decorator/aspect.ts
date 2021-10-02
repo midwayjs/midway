@@ -42,6 +42,6 @@ export function Aspect(
       );
     }
 
-    Scope(ScopeEnum.Singleton);
+    Scope(ScopeEnum.Singleton)(target);
   };
 }

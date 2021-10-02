@@ -8,6 +8,7 @@ import {
   MidwayFrameworkType
 } from '@midwayjs/decorator';
 import { ILogger, LoggerOptions } from '@midwayjs/logger';
+import * as EventEmitter from 'events';
 
 /**
  * 生命周期定义
@@ -25,9 +26,9 @@ export interface ILifeCycle {
  */
 export interface IObjectFactory {
   registry: IObjectDefinitionRegistry;
-  get<T>(identifier: new () => T, args?: any): T;
+  get<T>(identifier: new (...args) => T, args?: any): T;
   get<T>(identifier: ObjectIdentifier, args?: any): T;
-  getAsync<T>(identifier: new () => T, args?: any): Promise<T>;
+  getAsync<T>(identifier: new (...args) => T, args?: any): Promise<T>;
   getAsync<T>(identifier: ObjectIdentifier, args?: any): Promise<T>;
 }
 
@@ -35,6 +36,7 @@ export enum ObjectCreateEvent {
   BEFORE_CREATED = 'beforeObjectCreated',
   AFTER_CREATED = 'afterObjectCreated',
   AFTER_INIT = 'afterObjectInit',
+  BEFORE_DESTROY = 'beforeObjectDestroy',
 }
 
 /**
@@ -168,15 +170,20 @@ export interface IContainerConfiguration {
   bindConfigurationClass(clzz: any, filePath?: string);
 }
 
-export type HandlerFunction = (handlerKey: string, instance?: any) => any;
-
-export interface IResolverHandler {
-  beforeEachCreated(target, constructorArgs: any[], context);
-  afterEachCreated(instance, context, definition);
-  registerHandler(key: string, fn: HandlerFunction);
-  hasHandler(key: string): boolean;
-  getHandler(key: string);
-}
+export type HandlerFunction = (handlerKey: string, meta: {
+  /**
+   * decorator key
+   */
+  key: string;
+  /**
+   * decorator args
+   */
+  targetKey: string;
+  /**
+   * class property name
+   */
+  propertyName: string;
+}, instance?: any) => any;
 
 export interface IIdentifierRelationShip {
   saveClassRelation(module: any, namespace?: string);
@@ -188,6 +195,7 @@ export interface IIdentifierRelationShip {
 export interface IMidwayContainer extends IObjectFactory {
   parent: IMidwayContainer;
   identifierMapping: IIdentifierRelationShip;
+  objectCreateEventTarget: EventEmitter;
   ready();
   stop(): Promise<void>;
   registerObject(identifier: ObjectIdentifier, target: any);
@@ -201,13 +209,14 @@ export interface IMidwayContainer extends IObjectFactory {
   bindClass(exports, options?: ObjectDefinitionOptions);
   getDebugLogger();
   setFileDetector(fileDetector: IFileDetector);
-  registerDataHandler(handlerType: string, handler: (...args) => any);
   createChild(): IMidwayContainer;
-  getResolverHandler(): IResolverHandler;
-  onObjectCreated(fn: (
-    ins: any,
-    context: IMidwayContainer,
-    definition: IObjectDefinition
+  onObjectCreated<T = any>(fn: (
+    ins: T,
+    options: {
+      context: IMidwayContainer,
+      definition: IObjectDefinition,
+      replaceCallback: (ins: T) => void,
+    }
   ) => void);
   /**
    * Set value to app attribute map

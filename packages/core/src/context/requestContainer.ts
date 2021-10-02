@@ -22,14 +22,6 @@ export class MidwayRequestContainer extends MidwayContainer {
       // register contextLogger
       this.registerObject('logger', ctx.logger);
     }
-
-    const resolverHandler = this.applicationContext.getResolverHandler();
-    this.beforeEachCreated(
-      resolverHandler.beforeEachCreated.bind(resolverHandler)
-    );
-    this.afterEachCreated(
-      resolverHandler.afterEachCreated.bind(resolverHandler)
-    );
   }
 
   init() {

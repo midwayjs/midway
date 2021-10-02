@@ -3,9 +3,10 @@ import {
   IMidwayApplication,
   IMidwayBootstrapOptions,
   initializeGlobalApplicationContext,
+  destroyGlobalApplicationContext,
   MidwayFrameworkType,
   IMidwayFramework,
-  safeRequire, destroyGlobalApplicationContext
+  safeRequire,
 } from '../src';
 import { join } from 'path';
 import { Configuration, Framework, Inject, Provide } from '@midwayjs/decorator';
@@ -59,6 +60,7 @@ export async function createLightFramework(baseDir: string): Promise<IMidwayFram
   @Provide()
   @Framework()
   class EmptyFramework extends BaseFramework<any, any, any> {
+    private isStopped = false;
     getFrameworkType(): MidwayFrameworkType {
       return MidwayFrameworkType.EMPTY;
     }
@@ -72,7 +74,10 @@ export async function createLightFramework(baseDir: string): Promise<IMidwayFram
     }
 
     async beforeStop() {
-      await destroyGlobalApplicationContext(this.applicationContext);
+      if (!this.isStopped) {
+        this.isStopped = true;
+        await destroyGlobalApplicationContext(this.applicationContext);
+      }
     }
   }
 

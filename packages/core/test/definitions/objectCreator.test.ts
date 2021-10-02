@@ -1,6 +1,5 @@
 import { ObjectCreator } from '../../src/definitions/objectCreator';
 import { ObjectDefinition } from '../../src/definitions/objectDefinition';
-import { expect } from 'chai';
 import path = require('path');
 import sinon = require('sinon');
 
@@ -11,33 +10,33 @@ describe('/test/definitions/objectCreator.test.ts', () => {
     const creator = new ObjectCreator(definition);
 
     definition.path = '';
-    expect(creator.load()).null;
+    expect(creator.load()).toBeNull();
 
     definition.path = path.join(__dirname, '../fixtures/singleton_sample');
     definition.export = '';
     const oo = creator.load();
-    expect(Object.keys(oo).length).gt(2);
+    expect(Object.keys(oo).length).toBeGreaterThan(2);
 
     definition.export = 'HelloSingleton';
 
     const obj = creator.load();
-    expect(obj).is.a('function');
-    expect(obj.name).eq('HelloSingleton');
+    expect(typeof obj).toEqual('function');
+    expect(obj.name).toEqual('HelloSingleton');
 
-    expect(creator.doConstruct(null)).is.an('object');
+    expect(typeof creator.doConstruct(null)).toEqual('object');
 
     definition.constructMethod = 'say';
     expect(creator.doConstruct({
       say(a) {
         return a;
       }
-    }, [123])).eq(123);
+    }, [123])).toEqual(123);
 
     expect(await creator.doConstructAsync({
       say(a) {
         return a;
       }
-    }, [123])).eq(123);
+    }, [123])).toEqual(123);
 
     // expect(await creator.doConstructAsync({
     //   *say(a) {
@@ -48,7 +47,7 @@ describe('/test/definitions/objectCreator.test.ts', () => {
       async say(a) {
         return a;
       }
-    }, [12345])).eq(12345);
+    }, [12345])).toEqual(12345);
 
     const callback = sinon.spy();
     definition.initMethod = 'say';
@@ -74,7 +73,7 @@ describe('/test/definitions/objectCreator.test.ts', () => {
       callback(e.message);
     }
 
-    expect(callback.withArgs('mytest not valid by context.get, Use context.getAsync instead!').calledTwice).true;
+    expect(callback.withArgs('mytest not valid by context.get, Use context.getAsync instead!').calledTwice).toBeTruthy();
 
     await creator.doInitAsync({
       say(cb) {
@@ -82,14 +81,14 @@ describe('/test/definitions/objectCreator.test.ts', () => {
         cb();
       }
     });
-    expect(callback.withArgs('doInitAsync cb').calledOnce).true;
+    expect(callback.withArgs('doInitAsync cb').calledOnce).toBeTruthy();
 
     await creator.doInitAsync({
       say() {
         callback('doInitAsync cb1');
       }
     });
-    expect(callback.withArgs('doInitAsync cb1').calledOnce).true;
+    expect(callback.withArgs('doInitAsync cb1').calledOnce).toBeTruthy();
 
     definition.destroyMethod = 'destroy';
     creator.doDestroy({
@@ -97,14 +96,14 @@ describe('/test/definitions/objectCreator.test.ts', () => {
         callback('destroy1');
       }
     });
-    expect(callback.withArgs('destroy1').calledOnce).true;
+    expect(callback.withArgs('destroy1').calledOnce).toBeTruthy();
 
     await creator.doDestroyAsync({
       destroy() {
         callback('destroy async1');
       }
     });
-    expect(callback.withArgs('destroy async1').calledOnce).true;
+    expect(callback.withArgs('destroy async1').calledOnce).toBeTruthy();
 
     // await creator.doDestroyAsync({
     //   *destroy() {
@@ -118,7 +117,7 @@ describe('/test/definitions/objectCreator.test.ts', () => {
         callback('destroy asynca1');
       }
     });
-    expect(callback.withArgs('destroy asynca1').calledOnce).true;
+    expect(callback.withArgs('destroy asynca1').calledOnce).toBeTruthy();
 
     await creator.doDestroyAsync({
       destroy(cb) {
@@ -126,6 +125,6 @@ describe('/test/definitions/objectCreator.test.ts', () => {
         cb();
       }
     });
-    expect(callback.withArgs('destroy asynccb1').calledOnce).true;
+    expect(callback.withArgs('destroy asynccb1').calledOnce).toBeTruthy();
   });
 });

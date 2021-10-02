@@ -19,6 +19,7 @@ import {
   getObjectDefinition,
   getClassExtendedMetadata,
   INJECT_CUSTOM_TAG,
+  getProviderName,
 } from '@midwayjs/decorator';
 import { FunctionalConfiguration } from '../functional/configuration';
 import * as util from 'util';
@@ -35,7 +36,6 @@ import {
 import { FUNCTION_INJECT_KEY } from '../common/constants';
 import { ObjectDefinition } from '../definitions/objectDefinition';
 import { FunctionDefinition } from '../definitions/functionDefinition';
-import { ResolverHandler } from './resolverHandler';
 import {
   ManagedReference,
   ManagedResolverFactory,
@@ -43,6 +43,7 @@ import {
 import { NotFoundError } from '../common/notFoundError';
 import { MidwayEnvironmentService } from '../service/environmentService';
 import { MidwayConfigService } from '../service/configService';
+import * as EventEmitter from 'events';
 
 const debug = util.debuglog('midway:container:configuration');
 const globalDebugLogger = util.debuglog('midway:container');
@@ -200,13 +201,15 @@ class ContainerConfiguration {
   }
 }
 
+class ObjectCreateEventTarget extends EventEmitter {}
+
 export class MidwayContainer implements IMidwayContainer {
   private _resolverFactory: ManagedResolverFactory = null;
   private _registry: IObjectDefinitionRegistry = null;
   private _identifierMapping = null;
+  private _objectCreateEventTarget: EventEmitter;
   public parent: IMidwayContainer = null;
   private debugLogger = globalDebugLogger;
-  protected resolverHandler: ResolverHandler;
   // 仅仅用于兼容requestContainer的ctx
   protected ctx = {};
   private fileDetector: IFileDetector;
@@ -219,13 +222,16 @@ export class MidwayContainer implements IMidwayContainer {
   }
 
   protected init() {
-    this.resolverHandler = new ResolverHandler(
-      this,
-      this.managedResolverFactory
-    );
     // 防止直接从applicationContext.getAsync or get对象实例时依赖当前上下文信息出错
     // ctx is in requestContainer
     this.registerObject(REQUEST_CTX_KEY, this.ctx);
+  }
+
+  get objectCreateEventTarget() {
+    if (!this._objectCreateEventTarget) {
+      this._objectCreateEventTarget = new ObjectCreateEventTarget();
+    }
+    return this._objectCreateEventTarget;
   }
 
   get registry(): IObjectDefinitionRegistry {
@@ -302,11 +308,13 @@ export class MidwayContainer implements IMidwayContainer {
     let definition;
     if (isClass(target)) {
       definition = new ObjectDefinition();
+      definition.name = getProviderName(target);
     } else {
       definition = new FunctionDefinition();
       if (!isAsyncFunction(target)) {
         definition.asynchronous = false;
       }
+      definition.name = definition.id;
     }
 
     definition.path = target;
@@ -315,7 +323,7 @@ export class MidwayContainer implements IMidwayContainer {
     definition.namespace = options?.namespace || '';
     definition.scope = options?.scope || ScopeEnum.Request;
 
-    this.debugLogger(`  bind id => [${definition.id}]`);
+    this.debugLogger(`  bind id => [${definition.id}(${definition.name})]`);
 
     // inject properties
     const props = getPropertyInject(target);
@@ -406,14 +414,6 @@ export class MidwayContainer implements IMidwayContainer {
     return new MidwayContainer(this);
   }
 
-  registerDataHandler(handlerType: string, handler: (...args) => any) {
-    this.resolverHandler.registerHandler(handlerType, handler);
-  }
-
-  public getResolverHandler() {
-    return this.resolverHandler;
-  }
-
   public setAttr(key: string, value) {
     this.attrMap.set(key, value);
   }
@@ -492,37 +492,16 @@ export class MidwayContainer implements IMidwayContainer {
     this.registry.registerObject(identifier, target);
   }
 
-  /**
-   * register handler after instance create
-   * @param fn
-   */
-  afterEachCreated(
-    fn: (
-      ins: any,
-      context: IMidwayContainer,
-      definition?: IObjectDefinition
-    ) => void
-  ) {
-    this.managedResolverFactory.afterEachCreated(fn);
-  }
-
-  /**
-   * register handler before instance create
-   * @param fn
-   */
-  beforeEachCreated(
-    fn: (Clzz: any, constructorArgs: any[], context: IMidwayContainer) => void
-  ) {
-    this.managedResolverFactory.beforeEachCreated(fn);
-  }
-
   onObjectCreated(
     fn: (
       ins: any,
-      context: IMidwayContainer,
-      definition: IObjectDefinition
+      options: {
+        context: IMidwayContainer;
+        definition: IObjectDefinition;
+        replaceCallback: (ins: any) => void;
+      }
     ) => void
   ) {
-    this.managedResolverFactory.on(ObjectCreateEvent.AFTER_CREATED, fn);
+    this.objectCreateEventTarget.on(ObjectCreateEvent.AFTER_CREATED, fn);
   }
 }

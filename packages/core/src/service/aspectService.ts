@@ -27,9 +27,10 @@ export class MidwayAspectService implements IAspectService {
 
   @Init()
   async init() {
-    this.applicationContext.onObjectCreated((ins, context, definition) => {
-      this.wrapperAspectToInstance(ins);
+    this.applicationContext.onObjectCreated((ins, options) => {
+      options.replaceCallback(this.wrapperAspectToInstance(ins));
     });
+    await this.loadAspect();
   }
 
   /**
@@ -228,9 +229,6 @@ export class MidwayAspectService implements IAspectService {
       let methodAspectCollection;
       if (this.hasAspect(ins.constructor)) {
         methodAspectCollection = this.aspectMappingMap.get(ins.constructor);
-      }
-
-      if (methodAspectCollection) {
         proxy = new Proxy(ins, {
           get: (obj, prop) => {
             if (typeof prop === 'string' && methodAspectCollection.has(prop)) {

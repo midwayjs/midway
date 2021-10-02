@@ -23,6 +23,7 @@ export { MidwayConfigService } from './service/configService';
 export { MidwayEnvironmentService } from './service/environmentService';
 export { MidwayInformationService } from './service/informationService';
 export { MidwayLoggerService } from './service/loggerService';
+export { MidwayFrameworkService } from './service/frameworkService';
 export * from './util/contextUtil';
 export * from './util/serviceFactory';
 export * from './util/fileDetector';
