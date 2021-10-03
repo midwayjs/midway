@@ -14,7 +14,6 @@ import {
   listPreloadModule,
 } from '@midwayjs/decorator';
 import {
-  FrameworkDecoratorMetadata,
   HandlerFunction,
   IMidwayApplication,
   IMidwayBootstrapOptions,
@@ -81,9 +80,9 @@ export class MidwayFrameworkService {
       this.mainApp = this.mainFramework.getApplication();
 
       // register @App decorator handler
-      this.registerHandler(APPLICATION_KEY, type => {
-        if (type) {
-          return this.globalAppMap.get(type as any);
+      this.registerHandler(APPLICATION_KEY, (propertyName, mete) => {
+        if (mete.type) {
+          return this.globalAppMap.get(mete.type as any);
         } else {
           return this.mainApp;
         }
@@ -91,17 +90,17 @@ export class MidwayFrameworkService {
     }
 
     // register base config hook
-    this.registerHandler(CONFIG_KEY, (key: string) => {
-      if (key === ALL) {
+    this.registerHandler(CONFIG_KEY, (propertyName, meta) => {
+      if (meta.identifier === ALL) {
         return this.configService.getConfiguration();
       } else {
-        return this.configService.getConfiguration(key);
+        return this.configService.getConfiguration(meta.identifier ?? propertyName);
       }
     });
 
     // register @Logger decorator handler
-    this.registerHandler(LOGGER_KEY, key => {
-      return this.loggerService.getLogger(key);
+    this.registerHandler(LOGGER_KEY, (propertyName, meta) => {
+      return this.loggerService.getLogger(meta.identifier ?? propertyName);
     });
 
     this.applicationContext.onObjectCreated((instance, options) => {
@@ -109,9 +108,9 @@ export class MidwayFrameworkService {
         // 已经预先在 bind 时处理
         for (const item of options.definition.handlerProps) {
           this.defineGetterPropertyValue(
-            item.prop,
+            item,
             instance,
-            this.getHandler(item.handlerKey)
+            this.getHandler(item.key)
           );
         }
       }
@@ -128,19 +127,19 @@ export class MidwayFrameworkService {
   /**
    * binding getter method for decorator
    *
-   * @param setterProps
+   * @param prop
    * @param instance
    * @param getterHandler
    */
   private defineGetterPropertyValue(
-    prop: FrameworkDecoratorMetadata,
+    prop,
     instance,
     getterHandler
   ) {
     if (prop && getterHandler) {
       if (prop.propertyName) {
         Object.defineProperty(instance, prop.propertyName, {
-          get: () => getterHandler(prop.targetKey, prop, instance),
+          get: () => getterHandler(prop.propertyName, prop.metadata ?? {}, instance),
           configurable: true, // 继承对象有可能会有相同属性，这里需要配置成 true
           enumerable: true,
         });
@@ -162,7 +161,10 @@ export class MidwayFrameworkService {
     return this.mainFramework;
   }
 
-  public registerHandler(key: string, fn: HandlerFunction) {
+  public registerHandler(
+    key: string,
+    fn: HandlerFunction
+  ) {
     this.handlerMap.set(key, fn);
   }
 

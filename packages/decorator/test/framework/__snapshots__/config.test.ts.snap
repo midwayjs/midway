@@ -4,13 +4,17 @@ exports[`/test/framework/config.test.ts config decorator should be ok 1`] = `
 Object {
   "bbb": Object {
     "key": "config",
+    "metadata": Object {
+      "identifier": "bbb",
+    },
     "propertyName": "bbb",
-    "targetKey": "bbb",
   },
   "hhh": Object {
     "key": "config",
+    "metadata": Object {
+      "identifier": undefined,
+    },
     "propertyName": "hhh",
-    "targetKey": "hhh",
   },
 }
 `;

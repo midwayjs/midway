@@ -4,13 +4,17 @@ exports[`/test/framework/logger.test.ts logger decorator should be ok 1`] = `
 Object {
   "bbb": Object {
     "key": "logger",
+    "metadata": Object {
+      "identifier": "bbb",
+    },
     "propertyName": "bbb",
-    "targetKey": "bbb",
   },
   "logger": Object {
     "key": "logger",
+    "metadata": Object {
+      "identifier": undefined,
+    },
     "propertyName": "logger",
-    "targetKey": "logger",
   },
 }
 `;

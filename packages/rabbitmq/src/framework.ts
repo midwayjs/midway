@@ -7,7 +7,7 @@ import {
   ConsumerMetadata,
   MS_CONSUMER_KEY,
   MSListenerType,
-  RabbitMQListenerOptions,
+  RabbitMQListenerOptions, Provide, Framework,
 } from '@midwayjs/decorator';
 import { BaseFramework } from '@midwayjs/core';
 import {
@@ -18,6 +18,8 @@ import {
 import { RabbitMQServer } from './mq';
 import { ConsumeMessage } from 'amqplib';
 
+@Provide()
+@Framework()
 export class MidwayRabbitMQFramework extends BaseFramework<
   IMidwayRabbitMQApplication,
   IMidwayRabbitMQContext,

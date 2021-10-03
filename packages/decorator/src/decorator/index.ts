@@ -14,10 +14,7 @@ export * from './framework';
 export * from './faas/serverlessTrigger';
 
 // framework
-export * from './framework/app';
-export * from './framework/config';
-export * from './framework/logger';
-export * from './framework/plugin';
+export * from './framework/index';
 export * from './framework/schedule';
 
 // microservice

@@ -101,20 +101,21 @@ export interface IObjectDefinition {
   getAttr(key: ObjectIdentifier): any;
   hasAttr(key: ObjectIdentifier): boolean;
   setAttr(key: ObjectIdentifier, value: any): void;
-  // 暂存依赖的 key、propertyName
-  handlerProps: HandlerProp[];
-}
-
-export interface HandlerProp {
-  handlerKey: string;
-  prop: FrameworkDecoratorMetadata;
-}
-
-export interface FrameworkDecoratorMetadata {
-  key: string;
-  targetKey: string;
-  propertyName: string;
-  meta: any;
+  // 自定义装饰器的 key、propertyName
+  handlerProps: Array<{
+    /**
+     * decorator property name set
+     */
+    propertyName: string;
+    /**
+     * decorator uuid key
+     */
+    key: string;
+    /**
+     * custom decorator set metadata
+     */
+    metadata: any;
+  }>;
 }
 
 export interface IObjectCreator {
@@ -207,20 +208,16 @@ export interface IContainerConfiguration {
   bindConfigurationClass(clzz: any, filePath?: string);
 }
 
-export type HandlerFunction = (handlerKey: string, meta: {
+export type HandlerFunction = (
   /**
-   * decorator key
+   * decorator uuid key
    */
-  key: string;
+  key: string,
   /**
-   * decorator args
+   * decorator set metadata
    */
-  targetKey: string;
-  /**
-   * class property name
-   */
-  propertyName: string;
-}, instance?: any) => any;
+  meta: any,
+  instance: any) => any;
 
 export interface IIdentifierRelationShip {
   saveClassRelation(module: any, namespace?: string);

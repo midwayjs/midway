@@ -47,9 +47,12 @@ export class OrmConfiguration implements ILifeCycle {
   async init() {
     this.frameworkService.registerHandler(
       ORM_MODEL_KEY,
-      (key: { modelKey; connectionName }) => {
+      (propertyName, meta: {
+        modelKey: string;
+        connectionName: string;
+      }) => {
         // return getConnection(key.connectionName).getRepository(key.modelKey);
-        return getRepository(key.modelKey, key.connectionName);
+        return getRepository(meta.modelKey, meta.connectionName);
       }
     );
   }

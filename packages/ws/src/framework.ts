@@ -22,9 +22,11 @@ import {
   WSEventTypeEnum,
   getClassMetadata,
   getProviderId,
-  listModule,
+  listModule, Provide, Framework,
 } from '@midwayjs/decorator';
 
+@Provide()
+@Framework()
 export class MidwayWSFramework extends BaseFramework<
   IMidwayWSApplication,
   IMidwayWSContext,

@@ -1,7 +1,6 @@
 import {
   saveClassMetadata,
-  attachClassMetadata,
-  saveModule,
+  saveModule, createCustomPropertyDecorator,
 } from '@midwayjs/decorator';
 import {
   Connection,
@@ -131,19 +130,10 @@ export function EntityView(
 }
 
 export function InjectEntityModel(modelKey?: any, connectionName = 'default') {
-  return (target, propertyKey: string) => {
-    attachClassMetadata(
-      ORM_MODEL_KEY,
-      {
-        key: {
-          modelKey,
-          connectionName,
-        },
-        propertyName: propertyKey,
-      },
-      target
-    );
-  };
+  return createCustomPropertyDecorator(ORM_MODEL_KEY, {
+    modelKey,
+    connectionName,
+  });
 }
 
 /**

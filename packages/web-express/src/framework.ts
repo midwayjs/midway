@@ -9,6 +9,8 @@ import {
 } from '@midwayjs/core';
 
 import {
+  Provide,
+  Framework,
   RouterParamValue,
   WEB_RESPONSE_CONTENT_TYPE,
   WEB_RESPONSE_HEADER,
@@ -27,6 +29,8 @@ import * as express from 'express';
 import { Server } from 'net';
 import { MidwayExpressContextLogger } from './logger';
 
+@Provide()
+@Framework()
 export class MidwayExpressFramework extends BaseFramework<
   IMidwayExpressApplication,
   IMidwayExpressContext,

@@ -341,11 +341,12 @@ export class MidwayContainer implements IMidwayContainer {
     const customProps = getClassExtendedMetadata(INJECT_CUSTOM_TAG, target);
 
     for (const p in customProps) {
-      const propertyMeta = customProps[p] as any;
-      definition.handlerProps.push({
-        handlerKey: propertyMeta.key,
-        prop: propertyMeta,
-      });
+      const propertyMeta = customProps[p] as {
+        propertyName: string;
+        key: string;
+        metadata: any;
+      };
+      definition.handlerProps.push(propertyMeta);
     }
 
     // @async, @init, @destroy @scope

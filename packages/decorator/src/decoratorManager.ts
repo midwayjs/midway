@@ -5,7 +5,7 @@ import {
   TagClsMetadata,
   TagPropsMetadata,
 } from './interface';
-import { INJECT_TAG, OBJ_DEF_CLS, TAGGED_CLS } from './constant';
+import { INJECT_CUSTOM_TAG, INJECT_TAG, OBJ_DEF_CLS, TAGGED_CLS } from './constant';
 
 import {
   isNullOrUndefined,
@@ -868,4 +868,24 @@ export function getPropertyType(target, methodName: string | symbol) {
  */
 export function getMethodReturnTypes(target, methodName: string | symbol) {
   return Reflect.getMetadata('design:returntype', target, methodName);
+}
+
+/**
+ * create a custom property inject
+ * @param decoratorKey
+ * @param metadata
+ */
+export function createCustomPropertyDecorator(decoratorKey: string, metadata: any): PropertyDecorator {
+  return function (target: any, propertyName: string): void {
+    attachClassMetadata(
+      INJECT_CUSTOM_TAG,
+      {
+        propertyName,
+        key: decoratorKey,
+        metadata,
+      },
+      target,
+      propertyName,
+    );
+  };
 }

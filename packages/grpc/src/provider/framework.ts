@@ -20,7 +20,7 @@ import {
   listModule,
   MS_GRPC_METHOD_KEY,
   MS_PROVIDER_KEY,
-  MSProviderType,
+  MSProviderType, Provide, Framework,
 } from '@midwayjs/decorator';
 import {
   IMidwayGRPCApplication,
@@ -32,6 +32,8 @@ import * as camelCase from 'camelcase';
 import { loadProto } from '../util';
 import { PackageDefinition } from '@grpc/proto-loader';
 
+@Provide()
+@Framework()
 export class MidwayGRPCFramework extends BaseFramework<
   IMidwayGRPCApplication,
   Context,
