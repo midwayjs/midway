@@ -1,17 +1,17 @@
-import { Bootstrap, BootstrapStarter } from '@midwayjs/bootstrap';
 import {
-  IMidwayApplication,
+  BaseFramework, destroyGlobalApplicationContext,
+  IMidwayApplication, IMidwayBootstrapOptions,
   IMidwayContainer,
-  IMidwayFramework,
-  LightFramework,
+  IMidwayFramework, initializeGlobalApplicationContext, MidwayFrameworkService,
   MidwayFrameworkType,
   safeRequire,
 } from '@midwayjs/core';
-import { isAbsolute, join, resolve } from 'path';
+import { isAbsolute, join } from 'path';
 import { remove } from 'fs-extra';
-import { clearAllModule, sleep } from '@midwayjs/decorator';
+import { clearAllModule, Configuration, Framework, Provide, sleep } from '@midwayjs/decorator';
 import { clearAllLoggers } from '@midwayjs/logger';
 import * as os from 'os';
+import * as assert from 'assert';
 
 process.setMaxListeners(0);
 
@@ -40,58 +40,21 @@ function findFirstExistModule(moduleList): string {
   }
 }
 
-const appMap = new WeakMap();
-const bootstrapAppSet = (global['MIDWAY_BOOTSTRAP_APP_SET'] = new Set<{
-  framework: IMidwayFramework<any, any>;
-  starter: BootstrapStarter;
-}>());
-
-function getIncludeFramework(dependencies): string {
-  const currentFramework = [
-    '@midwayjs/web',
-    '@midwayjs/koa',
-    '@midwayjs/express',
-    '@midwayjs/serverless-app',
-    '@midwayjs/grpc',
-    '@midwayjs/rabbitmq',
-    '@midwayjs/socketio',
-    '@midwayjs/faas',
-  ];
-  for (const frameworkName of currentFramework) {
-    if (dependencies[frameworkName]) {
-      return frameworkName;
-    }
-  }
-}
-
-function formatPath(baseDir, p) {
-  if (isAbsolute(p)) {
-    return p;
-  } else {
-    return resolve(baseDir, p);
-  }
-}
-
 export type MockAppConfigurationOptions = {
   cleanLogsDir?: boolean;
   cleanTempDir?: boolean;
   entryFile?: string;
   baseDir?: string;
   bootstrapTimeout?: number;
-  applicationContext?: IMidwayContainer;
   configurationModule?: any;
 };
 
 let lastAppDir;
 
-export async function create<
-  T extends IMidwayFramework<any, U>,
-  U = T['configurationOptions']
->(
+export async function create(
   appDir: string = process.cwd(),
-  options?: U & MockAppConfigurationOptions,
-  customFrameworkName?: string | MidwayFrameworkType | any
-): Promise<T> {
+  options?: MockAppConfigurationOptions,
+): Promise<IMidwayApplication<any, any>> {
   process.env.MIDWAY_TS_MODE = 'true';
 
   // 处理测试的 fixtures
@@ -115,119 +78,30 @@ export async function create<
     safeRequire(join(`${appDir}`, 'src/interface'));
   }
 
-  if (options.entryFile) {
-    // start from entry file, like bootstrap.js
-    options.entryFile = formatPath(appDir, options.entryFile);
-    global['MIDWAY_BOOTSTRAP_APP_READY'] = false;
-    // set app in @midwayjs/bootstrap
-    require(options.entryFile);
+  options = options ?? {};
 
-    await new Promise<void>((resolve, reject) => {
-      const timeoutHandler = setTimeout(() => {
-        clearInterval(internalHandler);
-        reject(new Error('[midway]: bootstrap timeout'));
-      }, options.bootstrapTimeout || 30 * 1000);
-      const internalHandler = setInterval(() => {
-        if (global['MIDWAY_BOOTSTRAP_APP_READY'] === true) {
-          clearInterval(internalHandler);
-          clearTimeout(timeoutHandler);
-          resolve();
-        }
-      }, 200);
-    });
-    // 这里为了兼容下 cli 的老逻辑
-    if (bootstrapAppSet.size) {
-      const obj = bootstrapAppSet.values().next().value;
-      return obj.framework;
-    }
-    return;
-  }
+  const container = await initializeGlobalApplicationContext({
+    baseDir: options.baseDir,
+    appDir,
+    configurationModule: [safeRequire(join(options.baseDir, 'configuration'))].concat(options.configurationModule),
+  });
 
-  let framework: T = null;
-  let DefaultFramework;
-
-  // find framework
-  if (customFrameworkName) {
-    if (typeof customFrameworkName === 'string') {
-      DefaultFramework = require(customFrameworkName as string).Framework;
-    } else {
-      DefaultFramework = customFrameworkName;
-    }
-  } else {
-    // find default framework from pkg
-    const pkg = require(join(appDir, 'package.json'));
-    if (pkg.dependencies || pkg.devDependencies) {
-      customFrameworkName = getIncludeFramework(
-        Object.assign({}, pkg.dependencies || {}, pkg.devDependencies || {})
-      );
-    }
-    DefaultFramework = require(customFrameworkName as string).Framework;
-  }
-
-  options = options ?? ({} as U);
-
-  // got options from framework
-  if (DefaultFramework) {
-    framework = new DefaultFramework();
-    if (framework.getFrameworkType() === MidwayFrameworkType.WEB) {
-      // add egg-mock plugin for @midwayjs/web test, provide mock method
-      options = Object.assign(options || {}, {
-        plugins: {
-          'egg-mock': {
-            enable: true,
-            package: 'egg-mock',
-          },
-          'midway-mock': {
-            enable: true,
-            package: '@midwayjs/mock',
-          },
-          watcher: false,
-          development: false,
-        },
-      }) as any;
-    }
-    framework.configure(options);
-  } else {
-    throw new Error('framework not found');
-  }
-
-  const starter = new BootstrapStarter();
-  starter
-    .configure({
-      appDir,
-      baseDir: options.baseDir,
-      applicationContext: options.applicationContext,
-      configurationModule: options.configurationModule,
-    })
-    .load(framework as any);
-
-  await starter.init();
-  await starter.run();
-
-  appMap.set(framework.getApplication(), starter);
-
-  return framework;
+  const frameworkService = await container.getAsync(MidwayFrameworkService);
+  return frameworkService.getMainApp();
 }
 
-export async function createApp<
-  T extends IMidwayFramework<any, U>,
-  U = T['configurationOptions'],
-  Y = ReturnType<T['getApplication']>
->(
+export async function createApp(
   baseDir: string = process.cwd(),
-  options?: U & MockAppConfigurationOptions,
-  customFrameworkName?: string | MidwayFrameworkType | any
-): Promise<Y> {
-  const framework: T = await create<T, U>(
+  options?: MockAppConfigurationOptions,
+): Promise<IMidwayApplication<any, any>> {
+  return create(
     baseDir,
     options,
-    customFrameworkName
   );
-  return framework.getApplication() as unknown as Y;
 }
 
 export async function close(
-  app: IMidwayApplication | IMidwayFramework<any, any>,
+  app: IMidwayApplication,
   options?: {
     cleanLogsDir?: boolean;
     cleanTempDir?: boolean;
@@ -236,27 +110,15 @@ export async function close(
 ) {
   if (!app) return;
   options = options || {};
-  let newApp: IMidwayApplication;
-  if ((app as IMidwayFramework<any, any>).getApplication) {
-    newApp = (app as IMidwayFramework<any, any>).getApplication();
-  } else {
-    newApp = app as IMidwayApplication;
-  }
-  const starter = appMap.get(newApp);
-  if (starter) {
-    await starter.stop();
-    appMap.delete(newApp);
-    bootstrapAppSet.clear();
-  }
-
+  await destroyGlobalApplicationContext(app.getApplicationContext());
   if (isTestEnvironment()) {
     // clean first
     if (options.cleanLogsDir && !isWin32()) {
-      await remove(join(newApp.getAppDir(), 'logs'));
+      await remove(join(app.getAppDir(), 'logs'));
     }
-    if (MidwayFrameworkType.WEB === newApp.getFrameworkType()) {
+    if (MidwayFrameworkType.WEB === app.getFrameworkType()) {
       if (options.cleanTempDir && !isWin32()) {
-        await remove(join(newApp.getAppDir(), 'run'));
+        await remove(join(app.getAppDir(), 'run'));
       }
     }
     if (options.sleep > 0) {
@@ -267,15 +129,11 @@ export async function close(
   }
 }
 
-export async function createFunctionApp<
-  T extends IMidwayFramework<any, U>,
-  U = T['configurationOptions'],
-  Y = ReturnType<T['getApplication']>
->(
+export async function createFunctionApp(
   baseDir: string = process.cwd(),
-  options?: U & MockAppConfigurationOptions,
+  options?: MockAppConfigurationOptions,
   customFrameworkName?: string | MidwayFrameworkType | any
-): Promise<Y> {
+): Promise<IMidwayApplication> {
   const customFramework =
     customFrameworkName ??
     findFirstExistModule([
@@ -284,42 +142,62 @@ export async function createFunctionApp<
       '@midwayjs/serverless-app',
     ]);
 
-  const framework: T = await create<T, U>(baseDir, options, customFramework);
-  return framework.getApplication() as unknown as Y;
+  return create(baseDir, {
+    ...options,
+    configurationModule: transformFrameworkToConfiguration(customFramework),
+  });
 }
 
 export async function createLightApp(
   baseDir: string = process.cwd(),
   options?: MockAppConfigurationOptions
 ): Promise<IMidwayApplication> {
-  return await createApp(baseDir, options, LightFramework);
-}
+  /**
+   * 一个全量的空框架
+   */
+  @Provide()
+  @Framework()
+  class LightFramework extends BaseFramework<any, any, any> {
+    getFrameworkType(): MidwayFrameworkType {
+      return MidwayFrameworkType.LIGHT;
+    }
 
-class BootstrapAppStarter {
-  getApp(type: MidwayFrameworkType): IMidwayApplication<any> {
-    const appMap = Bootstrap.starter.getBootstrapAppMap();
-    return appMap.get(type);
-  }
+    async run(): Promise<void> {
+    }
 
-  async close(
-    options: {
-      sleep?: number;
-    } = {}
-  ) {
-    await Bootstrap.stop();
-    if (options.sleep > 0) {
-      await sleep(options.sleep);
-    } else {
-      await sleep(50);
+    async applicationInitialize(options: IMidwayBootstrapOptions) {
+      this.app = {} as IMidwayApplication;
+      this.defineApplicationProperties();
     }
   }
+
+  return create(baseDir, {
+    ...options,
+    configurationModule: transformFrameworkToConfiguration(LightFramework),
+  });
 }
 
-export async function createBootstrap(
-  entryFile: string
-): Promise<BootstrapAppStarter> {
-  await create(undefined, {
-    entryFile,
-  });
-  return new BootstrapAppStarter();
+/**
+ * transform a framework component or framework module to configuration class
+ * @param Framework
+ */
+function transformFrameworkToConfiguration<T extends IMidwayFramework<any, any>>(Framework: any): new () => any {
+
+  let CustomFramework;
+  if (typeof Framework === 'string') {
+    const frameworkModule = safeRequire(Framework);
+    CustomFramework = frameworkModule.Framework;
+  }
+
+  assert(CustomFramework, `can't found custom framework ${Framework}`);
+
+  @Configuration()
+  class CustomConfiguration {
+    async onServerReady(container: IMidwayContainer) {
+      const customFramework = await container.getAsync<T>(CustomFramework as any) as T;
+      await customFramework.run();
+    }
+  }
+
+  return CustomConfiguration;
 }

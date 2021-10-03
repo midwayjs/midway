@@ -9,7 +9,7 @@ import {
   BaseFramework,
   extractKoaLikeValue,
   IMiddleware,
-  IMidwayBootstrapOptions,
+  IMidwayBootstrapOptions, MidwayEnvironmentService, MidwayFrameworkService,
   MidwayFrameworkType,
   REQUEST_OBJ_CTX_KEY,
   RouterInfo,
@@ -22,7 +22,7 @@ import {
   WEB_RESPONSE_HTTP_CODE,
   WEB_RESPONSE_HEADER,
   WEB_RESPONSE_CONTENT_TYPE,
-  WEB_RESPONSE_REDIRECT,
+  WEB_RESPONSE_REDIRECT, Provide, Inject, Framework
 } from '@midwayjs/decorator';
 import SimpleLock from '@midwayjs/simple-lock';
 import * as compose from 'koa-compose';
@@ -30,6 +30,8 @@ import { createConsoleLogger, LoggerOptions, loggers } from '@midwayjs/logger';
 
 const LOCK_KEY = '_faas_starter_start_key';
 
+@Provide()
+@Framework()
 export class MidwayFaaSFramework extends BaseFramework<
   IMidwayFaaSApplication,
   FaaSContext,
@@ -43,6 +45,12 @@ export class MidwayFaaSFramework extends BaseFramework<
   public app: IMidwayFaaSApplication;
   private isReplaceLogger =
     process.env['MIDWAY_SERVERLESS_REPLACE_LOGGER'] === 'true';
+
+  @Inject()
+  environmentService: MidwayEnvironmentService;
+
+  @Inject()
+  frameworkService: MidwayFrameworkService;
 
   async applicationInitialize(options: IMidwayBootstrapOptions) {
     this.globalMiddleware = this.configurationOptions.middleware || [];
@@ -200,9 +208,7 @@ export class MidwayFaaSFramework extends BaseFramework<
 
   public getContext(context) {
     if (!context.env) {
-      context.env = this.getApplicationContext()
-        .getEnvironmentService()
-        .getCurrentEnvironment();
+      context.env = this.environmentService.getCurrentEnvironment();
     }
 
     if (this.isReplaceLogger || !context.logger) {
@@ -288,14 +294,14 @@ export class MidwayFaaSFramework extends BaseFramework<
   }
 
   private registerDecorator() {
-    this.getApplicationContext().registerDataHandler(
+    this.frameworkService.registerHandler(
       PLUGIN_KEY,
       (key, meta, target) => {
         return target?.[REQUEST_OBJ_CTX_KEY]?.[key] || this.app[key];
       }
     );
 
-    this.getApplicationContext().registerDataHandler(
+    this.frameworkService.registerHandler(
       LOGGER_KEY,
       (key, meta, target) => {
         return (

@@ -1,11 +1,8 @@
 import {
-  IMidwayFramework,
   IMidwayBootstrapOptions,
-  MidwayFrameworkType,
-  IMidwayApplication,
   IMidwayContainer,
-  MidwayContainer,
-  DirectoryFileDetector,
+  initializeGlobalApplicationContext,
+  destroyGlobalApplicationContext,
 } from '@midwayjs/core';
 import { join } from 'path';
 import { createConsoleLogger, ILogger } from '@midwayjs/logger';
@@ -22,12 +19,8 @@ export function isTypeScriptEnvironment() {
 export class BootstrapStarter {
   protected appDir: string;
   protected baseDir: string;
-  protected bootstrapItems: IMidwayFramework<any, any>[] = [];
+  // protected bootstrapItems: IMidwayFramework<any, any>[] = [];
   protected globalOptions: Partial<IMidwayBootstrapOptions> = {};
-  protected globalAppMap = new Map<
-    MidwayFrameworkType,
-    IMidwayApplication<any>
-  >();
   protected globalConfig: any;
   private applicationContext: IMidwayContainer;
 
@@ -36,131 +29,29 @@ export class BootstrapStarter {
     return this;
   }
 
-  public load(unit: (globalConfig: unknown) => IMidwayFramework<any, any>);
-  public load(unit: IMidwayFramework<any, any>);
-  public load(unit: any) {
-    this.bootstrapItems.push(unit);
-    return this;
-  }
+  // public load(unit: (globalConfig: unknown) => IMidwayFramework<any, any>);
+  // public load(unit: IMidwayFramework<any, any>);
+  // public load(unit: any) {
+  //   this.bootstrapItems.push(unit);
+  //   return this;
+  // }
 
   public async init() {
     this.appDir = this.globalOptions.appDir || process.cwd();
     this.baseDir = this.getBaseDir();
-    let mainApp; // eslint-disable-line prefer-const
 
-    if (this.globalOptions.applicationContext) {
-      this.applicationContext = this.globalOptions.applicationContext;
-    } else {
-      this.applicationContext = new MidwayContainer();
-      this.applicationContext.setFileDetector(
-        new DirectoryFileDetector({
-          loadDir: this.baseDir,
-        })
-      );
-      this.applicationContext.load(
-        this.globalOptions.configurationModule ??
-          require(join(this.baseDir, 'configuration'))
-      );
-      await this.applicationContext.ready();
-    }
-
-    // 获取全局配置
-    this.globalConfig =
-      this.applicationContext.getConfigService().getConfiguration() || {};
-    this.refreshBootstrapItems();
-
-    // 初始化主框架
-    await this.getFirstActions('initialize', {
+    this.applicationContext = await initializeGlobalApplicationContext({
       ...this.globalOptions,
-      baseDir: this.baseDir,
       appDir: this.appDir,
-      isMainFramework: true,
-      applicationContext: this.applicationContext,
-      globalApplicationHandler: (type: MidwayFrameworkType) => {
-        if (type) {
-          return this.globalAppMap.get(type);
-        } else {
-          return mainApp;
-        }
-      },
+      baseDir: this.baseDir,
     });
-
-    global['MIDWAY_MAIN_FRAMEWORK'] = this.getMainFramework();
-    mainApp = await this.getFirstActions('getApplication');
-
-    // 初始化其余的副框架
-    await Promise.all(
-      this.getTailActions('initialize', {
-        ...this.globalOptions,
-        baseDir: this.baseDir,
-        appDir: this.appDir,
-        applicationContext: this.applicationContext,
-        isMainFramework: false,
-      })
-    );
-
-    this.bootstrapItems.forEach(item => {
-      this.globalAppMap.set(item.getFrameworkType(), item.getApplication());
-      if (global['MIDWAY_BOOTSTRAP_APP_SET']) {
-        // for test/dev
-        global['MIDWAY_BOOTSTRAP_APP_SET'].add({
-          framework: item,
-          starter: this,
-        });
-      }
-    });
-
-    // 等所有框架初始化完之后，开始执行生命周期
-    await this.getFirstActions('loadExtension');
-    await this.getActions('afterContainerReady');
   }
 
   public async run() {
-    await Promise.all(this.getActions('run', {}));
-    global['MIDWAY_BOOTSTRAP_APP_READY'] = true;
   }
 
   public async stop() {
-    await Promise.all(this.getActions('stop', {}));
-    global['MIDWAY_BOOTSTRAP_APP_READY'] = false;
-  }
-
-  public getActions(action: string, args?): any[] {
-    return this.bootstrapItems.map(item => {
-      if (item[action]) {
-        return item[action](args);
-      }
-    });
-  }
-
-  public async getFirstActions(action: string, args?) {
-    if (this.bootstrapItems.length && this.bootstrapItems[0][action]) {
-      return this.bootstrapItems[0][action](args);
-    }
-  }
-
-  public getTailActions(action: string, args?): any[] {
-    if (this.bootstrapItems.length > 1) {
-      return this.bootstrapItems.slice(1).map(item => {
-        if (item[action]) {
-          return item[action](args);
-        }
-      });
-    }
-    return [];
-  }
-
-  protected getMainFramework() {
-    return this.bootstrapItems[0];
-  }
-
-  protected refreshBootstrapItems() {
-    this.bootstrapItems = this.bootstrapItems.map(bootstrapItem => {
-      if (typeof bootstrapItem === 'function') {
-        return (bootstrapItem as any)(this.globalConfig);
-      }
-      return bootstrapItem;
-    });
+    await destroyGlobalApplicationContext(this.applicationContext);
   }
 
   protected getBaseDir() {
@@ -172,10 +63,6 @@ export class BootstrapStarter {
     } else {
       return join(this.appDir, 'dist');
     }
-  }
-
-  public getBootstrapAppMap() {
-    return this.globalAppMap;
   }
 }
 
@@ -206,16 +93,6 @@ export class Bootstrap {
     }
 
     this.getStarter().configure(configuration);
-    return this;
-  }
-
-  /**
-   * load midway framework unit
-   * @param unit
-   */
-  static load(unit: IMidwayFramework<any, any>);
-  static load(unit: any) {
-    this.getStarter().load(unit);
     return this;
   }
 

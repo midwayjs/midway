@@ -38,8 +38,6 @@
     "ws": "^7.4.5"
   },
   "dependencies": {
-    "@midwayjs/bootstrap": "^3.0.0-alpha.42",
-    "egg-mock": "^3.21.0",
     "fs-extra": "^8.0.1",
     "supertest": "^6.0.0"
   },

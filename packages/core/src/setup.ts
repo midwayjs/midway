@@ -6,18 +6,15 @@ import {
   MidwayInformationService,
   IMidwayBootstrapOptions,
   IMidwayContainer,
-  ILifeCycle,
   MidwayLoggerService,
   MidwayFrameworkService,
-  getCurrentMainApp,
+  MidwayAspectService,
+  MidwayLifeCycleService,
 } from '../src';
-import { MidwayAspectService } from './service/aspectService';
-import { listModule, CONFIGURATION_KEY } from '@midwayjs/decorator';
-import { FunctionalConfiguration } from './functional/configuration';
 import defaultConfig from './config/config.default';
 
 export async function initializeGlobalApplicationContext(
-  globalOptions: IMidwayBootstrapOptions
+  globalOptions: Omit<IMidwayBootstrapOptions, 'applicationContext'>
 ) {
   const appDir = globalOptions.appDir ?? '';
   const baseDir = globalOptions.baseDir ?? '';
@@ -43,6 +40,7 @@ export async function initializeGlobalApplicationContext(
   applicationContext.bindClass(MidwayAspectService);
   applicationContext.bindClass(MidwayLoggerService);
   applicationContext.bindClass(MidwayFrameworkService);
+  applicationContext.bindClass(MidwayLifeCycleService);
 
   // bind preload module
   if (globalOptions.preloadModules && globalOptions.preloadModules.length) {
@@ -73,66 +71,19 @@ export async function initializeGlobalApplicationContext(
   await configService.load();
 
   // init logger
-  const loggerService = await applicationContext.getAsync(MidwayLoggerService);
-
-  // alias inject logger
-  applicationContext.registerObject(
-    'logger',
-    loggerService.getLogger('appLogger')
-  );
+  await applicationContext.getAsync(MidwayLoggerService, [applicationContext]);
 
   // aop support
   await applicationContext.getAsync(MidwayAspectService, [applicationContext]);
 
   // framework/config/plugin/logger/app decorator support
-  const frameworkService = await applicationContext.getAsync(
+  await applicationContext.getAsync(
     MidwayFrameworkService,
     [applicationContext, globalOptions]
   );
 
-  const mainApp = frameworkService.getMainApp();
-
-  // run lifecycle
-  const cycles = listModule(CONFIGURATION_KEY);
-
-  const lifecycleInstanceList = [];
-  for (const cycle of cycles) {
-    if (cycle.target instanceof FunctionalConfiguration) {
-      // 函数式写法
-      cycle.instance = cycle.target;
-    } else {
-      // 普通类写法
-      cycle.instance = await applicationContext.getAsync<ILifeCycle>(
-        cycle.target
-      );
-    }
-
-    cycle.instance && lifecycleInstanceList.push(cycle);
-  }
-
-  // exec onConfigLoad()
-  for (const cycle of lifecycleInstanceList) {
-    if (typeof cycle.instance.onConfigLoad === 'function') {
-      const configData = await cycle.instance.onConfigLoad(applicationContext);
-      if (configData) {
-        configService.addObject(configData);
-      }
-    }
-  }
-
-  // exec onReady()
-  for (const cycle of lifecycleInstanceList) {
-    if (typeof cycle.instance.onReady === 'function') {
-      await cycle.instance.onReady(applicationContext, mainApp);
-    }
-  }
-
-  // exec onServerReady()
-  for (const cycle of lifecycleInstanceList) {
-    if (typeof cycle.instance.onServerReady === 'function') {
-      await cycle.instance.onServerReady(applicationContext, mainApp);
-    }
-  }
+  // lifecycle support
+  await applicationContext.getAsync(MidwayLifeCycleService,[applicationContext]);
 
   return applicationContext;
 }
@@ -141,20 +92,8 @@ export async function destroyGlobalApplicationContext(
   applicationContext: IMidwayContainer
 ) {
   // stop lifecycle
-  const cycles = listModule(CONFIGURATION_KEY);
-  for (const cycle of cycles) {
-    let inst;
-    if (cycle.target instanceof FunctionalConfiguration) {
-      // 函数式写法
-      inst = cycle.target;
-    } else {
-      inst = await applicationContext.getAsync<ILifeCycle>(cycle.target);
-    }
-
-    if (inst?.onStop && typeof inst.onStop === 'function') {
-      await inst.onStop(applicationContext, getCurrentMainApp());
-    }
-  }
+  const lifecycleService = await applicationContext.getAsync(MidwayLifeCycleService);
+  await lifecycleService.stop();
   // stop container
   await applicationContext.stop();
 }

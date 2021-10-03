@@ -1,15 +1,17 @@
-import {
-  APPLICATION_KEY,
-  Provide,
-  clearAllModule,
-} from '@midwayjs/decorator';
+import { APPLICATION_KEY, clearAllModule, MidwayFrameworkType, Provide, } from '@midwayjs/decorator';
 import { MidwayContextLogger } from '@midwayjs/logger';
 import * as assert from 'assert';
 import * as path from 'path';
 import * as mm from 'mm';
-import sinon = require('sinon');
-import { MidwayRequestContainer, getCurrentApplicationContext, getCurrentMainApp, getCurrentMainFramework, MidwayFrameworkService } from '../src';
+import {
+  getCurrentApplicationContext,
+  getCurrentMainApp,
+  getCurrentMainFramework,
+  MidwayFrameworkService,
+  MidwayRequestContainer
+} from '../src';
 import { createLightFramework } from './util';
+import sinon = require('sinon');
 
 @Provide()
 class TestModule {
@@ -420,57 +422,29 @@ describe('/test/baseFramework.test.ts', () => {
   });
 
   it('should run multi framework in one process and use cache', async () => {
-    // const appMap = new Map();
+    const framework = await createLightFramework(path.join(
+      __dirname,
+      './fixtures/base-app-multi-framework-shared/src'
+    ));
 
-    // const framework1 = new LightFramework();
-    // framework1.configure({});
-    // await framework1.initialize({
-    //   baseDir: path.join(
-    //     __dirname,
-    //     './fixtures/base-app-multi-framework-shared/src'
-    //   ),
-    //   isMainFramework: true,
-    //   globalApplicationHandler: (type: MidwayFrameworkType) => {
-    //     return appMap.get(type);
-    //   }
-    // });
-    //
-    // class CustomTwoFramework extends LightFramework {
-    //   async applicationInitialize(options: IMidwayBootstrapOptions) {
-    //     this.app = {} as IMidwayApplication;
-    //   }
-    //   getFrameworkType(): MidwayFrameworkType {
-    //     return MidwayFrameworkType.MS_GRPC;
-    //   }
-    // }
-    //
-    // const framework2 = new CustomTwoFramework();
-    // framework2.configure({});
-    // await framework2.initialize({
-    //   baseDir: path.join(
-    //     __dirname,
-    //     './fixtures/base-app-multi-framework-shared/src'
-    //   ),
-    //   isMainFramework: false,
-    //   applicationContext: framework1.getApplicationContext(),
-    // });
-    //
-    // appMap.set(framework1.getFrameworkType(), framework1.getApplication());
-    // appMap.set(framework2.getFrameworkType(), framework2.getApplication());
-    //
-    // await framework1.loadLifeCycles(true);
-    //
-    // expect(framework1.getApplicationContext()).toEqual(framework2.getApplicationContext());
-    // // share application context data
-    // const userService1 = await framework1.getApplicationContext().getAsync('userService');
-    // const userService2 = await framework2.getApplicationContext().getAsync('userService');
-    // // 相同实例
-    // expect(userService1['id']).toEqual(userService2['id']);
-    //
-    // expect(framework1.getApplicationContext().get('total')['num']).toEqual(1);
-    // expect(framework2.getApplicationContext().get('total')['num']).toEqual(1);
-    //
-    // expect(framework2.getApplicationContext().get('total2')['num']).toEqual(0);
+    const applicationContext = framework.getApplicationContext();
+    const frameworkService = await applicationContext.getAsync(MidwayFrameworkService);
+    expect(frameworkService.getFramework(MidwayFrameworkType.LIGHT)).toBeUndefined();
+
+    const framework1 = frameworkService.getFramework(MidwayFrameworkType.EMPTY);
+    const framework2 = frameworkService.getFramework(MidwayFrameworkType.MS_GRPC);
+
+    expect(framework1.getApplicationContext()).toEqual(framework2.getApplicationContext());
+    // share application context data
+    const userService1 = await framework1.getApplicationContext().getAsync('userService');
+    const userService2 = await framework2.getApplicationContext().getAsync('userService');
+    // 相同实例
+    expect(userService1['id']).toEqual(userService2['id']);
+
+    expect(framework1.getApplicationContext().get('total')['num']).toEqual(1);
+    expect(framework2.getApplicationContext().get('total')['num']).toEqual(1);
+
+    expect(framework2.getApplicationContext().get('total2')['num']).toEqual(0);
   });
 
   it('should inject component service with class', async () => {

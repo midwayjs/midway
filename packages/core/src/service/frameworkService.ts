@@ -23,6 +23,7 @@ import {
 } from '../interface';
 import { MidwayConfigService } from './configService';
 import { MidwayLoggerService } from './loggerService';
+import { BaseFramework } from '../baseFramework';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -40,15 +41,23 @@ export class MidwayFrameworkService {
     readonly globalOptions
   ) {}
 
+  private mainFramework: IMidwayFramework<any, any>;
   private mainApp: IMidwayApplication;
+
+  private globalAppMap = new Map<
+    MidwayFrameworkType,
+    IMidwayApplication<any>
+    >();
+
+  private globalFrameworkMap = new Map<
+    MidwayFrameworkType, IMidwayFramework<any, any>
+    >();
 
   @Init()
   async init() {
-    const frameworks = listModule(FRAMEWORK_KEY);
-    const globalAppMap = new Map<
-      MidwayFrameworkType,
-      IMidwayApplication<any>
-    >();
+    let frameworks = listModule(FRAMEWORK_KEY);
+    // filter proto
+    frameworks = filterProtoFramework(frameworks);
 
     if (frameworks.length) {
       // init framework and app
@@ -61,19 +70,20 @@ export class MidwayFrameworkService {
 
       for (const frameworkInstance of frameworkInstances) {
         // app init
-        globalAppMap.set(
+        this.globalAppMap.set(
           frameworkInstance.getFrameworkType(),
           frameworkInstance.getApplication()
         );
+        this.globalFrameworkMap.set(frameworkInstance.getFrameworkType(), frameworkInstance);
       }
 
-      global['MIDWAY_MAIN_FRAMEWORK'] = frameworkInstances[0];
-      this.mainApp = frameworkInstances[0].getApplication();
+      global['MIDWAY_MAIN_FRAMEWORK'] = this.mainFramework = frameworkInstances[0];
+      this.mainApp = this.mainFramework.getApplication();
 
       // register @App decorator handler
       this.registerHandler(APPLICATION_KEY, type => {
         if (type) {
-          return globalAppMap.get(type as any);
+          return this.globalAppMap.get(type as any);
         } else {
           return this.mainApp;
         }
@@ -115,10 +125,6 @@ export class MidwayFrameworkService {
     }
   }
 
-  getMainApp() {
-    return this.mainApp;
-  }
-
   /**
    * binding getter method for decorator
    *
@@ -148,8 +154,20 @@ export class MidwayFrameworkService {
     }
   }
 
+  public getMainApp() {
+    return this.mainApp;
+  }
+
+  public getMainFramework() {
+    return this.mainFramework;
+  }
+
   public registerHandler(key: string, fn: HandlerFunction) {
     this.handlerMap.set(key, fn);
+  }
+
+  public getFramework(type: MidwayFrameworkType) {
+    return this.globalFrameworkMap.get(type);
   }
 }
 
@@ -175,4 +193,18 @@ async function initializeFramework(
       })();
     })
   );
+}
+
+function filterProtoFramework(frameworks) {
+  const frameworkProtoArr = [];
+  for (const framework of frameworks) {
+    let proto = Object.getPrototypeOf(framework);
+    while (proto !== BaseFramework ) {
+      frameworkProtoArr.push(proto);
+      proto = Object.getPrototypeOf(proto);
+    }
+  }
+  return frameworks.filter(framework => {
+    return !frameworkProtoArr.includes(framework);
+  })
 }

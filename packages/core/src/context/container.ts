@@ -30,7 +30,7 @@ import {
   IMidwayContainer,
   IObjectDefinition,
   IObjectDefinitionRegistry,
-  ObjectCreateEvent,
+  ObjectLifeCycleEvent,
   REQUEST_CTX_KEY,
 } from '../interface';
 import { FUNCTION_INJECT_KEY } from '../common/constants';
@@ -492,16 +492,53 @@ export class MidwayContainer implements IMidwayContainer {
     this.registry.registerObject(identifier, target);
   }
 
-  onObjectCreated(
+  onBeforeObjectCreated(
     fn: (
-      ins: any,
+      Clzz: any,
       options: {
         context: IMidwayContainer;
         definition: IObjectDefinition;
-        replaceCallback: (ins: any) => void;
+        constructorArgs: any[];
       }
     ) => void
   ) {
-    this.objectCreateEventTarget.on(ObjectCreateEvent.AFTER_CREATED, fn);
+    this.objectCreateEventTarget.on(ObjectLifeCycleEvent.BEFORE_CREATED, fn);
+  }
+
+  onObjectCreated<T>(
+    fn: (
+      ins: T,
+      options: {
+        context: IMidwayContainer;
+        definition: IObjectDefinition;
+        replaceCallback: (ins: T) => void;
+      }
+    ) => void
+  ) {
+    this.objectCreateEventTarget.on(ObjectLifeCycleEvent.AFTER_CREATED, fn);
+  }
+
+  onObjectInit<T>(
+    fn: (
+      ins: T,
+      options: {
+        context: IMidwayContainer;
+        definition: IObjectDefinition;
+      }
+    ) => void
+  ) {
+    this.objectCreateEventTarget.on(ObjectLifeCycleEvent.AFTER_INIT, fn);
+  }
+
+  onBeforeObjectDestroy<T>(
+    fn: (
+      ins: T,
+      options: {
+        context: IMidwayContainer;
+        definition: IObjectDefinition;
+      }
+    ) => void
+  ) {
+    this.objectCreateEventTarget.on(ObjectLifeCycleEvent.BEFORE_DESTROY, fn);
   }
 }

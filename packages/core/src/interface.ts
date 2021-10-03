@@ -13,11 +13,13 @@ import * as EventEmitter from 'events';
 /**
  * 生命周期定义
  */
-export interface ILifeCycle {
+export interface ILifeCycle extends Partial<IObjectLifeCycle> {
   onConfigLoad?(container: IMidwayContainer, app?: IMidwayApplication): Promise<any>;
   onReady(container: IMidwayContainer, app?: IMidwayApplication): Promise<void>;
   onServerReady?(container: IMidwayContainer, app?: IMidwayApplication): Promise<void>;
   onStop?(container: IMidwayContainer, app?: IMidwayApplication): Promise<void>;
+  onAppError?(err: Error, app: IMidwayApplication);
+  onContextError?(err: Error, ctx: IMidwayContext, app: IMidwayApplication);
 }
 
 /**
@@ -32,11 +34,46 @@ export interface IObjectFactory {
   getAsync<T>(identifier: ObjectIdentifier, args?: any): Promise<T>;
 }
 
-export enum ObjectCreateEvent {
+export enum ObjectLifeCycleEvent {
   BEFORE_CREATED = 'beforeObjectCreated',
   AFTER_CREATED = 'afterObjectCreated',
   AFTER_INIT = 'afterObjectInit',
   BEFORE_DESTROY = 'beforeObjectDestroy',
+}
+
+export interface IObjectLifeCycle {
+  onBeforeObjectCreated(
+    fn: (
+      Clzz: any,
+      options: {
+        context: IMidwayContainer;
+        definition: IObjectDefinition;
+        constructorArgs: any[];
+      }
+    ) => void
+  );
+  onObjectCreated<T>(fn: (
+    ins: T,
+    options: {
+      context: IMidwayContainer,
+      definition: IObjectDefinition,
+      replaceCallback: (ins: T) => void,
+    }
+  ) => void);
+  onObjectInit<T>(fn: (
+    ins: T,
+    options: {
+      context: IMidwayContainer,
+      definition: IObjectDefinition,
+    }
+  ) => void);
+  onBeforeObjectDestroy<T>(fn: (
+    ins: T,
+    options: {
+      context: IMidwayContainer,
+      definition: IObjectDefinition,
+    }
+  ) => void);
 }
 
 /**
@@ -192,7 +229,7 @@ export interface IIdentifierRelationShip {
   getRelation(id: ObjectIdentifier): string;
 }
 
-export interface IMidwayContainer extends IObjectFactory {
+export interface IMidwayContainer extends IObjectFactory, IObjectLifeCycle {
   parent: IMidwayContainer;
   identifierMapping: IIdentifierRelationShip;
   objectCreateEventTarget: EventEmitter;
@@ -210,14 +247,6 @@ export interface IMidwayContainer extends IObjectFactory {
   getDebugLogger();
   setFileDetector(fileDetector: IFileDetector);
   createChild(): IMidwayContainer;
-  onObjectCreated<T = any>(fn: (
-    ins: T,
-    options: {
-      context: IMidwayContainer,
-      definition: IObjectDefinition,
-      replaceCallback: (ins: T) => void,
-    }
-  ) => void);
   /**
    * Set value to app attribute map
    * @param key
@@ -325,6 +354,7 @@ export interface IMidwayBootstrapOptions {
   applicationContext?: IMidwayContainer;
   preloadModules?: any[];
   configurationModule?: any;
+  logger?: boolean | ILogger;
 }
 
 export interface IConfigurationOptions {

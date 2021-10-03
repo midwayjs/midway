@@ -10,7 +10,7 @@ import {
   REQUEST_OBJ_CTX_KEY,
   IManagedResolverFactoryCreateOptions,
   IMidwayContainer,
-  ObjectCreateEvent,
+  ObjectLifeCycleEvent,
 } from '../interface';
 import { NotFoundError } from '../common/notFoundError';
 import * as util from 'util';
@@ -137,8 +137,9 @@ export class ManagedResolverFactory {
       constructorArgs = args;
     }
 
-    this.getObjectEventTarget().emit(ObjectCreateEvent.BEFORE_CREATED, Clzz, {
+    this.getObjectEventTarget().emit(ObjectLifeCycleEvent.BEFORE_CREATED, Clzz, {
       constructorArgs,
+      definition,
       context: this.context,
     });
 
@@ -172,7 +173,7 @@ export class ManagedResolverFactory {
       }
     }
 
-    this.getObjectEventTarget().emit(ObjectCreateEvent.AFTER_CREATED, inst, {
+    this.getObjectEventTarget().emit(ObjectLifeCycleEvent.AFTER_CREATED, inst, {
       context: this.context,
       definition,
       replaceCallback: ins => {
@@ -183,7 +184,7 @@ export class ManagedResolverFactory {
     // after properties set then do init
     definition.creator.doInit(inst);
 
-    this.getObjectEventTarget().emit(ObjectCreateEvent.AFTER_INIT, inst, {
+    this.getObjectEventTarget().emit(ObjectLifeCycleEvent.AFTER_INIT, inst, {
       context: this.context,
       definition,
     });
@@ -239,7 +240,7 @@ export class ManagedResolverFactory {
       constructorArgs = args;
     }
 
-    this.getObjectEventTarget().emit(ObjectCreateEvent.BEFORE_CREATED, Clzz, {
+    this.getObjectEventTarget().emit(ObjectLifeCycleEvent.BEFORE_CREATED, Clzz, {
       constructorArgs,
       context: this.context,
     });
@@ -285,7 +286,7 @@ export class ManagedResolverFactory {
       }
     }
 
-    this.getObjectEventTarget().emit(ObjectCreateEvent.AFTER_CREATED, inst, {
+    this.getObjectEventTarget().emit(ObjectLifeCycleEvent.AFTER_CREATED, inst, {
       context: this.context,
       definition,
       replaceCallback: ins => {
@@ -296,7 +297,7 @@ export class ManagedResolverFactory {
     // after properties set then do init
     await definition.creator.doInitAsync(inst);
 
-    this.getObjectEventTarget().emit(ObjectCreateEvent.AFTER_INIT, inst, {
+    this.getObjectEventTarget().emit(ObjectLifeCycleEvent.AFTER_INIT, inst, {
       context: this.context,
       definition,
     });
@@ -322,7 +323,7 @@ export class ManagedResolverFactory {
       if (definition.creator) {
         const inst = this.singletonCache.get(key);
         this.getObjectEventTarget().emit(
-          ObjectCreateEvent.BEFORE_DESTROY,
+          ObjectLifeCycleEvent.BEFORE_DESTROY,
           inst,
           {
             context: this.context,

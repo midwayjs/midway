@@ -1,11 +1,11 @@
 import {
   BaseFramework,
+  destroyGlobalApplicationContext,
   IMidwayApplication,
   IMidwayBootstrapOptions,
-  initializeGlobalApplicationContext,
-  destroyGlobalApplicationContext,
-  MidwayFrameworkType,
   IMidwayFramework,
+  initializeGlobalApplicationContext,
+  MidwayFrameworkType,
   safeRequire,
 } from '../src';
 import { join } from 'path';
@@ -53,7 +53,7 @@ function deepEqual(x, y) {
   ) : (x === y);
 }
 
-export async function createLightFramework(baseDir: string): Promise<IMidwayFramework<any, any>> {
+export async function createLightFramework(baseDir: string, ): Promise<IMidwayFramework<any, any>> {
   /**
    * 一个全量的空框架
    */

@@ -1,14 +1,14 @@
 import {
   ILifeCycle,
   IMidwayApplication,
-  IMidwayContainer,
+  IMidwayContainer, MidwayFrameworkService,
 } from '@midwayjs/core';
 import {
   App,
   Config,
   Configuration,
   getClassMetadata,
-  Init,
+  Init, Inject,
   listModule,
 } from '@midwayjs/decorator';
 import { join } from 'path';
@@ -40,17 +40,18 @@ export class OrmConfiguration implements ILifeCycle {
 
   private connectionNames: string[] = [];
 
+  @Inject()
+  frameworkService: MidwayFrameworkService;
+
   @Init()
   async init() {
-    this.app
-      .getApplicationContext()
-      .registerDataHandler(
-        ORM_MODEL_KEY,
-        (key: { modelKey; connectionName }) => {
-          // return getConnection(key.connectionName).getRepository(key.modelKey);
-          return getRepository(key.modelKey, key.connectionName);
-        }
-      );
+    this.frameworkService.registerHandler(
+      ORM_MODEL_KEY,
+      (key: { modelKey; connectionName }) => {
+        // return getConnection(key.connectionName).getRepository(key.modelKey);
+        return getRepository(key.modelKey, key.connectionName);
+      }
+    );
   }
 
   async onReady(container: IMidwayContainer) {
@@ -175,6 +176,7 @@ export class OrmConfiguration implements ILifeCycle {
     }
     return rt;
   }
+
   /**
    * 创建 connection 之后
    * @param container
@@ -196,6 +198,7 @@ export class OrmConfiguration implements ILifeCycle {
     }
     return rtCon;
   }
+
   /**
    * 关闭连接之前
    * @param container
@@ -217,6 +220,7 @@ export class OrmConfiguration implements ILifeCycle {
     }
     return rt;
   }
+
   /**
    * 关闭连接之后
    * @param container

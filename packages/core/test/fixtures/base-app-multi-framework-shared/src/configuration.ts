@@ -3,7 +3,8 @@ import { App, Configuration, MidwayFrameworkType } from '@midwayjs/decorator';
 let idx = {num: 0};
 let idx2 = {num: 0};
 
-@Configuration()
+@Configuration({
+})
 export class AutoConfiguration {
   @App()
   app;
