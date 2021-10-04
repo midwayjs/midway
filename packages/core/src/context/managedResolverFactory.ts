@@ -137,11 +137,15 @@ export class ManagedResolverFactory {
       constructorArgs = args;
     }
 
-    this.getObjectEventTarget().emit(ObjectLifeCycleEvent.BEFORE_CREATED, Clzz, {
-      constructorArgs,
-      definition,
-      context: this.context,
-    });
+    this.getObjectEventTarget().emit(
+      ObjectLifeCycleEvent.BEFORE_CREATED,
+      Clzz,
+      {
+        constructorArgs,
+        definition,
+        context: this.context,
+      }
+    );
 
     inst = definition.creator.doConstruct(Clzz, constructorArgs, this.context);
 
@@ -240,10 +244,14 @@ export class ManagedResolverFactory {
       constructorArgs = args;
     }
 
-    this.getObjectEventTarget().emit(ObjectLifeCycleEvent.BEFORE_CREATED, Clzz, {
-      constructorArgs,
-      context: this.context,
-    });
+    this.getObjectEventTarget().emit(
+      ObjectLifeCycleEvent.BEFORE_CREATED,
+      Clzz,
+      {
+        constructorArgs,
+        context: this.context,
+      }
+    );
 
     inst = await definition.creator.doConstructAsync(
       Clzz,

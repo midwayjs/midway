@@ -9,7 +9,9 @@ import {
   BaseFramework,
   extractKoaLikeValue,
   IMiddleware,
-  IMidwayBootstrapOptions, MidwayEnvironmentService, MidwayFrameworkService,
+  IMidwayBootstrapOptions,
+  MidwayEnvironmentService,
+  MidwayFrameworkService,
   MidwayFrameworkType,
   REQUEST_OBJ_CTX_KEY,
   RouterInfo,
@@ -22,7 +24,10 @@ import {
   WEB_RESPONSE_HTTP_CODE,
   WEB_RESPONSE_HEADER,
   WEB_RESPONSE_CONTENT_TYPE,
-  WEB_RESPONSE_REDIRECT, Provide, Inject, Framework
+  WEB_RESPONSE_REDIRECT,
+  Provide,
+  Inject,
+  Framework,
 } from '@midwayjs/decorator';
 import SimpleLock from '@midwayjs/simple-lock';
 import * as compose from 'koa-compose';
@@ -294,21 +299,13 @@ export class MidwayFaaSFramework extends BaseFramework<
   }
 
   private registerDecorator() {
-    this.frameworkService.registerHandler(
-      PLUGIN_KEY,
-      (key, meta, target) => {
-        return target?.[REQUEST_OBJ_CTX_KEY]?.[key] || this.app[key];
-      }
-    );
+    this.frameworkService.registerHandler(PLUGIN_KEY, (key, meta, target) => {
+      return target?.[REQUEST_OBJ_CTX_KEY]?.[key] || this.app[key];
+    });
 
-    this.frameworkService.registerHandler(
-      LOGGER_KEY,
-      (key, meta, target) => {
-        return (
-          target?.[REQUEST_OBJ_CTX_KEY]?.['logger'] || this.app.getLogger()
-        );
-      }
-    );
+    this.frameworkService.registerHandler(LOGGER_KEY, (key, meta, target) => {
+      return target?.[REQUEST_OBJ_CTX_KEY]?.['logger'] || this.app.getLogger();
+    });
   }
 
   private async loadMiddleware(middlewares) {

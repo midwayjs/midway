@@ -20,7 +20,9 @@ import {
   listModule,
   MS_GRPC_METHOD_KEY,
   MS_PROVIDER_KEY,
-  MSProviderType, Provide, Framework,
+  MSProviderType,
+  Provide,
+  Framework,
 } from '@midwayjs/decorator';
 import {
   IMidwayGRPCApplication,

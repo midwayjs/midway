@@ -47,8 +47,7 @@ export class BootstrapStarter {
     });
   }
 
-  public async run() {
-  }
+  public async run() {}
 
   public async stop() {
     await destroyGlobalApplicationContext(this.applicationContext);

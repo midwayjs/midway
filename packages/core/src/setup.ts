@@ -78,13 +78,15 @@ export async function initializeGlobalApplicationContext(
   await applicationContext.getAsync(MidwayAspectService, [applicationContext]);
 
   // framework/config/plugin/logger/app decorator support
-  await applicationContext.getAsync(
-    MidwayFrameworkService,
-    [applicationContext, globalOptions]
-  );
+  await applicationContext.getAsync(MidwayFrameworkService, [
+    applicationContext,
+    globalOptions,
+  ]);
 
   // lifecycle support
-  await applicationContext.getAsync(MidwayLifeCycleService,[applicationContext]);
+  await applicationContext.getAsync(MidwayLifeCycleService, [
+    applicationContext,
+  ]);
 
   return applicationContext;
 }
@@ -93,7 +95,9 @@ export async function destroyGlobalApplicationContext(
   applicationContext: IMidwayContainer
 ) {
   // stop lifecycle
-  const lifecycleService = await applicationContext.getAsync(MidwayLifeCycleService);
+  const lifecycleService = await applicationContext.getAsync(
+    MidwayLifeCycleService
+  );
   await lifecycleService.stop();
   // stop container
   await applicationContext.stop();

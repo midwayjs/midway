@@ -5,7 +5,7 @@ import { MidwayWebFramework } from './framework/web';
 import {
   initializeGlobalApplicationContext,
   safelyGet,
-  safeRequire
+  safeRequire,
 } from '@midwayjs/core';
 import { join } from 'path';
 import { existsSync, readFileSync } from 'fs';
@@ -126,7 +126,6 @@ export const createAppWorkerLoader = () => {
     }
 
     load() {
-
       this.framework = new MidwayWebFramework().configure({
         processType: 'application',
         app: this.app,
@@ -141,7 +140,7 @@ export const createAppWorkerLoader = () => {
           // egg-scripts 启动
           this.applicationContext = await initializeGlobalApplicationContext({
             appDir: this.app.appDir,
-            ignore: ['**/app/extend/**']
+            ignore: ['**/app/extend/**'],
           });
         }
         await this.framework.initialize();

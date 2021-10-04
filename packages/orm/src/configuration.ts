@@ -1,14 +1,16 @@
 import {
   ILifeCycle,
   IMidwayApplication,
-  IMidwayContainer, MidwayFrameworkService,
+  IMidwayContainer,
+  MidwayFrameworkService,
 } from '@midwayjs/core';
 import {
   App,
   Config,
   Configuration,
   getClassMetadata,
-  Init, Inject,
+  Init,
+  Inject,
   listModule,
 } from '@midwayjs/decorator';
 import { join } from 'path';
@@ -47,10 +49,13 @@ export class OrmConfiguration implements ILifeCycle {
   async init() {
     this.frameworkService.registerHandler(
       ORM_MODEL_KEY,
-      (propertyName, meta: {
-        modelKey: string;
-        connectionName: string;
-      }) => {
+      (
+        propertyName,
+        meta: {
+          modelKey: string;
+          connectionName: string;
+        }
+      ) => {
         // return getConnection(key.connectionName).getRepository(key.modelKey);
         return getRepository(meta.modelKey, meta.connectionName);
       }

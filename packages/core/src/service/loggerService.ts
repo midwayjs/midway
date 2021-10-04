@@ -17,9 +17,7 @@ export class MidwayLoggerService extends ServiceFactory<ILogger> {
   @Inject()
   configService: MidwayConfigService;
 
-  constructor(
-    readonly applicationContext: IMidwayContainer,
-  ) {
+  constructor(readonly applicationContext: IMidwayContainer) {
     super();
   }
 
@@ -31,7 +29,6 @@ export class MidwayLoggerService extends ServiceFactory<ILogger> {
       'logger',
       this.getLogger('appLogger')
     );
-
   }
 
   protected createClient(config, name?: string) {

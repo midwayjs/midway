@@ -21,7 +21,9 @@ import {
   WSEventTypeEnum,
   getClassMetadata,
   getProviderId,
-  listModule, Provide, Framework,
+  listModule,
+  Provide,
+  Framework,
 } from '@midwayjs/decorator';
 import { MidwaySocketIOContextLogger } from './logger';
 

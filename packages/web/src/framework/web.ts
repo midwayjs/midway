@@ -1,13 +1,41 @@
 import {
-  IMidwayBootstrapOptions, IMidwayContainer, MidwayConfigService, MidwayFrameworkService,
+  IMidwayBootstrapOptions,
+  IMidwayContainer,
+  MidwayConfigService,
+  MidwayFrameworkService,
   MidwayProcessTypeEnum,
   safelyGet,
+  WebControllerGenerator,
 } from '@midwayjs/core';
 import { CONFIG_KEY, PLUGIN_KEY, LOGGER_KEY } from '@midwayjs/decorator';
 import { IMidwayWebConfigurationOptions } from '../interface';
 import { EggRouter } from '@eggjs/router';
 import { Application, Router, EggLogger } from 'egg';
 import { loggers } from '@midwayjs/logger';
+
+class EggControllerGenerator extends WebControllerGenerator<EggRouter> {
+  constructor(readonly app, readonly applicationContext) {
+    super(applicationContext, app.getFrameworkType());
+  }
+
+  createRouter(routerOptions: any): EggRouter {
+    const router = new EggRouter(routerOptions, this.app);
+    router.prefix(routerOptions.prefix);
+    this.prioritySortRouters.push({
+      priority: 0,
+      router,
+    });
+    return router;
+  }
+
+  generateController(controllerMapping, routeArgsInfo, routerResponseData) {
+    return this.generateKoaController(
+      controllerMapping,
+      routeArgsInfo,
+      routerResponseData
+    );
+  }
+}
 
 export class MidwayWebFramework {
   public app: Application;
@@ -80,7 +108,6 @@ export class MidwayWebFramework {
     return this;
   }
 
-
   public async initialize(options: IMidwayBootstrapOptions): Promise<void> {
     /**
      * Third party application initialization
@@ -92,7 +119,9 @@ export class MidwayWebFramework {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     process.env.EGG_TYPESCRIPT = 'true';
     if (this.configurationOptions.globalConfig) {
-      const configService = await this.applicationContext.getAsync(MidwayConfigService);
+      const configService = await this.applicationContext.getAsync(
+        MidwayConfigService
+      );
       configService.addObject(this.configurationOptions.globalConfig);
       Object.defineProperty(this.app, 'config', {
         get() {
@@ -101,15 +130,14 @@ export class MidwayWebFramework {
       });
     }
 
-    const frameworkService = await this.applicationContext.getAsync(MidwayFrameworkService);
+    const frameworkService = await this.applicationContext.getAsync(
+      MidwayFrameworkService
+    );
 
     // register plugin
-    frameworkService.registerHandler(
-      PLUGIN_KEY,
-      (key, target) => {
-        return this.app[key];
-      }
-    );
+    frameworkService.registerHandler(PLUGIN_KEY, (key, target) => {
+      return this.app[key];
+    });
 
     // register config
     frameworkService.registerHandler(CONFIG_KEY, key => {
@@ -120,6 +148,16 @@ export class MidwayWebFramework {
     frameworkService.registerHandler(LOGGER_KEY, key => {
       return this.getLogger(key);
     });
+
+    if (this.configurationOptions.processType === 'application') {
+      const generator = new EggControllerGenerator(
+        this.app,
+        this.applicationContext
+      );
+      await generator.loadMidwayController(newRouter => {
+        this.app.use(newRouter.middleware());
+      });
+    }
   }
 
   public getLogger(name?: string) {

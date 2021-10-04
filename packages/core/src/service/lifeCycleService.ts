@@ -15,7 +15,6 @@ import { MidwayConfigService } from './configService';
 @Provide()
 @Scope(ScopeEnum.Singleton)
 export class MidwayLifeCycleService {
-
   @Inject()
   frameworkService: MidwayFrameworkService;
 
@@ -24,9 +23,7 @@ export class MidwayLifeCycleService {
 
   mainApp: IMidwayApplication;
 
-  constructor(
-    readonly applicationContext: IMidwayContainer,
-  ) {}
+  constructor(readonly applicationContext: IMidwayContainer) {}
 
   @Init()
   async init() {
@@ -62,11 +59,15 @@ export class MidwayLifeCycleService {
     // onAppError
 
     // exec onConfigLoad()
-    await this.runContainerLifeCycle(lifecycleInstanceList, 'onConfigLoad', configData => {
-      if (configData) {
-        this.configService.addObject(configData);
+    await this.runContainerLifeCycle(
+      lifecycleInstanceList,
+      'onConfigLoad',
+      configData => {
+        if (configData) {
+          this.configService.addObject(configData);
+        }
       }
-    });
+    );
 
     // exec onReady()
     await this.runContainerLifeCycle(lifecycleInstanceList, 'onReady');
@@ -92,10 +93,17 @@ export class MidwayLifeCycleService {
     }
   }
 
-  private async runContainerLifeCycle(lifecycleInstanceList, lifecycle, resultHandler?: (result: any) => void) {
+  private async runContainerLifeCycle(
+    lifecycleInstanceList,
+    lifecycle,
+    resultHandler?: (result: any) => void
+  ) {
     for (const cycle of lifecycleInstanceList) {
       if (typeof cycle.instance[lifecycle] === 'function') {
-        const result = await cycle.instance[lifecycle](this.applicationContext, this.mainApp);
+        const result = await cycle.instance[lifecycle](
+          this.applicationContext,
+          this.mainApp
+        );
         if (resultHandler) {
           resultHandler(result);
         }
@@ -111,4 +119,3 @@ export class MidwayLifeCycleService {
     }
   }
 }
-

@@ -1,6 +1,7 @@
 import {
   saveClassMetadata,
-  saveModule, createCustomPropertyDecorator,
+  saveModule,
+  createCustomPropertyDecorator,
 } from '@midwayjs/decorator';
 import {
   Connection,

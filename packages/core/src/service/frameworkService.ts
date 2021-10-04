@@ -46,11 +46,12 @@ export class MidwayFrameworkService {
   private globalAppMap = new Map<
     MidwayFrameworkType,
     IMidwayApplication<any>
-    >();
+  >();
 
   private globalFrameworkMap = new Map<
-    MidwayFrameworkType, IMidwayFramework<any, any>
-    >();
+    MidwayFrameworkType,
+    IMidwayFramework<any, any>
+  >();
 
   @Init()
   async init() {
@@ -73,10 +74,14 @@ export class MidwayFrameworkService {
           frameworkInstance.getFrameworkType(),
           frameworkInstance.getApplication()
         );
-        this.globalFrameworkMap.set(frameworkInstance.getFrameworkType(), frameworkInstance);
+        this.globalFrameworkMap.set(
+          frameworkInstance.getFrameworkType(),
+          frameworkInstance
+        );
       }
 
-      global['MIDWAY_MAIN_FRAMEWORK'] = this.mainFramework = frameworkInstances[0];
+      global['MIDWAY_MAIN_FRAMEWORK'] = this.mainFramework =
+        frameworkInstances[0];
       this.mainApp = this.mainFramework.getApplication();
 
       // register @App decorator handler
@@ -94,7 +99,9 @@ export class MidwayFrameworkService {
       if (meta.identifier === ALL) {
         return this.configService.getConfiguration();
       } else {
-        return this.configService.getConfiguration(meta.identifier ?? propertyName);
+        return this.configService.getConfiguration(
+          meta.identifier ?? propertyName
+        );
       }
     });
 
@@ -104,7 +111,10 @@ export class MidwayFrameworkService {
     });
 
     this.applicationContext.onObjectCreated((instance, options) => {
-      if (this.handlerMap.size > 0 && Array.isArray(options.definition.handlerProps)) {
+      if (
+        this.handlerMap.size > 0 &&
+        Array.isArray(options.definition.handlerProps)
+      ) {
         // 已经预先在 bind 时处理
         for (const item of options.definition.handlerProps) {
           this.defineGetterPropertyValue(
@@ -131,15 +141,12 @@ export class MidwayFrameworkService {
    * @param instance
    * @param getterHandler
    */
-  private defineGetterPropertyValue(
-    prop,
-    instance,
-    getterHandler
-  ) {
+  private defineGetterPropertyValue(prop, instance, getterHandler) {
     if (prop && getterHandler) {
       if (prop.propertyName) {
         Object.defineProperty(instance, prop.propertyName, {
-          get: () => getterHandler(prop.propertyName, prop.metadata ?? {}, instance),
+          get: () =>
+            getterHandler(prop.propertyName, prop.metadata ?? {}, instance),
           configurable: true, // 继承对象有可能会有相同属性，这里需要配置成 true
           enumerable: true,
         });
@@ -161,10 +168,7 @@ export class MidwayFrameworkService {
     return this.mainFramework;
   }
 
-  public registerHandler(
-    key: string,
-    fn: HandlerFunction
-  ) {
+  public registerHandler(key: string, fn: HandlerFunction) {
     this.handlerMap.set(key, fn);
   }
 
@@ -201,12 +205,12 @@ function filterProtoFramework(frameworks) {
   const frameworkProtoArr = [];
   for (const framework of frameworks) {
     let proto = Object.getPrototypeOf(framework);
-    while (proto !== BaseFramework && proto !== {} ) {
+    while (proto !== BaseFramework && proto !== {}) {
       frameworkProtoArr.push(proto);
       proto = Object.getPrototypeOf(proto);
     }
   }
   return frameworks.filter(framework => {
     return !frameworkProtoArr.includes(framework);
-  })
+  });
 }

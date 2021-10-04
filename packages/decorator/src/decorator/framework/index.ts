@@ -4,30 +4,29 @@ import {
   PLUGIN_KEY,
   LOGGER_KEY,
   MidwayFrameworkType,
-  createCustomPropertyDecorator
+  createCustomPropertyDecorator,
 } from '../../';
 
 export function Plugin(identifier?: string): PropertyDecorator {
   return createCustomPropertyDecorator(PLUGIN_KEY, {
-    identifier
+    identifier,
   });
 }
 
 export function Config(identifier?: string): PropertyDecorator {
   return createCustomPropertyDecorator(CONFIG_KEY, {
-    identifier
+    identifier,
   });
 }
 
 export function App(type?: MidwayFrameworkType): PropertyDecorator {
   return createCustomPropertyDecorator(APPLICATION_KEY, {
-    type
+    type,
   });
 }
 
 export function Logger(identifier?: string): PropertyDecorator {
   return createCustomPropertyDecorator(LOGGER_KEY, {
-    identifier
+    identifier,
   });
 }
-

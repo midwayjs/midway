@@ -10,13 +10,19 @@ import {
   WEB_RESPONSE_CONTENT_TYPE,
   WEB_RESPONSE_HEADER,
   WEB_RESPONSE_HTTP_CODE,
-  WEB_RESPONSE_REDIRECT
+  WEB_RESPONSE_REDIRECT,
 } from '@midwayjs/decorator';
-import { extractKoaLikeValue, extractExpressLikeValue, WebRouterCollector, IMidwayContainer } from '../../src';
+import {
+  extractKoaLikeValue,
+  extractExpressLikeValue,
+  WebRouterCollector,
+  IMidwayContainer,
+} from '../../src';
 import { ILogger } from '@midwayjs/logger';
 
-export abstract class WebControllerGenerator<Router extends {use: (...args) => void}> {
-
+export abstract class WebControllerGenerator<
+  Router extends { use: (...args) => void }
+> {
   private controllerIds: string[] = [];
   public prioritySortRouters: Array<{
     priority: number;
@@ -26,8 +32,10 @@ export abstract class WebControllerGenerator<Router extends {use: (...args) => v
   logger: ILogger;
   appLogger: ILogger;
 
-  protected constructor(readonly applicationContext: IMidwayContainer, readonly frameworkType: MidwayFrameworkType) {
-  }
+  protected constructor(
+    readonly applicationContext: IMidwayContainer,
+    readonly frameworkType: MidwayFrameworkType
+  ) {}
 
   /**
    * wrap controller string to middleware function
@@ -149,7 +157,9 @@ export abstract class WebControllerGenerator<Router extends {use: (...args) => v
     };
   }
 
-  public async loadMidwayController(routerHandler): Promise<void> {
+  public async loadMidwayController(
+    routerHandler?: (newRouter: Router) => void
+  ): Promise<void> {
     const collector = new WebRouterCollector();
     const routerTable = await collector.getRouterTable();
     const routerList = await collector.getRoutePriorityList();
@@ -177,12 +187,9 @@ export abstract class WebControllerGenerator<Router extends {use: (...args) => v
       });
 
       // add router middleware
-      await this.handlerWebMiddleware(
-        routerInfo.middleware,
-        (middlewareImpl) => {
-          newRouter.use(middlewareImpl);
-        }
-      );
+      await this.handlerWebMiddleware(routerInfo.middleware, middlewareImpl => {
+        newRouter.use(middlewareImpl);
+      });
 
       // add route
       const routes = routerTable.get(routerInfo.prefix);
@@ -191,12 +198,9 @@ export abstract class WebControllerGenerator<Router extends {use: (...args) => v
         const middlewares2 = routeInfo.middleware;
         const methodMiddlewares = [];
 
-        await this.handlerWebMiddleware(
-          middlewares2,
-          (middlewareImpl) => {
-            methodMiddlewares.push(middlewareImpl);
-          }
-        );
+        await this.handlerWebMiddleware(middlewares2, middlewareImpl => {
+          methodMiddlewares.push(middlewareImpl);
+        });
 
         if (this.frameworkType === MidwayFrameworkType.WEB_KOA) {
           if (typeof routeInfo.url === 'string' && /\*$/.test(routeInfo.url)) {
@@ -247,8 +251,9 @@ export abstract class WebControllerGenerator<Router extends {use: (...args) => v
           // web function middleware
           handlerCallback(middleware);
         } else {
-          const middlewareImpl: any =
-            await this.applicationContext.getAsync(middleware);
+          const middlewareImpl: any = await this.applicationContext.getAsync(
+            middleware
+          );
           if (middlewareImpl && typeof middlewareImpl.resolve === 'function') {
             handlerCallback(middlewareImpl.resolve());
           }

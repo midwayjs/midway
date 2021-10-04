@@ -7,7 +7,9 @@ import {
   ConsumerMetadata,
   MS_CONSUMER_KEY,
   MSListenerType,
-  RabbitMQListenerOptions, Provide, Framework,
+  RabbitMQListenerOptions,
+  Provide,
+  Framework,
 } from '@midwayjs/decorator';
 import { BaseFramework } from '@midwayjs/core';
 import {

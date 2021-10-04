@@ -5,7 +5,12 @@ import {
   TagClsMetadata,
   TagPropsMetadata,
 } from './interface';
-import { INJECT_CUSTOM_TAG, INJECT_TAG, OBJ_DEF_CLS, TAGGED_CLS } from './constant';
+import {
+  INJECT_CUSTOM_TAG,
+  INJECT_TAG,
+  OBJ_DEF_CLS,
+  TAGGED_CLS,
+} from './constant';
 
 import {
   isNullOrUndefined,
@@ -875,7 +880,10 @@ export function getMethodReturnTypes(target, methodName: string | symbol) {
  * @param decoratorKey
  * @param metadata
  */
-export function createCustomPropertyDecorator(decoratorKey: string, metadata: any): PropertyDecorator {
+export function createCustomPropertyDecorator(
+  decoratorKey: string,
+  metadata: any
+): PropertyDecorator {
   return function (target: any, propertyName: string): void {
     attachClassMetadata(
       INJECT_CUSTOM_TAG,
@@ -885,7 +893,7 @@ export function createCustomPropertyDecorator(decoratorKey: string, metadata: an
         metadata,
       },
       target,
-      propertyName,
+      propertyName
     );
   };
 }

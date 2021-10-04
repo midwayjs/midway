@@ -1,14 +1,24 @@
 import {
-  BaseFramework, destroyGlobalApplicationContext,
-  IMidwayApplication, IMidwayBootstrapOptions,
+  BaseFramework,
+  destroyGlobalApplicationContext,
+  IMidwayApplication,
+  IMidwayBootstrapOptions,
   IMidwayContainer,
-  IMidwayFramework, initializeGlobalApplicationContext, MidwayFrameworkService,
+  IMidwayFramework,
+  initializeGlobalApplicationContext,
+  MidwayFrameworkService,
   MidwayFrameworkType,
   safeRequire,
 } from '@midwayjs/core';
 import { isAbsolute, join } from 'path';
 import { remove } from 'fs-extra';
-import { clearAllModule, Configuration, Framework, Provide, sleep } from '@midwayjs/decorator';
+import {
+  clearAllModule,
+  Configuration,
+  Framework,
+  Provide,
+  sleep,
+} from '@midwayjs/decorator';
 import { clearAllLoggers } from '@midwayjs/logger';
 import * as os from 'os';
 import * as assert from 'assert';
@@ -53,7 +63,7 @@ let lastAppDir;
 
 export async function create(
   appDir: string = process.cwd(),
-  options?: MockAppConfigurationOptions,
+  options?: MockAppConfigurationOptions
 ): Promise<IMidwayApplication<any, any>> {
   process.env.MIDWAY_TS_MODE = 'true';
 
@@ -83,7 +93,9 @@ export async function create(
   const container = await initializeGlobalApplicationContext({
     baseDir: options.baseDir,
     appDir,
-    configurationModule: [safeRequire(join(options.baseDir, 'configuration'))].concat(options.configurationModule),
+    configurationModule: [
+      safeRequire(join(options.baseDir, 'configuration')),
+    ].concat(options.configurationModule),
   });
 
   const frameworkService = await container.getAsync(MidwayFrameworkService);
@@ -92,12 +104,9 @@ export async function create(
 
 export async function createApp(
   baseDir: string = process.cwd(),
-  options?: MockAppConfigurationOptions,
+  options?: MockAppConfigurationOptions
 ): Promise<IMidwayApplication<any, any>> {
-  return create(
-    baseDir,
-    options,
-  );
+  return create(baseDir, options);
 }
 
 export async function close(
@@ -162,8 +171,7 @@ export async function createLightApp(
       return MidwayFrameworkType.LIGHT;
     }
 
-    async run(): Promise<void> {
-    }
+    async run(): Promise<void> {}
 
     async applicationInitialize(options: IMidwayBootstrapOptions) {
       this.app = {} as IMidwayApplication;
@@ -181,8 +189,9 @@ export async function createLightApp(
  * transform a framework component or framework module to configuration class
  * @param Framework
  */
-function transformFrameworkToConfiguration<T extends IMidwayFramework<any, any>>(Framework: any): new () => any {
-
+function transformFrameworkToConfiguration<
+  T extends IMidwayFramework<any, any>
+>(Framework: any): new () => any {
   let CustomFramework;
   if (typeof Framework === 'string') {
     const frameworkModule = safeRequire(Framework);
@@ -194,7 +203,9 @@ function transformFrameworkToConfiguration<T extends IMidwayFramework<any, any>>
   @Configuration()
   class CustomConfiguration {
     async onServerReady(container: IMidwayContainer) {
-      const customFramework = await container.getAsync<T>(CustomFramework as any) as T;
+      const customFramework = (await container.getAsync<T>(
+        CustomFramework as any
+      )) as T;
       await customFramework.run();
     }
   }
