@@ -14,7 +14,10 @@ import { resolve } from 'path';
 import { Server } from 'net';
 import { LoggerOptions } from '@midwayjs/logger';
 import { MidwayKoaContextLogger } from '@midwayjs/koa';
+import { Provide, Framework } from '@midwayjs/decorator';
 
+@Provide()
+@Framework()
 export class MidwayWebSingleProcessFramework
   implements
     IMidwayFramework<IMidwayWebApplication, IMidwayWebConfigurationOptions>
@@ -118,10 +121,6 @@ export class MidwayWebSingleProcessFramework
       } else {
         this.server = require('http').createServer(this.app.callback());
       }
-    }
-
-    if (options.isMainFramework === undefined) {
-      await this.loadExtension();
     }
   }
 

@@ -201,7 +201,7 @@ function filterProtoFramework(frameworks) {
   const frameworkProtoArr = [];
   for (const framework of frameworks) {
     let proto = Object.getPrototypeOf(framework);
-    while (proto !== BaseFramework ) {
+    while (proto !== BaseFramework && proto !== {} ) {
       frameworkProtoArr.push(proto);
       proto = Object.getPrototypeOf(proto);
     }

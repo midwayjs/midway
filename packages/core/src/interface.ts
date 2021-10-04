@@ -352,6 +352,7 @@ export interface IMidwayBootstrapOptions {
   preloadModules?: any[];
   configurationModule?: any;
   logger?: boolean | ILogger;
+  ignore?: string[];
 }
 
 export interface IConfigurationOptions {

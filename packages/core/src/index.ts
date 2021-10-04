@@ -30,4 +30,5 @@ export * from './util/contextUtil';
 export * from './util/serviceFactory';
 export * from './util/fileDetector';
 export * from './util/containerUtil';
+export * from './util/webGenerator';
 export * from './setup';

@@ -1,21 +1,15 @@
 import {
-  IMidwayBootstrapOptions,
-  MidwayFrameworkType,
+  IMidwayBootstrapOptions, IMidwayContainer, MidwayConfigService, MidwayFrameworkService,
   MidwayProcessTypeEnum,
   safelyGet,
 } from '@midwayjs/core';
 import { CONFIG_KEY, PLUGIN_KEY, LOGGER_KEY } from '@midwayjs/decorator';
 import { IMidwayWebConfigurationOptions } from '../interface';
-import { MidwayKoaBaseFramework } from '@midwayjs/koa';
 import { EggRouter } from '@eggjs/router';
-import { Application, Context, Router, EggLogger } from 'egg';
+import { Application, Router, EggLogger } from 'egg';
 import { loggers } from '@midwayjs/logger';
 
-export class MidwayWebFramework extends MidwayKoaBaseFramework<
-  Application,
-  Context,
-  IMidwayWebConfigurationOptions
-> {
+export class MidwayWebFramework {
   public app: Application;
   public configurationOptions: IMidwayWebConfigurationOptions;
   public prioritySortRouters: Array<{
@@ -25,12 +19,20 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
   protected loggers: {
     [name: string]: EggLogger;
   };
+  applicationContext: IMidwayContainer;
+  logger;
+  appLogger;
+  BaseContextLoggerClass;
 
   public configure(
     options: IMidwayWebConfigurationOptions
   ): MidwayWebFramework {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
+    this.applicationContext = this.app.getApplicationContext();
+    // 不需要在这里创建框架日志，从 egg 代理过来
+    this.logger = this.app.coreLogger;
+    this.appLogger = this.app.logger;
     this.configurationOptions = options;
     // set default context logger
     this.BaseContextLoggerClass =
@@ -71,86 +73,38 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
 
     Object.defineProperty(this.app, 'applicationContext', {
       get() {
-        return self.getApplicationContext();
+        return self.applicationContext;
       },
     });
 
     return this;
   }
 
+
   public async initialize(options: IMidwayBootstrapOptions): Promise<void> {
-    this.isMainFramework = options.isMainFramework;
-    /**
-     * before create MidwayContainer instance，can change init parameters
-     */
-    await this.beforeContainerInitialize(options);
-
-    /**
-     * initialize MidwayContainer instance
-     */
-    await this.containerInitialize(options);
-
-    /**
-     * before container load directory and bind
-     */
-    await this.afterContainerInitialize(options);
-
-    /**
-     * run container loadDirectoryLoad method to create object definition
-     */
-    await this.containerDirectoryLoad(options);
-
-    /**
-     * after container load directory and bind
-     */
-    await this.afterContainerDirectoryLoad(options);
-
     /**
      * Third party application initialization
      */
     await this.applicationInitialize(options);
-
-    /**
-     * EggJS 比较特殊，生命周期触发需要等到插件加载完才能加载
-     */
-    await this.applicationContext.ready();
-
-    /**
-     * after container refresh
-     */
-    await this.afterContainerReady(options);
-  }
-
-  protected async beforeContainerInitialize(
-    options: Partial<IMidwayBootstrapOptions>
-  ) {
-    options.ignore = options.ignore || [];
-    options.ignore.push('**/app/extend/**');
-  }
-
-  protected async initializeLogger() {
-    // 不需要在这里创建框架日志，从 egg 代理过来
-    this.logger = this.app.coreLogger;
-    this.appLogger = this.app.logger;
   }
 
   async applicationInitialize(options: Partial<IMidwayBootstrapOptions>) {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const self = this;
     process.env.EGG_TYPESCRIPT = 'true';
     if (this.configurationOptions.globalConfig) {
-      this.getApplicationContext()
-        .getConfigService()
-        .addObject(this.configurationOptions.globalConfig);
+      const configService = await this.applicationContext.getAsync(MidwayConfigService);
+      configService.addObject(this.configurationOptions.globalConfig);
       Object.defineProperty(this.app, 'config', {
         get() {
-          return self.getConfiguration();
+          return configService.getConfiguration();
         },
       });
     }
 
+    const frameworkService = await this.applicationContext.getAsync(MidwayFrameworkService);
+
     // register plugin
-    this.getApplicationContext().registerDataHandler(
+    frameworkService.registerHandler(
       PLUGIN_KEY,
       (key, target) => {
         return this.app[key];
@@ -158,26 +112,14 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
     );
 
     // register config
-    this.getApplicationContext().registerDataHandler(CONFIG_KEY, key => {
+    frameworkService.registerHandler(CONFIG_KEY, key => {
       return key ? safelyGet(key, this.app.config) : this.app.config;
     });
 
     // register logger
-    this.getApplicationContext().registerDataHandler(LOGGER_KEY, key => {
+    frameworkService.registerHandler(LOGGER_KEY, key => {
       return this.getLogger(key);
     });
-  }
-
-  protected async afterContainerReady(
-    options: Partial<IMidwayBootstrapOptions>
-  ): Promise<void> {}
-
-  public getApplication(): Application {
-    return this.app;
-  }
-
-  public getFrameworkType(): MidwayFrameworkType {
-    return MidwayFrameworkType.WEB;
   }
 
   public getLogger(name?: string) {
@@ -186,16 +128,6 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
     }
     return this.appLogger;
   }
-
-  /**
-   * 这个方法 egg-cluster 不走，只有单进程模式使用 @midwayjs/bootstrap 才会执行
-   */
-  public async run(): Promise<void> {}
-
-  /**
-   * 这个方法 egg-cluster 不走，只有单进程模式使用 @midwayjs/bootstrap 才会执行
-   */
-  protected async beforeStop(): Promise<void> {}
 
   protected createRouter(routerOptions): Router {
     const router = new EggRouter(routerOptions, this.app);

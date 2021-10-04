@@ -9,3 +9,4 @@ export {
 } from './base';
 export { Application, Agent } from './application';
 export { startCluster } from 'egg';
+export { EggConfiguration as Configuration } from './configuration';
