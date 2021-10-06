@@ -330,7 +330,9 @@ export class MidwayContainer implements IMidwayContainer {
 
     for (const p in props) {
       const propertyMeta = props[p];
-      this.debugLogger(`  inject properties => [${propertyMeta}]`);
+      this.debugLogger(
+        `  inject properties => [${JSON.stringify(propertyMeta)}]`
+      );
       const refManaged = new ManagedReference();
       refManaged.args = propertyMeta.args;
       refManaged.name = propertyMeta.value as any;

@@ -1,4 +1,5 @@
 import {
+  BaseFramework,
   IMidwayBootstrapOptions,
   IMidwayContainer,
   MidwayConfigService,
@@ -7,10 +8,15 @@ import {
   safelyGet,
   WebControllerGenerator,
 } from '@midwayjs/core';
-import { CONFIG_KEY, PLUGIN_KEY, LOGGER_KEY } from '@midwayjs/decorator';
+import {
+  CONFIG_KEY,
+  PLUGIN_KEY,
+  LOGGER_KEY,
+  MidwayFrameworkType,
+} from '@midwayjs/decorator';
 import { IMidwayWebConfigurationOptions } from '../interface';
 import { EggRouter } from '@eggjs/router';
-import { Application, Router, EggLogger } from 'egg';
+import { Application, Context, Router, EggLogger } from 'egg';
 import { loggers } from '@midwayjs/logger';
 
 class EggControllerGenerator extends WebControllerGenerator<EggRouter> {
@@ -37,7 +43,11 @@ class EggControllerGenerator extends WebControllerGenerator<EggRouter> {
   }
 }
 
-export class MidwayWebFramework {
+export class MidwayWebFramework extends BaseFramework<
+  Application,
+  Context,
+  IMidwayWebConfigurationOptions
+> {
   public app: Application;
   public configurationOptions: IMidwayWebConfigurationOptions;
   public prioritySortRouters: Array<{
@@ -52,6 +62,10 @@ export class MidwayWebFramework {
   appLogger;
   BaseContextLoggerClass;
 
+  constructor() {
+    super();
+  }
+
   public configure(
     options: IMidwayWebConfigurationOptions
   ): MidwayWebFramework {
@@ -63,19 +77,19 @@ export class MidwayWebFramework {
     this.appLogger = this.app.logger;
     this.configurationOptions = options;
     // set default context logger
-    this.BaseContextLoggerClass =
-      options.ContextLoggerClass || this.getDefaultContextLoggerClass();
+    // this.BaseContextLoggerClass =
+    //   options.ContextLoggerClass || this.getDefaultContextLoggerClass();
     this.app = options.app;
 
     this.defineApplicationProperties(
       {
-        generateController: (controllerMapping: string) => {
-          return this.generateController(controllerMapping);
-        },
-
-        generateMiddleware: async (middlewareId: string) => {
-          return this.generateMiddleware(middlewareId);
-        },
+        // generateController: (controllerMapping: string) => {
+        //   return this.generateController(controllerMapping);
+        // },
+        //
+        // generateMiddleware: async (middlewareId: string) => {
+        //   return this.generateMiddleware(middlewareId);
+        // },
 
         getProcessType: () => {
           if (this.configurationOptions.processType === 'application') {
@@ -159,6 +173,12 @@ export class MidwayWebFramework {
       });
     }
   }
+
+  getFrameworkType(): MidwayFrameworkType {
+    return MidwayFrameworkType.WEB;
+  }
+
+  async run(): Promise<void> {}
 
   public getLogger(name?: string) {
     if (name) {

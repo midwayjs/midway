@@ -430,6 +430,7 @@ describe('/test/baseFramework.test.ts', () => {
     const applicationContext = framework.getApplicationContext();
     const frameworkService = await applicationContext.getAsync(MidwayFrameworkService);
     expect(frameworkService.getFramework(MidwayFrameworkType.LIGHT)).toBeUndefined();
+    expect(frameworkService.getFramework(MidwayFrameworkType.FAAS)).toBeDefined();
 
     const framework1 = frameworkService.getFramework(MidwayFrameworkType.EMPTY);
     const framework2 = frameworkService.getFramework(MidwayFrameworkType.MS_GRPC);

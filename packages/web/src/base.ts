@@ -11,7 +11,6 @@ import { join } from 'path';
 import { existsSync, readFileSync } from 'fs';
 import { createLoggers } from './logger';
 import { EggRouter as Router } from '@eggjs/router';
-import { WebBootstrapStarter } from './starter';
 
 const ROUTER = Symbol('EggCore#router');
 const EGG_LOADER = Symbol.for('egg#loader');
@@ -152,8 +151,8 @@ export const createAppWorkerLoader = () => {
      * 这个代码只会在单进程 bootstrap.js 模式下执行
      */
     async loadOrigin() {
-      await this.bootstrap.init();
-      super.load();
+      // await this.bootstrap.init();
+      // super.load();
     }
 
     loadMiddleware() {
@@ -262,16 +261,18 @@ export const createAgentWorkerLoader = () => {
         app: this.app,
         globalConfig: this.app.config,
       });
-      this.bootstrap = new WebBootstrapStarter({
-        isWorker: false,
-      });
-      this.bootstrap
-        .configure({
-          appDir: this.app.appDir,
-        })
-        .load(this.framework);
       this.app.beforeStart(async () => {
-        await this.bootstrap.init();
+        if (this.app.options.applicationContext) {
+          // 单进程模式启动
+          this.applicationContext = this.app.options.applicationContext;
+        } else {
+          // egg-scripts 启动
+          this.applicationContext = await initializeGlobalApplicationContext({
+            appDir: this.app.appDir,
+            ignore: ['**/app/extend/**'],
+          });
+        }
+        await this.framework.initialize();
         super.load();
       });
     }

@@ -16,17 +16,17 @@ import { MidwayConfigService } from './configService';
 @Scope(ScopeEnum.Singleton)
 export class MidwayLifeCycleService {
   @Inject()
-  frameworkService: MidwayFrameworkService;
+  protected frameworkService: MidwayFrameworkService;
 
   @Inject()
-  configService: MidwayConfigService;
+  protected configService: MidwayConfigService;
 
-  mainApp: IMidwayApplication;
+  protected mainApp: IMidwayApplication;
 
   constructor(readonly applicationContext: IMidwayContainer) {}
 
   @Init()
-  async init() {
+  protected async init() {
     this.mainApp = this.frameworkService.getMainApp();
 
     // run lifecycle
@@ -76,7 +76,7 @@ export class MidwayLifeCycleService {
     await this.runContainerLifeCycle(lifecycleInstanceList, 'onServerReady');
   }
 
-  async stop() {
+  public async stop() {
     const cycles = listModule(CONFIGURATION_KEY);
     for (const cycle of cycles) {
       let inst;

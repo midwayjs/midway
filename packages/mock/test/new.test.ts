@@ -6,7 +6,7 @@ import { join } from 'path';
 import { MidwayFrameworkType } from '@midwayjs/decorator';
 import { existsSync } from 'fs';
 import { EventService } from './fixtures/base-faas/src/event';
-import { createLightApp } from '../dist';
+import { createLightApp } from '../';
 
 describe('/test/new.test.ts', () => {
   it('should test create app', async () => {

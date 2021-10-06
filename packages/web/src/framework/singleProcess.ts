@@ -3,7 +3,9 @@ import {
   IMidwayBootstrapOptions,
   IMidwayContainer,
   IMidwayFramework,
+  MidwayConfigService,
   MidwayFrameworkType,
+  MidwayLoggerService,
   PathFileUtil,
 } from '@midwayjs/core';
 import {
@@ -13,8 +15,8 @@ import {
 import { resolve } from 'path';
 import { Server } from 'net';
 import { LoggerOptions } from '@midwayjs/logger';
-import { MidwayKoaContextLogger } from '@midwayjs/koa';
-import { Provide, Framework } from '@midwayjs/decorator';
+import { Provide, Framework, Init, Inject } from '@midwayjs/decorator';
+import { MidwayEggContextLogger } from '../logger';
 
 @Provide()
 @Framework()
@@ -27,6 +29,25 @@ export class MidwayWebSingleProcessFramework
   public configurationOptions: IMidwayWebConfigurationOptions;
   private isTsMode: boolean;
   private server: Server;
+
+  @Inject()
+  loggerService: MidwayLoggerService;
+
+  @Inject()
+  configService: MidwayConfigService;
+
+  @Init()
+  async init() {
+    this.configure(
+      this.configService.getConfiguration(this.getFrameworkName())
+    );
+    // this.BaseContextLoggerClass =
+    //   this.configurationOptions.ContextLoggerClass ||
+    //   this.getDefaultContextLoggerClass();
+    // this.logger = this.loggerService.getLogger('coreLogger');
+    // this.appLogger = this.loggerService.getLogger('logger');
+    return this;
+  }
 
   public getApplication() {
     return this.app;
@@ -175,11 +196,11 @@ export class MidwayWebSingleProcessFramework
   }
 
   public getFrameworkName() {
-    return 'midway:web';
+    return 'egg';
   }
 
   public getDefaultContextLoggerClass() {
-    return MidwayKoaContextLogger;
+    return MidwayEggContextLogger;
   }
 
   public loadLifeCycles() {}

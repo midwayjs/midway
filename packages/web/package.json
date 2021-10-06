@@ -43,7 +43,6 @@
     "@eggjs/router": "^2.0.0",
     "@midwayjs/bootstrap": "^3.0.0-alpha.42",
     "@midwayjs/core": "^3.0.0-alpha.42",
-    "@midwayjs/koa": "^3.0.0-alpha.42",
     "@midwayjs/logger": "^3.0.0-alpha.42",
     "debug": "^4.1.1",
     "egg": "^2.28.0",

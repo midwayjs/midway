@@ -1,5 +1,5 @@
 import { Framework, MidwayFrameworkType, Provide } from '@midwayjs/decorator';
-import { BaseFramework, IMidwayApplication, IMidwayBootstrapOptions } from '../../../../src';
+import { BaseFramework, IMidwayApplication, IMidwayBootstrapOptions, IMidwayFramework } from '../../../../src';
 
 @Provide()
 @Framework()
@@ -25,5 +25,81 @@ export class CustomTwoFramework extends LightFramework {
   }
   getFrameworkType(): MidwayFrameworkType {
     return MidwayFrameworkType.MS_GRPC;
+  }
+}
+
+@Provide()
+@Framework()
+export class CustomThirdFramework implements IMidwayFramework<any, any> {
+  async applicationInitialize(options: IMidwayBootstrapOptions) {
+    this.app = {} as IMidwayApplication;
+  }
+  getFrameworkType(): MidwayFrameworkType {
+    return MidwayFrameworkType.FAAS;
+  }
+
+  app: any;
+  configurationOptions: any;
+
+  configure(options: any): IMidwayFramework<any, any> {
+    return undefined;
+  }
+
+  createLogger(name: string, options) {
+    return undefined;
+  }
+
+  getAppDir(): string {
+    return '';
+  }
+
+  getApplication(): any {
+    return undefined;
+  }
+
+  getApplicationContext() {
+    return undefined;
+  }
+
+  getBaseDir(): string {
+    return '';
+  }
+
+  getConfiguration(key?: string): any {
+  }
+
+  getCoreLogger() {
+    return undefined;
+  }
+
+  getCurrentEnvironment(): string {
+    return '';
+  }
+
+  getDefaultContextLoggerClass(): any {
+  }
+
+  getFrameworkName(): string {
+    return '';
+  }
+
+  getLogger(name?: string) {
+    return undefined;
+  }
+
+  getProjectName(): string {
+    return '';
+  }
+
+  initialize(options: Partial<IMidwayBootstrapOptions>): Promise<void> {
+    return Promise.resolve(undefined);
+  }
+
+  run(): Promise<void> {
+    return Promise.resolve(undefined);
+  }
+
+  stop(): Promise<void> {
+    return Promise.resolve(undefined);
   }
 }

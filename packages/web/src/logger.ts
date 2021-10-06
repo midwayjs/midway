@@ -1,5 +1,10 @@
 import { EggLoggers } from 'egg-logger';
-import { loggers, ILogger, IMidwayLogger } from '@midwayjs/logger';
+import {
+  loggers,
+  ILogger,
+  IMidwayLogger,
+  MidwayContextLogger,
+} from '@midwayjs/logger';
 import { join, isAbsolute } from 'path';
 import {
   existsSync,
@@ -8,7 +13,7 @@ import {
   renameSync,
   unlinkSync,
 } from 'fs';
-import { Application, EggLogger } from 'egg';
+import { Application, EggLogger, Context } from 'egg';
 import { MidwayProcessTypeEnum } from '@midwayjs/core';
 import { getCurrentDateString } from './utils';
 import * as os from 'os';
@@ -264,3 +269,26 @@ export const createLoggers = (app: Application) => {
 
   return loggers;
 };
+
+export class MidwayEggContextLogger extends MidwayContextLogger<Context> {
+  formatContextLabel() {
+    const ctx = this.ctx;
+    // format: '[$userId/$ip/$traceId/$use_ms $method $url]'
+    const userId = ctx.userId || '-';
+    const traceId = (ctx.tracer && ctx.tracer.traceId) || '-';
+    const use = Date.now() - ctx.startTime;
+    return (
+      userId +
+      '/' +
+      ctx.ip +
+      '/' +
+      traceId +
+      '/' +
+      use +
+      'ms ' +
+      ctx.method +
+      ' ' +
+      ctx.url
+    );
+  }
+}

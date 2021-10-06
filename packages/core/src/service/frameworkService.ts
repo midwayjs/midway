@@ -203,9 +203,10 @@ async function initializeFramework(
 
 function filterProtoFramework(frameworks) {
   const frameworkProtoArr = [];
+  // 这里把继承的框架父类都找出来，然后排除掉，只取第一层
   for (const framework of frameworks) {
     let proto = Object.getPrototypeOf(framework);
-    while (proto !== BaseFramework && proto !== {}) {
+    while (proto.name && proto.name !== BaseFramework.name) {
       frameworkProtoArr.push(proto);
       proto = Object.getPrototypeOf(proto);
     }

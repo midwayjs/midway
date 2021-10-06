@@ -4,10 +4,10 @@ import {
   IMidwayContext,
   Context as IMidwayBaseContext,
   IMidwayApplication,
-  IMidwayBaseApplication
+  IMidwayBaseApplication,
+  IConfigurationOptions
 } from '@midwayjs/core';
-import { IMidwayKoaConfigurationOptions, IMidwayKoaContext, IMidwayKoaNext } from '@midwayjs/koa';
-import { DefaultState, Middleware } from 'koa';
+import { DefaultState, Middleware, Next } from 'koa';
 import { ILogger, LoggerOptions } from '@midwayjs/logger';
 
 export interface IMidwayWebBaseApplication {
@@ -15,7 +15,7 @@ export interface IMidwayWebBaseApplication {
   getLogger(name?: string): EggLogger & ILogger;
   getCoreLogger(): EggLogger & ILogger;
   generateController?(controllerMapping: string);
-  generateMiddleware?(middlewareId: string): Promise<Middleware<DefaultState, IMidwayKoaContext>>;
+  generateMiddleware?(middlewareId: string): Promise<Middleware<DefaultState, EggContext>>;
   createLogger(name: string, options: LoggerOptions): EggLogger & ILogger;
 }
 
@@ -47,9 +47,9 @@ export type IMidwayWebApplication = IMidwayApplication<Context, EggApplication &
 export interface Application extends IMidwayWebApplication {}
 export interface Context <ResponseBodyT = unknown> extends IMidwayWebContext <ResponseBodyT> {}
 export type IMidwayWebContext <ResponseBodyT = unknown> = IMidwayContext<EggContext<ResponseBodyT>>;
-export type IMidwayWebNext = IMidwayKoaNext;
+export type IMidwayWebNext = Next;
 
-export interface IMidwayWebConfigurationOptions extends IMidwayKoaConfigurationOptions {
+export interface IMidwayWebConfigurationOptions extends IConfigurationOptions {
   app?: IMidwayWebApplication;
   plugins?: {
     [plugin: string]: {
@@ -61,6 +61,30 @@ export interface IMidwayWebConfigurationOptions extends IMidwayKoaConfigurationO
   typescript?: boolean;
   processType?: 'application' | 'agent';
   globalConfig?: any;
+  /**
+   * application http port
+   */
+  port?: number;
+  /**
+   * application hostname, 127.0.0.1 as default
+   */
+  hostname?: string;
+  /**
+   * https key
+   */
+  key?: string | Buffer | Array<Buffer | Object>;
+  /**
+   * https cert
+   */
+  cert?: string | Buffer | Array<string | Buffer>;
+  /**
+   * https ca
+   */
+  ca?: string | Buffer | Array<string | Buffer>;
+  /**
+   * http2 support
+   */
+  http2?: boolean;
 }
 
 export type MidwayWebMiddleware = Middleware<DefaultState, Context>;

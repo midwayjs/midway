@@ -61,10 +61,14 @@ export type MockAppConfigurationOptions = {
 
 let lastAppDir;
 
-export async function create(
+export async function create<
+  T extends IMidwayFramework<any, U>,
+  U = T['configurationOptions']
+>(
   appDir: string = process.cwd(),
-  options?: MockAppConfigurationOptions
-): Promise<IMidwayApplication<any, any>> {
+  options?: MockAppConfigurationOptions,
+  customFramework?: { new (...args): T }
+): Promise<T> {
   process.env.MIDWAY_TS_MODE = 'true';
 
   // 处理测试的 fixtures
@@ -77,7 +81,6 @@ export async function create(
     clearAllModule();
   }
   lastAppDir = appDir;
-  global['MIDWAY_BOOTSTRAP_APP_SET'].clear();
   // clearContainerCache();
   clearAllLoggers();
 
@@ -85,10 +88,9 @@ export async function create(
   if (options.baseDir) {
     safeRequire(join(`${options.baseDir}`, 'interface'));
   } else {
-    safeRequire(join(`${appDir}`, 'src/interface'));
+    options.baseDir = `${appDir}/src`;
+    safeRequire(join(`${options.baseDir}`, 'interface'));
   }
-
-  options = options ?? {};
 
   const container = await initializeGlobalApplicationContext({
     baseDir: options.baseDir,
@@ -98,15 +100,25 @@ export async function create(
     ].concat(options.configurationModule),
   });
 
-  const frameworkService = await container.getAsync(MidwayFrameworkService);
-  return frameworkService.getMainApp();
+  if (customFramework) {
+    return container.getAsync(customFramework);
+  } else {
+    const frameworkService = await container.getAsync(MidwayFrameworkService);
+    return frameworkService.getMainFramework() as T;
+  }
 }
 
-export async function createApp(
+export async function createApp<
+  T extends IMidwayFramework<any, U>,
+  U = T['configurationOptions'],
+  Y = ReturnType<T['getApplication']>
+>(
   baseDir: string = process.cwd(),
-  options?: MockAppConfigurationOptions
+  options?: U & MockAppConfigurationOptions,
+  customFramework?: { new (...args): T }
 ): Promise<IMidwayApplication<any, any>> {
-  return create(baseDir, options);
+  const framework: T = await create<T, U>(baseDir, options, customFramework);
+  return framework.getApplication() as unknown as Y;
 }
 
 export async function close(
@@ -151,7 +163,7 @@ export async function createFunctionApp(
       '@midwayjs/serverless-app',
     ]);
 
-  return create(baseDir, {
+  return createApp(baseDir, {
     ...options,
     configurationModule: transformFrameworkToConfiguration(customFramework),
   });
@@ -179,7 +191,7 @@ export async function createLightApp(
     }
   }
 
-  return create(baseDir, {
+  return createApp(baseDir, {
     ...options,
     configurationModule: transformFrameworkToConfiguration(LightFramework),
   });

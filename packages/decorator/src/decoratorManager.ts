@@ -20,7 +20,7 @@ import {
   merge,
 } from './util';
 
-const debug = require('util').debuglog('decorator:manager');
+const debug = require('util').debuglog('midway:decorator');
 
 export const PRELOAD_MODULE_KEY = 'INJECTION_PRELOAD_MODULE_KEY';
 
@@ -809,6 +809,8 @@ export function saveProviderId(identifier: ObjectIdentifier, target: any) {
     },
     target
   );
+
+  debug(`save provide: ${target.name} -> ${uuid}`);
 
   return target;
 }
