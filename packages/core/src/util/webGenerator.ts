@@ -17,24 +17,18 @@ import {
   extractExpressLikeValue,
   WebRouterCollector,
   IMidwayContainer,
-} from '../../src';
+} from '../';
 import { ILogger } from '@midwayjs/logger';
 
 export abstract class WebControllerGenerator<
   Router extends { use: (...args) => void }
 > {
   private controllerIds: string[] = [];
-  public prioritySortRouters: Array<{
-    priority: number;
-    router: Router;
-  }> = [];
-
-  logger: ILogger;
-  appLogger: ILogger;
 
   protected constructor(
     readonly applicationContext: IMidwayContainer,
-    readonly frameworkType: MidwayFrameworkType
+    readonly frameworkType: MidwayFrameworkType,
+    readonly logger?: ILogger
   ) {}
 
   /**
@@ -176,7 +170,7 @@ export abstract class WebControllerGenerator<
         );
       }
       this.controllerIds.push(providerId);
-      this.logger.debug(
+      this.logger?.debug(
         `Load Controller "${providerId}", prefix=${routerInfo.prefix}`
       );
 
@@ -219,7 +213,7 @@ export abstract class WebControllerGenerator<
           ),
         ];
 
-        this.logger.debug(
+        this.logger?.debug(
           `Load Router "${routeInfo.requestMethod.toUpperCase()} ${
             routeInfo.url
           }"`

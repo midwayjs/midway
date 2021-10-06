@@ -104,12 +104,6 @@ export class DecoratorManager extends Map {
     dataKey: string,
     data: any
   ) {
-    debug(
-      'saveMetadata %s on target %o with dataKey = %s.',
-      metaKey,
-      target,
-      dataKey
-    );
     // filter Object.create(null)
     if (typeof target === 'object' && target.constructor) {
       target = target.constructor;
@@ -133,12 +127,6 @@ export class DecoratorManager extends Map {
     data: any,
     groupBy?: string
   ) {
-    debug(
-      'attachMetadata %s on target %o with dataKey = %s.',
-      metaKey,
-      target,
-      dataKey
-    );
     // filter Object.create(null)
     if (typeof target === 'object' && target.constructor) {
       target = target.constructor;
@@ -167,12 +155,6 @@ export class DecoratorManager extends Map {
   }
 
   static getMetadata(metaKey: string, target: any, dataKey?: string) {
-    debug(
-      'getMetadata %s on target %o with dataKey = %s.',
-      metaKey,
-      target,
-      dataKey
-    );
     // filter Object.create(null)
     if (typeof target === 'object' && target.constructor) {
       target = target.constructor;

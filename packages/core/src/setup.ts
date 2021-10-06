@@ -10,7 +10,7 @@ import {
   MidwayFrameworkService,
   MidwayAspectService,
   MidwayLifeCycleService,
-} from '../src';
+} from './';
 import defaultConfig from './config/config.default';
 
 export async function initializeGlobalApplicationContext(

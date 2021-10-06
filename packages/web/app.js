@@ -32,11 +32,11 @@ class AppBootHook {
   }
 
   async willReady() {
-    await this.app.webFramework.loadExtension();
+    // await this.app.webFramework.loadExtension();
     const middlewareNames = this.coreMiddleware.concat(this.appMiddleware);
     // 等 midway 加载完成后，再去 use 中间件
     for (const name of middlewareNames) {
-      if (hasIdentifierMapping(name)) {
+      if (this.app.getApplicationContext().registry.hasDefinition(name)) {
         const mwIns = await this.app.generateMiddleware(name);
         mwIns._name = name;
         this.app.use(mwIns);

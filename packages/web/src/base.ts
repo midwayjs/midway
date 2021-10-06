@@ -142,7 +142,9 @@ export const createAppWorkerLoader = () => {
             ignore: ['**/app/extend/**'],
           });
         }
-        await this.framework.initialize();
+        await this.framework.initialize({
+          applicationContext: this.applicationContext,
+        });
         super.load();
       });
     }
@@ -272,7 +274,9 @@ export const createAgentWorkerLoader = () => {
             ignore: ['**/app/extend/**'],
           });
         }
-        await this.framework.initialize();
+        await this.framework.initialize({
+          applicationContext: this.applicationContext,
+        });
         super.load();
       });
     }

@@ -15,11 +15,10 @@ import {
 import { resolve } from 'path';
 import { Server } from 'net';
 import { LoggerOptions } from '@midwayjs/logger';
-import { Provide, Framework, Init, Inject } from '@midwayjs/decorator';
+import { Provide, Init, Inject } from '@midwayjs/decorator';
 import { MidwayEggContextLogger } from '../logger';
 
 @Provide()
-@Framework()
 export class MidwayWebSingleProcessFramework
   implements
     IMidwayFramework<IMidwayWebApplication, IMidwayWebConfigurationOptions>
