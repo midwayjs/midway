@@ -15,10 +15,11 @@ import {
 import { resolve } from 'path';
 import { Server } from 'net';
 import { LoggerOptions } from '@midwayjs/logger';
-import { Provide, Init, Inject } from '@midwayjs/decorator';
+import { Provide, Init, Inject, Framework } from '@midwayjs/decorator';
 import { MidwayEggContextLogger } from '../logger';
 
 @Provide()
+@Framework()
 export class MidwayWebSingleProcessFramework
   implements
     IMidwayFramework<IMidwayWebApplication, IMidwayWebConfigurationOptions>
@@ -40,11 +41,6 @@ export class MidwayWebSingleProcessFramework
     this.configure(
       this.configService.getConfiguration(this.getFrameworkName())
     );
-    // this.BaseContextLoggerClass =
-    //   this.configurationOptions.ContextLoggerClass ||
-    //   this.getDefaultContextLoggerClass();
-    // this.logger = this.loggerService.getLogger('coreLogger');
-    // this.appLogger = this.loggerService.getLogger('logger');
     return this;
   }
 
@@ -142,6 +138,10 @@ export class MidwayWebSingleProcessFramework
         this.server = require('http').createServer(this.app.callback());
       }
     }
+
+    // if (options.isMainFramework === undefined) {
+    await this.loadExtension();
+    // }
   }
 
   async loadExtension() {

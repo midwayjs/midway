@@ -12,6 +12,7 @@ import {
   MidwayLifeCycleService,
 } from './';
 import defaultConfig from './config/config.default';
+import { bindContainer, clearBindContainer } from '@midwayjs/decorator';
 
 export async function initializeGlobalApplicationContext(
   globalOptions: Omit<IMidwayBootstrapOptions, 'applicationContext'>
@@ -20,12 +21,14 @@ export async function initializeGlobalApplicationContext(
   const baseDir = globalOptions.baseDir ?? '';
   // new container
   const applicationContext = new MidwayContainer();
+  // bind container to decoratorManager
+  bindContainer(applicationContext);
 
   if (!globalOptions.preloadModules && baseDir) {
     applicationContext.setFileDetector(
       new DirectoryFileDetector({
         loadDir: baseDir,
-        ignore: globalOptions.ignore,
+        ignore: globalOptions.ignore ?? [],
       })
     );
   }
@@ -101,4 +104,5 @@ export async function destroyGlobalApplicationContext(
   await lifecycleService.stop();
   // stop container
   await applicationContext.stop();
+  clearBindContainer();
 }

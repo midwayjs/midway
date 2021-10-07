@@ -15,12 +15,12 @@ export class EggConfiguration {
   appDir;
 
   async onReady(container) {
-    // TODO 只在单进程执行
-    await this.singleProcessFramework.initialize({
-      appDir: this.appDir,
-      baseDir: this.baseDir,
-      applicationContext: container,
-    });
+    // // TODO 只在单进程执行
+    // await this.singleProcessFramework.initialize({
+    //   appDir: this.appDir,
+    //   baseDir: this.baseDir,
+    //   applicationContext: container,
+    // });
   }
 
   async onServerReady() {

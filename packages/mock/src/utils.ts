@@ -12,13 +12,7 @@ import {
 } from '@midwayjs/core';
 import { isAbsolute, join } from 'path';
 import { remove } from 'fs-extra';
-import {
-  clearAllModule,
-  Configuration,
-  Framework,
-  Provide,
-  sleep,
-} from '@midwayjs/decorator';
+import { Configuration, Framework, Provide, sleep } from '@midwayjs/decorator';
 import { clearAllLoggers } from '@midwayjs/logger';
 import * as os from 'os';
 import * as assert from 'assert';
@@ -59,8 +53,6 @@ export type MockAppConfigurationOptions = {
   configurationModule?: any;
 };
 
-let lastAppDir;
-
 export async function create<
   T extends IMidwayFramework<any, U>,
   U = T['configurationOptions']
@@ -75,13 +67,6 @@ export async function create<
   if (!isAbsolute(appDir)) {
     appDir = join(process.cwd(), 'test', 'fixtures', appDir);
   }
-
-  if (lastAppDir && lastAppDir !== appDir) {
-    // 当目录不同才清理缓存，相同目录的装饰器只加载一次，清理了就没了
-    clearAllModule();
-  }
-  lastAppDir = appDir;
-  // clearContainerCache();
   clearAllLoggers();
 
   options = options || ({} as any);
@@ -95,9 +80,9 @@ export async function create<
   const container = await initializeGlobalApplicationContext({
     baseDir: options.baseDir,
     appDir,
-    configurationModule: [
-      safeRequire(join(options.baseDir, 'configuration')),
-    ].concat(options.configurationModule),
+    configurationModule: []
+      .concat(options.configurationModule)
+      .concat(safeRequire(join(options.baseDir, 'configuration'))),
   });
 
   if (customFramework) {

@@ -4,6 +4,7 @@ import {
   ObjectIdentifier,
   TagClsMetadata,
   TagPropsMetadata,
+  IModuleStore,
 } from './interface';
 import {
   INJECT_CUSTOM_TAG,
@@ -26,7 +27,7 @@ export const PRELOAD_MODULE_KEY = 'INJECTION_PRELOAD_MODULE_KEY';
 
 export const INJECT_CLASS_KEY_PREFIX = 'INJECTION_CLASS_META_DATA';
 
-export class DecoratorManager extends Map {
+export class DecoratorManager extends Map implements IModuleStore {
   /**
    * the key for meta data store in class
    */
@@ -41,15 +42,32 @@ export class DecoratorManager extends Map {
    */
   injectMethodKeyPrefix = 'INJECTION_METHOD_META_DATA';
 
+  container: IModuleStore;
+
   saveModule(key, module) {
+    if (this.container) {
+      return this.container.saveModule(key, module);
+    }
     if (!this.has(key)) {
       this.set(key, new Set());
     }
     this.get(key).add(module);
   }
 
+  listModule(key) {
+    if (this.container) {
+      return this.container.listModule(key);
+    }
+    return Array.from(this.get(key) || {});
+  }
+
   resetModule(key) {
     this.set(key, new Set());
+  }
+
+  bindContainer(container: IModuleStore) {
+    this.container = container;
+    this.container.transformModule(this);
   }
 
   static getDecoratorClassKey(decoratorNameKey: ObjectIdentifier) {
@@ -92,10 +110,6 @@ export class DecoratorManager extends Map {
       '_' +
       methodKey.toString()
     );
-  }
-
-  listModule(key) {
-    return Array.from(this.get(key) || {});
   }
 
   static saveMetadata(
@@ -634,6 +648,14 @@ export function saveModule(decoratorNameKey: ObjectIdentifier, target) {
   return manager.saveModule(decoratorNameKey, target);
 }
 
+export function bindContainer(container) {
+  return manager.bindContainer(container);
+}
+
+export function clearBindContainer() {
+  return (manager.container = null);
+}
+
 /**
  * list module from decorator key
  * @param decoratorNameKey
@@ -663,6 +685,7 @@ export function resetModule(decoratorNameKey: ObjectIdentifier): void {
  * clear all module
  */
 export function clearAllModule() {
+  debug('--- clear all module here ---');
   return manager.clear();
 }
 

@@ -1,4 +1,4 @@
-import { APPLICATION_KEY, clearAllModule, MidwayFrameworkType, Provide, } from '@midwayjs/decorator';
+import { APPLICATION_KEY, MidwayFrameworkType, Provide, } from '@midwayjs/decorator';
 import { MidwayContextLogger } from '@midwayjs/logger';
 import * as assert from 'assert';
 import * as path from 'path';
@@ -21,10 +21,6 @@ class TestModule {
 }
 
 describe('/test/baseFramework.test.ts', () => {
-  beforeEach(() => {
-    clearAllModule();
-  });
-
   it('should load preload module', async () => {
     const framework = await createLightFramework(path.join(__dirname, './fixtures/base-app/src'));
     const appCtx = framework.getApplicationContext();
@@ -564,6 +560,17 @@ describe('/test/baseFramework.test.ts', () => {
     const applicationContext: any = framework.getApplicationContext();
     const rid = applicationContext.identifierMapping.getRelation('userService');
     expect(applicationContext.getManagedResolverFactory().singletonCache.has(rid)).toBeTruthy();
+  });
+
+  it('should test object lifecycle', async () => {
+    const framework = await createLightFramework(path.join(
+      __dirname,
+      './fixtures/base-app-object-lifecycle/src'
+    ));
+
+    const applicationContext: any = framework.getApplicationContext();
+    await applicationContext.getAsync('userService');
+    expect(framework.getApplication().getAttr('total')).toEqual(10);
   });
 
 });

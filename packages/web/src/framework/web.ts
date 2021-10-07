@@ -2,18 +2,14 @@ import {
   BaseFramework,
   IMidwayBootstrapOptions,
   IMidwayContainer,
-  MidwayConfigService, MidwayEnvironmentService,
-  MidwayFrameworkService, MidwayInformationService, MidwayLoggerService,
+  MidwayConfigService,
+  MidwayEnvironmentService,
+  MidwayInformationService,
+  MidwayLoggerService,
   MidwayProcessTypeEnum,
-  safelyGet,
   WebControllerGenerator,
 } from '@midwayjs/core';
-import {
-  CONFIG_KEY,
-  PLUGIN_KEY,
-  LOGGER_KEY,
-  MidwayFrameworkType,
-} from '@midwayjs/decorator';
+import { MidwayFrameworkType } from '@midwayjs/decorator';
 import { IMidwayWebConfigurationOptions } from '../interface';
 import { EggRouter } from '@eggjs/router';
 import { Application, Context, EggLogger } from 'egg';
@@ -68,17 +64,18 @@ export class MidwayWebFramework extends BaseFramework<
     // set default context logger
     this.BaseContextLoggerClass =
       options.ContextLoggerClass || this.getDefaultContextLoggerClass();
+
     this.app = options.app;
 
     this.defineApplicationProperties(
       {
-        // generateController: (controllerMapping: string) => {
-        //   return this.generateController(controllerMapping);
-        // },
-        //
-        // generateMiddleware: async (middlewareId: string) => {
-        //   return this.generateMiddleware(middlewareId);
-        // },
+        generateController: (controllerMapping: string) => {
+          return self.generator.generateController(controllerMapping);
+        },
+
+        generateMiddleware: async (middlewareId: string) => {
+          return self.generateMiddleware(middlewareId);
+        },
 
         getProcessType: () => {
           if (this.configurationOptions.processType === 'application') {
@@ -104,7 +101,7 @@ export class MidwayWebFramework extends BaseFramework<
 
     Object.defineProperty(this.app, 'applicationContext', {
       get() {
-        return self.applicationContext;
+        return self.getApplicationContext();
       },
     });
 
@@ -113,10 +110,18 @@ export class MidwayWebFramework extends BaseFramework<
 
   public async initialize(options: IMidwayBootstrapOptions): Promise<void> {
     this.applicationContext = options.applicationContext;
-    this.loggerService = await this.applicationContext.getAsync(MidwayLoggerService);
-    this.environmentService = await this.applicationContext.getAsync(MidwayEnvironmentService);
-    this.configService = await this.applicationContext.getAsync(MidwayConfigService);
-    this.informationService = await this.applicationContext.getAsync(MidwayInformationService);
+    this.loggerService = await this.applicationContext.getAsync(
+      MidwayLoggerService
+    );
+    this.environmentService = await this.applicationContext.getAsync(
+      MidwayEnvironmentService
+    );
+    this.configService = await this.applicationContext.getAsync(
+      MidwayConfigService
+    );
+    this.informationService = await this.applicationContext.getAsync(
+      MidwayInformationService
+    );
     /**
      * Third party application initialization
      */
@@ -127,9 +132,8 @@ export class MidwayWebFramework extends BaseFramework<
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     process.env.EGG_TYPESCRIPT = 'true';
     if (this.configurationOptions.globalConfig) {
-      const configService = this.configService = await this.applicationContext.getAsync(
-        MidwayConfigService
-      );
+      const configService = (this.configService =
+        await this.applicationContext.getAsync(MidwayConfigService));
       this.configService.addObject(this.configurationOptions.globalConfig);
       Object.defineProperty(this.app, 'config', {
         get() {
@@ -138,30 +142,17 @@ export class MidwayWebFramework extends BaseFramework<
       });
     }
 
-    const frameworkService = await this.applicationContext.getAsync(
-      MidwayFrameworkService
-    );
-
-    // register plugin
-    frameworkService.registerHandler(PLUGIN_KEY, (key, target) => {
-      return this.app[key];
-    });
-
-    // register config
-    frameworkService.registerHandler(CONFIG_KEY, key => {
-      return key ? safelyGet(key, this.app.config) : this.app.config;
-    });
-
-    // register logger
-    frameworkService.registerHandler(LOGGER_KEY, key => {
-      return this.getLogger(key);
-    });
-
     this.generator = new EggControllerGenerator(
       this.app,
       this.applicationContext,
-      this.appLogger,
+      this.appLogger
     );
+  }
+
+  protected async initializeLogger() {
+    // 不需要在这里创建框架日志，从 egg 代理过来
+    this.logger = this.app.coreLogger;
+    this.appLogger = this.app.logger;
   }
 
   async loadMidwayController() {
@@ -186,5 +177,12 @@ export class MidwayWebFramework extends BaseFramework<
   protected setContextLoggerClass(BaseContextLogger: any) {
     this.BaseContextLoggerClass = BaseContextLogger;
     this.app.ContextLogger = BaseContextLogger;
+  }
+
+  public async generateMiddleware(middlewareId: string) {
+    const mwIns: any = await this.getApplicationContext().getAsync(
+      middlewareId
+    );
+    return mwIns.resolve();
   }
 }

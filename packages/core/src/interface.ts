@@ -15,7 +15,7 @@ import * as EventEmitter from 'events';
  */
 export interface ILifeCycle extends Partial<IObjectLifeCycle> {
   onConfigLoad?(container: IMidwayContainer, app?: IMidwayApplication): Promise<any>;
-  onReady(container: IMidwayContainer, app?: IMidwayApplication): Promise<void>;
+  onReady?(container: IMidwayContainer, app?: IMidwayApplication): Promise<void>;
   onServerReady?(container: IMidwayContainer, app?: IMidwayApplication): Promise<void>;
   onStop?(container: IMidwayContainer, app?: IMidwayApplication): Promise<void>;
   onAppError?(err: Error, app: IMidwayApplication);

@@ -114,7 +114,9 @@ export class MidwayLifeCycleService {
   private async runObjectLifeCycle(lifecycleInstanceList, lifecycle) {
     for (const cycle of lifecycleInstanceList) {
       if (typeof cycle.instance[lifecycle] === 'function') {
-        await this.applicationContext[lifecycle](cycle.instance[lifecycle]);
+        return this.applicationContext[lifecycle](
+          cycle.instance[lifecycle].bind(cycle.instance)
+        );
       }
     }
   }

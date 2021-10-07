@@ -1,10 +1,11 @@
 import { App, Configuration } from '@midwayjs/decorator';
 import { IMidwayWebApplication } from '../../../../../src';
 import * as custom from './component/src';
+import { join } from 'path';
 
 @Configuration({
   importConfigs: [
-    './config'
+    join(__dirname, './config')
   ],
   imports: [
     custom,

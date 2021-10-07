@@ -12,6 +12,7 @@ import {
   MidwayFrameworkType,
   APPLICATION_KEY,
   listPreloadModule,
+  PLUGIN_KEY,
 } from '@midwayjs/decorator';
 import {
   HandlerFunction,
@@ -108,6 +109,10 @@ export class MidwayFrameworkService {
     // register @Logger decorator handler
     this.registerHandler(LOGGER_KEY, (propertyName, meta) => {
       return this.loggerService.getLogger(meta.identifier ?? propertyName);
+    });
+
+    this.registerHandler(PLUGIN_KEY, (key, target) => {
+      return this.mainApp[key];
     });
 
     this.applicationContext.onObjectCreated((instance, options) => {

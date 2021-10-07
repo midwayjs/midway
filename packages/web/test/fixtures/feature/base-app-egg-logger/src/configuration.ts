@@ -1,10 +1,11 @@
 import { Configuration, Logger, App } from '@midwayjs/decorator';
 import * as assert from 'assert';
 import { Application } from 'egg';
+import { join } from 'path';
 
 @Configuration({
   importConfigs: [
-    './config'
+    join(__dirname, './config')
   ]
 })
 export class ContainerConfiguration {

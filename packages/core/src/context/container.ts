@@ -20,6 +20,7 @@ import {
   getClassExtendedMetadata,
   INJECT_CUSTOM_TAG,
   getProviderName,
+  IModuleStore,
 } from '@midwayjs/decorator';
 import { FunctionalConfiguration } from '../functional/configuration';
 import * as util from 'util';
@@ -203,10 +204,11 @@ class ContainerConfiguration {
 
 class ObjectCreateEventTarget extends EventEmitter {}
 
-export class MidwayContainer implements IMidwayContainer {
+export class MidwayContainer implements IMidwayContainer, IModuleStore {
   private _resolverFactory: ManagedResolverFactory = null;
   private _registry: IObjectDefinitionRegistry = null;
   private _identifierMapping = null;
+  private moduleMap = null;
   private _objectCreateEventTarget: EventEmitter;
   public parent: IMidwayContainer = null;
   private debugLogger = globalDebugLogger;
@@ -543,5 +545,20 @@ export class MidwayContainer implements IMidwayContainer {
     ) => void
   ) {
     this.objectCreateEventTarget.on(ObjectLifeCycleEvent.BEFORE_DESTROY, fn);
+  }
+
+  saveModule(key, module) {
+    if (!this.moduleMap.has(key)) {
+      this.moduleMap.set(key, new Set());
+    }
+    this.moduleMap.get(key).add(module);
+  }
+
+  listModule(key: string) {
+    return Array.from(this.moduleMap.get(key) || {});
+  }
+
+  transformModule(moduleMap: Map<string, Set<any>>) {
+    this.moduleMap = new Map(moduleMap);
   }
 }

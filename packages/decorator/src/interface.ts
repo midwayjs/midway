@@ -241,3 +241,9 @@ export enum ServerlessTriggerType {
   HSF = 'hsf',
   MTOP = 'mtop',
 }
+
+export interface IModuleStore {
+  listModule(key: string);
+  saveModule(key: string, module: any);
+  transformModule?(moduleMap: Map<string, Set<any>>);
+}

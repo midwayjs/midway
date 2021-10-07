@@ -1,6 +1,6 @@
 import { join } from 'path';
 import {
-  BaseFramework, IMidwayApplication,
+  BaseFramework, destroyGlobalApplicationContext, IMidwayApplication,
   IMidwayBootstrapOptions,
   initializeGlobalApplicationContext,
   MidwayConfigService,
@@ -37,6 +37,8 @@ describe('/test/setup.test.ts', () => {
       {
         'bucLogin': false
       });
+
+    await destroyGlobalApplicationContext(container);
   });
 
   it('should test setup a framework and get from container', async () => {
@@ -102,5 +104,7 @@ describe('/test/setup.test.ts', () => {
     const framework = await container.getAsync(EmptyFramework);
     const app = framework.getApplication();
     expect(app.getApplicationContext()).toEqual(container);
+
+    await destroyGlobalApplicationContext(container);
   });
 });
