@@ -1,7 +1,6 @@
 'use strict';
 
 const pathMatching = require('egg-path-matching');
-const { hasIdentifierMapping } = require('@midwayjs/decorator');
 
 class AppBootHook {
   constructor(app) {
@@ -39,6 +38,7 @@ class AppBootHook {
       if (this.app.getApplicationContext().registry.hasDefinition(name)) {
         const mwIns = await this.app.generateMiddleware(name);
         mwIns._name = name;
+        console.log(`middleware - > ${name}`);
         this.app.use(mwIns);
       } else {
         // egg

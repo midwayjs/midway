@@ -433,35 +433,6 @@ describe('/test/enhance.test.ts', () => {
     });
   });
 
-  describe('should support change route priority', () => {
-    let app;
-    beforeAll(async () => {
-      app = await creatApp('enhance/base-app-router-priority');
-    });
-
-    afterAll(async () => {
-      await closeApp(app);
-    })
-
-    it('should invoke different router and get same result', done => {
-      done = pedding(3, done);
-      request(app.callback())
-        .get('/hello')
-        .expect(200)
-        .expect('hello', done);
-
-      request(app.callback())
-        .get('/world')
-        .expect(200)
-        .expect('world', done);
-
-      request(app.callback())
-        .get('/api/hello')
-        .expect(200)
-        .expect('api', done);
-    });
-  });
-
   describe('plugin can load controller directory directly', () => {
     let app;
     beforeAll(async () => {

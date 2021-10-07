@@ -17,6 +17,7 @@ export class ContainerConfiguration {
   app: IMidwayWebApplication;
 
   async onReady() {
+    console.log(`middleware - > globalMiddleware1`);
     this.app.use(await this.app.generateMiddleware('globalMiddleware1'));
   }
 }
