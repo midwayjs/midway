@@ -1,13 +1,13 @@
 import { Logger } from '@midwayjs/decorator';
-import { ILifeCycle, IMidwayContainer, IMidwayCoreApplication } from '@midwayjs/core';
+import { ILifeCycle, IMidwayContainer, IMidwayApplication } from '@midwayjs/core';
 import { Configuration, App } from '@midwayjs/decorator';
 
 @Configuration({
   imports: [
-    'midway-plugin-mod',
-    '@midwayjs/midway-plugin-atmod',
-    '@midwayjs/midway-plugin-btmod',
-    '@midwayjs/midway-plugin-btmod'
+    require('midway-plugin-mod'),
+    require('@midwayjs/midway-plugin-atmod'),
+    require('@midwayjs/midway-plugin-btmod'),
+    require('@midwayjs/midway-plugin-btmod'),
   ]
 })
 export class LifeCycleTest implements ILifeCycle {
@@ -15,7 +15,7 @@ export class LifeCycleTest implements ILifeCycle {
   logger: any;
 
   @App()
-  appx: IMidwayCoreApplication;
+  appx: IMidwayApplication;
 
   async onReady(container: IMidwayContainer): Promise<void> {
     console.log('this is lifecycle test1');
