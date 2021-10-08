@@ -13,7 +13,6 @@ export {
   delegateTargetProperties,
 } from './util/';
 export * from './util/pathFileUtil';
-export * from './features';
 export * from './util/webRouterParam';
 export * from './util/webRouterCollector';
 export * from './util/triggerCollector';
@@ -26,6 +25,7 @@ export { MidwayLoggerService } from './service/loggerService';
 export { MidwayFrameworkService } from './service/frameworkService';
 export { MidwayAspectService } from './service/aspectService';
 export { MidwayLifeCycleService } from './service/lifeCycleService';
+export * from './service/pipelineService';
 export * from './util/contextUtil';
 export * from './util/serviceFactory';
 export * from './util/fileDetector';

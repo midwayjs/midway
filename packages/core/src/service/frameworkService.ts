@@ -13,6 +13,7 @@ import {
   APPLICATION_KEY,
   listPreloadModule,
   PLUGIN_KEY,
+  PIPELINE_IDENTIFIER,
 } from '@midwayjs/decorator';
 import {
   HandlerFunction,
@@ -20,10 +21,12 @@ import {
   IMidwayBootstrapOptions,
   IMidwayContainer,
   IMidwayFramework,
+  REQUEST_OBJ_CTX_KEY,
 } from '../interface';
 import { MidwayConfigService } from './configService';
 import { MidwayLoggerService } from './loggerService';
 import { BaseFramework } from '../baseFramework';
+import { MidwayPipelineService } from './pipelineService';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -113,6 +116,10 @@ export class MidwayFrameworkService {
 
     this.registerHandler(PLUGIN_KEY, (key, target) => {
       return this.mainApp[key];
+    });
+
+    this.registerHandler(PIPELINE_IDENTIFIER, (key, meta, instance) => {
+      return new MidwayPipelineService(instance[REQUEST_OBJ_CTX_KEY]?.requestContext ?? this.applicationContext, meta.valves);
     });
 
     this.applicationContext.onObjectCreated((instance, options) => {

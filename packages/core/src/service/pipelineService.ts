@@ -1,4 +1,6 @@
-import { PIPELINE_IDENTIFIER, ScopeEnum } from '@midwayjs/decorator';
+import { IMidwayContainer } from '../interface';
+import { ObjectIdentifier } from '@midwayjs/decorator';
+
 /**
  * 执行pipeline 时当前上下文存储内容
  */
@@ -69,7 +71,7 @@ export interface IPipelineOptions {
   /**
    * 这次 pipeline 执行那几个 valve 白名单
    */
-  valves?: string[];
+  valves?: valvesType;
 }
 /**
  * pipeline 执行返回结果
@@ -103,37 +105,23 @@ export interface IPipelineResult<T> {
 }
 
 export interface IPipelineHandler {
-  /**
-   * 并行执行，使用 Promise.all
-   * @param opts 执行参数
-   */
   parallel<T>(opts: IPipelineOptions): Promise<IPipelineResult<T>>;
-  /**
-   * 并行执行，最终 result 为数组
-   * @param opts 执行参数
-   */
   concat<T>(opts: IPipelineOptions): Promise<IPipelineResult<T>>;
-  /**
-   * 串行执行，使用 foreach await
-   * @param opts 执行参数
-   */
   series<T>(opts: IPipelineOptions): Promise<IPipelineResult<T>>;
-  /**
-   * 串行执行，使用 foreach await，最终 result 为数组
-   * @param opts 执行参数
-   */
   concatSeries<T>(opts: IPipelineOptions): Promise<IPipelineResult<T>>;
-  /**
-   * 串行执行，但是会把前者执行结果当成入参，传入到下一个执行中去，最后一个执行的 valve 结果会被返回
-   * @param opts 执行参数
-   */
   waterfall<T>(opts: IPipelineOptions): Promise<IPipelineResult<T>>;
 }
 
-////////////// implements ///////////////////////
+interface IValveResult {
+  error?: Error;
+  valveName: string;
+  dataKey: string;
+  data: any;
+}
 
-import { IMidwayContainer } from '../interface';
-import { providerWrapper } from '../context/providerWrapper';
+type valvesType = Array<ObjectIdentifier | (new (...args: any[]) => any)>;
+
+////////////// implements ///////////////////////
 
 export class PipelineContext implements IPipelineContext {
   args: any;
@@ -168,34 +156,35 @@ export class PipelineContext implements IPipelineContext {
   }
 }
 
-interface IValveResult {
-  error?: Error;
-  valveName: string;
-  dataKey: string;
-  data: any;
-}
-
-export class PipelineHandler implements IPipelineHandler {
-  private applicationContext: IMidwayContainer;
+export class MidwayPipelineService implements IPipelineHandler {
   // 默认的 valves (@Pipeline(['test1', 'test2']))
-  private valves: string[];
-  constructor(applicationContext: IMidwayContainer, valves?: string[]) {
-    this.applicationContext = applicationContext;
-    this.valves = valves;
+  constructor(readonly applicationContext: IMidwayContainer, readonly valves?: valvesType) {
   }
 
+  /**
+   * 并行执行，使用 Promise.all
+   * @param opts 执行参数
+   */
   async parallel<T>(opts: IPipelineOptions): Promise<IPipelineResult<T>> {
     const valves = this.prepareParallelValves(opts);
     const res = await Promise.all(valves);
     return this.packResult<T>(res, false);
   }
 
+  /**
+   * 并行执行，最终 result 为数组
+   * @param opts 执行参数
+   */
   async concat<T>(opts: IPipelineOptions): Promise<IPipelineResult<T>> {
     const valves = this.prepareParallelValves(opts);
     const res = await Promise.all(valves);
     return this.packResult<T>(res, true);
   }
 
+  /**
+   * 串行执行，使用 foreach await
+   * @param opts 执行参数
+   */
   async series<T>(opts: IPipelineOptions): Promise<IPipelineResult<T>> {
     const valves = this.mergeValves(opts.valves);
     const ctx = new PipelineContext(opts.args);
@@ -233,7 +222,7 @@ export class PipelineHandler implements IPipelineHandler {
       } catch (e) {
         result.success = false;
         result.error = {
-          valveName: v,
+          valveName: typeof v === 'string' ? v : v.name,
           message: e.message,
           error: e,
         };
@@ -246,6 +235,10 @@ export class PipelineHandler implements IPipelineHandler {
     return result;
   }
 
+  /**
+   * 串行执行，使用 foreach await，最终 result 为数组
+   * @param opts 执行参数
+   */
   async concatSeries<T>(opts: IPipelineOptions): Promise<IPipelineResult<T>> {
     const valves = this.mergeValves(opts.valves);
     const ctx = new PipelineContext(opts.args);
@@ -279,7 +272,7 @@ export class PipelineHandler implements IPipelineHandler {
       } catch (e) {
         result.success = false;
         result.error = {
-          valveName: v,
+          valveName: typeof v === 'string' ? v : v.name,
           message: e.message,
           error: e,
         };
@@ -292,6 +285,10 @@ export class PipelineHandler implements IPipelineHandler {
     return result;
   }
 
+  /**
+   * 串行执行，但是会把前者执行结果当成入参，传入到下一个执行中去，最后一个执行的 valve 结果会被返回
+   * @param opts 执行参数
+   */
   async waterfall<T>(opts: IPipelineOptions): Promise<IPipelineResult<T>> {
     const result = await this.concatSeries<T>(opts);
     if (result.success) {
@@ -301,7 +298,7 @@ export class PipelineHandler implements IPipelineHandler {
     return result;
   }
 
-  private mergeValves(valves: string[]) {
+  private mergeValves(valves: valvesType) {
     let items = [];
     if (this.valves && this.valves.length > 0) {
       items = this.valves;
@@ -355,7 +352,7 @@ export class PipelineHandler implements IPipelineHandler {
       if (r.error) {
         result.success = false;
         result.error = {
-          valveName: r.valveName,
+          valveName: typeof r.valveName === 'string' ? r.valveName : r.valveName.name,
           message: r.error.message,
           error: r.error,
         };
@@ -373,18 +370,3 @@ export class PipelineHandler implements IPipelineHandler {
     return result;
   }
 }
-
-export function pipelineFactory(
-  applicationContext: IMidwayContainer,
-  valves?: string[]
-) {
-  return new PipelineHandler(applicationContext, valves);
-}
-
-providerWrapper([
-  {
-    id: PIPELINE_IDENTIFIER,
-    provider: pipelineFactory,
-    scope: ScopeEnum.Prototype,
-  },
-]);

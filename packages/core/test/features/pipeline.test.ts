@@ -1,17 +1,14 @@
 import bindClass, { DataMainTest } from '../fixtures/pipeline';
-import { MidwayContainer } from '../../src';
+import { createLightFramework } from '../util';
 
 describe('/test/features/pipeline.test.ts', () => {
-  const container = new MidwayContainer();
-
   it('pipeline should be ok', async () => {
-    await container.ready();
 
+    const framework = await createLightFramework();
+    const container = framework.getApplicationContext();
     bindClass(container);
 
-    const dataMainTest: DataMainTest = await container.getAsync<DataMainTest>('dataMainTest');
-
-    expect(dataMainTest.ss).toBeDefined();
+    const dataMainTest: DataMainTest = await container.getAsync<DataMainTest>(DataMainTest);
 
     let r = await dataMainTest.runParallel();
     expect(r).toBeDefined();
@@ -70,19 +67,19 @@ describe('/test/features/pipeline.test.ts', () => {
     expect(rr.success).toBeFalsy();
     expect(rr.error).toBeDefined();
     expect(rr.error.message).toEqual('this is error feeds');
-    expect(rr.error.valveName).toEqual('errorFeeds');
+    expect(rr.error.valveName).toEqual('ErrorFeeds');
 
     rr = await dataMainTest.runParallelError();
     expect(rr.success).toBeFalsy();
     expect(rr.error).toBeDefined();
     expect(rr.error.message).toEqual('this is error feeds');
-    expect(rr.error.valveName).toEqual('errorFeeds');
+    expect(rr.error.valveName).toEqual('ErrorFeeds');
 
     rr = await dataMainTest.runSeriesError();
     expect(rr.success).toBeFalsy();
     expect(rr.error).toBeDefined();
     expect(rr.error.message).toEqual('this is error feeds');
-    expect(rr.error.valveName).toEqual('errorFeeds');
+    expect(rr.error.valveName).toEqual('ErrorFeeds');
 
     const rw = await dataMainTest.runStagesWaterfall();
     expect(!rw.error).toBeTruthy();

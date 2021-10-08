@@ -1,13 +1,8 @@
 import { ObjectIdentifier } from '../interface';
-import { PIPELINE_IDENTIFIER, savePropertyInject } from '../';
+import { createCustomPropertyDecorator, PIPELINE_IDENTIFIER } from '../';
 
-export function Pipeline(valves?: ObjectIdentifier[]) {
-  return function (target: any, targetKey: string): void {
-    savePropertyInject({
-      target,
-      targetKey,
-      identifier: PIPELINE_IDENTIFIER,
-      args: valves,
-    });
-  };
+export function Pipeline(valves?: Array<ObjectIdentifier | (new (...args) => any)>) {
+  return createCustomPropertyDecorator(PIPELINE_IDENTIFIER, {
+    valves,
+  });
 }

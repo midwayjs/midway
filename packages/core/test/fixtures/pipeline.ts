@@ -1,6 +1,5 @@
-import { IValveHandler, IPipelineContext, IPipelineHandler } from '../../src/features/pipeline';
 import { Provide, Inject, Pipeline } from '@midwayjs/decorator';
-import { IMidwayContainer } from '../../src/interface';
+import { IMidwayContainer, IValveHandler, IPipelineContext, MidwayPipelineService, IPipelineHandler } from '../../src';
 
 class VideoDto {
   videoId: string;
@@ -156,21 +155,16 @@ class StageTwo implements IValveHandler {
   }
 }
 
+@Provide()
 export class DataMainTest {
-  @Pipeline(['videoFeeds', 'crowFeeds', 'accountMap'])
-  service: IPipelineHandler;
+  @Pipeline([VideoFeeds, CrowFeeds, AccountMap])
+  service: MidwayPipelineService;
 
-  @Pipeline(['videoFeeds', 'errorFeeds', 'accountMap'])
-  service1: IPipelineHandler;
+  @Pipeline([VideoFeeds, ErrorFeeds, AccountMap])
+  service1: MidwayPipelineService;
 
-  ss: IPipelineHandler;
-
-  @Pipeline(['stageOne', 'stageTwo'])
+  @Pipeline([StageOne, StageTwo])
   stages: IPipelineHandler;
-
-  constructor(@Pipeline(['videoFeeds', 'errorFeeds', 'accountMap']) ss: IPipelineHandler) {
-    this.ss = ss;
-  }
 
   async runParallel(): Promise<HomepageDto> {
     // 获取数据执行逻辑
@@ -204,7 +198,7 @@ export class DataMainTest {
   async runWaterfall(): Promise<any> {
     const rt = await this.service.waterfall<AccountDto>({
       args: {aa: 123},
-      valves: ['crowFeeds', 'accountMap']
+      valves: [CrowFeeds, AccountMap]
     });
     return rt.result;
   }
