@@ -14,6 +14,7 @@ import {
   listPreloadModule,
   PLUGIN_KEY,
   PIPELINE_IDENTIFIER,
+  APPLICATION_CONTEXT_KEY,
 } from '@midwayjs/decorator';
 import {
   HandlerFunction,
@@ -59,6 +60,48 @@ export class MidwayFrameworkService {
 
   @Init()
   async init() {
+    // add custom property decorator listener
+    this.applicationContext.onObjectCreated((instance, options) => {
+      if (
+        this.handlerMap.size > 0 &&
+        Array.isArray(options.definition.handlerProps)
+      ) {
+        // 已经预先在 bind 时处理
+        for (const item of options.definition.handlerProps) {
+          this.defineGetterPropertyValue(
+            item,
+            instance,
+            this.getHandler(item.key)
+          );
+        }
+      }
+    });
+
+    // register @ApplicationContext
+    this.registerHandler(APPLICATION_CONTEXT_KEY, (propertyName, mete) => {
+      return this.applicationContext;
+    });
+
+    // register base config hook
+    this.registerHandler(CONFIG_KEY, (propertyName, meta) => {
+      if (meta.identifier === ALL) {
+        return this.configService.getConfiguration();
+      } else {
+        return this.configService.getConfiguration(
+          meta.identifier ?? propertyName
+        );
+      }
+    });
+
+    // register @Logger decorator handler
+    this.registerHandler(LOGGER_KEY, (propertyName, meta) => {
+      return this.loggerService.getLogger(meta.identifier ?? propertyName);
+    });
+
+    this.registerHandler(PIPELINE_IDENTIFIER, (key, meta, instance) => {
+      return new MidwayPipelineService(instance[REQUEST_OBJ_CTX_KEY]?.requestContext ?? this.applicationContext, meta.valves);
+    });
+
     let frameworks = listModule(FRAMEWORK_KEY);
     // filter proto
     frameworks = filterProtoFramework(frameworks);
@@ -96,47 +139,12 @@ export class MidwayFrameworkService {
           return this.mainApp;
         }
       });
+
+      this.registerHandler(PLUGIN_KEY, (key, target) => {
+        return this.mainApp[key];
+      });
+
     }
-
-    // register base config hook
-    this.registerHandler(CONFIG_KEY, (propertyName, meta) => {
-      if (meta.identifier === ALL) {
-        return this.configService.getConfiguration();
-      } else {
-        return this.configService.getConfiguration(
-          meta.identifier ?? propertyName
-        );
-      }
-    });
-
-    // register @Logger decorator handler
-    this.registerHandler(LOGGER_KEY, (propertyName, meta) => {
-      return this.loggerService.getLogger(meta.identifier ?? propertyName);
-    });
-
-    this.registerHandler(PLUGIN_KEY, (key, target) => {
-      return this.mainApp[key];
-    });
-
-    this.registerHandler(PIPELINE_IDENTIFIER, (key, meta, instance) => {
-      return new MidwayPipelineService(instance[REQUEST_OBJ_CTX_KEY]?.requestContext ?? this.applicationContext, meta.valves);
-    });
-
-    this.applicationContext.onObjectCreated((instance, options) => {
-      if (
-        this.handlerMap.size > 0 &&
-        Array.isArray(options.definition.handlerProps)
-      ) {
-        // 已经预先在 bind 时处理
-        for (const item of options.definition.handlerProps) {
-          this.defineGetterPropertyValue(
-            item,
-            instance,
-            this.getHandler(item.key)
-          );
-        }
-      }
-    });
 
     // some preload module init
     const modules = listPreloadModule();
