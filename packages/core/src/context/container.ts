@@ -50,7 +50,8 @@ const debug = util.debuglog('midway:container:configuration');
 const globalDebugLogger = util.debuglog('midway:container');
 
 class ContainerConfiguration {
-  loadedMap = new WeakMap();
+  private loadedMap = new WeakMap();
+  private namespaceList = [];
   constructor(readonly container: IMidwayContainer) {}
 
   load(module) {
@@ -86,6 +87,7 @@ class ContainerConfiguration {
       if (configurationOptions) {
         if (configurationOptions.namespace !== undefined) {
           namespace = configurationOptions.namespace;
+          this.namespaceList.push(namespace);
         }
         this.addImports(configurationOptions.imports);
         this.addImportObjects(configurationOptions.importObjects);
@@ -200,6 +202,10 @@ class ContainerConfiguration {
     }
     return mods;
   }
+
+  public getNamespaceList() {
+    return this.namespaceList;
+  }
 }
 
 class ObjectCreateEventTarget extends EventEmitter {}
@@ -216,6 +222,7 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
   protected ctx = {};
   private fileDetector: IFileDetector;
   private attrMap: Map<string, any> = new Map();
+  private _namespaceSet: Set<string> = null;
   private isLoad = false;
 
   constructor(parent?: IMidwayContainer) {
@@ -261,12 +268,22 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     return this._identifierMapping;
   }
 
+  get namespaceSet(): Set<string> {
+    if (!this._namespaceSet) {
+      this._namespaceSet = new Set();
+    }
+    return this._namespaceSet;
+  }
+
   load(module?) {
     this.isLoad = true;
     if (module) {
       // load configuration
       const configuration = new ContainerConfiguration(this);
       configuration.load(module);
+      for (let ns of configuration.getNamespaceList()) {
+        this.namespaceSet.add(ns);
+      }
     }
   }
 
@@ -560,5 +577,9 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
 
   transformModule(moduleMap: Map<string, Set<any>>) {
     this.moduleMap = new Map(moduleMap);
+  }
+
+  hasNamespace(ns: string) {
+    return this.namespaceSet.has(ns);
   }
 }

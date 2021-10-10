@@ -6,7 +6,7 @@ export class MidwayFilterService {
   constructor(readonly applicationContext) {
   }
 
-  async compose(middleware) {
+  async compose(middleware, name?: string) {
     if (!Array.isArray(middleware)) throw new TypeError('Middleware stack must be an array!');
     for (let fn of middleware) {
       if (typeof fn !== 'function') {
@@ -26,7 +26,7 @@ export class MidwayFilterService {
      * @return {Promise}
      * @api public
      */
-    return function (context, next) {
+    const composeFn = (context, next) => {
       // last called middleware #
       let index = -1;
       return dispatch(0);
@@ -44,5 +44,7 @@ export class MidwayFilterService {
         }
       }
     };
+    composeFn._name = name;
+    return composeFn;
   }
 }

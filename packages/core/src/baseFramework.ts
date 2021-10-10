@@ -19,6 +19,7 @@ import { MidwayEnvironmentService } from './service/environmentService';
 import { MidwayConfigService } from './service/configService';
 import { MidwayInformationService } from './service/informationService';
 import { MidwayLoggerService } from './service/loggerService';
+import { MidwayFilterService } from './service/filterService';
 
 export abstract class BaseFramework<
   APP extends IMidwayApplication<CTX>,
@@ -33,6 +34,7 @@ export abstract class BaseFramework<
   public app: APP;
   protected defaultContext = {};
   protected BaseContextLoggerClass: any;
+  protected globalFilterList = [];
 
   @Inject()
   loggerService: MidwayLoggerService;
@@ -45,6 +47,9 @@ export abstract class BaseFramework<
 
   @Inject()
   informationService: MidwayInformationService;
+
+  @Inject()
+  filterService: MidwayFilterService;
 
   @Init()
   async init() {
@@ -214,13 +219,20 @@ export abstract class BaseFramework<
         this.configService.addObject(obj);
       },
 
-      setAttr(key: string, value: any) {
+      setAttr: (key: string, value: any) => {
         this.getApplicationContext().setAttr(key, value);
       },
 
-      getAttr<T>(key: string): T {
+      getAttr: <T>(key: string): T => {
         return this.getApplicationContext().getAttr(key);
       },
+      addGlobalFilter: (filters: [], name?: string) => {
+        const composeFilter = this.filterService.compose(filters, name);
+        this.globalFilterList.push(composeFilter);
+      },
+      getGlobalFilter() {
+        return this.globalFilterList;
+      }
     };
     for (const method of whiteList) {
       delete defaultApplicationProperties[method];

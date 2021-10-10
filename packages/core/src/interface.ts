@@ -234,6 +234,7 @@ export interface IMidwayContainer extends IObjectFactory, IObjectLifeCycle {
   stop(): Promise<void>;
   registerObject(identifier: ObjectIdentifier, target: any);
   load(module?: any);
+  hasNamespace(namespace: string): boolean;
   bind<T>(target: T, options?: ObjectDefinitionOptions): void;
   bind<T>(
     identifier: ObjectIdentifier,
@@ -341,6 +342,13 @@ export interface IMidwayBaseApplication<T extends IMidwayContext = IMidwayContex
    * @param key
    */
   getAttr<T>(key: string): T;
+
+  /**
+   * add global filter to app
+   * @param filters
+   * @param name
+   */
+  addGlobalFilter(filters: Array<new (...args) => {doFilter(): void}>, name?: string): void;
 }
 
 export type IMidwayApplication<T extends IMidwayContext = IMidwayContext, FrameworkApplication = unknown> = IMidwayBaseApplication<T> & FrameworkApplication;
