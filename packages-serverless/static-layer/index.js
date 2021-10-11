@@ -37,7 +37,6 @@ module.exports = engine => {
         deployConfig.prefix = '/' + deployConfig.prefix;
       }
       staticConfig.prefix = deployConfig.prefix || '/';
-      console.log(staticConfig.prefix)
 
       const app = new KOA();
       // handleRequest = koaApp.callback();
