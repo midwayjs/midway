@@ -33,7 +33,11 @@ module.exports = engine => {
         maxFiles: 1000,
       };
       staticConfig.dir = join(baseDir, deployConfig.rootDir);
+      if (deployConfig.prefix && !/^\//.test(deployConfig.prefix)) {
+        deployConfig.prefix = '/' + deployConfig.prefix;
+      }
       staticConfig.prefix = deployConfig.prefix || '/';
+      console.log(staticConfig.prefix)
 
       const app = new KOA();
       // handleRequest = koaApp.callback();
