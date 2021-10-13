@@ -9,6 +9,7 @@ import {
 } from '@midwayjs/decorator';
 import { ILogger, LoggerOptions } from '@midwayjs/logger';
 import * as EventEmitter from 'events';
+import { ContextFilterManager } from './util/filterManager';
 
 /**
  * 生命周期定义
@@ -349,6 +350,9 @@ export interface IMidwayBaseApplication<T extends IMidwayContext = IMidwayContex
    * @param name
    */
   addGlobalFilter(filters: Array<new (...args) => {doFilter(): void}>, name?: string): void;
+
+
+  getGlobalFilter(): ContextFilterManager;
 }
 
 export type IMidwayApplication<T extends IMidwayContext = IMidwayContext, FrameworkApplication = unknown> = IMidwayBaseApplication<T> & FrameworkApplication;

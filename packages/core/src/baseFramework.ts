@@ -20,6 +20,7 @@ import { MidwayConfigService } from './service/configService';
 import { MidwayInformationService } from './service/informationService';
 import { MidwayLoggerService } from './service/loggerService';
 import { MidwayFilterService } from './service/filterService';
+import { ContextFilterManager } from './util/filterManager';
 
 export abstract class BaseFramework<
   APP extends IMidwayApplication<CTX>,
@@ -34,7 +35,7 @@ export abstract class BaseFramework<
   public app: APP;
   protected defaultContext = {};
   protected BaseContextLoggerClass: any;
-  protected globalFilterList = [];
+  protected filterManager = new ContextFilterManager();
 
   @Inject()
   loggerService: MidwayLoggerService;
@@ -228,10 +229,10 @@ export abstract class BaseFramework<
       },
       addGlobalFilter: (filters: [], name?: string) => {
         const composeFilter = this.filterService.compose(filters, name);
-        this.globalFilterList.push(composeFilter);
+        this.filterManager.push(composeFilter);
       },
       getGlobalFilter() {
-        return this.globalFilterList;
+        return this.filterManager;
       }
     };
     for (const method of whiteList) {
