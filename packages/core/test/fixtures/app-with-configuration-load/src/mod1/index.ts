@@ -1,1 +1,1 @@
-export { AutoConfiguration as Configuration } from './configuration';
+export { Mod1Configuration as Configuration } from './configuration';
