@@ -29,7 +29,7 @@ describe('/test/index.test.ts', () => {
 
     it('should test with get', done => {
       request(app)
-        .get('/')
+        .get('/web')
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(/hello world/)
         .expect(200, done);
@@ -59,7 +59,7 @@ describe('/test/index.test.ts', () => {
 
     it('should test with get', done => {
       request(app)
-        .get('/')
+        .get('/web')
         .expect('Content-Type', 'text/html; charset=utf-8')
         .expect(/hello world/)
         .expect(200, done);
