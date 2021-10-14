@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES2018",
+    "target": "es2018",
     "module": "commonjs",
     "moduleResolution": "node",
     "experimentalDecorators": true,

@@ -17,6 +17,7 @@ async function initializeMethod() {
         deployType: {
           config: {
             rootDir: 'build',
+            prefix: '/web'
           }
         }
       }
