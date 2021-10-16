@@ -75,11 +75,17 @@ export class ContainerConfiguration implements IContainerConfiguration {
         );
       } else if ('component' in importPackage) {
         subContainerConfiguration.newVersion = true;
-        if (
-          (importPackage as IComponentInfo)?.enabledEnvironment?.includes(
-            this.container.getCurrentEnv()
-          )
-        ) {
+        if ((importPackage as IComponentInfo)?.enabledEnvironment) {
+          if (
+            (importPackage as IComponentInfo)?.enabledEnvironment?.includes(
+              this.container.getCurrentEnv()
+            )
+          ) {
+            subContainerConfiguration.loadComponentObject(
+              (importPackage as IComponentInfo).component
+            );
+          }
+        } else {
           subContainerConfiguration.loadComponentObject(
             (importPackage as IComponentInfo).component
           );

@@ -2,7 +2,7 @@
 
 const { asyncWrapper } = require('@midwayjs/runtime-engine');
 const { start } = require('@midwayjs/serverless-fc-starter');
-const StaticLayer = require('../../../');
+const StaticLayer = require('../../../index');
 
 let runtime;
 let inited;
