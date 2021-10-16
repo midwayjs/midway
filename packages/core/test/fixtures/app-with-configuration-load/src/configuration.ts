@@ -6,6 +6,9 @@ import { Configuration } from '@midwayjs/decorator';
     {
       component: require('./mod2'),
       enabledEnvironment: ['pre']
+    },
+    {
+      component: require('./mod3'),
     }
   ],
 })

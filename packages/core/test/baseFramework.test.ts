@@ -507,6 +507,7 @@ describe('/test/baseFramework.test.ts', () => {
 
     const value = applicationContext.getConfigService().getConfiguration();
     expect(value['a']).toEqual(1);
+    expect(value['b']).toEqual(1);
     mm.restore();
   });
 

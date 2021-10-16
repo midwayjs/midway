@@ -2,7 +2,7 @@
 
 const { asyncWrapper } = require('@midwayjs/runtime-engine');
 const { start } = require('@midwayjs/serverless-scf-starter');
-const KoaLayer = require('../../../');
+const KoaLayer = require('../../../index');
 
 let runtime;
 let inited;
