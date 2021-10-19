@@ -32,7 +32,13 @@ export { MidwayRequestContainer } from './context/requestContainer';
 export { BaseFramework } from './baseFramework';
 export * from './context/providerWrapper';
 export * from './common/constants';
-export { safelyGet, safeRequire, delegateTargetPrototypeMethod } from './util/';
+export {
+  safelyGet,
+  safeRequire,
+  delegateTargetPrototypeMethod,
+  delegateTargetMethod,
+  delegateTargetProperties,
+} from './util/';
 export * from './util/pathFileUtil';
 export * from './features';
 export * from './util/webRouterParam';

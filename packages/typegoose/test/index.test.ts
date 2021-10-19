@@ -1,21 +1,14 @@
-import { createApp, close } from '@midwayjs/mock';
-import { Framework } from '@midwayjs/koa'
+import { close, createLightApp } from '@midwayjs/mock';
 import { join } from 'path';
-// import { closeMongoServer, createMongoServer } from './util';
 
 describe('/test/index.test.ts', () => {
+  it.skip('should connect mongodb', async () => {
+    let app = await createLightApp(join(__dirname, 'fixtures', 'base-app'), {});
+    await close(app);
+  });
 
-  // beforeAll(async () => {
-  //   await createMongoServer();
-  // })
-  //
-  // afterAll(async () => {
-  //   await closeMongoServer();
-  // })
-
-  it('should connect mongodb', async () => {
-    process.env.MONGO_URI = 'mongodb://localhost:27017';
-    let app = await createApp(join(__dirname, 'fixtures', 'base-app'), {}, Framework);
+  it('should connect mongodb with new decorator', async () => {
+    let app = await createLightApp(join(__dirname, 'fixtures', 'base-app-decorator'), {});
     await close(app);
   });
 });
