@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/mongoose",
-  "version": "2.13.3",
+  "version": "2.13.0",
   "description": "Midway Component for mongoose",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",

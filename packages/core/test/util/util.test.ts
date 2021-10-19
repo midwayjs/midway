@@ -119,7 +119,6 @@ describe('/test/pathFileUtil.test.ts', () => {
       'a',
     ]);
 
-
     const a: any = new TargetA();
     expect(a.a).toBeUndefined();
     expect(a.hello()).toEqual('world');

@@ -25,17 +25,7 @@ export class MongooseConnectionServiceFactory extends ServiceFactory<mongoose.Co
 
   @Init()
   async init() {
-    let mongooseInitConfig = this.config;
-    if (this.config.options) {
-      // 兼容老的配置
-      mongooseInitConfig = {
-        client: this.config,
-      };
-      console.warn(
-        '[mongoose] Please use "mongoose: {client:{***}}" replace old config'
-      );
-    }
-    await this.initClients(mongooseInitConfig);
+    await this.initClients(this.config);
   }
 
   protected async createClient(config: any, name: string) {
@@ -61,6 +51,7 @@ export class MongooseConnectionServiceFactory extends ServiceFactory<mongoose.Co
     connection.on('reconnected', () => {
       this.logger.info(`[mongoose] ${name} reconnected successfully`);
     });
+
     return connection;
   }
 
