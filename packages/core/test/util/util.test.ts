@@ -1,6 +1,13 @@
 import * as assert from 'assert';
 import { join } from 'path';
-import { safeRequire, safelyGet, joinURLPath } from '../../src/util';
+import {
+  safeRequire,
+  safelyGet,
+  joinURLPath,
+  delegateTargetPrototypeMethod,
+  delegateTargetMethod,
+  delegateTargetProperties
+} from '../../src/util';
 import { PathFileUtil } from '../../src';
 import { StaticConfigLoader } from '../../src/util/staticConfig';
 
@@ -70,6 +77,73 @@ describe('/test/pathFileUtil.test.ts', () => {
     expect(joinURLPath('*')).toEqual('/*');
     expect(joinURLPath('/', '*')).toEqual('/*');
     expect(joinURLPath('/', '/*')).toEqual('/*');
+  });
+
+  it('should test delegate util method', async () => {
+    class Source {
+      a = 123;
+      hello() {
+        return 'world'
+      }
+      async getData() {
+        return {
+          test: 'a'
+        }
+      }
+      getInfo() {
+        return new Promise(resolve => {
+          resolve({
+            ddd: 'bbb'
+          })
+        });
+      }
+    }
+    const source = new Source();
+    class TargetA {
+      instance = source;
+    }
+    class TargetB {
+      instance = source;
+    }
+    class TargetC {
+      instance = source;
+    }
+
+    delegateTargetPrototypeMethod(TargetA, [Source]);
+    delegateTargetMethod(TargetB, [
+      'hello',
+      'getData',
+      'getInfo'
+    ]);
+    delegateTargetProperties(TargetC, [
+      'a',
+    ]);
+
+    const a: any = new TargetA();
+    expect(a.a).toBeUndefined();
+    expect(a.hello()).toEqual('world');
+    expect(await a.getData()).toEqual({
+      test: 'a',
+    });
+    expect(await a.getInfo()).toEqual({
+      ddd: 'bbb'
+    });
+
+    const b: any = new TargetB();
+    expect(b.a).toBeUndefined();
+    expect(b.hello()).toEqual('world');
+    expect(await b.getData()).toEqual({
+      test: 'a',
+    });
+    expect(await b.getInfo()).toEqual({
+      ddd: 'bbb'
+    });
+
+    const c: any = new TargetC();
+    expect(c.a).toEqual(123);
+    expect(c.hello).toBeUndefined();
+    expect(c.getData).toBeUndefined();
+    expect(c.getInfo).toBeUndefined();
   });
 
 });

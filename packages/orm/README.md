@@ -5,12 +5,15 @@
 in Configuration.ts file
 
 ```ts
+import * as orm from '@midwayjs/orm';
+import { join } from 'path';
+
 @Configuration({
   imports: [
-    '@midwayjs/orm',
+    orm,
   ],
   importConfigs: [
-    './config'
+    join(__dirname, './config')
   ]
 })
 export class ContainerConfiguration {
@@ -21,7 +24,6 @@ export class ContainerConfiguration {
 ## Configuration
 
 in config files
-
 
 ```ts
 export default {
@@ -79,13 +81,12 @@ import { User } from './model/user';
 import { Repository } from 'typeorm';
 
 @Provide()
-export class IndexHandler {
+export class UserService {
 
   @InjectEntityModel(User)
   userModel: Repository<User>;
 
-  @Func('index.handler')
-  async handler() {
+  async testUser() {
     const u = new User();
     u.name = 'oneuser1';
     const uu = await this.userModel.save(u);

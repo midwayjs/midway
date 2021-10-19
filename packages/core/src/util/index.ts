@@ -92,6 +92,11 @@ export function joinURLPath(...strArray) {
   return p;
 }
 
+/**
+ * 代理目标所有的原型方法，不包括构造器和内部隐藏方法
+ * @param derivedCtor
+ * @param constructors
+ */
 export function delegateTargetPrototypeMethod(
   derivedCtor: any,
   constructors: any[]
@@ -99,10 +104,41 @@ export function delegateTargetPrototypeMethod(
   constructors.forEach(baseCtor => {
     Object.getOwnPropertyNames(baseCtor.prototype).forEach(name => {
       if (name !== 'constructor' && !/^_/.test(name)) {
-        derivedCtor.prototype[name] = async function (...args) {
+        derivedCtor.prototype[name] = function (...args) {
           return this.instance[name](...args);
         };
       }
+    });
+  });
+}
+
+/**
+ * 代理目标原型上的特定方法
+ * @param derivedCtor
+ * @param methods
+ */
+export function delegateTargetMethod(derivedCtor: any, methods: string[]) {
+  methods.forEach(name => {
+    derivedCtor.prototype[name] = function (...args) {
+      return this.instance[name](...args);
+    };
+  });
+}
+
+/**
+ * 代理目标原型属性
+ * @param derivedCtor
+ * @param properties
+ */
+export function delegateTargetProperties(
+  derivedCtor: any,
+  properties: string[]
+) {
+  properties.forEach(name => {
+    Object.defineProperty(derivedCtor.prototype, name, {
+      get() {
+        return this.instance[name];
+      },
     });
   });
 }

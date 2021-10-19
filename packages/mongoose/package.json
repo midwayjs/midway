@@ -1,7 +1,7 @@
 {
-  "name": "@midwayjs/typegoose",
-  "version": "2.13.3",
-  "description": "Midway Component for typegoose",
+  "name": "@midwayjs/mongoose",
+  "version": "2.13.0",
+  "description": "Midway Component for mongoose",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
@@ -11,7 +11,7 @@
     "ci": "npm run test"
   },
   "keywords": [],
-  "author": "",
+  "author": "czy88840616@gmail.com",
   "files": [
     "dist/**/*.js",
     "dist/**/*.d.ts"
@@ -20,14 +20,13 @@
     "node": ">= 12.13.0"
   },
   "license": "MIT",
-  "dependencies": {
-    "@midwayjs/mongoose": "^2.13.0"
-  },
   "devDependencies": {
     "@midwayjs/core": "^2.13.3",
     "@midwayjs/decorator": "^2.13.2",
     "@midwayjs/mock": "^2.13.3",
-    "@typegoose/typegoose": "^8.1.0",
     "mongoose": "~5.13.3"
+  },
+  "peerDependencies": {
+    "mongoose": "*"
   }
 }
