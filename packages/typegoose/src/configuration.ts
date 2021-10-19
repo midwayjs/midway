@@ -1,4 +1,12 @@
-import { Config, Configuration, getClassMetadata, Init, Inject, listModule, App } from '@midwayjs/decorator';
+import {
+  Config,
+  Configuration,
+  getClassMetadata,
+  Init,
+  Inject,
+  listModule,
+  App,
+} from '@midwayjs/decorator';
 import * as mongoose from '@midwayjs/mongoose';
 import { ENTITY_MODEL_KEY } from './interface';
 import { getModelForClass } from '@typegoose/typegoose';
@@ -7,12 +15,9 @@ import { IMidwayApplication } from '@midwayjs/core';
 
 @Configuration({
   namespace: 'typegoose',
-  imports: [
-    mongoose,
-  ]
+  imports: [mongoose],
 })
 export class TypegooseConfiguration {
-
   @Inject()
   connectionFactory: mongoose.MongooseConnectionServiceFactory;
 
@@ -46,7 +51,7 @@ export class TypegooseConfiguration {
       const connectionName = metadata.connectionName ?? 'default';
       const conn = this.connectionFactory.get(connectionName);
       if (conn) {
-        const model = getModelForClass(Model, {existingConnection: conn});
+        const model = getModelForClass(Model, { existingConnection: conn });
         if (!this.modelMap.has(connectionName)) {
           this.modelMap.set(connectionName, new WeakMap());
         }
@@ -59,7 +64,10 @@ export class TypegooseConfiguration {
     // 兼容老代码
     if (Models.length === 0 && this.oldMongooseConfig['uri']) {
       this.legacyMode = true;
-      await mongo.connect(this.oldMongooseConfig.uri, this.oldMongooseConfig.options);
+      await mongo.connect(
+        this.oldMongooseConfig.uri,
+        this.oldMongooseConfig.options
+      );
     }
   }
 
