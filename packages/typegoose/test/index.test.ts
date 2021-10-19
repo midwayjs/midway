@@ -2,7 +2,7 @@ import { close, createLightApp } from '@midwayjs/mock';
 import { join } from 'path';
 
 describe('/test/index.test.ts', () => {
-  it('should connect mongodb', async () => {
+  it.skip('should connect mongodb', async () => {
     let app = await createLightApp(join(__dirname, 'fixtures', 'base-app'), {});
     await close(app);
   });
