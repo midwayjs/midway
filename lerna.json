@@ -12,7 +12,8 @@
       ],
       "nohoist": [
         "@midwayjs/faas-middleware-upload",
-        "midway-test-component"
+        "midway-test-component",
+        "typeorm"
       ]
     },
     "publish": {
