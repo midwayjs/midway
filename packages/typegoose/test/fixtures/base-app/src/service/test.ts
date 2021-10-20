@@ -1,5 +1,6 @@
 import { Provide, Scope, ScopeEnum, Init } from "@midwayjs/decorator";
-import { getModelForClass, prop, ReturnModelType } from '@typegoose/typegoose';
+import { getModelForClass, prop } from '@typegoose/typegoose';
+import { Model } from 'mongoose';
 
 class User {
 
@@ -14,7 +15,7 @@ class User {
 @Scope(ScopeEnum.Singleton)
 export class TestService{
 
-  userModel: ReturnModelType<typeof User>;
+  userModel: Model<User>;
 
   @Init()
   init() {
