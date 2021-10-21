@@ -10,7 +10,7 @@ import {
   MidwayFrameworkService,
   MidwayAspectService,
   MidwayLifeCycleService,
-  MidwayFilterService,
+  MidwayMiddlewareService,
 } from './';
 import defaultConfig from './config/config.default';
 import { bindContainer, clearBindContainer } from '@midwayjs/decorator';
@@ -45,7 +45,7 @@ export async function initializeGlobalApplicationContext(
   applicationContext.bindClass(MidwayAspectService);
   applicationContext.bindClass(MidwayLoggerService);
   applicationContext.bindClass(MidwayFrameworkService);
-  applicationContext.bindClass(MidwayFilterService);
+  applicationContext.bindClass(MidwayMiddlewareService);
   applicationContext.bindClass(MidwayLifeCycleService);
 
   // bind preload module
@@ -82,8 +82,8 @@ export async function initializeGlobalApplicationContext(
   // aop support
   await applicationContext.getAsync(MidwayAspectService, [applicationContext]);
 
-  // filter support
-  await applicationContext.getAsync(MidwayFilterService, [applicationContext]);
+  // middleware support
+  await applicationContext.getAsync(MidwayMiddlewareService, [applicationContext]);
 
   // framework/config/plugin/logger/app decorator support
   await applicationContext.getAsync(MidwayFrameworkService, [

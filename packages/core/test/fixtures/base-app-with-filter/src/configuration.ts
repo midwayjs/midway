@@ -10,8 +10,10 @@ export class AutoConfiguration {
 
   async onReady() {
     this.app.useMiddleware([TestFilter]);
-    this.app.getMiddleware().insertBefore(0, TestFilter2);
-    this.app.getMiddleware().insertBefore('name', TestFilter2);
+    this.app.getMiddleware().insertBefore(TestFilter2, 0);
+    this.app.getMiddleware().insertBefore(TestFilter2, TestFilter);
+    this.app.getMiddleware().insertAfter(TestFilter2, TestFilter);
+    this.app.getMiddleware().push(TestFilter);
   }
 
   onAppError(err, app: IMidwayApplication) {

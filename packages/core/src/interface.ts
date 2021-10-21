@@ -267,10 +267,6 @@ export interface IAspectService {
   hasAspect(module): boolean;
 }
 
-export interface IMiddleware<T> {
-  resolve: () => (context: T, next: () => Promise<any>) => any;
-}
-
 export enum MidwayProcessTypeEnum {
   APPLICATION = 'APPLICATION',
   AGENT = 'AGENT',
@@ -292,10 +288,15 @@ export type IMidwayContext<FrameworkContext = unknown> = Context & FrameworkCont
  * common middleware definition
  */
 
+export interface IMiddleware<T> {
+  resolve: () => FunctionMiddleware<T>;
+  match?: () => boolean;
+  ignore?: () => boolean;
+}
 export type FunctionMiddleware<T> = (context: T, next: () => Promise<any>) => any;
-export type ClassMiddleware<T> = new (...args) => { resolve(): FunctionMiddleware<T> };
-export type CommonMiddleware<T> = ClassMiddleware<T> & FunctionMiddleware<T>;
-export type CommonMiddlewareUnion<T> = CommonMiddleware<T> & Array<CommonMiddleware<T>>;
+export type ClassMiddleware<T> = new (...args) => IMiddleware<T>;
+export type CommonMiddleware<T> = ClassMiddleware<T> | FunctionMiddleware<T>;
+export type CommonMiddlewareUnion<T> = CommonMiddleware<T> | Array<CommonMiddleware<T>>;
 
 export interface IMidwayBaseApplication<T extends IMidwayContext = IMidwayContext> {
   getBaseDir(): string;
@@ -329,6 +330,7 @@ export interface IMidwayBaseApplication<T extends IMidwayContext = IMidwayContex
   /**
    * add global filter to app
    * @param middleware
+   * @param name
    */
   useMiddleware(middleware: CommonMiddlewareUnion<T>): void;
 

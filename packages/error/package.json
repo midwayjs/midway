@@ -1,40 +1,22 @@
 {
-  "name": "@midwayjs/faas",
+  "name": "@midwayjs/error",
   "version": "3.0.0-alpha.42",
   "main": "dist/index",
   "typings": "index.d.ts",
   "dependencies": {
-    "@midwayjs/core": "^3.0.0-alpha.42",
-    "@midwayjs/decorator": "^3.0.0-alpha.42",
-    "@midwayjs/faas-typings": "^3.0.0-alpha.42",
-    "@midwayjs/logger": "^3.0.0-alpha.42",
-    "@midwayjs/simple-lock": "^1.1.4",
-    "koa-compose": "^4.1.0"
   },
   "devDependencies": {
-    "@midwayjs/mock": "^3.0.0-alpha.42",
-    "@midwayjs/serverless-fc-starter": "^3.0.0-alpha.42",
-    "@midwayjs/serverless-scf-starter": "^3.0.0-alpha.42",
-    "mm": "3"
   },
   "engines": {
     "node": ">= 10"
   },
   "files": [
     "dist/**/*.js",
-    "dist/**/*.d.ts",
-    "index.d.ts"
+    "dist/**/*.d.ts"
   ],
   "keywords": [
-    "serverless",
-    "faas",
-    "k8s",
-    "cloud native",
-    "aliyun",
-    "tencent",
     "midway",
-    "aws",
-    "lambda"
+    "error"
   ],
   "scripts": {
     "build": "tsc",

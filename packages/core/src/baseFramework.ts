@@ -1,4 +1,5 @@
 import {
+  CommonMiddlewareUnion,
   IConfigurationOptions,
   IMidwayApplication,
   IMidwayBootstrapOptions,
@@ -19,8 +20,8 @@ import { MidwayEnvironmentService } from './service/environmentService';
 import { MidwayConfigService } from './service/configService';
 import { MidwayInformationService } from './service/informationService';
 import { MidwayLoggerService } from './service/loggerService';
-import { MidwayFilterService } from './service/filterService';
-import { ContextFilterManager } from './util/filterManager';
+import { ContextMiddlewareManager } from './util/middlewareManager';
+import { MidwayMiddlewareService } from './service/middlewareService';
 
 export abstract class BaseFramework<
   APP extends IMidwayApplication<CTX>,
@@ -35,7 +36,7 @@ export abstract class BaseFramework<
   public app: APP;
   protected defaultContext = {};
   protected BaseContextLoggerClass: any;
-  protected filterManager = new ContextFilterManager();
+  protected middlewareManager = new ContextMiddlewareManager();
 
   @Inject()
   loggerService: MidwayLoggerService;
@@ -50,7 +51,7 @@ export abstract class BaseFramework<
   informationService: MidwayInformationService;
 
   @Inject()
-  filterService: MidwayFilterService;
+  middlewareService: MidwayMiddlewareService;
 
   @Init()
   async init() {
@@ -227,12 +228,11 @@ export abstract class BaseFramework<
       getAttr: <T>(key: string): T => {
         return this.getApplicationContext().getAttr(key);
       },
-      addGlobalFilter: (filters: [], name?: string) => {
-        const composeFilter = this.filterService.compose(filters, name);
-        this.filterManager.push(composeFilter);
+      useMiddleware: (middleware: CommonMiddlewareUnion<CTX>) => {
+        this.middlewareManager.insertLast(middleware);
       },
-      getGlobalFilter() {
-        return this.filterManager;
+      getMiddleware: (): ContextMiddlewareManager<CTX> => {
+        return this.middlewareManager;
       }
     };
     for (const method of whiteList) {
