@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.13.4](https://github.com/midwayjs/midway/compare/v2.13.3...v2.13.4) (2021-10-21)
+
+
+### Bug Fixes
+
+* static prefix ([#1321](https://github.com/midwayjs/midway/issues/1321)) ([e6b4e46](https://github.com/midwayjs/midway/commit/e6b4e4673c1d2480da23d6bd664b613c813ee131))
+
+
+### Features
+
+* add mongoose component and support multi-instance for typegoose ([#1334](https://github.com/midwayjs/midway/issues/1334)) ([ec54224](https://github.com/midwayjs/midway/commit/ec54224d775a3cfde3ff280538c8db79bcff4610))
+
+
+
+
+
 ## [2.13.3](https://github.com/midwayjs/midway/compare/v2.13.2...v2.13.3) (2021-09-28)
 
 
