@@ -9,8 +9,9 @@ export class AutoConfiguration {
   app: IMidwayApplication;
 
   async onReady() {
-    this.app.addGlobalFilter([TestFilter]);
-    this.app.getGlobalFilter().insertBefore(0, TestFilter2);
+    this.app.useMiddleware([TestFilter]);
+    this.app.getMiddleware().insertBefore(0, TestFilter2);
+    this.app.getMiddleware().insertBefore('name', TestFilter2);
   }
 
   onAppError(err, app: IMidwayApplication) {
@@ -18,18 +19,27 @@ export class AutoConfiguration {
       this.app.getLogger().error(err.message);
     }
   }
-  //
+
   // onContextError(err, ctx, app: IMidwayApplication) {
   //
   // }
 }
 
 //
-// @Catch(HttpNotFoundException)
+// @GlobalCatch(A, B, C)
 // class AllExceptionFilter {
-//   catchException(ctx) {
-//     ctx.body = {
-//
+//   catchException(error,ctx) {
+//     return {
+//       data: xxx
 //     }
 //   }
 // }
+//
+//
+//
+// @Get()
+// async getUser() {
+//   throe new A()
+// }
+//
+// this.app.addFilter(AllExceptionFilter)

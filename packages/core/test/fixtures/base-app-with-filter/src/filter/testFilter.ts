@@ -20,4 +20,8 @@ export class TestFilter2 {
     }
   }
 
+  getName() {
+
+  }
+
 }

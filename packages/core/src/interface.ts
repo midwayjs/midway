@@ -1,7 +1,6 @@
 import {
   ObjectIdentifier,
   IManagedInstance,
-  ScopeEnum,
   ObjectDefinitionOptions,
   IMethodAspect,
   AspectMetadata,
@@ -9,7 +8,7 @@ import {
 } from '@midwayjs/decorator';
 import { ILogger, LoggerOptions } from '@midwayjs/logger';
 import * as EventEmitter from 'events';
-import { ContextFilterManager } from './util/filterManager';
+import { ContextMiddlewareManager } from './util/middlewareManager';
 
 /**
  * 生命周期定义
@@ -179,35 +178,9 @@ export interface IManagedResolverFactoryCreateOptions {
   namespace?: string;
 }
 
-export interface ObjectDependencyTree {
-  scope: ScopeEnum;
-  name: string;
-  constructorArgs: string[];
-  properties: string[];
-}
-
 export const REQUEST_CTX_KEY = 'ctx';
 export const REQUEST_OBJ_CTX_KEY = '_req_ctx';
 export const HTTP_SERVER_KEY = '_midway_http_server';
-
-export interface IContainerConfiguration {
-  namespace: string;
-  packageName: string;
-  addLoadDir(dir: string);
-  addImports(imports: string[], baseDir?: string);
-  addImportObjects(importObjects: Record<string, unknown>);
-  addImportConfigs(importConfigs: string[], baseDir: string);
-  load(packageName: string);
-  loadComponentObject(componentObject: any);
-  loadConfiguration(
-    configuration: IContainerConfiguration,
-    baseDir: string,
-    filePath?: string
-  );
-  getImportDirectory(): string[];
-  getImportObjects(): any;
-  bindConfigurationClass(clzz: any, filePath?: string);
-}
 
 export type HandlerFunction = (
   /**
@@ -315,6 +288,15 @@ export interface Context {
 
 export type IMidwayContext<FrameworkContext = unknown> = Context & FrameworkContext;
 
+/**
+ * common middleware definition
+ */
+
+export type FunctionMiddleware<T> = (context: T, next: () => Promise<any>) => any;
+export type ClassMiddleware<T> = new (...args) => { resolve(): FunctionMiddleware<T> };
+export type CommonMiddleware<T> = ClassMiddleware<T> & FunctionMiddleware<T>;
+export type CommonMiddlewareUnion<T> = CommonMiddleware<T> & Array<CommonMiddleware<T>>;
+
 export interface IMidwayBaseApplication<T extends IMidwayContext = IMidwayContext> {
   getBaseDir(): string;
   getAppDir(): string;
@@ -346,13 +328,14 @@ export interface IMidwayBaseApplication<T extends IMidwayContext = IMidwayContex
 
   /**
    * add global filter to app
-   * @param filters
-   * @param name
+   * @param middleware
    */
-  addGlobalFilter(filters: Array<new (...args) => {doFilter(): void}>, name?: string): void;
+  useMiddleware(middleware: CommonMiddlewareUnion<T>): void;
 
-
-  getGlobalFilter(): ContextFilterManager;
+  /**
+   * get global middleware
+   */
+  getMiddleware(): ContextMiddlewareManager<T>;
 }
 
 export type IMidwayApplication<T extends IMidwayContext = IMidwayContext, FrameworkApplication = unknown> = IMidwayBaseApplication<T> & FrameworkApplication;
