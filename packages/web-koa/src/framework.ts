@@ -298,6 +298,9 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<
   }
 
   public async run(): Promise<void> {
+    const middlewareFn = await this.middlewareService.compose(this.middlewareManager);
+    this.app.use(middlewareFn);
+
     if (this.configurationOptions.port) {
       new Promise<void>(resolve => {
         const args: any[] = [this.configurationOptions.port];
