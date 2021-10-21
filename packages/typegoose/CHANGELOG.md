@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.13.5](https://github.com/midwayjs/midway/compare/v2.13.4...v2.13.5) (2021-10-21)
+
+
+### Bug Fixes
+
+* remove connection key ([#1337](https://github.com/midwayjs/midway/issues/1337)) ([8e7e912](https://github.com/midwayjs/midway/commit/8e7e9124abbd66c27443851d67217ee76daac8fd))
+
+
+
+
+
 ## [2.13.4](https://github.com/midwayjs/midway/compare/v2.13.3...v2.13.4) (2021-10-21)
 
 

@@ -40,8 +40,14 @@
   "@midwayjs/socketio": "2.13.4",
   "@midwayjs/tablestore": "2.13.4",
   "@midwayjs/task": "2.13.4",
-  "@midwayjs/typegoose": "2.13.4",
-  "@midwayjs/version": "2.13.4",
+  "@midwayjs/typegoose": [
+    "2.13.4",
+    "2.13.5"
+  ],
+  "@midwayjs/version": [
+    "2.13.4",
+    "2.13.5"
+  ],
   "@midwayjs/view-ejs": "2.13.4",
   "@midwayjs/view-nunjucks": "2.13.4",
   "@midwayjs/view": "2.13.4",
