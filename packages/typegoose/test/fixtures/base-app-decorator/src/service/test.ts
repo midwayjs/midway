@@ -1,5 +1,6 @@
 import { Provide, Scope, ScopeEnum } from "@midwayjs/decorator";
-import { prop, ReturnModelType } from '@typegoose/typegoose';
+import { prop } from '@typegoose/typegoose';
+import { Model } from 'mongoose';
 import { EntityModel, InjectEntityModel } from '../../../../../src';
 
 @EntityModel()
@@ -29,10 +30,10 @@ class User2 {
 export class TestService{
 
   @InjectEntityModel(User)
-  userModel: ReturnModelType<typeof User>;
+  userModel: Model<User>;
 
   @InjectEntityModel(User2, 'db2')
-  user2Model: ReturnModelType<typeof User2>;
+  user2Model: Model<User2>;
 
   async getTest(){
     const { _id: id } = await this.userModel.create({ name: 'JohnDoe', jobs: ['Cleaner'] } as User); // an "as" assertion, to have types for all properties
