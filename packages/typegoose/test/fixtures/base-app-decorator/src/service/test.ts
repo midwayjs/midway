@@ -32,7 +32,7 @@ export class TestService{
   @InjectEntityModel(User)
   userModel: Model<User>;
 
-  @InjectEntityModel(User2, 'db2')
+  @InjectEntityModel(User2)
   user2Model: Model<User2>;
 
   async getTest(){

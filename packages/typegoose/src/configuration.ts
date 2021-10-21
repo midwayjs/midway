@@ -29,7 +29,7 @@ export class TypegooseConfiguration {
   @App()
   app: IMidwayApplication;
 
-  modelMap = new Map();
+  modelMap = new WeakMap();
 
   @Init()
   async init() {
@@ -39,7 +39,7 @@ export class TypegooseConfiguration {
         ENTITY_MODEL_KEY,
         (key: { modelKey; connectionName }) => {
           // return getConnection(key.connectionName).getRepository(key.modelKey);
-          return this.modelMap.get(key.connectionName).get(key.modelKey);
+          return this.modelMap.get(key.modelKey);
         }
       );
   }
@@ -52,10 +52,7 @@ export class TypegooseConfiguration {
       const conn = this.connectionFactory.get(connectionName);
       if (conn) {
         const model = getModelForClass(Model, { existingConnection: conn });
-        if (!this.modelMap.has(connectionName)) {
-          this.modelMap.set(connectionName, new WeakMap());
-        }
-        this.modelMap.get(connectionName).set(Model, model);
+        this.modelMap.set(Model, model);
       } else {
         throw new Error(`connection name ${metadata.connectionName} not found`);
       }
