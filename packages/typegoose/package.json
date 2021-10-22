@@ -21,7 +21,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@midwayjs/mongoose": "^2.13.0"
+    "@midwayjs/mongoose": "3.0.0-alpha.42"
   },
   "devDependencies": {
     "@midwayjs/core": "^3.0.0-alpha.42",

@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/mongoose",
-  "version": "2.13.0",
+  "version": "3.0.0-alpha.42",
   "description": "Midway Component for mongoose",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -21,9 +21,9 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/core": "^2.13.3",
-    "@midwayjs/decorator": "^2.13.2",
-    "@midwayjs/mock": "^2.13.3",
+    "@midwayjs/core":"3.0.0-alpha.42",
+    "@midwayjs/decorator": "3.0.0-alpha.42",
+    "@midwayjs/mock": "3.0.0-alpha.42",
     "mongoose": "~6.0.11"
   },
   "peerDependencies": {
