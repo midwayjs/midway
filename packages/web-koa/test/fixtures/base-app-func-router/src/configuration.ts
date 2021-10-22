@@ -1,10 +1,11 @@
 import { Configuration, App } from '@midwayjs/decorator';
 import * as bodyParser from 'koa-bodyparser';
 import * as session from 'koa-session';
+import { join } from 'path';
 
 @Configuration({
   importConfigs: [
-    './config'
+    join(__dirname, './config'),
   ]
 })
 export class ContainerConfiguration {

@@ -244,7 +244,11 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<
     >() as IMidwayKoaApplication;
     this.app.use(async (ctx, next) => {
       this.app.createAnonymousContext(ctx);
-      await next();
+      const result = await (await this.getMiddleware())(ctx, next);
+      if (result) {
+        ctx.body = result;
+      }
+      // TODO error handler
     });
 
     this.defineApplicationProperties({
@@ -298,11 +302,10 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<
   }
 
   public async run(): Promise<void> {
-    const middlewareFn = await this.middlewareService.compose(
-      this.middlewareManager
-    );
-    this.app.use(middlewareFn);
+    // merge koa middleware to middleware service
+    this.middlewareManager.push(this.app.middleware.slice(1) as any);
 
+    // set port and listen server
     if (this.configurationOptions.port) {
       new Promise<void>(resolve => {
         const args: any[] = [this.configurationOptions.port];

@@ -37,6 +37,7 @@ export abstract class BaseFramework<
   protected defaultContext = {};
   protected BaseContextLoggerClass: any;
   protected middlewareManager = new ContextMiddlewareManager();
+  private composeMiddleware = null;
 
   @Inject()
   loggerService: MidwayLoggerService;
@@ -262,6 +263,15 @@ export abstract class BaseFramework<
   protected async afterContainerReady(
     options: Partial<IMidwayBootstrapOptions>
   ): Promise<void> {}
+
+  protected async getMiddleware() {
+    if (!this.composeMiddleware) {
+      this.composeMiddleware = await this.middlewareService.compose(
+        this.middlewareManager
+      );
+    }
+    return this.composeMiddleware;
+  }
 
   public getLogger(name?: string) {
     return this.loggerService.getLogger(name) ?? this.appLogger;

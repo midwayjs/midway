@@ -74,7 +74,9 @@ export class MidwayMiddlewareService<T> {
         }
       }
     };
-    composeFn._name = name;
+    if (name) {
+      composeFn._name = name;
+    }
     return composeFn;
   }
 }
