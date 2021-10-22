@@ -7,7 +7,6 @@ import {
 export class ContextMiddlewareManager<
   T extends IMidwayContext = IMidwayContext
 > extends Array<CommonMiddleware<T>> {
-
   public insertFirst(middleware: CommonMiddlewareUnion<T>) {
     if (Array.isArray(middleware)) {
       this.unshift(...middleware);
@@ -16,9 +15,18 @@ export class ContextMiddlewareManager<
     }
   }
 
-  public insertBefore(middleware: CommonMiddlewareUnion<T>, idxOrBeforeMiddleware: number);
-  public insertBefore(middleware: CommonMiddlewareUnion<T>, idxOrBeforeMiddleware: CommonMiddlewareUnion<T>);
-  public insertBefore(middleware: CommonMiddlewareUnion<T>, idxOrBeforeMiddleware: any) {
+  public insertBefore(
+    middleware: CommonMiddlewareUnion<T>,
+    idxOrBeforeMiddleware: number
+  );
+  public insertBefore(
+    middleware: CommonMiddlewareUnion<T>,
+    idxOrBeforeMiddleware: CommonMiddlewareUnion<T>
+  );
+  public insertBefore(
+    middleware: CommonMiddlewareUnion<T>,
+    idxOrBeforeMiddleware: any
+  ) {
     if (typeof idxOrBeforeMiddleware !== 'number') {
       idxOrBeforeMiddleware = this.findItemIndex(idxOrBeforeMiddleware);
     }
@@ -29,9 +37,18 @@ export class ContextMiddlewareManager<
     }
   }
 
-  public insertAfter(middleware: CommonMiddlewareUnion<T>, idxOrAfterMiddleware: number);
-  public insertAfter(middleware: CommonMiddlewareUnion<T>, idxOrAfterMiddleware: CommonMiddlewareUnion<T>);
-  public insertAfter(middleware: CommonMiddlewareUnion<T>, idxOrAfterMiddleware: any) {
+  public insertAfter(
+    middleware: CommonMiddlewareUnion<T>,
+    idxOrAfterMiddleware: number
+  );
+  public insertAfter(
+    middleware: CommonMiddlewareUnion<T>,
+    idxOrAfterMiddleware: CommonMiddlewareUnion<T>
+  );
+  public insertAfter(
+    middleware: CommonMiddlewareUnion<T>,
+    idxOrAfterMiddleware: any
+  ) {
     if (typeof idxOrAfterMiddleware !== 'number') {
       idxOrAfterMiddleware = this.findItemIndex(idxOrAfterMiddleware);
     }

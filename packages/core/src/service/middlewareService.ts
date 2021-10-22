@@ -1,22 +1,33 @@
-import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
-import { CommonMiddleware, IMiddleware, IMidwayContainer, FunctionMiddleware } from '../interface';
-const pathToRegexp = require('path-to-regexp');
+import { isClass, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import {
+  CommonMiddleware,
+  IMiddleware,
+  IMidwayContainer,
+  FunctionMiddleware,
+} from '../interface';
+import { pathToRegexp } from '../util/pathToRegexp';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
 export class MidwayMiddlewareService<T> {
-  constructor(readonly applicationContext: IMidwayContainer) {
-  }
+  constructor(readonly applicationContext: IMidwayContainer) {}
 
-  async compose(middleware: Array<CommonMiddleware<T>>) {
-    if (!Array.isArray(middleware)) throw new TypeError('Middleware stack must be an array!');
+  async compose(middleware: Array<CommonMiddleware<T>>, name?: string) {
+    if (!Array.isArray(middleware))
+      throw new TypeError('Middleware stack must be an array!');
+
+    const newMiddlewareArr = [];
+
     for (let fn of middleware) {
-      if (typeof fn !== 'function') {
-        const classMiddleware = await this.applicationContext.getAsync<IMiddleware<T>>(fn)
+      if (isClass(fn)) {
+        const classMiddleware = await this.applicationContext.getAsync<
+          IMiddleware<T>
+        >(fn as any);
         if (classMiddleware) {
           fn = classMiddleware.resolve();
           if (!classMiddleware.match && !classMiddleware.ignore) {
             // just got fn
+            newMiddlewareArr.push(fn);
           } else {
             // wrap ignore and match
             const mw = fn;
@@ -28,15 +39,19 @@ export class MidwayMiddlewareService<T> {
               if (!match(ctx)) return next();
               return mw(ctx, next);
             };
+            newMiddlewareArr.push(fn);
           }
         } else {
           throw new TypeError('Middleware must have resolve method!');
         }
+      } else {
+        newMiddlewareArr.push(fn);
       }
     }
 
     /**
      * @param {Object} context
+     * @param next
      * @return {Promise}
      * @api public
      */
@@ -46,10 +61,11 @@ export class MidwayMiddlewareService<T> {
       return dispatch(0);
 
       function dispatch(i) {
-        if (i <= index) return Promise.reject(new Error('next() called multiple times'));
+        if (i <= index)
+          return Promise.reject(new Error('next() called multiple times'));
         index = i;
-        let fn = (middleware as Array<FunctionMiddleware<T>>)[i];
-        if (i === middleware.length) fn = next;
+        let fn = (newMiddlewareArr as Array<FunctionMiddleware<T>>)[i];
+        if (i === newMiddlewareArr.length) fn = next;
         if (!fn) return Promise.resolve();
         try {
           return Promise.resolve(fn(context, dispatch.bind(null, i + 1)));
@@ -63,14 +79,17 @@ export class MidwayMiddlewareService<T> {
   }
 }
 
-function pathMatching(options) {
+export function pathMatching(options) {
   options = options || {};
-  if (options.match && options.ignore) throw new Error('options.match and options.ignore can not both present');
+  if (options.match && options.ignore)
+    throw new Error('options.match and options.ignore can not both present');
   if (!options.match && !options.ignore) return () => true;
 
-  const matchFn = options.match ? toPathMatch(options.match) : toPathMatch(options.ignore);
+  const matchFn = options.match
+    ? toPathMatch(options.match)
+    : toPathMatch(options.ignore);
 
-  return function pathMatch(ctx) {
+  return function pathMatch(ctx?) {
     const matched = matchFn(ctx);
     return options.match ? matched : !matched;
   };
@@ -93,5 +112,7 @@ function toPathMatch(pattern) {
     const matchs = pattern.map(item => toPathMatch(item));
     return ctx => matchs.some(match => match(ctx));
   }
-  throw new Error('match/ignore pattern must be RegExp, Array or String, but got ' + pattern);
+  throw new Error(
+    'match/ignore pattern must be RegExp, Array or String, but got ' + pattern
+  );
 }

@@ -1,3 +1,1 @@
-export class MidwayBaseError extends Error {
-
-}
+export class MidwayBaseError extends Error {}

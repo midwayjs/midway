@@ -51,7 +51,7 @@ export abstract class BaseFramework<
   informationService: MidwayInformationService;
 
   @Inject()
-  middlewareService: MidwayMiddlewareService;
+  middlewareService: MidwayMiddlewareService<CTX>;
 
   @Init()
   async init() {
@@ -233,7 +233,7 @@ export abstract class BaseFramework<
       },
       getMiddleware: (): ContextMiddlewareManager<CTX> => {
         return this.middlewareManager;
-      }
+      },
     };
     for (const method of whiteList) {
       delete defaultApplicationProperties[method];

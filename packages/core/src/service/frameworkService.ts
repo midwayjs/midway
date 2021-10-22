@@ -99,7 +99,11 @@ export class MidwayFrameworkService {
     });
 
     this.registerHandler(PIPELINE_IDENTIFIER, (key, meta, instance) => {
-      return new MidwayPipelineService(instance[REQUEST_OBJ_CTX_KEY]?.requestContext ?? this.applicationContext, meta.valves);
+      return new MidwayPipelineService(
+        instance[REQUEST_OBJ_CTX_KEY]?.requestContext ??
+          this.applicationContext,
+        meta.valves
+      );
     });
 
     let frameworks = listModule(FRAMEWORK_KEY);
@@ -143,7 +147,6 @@ export class MidwayFrameworkService {
       this.registerHandler(PLUGIN_KEY, (key, target) => {
         return this.mainApp[key];
       });
-
     }
 
     // some preload module init

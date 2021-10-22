@@ -8,8 +8,7 @@ export class KoaConfiguration {
   @Inject()
   framework: MidwayKoaFramework;
 
-  async onReady() {
-  }
+  async onReady() {}
 
   async onServerReady() {
     await this.framework.run();

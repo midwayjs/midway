@@ -4,7 +4,8 @@ import {
   PLUGIN_KEY,
   LOGGER_KEY,
   MidwayFrameworkType,
-  createCustomPropertyDecorator, APPLICATION_CONTEXT_KEY,
+  createCustomPropertyDecorator,
+  APPLICATION_CONTEXT_KEY,
 } from '../../';
 
 export function Plugin(identifier?: string): PropertyDecorator {

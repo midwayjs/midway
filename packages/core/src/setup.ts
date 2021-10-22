@@ -83,7 +83,9 @@ export async function initializeGlobalApplicationContext(
   await applicationContext.getAsync(MidwayAspectService, [applicationContext]);
 
   // middleware support
-  await applicationContext.getAsync(MidwayMiddlewareService, [applicationContext]);
+  await applicationContext.getAsync(MidwayMiddlewareService, [
+    applicationContext,
+  ]);
 
   // framework/config/plugin/logger/app decorator support
   await applicationContext.getAsync(MidwayFrameworkService, [

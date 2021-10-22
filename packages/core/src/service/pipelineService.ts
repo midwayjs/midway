@@ -158,8 +158,10 @@ export class PipelineContext implements IPipelineContext {
 
 export class MidwayPipelineService implements IPipelineHandler {
   // 默认的 valves (@Pipeline(['test1', 'test2']))
-  constructor(readonly applicationContext: IMidwayContainer, readonly valves?: valvesType) {
-  }
+  constructor(
+    readonly applicationContext: IMidwayContainer,
+    readonly valves?: valvesType
+  ) {}
 
   /**
    * 并行执行，使用 Promise.all
@@ -352,7 +354,8 @@ export class MidwayPipelineService implements IPipelineHandler {
       if (r.error) {
         result.success = false;
         result.error = {
-          valveName: typeof r.valveName === 'string' ? r.valveName : r.valveName.name,
+          valveName:
+            typeof r.valveName === 'string' ? r.valveName : r.valveName.name,
           message: r.error.message,
           error: r.error,
         };
