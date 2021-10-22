@@ -12,6 +12,7 @@ import { ENTITY_MODEL_KEY } from './interface';
 import { getModelForClass } from '@typegoose/typegoose';
 import * as mongo from 'mongoose';
 import { IMidwayApplication } from '@midwayjs/core';
+import { MidwayFrameworkService } from '@midwayjs/core/dist';
 
 @Configuration({
   namespace: 'typegoose',
@@ -29,17 +30,24 @@ export class TypegooseConfiguration {
   @App()
   app: IMidwayApplication;
 
+  @Inject()
+  frameworkService: MidwayFrameworkService;
+
   modelMap = new WeakMap();
 
   @Init()
   async init() {
-    this.app
-      .getApplicationContext()
-      .registerDataHandler(
+    this.frameworkService
+      .registerHandler(
         ENTITY_MODEL_KEY,
-        (key: { modelKey; connectionName }) => {
-          // return getConnection(key.connectionName).getRepository(key.modelKey);
-          return this.modelMap.get(key.modelKey);
+        (
+          propertyName,
+          meta: {
+            modelKey: any;
+            connectionName: string;
+          }
+        ) => {
+          return this.modelMap.get(meta.modelKey);
         }
       );
   }

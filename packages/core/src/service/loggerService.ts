@@ -31,7 +31,7 @@ export class MidwayLoggerService extends ServiceFactory<ILogger> {
     );
   }
 
-  protected createClient(config, name?: string) {
+  protected async createClient(config, name?: string) {
     loggers.createLogger(name, config);
   }
 

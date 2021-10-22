@@ -126,11 +126,15 @@ class ContainerConfiguration {
           `---------- end load configuration from sub package "${importPackage}" ----------`
         );
       } else if ('component' in importPackage) {
-        if (
-          (importPackage as IComponentInfo)?.enabledEnvironment?.includes(
-            this.container.get(MidwayEnvironmentService).getCurrentEnvironment()
-          )
-        ) {
+        if ((importPackage as IComponentInfo)?.enabledEnvironment) {
+          if (
+            (importPackage as IComponentInfo)?.enabledEnvironment?.includes(
+              this.container.get(MidwayEnvironmentService).getCurrentEnvironment()
+            )
+          ) {
+            this.load((importPackage as IComponentInfo).component);
+          }
+        } else {
           this.load((importPackage as IComponentInfo).component);
         }
       } else {
