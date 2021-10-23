@@ -9,6 +9,7 @@ export * from './objectDef';
 // export * from './validate';
 // export * from './rule';
 export * from './framework';
+export * from './catch';
 
 // faas
 export * from './faas/serverlessTrigger';

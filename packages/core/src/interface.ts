@@ -285,7 +285,7 @@ export interface Context {
 export type IMidwayContext<FrameworkContext = unknown> = Context & FrameworkContext;
 
 /**
- * common middleware definition
+ * Common middleware definition
  */
 
 export interface IMiddleware<T> {
@@ -297,6 +297,14 @@ export type FunctionMiddleware<T> = (context: T, next: () => Promise<any>) => an
 export type ClassMiddleware<T> = new (...args) => IMiddleware<T>;
 export type CommonMiddleware<T> = ClassMiddleware<T> | FunctionMiddleware<T>;
 export type CommonMiddlewareUnion<T> = CommonMiddleware<T> | Array<CommonMiddleware<T>>;
+
+/**
+ * Common Exception Filter definition
+ */
+export interface IExceptionFilter<T> {
+  catch(err: Error, ctx: T): any;
+}
+export type CommonExceptionFilterUnion<T> = (new (...args) => IExceptionFilter<T>) | Array<new (...args) => IExceptionFilter<T>>
 
 export interface IMidwayBaseApplication<T extends IMidwayContext = IMidwayContext> {
   getBaseDir(): string;
@@ -329,15 +337,20 @@ export interface IMidwayBaseApplication<T extends IMidwayContext = IMidwayContex
 
   /**
    * add global filter to app
-   * @param middleware
-   * @param name
+   * @param Middleware
    */
-  useMiddleware(middleware: CommonMiddlewareUnion<T>): void;
+  useMiddleware(Middleware: CommonMiddlewareUnion<T>): void;
 
   /**
    * get global middleware
    */
   getMiddleware(): ContextMiddlewareManager<T>;
+
+  /**
+   * add exception filter
+   * @param Filter
+   */
+  useFilter(Filter: CommonExceptionFilterUnion<T>): void;
 }
 
 export type IMidwayApplication<T extends IMidwayContext = IMidwayContext, FrameworkApplication = unknown> = IMidwayBaseApplication<T> & FrameworkApplication;
@@ -378,6 +391,8 @@ export interface IMidwayFramework<APP extends IMidwayApplication, T extends ICon
   createLogger(name: string, options: LoggerOptions): ILogger;
   getProjectName(): string;
   getDefaultContextLoggerClass(): any;
+  useMiddleware(Middleware: CommonMiddlewareUnion<ReturnType<APP['createAnonymousContext']>>);
+  useFilter(Filter: CommonExceptionFilterUnion<ReturnType<APP['createAnonymousContext']>>);
 }
 
 export const MIDWAY_LOGGER_WRITEABLE_DIR = 'MIDWAY_LOGGER_WRITEABLE_DIR';

@@ -248,7 +248,6 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<
       if (result) {
         ctx.body = result;
       }
-      // TODO error handler
     });
 
     this.defineApplicationProperties({

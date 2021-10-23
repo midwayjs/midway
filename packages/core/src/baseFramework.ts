@@ -7,6 +7,7 @@ import {
   IMidwayContext,
   IMidwayFramework,
   MidwayProcessTypeEnum,
+  CommonExceptionFilterUnion,
 } from './interface';
 import {
   Inject,
@@ -22,6 +23,7 @@ import { MidwayInformationService } from './service/informationService';
 import { MidwayLoggerService } from './service/loggerService';
 import { ContextMiddlewareManager } from './util/middlewareManager';
 import { MidwayMiddlewareService } from './service/middlewareService';
+import { ExceptionFilterManager } from './util/exceptionFilterManager';
 
 export abstract class BaseFramework<
   APP extends IMidwayApplication<CTX>,
@@ -36,7 +38,8 @@ export abstract class BaseFramework<
   public app: APP;
   protected defaultContext = {};
   protected BaseContextLoggerClass: any;
-  protected middlewareManager = new ContextMiddlewareManager();
+  protected middlewareManager = new ContextMiddlewareManager<CTX>();
+  protected exceptionFilterManager = new ExceptionFilterManager<CTX>();
   private composeMiddleware = null;
 
   @Inject()
@@ -235,6 +238,9 @@ export abstract class BaseFramework<
       getMiddleware: (): ContextMiddlewareManager<CTX> => {
         return this.middlewareManager;
       },
+      useFilter: (Filter: CommonExceptionFilterUnion<CTX>) => {
+        this.exceptionFilterManager.useFilter(Filter);
+      }
     };
     for (const method of whiteList) {
       delete defaultApplicationProperties[method];
@@ -266,9 +272,19 @@ export abstract class BaseFramework<
 
   protected async getMiddleware() {
     if (!this.composeMiddleware) {
+      this.middlewareManager.insertFirst(async (ctx, next) => {
+        let result = undefined;
+        try {
+          result = await next();
+        } catch (err) {
+          result = await this.exceptionFilterManager.run(err, ctx);
+        }
+        return result;
+      });
       this.composeMiddleware = await this.middlewareService.compose(
         this.middlewareManager
       );
+      await this.exceptionFilterManager.init(this.applicationContext);
     }
     return this.composeMiddleware;
   }
@@ -295,5 +311,13 @@ export abstract class BaseFramework<
 
   public getDefaultContextLoggerClass(): any {
     return MidwayContextLogger;
+  }
+
+  public useMiddleware(Middleware: CommonMiddlewareUnion<CTX>) {
+    this.middlewareManager.insertLast(Middleware);
+  }
+
+  public useFilter(Filter: CommonExceptionFilterUnion<CTX>) {
+    this.exceptionFilterManager.useFilter(Filter);
   }
 }

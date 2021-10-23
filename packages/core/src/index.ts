@@ -33,3 +33,4 @@ export * from './util/fileDetector';
 export * from './util/containerUtil';
 export * from './util/webGenerator';
 export * from './setup';
+export * from './exception';
