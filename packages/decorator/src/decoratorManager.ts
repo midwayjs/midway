@@ -7,7 +7,9 @@ import {
   IModuleStore,
 } from './interface';
 import {
-  INJECT_CUSTOM_TAG,
+  INJECT_CUSTOM_METHOD,
+  INJECT_CUSTOM_PARAM,
+  INJECT_CUSTOM_PROPERTY,
   INJECT_TAG,
   OBJ_DEF_CLS,
   TAGGED_CLS,
@@ -819,6 +821,7 @@ export function saveProviderId(identifier: ObjectIdentifier, target: any) {
 
   return target;
 }
+
 /**
  * get provider id from module
  * @param module
@@ -847,6 +850,7 @@ export function getProviderUUId(module): string {
     return metaData.uuid;
   }
 }
+
 /**
  * use @Provide decorator or not
  * @param target class
@@ -893,7 +897,7 @@ export function createCustomPropertyDecorator(
 ): PropertyDecorator {
   return function (target: any, propertyName: string): void {
     attachClassMetadata(
-      INJECT_CUSTOM_TAG,
+      INJECT_CUSTOM_PROPERTY,
       {
         propertyName,
         key: decoratorKey,
@@ -901,6 +905,34 @@ export function createCustomPropertyDecorator(
       },
       target,
       propertyName
+    );
+  };
+}
+
+export function createCustomMethodDecorator(decoratorKey: string, metadata: any): MethodDecorator {
+  return function (target: any, methodName: string, descriptor) {
+    attachClassMetadata(
+      INJECT_CUSTOM_METHOD,
+      metadata,
+      target,
+      methodName
+    );
+  };
+}
+
+export function createCustomParamDecorator(decoratorKey: string, metadata: any): ParameterDecorator {
+  return function (target: any, methodName: string, parameterIndex: number) {
+    // const parameterName = getParamNames(target[methodName])[parameterIndex];
+    attachPropertyDataToClass(
+      INJECT_CUSTOM_PARAM,
+      {
+        key: decoratorKey,
+        parameterIndex,
+        // parameterName,
+        metadata,
+      },
+      target,
+      methodName
     );
   };
 }

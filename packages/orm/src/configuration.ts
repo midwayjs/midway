@@ -47,7 +47,7 @@ export class OrmConfiguration implements ILifeCycle {
 
   @Init()
   async init() {
-    this.frameworkService.registerHandler(
+    this.frameworkService.registerPropertyHandler(
       ORM_MODEL_KEY,
       (
         propertyName,

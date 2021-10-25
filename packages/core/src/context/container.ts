@@ -18,9 +18,9 @@ import {
   getPropertyInject,
   getObjectDefinition,
   getClassExtendedMetadata,
-  INJECT_CUSTOM_TAG,
+  INJECT_CUSTOM_PROPERTY,
   getProviderName,
-  IModuleStore,
+  IModuleStore, INJECT_CUSTOM_METHOD, getPropertyMetadata, savePropertyMetadata, INJECT_CUSTOM_PARAM,
 } from '@midwayjs/decorator';
 import { FunctionalConfiguration } from '../functional/configuration';
 import * as util from 'util';
@@ -34,7 +34,7 @@ import {
   ObjectLifeCycleEvent,
   REQUEST_CTX_KEY,
 } from '../interface';
-import { FUNCTION_INJECT_KEY } from '../common/constants';
+import { FUNCTION_INJECT_KEY, METHOD_ASPECT_KEY } from '../common/constants';
 import { ObjectDefinition } from '../definitions/objectDefinition';
 import { FunctionDefinition } from '../definitions/functionDefinition';
 import {
@@ -363,7 +363,7 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     }
 
     // inject custom properties
-    const customProps = getClassExtendedMetadata(INJECT_CUSTOM_TAG, target);
+    const customProps = getClassExtendedMetadata(INJECT_CUSTOM_PROPERTY, target);
 
     for (const p in customProps) {
       const propertyMeta = customProps[p] as {
@@ -372,6 +372,27 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
         metadata: any;
       };
       definition.handlerProps.push(propertyMeta);
+    }
+
+    // inject custom method decorator
+    const customMethodMetadata = getClassMetadata(INJECT_CUSTOM_METHOD, target);
+
+    if (customMethodMetadata) {
+      const { method } = customMethodMetadata;
+      // 判断是否被拦截过
+      if (!getPropertyMetadata(METHOD_ASPECT_KEY,  target, method)) {
+        this.registerAspectMethod(target, method);
+      }
+    }
+
+    const customParamMetadata = getClassMetadata(INJECT_CUSTOM_PARAM, target);
+
+    if (customParamMetadata) {
+      const { method } = customParamMetadata;
+      // 判断是否被拦截过
+      if (!getPropertyMetadata(METHOD_ASPECT_KEY,  target, method)) {
+        this.registerAspectMethod(target, method);
+      }
     }
 
     // @async, @init, @destroy @scope
@@ -396,6 +417,17 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     }
 
     this.registry.registerDefinition(definition.id, definition);
+  }
+
+  protected registerAspectMethod(target, method) {
+    target.prototype[method] = (...args) => {
+      const runRealMethod = this.objectCreateEventTarget.emit('', {});
+      if (runRealMethod !== false) {
+        const newArgs = this.objectCreateEventTarget.emit('', {});
+        return target.prototype[method].call(this, ...newArgs);
+      }
+    }
+    savePropertyMetadata(METHOD_ASPECT_KEY, true, target, method);
   }
 
   protected bindModule(module: any, options: ObjectDefinitionOptions = {}) {

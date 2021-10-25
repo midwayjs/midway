@@ -1,7 +1,7 @@
 import {
   Logger,
   getClassMetadata,
-  INJECT_CUSTOM_TAG,
+  INJECT_CUSTOM_PROPERTY,
 } from '../../src';
 
 class Test {
@@ -14,7 +14,7 @@ class Test {
 
 describe('/test/framework/logger.test.ts', () => {
   it('logger decorator should be ok', () => {
-    let data = getClassMetadata(INJECT_CUSTOM_TAG, Test);
+    let data = getClassMetadata(INJECT_CUSTOM_PROPERTY, Test);
     expect(data).toMatchSnapshot();
   });
 });

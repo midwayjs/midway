@@ -1,4 +1,5 @@
 export const FUNCTION_INJECT_KEY = 'midway:function_inject_key';
+export const METHOD_ASPECT_KEY = 'midway:method_inspect_key';
 /**
  * 静态参数
  *

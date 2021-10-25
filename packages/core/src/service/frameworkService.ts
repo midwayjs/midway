@@ -38,7 +38,7 @@ export class MidwayFrameworkService {
   @Inject()
   loggerService: MidwayLoggerService;
 
-  handlerMap = new Map<string, HandlerFunction>();
+  propertyHandlerMap = new Map<string, HandlerFunction>();
 
   constructor(
     readonly applicationContext: IMidwayContainer,
@@ -63,7 +63,7 @@ export class MidwayFrameworkService {
     // add custom property decorator listener
     this.applicationContext.onObjectCreated((instance, options) => {
       if (
-        this.handlerMap.size > 0 &&
+        this.propertyHandlerMap.size > 0 &&
         Array.isArray(options.definition.handlerProps)
       ) {
         // 已经预先在 bind 时处理
@@ -78,12 +78,12 @@ export class MidwayFrameworkService {
     });
 
     // register @ApplicationContext
-    this.registerHandler(APPLICATION_CONTEXT_KEY, (propertyName, mete) => {
+    this.registerPropertyHandler(APPLICATION_CONTEXT_KEY, (propertyName, mete) => {
       return this.applicationContext;
     });
 
     // register base config hook
-    this.registerHandler(CONFIG_KEY, (propertyName, meta) => {
+    this.registerPropertyHandler(CONFIG_KEY, (propertyName, meta) => {
       if (meta.identifier === ALL) {
         return this.configService.getConfiguration();
       } else {
@@ -94,11 +94,11 @@ export class MidwayFrameworkService {
     });
 
     // register @Logger decorator handler
-    this.registerHandler(LOGGER_KEY, (propertyName, meta) => {
+    this.registerPropertyHandler(LOGGER_KEY, (propertyName, meta) => {
       return this.loggerService.getLogger(meta.identifier ?? propertyName);
     });
 
-    this.registerHandler(PIPELINE_IDENTIFIER, (key, meta, instance) => {
+    this.registerPropertyHandler(PIPELINE_IDENTIFIER, (key, meta, instance) => {
       return new MidwayPipelineService(
         instance[REQUEST_OBJ_CTX_KEY]?.requestContext ??
           this.applicationContext,
@@ -136,7 +136,7 @@ export class MidwayFrameworkService {
       this.mainApp = this.mainFramework.getApplication();
 
       // register @App decorator handler
-      this.registerHandler(APPLICATION_KEY, (propertyName, mete) => {
+      this.registerPropertyHandler(APPLICATION_KEY, (propertyName, mete) => {
         if (mete.type) {
           return this.globalAppMap.get(mete.type as any);
         } else {
@@ -144,7 +144,7 @@ export class MidwayFrameworkService {
         }
       });
 
-      this.registerHandler(PLUGIN_KEY, (key, target) => {
+      this.registerPropertyHandler(PLUGIN_KEY, (key, target) => {
         return this.mainApp[key];
       });
     }
@@ -178,8 +178,8 @@ export class MidwayFrameworkService {
   }
 
   private getHandler(key: string) {
-    if (this.handlerMap.has(key)) {
-      return this.handlerMap.get(key);
+    if (this.propertyHandlerMap.has(key)) {
+      return this.propertyHandlerMap.get(key);
     }
   }
 
@@ -191,8 +191,17 @@ export class MidwayFrameworkService {
     return this.mainFramework;
   }
 
-  public registerHandler(key: string, fn: HandlerFunction) {
-    this.handlerMap.set(key, fn);
+  public registerPropertyHandler(key: string, fn: HandlerFunction) {
+    this.propertyHandlerMap.set(key, fn);
+  }
+
+
+  public registerMethodHandler(key: string, fn: HandlerFunction) {
+
+  }
+
+  public registerParamHandler(key: string, fn: HandlerFunction) {
+
   }
 
   public getFramework(type: MidwayFrameworkType) {

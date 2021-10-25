@@ -67,8 +67,12 @@ export const NAMED_TAG = 'named';
 
 // The name of the target at design time
 export const INJECT_TAG = 'inject';
-// The name inject custom decorator with resolver
-export const INJECT_CUSTOM_TAG = 'inject_custom_tag';
+// The name inject custom property decorator with resolver
+export const INJECT_CUSTOM_PROPERTY = 'inject_custom_property';
+// The name inject custom param decorator with resolver
+export const INJECT_CUSTOM_METHOD = 'inject_custom_method';
+// The name inject custom param decorator with resolver
+export const INJECT_CUSTOM_PARAM = 'inject_custom_param';
 //
 // // used to store constructor arguments tags
 // export const TAGGED = 'injection:tagged';

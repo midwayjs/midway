@@ -38,7 +38,7 @@ export class TypegooseConfiguration {
   @Init()
   async init() {
     this.frameworkService
-      .registerHandler(
+      .registerPropertyHandler(
         ENTITY_MODEL_KEY,
         (
           propertyName,
