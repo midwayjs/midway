@@ -1,0 +1,40 @@
+{
+  "name": "@midwayjs/passport",
+  "description": "midway passport component",
+  "version": "0.0.1-alpha.15",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "node --require=ts-node/register ../../node_modules/jest/bin/jest.js",
+    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --coverage --forceExit"
+  },
+  "keywords": [
+    "midway",
+    "authorization",
+    "passport"
+  ],
+  "author": "Nawbc",
+  "license": "MIT",
+  "devDependencies": {
+    "@midwayjs/core": "^2.13.4",
+    "@midwayjs/decorator": "^2.13.2",
+    "@midwayjs/express": "^2.13.4",
+    "@midwayjs/koa": "^2.13.4",
+    "@midwayjs/mock": "^2.13.4",
+    "@midwayjs/web": "^2.13.4",
+    "@types/koa-passport": "^4.0.2",
+    "@types/passport": "^1.0.7",
+    "koa-passport": "^4.1.4",
+    "passport": "^0.5.0",
+    "passport-local": "^1.0.0"
+  },
+  "peerDependencies": {
+    "koa-passport": "^4.1.4",
+    "passport": "^0.5.0"
+  }
+}
