@@ -3,18 +3,23 @@ import {
   Scope,
   ScopeEnum,
   Init,
-  CONFIG_KEY,
+  Inject,
+  MidwayFrameworkType,
+  listModule,
+  listPreloadModule,
+  savePropertyMetadata,
+  getClassMetadata,
+  getPropertyMetadata,
   ALL,
   LOGGER_KEY,
-  Inject,
-  listModule,
+  CONFIG_KEY,
   FRAMEWORK_KEY,
-  MidwayFrameworkType,
   APPLICATION_KEY,
-  listPreloadModule,
   PLUGIN_KEY,
   PIPELINE_IDENTIFIER,
   APPLICATION_CONTEXT_KEY,
+  INJECT_CUSTOM_METHOD,
+  INJECT_CUSTOM_PARAM,
 } from '@midwayjs/decorator';
 import {
   HandlerFunction,
@@ -28,6 +33,7 @@ import { MidwayConfigService } from './configService';
 import { MidwayLoggerService } from './loggerService';
 import { BaseFramework } from '../baseFramework';
 import { MidwayPipelineService } from './pipelineService';
+import { METHOD_ASPECT_KEY } from '../common/constants';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -39,6 +45,8 @@ export class MidwayFrameworkService {
   loggerService: MidwayLoggerService;
 
   propertyHandlerMap = new Map<string, HandlerFunction>();
+  methodHandlerMap = new Map<string, HandlerFunction>();
+  paramHandlerMap = new Map<string, HandlerFunction>();
 
   constructor(
     readonly applicationContext: IMidwayContainer,
@@ -60,6 +68,30 @@ export class MidwayFrameworkService {
 
   @Init()
   async init() {
+    this.applicationContext.onAfterBind((target, options) => {
+      // inject custom method decorator
+      const customMethodMetadata = getClassMetadata(INJECT_CUSTOM_METHOD, target);
+
+      if (customMethodMetadata) {
+        const { method } = customMethodMetadata;
+        // 判断是否被拦截过
+        if (!getPropertyMetadata(METHOD_ASPECT_KEY,  target, method)) {
+          this.registerAspectMethod(target, method);
+        }
+      }
+
+      const customParamMetadata = getClassMetadata(INJECT_CUSTOM_PARAM, target);
+
+      if (customParamMetadata) {
+        const { method } = customParamMetadata;
+        // 判断是否被拦截过
+        if (!getPropertyMetadata(METHOD_ASPECT_KEY,  target, method)) {
+          this.registerAspectMethod(target, method);
+        }
+      }
+
+    });
+
     // add custom property decorator listener
     this.applicationContext.onObjectCreated((instance, options) => {
       if (
@@ -195,18 +227,29 @@ export class MidwayFrameworkService {
     this.propertyHandlerMap.set(key, fn);
   }
 
-
-  public registerMethodHandler(key: string, fn: HandlerFunction) {
-
+  public registerMethodHandler(target: any, method: string, key: string, fn: HandlerFunction) {
+    this.methodHandlerMap.set(key, fn);
   }
 
   public registerParamHandler(key: string, fn: HandlerFunction) {
-
+    this.paramHandlerMap.set(key, fn);
   }
 
   public getFramework(type: MidwayFrameworkType) {
     return this.globalFrameworkMap.get(type);
   }
+
+  protected registerAspectMethod(target, method) {
+    target.prototype[method] = (...args) => {
+      const runRealMethod = this.methodHandlerMap.get('default')('', {}, this);
+      if (runRealMethod !== false) {
+        const newArgs =this.paramHandlerMap.get('default')('', {}, this);
+        return target.prototype[method].call(this, ...newArgs);
+      }
+    }
+    savePropertyMetadata(METHOD_ASPECT_KEY, true, target, method);
+  }
+
 }
 
 async function initializeFramework(

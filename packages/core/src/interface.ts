@@ -35,6 +35,7 @@ export interface IObjectFactory {
 }
 
 export enum ObjectLifeCycleEvent {
+  AFTER_BIND = 'afterBind',
   BEFORE_CREATED = 'beforeObjectCreated',
   AFTER_CREATED = 'afterObjectCreated',
   AFTER_INIT = 'afterObjectInit',
@@ -42,6 +43,15 @@ export enum ObjectLifeCycleEvent {
 }
 
 export interface IObjectLifeCycle {
+  onAfterBind(
+    fn: (
+      Clzz: any,
+      options: {
+        context: IMidwayContainer;
+        definition: IObjectDefinition;
+      }
+    ) => void
+  );
   onBeforeObjectCreated(
     fn: (
       Clzz: any,
