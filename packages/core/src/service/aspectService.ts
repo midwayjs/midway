@@ -9,7 +9,7 @@ import {
   Provide,
   Scope,
   ScopeEnum,
-  Init,
+  Init, JoinPoint,
 } from '@midwayjs/decorator';
 import * as pm from 'picomatch';
 import { IAspectService, IMidwayContainer } from '../interface';
@@ -210,6 +210,88 @@ export class MidwayAspectService implements IAspectService {
         };
 
         methodAspectCollection.push(fn);
+      }
+    }
+  }
+
+  public interceptPrototypeMethod(Clz: new (...args) => any, methodName: string, aspectObject: IMethodAspect) {
+    let originMethod = Clz.prototype[methodName];
+
+    if (isAsyncFunction(Clz.prototype[methodName])) {
+      Clz.prototype[methodName] = async function(...args) {
+        let error, result;
+        const newProceed = (...args) => {
+          return originMethod.apply(this, args);
+        };
+        const joinPoint = {
+          methodName,
+          target: this,
+          args: args,
+          proceed: newProceed,
+        } as JoinPoint;
+        try {
+          await aspectObject.before?.(joinPoint);
+          if (aspectObject.around) {
+            result = await aspectObject.around(joinPoint);
+          } else {
+            result = await originMethod.call(this, ...joinPoint.args);
+          }
+          joinPoint.proceed = undefined;
+          const resultTemp = await aspectObject.afterReturn?.(
+            joinPoint,
+            result
+          );
+          result = typeof resultTemp === 'undefined' ? result : resultTemp;
+          return result;
+        } catch (err) {
+          joinPoint.proceed = undefined;
+          error = err;
+          if (aspectObject.afterThrow) {
+            await aspectObject.afterThrow(joinPoint, error);
+          } else {
+            throw err;
+          }
+        } finally {
+          await aspectObject.after?.(joinPoint, result, error);
+        }
+      }
+    } else {
+      Clz.prototype[methodName] = function(...args) {
+        let error, result;
+        const newProceed = (...args) => {
+          return originMethod.apply(this, args);
+        };
+        const joinPoint = {
+          methodName,
+          target: this,
+          args: args,
+          proceed: newProceed,
+        } as JoinPoint;
+        try {
+          aspectObject.before?.(joinPoint);
+          if (aspectObject.around) {
+            result = aspectObject.around(joinPoint);
+          } else {
+            result = originMethod.call(this, ...joinPoint.args);
+          }
+          joinPoint.proceed = undefined;
+          const resultTemp = aspectObject.afterReturn?.(
+            joinPoint,
+            result
+          );
+          result = typeof resultTemp === 'undefined' ? result : resultTemp;
+          return result;
+        } catch (err) {
+          joinPoint.proceed = undefined;
+          error = err;
+          if (aspectObject.afterThrow) {
+            aspectObject.afterThrow(joinPoint, error);
+          } else {
+            throw err;
+          }
+        } finally {
+          aspectObject.after?.(joinPoint, result, error);
+        }
       }
     }
   }
