@@ -8,11 +8,10 @@
     "dist/**/*.js",
     "dist/**/*.d.ts"
   ],
-  "dependencies": {
-    "@midwayjs/core": "^3.0.0-alpha.42",
-    "@midwayjs/decorator": "^3.0.0-alpha.42"
-  },
+  "dependencies": {},
   "devDependencies": {
+    "@midwayjs/core": "^3.0.0-alpha.42",
+    "@midwayjs/decorator": "^3.0.0-alpha.42",
     "@midwayjs/mock": "^3.0.0-alpha.42",
     "@midwayjs/serverless-fc-starter": "^3.0.0-alpha.42",
     "@midwayjs/serverless-scf-starter": "^3.0.0-alpha.42"

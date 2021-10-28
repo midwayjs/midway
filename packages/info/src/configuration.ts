@@ -5,7 +5,4 @@ import { join } from 'path';
   namespace: 'info',
   importConfigs: [join(__dirname, './config.default')],
 })
-export class AutoConfiguration {
-  async onReady(container) {
-  }
-}
+export class AutoConfiguration {}

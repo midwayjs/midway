@@ -1,7 +1,7 @@
-import { Provide, Scope, ScopeEnum, Inject, App } from '@midwayjs/decorator';
-import { MidwayInformationService } from '@midwwayjs/core';
+import { Provide, Scope, ScopeEnum, Inject, App, ApplicationContext } from '@midwayjs/decorator';
+import { MidwayInformationService, IMidwayContainer } from '@midwayjs/core';
 import { InfoValueType, TypeInfo } from './interface';
-import {  bitToMB, renderToHtml, safeRequire } from './utils';
+import {  bitToMB, renderToHtml, safeJson, safeRequire } from './utils';
 import { hostname, homedir, cpus, networkInterfaces, uptime, totalmem, } from 'os';
 import { join } from 'path';
 
@@ -15,20 +15,25 @@ export class InfoService {
   @App()
   app;
 
+  @ApplicationContext()
+  container: IMidwayContainer;
+
   info(infoValueType?: InfoValueType) {
     const info: TypeInfo[] = [];
     info.push(this.projectInfo());
     info.push(this.systemInfo());
     info.push(this.resourceOccupationInfo());
     info.push(this.softwareInfo());
+    info.push(this.midwayConfig());
+    info.push(this.midwayService());
     info.push(this.timeInfo());
     info.push(this.envInfo());
     info.push(this.dependenciesInfo());
     info.push(this.networkInfo());
-    if (infoValueType === InfoValueType.JSON) {
-      return info;
+    if (infoValueType === InfoValueType.HTML) {
+      return renderToHtml(info);
     }
-    return renderToHtml(info);
+    return info;
   }
 
   projectInfo(): TypeInfo {
@@ -159,6 +164,34 @@ export class InfoService {
     });
     return {
       type: 'Dependencies',
+      info,
+    };
+  }
+
+  midwayService() {
+    const info = {};
+    if (this.container?.registry) {
+      for(const item of (this.container as any).registry) {
+        const [key, value] = item;
+        const name = value ? (value?.name || value) : typeof value;
+        info[key] = `${value?.namespace ? `${value?.namespace}:` : ''}${name}${value?.scope ? ` [${value?.scope}]` : ''}`
+      }
+    }
+    
+    return {
+      type: 'Midway Service',
+      info,
+    };
+  }
+
+  midwayConfig() {
+    let info = {};
+    const config = this.app.getConfig() || {};
+    Object.keys(config).forEach(key => {
+      info[key] = safeJson(config[key]);
+    })
+    return {
+      type: 'Midway Config',
       info,
     };
   }
