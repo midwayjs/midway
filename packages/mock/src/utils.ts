@@ -189,7 +189,7 @@ export async function createLightApp(
 function transformFrameworkToConfiguration<
   T extends IMidwayFramework<any, any>
 >(Framework: any): new () => any {
-  let CustomFramework;
+  let CustomFramework = Framework;
   if (typeof Framework === 'string') {
     const frameworkModule = safeRequire(Framework);
     CustomFramework = frameworkModule.Framework;

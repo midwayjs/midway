@@ -53,17 +53,19 @@ export class MidwayDecoratorService {
         metadata: any;
       }> = getClassMetadata(INJECT_CUSTOM_METHOD, Clzz);
 
-      for (const meta of metadataList) {
-        const { propertyName, key, metadata } = meta;
-        if (!this.aspectMethodDecoratorMap.has(key)) {
-          this.aspectMethodDecoratorMap.set(key, []);
+      if (metadataList) {
+        for (const meta of metadataList) {
+          const { propertyName, key, metadata } = meta;
+          if (!this.aspectMethodDecoratorMap.has(key)) {
+            this.aspectMethodDecoratorMap.set(key, []);
+          }
+          const mappings = this.aspectMethodDecoratorMap.get(key);
+          mappings.push({
+            clz: Clzz,
+            methodName: propertyName,
+            metadata,
+          });
         }
-        const mappings = this.aspectMethodDecoratorMap.get(key);
-        mappings.push({
-          clz: Clzz,
-          methodName: propertyName,
-          metadata,
-        });
       }
     });
   }
