@@ -6,7 +6,7 @@ import {
   getClassExtendedMetadata,
   JoinPoint,
 } from '@midwayjs/decorator';
-import { MidwayAspectService } from '@midwayjs/core';
+import { MidwayDecoratorService } from '@midwayjs/core';
 import { RULES_KEY, VALIDATE_KEY } from './constants';
 import * as Joi from 'joi';
 import { plainToClass } from 'class-transformer';
@@ -16,11 +16,11 @@ import { plainToClass } from 'class-transformer';
 })
 export class ValidateConfiguration {
   @Inject()
-  aspectService: MidwayAspectService;
+  decoratorService: MidwayDecoratorService;
 
   @Init()
   async init() {
-    this.aspectService.registerMethodDecorator(
+    this.decoratorService.registerMethodHandler(
       VALIDATE_KEY,
       (target, propertyKey, metadata) => {
         // get param types from method

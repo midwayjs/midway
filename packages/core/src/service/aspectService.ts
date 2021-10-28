@@ -85,7 +85,7 @@ export class MidwayAspectService {
   public interceptPrototypeMethod(
     Clz: new (...args) => any,
     methodName: string,
-    aspectObject: IMethodAspect
+    aspectObject: IMethodAspect | (() => IMethodAspect)
   ) {
     const originMethod = Clz.prototype[methodName];
 
@@ -101,6 +101,11 @@ export class MidwayAspectService {
           args: args,
           proceed: newProceed,
         } as JoinPoint;
+
+        if (typeof aspectObject === 'function') {
+          aspectObject = aspectObject();
+        }
+
         try {
           await aspectObject.before?.(joinPoint);
           if (aspectObject.around) {
@@ -139,6 +144,11 @@ export class MidwayAspectService {
           args: args,
           proceed: newProceed,
         } as JoinPoint;
+
+        if (typeof aspectObject === 'function') {
+          aspectObject = aspectObject();
+        }
+
         try {
           aspectObject.before?.(joinPoint);
           if (aspectObject.around) {

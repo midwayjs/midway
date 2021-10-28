@@ -10,8 +10,8 @@ import {
   extractKoaLikeValue,
   IMiddleware,
   IMidwayBootstrapOptions,
+  MidwayDecoratorService,
   MidwayEnvironmentService,
-  MidwayFrameworkService,
   MidwayFrameworkType,
   REQUEST_OBJ_CTX_KEY,
   RouterInfo,
@@ -55,7 +55,7 @@ export class MidwayFaaSFramework extends BaseFramework<
   environmentService: MidwayEnvironmentService;
 
   @Inject()
-  frameworkService: MidwayFrameworkService;
+  decoratorService: MidwayDecoratorService;
 
   async applicationInitialize(options: IMidwayBootstrapOptions) {
     this.globalMiddleware = this.configurationOptions.middleware || [];
@@ -299,14 +299,14 @@ export class MidwayFaaSFramework extends BaseFramework<
   }
 
   private registerDecorator() {
-    this.frameworkService.registerPropertyHandler(
+    this.decoratorService.registerPropertyHandler(
       PLUGIN_KEY,
       (key, meta, target) => {
         return target?.[REQUEST_OBJ_CTX_KEY]?.[key] || this.app[key];
       }
     );
 
-    this.frameworkService.registerPropertyHandler(
+    this.decoratorService.registerPropertyHandler(
       LOGGER_KEY,
       (key, meta, target) => {
         return (

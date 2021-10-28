@@ -11,8 +11,7 @@ import * as mongoose from '@midwayjs/mongoose';
 import { ENTITY_MODEL_KEY } from './interface';
 import { getModelForClass } from '@typegoose/typegoose';
 import * as mongo from 'mongoose';
-import { IMidwayApplication } from '@midwayjs/core';
-import { MidwayFrameworkService } from '@midwayjs/core/dist';
+import { IMidwayApplication, MidwayDecoratorService } from '@midwayjs/core';
 
 @Configuration({
   namespace: 'typegoose',
@@ -31,13 +30,13 @@ export class TypegooseConfiguration {
   app: IMidwayApplication;
 
   @Inject()
-  frameworkService: MidwayFrameworkService;
+  decoratorService: MidwayDecoratorService;
 
   modelMap = new WeakMap();
 
   @Init()
   async init() {
-    this.frameworkService.registerPropertyHandler(
+    this.decoratorService.registerPropertyHandler(
       ENTITY_MODEL_KEY,
       (
         propertyName,

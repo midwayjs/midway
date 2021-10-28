@@ -40,7 +40,7 @@ describe('/test/service/decoratorService.test.ts', () => {
 
     container.bindClass(A);
 
-    decoratorService.registerMethodDecorator('aabbcc', (target, method, metadata) => {
+    decoratorService.registerMethodHandler('aabbcc', (target, method, metadata) => {
 
       return {
         afterReturn: (joinPoint: JoinPoint, result: string) => {
@@ -49,7 +49,7 @@ describe('/test/service/decoratorService.test.ts', () => {
       }
     });
 
-    decoratorService.registerMethodDecorator('aabbccdd', (target, method, metadata) => {
+    decoratorService.registerMethodHandler('aabbccdd', (target, method, metadata) => {
       return {
         afterReturn: (joinPoint: JoinPoint, result: string) => {
           return result + ' ' + metadata.name;
