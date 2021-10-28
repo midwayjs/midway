@@ -2,7 +2,7 @@ import {
   ObjectIdentifier,
   IManagedInstance,
   ObjectDefinitionOptions,
-  MidwayFrameworkType
+  MidwayFrameworkType, IMethodAspect
 } from '@midwayjs/decorator';
 import { ILogger, LoggerOptions } from '@midwayjs/logger';
 import * as EventEmitter from 'events';
@@ -200,6 +200,9 @@ export type HandlerFunction = (
    */
   meta: any,
   instance: any) => any;
+
+export type MethodHandlerFunction = (target: new (...args) => any, methodName: string, metadata: any) => IMethodAspect;
+export type ParameterHandlerFunction = (target: new (...args) => any, methodName: string, metadata: any, originArgs: Array<any>, parameterIndex: number) => IMethodAspect;
 
 export interface IIdentifierRelationShip {
   saveClassRelation(module: any, namespace?: string);

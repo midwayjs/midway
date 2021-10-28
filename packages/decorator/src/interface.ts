@@ -3,6 +3,7 @@ import { RequestHandler } from 'express';
 
 export type MiddlewareParamArray = Array<Middleware | RequestHandler | string>;
 export type ObjectIdentifier = string | Symbol;
+export type GroupModeType = 'one' | 'multi';
 
 export enum ScopeEnum {
   Singleton = 'Singleton',

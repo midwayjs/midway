@@ -5,6 +5,7 @@ import {
   TagClsMetadata,
   TagPropsMetadata,
   IModuleStore,
+  GroupModeType,
 } from './interface';
 import {
   INJECT_CUSTOM_METHOD,
@@ -141,7 +142,8 @@ export class DecoratorManager extends Map implements IModuleStore {
     target: any,
     dataKey: string,
     data: any,
-    groupBy?: string
+    groupBy?: string,
+    groupMode: GroupModeType = 'one'
   ) {
     // filter Object.create(null)
     if (typeof target === 'object' && target.constructor) {
@@ -163,7 +165,15 @@ export class DecoratorManager extends Map implements IModuleStore {
       }
     }
     if (groupBy) {
-      m.get(dataKey)[groupBy] = data;
+      if (groupMode === 'one') {
+        m.get(dataKey)[groupBy] = data;
+      } else {
+        if (m.get(dataKey)[groupBy]) {
+          m.get(dataKey)[groupBy].push(data);
+        } else {
+          m.get(dataKey)[groupBy] = [data];
+        }
+      }
     } else {
       m.get(dataKey).push(data);
     }
@@ -237,7 +247,8 @@ export class DecoratorManager extends Map implements IModuleStore {
     data,
     target,
     propertyName?: string,
-    groupBy?: string
+    groupBy?: string,
+    groupMode?: GroupModeType
   ) {
     if (propertyName) {
       const dataKey = DecoratorManager.getDecoratorMethod(
@@ -249,7 +260,8 @@ export class DecoratorManager extends Map implements IModuleStore {
         target,
         dataKey,
         data,
-        groupBy
+        groupBy,
+        groupMode
       );
     } else {
       const dataKey = DecoratorManager.getDecoratorClassKey(decoratorNameKey);
@@ -258,7 +270,8 @@ export class DecoratorManager extends Map implements IModuleStore {
         target,
         dataKey,
         data,
-        groupBy
+        groupBy,
+        groupMode
       );
     }
   }
@@ -448,14 +461,16 @@ export function attachClassMetadata(
   decoratorNameKey: ObjectIdentifier,
   data: any,
   target,
-  groupBy?: string
+  groupBy?: string,
+  groupMode?: GroupModeType
 ) {
   return manager.attachMetadata(
     decoratorNameKey,
     data,
     target,
     undefined,
-    groupBy
+    groupBy,
+    groupMode
   );
 }
 
@@ -932,16 +947,17 @@ export function createCustomParamDecorator(
 ): ParameterDecorator {
   return function (target: any, propertyName: string, parameterIndex: number) {
     // const parameterName = getParamNames(target[methodName])[parameterIndex];
-    attachPropertyDataToClass(
+    attachClassMetadata(
       INJECT_CUSTOM_PARAM,
       {
         key: decoratorKey,
         parameterIndex,
-        // parameterName,
+        propertyName,
         metadata,
       },
       target,
-      propertyName
+      propertyName,
+      'multi'
     );
   };
 }

@@ -2,25 +2,31 @@ describe('test', () => {
   it('test decorator run', async () => {
     function ClassA(): ClassDecorator {
       return (target) => {
-        console.log('A', target);
+        console.log('A class decorator', target);
       }
     }
 
     function PropertyB(): PropertyDecorator {
       return (target, propertyKey) => {
-        console.log('B', target.constructor);
+        console.log('B property decorator', target.constructor);
       }
     }
 
     function MethodC(): MethodDecorator {
       return (target, propertyKey, descriptor) => {
-        console.log('C', target.constructor, propertyKey);
+        console.log('C method decorator', target.constructor, propertyKey);
       }
     }
 
     function ParamD(): ParameterDecorator {
       return (target, propertyKey, parameterIndex) => {
-        console.log('D', target.constructor, propertyKey, parameterIndex);
+        console.log('D param decorator', target.constructor, propertyKey, parameterIndex);
+      }
+    }
+
+    function ParamE(): ParameterDecorator {
+      return (target, propertyKey, parameterIndex) => {
+        console.log('E param decorator', target.constructor, propertyKey, parameterIndex);
       }
     }
 
@@ -31,19 +37,11 @@ describe('test', () => {
       abc;
 
       @MethodC()
-      async invoke(@ParamD() type: number) {
+      async invoke(@ParamD() @ParamE() type: number, @ParamD() user: string) {
 
       }
     }
 
     console.log(Test);
-
-    // this.registerPropertyHandler(Test, 'invoke', 'xxxx', (instance, name, handler) => {
-    //   return 'xxx';
-    // });
-    //
-    // this.registerPropertyHandler(Test, 'invoke', 'xxxx', (instance, name, index) => {
-    //   return 'xxx';
-    // });
   })
 })
