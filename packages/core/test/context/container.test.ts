@@ -1,8 +1,12 @@
 import {
   MidwayConfigService,
-  MidwayContainer as Container, MidwayEnvironmentService,
-  MidwayFrameworkService, MidwayInformationService,
-  MidwayLoggerService
+  MidwayContainer as Container,
+  MidwayEnvironmentService,
+  MidwayFrameworkService,
+  MidwayInformationService,
+  MidwayLoggerService,
+  MidwayDecoratorService,
+  MidwayAspectService,
 } from '../../src';
 import {
   Grandson,
@@ -85,10 +89,12 @@ describe('/test/context/container.test.ts', () => {
     container.bind(MidwayLoggerService);
     container.bind(MidwayEnvironmentService);
     container.bind(MidwayInformationService);
+    container.bind(MidwayAspectService);
+    container.bind(MidwayDecoratorService);
     container.registerObject('appDir', '');
     container.registerObject('baseDir', '');
 
-    const frameworkService = await container.getAsync(MidwayFrameworkService, [
+    const frameworkService = await container.getAsync(MidwayDecoratorService, [
       container
     ]);
 

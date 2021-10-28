@@ -1,15 +1,20 @@
 import * as path from 'path';
-import { MidwayContainer, MidwayRequestContainer, DirectoryFileDetector, MidwayLoggerService } from '../../src';
+import {
+  MidwayContainer,
+  MidwayRequestContainer,
+  DirectoryFileDetector,
+  MidwayLoggerService,
+  MidwayConfigService,
+  MidwayEnvironmentService,
+  MidwayFrameworkService,
+  MidwayInformationService,
+  MidwayDecoratorService,
+  MidwayAspectService,
+} from '../../src';
 import { App } from '../fixtures/ts-app-inject/app';
 import { TestCons } from '../fixtures/ts-app-inject/test';
 import { APPLICATION_KEY, clearAllModule, CONFIG_KEY, LOGGER_KEY, PLUGIN_KEY } from '@midwayjs/decorator';
 import * as assert from 'assert';
-import {
-  MidwayConfigService,
-  MidwayEnvironmentService,
-  MidwayFrameworkService,
-  MidwayInformationService
-} from '../../src';
 
 function buildLoadDir(arr, baseDir) {
   return arr.map(dir => {
@@ -46,10 +51,12 @@ describe('/test/context/midwayContainer.test.ts', () => {
     container.bind(MidwayLoggerService);
     container.bind(MidwayEnvironmentService);
     container.bind(MidwayInformationService);
+    container.bind(MidwayAspectService);
+    container.bind(MidwayDecoratorService);
     container.registerObject('appDir', '');
     container.registerObject('baseDir', '');
 
-    const frameworkService = await container.getAsync(MidwayFrameworkService, [
+    const frameworkService = await container.getAsync(MidwayDecoratorService, [
       container
     ]);
 
@@ -104,10 +111,12 @@ describe('/test/context/midwayContainer.test.ts', () => {
     container.bind(MidwayLoggerService);
     container.bind(MidwayEnvironmentService);
     container.bind(MidwayInformationService);
+    container.bind(MidwayAspectService);
+    container.bind(MidwayDecoratorService);
     container.registerObject('appDir', '');
     container.registerObject('baseDir', '');
 
-    const frameworkService = await container.getAsync(MidwayFrameworkService, [
+    const frameworkService = await container.getAsync(MidwayDecoratorService, [
       container
     ]);
 
@@ -149,10 +158,12 @@ describe('/test/context/midwayContainer.test.ts', () => {
     container.bind(MidwayLoggerService);
     container.bind(MidwayEnvironmentService);
     container.bind(MidwayInformationService);
+    container.bind(MidwayAspectService);
+    container.bind(MidwayDecoratorService);
     container.registerObject('appDir', '');
     container.registerObject('baseDir', '');
 
-    const frameworkService = await container.getAsync(MidwayFrameworkService, [
+    const frameworkService = await container.getAsync(MidwayDecoratorService, [
       container
     ]);
     // register handler for container
@@ -192,10 +203,12 @@ describe('/test/context/midwayContainer.test.ts', () => {
     container.bind(MidwayLoggerService);
     container.bind(MidwayEnvironmentService);
     container.bind(MidwayInformationService);
+    container.bind(MidwayAspectService);
+    container.bind(MidwayDecoratorService);
     container.registerObject('appDir', '');
     container.registerObject('baseDir', '');
 
-    const frameworkService = await container.getAsync(MidwayFrameworkService, [
+    const frameworkService = await container.getAsync(MidwayDecoratorService, [
       container
     ]);
     // register handler for container

@@ -1,8 +1,8 @@
 import {
   Pipeline,
   Provide,
-  getPropertyInject,
-  PIPELINE_IDENTIFIER,
+  INJECT_CUSTOM_PROPERTY,
+  getClassMetadata,
 } from '../../src';
 
 @Provide()
@@ -13,19 +13,7 @@ class Test {
 
 describe('/test/annotation/pipeline.test.ts', () => {
   it('pipeline decorator should be ok', () => {
-    const p = getPropertyInject(Test);
-    expect(p).toEqual({
-      dd: [
-        {
-          args: undefined,
-          key: 'inject',
-          value: PIPELINE_IDENTIFIER,
-        },
-      ],
-    });
-
-    expect(p['dd'][0].toString()).toEqual(
-      'tagged: { key:inject, value: __pipeline_identifier__ }'
-    );
+    let data = getClassMetadata(INJECT_CUSTOM_PROPERTY, Test);
+    expect(data).toMatchSnapshot();
   });
 });

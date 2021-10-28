@@ -8,7 +8,8 @@ import {
   getCurrentMainApp,
   getCurrentMainFramework,
   MidwayFrameworkService,
-  MidwayRequestContainer
+  MidwayRequestContainer,
+  MidwayDecoratorService,
 } from '../src';
 import { createLightFramework } from './util';
 import sinon = require('sinon');
@@ -34,8 +35,8 @@ describe('/test/baseFramework.test.ts', () => {
       __dirname,
       './fixtures/app-with-configuration/base-app-decorator/src'
     ));
-    const frameworkService = await framework.getApplicationContext().getAsync(MidwayFrameworkService);
-    frameworkService.registerPropertyHandler(APPLICATION_KEY, () => ({
+    const decoratorService = await framework.getApplicationContext().getAsync(MidwayDecoratorService);
+    decoratorService.registerPropertyHandler(APPLICATION_KEY, () => ({
       getBaseDir() {
         return 'base dir';
       }
