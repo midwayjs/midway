@@ -9,7 +9,7 @@ export function Catch(target?: any | any[]) {
     attachClassMetadata(
       CATCH_KEY,
       {
-        catchTargets
+        catchTargets,
       },
       target
     );

@@ -38,12 +38,12 @@ describe('test', () => {
 
     console.log(Test);
 
-    this.registerMethodHandler(Test, 'invoke', 'xxxx', (instance, name, handler) => {
-      return 'xxx';
-    });
-
-    this.registerParamHandler(Test, 'invoke', 'xxxx', (instance, name, index) => {
-      return 'xxx';
-    });
+    // this.registerPropertyHandler(Test, 'invoke', 'xxxx', (instance, name, handler) => {
+    //   return 'xxx';
+    // });
+    //
+    // this.registerPropertyHandler(Test, 'invoke', 'xxxx', (instance, name, index) => {
+    //   return 'xxx';
+    // });
   })
 })

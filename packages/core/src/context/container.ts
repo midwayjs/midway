@@ -129,7 +129,9 @@ class ContainerConfiguration {
         if ((importPackage as IComponentInfo)?.enabledEnvironment) {
           if (
             (importPackage as IComponentInfo)?.enabledEnvironment?.includes(
-              this.container.get(MidwayEnvironmentService).getCurrentEnvironment()
+              this.container
+                .get(MidwayEnvironmentService)
+                .getCurrentEnvironment()
             )
           ) {
             this.load((importPackage as IComponentInfo).component);
@@ -363,7 +365,10 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     }
 
     // inject custom properties
-    const customProps = getClassExtendedMetadata(INJECT_CUSTOM_PROPERTY, target);
+    const customProps = getClassExtendedMetadata(
+      INJECT_CUSTOM_PROPERTY,
+      target
+    );
 
     for (const p in customProps) {
       const propertyMeta = customProps[p] as {
@@ -395,9 +400,9 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
       definition.scope = objDefOptions.scope;
     }
 
-    this.objectCreateEventTarget.emit(ObjectLifeCycleEvent.AFTER_BIND, {
+    this.objectCreateEventTarget.emit(ObjectLifeCycleEvent.AFTER_BIND, target, {
       context: this,
-      definition
+      definition,
     });
 
     this.registry.registerDefinition(definition.id, definition);

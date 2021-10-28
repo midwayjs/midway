@@ -2,8 +2,6 @@ import {
   ObjectIdentifier,
   IManagedInstance,
   ObjectDefinitionOptions,
-  IMethodAspect,
-  AspectMetadata,
   MidwayFrameworkType
 } from '@midwayjs/decorator';
 import { ILogger, LoggerOptions } from '@midwayjs/logger';
@@ -268,13 +266,6 @@ export interface IEnvironmentService {
   getCurrentEnvironment(): string;
   setCurrentEnvironment(environment: string);
   isDevelopmentEnvironment(): boolean;
-}
-
-export interface IAspectService {
-  loadAspect();
-  addAspect(aspectIns: IMethodAspect, aspectData: AspectMetadata);
-  wrapperAspectToInstance(ins);
-  hasAspect(module): boolean;
 }
 
 export enum MidwayProcessTypeEnum {

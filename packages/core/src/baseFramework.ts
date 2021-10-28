@@ -240,7 +240,7 @@ export abstract class BaseFramework<
       },
       useFilter: (Filter: CommonExceptionFilterUnion<CTX>) => {
         this.exceptionFilterManager.useFilter(Filter);
-      }
+      },
     };
     for (const method of whiteList) {
       delete defaultApplicationProperties[method];

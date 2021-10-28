@@ -37,19 +37,18 @@ export class TypegooseConfiguration {
 
   @Init()
   async init() {
-    this.frameworkService
-      .registerPropertyHandler(
-        ENTITY_MODEL_KEY,
-        (
-          propertyName,
-          meta: {
-            modelKey: any;
-            connectionName: string;
-          }
-        ) => {
-          return this.modelMap.get(meta.modelKey);
+    this.frameworkService.registerPropertyHandler(
+      ENTITY_MODEL_KEY,
+      (
+        propertyName,
+        meta: {
+          modelKey: any;
+          connectionName: string;
         }
-      );
+      ) => {
+        return this.modelMap.get(meta.modelKey);
+      }
+    );
   }
 
   async onReady() {

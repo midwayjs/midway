@@ -92,16 +92,16 @@ describe('/test/context/container.test.ts', () => {
       container
     ]);
 
-    frameworkService.registerHandler(APPLICATION_KEY, () => {
+    frameworkService.registerPropertyHandler(APPLICATION_KEY, () => {
       return {appName: 'hello'};
     });
-    frameworkService.registerHandler(PLUGIN_KEY, (propertyName, meta) => {
+    frameworkService.registerPropertyHandler(PLUGIN_KEY, (propertyName, meta) => {
       if (meta.identifier === 'hh') {
         return {hh: 123};
       }
       return {d: 'hello'};
     });
-    frameworkService.registerHandler(CONFIG_KEY, (propertyName, meta) => {
+    frameworkService.registerPropertyHandler(CONFIG_KEY, (propertyName, meta) => {
       if (meta.identifier === 'hello') {
         return {hello: 'this is hello config'}
       }

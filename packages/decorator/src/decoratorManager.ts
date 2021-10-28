@@ -909,19 +909,28 @@ export function createCustomPropertyDecorator(
   };
 }
 
-export function createCustomMethodDecorator(decoratorKey: string, metadata: any): MethodDecorator {
-  return function (target: any, methodName: string, descriptor) {
+export function createCustomMethodDecorator(
+  decoratorKey: string,
+  metadata: any
+): MethodDecorator {
+  return function (target: any, propertyName: string, descriptor) {
     attachClassMetadata(
       INJECT_CUSTOM_METHOD,
-      metadata,
-      target,
-      methodName
+      {
+        propertyName,
+        key: decoratorKey,
+        metadata,
+      },
+      target
     );
   };
 }
 
-export function createCustomParamDecorator(decoratorKey: string, metadata: any): ParameterDecorator {
-  return function (target: any, methodName: string, parameterIndex: number) {
+export function createCustomParamDecorator(
+  decoratorKey: string,
+  metadata: any
+): ParameterDecorator {
+  return function (target: any, propertyName: string, parameterIndex: number) {
     // const parameterName = getParamNames(target[methodName])[parameterIndex];
     attachPropertyDataToClass(
       INJECT_CUSTOM_PARAM,
@@ -932,7 +941,7 @@ export function createCustomParamDecorator(decoratorKey: string, metadata: any):
         metadata,
       },
       target,
-      methodName
+      propertyName
     );
   };
 }

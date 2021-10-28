@@ -1,11 +1,11 @@
 import {
   Rule,
   RuleType,
-  getClassExtendedMetadata,
-  RULES_KEY,
   PickDto,
   OmitDto,
-} from '../../src';
+} from '../src';
+import { getClassExtendedMetadata } from '@midwayjs/decorator';
+import { RULES_KEY } from '../src/constants';
 
 class BaseDto {
   hello(): string {

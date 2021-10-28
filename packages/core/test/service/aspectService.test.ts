@@ -1,7 +1,7 @@
 import { MidwayAspectService, MidwayContainer } from '../../src';
 
-describe('/test/services/aspectService.test.ts', () => {
-  it('informationService should be ok', async() => {
+describe('/test/service/aspectService.test.ts', () => {
+  it('aspect normal method and async method should be ok', async() => {
 
     class A {
       async invokeAsyncMethod() {

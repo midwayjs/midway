@@ -11,6 +11,7 @@ import {
   MidwayAspectService,
   MidwayLifeCycleService,
   MidwayMiddlewareService,
+  MidwayDecoratorService,
 } from './';
 import defaultConfig from './config/config.default';
 import { bindContainer, clearBindContainer } from '@midwayjs/decorator';
@@ -41,6 +42,7 @@ export async function initializeGlobalApplicationContext(
   // bind inner service
   applicationContext.bindClass(MidwayEnvironmentService);
   applicationContext.bindClass(MidwayInformationService);
+  applicationContext.bindClass(MidwayDecoratorService);
   applicationContext.bindClass(MidwayConfigService);
   applicationContext.bindClass(MidwayAspectService);
   applicationContext.bindClass(MidwayLoggerService);
@@ -63,6 +65,16 @@ export async function initializeGlobalApplicationContext(
     },
   ]);
 
+  // init aop support
+  const aspectService = await applicationContext.getAsync(MidwayAspectService, [
+    applicationContext,
+  ]);
+
+  // init decorator service
+  await applicationContext.getAsync(MidwayDecoratorService, [
+    applicationContext,
+  ]);
+
   for (const configurationModule of [].concat(
     globalOptions.configurationModule
   )) {
@@ -79,9 +91,6 @@ export async function initializeGlobalApplicationContext(
   // init logger
   await applicationContext.getAsync(MidwayLoggerService, [applicationContext]);
 
-  // aop support
-  await applicationContext.getAsync(MidwayAspectService, [applicationContext]);
-
   // middleware support
   await applicationContext.getAsync(MidwayMiddlewareService, [
     applicationContext,
@@ -92,6 +101,9 @@ export async function initializeGlobalApplicationContext(
     applicationContext,
     globalOptions,
   ]);
+
+  // TODO 移动到 framework load aspect
+  await aspectService.loadAspect();
 
   // lifecycle support
   await applicationContext.getAsync(MidwayLifeCycleService, [
