@@ -26,6 +26,7 @@ export { MidwayFrameworkService } from './service/frameworkService';
 export { MidwayAspectService } from './service/aspectService';
 export { MidwayLifeCycleService } from './service/lifeCycleService';
 export { MidwayMiddlewareService } from './service/middlewareService';
+export { MidwayDecoratorService } from './service/decoratorService';
 export * from './service/pipelineService';
 export * from './util/contextUtil';
 export * from './util/serviceFactory';

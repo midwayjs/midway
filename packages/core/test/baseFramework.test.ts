@@ -35,7 +35,7 @@ describe('/test/baseFramework.test.ts', () => {
       './fixtures/app-with-configuration/base-app-decorator/src'
     ));
     const frameworkService = await framework.getApplicationContext().getAsync(MidwayFrameworkService);
-    frameworkService.registerHandler(APPLICATION_KEY, () => ({
+    frameworkService.registerPropertyHandler(APPLICATION_KEY, () => ({
       getBaseDir() {
         return 'base dir';
       }

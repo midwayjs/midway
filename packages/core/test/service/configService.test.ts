@@ -15,7 +15,7 @@ async function createConfigService(): Promise<MidwayConfigService> {
   return container.getAsync(MidwayConfigService);
 }
 
-describe('/test/services/configService.test.ts', () => {
+describe('/test/service/configService.test.ts', () => {
 
   it('configService should be ok', async () => {
     const cfg: any = await createConfigService();

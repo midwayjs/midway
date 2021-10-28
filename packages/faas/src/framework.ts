@@ -299,13 +299,21 @@ export class MidwayFaaSFramework extends BaseFramework<
   }
 
   private registerDecorator() {
-    this.frameworkService.registerHandler(PLUGIN_KEY, (key, meta, target) => {
-      return target?.[REQUEST_OBJ_CTX_KEY]?.[key] || this.app[key];
-    });
+    this.frameworkService.registerPropertyHandler(
+      PLUGIN_KEY,
+      (key, meta, target) => {
+        return target?.[REQUEST_OBJ_CTX_KEY]?.[key] || this.app[key];
+      }
+    );
 
-    this.frameworkService.registerHandler(LOGGER_KEY, (key, meta, target) => {
-      return target?.[REQUEST_OBJ_CTX_KEY]?.['logger'] || this.app.getLogger();
-    });
+    this.frameworkService.registerPropertyHandler(
+      LOGGER_KEY,
+      (key, meta, target) => {
+        return (
+          target?.[REQUEST_OBJ_CTX_KEY]?.['logger'] || this.app.getLogger()
+        );
+      }
+    );
   }
 
   private async loadMiddleware(middlewares) {

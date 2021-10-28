@@ -1,0 +1,32 @@
+{
+  "name": "@midwayjs/validate",
+  "version": "3.0.0-alpha.42",
+  "description": "Midway Component for mongoose",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "node --require=ts-node/register ../../node_modules/.bin/jest",
+    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --coverage --forceExit",
+    "ci": "npm run test"
+  },
+  "keywords": [],
+  "author": "czy88840616@gmail.com",
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts"
+  ],
+  "engines": {
+    "node": ">= 12.13.0"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "joi": "^17.2.1",
+    "class-transformer": "^0.3.1"
+  },
+  "devDependencies": {
+    "@midwayjs/core":"3.0.0-alpha.42",
+    "@midwayjs/decorator": "3.0.0-alpha.42",
+    "@midwayjs/mock": "3.0.0-alpha.42"
+  }
+}

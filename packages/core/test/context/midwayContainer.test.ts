@@ -54,7 +54,7 @@ describe('/test/context/midwayContainer.test.ts', () => {
     ]);
 
     // register handler for container
-    frameworkService.registerHandler(CONFIG_KEY, (key, meta, target) => {
+    frameworkService.registerPropertyHandler(CONFIG_KEY, (key, meta, target) => {
       assert(
         target instanceof
         require('../fixtures/base-app-decorator/src/lib/service')[
@@ -64,11 +64,11 @@ describe('/test/context/midwayContainer.test.ts', () => {
       return 'hello';
     });
 
-    frameworkService.registerHandler(PLUGIN_KEY, (key, meta) => {
+    frameworkService.registerPropertyHandler(PLUGIN_KEY, (key, meta) => {
       return { b: 2 };
     });
 
-    frameworkService.registerHandler(LOGGER_KEY, (key, meta) => {
+    frameworkService.registerPropertyHandler(LOGGER_KEY, (key, meta) => {
       return console;
     });
     await container.ready();
@@ -111,9 +111,9 @@ describe('/test/context/midwayContainer.test.ts', () => {
       container
     ]);
 
-    frameworkService.registerHandler(APPLICATION_KEY, () => tt);
+    frameworkService.registerPropertyHandler(APPLICATION_KEY, () => tt);
     // register handler for container
-    frameworkService.registerHandler(CONFIG_KEY, (key, meta, target) => {
+    frameworkService.registerPropertyHandler(CONFIG_KEY, (key, meta, target) => {
       assert(
         target instanceof
         require('../fixtures/base-app-forbindapp/src/lib/service')[
@@ -123,11 +123,11 @@ describe('/test/context/midwayContainer.test.ts', () => {
       return 'hello';
     });
 
-    frameworkService.registerHandler(PLUGIN_KEY, (key, target) => {
+    frameworkService.registerPropertyHandler(PLUGIN_KEY, (key, target) => {
       return { b: 2 };
     });
 
-    frameworkService.registerHandler(LOGGER_KEY, (key, target) => {
+    frameworkService.registerPropertyHandler(LOGGER_KEY, (key, target) => {
       return console;
     });
     await container.ready();
@@ -156,15 +156,15 @@ describe('/test/context/midwayContainer.test.ts', () => {
       container
     ]);
     // register handler for container
-    frameworkService.registerHandler(CONFIG_KEY, key => {
+    frameworkService.registerPropertyHandler(CONFIG_KEY, key => {
       return { c: 60 };
     });
 
-    frameworkService.registerHandler(PLUGIN_KEY, key => {
+    frameworkService.registerPropertyHandler(PLUGIN_KEY, key => {
       return { text: 2 };
     });
 
-    frameworkService.registerHandler(LOGGER_KEY, key => {
+    frameworkService.registerPropertyHandler(LOGGER_KEY, key => {
       return console;
     });
 
@@ -199,15 +199,15 @@ describe('/test/context/midwayContainer.test.ts', () => {
       container
     ]);
     // register handler for container
-    frameworkService.registerHandler(CONFIG_KEY, key => {
+    frameworkService.registerPropertyHandler(CONFIG_KEY, key => {
       return { c: 60 };
     });
 
-    frameworkService.registerHandler(PLUGIN_KEY, key => {
+    frameworkService.registerPropertyHandler(PLUGIN_KEY, key => {
       return { text: 2 };
     });
 
-    frameworkService.registerHandler(LOGGER_KEY, key => {
+    frameworkService.registerPropertyHandler(LOGGER_KEY, key => {
       return console;
     });
 
