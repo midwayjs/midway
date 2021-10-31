@@ -10,6 +10,8 @@ import {
   MidwayFrameworkService,
   MidwayRequestContainer,
   MidwayDecoratorService,
+  MidwayMiddlewareService,
+  ContextMiddlewareManager,
 } from '../src';
 import { createLightFramework } from './util';
 import sinon = require('sinon');
@@ -572,6 +574,100 @@ describe('/test/baseFramework.test.ts', () => {
     const applicationContext: any = framework.getApplicationContext();
     await applicationContext.getAsync('userService');
     expect(framework.getApplication().getAttr('total')).toEqual(10);
+  });
+
+  it('should test middleware manager', async () => {
+    @Provide()
+    class TestMiddleware1 {
+      resolve() {
+        return async (ctx, next) => {
+          return 'hello ' + await next();
+        }
+      }
+    }
+
+    @Provide()
+    class TestMiddleware2 {
+      resolve() {
+        return async (ctx, next) => {
+          return 'world ' + await next();
+        }
+      }
+    }
+
+    const framework = await createLightFramework();
+    framework.getApplicationContext().bind(TestMiddleware1);
+    framework.getApplicationContext().bind(TestMiddleware2);
+
+    framework.useMiddleware([TestMiddleware1, TestMiddleware2]);
+
+    let data1 = 'abc';
+    const fn = await framework.getMiddleware(async (ctx) => {
+      return data1;
+    });
+
+    expect(await fn({})).toEqual({"error": undefined, "result": "hello world abc"});
+
+    data1 = 'efg';
+    expect(await fn({})).toEqual({"error": undefined, "result": "hello world efg"});
+  });
+
+  it('should test middleware manager with compose', async () => {
+    @Provide()
+    class TestMiddleware1 {
+      resolve() {
+        return async (ctx, next) => {
+          return 'hello ' + await next();
+        }
+      }
+    }
+
+    @Provide()
+    class TestMiddleware2 {
+      resolve() {
+        return async (ctx, next) => {
+          return 'world ' + await next();
+        }
+      }
+    }
+
+    @Provide()
+    class TestMiddleware3 {
+      resolve() {
+        return async (ctx, next) => {
+          return 'zhangting';
+        }
+      }
+    }
+
+    const framework = await createLightFramework();
+    framework.getApplicationContext().bind(TestMiddleware1);
+    framework.getApplicationContext().bind(TestMiddleware2);
+    framework.getApplicationContext().bind(TestMiddleware3);
+
+    // 添加一个中间件
+    framework.useMiddleware([TestMiddleware1, TestMiddleware2]);
+
+    // compose 一下，再同时插入一个
+    const fn = await framework.getMiddleware(async (ctx, next) => {
+      return 'gogogo, ' + await next();
+    });
+
+    // 建一个新的
+    const middlewareManager = new ContextMiddlewareManager();
+    // 把 compose 的结果作为第一个
+    middlewareManager.insertLast(fn);
+    // 再插入一个
+    middlewareManager.insertLast(TestMiddleware3);
+
+    const middlewareService = await framework.getApplicationContext().getAsync(MidwayMiddlewareService);
+
+    // 再 compose
+    const composeMiddleware = await middlewareService.compose(
+      middlewareManager
+    );
+
+    expect(await composeMiddleware({})).toEqual({"error": undefined, "result": "hello world gogogo, zhangting"});
   });
 
 });

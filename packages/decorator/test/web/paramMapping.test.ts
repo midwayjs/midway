@@ -3,12 +3,12 @@ import {
   Body,
   File,
   Files,
-  getPropertyDataFromClass,
   Headers,
   Param,
   Query,
   Session,
-  WEB_ROUTER_PARAM_KEY,
+  getClassMetadata,
+  INJECT_CUSTOM_PARAM
 } from '../../src';
 
 class Test {
@@ -25,7 +25,7 @@ class Test {
 
 describe('/test/web/paramMapping.test.ts', () => {
   it('paramMapping decorator should be ok', () => {
-    const meta = getPropertyDataFromClass(WEB_ROUTER_PARAM_KEY, Test, 'doget');
-    expect(meta.length).toEqual(7);
+    const meta = getClassMetadata(INJECT_CUSTOM_PARAM, Test);
+    expect(meta).toMatchSnapshot();
   });
 });

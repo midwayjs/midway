@@ -8,6 +8,8 @@ import {
   IMidwayFramework,
   MidwayProcessTypeEnum,
   CommonExceptionFilterUnion,
+  CommonMiddleware,
+  MiddlewareRespond,
 } from './interface';
 import {
   Inject,
@@ -59,9 +61,7 @@ export abstract class BaseFramework<
 
   @Init()
   async init() {
-    this.configure(
-      this.configService.getConfiguration(this.getFrameworkName())
-    );
+    this.configurationOptions = this.configure() ?? ({} as OPT);
     this.BaseContextLoggerClass =
       this.configurationOptions.ContextLoggerClass ||
       this.getDefaultContextLoggerClass();
@@ -70,9 +70,10 @@ export abstract class BaseFramework<
     return this;
   }
 
-  public configure(options?: OPT): BaseFramework<APP, CTX, OPT> {
-    this.configurationOptions = options || ({} as OPT);
-    return this;
+  abstract configure(...args): OPT;
+
+  isEnable(): boolean {
+    return true;
   }
 
   public async initialize(options?: IMidwayBootstrapOptions): Promise<void> {
@@ -93,8 +94,17 @@ export abstract class BaseFramework<
     await this.afterContainerReady(options);
   }
 
+  /**
+   * @deprecated
+   */
   protected async containerInitialize(options: IMidwayBootstrapOptions) {}
+  /**
+   * @deprecated
+   */
   protected async containerDirectoryLoad(options: IMidwayBootstrapOptions) {}
+  /**
+   * @deprecated
+   */
   protected async containerReady(options: IMidwayBootstrapOptions) {
     if (!this.app.getApplicationContext) {
       this.defineApplicationProperties();
@@ -253,34 +263,51 @@ export abstract class BaseFramework<
   }
 
   protected async beforeStop(): Promise<void> {}
-
+  /**
+   * @deprecated
+   */
   protected async beforeContainerInitialize(
     options: Partial<IMidwayBootstrapOptions>
   ): Promise<void> {}
-
+  /**
+   * @deprecated
+   */
   protected async afterContainerInitialize(
     options: Partial<IMidwayBootstrapOptions>
   ): Promise<void> {}
-
+  /**
+   * @deprecated
+   */
   protected async afterContainerDirectoryLoad(
     options: Partial<IMidwayBootstrapOptions>
   ): Promise<void> {}
-
+  /**
+   * @deprecated
+   */
   protected async afterContainerReady(
     options: Partial<IMidwayBootstrapOptions>
   ): Promise<void> {}
 
-  protected async getMiddleware() {
+  public async getMiddleware(
+    lastMiddleware?: CommonMiddleware<CTX>
+  ): Promise<MiddlewareRespond<CTX>> {
     if (!this.composeMiddleware) {
       this.middlewareManager.insertFirst(async (ctx, next) => {
-        let result = undefined;
+        let returnResult = undefined;
         try {
-          result = await next();
+          const result = await next();
+          returnResult = {
+            result,
+            error: undefined,
+          };
         } catch (err) {
-          result = await this.exceptionFilterManager.run(err, ctx);
+          returnResult = await this.exceptionFilterManager.run(err, ctx);
         }
-        return result;
+        return returnResult;
       });
+      if (lastMiddleware) {
+        this.middlewareManager.insertLast(lastMiddleware);
+      }
       this.composeMiddleware = await this.middlewareService.compose(
         this.middlewareManager
       );

@@ -15,6 +15,10 @@ class LightFramework extends BaseFramework<any, any, any> {
   async run(): Promise<void> {
   }
 
+  configure() {
+    return {};
+  }
+
   async applicationInitialize(options: IMidwayBootstrapOptions) {
     this.app = {} as IMidwayApplication;
     this.defineApplicationProperties();
@@ -52,8 +56,8 @@ export class CustomThirdFramework implements IMidwayFramework<any, any> {
   app: any;
   configurationOptions: any;
 
-  configure(options: any): IMidwayFramework<any, any> {
-    return undefined;
+  configure() {
+    return {};
   }
 
   createLogger(name: string, options) {

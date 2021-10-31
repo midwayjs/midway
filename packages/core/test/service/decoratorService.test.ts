@@ -40,19 +40,19 @@ describe('/test/service/decoratorService.test.ts', () => {
 
     container.bindClass(A);
 
-    decoratorService.registerMethodHandler('aabbcc', (target, method, metadata) => {
+    decoratorService.registerMethodHandler('aabbcc', (options) => {
 
       return {
         afterReturn: (joinPoint: JoinPoint, result: string) => {
-          return result + ' ' + metadata.name;
+          return result + ' ' + options.metadata.name;
         }
       }
     });
 
-    decoratorService.registerMethodHandler('aabbccdd', (target, method, metadata) => {
+    decoratorService.registerMethodHandler('aabbccdd', (options) => {
       return {
         afterReturn: (joinPoint: JoinPoint, result: string) => {
-          return result + ' ' + metadata.name;
+          return result + ' ' + options.metadata.name;
         }
       }
     });
@@ -104,20 +104,20 @@ describe('/test/service/decoratorService.test.ts', () => {
 
     container.bindClass(A);
 
-    decoratorService.registerMethodHandler('aabbcc', (target, method, metadata) => {
+    decoratorService.registerMethodHandler('aabbcc', (options) => {
       return {
         afterReturn: (joinPoint: JoinPoint, result: string) => {
-          return result + ' ' + metadata.name;
+          return result + ' ' + options.metadata.name;
         }
       }
     });
 
-    decoratorService.registerParameterHandler('ggg', (target, method, metadata) => {
-      return metadata.name;
+    decoratorService.registerParameterHandler('ggg', (options) => {
+      return options.metadata.name;
     });
 
-    decoratorService.registerParameterHandler('fff', (target, method, metadata) => {
-      return metadata.name;
+    decoratorService.registerParameterHandler('fff', (options) => {
+      return options.metadata.name;
     });
 
     const a = await container.getAsync(A);

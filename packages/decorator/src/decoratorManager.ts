@@ -819,20 +819,32 @@ export function getObjectDefinition(target: any): ObjectDefinitionOptions {
  * @param target class
  */
 export function saveProviderId(identifier: ObjectIdentifier, target: any) {
-  const uuid = generateRandomId();
-  // save class id and uuid
-  saveClassMetadata(
-    TAGGED_CLS,
-    {
-      id: identifier,
-      originName: target.name,
-      uuid,
-      name: classNamed(target.name),
-    },
-    target
-  );
-
-  debug(`save provide: ${target.name} -> ${uuid}`);
+  if (isProvide(target)) {
+    if (identifier) {
+      const meta = getClassMetadata(TAGGED_CLS, target);
+      if (meta.id !== identifier) {
+        meta.id = identifier;
+        // save class id and uuid
+        saveClassMetadata(TAGGED_CLS, meta, target);
+        debug(`update provide: ${target.name} -> ${meta.uuid}`);
+      }
+    }
+  } else {
+    // save
+    const uuid = generateRandomId();
+    // save class id and uuid
+    saveClassMetadata(
+      TAGGED_CLS,
+      {
+        id: identifier,
+        originName: target.name,
+        uuid,
+        name: classNamed(target.name),
+      },
+      target
+    );
+    debug(`save provide: ${target.name} -> ${uuid}`);
+  }
 
   return target;
 }

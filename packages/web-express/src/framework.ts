@@ -1,6 +1,5 @@
 import {
   BaseFramework,
-  extractExpressLikeValue,
   HTTP_SERVER_KEY,
   IMidwayBootstrapOptions,
   MidwayFrameworkType,
@@ -44,6 +43,10 @@ export class MidwayExpressFramework extends BaseFramework<
     prefix: string;
   }> = [];
   private server: Server;
+
+  configure(): IMidwayExpressConfigurationOptions {
+    return this.configService.getConfiguration('express');
+  }
 
   async applicationInitialize(options: Partial<IMidwayBootstrapOptions>) {
     this.app = express() as unknown as IMidwayExpressApplication;
@@ -138,17 +141,6 @@ export class MidwayExpressFramework extends BaseFramework<
     const [controllerId, methodName] = controllerMapping.split('.');
     return async (req, res, next) => {
       const args = [req, res, next];
-      if (Array.isArray(routeArgsInfo)) {
-        await Promise.all(
-          routeArgsInfo.map(async ({ index, type, propertyData }) => {
-            args[index] = await extractExpressLikeValue(type, propertyData)(
-              req,
-              res,
-              next
-            );
-          })
-        );
-      }
       const controller = await req.requestContext.getAsync(controllerId);
       // eslint-disable-next-line prefer-spread
       const result = await controller[methodName].apply(controller, args);

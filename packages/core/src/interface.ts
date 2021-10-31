@@ -201,8 +201,18 @@ export type HandlerFunction = (
   meta: any,
   instance: any) => any;
 
-export type MethodHandlerFunction = (target: new (...args) => any, methodName: string, metadata: any) => IMethodAspect;
-export type ParameterHandlerFunction = (target: new (...args) => any, methodName: string, metadata: any, originArgs: Array<any>, parameterIndex: number) => IMethodAspect;
+export type MethodHandlerFunction = (options: {
+  target: new (...args) => any;
+  propertyName: string;
+  metadata: any;
+}) => IMethodAspect;
+export type ParameterHandlerFunction = (options: {
+  target: new (...args) => any;
+  propertyName: string;
+  metadata: any;
+  originArgs: Array<any>;
+  parameterIndex: number;
+}) => IMethodAspect;
 
 export interface IIdentifierRelationShip {
   saveClassRelation(module: any, namespace?: string);
@@ -297,10 +307,11 @@ export interface IMiddleware<T> {
   match?: () => boolean;
   ignore?: () => boolean;
 }
-export type FunctionMiddleware<T> = (context: T, next: () => Promise<any>) => any;
+export type FunctionMiddleware<T> = (context: T, next: () => Promise<any>, options?: any) => any;
 export type ClassMiddleware<T> = new (...args) => IMiddleware<T>;
 export type CommonMiddleware<T> = ClassMiddleware<T> | FunctionMiddleware<T>;
 export type CommonMiddlewareUnion<T> = CommonMiddleware<T> | Array<CommonMiddleware<T>>;
+export type MiddlewareRespond<T> = (context: T, next?: () => Promise<any>) => Promise<{ result: any; error: Error | undefined }>;
 
 /**
  * Common Exception Filter definition
@@ -378,7 +389,8 @@ export interface IConfigurationOptions {
 export interface IMidwayFramework<APP extends IMidwayApplication, T extends IConfigurationOptions> {
   app: APP;
   configurationOptions: T;
-  configure(options: T): IMidwayFramework<APP, T>;
+  configure(...args): T;
+  isEnable(): boolean;
   initialize(options: Partial<IMidwayBootstrapOptions>): Promise<void>;
   run(): Promise<void>;
   stop(): Promise<void>;
@@ -396,6 +408,7 @@ export interface IMidwayFramework<APP extends IMidwayApplication, T extends ICon
   getProjectName(): string;
   getDefaultContextLoggerClass(): any;
   useMiddleware(Middleware: CommonMiddlewareUnion<ReturnType<APP['createAnonymousContext']>>);
+  getMiddleware(lastMiddleware?: CommonMiddleware<ReturnType<APP['createAnonymousContext']>>): Promise<MiddlewareRespond<ReturnType<APP['createAnonymousContext']>>>;
   useFilter(Filter: CommonExceptionFilterUnion<ReturnType<APP['createAnonymousContext']>>);
 }
 

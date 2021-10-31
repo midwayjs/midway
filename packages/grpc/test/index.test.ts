@@ -64,15 +64,13 @@ export namespace math {
 
 describe('/test/index.test.ts', function () {
 
+  it('run with empty config', async () => {
+    const app = await createServer('base-app-empty');
+    await closeApp(app);
+  });
+
   it('should create gRPC server', async () => {
-    const app = await createServer('base-app', {
-      services: [
-        {
-          protoPath: join(__dirname, 'fixtures/proto/helloworld.proto'),
-          package: 'helloworld',
-        }
-      ],
-    });
+    const app = await createServer('base-app');
 
     const service = await createGRPCConsumer<helloworld.GreeterClient>({
       package: 'helloworld',
@@ -109,20 +107,9 @@ describe('/test/index.test.ts', function () {
   });
 
   it('should create multiple grpc service in one server', async () => {
-    const app = await createServer('base-app-multiple-service', {
-      services: [
-        {
-          protoPath: join(__dirname, 'fixtures/proto/hero.proto'),
-          package: 'hero',
-        },
-        {
-          protoPath: join(__dirname, 'fixtures/proto/helloworld.proto'),
-          package: 'helloworld',
-        }
-      ],
-    });
+    const app = await createServer('base-app-multiple-service');
 
-    const service: any = await createGRPCConsumer({
+    const service = await createGRPCConsumer<hero.HeroServiceClient>({
       package: 'hero',
       protoPath: join(__dirname, 'fixtures/proto/hero.proto'),
       url: 'localhost:6565'
@@ -137,14 +124,7 @@ describe('/test/index.test.ts', function () {
   });
 
   it('should support publish stream gRPC server', async () => {
-    const app = await createServer('base-app-stream', {
-      services: [
-        {
-          protoPath: join(__dirname, 'fixtures/proto/math.proto'),
-          package: 'math',
-        }
-      ],
-    });
+    const app = await createServer('base-app-stream');
 
     const service = await createGRPCConsumer<math.MathClient>({
       package: 'math',
@@ -242,14 +222,7 @@ describe('/test/index.test.ts', function () {
   });
 
   it('should test multi-package service', async () => {
-    const app = await createServer('base-app-multiple-package', {
-      services: [
-        {
-          protoPath: join(__dirname, 'fixtures/proto/hello_world.proto'),
-          package: 'hello.world',
-        }
-      ],
-    });
+    const app = await createServer('base-app-multiple-package');
 
     const service = await createGRPCConsumer<hello.world.GreeterClient>({
       package: 'hello.world',

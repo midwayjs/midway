@@ -19,7 +19,6 @@ export function isTypeScriptEnvironment() {
 export class BootstrapStarter {
   protected appDir: string;
   protected baseDir: string;
-  // protected bootstrapItems: IMidwayFramework<any, any>[] = [];
   protected globalOptions: Partial<IMidwayBootstrapOptions> = {};
   protected globalConfig: any;
   private applicationContext: IMidwayContainer;
@@ -28,13 +27,6 @@ export class BootstrapStarter {
     this.globalOptions = options;
     return this;
   }
-
-  // public load(unit: (globalConfig: unknown) => IMidwayFramework<any, any>);
-  // public load(unit: IMidwayFramework<any, any>);
-  // public load(unit: any) {
-  //   this.bootstrapItems.push(unit);
-  //   return this;
-  // }
 
   public async init() {
     this.appDir = this.globalOptions.appDir || process.cwd();

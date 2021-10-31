@@ -1,26 +1,7 @@
-import { Param, Session, Query, Body, Headers, File, Files, WEB_ROUTER_PARAM_KEY, RouteParamTypes, RequestIP, RequestPath, getPropertyDataFromClass } from '@midwayjs/decorator';
+import {  RouteParamTypes } from '@midwayjs/decorator';
 import { extractKoaLikeValue, extractExpressLikeValue } from '../src';
 
-class Test {
-  async doget(@Param('aa')aa: any,
-              @Query('bb') query: any,
-              @Body('body') body: any,
-              @Headers('tt') tt: any,
-              @File({requireFile: true}) f: any,
-              @Files() files: any,
-              @Session() bb: any,
-              @RequestIP() requestIp: any,
-              @RequestPath() requestPath: any) {
-
-  }
-}
-
 describe('/test/web/paramMapping.test.ts', () => {
-  it('paramMapping decorator should be ok', () => {
-    const meta = getPropertyDataFromClass(WEB_ROUTER_PARAM_KEY, Test, 'doget');
-    expect(meta.length).toEqual(9);
-  });
-
   it('extract koa value should be ok', async () => {
     let fn = extractKoaLikeValue(RouteParamTypes.NEXT, {});
     expect(await fn({}, 'next')).toEqual('next');

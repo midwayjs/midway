@@ -59,6 +59,10 @@ describe('/test/setup.test.ts', () => {
         this.app = {} as IMidwayApplication;
         this.defineApplicationProperties();
       }
+
+      configure() {
+        return {};
+      }
     }
 
     @Configuration()

@@ -53,7 +53,7 @@ function deepEqual(x, y) {
   ) : (x === y);
 }
 
-export async function createLightFramework(baseDir?: string, ): Promise<IMidwayFramework<any, any>> {
+export async function createLightFramework(baseDir?: string ): Promise<IMidwayFramework<any, any>> {
   /**
    * 一个全量的空框架
    */
@@ -78,6 +78,10 @@ export async function createLightFramework(baseDir?: string, ): Promise<IMidwayF
         this.isStopped = true;
         await destroyGlobalApplicationContext(this.applicationContext);
       }
+    }
+
+    configure() {
+      return {};
     }
   }
 

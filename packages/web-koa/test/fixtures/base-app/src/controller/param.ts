@@ -23,7 +23,7 @@ export class ParamController {
   ctx;
 
   @Get('/param_query')
-  async param_query(@Query() name: string) {
+  async param_query(@Query('name') name: string) {
     return name;
   }
 
@@ -33,37 +33,37 @@ export class ParamController {
   }
 
   @Get('/param_queries')
-  async param_queries(@Queries() name: string) {
+  async param_queries(@Queries('name') name: string) {
     return name;
   }
 
   @Get('/param_queries_all')
-  async param_queries_all(@Queries(ALL) name: string) {
+  async param_queries_all(@Queries() name: string) {
     return name;
   }
 
   @Post('/param_body')
-  async param_body(@Body() name: string) {
+  async param_body(@Body('name') name: string) {
     return name;
   }
 
   @Post('/param_body_all')
-  async param_body_All(@Body(ALL) name: string) {
+  async param_body_All(@Body() name: string) {
     return name;
   }
 
   @Get('/param/:name')
-  async param_param(@Param() name: string) {
+  async param_param(@Param('name') name: string) {
     return name;
   }
 
   @Get('/headers')
-  async param_headers(@Headers() name: string) {
+  async param_headers(@Headers('name') name: string) {
     return name;
   }
 
   @Get('/session')
-  async param_session(@Session() name: string) {
+  async param_session(@Session('name') name: string) {
     return name;
   }
 

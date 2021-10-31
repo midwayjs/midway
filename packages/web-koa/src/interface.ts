@@ -10,6 +10,10 @@ export type IMidwayKoaApplication = IMidwayApplication<IMidwayKoaContext, koa<De
     routeArgsInfo?: RouterParamValue[],
     routerResponseData?: any []
   ): Middleware<DefaultState, IMidwayKoaContext>;
+  /**
+   * @deprecated
+   * @param middlewareId
+   */
   generateMiddleware(middlewareId: string): Promise<Middleware<DefaultState, IMidwayKoaContext>>;
 }>;
 

@@ -1,26 +1,19 @@
 import {
   FaaSContext,
-  FaaSMiddleware,
   IFaaSConfigurationOptions,
   IMidwayFaaSApplication,
-  IWebMiddleware,
 } from './interface';
 import {
   BaseFramework,
-  extractKoaLikeValue,
-  IMiddleware,
+  FunctionMiddleware,
   IMidwayBootstrapOptions,
-  MidwayDecoratorService,
   MidwayEnvironmentService,
   MidwayFrameworkType,
-  REQUEST_OBJ_CTX_KEY,
+  MidwayMiddlewareService,
   RouterInfo,
   ServerlessTriggerCollector,
 } from '@midwayjs/core';
-
 import {
-  LOGGER_KEY,
-  PLUGIN_KEY,
   WEB_RESPONSE_HTTP_CODE,
   WEB_RESPONSE_HEADER,
   WEB_RESPONSE_CONTENT_TYPE,
@@ -30,8 +23,8 @@ import {
   Framework,
 } from '@midwayjs/decorator';
 import SimpleLock from '@midwayjs/simple-lock';
-import * as compose from 'koa-compose';
 import { createConsoleLogger, LoggerOptions, loggers } from '@midwayjs/logger';
+import { ContextMiddlewareManager } from '@midwayjs/core/dist/util/middlewareManager';
 
 const LOCK_KEY = '_faas_starter_start_key';
 
@@ -42,8 +35,10 @@ export class MidwayFaaSFramework extends BaseFramework<
   FaaSContext,
   IFaaSConfigurationOptions
 > {
+  configure(options) {
+    return options;
+  }
   protected defaultHandlerMethod = 'handler';
-  private globalMiddleware: string[];
   protected funMappingStore: Map<string, RouterInfo> = new Map();
   protected logger;
   private lock = new SimpleLock();
@@ -55,10 +50,9 @@ export class MidwayFaaSFramework extends BaseFramework<
   environmentService: MidwayEnvironmentService;
 
   @Inject()
-  decoratorService: MidwayDecoratorService;
+  middlewareService: MidwayMiddlewareService<FaaSContext>;
 
   async applicationInitialize(options: IMidwayBootstrapOptions) {
-    this.globalMiddleware = this.configurationOptions.middleware || [];
     this.app =
       this.configurationOptions.applicationAdapter?.getApplication() ||
       ({} as IMidwayFaaSApplication);
@@ -71,15 +65,10 @@ export class MidwayFaaSFramework extends BaseFramework<
         return this.configurationOptions.initializeContext;
       },
 
-      useMiddleware: async middlewares => {
-        if (middlewares.length) {
-          const newMiddlewares = await this.loadMiddleware(middlewares);
-          for (const mw of newMiddlewares) {
-            this.app.use(mw);
-          }
-        }
-      },
-
+      /**
+       * @deprecated
+       * @param middlewareId
+       */
       generateMiddleware: async (middlewareId: string) => {
         return this.generateMiddleware(middlewareId);
       },
@@ -116,25 +105,19 @@ export class MidwayFaaSFramework extends BaseFramework<
     }
   }
 
-  protected async afterContainerReady(
-    options: Partial<IMidwayBootstrapOptions>
-  ) {
-    this.registerDecorator();
-  }
-
   public async run() {
     return this.lock.sureOnce(async () => {
-      // attach global middleware from user config
-      if (this.app?.use) {
-        const middlewares = this.app.getConfig('middleware') || [];
-        await this.app.useMiddleware(middlewares);
-        this.globalMiddleware = this.globalMiddleware.concat(
-          this.app['middleware']
-        );
-      }
+      //
+      // if (this.app?.use) {
+      //   const middlewares = this.app.getConfig('middleware') || [];
+      //   await this.app.useMiddleware(middlewares);
+      //   this.globalMiddleware = this.globalMiddleware.concat(
+      //     this.app['middleware']
+      //   );
+      // }
 
       // set app keys
-      this.app['keys'] = this.app.getConfig('keys') || '';
+      this.app['keys'] = this.configService.getConfiguration('keys') || '';
 
       // store all http function entry
       const collector = new ServerlessTriggerCollector();
@@ -163,49 +146,51 @@ export class MidwayFaaSFramework extends BaseFramework<
         throw new Error('first parameter must be function context');
       }
 
-      const context: FaaSContext = this.getContext(args.shift());
+      if (!funOptions) {
+        throw new Error(`function handler = ${handlerMapping} not found`);
+      }
 
-      if (funOptions) {
-        let fnMiddlewere = [];
-        // invoke middleware, just for http
-        if (context.headers && context.get) {
-          fnMiddlewere = fnMiddlewere
-            .concat(this.globalMiddleware)
-            .concat(funOptions.controllerMiddleware);
-        }
-        fnMiddlewere = fnMiddlewere.concat(funOptions.middleware);
-        if (fnMiddlewere.length) {
-          const mw: any[] = await this.loadMiddleware(fnMiddlewere);
-          mw.push(async (ctx, next) => {
+      const context: FaaSContext = this.getContext(args.shift());
+      const globalMiddlewareFn = await this.getMiddleware();
+      const middlewareManager = new ContextMiddlewareManager();
+
+      middlewareManager.insertLast(globalMiddlewareFn);
+      middlewareManager.insertLast(async (ctx, next) => {
+        const fn = await this.middlewareService.compose([
+          ...funOptions.controllerMiddleware,
+          ...funOptions.middleware,
+          async (ctx, next) => {
             // invoke handler
-            const result = await this.invokeHandler(
-              funOptions,
-              ctx,
-              next,
-              args
-            );
+            const result = await this.invokeHandler(funOptions, ctx, args);
             if (result !== undefined) {
               ctx.body = result;
             }
-            return next();
-          });
-          return compose(mw)(context).then(() => {
-            return context.body;
-          });
-        } else {
-          // invoke handler
-          return this.invokeHandler(funOptions, context, null, args);
-        }
-      }
+            return result;
+          },
+        ]);
 
-      throw new Error(`function handler = ${handlerMapping} not found`);
+        return await fn(ctx, next);
+      });
+      const composeMiddleware = await this.middlewareService.compose(
+        middlewareManager
+      );
+
+      const { error, result } = await composeMiddleware(context);
+      if (error) {
+        throw error;
+      }
+      return result;
     };
   }
 
+  /**
+   * @deprecated
+   * @param middlewareId
+   */
   public async generateMiddleware(
     middlewareId: string
-  ): Promise<FaaSMiddleware> {
-    const mwIns = await this.getApplicationContext().getAsync<IWebMiddleware>(
+  ): Promise<FunctionMiddleware<FaaSContext>> {
+    const mwIns: any = await this.getApplicationContext().getAsync(
       middlewareId
     );
     return mwIns.resolve();
@@ -231,22 +216,7 @@ export class MidwayFaaSFramework extends BaseFramework<
     return context;
   }
 
-  private async invokeHandler(routerInfo: RouterInfo, context, next, args) {
-    if (
-      Array.isArray(routerInfo.requestMetadata) &&
-      routerInfo.requestMetadata.length
-    ) {
-      await Promise.all(
-        routerInfo.requestMetadata.map(
-          async ({ index, type, propertyData }) => {
-            args[index] = await extractKoaLikeValue(type, propertyData)(
-              context,
-              next
-            );
-          }
-        )
-      );
-    }
+  private async invokeHandler(routerInfo: RouterInfo, context, args) {
     const funModule = await context.requestContext.getAsync(
       routerInfo.controllerId
     );
@@ -296,41 +266,6 @@ export class MidwayFaaSFramework extends BaseFramework<
         method || this.defaultHandlerMethod
       }`
     );
-  }
-
-  private registerDecorator() {
-    this.decoratorService.registerPropertyHandler(
-      PLUGIN_KEY,
-      (key, meta, target) => {
-        return target?.[REQUEST_OBJ_CTX_KEY]?.[key] || this.app[key];
-      }
-    );
-
-    this.decoratorService.registerPropertyHandler(
-      LOGGER_KEY,
-      (key, meta, target) => {
-        return (
-          target?.[REQUEST_OBJ_CTX_KEY]?.['logger'] || this.app.getLogger()
-        );
-      }
-    );
-  }
-
-  private async loadMiddleware(middlewares) {
-    const newMiddlewares = [];
-    for (const middleware of middlewares) {
-      if (typeof middleware === 'function') {
-        newMiddlewares.push(middleware);
-      } else {
-        const middlewareImpl: IMiddleware<FaaSContext> =
-          await this.getApplicationContext().getAsync(middleware);
-        if (middlewareImpl && typeof middlewareImpl.resolve === 'function') {
-          newMiddlewares.push(middlewareImpl.resolve() as any);
-        }
-      }
-    }
-
-    return newMiddlewares;
   }
 
   public createLogger(name: string, option: LoggerOptions = {}) {

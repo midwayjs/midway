@@ -17,6 +17,10 @@ import { clearAllLoggers } from '@midwayjs/logger';
 import * as os from 'os';
 import * as assert from 'assert';
 
+type ComponentModule = {
+  Configuration: new () => any;
+};
+
 process.setMaxListeners(0);
 
 function isTestEnvironment() {
@@ -59,7 +63,7 @@ export async function create<
 >(
   appDir: string = process.cwd(),
   options?: MockAppConfigurationOptions,
-  customFramework?: { new (...args): T }
+  customFramework?: { new (...args): T } | ComponentModule
 ): Promise<T> {
   process.env.MIDWAY_TS_MODE = 'true';
 
@@ -77,6 +81,16 @@ export async function create<
     safeRequire(join(`${options.baseDir}`, 'interface'));
   }
 
+  if (!options.configurationModule && customFramework) {
+    options.configurationModule =
+      transformFrameworkToConfiguration(customFramework);
+  }
+
+  if (customFramework['Configuration']) {
+    options.configurationModule = customFramework;
+    customFramework = customFramework['Framework'];
+  }
+
   const container = await initializeGlobalApplicationContext({
     baseDir: options.baseDir,
     appDir,
@@ -86,7 +100,7 @@ export async function create<
   });
 
   if (customFramework) {
-    return container.getAsync(customFramework);
+    return container.getAsync(customFramework as any);
   } else {
     const frameworkService = await container.getAsync(MidwayFrameworkService);
     return frameworkService.getMainFramework() as T;
@@ -100,7 +114,7 @@ export async function createApp<
 >(
   baseDir: string = process.cwd(),
   options?: U & MockAppConfigurationOptions,
-  customFramework?: { new (...args): T }
+  customFramework?: { new (...args): T } | ComponentModule
 ): Promise<IMidwayApplication<any, any>> {
   const framework: T = await create<T, U>(baseDir, options, customFramework);
   return framework.getApplication() as unknown as Y;
@@ -173,6 +187,10 @@ export async function createLightApp(
     async applicationInitialize(options: IMidwayBootstrapOptions) {
       this.app = {} as IMidwayApplication;
       this.defineApplicationProperties();
+    }
+
+    configure(): any {
+      return {};
     }
   }
 

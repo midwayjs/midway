@@ -27,6 +27,7 @@ import { MidwayLoggerService } from './loggerService';
 import { BaseFramework } from '../baseFramework';
 import { MidwayPipelineService } from './pipelineService';
 import { MidwayDecoratorService } from './decoratorService';
+import { MidwayAspectService } from './aspectService';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -36,6 +37,9 @@ export class MidwayFrameworkService {
 
   @Inject()
   loggerService: MidwayLoggerService;
+
+  @Inject()
+  aspectService: MidwayAspectService;
 
   @Inject()
   decoratorService: MidwayDecoratorService;
@@ -142,6 +146,9 @@ export class MidwayFrameworkService {
       );
     }
 
+    // init aspect module
+    await this.aspectService.loadAspect();
+
     // some preload module init
     const modules = listPreloadModule();
     for (const module of modules) {
@@ -176,11 +183,14 @@ async function initializeFramework(
         const frameworkInstance = (await applicationContext.getAsync(
           framework
         )) as IMidwayFramework<any, any>;
-        // app init
-        await frameworkInstance.initialize({
-          applicationContext,
-          ...globalOptions,
-        });
+        // if enable, just init framework
+        if (frameworkInstance.isEnable()) {
+          // app init
+          await frameworkInstance.initialize({
+            applicationContext,
+            ...globalOptions,
+          });
+        }
         return frameworkInstance;
       })();
     })

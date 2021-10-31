@@ -6,6 +6,12 @@ describe('test', () => {
       }
     }
 
+    function ClassB(): ClassDecorator {
+      return (target) => {
+        console.log('B class decorator', target);
+      }
+    }
+
     function PropertyB(): PropertyDecorator {
       return (target, propertyKey) => {
         console.log('B property decorator', target.constructor);
@@ -31,6 +37,7 @@ describe('test', () => {
     }
 
     @ClassA()
+    @ClassB()
     class Test {
 
       @PropertyB()

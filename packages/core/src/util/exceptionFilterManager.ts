@@ -33,16 +33,25 @@ export class ExceptionFilterManager<CTX> {
     }
   }
 
-  public async run(err, ctx) {
-    let result;
+  public async run(
+    err,
+    ctx
+  ): Promise<{
+    result: any;
+    error: any;
+  }> {
+    let result, error;
     if (this.exceptionMap.has(err.constructor)) {
       const filter = this.exceptionMap.get(err.constructor);
       result = await filter.catch(err, ctx);
     } else if (this.defaultFilter) {
       result = await this.defaultFilter.catch(err, ctx);
     } else {
-      // do nothing
+      error = err;
     }
-    return result;
+    return {
+      result,
+      error,
+    };
   }
 }

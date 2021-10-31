@@ -321,7 +321,7 @@ describe('/test/services/middlewareService.test.ts', () => {
 
 
   describe('test middlewareService', () => {
-    it('informationService should be ok', async() => {
+    it('middleware service should be ok', async() => {
 
       @Provide()
       class TestMiddleware1 {
@@ -351,6 +351,39 @@ describe('/test/services/middlewareService.test.ts', () => {
       const result = await fn({}, () => {
         console.log('end');
       });
+
+      expect(result).toEqual('hello world');
+    });
+
+    it('test compose with compose should be ok', async() => {
+
+      @Provide()
+      class TestMiddleware1 {
+        resolve() {
+          return async (ctx, next) => {
+            return 'hello ' + await next();
+          }
+        }
+      }
+
+      @Provide()
+      class TestMiddleware2 {
+        resolve() {
+          return async (ctx, next) => {
+            return 'world'
+          }
+        }
+      }
+
+      const container = new MidwayContainer();
+      container.bindClass(MidwayMiddlewareService);
+      container.bindClass(TestMiddleware1);
+      container.bindClass(TestMiddleware2);
+
+      const middlewareService = await container.getAsync(MidwayMiddlewareService, [container]);
+      const fn = await middlewareService.compose([TestMiddleware1]);
+      const fn2 = await middlewareService.compose([fn, TestMiddleware2]);
+      const result = await fn2({});
 
       expect(result).toEqual('hello world');
     });

@@ -8,8 +8,7 @@
     "@midwayjs/decorator": "^3.0.0-alpha.42",
     "@midwayjs/faas-typings": "^3.0.0-alpha.42",
     "@midwayjs/logger": "^3.0.0-alpha.42",
-    "@midwayjs/simple-lock": "^1.1.4",
-    "koa-compose": "^4.1.0"
+    "@midwayjs/simple-lock": "^1.1.4"
   },
   "devDependencies": {
     "@midwayjs/mock": "^3.0.0-alpha.42",

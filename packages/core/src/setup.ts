@@ -66,9 +66,7 @@ export async function initializeGlobalApplicationContext(
   ]);
 
   // init aop support
-  const aspectService = await applicationContext.getAsync(MidwayAspectService, [
-    applicationContext,
-  ]);
+  await applicationContext.getAsync(MidwayAspectService, [applicationContext]);
 
   // init decorator service
   await applicationContext.getAsync(MidwayDecoratorService, [
@@ -101,9 +99,6 @@ export async function initializeGlobalApplicationContext(
     applicationContext,
     globalOptions,
   ]);
-
-  // TODO 移动到 framework load aspect
-  await aspectService.loadAspect();
 
   // lifecycle support
   await applicationContext.getAsync(MidwayLifeCycleService, [

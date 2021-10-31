@@ -54,13 +54,6 @@ describe('/test/util/triggerCollector.test.ts', function () {
         "fmw:upload",
       ],
       "prefix": "/",
-      "requestMetadata": [
-        {
-          "index": 0,
-          "propertyData": "name",
-          "type": 0
-        }
-      ],
       "functionMetadata": {
         "functionName": "helloHttpService-upload",
       }
@@ -86,13 +79,6 @@ describe('/test/util/triggerCollector.test.ts', function () {
         "auth"
       ],
       "prefix": "/",
-      "requestMetadata": [
-        {
-          "index": 0,
-          "propertyData": "event",
-          "type": 1
-        }
-      ],
       "requestMethod": "post",
       "responseMetadata": [],
       "routerName": "",
@@ -117,13 +103,6 @@ describe('/test/util/triggerCollector.test.ts', function () {
       "method": "invoke",
       'middleware': [],
       'prefix': '/',
-      'requestMetadata': [
-        {
-          'index': 0,
-          'propertyData': 'event',
-          'type': 1,
-        },
-      ],
       "functionMetadata": {
         "functionName": "helloHttpService-invoke",
       },

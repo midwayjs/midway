@@ -1,13 +1,13 @@
-import { inject, provide, func, FunctionHandler } from '../../../../src';
+import { Inject, Provide, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/decorator';
 
-@provide()
-@func('index.handler')
-export class HelloService implements FunctionHandler {
+@Provide()
+export class HelloService {
 
-  @inject()
-  ctx;  // context
+  @Inject()
+  ctx;
 
-  handler(event) {
+  @ServerlessTrigger(ServerlessTriggerType.EVENT)
+  async handler(event) {
     return event.text + this.ctx.text;
   }
 }

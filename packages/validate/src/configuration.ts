@@ -20,35 +20,35 @@ export class ValidateConfiguration {
 
   @Init()
   async init() {
-    this.decoratorService.registerMethodHandler(
-      VALIDATE_KEY,
-      (target, propertyKey, metadata) => {
-        // get param types from method
-        const paramTypes = getMethodParamTypes(target, propertyKey);
+    this.decoratorService.registerMethodHandler(VALIDATE_KEY, options => {
+      // get param types from method
+      const paramTypes = getMethodParamTypes(
+        options.target,
+        options.propertyName
+      );
 
-        // add aspect method
-        return {
-          before: (joinPoint: JoinPoint) => {
-            for (let i = 0; i < paramTypes.length; i++) {
-              const item = paramTypes[i];
-              const rules = getClassExtendedMetadata(RULES_KEY, item);
-              if (rules) {
-                const schema = Joi.object(rules);
-                const result = schema.validate(joinPoint.args[i]);
-                if (result.error) {
-                  throw result.error;
-                } else {
-                  joinPoint.args[i] = result.value;
-                }
-                // passed
-                if (metadata.isTransform) {
-                  joinPoint.args[i] = plainToClass(item, joinPoint.args[i]);
-                }
+      // add aspect method
+      return {
+        before: (joinPoint: JoinPoint) => {
+          for (let i = 0; i < paramTypes.length; i++) {
+            const item = paramTypes[i];
+            const rules = getClassExtendedMetadata(RULES_KEY, item);
+            if (rules) {
+              const schema = Joi.object(rules);
+              const result = schema.validate(joinPoint.args[i]);
+              if (result.error) {
+                throw result.error;
+              } else {
+                joinPoint.args[i] = result.value;
+              }
+              // passed
+              if (options.metadata.isTransform) {
+                joinPoint.args[i] = plainToClass(item, joinPoint.args[i]);
               }
             }
-          },
-        };
-      }
-    );
+          }
+        },
+      };
+    });
   }
 }

@@ -35,9 +35,9 @@ export class MidwayMiddlewareService<T> {
               match: classMiddleware.match,
               ignore: classMiddleware.ignore,
             });
-            fn = (ctx, next) => {
+            fn = (ctx, next, options) => {
               if (!match(ctx)) return next();
-              return mw(ctx, next);
+              return mw(ctx, next, options);
             };
             newMiddlewareArr.push(fn);
           }
@@ -55,7 +55,7 @@ export class MidwayMiddlewareService<T> {
      * @return {Promise}
      * @api public
      */
-    const composeFn = (context, next) => {
+    const composeFn = (context, next?) => {
       // last called middleware #
       let index = -1;
       return dispatch(0);
@@ -68,7 +68,11 @@ export class MidwayMiddlewareService<T> {
         if (i === newMiddlewareArr.length) fn = next;
         if (!fn) return Promise.resolve();
         try {
-          return Promise.resolve(fn(context, dispatch.bind(null, i + 1)));
+          return Promise.resolve(
+            fn(context, dispatch.bind(null, i + 1), {
+              index,
+            })
+          );
         } catch (err) {
           return Promise.reject(err);
         }

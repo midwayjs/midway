@@ -6,7 +6,7 @@ describe('test/index.test.ts', () => {
 
   it('invoke handler by default name', async () => {
     const starter = await creatStarter('base-app');
-    const data = await starter.handleInvokeWrapper('index.handler')(
+    const data = await starter.handleInvokeWrapper('helloService.handler')(
       {
         text: 'hello',
       },

@@ -1,6 +1,5 @@
 import {
   BaseFramework,
-  extractKoaLikeValue,
   HTTP_SERVER_KEY,
   IMidwayBootstrapOptions,
   IMidwayContext,
@@ -62,16 +61,6 @@ export abstract class MidwayKoaBaseFramework<
     const [controllerId, methodName] = controllerMapping.split('.');
     return async (ctx, next) => {
       const args = [ctx, next];
-      if (Array.isArray(routeArgsInfo)) {
-        await Promise.all(
-          routeArgsInfo.map(async ({ index, type, propertyData }) => {
-            args[index] = await extractKoaLikeValue(type, propertyData)(
-              ctx,
-              next
-            );
-          })
-        );
-      }
       const controller = await ctx.requestContext.getAsync(controllerId);
       // eslint-disable-next-line prefer-spread
       const result = await controller[methodName].apply(controller, args);
@@ -108,6 +97,10 @@ export abstract class MidwayKoaBaseFramework<
     };
   }
 
+  /**
+   * @deprecated
+   * @param middlewareId
+   */
   public async generateMiddleware(middlewareId: string) {
     const mwIns = await this.getApplicationContext().getAsync<IWebMiddleware>(
       middlewareId
@@ -237,6 +230,10 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<
 > {
   private server: Server;
 
+  configure(): IMidwayKoaConfigurationOptions {
+    return this.configService.getConfiguration('koa');
+  }
+
   async applicationInitialize(options: Partial<IMidwayBootstrapOptions>) {
     this.app = new koa<
       DefaultState,
@@ -244,7 +241,10 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<
     >() as IMidwayKoaApplication;
     this.app.use(async (ctx, next) => {
       this.app.createAnonymousContext(ctx);
-      const result = await (await this.getMiddleware())(ctx, next);
+      const { result, error } = await (await this.getMiddleware())(ctx, next);
+      if (error) {
+        throw error;
+      }
       if (result) {
         ctx.body = result;
       }
@@ -254,7 +254,10 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<
       generateController: (controllerMapping: string) => {
         return this.generateController(controllerMapping);
       },
-
+      /**
+       * @deprecated
+       * @param middlewareId
+       */
       generateMiddleware: async (middlewareId: string) => {
         return this.generateMiddleware(middlewareId);
       },
@@ -302,7 +305,7 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<
 
   public async run(): Promise<void> {
     // merge koa middleware to middleware service
-    this.middlewareManager.push(this.app.middleware.slice(1) as any);
+    this.middlewareManager.push(...(this.app.middleware.slice(1) as any));
 
     // set port and listen server
     if (this.configurationOptions.port) {
@@ -328,7 +331,7 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<
   }
 
   public getFrameworkName() {
-    return 'koa';
+    return 'web:koa';
   }
 
   public getServer() {

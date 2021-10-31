@@ -16,8 +16,6 @@ import { IMidwayContainer } from '../interface';
 @Provide()
 @Scope(ScopeEnum.Singleton)
 export class MidwayAspectService {
-  protected aspectMappingMap: WeakMap<any, Map<string, any[]>> = new WeakMap();
-
   constructor(readonly applicationContext: IMidwayContainer) {}
 
   /**

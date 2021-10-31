@@ -1,4 +1,5 @@
-import { ALL, Aspect, Controller, Get, Body, IMethodAspect, JoinPoint, Post, Provide, Validate } from '@midwayjs/decorator';
+import { ALL, Aspect, Controller, Get, Body, IMethodAspect, JoinPoint, Post, Provide } from '@midwayjs/decorator';
+import { Validate } from '@midwayjs/validate';
 
 export class BaseUserController {
 }

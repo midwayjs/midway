@@ -1,33 +1,16 @@
-import { Configuration, App, Inject, Catch } from '@midwayjs/decorator';
+import { Configuration, App, Inject } from '@midwayjs/decorator';
 import * as bodyParser from 'koa-bodyparser';
 import * as session from 'koa-session';
 import { join } from 'path';
-import { Framework, Context } from '../../../../src';
-import { BadGatewayException, IExceptionFilter } from '@midwayjs/core';
-
-@Catch(BadGatewayException)
-export class BadGatewayFilter implements IExceptionFilter<Context>{
-  async catch(err: BadGatewayException, ctx: Context) {
-    return {
-      status: err.status,
-      message: err.message,
-    }
-  }
-}
-
-@Catch()
-export class AllExceptionFilter {
-  async catch(err, ctx) {
-    return {
-      status: 500,
-      message: 'default error value'
-    }
-  }
-}
+import { Framework } from '../../../../src';
+import * as Validate from '@midwayjs/validate';
 
 @Configuration({
   importConfigs: [
     join(__dirname, './config'),
+  ],
+  imports: [
+    Validate
   ],
   conflictCheck: true,
 })
@@ -49,7 +32,5 @@ export class ContainerConfiguration {
     }, this.app));
 
     this.framework.useMiddleware(bodyParser());
-
-    this.framework.useFilter([BadGatewayFilter, AllExceptionFilter]);
   }
 }

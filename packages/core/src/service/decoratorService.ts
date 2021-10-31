@@ -56,11 +56,13 @@ export class MidwayDecoratorService {
                 for (const meta of parameterDecoratorMetadata[methodName]) {
                   const { propertyName, key, metadata, parameterIndex } = meta;
                   newArgs[parameterIndex] = this.parameterDecoratorMap.get(key)(
-                    Clzz,
-                    propertyName,
-                    metadata,
-                    joinPoint.args,
-                    parameterIndex
+                    {
+                      metadata,
+                      propertyName,
+                      parameterIndex,
+                      target: Clzz,
+                      originArgs: joinPoint.args,
+                    }
                   );
                 }
                 joinPoint.args = newArgs;
@@ -87,11 +89,11 @@ export class MidwayDecoratorService {
             Clzz,
             propertyName,
             () => {
-              return this.methodDecoratorMap.get(key)(
-                Clzz,
+              return this.methodDecoratorMap.get(key)({
+                target: Clzz,
                 propertyName,
-                metadata
-              );
+                metadata,
+              });
             }
           );
         }
