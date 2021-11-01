@@ -230,6 +230,8 @@ export interface IMidwayContainer extends IObjectFactory, IObjectLifeCycle {
   registerObject(identifier: ObjectIdentifier, target: any);
   load(module?: any);
   hasNamespace(namespace: string): boolean;
+  hasDefinition(identifier: ObjectIdentifier);
+  hasObject(identifier: ObjectIdentifier);
   bind<T>(target: T, options?: ObjectDefinitionOptions): void;
   bind<T>(
     identifier: ObjectIdentifier,
@@ -371,11 +373,13 @@ export interface IMidwayBaseApplication<T extends IMidwayContext = IMidwayContex
 export type IMidwayApplication<T extends IMidwayContext = IMidwayContext, FrameworkApplication = unknown> = IMidwayBaseApplication<T> & FrameworkApplication;
 
 export interface IMidwayBootstrapOptions {
+  [customPropertyKey: string]: any;
   baseDir?: string;
   appDir?: string;
   applicationContext?: IMidwayContainer;
   preloadModules?: any[];
   configurationModule?: any;
+  moduleDetector?: 'file' | IFileDetector | false;
   logger?: boolean | ILogger;
   ignore?: string[];
 }
@@ -389,7 +393,7 @@ export interface IConfigurationOptions {
 export interface IMidwayFramework<APP extends IMidwayApplication, T extends IConfigurationOptions> {
   app: APP;
   configurationOptions: T;
-  configure(...args): T;
+  configure(): T;
   isEnable(): boolean;
   initialize(options: Partial<IMidwayBootstrapOptions>): Promise<void>;
   run(): Promise<void>;

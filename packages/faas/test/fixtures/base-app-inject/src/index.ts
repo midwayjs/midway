@@ -1,11 +1,10 @@
-import { inject, provide, func, FunctionHandler } from '../../../../src';
+import { Inject, Provide, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/decorator';
 import { Plugin, App } from '@midwayjs/decorator';
 import * as assert from 'assert';
 
-@provide()
-@func('index.handler')
-export class HelloService implements FunctionHandler {
-  @inject()
+@Provide()
+export class HelloService {
+  @Inject()
   ctx; // context
 
   @App()
@@ -14,6 +13,7 @@ export class HelloService implements FunctionHandler {
   @Plugin()
   mysql;
 
+  @ServerlessTrigger(ServerlessTriggerType.EVENT)
   handler(event) {
     assert(this.app);
     return this.ctx.originContext['text'] + event.text + this.mysql.model;

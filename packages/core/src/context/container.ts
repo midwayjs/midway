@@ -608,4 +608,12 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
   hasNamespace(ns: string) {
     return this.namespaceSet.has(ns);
   }
+
+  hasDefinition(identifier: ObjectIdentifier) {
+    return this.registry.hasDefinition(identifier);
+  }
+
+  hasObject(identifier: ObjectIdentifier) {
+    return this.registry.hasObject(identifier);
+  }
 }

@@ -181,7 +181,8 @@ async function initializeFramework(
       applicationContext.bindClass(framework);
       return (async () => {
         const frameworkInstance = (await applicationContext.getAsync(
-          framework
+          framework,
+          [applicationContext]
         )) as IMidwayFramework<any, any>;
         // if enable, just init framework
         if (frameworkInstance.isEnable()) {

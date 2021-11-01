@@ -33,11 +33,10 @@ export abstract class BaseFramework<
   OPT extends IConfigurationOptions
 > implements IMidwayFramework<APP, OPT>
 {
-  protected applicationContext: IMidwayContainer;
+  public app: APP;
+  public configurationOptions: OPT;
   protected logger: ILogger;
   protected appLogger: ILogger;
-  public configurationOptions: OPT;
-  public app: APP;
   protected defaultContext = {};
   protected BaseContextLoggerClass: any;
   protected middlewareManager = new ContextMiddlewareManager<CTX>();
@@ -59,6 +58,8 @@ export abstract class BaseFramework<
   @Inject()
   middlewareService: MidwayMiddlewareService<CTX>;
 
+  constructor(readonly applicationContext: IMidwayContainer) {}
+
   @Init()
   async init() {
     this.configurationOptions = this.configure() ?? ({} as OPT);
@@ -70,16 +71,13 @@ export abstract class BaseFramework<
     return this;
   }
 
-  abstract configure(...args): OPT;
+  abstract configure(): OPT;
 
   isEnable(): boolean {
     return true;
   }
 
   public async initialize(options?: IMidwayBootstrapOptions): Promise<void> {
-    this.configurationOptions = this.configurationOptions || ({} as OPT);
-    this.applicationContext = options.applicationContext;
-
     await this.beforeContainerInitialize(options);
     await this.containerInitialize(options);
     await this.afterContainerInitialize(options);

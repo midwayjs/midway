@@ -14,13 +14,12 @@ import {
   ServerlessTriggerCollector,
 } from '@midwayjs/core';
 import {
-  WEB_RESPONSE_HTTP_CODE,
-  WEB_RESPONSE_HEADER,
-  WEB_RESPONSE_CONTENT_TYPE,
-  WEB_RESPONSE_REDIRECT,
-  Provide,
-  Inject,
   Framework,
+  Inject,
+  WEB_RESPONSE_CONTENT_TYPE,
+  WEB_RESPONSE_HEADER,
+  WEB_RESPONSE_HTTP_CODE,
+  WEB_RESPONSE_REDIRECT,
 } from '@midwayjs/decorator';
 import SimpleLock from '@midwayjs/simple-lock';
 import { createConsoleLogger, LoggerOptions, loggers } from '@midwayjs/logger';
@@ -28,16 +27,12 @@ import { ContextMiddlewareManager } from '@midwayjs/core/dist/util/middlewareMan
 
 const LOCK_KEY = '_faas_starter_start_key';
 
-@Provide()
 @Framework()
 export class MidwayFaaSFramework extends BaseFramework<
   IMidwayFaaSApplication,
   FaaSContext,
   IFaaSConfigurationOptions
 > {
-  configure(options) {
-    return options;
-  }
   protected defaultHandlerMethod = 'handler';
   protected funMappingStore: Map<string, RouterInfo> = new Map();
   protected logger;
@@ -52,9 +47,15 @@ export class MidwayFaaSFramework extends BaseFramework<
   @Inject()
   middlewareService: MidwayMiddlewareService<FaaSContext>;
 
-  async applicationInitialize(options: IMidwayBootstrapOptions) {
+  configure() {
+    return {};
+  }
+
+  async applicationInitialize(
+    options: IMidwayBootstrapOptions & IFaaSConfigurationOptions
+  ) {
     this.app =
-      this.configurationOptions.applicationAdapter?.getApplication() ||
+      options.applicationAdapter?.getApplication() ||
       ({} as IMidwayFaaSApplication);
 
     this.defineApplicationProperties({
@@ -62,7 +63,7 @@ export class MidwayFaaSFramework extends BaseFramework<
        * return init context value such as aliyun fc
        */
       getInitializeContext: () => {
-        return this.configurationOptions.initializeContext;
+        return options.initializeContext;
       },
 
       /**
@@ -74,11 +75,11 @@ export class MidwayFaaSFramework extends BaseFramework<
       },
 
       getFunctionName: () => {
-        return this.configurationOptions.applicationAdapter?.getFunctionName();
+        return options.applicationAdapter?.getFunctionName();
       },
 
       getFunctionServiceName: () => {
-        return this.configurationOptions.applicationAdapter?.getFunctionServiceName();
+        return options.applicationAdapter?.getFunctionServiceName();
       },
     });
   }
@@ -107,15 +108,6 @@ export class MidwayFaaSFramework extends BaseFramework<
 
   public async run() {
     return this.lock.sureOnce(async () => {
-      //
-      // if (this.app?.use) {
-      //   const middlewares = this.app.getConfig('middleware') || [];
-      //   await this.app.useMiddleware(middlewares);
-      //   this.globalMiddleware = this.globalMiddleware.concat(
-      //     this.app['middleware']
-      //   );
-      // }
-
       // set app keys
       this.app['keys'] = this.configService.getConfiguration('keys') || '';
 
@@ -151,6 +143,7 @@ export class MidwayFaaSFramework extends BaseFramework<
       }
 
       const context: FaaSContext = this.getContext(args.shift());
+      const isHttpFunction = context.headers && context.get;
       const globalMiddlewareFn = await this.getMiddleware();
       const middlewareManager = new ContextMiddlewareManager();
 
@@ -162,13 +155,12 @@ export class MidwayFaaSFramework extends BaseFramework<
           async (ctx, next) => {
             // invoke handler
             const result = await this.invokeHandler(funOptions, ctx, args);
-            if (result !== undefined) {
+            if (isHttpFunction && result !== undefined) {
               ctx.body = result;
             }
             return result;
           },
         ]);
-
         return await fn(ctx, next);
       });
       const composeMiddleware = await this.middlewareService.compose(

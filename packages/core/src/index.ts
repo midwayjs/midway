@@ -31,7 +31,6 @@ export * from './service/pipelineService';
 export * from './util/contextUtil';
 export * from './util/serviceFactory';
 export * from './util/fileDetector';
-export * from './util/containerUtil';
 export * from './util/webGenerator';
 export * from './util/middlewareManager';
 export * from './setup';

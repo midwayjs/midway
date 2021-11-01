@@ -11,7 +11,7 @@ export class TestMiddleware {
       assert(this.adb);
       assert(ctx.logger);
       ctx.requestId = 555;
-      await next();
+      return await next();
     };
   }
 }

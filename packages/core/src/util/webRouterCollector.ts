@@ -345,7 +345,7 @@ export class WebRouterCollector {
             handlerName: `${controllerId}.${webRouter['methodName']}`,
             funcHandlerName: `${controllerId}.${webRouter['methodName']}`,
             controllerId,
-            middleware: [],
+            middleware: webRouter['metadata']?.['middleware'] || [],
             controllerMiddleware: [],
             requestMetadata: [],
             responseMetadata: [],

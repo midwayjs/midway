@@ -6,6 +6,7 @@ import {
   FunctionMiddleware,
 } from '../interface';
 import { pathToRegexp } from '../util/pathToRegexp';
+import { MidwayCommonException, MidwayParameterException } from '../exception';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -13,19 +14,29 @@ export class MidwayMiddlewareService<T> {
   constructor(readonly applicationContext: IMidwayContainer) {}
 
   async compose(middleware: Array<CommonMiddleware<T>>, name?: string) {
-    if (!Array.isArray(middleware))
-      throw new TypeError('Middleware stack must be an array!');
+    if (!Array.isArray(middleware)) {
+      throw new MidwayParameterException('Middleware stack must be an array');
+    }
 
     const newMiddlewareArr = [];
 
     for (let fn of middleware) {
-      if (isClass(fn)) {
+      if (isClass(fn) || typeof fn === 'string') {
+        if (
+          typeof fn === 'string' &&
+          !this.applicationContext.hasDefinition(fn)
+        ) {
+          throw new MidwayCommonException(
+            'Middleware definition not found in midway container'
+          );
+        }
         const classMiddleware = await this.applicationContext.getAsync<
           IMiddleware<T>
         >(fn as any);
         if (classMiddleware) {
           fn = classMiddleware.resolve();
           if (!classMiddleware.match && !classMiddleware.ignore) {
+            (fn as any)._name = classMiddleware.constructor.name;
             // just got fn
             newMiddlewareArr.push(fn);
           } else {
@@ -39,10 +50,13 @@ export class MidwayMiddlewareService<T> {
               if (!match(ctx)) return next();
               return mw(ctx, next, options);
             };
+            (fn as any)._name = classMiddleware.constructor.name;
             newMiddlewareArr.push(fn);
           }
         } else {
-          throw new TypeError('Middleware must have resolve method!');
+          throw new MidwayCommonException(
+            'Middleware must have resolve method!'
+          );
         }
       } else {
         newMiddlewareArr.push(fn);
@@ -62,7 +76,9 @@ export class MidwayMiddlewareService<T> {
 
       function dispatch(i) {
         if (i <= index)
-          return Promise.reject(new Error('next() called multiple times'));
+          return Promise.reject(
+            new MidwayCommonException('next() called multiple times')
+          );
         index = i;
         let fn = (newMiddlewareArr as Array<FunctionMiddleware<T>>)[i];
         if (i === newMiddlewareArr.length) fn = next;
@@ -88,7 +104,9 @@ export class MidwayMiddlewareService<T> {
 export function pathMatching(options) {
   options = options || {};
   if (options.match && options.ignore)
-    throw new Error('options.match and options.ignore can not both present');
+    throw new MidwayCommonException(
+      'options.match and options.ignore can not both present'
+    );
   if (!options.match && !options.ignore) return () => true;
 
   const matchFn = options.match
@@ -118,7 +136,7 @@ function toPathMatch(pattern) {
     const matchs = pattern.map(item => toPathMatch(item));
     return ctx => matchs.some(match => match(ctx));
   }
-  throw new Error(
+  throw new MidwayCommonException(
     'match/ignore pattern must be RegExp, Array or String, but got ' + pattern
   );
 }

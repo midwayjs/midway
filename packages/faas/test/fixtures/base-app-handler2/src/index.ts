@@ -1,23 +1,21 @@
-import { Inject, Provide, Func } from '@midwayjs/decorator';
-import { FunctionHandler } from '../../../../src';
+import { Inject, Provide, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/decorator';
 
 @Provide()
-@Func('index.handler')
-export class IndexService implements FunctionHandler {
+export class IndexService {
   @Inject()
   ctx; // context
 
-  // index.handler default method
+  @ServerlessTrigger(ServerlessTriggerType.EVENT)
   handler(event) {
     return 'default' + event.text + this.ctx.text;
   }
 
-  @Func('index.list', {})
+  @ServerlessTrigger(ServerlessTriggerType.EVENT)
   getList(event) {
     return event.text + this.ctx.text;
   }
 
-  @Func({ path: '/' })
+  @ServerlessTrigger(ServerlessTriggerType.EVENT)
   get(event) {
     return 'hello';
   }

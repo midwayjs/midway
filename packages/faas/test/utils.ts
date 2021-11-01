@@ -4,7 +4,8 @@ import { join } from 'path';
 import { create, close } from '@midwayjs/mock';
 
 export async function creatStarter(name, options?, Clz?): Promise<Framework> {
-  return create<Framework>(join(__dirname, 'fixtures', name), options, FaaS);
+  const framework = await create<Framework>(join(__dirname, 'fixtures', name), options, FaaS);
+  return framework;
 }
 
 export async function closeApp(framework) {

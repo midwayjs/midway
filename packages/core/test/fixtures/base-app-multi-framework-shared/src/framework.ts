@@ -1,8 +1,9 @@
 import { Framework, MidwayFrameworkType, Provide } from '@midwayjs/decorator';
-import { BaseFramework, CommonExceptionFilterUnion, CommonMiddlewareUnion,
+import { BaseFramework, CommonExceptionFilterUnion, CommonMiddleware, CommonMiddlewareUnion,
   IMidwayApplication,
   IMidwayBootstrapOptions,
-  IMidwayFramework
+  IMidwayFramework,
+  MiddlewareRespond
 } from '../../../../src';
 
 @Provide()
@@ -40,11 +41,17 @@ export class CustomTwoFramework extends LightFramework {
 @Provide()
 @Framework()
 export class CustomThirdFramework implements IMidwayFramework<any, any> {
+  isEnable(): boolean {
+    return true;
+  }
+  getMiddleware(lastMiddleware?: CommonMiddleware<any>): Promise<MiddlewareRespond<any>> {
+    throw new Error('Method not implemented.');
+  }
   useMiddleware(Middleware: CommonMiddlewareUnion<any>) {
-      throw new Error('Method not implemented.');
+    throw new Error('Method not implemented.');
   }
   useFilter(Filter: CommonExceptionFilterUnion<any>) {
-      throw new Error('Method not implemented.');
+    throw new Error('Method not implemented.');
   }
   async applicationInitialize(options: IMidwayBootstrapOptions) {
     this.app = {} as IMidwayApplication;

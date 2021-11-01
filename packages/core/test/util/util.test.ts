@@ -8,7 +8,7 @@ import {
   delegateTargetMethod,
   delegateTargetProperties
 } from '../../src/util';
-import { createDirectoryGlobContainer, createModuleContainer, PathFileUtil } from '../../src';
+import { PathFileUtil } from '../../src';
 
 describe('/test/util/util.test.ts', () => {
 
@@ -131,28 +131,4 @@ describe('/test/pathFileUtil.test.ts', () => {
     expect(c.getInfo).toBeUndefined();
   });
 
-});
-
-describe('/test/util/containerUtil', () => {
-  it('should test createModuleContainer', async () => {
-    class A {}
-    class B {}
-    const container = createModuleContainer({
-      modules: [
-        A,
-        B
-      ],
-      entry: {
-        Configuration: {}
-      }
-    });
-    expect(container).toBeDefined();
-  });
-
-  it('should test createDirectoryGlobContainer', async () => {
-    const container = createDirectoryGlobContainer({
-      baseDir: __dirname
-    });
-    expect(container).toBeDefined();
-  });
 });

@@ -5,11 +5,11 @@ describe('test/util.test.ts', () => {
     class A {}
     class B {}
     const framework = await createModuleServerlessFramework({
-      modules: [
+      preloadModules: [
         A,
         B
       ],
-      entry: {
+      configurationModule: {
         Configuration: {}
       }
     });

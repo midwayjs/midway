@@ -1,10 +1,8 @@
-import { FunctionHandler } from '../../../../src';
-import { Func, Provide, App, Inject, Logger } from '@midwayjs/decorator';
+import { Provide, App, Inject, Logger, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/decorator';
 import * as assert from 'assert';
 
 @Provide()
-@Func('index.handler')
-export class HelloService implements FunctionHandler {
+export class HelloService {
   @App()
   app;
 
@@ -26,6 +24,7 @@ export class HelloService implements FunctionHandler {
   @Logger()
   appLogger;
 
+  @ServerlessTrigger(ServerlessTriggerType.EVENT)
   async handler() {
     assert(this.loggerService.getLogger());
     assert(this.loggerService.getLogger() === this.app.getLogger());

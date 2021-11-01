@@ -92,7 +92,7 @@ export async function create<
   }
 
   const container = await initializeGlobalApplicationContext({
-    baseDir: options.baseDir,
+    ...options,
     appDir,
     configurationModule: []
       .concat(options.configurationModule)
@@ -162,10 +162,12 @@ export async function createFunctionApp(
       '@midwayjs/serverless-app',
     ]);
 
-  return createApp(baseDir, {
+  const framework = await createApp(baseDir, {
     ...options,
     configurationModule: transformFrameworkToConfiguration(customFramework),
   });
+  framework.configurationOptions = options;
+  return framework;
 }
 
 export async function createLightApp(

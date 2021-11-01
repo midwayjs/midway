@@ -149,6 +149,10 @@ export namespace FaaSMetadata {
      * deploy or not
      */
     isDeploy?: boolean;
+    /**
+     * function middleware
+     */
+    middleware?: any[];
   }
 
   export interface EventTriggerOptions extends TriggerCommonOptions {
@@ -158,7 +162,6 @@ export namespace FaaSMetadata {
   export interface HTTPTriggerOptions extends TriggerCommonOptions  {
     path: string;
     method?: 'get' | 'post' | 'delete' | 'put' | 'head' | 'patch' | 'all';
-    middleware?: any[];
   }
 
   export interface APIGatewayTriggerOptions extends HTTPTriggerOptions  {

@@ -26,13 +26,20 @@ export async function initializeGlobalApplicationContext(
   // bind container to decoratorManager
   bindContainer(applicationContext);
 
-  if (!globalOptions.preloadModules && baseDir) {
-    applicationContext.setFileDetector(
-      new DirectoryFileDetector({
-        loadDir: baseDir,
-        ignore: globalOptions.ignore ?? [],
-      })
-    );
+  if (globalOptions.moduleDirector !== false) {
+    if (
+      globalOptions.moduleDetector === undefined ||
+      globalOptions.moduleDetector === 'file'
+    ) {
+      applicationContext.setFileDetector(
+        new DirectoryFileDetector({
+          loadDir: baseDir,
+          ignore: globalOptions.ignore ?? [],
+        })
+      );
+    } else if (globalOptions.moduleDetector) {
+      applicationContext.setFileDetector(globalOptions.moduleDetector);
+    }
   }
 
   // register baseDir and appDir

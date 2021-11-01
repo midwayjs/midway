@@ -1,4 +1,5 @@
 import {
+  ApplicationContext,
   Configuration,
   Init,
   Inject,
@@ -22,6 +23,9 @@ export class FaaSConfiguration {
 
   @Inject()
   decoratorService: MidwayDecoratorService;
+
+  @ApplicationContext()
+  applicationContext;
 
   @Init()
   async init() {
