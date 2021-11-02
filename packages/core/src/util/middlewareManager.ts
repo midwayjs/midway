@@ -5,9 +5,11 @@ import {
 } from '../interface';
 
 export class ContextMiddlewareManager<
-  T extends IMidwayContext = IMidwayContext
-> extends Array<CommonMiddleware<T>> {
-  public insertFirst(middleware: CommonMiddlewareUnion<T>) {
+  T extends IMidwayContext = IMidwayContext,
+  R = any,
+  N = any
+> extends Array<CommonMiddleware<T, R, N>> {
+  public insertFirst(middleware: CommonMiddlewareUnion<T, R, N>) {
     if (Array.isArray(middleware)) {
       this.unshift(...middleware);
     } else {
@@ -16,15 +18,15 @@ export class ContextMiddlewareManager<
   }
 
   public insertBefore(
-    middleware: CommonMiddlewareUnion<T>,
+    middleware: CommonMiddlewareUnion<T, R, N>,
     idxOrBeforeMiddleware: number
   );
   public insertBefore(
-    middleware: CommonMiddlewareUnion<T>,
-    idxOrBeforeMiddleware: CommonMiddlewareUnion<T>
+    middleware: CommonMiddlewareUnion<T, R, N>,
+    idxOrBeforeMiddleware: CommonMiddlewareUnion<T, R, N>
   );
   public insertBefore(
-    middleware: CommonMiddlewareUnion<T>,
+    middleware: CommonMiddlewareUnion<T, R, N>,
     idxOrBeforeMiddleware: any
   ) {
     if (typeof idxOrBeforeMiddleware !== 'number') {
@@ -38,15 +40,15 @@ export class ContextMiddlewareManager<
   }
 
   public insertAfter(
-    middleware: CommonMiddlewareUnion<T>,
+    middleware: CommonMiddlewareUnion<T, R, N>,
     idxOrAfterMiddleware: number
   );
   public insertAfter(
-    middleware: CommonMiddlewareUnion<T>,
-    idxOrAfterMiddleware: CommonMiddlewareUnion<T>
+    middleware: CommonMiddlewareUnion<T, R, N>,
+    idxOrAfterMiddleware: CommonMiddlewareUnion<T, R, N>
   );
   public insertAfter(
-    middleware: CommonMiddlewareUnion<T>,
+    middleware: CommonMiddlewareUnion<T, R, N>,
     idxOrAfterMiddleware: any
   ) {
     if (typeof idxOrAfterMiddleware !== 'number') {
@@ -59,7 +61,7 @@ export class ContextMiddlewareManager<
     }
   }
 
-  public insertLast(middleware: CommonMiddlewareUnion<T>) {
+  public insertLast(middleware: CommonMiddlewareUnion<T, R, N>) {
     if (Array.isArray(middleware)) {
       this.push(...middleware);
     } else {
@@ -67,7 +69,7 @@ export class ContextMiddlewareManager<
     }
   }
 
-  private findItemIndex(middleware: CommonMiddleware<T>): number {
+  private findItemIndex(middleware: CommonMiddleware<T, R, N>): number {
     return this.findIndex(item => item === middleware);
   }
 }

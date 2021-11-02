@@ -34,5 +34,6 @@ export * from './util/fileDetector';
 export * from './util/webGenerator';
 export * from './util/middlewareManager';
 export * from './util/pathToRegexp';
+export * from './util/exceptionFilterManager';
 export * from './setup';
 export * from './exception';

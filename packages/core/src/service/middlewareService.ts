@@ -13,7 +13,10 @@ import { MidwayCommonException, MidwayParameterException } from '../exception';
 export class MidwayMiddlewareService<T> {
   constructor(readonly applicationContext: IMidwayContainer) {}
 
-  async compose(middleware: Array<CommonMiddleware<T>>, name?: string) {
+  async compose(
+    middleware: Array<CommonMiddleware<T> | string>,
+    name?: string
+  ) {
     if (!Array.isArray(middleware)) {
       throw new MidwayParameterException('Middleware stack must be an array');
     }

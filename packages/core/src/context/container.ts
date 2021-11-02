@@ -31,6 +31,7 @@ import {
   IMidwayContainer,
   IObjectDefinition,
   IObjectDefinitionRegistry,
+  ObjectContext,
   ObjectLifeCycleEvent,
   REQUEST_CTX_KEY,
 } from '../interface';
@@ -41,10 +42,10 @@ import {
   ManagedReference,
   ManagedResolverFactory,
 } from './managedResolverFactory';
-import { NotFoundError } from '../common/notFoundError';
 import { MidwayEnvironmentService } from '../service/environmentService';
 import { MidwayConfigService } from '../service/configService';
 import * as EventEmitter from 'events';
+import { MidwayDefinitionNotFoundException } from '../exception';
 
 const debug = util.debuglog('midway:container:configuration');
 const globalDebugLogger = util.debuglog('midway:container');
@@ -478,9 +479,17 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     await this.loadDefinitions();
   }
 
-  get<T>(identifier: { new (...args): T }, args?: any): T;
-  get<T>(identifier: ObjectIdentifier, args?: any): T;
-  get(identifier: any, args?: any): any {
+  get<T>(
+    identifier: { new (...args): T },
+    args?: any,
+    objectContext?: ObjectContext
+  ): T;
+  get<T>(
+    identifier: ObjectIdentifier,
+    args?: any,
+    objectContext?: ObjectContext
+  ): T;
+  get(identifier: any, args?: any, objectContext?: ObjectContext): any {
     if (typeof identifier !== 'string') {
       identifier = this.getIdentifier(identifier);
     }
@@ -492,14 +501,28 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
       return this.parent.get(identifier, args);
     }
     if (!definition) {
-      throw new NotFoundError(identifier);
+      throw new MidwayDefinitionNotFoundException(
+        objectContext?.originName ?? identifier
+      );
     }
     return this.getManagedResolverFactory().create({ definition, args });
   }
 
-  async getAsync<T>(identifier: { new (...args): T }, args?: any): Promise<T>;
-  async getAsync<T>(identifier: ObjectIdentifier, args?: any): Promise<T>;
-  async getAsync(identifier: any, args?: any): Promise<any> {
+  async getAsync<T>(
+    identifier: { new (...args): T },
+    args?: any,
+    objectContext?: ObjectContext
+  ): Promise<T>;
+  async getAsync<T>(
+    identifier: ObjectIdentifier,
+    args?: any,
+    objectContext?: ObjectContext
+  ): Promise<T>;
+  async getAsync(
+    identifier: any,
+    args?: any,
+    objectContext?: ObjectContext
+  ): Promise<any> {
     if (typeof identifier !== 'string') {
       identifier = this.getIdentifier(identifier);
     }
@@ -513,7 +536,9 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     }
 
     if (!definition) {
-      throw new NotFoundError(identifier);
+      throw new MidwayDefinitionNotFoundException(
+        objectContext?.originName ?? identifier
+      );
     }
 
     return this.getManagedResolverFactory().createAsync({ definition, args });

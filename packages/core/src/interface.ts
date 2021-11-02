@@ -20,16 +20,20 @@ export interface ILifeCycle extends Partial<IObjectLifeCycle> {
   onContextError?(err: Error, ctx: IMidwayContext, app: IMidwayApplication);
 }
 
+export type ObjectContext = {
+  originName?: string;
+}
+
 /**
  * 对象容器抽象
  * 默认用Xml容器实现一个
  */
 export interface IObjectFactory {
   registry: IObjectDefinitionRegistry;
-  get<T>(identifier: new (...args) => T, args?: any): T;
-  get<T>(identifier: ObjectIdentifier, args?: any): T;
-  getAsync<T>(identifier: new (...args) => T, args?: any): Promise<T>;
-  getAsync<T>(identifier: ObjectIdentifier, args?: any): Promise<T>;
+  get<T>(identifier: new (...args) => T, args?: any, objectContext?: ObjectContext): T;
+  get<T>(identifier: ObjectIdentifier, args?: any, objectContext?: ObjectContext): T;
+  getAsync<T>(identifier: new (...args) => T, args?: any, objectContext?: ObjectContext): Promise<T>;
+  getAsync<T>(identifier: ObjectIdentifier, args?: any, objectContext?: ObjectContext): Promise<T>;
 }
 
 export enum ObjectLifeCycleEvent {
@@ -304,24 +308,24 @@ export type IMidwayContext<FrameworkContext = unknown> = Context & FrameworkCont
  * Common middleware definition
  */
 
-export interface IMiddleware<T> {
-  resolve: () => FunctionMiddleware<T>;
+export interface IMiddleware<T, R = any, N = any> {
+  resolve: () => FunctionMiddleware<T, R, N>;
   match?: () => boolean;
   ignore?: () => boolean;
 }
-export type FunctionMiddleware<T> = ((context: T, next: () => Promise<any>, options?: any) => any) | ((req, res, next: () => any) => any);
-export type ClassMiddleware<T> = new (...args) => IMiddleware<T>;
-export type CommonMiddleware<T> = ClassMiddleware<T> | FunctionMiddleware<T>;
-export type CommonMiddlewareUnion<T> = CommonMiddleware<T> | Array<CommonMiddleware<T>>;
-export type MiddlewareRespond<T> = (context: T, next?: () => Promise<any>) => Promise<{ result: any; error: Error | undefined }>;
+export type FunctionMiddleware<T, R = any, N = any> = ((context: T, next: () => Promise<any>, options?: any) => any) | ((req: T, res: R, next: N) => any);
+export type ClassMiddleware<T, R = any, N = any> = new (...args) => IMiddleware<T, R, N>;
+export type CommonMiddleware<T, R = any, N = any> = ClassMiddleware<T, R, N> | FunctionMiddleware<T, R, N>;
+export type CommonMiddlewareUnion<T, R = any, N = any> = CommonMiddleware<T, R, N> | Array<CommonMiddleware<T, R, N>>;
+export type MiddlewareRespond<T, R = any, N = any> = ((context: T, next?: () => Promise<any>) => Promise<{ result: any; error: Error | undefined }>) | (FunctionMiddleware<T, R, N>);
 
 /**
  * Common Exception Filter definition
  */
-export interface IExceptionFilter<T> {
-  catch(err: Error, ctx: T): any;
+export interface IExceptionFilter<T, R = any, N = any> {
+  catch(err: Error, ctx: T, res?: R, next?: N): any;
 }
-export type CommonExceptionFilterUnion<T> = (new (...args) => IExceptionFilter<T>) | Array<new (...args) => IExceptionFilter<T>>
+export type CommonExceptionFilterUnion<T, R = any, N = any> = (new (...args) => IExceptionFilter<T, R, N>) | Array<new (...args) => IExceptionFilter<T, R, N>>
 
 export interface IMidwayBaseApplication<T extends IMidwayContext = IMidwayContext> {
   getBaseDir(): string;
@@ -356,12 +360,12 @@ export interface IMidwayBaseApplication<T extends IMidwayContext = IMidwayContex
    * add global filter to app
    * @param Middleware
    */
-  useMiddleware(Middleware: CommonMiddlewareUnion<T>): void;
+  useMiddleware<R = any, N = any>(Middleware: CommonMiddlewareUnion<T, R, N>): void;
 
   /**
    * get global middleware
    */
-  getMiddleware(): ContextMiddlewareManager<T>;
+  getMiddleware<R = any, N = any>(): ContextMiddlewareManager<T, R, N>;
 
   /**
    * add exception filter

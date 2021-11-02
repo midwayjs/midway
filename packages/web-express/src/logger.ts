@@ -3,7 +3,7 @@ import { IMidwayExpressContext } from './interface';
 
 export class MidwayExpressContextLogger extends MidwayContextLogger<IMidwayExpressContext> {
   formatContextLabel() {
-    const req = this.ctx.req;
+    const req = this.ctx;
     // format: '[$userId/$ip/$traceId/$use_ms $method $url]'
     const userId = req?.['session']?.['userId'] || '-';
     const traceId = '-';

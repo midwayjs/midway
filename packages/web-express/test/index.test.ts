@@ -1,5 +1,6 @@
 import { closeApp, creatApp, createHttpRequest } from './utils';
-import { IMidwayExpressApplication } from '../src';
+import { IMidwayExpressApplication, MidwayExpressMiddlewareService} from '../src';
+import { createLightApp } from '@midwayjs/mock';
 
 describe('/test/feature.test.ts', () => {
 
@@ -88,6 +89,65 @@ describe('/test/feature.test.ts', () => {
         .get('/abc/123');
       expect(result.status).toEqual(200);
       expect(result.text).toEqual('hello worldabc');
+    });
+  });
+
+  describe('test middleware', function () {
+
+    it('should test middleware', async () => {
+      const app = await createLightApp('', {
+        configurationModule: require('../src')
+      });
+      app.getApplicationContext().bind(MidwayExpressMiddlewareService);
+
+      const middlewareService = await app.getApplicationContext().getAsync(MidwayExpressMiddlewareService, [app.getApplicationContext()]);
+      let i = 0;
+      const fn = await middlewareService.compose([
+        (req, res, next) => {
+          i += 2;
+          next();
+        },
+        (req, res, next) => {
+          i += 3;
+          next();
+        },
+        (req, res, next) => {
+          i += 4;
+          next();
+        },
+      ]);
+
+      await fn({type: 'req'} as any, {} as any, () => {
+      });
+      expect(i).toEqual(9);
+    });
+
+    it('should catch error in middleware', async () => {
+      const app = await createLightApp('', {
+        configurationModule: require('../src')
+      });
+
+      const middlewareService = await app.getApplicationContext().getAsync(MidwayExpressMiddlewareService, [app.getApplicationContext()]);
+      let i = 0;
+      const fn = await middlewareService.compose([
+        (req, res, next) => {
+          i += 2;
+          next();
+        },
+        (req, res, next) => {
+          i += 3;
+          throw new Error('custom error');
+        },
+      ]);
+
+      try {
+        await fn({type: 'req'} as any, {} as any, (err) => {
+        });
+      } catch (error) {
+        console.log(error);
+      }
+
+      expect(i).toEqual(5);
     });
   });
 

@@ -12,7 +12,7 @@ import {
 } from '@midwayjs/core';
 import { isAbsolute, join } from 'path';
 import { remove } from 'fs-extra';
-import { Configuration, Framework, Provide, sleep } from '@midwayjs/decorator';
+import { Configuration, Framework, sleep } from '@midwayjs/decorator';
 import { clearAllLoggers } from '@midwayjs/logger';
 import * as os from 'os';
 import * as assert from 'assert';
@@ -54,7 +54,7 @@ export type MockAppConfigurationOptions = {
   entryFile?: string;
   baseDir?: string;
   bootstrapTimeout?: number;
-  configurationModule?: any;
+  configurationModule?: any | any[];
 };
 
 export async function create<
@@ -86,7 +86,7 @@ export async function create<
       transformFrameworkToConfiguration(customFramework);
   }
 
-  if (customFramework['Configuration']) {
+  if (customFramework?.['Configuration']) {
     options.configurationModule = customFramework;
     customFramework = customFramework['Framework'];
   }
@@ -171,13 +171,12 @@ export async function createFunctionApp(
 }
 
 export async function createLightApp(
-  baseDir: string = process.cwd(),
+  baseDir = '',
   options?: MockAppConfigurationOptions
 ): Promise<IMidwayApplication> {
   /**
    * 一个全量的空框架
    */
-  @Provide()
   @Framework()
   class LightFramework extends BaseFramework<any, any, any> {
     getFrameworkType(): MidwayFrameworkType {
@@ -198,7 +197,9 @@ export async function createLightApp(
 
   return createApp(baseDir, {
     ...options,
-    configurationModule: transformFrameworkToConfiguration(LightFramework),
+    configurationModule: [
+      transformFrameworkToConfiguration(LightFramework),
+    ].concat(options.configurationModule),
   });
 }
 

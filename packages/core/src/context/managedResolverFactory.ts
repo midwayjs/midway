@@ -12,34 +12,12 @@ import {
   IMidwayContainer,
   ObjectLifeCycleEvent,
 } from '../interface';
-import { NotFoundError } from '../common/notFoundError';
+
 import * as util from 'util';
 import * as EventEmitter from 'events';
+import { MidwayDefinitionNotFoundException } from '../exception';
 
 const debug = util.debuglog('midway:managedresolver');
-
-/**
- * 所有解析器基类
- */
-export class BaseManagedResolver implements IManagedResolver {
-  protected _factory: ManagedResolverFactory;
-
-  constructor(factory: ManagedResolverFactory) {
-    this._factory = factory;
-  }
-
-  get type(): string {
-    throw new Error('not implement');
-  }
-
-  resolve(managed: IManagedInstance): any {
-    throw new Error('not implement');
-  }
-
-  async resolveAsync(managed: IManagedInstance): Promise<any> {
-    throw new Error('not implement');
-  }
-}
 
 export class ManagedReference implements IManagedInstance {
   type = KEYS.REF_ELEMENT;
@@ -50,19 +28,27 @@ export class ManagedReference implements IManagedInstance {
 /**
  * 解析ref
  */
-class RefResolver extends BaseManagedResolver {
+class RefResolver {
+  constructor(readonly factory: ManagedResolverFactory) {}
   get type(): string {
     return KEYS.REF_ELEMENT;
   }
 
-  resolve(managed: IManagedInstance): any {
+  resolve(managed: IManagedInstance, originName: string): any {
     const mr = managed as ManagedReference;
-    return this._factory.context.get(mr.name, mr.args);
+    return this.factory.context.get(mr.name, mr.args, {
+      originName,
+    });
   }
 
-  async resolveAsync(managed: IManagedInstance): Promise<any> {
+  async resolveAsync(
+    managed: IManagedInstance,
+    originName: string
+  ): Promise<any> {
     const mr = managed as ManagedReference;
-    return this._factory.context.getAsync(mr.name, mr.args);
+    return this.factory.context.getAsync(mr.name, mr.args, {
+      originName,
+    });
   }
 }
 
@@ -88,20 +74,23 @@ export class ManagedResolverFactory {
     this.resolvers[resolver.type] = resolver;
   }
 
-  resolveManaged(managed: IManagedInstance): any {
+  resolveManaged(managed: IManagedInstance, originPropertyName: string): any {
     const resolver = this.resolvers[managed.type];
     if (!resolver || resolver.type !== managed.type) {
       throw new Error(`${managed.type} resolver is not exists!`);
     }
-    return resolver.resolve(managed);
+    return resolver.resolve(managed, originPropertyName);
   }
 
-  async resolveManagedAsync(managed: IManagedInstance): Promise<any> {
+  async resolveManagedAsync(
+    managed: IManagedInstance,
+    originPropertyName: string
+  ): Promise<any> {
     const resolver = this.resolvers[managed.type];
     if (!resolver || resolver.type !== managed.type) {
       throw new Error(`${managed.type} resolver is not exists!`);
     }
-    return resolver.resolveAsync(managed);
+    return resolver.resolveAsync(managed, originPropertyName);
   }
 
   /**
@@ -165,9 +154,9 @@ export class ManagedResolverFactory {
       const keys = definition.properties.propertyKeys() as string[];
       for (const key of keys) {
         try {
-          inst[key] = this.resolveManaged(definition.properties.get(key));
+          inst[key] = this.resolveManaged(definition.properties.get(key), key);
         } catch (error) {
-          if (NotFoundError.isClosePrototypeOf(error)) {
+          if (MidwayDefinitionNotFoundException.isClosePrototypeOf(error)) {
             const className = definition.path.name;
             error.updateErrorMsg(className);
           }
@@ -281,10 +270,11 @@ export class ManagedResolverFactory {
       for (const key of keys) {
         try {
           inst[key] = await this.resolveManagedAsync(
-            definition.properties.get(key)
+            definition.properties.get(key),
+            key
           );
         } catch (error) {
-          if (NotFoundError.isClosePrototypeOf(error)) {
+          if (MidwayDefinitionNotFoundException.isClosePrototypeOf(error)) {
             const className = definition.path.name;
             error.updateErrorMsg(className);
           }

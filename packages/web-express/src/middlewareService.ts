@@ -1,20 +1,25 @@
 import { isClass, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
 import {
-  CommonMiddleware,
-  IMiddleware,
   IMidwayContainer,
-  FunctionMiddleware,
   pathToRegexp,
   MidwayCommonException,
   MidwayParameterException,
+  CommonMiddleware,
 } from '@midwayjs/core';
+import { IMidwayExpressContext, IMidwayExpressMiddleware } from './interface';
+import { NextFunction, Response } from 'express';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
-export class MidwayExpressMiddlewareService<T> {
+export class MidwayExpressMiddlewareService {
   constructor(readonly applicationContext: IMidwayContainer) {}
 
-  async compose(middleware: Array<CommonMiddleware<T>>, name?: string) {
+  async compose(
+    middleware: Array<
+      CommonMiddleware<IMidwayExpressContext, Response, NextFunction> | string
+    >,
+    name?: string
+  ) {
     if (!Array.isArray(middleware)) {
       throw new MidwayParameterException('Middleware stack must be an array');
     }
@@ -31,9 +36,10 @@ export class MidwayExpressMiddlewareService<T> {
             'Middleware definition not found in midway container'
           );
         }
-        const classMiddleware = await this.applicationContext.getAsync<
-          IMiddleware<T>
-        >(fn as any);
+        const classMiddleware =
+          await this.applicationContext.getAsync<IMidwayExpressMiddleware>(
+            fn as any
+          );
         if (classMiddleware) {
           fn = classMiddleware.resolve();
           if (!classMiddleware.match && !classMiddleware.ignore) {
@@ -47,9 +53,9 @@ export class MidwayExpressMiddlewareService<T> {
               match: classMiddleware.match,
               ignore: classMiddleware.ignore,
             });
-            fn = (ctx, next, options) => {
-              if (!match(ctx)) return next();
-              return mw(ctx, next, options);
+            fn = (req, res, next) => {
+              if (!match(req)) return next();
+              return mw(req, res, next);
             };
             (fn as any)._name = classMiddleware.constructor.name;
             newMiddlewareArr.push(fn);
@@ -64,36 +70,17 @@ export class MidwayExpressMiddlewareService<T> {
       }
     }
 
-    /**
-     * @param {Object} context
-     * @param next
-     * @return {Promise}
-     * @api public
-     */
-    const composeFn = (context, next?) => {
-      // last called middleware #
-      let index = -1;
-      return dispatch(0);
-
-      function dispatch(i) {
-        if (i <= index)
-          return Promise.reject(
-            new MidwayCommonException('next() called multiple times')
-          );
-        index = i;
-        let fn = (newMiddlewareArr as Array<FunctionMiddleware<T>>)[i];
-        if (i === newMiddlewareArr.length) fn = next;
-        if (!fn) return Promise.resolve();
-        try {
-          return Promise.resolve(
-            fn(context, dispatch.bind(null, i + 1), {
-              index,
-            })
-          );
-        } catch (err) {
-          return Promise.reject(err);
+    const composeFn = (
+      req: IMidwayExpressContext,
+      res: Response,
+      next: NextFunction
+    ) => {
+      (function iter(i, max) {
+        if (i === max) {
+          return next();
         }
-      }
+        newMiddlewareArr[i](req, res, iter.bind(this, i + 1, max));
+      })(0, newMiddlewareArr.length);
     };
     if (name) {
       composeFn._name = name;

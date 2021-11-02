@@ -13,17 +13,21 @@ import {
   Headers,
 } from '@midwayjs/decorator';
 import { UserService } from '../service/user';
-import { IMidwayExpressContext, IMidwayExpressRequest } from '../../../../../src';
+import { Context } from '../../../../../src';
+import { Response } from 'express';
 
 @Provide()
 @Controller('/api')
 export class APIController {
 
   @Inject()
-  ctx: IMidwayExpressContext;
+  ctx: Context;
 
   @Inject()
-  req: IMidwayExpressRequest;
+  req: Context;
+
+  @Inject()
+  res: Response;
 
   @Logger()
   logger;
@@ -69,7 +73,7 @@ export class APIController {
 
   @Get('/ctx-body')
   async getCtxBody() {
-    this.ctx.res.send('ctx-body');
+    this.res.send('ctx-body');
   }
 
   @Get('/header-upper')
