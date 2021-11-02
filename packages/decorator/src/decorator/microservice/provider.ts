@@ -12,7 +12,7 @@ import {
   GRPCMetadata,
   Provide,
 } from '../../';
-import { Scope } from '../common/objectDef';
+import { Scope } from '../common';
 
 export function Provider(
   type: MSProviderType.GRPC,

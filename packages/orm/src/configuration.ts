@@ -13,7 +13,6 @@ import {
   Inject,
   listModule,
 } from '@midwayjs/decorator';
-import { join } from 'path';
 import {
   Connection,
   ConnectionOptions,
@@ -30,7 +29,13 @@ import {
 import { OrmConnectionHook, ORM_HOOK_KEY } from './hook';
 
 @Configuration({
-  importConfigs: [join(__dirname, './config')],
+  importConfigs: [
+    {
+      default: {
+        orm: {},
+      },
+    },
+  ],
   namespace: 'orm',
 })
 export class OrmConfiguration implements ILifeCycle {
