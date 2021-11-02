@@ -5,12 +5,12 @@
   "typings": "index.d.ts",
   "dependencies": {
     "@midwayjs/core": "^3.0.0-alpha.42",
-    "@midwayjs/decorator": "^3.0.0-alpha.42",
     "@midwayjs/faas-typings": "^3.0.0-alpha.42",
     "@midwayjs/logger": "^3.0.0-alpha.42",
     "@midwayjs/simple-lock": "^1.1.4"
   },
   "devDependencies": {
+    "@midwayjs/decorator": "^3.0.0-alpha.42",
     "@midwayjs/mock": "^3.0.0-alpha.42",
     "@midwayjs/serverless-fc-starter": "^3.0.0-alpha.42",
     "@midwayjs/serverless-scf-starter": "^3.0.0-alpha.42",

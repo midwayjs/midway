@@ -9,7 +9,6 @@ import {
 } from '@midwayjs/core';
 
 import {
-  Provide,
   Framework,
   RouterParamValue,
   WEB_RESPONSE_CONTENT_TYPE,
@@ -221,7 +220,6 @@ export abstract class MidwayKoaBaseFramework<
   }
 }
 
-@Provide()
 @Framework()
 export class MidwayKoaFramework extends MidwayKoaBaseFramework<
   IMidwayKoaApplication,

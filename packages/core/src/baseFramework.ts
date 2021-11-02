@@ -303,15 +303,19 @@ export abstract class BaseFramework<
         }
         return returnResult;
       });
-      if (lastMiddleware) {
-        this.middlewareManager.insertLast(lastMiddleware);
-      }
       this.composeMiddleware = await this.middlewareService.compose(
         this.middlewareManager
       );
       await this.exceptionFilterManager.init(this.applicationContext);
     }
-    return this.composeMiddleware;
+    if (lastMiddleware) {
+      return await this.middlewareService.compose([
+        this.composeMiddleware,
+        lastMiddleware,
+      ]);
+    } else {
+      return this.composeMiddleware;
+    }
   }
 
   public getLogger(name?: string) {

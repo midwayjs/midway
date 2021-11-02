@@ -1,14 +1,27 @@
-import { Provide, Scope, ScopeEnum, Inject, App, ApplicationContext } from '@midwayjs/decorator';
+import {
+  Provide,
+  Scope,
+  ScopeEnum,
+  Inject,
+  App,
+  ApplicationContext,
+} from '@midwayjs/decorator';
 import { MidwayInformationService, IMidwayContainer } from '@midwayjs/core';
 import { InfoValueType, TypeInfo } from './interface';
-import {  bitToMB, renderToHtml, safeJson, safeRequire } from './utils';
-import { hostname, homedir, cpus, networkInterfaces, uptime, totalmem, } from 'os';
+import { bitToMB, renderToHtml, safeJson, safeRequire } from './utils';
+import {
+  hostname,
+  homedir,
+  cpus,
+  networkInterfaces,
+  uptime,
+  totalmem,
+} from 'os';
 import { join } from 'path';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
 export class InfoService {
-
   @Inject()
   midwayInformationService: MidwayInformationService;
 
@@ -45,8 +58,8 @@ export class InfoService {
         BaseDir: this.midwayInformationService.getBaseDir(),
         Root: this.midwayInformationService.getRoot(),
         Env: this.app.getEnv(),
-      }
-    }
+      },
+    };
   }
 
   systemInfo(): TypeInfo {
@@ -54,7 +67,7 @@ export class InfoService {
     return {
       type: 'System',
       info: {
-        Platform: (_platform === 'win32' ? 'Windows' : _platform),
+        Platform: _platform === 'win32' ? 'Windows' : _platform,
         Node: process.versions.node,
         V8: process.versions.v8,
         ProcessId: process.pid,
@@ -63,10 +76,10 @@ export class InfoService {
         HomeDir: homedir(),
         CWD: process.cwd(),
         ExecCommand: [].concat(process.argv, process.execArgv).join(' '),
-      }
-    }
+      },
+    };
   }
-  
+
   resourceOccupationInfo(): TypeInfo {
     const memory = process.memoryUsage();
     const cpu = cpus();
@@ -78,15 +91,30 @@ export class InfoService {
         'Heap Used': bitToMB(memory.heapUsed),
         'V8 C++ Object Memory': bitToMB(memory.external),
         'System Total Memory': bitToMB(totalmem()),
-        'CPU': `${cpu[0] ? `${cpu[0].model} ${cpu[0].speed}MHz` :''} ${cpu.length} core `,
-        'CPU Usage': cpu.map(cpuInfo => {
-          const times = cpuInfo.times;
-          return ((1-times.idle/(times.idle+times.user+times.nice+times.sys+times.irq))*100).toFixed(2) + '%';
-        }).join(' / '),
-      }
-    }
+        CPU: `${cpu[0] ? `${cpu[0].model} ${cpu[0].speed}MHz` : ''} ${
+          cpu.length
+        } core `,
+        'CPU Usage': cpu
+          .map(cpuInfo => {
+            const times = cpuInfo.times;
+            return (
+              (
+                (1 -
+                  times.idle /
+                    (times.idle +
+                      times.user +
+                      times.nice +
+                      times.sys +
+                      times.irq)) *
+                100
+              ).toFixed(2) + '%'
+            );
+          })
+          .join(' / '),
+      },
+    };
   }
-  
+
   softwareInfo(): TypeInfo {
     const npmModuleList = [
       '@midwayjs/core',
@@ -94,7 +122,7 @@ export class InfoService {
       '@midwayjs/faas',
     ];
     const info = {};
-    for(const modName of npmModuleList) {
+    for (const modName of npmModuleList) {
       const modulePkg = safeRequire(join(modName, 'package.json'));
       if (modulePkg) {
         info[modName] = modulePkg.version;
@@ -102,36 +130,39 @@ export class InfoService {
     }
     return {
       type: 'Software',
-      info
+      info,
     };
   }
-  
-  envInfo() : TypeInfo{
+
+  envInfo(): TypeInfo {
     return {
       type: 'Environment Variable',
       info: process.env,
-    }
+    };
   }
-  
+
   timeInfo(): TypeInfo {
-    let t = new Date().toString().split(' ');
+    const t = new Date().toString().split(' ');
     return {
       type: 'Time',
       info: {
         Current: Date.now(),
         Uptime: uptime(),
-        Timezone: (t.length >= 7) ? t[5] : '',
-        TimezoneName: (t.length >= 7) ? t.slice(6).join(' ').replace(/\(/g, '').replace(/\)/g, '') : ''
-      }
+        Timezone: t.length >= 7 ? t[5] : '',
+        TimezoneName:
+          t.length >= 7
+            ? t.slice(6).join(' ').replace(/\(/g, '').replace(/\)/g, '')
+            : '',
+      },
     };
   }
-  
+
   networkInfo(): TypeInfo {
     const net = networkInterfaces();
     const info = {};
     Object.keys(net).forEach(type => {
       const netItemList = net[type];
-      let newType = type; 
+      let newType = type;
       if (type[type.length - 1] === '0') {
         newType = type.slice(0, -1);
       }
@@ -139,28 +170,33 @@ export class InfoService {
       if (newType === 'lo') {
         return;
       }
-      info[newType] = netItemList.sort(item => {
-        if (item.family === 'IPv4') {
-          return -1;
-        }
-        return 1;
-      }).map(netItem => {
-        return `${netItem.family} ${netItem.address}`;
-      }).join(' / ');
+      info[newType] = netItemList
+        .sort(item => {
+          if (item.family === 'IPv4') {
+            return -1;
+          }
+          return 1;
+        })
+        .map(netItem => {
+          return `${netItem.family} ${netItem.address}`;
+        })
+        .join(' / ');
     });
     return {
       type: 'Network',
-      info
+      info,
     };
   }
-  
+
   dependenciesInfo(): TypeInfo {
     const pkg = this.midwayInformationService.getPkg();
     const dependencies = pkg.dependencies || {};
     const info = {};
     Object.keys(dependencies).forEach(modName => {
       const modInfo = safeRequire(join(modName, 'package.json'), {});
-      info[modName] = `${modInfo.version || 'Not Found'}(${dependencies[modName]})`;
+      info[modName] = `${modInfo.version || 'Not Found'}(${
+        dependencies[modName]
+      })`;
     });
     return {
       type: 'Dependencies',
@@ -171,13 +207,15 @@ export class InfoService {
   midwayService() {
     const info = {};
     if (this.container?.registry) {
-      for(const item of (this.container as any).registry) {
+      for (const item of (this.container as any).registry) {
         const [key, value] = item;
-        const name = value ? (value?.name || value) : typeof value;
-        info[key] = `${value?.namespace ? `${value?.namespace}:` : ''}${name}${value?.scope ? ` [${value?.scope}]` : ''}`
+        const name = value ? value?.name || value : typeof value;
+        info[key] = `${value?.namespace ? `${value?.namespace}:` : ''}${name}${
+          value?.scope ? ` [${value?.scope}]` : ''
+        }`;
       }
     }
-    
+
     return {
       type: 'Midway Service',
       info,
@@ -185,11 +223,11 @@ export class InfoService {
   }
 
   midwayConfig() {
-    let info = {};
+    const info = {};
     const config = this.app.getConfig() || {};
     Object.keys(config).forEach(key => {
       info[key] = safeJson(config[key]);
-    })
+    });
     return {
       type: 'Midway Config',
       info,

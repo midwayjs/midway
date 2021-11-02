@@ -1,5 +1,15 @@
-import { sendUnaryData, Server, ServerCredentials, ServerUnaryCall, setLogger, } from '@grpc/grpc-js';
-import { BaseFramework, IMidwayBootstrapOptions, MidwayFrameworkType, } from '@midwayjs/core';
+import {
+  sendUnaryData,
+  Server,
+  ServerCredentials,
+  ServerUnaryCall,
+  setLogger,
+} from '@grpc/grpc-js';
+import {
+  BaseFramework,
+  IMidwayBootstrapOptions,
+  MidwayFrameworkType,
+} from '@midwayjs/core';
 
 import {
   Config,
@@ -13,7 +23,6 @@ import {
   MS_GRPC_METHOD_KEY,
   MS_PROVIDER_KEY,
   MSProviderType,
-  Provide,
 } from '@midwayjs/decorator';
 import {
   Context,
@@ -25,7 +34,6 @@ import * as camelCase from 'camelcase';
 import { loadProto } from '../util';
 import { PackageDefinition } from '@grpc/proto-loader';
 
-@Provide()
 @Framework()
 export class MidwayGRPCFramework extends BaseFramework<
   IMidwayGRPCApplication,
@@ -184,15 +192,11 @@ export class MidwayGRPCFramework extends BaseFramework<
     };
   }) {
     const { ctx, callback, grpcMethodData } = options;
-    (ctx as any)._grpc_invoke_data = options.data;
-    (ctx as any)._grpc_invoke_service = options.service;
 
     const fn = await this.getMiddleware(async ctx => {
-      return await (ctx as any)._grpc_invoke_service[
-        camelCase(ctx.method)
-      ]?.call(
-        (ctx as any)._grpc_invoke_service,
-        (ctx as any)._grpc_invoke_data
+      return await options.service[camelCase(ctx.method)]?.call(
+        options.service,
+        options.data
       );
     });
 

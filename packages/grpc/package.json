@@ -23,7 +23,6 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/core": "^3.0.0-alpha.42",
     "@midwayjs/decorator": "^3.0.0-alpha.42",
     "@midwayjs/mock": "^3.0.0-alpha.42",
     "fs-extra": "^8.0.1"
@@ -31,6 +30,7 @@
   "dependencies": {
     "@grpc/grpc-js": "^1.2.1",
     "@grpc/proto-loader": "^0.5.5",
+    "@midwayjs/core": "^3.0.0-alpha.42",
     "@midwayjs/logger": "^3.0.0-alpha.42",
     "camelcase": "^6.2.0",
     "pascal-case": "^3.1.2"

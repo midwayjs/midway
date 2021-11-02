@@ -2,7 +2,8 @@ import {
   ApplicationContext,
   Config,
   Configuration,
-  Init, Inject,
+  Init,
+  Inject,
   Logger,
 } from '@midwayjs/decorator';
 import { MidwayGRPCFramework } from './provider/framework';
@@ -10,11 +11,17 @@ import { IMidwayContainer } from '@midwayjs/core';
 import { ILogger } from '@midwayjs/logger';
 import { setLogger } from '@grpc/grpc-js';
 import { GRPCClients } from './comsumer/clients';
-import { join } from 'path';
 
 @Configuration({
   namespace: 'gRPC',
-  importConfigs: [join(__dirname, 'config.default')],
+  importConfigs: [
+    {
+      default: {
+        grpc: {},
+        grpcServer: {},
+      },
+    },
+  ],
 })
 export class GrpcConfiguration {
   @Inject()

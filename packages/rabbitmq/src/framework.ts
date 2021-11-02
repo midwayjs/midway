@@ -1,6 +1,5 @@
 import {
   getClassMetadata,
-  getProviderId,
   listModule,
   listPropertyDataFromClass,
   MidwayFrameworkType,
@@ -8,7 +7,6 @@ import {
   MS_CONSUMER_KEY,
   MSListenerType,
   RabbitMQListenerOptions,
-  Provide,
   Framework,
 } from '@midwayjs/decorator';
 import { BaseFramework } from '@midwayjs/core';
@@ -20,7 +18,6 @@ import {
 import { RabbitMQServer } from './mq';
 import { ConsumeMessage } from 'amqplib';
 
-@Provide()
 @Framework()
 export class MidwayRabbitMQFramework extends BaseFramework<
   IMidwayRabbitMQApplication,
@@ -29,6 +26,10 @@ export class MidwayRabbitMQFramework extends BaseFramework<
 > {
   public app: IMidwayRabbitMQApplication;
   public consumerHandlerList = [];
+
+  configure() {
+    return this.configService.getConfiguration('rabbitMQServer');
+  }
 
   async applicationInitialize(options) {
     // Create a connection manager
@@ -66,7 +67,6 @@ export class MidwayRabbitMQFramework extends BaseFramework<
       return metadata.type === MSListenerType.RABBITMQ;
     });
     for (const module of subscriberModules) {
-      const providerId = getProviderId(module);
       const data: RabbitMQListenerOptions[][] = listPropertyDataFromClass(
         MS_CONSUMER_KEY,
         module
@@ -86,8 +86,18 @@ export class MidwayRabbitMQFramework extends BaseFramework<
                 },
               } as IMidwayRabbitMQContext;
               this.app.createAnonymousContext(ctx);
-              const ins = await ctx.requestContext.getAsync(providerId);
-              await ins[listenerOptions.propertyKey].call(ins, data);
+              const ins = await ctx.requestContext.getAsync(module);
+              const fn = await this.getMiddleware(async ctx => {
+                return await ins[listenerOptions.propertyKey].call(ins, data);
+              });
+
+              const { result, error } = await fn(ctx);
+              if (error) {
+                this.logger.error(error);
+              }
+              if (result) {
+                return channelWrapper.ack(data);
+              }
             }
           );
         }

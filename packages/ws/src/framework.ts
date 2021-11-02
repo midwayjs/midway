@@ -21,13 +21,10 @@ import {
   WSEventInfo,
   WSEventTypeEnum,
   getClassMetadata,
-  getProviderId,
   listModule,
-  Provide,
   Framework,
 } from '@midwayjs/decorator';
 
-@Provide()
 @Framework()
 export class MidwayWSFramework extends BaseFramework<
   IMidwayWSApplication,
@@ -35,6 +32,10 @@ export class MidwayWSFramework extends BaseFramework<
   IMidwayWSConfigurationOptions
 > {
   server: http.Server;
+
+  configure(): IMidwayWSConfigurationOptions {
+    return this.configService.getConfiguration('webSocket');
+  }
 
   applicationInitialize(options: IMidwayBootstrapOptions) {
     this.configurationOptions.noServer = true;
@@ -97,14 +98,11 @@ export class MidwayWSFramework extends BaseFramework<
     const controllerModules = listModule(WS_CONTROLLER_KEY);
     if (controllerModules.length > 0) {
       // ws just one namespace
-      await this.addNamespace(
-        controllerModules[0],
-        getProviderId(controllerModules[0])
-      );
+      await this.addNamespace(controllerModules[0]);
     }
   }
 
-  private async addNamespace(target: any, controllerId: string) {
+  private async addNamespace(target: any) {
     this.app.on(
       'connection',
       async (socket: IMidwayWSContext, request: http.IncomingMessage) => {
@@ -126,9 +124,7 @@ export class MidwayWSFramework extends BaseFramework<
             methodMap[wsEventInfo.propertyName] = methodMap[
               wsEventInfo.propertyName
             ] || { responseEvents: [] };
-            const controller = await socket.requestContext.getAsync(
-              controllerId
-            );
+            const controller = await socket.requestContext.getAsync(target);
             // on connection
             if (wsEventInfo.eventType === WSEventTypeEnum.ON_CONNECTION) {
               try {
@@ -149,20 +145,31 @@ export class MidwayWSFramework extends BaseFramework<
               // on user custom event
               socket.on(wsEventInfo.messageEventName, async (...args) => {
                 debug('got message', wsEventInfo.messageEventName, args);
-                try {
-                  // eslint-disable-next-line prefer-spread
-                  const result = await controller[
-                    wsEventInfo.propertyName
-                  ].apply(controller, args);
-                  // emit
-                  await this.bindSocketResponse(
-                    result,
-                    socket,
-                    wsEventInfo.propertyName,
-                    methodMap
-                  );
-                } catch (err) {
-                  this.logger.error(err);
+                const { result, error } = await (
+                  await this.getMiddleware(async (ctx, next) => {
+                    // eslint-disable-next-line prefer-spread
+                    return controller[wsEventInfo.propertyName].apply(
+                      controller,
+                      args
+                    );
+                  })
+                )(socket);
+
+                if (error) {
+                  this.logger.error(error);
+                } else {
+                  if (typeof args[args.length - 1] === 'function') {
+                    // ack
+                    args[args.length - 1](result);
+                  } else {
+                    // emit
+                    await this.bindSocketResponse(
+                      result,
+                      socket,
+                      wsEventInfo.propertyName,
+                      methodMap
+                    );
+                  }
                 }
               });
             } else if (

@@ -20,14 +20,11 @@ import {
   WSEventInfo,
   WSEventTypeEnum,
   getClassMetadata,
-  getProviderId,
   listModule,
-  Provide,
   Framework,
 } from '@midwayjs/decorator';
 import { MidwaySocketIOContextLogger } from './logger';
 
-@Provide()
 @Framework()
 export class MidwaySocketIOFramework extends BaseFramework<
   IMidwaySocketIOApplication,
@@ -35,6 +32,10 @@ export class MidwaySocketIOFramework extends BaseFramework<
   IMidwaySocketIOConfigurationOptions
 > {
   private namespaceList = [];
+
+  configure(): IMidwaySocketIOConfigurationOptions {
+    return this.configService.getConfiguration('socketIO');
+  }
 
   applicationInitialize(options: IMidwayBootstrapOptions) {
     this.app = new Server(
@@ -64,7 +65,7 @@ export class MidwaySocketIOFramework extends BaseFramework<
       this.logger.info(
         `Socket.io server port = ${this.configurationOptions.port} start success`
       );
-    } else if (this.applicationContext.registry.hasObject(HTTP_SERVER_KEY)) {
+    } else if (this.applicationContext.hasObject(HTTP_SERVER_KEY)) {
       this.app.attach(
         this.applicationContext.get(HTTP_SERVER_KEY),
         this.configurationOptions
@@ -93,14 +94,11 @@ export class MidwaySocketIOFramework extends BaseFramework<
     // create room
     const controllerModules = listModule(WS_CONTROLLER_KEY);
     for (const module of controllerModules) {
-      const providerId = getProviderId(module);
-      if (providerId) {
-        await this.addNamespace(module, providerId);
-      }
+      await this.addNamespace(module);
     }
   }
 
-  private async addNamespace(target: any, controllerId: string) {
+  private async addNamespace(target: any) {
     const controllerOption: WSControllerOption = getClassMetadata(
       WS_CONTROLLER_KEY,
       target
@@ -130,7 +128,7 @@ export class MidwaySocketIOFramework extends BaseFramework<
           methodMap[wsEventInfo.propertyName] = methodMap[
             wsEventInfo.propertyName
           ] || { responseEvents: [] };
-          const controller = await socket.requestContext.getAsync(controllerId);
+          const controller = await socket.requestContext.getAsync(target);
           // on connection
           if (wsEventInfo.eventType === WSEventTypeEnum.ON_CONNECTION) {
             try {
@@ -151,12 +149,19 @@ export class MidwaySocketIOFramework extends BaseFramework<
             // on user custom event
             socket.on(wsEventInfo.messageEventName, async (...args) => {
               debug('got message', wsEventInfo.messageEventName, args);
-              try {
-                // eslint-disable-next-line prefer-spread
-                const result = await controller[wsEventInfo.propertyName].apply(
-                  controller,
-                  args
-                );
+              const { result, error } = await (
+                await this.getMiddleware(async (ctx, next) => {
+                  // eslint-disable-next-line prefer-spread
+                  return controller[wsEventInfo.propertyName].apply(
+                    controller,
+                    args
+                  );
+                })
+              )(socket);
+
+              if (error) {
+                this.logger.error(error);
+              } else {
                 if (typeof args[args.length - 1] === 'function') {
                   // ack
                   args[args.length - 1](result);
@@ -169,8 +174,6 @@ export class MidwaySocketIOFramework extends BaseFramework<
                     methodMap
                   );
                 }
-              } catch (err) {
-                this.logger.error(err);
               }
             });
           } else if (

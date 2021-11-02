@@ -5,7 +5,7 @@ import { createWebSocketClient } from '@midwayjs/mock';
 
 describe('/test/index.test.ts', () => {
   it('should test create websocket app', async () => {
-    const app = await createServer('base-app', { port: 3000});
+    const app = await createServer('base-app');
     const client = await createWebSocketClient(`ws://localhost:3000`);
 
     client.send(1);
@@ -30,7 +30,7 @@ describe('/test/index.test.ts', () => {
   });
 
   it('should test websocket broadcast', async () => {
-    const app = await createServer('base-app-broadcast', { port: 3000});
+    const app = await createServer('base-app-broadcast');
     const client1 = await createWebSocketClient(`ws://localhost:3000`);
     const client2 = await createWebSocketClient(`ws://localhost:3000`);
 

@@ -17,7 +17,7 @@ describe('/test/index.test.ts', () => {
     channel.sendToQueue('tasks', Buffer.from('something to do'));
 
     // create app and got data
-    const app = await creatApp('base-app', { url: process.env.RABBITMQ_URL || 'amqp://localhost'});
+    const app = await creatApp('base-app');
     // will be close app wait a moment(after ack)
     await sleep();
 
@@ -36,7 +36,7 @@ describe('/test/index.test.ts', () => {
     channel.sendToQueue('tasks', Buffer.from('something to do'));
 
     // create app and got data
-    const app = await creatApp('base-app', { url: process.env.RABBITMQ_URL || 'amqp://localhost'});
+    const app = await creatApp('base-app');
     // will be close app wait a moment(after ack)
     await sleep();
 
@@ -46,10 +46,7 @@ describe('/test/index.test.ts', () => {
 
   it('should test listen a not exist channel and channel will be close by server', async () => {
     // create app and got data
-    const app = await creatApp('base-app-not-exist-channel', {
-      url: process.env.RABBITMQ_URL || 'amqp://localhost',
-      reconnectTime: 2000
-    });
+    const app = await creatApp('base-app-not-exist-channel');
     // will be close app wait a moment(after ack)
     await sleep(6000);
     // 应该能看到两条错误输出
@@ -72,10 +69,7 @@ describe('/test/index.test.ts', () => {
     // Declare the exchange
     manager.assertExchange(ex, 'fanout', { durable: false }) // 'fanout' will broadcast all messages to all the queues it knows
 
-    const app = await creatApp('base-app-fanout', {
-      url: process.env.RABBITMQ_URL || 'amqp://localhost',
-      reconnectTime: 2000
-    });
+    const app = await creatApp('base-app-fanout');
 
     // 由于不持久化，需要等订阅服务起来之后再发
     // Send message to the exchange
@@ -108,10 +102,7 @@ describe('/test/index.test.ts', () => {
     // Declare the exchange
     manager.assertExchange(ex, 'direct', { durable: false }) // 'fanout' will broadcast all messages to all the queues it knows
 
-    const app = await creatApp('base-app-direct', {
-      url: process.env.RABBITMQ_URL || 'amqp://localhost',
-      reconnectTime: 2000
-    });
+    const app = await creatApp('base-app-direct');
 
     // 这里指定 routerKey
     manager.sendToExchange(ex, 'direct_key', Buffer.from(msg))

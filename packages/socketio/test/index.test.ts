@@ -1,12 +1,11 @@
 import { closeApp, createServer } from './utils';
-import { createRedisAdapter } from '../src';
 import { createSocketIOClient } from '@midwayjs/mock';
 import { once } from 'events';
 import { sleep } from '@midwayjs/decorator';
 
 describe('/test/index.test.ts', () => {
   it('should test create socket app and use default namespace', async () => {
-    const app = await createServer('base-app', { port: 3000});
+    const app = await createServer('base-app');
     const client = await createSocketIOClient({
       port: 3000,
     });
@@ -24,10 +23,7 @@ describe('/test/index.test.ts', () => {
   });
 
   it('should test create socket app and with emit ack', async () => {
-    const app = await createServer('base-app-ack', {
-      port: 3000,
-      path: '/test'
-    });
+    const app = await createServer('base-app-ack');
     const client = await createSocketIOClient({
       port: 3000,
       path: '/test'
@@ -44,7 +40,7 @@ describe('/test/index.test.ts', () => {
   });
 
   it('should test create socket app with different namespace', async () => {
-    const app = await createServer('base-app-namespace', { port: 3000});
+    const app = await createServer('base-app-namespace');
     const client1 = await createSocketIOClient({
       port: 3000,
       namespace: '/',
@@ -86,7 +82,7 @@ describe('/test/index.test.ts', () => {
   });
 
   it('should test create socket app with room broadcast', async () => {
-    const app = await createServer('base-app-room', { port: 3000});
+    const app = await createServer('base-app-room');
     const clientParent = await createSocketIOClient({
       port: 3000,
       namespace: '/',
@@ -146,10 +142,7 @@ describe('/test/index.test.ts', () => {
   });
 
   it('should test create socket app and with redis adapter', async () => {
-    const app = await createServer('base-app-redis', {
-      port: 3000,
-      adapter: createRedisAdapter({ host: '127.0.0.1', port: 6379}),
-    });
+    const app = await createServer('base-app-redis');
     const client = await createSocketIOClient({
       port: '3000',
     });
@@ -160,12 +153,12 @@ describe('/test/index.test.ts', () => {
       name: 'harry',
     });
 
-    await client.close();
     await closeApp(app);
+    await client.close();
   });
 
   it('should test create socket app and throw error', async () => {
-    const app = await createServer('base-app-error', { port: 3000});
+    const app = await createServer('base-app-error');
     const client = await createSocketIOClient({
       port: 3000,
     });
