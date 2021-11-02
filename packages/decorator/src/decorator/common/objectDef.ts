@@ -1,4 +1,4 @@
-import { ScopeEnum, saveObjectDefinition } from '../';
+import { ScopeEnum, saveObjectDefinition } from '../../index';
 
 export function Init(): MethodDecorator {
   return function (target: any, propertyKey: string) {

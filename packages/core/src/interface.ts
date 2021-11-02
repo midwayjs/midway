@@ -309,7 +309,7 @@ export interface IMiddleware<T> {
   match?: () => boolean;
   ignore?: () => boolean;
 }
-export type FunctionMiddleware<T> = (context: T, next: () => Promise<any>, options?: any) => any;
+export type FunctionMiddleware<T> = ((context: T, next: () => Promise<any>, options?: any) => any) | ((req, res, next: () => any) => any);
 export type ClassMiddleware<T> = new (...args) => IMiddleware<T>;
 export type CommonMiddleware<T> = ClassMiddleware<T> | FunctionMiddleware<T>;
 export type CommonMiddlewareUnion<T> = CommonMiddleware<T> | Array<CommonMiddleware<T>>;

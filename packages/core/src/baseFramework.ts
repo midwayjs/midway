@@ -41,7 +41,7 @@ export abstract class BaseFramework<
   protected BaseContextLoggerClass: any;
   protected middlewareManager = new ContextMiddlewareManager<CTX>();
   protected exceptionFilterManager = new ExceptionFilterManager<CTX>();
-  private composeMiddleware = null;
+  protected composeMiddleware = null;
 
   @Inject()
   loggerService: MidwayLoggerService;

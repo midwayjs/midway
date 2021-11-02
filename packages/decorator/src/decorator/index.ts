@@ -1,15 +1,5 @@
 // common
-export * from './provide';
-export * from './inject';
-export * from './pipeline';
-export * from './aspect';
-export * from './autoload';
-export * from './configuration';
-export * from './objectDef';
-// export * from './validate';
-// export * from './rule';
-export * from './framework';
-export * from './catch';
+export * from './common/index';
 
 // faas
 export * from './faas/serverlessTrigger';

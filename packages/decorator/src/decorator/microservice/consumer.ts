@@ -5,7 +5,7 @@ import {
   MS_CONSUMER_KEY,
   MSListenerType,
 } from '../../';
-import { Scope } from '../objectDef';
+import { Scope } from '../common/objectDef';
 
 export function Consumer(type: MSListenerType.MQTT): ClassDecorator;
 export function Consumer(

@@ -1,4 +1,10 @@
-import { ASPECT_KEY, attachClassMetadata, saveModule, ScopeEnum } from '..';
+import {
+  ASPECT_KEY,
+  attachClassMetadata,
+  Provide,
+  saveModule,
+  ScopeEnum,
+} from '../../index';
 import { Scope } from './objectDef';
 
 export interface JoinPoint {
@@ -43,5 +49,6 @@ export function Aspect(
     }
 
     Scope(ScopeEnum.Singleton)(target);
+    Provide()(target);
   };
 }

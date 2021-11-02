@@ -1,7 +1,7 @@
-import { attachClassMetadata } from '../decoratorManager';
-import { CATCH_KEY } from '../constant';
+import { attachClassMetadata } from '../../decoratorManager';
+import { CATCH_KEY } from '../../constant';
 import { Scope } from './objectDef';
-import { ScopeEnum } from '../interface';
+import { ScopeEnum } from '../../interface';
 import { Provide } from './provide';
 
 export function Catch(catchTarget?: any | any[]) {

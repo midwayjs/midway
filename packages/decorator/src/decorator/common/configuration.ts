@@ -1,4 +1,4 @@
-import { saveClassMetadata, CONFIGURATION_KEY } from '../';
+import { saveClassMetadata, CONFIGURATION_KEY } from '../../index';
 
 export interface IComponentInfo {
   component: any;

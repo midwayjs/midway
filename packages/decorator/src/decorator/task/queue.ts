@@ -1,10 +1,10 @@
-import { saveModule, saveClassMetadata } from '../../';
+import { saveModule, saveClassMetadata, Provide } from '../../';
 import {
   MODULE_TASK_QUEUE_KEY,
   MODULE_TASK_QUEUE_OPTIONS,
 } from '../../constant';
 
-export function Queue(options?: any) {
+export function Queue(options?: any): ClassDecorator {
   return function (target) {
     saveModule(MODULE_TASK_QUEUE_KEY, target);
     saveClassMetadata(
@@ -15,5 +15,6 @@ export function Queue(options?: any) {
       },
       target
     );
+    Provide()(target);
   };
 }

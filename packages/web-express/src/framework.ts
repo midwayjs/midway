@@ -1,14 +1,15 @@
 import {
   BaseFramework,
+  CommonMiddleware,
   HTTP_SERVER_KEY,
   IMidwayBootstrapOptions,
+  MiddlewareRespond,
   MidwayFrameworkType,
   PathFileUtil,
   WebRouterCollector,
 } from '@midwayjs/core';
 
 import {
-  Provide,
   Framework,
   RouterParamValue,
   WEB_RESPONSE_CONTENT_TYPE,
@@ -28,7 +29,6 @@ import * as express from 'express';
 import { Server } from 'net';
 import { MidwayExpressContextLogger } from './logger';
 
-@Provide()
 @Framework()
 export class MidwayExpressFramework extends BaseFramework<
   IMidwayExpressApplication,
@@ -37,11 +37,6 @@ export class MidwayExpressFramework extends BaseFramework<
 > {
   public app: IMidwayExpressApplication;
   private controllerIds: string[] = [];
-  public prioritySortRouters: Array<{
-    priority: number;
-    router: IRouter;
-    prefix: string;
-  }> = [];
   private server: Server;
 
   configure(): IMidwayExpressConfigurationOptions {
@@ -54,7 +49,9 @@ export class MidwayExpressFramework extends BaseFramework<
       generateController: (controllerMapping: string) => {
         return this.generateController(controllerMapping);
       },
-
+      /**
+       * @deprecated
+       */
       generateMiddleware: async (middlewareId: string) => {
         return this.generateMiddleware(middlewareId);
       },
@@ -140,10 +137,13 @@ export class MidwayExpressFramework extends BaseFramework<
   ): IRouterHandler<any> {
     const [controllerId, methodName] = controllerMapping.split('.');
     return async (req, res, next) => {
-      const args = [req, res, next];
       const controller = await req.requestContext.getAsync(controllerId);
-      // eslint-disable-next-line prefer-spread
-      const result = await controller[methodName].apply(controller, args);
+      const result = await controller[methodName].call(
+        controller,
+        req,
+        res,
+        next
+      );
 
       if (res.headersSent) {
         // return when response send
@@ -240,7 +240,9 @@ export class MidwayExpressFramework extends BaseFramework<
       this.app.use(routerInfo.prefix, newRouter);
     }
   }
-
+  /**
+   * @deprecated
+   */
   public async generateMiddleware(middlewareId: string) {
     const mwIns = await this.getApplicationContext().getAsync<IWebMiddleware>(
       middlewareId
@@ -272,6 +274,38 @@ export class MidwayExpressFramework extends BaseFramework<
           }
         }
       }
+    }
+  }
+
+  public async getMiddleware(
+    lastMiddleware?: CommonMiddleware<IMidwayExpressContext>
+  ): Promise<MiddlewareRespond<IMidwayExpressContext>> {
+    if (!this.composeMiddleware) {
+      this.middlewareManager.insertFirst(async (req, res, next) => {
+        let returnResult = undefined;
+        try {
+          const result = await next();
+          returnResult = {
+            result,
+            error: undefined,
+          };
+        } catch (err) {
+          returnResult = await this.exceptionFilterManager.run(err, ctx);
+        }
+        return returnResult;
+      });
+      this.composeMiddleware = await this.middlewareService.compose(
+        this.middlewareManager
+      );
+      await this.exceptionFilterManager.init(this.applicationContext);
+    }
+    if (lastMiddleware) {
+      return await this.middlewareService.compose([
+        this.composeMiddleware,
+        lastMiddleware,
+      ]);
+    } else {
+      return this.composeMiddleware;
     }
   }
 

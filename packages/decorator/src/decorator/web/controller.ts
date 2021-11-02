@@ -1,9 +1,10 @@
-import { Scope } from '../objectDef';
+import { Scope } from '../common';
 import {
   ScopeEnum,
   saveClassMetadata,
   saveModule,
   CONTROLLER_KEY,
+  Provide,
 } from '../../';
 import { MiddlewareParamArray } from '../../interface';
 
@@ -39,5 +40,6 @@ export function Controller(
         target
       );
     Scope(ScopeEnum.Request)(target);
+    Provide()(target);
   };
 }

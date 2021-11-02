@@ -10,8 +10,9 @@ import {
   MS_HSF_METHOD_KEY,
   MSProviderType,
   GRPCMetadata,
+  Provide,
 } from '../../';
-import { Scope } from '../objectDef';
+import { Scope } from '../common/objectDef';
 
 export function Provider(
   type: MSProviderType.GRPC,
@@ -36,6 +37,7 @@ export function Provider(
       target
     );
     Scope(ScopeEnum.Request)(target);
+    Provide()(target);
   };
 }
 

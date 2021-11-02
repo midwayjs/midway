@@ -1,4 +1,10 @@
-import { saveModule, FRAMEWORK_KEY, Scope, ScopeEnum, Provide } from '../';
+import {
+  saveModule,
+  FRAMEWORK_KEY,
+  Scope,
+  ScopeEnum,
+  Provide,
+} from '../../index';
 
 export function Framework(): ClassDecorator {
   return (target: any) => {

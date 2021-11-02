@@ -1,4 +1,10 @@
-import { ScopeEnum, saveClassMetadata, saveModule, HSF_KEY } from '../../';
+import {
+  ScopeEnum,
+  saveClassMetadata,
+  saveModule,
+  HSF_KEY,
+  Provide,
+} from '../../';
 import { Scope } from '../';
 
 export interface HSFOpts {
@@ -17,5 +23,6 @@ export function HSF(hsfOption: HSFOpts = {}): ClassDecorator {
     saveModule(HSF_KEY, target);
     saveClassMetadata(HSF_KEY, hsfOption, target);
     Scope(ScopeEnum.Request)(target);
+    Provide()(target);
   };
 }

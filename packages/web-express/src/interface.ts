@@ -24,6 +24,9 @@ export type IMidwayExpressApplication = IMidwayApplication<IMidwayExpressContext
     routeArgsInfo?: RouterParamValue[],
     routerResponseData?: any []
   ): Middleware;
+  /**
+   * @deprecated
+   */
   generateMiddleware(middlewareId: string): Promise<Middleware>;
 }>;
 
