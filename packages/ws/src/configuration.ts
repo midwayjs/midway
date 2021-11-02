@@ -3,6 +3,13 @@ import { MidwayWSFramework } from './framework';
 
 @Configuration({
   namespace: 'webSocket',
+  importConfigs: [
+    {
+      default: {
+        webSocket: {},
+      },
+    },
+  ],
 })
 export class SocketIOConfiguration {
   @Inject()
