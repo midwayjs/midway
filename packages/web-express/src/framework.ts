@@ -314,7 +314,7 @@ export class MidwayExpressFramework extends BaseFramework<
     handlerCallback(fn);
   }
 
-  public async getMiddleware(): Promise<
+  public async getMiddleware<Response, NextFunction>(): Promise<
     MiddlewareRespond<IMidwayExpressContext, Response, NextFunction>
   > {
     if (!this.composeMiddleware) {

@@ -52,4 +52,5 @@ export enum HttpStatus {
 export enum FrameworkExceptionEnum {
   COMMON = 10001,
   PARAM_TYPE = 10002,
+  DEFINITION_NOT_FOUND = 10003,
 }

@@ -286,9 +286,9 @@ export abstract class BaseFramework<
     options: Partial<IMidwayBootstrapOptions>
   ): Promise<void> {}
 
-  public async getMiddleware(
-    lastMiddleware?: CommonMiddleware<CTX>
-  ): Promise<MiddlewareRespond<CTX>> {
+  public async getMiddleware<R, N>(
+    lastMiddleware?: CommonMiddleware<CTX, R, N>
+  ): Promise<MiddlewareRespond<CTX, R, N>> {
     if (!this.composeMiddleware) {
       this.middlewareManager.insertFirst(async (ctx, next) => {
         let returnResult = undefined;

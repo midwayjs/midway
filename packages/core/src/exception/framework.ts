@@ -28,7 +28,7 @@ export class MidwayDefinitionNotFoundException extends MidwayBaseException {
   constructor(identifier: ObjectIdentifier) {
     super(
       `${identifier} is not valid in current context`,
-      FrameworkExceptionEnum.PARAM_TYPE
+      FrameworkExceptionEnum.DEFINITION_NOT_FOUND
     );
     this[MidwayDefinitionNotFoundException.type] =
       MidwayDefinitionNotFoundException.type;

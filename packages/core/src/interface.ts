@@ -317,7 +317,7 @@ export type FunctionMiddleware<T, R = any, N = any> = ((context: T, next: () => 
 export type ClassMiddleware<T, R = any, N = any> = new (...args) => IMiddleware<T, R, N>;
 export type CommonMiddleware<T, R = any, N = any> = ClassMiddleware<T, R, N> | FunctionMiddleware<T, R, N>;
 export type CommonMiddlewareUnion<T, R = any, N = any> = CommonMiddleware<T, R, N> | Array<CommonMiddleware<T, R, N>>;
-export type MiddlewareRespond<T, R = any, N = any> = ((context: T, next?: () => Promise<any>) => Promise<{ result: any; error: Error | undefined }>) | (FunctionMiddleware<T, R, N>);
+export type MiddlewareRespond<T, R = any, N = any> = (context: T, nextOrRes?: () => Promise<any> | R, next?: N) => Promise<{ result: any; error: Error | undefined }>;
 
 /**
  * Common Exception Filter definition
@@ -416,7 +416,7 @@ export interface IMidwayFramework<APP extends IMidwayApplication, T extends ICon
   getProjectName(): string;
   getDefaultContextLoggerClass(): any;
   useMiddleware(Middleware: CommonMiddlewareUnion<ReturnType<APP['createAnonymousContext']>>);
-  getMiddleware(lastMiddleware?: CommonMiddleware<ReturnType<APP['createAnonymousContext']>>): Promise<MiddlewareRespond<ReturnType<APP['createAnonymousContext']>>>;
+  getMiddleware<R, N>(lastMiddleware?: CommonMiddleware<ReturnType<APP['createAnonymousContext']>>): Promise<MiddlewareRespond<ReturnType<APP['createAnonymousContext']>, R, N>>;
   useFilter(Filter: CommonExceptionFilterUnion<ReturnType<APP['createAnonymousContext']>>);
 }
 
