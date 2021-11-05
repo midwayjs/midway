@@ -14,7 +14,6 @@ import {
   unlinkSync,
 } from 'fs';
 import { Application, EggLogger, Context } from 'egg';
-import { MidwayProcessTypeEnum } from '@midwayjs/core';
 import { getCurrentDateString } from './utils';
 import * as os from 'os';
 
@@ -115,7 +114,7 @@ class MidwayLoggers extends Map<string, ILogger> {
    * @param options
    * @param app
    */
-  constructor(options, app: Application) {
+  constructor(options, app: Application, processType: 'agent' | 'app') {
     super();
     // 这么改是为了防止 egg 日志切割时遍历属性，导致报错
     Object.defineProperty(this, 'app', {
@@ -134,7 +133,7 @@ class MidwayLoggers extends Map<string, ILogger> {
       checkEggLoggerExistsAndBackup(options.logger.dir, name);
     }
     // 创建标准的日志
-    if (this.app.getProcessType() === MidwayProcessTypeEnum.AGENT) {
+    if (processType === 'agent') {
       this.createLogger(
         'coreLogger',
         {
@@ -236,7 +235,10 @@ class MidwayLoggers extends Map<string, ILogger> {
   }
 }
 
-export const createLoggers = (app: Application) => {
+export const createLoggers = (
+  app: Application,
+  processType: 'agent' | 'app'
+) => {
   const loggerConfig = app.config.logger as any;
   loggerConfig.type = app.type;
 
@@ -251,7 +253,7 @@ export const createLoggers = (app: Application) => {
   let loggers;
 
   if (app.config.midwayFeature['replaceEggLogger']) {
-    loggers = new MidwayLoggers(app.config, app);
+    loggers = new MidwayLoggers(app.config, app, processType);
   } else {
     checkMidwayLoggerSymbolExistsAndRemove(app.config);
     loggers = new EggLoggers(app.config as any);

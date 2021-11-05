@@ -11,6 +11,7 @@ describe('/test/enhance.test.ts', () => {
   describe('load ts file', () => {
     let app;
     beforeAll(async () => {
+      process.env.EGG_SERVER_ENV = 'unittest';
       app = await creatApp('enhance/base-app');
     });
 
@@ -365,24 +366,6 @@ describe('/test/enhance.test.ts', () => {
       assert(appInfo['name'] === app.name);
       assert(appInfo['baseDir'] === app.baseDir);
       assert(appInfo['baseDir'] === app.appDir + '/src');
-    });
-  });
-
-  describe('load ts file support constructor inject', () => {
-    let app;
-    beforeAll(async () => {
-      app = await creatApp('enhance/base-app-constructor');
-    });
-
-    afterAll(async () => {
-      await closeApp(app);
-    })
-
-    it('should load ts directory and inject in constructor', done => {
-      request(app.callback())
-        .get('/api')
-        .expect(200)
-        .expect('63t', done);
     });
   });
 

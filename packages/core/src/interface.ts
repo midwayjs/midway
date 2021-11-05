@@ -260,6 +260,11 @@ export interface IMidwayContainer extends IObjectFactory, IObjectLifeCycle {
   getAttr<T>(key: string): T;
 }
 
+/**
+ * @deprecated
+ */
+export type IApplicationContext = IMidwayContainer;
+
 export interface IFileDetector {
   run(container: IMidwayContainer);
 }

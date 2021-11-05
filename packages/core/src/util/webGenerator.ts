@@ -12,12 +12,7 @@ import {
   WEB_RESPONSE_HTTP_CODE,
   WEB_RESPONSE_REDIRECT,
 } from '@midwayjs/decorator';
-import {
-  extractKoaLikeValue,
-  extractExpressLikeValue,
-  WebRouterCollector,
-  IMidwayContainer,
-} from '../';
+import { WebRouterCollector, IMidwayContainer } from '../';
 import { ILogger } from '@midwayjs/logger';
 
 export abstract class WebControllerGenerator<
@@ -37,66 +32,6 @@ export abstract class WebControllerGenerator<
    * @param routeArgsInfo
    * @param routerResponseData
    */
-  public generateExpressController(
-    controllerMapping: string,
-    routeArgsInfo?: RouterParamValue[],
-    routerResponseData?: any[]
-  ) {
-    const [controllerId, methodName] = controllerMapping.split('.');
-    return async (req, res, next) => {
-      const args = [req, res, next];
-      if (Array.isArray(routeArgsInfo)) {
-        await Promise.all(
-          routeArgsInfo.map(async ({ index, type, propertyData }) => {
-            args[index] = await extractExpressLikeValue(type, propertyData)(
-              req,
-              res,
-              next
-            );
-          })
-        );
-      }
-      const controller = await req.requestContext.getAsync(controllerId);
-      // eslint-disable-next-line prefer-spread
-      const result = await controller[methodName].apply(controller, args);
-
-      if (res.headersSent) {
-        // return when response send
-        return;
-      }
-
-      if (res.statusCode === 200 && (result === null || result === undefined)) {
-        res.status(204);
-      }
-      // implement response decorator
-      if (Array.isArray(routerResponseData) && routerResponseData.length) {
-        for (const routerRes of routerResponseData) {
-          switch (routerRes.type) {
-            case WEB_RESPONSE_HTTP_CODE:
-              res.status(routerRes.code);
-              break;
-            case WEB_RESPONSE_HEADER:
-              res.set(routerRes.setHeaders);
-              break;
-            case WEB_RESPONSE_CONTENT_TYPE:
-              res.type(routerRes.contentType);
-              break;
-            case WEB_RESPONSE_REDIRECT:
-              res.redirect(routerRes.code, routerRes.url);
-              return;
-          }
-        }
-      }
-      res.send(result);
-    };
-  }
-
-  /**
-   * wrap controller string to middleware function
-   * @param controllerMapping like FooController.index
-   * @param routeArgsInfo
-   * @param routerResponseData
-   */
   public generateKoaController(
     controllerMapping: string,
     routeArgsInfo?: RouterParamValue[],
@@ -105,16 +40,6 @@ export abstract class WebControllerGenerator<
     const [controllerId, methodName] = controllerMapping.split('.');
     return async (ctx, next) => {
       const args = [ctx, next];
-      if (Array.isArray(routeArgsInfo)) {
-        await Promise.all(
-          routeArgsInfo.map(async ({ index, type, propertyData }) => {
-            args[index] = await extractKoaLikeValue(type, propertyData)(
-              ctx,
-              next
-            );
-          })
-        );
-      }
       const controller = await ctx.requestContext.getAsync(controllerId);
       // eslint-disable-next-line prefer-spread
       const result = await controller[methodName].apply(controller, args);

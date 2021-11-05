@@ -8,9 +8,9 @@ const logDir = join(__dirname, '../logs');
 process.env.NODE_LOG_DIR = logDir;
 
 export async function creatApp(name, options = {}) {
-  return createApp<Web.Framework>(join(__dirname, 'fixtures', name), Object.assign(options, {
+  return createApp(join(__dirname, 'fixtures', name), Object.assign(options, {
     configurationModule: [Web]
-  }), Web.Framework)
+  }), Web)
 }
 
 export async function closeApp(app) {

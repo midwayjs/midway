@@ -26,6 +26,8 @@ export async function initializeGlobalApplicationContext(
   // bind container to decoratorManager
   bindContainer(applicationContext);
 
+  global['MIDWAY_APPLICATION_CONTEXT'] = applicationContext;
+
   if (globalOptions.moduleDirector !== false) {
     if (
       globalOptions.moduleDetector === undefined ||
@@ -126,4 +128,6 @@ export async function destroyGlobalApplicationContext(
   // stop container
   await applicationContext.stop();
   clearBindContainer();
+  global['MIDWAY_APPLICATION_CONTEXT'] = undefined;
+  global['MIDWAY_MAIN_FRAMEWORK'] = undefined;
 }

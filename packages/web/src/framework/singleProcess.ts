@@ -2,7 +2,6 @@ import {
   HTTP_SERVER_KEY,
   IMidwayBootstrapOptions,
   IMidwayContainer,
-  IMidwayFramework,
   MidwayConfigService,
   MidwayFrameworkType,
   MidwayLoggerService,
@@ -15,15 +14,10 @@ import {
 import { resolve } from 'path';
 import { Server } from 'net';
 import { LoggerOptions } from '@midwayjs/logger';
-import { Provide, Init, Inject, Framework } from '@midwayjs/decorator';
+import { Init, Inject } from '@midwayjs/decorator';
 import { MidwayEggContextLogger } from '../logger';
 
-@Provide()
-@Framework()
-export class MidwayWebSingleProcessFramework
-  implements
-    IMidwayFramework<IMidwayWebApplication, IMidwayWebConfigurationOptions>
-{
+export class MidwayWebSingleProcessFramework {
   public app: IMidwayWebApplication;
   public agent;
   public configurationOptions: IMidwayWebConfigurationOptions;
@@ -201,6 +195,4 @@ export class MidwayWebSingleProcessFramework
   public getDefaultContextLoggerClass() {
     return MidwayEggContextLogger;
   }
-
-  public loadLifeCycles() {}
 }

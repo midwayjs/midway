@@ -1,8 +1,8 @@
 import { findLernaRoot, parseNormalDir } from './utils';
 import * as extend from 'extend2';
 import { EggAppInfo } from 'egg';
-import { MidwayWebFramework } from './framework/web';
 import {
+  getCurrentApplicationContext,
   initializeGlobalApplicationContext,
   safelyGet,
   safeRequire,
@@ -11,11 +11,13 @@ import { join } from 'path';
 import { existsSync, readFileSync } from 'fs';
 import { createLoggers } from './logger';
 import { EggRouter as Router } from '@eggjs/router';
-
+import { debuglog } from 'util';
 const ROUTER = Symbol('EggCore#router');
 const EGG_LOADER = Symbol.for('egg#loader');
 const EGG_PATH = Symbol.for('egg#eggPath');
 const LOGGERS = Symbol('EggApplication#loggers');
+
+const debug = debuglog('midway:egg');
 
 let customFramework = null;
 function getFramework() {
@@ -125,36 +127,22 @@ export const createAppWorkerLoader = () => {
     }
 
     load() {
-      this.framework = new MidwayWebFramework().configure({
-        processType: 'application',
-        app: this.app,
-        globalConfig: this.app.config,
-      });
-
-      this.app.beforeStart(async () => {
-        if (this.app.options.applicationContext) {
-          // 单进程模式启动
-          this.applicationContext = this.app.options.applicationContext;
-        } else {
-          // egg-scripts 启动
-          this.applicationContext = await initializeGlobalApplicationContext({
-            appDir: this.app.appDir,
-            ignore: ['**/app/extend/**'],
-          });
-        }
-        await this.framework.initialize({
-          applicationContext: this.applicationContext,
+      if (!getCurrentApplicationContext()) {
+        // 如果不走 bootstrap，就得在这里初始化 applicationContext
+        initializeGlobalApplicationContext({
+          ...this.globalOptions,
+          appDir: this.appDir,
+          baseDir: this.baseDir,
+          ignore: ['**/app/extend/**'],
+        }).then(r => {
+          debug('global context: init complete');
         });
-        super.load();
-      });
+      }
     }
 
-    /**
-     * 这个代码只会在单进程 bootstrap.js 模式下执行
-     */
-    async loadOrigin() {
-      // await this.bootstrap.init();
-      // super.load();
+    loadOrigin() {
+      debug('egg application: run load()');
+      super.load();
     }
 
     loadMiddleware() {
@@ -178,7 +166,7 @@ export const createAgentWorkerLoader = () => {
   const AppWorkerLoader =
     require(getFramework())?.AgentWorkerLoader ||
     require('egg').AgentWorkerLoader;
-  class EggAppWorkerLoader extends (AppWorkerLoader as any) {
+  class EggAgentWorkerLoader extends (AppWorkerLoader as any) {
     getEggPaths() {
       if (!this.appDir) {
         if (this.app.options.typescript || this.app.options.isTsMode) {
@@ -258,31 +246,12 @@ export const createAgentWorkerLoader = () => {
     }
 
     load() {
-      this.framework = new MidwayWebFramework().configure({
-        processType: 'agent',
-        app: this.app,
-        globalConfig: this.app.config,
-      });
-      this.app.beforeStart(async () => {
-        if (this.app.options.applicationContext) {
-          // 单进程模式启动
-          this.applicationContext = this.app.options.applicationContext;
-        } else {
-          // egg-scripts 启动
-          this.applicationContext = await initializeGlobalApplicationContext({
-            appDir: this.app.appDir,
-            ignore: ['**/app/extend/**'],
-          });
-        }
-        await this.framework.initialize({
-          applicationContext: this.applicationContext,
-        });
-        super.load();
-      });
+      debug('egg agent: run load()');
+      super.load();
     }
   }
 
-  return EggAppWorkerLoader as any;
+  return EggAgentWorkerLoader as any;
 };
 
 export const createEggApplication = () => {
@@ -304,7 +273,7 @@ export const createEggApplication = () => {
 
     get loggers() {
       if (!(this as any)[LOGGERS]) {
-        (this as any)[LOGGERS] = createLoggers(this as any);
+        (this as any)[LOGGERS] = createLoggers(this as any, 'app');
       }
       return (this as any)[LOGGERS];
     }
@@ -342,7 +311,7 @@ export const createEggAgent = () => {
 
     get loggers() {
       if (!(this as any)[LOGGERS]) {
-        (this as any)[LOGGERS] = createLoggers(this as any);
+        (this as any)[LOGGERS] = createLoggers(this as any, 'agent');
       }
       return (this as any)[LOGGERS];
     }

@@ -168,6 +168,14 @@ export class MidwayFrameworkService {
   public getFramework(type: MidwayFrameworkType) {
     return this.globalFrameworkMap.get(type);
   }
+
+  public async stopFramework() {
+    await Promise.all(
+      Array.from(this.globalFrameworkMap.values()).map(frameworkInstance => {
+        return frameworkInstance.stop();
+      })
+    );
+  }
 }
 
 async function initializeFramework(

@@ -1,4 +1,4 @@
-import { NotFoundError } from '../../src/common/notFoundError';
+import { MidwayDefinitionNotFoundException } from '../../src';
 
 describe('/test/common/notFoundError.test.ts', () => {
   it('should test not found error', function () {
@@ -6,22 +6,22 @@ describe('/test/common/notFoundError.test.ts', () => {
       throw new Error(msg);
     };
     const creatNotFoundError = function(msg) {
-      throw new NotFoundError(msg);
+      throw new MidwayDefinitionNotFoundException(msg);
     };
 
     try {
       creatNormalError('');
     } catch (error) {
       expect(error instanceof Error).toBeTruthy();
-      expect(NotFoundError.isClosePrototypeOf(error)).toBeFalsy();
+      expect(MidwayDefinitionNotFoundException.isClosePrototypeOf(error)).toBeFalsy();
     }
 
     try {
       creatNotFoundError('');
     } catch (error) {
       expect(error instanceof Error).toBeTruthy();
-      expect(error instanceof NotFoundError).toBeTruthy();
-      expect(NotFoundError.isClosePrototypeOf(error)).toBeTruthy();
+      expect(error instanceof MidwayDefinitionNotFoundException).toBeTruthy();
+      expect(MidwayDefinitionNotFoundException.isClosePrototypeOf(error)).toBeTruthy();
       expect(() => {
         throw error;
       }).toThrow(/is not valid in current context/);
@@ -31,8 +31,8 @@ describe('/test/common/notFoundError.test.ts', () => {
       creatNotFoundError('testKey');
     } catch (error) {
       expect(error instanceof Error).toBeTruthy();
-      expect(error instanceof NotFoundError).toBeTruthy();
-      expect(NotFoundError.isClosePrototypeOf(error)).toBeTruthy();
+      expect(error instanceof MidwayDefinitionNotFoundException).toBeTruthy();
+      expect(MidwayDefinitionNotFoundException.isClosePrototypeOf(error)).toBeTruthy();
       error.updateErrorMsg('TestClass');
       expect(() => {
         throw error;

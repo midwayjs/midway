@@ -115,7 +115,7 @@ export class ParamController {
   }
 
   @Get('/param_queries')
-  async param_queries(@Queries() name: string) {
+  async param_queries(@Queries('name') name: string) {
     return name;
   }
 

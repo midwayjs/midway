@@ -50,20 +50,19 @@ export class MidwayDecoratorService {
           // add aspect implementation first
           this.aspectService.interceptPrototypeMethod(Clzz, methodName, () => {
             return {
-              before: (joinPoint: JoinPoint) => {
+              before: async (joinPoint: JoinPoint) => {
                 // joinPoint.args
                 const newArgs = [...joinPoint.args];
                 for (const meta of parameterDecoratorMetadata[methodName]) {
                   const { propertyName, key, metadata, parameterIndex } = meta;
-                  newArgs[parameterIndex] = this.parameterDecoratorMap.get(key)(
-                    {
+                  newArgs[parameterIndex] =
+                    await this.parameterDecoratorMap.get(key)({
                       metadata,
                       propertyName,
                       parameterIndex,
                       target: Clzz,
                       originArgs: joinPoint.args,
-                    }
-                  );
+                    });
                 }
                 joinPoint.args = newArgs;
               },

@@ -77,6 +77,7 @@ export class MidwayLifeCycleService {
   }
 
   public async stop() {
+    // stop lifecycle
     const cycles = listModule(CONFIGURATION_KEY);
     for (const cycle of cycles) {
       let inst;
@@ -91,6 +92,9 @@ export class MidwayLifeCycleService {
         await inst.onStop(this.applicationContext, this.mainApp);
       }
     }
+
+    // stop framework
+    await this.frameworkService.stopFramework();
   }
 
   private async runContainerLifeCycle(
