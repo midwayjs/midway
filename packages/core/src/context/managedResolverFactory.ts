@@ -15,7 +15,7 @@ import {
 
 import * as util from 'util';
 import * as EventEmitter from 'events';
-import { MidwayDefinitionNotFoundException } from '../exception';
+import { MidwayDefinitionNotFoundError } from '../error';
 
 const debug = util.debuglog('midway:managedresolver');
 
@@ -156,7 +156,7 @@ export class ManagedResolverFactory {
         try {
           inst[key] = this.resolveManaged(definition.properties.get(key), key);
         } catch (error) {
-          if (MidwayDefinitionNotFoundException.isClosePrototypeOf(error)) {
+          if (MidwayDefinitionNotFoundError.isClosePrototypeOf(error)) {
             const className = definition.path.name;
             error.updateErrorMsg(className);
           }
@@ -274,7 +274,7 @@ export class ManagedResolverFactory {
             key
           );
         } catch (error) {
-          if (MidwayDefinitionNotFoundException.isClosePrototypeOf(error)) {
+          if (MidwayDefinitionNotFoundError.isClosePrototypeOf(error)) {
             const className = definition.path.name;
             error.updateErrorMsg(className);
           }

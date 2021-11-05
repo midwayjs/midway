@@ -1,4 +1,3 @@
-export { MidwayFrameworkType } from '@midwayjs/decorator';
 export * from './interface';
 export * from './context/container';
 export { MidwayRequestContainer } from './context/requestContainer';
@@ -36,4 +35,10 @@ export * from './util/middlewareManager';
 export * from './util/pathToRegexp';
 export * from './util/exceptionFilterManager';
 export * from './setup';
-export * from './exception';
+export * from './error';
+
+/**
+ * proxy
+ */
+export { MidwayFrameworkType } from '@midwayjs/decorator';
+export { ILogger, IMidwayLogger } from '@midwayjs/logger';

@@ -6,7 +6,7 @@ import {
   FunctionMiddleware,
 } from '../interface';
 import { pathToRegexp } from '../util/pathToRegexp';
-import { MidwayCommonException, MidwayParameterException } from '../exception';
+import { MidwayCommonError, MidwayParameterError } from '../error';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -18,7 +18,7 @@ export class MidwayMiddlewareService<T> {
     name?: string
   ) {
     if (!Array.isArray(middleware)) {
-      throw new MidwayParameterException('Middleware stack must be an array');
+      throw new MidwayParameterError('Middleware stack must be an array');
     }
 
     const newMiddlewareArr = [];
@@ -29,7 +29,7 @@ export class MidwayMiddlewareService<T> {
           typeof fn === 'string' &&
           !this.applicationContext.hasDefinition(fn)
         ) {
-          throw new MidwayCommonException(
+          throw new MidwayCommonError(
             'Middleware definition not found in midway container'
           );
         }
@@ -57,7 +57,7 @@ export class MidwayMiddlewareService<T> {
             newMiddlewareArr.push(fn);
           }
         } else {
-          throw new MidwayCommonException(
+          throw new MidwayCommonError(
             'Middleware must have resolve method!'
           );
         }
@@ -80,7 +80,7 @@ export class MidwayMiddlewareService<T> {
       function dispatch(i) {
         if (i <= index)
           return Promise.reject(
-            new MidwayCommonException('next() called multiple times')
+            new MidwayCommonError('next() called multiple times')
           );
         index = i;
         let fn = (newMiddlewareArr as Array<FunctionMiddleware<T>>)[i];
@@ -107,7 +107,7 @@ export class MidwayMiddlewareService<T> {
 export function pathMatching(options) {
   options = options || {};
   if (options.match && options.ignore)
-    throw new MidwayCommonException(
+    throw new MidwayCommonError(
       'options.match and options.ignore can not both present'
     );
   if (!options.match && !options.ignore) return () => true;
@@ -139,7 +139,7 @@ function toPathMatch(pattern) {
     const matchs = pattern.map(item => toPathMatch(item));
     return ctx => matchs.some(match => match(ctx));
   }
-  throw new MidwayCommonException(
+  throw new MidwayCommonError(
     'match/ignore pattern must be RegExp, Array or String, but got ' + pattern
   );
 }

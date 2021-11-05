@@ -49,7 +49,8 @@ export enum HttpStatus {
   HTTP_VERSION_NOT_SUPPORTED = 505,
 }
 
-export enum FrameworkExceptionEnum {
+export enum FrameworkErrorEnum {
+  UNKNOWN = 10000,
   COMMON = 10001,
   PARAM_TYPE = 10002,
   DEFINITION_NOT_FOUND = 10003,

@@ -45,7 +45,7 @@ import {
 import { MidwayEnvironmentService } from '../service/environmentService';
 import { MidwayConfigService } from '../service/configService';
 import * as EventEmitter from 'events';
-import { MidwayDefinitionNotFoundException } from '../exception';
+import { MidwayDefinitionNotFoundError } from '../error';
 
 const debug = util.debuglog('midway:container:configuration');
 const globalDebugLogger = util.debuglog('midway:container');
@@ -501,7 +501,7 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
       return this.parent.get(identifier, args);
     }
     if (!definition) {
-      throw new MidwayDefinitionNotFoundException(
+      throw new MidwayDefinitionNotFoundError(
         objectContext?.originName ?? identifier
       );
     }
@@ -536,7 +536,7 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     }
 
     if (!definition) {
-      throw new MidwayDefinitionNotFoundException(
+      throw new MidwayDefinitionNotFoundError(
         objectContext?.originName ?? identifier
       );
     }
