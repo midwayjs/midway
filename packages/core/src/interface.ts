@@ -1,8 +1,7 @@
 import {
   ObjectIdentifier,
   IManagedInstance,
-  ObjectDefinitionOptions,
-  MidwayFrameworkType, IMethodAspect
+  MidwayFrameworkType, IMethodAspect, ScopeEnum
 } from '@midwayjs/decorator';
 import { ILogger, LoggerOptions } from '@midwayjs/logger';
 import * as EventEmitter from 'events';
@@ -105,6 +104,7 @@ export interface IObjectDefinition {
   dependsOn: ObjectIdentifier[];
   constructorArgs: IManagedInstance[];
   properties: IProperties;
+  scope: ScopeEnum;
   isAsync(): boolean;
   isSingletonScope(): boolean;
   isRequestScope(): boolean;
@@ -128,6 +128,7 @@ export interface IObjectDefinition {
      */
     metadata: any;
   }>;
+  createFrom: 'framework' | 'file' | 'module';
 }
 
 export interface IObjectCreator {
@@ -236,13 +237,13 @@ export interface IMidwayContainer extends IObjectFactory, IObjectLifeCycle {
   hasNamespace(namespace: string): boolean;
   hasDefinition(identifier: ObjectIdentifier);
   hasObject(identifier: ObjectIdentifier);
-  bind<T>(target: T, options?: ObjectDefinitionOptions): void;
+  bind<T>(target: T, options?: Partial<IObjectDefinition>): void;
   bind<T>(
     identifier: ObjectIdentifier,
     target: T,
-    options?: ObjectDefinitionOptions
+    options?: Partial<IObjectDefinition>
   ): void;
-  bindClass(exports, options?: ObjectDefinitionOptions);
+  bindClass(exports, options?: Partial<IObjectDefinition>);
   getDebugLogger();
   setFileDetector(fileDetector: IFileDetector);
   createChild(): IMidwayContainer;
@@ -333,19 +334,81 @@ export interface IExceptionFilter<T, R = any, N = any> {
 export type CommonExceptionFilterUnion<T, R = any, N = any> = (new (...args) => IExceptionFilter<T, R, N>) | Array<new (...args) => IExceptionFilter<T, R, N>>
 
 export interface IMidwayBaseApplication<T extends IMidwayContext = IMidwayContext> {
+  /**
+   * Get a base directory for project, with src or dist
+   */
   getBaseDir(): string;
+
+  /**
+   * Get a project root directory, without src or dist
+   */
   getAppDir(): string;
+
+  /**
+   * Get a environment value, read from MIDWAY_SERVER_ENV
+   */
   getEnv(): string;
+
+  /**
+   * Get current framework type in MidwayFrameworkType enum
+   */
   getFrameworkType(): MidwayFrameworkType;
+
+  /**
+   * Get current running process type, app or agent, just for egg
+   */
   getProcessType(): MidwayProcessTypeEnum;
+
+  /**
+   * Get global Midway IoC Container
+   */
   getApplicationContext(): IMidwayContainer;
+
+  /**
+   * Get all configuration values or get the specified configuration through parameters
+   * @param key config key
+   */
   getConfig(key?: string): any;
+
+  /**
+   * Get default logger object or get the specified logger through parameters
+   * @param name
+   */
   getLogger(name?: string): ILogger;
+
+  /**
+   * Get core logger
+   */
   getCoreLogger(): ILogger;
+
+  /**
+   * Create a logger by name and options
+   * @param name
+   * @param options
+   */
   createLogger(name: string, options: LoggerOptions): ILogger;
+
+  /**
+   * Get project name, just package.json name
+   */
   getProjectName(): string;
+
+  /**
+   * create a context with RequestContainer
+   * @param args
+   */
   createAnonymousContext(...args): T;
+
+  /**
+   * Set a context logger class to change default context logger format
+   * @param BaseContextLoggerClass
+   */
   setContextLoggerClass(BaseContextLoggerClass: any): void;
+
+  /**
+   * Add new value to current config
+   * @param obj
+   */
   addConfigObject(obj: any);
 
   /**
@@ -387,7 +450,7 @@ export interface IMidwayBootstrapOptions {
   appDir?: string;
   applicationContext?: IMidwayContainer;
   preloadModules?: any[];
-  configurationModule?: any;
+  configurationModule?: any | any[];
   moduleDetector?: 'file' | IFileDetector | false;
   logger?: boolean | ILogger;
   ignore?: string[];

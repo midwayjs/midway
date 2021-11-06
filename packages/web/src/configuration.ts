@@ -25,6 +25,16 @@ const debug = debuglog('midway:egg');
           },
         },
       },
+      unittest: {
+        egg: {
+          plugins: {
+            'egg-mock': {
+              enable: true,
+              package: 'egg-mock',
+            },
+          },
+        },
+      },
     },
   ],
 })

@@ -8,7 +8,6 @@ import {
   isFunction,
   listModule,
   MAIN_MODULE_KEY,
-  ObjectDefinitionOptions,
   ObjectIdentifier,
   saveModule,
   saveProviderId,
@@ -302,7 +301,7 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     this.fileDetector?.run(this);
   }
 
-  bindClass(exports, options?: ObjectDefinitionOptions) {
+  bindClass(exports, options?: Partial<IObjectDefinition>) {
     if (isClass(exports) || isFunction(exports)) {
       this.bindModule(exports, options);
     } else {
@@ -315,11 +314,11 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     }
   }
 
-  bind<T>(target: T, options?: ObjectDefinitionOptions): void;
+  bind<T>(target: T, options?: Partial<IObjectDefinition>): void;
   bind<T>(
     identifier: ObjectIdentifier,
     target: T,
-    options?: ObjectDefinitionOptions
+    options?: Partial<IObjectDefinition>
   ): void;
   bind<T>(identifier: any, target: any, options?: any): void {
     if (isClass(identifier) || isFunction(identifier)) {
@@ -348,6 +347,7 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     definition.srcPath = options?.srcPath || null;
     definition.namespace = options?.namespace || '';
     definition.scope = options?.scope || ScopeEnum.Request;
+    definition.createFrom = options?.createFrom;
 
     this.debugLogger(`  bind id => [${definition.id}(${definition.name})]`);
 
@@ -381,8 +381,7 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     }
 
     // @async, @init, @destroy @scope
-    const objDefOptions: ObjectDefinitionOptions =
-      getObjectDefinition(target) ?? {};
+    const objDefOptions = getObjectDefinition(target) ?? {};
 
     if (objDefOptions.initMethod) {
       this.debugLogger(`  register initMethod = ${objDefOptions.initMethod}`);
@@ -409,11 +408,11 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     this.registry.registerDefinition(definition.id, definition);
   }
 
-  protected bindModule(module: any, options: ObjectDefinitionOptions = {}) {
+  protected bindModule(module: any, options: Partial<IObjectDefinition>) {
     if (isClass(module)) {
       const providerId = getProviderUUId(module);
       if (providerId) {
-        this.identifierMapping.saveClassRelation(module, options.namespace);
+        this.identifierMapping.saveClassRelation(module, options?.namespace);
         this.bind(providerId, module, options);
       } else {
         // no provide or js class must be skip
@@ -434,6 +433,7 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
           scope: info.scope,
           namespace: options.namespace,
           srcPath: options.srcPath,
+          createFrom: options.createFrom,
         });
       }
     }

@@ -28,6 +28,10 @@ export async function initializeGlobalApplicationContext(
 
   global['MIDWAY_APPLICATION_CONTEXT'] = applicationContext;
 
+  // register baseDir and appDir
+  applicationContext.registerObject('baseDir', baseDir);
+  applicationContext.registerObject('appDir', appDir);
+
   if (globalOptions.moduleDirector !== false) {
     if (
       globalOptions.moduleDetector === undefined ||
@@ -43,10 +47,6 @@ export async function initializeGlobalApplicationContext(
       applicationContext.setFileDetector(globalOptions.moduleDetector);
     }
   }
-
-  // register baseDir and appDir
-  applicationContext.registerObject('baseDir', baseDir);
-  applicationContext.registerObject('appDir', appDir);
 
   // bind inner service
   applicationContext.bindClass(MidwayEnvironmentService);

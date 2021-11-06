@@ -76,6 +76,7 @@ export class DirectoryFileDetector extends AbstractFileDetector<{
             container.bindClass(exports, {
               namespace: this.options.namespace,
               srcPath: file,
+              createFrom: 'file',
             });
             debugLogger(`  binding "${file}" end`);
           }
@@ -85,6 +86,7 @@ export class DirectoryFileDetector extends AbstractFileDetector<{
           container.bindClass(exports, {
             namespace: this.options.namespace,
             srcPath: file,
+            createFrom: 'file',
           });
           debugLogger(`  binding "${file}" end`);
         }
@@ -101,6 +103,7 @@ export class CustomModuleDetector extends AbstractFileDetector<{
     for (const module of this.options.modules) {
       container.bindClass(module, {
         namespace: this.options.namespace,
+        createFrom: 'module',
       });
     }
   }
