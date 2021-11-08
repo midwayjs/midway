@@ -18,12 +18,12 @@ module.exports = appInfo => {
       },
       appLogger: {
         fileLogName: 'midway-web.log',
-        aliasName: 'logger'
+        aliasName: 'logger',
       },
       agentLogger: {
         fileLogName: 'midway-agent.log',
-      }
-    }
+      },
+    },
   };
 
   exports.pluginOverwrite = false;

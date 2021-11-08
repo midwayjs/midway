@@ -107,7 +107,9 @@ export class MidwayLifeCycleService {
   ) {
     for (const cycle of lifecycleInstanceList) {
       if (typeof cycle.instance[lifecycle] === 'function') {
-        debug(`[core:lifecycle]: run ${cycle.instance.constructor.name} ${lifecycle}`);
+        debug(
+          `[core:lifecycle]: run ${cycle.instance.constructor.name} ${lifecycle}`
+        );
         const result = await cycle.instance[lifecycle](
           this.applicationContext,
           this.mainApp
@@ -122,7 +124,9 @@ export class MidwayLifeCycleService {
   private async runObjectLifeCycle(lifecycleInstanceList, lifecycle) {
     for (const cycle of lifecycleInstanceList) {
       if (typeof cycle.instance[lifecycle] === 'function') {
-        debug(`[core:lifecycle]: run ${cycle.instance.constructor.name} ${lifecycle}`);
+        debug(
+          `[core:lifecycle]: run ${cycle.instance.constructor.name} ${lifecycle}`
+        );
         return this.applicationContext[lifecycle](
           cycle.instance[lifecycle].bind(cycle.instance)
         );

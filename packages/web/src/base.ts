@@ -1,4 +1,8 @@
-import { findLernaRoot, initializeAgentApplicationContext, parseNormalDir } from './utils';
+import {
+  findLernaRoot,
+  initializeAgentApplicationContext,
+  parseNormalDir,
+} from './utils';
 import * as extend from 'extend2';
 import { EggAppInfo } from 'egg';
 import {
@@ -248,7 +252,7 @@ export const createAgentWorkerLoader = () => {
     load() {
       this.app.beforeStart(async () => {
         debug('[egg]: start "initializeAgentApplicationContext"');
-        await initializeAgentApplicationContext(this.app,{
+        await initializeAgentApplicationContext(this.app, {
           ...this.globalOptions,
           appDir: this.appDir,
           baseDir: this.baseDir,
@@ -256,7 +260,7 @@ export const createAgentWorkerLoader = () => {
         });
         super.load();
         debug('[egg]: agent load run complete');
-      })
+      });
     }
   }
 

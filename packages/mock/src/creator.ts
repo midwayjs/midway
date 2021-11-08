@@ -87,7 +87,7 @@ export async function create<
     options.moduleDetector === 'file' ||
     options.moduleDetector === undefined
   ) {
-    debug(`[mock]: "options.moduleDetector" empty and use default`);
+    debug('[mock]: "options.moduleDetector" empty and use default');
     // 这里设置是因为在 midway 单测中会不断的复用装饰器元信息，又不能清理缓存，所以在这里做一些过滤
     options.moduleDetector = new MockDirectoryFileDetector({
       loadDir: options.baseDir,
@@ -140,10 +140,13 @@ export async function close(
 
   for (const definition of registry.values()) {
     if (
-      definition?.constructor?.name === 'ObjectDefinition' && !/^Midway/.test(definition?.path?.name)
+      definition?.constructor?.name === 'ObjectDefinition' &&
+      !/^Midway/.test(definition?.path?.name)
     ) {
       usedModuleMap.set(definition.path, app.getAppDir());
-      debug(`[mock]: set user module "${definition.path.name}" to global filter map`);
+      debug(
+        `[mock]: set user module "${definition.path.name}" to global filter map`
+      );
     }
   }
 
@@ -187,7 +190,6 @@ export async function createFunctionApp(
   return framework;
 }
 
-
 /**
  * 一个全量的空框架
  */
@@ -213,8 +215,6 @@ export async function createLightApp(
   baseDir = '',
   options: MockAppConfigurationOptions = {}
 ): Promise<IMidwayApplication> {
-
-
   return createApp(baseDir, {
     ...options,
     configurationModule: [

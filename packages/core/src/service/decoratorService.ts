@@ -56,18 +56,20 @@ export class MidwayDecoratorService {
                 const newArgs = [...joinPoint.args];
                 for (const meta of parameterDecoratorMetadata[methodName]) {
                   const { propertyName, key, metadata, parameterIndex } = meta;
-                  const parameterDecoratorHandler = this.parameterDecoratorMap.get(key);
+                  const parameterDecoratorHandler =
+                    this.parameterDecoratorMap.get(key);
                   if (!parameterDecoratorHandler) {
-                    throw new MidwayCommonError(`Parameter Decorator "${key}" handler not found, please register first.`);
+                    throw new MidwayCommonError(
+                      `Parameter Decorator "${key}" handler not found, please register first.`
+                    );
                   }
-                  newArgs[parameterIndex] =
-                    await parameterDecoratorHandler({
-                      metadata,
-                      propertyName,
-                      parameterIndex,
-                      target: Clzz,
-                      originArgs: joinPoint.args,
-                    });
+                  newArgs[parameterIndex] = await parameterDecoratorHandler({
+                    metadata,
+                    propertyName,
+                    parameterIndex,
+                    target: Clzz,
+                    originArgs: joinPoint.args,
+                  });
                 }
                 joinPoint.args = newArgs;
               },
@@ -95,7 +97,9 @@ export class MidwayDecoratorService {
             () => {
               const methodDecoratorHandler = this.methodDecoratorMap.get(key);
               if (!methodDecoratorHandler) {
-                throw new MidwayCommonError(`Method Decorator "${key}" handler not found, please register first.`);
+                throw new MidwayCommonError(
+                  `Method Decorator "${key}" handler not found, please register first.`
+                );
               }
               return this.methodDecoratorMap.get(key)({
                 target: Clzz,

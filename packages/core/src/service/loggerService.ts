@@ -109,7 +109,7 @@ export class MidwayLoggerService extends ServiceFactory<ILogger> {
         dir: options.logger.dir,
         level: levelTransform(options.logger.level),
         consoleLevel: levelTransform(options.logger.consoleLevel),
-      }
+      };
     }
 
     const eggCustomLogger = options['customLogger'];
@@ -119,7 +119,7 @@ export class MidwayLoggerService extends ServiceFactory<ILogger> {
         fileLogName: eggCustomLogger[name]?.file,
         level: levelTransform(eggCustomLogger[name]?.level),
         consoleLevel: levelTransform(eggCustomLogger[name]?.consoleLevel),
-      }
+      };
       cleanUndefinedProperty(transformLoggerConfig.midwayLogger.clients[name]);
     }
     return transformLoggerConfig;

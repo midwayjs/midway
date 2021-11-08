@@ -12,10 +12,19 @@ import {
   MidwayEnvironmentService,
   MidwayFrameworkService,
   MidwayInformationService,
-  MidwayLoggerService, MidwayPipelineService, REQUEST_OBJ_CTX_KEY,
+  MidwayLoggerService,
+  MidwayPipelineService,
+  REQUEST_OBJ_CTX_KEY,
 } from '@midwayjs/core';
 import defaultConfig from '@midwayjs/core/dist/config/config.default';
-import { ALL, APPLICATION_KEY, CONFIG_KEY, LOGGER_KEY, PIPELINE_IDENTIFIER, PLUGIN_KEY } from '@midwayjs/decorator';
+import {
+  ALL,
+  APPLICATION_KEY,
+  CONFIG_KEY,
+  LOGGER_KEY,
+  PIPELINE_IDENTIFIER,
+  PLUGIN_KEY,
+} from '@midwayjs/decorator';
 import { MidwayWebFramework } from './framework/web';
 
 export const parseNormalDir = (baseDir: string, isTypescript = true) => {
@@ -68,7 +77,6 @@ export const getCurrentDateString = (timestamp: number = Date.now()) => {
     .toString()
     .padStart(2, '0')}-${d.getDate().toString().padStart(2, '0')}`;
 };
-
 
 export async function initializeAgentApplicationContext(
   agent,
@@ -123,12 +131,15 @@ export async function initializeAgentApplicationContext(
   ]);
 
   // init aop support
-  const aspectService = await applicationContext.getAsync(MidwayAspectService, [applicationContext]);
-
-  // init decorator service
-  const decoratorService = await applicationContext.getAsync(MidwayDecoratorService, [
+  const aspectService = await applicationContext.getAsync(MidwayAspectService, [
     applicationContext,
   ]);
+
+  // init decorator service
+  const decoratorService = await applicationContext.getAsync(
+    MidwayDecoratorService,
+    [applicationContext]
+  );
 
   for (const configurationModule of [].concat(
     globalOptions.configurationModule
@@ -148,33 +159,27 @@ export async function initializeAgentApplicationContext(
 
   // framework/config/plugin/logger/app decorator support
   // register base config hook
-  decoratorService.registerPropertyHandler(
-    CONFIG_KEY,
-    (propertyName, meta) => {
-      if (meta.identifier === ALL) {
-        return this.configService.getConfiguration();
-      } else {
-        return this.configService.getConfiguration(
-          meta.identifier ?? propertyName
-        );
-      }
+  decoratorService.registerPropertyHandler(CONFIG_KEY, (propertyName, meta) => {
+    if (meta.identifier === ALL) {
+      return this.configService.getConfiguration();
+    } else {
+      return this.configService.getConfiguration(
+        meta.identifier ?? propertyName
+      );
     }
-  );
+  });
 
   // register @Logger decorator handler
-  decoratorService.registerPropertyHandler(
-    LOGGER_KEY,
-    (propertyName, meta) => {
-      return this.loggerService.getLogger(meta.identifier ?? propertyName);
-    }
-  );
+  decoratorService.registerPropertyHandler(LOGGER_KEY, (propertyName, meta) => {
+    return this.loggerService.getLogger(meta.identifier ?? propertyName);
+  });
 
   decoratorService.registerPropertyHandler(
     PIPELINE_IDENTIFIER,
     (key, meta, instance) => {
       return new MidwayPipelineService(
         instance[REQUEST_OBJ_CTX_KEY]?.requestContext ??
-        this.applicationContext,
+          this.applicationContext,
         meta.valves
       );
     }
@@ -188,12 +193,9 @@ export async function initializeAgentApplicationContext(
     }
   );
 
-  decoratorService.registerPropertyHandler(
-    PLUGIN_KEY,
-    (key, target) => {
-      return this.agent[key];
-    }
-  );
+  decoratorService.registerPropertyHandler(PLUGIN_KEY, (key, target) => {
+    return this.agent[key];
+  });
 
   // init aspect module
   await aspectService.loadAspect();

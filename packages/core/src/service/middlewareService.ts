@@ -57,9 +57,7 @@ export class MidwayMiddlewareService<T> {
             newMiddlewareArr.push(fn);
           }
         } else {
-          throw new MidwayCommonError(
-            'Middleware must have resolve method!'
-          );
+          throw new MidwayCommonError('Middleware must have resolve method!');
         }
       } else {
         newMiddlewareArr.push(fn);

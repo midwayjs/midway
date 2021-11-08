@@ -12,12 +12,8 @@ export default (appInfo: MidwayAppInfo) => {
           'logs',
           appInfo.name
         ),
-        level: isDevelopment
-          ? 'info'
-          : 'warn',
-        consoleLevel: isDevelopment
-          ? 'info'
-          : 'warn',
+        level: isDevelopment ? 'info' : 'warn',
+        consoleLevel: isDevelopment ? 'info' : 'warn',
       },
       clients: {
         coreLogger: {

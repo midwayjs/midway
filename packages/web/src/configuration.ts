@@ -18,7 +18,7 @@ import { extractKoaLikeValue, MidwayDecoratorService } from '@midwayjs/core';
           clients: {
             appLogger: {
               fileLogName: 'midway-web.log',
-              aliasName: 'logger'
+              aliasName: 'logger',
             },
             agentLogger: {
               fileLogName: 'midway-agent.log',
@@ -78,8 +78,7 @@ export class EggConfiguration {
     );
   }
 
-  async onReady(container) {
-  }
+  async onReady(container) {}
 
   async onServerReady() {
     // trigger server didReady

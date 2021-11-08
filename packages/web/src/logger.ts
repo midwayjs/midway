@@ -122,7 +122,11 @@ class MidwayLoggers extends Map<string, ILogger> {
       }
 
       for (const id of Object.keys(options.midwayLogger.clients)) {
-        const config = Object.assign({}, options.midwayLogger['default'], options.midwayLogger.clients[id]);
+        const config = Object.assign(
+          {},
+          options.midwayLogger['default'],
+          options.midwayLogger.clients[id]
+        );
         this.createLogger(config, id);
       }
     }
@@ -141,10 +145,7 @@ class MidwayLoggers extends Map<string, ILogger> {
     }
   }
 
-  createLogger(
-    options,
-    loggerKey: string
-  ) {
+  createLogger(options, loggerKey: string) {
     const logger: ILogger = loggers.createLogger(loggerKey, options);
 
     // overwrite values for pandora collect
@@ -192,10 +193,8 @@ export const createLoggers = (
     loggerConfig.level = 'INFO';
   }
 
-  let loggers;
-
   // 现在只走 midway logger
-  loggers = new MidwayLoggers(app.config, app, processType);
+  const loggers = new MidwayLoggers(app.config, app, processType);
   // won't print to console after started, except for local and unittest
   app.ready(() => {
     if (loggerConfig.disableConsoleAfterReady) {
@@ -203,7 +202,7 @@ export const createLoggers = (
     }
   });
   debug(`[egg]: create loggers in ${processType}`);
-  loggers.coreLogger.info(
+  loggers['coreLogger'].info(
     '[egg:logger] init all loggers with options: %j',
     loggerConfig
   );

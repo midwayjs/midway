@@ -195,7 +195,10 @@ export class MidwayWebFramework extends BaseFramework<
 
     // if use midway logger will be use midway custom context logger
     debug(`[egg]: overwrite BaseContextLoggerClass to "${processType}"`);
-    this.setContextLoggerClass(this.configService.getConfiguration('egg.ContextLoggerClass') || MidwayEggContextLogger)
+    this.setContextLoggerClass(
+      this.configService.getConfiguration('egg.ContextLoggerClass') ||
+        MidwayEggContextLogger
+    );
   }
 
   async loadMidwayController() {

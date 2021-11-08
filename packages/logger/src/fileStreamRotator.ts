@@ -435,8 +435,7 @@ export class FileStreamRotator {
       if (
         dayjs().format(dateFormat) !==
           dayjs().endOf('day').format(dateFormat) ||
-        dayjs().format(dateFormat) ===
-          dayjs().add(1, 'day').format(dateFormat)
+        dayjs().format(dateFormat) === dayjs().add(1, 'day').format(dateFormat)
       ) {
         debug(
           new Date().toLocaleString(),

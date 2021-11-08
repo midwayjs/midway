@@ -88,7 +88,7 @@ class ContainerConfiguration {
           namespace = configurationOptions.namespace;
           this.namespaceList.push(namespace);
         }
-        debug(`[core]: load configuration in namespace="${namespace}"`)
+        debug(`[core]: load configuration in namespace="${namespace}"`);
         this.addImports(configurationOptions.imports);
         this.addImportObjects(configurationOptions.importObjects);
         this.addImportConfigs(configurationOptions.importConfigs);
@@ -352,9 +352,7 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
 
     for (const p in props) {
       const propertyMeta = props[p];
-      debugBind(
-        `  inject properties => [${JSON.stringify(propertyMeta)}]`
-      );
+      debugBind(`  inject properties => [${JSON.stringify(propertyMeta)}]`);
       const refManaged = new ManagedReference();
       refManaged.args = propertyMeta.args;
       refManaged.name = propertyMeta.value as any;
@@ -385,9 +383,7 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     }
 
     if (objDefOptions.destroyMethod) {
-      debugBind(
-        `  register destroyMethod = ${objDefOptions.destroyMethod}`
-      );
+      debugBind(`  register destroyMethod = ${objDefOptions.destroyMethod}`);
       definition.destroyMethod = objDefOptions.destroyMethod;
     }
 
