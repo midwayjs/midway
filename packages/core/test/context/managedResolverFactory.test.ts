@@ -1,64 +1,8 @@
-import { BaseManagedResolver, ManagedResolverFactory } from '../../src/context/managedResolverFactory';
+import { ManagedResolverFactory } from '../../src/context/managedResolverFactory';
 import { ObjectDefinition } from '../../src/definitions/objectDefinition';
-import { IManagedResolver, MidwayContainer } from '../../src';
-import { IManagedInstance } from '@midwayjs/decorator';
-
-class TestManaged implements IManagedInstance {
-  type = 'test';
-  val = 123;
-}
-class TestResolver implements IManagedResolver {
-  type = 'test';
-  resolve(managed: IManagedInstance): any {
-    const t = managed as TestManaged;
-    return 'this is a test sync' + t.val;
-  }
-  async resolveAsync(managed: IManagedInstance): Promise<any> {
-    const t = managed as TestManaged;
-    return 'this is a test' + t.val;
-  }
-}
+import { MidwayContainer } from '../../src';
 
 describe('/test/context/managedResolverFactory.test.ts', () => {
-  it('base resolver should be ok', async () => {
-    const r = new BaseManagedResolver(null);
-    let a = false;
-    try {
-      expect(r.type).toBeTruthy();
-    } catch (e) {
-      a = true;
-    }
-    expect(a).toBeTruthy();
-
-    try {
-      r.resolve(null);
-    } catch (e) {
-      a = true;
-    }
-    expect(a).toBeTruthy();
-
-    try {
-      await r.resolveAsync(null);
-    } catch (e) {
-      a = true;
-    }
-    expect(a).toBeTruthy();
-  });
-
-  it('register resolver should be ok', async () => {
-    const context = new MidwayContainer();
-    const resolver = new ManagedResolverFactory(context);
-    resolver.registerResolver(new TestResolver());
-
-    const t = new TestManaged();
-    t.val = 555;
-    const srt = resolver.resolveManaged(t);
-    const rt = await resolver.resolveManagedAsync(t);
-
-    expect(srt).toEqual('this is a test sync555');
-    expect(rt).toEqual('this is a test555');
-  });
-
   it('create get deps should be ok', async () => {
     const context = new MidwayContainer();
     const resolver = new ManagedResolverFactory(context);

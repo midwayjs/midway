@@ -1,58 +1,43 @@
-const { BootstrapStarter } = require('@midwayjs/bootstrap');
 import { analysisDecorator } from './utils';
-export const start2 = async options => {
+export const start3 = async options => {
   const {
     appDir,
-    baseDir,
     framework,
     starter,
     layers = [],
     initializeContext,
-    applicationContext,
     preloadModules,
   } = options;
   const { start } = starter;
-  let starterInstance;
-  let boot;
   layers.unshift(engine => {
     engine.addRuntimeExtension({
       async beforeFunctionStart(runtime) {
-        starterInstance = new framework();
-        starterInstance.configure({
+        framework.configure({
           initializeContext,
           preloadModules,
           applicationAdapter: runtime,
         });
-        boot = new BootstrapStarter();
-        boot
-          .configure({
-            baseDir,
-            applicationContext,
-          })
-          .load(starterInstance);
-        await boot.init();
-        await boot.run();
+        await framework.initialize();
       },
     });
   });
   const runtime = await start({
     layers: layers,
     getApp: () => {
-      return starterInstance && starterInstance.getApplication();
+      return framework && framework.getApplication();
     },
     initContext: initializeContext,
   });
   return {
     runtime,
-    framework: starterInstance,
-    innerBootStarter: boot,
+    framework,
     // 分析装饰器上面的函数表
     getFunctionsFromDecorator: async () => {
       return analysisDecorator(appDir);
     },
     invoke: async (handlerName: string, trigger: any[]) => {
       return runtime.asyncEvent(async (...args) => {
-        return starterInstance.handleInvokeWrapper(handlerName)(...args);
+        return framework.handleInvokeWrapper(handlerName)(...args);
       })(...trigger);
     },
   };

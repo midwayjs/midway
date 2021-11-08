@@ -1,7 +1,6 @@
-'use strict';
 import { join } from 'path';
 import * as assert from 'assert';
-import { createApp, close } from '../../../packages/mock';
+import { createApp, close } from '@midwayjs/mock';
 const request = require('supertest');
 const cwd = join(__dirname, 'fixtures/integration-v2');
 describe('test/index.test.ts', () => {
@@ -13,7 +12,7 @@ describe('test/index.test.ts', () => {
   beforeAll(async () => {
     app = await createApp(cwd, {
       baseDir: join(cwd, 'src/apis'),
-    }, join(__dirname, '../src'));
+    }, require('../src'));
   });
   afterAll(async () => {
     await close(app);

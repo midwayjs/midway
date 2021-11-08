@@ -38,3 +38,12 @@ export class MidwayDefinitionNotFoundError extends MidwayError {
     this.message = msg;
   }
 }
+
+export class MidwayFeatureNoLongerSupportedError extends MidwayError {
+  constructor(message?: string) {
+    super(
+      message ?? 'Features no longer supported',
+      FrameworkErrorEnum.FEATURE_NO_LONGER_SUPPORTED
+    );
+  }
+}

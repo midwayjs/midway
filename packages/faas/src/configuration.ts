@@ -13,9 +13,15 @@ import {
   MidwayDecoratorService,
   REQUEST_OBJ_CTX_KEY,
 } from '@midwayjs/core';
+import * as DefaultConfig from './config.default';
 
 @Configuration({
   namespace: 'faas',
+  importConfigs: [
+    {
+      default: DefaultConfig,
+    },
+  ],
 })
 export class FaaSConfiguration {
   @Inject()

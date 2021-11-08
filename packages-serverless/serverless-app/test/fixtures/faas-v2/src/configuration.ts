@@ -1,11 +1,12 @@
 import { Configuration } from '@midwayjs/decorator';
+import { join } from 'path';
 
 @Configuration({
   importConfigs: [
-    './config/'
+    join(__dirname, './config/')
   ],
   imports: [
-    '@midwayjs/faas-middleware-upload'
+    require('@midwayjs/faas-middleware-upload')
   ]
 })
 export class ContainerConfiguration {

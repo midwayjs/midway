@@ -20,7 +20,7 @@ export function Config(identifier?: string): PropertyDecorator {
   });
 }
 
-export function App(type?: MidwayFrameworkType): PropertyDecorator {
+export function App(type?: typeof MidwayFrameworkType | string): PropertyDecorator {
   return createCustomPropertyDecorator(APPLICATION_KEY, {
     type,
   });

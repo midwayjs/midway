@@ -1,23 +1,22 @@
 import {
+  ALL,
+  APPLICATION_KEY,
+  CONFIG_KEY,
+  FRAMEWORK_KEY,
+  Init,
+  Inject,
+  listModule,
+  listPreloadModule,
+  LOGGER_KEY,
+  MidwayFrameworkType,
+  PIPELINE_IDENTIFIER,
+  PLUGIN_KEY,
   Provide,
   Scope,
   ScopeEnum,
-  Init,
-  Inject,
-  MidwayFrameworkType,
-  listModule,
-  listPreloadModule,
-  ALL,
-  LOGGER_KEY,
-  CONFIG_KEY,
-  FRAMEWORK_KEY,
-  APPLICATION_KEY,
-  PLUGIN_KEY,
-  PIPELINE_IDENTIFIER,
 } from '@midwayjs/decorator';
 import {
   IMidwayApplication,
-  IMidwayBootstrapOptions,
   IMidwayContainer,
   IMidwayFramework,
   REQUEST_OBJ_CTX_KEY,
@@ -102,15 +101,23 @@ export class MidwayFrameworkService {
     frameworks = filterProtoFramework(frameworks);
 
     if (frameworks.length) {
-      // init framework and app
-      const frameworkInstances: IMidwayFramework<any, any>[] =
-        await initializeFramework(
-          this.applicationContext,
-          this.globalOptions,
-          frameworks
-        );
+      frameworks.forEach(framework => {
+        // bind first
+        this.applicationContext.bindClass(framework);
+      });
 
-      for (const frameworkInstance of frameworkInstances) {
+      for (const frameworkClz of frameworks) {
+        const frameworkInstance = await this.applicationContext.getAsync<
+          IMidwayFramework<any, any>
+        >(frameworkClz, [this.applicationContext]);
+        // if enable, just init framework
+        if (frameworkInstance.isEnable()) {
+          // app init
+          await frameworkInstance.initialize({
+            applicationContext: this.applicationContext,
+            ...this.globalOptions,
+          });
+        }
         // app init
         this.globalAppMap.set(
           frameworkInstance.getFrameworkType(),
@@ -120,11 +127,13 @@ export class MidwayFrameworkService {
           frameworkInstance.getFrameworkType(),
           frameworkInstance
         );
-      }
 
-      global['MIDWAY_MAIN_FRAMEWORK'] = this.mainFramework =
-        frameworkInstances[0];
-      this.mainApp = this.mainFramework.getApplication();
+        if (!this.mainFramework && frameworkInstance.isEnable()) {
+          global['MIDWAY_MAIN_FRAMEWORK'] = this.mainFramework =
+            frameworkInstance;
+          this.mainApp = this.mainFramework.getApplication();
+        }
+      }
 
       // register @App decorator handler
       this.decoratorService.registerPropertyHandler(
@@ -176,34 +185,6 @@ export class MidwayFrameworkService {
       })
     );
   }
-}
-
-async function initializeFramework(
-  applicationContext: IMidwayContainer,
-  globalOptions: IMidwayBootstrapOptions,
-  frameworks: any[]
-): Promise<IMidwayFramework<any, any>[]> {
-  return Promise.all(
-    frameworks.map(framework => {
-      // bind first
-      applicationContext.bindClass(framework);
-      return (async () => {
-        const frameworkInstance = (await applicationContext.getAsync(
-          framework,
-          [applicationContext]
-        )) as IMidwayFramework<any, any>;
-        // if enable, just init framework
-        if (frameworkInstance.isEnable()) {
-          // app init
-          await frameworkInstance.initialize({
-            applicationContext,
-            ...globalOptions,
-          });
-        }
-        return frameworkInstance;
-      })();
-    })
-  );
 }
 
 function filterProtoFramework(frameworks) {

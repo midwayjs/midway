@@ -41,9 +41,14 @@ export function transformFrameworkToConfiguration<
 >(Framework: any): new () => any {
   let CustomFramework = Framework;
   if (typeof Framework === 'string') {
-    const frameworkModule = safeRequire(Framework);
-    CustomFramework = frameworkModule.Framework;
+    Framework = safeRequire(Framework);
   }
+
+  if (Framework.Configuration) {
+    return Framework.Configuration;
+  }
+
+  CustomFramework = Framework.Framework;
 
   assert(CustomFramework, `can't found custom framework ${Framework}`);
 

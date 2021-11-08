@@ -469,15 +469,15 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
 
   get<T>(
     identifier: { new (...args): T },
-    args?: any,
+    args?: any[],
     objectContext?: ObjectContext
   ): T;
   get<T>(
     identifier: ObjectIdentifier,
-    args?: any,
+    args?: any[],
     objectContext?: ObjectContext
   ): T;
-  get(identifier: any, args?: any, objectContext?: ObjectContext): any {
+  get(identifier: any, args?: any[], objectContext?: ObjectContext): any {
     if (typeof identifier !== 'string') {
       identifier = this.getIdentifier(identifier);
     }
@@ -498,17 +498,17 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
 
   async getAsync<T>(
     identifier: { new (...args): T },
-    args?: any,
+    args?: any[],
     objectContext?: ObjectContext
   ): Promise<T>;
   async getAsync<T>(
     identifier: ObjectIdentifier,
-    args?: any,
+    args?: any[],
     objectContext?: ObjectContext
   ): Promise<T>;
   async getAsync(
     identifier: any,
-    args?: any,
+    args?: any[],
     objectContext?: ObjectContext
   ): Promise<any> {
     if (typeof identifier !== 'string') {

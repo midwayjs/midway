@@ -1,4 +1,3 @@
-'use strict';
 import { join } from 'path';
 import * as assert from 'assert';
 import { existsSync, remove } from 'fs-extra';
@@ -22,8 +21,8 @@ describe('test/faas-start-end.test.ts', () => {
     }
     const app = await createApp<Framework>(cwd, {
       initContext: createInitializeContext() as FC.InitializeContext,
-    }, join(__dirname, '../src'));
-   
+    }, require('../src'));
+
     assert(existsSync(readyFile));
     await remove(readyFile);
     const stopFile = join(cwd, 'src/stop.txt');

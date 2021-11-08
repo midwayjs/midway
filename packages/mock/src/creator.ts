@@ -193,7 +193,6 @@ export async function createFunctionApp(
 /**
  * 一个全量的空框架
  */
-@Framework()
 class LightFramework extends BaseFramework<any, any, any> {
   getFrameworkType(): MidwayFrameworkType {
     return MidwayFrameworkType.LIGHT;
@@ -215,6 +214,7 @@ export async function createLightApp(
   baseDir = '',
   options: MockAppConfigurationOptions = {}
 ): Promise<IMidwayApplication> {
+  Framework()(LightFramework);
   return createApp(baseDir, {
     ...options,
     configurationModule: [

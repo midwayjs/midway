@@ -39,6 +39,7 @@ export abstract class BaseFramework<
   protected appLogger: ILogger;
   protected defaultContext = {};
   protected BaseContextLoggerClass: any;
+  protected ContextLoggerApplyLogger: string;
   protected middlewareManager = new ContextMiddlewareManager<CTX>();
   protected exceptionFilterManager = new ExceptionFilterManager<CTX>();
   protected composeMiddleware = null;
@@ -64,14 +65,16 @@ export abstract class BaseFramework<
   async init() {
     this.configurationOptions = this.configure() ?? ({} as OPT);
     this.BaseContextLoggerClass =
-      this.configurationOptions.ContextLoggerClass ||
+      this.configurationOptions.ContextLoggerClass ??
       this.getDefaultContextLoggerClass();
+    this.ContextLoggerApplyLogger =
+      this.configurationOptions.ContextLoggerApplyLogger ?? 'appLogger';
     this.logger = this.loggerService.getLogger('coreLogger');
     this.appLogger = this.loggerService.getLogger('appLogger');
     return this;
   }
 
-  abstract configure(): OPT;
+  abstract configure(options?: OPT);
 
   isEnable(): boolean {
     return true;
@@ -127,7 +130,7 @@ export abstract class BaseFramework<
 
   public abstract applicationInitialize(options: IMidwayBootstrapOptions);
 
-  public abstract getFrameworkType(): MidwayFrameworkType;
+  public abstract getFrameworkType(): MidwayFrameworkType | string;
 
   public abstract run(): Promise<void>;
 
@@ -136,7 +139,7 @@ export abstract class BaseFramework<
   }
 
   protected createContextLogger(ctx: CTX, name?: string): ILogger {
-    const appLogger = this.getLogger(name);
+    const appLogger = this.getLogger(name ?? this.ContextLoggerApplyLogger);
     return new this.BaseContextLoggerClass(ctx, appLogger);
   }
 
@@ -222,6 +225,12 @@ export abstract class BaseFramework<
             return this.createContextLogger(ctx, name);
           };
         }
+        ctx.setAttr = (key: string, value: any) => {
+          ctx.requestContext.setAttr(key, value);
+        };
+        ctx.getAttr = <T>(key: string): T => {
+          return ctx.requestContext.getAttr(key);
+        };
         return ctx;
       },
 

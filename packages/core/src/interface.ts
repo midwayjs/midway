@@ -15,8 +15,7 @@ export interface ILifeCycle extends Partial<IObjectLifeCycle> {
   onReady?(container: IMidwayContainer, app?: IMidwayApplication): Promise<void>;
   onServerReady?(container: IMidwayContainer, app?: IMidwayApplication): Promise<void>;
   onStop?(container: IMidwayContainer, app?: IMidwayApplication): Promise<void>;
-  onAppError?(err: Error, app: IMidwayApplication);
-  onContextError?(err: Error, ctx: IMidwayContext, app: IMidwayApplication);
+  // onAppError?(err: Error, app: IMidwayApplication);
 }
 
 export type ObjectContext = {
@@ -29,10 +28,10 @@ export type ObjectContext = {
  */
 export interface IObjectFactory {
   registry: IObjectDefinitionRegistry;
-  get<T>(identifier: new (...args) => T, args?: any, objectContext?: ObjectContext): T;
-  get<T>(identifier: ObjectIdentifier, args?: any, objectContext?: ObjectContext): T;
-  getAsync<T>(identifier: new (...args) => T, args?: any, objectContext?: ObjectContext): Promise<T>;
-  getAsync<T>(identifier: ObjectIdentifier, args?: any, objectContext?: ObjectContext): Promise<T>;
+  get<T>(identifier: new (...args) => T, args?: any[], objectContext?: ObjectContext): T;
+  get<T>(identifier: ObjectIdentifier, args?: any[], objectContext?: ObjectContext): T;
+  getAsync<T>(identifier: new (...args) => T, args?: any[], objectContext?: ObjectContext): Promise<T>;
+  getAsync<T>(identifier: ObjectIdentifier, args?: any[], objectContext?: ObjectContext): Promise<T>;
 }
 
 export enum ObjectLifeCycleEvent {
@@ -305,6 +304,18 @@ export interface Context {
   logger: ILogger;
   getLogger(name?: string): ILogger;
   startTime: number;
+  /**
+   * Set value to app attribute map
+   * @param key
+   * @param value
+   */
+  setAttr(key: string, value: any);
+
+  /**
+   * Get value from app attribute map
+   * @param key
+   */
+  getAttr<T>(key: string): T;
 }
 
 export type IMidwayContext<FrameworkContext = unknown> = Context & FrameworkContext;
@@ -459,12 +470,13 @@ export interface IConfigurationOptions {
   logger?: ILogger;
   appLogger?: ILogger;
   ContextLoggerClass?: any;
+  ContextLoggerApplyLogger?: string;
 }
 
 export interface IMidwayFramework<APP extends IMidwayApplication, T extends IConfigurationOptions> {
   app: APP;
   configurationOptions: T;
-  configure(): T;
+  configure(options?: T);
   isEnable(): boolean;
   initialize(options: Partial<IMidwayBootstrapOptions>): Promise<void>;
   run(): Promise<void>;
@@ -473,7 +485,7 @@ export interface IMidwayFramework<APP extends IMidwayApplication, T extends ICon
   getApplicationContext(): IMidwayContainer;
   getConfiguration(key?: string): any;
   getCurrentEnvironment(): string;
-  getFrameworkType(): MidwayFrameworkType;
+  getFrameworkType(): MidwayFrameworkType | string;
   getFrameworkName(): string;
   getAppDir(): string;
   getBaseDir(): string;

@@ -6,6 +6,7 @@
   "dependencies": {
     "@midwayjs/bootstrap": "^3.0.0-alpha.42",
     "@midwayjs/core": "^3.0.0-alpha.42",
+    "@midwayjs/faas": "^3.0.0-alpha.42",
     "@midwayjs/faas-typings": "^3.0.0-alpha.42",
     "@midwayjs/gateway-common-http": "^1.2.41",
     "@midwayjs/serverless-spec-builder": "^1.2.41",
@@ -14,7 +15,6 @@
   },
   "devDependencies": {
     "@midwayjs/decorator": "^3.0.0-alpha.42",
-    "@midwayjs/faas": "^3.0.0-alpha.42",
     "@midwayjs/faas-middleware-upload": "^0.0.5",
     "@midwayjs/mock": "^3.0.0-alpha.42",
     "@midwayjs/serverless-fc-starter": "^3.0.0-alpha.42",

@@ -18,6 +18,7 @@ import * as EventEmitter from 'events';
 import { MidwayDefinitionNotFoundError } from '../error';
 
 const debug = util.debuglog('midway:managedresolver');
+const debugLog = util.debuglog('midway:debug');
 
 export class ManagedReference implements IManagedInstance {
   type = KEYS.REF_ELEMENT;
@@ -118,6 +119,10 @@ export class ManagedResolverFactory {
         this.context.get(dep, args);
       }
     }
+
+    debugLog(
+      `[core:container]: Create id = "${definition.name}" ${definition.id}.`
+    );
 
     const Clzz = definition.creator.load();
 
@@ -226,6 +231,10 @@ export class ManagedResolverFactory {
         await this.context.getAsync(dep, args);
       }
     }
+
+    debugLog(
+      `[core:container]: Create id = "${definition.name}" ${definition.id}.`
+    );
 
     const Clzz = definition.creator.load();
     let constructorArgs = [];

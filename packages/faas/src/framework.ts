@@ -47,15 +47,20 @@ export class MidwayFaaSFramework extends BaseFramework<
   @Inject()
   middlewareService: MidwayMiddlewareService<FaaSContext>;
 
-  configure() {
-    return {};
+  configure(options: IFaaSConfigurationOptions) {
+    this.configurationOptions = options;
   }
 
-  async applicationInitialize(
-    options: IMidwayBootstrapOptions & IFaaSConfigurationOptions
-  ) {
+  isEnable(): boolean {
+    return false;
+  }
+
+  async applicationInitialize(options: IMidwayBootstrapOptions) {
+    if (!this.logger) {
+      this.logger = options.logger || loggers.getLogger('appLogger');
+    }
     this.app =
-      options.applicationAdapter?.getApplication() ||
+      this.configurationOptions.applicationAdapter?.getApplication() ||
       ({} as IMidwayFaaSApplication);
 
     this.defineApplicationProperties({
@@ -63,7 +68,7 @@ export class MidwayFaaSFramework extends BaseFramework<
        * return init context value such as aliyun fc
        */
       getInitializeContext: () => {
-        return options.initializeContext;
+        return this.configurationOptions.initializeContext;
       },
 
       /**
@@ -75,41 +80,19 @@ export class MidwayFaaSFramework extends BaseFramework<
       },
 
       getFunctionName: () => {
-        return options.applicationAdapter?.getFunctionName();
+        return this.configurationOptions.applicationAdapter?.getFunctionName();
       },
 
       getFunctionServiceName: () => {
-        return options.applicationAdapter?.getFunctionServiceName();
+        return this.configurationOptions.applicationAdapter?.getFunctionServiceName();
       },
     });
-  }
-
-  protected async initializeLogger(options: IMidwayBootstrapOptions) {
-    if (!this.logger) {
-      this.logger =
-        options.logger ||
-        createConsoleLogger('midwayServerlessLogger', {
-          printFormat: info => {
-            const requestId =
-              info.ctx?.['originContext']?.['requestId'] ??
-              info.ctx?.['originContext']?.['request_id'] ??
-              '';
-            return `${new Date().toISOString()} ${requestId} [${info.level}] ${
-              info.message
-            }`;
-          },
-        });
-      this.appLogger = this.logger;
-      loggers.addLogger('coreLogger', this.logger, false);
-      loggers.addLogger('appLogger', this.logger, false);
-      loggers.addLogger('logger', this.logger, false);
-    }
   }
 
   public async run() {
     return this.lock.sureOnce(async () => {
       // set app keys
-      this.app['keys'] = this.configService.getConfiguration('keys') || '';
+      this.app['keys'] = this.configService.getConfiguration('keys') ?? '';
 
       // store all http function entry
       const collector = new ServerlessTriggerCollector();
@@ -153,6 +136,9 @@ export class MidwayFaaSFramework extends BaseFramework<
           ...funOptions.controllerMiddleware,
           ...funOptions.middleware,
           async (ctx, next) => {
+            if (isHttpFunction) {
+              args = [ctx];
+            }
             // invoke handler
             const result = await this.invokeHandler(funOptions, ctx, args);
             if (isHttpFunction && result !== undefined) {
