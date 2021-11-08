@@ -17,6 +17,7 @@ import {
   ParameterHandlerFunction,
 } from '../interface';
 import { MidwayAspectService } from './aspectService';
+import { MidwayCommonError } from '../error';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -55,8 +56,12 @@ export class MidwayDecoratorService {
                 const newArgs = [...joinPoint.args];
                 for (const meta of parameterDecoratorMetadata[methodName]) {
                   const { propertyName, key, metadata, parameterIndex } = meta;
+                  const parameterDecoratorHandler = this.parameterDecoratorMap.get(key);
+                  if (!parameterDecoratorHandler) {
+                    throw new MidwayCommonError(`Parameter Decorator "${key}" handler not found, please register first.`);
+                  }
                   newArgs[parameterIndex] =
-                    await this.parameterDecoratorMap.get(key)({
+                    await parameterDecoratorHandler({
                       metadata,
                       propertyName,
                       parameterIndex,
@@ -88,6 +93,10 @@ export class MidwayDecoratorService {
             Clzz,
             propertyName,
             () => {
+              const methodDecoratorHandler = this.methodDecoratorMap.get(key);
+              if (!methodDecoratorHandler) {
+                throw new MidwayCommonError(`Method Decorator "${key}" handler not found, please register first.`);
+              }
               return this.methodDecoratorMap.get(key)({
                 target: Clzz,
                 propertyName,

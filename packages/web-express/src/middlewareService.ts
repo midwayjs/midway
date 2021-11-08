@@ -2,8 +2,7 @@ import { isClass, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
 import {
   IMidwayContainer,
   pathToRegexp,
-  MidwayCommonException,
-  MidwayParameterException,
+  MidwayCommonError,
   CommonMiddleware,
 } from '@midwayjs/core';
 import { IMidwayExpressContext, IMidwayExpressMiddleware } from './interface';
@@ -21,7 +20,7 @@ export class MidwayExpressMiddlewareService {
     name?: string
   ) {
     if (!Array.isArray(middleware)) {
-      throw new MidwayParameterException('Middleware stack must be an array');
+      throw new MidwayCommonError('Middleware stack must be an array');
     }
 
     const newMiddlewareArr = [];
@@ -32,7 +31,7 @@ export class MidwayExpressMiddlewareService {
           typeof fn === 'string' &&
           !this.applicationContext.hasDefinition(fn)
         ) {
-          throw new MidwayCommonException(
+          throw new MidwayCommonError(
             'Middleware definition not found in midway container'
           );
         }
@@ -61,7 +60,7 @@ export class MidwayExpressMiddlewareService {
             newMiddlewareArr.push(fn);
           }
         } else {
-          throw new MidwayCommonException(
+          throw new MidwayCommonError(
             'Middleware must have resolve method!'
           );
         }
@@ -92,7 +91,7 @@ export class MidwayExpressMiddlewareService {
 export function pathMatching(options) {
   options = options || {};
   if (options.match && options.ignore)
-    throw new MidwayCommonException(
+    throw new MidwayCommonError(
       'options.match and options.ignore can not both present'
     );
   if (!options.match && !options.ignore) return () => true;
@@ -124,7 +123,7 @@ function toPathMatch(pattern) {
     const matchs = pattern.map(item => toPathMatch(item));
     return ctx => matchs.some(match => match(ctx));
   }
-  throw new MidwayCommonException(
+  throw new MidwayCommonError(
     'match/ignore pattern must be RegExp, Array or String, but got ' + pattern
   );
 }

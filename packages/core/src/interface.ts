@@ -244,7 +244,6 @@ export interface IMidwayContainer extends IObjectFactory, IObjectLifeCycle {
     options?: Partial<IObjectDefinition>
   ): void;
   bindClass(exports, options?: Partial<IObjectDefinition>);
-  getDebugLogger();
   setFileDetector(fileDetector: IFileDetector);
   createChild(): IMidwayContainer;
   /**

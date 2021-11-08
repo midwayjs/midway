@@ -12,7 +12,6 @@
   },
   "devDependencies": {
     "colors": "^1.4.0",
-    "dayjs": "^1.10.4",
     "egg-logger": "^2.4.2",
     "fs-extra": "^8.0.1"
   },

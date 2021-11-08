@@ -22,16 +22,15 @@ import {
   transformFrameworkToConfiguration,
 } from './utils';
 import { debuglog } from 'util';
-const debug = debuglog('midway:mock');
+const debug = debuglog('midway:debug');
 
 const usedModuleMap: WeakMap<any, string> = new WeakMap();
-debug('usedModuleMap init, current size = 0');
 
 process.setMaxListeners(0);
 
 class MockDirectoryFileDetector extends DirectoryFileDetector {
   run(container) {
-    debug('filter start');
+    debug('[mock]: filter container transform map from decorator');
     const appDir = container.get('appDir');
     for (const moduleMeta of container.moduleMap.values()) {
       for (const value of Array.from(moduleMeta)) {
@@ -39,11 +38,11 @@ class MockDirectoryFileDetector extends DirectoryFileDetector {
         // 如果在已经使用过的模块列表中，且他的目录和当前的不同，则需要清理
         if (dir && dir !== appDir) {
           moduleMeta.delete(value);
-          debug(`filter module ${value}`);
+          debug(`[mock]: filter module ${value}`);
         }
       }
     }
-    debug('filter close');
+    debug('[mock]: filter end');
     return super.run(container);
   }
 }
@@ -56,13 +55,14 @@ export async function create<
   options?: MockAppConfigurationOptions,
   customFramework?: { new (...args): T } | ComponentModule
 ): Promise<T> {
-  debug('-------- create new app -------------');
+  debug(`[mock]: Create app, appDir="${appDir}"`);
   process.env.MIDWAY_TS_MODE = 'true';
 
   // 处理测试的 fixtures
   if (!isAbsolute(appDir)) {
     appDir = join(process.cwd(), 'test', 'fixtures', appDir);
   }
+
   clearAllLoggers();
 
   options = options || ({} as any);
@@ -87,6 +87,7 @@ export async function create<
     options.moduleDetector === 'file' ||
     options.moduleDetector === undefined
   ) {
+    debug(`[mock]: "options.moduleDetector" empty and use default`);
     // 这里设置是因为在 midway 单测中会不断的复用装饰器元信息，又不能清理缓存，所以在这里做一些过滤
     options.moduleDetector = new MockDirectoryFileDetector({
       loadDir: options.baseDir,
@@ -132,16 +133,17 @@ export async function close(
   }
 ) {
   if (!app) return;
+  debug(`[mock]: Closing app, appDir=${app.getAppDir()}`);
   options = options || {};
   // save current user module in container to filter in next test case
   const registry = app.getApplicationContext().registry as any;
 
   for (const definition of registry.values()) {
     if (
-      definition?.constructor?.name === 'ObjectDefinition' &&
-      definition?.createFrom === 'file'
+      definition?.constructor?.name === 'ObjectDefinition' && !/^Midway/.test(definition?.path?.name)
     ) {
       usedModuleMap.set(definition.path, app.getAppDir());
+      debug(`[mock]: set user module "${definition.path.name}" to global filter map`);
     }
   }
 
@@ -185,30 +187,33 @@ export async function createFunctionApp(
   return framework;
 }
 
+
+/**
+ * 一个全量的空框架
+ */
+@Framework()
+class LightFramework extends BaseFramework<any, any, any> {
+  getFrameworkType(): MidwayFrameworkType {
+    return MidwayFrameworkType.LIGHT;
+  }
+
+  async run(): Promise<void> {}
+
+  async applicationInitialize(options: IMidwayBootstrapOptions) {
+    this.app = {} as IMidwayApplication;
+    this.defineApplicationProperties();
+  }
+
+  configure(): any {
+    return {};
+  }
+}
+
 export async function createLightApp(
   baseDir = '',
   options: MockAppConfigurationOptions = {}
 ): Promise<IMidwayApplication> {
-  /**
-   * 一个全量的空框架
-   */
-  @Framework()
-  class LightFramework extends BaseFramework<any, any, any> {
-    getFrameworkType(): MidwayFrameworkType {
-      return MidwayFrameworkType.LIGHT;
-    }
 
-    async run(): Promise<void> {}
-
-    async applicationInitialize(options: IMidwayBootstrapOptions) {
-      this.app = {} as IMidwayApplication;
-      this.defineApplicationProperties();
-    }
-
-    configure(): any {
-      return {};
-    }
-  }
 
   return createApp(baseDir, {
     ...options,

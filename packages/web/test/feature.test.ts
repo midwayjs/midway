@@ -95,7 +95,7 @@ describe('/test/feature.test.ts', () => {
     await closeApp(app);
   });
 
-  it('should use egg-logger', async () => {
+  it('should use midway logger ignore replaceEggLogger config', async () => {
     const app = await creatApp('feature/base-app-egg-logger');
     await closeApp(app);
   });

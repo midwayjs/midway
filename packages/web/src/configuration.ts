@@ -8,13 +8,24 @@ import {
 import { IMidwayWebApplication } from './interface';
 import { MidwayWebFramework } from './framework/web';
 import { extractKoaLikeValue, MidwayDecoratorService } from '@midwayjs/core';
-import { debuglog } from 'util';
-const debug = debuglog('midway:egg');
 
 @Configuration({
   namespace: 'egg',
   importConfigs: [
     {
+      default: {
+        midwayLogger: {
+          clients: {
+            appLogger: {
+              fileLogName: 'midway-web.log',
+              aliasName: 'logger'
+            },
+            agentLogger: {
+              fileLogName: 'midway-agent.log',
+            },
+          },
+        },
+      },
       test: {
         egg: {
           plugins: {
@@ -56,7 +67,6 @@ export class EggConfiguration {
 
   @Init()
   init() {
-    debug('lifecycle: init');
     this.decoratorService.registerParameterHandler(
       WEB_ROUTER_PARAM_KEY,
       options => {
@@ -69,13 +79,15 @@ export class EggConfiguration {
   }
 
   async onReady(container) {
-    debug('lifecycle: onReady');
   }
 
   async onServerReady() {
-    debug('lifecycle: onServerReady(framework run)');
     // trigger server didReady
     await this.webFramework.run();
     this.app.messenger.emit('egg-ready');
+  }
+
+  async onStop() {
+    // TODO flush egg logger and close it
   }
 }

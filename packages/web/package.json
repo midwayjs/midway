@@ -29,7 +29,7 @@
   "devDependencies": {
     "@midwayjs/decorator": "^3.0.0-alpha.42",
     "@midwayjs/mock": "^3.0.0-alpha.42",
-    "dayjs": "^1.10.4",
+    "dayjs": "^1.10.7",
     "egg-mock": "^3.26.0",
     "egg-socket.io": "^4.1.6",
     "egg-view-nunjucks": "^2.3.0",

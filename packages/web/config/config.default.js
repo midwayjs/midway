@@ -11,14 +11,19 @@ module.exports = appInfo => {
   exports.rundir = path.join(appInfo.appDir, 'run');
 
   // 修改默认的日志名
-  exports.logger = {
-    appLogName: 'midway-web.log',
-    coreLogName: 'midway-core.log',
-    agentLogName: 'midway-agent.log',
-  };
-
-  exports.midwayFeature = {
-    replaceEggLogger: false,
+  exports.midwayLogger = {
+    clients: {
+      coreLogger: {
+        fileLogName: 'midway-core.log',
+      },
+      appLogger: {
+        fileLogName: 'midway-web.log',
+        aliasName: 'logger'
+      },
+      agentLogger: {
+        fileLogName: 'midway-agent.log',
+      }
+    }
   };
 
   exports.pluginOverwrite = false;

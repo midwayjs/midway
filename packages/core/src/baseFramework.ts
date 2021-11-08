@@ -67,7 +67,7 @@ export abstract class BaseFramework<
       this.configurationOptions.ContextLoggerClass ||
       this.getDefaultContextLoggerClass();
     this.logger = this.loggerService.getLogger('coreLogger');
-    this.appLogger = this.loggerService.getLogger('logger');
+    this.appLogger = this.loggerService.getLogger('appLogger');
     return this;
   }
 
@@ -131,7 +131,7 @@ export abstract class BaseFramework<
 
   public abstract run(): Promise<void>;
 
-  protected setContextLoggerClass(BaseContextLogger: any) {
+  public setContextLoggerClass(BaseContextLogger: any) {
     this.BaseContextLoggerClass = BaseContextLogger;
   }
 

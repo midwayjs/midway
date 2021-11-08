@@ -14,7 +14,7 @@ import * as util from 'util';
 import { MidwayEnvironmentService } from './environmentService';
 import { MidwayInformationService } from './informationService';
 
-const debug = util.debuglog('midway:config');
+const debug = util.debuglog('midway:debug');
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -128,13 +128,18 @@ export class MidwayConfigService implements IConfigService {
         continue;
       }
 
-      debug('Loaded config %s, %j', filename, config);
+      if (typeof filename === 'string') {
+        debug('[config]: Loaded config %s, %j', filename, config);
+      } else {
+        debug('[config]: Loaded config %j', config);
+      }
+
       extend(true, target, config);
     }
     if (this.externalObject.length) {
       for (const externalObject of this.externalObject) {
         if (externalObject) {
-          debug('Loaded external object %j', externalObject);
+          debug('[config]: Loaded external object %j', externalObject);
           extend(true, target, externalObject);
         }
       }
@@ -145,14 +150,12 @@ export class MidwayConfigService implements IConfigService {
 
   getConfiguration(configKey?: string) {
     if (configKey) {
-      debug('get configuration by key => %s.', configKey);
       return safelyGet(configKey, this.configuration);
     }
     return this.configuration;
   }
 
   private async loadConfig(configFilename): Promise<Record<string, unknown>> {
-    debug('load config %s.', configFilename);
     let exports = require(configFilename);
     if (exports && exports['default'] && Object.keys(exports).length === 1) {
       exports = exports['default'];

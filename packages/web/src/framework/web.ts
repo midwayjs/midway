@@ -13,8 +13,9 @@ import { loggers } from '@midwayjs/logger';
 import { resolve } from 'path';
 import { Server } from 'net';
 import { debuglog } from 'util';
+import { MidwayEggContextLogger } from '../logger';
 
-const debug = debuglog('midway:egg');
+const debug = debuglog('midway:debug');
 
 class EggControllerGenerator extends WebControllerGenerator<EggRouter> {
   constructor(readonly app, readonly applicationContext, readonly logger) {
@@ -58,7 +59,6 @@ export class MidwayWebFramework extends BaseFramework<
   }
 
   async initSingleProcessEgg() {
-    debug('web framework: init egg');
     const opts = {
       baseDir: this.appDir,
       framework: resolve(__dirname, '../application'),
@@ -69,18 +69,16 @@ export class MidwayWebFramework extends BaseFramework<
       midwaySingleton: true,
     };
 
+    debug('[egg]: init single process egg agent');
     const Agent = require(opts.framework).Agent;
     const Application = require(opts.framework).Application;
     const agent = (this.agent = new Agent(Object.assign({}, opts)));
     await agent.ready();
+    debug('[egg]: init single process egg application');
     const application = (this.app = new Application(Object.assign({}, opts)));
     application.agent = agent;
     agent.application = application;
-
-    if (this.app.config.midwayFeature['replaceEggLogger']) {
-      // if use midway logger will be use midway custom context logger
-      this.app.ContextLogger = this.BaseContextLoggerClass;
-    }
+    debug('[egg]: init single process egg end');
   }
 
   async applicationInitialize(options: Partial<IMidwayBootstrapOptions>) {
@@ -129,9 +127,32 @@ export class MidwayWebFramework extends BaseFramework<
       }
     }
 
+    this.generator = new EggControllerGenerator(
+      this.app,
+      this.applicationContext,
+      this.appLogger
+    );
+
+    this.overwriteApplication('app');
+
+    // hack use method
+    (this.app as any).originUse = this.app.use;
+    this.app.use = this.app.useMiddleware as any;
+
+    await new Promise<void>(resolve => {
+      this.app.once('application-ready', () => {
+        debug('[egg]: web framework: init egg end');
+        resolve();
+      });
+      (this.app.loader as any).loadOrigin();
+    });
+  }
+
+  overwriteApplication(processType) {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
     // 单进程下，先把egg的配置覆盖进来，有可能业务测没写 importConfigs
+    debug(`[egg]: overwrite egg config to configService in "${processType}"`);
     this.configService.addObject(this.app.config);
     Object.defineProperty(this.app, 'config', {
       get() {
@@ -139,12 +160,14 @@ export class MidwayWebFramework extends BaseFramework<
       },
     });
 
-    this.generator = new EggControllerGenerator(
-      this.app,
-      this.applicationContext,
-      this.appLogger
-    );
+    debug(`[egg]: overwrite applicationContext config to "${processType}"`);
+    Object.defineProperty(this.app, 'applicationContext', {
+      get() {
+        return self.applicationContext;
+      },
+    });
 
+    debug(`[egg]: overwrite properties to "${processType}"`);
     this.defineApplicationProperties(
       {
         generateController: (controllerMapping: string) => {
@@ -170,36 +193,9 @@ export class MidwayWebFramework extends BaseFramework<
       ['createAnonymousContext']
     );
 
-    // hack use method
-    (this.app as any).originUse = this.app.use;
-    this.app.use = this.app.useMiddleware as any;
-
-    if (this.app.config.midwayFeature['replaceEggLogger']) {
-      // if use midway logger will be use midway custom context logger
-      this.app.beforeStart(() => {
-        this.app.ContextLogger = this.BaseContextLoggerClass;
-      });
-    }
-
-    Object.defineProperty(this.app, 'applicationContext', {
-      get() {
-        return self.applicationContext;
-      },
-    });
-
-    await new Promise<void>(resolve => {
-      this.app.once('application-ready', () => {
-        debug('web framework: init egg end');
-        resolve();
-      });
-      (this.app.loader as any).loadOrigin();
-    });
-  }
-
-  protected async initializeLogger() {
-    // 不需要在这里创建框架日志，从 egg 代理过来
-    this.logger = this.app.coreLogger;
-    this.appLogger = this.app.logger;
+    // if use midway logger will be use midway custom context logger
+    debug(`[egg]: overwrite BaseContextLoggerClass to "${processType}"`);
+    this.setContextLoggerClass(this.configService.getConfiguration('egg.ContextLoggerClass') || MidwayEggContextLogger)
   }
 
   async loadMidwayController() {
@@ -240,7 +236,7 @@ export class MidwayWebFramework extends BaseFramework<
     return this.appLogger;
   }
 
-  protected setContextLoggerClass(BaseContextLogger: any) {
+  public setContextLoggerClass(BaseContextLogger: any) {
     this.BaseContextLoggerClass = BaseContextLogger;
     this.app.ContextLogger = BaseContextLogger;
   }

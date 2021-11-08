@@ -1,4 +1,3 @@
-import { EggLoggers } from 'egg-logger';
 import {
   loggers,
   ILogger,
@@ -16,34 +15,12 @@ import {
 import { Application, EggLogger, Context } from 'egg';
 import { getCurrentDateString } from './utils';
 import * as os from 'os';
+import { MidwayLoggerService, safelyGet } from '@midwayjs/core';
+import * as extend from 'extend2';
+import { debuglog } from 'util';
 
+const debug = debuglog('midway:debug');
 const isWindows = os.platform() === 'win32';
-
-const levelTransform = level => {
-  switch (level) {
-    case 'NONE':
-    case Infinity: // egg logger 的 none 是这个等级
-      return null;
-    case 0:
-    case 'DEBUG':
-    case 'debug':
-      return 'debug';
-    case 1:
-    case 'INFO':
-    case 'info':
-      return 'info';
-    case 2:
-    case 'WARN':
-    case 'warn':
-      return 'warn';
-    case 3:
-    case 'ERROR':
-    case 'error':
-      return 'error';
-    default:
-      return 'silly';
-  }
-};
 
 function isEmptyFile(p: string) {
   const content = readFileSync(p, {
@@ -65,28 +42,6 @@ function checkEggLoggerExistsAndBackup(dir, fileName) {
       const timeFormat = getCurrentDateString();
       renameSync(file, file + '.' + timeFormat + '_eggjs_bak');
     }
-  }
-}
-
-function removeSymbol(dir, fileName) {
-  const file = isAbsolute(fileName) ? fileName : join(dir, fileName);
-  if (existsSync(file) && lstatSync(file).isSymbolicLink()) {
-    if (!isWindows) {
-      unlinkSync(file);
-    }
-  }
-}
-
-function checkMidwayLoggerSymbolExistsAndRemove(appConfig: any) {
-  removeSymbol(appConfig.logger['dir'], appConfig.logger['appLogName']);
-  removeSymbol(appConfig.logger['dir'], appConfig.logger['coreLogName']);
-  removeSymbol(appConfig.logger['dir'], appConfig.logger['agentLogName']);
-  removeSymbol(appConfig.logger['dir'], appConfig.logger['errorLogName']);
-  for (const loggerOption in appConfig['customLogger']) {
-    removeSymbol(
-      appConfig.logger['dir'],
-      appConfig['customLogger'][loggerOption].file
-    );
   }
 }
 
@@ -116,11 +71,19 @@ class MidwayLoggers extends Map<string, ILogger> {
    */
   constructor(options, app: Application, processType: 'agent' | 'app') {
     super();
+    /**
+     * 日志创建的几种场景，主要考虑 2，4
+     * 1、单进程，使用 egg logger
+     * 2、单进程，使用 midway logger
+     * 3、egg-scripts 多进程，使用 egg-logger
+     * 4、egg-scripts 多进程，使用 midway logger
+     */
     // 这么改是为了防止 egg 日志切割时遍历属性，导致报错
     Object.defineProperty(this, 'app', {
       value: app,
       enumerable: false,
     });
+
     /**
      * 提前备份 egg 日志
      */
@@ -132,78 +95,57 @@ class MidwayLoggers extends Map<string, ILogger> {
     ]) {
       checkEggLoggerExistsAndBackup(options.logger.dir, name);
     }
-    // 创建标准的日志
-    if (processType === 'agent') {
-      this.createLogger(
-        'coreLogger',
-        {
-          file: options.logger.agentLogName,
-          level: options.logger?.coreLogger?.level,
-          consoleLevel: options.logger?.coreLogger?.consoleLevel,
-        },
-        options.logger,
-        'agent:coreLogger'
-      );
-      this.createLogger(
-        'logger',
-        { file: options.logger.appLogName },
-        options.logger,
-        'agent:logger'
-      );
-    } else {
-      this.createLogger(
-        'coreLogger',
-        {
-          file: options.logger.coreLogName,
-          level: options.logger?.coreLogger?.level,
-          consoleLevel: options.logger?.coreLogger?.consoleLevel,
-        },
-        options.logger,
-        'coreLogger'
-      );
-      this.createLogger(
-        'logger',
-        { file: options.logger.appLogName },
-        options.logger,
-        'logger'
-      );
-    }
-    if (options.customLogger) {
-      for (const loggerKey in options.customLogger) {
-        const customLogger = options.customLogger[loggerKey];
-        checkEggLoggerExistsAndBackup(
-          customLogger['dir'] || options.logger.dir,
-          customLogger['file']
-        );
-        this.createLogger(loggerKey, customLogger, options.logger);
+
+    /**
+     * 走到这里，有几种情况
+     * 1、egg-scripts 启动，并使用了 midway logger，egg 先启动了
+     * 2、单进程启动，但是没有 configuration，midway 没读到配置，日志服务没初始化
+     * 3、再走一遍日志创建，把 egg 插件配置的日志再初始化一遍
+     */
+    const loggerService = new MidwayLoggerService(null);
+    loggerService.configService = {
+      getConfiguration(configKey?: string) {
+        if (configKey) {
+          return safelyGet(configKey, options);
+        }
+        return this.configuration;
+      },
+    } as any;
+
+    const midwayLoggerConfig = loggerService.transformEggLogger(options) as any;
+    extend(true, options, midwayLoggerConfig);
+
+    if (options?.midwayLogger?.clients) {
+      // 从 egg 过来，这里有可能没有 dir
+      if (!options.midwayLogger['default']?.dir) {
+        options.midwayLogger.default['dir'] = options.logger.dir;
       }
+
+      for (const id of Object.keys(options.midwayLogger.clients)) {
+        const config = Object.assign({}, options.midwayLogger['default'], options.midwayLogger.clients[id]);
+        this.createLogger(config, id);
+      }
+    }
+
+    if (!this['logger']) {
+      this['logger'] = loggers.getLogger('appLogger');
+      this.set('logger', loggers.getLogger('appLogger'));
+    }
+
+    if (loggers.has('coreLogger')) {
+      this.createLogger({}, 'coreLogger');
+      this.createLogger({}, 'appLogger');
+      this.createLogger({}, 'agentLogger');
+    } else {
+      console.log('-----请在 logger 里配置 clients');
     }
   }
 
   createLogger(
-    loggerKey,
     options,
-    defaultLoggerOptions,
-    createLoggerKey?: string
+    loggerKey: string
   ) {
-    const level = options.level
-      ? levelTransform(options.level)
-      : levelTransform(defaultLoggerOptions.level);
-    const consoleLevel = options.consoleLevel
-      ? levelTransform(options.consoleLevel)
-      : levelTransform(defaultLoggerOptions.consoleLevel);
-    const dir = options['dir'] || defaultLoggerOptions.dir;
-
-    const logger: ILogger = loggers.createLogger(createLoggerKey || loggerKey, {
-      dir,
-      fileLogName: options.file,
-      errorLogName: defaultLoggerOptions.errorLogName,
-      level,
-      consoleLevel,
-      disableFile: level === null,
-      disableConsole: consoleLevel === null,
-      errorDir: dir,
-    });
+    const logger: ILogger = loggers.createLogger(loggerKey, options);
 
     // overwrite values for pandora collect
     (logger as any).values = () => {
@@ -252,18 +194,15 @@ export const createLoggers = (
 
   let loggers;
 
-  if (app.config.midwayFeature['replaceEggLogger']) {
-    loggers = new MidwayLoggers(app.config, app, processType);
-  } else {
-    checkMidwayLoggerSymbolExistsAndRemove(app.config);
-    loggers = new EggLoggers(app.config as any);
-  }
+  // 现在只走 midway logger
+  loggers = new MidwayLoggers(app.config, app, processType);
   // won't print to console after started, except for local and unittest
   app.ready(() => {
     if (loggerConfig.disableConsoleAfterReady) {
       loggers.disableConsole();
     }
   });
+  debug(`[egg]: create loggers in ${processType}`);
   loggers.coreLogger.info(
     '[egg:logger] init all loggers with options: %j',
     loggerConfig

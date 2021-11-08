@@ -11,6 +11,8 @@ import {
 import { FunctionalConfiguration } from '../functional/configuration';
 import { MidwayFrameworkService } from './frameworkService';
 import { MidwayConfigService } from './configService';
+import { debuglog } from 'util';
+const debug = debuglog('midway:debug');
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -39,6 +41,7 @@ export class MidwayLifeCycleService {
         cycle.instance = cycle.target;
       } else {
         // 普通类写法
+        debug(`[core:lifecycle]: run ${cycle.target.name} init`);
         cycle.instance = await this.applicationContext.getAsync<ILifeCycle>(
           cycle.target
         );
@@ -104,6 +107,7 @@ export class MidwayLifeCycleService {
   ) {
     for (const cycle of lifecycleInstanceList) {
       if (typeof cycle.instance[lifecycle] === 'function') {
+        debug(`[core:lifecycle]: run ${cycle.instance.constructor.name} ${lifecycle}`);
         const result = await cycle.instance[lifecycle](
           this.applicationContext,
           this.mainApp
@@ -118,6 +122,7 @@ export class MidwayLifeCycleService {
   private async runObjectLifeCycle(lifecycleInstanceList, lifecycle) {
     for (const cycle of lifecycleInstanceList) {
       if (typeof cycle.instance[lifecycle] === 'function') {
+        debug(`[core:lifecycle]: run ${cycle.instance.constructor.name} ${lifecycle}`);
         return this.applicationContext[lifecycle](
           cycle.instance[lifecycle].bind(cycle.instance)
         );

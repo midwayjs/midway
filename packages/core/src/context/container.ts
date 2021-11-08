@@ -46,8 +46,8 @@ import { MidwayConfigService } from '../service/configService';
 import * as EventEmitter from 'events';
 import { MidwayDefinitionNotFoundError } from '../error';
 
-const debug = util.debuglog('midway:container:configuration');
-const globalDebugLogger = util.debuglog('midway:container');
+const debug = util.debuglog('midway:debug');
+const debugBind = util.debuglog('midway:bind');
 
 class ContainerConfiguration {
   private loadedMap = new WeakMap();
@@ -83,12 +83,12 @@ class ContainerConfiguration {
       // 已加载标记，防止死循环
       this.loadedMap.set(configurationExport, true);
 
-      debug('   configuration export %j.', configurationOptions);
       if (configurationOptions) {
         if (configurationOptions.namespace !== undefined) {
           namespace = configurationOptions.namespace;
           this.namespaceList.push(namespace);
         }
+        debug(`[core]: load configuration in namespace="${namespace}"`)
         this.addImports(configurationOptions.imports);
         this.addImportObjects(configurationOptions.importObjects);
         this.addImportConfigs(configurationOptions.importConfigs);
@@ -104,7 +104,6 @@ class ContainerConfiguration {
 
   addImportConfigs(importConfigs: string[]) {
     if (importConfigs && importConfigs.length) {
-      debug('   import configs %j".', importConfigs);
       this.container.get(MidwayConfigService).add(importConfigs);
     }
   }
@@ -118,13 +117,7 @@ class ContainerConfiguration {
       }
       if ('Configuration' in importPackage) {
         // component is object
-        debug(
-          '\n---------- start load configuration from submodule" ----------'
-        );
         this.load(importPackage);
-        debug(
-          `---------- end load configuration from sub package "${importPackage}" ----------`
-        );
       } else if ('component' in importPackage) {
         if ((importPackage as IComponentInfo)?.enabledEnvironment) {
           if (
@@ -223,7 +216,6 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
   private moduleMap = null;
   private _objectCreateEventTarget: EventEmitter;
   public parent: IMidwayContainer = null;
-  private debugLogger = globalDebugLogger;
   // 仅仅用于兼容requestContainer的ctx
   protected ctx = {};
   private fileDetector: IFileDetector;
@@ -349,14 +341,18 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     definition.scope = options?.scope || ScopeEnum.Request;
     definition.createFrom = options?.createFrom;
 
-    this.debugLogger(`  bind id => [${definition.id}(${definition.name})]`);
+    if (definition.srcPath) {
+      debug(`[core]: bind id "${definition.name} (${definition.srcPath})"`);
+    } else {
+      debug(`[core]: bind id "${definition.name}"`);
+    }
 
     // inject properties
     const props = getPropertyInject(target);
 
     for (const p in props) {
       const propertyMeta = props[p];
-      this.debugLogger(
+      debugBind(
         `  inject properties => [${JSON.stringify(propertyMeta)}]`
       );
       const refManaged = new ManagedReference();
@@ -384,19 +380,19 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     const objDefOptions = getObjectDefinition(target) ?? {};
 
     if (objDefOptions.initMethod) {
-      this.debugLogger(`  register initMethod = ${objDefOptions.initMethod}`);
+      debugBind(`  register initMethod = ${objDefOptions.initMethod}`);
       definition.initMethod = objDefOptions.initMethod;
     }
 
     if (objDefOptions.destroyMethod) {
-      this.debugLogger(
+      debugBind(
         `  register destroyMethod = ${objDefOptions.destroyMethod}`
       );
       definition.destroyMethod = objDefOptions.destroyMethod;
     }
 
     if (objDefOptions.scope) {
-      this.debugLogger(`  register scope = ${objDefOptions.scope}`);
+      debugBind(`  register scope = ${objDefOptions.scope}`);
       definition.scope = objDefOptions.scope;
     }
 
@@ -437,10 +433,6 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
         });
       }
     }
-  }
-
-  getDebugLogger() {
-    return this.debugLogger;
   }
 
   setFileDetector(fileDetector: IFileDetector) {

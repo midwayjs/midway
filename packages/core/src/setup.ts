@@ -15,15 +15,20 @@ import {
 } from './';
 import defaultConfig from './config/config.default';
 import { bindContainer, clearBindContainer } from '@midwayjs/decorator';
+import * as util from 'util';
+const debug = util.debuglog('midway:debug');
 
 export async function initializeGlobalApplicationContext(
   globalOptions: Omit<IMidwayBootstrapOptions, 'applicationContext'>
 ) {
+  debug('[core]: start "initializeGlobalApplicationContext"');
   const appDir = globalOptions.appDir ?? '';
   const baseDir = globalOptions.baseDir ?? '';
+
   // new container
   const applicationContext = new MidwayContainer();
   // bind container to decoratorManager
+  debug('[core]: delegate module map from decoratorManager');
   bindContainer(applicationContext);
 
   global['MIDWAY_APPLICATION_CONTEXT'] = applicationContext;
@@ -94,6 +99,7 @@ export async function initializeGlobalApplicationContext(
 
   // merge config
   await configService.load();
+  debug('[core]: Current config = %j', configService.getConfiguration());
 
   // init logger
   await applicationContext.getAsync(MidwayLoggerService, [applicationContext]);

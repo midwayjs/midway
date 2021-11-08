@@ -35,7 +35,6 @@ export class DirectoryFileDetector extends AbstractFileDetector<{
   private directoryFilterArray: ResolveFilter[] = [];
 
   run(container) {
-    const debugLogger = container.getDebugLogger();
     const loadDirs = [].concat(this.options.loadDir || []);
 
     for (const dir of loadDirs) {
@@ -48,9 +47,6 @@ export class DirectoryFileDetector extends AbstractFileDetector<{
       );
 
       for (const file of fileResults) {
-        debugLogger(`\nmain:*********** binding "${file}" ***********`);
-        debugLogger(`  namespace => "${this.options.namespace}"`);
-
         if (this.directoryFilterArray.length) {
           for (const resolveFilter of this.directoryFilterArray) {
             if (typeof resolveFilter.pattern === 'string') {
@@ -78,7 +74,6 @@ export class DirectoryFileDetector extends AbstractFileDetector<{
               srcPath: file,
               createFrom: 'file',
             });
-            debugLogger(`  binding "${file}" end`);
           }
         } else {
           const exports = require(file);
@@ -88,7 +83,6 @@ export class DirectoryFileDetector extends AbstractFileDetector<{
             srcPath: file,
             createFrom: 'file',
           });
-          debugLogger(`  binding "${file}" end`);
         }
       }
     }

@@ -1,4 +1,4 @@
-import { findLernaRoot, parseNormalDir } from './utils';
+import { findLernaRoot, initializeAgentApplicationContext, parseNormalDir } from './utils';
 import * as extend from 'extend2';
 import { EggAppInfo } from 'egg';
 import {
@@ -17,7 +17,7 @@ const EGG_LOADER = Symbol.for('egg#loader');
 const EGG_PATH = Symbol.for('egg#eggPath');
 const LOGGERS = Symbol('EggApplication#loggers');
 
-const debug = debuglog('midway:egg');
+const debug = debuglog('midway:debug');
 
 let customFramework = null;
 function getFramework() {
@@ -135,13 +135,13 @@ export const createAppWorkerLoader = () => {
           baseDir: this.baseDir,
           ignore: ['**/app/extend/**'],
         }).then(r => {
-          debug('global context: init complete');
+          debug('[egg]: global context: init complete');
         });
       }
     }
 
     loadOrigin() {
-      debug('egg application: run load()');
+      debug('[egg]: application: run load()');
       super.load();
     }
 
@@ -246,8 +246,17 @@ export const createAgentWorkerLoader = () => {
     }
 
     load() {
-      debug('egg agent: run load()');
-      super.load();
+      this.app.beforeStart(async () => {
+        debug('[egg]: start "initializeAgentApplicationContext"');
+        await initializeAgentApplicationContext(this.app,{
+          ...this.globalOptions,
+          appDir: this.appDir,
+          baseDir: this.baseDir,
+          ignore: ['**/app/extend/**'],
+        });
+        super.load();
+        debug('[egg]: agent load run complete');
+      })
     }
   }
 

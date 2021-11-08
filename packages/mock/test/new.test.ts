@@ -1,6 +1,6 @@
 import { close, createApp, createLightApp, /*createBootstrap, */ createHttpRequest, /*createFunctionApp*/ } from '../src';
-import { Framework } from '../../web/src';
-import { Framework as KoaFramework } from '../../web-koa/src';
+import * as Web from '../../web/src';
+import * as Koa from '../../web-koa/src';
 // import { Framework as ServerlessFramework } from '../../../packages-serverless/serverless-app/src';
 import { join } from 'path';
 // import { MidwayFrameworkType } from '@midwayjs/decorator';
@@ -9,7 +9,7 @@ import { existsSync } from 'fs';
 
 describe('/test/new.test.ts', () => {
   it('should test create app', async () => {
-    const app = await createApp<Framework>(join(__dirname, 'fixtures/base-app-decorator'), {}, Framework);
+    const app = await createApp<Web.Framework>(join(__dirname, 'fixtures/base-app-decorator'), {}, Web);
     const result = await createHttpRequest(app).get('/').query({ name: 'harry' });
     expect(result.status).toBe(200);
     expect(result.text).toBe('hello world, harry');
@@ -19,7 +19,7 @@ describe('/test/new.test.ts', () => {
   });
 
   it('should test create another app', async () => {
-    const app = await createApp<KoaFramework>(join(__dirname, 'fixtures/base-app-new'), { cleanLogsDir: true }, KoaFramework);
+    const app = await createApp<Koa.Framework>(join(__dirname, 'fixtures/base-app-new'), { cleanLogsDir: true }, Koa);
     const result = await createHttpRequest(app).get('/').query({ name: 'harry' });
     expect(result.status).toBe(200);
     expect(result.text).toBe('hello world, harry');
@@ -58,7 +58,7 @@ describe('/test/new.test.ts', () => {
     await close(app1);
 
     const app2 = await createLightApp(join(__dirname, 'fixtures/base-app-replace-load/app2'));
-    const homeController2 = await app1.getApplicationContext().getAsync('homeController') as any;
+    const homeController2 = await app2.getApplicationContext().getAsync('homeController') as any;
     expect(await homeController2.index()).toEqual('hello world 2222');
     await close(app2);
   });
