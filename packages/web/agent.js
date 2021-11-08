@@ -21,7 +21,6 @@ class AgentBootHook {
 
   async beforeClose() {
     debug('[egg:lifecycle]: agent beforeClose');
-    await this.app.applicationContext.stop();
   }
 }
 

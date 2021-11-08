@@ -10,7 +10,6 @@ import {
   App
 } from '@midwayjs/decorator';
 import { UserService } from '../service/user';
-import * as assert from 'assert';
 
 @Provide()
 @Controller('/')
@@ -40,7 +39,6 @@ export class APIController {
 
   @Get('/', { middleware: [] })
   async home(@Query('name') name: string) {
-    assert(this.app.webFramework);
     return this.app.hello + ' ' + name;
   }
 

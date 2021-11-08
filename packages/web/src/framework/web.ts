@@ -135,16 +135,15 @@ export class MidwayWebFramework extends BaseFramework<
 
     this.overwriteApplication('app');
 
-    // hack use method
-    (this.app as any).originUse = this.app.use;
-    this.app.use = this.app.useMiddleware as any;
-
     await new Promise<void>(resolve => {
       this.app.once('application-ready', () => {
         debug('[egg]: web framework: init egg end');
         resolve();
       });
       (this.app.loader as any).loadOrigin();
+      // hack use method
+      (this.app as any).originUse = this.app.use;
+      this.app.use = this.app.useMiddleware as any;
     });
   }
 
@@ -179,15 +178,12 @@ export class MidwayWebFramework extends BaseFramework<
         },
 
         getProcessType: () => {
-          if (this.configurationOptions.processType === 'application') {
+          if (processType === 'app') {
             return MidwayProcessTypeEnum.APPLICATION;
           }
-          if (this.configurationOptions.processType === 'agent') {
+          if (processType === 'agent') {
             return MidwayProcessTypeEnum.AGENT;
           }
-
-          // TODO 单进程模式下区分进程类型??
-          return MidwayProcessTypeEnum.APPLICATION;
         },
       },
       ['createAnonymousContext']
