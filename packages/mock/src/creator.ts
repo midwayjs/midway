@@ -1,11 +1,11 @@
 import {
-  BaseFramework,
   destroyGlobalApplicationContext,
+  initializeGlobalApplicationContext,
+  BaseFramework,
   DirectoryFileDetector,
   IMidwayApplication,
   IMidwayBootstrapOptions,
   IMidwayFramework,
-  initializeGlobalApplicationContext,
   MidwayFrameworkService,
   MidwayFrameworkType,
   safeRequire,

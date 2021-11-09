@@ -38,7 +38,12 @@ export function findFirstExistModule(moduleList): string {
  */
 export function transformFrameworkToConfiguration<
   T extends IMidwayFramework<any, any>
->(Framework: any): new () => any {
+>(
+  Framework: any
+): {
+  [key: string]: any;
+  Configuration: any;
+} {
   let CustomFramework = Framework;
   if (typeof Framework === 'string') {
     Framework = safeRequire(Framework);
@@ -48,7 +53,11 @@ export function transformFrameworkToConfiguration<
     return Framework.Configuration;
   }
 
-  CustomFramework = Framework.Framework;
+  if (Framework.Framework) {
+    CustomFramework = Framework.Framework;
+  } else {
+    CustomFramework = Framework;
+  }
 
   assert(CustomFramework, `can't found custom framework ${Framework}`);
 
@@ -62,5 +71,8 @@ export function transformFrameworkToConfiguration<
     }
   }
 
-  return CustomConfiguration;
+  return {
+    Configuration: CustomConfiguration,
+    Framework,
+  };
 }

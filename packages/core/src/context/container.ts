@@ -392,12 +392,21 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
       definition.scope = objDefOptions.scope;
     }
 
-    this.objectCreateEventTarget.emit(ObjectLifeCycleEvent.AFTER_BIND, target, {
-      context: this,
-      definition,
-    });
+    this.objectCreateEventTarget.emit(
+      ObjectLifeCycleEvent.BEFORE_BIND,
+      target,
+      {
+        context: this,
+        definition,
+        replaceCallback: newDefinition => {
+          definition = newDefinition;
+        },
+      }
+    );
 
-    this.registry.registerDefinition(definition.id, definition);
+    if (definition) {
+      this.registry.registerDefinition(definition.id, definition);
+    }
   }
 
   protected bindModule(module: any, options: Partial<IObjectDefinition>) {
@@ -541,16 +550,17 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     this.registry.registerObject(identifier, target);
   }
 
-  onAfterBind(
+  onBeforeBind(
     fn: (
       Clzz: any,
       options: {
         context: IMidwayContainer;
         definition: IObjectDefinition;
+        replaceCallback: (newDefinition: IObjectDefinition) => void;
       }
     ) => void
   ) {
-    this.objectCreateEventTarget.on(ObjectLifeCycleEvent.AFTER_BIND, fn);
+    this.objectCreateEventTarget.on(ObjectLifeCycleEvent.BEFORE_BIND, fn);
   }
 
   onBeforeObjectCreated(

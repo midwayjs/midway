@@ -34,7 +34,7 @@ export class MidwayDecoratorService {
   @Init()
   protected async init() {
     // add custom method decorator listener
-    this.applicationContext.onAfterBind((Clzz, options) => {
+    this.applicationContext.onBeforeBind((Clzz, options) => {
       // find custom param decorator metadata
       const parameterDecoratorMetadata: {
         [methodName: string]: Array<{

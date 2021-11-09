@@ -19,14 +19,15 @@ import * as util from 'util';
 const debug = util.debuglog('midway:debug');
 
 export async function initializeGlobalApplicationContext(
-  globalOptions: Omit<IMidwayBootstrapOptions, 'applicationContext'>
+  globalOptions: IMidwayBootstrapOptions
 ) {
   debug('[core]: start "initializeGlobalApplicationContext"');
   const appDir = globalOptions.appDir ?? '';
   const baseDir = globalOptions.baseDir ?? '';
 
   // new container
-  const applicationContext = new MidwayContainer();
+  const applicationContext =
+    globalOptions.applicationContext ?? new MidwayContainer();
   // bind container to decoratorManager
   debug('[core]: delegate module map from decoratorManager');
   bindContainer(applicationContext);

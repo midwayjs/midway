@@ -4,6 +4,7 @@ import {
   CONFIG_KEY,
   FRAMEWORK_KEY,
   FrameworkType,
+  getProviderUUId,
   Init,
   Inject,
   listModule,
@@ -28,6 +29,7 @@ import { BaseFramework } from '../baseFramework';
 import { MidwayPipelineService } from './pipelineService';
 import { MidwayDecoratorService } from './decoratorService';
 import { MidwayAspectService } from './aspectService';
+import { MidwayEnvironmentService } from './environmentService';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -43,6 +45,9 @@ export class MidwayFrameworkService {
 
   @Inject()
   decoratorService: MidwayDecoratorService;
+
+  @Inject()
+  environmentService: MidwayEnvironmentService;
 
   constructor(
     readonly applicationContext: IMidwayContainer,
@@ -94,17 +99,21 @@ export class MidwayFrameworkService {
       }
     );
 
-    let frameworks = listModule(FRAMEWORK_KEY);
+    let frameworks: Array<new (...args) => any> = listModule(FRAMEWORK_KEY);
     // filter proto
     frameworks = filterProtoFramework(frameworks);
 
     if (frameworks.length) {
-      frameworks.forEach(framework => {
-        // bind first
-        this.applicationContext.bindClass(framework);
-      });
-
+      // frameworks.forEach(framework => {
+      //   // bind first
+      //   this.applicationContext.bindClass(framework);
+      // });
       for (const frameworkClz of frameworks) {
+        if (
+          !this.applicationContext.hasDefinition(getProviderUUId(frameworkClz))
+        ) {
+          continue;
+        }
         const frameworkInstance = await this.applicationContext.getAsync<
           IMidwayFramework<any, any>
         >(frameworkClz, [this.applicationContext]);

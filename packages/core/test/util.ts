@@ -9,7 +9,7 @@ import {
   safeRequire,
 } from '../src';
 import { join } from 'path';
-import { Configuration, Framework, Inject, Provide } from '@midwayjs/decorator';
+import { Configuration, Framework, Inject } from '@midwayjs/decorator';
 
 /**
  * 任意一个数组中的对象，和预期的对象属性一致即可
@@ -57,7 +57,6 @@ export async function createLightFramework(baseDir?: string ): Promise<IMidwayFr
   /**
    * 一个全量的空框架
    */
-  @Provide()
   @Framework()
   class EmptyFramework extends BaseFramework<any, any, any> {
     private isStopped = false;
@@ -96,7 +95,10 @@ export async function createLightFramework(baseDir?: string ): Promise<IMidwayFr
     }
   }
 
-  const configurationModule = [EmptyConfiguration];
+  const configurationModule = [{
+    Configuration: EmptyConfiguration,
+    EmptyFramework
+  }];
   if (baseDir) {
     configurationModule.push(safeRequire(join(baseDir, 'configuration')));
   }
