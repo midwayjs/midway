@@ -1,5 +1,36 @@
 import { IMidwayContainer } from '../interface';
-import { ObjectIdentifier } from '@midwayjs/decorator';
+import { getProviderName, ObjectIdentifier } from '@midwayjs/decorator';
+
+interface IPipelineInfo {
+  /**
+   * 上次执行结果(只有在执行 waterfall 时才有值)
+   */
+  prevValue?: any;
+  /**
+   * 当前执行的 valve 类
+   */
+  current: IValveHandler;
+  /**
+   * 当前执行的 valve 名称(类名)
+   */
+  currentName: string;
+  /**
+   * 之前执行的 valve 类
+   */
+  prev?: IValveHandler;
+  /**
+   * 之前执行的 valve 名称(类名)
+   */
+  prevName?: string;
+  /**
+   * 后一个将执行的 valve 类
+   */
+  next?: IValveHandler;
+  /**
+   * 后一个将执行的 valve 名称(类名)
+   */
+  nextName?: string;
+}
 
 /**
  * 执行pipeline 时当前上下文存储内容
@@ -12,24 +43,7 @@ export interface IPipelineContext {
   /**
    * valve 执行信息
    */
-  info?: {
-    /**
-     * 上次执行结果(只有在执行 waterfall 时才有值)
-     */
-    prevValue?: any;
-    /**
-     * 当前执行的 valve 名称(类名)
-     */
-    current: string;
-    /**
-     * 之前执行的 valve 名称(类名)
-     */
-    prev?: string;
-    /**
-     * 后一个将执行的 valve 名称(类名)
-     */
-    next?: string;
-  };
+  info?: IPipelineInfo;
   /**
    * 用于缓存当前 pipeline 执行中的中间过程参数
    * @param key 关键词
@@ -125,12 +139,7 @@ type valvesType = Array<ObjectIdentifier | (new (...args: any[]) => any)>;
 
 export class PipelineContext implements IPipelineContext {
   args: any;
-  info: {
-    prevValue?: any;
-    current: string;
-    prev?: string;
-    next?: string;
-  } = { current: null };
+  info: IPipelineInfo = { current: null, currentName: null };
 
   constructor(args?: any) {
     this.args = args;
@@ -197,8 +206,11 @@ export class MidwayPipelineService implements IPipelineHandler {
     const info = {
       prevValue: null,
       current: null,
+      currentName: null,
       prev: null,
+      prevName: null,
       next: null,
+      nextName: null,
     };
     let nextIdx = 1;
     for (const v of valves) {
@@ -251,17 +263,24 @@ export class MidwayPipelineService implements IPipelineHandler {
     const info = {
       prevValue: null,
       current: null,
+      currentName: null,
       prev: null,
+      prevName: null,
       next: null,
+      nextName: null,
     };
     let nextIdx = 1;
     for (const v of valves) {
       info.prev = info.current;
+      info.prevName = getName(info.prev);
       info.current = v;
+      info.currentName = getName(info.current);
       if (nextIdx < valves.length) {
         info.next = valves[nextIdx];
+        info.nextName = getName(info.next);
       } else {
         info.next = undefined;
+        info.nextName = undefined;
       }
       nextIdx += 1;
       ctx.info = info;
@@ -372,4 +391,11 @@ export class MidwayPipelineService implements IPipelineHandler {
     result.result = data as any;
     return result;
   }
+}
+
+function getName(target) {
+  if (target) {
+    return getProviderName(target);
+  }
+  return null;
 }

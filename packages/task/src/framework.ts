@@ -1,7 +1,4 @@
-import {
-  BaseFramework,
-  IMidwayBootstrapOptions,
-} from '@midwayjs/core';
+import { BaseFramework, IMidwayBootstrapOptions } from '@midwayjs/core';
 import {
   Framework,
   getClassMetadata,

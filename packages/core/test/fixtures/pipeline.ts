@@ -115,10 +115,10 @@ class StageOne implements IValveHandler {
     }
     ctx.set('stageone', 'this is stage one');
     ctx.set('stageone_date', Date.now());
-    if (ctx.info.current !== 'stageOne') {
+    if (ctx.info.currentName !== 'stageOne') {
       throw new Error('current stage is not stageOne');
     }
-    if (ctx.info.next !== 'stageTwo') {
+    if (ctx.info.nextName !== 'stageTwo') {
       throw new Error('next stage is not stageTwo');
     }
     if (ctx.info.prev) {
@@ -141,13 +141,13 @@ class StageTwo implements IValveHandler {
     if (ctx.info.prevValue !== 'stageone') {
       throw new Error('stageone result empty');
     }
-    if (ctx.info.current !== 'stageTwo') {
+    if (ctx.info.currentName !== 'stageTwo') {
       throw new Error('current stage is not stageTwo');
     }
-    if (ctx.info.next) {
+    if (ctx.info.nextName) {
       throw new Error('stageTwo next stage is not undefined');
     }
-    if (ctx.info.prev !== 'stageOne') {
+    if (ctx.info.prevName !== 'stageOne') {
       throw new Error('prev stage is not stageOne');
     }
 
