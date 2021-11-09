@@ -214,20 +214,27 @@ export namespace FaaSMetadata {
 
 }
 
-export enum MidwayFrameworkType {
-  WEB = '@midwayjs/web',
-  WEB_KOA = '@midwayjs/koa',
-  WEB_EXPRESS = '@midwayjs/express',
-  FAAS = '@midwayjs/faas',
-  MS_HSF = '',
-  MS_GRPC = '@midwayjs/grpc',
-  MS_RABBITMQ = '@midwayjs/rabbitmq',
-  WS_IO = '@midwayjs/socketio',
-  WS = '@midwayjs/ws',
-  SERVERLESS_APP = '@midwayjs/serverless-app',
-  CUSTOM = '',
-  EMPTY = 'empty',
-  LIGHT = 'light',
+export abstract class FrameworkType {
+  abstract name: string;
+}
+
+export class MidwayFrameworkType extends FrameworkType {
+  static WEB = new MidwayFrameworkType('@midwayjs/web');
+  static WEB_KOA = new MidwayFrameworkType('@midwayjs/web-koa');
+  static WEB_EXPRESS = new MidwayFrameworkType('@midwayjs/express');
+  static FAAS = new MidwayFrameworkType('@midwayjs/faas');
+  static MS_GRPC = new MidwayFrameworkType('@midwayjs/grpc');
+  static MS_RABBITMQ = new MidwayFrameworkType('@midwayjs/rabbitmq');
+  static WS_IO = new MidwayFrameworkType('@midwayjs/socketio');
+  static WS = new MidwayFrameworkType('@midwayjs/ws');
+  static SERVERLESS_APP = new MidwayFrameworkType('@midwayjs/serverless-app');
+  static CUSTOM = new MidwayFrameworkType('');
+  static EMPTY = new MidwayFrameworkType('empty');
+  static LIGHT = new MidwayFrameworkType('light');
+  static TASK = new MidwayFrameworkType('@midwayjs/task');
+  constructor(public name: string) {
+    super();
+  };
 }
 
 export enum ServerlessTriggerType {

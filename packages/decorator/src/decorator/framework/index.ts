@@ -3,9 +3,9 @@ import {
   CONFIG_KEY,
   PLUGIN_KEY,
   LOGGER_KEY,
-  MidwayFrameworkType,
   createCustomPropertyDecorator,
   APPLICATION_CONTEXT_KEY,
+  FrameworkType,
 } from '../../';
 
 export function Plugin(identifier?: string): PropertyDecorator {
@@ -20,7 +20,7 @@ export function Config(identifier?: string): PropertyDecorator {
   });
 }
 
-export function App(type?: typeof MidwayFrameworkType | string): PropertyDecorator {
+export function App(type?: FrameworkType): PropertyDecorator {
   return createCustomPropertyDecorator(APPLICATION_KEY, {
     type,
   });

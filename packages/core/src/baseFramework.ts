@@ -11,12 +11,7 @@ import {
   CommonMiddleware,
   MiddlewareRespond,
 } from './interface';
-import {
-  Inject,
-  Destroy,
-  Init,
-  MidwayFrameworkType,
-} from '@midwayjs/decorator';
+import { Inject, Destroy, Init, FrameworkType } from '@midwayjs/decorator';
 import { ILogger, LoggerOptions, MidwayContextLogger } from '@midwayjs/logger';
 import { MidwayRequestContainer } from './context/requestContainer';
 import { MidwayEnvironmentService } from './service/environmentService';
@@ -130,7 +125,7 @@ export abstract class BaseFramework<
 
   public abstract applicationInitialize(options: IMidwayBootstrapOptions);
 
-  public abstract getFrameworkType(): MidwayFrameworkType | string;
+  public abstract getFrameworkType(): FrameworkType;
 
   public abstract run(): Promise<void>;
 
@@ -344,7 +339,7 @@ export abstract class BaseFramework<
   }
 
   public getFrameworkName() {
-    return this.getFrameworkType().toString();
+    return this.getFrameworkType().name;
   }
 
   public getDefaultContextLoggerClass(): any {

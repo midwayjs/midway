@@ -1,7 +1,7 @@
 import {
   ObjectIdentifier,
   IManagedInstance,
-  MidwayFrameworkType, IMethodAspect, ScopeEnum
+  IMethodAspect, ScopeEnum, FrameworkType
 } from '@midwayjs/decorator';
 import { ILogger, LoggerOptions } from '@midwayjs/logger';
 import * as EventEmitter from 'events';
@@ -362,7 +362,7 @@ export interface IMidwayBaseApplication<T extends IMidwayContext = IMidwayContex
   /**
    * Get current framework type in MidwayFrameworkType enum
    */
-  getFrameworkType(): MidwayFrameworkType;
+  getFrameworkType(): FrameworkType;
 
   /**
    * Get current running process type, app or agent, just for egg
@@ -485,7 +485,7 @@ export interface IMidwayFramework<APP extends IMidwayApplication, T extends ICon
   getApplicationContext(): IMidwayContainer;
   getConfiguration(key?: string): any;
   getCurrentEnvironment(): string;
-  getFrameworkType(): MidwayFrameworkType | string;
+  getFrameworkType(): FrameworkType;
   getFrameworkName(): string;
   getAppDir(): string;
   getBaseDir(): string;

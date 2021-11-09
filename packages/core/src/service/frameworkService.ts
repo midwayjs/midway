@@ -3,6 +3,7 @@ import {
   APPLICATION_KEY,
   CONFIG_KEY,
   FRAMEWORK_KEY,
+  FrameworkType,
   Init,
   Inject,
   listModule,
@@ -51,15 +52,12 @@ export class MidwayFrameworkService {
   private mainFramework: IMidwayFramework<any, any>;
   private mainApp: IMidwayApplication;
 
-  private globalAppMap = new Map<
-    MidwayFrameworkType,
-    IMidwayApplication<any>
-  >();
-
-  private globalFrameworkMap = new Map<
-    MidwayFrameworkType,
+  private globalFrameworkMap = new WeakMap<
+    FrameworkType,
     IMidwayFramework<any, any>
   >();
+
+  private globalFrameworkList = [];
 
   @Init()
   async init() {
@@ -119,14 +117,11 @@ export class MidwayFrameworkService {
           });
         }
         // app init
-        this.globalAppMap.set(
-          frameworkInstance.getFrameworkType(),
-          frameworkInstance.getApplication()
-        );
         this.globalFrameworkMap.set(
           frameworkInstance.getFrameworkType(),
           frameworkInstance
         );
+        this.globalFrameworkList.push(frameworkInstance);
 
         if (!this.mainFramework && frameworkInstance.isEnable()) {
           global['MIDWAY_MAIN_FRAMEWORK'] = this.mainFramework =
@@ -140,7 +135,7 @@ export class MidwayFrameworkService {
         APPLICATION_KEY,
         (propertyName, mete) => {
           if (mete.type) {
-            return this.globalAppMap.get(mete.type as any);
+            return this.globalFrameworkMap.get(mete.type);
           } else {
             return this.mainApp;
           }
@@ -180,7 +175,7 @@ export class MidwayFrameworkService {
 
   public async stopFramework() {
     await Promise.all(
-      Array.from(this.globalFrameworkMap.values()).map(frameworkInstance => {
+      Array.from(this.globalFrameworkList).map(frameworkInstance => {
         return frameworkInstance.stop();
       })
     );

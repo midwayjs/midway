@@ -1,6 +1,5 @@
 import {
   BaseFramework,
-  IMidwayApplication,
   IMidwayBootstrapOptions,
 } from '@midwayjs/core';
 import {
@@ -19,7 +18,7 @@ import {
 import * as Bull from 'bull';
 import { CronJob } from 'cron';
 import { v4 } from 'uuid';
-import { Context } from './interface';
+import { Application, Context, IQueue } from './interface';
 
 function wrapAsync(fn) {
   return async function (...args) {
@@ -35,16 +34,12 @@ function wrapAsync(fn) {
 }
 
 @Framework()
-export class TaskFramework extends BaseFramework<
-  IMidwayApplication,
-  Context,
-  any
-> {
+export class TaskFramework extends BaseFramework<Application, Context, any> {
   queueList: any[] = [];
   jobList: any[] = [];
 
   applicationInitialize(options: IMidwayBootstrapOptions) {
-    return {};
+    this.app = {} as any;
   }
 
   configure() {
@@ -109,6 +104,7 @@ export class TaskFramework extends BaseFramework<
   }
 
   async loadLocalTask() {
+    const taskConfig = this.configService.getConfiguration('taskConfig');
     const modules = listModule(MODULE_TASK_TASK_LOCAL_KEY);
     for (const module of modules) {
       const rules = getClassMetadata(MODULE_TASK_TASK_LOCAL_OPTIONS, module);
@@ -136,7 +132,7 @@ export class TaskFramework extends BaseFramework<
           },
           null,
           true,
-          this.taskConfig.defaultJobOptions.repeat.tz
+          taskConfig.defaultJobOptions.repeat.tz
         );
         job.start();
         this.jobList.push(job);
@@ -165,7 +161,7 @@ export class TaskFramework extends BaseFramework<
         const { logger } = ctx;
         try {
           logger.info('queue process start.');
-          const service = await ctx.requestContext.getAsync(module);
+          const service = await ctx.requestContext.getAsync<IQueue>(module);
           await wrapAsync(service.execute)(service, job.data, job);
         } catch (e) {
           logger.error(`${e.stack}`);
