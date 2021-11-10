@@ -1,5 +1,6 @@
 import {
   BaseFramework,
+  HTTP_SERVER_KEY,
   IMidwayBootstrapOptions,
   MidwayProcessTypeEnum,
   PathFileUtil,
@@ -79,23 +80,7 @@ export class MidwayWebFramework extends BaseFramework<
     application.agent = agent;
     agent.application = application;
     debug('[egg]: init single process egg end');
-  }
 
-  async applicationInitialize(options: Partial<IMidwayBootstrapOptions>) {
-    await this.initSingleProcessEgg();
-    // insert error handler
-    this.app.use(async (ctx, next) => {
-      // this.app.createAnonymousContext(ctx);
-      const { result, error } = await (
-        await this.getMiddleware()
-      )(ctx as any, next);
-      if (error) {
-        throw error;
-      }
-      if (result) {
-        ctx.body = result;
-      }
-    });
     // https config
     if (this.configurationOptions.key && this.configurationOptions.cert) {
       this.configurationOptions.key = PathFileUtil.getFileContentSync(
@@ -126,6 +111,23 @@ export class MidwayWebFramework extends BaseFramework<
         this.server = require('http').createServer(this.app.callback());
       }
     }
+  }
+
+  async applicationInitialize(options: Partial<IMidwayBootstrapOptions>) {
+    await this.initSingleProcessEgg();
+    // insert error handler
+    this.app.use(async (ctx, next) => {
+      // this.app.createAnonymousContext(ctx);
+      const { result, error } = await (
+        await this.getMiddleware()
+      )(ctx as any, next);
+      if (error) {
+        throw error;
+      }
+      if (result) {
+        ctx.body = result;
+      }
+    });
 
     this.generator = new EggControllerGenerator(
       this.app,
@@ -212,6 +214,14 @@ export class MidwayWebFramework extends BaseFramework<
     await this.loadMidwayController();
     // restore use method
     this.app.use = (this.app as any).originUse;
+
+    // emit egg-ready message in agent and application
+    this.app.messenger.broadcast('egg-ready', undefined);
+
+    // emit `server` event in app
+    this.app.emit('server', this.server);
+    // register httpServer to applicationContext
+    this.getApplicationContext().registerObject(HTTP_SERVER_KEY, this.server);
 
     const eggConfig = this.configService.getConfiguration('egg');
     if (this.configService.getConfiguration('egg')) {

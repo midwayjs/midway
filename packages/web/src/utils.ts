@@ -14,6 +14,7 @@ import {
   MidwayLoggerService,
   MidwayPipelineService,
   REQUEST_OBJ_CTX_KEY,
+  safeRequire,
 } from '@midwayjs/core';
 import {
   ALL,
@@ -161,6 +162,12 @@ export async function initializeAgentApplicationContext(
       MidwayDecoratorService,
       [applicationContext]
     );
+
+    if (!globalOptions.configurationModule) {
+      globalOptions.configurationModule = [
+        safeRequire(join(globalOptions.baseDir, 'configuration')),
+      ];
+    }
 
     for (const configurationModule of [].concat(
       globalOptions.configurationModule

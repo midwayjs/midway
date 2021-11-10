@@ -1,4 +1,4 @@
-export const cluster = {
+export const egg = {
   port: 8080
 }
 

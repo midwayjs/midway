@@ -12,10 +12,12 @@ import {
   MidwayLifeCycleService,
   MidwayMiddlewareService,
   MidwayDecoratorService,
+  safeRequire,
 } from './';
 import defaultConfig from './config/config.default';
 import { bindContainer, clearBindContainer } from '@midwayjs/decorator';
 import * as util from 'util';
+import { join } from 'path';
 const debug = util.debuglog('midway:debug');
 
 export async function initializeGlobalApplicationContext(
@@ -87,6 +89,12 @@ export async function initializeGlobalApplicationContext(
   await applicationContext.getAsync(MidwayDecoratorService, [
     applicationContext,
   ]);
+
+  if (!globalOptions.configurationModule) {
+    globalOptions.configurationModule = [
+      safeRequire(join(globalOptions.baseDir, 'configuration')),
+    ];
+  }
 
   for (const configurationModule of [].concat(
     globalOptions.configurationModule
