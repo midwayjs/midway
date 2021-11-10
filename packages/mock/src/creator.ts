@@ -2,17 +2,17 @@ import {
   destroyGlobalApplicationContext,
   initializeGlobalApplicationContext,
   BaseFramework,
-  DirectoryFileDetector,
   IMidwayApplication,
   IMidwayBootstrapOptions,
   IMidwayFramework,
   MidwayFrameworkService,
   MidwayFrameworkType,
   safeRequire,
+  MidwayContainer,
 } from '@midwayjs/core';
 import { isAbsolute, join } from 'path';
 import { remove } from 'fs-extra';
-import { Framework, sleep } from '@midwayjs/decorator';
+import { CONFIGURATION_KEY, Framework, sleep } from '@midwayjs/decorator';
 import { clearAllLoggers } from '@midwayjs/logger';
 import { ComponentModule, MockAppConfigurationOptions } from './interface';
 import {
@@ -24,28 +24,7 @@ import {
 import { debuglog } from 'util';
 const debug = debuglog('midway:debug');
 
-const usedModuleMap: WeakMap<any, string> = new WeakMap();
-
 process.setMaxListeners(0);
-
-class MockDirectoryFileDetector extends DirectoryFileDetector {
-  run(container) {
-    debug('[mock]: filter container transform map from decorator');
-    const appDir = container.get('appDir');
-    for (const moduleMeta of container.moduleMap.values()) {
-      for (const value of Array.from(moduleMeta)) {
-        const dir = usedModuleMap.get(value);
-        // 如果在已经使用过的模块列表中，且他的目录和当前的不同，则需要清理
-        if (dir && dir !== appDir) {
-          moduleMeta.delete(value);
-          debug(`[mock]: filter module ${value}`);
-        }
-      }
-    }
-    debug('[mock]: filter end');
-    return super.run(container);
-  }
-}
 
 export async function create<
   T extends IMidwayFramework<any, U>,
@@ -83,19 +62,38 @@ export async function create<
     customFramework = customFramework['Framework'];
   }
 
-  if (
-    options.moduleDetector === 'file' ||
-    options.moduleDetector === undefined
-  ) {
-    debug('[mock]: "options.moduleDetector" empty and use default');
-    // 这里设置是因为在 midway 单测中会不断的复用装饰器元信息，又不能清理缓存，所以在这里做一些过滤
-    options.moduleDetector = new MockDirectoryFileDetector({
-      loadDir: options.baseDir,
-      ignore: options.ignore ?? [],
-    });
-  }
+  const container = new MidwayContainer();
+  const bindModuleMap: WeakMap<any, boolean> = new WeakMap();
+  // 这里设置是因为在 midway 单测中会不断的复用装饰器元信息，又不能清理缓存，所以在这里做一些过滤
+  container.onBeforeBind(target => {
+    bindModuleMap.set(target, true);
+  });
 
-  const container = await initializeGlobalApplicationContext({
+  const originMethod = container.listModule;
+
+  container.listModule = key => {
+    const modules = originMethod.call(container, key);
+    if (key === CONFIGURATION_KEY) {
+      return modules;
+    }
+
+    return modules.filter((module: any) => {
+      if (bindModuleMap.has(module)) {
+        return true;
+      } else {
+        debug(
+          '[mock] Filter "%o" module without binding when list module %s.',
+          module.name ?? module,
+          key
+        );
+        return false;
+      }
+    });
+  };
+
+  options.applicationContext = container;
+
+  await initializeGlobalApplicationContext({
     ...options,
     appDir,
     configurationModule: []
@@ -135,20 +133,6 @@ export async function close(
   if (!app) return;
   debug(`[mock]: Closing app, appDir=${app.getAppDir()}`);
   options = options || {};
-  // save current user module in container to filter in next test case
-  const registry = app.getApplicationContext().registry as any;
-
-  for (const definition of registry.values()) {
-    if (
-      definition?.constructor?.name === 'ObjectDefinition' &&
-      !/^Midway/.test(definition?.path?.name)
-    ) {
-      usedModuleMap.set(definition.path, app.getAppDir());
-      debug(
-        `[mock]: set user module "${definition.path.name}" to global filter map`
-      );
-    }
-  }
 
   await destroyGlobalApplicationContext(app.getApplicationContext());
   if (isTestEnvironment()) {

@@ -4,7 +4,6 @@ import {
   CONFIG_KEY,
   FRAMEWORK_KEY,
   FrameworkType,
-  getProviderUUId,
   Init,
   Inject,
   listModule,
@@ -29,7 +28,10 @@ import { BaseFramework } from '../baseFramework';
 import { MidwayPipelineService } from './pipelineService';
 import { MidwayDecoratorService } from './decoratorService';
 import { MidwayAspectService } from './aspectService';
-import { MidwayEnvironmentService } from './environmentService';
+import { MidwayNoFrameworkFoundError } from '../error';
+import * as util from 'util';
+
+const debug = util.debuglog('midway:debug');
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -45,9 +47,6 @@ export class MidwayFrameworkService {
 
   @Inject()
   decoratorService: MidwayDecoratorService;
-
-  @Inject()
-  environmentService: MidwayEnvironmentService;
 
   constructor(
     readonly applicationContext: IMidwayContainer,
@@ -104,16 +103,7 @@ export class MidwayFrameworkService {
     frameworks = filterProtoFramework(frameworks);
 
     if (frameworks.length) {
-      // frameworks.forEach(framework => {
-      //   // bind first
-      //   this.applicationContext.bindClass(framework);
-      // });
       for (const frameworkClz of frameworks) {
-        if (
-          !this.applicationContext.hasDefinition(getProviderUUId(frameworkClz))
-        ) {
-          continue;
-        }
         const frameworkInstance = await this.applicationContext.getAsync<
           IMidwayFramework<any, any>
         >(frameworkClz, [this.applicationContext]);
@@ -124,6 +114,14 @@ export class MidwayFrameworkService {
             applicationContext: this.applicationContext,
             ...this.globalOptions,
           });
+
+          debug(
+            `[core:framework]: Found Framework "${frameworkInstance.getFrameworkName()}" and initialize.`
+          );
+        } else {
+          debug(
+            `[core:framework]: Found Framework "${frameworkInstance.getFrameworkName()}" and delay initialize.`
+          );
         }
         // app init
         this.globalFrameworkMap.set(
@@ -137,6 +135,10 @@ export class MidwayFrameworkService {
             frameworkInstance;
           this.mainApp = this.mainFramework.getApplication();
         }
+      }
+
+      if (!this.mainFramework) {
+        throw new MidwayNoFrameworkFoundError();
       }
 
       // register @App decorator handler

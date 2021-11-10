@@ -57,13 +57,9 @@ describe('/test/new.test.ts', () => {
     expect(await homeController1.index()).toEqual('hello world 1111');
     await close(app1);
 
-    try {
-      const app2 = await createLightApp(join(__dirname, 'fixtures/base-app-replace-load/app2'));
-      const homeController2 = await app2.getApplicationContext().getAsync('homeController') as any;
-      expect(await homeController2.index()).toEqual('hello world 2222');
-      await close(app2);
-    } catch (err) {
-      console.error(err);
-    }
+    const app2 = await createLightApp(join(__dirname, 'fixtures/base-app-replace-load/app2'));
+    const homeController2 = await app2.getApplicationContext().getAsync('homeController') as any;
+    expect(await homeController2.index()).toEqual('hello world 2222');
+    await close(app2);
   });
 });

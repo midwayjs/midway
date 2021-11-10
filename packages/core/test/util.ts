@@ -7,9 +7,10 @@ import {
   initializeGlobalApplicationContext,
   MidwayFrameworkType,
   safeRequire,
+  MidwayContainer,
 } from '../src';
 import { join } from 'path';
-import { Configuration, Framework, Inject } from '@midwayjs/decorator';
+import { Configuration, CONFIGURATION_KEY, Framework, Inject } from '@midwayjs/decorator';
 
 /**
  * 任意一个数组中的对象，和预期的对象属性一致即可
@@ -103,9 +104,30 @@ export async function createLightFramework(baseDir?: string ): Promise<IMidwayFr
     configurationModule.push(safeRequire(join(baseDir, 'configuration')));
   }
 
-  const container = await initializeGlobalApplicationContext({
+  const container = new MidwayContainer();
+  const bindModuleMap: WeakMap<any, boolean> = new WeakMap();
+  // 这里设置是因为在 midway 单测中会不断的复用装饰器元信息，又不能清理缓存，所以在这里做一些过滤
+  container.onBeforeBind(target => {
+    bindModuleMap.set(target, true);
+  });
+
+  const originMethod = container.listModule;
+
+  container.listModule = key => {
+    const modules = originMethod.call(container, key);
+    if (key === CONFIGURATION_KEY) {
+      return modules;
+    }
+
+    return modules.filter((module: any) => {
+      return bindModuleMap.has(module);
+    });
+  };
+
+  await initializeGlobalApplicationContext({
     baseDir,
     configurationModule,
+    applicationContext: container
   });
 
   return container.get(EmptyFramework);

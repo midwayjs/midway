@@ -20,6 +20,9 @@ import {
 import { joinURLPath } from './index';
 import { MidwayContainer } from '../context/container';
 import { DirectoryFileDetector } from './fileDetector';
+import * as util from 'util';
+
+const debug = util.debuglog('midway:debug');
 
 export interface RouterInfo {
   /**
@@ -160,6 +163,7 @@ export class WebRouterCollector {
 
   protected collectRoute(module, functionMeta = false) {
     const controllerId = getProviderName(module);
+    debug(`[core:webCollector]: Found Controller ${controllerId}.`);
     const id = getProviderUUId(module);
     const controllerOption: ControllerOption = getClassMetadata(
       CONTROLLER_KEY,

@@ -34,16 +34,24 @@ export class MidwayDefinitionNotFoundError extends MidwayError {
     const identifier = this.message.split(
       ' is not valid in current context'
     )[0];
-    const msg = `${identifier} in class ${className} is not valid in current context`;
-    this.message = msg;
+    this.message = `${identifier} in class ${className} is not valid in current context`;
   }
 }
 
 export class MidwayFeatureNoLongerSupportedError extends MidwayError {
   constructor(message?: string) {
     super(
-      message ?? 'Features no longer supported',
+      'This feature no longer supported \n' + message,
       FrameworkErrorEnum.FEATURE_NO_LONGER_SUPPORTED
+    );
+  }
+}
+
+export class MidwayNoFrameworkFoundError extends MidwayError {
+  constructor() {
+    super(
+      'You must add a component that contains @Framework at least, such as @midwayjs/web, @midwayjs/koa, etc.',
+      FrameworkErrorEnum.NO_FRAMEWORK_FOUND
     );
   }
 }

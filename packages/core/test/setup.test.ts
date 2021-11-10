@@ -6,7 +6,7 @@ import {
   MidwayConfigService,
   MidwayFrameworkType
 } from '../src';
-import { Configuration, Framework, Inject, Provide } from '@midwayjs/decorator';
+import { Configuration, Framework, Inject } from '@midwayjs/decorator';
 
 describe('/test/setup.test.ts', () => {
   it('should test setup and config', async () => {
@@ -45,7 +45,6 @@ describe('/test/setup.test.ts', () => {
     /**
      * 一个全量的空框架
      */
-    @Provide()
     @Framework()
     class EmptyFramework extends BaseFramework<any, any, any> {
       getFrameworkType(): MidwayFrameworkType {
@@ -82,7 +81,10 @@ describe('/test/setup.test.ts', () => {
     );
     const container = await initializeGlobalApplicationContext({
       baseDir,
-      configurationModule: [require(join(baseDir, 'configuration')), EmptyConfiguration]
+      configurationModule: [require(join(baseDir, 'configuration')), {
+        Configuration: EmptyConfiguration,
+        EmptyFramework,
+      }]
     });
 
     const configService = await container.getAsync(MidwayConfigService);
