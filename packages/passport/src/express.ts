@@ -1,5 +1,6 @@
 import * as passport from 'passport';
 import { Context, IWebMiddleware, Middleware } from '@midwayjs/express';
+import { defaultOptions } from './options';
 
 interface Class<T = any> {
   new (...args: any[]): T;
@@ -101,13 +102,14 @@ export abstract class ExpressPassportMiddleware implements IWebMiddleware {
         }
       });
 
-      const options = (
-        this.setOptions ? await this.setOptions(req as any) : null
-      ) as any;
+      const options = {
+        ...defaultOptions,
+        ...(this.setOptions ? await this.setOptions(req as any) : null),
+      };
 
       passport.authenticate(this.strategy, options, async (...d) => {
         const user = await this.auth(req as any, ...d);
-        req.user = user;
+        req[options.presetProperty] = user;
         next();
       })(req, res);
     };
