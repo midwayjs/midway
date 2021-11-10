@@ -11,7 +11,7 @@
     "@midwayjs/faas-typings": "^3.0.0-alpha.42"
   },
   "engines": {
-    "node": ">= 10"
+    "node": ">=12"
   },
   "files": [
     "dist/**/*.js",

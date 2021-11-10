@@ -1,11 +1,10 @@
-import { close, createApp, createLightApp, /*createBootstrap, */ createHttpRequest, /*createFunctionApp*/ } from '../src';
+import { close, createApp, createLightApp, createHttpRequest, createFunctionApp } from '../src';
 import * as Web from '../../web/src';
 import * as Koa from '../../web-koa/src';
-// import { Framework as ServerlessFramework } from '../../../packages-serverless/serverless-app/src';
+import * as ServerlessApp from '../../../packages-serverless/serverless-app/src';
 import { join } from 'path';
-// import { MidwayFrameworkType } from '@midwayjs/decorator';
 import { existsSync } from 'fs';
-// import { EventService } from './fixtures/base-faas/src/event';
+import { EventService } from './fixtures/base-faas/src/event';
 
 describe('/test/new.test.ts', () => {
   it('should test create app', async () => {
@@ -26,24 +25,14 @@ describe('/test/new.test.ts', () => {
     await close(app, { sleep: 200});
   });
 
-  // it('should test with entry file', async () => {
-  //   const bootstrap = await createBootstrap(join(__dirname, 'fixtures/base-app-bootstrap', 'bootstrap.js'));
-  //   const app = bootstrap.getApp(MidwayFrameworkType.WEB_KOA);
-  //
-  //   const result = await createHttpRequest(app).get('/').query({ name: 'harry' });
-  //   expect(result.status).toBe(200);
-  //   expect(result.text).toBe('hello world, harry');
-  //   await bootstrap.close();
-  // });
+  it('should test with createFunctionApp', async () => {
+    const app = await createFunctionApp<ServerlessApp.Framework>(join(__dirname, 'fixtures/base-faas'), {}, ServerlessApp);
+    const instance: EventService = await app.getServerlessInstance(EventService);
+    const result = await instance.handleEvent();
 
-  // it('should test with createFunctionApp', async () => {
-  //   const app = await createFunctionApp<ServerlessFramework>(join(__dirname, 'fixtures/base-faas'), {}, ServerlessFramework);
-  //   const instance: EventService = await app.getServerlessInstance(EventService);
-  //   const result = await instance.handleEvent();
-  //
-  //   expect(result).toEqual('hello world');
-  //   await close(app, { cleanLogsDir: true, cleanTempDir: true });
-  // });
+    expect(result).toEqual('hello world');
+    await close(app, { cleanLogsDir: true, cleanTempDir: true });
+  });
 
   it('should test createLightApp', async () => {
     const app = await createLightApp(join(__dirname, 'fixtures/base-app-light'));

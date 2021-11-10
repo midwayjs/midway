@@ -19,12 +19,10 @@
   ],
   "files": [
     "dist/**/*.js",
-    "dist/**/*.d.ts",
-    "app",
-    "config"
+    "dist/**/*.d.ts"
   ],
-  "eggPlugin": {
-    "name": "midway-mock"
+  "engines": {
+    "node": ">=12"
   },
   "license": "MIT",
   "devDependencies": {

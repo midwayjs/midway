@@ -24,7 +24,7 @@
     "index.d.ts"
   ],
   "engines": {
-    "node": ">= 12.13.0"
+    "node": ">=12"
   },
   "license": "MIT",
   "dependencies": {

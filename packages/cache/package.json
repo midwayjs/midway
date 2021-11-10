@@ -24,7 +24,7 @@
     "cache"
   ],
   "engines": {
-    "node": ">= 10"
+    "node": ">=12"
   },
   "devDependencies": {
     "@midwayjs/core": "^3.0.0-alpha.42",

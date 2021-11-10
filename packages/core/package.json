@@ -43,7 +43,7 @@
     "url": "http://github.com/midwayjs/midway.git"
   },
   "engines": {
-    "node": ">= 10.0.0"
+    "node": ">=12"
   },
   "gitHead": "a603d2348d6141f8f723901498f03a162a037708"
 }

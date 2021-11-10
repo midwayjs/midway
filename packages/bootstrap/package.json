@@ -23,7 +23,9 @@
   "devDependencies": {
     "@midwayjs/core": "^3.0.0-alpha.42",
     "@midwayjs/decorator": "^3.0.0-alpha.42",
+    "@midwayjs/socketio": "^3.0.0-alpha.42",
     "@midwayjs/logger": "^3.0.0-alpha.42",
+    "@midwayjs/web": "^3.0.0-alpha.42",
     "@types/socket.io-client": "^1.4.36",
     "request": "^2.88.2",
     "socket.io-client": "^4.0.0"
@@ -32,6 +34,9 @@
   "repository": {
     "type": "git",
     "url": "http://github.com/midwayjs/midway.git"
+  },
+  "engines": {
+    "node": ">=12"
   },
   "gitHead": "a603d2348d6141f8f723901498f03a162a037708"
 }

@@ -16,7 +16,7 @@
     "@midwayjs/runtime-mock": "^3.0.0-alpha.42"
   },
   "engines": {
-    "node": ">= 12"
+    "node": ">=12"
   },
   "files": [
     "dist/**/*.js",

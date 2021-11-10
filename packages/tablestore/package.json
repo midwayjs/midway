@@ -29,6 +29,9 @@
     "ci": "npm run test",
     "lint": "mwts check"
   },
+  "engines": {
+    "node": ">=12"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/midwayjs/midway.git"

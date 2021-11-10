@@ -22,7 +22,7 @@
     "mm": "3"
   },
   "engines": {
-    "node": ">= 10"
+    "node": ">=12"
   },
   "files": [
     "dist/**/*.js",

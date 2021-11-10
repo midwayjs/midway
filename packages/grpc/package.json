@@ -35,6 +35,9 @@
     "camelcase": "^6.2.0",
     "pascal-case": "^3.1.2"
   },
+  "engines": {
+    "node": ">=12"
+  },
   "author": "Harry Chen <czy88840616@gmail.com>",
   "repository": {
     "type": "git",

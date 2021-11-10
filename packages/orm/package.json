@@ -21,6 +21,9 @@
     "name": "Kurten Chan",
     "email": "chinkurten@gmail.com"
   },
+  "engines": {
+    "node": ">=12"
+  },
   "license": "MIT",
   "scripts": {
     "build": "tsc",

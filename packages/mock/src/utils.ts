@@ -50,7 +50,7 @@ export function transformFrameworkToConfiguration<
   }
 
   if (Framework.Configuration) {
-    return Framework.Configuration;
+    return Framework;
   }
 
   if (Framework.Framework) {

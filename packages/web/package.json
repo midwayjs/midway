@@ -42,7 +42,6 @@
   },
   "dependencies": {
     "@eggjs/router": "^2.0.0",
-    "@midwayjs/bootstrap": "^3.0.0-alpha.42",
     "@midwayjs/core": "^3.0.0-alpha.42",
     "@midwayjs/logger": "^3.0.0-alpha.42",
     "debug": "^4.1.1",
@@ -59,7 +58,7 @@
     "url": "http://github.com/midwayjs/midway.git"
   },
   "engines": {
-    "node": ">=10.10.0"
+    "node": ">=12"
   },
   "gitHead": "a603d2348d6141f8f723901498f03a162a037708"
 }

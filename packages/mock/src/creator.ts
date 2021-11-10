@@ -153,11 +153,15 @@ export async function close(
   }
 }
 
-export async function createFunctionApp(
+export async function createFunctionApp<
+  T extends IMidwayFramework<any, U>,
+  U = T['configurationOptions'],
+  Y = ReturnType<T['getApplication']>
+>(
   baseDir: string = process.cwd(),
   options?: MockAppConfigurationOptions,
-  customFrameworkName?: string | MidwayFrameworkType | any
-): Promise<IMidwayApplication> {
+  customFrameworkName?: { new (...args): T } | ComponentModule
+): Promise<Y> {
   const customFramework =
     customFrameworkName ??
     findFirstExistModule([

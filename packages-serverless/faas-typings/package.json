@@ -3,7 +3,7 @@
   "version": "3.0.0-alpha.42",
   "typings": "index.d.ts",
   "engines": {
-    "node": ">= 10"
+    "node": ">=12"
   },
   "keywords": [
     "midway",
