@@ -21,9 +21,9 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/core":"3.0.0-alpha.42",
-    "@midwayjs/decorator": "3.0.0-alpha.42",
-    "@midwayjs/mock": "3.0.0-alpha.42",
+    "@midwayjs/core": "^3.0.0-alpha.42",
+    "@midwayjs/decorator": "^3.0.0-alpha.42",
+    "@midwayjs/mock": "^3.0.0-alpha.42",
     "mongoose": "~6.0.11"
   },
   "peerDependencies": {

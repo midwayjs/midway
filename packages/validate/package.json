@@ -25,8 +25,8 @@
     "class-transformer": "^0.3.1"
   },
   "devDependencies": {
-    "@midwayjs/core":"3.0.0-alpha.42",
-    "@midwayjs/decorator": "3.0.0-alpha.42",
-    "@midwayjs/mock": "3.0.0-alpha.42"
+    "@midwayjs/core": "^3.0.0-alpha.42",
+    "@midwayjs/decorator": "^3.0.0-alpha.42",
+    "@midwayjs/mock": "^3.0.0-alpha.42"
   }
 }
