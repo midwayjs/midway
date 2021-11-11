@@ -1,11 +1,24 @@
-import { Framework } from '../src';
 import * as FaaS from '../src';
+import { Framework } from '../src';
 import { join } from 'path';
-import { create, close } from '@midwayjs/mock';
+import { close, create } from '@midwayjs/mock';
 
-export async function creatStarter(name, options?, Clz?): Promise<Framework> {
-  const framework = await create<Framework>(join(__dirname, 'fixtures', name), options, FaaS);
-  return framework;
+const originReady = FaaS.Configuration.prototype.init;
+let isProxy = false;
+let currentOptions;
+
+export async function creatStarter(name, options = {}): Promise<Framework> {
+  currentOptions = options;
+  if (!isProxy) {
+    FaaS.Configuration.prototype.init = async function () {
+      this.framework.configure(currentOptions);
+      await this.framework.initialize(currentOptions);
+      await originReady.call(this);
+    }
+    isProxy = true;
+  }
+
+  return await create<Framework>(join(__dirname, 'fixtures', name), options, FaaS);
 }
 
 export async function closeApp(framework) {

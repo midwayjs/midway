@@ -427,7 +427,7 @@ export interface FaaSHTTPContext
   /**
    * FaaS original event object.
    */
-  originEvent: any;
+  originEvent: Record<string, any>;
   /**
    * FaaS Cookies Object
    */

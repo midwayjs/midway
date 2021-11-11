@@ -1,4 +1,4 @@
-import { ILifeCycle, IMidwayApplication, IMidwayContainer } from '../interface';
+import { ILifeCycle, IMidwayContainer } from '../interface';
 import {
   CONFIGURATION_KEY,
   Init,
@@ -23,14 +23,10 @@ export class MidwayLifeCycleService {
   @Inject()
   protected configService: MidwayConfigService;
 
-  protected mainApp: IMidwayApplication;
-
   constructor(readonly applicationContext: IMidwayContainer) {}
 
   @Init()
   protected async init() {
-    this.mainApp = this.frameworkService.getMainApp();
-
     // run lifecycle
     const cycles = listModule(CONFIGURATION_KEY);
 
@@ -92,7 +88,10 @@ export class MidwayLifeCycleService {
       }
 
       if (inst?.onStop && typeof inst.onStop === 'function') {
-        await inst.onStop(this.applicationContext, this.mainApp);
+        await inst.onStop(
+          this.applicationContext,
+          this.frameworkService.getMainApp()
+        );
       }
     }
 
@@ -112,7 +111,7 @@ export class MidwayLifeCycleService {
         );
         const result = await cycle.instance[lifecycle](
           this.applicationContext,
-          this.mainApp
+          this.frameworkService.getMainApp()
         );
         if (resultHandler) {
           resultHandler(result);

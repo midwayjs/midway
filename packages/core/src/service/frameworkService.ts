@@ -17,7 +17,6 @@ import {
   ScopeEnum,
 } from '@midwayjs/decorator';
 import {
-  IMidwayApplication,
   IMidwayContainer,
   IMidwayFramework,
   REQUEST_OBJ_CTX_KEY,
@@ -28,7 +27,6 @@ import { BaseFramework } from '../baseFramework';
 import { MidwayPipelineService } from './pipelineService';
 import { MidwayDecoratorService } from './decoratorService';
 import { MidwayAspectService } from './aspectService';
-import { MidwayNoFrameworkFoundError } from '../error';
 import * as util from 'util';
 
 const debug = util.debuglog('midway:debug');
@@ -54,7 +52,6 @@ export class MidwayFrameworkService {
   ) {}
 
   private mainFramework: IMidwayFramework<any, any>;
-  private mainApp: IMidwayApplication;
 
   private globalFrameworkMap = new WeakMap<
     FrameworkType,
@@ -129,16 +126,6 @@ export class MidwayFrameworkService {
           frameworkInstance
         );
         this.globalFrameworkList.push(frameworkInstance);
-
-        if (!this.mainFramework && frameworkInstance.isEnable()) {
-          global['MIDWAY_MAIN_FRAMEWORK'] = this.mainFramework =
-            frameworkInstance;
-          this.mainApp = this.mainFramework.getApplication();
-        }
-      }
-
-      if (!this.mainFramework) {
-        throw new MidwayNoFrameworkFoundError();
       }
 
       // register @App decorator handler
@@ -148,7 +135,7 @@ export class MidwayFrameworkService {
           if (mete.type) {
             return this.globalFrameworkMap.get(mete.type);
           } else {
-            return this.mainApp;
+            return this.getMainApp();
           }
         }
       );
@@ -156,9 +143,12 @@ export class MidwayFrameworkService {
       this.decoratorService.registerPropertyHandler(
         PLUGIN_KEY,
         (key, target) => {
-          return this.mainApp[key];
+          return this.getMainApp()[key];
         }
       );
+
+      global['MIDWAY_MAIN_FRAMEWORK'] = this.mainFramework =
+        this.globalFrameworkList[0];
     }
 
     // init aspect module
@@ -173,7 +163,7 @@ export class MidwayFrameworkService {
   }
 
   public getMainApp() {
-    return this.mainApp;
+    return this.mainFramework?.getApplication();
   }
 
   public getMainFramework() {

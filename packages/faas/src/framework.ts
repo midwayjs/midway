@@ -126,7 +126,7 @@ export class MidwayFaaSFramework extends BaseFramework<
       }
 
       const context: FaaSContext = this.getContext(args.shift());
-      const isHttpFunction = context.headers && context.get;
+      const isHttpFunction = !!(context.headers && context.get);
       const globalMiddlewareFn = await this.getMiddleware();
       const middlewareManager = new ContextMiddlewareManager();
 
@@ -140,7 +140,12 @@ export class MidwayFaaSFramework extends BaseFramework<
               args = [ctx];
             }
             // invoke handler
-            const result = await this.invokeHandler(funOptions, ctx, args);
+            const result = await this.invokeHandler(
+              funOptions,
+              ctx,
+              args,
+              isHttpFunction
+            );
             if (isHttpFunction && result !== undefined) {
               ctx.body = result;
             }
@@ -194,7 +199,12 @@ export class MidwayFaaSFramework extends BaseFramework<
     return context;
   }
 
-  private async invokeHandler(routerInfo: RouterInfo, context, args) {
+  private async invokeHandler(
+    routerInfo: RouterInfo,
+    context,
+    args,
+    isHttpFunction: boolean
+  ) {
     const funModule = await context.requestContext.getAsync(
       routerInfo.controllerId
     );
@@ -206,7 +216,7 @@ export class MidwayFaaSFramework extends BaseFramework<
       const result = await funModule[handlerName](...args);
       // implement response decorator
       const routerResponseData = routerInfo.responseMetadata;
-      if (context.headers && routerResponseData.length) {
+      if (isHttpFunction) {
         for (const routerRes of routerResponseData) {
           switch (routerRes.type) {
             case WEB_RESPONSE_HTTP_CODE:

@@ -6,3 +6,4 @@ export {
   createLightApp,
 } from './creator';
 export * from './client/index';
+export { transformFrameworkToConfiguration } from './utils';

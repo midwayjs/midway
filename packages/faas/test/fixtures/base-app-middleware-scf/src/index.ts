@@ -7,6 +7,6 @@ export class HelloService {
 
   @ServerlessTrigger(ServerlessTriggerType.EVENT)
   handler(event) {
-    return this.ctx.originContext['text'] + event.text + this.ctx.requestId;
+    return this.ctx.originContext['text'] +  this.ctx.originEvent.text + this.ctx.requestId;
   }
 }

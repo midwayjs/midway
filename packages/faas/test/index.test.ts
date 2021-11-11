@@ -188,13 +188,12 @@ describe('test/index.test.ts', () => {
       {
         text: 'hello',
         httpMethod: 'GET',
-        headers: {},
         requestContext: {},
       },
       { text: 'a' }
     );
 
-    expect(data.body).toEqual('ahello123');
+    expect(data).toEqual('ahello123');
     await closeApp(starter);
   });
 
@@ -237,7 +236,8 @@ describe('test/index.test.ts', () => {
       headers: {},
       set(key, value) {
         ctx.headers[key] = value;
-      }
+      },
+      get(key) {}
     }
 
     data = await starter.handleInvokeWrapper('apiController.homeSet')(

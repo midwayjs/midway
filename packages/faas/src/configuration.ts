@@ -65,7 +65,7 @@ export class FaaSConfiguration {
     );
   }
 
-  async onReady() {}
+  async onReady(container) {}
 
   async onServerReady() {
     await this.framework.run();
