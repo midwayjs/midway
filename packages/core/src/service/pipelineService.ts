@@ -215,11 +215,15 @@ export class MidwayPipelineService implements IPipelineHandler {
     let nextIdx = 1;
     for (const v of valves) {
       info.prev = info.current;
+      info.prevName = getName(info.prev);
       info.current = v;
+      info.currentName = getName(info.current);
       if (nextIdx < valves.length) {
         info.next = valves[nextIdx];
+        info.nextName = getName(info.next);
       } else {
         info.next = undefined;
+        info.nextName = undefined;
       }
       nextIdx += 1;
       ctx.info = info;
@@ -395,7 +399,11 @@ export class MidwayPipelineService implements IPipelineHandler {
 
 function getName(target) {
   if (target) {
-    return getProviderName(target);
+    if (typeof target === 'string') {
+      return target;
+    } else {
+      return getProviderName(target);
+    }
   }
   return null;
 }
