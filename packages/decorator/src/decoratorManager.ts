@@ -662,6 +662,9 @@ export function listPreloadModule(): any[] {
  * @param target
  */
 export function saveModule(decoratorNameKey: ObjectIdentifier, target) {
+  if (isClass(target)) {
+    saveProviderId(undefined, target);
+  }
   return manager.saveModule(decoratorNameKey, target);
 }
 

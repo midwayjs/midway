@@ -41,7 +41,7 @@ export type getCustomRepository = <T>(customRepository: ObjectType<T>) => T;
 export { OrmConfiguration as Configuration } from './configuration';
 export * from './hook';
 export * from './repository';
-
+export * from './decorator';
 export type GetConnection = (instanceName?: string) => Connection;
 
 /**
