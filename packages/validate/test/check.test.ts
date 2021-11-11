@@ -1,9 +1,16 @@
 import { Validate, Rule, RuleType } from '../src';
+import { createLightApp, close } from '@midwayjs/mock';
+import * as Valid from '../src';
 
 import * as assert from 'assert';
+import { Provide } from '@midwayjs/decorator';
 describe('/test/check.test.ts', () => {
-  it('check with check', () => {
-    class TO{
+  it('check with check', async () => {
+    const app = await createLightApp('', {
+      configurationModule: [Valid]
+    });
+
+    class TO {
 
     }
 
@@ -17,6 +24,7 @@ describe('/test/check.test.ts', () => {
     class HelloDTO extends UserDTO{
     }
 
+    @Provide()
     class Hello {
       @Validate()
       school(a, data: HelloDTO) {
@@ -26,11 +34,19 @@ describe('/test/check.test.ts', () => {
     const user = {
       age: 8
     };
-    const result = new Hello().school(1, user);
+
+    app.getApplicationContext().bind(Hello);
+    const hello = await app.getApplicationContext().getAsync(Hello);
+    const result = hello.school(1, user);
     assert.deepEqual(result, user);
+
+    await close(app);
   });
 
-  it('check with check with extends', () => {
+  it('check with check with extends', async () => {
+    const app = await createLightApp('', {
+      configurationModule: [Valid]
+    });
     class TO{
 
     }
@@ -48,6 +64,7 @@ describe('/test/check.test.ts', () => {
       age: number;
     }
 
+    @Provide()
     class Hello {
       @Validate()
       school(a, data: HelloDTO) {
@@ -57,11 +74,16 @@ describe('/test/check.test.ts', () => {
     const user = {
       age: 11
     };
-    const result = new Hello().school(1, user);
+    app.getApplicationContext().bind(Hello);
+    const hello = await app.getApplicationContext().getAsync(Hello);
+    const result = hello.school(1, user);
     assert.deepEqual(result, user);
   });
 
-  it('check with check with options', () => {
+  it('check with check with options', async () => {
+    const app = await createLightApp('', {
+      configurationModule: [Valid]
+    });
     class WorldDTO {
       @Rule(RuleType.number().max(20))
       age: number;
@@ -75,6 +97,7 @@ describe('/test/check.test.ts', () => {
       world?: WorldDTO;
     }
 
+    @Provide()
     class Hello {
       @Validate()
       school(a, data: UserDTO) {
@@ -84,11 +107,17 @@ describe('/test/check.test.ts', () => {
     const user = {
       age: 10
     };
-    const result = new Hello().school(1, user);
+    app.getApplicationContext().bind(Hello);
+    const hello = await app.getApplicationContext().getAsync(Hello);
+    const result = hello.school(1, user);
     assert.deepEqual(result, user);
   });
 
-  it('check with check with array', () => {
+  it('check with check with array', async () => {
+    const app = await createLightApp('', {
+      configurationModule: [Valid]
+    });
+
     class WorldDTO {
       @Rule(RuleType.number().max(20))
       age: number;
@@ -102,6 +131,7 @@ describe('/test/check.test.ts', () => {
       world: WorldDTO[];
     }
 
+    @Provide()
     class Hello {
       @Validate()
       school(a, data: UserDTO) {
@@ -116,10 +146,17 @@ describe('/test/check.test.ts', () => {
         age: 22
       }]
     };
-    expect(()=> new Hello().school(1, user)).toThrow();
+
+    app.getApplicationContext().bind(Hello);
+    const hello = await app.getApplicationContext().getAsync(Hello);
+    expect(()=> hello.school(1, user)).toThrow();
+    await close(app);
   });
 
-  it('check with check and transform object', () => {
+  it('check with check and transform object', async () => {
+    const app = await createLightApp('', {
+      configurationModule: [Valid]
+    });
     class UserDTO {
       @Rule(RuleType.number().max(10))
       age: number;
@@ -139,6 +176,7 @@ describe('/test/check.test.ts', () => {
       }
     }
 
+    @Provide()
     class Hello {
       @Validate(true)
       school(a, data: UserDTO) {
@@ -150,17 +188,23 @@ describe('/test/check.test.ts', () => {
       firstName: 'Johny',
       lastName: 'Cage',
     };
-    const result = new Hello().school(1, user);
+    app.getApplicationContext().bind(Hello);
+    const hello = await app.getApplicationContext().getAsync(Hello);
+    const result = hello.school(1, user);
     expect(result.getName()).toEqual('Johny Cage');
     assert.deepEqual(result, user);
   });
 
-  it('check with no check', () => {
+  it('check with no check', async () => {
+    const app = await createLightApp('', {
+      configurationModule: [Valid]
+    });
     class UserDTO {
       @Rule(RuleType.number().max(10))
       age: number;
     }
 
+    @Provide()
     class Hello {
       school(a, data: UserDTO) {
         return data;
@@ -169,11 +213,16 @@ describe('/test/check.test.ts', () => {
     const user = {
       age: 18,
     };
-    const result = new Hello().school(1, user);
+    app.getApplicationContext().bind(Hello);
+    const hello = await app.getApplicationContext().getAsync(Hello);
+    const result = hello.school(1, user);
     assert.deepEqual(result, user);
   });
 
-  it('check with check when vo have two level', () => {
+  it('check with check when vo have two level', async () => {
+    const app = await createLightApp('', {
+      configurationModule: [Valid]
+    });
     class WorldDTO {
       @Rule(RuleType.number().max(20))
       age: number;
@@ -187,6 +236,7 @@ describe('/test/check.test.ts', () => {
       world: WorldDTO;
     }
 
+    @Provide()
     class Hello {
       @Validate()
       school(a, data: UserDTO) {
@@ -199,11 +249,16 @@ describe('/test/check.test.ts', () => {
         age: 18,
       },
     };
-    const result = new Hello().school(1, user);
+    app.getApplicationContext().bind(Hello);
+    const hello = await app.getApplicationContext().getAsync(Hello);
+    const result = hello.school(1, user);
     assert.deepEqual(result, user);
   });
 
-  it('check with check when vo have two level not equal', () => {
+  it('check with check when vo have two level not equal', async () => {
+    const app = await createLightApp('', {
+      configurationModule: [Valid]
+    });
     class WorldDTO {
       @Rule(RuleType.number().max(20))
       age: number;
@@ -217,6 +272,7 @@ describe('/test/check.test.ts', () => {
       world: WorldDTO;
     }
 
+    @Provide()
     class Hello {
       @Validate()
       school(a, data: UserDTO) {
@@ -229,12 +285,17 @@ describe('/test/check.test.ts', () => {
         age: 22,
       },
     };
+    app.getApplicationContext().bind(Hello);
+    const hello = await app.getApplicationContext().getAsync(Hello);
     expect(() => {
-      new Hello().school(1, user);
+      hello.school(1, user);
     }).toThrow(Error);
   });
 
-  it('check with check when two level and array and not equal', () => {
+  it('check with check when two level and array and not equal', async () => {
+    const app = await createLightApp('', {
+      configurationModule: [Valid]
+    });
     class WorldDTO {
       @Rule(RuleType.number().max(20))
       age: number;
@@ -248,6 +309,7 @@ describe('/test/check.test.ts', () => {
       worlds: WorldDTO[];
     }
 
+    @Provide()
     class Hello {
       @Validate()
       school(a, data: UserDTO) {
@@ -262,25 +324,32 @@ describe('/test/check.test.ts', () => {
         },
       ],
     };
+    app.getApplicationContext().bind(Hello);
+    const hello = await app.getApplicationContext().getAsync(Hello);
     expect(() => {
-      new Hello().school(1, user);
+      hello.school(1, user);
     }).toThrow(Error);
   });
 
-  it('should transform string to number', function () {
+  it('should transform string to number', async () => {
+    const app = await createLightApp('', {
+      configurationModule: [Valid]
+    });
     class UserNewDTO {
       @Rule(RuleType.number().required())
       id: number;
     }
 
+    @Provide()
     class Hello {
       @Validate()
       school(user: UserNewDTO) {
         return user;
       }
     }
-
-    const data = new Hello().school({
+    app.getApplicationContext().bind(Hello);
+    const hello = await app.getApplicationContext().getAsync(Hello);
+    const data = hello.school({
       id: '555'
     } as any)
     expect(typeof data.id).toEqual('number');

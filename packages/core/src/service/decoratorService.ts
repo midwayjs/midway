@@ -18,6 +18,9 @@ import {
 } from '../interface';
 import { MidwayAspectService } from './aspectService';
 import { MidwayCommonError } from '../error';
+import * as util from 'util';
+
+const debug = util.debuglog('midway:debug');
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -139,6 +142,9 @@ export class MidwayDecoratorService {
   }
 
   public registerPropertyHandler(decoratorKey: string, fn: HandlerFunction) {
+    debug(
+      `[core:decorator]: Register property decorator key="${decoratorKey}"`
+    );
     this.propertyHandlerMap.set(decoratorKey, fn);
   }
 
@@ -146,6 +152,7 @@ export class MidwayDecoratorService {
     decoratorKey: string,
     fn: MethodHandlerFunction
   ) {
+    debug(`[core:decorator]: Register method decorator key="${decoratorKey}"`);
     this.methodDecoratorMap.set(decoratorKey, fn);
   }
 
@@ -153,6 +160,9 @@ export class MidwayDecoratorService {
     decoratorKey: string,
     fn: ParameterHandlerFunction
   ) {
+    debug(
+      `[core:decorator]: Register parameter decorator key="${decoratorKey}"`
+    );
     this.parameterDecoratorMap.set(decoratorKey, fn);
   }
 

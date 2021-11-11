@@ -893,6 +893,9 @@ export function isProvide(target: any): boolean {
  * get parameters type by reflect-metadata
  */
 export function getMethodParamTypes(target, methodName: string | symbol) {
+  if (isClass(target)) {
+    target = target.prototype;
+  }
   return Reflect.getMetadata('design:paramtypes', target, methodName);
 }
 
@@ -913,6 +916,9 @@ export function getPropertyType(target, methodName: string | symbol) {
  * @param methodName
  */
 export function getMethodReturnTypes(target, methodName: string | symbol) {
+  if (isClass(target)) {
+    target = target.prototype;
+  }
   return Reflect.getMetadata('design:returntype', target, methodName);
 }
 

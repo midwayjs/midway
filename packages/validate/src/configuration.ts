@@ -10,6 +10,9 @@ import { MidwayDecoratorService } from '@midwayjs/core';
 import { RULES_KEY, VALIDATE_KEY } from './constants';
 import * as Joi from 'joi';
 import { plainToClass } from 'class-transformer';
+import * as util from 'util';
+
+const debug = util.debuglog('midway:debug');
 
 @Configuration({
   namespace: 'validate',
@@ -20,6 +23,7 @@ export class ValidateConfiguration {
 
   @Init()
   async init() {
+    debug(`[validate]: Register @validate "${VALIDATE_KEY}" handler"`);
     this.decoratorService.registerMethodHandler(VALIDATE_KEY, options => {
       // get param types from method
       const paramTypes = getMethodParamTypes(
