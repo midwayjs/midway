@@ -26,7 +26,7 @@ export class APIController {
   }
 
   @Get('/echo/:param')
-  async echoParam(@Param() param: string) {
+  async echoParam(@Param('param') param: string) {
     console.log('[echo param]', param);
     return param;
   }

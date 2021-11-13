@@ -12,32 +12,52 @@ module.exports = engine => {
 
   engine.addRuntimeExtension({
     async beforeRuntimeStart(runtime) {
-      let framework = '';
       const baseDir = runtime.getPropertyParser().getEntryDir();
-      // 从 package.json 中获取 egg 框架
-      const packageJSON = require(resolve(baseDir, 'package.json'));
-      framework = packageJSON.egg && packageJSON.egg.framework;
-      // 支持自定义框架
-      if (
-        packageJSON['dependencies'] &&
-        packageJSON['dependencies']['@midwayjs/web'] &&
-        framework !== '@midwayjs/web'
-      ) {
-        framework = '@midwayjs/web';
+      let isMidway3 = false;
+      try {
+        const midwayFrameworkPkg = require('@midwayjs/web/package.json');
+        if (/^3/.test(midwayFrameworkPkg.version)) {
+          isMidway3 = true;
+        }
+      } catch (e) {
+        // ignore
       }
-      const localFrameWorkPath = resolve(__dirname, 'framework');
-      require(localFrameWorkPath).getFramework(
-        process.env.EGG_FRAMEWORK_DIR ||
-          (framework && resolve(baseDir, 'node_modules', framework))
-      );
-      eggApp = await start({
-        baseDir,
-        framework: localFrameWorkPath,
-        ignoreWarning: true,
-        runtime,
-        typescript:
-          framework && framework.includes('midway') ? true : undefined,
-      });
+
+      if (isMidway3) {
+        try {
+          const bootstrap = require(join(baseDir, 'bootstrap'));
+          eggApp = await bootstrap();
+        } catch (e) {
+          console.error(e);
+        }
+      } else {
+        let framework = '';
+        // 从 package.json 中获取 egg 框架
+        const packageJSON = require(resolve(baseDir, 'package.json'));
+        framework = packageJSON.egg && packageJSON.egg.framework;
+        // 支持自定义框架
+        if (
+          packageJSON['dependencies'] &&
+          packageJSON['dependencies']['@midwayjs/web'] &&
+          framework !== '@midwayjs/web'
+        ) {
+          framework = '@midwayjs/web';
+        }
+        const localFrameWorkPath = resolve(__dirname, 'framework');
+        require(localFrameWorkPath).getFramework(
+          process.env.EGG_FRAMEWORK_DIR ||
+            (framework && resolve(baseDir, 'node_modules', framework))
+        );
+        eggApp = await start({
+          baseDir,
+          framework: localFrameWorkPath,
+          ignoreWarning: true,
+          runtime,
+          typescript:
+            framework && framework.includes('midway') ? true : undefined,
+        });
+      }
+
       if (fs.existsSync(socketPath)) {
         fs.unlinkSync(socketPath);
       }
