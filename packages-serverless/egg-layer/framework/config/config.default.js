@@ -1,4 +1,11 @@
 const os = require('os');
+
+exports.midwayLogger = {
+  default: {
+    dir: os.tmpdir(),
+  },
+};
+
 exports.logger = {
   dir: os.tmpdir(),
   disableConsoleAfterReady: false,

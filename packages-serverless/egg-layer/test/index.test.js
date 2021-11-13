@@ -12,6 +12,7 @@ describe('/test/index.test.ts', () => {
     let app;
 
     beforeAll(async () => {
+      process.env.FRAMEWORK_EGG_MODE = 'true';
       const entryDir = join(__dirname, './fixtures/eaas-fc');
       process.env.ENTRY_DIR = entryDir;
       runtime = createRuntime({
@@ -26,6 +27,7 @@ describe('/test/index.test.ts', () => {
         runtime.close();
       }
       process.env.ENTRY_DIR = '';
+      process.env.FRAMEWORK_EGG_MODE = undefined;
       // delete require.cache[require.resolve('./fixtures/eaas/index.js')];
     });
 
@@ -117,6 +119,7 @@ describe('/test/index.test.ts', () => {
     let app;
 
     beforeAll(async () => {
+      process.env.FRAMEWORK_EGG_MODE = 'true';
       const entryDir = join(__dirname, './fixtures/eaas-fc');
       process.env.ENTRY_DIR = entryDir;
       runtime = createRuntime({
@@ -131,6 +134,7 @@ describe('/test/index.test.ts', () => {
         runtime.close();
       }
       process.env.ENTRY_DIR = '';
+      process.env.FRAMEWORK_EGG_MODE = undefined;
     });
 
     it('should test with get', done => {
@@ -200,6 +204,7 @@ describe('/test/index.test.ts', () => {
     let app;
 
     beforeAll(async () => {
+      process.env.FRAMEWORK_EGG_MODE = 'true';
       const entryDir = join(__dirname, './fixtures/eaas-scf');
       process.env.ENTRY_DIR = entryDir;
       runtime = createRuntime({
@@ -214,6 +219,7 @@ describe('/test/index.test.ts', () => {
         runtime.close();
       }
       process.env.ENTRY_DIR = '';
+      process.env.FRAMEWORK_EGG_MODE = undefined;
     });
 
     it('should test with get', done => {
@@ -285,10 +291,6 @@ describe('/test/index.test.ts', () => {
 
     beforeAll(async () => {
       // set midway framework dir
-      process.env.EGG_FRAMEWORK_DIR = join(
-        __dirname,
-        '../node_modules/@midwayjs/web'
-      );
       const entryDir = join(__dirname, './fixtures/midway-fc');
       process.env.ENTRY_DIR = entryDir;
       runtime = createRuntime({

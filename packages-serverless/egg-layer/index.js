@@ -16,7 +16,7 @@ module.exports = engine => {
       let isMidway3 = false;
       try {
         const midwayFrameworkPkg = require('@midwayjs/web/package.json');
-        if (/^3/.test(midwayFrameworkPkg.version)) {
+        if (process.env.FRAMEWORK_EGG_MODE !== 'true' && /^3/.test(midwayFrameworkPkg.version)) {
           isMidway3 = true;
         }
       } catch (e) {
@@ -26,7 +26,11 @@ module.exports = engine => {
       if (isMidway3) {
         try {
           const bootstrap = require(join(baseDir, 'bootstrap'));
-          eggApp = await bootstrap();
+          eggApp = await bootstrap({
+            globalConfig: {
+              default: require('./framework/config/config.default'),
+            },
+          });
         } catch (e) {
           console.error(e);
         }
