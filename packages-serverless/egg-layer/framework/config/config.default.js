@@ -8,6 +8,10 @@ exports.midwayLogger = {
   },
 };
 
+exports.egg = {
+  dumpConfig: false,
+};
+
 exports.logger = {
   dir: os.tmpdir(),
   disableConsoleAfterReady: false,

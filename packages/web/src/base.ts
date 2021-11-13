@@ -8,6 +8,7 @@ import { EggAppInfo } from 'egg';
 import {
   getCurrentApplicationContext,
   initializeGlobalApplicationContext,
+  MidwayConfigService,
   safelyGet,
   safeRequire,
 } from '@midwayjs/core';
@@ -50,8 +51,13 @@ export const createAppWorkerLoader = () => {
     bootstrap;
     useEggSocketIO = false;
     applicationContext;
+    // 是否是单进程模式
+    singleProcessMode;
 
     getEggPaths() {
+      if (getCurrentApplicationContext()) {
+        this.singleProcessMode = true;
+      }
       if (!this.appDir) {
         // 这里的逻辑是为了兼容老 cluster 模式
         if (this.app.options.typescript || this.app.options.isTsMode) {
@@ -131,7 +137,7 @@ export const createAppWorkerLoader = () => {
     }
 
     load() {
-      if (!getCurrentApplicationContext()) {
+      if (!this.singleProcessMode) {
         // 多进程模式，从 egg-scripts 启动的
         process.env['EGG_CLUSTER_MODE'] = 'true';
         debug('[egg]: run with egg-scripts in cluster mode');
@@ -150,6 +156,20 @@ export const createAppWorkerLoader = () => {
     loadOrigin() {
       debug('[egg]: application: run load()');
       super.load();
+    }
+
+    loadConfig() {
+      super.loadConfig();
+      if (this.singleProcessMode) {
+        const configService =
+          getCurrentApplicationContext().get(MidwayConfigService);
+        configService.addObject(this.config);
+        Object.defineProperty(this, 'config', {
+          get() {
+            return configService.getConfiguration();
+          },
+        });
+      }
     }
 
     loadMiddleware() {
@@ -174,7 +194,13 @@ export const createAgentWorkerLoader = () => {
     require(getFramework())?.AgentWorkerLoader ||
     require('egg').AgentWorkerLoader;
   class EggAgentWorkerLoader extends (AppWorkerLoader as any) {
+    // 是否是单进程模式
+    singleProcessMode;
+
     getEggPaths() {
+      if (getCurrentApplicationContext()) {
+        this.singleProcessMode = true;
+      }
       if (!this.appDir) {
         if (this.app.options.typescript || this.app.options.isTsMode) {
           process.env.EGG_TYPESCRIPT = 'true';
@@ -265,6 +291,20 @@ export const createAgentWorkerLoader = () => {
         debug('[egg]: agent load run complete');
       });
     }
+
+    loadConfig() {
+      super.loadConfig();
+      if (this.singleProcessMode) {
+        const configService =
+          getCurrentApplicationContext().get(MidwayConfigService);
+        configService.addObject(this.config);
+        Object.defineProperty(this, 'config', {
+          get() {
+            return configService.getConfiguration();
+          },
+        });
+      }
+    }
   }
 
   return EggAgentWorkerLoader as any;
@@ -304,6 +344,12 @@ export const createEggApplication = () => {
       ));
       return router;
     }
+
+    dumpConfig() {
+      if (this.config?.egg?.dumpConfig !== false) {
+        super.dumpConfig();
+      }
+    }
   }
 
   return EggApplication as any;
@@ -330,6 +376,12 @@ export const createEggAgent = () => {
         (this as any)[LOGGERS] = createLoggers(this as any, 'agent');
       }
       return (this as any)[LOGGERS];
+    }
+
+    dumpConfig() {
+      if (this.config?.egg?.dumpConfig !== false) {
+        super.dumpConfig();
+      }
     }
   }
 

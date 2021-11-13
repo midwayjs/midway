@@ -19,7 +19,7 @@ import { ConsulProvider } from './lib/provider';
   namespace: 'consul',
   importConfigs: [join(__dirname, 'config')],
 })
-export class AutoConfiguration implements ILifeCycle {
+export class ConsulConfiguration implements ILifeCycle {
   /**
    * 有关 consul server 的配置
    */

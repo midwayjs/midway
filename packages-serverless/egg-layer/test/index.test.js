@@ -5,7 +5,7 @@ const FCApiGatewayTrigger =
 const { ApiGatewayTrigger } = require('@midwayjs/serverless-scf-trigger');
 const { join } = require('path');
 const request = require('supertest');
-const { existsSync } = require('fs');
+const { existsSync, remove } = require('fs-extra');
 
 describe('/test/index.test.ts', () => {
   describe('FC test with http trigger', () => {
@@ -293,6 +293,8 @@ describe('/test/index.test.ts', () => {
     beforeAll(async () => {
       // set midway framework dir
       const entryDir = join(__dirname, './fixtures/midway-fc');
+      await remove(join(entryDir, 'logs'));
+      await remove(join(entryDir, 'run'));
       process.env.ENTRY_DIR = entryDir;
       runtime = createRuntime({
         functionDir: entryDir,
@@ -329,7 +331,9 @@ describe('/test/index.test.ts', () => {
 
     it('logs will be not exists', async () => {
       const logsDir = join(__dirname, './fixtures/midway-fc', 'logs');
+      const runDir = join(__dirname, './fixtures/midway-fc', 'run');
       expect(existsSync(logsDir)).toBeFalsy();
+      expect(existsSync(runDir)).toBeFalsy();
     });
   });
 });

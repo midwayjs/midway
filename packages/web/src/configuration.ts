@@ -25,6 +25,9 @@ import { extractKoaLikeValue, MidwayDecoratorService } from '@midwayjs/core';
             },
           },
         },
+        egg: {
+          dumpConfig: true,
+        },
       },
       test: {
         egg: {
