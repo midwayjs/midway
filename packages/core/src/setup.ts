@@ -106,6 +106,10 @@ export async function initializeGlobalApplicationContext(
   // bind user code module
   await applicationContext.ready();
 
+  if (globalOptions.globalConfig) {
+    configService.add([globalOptions.globalConfig]);
+  }
+
   // merge config
   await configService.load();
   debug('[core]: Current config = %j', configService.getConfiguration());

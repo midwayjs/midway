@@ -5,6 +5,7 @@ const FCApiGatewayTrigger =
 const { ApiGatewayTrigger } = require('@midwayjs/serverless-scf-trigger');
 const { join } = require('path');
 const request = require('supertest');
+const { existsSync } = require('fs');
 
 describe('/test/index.test.ts', () => {
   describe('FC test with http trigger', () => {
@@ -324,6 +325,11 @@ describe('/test/index.test.ts', () => {
         .expect('Content-Type', 'text/plain; charset=utf-8')
         .expect('%E6%B5%8B%E8%AF%95')
         .expect(200, done);
+    });
+
+    it('logs will be not exists', async () => {
+      const logsDir = join(__dirname, './fixtures/midway-fc', 'logs');
+      expect(existsSync(logsDir)).toBeFalsy();
     });
   });
 });

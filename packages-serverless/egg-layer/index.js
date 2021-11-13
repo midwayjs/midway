@@ -16,7 +16,10 @@ module.exports = engine => {
       let isMidway3 = false;
       try {
         const midwayFrameworkPkg = require('@midwayjs/web/package.json');
-        if (process.env.FRAMEWORK_EGG_MODE !== 'true' && /^3/.test(midwayFrameworkPkg.version)) {
+        if (
+          process.env.FRAMEWORK_EGG_MODE !== 'true' &&
+          /^3/.test(midwayFrameworkPkg.version)
+        ) {
           isMidway3 = true;
         }
       } catch (e) {

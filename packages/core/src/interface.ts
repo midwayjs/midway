@@ -465,6 +465,9 @@ export interface IMidwayBootstrapOptions {
   moduleDetector?: 'file' | IFileDetector | false;
   logger?: boolean | ILogger;
   ignore?: string[];
+  globalConfig?: {
+    [environmentName: string]: Record<string, any>;
+  }
 }
 
 export interface IConfigurationOptions {

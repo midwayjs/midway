@@ -3,6 +3,8 @@ const os = require('os');
 exports.midwayLogger = {
   default: {
     dir: os.tmpdir(),
+    disableFile: true,
+    disableError: true,
   },
 };
 
