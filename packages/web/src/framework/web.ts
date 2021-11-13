@@ -50,12 +50,16 @@ export class MidwayWebFramework extends BaseFramework<
   generator;
   private server: Server;
   private agent;
+  private isClusterMode = false;
 
   @Inject()
   appDir;
 
   public configure() {
     process.env.EGG_TYPESCRIPT = 'true';
+    if (process.env['EGG_CLUSTER_MODE'] === 'true') {
+      this.isClusterMode = true;
+    }
     return this.configService.getConfiguration('egg');
   }
 
@@ -114,7 +118,10 @@ export class MidwayWebFramework extends BaseFramework<
   }
 
   async applicationInitialize(options: Partial<IMidwayBootstrapOptions>) {
-    await this.initSingleProcessEgg();
+    if (!this.isClusterMode) {
+      await this.initSingleProcessEgg();
+    }
+
     // insert error handler
     this.app.use(async (ctx, next) => {
       // this.app.createAnonymousContext(ctx);
@@ -146,6 +153,7 @@ export class MidwayWebFramework extends BaseFramework<
       // hack use method
       (this.app as any).originUse = this.app.use;
       this.app.use = this.app.useMiddleware as any;
+      this.app.ready();
     });
   }
 
@@ -215,26 +223,29 @@ export class MidwayWebFramework extends BaseFramework<
     // restore use method
     this.app.use = (this.app as any).originUse;
 
-    // emit egg-ready message in agent and application
-    this.app.messenger.broadcast('egg-ready', undefined);
+    if (!this.isClusterMode) {
+      // emit egg-ready message in agent and application
+      this.app.messenger.broadcast('egg-ready', undefined);
 
-    // emit `server` event in app
-    this.app.emit('server', this.server);
-    // register httpServer to applicationContext
-    this.getApplicationContext().registerObject(HTTP_SERVER_KEY, this.server);
+      // emit `server` event in app
+      this.app.emit('server', this.server);
 
-    const eggConfig = this.configService.getConfiguration('egg');
-    if (this.configService.getConfiguration('egg')) {
-      new Promise<void>(resolve => {
-        const args: any[] = [eggConfig.port];
-        if (eggConfig.hostname) {
-          args.push(eggConfig.hostname);
-        }
-        args.push(() => {
-          resolve();
+      // register httpServer to applicationContext
+      this.getApplicationContext().registerObject(HTTP_SERVER_KEY, this.server);
+
+      const eggConfig = this.configService.getConfiguration('egg');
+      if (this.configService.getConfiguration('egg')) {
+        new Promise<void>(resolve => {
+          const args: any[] = [eggConfig.port];
+          if (eggConfig.hostname) {
+            args.push(eggConfig.hostname);
+          }
+          args.push(() => {
+            resolve();
+          });
+          this.server.listen(...args);
         });
-        this.server.listen(...args);
-      });
+      }
     }
   }
 
@@ -258,10 +269,12 @@ export class MidwayWebFramework extends BaseFramework<
   }
 
   async beforeStop() {
-    await new Promise(resolve => {
-      this.server.close(resolve);
-    });
-    await this.app.close();
-    await this.agent.close();
+    if (!this.isClusterMode) {
+      await new Promise(resolve => {
+        this.server.close(resolve);
+      });
+      await this.app.close();
+      await this.agent.close();
+    }
   }
 }

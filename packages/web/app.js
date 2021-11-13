@@ -3,7 +3,7 @@
 const pathMatching = require('egg-path-matching');
 const { debuglog } = require('util');
 
-const debug = debuglog('midway:egg');
+const debug = debuglog('midway:debug');
 
 class AppBootHook {
   constructor(app) {
@@ -13,7 +13,7 @@ class AppBootHook {
   }
 
   configDidLoad() {
-    debug('egg lifecycle: configDidLoad');
+    debug('[egg lifecycle]: app configDidLoad');
     // 先清空，防止加载到 midway 中间件出错
     this.coreMiddleware = this.app.loader.config.coreMiddleware;
     this.app.loader.config.coreMiddleware = [];
@@ -22,7 +22,7 @@ class AppBootHook {
   }
 
   async didLoad() {
-    debug('egg lifecycle: didLoad');
+    debug('[egg lifecycle]: app didLoad');
     if (this.app.loader['useEggSocketIO']) {
       // socketio 下会提前加入 session 中间件，这里删除，防止重复加载
       if (this.app.middleware.length && this.app.middleware[this.app.middleware.length - 1]._name === 'session') {
@@ -32,7 +32,7 @@ class AppBootHook {
   }
 
   async willReady() {
-    debug('egg lifecycle: willReady');
+    debug('[egg lifecycle]: app willReady');
     const middlewareNames = this.coreMiddleware.concat(this.appMiddleware);
     // 等 midway 加载完成后，再去 use 中间件
     for (const name of middlewareNames) {
@@ -70,7 +70,7 @@ class AppBootHook {
   }
 
   async beforeClose() {
-    debug('egg lifecycle: beforeClose');
+    debug('[egg lifecycle]: app beforeClose');
   }
 }
 

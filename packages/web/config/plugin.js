@@ -9,4 +9,5 @@ module.exports = {
   security: true,
   logrotator: false,
   view: false,
+  schedule: false,
 };

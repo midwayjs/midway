@@ -242,7 +242,7 @@ describe('test/logger.test.js', () => {
     );
   });
 
-  it('log buffer enable cache on non-local and non-unittest env', async () => {
+  it.skip('log buffer enable cache on non-local and non-unittest env', async () => {
     mm(process.env, 'MIDWAY_SERVER_ENV', '');
     mm(process.env, 'EGG_LOG', 'none');
     mm(process.env, 'EGG_SERVER_ENV', 'prod');

@@ -78,6 +78,7 @@ export class MidwayLifeCycleService {
   public async stop() {
     // stop lifecycle
     const cycles = listModule(CONFIGURATION_KEY);
+
     for (const cycle of cycles) {
       let inst;
       if (cycle.target instanceof FunctionalConfiguration) {
@@ -87,12 +88,7 @@ export class MidwayLifeCycleService {
         inst = await this.applicationContext.getAsync<ILifeCycle>(cycle.target);
       }
 
-      if (inst?.onStop && typeof inst.onStop === 'function') {
-        await inst.onStop(
-          this.applicationContext,
-          this.frameworkService.getMainApp()
-        );
-      }
+      await this.runContainerLifeCycle(inst, 'onStop');
     }
 
     // stop framework
@@ -100,16 +96,31 @@ export class MidwayLifeCycleService {
   }
 
   private async runContainerLifeCycle(
-    lifecycleInstanceList,
+    lifecycleInstanceOrList,
     lifecycle,
     resultHandler?: (result: any) => void
   ) {
-    for (const cycle of lifecycleInstanceList) {
-      if (typeof cycle.instance[lifecycle] === 'function') {
+    if (Array.isArray(lifecycleInstanceOrList)) {
+      for (const cycle of lifecycleInstanceOrList) {
+        if (typeof cycle.instance[lifecycle] === 'function') {
+          debug(
+            `[core:lifecycle]: run ${cycle.instance.constructor.name} ${lifecycle}`
+          );
+          const result = await cycle.instance[lifecycle](
+            this.applicationContext,
+            this.frameworkService.getMainApp()
+          );
+          if (resultHandler) {
+            resultHandler(result);
+          }
+        }
+      }
+    } else {
+      if (typeof lifecycleInstanceOrList[lifecycle] === 'function') {
         debug(
-          `[core:lifecycle]: run ${cycle.instance.constructor.name} ${lifecycle}`
+          `[core:lifecycle]: run ${lifecycleInstanceOrList.constructor.name} ${lifecycle}`
         );
-        const result = await cycle.instance[lifecycle](
+        const result = await lifecycleInstanceOrList[lifecycle](
           this.applicationContext,
           this.frameworkService.getMainApp()
         );

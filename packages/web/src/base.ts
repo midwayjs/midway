@@ -132,6 +132,9 @@ export const createAppWorkerLoader = () => {
 
     load() {
       if (!getCurrentApplicationContext()) {
+        // 多进程模式，从 egg-scripts 启动的
+        process.env['EGG_CLUSTER_MODE'] = 'true';
+        debug('[egg]: run with egg-scripts in cluster mode');
         // 如果不走 bootstrap，就得在这里初始化 applicationContext
         initializeGlobalApplicationContext({
           ...this.globalOptions,
