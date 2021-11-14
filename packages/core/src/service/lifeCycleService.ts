@@ -30,6 +30,8 @@ export class MidwayLifeCycleService {
     // run lifecycle
     const cycles = listModule(CONFIGURATION_KEY);
 
+    debug(`[core:lifecycle]: Found Configuration length = ${cycles.length}`);
+
     const lifecycleInstanceList = [];
     for (const cycle of cycles) {
       if (cycle.target instanceof FunctionalConfiguration) {

@@ -1,20 +1,23 @@
 import { App, Configuration, MidwayFrameworkType } from '@midwayjs/decorator';
 import { ILifeCycle } from '@midwayjs/core';
-import { Application } from 'egg';
 import { Application as SocketApplication } from '@midwayjs/socketio';
 import { join } from 'path';
 import * as prometheusSocketIO from '../../../../src';
 import * as prometheus from '@midwayjs/prometheus';
+import * as Web from '@midwayjs/web';
+import * as SocketIO from '@midwayjs/socketio';
 
 @Configuration({
-  imports: [prometheus, prometheusSocketIO],
+  imports: [
+    Web,
+    SocketIO,
+    prometheus,
+    prometheusSocketIO
+  ],
   importConfigs: [join(__dirname, './config')],
   conflictCheck: true,
 })
 export class ContainerLifeCycle implements ILifeCycle {
-  @App()
-  app: Application;
-
   @App(MidwayFrameworkType.WS_IO)
   socketApp: SocketApplication;
 

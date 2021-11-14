@@ -28,6 +28,7 @@ import { MidwayPipelineService } from './pipelineService';
 import { MidwayDecoratorService } from './decoratorService';
 import { MidwayAspectService } from './aspectService';
 import * as util from 'util';
+import { MidwayCommonError } from '../error';
 
 const debug = util.debuglog('midway:debug');
 
@@ -99,6 +100,8 @@ export class MidwayFrameworkService {
     // filter proto
     frameworks = filterProtoFramework(frameworks);
 
+    debug(`[core:framework]: Found Framework length = ${frameworks.length}`);
+
     if (frameworks.length) {
       for (const frameworkClz of frameworks) {
         const frameworkInstance = await this.applicationContext.getAsync<
@@ -133,7 +136,11 @@ export class MidwayFrameworkService {
         APPLICATION_KEY,
         (propertyName, mete) => {
           if (mete.type) {
-            return this.globalFrameworkMap.get(mete.type);
+            if (this.globalFrameworkMap.has(mete.type)) {
+              return this.globalFrameworkMap.get(mete.type).getApplication();
+            } else {
+              throw new MidwayCommonError(`Framework ${mete.type} not Found`);
+            }
           } else {
             return this.getMainApp();
           }
