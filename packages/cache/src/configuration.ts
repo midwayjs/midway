@@ -6,4 +6,4 @@ import { join } from 'path';
   namespace: 'cache',
   importConfigs: [join(__dirname, 'config')],
 })
-export class AutoConfiguration {}
+export class CacheConfiguration {}

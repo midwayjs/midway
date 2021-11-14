@@ -4,7 +4,7 @@ import { close, createLightApp } from '@midwayjs/mock';
 import { IMidwayApplication } from '@midwayjs/core';
 
 describe('/test/index.test.ts', () => {
-  it('should use one db', async () => {
+  it.skip('should use one db', async () => {
     cleanFile(join(__dirname, 'fixtures/base-fn', 'default.sqlite'));
 
     const app: IMidwayApplication = await createLightApp(join(__dirname, 'fixtures/base-fn'), {});
@@ -16,7 +16,7 @@ describe('/test/index.test.ts', () => {
     await close(app);
   });
 
-  it.skip('use two db in one config', async () => {
+  it('use two db in one config', async () => {
     cleanFile(join(__dirname, 'fixtures/base-fn-multiple-db', 'default.sqlite'));
     cleanFile(join(__dirname, 'fixtures/base-fn-multiple-db', 'test.sqlite'));
 

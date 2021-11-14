@@ -6,7 +6,7 @@ import { OSSServiceFactory } from './manager';
   namespace: 'oss',
   importConfigs: [join(__dirname, './config.default')],
 })
-export class AutoConfiguration {
+export class OSSConfiguration {
   async onReady(container) {
     await container.getAsync(OSSServiceFactory);
   }

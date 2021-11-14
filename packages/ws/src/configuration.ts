@@ -11,7 +11,7 @@ import { MidwayWSFramework } from './framework';
     },
   ],
 })
-export class SocketIOConfiguration {
+export class WebSocketConfiguration {
   @Inject()
   framework: MidwayWSFramework;
 

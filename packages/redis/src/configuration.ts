@@ -6,7 +6,7 @@ import { RedisServiceFactory } from './manager';
   namespace: 'redis',
   importConfigs: [join(__dirname, './config.default')],
 })
-export class AutoConfiguration {
+export class RedisConfiguration {
   async onReady(container) {
     await container.getAsync(RedisServiceFactory);
   }

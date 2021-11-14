@@ -14,7 +14,7 @@ import * as qs from 'querystring';
 @Configuration({
   namespace: 'process-agent',
 })
-export class AutoConfiguration {
+export class ProcessAgentConfiguration {
   http_server: any;
 
   @App()
