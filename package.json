@@ -21,7 +21,7 @@
     "autod": "lerna run autod",
     "test": "lerna run test",
     "link": "lerna run link",
-    "cov": "lerna run cov --stream",
+    "cov": "lerna run cov --concurrency 2 --stream",
     "ci": "npm run build && npm run cov",
     "purge": "npm run clean && rm -rf node_modules",
     "reset": "npm run purge && npm i && npm run ci",
