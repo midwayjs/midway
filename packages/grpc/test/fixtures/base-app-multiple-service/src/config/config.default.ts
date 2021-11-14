@@ -1,4 +1,3 @@
-import { DefaultConfig } from '../../../../../src';
 import { join } from 'path';
 
 export const grpc = {
@@ -9,4 +8,18 @@ export const grpc = {
       package: 'helloworld'
     }
   ]
-} as DefaultConfig;
+}
+
+export const grpcServer = {
+  services: [
+    {
+      protoPath: join(__dirname, '../../../proto/hero.proto'),
+      package: 'hero',
+    },
+    {
+      protoPath: join(__dirname, '../../../proto/helloworld.proto'),
+      package: 'helloworld',
+    }
+  ],
+}
+

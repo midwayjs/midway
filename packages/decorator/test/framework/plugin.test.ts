@@ -1,15 +1,10 @@
 import {
   getClassMetadata,
-  CLASS_KEY_CONSTRUCTOR,
-  PLUGIN_KEY,
   Plugin,
+  INJECT_CUSTOM_PROPERTY
 } from '../../src';
 
 class Test {
-  constructor(@Plugin('aaa') aaa: any) {
-    // ignore
-  }
-
   @Plugin()
   test: any;
 
@@ -19,18 +14,7 @@ class Test {
 
 describe('/test/framework/plugin.test.ts', () => {
   it('plugin decorator should be ok', () => {
-    let data = getClassMetadata(CLASS_KEY_CONSTRUCTOR, Test);
-    expect(data).toStrictEqual({
-      0: {
-        key: 'aaa',
-        type: PLUGIN_KEY,
-      },
-    });
-
-    data = getClassMetadata(PLUGIN_KEY, Test);
-    expect(data).toStrictEqual([
-      { key: 'test', propertyName: 'test' },
-      { key: 'bbb', propertyName: 'bbb' },
-    ]);
+    let data = getClassMetadata(INJECT_CUSTOM_PROPERTY, Test);
+    expect(data).toMatchSnapshot();
   });
 });

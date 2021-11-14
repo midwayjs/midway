@@ -5,7 +5,9 @@ import {
   LoggerOptions,
 } from './interface';
 import { MidwayBaseLogger } from './logger';
+import * as util from 'util';
 
+const debug = util.debuglog('midway:debug');
 /**
  * 数组结构为获取当前的状态值 + 恢复状态值的方法
  */
@@ -30,6 +32,7 @@ export class MidwayLoggerContainer extends Map<string, ILogger> {
   private containerOptions: LoggerOptions;
   private loggerOriginData = {};
   private containerLoggerData = {};
+  private aliasMap = new Map<string, string>();
 
   constructor(options: LoggerOptions = {}) {
     super();
@@ -38,9 +41,14 @@ export class MidwayLoggerContainer extends Map<string, ILogger> {
 
   createLogger(name: string, options: LoggerOptions): ILogger {
     if (!this.has(name)) {
+      debug('[logger]: Create logger "%s" with options %j', name, options);
       const logger = new MidwayBaseLogger(
         Object.assign(options, this.containerOptions)
       );
+
+      if (options.aliasName) {
+        this.aliasMap.set(options.aliasName, name);
+      }
 
       this.syncOriginStatus(name, logger);
 
@@ -77,6 +85,10 @@ export class MidwayLoggerContainer extends Map<string, ILogger> {
     logger?.['close']();
     this.delete(name);
     delete this.loggerOriginData[name];
+  }
+
+  get(name) {
+    return super.get(this.aliasMap.get(name) ?? name);
   }
 
   /**

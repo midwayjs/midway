@@ -1,42 +1,36 @@
 import {
-  Async,
   Scope,
   ScopeEnum,
-  Autowire,
   Init,
   Destroy,
-  getObjectDefProps,
+  getObjectDefinition,
 } from '../../src';
 
-@Async()
+class Parent {}
+
 @Scope(ScopeEnum.Prototype)
-@Autowire(false)
-class Test {
+class Test extends Parent {
   @Init()
-  init() {}
+  async abcde() {}
 
   @Destroy()
   destroy() {}
 }
 
 @Scope()
-@Autowire()
 class TestOne {}
 
 describe('/test/annotation/objectDef.test.ts', () => {
   it('objectDef decorator should be ok', () => {
-    const def = getObjectDefProps(Test);
+    const def = getObjectDefinition(Test);
     expect(def).toStrictEqual({
-      isAutowire: false,
       scope: ScopeEnum.Prototype,
-      initMethod: 'init',
+      initMethod: 'abcde',
       destroyMethod: 'destroy',
-      isAsync: true,
     });
 
-    const defone = getObjectDefProps(TestOne);
+    const defone = getObjectDefinition(TestOne);
     expect(defone).toStrictEqual({
-      isAutowire: true,
       scope: ScopeEnum.Singleton,
     });
   });

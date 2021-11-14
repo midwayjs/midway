@@ -6,7 +6,7 @@ import {
 } from '../interface';
 
 export const getCurrentApplicationContext = (): IMidwayContainer => {
-  return getCurrentMainFramework().getApplicationContext();
+  return global['MIDWAY_APPLICATION_CONTEXT'];
 };
 
 export const getCurrentMainFramework = <

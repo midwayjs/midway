@@ -1,0 +1,38 @@
+{
+  "name": "@midwayjs/info",
+  "description": "midway info",
+  "version": "3.0.0-alpha.2",
+  "main": "dist/index",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "@midwayjs/core": "^3.0.0-alpha.42",
+    "@midwayjs/decorator": "^3.0.0-alpha.42",
+    "@midwayjs/mock": "^3.0.0-alpha.42",
+    "@midwayjs/serverless-fc-starter": "^3.0.0-alpha.42",
+    "@midwayjs/serverless-scf-starter": "^3.0.0-alpha.42"
+  },
+  "keywords": [
+    "midway"
+  ],
+  "author": "czy88840616 <czy88840616@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "test": "node --require=ts-node/register ../../node_modules/.bin/jest",
+    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --coverage --forceExit",
+    "ci": "npm run test",
+    "lint": "mwts check"
+  },
+  "engines": {
+    "node": ">=12"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/midwayjs/midway.git"
+  }
+}

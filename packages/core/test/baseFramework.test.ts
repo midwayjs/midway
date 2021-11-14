@@ -1,26 +1,20 @@
-import {
-  APPLICATION_KEY,
-  // CONFIGURATION_KEY,
-  // LIFECYCLE_IDENTIFIER_PREFIX,
-  MidwayFrameworkType,
-  Provide,
-  // resetModule,
-} from '@midwayjs/decorator';
+import { APPLICATION_KEY, MidwayFrameworkType, Provide, } from '@midwayjs/decorator';
 import { MidwayContextLogger } from '@midwayjs/logger';
 import * as assert from 'assert';
 import * as path from 'path';
-import {
-  clearAllModule,
-  // clearContainerCache,
-  IMidwayApplication,
-  IMidwayBootstrapOptions,
-  MidwayRequestContainer,
-  LightFramework,
-} from '../src';
 import * as mm from 'mm';
-// import { LifeCycleTest, LifeCycleTest1, TestBinding } from './fixtures/lifecycle';
+import {
+  getCurrentApplicationContext,
+  getCurrentMainApp,
+  getCurrentMainFramework,
+  MidwayFrameworkService,
+  MidwayRequestContainer,
+  MidwayDecoratorService,
+  MidwayMiddlewareService,
+  ContextMiddlewareManager,
+} from '../src';
+import { createLightFramework } from './util';
 import sinon = require('sinon');
-import { getCurrentApplicationContext, getCurrentMainApp, getCurrentMainFramework } from '../src';
 
 @Provide()
 class TestModule {
@@ -30,48 +24,21 @@ class TestModule {
 }
 
 describe('/test/baseFramework.test.ts', () => {
-  beforeEach(() => {
-    clearAllModule();
-    // clearContainerCache();
-  });
-
-  it.skip('should load js directory and auto disable', async () => {
-    const framework = new LightFramework();
-    await framework.initialize({
-      baseDir: path.join(__dirname, './fixtures/js-app-loader'),
-      isTsMode: false,
-    });
-
-    const appCtx = framework.getApplicationContext();
-    try {
-      await appCtx.getAsync('app');
-    } catch (err) {
-      assert(err);
-    }
-  });
-
   it('should load preload module', async () => {
-    const framework = new LightFramework();
-    await framework.initialize({
-      baseDir: path.join(__dirname, './fixtures/base-app/src'),
-      preloadModules: [TestModule],
-    });
-
+    const framework = await createLightFramework(path.join(__dirname, './fixtures/base-app/src'));
     const appCtx = framework.getApplicationContext();
+    appCtx.bind(TestModule);
     const module: any = await appCtx.getAsync('testModule');
     assert(module.test() === 'hello');
   });
 
   it('should load configuration', async () => {
-    const framework = new LightFramework();
-    await framework.initialize({
-      baseDir: path.join(
-        __dirname,
-        './fixtures/app-with-configuration/base-app-decorator/src'
-      )
-    });
-
-    framework.getApplicationContext().registerDataHandler(APPLICATION_KEY, () => ({
+    const framework = await createLightFramework(path.join(
+      __dirname,
+      './fixtures/app-with-configuration/base-app-decorator/src'
+    ));
+    const decoratorService = await framework.getApplicationContext().getAsync(MidwayDecoratorService);
+    decoratorService.registerPropertyHandler(APPLICATION_KEY, () => ({
       getBaseDir() {
         return 'base dir';
       }
@@ -86,31 +53,24 @@ describe('/test/baseFramework.test.ts', () => {
   });
 
   it('should load config.*.ts by default env', async () => {
-    const framework = new LightFramework();
-    await framework.initialize({
-      baseDir: path.join(
-        __dirname,
-        './fixtures/app-with-configuration/base-app-decorator/src'
-      )
-    });
-
+    const framework = await createLightFramework(path.join(
+      __dirname,
+      './fixtures/app-with-configuration/base-app-decorator/src'
+    ));
     const appCtx = framework.getApplicationContext();
 
-    const replaceManager: any = await appCtx.getAsync('@ok:replaceManager');
+    const replaceManager: any = await appCtx.getAsync('ok:replaceManager');
     expect(await replaceManager.getOne()).toEqual('ok');
   });
 
   it('should load config.*.ts by process.env', async () => {
     mm(process.env, 'NODE_ENV', 'local');
-    const framework = new LightFramework();
-    await framework.initialize({
-      baseDir: path.join(
-        __dirname,
-        './fixtures/app-with-configuration/base-app-decorator/src'
-      ),
-    });
+    const framework = await createLightFramework(path.join(
+      __dirname,
+      './fixtures/app-with-configuration/base-app-decorator/src'
+    ));
     const appCtx = framework.getApplicationContext();
-    const replaceManager: any = await appCtx.getAsync('@ok:replaceManager');
+    const replaceManager: any = await appCtx.getAsync('ok:replaceManager');
     assert((await replaceManager.getOne()) === 'ok1');
     mm.restore();
   });
@@ -122,16 +82,13 @@ describe('/test/baseFramework.test.ts', () => {
       callback(m);
     });
 
-    const framework = new LightFramework();
-    await framework.initialize({
-      baseDir: path.join(
-        __dirname,
-        './fixtures/app-with-configuration/base-app-decorator/src'
-      ),
-    });
+    const framework = await createLightFramework(path.join(
+      __dirname,
+      './fixtures/app-with-configuration/base-app-decorator/src'
+    ));
 
     const appCtx = framework.getApplicationContext();
-    const replaceManager: any = await appCtx.getAsync('@ok:replaceManager');
+    const replaceManager: any = await appCtx.getAsync('ok:replaceManager');
     assert((await replaceManager.getOne()) === 'ok1');
     assert.ok(
       callback.withArgs('------auto configuration ready now').calledOnce
@@ -141,79 +98,30 @@ describe('/test/baseFramework.test.ts', () => {
 
   it('should load with no package.json', async () => {
     mm(process.env, 'MIDWAY_SERVER_ENV', 'local');
-    const framework = new LightFramework();
-    await framework.initialize({
-      baseDir: path.join(
-        __dirname,
-        './fixtures/app-with-configuration/base-app-no-package-json/src'
-      ),
-    });
+    const framework = await createLightFramework(path.join(
+      __dirname,
+      './fixtures/app-with-configuration/base-app-no-package-json/src'
+    ));
 
     const appCtx = framework.getApplicationContext();
-    const replaceManager: any = await appCtx.getAsync('@ok:replaceManager');
+    const replaceManager: any = await appCtx.getAsync('ok:replaceManager');
     assert((await replaceManager.getOne()) === 'oktwo');
     const replaceManagerno: any = await appCtx.getAsync(
-      '@midway-plugin-no-pkg-json:replaceManager'
+      'midway-plugin-no-pkg-json:replaceManager'
     );
     assert((await replaceManagerno.getOne()) === 'oktwo');
 
-    const replaceManagerTwo: any = await appCtx.getAsync('@ok:replaceManagerTwo');
+    const replaceManagerTwo: any = await appCtx.getAsync('ok:replaceManagerTwo');
     assert((await replaceManagerTwo.getOne()) === 'oktwo');
     mm.restore();
   });
 
-  it('should load configuration with namespace', async () => {
-    mm(process.env, 'MIDWAY_SERVER_ENV', 'local');
-    const framework = new LightFramework();
-    await framework.initialize({
-      baseDir: path.join(
-        __dirname,
-        './fixtures/app-with-configuration-namespace/base-app-decorator/src'
-      ),
-    });
-
-    const appCtx = framework.getApplicationContext();
-    // 取默认 namespace
-    const replaceManager1: any = await appCtx.getAsync(
-      '@midway-plugin-mock:replaceManager'
-    );
-    assert((await replaceManager1.getOne()) === 'one article');
-    // 取自定义 namespace
-    const replaceManager2: any = await appCtx.getAsync('@ok:replaceManager');
-    assert((await replaceManager2.getOne()) === 'ok3');
-    // 查看覆盖的情况
-    const baseService: any = await appCtx.getAsync('baseService');
-    expect(await baseService.getInformation()).toEqual('harryone article atmod,one article,ok3');
-
-    assert(baseService.helloworld === 234);
-
-    assert(baseService.articleManager1);
-    assert((await baseService.articleManager1.getOne()) === 'ok3empty');
-
-    assert(baseService.articleManager2);
-    assert((await baseService.articleManager2.getOne()) === 'ok3emptytwo');
-
-    const userManager: any = await appCtx.getAsync('userManager');
-    assert((await userManager.getUser()) === 'harryone article atmod');
-    assert((await userManager.getTest()) === 'testone article atmod bt');
-
-    const repm: any = await appCtx.getAsync(
-      '@midway-plugin-mod:replaceManager'
-    );
-    assert((await repm.getOne()) === 'one article mod');
-    mm.restore();
-  });
-
-
   it('should load configuration with object', async () => {
     mm(process.env, 'MIDWAY_SERVER_ENV', 'local');
-    const framework = new LightFramework();
-    await framework.initialize({
-      baseDir: path.join(
-        __dirname,
-        './fixtures/app-with-configuration-object/base-app-decorator/src'
-      ),
-    });
+    const framework = await createLightFramework(path.join(
+      __dirname,
+      './fixtures/app-with-configuration-object/base-app-decorator/src'
+    ));
 
     const appCtx = framework.getApplicationContext();
     // 取默认 namespace
@@ -222,7 +130,7 @@ describe('/test/baseFramework.test.ts', () => {
     );
     expect(await replaceManager1.getOne()).toEqual('one article');
     // 取自定义 namespace
-    const replaceManager2: any = await appCtx.getAsync('@ok:replaceManager');
+    const replaceManager2: any = await appCtx.getAsync('ok:replaceManager');
     expect(await replaceManager2.getOne()).toEqual('ok2');
     mm.restore();
   });
@@ -254,13 +162,10 @@ describe('/test/baseFramework.test.ts', () => {
   // });
 
   it('should load conflict without error', async () => {
-    const framework = new LightFramework();
-    await framework.initialize({
-      baseDir: path.join(
-        __dirname,
-        './fixtures/app-with-conflict/base-app-decorator/src'
-      ),
-    });
+    const framework = await createLightFramework(path.join(
+      __dirname,
+      './fixtures/app-with-conflict/base-app-decorator/src'
+    ));
     const appCtx = framework.getApplicationContext();
     const baseService: any = await appCtx.getAsync('baseService');
     assert.ok((await baseService.getInformation()) === 'this is conflict');
@@ -272,16 +177,12 @@ describe('/test/baseFramework.test.ts', () => {
     it('load default env', async () => {
       mm(process.env, 'NODE_ENV', '');
       mm(process.env, 'MIDWAY_SERVER_ENV', '');
-      const framework = new LightFramework();
-      await framework.initialize({
-        baseDir: path.join(
-          __dirname,
-          './fixtures/app-with-configuration-config/src'
-        ),
-      });
+      const framework = await createLightFramework(path.join(
+        __dirname,
+        './fixtures/app-with-configuration-config/src'
+      ));
 
-      const applicationContext = framework.getApplicationContext();
-      const value = applicationContext.getConfigService().getConfiguration();
+      const value = framework.getConfiguration();
       assert(value['env'] === 'prod');
       assert(value['bbb'] === '111');
     });
@@ -289,78 +190,48 @@ describe('/test/baseFramework.test.ts', () => {
     it('load prod env', async () => {
       mm(process.env, 'NODE_ENV', 'prod');
       mm(process.env, 'MIDWAY_SERVER_ENV', '');
-      const framework = new LightFramework();
-      await framework.initialize({
-        baseDir: path.join(
-          __dirname,
-          './fixtures/app-with-configuration-config/src'
-        ),
-      });
+      const framework = await createLightFramework(path.join(
+        __dirname,
+        './fixtures/app-with-configuration-config/src'
+      ));
 
-      const applicationContext = framework.getApplicationContext();
-      const value = applicationContext
-        .getConfigService()
-        .getConfiguration('env');
+      const value = framework.getConfiguration('env');
       assert(value === 'prod');
     });
 
     it('load daily env', async () => {
       mm(process.env, 'NODE_ENV', 'daily');
-      const framework = new LightFramework();
-      await framework.initialize({
-        baseDir: path.join(
-          __dirname,
-          './fixtures/app-with-configuration-config/src'
-        ),
-      });
-      const applicationContext = framework.getApplicationContext();
-
-      const value = applicationContext
-        .getConfigService()
-        .getConfiguration('env');
+      const framework = await createLightFramework(path.join(
+        __dirname,
+        './fixtures/app-with-configuration-config/src'
+      ));
+      const value = framework.getConfiguration('env');
       assert(value === 'daily');
     });
 
     it('load pre env', async () => {
       mm(process.env, 'NODE_ENV', 'pre');
       mm(process.env, 'MIDWAY_SERVER_ENV', '');
-      const framework = new LightFramework();
-      await framework.initialize({
-        baseDir: path.join(
-          __dirname,
-          './fixtures/app-with-configuration-config/src'
-        ),
-      });
+      const framework = await createLightFramework(path.join(
+        __dirname,
+        './fixtures/app-with-configuration-config/src'
+      ));
 
-      const applicationContext = framework.getApplicationContext();
-
-      const value = applicationContext
-        .getConfigService()
-        .getConfiguration('env');
+      const value = framework.getConfiguration('env');
       assert(value === 'pre');
     });
 
     it('load local env', async () => {
       mm(process.env, 'NODE_ENV', 'local');
       mm(process.env, 'MIDWAY_SERVER_ENV', '');
-      const framework = new LightFramework();
-      await framework.initialize({
-        baseDir: path.join(
-          __dirname,
-          './fixtures/app-with-configuration-config/src'
-        ),
-      });
+      const framework = await createLightFramework(path.join(
+        __dirname,
+        './fixtures/app-with-configuration-config/src'
+      ));
 
-      const applicationContext = framework.getApplicationContext();
-      expect(applicationContext
-        .getConfigService()
-        .getConfiguration('env')).toEqual('local');
-      expect(applicationContext
-        .getConfigService()
-        .getConfiguration('in')).toEqual(2);
-      expect(applicationContext
-        .getConfigService()
-        .getConfiguration('out')).toEqual(1);
+      expect(framework.getConfiguration('env')).toEqual('local');
+      expect(framework.getConfiguration('in')).toEqual(2);
+      expect(framework.getConfiguration('out')).toEqual(1);
     });
   });
 
@@ -370,17 +241,14 @@ describe('/test/baseFramework.test.ts', () => {
     it('load default env', async () => {
       mm(process.env, 'NODE_ENV', '');
       mm(process.env, 'MIDWAY_SERVER_ENV', '');
-      const framework = new LightFramework();
-      await framework.initialize({
-        baseDir: path.join(
-          __dirname,
-          './fixtures/app-with-configuration-config-dir/src'
-        ),
-      });
+      const framework = await createLightFramework(path.join(
+        __dirname,
+        './fixtures/app-with-configuration-config-dir/src'
+      ));
 
       const applicationContext = framework.getApplicationContext();
 
-      const value = applicationContext.getConfigService().getConfiguration();
+      const value = framework.getConfiguration();
       assert(value['env'] === 'prod');
       assert(value['bbb'] === '222');
 
@@ -396,70 +264,46 @@ describe('/test/baseFramework.test.ts', () => {
     it('load prod env', async () => {
       mm(process.env, 'NODE_ENV', 'prod');
       mm(process.env, 'MIDWAY_SERVER_ENV', '');
-      const framework = new LightFramework();
-      await framework.initialize({
-        baseDir: path.join(
-          __dirname,
-          './fixtures/app-with-configuration-config-dir/src'
-        ),
-      });
+      const framework = await createLightFramework(path.join(
+        __dirname,
+        './fixtures/app-with-configuration-config-dir/src'
+      ));
 
-      const applicationContext = framework.getApplicationContext();
-
-      const value = applicationContext
-        .getConfigService()
-        .getConfiguration('env');
+      const value = framework.getConfiguration('env');
       assert(value === 'prod');
     });
 
     it('load daily env', async () => {
       mm(process.env, 'NODE_ENV', 'daily');
       mm(process.env, 'MIDWAY_SERVER_ENV', '');
-      const framework = new LightFramework();
-      await framework.initialize({
-        baseDir: path.join(
-          __dirname,
-          './fixtures/app-with-configuration-config-dir/src'
-        ),
-      });
+      const framework = await createLightFramework(path.join(
+        __dirname,
+        './fixtures/app-with-configuration-config-dir/src'
+      ));
 
-      const applicationContext = framework.getApplicationContext();
-
-      const value = applicationContext
-        .getConfigService()
-        .getConfiguration('env');
+      const value = framework.getConfiguration('env');
       assert(value === 'daily');
     });
 
     it('load pre env', async () => {
       mm(process.env, 'NODE_ENV', 'pre');
       mm(process.env, 'MIDWAY_SERVER_ENV', '');
-      const framework = new LightFramework();
-      await framework.initialize({
-        baseDir: path.join(
-          __dirname,
-          './fixtures/app-with-configuration-config-dir/src'
-        ),
-      });
+      const framework = await createLightFramework(path.join(
+        __dirname,
+        './fixtures/app-with-configuration-config-dir/src'
+      ));
 
-      const applicationContext = framework.getApplicationContext();
-
-      const value = applicationContext
-        .getConfigService()
-        .getConfiguration('env');
+      const value = framework.getConfiguration('env');
       assert(value === 'pre');
     });
 
   });
 
   it('should test aspect decorator', async () => {
-    const framework = new LightFramework();
-    await framework.initialize({
-      baseDir: path.join(
-        __dirname,
-        './fixtures/base-app-aspect/src'
-      )
-    });
+    const framework = await createLightFramework(path.join(
+      __dirname,
+      './fixtures/base-app-aspect/src'
+    ));
 
     const home: any = await framework.getApplicationContext().getAsync('home');
     expect(home.hello()).toEqual('hello worlddddccccfff');
@@ -480,14 +324,10 @@ describe('/test/baseFramework.test.ts', () => {
   });
 
   it('should inject global value in component', async () => {
-    const framework = new LightFramework();
-    await framework.initialize({
-      baseDir: path.join(
-        __dirname,
-        './fixtures/app-with-configuration-global-inject/base-app-decorator/src'
-      )
-    });
-
+    const framework = await createLightFramework(path.join(
+      __dirname,
+      './fixtures/app-with-configuration-global-inject/base-app-decorator/src'
+    ));
     const home: any = await framework.getApplicationContext().getAsync('SQL:home');
     expect(await home.getData()).toMatch(/base-app-decorator\/src\/bbbb\/dddd/);
   });
@@ -495,104 +335,47 @@ describe('/test/baseFramework.test.ts', () => {
   it('should load component in different type and different env', async () => {
     mm(process.env, 'NODE_ENV', '');
     mm(process.env, 'MIDWAY_SERVER_ENV', '');
-    const framework = new LightFramework();
-    await framework.initialize({
-      baseDir: path.join(
-        __dirname,
-        './fixtures/app-with-configuration-load/src'
-      ),
-    });
-
-    const applicationContext = framework.getApplicationContext();
-
-    const value = applicationContext.getConfigService().getConfiguration();
+    const framework = await createLightFramework(path.join(
+      __dirname,
+      './fixtures/app-with-configuration-load/src'
+    ));
+    const value = framework.getConfiguration();
     expect(value['a']).toEqual(1);
     expect(value['b']).toEqual(1);
     mm.restore();
   });
 
-  // it('lifecycle should be ok', async () => {
-  //   const framework = new LightFramework();
-  //   await framework.initialize({
-  //     baseDir: path.join(
-  //       __dirname,
-  //       './fixtures/base-app/src'
-  //     ),
-  //   });
-  //
-  //   const container = framework.getApplicationContext();
-  //   container.registerDataHandler(APPLICATION_KEY, () => {
-  //     return { hello: 123 };
-  //   });
-  //   const cfg = container.createConfiguration();
-  //   container.bind(TestBinding);
-  //   cfg.bindConfigurationClass(LifeCycleTest);
-  //   cfg.bindConfigurationClass(LifeCycleTest1);
-  //
-  //   await framework.loadLifeCycles();
-  //
-  //   const aa = await container.getAsync<LifeCycleTest>(LIFECYCLE_IDENTIFIER_PREFIX + 'lifeCycleTest');
-  //   expect(aa.ts).toEqual('hello');
-  //   expect(aa.ready).toBeTruthy();
-  //   // container.registerObject('hellotest111', '12312312');
-  //   expect(container.get('hellotest111')).toEqual('12312312');
-  //
-  //   const aa1 = await container.getAsync<LifeCycleTest1>(LIFECYCLE_IDENTIFIER_PREFIX + 'lifeCycleTest1');
-  //   expect(aa1.tts).toEqual('hello');
-  //   expect(aa1.ready).toBeTruthy();
-  //
-  //   const callback = sinon.spy();
-  //   mm(console, 'log', (m) => {
-  //     callback(m);
-  //   });
-  //
-  //   expect(container.registry.hasDefinition(LIFECYCLE_IDENTIFIER_PREFIX + 'lifeCycleTest')).toBeTruthy();
-  //   await framework.stop();
-  //   expect(container.registry.hasDefinition(LIFECYCLE_IDENTIFIER_PREFIX + 'lifeCycleTest')).toBeFalsy();
-  //   expect(callback.withArgs('on stop').calledOnce).toBeTruthy();
-  //
-  //   resetModule(CONFIGURATION_KEY);
-  //   mm.restore();
-  // });
-
   it('should get service in a component write with app', async () => {
-    const framework = new LightFramework();
-    await framework.initialize({
-      baseDir: path.join(
-        __dirname,
-        './fixtures/app-with-custom-component-in-app/src'
-      ),
-    });
+    const framework = await createLightFramework(path.join(
+      __dirname,
+      './fixtures/app-with-custom-component-in-app/src'
+    ));
 
     const appCtx = framework.getApplicationContext();
     const userController = await appCtx.getAsync('userController');
     const books = await (userController as any).getBooksByUser();
     expect(books).toEqual([
       {
-        "isbn": "9787115549440",
-        "name": "无限可能"
+        'isbn': '9787115549440',
+        'name': '无限可能'
       },
       {
-        "isbn": "9787305236525",
-        "name": "明智的孩子"
+        'isbn': '9787305236525',
+        'name': '明智的孩子'
       },
       {
-        "isbn": "9787020166916",
-        "name": "伊卡狛格"
+        'isbn': '9787020166916',
+        'name': '伊卡狛格'
       }
     ]);
     await framework.stop();
   });
 
   it('should create logger and match property between framework and app', async () => {
-    const framework = new LightFramework();
-    framework.configure({});
-    await framework.initialize({
-      baseDir: path.join(
-        __dirname,
-        './fixtures/base-app-logger/src'
-      ),
-    });
+    const framework = await createLightFramework(path.join(
+      __dirname,
+      './fixtures/base-app-logger/src'
+    ));
     expect(framework.getApplication().getLogger()).toEqual(framework.getLogger());
     expect(framework.getApplication().getLogger('coreLogger')).toEqual(framework.getLogger('coreLogger'));
     expect(framework.getApplication().getCoreLogger()).toEqual(framework.getLogger('coreLogger'));
@@ -613,6 +396,7 @@ describe('/test/baseFramework.test.ts', () => {
         return 'bbbb';
       }
     }
+
     framework.getApplication().setContextLoggerClass(CustomContextLogger);
     expect(framework.getApplication().createAnonymousContext().startTime).toBeDefined();
     const ctxLogger = framework.getApplication().createAnonymousContext().getLogger();
@@ -625,14 +409,10 @@ describe('/test/baseFramework.test.ts', () => {
   });
 
   it('should support functional configuration and hook load', async () => {
-    const framework = new LightFramework();
-    await framework.initialize({
-      baseDir: path.join(
-        __dirname,
-        './fixtures/app-with-functional-component/src'
-      ),
-    });
-
+    const framework = await createLightFramework(path.join(
+      __dirname,
+      './fixtures/app-with-functional-component/src'
+    ));
     expect(framework.getConfiguration('a')).toEqual(1);
 
     await framework.stop();
@@ -641,45 +421,18 @@ describe('/test/baseFramework.test.ts', () => {
   });
 
   it('should run multi framework in one process and use cache', async () => {
-    const appMap = new Map();
+    const framework = await createLightFramework(path.join(
+      __dirname,
+      './fixtures/base-app-multi-framework-shared/src'
+    ));
 
-    const framework1 = new LightFramework();
-    framework1.configure({});
-    await framework1.initialize({
-      baseDir: path.join(
-        __dirname,
-        './fixtures/base-app-multi-framework-shared/src'
-      ),
-      isMainFramework: true,
-      globalApplicationHandler: (type: MidwayFrameworkType) => {
-        return appMap.get(type);
-      }
-    });
+    const applicationContext = framework.getApplicationContext();
+    const frameworkService = await applicationContext.getAsync(MidwayFrameworkService);
+    expect(frameworkService.getFramework(MidwayFrameworkType.LIGHT)).toBeUndefined();
+    expect(frameworkService.getFramework(MidwayFrameworkType.FAAS)).toBeDefined();
 
-    class CustomTwoFramework extends LightFramework {
-      async applicationInitialize(options: IMidwayBootstrapOptions) {
-        this.app = {} as IMidwayApplication;
-      }
-      getFrameworkType(): MidwayFrameworkType {
-        return MidwayFrameworkType.MS_GRPC;
-      }
-    }
-
-    const framework2 = new CustomTwoFramework();
-    framework2.configure({});
-    await framework2.initialize({
-      baseDir: path.join(
-        __dirname,
-        './fixtures/base-app-multi-framework-shared/src'
-      ),
-      isMainFramework: false,
-      applicationContext: framework1.getApplicationContext(),
-    });
-
-    appMap.set(framework1.getFrameworkType(), framework1.getApplication());
-    appMap.set(framework2.getFrameworkType(), framework2.getApplication());
-
-    await framework1.loadLifeCycles(true);
+    const framework1 = frameworkService.getFramework(MidwayFrameworkType.EMPTY);
+    const framework2 = frameworkService.getFramework(MidwayFrameworkType.MS_GRPC);
 
     expect(framework1.getApplicationContext()).toEqual(framework2.getApplicationContext());
     // share application context data
@@ -695,41 +448,38 @@ describe('/test/baseFramework.test.ts', () => {
   });
 
   it('should inject component service with class', async () => {
-    const framework = new LightFramework();
-    await framework.initialize({
-      baseDir: path.join(
-        __dirname,
-        './fixtures/app-with-component-inject-with-class/main/src'
-      ),
-    });
+    const framework = await createLightFramework(path.join(
+      __dirname,
+      './fixtures/app-with-component-inject-with-class/main/src'
+    ));
 
     const appCtx = framework.getApplicationContext();
     const userController = await appCtx.getAsync('userController');
     const books = await (userController as any).getBooksByUser();
     expect(books).toEqual([
       {
-        "name": "无限可能str",
-        "isbn": "9787115549440str"
+        'name': '无限可能str',
+        'isbn': '9787115549440str'
       },
       {
-        "name": "明智的孩子str",
-        "isbn": "9787305236525str"
+        'name': '明智的孩子str',
+        'isbn': '9787305236525str'
       },
       {
-        "name": "伊卡狛格str",
-        "isbn": "9787020166916str"
+        'name': '伊卡狛格str',
+        'isbn': '9787020166916str'
       },
       {
-        "isbn": "9787115549440",
-        "name": "无限可能"
+        'isbn': '9787115549440',
+        'name': '无限可能'
       },
       {
-        "isbn": "9787305236525",
-        "name": "明智的孩子"
+        'isbn': '9787305236525',
+        'name': '明智的孩子'
       },
       {
-        "isbn": "9787020166916",
-        "name": "伊卡狛格"
+        'isbn': '9787020166916',
+        'name': '伊卡狛格'
       }
     ]);
 
@@ -737,13 +487,23 @@ describe('/test/baseFramework.test.ts', () => {
     expect((global as any).container_not_null).toBeTruthy();
   });
 
+  it('component circular dependency should be ok', async () => {
+    const framework = await createLightFramework(path.join(
+      __dirname,
+      './fixtures/app-with-component-inject-with-class/main/src'
+    ));
+    const appCtx = framework.getApplicationContext();
+    const circularService = await appCtx.getAsync('circular:circularService');
+
+    expect(circularService).not.toBeNull();
+    await framework.stop();
+  });
 
   it('should test global framework', async () => {
-    const framework = new LightFramework();
-    await framework.initialize({
-      baseDir: path.join(__dirname, './fixtures/base-app/src'),
-    });
-
+    const framework = await createLightFramework(path.join(
+      __dirname,
+      './fixtures/base-app/src'
+    ));
     mm(global, 'MIDWAY_MAIN_FRAMEWORK', framework);
 
     const appCtx = framework.getApplicationContext();
@@ -755,10 +515,10 @@ describe('/test/baseFramework.test.ts', () => {
   });
 
   it('should test attr api', async () => {
-    const framework = new LightFramework();
-    await framework.initialize({
-      baseDir: path.join(__dirname, './fixtures/base-app/src'),
-    });
+    const framework = await createLightFramework(path.join(
+      __dirname,
+      './fixtures/base-app/src'
+    ));
 
     framework.getApplicationContext().setAttr('bcd', 1);
     expect(framework.getApplicationContext().getAttr('bcd')).toEqual(1);
@@ -773,10 +533,10 @@ describe('/test/baseFramework.test.ts', () => {
 
   it('should test object config load', async () => {
     mm(process.env, 'NODE_ENV', 'unittest');
-    const framework = new LightFramework();
-    await framework.initialize({
-      baseDir: path.join(__dirname, './fixtures/base-app-config-object/src'),
-    });
+    const framework = await createLightFramework(path.join(
+      __dirname,
+      './fixtures/base-app-config-object/src'
+    ));
 
     const config = framework.getConfiguration();
     expect(config.hello.a).toEqual(1);
@@ -785,13 +545,129 @@ describe('/test/baseFramework.test.ts', () => {
   });
 
   it('should test load async config', async () => {
-    const framework = new LightFramework();
-    await framework.initialize({
-      baseDir: path.join(__dirname, './fixtures/base-app-config-async-load/src'),
-    });
+    const framework = await createLightFramework(path.join(
+      __dirname,
+      './fixtures/base-app-config-async-load/src'
+    ));
 
     const config = framework.getConfiguration();
     expect(config.e).toEqual(333);
+  });
+
+  it('should test autoload', async () => {
+    const framework = await createLightFramework(path.join(
+      __dirname,
+      './fixtures/base-app-autoload/src'
+    ));
+
+    const applicationContext: any = framework.getApplicationContext();
+    const rid = applicationContext.identifierMapping.getRelation('userService');
+    expect(applicationContext.getManagedResolverFactory().singletonCache.has(rid)).toBeTruthy();
+  });
+
+  it('should test object lifecycle', async () => {
+    const framework = await createLightFramework(path.join(
+      __dirname,
+      './fixtures/base-app-object-lifecycle/src'
+    ));
+
+    const applicationContext: any = framework.getApplicationContext();
+    await applicationContext.getAsync('userService');
+    expect(framework.getApplication().getAttr('total')).toEqual(10);
+  });
+
+  it('should test middleware manager', async () => {
+    @Provide()
+    class TestMiddleware1 {
+      resolve() {
+        return async (ctx, next) => {
+          return 'hello ' + await next();
+        }
+      }
+    }
+
+    @Provide()
+    class TestMiddleware2 {
+      resolve() {
+        return async (ctx, next) => {
+          return 'world ' + await next();
+        }
+      }
+    }
+
+    const framework = await createLightFramework();
+    framework.getApplicationContext().bind(TestMiddleware1);
+    framework.getApplicationContext().bind(TestMiddleware2);
+
+    framework.useMiddleware([TestMiddleware1, TestMiddleware2]);
+
+    let data1 = 'abc';
+    const fn = await framework.getMiddleware(async (ctx) => {
+      return data1;
+    });
+
+    expect(await fn({})).toEqual({"error": undefined, "result": "hello world abc"});
+
+    data1 = 'efg';
+    expect(await fn({})).toEqual({"error": undefined, "result": "hello world efg"});
+  });
+
+  it('should test middleware manager with compose', async () => {
+    @Provide()
+    class TestMiddleware1 {
+      resolve() {
+        return async (ctx, next) => {
+          return 'hello ' + await next();
+        }
+      }
+    }
+
+    @Provide()
+    class TestMiddleware2 {
+      resolve() {
+        return async (ctx, next) => {
+          return 'world ' + await next();
+        }
+      }
+    }
+
+    @Provide()
+    class TestMiddleware3 {
+      resolve() {
+        return async (ctx, next) => {
+          return 'zhangting';
+        }
+      }
+    }
+
+    const framework = await createLightFramework();
+    framework.getApplicationContext().bind(TestMiddleware1);
+    framework.getApplicationContext().bind(TestMiddleware2);
+    framework.getApplicationContext().bind(TestMiddleware3);
+
+    // 添加一个中间件
+    framework.useMiddleware([TestMiddleware1, TestMiddleware2]);
+
+    // compose 一下，再同时插入一个
+    const fn = await framework.getMiddleware(async (ctx, next) => {
+      return 'gogogo, ' + await next();
+    });
+
+    // 建一个新的
+    const middlewareManager = new ContextMiddlewareManager();
+    // 把 compose 的结果作为第一个
+    middlewareManager.insertLast(fn);
+    // 再插入一个
+    middlewareManager.insertLast(TestMiddleware3);
+
+    const middlewareService = await framework.getApplicationContext().getAsync(MidwayMiddlewareService);
+
+    // 再 compose
+    const composeMiddleware = await middlewareService.compose(
+      middlewareManager
+    );
+
+    expect(await composeMiddleware({})).toEqual({"error": undefined, "result": "hello world gogogo, zhangting"});
   });
 
 });

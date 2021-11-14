@@ -1,9 +1,9 @@
 {
   "name": "@midwayjs/faas-typings",
-  "version": "2.11.1",
+  "version": "3.0.0-alpha.42",
   "typings": "index.d.ts",
   "engines": {
-    "node": ">= 10"
+    "node": ">=12"
   },
   "keywords": [
     "midway",
@@ -14,7 +14,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git@github.com:midwayjs/midway-faas.git"
+    "url": "git@github.com:midwayjs/midway.git"
   },
   "license": "MIT",
   "gitHead": "1afeb34cbb6c0ad49ccdb9cfaebd254ae73afc6a"

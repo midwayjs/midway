@@ -6,7 +6,7 @@ import { Clients } from '../../../../../src';
 @Provider(MSProviderType.GRPC, { package: 'hero' })
 export class HeroService implements hero.HeroService {
 
-  @Inject('grpc:clients')
+  @Inject()
   grpcClients: Clients;
 
   greeterService: helloworld.GreeterClient;

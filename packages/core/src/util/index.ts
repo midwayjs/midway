@@ -26,7 +26,7 @@ export const safeRequire = (p, enabledCache = true) => {
       return JSON.parse(content);
     }
   } catch (err) {
-    debug('SafeRequire Warning', err.message);
+    debug(`SafeRequire Warning, message = ${err.message}`);
     return undefined;
   }
 };
@@ -142,3 +142,10 @@ export function delegateTargetProperties(
     });
   });
 }
+
+export const getCurrentDateString = (timestamp: number = Date.now()) => {
+  const d = new Date(timestamp);
+  return `${d.getFullYear()}-${(d.getMonth() + 1)
+    .toString()
+    .padStart(2, '0')}-${d.getDate().toString().padStart(2, '0')}`;
+};

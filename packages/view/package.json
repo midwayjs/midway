@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/view",
-  "version": "2.13.2",
+  "version": "3.0.0-alpha.42",
   "description": "Midway Component for egg-view",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -24,7 +24,7 @@
     "index.d.ts"
   ],
   "engines": {
-    "node": ">= 12.13.0"
+    "node": ">=12"
   },
   "license": "MIT",
   "dependencies": {
@@ -33,9 +33,9 @@
     "extend2": "^1.0.0"
   },
   "devDependencies": {
-    "@midwayjs/core": "^2.13.2",
-    "@midwayjs/decorator": "^2.13.2",
-    "@midwayjs/koa": "^2.13.2",
-    "@midwayjs/mock": "^2.13.2"
+    "@midwayjs/koa": "^3.0.0-alpha.42",
+    "@midwayjs/core": "^3.0.0-alpha.42",
+    "@midwayjs/decorator": "^3.0.0-alpha.42",
+    "@midwayjs/mock": "^3.0.0-alpha.42"
   }
 }

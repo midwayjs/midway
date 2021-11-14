@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import { EntityModel, InjectEntityModel } from '../../../../../src';
 
 @EntityModel()
-class User {
+export class User {
 
   @prop()
   public name?: string;
@@ -16,7 +16,7 @@ class User {
 @EntityModel({
   connectionName: 'db2'
 })
-class User2 {
+export class User2 {
 
   @prop()
   public name?: string;
@@ -27,7 +27,7 @@ class User2 {
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
-export class TestService{
+export class TestService {
 
   @InjectEntityModel(User)
   userModel: Model<User>;

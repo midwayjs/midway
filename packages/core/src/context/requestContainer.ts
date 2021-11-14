@@ -1,17 +1,18 @@
 import { MidwayContainer } from './container';
 import { REQUEST_CTX_KEY, IMidwayContainer } from '../interface';
-import { parsePrefix } from '../util/';
-import { getProviderId, PIPELINE_IDENTIFIER } from '@midwayjs/decorator';
+import { PIPELINE_IDENTIFIER } from '@midwayjs/decorator';
 
 export class MidwayRequestContainer extends MidwayContainer {
   private readonly applicationContext: IMidwayContainer;
 
   constructor(ctx, applicationContext: IMidwayContainer) {
-    super(null, applicationContext);
+    super(applicationContext);
     this.applicationContext = applicationContext;
-    this.configService = this.applicationContext.getConfigService();
-    this.environmentService = this.applicationContext.getEnvironmentService();
-    this.aspectService = this.applicationContext.getAspectService();
+
+    // update legacy relationship
+    this.registry.setIdentifierRelation(
+      this.applicationContext.registry.getIdentifierRelation()
+    );
 
     this.ctx = ctx;
     // register ctx
@@ -21,14 +22,6 @@ export class MidwayRequestContainer extends MidwayContainer {
       // register contextLogger
       this.registerObject('logger', ctx.logger);
     }
-
-    const resolverHandler = this.applicationContext.getResolverHandler();
-    this.beforeEachCreated(
-      resolverHandler.beforeEachCreated.bind(resolverHandler)
-    );
-    this.afterEachCreated(
-      resolverHandler.afterEachCreated.bind(resolverHandler)
-    );
   }
 
   init() {
@@ -37,12 +30,13 @@ export class MidwayRequestContainer extends MidwayContainer {
 
   get<T = any>(identifier: any, args?: any): T {
     if (typeof identifier !== 'string') {
-      identifier = getProviderId(identifier);
+      identifier = this.getIdentifier(identifier);
     }
+
     if (this.registry.hasObject(identifier)) {
-      const ins = this.registry.getObject(identifier);
-      return this.aspectService.wrapperAspectToInstance(ins);
+      return this.registry.getObject(identifier);
     }
+
     const definition =
       this.applicationContext.registry.getDefinition(identifier);
     if (definition) {
@@ -51,11 +45,10 @@ export class MidwayRequestContainer extends MidwayContainer {
         definition.id === PIPELINE_IDENTIFIER
       ) {
         // create object from applicationContext definition for requestScope
-        const ins = this.getManagedResolverFactory().create({
+        return this.getManagedResolverFactory().create({
           definition,
           args,
         });
-        return this.aspectService.wrapperAspectToInstance(ins);
       }
     }
 
@@ -66,14 +59,11 @@ export class MidwayRequestContainer extends MidwayContainer {
 
   async getAsync<T = any>(identifier: any, args?: any): Promise<T> {
     if (typeof identifier !== 'string') {
-      identifier = getProviderId(identifier);
+      identifier = this.getIdentifier(identifier);
     }
 
-    identifier = parsePrefix(identifier);
-
     if (this.registry.hasObject(identifier)) {
-      const ins = this.registry.getObject(identifier);
-      return this.aspectService.wrapperAspectToInstance(ins);
+      return this.registry.getObject(identifier);
     }
 
     const definition =
@@ -84,11 +74,10 @@ export class MidwayRequestContainer extends MidwayContainer {
         definition.id === PIPELINE_IDENTIFIER
       ) {
         // create object from applicationContext definition for requestScope
-        const ins = await this.getManagedResolverFactory().createAsync({
+        return this.getManagedResolverFactory().createAsync({
           definition,
           args,
         });
-        return this.aspectService.wrapperAspectToInstance(ins);
       }
     }
 
@@ -98,16 +87,7 @@ export class MidwayRequestContainer extends MidwayContainer {
   }
 
   async ready() {
-    this.readied = true;
     // ignore other things
-  }
-
-  getConfigService() {
-    return this.configService;
-  }
-
-  getEnvironmentService() {
-    return this.environmentService;
   }
 
   getContext() {

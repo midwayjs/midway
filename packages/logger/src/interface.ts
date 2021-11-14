@@ -47,6 +47,7 @@ export interface LoggerOptions {
   printFormat?: (info: any) => string;
   dir?: string;
   errorDir?: string;
+  aliasName?: string;
   fileLogName?: string;
   errorLogName?: string;
   defaultLabel?: string;

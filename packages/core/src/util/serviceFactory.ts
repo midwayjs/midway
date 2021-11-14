@@ -3,11 +3,11 @@ import * as assert from 'assert';
 /**
  * 多客户端工厂实现
  */
-export abstract class ServiceFactory<T, U = T> {
+export abstract class ServiceFactory<T> {
   protected clients: Map<string, T> = new Map();
   protected options = {};
 
-  protected async initClients(options): Promise<void> {
+  protected async initClients(options: any = {}): Promise<void> {
     this.options = options;
     assert(
       !(options.client && options.clients),
@@ -32,18 +32,20 @@ export abstract class ServiceFactory<T, U = T> {
     return this.clients.get(id) as unknown as U;
   }
 
-  public async createInstance(config, clientName?): Promise<T> {
+  public async createInstance(config, clientName?): Promise<T | void> {
     // options.default will be merge in to options.clients[id]
     config = Object.assign({}, this.options['default'], config);
     const client = await this.createClient(config, clientName);
-    if (clientName) {
-      this.clients.set(clientName, client);
+    if (client) {
+      if (clientName) {
+        this.clients.set(clientName, client);
+      }
+      return client;
     }
-    return client;
   }
 
   public abstract getName(): string;
-  protected abstract createClient(config, clientName): Promise<T>;
+  protected abstract createClient(config, clientName): Promise<T | void>;
   protected async destroyClient(client: T): Promise<void> {}
 
   public async stop(): Promise<void> {

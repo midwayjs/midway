@@ -1,1 +1,1 @@
-export { AutoConfiguration as Configuration } from './configuration';
+export { PrometheusSocketIOConfiguration as Configuration } from './configuration';

@@ -14,7 +14,10 @@ export type FaaSMiddleware = ((context: FaaSContext, next: () => Promise<any>) =
 export type IMidwayFaaSApplication = IMidwayApplication<FaaSContext, {
   getInitializeContext();
   use(middleware: FaaSMiddleware);
-  useMiddleware(mw: string[]);
+  /**
+   * @deprecated
+   * @param middlewareId
+   */
   generateMiddleware(middlewareId: any): Promise<FaaSMiddleware>;
 
   /**
@@ -33,7 +36,6 @@ export interface Context extends FaaSContext {}
 
 export interface IFaaSConfigurationOptions extends IConfigurationOptions {
   config?: object;
-  middleware?: string[];
   initializeContext?: object;
   applicationAdapter?: {
     getApplication(): IMidwayFaaSApplication;

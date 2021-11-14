@@ -11,6 +11,7 @@ const originData = execSync('npx lerna ls --json').toString();
 const data = JSON.parse(originData);
 
 const arr = ['#!/bin/bash\n', `# timestamp: ${Date.now()}\n\n`];
+const tnpmArr = [];
 const diff = ['\n# Changes:\n\n'];
 
 for (const item of data) {
@@ -30,15 +31,15 @@ for (const item of data) {
       arr.push(
         `npm dist-tag add ${item.name}@${localVersion} beta\n`
       );
-      arr.push(
+      tnpmArr.push(
         `tnpm dist-tag add ${item.name}@${remoteVersion} latest\n`
       );
-      arr.push(
-        `tnpm dist-tag add ${item.name}@${localVersion} latest\n`
+      tnpmArr.push(
+        `tnpm dist-tag add ${item.name}@${localVersion} beta\n`
       );
       diff.push(`#  - ${item.name}: ${remoteVersion} => ${currentVersion}\n`);
     }
   }
 }
 
-writeFileSync(join(__dirname, `./rollback/rollback-${currentVersion}.sh`), arr.join('') + diff.join(''));
+writeFileSync(join(__dirname, `./rollback/rollback-${currentVersion}.sh`), arr.join('') + tnpmArr.join('') + diff.join(''));

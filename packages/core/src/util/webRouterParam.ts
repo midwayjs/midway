@@ -4,7 +4,7 @@ export const extractKoaLikeValue = (key, data) => {
   if (ALL === data) {
     data = undefined;
   }
-  return async function (ctx, next) {
+  return function (ctx, next) {
     switch (key) {
       case RouteParamTypes.NEXT:
         return next;
@@ -44,7 +44,7 @@ export const extractExpressLikeValue = (key, data) => {
   if (ALL === data) {
     data = undefined;
   }
-  return async function (req, res, next) {
+  return function (req, res, next) {
     switch (key) {
       case RouteParamTypes.NEXT:
         return next;

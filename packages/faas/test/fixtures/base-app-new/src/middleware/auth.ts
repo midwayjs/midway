@@ -6,8 +6,8 @@ import { FaaSContext } from '../../../../../src';
 export class AuthMiddleware implements IMiddleware<FaaSContext> {
   resolve() {
     return async (ctx, next) => {
-      ctx.text = 'hello';
-      await next();
+      ctx.extraData = 'extra data';
+      return await next();
     };
   }
 }

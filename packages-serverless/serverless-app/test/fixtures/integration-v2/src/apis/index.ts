@@ -1,15 +1,15 @@
-import { provide, func, inject, config } from '@midwayjs/faas';
+import { Config, Inject, Provide, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/decorator';
 import * as assert from 'assert';
 
-@provide()
+@Provide()
 export class HelloHttpService {
-  @inject()
+  @Inject()
   ctx;
 
-  @config()
+  @Config()
   testConfig;
 
-  @func('http.handler', { event: 'http', path: '/hello'})
+  @ServerlessTrigger(ServerlessTriggerType.HTTP, { path: '/hello'})
   async handler() {
     assert(this.testConfig.name === 'test');
     return {

@@ -1,28 +1,38 @@
 import * as extend from 'extend2';
 import { basename, join } from 'path';
-import { IConfigService, IMidwayContainer } from '../interface';
+import { IConfigService } from '../interface';
 import { safelyGet } from '../util';
 import { readdirSync, statSync } from 'fs';
-import { isFunction } from '@midwayjs/decorator';
+import {
+  Inject,
+  isFunction,
+  Provide,
+  Scope,
+  ScopeEnum,
+} from '@midwayjs/decorator';
 import * as util from 'util';
+import { MidwayEnvironmentService } from './environmentService';
+import { MidwayInformationService } from './informationService';
 
-const debug = util.debuglog('midway:config');
+const debug = util.debuglog('midway:debug');
 
+@Provide()
+@Scope(ScopeEnum.Singleton)
 export class MidwayConfigService implements IConfigService {
-  private envDirMap: Map<string, Set<any>>;
-  private container: IMidwayContainer;
+  private envDirMap: Map<string, Set<any>> = new Map();
   private aliasMap = {
     prod: 'production',
     unittest: 'test',
   };
-  configuration;
-  isReady = false;
-  externalObject: Record<string, unknown>[] = [];
+  protected configuration;
+  protected isReady = false;
+  protected externalObject: Record<string, unknown>[] = [];
 
-  constructor(container) {
-    this.container = container;
-    this.envDirMap = new Map();
-  }
+  @Inject()
+  protected environmentService: MidwayEnvironmentService;
+
+  @Inject()
+  protected informationService: MidwayInformationService;
 
   add(configFilePaths: any[]) {
     for (const dir of configFilePaths) {
@@ -65,14 +75,14 @@ export class MidwayConfigService implements IConfigService {
     }
   }
 
-  getEnvSet(env) {
+  private getEnvSet(env) {
     if (!this.envDirMap.has(env)) {
       this.envDirMap.set(env, new Set());
     }
     return this.envDirMap.get(env);
   }
 
-  getConfigEnv(configFilePath) {
+  private getConfigEnv(configFilePath) {
     // parse env
     const configFileBaseName = basename(configFilePath);
     const splits = configFileBaseName.split('.');
@@ -88,26 +98,48 @@ export class MidwayConfigService implements IConfigService {
     // get default
     const defaultSet = this.getEnvSet('default');
     // get current set
-    const currentEnvSet = this.getEnvSet(this.container.getCurrentEnv());
+    const currentEnvSet = this.getEnvSet(
+      this.environmentService.getCurrentEnvironment()
+    );
     // merge set
     const target = {};
     for (const filename of [...defaultSet, ...currentEnvSet]) {
       let config = filename;
       if (typeof filename === 'string') {
-        config = await this.loadConfig(filename, target);
+        config = await this.loadConfig(filename);
+      }
+      if (isFunction(config)) {
+        // eslint-disable-next-line prefer-spread
+        config = config.apply(null, [
+          {
+            pkg: this.informationService.getPkg(),
+            name: this.informationService.getProjectName(),
+            baseDir: this.informationService.getBaseDir(),
+            appDir: this.informationService.getAppDir(),
+            HOME: this.informationService.getHome(),
+            root: this.informationService.getRoot(),
+            env: this.environmentService.getCurrentEnvironment(),
+          },
+          target,
+        ]);
       }
 
       if (!config) {
         continue;
       }
 
-      debug('Loaded config %s, %j', filename, config);
+      if (typeof filename === 'string') {
+        debug('[config]: Loaded config %s, %j', filename, config);
+      } else {
+        debug('[config]: Loaded config %j', config);
+      }
+
       extend(true, target, config);
     }
     if (this.externalObject.length) {
       for (const externalObject of this.externalObject) {
         if (externalObject) {
-          debug('Loaded external object %j', externalObject);
+          debug('[config]: Loaded external object %j', externalObject);
           extend(true, target, externalObject);
         }
       }
@@ -118,35 +150,17 @@ export class MidwayConfigService implements IConfigService {
 
   getConfiguration(configKey?: string) {
     if (configKey) {
-      debug('get configuration by key => %s.', configKey);
       return safelyGet(configKey, this.configuration);
     }
     return this.configuration;
   }
 
-  async loadConfig(configFilename, target?): Promise<Record<string, unknown>> {
-    debug('load config %s.', configFilename);
+  private async loadConfig(configFilename): Promise<Record<string, unknown>> {
     let exports = require(configFilename);
     if (exports && exports['default'] && Object.keys(exports).length === 1) {
       exports = exports['default'];
     }
-    let result = exports;
-    if (isFunction(exports)) {
-      const informationService = this.container.getInformationService();
-      // eslint-disable-next-line prefer-spread
-      result = exports.apply(null, [
-        {
-          pkg: informationService.getPkg(),
-          name: informationService.getProjectName(),
-          baseDir: informationService.getBaseDir(),
-          appDir: informationService.getAppDir(),
-          HOME: informationService.getHome(),
-          root: informationService.getRoot(),
-        },
-        target,
-      ]);
-    }
-    return result;
+    return exports;
   }
 
   clearAllConfig() {

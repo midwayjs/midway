@@ -6,8 +6,4 @@ module.exports = {
   get appDir() {
     return this.loader.appDir;
   },
-
-  get webFramework() {
-    return this.loader.framework;
-  },
 };

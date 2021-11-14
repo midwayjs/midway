@@ -6,19 +6,29 @@ import {
   safeRequire,
 } from '../util';
 import { dirname, join } from 'path';
+import { Provide, Inject, Init, Scope, ScopeEnum } from '@midwayjs/decorator';
 
+@Provide()
+@Scope(ScopeEnum.Singleton)
 export class MidwayInformationService implements IInformationService {
-  protected pkg: Record<string, unknown>;
-  private readonly appDir: string;
-  private readonly baseDir: string;
+  private pkg: Record<string, unknown>;
 
-  constructor(options: { baseDir?: string; appDir?: string }) {
-    this.baseDir = options.baseDir;
-    this.appDir = options.appDir;
-    if (!this.appDir) {
-      this.appDir = dirname(this.baseDir);
+  @Inject()
+  protected appDir: string;
+
+  @Inject()
+  protected baseDir: string;
+
+  @Init()
+  protected init() {
+    if (this.baseDir) {
+      if (!this.appDir) {
+        this.appDir = dirname(this.baseDir);
+      }
+      this.pkg = safeRequire(join(this.appDir, 'package.json')) || {};
+    } else {
+      this.pkg = {};
     }
-    this.pkg = safeRequire(join(this.appDir, 'package.json')) || {};
   }
 
   getAppDir(): string {

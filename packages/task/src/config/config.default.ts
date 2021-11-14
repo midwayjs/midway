@@ -1,3 +1,5 @@
+import { ScheduleContextLogger } from '../service/scheduleContextLogger';
+
 export const taskConfig = {
   redis: 'redis://127.0.0.1:6379',
   prefix: 'midway-task',
@@ -7,4 +9,17 @@ export const taskConfig = {
     },
   },
   concurrency: 1,
+  ContextLoggerClass: ScheduleContextLogger,
+  ContextLoggerApplyLogger: 'taskLog',
+};
+
+export const midwayLogger = {
+  clients: {
+    taskLog: {
+      fileLogName: 'midway-task.log',
+      printFormat: info => {
+        return `${info.timestamp} ${info.LEVEL} ${info.pid} ${info.label} ${info.message}`;
+      },
+    },
+  },
 };

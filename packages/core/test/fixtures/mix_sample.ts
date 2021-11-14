@@ -1,5 +1,4 @@
-import {Inject, Provide, Scope} from '@midwayjs/decorator';
-import {ScopeEnum} from '../../src';
+import {Inject, Provide, Scope, ScopeEnum, Init} from '@midwayjs/decorator';
 
 interface Engine {
   capacity;
@@ -32,11 +31,13 @@ export class DieselCar implements CarFactory {
   dieselEngine: Engine;
   backUpDieselEngine: Engine;
 
-  constructor(
-    @Inject('engineFactory') factory: (category: string) => Engine
-  ) {
-    this.dieselEngine = factory('diesel') as Engine;
-    this.backUpDieselEngine = factory('diesel') as Engine;
+  @Inject('engineFactory')
+  factory: (category: string) => Engine;
+
+  @Init()
+  init() {
+    this.dieselEngine = this.factory('diesel') as Engine;
+    this.backUpDieselEngine = this.factory('diesel') as Engine;
   }
 
   run() {

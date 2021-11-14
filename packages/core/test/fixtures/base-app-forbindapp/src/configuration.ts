@@ -1,4 +1,4 @@
-import { ILifeCycle, IMidwayCoreApplication } from '../../../../src';
+import { ILifeCycle, IMidwayApplication } from '../../../../src';
 import { Configuration, App } from '@midwayjs/decorator';
 
 @Configuration({
@@ -9,7 +9,7 @@ import { Configuration, App } from '@midwayjs/decorator';
 })
 class AutoConfiguraion implements ILifeCycle {
   @App()
-  test: IMidwayCoreApplication;
+  test: IMidwayApplication;
 
   async onReady() {
     if (this.test.getBaseDir() !== 'hello this is basedir') {

@@ -1,6 +1,0 @@
-{
-  "name": "worker-non-default-class",
-	"scripts": {
-		"build": "tsc"
-	}
-}

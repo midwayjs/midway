@@ -1,6 +1,6 @@
+import { ObjectDefinitionRegistry } from '../../src/context/definitionRegistry';
 import { ObjectDefinition } from '../../src/definitions/objectDefinition';
-import { ObjectDefinitionRegistry, BaseApplicationContext } from '../../src/context/applicationContext';
-import sinon = require('sinon');
+import { MidwayContainer } from '../../src';
 
 describe('/test/context/applicationContext.test.ts', () => {
   describe('ObjectDefinitionRegistry', () => {
@@ -30,8 +30,6 @@ describe('/test/context/applicationContext.test.ts', () => {
       expect(registry.getDefinition(definition.id)).toBeDefined()
       expect(registry.identifiers).toStrictEqual([definition.id, definition1.id]);
       expect(registry.count).toEqual(2);
-      expect(registry.getDefinitionByPath(definition1.path)).toBeDefined()
-      expect(registry.getDefinitionByPath('/test')).toBeNull();
 
       registry.clearAll();
       expect(registry.count).toEqual(0);
@@ -61,7 +59,6 @@ describe('/test/context/applicationContext.test.ts', () => {
   });
   describe('BaseApplicationContext', () => {
     it('context get/getAsync should be ok', async () => {
-      const callback = sinon.spy();
       const definition = new ObjectDefinition();
       definition.id = 'hello2';
       definition.name = 'helloworld1';
@@ -78,37 +75,19 @@ describe('/test/context/applicationContext.test.ts', () => {
         aa = 1231;
       };
 
-      const app = new BaseApplicationContext(__dirname);
-      app.registerDefinition(definition.id, definition);
-      app.registerDefinition(definition1.id, definition1);
+      const app = new MidwayContainer();
+      app.registry.registerDefinition(definition.id, definition);
+      app.registry.registerDefinition(definition1.id, definition1);
 
-      expect(app.isReady).toBeFalsy();
       await app.ready();
-      expect(app.isReady).toBeTruthy();
 
-      try {
-        app.get('hello2');
-      } catch (e) {
-        callback(e.message);
-      }
-      expect(callback.withArgs('hello2 must use getAsync').calledOnce).toBeTruthy();
-
-      const subApp = new BaseApplicationContext(__dirname, app);
-      try {
-        subApp.get('hello2');
-      } catch (e) {
-        callback(e.message + 1);
-      }
-      expect(callback.withArgs('hello2 must use getAsync1').calledOnce).toBeTruthy();
-
+      const subApp = new MidwayContainer(app);
       const d: any = await subApp.getAsync('hello2');
       expect(d).toBeDefined()
-      expect(d).toBeDefined();
       expect(d.aa).toEqual(123);
 
       const b: any = subApp.get('hello1');
       expect(b).toBeDefined()
-      expect(b).toBeDefined();
       expect(b.aa).toEqual(1231);
 
       await app.stop();

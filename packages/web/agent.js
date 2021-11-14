@@ -1,4 +1,6 @@
 'use strict';
+const { debuglog } = require('util');
+const debug = debuglog('midway:debug');
 
 class AgentBootHook {
   constructor(app) {
@@ -6,15 +8,20 @@ class AgentBootHook {
   }
 
   configDidLoad() {
-    if (this.app.config.midwayFeature['replaceEggLogger']) {
-      // if use midway logger will be use midway custom context logger
-      this.app.ContextLogger = this.app.webFramework.BaseContextLoggerClass;
-    }
+    debug('[egg:lifecycle]: agent configDidLoad');
   }
 
-  async didLoad() {}
+  async didLoad() {
+    debug('[egg:lifecycle]: agent didLoad');
+  }
 
-  async willReady() {}
+  async willReady() {
+    debug('[egg:lifecycle]: agent willReady');
+  }
+
+  async beforeClose() {
+    debug('[egg:lifecycle]: agent beforeClose');
+  }
 }
 
 module.exports = AgentBootHook;

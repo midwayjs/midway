@@ -8,8 +8,7 @@ import {
   delegateTargetMethod,
   delegateTargetProperties
 } from '../../src/util';
-import { createDirectoryGlobContainer, createModuleContainer, PathFileUtil } from '../../src';
-import { StaticConfigLoader } from '../../src/util/staticConfig';
+import { PathFileUtil } from '../../src';
 
 describe('/test/util/util.test.ts', () => {
 
@@ -29,20 +28,6 @@ describe('/test/util/util.test.ts', () => {
     assert.deepEqual(undefined, safelyGet(['a', 'b'], null), 'safelyGet obj is null not ok');
     assert.deepEqual(undefined, safelyGet(['a1', 'b1'], {a: {b: 2}}), 'safelyGet obj is null not ok');
     assert.deepEqual(undefined, safelyGet(['a', 'b2'], {a: 2}), 'safelyGet obj is number not ok');
-  });
-
-  it('should load static config from app', async () => {
-    let loader = new StaticConfigLoader(join(__dirname, '../fixtures/app-with-configuration-static-config-loader/base-app-decorator'), 'local');
-    let configText = await loader.getSerializeConfig();
-    expect(configText['helloworld']).toEqual(234);
-    expect(configText['ok']['text']).toEqual('ok3');
-    expect(configText['mock']['b']).toEqual('local');
-
-    loader = new StaticConfigLoader(join(__dirname, '../fixtures/app-with-configuration-static-config-loader/base-app-decorator'), 'production');
-    configText = await loader.getSerializeConfig();
-    expect(configText['helloworld']).toEqual(123);
-    expect(configText['ok']['text']).toEqual('ok');
-    expect(configText['mock']['b']).toEqual('test');
   });
 });
 
@@ -146,28 +131,4 @@ describe('/test/pathFileUtil.test.ts', () => {
     expect(c.getInfo).toBeUndefined();
   });
 
-});
-
-describe('/test/util/containerUtil', () => {
-  it('should test createModuleContainer', async () => {
-    class A {}
-    class B {}
-    const container = createModuleContainer({
-      modules: [
-        A,
-        B
-      ],
-      entry: {
-        Configuration: {}
-      }
-    });
-    expect(container).toBeDefined();
-  });
-
-  it('should test createDirectoryGlobContainer', async () => {
-    const container = createDirectoryGlobContainer({
-      baseDir: __dirname
-    });
-    expect(container).toBeDefined();
-  });
 });

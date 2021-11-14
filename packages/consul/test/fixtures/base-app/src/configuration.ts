@@ -1,5 +1,6 @@
 import { Configuration } from '@midwayjs/decorator';
 import * as consul from '../../../../src';
+import * as Koa from '@midwayjs/koa';
 import {
   ILifeCycle,
   IMidwayApplication,
@@ -9,6 +10,7 @@ import {join} from 'path';
 
 @Configuration({
   imports: [
+    Koa,
     consul
   ],
   importConfigs: [join(__dirname, 'config')]

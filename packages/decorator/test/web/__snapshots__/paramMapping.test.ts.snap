@@ -1,0 +1,73 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`/test/web/paramMapping.test.ts paramMapping decorator should be ok 1`] = `
+Object {
+  "doget": Array [
+    Object {
+      "key": "web:router_param",
+      "metadata": Object {
+        "propertyData": "common:all_value_key",
+        "type": 4,
+      },
+      "parameterIndex": 6,
+      "propertyName": "doget",
+    },
+    Object {
+      "key": "web:router_param",
+      "metadata": Object {
+        "propertyData": undefined,
+        "type": 6,
+      },
+      "parameterIndex": 5,
+      "propertyName": "doget",
+    },
+    Object {
+      "key": "web:router_param",
+      "metadata": Object {
+        "propertyData": Object {
+          "requireFile": true,
+        },
+        "type": 5,
+      },
+      "parameterIndex": 4,
+      "propertyName": "doget",
+    },
+    Object {
+      "key": "web:router_param",
+      "metadata": Object {
+        "propertyData": "tt",
+        "type": 3,
+      },
+      "parameterIndex": 3,
+      "propertyName": "doget",
+    },
+    Object {
+      "key": "web:router_param",
+      "metadata": Object {
+        "propertyData": "body",
+        "type": 1,
+      },
+      "parameterIndex": 2,
+      "propertyName": "doget",
+    },
+    Object {
+      "key": "web:router_param",
+      "metadata": Object {
+        "propertyData": "bb",
+        "type": 0,
+      },
+      "parameterIndex": 1,
+      "propertyName": "doget",
+    },
+    Object {
+      "key": "web:router_param",
+      "metadata": Object {
+        "propertyData": "aa",
+        "type": 2,
+      },
+      "parameterIndex": 0,
+      "propertyName": "doget",
+    },
+  ],
+}
+`;

@@ -1,7 +1,11 @@
 import { Configuration } from '@midwayjs/decorator';
+import { join } from 'path';
 
 @Configuration({
-  importConfigs: ['./config.default', './config/'],
+  importConfigs: [
+    join(__dirname, './config.default'),
+    join(__dirname,'./config/')
+  ],
 })
 class AutoConfiguraion {}
 

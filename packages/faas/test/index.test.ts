@@ -6,7 +6,7 @@ describe('test/index.test.ts', () => {
 
   it('invoke handler by default name', async () => {
     const starter = await creatStarter('base-app');
-    const data = await starter.handleInvokeWrapper('index.handler')(
+    const data = await starter.handleInvokeWrapper('helloService.handler')(
       {
         text: 'hello',
       },
@@ -18,7 +18,7 @@ describe('test/index.test.ts', () => {
   it('invoke different handler use @Handler', async () => {
     const starter = await creatStarter('base-app-handler');
     assert(
-      (await starter.handleInvokeWrapper('index.entry')(
+      (await starter.handleInvokeWrapper('indexService.handler')(
         {
           text: 'hello',
         },
@@ -26,7 +26,7 @@ describe('test/index.test.ts', () => {
       )) === 'ahello'
     );
     assert(
-      (await starter.handleInvokeWrapper('index.list')(
+      (await starter.handleInvokeWrapper('indexService.getList')(
         {
           text: 'hello',
         },
@@ -39,7 +39,7 @@ describe('test/index.test.ts', () => {
   it('use default handler and new handler', async () => {
     const starter = await creatStarter('base-app-handler2');
     assert(
-      (await starter.handleInvokeWrapper('index.handler')(
+      (await starter.handleInvokeWrapper('indexService.handler')(
         {
           text: 'hello',
         },
@@ -47,7 +47,7 @@ describe('test/index.test.ts', () => {
       )) === 'defaultahello'
     );
     assert(
-      (await starter.handleInvokeWrapper('index.list')(
+      (await starter.handleInvokeWrapper('indexService.getList')(
         {
           text: 'hello',
         },
@@ -63,7 +63,7 @@ describe('test/index.test.ts', () => {
 
   it('invoke handler by another name', async () => {
     const starter = await creatStarter('base-app-route');
-    const data = await starter.handleInvokeWrapper('deploy.handler9')(
+    const data = await starter.handleInvokeWrapper('helloService.handler')(
       {
         text: 'hello',
       },
@@ -88,13 +88,13 @@ describe('test/index.test.ts', () => {
 
   it('use new decorator and use function middleware', async () => {
     const starter = await creatStarter('base-app-new');
-    const data = await starter.handleInvokeWrapper('index.handler')(
+    const data = await starter.handleInvokeWrapper('helloService.handler')(
       {
         text: 'hello',
       },
       { text: 'ab' }
     );
-    assert(data === 'abhello');
+    expect(data).toEqual('abhelloextra data');
     await closeApp(starter);
   });
 
@@ -108,7 +108,7 @@ describe('test/index.test.ts', () => {
     });
 
     const data = await runtime.asyncEvent(
-      starter.handleInvokeWrapper('index.handler')
+      starter.handleInvokeWrapper('helloService.handler')
     )(
       {
         text: 'hello',
@@ -133,7 +133,7 @@ describe('test/index.test.ts', () => {
     });
 
     const data = await runtime.asyncEvent(
-      starter.handleInvokeWrapper('index.handler')
+      starter.handleInvokeWrapper('helloService.handler')
     )(
       {
         text: 'hello',
@@ -144,7 +144,7 @@ describe('test/index.test.ts', () => {
       { text: 'a' }
     );
 
-    assert(data.body === 'ahello555');
+    expect(data.body).toEqual('ahello555');
     await closeApp(starter);
   });
 
@@ -156,7 +156,7 @@ describe('test/index.test.ts', () => {
       applicationAdapter: runtime,
     });
     const data = await runtime.asyncEvent(
-      starter.handleInvokeWrapper('index.handler')
+      starter.handleInvokeWrapper('helloService.handler')
     )(
       {
         text: 'hello',
@@ -183,18 +183,17 @@ describe('test/index.test.ts', () => {
       model: '123',
     };
     const data = await runtime.asyncEvent(
-      starter.handleInvokeWrapper('index.handler')
+      starter.handleInvokeWrapper('helloService.handler')
     )(
       {
         text: 'hello',
         httpMethod: 'GET',
-        headers: {},
         requestContext: {},
       },
       { text: 'a' }
     );
 
-    assert(data.body === 'ahello123');
+    expect(data).toEqual('ahello123');
     await closeApp(starter);
   });
 
@@ -206,7 +205,7 @@ describe('test/index.test.ts', () => {
     });
 
     const data = await runtime.asyncEvent(
-      starter.handleInvokeWrapper('index.handler')
+      starter.handleInvokeWrapper('helloService.handler')
     )(
       {
         text: 'hello',
@@ -223,7 +222,7 @@ describe('test/index.test.ts', () => {
 
   it('invoke controller handler', async () => {
     const starter = await creatStarter('base-app-controller');
-    let data = await starter.handleInvokeWrapper('index.handler')(
+    let data = await starter.handleInvokeWrapper('helloService.handler')(
       {
         text: 'hello',
       },
@@ -237,7 +236,8 @@ describe('test/index.test.ts', () => {
       headers: {},
       set(key, value) {
         ctx.headers[key] = value;
-      }
+      },
+      get(key) {}
     }
 
     data = await starter.handleInvokeWrapper('apiController.homeSet')(

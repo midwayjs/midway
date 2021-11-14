@@ -6,7 +6,7 @@ import { HttpService } from './serviceManager';
   namespace: 'axios',
   importConfigs: [join(__dirname, './config.default')],
 })
-export class AutoConfiguration {
+export class AxiosConfiguration {
   async onReady(container) {
     await container.getAsync(HttpService);
   }

@@ -1,7 +1,6 @@
-import { Autowire, Provide } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/decorator';
 
 @Provide()
-@Autowire(false)
 export class GoogleAdapter {
   _hello = null;
 }

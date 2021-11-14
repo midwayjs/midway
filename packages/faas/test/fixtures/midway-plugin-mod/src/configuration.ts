@@ -4,4 +4,4 @@ import { Configuration } from '@midwayjs/decorator';
   imports: [],
   namespace: 'midway-plugin-mod',
 })
-export class AutoConfiguraion {}
+export class ModConfiguration {}

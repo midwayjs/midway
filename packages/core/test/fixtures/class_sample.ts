@@ -1,18 +1,18 @@
-import {App, Async, Config, Destroy, Init, Inject, Provide, Plugin} from '@midwayjs/decorator';
+import {App, Config, Destroy, Init, Inject, Provide, Plugin} from '@midwayjs/decorator';
 
 export interface Warrior {
   katana1;
   katana2;
 }
-
+@Provide()
 export class Katana {
 }
-
+@Provide()
 export class Ninja implements Warrior {
   katana1;
   katana2;
 }
-
+@Provide()
 export class Samurai implements Warrior {
   args?: any;
   constructor(args?: any) {
@@ -24,7 +24,7 @@ export class Samurai implements Warrior {
   @Inject('katana2')
   katana2: Katana;
 }
-
+@Provide()
 export class BaseService {
   foodNumber = 10;
 
@@ -34,7 +34,6 @@ export class BaseService {
   }
 }
 
-@Async()
 @Provide('serviceAsync')
 export class BaseServiceAsync {
 
@@ -50,7 +49,6 @@ export class BaseServiceAsync {
   }
 }
 
-@Async()
 @Provide('serviceGenerator')
 export class BaseServiceGenerator {
 
@@ -70,21 +68,22 @@ export class Parent {
   @Inject('katana1')
   katana1: Katana;
 }
-
+@Provide()
 export class Child extends Parent {
   @Inject('katana2')
   katana2: Katana;
 }
-
+@Provide()
 export class Grandson extends Child {
   @Inject('katana3')
   katana3: Katana;
 }
-
+@Provide()
 export class SubChild {
   @Inject()
   subAny: any;
 }
+@Provide()
 export class SubParent {
   @Inject()
   subChild: SubChild;

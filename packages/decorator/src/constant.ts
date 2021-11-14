@@ -2,15 +2,14 @@
 export const ALL = 'common:all_value_key';
 
 // common
-export const PRIORITY_KEY = 'common:priority';
 export const SCHEDULE_KEY = 'common:schedule';
 export const CONFIGURATION_KEY = 'common:configuration';
-export const RULES_KEY = 'common:rules';
+export const FRAMEWORK_KEY = 'common:framework';
 export const ASPECT_KEY = 'common:aspect';
+export const CATCH_KEY = 'common:catch';
 
 // faas
 export const FUNC_KEY = 'faas:func';
-export const HANDLER_KEY = 'faas:handler';
 export const SERVERLESS_FUNC_KEY = 'faas:serverless:function';
 
 // web
@@ -56,6 +55,7 @@ export const CONFIG_KEY = 'config';
 export const PLUGIN_KEY = 'plugin';
 export const LOGGER_KEY = 'logger';
 export const APPLICATION_KEY = '__midway_framework_app__';
+export const APPLICATION_CONTEXT_KEY = '__midway_application_context__';
 
 ////////////////////////////////////////// inject keys
 // constructor key
@@ -66,12 +66,18 @@ export const NAMED_TAG = 'named';
 
 // The name of the target at design time
 export const INJECT_TAG = 'inject';
-
-// used to store constructor arguments tags
-export const TAGGED = 'injection:tagged';
-
-// used to store class properties tags
-export const TAGGED_PROP = 'injection:tagged_props';
+// The name inject custom property decorator with resolver
+export const INJECT_CUSTOM_PROPERTY = 'inject_custom_property';
+// The name inject custom param decorator with resolver
+export const INJECT_CUSTOM_METHOD = 'inject_custom_method';
+// The name inject custom param decorator with resolver
+export const INJECT_CUSTOM_PARAM = 'inject_custom_param';
+//
+// // used to store constructor arguments tags
+// export const TAGGED = 'injection:tagged';
+//
+// // used to store class properties tags
+// export const TAGGED_PROP = 'injection:tagged_props';
 
 // used to store class to be injected
 export const TAGGED_CLS = 'injection:tagged_class';

@@ -1,34 +1,26 @@
 import {
+  CommonMiddlewareUnion,
   IConfigurationOptions,
-  ILifeCycle,
   IMidwayApplication,
   IMidwayBootstrapOptions,
   IMidwayContainer,
   IMidwayContext,
   IMidwayFramework,
   MidwayProcessTypeEnum,
+  CommonExceptionFilterUnion,
+  CommonMiddleware,
+  MiddlewareRespond,
 } from './interface';
-import {
-  APPLICATION_KEY,
-  CONFIGURATION_KEY,
-  getProviderId,
-  listModule,
-  listPreloadModule,
-  LOGGER_KEY,
-  MidwayFrameworkType,
-} from '@midwayjs/decorator';
-import {
-  ILogger,
-  IMidwayLogger,
-  LoggerOptions,
-  loggers,
-  MidwayContextLogger,
-} from '@midwayjs/logger';
-import { createMidwayLogger } from './logger';
+import { Inject, Destroy, Init, FrameworkType } from '@midwayjs/decorator';
+import { ILogger, LoggerOptions, MidwayContextLogger } from '@midwayjs/logger';
 import { MidwayRequestContainer } from './context/requestContainer';
-import { FunctionalConfiguration } from './functional/configuration';
+import { MidwayEnvironmentService } from './service/environmentService';
+import { MidwayConfigService } from './service/configService';
 import { MidwayInformationService } from './service/informationService';
-import { createDirectoryGlobContainer } from './util/containerUtil';
+import { MidwayLoggerService } from './service/loggerService';
+import { ContextMiddlewareManager } from './util/middlewareManager';
+import { MidwayMiddlewareService } from './service/middlewareService';
+import { ExceptionFilterManager } from './util/exceptionFilterManager';
 
 export abstract class BaseFramework<
   APP extends IMidwayApplication<CTX>,
@@ -36,178 +28,83 @@ export abstract class BaseFramework<
   OPT extends IConfigurationOptions
 > implements IMidwayFramework<APP, OPT>
 {
-  protected applicationContext: IMidwayContainer;
+  public app: APP;
+  public configurationOptions: OPT;
   protected logger: ILogger;
   protected appLogger: ILogger;
-  public configurationOptions: OPT;
-  public app: APP;
   protected defaultContext = {};
   protected BaseContextLoggerClass: any;
-  protected isMainFramework: boolean;
+  protected ContextLoggerApplyLogger: string;
+  protected middlewareManager = new ContextMiddlewareManager<CTX>();
+  protected exceptionFilterManager = new ExceptionFilterManager<CTX>();
+  protected composeMiddleware = null;
 
-  public configure(options?: OPT): BaseFramework<APP, CTX, OPT> {
-    this.configurationOptions = options || ({} as OPT);
+  @Inject()
+  loggerService: MidwayLoggerService;
+
+  @Inject()
+  environmentService: MidwayEnvironmentService;
+
+  @Inject()
+  configService: MidwayConfigService;
+
+  @Inject()
+  informationService: MidwayInformationService;
+
+  @Inject()
+  middlewareService: MidwayMiddlewareService<CTX>;
+
+  constructor(readonly applicationContext: IMidwayContainer) {}
+
+  @Init()
+  async init() {
+    this.configurationOptions = this.configure() ?? ({} as OPT);
     this.BaseContextLoggerClass =
-      this.configurationOptions.ContextLoggerClass ||
+      this.configurationOptions.ContextLoggerClass ??
       this.getDefaultContextLoggerClass();
-    this.logger = this.configurationOptions.logger;
-    this.appLogger = this.configurationOptions.appLogger;
+    this.ContextLoggerApplyLogger =
+      this.configurationOptions.ContextLoggerApplyLogger ?? 'appLogger';
+    this.logger = this.loggerService.getLogger('coreLogger');
+    this.appLogger = this.loggerService.getLogger('appLogger');
     return this;
   }
 
-  public async initialize(options: IMidwayBootstrapOptions): Promise<void> {
-    this.isMainFramework = options.isMainFramework;
-    this.configurationOptions = this.configurationOptions || ({} as OPT);
+  abstract configure(options?: OPT);
 
-    /**
-     * before create MidwayContainer instance，can change init parameters
-     */
+  isEnable(): boolean {
+    return true;
+  }
+
+  public async initialize(options?: IMidwayBootstrapOptions): Promise<void> {
     await this.beforeContainerInitialize(options);
-
-    /**
-     * initialize MidwayContainer instance
-     */
     await this.containerInitialize(options);
-
-    /**
-     * before container load directory and bind
-     */
     await this.afterContainerInitialize(options);
-
-    /**
-     * run container loadDirectoryLoad method to create object definition
-     */
     await this.containerDirectoryLoad(options);
-
-    /**
-     * after container load directory and bind
-     */
     await this.afterContainerDirectoryLoad(options);
 
     /**
      * Third party application initialization
      */
     await this.applicationInitialize(options);
-
-    /**
-     * start container ready
-     */
     await this.containerReady(options);
-
-    if (this.isMainFramework !== undefined) {
-      // 多框架场景，由 bootstrap 执行后续流程
-      return;
-    }
-    /**
-     * load extensions and lifeCycle
-     */
-    await this.loadExtension();
-
-    /**
-     * after container refresh
-     */
     await this.afterContainerReady(options);
   }
 
-  protected async initializeInfo(options: IMidwayBootstrapOptions) {
-    if (!this.applicationContext.getInformationService()) {
-      const informationService = new MidwayInformationService(options);
-      this.applicationContext.setInformationService(informationService);
-    }
-  }
-
-  protected async initializeLogger(options: IMidwayBootstrapOptions) {
-    if (!this.logger) {
-      this.logger = new Proxy(createMidwayLogger(this, 'coreLogger'), {});
-      (this.logger as IMidwayLogger).updateDefaultLabel(
-        this.getFrameworkName()
-      );
-    }
-    if (!this.appLogger) {
-      this.appLogger = createMidwayLogger(this, 'logger', {
-        fileLogName: 'midway-app.log',
-      }) as IMidwayLogger;
-    }
-  }
-
-  protected async containerInitialize(options: IMidwayBootstrapOptions) {
-    /**
-     * initialize container
-     */
-    if (options.applicationContext) {
-      this.applicationContext = options.applicationContext;
-    } else {
-      this.applicationContext = createDirectoryGlobContainer({
-        baseDir: options.baseDir,
-      });
-    }
-
-    this.applicationContext.registerObject('baseDir', options.baseDir);
-    this.applicationContext.registerObject('appDir', options.appDir);
-
-    /**
-     * initialize base information
-     */
-    await this.initializeInfo(options);
-
-    /**
-     * initialize framework logger
-     */
-    await this.initializeLogger(options);
-  }
-
-  protected async containerDirectoryLoad(options: IMidwayBootstrapOptions) {
-    if (options.applicationContext) {
-      // 如果有传入全局容器，就不需要再次扫描了
-      return;
-    }
-
-    // 废弃 deprecated
-    if (options.preloadModules && options.preloadModules.length) {
-      for (const preloadModule of options.preloadModules) {
-        this.applicationContext.bindClass(preloadModule);
-      }
-    }
-
-    // register app
-    this.applicationContext.registerDataHandler(
-      APPLICATION_KEY,
-      (key, meta) => {
-        if (options.globalApplicationHandler) {
-          return (
-            options.globalApplicationHandler(meta?.type) ??
-            this.getApplication()
-          );
-        } else {
-          return this.getApplication();
-        }
-      }
-    );
-
-    // register logger
-    this.getApplicationContext().registerDataHandler(LOGGER_KEY, key => {
-      return this.getLogger(key);
-    });
-  }
-
+  /**
+   * @deprecated
+   */
+  protected async containerInitialize(options: IMidwayBootstrapOptions) {}
+  /**
+   * @deprecated
+   */
+  protected async containerDirectoryLoad(options: IMidwayBootstrapOptions) {}
+  /**
+   * @deprecated
+   */
   protected async containerReady(options: IMidwayBootstrapOptions) {
     if (!this.app.getApplicationContext) {
       this.defineApplicationProperties();
     }
-    await this.applicationContext.ready();
-  }
-
-  public async loadExtension() {
-    // 切面支持
-    await this.applicationContext.getAspectService().loadAspect();
-    // 预加载模块支持
-    await this.loadPreloadModule();
-    // lifecycle 支持
-    await this.loadLifeCycles();
-  }
-
-  protected async containerStop() {
-    await this.applicationContext.stop();
   }
 
   public getApplicationContext(): IMidwayContainer {
@@ -215,15 +112,11 @@ export abstract class BaseFramework<
   }
 
   public getConfiguration(key?: string): any {
-    return this.getApplicationContext()
-      .getConfigService()
-      .getConfiguration(key);
+    return this.configService.getConfiguration(key);
   }
 
   public getCurrentEnvironment() {
-    return this.getApplicationContext()
-      .getEnvironmentService()
-      .getCurrentEnvironment();
+    return this.environmentService.getCurrentEnvironment();
   }
 
   public getApplication(): APP {
@@ -232,33 +125,30 @@ export abstract class BaseFramework<
 
   public abstract applicationInitialize(options: IMidwayBootstrapOptions);
 
-  public abstract getFrameworkType(): MidwayFrameworkType;
+  public abstract getFrameworkType(): FrameworkType;
 
   public abstract run(): Promise<void>;
 
-  protected setContextLoggerClass(BaseContextLogger: any) {
+  public setContextLoggerClass(BaseContextLogger: any) {
     this.BaseContextLoggerClass = BaseContextLogger;
   }
 
   protected createContextLogger(ctx: CTX, name?: string): ILogger {
-    const appLogger = this.getLogger(name);
+    const appLogger = this.getLogger(name ?? this.ContextLoggerApplyLogger);
     return new this.BaseContextLoggerClass(ctx, appLogger);
   }
 
+  @Destroy()
   public async stop(): Promise<void> {
     await this.beforeStop();
-    if (this.isMainFramework === true || this.isMainFramework === undefined) {
-      await this.stopLifeCycles();
-      await this.containerStop();
-    }
   }
 
   public getAppDir(): string {
-    return this.applicationContext.getInformationService().getAppDir();
+    return this.informationService.getAppDir();
   }
 
   public getBaseDir(): string {
-    return this.applicationContext.getInformationService().getBaseDir();
+    return this.informationService.getBaseDir();
   }
 
   protected defineApplicationProperties(
@@ -267,19 +157,15 @@ export abstract class BaseFramework<
   ) {
     const defaultApplicationProperties = {
       getBaseDir: () => {
-        return this.getApplicationContext()
-          .getInformationService()
-          .getBaseDir();
+        return this.getBaseDir();
       },
 
       getAppDir: () => {
-        return this.getApplicationContext().getInformationService().getAppDir();
+        return this.getAppDir();
       },
 
       getEnv: () => {
-        return this.getApplicationContext()
-          .getEnvironmentService()
-          .getCurrentEnvironment();
+        return this.getCurrentEnvironment();
       },
 
       getApplicationContext: () => {
@@ -287,9 +173,7 @@ export abstract class BaseFramework<
       },
 
       getConfig: (key?: string) => {
-        return this.getApplicationContext()
-          .getConfigService()
-          .getConfiguration(key);
+        return this.getConfiguration(key);
       },
 
       getFrameworkType: () => {
@@ -336,6 +220,12 @@ export abstract class BaseFramework<
             return this.createContextLogger(ctx, name);
           };
         }
+        ctx.setAttr = (key: string, value: any) => {
+          ctx.requestContext.setAttr(key, value);
+        };
+        ctx.getAttr = <T>(key: string): T => {
+          return ctx.requestContext.getAttr(key);
+        };
         return ctx;
       },
 
@@ -343,16 +233,25 @@ export abstract class BaseFramework<
         return this.setContextLoggerClass(BaseContextLogger);
       },
 
-      addConfigObject(obj: any) {
-        this.getApplicationContext().getConfigService().addObject(obj);
+      addConfigObject: (obj: any) => {
+        this.configService.addObject(obj);
       },
 
-      setAttr(key: string, value: any) {
+      setAttr: (key: string, value: any) => {
         this.getApplicationContext().setAttr(key, value);
       },
 
-      getAttr<T>(key: string): T {
+      getAttr: <T>(key: string): T => {
         return this.getApplicationContext().getAttr(key);
+      },
+      useMiddleware: (middleware: CommonMiddlewareUnion<CTX>) => {
+        this.middlewareManager.insertLast(middleware);
+      },
+      getMiddleware: (): ContextMiddlewareManager<CTX> => {
+        return this.middlewareManager;
+      },
+      useFilter: (Filter: CommonExceptionFilterUnion<CTX>) => {
+        this.exceptionFilterManager.useFilter(Filter);
       },
     };
     for (const method of whiteList) {
@@ -366,127 +265,65 @@ export abstract class BaseFramework<
   }
 
   protected async beforeStop(): Promise<void> {}
-
+  /**
+   * @deprecated
+   */
   protected async beforeContainerInitialize(
     options: Partial<IMidwayBootstrapOptions>
   ): Promise<void> {}
-
+  /**
+   * @deprecated
+   */
   protected async afterContainerInitialize(
     options: Partial<IMidwayBootstrapOptions>
   ): Promise<void> {}
-
+  /**
+   * @deprecated
+   */
   protected async afterContainerDirectoryLoad(
     options: Partial<IMidwayBootstrapOptions>
   ): Promise<void> {}
-
+  /**
+   * @deprecated
+   */
   protected async afterContainerReady(
     options: Partial<IMidwayBootstrapOptions>
   ): Promise<void> {}
 
-  public async loadLifeCycles(isForce = false) {
-    // agent 不加载生命周期
-    if (this.app.getProcessType() === MidwayProcessTypeEnum.AGENT) return;
-    const cycles = listModule(CONFIGURATION_KEY);
-
-    const lifecycleInstanceList = [];
-    for (const cycle of cycles) {
-      if (cycle.target instanceof FunctionalConfiguration) {
-        // 函数式写法
-        cycle.instance = cycle.target;
-      } else {
-        // 普通类写法
-        const providerId = getProviderId(cycle.target);
-        if (this.getApplicationContext().registry.hasDefinition(providerId)) {
-          cycle.instance =
-            await this.getApplicationContext().getAsync<ILifeCycle>(providerId);
+  public async getMiddleware<R, N>(
+    lastMiddleware?: CommonMiddleware<CTX, R, N>
+  ): Promise<MiddlewareRespond<CTX, R, N>> {
+    if (!this.composeMiddleware) {
+      this.middlewareManager.insertFirst(async (ctx, next) => {
+        let returnResult = undefined;
+        try {
+          const result = await next();
+          returnResult = {
+            result,
+            error: undefined,
+          };
+        } catch (err) {
+          returnResult = await this.exceptionFilterManager.run(err, ctx);
         }
-      }
-
-      cycle.instance && lifecycleInstanceList.push(cycle);
+        return returnResult;
+      });
+      this.composeMiddleware = await this.middlewareService.compose(
+        this.middlewareManager
+      );
+      await this.exceptionFilterManager.init(this.applicationContext);
     }
-
-    // exec onConfigLoad()
-    for (const cycle of lifecycleInstanceList) {
-      if (typeof cycle.instance.onConfigLoad === 'function') {
-        const configData = await cycle.instance.onConfigLoad(
-          this.getApplicationContext()
-        );
-        if (configData) {
-          this.getApplicationContext().getConfigService().addObject(configData);
-        }
-      }
-    }
-
-    for (const cycle of lifecycleInstanceList) {
-      if (typeof cycle.instance.onReady === 'function') {
-        /**
-         * 让组件能正确获取到 bind 之后 registerObject 的对象有三个方法
-         * 1、在 load 之后修改 bind，不太可行
-         * 2、每次 getAsync 的时候，去掉 namespace，同时还要查找当前全局的变量，性能差
-         * 3、一般只会在 onReady 的地方执行 registerObject（否则没有全局的意义），这个取巧的办法就是 onReady 传入一个代理，其中绑定当前的 namespace
-         */
-        await cycle.instance.onReady(
-          new Proxy(this.getApplicationContext(), {
-            get: function (target, prop, receiver) {
-              if (prop === 'getCurrentNamespace' && cycle.namespace) {
-                return () => {
-                  return cycle.namespace;
-                };
-              }
-              return Reflect.get(target, prop, receiver);
-            },
-          }),
-          this.app
-        );
-      }
-    }
-  }
-
-  protected async stopLifeCycles() {
-    const cycles = listModule(CONFIGURATION_KEY);
-    for (const cycle of cycles) {
-      let inst;
-      if (cycle.target instanceof FunctionalConfiguration) {
-        // 函数式写法
-        inst = cycle.target;
-      } else {
-        const providerId = getProviderId(cycle.target);
-        inst = await this.applicationContext.getAsync<ILifeCycle>(providerId);
-      }
-
-      if (inst.onStop && typeof inst.onStop === 'function') {
-        await inst.onStop(
-          new Proxy(this.getApplicationContext(), {
-            get: function (target, prop, receiver) {
-              if (prop === 'getCurrentNamespace' && cycle.namespace) {
-                return () => {
-                  return cycle.namespace;
-                };
-              }
-              return Reflect.get(target, prop, receiver);
-            },
-          }),
-          this.app
-        );
-      }
-    }
-  }
-
-  /**
-   * load preload module for container
-   * @private
-   */
-  protected async loadPreloadModule() {
-    // some common decorator implementation
-    const modules = listPreloadModule();
-    for (const module of modules) {
-      // preload init context
-      await this.applicationContext.getAsync(module);
+    if (lastMiddleware) {
+      return await this.middlewareService.compose([
+        this.composeMiddleware,
+        lastMiddleware,
+      ]);
+    } else {
+      return this.composeMiddleware;
     }
   }
 
   public getLogger(name?: string) {
-    return loggers.getLogger(name) ?? this.appLogger;
+    return this.loggerService.getLogger(name) ?? this.appLogger;
   }
 
   public getCoreLogger() {
@@ -494,18 +331,26 @@ export abstract class BaseFramework<
   }
 
   public createLogger(name: string, option: LoggerOptions = {}) {
-    return createMidwayLogger(this, name, option);
+    return this.loggerService.createLogger(name, option);
   }
 
   public getProjectName() {
-    return this.applicationContext.getInformationService().getProjectName();
+    return this.informationService.getProjectName();
   }
 
   public getFrameworkName() {
-    return this.getFrameworkType().toString();
+    return this.getFrameworkType().name;
   }
 
   public getDefaultContextLoggerClass(): any {
     return MidwayContextLogger;
+  }
+
+  public useMiddleware(Middleware: CommonMiddlewareUnion<CTX>) {
+    this.middlewareManager.insertLast(Middleware);
+  }
+
+  public useFilter(Filter: CommonExceptionFilterUnion<CTX>) {
+    this.exceptionFilterManager.useFilter(Filter);
   }
 }

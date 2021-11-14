@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/koa-layer",
-  "version": "3.0.0-alpha.2",
+  "version": "3.0.0-alpha.42",
   "main": "index.js",
   "scripts": {
     "test": "node --require=ts-node/register ../../node_modules/.bin/jest",
@@ -10,26 +10,26 @@
     "request": "^2.88.2"
   },
   "devDependencies": {
-    "@midwayjs/runtime-engine": "^3.0.0-alpha.2",
-    "@midwayjs/runtime-mock": "^3.0.0-alpha.2",
-    "@midwayjs/serverless-fc-starter": "^3.0.0-alpha.2",
-    "@midwayjs/serverless-fc-trigger": "^3.0.0-alpha.2",
-    "@midwayjs/serverless-scf-starter": "^3.0.0-alpha.2",
-    "@midwayjs/serverless-scf-trigger": "^3.0.0-alpha.2",
+    "@midwayjs/runtime-engine": "^3.0.0-alpha.42",
+    "@midwayjs/runtime-mock": "^3.0.0-alpha.42",
+    "@midwayjs/serverless-fc-starter": "^3.0.0-alpha.42",
+    "@midwayjs/serverless-fc-trigger": "^3.0.0-alpha.42",
+    "@midwayjs/serverless-scf-starter": "^3.0.0-alpha.42",
+    "@midwayjs/serverless-scf-trigger": "^3.0.0-alpha.42",
     "koa": "^2.13.0",
     "koa-bodyparser": "^4.3.0",
     "koa-router": "^9.4.0",
     "supertest": "^6.0.0"
   },
   "engines": {
-    "node": ">= 10"
+    "node": ">=12"
   },
   "files": [
     "index.js"
   ],
   "repository": {
     "type": "git",
-    "url": "git@github.com:midwayjs/midway-faas.git"
+    "url": "git@github.com:midwayjs/midway.git"
   },
   "license": "MIT",
   "gitHead": "1afeb34cbb6c0ad49ccdb9cfaebd254ae73afc6a"

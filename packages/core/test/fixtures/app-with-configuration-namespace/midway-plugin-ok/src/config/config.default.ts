@@ -1,5 +1,0 @@
-export = {
-  ok: {
-    text: 'ok'
-  }
-};

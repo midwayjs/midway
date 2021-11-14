@@ -1,24 +1,23 @@
 {
   "name": "@midwayjs/faas",
-  "version": "3.0.0-alpha.2",
+  "version": "3.0.0-alpha.42",
   "main": "dist/index",
   "typings": "index.d.ts",
   "dependencies": {
-    "@midwayjs/core": "^3.0.0-alpha.2",
-    "@midwayjs/decorator": "^3.0.0-alpha.2",
-    "@midwayjs/faas-typings": "^2.11.1",
-    "@midwayjs/logger": "^2.13.0",
-    "@midwayjs/simple-lock": "^1.1.4",
-    "koa-compose": "^4.1.0"
+    "@midwayjs/core": "^3.0.0-alpha.42",
+    "@midwayjs/faas-typings": "^3.0.0-alpha.42",
+    "@midwayjs/logger": "^3.0.0-alpha.42",
+    "@midwayjs/simple-lock": "^1.1.4"
   },
   "devDependencies": {
-    "@midwayjs/mock": "^3.0.0-alpha.2",
-    "@midwayjs/serverless-fc-starter": "^3.0.0-alpha.2",
-    "@midwayjs/serverless-scf-starter": "^3.0.0-alpha.2",
+    "@midwayjs/decorator": "^3.0.0-alpha.42",
+    "@midwayjs/mock": "^3.0.0-alpha.42",
+    "@midwayjs/serverless-fc-starter": "^3.0.0-alpha.42",
+    "@midwayjs/serverless-scf-starter": "^3.0.0-alpha.42",
     "mm": "3"
   },
   "engines": {
-    "node": ">= 10"
+    "node": ">=12"
   },
   "files": [
     "dist/**/*.js",

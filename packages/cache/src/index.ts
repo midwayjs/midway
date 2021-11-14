@@ -1,2 +1,2 @@
-export { AutoConfiguration as Configuration } from './configuration';
+export { CacheConfiguration as Configuration } from './configuration';
 export * from './service/cache';

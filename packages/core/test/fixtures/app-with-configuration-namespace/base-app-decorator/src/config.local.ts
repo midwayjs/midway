@@ -1,3 +1,0 @@
-export = {
-  helloworld: 234
-};

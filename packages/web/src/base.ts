@@ -1,18 +1,28 @@
-import { findLernaRoot, parseNormalDir } from './utils';
+import {
+  findLernaRoot,
+  initializeAgentApplicationContext,
+  parseNormalDir,
+} from './utils';
 import * as extend from 'extend2';
 import { EggAppInfo } from 'egg';
-import { MidwayWebFramework } from './framework/web';
-import { safelyGet, safeRequire } from '@midwayjs/core';
+import {
+  getCurrentApplicationContext,
+  initializeGlobalApplicationContext,
+  MidwayConfigService,
+  safelyGet,
+  safeRequire,
+} from '@midwayjs/core';
 import { join } from 'path';
 import { existsSync, readFileSync } from 'fs';
 import { createLoggers } from './logger';
 import { EggRouter as Router } from '@eggjs/router';
-import { WebBootstrapStarter } from './starter';
-
+import { debuglog } from 'util';
 const ROUTER = Symbol('EggCore#router');
 const EGG_LOADER = Symbol.for('egg#loader');
 const EGG_PATH = Symbol.for('egg#eggPath');
 const LOGGERS = Symbol('EggApplication#loggers');
+
+const debug = debuglog('midway:debug');
 
 let customFramework = null;
 function getFramework() {
@@ -40,8 +50,14 @@ export const createAppWorkerLoader = () => {
     framework;
     bootstrap;
     useEggSocketIO = false;
+    applicationContext;
+    // 是否是单进程模式
+    singleProcessMode;
 
     getEggPaths() {
+      if (getCurrentApplicationContext()) {
+        this.singleProcessMode = true;
+      }
       if (!this.appDir) {
         // 这里的逻辑是为了兼容老 cluster 模式
         if (this.app.options.typescript || this.app.options.isTsMode) {
@@ -121,36 +137,39 @@ export const createAppWorkerLoader = () => {
     }
 
     load() {
-      this.framework = new MidwayWebFramework().configure({
-        processType: 'application',
-        app: this.app,
-        globalConfig: this.app.config,
-      });
-      this.bootstrap = new WebBootstrapStarter({
-        isWorker: true,
-        applicationContext: this.app.options.applicationContext,
-      });
-      this.bootstrap
-        .configure({
-          appDir: this.app.appDir,
-        })
-        .load(this.framework);
-
-      if (this.app.options['midwaySingleton'] !== true) {
-        // 这个代码只会在 egg-cluster 模式下执行
-        this.app.beforeStart(async () => {
-          await this.bootstrap.init();
-          super.load();
+      if (!this.singleProcessMode) {
+        // 多进程模式，从 egg-scripts 启动的
+        process.env['EGG_CLUSTER_MODE'] = 'true';
+        debug('[egg]: run with egg-scripts in cluster mode');
+        // 如果不走 bootstrap，就得在这里初始化 applicationContext
+        initializeGlobalApplicationContext({
+          ...this.globalOptions,
+          appDir: this.appDir,
+          baseDir: this.baseDir,
+          ignore: ['**/app/extend/**'],
+        }).then(r => {
+          debug('[egg]: global context: init complete');
         });
       }
     }
 
-    /**
-     * 这个代码只会在单进程 bootstrap.js 模式下执行
-     */
-    async loadOrigin() {
-      await this.bootstrap.init();
+    loadOrigin() {
+      debug('[egg]: application: run load()');
       super.load();
+    }
+
+    loadConfig() {
+      super.loadConfig();
+      if (this.singleProcessMode) {
+        const configService =
+          getCurrentApplicationContext().get(MidwayConfigService);
+        configService.addObject(this.config);
+        Object.defineProperty(this, 'config', {
+          get() {
+            return configService.getConfiguration();
+          },
+        });
+      }
     }
 
     loadMiddleware() {
@@ -174,8 +193,14 @@ export const createAgentWorkerLoader = () => {
   const AppWorkerLoader =
     require(getFramework())?.AgentWorkerLoader ||
     require('egg').AgentWorkerLoader;
-  class EggAppWorkerLoader extends (AppWorkerLoader as any) {
+  class EggAgentWorkerLoader extends (AppWorkerLoader as any) {
+    // 是否是单进程模式
+    singleProcessMode;
+
     getEggPaths() {
+      if (getCurrentApplicationContext()) {
+        this.singleProcessMode = true;
+      }
       if (!this.appDir) {
         if (this.app.options.typescript || this.app.options.isTsMode) {
           process.env.EGG_TYPESCRIPT = 'true';
@@ -254,27 +279,35 @@ export const createAgentWorkerLoader = () => {
     }
 
     load() {
-      this.framework = new MidwayWebFramework().configure({
-        processType: 'agent',
-        app: this.app,
-        globalConfig: this.app.config,
-      });
-      this.bootstrap = new WebBootstrapStarter({
-        isWorker: false,
-      });
-      this.bootstrap
-        .configure({
-          appDir: this.app.appDir,
-        })
-        .load(this.framework);
       this.app.beforeStart(async () => {
-        await this.bootstrap.init();
+        debug('[egg]: start "initializeAgentApplicationContext"');
+        await initializeAgentApplicationContext(this.app, {
+          ...this.globalOptions,
+          appDir: this.appDir,
+          baseDir: this.baseDir,
+          ignore: ['**/app/extend/**'],
+        });
         super.load();
+        debug('[egg]: agent load run complete');
       });
+    }
+
+    loadConfig() {
+      super.loadConfig();
+      if (this.singleProcessMode) {
+        const configService =
+          getCurrentApplicationContext().get(MidwayConfigService);
+        configService.addObject(this.config);
+        Object.defineProperty(this, 'config', {
+          get() {
+            return configService.getConfiguration();
+          },
+        });
+      }
     }
   }
 
-  return EggAppWorkerLoader as any;
+  return EggAgentWorkerLoader as any;
 };
 
 export const createEggApplication = () => {
@@ -296,7 +329,7 @@ export const createEggApplication = () => {
 
     get loggers() {
       if (!(this as any)[LOGGERS]) {
-        (this as any)[LOGGERS] = createLoggers(this as any);
+        (this as any)[LOGGERS] = createLoggers(this as any, 'app');
       }
       return (this as any)[LOGGERS];
     }
@@ -310,6 +343,12 @@ export const createEggApplication = () => {
         this
       ));
       return router;
+    }
+
+    dumpConfig() {
+      if (this.config?.egg?.dumpConfig !== false) {
+        super.dumpConfig();
+      }
     }
   }
 
@@ -334,9 +373,15 @@ export const createEggAgent = () => {
 
     get loggers() {
       if (!(this as any)[LOGGERS]) {
-        (this as any)[LOGGERS] = createLoggers(this as any);
+        (this as any)[LOGGERS] = createLoggers(this as any, 'agent');
       }
       return (this as any)[LOGGERS];
+    }
+
+    dumpConfig() {
+      if (this.config?.egg?.dumpConfig !== false) {
+        super.dumpConfig();
+      }
     }
   }
 

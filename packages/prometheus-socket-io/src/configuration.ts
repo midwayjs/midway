@@ -1,4 +1,9 @@
-import { App, Configuration, MidwayFrameworkType } from '@midwayjs/decorator';
+import {
+  App,
+  Configuration,
+  Inject,
+  MidwayFrameworkType,
+} from '@midwayjs/decorator';
 import { Application as SocketApplication } from '@midwayjs/socketio';
 import { DataService } from '@midwayjs/prometheus';
 import * as prometheus from '@midwayjs/prometheus';
@@ -7,15 +12,14 @@ import * as prometheus from '@midwayjs/prometheus';
   imports: [prometheus],
   namespace: 'prometheus-socket-io',
 })
-export class AutoConfiguration {
+export class PrometheusSocketIOConfiguration {
   @App(MidwayFrameworkType.WS_IO)
   socketApp: SocketApplication;
 
-  async onReady(contanier) {
-    const dataService: DataService = await this.socketApp
-      .getApplicationContext()
-      .getAsync(DataService);
+  @Inject()
+  dataService: DataService;
 
+  async onReady() {
     const dataToBytes = (data: any) => {
       try {
         return Buffer.byteLength(
@@ -26,48 +30,48 @@ export class AutoConfiguration {
         return 0;
       }
     };
-    dataService.define('connectedSockets', 'Gauge', {
+    this.dataService.define('connectedSockets', 'Gauge', {
       name: 'socket_io_connected',
       help: 'Number of currently connected sockets',
     });
 
-    dataService.define('connectTotal', 'Counter', {
+    this.dataService.define('connectTotal', 'Counter', {
       name: 'socket_io_connect_total',
       help: 'Total count of socket.io connection requests',
       labelNames: ['namespace'],
     });
 
-    dataService.define('disconnectTotal', 'Counter', {
+    this.dataService.define('disconnectTotal', 'Counter', {
       name: 'socket_io_disconnect_total',
       help: 'Total count of socket.io disconnections',
       labelNames: ['namespace'],
     });
 
-    dataService.define('bytesTransmitted', 'Counter', {
+    this.dataService.define('bytesTransmitted', 'Counter', {
       name: 'socket_io_transmit_bytes',
       help: 'Total socket.io bytes transmitted',
       labelNames: ['event', 'namespace'],
     });
 
-    dataService.define('eventsSentTotal', 'Counter', {
+    this.dataService.define('eventsSentTotal', 'Counter', {
       name: 'socket_io_events_sent_total',
       help: 'Total count of socket.io sent events',
       labelNames: ['event', 'namespace'],
     });
 
-    dataService.define('errorsTotal', 'Counter', {
+    this.dataService.define('errorsTotal', 'Counter', {
       name: 'socket_io_errors_total',
       help: 'Total socket.io errors',
       labelNames: ['namespace'],
     });
 
-    dataService.define('bytesReceived', 'Counter', {
+    this.dataService.define('bytesReceived', 'Counter', {
       name: 'socket_io_receive_bytes',
       help: 'Total socket.io bytes received',
       labelNames: ['event', 'namespace'],
     });
 
-    dataService.define('eventsReceivedTotal', 'Counter', {
+    this.dataService.define('eventsReceivedTotal', 'Counter', {
       name: 'socket_io_events_received_total',
       help: 'Total count of socket.io received events',
       labelNames: ['event', 'namespace'],
@@ -86,18 +90,18 @@ export class AutoConfiguration {
 
     const disconnect = socket => {
       if ((socket as any).midwayConnect) {
-        dataService.setDiff('connectedSockets', -1);
+        this.dataService.setDiff('connectedSockets', -1);
         (socket as any).midwayConnect = false;
       }
     };
 
     this.socketApp.on('connection', async socket => {
       (socket as any).midwayConnect = true;
-      dataService.inc('connectTotal', labels);
-      dataService.setDiff('connectedSockets', 1);
+      this.dataService.inc('connectTotal', labels);
+      this.dataService.setDiff('connectedSockets', 1);
 
       socket.on('disconnect', () => {
-        dataService.inc('disconnectTotal', labels);
+        this.dataService.inc('disconnectTotal', labels);
         disconnect(socket);
       });
 
@@ -105,12 +109,12 @@ export class AutoConfiguration {
       socket.emit = (event: string, ...data: any[]) => {
         if (!blacklisted_events.has(event)) {
           const labelsWithEvent = { event: event, ...labels };
-          dataService.inc(
+          this.dataService.inc(
             'bytesTransmitted',
             labelsWithEvent,
             dataToBytes(data)
           );
-          dataService.inc('eventsSentTotal', labelsWithEvent);
+          this.dataService.inc('eventsSentTotal', labelsWithEvent);
         }
 
         return org_emit.apply(socket, [event, ...data]);
@@ -122,15 +126,15 @@ export class AutoConfiguration {
           const [event, data] = packet.data;
           if (event === 'error') {
             disconnect(socket);
-            dataService.inc('errorsTotal', labels);
+            this.dataService.inc('errorsTotal', labels);
           } else if (!blacklisted_events.has(event)) {
             const labelsWithEvent = { event: event, ...labels };
-            dataService.inc(
+            this.dataService.inc(
               'bytesReceived',
               labelsWithEvent,
               dataToBytes(data)
             );
-            dataService.inc('eventsReceivedTotal', labelsWithEvent);
+            this.dataService.inc('eventsReceivedTotal', labelsWithEvent);
           }
         }
 

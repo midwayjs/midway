@@ -1,6 +1,6 @@
 import {
   Schedule,
-  getObjectDefProps,
+  getObjectDefinition,
   ScopeEnum,
   listModule,
   SCHEDULE_KEY,
@@ -15,7 +15,7 @@ class Test {}
 
 describe('/test/annotation/schedule.test.ts', () => {
   it('schedule decorator should be ok', () => {
-    const def = getObjectDefProps(Test);
+    const def = getObjectDefinition(Test);
     expect(def).toStrictEqual({
       scope: ScopeEnum.Request,
     });

@@ -1,25 +1,21 @@
-import { expect } from 'chai';
 import { ObjectDefinition } from '../../src/definitions/objectDefinition';
-import { ScopeEnum } from '../../src';
+import { ScopeEnum } from '@midwayjs/decorator';
 
 describe('/test/definitions/objectDefinition.test.ts', () => {
   it('definition should be ok', () => {
     const definition = new ObjectDefinition();
-    expect(definition.isAsync()).false;
+    expect(definition.isAsync()).toBeFalsy();
     definition.asynchronous = true;
-    expect(definition.isAsync()).true;
-    expect(definition.isAutowire()).true;
-    definition.autowire = true;
-    expect(definition.isAutowire()).true;
+    expect(definition.isAsync()).toBeTruthy();
 
     definition.scope = ScopeEnum.Prototype;
-    expect(definition.isRequestScope()).false;
-    expect(definition.isSingletonScope()).false;
+    expect(definition.isRequestScope()).toBeFalsy();
+    expect(definition.isSingletonScope()).toBeFalsy();
 
     definition.setAttr('hello', 1);
-    expect(definition.getAttr('hello')).eq(1);
-    expect(definition.hasAttr('hello')).true;
+    expect(definition.getAttr('hello')).toEqual(1);
+    expect(definition.hasAttr('hello')).toBeTruthy();
 
-    expect(definition.hasConstructorArgs()).false;
+    expect(definition.hasConstructorArgs()).toBeFalsy();
   });
 });

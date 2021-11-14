@@ -1,6 +1,6 @@
-import { providerWrapper, IApplicationContext } from '@midwayjs/core';
+import { providerWrapper, IMidwayContainer } from '@midwayjs/core';
 
-export function Test(context: IApplicationContext, args?: any) {
+export function Test(context: IMidwayContainer, args?: any) {
   // ignore
   return AppModel;
 }

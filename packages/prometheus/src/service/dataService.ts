@@ -67,7 +67,7 @@ export class DataService {
       .observe(time);
   }
 
-  async define(name, type, options) {
+  define(name, type, options) {
     options.labelNames = options.labelNames
       ? [...options.labelNames, ...Object.keys(this.prometheusConfig.labels)]
       : Object.keys(this.prometheusConfig.labels);

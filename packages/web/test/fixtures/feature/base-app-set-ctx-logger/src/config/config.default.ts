@@ -1,5 +1,7 @@
 'use strict';
 
+import { MidwayCustomContextLogger } from '../logger';
+
 export const keys = 'key';
 
 export const hello = {
@@ -10,4 +12,8 @@ export const hello = {
 
 export const midwayFeature = {
   replaceEggLogger: true,
+}
+
+export const egg = {
+  BaseContextLoggerClass: MidwayCustomContextLogger
 }

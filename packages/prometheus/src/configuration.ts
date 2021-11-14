@@ -14,11 +14,12 @@ import * as fs from 'fs';
 import * as http from 'http';
 import * as qs from 'querystring';
 import { DataService } from './service/dataService';
+
 @Configuration({
   namespace: 'prometheus',
   importConfigs: [join(__dirname, 'config')],
 })
-export class AutoConfiguration {
+export class PrometheusConfiguration {
   @Config('prometheus')
   prometheusConfig: any;
 
@@ -27,7 +28,7 @@ export class AutoConfiguration {
 
   http_server: any;
 
-  async onReady(contanier) {
+  async onReady() {
     PromClient.collectDefaultMetrics(this.prometheusConfig);
     const modules = listModule('prometheus:master');
     const handlers = {};

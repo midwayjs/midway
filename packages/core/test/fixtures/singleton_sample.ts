@@ -1,5 +1,4 @@
-import {Provide, Scope, Init, Inject} from '@midwayjs/decorator';
-import { ScopeEnum } from '../../src';
+import {Provide, Scope, Init, Inject, ScopeEnum} from '@midwayjs/decorator';
 
 @Scope(ScopeEnum.Singleton)
 @Provide()
@@ -30,7 +29,7 @@ export class HelloErrorSingleton {
   @Init()
   async doinit(): Promise<true> {
     this.ts = Date.now();
-    return new Promise(resolve => {
+    return new Promise<any>(resolve => {
       this.end = Date.now();
       setTimeout(resolve, 600);
     });

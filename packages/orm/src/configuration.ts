@@ -2,6 +2,7 @@ import {
   ILifeCycle,
   IMidwayApplication,
   IMidwayContainer,
+  MidwayDecoratorService,
 } from '@midwayjs/core';
 import {
   App,
@@ -9,9 +10,9 @@ import {
   Configuration,
   getClassMetadata,
   Init,
+  Inject,
   listModule,
 } from '@midwayjs/decorator';
-import { join } from 'path';
 import {
   Connection,
   ConnectionOptions,
@@ -28,7 +29,13 @@ import {
 import { OrmConnectionHook, ORM_HOOK_KEY } from './hook';
 
 @Configuration({
-  importConfigs: [join(__dirname, './config')],
+  importConfigs: [
+    {
+      default: {
+        orm: {},
+      },
+    },
+  ],
   namespace: 'orm',
 })
 export class OrmConfiguration implements ILifeCycle {
@@ -40,17 +47,24 @@ export class OrmConfiguration implements ILifeCycle {
 
   private connectionNames: string[] = [];
 
+  @Inject()
+  decoratorService: MidwayDecoratorService;
+
   @Init()
   async init() {
-    this.app
-      .getApplicationContext()
-      .registerDataHandler(
-        ORM_MODEL_KEY,
-        (key: { modelKey; connectionName }) => {
-          // return getConnection(key.connectionName).getRepository(key.modelKey);
-          return getRepository(key.modelKey, key.connectionName);
+    this.decoratorService.registerPropertyHandler(
+      ORM_MODEL_KEY,
+      (
+        propertyName,
+        meta: {
+          modelKey: string;
+          connectionName: string;
         }
-      );
+      ) => {
+        // return getConnection(key.connectionName).getRepository(key.modelKey);
+        return getRepository(meta.modelKey, meta.connectionName);
+      }
+    );
   }
 
   async onReady(container: IMidwayContainer) {
@@ -175,6 +189,7 @@ export class OrmConfiguration implements ILifeCycle {
     }
     return rt;
   }
+
   /**
    * 创建 connection 之后
    * @param container
@@ -196,6 +211,7 @@ export class OrmConfiguration implements ILifeCycle {
     }
     return rtCon;
   }
+
   /**
    * 关闭连接之前
    * @param container
@@ -217,6 +233,7 @@ export class OrmConfiguration implements ILifeCycle {
     }
     return rt;
   }
+
   /**
    * 关闭连接之后
    * @param container

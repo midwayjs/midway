@@ -1,2 +1,2 @@
-export { AutoConfiguration as Configuration } from './configuration';
+export { RedisConfiguration as Configuration } from './configuration';
 export * from './manager';

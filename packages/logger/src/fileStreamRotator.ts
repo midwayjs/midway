@@ -5,13 +5,15 @@ import * as path from 'path';
 import * as crypto from 'crypto';
 import * as EventEmitter from 'events';
 import { format, debuglog } from 'util';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
+import * as utc from 'dayjs/plugin/utc';
 import * as assert from 'assert';
 import { debounce } from './util';
 
 const debug = debuglog('midway-logger');
 const staticFrequency = ['daily', 'test', 's', 'm', 'h', 'custom'];
 const DATE_FORMAT = 'YYYYMMDDHHmm';
+dayjs.extend(utc);
 
 /**
  * Returns frequency metadata for minute/hour rotation
@@ -205,19 +207,19 @@ export class FileStreamRotator {
    */
   getDate(format, date_format, utc) {
     date_format = date_format || DATE_FORMAT;
-    const currentMoment = utc ? moment.utc() : moment().local();
+    const currentMoment = utc ? dayjs.utc() : dayjs().local();
     if (format && staticFrequency.indexOf(format.type) !== -1) {
       switch (format.type) {
         case 's':
           /*eslint-disable-next-line no-case-declarations*/
           const second =
-            Math.floor(currentMoment.seconds() / format.digit) * format.digit;
-          return currentMoment.seconds(second).format(date_format);
+            Math.floor(currentMoment.second() / format.digit) * format.digit;
+          return currentMoment.second(second).format(date_format);
         case 'm':
           /*eslint-disable-next-line no-case-declarations*/
           const minute =
-            Math.floor(currentMoment.minutes() / format.digit) * format.digit;
-          return currentMoment.minutes(minute).format(date_format);
+            Math.floor(currentMoment.minute() / format.digit) * format.digit;
+          return currentMoment.minute(minute).format(date_format);
         case 'h':
           /*eslint-disable-next-line no-case-declarations*/
           const hour =
@@ -343,7 +345,7 @@ export class FileStreamRotator {
       });
 
       if (audit.keep.days) {
-        const oldestDate = moment()
+        const oldestDate = dayjs()
           .subtract(audit.keep.amount, 'days')
           .valueOf();
         const recentFiles = audit.files.filter(file => {
@@ -431,10 +433,9 @@ export class FileStreamRotator {
         dateFormat = 'YYYY-MM-DD';
       }
       if (
-        moment().format(dateFormat) !==
-          moment().endOf('day').format(dateFormat) ||
-        moment().format(dateFormat) ===
-          moment().add(1, 'day').format(dateFormat)
+        dayjs().format(dateFormat) !==
+          dayjs().endOf('day').format(dateFormat) ||
+        dayjs().format(dateFormat) === dayjs().add(1, 'day').format(dateFormat)
       ) {
         debug(
           new Date().toLocaleString(),

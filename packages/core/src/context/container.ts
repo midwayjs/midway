@@ -1,71 +1,73 @@
 import {
-  ALL,
-  classNamed,
-  CONFIG_KEY,
   CONFIGURATION_KEY,
-  DecoratorManager,
-  generateProvideId,
   getClassMetadata,
-  getConstructorInject,
-  getObjectDefProps,
-  getProviderId,
   IComponentInfo,
-  INJECT_CLASS_KEY_PREFIX,
   InjectionConfigurationOptions,
   isAsyncFunction,
   isClass,
   isFunction,
-  isProvide,
-  LIFECYCLE_IDENTIFIER_PREFIX,
   listModule,
   MAIN_MODULE_KEY,
-  ObjectDefinitionOptions,
   ObjectIdentifier,
-  PRIVATE_META_DATA_KEY,
-  saveClassMetadata,
   saveModule,
   saveProviderId,
   ScopeEnum,
-  TAGGED_PROP,
+  getProviderUUId,
+  generateRandomId,
+  getPropertyInject,
+  getObjectDefinition,
+  getClassExtendedMetadata,
+  INJECT_CUSTOM_PROPERTY,
+  getProviderName,
+  IModuleStore,
 } from '@midwayjs/decorator';
 import { FunctionalConfiguration } from '../functional/configuration';
 import * as util from 'util';
-import { BaseApplicationContext } from './applicationContext';
+import { ObjectDefinitionRegistry } from './definitionRegistry';
 import {
-  IApplicationContext,
-  IConfigService,
-  IEnvironmentService,
   IFileDetector,
-  IInformationService,
+  IIdentifierRelationShip,
   IMidwayContainer,
-  IObjectDefinitionMetadata,
+  IObjectDefinition,
+  IObjectDefinitionRegistry,
+  ObjectContext,
+  ObjectLifeCycleEvent,
   REQUEST_CTX_KEY,
 } from '../interface';
-import { getOwnMetadata, recursiveGetPrototypeOf } from '../common/reflectTool';
 import { FUNCTION_INJECT_KEY } from '../common/constants';
 import { ObjectDefinition } from '../definitions/objectDefinition';
 import { FunctionDefinition } from '../definitions/functionDefinition';
-import { ManagedReference, ManagedValue } from './managed';
-import { ResolverHandler } from './resolverHandler';
+import {
+  ManagedReference,
+  ManagedResolverFactory,
+} from './managedResolverFactory';
 import { MidwayEnvironmentService } from '../service/environmentService';
 import { MidwayConfigService } from '../service/configService';
-import { MidwayAspectService } from '../service/aspectService';
+import * as EventEmitter from 'events';
+import { MidwayDefinitionNotFoundError } from '../error';
 
-const debug = util.debuglog('midway:container:configuration');
-const globalDebugLogger = util.debuglog('midway:container');
+const debug = util.debuglog('midway:debug');
+const debugBind = util.debuglog('midway:bind');
 
 class ContainerConfiguration {
-  private namespace;
-
-  constructor(readonly container) {}
+  private loadedMap = new WeakMap();
+  private namespaceList = [];
+  constructor(readonly container: IMidwayContainer) {}
 
   load(module) {
+    let namespace = MAIN_MODULE_KEY;
     // 可能导出多个
     const configurationExports = this.getConfigurationExport(module);
     if (!configurationExports.length) return;
     // 多个的情况，数据交给第一个保存
     for (let i = 0; i < configurationExports.length; i++) {
       const configurationExport = configurationExports[i];
+
+      if (this.loadedMap.get(configurationExport)) {
+        // 已经加载过就跳过循环
+        continue;
+      }
+
       let configurationOptions: InjectionConfigurationOptions;
       if (configurationExport instanceof FunctionalConfiguration) {
         // 函数式写法
@@ -78,35 +80,31 @@ class ContainerConfiguration {
         );
       }
 
-      debug('   configuration export %j.', configurationOptions);
+      // 已加载标记，防止死循环
+      this.loadedMap.set(configurationExport, true);
+
       if (configurationOptions) {
-        if (
-          this.namespace !== MAIN_MODULE_KEY &&
-          configurationOptions.namespace !== undefined
-        ) {
-          this.namespace = configurationOptions.namespace;
+        if (configurationOptions.namespace !== undefined) {
+          namespace = configurationOptions.namespace;
+          this.namespaceList.push(namespace);
         }
-
-        // if (i === 0 && this.namespace === MAIN_MODULE_KEY) {
-        //   // set conflictCheck
-        //   if (configurationOptions.conflictCheck === undefined) {
-        //     configurationOptions.conflictCheck = false;
-        //   }
-        //   this.container.disableConflictCheck =
-        //     !configurationOptions.conflictCheck;
-        // }
-
+        debug(`[core]: load configuration in namespace="${namespace}"`);
         this.addImports(configurationOptions.imports);
+        this.addImportObjects(configurationOptions.importObjects);
         this.addImportConfigs(configurationOptions.importConfigs);
-        this.bindConfigurationClass(configurationExport);
+        this.bindConfigurationClass(configurationExport, namespace);
       }
     }
+
+    // bind module
+    this.container.bindClass(module, {
+      namespace,
+    });
   }
 
   addImportConfigs(importConfigs: string[]) {
     if (importConfigs && importConfigs.length) {
-      debug('   import configs %j".', importConfigs);
-      this.container.getConfigService().add(importConfigs);
+      this.container.get(MidwayConfigService).add(importConfigs);
     }
   }
 
@@ -117,44 +115,53 @@ class ContainerConfiguration {
       if (typeof importPackage === 'string') {
         importPackage = require(importPackage);
       }
-      // for package
-      const subContainerConfiguration = this.container.createConfiguration();
       if ('Configuration' in importPackage) {
         // component is object
-        debug(
-          '\n---------- start load configuration from submodule" ----------'
-        );
-        subContainerConfiguration.load(importPackage);
-        debug(
-          `---------- end load configuration from sub package "${importPackage}" ----------`
-        );
+        this.load(importPackage);
       } else if ('component' in importPackage) {
-        if (
-          (importPackage as IComponentInfo)?.enabledEnvironment?.includes(
-            this.container.getCurrentEnv()
-          )
-        ) {
-          subContainerConfiguration.load(
-            (importPackage as IComponentInfo).component
-          );
+        if ((importPackage as IComponentInfo)?.enabledEnvironment) {
+          if (
+            (importPackage as IComponentInfo)?.enabledEnvironment?.includes(
+              this.container
+                .get(MidwayEnvironmentService)
+                .getCurrentEnvironment()
+            )
+          ) {
+            this.load((importPackage as IComponentInfo).component);
+          }
+        } else {
+          this.load((importPackage as IComponentInfo).component);
         }
       } else {
-        subContainerConfiguration.load(importPackage);
+        this.load(importPackage);
       }
     }
   }
 
-  bindConfigurationClass(clzz, filePath?: string) {
+  /**
+   * 注册 importObjects
+   * @param objs configuration 中的 importObjects
+   */
+  addImportObjects(objs: any) {
+    if (objs) {
+      const keys = Object.keys(objs);
+      for (const key of keys) {
+        if (typeof objs[key] !== undefined) {
+          this.container.registerObject(key, objs[key]);
+        }
+      }
+    }
+  }
+
+  bindConfigurationClass(clzz, namespace) {
     if (clzz instanceof FunctionalConfiguration) {
       // 函数式写法不需要绑定到容器
     } else {
       // 普通类写法
-      const clzzName = `${LIFECYCLE_IDENTIFIER_PREFIX}${classNamed(clzz.name)}`;
-      const id = generateProvideId(clzzName, this.namespace);
-      saveProviderId(id, clzz, true);
+      saveProviderId(undefined, clzz);
+      const id = getProviderUUId(clzz);
       this.container.bind(id, clzz, {
-        namespace: this.namespace,
-        srcPath: filePath,
+        namespace: namespace,
         scope: ScopeEnum.Singleton,
       });
     }
@@ -167,7 +174,7 @@ class ContainerConfiguration {
     if (!exists) {
       saveModule(CONFIGURATION_KEY, {
         target: clzz,
-        namespace: this.namespace,
+        namespace: namespace,
       });
     }
   }
@@ -194,337 +201,243 @@ class ContainerConfiguration {
     }
     return mods;
   }
+
+  public getNamespaceList() {
+    return this.namespaceList;
+  }
 }
 
-export class MidwayContainer
-  extends BaseApplicationContext
-  implements IMidwayContainer
-{
-  private debugLogger = globalDebugLogger;
-  private definitionMetadataList = [];
-  protected resolverHandler: ResolverHandler;
+class ObjectCreateEventTarget extends EventEmitter {}
+
+export class MidwayContainer implements IMidwayContainer, IModuleStore {
+  private _resolverFactory: ManagedResolverFactory = null;
+  private _registry: IObjectDefinitionRegistry = null;
+  private _identifierMapping = null;
+  private moduleMap = null;
+  private _objectCreateEventTarget: EventEmitter;
+  public parent: IMidwayContainer = null;
   // 仅仅用于兼容requestContainer的ctx
   protected ctx = {};
-  protected configService: IConfigService;
-  protected environmentService: IEnvironmentService;
-  protected informationService: IInformationService;
-  protected aspectService;
   private fileDetector: IFileDetector;
   private attrMap: Map<string, any> = new Map();
+  private _namespaceSet: Set<string> = null;
   private isLoad = false;
 
-  init(): void {
-    this.initService();
+  constructor(parent?: IMidwayContainer) {
+    this.parent = parent;
+    this.init();
+  }
 
-    this.resolverHandler = new ResolverHandler(
-      this,
-      this.getManagedResolverFactory()
-    );
+  protected init() {
     // 防止直接从applicationContext.getAsync or get对象实例时依赖当前上下文信息出错
     // ctx is in requestContainer
     this.registerObject(REQUEST_CTX_KEY, this.ctx);
   }
 
-  initService() {
-    this.environmentService = new MidwayEnvironmentService();
-    this.configService = new MidwayConfigService(this);
-    this.aspectService = new MidwayAspectService(this);
+  get objectCreateEventTarget() {
+    if (!this._objectCreateEventTarget) {
+      this._objectCreateEventTarget = new ObjectCreateEventTarget();
+    }
+    return this._objectCreateEventTarget;
+  }
+
+  get registry(): IObjectDefinitionRegistry {
+    if (!this._registry) {
+      this._registry = new ObjectDefinitionRegistry();
+    }
+    return this._registry;
+  }
+
+  set registry(registry) {
+    this._registry = registry;
+  }
+
+  get managedResolverFactory() {
+    if (!this._resolverFactory) {
+      this._resolverFactory = new ManagedResolverFactory(this);
+    }
+    return this._resolverFactory;
+  }
+
+  get identifierMapping(): IIdentifierRelationShip {
+    if (!this._identifierMapping) {
+      this._identifierMapping = this.registry.getIdentifierRelation();
+    }
+    return this._identifierMapping;
+  }
+
+  get namespaceSet(): Set<string> {
+    if (!this._namespaceSet) {
+      this._namespaceSet = new Set();
+    }
+    return this._namespaceSet;
   }
 
   load(module?) {
     this.isLoad = true;
     if (module) {
       // load configuration
-      const configuration = this.createConfiguration();
+      const configuration = new ContainerConfiguration(this);
       configuration.load(module);
-    }
-
-    // register base config hook
-    if (!this.resolverHandler.hasHandler(CONFIG_KEY)) {
-      this.registerDataHandler(CONFIG_KEY, (key: string) => {
-        if (key === ALL) {
-          return this.getConfigService().getConfiguration();
-        } else {
-          return this.getConfigService().getConfiguration(key);
-        }
-      });
+      for (const ns of configuration.getNamespaceList()) {
+        this.namespaceSet.add(ns);
+      }
     }
   }
 
-  loadDefinitions() {
+  protected loadDefinitions() {
     if (!this.isLoad) {
       this.load();
     }
     // load project file
     this.fileDetector?.run(this);
-    // init config service
-    this.configService.load();
   }
 
-  createConfiguration() {
-    return new ContainerConfiguration(this);
-  }
-
-  bindClass(exports, namespace = '', filePath?: string) {
+  bindClass(exports, options?: Partial<IObjectDefinition>) {
     if (isClass(exports) || isFunction(exports)) {
-      this.bindModule(exports, namespace, filePath);
+      this.bindModule(exports, options);
     } else {
       for (const m in exports) {
         const module = exports[m];
         if (isClass(module) || isFunction(module)) {
-          this.bindModule(module, namespace, filePath);
+          this.bindModule(module, options);
         }
       }
     }
   }
 
-  bind<T>(target: T, options?: ObjectDefinitionOptions): void;
+  bind<T>(target: T, options?: Partial<IObjectDefinition>): void;
   bind<T>(
     identifier: ObjectIdentifier,
     target: T,
-    options?: ObjectDefinitionOptions
+    options?: Partial<IObjectDefinition>
   ): void;
   bind<T>(identifier: any, target: any, options?: any): void {
-    const definitionMeta = {} as IObjectDefinitionMetadata;
-    this.definitionMetadataList.push(definitionMeta);
-
     if (isClass(identifier) || isFunction(identifier)) {
-      options = target;
-      target = identifier as any;
-      identifier = getProviderId(target);
+      return this.bindModule(identifier, target);
     }
 
+    if (this.registry.hasDefinition(identifier)) {
+      // 如果 definition 存在就不再重复 bind
+      return;
+    }
+
+    let definition;
     if (isClass(target)) {
-      definitionMeta.definitionType = 'object';
+      definition = new ObjectDefinition();
+      definition.name = getProviderName(target);
     } else {
-      definitionMeta.definitionType = 'function';
+      definition = new FunctionDefinition();
       if (!isAsyncFunction(target)) {
-        definitionMeta.asynchronous = false;
+        definition.asynchronous = false;
       }
+      definition.name = definition.id;
     }
 
-    definitionMeta.path = target;
-    definitionMeta.id = identifier;
-    definitionMeta.srcPath = options?.srcPath || null;
-    definitionMeta.namespace = options?.namespace || '';
-    definitionMeta.scope = options?.scope || ScopeEnum.Request;
-    definitionMeta.autowire = options?.isAutowire !== false;
+    definition.path = target;
+    definition.id = identifier;
+    definition.srcPath = options?.srcPath || null;
+    definition.namespace = options?.namespace || '';
+    definition.scope = options?.scope || ScopeEnum.Request;
+    definition.createFrom = options?.createFrom;
 
-    this.debugLogger(`  bind id => [${definitionMeta.id}]`);
-
-    // inject constructArgs
-    const constructorMetaData = getConstructorInject(target);
-    if (constructorMetaData) {
-      this.debugLogger(`inject constructor => length = ${target['length']}`);
-      definitionMeta.constructorArgs = [];
-      const maxLength = Math.max.apply(null, Object.keys(constructorMetaData));
-      for (let i = 0; i < maxLength + 1; i++) {
-        const propertyMeta = constructorMetaData[i];
-        if (propertyMeta) {
-          definitionMeta.constructorArgs.push({
-            type: 'ref',
-            value: propertyMeta[0].value,
-            args: propertyMeta[0].args,
-          });
-        } else {
-          definitionMeta.constructorArgs.push({
-            type: 'value',
-            value: propertyMeta?.[0].value,
-          });
-        }
-      }
+    if (definition.srcPath) {
+      debug(`[core]: bind id "${definition.name} (${definition.srcPath})"`);
+    } else {
+      debug(`[core]: bind id "${definition.name}"`);
     }
 
     // inject properties
-    const props = recursiveGetPrototypeOf(target);
-    props.push(target);
+    const props = getPropertyInject(target);
 
-    definitionMeta.properties = [];
-    definitionMeta.handlerProps = [];
-    for (const p of props) {
-      const metaData = getOwnMetadata(TAGGED_PROP, p);
+    for (const p in props) {
+      const propertyMeta = props[p];
+      debugBind(`  inject properties => [${JSON.stringify(propertyMeta)}]`);
+      const refManaged = new ManagedReference();
+      refManaged.args = propertyMeta.args;
+      refManaged.name = propertyMeta.value as any;
+      definition.properties.set(propertyMeta['targetKey'], refManaged);
+    }
 
-      if (metaData) {
-        this.debugLogger(`  inject properties => [${Object.keys(metaData)}]`);
-        for (const metaKey in metaData) {
-          for (const propertyMeta of metaData[metaKey]) {
-            definitionMeta.properties.push({
-              metaKey,
-              args: propertyMeta.args,
-              value: propertyMeta.value,
-            });
-          }
-        }
-      }
+    // inject custom properties
+    const customProps = getClassExtendedMetadata(
+      INJECT_CUSTOM_PROPERTY,
+      target
+    );
 
-      const meta = getOwnMetadata(INJECT_CLASS_KEY_PREFIX, p) as any;
-      if (meta) {
-        for (const [key, vals] of meta) {
-          if (Array.isArray(vals)) {
-            for (const val of vals) {
-              if (
-                val.key !== undefined &&
-                val.key !== null &&
-                typeof val.propertyName === 'string'
-              ) {
-                definitionMeta.handlerProps.push({
-                  handlerKey:
-                    DecoratorManager.removeDecoratorClassKeySuffix(key),
-                  prop: val,
-                });
-              }
-            }
-          }
-        }
-      }
+    for (const p in customProps) {
+      const propertyMeta = customProps[p] as {
+        propertyName: string;
+        key: string;
+        metadata: any;
+      };
+      definition.handlerProps.push(propertyMeta);
     }
 
     // @async, @init, @destroy @scope
-    const objDefOptions: ObjectDefinitionOptions =
-      getObjectDefProps(target) ?? {};
+    const objDefOptions = getObjectDefinition(target) ?? {};
+
     if (objDefOptions.initMethod) {
-      this.debugLogger(`  register initMethod = ${objDefOptions.initMethod}`);
-      definitionMeta.initMethod = objDefOptions.initMethod;
+      debugBind(`  register initMethod = ${objDefOptions.initMethod}`);
+      definition.initMethod = objDefOptions.initMethod;
     }
 
     if (objDefOptions.destroyMethod) {
-      this.debugLogger(
-        `  register destroyMethod = ${objDefOptions.destroyMethod}`
-      );
-      definitionMeta.destroyMethod = objDefOptions.destroyMethod;
+      debugBind(`  register destroyMethod = ${objDefOptions.destroyMethod}`);
+      definition.destroyMethod = objDefOptions.destroyMethod;
     }
 
     if (objDefOptions.scope) {
-      this.debugLogger(`  register scope = ${objDefOptions.scope}`);
-      definitionMeta.scope = objDefOptions.scope;
+      debugBind(`  register scope = ${objDefOptions.scope}`);
+      definition.scope = objDefOptions.scope;
     }
 
-    // 把源信息变成真正的对象定义
-    this.restoreDefinition(definitionMeta);
-  }
-
-  protected restoreDefinition(definitionMeta: IObjectDefinitionMetadata) {
-    let definition;
-    if (definitionMeta.definitionType === 'object') {
-      definition = new ObjectDefinition();
-    } else {
-      definition = new FunctionDefinition();
-      if (!definitionMeta.asynchronous) {
-        definition.asynchronous = false;
+    this.objectCreateEventTarget.emit(
+      ObjectLifeCycleEvent.BEFORE_BIND,
+      target,
+      {
+        context: this,
+        definition,
+        replaceCallback: newDefinition => {
+          definition = newDefinition;
+        },
       }
-    }
+    );
 
-    definition.path = definitionMeta.path;
-    definition.id = definitionMeta.id;
-    definition.srcPath = definitionMeta.srcPath;
-    definition.namespace = definitionMeta.namespace;
-
-    this.debugLogger(`  bind id => [${definition.id}]`);
-
-    // inject constructArgs
-    if (
-      definitionMeta.constructorArgs &&
-      definitionMeta.constructorArgs.length
-    ) {
-      for (const constructorInfo of definitionMeta.constructorArgs) {
-        if (constructorInfo.type === 'ref') {
-          const refManagedIns = new ManagedReference();
-          const name = constructorInfo.value;
-          refManagedIns.args = constructorInfo.args;
-          if (this.midwayIdentifiers.includes(name)) {
-            refManagedIns.name = name;
-          } else {
-            refManagedIns.name = generateProvideId(name, definition.namespace);
-          }
-          definition.constructorArgs.push(refManagedIns);
-        } else {
-          // inject empty value
-          const valueManagedIns = new ManagedValue();
-          valueManagedIns.valueType = constructorInfo.type;
-          valueManagedIns.value = constructorInfo.value;
-          definition.constructorArgs.push(valueManagedIns);
-        }
-      }
-    }
-
-    // inject properties
-    for (const propertyMeta of definitionMeta.properties) {
-      const refManaged = new ManagedReference();
-      refManaged.args = propertyMeta.args;
-      if (this.midwayIdentifiers.includes(propertyMeta.value)) {
-        refManaged.name = propertyMeta.value;
-      } else {
-        refManaged.name = generateProvideId(
-          propertyMeta.value,
-          definition.namespace
-        );
-      }
-      definition.properties.set(propertyMeta.metaKey, refManaged);
-    }
-
-    definition.asynchronous = definitionMeta.asynchronous;
-    definition.initMethod = definitionMeta.initMethod;
-    definition.destroyMethod = definitionMeta.destroyMethod;
-    definition.scope = definitionMeta.scope;
-    definition.autowire = definitionMeta.autowire;
-    definition.handlerProps = definitionMeta.handlerProps;
-
-    this.registerDefinition(definitionMeta.id, definition);
-  }
-
-  protected restoreDefinitions(definitionMetadataList) {
-    if (definitionMetadataList && definitionMetadataList.length) {
-      for (const definitionMeta of definitionMetadataList) {
-        this.restoreDefinition(definitionMeta);
-      }
+    if (definition) {
+      this.registry.registerDefinition(definition.id, definition);
     }
   }
 
-  protected getDefinitionMetaList() {
-    return this.definitionMetadataList;
-  }
-
-  protected bindModule(module, namespace = '', filePath?: string) {
+  protected bindModule(module: any, options: Partial<IObjectDefinition>) {
     if (isClass(module)) {
-      const providerId = isProvide(module) ? getProviderId(module) : null;
+      const providerId = getProviderUUId(module);
       if (providerId) {
-        if (namespace) {
-          saveClassMetadata(
-            PRIVATE_META_DATA_KEY,
-            { namespace, providerId, srcPath: filePath },
-            module
-          );
-        }
-        this.bind(generateProvideId(providerId, namespace), module, {
-          namespace,
-          srcPath: filePath,
-        });
+        this.identifierMapping.saveClassRelation(module, options?.namespace);
+        this.bind(providerId, module, options);
       } else {
         // no provide or js class must be skip
       }
     } else {
       const info: {
         id: ObjectIdentifier;
-        provider: (context?: IApplicationContext) => any;
+        provider: (context?: IMidwayContainer) => any;
         scope?: ScopeEnum;
-        isAutowire?: boolean;
       } = module[FUNCTION_INJECT_KEY];
       if (info && info.id) {
         if (!info.scope) {
           info.scope = ScopeEnum.Request;
         }
-        this.bind(generateProvideId(info.id, namespace), module, {
+        const uuid = generateRandomId();
+        this.identifierMapping.saveFunctionRelation(info.id, uuid);
+        this.bind(uuid, module, {
           scope: info.scope,
-          isAutowire: info.isAutowire,
-          namespace,
-          srcPath: filePath,
+          namespace: options.namespace,
+          srcPath: options.srcPath,
+          createFrom: options.createFrom,
         });
       }
     }
-  }
-
-  getDebugLogger() {
-    return this.debugLogger;
   }
 
   setFileDetector(fileDetector: IFileDetector) {
@@ -532,39 +445,7 @@ export class MidwayContainer
   }
 
   createChild(): IMidwayContainer {
-    return new MidwayContainer('', this);
-  }
-
-  registerDataHandler(handlerType: string, handler: (...args) => any) {
-    this.resolverHandler.registerHandler(handlerType, handler);
-  }
-
-  getConfigService() {
-    return this.configService;
-  }
-
-  getEnvironmentService() {
-    return this.environmentService;
-  }
-
-  getInformationService() {
-    return this.informationService;
-  }
-
-  setInformationService(informationService) {
-    this.informationService = informationService;
-  }
-
-  getAspectService() {
-    return this.aspectService;
-  }
-
-  getCurrentEnv() {
-    return this.environmentService.getCurrentEnvironment();
-  }
-
-  public getResolverHandler() {
-    return this.resolverHandler;
+    return new MidwayContainer(this);
   }
 
   public setAttr(key: string, value) {
@@ -573,5 +454,189 @@ export class MidwayContainer
 
   public getAttr<T>(key: string): T {
     return this.attrMap.get(key);
+  }
+
+  protected getIdentifier(target: any) {
+    return getProviderUUId(target);
+  }
+
+  protected getManagedResolverFactory() {
+    if (!this._resolverFactory) {
+      this._resolverFactory = new ManagedResolverFactory(this);
+    }
+    return this._resolverFactory;
+  }
+
+  async stop(): Promise<void> {
+    await this.getManagedResolverFactory().destroyCache();
+    this.registry.clearAll();
+  }
+
+  async ready(): Promise<void> {
+    await this.loadDefinitions();
+  }
+
+  get<T>(
+    identifier: { new (...args): T },
+    args?: any[],
+    objectContext?: ObjectContext
+  ): T;
+  get<T>(
+    identifier: ObjectIdentifier,
+    args?: any[],
+    objectContext?: ObjectContext
+  ): T;
+  get(identifier: any, args?: any[], objectContext?: ObjectContext): any {
+    if (typeof identifier !== 'string') {
+      identifier = this.getIdentifier(identifier);
+    }
+    if (this.registry.hasObject(identifier)) {
+      return this.registry.getObject(identifier);
+    }
+    const definition = this.registry.getDefinition(identifier);
+    if (!definition && this.parent) {
+      return this.parent.get(identifier, args);
+    }
+    if (!definition) {
+      throw new MidwayDefinitionNotFoundError(
+        objectContext?.originName ?? identifier
+      );
+    }
+    return this.getManagedResolverFactory().create({ definition, args });
+  }
+
+  async getAsync<T>(
+    identifier: { new (...args): T },
+    args?: any[],
+    objectContext?: ObjectContext
+  ): Promise<T>;
+  async getAsync<T>(
+    identifier: ObjectIdentifier,
+    args?: any[],
+    objectContext?: ObjectContext
+  ): Promise<T>;
+  async getAsync(
+    identifier: any,
+    args?: any[],
+    objectContext?: ObjectContext
+  ): Promise<any> {
+    if (typeof identifier !== 'string') {
+      identifier = this.getIdentifier(identifier);
+    }
+    if (this.registry.hasObject(identifier)) {
+      return this.registry.getObject(identifier);
+    }
+
+    const definition = this.registry.getDefinition(identifier);
+    if (!definition && this.parent) {
+      return this.parent.getAsync(identifier, args);
+    }
+
+    if (!definition) {
+      throw new MidwayDefinitionNotFoundError(
+        objectContext?.originName ?? identifier
+      );
+    }
+
+    return this.getManagedResolverFactory().createAsync({ definition, args });
+  }
+
+  /**
+   * proxy registry.registerObject
+   * @param {ObjectIdentifier} identifier
+   * @param target
+   */
+  registerObject(identifier: ObjectIdentifier, target: any) {
+    this.registry.registerObject(identifier, target);
+  }
+
+  onBeforeBind(
+    fn: (
+      Clzz: any,
+      options: {
+        context: IMidwayContainer;
+        definition: IObjectDefinition;
+        replaceCallback: (newDefinition: IObjectDefinition) => void;
+      }
+    ) => void
+  ) {
+    this.objectCreateEventTarget.on(ObjectLifeCycleEvent.BEFORE_BIND, fn);
+  }
+
+  onBeforeObjectCreated(
+    fn: (
+      Clzz: any,
+      options: {
+        context: IMidwayContainer;
+        definition: IObjectDefinition;
+        constructorArgs: any[];
+      }
+    ) => void
+  ) {
+    this.objectCreateEventTarget.on(ObjectLifeCycleEvent.BEFORE_CREATED, fn);
+  }
+
+  onObjectCreated<T>(
+    fn: (
+      ins: T,
+      options: {
+        context: IMidwayContainer;
+        definition: IObjectDefinition;
+        replaceCallback: (ins: T) => void;
+      }
+    ) => void
+  ) {
+    this.objectCreateEventTarget.on(ObjectLifeCycleEvent.AFTER_CREATED, fn);
+  }
+
+  onObjectInit<T>(
+    fn: (
+      ins: T,
+      options: {
+        context: IMidwayContainer;
+        definition: IObjectDefinition;
+      }
+    ) => void
+  ) {
+    this.objectCreateEventTarget.on(ObjectLifeCycleEvent.AFTER_INIT, fn);
+  }
+
+  onBeforeObjectDestroy<T>(
+    fn: (
+      ins: T,
+      options: {
+        context: IMidwayContainer;
+        definition: IObjectDefinition;
+      }
+    ) => void
+  ) {
+    this.objectCreateEventTarget.on(ObjectLifeCycleEvent.BEFORE_DESTROY, fn);
+  }
+
+  saveModule(key, module) {
+    if (!this.moduleMap.has(key)) {
+      this.moduleMap.set(key, new Set());
+    }
+    this.moduleMap.get(key).add(module);
+  }
+
+  listModule(key: string) {
+    return Array.from(this.moduleMap.get(key) || {});
+  }
+
+  transformModule(moduleMap: Map<string, Set<any>>) {
+    this.moduleMap = new Map(moduleMap);
+  }
+
+  hasNamespace(ns: string) {
+    return this.namespaceSet.has(ns);
+  }
+
+  hasDefinition(identifier: ObjectIdentifier) {
+    return this.registry.hasDefinition(identifier);
+  }
+
+  hasObject(identifier: ObjectIdentifier) {
+    return this.registry.hasObject(identifier);
   }
 }

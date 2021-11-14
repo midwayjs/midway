@@ -6,7 +6,7 @@ import { IServiceBalancer, IConsulBalancer } from '../interface';
 @Provide()
 @Scope(ScopeEnum.Singleton)
 export class BalancerService implements IConsulBalancer {
-  @Inject()
+  @Inject('consul:consul')
   consul: Consul.Consul;
 
   private consulBalancer: ConsulBalancer;

@@ -1,9 +1,19 @@
 import { Configuration, App } from '@midwayjs/decorator';
 import { ILifeCycle } from '@midwayjs/core';
-import { IMidwaySocketIOApplication } from '../../../../src';
+import { createRedisAdapter, IMidwaySocketIOApplication } from '../../../../src';
 
-
-@Configuration()
+@Configuration({
+  importConfigs: [
+    {
+      default: {
+        socketIO: {
+          port: 3000,
+          adapter: createRedisAdapter({ host: '127.0.0.1', port: 6379}),
+        }
+      }
+    }
+  ]
+})
 export class AutoConfiguration implements ILifeCycle {
 
   @App()

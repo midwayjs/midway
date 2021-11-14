@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/runtime-engine",
-  "version": "3.0.0-alpha.2",
+  "version": "3.0.0-alpha.42",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "scripts": {
@@ -9,7 +9,7 @@
     "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --coverage --forceExit"
   },
   "engines": {
-    "node": ">= 10"
+    "node": ">=12"
   },
   "files": [
     "dist/**/*.js",
@@ -17,7 +17,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git@github.com:midwayjs/midway-faas.git"
+    "url": "git@github.com:midwayjs/midway.git"
   },
   "license": "MIT",
   "gitHead": "1afeb34cbb6c0ad49ccdb9cfaebd254ae73afc6a"

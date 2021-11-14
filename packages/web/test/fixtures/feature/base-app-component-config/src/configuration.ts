@@ -1,6 +1,8 @@
 import { Configuration } from '@midwayjs/decorator';
 
 @Configuration({
-  imports: ['./component/sql/src'],
+  imports: [
+    require('./component/sql/src')
+  ],
 })
 export class ContainerConfiguration {}

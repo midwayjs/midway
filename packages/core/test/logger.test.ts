@@ -1,20 +1,22 @@
-import { createMidwayLogger, EmptyFramework, LightFramework } from '../src';
 import { MidwayContextLogger } from '@midwayjs/logger';
 import { join } from 'path';
 import * as mm from 'mm';
 import { tmpdir } from 'os';
 import { existsSync } from 'fs';
+import { createLightFramework } from './util';
+import { clearAllModule } from '@midwayjs/decorator';
 
 describe('/test/logger.test.ts', () => {
+  beforeEach(() => {
+    clearAllModule();
+  });
+
   it('should create context logger', async () => {
-    const framework = new EmptyFramework();
-    await framework.initialize({
-      baseDir: join(
-        __dirname,
-        './fixtures/base-app/src'
-      ),
-    });
-    const customLogger = createMidwayLogger(framework, 'customLogger', {
+    const framework = await createLightFramework(join(
+      __dirname,
+      './fixtures/base-app/src'
+    ));
+    const customLogger = framework.createLogger('customLogger', {
       disableError: true,
       disableFile: true
     });
@@ -27,18 +29,17 @@ describe('/test/logger.test.ts', () => {
     contextLogger.error('hello world');
     contextLogger.log('hello world');
     contextLogger.log('info', 'hello world');
+
+    await framework.stop();
   });
 
   it('should create log in serverless environment', async () => {
     const tmpLogsDir = join(tmpdir(), Date.now() + '-' + (Math.random() * 100000).toString().slice(-5));
     mm(process.env, 'MIDWAY_LOGGER_WRITEABLE_DIR', tmpLogsDir);
-    const framework = new LightFramework();
-    await framework.initialize({
-      baseDir: join(
-        __dirname,
-        './fixtures/base-app/src'
-      ),
-    });
+    const framework = await createLightFramework(join(
+      __dirname,
+      './fixtures/base-app/src'
+    ));
     const logger = framework.getCoreLogger();
     logger.info('hello world');
     logger.debug('hello world');
@@ -46,5 +47,7 @@ describe('/test/logger.test.ts', () => {
     logger.error('hello world');
     expect(existsSync(join(tmpLogsDir, 'logs'))).toBeTruthy();
     mm.restore();
+
+    await framework.stop();
   });
 });

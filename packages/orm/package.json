@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/orm",
-  "version": "3.0.0-alpha.2",
+  "version": "3.0.0-alpha.42",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "peerDependencies": {
@@ -11,15 +11,18 @@
     "dist/**/*.d.ts"
   ],
   "devDependencies": {
-    "@midwayjs/core": "^3.0.0-alpha.2",
-    "@midwayjs/decorator": "^3.0.0-alpha.2",
-    "@midwayjs/mock": "^3.0.0-alpha.2",
+    "@midwayjs/core": "^3.0.0-alpha.42",
+    "@midwayjs/decorator": "^3.0.0-alpha.42",
+    "@midwayjs/mock": "^3.0.0-alpha.42",
     "sqlite3": "^5.0.2",
     "typeorm": "*"
   },
   "author": {
     "name": "Kurten Chan",
     "email": "chinkurten@gmail.com"
+  },
+  "engines": {
+    "node": ">=12"
   },
   "license": "MIT",
   "scripts": {

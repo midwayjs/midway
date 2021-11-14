@@ -12,10 +12,12 @@ import {
 } from '@midwayjs/core';
 
 import {
-  GRPCMetadata,
+  Config,
+  Framework,
   getClassMetadata,
   getPropertyMetadata,
-  getProviderId,
+  getProviderName,
+  GRPCMetadata,
   GrpcStreamTypeEnum,
   listModule,
   MS_GRPC_METHOD_KEY,
@@ -23,8 +25,8 @@ import {
   MSProviderType,
 } from '@midwayjs/decorator';
 import {
-  IMidwayGRPCApplication,
   Context,
+  IMidwayGRPCApplication,
   IMidwayGRPFrameworkOptions,
 } from '../interface';
 import { pascalCase } from 'pascal-case';
@@ -32,6 +34,7 @@ import * as camelCase from 'camelcase';
 import { loadProto } from '../util';
 import { PackageDefinition } from '@grpc/proto-loader';
 
+@Framework()
 export class MidwayGRPCFramework extends BaseFramework<
   IMidwayGRPCApplication,
   Context,
@@ -39,6 +42,17 @@ export class MidwayGRPCFramework extends BaseFramework<
 > {
   public app: IMidwayGRPCApplication;
   private server: Server;
+
+  @Config()
+  providerConfig;
+
+  configure() {
+    return this.configService.getConfiguration('grpcServer');
+  }
+
+  isEnable(): boolean {
+    return this.configurationOptions.services?.length > 0;
+  }
 
   async applicationInitialize(options: Partial<IMidwayBootstrapOptions>) {
     // set logger to grpc server
@@ -74,7 +88,7 @@ export class MidwayGRPCFramework extends BaseFramework<
 
     // get definition from proto file
     const serviceClassDefinition: Map<string, PackageDefinition> = new Map();
-    for (const service of this.configurationOptions.services) {
+    for (const service of this.configurationOptions.services ?? []) {
       const definitions = await loadProto({
         protoPath: service.protoPath,
         loaderOptions: this.configurationOptions.loaderOptions,
@@ -84,13 +98,13 @@ export class MidwayGRPCFramework extends BaseFramework<
 
     // register method to service
     for (const module of gRPCModules) {
-      const provideId = getProviderId(module);
+      const providerName = getProviderName(module);
       const info: GRPCMetadata.ProviderMetadata = getClassMetadata(
         MS_PROVIDER_KEY,
         module
       );
       const classMetadata = info.metadata;
-      const serviceName = classMetadata.serviceName || pascalCase(provideId);
+      const serviceName = classMetadata.serviceName || pascalCase(providerName);
 
       if (serviceClassDefinition.has(classMetadata?.package)) {
         const serviceInstance = {};
@@ -177,24 +191,31 @@ export class MidwayGRPCFramework extends BaseFramework<
       onEnd: string;
     };
   }) {
-    let result;
-    const { service, ctx, callback, data, grpcMethodData } = options;
+    const { ctx, callback, grpcMethodData } = options;
 
-    try {
-      result = await service[camelCase(ctx.method)]?.call(service, data);
+    const fn = await this.getMiddleware(async ctx => {
+      return await options.service[camelCase(ctx.method)]?.call(
+        options.service,
+        options.data
+      );
+    });
+
+    const { result, error } = await fn(ctx);
+
+    if (error) {
+      callback && callback(error);
+    } else {
       if (grpcMethodData.type === GrpcStreamTypeEnum.BASE) {
         // base 才返回，其他的要等服务端自己 end，或者等客户端 end 事件才结束
         callback && callback(null, result);
       }
-    } catch (err) {
-      callback && callback(err);
     }
   }
 
   public async run(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this.server.bindAsync(
-        `${this.configurationOptions.url || 'localhost:6565'}`,
+        `${this.configurationOptions.url || '0.0.0.0:6565'}`,
         this.configurationOptions.credentials ||
           ServerCredentials.createInsecure(),
         (err: Error | null, bindPort: number) => {

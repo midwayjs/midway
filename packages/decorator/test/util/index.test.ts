@@ -11,7 +11,7 @@ import {
   isRegExp,
   sleep,
   isProxy
-} from '../../src/util';
+} from '../../src';
 
 describe('/test/util/index.test.ts', () => {
   it('should test util method', async () => {

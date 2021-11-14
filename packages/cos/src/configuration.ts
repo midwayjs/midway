@@ -10,7 +10,7 @@ import * as defaultConfig from './config.default';
     },
   ],
 })
-export class AutoConfiguration {
+export class COSConfiguration {
   async onReady(container) {
     await container.getAsync(COSServiceFactory);
   }

@@ -1,4 +1,4 @@
-import { Framework } from '../src';
+import * as Web from '../src';
 import { join } from 'path';
 import { createApp, close } from '@midwayjs/mock';
 import { existsSync, readFileSync } from 'fs';
@@ -8,7 +8,9 @@ const logDir = join(__dirname, '../logs');
 process.env.NODE_LOG_DIR = logDir;
 
 export async function creatApp(name, options = {}) {
-  return createApp<Framework>(join(__dirname, 'fixtures', name), options, Framework)
+  return createApp(join(__dirname, 'fixtures', name), Object.assign(options, {
+    configurationModule: [Web]
+  }), Web)
 }
 
 export async function closeApp(app) {

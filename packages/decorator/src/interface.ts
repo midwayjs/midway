@@ -1,9 +1,12 @@
-import { ScopeEnum } from './common/scopeEnum';
-import { Middleware } from 'koa';
-import { RequestHandler } from 'express';
+export type MiddlewareParamArray = Array<string | any>;
+export type ObjectIdentifier = string | Symbol;
+export type GroupModeType = 'one' | 'multi';
 
-export type MiddlewareParamArray = Array<Middleware | RequestHandler | string>;
-export type ObjectIdentifier = string;
+export enum ScopeEnum {
+  Singleton = 'Singleton',
+  Request = 'Request',
+  Prototype = 'Prototype',
+}
 
 /**
  * 内部管理的属性、json、ref等解析实例存储
@@ -19,9 +22,7 @@ export interface ObjectDefinitionOptions {
   initMethod?: string;
   destroyMethod?: string;
   scope?: ScopeEnum;
-  constructorArgs?: IManagedInstance[];
-  // 是否自动装配
-  isAutowire?: boolean;
+  constructorArgs?: any[];
   namespace?: string;
   srcPath?: string;
 }
@@ -35,10 +36,12 @@ export interface TagPropsMetadata {
 export interface TagClsMetadata {
   id: string;
   originName: string;
+  uuid: string;
+  name: string;
 }
 
 export interface ReflectResult {
-  [key: string]: TagPropsMetadata[];
+  [key: string]: any[];
 }
 
 export enum MSProviderType {
@@ -143,6 +146,10 @@ export namespace FaaSMetadata {
      * deploy or not
      */
     isDeploy?: boolean;
+    /**
+     * function middleware
+     */
+    middleware?: any[];
   }
 
   export interface EventTriggerOptions extends TriggerCommonOptions {
@@ -152,7 +159,6 @@ export namespace FaaSMetadata {
   export interface HTTPTriggerOptions extends TriggerCommonOptions  {
     path: string;
     method?: 'get' | 'post' | 'delete' | 'put' | 'head' | 'patch' | 'all';
-    middleware?: any[];
   }
 
   export interface APIGatewayTriggerOptions extends HTTPTriggerOptions  {
@@ -208,20 +214,27 @@ export namespace FaaSMetadata {
 
 }
 
-export enum MidwayFrameworkType {
-  WEB = '@midwayjs/web',
-  WEB_KOA = '@midwayjs/koa',
-  WEB_EXPRESS = '@midwayjs/express',
-  FAAS = '@midwayjs/faas',
-  MS_HSF = '',
-  MS_GRPC = '@midwayjs/grpc',
-  MS_RABBITMQ = '@midwayjs/rabbitmq',
-  WS_IO = '@midwayjs/socketio',
-  WS = '@midwayjs/ws',
-  SERVERLESS_APP = '@midwayjs/serverless-app',
-  CUSTOM = '',
-  EMPTY = 'empty',
-  LIGHT = 'light',
+export abstract class FrameworkType {
+  abstract name: string;
+}
+
+export class MidwayFrameworkType extends FrameworkType {
+  static WEB = new MidwayFrameworkType('@midwayjs/web');
+  static WEB_KOA = new MidwayFrameworkType('@midwayjs/web-koa');
+  static WEB_EXPRESS = new MidwayFrameworkType('@midwayjs/express');
+  static FAAS = new MidwayFrameworkType('@midwayjs/faas');
+  static MS_GRPC = new MidwayFrameworkType('@midwayjs/grpc');
+  static MS_RABBITMQ = new MidwayFrameworkType('@midwayjs/rabbitmq');
+  static WS_IO = new MidwayFrameworkType('@midwayjs/socketio');
+  static WS = new MidwayFrameworkType('@midwayjs/ws');
+  static SERVERLESS_APP = new MidwayFrameworkType('@midwayjs/serverless-app');
+  static CUSTOM = new MidwayFrameworkType('');
+  static EMPTY = new MidwayFrameworkType('empty');
+  static LIGHT = new MidwayFrameworkType('light');
+  static TASK = new MidwayFrameworkType('@midwayjs/task');
+  constructor(public name: string) {
+    super();
+  };
 }
 
 export enum ServerlessTriggerType {
@@ -235,4 +248,10 @@ export enum ServerlessTriggerType {
   MQ = 'mq',
   HSF = 'hsf',
   MTOP = 'mtop',
+}
+
+export interface IModuleStore {
+  listModule(key: string);
+  saveModule(key: string, module: any);
+  transformModule?(moduleMap: Map<string, Set<any>>);
 }

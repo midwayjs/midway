@@ -1,4 +1,4 @@
-import { saveModule } from '@midwayjs/core';
+import { saveModule } from '@midwayjs/decorator';
 import { Connection, ConnectionOptions } from 'typeorm';
 
 export const ORM_HOOK_KEY = '__orm_hook_for_configuration__';

@@ -1,7 +1,6 @@
 import {
   delegateTargetMethod,
   delegateTargetProperties,
-  ScopeEnum,
   ServiceFactory,
 } from '@midwayjs/core';
 import {
@@ -11,6 +10,7 @@ import {
   Logger,
   Provide,
   Scope,
+  ScopeEnum,
 } from '@midwayjs/decorator';
 import * as mongoose from 'mongoose';
 

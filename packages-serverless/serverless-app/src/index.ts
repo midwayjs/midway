@@ -1,2 +1,3 @@
 export * from './interface';
-export * from './framework';
+export { ServerlessAppFramework as Framework } from './framework';
+export { ServerlessAppConfiguration as Configuration } from './configuration';

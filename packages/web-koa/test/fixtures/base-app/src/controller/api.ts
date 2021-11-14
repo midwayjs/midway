@@ -43,7 +43,7 @@ export class APIController {
 
   @Get('/', { middleware: [] })
   @HttpCode(201)
-  async home(@Query() name: string, @Query() age: number) {
+  async home(@Query('name') name: string, @Query('age') age: number) {
     this.ctx.logger.info('my home router');
     this.logger.warn('my home warn router')
     return 'hello world,' + name + age;

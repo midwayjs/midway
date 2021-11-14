@@ -1,29 +1,15 @@
-import { createBootstrap } from '@midwayjs/mock';
+import { createApp, createHttpRequest, close } from '@midwayjs/mock';
 import { join } from 'path';
-import { MidwayFrameworkType } from '@midwayjs/decorator';
-const request = require('supertest');
 
 describe('/test/index.test.ts', () => {
 
-  let bootstrap = null;
-  let app = null;
-  beforeAll(async () => {
-    bootstrap = await createBootstrap(
-      join(process.cwd(), 'test', 'fixtures', 'test-prometheus-socket-io', 'bootstrap.js')
-    );
-    app = bootstrap.getApp(MidwayFrameworkType.WEB);
-  });
+  it('should get metrics', async() => {
+    const app = await createApp(join(__dirname, './fixtures/test-prometheus-socket-io'));
+    const result = await createHttpRequest(app)
+      .get('/metrics');
 
-  afterAll(async () => {
-
-    // close app
-    await bootstrap.close();
-  })
-  it('should get metrics', done => {
-
-    request(app.callback())
-      .get('/metrics')
-      .expect(200, done)
+    expect(result.status).toEqual(200);
+    await close(app);
   });
 });
 

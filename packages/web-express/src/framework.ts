@@ -1,14 +1,20 @@
 import {
   BaseFramework,
-  extractExpressLikeValue,
+  CommonMiddleware,
+  ContextMiddlewareManager,
+  FunctionMiddleware,
   HTTP_SERVER_KEY,
   IMidwayBootstrapOptions,
+  MiddlewareRespond,
   MidwayFrameworkType,
   PathFileUtil,
   WebRouterCollector,
+  ExceptionFilterManager,
 } from '@midwayjs/core';
 
 import {
+  Framework,
+  Inject,
   RouterParamValue,
   WEB_RESPONSE_CONTENT_TYPE,
   WEB_RESPONSE_HEADER,
@@ -18,15 +24,22 @@ import {
 import {
   IMidwayExpressApplication,
   IMidwayExpressConfigurationOptions,
-  MiddlewareParamArray,
-  IWebMiddleware,
   IMidwayExpressContext,
+  IMidwayExpressMiddleware,
 } from './interface';
-import type { IRouter, IRouterHandler, RequestHandler } from 'express';
+import type {
+  IRouter,
+  IRouterHandler,
+  Response,
+  NextFunction,
+  RequestHandler,
+} from 'express';
 import * as express from 'express';
 import { Server } from 'net';
 import { MidwayExpressContextLogger } from './logger';
+import { MidwayExpressMiddlewareService } from './middlewareService';
 
+@Framework()
 export class MidwayExpressFramework extends BaseFramework<
   IMidwayExpressApplication,
   IMidwayExpressContext,
@@ -34,12 +47,25 @@ export class MidwayExpressFramework extends BaseFramework<
 > {
   public app: IMidwayExpressApplication;
   private controllerIds: string[] = [];
-  public prioritySortRouters: Array<{
-    priority: number;
-    router: IRouter;
-    prefix: string;
-  }> = [];
   private server: Server;
+
+  protected middlewareManager = new ContextMiddlewareManager<
+    IMidwayExpressContext,
+    Response,
+    NextFunction
+  >();
+  protected exceptionFilterManager = new ExceptionFilterManager<
+    IMidwayExpressContext,
+    Response,
+    NextFunction
+  >();
+
+  @Inject()
+  private expressMiddlewareService: MidwayExpressMiddlewareService;
+
+  configure(): IMidwayExpressConfigurationOptions {
+    return this.configService.getConfiguration('express');
+  }
 
   async applicationInitialize(options: Partial<IMidwayBootstrapOptions>) {
     this.app = express() as unknown as IMidwayExpressApplication;
@@ -47,13 +73,15 @@ export class MidwayExpressFramework extends BaseFramework<
       generateController: (controllerMapping: string) => {
         return this.generateController(controllerMapping);
       },
-
+      /**
+       * @deprecated
+       */
       generateMiddleware: async (middlewareId: string) => {
         return this.generateMiddleware(middlewareId);
       },
     });
     this.app.use((req, res, next) => {
-      const ctx = { req, res } as IMidwayExpressContext;
+      const ctx = req as IMidwayExpressContext;
       this.app.createAnonymousContext(ctx);
       (req as any).requestContext = ctx.requestContext;
       ctx.requestContext.registerObject('req', req);
@@ -94,13 +122,29 @@ export class MidwayExpressFramework extends BaseFramework<
     this.applicationContext.registerObject(HTTP_SERVER_KEY, this.server);
   }
 
-  protected async afterContainerReady(
-    options: Partial<IMidwayBootstrapOptions>
-  ): Promise<void> {
-    await this.loadMidwayController();
-  }
-
   public async run(): Promise<void> {
+    // use global middleware
+    const globalMiddleware = await this.getMiddleware();
+    this.app.use(globalMiddleware as any);
+    // load controller
+    await this.loadMidwayController();
+    // use global error handler
+    this.app.use(async (err, req, res, next) => {
+      if (err) {
+        const { result, error } = await this.exceptionFilterManager.run(
+          err,
+          req,
+          res,
+          next
+        );
+        if (error) {
+          next(error);
+        } else {
+          res.send(result);
+        }
+      }
+    });
+
     if (this.configurationOptions.port) {
       new Promise<void>(resolve => {
         const args: any[] = [this.configurationOptions.port];
@@ -133,21 +177,13 @@ export class MidwayExpressFramework extends BaseFramework<
   ): IRouterHandler<any> {
     const [controllerId, methodName] = controllerMapping.split('.');
     return async (req, res, next) => {
-      const args = [req, res, next];
-      if (Array.isArray(routeArgsInfo)) {
-        await Promise.all(
-          routeArgsInfo.map(async ({ index, type, propertyData }) => {
-            args[index] = await extractExpressLikeValue(type, propertyData)(
-              req,
-              res,
-              next
-            );
-          })
-        );
-      }
       const controller = await req.requestContext.getAsync(controllerId);
-      // eslint-disable-next-line prefer-spread
-      const result = await controller[methodName].apply(controller, args);
+      const result = await controller[methodName].call(
+        controller,
+        req,
+        res,
+        next
+      );
 
       if (res.headersSent) {
         // return when response send
@@ -186,6 +222,9 @@ export class MidwayExpressFramework extends BaseFramework<
     const routerList = await collector.getRoutePriorityList();
 
     for (const routerInfo of routerList) {
+      // bind controller first
+      this.getApplicationContext().bindClass(routerInfo.routerModule);
+
       const providerId = routerInfo.controllerId;
       // controller id check
       if (this.controllerIds.indexOf(providerId) > -1) {
@@ -241,39 +280,50 @@ export class MidwayExpressFramework extends BaseFramework<
       this.app.use(routerInfo.prefix, newRouter);
     }
   }
-
+  /**
+   * @deprecated
+   */
   public async generateMiddleware(middlewareId: string) {
-    const mwIns = await this.getApplicationContext().getAsync<IWebMiddleware>(
-      middlewareId
-    );
+    const mwIns =
+      await this.getApplicationContext().getAsync<IMidwayExpressMiddleware>(
+        middlewareId
+      );
     return mwIns.resolve();
   }
 
   /**
-   * @param controllerOption
+   * @param routerOptions
    */
   protected createRouter(routerOptions: { sensitive }): IRouter {
     return express.Router({ caseSensitive: routerOptions.sensitive });
   }
 
   private async handlerWebMiddleware(
-    middlewares: MiddlewareParamArray,
-    handlerCallback: (middlewareImpl: RequestHandler) => void
+    middlewares: Array<
+      CommonMiddleware<IMidwayExpressContext, Response, NextFunction> | string
+    >,
+    handlerCallback: (
+      middlewareImpl: FunctionMiddleware<
+        IMidwayExpressContext,
+        Response,
+        NextFunction
+      >
+    ) => void
   ): Promise<void> {
-    if (middlewares && middlewares.length) {
-      for (const middleware of middlewares) {
-        if (typeof middleware === 'function') {
-          // web function middleware
-          handlerCallback(middleware);
-        } else {
-          const middlewareImpl: IWebMiddleware | void =
-            await this.getApplicationContext().getAsync(middleware);
-          if (middlewareImpl && typeof middlewareImpl.resolve === 'function') {
-            handlerCallback(middlewareImpl.resolve());
-          }
-        }
-      }
+    const fn = await this.expressMiddlewareService.compose(middlewares);
+    handlerCallback(fn);
+  }
+
+  public async getMiddleware<Response, NextFunction>(): Promise<
+    MiddlewareRespond<IMidwayExpressContext, Response, NextFunction>
+  > {
+    if (!this.composeMiddleware) {
+      this.composeMiddleware = await this.expressMiddlewareService.compose(
+        this.middlewareManager
+      );
+      await this.exceptionFilterManager.init(this.applicationContext);
     }
+    return this.composeMiddleware;
   }
 
   public async beforeStop() {

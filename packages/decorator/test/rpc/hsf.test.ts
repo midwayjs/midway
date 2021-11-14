@@ -3,7 +3,7 @@ import {
   listModule,
   HSF_KEY,
   getClassMetadata,
-  getObjectDefProps,
+  getObjectDefinition,
   ScopeEnum,
 } from '../../src';
 
@@ -31,7 +31,7 @@ describe('/test/rpc/hsf.test.ts', () => {
     const m1 = getClassMetadata(HSF_KEY, TestFun1);
     expect(m1).toStrictEqual({});
 
-    const def = getObjectDefProps(TestFun);
+    const def = getObjectDefinition(TestFun);
     expect(def).toStrictEqual({
       scope: ScopeEnum.Request,
     });

@@ -1,3 +1,4 @@
-export { AutoConfiguration as Configuration } from './configuration';
+export { TaskConfiguration as Configuration } from './configuration';
 export { QueueService } from './service/queueService';
-export { IQueue } from './type';
+export * from './framework';
+export * from './interface';

@@ -1,4 +1,4 @@
-import { Provide, Inject, Controller, Get, Config } from '@midwayjs/decorator';
+import { Provide, Inject, Controller, Get, Config, Init } from '@midwayjs/decorator';
 
 @Provide()
 @Controller('/config')
@@ -24,11 +24,12 @@ export class ConfigController {
 
   b: boolean;
 
-  constructor(
-      // should be true
-      @Config('plugins.plugin2') pluginFlag: boolean
-  ) {
-    this.b = pluginFlag;
+  @Config('plugins.plugin2')
+  pluginFlag: boolean;
+
+  @Init()
+  async init() {
+    this.b = this.pluginFlag;
   }
 
   @Get('/test')

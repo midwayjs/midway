@@ -1,4 +1,5 @@
 import { Framework, IMidwaySocketIOApplication, IMidwaySocketIOConfigurationOptions } from '../src';
+import * as socketIO from '../src';
 import { join } from 'path';
 import { close, createApp } from '@midwayjs/mock';
 
@@ -8,7 +9,7 @@ import { close, createApp } from '@midwayjs/mock';
  * @param options
  */
 export async function createServer(name: string, options: IMidwaySocketIOConfigurationOptions = {}): Promise<IMidwaySocketIOApplication> {
-  return createApp<Framework>(join(__dirname, 'fixtures', name), options, Framework);
+  return createApp<Framework>(join(__dirname, 'fixtures', name), options, socketIO);
 }
 
 export async function closeApp(app) {

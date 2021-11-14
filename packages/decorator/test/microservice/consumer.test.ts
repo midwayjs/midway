@@ -1,7 +1,7 @@
 import {
   Consumer,
   getClassMetadata,
-  getObjectDefProps,
+  getObjectDefinition,
   listModule,
   MS_CONSUMER_KEY,
   MSListenerType,
@@ -22,7 +22,7 @@ describe('/test/microservice/consumer.test.ts', () => {
     const meta2 = getClassMetadata(MS_CONSUMER_KEY, TestFun1);
     expect(meta2).toEqual({"metadata": {}, "type": "mqtt"})
 
-    const def = getObjectDefProps(TestFun);
+    const def = getObjectDefinition(TestFun);
     expect(def).toEqual({
       scope: ScopeEnum.Request,
     });

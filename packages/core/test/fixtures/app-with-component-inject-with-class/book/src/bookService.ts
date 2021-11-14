@@ -31,7 +31,7 @@ export async function dynamicCacheServiceHandler(container: IMidwayContainer) {
 
 providerWrapper([
   {
-    id: 'dynamicCacheService',
+    id: 'book:dynamicCacheService',
     provider: dynamicCacheServiceHandler,
     scope: ScopeEnum.Singleton,
   }

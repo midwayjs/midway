@@ -1,4 +1,3 @@
-'use strict';
 import { join } from 'path';
 import * as assert from 'assert';
 import { createApp, close, createHttpRequest } from '@midwayjs/mock';
@@ -6,20 +5,15 @@ import { Framework, Application } from '../src';
 import { EventService } from './fixtures/faas-v2/src/event';
 import { createInitializeContext, createTimerEvent } from '../../serverless-fc-trigger';
 import { FC } from '@midwayjs/faas-typings';
+import * as fs from 'fs';
 
-const cwd = join(__dirname, 'fixtures/faas-v2');
 describe('test/faas-v2.test.ts', () => {
-
-  if (/^v10/.test(process.version)) {
-    it('skip node v10', () => {});
-    return;
-  }
-
   let app: Application;
+  const appDir = join(__dirname, 'fixtures/faas-v2');
   beforeAll(async () => {
-    app = await createApp<Framework>(cwd, {
+    app = await createApp<Framework>(appDir, {
       initContext: createInitializeContext() as FC.InitializeContext,
-    }, join(__dirname, '../src'));
+    }, require('../src'));
   });
   afterAll(async () => {
     await close(app);
@@ -77,7 +71,7 @@ describe('test/faas-v2.test.ts', () => {
   });
 
   it.skip('http post upload', done => {
-    const imagePath = join(cwd, '1.jpg');
+    const imagePath = join(appDir, '1.jpg');
     createHttpRequest(app)
       .post('/upload')
       .field('name', 'form')
@@ -114,5 +108,9 @@ describe('test/faas-v2.test.ts', () => {
         name: 'zhangting'
       });
     expect(result.text).toEqual('user:zhangting');
+  });
+
+  it('test serverless logger should not write log to file', function () {
+    expect(fs.existsSync(join(appDir, 'logs'))).toBeFalsy();
   });
 });

@@ -3,13 +3,11 @@ exports.watcher = {
   type: 'development',
 };
 
-exports.logger = {
-  level: 'DEBUG',
-  allowDebugAtProd: true,
+exports.midwayLogger = {
+  default: {
+    level: 'debug',
+    consoleLevel: 'info'
+  }
 };
-
-export const midwayFeature = {
-  replaceEggLogger: true,
-}
 
 exports.keys = 'foo';

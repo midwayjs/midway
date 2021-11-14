@@ -1,14 +1,14 @@
 import { createApp, close } from '@midwayjs/mock';
-import { Application, Framework } from '@midwayjs/koa'
 import { QueueTask } from './fixtures/base-app/src/task/queue.task';
 import { join } from 'path';
 import { sleep } from '@midwayjs/decorator';
+import * as TaskModule from '../src';
 
 describe(`midway task`, () => {
-  let app: Application;
+  let app: TaskModule.Application;
 
   beforeAll(async () => {
-    app = await createApp(join(__dirname, 'fixtures', 'base-app'), {}, Framework);
+    app = await createApp(join(__dirname, 'fixtures', 'base-app'), {}, TaskModule);
   });
 
   afterAll(async () => {

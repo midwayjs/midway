@@ -1,4 +1,4 @@
-import { Provide, Inject, getConstructorInject, getPropertyInject } from '../../src';
+import { Provide, Inject, getPropertyInject } from '../../src';
 
 @Provide()
 class InjectChild {
@@ -9,10 +9,6 @@ class InjectChild2 {
 
 
 class Test {
-  constructor(@Inject() bb: any, @Inject() cc: any, @Inject() dd: InjectChild) {
-    // ignore
-  }
-
   @Inject()
   aa: any;
 
@@ -25,51 +21,16 @@ class Test {
 
 describe('/test/annotation/inject.test.ts', () => {
   it('inject decorator should be ok', () => {
-    let meta = getConstructorInject(Test);
-    expect(meta).toEqual({
-      0: [
-        {
-          args: undefined,
-          key: 'inject',
-          value: 'bb',
-        },
-      ],
-      1: [
-        {
-          args: undefined,
-          key: 'inject',
-          value: 'cc',
-        },
-      ],
-      2: [
-        {
-          key: 'inject',
-          value: 'dd'
-        }
-      ]
+    let meta = getPropertyInject(Test);
+    expect(meta['aa']).toEqual({
+      value: 'aa',
+      targetKey: 'aa'
     });
-
-    meta = getPropertyInject(Test);
-    expect(meta).toEqual({
-      aa: [
-        {
-          args: undefined,
-          key: 'inject',
-          value: 'aa',
-        },
-      ],
-      ee: [
-        {
-          'key': 'inject',
-          'value': 'injectChild'
-        }
-      ],
-      ff: [
-        {
-          'key': 'inject',
-          'value': 'ff'
-        }
-      ]
+    expect(meta['ee']['targetKey']).toEqual('ee');
+    expect(meta['ee']['value'].length).toEqual(32);
+    expect(meta['ff']).toEqual({
+      value: 'ff',
+      targetKey: 'ff'
     });
   });
 });

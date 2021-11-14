@@ -11,6 +11,4 @@ import { Configuration } from '@midwayjs/decorator';
     aa: 123
   }
 })
-class AutoConfiguraion {}
-
-module.exports = AutoConfiguraion;
+export class AutoConfiguration {}

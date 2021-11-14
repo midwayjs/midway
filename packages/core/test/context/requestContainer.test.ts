@@ -1,10 +1,9 @@
 import {
   MidwayContainer as Container,
   MidwayRequestContainer as RequestContainer,
-  REQUEST_OBJ_CTX_KEY,
-  ScopeEnum,
+  REQUEST_OBJ_CTX_KEY
 } from '../../src';
-import { Inject, Provide, Scope } from '@midwayjs/decorator';
+import { Inject, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
 import {
   AppService,
   AutoScaleService,
@@ -26,12 +25,14 @@ import {
   TestTwo1,
 } from '../fixtures/circular_dependency';
 
+@Provide()
 class Tracer {
   get parentId() {
     return '321';
   }
 }
 
+@Provide()
 class DataCollector {
   id = Math.random();
 
@@ -210,26 +211,6 @@ describe('/test/context/requestContainer.test.ts', () => {
     expect((one.autoScaleService as any).scaleManager.ts).toEqual('scale');
   });
 
-  it('test getService in requestContainer', async () => {
-    const appCtx = new Container();
-    // 合并 egg config
-    const configService = appCtx.getConfigService();
-    configService.addObject({
-      name: 'zhangting',
-    });
-    appCtx.bind(GatewayManager);
-    await appCtx.ready();
-
-    const ctx1 = { a: 1 };
-    const container = new RequestContainer(ctx1, appCtx);
-    const defaultConfig = container.getConfigService().getConfiguration();
-    expect(defaultConfig.name).toEqual('zhangting');
-    const defaultEnv = container
-      .getEnvironmentService()
-      .getCurrentEnvironment();
-    expect(defaultEnv).toEqual('test');
-  });
-
   it('test request scope inject request scope', async () => {
     @Provide()
     @Scope(ScopeEnum.Request)
@@ -296,9 +277,9 @@ describe('/test/context/requestContainer.test.ts', () => {
     const a2 = await requestContainer2.getAsync(A);
     // 请求 ctx 是否正确
     expect(a1.ctx.c).toEqual(1);
-    expect(a1.b.ctx).toBeUndefined();
+    expect(a1.b.ctx).toEqual({});
     expect(a2.ctx.d).toEqual(1);
-    expect(a2.b.ctx).toBeUndefined();
+    expect(a2.b.ctx).toEqual({});
     // 是否同一单例
     expect(a1.aid).not.toEqual(a2.aid);
     expect(a1.b.bid).toEqual(a2.b.bid);
@@ -333,10 +314,10 @@ describe('/test/context/requestContainer.test.ts', () => {
     const requestContainer2 = new RequestContainer({d:1}, appCtx);
     const a2 = await requestContainer2.getAsync(A);
     // 请求 ctx 是否正确
-    expect(a1.ctx).toBeUndefined();
-    expect(a1.b.ctx).toBeUndefined();
-    expect(a2.ctx).toBeUndefined();
-    expect(a2.b.ctx).toBeUndefined();
+    expect(a1.ctx).toEqual({});
+    expect(a1.b.ctx).toEqual({});
+    expect(a2.ctx).toEqual({});
+    expect(a2.b.ctx).toEqual({});
     // 是否同一单例
     expect(a1.aid).toEqual(a2.aid);
     expect(a1.b.bid).toEqual(a2.b.bid);

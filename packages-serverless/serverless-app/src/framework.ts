@@ -1,17 +1,15 @@
 import {
-  IMidwayApplication,
+  BaseFramework,
   IMidwayBootstrapOptions,
-  IMidwayContainer,
   IMidwayContext,
-  IMidwayFramework,
+  MidwayCommonError,
   MidwayFrameworkType,
 } from '@midwayjs/core';
 import { Application, IServerlessAppOptions } from './interface';
 import { Server } from 'net';
 import { StarterMap, TriggerMap } from './platform';
 import * as express from 'express';
-import { findNpmModule, output404 } from './utils';
-import { start2 } from './start';
+import { output404 } from './utils';
 import { existsSync, readFileSync } from 'fs';
 import { resolve, join } from 'path';
 import * as bodyParser from 'body-parser';
@@ -21,72 +19,38 @@ import {
   parse,
 } from '@midwayjs/serverless-spec-builder';
 import { createExpressGateway } from '@midwayjs/gateway-common-http';
+import { Framework as FaaSFramework, Context } from '@midwayjs/faas';
+import { Inject, Framework } from '@midwayjs/decorator';
+import { start3 } from './start';
 
-export class Framework
-  implements IMidwayFramework<Application, IServerlessAppOptions>
-{
-  app: Application;
+@Framework()
+export class ServerlessAppFramework extends BaseFramework<
+  Application,
+  Context,
+  IServerlessAppOptions
+> {
+  @Inject()
+  private innerServerlessFramework: FaaSFramework;
   configurationOptions: IServerlessAppOptions;
-  private innerApp: IMidwayApplication;
-  private innerFramework: IMidwayFramework<any, any>;
-  private innerBootStarter;
+
   private runtime: any;
   private server: Server;
   private spec;
-  private proxyApp;
   protected bootstrapOptions;
   protected invokeFun;
-  configure(options: IServerlessAppOptions = {}) {
-    this.configurationOptions = options;
-    return this;
-  }
-  async stop() {
+  private httpServerApp;
+  private proxyApp;
+
+  configure(options) {}
+
+  async beforeStop() {
     if (this.server?.close) {
       this.server.close();
-    }
-    if (this.innerBootStarter) {
-      await this.innerBootStarter.stop();
     }
     if (this.runtime) {
       await this.runtime.close();
     }
   }
-
-  getApplicationContext(): IMidwayContainer {
-    return this.innerApp.getApplicationContext();
-  }
-
-  getConfiguration(key?: string): any {
-    return this.innerApp.getConfig(key);
-  }
-
-  getCurrentEnvironment(): string {
-    return this.innerApp.getEnv();
-  }
-  getAppDir(): string {
-    return this.innerApp.getAppDir();
-  }
-
-  getLogger(name?: string): any {
-    return this.innerApp.getLogger(name);
-  }
-  getBaseDir(): string {
-    return this.innerApp.getBaseDir();
-  }
-  getCoreLogger() {
-    return (this.innerApp as any).coreLogger;
-  }
-  createLogger(name: string, options?: any): any {
-    return this.innerApp.createLogger(name, options);
-  }
-  getProjectName(): string {
-    return this.innerApp.getProjectName();
-  }
-  public getDefaultContextLoggerClass() {
-    return this.innerFramework.getDefaultContextLoggerClass();
-  }
-
-  async applicationInitialize(options: IMidwayBootstrapOptions) {}
 
   public getFrameworkName() {
     return 'midway:serverless:app';
@@ -97,13 +61,14 @@ export class Framework
   }
   public getApplication() {
     if (!this.proxyApp) {
-      this.proxyApp = new Proxy(this.app, {
+      this.proxyApp = new Proxy(this.httpServerApp, {
         get: (target, key) => {
+          if (key === 'callback') return;
           if (target[key]) {
             return target[key];
           }
-          if (this[key]) {
-            return this[key];
+          if (this.app[key]) {
+            return this.app[key];
           }
         },
       });
@@ -123,7 +88,9 @@ export class Framework
     const platform = this.getPlatform();
     const starterModList = StarterMap[platform];
     if (!starterModList || !starterModList.length) {
-      throw new Error(`Current provider '${platform}' not support(no starter)`);
+      throw new MidwayCommonError(
+        `Current provider '${platform}' not support(no starter)`
+      );
     }
     for (const mod of starterModList) {
       try {
@@ -132,7 +99,7 @@ export class Framework
         // continue
       }
     }
-    throw new Error(
+    throw new MidwayCommonError(
       `Platform starter '${
         starterModList[starterModList.length - 1]
       }' not found`
@@ -147,7 +114,9 @@ export class Framework
     const platform = this.getPlatform();
     const triggerModList = TriggerMap[platform];
     if (!triggerModList || !triggerModList.length) {
-      throw new Error(`Current provider '${platform}' not support(no trigger)`);
+      throw new MidwayCommonError(
+        `Current provider '${platform}' not support(no trigger)`
+      );
     }
     for (const mod of triggerModList) {
       try {
@@ -156,7 +125,7 @@ export class Framework
         // continue
       }
     }
-    throw new Error(
+    throw new MidwayCommonError(
       `Platform trigger '${
         triggerModList[triggerModList.length - 1]
       }' not found`
@@ -167,7 +136,7 @@ export class Framework
     // 如何传initializeContext
     const context: IMidwayContext = await new Promise(resolve => {
       this.runtime.asyncEvent(async ctx => {
-        resolve((this.innerFramework as any).getContext(ctx));
+        resolve((this.innerServerlessFramework as any).getContext(ctx));
       })({}, this.configurationOptions.initContext ?? {});
     });
 
@@ -186,46 +155,27 @@ export class Framework
     return provider;
   }
 
-  async initialize(options: Partial<IMidwayBootstrapOptions>) {
+  async applicationInitialize(options: Partial<IMidwayBootstrapOptions>) {
+    this.configurationOptions = options as IServerlessAppOptions;
     this.bootstrapOptions = options;
     this.getFaaSSpec();
-    this.app = express() as any;
-    const { appDir, baseDir } = options;
+    this.httpServerApp = express() as any;
 
-    const faasModule = '@midwayjs/faas';
-    const faasModulePath =
-      process.env.MIDWAY_FAAS_PATH ?? findNpmModule(appDir, faasModule);
-    if (!faasModulePath) {
-      throw new Error(`Module '${faasModule}' not found`);
-    }
+    const { appDir } = options;
     const starterName = this.getStarterName();
-    const usageFaaSModule = this.getFaaSModule();
-
-    let usageFaasModulePath = faasModulePath;
-    if (usageFaaSModule !== faasModule) {
-      usageFaasModulePath = findNpmModule(appDir, usageFaaSModule);
-      if (!usageFaasModulePath) {
-        throw new Error(`Module '${usageFaasModulePath}' not found`);
-      }
-    }
 
     // 分析项目结构
-    const currentBaseDir = baseDir;
     const layers = this.getLayers();
-    const { Framework } = require(usageFaasModulePath);
-    const startResult = await start2({
+    const startResult = await start3({
       appDir,
-      baseDir: currentBaseDir,
-      framework: Framework,
+      framework: this.innerServerlessFramework,
       layers: layers,
       starter: require(starterName),
-      applicationContext: options.applicationContext,
       initializeContext: this.configurationOptions?.initContext,
     });
-    this.innerFramework = startResult.framework;
-    this.innerBootStarter = startResult.innerBootStarter;
+
+    this.app = this.innerServerlessFramework.getApplication() as Application;
     this.runtime = startResult.runtime;
-    this.innerApp = startResult.framework.getApplication();
     this.invokeFun = startResult.invoke;
     const funcSpec = await startResult.getFunctionsFromDecorator();
     if (!this.spec.functions) {
@@ -233,19 +183,19 @@ export class Framework
     }
     Object.assign(this.spec.functions, funcSpec);
     this.app.getServerlessInstance = this.getServerlessInstance.bind(this);
-    this.app.use(
+    this.httpServerApp.use(
       bodyParser.urlencoded({
         extended: false,
         limit: this.configurationOptions.bodyParserLimit ?? '2mb',
       })
     );
-    this.app.use(
+    this.httpServerApp.use(
       bodyParser.json({
         limit: this.configurationOptions.bodyParserLimit ?? '2mb',
       })
     );
-    this.app.use(this.faasInvokeMiddleware.bind(this));
-    this.app.use((req, res) => {
+    this.httpServerApp.use(this.faasInvokeMiddleware.bind(this));
+    this.httpServerApp.use((req, res) => {
       res.statusCode = 404;
       res.send(output404(req.path, this.spec.functions));
     });
@@ -356,10 +306,10 @@ export class Framework
             key: readFileSync(join(__dirname, '../ssl/ssl.key'), 'utf8'),
             cert: readFileSync(join(__dirname, '../ssl/ssl.pem'), 'utf8'),
           },
-          this.app
+          this.httpServerApp
         );
       } else {
-        this.server = require('http').createServer(this.app);
+        this.server = require('http').createServer(this.httpServerApp);
       }
 
       await new Promise<void>(resolve => {

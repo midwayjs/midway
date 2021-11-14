@@ -1,6 +1,6 @@
 import {
   getClassMetadata,
-  getObjectDefProps,
+  getObjectDefinition,
   listModule,
   MS_PROVIDER_KEY,
   ScopeEnum,
@@ -25,7 +25,7 @@ describe('/test/microservice/provider.test.ts', () => {
     const meta2 = getClassMetadata(MS_PROVIDER_KEY, TestFun1);
     expect(meta2).toEqual({ type: MSProviderType.DUBBO, metadata: {} });
 
-    const def = getObjectDefProps(TestFun);
+    const def = getObjectDefinition(TestFun);
     expect(def).toEqual({
       scope: ScopeEnum.Request,
     });

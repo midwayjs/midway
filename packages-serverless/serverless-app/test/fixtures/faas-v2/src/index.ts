@@ -1,10 +1,17 @@
-import { Provide, Func, Inject } from '@midwayjs/decorator';
+import { Provide, ServerlessTrigger, Inject, ServerlessTriggerType, ServerlessFunction } from '@midwayjs/decorator';
 @Provide()
 export class HelloHttpService {
   @Inject()
   ctx;
 
-  @Func('http.handler')
+  @ServerlessTrigger(ServerlessTriggerType.HTTP, {
+    path: '/hello',
+    method: 'get'
+  })
+  @ServerlessTrigger(ServerlessTriggerType.HTTP, {
+    path: '/hello',
+    method: 'post'
+  })
   handler() {
     return {
       method: this.ctx.method,
@@ -15,7 +22,10 @@ export class HelloHttpService {
     }
   }
 
-  @Func('http.upload', { middleware: ['fmw:upload'] })
+  @ServerlessFunction({
+    functionName: 'upload'
+  })
+  @ServerlessTrigger(ServerlessTriggerType.EVENT, { middleware: ['fmw:upload'] })
   upload() {
     const { files, fields } = this.ctx;
     return {
@@ -24,7 +34,7 @@ export class HelloHttpService {
     }
   }
 
-  @Func('http.oth', { event: 'http', path: '/other', method: 'get'})
+  @ServerlessTrigger(ServerlessTriggerType.HTTP, { path: '/other', method: 'get'})
   other() {
     return 'hello world'
   }

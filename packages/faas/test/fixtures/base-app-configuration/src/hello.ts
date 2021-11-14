@@ -1,28 +1,22 @@
-import {
-  inject,
-  provide,
-  func,
-  config,
-  FunctionHandler,
-} from '../../../../src';
+import { Inject, Provide, Config, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/decorator';
 import { UserManager } from './lib/userManager';
 import assert = require('assert');
 
-@provide()
-@func('index.handler')
-export class HelloService implements FunctionHandler {
-  @inject()
+@Provide()
+export class HelloService {
+  @Inject()
   ctx; // context
 
-  @config('case')
+  @Config('case')
   allConfig;
 
-  @inject()
+  @Inject()
   userManager: UserManager;
 
-  @inject('@midway-plugin-mod:articleManager')
+  @Inject('@midway-plugin-mod:articleManager')
   articleManager: any;
 
+  @ServerlessTrigger(ServerlessTriggerType.EVENT)
   async handler(event) {
     assert.equal(
       await this.userManager.getUser(),

@@ -1,11 +1,9 @@
 import {
   attachClassMetadata,
-  attachMethodDataToClass,
-  attachMethodMetadata,
+  attachPropertyMetadata,
   attachPropertyDataToClass,
+  savePropertyDataToClass,
   saveClassMetadata,
-  saveMethodDataToClass,
-  saveMethodMetadata,
   saveModule,
   savePreloadModule,
   savePropertyMetadata
@@ -26,20 +24,20 @@ export function preload(): ClassDecorator {
 
 export function customMethod(): MethodDecorator {
   return (target: object, propertykey: string, descriptor: PropertyDescriptor) => {
-    saveMethodDataToClass('custom', {
+    savePropertyDataToClass('custom', {
       method: propertykey,
       data: 'customData',
     }, target, propertykey);
 
-    saveMethodMetadata('custom', 'methodData', target, propertykey);
+    savePropertyMetadata('custom', 'methodData', target, propertykey);
     saveClassMetadata('custom_method', propertykey, target);
   };
 }
 
 export function attachMethod(data): MethodDecorator {
   return (target: object, propertykey: string, descriptor: PropertyDescriptor) => {
-    attachMethodMetadata('custom_attach', data, target, propertykey);
-    attachMethodDataToClass('custom_attach_to_class', data, target, propertykey);
+    attachPropertyMetadata('custom_attach', data, target, propertykey);
+    attachPropertyDataToClass('custom_attach_to_class', data, target, propertykey);
   };
 }
 

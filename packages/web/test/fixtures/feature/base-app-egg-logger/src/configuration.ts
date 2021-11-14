@@ -1,10 +1,11 @@
 import { Configuration, Logger, App } from '@midwayjs/decorator';
 import * as assert from 'assert';
 import { Application } from 'egg';
+import { join } from 'path';
 
 @Configuration({
   importConfigs: [
-    './config'
+    join(__dirname, './config')
   ]
 })
 export class ContainerConfiguration {
@@ -16,7 +17,7 @@ export class ContainerConfiguration {
   app: Application;
 
   async onReady() {
-    assert(this.logger.get('file'));
+    assert(this.logger.fileTransport);
     assert(this.logger === this.app.logger);
   }
 }

@@ -4,8 +4,10 @@ module.exports = {
   static: false,
   development: false,
   watcher: false,
-  schedulePlus: {
-    enable: true,
-    package: 'midway-schedule',
-  },
+  onerror: true,
+  multipart: true,
+  security: true,
+  logrotator: false,
+  view: false,
+  schedule: false,
 };

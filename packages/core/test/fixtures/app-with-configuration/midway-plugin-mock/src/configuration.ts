@@ -4,6 +4,7 @@ import { Configuration } from '@midwayjs/decorator';
   importObjects: {
     bb: 123,
     cc: 'mock'
-  }
+  },
+  namespace: '@midway-plugin-mock'
 })
 export class AutoConfiguration {}

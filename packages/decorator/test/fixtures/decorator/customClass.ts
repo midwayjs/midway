@@ -1,7 +1,7 @@
 import { attachClass, attachMethod, customCls, customMethod, preload, propertyKeyA, propertyKeyB } from './custom';
 import { Provide, Scope, ScopeEnum, Logger, Controller } from '../../../src';
 
-@Provide()
+@Provide('123')
 @Scope(ScopeEnum.Singleton)
 @preload()
 @customCls()

@@ -1,6 +1,5 @@
-import { Async, Config, Init, Plugin, Provide } from '@midwayjs/decorator';
+import { Config, Init, Plugin, Provide } from '@midwayjs/decorator';
 
-@Async()
 @Provide()
 export class BaseService {
 

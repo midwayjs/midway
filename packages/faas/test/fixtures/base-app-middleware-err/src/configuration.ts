@@ -1,6 +1,14 @@
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration, App } from '@midwayjs/decorator';
+import { TestMiddleware } from './mw/test';
 
 @Configuration({
-  importConfigs: ['./config.default'],
 })
-export class AutoConfiguraion {}
+export class AutoConfiguration {
+
+  @App()
+  app;
+
+  async onReady(container) {
+    this.app.useMiddleware(TestMiddleware);
+  }
+}

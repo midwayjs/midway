@@ -19,7 +19,7 @@ export class FuncService {
     method: 'get',
     path: '/func/http/get'
   })
-  async handler(@Query() name) {
+  async handler(@Query('name') name) {
     return 'user:' + name;
   }
 
@@ -27,7 +27,7 @@ export class FuncService {
     method: 'post',
     path: '/func/http/post'
   })
-  async handler2(@Body() name, @Headers('content-type') type) {
+  async handler2(@Body('name') name, @Headers('content-type') type) {
     return 'user:' + name;
   }
 

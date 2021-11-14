@@ -5,6 +5,7 @@ const FCApiGatewayTrigger =
 const { ApiGatewayTrigger } = require('@midwayjs/serverless-scf-trigger');
 const { join } = require('path');
 const request = require('supertest');
+const { existsSync, remove } = require('fs-extra');
 
 describe('/test/index.test.ts', () => {
   describe('FC test with http trigger', () => {
@@ -12,6 +13,7 @@ describe('/test/index.test.ts', () => {
     let app;
 
     beforeAll(async () => {
+      process.env.FRAMEWORK_EGG_MODE = 'true';
       const entryDir = join(__dirname, './fixtures/eaas-fc');
       process.env.ENTRY_DIR = entryDir;
       runtime = createRuntime({
@@ -26,6 +28,7 @@ describe('/test/index.test.ts', () => {
         runtime.close();
       }
       process.env.ENTRY_DIR = '';
+      process.env.FRAMEWORK_EGG_MODE = undefined;
       // delete require.cache[require.resolve('./fixtures/eaas/index.js')];
     });
 
@@ -117,6 +120,7 @@ describe('/test/index.test.ts', () => {
     let app;
 
     beforeAll(async () => {
+      process.env.FRAMEWORK_EGG_MODE = 'true';
       const entryDir = join(__dirname, './fixtures/eaas-fc');
       process.env.ENTRY_DIR = entryDir;
       runtime = createRuntime({
@@ -131,6 +135,7 @@ describe('/test/index.test.ts', () => {
         runtime.close();
       }
       process.env.ENTRY_DIR = '';
+      process.env.FRAMEWORK_EGG_MODE = undefined;
     });
 
     it('should test with get', done => {
@@ -200,6 +205,7 @@ describe('/test/index.test.ts', () => {
     let app;
 
     beforeAll(async () => {
+      process.env.FRAMEWORK_EGG_MODE = 'true';
       const entryDir = join(__dirname, './fixtures/eaas-scf');
       process.env.ENTRY_DIR = entryDir;
       runtime = createRuntime({
@@ -214,6 +220,7 @@ describe('/test/index.test.ts', () => {
         runtime.close();
       }
       process.env.ENTRY_DIR = '';
+      process.env.FRAMEWORK_EGG_MODE = undefined;
     });
 
     it('should test with get', done => {
@@ -285,11 +292,9 @@ describe('/test/index.test.ts', () => {
 
     beforeAll(async () => {
       // set midway framework dir
-      process.env.EGG_FRAMEWORK_DIR = join(
-        __dirname,
-        '../node_modules/@midwayjs/web'
-      );
       const entryDir = join(__dirname, './fixtures/midway-fc');
+      await remove(join(entryDir, 'logs'));
+      await remove(join(entryDir, 'run'));
       process.env.ENTRY_DIR = entryDir;
       runtime = createRuntime({
         functionDir: entryDir,
@@ -322,6 +327,13 @@ describe('/test/index.test.ts', () => {
         .expect('Content-Type', 'text/plain; charset=utf-8')
         .expect('%E6%B5%8B%E8%AF%95')
         .expect(200, done);
+    });
+
+    it('logs will be not exists', async () => {
+      const logsDir = join(__dirname, './fixtures/midway-fc', 'logs');
+      const runDir = join(__dirname, './fixtures/midway-fc', 'run');
+      expect(existsSync(logsDir)).toBeFalsy();
+      expect(existsSync(runDir)).toBeFalsy();
     });
   });
 });
