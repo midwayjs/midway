@@ -3,6 +3,53 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.1](https://github.com/midwayjs/midway/compare/v2.12.4...v3.0.0-beta.1) (2021-11-14)
+
+
+### Bug Fixes
+
+* add log for 'Internal Server Error' ([#1282](https://github.com/midwayjs/midway/issues/1282)) ([f333466](https://github.com/midwayjs/midway/commit/f333466d138a319b417964cdb9cb065f2b955722))
+* ci、build and type error with rabbitmq ([#1253](https://github.com/midwayjs/midway/issues/1253)) ([80ae991](https://github.com/midwayjs/midway/commit/80ae9919e1c21c9e326b5f186f891d14d43495a5))
+* circular inject for provide uuid ([#1285](https://github.com/midwayjs/midway/issues/1285)) ([34533bf](https://github.com/midwayjs/midway/commit/34533bfe9bf1c4acdffb1360ab24c716b5196de8))
+* component env filter ([#1234](https://github.com/midwayjs/midway/issues/1234)) ([1ad365f](https://github.com/midwayjs/midway/commit/1ad365fd8ef5e0e7dae3d08a2427a2300038290a))
+* correct aspect chain bug ([#1204](https://github.com/midwayjs/midway/issues/1204)) ([5de5284](https://github.com/midwayjs/midway/commit/5de5284c70b44acc73eaaad651fd2edc72d54f28))
+* disable performance marking for invoke handlers ([#1299](https://github.com/midwayjs/midway/issues/1299)) ([2de9221](https://github.com/midwayjs/midway/commit/2de92214542b8df3abb57b618befde5e161de79e))
+* empty options in default ([#1241](https://github.com/midwayjs/midway/issues/1241)) ([802109d](https://github.com/midwayjs/midway/commit/802109ddd098afb04d6d540bff509e0aee85b806))
+* encode request path in serverless ([#1230](https://github.com/midwayjs/midway/issues/1230)) ([c826e68](https://github.com/midwayjs/midway/commit/c826e6899c884af9f3365ab77b95449a68889afe))
+* find egg plugin in cwd ([#1236](https://github.com/midwayjs/midway/issues/1236)) ([d9ac0ff](https://github.com/midwayjs/midway/commit/d9ac0ff6d4e7a58a8924636806d3894acf94fcd8))
+* form-data for egg-layer ([#1097](https://github.com/midwayjs/midway/issues/1097)) ([66057e8](https://github.com/midwayjs/midway/commit/66057e8910c00db0ae2b2ea801cdd94aa063fe84))
+* functional configuration load async code ([#1300](https://github.com/midwayjs/midway/issues/1300)) ([32bcf03](https://github.com/midwayjs/midway/commit/32bcf030ed1ab04482dc557f8b0c6904e47b31e1))
+* getCustomRepository bug ([#1309](https://github.com/midwayjs/midway/issues/1309)) ([04487a8](https://github.com/midwayjs/midway/commit/04487a8029ac42ed8001ed11a13eb29b846460d8))
+* load component with enabledEnvironment ([#1329](https://github.com/midwayjs/midway/issues/1329)) ([3182271](https://github.com/midwayjs/midway/commit/3182271a1eab931e2bf872bff6e2725ebb906ad0))
+* node v16 typings ([#1269](https://github.com/midwayjs/midway/issues/1269)) ([e3443b5](https://github.com/midwayjs/midway/commit/e3443b58fc1faddadf1e95dd03a2f319410941bb))
+* remove connection key ([#1337](https://github.com/midwayjs/midway/issues/1337)) ([6ac219e](https://github.com/midwayjs/midway/commit/6ac219e786792b32d19a364bffbe9e6318c2f9e1))
+* serverless app support applicationContext ([#1281](https://github.com/midwayjs/midway/issues/1281)) ([b692001](https://github.com/midwayjs/midway/commit/b692001c451b17a10d26cb6778a8566d5fa569c5))
+* serverless local dev bodyparser limit ([#1245](https://github.com/midwayjs/midway/issues/1245)) ([6bdf378](https://github.com/midwayjs/midway/commit/6bdf37841260b1f77e20d913ee85a45ae41ca559))
+* static prefix ([#1321](https://github.com/midwayjs/midway/issues/1321)) ([31fe961](https://github.com/midwayjs/midway/commit/31fe961931fed7656a144b1682ee4c4bb25fdff5))
+* winston rotate log size limit in cluster mode ([#1268](https://github.com/midwayjs/midway/issues/1268)) ([09f9d81](https://github.com/midwayjs/midway/commit/09f9d81ac80f660907c5d8a97c897e375bde8ecc))
+
+
+### Features
+
+* add a process agent component ([#1278](https://github.com/midwayjs/midway/issues/1278)) ([e630fb1](https://github.com/midwayjs/midway/commit/e630fb143ba14eed64436612e9a86afc0d46b42d))
+* add cos component ([#1271](https://github.com/midwayjs/midway/issues/1271)) ([c18e597](https://github.com/midwayjs/midway/commit/c18e597d55a6452188cc7daecd0062bf161028cc))
+* add ctx.throw for serverless app ([#1262](https://github.com/midwayjs/midway/issues/1262)) ([70008b3](https://github.com/midwayjs/midway/commit/70008b32157286708ec01390b0bf8233ba5a84dd))
+* add http2 support ([#1242](https://github.com/midwayjs/midway/issues/1242)) ([6cda27e](https://github.com/midwayjs/midway/commit/6cda27e9e22689e46ace543326b43ae21b134911))
+* add mongoose component and support multi-instance for typegoose ([#1334](https://github.com/midwayjs/midway/issues/1334)) ([ca0b73f](https://github.com/midwayjs/midway/commit/ca0b73fec77e8871e4001b4c9d3e45397ce32450))
+* add prometheus-socket-io ([#1275](https://github.com/midwayjs/midway/issues/1275)) ([55e2b53](https://github.com/midwayjs/midway/commit/55e2b53e83f9b6756df0ffac2e2d7d791aa2154f))
+* add redis component ([#1270](https://github.com/midwayjs/midway/issues/1270)) ([09c993a](https://github.com/midwayjs/midway/commit/09c993ac308d26fa9c742a659471c3f4cf5c5782))
+* add sequelize component ([#1283](https://github.com/midwayjs/midway/issues/1283)) ([9ad91d1](https://github.com/midwayjs/midway/commit/9ad91d1e3ef3cf4cd799a1f8ef3d57b7efae60cf))
+* add setDiff ([#1263](https://github.com/midwayjs/midway/issues/1263)) ([9dd1a08](https://github.com/midwayjs/midway/commit/9dd1a08326540da52abf79cf31182d4e63b7f4d9))
+* add tablestore component and typescript definition ([#1302](https://github.com/midwayjs/midway/issues/1302)) ([aaa4877](https://github.com/midwayjs/midway/commit/aaa4877dc2e6a148346e130dcc6f5401c470eb4c))
+* add view, view-ejs and view-nunjucks ([#1308](https://github.com/midwayjs/midway/issues/1308)) ([a00f44b](https://github.com/midwayjs/midway/commit/a00f44bd769052245cd49d49ab417d621bb89caa))
+* merge DTO Helper for [#1250](https://github.com/midwayjs/midway/issues/1250) ([#1288](https://github.com/midwayjs/midway/issues/1288)) ([3f8f937](https://github.com/midwayjs/midway/commit/3f8f93765a66f49940565231d50405a7dbd593c7))
+* queue support concurrency config ([#1231](https://github.com/midwayjs/midway/issues/1231)) ([67bb7f5](https://github.com/midwayjs/midway/commit/67bb7f50b3dcf80439d1b4b4b9c06f930a8b4468))
+* serverless-worker-starter ([#1171](https://github.com/midwayjs/midway/issues/1171)) ([081a3ec](https://github.com/midwayjs/midway/commit/081a3ec360af4f0d771bd4cc5a39b185c87c0307))
+
+
+
+
+
 ## [2.12.4](https://github.com/midwayjs/midway/compare/v2.12.3...v2.12.4) (2021-08-13)
 
 

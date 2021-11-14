@@ -1,20 +1,19 @@
 {
   "name": "@midwayjs/info",
   "description": "midway info",
-  "version": "3.0.0-alpha.2",
+  "version": "3.0.0-beta.1",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "files": [
     "dist/**/*.js",
     "dist/**/*.d.ts"
   ],
-  "dependencies": {},
   "devDependencies": {
-    "@midwayjs/core": "^3.0.0-alpha.42",
-    "@midwayjs/decorator": "^3.0.0-alpha.42",
-    "@midwayjs/mock": "^3.0.0-alpha.42",
-    "@midwayjs/serverless-fc-starter": "^3.0.0-alpha.42",
-    "@midwayjs/serverless-scf-starter": "^3.0.0-alpha.42"
+    "@midwayjs/core": "^3.0.0-beta.1",
+    "@midwayjs/decorator": "^3.0.0-beta.1",
+    "@midwayjs/mock": "^3.0.0-beta.1",
+    "@midwayjs/serverless-fc-starter": "^3.0.0-beta.1",
+    "@midwayjs/serverless-scf-starter": "^3.0.0-beta.1"
   },
   "keywords": [
     "midway"

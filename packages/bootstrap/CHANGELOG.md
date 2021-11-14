@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.1](https://github.com/midwayjs/midway/compare/v2.12.4...v3.0.0-beta.1) (2021-11-14)
+
+
+### Bug Fixes
+
+* serverless app support applicationContext ([#1281](https://github.com/midwayjs/midway/issues/1281)) ([b692001](https://github.com/midwayjs/midway/commit/b692001c451b17a10d26cb6778a8566d5fa569c5))
+
+
+
+
+
 ## [2.12.3](https://github.com/midwayjs/midway/compare/v2.12.2...v2.12.3) (2021-08-09)
 
 **Note:** Version bump only for package @midwayjs/bootstrap

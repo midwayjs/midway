@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.1](https://github.com/midwayjs/midway/compare/v2.12.4...v3.0.0-beta.1) (2021-11-14)
+
+
+### Bug Fixes
+
+* add log for 'Internal Server Error' ([#1282](https://github.com/midwayjs/midway/issues/1282)) ([f333466](https://github.com/midwayjs/midway/commit/f333466d138a319b417964cdb9cb065f2b955722))
+
+
+
+
+
 # [3.0.0-alpha.2](https://github.com/midwayjs/midway-faas/compare/v3.0.0-alpha.1...v3.0.0-alpha.2) (2021-08-05)
 
 **Note:** Version bump only for package @midwayjs/serverless-scf-starter

@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/cache",
-  "version": "3.0.0-alpha.42",
+  "version": "3.0.0-beta.1",
   "description": "midway cache manager",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -27,9 +27,9 @@
     "node": ">=12"
   },
   "devDependencies": {
-    "@midwayjs/core": "^3.0.0-alpha.42",
-    "@midwayjs/decorator": "^3.0.0-alpha.42",
-    "@midwayjs/mock": "^3.0.0-alpha.42"
+    "@midwayjs/core": "^3.0.0-beta.1",
+    "@midwayjs/decorator": "^3.0.0-beta.1",
+    "@midwayjs/mock": "^3.0.0-beta.1"
   },
   "dependencies": {
     "@types/cache-manager": "^3.4.0",

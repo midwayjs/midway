@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.1](https://github.com/midwayjs/midway/compare/v2.12.4...v3.0.0-beta.1) (2021-11-14)
+
+
+### Bug Fixes
+
+* serverless local dev bodyparser limit ([#1245](https://github.com/midwayjs/midway/issues/1245)) ([6bdf378](https://github.com/midwayjs/midway/commit/6bdf37841260b1f77e20d913ee85a45ae41ca559))
+
+
+### Features
+
+* add cos component ([#1271](https://github.com/midwayjs/midway/issues/1271)) ([c18e597](https://github.com/midwayjs/midway/commit/c18e597d55a6452188cc7daecd0062bf161028cc))
+* add ctx.throw for serverless app ([#1262](https://github.com/midwayjs/midway/issues/1262)) ([70008b3](https://github.com/midwayjs/midway/commit/70008b32157286708ec01390b0bf8233ba5a84dd))
+* add redis component ([#1270](https://github.com/midwayjs/midway/issues/1270)) ([09c993a](https://github.com/midwayjs/midway/commit/09c993ac308d26fa9c742a659471c3f4cf5c5782))
+
+
+
+
+
 ## [2.12.3](https://github.com/midwayjs/midway/compare/v2.12.2...v2.12.3) (2021-08-09)
 
 

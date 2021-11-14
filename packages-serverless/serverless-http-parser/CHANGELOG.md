@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.1](https://github.com/midwayjs/midway/compare/v2.12.4...v3.0.0-beta.1) (2021-11-14)
+
+
+### Features
+
+* add ctx.throw for serverless app ([#1262](https://github.com/midwayjs/midway/issues/1262)) ([70008b3](https://github.com/midwayjs/midway/commit/70008b32157286708ec01390b0bf8233ba5a84dd))
+
+
+
+
+
 ## [2.11.4](https://github.com/midwayjs/midway-faas/compare/v2.11.3...v2.11.4) (2021-07-06)
 
 

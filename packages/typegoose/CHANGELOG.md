@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.1](https://github.com/midwayjs/midway/compare/v2.12.4...v3.0.0-beta.1) (2021-11-14)
+
+
+### Bug Fixes
+
+* remove connection key ([#1337](https://github.com/midwayjs/midway/issues/1337)) ([6ac219e](https://github.com/midwayjs/midway/commit/6ac219e786792b32d19a364bffbe9e6318c2f9e1))
+
+
+### Features
+
+* add mongoose component and support multi-instance for typegoose ([#1334](https://github.com/midwayjs/midway/issues/1334)) ([ca0b73f](https://github.com/midwayjs/midway/commit/ca0b73fec77e8871e4001b4c9d3e45397ce32450))
+
+
+
+
+
 ## [2.12.3](https://github.com/midwayjs/midway/compare/v2.12.2...v2.12.3) (2021-08-09)
 
 **Note:** Version bump only for package @midwayjs/typegoose

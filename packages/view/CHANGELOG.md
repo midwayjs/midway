@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.1](https://github.com/midwayjs/midway/compare/v2.12.4...v3.0.0-beta.1) (2021-11-14)
+
+
+### Features
+
+* add view, view-ejs and view-nunjucks ([#1308](https://github.com/midwayjs/midway/issues/1308)) ([a00f44b](https://github.com/midwayjs/midway/commit/a00f44bd769052245cd49d49ab417d621bb89caa))
+
+
+
+
+
 ## [2.13.2](https://github.com/midwayjs/midway/compare/v2.13.1...v2.13.2) (2021-09-09)
 
 **Note:** Version bump only for package @midwayjs/typegoose

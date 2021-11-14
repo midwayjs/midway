@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.1](https://github.com/midwayjs/midway/compare/v2.12.4...v3.0.0-beta.1) (2021-11-14)
+
+
+### Bug Fixes
+
+* disable performance marking for invoke handlers ([#1299](https://github.com/midwayjs/midway/issues/1299)) ([2de9221](https://github.com/midwayjs/midway/commit/2de92214542b8df3abb57b618befde5e161de79e))
+* node v16 typings ([#1269](https://github.com/midwayjs/midway/issues/1269)) ([e3443b5](https://github.com/midwayjs/midway/commit/e3443b58fc1faddadf1e95dd03a2f319410941bb))
+
+
+
+
+
 # [3.0.0-alpha.2](https://github.com/midwayjs/midway-faas/compare/v3.0.0-alpha.1...v3.0.0-alpha.2) (2021-08-05)
 
 **Note:** Version bump only for package @midwayjs/runtime-engine

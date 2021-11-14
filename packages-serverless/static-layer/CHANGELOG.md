@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.1](https://github.com/midwayjs/midway/compare/v2.12.4...v3.0.0-beta.1) (2021-11-14)
+
+
+### Bug Fixes
+
+* load component with enabledEnvironment ([#1329](https://github.com/midwayjs/midway/issues/1329)) ([3182271](https://github.com/midwayjs/midway/commit/3182271a1eab931e2bf872bff6e2725ebb906ad0))
+* static prefix ([#1321](https://github.com/midwayjs/midway/issues/1321)) ([31fe961](https://github.com/midwayjs/midway/commit/31fe961931fed7656a144b1682ee4c4bb25fdff5))
+
+
+
+
+
 ## [2.12.3](https://github.com/midwayjs/midway-faas/compare/v2.12.2...v2.12.3) (2021-08-09)
 
 **Note:** Version bump only for package @midwayjs/static-layer

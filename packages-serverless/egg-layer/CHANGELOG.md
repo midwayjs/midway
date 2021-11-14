@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.1](https://github.com/midwayjs/midway/compare/v2.12.4...v3.0.0-beta.1) (2021-11-14)
+
+
+### Bug Fixes
+
+* component env filter ([#1234](https://github.com/midwayjs/midway/issues/1234)) ([1ad365f](https://github.com/midwayjs/midway/commit/1ad365fd8ef5e0e7dae3d08a2427a2300038290a))
+* encode request path in serverless ([#1230](https://github.com/midwayjs/midway/issues/1230)) ([c826e68](https://github.com/midwayjs/midway/commit/c826e6899c884af9f3365ab77b95449a68889afe))
+* form-data for egg-layer ([#1097](https://github.com/midwayjs/midway/issues/1097)) ([66057e8](https://github.com/midwayjs/midway/commit/66057e8910c00db0ae2b2ea801cdd94aa063fe84))
+
+
+
+
+
 ## [2.12.3](https://github.com/midwayjs/midway-faas/compare/v2.12.2...v2.12.3) (2021-08-09)
 
 **Note:** Version bump only for package @midwayjs/egg-layer

@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.1](https://github.com/midwayjs/midway/compare/v2.12.4...v3.0.0-beta.1) (2021-11-14)
+
+
+### Bug Fixes
+
+* node v16 typings ([#1269](https://github.com/midwayjs/midway/issues/1269)) ([e3443b5](https://github.com/midwayjs/midway/commit/e3443b58fc1faddadf1e95dd03a2f319410941bb))
+* serverless app support applicationContext ([#1281](https://github.com/midwayjs/midway/issues/1281)) ([b692001](https://github.com/midwayjs/midway/commit/b692001c451b17a10d26cb6778a8566d5fa569c5))
+* serverless local dev bodyparser limit ([#1245](https://github.com/midwayjs/midway/issues/1245)) ([6bdf378](https://github.com/midwayjs/midway/commit/6bdf37841260b1f77e20d913ee85a45ae41ca559))
+* static prefix ([#1321](https://github.com/midwayjs/midway/issues/1321)) ([31fe961](https://github.com/midwayjs/midway/commit/31fe961931fed7656a144b1682ee4c4bb25fdff5))
+
+
+
+
+
 ## [2.12.4](https://github.com/midwayjs/midway/compare/v2.12.3...v2.12.4) (2021-08-13)
 
 **Note:** Version bump only for package @midwayjs/serverless-app

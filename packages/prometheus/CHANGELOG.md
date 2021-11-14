@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.1](https://github.com/midwayjs/midway/compare/v2.12.4...v3.0.0-beta.1) (2021-11-14)
+
+
+### Bug Fixes
+
+* node v16 typings ([#1269](https://github.com/midwayjs/midway/issues/1269)) ([e3443b5](https://github.com/midwayjs/midway/commit/e3443b58fc1faddadf1e95dd03a2f319410941bb))
+
+
+### Features
+
+* add setDiff ([#1263](https://github.com/midwayjs/midway/issues/1263)) ([9dd1a08](https://github.com/midwayjs/midway/commit/9dd1a08326540da52abf79cf31182d4e63b7f4d9))
+
+
+
+
+
 ## [2.12.3](https://github.com/midwayjs/midway/compare/v2.12.2...v2.12.3) (2021-08-09)
 
 **Note:** Version bump only for package @midwayjs/prometheus

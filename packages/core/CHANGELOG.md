@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.1](https://github.com/midwayjs/midway/compare/v2.12.4...v3.0.0-beta.1) (2021-11-14)
+
+
+### Bug Fixes
+
+* circular inject for provide uuid ([#1285](https://github.com/midwayjs/midway/issues/1285)) ([34533bf](https://github.com/midwayjs/midway/commit/34533bfe9bf1c4acdffb1360ab24c716b5196de8))
+* component env filter ([#1234](https://github.com/midwayjs/midway/issues/1234)) ([1ad365f](https://github.com/midwayjs/midway/commit/1ad365fd8ef5e0e7dae3d08a2427a2300038290a))
+* correct aspect chain bug ([#1204](https://github.com/midwayjs/midway/issues/1204)) ([5de5284](https://github.com/midwayjs/midway/commit/5de5284c70b44acc73eaaad651fd2edc72d54f28))
+* empty options in default ([#1241](https://github.com/midwayjs/midway/issues/1241)) ([802109d](https://github.com/midwayjs/midway/commit/802109ddd098afb04d6d540bff509e0aee85b806))
+* functional configuration load async code ([#1300](https://github.com/midwayjs/midway/issues/1300)) ([32bcf03](https://github.com/midwayjs/midway/commit/32bcf030ed1ab04482dc557f8b0c6904e47b31e1))
+* load component with enabledEnvironment ([#1329](https://github.com/midwayjs/midway/issues/1329)) ([3182271](https://github.com/midwayjs/midway/commit/3182271a1eab931e2bf872bff6e2725ebb906ad0))
+* static prefix ([#1321](https://github.com/midwayjs/midway/issues/1321)) ([31fe961](https://github.com/midwayjs/midway/commit/31fe961931fed7656a144b1682ee4c4bb25fdff5))
+
+
+### Features
+
+* add mongoose component and support multi-instance for typegoose ([#1334](https://github.com/midwayjs/midway/issues/1334)) ([ca0b73f](https://github.com/midwayjs/midway/commit/ca0b73fec77e8871e4001b4c9d3e45397ce32450))
+* add redis component ([#1270](https://github.com/midwayjs/midway/issues/1270)) ([09c993a](https://github.com/midwayjs/midway/commit/09c993ac308d26fa9c742a659471c3f4cf5c5782))
+
+
+
+
+
 ## [2.12.3](https://github.com/midwayjs/midway/compare/v2.12.2...v2.12.3) (2021-08-09)
 
 
