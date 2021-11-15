@@ -14,7 +14,7 @@ export function Destroy(): MethodDecorator {
   };
 }
 
-export function Scope(scope: ScopeEnum = ScopeEnum.Singleton): ClassDecorator {
+export function Scope(scope: ScopeEnum): ClassDecorator {
   return function (target: any): void {
     saveObjectDefinition(target, { scope });
   };
