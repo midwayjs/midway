@@ -7,3 +7,4 @@ export * from './configuration';
 export * from './objectDef';
 export * from './framework';
 export * from './catch';
+export * from './middleware';
