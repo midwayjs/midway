@@ -1,10 +1,4 @@
-import {
-  Scope,
-  ScopeEnum,
-  Init,
-  Destroy,
-  getObjectDefinition,
-} from '../../src';
+import { Destroy, getObjectDefinition, Init, Scope, ScopeEnum, } from '../../src';
 
 class Parent {}
 
@@ -17,7 +11,7 @@ class Test extends Parent {
   destroy() {}
 }
 
-@Scope()
+@Scope(ScopeEnum.Singleton)
 class TestOne {}
 
 describe('/test/annotation/objectDef.test.ts', () => {
