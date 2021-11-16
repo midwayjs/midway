@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.2](https://github.com/midwayjs/midway/compare/v3.0.0-beta.1...v3.0.0-beta.2) (2021-11-16)
+
+
+### Bug Fixes
+
+* middleware decorator missing ([#1366](https://github.com/midwayjs/midway/issues/1366)) ([5f9a8c1](https://github.com/midwayjs/midway/commit/5f9a8c1f7cdd940f785f6c9871fb67b9738de940))
+
+
+
+
+
 # [3.0.0-beta.1](https://github.com/midwayjs/midway/compare/v2.12.4...v3.0.0-beta.1) (2021-11-14)
 
 
