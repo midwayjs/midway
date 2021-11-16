@@ -6,6 +6,14 @@ import {
 import { ILogger, LoggerOptions } from '@midwayjs/logger';
 import * as EventEmitter from 'events';
 import { ContextMiddlewareManager } from './util/middlewareManager';
+import type _default from './config/config.default';
+
+export type ServiceFactoryConfigOption<OPTIONS> = {
+  default?: OPTIONS,
+  clients?: {
+    [key: string]: OPTIONS
+  }
+}
 
 /**
  * 生命周期定义
@@ -514,3 +522,8 @@ export interface MidwayAppInfo {
   root: string;
   env: string;
 }
+
+/**
+ * midway global config definition
+ */
+export interface MidwayConfig extends ReturnType<typeof _default> {}

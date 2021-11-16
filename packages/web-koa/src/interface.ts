@@ -59,3 +59,9 @@ export interface IWebMiddleware {
 export type Application = IMidwayKoaApplication;
 
 export interface Context extends IMidwayKoaContext {}
+
+declare module '@midwayjs/core/dist/interface' {
+  interface MidwayConfig {
+    koa?: IMidwayKoaConfigurationOptions;
+  }
+}

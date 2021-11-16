@@ -15,4 +15,12 @@ export default {
     lstripBlocks: false,
     cache: true,
   },
+} as {
+  nunjucks: {
+    autoescape: boolean;
+    throwOnUndefined: boolean;
+    trimBlocks: boolean;
+    lstripBlocks: boolean;
+    cache: boolean;
+  }
 };

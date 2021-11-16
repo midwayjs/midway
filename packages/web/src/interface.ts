@@ -1,4 +1,4 @@
-import { Context as EggContext, Application as EggApplication, EggLogger } from 'egg';
+import { Context as EggContext, Application as EggApplication, EggLogger, EggAppConfig } from 'egg';
 import {
   IMidwayContainer,
   IMidwayContext,
@@ -91,4 +91,10 @@ export type MidwayWebMiddleware = Middleware<DefaultState, Context>;
 
 export interface IWebMiddleware {
   resolve(): MidwayWebMiddleware;
+}
+
+declare module '@midwayjs/core/dist/interface' {
+  interface MidwayConfig extends EggAppConfig {
+    egg?: IMidwayWebConfigurationOptions;
+  }
 }
