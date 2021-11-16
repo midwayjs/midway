@@ -8,11 +8,17 @@ import * as EventEmitter from 'events';
 import { ContextMiddlewareManager } from './util/middlewareManager';
 import _default from './config/config.default';
 
+export type PowerPartial<T> = {
+  [U in keyof T]?: T[U] extends {}
+    ? PowerPartial<T[U]>
+    : T[U]
+};
+
 export type ServiceFactoryConfigOption<OPTIONS> = {
-  default?: OPTIONS,
+  default?: PowerPartial<OPTIONS>;
   clients?: {
-    [key: string]: OPTIONS
-  }
+    [key: string]: PowerPartial<OPTIONS>;
+  };
 }
 
 /**
