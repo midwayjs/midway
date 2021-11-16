@@ -6,7 +6,7 @@ import {
 import { ILogger, LoggerOptions } from '@midwayjs/logger';
 import * as EventEmitter from 'events';
 import { ContextMiddlewareManager } from './util/middlewareManager';
-import type _default from './config/config.default';
+import _default from './config/config.default';
 
 export type ServiceFactoryConfigOption<OPTIONS> = {
   default?: OPTIONS,
