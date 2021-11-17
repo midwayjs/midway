@@ -839,3 +839,9 @@ export interface TableStoreConfig {
    */
   computeChecksums?: boolean;
 }
+
+declare module '@midwayjs/core/dist/interface' {
+  interface MidwayConfig {
+    tableStore: ServiceFactoryConfigOption<TableStoreConfig>;
+  }
+}

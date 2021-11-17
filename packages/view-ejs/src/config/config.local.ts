@@ -1,1 +1,1 @@
-export = require('egg-view-ejs/config/config.local');
+export default require('egg-view-ejs/config/config.local');

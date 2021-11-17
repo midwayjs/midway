@@ -1,5 +1,4 @@
 import { Configuration, Inject } from '@midwayjs/decorator';
-import * as DefaultConfig from './config.default';
 import { ILifeCycle, IMidwayContainer } from '@midwayjs/core';
 import { MongooseConnectionServiceFactory } from './manager';
 
@@ -7,7 +6,9 @@ import { MongooseConnectionServiceFactory } from './manager';
   namespace: 'mongoose',
   importConfigs: [
     {
-      default: DefaultConfig,
+      default: {
+        mongoose: {},
+      },
     },
   ],
 })

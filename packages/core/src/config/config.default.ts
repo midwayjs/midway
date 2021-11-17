@@ -5,9 +5,11 @@ import {
 } from '../interface';
 import { getCurrentEnvironment, isDevelopmentEnvironment } from '../util/';
 import { join } from 'path';
-import type { LoggerOptions } from '@midwayjs/logger'
+import type { LoggerOptions } from '@midwayjs/logger';
 
-export default (appInfo: MidwayAppInfo): {
+export default (
+  appInfo: MidwayAppInfo
+): {
   midwayLogger?: ServiceFactoryConfigOption<LoggerOptions>;
 } => {
   const isDevelopment = isDevelopmentEnvironment(getCurrentEnvironment());

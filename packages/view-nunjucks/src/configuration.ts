@@ -7,10 +7,12 @@ import * as LocalConfig from './config/config.local';
 
 @Configuration({
   namespace: 'view-nunjucks',
-  importConfigs: [{
-    default: DefaultConfig,
-    local: LocalConfig,
-  }],
+  importConfigs: [
+    {
+      default: DefaultConfig,
+      local: LocalConfig,
+    },
+  ],
   imports: [View],
 })
 export class ViewNunjucksConfiguration {

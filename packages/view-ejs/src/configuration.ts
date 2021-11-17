@@ -1,11 +1,17 @@
 import { App, Configuration, Inject } from '@midwayjs/decorator';
 import { createMockApp } from '@midwayjs/mw-util';
 import * as View from '@midwayjs/view';
-import { join } from 'path';
+import * as DefaultConfig from './config/config.default';
+import * as LocalConfig from './config/config.local';
 
 @Configuration({
   namespace: 'view-ejs',
-  importConfigs: [join(__dirname, 'config')],
+  importConfigs: [
+    {
+      default: DefaultConfig,
+      local: LocalConfig,
+    },
+  ],
   imports: [View],
 })
 export class ViewEJSConfiguration {

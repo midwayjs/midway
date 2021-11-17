@@ -1,11 +1,17 @@
 import { App, Configuration } from '@midwayjs/decorator';
 import { completeAssign } from '@midwayjs/mw-util';
-import { join } from 'path';
+import * as DefaultConfig from './config/config.default';
+import * as LocalConfig from './config/config.local';
 import { ViewManager } from './viewManager';
 
 @Configuration({
   namespace: 'view',
-  importConfigs: [join(__dirname, 'config')],
+  importConfigs: [
+    {
+      default: DefaultConfig,
+      local: LocalConfig,
+    },
+  ],
 })
 export class ViewConfiguration {
   @App()

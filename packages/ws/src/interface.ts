@@ -4,7 +4,6 @@ import { IConfigurationOptions, IMidwayApplication, IMidwayContext } from '@midw
 export type IMidwayWSApplication = IMidwayApplication<IMidwayWSContext> & WebSocket.Server;
 
 export type IMidwayWSConfigurationOptions = {
-  port?: number;
   pubClient?: any;
   subClient?: any;
 } & Partial<WebSocket.ServerOptions> & IConfigurationOptions;

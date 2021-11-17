@@ -16,10 +16,13 @@ export type PowerPartial<T> = {
 
 export type ServiceFactoryConfigOption<OPTIONS> = {
   default?: PowerPartial<OPTIONS>;
+  client?: PowerPartial<OPTIONS>;
   clients?: {
     [key: string]: PowerPartial<OPTIONS>;
   };
 }
+
+export type FileConfigOption<T> = T extends (args: any[]) => any ? PowerPartial<ReturnType<T>> : PowerPartial<T>;
 
 /**
  * 生命周期定义
@@ -532,4 +535,4 @@ export interface MidwayAppInfo {
 /**
  * midway global config definition
  */
-export interface MidwayConfig extends ReturnType<typeof _default> {}
+export interface MidwayConfig extends FileConfigOption<typeof _default> {}

@@ -54,7 +54,13 @@ export class TaskFramework extends BaseFramework<Application, Context, any> {
   }
 
   async loadTask() {
-    const taskConfig = this.configService.getConfiguration('taskConfig');
+    const legacyConfig = this.configService.getConfiguration('taskConfig');
+    if (legacyConfig) {
+      throw new Error(
+        '[task]: unsupport config key "taskConfig", please use "task"'
+      );
+    }
+    const taskConfig = this.configService.getConfiguration('task');
     const modules = listModule(MODULE_TASK_KEY);
     const queueTaskMap = {};
     for (const module of modules) {
