@@ -1,6 +1,6 @@
-import { DefaultMetricsCollectorConfiguration as DefaultConfig } from 'prom-client';
+import { DefaultMetricsCollectorConfiguration } from 'prom-client';
 
-export const prometheus: DefaultConfig = {
+export const prometheus: DefaultMetricsCollectorConfiguration = {
   labels: {
     APP_NAME: 'default',
   },

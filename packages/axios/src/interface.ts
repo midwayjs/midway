@@ -47,3 +47,10 @@ export interface AxiosHttpService {
     config?: AxiosRequestConfig
   ): Promise<R>;
 }
+
+declare module '@midwayjs/core/dist/interface' {
+  interface MidwayConfig {
+    axios?: AxiosRequestConfig;
+  }
+}
+

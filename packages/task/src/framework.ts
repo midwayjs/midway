@@ -16,6 +16,7 @@ import * as Bull from 'bull';
 import { CronJob } from 'cron';
 import { v4 } from 'uuid';
 import { Application, Context, IQueue } from './interface';
+import { deprecatedOutput } from '@midwayjs/core';
 
 function wrapAsync(fn) {
   return async function (...args) {
@@ -40,7 +41,7 @@ export class TaskFramework extends BaseFramework<Application, Context, any> {
   }
 
   configure() {
-    return this.configService.getConfiguration('taskConfig');
+    return this.configService.getConfiguration('task');
   }
 
   getFrameworkType() {
@@ -56,9 +57,10 @@ export class TaskFramework extends BaseFramework<Application, Context, any> {
   async loadTask() {
     const legacyConfig = this.configService.getConfiguration('taskConfig');
     if (legacyConfig) {
-      throw new Error(
-        '[task]: unsupport config key "taskConfig", please use "task"'
-      );
+      deprecatedOutput('[task]: Please use "task" replace "taskConfig"');
+      this.configService.addObject({
+        task: legacyConfig,
+      });
     }
     const taskConfig = this.configService.getConfiguration('task');
     const modules = listModule(MODULE_TASK_KEY);

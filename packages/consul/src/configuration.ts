@@ -3,7 +3,6 @@ import {
   Configuration,
   MidwayFrameworkType,
 } from '@midwayjs/decorator';
-import { join } from 'path';
 import {
   ILifeCycle,
   IMidwayApplication,
@@ -14,10 +13,15 @@ import {
   IConsulRegisterInfoOptions,
 } from './interface';
 import { ConsulProvider } from './lib/provider';
+import * as DefaultConfig from './config/config.default';
 
 @Configuration({
   namespace: 'consul',
-  importConfigs: [join(__dirname, 'config')],
+  importConfigs: [
+    {
+      default: DefaultConfig,
+    },
+  ],
 })
 export class ConsulConfiguration implements ILifeCycle {
   /**

@@ -842,6 +842,6 @@ export interface TableStoreConfig {
 
 declare module '@midwayjs/core/dist/interface' {
   interface MidwayConfig {
-    tableStore: ServiceFactoryConfigOption<TableStoreConfig>;
+    tableStore?: ServiceFactoryConfigOption<TableStoreConfig>;
   }
 }

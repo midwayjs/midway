@@ -5,7 +5,6 @@ import {
   getClassMetadata,
   listModule,
 } from '@midwayjs/decorator';
-import { join } from 'path';
 import * as PromClient from 'prom-client';
 import { isMaster, closeLock } from './utils/utils';
 import * as os from 'os';
@@ -14,10 +13,15 @@ import * as fs from 'fs';
 import * as http from 'http';
 import * as qs from 'querystring';
 import { DataService } from './service/dataService';
+import * as DefaultConfig from './config/config.default';
 
 @Configuration({
   namespace: 'prometheus',
-  importConfigs: [join(__dirname, 'config')],
+  importConfigs: [
+    {
+      default: DefaultConfig,
+    },
+  ],
 })
 export class PrometheusConfiguration {
   @Config('prometheus')

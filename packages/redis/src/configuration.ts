@@ -1,10 +1,15 @@
 import { Configuration } from '@midwayjs/decorator';
-import { join } from 'path';
 import { RedisServiceFactory } from './manager';
 
 @Configuration({
   namespace: 'redis',
-  importConfigs: [join(__dirname, './config.default')],
+  importConfigs: [
+    {
+      default: {
+        redis: {},
+      },
+    },
+  ],
 })
 export class RedisConfiguration {
   async onReady(container) {
