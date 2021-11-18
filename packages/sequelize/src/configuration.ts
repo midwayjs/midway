@@ -1,10 +1,14 @@
 import { Config, Configuration, listModule } from '@midwayjs/decorator';
 import { Sequelize } from 'sequelize-typescript';
-import * as path from 'path';
+import * as DefaultConfig from './config/config.default';
 
 @Configuration({
   namespace: 'sequelize',
-  importConfigs: [path.join(__dirname, 'config')],
+  importConfigs: [
+    {
+      default: DefaultConfig,
+    },
+  ],
 })
 export class SequelizeConfiguration {
   instance: Sequelize;
