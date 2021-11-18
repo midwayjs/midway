@@ -1,3 +1,7 @@
-export const bbb = {
-  data: 321,
+export default (appInfo) => {
+  return {
+    bbb: {
+      data: 321,
+    }
+  }
 }

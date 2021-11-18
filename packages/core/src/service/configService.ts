@@ -104,10 +104,7 @@ export class MidwayConfigService implements IConfigService {
     // merge set
     const target = {};
     for (const filename of [...defaultSet, ...currentEnvSet]) {
-      let config = filename;
-      if (typeof filename === 'string') {
-        config = await this.loadConfig(filename);
-      }
+      let config = await this.loadConfig(filename);
       if (isFunction(config)) {
         // eslint-disable-next-line prefer-spread
         config = config.apply(null, [
@@ -155,8 +152,13 @@ export class MidwayConfigService implements IConfigService {
     return this.configuration;
   }
 
-  private async loadConfig(configFilename): Promise<Record<string, unknown>> {
-    let exports = require(configFilename);
+  private async loadConfig(
+    configFilename
+  ): Promise<(...args) => any | Record<string, unknown>> {
+    let exports =
+      typeof configFilename === 'string'
+        ? require(configFilename)
+        : configFilename;
     if (exports && exports['default'] && Object.keys(exports).length === 1) {
       exports = exports['default'];
     }
