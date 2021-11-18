@@ -109,7 +109,7 @@ export class TaskFramework extends BaseFramework<Application, Context, any> {
   }
 
   async loadLocalTask() {
-    const taskConfig = this.configService.getConfiguration('taskConfig');
+    const taskConfig = this.configService.getConfiguration('task');
     const modules = listModule(MODULE_TASK_TASK_LOCAL_KEY);
     for (const module of modules) {
       const rules = getClassMetadata(MODULE_TASK_TASK_LOCAL_OPTIONS, module);
@@ -148,7 +148,7 @@ export class TaskFramework extends BaseFramework<Application, Context, any> {
   async loadQueue() {
     const modules = listModule(MODULE_TASK_QUEUE_KEY);
     const queueMap = {};
-    const taskConfig = this.configService.getConfiguration('taskConfig');
+    const taskConfig = this.configService.getConfiguration('task');
     const config = JSON.parse(JSON.stringify(taskConfig));
     const concurrency = config.concurrency || 1;
     delete config.defaultJobOptions.repeat;
