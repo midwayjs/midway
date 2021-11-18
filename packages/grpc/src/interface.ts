@@ -42,7 +42,7 @@ export interface IMidwayGRPFrameworkOptions extends IConfigurationOptions {
    * gRPC Server connection url, like 'localhost:6565'
    */
   url?: string;
-  services: IGRPCServiceOptions[];
+  services?: IGRPCServiceOptions[];
   /**
    * proto file loader options. Optional
    */
@@ -84,4 +84,11 @@ export interface IClientOptions {
   timeout?: number;
   timeoutMessage?: number;
   messageKey?: string;
+}
+
+declare module '@midwayjs/core/dist/interface' {
+  interface MidwayConfig {
+    grpcServer?: IMidwayGRPFrameworkOptions;
+    grpc?: PowerPartial<DefaultConfig>;
+  }
 }

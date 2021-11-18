@@ -6,6 +6,25 @@ import {
 import { ILogger, LoggerOptions } from '@midwayjs/logger';
 import * as EventEmitter from 'events';
 import { ContextMiddlewareManager } from './util/middlewareManager';
+import _default from './config/config.default';
+
+export type PowerPartial<T> = {
+  [U in keyof T]?: T[U] extends {}
+    ? PowerPartial<T[U]>
+    : T[U]
+};
+
+export type ServiceFactoryConfigOption<OPTIONS> = {
+  default?: PowerPartial<OPTIONS>;
+  client?: PowerPartial<OPTIONS>;
+  clients?: {
+    [key: string]: PowerPartial<OPTIONS>;
+  };
+}
+
+type ConfigType<T> = T extends (args: any[]) => any ? PowerPartial<ReturnType<T>> : PowerPartial<T>;
+
+export type FileConfigOption<T, K = unknown> = K extends keyof ConfigType<T> ? Pick<ConfigType<T>, K> : ConfigType<T>;
 
 /**
  * 生命周期定义
@@ -514,3 +533,8 @@ export interface MidwayAppInfo {
   root: string;
   env: string;
 }
+
+/**
+ * midway global config definition
+ */
+export interface MidwayConfig extends FileConfigOption<typeof _default> {}

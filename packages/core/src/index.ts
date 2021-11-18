@@ -10,6 +10,7 @@ export {
   delegateTargetPrototypeMethod,
   delegateTargetMethod,
   delegateTargetProperties,
+  deprecatedOutput,
 } from './util/';
 export * from './util/pathFileUtil';
 export * from './util/webRouterParam';

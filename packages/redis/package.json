@@ -3,10 +3,11 @@
   "description": "midway redis component",
   "version": "3.0.0-beta.2",
   "main": "dist/index",
-  "typings": "dist/index.d.ts",
+  "typings": "index.d.ts",
   "files": [
     "dist/**/*.js",
-    "dist/**/*.d.ts"
+    "dist/**/*.d.ts",
+    "index.d.ts"
   ],
   "devDependencies": {
     "@midwayjs/core": "^3.0.0-beta.2",

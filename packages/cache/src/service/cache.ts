@@ -1,8 +1,8 @@
 import { Config, Init, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
 import * as cacheManager from 'cache-manager';
 
-@Scope(ScopeEnum.Singleton)
 @Provide()
+@Scope(ScopeEnum.Singleton)
 export class CacheManager {
   cache: cacheManager.Cache;
 

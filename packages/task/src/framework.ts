@@ -16,6 +16,7 @@ import * as Bull from 'bull';
 import { CronJob } from 'cron';
 import { v4 } from 'uuid';
 import { Application, Context, IQueue } from './interface';
+import { deprecatedOutput } from '@midwayjs/core';
 
 function wrapAsync(fn) {
   return async function (...args) {
@@ -40,7 +41,7 @@ export class TaskFramework extends BaseFramework<Application, Context, any> {
   }
 
   configure() {
-    return this.configService.getConfiguration('taskConfig');
+    return this.configService.getConfiguration('task');
   }
 
   getFrameworkType() {
@@ -54,7 +55,14 @@ export class TaskFramework extends BaseFramework<Application, Context, any> {
   }
 
   async loadTask() {
-    const taskConfig = this.configService.getConfiguration('taskConfig');
+    const legacyConfig = this.configService.getConfiguration('taskConfig');
+    if (legacyConfig) {
+      deprecatedOutput('[task]: Please use "task" replace "taskConfig"');
+      this.configService.addObject({
+        task: legacyConfig,
+      });
+    }
+    const taskConfig = this.configService.getConfiguration('task');
     const modules = listModule(MODULE_TASK_KEY);
     const queueTaskMap = {};
     for (const module of modules) {
@@ -101,7 +109,7 @@ export class TaskFramework extends BaseFramework<Application, Context, any> {
   }
 
   async loadLocalTask() {
-    const taskConfig = this.configService.getConfiguration('taskConfig');
+    const taskConfig = this.configService.getConfiguration('task');
     const modules = listModule(MODULE_TASK_TASK_LOCAL_KEY);
     for (const module of modules) {
       const rules = getClassMetadata(MODULE_TASK_TASK_LOCAL_OPTIONS, module);
@@ -140,7 +148,7 @@ export class TaskFramework extends BaseFramework<Application, Context, any> {
   async loadQueue() {
     const modules = listModule(MODULE_TASK_QUEUE_KEY);
     const queueMap = {};
-    const taskConfig = this.configService.getConfiguration('taskConfig');
+    const taskConfig = this.configService.getConfiguration('task');
     const config = JSON.parse(JSON.stringify(taskConfig));
     const concurrency = config.concurrency || 1;
     delete config.defaultJobOptions.repeat;

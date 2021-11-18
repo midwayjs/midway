@@ -4,14 +4,26 @@ import { debuglog } from 'util';
 
 const debug = debuglog('midway:container:util');
 
+/**
+ * @since 2.0.0
+ * @param env
+ */
 export const isDevelopmentEnvironment = env => {
   return ['local', 'test', 'unittest'].includes(env);
 };
 
+/**
+ * @since 2.0.0
+ */
 export const getCurrentEnvironment = () => {
   return process.env['MIDWAY_SERVER_ENV'] || process.env['NODE_ENV'] || 'prod';
 };
 
+/**
+ * @param p
+ * @param enabledCache
+ * @since 2.0.0
+ */
 export const safeRequire = (p, enabledCache = true) => {
   if (p.startsWith(`.${sep}`) || p.startsWith(`..${sep}`)) {
     p = resolve(dirname(module.parent.filename), p);
@@ -38,6 +50,7 @@ export const safeRequire = (p, enabledCache = true) => {
  *  safelyGet(['a','1'],{a: {b: 2}})  // => undefined
  *  safelyGet('a.b',{a: {b: 2}})  // => 2
  *  safelyGet('a.b',{c: {b: 2}})  // => undefined
+ *  @since 2.0.0
  */
 export function safelyGet(
   list: string | string[],
@@ -68,6 +81,7 @@ export function safelyGet(
 /**
  * 剔除 @ 符号
  * @param provideId provideId
+ * @since 2.0.0
  */
 export function parsePrefix(provideId: string) {
   if (provideId.includes('@')) {
@@ -96,6 +110,7 @@ export function joinURLPath(...strArray) {
  * 代理目标所有的原型方法，不包括构造器和内部隐藏方法
  * @param derivedCtor
  * @param constructors
+ * @since 2.0.0
  */
 export function delegateTargetPrototypeMethod(
   derivedCtor: any,
@@ -116,6 +131,7 @@ export function delegateTargetPrototypeMethod(
  * 代理目标原型上的特定方法
  * @param derivedCtor
  * @param methods
+ * @since 2.0.0
  */
 export function delegateTargetMethod(derivedCtor: any, methods: string[]) {
   methods.forEach(name => {
@@ -129,6 +145,7 @@ export function delegateTargetMethod(derivedCtor: any, methods: string[]) {
  * 代理目标原型属性
  * @param derivedCtor
  * @param properties
+ * @since 2.0.0
  */
 export function delegateTargetProperties(
   derivedCtor: any,
@@ -143,9 +160,23 @@ export function delegateTargetProperties(
   });
 }
 
+/**
+ * 代理目标原型属性
+ * @since 2.0.0
+ * @param timestamp
+ */
 export const getCurrentDateString = (timestamp: number = Date.now()) => {
   const d = new Date(timestamp);
   return `${d.getFullYear()}-${(d.getMonth() + 1)
     .toString()
     .padStart(2, '0')}-${d.getDate().toString().padStart(2, '0')}`;
+};
+
+/**
+ *
+ * @param message
+ * @since 3.0.0
+ */
+export const deprecatedOutput = (message: string) => {
+  console.warn('DeprecationWarning: ' + message);
 };

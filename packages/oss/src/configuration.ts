@@ -1,10 +1,19 @@
 import { Configuration } from '@midwayjs/decorator';
-import { join } from 'path';
 import { OSSServiceFactory } from './manager';
 
 @Configuration({
   namespace: 'oss',
-  importConfigs: [join(__dirname, './config.default')],
+  importConfigs: [
+    {
+      default: {
+        oss: {
+          default: {
+            timeout: '60s',
+          },
+        },
+      },
+    },
+  ],
 })
 export class OSSConfiguration {
   async onReady(container) {

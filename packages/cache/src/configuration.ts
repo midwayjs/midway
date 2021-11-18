@@ -1,9 +1,13 @@
 // src/configuration.ts
 import { Configuration } from '@midwayjs/decorator';
-import { join } from 'path';
+import * as DefaultConfig from './config/config.default';
 
 @Configuration({
   namespace: 'cache',
-  importConfigs: [join(__dirname, 'config')],
+  importConfigs: [
+    {
+      default: DefaultConfig,
+    },
+  ],
 })
 export class CacheConfiguration {}

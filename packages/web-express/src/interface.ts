@@ -46,3 +46,9 @@ export interface IMidwayExpressConfigurationOptions extends IConfigurationOption
 export type Application = IMidwayExpressApplication;
 
 export interface Context extends IMidwayExpressContext {}
+
+declare module '@midwayjs/core/dist/interface' {
+  interface MidwayConfig {
+    express?: IMidwayExpressConfigurationOptions;
+  }
+}

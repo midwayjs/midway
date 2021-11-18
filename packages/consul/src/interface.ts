@@ -1,5 +1,5 @@
-import * as Consul from "consul";
-import { ConsulOptions } from "consul";
+import * as Consul from 'consul';
+import { ConsulOptions } from 'consul';
 import RegisterOptions = Consul.Agent.Service.RegisterOptions;
 
 export interface IServiceBalancer {
@@ -74,5 +74,12 @@ export interface IConsulRegisterInfoOptions extends RegisterOptions {
     ttl?: string;
     notes?: string;
     status?: string;
+  }
+}
+
+declare module '@midwayjs/core/dist/interface' {
+  interface MidwayConfig {
+    consul?: IConsulProviderInfoOptions;
+    service?: IConsulRegisterInfoOptions;
   }
 }

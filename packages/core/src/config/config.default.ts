@@ -1,8 +1,17 @@
-import { MIDWAY_LOGGER_WRITEABLE_DIR, MidwayAppInfo } from '../interface';
+import {
+  MIDWAY_LOGGER_WRITEABLE_DIR,
+  MidwayAppInfo,
+  ServiceFactoryConfigOption,
+} from '../interface';
 import { getCurrentEnvironment, isDevelopmentEnvironment } from '../util/';
 import { join } from 'path';
+import type { LoggerOptions } from '@midwayjs/logger';
 
-export default (appInfo: MidwayAppInfo) => {
+export default (
+  appInfo: MidwayAppInfo
+): {
+  midwayLogger?: ServiceFactoryConfigOption<LoggerOptions>;
+} => {
   const isDevelopment = isDevelopmentEnvironment(getCurrentEnvironment());
   return {
     midwayLogger: {
