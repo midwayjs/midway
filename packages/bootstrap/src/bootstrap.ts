@@ -5,7 +5,7 @@ import {
   destroyGlobalApplicationContext,
 } from '@midwayjs/core';
 import { join } from 'path';
-import { createConsoleLogger, ILogger } from '@midwayjs/logger';
+import { IMidwayLogger, MidwayBaseLogger } from '@midwayjs/logger';
 
 export function isTypeScriptEnvironment() {
   const TS_MODE_PROCESS_FLAG: string = process.env.MIDWAY_TS_MODE;
@@ -60,7 +60,7 @@ export class BootstrapStarter {
 
 export class Bootstrap {
   static starter: BootstrapStarter;
-  static logger: ILogger;
+  static logger: IMidwayLogger;
   static configured = false;
   static applicationContext: IMidwayContainer;
 
@@ -71,13 +71,16 @@ export class Bootstrap {
   static configure(configuration: IMidwayBootstrapOptions = {}) {
     this.configured = true;
     if (!this.logger && !configuration.logger) {
-      this.logger = createConsoleLogger('bootstrapConsole');
+      this.logger = new MidwayBaseLogger({
+        disableError: true,
+        disableFile: true,
+      });
       if (configuration.logger === false) {
         this.logger?.['disableConsole']();
       }
       configuration.logger = this.logger;
     } else {
-      this.logger = this.logger || (configuration.logger as ILogger);
+      this.logger = this.logger || (configuration.logger as IMidwayLogger);
     }
 
     // 处理三方框架内部依赖 process.cwd 来查找 node_modules 等问题
@@ -142,6 +145,7 @@ export class Bootstrap {
   static reset() {
     this.configured = false;
     this.starter = null;
+    this.logger.close();
   }
 
   /**

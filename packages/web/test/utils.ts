@@ -13,8 +13,8 @@ export async function creatApp(name, options = {}) {
   }), Web)
 }
 
-export async function closeApp(app) {
-  await close(app);
+export async function closeApp(app, options?) {
+  await close(app, options);
   if (process.env.EGG_HOME) {
     await remove(join(process.env.EGG_HOME, 'logs'));
   }
