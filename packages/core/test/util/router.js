@@ -188,4 +188,3 @@ exports.routerList4 = [
     url: '/:category/:slug'
   }
 ];
-

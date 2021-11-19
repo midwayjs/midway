@@ -62,6 +62,8 @@ describe('/test/pathFileUtil.test.ts', () => {
     expect(joinURLPath('*')).toEqual('/*');
     expect(joinURLPath('/', '*')).toEqual('/*');
     expect(joinURLPath('/', '/*')).toEqual('/*');
+    expect(joinURLPath(undefined, '/*')).toEqual('/*');
+    expect(joinURLPath(undefined, '/*', null)).toEqual('/*');
   });
 
   it('should test delegate util method', async () => {

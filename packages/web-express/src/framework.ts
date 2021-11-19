@@ -10,12 +10,12 @@ import {
   PathFileUtil,
   WebRouterCollector,
   ExceptionFilterManager,
+  RouterInfo,
 } from '@midwayjs/core';
 
 import {
   Framework,
   Inject,
-  RouterParamValue,
   WEB_RESPONSE_CONTENT_TYPE,
   WEB_RESPONSE_HEADER,
   WEB_RESPONSE_HTTP_CODE,
@@ -25,7 +25,6 @@ import {
   IMidwayExpressApplication,
   IMidwayExpressConfigurationOptions,
   IMidwayExpressContext,
-  IMidwayExpressMiddleware,
 } from './interface';
 import type {
   IRouter,
@@ -69,17 +68,6 @@ export class MidwayExpressFramework extends BaseFramework<
 
   async applicationInitialize(options: Partial<IMidwayBootstrapOptions>) {
     this.app = express() as unknown as IMidwayExpressApplication;
-    this.defineApplicationProperties({
-      generateController: (controllerMapping: string) => {
-        return this.generateController(controllerMapping);
-      },
-      /**
-       * @deprecated
-       */
-      generateMiddleware: async (middlewareId: string) => {
-        return this.generateMiddleware(middlewareId);
-      },
-    });
     this.app.use((req, res, next) => {
       const ctx = req as IMidwayExpressContext;
       this.app.createAnonymousContext(ctx);
@@ -166,19 +154,11 @@ export class MidwayExpressFramework extends BaseFramework<
 
   /**
    * wrap controller string to middleware function
-   * @param controllerMapping like FooController.index
-   * @param routeArgsInfo
-   * @param routerResponseData
    */
-  public generateController(
-    controllerMapping: string,
-    routeArgsInfo?: RouterParamValue[],
-    routerResponseData?: any[]
-  ): IRouterHandler<any> {
-    const [controllerId, methodName] = controllerMapping.split('.');
+  protected generateController(routeInfo: RouterInfo): IRouterHandler<any> {
     return async (req, res, next) => {
-      const controller = await req.requestContext.getAsync(controllerId);
-      const result = await controller[methodName].call(
+      const controller = await req.requestContext.getAsync(routeInfo.id);
+      const result = await controller[routeInfo.method].call(
         controller,
         req,
         res,
@@ -194,8 +174,11 @@ export class MidwayExpressFramework extends BaseFramework<
         res.status(204);
       }
       // implement response decorator
-      if (Array.isArray(routerResponseData) && routerResponseData.length) {
-        for (const routerRes of routerResponseData) {
+      if (
+        Array.isArray(routeInfo.responseMetadata) &&
+        routeInfo.responseMetadata.length
+      ) {
+        for (const routerRes of routeInfo.responseMetadata) {
           switch (routerRes.type) {
             case WEB_RESPONSE_HTTP_CODE:
               res.status(routerRes.code);
@@ -217,7 +200,9 @@ export class MidwayExpressFramework extends BaseFramework<
   }
 
   public async loadMidwayController(): Promise<void> {
-    const collector = new WebRouterCollector();
+    const collector = new WebRouterCollector('', {
+      globalPrefix: this.configurationOptions.globalPrefix,
+    });
     const routerTable = await collector.getRouterTable();
     const routerList = await collector.getRoutePriorityList();
 
@@ -269,26 +254,12 @@ export class MidwayExpressFramework extends BaseFramework<
         newRouter[routeInfo.requestMethod].call(
           newRouter,
           routeInfo.url,
-          this.generateController(
-            routeInfo.handlerName,
-            routeInfo.requestMetadata,
-            routeInfo.responseMetadata
-          )
+          this.generateController(routeInfo)
         );
       }
 
       this.app.use(routerInfo.prefix, newRouter);
     }
-  }
-  /**
-   * @deprecated
-   */
-  public async generateMiddleware(middlewareId: string) {
-    const mwIns =
-      await this.getApplicationContext().getAsync<IMidwayExpressMiddleware>(
-        middlewareId
-      );
-    return mwIns.resolve();
   }
 
   /**

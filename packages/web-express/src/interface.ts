@@ -1,20 +1,9 @@
 import { IConfigurationOptions, IMiddleware, IMidwayApplication, IMidwayContext } from '@midwayjs/core';
 import { Application as ExpressApplication, NextFunction, Request, Response } from 'express';
-import { RouterParamValue } from "@midwayjs/decorator";
 
 export type IMidwayExpressContext = IMidwayContext<Request>;
 export type IMidwayExpressMiddleware = IMiddleware<IMidwayExpressContext, Response, NextFunction>;
-export type IMidwayExpressApplication = IMidwayApplication<IMidwayExpressContext, ExpressApplication & {
-  generateController(
-    controllerMapping: string,
-    routeArgsInfo?: RouterParamValue[],
-    routerResponseData?: any []
-  ): IMidwayExpressMiddleware;
-  /**
-   * @deprecated
-   */
-  generateMiddleware(middlewareId: string): Promise<IMidwayExpressMiddleware>;
-}>;
+export type IMidwayExpressApplication = IMidwayApplication<IMidwayExpressContext, ExpressApplication>;
 
 export interface IMidwayExpressConfigurationOptions extends IConfigurationOptions {
   /**
@@ -41,6 +30,10 @@ export interface IMidwayExpressConfigurationOptions extends IConfigurationOption
    * http2 support
    */
   http2?: boolean;
+  /**
+   * http global prefix
+   */
+  globalPrefix?: string;
 }
 
 export type Application = IMidwayExpressApplication;

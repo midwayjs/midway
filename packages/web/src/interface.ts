@@ -14,7 +14,6 @@ export interface IMidwayWebBaseApplication {
   applicationContext: IMidwayContainer;
   getLogger(name?: string): EggLogger & ILogger;
   getCoreLogger(): EggLogger & ILogger;
-  generateController?(controllerMapping: string);
   generateMiddleware?(middlewareId: string): Promise<Middleware<DefaultState, EggContext>>;
   createLogger(name: string, options: LoggerOptions): EggLogger & ILogger;
 }
@@ -85,10 +84,22 @@ export interface IMidwayWebConfigurationOptions extends IConfigurationOptions {
    * http2 support
    */
   http2?: boolean;
+  /**
+   * http global prefix
+   */
+  globalPrefix?: string;
 }
 
+/**
+ * @deprecated since version 3.0.0
+ * Please use IMiddleware from @midwayjs/core
+ */
 export type MidwayWebMiddleware = Middleware<DefaultState, Context>;
 
+/**
+ * @deprecated since version 3.0.0
+ * Please use IMiddleware from @midwayjs/core
+ */
 export interface IWebMiddleware {
   resolve(): MidwayWebMiddleware;
 }

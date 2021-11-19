@@ -30,7 +30,7 @@ export interface RouterInfo {
    */
   id: string;
   /**
-   * router prefix
+   * router prefix from controller
    */
   prefix: string;
   /**
@@ -49,6 +49,9 @@ export interface RouterInfo {
    * invoke function method
    */
   method: string;
+  /**
+   * router description
+   */
   description: string;
   summary: string;
   /**
@@ -111,13 +114,13 @@ export interface RouterPriority {
 
 export interface RouterCollectorOptions {
   includeFunctionRouter?: boolean;
+  globalPrefix?: string;
 }
 
 export class WebRouterCollector {
   protected readonly baseDir: string;
   private isReady = false;
   protected routes = new Map<string, RouterInfo[]>();
-  protected routerModules = new Set();
   private routesPriority: RouterPriority[] = [];
   protected options: RouterCollectorOptions;
 
@@ -149,6 +152,17 @@ export class WebRouterCollector {
       }
     }
 
+    // filter empty prefix
+    this.routesPriority = this.routesPriority.filter(item => {
+      const prefixList = this.routes.get(item.prefix);
+      if (prefixList.length > 0) {
+        return true;
+      } else {
+        this.routes.delete(item.prefix);
+        return false;
+      }
+    });
+
     // sort router
     for (const prefix of this.routes.keys()) {
       const routerInfo = this.routes.get(prefix);
@@ -157,7 +171,7 @@ export class WebRouterCollector {
 
     // sort prefix
     this.routesPriority = this.routesPriority.sort((routeA, routeB) => {
-      return routeB.priority - routeA.priority;
+      return routeB.prefix.length - routeA.prefix.length;
     });
   }
 
@@ -173,23 +187,43 @@ export class WebRouterCollector {
     let priority;
     // implement middleware in controller
     const middleware = controllerOption.routerOptions.middleware;
+    const controllerIgnoreGlobalPrefix =
+      !!controllerOption.routerOptions?.ignoreGlobalPrefix;
 
-    const prefix = controllerOption.prefix || '/';
-    if (prefix === '/' && priority === undefined) {
-      priority = -999;
+    let prefix = joinURLPath(
+      this.options.globalPrefix,
+      controllerOption.prefix || '/'
+    );
+    const ignorePrefix = controllerOption.prefix || '/';
+    // if controller set ignore global prefix, all router will be ignore too.
+    if (controllerIgnoreGlobalPrefix) {
+      prefix = ignorePrefix;
     }
 
+    // set prefix
     if (!this.routes.has(prefix)) {
       this.routes.set(prefix, []);
       this.routesPriority.push({
         prefix,
-        priority: priority || 0,
+        priority: prefix === '/' && priority === undefined ? -999 : 0,
         middleware,
         routerOptions: controllerOption.routerOptions,
         controllerId,
         routerModule: module,
       });
-      this.routerModules.add(module);
+    }
+
+    // set ignorePrefix
+    if (!this.routes.has(ignorePrefix)) {
+      this.routes.set(ignorePrefix, []);
+      this.routesPriority.push({
+        prefix: ignorePrefix,
+        priority: ignorePrefix === '/' && priority === undefined ? -999 : 0,
+        middleware,
+        routerOptions: controllerOption.routerOptions,
+        controllerId,
+        routerModule: module,
+      });
     }
 
     const webRouterInfo: RouterOption[] = getClassMetadata(
@@ -211,7 +245,7 @@ export class WebRouterCollector {
 
         const data: RouterInfo = {
           id,
-          prefix,
+          prefix: webRouter.ignoreGlobalPrefix ? ignorePrefix : prefix,
           routerName: webRouter.routerName || '',
           url: webRouter.path,
           requestMethod: webRouter.requestMethod,
@@ -240,7 +274,7 @@ export class WebRouterCollector {
           };
         }
 
-        this.checkDuplicateAndPush(prefix, data);
+        this.checkDuplicateAndPush(data.prefix, data);
       }
     }
   }
@@ -267,7 +301,6 @@ export class WebRouterCollector {
         controllerId,
         routerModule: module,
       });
-      this.routerModules.add(module);
     }
 
     for (const webRouter of webRouterInfo) {
@@ -456,14 +489,6 @@ export class WebRouterCollector {
       routeArr = routeArr.concat(routerInfo);
     }
     return routeArr;
-  }
-
-  async getRouterModules(): Promise<any[]> {
-    if (!this.isReady) {
-      await this.analyze();
-      this.isReady = true;
-    }
-    return Array.from(this.routerModules);
   }
 
   private checkDuplicateAndPush(prefix, routerInfo: RouterInfo) {

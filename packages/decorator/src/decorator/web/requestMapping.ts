@@ -5,20 +5,38 @@ import { attachClassMetadata, WEB_ROUTER_KEY } from '../../';
 import { MiddlewareParamArray } from '../../interface';
 
 export interface RouterOption {
-  // 路由
+  /**
+   * router path, like "/api"
+   */
   path?: string | RegExp;
-  // 请求类型
+  /**
+   * http method, like "get", "post"
+   */
   requestMethod: string;
-  // 路由别名
+  /**
+   * router alias name
+   */
   routerName?: string;
-  // 装饰器附加的方法
+  /**
+   * which method decorator attached
+   */
   method?: string;
-  // 路由附加的中间件
+  /**
+   * middleware array in router
+   */
   middleware?: MiddlewareParamArray;
-  // 路由摘要
+  /**
+   * router summary, for swagger
+   */
   summary?: string;
-  // 路由描述
+  /**
+   * router description, for swagger
+   */
   description?: string;
+  /**
+   * ignore global prefix
+   */
+  ignoreGlobalPrefix?: boolean;
 }
 
 export const RequestMethod = {
@@ -75,6 +93,7 @@ const createMappingDecorator =
       middleware?: MiddlewareParamArray;
       summary?: string;
       description?: string;
+      ignoreGlobalPrefix?: boolean;
     } = { middleware: [] }
   ): MethodDecorator => {
     return RequestMapping(

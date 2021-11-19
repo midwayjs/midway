@@ -48,6 +48,10 @@ export interface IMidwayKoaConfigurationOptions extends IConfigurationOptions {
    * http2 support
    */
   http2?: boolean;
+  /**
+   * http global prefix
+   */
+  globalPrefix?: string;
 }
 
 export type MiddlewareParamArray = Array<Middleware<DefaultState, IMidwayKoaContext>>;

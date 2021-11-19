@@ -90,4 +90,15 @@ describe('/test/util/webRouterCollector.test.ts', function () {
     expect(result2[2].url).toEqual('/:category/:slug');
   });
 
+  it('should test global prefix', async () => {
+    clearAllModule();
+    const collector = new WebRouterCollector(join(__dirname, '../fixtures/base-app-global-prefix'), { globalPrefix: 'api'});
+    const list = await collector.getRoutePriorityList();
+    expect(list.length).toEqual(2);
+    expect(list[0].prefix).toEqual('/api/test');
+    expect(list[1].prefix).toEqual('/api');
+    const result = await collector.getFlattenRouterTable()
+    expect(result.length).toEqual(4);
+  });
+
 });

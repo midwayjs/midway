@@ -6,13 +6,12 @@
  */
 import {
   MidwayFrameworkType,
-  RouterParamValue,
   WEB_RESPONSE_CONTENT_TYPE,
   WEB_RESPONSE_HEADER,
   WEB_RESPONSE_HTTP_CODE,
   WEB_RESPONSE_REDIRECT,
 } from '@midwayjs/decorator';
-import { WebRouterCollector, IMidwayContainer } from '../';
+import { WebRouterCollector, IMidwayContainer, RouterInfo } from '../';
 import { ILogger } from '@midwayjs/logger';
 
 export abstract class WebControllerGenerator<
@@ -28,21 +27,14 @@ export abstract class WebControllerGenerator<
 
   /**
    * wrap controller string to middleware function
-   * @param controllerMapping like FooController.index
-   * @param routeArgsInfo
-   * @param routerResponseData
+   * @param routeInfo
    */
-  public generateKoaController(
-    controllerMapping: string,
-    routeArgsInfo?: RouterParamValue[],
-    routerResponseData?: any[]
-  ) {
-    const [controllerId, methodName] = controllerMapping.split('.');
+  public generateKoaController(routeInfo: RouterInfo) {
     return async (ctx, next) => {
       const args = [ctx, next];
-      const controller = await ctx.requestContext.getAsync(controllerId);
+      const controller = await ctx.requestContext.getAsync(routeInfo.id);
       // eslint-disable-next-line prefer-spread
-      const result = await controller[methodName].apply(controller, args);
+      const result = await controller[routeInfo.method].apply(controller, args);
       if (result !== undefined) {
         ctx.body = result;
       }
@@ -52,8 +44,11 @@ export abstract class WebControllerGenerator<
       }
 
       // implement response decorator
-      if (Array.isArray(routerResponseData) && routerResponseData.length) {
-        for (const routerRes of routerResponseData) {
+      if (
+        Array.isArray(routeInfo.responseMetadata) &&
+        routeInfo.responseMetadata.length
+      ) {
+        for (const routerRes of routeInfo.responseMetadata) {
           switch (routerRes.type) {
             case WEB_RESPONSE_HTTP_CODE:
               ctx.status = routerRes.code;
@@ -77,9 +72,12 @@ export abstract class WebControllerGenerator<
   }
 
   public async loadMidwayController(
+    globalPrefix: string,
     routerHandler?: (newRouter: Router) => void
   ): Promise<void> {
-    const collector = new WebRouterCollector();
+    const collector = new WebRouterCollector('', {
+      globalPrefix,
+    });
     const routerTable = await collector.getRouterTable();
     const routerList = await collector.getRoutePriorityList();
 
@@ -131,11 +129,7 @@ export abstract class WebControllerGenerator<
           routeInfo.routerName,
           routeInfo.url,
           ...methodMiddlewares,
-          this.generateController(
-            routeInfo.handlerName,
-            routeInfo.requestMetadata,
-            routeInfo.responseMetadata
-          ),
+          this.generateController(routeInfo),
         ];
 
         this.logger?.debug(
@@ -154,11 +148,7 @@ export abstract class WebControllerGenerator<
   }
 
   abstract createRouter(routerOptions): Router;
-  abstract generateController(
-    controllerMapping: string,
-    routeArgsInfo?: RouterParamValue[],
-    routerResponseData?: any[]
-  );
+  abstract generateController(routeInfo: RouterInfo);
 
   protected async handlerWebMiddleware(
     middlewares: any[],
