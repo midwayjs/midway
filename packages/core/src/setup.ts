@@ -18,6 +18,7 @@ import defaultConfig from './config/config.default';
 import { bindContainer, clearBindContainer } from '@midwayjs/decorator';
 import * as util from 'util';
 import { join } from 'path';
+import { loggers } from '@midwayjs/logger';
 const debug = util.debuglog('midway:debug');
 
 export async function initializeGlobalApplicationContext(
@@ -147,6 +148,7 @@ export async function destroyGlobalApplicationContext(
   // stop container
   await applicationContext.stop();
   clearBindContainer();
+  loggers.close();
   global['MIDWAY_APPLICATION_CONTEXT'] = undefined;
   global['MIDWAY_MAIN_FRAMEWORK'] = undefined;
 }

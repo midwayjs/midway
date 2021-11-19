@@ -1,11 +1,4 @@
-import {
-  Provide,
-  Scope,
-  ScopeEnum,
-  Inject,
-  Init,
-  Destroy,
-} from '@midwayjs/decorator';
+import { Provide, Scope, ScopeEnum, Inject, Init } from '@midwayjs/decorator';
 import { MidwayConfigService } from './configService';
 import { ServiceFactory } from '../util/serviceFactory';
 import { ILogger, loggers } from '@midwayjs/logger';
@@ -81,11 +74,6 @@ export class MidwayLoggerService extends ServiceFactory<ILogger> {
 
   getName() {
     return 'logger';
-  }
-
-  @Destroy()
-  async destroy() {
-    loggers.close();
   }
 
   createLogger(name, config) {

@@ -34,7 +34,9 @@ describe('test/logger.test.js', () => {
     await sleep();
     const timeFormat = getCurrentDateString();
     expect(matchContentTimes(join(logsDir, 'midway-web.log'), timeFormat)).toEqual(1);
-    await closeApp(app);
+    await closeApp(app, {
+      sleep: 2000
+    });
   });
 
   it('should test util', async () => {
@@ -61,6 +63,8 @@ describe('test/logger.test.js', () => {
       }
     }
     expect(list.length).toEqual(0);
+    await sleep(2000);
+    await closeApp(app);
   });
 
   it.skip('should backup egg logger file when start', async () => {
@@ -240,6 +244,7 @@ describe('test/logger.test.js', () => {
     expect(
       readFileSync(logfile, 'utf8').includes('nodejs.Error: mock nobuffer error\n')
     );
+    await closeApp(app);
   });
 
   it.skip('log buffer enable cache on non-local and non-unittest env', async () => {
