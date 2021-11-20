@@ -41,67 +41,13 @@ class Test {
 describe('/test/web/requestMapping.test.ts', () => {
   it('requestMapping decorator should be ok', () => {
     const meta = getClassMetadata(WEB_ROUTER_KEY, Test);
-    expect(meta).toStrictEqual([
-      {
-        description: '',
-        path: '/get',
-        requestMethod: 'get',
-        routerName: 'get',
-        method: 'doGet',
-        middleware: ['hello'],
-        summary: '',
-      },
-      {
-        description: '',
-        path: '/get',
-        requestMethod: 'post',
-        routerName: 'post',
-        method: 'doPost',
-        middleware: ['hello'],
-        summary: 'test post method',
-      },
-      {
-        description: 'test option method',
-        path: '/get',
-        requestMethod: 'options',
-        routerName: 'options',
-        method: 'doOptions',
-        middleware: ['hello'],
-        summary: '',
-      },
-      {
-        description: '',
-        path: '/get',
-        requestMethod: 'head',
-        routerName: 'head',
-        method: 'doHead',
-        middleware: ['hello'],
-        summary: '',
-      },
-      {
-        description: '',
-        path: '/',
-        requestMethod: 'all',
-        routerName: 'all',
-        method: 'doAll',
-        middleware: undefined,
-        summary: '',
-      },
-    ]);
+    expect(meta).toMatchSnapshot();
 
     const dd = RequestMapping();
     dd(Test, 'ttt', null);
 
     const metadd = getClassMetadata(WEB_ROUTER_KEY, Test);
-    expect(metadd[metadd.length - 1]).toStrictEqual({
-      description: '',
-      path: '/',
-      requestMethod: 'get',
-      routerName: null,
-      method: 'ttt',
-      middleware: [],
-      summary: '',
-    });
+    expect(metadd[metadd.length - 1]).toMatchSnapshot();
 
     const bb = RequestMapping({
       requestMethod: null,
@@ -109,14 +55,6 @@ describe('/test/web/requestMapping.test.ts', () => {
 
     bb(Test, 'ttt', null);
     const metabb = getClassMetadata(WEB_ROUTER_KEY, Test);
-    expect(metabb[metabb.length - 1]).toStrictEqual({
-      description: '',
-      path: '/',
-      requestMethod: 'get',
-      routerName: undefined,
-      method: 'ttt',
-      middleware: undefined,
-      summary: '',
-    });
+    expect(metabb[metabb.length - 1]).toMatchSnapshot();
   });
 });

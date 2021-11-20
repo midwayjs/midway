@@ -16,6 +16,7 @@ export interface ControllerOption {
     alias?: string[];
     description?: string;
     tagName?: string;
+    ignoreGlobalPrefix?: boolean;
   };
 }
 
@@ -26,6 +27,7 @@ export function Controller(
     middleware?: MiddlewareParamArray;
     description?: string;
     tagName?: string;
+    ignoreGlobalPrefix?: boolean;
   } = { middleware: [], sensitive: true }
 ): ClassDecorator {
   return (target: any) => {

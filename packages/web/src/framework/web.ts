@@ -4,6 +4,7 @@ import {
   IMidwayBootstrapOptions,
   MidwayProcessTypeEnum,
   PathFileUtil,
+  RouterInfo,
   WebControllerGenerator,
 } from '@midwayjs/core';
 import { Framework, Inject, MidwayFrameworkType } from '@midwayjs/decorator';
@@ -29,12 +30,8 @@ class EggControllerGenerator extends WebControllerGenerator<EggRouter> {
     return router;
   }
 
-  generateController(controllerMapping, routeArgsInfo, routerResponseData) {
-    return this.generateKoaController(
-      controllerMapping,
-      routeArgsInfo,
-      routerResponseData
-    );
+  generateController(routeInfo: RouterInfo) {
+    return this.generateKoaController(routeInfo);
   }
 }
 
@@ -47,7 +44,7 @@ export class MidwayWebFramework extends BaseFramework<
   protected loggers: {
     [name: string]: EggLogger;
   };
-  generator;
+  generator: EggControllerGenerator;
   private server: Server;
   private agent;
   private isClusterMode = false;
@@ -179,10 +176,6 @@ export class MidwayWebFramework extends BaseFramework<
     debug(`[egg]: overwrite properties to "${processType}"`);
     this.defineApplicationProperties(
       {
-        generateController: (controllerMapping: string) => {
-          return this.generator.generateController(controllerMapping);
-        },
-
         generateMiddleware: async (middlewareId: string) => {
           return this.generateMiddleware(middlewareId);
         },
@@ -208,9 +201,12 @@ export class MidwayWebFramework extends BaseFramework<
   }
 
   async loadMidwayController() {
-    await this.generator.loadMidwayController(newRouter => {
-      this.app.use(newRouter.middleware());
-    });
+    await this.generator.loadMidwayController(
+      this.configurationOptions.globalPrefix,
+      newRouter => {
+        this.app.use(newRouter.middleware());
+      }
+    );
   }
 
   getFrameworkType(): MidwayFrameworkType {

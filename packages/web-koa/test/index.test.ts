@@ -243,4 +243,18 @@ describe('/test/feature.test.ts', () => {
       expect(result.text).toEqual('hello worldabc');
     });
   });
+
+  it('should test global prefix', async () => {
+    const app = await creatApp('base-app-global-prefix');
+    let result = await createHttpRequest(app)
+      .get('/');
+    expect(result.status).toEqual(200);
+    expect(result.text).toEqual('ok');
+
+    result = await createHttpRequest(app)
+      .get('/api/222');
+    expect(result.status).toEqual(200);
+    expect(result.text).toEqual('ok');
+    await closeApp(app);
+  });
 });

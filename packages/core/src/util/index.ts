@@ -95,6 +95,7 @@ export function getUserHome() {
 }
 
 export function joinURLPath(...strArray) {
+  strArray = strArray.filter(item => !!item);
   if (strArray.length === 0) {
     return '';
   }

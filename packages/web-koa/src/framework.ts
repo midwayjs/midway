@@ -4,10 +4,11 @@ import {
   IMidwayBootstrapOptions,
   MidwayFrameworkType,
   PathFileUtil,
+  RouterInfo,
   WebControllerGenerator,
 } from '@midwayjs/core';
 
-import { Framework, RouterParamValue } from '@midwayjs/decorator';
+import { Framework } from '@midwayjs/decorator';
 import {
   IMidwayKoaApplication,
   IMidwayKoaConfigurationOptions,
@@ -30,12 +31,8 @@ class KoaControllerGenerator extends WebControllerGenerator<Router> {
     return router;
   }
 
-  generateController(controllerMapping, routeArgsInfo, routerResponseData) {
-    return this.generateKoaController(
-      controllerMapping,
-      routeArgsInfo,
-      routerResponseData
-    );
+  generateController(routeInfo: RouterInfo) {
+    return this.generateKoaController(routeInfo);
   }
 }
 
@@ -74,18 +71,7 @@ export class MidwayKoaFramework extends BaseFramework<
       this.appLogger
     );
 
-    this.defineApplicationProperties({
-      generateController: (controllerMapping: string) => {
-        return this.generateController(controllerMapping);
-      },
-      /**
-       * @deprecated
-       * @param middlewareId
-       */
-      generateMiddleware: async (middlewareId: string) => {
-        return this.generateMiddleware(middlewareId);
-      },
-    });
+    this.defineApplicationProperties();
 
     // hack use method
     (this.app as any).originUse = this.app.use;
@@ -126,27 +112,21 @@ export class MidwayKoaFramework extends BaseFramework<
   }
 
   async loadMidwayController() {
-    await this.generator.loadMidwayController(newRouter => {
-      this.app.use(newRouter.middleware());
-    });
+    await this.generator.loadMidwayController(
+      this.configurationOptions.globalPrefix,
+      newRouter => {
+        this.app.use(newRouter.middleware());
+      }
+    );
   }
 
   /**
    * wrap controller string to middleware function
-   * @param controllerMapping like FooController.index
-   * @param routeArgsInfo
-   * @param routerResponseData
    */
   public generateController(
-    controllerMapping: string,
-    routeArgsInfo?: RouterParamValue[],
-    routerResponseData?: any[]
+    routeInfo: RouterInfo
   ): Middleware<DefaultState, IMidwayKoaContext> {
-    return this.generator.generateKoaController(
-      controllerMapping,
-      routeArgsInfo,
-      routerResponseData
-    );
+    return this.generator.generateKoaController(routeInfo);
   }
 
   /**
