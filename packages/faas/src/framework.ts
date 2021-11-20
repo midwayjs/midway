@@ -100,12 +100,6 @@ export class MidwayFaaSFramework extends BaseFramework<
       for (const funcInfo of functionList) {
         this.funMappingStore.set(funcInfo.funcHandlerName, funcInfo);
       }
-
-      // bind func and controller module
-      const routerModules = await collector.getRouterModules();
-      for (const module of routerModules) {
-        this.getApplicationContext().bindClass(module);
-      }
     }, LOCK_KEY);
   }
 
