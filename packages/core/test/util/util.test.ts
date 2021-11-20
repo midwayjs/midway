@@ -6,7 +6,8 @@ import {
   joinURLPath,
   delegateTargetPrototypeMethod,
   delegateTargetMethod,
-  delegateTargetProperties
+  delegateTargetProperties,
+  transformRequestObjectByType
 } from '../../src/util';
 import { PathFileUtil } from '../../src';
 
@@ -131,6 +132,37 @@ describe('/test/pathFileUtil.test.ts', () => {
     expect(c.hello).toBeUndefined();
     expect(c.getData).toBeUndefined();
     expect(c.getInfo).toBeUndefined();
+  });
+
+  it('should transform plain to target type', function () {
+    expect(transformRequestObjectByType('1', Number)).toEqual(1);
+    expect(transformRequestObjectByType('1.001', Number)).toEqual(1.001);
+    expect(transformRequestObjectByType('1.001', String)).toEqual('1.001');
+    expect(transformRequestObjectByType('1.001', Boolean)).toEqual(true);
+    expect(transformRequestObjectByType(true, Boolean)).toEqual(true);
+    expect(transformRequestObjectByType('true', Boolean)).toEqual(true);
+    expect(transformRequestObjectByType(undefined, Boolean)).toEqual(false);
+    expect(transformRequestObjectByType(null, Boolean)).toEqual(false);
+    expect(transformRequestObjectByType(false, Boolean)).toEqual(false);
+    expect(transformRequestObjectByType(0, Boolean)).toEqual(false);
+    // special
+    expect(transformRequestObjectByType('0', Boolean)).toEqual(false);
+    expect(transformRequestObjectByType('false', Boolean)).toEqual(false);
+
+    class A {
+      a: number;
+      b: number;
+      invoke() {
+        return this.a + this.b;
+      }
+    }
+
+    const result: A = transformRequestObjectByType({
+      a: 1,
+      b: 2
+    }, A);
+    expect(result instanceof A).toBeTruthy();
+    expect(result.invoke()).toEqual(3);
   });
 
 });

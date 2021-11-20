@@ -235,6 +235,7 @@ export type ParameterHandlerFunction = (options: {
   propertyName: string;
   metadata: any;
   originArgs: Array<any>;
+  originParamType: any;
   parameterIndex: number;
 }) => IMethodAspect;
 

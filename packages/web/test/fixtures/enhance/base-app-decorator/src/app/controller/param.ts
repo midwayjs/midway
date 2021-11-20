@@ -115,12 +115,14 @@ export class ParamController {
   }
 
   @Get('/param_queries')
-  async param_queries(@Queries('name') name: string) {
+  async param_queries(@Queries('name') name: string[]) {
     return name;
   }
 
   @Get('/param_queries_all')
-  async param_queries_all(@Queries(ALL) name: string) {
+  async param_queries_all(@Queries() name: {
+    name: string[]
+  }) {
     return name;
   }
 
