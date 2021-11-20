@@ -485,8 +485,8 @@ export class WebRouterCollector {
       this.isReady = true;
     }
     let routeArr = [];
-    for (const routerInfo of this.routes.values()) {
-      routeArr = routeArr.concat(routerInfo);
+    for (const routerPriority of this.routesPriority) {
+      routeArr = routeArr.concat(this.routes.get(routerPriority.prefix));
     }
     return routeArr;
   }

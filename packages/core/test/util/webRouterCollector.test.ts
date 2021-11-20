@@ -96,11 +96,13 @@ describe('/test/util/webRouterCollector.test.ts', function () {
     container.bindClass(require('./fixtures/home'));
     const collector = new WebRouterCollector('', { globalPrefix: 'api'});
     const list = await collector.getRoutePriorityList();
-    expect(list.length).toEqual(2);
+    expect(list.length).toEqual(3);
     expect(list[0].prefix).toEqual('/api/test');
     expect(list[1].prefix).toEqual('/api');
-    const result = await collector.getFlattenRouterTable()
+    expect(list[2].prefix).toEqual('/');
+    const result = await collector.getFlattenRouterTable();
     expect(result.length).toEqual(4);
+    expect(result[3].prefix).toEqual('/');
   });
 
   it('should test global prefix with router ignore', async () => {
