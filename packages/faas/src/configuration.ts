@@ -59,7 +59,8 @@ export class FaaSConfiguration {
       options => {
         return extractKoaLikeValue(
           options.metadata.type,
-          options.metadata.propertyData
+          options.metadata.propertyData,
+          options.originParamType
         )(options.originArgs[0], options.originArgs[1]);
       }
     );

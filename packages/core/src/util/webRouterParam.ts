@@ -1,6 +1,7 @@
 import { ALL, RouteParamTypes } from '@midwayjs/decorator';
+import { transformRequestObjectByType } from './index';
 
-export const extractKoaLikeValue = (key, data) => {
+export const extractKoaLikeValue = (key, data, paramType) => {
   if (ALL === data) {
     data = undefined;
   }
@@ -9,17 +10,30 @@ export const extractKoaLikeValue = (key, data) => {
       case RouteParamTypes.NEXT:
         return next;
       case RouteParamTypes.BODY:
-        return data && ctx.request.body
-          ? ctx.request.body[data]
-          : ctx.request.body;
+        return transformRequestObjectByType(
+          data && ctx.request.body ? ctx.request.body[data] : ctx.request.body,
+          paramType
+        );
       case RouteParamTypes.PARAM:
-        return data ? ctx.params[data] : ctx.params;
+        return transformRequestObjectByType(
+          data ? ctx.params[data] : ctx.params,
+          paramType
+        );
       case RouteParamTypes.QUERY:
-        return data ? ctx.query[data] : ctx.query;
+        return transformRequestObjectByType(
+          data ? ctx.query[data] : ctx.query,
+          paramType
+        );
       case RouteParamTypes.HEADERS:
-        return data ? ctx.get(data) : ctx.headers;
+        return transformRequestObjectByType(
+          data ? ctx.get(data) : ctx.headers,
+          paramType
+        );
       case RouteParamTypes.SESSION:
-        return data ? ctx.session[data] : ctx.session;
+        return transformRequestObjectByType(
+          data ? ctx.session[data] : ctx.session,
+          paramType
+        );
       case RouteParamTypes.FILESTREAM:
         return ctx.getFileStream && ctx.getFileStream(data);
       case RouteParamTypes.FILESSTREAM:
@@ -30,9 +44,15 @@ export const extractKoaLikeValue = (key, data) => {
         return ctx['ip'];
       case RouteParamTypes.QUERIES:
         if (ctx.queries) {
-          return data ? ctx.queries[data] : ctx.queries;
+          return transformRequestObjectByType(
+            data ? ctx.queries[data] : ctx.queries,
+            paramType
+          );
         } else {
-          return data ? ctx.query[data] : ctx.query;
+          return transformRequestObjectByType(
+            data ? ctx.query[data] : ctx.query,
+            paramType
+          );
         }
       default:
         return null;
@@ -40,7 +60,7 @@ export const extractKoaLikeValue = (key, data) => {
   };
 };
 
-export const extractExpressLikeValue = (key, data) => {
+export const extractExpressLikeValue = (key, data, paramType) => {
   if (ALL === data) {
     data = undefined;
   }
@@ -49,15 +69,30 @@ export const extractExpressLikeValue = (key, data) => {
       case RouteParamTypes.NEXT:
         return next;
       case RouteParamTypes.BODY:
-        return data && req.body ? req.body[data] : req.body;
+        return transformRequestObjectByType(
+          data && req.body ? req.body[data] : req.body,
+          paramType
+        );
       case RouteParamTypes.PARAM:
-        return data ? req.params[data] : req.params;
+        return transformRequestObjectByType(
+          data ? req.params[data] : req.params,
+          paramType
+        );
       case RouteParamTypes.QUERY:
-        return data ? req.query[data] : req.query;
+        return transformRequestObjectByType(
+          data ? req.query[data] : req.query,
+          paramType
+        );
       case RouteParamTypes.HEADERS:
-        return data ? req.get(data) : req.headers;
+        return transformRequestObjectByType(
+          data ? req.get(data) : req.headers,
+          paramType
+        );
       case RouteParamTypes.SESSION:
-        return data ? req.session[data] : req.session;
+        return transformRequestObjectByType(
+          data ? req.session[data] : req.session,
+          paramType
+        );
       case RouteParamTypes.FILESTREAM:
         return req.getFileStream && req.getFileStream(data);
       case RouteParamTypes.FILESSTREAM:
@@ -68,9 +103,15 @@ export const extractExpressLikeValue = (key, data) => {
         return req['ip'];
       case RouteParamTypes.QUERIES:
         if (req.queries) {
-          return data ? req.queries[data] : req.queries;
+          return transformRequestObjectByType(
+            data ? req.queries[data] : req.queries,
+            paramType
+          );
         } else {
-          return data ? req.query[data] : req.query;
+          return transformRequestObjectByType(
+            data ? req.query[data] : req.query,
+            paramType
+          );
         }
       default:
         return null;

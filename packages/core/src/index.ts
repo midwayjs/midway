@@ -11,6 +11,7 @@ export {
   delegateTargetMethod,
   delegateTargetProperties,
   deprecatedOutput,
+  transformRequestObjectByType,
 } from './util/';
 export * from './util/pathFileUtil';
 export * from './util/webRouterParam';

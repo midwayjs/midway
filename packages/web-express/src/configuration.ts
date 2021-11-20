@@ -27,7 +27,8 @@ export class ExpressConfiguration {
       options => {
         return extractExpressLikeValue(
           options.metadata.type,
-          options.metadata.propertyData
+          options.metadata.propertyData,
+          options.originParamType
         )(options.originArgs[0], options.originArgs[1], options.originArgs[2]);
       }
     );

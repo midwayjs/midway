@@ -38,7 +38,7 @@ export class ParamController {
   }
 
   @Get('/param_queries_all')
-  async param_queries_all(@Queries() name: string) {
+  async param_queries_all(@Queries() name: any) {
     return name;
   }
 
@@ -48,7 +48,10 @@ export class ParamController {
   }
 
   @Post('/param_body_all')
-  async param_body_All(@Body() name: string) {
+  async param_body_All(@Body() name: {
+    name: string;
+    other: any;
+  }) {
     return name;
   }
 

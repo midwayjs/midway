@@ -889,6 +889,12 @@ export function isProvide(target: any): boolean {
   return !!getClassMetadata(TAGGED_CLS, target);
 }
 
+export enum BaseType {
+  Boolean = 'boolean',
+  Number = 'number',
+  String = 'string',
+}
+
 /**
  * get parameters type by reflect-metadata
  */

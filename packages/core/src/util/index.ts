@@ -1,6 +1,7 @@
 import { dirname, resolve, sep, posix } from 'path';
 import { readFileSync } from 'fs';
 import { debuglog } from 'util';
+import { plainToClass } from 'class-transformer';
 
 const debug = debuglog('midway:container:util');
 
@@ -180,4 +181,34 @@ export const getCurrentDateString = (timestamp: number = Date.now()) => {
  */
 export const deprecatedOutput = (message: string) => {
   console.warn('DeprecationWarning: ' + message);
+};
+
+/**
+ * transform request object to definition type
+ *
+ * @param originValue
+ * @param targetType
+ * @since 3.0.0
+ */
+export const transformRequestObjectByType = (originValue: any, targetType) => {
+  if (
+    targetType === undefined ||
+    targetType === null ||
+    targetType === Object
+  ) {
+    return originValue;
+  }
+  if (targetType === Number) {
+    return Number(originValue);
+  }
+  if (targetType === String) {
+    return String(originValue);
+  }
+  if (targetType === Boolean) {
+    if (originValue === '0' || originValue === 'false') {
+      return false;
+    }
+    return Boolean(originValue);
+  }
+  return plainToClass(targetType, originValue) as typeof originValue;
 };

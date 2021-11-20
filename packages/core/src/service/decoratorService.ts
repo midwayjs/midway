@@ -9,6 +9,7 @@ import {
   APPLICATION_CONTEXT_KEY,
   INJECT_CUSTOM_PARAM,
   JoinPoint,
+  getMethodParamTypes,
 } from '@midwayjs/decorator';
 import {
   HandlerFunction,
@@ -66,12 +67,14 @@ export class MidwayDecoratorService {
                       `Parameter Decorator "${key}" handler not found, please register first.`
                     );
                   }
+                  const paramTypes = getMethodParamTypes(Clzz, propertyName);
                   newArgs[parameterIndex] = await parameterDecoratorHandler({
                     metadata,
                     propertyName,
                     parameterIndex,
                     target: Clzz,
                     originArgs: joinPoint.args,
+                    originParamType: paramTypes[parameterIndex],
                   });
                 }
                 joinPoint.args = newArgs;
