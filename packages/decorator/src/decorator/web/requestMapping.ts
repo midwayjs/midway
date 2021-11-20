@@ -76,6 +76,7 @@ export const RequestMapping = (
         middleware,
         summary: metadata?.summary || '',
         description: metadata?.description || '',
+        ignoreGlobalPrefix: metadata?.ignoreGlobalPrefix ?? false,
       } as RouterOption,
       target
     );

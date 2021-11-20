@@ -17,8 +17,6 @@ import { ILogger } from '@midwayjs/logger';
 export abstract class WebControllerGenerator<
   Router extends { use: (...args) => void }
 > {
-  private controllerIds: string[] = [];
-
   protected constructor(
     readonly applicationContext: IMidwayContainer,
     readonly frameworkType: MidwayFrameworkType,
@@ -85,16 +83,8 @@ export abstract class WebControllerGenerator<
       // bind controller first
       this.applicationContext.bindClass(routerInfo.routerModule);
 
-      const providerId = routerInfo.controllerId;
-      // controller id check
-      if (this.controllerIds.indexOf(providerId) > -1) {
-        throw new Error(
-          `Controller identifier [${providerId}] already exists!`
-        );
-      }
-      this.controllerIds.push(providerId);
       this.logger?.debug(
-        `Load Controller "${providerId}", prefix=${routerInfo.prefix}`
+        `Load Controller "${routerInfo.controllerId}", prefix=${routerInfo.prefix}`
       );
 
       // new router

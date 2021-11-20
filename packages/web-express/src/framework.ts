@@ -45,7 +45,6 @@ export class MidwayExpressFramework extends BaseFramework<
   IMidwayExpressConfigurationOptions
 > {
   public app: IMidwayExpressApplication;
-  private controllerIds: string[] = [];
   private server: Server;
 
   protected middlewareManager = new ContextMiddlewareManager<
@@ -210,16 +209,8 @@ export class MidwayExpressFramework extends BaseFramework<
       // bind controller first
       this.getApplicationContext().bindClass(routerInfo.routerModule);
 
-      const providerId = routerInfo.controllerId;
-      // controller id check
-      if (this.controllerIds.indexOf(providerId) > -1) {
-        throw new Error(
-          `Controller identifier [${providerId}] already exists!`
-        );
-      }
-      this.controllerIds.push(providerId);
       this.logger.debug(
-        `Load Controller "${providerId}", prefix=${routerInfo.prefix}`
+        `Load Controller "${routerInfo.controllerId}", prefix=${routerInfo.prefix}`
       );
 
       // new router
