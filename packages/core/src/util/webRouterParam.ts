@@ -1,7 +1,7 @@
 import { ALL, RouteParamTypes } from '@midwayjs/decorator';
 import { transformRequestObjectByType } from './index';
 
-export const extractKoaLikeValue = (key, data, paramType) => {
+export const extractKoaLikeValue = (key, data, paramType?) => {
   if (ALL === data) {
     data = undefined;
   }
@@ -60,7 +60,7 @@ export const extractKoaLikeValue = (key, data, paramType) => {
   };
 };
 
-export const extractExpressLikeValue = (key, data, paramType) => {
+export const extractExpressLikeValue = (key, data, paramType?) => {
   if (ALL === data) {
     data = undefined;
   }

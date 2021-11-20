@@ -190,7 +190,7 @@ export const deprecatedOutput = (message: string) => {
  * @param targetType
  * @since 3.0.0
  */
-export const transformRequestObjectByType = (originValue: any, targetType) => {
+export const transformRequestObjectByType = (originValue: any, targetType?) => {
   if (
     targetType === undefined ||
     targetType === null ||
