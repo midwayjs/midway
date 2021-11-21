@@ -11,9 +11,6 @@ export default (
   appInfo: MidwayAppInfo
 ): {
   midwayLogger?: ServiceFactoryConfigOption<LoggerOptions>;
-  i18n?: {
-    currentLocale?: string;
-  };
 } => {
   const isDevelopment = isDevelopmentEnvironment(getCurrentEnvironment());
   return {
@@ -36,9 +33,6 @@ export default (
           aliasName: 'logger',
         },
       },
-    },
-    i18n: {
-      currentLocale: 'en',
     },
   };
 };
