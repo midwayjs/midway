@@ -47,11 +47,10 @@ export class MidwayFeatureNoLongerSupportedError extends MidwayError {
   }
 }
 
-export class MidwayNoFrameworkFoundError extends MidwayError {
-  constructor() {
-    super(
-      'You must add a component that contains @Framework at least, such as @midwayjs/web, @midwayjs/koa, etc.',
-      FrameworkErrorEnum.NO_FRAMEWORK_FOUND
-    );
+export class MidwayValidationError extends MidwayError {
+  constructor(message, cause) {
+    super(message, FrameworkErrorEnum.VALIDATE_FAIL, {
+      cause,
+    });
   }
 }

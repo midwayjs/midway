@@ -5,21 +5,47 @@ import {
   getMethodParamTypes,
   getClassExtendedMetadata,
   JoinPoint,
+  Provide,
+  Scope,
+  ScopeEnum,
 } from '@midwayjs/decorator';
-import { MidwayDecoratorService } from '@midwayjs/core';
+import { MidwayDecoratorService, MidwayValidationError } from '@midwayjs/core';
 import { RULES_KEY, VALIDATE_KEY } from './constants';
 import * as Joi from 'joi';
-import { plainToClass } from 'class-transformer';
 import * as util from 'util';
+import * as DefaultConfig from './config.default';
 
 const debug = util.debuglog('midway:debug');
 
+@Provide()
+@Scope(ScopeEnum.Singleton)
+export class ValidateService {
+  validate(ClzType: new (...args) => any, value: any) {
+    const rules = getClassExtendedMetadata(RULES_KEY, ClzType);
+    if (rules) {
+      const schema = Joi.object(rules);
+      const result = schema.validate(value);
+      if (result.error) {
+        throw new MidwayValidationError(result.error.message, result.error);
+      }
+    }
+  }
+}
+
 @Configuration({
   namespace: 'validate',
+  importConfigs: [
+    {
+      default: DefaultConfig,
+    },
+  ],
 })
 export class ValidateConfiguration {
   @Inject()
   decoratorService: MidwayDecoratorService;
+
+  @Inject()
+  validateService: ValidateService;
 
   @Init()
   async init() {
@@ -36,20 +62,7 @@ export class ValidateConfiguration {
         before: (joinPoint: JoinPoint) => {
           for (let i = 0; i < paramTypes.length; i++) {
             const item = paramTypes[i];
-            const rules = getClassExtendedMetadata(RULES_KEY, item);
-            if (rules) {
-              const schema = Joi.object(rules);
-              const result = schema.validate(joinPoint.args[i]);
-              if (result.error) {
-                throw result.error;
-              } else {
-                joinPoint.args[i] = result.value;
-              }
-              // passed
-              if (options.metadata.isTransform) {
-                joinPoint.args[i] = plainToClass(item, joinPoint.args[i]);
-              }
-            }
+            this.validateService.validate(item, joinPoint.args[i]);
           }
         },
       };

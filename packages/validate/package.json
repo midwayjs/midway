@@ -22,7 +22,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "class-transformer": "^0.4.0",
     "joi": "^17.2.1"
   },
   "devDependencies": {

@@ -198,17 +198,22 @@ export const transformRequestObjectByType = (originValue: any, targetType?) => {
   ) {
     return originValue;
   }
-  if (targetType === Number) {
-    return Number(originValue);
+
+  switch (targetType) {
+    case Number:
+      return Number(originValue);
+    case String:
+      return String(originValue);
+    case Boolean:
+      if (originValue === '0' || originValue === 'false') {
+        return false;
+      }
+      return Boolean(originValue);
+    default:
+      if (originValue instanceof targetType) {
+        return originValue;
+      } else {
+        return plainToClass(targetType, originValue) as typeof originValue;
+      }
   }
-  if (targetType === String) {
-    return String(originValue);
-  }
-  if (targetType === Boolean) {
-    if (originValue === '0' || originValue === 'false') {
-      return false;
-    }
-    return Boolean(originValue);
-  }
-  return plainToClass(targetType, originValue) as typeof originValue;
 };
