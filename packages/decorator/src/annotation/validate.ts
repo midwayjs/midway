@@ -19,6 +19,8 @@ export function Validate(isTransform = true) {
           const schema = Joi.object(rules);
           const result = schema.validate(args[i]);
           if (result.error) {
+            // HTTP status code: 422 Unprocessable Entity
+            result.error.status = 422;
             throw result.error;
           } else {
             args[i] = result.value;
