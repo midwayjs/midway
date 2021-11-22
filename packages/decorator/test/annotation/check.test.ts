@@ -284,4 +284,28 @@ describe('/test/annotation/check.test.ts', () => {
     } as any)
     expect(typeof data.id).toEqual('number');
   });
+
+  it('throw validation error with status set', () => {
+    class UserDTO {
+      @Rule(RuleType.number().max(10))
+      age: number;
+    }
+
+    class Hello {
+      @Validate()
+      school(a, data: UserDTO) {
+        return data;
+      }
+    }
+    const user = {
+      age: 22,
+    };
+    let errorThrown;
+    try {
+      new Hello().school(1, user);
+    } catch (e) {
+      errorThrown = e;
+    }
+    expect(errorThrown.status).toBe(422);
+  });
 });
