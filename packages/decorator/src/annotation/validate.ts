@@ -6,7 +6,17 @@ interface MidwayValidationError extends joi.ValidationError {
   status: number;
 }
 
-export function Validate(isTransform = true) {
+interface ValidateOptions {
+  isTransform?: boolean;
+  errorStatus?: number;
+}
+
+export function CustomValidate(opt: ValidateOptions) {
+  return (customOpt: ValidateOptions = {}) =>
+    Validate({ ...opt, ...customOpt });
+}
+
+export function Validate(opt: boolean | ValidateOptions = true) {
   return function (
     target,
     propertyKey: string | symbol,
@@ -14,6 +24,10 @@ export function Validate(isTransform = true) {
   ) {
     const origin = descriptor.value;
     const paramTypes = getMethodParamTypes(target, propertyKey);
+    const options = typeof opt === 'boolean' ? { isTransform: opt } : opt;
+    if (!('isTransform' in options)) {
+      options.isTransform = true;
+    }
 
     descriptor.value = function (...args: any[]) {
       for (let i = 0; i < paramTypes.length; i++) {
@@ -23,14 +37,16 @@ export function Validate(isTransform = true) {
           const schema = joi.object(rules);
           const result = schema.validate(args[i]);
           if (result.error) {
-            // HTTP status code: 422 Unprocessable Entity
-            (result.error as MidwayValidationError).status = 422;
+            if (options.errorStatus) {
+              (result.error as MidwayValidationError).status =
+                options.errorStatus;
+            }
             throw result.error;
           } else {
             args[i] = result.value;
           }
           // passed
-          if (isTransform) {
+          if (options.isTransform) {
             args[i] = plainToClass(item, args[i]);
           }
         }
