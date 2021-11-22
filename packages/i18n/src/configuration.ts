@@ -2,7 +2,7 @@ import { Configuration } from '@midwayjs/decorator';
 import * as DefaultConfig from './config.default';
 
 @Configuration({
-  namespace: 'info',
+  namespace: 'i18n',
   importConfigs: [
     {
       default: DefaultConfig,

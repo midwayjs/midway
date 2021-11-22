@@ -48,8 +48,9 @@ export class MidwayFeatureNoLongerSupportedError extends MidwayError {
 }
 
 export class MidwayValidationError extends MidwayError {
-  constructor(message, cause) {
+  constructor(message, status, cause) {
     super(message, FrameworkErrorEnum.VALIDATE_FAIL, {
+      status,
       cause,
     });
   }

@@ -8,6 +8,7 @@ import {
   Provide,
   Scope,
   ScopeEnum,
+  Config,
 } from '@midwayjs/decorator';
 import { MidwayDecoratorService, MidwayValidationError } from '@midwayjs/core';
 import { RULES_KEY, VALIDATE_KEY } from './constants';
@@ -20,13 +21,26 @@ const debug = util.debuglog('midway:debug');
 @Provide()
 @Scope(ScopeEnum.Singleton)
 export class ValidateService {
-  validate(ClzType: new (...args) => any, value: any) {
+  @Config('validate')
+  validateConfig: typeof DefaultConfig.validate;
+
+  validate(
+    ClzType: new (...args) => any,
+    value: any,
+    options?: {
+      errorStatus?: number;
+    }
+  ) {
     const rules = getClassExtendedMetadata(RULES_KEY, ClzType);
     if (rules) {
       const schema = Joi.object(rules);
       const result = schema.validate(value);
       if (result.error) {
-        throw new MidwayValidationError(result.error.message, result.error);
+        throw new MidwayValidationError(
+          result.error.message,
+          options?.errorStatus ?? this.validateConfig.errorStatus,
+          result.error
+        );
       }
     }
   }
@@ -62,7 +76,11 @@ export class ValidateConfiguration {
         before: (joinPoint: JoinPoint) => {
           for (let i = 0; i < paramTypes.length; i++) {
             const item = paramTypes[i];
-            this.validateService.validate(item, joinPoint.args[i]);
+            this.validateService.validate(
+              item,
+              joinPoint.args[i],
+              options.metadata
+            );
           }
         },
       };
