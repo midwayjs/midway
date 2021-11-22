@@ -1,5 +1,6 @@
-import { Validate, Rule, RuleType } from '../../src';
+import { Validate, Rule, RuleType, CustomValidate } from '../../src';
 import * as assert from 'assert';
+
 describe('/test/annotation/check.test.ts', () => {
   it('check with check', () => {
     class TO{
@@ -283,5 +284,32 @@ describe('/test/annotation/check.test.ts', () => {
       id: '555'
     } as any)
     expect(typeof data.id).toEqual('number');
+  });
+
+  it('customize status code for validate error', () => {
+
+    const Validate = CustomValidate({ errorStatus: 422 });
+    class UserDTO {
+      @Rule(RuleType.number().max(10))
+      age: number;
+    }
+
+    class Hello {
+      @Validate()
+      school(a, data: UserDTO) {
+        return data;
+      }
+    }
+
+    const user = {
+      age: 22,
+    };
+    let errorThrown;
+    try {
+      new Hello().school(1, user);
+    } catch (e) {
+      errorThrown = e;
+    }
+    expect(errorThrown.status).toBe(422);
   });
 });
