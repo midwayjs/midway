@@ -1,8 +1,8 @@
 import { getClassExtendedMetadata, getMethodParamTypes, RULES_KEY } from '..';
 import { plainToClass } from 'class-transformer';
-import { object, ValidationError } from 'joi';
+import * as joi from 'joi';
 
-interface MidwayValidationError extends ValidationError {
+interface MidwayValidationError extends joi.ValidationError {
   status: number;
 }
 
@@ -20,7 +20,7 @@ export function Validate(isTransform = true) {
         const item = paramTypes[i];
         const rules = getClassExtendedMetadata(RULES_KEY, item);
         if (rules) {
-          const schema = object(rules);
+          const schema = joi.object(rules);
           const result = schema.validate(args[i]);
           if (result.error) {
             // HTTP status code: 422 Unprocessable Entity
