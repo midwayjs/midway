@@ -1,4 +1,9 @@
-import { IConfigurationOptions, IMidwayApplication, IMidwayContext } from '@midwayjs/core';
+import {
+  IConfigurationOptions,
+  IMidwayApplication,
+  IMidwayContext,
+  NextFunction as BaseNextFunction
+} from '@midwayjs/core';
 import { ConsumeMessage, Options } from 'amqplib/properties';
 import { RabbitMQListenerOptions } from '@midwayjs/decorator';
 import type { ConfirmChannel, Channel, Options as AmqpOptions } from 'amqplib';
@@ -34,6 +39,7 @@ export type IMidwayRabbitMQContext = IMidwayContext<{
 
 export type Application = IMidwayRabbitMQApplication;
 export interface Context extends IMidwayRabbitMQContext {}
+export type NextFunction = BaseNextFunction;
 export type DefaultConfig = string | AmqpOptions.Connect;
 
 declare module '@midwayjs/core/dist/interface' {

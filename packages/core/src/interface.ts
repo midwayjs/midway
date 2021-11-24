@@ -340,11 +340,11 @@ export interface Context {
 }
 
 export type IMidwayContext<FrameworkContext = unknown> = Context & FrameworkContext;
+export type NextFunction = () => Promise<any>;
 
 /**
  * Common middleware definition
  */
-
 export interface IMiddleware<CTX, R, N = unknown> {
   resolve: () => FunctionMiddleware<CTX, R, N>;
   match?: (ctx?: CTX) => boolean;
@@ -354,7 +354,7 @@ export type FunctionMiddleware<CTX, R, N = unknown> = N extends true ? (req: CTX
 export type ClassMiddleware<CTX, R, N> = new (...args) => IMiddleware<CTX, R, N>;
 export type CommonMiddleware<CTX, R, N> = ClassMiddleware<CTX, R, N> | FunctionMiddleware<CTX, R, N>;
 export type CommonMiddlewareUnion<CTX, R, N> = CommonMiddleware<CTX, R, N> | Array<CommonMiddleware<CTX, R, N>>;
-export type MiddlewareRespond<CTX, R, N> = (context: CTX, nextOrRes?: N extends true ? R: () => Promise<any>, next?: N) => Promise<{ result: any; error: Error | undefined }>;
+export type MiddlewareRespond<CTX, R, N> = (context: CTX, nextOrRes?: N extends true ? R: NextFunction, next?: N) => Promise<{ result: any; error: Error | undefined }>;
 
 /**
  * Common Exception Filter definition

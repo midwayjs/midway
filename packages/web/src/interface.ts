@@ -5,9 +5,10 @@ import {
   Context as IMidwayBaseContext,
   IMidwayApplication,
   IMidwayBaseApplication,
-  IConfigurationOptions
+  IConfigurationOptions,
+  NextFunction as BaseNextFunction,
 } from '@midwayjs/core';
-import { DefaultState, Middleware, Next } from 'koa';
+import { DefaultState, Middleware } from 'koa';
 import { ILogger, LoggerOptions } from '@midwayjs/logger';
 
 export interface IMidwayWebBaseApplication {
@@ -46,7 +47,8 @@ export type IMidwayWebApplication = IMidwayApplication<Context, EggApplication &
 export interface Application extends IMidwayWebApplication {}
 export interface Context <ResponseBodyT = unknown> extends IMidwayWebContext <ResponseBodyT> {}
 export type IMidwayWebContext <ResponseBodyT = unknown> = IMidwayContext<EggContext<ResponseBodyT>>;
-export type IMidwayWebNext = Next;
+export type IMidwayWebNext = BaseNextFunction;
+export type NextFunction = BaseNextFunction;
 
 export interface IMidwayWebConfigurationOptions extends IConfigurationOptions {
   app?: IMidwayWebApplication;

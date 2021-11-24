@@ -1,4 +1,4 @@
-import { MidwayRequestContainer, IMidwayApplication, IConfigurationOptions, IMidwayContext } from '@midwayjs/core';
+import { MidwayRequestContainer, IMidwayApplication, IConfigurationOptions, IMidwayContext, NextFunction as BaseNextFunction } from '@midwayjs/core';
 import { FaaSHTTPContext } from '@midwayjs/faas-typings';
 import { ILogger } from '@midwayjs/logger';
 
@@ -33,6 +33,7 @@ export type IMidwayFaaSApplication = IMidwayApplication<FaaSContext, {
 export interface Application extends IMidwayFaaSApplication {}
 
 export interface Context extends FaaSContext {}
+export type NextFunction = BaseNextFunction;
 
 export interface IFaaSConfigurationOptions extends IConfigurationOptions {
   config?: object;

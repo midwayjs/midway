@@ -6,10 +6,10 @@ import {
   IMidwayApplication,
   IMidwayContext
 } from '@midwayjs/core';
-import { Application as ExpressApplication, NextFunction, Request, Response } from 'express';
+import { Application as ExpressApplication, NextFunction as ExpressNextFunction, Request, Response } from 'express';
 
 export type IMidwayExpressContext = IMidwayContext<Request>;
-export type IMidwayExpressMiddleware = IMiddleware<IMidwayExpressContext, Response, NextFunction>;
+export type IMidwayExpressMiddleware = IMiddleware<IMidwayExpressContext, Response, ExpressNextFunction>;
 export interface IMidwayExpressApplication extends IMidwayApplication<IMidwayExpressContext, ExpressApplication> {
   /**
    * add global middleware to app
@@ -55,7 +55,7 @@ export interface IMidwayExpressConfigurationOptions extends IConfigurationOption
 }
 
 export type Application = IMidwayExpressApplication;
-
+export type NextFunction = ExpressNextFunction;
 export interface Context extends IMidwayExpressContext {}
 
 declare module '@midwayjs/core/dist/interface' {

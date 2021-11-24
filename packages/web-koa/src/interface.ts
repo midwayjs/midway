@@ -18,10 +18,7 @@ export type IMidwayKoaApplication = IMidwayApplication<IMidwayKoaContext, koa<De
 }>;
 
 export type IMidwayKoaNext = Next;
-
-export interface IMidwayKoaApplicationPlus<CTX extends IMidwayContext> extends IMidwayApplication<CTX> {
-  use(...args);
-}
+export type NextFunction = Next;
 
 export interface IMidwayKoaConfigurationOptions extends IConfigurationOptions {
   /**
