@@ -1,4 +1,13 @@
 export const i18n = {
-  currentLocale: 'en',
-  localeMap: {},
+  defaultLanguage: 'en',
+  languageTable: {
+    en: {},
+  },
+  fallbackLanguage: 'en',
+  fallbacks: {
+    //   'en-CA': 'fr',
+    //   'en-*': 'en',
+    //   'fr-*': 'fr',
+    //   pt: 'pt-BR',
+  },
 };

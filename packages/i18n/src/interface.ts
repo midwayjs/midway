@@ -2,7 +2,7 @@ import { i18n } from './config.default';
 
 export interface TranslateOptions {
   lang?: string;
-  args: any;
+  args?: any;
 }
 
 declare module '@midwayjs/core/dist/interface' {
