@@ -3,7 +3,7 @@ import { join } from 'path';
 import { clearAllModule } from '@midwayjs/decorator';
 import { matchObjectPropertyInArray } from '../util';
 
-describe('/test/util/triggerCollector.test.ts', function () {
+describe('/test/common/triggerCollector.test.ts', function () {
 
   it('should test with function router', async () => {
     clearAllModule();

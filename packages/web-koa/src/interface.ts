@@ -52,6 +52,17 @@ export interface IMidwayKoaConfigurationOptions extends IConfigurationOptions {
    * http global prefix
    */
   globalPrefix?: string;
+  /**
+   * onerror middleware options
+   */
+  onerror?: {
+    text: (err: Error, ctx: IMidwayKoaContext) => void;
+    json: (err: Error, ctx: IMidwayKoaContext) => void;
+    html: (err: Error, ctx: IMidwayKoaContext) => void;
+    redirect?: string;
+    template?: string;
+    accepts?: (...args) => any;
+  }
 }
 
 export type MiddlewareParamArray = Array<Middleware<DefaultState, IMidwayKoaContext>>;

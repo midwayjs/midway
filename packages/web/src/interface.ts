@@ -1,4 +1,4 @@
-import { Context as EggContext, Application as EggApplication, EggLogger, EggAppConfig } from 'egg';
+import { Context as EggContext, Application as EggApplication, EggAppConfig } from 'egg';
 import {
   IMidwayContainer,
   IMidwayContext,
@@ -12,10 +12,10 @@ import { ILogger, LoggerOptions } from '@midwayjs/logger';
 
 export interface IMidwayWebBaseApplication {
   applicationContext: IMidwayContainer;
-  getLogger(name?: string): EggLogger & ILogger;
-  getCoreLogger(): EggLogger & ILogger;
+  getLogger(name?: string): ILogger;
+  getCoreLogger(): ILogger;
   generateMiddleware?(middlewareId: string): Promise<Middleware<DefaultState, EggContext>>;
-  createLogger(name: string, options: LoggerOptions): EggLogger & ILogger;
+  createLogger(name: string, options: LoggerOptions): ILogger;
 }
 
 declare module 'egg' {
@@ -24,7 +24,7 @@ declare module 'egg' {
   }
 
   // 这里再次覆盖和 egg 不同的定义，不然 egg 插件里可能会报错
-  interface Application extends IMidwayBaseApplication, IMidwayWebBaseApplication {
+  interface Application extends IMidwayBaseApplication<Context>, IMidwayWebBaseApplication {
     createAnonymousContext(...args: any[]): EggContext;
     getCoreLogger(): EggLogger & ILogger;
     getLogger(name?: string): EggLogger & ILogger;
@@ -32,7 +32,7 @@ declare module 'egg' {
   }
 
   interface Context <ResponseBodyT = any> extends IMidwayBaseContext {
-    getLogger(name?: string): EggLogger & ILogger;
+    getLogger(name?: string): ILogger;
   }
 
   interface EggAppConfig {

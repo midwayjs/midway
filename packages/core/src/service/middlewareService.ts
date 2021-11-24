@@ -5,16 +5,16 @@ import {
   IMidwayContainer,
   FunctionMiddleware,
 } from '../interface';
-import { pathToRegexp } from '../util/pathToRegexp';
 import { MidwayCommonError, MidwayParameterError } from '../error';
+import { toPathMatch } from '../util';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
-export class MidwayMiddlewareService<T> {
+export class MidwayMiddlewareService<T, R, N> {
   constructor(readonly applicationContext: IMidwayContainer) {}
 
   async compose(
-    middleware: Array<CommonMiddleware<T> | string>,
+    middleware: Array<CommonMiddleware<T, R, N> | string>,
     name?: string
   ) {
     if (!Array.isArray(middleware)) {
@@ -34,7 +34,7 @@ export class MidwayMiddlewareService<T> {
           );
         }
         const classMiddleware = await this.applicationContext.getAsync<
-          IMiddleware<T>
+          IMiddleware<T, R, N>
         >(fn as any);
         if (classMiddleware) {
           fn = classMiddleware.resolve();
@@ -81,14 +81,14 @@ export class MidwayMiddlewareService<T> {
             new MidwayCommonError('next() called multiple times')
           );
         index = i;
-        let fn = (newMiddlewareArr as Array<FunctionMiddleware<T>>)[i];
+        let fn = (newMiddlewareArr as Array<FunctionMiddleware<T, R, N>>)[i];
         if (i === newMiddlewareArr.length) fn = next;
         if (!fn) return Promise.resolve();
         try {
           return Promise.resolve(
             fn(context, dispatch.bind(null, i + 1), {
               index,
-            })
+            } as any)
           );
         } catch (err) {
           return Promise.reject(err);
@@ -118,26 +118,4 @@ export function pathMatching(options) {
     const matched = matchFn(ctx);
     return options.match ? matched : !matched;
   };
-}
-
-function toPathMatch(pattern) {
-  if (typeof pattern === 'string') {
-    const reg = pathToRegexp(pattern, [], { end: false });
-    if (reg.global) reg.lastIndex = 0;
-    return ctx => reg.test(ctx.path);
-  }
-  if (pattern instanceof RegExp) {
-    return ctx => {
-      if (pattern.global) pattern.lastIndex = 0;
-      return pattern.test(ctx.path);
-    };
-  }
-  if (typeof pattern === 'function') return pattern;
-  if (Array.isArray(pattern)) {
-    const matchs = pattern.map(item => toPathMatch(item));
-    return ctx => matchs.some(match => match(ctx));
-  }
-  throw new MidwayCommonError(
-    'match/ignore pattern must be RegExp, Array or String, but got ' + pattern
-  );
 }

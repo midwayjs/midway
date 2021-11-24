@@ -6,5 +6,5 @@ export * from './autoload';
 export * from './configuration';
 export * from './objectDef';
 export * from './framework';
-export * from './catch';
+export * from './filter';
 export * from './middleware';

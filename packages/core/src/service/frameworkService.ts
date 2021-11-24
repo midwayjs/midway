@@ -52,11 +52,11 @@ export class MidwayFrameworkService {
     readonly globalOptions
   ) {}
 
-  private mainFramework: IMidwayFramework<any, any>;
+  private mainFramework: IMidwayFramework<any, any, any>;
 
   private globalFrameworkMap = new WeakMap<
     FrameworkType,
-    IMidwayFramework<any, any>
+    IMidwayFramework<any, any, any>
   >();
 
   private globalFrameworkList = [];
@@ -105,7 +105,7 @@ export class MidwayFrameworkService {
     if (frameworks.length) {
       for (const frameworkClz of frameworks) {
         const frameworkInstance = await this.applicationContext.getAsync<
-          IMidwayFramework<any, any>
+          IMidwayFramework<any, any, any>
         >(frameworkClz, [this.applicationContext]);
         // if enable, just init framework
         if (frameworkInstance.isEnable()) {

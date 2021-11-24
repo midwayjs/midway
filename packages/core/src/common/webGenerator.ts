@@ -11,7 +11,7 @@ import {
   WEB_RESPONSE_HTTP_CODE,
   WEB_RESPONSE_REDIRECT,
 } from '@midwayjs/decorator';
-import { WebRouterCollector, IMidwayContainer, RouterInfo } from '../';
+import { WebRouterCollector, IMidwayContainer, RouterInfo } from '../index';
 import { ILogger } from '@midwayjs/logger';
 
 export abstract class WebControllerGenerator<

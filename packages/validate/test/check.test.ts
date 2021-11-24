@@ -178,7 +178,7 @@ describe('/test/check.test.ts', () => {
 
     @Provide()
     class Hello {
-      @Validate(true)
+      @Validate()
       school(a, data: UserDTO) {
         return data;
       }

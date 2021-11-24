@@ -2,6 +2,8 @@ import { dirname, resolve, sep, posix } from 'path';
 import { readFileSync } from 'fs';
 import { debuglog } from 'util';
 import { plainToClass } from 'class-transformer';
+import { pathToRegexp } from './pathToRegexp';
+import { MidwayCommonError } from '../error';
 
 const debug = debuglog('midway:container:util');
 
@@ -217,3 +219,25 @@ export const transformRequestObjectByType = (originValue: any, targetType?) => {
       }
   }
 };
+
+export function toPathMatch(pattern) {
+  if (typeof pattern === 'string') {
+    const reg = pathToRegexp(pattern, [], { end: false });
+    if (reg.global) reg.lastIndex = 0;
+    return ctx => reg.test(ctx.path);
+  }
+  if (pattern instanceof RegExp) {
+    return ctx => {
+      if (pattern.global) pattern.lastIndex = 0;
+      return pattern.test(ctx.path);
+    };
+  }
+  if (typeof pattern === 'function') return pattern;
+  if (Array.isArray(pattern)) {
+    const matchs = pattern.map(item => toPathMatch(item));
+    return ctx => matchs.some(match => match(ctx));
+  }
+  throw new MidwayCommonError(
+    'match/ignore pattern must be RegExp, Array or String, but got ' + pattern
+  );
+}

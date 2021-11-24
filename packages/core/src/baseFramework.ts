@@ -7,7 +7,7 @@ import {
   IMidwayContext,
   IMidwayFramework,
   MidwayProcessTypeEnum,
-  CommonExceptionFilterUnion,
+  CommonFilterUnion,
   CommonMiddleware,
   MiddlewareRespond,
 } from './interface';
@@ -18,15 +18,17 @@ import { MidwayEnvironmentService } from './service/environmentService';
 import { MidwayConfigService } from './service/configService';
 import { MidwayInformationService } from './service/informationService';
 import { MidwayLoggerService } from './service/loggerService';
-import { ContextMiddlewareManager } from './util/middlewareManager';
+import { ContextMiddlewareManager } from './common/middlewareManager';
 import { MidwayMiddlewareService } from './service/middlewareService';
-import { ExceptionFilterManager } from './util/exceptionFilterManager';
+import { FilterManager } from './common/filterManager';
 
 export abstract class BaseFramework<
   APP extends IMidwayApplication<CTX>,
   CTX extends IMidwayContext,
-  OPT extends IConfigurationOptions
-> implements IMidwayFramework<APP, OPT>
+  OPT extends IConfigurationOptions,
+  ResOrNext = unknown,
+  Next = unknown
+> implements IMidwayFramework<APP, CTX, OPT, ResOrNext, Next>
 {
   public app: APP;
   public configurationOptions: OPT;
@@ -35,8 +37,8 @@ export abstract class BaseFramework<
   protected defaultContext = {};
   protected BaseContextLoggerClass: any;
   protected ContextLoggerApplyLogger: string;
-  protected middlewareManager = new ContextMiddlewareManager<CTX>();
-  protected exceptionFilterManager = new ExceptionFilterManager<CTX>();
+  protected middlewareManager = this.createMiddlewareManager();
+  protected filterManager = this.createFilterManager();
   protected composeMiddleware = null;
 
   @Inject()
@@ -52,7 +54,7 @@ export abstract class BaseFramework<
   informationService: MidwayInformationService;
 
   @Inject()
-  middlewareService: MidwayMiddlewareService<CTX>;
+  middlewareService: MidwayMiddlewareService<CTX, ResOrNext, Next>;
 
   constructor(readonly applicationContext: IMidwayContainer) {}
 
@@ -244,14 +246,16 @@ export abstract class BaseFramework<
       getAttr: <T>(key: string): T => {
         return this.getApplicationContext().getAttr(key);
       },
-      useMiddleware: (middleware: CommonMiddlewareUnion<CTX>) => {
+      useMiddleware: (
+        middleware: CommonMiddlewareUnion<CTX, ResOrNext, Next>
+      ) => {
         this.middlewareManager.insertLast(middleware);
       },
-      getMiddleware: (): ContextMiddlewareManager<CTX> => {
+      getMiddleware: (): ContextMiddlewareManager<CTX, ResOrNext, Next> => {
         return this.middlewareManager;
       },
-      useFilter: (Filter: CommonExceptionFilterUnion<CTX>) => {
-        this.exceptionFilterManager.useFilter(Filter);
+      useFilter: (Filter: CommonFilterUnion<CTX, ResOrNext, Next>) => {
+        this.filterManager.useFilter(Filter);
       },
     };
     for (const method of whiteList) {
@@ -298,19 +302,16 @@ export abstract class BaseFramework<
         let returnResult = undefined;
         try {
           const result = await next();
-          returnResult = {
-            result,
-            error: undefined,
-          };
+          returnResult = await this.filterManager.runResultFilter(result, ctx);
         } catch (err) {
-          returnResult = await this.exceptionFilterManager.run(err, ctx);
+          returnResult = await this.filterManager.runErrorFilter(err, ctx);
         }
         return returnResult;
       });
       this.composeMiddleware = await this.middlewareService.compose(
         this.middlewareManager
       );
-      await this.exceptionFilterManager.init(this.applicationContext);
+      await this.filterManager.init(this.applicationContext);
     }
     if (lastMiddleware) {
       return await this.middlewareService.compose([
@@ -346,11 +347,21 @@ export abstract class BaseFramework<
     return MidwayContextLogger;
   }
 
-  public useMiddleware(Middleware: CommonMiddlewareUnion<CTX>) {
+  public useMiddleware(
+    Middleware: CommonMiddlewareUnion<CTX, ResOrNext, Next>
+  ) {
     this.middlewareManager.insertLast(Middleware);
   }
 
-  public useFilter(Filter: CommonExceptionFilterUnion<CTX>) {
-    this.exceptionFilterManager.useFilter(Filter);
+  public useFilter(Filter: CommonFilterUnion<CTX, ResOrNext, Next>) {
+    this.filterManager.useFilter(Filter);
+  }
+
+  protected createMiddlewareManager() {
+    return new ContextMiddlewareManager<CTX, ResOrNext, Next>();
+  }
+
+  protected createFilterManager() {
+    return new FilterManager<CTX, ResOrNext, Next>();
   }
 }
