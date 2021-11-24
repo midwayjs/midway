@@ -1,5 +1,10 @@
 import * as SocketIO from 'socket.io';
-import { IConfigurationOptions, IMidwayApplication, IMidwayContext } from '@midwayjs/core';
+import {
+  IConfigurationOptions,
+  IMidwayApplication,
+  IMidwayContext,
+  NextFunction as BaseNextFunction
+} from '@midwayjs/core';
 
 export type IMidwaySocketIOApplication = IMidwayApplication<IMidwaySocketIOContext, {
   use(fn: (socket: IMidwaySocketIOContext, fn: (err?: any) => void) => void): SocketIO.Namespace;
@@ -18,6 +23,7 @@ export type IMidwaySocketIOContext = IMidwayContext<SocketIO.Socket & {
 export type Application = IMidwaySocketIOApplication;
 
 export interface Context extends IMidwaySocketIOContext {}
+export type NextFunction = BaseNextFunction;
 
 declare module '@midwayjs/core/dist/interface' {
   interface MidwayConfig {

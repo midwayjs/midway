@@ -1,7 +1,6 @@
 import {
   BaseFramework,
   CommonMiddleware,
-  ContextMiddlewareManager,
   FunctionMiddleware,
   HTTP_SERVER_KEY,
   IMidwayBootstrapOptions,
@@ -9,7 +8,6 @@ import {
   MidwayFrameworkType,
   PathFileUtil,
   WebRouterCollector,
-  ExceptionFilterManager,
   RouterInfo,
 } from '@midwayjs/core';
 
@@ -26,13 +24,7 @@ import {
   IMidwayExpressConfigurationOptions,
   IMidwayExpressContext,
 } from './interface';
-import type {
-  IRouter,
-  IRouterHandler,
-  Response,
-  NextFunction,
-  RequestHandler,
-} from 'express';
+import type { IRouter, IRouterHandler, Response, NextFunction } from 'express';
 import * as express from 'express';
 import { Server } from 'net';
 import { MidwayExpressContextLogger } from './logger';
@@ -42,21 +34,12 @@ import { MidwayExpressMiddlewareService } from './middlewareService';
 export class MidwayExpressFramework extends BaseFramework<
   IMidwayExpressApplication,
   IMidwayExpressContext,
-  IMidwayExpressConfigurationOptions
+  IMidwayExpressConfigurationOptions,
+  Response,
+  NextFunction
 > {
   public app: IMidwayExpressApplication;
   private server: Server;
-
-  protected middlewareManager = new ContextMiddlewareManager<
-    IMidwayExpressContext,
-    Response,
-    NextFunction
-  >();
-  protected exceptionFilterManager = new ExceptionFilterManager<
-    IMidwayExpressContext,
-    Response,
-    NextFunction
-  >();
 
   @Inject()
   private expressMiddlewareService: MidwayExpressMiddlewareService;
@@ -75,6 +58,31 @@ export class MidwayExpressFramework extends BaseFramework<
       ctx.requestContext.registerObject('res', res);
       next();
     });
+  }
+
+  public async run(): Promise<void> {
+    // use global middleware
+    const globalMiddleware = await this.getMiddleware();
+    this.app.use(globalMiddleware as any);
+    // load controller
+    await this.loadMidwayController();
+    // use global error handler
+    this.app.use(async (err, req, res, next) => {
+      if (err) {
+        const { result, error } = await this.filterManager.runErrorFilter(
+          err,
+          req,
+          res,
+          next
+        );
+        if (error) {
+          next(error);
+        } else {
+          res.send(result);
+        }
+      }
+    });
+
     // https config
     if (this.configurationOptions.key && this.configurationOptions.cert) {
       this.configurationOptions.key = PathFileUtil.getFileContentSync(
@@ -107,30 +115,6 @@ export class MidwayExpressFramework extends BaseFramework<
     }
     // register httpServer to applicationContext
     this.applicationContext.registerObject(HTTP_SERVER_KEY, this.server);
-  }
-
-  public async run(): Promise<void> {
-    // use global middleware
-    const globalMiddleware = await this.getMiddleware();
-    this.app.use(globalMiddleware as any);
-    // load controller
-    await this.loadMidwayController();
-    // use global error handler
-    this.app.use(async (err, req, res, next) => {
-      if (err) {
-        const { result, error } = await this.exceptionFilterManager.run(
-          err,
-          req,
-          res,
-          next
-        );
-        if (error) {
-          next(error);
-        } else {
-          res.send(result);
-        }
-      }
-    });
 
     if (this.configurationOptions.port) {
       new Promise<void>(resolve => {
@@ -194,7 +178,15 @@ export class MidwayExpressFramework extends BaseFramework<
           }
         }
       }
-      res.send(result);
+
+      const { result: returnValue, error } =
+        await this.filterManager.runResultFilter(result, req, res, next);
+
+      if (error) {
+        throw error;
+      }
+
+      res.send(returnValue);
     };
   }
 
@@ -217,12 +209,9 @@ export class MidwayExpressFramework extends BaseFramework<
       const newRouter = this.createRouter(routerInfo.routerOptions);
 
       // add router middleware
-      await this.handlerWebMiddleware(
-        routerInfo.middleware,
-        (middlewareImpl: RequestHandler) => {
-          newRouter.use(middlewareImpl);
-        }
-      );
+      await this.handlerWebMiddleware(routerInfo.middleware, middlewareImpl => {
+        newRouter.use(middlewareImpl);
+      });
 
       // add route
       const routes = routerTable.get(routerInfo.prefix);
@@ -230,7 +219,7 @@ export class MidwayExpressFramework extends BaseFramework<
         // router middleware
         await this.handlerWebMiddleware(
           routeInfo.middleware,
-          (middlewareImpl: RequestHandler) => {
+          middlewareImpl => {
             newRouter.use(middlewareImpl);
           }
         );
@@ -283,7 +272,7 @@ export class MidwayExpressFramework extends BaseFramework<
       this.composeMiddleware = await this.expressMiddlewareService.compose(
         this.middlewareManager
       );
-      await this.exceptionFilterManager.init(this.applicationContext);
+      await this.filterManager.init(this.applicationContext);
     }
     return this.composeMiddleware;
   }

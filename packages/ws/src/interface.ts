@@ -1,5 +1,10 @@
 import * as WebSocket from 'ws';
-import { IConfigurationOptions, IMidwayApplication, IMidwayContext } from '@midwayjs/core';
+import {
+  IConfigurationOptions,
+  IMidwayApplication,
+  IMidwayContext,
+  NextFunction as BaseNextFunction
+} from '@midwayjs/core';
 
 export type IMidwayWSApplication = IMidwayApplication<IMidwayWSContext> & WebSocket.Server;
 
@@ -13,7 +18,7 @@ export type IMidwayWSContext = IMidwayContext<WebSocket & {
 }>;
 
 export type Application = IMidwayWSApplication;
-
+export type NextFunction = BaseNextFunction;
 export interface Context extends IMidwayWSContext {}
 
 declare module '@midwayjs/core/dist/interface' {

@@ -1,11 +1,11 @@
 import { HttpStatus } from './code';
+import { MidwayError } from './base';
 
-export class HttpError extends Error {
+export class HttpError extends MidwayError {
   status: number;
 
   constructor(response, status) {
-    super();
-    this.message = typeof response === 'string' ? response : response.message;
+    super(typeof response === 'string' ? response : response.message);
     this.status = status;
     this.name = this.constructor.name;
   }

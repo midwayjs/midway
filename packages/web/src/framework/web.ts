@@ -81,37 +81,6 @@ export class MidwayWebFramework extends BaseFramework<
     application.agent = agent;
     agent.application = application;
     debug('[egg]: init single process egg end');
-
-    // https config
-    if (this.configurationOptions.key && this.configurationOptions.cert) {
-      this.configurationOptions.key = PathFileUtil.getFileContentSync(
-        this.configurationOptions.key
-      );
-      this.configurationOptions.cert = PathFileUtil.getFileContentSync(
-        this.configurationOptions.cert
-      );
-      this.configurationOptions.ca = PathFileUtil.getFileContentSync(
-        this.configurationOptions.ca
-      );
-
-      if (this.configurationOptions.http2) {
-        this.server = require('http2').createSecureServer(
-          this.configurationOptions,
-          this.app.callback()
-        );
-      } else {
-        this.server = require('https').createServer(
-          this.configurationOptions,
-          this.app.callback()
-        );
-      }
-    } else {
-      if (this.configurationOptions.http2) {
-        this.server = require('http2').createServer(this.app.callback());
-      } else {
-        this.server = require('http').createServer(this.app.callback());
-      }
-    }
   }
 
   async applicationInitialize(options: Partial<IMidwayBootstrapOptions>) {
@@ -220,6 +189,36 @@ export class MidwayWebFramework extends BaseFramework<
     this.app.use = (this.app as any).originUse;
 
     if (!this.isClusterMode) {
+      // https config
+      if (this.configurationOptions.key && this.configurationOptions.cert) {
+        this.configurationOptions.key = PathFileUtil.getFileContentSync(
+          this.configurationOptions.key
+        );
+        this.configurationOptions.cert = PathFileUtil.getFileContentSync(
+          this.configurationOptions.cert
+        );
+        this.configurationOptions.ca = PathFileUtil.getFileContentSync(
+          this.configurationOptions.ca
+        );
+
+        if (this.configurationOptions.http2) {
+          this.server = require('http2').createSecureServer(
+            this.configurationOptions,
+            this.app.callback()
+          );
+        } else {
+          this.server = require('https').createServer(
+            this.configurationOptions,
+            this.app.callback()
+          );
+        }
+      } else {
+        if (this.configurationOptions.http2) {
+          this.server = require('http2').createServer(this.app.callback());
+        } else {
+          this.server = require('http').createServer(this.app.callback());
+        }
+      }
       // emit egg-ready message in agent and application
       this.app.messenger.broadcast('egg-ready', undefined);
 

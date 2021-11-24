@@ -1,5 +1,7 @@
 import {
   BaseFramework,
+  CommonFilterUnion,
+  CommonMiddlewareUnion,
   HTTP_SERVER_KEY,
   IMidwayBootstrapOptions,
   MidwayFrameworkType,
@@ -16,9 +18,10 @@ import {
   IWebMiddleware,
 } from './interface';
 import * as Router from '@koa/router';
-import type { DefaultState, Middleware } from 'koa';
+import type { DefaultState, Middleware, Next } from 'koa';
 import * as koa from 'koa';
 import { Server } from 'net';
+import * as onerror from 'koa-onerror';
 
 class KoaControllerGenerator extends WebControllerGenerator<Router> {
   constructor(readonly app, readonly applicationContext, readonly logger) {
@@ -40,7 +43,8 @@ class KoaControllerGenerator extends WebControllerGenerator<Router> {
 export class MidwayKoaFramework extends BaseFramework<
   IMidwayKoaApplication,
   IMidwayKoaContext,
-  IMidwayKoaConfigurationOptions
+  IMidwayKoaConfigurationOptions,
+  Next
 > {
   private server: Server;
   private generator: KoaControllerGenerator;
@@ -54,6 +58,7 @@ export class MidwayKoaFramework extends BaseFramework<
       DefaultState,
       IMidwayKoaContext
     >() as IMidwayKoaApplication;
+    onerror(this.app, this.configurationOptions.onerror);
     this.app.use(async (ctx, next) => {
       this.app.createAnonymousContext(ctx);
       const { result, error } = await (await this.getMiddleware())(ctx, next);
@@ -76,39 +81,6 @@ export class MidwayKoaFramework extends BaseFramework<
     // hack use method
     (this.app as any).originUse = this.app.use;
     this.app.use = this.app.useMiddleware as any;
-
-    // https config
-    if (this.configurationOptions.key && this.configurationOptions.cert) {
-      this.configurationOptions.key = PathFileUtil.getFileContentSync(
-        this.configurationOptions.key
-      );
-      this.configurationOptions.cert = PathFileUtil.getFileContentSync(
-        this.configurationOptions.cert
-      );
-      this.configurationOptions.ca = PathFileUtil.getFileContentSync(
-        this.configurationOptions.ca
-      );
-
-      if (this.configurationOptions.http2) {
-        this.server = require('http2').createSecureServer(
-          this.configurationOptions,
-          this.app.callback()
-        );
-      } else {
-        this.server = require('https').createServer(
-          this.configurationOptions,
-          this.app.callback()
-        );
-      }
-    } else {
-      if (this.configurationOptions.http2) {
-        this.server = require('http2').createServer(this.app.callback());
-      } else {
-        this.server = require('http').createServer(this.app.callback());
-      }
-    }
-    // register httpServer to applicationContext
-    this.applicationContext.registerObject(HTTP_SERVER_KEY, this.server);
   }
 
   async loadMidwayController() {
@@ -146,6 +118,39 @@ export class MidwayKoaFramework extends BaseFramework<
     // restore use method
     this.app.use = (this.app as any).originUse;
 
+    // https config
+    if (this.configurationOptions.key && this.configurationOptions.cert) {
+      this.configurationOptions.key = PathFileUtil.getFileContentSync(
+        this.configurationOptions.key
+      );
+      this.configurationOptions.cert = PathFileUtil.getFileContentSync(
+        this.configurationOptions.cert
+      );
+      this.configurationOptions.ca = PathFileUtil.getFileContentSync(
+        this.configurationOptions.ca
+      );
+
+      if (this.configurationOptions.http2) {
+        this.server = require('http2').createSecureServer(
+          this.configurationOptions,
+          this.app.callback()
+        );
+      } else {
+        this.server = require('https').createServer(
+          this.configurationOptions,
+          this.app.callback()
+        );
+      }
+    } else {
+      if (this.configurationOptions.http2) {
+        this.server = require('http2').createServer(this.app.callback());
+      } else {
+        this.server = require('http').createServer(this.app.callback());
+      }
+    }
+    // register httpServer to applicationContext
+    this.applicationContext.registerObject(HTTP_SERVER_KEY, this.server);
+
     // set port and listen server
     if (this.configurationOptions.port) {
       new Promise<void>(resolve => {
@@ -175,5 +180,17 @@ export class MidwayKoaFramework extends BaseFramework<
 
   public getServer() {
     return this.server;
+  }
+
+  public useMiddleware(
+    Middleware: CommonMiddlewareUnion<IMidwayKoaContext, Next, unknown>
+  ) {
+    this.middlewareManager.insertLast(Middleware);
+  }
+
+  public useFilter(
+    Filter: CommonFilterUnion<IMidwayKoaContext, Next, unknown>
+  ) {
+    this.filterManager.useFilter(Filter);
   }
 }

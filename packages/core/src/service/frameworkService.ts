@@ -52,17 +52,17 @@ export class MidwayFrameworkService {
     readonly globalOptions
   ) {}
 
-  private mainFramework: IMidwayFramework<any, any>;
+  private mainFramework: IMidwayFramework<any, any, any>;
 
   private globalFrameworkMap = new WeakMap<
     FrameworkType,
-    IMidwayFramework<any, any>
+    IMidwayFramework<any, any, any>
   >();
 
-  private globalFrameworkList = [];
+  private globalFrameworkList: Array<IMidwayFramework<any, any, any>> = [];
 
   @Init()
-  async init() {
+  protected async init() {
     // register base config hook
     this.decoratorService.registerPropertyHandler(
       CONFIG_KEY,
@@ -105,7 +105,7 @@ export class MidwayFrameworkService {
     if (frameworks.length) {
       for (const frameworkClz of frameworks) {
         const frameworkInstance = await this.applicationContext.getAsync<
-          IMidwayFramework<any, any>
+          IMidwayFramework<any, any, any>
         >(frameworkClz, [this.applicationContext]);
         // if enable, just init framework
         if (frameworkInstance.isEnable()) {
@@ -179,6 +179,19 @@ export class MidwayFrameworkService {
 
   public getFramework(type: MidwayFrameworkType) {
     return this.globalFrameworkMap.get(type);
+  }
+
+  public async runFramework() {
+    for (const frameworkInstance of this.globalFrameworkList) {
+      // if enable, just init framework
+      if (frameworkInstance.isEnable()) {
+        // app init
+        await frameworkInstance.run();
+        debug(
+          `[core:framework]: Found Framework "${frameworkInstance.getFrameworkName()}" and run.`
+        );
+      }
+    }
   }
 
   public async stopFramework() {

@@ -3,6 +3,7 @@ import {
   IMidwayApplication,
   IMidwayContainer,
   IMidwayFramework,
+  IMidwayContext,
 } from '../interface';
 
 export const getCurrentApplicationContext = (): IMidwayContainer => {
@@ -10,10 +11,11 @@ export const getCurrentApplicationContext = (): IMidwayContainer => {
 };
 
 export const getCurrentMainFramework = <
-  APP extends IMidwayApplication,
-  T extends IConfigurationOptions
->(): IMidwayFramework<APP, T> => {
-  return global['MIDWAY_MAIN_FRAMEWORK'] as IMidwayFramework<APP, T>;
+  APP extends IMidwayApplication<CTX>,
+  CTX extends IMidwayContext,
+  CONFIG extends IConfigurationOptions
+>(): IMidwayFramework<APP, CTX, CONFIG> => {
+  return global['MIDWAY_MAIN_FRAMEWORK'] as IMidwayFramework<APP, CTX, CONFIG>;
 };
 
 export const getCurrentMainApp = <APP extends IMidwayApplication>(): APP => {

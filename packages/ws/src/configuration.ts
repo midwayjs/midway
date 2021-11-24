@@ -1,5 +1,4 @@
-import { Configuration, Inject } from '@midwayjs/decorator';
-import { MidwayWSFramework } from './framework';
+import { Configuration } from '@midwayjs/decorator';
 
 @Configuration({
   namespace: 'webSocket',
@@ -11,13 +10,4 @@ import { MidwayWSFramework } from './framework';
     },
   ],
 })
-export class WebSocketConfiguration {
-  @Inject()
-  framework: MidwayWSFramework;
-
-  async onReady() {}
-
-  async onServerReady() {
-    await this.framework.run();
-  }
-}
+export class WebSocketConfiguration {}

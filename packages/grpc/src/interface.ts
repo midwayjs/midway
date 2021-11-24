@@ -1,4 +1,9 @@
-import { IConfigurationOptions, IMidwayApplication, IMidwayContext } from '@midwayjs/core';
+import {
+  IConfigurationOptions,
+  IMidwayApplication,
+  IMidwayContext,
+  NextFunction as BaseNextFunction
+} from '@midwayjs/core';
 import { Server, ServerCredentials, Metadata, ServerDuplexStream, ClientWritableStream, ClientDuplexStream, ClientReadableStream, ClientUnaryCall } from '@grpc/grpc-js';
 
 export interface Context extends IMidwayContext<ServerDuplexStream<any, any>> {
@@ -8,6 +13,7 @@ export interface Context extends IMidwayContext<ServerDuplexStream<any, any>> {
 export type IMidwayGRPCApplication = IMidwayApplication<Context, Server>;
 
 export type Application = IMidwayGRPCApplication;
+export type NextFunction = BaseNextFunction;
 
 export interface IGRPCServiceOptions {
   /**

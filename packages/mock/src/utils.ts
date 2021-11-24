@@ -37,7 +37,7 @@ export function findFirstExistModule(moduleList): string {
  * @param Framework
  */
 export function transformFrameworkToConfiguration<
-  T extends IMidwayFramework<any, any>
+  T extends IMidwayFramework<any, any, any>
 >(
   Framework: any
 ): {

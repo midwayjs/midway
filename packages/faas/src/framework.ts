@@ -12,6 +12,7 @@ import {
   MidwayMiddlewareService,
   RouterInfo,
   ServerlessTriggerCollector,
+  ContextMiddlewareManager,
 } from '@midwayjs/core';
 import {
   Framework,
@@ -23,7 +24,6 @@ import {
 } from '@midwayjs/decorator';
 import SimpleLock from '@midwayjs/simple-lock';
 import { createConsoleLogger, LoggerOptions, loggers } from '@midwayjs/logger';
-import { ContextMiddlewareManager } from '@midwayjs/core/dist/util/middlewareManager';
 
 const LOCK_KEY = '_faas_starter_start_key';
 
@@ -45,7 +45,7 @@ export class MidwayFaaSFramework extends BaseFramework<
   environmentService: MidwayEnvironmentService;
 
   @Inject()
-  middlewareService: MidwayMiddlewareService<FaaSContext>;
+  middlewareService: MidwayMiddlewareService<FaaSContext, any>;
 
   configure(options: IFaaSConfigurationOptions) {
     this.configurationOptions = options;
@@ -166,7 +166,7 @@ export class MidwayFaaSFramework extends BaseFramework<
    */
   public async generateMiddleware(
     middlewareId: string
-  ): Promise<FunctionMiddleware<FaaSContext>> {
+  ): Promise<FunctionMiddleware<FaaSContext, any>> {
     const mwIns: any = await this.getApplicationContext().getAsync(
       middlewareId
     );

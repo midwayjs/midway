@@ -4,7 +4,6 @@ import {
   Inject,
   WEB_ROUTER_PARAM_KEY,
 } from '@midwayjs/decorator';
-import { MidwayExpressFramework } from './framework';
 import {
   extractExpressLikeValue,
   MidwayDecoratorService,
@@ -14,9 +13,6 @@ import {
   namespace: 'express',
 })
 export class ExpressConfiguration {
-  @Inject()
-  framework: MidwayExpressFramework;
-
   @Inject()
   decoratorService: MidwayDecoratorService;
 
@@ -35,8 +31,4 @@ export class ExpressConfiguration {
   }
 
   async onReady() {}
-
-  async onServerReady() {
-    await this.framework.run();
-  }
 }

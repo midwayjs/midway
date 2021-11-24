@@ -5,7 +5,7 @@ import {
 } from '@midwayjs/decorator';
 import { ILogger, LoggerOptions } from '@midwayjs/logger';
 import * as EventEmitter from 'events';
-import { ContextMiddlewareManager } from './util/middlewareManager';
+import { ContextMiddlewareManager } from './common/middlewareManager';
 import _default from './config/config.default';
 
 export type PowerPartial<T> = {
@@ -30,10 +30,10 @@ export type FileConfigOption<T, K = unknown> = K extends keyof ConfigType<T> ? P
  * 生命周期定义
  */
 export interface ILifeCycle extends Partial<IObjectLifeCycle> {
-  onConfigLoad?(container: IMidwayContainer, app?: IMidwayApplication): Promise<any>;
-  onReady?(container: IMidwayContainer, app?: IMidwayApplication): Promise<void>;
-  onServerReady?(container: IMidwayContainer, app?: IMidwayApplication): Promise<void>;
-  onStop?(container: IMidwayContainer, app?: IMidwayApplication): Promise<void>;
+  onConfigLoad?(container: IMidwayContainer, mainApp?: IMidwayApplication): Promise<any>;
+  onReady?(container: IMidwayContainer, mainApp?: IMidwayApplication): Promise<void>;
+  onServerReady?(container: IMidwayContainer, mainApp?: IMidwayApplication): Promise<void>;
+  onStop?(container: IMidwayContainer, mainApp?: IMidwayApplication): Promise<void>;
   // onAppError?(err: Error, app: IMidwayApplication);
 }
 
@@ -340,31 +340,32 @@ export interface Context {
 }
 
 export type IMidwayContext<FrameworkContext = unknown> = Context & FrameworkContext;
+export type NextFunction = () => Promise<any>;
 
 /**
  * Common middleware definition
  */
-
-export interface IMiddleware<T, R = any, N = any> {
-  resolve: () => FunctionMiddleware<T, R, N>;
-  match?: () => boolean;
-  ignore?: () => boolean;
+export interface IMiddleware<CTX, R, N = unknown> {
+  resolve: () => FunctionMiddleware<CTX, R, N>;
+  match?: (ctx?: CTX) => boolean;
+  ignore?: (ctx?: CTX) => boolean;
 }
-export type FunctionMiddleware<T, R = any, N = any> = ((context: T, next: () => Promise<any>, options?: any) => any) | ((req: T, res: R, next: N) => any);
-export type ClassMiddleware<T, R = any, N = any> = new (...args) => IMiddleware<T, R, N>;
-export type CommonMiddleware<T, R = any, N = any> = ClassMiddleware<T, R, N> | FunctionMiddleware<T, R, N>;
-export type CommonMiddlewareUnion<T, R = any, N = any> = CommonMiddleware<T, R, N> | Array<CommonMiddleware<T, R, N>>;
-export type MiddlewareRespond<T, R = any, N = any> = (context: T, nextOrRes?: () => Promise<any> | R, next?: N) => Promise<{ result: any; error: Error | undefined }>;
+export type FunctionMiddleware<CTX, R, N = unknown> = N extends true ? (req: CTX, res: R, next: N) => any: (context: CTX, next: R, options?: any) => any;
+export type ClassMiddleware<CTX, R, N> = new (...args) => IMiddleware<CTX, R, N>;
+export type CommonMiddleware<CTX, R, N> = ClassMiddleware<CTX, R, N> | FunctionMiddleware<CTX, R, N>;
+export type CommonMiddlewareUnion<CTX, R, N> = CommonMiddleware<CTX, R, N> | Array<CommonMiddleware<CTX, R, N>>;
+export type MiddlewareRespond<CTX, R, N> = (context: CTX, nextOrRes?: N extends true ? R: NextFunction, next?: N) => Promise<{ result: any; error: Error | undefined }>;
 
 /**
  * Common Exception Filter definition
  */
-export interface IExceptionFilter<T, R = any, N = any> {
-  catch(err: Error, ctx: T, res?: R, next?: N): any;
+export interface IFilter<CTX, R, N> {
+  catch?(err: Error, ctx: CTX, res?: R, next?: N): any;
+  match?(result: any, ctx: CTX, res?: R, next?: N): any;
 }
-export type CommonExceptionFilterUnion<T, R = any, N = any> = (new (...args) => IExceptionFilter<T, R, N>) | Array<new (...args) => IExceptionFilter<T, R, N>>
+export type CommonFilterUnion<CTX, R, N> = (new (...args) => IFilter<CTX, R, N>) | Array<new (...args) => IFilter<CTX, R, N>>
 
-export interface IMidwayBaseApplication<T extends IMidwayContext = IMidwayContext> {
+export interface IMidwayBaseApplication<CTX extends IMidwayContext> {
   /**
    * Get a base directory for project, with src or dist
    */
@@ -428,7 +429,7 @@ export interface IMidwayBaseApplication<T extends IMidwayContext = IMidwayContex
    * create a context with RequestContainer
    * @param args
    */
-  createAnonymousContext(...args): T;
+  createAnonymousContext(...args): CTX;
 
   /**
    * Set a context logger class to change default context logger format
@@ -459,21 +460,22 @@ export interface IMidwayBaseApplication<T extends IMidwayContext = IMidwayContex
    * add global filter to app
    * @param Middleware
    */
-  useMiddleware<R = any, N = any>(Middleware: CommonMiddlewareUnion<T, R, N>): void;
+  useMiddleware<R, N>(Middleware: CommonMiddlewareUnion<CTX, R, N>): void;
 
   /**
    * get global middleware
    */
-  getMiddleware<R = any, N = any>(): ContextMiddlewareManager<T, R, N>;
+  getMiddleware<R, N>(): ContextMiddlewareManager<CTX, R, N>;
 
   /**
    * add exception filter
    * @param Filter
    */
-  useFilter(Filter: CommonExceptionFilterUnion<T>): void;
+  useFilter<R, N>(Filter: CommonFilterUnion<CTX, R, N>): void;
 }
 
-export type IMidwayApplication<T extends IMidwayContext = IMidwayContext, FrameworkApplication = unknown> = IMidwayBaseApplication<T> & FrameworkApplication;
+export type IMidwayApplication<T extends IMidwayContext = IMidwayContext, FrameworkApplication = unknown> = IMidwayBaseApplication<T>
+  & FrameworkApplication;
 
 export interface IMidwayBootstrapOptions {
   [customPropertyKey: string]: any;
@@ -497,10 +499,10 @@ export interface IConfigurationOptions {
   ContextLoggerApplyLogger?: string;
 }
 
-export interface IMidwayFramework<APP extends IMidwayApplication, T extends IConfigurationOptions> {
+export interface IMidwayFramework<APP extends IMidwayApplication<CTX>, CTX extends IMidwayContext, CONFIG extends IConfigurationOptions, ResOrNext = unknown, Next = unknown> {
   app: APP;
-  configurationOptions: T;
-  configure(options?: T);
+  configurationOptions: CONFIG;
+  configure(options?: CONFIG);
   isEnable(): boolean;
   initialize(options: Partial<IMidwayBootstrapOptions>): Promise<void>;
   run(): Promise<void>;
@@ -518,9 +520,9 @@ export interface IMidwayFramework<APP extends IMidwayApplication, T extends ICon
   createLogger(name: string, options: LoggerOptions): ILogger;
   getProjectName(): string;
   getDefaultContextLoggerClass(): any;
-  useMiddleware(Middleware: CommonMiddlewareUnion<ReturnType<APP['createAnonymousContext']>>);
-  getMiddleware<R, N>(lastMiddleware?: CommonMiddleware<ReturnType<APP['createAnonymousContext']>>): Promise<MiddlewareRespond<ReturnType<APP['createAnonymousContext']>, R, N>>;
-  useFilter(Filter: CommonExceptionFilterUnion<ReturnType<APP['createAnonymousContext']>>);
+  useMiddleware(Middleware: CommonMiddlewareUnion<CTX, ResOrNext, Next>): void;
+  getMiddleware(lastMiddleware?: CommonMiddleware<CTX, ResOrNext, Next>): Promise<MiddlewareRespond<CTX, ResOrNext, Next>>;
+  useFilter(Filter: CommonFilterUnion<CTX, ResOrNext, Next>);
 }
 
 export const MIDWAY_LOGGER_WRITEABLE_DIR = 'MIDWAY_LOGGER_WRITEABLE_DIR';

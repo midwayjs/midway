@@ -1,16 +1,6 @@
-import { Configuration, Inject } from '@midwayjs/decorator';
-import { MidwaySocketIOFramework } from './framework';
+import { Configuration } from '@midwayjs/decorator';
 
 @Configuration({
   namespace: 'socketIO',
 })
-export class SocketIOConfiguration {
-  @Inject()
-  framework: MidwaySocketIOFramework;
-
-  async onReady() {}
-
-  async onServerReady() {
-    await this.framework.run();
-  }
-}
+export class SocketIOConfiguration {}

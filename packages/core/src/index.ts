@@ -15,8 +15,8 @@ export {
 } from './util/';
 export * from './util/pathFileUtil';
 export * from './util/webRouterParam';
-export * from './util/webRouterCollector';
-export * from './util/triggerCollector';
+export * from './common/webRouterCollector';
+export * from './common/triggerCollector';
 export { plainToClass, classToPlain } from 'class-transformer';
 export { createConfiguration } from './functional/configuration';
 export { MidwayConfigService } from './service/configService';
@@ -30,12 +30,12 @@ export { MidwayMiddlewareService } from './service/middlewareService';
 export { MidwayDecoratorService } from './service/decoratorService';
 export * from './service/pipelineService';
 export * from './util/contextUtil';
-export * from './util/serviceFactory';
-export * from './util/fileDetector';
-export * from './util/webGenerator';
-export * from './util/middlewareManager';
+export * from './common/serviceFactory';
+export * from './common/fileDetector';
+export * from './common/webGenerator';
+export * from './common/middlewareManager';
 export * from './util/pathToRegexp';
-export * from './util/exceptionFilterManager';
+export * from './common/filterManager';
 export * from './setup';
 export * from './error';
 

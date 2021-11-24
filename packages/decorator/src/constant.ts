@@ -7,6 +7,7 @@ export const CONFIGURATION_KEY = 'common:configuration';
 export const FRAMEWORK_KEY = 'common:framework';
 export const ASPECT_KEY = 'common:aspect';
 export const CATCH_KEY = 'common:catch';
+export const MATCH_KEY = 'common:match';
 
 // faas
 export const FUNC_KEY = 'faas:func';

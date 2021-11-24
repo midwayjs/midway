@@ -18,10 +18,7 @@ export type IMidwayKoaApplication = IMidwayApplication<IMidwayKoaContext, koa<De
 }>;
 
 export type IMidwayKoaNext = Next;
-
-export interface IMidwayKoaApplicationPlus<CTX extends IMidwayContext> extends IMidwayApplication<CTX> {
-  use(...args);
-}
+export type NextFunction = Next;
 
 export interface IMidwayKoaConfigurationOptions extends IConfigurationOptions {
   /**
@@ -52,6 +49,17 @@ export interface IMidwayKoaConfigurationOptions extends IConfigurationOptions {
    * http global prefix
    */
   globalPrefix?: string;
+  /**
+   * onerror middleware options
+   */
+  onerror?: {
+    text: (err: Error, ctx: IMidwayKoaContext) => void;
+    json: (err: Error, ctx: IMidwayKoaContext) => void;
+    html: (err: Error, ctx: IMidwayKoaContext) => void;
+    redirect?: string;
+    template?: string;
+    accepts?: (...args) => any;
+  }
 }
 
 export type MiddlewareParamArray = Array<Middleware<DefaultState, IMidwayKoaContext>>;

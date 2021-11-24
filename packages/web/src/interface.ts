@@ -1,21 +1,22 @@
-import { Context as EggContext, Application as EggApplication, EggLogger, EggAppConfig } from 'egg';
+import { Context as EggContext, Application as EggApplication, EggAppConfig } from 'egg';
 import {
   IMidwayContainer,
   IMidwayContext,
   Context as IMidwayBaseContext,
   IMidwayApplication,
   IMidwayBaseApplication,
-  IConfigurationOptions
+  IConfigurationOptions,
+  NextFunction as BaseNextFunction,
 } from '@midwayjs/core';
-import { DefaultState, Middleware, Next } from 'koa';
+import { DefaultState, Middleware } from 'koa';
 import { ILogger, LoggerOptions } from '@midwayjs/logger';
 
 export interface IMidwayWebBaseApplication {
   applicationContext: IMidwayContainer;
-  getLogger(name?: string): EggLogger & ILogger;
-  getCoreLogger(): EggLogger & ILogger;
+  getLogger(name?: string): ILogger;
+  getCoreLogger(): ILogger;
   generateMiddleware?(middlewareId: string): Promise<Middleware<DefaultState, EggContext>>;
-  createLogger(name: string, options: LoggerOptions): EggLogger & ILogger;
+  createLogger(name: string, options: LoggerOptions): ILogger;
 }
 
 declare module 'egg' {
@@ -24,7 +25,7 @@ declare module 'egg' {
   }
 
   // 这里再次覆盖和 egg 不同的定义，不然 egg 插件里可能会报错
-  interface Application extends IMidwayBaseApplication, IMidwayWebBaseApplication {
+  interface Application extends IMidwayBaseApplication<Context>, IMidwayWebBaseApplication {
     createAnonymousContext(...args: any[]): EggContext;
     getCoreLogger(): EggLogger & ILogger;
     getLogger(name?: string): EggLogger & ILogger;
@@ -32,7 +33,7 @@ declare module 'egg' {
   }
 
   interface Context <ResponseBodyT = any> extends IMidwayBaseContext {
-    getLogger(name?: string): EggLogger & ILogger;
+    getLogger(name?: string): ILogger;
   }
 
   interface EggAppConfig {
@@ -46,7 +47,8 @@ export type IMidwayWebApplication = IMidwayApplication<Context, EggApplication &
 export interface Application extends IMidwayWebApplication {}
 export interface Context <ResponseBodyT = unknown> extends IMidwayWebContext <ResponseBodyT> {}
 export type IMidwayWebContext <ResponseBodyT = unknown> = IMidwayContext<EggContext<ResponseBodyT>>;
-export type IMidwayWebNext = Next;
+export type IMidwayWebNext = BaseNextFunction;
+export type NextFunction = BaseNextFunction;
 
 export interface IMidwayWebConfigurationOptions extends IConfigurationOptions {
   app?: IMidwayWebApplication;

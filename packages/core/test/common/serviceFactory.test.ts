@@ -1,6 +1,6 @@
 import { ServiceFactory } from '../../src';
 
-describe('test/util/serviceFactory.test.ts', () => {
+describe('test/common/serviceFactory.test.ts', () => {
 
   class TestServiceFactory extends ServiceFactory<any> {
     protected createClient(config: any): any {

@@ -1,11 +1,13 @@
 import { FrameworkErrorEnum } from './code';
 
 interface ErrorOption {
-  cause: Error;
+  cause?: Error;
+  status?: number;
 }
 
 export class MidwayError extends Error {
   code: number;
+  status: number;
   cause: Error;
 
   constructor(message: string, options?: ErrorOption);
@@ -19,5 +21,6 @@ export class MidwayError extends Error {
     this.name = this.constructor.name;
     this.code = code;
     this.cause = options?.cause;
+    this.status = options?.status;
   }
 }

@@ -4,6 +4,7 @@ import * as session from 'koa-session';
 import { join } from 'path';
 import { Framework } from '../../../../src';
 import * as Validate from '@midwayjs/validate';
+import { TestMiddleware } from './middleware/test';
 
 @Configuration({
   importConfigs: [
@@ -32,5 +33,11 @@ export class ContainerConfiguration {
     }, this.app));
 
     this.framework.useMiddleware(bodyParser());
+
+    this.framework.useMiddleware(async (ctx, next) => {
+      await next();
+    });
+
+    this.framework.useMiddleware(TestMiddleware);
   }
 }

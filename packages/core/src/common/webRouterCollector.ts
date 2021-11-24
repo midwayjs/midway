@@ -17,7 +17,7 @@ import {
   WEB_ROUTER_KEY,
   WEB_ROUTER_PARAM_KEY,
 } from '@midwayjs/decorator';
-import { joinURLPath } from './index';
+import { joinURLPath } from '../util';
 import { MidwayContainer } from '../context/container';
 import { DirectoryFileDetector } from './fileDetector';
 import * as util from 'util';

@@ -27,7 +27,7 @@ const debug = debuglog('midway:debug');
 process.setMaxListeners(0);
 
 export async function create<
-  T extends IMidwayFramework<any, U>,
+  T extends IMidwayFramework<any, any, U>,
   U = T['configurationOptions']
 >(
   appDir: string = process.cwd(),
@@ -110,7 +110,7 @@ export async function create<
 }
 
 export async function createApp<
-  T extends IMidwayFramework<any, U>,
+  T extends IMidwayFramework<any, any, U>,
   U = T['configurationOptions'],
   Y = ReturnType<T['getApplication']>
 >(
@@ -154,7 +154,7 @@ export async function close(
 }
 
 export async function createFunctionApp<
-  T extends IMidwayFramework<any, U>,
+  T extends IMidwayFramework<any, any, U>,
   U = T['configurationOptions'],
   Y = ReturnType<T['getApplication']>
 >(

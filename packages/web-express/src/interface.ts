@@ -1,9 +1,27 @@
-import { IConfigurationOptions, IMiddleware, IMidwayApplication, IMidwayContext } from '@midwayjs/core';
-import { Application as ExpressApplication, NextFunction, Request, Response } from 'express';
+import {
+  CommonMiddlewareUnion,
+  ContextMiddlewareManager,
+  IConfigurationOptions,
+  IMiddleware,
+  IMidwayApplication,
+  IMidwayContext
+} from '@midwayjs/core';
+import { Application as ExpressApplication, NextFunction as ExpressNextFunction, Request, Response } from 'express';
 
 export type IMidwayExpressContext = IMidwayContext<Request>;
-export type IMidwayExpressMiddleware = IMiddleware<IMidwayExpressContext, Response, NextFunction>;
-export type IMidwayExpressApplication = IMidwayApplication<IMidwayExpressContext, ExpressApplication>;
+export type IMidwayExpressMiddleware = IMiddleware<IMidwayExpressContext, Response, ExpressNextFunction>;
+export interface IMidwayExpressApplication extends IMidwayApplication<IMidwayExpressContext, ExpressApplication> {
+  /**
+   * add global middleware to app
+   * @param Middleware
+   */
+  useMiddleware<Response, NextFunction>(Middleware: CommonMiddlewareUnion<IMidwayExpressContext, Response, NextFunction>): void;
+
+  /**
+   * get global middleware
+   */
+  getMiddleware<Response, NextFunction>(): ContextMiddlewareManager<IMidwayExpressContext, Response, NextFunction>;
+}
 
 export interface IMidwayExpressConfigurationOptions extends IConfigurationOptions {
   /**
@@ -37,7 +55,7 @@ export interface IMidwayExpressConfigurationOptions extends IConfigurationOption
 }
 
 export type Application = IMidwayExpressApplication;
-
+export type NextFunction = ExpressNextFunction;
 export interface Context extends IMidwayExpressContext {}
 
 declare module '@midwayjs/core/dist/interface' {

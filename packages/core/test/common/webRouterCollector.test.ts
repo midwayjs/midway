@@ -3,7 +3,7 @@ import { join } from 'path';
 import { clearAllModule } from '@midwayjs/decorator';
 import { matchObjectPropertyInArray } from '../util';
 
-describe('/test/util/webRouterCollector.test.ts', function () {
+describe('/test/common/webRouterCollector.test.ts', function () {
 
   it('should test generate router', async () => {
     const collector = new WebRouterCollector(join(__dirname, '../fixtures/base-app-controller'));
@@ -60,7 +60,7 @@ describe('/test/util/webRouterCollector.test.ts', function () {
 
   it('should sort param', function () {
     const collector = new WebRouterCollector();
-    const result = collector.sortRouter(require('./fixtures/router').routerList1);
+    const result = collector.sortRouter(require('../util/fixtures/router').routerList1);
     expect(result[0].url).toEqual('/json');
     expect(result[1].url).toEqual('/');
     expect(result[2].url).toEqual('/:abc/123');
@@ -71,7 +71,7 @@ describe('/test/util/webRouterCollector.test.ts', function () {
 
   it('should sort wildcard', function () {
     const collector = new WebRouterCollector();
-    const result = collector.sortRouter(require('./fixtures/router').routerList2);
+    const result = collector.sortRouter(require('../util/fixtures/router').routerList2);
     expect(result[0].url).toEqual('/update');
     expect(result[1].url).toEqual('/');
     expect(result[2].url).toEqual('/*');
@@ -79,12 +79,12 @@ describe('/test/util/webRouterCollector.test.ts', function () {
 
   it('fix issue 1008', function () {
     const collector = new WebRouterCollector();
-    const result1 = collector.sortRouter(require('./fixtures/router').routerList3);
+    const result1 = collector.sortRouter(require('../util/fixtures/router').routerList3);
     expect(result1[0].url).toEqual('/:page/page');
     expect(result1[1].url).toEqual('/page/:page');
     expect(result1[2].url).toEqual('/:category/:slug');
 
-    const result2 = collector.sortRouter(require('./fixtures/router').routerList4);
+    const result2 = collector.sortRouter(require('../util/fixtures/router').routerList4);
     expect(result2[0].url).toEqual('/page/:page');
     expect(result2[1].url).toEqual('/:page/page');
     expect(result2[2].url).toEqual('/:category/:slug');
@@ -93,7 +93,7 @@ describe('/test/util/webRouterCollector.test.ts', function () {
   it('should test global prefix', async () => {
     clearAllModule();
     const container = new MidwayContainer();
-    container.bindClass(require('./fixtures/home'));
+    container.bindClass(require('../util/fixtures/home'));
     const collector = new WebRouterCollector('', { globalPrefix: 'api'});
     const list = await collector.getRoutePriorityList();
     expect(list.length).toEqual(3);
@@ -108,7 +108,7 @@ describe('/test/util/webRouterCollector.test.ts', function () {
   it('should test global prefix with router ignore', async () => {
     clearAllModule();
     const container = new MidwayContainer();
-    container.bindClass(require('./fixtures/prefix-normal'));
+    container.bindClass(require('../util/fixtures/prefix-normal'));
     const collector = new WebRouterCollector('', { globalPrefix: 'api'});
     const list = await collector.getRoutePriorityList();
     expect(list.length).toEqual(2);

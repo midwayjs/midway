@@ -1,6 +1,6 @@
 import { Provide, Scope, ScopeEnum, Inject, Init } from '@midwayjs/decorator';
 import { MidwayConfigService } from './configService';
-import { ServiceFactory } from '../util/serviceFactory';
+import { ServiceFactory } from '../common/serviceFactory';
 import { ILogger, loggers } from '@midwayjs/logger';
 import { IMidwayContainer } from '../interface';
 
