@@ -12,6 +12,7 @@ import {
   MidwayMiddlewareService,
   RouterInfo,
   ServerlessTriggerCollector,
+  ContextMiddlewareManager,
 } from '@midwayjs/core';
 import {
   Framework,
@@ -23,7 +24,6 @@ import {
 } from '@midwayjs/decorator';
 import SimpleLock from '@midwayjs/simple-lock';
 import { createConsoleLogger, LoggerOptions, loggers } from '@midwayjs/logger';
-import { ContextMiddlewareManager } from '@midwayjs/core/dist/util/middlewareManager';
 
 const LOCK_KEY = '_faas_starter_start_key';
 
