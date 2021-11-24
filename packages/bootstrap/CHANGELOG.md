@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.4](https://github.com/midwayjs/midway/compare/v3.0.0-beta.3...v3.0.0-beta.4) (2021-11-24)
+
+
+### Bug Fixes
+
+* logger close before bootstrap close ([#1370](https://github.com/midwayjs/midway/issues/1370)) ([6cc2720](https://github.com/midwayjs/midway/commit/6cc2720ed3445e8ffccc96d124b80ed7e2517f08))
+
+
+
+
+
 # [3.0.0-beta.3](https://github.com/midwayjs/midway/compare/v3.0.0-beta.2...v3.0.0-beta.3) (2021-11-18)
 
 **Note:** Version bump only for package @midwayjs/bootstrap

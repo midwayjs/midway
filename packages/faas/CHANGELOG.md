@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.4](https://github.com/midwayjs/midway/compare/v3.0.0-beta.3...v3.0.0-beta.4) (2021-11-24)
+
+
+### Features
+
+* add i18n ([#1375](https://github.com/midwayjs/midway/issues/1375)) ([bffefe0](https://github.com/midwayjs/midway/commit/bffefe07afe45777d49b5a76b9ab17fc2b9d9a55))
+* auto transform args to type ([#1372](https://github.com/midwayjs/midway/issues/1372)) ([bb3f7d2](https://github.com/midwayjs/midway/commit/bb3f7d2028a034e1926d9df554849332354c3762))
+* support global prefix url ([#1371](https://github.com/midwayjs/midway/issues/1371)) ([cc5fe44](https://github.com/midwayjs/midway/commit/cc5fe44e1d221590562dc71e1f33ae96093e0da7))
+
+
+
+
+
 # [3.0.0-beta.3](https://github.com/midwayjs/midway/compare/v3.0.0-beta.2...v3.0.0-beta.3) (2021-11-18)
 
 **Note:** Version bump only for package @midwayjs/faas
