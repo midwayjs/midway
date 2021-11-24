@@ -16,10 +16,4 @@ export class RabbitMQConfiguration {
   framework: MidwayRabbitMQFramework;
 
   async onReady() {}
-
-  async onServerReady() {
-    if (this.framework.isEnable()) {
-      await this.framework.run();
-    }
-  }
 }

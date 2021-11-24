@@ -4,16 +4,12 @@ import {
   Inject,
   WEB_ROUTER_PARAM_KEY,
 } from '@midwayjs/decorator';
-import { MidwayKoaFramework } from './framework';
 import { extractKoaLikeValue, MidwayDecoratorService } from '@midwayjs/core';
 
 @Configuration({
   namespace: 'koa',
 })
 export class KoaConfiguration {
-  @Inject()
-  framework: MidwayKoaFramework;
-
   @Inject()
   decoratorService: MidwayDecoratorService;
 
@@ -32,8 +28,4 @@ export class KoaConfiguration {
   }
 
   async onReady() {}
-
-  async onServerReady() {
-    await this.framework.run();
-  }
 }

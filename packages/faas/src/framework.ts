@@ -45,7 +45,7 @@ export class MidwayFaaSFramework extends BaseFramework<
   environmentService: MidwayEnvironmentService;
 
   @Inject()
-  middlewareService: MidwayMiddlewareService<FaaSContext>;
+  middlewareService: MidwayMiddlewareService<FaaSContext, any>;
 
   configure(options: IFaaSConfigurationOptions) {
     this.configurationOptions = options;
@@ -166,7 +166,7 @@ export class MidwayFaaSFramework extends BaseFramework<
    */
   public async generateMiddleware(
     middlewareId: string
-  ): Promise<FunctionMiddleware<FaaSContext>> {
+  ): Promise<FunctionMiddleware<FaaSContext, any>> {
     const mwIns: any = await this.getApplicationContext().getAsync(
       middlewareId
     );

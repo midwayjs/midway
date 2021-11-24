@@ -54,7 +54,7 @@ function deepEqual(x, y) {
   ) : (x === y);
 }
 
-export async function createLightFramework(baseDir?: string ): Promise<IMidwayFramework<any, any>> {
+export async function createLightFramework(baseDir?: string ): Promise<IMidwayFramework<any, any, any>> {
   /**
    * 一个全量的空框架
    */

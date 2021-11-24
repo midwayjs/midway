@@ -6,7 +6,6 @@ import {
   WEB_ROUTER_PARAM_KEY,
 } from '@midwayjs/decorator';
 import { IMidwayWebApplication } from './interface';
-import { MidwayWebFramework } from './framework/web';
 import { extractKoaLikeValue, MidwayDecoratorService } from '@midwayjs/core';
 
 @Configuration({
@@ -63,9 +62,6 @@ export class EggConfiguration {
   app: IMidwayWebApplication;
 
   @Inject()
-  webFramework: MidwayWebFramework;
-
-  @Inject()
   decoratorService: MidwayDecoratorService;
 
   @Init()
@@ -86,7 +82,6 @@ export class EggConfiguration {
 
   async onServerReady() {
     // trigger server didReady
-    await this.webFramework.run();
     this.app.messenger.emit('egg-ready');
   }
 

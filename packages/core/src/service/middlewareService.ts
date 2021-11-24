@@ -10,7 +10,7 @@ import { toPathMatch } from '../util';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
-export class MidwayMiddlewareService<T, R, N> {
+export class MidwayMiddlewareService<T, R, N = unknown> {
   constructor(readonly applicationContext: IMidwayContainer) {}
 
   async compose(

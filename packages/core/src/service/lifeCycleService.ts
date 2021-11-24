@@ -73,6 +73,9 @@ export class MidwayLifeCycleService {
     // exec onReady()
     await this.runContainerLifeCycle(lifecycleInstanceList, 'onReady');
 
+    // exec framework.run()
+    await this.frameworkService.runFramework();
+
     // exec onServerReady()
     await this.runContainerLifeCycle(lifecycleInstanceList, 'onServerReady');
   }

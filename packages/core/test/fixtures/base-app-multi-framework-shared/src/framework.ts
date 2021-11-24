@@ -1,4 +1,4 @@
-import { Framework, MidwayFrameworkType, Provide } from '@midwayjs/decorator';
+import { Framework, MidwayFrameworkType } from '@midwayjs/decorator';
 import { BaseFramework, CommonFilterUnion, CommonMiddleware, CommonMiddlewareUnion,
   IMidwayApplication,
   IMidwayBootstrapOptions,
@@ -6,7 +6,6 @@ import { BaseFramework, CommonFilterUnion, CommonMiddleware, CommonMiddlewareUni
   MiddlewareRespond
 } from '../../../../src';
 
-@Provide()
 @Framework()
 class LightFramework extends BaseFramework<any, any, any> {
   getFrameworkType(): MidwayFrameworkType {
@@ -26,7 +25,6 @@ class LightFramework extends BaseFramework<any, any, any> {
   }
 }
 
-@Provide()
 @Framework()
 export class CustomTwoFramework extends LightFramework {
   async applicationInitialize(options: IMidwayBootstrapOptions) {
@@ -38,19 +36,18 @@ export class CustomTwoFramework extends LightFramework {
   }
 }
 
-@Provide()
 @Framework()
-export class CustomThirdFramework implements IMidwayFramework<any, any> {
+export class CustomThirdFramework implements IMidwayFramework<any, any, any, any, any> {
   isEnable(): boolean {
     return true;
   }
-  getMiddleware(lastMiddleware?: CommonMiddleware<any>): Promise<MiddlewareRespond<any>> {
+  getMiddleware(lastMiddleware?: CommonMiddleware<any, any, any>): Promise<MiddlewareRespond<any, any, any>> {
     throw new Error('Method not implemented.');
   }
-  useMiddleware(Middleware: CommonMiddlewareUnion<any>) {
+  useMiddleware(Middleware: CommonMiddlewareUnion<any, any, any>) {
     throw new Error('Method not implemented.');
   }
-  useFilter(Filter: CommonFilterUnion<any>) {
+  useFilter(Filter: CommonFilterUnion<any, any, any>) {
     throw new Error('Method not implemented.');
   }
   async applicationInitialize(options: IMidwayBootstrapOptions) {

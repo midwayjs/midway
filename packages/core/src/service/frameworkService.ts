@@ -59,10 +59,10 @@ export class MidwayFrameworkService {
     IMidwayFramework<any, any, any>
   >();
 
-  private globalFrameworkList = [];
+  private globalFrameworkList: Array<IMidwayFramework<any, any, any>> = [];
 
   @Init()
-  async init() {
+  protected async init() {
     // register base config hook
     this.decoratorService.registerPropertyHandler(
       CONFIG_KEY,
@@ -179,6 +179,19 @@ export class MidwayFrameworkService {
 
   public getFramework(type: MidwayFrameworkType) {
     return this.globalFrameworkMap.get(type);
+  }
+
+  public async runFramework() {
+    for (const frameworkInstance of this.globalFrameworkList) {
+      // if enable, just init framework
+      if (frameworkInstance.isEnable()) {
+        // app init
+        await frameworkInstance.run();
+        debug(
+          `[core:framework]: Found Framework "${frameworkInstance.getFrameworkName()}" and run.`
+        );
+      }
+    }
   }
 
   public async stopFramework() {
