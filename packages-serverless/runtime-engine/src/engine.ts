@@ -42,17 +42,23 @@ export class BaseRuntimeEngine implements RuntimeEngine {
     return this;
   }
 
-  public addHealthExtension(healthExtensionHandler: HealthExtensionHandler): RuntimeEngine {
+  public addHealthExtension(
+    healthExtensionHandler: HealthExtensionHandler
+  ): RuntimeEngine {
     this.healthExtensions.push(healthExtensionHandler);
     return this;
   }
 
-  public addEventExtension(eventExtensionHandler: EventExtensionHandler): RuntimeEngine {
+  public addEventExtension(
+    eventExtensionHandler: EventExtensionHandler
+  ): RuntimeEngine {
     this.eventExtensions.push(eventExtensionHandler);
     return this;
   }
 
-  public addContextExtension(contextExtensionHandler: ContextExtensionHandler): RuntimeEngine {
+  public addContextExtension(
+    contextExtensionHandler: ContextExtensionHandler
+  ): RuntimeEngine {
     this.contextExtensions.push(contextExtensionHandler);
     return this;
   }

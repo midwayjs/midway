@@ -1,4 +1,7 @@
-import { ServerlessLightRuntime, ContextExtensionHandler } from '@midwayjs/runtime-engine';
+import {
+  ServerlessLightRuntime,
+  ContextExtensionHandler,
+} from '@midwayjs/runtime-engine';
 import { Application, HTTPResponse } from '@midwayjs/serverless-http-parser';
 import { types } from 'util';
 import { HTTPRequest } from './http-request';
@@ -17,7 +20,7 @@ export class WorkerRuntime extends ServerlessLightRuntime {
   app: Application;
   respond;
 
-  async init(contextExtensions: ContextExtensionHandler[]) : Promise<void>{
+  async init(contextExtensions: ContextExtensionHandler[]): Promise<void> {
     await super.init(contextExtensions);
     this.app = new Application();
   }

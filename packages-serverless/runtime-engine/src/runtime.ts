@@ -42,11 +42,15 @@ export abstract class ServerlessAbstractRuntime
     this.logger = this.loggerFactory.createLogger();
   }
 
-  public async init(contextExtensions: ContextExtensionHandler[]): Promise<void> {
+  public async init(
+    contextExtensions: ContextExtensionHandler[]
+  ): Promise<void> {
     this.contextExtensions = contextExtensions;
   }
 
-  public async runtimeStart(eventExtensions: EventExtensionHandler[]): Promise<void> {
+  public async runtimeStart(
+    eventExtensions: EventExtensionHandler[]
+  ): Promise<void> {
     await this.handlerInvokerWrapper('beforeRuntimeStartHandler', [this]);
 
     for (const eventExtension of eventExtensions) {
