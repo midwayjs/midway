@@ -49,7 +49,7 @@ export class MidwayMiddlewareService<T, R, N = unknown> {
               match: classMiddleware.match,
               ignore: classMiddleware.ignore,
             });
-            fn = (ctx, next, options) => {
+            (fn as any) = (ctx, next, options) => {
               if (!match(ctx)) return next();
               return mw(ctx, next, options);
             };

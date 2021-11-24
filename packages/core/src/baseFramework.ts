@@ -298,7 +298,7 @@ export abstract class BaseFramework<
     lastMiddleware?: CommonMiddleware<CTX, R, N>
   ): Promise<MiddlewareRespond<CTX, R, N>> {
     if (!this.composeMiddleware) {
-      this.middlewareManager.insertFirst(async (ctx, next) => {
+      this.middlewareManager.insertFirst((async (ctx: any, next: any) => {
         let returnResult = undefined;
         try {
           const result = await next();
@@ -307,7 +307,7 @@ export abstract class BaseFramework<
           returnResult = await this.filterManager.runErrorFilter(err, ctx);
         }
         return returnResult;
-      });
+      }) as any);
       this.composeMiddleware = await this.middlewareService.compose(
         this.middlewareManager
       );
