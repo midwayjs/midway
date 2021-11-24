@@ -65,9 +65,6 @@ export const completeAssign = function (...sources) {
 
     // 在 copy 属性时不执行 get/set 方法
     for (const name in descriptors) {
-      if (Object.getOwnPropertyDescriptor(target, name)) {
-        // console.debug('Property: "%s" already exists, will be override', name);
-      }
       if (
         /^(before|after)\w+/.test(name) &&
         typeof descriptors[name].value === 'function'

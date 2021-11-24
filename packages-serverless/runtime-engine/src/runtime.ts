@@ -42,11 +42,11 @@ export abstract class ServerlessAbstractRuntime
     this.logger = this.loggerFactory.createLogger();
   }
 
-  init(contextExtensions) {
+  public async init(contextExtensions: ContextExtensionHandler[]): Promise<void> {
     this.contextExtensions = contextExtensions;
   }
 
-  async runtimeStart(eventExtensions: EventExtensionHandler[]) {
+  public async runtimeStart(eventExtensions: EventExtensionHandler[]): Promise<void> {
     await this.handlerInvokerWrapper('beforeRuntimeStartHandler', [this]);
 
     for (const eventExtension of eventExtensions) {
@@ -59,13 +59,85 @@ export abstract class ServerlessAbstractRuntime
     await this.handlerInvokerWrapper('afterRuntimeStartHandler', [this]);
   }
 
-  async functionStart() {
+  public async functionStart(): Promise<void> {
     await this.handlerInvokerWrapper('beforeFunctionStartHandler', [this]);
     // invoke init handler
     await this.invokeInitHandler({
       baseDir: this.propertyParser.getEntryDir(),
     });
     await this.handlerInvokerWrapper('afterFunctionStartHandler', [this]);
+  }
+
+  public async close(): Promise<void> {
+    await this.handlerInvokerWrapper('beforeCloseHandler', [this]);
+    this.loggerFactory.close();
+  }
+
+  public getProperty(propertyKey: string) {
+    return this.propertyParser.getProperty(propertyKey);
+  }
+
+  public getPropertyParser(): PropertyParser<string> {
+    return this.propertyParser;
+  }
+
+  abstract invokeInitHandler(...args);
+
+  abstract invokeDataHandler(...args);
+
+  public async invoke(payload: any): Promise<any> {
+    const funEvent = await this.triggerRoute(payload);
+    return new Promise((resolve, reject) => {
+      const timer = setTimeout(() => {
+        reject(
+          new Error(`function invoke timeout: ${JSON.stringify(payload)}`)
+        );
+      }, Number(this.propertyParser.getFuncTimeout()));
+      this.emitHandler(funEvent, payload)
+        .then(res => {
+          clearTimeout(timer);
+          resolve(res);
+        })
+        .catch(err => {
+          clearTimeout(timer);
+          reject(err);
+        });
+    });
+  }
+
+  public async triggerRoute(payload): Promise<FunctionEvent> {
+    for (const event of this.eventHandlers) {
+      if (event.match(payload)) {
+        return event;
+      }
+    }
+    throw new Error('trigger not found');
+  }
+
+  getContextExtensions(): ContextExtensionHandler[] {
+    return this.contextExtensions;
+  }
+
+  setOptions(options) {
+    this.options = options;
+  }
+
+  /**
+   * get function name in runtime
+   */
+  getFunctionName(): string {
+    return process.env.MIDWAY_SERVERLESS_FUNCTION_NAME || '';
+  }
+
+  /**
+   * get function service/group in runtime
+   */
+  getFunctionServiceName(): string {
+    return process.env.MIDWAY_SERVERLESS_SERVICE_NAME || '';
+  }
+
+  getRuntimeConfig() {
+    return this.options?.runtimeConfig || {};
   }
 
   async getContext(event: FunctionEvent, newArgs) {
@@ -114,11 +186,6 @@ export abstract class ServerlessAbstractRuntime
     }
   }
 
-  async close() {
-    await this.handlerInvokerWrapper('beforeCloseHandler', [this]);
-    this.loggerFactory.close();
-  }
-
   createEnvParser(): PropertyParser<string> {
     return new EnvPropertyParser<string>();
   }
@@ -129,39 +196,6 @@ export abstract class ServerlessAbstractRuntime
 
   createLoggerFactory() {
     return new BaseLoggerFactory();
-  }
-
-  abstract invokeInitHandler(...args);
-
-  abstract invokeDataHandler(...args);
-
-  async triggerRoute(payload): Promise<FunctionEvent> {
-    for (const event of this.eventHandlers) {
-      if (event.match(payload)) {
-        return event;
-      }
-    }
-    throw new Error('trigger not found');
-  }
-
-  async invoke(payload: any): Promise<any> {
-    const funEvent = await this.triggerRoute(payload);
-    return new Promise((resolve, reject) => {
-      const timer = setTimeout(() => {
-        reject(
-          new Error(`function invoke timeout: ${JSON.stringify(payload)}`)
-        );
-      }, Number(this.propertyParser.getFuncTimeout()));
-      this.emitHandler(funEvent, payload)
-        .then(res => {
-          clearTimeout(timer);
-          resolve(res);
-        })
-        .catch(err => {
-          clearTimeout(timer);
-          reject(err);
-        });
-    });
   }
 
   async defaultInvokeHandler(...args) {
@@ -180,18 +214,6 @@ export abstract class ServerlessAbstractRuntime
     return {};
   }
 
-  getProperty(propertyKey: string) {
-    return this.propertyParser.getProperty(propertyKey);
-  }
-
-  getPropertyParser(): PropertyParser<string> {
-    return this.propertyParser;
-  }
-
-  getContextExtensions(): ContextExtensionHandler[] {
-    return this.contextExtensions;
-  }
-
   protected async handlerInvokerWrapper(handlerKey: string, args?) {
     performance.mark(`midway-faas:${handlerKey}:start`);
     if (this.handlerStore.has(handlerKey)) {
@@ -204,30 +226,8 @@ export abstract class ServerlessAbstractRuntime
     performance.mark(`midway-faas:${handlerKey}:end`);
   }
 
-  setOptions(options) {
-    this.options = options;
-  }
-
   get isAppMode() {
     return !!this.options.isAppMode;
-  }
-
-  getRuntimeConfig() {
-    return this.options?.runtimeConfig || {};
-  }
-
-  /**
-   * get function name in runtime
-   */
-  getFunctionName(): string {
-    return process.env.MIDWAY_SERVERLESS_FUNCTION_NAME || '';
-  }
-
-  /**
-   * get function service/group in runtime
-   */
-  getFunctionServiceName(): string {
-    return process.env.MIDWAY_SERVERLESS_SERVICE_NAME || '';
   }
 }
 

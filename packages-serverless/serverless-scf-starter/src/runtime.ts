@@ -18,7 +18,7 @@ export class SCFRuntime extends ServerlessLightRuntime {
   app;
   respond;
 
-  init() {
+  async init(): Promise<void> {
     this.app = new Application();
   }
 

@@ -11,17 +11,11 @@ export interface RuntimeEngine {
   add(engineHandler: (engine: RuntimeEngine) => void);
   addBaseRuntime(baseRuntime: Runtime);
   addRuntimeExtension(ext: RuntimeExtension): RuntimeEngine;
-  addContextExtension(
-    contextExtensionHandler: ContextExtensionHandler
-  ): RuntimeEngine;
-  addHealthExtension(
-    healthExtensionHandler: HealthExtensionHandler
-  ): RuntimeEngine;
-  addEventExtension(
-    eventExtensionHandler: EventExtensionHandler
-  ): RuntimeEngine;
-  ready();
-  close();
+  addContextExtension(contextExtensionHandler: ContextExtensionHandler): RuntimeEngine;
+  addHealthExtension(healthExtensionHandler: HealthExtensionHandler): RuntimeEngine;
+  addEventExtension(eventExtensionHandler: EventExtensionHandler): RuntimeEngine;
+  ready(): Promise<void>;
+  close(): Promise<void>;
   getCurrentRuntime(): Runtime;
 }
 
@@ -43,10 +37,10 @@ export interface Runtime extends RuntimeExtension {
   logger: any;
   eventHandlers: FunctionEvent[];
   isAppMode: boolean;
-  init(contextExtensions: ContextExtensionHandler[]);
-  runtimeStart(eventExtensions: EventExtensionHandler[]);
-  functionStart();
-  close();
+  init(contextExtensions: ContextExtensionHandler[]): Promise<void>;
+  runtimeStart(eventExtensions: EventExtensionHandler[]): Promise<void>;
+  functionStart(): Promise<void>;
+  close(): Promise<void>;
   getProperty(propertyKey: string);
   getPropertyParser(): PropertyParser<string>;
   invokeInitHandler(...args);
@@ -104,10 +98,10 @@ export interface FunctionEvent {
 }
 
 export interface Bootstrap {
-  start(runtime);
-  close();
-  getRuntime();
-  getRuntimeEngine();
+  start(): Promise<Runtime>;
+  close(): Promise<void>;
+  getRuntime(): Runtime;
+  getRuntimeEngine(): RuntimeEngine;
 }
 
 export interface BootstrapOptions {
