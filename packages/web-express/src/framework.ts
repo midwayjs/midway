@@ -58,6 +58,31 @@ export class MidwayExpressFramework extends BaseFramework<
       ctx.requestContext.registerObject('res', res);
       next();
     });
+  }
+
+  public async run(): Promise<void> {
+    // use global middleware
+    const globalMiddleware = await this.getMiddleware();
+    this.app.use(globalMiddleware as any);
+    // load controller
+    await this.loadMidwayController();
+    // use global error handler
+    this.app.use(async (err, req, res, next) => {
+      if (err) {
+        const { result, error } = await this.filterManager.runErrorFilter(
+          err,
+          req,
+          res,
+          next
+        );
+        if (error) {
+          next(error);
+        } else {
+          res.send(result);
+        }
+      }
+    });
+
     // https config
     if (this.configurationOptions.key && this.configurationOptions.cert) {
       this.configurationOptions.key = PathFileUtil.getFileContentSync(
@@ -90,30 +115,6 @@ export class MidwayExpressFramework extends BaseFramework<
     }
     // register httpServer to applicationContext
     this.applicationContext.registerObject(HTTP_SERVER_KEY, this.server);
-  }
-
-  public async run(): Promise<void> {
-    // use global middleware
-    const globalMiddleware = await this.getMiddleware();
-    this.app.use(globalMiddleware as any);
-    // load controller
-    await this.loadMidwayController();
-    // use global error handler
-    this.app.use(async (err, req, res, next) => {
-      if (err) {
-        const { result, error } = await this.filterManager.runErrorFilter(
-          err,
-          req,
-          res,
-          next
-        );
-        if (error) {
-          next(error);
-        } else {
-          res.send(result);
-        }
-      }
-    });
 
     if (this.configurationOptions.port) {
       new Promise<void>(resolve => {

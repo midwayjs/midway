@@ -81,39 +81,6 @@ export class MidwayKoaFramework extends BaseFramework<
     // hack use method
     (this.app as any).originUse = this.app.use;
     this.app.use = this.app.useMiddleware as any;
-
-    // https config
-    if (this.configurationOptions.key && this.configurationOptions.cert) {
-      this.configurationOptions.key = PathFileUtil.getFileContentSync(
-        this.configurationOptions.key
-      );
-      this.configurationOptions.cert = PathFileUtil.getFileContentSync(
-        this.configurationOptions.cert
-      );
-      this.configurationOptions.ca = PathFileUtil.getFileContentSync(
-        this.configurationOptions.ca
-      );
-
-      if (this.configurationOptions.http2) {
-        this.server = require('http2').createSecureServer(
-          this.configurationOptions,
-          this.app.callback()
-        );
-      } else {
-        this.server = require('https').createServer(
-          this.configurationOptions,
-          this.app.callback()
-        );
-      }
-    } else {
-      if (this.configurationOptions.http2) {
-        this.server = require('http2').createServer(this.app.callback());
-      } else {
-        this.server = require('http').createServer(this.app.callback());
-      }
-    }
-    // register httpServer to applicationContext
-    this.applicationContext.registerObject(HTTP_SERVER_KEY, this.server);
   }
 
   async loadMidwayController() {
@@ -150,6 +117,39 @@ export class MidwayKoaFramework extends BaseFramework<
     await this.loadMidwayController();
     // restore use method
     this.app.use = (this.app as any).originUse;
+
+    // https config
+    if (this.configurationOptions.key && this.configurationOptions.cert) {
+      this.configurationOptions.key = PathFileUtil.getFileContentSync(
+        this.configurationOptions.key
+      );
+      this.configurationOptions.cert = PathFileUtil.getFileContentSync(
+        this.configurationOptions.cert
+      );
+      this.configurationOptions.ca = PathFileUtil.getFileContentSync(
+        this.configurationOptions.ca
+      );
+
+      if (this.configurationOptions.http2) {
+        this.server = require('http2').createSecureServer(
+          this.configurationOptions,
+          this.app.callback()
+        );
+      } else {
+        this.server = require('https').createServer(
+          this.configurationOptions,
+          this.app.callback()
+        );
+      }
+    } else {
+      if (this.configurationOptions.http2) {
+        this.server = require('http2').createServer(this.app.callback());
+      } else {
+        this.server = require('http').createServer(this.app.callback());
+      }
+    }
+    // register httpServer to applicationContext
+    this.applicationContext.registerObject(HTTP_SERVER_KEY, this.server);
 
     // set port and listen server
     if (this.configurationOptions.port) {
