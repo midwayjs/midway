@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.5](https://github.com/midwayjs/midway/compare/v3.0.0-beta.4...v3.0.0-beta.5) (2021-11-25)
+
+
+### Bug Fixes
+
+* [@match](https://github.com/match) empty args ([#1384](https://github.com/midwayjs/midway/issues/1384)) ([6f90fc9](https://github.com/midwayjs/midway/commit/6f90fc993ff01e078288ff664833c61c02dede51))
+
+
+
+
+
 # [3.0.0-beta.4](https://github.com/midwayjs/midway/compare/v3.0.0-beta.3...v3.0.0-beta.4) (2021-11-24)
 
 
