@@ -20,8 +20,8 @@ export function Catch(catchTarget?: any | any[]) {
   };
 }
 
-export type MatchPattern<T = any> =
-  | ((ctx: T) => boolean)
+export type MatchPattern<CtxOrReq = any, Res = any> =
+  | ((ctxOrReq: CtxOrReq, res: Res) => boolean)
   | string
   | string[]
   | boolean;

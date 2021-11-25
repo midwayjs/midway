@@ -103,7 +103,7 @@ export class FilterManager<
     let returnValue = result;
 
     for (const matchData of this.matchFnList) {
-      if (matchData.matchFn(ctx)) {
+      if (matchData.matchFn(ctx, res)) {
         returnValue = await matchData.target.match(returnValue, ctx, res, next);
       }
     }
