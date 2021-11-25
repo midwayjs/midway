@@ -188,3 +188,15 @@ exports.routerList4 = [
     url: '/:category/:slug'
   }
 ];
+
+exports.routerList5 = [
+  {
+    prefix: '/',
+    url: '/detail/:id.html'
+  },
+  {
+    prefix: '/',
+    url: '/:typeid/:area/'
+  }
+];
+
