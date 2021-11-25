@@ -8,7 +8,7 @@ Thank you for reporting an issue.
 
 感谢您向我们反馈问题。
 
-1. 提交问题前，请先阅读 https://eggjs.org/zh-cn/faq.html
+1. 提交问题前，请先阅读文档，善用搜索
 2. 我们推荐如果是小问题（错别字修改，小的 bug fix）直接提交 PR。
 3. 如果是一个新需求，请提供：详细需求描述，最好是有伪代码实现。
 4. 如果是一个 BUG，请提供：复现步骤，错误日志以及相关配置，并尽量填写下面的模板中的条目。
@@ -17,9 +17,8 @@ Thank you for reporting an issue.
 -->
 
 * **Node Version**:
-* **Egg Version**:
-* **Plugin Name**:
-* **Plugin Version**:
+* **Midway Version(Decorator/Core)**:
+* **Component Name/Version**:
 * **Platform**:
 * **Mini Showcase Repository**:
 

@@ -22,7 +22,7 @@ export type ServiceFactoryConfigOption<OPTIONS> = {
   };
 }
 
-type ConfigType<T> = T extends (args: any[]) => any ? PowerPartial<ReturnType<T>> : PowerPartial<T>;
+type ConfigType<T> = T extends (...args: any[]) => any ? PowerPartial<ReturnType<T>> : PowerPartial<T>;
 
 export type FileConfigOption<T, K = unknown> = K extends keyof ConfigType<T> ? Pick<ConfigType<T>, K> : ConfigType<T>;
 
