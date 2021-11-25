@@ -8,14 +8,20 @@ describe('Express passport', () => {
   let app = null;
 
   beforeAll(async () => {
-    app = await createApp(
-      join(__dirname, 'fixtures', 'passport-express'),
-      {},
-      ExpressFramework
-    );
+    process.env['MIDWAY_PASSPORT_MODE'] = 'express'
+    try {
+      app = await createApp(
+        join(__dirname, 'fixtures', 'passport-express'),
+        {},
+        ExpressFramework
+      );
+    } catch (e) {
+      console.error(e);
+    }
   });
 
   afterAll(async () => {
+    process.env['MIDWAY_PASSPORT_MODE'] = undefined;
     await close(app);
   });
 

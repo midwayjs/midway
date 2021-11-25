@@ -1,5 +1,5 @@
 import { Provide, Controller, Get, Inject } from '@midwayjs/decorator';
-import { Jwt } from '../../../../src';
+import { JWTService } from '../../../../src';
 
 @Provide()
 @Controller('/')
@@ -8,7 +8,7 @@ export class TestPackagesController {
   ctx;
 
   @Inject()
-  jwt: Jwt;
+  jwt: JWTService;
 
   @Get('/jwt-passport', { middleware: ['jwtPassportMiddleware'] })
   async jwtPassport() {

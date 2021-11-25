@@ -1,17 +1,17 @@
-import type { Context, IMidwayKoaNext, IWebMiddleware } from '@midwayjs/koa';
-import * as koaPassport from 'koa-passport';
-import { defaultOptions } from './options';
+import * as passport from 'passport';
+import type { Context, IWebMiddleware, Middleware } from '@midwayjs/express';
+import { defaultOptions } from '../options';
 
 interface Class<T = any> {
   new (...args: any[]): T;
 }
 
 type ExternalOverride = {
-  verify(...args: any[]): Promise<any>;
+  verify(...args: any[]): Promise<Record<string, any>>;
 };
 
 /**
- * Koa
+ * Express
  * passport strategy 适配器
  *
  * @param Strategy passport策略
@@ -19,7 +19,7 @@ type ExternalOverride = {
  * @param rest Strategy 其余参数
  * @returns {Strategy}
  */
-export function WebPassportStrategyAdapter<T extends Class<any> = any>(
+export function ExpressPassportStrategyAdapter<T extends Class<any> = any>(
   Strategy: T,
   name?: string,
   ...syncArgs: any[]
@@ -44,39 +44,49 @@ export function WebPassportStrategyAdapter<T extends Class<any> = any>(
         }
       };
 
+      // 优先使用同步参数
       super(...(syncArgs.length > 0 ? syncArgs : asyncArgs), cb);
 
       if (name) {
-        koaPassport.use(name, this as any);
+        passport.use(name, this as any);
       } else {
-        koaPassport.use(this as any);
+        passport.use(this as any);
       }
     }
-    protected abstract verify(...args: any[]): any;
+
+    /**
+     *
+     * @protected
+     * @param args
+     */
+    protected abstract verify(...args: any[]): Record<string, any>;
   }
   return TmpStrategy;
 }
 
-export interface WebPassportMiddleware {
+export interface ExpressPassportMiddleware {
   setOptions?(ctx?: Context): Promise<null | Record<string, any>>;
 }
 
 /**
  *
- * Egg, Koa Passport 中间件
+ * Express Passport 中间件
  *
  */
-export abstract class WebPassportMiddleware implements IWebMiddleware {
+export abstract class ExpressPassportMiddleware implements IWebMiddleware {
   /**
    *
-   * @param args  verify() 中返回的参数 @see {WebPassportStrategyAdapter}
+   * @param args  verify() 中返回的参数 @see {ExpressPassportStrategyAdapter}
    */
-  public abstract auth(ctx: Context, ...args: any[]): any;
+  protected abstract auth(
+    ctx: Context,
+    ...args: any[]
+  ): Promise<Record<any, any>>;
 
   /**
    * 鉴权名
    */
-  public abstract strategy: string;
+  protected abstract strategy: string;
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   //@ts-ignore
@@ -84,8 +94,8 @@ export abstract class WebPassportMiddleware implements IWebMiddleware {
     ctx?: Context
   ): Promise<null | Record<string, any>>;
 
-  resolve() {
-    return async (ctx: Context, next: IMidwayKoaNext) => {
+  resolve(): Middleware {
+    return async (req, res, next) => {
       ['strategy', 'auth'].forEach(n => {
         if (!this[n]) {
           throw new Error(`[PassportMiddleware]: missing ${n} property`);
@@ -94,18 +104,14 @@ export abstract class WebPassportMiddleware implements IWebMiddleware {
 
       const options = {
         ...defaultOptions,
-        ...(this.setOptions ? await this.setOptions(ctx) : null),
+        ...(this.setOptions ? await this.setOptions(req as any) : null),
       };
 
-      await new Promise(resolve => {
-        koaPassport.authenticate(this.strategy, options, async (...d) => {
-          const user = await this.auth(ctx, ...d);
-          ctx.req[options.presetProperty] = user;
-          resolve(null);
-        })(ctx, null);
-      });
-
-      await next();
+      passport.authenticate(this.strategy, options, async (...d) => {
+        const user = await this.auth(req as any, ...d);
+        req[options.presetProperty] = user;
+        next();
+      })(req, res);
     };
   }
 }

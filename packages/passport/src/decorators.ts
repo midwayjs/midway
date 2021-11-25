@@ -19,7 +19,7 @@ export interface BootStrategyParams {
  *
  * 自启动 passport策略
  *
- * @param {Strategy} Target passport策略
+ * @param option {Strategy} Target passport策略
  * @method
  */
 export const BootStrategy = function (option?: BootStrategyParams): any {

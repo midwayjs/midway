@@ -1,13 +1,13 @@
-import { Config, Provide } from '@midwayjs/decorator';
-import * as jwt from 'jsonwebtoken';
+import { Config, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
 import type {
+  DecodeOptions,
   GetPublicKeyOrSecret,
+  Jwt as JwtType,
   Secret,
   SignOptions,
   VerifyOptions,
-  Jwt as JwtType,
-  DecodeOptions,
 } from 'jsonwebtoken';
+import * as jwt from 'jsonwebtoken';
 
 type JwtPayload = string | Buffer | Record<string, any>;
 
@@ -16,9 +16,10 @@ type JwtPayload = string | Buffer | Record<string, any>;
  * @see{@link https://github.com/auth0/node-jsonwebtoken}
  */
 @Provide()
-export class Jwt {
+@Scope(ScopeEnum.Singleton)
+export class JWTService {
   @Config('jwt')
-  private _config: any;
+  private jwtConfig: any;
 
   public signSync(
     payload: JwtPayload,
@@ -27,18 +28,18 @@ export class Jwt {
   ): string | void {
     let expiresIn;
     if (!secret) {
-      secret = this._config?.secret;
+      secret = this.jwtConfig?.secret;
     }
     if (!secret) {
-      throw new Error('[midway-jwt]: provide the jwt secret please');
+      throw new Error('[midway-jwt]: jwt secret should be set');
     }
 
     if (options.expiresIn) {
       expiresIn = options.expiresIn;
     }
 
-    if (this._config.expiresIn) {
-      expiresIn = this._config.expiresIn;
+    if (this.jwtConfig.expiresIn) {
+      expiresIn = this.jwtConfig.expiresIn;
     }
 
     options.expiresIn = expiresIn;
@@ -57,7 +58,7 @@ export class Jwt {
   ): Promise<string | void> {
     let expiresIn;
     if (!secret) {
-      secret = this._config?.secret;
+      secret = this.jwtConfig?.secret;
     }
 
     if (!secret) {
@@ -68,8 +69,8 @@ export class Jwt {
       expiresIn = options.expiresIn;
     }
 
-    if (this._config.expiresIn) {
-      expiresIn = this._config.expiresIn;
+    if (this.jwtConfig.expiresIn) {
+      expiresIn = this.jwtConfig.expiresIn;
     }
 
     options.expiresIn = expiresIn;
@@ -89,9 +90,9 @@ export class Jwt {
     token: string,
     options?: VerifyOptions & { complete: true },
     secret?: Secret
-  ): Jwt | string | JwtPayload {
+  ): JWTService | string | JwtPayload {
     if (!secret) {
-      secret = this._config?.secret;
+      secret = this.jwtConfig?.secret;
     }
 
     if (!secret) {
@@ -111,7 +112,7 @@ export class Jwt {
     secret?: Secret | GetPublicKeyOrSecret
   ): Promise<JwtType | undefined | JwtPayload> {
     if (!secret) {
-      secret = this._config?.secret;
+      secret = this.jwtConfig?.secret;
     }
 
     if (!secret) {
@@ -132,7 +133,7 @@ export class Jwt {
   public decodeSync(
     token: string,
     options?: DecodeOptions & { complete: true } & { json: true }
-  ): Jwt | null | JwtPayload | string {
+  ): JWTService | null | JwtPayload | string {
     return jwt.decode(token, options);
   }
 }
