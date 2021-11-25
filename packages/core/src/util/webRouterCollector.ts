@@ -432,7 +432,11 @@ export class WebRouterCollector {
         let weight = 0;
         // 权重，比如通配的不加权，非通配加权，防止通配出现在最前面
         for (const fragment of weightArr) {
-          if (fragment === '' || fragment.includes(':') || fragment.includes('*')) {
+          if (
+            fragment === '' ||
+            fragment.includes(':') ||
+            fragment.includes('*')
+          ) {
             weight += 0;
           } else {
             weight += 1;
