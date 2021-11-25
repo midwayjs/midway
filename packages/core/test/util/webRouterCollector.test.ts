@@ -112,4 +112,10 @@ describe('/test/util/webRouterCollector.test.ts', function () {
     expect(result2[2].url).toEqual('/:category/:slug');
   });
 
+  it('fix issue 1382', function () {
+    const collector = new WebRouterCollector();
+    const result1 = collector.sortRouter(require('./router').routerList5);
+    expect(result1[0].url).toEqual('/detail/:id.html');
+    expect(result1[1].url).toEqual('/:typeid/:area/');
+  });
 });
