@@ -221,6 +221,9 @@ export const transformRequestObjectByType = (originValue: any, targetType?) => {
 };
 
 export function toPathMatch(pattern) {
+  if (typeof pattern === 'boolean') {
+    return ctx => pattern;
+  }
   if (typeof pattern === 'string') {
     const reg = pathToRegexp(pattern, [], { end: false });
     if (reg.global) reg.lastIndex = 0;

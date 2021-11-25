@@ -130,6 +130,27 @@ describe('/test/common/filterManager.test.ts', function () {
     expect(error2).toBeUndefined();
   });
 
+  it('should test all match with empty args', async () => {
+    const container = new MidwayContainer();
+    const filterManager = new FilterManager();
+
+    @Match()
+    class TestFilter {
+      match(result, ctx) {
+        return result + ', midway';
+      }
+    }
+
+    container.bindClass(TestFilter);
+    filterManager.useFilter(TestFilter);
+    await filterManager.init(container);
+
+    const { result, error } = await filterManager.runResultFilter('hello world', {} as any);
+
+    expect(result).toEqual('hello world, midway');
+    expect(error).toBeUndefined();
+  });
+
   it('should test match path', async () => {
     const container = new MidwayContainer();
     const filterManager = new FilterManager();
