@@ -123,4 +123,57 @@ describe('/test/service/decoratorService.test.ts', () => {
     const a = await container.getAsync(A);
     expect(await a.invokeAsyncMethod.call(a, 'zhangting')).toEqual('hello world haha hehe def abc');
   });
+
+  it('should test parameter and method decorator sequence', async () => {
+
+    function CustomMethod(name: string) {
+      return createCustomMethodDecorator('aabbcc', {
+        name
+      });
+    }
+
+    function CustomParam1(name) {
+      return createCustomParamDecorator('ggg', {
+        name
+      });
+    }
+
+
+    @Provide()
+    class A {
+      @CustomMethod('111')
+      async invokeAsyncMethod(@CustomParam1('222') bbb) {
+        return bbb;
+      }
+    }
+
+    const container = new MidwayContainer();
+    container.bindClass(MidwayAspectService);
+    container.bindClass(MidwayDecoratorService);
+
+    await container.getAsync(MidwayAspectService, [
+      container
+    ]);
+
+    const decoratorService = await container.getAsync(MidwayDecoratorService, [
+      container
+    ]);
+
+    container.bindClass(A);
+
+    decoratorService.registerMethodHandler('aabbcc', (options) => {
+      return {
+        before: (joinPoint: JoinPoint) => {
+          joinPoint.args[0] = joinPoint.args[0] + options.metadata.name;
+        },
+      }
+    });
+
+    decoratorService.registerParameterHandler('ggg', (options) => {
+      return options.metadata.name;
+    });
+
+    const a = await container.getAsync(A);
+    expect(await a.invokeAsyncMethod(222)).toEqual('222111');
+  });
 });
