@@ -116,7 +116,9 @@ export class MidwayExpressFramework extends BaseFramework<
     // register httpServer to applicationContext
     this.applicationContext.registerObject(HTTP_SERVER_KEY, this.server);
 
-    if (this.configurationOptions.port) {
+    const customPort =
+      process.env.MIDWAY_HTTP_PORT ?? this.configurationOptions.port;
+    if (customPort) {
       new Promise<void>(resolve => {
         const args: any[] = [this.configurationOptions.port];
         if (this.configurationOptions.hostname) {
@@ -127,6 +129,7 @@ export class MidwayExpressFramework extends BaseFramework<
         });
 
         this.server.listen(...args);
+        process.env.MIDWAY_HTTP_PORT = String(customPort);
       });
     }
   }

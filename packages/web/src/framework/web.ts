@@ -229,9 +229,10 @@ export class MidwayWebFramework extends BaseFramework<
       this.getApplicationContext().registerObject(HTTP_SERVER_KEY, this.server);
 
       const eggConfig = this.configService.getConfiguration('egg');
-      if (this.configService.getConfiguration('egg')) {
+      if (!this.isClusterMode && eggConfig) {
+        const customPort = process.env.MIDWAY_HTTP_PORT ?? eggConfig.port;
         new Promise<void>(resolve => {
-          const args: any[] = [eggConfig.port];
+          const args: any[] = [customPort];
           if (eggConfig.hostname) {
             args.push(eggConfig.hostname);
           }
@@ -239,6 +240,7 @@ export class MidwayWebFramework extends BaseFramework<
             resolve();
           });
           this.server.listen(...args);
+          process.env.MIDWAY_HTTP_PORT = String(customPort);
         });
       }
     }

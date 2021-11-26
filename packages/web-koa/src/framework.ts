@@ -152,7 +152,9 @@ export class MidwayKoaFramework extends BaseFramework<
     this.applicationContext.registerObject(HTTP_SERVER_KEY, this.server);
 
     // set port and listen server
-    if (this.configurationOptions.port) {
+    const customPort =
+      process.env.MIDWAY_HTTP_PORT ?? this.configurationOptions.port;
+    if (customPort) {
       new Promise<void>(resolve => {
         const args: any[] = [this.configurationOptions.port];
         if (this.configurationOptions.hostname) {
@@ -162,6 +164,7 @@ export class MidwayKoaFramework extends BaseFramework<
           resolve();
         });
         this.server.listen(...args);
+        process.env.MIDWAY_HTTP_PORT = String(customPort);
       });
     }
   }
