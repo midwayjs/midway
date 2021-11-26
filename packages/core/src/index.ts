@@ -17,7 +17,6 @@ export * from './util/pathFileUtil';
 export * from './util/webRouterParam';
 export * from './common/webRouterCollector';
 export * from './common/triggerCollector';
-export { plainToClass, classToPlain } from 'class-transformer';
 export { createConfiguration } from './functional/configuration';
 export { MidwayConfigService } from './service/configService';
 export { MidwayEnvironmentService } from './service/environmentService';
