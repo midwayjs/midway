@@ -38,7 +38,40 @@ export class MidwayDecoratorService {
   @Init()
   protected async init() {
     // add custom method decorator listener
-    this.applicationContext.onBeforeBind((Clzz, options) => {
+    this.applicationContext.onBeforeBind(Clzz => {
+      // find custom method decorator metadata, include method decorator information array
+      const methodDecoratorMetadataList: Array<{
+        propertyName: string;
+        key: string;
+        metadata: any;
+      }> = getClassMetadata(INJECT_CUSTOM_METHOD, Clzz);
+
+      if (methodDecoratorMetadataList) {
+        // loop it, save this order for decorator run
+        for (const meta of methodDecoratorMetadataList) {
+          const { propertyName, key, metadata } = meta;
+
+          // add aspect implementation first
+          this.aspectService.interceptPrototypeMethod(
+            Clzz,
+            propertyName,
+            () => {
+              const methodDecoratorHandler = this.methodDecoratorMap.get(key);
+              if (!methodDecoratorHandler) {
+                throw new MidwayCommonError(
+                  `Method Decorator "${key}" handler not found, please register first.`
+                );
+              }
+              return this.methodDecoratorMap.get(key)({
+                target: Clzz,
+                propertyName,
+                metadata,
+              });
+            }
+          );
+        }
+      }
+
       // find custom param decorator metadata
       const parameterDecoratorMetadata: {
         [methodName: string]: Array<{
@@ -81,39 +114,6 @@ export class MidwayDecoratorService {
               },
             };
           });
-        }
-      }
-
-      // find custom method decorator metadata, include method decorator information array
-      const methodDecoratorMetadataList: Array<{
-        propertyName: string;
-        key: string;
-        metadata: any;
-      }> = getClassMetadata(INJECT_CUSTOM_METHOD, Clzz);
-
-      if (methodDecoratorMetadataList) {
-        // loop it, save this order for decorator run
-        for (const meta of methodDecoratorMetadataList) {
-          const { propertyName, key, metadata } = meta;
-
-          // add aspect implementation first
-          this.aspectService.interceptPrototypeMethod(
-            Clzz,
-            propertyName,
-            () => {
-              const methodDecoratorHandler = this.methodDecoratorMap.get(key);
-              if (!methodDecoratorHandler) {
-                throw new MidwayCommonError(
-                  `Method Decorator "${key}" handler not found, please register first.`
-                );
-              }
-              return this.methodDecoratorMap.get(key)({
-                target: Clzz,
-                propertyName,
-                metadata,
-              });
-            }
-          );
         }
       }
     });

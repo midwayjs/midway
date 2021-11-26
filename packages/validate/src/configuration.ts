@@ -29,6 +29,7 @@ export class ValidateService {
     value: any,
     options?: {
       errorStatus?: number;
+      validateOptions?: Joi.ValidationOptions;
     }
   ) {
     const rules = getClassExtendedMetadata(RULES_KEY, ClzType);
@@ -41,6 +42,8 @@ export class ValidateService {
           options?.errorStatus ?? this.validateConfig.errorStatus,
           result.error
         );
+      } else {
+        return result;
       }
     }
   }
@@ -76,11 +79,14 @@ export class ValidateConfiguration {
         before: (joinPoint: JoinPoint) => {
           for (let i = 0; i < paramTypes.length; i++) {
             const item = paramTypes[i];
-            this.validateService.validate(
+            const result = this.validateService.validate(
               item,
               joinPoint.args[i],
               options.metadata
             );
+            if (result && result.value) {
+              joinPoint.args[i] = result.value;
+            }
           }
         },
       };
