@@ -1,5 +1,6 @@
 import { Validate, Rule, RuleType } from '../src';
 import { createLightApp, close } from '@midwayjs/mock';
+import * as Joi from 'joi';
 import * as Valid from '../src';
 
 import * as assert from 'assert';
@@ -353,5 +354,15 @@ describe('/test/check.test.ts', () => {
       id: '555'
     } as any)
     expect(typeof data.id).toEqual('number');
+  });
+
+  it('should test joi transform type', function () {
+    const schema = Joi.object({
+      age: Joi.number()
+    });
+    const result = schema.validate({
+      age: '12'
+    });
+    expect(typeof result.value.age).toEqual('number');
   });
 });

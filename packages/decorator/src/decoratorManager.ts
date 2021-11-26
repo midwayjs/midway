@@ -405,15 +405,16 @@ export class DecoratorManager extends Map implements IModuleStore {
 }
 
 let manager = new DecoratorManager();
-if (global['MIDWAY_GLOBAL_DECORATOR_MANAGER']) {
-  console.warn(
-    'DecoratorManager not singleton and please check @midwayjs/decorator version by "npm ls @midwayjs/decorator"'
-  );
-  manager = global['MIDWAY_GLOBAL_DECORATOR_MANAGER'];
-} else {
-  global['MIDWAY_GLOBAL_DECORATOR_MANAGER'] = manager;
+if (typeof global === 'object') {
+  if (global['MIDWAY_GLOBAL_DECORATOR_MANAGER']) {
+    console.warn(
+      'DecoratorManager not singleton and please check @midwayjs/decorator version by "npm ls @midwayjs/decorator"'
+    );
+    manager = global['MIDWAY_GLOBAL_DECORATOR_MANAGER'];
+  } else {
+    global['MIDWAY_GLOBAL_DECORATOR_MANAGER'] = manager;
+  }
 }
-
 /**
  * save data to class
  * @param decoratorNameKey

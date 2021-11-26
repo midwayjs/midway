@@ -1,7 +1,7 @@
 import { dirname, resolve, sep, posix } from 'path';
 import { readFileSync } from 'fs';
 import { debuglog } from 'util';
-import { plainToClass } from 'class-transformer';
+import * as transformer from 'class-transformer';
 import { pathToRegexp } from './pathToRegexp';
 import { MidwayCommonError } from '../error';
 
@@ -215,7 +215,12 @@ export const transformRequestObjectByType = (originValue: any, targetType?) => {
       if (originValue instanceof targetType) {
         return originValue;
       } else {
-        return plainToClass(targetType, originValue) as typeof originValue;
+        const transformToInstance =
+          transformer['plainToClass'] || transformer['plainToInstance'];
+        return transformToInstance(
+          targetType,
+          originValue
+        ) as typeof originValue;
       }
   }
 };
