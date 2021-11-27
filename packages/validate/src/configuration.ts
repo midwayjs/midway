@@ -88,7 +88,7 @@ export class ValidateConfiguration {
             const result = this.validateService.validate(
               item,
               joinPoint.args[i],
-              options.metadata
+              options.metadata?.options
             );
             if (result && result.value) {
               joinPoint.args[i] = result.value;
