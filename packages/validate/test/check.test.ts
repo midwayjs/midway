@@ -365,4 +365,50 @@ describe('/test/check.test.ts', () => {
     });
     expect(typeof result.value.age).toEqual('number');
   });
+
+  it('should test global validate config', async () => {
+    const app = await createLightApp('', {
+      configurationModule: [Valid]
+    });
+
+    class UserDTO {
+      @Rule(RuleType.number().max(10))
+      age: number;
+    }
+
+    @Provide()
+    class Hello {
+      @Validate({
+        validateOptions: {
+          allowUnknown: true,
+        },
+        errorStatus: 400
+      })
+      school(data: UserDTO) {
+        return data;
+      }
+    }
+    app.getApplicationContext().bind(Hello);
+    const hello = await app.getApplicationContext().getAsync(Hello);
+
+    let error;
+    try {
+      hello.school({
+        age: 11
+      });
+    } catch (err) {
+      error = err;
+    }
+
+    expect(error).toBeDefined();
+    expect(error.status).toEqual(400);
+
+    const result = hello.school({
+      age: 1,
+      name: 'hello',
+    } as any);
+    expect(result['name']).toEqual('hello');
+
+    await close(app);
+  });
 });
