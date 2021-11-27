@@ -35,7 +35,13 @@ export class ValidateService {
     const rules = getClassExtendedMetadata(RULES_KEY, ClzType);
     if (rules) {
       const schema = Joi.object(rules);
-      const result = schema.validate(value);
+      const result = schema.validate(
+        value,
+        Object.assign(
+          this.validateConfig.validationOptions,
+          options.validateOptions ?? {}
+        )
+      );
       if (result.error) {
         throw new MidwayValidationError(
           result.error.message,

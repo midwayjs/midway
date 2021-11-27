@@ -1,4 +1,4 @@
 export const validate = {
-  allowUnknown: false,
+  validationOptions: {},
   errorStatus: 422,
 };
