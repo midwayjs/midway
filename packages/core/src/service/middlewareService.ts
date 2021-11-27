@@ -89,7 +89,14 @@ export class MidwayMiddlewareService<T, R, N = unknown> {
             fn(context, dispatch.bind(null, i + 1), {
               index,
             } as any)
-          );
+          ).then(result => {
+            if (context.body && !result) {
+              result = context.body;
+            } else if (result && context.body !== result) {
+              context.body = result;
+            }
+            return result;
+          });
         } catch (err) {
           return Promise.reject(err);
         }
