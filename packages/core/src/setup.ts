@@ -12,6 +12,7 @@ import {
   MidwayLifeCycleService,
   MidwayMiddlewareService,
   MidwayDecoratorService,
+  MidwayTracingService,
   safeRequire,
 } from './';
 import defaultConfig from './config/config.default';
@@ -67,6 +68,7 @@ export async function initializeGlobalApplicationContext(
   applicationContext.bindClass(MidwayFrameworkService);
   applicationContext.bindClass(MidwayMiddlewareService);
   applicationContext.bindClass(MidwayLifeCycleService);
+  applicationContext.bindClass(MidwayTracingService);
 
   // bind preload module
   if (globalOptions.preloadModules && globalOptions.preloadModules.length) {
@@ -122,6 +124,8 @@ export async function initializeGlobalApplicationContext(
   await applicationContext.getAsync(MidwayMiddlewareService, [
     applicationContext,
   ]);
+
+  await applicationContext.getAsync(MidwayTracingService, [applicationContext]);
 
   // framework/config/plugin/logger/app decorator support
   await applicationContext.getAsync(MidwayFrameworkService, [

@@ -53,7 +53,7 @@ export class COSService implements COS {
   private instance: COS;
 
   @Init()
-  async init() {
+  protected async init() {
     this.instance = this.serviceFactory.get('default');
   }
 }
