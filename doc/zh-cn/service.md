@@ -21,6 +21,7 @@
 
 
 对于服务的文件，我们一般会存放到 `src/service` 目录中。我们来添加一个 user 服务。
+
 ```typescript
 ➜  my_midway_app tree
 .
@@ -35,7 +36,9 @@
 ├── package.json
 └── tsconfig.json
 ```
+
 内容为：
+
 ```typescript
 // src/service/user.ts
 import { Provide } from '@midwayjs/decorator';
@@ -56,6 +59,7 @@ export class UserService {
 
 
 之前我们还增加了一个 User 定义，这里也可以直接使用。
+
 ```typescript
 import { Provide } from '@midwayjs/decorator';
 import { User } from '../interface';
@@ -84,7 +88,6 @@ export class UserService {
 import { Inject, Controller, Get, Provide, Query } from '@midwayjs/decorator';
 import { UserService } from '../service/user';
 
-@Provide()
 @Controller('/api/user')
 export class APIController {
 
@@ -99,6 +102,7 @@ export class APIController {
 }
 
 ```
+
 使用服务的过程分为几部分：
 
 
@@ -107,22 +111,28 @@ export class APIController {
 - 3、调用注入服务，执行对应的方法
 
 
-
 Midway 的核心 “依赖注入” 容器会**自动关联**你的控制器（Controller） 和服务（Service），在运行过程中**会自动初始化**所有的代码，你**无需手动初始化**这些 Class。
 
 
 ## 注入行为描述
 
+看到这里，你会有一些疑惑，为什么 为什么服务（Service）上有一个 `@Provide` 装饰器，但是控制器（Controller) 上没有。
 
-看到这里，你应该明白为什么控制器（Controller) 和服务（Service）上都有一个 `@Provide` 装饰器。不仅如此，之后的大部分代码中，你都会发现这个装饰器。
+事实上，控制器（Controller） 上也有这个装饰器，只是在新版本中，Controller 包含了 Provide 的功能。如果你不确定什么时候可以隐藏，可以都写上。
 
+你如果不写，默认等价于下面的代码。
+
+```ts
+@Provide()
+@Controller('/api/user')
+export class APIController {
+```
 
 `@Provide` 装饰器的作用：
 
 
 - 1、这个 Class，被依赖注入容器托管，会自动被实例化（new）
 - 2、这个 Class，可以被其他在容器中的 Class 注入
-
 
 
 而对应的 `@Inject` 装饰器，作用为：
@@ -133,7 +143,7 @@ Midway 的核心 “依赖注入” 容器会**自动关联**你的控制器（C
 
 
 :::info
-`@Inject` 的类中，必须有 `@Provide` 才会生效。
+`@Inject` 的类中，必须有对应的 `@Provide` 才会生效。
 :::
 
 
@@ -146,7 +156,7 @@ export class UserService {
 }
 
 // controller
-@Provide()
+@Provide()                      // <------ 由于有 Controller 包含了 Provide 的能力，这里展示的更加完整
 @Controller('/api/user')
 export class APIController {
 

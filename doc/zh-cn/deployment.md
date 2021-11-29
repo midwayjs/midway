@@ -24,7 +24,7 @@ Midway 提供了一个轻量的启动器，用于启动你的应用。我们为�
 
 
 - 1、使用 `--ts` 指定 TypeScript（ts-node）环境启动
-- 2、使用内置的（@midwayjs/mock 的 createApp）创建一个**匹配当前框架 **的服务，并返回 app
+- 2、使用内置的（@midwayjs/mock 的 createApp）创建一个服务，并返回主框架的 app
 
 
 
@@ -32,55 +32,6 @@ Midway 提供了一个轻量的启动器，用于启动你的应用。我们为�
 ```bash
 $ npm run dev
 ```
-
-
-所谓匹配当前框架，指的是根据内部的框架列表，和 pkg 的依赖匹配查找到最符合当前的框架并启动。
-
-
-内部的框架列表如下：
-```typescript
-const currentFramework = [
-  '@midwayjs/web',
-  '@midwayjs/koa',
-  '@midwayjs/express',
-  '@midwayjs/serverless-app',
-  '@midwayjs/grpc',
-  '@midwayjs/rabbitmq',
-  '@midwayjs/socketio',
-  '@midwayjs/faas',
-];
-```
-这样启动的服务用于本地快速开发测试，使用的是 **框架初始化的默认值**。
-
-
-比如，你的 `package.json` 中依赖如下；
-```typescript
-{
-	"@midwayjs/grpc": "xxx",
-  "@midwayjs/web": "xxx"
-}
-```
-按照优先级顺序，默认的 `dev` 依旧会启动 `@midwayjs/web` 服务。
-
-
-### 指定入口启动服务
-
-
-由于本地的 dev 命令普通情况下和 `bootstrap.js` 启动文件初始化参数不同，有些用户担心本地开发和线上开发不一致，或者希望一次启动多个框架（多种协议）。
-
-
-这个时候我们可以直接传递一个入口文件给 `dev` 命令，直接使用入口文件启动服务。
-```json
-{
-	"script": {
-    "dev": "midway-bin dev --ts --entryFile=bootstrap.js"
-  }
-}
-```
-:::info
-这种情况下，会忽略其余的参数，比如 --port。
-:::
-
 
 ## 部署到普通服务器
 
@@ -365,8 +316,9 @@ deployType: egg       ## 部署的应用类型
 ```
 应用类型选项如下：
 
-| @midwayjs/web 项目 | egg |  |
+|  |  |  |
 | --- | --- | --- |
+| @midwayjs/web 项目 | egg |  |
 | @midwayjs/experss 项目 | express |  |
 | @midwayjs/koa 项目 | koa |  |
 
@@ -523,6 +475,7 @@ CMD ["npm", "run", "start"]
 ****
 
 新增docker-compose.yml文件，内容如下：（此处我们模拟我们的midway项目需要使用redis）
+
 ```yaml
 version: "3"
 services:
@@ -539,7 +492,7 @@ services:
 
 
 **步骤三：构建**
-****
+
 
 使用命令：
 ```bash
@@ -548,14 +501,17 @@ $ docker-compose build
 
 
 **步骤四：运行**
+
 ```bash
 $ docker-compose up -d
 ```
+
 ![image.png](https://cdn.nlark.com/yuque/0/2020/png/187105/1608884158660-02bd2d3c-08b4-4ecc-a4dd-a18d4b9d2c12.png#height=44&id=jWw4i&margin=%5Bobject%20Object%5D&name=image.png&originHeight=62&originWidth=1054&originalType=binary&ratio=1&size=47727&status=done&style=none&width=746)
 那么redis比如怎么用，因为 docker-compose 里面加了一个 redis，并且 link 了，所以我们代码里面如下写：
 
 
 在 service 目录下添加 `redis.service.ts` 文件，代码如下：
+
 ```typescript
 import { Provide, Scope, ScopeEnum, Init } from "@midwayjs/decorator";
 import * as Redis from 'ioredis'
@@ -581,12 +537,13 @@ export class RedisService{
   }
 }
 ```
+
 然后在 `controller/home.ts` 里面添加一个接口如下：
+
 ```typescript
-import { Controller, Get, Inject, Provide } from '@midwayjs/decorator';
+import { Controller, Get, Inject } from '@midwayjs/decorator';
 import { RedisService } from '../service/redis.service';
 
-@Provide()
 @Controller('/')
 export class HomeController {
 
@@ -606,11 +563,14 @@ export class HomeController {
   }
 }
 ```
+
 这个代码比较好理解，相当于访问 `127.0.0.1:7001/update` 接口，会去调用 redisService 新增一个 key，对应的 value 为 hello world
 
 
 然后访问 `127.0.0.1:7001`  ，会调用redisService获取key为foo的值，并返回给页面。
 
 如下：
+
 ![image.png](https://cdn.nlark.com/yuque/0/2020/png/187105/1608886309353-2a65279f-8164-45c0-ab41-a759d31f1492.png#height=92&id=APR77&margin=%5Bobject%20Object%5D&name=image.png&originHeight=184&originWidth=686&originalType=binary&ratio=1&size=26724&status=done&style=none&width=343)
+
 关于更多关于 docker-compose 的详情，可以查看网上关于 docker-compose 的使用方法。
