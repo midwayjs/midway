@@ -606,10 +606,10 @@ describe('/test/baseFramework.test.ts', () => {
       return data1;
     });
 
-    expect(await fn({})).toEqual({"error": undefined, "result": "hello world abc"});
+    expect(await fn({})).toEqual('hello world abc');
 
     data1 = 'efg';
-    expect(await fn({})).toEqual({"error": undefined, "result": "hello world efg"});
+    expect(await fn({})).toEqual('hello world efg');
   });
 
   it('should test middleware manager with compose', async () => {
@@ -667,7 +667,7 @@ describe('/test/baseFramework.test.ts', () => {
       middlewareManager
     );
 
-    expect(await composeMiddleware({})).toEqual({"error": undefined, "result": "hello world gogogo, zhangting"});
+    expect(await composeMiddleware({})).toEqual('hello world gogogo, zhangting');
   });
 
 });

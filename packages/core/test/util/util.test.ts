@@ -7,7 +7,8 @@ import {
   delegateTargetPrototypeMethod,
   delegateTargetMethod,
   delegateTargetProperties,
-  transformRequestObjectByType
+  transformRequestObjectByType,
+  isIncludeProperty
 } from '../../src/util';
 import { PathFileUtil } from '../../src';
 
@@ -165,4 +166,10 @@ describe('/test/pathFileUtil.test.ts', () => {
     expect(result.invoke()).toEqual(3);
   });
 
+  it('should test object property writable', function () {
+    const context = require('koa/lib/context');
+    const newContext = Object.create(context);
+    expect(isIncludeProperty(newContext, 'body')).toBeTruthy();
+    expect(isIncludeProperty(newContext, 'xxx')).toBeFalsy();
+  });
 });

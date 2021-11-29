@@ -249,3 +249,18 @@ export function toPathMatch(pattern) {
     'match/ignore pattern must be RegExp, Array or String, but got ' + pattern
   );
 }
+
+function isOwnPropertyWritable(obj: any, prop: string): boolean {
+  if (obj == null) return false;
+  const type = typeof obj;
+  if (type !== 'object' && type !== 'function') return false;
+  return !!Object.getOwnPropertyDescriptor(obj, prop);
+}
+
+export function isIncludeProperty(obj: any, prop: string): boolean {
+  while (obj) {
+    if (isOwnPropertyWritable(obj, prop)) return true;
+    obj = Object.getPrototypeOf(obj);
+  }
+  return false;
+}

@@ -6,7 +6,7 @@ import {
   FunctionMiddleware,
 } from '../interface';
 import { MidwayCommonError, MidwayParameterError } from '../error';
-import { toPathMatch } from '../util';
+import { isIncludeProperty, toPathMatch } from '../util';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -71,6 +71,7 @@ export class MidwayMiddlewareService<T, R, N = unknown> {
      * @api public
      */
     const composeFn = (context, next?) => {
+      const supportBody = isIncludeProperty(context, 'body');
       // last called middleware #
       let index = -1;
       return dispatch(0);
@@ -85,11 +86,27 @@ export class MidwayMiddlewareService<T, R, N = unknown> {
         if (i === newMiddlewareArr.length) fn = next;
         if (!fn) return Promise.resolve();
         try {
-          return Promise.resolve(
-            fn(context, dispatch.bind(null, i + 1), {
-              index,
-            } as any)
-          );
+          if (supportBody) {
+            return Promise.resolve(
+              fn(context, dispatch.bind(null, i + 1), {
+                index,
+              } as any)
+            ).then(result => {
+              // need to set body
+              if (context.body && !result) {
+                result = context.body;
+              } else if (result && context.body !== result) {
+                context.body = result;
+              }
+              return result;
+            });
+          } else {
+            return Promise.resolve(
+              fn(context, dispatch.bind(null, i + 1), {
+                index,
+              } as any)
+            );
+          }
         } catch (err) {
           return Promise.reject(err);
         }

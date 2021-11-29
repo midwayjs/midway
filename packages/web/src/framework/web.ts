@@ -87,19 +87,12 @@ export class MidwayWebFramework extends BaseFramework<
     if (!this.isClusterMode) {
       await this.initSingleProcessEgg();
     }
-
     // insert error handler
     this.app.use(async (ctx, next) => {
       // this.app.createAnonymousContext(ctx);
-      const { result, error } = await (
+      await (
         await this.getMiddleware()
       )(ctx as any, next);
-      if (error) {
-        throw error;
-      }
-      if (result) {
-        ctx.body = result;
-      }
     });
 
     this.generator = new EggControllerGenerator(

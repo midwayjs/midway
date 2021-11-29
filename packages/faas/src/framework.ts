@@ -5,6 +5,7 @@ import {
 } from './interface';
 import {
   BaseFramework,
+  ContextMiddlewareManager,
   FunctionMiddleware,
   IMidwayBootstrapOptions,
   MidwayEnvironmentService,
@@ -12,7 +13,6 @@ import {
   MidwayMiddlewareService,
   RouterInfo,
   ServerlessTriggerCollector,
-  ContextMiddlewareManager,
 } from '@midwayjs/core';
 import {
   Framework,
@@ -152,11 +152,7 @@ export class MidwayFaaSFramework extends BaseFramework<
         middlewareManager
       );
 
-      const { error, result } = await composeMiddleware(context);
-      if (error) {
-        throw error;
-      }
-      return result;
+      return await composeMiddleware(context);
     };
   }
 

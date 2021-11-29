@@ -91,12 +91,13 @@ export class MidwayRabbitMQFramework extends BaseFramework<
                 return await ins[listenerOptions.propertyKey].call(ins, data);
               });
 
-              const { result, error } = await fn(ctx);
-              if (error) {
+              try {
+                const result = await fn(ctx);
+                if (result) {
+                  return channelWrapper.ack(data);
+                }
+              } catch (error) {
                 this.logger.error(error);
-              }
-              if (result) {
-                return channelWrapper.ack(data);
               }
             }
           );
