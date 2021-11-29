@@ -321,7 +321,7 @@ describe('/test/services/middlewareService.test.ts', () => {
 
 
   describe('test middlewareService', () => {
-    it('middleware service should be ok', async() => {
+    it('middleware service should be ok', async () => {
 
       @Provide()
       class TestMiddleware1 {
@@ -355,7 +355,7 @@ describe('/test/services/middlewareService.test.ts', () => {
       expect(result).toEqual('hello world');
     });
 
-    it('test compose with compose should be ok', async() => {
+    it('test compose should be ok', async () => {
 
       @Provide()
       class TestMiddleware1 {
@@ -388,6 +388,60 @@ describe('/test/services/middlewareService.test.ts', () => {
       expect(result).toEqual('hello world');
     });
 
+    it('middleware service with body should be ok', async () => {
+
+      @Provide()
+      class TestMiddleware {
+        resolve() {
+          return async (ctx, next) => {
+            await next();
+            return 'ddd' + ctx.body;
+          }
+        }
+      }
+
+      @Provide()
+      class TestMiddleware1 {
+        resolve() {
+          return async (ctx, next) => {
+            ctx.body = 'abc' + await next();
+          }
+        }
+      }
+
+      @Provide()
+      class TestMiddleware2 {
+        resolve() {
+          return async (ctx, next) => {
+            return 'hello ' + await next();
+          }
+        }
+      }
+
+      @Provide()
+      class TestMiddleware3 {
+        resolve() {
+          return async (ctx, next) => {
+            ctx.body = 'world';
+          }
+        }
+      }
+
+      const container = new MidwayContainer();
+      container.bindClass(MidwayMiddlewareService);
+      container.bindClass(TestMiddleware);
+      container.bindClass(TestMiddleware1);
+      container.bindClass(TestMiddleware2);
+      container.bindClass(TestMiddleware3);
+
+      const middlewareService = await container.getAsync(MidwayMiddlewareService, [container]);
+      const fn = await middlewareService.compose([TestMiddleware, TestMiddleware1, TestMiddleware2, TestMiddleware3]);
+      const result = await fn({body: ''}, () => {
+        console.log('end');
+      });
+
+      expect(result).toEqual('dddabchello world');
+    });
   });
 
 });
