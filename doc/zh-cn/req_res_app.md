@@ -33,10 +33,9 @@ import { Application, Context } from '@midwayjs/rabbitmq';
 
 比如在以 EggJS 为上层 Web 框架代码中，我们可以这样获取到对应的 ctx 实例。
 ```typescript
-import { Inject, Controller, Get, Provide } from '@midwayjs/decorator';
+import { Inject, Controller, Get } from '@midwayjs/decorator';
 import { Context } from 'egg';
 
-@Provide()
 @Controller('/')
 export class HomeController {
 
@@ -51,10 +50,9 @@ export class HomeController {
 ```
 而 Koa 和 Express 则是不同的用法。Koa 示例如下。
 ```typescript
-import { Inject, Controller, Get, Provide } from '@midwayjs/decorator';
+import { Inject, Controller, Get } from '@midwayjs/decorator';
 import { Context } from '@midwayjs/koa';
 
-@Provide()
 @Controller('/')
 export class HomeController {
 

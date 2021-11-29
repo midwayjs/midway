@@ -47,9 +47,8 @@
 ```typescript
 // src/controller/home.ts
 
-import { Controller, Get, Provide } from '@midwayjs/decorator';
+import { Controller, Get } from '@midwayjs/decorator';
 
-@Provide()
 @Controller('/')
 export class HomeController {
 
@@ -75,9 +74,8 @@ export class HomeController {
 ```typescript
 // src/controller/home.ts
 
-import { Controller, Get, Provide } from '@midwayjs/decorator';
+import { Controller, Get } from '@midwayjs/decorator';
 
-@Provide()
 @Controller('/')
 export class HomeController {
 
@@ -140,9 +138,8 @@ export interface User {
 ```typescript
 // src/controller/user.ts
 
-import { Controller, Provide } from "@midwayjs/decorator";
+import { Controller } from "@midwayjs/decorator";
 
-@Provide()
 @Controller('/api/user')
 export class UserController {
 	// xxxx
@@ -158,35 +155,25 @@ Midway 添加了常见的动态取值的装饰器，我们以 `@Query` 装饰器
 ```typescript
 // src/controller/user.ts
 
-import { Controller, Provide, Get, Query } from "@midwayjs/decorator";
+import { Controller, Get, Query } from "@midwayjs/decorator";
 
-@Provide()
 @Controller('/api/user')
 export class UserController {
 	@Get('/')
-  async getUser(@Query() id: string): Promise<User> {
+  async getUser(@Query('id') id: string): Promise<User> {
     // xxxx
   }
 }
 ```
 
 
-`@Query`  装饰器的有参数，可以传入一个指定的字符串 key，获取对应的值，赋值给入参，如果不传入，则默认的字符串 key 为参数名。
+`@Query`  装饰器的有参数，可以传入一个指定的字符串 key，获取对应的值，赋值给入参，如果不传入，则默认返回整个 Query 对象。
 ```typescript
-// 下面两种写法相同
-async getUser(@Query() id: string)
-async getUser(@Query('id') id: string)
-
-// 可以修改参数名，这个时候为了取到值就必须修改装饰器的参数
 // URL = /?id=1
-async getUser(@Query('id') uid: string)  // uid = 1
+async getUser(@Query('id') id: string) // id = 1
+async getUser(@Query() queryData) // {"id": "1"}
 ```
-有时候，我们希望拿到整个 Query 对象的值，Midway 提供了一个特殊的 key，用于指定获取整个对象。
-```typescript
-import { ALL } from "@midwayjs/decorator";
 
-async getUser(@Query(ALL) queryObject: object)  // queryObject = {"id": 1}
-```
 Midway 提供了更多从 Query、Body 、Header 等位置获取值的装饰器，这些都是开箱即用，并且适配于不同的上层 Web 框架。
 
 
@@ -205,12 +192,6 @@ Midway 提供了更多从 Query、Body 、Header 等位置获取值的装饰器�
 |  |  |  |
 
 
-
-:::info
-注意：ALL 这个 key 这些装饰器都可用， `ALL`  和 `All`  是不同的， `ALL` 用来获取到所有的属性，是一个变量，而 `All` 是一个装饰器，用于匹配所有 method 的请求。
-:::
-
-
 :::warning
 **注意 **@Queries 装饰器和 @Query **有所区别**。
 
@@ -220,18 +201,17 @@ Queries 会将相同的 key 聚合到一起，变为数组。当用户访问的�
 
 
 
-
 **示例：获取单个 body**
 ```typescript
 @Post('/')
-async updateUser(@Body() id: string): Promise<User> {
+async updateUser(@Body('id') id: string): Promise<User> {
   // id 等价于 ctx.request.body.id
 }
 ```
 **示例：所有 body 参数**
 ```typescript
 @Post('/')
-async updateUser(@Body(ALL) user: User): Promise<User> {
+async updateUser(@Body() user: User): Promise<User> {
   // user 等价于 ctx.request.body 整个 body 对象
 }
 ```
@@ -241,7 +221,7 @@ async updateUser(@Body(ALL) user: User): Promise<User> {
 装饰器可以组合使用。
 ```typescript
 @Post('/')
-async updateUser(@Body(ALL) user: User, @Query() pageIdx: number): Promise<User> {
+async updateUser(@Body() user: User, @Query('pageIdx') pageIdx: number): Promise<User> {
   // user 从 body 获取
   // pageIdx 从 query 获取
 }
@@ -249,7 +229,7 @@ async updateUser(@Body(ALL) user: User, @Query() pageIdx: number): Promise<User>
 **示例：获取 param 参数**
 ```typescript
 @Get('/api/user/:uid')
-async findUser(@Param() uid: string): Promise<User> {
+async findUser(@Param('uid') uid: string): Promise<User> {
   // uid 从路由参数中获取
 }
 ```
@@ -271,10 +251,36 @@ async findUser(@Param() uid: string): Promise<User> {
 ```typescript
 @Post('/')
 async updateUser(
-  @Body() id: string,
+  @Body('id') id: string,
   @RequestPath() p: string,
   @RequestIP() ip: string): Promise<User> {
 
+}
+```
+
+## 请求参数类型转换
+
+如果是简单类型，Midway 会自动将参数转换为用户声明的类型。
+
+比如：
+
+数字类型
+
+```ts
+@Get('/')
+async getUser(@Query('id') id: number): Promise<User> {
+  console.log(typeof id)  // number
+}
+```
+
+布尔类型
+
+- 当值为 0，"0", "false" 则转为 false，其余返回 Boolean(value) 的值
+
+```ts
+@Get('/')
+async getUser(@Query('id') id: boolean): Promise<User> {
+  console.log(typeof id)  // boolean
 }
 ```
 
@@ -286,9 +292,8 @@ async updateUser(
 
 
 ```typescript
-import { Controller, Get, Provide, HttpCode } from "@midwayjs/decorator";
+import { Controller, Get, HttpCode } from "@midwayjs/decorator";
 
-@Provide()
 @Controller('/')
 export class HomeController {
 
@@ -310,9 +315,8 @@ export class HomeController {
 
 Midway 提供 `@SetHeader` 装饰器来简单的设置自定义响应头。
 ```typescript
-import { Controller, Get, Provide, SetHeader } from "@midwayjs/decorator";
+import { Controller, Get, SetHeader } from "@midwayjs/decorator";
 
-@Provide()
 @Controller('/')
 export class HomeController {
 
@@ -328,9 +332,8 @@ export class HomeController {
 
 
 ```typescript
-import { Controller, Get, Provide, SetHeader } from "@midwayjs/decorator";
+import { Controller, Get, SetHeader } from "@midwayjs/decorator";
 
-@Provide()
 @Controller('/')
 export class HomeController {
 
@@ -355,9 +358,8 @@ export class HomeController {
 
 
 ```typescript
-import { Controller, Get, Provide, Redirect } from "@midwayjs/decorator";
+import { Controller, Get, Redirect } from "@midwayjs/decorator";
 
-@Provide()
 @Controller('/')
 export class LoginController {
 
@@ -393,9 +395,8 @@ export class LoginController {
 
 
 ```typescript
-import { Controller, Get, Provide, ContentType } from "@midwayjs/decorator";
+import { Controller, Get, ContentType } from "@midwayjs/decorator";
 
-@Provide()
 @Controller('/')
 export class HomeController {
 
