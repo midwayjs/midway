@@ -149,19 +149,17 @@ export class MidwaySocketIOFramework extends BaseFramework<
             // on user custom event
             socket.on(wsEventInfo.messageEventName, async (...args) => {
               debug('got message', wsEventInfo.messageEventName, args);
-              const { result, error } = await (
-                await this.getMiddleware(async (ctx, next) => {
-                  // eslint-disable-next-line prefer-spread
-                  return controller[wsEventInfo.propertyName].apply(
-                    controller,
-                    args
-                  );
-                })
-              )(socket);
 
-              if (error) {
-                this.logger.error(error);
-              } else {
+              try {
+                const result = await (
+                  await this.getMiddleware(async (ctx, next) => {
+                    // eslint-disable-next-line prefer-spread
+                    return controller[wsEventInfo.propertyName].apply(
+                      controller,
+                      args
+                    );
+                  })
+                )(socket);
                 if (typeof args[args.length - 1] === 'function') {
                   // ack
                   args[args.length - 1](result);
@@ -174,6 +172,8 @@ export class MidwaySocketIOFramework extends BaseFramework<
                     methodMap
                   );
                 }
+              } catch (error) {
+                this.logger.error(error);
               }
             });
           } else if (

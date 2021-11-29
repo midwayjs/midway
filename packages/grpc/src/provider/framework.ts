@@ -200,15 +200,14 @@ export class MidwayGRPCFramework extends BaseFramework<
       );
     });
 
-    const { result, error } = await fn(ctx);
-
-    if (error) {
-      callback && callback(error);
-    } else {
+    try {
+      const result = await fn(ctx);
       if (grpcMethodData.type === GrpcStreamTypeEnum.BASE) {
         // base 才返回，其他的要等服务端自己 end，或者等客户端 end 事件才结束
         callback && callback(null, result);
       }
+    } catch (err) {
+      callback && callback(err);
     }
   }
 

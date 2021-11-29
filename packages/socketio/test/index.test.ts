@@ -153,8 +153,8 @@ describe('/test/index.test.ts', () => {
       name: 'harry',
     });
 
-    await closeApp(app);
     await client.close();
+    await closeApp(app);
   });
 
   it('should test create socket app and throw error', async () => {

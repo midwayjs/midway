@@ -61,13 +61,9 @@ export class MidwayKoaFramework extends BaseFramework<
     onerror(this.app, this.configurationOptions.onerror);
     this.app.use(async (ctx, next) => {
       this.app.createAnonymousContext(ctx);
-      const { result, error } = await (await this.getMiddleware())(ctx, next);
-      if (error) {
-        throw error;
-      }
-      if (result) {
-        ctx.body = result;
-      }
+      await (
+        await this.getMiddleware()
+      )(ctx, next);
     });
 
     this.generator = new KoaControllerGenerator(

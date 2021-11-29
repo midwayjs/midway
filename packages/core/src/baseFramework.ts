@@ -306,7 +306,10 @@ export abstract class BaseFramework<
         } catch (err) {
           returnResult = await this.filterManager.runErrorFilter(err, ctx);
         }
-        return returnResult;
+        if (returnResult.error) {
+          throw returnResult.error;
+        }
+        return returnResult.result;
       }) as any);
       this.composeMiddleware = await this.middlewareService.compose(
         this.middlewareManager
