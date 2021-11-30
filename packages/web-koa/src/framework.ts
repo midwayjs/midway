@@ -8,6 +8,7 @@ import {
   PathFileUtil,
   RouterInfo,
   WebControllerGenerator,
+  MidwayConfigMissingError,
 } from '@midwayjs/core';
 
 import { Framework } from '@midwayjs/decorator';
@@ -58,6 +59,14 @@ export class MidwayKoaFramework extends BaseFramework<
       DefaultState,
       IMidwayKoaContext
     >() as IMidwayKoaApplication;
+    const appKeys =
+      this.configurationOptions['keys'] ||
+      this.configService.getConfiguration('keys');
+    if (appKeys) {
+      this.app.keys = appKeys;
+    } else {
+      throw new MidwayConfigMissingError('koa.keys');
+    }
     onerror(this.app, this.configurationOptions.onerror);
     this.app.use(async (ctx, next) => {
       this.app.createAnonymousContext(ctx);
