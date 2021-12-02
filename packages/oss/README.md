@@ -5,7 +5,7 @@
 
 this is a sub package for midway.
 
-Document: [https://midwayjs.org/midway](https://midwayjs.org/midway)
+Document: [https://midwayjs.org/docs/oss](https://midwayjs.org/docs/oss)
 
 ## License
 
