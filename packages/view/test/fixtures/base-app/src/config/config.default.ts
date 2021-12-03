@@ -6,3 +6,7 @@ export const view = {
   },
   keys: '123',
 };
+
+export const koa = {
+  keys: ['123']
+}

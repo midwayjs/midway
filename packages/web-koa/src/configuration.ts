@@ -8,6 +8,16 @@ import { extractKoaLikeValue, MidwayDecoratorService } from '@midwayjs/core';
 
 @Configuration({
   namespace: 'koa',
+  importConfigs: [
+    {
+      default: {
+        koa: {
+          keys: [],
+          onerror: {},
+        },
+      },
+    },
+  ],
 })
 export class KoaConfiguration {
   @Inject()

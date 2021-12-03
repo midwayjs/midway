@@ -1,5 +1,5 @@
 import { createApp, close } from '@midwayjs/mock';
-import { Framework } from '@midwayjs/koa'
+import { Framework } from '@midwayjs/koa';
 import { join } from 'path';
 import { UserService } from './fixtures/sequelize-demo/src/service/user'
 
