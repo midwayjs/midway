@@ -7,3 +7,7 @@ export const sequelize = {
   },
   sync: true
 }
+
+export const koa = {
+  keys: ['123']
+}
