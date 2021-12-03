@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/validate",
-  "version": "3.0.0-beta.6",
+  "version": "3.0.0-beta.7",
   "description": "Midway Component for mongoose",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -25,8 +25,8 @@
     "joi": "^17.2.1"
   },
   "devDependencies": {
-    "@midwayjs/core": "^3.0.0-beta.6",
-    "@midwayjs/decorator": "^3.0.0-beta.6",
-    "@midwayjs/mock": "^3.0.0-beta.6"
+    "@midwayjs/core": "^3.0.0-beta.7",
+    "@midwayjs/decorator": "^3.0.0-beta.7",
+    "@midwayjs/mock": "^3.0.0-beta.7"
   }
 }

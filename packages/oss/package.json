@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/oss",
   "description": "midway oss component",
-  "version": "3.0.0-beta.6",
+  "version": "3.0.0-beta.7",
   "main": "dist/index",
   "typings": "index.d.ts",
   "files": [
@@ -10,9 +10,9 @@
     "index.d.ts"
   ],
   "devDependencies": {
-    "@midwayjs/core": "^3.0.0-beta.6",
-    "@midwayjs/decorator": "^3.0.0-beta.6",
-    "@midwayjs/mock": "^3.0.0-beta.6",
+    "@midwayjs/core": "^3.0.0-beta.7",
+    "@midwayjs/decorator": "^3.0.0-beta.7",
+    "@midwayjs/mock": "^3.0.0-beta.7",
     "@types/ali-oss": "^6.0.10",
     "dotenv": "^10.0.0"
   },

@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/info",
   "description": "midway info",
-  "version": "3.0.0-beta.6",
+  "version": "3.0.0-beta.7",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "files": [
@@ -9,11 +9,11 @@
     "dist/**/*.d.ts"
   ],
   "devDependencies": {
-    "@midwayjs/core": "^3.0.0-beta.6",
-    "@midwayjs/decorator": "^3.0.0-beta.6",
-    "@midwayjs/mock": "^3.0.0-beta.6",
-    "@midwayjs/serverless-fc-starter": "^3.0.0-beta.6",
-    "@midwayjs/serverless-scf-starter": "^3.0.0-beta.6"
+    "@midwayjs/core": "^3.0.0-beta.7",
+    "@midwayjs/decorator": "^3.0.0-beta.7",
+    "@midwayjs/mock": "^3.0.0-beta.7",
+    "@midwayjs/serverless-fc-starter": "^3.0.0-beta.7",
+    "@midwayjs/serverless-scf-starter": "^3.0.0-beta.7"
   },
   "keywords": [
     "midway"
