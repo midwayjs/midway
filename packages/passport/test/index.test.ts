@@ -4,110 +4,168 @@ import { Framework as KoaFramework } from '@midwayjs/koa';
 import { Framework as EggFramework } from '@midwayjs/web';
 import { join } from 'path';
 
-describe('Express passport', () => {
-  let app = null;
-
-  beforeAll(async () => {
-    process.env['MIDWAY_PASSPORT_MODE'] = 'express'
-    try {
-      app = await createApp(
+describe('/test/index.test.ts', () => {
+  describe('Express passport', () => {
+    it('basic local auth', async () => {
+      process.env['MIDWAY_PASSPORT_MODE'] = 'express'
+      const app = await createApp(
         join(__dirname, 'fixtures', 'passport-express'),
         {},
         ExpressFramework
       );
-    } catch (e) {
-      console.error(e);
-    }
+
+      const request = createHttpRequest(app);
+
+      let result = await request.get('/local-passport')
+
+      expect(result.status).toEqual(302);
+      expect(result.text).toEqual('Found. Redirecting to /login');
+
+      result = await request
+        .get('/local-passport')
+        .query({ username: 'admin', password: '123' })
+
+      expect(result.status).toEqual(200);
+      expect(result.text).toEqual('success');
+
+      process.env['MIDWAY_PASSPORT_MODE'] = undefined;
+      await close(app);
+    });
+
+    it('passport with session', async () => {
+      process.env['MIDWAY_PASSPORT_MODE'] = 'express'
+      const app = await createApp(
+        join(__dirname, 'fixtures', 'passport-express-session'),
+        {},
+        ExpressFramework
+      );
+
+      const request = createHttpRequest(app);
+
+      let result = await request.get('/local-passport')
+
+      expect(result.status).toEqual(302);
+      expect(result.text).toEqual('Found. Redirecting to /login');
+
+      result = await request
+        .get('/local-passport')
+        .query({ username: 'admin', password: '123' })
+
+      expect(result.text).toEqual('success');
+      expect(result.status).toEqual(200);
+
+      result = await request
+        .get('/local-passport')
+        .set({
+          cookie: result.headers['set-cookie']
+        })
+
+      expect(result.status).toEqual(200);
+      expect(result.text).toEqual('success');
+
+      process.env['MIDWAY_PASSPORT_MODE'] = undefined;
+      await close(app);
+    });
   });
 
-  afterAll(async () => {
-    process.env['MIDWAY_PASSPORT_MODE'] = undefined;
-    await close(app);
+  describe('Egg passport', () => {
+    it('test passport with egg', async () => {
+      const app = await createApp(
+        join(__dirname, 'fixtures', 'passport-web'),
+        {},
+        EggFramework
+      );
+
+      const request = createHttpRequest(app);
+
+      let result = await request.get('/')
+
+      expect(result.status).toEqual(302);
+      expect(result.text).toEqual('Redirecting to <a href=\"/login\">/login</a>.');
+
+      result = await request
+        .get('/')
+        .query({ username: 'admin', password: '123' })
+
+      expect(result.status).toEqual(302);
+      expect(result.text).toEqual('Redirecting to <a href=\"/\">/</a>.');
+
+      result = await request
+        .get('/')
+        .set({
+          cookie: result.headers['set-cookie']
+        })
+
+      expect(result.status).toEqual(200);
+
+      await close(app);
+    });
   });
 
-  it('basic local auth', async () => {
-    let result = await createHttpRequest(app)
-      .get('/local-passport')
-      .query({ username: 'admin', password: '123' });
+  describe('koa passport', () => {
 
-    expect(result.status).toEqual(200);
-    expect(result.text).toEqual('success');
-  });
+    it('should start koa app with pure passport', async () => {
+      const app = await createApp(
+        join(__dirname, 'fixtures', 'passport-koa'),
+        {},
+        KoaFramework
+      );
 
-  it('BootStrategy useParams', async () => {
-    let result = await createHttpRequest(app)
-      .get('/local-passport2')
-      .query({ username: 'admin', pwd: '123' });
+      const request = createHttpRequest(app);
 
-    expect(result.status).toEqual(200);
-    expect(result.text).toEqual('success');
-  });
-});
+      let result = await request.get('/')
 
-describe('Koa passport', () => {
-  let app = null;
+      expect(result.status).toEqual(302);
+      expect(result.text).toEqual('Redirecting to <a href=\"/login\">/login</a>.');
 
-  beforeAll(async () => {
-    app = await createApp(
-      join(__dirname, 'fixtures', 'passport-web'),
-      {},
-      KoaFramework
-    );
-  });
+      result = await request
+        .get('/')
+        .query({ username: 'admin', password: '123' })
 
-  afterAll(async () => {
-    await close(app);
-  });
+      expect(result.status).toEqual(302);
+      expect(result.text).toEqual('Redirecting to <a href=\"/\">/</a>.');
 
-  it('basic local passport inspect', async () => {
-    let result = await createHttpRequest(app)
-      .get('/local-passport')
-      .query({ username: 'admin', password: '123' });
+      result = await request
+        .get('/')
+        .set({
+          cookie: result.headers['set-cookie']
+        })
 
-    expect(result.status).toEqual(200);
-    expect(result.text).toEqual('success');
-  });
+      expect(result.status).toEqual(200);
 
-  it('BootStrategy useParams', async () => {
-    let result = await createHttpRequest(app)
-      .get('/local-passport2')
-      .query({ username: 'admin', pwd: '123' });
+      await close(app);
+    });
 
-    expect(result.status).toEqual(200);
-    expect(result.text).toEqual('success');
-  });
-});
+    it('should start koa app and session with passport', async () => {
+      const app = await createApp(
+        join(__dirname, 'fixtures', 'passport-koa-session'),
+        {},
+        KoaFramework
+      );
 
-describe('Egg passport', () => {
-  let app = null;
+      const request = createHttpRequest(app);
 
-  beforeAll(async () => {
-    app = await createApp(
-      join(__dirname, 'fixtures', 'passport-web'),
-      {},
-      EggFramework
-    );
-  });
+      let result = await request.get('/')
 
-  afterAll(async () => {
-    await close(app);
-  });
+      expect(result.status).toEqual(302);
+      expect(result.text).toEqual('Redirecting to <a href=\"/login\">/login</a>.');
 
-  it('basic local auth', async () => {
-    let result = await createHttpRequest(app)
-      .get('/local-passport')
-      .query({ username: 'admin', password: '123' });
+      result = await request
+        .get('/')
+        .query({ username: 'admin', password: '123' })
 
-    expect(result.status).toEqual(200);
-    expect(result.text).toEqual('success');
-  });
+      expect(result.status).toEqual(302);
+      expect(result.text).toEqual('Redirecting to <a href=\"/\">/</a>.');
 
-  it('BootStrategy useParams', async () => {
-    let result = await createHttpRequest(app)
-      .get('/local-passport2')
-      .query({ username: 'admin', pwd: '123' });
+      result = await request
+        .get('/')
+        .set({
+          cookie: result.headers['set-cookie']
+        })
 
-    expect(result.status).toEqual(200);
-    expect(result.text).toEqual('success');
+      expect(result.status).toEqual(200);
+
+      await close(app);
+    });
   });
 });

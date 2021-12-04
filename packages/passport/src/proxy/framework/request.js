@@ -24,6 +24,9 @@
 //
 // Until this is fixed, koa-passport tries to properly delegate every possible
 // used property/method.
+
+'use strict'
+
 // Property/Method names to be delegated
 let keys = [
   // passport
@@ -131,7 +134,7 @@ function getObject(ctx, key) {
 
 const IncomingMessageExt = require('passport/lib/http/request')
 
-export const create = function(ctx, userProperty) {
+exports.create = function(ctx, userProperty) {
   const req = Object.create(ctx.request, properties)
 
   Object.defineProperty(req, userProperty, {

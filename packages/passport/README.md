@@ -27,7 +27,7 @@ npm i koa-passport
 
 ## 使用
 这里我们以本地认证，和Jwt作为演示。
-​
+
 
 首先
 ```bash
@@ -288,5 +288,5 @@ export class AuthController {
 }
 
 ```
-​
+
 

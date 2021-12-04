@@ -6,7 +6,7 @@ export class TestPackagesController {
   @Inject()
   ctx;
 
-  @Get('/local-passport', { middleware: ['local'] })
+  @Get('/local-passport', )
   async localPassport() {
     if (
       this.ctx.req.user?.username === 'admin' &&

@@ -1,9 +1,16 @@
+'use strict'
+
+/**
+ * Module dependencies.
+ */
+const passport = require('passport')
+
 /**
  * Passport's default/connect middleware.
  */
 const _initialize   = require('passport/lib/middleware/initialize')
 const _authenticate = require('passport/lib/middleware/authenticate')
-import { create as createReqMock} from './request';
+const createReqMock = require('./request').create
 
 /**
  * Passport's initialization middleware for Koa.
@@ -11,7 +18,7 @@ import { create as createReqMock} from './request';
  * @return {GeneratorFunction}
  * @api private
  */
-export function initialize(passport) {
+function initialize(passport) {
   const middleware = promisify(_initialize(passport))
   return function passportInitialize(ctx, next) {
     // koa <-> connect compatibility:
@@ -36,7 +43,7 @@ export function initialize(passport) {
     // add Promise-based login method
     const login  = req.login
     ctx.login = ctx.logIn = function(user, options) {
-      return new Promise<void>((resolve, reject) => {
+      return new Promise((resolve, reject) => {
         login.call(req, user, options, err => {
           if (err) reject(err)
           else resolve()
@@ -64,7 +71,7 @@ export function initialize(passport) {
  * @return {GeneratorFunction}
  * @api private
  */
-export function authenticate(passport, name, options, callback) {
+function authenticate(passport, name, options, callback) {
   // normalize arguments
   if (typeof options === 'function') {
     callback = options
@@ -84,8 +91,8 @@ export function authenticate(passport, name, options, callback) {
     callback = function(err, user, info, status) {
       try {
         Promise.resolve(_callback(err, user, info, status))
-          .then(() => callback.resolve(false))
-          .catch(err => callback.reject(err))
+               .then(() => callback.resolve(false))
+               .catch(err => callback.reject(err))
       } catch (err) {
         callback.reject(err)
       }
@@ -155,11 +162,30 @@ export function authenticate(passport, name, options, callback) {
  * @return {GeneratorFunction}
  * @api private
  */
-export function authorize(passport, name, options, callback) {
+function authorize(passport, name, options, callback) {
   options = options || {}
   options.assignProperty = 'account'
 
   return authenticate(passport, name, options, callback)
+}
+
+/**
+ * Framework support for Koa.
+ *
+ * This module provides support for using Passport with Koa. It exposes
+ * middleware that conform to the `fn*(next)` signature and extends
+ * Node's built-in HTTP request object with useful authentication-related
+ * functions.
+ *
+ * @return {Object}
+ * @api protected
+ */
+module.exports = function() {
+  return {
+    initialize:   initialize,
+    authenticate: authenticate,
+    authorize:    authorize
+  }
 }
 
 function promisify(expressMiddleware) {

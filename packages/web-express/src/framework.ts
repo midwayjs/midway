@@ -94,13 +94,8 @@ export class MidwayExpressFramework extends BaseFramework<
     this.applicationContext.registerObject(HTTP_SERVER_KEY, this.server);
   }
 
-  protected async afterContainerReady(
-    options: Partial<IMidwayBootstrapOptions>
-  ): Promise<void> {
-    await this.loadMidwayController();
-  }
-
   public async run(): Promise<void> {
+    await this.loadMidwayController();
     if (this.configurationOptions.port) {
       new Promise<void>(resolve => {
         const args: any[] = [this.configurationOptions.port];

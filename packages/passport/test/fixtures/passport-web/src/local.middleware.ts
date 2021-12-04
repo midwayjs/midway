@@ -1,20 +1,14 @@
-import { WebPassportMiddleware } from '../../../../src';
+import { PassportMiddleware } from '../../../../src';
 import { Provide } from '@midwayjs/decorator';
+import * as passport from 'passport';
+import { CustomStrategy } from './local.strategy';
 
 @Provide('local')
-export class LocalPassportMiddleware extends WebPassportMiddleware {
-  public strategy: string = 'local';
-
-  public async auth(_ctx, _err, data) {
-    return data;
-  }
-}
-
-@Provide('local2')
-export class LocalPassportMiddleware2 extends WebPassportMiddleware {
-  public strategy: string = 'local2';
-
-  public async auth(_ctx, _err, data) {
-    return data;
+export class AuthMiddleware extends PassportMiddleware(CustomStrategy) {
+  getAuthenticateOptions(): Promise<passport.AuthenticateOptions> | passport.AuthenticateOptions {
+    return {
+      successRedirect: '/',
+      failureRedirect: '/login'
+    }
   }
 }

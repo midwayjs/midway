@@ -1,35 +1,27 @@
-import { BootStrategy } from '../../../../src/decorators';
-import { WebPassportStrategyAdapter } from '../../../../src';
-import { Strategy } from 'passport-local';
+import { PassportStrategy, Strategy } from '../../../../src';
+import * as LocalStrategy from 'passport-local';
 
-@BootStrategy()
-export class LocalStrategy extends WebPassportStrategyAdapter(
-  Strategy,
-  'local'
-) {
-  async verify(username, password) {
-    return {
-      username,
-      password,
-    };
+@Strategy()
+export class CustomStrategy extends PassportStrategy(LocalStrategy.Strategy, 'local') {
+
+  getStrategyConfig(): any {
+    return {};
   }
-}
 
-@BootStrategy({
-  async useParams() {
-    return {
-      passwordField: 'pwd',
-    };
-  },
-})
-export class LocalStrategy2 extends WebPassportStrategyAdapter(
-  Strategy,
-  'local2'
-) {
-  async verify(username, password) {
-    return {
-      username,
-      password,
-    };
+  validate(username, password): any {
+    return { username, password };
+  }
+
+  // serializeUser 在用户登录验证成功以后将会把用户的数据存储到 session 中
+  serializeUser(user, done) {
+    done(null, user.username);
+  }
+
+  // deserializeUser 在每次请求的时候将从 session 中读取用户对象
+  deserializeUser(user, done) {
+    done(null, {
+      username: 'admin',
+      password: '123'
+    });
   }
 }
