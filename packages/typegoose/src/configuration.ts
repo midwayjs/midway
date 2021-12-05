@@ -18,9 +18,6 @@ import { IMidwayApplication, MidwayDecoratorService } from '@midwayjs/core';
   imports: [mongoose],
 })
 export class TypegooseConfiguration {
-  @Inject()
-  connectionFactory: mongoose.MongooseConnectionServiceFactory;
-
   @Config('mongoose')
   oldMongooseConfig;
 
@@ -50,12 +47,15 @@ export class TypegooseConfiguration {
     );
   }
 
-  async onReady() {
+  async onReady(container) {
+    const connectionFactory = await container.getAsync(
+      mongoose.MongooseConnectionServiceFactory
+    );
     const Models = listModule(ENTITY_MODEL_KEY);
     for (const Model of Models) {
       const metadata = getClassMetadata(ENTITY_MODEL_KEY, Model) ?? {};
       const connectionName = metadata.connectionName ?? 'default';
-      const conn = this.connectionFactory.get(connectionName);
+      const conn = connectionFactory.get(connectionName);
       if (conn) {
         const model = getModelForClass(Model, { existingConnection: conn });
         this.modelMap.set(Model, model);
