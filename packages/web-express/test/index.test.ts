@@ -165,4 +165,20 @@ describe('/test/feature.test.ts', () => {
     await closeApp(app);
   });
 
+  describe('test router middleware', () => {
+    it('should test middleware in different router', async () => {
+      const app = await creatApp('base-app-middleware');
+      const result = await createHttpRequest(app)
+        .get('/');
+      expect(result.status).toEqual(200);
+      expect(result.text).toEqual('undefinedhello world');
+
+      const result1 = await createHttpRequest(app)
+        .get('/11');
+      expect(result1.status).toEqual(200);
+      expect(result1.text).toEqual('harryhello world11');
+      await closeApp(app);
+    });
+  });
+
 });

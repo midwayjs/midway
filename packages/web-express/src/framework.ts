@@ -37,7 +37,7 @@ export class MidwayExpressFramework extends BaseFramework<
   IMidwayExpressConfigurationOptions,
   Response,
   NextFunction
-> {
+  > {
   public app: IMidwayExpressApplication;
   private server: Server;
 
@@ -219,11 +219,12 @@ export class MidwayExpressFramework extends BaseFramework<
       // add route
       const routes = routerTable.get(routerInfo.prefix);
       for (const routeInfo of routes) {
+        const routeMiddlewareList = [];
         // router middleware
         await this.handlerWebMiddleware(
           routeInfo.middleware,
           middlewareImpl => {
-            newRouter.use(middlewareImpl);
+            routeMiddlewareList.push(middlewareImpl);
           }
         );
 
@@ -237,6 +238,7 @@ export class MidwayExpressFramework extends BaseFramework<
         newRouter[routeInfo.requestMethod].call(
           newRouter,
           routeInfo.url,
+          ...routeMiddlewareList,
           this.generateController(routeInfo)
         );
       }
@@ -255,13 +257,13 @@ export class MidwayExpressFramework extends BaseFramework<
   private async handlerWebMiddleware(
     middlewares: Array<
       CommonMiddleware<IMidwayExpressContext, Response, NextFunction> | string
-    >,
+      >,
     handlerCallback: (
       middlewareImpl: FunctionMiddleware<
         IMidwayExpressContext,
         Response,
         NextFunction
-      >
+        >
     ) => void
   ): Promise<void> {
     const fn = await this.expressMiddlewareService.compose(middlewares);
@@ -270,7 +272,7 @@ export class MidwayExpressFramework extends BaseFramework<
 
   public async getMiddleware<Response, NextFunction>(): Promise<
     MiddlewareRespond<IMidwayExpressContext, Response, NextFunction>
-  > {
+    > {
     if (!this.composeMiddleware) {
       this.composeMiddleware = await this.expressMiddlewareService.compose(
         this.middlewareManager

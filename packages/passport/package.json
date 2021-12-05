@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/passport",
   "description": "midway passport component",
-  "version": "0.0.1-alpha.15",
+  "version": "2.13.4",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
@@ -27,11 +27,12 @@
     "@midwayjs/koa": "^2.13.4",
     "@midwayjs/mock": "^2.13.4",
     "@midwayjs/web": "^2.13.4",
-    "@types/koa-passport": "^4.0.2",
+    "@midwayjs/jwt": "^2.13.4",
     "@types/passport": "^1.0.7",
-    "koa-passport": "^4.1.4",
+    "@types/passport-local": "^1.0.34",
     "passport": "^0.5.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "express-session": "^1.17.2"
   },
   "peerDependencies": {
     "koa-passport": "^4.1.4",

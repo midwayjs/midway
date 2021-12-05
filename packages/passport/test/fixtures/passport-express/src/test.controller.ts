@@ -17,16 +17,4 @@ export class TestPackagesController {
 
     return 'fail';
   }
-
-  @Get('/local-passport2', { middleware: ['local2'] })
-  async localPassport2(ctx) {
-    if (
-      this.ctx.req.user?.username === 'admin' &&
-      this.ctx.req.user?.password === '123'
-    ) {
-      return 'success';
-    }
-
-    return 'fail';
-  }
 }
