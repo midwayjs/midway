@@ -1,4 +1,4 @@
-import { PassportStrategy, Strategy } from '../../../../src';
+import { PassportStrategy, CustomStrategy as Strategy } from '../../../../src';
 import * as LocalStrategy from 'passport-local';
 
 @Strategy()

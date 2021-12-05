@@ -17,22 +17,30 @@ type JwtPayload = string | Buffer | Record<string, any>;
  */
 @Provide()
 @Scope(ScopeEnum.Singleton)
-export class JWTService {
+export class JwtService {
   @Config('jwt')
   private jwtConfig: any;
 
+  public signSync(payload: JwtPayload, options?: SignOptions): string;
   public signSync(
     payload: JwtPayload,
-    options: SignOptions = {},
-    secret?: Secret
-  ): string | void {
-    let expiresIn;
-    if (!secret) {
-      secret = this.jwtConfig?.secret;
+    secretOrPrivateKey: Secret,
+    options?: SignOptions
+  ): string;
+  public signSync(
+    payload: JwtPayload,
+    secretOrPrivateKey: any,
+    options?: any
+  ): string {
+    if (!options) {
+      options = secretOrPrivateKey;
+      secretOrPrivateKey = this.jwtConfig?.secret;
     }
-    if (!secret) {
+    if (!secretOrPrivateKey) {
       throw new Error('[midway-jwt]: jwt secret should be set');
     }
+
+    let expiresIn;
 
     if (options.expiresIn) {
       expiresIn = options.expiresIn;
@@ -44,7 +52,7 @@ export class JWTService {
 
     options.expiresIn = expiresIn;
 
-    return jwt.sign(payload, secret, options);
+    return jwt.sign(payload, secretOrPrivateKey, options);
   }
 
   /**
@@ -53,15 +61,25 @@ export class JWTService {
    */
   public async sign(
     payload: JwtPayload,
-    options: SignOptions = {},
-    secret?: Secret
-  ): Promise<string | void> {
-    let expiresIn;
-    if (!secret) {
-      secret = this.jwtConfig?.secret;
+    options?: SignOptions
+  ): Promise<string>;
+  public async sign(
+    payload: JwtPayload,
+    secretOrPrivateKey: Secret,
+    options?: SignOptions
+  ): Promise<string>;
+  public async sign(
+    payload: JwtPayload,
+    secretOrPrivateKey: any,
+    options?: any
+  ): Promise<string> {
+    if (!options) {
+      options = secretOrPrivateKey;
+      secretOrPrivateKey = this.jwtConfig?.secret;
     }
+    let expiresIn;
 
-    if (!secret) {
+    if (!secretOrPrivateKey) {
       throw new Error('[midway-jwt]: provide the jwt secret please');
     }
 
@@ -76,7 +94,7 @@ export class JWTService {
     options.expiresIn = expiresIn;
 
     return new Promise((resolve, reject) => {
-      jwt.sign(payload, secret, options, (err, encoded) => {
+      jwt.sign(payload, secretOrPrivateKey, options, (err, encoded) => {
         if (err) {
           reject(err);
         } else {
@@ -90,7 +108,7 @@ export class JWTService {
     token: string,
     options?: VerifyOptions & { complete: true },
     secret?: Secret
-  ): JWTService | string | JwtPayload {
+  ): JwtService | string | JwtPayload {
     if (!secret) {
       secret = this.jwtConfig?.secret;
     }
@@ -133,7 +151,7 @@ export class JWTService {
   public decodeSync(
     token: string,
     options?: DecodeOptions & { complete: true } & { json: true }
-  ): JWTService | null | JwtPayload | string {
+  ): JwtService | null | JwtPayload | string {
     return jwt.decode(token, options);
   }
 }

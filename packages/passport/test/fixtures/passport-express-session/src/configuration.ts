@@ -1,6 +1,6 @@
 import { App, Configuration, Provide } from '@midwayjs/decorator';
 import * as passport from 'passport';
-import { PassportMiddleware, PassportStrategy, Strategy } from '../../../../src';
+import { PassportMiddleware, PassportStrategy, CustomStrategy as Strategy } from '../../../../src';
 import * as path from 'path';
 import * as LocalStrategy from 'passport-local';
 import * as bodyParser from 'body-parser';

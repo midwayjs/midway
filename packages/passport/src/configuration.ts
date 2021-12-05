@@ -3,9 +3,7 @@ import {
   IMidwayApplication,
   IMidwayContainer,
 } from '@midwayjs/core';
-import {
-  Configuration,
-} from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/decorator';
 import * as DefaultConfig from './config/config.default';
 import { PassportService } from './service/passport';
 
@@ -13,7 +11,7 @@ import { PassportService } from './service/passport';
   namespace: 'passport',
   importConfigs: [
     {
-      default: DefaultConfig
+      default: DefaultConfig,
     },
   ],
 })

@@ -1,107 +1,22 @@
-import { createApp, close, createHttpRequest } from '@midwayjs/mock';
-import { Framework as ExpressFramework } from '@midwayjs/express';
-import { Framework as KoaFramework } from '@midwayjs/koa';
-import { Framework as EggFramework } from '@midwayjs/web';
+import { close, createLightApp } from '@midwayjs/mock';
+import { JwtService } from '../src';
 import { join } from 'path';
 
-describe('Express jwt', () => {
-  let app = null;
-  let token;
+describe('/test/index.test.ts', () => {
+  it('should test jwt service', async () => {
+    const app = await createLightApp(join(__dirname, './fixtures/base-app'));
+    const jwtService = await  app.getApplicationContext().getAsync(JwtService);
+    const secret = 'shhhhhh';
+    const asyncToken = await jwtService.sign({ foo: 'bar' }, secret, { algorithm: 'HS256' });
+    const syncToken = jwtService.signSync({ foo: 'bar' }, secret, { algorithm: 'HS256' });
+    expect(typeof asyncToken).toEqual('string');
+    expect((asyncToken as string).split('.')).toHaveLength(3);
+    expect(asyncToken).toEqual(syncToken);
 
-  beforeAll(async () => {
-    app = await createApp(
-      join(__dirname, 'fixtures', 'passport-express'),
-      {},
-      ExpressFramework
-    );
-  });
+    const asyncToken1 = await jwtService.sign({ foo: 'bar' }, { algorithm: 'HS256' });
+    const syncToken1 = jwtService.signSync({ foo: 'bar' }, { algorithm: 'HS256' });
+    expect(asyncToken1).toEqual(syncToken1);
 
-  afterAll(async () => {
     await close(app);
-    token = null;
-  });
-
-  it('generate token', async () => {
-    let result = await createHttpRequest(app).get('/gen-jwt');
-    token = result.text;
-    expect(result.status).toEqual(200);
-    expect(typeof result.text).toEqual('string');
-  });
-
-  it('Bearer token inspect', async () => {
-    let result = await createHttpRequest(app)
-      .get('/jwt-passport')
-      .set({ Authorization: `Bearer ${token}` });
-
-    expect(result.status).toEqual(200);
-    expect(result.text).toEqual('success');
-  });
-});
-
-describe('Koa jwt', () => {
-  let app = null;
-  let token;
-
-  beforeAll(async () => {
-    app = await createApp(
-      join(__dirname, 'fixtures', 'passport-web'),
-      {},
-      KoaFramework
-    );
-  });
-
-  afterAll(async () => {
-    await close(app);
-    token = null;
-  });
-
-  it('generate token', async () => {
-    let result = await createHttpRequest(app).get('/gen-jwt');
-    token = result.text;
-    expect(result.status).toEqual(200);
-    expect(typeof result.text).toEqual('string');
-  });
-
-  it('Bearer token inspect', async () => {
-    let result = await createHttpRequest(app)
-      .get('/jwt-passport')
-      .set({ Authorization: `Bearer ${token}` });
-
-    expect(result.status).toEqual(200);
-    expect(result.text).toEqual('success');
-  });
-});
-
-describe('Egg jwt', () => {
-  let app = null;
-  let token;
-
-  beforeAll(async () => {
-    app = await createApp(
-      join(__dirname, 'fixtures', 'passport-web'),
-      {},
-      EggFramework
-    );
-  });
-
-  afterAll(async () => {
-    await close(app);
-    token = null;
-  });
-
-  it('generate token', async () => {
-    let result = await createHttpRequest(app).get('/gen-jwt');
-    token = result.text;
-    expect(result.status).toEqual(200);
-    expect(typeof result.text).toEqual('string');
-  });
-
-  it('Bearer token inspect', async () => {
-    let result = await createHttpRequest(app)
-      .get('/jwt-passport')
-      .set({ Authorization: `Bearer ${token}` });
-
-    expect(result.status).toEqual(200);
-    expect(result.text).toEqual('success');
   });
 });

@@ -1,16 +1,16 @@
-'use strict'
+'use strict';
 
 /**
  * Module dependencies.
  */
-const passport = require('passport')
+const passport = require('passport');
 
 /**
  * Passport's default/connect middleware.
  */
-const _initialize   = require('passport/lib/middleware/initialize')
-const _authenticate = require('passport/lib/middleware/authenticate')
-const createReqMock = require('./request').create
+const _initialize = require('passport/lib/middleware/initialize');
+const _authenticate = require('passport/lib/middleware/authenticate');
+const createReqMock = require('./request').create;
 
 /**
  * Passport's initialization middleware for Koa.
@@ -19,47 +19,47 @@ const createReqMock = require('./request').create
  * @api private
  */
 function initialize(passport) {
-  const middleware = promisify(_initialize(passport))
+  const middleware = promisify(_initialize(passport));
   return function passportInitialize(ctx, next) {
     // koa <-> connect compatibility:
-    const userProperty = passport._userProperty || 'user'
+    const userProperty = passport._userProperty || 'user';
     // check ctx.req has the userProperty
+    // eslint-disable-next-line no-prototype-builtins
     if (!ctx.req.hasOwnProperty(userProperty)) {
       Object.defineProperty(ctx.req, userProperty, {
         enumerable: true,
-        get: function() {
-          return ctx.state[userProperty]
+        get: function () {
+          return ctx.state[userProperty];
         },
-        set: function(val) {
-          ctx.state[userProperty] = val
-        }
-      })
+        set: function (val) {
+          ctx.state[userProperty] = val;
+        },
+      });
     }
 
     // create mock object for express' req object
-    const req = createReqMock(ctx, userProperty)
-
+    const req = createReqMock(ctx, userProperty);
 
     // add Promise-based login method
-    const login  = req.login
-    ctx.login = ctx.logIn = function(user, options) {
+    const login = req.login;
+    ctx.login = ctx.logIn = function (user, options) {
       return new Promise((resolve, reject) => {
         login.call(req, user, options, err => {
-          if (err) reject(err)
-          else resolve()
-        })
-      })
-    }
+          if (err) reject(err);
+          else resolve();
+        });
+      });
+    };
 
     // add aliases for passport's request extensions to Koa's context
-    ctx.logout = ctx.logOut = req.logout.bind(req)
-    ctx.isAuthenticated     = req.isAuthenticated.bind(req)
-    ctx.isUnauthenticated   = req.isUnauthenticated.bind(req)
+    ctx.logout = ctx.logOut = req.logout.bind(req);
+    ctx.isAuthenticated = req.isAuthenticated.bind(req);
+    ctx.isUnauthenticated = req.isUnauthenticated.bind(req);
 
-    return middleware(req, ctx).then(function() {
-      return next()
-    })
-  }
+    return middleware(req, ctx).then(() => {
+      return next();
+    });
+  };
 }
 
 /**
@@ -74,10 +74,10 @@ function initialize(passport) {
 function authenticate(passport, name, options, callback) {
   // normalize arguments
   if (typeof options === 'function') {
-    callback = options
-    options  = {}
+    callback = options;
+    options = {};
   }
-  options = options || {}
+  options = options || {};
 
   if (callback) {
     // When the callback is set, neither `next`, `res.redirect` or `res.end`
@@ -87,70 +87,75 @@ function authenticate(passport, name, options, callback) {
     // finishes, the modified callback calls the original one and afterwards
     // triggers either `callback.resolve` or `callback.reject` to inform
     // `passportAuthenticate()` that we are ready.
-    const _callback = callback
-    callback = function(err, user, info, status) {
+    const _callback = callback;
+    callback = function (err, user, info, status) {
       try {
         Promise.resolve(_callback(err, user, info, status))
-               .then(() => callback.resolve(false))
-               .catch(err => callback.reject(err))
+          .then(() => callback.resolve(false))
+          .catch(err => callback.reject(err));
       } catch (err) {
-        callback.reject(err)
+        callback.reject(err);
       }
-    }
+    };
   }
 
-  const middleware = promisify(_authenticate(passport, name, options, callback))
+  const middleware = promisify(
+    _authenticate(passport, name, options, callback)
+  );
 
   return function passportAuthenticate(ctx, next) {
     // this functions wraps the connect middleware
     // to catch `next`, `res.redirect` and `res.end` calls
     const p = new Promise((resolve, reject) => {
       // mock the `req` object
-      const req = createReqMock(ctx, options.assignProperty || passport._userProperty || 'user')
+      const req = createReqMock(
+        ctx,
+        options.assignProperty || passport._userProperty || 'user'
+      );
 
       function setBodyAndResolve(content) {
-        if (content) ctx.body = content
-        resolve(false)
+        if (content) ctx.body = content;
+        resolve(false);
       }
 
       // mock the `res` object
       const res = {
-        redirect: function(url) {
-          ctx.redirect(url)
-          resolve(false)
+        redirect: function (url) {
+          ctx.redirect(url);
+          resolve(false);
         },
         set: ctx.set.bind(ctx),
         setHeader: ctx.set.bind(ctx),
         end: setBodyAndResolve,
         send: setBodyAndResolve,
         set statusCode(status) {
-          ctx.status = status
+          ctx.status = status;
         },
         get statusCode() {
-          return ctx.status
-        }
-      }
+          return ctx.status;
+        },
+      };
 
-      req.res = res
+      req.res = res;
 
       // update the custom callback above
       if (callback) {
-        callback.resolve = resolve
-        callback.reject  = reject
+        callback.resolve = resolve;
+        callback.reject = reject;
       }
 
       // call the connect middleware
-      middleware(req, res).then(resolve, reject)
-    })
+      middleware(req, res).then(resolve, reject);
+    });
 
     return p.then(cont => {
       // cont equals `false` when `res.redirect` or `res.end` got called
       // in this case, call next to continue through Koa's middleware stack
       if (cont !== false) {
-        return next()
+        return next();
       }
-    })
-  }
+    });
+  };
 }
 
 /**
@@ -163,10 +168,10 @@ function authenticate(passport, name, options, callback) {
  * @api private
  */
 function authorize(passport, name, options, callback) {
-  options = options || {}
-  options.assignProperty = 'account'
+  options = options || {};
+  options.assignProperty = 'account';
 
-  return authenticate(passport, name, options, callback)
+  return authenticate(passport, name, options, callback);
 }
 
 /**
@@ -180,21 +185,21 @@ function authorize(passport, name, options, callback) {
  * @return {Object}
  * @api protected
  */
-module.exports = function() {
+module.exports = function () {
   return {
-    initialize:   initialize,
+    initialize: initialize,
     authenticate: authenticate,
-    authorize:    authorize
-  }
-}
+    authorize: authorize,
+  };
+};
 
 function promisify(expressMiddleware) {
-  return function(req, res) {
-    return new Promise(function(resolve, reject) {
-      expressMiddleware(req, res, function(err, result) {
-        if (err) reject(err)
-        else resolve(result)
-      })
-    })
-  }
+  return function (req, res) {
+    return new Promise((resolve, reject) => {
+      expressMiddleware(req, res, (err, result) => {
+        if (err) reject(err);
+        else resolve(result);
+      });
+    });
+  };
 }

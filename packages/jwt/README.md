@@ -19,7 +19,7 @@ import { JWTService } from '@midwayjs/jwt';
 @Provide()
 class Demo {
   @Inject()
-  jwt: JWTService;
+  jwt: JwtService;
 }
 ```
 

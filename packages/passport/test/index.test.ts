@@ -168,4 +168,39 @@ describe('/test/index.test.ts', () => {
       await close(app);
     });
   });
+
+  describe('passport with jwt', () => {
+    let app = null;
+    let token;
+
+    beforeAll(async () => {
+      app = await createApp(
+        join(__dirname, 'fixtures', 'passport-express'),
+        {},
+        ExpressFramework
+      );
+    });
+
+    afterAll(async () => {
+      await close(app);
+      token = null;
+    });
+
+    it('generate token', async () => {
+      let result = await createHttpRequest(app).get('/gen-jwt');
+      token = result.text;
+      expect(result.status).toEqual(200);
+      expect(typeof result.text).toEqual('string');
+    });
+
+    it('Bearer token inspect', async () => {
+      let result = await createHttpRequest(app)
+        .get('/jwt-passport')
+        .set({ Authorization: `Bearer ${token}` });
+
+      expect(result.status).toEqual(200);
+      expect(result.text).toEqual('success');
+    });
+  });
+
 });

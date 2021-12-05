@@ -1,5 +1,12 @@
 import * as passport from 'passport';
-import { App, Config, Inject, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import {
+  App,
+  Config,
+  Inject,
+  Provide,
+  Scope,
+  ScopeEnum,
+} from '@midwayjs/decorator';
 import { getPassport, isExpressMode } from '../util';
 import { AbstractPassportMiddleware, AbstractStrategy } from '../interface';
 
@@ -8,42 +15,45 @@ export function PassportStrategy(
   name?: string
 ): new (...args) => AbstractStrategy {
   abstract class InnerStrategyAbstractClass extends AbstractStrategy {
-
     strategy;
+    inited = false;
 
     async initStrategy() {
-      const cb = async (...params: any[]) => {
-        const done = params[params.length - 1];
-        try {
-          const result = await this.validate(...params);
-          if (Array.isArray(result)) {
-            done(null, ...result);
-          } else {
-            done(null, result);
+      if (!this.inited) {
+        this.inited = true;
+        const cb = async (...params: any[]) => {
+          const done = params[params.length - 1];
+          try {
+            const result = await this.validate(...params);
+            if (Array.isArray(result)) {
+              done(null, ...result);
+            } else {
+              done(null, result);
+            }
+          } catch (err) {
+            done(err, null);
           }
-        } catch (err) {
-          done(err, null);
+        };
+
+        this.strategy = new Strategy(this.getStrategyConfig(), cb);
+
+        const passport = getPassport() as passport.PassportStatic;
+        if (name) {
+          passport.use(name, this.strategy);
+        } else {
+          passport.use(this.strategy);
         }
-      };
+        if (this['serializeUser']) {
+          passport.serializeUser(this['serializeUser']);
+        }
 
-      this.strategy = new Strategy(this.getStrategyConfig(), cb);
+        if (this['deserializeUser']) {
+          passport.deserializeUser(this['deserializeUser']);
+        }
 
-      const passport = getPassport() as passport.PassportStatic;
-      if (name) {
-        passport.use(name, this.strategy);
-      } else {
-        passport.use('default', this.strategy);
-      }
-      if (this['serializeUser']) {
-        passport.serializeUser(this['serializeUser']);
-      }
-
-      if (this['deserializeUser']) {
-        passport.deserializeUser(this['deserializeUser']);
-      }
-
-      if (this['transformAuthInfo']) {
-        passport.transformAuthInfo(this['transformAuthInfo']);
+        if (this['transformAuthInfo']) {
+          passport.transformAuthInfo(this['transformAuthInfo']);
+        }
       }
     }
     getStrategy() {
@@ -53,9 +63,12 @@ export function PassportStrategy(
   return InnerStrategyAbstractClass as any;
 }
 
-export function PassportMiddleware(type: (new (...args) => AbstractStrategy)): new (...args) => AbstractPassportMiddleware {
-  abstract class InnerPassportMiddleware extends AbstractPassportMiddleware {
+export type StrategyClass = new (...args) => AbstractStrategy;
 
+export function PassportMiddleware(
+  type: StrategyClass | StrategyClass[]
+): new (...args) => AbstractPassportMiddleware {
+  abstract class InnerPassportMiddleware extends AbstractPassportMiddleware {
     @Inject()
     passportService: PassportService;
 
@@ -67,16 +80,25 @@ export function PassportMiddleware(type: (new (...args) => AbstractStrategy)): n
       this.passportService.initMiddleware();
       if (isExpressMode()) {
         return async (req, res, next) => {
-          return this.authenticate(await this.getAuthenticateOptions())(req, res, next);
-        }
+          return this.authenticate(await this.getAuthenticateOptions())(
+            req,
+            res,
+            next
+          );
+        };
       } else {
         return async (ctx, next) => {
-          return this.authenticate(await this.getAuthenticateOptions())(ctx, next);
-        }
+          return this.authenticate(await this.getAuthenticateOptions())(
+            ctx,
+            next
+          );
+        };
       }
     }
 
-    getAuthenticateOptions(): Promise<passport.AuthenticateOptions> | passport.AuthenticateOptions {
+    getAuthenticateOptions():
+      | Promise<passport.AuthenticateOptions>
+      | passport.AuthenticateOptions {
       return undefined;
     }
   }
@@ -105,7 +127,14 @@ export class PassportService {
     }
   }
 
-  authenticate(strategy: (new (...args) => AbstractStrategy), options: passport.AuthenticateOptions): any {
+  authenticate(
+    strategy: StrategyClass | StrategyClass[],
+    options: passport.AuthenticateOptions
+  ): any {
+    if (!Array.isArray(strategy)) {
+      strategy = [strategy];
+    }
+
     if (isExpressMode()) {
       return async (req, res, next) => {
         // merge options with default options
@@ -122,20 +151,31 @@ export class PassportService {
           next();
         } else {
           const passport = getPassport() as passport.PassportStatic;
-          // got strategy
-          let strategyInstance = await this.app.getApplicationContext().getAsync(strategy);
-          await (strategyInstance as any).initStrategy();
+          const strategyList = [];
+          for (const strategySingle of strategy as StrategyClass[]) {
+            // got strategy
+            const strategyInstance = await this.app
+              .getApplicationContext()
+              .getAsync(strategySingle);
+            await (strategyInstance as any).initStrategy();
+            strategyList.push(strategyInstance.getStrategy());
+          }
+
           const user = await new Promise<any>((resolve, reject) => {
             // authenticate
-            passport.authenticate((strategyInstance as any).getStrategy(), authOptions, (err, user, info, status) => {
-              if (err) {
-                reject(err);
-              } else {
-                resolve(user);
+            passport.authenticate(
+              strategyList,
+              authOptions,
+              (err, user, info, status) => {
+                if (err) {
+                  reject(err);
+                } else {
+                  resolve(user);
+                }
               }
-            })(req, res, (err) => (err ? reject(err) : resolve(0)));
+            )(req, res, err => (err ? reject(err) : resolve(0)));
           });
-          if (user)  {
+          if (user) {
             req[authOptions.property] = user;
             if (authOptions.session) {
               req.logIn(user, options, next);
@@ -151,7 +191,7 @@ export class PassportService {
           }
           next();
         }
-      }
+      };
     } else {
       return async (ctx, next) => {
         // merge options with default options
@@ -160,27 +200,42 @@ export class PassportService {
           ...options,
         };
 
-        if (authOptions.session && ctx.session.passport && ctx.session.passport[authOptions.property]) {
-          ctx.state[authOptions.property] = ctx.session.passport[authOptions.property];
+        if (
+          authOptions.session &&
+          ctx.session.passport &&
+          ctx.session.passport[authOptions.property]
+        ) {
+          ctx.state[authOptions.property] =
+            ctx.session.passport[authOptions.property];
         }
         // ignore user has exists
         if (ctx.state[authOptions.property]) {
           await next();
         } else {
           const passport = getPassport() as passport.PassportStatic;
-          // got strategy
-          let strategyInstance = await this.app.getApplicationContext().getAsync(strategy);
-          await (strategyInstance as any).initStrategy();
+          const strategyList = [];
+          for (const strategySingle of strategy as StrategyClass[]) {
+            // got strategy
+            const strategyInstance = await this.app
+              .getApplicationContext()
+              .getAsync(strategySingle);
+            await (strategyInstance as any).initStrategy();
+            strategyList.push(strategyInstance.getStrategy());
+          }
           try {
             const user = await new Promise<any>((resolve, reject) => {
               // authenticate
-              passport.authenticate((strategyInstance as any).getStrategy(), authOptions, (err, user, info, status) => {
-                if (err) {
-                  reject(err);
-                } else {
-                  resolve(user);
+              passport.authenticate(
+                strategyList,
+                authOptions,
+                (err, user, info, status) => {
+                  if (err) {
+                    reject(err);
+                  } else {
+                    resolve(user);
+                  }
                 }
-              })(ctx, (err) => (err ? reject(err) : resolve(0)));
+              )(ctx, err => (err ? reject(err) : resolve(0)));
             });
             if (user) {
               ctx.state[authOptions.property] = user;
@@ -205,7 +260,7 @@ export class PassportService {
             ctx.throw(err);
           }
         }
-      }
+      };
     }
   }
 }

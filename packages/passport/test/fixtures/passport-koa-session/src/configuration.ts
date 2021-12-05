@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as bodyParser from 'koa-bodyparser';
 import * as session from 'koa-session';
 import * as LocalStrategy from 'passport-local';
-import { PassportMiddleware, PassportStrategy, Strategy } from '../../../../src';
+import { PassportMiddleware, PassportStrategy, CustomStrategy as Strategy } from '../../../../src';
 import * as passport from 'passport';
 
 @Strategy()
