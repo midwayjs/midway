@@ -2,7 +2,7 @@ import * as passport from 'passport';
 
 export interface IPassportStrategy {
   validate(...args): any;
-  getStrategyConfig(): any;
+  getStrategyOptions(): any;
   serializeUser?(user: any, done: (err: any, id?: any) => void): void;
   deserializeUser?(id: any, done: (err: any, user?: any) => void): void;
   transformAuthInfo?(info: any, done: (err: any, info: any) => void): void;
@@ -10,7 +10,7 @@ export interface IPassportStrategy {
 
 export abstract class AbstractStrategy implements IPassportStrategy {
   abstract validate(...args): any;
-  abstract getStrategyConfig(): any;
+  abstract getStrategyOptions(): any;
 }
 
 export interface IPassportMiddleware {

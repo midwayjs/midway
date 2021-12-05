@@ -16,7 +16,7 @@ $ npm i passport --save
 $ npm i @types/passport --save-dev
 ```
 
-2. 开启相对应框架的 bodyparser，session
+2. 如果有需要的话，开启相对应框架的 bodyparser，session
 
 
 ## 使用
@@ -75,7 +75,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
   }
 
   // 当前策略的参数
-  getStrategyConfig(): any {
+  getStrategyOptions(): any {
     return {};
   }
 }
@@ -86,7 +86,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 // local-middleware.ts
 
 import { Inject, Provide } from '@midwayjs/decorator';
-import { ExpressPassportMiddleware } from '@midwayjs/passport';
+import { PassportMiddleware } from '@midwayjs/passport';
 import { Context } from '@midwayjs/express';
 
 @Provide('local') // 此处可以使用一个简短的identifier
@@ -131,41 +131,47 @@ export const jwt = {
 }
 ```
 ```typescript
-// jwt-strategy.ts
+// strategy/jwt-strategy.ts
 
-import { BootStrategy, ExpressPassportStrategyAdapter } from '@midwayjs/passport';
+import { CustomStrategy, PassportStrategy } from '@midwayjs/passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
 
-@BootStrategy({
-  async useParams({ configuration }) {
-    return {
-      // 需要在config中配置secret
-      secretOrKey: configuration.jwt.secret,
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    };
-  },
-})
-export class JwtStrategy extends ExpressPassportStrategyAdapter(Strategy, 'jwt') {
-  async verify(payload) {
+@CustomStrategy()
+export class JwtStrategy extends PassportStrategy(
+  Strategy,
+  'jwt'
+) {
+  @Config('jwt')
+  jwtConfig;
+
+  async validate(payload) {
     return payload;
   }
+
+  getStrategyOptions(): any {
+    return {
+      secretOrKey: this.jwtConfig.secret,
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    };
+  }
 }
+
 
 ```
 ```typescript
 // jwt-middleware.ts
 
 import { Provide } from '@midwayjs/decorator';
-import { ExpressPassportMiddleware } from '@midwayjs/passport';
+import { PassportMiddleware } from '@midwayjs/passport';
+import { JwtStrategy } from './strategy/jwt-strategy';
 
 @Provide()
-export class JwtPassportMiddleware extends ExpressPassportMiddleware {
-  strategy: string = 'jwt';
-
-  async auth(_ctx, _err, data) {
-    return data;
+export class JwtPassportMiddleware extends PassportMiddleware(JwtStrategy) {
+  getAuthenticateOptions(): Promise<passport.AuthenticateOptions> | passport.AuthenticateOptions {
+    return {};
   }
 }
+
 ```
 ```typescript
 import { Provide, Post, Inject } from '@midwayjs/decorator';
@@ -215,23 +221,22 @@ curl http://127.0.0.1:7001/passport/jwt -H "Authorization: Bearer xxxxxxxxxxxxxx
 ```typescript
 // github-strategy.ts
 
-import { BootStrategy, ExpressPassportStrategyAdapter } from '@midwayjs/passport';
+import { CustomStrategy, PassportStrategy } from '@midwayjs/passport';
 import { Strategy, StrategyOptions } from 'passport-github';
 
 const GITHUB_CLIENT_ID = 'xxxxxx', GITHUB_CLIENT_SECRET = 'xxxxxxxx';
 
-@BootStrategy({
-  async useParams({ configuration }): Promise<StrategyOptions> {
+@CustomStrategy()
+export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
+  async validate(...payload) {
+    return payload;
+  }
+  getStrategyOptions() {
     return {
       clientID: GITHUB_CLIENT_ID,
       clientSecret: GITHUB_CLIENT_SECRET,
       callbackURL: 'https://127.0.0.1:7001/auth/github/cb'
     };
-  },
-})
-export class GithubStrategy extends ExpressPassportStrategyAdapter(Strategy, 'github') {
-  async verify(...payload) {
-    return payload;
   }
 }
 
@@ -239,15 +244,10 @@ export class GithubStrategy extends ExpressPassportStrategyAdapter(Strategy, 'gi
 ```typescript
 // github-middleware.ts
 
-import { ExpressPassportMiddleware } from '@midwayjs/passport';
+import { PassportMiddleware } from '@midwayjs/passport';
 
 @Provide()
-export class GithubPassportMiddleware extends ExpressPassportMiddleware {
-  strategy: string = 'github';
-
-  async auth(_ctx, ...data) {
-    return data;
-  }
+export class GithubPassportMiddleware extends PassportMiddleware {
 }
 ```
 ```typescript

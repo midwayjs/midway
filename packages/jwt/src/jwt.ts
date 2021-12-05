@@ -59,9 +59,20 @@ export class JwtService {
    * [options] - Options for the signature
    * returns - The JSON Web Token string
    */
-  public async sign(payload: JwtPayload, options?: SignOptions): Promise<string>;
-  public async sign(payload: JwtPayload, secretOrPrivateKey: Secret, options?: SignOptions): Promise<string>;
-  public async sign(payload: JwtPayload, secretOrPrivateKey: any, options?: any): Promise<string> {
+  public async sign(
+    payload: JwtPayload,
+    options?: SignOptions
+  ): Promise<string>;
+  public async sign(
+    payload: JwtPayload,
+    secretOrPrivateKey: Secret,
+    options?: SignOptions
+  ): Promise<string>;
+  public async sign(
+    payload: JwtPayload,
+    secretOrPrivateKey: any,
+    options?: any
+  ): Promise<string> {
     if (!options) {
       options = secretOrPrivateKey;
       secretOrPrivateKey = this.jwtConfig?.secret;
@@ -90,10 +101,21 @@ export class JwtService {
    * [options] - Options for the verification
    * returns - The decoded token.
    */
-  public verifySync(token: string, options: VerifyOptions & { complete: true }): Jwt | string;
+  public verifySync(
+    token: string,
+    options: VerifyOptions & { complete: true }
+  ): Jwt | string;
   public verifySync(token: string, options: VerifyOptions): JwtPayload | string;
-  public verifySync(token: string, secretOrPublicKey: Secret, options?: VerifyOptions & { complete: true }): Jwt | string;
-  public verifySync(token: string, secretOrPublicKey: Secret, options?: VerifyOptions): JwtPayload | string;
+  public verifySync(
+    token: string,
+    secretOrPublicKey: Secret,
+    options?: VerifyOptions & { complete: true }
+  ): Jwt | string;
+  public verifySync(
+    token: string,
+    secretOrPublicKey: Secret,
+    options?: VerifyOptions
+  ): JwtPayload | string;
   public verifySync(token: string, secretOrPublicKey: any, options?: any): any {
     if (!options) {
       options = secretOrPublicKey;
@@ -114,11 +136,29 @@ export class JwtService {
    * [options] - Options for the verification
    * returns - The decoded token.
    */
-  public async verify(token: string, options?: VerifyOptions & { complete: true }): Promise<Jwt | string>;
-  public async verify(token: string, options?: VerifyOptions): Promise<JwtPayload | string>;
-  public async verify(token: string, secretOrPublicKey: Secret | GetPublicKeyOrSecret, options?: VerifyOptions & { complete: true }): Promise<Jwt | string>;
-  public async verify(token: string, secretOrPublicKey: Secret | GetPublicKeyOrSecret, options?: VerifyOptions): Promise<JwtPayload | string>;
-  public async verify(token: string, secretOrPublicKey: any, options?: any): Promise<any> {
+  public async verify(
+    token: string,
+    options?: VerifyOptions & { complete: true }
+  ): Promise<Jwt | string>;
+  public async verify(
+    token: string,
+    options?: VerifyOptions
+  ): Promise<JwtPayload | string>;
+  public async verify(
+    token: string,
+    secretOrPublicKey: Secret | GetPublicKeyOrSecret,
+    options?: VerifyOptions & { complete: true }
+  ): Promise<Jwt | string>;
+  public async verify(
+    token: string,
+    secretOrPublicKey: Secret | GetPublicKeyOrSecret,
+    options?: VerifyOptions
+  ): Promise<JwtPayload | string>;
+  public async verify(
+    token: string,
+    secretOrPublicKey: any,
+    options?: any
+  ): Promise<any> {
     if (!options) {
       options = secretOrPublicKey;
       secretOrPublicKey = this.jwtConfig?.secret;
@@ -145,9 +185,18 @@ export class JwtService {
    * [options] - Options for decoding
    * returns - The decoded Token
    */
-  public decode(token: string, options: DecodeOptions & { complete: true }): null | Jwt;
-  public decode(token: string, options: DecodeOptions & { json: true }): null | JwtPayload;
-  public decode(token: string, options?: DecodeOptions): null | JwtPayload | string;
+  public decode(
+    token: string,
+    options: DecodeOptions & { complete: true }
+  ): null | Jwt;
+  public decode(
+    token: string,
+    options: DecodeOptions & { json: true }
+  ): null | JwtPayload;
+  public decode(
+    token: string,
+    options?: DecodeOptions
+  ): null | JwtPayload | string;
   public decode(token: string, options?: any): any {
     return jwt.decode(token, options);
   }
@@ -157,13 +206,19 @@ export class JwtService {
    * @param token
    * @param options
    */
-  public decodeSync(token: string, options: DecodeOptions & { complete: true }): null | Jwt;
-  public decodeSync(token: string, options: DecodeOptions & { json: true }): null | JwtPayload;
-  public decodeSync(token: string, options?: DecodeOptions): null | JwtPayload | string;
   public decodeSync(
     token: string,
-    options?: any
-  ): any {
+    options: DecodeOptions & { complete: true }
+  ): null | Jwt;
+  public decodeSync(
+    token: string,
+    options: DecodeOptions & { json: true }
+  ): null | JwtPayload;
+  public decodeSync(
+    token: string,
+    options?: DecodeOptions
+  ): null | JwtPayload | string;
+  public decodeSync(token: string, options?: any): any {
     return this.decode(token, options);
   }
 }

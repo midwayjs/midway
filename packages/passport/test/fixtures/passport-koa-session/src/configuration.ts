@@ -9,7 +9,7 @@ import * as passport from 'passport';
 @Strategy()
 export class CustomStrategy extends PassportStrategy(LocalStrategy.Strategy, 'local') {
 
-  getStrategyConfig(): any {
+  getStrategyOptions(): any {
     return {};
   }
 

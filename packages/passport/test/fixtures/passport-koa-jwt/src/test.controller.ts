@@ -1,18 +1,18 @@
 import { Provide, Controller, Get, Inject } from '@midwayjs/decorator';
-import { JwtService } from '../../../../../jwt/src';
+import { JwtService } from '@midwayjs/jwt';
 
 @Provide()
 @Controller('/')
 export class TestPackagesController {
   @Inject()
-  req;
+  ctx;
 
   @Inject()
   jwt: JwtService;
 
   @Get('/jwt-passport', { middleware: ['jwtPassportMiddleware'] })
   async jwtPassport() {
-    if (this.req.user?.msg === 'midway') {
+    if (this.ctx.state.user?.msg === 'midway') {
       return 'success';
     }
 

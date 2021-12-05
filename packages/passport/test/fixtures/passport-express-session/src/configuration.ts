@@ -9,7 +9,7 @@ import * as session from 'express-session';
 @Strategy()
 export class CustomStrategy extends PassportStrategy(LocalStrategy.Strategy) {
 
-  getStrategyConfig(): any {
+  getStrategyOptions(): any {
     return {};
   }
 

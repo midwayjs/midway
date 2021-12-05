@@ -1,6 +1,6 @@
 import { App, Configuration } from '@midwayjs/decorator';
 import * as passport from '../../../../../passport/src';
-import * as jwt from '../../../../../jwt/src';
+import * as jwt from '@midwayjs/jwt';
 import * as path from 'path';
 import { IMidwayExpressApplication } from '@midwayjs/express';
 

@@ -1,5 +1,5 @@
 import { Provide, Controller, Get, Inject } from '@midwayjs/decorator';
-import { JwtService } from '../../../../../jwt/src';
+import { JwtService } from '@midwayjs/jwt';
 
 @Provide()
 @Controller('/')

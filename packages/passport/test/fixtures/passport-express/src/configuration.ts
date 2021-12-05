@@ -7,7 +7,7 @@ import * as LocalStrategy from 'passport-local';
 @CustomStrategy()
 export class MyStrategy extends PassportStrategy(LocalStrategy.Strategy) {
 
-  getStrategyConfig(): any {
+  getStrategyOptions(): any {
     return {};
   }
 

@@ -66,6 +66,30 @@ describe('/test/index.test.ts', () => {
       process.env['MIDWAY_PASSPORT_MODE'] = undefined;
       await close(app);
     });
+
+    it('jwt passport with express', async () => {
+      process.env['MIDWAY_PASSPORT_MODE'] = 'express'
+      let token;
+      const app = await createApp(
+        join(__dirname, 'fixtures', 'passport-express-jwt'),
+        {},
+        ExpressFramework
+      );
+      let result = await createHttpRequest(app).get('/gen-jwt');
+      token = result.text;
+      expect(result.status).toEqual(200);
+      expect(typeof result.text).toEqual('string');
+
+      result = await createHttpRequest(app)
+        .get('/jwt-passport')
+        .set({ Authorization: `Bearer ${token}` });
+
+      expect(result.status).toEqual(200);
+      expect(result.text).toEqual('success');
+
+      await close(app);
+      process.env['MIDWAY_PASSPORT_MODE'] = undefined;
+    });
   });
 
   describe('Egg passport', () => {
@@ -167,34 +191,8 @@ describe('/test/index.test.ts', () => {
 
       await close(app);
     });
-  });
 
-  describe('passport with jwt', () => {
-    it('with express', async () => {
-      process.env['MIDWAY_PASSPORT_MODE'] = 'express'
-      let token;
-      const app = await createApp(
-        join(__dirname, 'fixtures', 'passport-express-jwt'),
-        {},
-        ExpressFramework
-      );
-      let result = await createHttpRequest(app).get('/gen-jwt');
-      token = result.text;
-      expect(result.status).toEqual(200);
-      expect(typeof result.text).toEqual('string');
-
-      result = await createHttpRequest(app)
-        .get('/jwt-passport')
-        .set({ Authorization: `Bearer ${token}` });
-
-      expect(result.status).toEqual(200);
-      expect(result.text).toEqual('success');
-
-      await close(app);
-      process.env['MIDWAY_PASSPORT_MODE'] = undefined;
-    });
-
-    it('with koa', async () => {
+    it('jwt passport with koa', async () => {
       let token;
       const app = await createApp(
         join(__dirname, 'fixtures', 'passport-koa-jwt'),
@@ -216,5 +214,4 @@ describe('/test/index.test.ts', () => {
       await close(app);
     });
   });
-
 });

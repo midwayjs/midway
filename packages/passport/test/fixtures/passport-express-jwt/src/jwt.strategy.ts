@@ -16,7 +16,7 @@ export class JwtStrategy extends PassportStrategy(
     return payload;
   }
 
-  getStrategyConfig(): any {
+  getStrategyOptions(): any {
     return {
       secretOrKey: this.jwtConfig.secret,
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),

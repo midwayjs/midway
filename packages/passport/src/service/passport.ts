@@ -35,7 +35,7 @@ export function PassportStrategy(
           }
         };
 
-        this.strategy = new Strategy(this.getStrategyConfig(), cb);
+        this.strategy = new Strategy(this.getStrategyOptions(), cb);
 
         const passport = getPassport() as passport.PassportStatic;
         if (name) {
