@@ -7,4 +7,5 @@ import * as path from 'path';
   conflictCheck: true,
   importConfigs: [path.join(__dirname, 'config')],
 })
-export class ContainerLifeCycle {}
+export class ContainerLifeCycle {
+}

@@ -94,13 +94,8 @@ export class MidwayExpressFramework extends BaseFramework<
     this.applicationContext.registerObject(HTTP_SERVER_KEY, this.server);
   }
 
-  protected async afterContainerReady(
-    options: Partial<IMidwayBootstrapOptions>
-  ): Promise<void> {
-    await this.loadMidwayController();
-  }
-
   public async run(): Promise<void> {
+    await this.loadMidwayController();
     if (this.configurationOptions.port) {
       new Promise<void>(resolve => {
         const args: any[] = [this.configurationOptions.port];
@@ -212,11 +207,12 @@ export class MidwayExpressFramework extends BaseFramework<
       // add route
       const routes = routerTable.get(routerInfo.prefix);
       for (const routeInfo of routes) {
+        const routeMiddlewareList = [];
         // router middleware
         await this.handlerWebMiddleware(
           routeInfo.middleware,
           (middlewareImpl: RequestHandler) => {
-            newRouter.use(middlewareImpl);
+            routeMiddlewareList.push(middlewareImpl);
           }
         );
 
@@ -230,6 +226,7 @@ export class MidwayExpressFramework extends BaseFramework<
         newRouter[routeInfo.requestMethod].call(
           newRouter,
           routeInfo.url,
+          ...routeMiddlewareList,
           this.generateController(
             routeInfo.handlerName,
             routeInfo.requestMetadata,

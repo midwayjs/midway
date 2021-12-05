@@ -1,107 +1,41 @@
-import { createApp, close, createHttpRequest } from '@midwayjs/mock';
-import { Framework as ExpressFramework } from '@midwayjs/express';
-import { Framework as KoaFramework } from '@midwayjs/koa';
-import { Framework as EggFramework } from '@midwayjs/web';
+import { close, createLightApp } from '@midwayjs/mock';
+import { JwtService } from '../src';
 import { join } from 'path';
 
-describe('Express jwt', () => {
-  let app = null;
-  let token;
+describe('/test/index.test.ts', () => {
+  it('should test jwt', async () => {
+    const app = await createLightApp(join(__dirname, './fixtures/base-app'));
+    const jwtService = await  app.getApplicationContext().getAsync(JwtService);
 
-  beforeAll(async () => {
-    app = await createApp(
-      join(__dirname, 'fixtures', 'passport-express'),
-      {},
-      ExpressFramework
-    );
-  });
+    // sign
+    const secret = 'shhhhhh';
+    const asyncToken = await jwtService.sign({ foo: 'bar' }, secret, { algorithm: 'HS256' });
+    const syncToken = jwtService.signSync({ foo: 'bar' }, secret, { algorithm: 'HS256' });
+    expect(typeof asyncToken).toEqual('string');
+    expect((asyncToken as string).split('.')).toHaveLength(3);
+    expect(asyncToken).toEqual(syncToken);
 
-  afterAll(async () => {
+    const asyncToken1 = await jwtService.sign({ foo: 'bar' }, { algorithm: 'HS256' });
+    const syncToken1 = jwtService.signSync({ foo: 'bar' }, { algorithm: 'HS256' });
+    expect(asyncToken1).toEqual(syncToken1);
+
+    // verify
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb28iOiJiYXIiLCJpYXQiOjE0MzcwMTg1ODIsImV4cCI6MTQzNzAxODU5Mn0.3aR3vocmgRpG05rsI9MpR6z2T_BGtMQaPq2YR6QaroU';
+    const key = 'key';
+
+    const payload = {foo: 'bar', iat: 1437018582, exp: 1437018592};
+    const p = await jwtService.verify(token, key, {algorithms: ['HS256'], ignoreExpiration: true});
+    expect(p).toEqual(payload);
+
+    const p1 = jwtService.verifySync(token, key, {algorithms: ['HS256'], ignoreExpiration: true});
+    expect(p1).toEqual(payload);
+
+    const decoded = jwtService.decode("null");
+    expect(decoded).toEqual(null);
+
+    const decoded1 = jwtService.decodeSync("null");
+    expect(decoded1).toEqual(null);
+
     await close(app);
-    token = null;
-  });
-
-  it('generate token', async () => {
-    let result = await createHttpRequest(app).get('/gen-jwt');
-    token = result.text;
-    expect(result.status).toEqual(200);
-    expect(typeof result.text).toEqual('string');
-  });
-
-  it('Bearer token inspect', async () => {
-    let result = await createHttpRequest(app)
-      .get('/jwt-passport')
-      .set({ Authorization: `Bearer ${token}` });
-
-    expect(result.status).toEqual(200);
-    expect(result.text).toEqual('success');
-  });
-});
-
-describe('Koa jwt', () => {
-  let app = null;
-  let token;
-
-  beforeAll(async () => {
-    app = await createApp(
-      join(__dirname, 'fixtures', 'passport-web'),
-      {},
-      KoaFramework
-    );
-  });
-
-  afterAll(async () => {
-    await close(app);
-    token = null;
-  });
-
-  it('generate token', async () => {
-    let result = await createHttpRequest(app).get('/gen-jwt');
-    token = result.text;
-    expect(result.status).toEqual(200);
-    expect(typeof result.text).toEqual('string');
-  });
-
-  it('Bearer token inspect', async () => {
-    let result = await createHttpRequest(app)
-      .get('/jwt-passport')
-      .set({ Authorization: `Bearer ${token}` });
-
-    expect(result.status).toEqual(200);
-    expect(result.text).toEqual('success');
-  });
-});
-
-describe('Egg jwt', () => {
-  let app = null;
-  let token;
-
-  beforeAll(async () => {
-    app = await createApp(
-      join(__dirname, 'fixtures', 'passport-web'),
-      {},
-      EggFramework
-    );
-  });
-
-  afterAll(async () => {
-    await close(app);
-    token = null;
-  });
-
-  it('generate token', async () => {
-    let result = await createHttpRequest(app).get('/gen-jwt');
-    token = result.text;
-    expect(result.status).toEqual(200);
-    expect(typeof result.text).toEqual('string');
-  });
-
-  it('Bearer token inspect', async () => {
-    let result = await createHttpRequest(app)
-      .get('/jwt-passport')
-      .set({ Authorization: `Bearer ${token}` });
-
-    expect(result.status).toEqual(200);
-    expect(result.text).toEqual('success');
   });
 });

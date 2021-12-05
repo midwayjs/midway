@@ -1,5 +1,3 @@
 export { PassportConfiguration as Configuration } from './configuration';
-export * from './decorators';
-export * from './contants';
-export * from './web';
-export * from './express';
+export * from './decorator/strategy';
+export * from './service/passport';
