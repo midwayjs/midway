@@ -170,36 +170,50 @@ describe('/test/index.test.ts', () => {
   });
 
   describe('passport with jwt', () => {
-    let app = null;
-    let token;
-
-    beforeAll(async () => {
-      app = await createApp(
-        join(__dirname, 'fixtures', 'passport-express'),
+    it('with express', async () => {
+      process.env['MIDWAY_PASSPORT_MODE'] = 'express'
+      let token;
+      const app = await createApp(
+        join(__dirname, 'fixtures', 'passport-express-jwt'),
         {},
         ExpressFramework
       );
-    });
-
-    afterAll(async () => {
-      await close(app);
-      token = null;
-    });
-
-    it('generate token', async () => {
       let result = await createHttpRequest(app).get('/gen-jwt');
       token = result.text;
       expect(result.status).toEqual(200);
       expect(typeof result.text).toEqual('string');
-    });
 
-    it('Bearer token inspect', async () => {
-      let result = await createHttpRequest(app)
+      result = await createHttpRequest(app)
         .get('/jwt-passport')
         .set({ Authorization: `Bearer ${token}` });
 
       expect(result.status).toEqual(200);
       expect(result.text).toEqual('success');
+
+      await close(app);
+      process.env['MIDWAY_PASSPORT_MODE'] = undefined;
+    });
+
+    it('with koa', async () => {
+      let token;
+      const app = await createApp(
+        join(__dirname, 'fixtures', 'passport-koa-jwt'),
+        {},
+        KoaFramework
+      );
+      let result = await createHttpRequest(app).get('/gen-jwt');
+      token = result.text;
+      expect(result.status).toEqual(200);
+      expect(typeof result.text).toEqual('string');
+
+      result = await createHttpRequest(app)
+        .get('/jwt-passport')
+        .set({ Authorization: `Bearer ${token}` });
+
+      expect(result.status).toEqual(200);
+      expect(result.text).toEqual('success');
+
+      await close(app);
     });
   });
 

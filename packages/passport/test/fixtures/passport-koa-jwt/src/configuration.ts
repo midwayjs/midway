@@ -1,8 +1,7 @@
-import { App, Configuration } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/decorator';
 import * as passport from '../../../../../passport/src';
 import * as jwt from '../../../../../jwt/src';
 import * as path from 'path';
-import { IMidwayExpressApplication } from '@midwayjs/express';
 
 @Configuration({
   imports: [passport, jwt],
@@ -10,6 +9,4 @@ import { IMidwayExpressApplication } from '@midwayjs/express';
   importConfigs: [path.join(__dirname, './config')],
 })
 export class ContainerLifeCycle {
-  @App()
-  app: IMidwayExpressApplication;
 }

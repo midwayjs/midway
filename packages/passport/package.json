@@ -27,6 +27,7 @@
     "@midwayjs/koa": "^2.13.4",
     "@midwayjs/mock": "^2.13.4",
     "@midwayjs/web": "^2.13.4",
+    "@midwayjs/jwt": "^2.13.4",
     "@types/passport": "^1.0.7",
     "@types/passport-local": "^1.0.34",
     "passport": "^0.5.0",
