@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 // Koa and Express are fundamental different in how they deal with extensions
 // to the incoming request.
 // Express pollutes Node's IncomingRequest directly, while Koa keeps Node's
