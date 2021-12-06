@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.14.1](https://github.com/midwayjs/midway/compare/v2.14.0...v2.14.1) (2021-12-06)
+
+
+### Bug Fixes
+
+* passport missing proxy file ([#1405](https://github.com/midwayjs/midway/issues/1405)) ([ded726a](https://github.com/midwayjs/midway/commit/ded726aeda756aea4dcb2c616d3bc85984e46a60))
+
+
+
+
+
 # [2.14.0](https://github.com/midwayjs/midway/compare/v2.13.5...v2.14.0) (2021-12-06)
 
 

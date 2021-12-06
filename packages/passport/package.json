@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/passport",
   "description": "midway passport component",
-  "version": "2.14.0",
+  "version": "2.14.1",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
