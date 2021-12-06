@@ -11,7 +11,7 @@ import {
   Repository,
   TreeRepository,
 } from 'typeorm';
-import { ViewEntityOptions } from 'typeorm/decorator/options/ViewEntityOptions';
+import { ViewEntityOptions as BaseViewEntityOptions } from 'typeorm/decorator/options/ViewEntityOptions';
 
 export const CONNECTION_KEY = 'orm:getConnection';
 export const ENTITY_MODEL_KEY = 'entity_model_key';
@@ -19,6 +19,10 @@ export const EVENT_SUBSCRIBER_KEY = 'event_subscriber_key';
 export const ORM_MODEL_KEY = '__orm_model_key__';
 
 export interface EntityOptions extends BaseEntityOptions {
+  connectionName?: string;
+}
+
+export interface ViewEntityOptions extends BaseViewEntityOptions {
   connectionName?: string;
 }
 
@@ -106,12 +110,19 @@ export function EntityView(
       ? (nameOrOptions as ViewEntityOptions)
       : maybeOptions) || {};
   const name = typeof nameOrOptions === 'string' ? nameOrOptions : options.name;
+  const connectionName = options?.connectionName || 'ALL';
 
   return function (target) {
     if (typeof target === 'function') {
       saveModule(ENTITY_MODEL_KEY, target);
+      saveClassMetadata(ENTITY_MODEL_KEY, { connectionName }, target);
     } else {
       saveModule(ENTITY_MODEL_KEY, (target as any).constructor);
+      saveClassMetadata(
+        ENTITY_MODEL_KEY,
+        { connectionName },
+        (target as any).constructor
+      );
     }
 
     getMetadataArgsStorage().tables.push({
