@@ -1,8 +1,16 @@
-module.exports = (appInfo: any) => {
-  const config: any = exports = {};
+import { join } from 'path';
 
-  // use for cookie sign key, should change to your own and keep security
-  config.keys = appInfo.name + '123';
+export const keys = ['123321'];
+/**
+ * 单数据库实例
+ */
+export const orm = {
+  type: 'sqlite',
+  database: join(__dirname, '../../../user.sqlite3'),
+  synchronize: false, // 如果第一次使用，不存在表，有同步的需求可以写 true
+  logging: false,
+};
 
-  return config;
+export const koa = {
+  port: 7001,
 };
