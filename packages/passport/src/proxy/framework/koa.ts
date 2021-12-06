@@ -43,7 +43,7 @@ function initialize(passport) {
     // add Promise-based login method
     const login = req.login;
     ctx.login = ctx.logIn = function (user, options) {
-      return new Promise((resolve, reject) => {
+      return new Promise<void>((resolve, reject) => {
         login.call(req, user, options, err => {
           if (err) reject(err);
           else resolve();

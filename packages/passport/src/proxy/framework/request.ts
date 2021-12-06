@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 // Koa and Express are fundamental different in how they deal with extensions
 // to the incoming request.
 // Express pollutes Node's IncomingRequest directly, while Koa keeps Node's
@@ -24,8 +26,6 @@
 //
 // Until this is fixed, koa-passport tries to properly delegate every possible
 // used property/method.
-
-'use strict';
 
 // Property/Method names to be delegated
 let keys = [

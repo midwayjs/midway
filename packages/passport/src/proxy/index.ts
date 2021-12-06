@@ -1,17 +1,15 @@
-'use strict';
-
 // prevent passport from monkey patching
 const connect = require('passport/lib/framework/connect');
 connect.__monkeypatchNode = function () {};
 
 // load passport and add the koa framework
-const passport = require('passport');
+const originPassport = require('passport');
 const Passport = require('passport').Passport;
 const framework = require('./framework/koa')();
 
-passport.framework(framework);
+originPassport.framework(framework);
 
-class KoaPassport extends Passport {
+export class KoaPassport extends Passport {
   constructor() {
     super();
     this.framework(framework);
@@ -19,7 +17,4 @@ class KoaPassport extends Passport {
 }
 
 // Export default singleton.
-module.exports = passport;
-
-// Expose constructor
-module.exports.KoaPassport = KoaPassport;
+export const passport = originPassport;
