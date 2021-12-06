@@ -25,8 +25,6 @@
 // Until this is fixed, koa-passport tries to properly delegate every possible
 // used property/method.
 
-'use strict';
-
 // Property/Method names to be delegated
 let keys = [
   // passport
