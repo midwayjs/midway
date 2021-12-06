@@ -41,7 +41,9 @@ export class TypegooseConfiguration {
   }
 
   async onReady(container: IMidwayContainer) {
-    const connectionFactory = await container.getAsync(mongoose.MongooseConnectionServiceFactory);
+    const connectionFactory = await container.getAsync(
+      mongoose.MongooseConnectionServiceFactory
+    );
 
     const Models = listModule(ENTITY_MODEL_KEY);
     for (const Model of Models) {

@@ -17,7 +17,9 @@ export class MongooseConfiguration implements ILifeCycle {
   }
 
   async onStop(container: IMidwayContainer) {
-    const factoryService = await container.getAsync(MongooseConnectionServiceFactory);
+    const factoryService = await container.getAsync(
+      MongooseConnectionServiceFactory
+    );
     await factoryService.stop();
   }
 }
