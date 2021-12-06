@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.7](https://github.com/midwayjs/midway/compare/v3.0.0-beta.6...v3.0.0-beta.7) (2021-12-03)
+
+
+### Bug Fixes
+
+* middleware with ctx.body ([#1389](https://github.com/midwayjs/midway/issues/1389)) ([77af5c0](https://github.com/midwayjs/midway/commit/77af5c0b456f1843f4dcfd3dbfd2c0aa244c51bd))
+
+
+
+
+
 # [3.0.0-beta.6](https://github.com/midwayjs/midway/compare/v3.0.0-beta.5...v3.0.0-beta.6) (2021-11-26)
 
 **Note:** Version bump only for package @midwayjs/rabbitmq

@@ -55,3 +55,12 @@ export class MidwayValidationError extends MidwayError {
     });
   }
 }
+
+export class MidwayConfigMissingError extends MidwayError {
+  constructor(configKey: string) {
+    super(
+      `Can't found config key "${configKey}" in your config, please set it first`,
+      FrameworkErrorEnum.MISSING_CONFIG
+    );
+  }
+}

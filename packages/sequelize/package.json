@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/sequelize",
-  "version": "3.0.0-beta.6",
+  "version": "3.0.0-beta.7",
   "main": "dist/index",
   "typings": "index.d.ts",
   "files": [
@@ -9,9 +9,9 @@
     "index.d.ts"
   ],
   "devDependencies": {
-    "@midwayjs/decorator": "^3.0.0-beta.6",
-    "@midwayjs/koa": "^3.0.0-beta.6",
-    "@midwayjs/mock": "^3.0.0-beta.6",
+    "@midwayjs/decorator": "^3.0.0-beta.7",
+    "@midwayjs/koa": "^3.0.0-beta.7",
+    "@midwayjs/mock": "^3.0.0-beta.7",
     "sqlite3": "^5.0.2"
   },
   "dependencies": {
