@@ -127,39 +127,6 @@ describe('/test/index.test.ts', () => {
   });
 
   describe('koa passport', () => {
-
-    it('should start koa app with pure passport', async () => {
-      const app = await createApp(
-        join(__dirname, 'fixtures', 'passport-koa'),
-        {},
-        KoaFramework
-      );
-
-      const request = createHttpRequest(app);
-
-      let result = await request.get('/')
-
-      expect(result.status).toEqual(302);
-      expect(result.text).toEqual('Redirecting to <a href=\"/login\">/login</a>.');
-
-      result = await request
-        .get('/')
-        .query({ username: 'admin', password: '123' })
-
-      expect(result.status).toEqual(302);
-      expect(result.text).toEqual('Redirecting to <a href=\"/\">/</a>.');
-
-      result = await request
-        .get('/')
-        .set({
-          cookie: result.headers['set-cookie']
-        })
-
-      expect(result.status).toEqual(200);
-
-      await close(app);
-    });
-
     it('should start koa app and session with passport', async () => {
       const app = await createApp(
         join(__dirname, 'fixtures', 'passport-koa-session'),
