@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/passport",
   "description": "midway passport component",
-  "version": "2.13.4",
+  "version": "2.13.3",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
@@ -35,7 +35,6 @@
     "express-session": "^1.17.2"
   },
   "peerDependencies": {
-    "koa-passport": "^4.1.4",
     "passport": "^0.5.0"
   }
 }
