@@ -3,7 +3,6 @@ import {
   Configuration,
   getClassMetadata,
   Init,
-  Inject,
   listModule,
   App,
 } from '@midwayjs/decorator';
@@ -11,16 +10,13 @@ import * as mongoose from '@midwayjs/mongoose';
 import { ENTITY_MODEL_KEY } from './interface';
 import { getModelForClass } from '@typegoose/typegoose';
 import * as mongo from 'mongoose';
-import { IMidwayApplication } from '@midwayjs/core';
+import { IMidwayApplication, IMidwayContainer } from '@midwayjs/core';
 
 @Configuration({
   namespace: 'typegoose',
   imports: [mongoose],
 })
 export class TypegooseConfiguration {
-  @Inject()
-  connectionFactory: mongoose.MongooseConnectionServiceFactory;
-
   @Config('mongoose')
   oldMongooseConfig;
 
@@ -44,12 +40,16 @@ export class TypegooseConfiguration {
       );
   }
 
-  async onReady() {
+  async onReady(container: IMidwayContainer) {
+    const connectionFactory = await container.getAsync(
+      mongoose.MongooseConnectionServiceFactory
+    );
+
     const Models = listModule(ENTITY_MODEL_KEY);
     for (const Model of Models) {
       const metadata = getClassMetadata(ENTITY_MODEL_KEY, Model) ?? {};
       const connectionName = metadata.connectionName ?? 'default';
-      const conn = this.connectionFactory.get(connectionName);
+      const conn = connectionFactory.get(connectionName);
       if (conn) {
         const model = getModelForClass(Model, { existingConnection: conn });
         this.modelMap.set(Model, model);

@@ -1,4 +1,4 @@
-import { Configuration, Inject } from '@midwayjs/decorator';
+import { Configuration } from '@midwayjs/decorator';
 import * as DefaultConfig from './config.default';
 import { ILifeCycle, IMidwayContainer } from '@midwayjs/core';
 import { MongooseConnectionServiceFactory } from './manager';
@@ -12,12 +12,14 @@ import { MongooseConnectionServiceFactory } from './manager';
   ],
 })
 export class MongooseConfiguration implements ILifeCycle {
-  @Inject()
-  factoryService: MongooseConnectionServiceFactory;
+  async onReady(container: IMidwayContainer) {
+    await container.getAsync(MongooseConnectionServiceFactory);
+  }
 
-  async onReady(container: IMidwayContainer) {}
-
-  async onStop() {
-    await this.factoryService.stop();
+  async onStop(container: IMidwayContainer) {
+    const factoryService = await container.getAsync(
+      MongooseConnectionServiceFactory
+    );
+    await factoryService.stop();
   }
 }
