@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.14.0](https://github.com/midwayjs/midway/compare/v2.13.5...v2.14.0) (2021-12-06)
+
+
+### Bug Fixes
+
+* mongoose init before config load ([#1401](https://github.com/midwayjs/midway/issues/1401)) ([34d2ab8](https://github.com/midwayjs/midway/commit/34d2ab8b5bcfc9bddf52b9a93d6f3b44960ef537))
+
+
+
+
+
 ## [2.13.5](https://github.com/midwayjs/midway/compare/v2.13.4...v2.13.5) (2021-10-21)
 
 

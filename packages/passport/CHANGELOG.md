@@ -11,20 +11,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * express routing middleware takes effect at the controller level ([#1364](https://github.com/midwayjs/midway/issues/1364)) ([5d5f299](https://github.com/midwayjs/midway/commit/5d5f2992be116ca71b21f01fd782e3a2ac072496))
 
 
-
-
-
-## [2.13.4](https://github.com/midwayjs/midway/compare/v2.13.3...v2.13.4) (2021-10-21)
-
-**Note:** Version bump only for package @midwayjs/tablestore
-
-
-
-
-
-## [2.13.3](https://github.com/midwayjs/midway/compare/v2.13.2...v2.13.3) (2021-09-28)
-
-
 ### Features
 
-* add tablestore component and typescript definition ([#1302](https://github.com/midwayjs/midway/issues/1302)) ([094b027](https://github.com/midwayjs/midway/commit/094b0277ff0fed969d438e85b62cf99e06b024c3))
+* passport add presetProperty ([#1358](https://github.com/midwayjs/midway/issues/1358)) ([0e5e586](https://github.com/midwayjs/midway/commit/0e5e586c8a43971ff804f73000d44434ac0a9eb4))
+* support passport and jwt ([#1343](https://github.com/midwayjs/midway/issues/1343)) ([f1a7668](https://github.com/midwayjs/midway/commit/f1a7668dfce5a82ddc37efa7cd6321e088d0b1cc))

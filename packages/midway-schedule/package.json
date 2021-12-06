@@ -1,6 +1,6 @@
 {
   "name": "midway-schedule",
-  "version": "2.13.4",
+  "version": "2.14.0",
   "description": "",
   "main": "index.js",
   "eggPlugin": {
@@ -16,8 +16,8 @@
   "keywords": [],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/decorator": "^2.13.2",
-    "@midwayjs/mock": "^2.13.4",
+    "@midwayjs/decorator": "^2.14.0",
+    "@midwayjs/mock": "^2.14.0",
     "@types/sinon": "^10.0.2"
   },
   "dependencies": {

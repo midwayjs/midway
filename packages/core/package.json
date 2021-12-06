@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/core",
-  "version": "2.13.4",
+  "version": "2.14.0",
   "description": "midway core",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -21,7 +21,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/decorator": "^2.13.2",
+    "@midwayjs/decorator": "^2.14.0",
     "chai": "^4.2.0",
     "midway-test-component": "*",
     "mm": "3",

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.14.0](https://github.com/midwayjs/midway/compare/v2.13.5...v2.14.0) (2021-12-06)
+
+
+### Bug Fixes
+
+* express routing middleware takes effect at the controller level ([#1364](https://github.com/midwayjs/midway/issues/1364)) ([5d5f299](https://github.com/midwayjs/midway/commit/5d5f2992be116ca71b21f01fd782e3a2ac072496))
+
+
+
+
+
 ## [2.13.4](https://github.com/midwayjs/midway/compare/v2.13.3...v2.13.4) (2021-10-21)
 
 **Note:** Version bump only for package @midwayjs/view

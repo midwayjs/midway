@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/orm",
-  "version": "2.13.4",
+  "version": "2.14.0",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "peerDependencies": {
@@ -11,9 +11,9 @@
     "dist/**/*.d.ts"
   ],
   "devDependencies": {
-    "@midwayjs/core": "^2.13.4",
-    "@midwayjs/decorator": "^2.13.2",
-    "@midwayjs/mock": "^2.13.4",
+    "@midwayjs/core": "^2.14.0",
+    "@midwayjs/decorator": "^2.14.0",
+    "@midwayjs/mock": "^2.14.0",
     "sqlite3": "^5.0.2",
     "typeorm": "*"
   },
