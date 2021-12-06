@@ -37,7 +37,7 @@ export class MidwayExpressFramework extends BaseFramework<
   IMidwayExpressConfigurationOptions,
   Response,
   NextFunction
-  > {
+> {
   public app: IMidwayExpressApplication;
   private server: Server;
 
@@ -257,13 +257,13 @@ export class MidwayExpressFramework extends BaseFramework<
   private async handlerWebMiddleware(
     middlewares: Array<
       CommonMiddleware<IMidwayExpressContext, Response, NextFunction> | string
-      >,
+    >,
     handlerCallback: (
       middlewareImpl: FunctionMiddleware<
         IMidwayExpressContext,
         Response,
         NextFunction
-        >
+      >
     ) => void
   ): Promise<void> {
     const fn = await this.expressMiddlewareService.compose(middlewares);
@@ -272,7 +272,7 @@ export class MidwayExpressFramework extends BaseFramework<
 
   public async getMiddleware<Response, NextFunction>(): Promise<
     MiddlewareRespond<IMidwayExpressContext, Response, NextFunction>
-    > {
+  > {
     if (!this.composeMiddleware) {
       this.composeMiddleware = await this.expressMiddlewareService.compose(
         this.middlewareManager

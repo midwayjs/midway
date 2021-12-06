@@ -4,8 +4,9 @@ import {
   saveModule,
   MS_CONSUMER_KEY,
   MSListenerType,
+  Provide,
 } from '../../';
-import { Scope } from '../common/objectDef';
+import { Scope } from '../common';
 
 export function Consumer(type: MSListenerType.MQTT): ClassDecorator;
 export function Consumer(
@@ -24,5 +25,6 @@ export function Consumer(type: any, options: any = {}): ClassDecorator {
       target
     );
     Scope(ScopeEnum.Request)(target);
+    Provide()(target);
   };
 }
