@@ -38,9 +38,7 @@ export class RedisServiceFactory extends ServiceFactory<Redis.Redis> {
         assert(
           client.host &&
             client.port &&
-            client.password !== undefined &&
-            client.db !== undefined,
-          `[@midwayjs/redis] 'host: ${client.host}', 'port: ${client.port}', 'password: ${client.password}', 'db: ${client.db}' are required on config`
+            `[@midwayjs/redis] 'host: ${client.host}', 'port: ${client.port}' are required on config`
         );
       });
       this.logger.info('[@midwayjs/redis] cluster connecting');
@@ -58,26 +56,17 @@ export class RedisServiceFactory extends ServiceFactory<Redis.Redis> {
         );
       });
 
-      assert(
-        config.name && config.password !== undefined && config.db !== undefined,
-        `[@midwayjs/redis] 'name of master: ${config.name}', 'password: ${config.password}', 'db: ${config.db}' are required on config`
-      );
-
       this.logger.info('[@midwayjs/redis] sentinel connecting start');
       client = new Redis(config);
     } else {
       assert(
-        config.host &&
-          config.port &&
-          config.password !== undefined &&
-          config.db !== undefined,
-        `[@midwayjs/redis] 'host: ${config.host}', 'port: ${config.port}', 'password: ${config.password}', 'db: ${config.db}' are required on config`
+        config.host && config.port,
+        `[@midwayjs/redis] 'host: ${config.host}', 'port: ${config.port}' are required on config`
       );
       this.logger.info(
         '[@midwayjs/redis] server connecting redis://:***@%s:%s/%s',
         config.host,
-        config.port,
-        config.db
+        config.port
       );
       client = new Redis(config);
     }
