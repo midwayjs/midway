@@ -1,9 +1,11 @@
-import * as OSS from 'ali-oss';
+import { SignOptions } from 'jsonwebtoken';
 
 export * from './dist/index';
 
 declare module '@midwayjs/core/dist/interface' {
   interface MidwayConfig {
-    oss?: ServiceFactoryConfigOption<OSS.STSOptions | OSS.Options>;
+    jwt?: SignOptions & {
+      secret?: string;
+    };
   }
 }

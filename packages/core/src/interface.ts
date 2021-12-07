@@ -237,6 +237,7 @@ export type ParameterHandlerFunction = (options: {
   originArgs: Array<any>;
   originParamType: any;
   parameterIndex: number;
+  parameterName: string;
 }) => IMethodAspect;
 
 export interface IIdentifierRelationShip {

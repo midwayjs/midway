@@ -1,12 +1,5 @@
 import * as passport from 'passport';
-import {
-  App,
-  Config,
-  Inject,
-  Provide,
-  Scope,
-  ScopeEnum,
-} from '@midwayjs/decorator';
+import { App, Config, Init } from '@midwayjs/decorator';
 import { getPassport, isExpressMode } from '../util';
 import { AbstractPassportMiddleware, AbstractStrategy } from '../interface';
 
@@ -15,47 +8,45 @@ export function PassportStrategy(
   name?: string
 ): new (...args) => AbstractStrategy {
   abstract class InnerStrategyAbstractClass extends AbstractStrategy {
-    strategy;
-    inited = false;
+    private strategy;
 
-    async initStrategy() {
-      if (!this.inited) {
-        this.inited = true;
-        const cb = async (...params: any[]) => {
-          const done = params[params.length - 1];
-          try {
-            const result = await this.validate(...params);
-            if (Array.isArray(result)) {
-              done(null, ...result);
-            } else {
-              done(null, result);
-            }
-          } catch (err) {
-            done(err, null);
+    @Init()
+    async init() {
+      const cb = async (...params: any[]) => {
+        const done = params[params.length - 1];
+        try {
+          const result = await this.validate(...params);
+          if (Array.isArray(result)) {
+            done(null, ...result);
+          } else {
+            done(null, result);
           }
-        };
-
-        this.strategy = new Strategy(this.getStrategyOptions(), cb);
-
-        const passport = getPassport() as passport.PassportStatic;
-        if (name) {
-          passport.use(name, this.strategy);
-        } else {
-          passport.use(this.strategy);
+        } catch (err) {
+          done(err, null);
         }
-        if (this['serializeUser']) {
-          passport.serializeUser(this['serializeUser']);
-        }
+      };
 
-        if (this['deserializeUser']) {
-          passport.deserializeUser(this['deserializeUser']);
-        }
+      this.strategy = new Strategy(this.getStrategyOptions(), cb);
 
-        if (this['transformAuthInfo']) {
-          passport.transformAuthInfo(this['transformAuthInfo']);
-        }
+      const passport = getPassport() as passport.PassportStatic;
+      if (name) {
+        passport.use(name, this.strategy);
+      } else {
+        passport.use(this.strategy);
+      }
+      if (this['serializeUser']) {
+        passport.serializeUser(this['serializeUser']);
+      }
+
+      if (this['deserializeUser']) {
+        passport.deserializeUser(this['deserializeUser']);
+      }
+
+      if (this['transformAuthInfo']) {
+        passport.transformAuthInfo(this['transformAuthInfo']);
       }
     }
+
     getStrategy() {
       return this.strategy;
     }
@@ -66,18 +57,25 @@ export function PassportStrategy(
 export type StrategyClass = new (...args) => AbstractStrategy;
 
 export function PassportMiddleware(
-  type: StrategyClass | StrategyClass[]
+  strategy: StrategyClass | StrategyClass[]
 ): new (...args) => AbstractPassportMiddleware {
   abstract class InnerPassportMiddleware extends AbstractPassportMiddleware {
-    @Inject()
-    passportService: PassportService;
+    @Config('passport')
+    passportConfig;
 
-    authenticate(options: passport.AuthenticateOptions) {
-      return this.passportService.authenticate(type, options);
+    @App()
+    app;
+
+    @Init()
+    async init() {
+      const passport = getPassport();
+      this.app.use(passport.initialize());
+      if (this.passportConfig.session) {
+        this.app.use(passport.session());
+      }
     }
 
     resolve() {
-      this.passportService.initMiddleware();
       if (isExpressMode()) {
         return async (req, res, next) => {
           return this.authenticate(await this.getAuthenticateOptions())(
@@ -101,128 +99,38 @@ export function PassportMiddleware(
       | passport.AuthenticateOptions {
       return undefined;
     }
-  }
-  return InnerPassportMiddleware as any;
-}
 
-@Provide()
-@Scope(ScopeEnum.Singleton)
-export class PassportService {
-  @Config('passport')
-  passportConfig;
-
-  @App()
-  app;
-
-  inited = false;
-
-  initMiddleware() {
-    if (!this.inited) {
-      this.inited = true;
-      const passport = getPassport();
-      this.app.use(passport.initialize());
-      if (this.passportConfig.session) {
-        this.app.use(passport.session());
+    authenticate(options: passport.AuthenticateOptions): any {
+      if (!Array.isArray(strategy)) {
+        strategy = [strategy];
       }
-    }
-  }
 
-  authenticate(
-    strategy: StrategyClass | StrategyClass[],
-    options: passport.AuthenticateOptions
-  ): any {
-    if (!Array.isArray(strategy)) {
-      strategy = [strategy];
-    }
+      if (isExpressMode()) {
+        return async (req, res, next) => {
+          // merge options with default options
+          const authOptions = {
+            ...this.passportConfig,
+            ...options,
+          };
 
-    if (isExpressMode()) {
-      return async (req, res, next) => {
-        // merge options with default options
-        const authOptions = {
-          ...this.passportConfig,
-          ...options,
-        };
-
-        if (authOptions.session && req.session[authOptions.property]) {
-          req[authOptions.property] = req.session[authOptions.property];
-        }
-        // ignore user has exists
-        if (req[authOptions.property]) {
-          next();
-        } else {
-          const passport = getPassport() as passport.PassportStatic;
-          const strategyList = [];
-          for (const strategySingle of strategy as StrategyClass[]) {
-            // got strategy
-            const strategyInstance = await this.app
-              .getApplicationContext()
-              .getAsync(strategySingle);
-            await (strategyInstance as any).initStrategy();
-            strategyList.push(strategyInstance.getStrategy());
+          if (authOptions.session && req.session[authOptions.userProperty]) {
+            req[authOptions.userProperty] =
+              req.session[authOptions.userProperty];
           }
-
-          const user = await new Promise<any>((resolve, reject) => {
-            // authenticate
-            passport.authenticate(
-              strategyList,
-              authOptions,
-              (err, user, info, status) => {
-                if (err) {
-                  reject(err);
-                } else {
-                  resolve(user);
-                }
-              }
-            )(req, res, err => (err ? reject(err) : resolve(0)));
-          });
-          if (user) {
-            req[authOptions.property] = user;
-            if (authOptions.session) {
-              req.logIn(user, options, next);
-              return;
-            }
+          // ignore user has exists
+          if (req[authOptions.userProperty]) {
+            next();
           } else {
-            if (options.failureRedirect) {
-              res.redirect(options.failureRedirect);
-              return;
-            } else {
-              res.status(401);
+            const passport = getPassport() as passport.PassportStatic;
+            const strategyList = [];
+            for (const strategySingle of strategy as StrategyClass[]) {
+              // got strategy
+              const strategyInstance = await this.app
+                .getApplicationContext()
+                .getAsync(strategySingle);
+              strategyList.push(strategyInstance.getStrategy());
             }
-          }
-          next();
-        }
-      };
-    } else {
-      return async (ctx, next) => {
-        // merge options with default options
-        const authOptions = {
-          ...this.passportConfig,
-          ...options,
-        };
 
-        if (
-          authOptions.session &&
-          ctx.session.passport &&
-          ctx.session.passport[authOptions.property]
-        ) {
-          ctx.state[authOptions.property] =
-            ctx.session.passport[authOptions.property];
-        }
-        // ignore user has exists
-        if (ctx.state[authOptions.property]) {
-          await next();
-        } else {
-          const passport = getPassport() as passport.PassportStatic;
-          const strategyList = [];
-          for (const strategySingle of strategy as StrategyClass[]) {
-            // got strategy
-            const strategyInstance = await this.app
-              .getApplicationContext()
-              .getAsync(strategySingle);
-            await (strategyInstance as any).initStrategy();
-            strategyList.push(strategyInstance.getStrategy());
-          }
-          try {
             const user = await new Promise<any>((resolve, reject) => {
               // authenticate
               passport.authenticate(
@@ -235,32 +143,95 @@ export class PassportService {
                     resolve(user);
                   }
                 }
-              )(ctx, err => (err ? reject(err) : resolve(0)));
+              )(req, res, err => (err ? reject(err) : resolve(0)));
             });
             if (user) {
-              ctx.state[authOptions.property] = user;
+              req[authOptions.userProperty] = user;
               if (authOptions.session) {
-                // save to ctx.session.passport
-                await ctx.login(user, options);
-              }
-              if (options.successRedirect) {
-                ctx.redirect(options.successRedirect);
+                req.logIn(user, options, next);
                 return;
               }
             } else {
               if (options.failureRedirect) {
-                ctx.redirect(options.failureRedirect);
+                res.redirect(options.failureRedirect);
                 return;
               } else {
-                ctx.status = 401;
+                res.status(401);
               }
             }
-            await next();
-          } catch (err) {
-            ctx.throw(err);
+            next();
           }
-        }
-      };
+        };
+      } else {
+        return async (ctx, next) => {
+          // merge options with default options
+          const authOptions = {
+            ...this.passportConfig,
+            ...options,
+          };
+
+          if (
+            authOptions.session &&
+            ctx.session.passport &&
+            ctx.session.passport[authOptions.userProperty]
+          ) {
+            ctx.state[authOptions.userProperty] =
+              ctx.session.passport[authOptions.userProperty];
+          }
+          // ignore user has exists
+          if (ctx.state[authOptions.userProperty]) {
+            await next();
+          } else {
+            const passport = getPassport() as passport.PassportStatic;
+            const strategyList = [];
+            for (const strategySingle of strategy as StrategyClass[]) {
+              // got strategy
+              const strategyInstance = await this.app
+                .getApplicationContext()
+                .getAsync(strategySingle);
+              strategyList.push(strategyInstance.getStrategy());
+            }
+            try {
+              const user = await new Promise<any>((resolve, reject) => {
+                // authenticate
+                passport.authenticate(
+                  strategyList,
+                  authOptions,
+                  (err, user, info, status) => {
+                    if (err) {
+                      reject(err);
+                    } else {
+                      resolve(user);
+                    }
+                  }
+                )(ctx, err => (err ? reject(err) : resolve(0)));
+              });
+              if (user) {
+                ctx.state[authOptions.userProperty] = user;
+                if (authOptions.session) {
+                  // save to ctx.session.passport
+                  await ctx.login(user, options);
+                }
+                if (options.successRedirect) {
+                  ctx.redirect(options.successRedirect);
+                  return;
+                }
+              } else {
+                if (options.failureRedirect) {
+                  ctx.redirect(options.failureRedirect);
+                  return;
+                } else {
+                  ctx.status = 401;
+                }
+              }
+              await next();
+            } catch (err) {
+              ctx.throw(err);
+            }
+          }
+        };
+      }
     }
   }
+  return InnerPassportMiddleware as any;
 }

@@ -1,12 +1,13 @@
 {
   "name": "@midwayjs/jwt",
   "description": "midway jwt component",
-  "version": "2.13.4",
+  "version": "3.0.0-beta.7",
   "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
+  "typings": "index.d.ts",
   "files": [
     "dist/**/*.js",
-    "dist/**/*.d.ts"
+    "dist/**/*.d.ts",
+    "index.d.ts"
   ],
   "scripts": {
     "build": "tsc",
@@ -21,14 +22,13 @@
   "author": "Nawbc",
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/core": "^2.13.4",
-    "@midwayjs/decorator": "^2.13.2",
-    "@midwayjs/express": "^2.13.4",
-    "@midwayjs/koa": "^2.13.4",
-    "@midwayjs/mock": "^2.13.4",
-    "@midwayjs/web": "^2.13.4",
-    "@types/jsonwebtoken": "^8.5.5",
-    "passport-jwt": "^4.0.0"
+    "@midwayjs/core": "^3.0.0-beta.7",
+    "@midwayjs/decorator": "^3.0.0-beta.7",
+    "@midwayjs/express": "^3.0.0-beta.7",
+    "@midwayjs/koa": "^3.0.0-beta.7",
+    "@midwayjs/mock": "^3.0.0-beta.7",
+    "@midwayjs/web": "^3.0.0-beta.7",
+    "@types/jsonwebtoken": "^8.5.5"
   },
   "dependencies": {
     "jsonwebtoken": "^8.5.1"
