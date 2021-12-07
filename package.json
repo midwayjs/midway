@@ -61,5 +61,9 @@
   "collective": {
     "type": "opencollective",
     "url": "https://opencollective.com/midway"
+  },
+  "dependencies": {
+    "@opentelemetry/api": "^1.0.3",
+    "@opentelemetry/sdk-trace-node": "^1.0.1"
   }
 }
