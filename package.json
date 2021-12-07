@@ -6,12 +6,14 @@
     "@types/jest": "^27.0.0",
     "@types/node": "^16.7.10",
     "@vercel/ncc": "^0.33.0",
+    "autocannon": "^7.5.0",
     "jest": "^27.0.3",
     "lerna": "^3.20.2",
     "lerna-relinker": "^1.4.0",
     "mwts": "^1.0.5",
     "opencollective": "^1.0.3",
     "opencollective-postinstall": "^2.0.2",
+    "tree-kill": "^1.2.2",
     "ts-jest": "^27.0.2",
     "ts-node": "^10.0.0",
     "typescript": "^4.1.0",
@@ -59,5 +61,9 @@
   "collective": {
     "type": "opencollective",
     "url": "https://opencollective.com/midway"
+  },
+  "dependencies": {
+    "@opentelemetry/api": "^1.0.3",
+    "@opentelemetry/sdk-trace-node": "^1.0.1"
   }
 }

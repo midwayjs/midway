@@ -9,6 +9,8 @@
     "@midwayjs/decorator": "beta",
     "@midwayjs/koa": "beta",
     "@midwayjs/orm": "beta",
+    "@opentelemetry/api": "^1.0.3",
+    "@opentelemetry/sdk-trace-node": "^1.0.1",
     "sqlite3": "^5.0.2",
     "typeorm": "^0.2.41"
   },
