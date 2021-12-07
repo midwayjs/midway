@@ -10,7 +10,7 @@
     "noImplicitThis": true,
     "noUnusedLocals": true,
     "stripInternal": true,
-    "skipLibCheck": false,
+    "skipLibCheck": true,
     "pretty": true,
     "declaration": true,
     "typeRoots": [ "./typings", "./node_modules/@types"],
