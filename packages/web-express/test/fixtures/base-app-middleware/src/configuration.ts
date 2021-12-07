@@ -1,9 +1,10 @@
 import { Configuration, App } from '@midwayjs/decorator';
+import { join } from 'path';
 import { IMidwayExpressApplication, IMidwayExpressRequest } from '../../../../src';
 
 @Configuration({
   importConfigs: [
-    './config'
+    join(__dirname, './config'),
   ]
 })
 export class ContainerConfiguration {

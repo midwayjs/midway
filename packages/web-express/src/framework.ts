@@ -13,7 +13,6 @@ import {
 
 import {
   Framework,
-  Inject,
   WEB_RESPONSE_CONTENT_TYPE,
   WEB_RESPONSE_HEADER,
   WEB_RESPONSE_HTTP_CODE,
@@ -37,11 +36,9 @@ export class MidwayExpressFramework extends BaseFramework<
   IMidwayExpressConfigurationOptions,
   Response,
   NextFunction
-  > {
+> {
   public app: IMidwayExpressApplication;
   private server: Server;
-
-  @Inject()
   private expressMiddlewareService: MidwayExpressMiddlewareService;
 
   configure(): IMidwayExpressConfigurationOptions {
@@ -49,6 +46,10 @@ export class MidwayExpressFramework extends BaseFramework<
   }
 
   async applicationInitialize(options: Partial<IMidwayBootstrapOptions>) {
+    this.expressMiddlewareService = await this.applicationContext.getAsync(
+      MidwayExpressMiddlewareService,
+      [this.applicationContext]
+    );
     this.app = express() as unknown as IMidwayExpressApplication;
     this.app.use((req, res, next) => {
       const ctx = req as IMidwayExpressContext;
@@ -257,13 +258,13 @@ export class MidwayExpressFramework extends BaseFramework<
   private async handlerWebMiddleware(
     middlewares: Array<
       CommonMiddleware<IMidwayExpressContext, Response, NextFunction> | string
-      >,
+    >,
     handlerCallback: (
       middlewareImpl: FunctionMiddleware<
         IMidwayExpressContext,
         Response,
         NextFunction
-        >
+      >
     ) => void
   ): Promise<void> {
     const fn = await this.expressMiddlewareService.compose(middlewares);
@@ -272,7 +273,7 @@ export class MidwayExpressFramework extends BaseFramework<
 
   public async getMiddleware<Response, NextFunction>(): Promise<
     MiddlewareRespond<IMidwayExpressContext, Response, NextFunction>
-    > {
+  > {
     if (!this.composeMiddleware) {
       this.composeMiddleware = await this.expressMiddlewareService.compose(
         this.middlewareManager
