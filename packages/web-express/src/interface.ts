@@ -9,6 +9,10 @@ import {
 import { Application as ExpressApplication, NextFunction as ExpressNextFunction, Request, Response } from 'express';
 
 export type IMidwayExpressContext = IMidwayContext<Request>;
+/**
+ * @deprecated use IMidwayExpressContext
+ */
+export type IMidwayExpressRequest = IMidwayExpressContext;
 export type IMidwayExpressMiddleware = IMiddleware<IMidwayExpressContext, Response, ExpressNextFunction>;
 export interface IMidwayExpressApplication extends IMidwayApplication<IMidwayExpressContext, ExpressApplication> {
   /**
