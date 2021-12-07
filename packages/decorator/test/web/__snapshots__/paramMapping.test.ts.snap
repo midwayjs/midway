@@ -10,7 +10,6 @@ Object {
         "type": 4,
       },
       "parameterIndex": 6,
-      "parameterName": "bb",
       "propertyName": "doget",
     },
     Object {
@@ -20,7 +19,6 @@ Object {
         "type": 6,
       },
       "parameterIndex": 5,
-      "parameterName": "files",
       "propertyName": "doget",
     },
     Object {
@@ -32,7 +30,6 @@ Object {
         "type": 5,
       },
       "parameterIndex": 4,
-      "parameterName": "f",
       "propertyName": "doget",
     },
     Object {
@@ -42,7 +39,6 @@ Object {
         "type": 3,
       },
       "parameterIndex": 3,
-      "parameterName": "tt",
       "propertyName": "doget",
     },
     Object {
@@ -52,7 +48,6 @@ Object {
         "type": 1,
       },
       "parameterIndex": 2,
-      "parameterName": "body",
       "propertyName": "doget",
     },
     Object {
@@ -62,7 +57,6 @@ Object {
         "type": 0,
       },
       "parameterIndex": 1,
-      "parameterName": "query",
       "propertyName": "doget",
     },
     Object {
@@ -72,7 +66,6 @@ Object {
         "type": 2,
       },
       "parameterIndex": 0,
-      "parameterName": "aa",
       "propertyName": "doget",
     },
   ],

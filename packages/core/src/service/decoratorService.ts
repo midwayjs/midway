@@ -79,7 +79,6 @@ export class MidwayDecoratorService {
           parameterIndex: number;
           propertyName: string;
           metadata: any;
-          parameterName: string;
         }>;
       } = getClassMetadata(INJECT_CUSTOM_PARAM, Clzz);
 
@@ -93,13 +92,7 @@ export class MidwayDecoratorService {
                 // joinPoint.args
                 const newArgs = [...joinPoint.args];
                 for (const meta of parameterDecoratorMetadata[methodName]) {
-                  const {
-                    propertyName,
-                    key,
-                    metadata,
-                    parameterIndex,
-                    parameterName,
-                  } = meta;
+                  const { propertyName, key, metadata, parameterIndex } = meta;
                   const parameterDecoratorHandler =
                     this.parameterDecoratorMap.get(key);
                   if (!parameterDecoratorHandler) {
@@ -115,7 +108,6 @@ export class MidwayDecoratorService {
                     target: Clzz,
                     originArgs: joinPoint.args,
                     originParamType: paramTypes[parameterIndex],
-                    parameterName,
                   });
                 }
                 joinPoint.args = newArgs;

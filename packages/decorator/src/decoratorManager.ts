@@ -22,7 +22,6 @@ import {
   generateRandomId,
   classNamed,
   merge,
-  getParamNames,
 } from './util';
 
 const debug = require('util').debuglog('midway:decorator');
@@ -975,7 +974,7 @@ export function createCustomParamDecorator(
   metadata: any
 ): ParameterDecorator {
   return function (target: any, propertyName: string, parameterIndex: number) {
-    const parameterName = getParamNames(target[propertyName])[parameterIndex];
+    // const parameterName = getParamNames(target[methodName])[parameterIndex];
     attachClassMetadata(
       INJECT_CUSTOM_PARAM,
       {
@@ -983,7 +982,6 @@ export function createCustomParamDecorator(
         parameterIndex,
         propertyName,
         metadata,
-        parameterName,
       },
       target,
       propertyName,

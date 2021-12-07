@@ -66,15 +66,6 @@ export function PassportMiddleware(
     @App()
     app;
 
-    @Init()
-    async init() {
-      const passport = getPassport();
-      this.app.use(passport.initialize());
-      if (this.passportConfig.session) {
-        this.app.use(passport.session());
-      }
-    }
-
     resolve() {
       if (isExpressMode()) {
         return async (req, res, next) => {

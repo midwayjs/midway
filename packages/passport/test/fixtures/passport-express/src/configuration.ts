@@ -3,6 +3,7 @@ import * as passport from 'passport';
 import { PassportMiddleware, PassportStrategy, CustomStrategy } from '../../../../src';
 import * as path from 'path';
 import * as LocalStrategy from 'passport-local';
+import * as express from '@midwayjs/express';
 
 @CustomStrategy()
 export class MyStrategy extends PassportStrategy(LocalStrategy.Strategy) {
@@ -29,6 +30,7 @@ export class AuthMiddleware extends PassportMiddleware(MyStrategy) {
 
 @Configuration({
   imports: [
+    express,
     require('../../../../src')
   ],
   conflictCheck: true,

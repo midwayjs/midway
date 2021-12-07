@@ -1,7 +1,4 @@
 import { createApp, close, createHttpRequest } from '@midwayjs/mock';
-import { Framework as ExpressFramework } from '@midwayjs/express';
-import { Framework as KoaFramework } from '@midwayjs/koa';
-import { Framework as EggFramework } from '@midwayjs/web';
 import { join } from 'path';
 
 describe('/test/index.test.ts', () => {
@@ -11,7 +8,6 @@ describe('/test/index.test.ts', () => {
       const app = await createApp(
         join(__dirname, 'fixtures', 'passport-express'),
         {},
-        ExpressFramework
       );
 
       const request = createHttpRequest(app);
@@ -37,7 +33,6 @@ describe('/test/index.test.ts', () => {
       const app = await createApp(
         join(__dirname, 'fixtures', 'passport-express-session'),
         {},
-        ExpressFramework
       );
 
       const request = createHttpRequest(app);
@@ -73,7 +68,6 @@ describe('/test/index.test.ts', () => {
       const app = await createApp(
         join(__dirname, 'fixtures', 'passport-express-jwt'),
         {},
-        ExpressFramework
       );
       let result = await createHttpRequest(app).get('/gen-jwt');
       token = result.text;
@@ -97,7 +91,6 @@ describe('/test/index.test.ts', () => {
       const app = await createApp(
         join(__dirname, 'fixtures', 'passport-web'),
         {},
-        EggFramework
       );
 
       const request = createHttpRequest(app);
@@ -131,7 +124,6 @@ describe('/test/index.test.ts', () => {
       const app = await createApp(
         join(__dirname, 'fixtures', 'passport-koa-session'),
         {},
-        KoaFramework
       );
 
       const request = createHttpRequest(app);
@@ -164,7 +156,6 @@ describe('/test/index.test.ts', () => {
       const app = await createApp(
         join(__dirname, 'fixtures', 'passport-koa-jwt'),
         {},
-        KoaFramework
       );
       let result = await createHttpRequest(app).get('/gen-jwt');
       token = result.text;

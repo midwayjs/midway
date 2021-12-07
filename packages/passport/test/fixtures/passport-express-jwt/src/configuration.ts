@@ -3,9 +3,10 @@ import * as passport from '../../../../../passport/src';
 import * as jwt from '@midwayjs/jwt';
 import * as path from 'path';
 import { IMidwayExpressApplication } from '@midwayjs/express';
+import * as express from '@midwayjs/express';
 
 @Configuration({
-  imports: [passport, jwt],
+  imports: [express, passport, jwt],
   conflictCheck: true,
   importConfigs: [path.join(__dirname, './config')],
 })
