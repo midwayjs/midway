@@ -13,6 +13,9 @@ import {
 } from '@midwayjs/decorator';
 import { WebRouterCollector, IMidwayContainer, RouterInfo } from '../index';
 import { ILogger } from '@midwayjs/logger';
+import * as util from 'util';
+
+const debug = util.debuglog('midway:debug');
 
 export abstract class WebControllerGenerator<
   Router extends { use: (...args) => void }
@@ -87,6 +90,10 @@ export abstract class WebControllerGenerator<
         `Load Controller "${routerInfo.controllerId}", prefix=${routerInfo.prefix}`
       );
 
+      debug(
+        `[core:webGenerator]: Load Controller "${routerInfo.controllerId}", prefix=${routerInfo.prefix}`
+      );
+
       // new router
       const newRouter: Router = this.createRouter({
         prefix: routerInfo.prefix,
@@ -124,6 +131,12 @@ export abstract class WebControllerGenerator<
 
         this.logger?.debug(
           `Load Router "${routeInfo.requestMethod.toUpperCase()} ${
+            routeInfo.url
+          }"`
+        );
+
+        debug(
+          `[core:webGenerator]: Load Router "${routeInfo.requestMethod.toUpperCase()} ${
             routeInfo.url
           }"`
         );

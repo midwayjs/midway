@@ -6,7 +6,7 @@ import {
   FunctionMiddleware,
 } from '../interface';
 import { MidwayCommonError, MidwayParameterError } from '../error';
-import { isIncludeProperty, toPathMatch } from '../util';
+import { isIncludeProperty, pathMatching } from '../util';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -39,7 +39,9 @@ export class MidwayMiddlewareService<T, R, N = unknown> {
         if (classMiddleware) {
           fn = classMiddleware.resolve();
           if (!classMiddleware.match && !classMiddleware.ignore) {
-            (fn as any)._name = classMiddleware.constructor.name;
+            if (!fn.name) {
+              (fn as any)._name = classMiddleware.constructor.name;
+            }
             // just got fn
             newMiddlewareArr.push(fn);
           } else {
@@ -117,22 +119,8 @@ export class MidwayMiddlewareService<T, R, N = unknown> {
     }
     return composeFn;
   }
-}
 
-export function pathMatching(options) {
-  options = options || {};
-  if (options.match && options.ignore)
-    throw new MidwayCommonError(
-      'options.match and options.ignore can not both present'
-    );
-  if (!options.match && !options.ignore) return () => true;
-
-  const matchFn = options.match
-    ? toPathMatch(options.match)
-    : toPathMatch(options.ignore);
-
-  return function pathMatch(ctx?) {
-    const matched = matchFn(ctx);
-    return options.match ? matched : !matched;
-  };
+  public getMiddlewareName(mw) {
+    return mw.name ?? mw._name;
+  }
 }

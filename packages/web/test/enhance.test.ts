@@ -128,7 +128,7 @@ describe('/test/enhance.test.ts', () => {
     });
   });
 
-  describe.only('load ts file and use config, plugin decorator', () => {
+  describe('load ts file and use config, plugin decorator', () => {
     let app;
 
     beforeAll(async () => {
@@ -433,7 +433,7 @@ describe('/test/enhance.test.ts', () => {
     });
   });
 
-  describe.only('load tsx file', () => {
+  describe('load tsx file', () => {
     let app;
     beforeAll(async () => {
       app = await creatApp('enhance/base-app-controller-tsx');
@@ -451,7 +451,7 @@ describe('/test/enhance.test.ts', () => {
     });
   });
 
-  describe.only('support middleware parameter', () => {
+  describe('support middleware parameter', () => {
     let app;
     beforeAll(async () => {
       app = await creatApp('enhance/base-app-middleware');

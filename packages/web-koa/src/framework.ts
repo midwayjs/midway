@@ -68,12 +68,14 @@ export class MidwayKoaFramework extends BaseFramework<
       throw new MidwayConfigMissingError('koa.keys');
     }
     onerror(this.app, this.configurationOptions.onerror);
-    this.app.use(async (ctx, next) => {
+
+    const midwayRootMiddleware = async (ctx, next) => {
       this.app.createAnonymousContext(ctx);
       await (
         await this.getMiddleware()
       )(ctx, next);
-    });
+    };
+    this.app.use(midwayRootMiddleware);
 
     this.generator = new KoaControllerGenerator(
       this.app,
@@ -92,7 +94,11 @@ export class MidwayKoaFramework extends BaseFramework<
     await this.generator.loadMidwayController(
       this.configurationOptions.globalPrefix,
       newRouter => {
-        this.app.use(newRouter.middleware());
+        const dispatchFn = newRouter.middleware();
+        dispatchFn._name = `midwayController(${
+          newRouter?.opts?.prefix || '/'
+        })`;
+        this.app.use(dispatchFn);
       }
     );
   }

@@ -68,20 +68,20 @@ export function PassportMiddleware(
 
     resolve() {
       if (isExpressMode()) {
-        return async (req, res, next) => {
+        return async function passportMiddleware(req, res, next) {
           return this.authenticate(await this.getAuthenticateOptions())(
             req,
             res,
             next
           );
-        };
+        }.bind(this);
       } else {
-        return async (ctx, next) => {
+        return async function passportMiddleware(ctx, next) {
           return this.authenticate(await this.getAuthenticateOptions())(
             ctx,
             next
           );
-        };
+        }.bind(this);
       }
     }
 
@@ -154,7 +154,7 @@ export function PassportMiddleware(
           }
         };
       } else {
-        return async (ctx, next) => {
+        return async function bbb(ctx, next) {
           // merge options with default options
           const authOptions = {
             ...this.passportConfig,
@@ -220,7 +220,7 @@ export function PassportMiddleware(
               ctx.throw(err);
             }
           }
-        };
+        }.bind(this);
       }
     }
   }

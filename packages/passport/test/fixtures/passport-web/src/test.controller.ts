@@ -1,6 +1,5 @@
-import { Provide, Controller, Get, Inject } from '@midwayjs/decorator';
+import { Controller, Get, Inject } from '@midwayjs/decorator';
 
-@Provide()
 @Controller('/')
 export class TestPackagesController {
   @Inject()
