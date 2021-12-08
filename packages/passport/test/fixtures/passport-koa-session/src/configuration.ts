@@ -5,6 +5,7 @@ import * as session from 'koa-session';
 import * as LocalStrategy from 'passport-local';
 import { PassportMiddleware, PassportStrategy, CustomStrategy as Strategy } from '../../../../src';
 import * as passport from 'passport';
+import * as koa from '@midwayjs/koa';
 
 @Strategy()
 export class CustomStrategy extends PassportStrategy(LocalStrategy.Strategy, 'local') {
@@ -43,6 +44,7 @@ export class AuthMiddleware extends PassportMiddleware(CustomStrategy) {
 
 @Configuration({
   imports: [
+    koa,
     require('../../../../src')
   ],
   conflictCheck: true,
@@ -57,6 +59,6 @@ export class ContainerLifeCycle {
     this.app.keys = ["21321312"];
     this.app.use(session({key: "SESSIONID"}, this.app))
     this.app.use(bodyParser())
-    this.app.use(await this.app.generateMiddleware(AuthMiddleware));
+    this.app.useMiddleware(AuthMiddleware);
   }
 }

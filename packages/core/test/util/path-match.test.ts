@@ -1,4 +1,4 @@
-import { pathMatching as match } from '../../src/service/middlewareService';
+import { pathMatching as match } from '../../src/';
 import * as assert from 'assert';
 
 describe('/test/util/path-matching.test.ts', () => {

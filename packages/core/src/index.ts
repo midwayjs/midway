@@ -12,6 +12,8 @@ export {
   delegateTargetProperties,
   deprecatedOutput,
   transformRequestObjectByType,
+  pathMatching,
+  wrapMiddleware,
 } from './util/';
 export * from './util/pathFileUtil';
 export * from './util/webRouterParam';

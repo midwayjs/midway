@@ -4,6 +4,7 @@ import { debuglog } from 'util';
 import * as transformer from 'class-transformer';
 import { pathToRegexp } from './pathToRegexp';
 import { MidwayCommonError } from '../error';
+import { FunctionMiddleware } from '../interface';
 
 const debug = debuglog('midway:container:util');
 
@@ -248,6 +249,45 @@ export function toPathMatch(pattern) {
   throw new MidwayCommonError(
     'match/ignore pattern must be RegExp, Array or String, but got ' + pattern
   );
+}
+
+export function pathMatching(options) {
+  options = options || {};
+  if (options.match && options.ignore)
+    throw new MidwayCommonError(
+      'options.match and options.ignore can not both present'
+    );
+  if (!options.match && !options.ignore) return () => true;
+
+  const matchFn = options.match
+    ? toPathMatch(options.match)
+    : toPathMatch(options.ignore);
+
+  return function pathMatch(ctx?) {
+    const matched = matchFn(ctx);
+    return options.match ? matched : !matched;
+  };
+}
+
+/**
+ * wrap function middleware with match and ignore
+ * @param mw
+ * @param options
+ */
+export function wrapMiddleware(mw: FunctionMiddleware<any, any>, options) {
+  // support options.enable
+  if (options.enable === false) return null;
+
+  // support options.match and options.ignore
+  if (!options.match && !options.ignore) return mw;
+  const match = pathMatching(options);
+
+  const fn = (ctx, next) => {
+    if (!match(ctx)) return next();
+    return mw(ctx, next);
+  };
+  fn._name = (mw as any)._name + 'middlewareWrapper';
+  return fn;
 }
 
 function isOwnPropertyWritable(obj: any, prop: string): boolean {

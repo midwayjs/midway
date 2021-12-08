@@ -24,10 +24,9 @@ class AppBootHook {
   async didLoad() {
     debug('[egg lifecycle]: app didLoad');
     if (this.app.loader['useEggSocketIO']) {
-      // socketio 下会提前加入 session 中间件，这里删除，防止重复加载
-      if (this.app.middleware.length && this.app.middleware[this.app.middleware.length - 1]._name === 'session') {
-        this.app.middleware.pop();
-      }
+      // egg socket.io 需要这个中间件
+      // const session = this.app.getMiddleware().findItem('session');
+      // this.app.middleware.push(session);
     }
   }
 

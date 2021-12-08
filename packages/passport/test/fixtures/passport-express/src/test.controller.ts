@@ -4,13 +4,13 @@ import { Provide, Controller, Get, Inject } from '@midwayjs/decorator';
 @Controller('/')
 export class TestPackagesController {
   @Inject()
-  ctx;
+  req;
 
   @Get('/local-passport', { middleware: ['local'] })
   async localPassport() {
     if (
-      this.ctx.req.user?.username === 'admin' &&
-      this.ctx.req.user?.password === '123'
+      this.req.user?.username === 'admin' &&
+      this.req.user?.password === '123'
     ) {
       return 'success';
     }

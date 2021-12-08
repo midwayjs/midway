@@ -1,11 +1,6 @@
-import {
-  ILifeCycle,
-  IMidwayApplication,
-  IMidwayContainer,
-} from '@midwayjs/core';
-import { Configuration } from '@midwayjs/decorator';
+import { App, Config, Configuration } from '@midwayjs/decorator';
 import * as DefaultConfig from './config/config.default';
-import { PassportService } from './service/passport';
+import { getPassport } from './util';
 
 @Configuration({
   namespace: 'passport',
@@ -15,8 +10,18 @@ import { PassportService } from './service/passport';
     },
   ],
 })
-export class PassportConfiguration implements ILifeCycle {
-  async onReady(container: IMidwayContainer, app: IMidwayApplication) {
-    await container.getAsync(PassportService);
+export class PassportConfiguration {
+  @App()
+  app;
+
+  @Config('passport')
+  passportConfig;
+
+  async onReady() {
+    const passport = getPassport();
+    this.app.useMiddleware(passport.initialize());
+    if (this.passportConfig.session) {
+      this.app.useMiddleware(passport.session());
+    }
   }
 }

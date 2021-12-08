@@ -5,6 +5,7 @@ import * as path from 'path';
 import * as LocalStrategy from 'passport-local';
 import * as bodyParser from 'body-parser';
 import * as session from 'express-session';
+import * as express from '@midwayjs/express';
 
 @Strategy()
 export class CustomStrategy extends PassportStrategy(LocalStrategy.Strategy) {
@@ -42,6 +43,7 @@ export class AuthMiddleware extends PassportMiddleware(CustomStrategy) {
 
 @Configuration({
   imports: [
+    express,
     require('../../../../src')
   ],
   conflictCheck: true,
@@ -62,6 +64,6 @@ export class ContainerLifeCycle {
     );
     this.app.use(bodyParser.json());
     this.app.use(bodyParser.urlencoded({ extended: false }));
-    this.app.use(await this.app.generateMiddleware(AuthMiddleware));
+    this.app.useMiddleware(AuthMiddleware);
   }
 }

@@ -2,8 +2,6 @@
 
 import { Inject, Provide, Scope, ScopeEnum, Controller, Get } from '@midwayjs/decorator';
 
-const assert = require('assert');
-
 @Provide()
 @Scope(ScopeEnum.Request)
 export class BaseApi {
@@ -21,7 +19,6 @@ export class Api {
 
   @Get('/')
   async index(ctx) {
-    assert(this.logger.constructor.name === 'ContextLogger');
     ctx.body = 'hello';
   }
 }
