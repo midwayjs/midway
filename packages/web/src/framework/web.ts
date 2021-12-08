@@ -104,16 +104,16 @@ export class MidwayWebFramework extends BaseFramework<
 
     this.overwriteApplication('app');
 
-    // 这里拦截 app.use 方法，让他可以加到 midway 的 middlewareManager 中
-    (this.app as any).originUse = this.app.use;
-    this.app.use = this.app.useMiddleware as any;
-
     await new Promise<void>(resolve => {
       this.app.once('application-ready', () => {
         debug('[egg]: web framework: init egg end');
         resolve();
       });
       (this.app.loader as any).loadOrigin();
+      // 这里拦截 app.use 方法，让他可以加到 midway 的 middlewareManager 中
+      (this.app as any).originUse = this.app.use;
+      this.app.use = this.app.useMiddleware as any;
+
       this.app.ready();
     });
   }
@@ -242,17 +242,19 @@ export class MidwayWebFramework extends BaseFramework<
       const eggConfig = this.configService.getConfiguration('egg');
       if (!this.isClusterMode && eggConfig) {
         const customPort = process.env.MIDWAY_HTTP_PORT ?? eggConfig.port;
-        new Promise<void>(resolve => {
-          const args: any[] = [customPort];
-          if (eggConfig.hostname) {
-            args.push(eggConfig.hostname);
-          }
-          args.push(() => {
-            resolve();
+        if (customPort) {
+          new Promise<void>(resolve => {
+            const args: any[] = [customPort];
+            if (eggConfig.hostname) {
+              args.push(eggConfig.hostname);
+            }
+            args.push(() => {
+              resolve();
+            });
+            this.server.listen(...args);
+            process.env.MIDWAY_HTTP_PORT = String(customPort);
           });
-          this.server.listen(...args);
-          process.env.MIDWAY_HTTP_PORT = String(customPort);
-        });
+        }
       }
     }
   }
