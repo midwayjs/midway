@@ -51,8 +51,10 @@ export class MidwayFaaSFramework extends BaseFramework<
   configure(options: IFaaSConfigurationOptions) {
     if (options) {
       this.developmentRun = true;
+      this.configurationOptions = options;
+    } else {
+      return this.configService.getConfiguration('faas');
     }
-    return options ?? this.configService.getConfiguration('faas');
   }
 
   isEnable(): boolean {
