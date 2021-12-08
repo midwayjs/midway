@@ -6,20 +6,23 @@ import {
   ControllerOption,
   getClassMetadata,
   getMethodParamTypes,
-  getPropertyDataFromClass,
   isClass,
   RouteParamTypes,
   RouterOption,
-  RouterParamValue,
   WEB_ROUTER_KEY,
   WEB_ROUTER_PARAM_KEY,
   Init,
+  Scope,
+  ScopeEnum,
+  INJECT_CUSTOM_PARAM,
+  INJECT_CUSTOM_METHOD,
 } from '@midwayjs/decorator';
 import { PathItemObject, Type } from './interfaces';
 import { DECORATORS } from './constants';
 import { DocumentBuilder } from './documentBuilder';
 
 @Provide()
+@Scope(ScopeEnum.Singleton)
 export class SwaggerExplorer {
   @Config('swagger')
   private swaggerConfig: any;
@@ -88,23 +91,25 @@ export class SwaggerExplorer {
     );
 
     const prefix = controllerOption.prefix;
-    const tag = { name: '', description: '' };
-    if (prefix !== '/') {
-      tag.name =
-        controllerOption?.routerOptions.tagName ||
-        (/^\//.test(prefix) ? prefix.split('/')[1] : prefix);
-      tag.description = controllerOption?.routerOptions.description || tag.name;
-    } else {
-      tag.name = controllerOption?.routerOptions.tagName || 'default';
-      tag.description = controllerOption?.routerOptions.description || tag.name;
-    }
-    if (tag.name) {
-      this.documentBuilder.addTag(tag.name, tag.description);
-    }
+
     const tags = Reflect.getMetadata(DECORATORS.API_TAGS, module);
     if (Array.isArray(tags)) {
       for (const t of tags) {
         this.documentBuilder.addTag(t);
+      }
+    } else {
+      const tag = { name: '', description: '' };
+      if (prefix !== '/') {
+        tag.name =
+          controllerOption?.routerOptions.tagName ||
+          (/^\//.test(prefix) ? prefix.split('/')[1] : prefix);
+        tag.description = controllerOption?.routerOptions.description || tag.name;
+      } else {
+        tag.name = controllerOption?.routerOptions.tagName || 'default';
+        tag.description = controllerOption?.routerOptions.description || tag.name;
+      }
+      if (tag.name) {
+        this.documentBuilder.addTag(tag.name, tag.description);
       }
     }
 
@@ -115,13 +120,19 @@ export class SwaggerExplorer {
       module
     );
     
+    let header = null;
+    const headers = Reflect.getMetadata(DECORATORS.API_HEADERS, module);
+    if (Array.isArray(headers)) {
+      header = headers[0];
+    }
+
     const paths: Record<string, PathItemObject> = {};
     if (webRouterInfo && typeof webRouterInfo[Symbol.iterator] === 'function') {
       for (const webRouter of webRouterInfo) {
         let url = (prefix + webRouter.path).replace('//', '/');
         url = replaceUrl(url, parseParamsInPath(url));
 
-        this.generateRouteMethod(url, webRouter, module, paths);
+        this.generateRouteMethod(url, webRouter, module, paths, header);
       }
     }
 
@@ -137,34 +148,42 @@ export class SwaggerExplorer {
   private generateRouteMethod(url: string,
     webRouter: RouterOption,
     module: any,
-    paths: Record<string, PathItemObject>) {
+    paths: Record<string, PathItemObject>,
+    header: any) {
 
     const operMeta = Reflect.getMetadata(DECORATORS.API_OPERATION,
       module,
       webRouter.method);
 
-    const opts: PathItemObject = {};
-    if (!paths[url]) {
-      paths[url] = opts;
+    let opts: PathItemObject = paths[url];
+    if (!opts) {
+      opts = {};
     }
     const parameters = [];
     opts[webRouter.requestMethod] = {
-      summary: operMeta.summary,
-      description: operMeta.description,
-      operationId: operMeta.operationId || webRouter.method,
-      tags: operMeta.tags || [],
+      summary: operMeta?.summary,
+      description: operMeta?.description,
+      operationId: operMeta?.operationId || webRouter.method,
+      tags: operMeta?.tags || [],
     };
-
-    const args: RouterParamValue[] = getPropertyDataFromClass(WEB_ROUTER_PARAM_KEY, module, webRouter.method);
+    /**
+     * [{"key":"web:router_param","parameterIndex":1,"propertyName":"create","metadata":{"type":2}},
+     * {"key":"web:router_param","parameterIndex":0,"propertyName":"create","metadata":{"type":1,"propertyData":"createCatDto"}}]
+     */
+    let routerArgs = getClassMetadata(INJECT_CUSTOM_PARAM, module);
+    routerArgs = routerArgs[webRouter.method] || [];
+    // WEB_ROUTER_PARAM_KEY
+    let args: any[] = routerArgs.filter(item => item.key === WEB_ROUTER_PARAM_KEY);
+    args = args.filter(item => (item as any).key === WEB_ROUTER_PARAM_KEY);
     const types = getMethodParamTypes(module, webRouter.method);
-    const params = Reflect.getMetadata(DECORATORS.API_PARAMETERS,
-      module,
-      webRouter.method);
-
+    let params = getClassMetadata(INJECT_CUSTOM_METHOD, module);
+    params = params.filter(item => item.key === DECORATORS.API_PARAMETERS);
+    console.log('params ------>', params)
     for (const arg of args) {
+      const currentType = types[arg.parameterIndex];
       const p: any = {
-        name: arg.propertyData,
-        in: convertTypeToString(arg.type),
+        name: arg?.metadata?.propertyData ?? '',
+        in: convertTypeToString(arg.metadata?.type),
         required: false,
       };
 
@@ -178,13 +197,15 @@ export class SwaggerExplorer {
         }
       }
       if (!p.schema) {
-        if (isClass(types[arg.index])) {
+        if (isClass(currentType)) {
+          this.parseClzz(currentType);
+
           p.schema = {
-            $ref: '#/components/schemas/' + types[arg.index].name,
+            $ref: '#/components/schemas/' + currentType.name,
           };
         } else {
           p.schema = {
-            type: convertSchemaType(types[arg.index]),
+            type: convertSchemaType(currentType),
           };
         }
       }
@@ -206,15 +227,23 @@ export class SwaggerExplorer {
 
       parameters.push(p);
     }
+    // class header 需要使用 ApiHeader 装饰器
+    if (header) {
+      parameters.unshift(header);
+    }
 
     opts[webRouter.requestMethod].parameters = parameters;
     opts[webRouter.requestMethod].responses = {};
 
-    const responses = Reflect.getMetadata(DECORATORS.API_RESPONSE, module, webRouter.method);
-    for (const resp of responses) {
+    const responses = Reflect.getMetadata(DECORATORS.API_RESPONSE, module, webRouter.method) || {};
+    console.log('responses ------>', responses);
+    const keys = Object.keys(responses);
+    for (const k of keys) {
       // 这里是引用，赋值可以直接更改
-      const tt = resp[Object.keys(resp)[0]];
+      const tt = responses[k];
       if (isClass(tt.type)) {
+        this.parseClzz(tt.type);
+
         tt.schema = {
           $ref: '#/components/schemas/' + tt.type.name,
         };
@@ -239,7 +268,7 @@ export class SwaggerExplorer {
       delete tt.isArray;
       delete tt.format;
 
-      Object.assign(opts[webRouter.requestMethod].responses, resp);
+      Object.assign(opts[webRouter.requestMethod].responses, responses[k]);
     }
 
     paths[url] = opts;
@@ -271,6 +300,8 @@ export class SwaggerExplorer {
         } else {
           if (param.type) {
             if (isClass(param.type)) {
+              this.parseClzz(param.type);
+
               p.schema = {
                 $ref: '#/components/schemas/' + param.type.name,
               };  
@@ -295,6 +326,20 @@ export class SwaggerExplorer {
           }
         }
       }
+    }
+  }
+  /**
+   * 解析类型的 ApiProperty
+   * @param clzz 
+   */
+  private parseClzz(clzz: Type) {
+    const props = Reflect.getMetadata(DECORATORS.API_MODEL_PROPERTIES, clzz);
+    if (props) {
+      this.documentBuilder.addSchema({
+        [clzz.name]: props
+      });
+    } else {
+      console.log(Object.keys(clzz.prototype));
     }
   }
   /**

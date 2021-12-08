@@ -1,12 +1,13 @@
-import type { IMiddleware, IMidwayContext } from '@midwayjs/core';
+import type { IMiddleware, IMidwayContext, NextFunction } from '@midwayjs/core';
 import { safeRequire } from '@midwayjs/core';
-import { Provide, Config, Init, Inject } from '@midwayjs/decorator';
+import { Config, Init, Inject, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
 import { readFileSync } from 'fs';
 import { join, extname } from 'path';
 import { SwaggerExplorer } from './swaggerExplorer';
 
 @Provide()
-export class SwaggerMiddleware implements IMiddleware<IMidwayContext> {
+@Scope(ScopeEnum.Singleton)
+export class SwaggerMiddleware implements IMiddleware<IMidwayContext, NextFunction, unknown> {
   @Config('swagger')
   private swaggerConfig: any;
 
@@ -25,10 +26,12 @@ export class SwaggerMiddleware implements IMiddleware<IMidwayContext> {
 
   resolve() {
     return async (ctx: IMidwayContext, next: () => Promise<any>, options?: any) => {
-      if (!this.swaggerUiAssetPath) {
+      const pathname = (ctx as any).path;
+      if (!this.swaggerUiAssetPath ||
+        pathname.indexOf(this.swaggerConfig.swaggerPath) === -1) {
+
         return next();
       }
-      const pathname = (ctx as any).path;
       const arr = pathname.split('/');
       let lastName = arr.pop();
       if (lastName === 'index.json') {
@@ -50,10 +53,5 @@ export class SwaggerMiddleware implements IMiddleware<IMidwayContext> {
 
       (ctx as any).body = content;
     }
-  }
-
-  match(ctx: IMidwayContext): boolean {
-    const path = (ctx as any).path;
-    return path.indexOf(this.swaggerConfig.swaggerPath) > -1;
   }
 }

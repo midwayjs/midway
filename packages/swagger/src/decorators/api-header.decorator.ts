@@ -4,7 +4,8 @@ import {
   ParameterObject
 } from '../interfaces';
 import { getEnumType, getEnumValues } from '../common/enum.utils';
-import { createClassDecorator, createParamDecorator } from './helpers';
+import { createParamDecorator } from './helpers';
+import { createCustomMethodDecorator } from '@midwayjs/decorator';
 
 export interface ApiHeaderOptions extends Omit<ParameterObject, 'in'> {
   enum?: SwaggerEnumType;
@@ -16,7 +17,7 @@ const defaultHeaderOptions: Partial<ApiHeaderOptions> = {
 
 export function ApiHeader(
   options: ApiHeaderOptions
-): MethodDecorator & ClassDecorator {
+): any {
   const param = {
       name: !options.name ? defaultHeaderOptions.name : options.name,
       in: 'header',
@@ -48,8 +49,10 @@ export function ApiHeader(
         descriptor
       );
     }
-    return createClassDecorator(DECORATORS.API_HEADERS, [param])(
-      target as Function
+    return createCustomMethodDecorator(DECORATORS.API_HEADERS, [param])(
+      target,
+      undefined,
+      undefined
     );
   };
 }

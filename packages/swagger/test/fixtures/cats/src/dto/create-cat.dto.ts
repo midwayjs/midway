@@ -1,12 +1,13 @@
-// import { IsInt, IsString } from 'class-validator';
+
+import { ApiProperty } from "../../../../../src";
 
 export class CreateCatDto {
-  // @IsString()
-  readonly name: string;
+  @ApiProperty({ example: 'Kitty', description: 'The name of the Catname'})
+  name: string;
 
-  // @IsInt()
-  readonly age: number;
+  @ApiProperty({ example: '1', description: 'The name of the Catage'})
+  age: number;
 
-  // @IsString()
-  readonly breed: string;
+  @ApiProperty({ example: 'bbbb', description: 'The name of the Catbreed'})
+  breed: string;
 }
