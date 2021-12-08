@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/i18n",
   "description": "midway i18n compoennet",
-  "version": "3.0.0-beta.7",
+  "version": "3.0.0-beta.8",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "files": [
@@ -9,9 +9,9 @@
     "dist/**/*.d.ts"
   ],
   "devDependencies": {
-    "@midwayjs/core": "^3.0.0-beta.7",
-    "@midwayjs/decorator": "^3.0.0-beta.7",
-    "@midwayjs/mock": "^3.0.0-beta.7"
+    "@midwayjs/core": "^3.0.0-beta.8",
+    "@midwayjs/decorator": "^3.0.0-beta.8",
+    "@midwayjs/mock": "^3.0.0-beta.8"
   },
   "keywords": [
     "midway",

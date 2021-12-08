@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/koa-layer",
-  "version": "3.0.0-beta.7",
+  "version": "3.0.0-beta.8",
   "main": "index.js",
   "scripts": {
     "test": "node --require=ts-node/register ../../node_modules/.bin/jest",
@@ -10,12 +10,12 @@
     "request": "^2.88.2"
   },
   "devDependencies": {
-    "@midwayjs/runtime-engine": "^3.0.0-beta.7",
-    "@midwayjs/runtime-mock": "^3.0.0-beta.7",
-    "@midwayjs/serverless-fc-starter": "^3.0.0-beta.7",
-    "@midwayjs/serverless-fc-trigger": "^3.0.0-beta.7",
-    "@midwayjs/serverless-scf-starter": "^3.0.0-beta.7",
-    "@midwayjs/serverless-scf-trigger": "^3.0.0-beta.7",
+    "@midwayjs/runtime-engine": "^3.0.0-beta.8",
+    "@midwayjs/runtime-mock": "^3.0.0-beta.8",
+    "@midwayjs/serverless-fc-starter": "^3.0.0-beta.8",
+    "@midwayjs/serverless-fc-trigger": "^3.0.0-beta.8",
+    "@midwayjs/serverless-scf-starter": "^3.0.0-beta.8",
+    "@midwayjs/serverless-scf-trigger": "^3.0.0-beta.8",
     "koa": "^2.13.0",
     "koa-bodyparser": "^4.3.0",
     "koa-router": "^9.4.0",

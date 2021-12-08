@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/task",
-  "version": "3.0.0-beta.7",
+  "version": "3.0.0-beta.8",
   "description": "",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -23,11 +23,11 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/core": "^3.0.0-beta.7",
-    "@midwayjs/decorator": "^3.0.0-beta.7",
-    "@midwayjs/koa": "^3.0.0-beta.7",
-    "@midwayjs/logger": "^3.0.0-beta.7",
-    "@midwayjs/mock": "^3.0.0-beta.7",
+    "@midwayjs/core": "^3.0.0-beta.8",
+    "@midwayjs/decorator": "^3.0.0-beta.8",
+    "@midwayjs/koa": "^3.0.0-beta.8",
+    "@midwayjs/logger": "^3.0.0-beta.8",
+    "@midwayjs/mock": "^3.0.0-beta.8",
     "@types/bull": "^3.15.0",
     "@types/cron": "^1.7.2"
   },
