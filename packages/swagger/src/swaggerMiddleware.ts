@@ -38,16 +38,16 @@ export class SwaggerMiddleware implements IMiddleware<IMidwayContext, NextFuncti
         (ctx as any).body = this.swaggerExplorer.getData();
         return;
       }
-      if (!lastName || extname(pathname) !== 'html') {
+      if (!lastName || extname(pathname) !== '.html') {
         lastName = 'index.html';
       }
 
-      const content = readFileSync(join(this.swaggerUiAssetPath, lastName),
+      let content = readFileSync(join(this.swaggerUiAssetPath, lastName),
         { encoding: 'utf-8' });
       if (lastName === 'index.html') {
-        return content.replace(
+        content = content.replace(
           '"https://petstore.swagger.io/v2/swagger.json"',
-          `location.href.replace('/${this.swaggerConfig.swaggerPath}/index.html', '/${this.swaggerConfig.swaggerPath}/index.json')`
+          `location.href.replace('${this.swaggerConfig.swaggerPath}/index.html', '${this.swaggerConfig.swaggerPath}/index.json')`
         );
       }
 

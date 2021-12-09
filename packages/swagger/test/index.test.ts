@@ -16,8 +16,11 @@ describe('/test/index.test.ts', () => {
     });
 
     it('should get swagger json', async () => {
+      const ret = await createHttpRequest(app).get('/swagger-ui/index.html');
+      expect(ret.type).toEqual('text/html');
+      expect(ret.text).toContain('html');
+
       const result = await createHttpRequest(app).get('/swagger-ui/index.json');
-      console.log(JSON.stringify(result.body));
       expect(result.type).toEqual('application/json');
     });
 
