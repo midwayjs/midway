@@ -14,7 +14,9 @@ export interface ResolveFilter {
 export interface InjectionConfigurationOptions {
   imports?: Array<string | IComponentInfo | { Configuration: any }>;
   importObjects?: Record<string, unknown>;
-  importConfigs?: any[];
+  importConfigs?:
+    | Array<{ [environmentName: string]: Record<string, any> }>
+    | Record<string, any>;
   namespace?: string;
   directoryResolveFilter?: ResolveFilter[];
   conflictCheck?: boolean;
