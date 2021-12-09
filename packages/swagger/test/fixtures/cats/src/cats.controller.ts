@@ -1,7 +1,10 @@
 import { Body, Controller, Get, Inject, Param, Post } from '@midwayjs/decorator';
 import {
   ApiBody,
+  ApiForbiddenResponse,
   ApiHeader,
+  ApiNotFoundResponse,
+  ApiOkResponse,
   ApiOperation,
   ApiParam,
   ApiResponse,
@@ -24,8 +27,9 @@ export class CatsController {
   @ApiOperation({ summary: 'Create cat' })
   @ApiBody({ type: CreateCatDto, description: 'hello world'})
   @ApiParam({ name: 'id', format: 'int32', description: 'hello world id number'})
-  @ApiResponse({ status: 403, description: 'Forbidden.' })
-  @ApiResponse({ status: 404, description: 'NotFound.' })
+  @ApiForbiddenResponse({ description: 'Forbidden.' })
+  @ApiNotFoundResponse({ description: 'NotFound.'})
+  @ApiOkResponse({ type: Cat, description: '成功了'})
   async create(@Body() createCatDto: CreateCatDto, @Param('id') id: number): Promise<Cat> {
     return this.catsService.create(createCatDto);
   }

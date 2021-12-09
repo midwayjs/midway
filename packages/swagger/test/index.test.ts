@@ -21,9 +21,8 @@ describe('/test/index.test.ts', () => {
       expect(ret.text).toContain('html');
 
       const result = await createHttpRequest(app).get('/swagger-ui/index.json');
+      console.log('---->', result.text);
       expect(result.type).toEqual('application/json');
     });
-
   });
-
 });

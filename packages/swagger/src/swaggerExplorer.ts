@@ -239,6 +239,8 @@ export class SwaggerExplorer {
         opts[webRouter.requestMethod].requestBody = requestBody;
 
         delete p.content;
+        // in body 不需要处理
+        continue;
       }
 
       parameters.push(p);
@@ -261,27 +263,8 @@ export class SwaggerExplorer {
         const tt = resp[k];
         if (isClass(tt.type)) {
           this.parseClzz(tt.type);
-
-          tt.schema = {
-            $ref: '#/components/schemas/' + tt.type.name,
-          };
         }
-        if (tt.isArray) {
-          tt.schema = {
-            type: 'array',
-            items: {
-              type: tt?.schema?.$ref ?? convertSchemaType(tt.type),
-              format: tt.format,
-            }
-          };
-        } else {
-          if (!tt.schema) {
-            tt.schema = {
-              type: convertSchemaType(tt.type),
-              format: tt.format,
-            };
-          }
-        }
+        delete tt.status;
         delete tt.type;
         delete tt.isArray;
         delete tt.format;
@@ -311,9 +294,11 @@ export class SwaggerExplorer {
         p.required = param?.required ?? p.required;
         p.allowReserved = param?.allowReserved ?? false;
         p.explode = param?.explode ?? false;
-        p.style = param?.style ?? false;
+        p.style = param?.style ?? 'false';
         // response content
-        p.content = param?.content ?? null;
+        if (param?.content) {
+          p.content = param?.content;
+        }
         if (param.schema) {
           p.schema = param.schema;
         } else {
