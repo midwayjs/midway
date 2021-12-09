@@ -4,7 +4,6 @@ export * from './api-exclude-endpoint.decorator';
 export * from './api-exclude-controller.decorator';
 export * from './api-extra-models.decorator';
 export * from './api-header.decorator';
-export * from './api-hide-property.decorator';
 export * from './api-operation.decorator';
 export * from './api-param.decorator';
 export * from './api-produces.decorator';

@@ -6,7 +6,8 @@ import {
   Type
 } from '../interfaces';
 import { getTypeIsArrayTuple } from './helpers';
-import { HttpStatus } from '../httpStatus';
+import { HttpStatus } from '../common/httpStatus';
+import { createCustomMethodDecorator } from '@midwayjs/decorator';
 
 export interface ApiResponseMetadata
   extends Omit<ResponseObject, 'description'> {
@@ -27,7 +28,7 @@ export type ApiResponseOptions = ApiResponseMetadata | ApiResponseSchemaHost;
 
 export function ApiResponse(
   options: ApiResponseOptions
-): MethodDecorator & ClassDecorator {
+): any {
   const [type, isArray] = getTypeIsArrayTuple(
     (options as ApiResponseMetadata).type,
     (options as ApiResponseMetadata).isArray
@@ -40,36 +41,8 @@ export function ApiResponse(
   const groupedMetadata = {
     [options.status || 'default']: options
   };
-  return (
-    target: object,
-    key?: string | symbol,
-    descriptor?: TypedPropertyDescriptor<any>
-  ): any => {
-    if (descriptor) {
-      const responses =
-        Reflect.getMetadata(DECORATORS.API_RESPONSE, descriptor.value) || {};
-      Reflect.defineMetadata(
-        DECORATORS.API_RESPONSE,
-        {
-          ...responses,
-          ...groupedMetadata
-        },
-        descriptor.value
-      );
-      return descriptor;
-    }
-    const responses =
-      Reflect.getMetadata(DECORATORS.API_RESPONSE, target) || {};
-    Reflect.defineMetadata(
-      DECORATORS.API_RESPONSE,
-      {
-        ...responses,
-        ...groupedMetadata
-      },
-      target
-    );
-    return target;
-  };
+
+  return createCustomMethodDecorator(DECORATORS.API_RESPONSE, groupedMetadata);
 }
 
 export const ApiOkResponse = (options: ApiResponseOptions = {}) =>

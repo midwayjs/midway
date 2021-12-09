@@ -1,4 +1,4 @@
-import { createCustomMethodDecorator } from '@midwayjs/decorator';
+import { createCustomMethodDecorator, createCustomPropertyDecorator } from '@midwayjs/decorator';
 import { DECORATORS } from '../constants';
 
 export function createPropertyDecorator<T extends Record<string, any> = any>(
@@ -6,7 +6,7 @@ export function createPropertyDecorator<T extends Record<string, any> = any>(
   metadata: T,
   overrideExisting = true
 ): PropertyDecorator {
-  return createPropertyDecorator(metakey, metadata, overrideExisting);
+  return createCustomPropertyDecorator(metakey, metadata);
 }
 
 export function createMixedDecorator<T = any>(
@@ -39,16 +39,4 @@ export function getTypeIsArrayTuple(
   const isInputArray = Array.isArray(input);
   const type = isInputArray ? input[0] : input;
   return [type, isInputArray];
-}
-
-export function extendMetadata<T extends Record<string, any>[] = any[]>(
-  metadata: T,
-  metakey: string,
-  target: object
-) {
-  const existingMetadata = Reflect.getMetadata(metakey, target);
-  if (!existingMetadata) {
-    return metadata;
-  }
-  return existingMetadata.concat(metadata);
 }

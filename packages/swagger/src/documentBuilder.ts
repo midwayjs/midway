@@ -86,6 +86,9 @@ export class DocumentBuilder {
   }
 
   public addSchema(schema: Record<string, SchemaObject>) {
+    if (!this.document.components.schemas) {
+      this.document.components.schemas = {};
+    }
     Object.assign(this.document.components.schemas, schema);
     return this;
   }
@@ -95,7 +98,19 @@ export class DocumentBuilder {
     description = '',
     externalDocs?: ExternalDocumentationObject
   ): this {
-    this.document.tags = this.document.tags.concat(
+    if (Array.isArray(name)) {
+      const arr = name as Array<string>;
+      for (const s of arr) {
+        this.document.tags.push(
+          {
+            name: s,
+            description: ''
+          }
+        );
+      }
+      return this;
+    }
+    this.document.tags.push(
       {
         name,
         description,

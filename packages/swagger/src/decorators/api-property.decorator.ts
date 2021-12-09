@@ -49,10 +49,7 @@ export function createApiPropertyDecorator(
   if (Array.isArray(options.type)) {
     options.type = 'array';
     options.items = {
-      type: 'array',
-      items: {
-        type: options.type[0]
-      }
+      type: options.type[0]
     }
   }
 
