@@ -102,9 +102,17 @@ class ContainerConfiguration {
     });
   }
 
-  addImportConfigs(importConfigs: string[]) {
-    if (importConfigs && importConfigs.length) {
-      this.container.get(MidwayConfigService).add(importConfigs);
+  addImportConfigs(
+    importConfigs:
+      | Array<{ [environmentName: string]: Record<string, any> }>
+      | Record<string, any>
+  ) {
+    if (importConfigs) {
+      if (Array.isArray(importConfigs)) {
+        this.container.get(MidwayConfigService).add(importConfigs);
+      } else {
+        this.container.get(MidwayConfigService).addObject(importConfigs);
+      }
     }
   }
 

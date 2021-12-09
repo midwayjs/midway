@@ -108,7 +108,11 @@ export async function initializeGlobalApplicationContext(
   await applicationContext.ready();
 
   if (globalOptions.globalConfig) {
-    configService.add([globalOptions.globalConfig]);
+    if (Array.isArray(globalOptions.globalConfig)) {
+      configService.add(globalOptions.globalConfig);
+    } else {
+      configService.addObject(globalOptions.globalConfig);
+    }
   }
 
   // merge config

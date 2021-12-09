@@ -21,6 +21,7 @@ import { joinURLPath } from '../util';
 import { MidwayContainer } from '../context/container';
 import { DirectoryFileDetector } from './fileDetector';
 import * as util from 'util';
+import { MidwayCommonError } from '../error';
 
 const debug = util.debuglog('midway:debug');
 
@@ -198,6 +199,12 @@ export class WebRouterCollector {
     // if controller set ignore global prefix, all router will be ignore too.
     if (controllerIgnoreGlobalPrefix) {
       prefix = ignorePrefix;
+    }
+
+    if (/\*/.test(prefix)) {
+      throw new MidwayCommonError(
+        `Router prefix ${prefix} can't set string with *`
+      );
     }
 
     // set prefix

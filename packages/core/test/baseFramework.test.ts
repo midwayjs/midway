@@ -670,4 +670,15 @@ describe('/test/baseFramework.test.ts', () => {
     expect(await composeMiddleware({})).toEqual('hello world gogogo, zhangting');
   });
 
+  it('load object config in configuration', async () => {
+    mm(process.env, 'MIDWAY_SERVER_ENV', '');
+    const framework = await createLightFramework(path.join(
+      __dirname,
+      './fixtures/app-with-configuration-config-object/src'
+    ));
+
+    expect(framework.getConfiguration('bbb')).toEqual(222);
+    expect(framework.getConfiguration('ccc')).toEqual(333);
+  });
+
 });

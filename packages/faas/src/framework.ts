@@ -40,6 +40,7 @@ export class MidwayFaaSFramework extends BaseFramework<
   public app: IMidwayFaaSApplication;
   private isReplaceLogger =
     process.env['MIDWAY_SERVERLESS_REPLACE_LOGGER'] === 'true';
+  private developmentRun = false;
 
   @Inject()
   environmentService: MidwayEnvironmentService;
@@ -48,16 +49,16 @@ export class MidwayFaaSFramework extends BaseFramework<
   middlewareService: MidwayMiddlewareService<FaaSContext, any>;
 
   configure(options: IFaaSConfigurationOptions) {
-    const faasConfig = this.configService.getConfiguration('faas');
-    if (faasConfig) {
-      this.configurationOptions = faasConfig;
-    } else {
+    if (options) {
+      this.developmentRun = true;
       this.configurationOptions = options;
+    } else {
+      return this.configService.getConfiguration('faas');
     }
   }
 
   isEnable(): boolean {
-    return false;
+    return !this.developmentRun;
   }
 
   async applicationInitialize(options: IMidwayBootstrapOptions) {

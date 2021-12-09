@@ -69,6 +69,8 @@ export class FaaSConfiguration {
   async onReady(container) {}
 
   async onServerReady() {
-    await this.framework.run();
+    if (!this.framework.isEnable()) {
+      await this.framework.run();
+    }
   }
 }
