@@ -49,7 +49,7 @@ export function ApiHeader(
         descriptor
       );
     }
-    return createCustomMethodDecorator(DECORATORS.API_HEADERS, [param])(
+    return createCustomMethodDecorator(DECORATORS.API_HEADERS, param)(
       target,
       undefined,
       undefined

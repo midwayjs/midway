@@ -184,6 +184,18 @@ export class SwaggerExplorer {
     const types = getMethodParamTypes(target, webRouter.method);
     let params = metaForMethods.filter(item =>
       item.key === DECORATORS.API_PARAMETERS && item.propertyName === webRouter.method);
+
+    const producesMetas = metaForMethods.filter(item =>
+      item.key === DECORATORS.API_PRODUCES && item.propertyName === webRouter.method);
+    if (producesMetas.length > 0) {
+      opts[webRouter.requestMethod].produces = producesMetas[0]?.metadata ?? [];
+    }
+    const comsumesMetas = metaForMethods.filter(item =>
+      item.key === DECORATORS.API_CONSUMES && item.propertyName === webRouter.method);
+    if (comsumesMetas.length > 0) {
+      opts[webRouter.requestMethod].comsumes = comsumesMetas[0]?.metadata ?? [];
+    }
+
     for (const arg of args) {
       const currentType = types[arg.parameterIndex];
       const p: any = {
@@ -273,9 +285,9 @@ export class SwaggerExplorer {
         delete tt.type;
         delete tt.isArray;
         delete tt.format;
-
-        Object.assign(opts[webRouter.requestMethod].responses, responses[k]);
       }
+
+      Object.assign(opts[webRouter.requestMethod].responses, resp);
     }
 
     paths[url] = opts;
@@ -399,13 +411,13 @@ export class SwaggerExplorer {
               tt.properties[key] = {
                 type: 'array',
                 items: {
-                  type: getPropertyType(clzz.constructor, key).name,
+                  type: getPropertyType(clzz.prototype, key).name,
                   format: props[key].metadata?.format,
                 }
               };
             } else {
               tt.properties[key] = {
-                type: getPropertyType(clzz.constructor, key).name,
+                type: getPropertyType(clzz.prototype, key).name,
                 format: props[key].metadata?.format,
               };
             }

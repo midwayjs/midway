@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Inject, Param, Post } from '@midwayjs/decorator';
 import {
   ApiBody,
+  ApiHeader,
   ApiOperation,
   ApiParam,
   ApiResponse,
@@ -12,6 +13,9 @@ import { Cat } from './entities/cat.entity';
 
 @ApiTags('cats1')
 @Controller('/cats')
+@ApiHeader({
+  name: 'x-test-one',
+})
 export class CatsController {
   @Inject()
   private readonly catsService: CatsService
