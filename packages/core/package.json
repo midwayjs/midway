@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/core",
-  "version": "3.0.0-beta.8",
+  "version": "3.0.0-beta.9",
   "description": "midway core",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -21,7 +21,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/decorator": "^3.0.0-beta.8",
+    "@midwayjs/decorator": "^3.0.0-beta.9",
     "koa": "^2.13.4",
     "midway-test-component": "*",
     "mm": "3",
@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@midwayjs/glob": "^1.0.2",
-    "@midwayjs/logger": "^3.0.0-beta.8",
+    "@midwayjs/logger": "^3.0.0-beta.9",
     "class-transformer": "^0.5.1",
     "extend2": "^1.0.0",
     "picomatch": "^2.2.2",
