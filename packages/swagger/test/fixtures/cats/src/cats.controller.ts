@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Inject, Param, Post } from '@midwayjs/decorator';
 import {
   ApiBody,
+  ApiExtension,
   ApiForbiddenResponse,
   ApiHeader,
   ApiNotFoundResponse,
@@ -25,8 +26,8 @@ export class CatsController {
 
   @Post('/:id', { summary: 'test'})
   @ApiOperation({ summary: 'Create cat' })
-  @ApiBody({ type: CreateCatDto, description: 'hello world'})
-  @ApiParam({ name: 'id', format: 'int32', description: 'hello world id number'})
+  @ApiBody({ description: 'hello world'})
+  @ApiParam({ name: 'id', format: 'int32', description: 'hello world id number', example: 12})
   @ApiForbiddenResponse({ description: 'Forbidden.' })
   @ApiNotFoundResponse({ description: 'NotFound.'})
   @ApiOkResponse({ type: Cat, description: '成功了'})
@@ -40,6 +41,7 @@ export class CatsController {
     description: 'The found record',
     type: Cat,
   })
+  @ApiExtension('x-hello', { hello: 'world' })
   findOne(@Param('id') id: string): Cat {
     return this.catsService.findOne(+id);
   }

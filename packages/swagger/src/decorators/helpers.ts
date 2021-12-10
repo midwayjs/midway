@@ -1,5 +1,6 @@
 import { createCustomMethodDecorator, createCustomPropertyDecorator } from '@midwayjs/decorator';
 import { DECORATORS } from '../constants';
+import type { Type } from '../interfaces';
 
 export function createPropertyDecorator<T extends Record<string, any> = any>(
   metakey: string,
@@ -39,4 +40,12 @@ export function getTypeIsArrayTuple(
   const isInputArray = Array.isArray(input);
   const type = isInputArray ? input[0] : input;
   return [type, isInputArray];
+}
+
+export function getSchemaPath(clzz: Type | string) {
+  let str = clzz;
+  if (typeof clzz === 'object') {
+    str = clzz ? (clzz as any).name : clzz;
+  }
+  return `#/components/schemas/${str}`;
 }

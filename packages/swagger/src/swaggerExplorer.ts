@@ -84,7 +84,7 @@ export class SwaggerExplorer {
   private generatePath(target: Type) {
     const metaForMethods: any[] = getClassMetadata(INJECT_CUSTOM_METHOD, target) || [];
     const exs = metaForMethods.filter(item => item.key === DECORATORS.API_EXCLUDE_CONTROLLER);
-    if (Array.isArray(exs) && exs[0]) {
+    if (exs[0]) {
       return;
     }
 
@@ -97,8 +97,11 @@ export class SwaggerExplorer {
 
     const prefix = controllerOption.prefix;
     const tags = metaForMethods.filter(item => item.key === DECORATORS.API_TAGS);
+    let strTags: string[] = [];
     if (tags.length > 0) {
       for (const t of tags) {
+        // 这里 metadata => string[]
+        strTags = strTags.concat(t.metadata);
         this.documentBuilder.addTag(t.metadata);
       }
     } else {
@@ -136,6 +139,14 @@ export class SwaggerExplorer {
         let url = (prefix + webRouter.path).replace('//', '/');
         url = replaceUrl(url, parseParamsInPath(url));
 
+        // 判断是否忽略当前路由
+        const endpoints = metaForMethods.filter(item =>
+          item.key === DECORATORS.API_EXCLUDE_ENDPOINT &&
+          item.propertyName === webRouter.method);
+        if (endpoints[0]) {
+          continue;
+        }
+
         this.generateRouteMethod(url,
           webRouter,
           paths,
@@ -143,6 +154,20 @@ export class SwaggerExplorer {
           metaForParams,
           header,
           target);
+
+        // 这里赋值 tags
+        if (paths[url][webRouter.requestMethod].tags.length === 0) {
+          paths[url][webRouter.requestMethod].tags = strTags;
+        }
+        // extension => prefix 为 x-
+        const exts = metaForMethods.filter(item =>
+          item.key === DECORATORS.API_EXTENSION &&
+          item.propertyName === webRouter.method);
+        for (const e of exts) {
+          if (e.metadata) {
+            Object.assign(paths[url][webRouter.requestMethod], e.metadata);
+          }
+        }
       }
     }
 
@@ -184,17 +209,6 @@ export class SwaggerExplorer {
     const types = getMethodParamTypes(target, webRouter.method);
     let params = metaForMethods.filter(item =>
       item.key === DECORATORS.API_PARAMETERS && item.propertyName === webRouter.method);
-
-    const producesMetas = metaForMethods.filter(item =>
-      item.key === DECORATORS.API_PRODUCES && item.propertyName === webRouter.method);
-    if (producesMetas.length > 0) {
-      opts[webRouter.requestMethod].produces = producesMetas[0]?.metadata ?? [];
-    }
-    const comsumesMetas = metaForMethods.filter(item =>
-      item.key === DECORATORS.API_CONSUMES && item.propertyName === webRouter.method);
-    if (comsumesMetas.length > 0) {
-      opts[webRouter.requestMethod].comsumes = comsumesMetas[0]?.metadata ?? [];
-    }
 
     for (const arg of args) {
       const currentType = types[arg.parameterIndex];
@@ -261,8 +275,39 @@ export class SwaggerExplorer {
       for (const k of keys) {
         // 这里是引用，赋值可以直接更改
         const tt = resp[k];
-        if (isClass(tt.type)) {
-          this.parseClzz(tt.type);
+        if (tt.type) {
+          if (isClass(tt.type)) {
+            this.parseClzz(tt.type);
+
+            if (tt.isArray) {
+              tt.content = {
+                'application/json': {
+                  schema: {
+                    type: 'array',
+                    items: {
+                      $ref: '#/components/schemas/' + tt.type.name,
+                    }
+                  }
+                }
+              };
+            } else {
+              tt.content = {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/' + tt.type.name,
+                  }
+                }
+              };
+            }
+          } else {
+            tt.content = {
+              'text/plan': {
+                schema: {
+                  type: convertSchemaType(tt.type)
+                }
+              }
+            };
+          }
         }
         delete tt.status;
         delete tt.type;
@@ -286,15 +331,28 @@ export class SwaggerExplorer {
 
       if (param) {
         p.description = param.description;
-        p.allowEmptyValue = param.allowEmptyValue || false;
-        p.example = param.example;
-        p.examples = param.examples;
-        p.deprecated = param.deprecated || false;
+        if (param.in === 'query') {
+          p.allowEmptyValue = param.allowEmptyValue || false;
+        }
+        if (param.example) {
+          p.example = param.example;
+        }
+        if (param.examples) {
+          p.examples = param.examples;
+        }
+        if (param.deprecated) {
+          p.deprecated = param.deprecated;
+        }
         p.in = param?.in ?? p.in;
         p.required = param?.required ?? p.required;
-        p.allowReserved = param?.allowReserved ?? false;
-        p.explode = param?.explode ?? false;
-        p.style = param?.style ?? 'false';
+        if (p.in === 'query') {
+          p.style = 'form';
+        } else if (p.in === 'path' || p.in === 'header') {
+          p.style = 'simple';
+        } else if (p.in === 'cookie') {
+          p.style = 'form';
+        }
+        p.explode = p.style === 'form';
         // response content
         if (param?.content) {
           p.content = param?.content;
@@ -320,11 +378,15 @@ export class SwaggerExplorer {
                 }
               };
             } else {
-              p.schema = {
-                type: param.type ? convertSchemaType(param.type) : p.type,
-                format: param.format || p.format,
-              };
+              if (!p.schema) {
+                p.schema = {
+                  type: param.type ? convertSchemaType(param.type) : p.type,
+                  format: param.format || p.format,
+                };
+              }
             }
+          } else if (param.format) {
+            p.schema.format = param.format;
           }
         }
       }
@@ -437,7 +499,7 @@ export class SwaggerExplorer {
         this.documentBuilder.addCookieAuth();
         break;
       case 'oauth2':
-        this.documentBuilder.addOAuth2()
+        this.documentBuilder.addOAuth2();
         break;
       case 'apikey':
         this.documentBuilder.addApiKey();
@@ -452,7 +514,7 @@ export class SwaggerExplorer {
  * 解释路由上的参数
  * @param url
  */
- function parseParamsInPath(url: string) {
+function parseParamsInPath(url: string) {
   const names: string[] = [];
   url.split('/').forEach(item => {
     if (item.startsWith(':')) {
@@ -467,7 +529,7 @@ export class SwaggerExplorer {
  * @param url
  * @param names
  */
- function replaceUrl(url: string, names: string[]) {
+function replaceUrl(url: string, names: string[]) {
   names.forEach(n => {
     url = url.replace(`:${n}`, `{${n}}`);
   });

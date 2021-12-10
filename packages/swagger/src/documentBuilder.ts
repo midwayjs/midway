@@ -10,7 +10,7 @@ import {
 
 export class DocumentBuilder {
   private readonly document: OpenAPIObject = {
-    openapi: '3.0.0',
+    openapi: '3.0.1',
     info: {
       title: '',
       description: '',
