@@ -3,13 +3,13 @@ import {
   ParameterObject,
   ReferenceObject,
   SchemaObject,
-  SwaggerEnumType
+  SwaggerEnumType,
 } from '../interfaces';
 import {
   addEnumSchema,
   addEnumArraySchema,
   isEnumArray,
-  isEnumDefined
+  isEnumDefined,
 } from '../common/enum.utils';
 import { createParamDecorator, getTypeIsArrayTuple } from './helpers';
 
@@ -32,7 +32,7 @@ export type ApiQueryOptions = ApiQueryMetadata | ApiQuerySchemaHost;
 
 const defaultQueryOptions: ApiQueryOptions = {
   name: '',
-  required: true
+  required: true,
 };
 
 export function ApiQuery(options: ApiQueryOptions): MethodDecorator {
@@ -45,7 +45,7 @@ export function ApiQuery(options: ApiQueryOptions): MethodDecorator {
     name: !options.name ? defaultQueryOptions.name : options.name,
     in: 'query',
     ...options,
-    type
+    type,
   };
 
   if (isEnumArray(options)) {

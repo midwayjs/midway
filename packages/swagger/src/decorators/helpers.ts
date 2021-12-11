@@ -1,11 +1,13 @@
-import { createCustomMethodDecorator, createCustomPropertyDecorator } from '@midwayjs/decorator';
+import {
+  createCustomMethodDecorator,
+  createCustomPropertyDecorator,
+} from '@midwayjs/decorator';
 import { DECORATORS } from '../constants';
 import type { Type } from '../interfaces';
 
 export function createPropertyDecorator<T extends Record<string, any> = any>(
   metakey: string,
-  metadata: T,
-  overrideExisting = true
+  metadata: T
 ): PropertyDecorator {
   return createCustomPropertyDecorator(metakey, metadata);
 }
@@ -23,7 +25,7 @@ export function createParamDecorator<T extends Record<string, any> = any>(
 ): MethodDecorator {
   return createCustomMethodDecorator(DECORATORS.API_PARAMETERS, {
     ...initial,
-    ...metadata
+    ...metadata,
   });
 }
 

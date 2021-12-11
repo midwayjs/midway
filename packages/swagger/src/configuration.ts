@@ -1,12 +1,9 @@
 import {
   ILifeCycle,
   IMidwayContainer,
-  IMidwayApplication
+  IMidwayApplication,
 } from '@midwayjs/core';
-import {
-  App,
-  Configuration,
-} from '@midwayjs/decorator';
+import { App, Configuration } from '@midwayjs/decorator';
 import { SwaggerExplorer, SwaggerMiddleware } from '.';
 
 @Configuration({
@@ -17,10 +14,10 @@ import { SwaggerExplorer, SwaggerMiddleware } from '.';
           title: 'My Project',
           description: 'This is a swagger-ui for midwayjs project',
           version: '1.0.0',
-          swaggerPath: '/swagger-ui'
+          swaggerPath: '/swagger-ui',
         },
-      }
-    }
+      },
+    },
   ],
   namespace: 'swagger',
 })

@@ -8,7 +8,7 @@ export {
   ApiProperty,
   ApiPropertyOptional,
   ApiPropertyOptions,
-  ApiResponseProperty
+  ApiResponseProperty,
 } from './api-property.decorator';
 export * from './api-query.decorator';
 export * from './api-response.decorator';

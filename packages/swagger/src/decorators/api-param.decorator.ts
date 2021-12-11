@@ -2,7 +2,7 @@ import {
   Type,
   ParameterObject,
   SchemaObject,
-  SwaggerEnumType
+  SwaggerEnumType,
 } from '../interfaces';
 import { createParamDecorator } from './helpers';
 import { getEnumValues, getEnumType } from '../common/enum.utils';
@@ -24,14 +24,14 @@ export type ApiParamOptions = ApiParamMetadata | ApiParamSchemaHost;
 
 const defaultParamOptions: ApiParamOptions = {
   name: '',
-  required: true
+  required: true,
 };
 
 export function ApiParam(options: ApiParamOptions): MethodDecorator {
   const param: Record<string, any> = {
     name: !options.name ? defaultParamOptions.name : options.name,
     in: 'path',
-    ...options
+    ...options,
   };
 
   const apiParamMetadata = options as ApiParamMetadata;

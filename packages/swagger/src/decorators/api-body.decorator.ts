@@ -4,13 +4,13 @@ import {
   ReferenceObject,
   RequestBodyObject,
   SchemaObject,
-  SwaggerEnumType
+  SwaggerEnumType,
 } from '../interfaces';
 import {
   addEnumArraySchema,
   addEnumSchema,
   isEnumArray,
-  isEnumDefined
+  isEnumDefined,
 } from '../common/enum.utils';
 import { createParamDecorator, getTypeIsArrayTuple } from './helpers';
 
@@ -32,7 +32,7 @@ export type ApiBodyOptions = ApiBodyMetadata | ApiBodySchemaHost;
 
 const defaultBodyMetadata: ApiBodyMetadata = {
   type: String,
-  required: true
+  required: true,
 };
 
 export function ApiBody(options: ApiBodyOptions): MethodDecorator {
@@ -44,7 +44,7 @@ export function ApiBody(options: ApiBodyOptions): MethodDecorator {
     in: 'body',
     ...options,
     type,
-    isArray
+    isArray,
   };
 
   if (isEnumArray(options)) {

@@ -3,7 +3,7 @@ import {
   ResponseObject,
   SchemaObject,
   ReferenceObject,
-  Type
+  Type,
 } from '../interfaces';
 import { getTypeIsArrayTuple } from './helpers';
 import { HttpStatus } from '../common/httpStatus';
@@ -26,9 +26,7 @@ export interface ApiResponseSchemaHost
 
 export type ApiResponseOptions = ApiResponseMetadata | ApiResponseSchemaHost;
 
-export function ApiResponse(
-  options: ApiResponseOptions
-): any {
+export function ApiResponse(options: ApiResponseOptions): any {
   const [type, isArray] = getTypeIsArrayTuple(
     (options as ApiResponseMetadata).type,
     (options as ApiResponseMetadata).isArray
@@ -39,7 +37,7 @@ export function ApiResponse(
   options.description = options.description ? options.description : '';
 
   const groupedMetadata = {
-    [options.status || 'default']: options
+    [options.status || 'default']: options,
   };
 
   return createCustomMethodDecorator(DECORATORS.API_RESPONSE, groupedMetadata);
@@ -48,61 +46,61 @@ export function ApiResponse(
 export const ApiOkResponse = (options: ApiResponseOptions = {}) =>
   ApiResponse({
     ...options,
-    status: HttpStatus.OK
+    status: HttpStatus.OK,
   });
 
 export const ApiCreatedResponse = (options: ApiResponseOptions = {}) =>
   ApiResponse({
     ...options,
-    status: HttpStatus.CREATED
+    status: HttpStatus.CREATED,
   });
 
 export const ApiAcceptedResponse = (options: ApiResponseOptions = {}) =>
   ApiResponse({
     ...options,
-    status: HttpStatus.ACCEPTED
+    status: HttpStatus.ACCEPTED,
   });
 
 export const ApiNoContentResponse = (options: ApiResponseOptions = {}) =>
   ApiResponse({
     ...options,
-    status: HttpStatus.NO_CONTENT
+    status: HttpStatus.NO_CONTENT,
   });
 
 export const ApiMovedPermanentlyResponse = (options: ApiResponseOptions = {}) =>
   ApiResponse({
     ...options,
-    status: HttpStatus.MOVED_PERMANENTLY
+    status: HttpStatus.MOVED_PERMANENTLY,
   });
 
 export const ApiFoundResponse = (options: ApiResponseOptions = {}) =>
   ApiResponse({
     ...options,
-    status: HttpStatus.FOUND
+    status: HttpStatus.FOUND,
   });
 
 export const ApiBadRequestResponse = (options: ApiResponseOptions = {}) =>
   ApiResponse({
     ...options,
-    status: HttpStatus.BAD_REQUEST
+    status: HttpStatus.BAD_REQUEST,
   });
 
 export const ApiUnauthorizedResponse = (options: ApiResponseOptions = {}) =>
   ApiResponse({
     ...options,
-    status: HttpStatus.UNAUTHORIZED
+    status: HttpStatus.UNAUTHORIZED,
   });
 
 export const ApiTooManyRequestsResponse = (options: ApiResponseOptions = {}) =>
   ApiResponse({
     ...options,
-    status: HttpStatus.TOO_MANY_REQUESTS
+    status: HttpStatus.TOO_MANY_REQUESTS,
   });
 
 export const ApiNotFoundResponse = (options: ApiResponseOptions = {}) =>
   ApiResponse({
     ...options,
-    status: HttpStatus.NOT_FOUND
+    status: HttpStatus.NOT_FOUND,
   });
 
 export const ApiInternalServerErrorResponse = (
@@ -110,55 +108,55 @@ export const ApiInternalServerErrorResponse = (
 ) =>
   ApiResponse({
     ...options,
-    status: HttpStatus.INTERNAL_SERVER_ERROR
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
   });
 
 export const ApiBadGatewayResponse = (options: ApiResponseOptions = {}) =>
   ApiResponse({
     ...options,
-    status: HttpStatus.BAD_GATEWAY
+    status: HttpStatus.BAD_GATEWAY,
   });
 
 export const ApiConflictResponse = (options: ApiResponseOptions = {}) =>
   ApiResponse({
     ...options,
-    status: HttpStatus.CONFLICT
+    status: HttpStatus.CONFLICT,
   });
 
 export const ApiForbiddenResponse = (options: ApiResponseOptions = {}) =>
   ApiResponse({
     ...options,
-    status: HttpStatus.FORBIDDEN
+    status: HttpStatus.FORBIDDEN,
   });
 
 export const ApiGatewayTimeoutResponse = (options: ApiResponseOptions = {}) =>
   ApiResponse({
     ...options,
-    status: HttpStatus.GATEWAY_TIMEOUT
+    status: HttpStatus.GATEWAY_TIMEOUT,
   });
 
 export const ApiGoneResponse = (options: ApiResponseOptions = {}) =>
   ApiResponse({
     ...options,
-    status: HttpStatus.GONE
+    status: HttpStatus.GONE,
   });
 
 export const ApiMethodNotAllowedResponse = (options: ApiResponseOptions = {}) =>
   ApiResponse({
     ...options,
-    status: HttpStatus.METHOD_NOT_ALLOWED
+    status: HttpStatus.METHOD_NOT_ALLOWED,
   });
 
 export const ApiNotAcceptableResponse = (options: ApiResponseOptions = {}) =>
   ApiResponse({
     ...options,
-    status: HttpStatus.NOT_ACCEPTABLE
+    status: HttpStatus.NOT_ACCEPTABLE,
   });
 
 export const ApiNotImplementedResponse = (options: ApiResponseOptions = {}) =>
   ApiResponse({
     ...options,
-    status: HttpStatus.NOT_IMPLEMENTED
+    status: HttpStatus.NOT_IMPLEMENTED,
   });
 
 export const ApiPreconditionFailedResponse = (
@@ -166,19 +164,19 @@ export const ApiPreconditionFailedResponse = (
 ) =>
   ApiResponse({
     ...options,
-    status: HttpStatus.PRECONDITION_FAILED
+    status: HttpStatus.PRECONDITION_FAILED,
   });
 
 export const ApiPayloadTooLargeResponse = (options: ApiResponseOptions = {}) =>
   ApiResponse({
     ...options,
-    status: HttpStatus.PAYLOAD_TOO_LARGE
+    status: HttpStatus.PAYLOAD_TOO_LARGE,
   });
 
 export const ApiRequestTimeoutResponse = (options: ApiResponseOptions = {}) =>
   ApiResponse({
     ...options,
-    status: HttpStatus.REQUEST_TIMEOUT
+    status: HttpStatus.REQUEST_TIMEOUT,
   });
 
 export const ApiServiceUnavailableResponse = (
@@ -186,7 +184,7 @@ export const ApiServiceUnavailableResponse = (
 ) =>
   ApiResponse({
     ...options,
-    status: HttpStatus.SERVICE_UNAVAILABLE
+    status: HttpStatus.SERVICE_UNAVAILABLE,
   });
 
 export const ApiUnprocessableEntityResponse = (
@@ -194,7 +192,7 @@ export const ApiUnprocessableEntityResponse = (
 ) =>
   ApiResponse({
     ...options,
-    status: HttpStatus.UNPROCESSABLE_ENTITY
+    status: HttpStatus.UNPROCESSABLE_ENTITY,
   });
 
 export const ApiUnsupportedMediaTypeResponse = (
@@ -202,11 +200,11 @@ export const ApiUnsupportedMediaTypeResponse = (
 ) =>
   ApiResponse({
     ...options,
-    status: HttpStatus.UNSUPPORTED_MEDIA_TYPE
+    status: HttpStatus.UNSUPPORTED_MEDIA_TYPE,
   });
 
 export const ApiDefaultResponse = (options: ApiResponseOptions = {}) =>
   ApiResponse({
     ...options,
-    status: 'default'
+    status: 'default',
   });

@@ -1,13 +1,22 @@
 import type { IMiddleware, IMidwayContext, NextFunction } from '@midwayjs/core';
 import { safeRequire } from '@midwayjs/core';
-import { Config, Init, Inject, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import {
+  Config,
+  Init,
+  Inject,
+  Provide,
+  Scope,
+  ScopeEnum,
+} from '@midwayjs/decorator';
 import { readFileSync } from 'fs';
 import { join, extname } from 'path';
 import { SwaggerExplorer } from './swaggerExplorer';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
-export class SwaggerMiddleware implements IMiddleware<IMidwayContext, NextFunction, unknown> {
+export class SwaggerMiddleware
+  implements IMiddleware<IMidwayContext, NextFunction, unknown>
+{
   @Config('swagger')
   private swaggerConfig: any;
 
@@ -25,11 +34,12 @@ export class SwaggerMiddleware implements IMiddleware<IMidwayContext, NextFuncti
   }
 
   resolve() {
-    return async (ctx: IMidwayContext, next: () => Promise<any>, options?: any) => {
+    return async (ctx: IMidwayContext, next: () => Promise<any>) => {
       const pathname = (ctx as any).path;
-      if (!this.swaggerUiAssetPath ||
-        pathname.indexOf(this.swaggerConfig.swaggerPath) === -1) {
-
+      if (
+        !this.swaggerUiAssetPath ||
+        pathname.indexOf(this.swaggerConfig.swaggerPath) === -1
+      ) {
         return next();
       }
       const arr = pathname.split('/');
@@ -42,8 +52,9 @@ export class SwaggerMiddleware implements IMiddleware<IMidwayContext, NextFuncti
         lastName = 'index.html';
       }
 
-      let content = readFileSync(join(this.swaggerUiAssetPath, lastName),
-        { encoding: 'utf-8' });
+      let content = readFileSync(join(this.swaggerUiAssetPath, lastName), {
+        encoding: 'utf-8',
+      });
       if (lastName === 'index.html') {
         content = content.replace(
           '"https://petstore.swagger.io/v2/swagger.json"',
@@ -62,6 +73,6 @@ export class SwaggerMiddleware implements IMiddleware<IMidwayContext, NextFuncti
       }
 
       (ctx as any).body = content;
-    }
+    };
   }
 }

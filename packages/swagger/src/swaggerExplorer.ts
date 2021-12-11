@@ -36,14 +36,24 @@ export class SwaggerExplorer {
     this.documentBuilder.setTitle(this.swaggerConfig.title);
     this.documentBuilder.setVersion(this.swaggerConfig.version);
     this.documentBuilder.setDescription(this.swaggerConfig.description);
-    if (this.swaggerConfig?.contact && typeof this.swaggerConfig?.contact === 'object') {
-      this.documentBuilder.setContact(this.swaggerConfig?.contact?.name,
+    if (
+      this.swaggerConfig?.contact &&
+      typeof this.swaggerConfig?.contact === 'object'
+    ) {
+      this.documentBuilder.setContact(
+        this.swaggerConfig?.contact?.name,
         this.swaggerConfig?.contact?.url,
-        this.swaggerConfig?.contact?.email);
+        this.swaggerConfig?.contact?.email
+      );
     }
-    if (this.swaggerConfig?.license && typeof this.swaggerConfig?.license === 'object') {
-      this.documentBuilder.setLicense(this.swaggerConfig?.license?.name,
-        this.swaggerConfig?.license?.url);
+    if (
+      this.swaggerConfig?.license &&
+      typeof this.swaggerConfig?.license === 'object'
+    ) {
+      this.documentBuilder.setLicense(
+        this.swaggerConfig?.license?.name,
+        this.swaggerConfig?.license?.url
+      );
     }
     if (this.swaggerConfig.basePath) {
       this.documentBuilder.setBasePath(this.swaggerConfig.basePath);
@@ -51,11 +61,19 @@ export class SwaggerExplorer {
     if (this.swaggerConfig.termsOfService) {
       this.documentBuilder.setTermsOfService(this.swaggerConfig.termsOfService);
     }
-    if (this.swaggerConfig?.externalDoc && typeof this.swaggerConfig?.externalDoc === 'object') {
-      this.documentBuilder.setExternalDoc(this.swaggerConfig?.externalDoc?.description,
-        this.swaggerConfig?.externalDoc?.url)
+    if (
+      this.swaggerConfig?.externalDoc &&
+      typeof this.swaggerConfig?.externalDoc === 'object'
+    ) {
+      this.documentBuilder.setExternalDoc(
+        this.swaggerConfig?.externalDoc?.description,
+        this.swaggerConfig?.externalDoc?.url
+      );
     }
-    if (this.swaggerConfig?.servers && Array.isArray(this.swaggerConfig?.servers)) {
+    if (
+      this.swaggerConfig?.servers &&
+      Array.isArray(this.swaggerConfig?.servers)
+    ) {
       for (const serv of this.swaggerConfig?.servers) {
         this.documentBuilder.addServer(serv?.url, serv?.description);
       }
@@ -88,13 +106,17 @@ export class SwaggerExplorer {
   }
 
   private generatePath(target: Type) {
-    const metaForMethods: any[] = getClassMetadata(INJECT_CUSTOM_METHOD, target) || [];
-    const exs = metaForMethods.filter(item => item.key === DECORATORS.API_EXCLUDE_CONTROLLER);
+    const metaForMethods: any[] =
+      getClassMetadata(INJECT_CUSTOM_METHOD, target) || [];
+    const exs = metaForMethods.filter(
+      item => item.key === DECORATORS.API_EXCLUDE_CONTROLLER
+    );
     if (exs[0]) {
       return;
     }
 
-    const metaForParams: any[] = getClassMetadata(INJECT_CUSTOM_PARAM, target) || [];
+    const metaForParams: any[] =
+      getClassMetadata(INJECT_CUSTOM_PARAM, target) || [];
 
     const controllerOption: ControllerOption = getClassMetadata(
       CONTROLLER_KEY,
@@ -102,7 +124,9 @@ export class SwaggerExplorer {
     );
 
     const prefix = controllerOption.prefix;
-    const tags = metaForMethods.filter(item => item.key === DECORATORS.API_TAGS);
+    const tags = metaForMethods.filter(
+      item => item.key === DECORATORS.API_TAGS
+    );
     let strTags: string[] = [];
     if (tags.length > 0) {
       for (const t of tags) {
@@ -116,10 +140,12 @@ export class SwaggerExplorer {
         tag.name =
           controllerOption?.routerOptions.tagName ||
           (/^\//.test(prefix) ? prefix.split('/')[1] : prefix);
-        tag.description = controllerOption?.routerOptions.description || tag.name;
+        tag.description =
+          controllerOption?.routerOptions.description || tag.name;
       } else {
         tag.name = controllerOption?.routerOptions.tagName || 'default';
-        tag.description = controllerOption?.routerOptions.description || tag.name;
+        tag.description =
+          controllerOption?.routerOptions.description || tag.name;
       }
       if (tag.name) {
         this.documentBuilder.addTag(tag.name, tag.description);
@@ -132,14 +158,18 @@ export class SwaggerExplorer {
       WEB_ROUTER_KEY,
       target
     );
-    
+
     let header = null;
-    const headers = metaForMethods.filter(item => item.key === DECORATORS.API_HEADERS);
+    const headers = metaForMethods.filter(
+      item => item.key === DECORATORS.API_HEADERS
+    );
     if (headers.length > 0) {
       header = headers[0].metadata;
     }
 
-    const security = metaForMethods.filter(item => item.key === DECORATORS.API_SECURITY);
+    const security = metaForMethods.filter(
+      item => item.key === DECORATORS.API_SECURITY
+    );
 
     const paths: Record<string, PathItemObject> = {};
     if (webRouterInfo && typeof webRouterInfo[Symbol.iterator] === 'function') {
@@ -148,29 +178,35 @@ export class SwaggerExplorer {
         url = replaceUrl(url, parseParamsInPath(url));
 
         // 判断是否忽略当前路由
-        const endpoints = metaForMethods.filter(item =>
-          item.key === DECORATORS.API_EXCLUDE_ENDPOINT &&
-          item.propertyName === webRouter.method);
+        const endpoints = metaForMethods.filter(
+          item =>
+            item.key === DECORATORS.API_EXCLUDE_ENDPOINT &&
+            item.propertyName === webRouter.method
+        );
         if (endpoints[0]) {
           continue;
         }
 
-        this.generateRouteMethod(url,
+        this.generateRouteMethod(
+          url,
           webRouter,
           paths,
           metaForMethods,
           metaForParams,
           header,
-          target);
+          target
+        );
 
         // 这里赋值 tags
         if (paths[url][webRouter.requestMethod].tags.length === 0) {
           paths[url][webRouter.requestMethod].tags = strTags;
         }
         // extension => prefix 为 x-
-        const exts = metaForMethods.filter(item =>
-          item.key === DECORATORS.API_EXTENSION &&
-          item.propertyName === webRouter.method);
+        const exts = metaForMethods.filter(
+          item =>
+            item.key === DECORATORS.API_EXTENSION &&
+            item.propertyName === webRouter.method
+        );
         for (const e of exts) {
           if (e.metadata) {
             Object.assign(paths[url][webRouter.requestMethod], e.metadata);
@@ -197,16 +233,20 @@ export class SwaggerExplorer {
   /**
    * 构造 router 提取方法
    */
-  private generateRouteMethod(url: string,
+  private generateRouteMethod(
+    url: string,
     webRouter: RouterOption,
     paths: Record<string, PathItemObject>,
     metaForMethods: any[],
     metaForParams: any[],
     header: any,
-    target: Type) {
-
-    const operMeta = metaForMethods.filter(item =>
-      item.key === DECORATORS.API_OPERATION && item.propertyName === webRouter.method)[0];
+    target: Type
+  ) {
+    const operMeta = metaForMethods.filter(
+      item =>
+        item.key === DECORATORS.API_OPERATION &&
+        item.propertyName === webRouter.method
+    )[0];
 
     let opts: PathItemObject = paths[url];
     if (!opts) {
@@ -223,13 +263,18 @@ export class SwaggerExplorer {
      * [{"key":"web:router_param","parameterIndex":1,"propertyName":"create","metadata":{"type":2}},
      * {"key":"web:router_param","parameterIndex":0,"propertyName":"create","metadata":{"type":1,"propertyData":"createCatDto"}}]
      */
-    let routerArgs = metaForParams[webRouter.method] || [];
+    const routerArgs = metaForParams[webRouter.method] || [];
     // WEB_ROUTER_PARAM_KEY
-    let args: any[] = routerArgs.filter(item => item.key === WEB_ROUTER_PARAM_KEY);
+    let args: any[] = routerArgs.filter(
+      item => item.key === WEB_ROUTER_PARAM_KEY
+    );
     args = args.filter(item => (item as any).key === WEB_ROUTER_PARAM_KEY);
     const types = getMethodParamTypes(target, webRouter.method);
-    let params = metaForMethods.filter(item =>
-      item.key === DECORATORS.API_PARAMETERS && item.propertyName === webRouter.method);
+    const params = metaForMethods.filter(
+      item =>
+        item.key === DECORATORS.API_PARAMETERS &&
+        item.propertyName === webRouter.method
+    );
 
     for (const arg of args) {
       const currentType = types[arg.parameterIndex];
@@ -259,7 +304,10 @@ export class SwaggerExplorer {
         };
       }
 
-      this.parseFromParamsToP(params[params.length - 1 - arg.parameterIndex], p);
+      this.parseFromParamsToP(
+        params[params.length - 1 - arg.parameterIndex],
+        p
+      );
 
       if (p.in === 'body') {
         const requestBody = {
@@ -288,8 +336,11 @@ export class SwaggerExplorer {
     opts[webRouter.requestMethod].parameters = parameters;
     opts[webRouter.requestMethod].responses = {};
 
-    const responses = metaForMethods.filter(item =>
-      item.key === DECORATORS.API_RESPONSE && item.propertyName === webRouter.method);
+    const responses = metaForMethods.filter(
+      item =>
+        item.key === DECORATORS.API_RESPONSE &&
+        item.propertyName === webRouter.method
+    );
     for (const r of responses) {
       const resp = r.metadata;
       const keys = Object.keys(resp);
@@ -307,26 +358,26 @@ export class SwaggerExplorer {
                     type: 'array',
                     items: {
                       $ref: '#/components/schemas/' + tt.type.name,
-                    }
-                  }
-                }
+                    },
+                  },
+                },
               };
             } else {
               tt.content = {
                 'application/json': {
                   schema: {
                     $ref: '#/components/schemas/' + tt.type.name,
-                  }
-                }
+                  },
+                },
               };
             }
           } else {
             tt.content = {
               'text/plan': {
                 schema: {
-                  type: convertSchemaType(tt.type)
-                }
-              }
+                  type: convertSchemaType(tt.type),
+                },
+              },
             };
           }
         }
@@ -343,8 +394,8 @@ export class SwaggerExplorer {
   }
   /**
    * 提取参数
-   * @param params 
-   * @param p 
+   * @param params
+   * @param p
    */
   private parseFromParamsToP(paramMeta: any, p: any) {
     if (paramMeta) {
@@ -387,7 +438,7 @@ export class SwaggerExplorer {
 
               p.schema = {
                 $ref: '#/components/schemas/' + param.type.name,
-              };  
+              };
             }
 
             if (param.isArray) {
@@ -395,8 +446,8 @@ export class SwaggerExplorer {
                 type: 'array',
                 items: {
                   type: p?.schema?.$ref ?? convertSchemaType(param.type),
-                  format: param.format
-                }
+                  format: param.format,
+                },
               };
             } else {
               if (!p.schema) {
@@ -415,92 +466,90 @@ export class SwaggerExplorer {
   }
   /**
    * 解析类型的 ApiProperty
-   * @param clzz 
+   * @param clzz
    */
   private parseClzz(clzz: Type) {
     const props = getClassMetadata(INJECT_CUSTOM_PROPERTY, clzz);
     if (props) {
-      let tt = {
+      const tt = {
         type: 'object',
         properties: {},
         required: [],
-        example: {}
+        example: {},
       };
-      Object
-        .keys(props)
-        .forEach(key => {
-          if (props[key].metadata?.example) {
-            tt.example[key] = props[key].metadata?.example;
-          }
-          if (props[key].metadata?.required !== false) {
-            tt.required.push(key);
-          }
-          if (props[key].metadata?.enum) {
+      Object.keys(props).forEach(key => {
+        if (props[key].metadata?.example) {
+          tt.example[key] = props[key].metadata?.example;
+        }
+        if (props[key].metadata?.required !== false) {
+          tt.required.push(key);
+        }
+        if (props[key].metadata?.enum) {
+          tt.properties[key] = {
+            type: props[key].metadata?.type,
+            enum: props[key].metadata?.enum,
+            default: props[key].metadata?.default,
+          };
+
+          return;
+        }
+        if (props[key].metadata?.items?.enum) {
+          tt.properties[key] = {
+            type: props[key].metadata?.type,
+            items: props[key].metadata?.items,
+            default: props[key].metadata?.default,
+          };
+
+          return;
+        }
+        let currentType = props[key].metadata?.type;
+
+        if (currentType === 'array') {
+          currentType = props[key].metadata?.items?.type;
+        }
+
+        if (isClass(currentType)) {
+          this.parseClzz(currentType);
+
+          if (props[key].metadata?.type === 'array') {
             tt.properties[key] = {
-              type: props[key].metadata?.type,
-              enum: props[key].metadata?.enum,
-              default: props[key].metadata?.default,
-            };
-
-            return;
-          }
-          if (props[key].metadata?.items?.enum) {
-            tt.properties[key] = {
-              type: props[key].metadata?.type,
-              items: props[key].metadata?.items,
-              default: props[key].metadata?.default,
-            };
-
-            return;
-          }
-          let currentType = props[key].metadata?.type;
-
-          if (currentType === 'array') {
-            currentType = props[key].metadata?.items?.type;
-          }
-
-          if (isClass(currentType)) {
-            this.parseClzz(currentType);
-
-            if (props[key].metadata?.type === 'array') {
-              tt.properties[key] = {
-                type: 'array',
-                items: {
-                  $ref: '#components/schemas/' + currentType?.name,
-                }
-              };
-            } else {
-              tt.properties[key] = {
+              type: 'array',
+              items: {
                 $ref: '#components/schemas/' + currentType?.name,
-              };
-            }
+              },
+            };
           } else {
-            if (props[key].metadata?.type === 'array') {
-              tt.properties[key] = {
-                type: 'array',
-                items: {
-                  type: getPropertyType(clzz.prototype, key).name,
-                  format: props[key].metadata?.format,
-                }
-              };
-            } else {
-              tt.properties[key] = {
+            tt.properties[key] = {
+              $ref: '#components/schemas/' + currentType?.name,
+            };
+          }
+        } else {
+          if (props[key].metadata?.type === 'array') {
+            tt.properties[key] = {
+              type: 'array',
+              items: {
                 type: getPropertyType(clzz.prototype, key).name,
                 format: props[key].metadata?.format,
-              };
-            }
+              },
+            };
+          } else {
+            tt.properties[key] = {
+              type: getPropertyType(clzz.prototype, key).name,
+              format: props[key].metadata?.format,
+            };
           }
-        });
+        }
+      });
 
       this.documentBuilder.addSchema({
-        [clzz.name]: tt
+        [clzz.name]: tt,
       });
     }
   }
   /**
    * 授权验证
-   * @param opts 
-   * @returns 
+   * @param opts
+   * @returns
    */
   private setAuth(opts: any) {
     if (!opts) {
@@ -509,42 +558,48 @@ export class SwaggerExplorer {
     const authType = opts.authType;
     delete opts.authType;
     // TODO 加 security
-    switch(authType) {
-      case 'basic': {
-        const name = opts.name;
-        delete opts.name;
-        this.documentBuilder.addBasicAuth(opts, name);
-      }
+    switch (authType) {
+      case 'basic':
+        {
+          const name = opts.name;
+          delete opts.name;
+          this.documentBuilder.addBasicAuth(opts, name);
+        }
         break;
-      case 'bearer': {
-        const name = opts.name;
-        delete opts.name;
-        this.documentBuilder.addBearerAuth(opts, name);
-      }
+      case 'bearer':
+        {
+          const name = opts.name;
+          delete opts.name;
+          this.documentBuilder.addBearerAuth(opts, name);
+        }
         break;
-      case 'cookie':{
-        const cname = opts.cookieName;
-        const secName = opts.securityName;
-        delete opts.cookieName;
-        delete opts.securityName;
-        this.documentBuilder.addCookieAuth(cname, opts, secName);
-      }
+      case 'cookie':
+        {
+          const cname = opts.cookieName;
+          const secName = opts.securityName;
+          delete opts.cookieName;
+          delete opts.securityName;
+          this.documentBuilder.addCookieAuth(cname, opts, secName);
+        }
         break;
-      case 'oauth2': {
-        const name = opts.name;
-        delete opts.name;
-        this.documentBuilder.addOAuth2(opts, name);
-      }
+      case 'oauth2':
+        {
+          const name = opts.name;
+          delete opts.name;
+          this.documentBuilder.addOAuth2(opts, name);
+        }
         break;
-      case 'apikey': {
-        const name = opts.name;
-        delete opts.name;
-        this.documentBuilder.addApiKey(opts, name);
-      }
+      case 'apikey':
+        {
+          const name = opts.name;
+          delete opts.name;
+          this.documentBuilder.addApiKey(opts, name);
+        }
         break;
-      case 'custom': {
-        this.documentBuilder.addSecurity(opts?.name, opts);
-      }
+      case 'custom':
+        {
+          this.documentBuilder.addSecurity(opts?.name, opts);
+        }
         break;
     }
   }

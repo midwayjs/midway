@@ -20,14 +20,13 @@ export function ApiProperty(
 }
 
 export function createApiPropertyDecorator(
-  options: ApiPropertyOptions = {},
-  overrideExisting = true
+  options: ApiPropertyOptions = {}
 ): PropertyDecorator {
   const [type, isArray] = getTypeIsArrayTuple(options.type, options.isArray);
   options = {
     ...options,
     type,
-    isArray
+    isArray,
   };
 
   if (isEnumArray(options)) {
@@ -36,7 +35,7 @@ export function createApiPropertyDecorator(
     const enumValues = getEnumValues(options.enum);
     options.items = {
       type: getEnumType(enumValues),
-      enum: enumValues
+      enum: enumValues,
     };
     delete options.enum;
   } else if (options.enum) {
@@ -49,15 +48,11 @@ export function createApiPropertyDecorator(
   if (Array.isArray(options.type)) {
     options.type = 'array';
     options.items = {
-      type: options.type[0]
-    }
+      type: options.type[0],
+    };
   }
 
-  return createPropertyDecorator(
-    DECORATORS.API_MODEL_PROPERTIES,
-    options,
-    overrideExisting
-  );
+  return createPropertyDecorator(DECORATORS.API_MODEL_PROPERTIES, options);
 }
 
 export function ApiPropertyOptional(
@@ -65,7 +60,7 @@ export function ApiPropertyOptional(
 ): PropertyDecorator {
   return ApiProperty({
     ...options,
-    required: false
+    required: false,
   });
 }
 
@@ -77,6 +72,6 @@ export function ApiResponseProperty(
 ): PropertyDecorator {
   return ApiProperty({
     readOnly: true,
-    ...options
+    ...options,
   });
 }

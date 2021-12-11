@@ -5,15 +5,12 @@ import { OperationObject } from '../interfaces';
 export type ApiOperationOptions = Partial<OperationObject>;
 
 const defaultOperationOptions: ApiOperationOptions = {
-  summary: ''
+  summary: '',
 };
 
 export function ApiOperation(options: ApiOperationOptions): MethodDecorator {
-  return createCustomMethodDecorator(
-    DECORATORS.API_OPERATION,
-    {
-      ...defaultOperationOptions,
-      ...options
-    } as ApiOperationOptions
-  );
+  return createCustomMethodDecorator(DECORATORS.API_OPERATION, {
+    ...defaultOperationOptions,
+    ...options,
+  } as ApiOperationOptions);
 }

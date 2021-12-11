@@ -1,7 +1,7 @@
 import {
   SchemaObject,
   SchemaObjectMetadata,
-  SwaggerEnumType
+  SwaggerEnumType,
 } from '../interfaces';
 
 export function getEnumValues(enumType: SwaggerEnumType): string[] | number[] {
@@ -46,7 +46,7 @@ export function addEnumArraySchema(
   const enumValues = getEnumValues(decoratorOptions.enum);
   paramSchema.items = {
     type: getEnumType(enumValues),
-    enum: enumValues
+    enum: enumValues,
   };
 
   if (decoratorOptions.enumName) {

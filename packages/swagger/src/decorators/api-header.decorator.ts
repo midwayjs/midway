@@ -1,8 +1,5 @@
 import { DECORATORS } from '../constants';
-import {
-  SwaggerEnumType,
-  ParameterObject
-} from '../interfaces';
+import { SwaggerEnumType, ParameterObject } from '../interfaces';
 import { getEnumType, getEnumValues } from '../common/enum.utils';
 import { createParamDecorator } from './helpers';
 import { createCustomMethodDecorator } from '@midwayjs/decorator';
@@ -12,28 +9,26 @@ export interface ApiHeaderOptions extends Omit<ParameterObject, 'in'> {
 }
 
 const defaultHeaderOptions: Partial<ApiHeaderOptions> = {
-  name: ''
+  name: '',
 };
 
-export function ApiHeader(
-  options: ApiHeaderOptions
-): any {
+export function ApiHeader(options: ApiHeaderOptions): any {
   const param = {
-      name: !options.name ? defaultHeaderOptions.name : options.name,
-      in: 'header',
-      description: options.description,
-      required: options.required,
-      schema: {
-        ...(options.schema || {}),
-        type: 'string'
-      }
-    };
+    name: !options.name ? defaultHeaderOptions.name : options.name,
+    in: 'header',
+    description: options.description,
+    required: options.required,
+    schema: {
+      ...(options.schema || {}),
+      type: 'string',
+    },
+  };
 
   if (options.enum) {
     const enumValues = getEnumValues(options.enum);
     param.schema = {
       enum: enumValues,
-      type: getEnumType(enumValues)
+      type: getEnumType(enumValues),
     };
   }
 
@@ -65,6 +60,6 @@ export const ApiHeaders = (
     key?: string | symbol,
     descriptor?: TypedPropertyDescriptor<any>
   ): any => {
-    headers.forEach((options) => ApiHeader(options)(target, key, descriptor));
+    headers.forEach(options => ApiHeader(options)(target, key, descriptor));
   };
 };

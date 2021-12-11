@@ -9,7 +9,7 @@ export function ApiExtension(extensionKey: string, extensionProperties: any) {
   }
 
   const extensionObject = {
-    [extensionKey]: JSON.parse(JSON.stringify(extensionProperties))
+    [extensionKey]: JSON.parse(JSON.stringify(extensionProperties)),
   };
 
   return createMixedDecorator(DECORATORS.API_EXTENSION, extensionObject);

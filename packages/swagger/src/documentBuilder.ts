@@ -5,7 +5,7 @@ import {
   SecuritySchemeObject,
   ServerVariableObject,
   PathItemObject,
-  SchemaObject
+  SchemaObject,
 } from './interfaces';
 
 export class DocumentBuilder {
@@ -15,7 +15,7 @@ export class DocumentBuilder {
       title: '',
       description: '',
       version: '1.0.0',
-      contact: {}
+      contact: {},
     },
     tags: [],
     servers: [],
@@ -72,7 +72,10 @@ export class DocumentBuilder {
       if (Array.isArray((this.document as any).basePath)) {
         (this.document as any).basePath.push(path);
       } else {
-        (this.document as any).basePath = [(this.document as any).basePath, path];
+        (this.document as any).basePath = [
+          (this.document as any).basePath,
+          path,
+        ];
       }
     } else {
       (this.document as any).basePath = path;
@@ -101,29 +104,25 @@ export class DocumentBuilder {
     if (Array.isArray(name)) {
       const arr = name as Array<string>;
       for (const s of arr) {
-        this.document.tags.push(
-          {
-            name: s,
-            description: ''
-          }
-        );
+        this.document.tags.push({
+          name: s,
+          description: '',
+        });
       }
       return this;
     }
-    this.document.tags.push(
-      {
-        name,
-        description,
-        externalDocs
-      }
-    );
+    this.document.tags.push({
+      name,
+      description,
+      externalDocs,
+    });
     return this;
   }
 
   public addSecurity(name: string, options: SecuritySchemeObject): this {
     this.document.components.securitySchemes = {
       ...(this.document.components.securitySchemes || {}),
-      [name]: options
+      [name]: options,
     };
     return this;
   }
@@ -141,14 +140,14 @@ export class DocumentBuilder {
     }
 
     this.document.security = (this.document.security || []).concat({
-      ...securityRequirement
+      ...securityRequirement,
     });
     return this;
   }
 
   public addBearerAuth(
     options: SecuritySchemeObject = {
-      type: 'http'
+      type: 'http',
     },
     name = 'bearer'
   ): this {
@@ -156,14 +155,14 @@ export class DocumentBuilder {
       type: 'http',
       scheme: 'bearer',
       bearerFormat: 'JWT',
-      ...options
+      ...options,
     });
     return this;
   }
 
   public addOAuth2(
     options: SecuritySchemeObject = {
-      type: 'oauth2'
+      type: 'oauth2',
     },
     name = 'oauth2'
   ): this {
@@ -173,7 +172,7 @@ export class DocumentBuilder {
     this.addSecurity(name, {
       type: 'oauth2',
       flows: {
-        ...options?.flows
+        ...options?.flows,
       },
     });
     return this;
@@ -181,7 +180,7 @@ export class DocumentBuilder {
 
   public addApiKey(
     options: SecuritySchemeObject = {
-      type: 'apiKey'
+      type: 'apiKey',
     },
     name = 'api_key'
   ): this {
@@ -192,14 +191,14 @@ export class DocumentBuilder {
       type: 'apiKey',
       in: 'header',
       name,
-      ...options
+      ...options,
     });
     return this;
   }
 
   public addBasicAuth(
     options: SecuritySchemeObject = {
-      type: 'http'
+      type: 'http',
     },
     name = 'basic'
   ): this {
@@ -209,7 +208,7 @@ export class DocumentBuilder {
     this.addSecurity(name, {
       type: 'http',
       scheme: 'basic',
-      ...options
+      ...options,
     });
     return this;
   }
@@ -217,7 +216,7 @@ export class DocumentBuilder {
   public addCookieAuth(
     cookieName = 'connect.sid',
     options: SecuritySchemeObject = {
-      type: 'apiKey'
+      type: 'apiKey',
     },
     securityName = 'cookie'
   ): this {
@@ -231,7 +230,7 @@ export class DocumentBuilder {
       type: 'apiKey',
       in: 'cookie',
       name: cookieName,
-      ...options
+      ...options,
     });
     return this;
   }
