@@ -88,12 +88,13 @@ export class MidwayWebFramework extends BaseFramework<
       await this.initSingleProcessEgg();
     }
     // insert error handler
-    this.app.use(async (ctx, next) => {
+    const midwayRootMiddleware = async (ctx, next) => {
       // this.app.createAnonymousContext(ctx);
       await (
         await this.getMiddleware()
       )(ctx as any, next);
-    });
+    };
+    this.app.use(midwayRootMiddleware);
 
     this.generator = new EggControllerGenerator(
       this.app,
@@ -109,9 +110,10 @@ export class MidwayWebFramework extends BaseFramework<
         resolve();
       });
       (this.app.loader as any).loadOrigin();
-      // hack use method
+      // 这里拦截 app.use 方法，让他可以加到 midway 的 middlewareManager 中
       (this.app as any).originUse = this.app.use;
       this.app.use = this.app.useMiddleware as any;
+
       this.app.ready();
     });
   }
@@ -138,6 +140,14 @@ export class MidwayWebFramework extends BaseFramework<
     debug(`[egg]: overwrite properties to "${processType}"`);
     this.defineApplicationProperties(
       {
+        generateController: (controllerMapping: string) => {
+          const [controllerId, methodName] = controllerMapping.split('.');
+          return this.generator.generateController({
+            id: controllerId,
+            method: methodName,
+          } as any);
+        },
+
         generateMiddleware: async (middlewareId: string) => {
           return this.generateMiddleware(middlewareId);
         },
@@ -166,7 +176,11 @@ export class MidwayWebFramework extends BaseFramework<
     await this.generator.loadMidwayController(
       this.configurationOptions.globalPrefix,
       newRouter => {
-        this.app.use(newRouter.middleware());
+        const dispatchFn = newRouter.middleware();
+        dispatchFn._name = `midwayController(${
+          newRouter?.opts?.prefix || '/'
+        })`;
+        this.app.useMiddleware(dispatchFn);
       }
     );
   }
@@ -176,10 +190,14 @@ export class MidwayWebFramework extends BaseFramework<
   }
 
   async run(): Promise<void> {
+    // move egg router to last
+    this.app.getMiddleware().findAndInsertLast('eggRouterMiddleware');
     // load controller
     await this.loadMidwayController();
     // restore use method
     this.app.use = (this.app as any).originUse;
+
+    debug(`[egg]: current middleware = ${this.middlewareManager.getNames()}`);
 
     if (!this.isClusterMode) {
       // https config
@@ -224,17 +242,19 @@ export class MidwayWebFramework extends BaseFramework<
       const eggConfig = this.configService.getConfiguration('egg');
       if (!this.isClusterMode && eggConfig) {
         const customPort = process.env.MIDWAY_HTTP_PORT ?? eggConfig.port;
-        new Promise<void>(resolve => {
-          const args: any[] = [customPort];
-          if (eggConfig.hostname) {
-            args.push(eggConfig.hostname);
-          }
-          args.push(() => {
-            resolve();
+        if (customPort) {
+          new Promise<void>(resolve => {
+            const args: any[] = [customPort];
+            if (eggConfig.hostname) {
+              args.push(eggConfig.hostname);
+            }
+            args.push(() => {
+              resolve();
+            });
+            this.server.listen(...args);
+            process.env.MIDWAY_HTTP_PORT = String(customPort);
           });
-          this.server.listen(...args);
-          process.env.MIDWAY_HTTP_PORT = String(customPort);
-        });
+        }
       }
     }
   }

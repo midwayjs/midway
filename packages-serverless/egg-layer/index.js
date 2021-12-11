@@ -30,9 +30,11 @@ module.exports = engine => {
         try {
           const bootstrap = require(join(baseDir, 'bootstrap'));
           eggApp = await bootstrap({
-            globalConfig: {
-              default: require('./framework/config/config.default'),
-            },
+            globalConfig: [
+              {
+                default: require('./framework/config/config.default'),
+              },
+            ],
           });
         } catch (e) {
           console.error(e);

@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.9](https://github.com/midwayjs/midway/compare/v3.0.0-beta.8...v3.0.0-beta.9) (2021-12-09)
+
+**Note:** Version bump only for package @midwayjs/mongoose
+
+
+
+
+
+# [3.0.0-beta.8](https://github.com/midwayjs/midway/compare/v3.0.0-beta.7...v3.0.0-beta.8) (2021-12-08)
+
+
+### Bug Fixes
+
+* express routing middleware takes effect at the controller level ([#1364](https://github.com/midwayjs/midway/issues/1364)) ([b9272e0](https://github.com/midwayjs/midway/commit/b9272e0971003443304b0c53815be31a0061b4bd))
+* mongoose remote config bug ([#1399](https://github.com/midwayjs/midway/issues/1399)) ([e37602d](https://github.com/midwayjs/midway/commit/e37602d54ae503aeee48afa320709aae3d18b329))
+
+
+
+
+
 # [3.0.0-beta.7](https://github.com/midwayjs/midway/compare/v3.0.0-beta.6...v3.0.0-beta.7) (2021-12-03)
 
 **Note:** Version bump only for package @midwayjs/mongoose

@@ -1,0 +1,339 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`test/common/middlewareManager.test.ts should remove middleware 1`] = `
+ContextMiddlewareManager [
+  "MW4",
+  "MW3",
+  "mw2",
+]
+`;
+
+exports[`test/common/middlewareManager.test.ts should remove middleware 2`] = `
+ContextMiddlewareManager [
+  "MW4",
+  "mw2",
+]
+`;
+
+exports[`test/common/middlewareManager.test.ts should remove middleware 3`] = `
+ContextMiddlewareManager [
+  "MW4",
+]
+`;
+
+exports[`test/common/middlewareManager.test.ts should remove middleware 4`] = `
+ContextMiddlewareManager [
+  "MW4",
+]
+`;
+
+exports[`test/common/middlewareManager.test.ts should test find and insert after 1`] = `
+ContextMiddlewareManager [
+  "mw1",
+  "mw2",
+  "MW4",
+  "mw5",
+  "MW3",
+  "mw6",
+]
+`;
+
+exports[`test/common/middlewareManager.test.ts should test find and insert after 2`] = `
+ContextMiddlewareManager [
+  "mw1",
+  "mw2",
+  "MW3",
+  "MW4",
+  "mw5",
+  "mw6",
+]
+`;
+
+exports[`test/common/middlewareManager.test.ts should test find and insert after 3`] = `
+ContextMiddlewareManager [
+  "mw1",
+  "MW3",
+  "MW4",
+  "mw2",
+  "mw5",
+  "mw6",
+]
+`;
+
+exports[`test/common/middlewareManager.test.ts should test find and insert after 4`] = `
+ContextMiddlewareManager [
+  "mw1",
+  "MW3",
+  "mw2",
+  "mw5",
+  "MW4",
+  "mw6",
+]
+`;
+
+exports[`test/common/middlewareManager.test.ts should test find and insert after 5`] = `
+ContextMiddlewareManager [
+  "mw1",
+  "MW3",
+  "mw2",
+  "mw5",
+  "MW4",
+  "mw6",
+]
+`;
+
+exports[`test/common/middlewareManager.test.ts should test find and insert after 6`] = `
+ContextMiddlewareManager [
+  "mw1",
+  "MW3",
+  "mw2",
+  "mw5",
+  "MW4",
+  "mw6",
+]
+`;
+
+exports[`test/common/middlewareManager.test.ts should test find and insert after 7`] = `
+ContextMiddlewareManager [
+  "mw1",
+  "MW3",
+  "mw2",
+  "mw5",
+  "MW4",
+  "mw6",
+]
+`;
+
+exports[`test/common/middlewareManager.test.ts should test find and insert after 8`] = `
+ContextMiddlewareManager [
+  "mw1",
+  "MW3",
+  "mw2",
+  "mw5",
+  "MW4",
+  "mw6",
+]
+`;
+
+exports[`test/common/middlewareManager.test.ts should test find and insert after 9`] = `
+ContextMiddlewareManager [
+  "mw1",
+  "MW3",
+  "mw2",
+  "mw5",
+  "MW4",
+  "mw6",
+]
+`;
+
+exports[`test/common/middlewareManager.test.ts should test find and insert before 1`] = `
+ContextMiddlewareManager [
+  "mw1",
+  "mw2",
+  "MW4",
+  "MW3",
+  "mw5",
+  "mw6",
+]
+`;
+
+exports[`test/common/middlewareManager.test.ts should test find and insert before 2`] = `
+ContextMiddlewareManager [
+  "mw1",
+  "MW3",
+  "mw2",
+  "MW4",
+  "mw5",
+  "mw6",
+]
+`;
+
+exports[`test/common/middlewareManager.test.ts should test find and insert before 3`] = `
+ContextMiddlewareManager [
+  "mw1",
+  "MW3",
+  "mw2",
+  "mw6",
+  "MW4",
+  "mw5",
+]
+`;
+
+exports[`test/common/middlewareManager.test.ts should test find and insert before 4`] = `
+ContextMiddlewareManager [
+  "mw1",
+  "MW4",
+  "MW3",
+  "mw2",
+  "mw6",
+  "mw5",
+]
+`;
+
+exports[`test/common/middlewareManager.test.ts should test find and insert before 5`] = `
+ContextMiddlewareManager [
+  "mw1",
+  "MW4",
+  "MW3",
+  "mw2",
+  "mw6",
+  "mw5",
+]
+`;
+
+exports[`test/common/middlewareManager.test.ts should test find and insert before 6`] = `
+ContextMiddlewareManager [
+  "mw1",
+  "MW4",
+  "MW3",
+  "mw2",
+  "mw6",
+  "mw5",
+]
+`;
+
+exports[`test/common/middlewareManager.test.ts should test find and insert before 7`] = `
+ContextMiddlewareManager [
+  "mw1",
+  "MW4",
+  "MW3",
+  "mw2",
+  "mw6",
+  "mw5",
+]
+`;
+
+exports[`test/common/middlewareManager.test.ts should test find and insert before 8`] = `
+ContextMiddlewareManager [
+  "mw1",
+  "MW4",
+  "MW3",
+  "mw2",
+  "mw6",
+  "mw5",
+]
+`;
+
+exports[`test/common/middlewareManager.test.ts should test find and insert before 9`] = `
+ContextMiddlewareManager [
+  "mw1",
+  "MW4",
+  "MW3",
+  "mw2",
+  "mw6",
+  "mw5",
+]
+`;
+
+exports[`test/common/middlewareManager.test.ts should test find and insert first 1`] = `
+ContextMiddlewareManager [
+  "mw5",
+  "mw1",
+  "mw2",
+  "MW3",
+  "MW4",
+  "mw6",
+]
+`;
+
+exports[`test/common/middlewareManager.test.ts should test find and insert first 2`] = `
+ContextMiddlewareManager [
+  "mw2",
+  "mw5",
+  "mw1",
+  "MW3",
+  "MW4",
+  "mw6",
+]
+`;
+
+exports[`test/common/middlewareManager.test.ts should test find and insert first 3`] = `
+ContextMiddlewareManager [
+  "mw2",
+  "mw5",
+  "mw1",
+  "MW3",
+  "MW4",
+  "mw6",
+]
+`;
+
+exports[`test/common/middlewareManager.test.ts should test find and insert last 1`] = `
+ContextMiddlewareManager [
+  "mw1",
+  "mw2",
+  "MW3",
+  "MW4",
+  "mw6",
+  "mw5",
+]
+`;
+
+exports[`test/common/middlewareManager.test.ts should test find and insert last 2`] = `
+ContextMiddlewareManager [
+  "mw1",
+  "MW3",
+  "MW4",
+  "mw6",
+  "mw5",
+  "mw2",
+]
+`;
+
+exports[`test/common/middlewareManager.test.ts should test find and insert last 3`] = `
+ContextMiddlewareManager [
+  "mw1",
+  "MW3",
+  "MW4",
+  "mw6",
+  "mw5",
+  "mw2",
+]
+`;
+
+exports[`test/common/middlewareManager.test.ts should test idx greater then the length of array 1`] = `
+ContextMiddlewareManager [
+  "MW3",
+  "mw2",
+  "mw1",
+]
+`;
+
+exports[`test/common/middlewareManager.test.ts should test manager like array insert after 1`] = `
+ContextMiddlewareManager [
+  "mw1",
+  "mw6",
+  "mw2",
+  "mw5",
+  "MW3",
+]
+`;
+
+exports[`test/common/middlewareManager.test.ts should test manager like array insert before 1`] = `
+ContextMiddlewareManager [
+  "mw2",
+  "mw6",
+  "MW3",
+  "mw5",
+  "mw1",
+]
+`;
+
+exports[`test/common/middlewareManager.test.ts should test manager like array insert first 1`] = `
+ContextMiddlewareManager [
+  "MW4",
+  "MW3",
+  "mw2",
+  "mw1",
+]
+`;
+
+exports[`test/common/middlewareManager.test.ts should test manager like array insert last 1`] = `
+ContextMiddlewareManager [
+  "mw1",
+  "mw2",
+  "MW3",
+  "MW4",
+  "mw5",
+]
+`;

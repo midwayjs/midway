@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.9](https://github.com/midwayjs/midway/compare/v3.0.0-beta.8...v3.0.0-beta.9) (2021-12-09)
+
+
+### Bug Fixes
+
+* faas missing config in framework ([#1413](https://github.com/midwayjs/midway/issues/1413)) ([7ab16a2](https://github.com/midwayjs/midway/commit/7ab16a24b29d5254a762bfffcdf18385effdf639))
+
+
+
+
+
+# [3.0.0-beta.8](https://github.com/midwayjs/midway/compare/v3.0.0-beta.7...v3.0.0-beta.8) (2021-12-08)
+
+**Note:** Version bump only for package @midwayjs/egg-layer
+
+
+
+
+
 # [3.0.0-beta.7](https://github.com/midwayjs/midway/compare/v3.0.0-beta.6...v3.0.0-beta.7) (2021-12-03)
 
 **Note:** Version bump only for package @midwayjs/egg-layer

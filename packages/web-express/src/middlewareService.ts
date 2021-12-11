@@ -1,9 +1,10 @@
 import { isClass, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
 import {
   IMidwayContainer,
-  pathToRegexp,
   MidwayCommonError,
   CommonMiddleware,
+  FunctionMiddleware,
+  pathMatching,
 } from '@midwayjs/core';
 import { IMidwayExpressContext, IMidwayExpressMiddleware } from './interface';
 import { NextFunction, Response } from 'express';
@@ -86,42 +87,18 @@ export class MidwayExpressMiddlewareService {
   }
 }
 
-export function pathMatching(options) {
-  options = options || {};
-  if (options.match && options.ignore)
-    throw new MidwayCommonError(
-      'options.match and options.ignore can not both present'
-    );
-  if (!options.match && !options.ignore) return () => true;
+export function wrapMiddleware(mw: FunctionMiddleware<any, any, any>, options) {
+  // support options.enable
+  if (options.enable === false) return null;
 
-  const matchFn = options.match
-    ? toPathMatch(options.match)
-    : toPathMatch(options.ignore);
+  // support options.match and options.ignore
+  if (!options.match && !options.ignore) return mw;
+  const match = pathMatching(options);
 
-  return function pathMatch(ctx?) {
-    const matched = matchFn(ctx);
-    return options.match ? matched : !matched;
+  const fn = (req, res, next) => {
+    if (!match(req)) return next();
+    return mw(req, res, next);
   };
-}
-
-function toPathMatch(pattern) {
-  if (typeof pattern === 'string') {
-    const reg = pathToRegexp(pattern, [], { end: false });
-    if (reg.global) reg.lastIndex = 0;
-    return ctx => reg.test(ctx.path);
-  }
-  if (pattern instanceof RegExp) {
-    return ctx => {
-      if (pattern.global) pattern.lastIndex = 0;
-      return pattern.test(ctx.path);
-    };
-  }
-  if (typeof pattern === 'function') return pattern;
-  if (Array.isArray(pattern)) {
-    const matchs = pattern.map(item => toPathMatch(item));
-    return ctx => matchs.some(match => match(ctx));
-  }
-  throw new MidwayCommonError(
-    'match/ignore pattern must be RegExp, Array or String, but got ' + pattern
-  );
+  fn._name = (mw as any)._name + 'middlewareWrapper';
+  return fn;
 }

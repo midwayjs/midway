@@ -1,0 +1,36 @@
+{
+  "name": "@midwayjs/jwt",
+  "description": "midway jwt component",
+  "version": "3.0.0-beta.9",
+  "main": "dist/index.js",
+  "typings": "index.d.ts",
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "index.d.ts"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "node --require=ts-node/register ../../node_modules/jest/bin/jest.js",
+    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --coverage --forceExit"
+  },
+  "keywords": [
+    "midway",
+    "jsonwebtoken",
+    "jwt"
+  ],
+  "author": "Nawbc",
+  "license": "MIT",
+  "devDependencies": {
+    "@midwayjs/core": "^3.0.0-beta.9",
+    "@midwayjs/decorator": "^3.0.0-beta.9",
+    "@midwayjs/express": "^3.0.0-beta.9",
+    "@midwayjs/koa": "^3.0.0-beta.9",
+    "@midwayjs/mock": "^3.0.0-beta.9",
+    "@midwayjs/web": "^3.0.0-beta.9",
+    "@types/jsonwebtoken": "^8.5.5"
+  },
+  "dependencies": {
+    "jsonwebtoken": "^8.5.1"
+  }
+}

@@ -5,10 +5,14 @@ import {
   saveModule,
 } from '@midwayjs/decorator';
 import { getMetadataArgsStorage } from 'typeorm';
-import { ViewEntityOptions } from 'typeorm/decorator/options/ViewEntityOptions';
+import { ViewEntityOptions as BaseViewEntityOptions } from 'typeorm/decorator/options/ViewEntityOptions';
 import { ENTITY_MODEL_KEY, EVENT_SUBSCRIBER_KEY, ORM_MODEL_KEY } from './index';
 
 export interface EntityOptions extends BaseEntityOptions {
+  connectionName?: string;
+}
+
+export interface ViewEntityOptions extends BaseViewEntityOptions {
   connectionName?: string;
 }
 
@@ -96,12 +100,19 @@ export function EntityView(
       ? (nameOrOptions as ViewEntityOptions)
       : maybeOptions) || {};
   const name = typeof nameOrOptions === 'string' ? nameOrOptions : options.name;
+  const connectionName = options?.connectionName || 'ALL';
 
   return function (target) {
     if (typeof target === 'function') {
       saveModule(ENTITY_MODEL_KEY, target);
+      saveClassMetadata(ENTITY_MODEL_KEY, { connectionName }, target);
     } else {
       saveModule(ENTITY_MODEL_KEY, (target as any).constructor);
+      saveClassMetadata(
+        ENTITY_MODEL_KEY,
+        { connectionName },
+        (target as any).constructor
+      );
     }
 
     getMetadataArgsStorage().tables.push({

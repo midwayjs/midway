@@ -7,7 +7,7 @@ this is a sub package for midway.
 
 this module use [amqplib](https://github.com/squaremo/amqp.node)
 
-Document: [https://midwayjs.org/midway](https://midwayjs.org/midway)
+Document: [https://midwayjs.org](https://midwayjs.org)
 
 ## License
 

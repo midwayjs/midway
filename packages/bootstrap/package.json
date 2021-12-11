@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/bootstrap",
-  "version": "3.0.0-beta.7",
+  "version": "3.0.0-beta.9",
   "description": "midwayjs bootstrap",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -21,11 +21,11 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@midwayjs/core": "^3.0.0-beta.7",
-    "@midwayjs/decorator": "^3.0.0-beta.7",
-    "@midwayjs/logger": "^3.0.0-beta.7",
-    "@midwayjs/socketio": "^3.0.0-beta.7",
-    "@midwayjs/web": "^3.0.0-beta.7",
+    "@midwayjs/core": "^3.0.0-beta.9",
+    "@midwayjs/decorator": "^3.0.0-beta.9",
+    "@midwayjs/logger": "^3.0.0-beta.9",
+    "@midwayjs/socketio": "^3.0.0-beta.9",
+    "@midwayjs/web": "^3.0.0-beta.9",
     "@types/socket.io-client": "^1.4.36",
     "request": "^2.88.2",
     "socket.io-client": "^4.0.0"

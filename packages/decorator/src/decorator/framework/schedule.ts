@@ -5,7 +5,7 @@ import {
   SCHEDULE_KEY,
   Provide,
 } from '../../';
-import { Scope } from '../common/objectDef';
+import { Scope } from '../common';
 
 export interface CommonSchedule {
   exec(ctx?);
