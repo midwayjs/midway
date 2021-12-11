@@ -16,13 +16,24 @@ describe('/test/index.test.ts', () => {
     });
 
     it('should get swagger json', async () => {
-      const ret = await createHttpRequest(app).get('/swagger-ui/index.html');
+      let ret = await createHttpRequest(app).get('/swagger-ui/index.html');
       expect(ret.type).toEqual('text/html');
       expect(ret.text).toContain('html');
+      
+      ret = await createHttpRequest(app).get('/swagger-ui/swagger-ui.js');
+      expect(ret.type).toEqual('application/javascript');
+      expect(ret.text).toContain('!function');
+
+      ret = await createHttpRequest(app).get('/swagger-ui/swagger-ui.css');
+      expect(ret.type).toEqual('text/css');
+      expect(ret.text).toContain('.swagger-ui{color:#3b4151');
 
       const result = await createHttpRequest(app).get('/swagger-ui/index.json');
-      console.log('---->', result.text);
       expect(result.type).toEqual('application/json');
+      const body = result.body;
+
+      expect(body.tags).toStrictEqual([{"name":"cats1","description":""}]);
+      expect(body.components.securitySchemes).toStrictEqual({"bbb":{"type":"http","scheme":"basic"},"ttt":{"type":"http","scheme":"bearer","bearerFormat":"JWT"}})
     });
   });
 });

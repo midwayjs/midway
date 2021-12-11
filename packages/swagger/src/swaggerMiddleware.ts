@@ -38,7 +38,7 @@ export class SwaggerMiddleware implements IMiddleware<IMidwayContext, NextFuncti
         (ctx as any).body = this.swaggerExplorer.getData();
         return;
       }
-      if (!lastName || extname(pathname) !== '.html') {
+      if (!lastName) {
         lastName = 'index.html';
       }
 
@@ -49,6 +49,16 @@ export class SwaggerMiddleware implements IMiddleware<IMidwayContext, NextFuncti
           '"https://petstore.swagger.io/v2/swagger.json"',
           `location.href.replace('${this.swaggerConfig.swaggerPath}/index.html', '${this.swaggerConfig.swaggerPath}/index.json')`
         );
+      }
+      const ext = extname(lastName);
+      if (ext === '.js') {
+        (ctx as any).set('Content-Type', 'application/javascript');
+      } else if (ext === '.map') {
+        (ctx as any).set('Content-Type', 'application/json');
+      } else if (ext === '.css') {
+        (ctx as any).set('Content-Type', 'text/css');
+      } else if (ext === '.png') {
+        (ctx as any).set('Content-Type', 'image/png');
       }
 
       (ctx as any).body = content;
