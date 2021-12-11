@@ -347,7 +347,7 @@ describe('/test/services/middlewareService.test.ts', () => {
       container.bindClass(TestMiddleware2);
 
       const middlewareService = await container.getAsync(MidwayMiddlewareService, [container]);
-      const fn = await middlewareService.compose([TestMiddleware1, TestMiddleware2]);
+      const fn = await middlewareService.compose([TestMiddleware1, TestMiddleware2], {} as any);
       const result = await fn({}, () => {
         console.log('end');
       });
@@ -381,8 +381,8 @@ describe('/test/services/middlewareService.test.ts', () => {
       container.bindClass(TestMiddleware2);
 
       const middlewareService = await container.getAsync(MidwayMiddlewareService, [container]);
-      const fn = await middlewareService.compose([TestMiddleware1]);
-      const fn2 = await middlewareService.compose([fn, TestMiddleware2]);
+      const fn = await middlewareService.compose([TestMiddleware1], {} as any);
+      const fn2 = await middlewareService.compose([fn, TestMiddleware2], {} as any);
       const result = await fn2({});
 
       expect(result).toEqual('hello world');
@@ -435,7 +435,7 @@ describe('/test/services/middlewareService.test.ts', () => {
       container.bindClass(TestMiddleware3);
 
       const middlewareService = await container.getAsync(MidwayMiddlewareService, [container]);
-      const fn = await middlewareService.compose([TestMiddleware, TestMiddleware1, TestMiddleware2, TestMiddleware3]);
+      const fn = await middlewareService.compose([TestMiddleware, TestMiddleware1, TestMiddleware2, TestMiddleware3], {} as any);
       const result = await fn({body: ''}, () => {
         console.log('end');
       });
