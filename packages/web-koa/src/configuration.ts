@@ -5,9 +5,11 @@ import {
   WEB_ROUTER_PARAM_KEY,
 } from '@midwayjs/decorator';
 import { extractKoaLikeValue, MidwayDecoratorService } from '@midwayjs/core';
+import * as session from '@midwayjs/session';
 
 @Configuration({
   namespace: 'koa',
+  imports: [session],
   importConfigs: [
     {
       default: {

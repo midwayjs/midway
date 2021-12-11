@@ -29,6 +29,10 @@ export interface IMidwayExpressApplication extends IMidwayApplication<IMidwayExp
 
 export interface IMidwayExpressConfigurationOptions extends IConfigurationOptions {
   /**
+   * session or cookie secret key
+   */
+  keys?: string | string[];
+  /**
    * application http port
    */
   port?: number;

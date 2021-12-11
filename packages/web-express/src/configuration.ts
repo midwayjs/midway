@@ -8,9 +8,11 @@ import {
   extractExpressLikeValue,
   MidwayDecoratorService,
 } from '@midwayjs/core';
+import * as session from '@midwayjs/express-session';
 
 @Configuration({
   namespace: 'express',
+  imports: [session],
 })
 export class ExpressConfiguration {
   @Inject()

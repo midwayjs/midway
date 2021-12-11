@@ -3,7 +3,7 @@ import {
   APPLICATION_KEY,
   CONFIG_KEY,
   FRAMEWORK_KEY,
-  FrameworkType,
+  getProviderUUId,
   Init,
   Inject,
   listModule,
@@ -27,6 +27,7 @@ import { BaseFramework } from '../baseFramework';
 import { MidwayPipelineService } from './pipelineService';
 import { MidwayDecoratorService } from './decoratorService';
 import { MidwayAspectService } from './aspectService';
+import { MidwayApplicationManager } from '../common/applicationManager';
 import * as util from 'util';
 import { MidwayCommonError } from '../error';
 
@@ -47,17 +48,15 @@ export class MidwayFrameworkService {
   @Inject()
   decoratorService: MidwayDecoratorService;
 
+  @Inject()
+  applicationManager: MidwayApplicationManager;
+
   constructor(
     readonly applicationContext: IMidwayContainer,
     readonly globalOptions
   ) {}
 
   private mainFramework: IMidwayFramework<any, any, any>;
-
-  private globalFrameworkMap = new WeakMap<
-    FrameworkType,
-    IMidwayFramework<any, any, any>
-  >();
 
   private globalFrameworkList: Array<IMidwayFramework<any, any, any>> = [];
 
@@ -124,8 +123,11 @@ export class MidwayFrameworkService {
           );
         }
         // app init
-        this.globalFrameworkMap.set(
-          frameworkInstance.getFrameworkType(),
+        const definition = this.applicationContext.registry.getDefinition(
+          getProviderUUId(frameworkClz)
+        );
+        this.applicationManager.addFramework(
+          definition?.namespace ?? frameworkInstance.getFrameworkName(),
           frameworkInstance
         );
         this.globalFrameworkList.push(frameworkInstance);
@@ -136,11 +138,11 @@ export class MidwayFrameworkService {
         APPLICATION_KEY,
         (propertyName, mete) => {
           if (mete.type) {
-            if (this.globalFrameworkMap.has(mete.type)) {
-              return this.globalFrameworkMap.get(mete.type).getApplication();
-            } else {
+            const framework = this.applicationManager.getApplication(mete.type);
+            if (!framework) {
               throw new MidwayCommonError(`Framework ${mete.type} not Found`);
             }
+            return framework;
           } else {
             return this.getMainApp();
           }
@@ -177,8 +179,8 @@ export class MidwayFrameworkService {
     return this.mainFramework;
   }
 
-  public getFramework(type: MidwayFrameworkType) {
-    return this.globalFrameworkMap.get(type);
+  public getFramework(namespaceOrFrameworkType: string | MidwayFrameworkType) {
+    return this.applicationManager.getFramework(namespaceOrFrameworkType);
   }
 
   public async runFramework() {

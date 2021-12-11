@@ -60,12 +60,12 @@ export class MidwayKoaFramework extends BaseFramework<
       IMidwayKoaContext
     >() as IMidwayKoaApplication;
     const appKeys =
-      this.configurationOptions['keys'] ||
-      this.configService.getConfiguration('keys');
+      this.configService.getConfiguration('keys') ||
+      this.configurationOptions['keys'];
     if (appKeys) {
-      this.app.keys = appKeys;
+      this.app.keys = [].concat(appKeys);
     } else {
-      throw new MidwayConfigMissingError('koa.keys');
+      throw new MidwayConfigMissingError('config.koa.keys');
     }
     onerror(this.app, this.configurationOptions.onerror);
 

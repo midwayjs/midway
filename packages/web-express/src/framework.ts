@@ -267,7 +267,10 @@ export class MidwayExpressFramework extends BaseFramework<
       >
     ) => void
   ): Promise<void> {
-    const fn = await this.expressMiddlewareService.compose(middlewares);
+    const fn = await this.expressMiddlewareService.compose(
+      middlewares,
+      this.app
+    );
     handlerCallback(fn);
   }
 
@@ -276,7 +279,8 @@ export class MidwayExpressFramework extends BaseFramework<
   > {
     if (!this.composeMiddleware) {
       this.composeMiddleware = await this.expressMiddlewareService.compose(
-        this.middlewareManager
+        this.middlewareManager,
+        this.app
       );
       await this.filterManager.init(this.applicationContext);
     }

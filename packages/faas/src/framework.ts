@@ -132,30 +132,34 @@ export class MidwayFaaSFramework extends BaseFramework<
 
       middlewareManager.insertLast(globalMiddlewareFn);
       middlewareManager.insertLast(async (ctx, next) => {
-        const fn = await this.middlewareService.compose([
-          ...funOptions.controllerMiddleware,
-          ...funOptions.middleware,
-          async (ctx, next) => {
-            if (isHttpFunction) {
-              args = [ctx];
-            }
-            // invoke handler
-            const result = await this.invokeHandler(
-              funOptions,
-              ctx,
-              args,
-              isHttpFunction
-            );
-            if (isHttpFunction && result !== undefined) {
-              ctx.body = result;
-            }
-            return result;
-          },
-        ]);
+        const fn = await this.middlewareService.compose(
+          [
+            ...funOptions.controllerMiddleware,
+            ...funOptions.middleware,
+            async (ctx, next) => {
+              if (isHttpFunction) {
+                args = [ctx];
+              }
+              // invoke handler
+              const result = await this.invokeHandler(
+                funOptions,
+                ctx,
+                args,
+                isHttpFunction
+              );
+              if (isHttpFunction && result !== undefined) {
+                ctx.body = result;
+              }
+              return result;
+            },
+          ],
+          this.app
+        );
         return await fn(ctx, next);
       });
       const composeMiddleware = await this.middlewareService.compose(
-        middlewareManager
+        middlewareManager,
+        this.app
       );
 
       return await composeMiddleware(context);

@@ -22,6 +22,10 @@ export type NextFunction = Next;
 
 export interface IMidwayKoaConfigurationOptions extends IConfigurationOptions {
   /**
+   * cookies sign keys
+   */
+  keys?: string[];
+  /**
    * application http port
    */
   port?: number;

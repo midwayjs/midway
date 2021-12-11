@@ -37,6 +37,7 @@ export * from './common/webGenerator';
 export * from './common/middlewareManager';
 export * from './util/pathToRegexp';
 export * from './common/filterManager';
+export * from './common/applicationManager';
 export * from './setup';
 export * from './error';
 
