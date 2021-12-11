@@ -66,7 +66,13 @@ export class SwaggerExplorer {
       }
     }
     // 设置 auth 类型
-    this.setAuth(this.swaggerConfig?.auth);
+    if (Array.isArray(this.swaggerConfig?.auth)) {
+      for (const a of this.swaggerConfig?.auth) {
+        this.setAuth(a);
+      }
+    } else {
+      this.setAuth(this.swaggerConfig?.auth);
+    }
   }
 
   public scanApp() {
@@ -133,6 +139,8 @@ export class SwaggerExplorer {
       header = headers[0].metadata;
     }
 
+    const security = metaForMethods.filter(item => item.key === DECORATORS.API_SECURITY);
+
     const paths: Record<string, PathItemObject> = {};
     if (webRouterInfo && typeof webRouterInfo[Symbol.iterator] === 'function') {
       for (const webRouter of webRouterInfo) {
@@ -166,6 +174,19 @@ export class SwaggerExplorer {
         for (const e of exts) {
           if (e.metadata) {
             Object.assign(paths[url][webRouter.requestMethod], e.metadata);
+          }
+        }
+
+        if (security.length > 0) {
+          if (!paths[url][webRouter.requestMethod].security) {
+            paths[url][webRouter.requestMethod].security = [];
+          }
+
+          for (const s of security) {
+            if (!s.metadata) {
+              continue;
+            }
+            paths[url][webRouter.requestMethod].security.push(s.metadata);
           }
         }
       }
@@ -487,25 +508,43 @@ export class SwaggerExplorer {
     }
     const authType = opts.authType;
     delete opts.authType;
-
+    // TODO 加 security
     switch(authType) {
-      case 'basic':
-        this.documentBuilder.addBasicAuth();
+      case 'basic': {
+        const name = opts.name;
+        delete opts.name;
+        this.documentBuilder.addBasicAuth(opts, name);
+      }
         break;
-      case 'bearer':
-        this.documentBuilder.addBearerAuth();
+      case 'bearer': {
+        const name = opts.name;
+        delete opts.name;
+        this.documentBuilder.addBearerAuth(opts, name);
+      }
         break;
-      case 'cookie':
-        this.documentBuilder.addCookieAuth();
+      case 'cookie':{
+        const cname = opts.cookieName;
+        const secName = opts.securityName;
+        delete opts.cookieName;
+        delete opts.securityName;
+        this.documentBuilder.addCookieAuth(cname, opts, secName);
+      }
         break;
-      case 'oauth2':
-        this.documentBuilder.addOAuth2();
+      case 'oauth2': {
+        const name = opts.name;
+        delete opts.name;
+        this.documentBuilder.addOAuth2(opts, name);
+      }
         break;
-      case 'apikey':
-        this.documentBuilder.addApiKey();
+      case 'apikey': {
+        const name = opts.name;
+        delete opts.name;
+        this.documentBuilder.addApiKey(opts, name);
+      }
         break;
-      case 'custom':
+      case 'custom': {
         this.documentBuilder.addSecurity(opts?.name, opts);
+      }
         break;
     }
   }

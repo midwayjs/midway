@@ -6,12 +6,12 @@ export function ApiSecurity(
   name: string | SecurityRequirementObject,
   requirements: string[] = []
 ): any {
-  let metadata: SecurityRequirementObject[];
+  let metadata: SecurityRequirementObject;
 
   if (typeof name === 'string') {
-    metadata = [{ [name]: requirements }];
+    metadata = { [name]: requirements || [] };
   } else {
-    metadata = [name];
+    metadata = name;
   }
 
   return createCustomMethodDecorator(DECORATORS.API_SECURITY, metadata);

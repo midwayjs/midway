@@ -1,5 +1,7 @@
 import { Body, Controller, Get, Inject, Param, Post } from '@midwayjs/decorator';
 import {
+  ApiBasicAuth,
+  ApiBearerAuth,
   ApiBody,
   ApiExtension,
   ApiForbiddenResponse,
@@ -20,6 +22,8 @@ import { Cat } from './entities/cat.entity';
 @ApiHeader({
   name: 'x-test-one',
 })
+@ApiBasicAuth('bbb')
+@ApiBearerAuth('ttt')
 export class CatsController {
   @Inject()
   private readonly catsService: CatsService

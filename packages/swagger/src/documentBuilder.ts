@@ -153,6 +153,7 @@ export class DocumentBuilder {
     name = 'bearer'
   ): this {
     this.addSecurity(name, {
+      type: 'http',
       scheme: 'bearer',
       bearerFormat: 'JWT',
       ...options
@@ -166,10 +167,14 @@ export class DocumentBuilder {
     },
     name = 'oauth2'
   ): this {
+    if (!name) {
+      name = 'oauth2';
+    }
     this.addSecurity(name, {
       type: 'oauth2',
-      flows: {},
-      ...options
+      flows: {
+        ...options?.flows
+      },
     });
     return this;
   }
@@ -180,6 +185,9 @@ export class DocumentBuilder {
     },
     name = 'api_key'
   ): this {
+    if (!name) {
+      name = 'api_key';
+    }
     this.addSecurity(name, {
       type: 'apiKey',
       in: 'header',
@@ -195,6 +203,9 @@ export class DocumentBuilder {
     },
     name = 'basic'
   ): this {
+    if (!name) {
+      name = 'basic';
+    }
     this.addSecurity(name, {
       type: 'http',
       scheme: 'basic',
@@ -210,6 +221,12 @@ export class DocumentBuilder {
     },
     securityName = 'cookie'
   ): this {
+    if (!cookieName) {
+      cookieName = 'connect.sid';
+    }
+    if (!securityName) {
+      securityName = 'cookie';
+    }
     this.addSecurity(securityName, {
       type: 'apiKey',
       in: 'cookie',

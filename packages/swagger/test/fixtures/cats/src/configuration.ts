@@ -5,7 +5,7 @@ import * as swagger from '../../../../src';
   importConfigs: [{
     default: {
       swagger: {
-        auth: {authType: 'basic'}
+        auth: [{authType: 'basic', name: 'bbb'}, {authType: 'bearer', name: 'ttt'}]
       },
     }
   }],
