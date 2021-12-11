@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import {
   ContentObject,
   ExamplesObject,
@@ -17,7 +18,7 @@ import { createParamDecorator, getTypeIsArrayTuple } from './helpers';
 type RequestBodyOptions = Omit<RequestBodyObject, 'content'>;
 
 interface ApiBodyMetadata extends RequestBodyOptions {
-  type?: any | Function | [Function] | string;
+  type?: any;
   isArray?: boolean;
   enum?: SwaggerEnumType;
   content?: ContentObject;

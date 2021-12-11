@@ -1,5 +1,5 @@
 import { DECORATORS } from '../constants';
-import { SwaggerEnumType, ParameterObject } from '../interfaces';
+import { SwaggerEnumType, ParameterObject, Type } from '../interfaces';
 import { getEnumType, getEnumValues } from '../common/enum.utils';
 import { createParamDecorator } from './helpers';
 import { createCustomMethodDecorator } from '@midwayjs/decorator';
@@ -33,7 +33,7 @@ export function ApiHeader(options: ApiHeaderOptions): any {
   }
 
   return (
-    target: object | Function,
+    target: object | Type,
     key?: string | symbol,
     descriptor?: TypedPropertyDescriptor<any>
   ): any => {
@@ -56,7 +56,7 @@ export const ApiHeaders = (
   headers: ApiHeaderOptions[]
 ): MethodDecorator & ClassDecorator => {
   return (
-    target: object | Function,
+    target: object | Type,
     key?: string | symbol,
     descriptor?: TypedPropertyDescriptor<any>
   ): any => {

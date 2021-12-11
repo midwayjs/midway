@@ -17,6 +17,7 @@ export function getEnumValues(enumType: SwaggerEnumType): string[] | number[] {
 
   for (const key in enumType) {
     const value = enumType[key];
+    /* eslint-disable no-prototype-builtins */
     // filter out cases where enum key also becomes its value (A: B, B: A)
     if (
       !uniqueValues.hasOwnProperty(value) &&

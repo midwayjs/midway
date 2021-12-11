@@ -10,7 +10,7 @@ import { getEnumValues, getEnumType } from '../common/enum.utils';
 type ParameterOptions = Omit<ParameterObject, 'in' | 'schema'>;
 
 interface ApiParamMetadata extends ParameterOptions {
-  type?: Type | Function | [Function] | string;
+  type?: Type | string;
   format?: string;
   enum?: SwaggerEnumType;
   enumName?: string;

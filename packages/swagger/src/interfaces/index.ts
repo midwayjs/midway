@@ -294,7 +294,7 @@ export interface Type<T = any> extends Function {
 
 export interface SchemaObjectMetadata
   extends Omit<SchemaObject, 'type' | 'required'> {
-  type?: Type<unknown> | Function | [Function] | string | Record<string, any>;
+  type?: Type<unknown> | [Type] | string | Record<string, any>;
   isArray?: boolean;
   required?: boolean;
   name?: string;

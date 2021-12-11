@@ -12,7 +12,7 @@ import { createCustomMethodDecorator } from '@midwayjs/decorator';
 export interface ApiResponseMetadata
   extends Omit<ResponseObject, 'description'> {
   status?: number | 'default';
-  type?: Type | Function | [Function] | string | Record<string, any>;
+  type?: Type | string | Record<string, any>;
   isArray?: boolean;
   description?: string;
 }

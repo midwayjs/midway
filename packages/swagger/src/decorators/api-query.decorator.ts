@@ -17,7 +17,7 @@ type ParameterOptions = Omit<ParameterObject, 'in' | 'schema' | 'name'>;
 
 interface ApiQueryMetadata extends ParameterOptions {
   name?: string;
-  type?: Type | Function | [Function] | string;
+  type?: Type | string;
   isArray?: boolean;
   enum?: SwaggerEnumType;
   enumName?: string;
