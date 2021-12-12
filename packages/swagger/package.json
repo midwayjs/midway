@@ -1,19 +1,20 @@
 {
   "name": "@midwayjs/swagger",
-  "version": "3.0.0-beta.7",
+  "version": "3.0.0-beta.9",
   "main": "dist/index",
-  "typings": "dist/index.d.ts",
+  "typings": "index.d.ts",
   "files": [
     "dist/**/*.js",
-    "dist/**/*.d.ts"
+    "dist/**/*.d.ts",
+    "index.d.ts"
   ],
   "dependencies": { },
   "devDependencies": {
     "swagger-ui-dist": "^3.34.0",
-    "@midwayjs/core": "^3.0.0-beta.7",
-    "@midwayjs/decorator": "^3.0.0-beta.7",
-    "@midwayjs/koa": "^3.0.0-beta.7",
-    "@midwayjs/mock": "^3.0.0-beta.7"
+    "@midwayjs/core": "^3.0.0-beta.9",
+    "@midwayjs/decorator": "^3.0.0-beta.9",
+    "@midwayjs/koa": "^3.0.0-beta.9",
+    "@midwayjs/mock": "^3.0.0-beta.9"
   },
   "author": "Kurten Chan <chinkurten@gmail.com>",
   "license": "MIT",

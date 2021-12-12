@@ -22,12 +22,13 @@ import {
 import { PathItemObject, Type } from './interfaces';
 import { DECORATORS } from './constants';
 import { DocumentBuilder } from './documentBuilder';
+import { SwaggerOptions } from './interfaces/';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
 export class SwaggerExplorer {
   @Config('swagger')
-  private swaggerConfig: any;
+  private swaggerConfig: SwaggerOptions;
 
   private documentBuilder = new DocumentBuilder();
 
