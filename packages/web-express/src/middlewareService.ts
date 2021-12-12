@@ -6,7 +6,11 @@ import {
   FunctionMiddleware,
   pathMatching,
 } from '@midwayjs/core';
-import { IMidwayExpressContext, IMidwayExpressMiddleware } from './interface';
+import {
+  IMidwayExpressContext,
+  IMidwayExpressMiddleware,
+  Application,
+} from './interface';
 import { NextFunction, Response } from 'express';
 
 @Provide()
@@ -18,6 +22,7 @@ export class MidwayExpressMiddlewareService {
     middleware: Array<
       CommonMiddleware<IMidwayExpressContext, Response, NextFunction> | string
     >,
+    app: Application,
     name?: string
   ) {
     if (!Array.isArray(middleware)) {
@@ -41,7 +46,7 @@ export class MidwayExpressMiddlewareService {
             fn as any
           );
         if (classMiddleware) {
-          fn = classMiddleware.resolve();
+          fn = classMiddleware.resolve(app);
           if (!classMiddleware.match && !classMiddleware.ignore) {
             (fn as any)._name = classMiddleware.constructor.name;
             // just got fn

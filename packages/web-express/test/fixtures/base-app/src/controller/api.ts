@@ -2,7 +2,6 @@ import {
   Controller,
   Post,
   Get,
-  Provide,
   Inject,
   Query,
   Body,
@@ -16,7 +15,6 @@ import { UserService } from '../service/user';
 import { Context } from '../../../../../src';
 import { Response } from 'express';
 
-@Provide()
 @Controller('/api')
 export class APIController {
 
@@ -49,7 +47,7 @@ export class APIController {
 
   @Post()
   async postData(@Body('bbbbb') bbbb) {
-    return 'data';
+    return bbbb;
   }
 
   @Get('/', { middleware: [] })

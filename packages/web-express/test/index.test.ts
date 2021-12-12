@@ -36,6 +36,14 @@ describe('/test/feature.test.ts', () => {
       expect(result.text).toBe('hello world,harry');
     });
 
+    it('test post json data', async () => {
+      const result = await createHttpRequest(app).post('/api/').send({
+        bbbbb: 222,
+      })
+      expect(result.status).toBe(200);
+      expect(result.text).toBe('222');
+    });
+
     it('test get method with redirect', async () => {
       const result = await createHttpRequest(app).get('/api/login');
       expect(result.status).toBe(302);
@@ -96,7 +104,10 @@ describe('/test/feature.test.ts', () => {
 
     it('should test middleware', async () => {
       const app = await createLightApp('', {
-        configurationModule: require('../src')
+        configurationModule: require('../src'),
+        globalConfig: {
+          keys: '12345'
+        }
       });
       app.getApplicationContext().bind(MidwayExpressMiddlewareService);
 
@@ -115,7 +126,7 @@ describe('/test/feature.test.ts', () => {
           i += 4;
           next();
         },
-      ]);
+      ], app as any);
 
       await fn({type: 'req'} as any, {} as any, () => {
       });
@@ -124,7 +135,10 @@ describe('/test/feature.test.ts', () => {
 
     it('should catch error in middleware', async () => {
       const app = await createLightApp('', {
-        configurationModule: require('../src')
+        configurationModule: require('../src'),
+        globalConfig: {
+          keys: ['12345']
+        }
       });
 
       const middlewareService = await app.getApplicationContext().getAsync(MidwayExpressMiddlewareService, [app.getApplicationContext()]);
@@ -138,7 +152,7 @@ describe('/test/feature.test.ts', () => {
           i += 3;
           throw new Error('custom error');
         },
-      ]);
+      ], app as any);
 
       try {
         await fn({type: 'req'} as any, {} as any, (err) => {

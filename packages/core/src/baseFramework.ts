@@ -312,15 +312,16 @@ export abstract class BaseFramework<
         return returnResult.result;
       }) as any);
       this.composeMiddleware = await this.middlewareService.compose(
-        this.middlewareManager
+        this.middlewareManager,
+        this.app
       );
       await this.filterManager.init(this.applicationContext);
     }
     if (lastMiddleware) {
-      return await this.middlewareService.compose([
-        this.composeMiddleware,
-        lastMiddleware,
-      ]);
+      return await this.middlewareService.compose(
+        [this.composeMiddleware, lastMiddleware],
+        this.app
+      );
     } else {
       return this.composeMiddleware;
     }

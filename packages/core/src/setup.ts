@@ -12,6 +12,7 @@ import {
   MidwayLifeCycleService,
   MidwayMiddlewareService,
   MidwayDecoratorService,
+  MidwayApplicationManager,
   safeRequire,
 } from './';
 import defaultConfig from './config/config.default';
@@ -67,6 +68,7 @@ export async function initializeGlobalApplicationContext(
   applicationContext.bindClass(MidwayFrameworkService);
   applicationContext.bindClass(MidwayMiddlewareService);
   applicationContext.bindClass(MidwayLifeCycleService);
+  applicationContext.bindClass(MidwayApplicationManager);
 
   // bind preload module
   if (globalOptions.preloadModules && globalOptions.preloadModules.length) {

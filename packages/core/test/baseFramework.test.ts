@@ -664,7 +664,8 @@ describe('/test/baseFramework.test.ts', () => {
 
     // 再 compose
     const composeMiddleware = await middlewareService.compose(
-      middlewareManager
+      middlewareManager,
+      {} as any
     );
 
     expect(await composeMiddleware({})).toEqual('hello world gogogo, zhangting');

@@ -50,6 +50,14 @@ describe('/test/feature.test.ts', () => {
       expect(result.text).toEqual('ctx-body');
     });
 
+    it('test post json data', async () => {
+      const result = await createHttpRequest(app).post('/').send({
+        bbbb: 222,
+      })
+      expect(result.status).toBe(200);
+      expect(result.text).toBe('222');
+    });
+
     describe('test 500', function () {
       it('test status 500', async () => {
         const result = await createHttpRequest(app).get('/case/500');

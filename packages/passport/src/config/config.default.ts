@@ -1,4 +1,4 @@
 export const passport = {
-  session: false,
+  session: true,
   userProperty: 'user',
 };

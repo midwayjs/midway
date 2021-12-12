@@ -5,7 +5,10 @@ import { IMidwayExpressApplication, IMidwayExpressRequest } from '../../../../sr
 @Configuration({
   importConfigs: [
     join(__dirname, './config'),
-  ]
+  ],
+  imports: [
+    require('../../../../src')
+  ],
 })
 export class ContainerConfiguration {
 

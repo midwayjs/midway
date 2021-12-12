@@ -4,6 +4,7 @@ import {
   IMiddleware,
   IMidwayContainer,
   FunctionMiddleware,
+  IMidwayApplication,
 } from '../interface';
 import { MidwayCommonError, MidwayParameterError } from '../error';
 import { isIncludeProperty, pathMatching } from '../util';
@@ -15,6 +16,7 @@ export class MidwayMiddlewareService<T, R, N = unknown> {
 
   async compose(
     middleware: Array<CommonMiddleware<T, R, N> | string>,
+    app: IMidwayApplication,
     name?: string
   ) {
     if (!Array.isArray(middleware)) {
@@ -37,7 +39,7 @@ export class MidwayMiddlewareService<T, R, N = unknown> {
           IMiddleware<T, R, N>
         >(fn as any);
         if (classMiddleware) {
-          fn = classMiddleware.resolve();
+          fn = classMiddleware.resolve(app);
           if (!classMiddleware.match && !classMiddleware.ignore) {
             if (!fn.name) {
               (fn as any)._name = classMiddleware.constructor.name;

@@ -79,7 +79,7 @@ export class MidwayExpressFramework extends BaseFramework<
         if (error) {
           next(error);
         } else {
-          res.send(result);
+          this.sendData(res, result);
         }
       }
     });
@@ -190,7 +190,7 @@ export class MidwayExpressFramework extends BaseFramework<
         throw error;
       }
 
-      res.send(returnValue);
+      this.sendData(res, returnValue);
     };
   }
 
@@ -267,7 +267,10 @@ export class MidwayExpressFramework extends BaseFramework<
       >
     ) => void
   ): Promise<void> {
-    const fn = await this.expressMiddlewareService.compose(middlewares);
+    const fn = await this.expressMiddlewareService.compose(
+      middlewares,
+      this.app
+    );
     handlerCallback(fn);
   }
 
@@ -276,7 +279,8 @@ export class MidwayExpressFramework extends BaseFramework<
   > {
     if (!this.composeMiddleware) {
       this.composeMiddleware = await this.expressMiddlewareService.compose(
-        this.middlewareManager
+        this.middlewareManager,
+        this.app
       );
       await this.filterManager.init(this.applicationContext);
     }
@@ -297,5 +301,13 @@ export class MidwayExpressFramework extends BaseFramework<
 
   public getDefaultContextLoggerClass() {
     return MidwayExpressContextLogger;
+  }
+
+  protected sendData(res, data) {
+    if (typeof data === 'number') {
+      res.status(res.statusCode).send('' + data);
+    } else {
+      res.status(res.statusCode).send(data);
+    }
   }
 }

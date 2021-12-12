@@ -2,6 +2,7 @@ import { IConfigurationOptions, IMidwayApplication, IMidwayContext } from '@midw
 import * as koa from 'koa';
 import { Context as KoaContext, DefaultState, Middleware, Next } from 'koa';
 import { RouterParamValue } from '@midwayjs/decorator';
+import * as bodyParser from 'koa-bodyparser';
 
 export type IMidwayKoaContext = IMidwayContext<KoaContext>;
 export type IMidwayKoaApplication = IMidwayApplication<IMidwayKoaContext, koa<DefaultState, IMidwayKoaContext> & {
@@ -17,10 +18,17 @@ export type IMidwayKoaApplication = IMidwayApplication<IMidwayKoaContext, koa<De
   generateMiddleware(middlewareId: string): Promise<Middleware<DefaultState, IMidwayKoaContext>>;
 }>;
 
+/**
+ * @deprecated use NextFunction definition
+ */
 export type IMidwayKoaNext = Next;
 export type NextFunction = Next;
 
 export interface IMidwayKoaConfigurationOptions extends IConfigurationOptions {
+  /**
+   * cookies sign keys
+   */
+  keys?: string[];
   /**
    * application http port
    */
@@ -49,17 +57,6 @@ export interface IMidwayKoaConfigurationOptions extends IConfigurationOptions {
    * http global prefix
    */
   globalPrefix?: string;
-  /**
-   * onerror middleware options
-   */
-  onerror?: {
-    text: (err: Error, ctx: IMidwayKoaContext) => void;
-    json: (err: Error, ctx: IMidwayKoaContext) => void;
-    html: (err: Error, ctx: IMidwayKoaContext) => void;
-    redirect?: string;
-    template?: string;
-    accepts?: (...args) => any;
-  }
 }
 
 export type MiddlewareParamArray = Array<Middleware<DefaultState, IMidwayKoaContext>>;
@@ -75,5 +72,17 @@ export interface Context extends IMidwayKoaContext {}
 declare module '@midwayjs/core/dist/interface' {
   interface MidwayConfig {
     koa?: IMidwayKoaConfigurationOptions;
+    /**
+     * onerror middleware options
+     */
+    onerror?: {
+      text?: (err: Error, ctx: IMidwayKoaContext) => void;
+      json?: (err: Error, ctx: IMidwayKoaContext) => void;
+      html?: (err: Error, ctx: IMidwayKoaContext) => void;
+      redirect?: string;
+      template?: string;
+      accepts?: (...args) => any;
+    },
+    bodyParser?: bodyParser.Options;
   }
 }

@@ -3,6 +3,9 @@ import { join } from 'path';
 import { IMidwayExpressApplication } from '../../../../src';
 
 @Configuration({
+  imports: [
+    require('../../../../src')
+  ],
   importConfigs: [
     join(__dirname, './config')
   ]
