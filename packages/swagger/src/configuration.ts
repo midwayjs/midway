@@ -1,34 +1,30 @@
 import {
   ILifeCycle,
   IMidwayContainer,
-  IMidwayApplication,
+  MidwayApplicationManager,
 } from '@midwayjs/core';
-import { App, Configuration } from '@midwayjs/decorator';
+import { Inject, Configuration } from '@midwayjs/decorator';
 import { SwaggerExplorer, SwaggerMiddleware } from '.';
+import * as DefaultConfig from './config/config.default';
 
 @Configuration({
   importConfigs: [
     {
-      default: {
-        swagger: {
-          title: 'My Project',
-          description: 'This is a swagger-ui for midwayjs project',
-          version: '1.0.0',
-          swaggerPath: '/swagger-ui',
-        },
-      },
+      default: DefaultConfig,
     },
   ],
   namespace: 'swagger',
 })
 export class SwaggerConfiguration implements ILifeCycle {
-  @App()
-  app: IMidwayApplication;
+  @Inject()
+  applicationManager: MidwayApplicationManager;
 
   async onReady(container: IMidwayContainer) {
-    const ret = await container.getAsync(SwaggerMiddleware);
-
-    this.app.useMiddleware(ret.resolve());
+    this.applicationManager
+      .getApplications(['express', 'koa', 'egg', 'faas'])
+      .forEach(app => {
+        app.useMiddleware(SwaggerMiddleware);
+      });
 
     const explorer = await container.getAsync(SwaggerExplorer);
     explorer.scanApp();

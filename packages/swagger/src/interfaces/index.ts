@@ -300,3 +300,18 @@ export interface SchemaObjectMetadata
   name?: string;
   enumName?: string;
 }
+
+export interface SwaggerOptions {
+  title?: string;
+  description?: string;
+  version?: string;
+  swaggerPath?: string;
+  contact?: ContactObject;
+  license?: LicenseObject;
+  basePath?: string;
+  termsOfService?: string;
+  externalDoc?: ExternalDocumentationObject;
+  servers?: Array<ServerObject>;
+  tags?: Array<TagObject>;
+  auth?: SecuritySchemeObject;
+}
