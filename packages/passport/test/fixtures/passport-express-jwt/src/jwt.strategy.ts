@@ -22,4 +22,15 @@ export class JwtStrategy extends PassportStrategy(
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     };
   }
+
+  serializeUser(user, done) {
+    done(null, user);
+  }
+
+  deserializeUser(id, done) {
+    done(null, {
+      username: 'admin',
+      password: '123'
+    });
+  }
 }

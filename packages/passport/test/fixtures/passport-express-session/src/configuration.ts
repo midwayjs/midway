@@ -3,8 +3,6 @@ import * as passport from 'passport';
 import { PassportMiddleware, PassportStrategy, CustomStrategy as Strategy } from '../../../../src';
 import * as path from 'path';
 import * as LocalStrategy from 'passport-local';
-import * as bodyParser from 'body-parser';
-import * as session from 'express-session';
 import * as express from '@midwayjs/express';
 
 @Strategy()
@@ -55,15 +53,6 @@ export class ContainerLifeCycle {
   app;
 
   async onReady() {
-    this.app.use(
-      session({
-        secret: 'my-secret',
-        resave: true,
-        saveUninitialized: true,
-      })
-    );
-    this.app.use(bodyParser.json());
-    this.app.use(bodyParser.urlencoded({ extended: false }));
     this.app.useMiddleware(AuthMiddleware);
   }
 }

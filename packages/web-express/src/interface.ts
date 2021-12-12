@@ -7,6 +7,7 @@ import {
   IMidwayContext
 } from '@midwayjs/core';
 import { Application as ExpressApplication, NextFunction as ExpressNextFunction, Request, Response } from 'express';
+import { Options, OptionsJson, OptionsText, OptionsUrlencoded } from 'body-parser';
 
 export type IMidwayExpressContext = IMidwayContext<Request>;
 /**
@@ -69,5 +70,20 @@ export interface Context extends IMidwayExpressContext {}
 declare module '@midwayjs/core/dist/interface' {
   interface MidwayConfig {
     express?: IMidwayExpressConfigurationOptions;
+    bodyParser?: {
+      enable?: boolean;
+      json?: OptionsJson & {
+        enable?: boolean;
+      };
+      raw?: Options & {
+        enable?: boolean;
+      };
+      text?: OptionsText & {
+        enable?: boolean;
+      };
+      urlencoded?: OptionsUrlencoded & {
+        enable?: boolean;
+      };
+    }
   }
 }

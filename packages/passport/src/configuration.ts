@@ -22,20 +22,6 @@ export class PassportConfiguration {
   @Inject()
   configService: MidwayConfigService;
 
-  async onConfigLoad(container) {
-    const passportConfig = this.configService.getConfiguration('passport');
-    if (
-      passportConfig.session === undefined &&
-      container.hasNamespace('session')
-    ) {
-      return {
-        passport: {
-          session: true,
-        },
-      };
-    }
-  }
-
   async onReady(container: IMidwayContainer) {
     const passportConfig = this.configService.getConfiguration('passport');
     const passport = getPassport();

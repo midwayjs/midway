@@ -37,8 +37,8 @@ export class APIController {
   }
 
   @Post()
-  async postData(@Body() bbbb) {
-    return 'data';
+  async postData(@Body('bbbb') bbbb) {
+    return bbbb;
   }
 
   @Get('/', { middleware: [] })

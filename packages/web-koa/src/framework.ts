@@ -67,7 +67,9 @@ export class MidwayKoaFramework extends BaseFramework<
     } else {
       throw new MidwayConfigMissingError('config.koa.keys');
     }
-    onerror(this.app, this.configurationOptions.onerror);
+
+    const onerrorConfig = this.configService.getConfiguration('onerror');
+    onerror(this.app, onerrorConfig);
 
     const midwayRootMiddleware = async (ctx, next) => {
       this.app.createAnonymousContext(ctx);

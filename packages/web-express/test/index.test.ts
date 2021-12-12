@@ -36,6 +36,14 @@ describe('/test/feature.test.ts', () => {
       expect(result.text).toBe('hello world,harry');
     });
 
+    it('test post json data', async () => {
+      const result = await createHttpRequest(app).post('/api/').send({
+        bbbbb: 222,
+      })
+      expect(result.status).toBe(200);
+      expect(result.text).toBe('222');
+    });
+
     it('test get method with redirect', async () => {
       const result = await createHttpRequest(app).get('/api/login');
       expect(result.status).toBe(302);
