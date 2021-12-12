@@ -1,6 +1,7 @@
 import { SessionOptions } from 'express-session';
 
-export const session: SessionOptions = {
+export const session: SessionOptions & { enable: boolean } = {
+  enable: true,
   secret: undefined, // must be set in application
   name: 'MW_SESS',
   resave: true,

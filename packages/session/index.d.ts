@@ -3,6 +3,10 @@ export * from './dist/index';
 
 declare module '@midwayjs/core/dist/interface' {
   interface MidwayConfig {
-    session: Partial<opts>;
+    session: Partial<
+      opts & {
+        enable: boolean;
+      }
+    >;
   }
 }

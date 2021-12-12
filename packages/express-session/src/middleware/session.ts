@@ -23,32 +23,34 @@ export class SessionMiddleware implements IMiddleware<any, any> {
   configService: MidwayConfigService;
 
   resolve() {
-    const secret =
-      this.sessionConfig.secret ??
-      this.configService.getConfiguration('express.keys') ??
-      this.configService.getConfiguration('keys');
-    if (!secret) {
-      throw new MidwayConfigMissingError('config.session.secret');
-    }
-    this.sessionConfig.secret = [].concat(secret);
-    if (!this.sessionConfig.cookie.httpOnly) {
-      this.logger.warn(
-        '[midway-session]: please set `config.session.cookie.httpOnly` to true. It is very dangerous if session can read by client JavaScript.'
-      );
-    }
-    const store = this.sessionStoreManager.getSessionStore(session);
-    if (store) {
-      this.sessionConfig.store = store;
-    }
-    if (!this.sessionConfig.store) {
-      return cookieSession(
-        Object.assign(this.sessionConfig.cookie, {
-          keys: this.sessionConfig.secret,
-          name: this.sessionConfig.name,
-        })
-      );
-    } else {
-      return session(this.sessionConfig);
+    if (this.sessionConfig.enable) {
+      const secret =
+        this.sessionConfig.secret ??
+        this.configService.getConfiguration('express.keys') ??
+        this.configService.getConfiguration('keys');
+      if (!secret) {
+        throw new MidwayConfigMissingError('config.session.secret');
+      }
+      this.sessionConfig.secret = [].concat(secret);
+      if (!this.sessionConfig.cookie.httpOnly) {
+        this.logger.warn(
+          '[midway-session]: please set `config.session.cookie.httpOnly` to true. It is very dangerous if session can read by client JavaScript.'
+        );
+      }
+      const store = this.sessionStoreManager.getSessionStore(session);
+      if (store) {
+        this.sessionConfig.store = store;
+      }
+      if (!this.sessionConfig.store) {
+        return cookieSession(
+          Object.assign(this.sessionConfig.cookie, {
+            keys: this.sessionConfig.secret,
+            name: this.sessionConfig.name,
+          })
+        );
+      } else {
+        return session(this.sessionConfig);
+      }
     }
   }
 }
