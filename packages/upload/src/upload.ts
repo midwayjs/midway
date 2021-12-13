@@ -97,16 +97,15 @@ export const parseHead = (headBuf: Buffer) => {
       continue;
     }
     const name = matched[1].toLowerCase();
-    const value = matched[2] ? matched[2].replace(
-      /&#(\d+);/g,
-      (origin: string, code: string) => {
-        try {
-          return String.fromCharCode(parseInt(code));
-        } catch {
-          return origin;
-        }
-      }
-    ): '';
+    const value = matched[2]
+      ? matched[2].replace(/&#(\d+);/g, (origin: string, code: string) => {
+          try {
+            return String.fromCharCode(parseInt(code));
+          } catch {
+            return origin;
+          }
+        })
+      : '';
     if (name === 'content-disposition') {
       const headCol = {};
       value.split(/;\s+/).forEach((kv: string) => {

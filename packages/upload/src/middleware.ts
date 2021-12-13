@@ -14,7 +14,9 @@ export class UploadMiddleware implements IMiddleware<any, any> {
 
   resolve(app) {
     if (app.getFrameworkType() === MidwayFrameworkType.WEB_EXPRESS) {
-      
+      return async (req: any, res: any, next: any) => {
+        return next();
+      };
     } else {
       return async (ctx, next) => {
         const boundary = this.getUploadBoundary(ctx.request);
@@ -33,7 +35,7 @@ export class UploadMiddleware implements IMiddleware<any, any> {
             limit: fileSize,
           });
         } else {
-          body =  req.body;
+          body = req.body;
         }
 
         const data = await parseMultipart(body, boundary);
@@ -43,42 +45,45 @@ export class UploadMiddleware implements IMiddleware<any, any> {
 
         ctx.fields = data.fields;
         const requireId = `upload_${Date.now()}.${Math.random()}`;
-        ctx.files = mode === 'buffer' ? data.files : data.files.map((file, index) => {
-          const { data, filename } = file;
-          if (mode === UploadMode.File) {
-            const ext = extname(filename);
-            const tmpFileName = resolve(tmpdir, `${requireId}.${index}${ext}`);
-            writeFileSync(tmpFileName, data, 'binary');
-            file.data = tmpFileName;
-          } else if (mode === UploadMode.Stream) {
-            file.data = new Readable({
-              read() {
-                this.push(data);
-                this.push(null);
-              }
-            });
-          }
-          return file;
-        });
-        
+        ctx.files =
+          mode === 'buffer'
+            ? data.files
+            : data.files.map((file, index) => {
+                const { data, filename } = file;
+                if (mode === UploadMode.File) {
+                  const ext = extname(filename);
+                  const tmpFileName = resolve(
+                    tmpdir,
+                    `${requireId}.${index}${ext}`
+                  );
+                  writeFileSync(tmpFileName, data, 'binary');
+                  file.data = tmpFileName;
+                } else if (mode === UploadMode.Stream) {
+                  file.data = new Readable({
+                    read() {
+                      this.push(data);
+                      this.push(null);
+                    },
+                  });
+                }
+                return file;
+              });
+
         return next();
-      }
+      };
     }
   }
 
-  getUploadBoundary(request): false|string {
+  getUploadBoundary(request): false | string {
     const method = (request.method || request.httpMethod || '').toUpperCase();
-    if (
-      !request.headers?.['content-type'] ||
-      method !== 'POST'
-    ) {
+    if (!request.headers?.['content-type'] || method !== 'POST') {
       return false;
     }
     const contentType: string = request.headers['content-type'];
     if (!contentType.startsWith('multipart/form-data;')) {
       return false;
     }
-  
+
     const boundaryMatch = /boundary=(.*)(;|\s|$)/.exec(contentType);
     if (!boundaryMatch?.[1]) {
       return false;
@@ -86,12 +91,10 @@ export class UploadMiddleware implements IMiddleware<any, any> {
     return boundaryMatch[1];
   }
 
-
   isStream(req): boolean {
     if (!req.body && typeof req.on === 'function') {
-      return true
+      return true;
     }
     return false;
   }
 }
-

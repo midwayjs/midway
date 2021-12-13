@@ -19,8 +19,10 @@ export class UploadConfiguration {
   uploadConfig;
 
   async onReady() {
-    this.applicationManager.getApplications(['koa', 'faas', 'express', 'egg']).forEach(app => {
-      app.useMiddleware(UploadMiddleware);
-    });
+    this.applicationManager
+      .getApplications(['koa', 'faas', 'express', 'egg'])
+      .forEach(app => {
+        app.useMiddleware(UploadMiddleware);
+      });
   }
 }
