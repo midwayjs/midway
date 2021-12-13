@@ -1,5 +1,5 @@
 import { Configuration, Provide, ServerlessTrigger, ServerlessTriggerType, Inject } from '@midwayjs/decorator';
-import * as faas from '../../../../../faas';
+import * as faas from '@midwayjs/faas';
 
 @Configuration({
   imports: [

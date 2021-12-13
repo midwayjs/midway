@@ -13,14 +13,11 @@ export class UploadMiddleware implements IMiddleware<any, any> {
   upload: UploadOptions;
 
   resolve(app) {
-    console.log('type', app.getFrameworkType());
     if (app.getFrameworkType() === MidwayFrameworkType.WEB_EXPRESS) {
       
     } else {
       return async (ctx, next) => {
-        console.log('req');
         const boundary = this.getUploadBoundary(ctx.request);
-        console.log('boundary', boundary);
         if (!boundary) {
           return next();
         }
