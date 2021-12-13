@@ -23,7 +23,6 @@ export class HelloHttpService {
 
   @ServerlessTrigger(ServerlessTriggerType.HTTP, { path: '/upload', method: 'post'})
   async upload() {
-    console.log('upload function');
     const { files, fields } = this.ctx;
     return {
       files,

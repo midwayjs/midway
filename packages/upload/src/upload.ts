@@ -1,3 +1,4 @@
+import { Readable, Writable } from 'stream';
 export const parseMultipart = async (body: any, boundary: string) => {
   if (typeof body === 'string') {
     body = Buffer.from(body);
@@ -30,6 +31,36 @@ export const parseMultipart = async (body: any, boundary: string) => {
     files,
     fields,
   };
+};
+
+export const parseFromWritableStream = (
+  readStream: Readable,
+  onFieldChange
+) => {
+  const passthrough: any = new Writable();
+  const chunks = [];
+  const fileInfo = {
+    filename: '',
+    data: null,
+    fieldname: '',
+    mimeType: '',
+  };
+  passthrough._write = (chunk, encoding, cb) => {
+    chunks.push(chunk);
+  };
+  readStream.pipe(passthrough);
+  const newReadStream = new Readable({
+    read() {
+      if (chunks.length) {
+        this.push(chunks.shift());
+      } else {
+        this.push(null);
+      }
+    },
+  });
+  fileInfo.data = newReadStream;
+
+  return fileInfo;
 };
 
 // search buffer index

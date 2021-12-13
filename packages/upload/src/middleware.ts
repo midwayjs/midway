@@ -2,9 +2,9 @@ import { Config, Middleware, MidwayFrameworkType } from '@midwayjs/decorator';
 import { IMiddleware } from '@midwayjs/core';
 import { resolve, extname } from 'path';
 import { writeFileSync } from 'fs';
-import { Readable } from 'stream';
+import { Readable, Stream } from 'stream';
 import { UploadMode, UploadOptions } from '.';
-import { parseMultipart } from './upload';
+import { parseFromWritableStream, parseMultipart } from './upload';
 import * as getRawBody from 'raw-body';
 
 @Middleware()
@@ -24,12 +24,17 @@ export class UploadMiddleware implements IMiddleware<any, any> {
           return next();
         }
 
+        ctx.fields = {};
         const { mode, tmpdir, fileSize } = this.upload;
         const req = ctx.request?.req || ctx.request;
         let body;
-        if (this.isStream(req)) {
+        if (this.isReadableStream(req)) {
           if (mode === UploadMode.Stream) {
-            // TODO: stream
+            const fileInfo: any = parseFromWritableStream(req, fields => {
+              Object.assign(ctx.fields, fields);
+            });
+            ctx.files = [fileInfo];
+            return next();
           }
           body = await getRawBody(req, {
             limit: fileSize,
@@ -91,8 +96,14 @@ export class UploadMiddleware implements IMiddleware<any, any> {
     return boundaryMatch[1];
   }
 
-  isStream(req): boolean {
-    if (!req.body && typeof req.on === 'function') {
+  isReadableStream(req: any): boolean {
+    // ref: https://github.com/rvagg/isstream/blob/master/isstream.js#L10
+    if (
+      req instanceof Stream &&
+      typeof (req as any)._read === 'function' &&
+      typeof (req as any)._readableState === 'object' &&
+      !(req as any).body
+    ) {
       return true;
     }
     return false;
