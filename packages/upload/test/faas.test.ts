@@ -1,14 +1,16 @@
-import { createApp, createHttpRequest, close } from '@midwayjs/mock';
+import { createHttpRequest, close, createFunctionApp } from '@midwayjs/mock';
 import { join } from 'path';
 import * as assert from 'assert';
 
 describe('test/faas.test.ts', function () {
 
-  it('upload file', async (done) => {
+  it('upload file mode', async (done) => {
     const appDir = join(__dirname, 'fixtures/faas');
-    const app = await createApp(appDir);
+    const app = await createFunctionApp(appDir);
     const imagePath = join(appDir, '1.jpg');
-    const request = createHttpRequest(app);
+    console.log('imagePath', imagePath);
+    const request = await createHttpRequest(app);
+    console.log('request', request);
     await request.post('/upload')
       .field('name', 'form')
       .attach('file', imagePath)

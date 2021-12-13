@@ -1,6 +1,5 @@
 import { Configuration, Provide, ServerlessTrigger, ServerlessTriggerType, Inject } from '@midwayjs/decorator';
 import * as faas from '../../../../../faas';
-import MemoryStore = require('memorystore');
 
 @Configuration({
   imports: [
@@ -9,7 +8,9 @@ import MemoryStore = require('memorystore');
   ],
   importConfigs: [
     {
-      default: {}
+      default: {
+        upload: 'file',
+      }
     }
   ]
 })

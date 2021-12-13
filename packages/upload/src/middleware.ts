@@ -13,6 +13,7 @@ export class UploadMiddleware implements IMiddleware<any, any> {
   upload: UploadOptions;
 
   resolve(app) {
+    console.log('type', app.getFrameworkType());
     if (app.getFrameworkType() === MidwayFrameworkType.WEB_EXPRESS) {
       
     } else {
