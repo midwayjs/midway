@@ -539,3 +539,9 @@ export interface MidwayAppInfo {
  * midway global config definition
  */
 export interface MidwayConfig extends FileConfigOption<typeof _default> {}
+
+export interface TranslateOptions {
+  lang?: string;
+  group?: string;
+  args?: any;
+}

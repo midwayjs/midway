@@ -3,57 +3,15 @@ import {
   Init,
   Inject,
   getMethodParamTypes,
-  getClassExtendedMetadata,
   JoinPoint,
-  Provide,
-  Scope,
-  ScopeEnum,
-  Config,
 } from '@midwayjs/decorator';
-import { MidwayDecoratorService, MidwayValidationError } from '@midwayjs/core';
-import { RULES_KEY, VALIDATE_KEY } from './constants';
-import * as Joi from 'joi';
+import { MidwayDecoratorService } from '@midwayjs/core';
+import { VALIDATE_KEY } from './constants';
 import * as util from 'util';
 import * as DefaultConfig from './config.default';
+import { ValidateService } from './service';
 
 const debug = util.debuglog('midway:debug');
-
-@Provide()
-@Scope(ScopeEnum.Singleton)
-export class ValidateService {
-  @Config('validate')
-  validateConfig: typeof DefaultConfig.validate;
-
-  validate(
-    ClzType: new (...args) => any,
-    value: any,
-    options?: {
-      errorStatus?: number;
-      validateOptions?: Joi.ValidationOptions;
-    }
-  ) {
-    const rules = getClassExtendedMetadata(RULES_KEY, ClzType);
-    if (rules) {
-      const schema = Joi.object(rules);
-      const result = schema.validate(
-        value,
-        Object.assign(
-          this.validateConfig.validationOptions,
-          options.validateOptions ?? {}
-        )
-      );
-      if (result.error) {
-        throw new MidwayValidationError(
-          result.error.message,
-          options?.errorStatus ?? this.validateConfig.errorStatus,
-          result.error
-        );
-      } else {
-        return result;
-      }
-    }
-  }
-}
 
 @Configuration({
   namespace: 'validate',
