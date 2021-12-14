@@ -23,16 +23,15 @@ export class UploadMiddleware implements IMiddleware<any, any> {
         if (!boundary) {
           return next();
         }
-
         ctx.fields = {};
         const { mode, tmpdir, fileSize } = this.upload;
         const req = ctx.request?.req || ctx.request;
         let body;
         if (this.isReadableStream(req)) {
+
           if (mode === UploadMode.Stream) {
-            const fileInfo: any = parseFromWritableStream(req, fields => {
-              Object.assign(ctx.fields, fields);
-            });
+            const { fields, fileInfo}: any = await parseFromWritableStream(req, boundary);
+            ctx.fields = fields;
             ctx.files = [fileInfo];
             return next();
           }

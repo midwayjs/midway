@@ -6,7 +6,8 @@
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "test": "node --require=ts-node/register ../../node_modules/.bin/jest",
+    "test": "node --require=ts-node/register ../../node_modules/.bin/jest ./test/web.test.ts",
+    "test2": "node --require=ts-node/register ../../node_modules/.bin/jest ./test/utils.test.ts",
     "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --coverage --forceExit",
     "ci": "npm run test"
   },

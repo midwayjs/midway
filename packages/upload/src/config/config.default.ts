@@ -5,5 +5,5 @@ export const upload: UploadOptions = {
   mode: UploadMode.File,
   fileSize: '10mb',
   whitelist: null,
-  tmpdir: join(tmpdir(), 'midway-upload-tmp'),
+  tmpdir: join(tmpdir()),
 };
