@@ -1,0 +1,40 @@
+{
+  "name": "@midwayjs/i18n",
+  "description": "midway i18n component",
+  "version": "3.0.0-beta.9",
+  "main": "dist/index",
+  "typings": "index.d.ts",
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "index.d.ts"
+  ],
+  "dependencies": {
+    "picomatch": "^2.3.0"
+  },
+  "devDependencies": {
+    "@midwayjs/core": "^3.0.0-beta.9",
+    "@midwayjs/decorator": "^3.0.0-beta.9",
+    "@midwayjs/mock": "^3.0.0-beta.9"
+  },
+  "keywords": [
+    "midway",
+    "i18n"
+  ],
+  "author": "czy88840616 <czy88840616@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "test": "node --require=ts-node/register ../../node_modules/.bin/jest",
+    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --coverage --forceExit",
+    "ci": "npm run test",
+    "lint": "mwts check"
+  },
+  "engines": {
+    "node": ">=12"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/midwayjs/midway.git"
+  }
+}

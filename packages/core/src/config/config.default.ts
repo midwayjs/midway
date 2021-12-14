@@ -7,18 +7,10 @@ import { getCurrentEnvironment, isDevelopmentEnvironment } from '../util/';
 import { join } from 'path';
 import type { LoggerOptions } from '@midwayjs/logger';
 
-interface i18nOptions {
-  defaultLanguage: string;
-  languageTable: Record<string, Record<string, any>>;
-  fallbackLanguage: string;
-  fallback: Record<string, any>;
-}
-
 export default (
   appInfo: MidwayAppInfo
 ): {
   midwayLogger?: ServiceFactoryConfigOption<LoggerOptions>;
-  i18n?: Partial<i18nOptions>;
 } => {
   const isDevelopment = isDevelopmentEnvironment(getCurrentEnvironment());
   return {
@@ -40,17 +32,6 @@ export default (
           fileLogName: 'midway-app.log',
           aliasName: 'logger',
         },
-      },
-    },
-    i18n: {
-      defaultLanguage: 'en_US',
-      languageTable: {
-        en_US: {},
-      },
-      fallbackLanguage: 'en_US',
-      fallback: {
-        //   'en_*': 'en_US',
-        //   pt: 'pt-BR',
       },
     },
   };

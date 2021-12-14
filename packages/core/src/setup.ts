@@ -13,7 +13,6 @@ import {
   MidwayMiddlewareService,
   MidwayDecoratorService,
   MidwayApplicationManager,
-  MidwayI18nService,
   safeRequire,
 } from './';
 import defaultConfig from './config/config.default';
@@ -43,7 +42,7 @@ export async function initializeGlobalApplicationContext(
   applicationContext.registerObject('baseDir', baseDir);
   applicationContext.registerObject('appDir', appDir);
 
-  if (globalOptions.moduleDirector !== false) {
+  if (globalOptions.moduleDetector !== false) {
     if (
       globalOptions.moduleDetector === undefined ||
       globalOptions.moduleDetector === 'file'
@@ -70,7 +69,6 @@ export async function initializeGlobalApplicationContext(
   applicationContext.bindClass(MidwayMiddlewareService);
   applicationContext.bindClass(MidwayLifeCycleService);
   applicationContext.bindClass(MidwayApplicationManager);
-  applicationContext.bindClass(MidwayI18nService);
 
   // bind preload module
   if (globalOptions.preloadModules && globalOptions.preloadModules.length) {
@@ -130,9 +128,6 @@ export async function initializeGlobalApplicationContext(
   await applicationContext.getAsync(MidwayMiddlewareService, [
     applicationContext,
   ]);
-
-  // i18n support
-  await applicationContext.getAsync(MidwayI18nService, [applicationContext]);
 
   // framework/config/plugin/logger/app decorator support
   await applicationContext.getAsync(MidwayFrameworkService, [

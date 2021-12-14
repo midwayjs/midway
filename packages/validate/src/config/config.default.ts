@@ -4,12 +4,12 @@ export const validate = {
 };
 
 export const i18n = {
-  languageTable: {
+  localeTable: {
     en_US: {
-      validate: require('./locales/en_US.json'),
+      validate: require('../locales/en_US.json'),
     },
     zh_CN: {
-      validate: require('./locales/zh_CN.json'),
+      validate: require('../locales/zh_CN.json'),
     },
   },
 };
