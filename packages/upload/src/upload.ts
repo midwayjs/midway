@@ -33,11 +33,8 @@ export const parseMultipart = async (body: any, boundary: string) => {
   };
 };
 
-const pre = Buffer.from(`\r\n`);
-export const parseFromWritableStream = (
-  readStream: Readable,
-  boundary,
-) => {
+const pre = Buffer.from('\r\n');
+export const parseFromWritableStream = (readStream: Readable, boundary) => {
   const bufferSeparator = Buffer.from(`\r\n--${boundary}`);
   const fields = {};
   const fileInfo = {
@@ -46,7 +43,7 @@ export const parseFromWritableStream = (
     fieldname: '',
     mimeType: '',
   };
-  let emptyBuf = Buffer.alloc(0);
+  const emptyBuf = Buffer.alloc(0);
   // 上一次遗留的 chunk
   let lastChunk = emptyBuf;
   // 前一个chunk的后缀
@@ -54,14 +51,14 @@ export const parseFromWritableStream = (
   let isTransformFileData = false;
   let isTransformFileDataEnd = false;
   // let isEnd = false;
-  let isFirst = true
+  let isFirst = true;
   let allChuns = Buffer.alloc(0);
   return new Promise(resolve => {
     fileInfo.data = new Transform({
       highWaterMark: 1000,
       transform(chunk, encoding, callback) {
         if (isFirst) {
-          chunk = Buffer.concat([pre, chunk])
+          chunk = Buffer.concat([pre, chunk]);
           isFirst = false;
         }
         // 已经结束了
@@ -71,7 +68,6 @@ export const parseFromWritableStream = (
 
         // 正在传输中的话
         if (isTransformFileData) {
-
           if (lastChunk.length) {
             chunk = Buffer.concat([lastChunk, chunk]);
             lastChunk = emptyBuf;
@@ -81,7 +77,10 @@ export const parseFromWritableStream = (
           // 存在新的块则代表已经结束了
           if (newBlockIndex !== -1) {
             // 上一个块的最后一部分数据，需要追加写入
-            const lastDataBlock = newPreChunk.slice(preChunk.length, newBlockIndex);
+            const lastDataBlock = newPreChunk.slice(
+              preChunk.length,
+              newBlockIndex
+            );
             isTransformFileDataEnd = true;
             callback(null, lastDataBlock);
             return;
@@ -96,11 +95,18 @@ export const parseFromWritableStream = (
         allChuns = Buffer.concat([allChuns, chunk]);
 
         const splitAllChuns = bufferSplit(allChuns, bufferSeparator);
-        for(let chunkIndex = 0; chunkIndex < splitAllChuns.length; chunkIndex ++) {
-          const [headerBuf, data] = bufferSplit(splitAllChuns[chunkIndex], headSeparator);
+        for (
+          let chunkIndex = 0;
+          chunkIndex < splitAllChuns.length;
+          chunkIndex++
+        ) {
+          const [headerBuf, data] = bufferSplit(
+            splitAllChuns[chunkIndex],
+            headSeparator
+          );
           const head = parseHead(headerBuf);
           if (!head['content-disposition']) {
-            continue
+            continue;
           }
           if (!head['content-disposition'].filename) {
             if (head['content-disposition'].name) {
@@ -120,7 +126,7 @@ export const parseFromWritableStream = (
           lastChunk = data;
           allChuns = emptyBuf;
           this.pause();
-          resolve({ fileInfo, fields})
+          resolve({ fileInfo, fields });
           break;
         }
 
@@ -200,4 +206,3 @@ export const parseHead = (headBuf: Buffer) => {
   }
   return head;
 };
-
