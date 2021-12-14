@@ -9,7 +9,9 @@ import * as faas from '@midwayjs/faas';
   importConfigs: [
     {
       default: {
-        upload: 'file',
+        upload: {
+          mode: 'file',
+        },
       }
     }
   ]

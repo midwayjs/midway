@@ -14,7 +14,7 @@ import * as upload from '../../../../src';
       default: {
         keys: ["test"],
         upload: {
-          mode: upload.UploadMode.File,
+          mode: upload.UploadMode.Stream,
         }
       }
     }

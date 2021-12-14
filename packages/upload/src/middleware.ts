@@ -6,7 +6,6 @@ import { Readable, Stream } from 'stream';
 import { UploadMode, UploadOptions } from '.';
 import { parseFromWritableStream, parseMultipart } from './upload';
 import * as getRawBody from 'raw-body';
-import { ensureDirSync } from 'fs-extra';
 
 @Middleware()
 export class UploadMiddleware implements IMiddleware<any, any> {
@@ -15,7 +14,6 @@ export class UploadMiddleware implements IMiddleware<any, any> {
 
   resolve(app) {
     const { mode, tmpdir, fileSize } = this.upload;
-    ensureDirSync(tmpdir);
     if (app.getFrameworkType() === MidwayFrameworkType.WEB_EXPRESS) {
       return async (req: any, res: any, next: any) => {
         return next();
