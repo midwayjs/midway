@@ -13,72 +13,76 @@ export class UploadMiddleware implements IMiddleware<any, any> {
   upload: UploadOptions;
 
   resolve(app) {
-    const { mode, tmpdir, fileSize } = this.upload;
     if (app.getFrameworkType() === MidwayFrameworkType.WEB_EXPRESS) {
       return async (req: any, res: any, next: any) => {
-        return next();
+        return this.execUpload(req, req, next, true);
       };
     } else {
       return async (ctx, next) => {
-        const boundary = this.getUploadBoundary(ctx.request);
-        if (!boundary) {
-          return next();
-        }
-        ctx.fields = {};
-
         const req = ctx.request?.req || ctx.request;
-        let body;
-        if (this.isReadableStream(req)) {
-          if (mode === UploadMode.Stream) {
-            const { fields, fileInfo }: any = await parseFromWritableStream(
-              req,
-              boundary
-            );
-            ctx.fields = fields;
-            ctx.files = [fileInfo];
-            return next();
-          }
-          body = await getRawBody(req, {
-            limit: fileSize,
-          });
-        } else {
-          body = req.body;
-        }
-
-        const data = await parseMultipart(body, boundary);
-        if (!data) {
-          return next();
-        }
-
-        ctx.fields = data.fields;
-        const requireId = `upload_${Date.now()}.${Math.random()}`;
-        ctx.files =
-          mode === 'buffer'
-            ? data.files
-            : data.files.map((file, index) => {
-                const { data, filename } = file;
-                if (mode === UploadMode.File) {
-                  const ext = extname(filename);
-                  const tmpFileName = resolve(
-                    tmpdir,
-                    `${requireId}.${index}${ext}`
-                  );
-                  writeFileSync(tmpFileName, data, 'binary');
-                  file.data = tmpFileName;
-                } else if (mode === UploadMode.Stream) {
-                  file.data = new Readable({
-                    read() {
-                      this.push(data);
-                      this.push(null);
-                    },
-                  });
-                }
-                return file;
-              });
-
-        return next();
+        return this.execUpload(ctx, req, next, false);
       };
     }
+  }
+
+  async execUpload(ctx, req, next, isExpress) {
+    const { mode, tmpdir, fileSize } = this.upload;
+    const boundary = this.getUploadBoundary(req);
+    if (!boundary) {
+      return next();
+    }
+    ctx.fields = {};
+
+    let body;
+    if (this.isReadableStream(req, isExpress)) {
+      if (mode === UploadMode.Stream) {
+        const { fields, fileInfo }: any = await parseFromWritableStream(
+          req,
+          boundary
+        );
+        ctx.fields = fields;
+        ctx.files = [fileInfo];
+        return next();
+      }
+      body = await getRawBody(req, {
+        limit: fileSize,
+      });
+    } else {
+      body = req.body;
+    }
+
+    const data = await parseMultipart(body, boundary);
+    if (!data) {
+      return next();
+    }
+
+    ctx.fields = data.fields;
+    const requireId = `upload_${Date.now()}.${Math.random()}`;
+    ctx.files =
+      mode === 'buffer'
+        ? data.files
+        : data.files.map((file, index) => {
+            const { data, filename } = file;
+            if (mode === UploadMode.File) {
+              const ext = extname(filename);
+              const tmpFileName = resolve(
+                tmpdir,
+                `${requireId}.${index}${ext}`
+              );
+              writeFileSync(tmpFileName, data, 'binary');
+              file.data = tmpFileName;
+            } else if (mode === UploadMode.Stream) {
+              file.data = new Readable({
+                read() {
+                  this.push(data);
+                  this.push(null);
+                },
+              });
+            }
+            return file;
+          });
+
+    return next();
   }
 
   getUploadBoundary(request): false | string {
@@ -98,14 +102,17 @@ export class UploadMiddleware implements IMiddleware<any, any> {
     return boundaryMatch[1];
   }
 
-  isReadableStream(req: any): boolean {
+  isReadableStream(req: any, isExpress): boolean {
     // ref: https://github.com/rvagg/isstream/blob/master/isstream.js#L10
     if (
       req instanceof Stream &&
       typeof (req as any)._read === 'function' &&
       typeof (req as any)._readableState === 'object' &&
-      !(req as any).body
+      (!(req as any).body || isExpress)
     ) {
+      return true;
+    }
+    if (req.pipe && req.on && !req.body) {
       return true;
     }
     return false;
