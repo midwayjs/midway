@@ -25,4 +25,16 @@ describe('test/faas.test.ts', function () {
       });
     await close(app);
   });
+  it('upload unsupport ext file using file', async () => {
+
+    const appDir = join(__dirname, 'fixtures/faas');
+    const testPath = join(__dirname, 'fixtures/1.test');
+    const app = await createFunctionApp<ServerlessApp.Framework>(appDir, {}, ServerlessApp);
+    const request = await createHttpRequest(app);
+    await request.post('/upload')
+      .field('name', 'form')
+      .attach('file', testPath)
+      .expect(400);
+    await close(app);
+  });
 });

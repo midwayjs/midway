@@ -1,4 +1,5 @@
 import { Readable, Transform, Writable } from 'stream';
+import { UploadFileInfo } from './interface';
 const headSeparator = Buffer.from('\r\n\r\n');
 export const parseMultipart = async (body: any, boundary: string) => {
   if (typeof body === 'string') {
@@ -34,10 +35,13 @@ export const parseMultipart = async (body: any, boundary: string) => {
 };
 
 const pre = Buffer.from('\r\n');
-export const parseFromWritableStream = (readStream: Readable, boundary) => {
+export const parseFromReadableStream = (
+  readStream: Readable,
+  boundary
+): Promise<{ fields: any; fileInfo: UploadFileInfo }> => {
   const bufferSeparator = Buffer.from(`\r\n--${boundary}`);
   const fields = {};
-  const fileInfo = {
+  const fileInfo: UploadFileInfo = {
     filename: '',
     data: null,
     fieldname: '',
@@ -133,7 +137,7 @@ export const parseFromWritableStream = (readStream: Readable, boundary) => {
         callback(null, emptyBuf);
       },
     });
-    readStream.pipe(fileInfo.data);
+    readStream.pipe(fileInfo.data as any);
     const empty = new Writable();
     empty._write = function (chunk, encoding, cb) {
       cb();

@@ -1,3 +1,5 @@
+import { Readable } from "stream";
+
 export enum UploadMode {
   Stream = 'stream',
   File = 'file',
@@ -15,4 +17,12 @@ export interface UploadOptions {
   // files: number;      // Max number of file fields, default is `10`
   // fileExtensions: [],
   // allowArrayField: false,
+}
+
+
+export interface UploadFileInfo {
+  filename: string;
+  fieldname: string;
+  mimeType: string;
+  data: Buffer | Readable | string;
 }

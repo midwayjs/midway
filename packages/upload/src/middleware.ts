@@ -1,10 +1,15 @@
-import { Config, Middleware, MidwayFrameworkType } from '@midwayjs/decorator';
-import { IMiddleware } from '@midwayjs/core';
+import {
+  Config,
+  Logger,
+  Middleware,
+  MidwayFrameworkType,
+} from '@midwayjs/decorator';
+import { IMiddleware, IMidwayLogger } from '@midwayjs/core';
 import { resolve, extname } from 'path';
 import { writeFileSync } from 'fs';
 import { Readable, Stream } from 'stream';
 import { UploadMode, UploadOptions } from '.';
-import { parseFromWritableStream, parseMultipart } from './upload';
+import { parseFromReadableStream, parseMultipart } from './upload';
 import * as getRawBody from 'raw-body';
 
 @Middleware()
@@ -12,20 +17,23 @@ export class UploadMiddleware implements IMiddleware<any, any> {
   @Config('upload')
   upload: UploadOptions;
 
+  @Logger()
+  logger: IMidwayLogger;
+
   resolve(app) {
     if (app.getFrameworkType() === MidwayFrameworkType.WEB_EXPRESS) {
       return async (req: any, res: any, next: any) => {
-        return this.execUpload(req, req, next, true);
+        return this.execUpload(req, req, res, next, true);
       };
     } else {
       return async (ctx, next) => {
         const req = ctx.request?.req || ctx.request;
-        return this.execUpload(ctx, req, next, false);
+        return this.execUpload(ctx, req, ctx, next, false);
       };
     }
   }
 
-  async execUpload(ctx, req, next, isExpress) {
+  async execUpload(ctx, req, res, next, isExpress) {
     const { mode, tmpdir, fileSize } = this.upload;
     const boundary = this.getUploadBoundary(req);
     if (!boundary) {
@@ -36,13 +44,24 @@ export class UploadMiddleware implements IMiddleware<any, any> {
     let body;
     if (this.isReadableStream(req, isExpress)) {
       if (mode === UploadMode.Stream) {
-        const { fields, fileInfo }: any = await parseFromWritableStream(
+        const { fields, fileInfo } = await parseFromReadableStream(
           req,
           boundary
         );
-        ctx.fields = fields;
-        ctx.files = [fileInfo];
-        return next();
+        if (!this.checkExt(fileInfo.filename)) {
+          res.status = 400;
+          const errorMessage = 'Invalid filename: ' + fileInfo.filename;
+          const err = new Error(errorMessage);
+          this.logger.error(err);
+          if (isExpress) {
+            return res.sendStatus(400);
+          }
+          return;
+        } else {
+          ctx.fields = fields;
+          ctx.files = [fileInfo];
+          return next();
+        }
       }
       body = await getRawBody(req, {
         limit: fileSize,
@@ -58,10 +77,27 @@ export class UploadMiddleware implements IMiddleware<any, any> {
 
     ctx.fields = data.fields;
     const requireId = `upload_${Date.now()}.${Math.random()}`;
+    const files = data.files;
+    const notCheckFile = files.find(fileInfo => {
+      if (!this.checkExt(fileInfo.filename)) {
+        return fileInfo;
+      }
+    });
+
+    if (notCheckFile) {
+      res.status = 400;
+      const errorMessage = 'Invalid filename: ' + notCheckFile.filename;
+      const err = new Error(errorMessage);
+      this.logger.error(err);
+      if (isExpress) {
+        return res.sendStatus(400);
+      }
+      return;
+    }
     ctx.files =
       mode === 'buffer'
-        ? data.files
-        : data.files.map((file, index) => {
+        ? files
+        : files.map((file, index) => {
             const { data, filename } = file;
             if (mode === UploadMode.File) {
               const ext = extname(filename);
@@ -116,5 +152,14 @@ export class UploadMiddleware implements IMiddleware<any, any> {
       return true;
     }
     return false;
+  }
+
+  checkExt(filename): boolean {
+    const ext = extname(filename).toLowerCase();
+    const { whitelist } = this.upload;
+    if (!Array.isArray(whitelist)) {
+      return true;
+    }
+    return whitelist.includes(ext);
   }
 }
