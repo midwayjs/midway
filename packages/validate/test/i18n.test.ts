@@ -1,4 +1,4 @@
-import * as Joi from 'Joi';
+import * as Joi from 'joi';
 
 describe('test/i18n.test.ts', function () {
   it('should test proxy joi', function () {
