@@ -160,7 +160,7 @@ async create(@Body() createCatDto: CreateCatDto, @Param('id') id: number): Promi
 
 组件启动时会提取其中的两个参数：
 
-TODO 1.jpg
+![image.png](./images/swagger1.jpg)
 
 图中可以看到 id，以及 request body 参数 Schema 为 CreateCatDto。其中 CreateCatDto 字段都是空的，我们提供了 ```@ApiProperty(...)``` 装饰器可以用来声明模型定义。
 
@@ -178,6 +178,9 @@ export class CreateCatDto {
   breed: string;
 }
 ```
+
+Swagger UI 中展示：
+![image.png](./images/swagger2.jpg)
 
 从代码中可以看到，我们对每个字段添加了 example、description，至于字段类型可以通过 ```design:type``` 来提取，当然也支持 ```@ApiProperty(...)``` 中通过 type 和 format 来定义。
 
@@ -217,6 +220,9 @@ enum HelloWorld {
 })
 hello: HelloWorld;
 ```
+
+Swagger UI 中展示：
+![image.png](./images/swagger3.jpg)
 
 ### 路由定义
 [OpenAPI](https://swagger.io/specification/) 定义的 paths 就是各个路由路径，且每个路由路径都有 HTTP 方法的定义，比如 GET、POST、DELETE、PUT 等。
