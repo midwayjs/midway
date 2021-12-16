@@ -1,5 +1,7 @@
 # midwayjs swagger module
 
+## Thanks to [@nestjs/swagger](https://github.com/nestjs/swagger)
+
 [![Package Quality](http://npm.packagequality.com/shield/midway-core.svg)](http://packagequality.com/#?package=midway-core)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/midwayjs/midway/pulls)
 

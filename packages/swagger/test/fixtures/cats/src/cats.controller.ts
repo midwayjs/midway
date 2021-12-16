@@ -1,9 +1,10 @@
-import { Body, Controller, Get, Inject, Param, Post } from '@midwayjs/decorator';
+import { Body, Controller, Get, Inject, Param, Post, Query } from '@midwayjs/decorator';
 import {
   ApiBasicAuth,
   ApiBearerAuth,
   ApiBody,
   ApiExtension,
+  ApiQuery,
   ApiForbiddenResponse,
   ApiHeader,
   ApiNotFoundResponse,
@@ -46,7 +47,9 @@ export class CatsController {
     type: Cat,
   })
   @ApiExtension('x-hello', { hello: 'world' })
-  findOne(@Param('id') id: string): Cat {
+  @ApiParam({ name: 'id', format: 'int32', description: 'hello world id number', example: 12})
+  @ApiQuery({ name: 'test', enum: ['One', 'Two', 'Three']})
+  findOne(@Param('id') id: string, @Query('test') test: any): Cat {
     return this.catsService.findOne(+id);
   }
 }

@@ -45,10 +45,10 @@ export function createApiPropertyDecorator(
     options.type = getEnumType(enumValues);
   }
 
-  if (Array.isArray(options.type)) {
+  if (isArray) {
     options.type = 'array';
     options.items = {
-      type: options.type[0],
+      type: type as any,
     };
   }
 

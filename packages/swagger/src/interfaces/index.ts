@@ -301,17 +301,89 @@ export interface SchemaObjectMetadata
   enumName?: string;
 }
 
+export type AuthType = 'basic' | 'bearer' |  'cookie' | 'oauth2' | 'apikey' | 'custom';
+
+/**
+ * 继承自 https://swagger.io/specification/#security-scheme-object
+ */
+export interface AuthOptions extends Omit<SecuritySchemeObject, 'type'> {
+  /**
+   * 验权类型
+   * basic  => http basic 验证
+   * bearer => http jwt 验证
+   * cookie => cookie 方式验证
+   * oauth2 => 使用 oauth2
+   * apikey => apiKey
+   * custom => 自定义方式
+   */
+  authType: AuthType;
+  /**
+   * https://swagger.io/specification/#security-scheme-object type 字段
+   */
+  type?: SecuritySchemeType;
+  /**
+   * authType = cookie 时可以修改，通过 ApiCookie 装饰器关联的名称
+   */
+  securityName?: string;
+  /**
+   * authType = cookie 时可以修改，cookie 的名称
+   */
+  cookieName?: string;
+}
+/**
+ * see https://swagger.io/specification/
+ */
 export interface SwaggerOptions {
-  title?: string;
-  description?: string;
-  version?: string;
-  swaggerPath?: string;
+  /**
+   * 默认值: My Project
+   * https://swagger.io/specification/#info-object title 字段
+   */
+   title?: string;
+   /**
+    * 默认值: This is a swagger-ui for midwayjs project
+    * https://swagger.io/specification/#info-object description 字段
+    */
+   description?: string;
+   /**
+    * 默认值: 1.0.0
+    * https://swagger.io/specification/#info-object version 字段
+    */
+   version?: string;
+  /**
+   * https://swagger.io/specification/#info-object contact 字段
+   */
   contact?: ContactObject;
+  /**
+   * https://swagger.io/specification/#info-object license 字段
+   */
   license?: LicenseObject;
-  basePath?: string;
+  /**
+   * https://swagger.io/specification/#info-object termsOfService 字段
+   */
   termsOfService?: string;
-  externalDoc?: ExternalDocumentationObject;
+  /**
+   * https://swagger.io/specification/#openapi-object externalDocs 字段
+   */
+  externalDocs?: ExternalDocumentationObject;
+  /**
+   * https://swagger.io/specification/#openapi-object servers 字段
+   */
   servers?: Array<ServerObject>;
+  /**
+   * https://swagger.io/specification/#openapi-object tags 字段
+   */
   tags?: Array<TagObject>;
-  auth?: SecuritySchemeObject;
+  /**
+   * 可以参考 https://swagger.io/specification/#security-scheme-object
+   */
+  auth?: AuthOptions | AuthOptions[];
+  /**
+   * api 的 根路径
+   */
+  basePath?: string | string[];
+  /**
+   * 默认值: /swagger-ui
+   * 访问 swagger ui 的路径
+   */
+  swaggerPath?: string;
 }
