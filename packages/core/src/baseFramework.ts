@@ -249,13 +249,13 @@ export abstract class BaseFramework<
       useMiddleware: (
         middleware: CommonMiddlewareUnion<CTX, ResOrNext, Next>
       ) => {
-        this.middlewareManager.insertLast(middleware);
+        return this.useMiddleware(middleware);
       },
       getMiddleware: (): ContextMiddlewareManager<CTX, ResOrNext, Next> => {
-        return this.middlewareManager;
+        return this.getMiddleware();
       },
       useFilter: (Filter: CommonFilterUnion<CTX, ResOrNext, Next>) => {
-        this.filterManager.useFilter(Filter);
+        return this.useFilter(Filter);
       },
     };
     for (const method of whiteList) {
@@ -294,7 +294,7 @@ export abstract class BaseFramework<
     options: Partial<IMidwayBootstrapOptions>
   ): Promise<void> {}
 
-  public async getMiddleware<R, N>(
+  public async applyMiddleware<R, N>(
     lastMiddleware?: CommonMiddleware<CTX, R, N>
   ): Promise<MiddlewareRespond<CTX, R, N>> {
     if (!this.composeMiddleware) {
@@ -357,8 +357,12 @@ export abstract class BaseFramework<
     this.middlewareManager.insertLast(Middleware);
   }
 
+  public getMiddleware(): ContextMiddlewareManager<CTX, ResOrNext, Next> {
+    return this.middlewareManager;
+  }
+
   public useFilter(Filter: CommonFilterUnion<CTX, ResOrNext, Next>) {
-    this.filterManager.useFilter(Filter);
+    return this.filterManager.useFilter(Filter);
   }
 
   protected createMiddlewareManager() {

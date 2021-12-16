@@ -519,7 +519,8 @@ export interface IMidwayFramework<APP extends IMidwayApplication<CTX>, CTX exten
   getProjectName(): string;
   getDefaultContextLoggerClass(): any;
   useMiddleware(Middleware: CommonMiddlewareUnion<CTX, ResOrNext, Next>): void;
-  getMiddleware(lastMiddleware?: CommonMiddleware<CTX, ResOrNext, Next>): Promise<MiddlewareRespond<CTX, ResOrNext, Next>>;
+  getMiddleware(): ContextMiddlewareManager<CTX, ResOrNext, Next>;
+  applyMiddleware(lastMiddleware?: CommonMiddleware<CTX, ResOrNext, Next>): Promise<MiddlewareRespond<CTX, ResOrNext, Next>>;
   useFilter(Filter: CommonFilterUnion<CTX, ResOrNext, Next>);
 }
 

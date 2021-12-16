@@ -127,7 +127,7 @@ export class MidwayFaaSFramework extends BaseFramework<
 
       const context: FaaSContext = this.getContext(args.shift());
       const isHttpFunction = !!(context.headers && context.get);
-      const globalMiddlewareFn = await this.getMiddleware();
+      const globalMiddlewareFn = await this.applyMiddleware();
       const middlewareManager = new ContextMiddlewareManager();
 
       middlewareManager.insertLast(globalMiddlewareFn);

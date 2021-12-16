@@ -193,7 +193,7 @@ export class MidwayGRPCFramework extends BaseFramework<
   }) {
     const { ctx, callback, grpcMethodData } = options;
 
-    const fn = await this.getMiddleware(async ctx => {
+    const fn = await this.applyMiddleware(async ctx => {
       return await options.service[camelCase(ctx.method)]?.call(
         options.service,
         options.data

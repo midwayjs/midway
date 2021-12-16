@@ -1,10 +1,31 @@
+import { IMiddleware, IMidwayApplication } from '@midwayjs/core';
 import {
-  IMiddleware,
-  IMidwayApplication,
-  IMidwayContext,
-} from '@midwayjs/core';
-import { Config, Middleware, MidwayFrameworkType } from '@midwayjs/decorator';
+  Config,
+  Match,
+  Middleware,
+  MidwayFrameworkType,
+} from '@midwayjs/decorator';
 import { I18N_ATTR_KEY, I18N_SAVE_KEY, I18nOptions } from './interface';
+
+@Match()
+export class I18nFilter {
+  @Config('i18n.resolver')
+  resolverConfig: I18nOptions['resolver'];
+
+  match(value, req, res) {
+    const saveLocale = req.getAttr(I18N_SAVE_KEY);
+    if (saveLocale) {
+      const cookieOptions = {
+        // make sure browser javascript can read the cookie
+        httpOnly: false,
+        maxAge: this.resolverConfig.cookieMaxAge,
+        signed: false,
+        domain: this.resolverConfig.cookieDomain,
+      };
+      res.cookie(this.resolverConfig.cookieField, saveLocale, cookieOptions);
+    }
+  }
+}
 
 @Middleware()
 export class I18nMiddleware implements IMiddleware<any, any> {
@@ -13,9 +34,15 @@ export class I18nMiddleware implements IMiddleware<any, any> {
 
   resolve(app: IMidwayApplication) {
     if (app.getFrameworkType() === MidwayFrameworkType.WEB_EXPRESS) {
-      return (ctx: IMidwayContext, res, next) => {
-        // TODO
-        // ctx.setAttr(I18N_ATTR_KEY, ctx.query['locale'] ?? ctx.cookies.get('locale'));
+      // add a filter for i18n cookie
+      app.useFilter(I18nFilter);
+      return (req, res, next) => {
+        req.setAttr(
+          I18N_ATTR_KEY,
+          req.query[this.resolverConfig.queryField] ??
+            req.get(this.resolverConfig.headerField) ??
+            req.cookies[this.resolverConfig.cookieField]
+        );
         return next();
       };
     } else {

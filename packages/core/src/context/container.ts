@@ -495,7 +495,10 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     objectContext?: ObjectContext
   ): T;
   get(identifier: any, args?: any[], objectContext?: ObjectContext): any {
+    args = args ?? [];
+    objectContext = objectContext ?? { originName: identifier };
     if (typeof identifier !== 'string') {
+      objectContext.originName = identifier.name;
       identifier = this.getIdentifier(identifier);
     }
     if (this.registry.hasObject(identifier)) {
@@ -528,7 +531,10 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     args?: any[],
     objectContext?: ObjectContext
   ): Promise<any> {
+    args = args ?? [];
+    objectContext = objectContext ?? { originName: identifier };
     if (typeof identifier !== 'string') {
+      objectContext.originName = identifier.name;
       identifier = this.getIdentifier(identifier);
     }
     if (this.registry.hasObject(identifier)) {

@@ -4,6 +4,12 @@ import {
   OptionsText,
   OptionsUrlencoded,
 } from 'body-parser';
+import { CookieOptions } from 'express';
+
+export const cookieParser: {
+  secret?: string | string[];
+  options?: CookieOptions;
+} = {};
 
 export const bodyParser: {
   enable?: boolean;

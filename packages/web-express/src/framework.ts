@@ -63,7 +63,7 @@ export class MidwayExpressFramework extends BaseFramework<
 
   public async run(): Promise<void> {
     // use global middleware
-    const globalMiddleware = await this.getMiddleware();
+    const globalMiddleware = await this.applyMiddleware();
     this.app.use(globalMiddleware as any);
     // load controller
     await this.loadMidwayController();
@@ -145,12 +145,19 @@ export class MidwayExpressFramework extends BaseFramework<
   protected generateController(routeInfo: RouterInfo): IRouterHandler<any> {
     return async (req, res, next) => {
       const controller = await req.requestContext.getAsync(routeInfo.id);
-      const result = await controller[routeInfo.method].call(
-        controller,
-        req,
-        res,
-        next
-      );
+
+      let result;
+      try {
+        result = await controller[routeInfo.method].call(
+          controller,
+          req,
+          res,
+          next
+        );
+      } catch (err) {
+        next(err);
+        return;
+      }
 
       if (res.headersSent) {
         // return when response send
@@ -274,7 +281,7 @@ export class MidwayExpressFramework extends BaseFramework<
     handlerCallback(fn);
   }
 
-  public async getMiddleware<Response, NextFunction>(): Promise<
+  public async applyMiddleware<Response, NextFunction>(): Promise<
     MiddlewareRespond<IMidwayExpressContext, Response, NextFunction>
   > {
     if (!this.composeMiddleware) {

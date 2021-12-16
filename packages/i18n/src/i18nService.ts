@@ -24,6 +24,7 @@ export class MidwayI18nServiceSingleton {
     pattern: any;
     locale: string;
   }> = [];
+  private localeMatchCache = {};
 
   @Init()
   protected async init() {
@@ -108,11 +109,57 @@ export class MidwayI18nServiceSingleton {
   }
 
   /**
+   * get locale string by find fallback and default, ignore match message
+   * @param locale
+   * @param group
+   */
+  public getAvailableLocale(locale: string, group = 'default') {
+    if (this.localeMatchCache[locale + '_' + group]) {
+      return this.localeMatchCache[locale + '_' + group];
+    }
+    if (
+      this.localeTextMap.has(locale) &&
+      this.localeTextMap.get(locale).has(group)
+    ) {
+      this.localeMatchCache[locale + '_' + group] = locale;
+      return locale;
+    }
+
+    if (this.fallbackMatch.length) {
+      const findRule = this.fallbackMatch.find(rule => {
+        if (rule.pattern(locale)) {
+          if (
+            this.localeTextMap.has(rule.locale) &&
+            this.localeTextMap.get(locale).has(group)
+          ) {
+            this.localeMatchCache[locale + '_' + group] = rule.locale;
+            return rule.locale;
+          }
+          return true;
+        }
+      });
+      return findRule.locale;
+    }
+
+    const fallbackLanguage = this.i18nConfig.fallbackLocale;
+    if (
+      this.localeTextMap.has(fallbackLanguage) &&
+      this.localeTextMap.get(fallbackLanguage).has(group)
+    ) {
+      this.localeMatchCache[locale + '_' + group] = fallbackLanguage;
+      return fallbackLanguage;
+    }
+
+    this.localeMatchCache[locale + '_' + group] = this.defaultLocale;
+    return this.defaultLocale;
+  }
+
+  /**
    * get mapping by lang
    * @param locale
    * @param group
    */
-  public getLocaleMapping(locale, group) {
+  public getLocaleMapping(locale: string, group = 'default') {
     const langMap = this.localeTextMap.get(locale);
     if (langMap) {
       return langMap.get(group);
@@ -126,7 +173,7 @@ export class MidwayI18nServiceSingleton {
     return this.defaultLocale;
   }
 
-  private getLocaleMappingText(locale, message, group, args) {
+  private getLocaleMappingText(locale: string, message, group, args) {
     const langMap = this.localeTextMap.get(locale);
     if (langMap) {
       const textMapping = langMap.get(group);

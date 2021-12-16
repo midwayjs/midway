@@ -74,7 +74,7 @@ export class MidwayKoaFramework extends BaseFramework<
     const midwayRootMiddleware = async (ctx, next) => {
       this.app.createAnonymousContext(ctx);
       await (
-        await this.getMiddleware()
+        await this.applyMiddleware()
       )(ctx, next);
     };
     this.app.use(midwayRootMiddleware);

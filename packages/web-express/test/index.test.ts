@@ -195,4 +195,40 @@ describe('/test/feature.test.ts', () => {
     });
   });
 
+  it('should test global filter', async () => {
+    const app = await creatApp('base-app-error-filter');
+    const result = await createHttpRequest(app)
+      .get('/11');
+    expect(result.status).toEqual(404);
+
+    const result1 = await createHttpRequest(app)
+      .get('/');
+    expect(result1.status).toEqual(200);
+    expect(result1.body).toEqual({
+      message: 'my error',
+      status: 500
+    });
+    await closeApp(app);
+  });
+
+  it('should test global match', async () => {
+    const app = await creatApp('base-app-global-match');
+    const result = await createHttpRequest(app)
+      .get('/11');
+    expect(result.status).toEqual(404);
+
+    const result1 = await createHttpRequest(app)
+      .get('/');
+    expect(result1.status).toEqual(200);
+    expect(result1.body).toEqual({
+      'data': {
+        'value': {
+          'user': 'harry'
+        }
+      },
+      'status': 200
+    });
+    await closeApp(app);
+  });
+
 });

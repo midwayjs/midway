@@ -91,7 +91,7 @@ export class MidwayWebFramework extends BaseFramework<
     const midwayRootMiddleware = async (ctx, next) => {
       // this.app.createAnonymousContext(ctx);
       await (
-        await this.getMiddleware()
+        await this.applyMiddleware()
       )(ctx as any, next);
     };
     this.app.use(midwayRootMiddleware);

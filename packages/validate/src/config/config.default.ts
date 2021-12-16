@@ -1,4 +1,6 @@
-export const validate = {
+import { ValidateOptions } from '../decorator/validate';
+
+export const validate: ValidateOptions = {
   validationOptions: {},
   errorStatus: 422,
 };

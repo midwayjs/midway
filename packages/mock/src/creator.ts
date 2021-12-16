@@ -9,6 +9,7 @@ import {
   MidwayFrameworkType,
   safeRequire,
   MidwayContainer,
+  MidwayCommonError,
 } from '@midwayjs/core';
 import { isAbsolute, join } from 'path';
 import { remove } from 'fs-extra';
@@ -22,6 +23,7 @@ import {
   transformFrameworkToConfiguration,
 } from './utils';
 import { debuglog } from 'util';
+import { existsSync } from 'fs';
 const debug = debuglog('midway:debug');
 
 process.setMaxListeners(0);
@@ -40,6 +42,12 @@ export async function create<
   // 处理测试的 fixtures
   if (!isAbsolute(appDir)) {
     appDir = join(process.cwd(), 'test', 'fixtures', appDir);
+  }
+
+  if (!existsSync(appDir)) {
+    throw new MidwayCommonError(
+      `Path "${appDir}" not exists, please check it.`
+    );
   }
 
   clearAllLoggers();

@@ -148,7 +148,7 @@ export class MidwayWSFramework extends BaseFramework<
 
                 try {
                   const result = await (
-                    await this.getMiddleware(async (ctx, next) => {
+                    await this.applyMiddleware(async (ctx, next) => {
                       // eslint-disable-next-line prefer-spread
                       return controller[wsEventInfo.propertyName].apply(
                         controller,

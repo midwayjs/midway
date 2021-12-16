@@ -602,7 +602,7 @@ describe('/test/baseFramework.test.ts', () => {
     framework.useMiddleware([TestMiddleware1, TestMiddleware2]);
 
     let data1 = 'abc';
-    const fn = await framework.getMiddleware(async (ctx) => {
+    const fn = await framework.applyMiddleware(async (ctx) => {
       return data1;
     });
 
@@ -649,7 +649,7 @@ describe('/test/baseFramework.test.ts', () => {
     framework.useMiddleware([TestMiddleware1, TestMiddleware2]);
 
     // compose 一下，再同时插入一个
-    const fn = await framework.getMiddleware(async (ctx, next: any) => {
+    const fn = await framework.applyMiddleware(async (ctx, next: any) => {
       return 'gogogo, ' + await next();
     });
 

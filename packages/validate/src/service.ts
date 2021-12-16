@@ -19,6 +19,9 @@ export class ValidateService {
   @Config('validate')
   validateConfig: typeof DefaultConfig.validate;
 
+  @Config('i18n')
+  i18nConfig;
+
   @Inject()
   i18nService: MidwayI18nServiceSingleton;
 
@@ -28,9 +31,8 @@ export class ValidateService {
   async init() {
     const locales = Object.keys(DefaultConfig.i18n.localeTable);
     locales.forEach(locale => {
-      this.messages[locale] = this.i18nService.getLocaleMapping(
-        locale,
-        'validate'
+      this.messages[locale] = Object.fromEntries(
+        this.i18nService.getLocaleMapping(locale, 'validate')
       );
     });
   }
@@ -40,15 +42,20 @@ export class ValidateService {
     value: any,
     options?: {
       errorStatus?: number;
-      language?: string;
-      validateOptions?: Joi.ValidationOptions;
+      locale?: string;
+      validationOptions?: Joi.ValidationOptions;
     }
   ) {
-    if (options.language) {
-      options.validateOptions = options.validateOptions || {};
-      options.validateOptions.errors = options.validateOptions.errors || {};
-      options.validateOptions.errors.language = options.language;
-    }
+    options.validationOptions = options.validationOptions || {};
+    options.validationOptions.errors = options.validationOptions.errors || {};
+    options.validationOptions.errors.language =
+      this.i18nService.getAvailableLocale(
+        options.validationOptions.errors.language ||
+          options.locale ||
+          this.i18nConfig.defaultLocale,
+        'validate'
+      );
+
     const rules = getClassExtendedMetadata(RULES_KEY, ClzType);
     if (rules) {
       const schema = Joi.object(rules);
@@ -59,7 +66,7 @@ export class ValidateService {
           {
             messages: this.messages,
           },
-          options.validateOptions ?? {}
+          options.validationOptions ?? {}
         )
       );
       if (result.error) {
