@@ -22,7 +22,11 @@ import {
 import { PathItemObject, Type } from './interfaces';
 import { DECORATORS } from './constants';
 import { DocumentBuilder } from './documentBuilder';
-import { SwaggerOptions, AuthOptions, SecuritySchemeObject } from './interfaces/';
+import {
+  SwaggerOptions,
+  AuthOptions,
+  SecuritySchemeObject,
+} from './interfaces/';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -396,8 +400,8 @@ export class SwaggerExplorer {
     } else {
       opts[webRouter.requestMethod].responses = {
         200: {
-          description: 'OK'
-        }
+          description: 'OK',
+        },
       };
     }
 
@@ -486,7 +490,7 @@ export class SwaggerExplorer {
       type: 'object',
       properties: {},
     };
-    
+
     if (props) {
       Object.keys(props).forEach(key => {
         if (props[key].metadata?.example) {
@@ -545,7 +549,7 @@ export class SwaggerExplorer {
             tt.properties[key] = {
               type: 'array',
               items: {
-                type: convertSchemaType(currentType?.name || currentType)
+                type: convertSchemaType(currentType?.name || currentType),
               },
             };
           } else {
@@ -586,7 +590,10 @@ export class SwaggerExplorer {
         {
           const name = opts.name;
           delete opts.name;
-          this.documentBuilder.addBearerAuth(opts as SecuritySchemeObject, name);
+          this.documentBuilder.addBearerAuth(
+            opts as SecuritySchemeObject,
+            name
+          );
         }
         break;
       case 'cookie':
@@ -595,7 +602,11 @@ export class SwaggerExplorer {
           const secName = opts.securityName;
           delete opts.cookieName;
           delete opts.securityName;
-          this.documentBuilder.addCookieAuth(cname, opts as SecuritySchemeObject, secName);
+          this.documentBuilder.addCookieAuth(
+            cname,
+            opts as SecuritySchemeObject,
+            secName
+          );
         }
         break;
       case 'oauth2':
@@ -614,7 +625,10 @@ export class SwaggerExplorer {
         break;
       case 'custom':
         {
-          this.documentBuilder.addSecurity(opts?.name, opts as SecuritySchemeObject);
+          this.documentBuilder.addSecurity(
+            opts?.name,
+            opts as SecuritySchemeObject
+          );
         }
         break;
     }

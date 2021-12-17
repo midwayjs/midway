@@ -301,7 +301,13 @@ export interface SchemaObjectMetadata
   enumName?: string;
 }
 
-export type AuthType = 'basic' | 'bearer' |  'cookie' | 'oauth2' | 'apikey' | 'custom';
+export type AuthType =
+  | 'basic'
+  | 'bearer'
+  | 'cookie'
+  | 'oauth2'
+  | 'apikey'
+  | 'custom';
 
 /**
  * 继承自 https://swagger.io/specification/#security-scheme-object
@@ -338,17 +344,17 @@ export interface SwaggerOptions {
    * 默认值: My Project
    * https://swagger.io/specification/#info-object title 字段
    */
-   title?: string;
-   /**
-    * 默认值: This is a swagger-ui for midwayjs project
-    * https://swagger.io/specification/#info-object description 字段
-    */
-   description?: string;
-   /**
-    * 默认值: 1.0.0
-    * https://swagger.io/specification/#info-object version 字段
-    */
-   version?: string;
+  title?: string;
+  /**
+   * 默认值: This is a swagger-ui for midwayjs project
+   * https://swagger.io/specification/#info-object description 字段
+   */
+  description?: string;
+  /**
+   * 默认值: 1.0.0
+   * https://swagger.io/specification/#info-object version 字段
+   */
+  version?: string;
   /**
    * https://swagger.io/specification/#info-object contact 字段
    */
