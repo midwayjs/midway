@@ -8,10 +8,10 @@ export const validate: ValidateOptions = {
 export const i18n = {
   localeTable: {
     en_US: {
-      validate: require('../locales/en_US.json'),
+      validate: require('../../locales/en_US.json'),
     },
     zh_CN: {
-      validate: require('../locales/zh_CN.json'),
+      validate: require('../../locales/zh_CN.json'),
     },
   },
 };

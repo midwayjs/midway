@@ -15,6 +15,7 @@
   "files": [
     "dist/**/*.js",
     "dist/**/*.d.ts",
+    "locales",
     "index.d.ts"
   ],
   "engines": {
