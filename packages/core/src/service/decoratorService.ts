@@ -145,9 +145,7 @@ export class MidwayDecoratorService {
   }
 
   public registerPropertyHandler(decoratorKey: string, fn: HandlerFunction) {
-    debug(
-      `[core:decorator]: Register property decorator key="${decoratorKey}"`
-    );
+    debug(`[core]: Register property decorator key="${decoratorKey}"`);
     this.propertyHandlerMap.set(decoratorKey, fn);
   }
 
@@ -155,7 +153,7 @@ export class MidwayDecoratorService {
     decoratorKey: string,
     fn: MethodHandlerFunction
   ) {
-    debug(`[core:decorator]: Register method decorator key="${decoratorKey}"`);
+    debug(`[core]: Register method decorator key="${decoratorKey}"`);
     this.methodDecoratorMap.set(decoratorKey, fn);
   }
 
@@ -163,9 +161,7 @@ export class MidwayDecoratorService {
     decoratorKey: string,
     fn: ParameterHandlerFunction
   ) {
-    debug(
-      `[core:decorator]: Register parameter decorator key="${decoratorKey}"`
-    );
+    debug(`[core]: Register parameter decorator key="${decoratorKey}"`);
     this.parameterDecoratorMap.set(decoratorKey, fn);
   }
 

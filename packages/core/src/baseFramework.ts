@@ -21,6 +21,8 @@ import { MidwayLoggerService } from './service/loggerService';
 import { ContextMiddlewareManager } from './common/middlewareManager';
 import { MidwayMiddlewareService } from './service/middlewareService';
 import { FilterManager } from './common/filterManager';
+import * as util from 'util';
+const debug = util.debuglog('midway:debug');
 
 export abstract class BaseFramework<
   APP extends IMidwayApplication<CTX>,
@@ -311,6 +313,9 @@ export abstract class BaseFramework<
         }
         return returnResult.result;
       }) as any);
+      debug(
+        `[core]: Compose middleware = [${this.middlewareManager.getNames()}]`
+      );
       this.composeMiddleware = await this.middlewareService.compose(
         this.middlewareManager,
         this.app

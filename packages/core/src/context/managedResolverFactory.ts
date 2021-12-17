@@ -120,9 +120,7 @@ export class ManagedResolverFactory {
       }
     }
 
-    debugLog(
-      `[core:container]: Create id = "${definition.name}" ${definition.id}.`
-    );
+    debugLog(`[core]: Create id = "${definition.name}" ${definition.id}.`);
 
     const Clzz = definition.creator.load();
 
@@ -232,9 +230,7 @@ export class ManagedResolverFactory {
       }
     }
 
-    debugLog(
-      `[core:container]: Create id = "${definition.name}" ${definition.id}.`
-    );
+    debugLog(`[core]: Create id = "${definition.name}" ${definition.id}.`);
 
     const Clzz = definition.creator.load();
     let constructorArgs = [];

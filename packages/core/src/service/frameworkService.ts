@@ -99,7 +99,7 @@ export class MidwayFrameworkService {
     // filter proto
     frameworks = filterProtoFramework(frameworks);
 
-    debug(`[core:framework]: Found Framework length = ${frameworks.length}`);
+    debug(`[core]: Found Framework length = ${frameworks.length}`);
 
     if (frameworks.length) {
       for (const frameworkClz of frameworks) {
@@ -115,11 +115,11 @@ export class MidwayFrameworkService {
           });
 
           debug(
-            `[core:framework]: Found Framework "${frameworkInstance.getFrameworkName()}" and initialize.`
+            `[core]: Found Framework "${frameworkInstance.getFrameworkName()}" and initialize.`
           );
         } else {
           debug(
-            `[core:framework]: Found Framework "${frameworkInstance.getFrameworkName()}" and delay initialize.`
+            `[core]: Found Framework "${frameworkInstance.getFrameworkName()}" and delay initialize.`
           );
         }
         // app init
@@ -190,7 +190,7 @@ export class MidwayFrameworkService {
         // app init
         await frameworkInstance.run();
         debug(
-          `[core:framework]: Found Framework "${frameworkInstance.getFrameworkName()}" and run.`
+          `[core]: Found Framework "${frameworkInstance.getFrameworkName()}" and run.`
         );
       }
     }

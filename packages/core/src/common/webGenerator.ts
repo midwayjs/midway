@@ -91,7 +91,7 @@ export abstract class WebControllerGenerator<
       );
 
       debug(
-        `[core:webGenerator]: Load Controller "${routerInfo.controllerId}", prefix=${routerInfo.prefix}`
+        `[core]: Load Controller "${routerInfo.controllerId}", prefix=${routerInfo.prefix}`
       );
 
       // new router
@@ -136,7 +136,7 @@ export abstract class WebControllerGenerator<
         );
 
         debug(
-          `[core:webGenerator]: Load Router "${routeInfo.requestMethod.toUpperCase()} ${
+          `[core]: Load Router "${routeInfo.requestMethod.toUpperCase()} ${
             routeInfo.url
           }"`
         );
