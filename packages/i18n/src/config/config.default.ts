@@ -1,4 +1,5 @@
 import { I18nOptions } from '../interface';
+import { FORMAT } from '@midwayjs/decorator';
 
 export const i18n: I18nOptions = {
   defaultLocale: 'en_US',
@@ -10,11 +11,14 @@ export const i18n: I18nOptions = {
     //   'en_*': 'en_US',
     //   pt: 'pt-BR',
   },
+  writeCookie: true,
   resolver: {
     queryField: 'locale',
     headerField: 'locale',
-    cookieField: 'locale',
-    cookieDomain: '',
-    cookieMaxAge: '1y',
+    cookieField: {
+      fieldName: 'locale',
+      cookieDomain: '',
+      cookieMaxAge: FORMAT.MS.ONE_YEAR,
+    },
   },
 };

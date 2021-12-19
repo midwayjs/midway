@@ -1,5 +1,5 @@
 import { MidwayI18nService } from '../src';
-import { createLightApp, close } from '@midwayjs/mock';
+import { createLightApp, close, createHttpRequest, createApp } from '@midwayjs/mock';
 import { join } from 'path';
 
 describe('test/index.test.ts', () => {
@@ -161,5 +161,175 @@ describe('test/index.test.ts', () => {
     })).toEqual('你好 世界');
 
     await close(app);
+  });
+
+  describe('i18n in koa', function () {
+    it('should test with request by query', async () => {
+      const app = await createApp(join(
+        __dirname,
+        './fixtures/base-app-koa-query-locale'
+      ));
+
+      const result = await createHttpRequest(app).get('/').query({
+        locale: 'zh_CN',
+        username: '世界',
+      });
+
+      expect(result.text).toEqual('你好 世界');
+
+      await close(app);
+    });
+
+    it('should test with request by header', async () => {
+      const app = await createApp(join(
+        __dirname,
+        './fixtures/base-app-koa-header-locale'
+      ));
+
+      const result = await createHttpRequest(app).get('/')
+        .set({
+          locale: 'zh_CN',
+        })
+        .query({
+          username: '世界',
+        });
+
+      expect(result.text).toEqual('你好 世界');
+      await close(app);
+    });
+
+    it('should test with request by cookie', async () => {
+      const app = await createApp(join(
+        __dirname,
+        './fixtures/base-app-koa-cookie-locale'
+      ));
+
+      const result = await createHttpRequest(app).get('/')
+        .set({
+          locale: 'zh_CN',
+        })
+        .query({
+          username: '世界',
+        });
+
+      expect(result.text).toEqual('你好 世界');
+      expect(result.headers['set-cookie'][0]).toMatch(/zh_CN/);
+
+      const result1 = await createHttpRequest(app).get('/')
+        .set({
+          'cookie': result.headers['set-cookie'][0]
+        })
+        .query({
+          username: '世界',
+        });
+
+      expect(result1.text).toEqual('你好 世界');
+      expect(result1.headers['set-cookie'][0]).toMatch(/zh_CN/);
+      await close(app);
+    });
+
+    it('should test with request by cookie and manual', async () => {
+      const app = await createApp(join(
+        __dirname,
+        './fixtures/base-app-koa-cookie-locale-manual'
+      ));
+
+      const result = await createHttpRequest(app).get('/')
+        .set({
+          locale: 'zh_CN',
+        })
+        .query({
+          username: '世界',
+        });
+
+      expect(result.text).toEqual('你好 世界');
+      expect(result.headers['set-cookie'][0]).toMatch(/en_US/);
+      await close(app);
+    });
+  });
+
+  describe('i18n in express', function () {
+    it('should test with request by query', async () => {
+      const app = await createApp(join(
+        __dirname,
+        './fixtures/base-app-express-query-locale'
+      ));
+
+      const result = await createHttpRequest(app).get('/').query({
+        locale: 'zh_CN',
+        username: '世界',
+      });
+
+      expect(result.text).toEqual('你好 世界');
+
+      await close(app);
+    });
+
+    it('should test with request by header', async () => {
+      const app = await createApp(join(
+        __dirname,
+        './fixtures/base-app-express-header-locale'
+      ));
+
+      const result = await createHttpRequest(app).get('/')
+        .set({
+          locale: 'zh_CN',
+        })
+        .query({
+          username: '世界',
+        });
+
+      expect(result.text).toEqual('你好 世界');
+      await close(app);
+    });
+
+    it('should test with request by cookie', async () => {
+      const app = await createApp(join(
+        __dirname,
+        './fixtures/base-app-express-cookie-locale'
+      ));
+
+      const result = await createHttpRequest(app).get('/')
+        .set({
+          locale: 'zh_CN',
+        })
+        .query({
+          username: '世界',
+        });
+
+      expect(result.text).toEqual('你好 世界');
+      expect(result.headers['set-cookie'][0]).toMatch(/zh_CN/);
+
+      const result1 = await createHttpRequest(app).get('/')
+        .set({
+          'cookie': result.headers['set-cookie'][0]
+        })
+        .query({
+          username: '世界',
+        });
+
+      expect(result1.text).toEqual('你好 世界');
+      expect(result1.headers['set-cookie'][0]).toMatch(/zh_CN/);
+      await close(app);
+    });
+
+    it('should test with request by cookie and manual', async () => {
+      const app = await createApp(join(
+        __dirname,
+        './fixtures/base-app-express-cookie-locale-manual'
+      ));
+
+      const result = await createHttpRequest(app).get('/')
+        .set({
+          locale: 'zh_CN',
+        })
+        .query({
+          username: '世界',
+        });
+
+      expect(result.text).toEqual('你好 世界');
+      expect(result.headers['set-cookie'][0]).toMatch(/en_US/);
+      await close(app);
+    });
   });
 });

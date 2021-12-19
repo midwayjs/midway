@@ -230,9 +230,9 @@ export class MidwayI18nService {
   /**
    * save current context lang to flag, middleware will be set it to cookie
    */
-  public saveLocale() {
+  public saveRequestLocale(locale?: string) {
     const currentLocale =
-      this.ctx.getAttr(I18N_ATTR_KEY) ?? this.getDefaultLocale();
+      locale ?? this.ctx.getAttr(I18N_ATTR_KEY) ?? this.getDefaultLocale();
     this.ctx?.setAttr(I18N_SAVE_KEY, currentLocale);
   }
 }

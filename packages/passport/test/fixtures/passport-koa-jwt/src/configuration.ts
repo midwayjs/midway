@@ -9,5 +9,4 @@ import * as koa from '@midwayjs/koa';
   conflictCheck: true,
   importConfigs: [path.join(__dirname, './config')],
 })
-export class ContainerLifeCycle {
-}
+export class ContainerLifeCycle {}

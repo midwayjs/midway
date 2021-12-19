@@ -16,7 +16,7 @@ export class I18nConfiguration {
   applicationManager: MidwayApplicationManager;
   async onReady() {
     this.applicationManager
-      .getApplications(['koa', 'egg', 'faas'])
+      .getApplications(['koa', 'egg', 'faas', 'express'])
       .forEach(app => {
         app.useMiddleware(I18nMiddleware);
       });

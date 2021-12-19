@@ -1,7 +1,5 @@
 import {
   BaseFramework,
-  CommonMiddleware,
-  FunctionMiddleware,
   HTTP_SERVER_KEY,
   IMidwayBootstrapOptions,
   MiddlewareRespond,
@@ -220,21 +218,26 @@ export class MidwayExpressFramework extends BaseFramework<
       const newRouter = this.createRouter(routerInfo.routerOptions);
 
       // add router middleware
-      await this.handlerWebMiddleware(routerInfo.middleware, middlewareImpl => {
-        newRouter.use(middlewareImpl);
-      });
+      if (routerInfo.middleware.length) {
+        const routerMiddlewareFn = await this.expressMiddlewareService.compose(
+          routerInfo.middleware,
+          this.app
+        );
+        newRouter.use(routerMiddlewareFn);
+      }
 
       // add route
       const routes = routerTable.get(routerInfo.prefix);
       for (const routeInfo of routes) {
         const routeMiddlewareList = [];
-        // router middleware
-        await this.handlerWebMiddleware(
-          routeInfo.middleware,
-          middlewareImpl => {
-            routeMiddlewareList.push(middlewareImpl);
-          }
-        );
+        // routeInfo middleware
+        if (routeInfo.middleware.length) {
+          const routeMiddlewareFn = await this.expressMiddlewareService.compose(
+            routeInfo.middleware,
+            this.app
+          );
+          routeMiddlewareList.push(routeMiddlewareFn);
+        }
 
         this.logger.debug(
           `Load Router "${routeInfo.requestMethod.toUpperCase()} ${
@@ -260,25 +263,6 @@ export class MidwayExpressFramework extends BaseFramework<
    */
   protected createRouter(routerOptions: { sensitive }): IRouter {
     return express.Router({ caseSensitive: routerOptions.sensitive });
-  }
-
-  private async handlerWebMiddleware(
-    middlewares: Array<
-      CommonMiddleware<IMidwayExpressContext, Response, NextFunction> | string
-    >,
-    handlerCallback: (
-      middlewareImpl: FunctionMiddleware<
-        IMidwayExpressContext,
-        Response,
-        NextFunction
-      >
-    ) => void
-  ): Promise<void> {
-    const fn = await this.expressMiddlewareService.compose(
-      middlewares,
-      this.app
-    );
-    handlerCallback(fn);
   }
 
   public async applyMiddleware<Response, NextFunction>(): Promise<

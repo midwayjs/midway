@@ -1,5 +1,24 @@
-export const koa = {
-  keys: undefined,
+/**
+ * koa server options
+ */
+export const koa = {};
+
+/**
+ * The key that signing cookies. It can contain multiple keys seperated by `,`.
+ * @member {String} Config#keys
+ */
+export const keys = '';
+
+/**
+ * default cookie options
+ *
+ * @member Config#cookies
+ * @property {String} sameSite - SameSite property, defaults is ''
+ * @property {Boolean} httpOnly - httpOnly property, defaults is true
+ */
+export const cookies = {
+  // httpOnly: true | false,
+  // sameSite: 'none|lax|strict',
 };
 
 export const onerror = {};

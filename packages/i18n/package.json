@@ -15,7 +15,9 @@
   "devDependencies": {
     "@midwayjs/core": "^3.0.0-beta.9",
     "@midwayjs/decorator": "^3.0.0-beta.9",
-    "@midwayjs/mock": "^3.0.0-beta.9"
+    "@midwayjs/mock": "^3.0.0-beta.9",
+    "@midwayjs/koa": "^3.0.0-beta.9",
+    "@midwayjs/express": "^3.0.0-beta.9"
   },
   "keywords": [
     "midway",

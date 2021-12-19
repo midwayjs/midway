@@ -1,7 +1,7 @@
 import { FaaSOriginContext } from '@midwayjs/faas-typings';
 import * as util from 'util';
 import * as createError from 'http-errors';
-const Cookies = require('cookies');
+import { Cookies } from '@midwayjs/cookies';
 
 const COOKIES = Symbol('context#cookies');
 
@@ -245,18 +245,9 @@ export const context = {
     };
   },
 
-  get cookies() {
+  get cookies(): Cookies {
     if (!this[COOKIES]) {
-      const resProxy = new Proxy(this.res, {
-        get(obj, prop) {
-          // 这里屏蔽 set 方法，是因为 cookies 模块中根据这个方法获取 setHeader 方法
-          if (prop !== 'set') {
-            return obj[prop];
-          }
-        },
-      });
-      this[COOKIES] = new Cookies(this.req, resProxy, {
-        keys: this.app.keys,
+      this[COOKIES] = new Cookies(this, this.app.keys, {
         secure: this.request.secure,
       });
     }

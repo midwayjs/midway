@@ -9,13 +9,16 @@ export interface I18nOptions {
   localeTable: Record<string, Record<string, any>>;
   fallbackLocale: string;
   fallbacks: Record<string, any>;
+  writeCookie: boolean;
   resolver: {
     queryField: string;
     headerField: string;
-    cookieField: string;
-    cookieDomain: string;
-    cookieMaxAge: string;
-  }
+    cookieField: {
+      fieldName: string;
+      cookieDomain: string;
+      cookieMaxAge: number;
+    };
+  },
 }
 
 export const I18N_ATTR_KEY = 'i18n:locale';

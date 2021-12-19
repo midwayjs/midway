@@ -20,8 +20,8 @@ import { MidwayEggContextLogger } from '../logger';
 const debug = debuglog('midway:debug');
 
 class EggControllerGenerator extends WebControllerGenerator<EggRouter> {
-  constructor(readonly app, readonly applicationContext, readonly logger) {
-    super(applicationContext, MidwayFrameworkType.WEB, logger);
+  constructor(readonly app) {
+    super(app);
   }
 
   createRouter(routerOptions: any): EggRouter {
@@ -96,11 +96,7 @@ export class MidwayWebFramework extends BaseFramework<
     };
     this.app.use(midwayRootMiddleware);
 
-    this.generator = new EggControllerGenerator(
-      this.app,
-      this.applicationContext,
-      this.appLogger
-    );
+    this.generator = new EggControllerGenerator(this.app);
 
     this.overwriteApplication('app');
 

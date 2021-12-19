@@ -87,7 +87,7 @@ import { Inject, Provide } from '@midwayjs/decorator';
 import { PassportMiddleware } from '@midwayjs/passport';
 import { Context } from '@midwayjs/express';
 
-@Provide('local') // 此处可以使用一个简短的identifier
+@Provide()
 export class LocalPassportMiddleware extends PassportMiddleware(LocalStrategy) {
   // 设置 AuthenticateOptions
   getAuthenticateOptions(): Promise<passport.AuthenticateOptions> | passport.AuthenticateOptions {
@@ -107,7 +107,7 @@ import { Provide, Post, Inject, Controller } from '@midwayjs/decorator';
 @Controller('/')
 export class LocalController {
 
-  @Post('/passport/local', { middleware: ['local'] })
+  @Post('/passport/local', { middleware: [LocalPassportMiddleware] })
   async localPassport() {
     console.log('local user: ', this.ctx.req.user);
     return this.ctx.req.user;
@@ -186,7 +186,7 @@ export class JwtController {
   @Inject()
   ctx: any;
 
-  @Post('/passport/jwt', { middleware: ['jwtPassportMiddleware'] })
+  @Post('/passport/jwt', { middleware: [JwtPassportMiddleware] })
   async jwtPassport() {
     console.log('jwt user: ', this.ctx.req.user);
     return this.ctx.req.user;
@@ -259,10 +259,10 @@ export class AuthController {
   @Inject()
   ctx: any;
 
-  @Get('/github', { middleware: ['githubPassportMiddleware'] })
+  @Get('/github', { middleware: [GithubPassportMiddleware] })
   async githubOAuth() {}
 
-  @Get('/github/cb', { middleware: ['githubPassportMiddleware'] })
+  @Get('/github/cb', { middleware: [GithubPassportMiddleware] })
   async githubOAuthCallback() {
     return this.ctx.req.user;
   }
