@@ -14,7 +14,6 @@ export const i18n: I18nOptions = {
   writeCookie: true,
   resolver: {
     queryField: 'locale',
-    headerField: 'locale',
     cookieField: {
       fieldName: 'locale',
       cookieDomain: '',

@@ -1,6 +1,7 @@
 import { MidwayI18nService } from '../src';
 import { createLightApp, close, createHttpRequest, createApp } from '@midwayjs/mock';
 import { join } from 'path';
+import { formatWithArray, formatWithObject } from '../src/utils';
 
 describe('test/index.test.ts', () => {
   it('i18n service', async () => {
@@ -12,20 +13,46 @@ describe('test/index.test.ts', () => {
             en_US: {
               'hello': 'hello world'
             },
-            'zh-CN': {
-              'hello': '你好，世界'
+            'zh_CN': {
+              'hello': '你好，美丽的世界'
             }
           },
+          fallbacks: {
+            'zh_*': 'zh_CN'
+          }
         }
       }
     });
 
     const i18nService = await app.getApplicationContext().getAsync(MidwayI18nService);
 
+    expect(i18nService.getDefaultLocale()).toEqual('en-us');
+
     expect(i18nService.translate('hello')).toEqual('hello world');
     expect(i18nService.translate('hello', {
-      locale: 'zh-CN'
-    })).toEqual('你好，世界');
+      locale: 'zh_CN'
+    })).toEqual('你好，美丽的世界');
+
+    i18nService.addLocale('zh_TW', {
+      hello: '你好，美麗的世界'
+    });
+
+    expect(i18nService.translate('hello', {
+      locale: 'zh_TW'
+    })).toEqual('你好，美麗的世界');
+
+    expect(Object.fromEntries(i18nService.getLocaleMapping('zh_CN'))).toEqual({
+      "hello": "你好，美丽的世界"
+    });
+
+    expect(i18nService.getAvailableLocale('zh_CN')).toEqual('zh-cn');
+    expect(i18nService.getAvailableLocale('fr_FR')).toEqual('en-us');
+    expect(i18nService.getAvailableLocale('zh_YY')).toEqual('zh-cn');
+
+    // return cache
+    expect(i18nService.getAvailableLocale('zh_CN')).toEqual('zh-cn');
+    expect(i18nService.getAvailableLocale('fr_FR')).toEqual('en-us');
+    expect(i18nService.getAvailableLocale('zh_YY')).toEqual('zh-cn');
 
     await close(app);
   });
@@ -136,6 +163,11 @@ describe('test/index.test.ts', () => {
       group: 'user'
     })).toEqual('Hello world');
 
+    expect(i18nService.getAvailableLocale('zh_CN')).toEqual('en-us');
+
+    // cache
+    expect(i18nService.getAvailableLocale('zh_CN')).toEqual('en-us');
+
     await close(app);
   });
 
@@ -163,6 +195,15 @@ describe('test/index.test.ts', () => {
     await close(app);
   });
 
+  it('should message format', function () {
+    expect(formatWithArray('hello world, {0} {1}', ['harry', 'chen'])).toEqual('hello world, harry chen');
+    expect(formatWithArray('hello world, {0} {1}', ['harry'])).toEqual('hello world, harry {1}');
+
+    expect(formatWithObject('hello world, {name1} {name2}', {
+      name1: 'harry'
+    })).toEqual('hello world, harry {name2}');
+  });
+
   describe('i18n in koa', function () {
     it('should test with request by query', async () => {
       const app = await createApp(join(
@@ -187,9 +228,7 @@ describe('test/index.test.ts', () => {
       ));
 
       const result = await createHttpRequest(app).get('/')
-        .set({
-          locale: 'zh_CN',
-        })
+        .set('Accept-Language', 'zh-CN,zh;q=0.5')
         .query({
           username: '世界',
         });
@@ -205,15 +244,13 @@ describe('test/index.test.ts', () => {
       ));
 
       const result = await createHttpRequest(app).get('/')
-        .set({
-          locale: 'zh_CN',
-        })
+        .set('Accept-Language', 'zh-CN,zh;q=0.5')
         .query({
           username: '世界',
         });
 
       expect(result.text).toEqual('你好 世界');
-      expect(result.headers['set-cookie'][0]).toMatch(/zh_CN/);
+      expect(result.headers['set-cookie'][0]).toMatch(/zh-cn/);
 
       const result1 = await createHttpRequest(app).get('/')
         .set({
@@ -224,7 +261,7 @@ describe('test/index.test.ts', () => {
         });
 
       expect(result1.text).toEqual('你好 世界');
-      expect(result1.headers['set-cookie'][0]).toMatch(/zh_CN/);
+      expect(result1.headers['set-cookie'][0]).toMatch(/zh-cn/);
       await close(app);
     });
 
@@ -235,15 +272,13 @@ describe('test/index.test.ts', () => {
       ));
 
       const result = await createHttpRequest(app).get('/')
-        .set({
-          locale: 'zh_CN',
-        })
+        .set('Accept-Language', 'zh-CN,zh;q=0.5')
         .query({
           username: '世界',
         });
 
       expect(result.text).toEqual('你好 世界');
-      expect(result.headers['set-cookie'][0]).toMatch(/en_US/);
+      expect(result.headers['set-cookie'][0]).toMatch(/en-us/);
       await close(app);
     });
   });
@@ -272,9 +307,7 @@ describe('test/index.test.ts', () => {
       ));
 
       const result = await createHttpRequest(app).get('/')
-        .set({
-          locale: 'zh_CN',
-        })
+        .set('Accept-Language', 'zh-CN,zh;q=0.5')
         .query({
           username: '世界',
         });
@@ -290,15 +323,13 @@ describe('test/index.test.ts', () => {
       ));
 
       const result = await createHttpRequest(app).get('/')
-        .set({
-          locale: 'zh_CN',
-        })
+        .set('Accept-Language', 'zh-CN,zh;q=0.5')
         .query({
           username: '世界',
         });
 
       expect(result.text).toEqual('你好 世界');
-      expect(result.headers['set-cookie'][0]).toMatch(/zh_CN/);
+      expect(result.headers['set-cookie'][0]).toMatch(/zh-cn/);
 
       const result1 = await createHttpRequest(app).get('/')
         .set({
@@ -309,7 +340,7 @@ describe('test/index.test.ts', () => {
         });
 
       expect(result1.text).toEqual('你好 世界');
-      expect(result1.headers['set-cookie'][0]).toMatch(/zh_CN/);
+      expect(result1.headers['set-cookie'][0]).toMatch(/zh-cn/);
       await close(app);
     });
 
@@ -320,15 +351,13 @@ describe('test/index.test.ts', () => {
       ));
 
       const result = await createHttpRequest(app).get('/')
-        .set({
-          locale: 'zh_CN',
-        })
+        .set('Accept-Language', 'zh-CN,zh;q=0.5')
         .query({
           username: '世界',
         });
 
       expect(result.text).toEqual('你好 世界');
-      expect(result.headers['set-cookie'][0]).toMatch(/en_US/);
+      expect(result.headers['set-cookie'][0]).toMatch(/en-us/);
       await close(app);
     });
   });

@@ -12,7 +12,6 @@ export interface I18nOptions {
   writeCookie: boolean;
   resolver: {
     queryField: string;
-    headerField: string;
     cookieField: {
       fieldName: string;
       cookieDomain: string;
