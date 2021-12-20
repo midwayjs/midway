@@ -178,10 +178,14 @@ export async function createFunctionApp<
       '@midwayjs/serverless-app',
     ]);
 
-  const framework = await createApp(baseDir, {
-    ...options,
-    configurationModule: transformFrameworkToConfiguration(customFramework),
-  });
+  const framework = await createApp(
+    baseDir,
+    {
+      ...options,
+      configurationModule: transformFrameworkToConfiguration(customFramework),
+    },
+    customFrameworkName as any
+  );
   framework.configurationOptions = options;
   return framework;
 }
