@@ -6,7 +6,6 @@ export const i18n: I18nOptions = {
   localeTable: {
     en_US: {},
   },
-  fallbackLocale: 'en_US',
   fallbacks: {
     //   'en_*': 'en_US',
     //   pt: 'pt-BR',

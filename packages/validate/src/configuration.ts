@@ -44,9 +44,11 @@ export class ValidateConfiguration {
       return {
         before: (joinPoint: JoinPoint) => {
           for (let i = 0; i < paramTypes.length; i++) {
-            const maybeCtx = joinPoint.target[REQUEST_OBJ_CTX_KEY];
-            if (maybeCtx && maybeCtx.getAttr) {
-              validateOptions.locale = maybeCtx.getAttr(i18n.I18N_ATTR_KEY);
+            if (!validateOptions.locale) {
+              const maybeCtx = joinPoint.target[REQUEST_OBJ_CTX_KEY];
+              if (maybeCtx && maybeCtx.getAttr) {
+                validateOptions.locale = maybeCtx.getAttr(i18n.I18N_ATTR_KEY);
+              }
             }
             const item = paramTypes[i];
             const result = this.validateService.validate(

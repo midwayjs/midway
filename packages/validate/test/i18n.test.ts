@@ -53,7 +53,7 @@ describe('test/i18n.test.ts', function () {
     await close(app);
   });
 
-  it('should test with locale fallback', async () => {
+  it('should test with locale fallback use custom message', async () => {
     const app = await createApp(join(__dirname, 'fixtures/base-app-koa-custom-message'));
     const result = await createHttpRequest(app)
       .post('/user/')

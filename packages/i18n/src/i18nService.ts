@@ -20,7 +20,6 @@ export class MidwayI18nServiceSingleton {
 
   private localeTextMap: Map<string, Map<string, any>> = new Map();
   private defaultLocale: string;
-  private fallbackLocale: string;
   private fallbackMatch: Array<{
     pattern: any;
     locale: string;
@@ -30,7 +29,6 @@ export class MidwayI18nServiceSingleton {
   @Init()
   protected async init() {
     this.defaultLocale = formatLocale(this.i18nConfig.defaultLocale);
-    this.fallbackLocale = formatLocale(this.i18nConfig.fallbackLocale);
     for (const lang in this.i18nConfig.localeTable) {
       this.addLocale(lang, getES6Object(this.i18nConfig.localeTable[lang]));
     }
@@ -96,15 +94,12 @@ export class MidwayI18nServiceSingleton {
       }
 
       if (!msg) {
-        const fallbackLanguage = this.fallbackLocale;
-        if (fallbackLanguage) {
-          msg = this.getLocaleMappingText(
-            fallbackLanguage,
-            message,
-            group,
-            args
-          );
-        }
+        msg = this.getLocaleMappingText(
+          this.defaultLocale,
+          message,
+          group,
+          args
+        );
       }
     }
     return msg;
@@ -143,15 +138,6 @@ export class MidwayI18nServiceSingleton {
       if (findRule) {
         return findRule.locale;
       }
-    }
-
-    const fallbackLanguage = this.fallbackLocale;
-    if (
-      this.localeTextMap.has(fallbackLanguage) &&
-      this.localeTextMap.get(fallbackLanguage).has(group)
-    ) {
-      this.localeMatchCache[locale + '_' + group] = fallbackLanguage;
-      return fallbackLanguage;
     }
 
     this.localeMatchCache[locale + '_' + group] = this.defaultLocale;

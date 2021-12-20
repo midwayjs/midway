@@ -11,7 +11,7 @@ import * as DefaultConfig from './config/config.default';
 import { RULES_KEY } from './constants';
 import { MidwayValidationError } from '@midwayjs/core';
 import * as Joi from 'joi';
-import { MidwayI18nServiceSingleton } from '@midwayjs/i18n';
+import { MidwayI18nServiceSingleton, formatLocale } from '@midwayjs/i18n';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -31,7 +31,7 @@ export class ValidateService {
   async init() {
     const locales = Object.keys(DefaultConfig.i18n.localeTable);
     locales.forEach(locale => {
-      this.messages[locale] = Object.fromEntries(
+      this.messages[formatLocale(locale)] = Object.fromEntries(
         this.i18nService.getLocaleMapping(locale, 'validate')
       );
     });
@@ -48,13 +48,14 @@ export class ValidateService {
   ) {
     options.validationOptions = options.validationOptions || {};
     options.validationOptions.errors = options.validationOptions.errors || {};
-    options.validationOptions.errors.language =
+    options.validationOptions.errors.language = formatLocale(
       this.i18nService.getAvailableLocale(
         options.validationOptions.errors.language ||
           options.locale ||
           this.i18nConfig.defaultLocale,
         'validate'
-      );
+      )
+    );
 
     const rules = getClassExtendedMetadata(RULES_KEY, ClzType);
     if (rules) {

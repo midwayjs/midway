@@ -65,7 +65,6 @@ export const i18n = {
         // hello: '你好'
       }
     },
-    fallbackLocale: 'en_US',
     fallbacks: {
       //   'en_*': 'en_US',
       //   pt: 'pt-BR',

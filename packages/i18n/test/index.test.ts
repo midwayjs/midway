@@ -141,7 +141,6 @@ describe('test/index.test.ts', () => {
       globalConfig: {
         i18n: {
           defaultLocale: 'en_US',
-          fallbackLocale: 'en_US',
           localeTable: {
             en_US: {
               "user": {

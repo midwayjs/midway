@@ -7,7 +7,6 @@ export interface TranslateOptions {
 export interface I18nOptions {
   defaultLocale: string;
   localeTable: Record<string, Record<string, any>>;
-  fallbackLocale: string;
   fallbacks: Record<string, any>;
   writeCookie: boolean;
   resolver: {
