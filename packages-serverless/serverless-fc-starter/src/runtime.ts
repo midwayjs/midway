@@ -22,7 +22,7 @@ export class FCRuntime extends ServerlessLightRuntime {
   app;
   respond;
 
-  init(contextExtensions) {
+  async init(contextExtensions): Promise<void> {
     super.init(contextExtensions);
     this.app = new Application();
   }
@@ -267,10 +267,6 @@ export class FCRuntime extends ServerlessLightRuntime {
       }
     });
   }
-
-  async beforeInvokeHandler(context) {}
-
-  async afterInvokeHandler(err, result, context) {}
 
   getApplication() {
     return this.app;

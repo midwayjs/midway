@@ -1,4 +1,7 @@
-import { ServerlessLightRuntime } from '@midwayjs/runtime-engine';
+import {
+  ServerlessLightRuntime,
+  ContextExtensionHandler,
+} from '@midwayjs/runtime-engine';
 import { Application, HTTPResponse } from '@midwayjs/serverless-http-parser';
 import { types } from 'util';
 import { HTTPRequest } from './http-request';
@@ -22,8 +25,8 @@ export class WorkerRuntime extends ServerlessLightRuntime {
   app: Application;
   respond;
 
-  init(contextExtensions) {
-    super.init(contextExtensions);
+  async init(contextExtensions: ContextExtensionHandler[]): Promise<void> {
+    await super.init(contextExtensions);
     this.app = new Application();
   }
 
@@ -39,6 +42,20 @@ export class WorkerRuntime extends ServerlessLightRuntime {
     return event => {
       return this.wrapperWebInvoker(handler, event);
     };
+  }
+
+  getApplication() {
+    return this.app;
+  }
+
+  getFunctionName(): string {
+    return this.options?.initContext?.function?.name || super.getFunctionName();
+  }
+
+  getFunctionServiceName(): string {
+    return (
+      this.options?.initContext?.service?.name || super.getFunctionServiceName()
+    );
   }
 
   async wrapperWebInvoker(handler, event: FetchEvent) {
@@ -144,18 +161,4 @@ export class WorkerRuntime extends ServerlessLightRuntime {
   async beforeInvokeHandler(context) {}
 
   async afterInvokeHandler(err, result, context) {}
-
-  getApplication() {
-    return this.app;
-  }
-
-  getFunctionName(): string {
-    return this.options?.initContext?.function?.name || super.getFunctionName();
-  }
-
-  getFunctionServiceName(): string {
-    return (
-      this.options?.initContext?.service?.name || super.getFunctionServiceName()
-    );
-  }
 }

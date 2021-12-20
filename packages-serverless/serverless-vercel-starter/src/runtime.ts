@@ -15,7 +15,7 @@ export class VercelRuntime extends ServerlessLightRuntime {
   app;
   respond;
 
-  init(contextExtensions) {
+  async init(contextExtensions): Promise<void> {
     super.init(contextExtensions);
     this.app = new Application();
   }

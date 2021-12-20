@@ -11,22 +11,22 @@ import { completeAssign } from './util';
 import performance from './lib/performance';
 
 export class BaseRuntimeEngine implements RuntimeEngine {
-  runtimeExtensions = [];
-  contextExtensions = [];
-  eventExtensions = [];
-  healthExtensions = [];
-  runtime: Runtime;
-  baseRuntime;
+  public runtimeExtensions: RuntimeExtension[] = [];
+  public contextExtensions: ContextExtensionHandler[] = [];
+  public eventExtensions: EventExtensionHandler[] = [];
+  public healthExtensions: HealthExtensionHandler[] = [];
+  public runtime: Runtime;
+  public baseRuntime;
 
-  add(extensionHandler: (rt: RuntimeEngine) => void) {
+  public add(extensionHandler: (engine: RuntimeEngine) => void) {
     extensionHandler(this);
   }
 
-  addBaseRuntime(baseRuntime: Runtime) {
+  public addBaseRuntime(baseRuntime: Runtime) {
     this.baseRuntime = baseRuntime;
   }
 
-  addRuntimeExtension(ext: RuntimeExtension) {
+  public addRuntimeExtension(ext: RuntimeExtension): RuntimeEngine {
     //
     // This is for compatibility legacy layers
     // And this logic will be removed soon
@@ -42,22 +42,28 @@ export class BaseRuntimeEngine implements RuntimeEngine {
     return this;
   }
 
-  addHealthExtension(healthExtensionHandler: HealthExtensionHandler) {
+  public addHealthExtension(
+    healthExtensionHandler: HealthExtensionHandler
+  ): RuntimeEngine {
     this.healthExtensions.push(healthExtensionHandler);
     return this;
   }
 
-  addEventExtension(eventExtensionHandler: EventExtensionHandler) {
+  public addEventExtension(
+    eventExtensionHandler: EventExtensionHandler
+  ): RuntimeEngine {
     this.eventExtensions.push(eventExtensionHandler);
     return this;
   }
 
-  addContextExtension(contextExtensionHandler: ContextExtensionHandler) {
+  public addContextExtension(
+    contextExtensionHandler: ContextExtensionHandler
+  ): RuntimeEngine {
     this.contextExtensions.push(contextExtensionHandler);
     return this;
   }
 
-  async ready() {
+  public async ready(): Promise<void> {
     if (!this.baseRuntime) {
       this.addBaseRuntime(new ServerlessBaseRuntime());
     }
@@ -75,11 +81,11 @@ export class BaseRuntimeEngine implements RuntimeEngine {
     this.measureMarksOnReady();
   }
 
-  async close() {
+  public async close(): Promise<void> {
     await this.runtime.close();
   }
 
-  getCurrentRuntime() {
+  public getCurrentRuntime(): Runtime {
     return this.runtime;
   }
 

@@ -8,7 +8,7 @@ import {
 
 export class BaseBootstrap implements Bootstrap {
   runtimeEngine: RuntimeEngine;
-  options;
+  options: BootstrapOptions;
   runtime: Runtime;
   layers;
 
@@ -25,7 +25,7 @@ export class BaseBootstrap implements Bootstrap {
     }
   }
 
-  async start() {
+  public async start(): Promise<Runtime> {
     if (this.options.layers && this.options.layers.length) {
       this.options.layers.map(mod => this.runtimeEngine.add(mod));
     }
@@ -33,15 +33,15 @@ export class BaseBootstrap implements Bootstrap {
     return this.runtimeEngine.getCurrentRuntime() as Runtime;
   }
 
-  async close() {
-    return this.runtimeEngine.close();
+  public async close(): Promise<void> {
+    await this.runtimeEngine.close();
   }
 
-  getRuntime() {
+  public getRuntime(): Runtime {
     return this.runtimeEngine.getCurrentRuntime();
   }
 
-  getRuntimeEngine() {
+  public getRuntimeEngine(): RuntimeEngine {
     return this.runtimeEngine;
   }
 }

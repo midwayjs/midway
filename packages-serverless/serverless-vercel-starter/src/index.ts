@@ -4,7 +4,7 @@ import { VercelRuntime } from './runtime';
 export { asyncWrapper } from '@midwayjs/runtime-engine';
 export * from './runtime';
 
-let bootstrap;
+let bootstrap: BaseBootstrap;
 
 export const start = async (options: any = {}) => {
   if (!process.env.NODE_ENV) {
