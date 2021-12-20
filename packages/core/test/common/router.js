@@ -200,3 +200,13 @@ exports.routerList5 = [
   }
 ];
 
+exports.routerList6 = [
+  {
+    prefix: '/',
+    url: '/:slot'
+  },
+  {
+    prefix: '/',
+    url: '/hello'
+  }
+];

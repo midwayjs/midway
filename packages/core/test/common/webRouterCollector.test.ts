@@ -120,4 +120,11 @@ describe('/test/common/webRouterCollector.test.ts', function () {
     expect(result1[0].url).toEqual('/detail/:id.html');
     expect(result1[1].url).toEqual('/:typeid/:area/');
   });
+
+  it('test base param router', function () {
+    const collector = new WebRouterCollector();
+    const result1 = collector.sortRouter(require('./router').routerList6);
+    expect(result1[0].url).toEqual('/hello');
+    expect(result1[1].url).toEqual('/:slot');
+  });
 });
