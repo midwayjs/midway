@@ -8,4 +8,4 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Features
 
-* 3.x upload ([#1422](https://github.com/midwayjs/midway/issues/1422)) ([cbd8e33](https://github.com/midwayjs/midway/commit/cbd8e334a918222f526552859401f0cf222737b6))
+* default add session  & bodyparser support for koa/express/faas ([#1420](https://github.com/midwayjs/midway/issues/1420)) ([cdaff31](https://github.com/midwayjs/midway/commit/cdaff317c3e862a95494a167995a28280af639bf))

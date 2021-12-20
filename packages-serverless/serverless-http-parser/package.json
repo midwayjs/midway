@@ -1,11 +1,11 @@
 {
   "name": "@midwayjs/serverless-http-parser",
-  "version": "3.0.0-beta.9",
+  "version": "3.0.0-beta.10",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {
     "@midwayjs/cookies": "^1.0.1",
-    "@midwayjs/faas-typings": "^3.0.0-beta.9",
+    "@midwayjs/faas-typings": "^3.0.0-beta.10",
     "accepts": "^1.3.7",
     "cache-content-type": "^1.0.1",
     "encodeurl": "^1.0.2",
