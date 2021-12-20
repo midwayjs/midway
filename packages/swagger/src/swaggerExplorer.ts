@@ -22,7 +22,11 @@ import {
 import { PathItemObject, Type } from './interfaces';
 import { DECORATORS } from './constants';
 import { DocumentBuilder } from './documentBuilder';
-import { SwaggerOptions } from './interfaces/';
+import {
+  SwaggerOptions,
+  AuthOptions,
+  SecuritySchemeObject,
+} from './interfaces/';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -63,12 +67,12 @@ export class SwaggerExplorer {
       this.documentBuilder.setTermsOfService(this.swaggerConfig.termsOfService);
     }
     if (
-      this.swaggerConfig?.externalDoc &&
-      typeof this.swaggerConfig?.externalDoc === 'object'
+      this.swaggerConfig?.externalDocs &&
+      typeof this.swaggerConfig?.externalDocs === 'object'
     ) {
       this.documentBuilder.setExternalDoc(
-        this.swaggerConfig?.externalDoc?.description,
-        this.swaggerConfig?.externalDoc?.url
+        this.swaggerConfig?.externalDocs?.description,
+        this.swaggerConfig?.externalDocs?.url
       );
     }
     if (
@@ -335,13 +339,13 @@ export class SwaggerExplorer {
     }
 
     opts[webRouter.requestMethod].parameters = parameters;
-    opts[webRouter.requestMethod].responses = {};
 
     const responses = metaForMethods.filter(
       item =>
         item.key === DECORATORS.API_RESPONSE &&
         item.propertyName === webRouter.method
     );
+    const returnResponses = {};
     for (const r of responses) {
       const resp = r.metadata;
       const keys = Object.keys(resp);
@@ -388,7 +392,17 @@ export class SwaggerExplorer {
         delete tt.format;
       }
 
-      Object.assign(opts[webRouter.requestMethod].responses, resp);
+      Object.assign(returnResponses, resp);
+    }
+
+    if (Object.keys(returnResponses).length > 0) {
+      opts[webRouter.requestMethod].responses = returnResponses;
+    } else {
+      opts[webRouter.requestMethod].responses = {
+        200: {
+          description: 'OK',
+        },
+      };
     }
 
     paths[url] = opts;
@@ -471,18 +485,24 @@ export class SwaggerExplorer {
    */
   private parseClzz(clzz: Type) {
     const props = getClassMetadata(INJECT_CUSTOM_PROPERTY, clzz);
+
+    const tt: any = {
+      type: 'object',
+      properties: {},
+    };
+
     if (props) {
-      const tt = {
-        type: 'object',
-        properties: {},
-        required: [],
-        example: {},
-      };
       Object.keys(props).forEach(key => {
         if (props[key].metadata?.example) {
+          if (!tt.example) {
+            tt.example = {};
+          }
           tt.example[key] = props[key].metadata?.example;
         }
         if (props[key].metadata?.required !== false) {
+          if (!tt.required) {
+            tt.required = [];
+          }
           tt.required.push(key);
         }
         if (props[key].metadata?.enum) {
@@ -529,8 +549,7 @@ export class SwaggerExplorer {
             tt.properties[key] = {
               type: 'array',
               items: {
-                type: getPropertyType(clzz.prototype, key).name,
-                format: props[key].metadata?.format,
+                type: convertSchemaType(currentType?.name || currentType),
               },
             };
           } else {
@@ -541,18 +560,18 @@ export class SwaggerExplorer {
           }
         }
       });
-
-      this.documentBuilder.addSchema({
-        [clzz.name]: tt,
-      });
     }
+
+    this.documentBuilder.addSchema({
+      [clzz.name]: tt,
+    });
   }
   /**
    * 授权验证
    * @param opts
    * @returns
    */
-  private setAuth(opts: any) {
+  private setAuth(opts: AuthOptions) {
     if (!opts) {
       return;
     }
@@ -564,14 +583,17 @@ export class SwaggerExplorer {
         {
           const name = opts.name;
           delete opts.name;
-          this.documentBuilder.addBasicAuth(opts, name);
+          this.documentBuilder.addBasicAuth(opts as SecuritySchemeObject, name);
         }
         break;
       case 'bearer':
         {
           const name = opts.name;
           delete opts.name;
-          this.documentBuilder.addBearerAuth(opts, name);
+          this.documentBuilder.addBearerAuth(
+            opts as SecuritySchemeObject,
+            name
+          );
         }
         break;
       case 'cookie':
@@ -580,26 +602,33 @@ export class SwaggerExplorer {
           const secName = opts.securityName;
           delete opts.cookieName;
           delete opts.securityName;
-          this.documentBuilder.addCookieAuth(cname, opts, secName);
+          this.documentBuilder.addCookieAuth(
+            cname,
+            opts as SecuritySchemeObject,
+            secName
+          );
         }
         break;
       case 'oauth2':
         {
           const name = opts.name;
           delete opts.name;
-          this.documentBuilder.addOAuth2(opts, name);
+          this.documentBuilder.addOAuth2(opts as SecuritySchemeObject, name);
         }
         break;
       case 'apikey':
         {
           const name = opts.name;
           delete opts.name;
-          this.documentBuilder.addApiKey(opts, name);
+          this.documentBuilder.addApiKey(opts as SecuritySchemeObject, name);
         }
         break;
       case 'custom':
         {
-          this.documentBuilder.addSecurity(opts?.name, opts);
+          this.documentBuilder.addSecurity(
+            opts?.name,
+            opts as SecuritySchemeObject
+          );
         }
         break;
     }

@@ -67,7 +67,7 @@ export class DocumentBuilder {
     return this;
   }
 
-  public setBasePath(path: string) {
+  public setBasePath(path: string | string[]) {
     if ((this.document as any).basePath) {
       if (Array.isArray((this.document as any).basePath)) {
         (this.document as any).basePath.push(path);
