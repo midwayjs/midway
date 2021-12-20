@@ -87,7 +87,7 @@ export class MidwayRabbitMQFramework extends BaseFramework<
               } as IMidwayRabbitMQContext;
               this.app.createAnonymousContext(ctx);
               const ins = await ctx.requestContext.getAsync(module);
-              const fn = await this.getMiddleware(async ctx => {
+              const fn = await this.applyMiddleware(async ctx => {
                 return await ins[listenerOptions.propertyKey].call(ins, data);
               });
 

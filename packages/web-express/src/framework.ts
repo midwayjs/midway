@@ -1,7 +1,5 @@
 import {
   BaseFramework,
-  CommonMiddleware,
-  FunctionMiddleware,
   HTTP_SERVER_KEY,
   IMidwayBootstrapOptions,
   MiddlewareRespond,
@@ -63,7 +61,7 @@ export class MidwayExpressFramework extends BaseFramework<
 
   public async run(): Promise<void> {
     // use global middleware
-    const globalMiddleware = await this.getMiddleware();
+    const globalMiddleware = await this.applyMiddleware();
     this.app.use(globalMiddleware as any);
     // load controller
     await this.loadMidwayController();
@@ -145,12 +143,19 @@ export class MidwayExpressFramework extends BaseFramework<
   protected generateController(routeInfo: RouterInfo): IRouterHandler<any> {
     return async (req, res, next) => {
       const controller = await req.requestContext.getAsync(routeInfo.id);
-      const result = await controller[routeInfo.method].call(
-        controller,
-        req,
-        res,
-        next
-      );
+
+      let result;
+      try {
+        result = await controller[routeInfo.method].call(
+          controller,
+          req,
+          res,
+          next
+        );
+      } catch (err) {
+        next(err);
+        return;
+      }
 
       if (res.headersSent) {
         // return when response send
@@ -213,21 +218,26 @@ export class MidwayExpressFramework extends BaseFramework<
       const newRouter = this.createRouter(routerInfo.routerOptions);
 
       // add router middleware
-      await this.handlerWebMiddleware(routerInfo.middleware, middlewareImpl => {
-        newRouter.use(middlewareImpl);
-      });
+      if (routerInfo.middleware.length) {
+        const routerMiddlewareFn = await this.expressMiddlewareService.compose(
+          routerInfo.middleware,
+          this.app
+        );
+        newRouter.use(routerMiddlewareFn);
+      }
 
       // add route
       const routes = routerTable.get(routerInfo.prefix);
       for (const routeInfo of routes) {
         const routeMiddlewareList = [];
-        // router middleware
-        await this.handlerWebMiddleware(
-          routeInfo.middleware,
-          middlewareImpl => {
-            routeMiddlewareList.push(middlewareImpl);
-          }
-        );
+        // routeInfo middleware
+        if (routeInfo.middleware.length) {
+          const routeMiddlewareFn = await this.expressMiddlewareService.compose(
+            routeInfo.middleware,
+            this.app
+          );
+          routeMiddlewareList.push(routeMiddlewareFn);
+        }
 
         this.logger.debug(
           `Load Router "${routeInfo.requestMethod.toUpperCase()} ${
@@ -255,26 +265,7 @@ export class MidwayExpressFramework extends BaseFramework<
     return express.Router({ caseSensitive: routerOptions.sensitive });
   }
 
-  private async handlerWebMiddleware(
-    middlewares: Array<
-      CommonMiddleware<IMidwayExpressContext, Response, NextFunction> | string
-    >,
-    handlerCallback: (
-      middlewareImpl: FunctionMiddleware<
-        IMidwayExpressContext,
-        Response,
-        NextFunction
-      >
-    ) => void
-  ): Promise<void> {
-    const fn = await this.expressMiddlewareService.compose(
-      middlewares,
-      this.app
-    );
-    handlerCallback(fn);
-  }
-
-  public async getMiddleware<Response, NextFunction>(): Promise<
+  public async applyMiddleware<Response, NextFunction>(): Promise<
     MiddlewareRespond<IMidwayExpressContext, Response, NextFunction>
   > {
     if (!this.composeMiddleware) {

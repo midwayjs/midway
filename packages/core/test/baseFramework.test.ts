@@ -1,4 +1,4 @@
-import { APPLICATION_KEY, MidwayFrameworkType, Provide, } from '@midwayjs/decorator';
+import { APPLICATION_KEY, MidwayFrameworkType, Provide } from '@midwayjs/decorator';
 import { MidwayContextLogger } from '@midwayjs/logger';
 import * as assert from 'assert';
 import * as path from 'path';
@@ -602,7 +602,7 @@ describe('/test/baseFramework.test.ts', () => {
     framework.useMiddleware([TestMiddleware1, TestMiddleware2]);
 
     let data1 = 'abc';
-    const fn = await framework.getMiddleware(async (ctx) => {
+    const fn = await framework.applyMiddleware(async (ctx) => {
       return data1;
     });
 
@@ -649,7 +649,7 @@ describe('/test/baseFramework.test.ts', () => {
     framework.useMiddleware([TestMiddleware1, TestMiddleware2]);
 
     // compose 一下，再同时插入一个
-    const fn = await framework.getMiddleware(async (ctx, next: any) => {
+    const fn = await framework.applyMiddleware(async (ctx, next: any) => {
       return 'gogogo, ' + await next();
     });
 
@@ -681,5 +681,4 @@ describe('/test/baseFramework.test.ts', () => {
     expect(framework.getConfiguration('bbb')).toEqual(222);
     expect(framework.getConfiguration('ccc')).toEqual(333);
   });
-
 });

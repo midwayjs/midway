@@ -16,10 +16,6 @@ export class ContainerConfiguration {
   app: IMidwayExpressApplication;
 
   async onReady() {
-    const bodyParser = require('body-parser');
-
-    this.app.useMiddleware(bodyParser.json());
-    this.app.useMiddleware(bodyParser.urlencoded({ extended: true }));
     this.app.useMiddleware((req, res, next) => {
       next();
     });

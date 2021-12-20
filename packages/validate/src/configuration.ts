@@ -1,62 +1,21 @@
 import {
   Configuration,
-  Init,
   Inject,
   getMethodParamTypes,
-  getClassExtendedMetadata,
   JoinPoint,
-  Provide,
-  Scope,
-  ScopeEnum,
-  Config,
 } from '@midwayjs/decorator';
-import { MidwayDecoratorService, MidwayValidationError } from '@midwayjs/core';
-import { RULES_KEY, VALIDATE_KEY } from './constants';
-import * as Joi from 'joi';
+import { MidwayDecoratorService, REQUEST_OBJ_CTX_KEY } from '@midwayjs/core';
+import { VALIDATE_KEY } from './constants';
 import * as util from 'util';
-import * as DefaultConfig from './config.default';
+import * as DefaultConfig from './config/config.default';
+import { ValidateService } from './service';
+import * as i18n from '@midwayjs/i18n';
 
 const debug = util.debuglog('midway:debug');
 
-@Provide()
-@Scope(ScopeEnum.Singleton)
-export class ValidateService {
-  @Config('validate')
-  validateConfig: typeof DefaultConfig.validate;
-
-  validate(
-    ClzType: new (...args) => any,
-    value: any,
-    options?: {
-      errorStatus?: number;
-      validateOptions?: Joi.ValidationOptions;
-    }
-  ) {
-    const rules = getClassExtendedMetadata(RULES_KEY, ClzType);
-    if (rules) {
-      const schema = Joi.object(rules);
-      const result = schema.validate(
-        value,
-        Object.assign(
-          this.validateConfig.validationOptions,
-          options.validateOptions ?? {}
-        )
-      );
-      if (result.error) {
-        throw new MidwayValidationError(
-          result.error.message,
-          options?.errorStatus ?? this.validateConfig.errorStatus,
-          result.error
-        );
-      } else {
-        return result;
-      }
-    }
-  }
-}
-
 @Configuration({
   namespace: 'validate',
+  imports: [i18n],
   importConfigs: [
     {
       default: DefaultConfig,
@@ -70,8 +29,7 @@ export class ValidateConfiguration {
   @Inject()
   validateService: ValidateService;
 
-  @Init()
-  async init() {
+  async onReady() {
     debug(`[validate]: Register @validate "${VALIDATE_KEY}" handler"`);
     this.decoratorService.registerMethodHandler(VALIDATE_KEY, options => {
       // get param types from method
@@ -80,15 +38,23 @@ export class ValidateConfiguration {
         options.propertyName
       );
 
+      const validateOptions = options.metadata?.options;
+
       // add aspect method
       return {
         before: (joinPoint: JoinPoint) => {
           for (let i = 0; i < paramTypes.length; i++) {
+            if (!validateOptions.locale) {
+              const maybeCtx = joinPoint.target[REQUEST_OBJ_CTX_KEY];
+              if (maybeCtx && maybeCtx.getAttr) {
+                validateOptions.locale = maybeCtx.getAttr(i18n.I18N_ATTR_KEY);
+              }
+            }
             const item = paramTypes[i];
             const result = this.validateService.validate(
               item,
               joinPoint.args[i],
-              options.metadata?.options
+              validateOptions
             );
             if (result && result.value) {
               joinPoint.args[i] = result.value;

@@ -4,7 +4,8 @@ import * as Joi from 'joi';
 
 export interface ValidateOptions {
   errorStatus?: number;
-  validateOptions?: Joi.ValidationOptions;
+  locale?: string;
+  validationOptions?: Joi.ValidationOptions;
 }
 
 export function Validate(options: ValidateOptions = {}) {

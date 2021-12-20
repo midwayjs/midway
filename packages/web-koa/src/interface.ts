@@ -3,6 +3,7 @@ import * as koa from 'koa';
 import { Context as KoaContext, DefaultState, Middleware, Next } from 'koa';
 import { RouterParamValue } from '@midwayjs/decorator';
 import * as bodyParser from 'koa-bodyparser';
+import { CookieSetOptions } from '@midwayjs/cookies';
 
 export type IMidwayKoaContext = IMidwayContext<KoaContext>;
 export type IMidwayKoaApplication = IMidwayApplication<IMidwayKoaContext, koa<DefaultState, IMidwayKoaContext> & {
@@ -71,7 +72,9 @@ export interface Context extends IMidwayKoaContext {}
 
 declare module '@midwayjs/core/dist/interface' {
   interface MidwayConfig {
+    keys?: string | string[];
     koa?: IMidwayKoaConfigurationOptions;
+    cookies?: CookieSetOptions;
     /**
      * onerror middleware options
      */

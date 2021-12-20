@@ -1,7 +1,7 @@
 import { Configuration, App, Inject } from '@midwayjs/decorator';
 import { join } from 'path';
 import { Framework } from '../../../../src';
-import * as Validate from '@midwayjs/validate';
+import * as Validate from '../../../../../validate';
 import { TestMiddleware } from './middleware/test';
 
 @Configuration({

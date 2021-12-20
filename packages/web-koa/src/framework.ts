@@ -10,6 +10,7 @@ import {
   WebControllerGenerator,
   MidwayConfigMissingError,
 } from '@midwayjs/core';
+import { Cookies } from '@midwayjs/cookies';
 
 import { Framework } from '@midwayjs/decorator';
 import {
@@ -24,9 +25,11 @@ import * as koa from 'koa';
 import { Server } from 'net';
 import * as onerror from 'koa-onerror';
 
+const COOKIES = Symbol('context#cookies');
+
 class KoaControllerGenerator extends WebControllerGenerator<Router> {
-  constructor(readonly app, readonly applicationContext, readonly logger) {
-    super(applicationContext, MidwayFrameworkType.WEB_KOA, logger);
+  constructor(readonly app) {
+    super(app);
   }
 
   createRouter(routerOptions: any): Router {
@@ -55,18 +58,28 @@ export class MidwayKoaFramework extends BaseFramework<
   }
 
   async applicationInitialize(options: Partial<IMidwayBootstrapOptions>) {
-    this.app = new koa<
-      DefaultState,
-      IMidwayKoaContext
-    >() as IMidwayKoaApplication;
     const appKeys =
       this.configService.getConfiguration('keys') ||
       this.configurationOptions['keys'];
-    if (appKeys) {
-      this.app.keys = [].concat(appKeys);
-    } else {
-      throw new MidwayConfigMissingError('config.koa.keys');
+    if (!appKeys) {
+      throw new MidwayConfigMissingError('config.keys');
     }
+
+    const cookieOptions = this.configService.getConfiguration('cookies');
+
+    this.app = new koa<DefaultState, IMidwayKoaContext>({
+      keys: [].concat(appKeys),
+    }) as IMidwayKoaApplication;
+
+    Object.defineProperty(this.app.context, 'cookies', {
+      get() {
+        if (!this[COOKIES]) {
+          this[COOKIES] = new Cookies(this, this.app.keys, cookieOptions);
+        }
+        return this[COOKIES];
+      },
+      enumerable: true,
+    });
 
     const onerrorConfig = this.configService.getConfiguration('onerror');
     onerror(this.app, onerrorConfig);
@@ -74,16 +87,12 @@ export class MidwayKoaFramework extends BaseFramework<
     const midwayRootMiddleware = async (ctx, next) => {
       this.app.createAnonymousContext(ctx);
       await (
-        await this.getMiddleware()
+        await this.applyMiddleware()
       )(ctx, next);
     };
     this.app.use(midwayRootMiddleware);
 
-    this.generator = new KoaControllerGenerator(
-      this.app,
-      this.applicationContext,
-      this.appLogger
-    );
+    this.generator = new KoaControllerGenerator(this.app);
 
     this.defineApplicationProperties();
 

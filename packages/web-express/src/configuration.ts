@@ -12,6 +12,7 @@ import {
 import * as session from '@midwayjs/express-session';
 import { MidwayExpressFramework } from './framework';
 import * as bodyParser from 'body-parser';
+import * as cookieParser from 'cookie-parser';
 import * as DefaultConfig from './config/config.default';
 
 @Configuration({
@@ -48,6 +49,21 @@ export class ExpressConfiguration {
   }
 
   async onReady() {
+    const keys =
+      this.configService.getConfiguration('express.keys') ??
+      this.configService.getConfiguration('keys');
+    const cookieParserConfig =
+      this.configService.getConfiguration('cookieParser');
+    // add cookie parser middleware
+    this.expressFramework
+      .getMiddleware()
+      .insertFirst(
+        cookieParser(
+          cookieParserConfig.secret ?? keys,
+          cookieParserConfig.options
+        )
+      );
+    // add body parser
     const bodyparserConfig = this.configService.getConfiguration('bodyParser');
     if (bodyparserConfig.enable) {
       // create application/json parser

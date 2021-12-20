@@ -15,6 +15,7 @@
   "files": [
     "dist/**/*.js",
     "dist/**/*.d.ts",
+    "locales",
     "index.d.ts"
   ],
   "engines": {
@@ -22,11 +23,14 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@midwayjs/i18n": "3.0.0-beta.9",
     "joi": "^17.2.1"
   },
   "devDependencies": {
     "@midwayjs/core": "^3.0.0-beta.9",
     "@midwayjs/decorator": "^3.0.0-beta.9",
-    "@midwayjs/mock": "^3.0.0-beta.9"
+    "@midwayjs/mock": "^3.0.0-beta.9",
+    "@midwayjs/koa": "^3.0.0-beta.9",
+    "@midwayjs/express": "^3.0.0-beta.9"
   }
 }

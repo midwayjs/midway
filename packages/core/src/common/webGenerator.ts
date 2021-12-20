@@ -11,8 +11,12 @@ import {
   WEB_RESPONSE_HTTP_CODE,
   WEB_RESPONSE_REDIRECT,
 } from '@midwayjs/decorator';
-import { WebRouterCollector, IMidwayContainer, RouterInfo } from '../index';
-import { ILogger } from '@midwayjs/logger';
+import {
+  WebRouterCollector,
+  RouterInfo,
+  MidwayMiddlewareService,
+  IMidwayApplication,
+} from '../index';
 import * as util from 'util';
 
 const debug = util.debuglog('midway:debug');
@@ -20,11 +24,7 @@ const debug = util.debuglog('midway:debug');
 export abstract class WebControllerGenerator<
   Router extends { use: (...args) => void }
 > {
-  protected constructor(
-    readonly applicationContext: IMidwayContainer,
-    readonly frameworkType: MidwayFrameworkType,
-    readonly logger?: ILogger
-  ) {}
+  protected constructor(readonly app: IMidwayApplication) {}
 
   /**
    * wrap controller string to middleware function
@@ -81,17 +81,20 @@ export abstract class WebControllerGenerator<
     });
     const routerTable = await collector.getRouterTable();
     const routerList = await collector.getRoutePriorityList();
+    const applicationContext = this.app.getApplicationContext();
+    const logger = this.app.getCoreLogger();
+    const middlewareService = applicationContext.get(MidwayMiddlewareService);
 
     for (const routerInfo of routerList) {
       // bind controller first
-      this.applicationContext.bindClass(routerInfo.routerModule);
+      applicationContext.bindClass(routerInfo.routerModule);
 
-      this.logger?.debug(
+      logger.debug(
         `Load Controller "${routerInfo.controllerId}", prefix=${routerInfo.prefix}`
       );
 
       debug(
-        `[core:webGenerator]: Load Controller "${routerInfo.controllerId}", prefix=${routerInfo.prefix}`
+        `[core]: Load Controller "${routerInfo.controllerId}", prefix=${routerInfo.prefix}`
       );
 
       // new router
@@ -101,22 +104,29 @@ export abstract class WebControllerGenerator<
       });
 
       // add router middleware
-      await this.handlerWebMiddleware(routerInfo.middleware, middlewareImpl => {
-        newRouter.use(middlewareImpl);
-      });
+      if (routerInfo.middleware.length) {
+        const routerMiddlewareFn = await middlewareService.compose(
+          routerInfo.middleware,
+          this.app
+        );
+        newRouter.use(routerMiddlewareFn);
+      }
 
       // add route
       const routes = routerTable.get(routerInfo.prefix);
       for (const routeInfo of routes) {
         // get middleware
-        const middlewares2 = routeInfo.middleware;
         const methodMiddlewares = [];
 
-        await this.handlerWebMiddleware(middlewares2, middlewareImpl => {
-          methodMiddlewares.push(middlewareImpl);
-        });
+        if (routeInfo.middleware.length) {
+          const routeMiddlewareFn = await middlewareService.compose(
+            routeInfo.middleware,
+            this.app
+          );
+          methodMiddlewares.push(routeMiddlewareFn);
+        }
 
-        if (this.frameworkType === MidwayFrameworkType.WEB_KOA) {
+        if (this.app.getFrameworkType() === MidwayFrameworkType.WEB_KOA) {
           if (typeof routeInfo.url === 'string' && /\*$/.test(routeInfo.url)) {
             routeInfo.url = routeInfo.url.replace('*', '(.*)');
           }
@@ -129,14 +139,14 @@ export abstract class WebControllerGenerator<
           this.generateController(routeInfo),
         ];
 
-        this.logger?.debug(
+        logger.debug(
           `Load Router "${routeInfo.requestMethod.toUpperCase()} ${
             routeInfo.url
           }"`
         );
 
         debug(
-          `[core:webGenerator]: Load Router "${routeInfo.requestMethod.toUpperCase()} ${
+          `[core]: Load Router "${routeInfo.requestMethod.toUpperCase()} ${
             routeInfo.url
           }"`
         );
@@ -152,25 +162,4 @@ export abstract class WebControllerGenerator<
 
   abstract createRouter(routerOptions): Router;
   abstract generateController(routeInfo: RouterInfo);
-
-  protected async handlerWebMiddleware(
-    middlewares: any[],
-    handlerCallback: (middlewareImpl) => void
-  ): Promise<void> {
-    if (middlewares && middlewares.length) {
-      for (const middleware of middlewares) {
-        if (typeof middleware === 'function') {
-          // web function middleware
-          handlerCallback(middleware);
-        } else {
-          const middlewareImpl: any = await this.applicationContext.getAsync(
-            middleware
-          );
-          if (middlewareImpl && typeof middlewareImpl.resolve === 'function') {
-            handlerCallback(middlewareImpl.resolve());
-          }
-        }
-      }
-    }
-  }
 }

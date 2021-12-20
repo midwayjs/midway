@@ -265,4 +265,12 @@ describe('/test/feature.test.ts', () => {
     expect(result.text).toEqual('ok');
     await closeApp(app);
   });
+
+  it('should test router middleware with class', async () => {
+    const app = await creatApp('base-app-router-middleware');
+    let result = await createHttpRequest(app)
+      .get('/');
+    expect(result.status).toEqual(200);
+    expect(result.text).toEqual('123');
+  });
 });

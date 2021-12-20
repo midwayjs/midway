@@ -1,15 +1,19 @@
 import { Configuration, App, Provide } from '@midwayjs/decorator';
 import * as path from 'path';
-import * as bodyParser from 'koa-bodyparser';
-import * as session from 'koa-session';
 import * as LocalStrategy from 'passport-local';
-import { PassportMiddleware, PassportStrategy, CustomStrategy as Strategy } from '../../../../src';
+import {
+  PassportMiddleware,
+  PassportStrategy,
+  CustomStrategy as Strategy,
+} from '../../../../src';
 import * as passport from 'passport';
 import * as koa from '@midwayjs/koa';
 
 @Strategy()
-export class CustomStrategy extends PassportStrategy(LocalStrategy.Strategy, 'local') {
-
+export class CustomStrategy extends PassportStrategy(
+  LocalStrategy.Strategy,
+  'local'
+) {
   getStrategyOptions(): any {
     return {};
   }
@@ -27,38 +31,33 @@ export class CustomStrategy extends PassportStrategy(LocalStrategy.Strategy, 'lo
   deserializeUser(user, done) {
     done(null, {
       username: 'admin',
-      password: '123'
+      password: '123',
     });
   }
 }
 
 @Provide()
 export class AuthMiddleware extends PassportMiddleware(CustomStrategy) {
-  getAuthenticateOptions(): Promise<passport.AuthenticateOptions> | passport.AuthenticateOptions {
+  getAuthenticateOptions():
+    | Promise<passport.AuthenticateOptions>
+    | passport.AuthenticateOptions {
     return {
       successRedirect: '/',
-      failureRedirect: '/login'
-    }
+      failureRedirect: '/login',
+    };
   }
 }
 
 @Configuration({
-  imports: [
-    koa,
-    require('../../../../src')
-  ],
+  imports: [koa, require('../../../../src')],
   conflictCheck: true,
   importConfigs: [path.join(__dirname, 'config')],
 })
 export class ContainerLifeCycle {
-
   @App()
   app;
 
   async onReady() {
-    this.app.keys = ["21321312"];
-    this.app.use(session({key: "SESSIONID"}, this.app))
-    this.app.use(bodyParser())
     this.app.useMiddleware(AuthMiddleware);
   }
 }

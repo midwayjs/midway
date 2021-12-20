@@ -30,7 +30,7 @@ export class MidwayLifeCycleService {
     // run lifecycle
     const cycles = listModule(CONFIGURATION_KEY);
 
-    debug(`[core:lifecycle]: Found Configuration length = ${cycles.length}`);
+    debug(`[core]: Found Configuration length = ${cycles.length}`);
 
     const lifecycleInstanceList = [];
     for (const cycle of cycles) {
@@ -39,7 +39,7 @@ export class MidwayLifeCycleService {
         cycle.instance = cycle.target;
       } else {
         // 普通类写法
-        debug(`[core:lifecycle]: run ${cycle.target.name} init`);
+        debug(`[core]: run ${cycle.target.name} init`);
         cycle.instance = await this.applicationContext.getAsync<ILifeCycle>(
           cycle.target
         );
@@ -108,9 +108,7 @@ export class MidwayLifeCycleService {
     if (Array.isArray(lifecycleInstanceOrList)) {
       for (const cycle of lifecycleInstanceOrList) {
         if (typeof cycle.instance[lifecycle] === 'function') {
-          debug(
-            `[core:lifecycle]: run ${cycle.instance.constructor.name} ${lifecycle}`
-          );
+          debug(`[core]: run ${cycle.instance.constructor.name} ${lifecycle}`);
           const result = await cycle.instance[lifecycle](
             this.applicationContext,
             this.frameworkService.getMainApp()
@@ -123,7 +121,7 @@ export class MidwayLifeCycleService {
     } else {
       if (typeof lifecycleInstanceOrList[lifecycle] === 'function') {
         debug(
-          `[core:lifecycle]: run ${lifecycleInstanceOrList.constructor.name} ${lifecycle}`
+          `[core]: run ${lifecycleInstanceOrList.constructor.name} ${lifecycle}`
         );
         const result = await lifecycleInstanceOrList[lifecycle](
           this.applicationContext,
@@ -139,9 +137,7 @@ export class MidwayLifeCycleService {
   private async runObjectLifeCycle(lifecycleInstanceList, lifecycle) {
     for (const cycle of lifecycleInstanceList) {
       if (typeof cycle.instance[lifecycle] === 'function') {
-        debug(
-          `[core:lifecycle]: run ${cycle.instance.constructor.name} ${lifecycle}`
-        );
+        debug(`[core]: run ${cycle.instance.constructor.name} ${lifecycle}`);
         return this.applicationContext[lifecycle](
           cycle.instance[lifecycle].bind(cycle.instance)
         );

@@ -26,7 +26,6 @@
     "@midwayjs/decorator": "^3.0.0-beta.9",
     "@midwayjs/logger": "^3.0.0-beta.9",
     "@midwayjs/mock": "^3.0.0-beta.9",
-    "@midwayjs/validate": "^3.0.0-beta.9",
     "@types/koa": "^2.11.4",
     "@types/koa-router": "^7.4.1",
     "@types/koa-bodyparser": "^4.3.4",
@@ -35,6 +34,7 @@
   "dependencies": {
     "@koa/router": "^10.0.0",
     "@midwayjs/core": "^3.0.0-beta.9",
+    "@midwayjs/cookies": "^1.0.1",
     "@midwayjs/session": "^3.0.0-beta.9",
     "koa": "^2.13.4",
     "koa-bodyparser": "^4.3.0",

@@ -379,7 +379,7 @@ describe('/test/check.test.ts', () => {
     @Provide()
     class Hello {
       @Validate({
-        validateOptions: {
+        validationOptions: {
           allowUnknown: true,
         },
         errorStatus: 400

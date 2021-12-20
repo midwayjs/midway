@@ -13,7 +13,7 @@ import {
 } from '../../src';
 import { App } from '../fixtures/ts-app-inject/app';
 import { TestCons } from '../fixtures/ts-app-inject/test';
-import { APPLICATION_KEY, clearAllModule, CONFIG_KEY, LOGGER_KEY, PLUGIN_KEY } from '@midwayjs/decorator';
+import { APPLICATION_KEY, clearAllModule, CONFIG_KEY, LOGGER_KEY, PLUGIN_KEY, Provide } from '@midwayjs/decorator';
 import * as assert from 'assert';
 
 function buildLoadDir(arr, baseDir) {
@@ -251,6 +251,29 @@ describe('/test/context/midwayContainer.test.ts', () => {
     expect(app.getConfig().a).toEqual(3);
     // 其实这里循环依赖了
     expect(app.easyLoader.getConfig().a).toEqual(1);
+  });
+
+
+  it('should test throw error with class name', async () => {
+
+    @Provide()
+    class NoBindClass {}
+    const container = new MidwayContainer();
+
+    let error;
+    try {
+      await container.getAsync(NoBindClass);
+    } catch (err) {
+      error = err;
+    }
+    expect(error.message).toEqual('NoBindClass is not valid in current context');
+
+    try {
+      container.get(NoBindClass);
+    } catch (err) {
+      error = err;
+    }
+    expect(error.message).toEqual('NoBindClass is not valid in current context');
   });
 
 });

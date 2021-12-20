@@ -5,9 +5,10 @@ import {
   Inject,
 } from '@midwayjs/decorator';
 import { IMidwayExpressContext, IMidwayExpressRequest } from '../../../../../src';
+import { TestMiddleware, TestControllerMiddleware } from '../test.middleware';
 
 @Provide()
-@Controller('/')
+@Controller('/', { middleware: [TestControllerMiddleware]})
 export class APIController {
 
   @Inject()
@@ -21,7 +22,7 @@ export class APIController {
     return this.req.user + 'hello world';
   }
 
-  @Get('/11', { middleware: ['testMiddleware']})
+  @Get('/11', { middleware: [TestMiddleware]})
   async home1() {
     return this.req.user + 'hello world11';
   }

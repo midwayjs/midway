@@ -42,7 +42,7 @@ export async function initializeGlobalApplicationContext(
   applicationContext.registerObject('baseDir', baseDir);
   applicationContext.registerObject('appDir', appDir);
 
-  if (globalOptions.moduleDirector !== false) {
+  if (globalOptions.moduleDetector !== false) {
     if (
       globalOptions.moduleDetector === undefined ||
       globalOptions.moduleDetector === 'file'
