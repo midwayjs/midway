@@ -156,4 +156,8 @@ export class I18nMiddleware implements IMiddleware<any, any> {
       };
     }
   }
+
+  getName() {
+    return 'i18n';
+  }
 }

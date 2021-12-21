@@ -26,4 +26,8 @@ export class SessionMiddleware implements IMiddleware<any, any> {
     }
     return koaSession(this.sessionConfig, app) as any;
   }
+
+  getName() {
+    return 'session';
+  }
 }

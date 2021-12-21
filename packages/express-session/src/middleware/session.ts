@@ -53,4 +53,8 @@ export class SessionMiddleware implements IMiddleware<any, any> {
       }
     }
   }
+
+  getName() {
+    return 'session';
+  }
 }

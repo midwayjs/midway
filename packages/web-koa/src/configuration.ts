@@ -11,7 +11,7 @@ import {
 } from '@midwayjs/core';
 import * as session from '@midwayjs/session';
 import { MidwayKoaFramework } from './framework';
-import * as bodyParser from 'koa-bodyparser';
+import * as koaBodyParser from 'koa-bodyparser';
 import * as DefaultConfig from './config/config.default';
 
 @Configuration({
@@ -52,7 +52,8 @@ export class KoaConfiguration {
     // use bodyparser middleware
     const bodyparserConfig = this.configService.getConfiguration('bodyParser');
     if (bodyparserConfig.enable) {
-      this.koaFramework.useMiddleware(bodyParser(bodyparserConfig));
+      const bodyParser = koaBodyParser(bodyparserConfig);
+      this.koaFramework.useMiddleware(bodyParser);
     }
   }
 }
