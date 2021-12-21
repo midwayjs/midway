@@ -1,8 +1,12 @@
 import { Provide, Scope, ScopeEnum, Init } from "@midwayjs/decorator";
-import { getModelForClass, prop } from '@typegoose/typegoose';
-import { Model } from 'mongoose';
+import { ReturnModelType, prop } from '@typegoose/typegoose';
+import { EntityModel, InjectEntityModel } from '../../../../../src';
+// import { Model } from 'mongoose';
 
-class User {
+@EntityModel()
+export class User {
+
+  static c() {}
 
   @prop()
   public name?: string;
@@ -13,13 +17,15 @@ class User {
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
-export class TestService{
+export class TestService {
 
-  userModel: Model<User>;
+  @InjectEntityModel(User)
+  userModel: ReturnModelType<typeof User>
 
   @Init()
   init() {
-    this.userModel = getModelForClass(User);
+    // this.userModel =
+    console.log(this.userModel.c);
   }
 
   async getTest(){
