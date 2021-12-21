@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.11](https://github.com/midwayjs/midway/compare/v3.0.0-beta.10...v3.0.0-beta.11) (2021-12-21)
+
+**Note:** Version bump only for package @midwayjs/version
+
+
+
+
+
 # [3.0.0-beta.10](https://github.com/midwayjs/midway/compare/v3.0.0-beta.9...v3.0.0-beta.10) (2021-12-20)
 
 **Note:** Version bump only for package @midwayjs/version

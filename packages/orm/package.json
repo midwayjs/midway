@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/orm",
-  "version": "3.0.0-beta.10",
+  "version": "3.0.0-beta.11",
   "main": "dist/index",
   "typings": "index.d.ts",
   "peerDependencies": {
@@ -12,9 +12,9 @@
     "index.d.ts"
   ],
   "devDependencies": {
-    "@midwayjs/core": "^3.0.0-beta.10",
-    "@midwayjs/decorator": "^3.0.0-beta.10",
-    "@midwayjs/mock": "^3.0.0-beta.10",
+    "@midwayjs/core": "^3.0.0-beta.11",
+    "@midwayjs/decorator": "^3.0.0-beta.11",
+    "@midwayjs/mock": "^3.0.0-beta.11",
     "sqlite3": "^5.0.2",
     "typeorm": "*"
   },
