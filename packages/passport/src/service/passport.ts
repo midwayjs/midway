@@ -223,6 +223,10 @@ export function PassportMiddleware(
         }.bind(this);
       }
     }
+
+    getName() {
+      return 'passport';
+    }
   }
   return InnerPassportMiddleware as any;
 }

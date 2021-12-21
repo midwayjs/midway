@@ -123,6 +123,6 @@ export class MidwayMiddlewareService<T, R, N = unknown> {
   }
 
   public getMiddlewareName(mw) {
-    return mw.name ?? mw._name;
+    return mw.getName ? mw.getName() : mw.name ?? mw._name;
   }
 }

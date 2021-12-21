@@ -124,4 +124,8 @@ export class SwaggerMiddleware
       };
     }
   }
+
+  getName() {
+    return 'swagger';
+  }
 }
