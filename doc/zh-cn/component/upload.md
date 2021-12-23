@@ -19,15 +19,7 @@ import * as upload from '@midwayjs/upload';
     // ...other components
     upload
   ],
-  importConfigs: [
-    {
-      default: {
-        upload: {                       // 上传组件的配置
-          mode: upload.UploadMode.File, // 默认为 file 模式
-        }
-      }
-    }
-  ]
+  // ...
 })
 export class AutoConfiguration {}
 ```
