@@ -36,8 +36,8 @@ describe('test/koa.test.ts', function () {
       .expect(200)
       .then(async response => {
         assert(response.body.files.length === 2);
-        assert(response.body.files[0].fieldname === 'file');
-        assert(response.body.files[1].fieldname === 'file2');
+        assert(response.body.files[0].fieldName === 'file');
+        assert(response.body.files[1].fieldName === 'file2');
         assert(response.body.files[1].mimeType === 'application/pdf');
         assert(response.body.fields.name === 'form');
         assert(response.body.fields.name2 === 'form2');

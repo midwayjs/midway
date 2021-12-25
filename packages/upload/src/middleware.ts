@@ -8,7 +8,7 @@ import { IMiddleware, IMidwayLogger } from '@midwayjs/core';
 import { resolve, extname } from 'path';
 import { writeFileSync } from 'fs';
 import { Readable, Stream } from 'stream';
-import { UploadMode, UploadOptions } from '.';
+import { MultipartInvalidFilenameError, UploadOptions } from '.';
 import { parseFromReadableStream, parseMultipart } from './upload';
 import * as getRawBody from 'raw-body';
 
@@ -43,15 +43,14 @@ export class UploadMiddleware implements IMiddleware<any, any> {
 
     let body;
     if (this.isReadableStream(req, isExpress)) {
-      if (mode === UploadMode.Stream) {
+      if (mode === 'stream') {
         const { fields, fileInfo } = await parseFromReadableStream(
           req,
           boundary
         );
         if (!this.checkExt(fileInfo.filename)) {
           res.status = 400;
-          const errorMessage = 'Invalid filename: ' + fileInfo.filename;
-          const err = new Error(errorMessage);
+          const err = new MultipartInvalidFilenameError(fileInfo.filename);
           this.logger.error(err);
           if (isExpress) {
             return res.sendStatus(400);
@@ -86,8 +85,7 @@ export class UploadMiddleware implements IMiddleware<any, any> {
 
     if (notCheckFile) {
       res.status = 400;
-      const errorMessage = 'Invalid filename: ' + notCheckFile.filename;
-      const err = new Error(errorMessage);
+      const err = new MultipartInvalidFilenameError(notCheckFile.filename);
       this.logger.error(err);
       if (isExpress) {
         return res.sendStatus(400);
@@ -99,7 +97,7 @@ export class UploadMiddleware implements IMiddleware<any, any> {
         ? files
         : files.map((file, index) => {
             const { data, filename } = file;
-            if (mode === UploadMode.File) {
+            if (mode === 'file') {
               const ext = extname(filename);
               const tmpFileName = resolve(
                 tmpdir,
@@ -107,7 +105,7 @@ export class UploadMiddleware implements IMiddleware<any, any> {
               );
               writeFileSync(tmpFileName, data, 'binary');
               file.data = tmpFileName;
-            } else if (mode === UploadMode.Stream) {
+            } else if (mode === 'stream') {
               file.data = new Readable({
                 read() {
                   this.push(data);

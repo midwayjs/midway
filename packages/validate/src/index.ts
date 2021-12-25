@@ -3,3 +3,4 @@ export * from './decorator/rule';
 export * from './decorator/validate';
 export * from './dtoHelper';
 export * from './service';
+export * from './error';

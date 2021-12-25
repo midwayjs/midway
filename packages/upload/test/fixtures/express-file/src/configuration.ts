@@ -1,10 +1,11 @@
-import { Configuration, Controller, Inject, Post } from '@midwayjs/decorator';
+import { Configuration, Controller, Fields, Files, Inject, Post } from '@midwayjs/decorator';
 import * as express from '@midwayjs/express';
+import * as upload from '../../../../src';
 
 @Configuration({
   imports: [
     express,
-    require('../../../../src')
+    upload
   ],
   importConfigs: [
     {
@@ -27,8 +28,7 @@ export class HomeController {
   ctx;
 
   @Post('/upload')
-  async upload() {
-    const { files, fields } = this.ctx;
+  async upload(@Fields() fields, @Files() files: upload.UploadFileInfo<string>[]) {
     return {
       files,
       fields

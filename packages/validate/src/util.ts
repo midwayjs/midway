@@ -1,3 +1,8 @@
+import {
+  ValidationNotMethodPropertyError,
+  ValidationPropertyMissingError,
+} from './error';
+
 export function overrideMethodProperty(
   object: Record<any, any>,
   key: string,
@@ -5,12 +10,12 @@ export function overrideMethodProperty(
 ): void {
   const descriptor = Object.getOwnPropertyDescriptor(object, key);
   if (!descriptor) {
-    throw new Error(`Cannot find property of "${key}"`);
+    throw new ValidationPropertyMissingError(key);
   }
 
   const superMethod = descriptor.value;
   if (typeof superMethod !== 'function') {
-    throw new Error(`"${key}" is not a method property!`);
+    throw new ValidationNotMethodPropertyError(key);
   }
 
   Object.defineProperty(object, key, {

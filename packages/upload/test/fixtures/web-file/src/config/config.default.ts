@@ -1,7 +1,4 @@
-exports.keys = 'd';
-export const midwayFeature = {
-  replaceEggLogger: true,
-}
+export const keys = 'd';
 export const security = {
   csrf: false,
 };

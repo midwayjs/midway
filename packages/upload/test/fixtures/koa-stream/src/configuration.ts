@@ -1,4 +1,4 @@
-import { Configuration, Controller, Inject, Post, sleep } from '@midwayjs/decorator';
+import { Configuration, Controller, Fields, Inject, Post, sleep, File } from '@midwayjs/decorator';
 import * as koa from '@midwayjs/koa';
 import { createWriteStream } from 'fs'
 import { join } from 'path';
@@ -14,7 +14,7 @@ import * as upload from '../../../../src';
       default: {
         keys: ["test"],
         upload: {
-          mode: upload.UploadMode.Stream,
+          mode: 'stream',
         }
       }
     }
@@ -30,14 +30,13 @@ export class HomeController {
   ctx;
 
   @Post('/upload')
-  async upload() {
-    const { files, fields } = this.ctx;
+  async upload(@File() file: upload.UploadFileInfo, @Fields() fields) {
     const path = join(__dirname, '../logs/test.pdf');
     const stream = createWriteStream(path)
-    files[0].data.pipe(stream);
+    file.data.pipe(stream);
     await sleep(2000);
     return {
-      files,
+      files: [file],
       fields
     }
   }

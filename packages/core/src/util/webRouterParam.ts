@@ -35,9 +35,21 @@ export const extractKoaLikeValue = (key, data, paramType?) => {
           paramType
         );
       case RouteParamTypes.FILESTREAM:
-        return ctx.getFileStream && ctx.getFileStream(data);
+        if (ctx.files) {
+          return ctx.files[0];
+        } else if (ctx.getFileStream) {
+          return ctx.getFileStream(data);
+        } else {
+          return undefined;
+        }
       case RouteParamTypes.FILESSTREAM:
-        return ctx.multipart && ctx.multipart(data);
+        if (ctx.files) {
+          return ctx.files;
+        } else if (ctx.multipart) {
+          return ctx.multipart(data);
+        } else {
+          return undefined;
+        }
       case RouteParamTypes.REQUEST_PATH:
         return ctx['path'];
       case RouteParamTypes.REQUEST_IP:
@@ -54,6 +66,8 @@ export const extractKoaLikeValue = (key, data, paramType?) => {
             paramType
           );
         }
+      case RouteParamTypes.FIELDS:
+        return data ? ctx.fields[data] : ctx.fields;
       default:
         return null;
     }
@@ -94,9 +108,9 @@ export const extractExpressLikeValue = (key, data, paramType?) => {
           paramType
         );
       case RouteParamTypes.FILESTREAM:
-        return req.getFileStream && req.getFileStream(data);
+        return req.files ? req.files[0] : undefined;
       case RouteParamTypes.FILESSTREAM:
-        return req.multipart && req.multipart(data);
+        return req.files;
       case RouteParamTypes.REQUEST_PATH:
         return req['baseUrl'];
       case RouteParamTypes.REQUEST_IP:
@@ -113,6 +127,8 @@ export const extractExpressLikeValue = (key, data, paramType?) => {
             paramType
           );
         }
+      case RouteParamTypes.FIELDS:
+        return data ? req.fields[data] : req.fields;
       default:
         return null;
     }

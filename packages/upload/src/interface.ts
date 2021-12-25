@@ -1,10 +1,7 @@
 import { Readable } from "stream";
 
-export enum UploadMode {
-  Stream = 'stream',
-  File = 'file',
-  Buffer = 'buffer',
-}
+export type UploadMode = 'stream' | 'file' | 'buffer';
+
 export interface UploadOptions {
   mode?: UploadMode,
   fileSize?: string;   // Max file size (in bytes), default is `10mb`
@@ -19,10 +16,9 @@ export interface UploadOptions {
   // allowArrayField: false,
 }
 
-
-export interface UploadFileInfo {
+export interface UploadFileInfo<T> {
   filename: string;
-  fieldname: string;
+  fieldName: string;
   mimeType: string;
-  data: Buffer | Readable | string;
+  data: T extends string ? string : Readable ;
 }

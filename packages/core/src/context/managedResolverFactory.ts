@@ -15,7 +15,11 @@ import {
 
 import * as util from 'util';
 import * as EventEmitter from 'events';
-import { MidwayDefinitionNotFoundError } from '../error';
+import {
+  MidwayCommonError,
+  MidwayDefinitionNotFoundError,
+  MidwayResolverMissingError,
+} from '../error';
 
 const debug = util.debuglog('midway:managedresolver');
 const debugLog = util.debuglog('midway:debug');
@@ -78,7 +82,7 @@ export class ManagedResolverFactory {
   resolveManaged(managed: IManagedInstance, originPropertyName: string): any {
     const resolver = this.resolvers[managed.type];
     if (!resolver || resolver.type !== managed.type) {
-      throw new Error(`${managed.type} resolver is not exists!`);
+      throw new MidwayResolverMissingError(managed.type);
     }
     return resolver.resolve(managed, originPropertyName);
   }
@@ -89,7 +93,7 @@ export class ManagedResolverFactory {
   ): Promise<any> {
     const resolver = this.resolvers[managed.type];
     if (!resolver || resolver.type !== managed.type) {
-      throw new Error(`${managed.type} resolver is not exists!`);
+      throw new MidwayResolverMissingError(managed.type);
     }
     return resolver.resolveAsync(managed, originPropertyName);
   }
@@ -254,7 +258,9 @@ export class ManagedResolverFactory {
     );
     if (!inst) {
       this.removeCreateStatus(definition, false);
-      throw new Error(`${definition.id} construct return undefined`);
+      throw new MidwayCommonError(
+        `${definition.id} construct return undefined`
+      );
     }
 
     // binding ctx object
