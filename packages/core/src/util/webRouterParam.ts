@@ -35,18 +35,18 @@ export const extractKoaLikeValue = (key, data, paramType?) => {
           paramType
         );
       case RouteParamTypes.FILESTREAM:
-        if (ctx.files) {
-          return ctx.files[0];
-        } else if (ctx.getFileStream) {
+        if (ctx.getFileStream) {
           return ctx.getFileStream(data);
+        } else if (ctx.files) {
+          return ctx.files[0];
         } else {
           return undefined;
         }
       case RouteParamTypes.FILESSTREAM:
-        if (ctx.files) {
-          return ctx.files;
-        } else if (ctx.multipart) {
+        if (ctx.multipart) {
           return ctx.multipart(data);
+        } else if (ctx.files) {
+          return ctx.files;
         } else {
           return undefined;
         }
