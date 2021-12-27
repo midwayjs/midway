@@ -24,7 +24,7 @@ export class HomeController {
   ctx;
 
   @Post('/upload')
-  async upload(@Fields() fields, @Files() files: UploadFileInfo[]) {
+  async upload(@Fields() fields, @Files() files: UploadFileInfo<string>[]) {
     return {
       files,
       fields

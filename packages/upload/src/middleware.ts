@@ -92,29 +92,23 @@ export class UploadMiddleware implements IMiddleware<any, any> {
       }
       return;
     }
-    ctx.files =
-      mode === 'buffer'
-        ? files
-        : files.map((file, index) => {
-            const { data, filename } = file;
-            if (mode === 'file') {
-              const ext = extname(filename);
-              const tmpFileName = resolve(
-                tmpdir,
-                `${requireId}.${index}${ext}`
-              );
-              writeFileSync(tmpFileName, data, 'binary');
-              file.data = tmpFileName;
-            } else if (mode === 'stream') {
-              file.data = new Readable({
-                read() {
-                  this.push(data);
-                  this.push(null);
-                },
-              });
-            }
-            return file;
-          });
+    ctx.files = files.map((file, index) => {
+      const { data, filename } = file;
+      if (mode === 'file') {
+        const ext = extname(filename);
+        const tmpFileName = resolve(tmpdir, `${requireId}.${index}${ext}`);
+        writeFileSync(tmpFileName, data, 'binary');
+        file.data = tmpFileName;
+      } else if (mode === 'stream') {
+        file.data = new Readable({
+          read() {
+            this.push(data);
+            this.push(null);
+          },
+        });
+      }
+      return file;
+    });
 
     return next();
   }

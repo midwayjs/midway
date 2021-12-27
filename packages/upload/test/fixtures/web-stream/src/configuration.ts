@@ -4,6 +4,7 @@ import { createWriteStream } from 'fs';
 import { join } from 'path';
 import * as defaultConfig from './config/config.default';
 import * as upload from '../../../../src';
+import { Readable } from 'stream';
 
 @Configuration({
   imports: [
@@ -26,7 +27,7 @@ export class HomeController {
   ctx;
 
   @Post('/upload')
-  async upload(@File() file: upload.UploadFileInfo, @Fields() fields) {
+  async upload(@File() file: upload.UploadFileInfo<Readable>, @Fields() fields) {
     const path = join(__dirname, '../logs/test.pdf');
     const stream = createWriteStream(path)
     file.data.pipe(stream);
