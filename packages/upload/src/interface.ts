@@ -1,6 +1,6 @@
 import { Readable } from "stream";
 
-export type UploadMode = 'stream' | 'file' | 'buffer';
+export type UploadMode = 'stream' | 'file';
 
 export interface UploadOptions {
   mode?: UploadMode,
