@@ -51,6 +51,42 @@ describe('/test/web/paramMapping.test.ts', () => {
 
     fn = extractKoaLikeValue(RouteParamTypes.REQUEST_IP, null);
     expect(await fn({ip: '127.0.0.1'}, 'next')).toStrictEqual('127.0.0.1');
+
+    fn = extractKoaLikeValue(RouteParamTypes.FILESTREAM, {});
+    expect(await fn({
+      files: [
+        {
+          filename: 'test.pdf',        // 文件原名
+          data: '/var/tmp/xxx.pdf',    // mode 为 file 时为服务器临时文件地址
+          fieldname: 'test1',          // 表单 field 名
+          mimeType: 'application/pdf', // mime
+        }
+      ],
+    }, '')).toStrictEqual({
+      "data": "/var/tmp/xxx.pdf",
+      "fieldname": "test1",
+      "filename": "test.pdf",
+      "mimeType": "application/pdf"
+    });
+
+    fn = extractKoaLikeValue(RouteParamTypes.FILESSTREAM, {});
+    expect(await fn({
+      files: [
+        {
+          filename: 'test.pdf',        // 文件原名
+          data: '/var/tmp/xxx.pdf',    // mode 为 file 时为服务器临时文件地址
+          fieldname: 'test1',          // 表单 field 名
+          mimeType: 'application/pdf', // mime
+        }
+      ],
+    }, '')).toStrictEqual([
+      {
+        "data": "/var/tmp/xxx.pdf",
+        "fieldname": "test1",
+        "filename": "test.pdf",
+        "mimeType": "application/pdf"
+      }
+    ]);
   });
 
   it('extract express value should be ok', async () => {
@@ -83,19 +119,41 @@ describe('/test/web/paramMapping.test.ts', () => {
     expect(await fn({headers: { body : {aaa: 111}}}, {}, 'next')).toStrictEqual({ body : {aaa: 111}});
     fn = extractExpressLikeValue(RouteParamTypes.SESSION, null);
     expect(await fn({session: { body : {aaa: 111}}}, {}, 'next')).toStrictEqual({ body : {aaa: 111}});
-    fn = extractExpressLikeValue(RouteParamTypes.FILESTREAM, 'filestream');
+    fn = extractExpressLikeValue(RouteParamTypes.FILESTREAM, {});
     expect(await fn({
-      getFileStream(data) {
-        return {body: {aaa: 111}, data};
-      }
-    }, {}, 'next')).toStrictEqual({ body : {aaa: 111}, data: 'filestream'});
+      files: [
+        {
+          filename: 'test.pdf',        // 文件原名
+          data: '/var/tmp/xxx.pdf',    // mode 为 file 时为服务器临时文件地址
+          fieldname: 'test1',          // 表单 field 名
+          mimeType: 'application/pdf', // mime
+        }
+      ],
+    }, {}, 'next')).toStrictEqual({
+      "data": "/var/tmp/xxx.pdf",
+      "fieldname": "test1",
+      "filename": "test.pdf",
+      "mimeType": "application/pdf"
+    });
 
-    fn = extractExpressLikeValue(RouteParamTypes.FILESSTREAM, 'filesstream');
+    fn = extractExpressLikeValue(RouteParamTypes.FILESSTREAM, {});
     expect(await fn({
-      multipart(data) {
-        return {body: {aaa: 111}, data};
+      files: [
+        {
+          filename: 'test.pdf',        // 文件原名
+          data: '/var/tmp/xxx.pdf',    // mode 为 file 时为服务器临时文件地址
+          fieldname: 'test1',          // 表单 field 名
+          mimeType: 'application/pdf', // mime
+        }
+      ],
+    }, {}, 'next')).toStrictEqual([
+      {
+        "data": "/var/tmp/xxx.pdf",
+        "fieldname": "test1",
+        "filename": "test.pdf",
+        "mimeType": "application/pdf"
       }
-    }, {}, 'next')).toStrictEqual({ body : {aaa: 111}, data: 'filesstream'});
+    ]);
     fn = extractExpressLikeValue('ttt', 'any');
     expect(await fn('', {}, '')).toBeNull();
 

@@ -3,6 +3,7 @@ import * as path from 'path';
 module.exports = {
   // 默认开启的插件
   static: true,
+  multipart: true,
   /**
    * 支持各个 bu 的健康检查
    */

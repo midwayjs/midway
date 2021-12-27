@@ -9,9 +9,9 @@ import {
 } from '@midwayjs/decorator';
 import * as DefaultConfig from './config/config.default';
 import { RULES_KEY } from './constants';
-import { MidwayValidationError } from '@midwayjs/core';
 import * as Joi from 'joi';
 import { MidwayI18nServiceSingleton, formatLocale } from '@midwayjs/i18n';
+import { MidwayValidationError } from './error';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)

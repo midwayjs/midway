@@ -1,10 +1,12 @@
-import { Configuration, Provide, ServerlessTrigger, ServerlessTriggerType, Inject } from '@midwayjs/decorator';
+import { Configuration, Provide, ServerlessTrigger, ServerlessTriggerType, Inject, Fields, Files } from '@midwayjs/decorator';
 import * as faas from '@midwayjs/faas';
+import * as upload from '../../../../src';
+import { Readable } from 'stream';
 
 @Configuration({
   imports: [
     faas,
-    require('../../../../src')
+    upload
   ],
   importConfigs: [
     {
@@ -24,8 +26,7 @@ export class HelloHttpService {
   ctx;
 
   @ServerlessTrigger(ServerlessTriggerType.HTTP, { path: '/upload', method: 'post'})
-  async upload() {
-    const { files, fields } = this.ctx;
+  async upload(@Fields() fields, @Files() files: upload.UploadFileInfo<Readable>[]) {
     return {
       files,
       fields

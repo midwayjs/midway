@@ -23,7 +23,7 @@ export const parseMultipart = async (body: any, boundary: string) => {
     files.push({
       filename: head['content-disposition'].filename,
       data,
-      fieldname: head['content-disposition'].name,
+      fieldName: head['content-disposition'].name,
       mimeType: head['content-type'],
     });
   });
@@ -38,13 +38,13 @@ const pre = Buffer.from('\r\n');
 export const parseFromReadableStream = (
   readStream: Readable,
   boundary
-): Promise<{ fields: any; fileInfo: UploadFileInfo }> => {
+): Promise<{ fields: any; fileInfo: UploadFileInfo<Readable> }> => {
   const bufferSeparator = Buffer.from(`\r\n--${boundary}`);
   const fields = {};
-  const fileInfo: UploadFileInfo = {
+  const fileInfo: UploadFileInfo<Readable> = {
     filename: '',
     data: null,
-    fieldname: '',
+    fieldName: '',
     mimeType: '',
   };
   const emptyBuf = Buffer.alloc(0);
@@ -124,7 +124,7 @@ export const parseFromReadableStream = (
           }
 
           fileInfo.filename = head['content-disposition'].filename;
-          fileInfo.fieldname = head['content-disposition'].name;
+          fileInfo.fieldName = head['content-disposition'].name;
           fileInfo.mimeType = head['content-type'];
           isTransformFileData = true;
           lastChunk = data;

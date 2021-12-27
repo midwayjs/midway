@@ -21,7 +21,7 @@ import { joinURLPath } from '../util';
 import { MidwayContainer } from '../context/container';
 import { DirectoryFileDetector } from './fileDetector';
 import * as util from 'util';
-import { MidwayCommonError } from '../error';
+import { MidwayCommonError, MidwayDuplicateRouteError } from '../error';
 
 const debug = util.debuglog('midway:debug');
 
@@ -514,8 +514,10 @@ export class WebRouterCollector {
       );
     });
     if (matched && matched.length) {
-      throw new Error(
-        `Duplicate router "${routerInfo.requestMethod} ${routerInfo.url}" at "${matched[0].handlerName}" and "${routerInfo.handlerName}"`
+      throw new MidwayDuplicateRouteError(
+        `${routerInfo.requestMethod} ${routerInfo.url}`,
+        `${matched[0].handlerName}`,
+        `${routerInfo.handlerName}`
       );
     }
     prefixList.push(routerInfo);

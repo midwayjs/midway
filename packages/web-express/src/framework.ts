@@ -119,7 +119,7 @@ export class MidwayExpressFramework extends BaseFramework<
       process.env.MIDWAY_HTTP_PORT ?? this.configurationOptions.port;
     if (customPort) {
       new Promise<void>(resolve => {
-        const args: any[] = [this.configurationOptions.port];
+        const args: any[] = [customPort];
         if (this.configurationOptions.hostname) {
           args.push(this.configurationOptions.hostname);
         }

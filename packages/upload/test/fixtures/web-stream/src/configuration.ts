@@ -1,13 +1,15 @@
-import { Configuration, Controller, Inject, Post, sleep } from '@midwayjs/decorator';
+import { Configuration, Controller, Fields, File, Inject, Post, sleep } from '@midwayjs/decorator';
 import * as web from '@midwayjs/web';
 import { createWriteStream } from 'fs';
 import { join } from 'path';
 import * as defaultConfig from './config/config.default';
+import * as upload from '../../../../src';
+import { Readable } from 'stream';
 
 @Configuration({
   imports: [
     web,
-    require('../../../../src')
+    upload,
   ],
   importConfigs: [
     {
@@ -25,14 +27,13 @@ export class HomeController {
   ctx;
 
   @Post('/upload')
-  async upload() {
-    const { files, fields } = this.ctx;
+  async upload(@File() file: upload.UploadFileInfo<Readable>, @Fields() fields) {
     const path = join(__dirname, '../logs/test.pdf');
     const stream = createWriteStream(path)
-    files[0].data.pipe(stream);
+    file.data.pipe(stream);
     await sleep(2000);
     return {
-      files,
+      files: [file],
       fields
     }
   }

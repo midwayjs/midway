@@ -4,6 +4,7 @@ import {
   isPromise,
 } from '@midwayjs/decorator';
 import { IObjectCreator, IObjectDefinition } from '../interface';
+import { MidwayUseWrongMethodError } from '../error';
 
 export class ObjectCreator implements IObjectCreator {
   protected definition: IObjectDefinition;
@@ -95,14 +96,18 @@ export class ObjectCreator implements IObjectCreator {
         isGeneratorFunction(inst[this.definition.initMethod]) ||
         isAsyncFunction(inst[this.definition.initMethod])
       ) {
-        throw new Error(
-          `${this.definition.id} not valid by context.get, Use context.getAsync instead!`
+        throw new MidwayUseWrongMethodError(
+          'context.get',
+          'context.getAsync',
+          this.definition.id
         );
       } else {
         const rt = inst[this.definition.initMethod].call(inst);
         if (isPromise(rt)) {
-          throw new Error(
-            `${this.definition.id} not valid by context.get, Use context.getAsync instead!`
+          throw new MidwayUseWrongMethodError(
+            'context.get',
+            'context.getAsync',
+            this.definition.id
           );
         }
       }

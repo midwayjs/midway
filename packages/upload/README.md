@@ -10,21 +10,12 @@ tnpm i @midwayjs/upload --save
 ```
 2. 在 configuration 中引入组件,
 ```ts
-import * as upload from '../../../../src';
+import * as upload from '@midwayjs/upload';
 @Configuration({
   imports: [
     // ...other components
     upload
   ],
-  importConfigs: [
-    {
-      default: {
-        upload: {                       // 上传组件的配置
-          mode: upload.UploadMode.File, // 默认为 file 模式
-        }
-      }
-    }
-  ]
 })
 export class AutoConfiguration {}
 ```
@@ -38,20 +29,19 @@ export class HomeController {
   ctx;
 
   @Post('/upload')
-  async upload() {
-    const { files, fields } = this.ctx;
+  async upload(@Files() files: upload.UploadFileInfo[], @Fields() fields) {
     /*
     files = [
       {
         filename: 'test.pdf',        // 文件原名
         data: '/var/tmp/xxx.pdf',    // mode 为 file 时为服务器临时文件地址
-        fieldname: 'test1',          // 表单 field 名
+        fieldName: 'test1',          // 表单 field 名
         mimeType: 'application/pdf', // mime
       },
       {
         filename: 'test.pdf',        // 文件原名
         data: ReadStream,    // mode 为 stream 时为服务器临时文件地址
-        fieldname: 'test2',          // 表单 field 名
+        fieldName: 'test2',          // 表单 field 名
         mimeType: 'application/pdf', // mime
       },
       // ...file 下支持同时上传多个文件

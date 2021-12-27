@@ -34,8 +34,7 @@ export class HomeController {
   ctx;
 
   @Post('/upload')
-  async upload() {
-    const { files, fields } = this.ctx;
+  async upload(@Files() files, @Fields() fields) {
     /*
     files = [
       {
@@ -79,6 +78,7 @@ export const upload = {
 ```
 
 ### mode 配置上传模式
+
 #### 1. file 模式【默认值】
 
 配置 upload 的 mode 为 `file` 字符串，或使用 `@midwayjs/upload` 包导出的 `UploadMode.File` 来配置。
@@ -97,11 +97,11 @@ export const upload = {
 
 使用 stream 模式时，仅同时上传一个文件，即 `this.ctx.files` 数组中只有一个文件数据对象。
 
- 
- 
 
 
-  
+
+
+
 
 ### whitelist 白名单配置
 

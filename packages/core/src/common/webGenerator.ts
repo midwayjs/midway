@@ -104,6 +104,7 @@ export abstract class WebControllerGenerator<
       });
 
       // add router middleware
+      routerInfo.middleware = routerInfo.middleware ?? [];
       if (routerInfo.middleware.length) {
         const routerMiddlewareFn = await middlewareService.compose(
           routerInfo.middleware,
@@ -118,6 +119,7 @@ export abstract class WebControllerGenerator<
         // get middleware
         const methodMiddlewares = [];
 
+        routeInfo.middleware = routeInfo.middleware ?? [];
         if (routeInfo.middleware.length) {
           const routeMiddlewareFn = await middlewareService.compose(
             routeInfo.middleware,
