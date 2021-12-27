@@ -8,7 +8,7 @@ export enum HelloWorld {
 }
 
 export class CreateCatDto {
-  @ApiProperty({ example: 'Kitty', description: 'The name of the Catname'})
+  @ApiProperty({ example: 'Kitty', description: 'The name of the Catname', format: 'binary'})
   name: string;
 
   @ApiProperty({ example: '1', description: 'The name of the Catage'})

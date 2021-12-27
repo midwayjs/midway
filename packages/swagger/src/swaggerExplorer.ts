@@ -315,17 +315,20 @@ export class SwaggerExplorer {
       );
 
       if (p.in === 'body') {
+        if (!p.content) {
+          p.content = {};
+          p.content[p.contentType || 'application/json'] = {
+            schema: p.schema
+          };
+        }
         const requestBody = {
           required: true,
           description: p.description || p.name,
-          content: p.content || {
-            'application/json': {
-              schema: p.schema,
-            },
-          },
+          content: p.content,
         };
         opts[webRouter.requestMethod].requestBody = requestBody;
 
+        delete p.contentType;
         delete p.content;
         // in body 不需要处理
         continue;
@@ -429,6 +432,9 @@ export class SwaggerExplorer {
         }
         if (param.deprecated) {
           p.deprecated = param.deprecated;
+        }
+        if (param.contentType) {
+          p.contentType = param.contentType;
         }
         p.in = param?.in ?? p.in;
         p.required = param?.required ?? p.required;

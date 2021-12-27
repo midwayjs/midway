@@ -17,11 +17,20 @@ import { createParamDecorator, getTypeIsArrayTuple } from './helpers';
 
 type RequestBodyOptions = Omit<RequestBodyObject, 'content'>;
 
+export enum BodyContentType {
+  FormUrlEncoded = 'application/x-www-form-urlencoded',
+  JSON = 'application/json',
+  Multipart = 'multipart/form-data',
+  MultipartMixed = 'multipart/mixed',
+  OctetStream = 'application/octet-stream',
+}
+
 interface ApiBodyMetadata extends RequestBodyOptions {
   type?: any;
   isArray?: boolean;
   enum?: SwaggerEnumType;
   content?: ContentObject;
+  contentType?: BodyContentType;
 }
 
 interface ApiBodySchemaHost extends RequestBodyOptions {

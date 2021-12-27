@@ -13,6 +13,7 @@ import {
   ApiParam,
   ApiResponse,
   ApiTags,
+  BodyContentType,
 } from '../../../../src';
 import { CatsService } from './cats.service';
 import { CreateCatDto } from './dto/create-cat.dto';
@@ -31,7 +32,7 @@ export class CatsController {
 
   @Post('/:id', { summary: 'test'})
   @ApiOperation({ summary: 'Create cat' })
-  @ApiBody({ description: 'hello world'})
+  @ApiBody({ description: 'hello world', contentType: BodyContentType.MultipartMixed})
   @ApiParam({ name: 'id', format: 'int32', description: 'hello world id number', example: 12})
   @ApiForbiddenResponse({ description: 'Forbidden.' })
   @ApiNotFoundResponse({ description: 'NotFound.'})
