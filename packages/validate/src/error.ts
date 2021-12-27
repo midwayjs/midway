@@ -1,4 +1,8 @@
-import { MidwayError, registerErrorCode } from '@midwayjs/core';
+import {
+  MidwayError,
+  MidwayHttpError,
+  registerErrorCode,
+} from '@midwayjs/core';
 
 const ValidateErrorCode = registerErrorCode('validate', {
   VALIDATE_FAIL: 10000,
@@ -6,10 +10,9 @@ const ValidateErrorCode = registerErrorCode('validate', {
   NOT_METHOD_PROPERTY: 10002,
 } as const);
 
-export class MidwayValidationError extends MidwayError {
+export class MidwayValidationError extends MidwayHttpError {
   constructor(message, status, cause) {
-    super(message, ValidateErrorCode.VALIDATE_FAIL, {
-      status,
+    super(message, status, ValidateErrorCode.VALIDATE_FAIL, {
       cause,
     });
   }

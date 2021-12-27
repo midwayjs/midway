@@ -71,12 +71,18 @@ export class MidwayHttpError extends MidwayError {
   constructor(
     resOrMessage: ResOrMessage,
     status: number,
+    code: string,
     options?: ErrorOption
   );
-  constructor(resOrMessage: any, status: number, options?: ErrorOption) {
+  constructor(
+    resOrMessage: any,
+    status: number,
+    code?: string,
+    options?: ErrorOption
+  ) {
     super(
       typeof resOrMessage === 'string' ? resOrMessage : resOrMessage.message,
-      String(status),
+      code ?? String(status),
       options
     );
     this.status = status;
