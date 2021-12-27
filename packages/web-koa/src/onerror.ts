@@ -1,4 +1,1 @@
-export default function (app) {
-
-}
-
+export default function (app) {}
