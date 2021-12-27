@@ -32,7 +32,7 @@ export class CatsController {
 
   @Post('/:id', { summary: 'test'})
   @ApiOperation({ summary: 'Create cat' })
-  @ApiBody({ description: 'hello world', contentType: BodyContentType.MultipartMixed})
+  @ApiBody({ description: 'hello world', content: { 'application/octet-stream': { schema: { type: 'string', format:'binary' }}}})
   @ApiParam({ name: 'id', format: 'int32', description: 'hello world id number', example: 12})
   @ApiForbiddenResponse({ description: 'Forbidden.' })
   @ApiNotFoundResponse({ description: 'NotFound.'})

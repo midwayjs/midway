@@ -318,7 +318,7 @@ export class SwaggerExplorer {
         if (!p.content) {
           p.content = {};
           p.content[p.contentType || 'application/json'] = {
-            schema: p.schema
+            schema: p.schema,
           };
         }
         const requestBody = {
