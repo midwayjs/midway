@@ -46,7 +46,6 @@ export function registerErrorCode<T extends Convertable, G extends string>(
 
 export class MidwayError extends Error {
   code: number | string;
-  status: number;
   cause: Error;
 
   constructor(message: string, options?: ErrorOption);
@@ -60,6 +59,26 @@ export class MidwayError extends Error {
     this.name = this.constructor.name;
     this.code = code;
     this.cause = options?.cause;
-    this.status = options?.status;
+  }
+}
+
+export type ResOrMessage = string | { message: string };
+
+export class MidwayHttpError extends MidwayError {
+  status: number;
+
+  constructor(resOrMessage: ResOrMessage, status: number);
+  constructor(
+    resOrMessage: ResOrMessage,
+    status: number,
+    options?: ErrorOption
+  );
+  constructor(resOrMessage: any, status: number, options?: ErrorOption) {
+    super(
+      typeof resOrMessage === 'string' ? resOrMessage : resOrMessage.message,
+      String(status),
+      options
+    );
+    this.status = status;
   }
 }
