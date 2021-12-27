@@ -24,7 +24,9 @@ Object {
     Object {
       "key": "web:router_param",
       "metadata": Object {
-        "propertyData": undefined,
+        "propertyData": Object {
+          "requireFile": true,
+        },
         "type": 5,
       },
       "parameterIndex": 4,
