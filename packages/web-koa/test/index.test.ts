@@ -273,4 +273,12 @@ describe('/test/feature.test.ts', () => {
     expect(result.status).toEqual(200);
     expect(result.text).toEqual('123');
   });
+
+  it('should test default onerror set status', async () => {
+    const app = await creatApp('base-app-default-onerror');
+    const result1 = await createHttpRequest(app)
+      .get('/');
+    expect(result1.status).toEqual(400);
+    await closeApp(app);
+  });
 });

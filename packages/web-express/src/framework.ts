@@ -75,6 +75,7 @@ export class MidwayExpressFramework extends BaseFramework<
           next
         );
         if (error) {
+          res.status(error.status ?? 500);
           next(error);
         } else {
           this.sendData(res, result);

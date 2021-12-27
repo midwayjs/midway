@@ -49,13 +49,7 @@ export class UploadMiddleware implements IMiddleware<any, any> {
           boundary
         );
         if (!this.checkExt(fileInfo.filename)) {
-          res.status = 400;
-          const err = new MultipartInvalidFilenameError(fileInfo.filename);
-          this.logger.error(err);
-          if (isExpress) {
-            return res.sendStatus(400);
-          }
-          return;
+          throw new MultipartInvalidFilenameError(fileInfo.filename);
         } else {
           ctx.fields = fields;
           ctx.files = [fileInfo];
@@ -84,13 +78,7 @@ export class UploadMiddleware implements IMiddleware<any, any> {
     });
 
     if (notCheckFile) {
-      res.status = 400;
-      const err = new MultipartInvalidFilenameError(notCheckFile.filename);
-      this.logger.error(err);
-      if (isExpress) {
-        return res.sendStatus(400);
-      }
-      return;
+      throw new MultipartInvalidFilenameError(notCheckFile.filename);
     }
     ctx.files = files.map((file, index) => {
       const { data, filename } = file;
