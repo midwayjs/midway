@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.14.2](https://github.com/midwayjs/midway/compare/v2.14.1...v2.14.2) (2021-12-28)
+
+
+### Bug Fixes
+
+* generate middleware typings ([#1442](https://github.com/midwayjs/midway/issues/1442)) ([1b2f99b](https://github.com/midwayjs/midway/commit/1b2f99b0fcfa6d87fa216ac9277d9f1240ef26a2))
+
+
+
+
+
 ## [2.14.1](https://github.com/midwayjs/midway/compare/v2.14.0...v2.14.1) (2021-12-06)
 
 
