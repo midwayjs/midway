@@ -26,7 +26,6 @@ export function createApiPropertyDecorator(
   options = {
     ...options,
     type,
-    isArray,
   };
 
   if (isEnumArray(options)) {
