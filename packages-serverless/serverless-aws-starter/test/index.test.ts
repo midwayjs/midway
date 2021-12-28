@@ -166,14 +166,8 @@ describe('/test/index.test.ts', () => {
           throw new Error('oops');
         })(...args);
       });
-      let err;
-      try {
-        await test(handle).runHttp(require('../resource/event'), {});
-      } catch (ex) {
-        err = ex;
-      }
-      assert.ok(err);
-      assert.equal(err.message, 'oops');
+      const result = await test(handle).runHttp(require('../resource/event'), {});
+      expect(result).toMatchSnapshot();
     });
 
     it('should ok with non-async function', async () => {
@@ -209,15 +203,8 @@ describe('/test/index.test.ts', () => {
           throw new Error('ooops!');
         })(...args);
       });
-      let err;
-      try {
-        await test(handle).run(require('../resource/event'), {});
-      } catch (ex) {
-        err = ex;
-      }
-
-      assert.ok(err);
-      assert.equal(err.message, 'ooops!');
+      const result = await test(handle).run(require('../resource/event'), {});
+      expect(result).toMatchSnapshot();
     });
 
     it('should ok with asyncWrap when not async functions', async () => {

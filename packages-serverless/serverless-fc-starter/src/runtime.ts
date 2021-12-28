@@ -202,7 +202,9 @@ export class FCRuntime extends ServerlessLightRuntime {
           })
           .catch(err => {
             ctx.logger.error(err);
-            res.setHeader('content-type', 'text/plain');
+            if (res.setHeader) {
+              res.setHeader('content-type', 'text/plain');
+            }
             if (res.send) {
               res.setStatusCode(err.status ?? 500);
               res.send(isOutputError() ? err.stack : 'Internal Server Error');
