@@ -64,7 +64,7 @@ export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
     };
   }
 
-  getName(): string {
+  static getName(): string {
     return 'report';
   }
 }
@@ -75,6 +75,7 @@ export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
 
 注意，Midway 对传统的洋葱模型做了一些微调，使得其可以获取到下一个中间件的返回值，同时，你也可以将这个中间件的结果，通过 `return` 方法返回给上一个中间件。
 
+这里的静态 `getName` 方法，用来指定中间件的名字，方便排查问题。
 
 
 
@@ -130,12 +131,10 @@ export class HomeController {
 
 
 
-
-
 ### 全局中间件
 
 
-所谓的全局中间件，就是对所有的路由生效的 Web 中间件。 
+所谓的全局中间件，就是对所有的路由生效的 Web 中间件。
 
 
 我们需要在应用启动前，加入当前框架的中间件列表中，`useMiddlware` 方法，可以把中间件加入到中间件列表中。
@@ -151,10 +150,10 @@ import { ReportMiddleware } from './middleware/user.middleware';
   // ...
 })
 export class AutoConfiguration {
-  
+
   @App()
   app: koa.Application;
-  
+
   async onReady() {
     this.app.useMiddlware(ReportMiddleware);
   }
@@ -195,10 +194,10 @@ import { fnMiddleware } from './middleware/another.middleware';
   // ...
 })
 export class AutoConfiguration {
-  
+
   @App()
   app: koa.Application;
-  
+
   async onReady() {
     // add middleware
     this.app.useMiddlware([ReportMiddleware, fnMiddleware]);
@@ -237,8 +236,8 @@ async onReady() {
 
 每个中间件应当有一个名字，默认情况下，类中间件的名字将依照下面的规则获取：
 
-- 1、当 `getName()` 方法存在时，以其返回值作为名字
-- 2、如果不存在 `getName()` 方法，将使用类名作为中间件名
+- 1、当 `getName()` 静态方法存在时，以其返回值作为名字
+- 2、如果不存在 `getName()` 静态方法，将使用类名作为中间件名
 
 一个好认的中间件名在手动排序或者调试代码时有很大的作用。
 
@@ -247,8 +246,8 @@ async onReady() {
 export class ReportMiddleware  implements IMiddleware<Context, NextFunction> {
 
   // ...
-  
-  getName(): string {
+
+  static getName(): string {
     return 'report';	// 中间件名
   }
 }
@@ -291,14 +290,14 @@ import { fnMiddleware } from './middleware/another.middleware';
   // ...
 })
 export class AutoConfiguration {
-  
+
   @App()
   app: koa.Application;
-  
+
   async onReady() {
     // add middleware
     this.app.useMiddlware([ReportMiddleware, fnMiddleware]);
-    
+
     // output
     console.log(this.app.getMiddleware().getNames());
     // => report, fnMiddleware
@@ -330,16 +329,16 @@ import { ReportMiddleware } from './middleware/user.middleware';
   // ...
 })
 export class AutoConfiguration {
-  
+
   @App()
   app: koa.Application;
-  
+
   async onReady() {
     // 把中间件添加到最前面
     this.app.getMiddlware().insertFirst(ReportMiddleware);
     // 把中间件添加到最后面，等价于 useMiddlware
     this.app.getMiddlware().insertLast(ReportMiddleware);
-    
+
     // 把中间件添加到名为 session 的中间件之后
     this.app.getMiddlware().insertAfter(ReportMiddleware, 'session');
     // 把中间件添加到名为 session 的中间件之前

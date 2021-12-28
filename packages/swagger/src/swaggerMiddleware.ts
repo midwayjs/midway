@@ -125,7 +125,7 @@ export class SwaggerMiddleware
     }
   }
 
-  getName() {
+  static getName() {
     return 'swagger';
   }
 }

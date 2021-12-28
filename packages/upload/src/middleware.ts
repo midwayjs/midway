@@ -143,7 +143,7 @@ export class UploadMiddleware implements IMiddleware<any, any> {
     return whitelist.includes(ext);
   }
 
-  getName() {
+  static getName() {
     return 'upload';
   }
 }

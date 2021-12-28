@@ -56,6 +56,7 @@ export class MidwayExpressFramework extends BaseFramework<
     debug('[express]: create express app');
     this.app = express() as unknown as IMidwayExpressApplication;
     debug('[express]: use root middleware');
+    // use root middleware
     this.app.use((req, res, next) => {
       const ctx = req as IMidwayExpressContext;
       this.app.createAnonymousContext(ctx);
@@ -64,10 +65,18 @@ export class MidwayExpressFramework extends BaseFramework<
       ctx.requestContext.registerObject('res', res);
       next();
     });
+
+    this.defineApplicationProperties();
+
+    // hack use method
+    (this.app as any).originUse = this.app.use;
+    this.app.use = this.app.useMiddleware as any;
   }
 
   public async run(): Promise<void> {
     debug(`[express]: use middlewares = "${this.getMiddleware().getNames()}"`);
+    // restore use method
+    this.app.use = (this.app as any).originUse;
     // use global middleware
     const globalMiddleware = await this.applyMiddleware();
     debug('[express]: use and apply all framework and global middleware');

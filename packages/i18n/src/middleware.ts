@@ -157,7 +157,7 @@ export class I18nMiddleware implements IMiddleware<any, any> {
     }
   }
 
-  getName() {
+  static getName() {
     return 'i18n';
   }
 }

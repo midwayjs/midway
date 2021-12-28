@@ -251,4 +251,17 @@ describe('/test/feature.test.ts', () => {
     await closeApp(app);
   });
 
+  it('should test got middleware name list', async () => {
+    const app = await creatApp('base-app-middleware-names');
+    expect(app.getMiddleware().getNames()).toEqual([
+      'cookieParser',
+      'session',
+      'jsonParser',
+      'textParser',
+      'urlencodedParser',
+      'test'
+    ]);
+    await closeApp(app);
+  });
+
 });

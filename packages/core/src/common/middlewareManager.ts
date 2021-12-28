@@ -188,7 +188,11 @@ export class ContextMiddlewareManager<
    * @param middleware
    */
   public getMiddlewareName(middleware: CommonMiddleware<CTX, R, N>): string {
-    return (middleware as any)._name ?? middleware.name;
+    return (
+      ((middleware as any).getName && (middleware as any).getName()) ??
+      (middleware as any)._name ??
+      middleware.name
+    );
   }
 
   /**

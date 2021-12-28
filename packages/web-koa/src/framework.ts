@@ -152,7 +152,7 @@ export class MidwayKoaFramework extends BaseFramework<
    * @deprecated
    * @param middlewareId
    */
-  public async generateMiddleware(middlewareId: string) {
+  public async generateMiddleware(middlewareId: any) {
     const mwIns = await this.getApplicationContext().getAsync<IWebMiddleware>(
       middlewareId
     );
