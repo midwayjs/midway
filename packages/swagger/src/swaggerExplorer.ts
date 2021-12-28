@@ -499,52 +499,64 @@ export class SwaggerExplorer {
 
     if (props) {
       Object.keys(props).forEach(key => {
-        if (props[key].metadata?.example) {
+        const metadata = props[key].metadata;
+
+        if (metadata?.example) {
           if (!tt.example) {
             tt.example = {};
           }
-          tt.example[key] = props[key].metadata?.example;
+          tt.example[key] = metadata?.example;
+
+          delete metadata.example;
         }
-        if (props[key].metadata?.required !== false) {
+        if (metadata?.required !== false) {
           if (!tt.required) {
             tt.required = [];
           }
           tt.required.push(key);
+
+          delete metadata.required;
         }
-        if (props[key].metadata?.enum) {
+        if (metadata?.enum) {
           tt.properties[key] = {
-            type: props[key].metadata?.type,
-            enum: props[key].metadata?.enum,
-            default: props[key].metadata?.default,
+            type: metadata?.type,
+            enum: metadata?.enum,
+            default: metadata?.default,
           };
 
-          if (props[key].metadata?.description) {
-            tt.properties[key].description = props[key].metadata?.description;
+          if (metadata?.description) {
+            tt.properties[key].description = metadata?.description;
           }
           return;
         }
-        if (props[key].metadata?.items?.enum) {
+        if (metadata?.items?.enum) {
           tt.properties[key] = {
-            type: props[key].metadata?.type,
-            items: props[key].metadata?.items,
-            default: props[key].metadata?.default,
+            type: metadata?.type,
+            items: metadata?.items,
+            default: metadata?.default,
           };
 
-          if (props[key].metadata?.description) {
-            tt.properties[key].description = props[key].metadata?.description;
+          if (metadata?.description) {
+            tt.properties[key].description = metadata?.description;
           }
           return;
         }
-        let currentType = props[key].metadata?.type;
+        let isArray = false;
+        let currentType = metadata?.type;
+
+        delete metadata?.type;
 
         if (currentType === 'array') {
-          currentType = props[key].metadata?.items?.type;
+          isArray = true;
+          currentType = metadata?.items?.type;
+
+          delete metadata.items;
         }
 
         if (isClass(currentType)) {
           this.parseClzz(currentType);
 
-          if (props[key].metadata?.type === 'array') {
+          if (isArray) {
             tt.properties[key] = {
               type: 'array',
               items: {
@@ -557,7 +569,7 @@ export class SwaggerExplorer {
             };
           }
         } else {
-          if (props[key].metadata?.type === 'array') {
+          if (isArray) {
             tt.properties[key] = {
               type: 'array',
               items: {
@@ -567,14 +579,14 @@ export class SwaggerExplorer {
           } else {
             tt.properties[key] = {
               type: getPropertyType(clzz.prototype, key).name,
-              format: props[key].metadata?.format,
+              format: metadata?.format,
             };
+
+            delete metadata.format;
           }
         }
 
-        if (props[key].metadata?.description) {
-          tt.properties[key].description = props[key].metadata?.description;
-        }
+        Object.assign(tt.properties[key], metadata);
       });
     }
 
