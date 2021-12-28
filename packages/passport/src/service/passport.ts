@@ -224,7 +224,7 @@ export function PassportMiddleware(
       }
     }
 
-    getName() {
+    static getName() {
       return 'passport';
     }
   }

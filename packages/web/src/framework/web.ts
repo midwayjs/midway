@@ -144,7 +144,7 @@ export class MidwayWebFramework extends BaseFramework<
           } as any);
         },
 
-        generateMiddleware: async (middlewareId: string) => {
+        generateMiddleware: async (middlewareId: any) => {
           return this.generateMiddleware(middlewareId);
         },
 
@@ -267,7 +267,7 @@ export class MidwayWebFramework extends BaseFramework<
     this.app.ContextLogger = BaseContextLogger;
   }
 
-  public async generateMiddleware(middlewareId: string) {
+  public async generateMiddleware(middlewareId: any) {
     const mwIns: any = await this.getApplicationContext().getAsync(
       middlewareId
     );

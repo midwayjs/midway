@@ -81,7 +81,7 @@ export class MidwayFaaSFramework extends BaseFramework<
        * @deprecated
        * @param middlewareId
        */
-      generateMiddleware: async (middlewareId: string) => {
+      generateMiddleware: async (middlewareId: any) => {
         return this.generateMiddleware(middlewareId);
       },
 
@@ -93,6 +93,9 @@ export class MidwayFaaSFramework extends BaseFramework<
         return this.configurationOptions.applicationAdapter?.getFunctionServiceName();
       },
     });
+    // hack use method
+    (this.app as any).originUse = this.app.use;
+    this.app.use = this.app.useMiddleware as any;
   }
 
   public async run() {

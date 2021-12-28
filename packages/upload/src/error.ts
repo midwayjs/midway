@@ -1,17 +1,7 @@
-import { MidwayError, registerErrorCode } from '@midwayjs/core';
+import { httpError } from '@midwayjs/core';
 
-const UPLOAD_ERROR_CODE = registerErrorCode('upload', {
-  /**
-   * upload invalid filename
-   */
-  INVALID_FILENAME: 10000,
-} as const);
-
-export class MultipartInvalidFilenameError extends MidwayError {
+export class MultipartInvalidFilenameError extends httpError.BadRequestError {
   constructor(filename: string) {
-    super(
-      `Invalid update file name ${filename}, please check it`,
-      UPLOAD_ERROR_CODE.INVALID_FILENAME
-    );
+    super(`Invalid update file name ${filename}, please check it`);
   }
 }

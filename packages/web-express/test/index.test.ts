@@ -231,4 +231,37 @@ describe('/test/feature.test.ts', () => {
     await closeApp(app);
   });
 
+  it('should test default onerror set status', async () => {
+    const app = await creatApp('base-app-default-onerror');
+    const result1 = await createHttpRequest(app)
+      .get('/');
+    expect(result1.status).toEqual(400);
+    await closeApp(app);
+  });
+
+  it('should test middleware throw error', async () => {
+    const app = await creatApp('base-app-middleware-error');
+    const result = await createHttpRequest(app)
+      .get('/');
+    expect(result.status).toEqual(200);
+    expect(result.text).toEqual('hello world');
+    const result1 = await createHttpRequest(app)
+      .get('/error');
+    expect(result1.status).toEqual(400);
+    await closeApp(app);
+  });
+
+  it('should test got middleware name list', async () => {
+    const app = await creatApp('base-app-middleware-names');
+    expect(app.getMiddleware().getNames()).toEqual([
+      'cookieParser',
+      'session',
+      'jsonParser',
+      'textParser',
+      'urlencodedParser',
+      'test'
+    ]);
+    await closeApp(app);
+  });
+
 });

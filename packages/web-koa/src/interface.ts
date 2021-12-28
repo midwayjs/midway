@@ -16,7 +16,7 @@ export type IMidwayKoaApplication = IMidwayApplication<IMidwayKoaContext, koa<De
    * @deprecated
    * @param middlewareId
    */
-  generateMiddleware(middlewareId: string): Promise<Middleware<DefaultState, IMidwayKoaContext>>;
+  generateMiddleware(middlewareId: any): Promise<Middleware<DefaultState, IMidwayKoaContext>>;
 }>;
 
 /**

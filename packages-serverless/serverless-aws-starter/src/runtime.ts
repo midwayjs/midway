@@ -9,6 +9,14 @@ import {
   HTTPResponse,
 } from '@midwayjs/serverless-http-parser';
 
+const isOutputError = () => {
+  return (
+    process.env.SERVERLESS_OUTPUT_ERROR_STACK === 'true' ||
+    ['local', 'development'].includes(process.env.MIDWAY_SERVER_ENV) ||
+    ['local', 'development'].includes(process.env.NODE_ENV)
+  );
+};
+
 export class AWSRuntime extends ServerlessLightRuntime {
   app;
   respond;
@@ -56,37 +64,47 @@ export class AWSRuntime extends ServerlessLightRuntime {
             }
           }
           return handler.apply(handler, args);
-        }).then(result => {
-          if (result) {
-            ctx.body = result;
-          }
-          const data = ctx.body;
-          let encoded = false;
-          if (typeof data === 'string') {
-            if (!ctx.type) {
-              ctx.type = 'text/plain';
+        })
+          .then(result => {
+            if (result) {
+              ctx.body = result;
             }
-            ctx.body = data;
-          } else if (Buffer.isBuffer(data)) {
-            encoded = true;
-            if (!ctx.type) {
-              ctx.type = 'application/octet-stream';
+            const data = ctx.body;
+            let encoded = false;
+            if (typeof data === 'string') {
+              if (!ctx.type) {
+                ctx.type = 'text/plain';
+              }
+              ctx.body = data;
+            } else if (Buffer.isBuffer(data)) {
+              encoded = true;
+              if (!ctx.type) {
+                ctx.type = 'application/octet-stream';
+              }
+              ctx.body = data.toString('base64');
+            } else if (typeof data === 'object') {
+              if (!ctx.type) {
+                ctx.type = 'application/json';
+              }
+              ctx.body = JSON.stringify(data);
             }
-            ctx.body = data.toString('base64');
-          } else if (typeof data === 'object') {
-            if (!ctx.type) {
-              ctx.type = 'application/json';
-            }
-            ctx.body = JSON.stringify(data);
-          }
 
-          return {
-            isBase64Encoded: encoded,
-            statusCode: ctx.status,
-            headers: ctx.res.headers,
-            body: ctx.body,
-          };
-        });
+            return {
+              isBase64Encoded: encoded,
+              statusCode: ctx.status,
+              headers: ctx.res.headers,
+              body: ctx.body,
+            };
+          })
+          .catch(err => {
+            ctx.logger.error(err);
+            return {
+              isBase64Encoded: false,
+              statusCode: err.status ?? 500,
+              headers: {},
+              body: isOutputError() ? err.stack : 'Internal Server Error',
+            };
+          });
       },
     ]);
   }
@@ -103,10 +121,6 @@ export class AWSRuntime extends ServerlessLightRuntime {
       return handler.apply(handler, args);
     });
   }
-
-  async beforeInvokeHandler(context) {}
-
-  async afterInvokeHandler(err, result, context) {}
 
   getApplication() {
     return this.app;

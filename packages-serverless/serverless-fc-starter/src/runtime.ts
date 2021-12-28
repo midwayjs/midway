@@ -202,13 +202,16 @@ export class FCRuntime extends ServerlessLightRuntime {
           })
           .catch(err => {
             ctx.logger.error(err);
+            if (res.setHeader) {
+              res.setHeader('content-type', 'text/plain');
+            }
             if (res.send) {
-              res.setStatusCode(500);
+              res.setStatusCode(err.status ?? 500);
               res.send(isOutputError() ? err.stack : 'Internal Server Error');
             }
             return {
               isBase64Encoded: false,
-              statusCode: 500,
+              statusCode: err.status ?? 500,
               headers: {},
               body: isOutputError() ? err.stack : 'Internal Server Error',
             };

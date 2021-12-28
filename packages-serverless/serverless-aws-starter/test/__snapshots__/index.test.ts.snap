@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`/test/index.test.ts wrapper web event should ok with asyncWrap when error 1`] = `
+Object {
+  "body": "Internal Server Error",
+  "headers": Object {},
+  "isBase64Encoded": false,
+  "statusCode": 500,
+}
+`;
+
+exports[`/test/index.test.ts wrapper web event should ok with error 1`] = `
+Object {
+  "body": "Internal Server Error",
+  "headers": Object {},
+  "isBase64Encoded": false,
+  "statusCode": 500,
+}
+`;

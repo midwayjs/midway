@@ -107,16 +107,12 @@ export class VercelRuntime extends ServerlessLightRuntime {
           })
           .catch(err => {
             ctx.logger.error(err);
-            res.status(500);
+            res.status(err.status ?? 500);
             res.send(isOutputError() ? err.stack : 'Internal Server Error');
           });
       },
     ]);
   }
-
-  async beforeInvokeHandler(context) {}
-
-  async afterInvokeHandler(err, result, context) {}
 
   getApplication() {
     return this.app;

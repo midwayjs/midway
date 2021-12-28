@@ -1,4 +1,10 @@
-import { isClass, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import {
+  isAsyncFunction,
+  isClass,
+  Provide,
+  Scope,
+  ScopeEnum,
+} from '@midwayjs/decorator';
 import {
   IMidwayContainer,
   MidwayCommonError,
@@ -12,6 +18,18 @@ import {
   Application,
 } from './interface';
 import { NextFunction, Response } from 'express';
+
+export function wrapAsyncHandler(fn): any {
+  if (isAsyncFunction(fn)) {
+    return (req, res, next) => {
+      return fn(req, res, next).catch(err => {
+        next(err);
+      });
+    };
+  } else {
+    return fn;
+  }
+}
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -47,13 +65,15 @@ export class MidwayExpressMiddlewareService {
           );
         if (classMiddleware) {
           fn = classMiddleware.resolve(app);
+          // wrap async middleware
+          fn = wrapAsyncHandler(fn);
           if (!classMiddleware.match && !classMiddleware.ignore) {
             (fn as any)._name = classMiddleware.constructor.name;
             // just got fn
             newMiddlewareArr.push(fn);
           } else {
             // wrap ignore and match
-            const mw = fn;
+            const mw = fn as any;
             const match = pathMatching({
               match: classMiddleware.match,
               ignore: classMiddleware.ignore,
@@ -69,6 +89,8 @@ export class MidwayExpressMiddlewareService {
           throw new MidwayCommonError('Middleware must have resolve method!');
         }
       } else {
+        // wrap async middleware
+        fn = wrapAsyncHandler(fn);
         newMiddlewareArr.push(fn);
       }
     }
@@ -76,14 +98,32 @@ export class MidwayExpressMiddlewareService {
     const composeFn = (
       req: IMidwayExpressContext,
       res: Response,
-      next: NextFunction
+      nextFunction: NextFunction
     ) => {
-      (function iter(i, max) {
-        if (i === max) {
-          return next();
+      let index = -1;
+      function dispatch(pos: number, err?: Error | null) {
+        const handler = newMiddlewareArr[pos];
+        index = pos;
+        if (err || index === newMiddlewareArr.length) {
+          return nextFunction(err);
         }
-        newMiddlewareArr[i](req, res, iter.bind(this, i + 1, max));
-      })(0, newMiddlewareArr.length);
+
+        function next(err?: Error | null) {
+          if (pos < index) {
+            throw new TypeError('`next()` called multiple times');
+          }
+          return dispatch(pos + 1, err);
+        }
+
+        try {
+          return handler(req, res, next);
+        } catch (err) {
+          // Avoid future errors that could diverge stack execution.
+          if (index > pos) throw err;
+          return next(err);
+        }
+      }
+      return dispatch(0);
     };
     if (name) {
       composeFn._name = name;

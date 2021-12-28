@@ -150,15 +150,11 @@ export class WorkerRuntime extends ServerlessLightRuntime {
             return new Response(
               isOutputError() ? err.stack : 'Internal Server Error',
               {
-                status: 500,
+                status: err.status ?? 500,
               }
             );
           });
       },
     ]);
   }
-
-  async beforeInvokeHandler(context) {}
-
-  async afterInvokeHandler(err, result, context) {}
 }
