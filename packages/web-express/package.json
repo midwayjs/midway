@@ -35,8 +35,7 @@
     "@midwayjs/express-session": "^3.0.0-beta.11",
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.6",
-    "express": "^4.17.1",
-    "express-async-errors": "^3.1.1"
+    "express": "^4.17.1"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
   "repository": {

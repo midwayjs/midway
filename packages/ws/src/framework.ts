@@ -6,7 +6,7 @@ import {
 } from '@midwayjs/core';
 import * as http from 'http';
 import { debuglog } from 'util';
-const debug = debuglog('midway:ws');
+const debug = debuglog('midway:debug');
 
 import {
   IMidwayWSApplication,
@@ -144,7 +144,7 @@ export class MidwayWSFramework extends BaseFramework<
             } else if (wsEventInfo.eventType === WSEventTypeEnum.ON_MESSAGE) {
               // on user custom event
               socket.on(wsEventInfo.messageEventName, async (...args) => {
-                debug('got message', wsEventInfo.messageEventName, args);
+                debug('[ws]: got message', wsEventInfo.messageEventName, args);
 
                 try {
                   const result = await (

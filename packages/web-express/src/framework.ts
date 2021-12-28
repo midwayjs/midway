@@ -25,7 +25,12 @@ import type { IRouter, IRouterHandler, Response, NextFunction } from 'express';
 import * as express from 'express';
 import { Server } from 'net';
 import { MidwayExpressContextLogger } from './logger';
-import { MidwayExpressMiddlewareService } from './middlewareService';
+import {
+  wrapAsyncHandler,
+  MidwayExpressMiddlewareService,
+} from './middlewareService';
+import { debuglog } from 'util';
+const debug = debuglog('midway:debug');
 
 @Framework()
 export class MidwayExpressFramework extends BaseFramework<
@@ -48,8 +53,9 @@ export class MidwayExpressFramework extends BaseFramework<
       MidwayExpressMiddlewareService,
       [this.applicationContext]
     );
-    // require('express-async-errors');
+    debug('[express]: create express app');
     this.app = express() as unknown as IMidwayExpressApplication;
+    debug('[express]: use root middleware');
     this.app.use((req, res, next) => {
       const ctx = req as IMidwayExpressContext;
       this.app.createAnonymousContext(ctx);
@@ -61,25 +67,53 @@ export class MidwayExpressFramework extends BaseFramework<
   }
 
   public async run(): Promise<void> {
+    debug(`[express]: use middlewares = "${this.getMiddleware().getNames()}"`);
     // use global middleware
     const globalMiddleware = await this.applyMiddleware();
+    debug('[express]: use and apply all framework and global middleware');
     this.app.use(globalMiddleware as any);
+
+    debug('[express]: use user router middleware');
     // load controller
     await this.loadMidwayController();
+
+    debug('[express]: use global error handler middleware');
     // use global error handler
     this.app.use((err, req, res, next) => {
-      if (err) {
-        this.filterManager.runErrorFilter(err, req, res, next).then(data => {
+      this.filterManager
+        .runErrorFilter(err, req, res, next)
+        .then(data => {
           const { result, error } = data;
           if (error) {
-            res.status(error.status ?? 500);
-            res.type('text');
+            const status = error.status ?? res.statusCode ?? 500;
+            // 5xx
+            if (status >= 500) {
+              try {
+                req.logger.error(err);
+              } catch (ex) {
+                this.logger.error(err);
+                this.logger.error(ex);
+              }
+              return;
+            }
+
+            // 4xx
+            try {
+              req.logger.warn(err);
+            } catch (ex) {
+              this.logger.warn(err);
+              this.logger.error(ex);
+            }
+
+            res.status(status);
             next(error);
           } else {
             this.sendData(res, result);
           }
+        })
+        .catch(err => {
+          next(err);
         });
-      }
     });
 
     // https config
@@ -141,21 +175,15 @@ export class MidwayExpressFramework extends BaseFramework<
    * wrap controller string to middleware function
    */
   protected generateController(routeInfo: RouterInfo): IRouterHandler<any> {
-    return async (req, res, next) => {
+    return wrapAsyncHandler(async (req, res, next) => {
       const controller = await req.requestContext.getAsync(routeInfo.id);
 
-      let result;
-      try {
-        result = await controller[routeInfo.method].call(
-          controller,
-          req,
-          res,
-          next
-        );
-      } catch (err) {
-        next(err);
-        return;
-      }
+      const result = await controller[routeInfo.method].call(
+        controller,
+        req,
+        res,
+        next
+      );
 
       if (res.headersSent) {
         // return when response send
@@ -196,7 +224,7 @@ export class MidwayExpressFramework extends BaseFramework<
       }
 
       this.sendData(res, returnValue);
-    };
+    });
   }
 
   public async loadMidwayController(): Promise<void> {
@@ -217,6 +245,7 @@ export class MidwayExpressFramework extends BaseFramework<
       // new router
       const newRouter = this.createRouter(routerInfo.routerOptions);
 
+      routerInfo.middleware = routerInfo.middleware ?? [];
       // add router middleware
       if (routerInfo.middleware.length) {
         const routerMiddlewareFn = await this.expressMiddlewareService.compose(
@@ -231,6 +260,7 @@ export class MidwayExpressFramework extends BaseFramework<
       for (const routeInfo of routes) {
         const routeMiddlewareList = [];
         // routeInfo middleware
+        routeInfo.middleware = routeInfo.middleware ?? [];
         if (routeInfo.middleware.length) {
           const routeMiddlewareFn = await this.expressMiddlewareService.compose(
             routeInfo.middleware,

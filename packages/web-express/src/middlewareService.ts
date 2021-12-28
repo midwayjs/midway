@@ -19,10 +19,10 @@ import {
 } from './interface';
 import { NextFunction, Response } from 'express';
 
-function wrapAsyncHandler(fn): any {
+export function wrapAsyncHandler(fn): any {
   if (isAsyncFunction(fn)) {
     return (req, res, next) => {
-      fn(req, res, next).catch(err => {
+      return fn(req, res, next).catch(err => {
         next(err);
       });
     };
@@ -98,14 +98,32 @@ export class MidwayExpressMiddlewareService {
     const composeFn = (
       req: IMidwayExpressContext,
       res: Response,
-      next: NextFunction
+      nextFunction: NextFunction
     ) => {
-      (function iter(i, max) {
-        if (i === max) {
-          return next();
+      let index = -1;
+      function dispatch(pos: number, err?: Error | null) {
+        const handler = newMiddlewareArr[pos];
+        index = pos;
+        if (err || index === newMiddlewareArr.length) {
+          return nextFunction(err);
         }
-        newMiddlewareArr[i](req, res, iter.bind(this, i + 1, max));
-      })(0, newMiddlewareArr.length);
+
+        function next(err?: Error | null) {
+          if (pos < index) {
+            throw new TypeError('`next()` called multiple times');
+          }
+          return dispatch(pos + 1, err);
+        }
+
+        try {
+          return handler(req, res, next);
+        } catch (err) {
+          // Avoid future errors that could diverge stack execution.
+          if (index > pos) throw err;
+          return next(err);
+        }
+      }
+      return dispatch(0);
     };
     if (name) {
       composeFn._name = name;

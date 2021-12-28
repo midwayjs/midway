@@ -86,13 +86,6 @@ export class MidwayKoaFramework extends BaseFramework<
 
     this.app.on('error', (err, ctx) => {
       ctx = ctx || this.app.createAnonymousContext();
-      if (
-        onerrorConfig.appErrorFilter &&
-        !onerrorConfig.appErrorFilter(err, ctx)
-      ) {
-        return;
-      }
-
       const status = detectStatus(err);
       // 5xx
       if (status >= 500) {
