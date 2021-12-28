@@ -499,9 +499,6 @@ export class SwaggerExplorer {
 
     if (props) {
       Object.keys(props).forEach(key => {
-        if (props[key].metadata?.description) {
-          tt.description = props[key].metadata?.description;
-        }
         if (props[key].metadata?.example) {
           if (!tt.example) {
             tt.example = {};
@@ -521,6 +518,9 @@ export class SwaggerExplorer {
             default: props[key].metadata?.default,
           };
 
+          if (props[key].metadata?.description) {
+            tt.properties[key].description = props[key].metadata?.description;
+          }
           return;
         }
         if (props[key].metadata?.items?.enum) {
@@ -530,6 +530,9 @@ export class SwaggerExplorer {
             default: props[key].metadata?.default,
           };
 
+          if (props[key].metadata?.description) {
+            tt.properties[key].description = props[key].metadata?.description;
+          }
           return;
         }
         let currentType = props[key].metadata?.type;
@@ -567,6 +570,10 @@ export class SwaggerExplorer {
               format: props[key].metadata?.format,
             };
           }
+        }
+
+        if (props[key].metadata?.description) {
+          tt.properties[key].description = props[key].metadata?.description;
         }
       });
     }
