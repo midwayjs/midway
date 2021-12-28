@@ -13,7 +13,6 @@ import {
   ApiParam,
   ApiResponse,
   ApiTags,
-  BodyContentType,
 } from '../../../../src';
 import { CatsService } from './cats.service';
 import { CreateCatDto } from './dto/create-cat.dto';

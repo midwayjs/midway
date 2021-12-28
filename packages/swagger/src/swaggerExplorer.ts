@@ -499,6 +499,9 @@ export class SwaggerExplorer {
 
     if (props) {
       Object.keys(props).forEach(key => {
+        if (props[key].metadata?.description) {
+          tt.description = props[key].metadata?.description;
+        }
         if (props[key].metadata?.example) {
           if (!tt.example) {
             tt.example = {};

@@ -8,7 +8,12 @@ describe('/test/index.test.ts', () => {
 
     let app;
     beforeAll(async () => {
-      app = await createApp(join(__dirname, 'fixtures/cats'), {}, koa);
+      try {
+        app = await createApp(join(__dirname, 'fixtures/cats'), {}, koa);
+      } catch (e) {
+        console.log(e);
+        console.log('beforeAll: ' +  e.stack);
+      }
     });
 
     afterAll(async () => {
