@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.12](https://github.com/midwayjs/midway/compare/v3.0.0-beta.11...v3.0.0-beta.12) (2021-12-28)
+
+
+### Bug Fixes
+
+* 3.x copy all properties ([#1444](https://github.com/midwayjs/midway/issues/1444)) ([21ec8b6](https://github.com/midwayjs/midway/commit/21ec8b6a85b6ba3f4fbff0c8a571484aaa078788))
+
+
+### Features
+
+* add fileupload support ([#1439](https://github.com/midwayjs/midway/issues/1439)) ([0a81e72](https://github.com/midwayjs/midway/commit/0a81e720f525ddab0718301f44f80fce376f9bfe))
+* support throw err status ([#1440](https://github.com/midwayjs/midway/issues/1440)) ([7b98110](https://github.com/midwayjs/midway/commit/7b98110d65c5287a8fcb3eb5356dea2d7a32cee9))
+
+
+
+
+
 # [3.0.0-beta.11](https://github.com/midwayjs/midway/compare/v3.0.0-beta.10...v3.0.0-beta.11) (2021-12-21)
 
 **Note:** Version bump only for package @midwayjs/swagger
