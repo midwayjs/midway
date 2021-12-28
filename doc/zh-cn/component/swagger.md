@@ -224,6 +224,36 @@ hello: HelloWorld;
 Swagger UI 中展示：
 ![image.png](./images/swagger3.jpg)
 
+#### 文件上传定义
+
+使用 ```@ApiBody``` 设置 ```contentType```
+
+```TypeScript
+@Post('/:id', { summary: 'test'})
+@ApiBody({
+  description: 'this is body', 
+  contentType: BotyContentType.Multipart
+})
+@ApiParam({ description: 'this is id' })
+async create(@Body() createCatDto: CreateCatDto, @Param('id') id: number): Promise<Cat> {
+  return this.catsService.create(createCatDto);
+}
+```
+
+在 ```CreateCatDto``` 中使用 ``` @ApiProperty ``` 添加 ```format```
+
+```TypeScript
+@ApiProperty({
+  type: 'string',
+  format: 'binary',
+  description: 'this is file test'
+})
+file: any;
+```
+
+Swagger UI 中展示：
+![image.png](./images/swagger4.jpg)
+
 ### 路由定义
 [OpenAPI](https://swagger.io/specification/) 定义的 paths 就是各个路由路径，且每个路由路径都有 HTTP 方法的定义，比如 GET、POST、DELETE、PUT 等。
 

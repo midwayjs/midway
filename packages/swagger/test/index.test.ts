@@ -8,7 +8,12 @@ describe('/test/index.test.ts', () => {
 
     let app;
     beforeAll(async () => {
-      app = await createApp(join(__dirname, 'fixtures/cats'), {}, koa);
+      try {
+        app = await createApp(join(__dirname, 'fixtures/cats'), {}, koa);
+      } catch (e) {
+        console.log(e);
+        console.log('beforeAll: ' +  e.stack);
+      }
     });
 
     afterAll(async () => {
@@ -31,6 +36,7 @@ describe('/test/index.test.ts', () => {
       const result = await createHttpRequest(app).get('/swagger-ui/index.json');
       expect(result.type).toEqual('application/json');
       const body = result.body;
+      console.log('--->', result.text);
 
       expect(body.tags).toStrictEqual([{"name":"cats1","description":""}]);
       expect(body.components.securitySchemes).toStrictEqual({"bbb":{"type":"http","scheme":"basic"},"ttt":{"type":"http","scheme":"bearer","bearerFormat":"JWT"}})
