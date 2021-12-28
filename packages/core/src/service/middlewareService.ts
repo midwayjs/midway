@@ -121,8 +121,4 @@ export class MidwayMiddlewareService<T, R, N = unknown> {
     }
     return composeFn;
   }
-
-  public getMiddlewareName(mw) {
-    return mw.getName ? mw.getName() : mw.name ?? mw._name;
-  }
 }

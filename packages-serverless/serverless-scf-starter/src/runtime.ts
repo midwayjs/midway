@@ -113,7 +113,7 @@ export class SCFRuntime extends ServerlessLightRuntime {
             context.callbackWaitsForEmptyEventLoop = false;
             return {
               isBase64Encoded: false,
-              statusCode: 500,
+              statusCode: err.status ?? 500,
               headers: {},
               body: isOutputError() ? err.stack : 'Internal Server Error',
             };
@@ -148,10 +148,6 @@ export class SCFRuntime extends ServerlessLightRuntime {
       }
     });
   }
-
-  async beforeInvokeHandler(context) {}
-
-  async afterInvokeHandler(err, result, context) {}
 
   getApplication() {
     return this.app;

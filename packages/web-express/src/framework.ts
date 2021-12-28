@@ -48,6 +48,7 @@ export class MidwayExpressFramework extends BaseFramework<
       MidwayExpressMiddlewareService,
       [this.applicationContext]
     );
+    // require('express-async-errors');
     this.app = express() as unknown as IMidwayExpressApplication;
     this.app.use((req, res, next) => {
       const ctx = req as IMidwayExpressContext;
@@ -66,20 +67,18 @@ export class MidwayExpressFramework extends BaseFramework<
     // load controller
     await this.loadMidwayController();
     // use global error handler
-    this.app.use(async (err, req, res, next) => {
+    this.app.use((err, req, res, next) => {
       if (err) {
-        const { result, error } = await this.filterManager.runErrorFilter(
-          err,
-          req,
-          res,
-          next
-        );
-        if (error) {
-          res.status(error.status ?? 500);
-          next(error);
-        } else {
-          this.sendData(res, result);
-        }
+        this.filterManager.runErrorFilter(err, req, res, next).then(data => {
+          const { result, error } = data;
+          if (error) {
+            res.status(error.status ?? 500);
+            res.type('text');
+            next(error);
+          } else {
+            this.sendData(res, result);
+          }
+        });
       }
     });
 

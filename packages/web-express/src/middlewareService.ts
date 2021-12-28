@@ -1,4 +1,10 @@
-import { isClass, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import {
+  isAsyncFunction,
+  isClass,
+  Provide,
+  Scope,
+  ScopeEnum,
+} from '@midwayjs/decorator';
 import {
   IMidwayContainer,
   MidwayCommonError,
@@ -12,6 +18,18 @@ import {
   Application,
 } from './interface';
 import { NextFunction, Response } from 'express';
+
+function wrapAsyncHandler(fn): any {
+  if (isAsyncFunction(fn)) {
+    return (req, res, next) => {
+      fn(req, res, next).catch(err => {
+        next(err);
+      });
+    };
+  } else {
+    return fn;
+  }
+}
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -47,13 +65,15 @@ export class MidwayExpressMiddlewareService {
           );
         if (classMiddleware) {
           fn = classMiddleware.resolve(app);
+          // wrap async middleware
+          fn = wrapAsyncHandler(fn);
           if (!classMiddleware.match && !classMiddleware.ignore) {
             (fn as any)._name = classMiddleware.constructor.name;
             // just got fn
             newMiddlewareArr.push(fn);
           } else {
             // wrap ignore and match
-            const mw = fn;
+            const mw = fn as any;
             const match = pathMatching({
               match: classMiddleware.match,
               ignore: classMiddleware.ignore,
@@ -69,6 +89,8 @@ export class MidwayExpressMiddlewareService {
           throw new MidwayCommonError('Middleware must have resolve method!');
         }
       } else {
+        // wrap async middleware
+        fn = wrapAsyncHandler(fn);
         newMiddlewareArr.push(fn);
       }
     }

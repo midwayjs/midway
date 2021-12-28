@@ -22,14 +22,14 @@ export class UploadMiddleware implements IMiddleware<any, any> {
 
   resolve(app) {
     if (app.getFrameworkType() === MidwayFrameworkType.WEB_EXPRESS) {
-      return async (req: any, res: any, next: any) => {
+      return async function upload(req: any, res: any, next: any) {
         return this.execUpload(req, req, res, next, true);
-      };
+      }.bind(this);
     } else {
-      return async (ctx, next) => {
+      return async function upload(ctx, next) {
         const req = ctx.request?.req || ctx.request;
         return this.execUpload(ctx, req, ctx, next, false);
-      };
+      }.bind(this);
     }
   }
 
