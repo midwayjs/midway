@@ -106,7 +106,7 @@ export abstract class MidwayKoaBaseFramework<
     };
   }
 
-  public async generateMiddleware(middlewareId: string) {
+  public async generateMiddleware(middlewareId: any) {
     const mwIns = await this.getApplicationContext().getAsync<IWebMiddleware>(
       middlewareId
     );
@@ -245,7 +245,7 @@ export class MidwayKoaFramework extends MidwayKoaBaseFramework<
         return this.generateController(controllerMapping);
       },
 
-      generateMiddleware: async (middlewareId: string) => {
+      generateMiddleware: async (middlewareId: any) => {
         return this.generateMiddleware(middlewareId);
       },
     });
