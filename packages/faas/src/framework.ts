@@ -188,9 +188,7 @@ export class MidwayFaaSFramework extends BaseFramework<
     };
   }
 
-  public async generateMiddleware(
-    middlewareId: any
-  ): Promise<FaaSMiddleware> {
+  public async generateMiddleware(middlewareId: any): Promise<FaaSMiddleware> {
     const mwIns = await this.getApplicationContext().getAsync<IWebMiddleware>(
       middlewareId
     );
