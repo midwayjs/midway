@@ -104,7 +104,7 @@ export class AWSRuntime extends ServerlessLightRuntime {
               headers: {},
               body: isOutputError() ? err.stack : 'Internal Server Error',
             };
-        });
+          });
       },
     ]);
   }
