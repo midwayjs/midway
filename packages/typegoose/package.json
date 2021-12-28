@@ -28,6 +28,6 @@
     "@midwayjs/decorator": "^2.14.0",
     "@midwayjs/mock": "^2.14.0",
     "@typegoose/typegoose": "^9.0.0",
-    "mongoose": "~6.0.11"
+    "mongoose": "^6.1.3"
   }
 }
