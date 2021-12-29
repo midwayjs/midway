@@ -4,7 +4,7 @@
   "description": "midway-sample",
   "private": true,
   "dependencies": {
-    "midway": "0.2.11",
+    "midway": "0.7.1",
     "@midwayjs/cli": "1.2.93",
     "@midwayjs/cli-plugin-build": "1.2.93",
     "egg-scripts": "2.15.2"
