@@ -26,7 +26,7 @@
     "@midwayjs/decorator": "^2.14.0",
     "@midwayjs/koa": "^2.14.2",
     "@midwayjs/mock": "^2.14.0",
-    "@types/request": "^2.48.5"
+    "@types/request": "2.48.7"
   },
   "dependencies": {
     "prom-client": "^13.1.0",

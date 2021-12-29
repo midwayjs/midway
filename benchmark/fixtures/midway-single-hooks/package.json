@@ -4,18 +4,18 @@
   "description": "midway-sample",
   "private": true,
   "dependencies": {
-    "midway": "1",
-    "@midwayjs/cli": "^1.2.36",
-    "@midwayjs/cli-plugin-build": "^1.2.47",
-    "pandora": "^1.8.27"
+    "midway": "1.20.3",
+    "@midwayjs/cli": "1.2.93",
+    "@midwayjs/cli-plugin-build": "1.2.93",
+    "pandora": "1.10.6"
   },
   "devDependencies": {
-    "@types/mocha": "^5.2.5",
-    "@types/node": "^10.5.5",
-    "ts-node": "^8.0.2",
-    "tslib": "^1.8.1",
-    "tslint": "^5.9.1",
-    "typescript": "^3.5.0"
+    "@types/mocha": "5.2.7",
+    "@types/node": "10.17.60",
+    "ts-node": "8.10.2",
+    "tslib": "1.14.1",
+    "tslint": "5.20.1",
+    "typescript": "3.9.10"
   },
   "engines": {
     "node": ">=8.9.0"

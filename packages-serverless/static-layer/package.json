@@ -14,11 +14,11 @@
     "@midwayjs/serverless-fc-trigger": "^2.14.0",
     "@midwayjs/serverless-scf-starter": "^2.13.3",
     "@midwayjs/serverless-scf-trigger": "^2.14.0",
-    "koa": "^2.13.0",
-    "koa-static-cache": "^5.1.4",
-    "path-to-regexp": "^6.2.0",
-    "request": "^2.88.2",
-    "supertest": "^6.0.0"
+    "koa": "2.13.4",
+    "koa-static-cache": "5.1.4",
+    "path-to-regexp": "6.2.0",
+    "request": "2.88.2",
+    "supertest": "6.1.6"
   },
   "engines": {
     "node": ">= 10"

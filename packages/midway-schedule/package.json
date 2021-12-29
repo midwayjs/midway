@@ -18,7 +18,7 @@
   "devDependencies": {
     "@midwayjs/decorator": "^2.14.0",
     "@midwayjs/mock": "^2.14.0",
-    "@types/sinon": "^10.0.2"
+    "@types/sinon": "10.0.6"
   },
   "dependencies": {
     "is-type-of": "^1.2.1"

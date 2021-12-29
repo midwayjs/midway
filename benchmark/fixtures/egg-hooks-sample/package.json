@@ -4,9 +4,9 @@
   "description": "",
   "private": true,
   "dependencies": {
-    "egg": "^2.2.1",
-    "egg-bin": "^4.8.3",
-    "pandora": "^1.8.27"
+    "egg": "2.33.1",
+    "egg-bin": "4.16.4",
+    "pandora": "1.10.6"
   },
   "devDependencies": {},
   "engines": {

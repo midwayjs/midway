@@ -24,8 +24,8 @@
     "@midwayjs/core": "^2.14.0",
     "@midwayjs/decorator": "^2.14.0",
     "@midwayjs/logger": "^2.13.0",
-    "@types/socket.io-client": "^1.4.36",
-    "request": "^2.88.2",
+    "@types/socket.io-client": "1.4.36",
+    "request": "2.88.2",
     "socket.io-client": "4.4.0"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",

@@ -11,7 +11,7 @@
     "@midwayjs/core": "^2.14.0",
     "@midwayjs/decorator": "^2.14.0",
     "@midwayjs/runtime-mock": "^2.13.3",
-    "raw-body": "^2.4.1"
+    "raw-body": "2.4.2"
   },
   "engines": {
     "node": ">= 10"
