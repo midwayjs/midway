@@ -15,7 +15,7 @@
     "ts-node": "8.10.2",
     "tslib": "1.14.1",
     "tslint": "5.20.1",
-    "typescript": "3.9.10"
+    "typescript": "4.5.4"
   },
   "engines": {
     "node": ">=8.9.0"
