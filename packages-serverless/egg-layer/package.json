@@ -18,8 +18,8 @@
     "@midwayjs/serverless-scf-starter": "^2.13.3",
     "@midwayjs/serverless-scf-trigger": "^2.14.0",
     "@midwayjs/web": "^2.14.2",
-    "egg": "^2.28.0",
-    "supertest": "^6.0.0"
+    "egg": "2.33.1",
+    "supertest": "6.1.6"
   },
   "engines": {
     "node": ">= 10"

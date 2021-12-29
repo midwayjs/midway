@@ -22,10 +22,10 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/decorator": "^2.14.0",
-    "chai": "^4.2.0",
+    "chai": "4.3.4",
     "midway-test-component": "*",
-    "mm": "3",
-    "sinon": "^7.2.2"
+    "mm": "3.2.0",
+    "sinon": "7.5.0"
   },
   "peerDependencies": {
     "@midwayjs/decorator": "^2.10.12"
