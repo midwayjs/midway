@@ -28,11 +28,11 @@
     "@midwayjs/koa": "^2.14.2",
     "@midwayjs/mock": "^2.14.0",
     "@midwayjs/web": "^2.14.2",
-    "@types/passport": "^1.0.7",
-    "@types/passport-local": "^1.0.34",
-    "express-session": "^1.17.2",
-    "passport": "^0.5.0",
-    "passport-local": "^1.0.0"
+    "@types/passport": "1.0.7",
+    "@types/passport-local": "1.0.34",
+    "express-session": "1.17.2",
+    "passport": "0.5.2",
+    "passport-local": "1.0.0"
   },
   "peerDependencies": {
     "passport": "^0.5.0"

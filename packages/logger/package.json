@@ -11,10 +11,10 @@
     "winston-transport": "^4.4.0"
   },
   "devDependencies": {
-    "colors": "^1.4.0",
-    "dayjs": "^1.10.4",
-    "egg-logger": "^2.4.2",
-    "fs-extra": "^8.0.1"
+    "colors": "1.4.0",
+    "dayjs": "1.10.7",
+    "egg-logger": "2.7.0",
+    "fs-extra": "8.1.0"
   },
   "engines": {
     "node": ">= 10"

@@ -4,9 +4,9 @@
   "description": "",
   "private": true,
   "dependencies": {
-    "egg": "^2.2.1",
-    "egg-bin": "^4.8.3",
-    "egg-scripts": "^2.5.0"
+    "egg": "2.33.1",
+    "egg-bin": "4.16.4",
+    "egg-scripts": "2.15.2"
   },
   "devDependencies": {},
   "engines": {
