@@ -1,18 +1,6 @@
-import { Configuration, App, Catch } from '@midwayjs/decorator';
+import { Configuration, App } from '@midwayjs/decorator';
 import { join } from 'path';
 import { IMidwayExpressApplication } from '../../../../src';
-
-@Catch()
-export class GlobalError {
-  catch(err, req, res) {
-    if (err) {
-      return {
-        status: err.status ?? 500,
-        message: err.message,
-      }
-    }
-  }
-}
 
 @Configuration({
   imports: [
@@ -28,10 +16,8 @@ export class ContainerConfiguration {
   app: IMidwayExpressApplication;
 
   async onReady() {
-    this.app.useMiddleware((req, res, next) => {
+    this.app.useMiddleware(async (req, res, next) => {
       next();
     });
-
-    this.app.useFilter([GlobalError]);
   }
 }
