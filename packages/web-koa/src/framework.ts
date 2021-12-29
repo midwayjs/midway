@@ -9,6 +9,7 @@ import {
   RouterInfo,
   WebControllerGenerator,
   MidwayConfigMissingError,
+  httpError,
 } from '@midwayjs/core';
 import { Cookies } from '@midwayjs/cookies';
 
@@ -109,10 +110,19 @@ export class MidwayKoaFramework extends BaseFramework<
 
     onerror(this.app, onerrorConfig);
 
+    // not found middleware
+    const notFound = async (ctx, next) => {
+      await next();
+      if (!ctx._matchedRoute) {
+        throw new httpError.NotFoundError();
+      }
+    };
+
+    // root middleware
     const midwayRootMiddleware = async (ctx, next) => {
       this.app.createAnonymousContext(ctx);
       await (
-        await this.applyMiddleware()
+        await this.applyMiddleware(notFound)
       )(ctx, next);
     };
     this.app.use(midwayRootMiddleware);

@@ -100,4 +100,12 @@ describe('/test/feature.test.ts', () => {
     await closeApp(app);
   });
 
+  it('should test not found will got 404', async () => {
+    const app = await creatApp('feature/base-app-404');
+    const result = await createHttpRequest(app)
+      .get('/error');
+    expect(result.status).toEqual(404);
+    await closeApp(app);
+  });
+
 });
