@@ -30,7 +30,7 @@
     "@types/request": "2.48.7"
   },
   "dependencies": {
-    "prom-client": "^13.1.0",
+    "prom-client": "^14.0.0",
     "request": "^2.88.2"
   },
   "engines": {
