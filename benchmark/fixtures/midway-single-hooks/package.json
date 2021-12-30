@@ -10,7 +10,7 @@
     "pandora": "1.10.6"
   },
   "devDependencies": {
-    "@types/mocha": "5.2.7",
+    "@types/mocha": "9.0.0",
     "@types/node": "16.11.17",
     "ts-node": "8.10.2",
     "tslib": "2.3.1",
