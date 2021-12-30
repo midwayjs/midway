@@ -31,7 +31,7 @@
     "@types/cron": "1.7.3"
   },
   "dependencies": {
-    "bull": "^3.22.0",
+    "bull": "^4.0.0",
     "cron": "^1.8.2",
     "uuid": "^8.3.2"
   }
