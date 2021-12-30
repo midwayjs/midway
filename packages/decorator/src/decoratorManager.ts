@@ -938,7 +938,7 @@ export function getMethodReturnTypes(target, methodName: string | symbol) {
 export function createCustomPropertyDecorator(
   decoratorKey: string,
   metadata: any,
-  impl = true,
+  impl = true
 ): PropertyDecorator {
   return function (target: any, propertyName: string): void {
     attachClassMetadata(
@@ -955,15 +955,15 @@ export function createCustomPropertyDecorator(
   };
 }
 /**
- * 
- * @param decoratorKey 
- * @param metadata 
+ *
+ * @param decoratorKey
+ * @param metadata
  * @param impl default true, configuration need decoratorService.registerMethodHandler
  */
 export function createCustomMethodDecorator(
   decoratorKey: string,
   metadata: any,
-  impl = true,
+  impl = true
 ): MethodDecorator {
   return function (target: any, propertyName: string, descriptor) {
     attachClassMetadata(
@@ -979,15 +979,15 @@ export function createCustomMethodDecorator(
   };
 }
 /**
- * 
- * @param decoratorKey 
- * @param metadata 
+ *
+ * @param decoratorKey
+ * @param metadata
  * @param impl default true, configuration need decoratorService.registerMethodHandler
  */
 export function createCustomParamDecorator(
   decoratorKey: string,
   metadata: any,
-  impl = true,
+  impl = true
 ): ParameterDecorator {
   return function (target: any, propertyName: string, parameterIndex: number) {
     // const parameterName = getParamNames(target[methodName])[parameterIndex];

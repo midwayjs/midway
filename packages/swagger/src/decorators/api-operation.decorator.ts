@@ -9,8 +9,12 @@ const defaultOperationOptions: ApiOperationOptions = {
 };
 
 export function ApiOperation(options: ApiOperationOptions): MethodDecorator {
-  return createCustomMethodDecorator(DECORATORS.API_OPERATION, {
-    ...defaultOperationOptions,
-    ...options,
-  } as ApiOperationOptions, false);
+  return createCustomMethodDecorator(
+    DECORATORS.API_OPERATION,
+    {
+      ...defaultOperationOptions,
+      ...options,
+    } as ApiOperationOptions,
+    false
+  );
 }

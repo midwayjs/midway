@@ -96,7 +96,8 @@ export class MidwayDecoratorService {
                 // joinPoint.args
                 const newArgs = [...joinPoint.args];
                 for (const meta of parameterDecoratorMetadata[methodName]) {
-                  const { propertyName, key, metadata, parameterIndex, impl } = meta;
+                  const { propertyName, key, metadata, parameterIndex, impl } =
+                    meta;
                   if (!impl) {
                     continue;
                   }

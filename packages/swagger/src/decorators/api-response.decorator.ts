@@ -40,7 +40,11 @@ export function ApiResponse(options: ApiResponseOptions): any {
     [options.status || 'default']: options,
   };
 
-  return createCustomMethodDecorator(DECORATORS.API_RESPONSE, groupedMetadata, false);
+  return createCustomMethodDecorator(
+    DECORATORS.API_RESPONSE,
+    groupedMetadata,
+    false
+  );
 }
 
 export const ApiOkResponse = (options: ApiResponseOptions = {}) =>

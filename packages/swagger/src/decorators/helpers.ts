@@ -23,10 +23,14 @@ export function createParamDecorator<T extends Record<string, any> = any>(
   metadata: T,
   initial: Partial<T>
 ): MethodDecorator {
-  return createCustomMethodDecorator(DECORATORS.API_PARAMETERS, {
-    ...initial,
-    ...metadata,
-  }, false);
+  return createCustomMethodDecorator(
+    DECORATORS.API_PARAMETERS,
+    {
+      ...initial,
+      ...metadata,
+    },
+    false
+  );
 }
 
 export function getTypeIsArrayTuple(
