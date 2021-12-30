@@ -12,7 +12,7 @@
   },
   "devDependencies": {
     "colors": "1.4.0",
-    "egg-logger": "2.7.0",
+    "egg-logger": "2.7.1",
     "fs-extra": "8.1.0"
   },
   "engines": {

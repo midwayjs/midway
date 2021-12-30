@@ -31,7 +31,7 @@
     "@midwayjs/logger": "^3.0.0-beta.13",
     "@midwayjs/mock": "^3.0.0-beta.13",
     "dayjs": "1.10.7",
-    "egg-logger": "2.7.0",
+    "egg-logger": "2.7.1",
     "egg-mock": "4.2.0",
     "egg-socket.io": "4.1.6",
     "egg-view-nunjucks": "2.3.0",
