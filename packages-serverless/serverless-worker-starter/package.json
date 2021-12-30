@@ -11,8 +11,8 @@
   "devDependencies": {
     "@midwayjs/core": "^3.0.0-beta.13",
     "@midwayjs/decorator": "^3.0.0-beta.13",
-    "@midwayjs/jest-environment-service-worker": "^0.0.1-alpha.5",
-    "@midwayjs/jsdom-service-worker": "^0.0.1-alpha.5",
+    "@midwayjs/jest-environment-service-worker": "0.0.1-alpha.5",
+    "@midwayjs/jsdom-service-worker": "0.0.1-alpha.5",
     "@midwayjs/logger": "^3.0.0-beta.13",
     "@midwayjs/runtime-mock": "^3.0.0-beta.13"
   },

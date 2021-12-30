@@ -13,8 +13,8 @@
     "@midwayjs/core": "^3.0.0-beta.13",
     "@midwayjs/decorator": "^3.0.0-beta.13",
     "@midwayjs/mock": "^3.0.0-beta.13",
-    "@types/ali-oss": "^6.0.10",
-    "dotenv": "^10.0.0"
+    "@types/ali-oss": "6.16.2",
+    "dotenv": "10.0.0"
   },
   "dependencies": {
     "ali-oss": "^6.16.0"

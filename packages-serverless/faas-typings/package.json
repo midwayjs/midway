@@ -6,7 +6,7 @@
     "node": ">=12"
   },
   "devDependencies": {
-    "@midwayjs/cookies": "^1.0.1"
+    "@midwayjs/cookies": "1.0.1"
   },
   "keywords": [
     "midway",
