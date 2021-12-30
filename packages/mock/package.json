@@ -28,7 +28,7 @@
   "devDependencies": {
     "@midwayjs/core": "^3.0.0-beta.13",
     "@midwayjs/decorator": "^3.0.0-beta.13",
-    "@midwayjs/logger": "^3.0.0-beta.13",
+    "@midwayjs/logger": "^2.14.0",
     "@types/amqplib": "*",
     "amqplib": "*",
     "socket.io": "^4.0.0",
