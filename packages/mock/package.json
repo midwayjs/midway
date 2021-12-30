@@ -40,7 +40,7 @@
   "dependencies": {
     "@midwayjs/bootstrap": "^2.14.0",
     "egg-mock": "^4.0.0",
-    "fs-extra": "^8.0.1",
+    "fs-extra": "^10.0.0",
     "supertest": "^6.0.0"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
