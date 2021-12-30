@@ -2,7 +2,12 @@ import { Config, Configuration, Inject } from '@midwayjs/decorator';
 import * as DefaultConfig from './config/config.default';
 import { MidwayApplicationManager } from '@midwayjs/core';
 import { UploadMiddleware } from './middleware';
-import { ensureDir } from 'fs-extra';
+import {
+  autoRemoveUploadTmpFile,
+  ensureDir,
+  stopAutoRemoveUploadTmpFile,
+} from './utils';
+import { UploadOptions } from './interface';
 @Configuration({
   namespace: 'upload',
   importConfigs: [
@@ -16,17 +21,24 @@ export class UploadConfiguration {
   applicationManager: MidwayApplicationManager;
 
   @Config('upload')
-  uploadConfig;
+  uploadConfig: UploadOptions;
 
   async onReady() {
-    const { tmpdir } = this.uploadConfig;
+    const { tmpdir, cleanTimeout } = this.uploadConfig;
     if (tmpdir) {
       await ensureDir(tmpdir);
+      if (cleanTimeout) {
+        autoRemoveUploadTmpFile(tmpdir, cleanTimeout);
+      }
     }
     this.applicationManager
       .getApplications(['koa', 'faas', 'express', 'egg'])
       .forEach(app => {
         app.useMiddleware(UploadMiddleware);
       });
+  }
+
+  async onStop() {
+    await stopAutoRemoveUploadTmpFile();
   }
 }

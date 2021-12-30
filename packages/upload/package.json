@@ -21,7 +21,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "fs-extra": "^8.0.1",
     "raw-body": "^2.4.1"
   },
   "devDependencies": {

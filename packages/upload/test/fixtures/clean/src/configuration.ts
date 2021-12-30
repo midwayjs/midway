@@ -13,6 +13,7 @@ import { Readable } from 'stream';
       default: {
         upload: {
           mode: 'file',
+          cleanTimeout: 1,
         },
       }
     }
@@ -27,15 +28,6 @@ export class HelloHttpService {
 
   @ServerlessTrigger(ServerlessTriggerType.HTTP, { path: '/upload', method: 'post'})
   async upload(@Fields() fields, @Files() files: upload.UploadFileInfo<Readable>[]) {
-    return {
-      files,
-      fields
-    }
-  }
-
-  @ServerlessTrigger(ServerlessTriggerType.HTTP, { path: '/uploadAutoClean', method: 'post'})
-  async uploadAutoClean(@Fields() fields, @Files() files: upload.UploadFileInfo<Readable>[]) {
-    await this.ctx.cleanupRequestFiles();
     return {
       files,
       fields
