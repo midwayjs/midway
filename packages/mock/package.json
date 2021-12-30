@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "@midwayjs/bootstrap": "^2.14.0",
-    "egg-mock": "^3.21.0",
+    "egg-mock": "^4.0.0",
     "fs-extra": "^8.0.1",
     "supertest": "^6.0.0"
   },
