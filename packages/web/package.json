@@ -50,7 +50,7 @@
     "egg-logger": "^2.4.2",
     "egg-path-matching": "^1.0.1",
     "extend2": "^1.0.0",
-    "find-up": "^5.0.0",
+    "find-up": "^6.0.0",
     "midway-schedule": "^2.14.0",
     "mkdirp": "^1.0.4"
   },
