@@ -12,5 +12,5 @@ export function ApiOperation(options: ApiOperationOptions): MethodDecorator {
   return createCustomMethodDecorator(DECORATORS.API_OPERATION, {
     ...defaultOperationOptions,
     ...options,
-  } as ApiOperationOptions);
+  } as ApiOperationOptions, false);
 }

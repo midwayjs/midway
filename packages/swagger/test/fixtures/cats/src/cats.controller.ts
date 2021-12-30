@@ -47,9 +47,10 @@ export class CatsController {
     type: Cat,
   })
   @ApiExtension('x-hello', { hello: 'world' })
-  @ApiParam({ name: 'id', format: 'int32', description: 'hello world id number', example: 12})
+  @ApiParam({ name: 'id', description: 'hello world id number', example: 12})
   @ApiQuery({ name: 'test', enum: ['One', 'Two', 'Three']})
-  findOne(@Param('id') id: string, @Query('test') test: any): Cat {
+  @ApiQuery({ name: 'aa', enum: ['One', 'Two', 'Three']})
+  findOne(@Param('id') id: string, @Query('test') test: any, @Query('aa') aa: any): Cat {
     return this.catsService.findOne(+id);
   }
 }

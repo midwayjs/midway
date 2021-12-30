@@ -9,14 +9,14 @@ export function createPropertyDecorator<T extends Record<string, any> = any>(
   metakey: string,
   metadata: T
 ): PropertyDecorator {
-  return createCustomPropertyDecorator(metakey, metadata);
+  return createCustomPropertyDecorator(metakey, metadata, false);
 }
 
 export function createMixedDecorator<T = any>(
   metakey: string,
   metadata: T
 ): any {
-  return createCustomMethodDecorator(metakey, metadata);
+  return createCustomMethodDecorator(metakey, metadata, false);
 }
 
 export function createParamDecorator<T extends Record<string, any> = any>(
@@ -26,7 +26,7 @@ export function createParamDecorator<T extends Record<string, any> = any>(
   return createCustomMethodDecorator(DECORATORS.API_PARAMETERS, {
     ...initial,
     ...metadata,
-  });
+  }, false);
 }
 
 export function getTypeIsArrayTuple(
