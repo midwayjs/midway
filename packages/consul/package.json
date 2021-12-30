@@ -13,9 +13,9 @@
     "@midwayjs/decorator": "^3.0.0-beta.13",
     "@midwayjs/koa": "^3.0.0-beta.13",
     "@midwayjs/mock": "^3.0.0-beta.13",
-    "@types/consul": "^0.23.34",
-    "@types/sinon": "^10.0.2",
-    "nock": "^13.0.11"
+    "@types/consul": "0.23.36",
+    "@types/sinon": "10.0.6",
+    "nock": "13.2.1"
   },
   "dependencies": {
     "consul": "^0.40.0"
