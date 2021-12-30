@@ -6,7 +6,7 @@
   "dependencies": {
     "egg": "2.33.1",
     "egg-bin": "4.16.4",
-    "pandora": "1.10.6"
+    "pandora": "2.2.0"
   },
   "devDependencies": {},
   "engines": {

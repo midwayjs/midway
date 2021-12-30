@@ -7,7 +7,7 @@
     "midway": "1.20.3",
     "@midwayjs/cli": "1.2.93",
     "@midwayjs/cli-plugin-build": "1.2.93",
-    "pandora": "1.10.6"
+    "pandora": "2.2.0"
   },
   "devDependencies": {
     "@types/mocha": "5.2.7",
