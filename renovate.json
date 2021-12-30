@@ -8,5 +8,5 @@
       "automerge": true
     }
   ],
-  "baseBranches": ["3.x"]
+  "baseBranches": ["main"]
 }
