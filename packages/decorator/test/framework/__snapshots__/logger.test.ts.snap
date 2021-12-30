@@ -3,6 +3,7 @@
 exports[`/test/framework/logger.test.ts logger decorator should be ok 1`] = `
 Object {
   "bbb": Object {
+    "impl": true,
     "key": "logger",
     "metadata": Object {
       "identifier": "bbb",
@@ -10,6 +11,7 @@ Object {
     "propertyName": "bbb",
   },
   "logger": Object {
+    "impl": true,
     "key": "logger",
     "metadata": Object {
       "identifier": undefined,

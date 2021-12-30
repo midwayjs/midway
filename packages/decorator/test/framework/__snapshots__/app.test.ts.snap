@@ -3,6 +3,7 @@
 exports[`/test/framework/app.test.ts app decorator should be ok 1`] = `
 Object {
   "hhh": Object {
+    "impl": true,
     "key": "__midway_framework_app__",
     "metadata": Object {
       "type": undefined,

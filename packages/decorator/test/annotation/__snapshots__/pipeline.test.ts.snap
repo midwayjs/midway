@@ -3,6 +3,7 @@
 exports[`/test/annotation/pipeline.test.ts pipeline decorator should be ok 1`] = `
 Object {
   "dd": Object {
+    "impl": true,
     "key": "__pipeline_identifier__",
     "metadata": Object {
       "valves": undefined,

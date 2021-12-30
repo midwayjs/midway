@@ -3,6 +3,7 @@
 exports[`/test/framework/config.test.ts config decorator should be ok 1`] = `
 Object {
   "bbb": Object {
+    "impl": true,
     "key": "config",
     "metadata": Object {
       "identifier": "bbb",
@@ -10,6 +11,7 @@ Object {
     "propertyName": "bbb",
   },
   "hhh": Object {
+    "impl": true,
     "key": "config",
     "metadata": Object {
       "identifier": undefined,
