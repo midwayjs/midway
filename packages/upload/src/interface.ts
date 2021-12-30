@@ -7,13 +7,7 @@ export interface UploadOptions {
   fileSize?: string;   // Max file size (in bytes), default is `10mb`
   whitelist?: string[]; // The white ext file names, default is `null`
   tmpdir?: string; // 临时文件目录
-  // autoFields: false, // Auto set fields to parts, default is `false`. Only work on `stream` mode.
-  // fieldNameSize: number; // Max field name size (in bytes), default is `100`
-  // fieldSize: string;  // Max field value size (in bytes), default is `100kb`
-  // fields: number;     // Max number of non-file fields, default is `10`
-  // files: number;      // Max number of file fields, default is `10`
-  // fileExtensions: [],
-  // allowArrayField: false,
+  cleanTimeout?: number; // 临时文件自动清理时间
 }
 
 export interface UploadFileInfo<T> {

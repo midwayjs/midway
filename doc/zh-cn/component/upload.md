@@ -65,15 +65,18 @@ export class HomeController {
 ## 配置
 ```ts
 // src/config/config.default.ts
+import { uploadWhiteList } from '@midwayjs/upload';
 export const upload = {
   // mode: UploadMode, 默认为file，即上传到服务器临时目录，可以配置为 stream
   mode: 'file',
   // fileSize: string, 最大上传文件大小，默认为 10mb
   fileSize: '10mb',
   // whitelist: string[]，文件扩展名白名单
-  whitelist: null,
+  whitelist: uploadWhiteList.filter(ext => ext !== '.pdf'),
   // tmpdir: string，上传的文件临时存储路径
   tmpdir: join(tmpdir(), 'midway-upload-files'),
+  // cleanTimeout: number，上传的文件在临时目录中多久之后自动删除，默认为 5 分钟
+  cleanTimeout: 5 * 60 * 1000,
 }
 ```
 
@@ -134,6 +137,8 @@ export const upload = {
 '.mp4',
 '.avi',
 ```
+
+可以通过 `@midwayjs/upload` 包中导出的 `uploadWhiteList` 获取到默认的后缀名白名单。
 
 ## 前端如何将文件上传到服务器？
 

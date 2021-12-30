@@ -9,7 +9,7 @@ import { resolve, extname } from 'path';
 import { writeFileSync } from 'fs';
 import { Readable, Stream } from 'stream';
 import { MultipartInvalidFilenameError, UploadOptions } from '.';
-import { parseFromReadableStream, parseMultipart } from './upload';
+import { parseFromReadableStream, parseMultipart } from './parse';
 import * as getRawBody from 'raw-body';
 
 @Middleware()
