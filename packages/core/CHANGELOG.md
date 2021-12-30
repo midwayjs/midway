@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.13](https://github.com/midwayjs/midway/compare/v3.0.0-beta.12...v3.0.0-beta.13) (2021-12-30)
+
+
+### Features
+
+* 404 error ([#1465](https://github.com/midwayjs/midway/issues/1465)) ([e7e8a9d](https://github.com/midwayjs/midway/commit/e7e8a9dedfa7198ac05b161b41024c2871f93965))
+* add custom decorator filter ([#1477](https://github.com/midwayjs/midway/issues/1477)) ([97501a9](https://github.com/midwayjs/midway/commit/97501a989abc211b0c7400b1df45e050bb237c6a))
+
+
+
+
+
 # [3.0.0-beta.12](https://github.com/midwayjs/midway/compare/v3.0.0-beta.11...v3.0.0-beta.12) (2021-12-28)
 
 

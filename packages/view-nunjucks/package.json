@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/view-nunjucks",
-  "version": "3.0.0-beta.12",
+  "version": "3.0.0-beta.13",
   "description": "Midway Component for egg-view-nunjucks",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -31,13 +31,13 @@
   "license": "MIT",
   "dependencies": {
     "@midwayjs/mw-util": "^1.0.0",
-    "@midwayjs/view": "^3.0.0-beta.12",
+    "@midwayjs/view": "^3.0.0-beta.13",
     "nunjucks": "^3.2.2"
   },
   "devDependencies": {
-    "@midwayjs/core": "^3.0.0-beta.12",
-    "@midwayjs/decorator": "^3.0.0-beta.12",
-    "@midwayjs/koa": "^3.0.0-beta.12",
-    "@midwayjs/mock": "^3.0.0-beta.12"
+    "@midwayjs/core": "^3.0.0-beta.13",
+    "@midwayjs/decorator": "^3.0.0-beta.13",
+    "@midwayjs/koa": "^3.0.0-beta.13",
+    "@midwayjs/mock": "^3.0.0-beta.13"
   }
 }
