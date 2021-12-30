@@ -44,7 +44,7 @@ export function ApiHeader(options: ApiHeaderOptions): any {
         descriptor
       );
     }
-    return createCustomMethodDecorator(DECORATORS.API_HEADERS, param)(
+    return createCustomMethodDecorator(DECORATORS.API_HEADERS, param, false)(
       target,
       undefined,
       undefined

@@ -44,13 +44,16 @@ export class MidwayDecoratorService {
         propertyName: string;
         key: string;
         metadata: any;
+        impl: boolean;
       }> = getClassMetadata(INJECT_CUSTOM_METHOD, Clzz);
 
       if (methodDecoratorMetadataList) {
         // loop it, save this order for decorator run
         for (const meta of methodDecoratorMetadataList) {
-          const { propertyName, key, metadata } = meta;
-
+          const { propertyName, key, metadata, impl } = meta;
+          if (!impl) {
+            continue;
+          }
           // add aspect implementation first
           this.aspectService.interceptPrototypeMethod(
             Clzz,
@@ -79,6 +82,7 @@ export class MidwayDecoratorService {
           parameterIndex: number;
           propertyName: string;
           metadata: any;
+          impl: boolean;
         }>;
       } = getClassMetadata(INJECT_CUSTOM_PARAM, Clzz);
 
@@ -92,7 +96,12 @@ export class MidwayDecoratorService {
                 // joinPoint.args
                 const newArgs = [...joinPoint.args];
                 for (const meta of parameterDecoratorMetadata[methodName]) {
-                  const { propertyName, key, metadata, parameterIndex } = meta;
+                  const { propertyName, key, metadata, parameterIndex, impl } =
+                    meta;
+                  if (!impl) {
+                    continue;
+                  }
+
                   const parameterDecoratorHandler =
                     this.parameterDecoratorMap.get(key);
                   if (!parameterDecoratorHandler) {

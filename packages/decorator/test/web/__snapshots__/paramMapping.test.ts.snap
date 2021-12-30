@@ -4,6 +4,7 @@ exports[`/test/web/paramMapping.test.ts paramMapping decorator should be ok 1`] 
 Object {
   "doget": Array [
     Object {
+      "impl": true,
       "key": "web:router_param",
       "metadata": Object {
         "propertyData": "common:all_value_key",
@@ -13,6 +14,7 @@ Object {
       "propertyName": "doget",
     },
     Object {
+      "impl": true,
       "key": "web:router_param",
       "metadata": Object {
         "propertyData": undefined,
@@ -22,6 +24,7 @@ Object {
       "propertyName": "doget",
     },
     Object {
+      "impl": true,
       "key": "web:router_param",
       "metadata": Object {
         "propertyData": Object {
@@ -33,6 +36,7 @@ Object {
       "propertyName": "doget",
     },
     Object {
+      "impl": true,
       "key": "web:router_param",
       "metadata": Object {
         "propertyData": "tt",
@@ -42,6 +46,7 @@ Object {
       "propertyName": "doget",
     },
     Object {
+      "impl": true,
       "key": "web:router_param",
       "metadata": Object {
         "propertyData": "body",
@@ -51,6 +56,7 @@ Object {
       "propertyName": "doget",
     },
     Object {
+      "impl": true,
       "key": "web:router_param",
       "metadata": Object {
         "propertyData": "bb",
@@ -60,6 +66,7 @@ Object {
       "propertyName": "doget",
     },
     Object {
+      "impl": true,
       "key": "web:router_param",
       "metadata": Object {
         "propertyData": "aa",

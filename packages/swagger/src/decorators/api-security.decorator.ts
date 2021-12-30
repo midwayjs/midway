@@ -14,5 +14,5 @@ export function ApiSecurity(
     metadata = name;
   }
 
-  return createCustomMethodDecorator(DECORATORS.API_SECURITY, metadata);
+  return createCustomMethodDecorator(DECORATORS.API_SECURITY, metadata, false);
 }

@@ -3,6 +3,7 @@
 exports[`/test/framework/plugin.test.ts plugin decorator should be ok 1`] = `
 Object {
   "bbb": Object {
+    "impl": true,
     "key": "plugin",
     "metadata": Object {
       "identifier": "bbb",
@@ -10,6 +11,7 @@ Object {
     "propertyName": "bbb",
   },
   "test": Object {
+    "impl": true,
     "key": "plugin",
     "metadata": Object {
       "identifier": undefined,
