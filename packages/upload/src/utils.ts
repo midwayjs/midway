@@ -1,6 +1,6 @@
-import { readdir, access, stat, unlink, mkdir } from 'fs/promises';
-import { constants } from 'fs';
+import { promises, constants } from 'fs';
 import { join } from 'path';
+const { readdir, access, stat, unlink, mkdir } = promises;
 let autoRemoveUploadTmpFileTimeoutHandler;
 let autoRemoveUploadTmpFilePromise;
 export const autoRemoveUploadTmpFile = async (

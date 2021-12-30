@@ -6,11 +6,16 @@ import {
 } from '@midwayjs/decorator';
 import { IMiddleware, IMidwayLogger } from '@midwayjs/core';
 import { resolve, extname } from 'path';
-import { writeFileSync } from 'fs';
+import { promises } from 'fs';
 import { Readable, Stream } from 'stream';
-import { MultipartInvalidFilenameError, UploadOptions } from '.';
+import {
+  MultipartInvalidFilenameError,
+  UploadFileInfo,
+  UploadOptions,
+} from '.';
 import { parseFromReadableStream, parseMultipart } from './parse';
 import * as getRawBody from 'raw-body';
+const { unlink, writeFile } = promises;
 
 @Middleware()
 export class UploadMiddleware implements IMiddleware<any, any> {
@@ -40,6 +45,25 @@ export class UploadMiddleware implements IMiddleware<any, any> {
       return next();
     }
     ctx.fields = {};
+    ctx.files = [];
+    ctx.cleanupRequestFiles = async (): Promise<Array<boolean>> => {
+      if (!ctx.files?.length) {
+        return [];
+      }
+      return Promise.all(
+        ctx.files.map(async (fileInfo: UploadFileInfo<any>) => {
+          if (typeof fileInfo.data !== 'string') {
+            return false;
+          }
+          try {
+            await unlink(fileInfo.data);
+            return true;
+          } catch {
+            return false;
+          }
+        })
+      );
+    };
 
     let body;
     if (this.isReadableStream(req, isExpress)) {
@@ -80,23 +104,25 @@ export class UploadMiddleware implements IMiddleware<any, any> {
     if (notCheckFile) {
       throw new MultipartInvalidFilenameError(notCheckFile.filename);
     }
-    ctx.files = files.map((file, index) => {
-      const { data, filename } = file;
-      if (mode === 'file') {
-        const ext = extname(filename);
-        const tmpFileName = resolve(tmpdir, `${requireId}.${index}${ext}`);
-        writeFileSync(tmpFileName, data, 'binary');
-        file.data = tmpFileName;
-      } else if (mode === 'stream') {
-        file.data = new Readable({
-          read() {
-            this.push(data);
-            this.push(null);
-          },
-        });
-      }
-      return file;
-    });
+    ctx.files = await Promise.all(
+      files.map(async (file, index) => {
+        const { data, filename } = file;
+        if (mode === 'file') {
+          const ext = extname(filename);
+          const tmpFileName = resolve(tmpdir, `${requireId}.${index}${ext}`);
+          await writeFile(tmpFileName, data, 'binary');
+          file.data = tmpFileName;
+        } else if (mode === 'stream') {
+          file.data = new Readable({
+            read() {
+              this.push(data);
+              this.push(null);
+            },
+          });
+        }
+        return file;
+      })
+    );
 
     return next();
   }

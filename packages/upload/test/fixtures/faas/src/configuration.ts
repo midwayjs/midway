@@ -32,5 +32,14 @@ export class HelloHttpService {
       fields
     }
   }
+
+  @ServerlessTrigger(ServerlessTriggerType.HTTP, { path: '/uploadAutoClean', method: 'post'})
+  async uploadAutoClean(@Fields() fields, @Files() files: upload.UploadFileInfo<Readable>[]) {
+    await this.ctx.cleanupRequestFiles();
+    return {
+      files,
+      fields
+    }
+  }
 }
 
