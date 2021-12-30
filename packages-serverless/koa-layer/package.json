@@ -16,10 +16,10 @@
     "@midwayjs/serverless-fc-trigger": "^3.0.0-beta.13",
     "@midwayjs/serverless-scf-starter": "^3.0.0-beta.13",
     "@midwayjs/serverless-scf-trigger": "^3.0.0-beta.13",
-    "koa": "^2.13.4",
-    "koa-bodyparser": "^4.3.0",
-    "koa-router": "^9.4.0",
-    "supertest": "^6.0.0"
+    "koa": "2.13.4",
+    "koa-bodyparser": "4.3.0",
+    "koa-router": "9.4.0",
+    "supertest": "6.1.6"
   },
   "engines": {
     "node": ">=12"

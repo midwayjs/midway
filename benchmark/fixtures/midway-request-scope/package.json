@@ -9,12 +9,12 @@
     "@midwayjs/decorator": "beta",
     "@midwayjs/koa": "beta",
     "@midwayjs/orm": "beta",
-    "sqlite3": "^5.0.2",
-    "typeorm": "^0.2.41"
+    "sqlite3": "5.0.2",
+    "typeorm": "0.2.41"
   },
   "devDependencies": {
-    "@types/node": "^10.5.5",
-    "typescript": "^4.0.0"
+    "@types/node": "10.17.60",
+    "typescript": "4.5.4"
   },
   "engines": {
     "node": ">=12.0.0"

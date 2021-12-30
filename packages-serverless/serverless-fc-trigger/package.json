@@ -12,7 +12,7 @@
     "extend2": "^1.0.0"
   },
   "devDependencies": {
-    "supertest": "^6.0.0"
+    "supertest": "6.1.6"
   },
   "engines": {
     "node": ">=12"
