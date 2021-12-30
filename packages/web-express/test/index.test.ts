@@ -199,7 +199,11 @@ describe('/test/feature.test.ts', () => {
     const app = await creatApp('base-app-error-filter');
     const result = await createHttpRequest(app)
       .get('/11');
-    expect(result.status).toEqual(404);
+    expect(result.status).toEqual(200);
+    expect(result.body).toEqual({
+      'message': 'Not Found',
+      'status': 404
+    });
 
     const result1 = await createHttpRequest(app)
       .get('/');
@@ -215,7 +219,11 @@ describe('/test/feature.test.ts', () => {
     const app = await creatApp('base-app-global-match');
     const result = await createHttpRequest(app)
       .get('/11');
-    expect(result.status).toEqual(404);
+    expect(result.status).toEqual(200);
+    expect(result.body).toEqual({
+      'message': 'Not Found',
+      'status': 404
+    });
 
     const result1 = await createHttpRequest(app)
       .get('/');
@@ -261,6 +269,14 @@ describe('/test/feature.test.ts', () => {
       'urlencodedParser',
       'test'
     ]);
+    await closeApp(app);
+  });
+
+  it('should test not found will got 404', async () => {
+    const app = await creatApp('base-app-404');
+    const result = await createHttpRequest(app)
+      .get('/error');
+    expect(result.status).toEqual(404);
     await closeApp(app);
   });
 

@@ -1,6 +1,7 @@
 import {
   BaseFramework,
   HTTP_SERVER_KEY,
+  httpError,
   IMidwayBootstrapOptions,
   MidwayProcessTypeEnum,
   PathFileUtil,
@@ -87,11 +88,19 @@ export class MidwayWebFramework extends BaseFramework<
     if (!this.isClusterMode) {
       await this.initSingleProcessEgg();
     }
+
+    // not found middleware
+    const notFound = async (ctx, next) => {
+      await next();
+      if (!ctx._matchedRoute) {
+        throw new httpError.NotFoundError();
+      }
+    };
     // insert error handler
     const midwayRootMiddleware = async (ctx, next) => {
       // this.app.createAnonymousContext(ctx);
       await (
-        await this.applyMiddleware()
+        await this.applyMiddleware(notFound)
       )(ctx as any, next);
     };
     this.app.use(midwayRootMiddleware);

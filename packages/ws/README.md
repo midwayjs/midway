@@ -1,4 +1,4 @@
-# midway framework for socket.io
+# midway framework for WebSocket
 
 [![Package Quality](http://npm.packagequality.com/shield/midway-web.svg)](http://packagequality.com/#?package=midway-web)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/midwayjs/midway/pulls)

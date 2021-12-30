@@ -1,10 +1,10 @@
 import { Configuration, App, Catch } from '@midwayjs/decorator';
 import { join } from 'path';
-import { IMidwayExpressApplication } from '../../../../src';
+import { Application } from '../../../../src';
 
 @Catch()
 export class GlobalError {
-  catch(err, req, res) {
+  catch(err, ctx) {
     if (err) {
       return {
         status: err.status ?? 500,
@@ -25,11 +25,11 @@ export class GlobalError {
 export class ContainerConfiguration {
 
   @App()
-  app: IMidwayExpressApplication;
+  app: Application;
 
   async onReady() {
-    this.app.useMiddleware((req, res, next) => {
-      next();
+    this.app.useMiddleware(async (ctx, next) => {
+      return await next();
     });
 
     this.app.useFilter([GlobalError]);

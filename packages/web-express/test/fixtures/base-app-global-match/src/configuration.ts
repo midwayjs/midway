@@ -8,7 +8,7 @@ export class GlobalFilter {
   catch(err, req, res) {
     if (err) {
       return {
-        status: 500,
+        status: err.status ?? 500,
         message: err.message,
       }
     }

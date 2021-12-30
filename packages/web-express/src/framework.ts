@@ -7,6 +7,7 @@ import {
   PathFileUtil,
   WebRouterCollector,
   RouterInfo,
+  httpError,
 } from '@midwayjs/core';
 
 import {
@@ -85,6 +86,12 @@ export class MidwayExpressFramework extends BaseFramework<
     debug('[express]: use user router middleware');
     // load controller
     await this.loadMidwayController();
+
+    debug('[express]: use 404 not found middleware');
+    // eslint-disable-next-line
+    this.app.use(function notFound(req, res, next) {
+      next(new httpError.NotFoundError());
+    });
 
     debug('[express]: use global error handler middleware');
     // use global error handler

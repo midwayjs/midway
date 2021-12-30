@@ -281,4 +281,32 @@ describe('/test/feature.test.ts', () => {
     expect(result1.status).toEqual(400);
     await closeApp(app);
   });
+
+  it('should test global filter', async () => {
+    const app = await creatApp('base-app-error-filter');
+    const result = await createHttpRequest(app)
+      .get('/11');
+    expect(result.status).toEqual(200);
+    expect(result.body).toEqual({
+      'message': 'Not Found',
+      'status': 404
+    });
+
+    const result1 = await createHttpRequest(app)
+      .get('/');
+    expect(result1.status).toEqual(200);
+    expect(result1.body).toEqual({
+      message: 'my error',
+      status: 500
+    });
+    await closeApp(app);
+  });
+
+  it('should test not found will got 404', async () => {
+    const app = await creatApp('base-app-404');
+    const result = await createHttpRequest(app)
+      .get('/error');
+    expect(result.status).toEqual(404);
+    await closeApp(app);
+  });
 });
