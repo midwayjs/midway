@@ -24,13 +24,13 @@
   "devDependencies": {
     "@midwayjs/decorator": "^3.0.0-beta.13",
     "@midwayjs/mock": "^3.0.0-beta.13",
-    "@types/ws": "7.4.7",
+    "@types/ws": "8.2.2",
     "fs-extra": "8.1.0"
   },
   "dependencies": {
     "@midwayjs/core": "^3.0.0-beta.13",
     "@midwayjs/logger": "^3.0.0-beta.13",
-    "ws": "^7.4.5"
+    "ws": "^8.0.0"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
   "repository": {
