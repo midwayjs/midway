@@ -1,5 +1,9 @@
 # 创建第一个应用
 
+## 关于 v3 版本
+
+当前 v3 版本还是 beta 状态，在未发布前，我们依旧会调整 API 并且无法及时通知用户，但是相应的，可以随时使用到最新的功能。
+
 ## 快速初始化
 
 
@@ -7,11 +11,12 @@
 $ npm -v
 
 # 如果是 npm v6
-$ npm init midway --type=web my_midway_app
+$ npm init midway --type=koa-v3 my_midway_app
 
 # 如果是 npm v7
-$ npm init midway -- --type=web my_midway_app
+$ npm init midway -- --type=koa-v3 my_midway_app
 ```
+
 
 
 `my_midway_app`  是你即将创建的项目根目录名，CLI 会自动创建该目录，并将初始化示例代码写入其中。
@@ -94,10 +99,9 @@ Midway 设计之初就可以兼容多种上层框架，比如常见的 `Express`
 
 | 名称 | 描述 |
 | --- | --- |
-| @midwayjs/web | 默认，Egg.js 是国内相对常用的 Web 框架，也在阿里的双促中经过稳定性考验，包含了比较多的默认插件。 |
+| @midwayjs/koa | 默认，Koa 是一个 Express 的替代框架，它默认支持了异步中间件等能力，是第二大通用的 Node.js Web 框架。 |
+| @midwayjs/web | Egg.js 是国内相对常用的 Web 框架，包含一些默认插件。 |
 | @midwayjs/express | Express 是一个众所周知的 node.js 简约 Web 框架。 这是一个经过实战考验，适用于生产的库，拥有大量社区资源。  |
-| @midwayjs/koa | Koa 是一个 Express 的替代框架，它默认支持了异步中间件等能力，是第二大通用的 Node.js Web 框架。 |
-
 
 
 如果你希望替代默认的 Web 框架，请参考对应的框架章节。
