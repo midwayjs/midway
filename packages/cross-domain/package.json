@@ -1,0 +1,36 @@
+{
+  "name": "@midwayjs/corss-domain",
+  "version": "3.0.0-beta.13",
+  "description": "Midway Component for Corss Domain",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "node --require=ts-node/register ../../node_modules/.bin/jest",
+    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --coverage --forceExit",
+    "ci": "npm run test"
+  },
+  "keywords": [],
+  "author": "",
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts"
+  ],
+  "engines": {
+    "node": ">=12"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "vary": "^1.1.2"
+  },
+  "devDependencies": {
+    "@midwayjs/core": "^3.0.0-beta.13",
+    "@midwayjs/decorator": "^3.0.0-beta.13",
+    "@midwayjs/express": "^3.0.0-beta.13",
+    "@midwayjs/faas": "^3.0.0-beta.13",
+    "@midwayjs/koa": "^3.0.0-beta.13",
+    "@midwayjs/mock": "^3.0.0-beta.13",
+    "@midwayjs/serverless-app": "^3.0.0-beta.13",
+    "@midwayjs/web": "^3.0.0-beta.13"
+  }
+}
