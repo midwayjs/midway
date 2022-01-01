@@ -28,7 +28,7 @@
     "@midwayjs/web": "^3.0.0-beta.13",
     "@types/socket.io-client": "1.4.36",
     "request": "2.88.2",
-    "socket.io-client": "^4.0.0"
+    "socket.io-client": "4.4.0"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
   "repository": {
