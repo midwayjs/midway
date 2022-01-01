@@ -31,8 +31,8 @@
     "@midwayjs/logger": "2.14.0",
     "@types/amqplib": "*",
     "amqplib": "*",
-    "socket.io": "^4.0.0",
-    "socket.io-client": "^4.0.0",
+    "socket.io": "4.4.0",
+    "socket.io-client": "4.4.0",
     "ws": "8.4.0"
   },
   "dependencies": {
