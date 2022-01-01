@@ -13,7 +13,7 @@
     "@midwayjs/decorator": "^3.0.0-beta.13",
     "@midwayjs/koa": "^3.0.0-beta.13",
     "@midwayjs/mock": "^3.0.0-beta.13",
-    "@types/consul": "0.23.36",
+    "@types/consul": "0.40.0",
     "@types/sinon": "10.0.6",
     "nock": "13.2.1"
   },
