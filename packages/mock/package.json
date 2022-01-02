@@ -36,7 +36,7 @@
     "ws": "8.4.0"
   },
   "dependencies": {
-    "fs-extra": "^8.0.1",
+    "fs-extra": "^10.0.0",
     "supertest": "^6.0.0"
   },
   "author": "Harry Chen <czy88840616@gmail.com>",
