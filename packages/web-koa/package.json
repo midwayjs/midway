@@ -29,7 +29,7 @@
     "@types/koa": "2.13.4",
     "@types/koa-bodyparser": "4.3.5",
     "@types/koa-router": "7.4.4",
-    "fs-extra": "8.1.0"
+    "fs-extra": "10.0.0"
   },
   "dependencies": {
     "@koa/router": "^10.0.0",
