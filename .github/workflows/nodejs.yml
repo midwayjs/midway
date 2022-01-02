@@ -58,7 +58,7 @@ jobs:
         ALI_SDK_STS_BUCKET: ${{ secrets.ALI_SDK_STS_BUCKET }}
         ALI_SDK_STS_ROLE: ${{ secrets.ALI_SDK_STS_ROLE }}
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v1
+      uses: codecov/codecov-action@v2
 
 #
 #   build-windows:
