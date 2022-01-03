@@ -76,8 +76,7 @@ $ npm run dev
 
 整个部署分为几个部分，由于 Midway 是 TypeScript 编写，比传统 JavaScript 代码增加了一个构建的步骤，整个部署的过程如下。
 
-
-![image.png](https://cdn.nlark.com/yuque/0/2020/png/501408/1607238098956-563e8219-182d-4494-b9b4-311745be32f2.png#height=121&id=WtwR3&margin=%5Bobject%20Object%5D&name=image.png&originHeight=242&originWidth=2212&originalType=binary&ratio=1&size=51328&status=done&style=none&width=1106)
+![image.png](https://img.alicdn.com/imgextra/i3/O1CN01wSpCuM27pWGTDeDyK_!!6000000007846-2-tps-2212-242.png)
 由于部署和平台、环境非常相关，下面我们都将以 Linux 来演示，其他平台可以视情况参考。
 
 
@@ -259,6 +258,7 @@ $ npm i egg-scripts --save
 
 ####
 **启动参数**
+
 ```bash
 $ egg-scripts start --port=7001 --daemon --title=egg-server-showcase
 ```
@@ -343,9 +343,8 @@ deployType: egg       ## 部署的应用类型
 如果使用了自己的 egg 上层框架，这里的 egg.framework 可以变为自己的包名。
 :::
 
-
 3、执行 `npm run deploy` 即可，发布后，阿里云会输出一个临时可用的域名，打开浏览器访问即可。
-![image.png](https://cdn.nlark.com/yuque/0/2020/png/501408/1600835297676-1753de7a-fb0d-46ca-98f0-944eba5b2f2b.png#height=193&id=s5j4s&margin=%5Bobject%20Object%5D&name=image.png&originHeight=193&originWidth=1219&originalType=binary&ratio=1&size=35152&status=done&style=none&width=1219)
+![image.png](https://img.alicdn.com/imgextra/i2/O1CN01OUELkl24p74BjScrn_!!6000000007439-2-tps-1219-193.png)
 如需更详细的发布文档，请查阅 [**Serverless 发布 FAQ**](https://www.yuque.com/midwayjs/faas/deploy_aliyun_faq)。
 
 
@@ -571,6 +570,6 @@ export class HomeController {
 
 如下：
 
-![image.png](https://cdn.nlark.com/yuque/0/2020/png/187105/1608886309353-2a65279f-8164-45c0-ab41-a759d31f1492.png#height=92&id=APR77&margin=%5Bobject%20Object%5D&name=image.png&originHeight=184&originWidth=686&originalType=binary&ratio=1&size=26724&status=done&style=none&width=343)
+![image.png](https://img.alicdn.com/imgextra/i1/O1CN01Zrvj3E1p61qFBz95H_!!6000000005310-2-tps-686-184.png)
 
 关于更多关于 docker-compose 的详情，可以查看网上关于 docker-compose 的使用方法。

@@ -2,14 +2,12 @@
 
 适用于 `@midwayjs/faas` 、`@midwayjs/web` 、`@midwayjs/koa` 和 `@midwayjs/express` 多种框架的通用上传组件，支持 `file` (服务器临时文件)、`stream` （流）多种模式。
 
-
-
 # 使用
 
 1. 安装依赖
 
-```shell
-$ npm i @midwayjs/upload --save
+```bash
+$ npm i @midwayjs/upload@3 --save
 ```
 
 2. 在 configuration 文件中引入组件
