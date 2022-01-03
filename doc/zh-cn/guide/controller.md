@@ -1,9 +1,22 @@
 # 控制器（Controller）
 
-在常见的 MVC 架构中，C 即代表控制器，控制器用于负责**解析用户的输入，处理后返回相应的结果。**
+在常见的 MVC 架构中，C 即代表控制器，控制器用于负责 **解析用户的输入，处理后返回相应的结果。**
+
+如图所示，客户端通过 Http 协议请求服务端的控制器，控制器处理结束后响应客户端，这是一个最基础的 ”请求 - 响应“ 流程。
+
+```
+┌─────────────────────┐                     ┌─────────────────────┐
+│                     │                     │                     │
+│       Client        │─── Http Request  ──▶│    Controller A     │
+│                     │                     │                     │
+└─────────────────────┘                     └─────────────────────┘
+           ▲                                           │           
+           │                                           │           
+           └─────────────  Http Response  ─────────────┘           
+                                                                   
+```
 
 
-![image.png](https://cdn.nlark.com/yuque/0/2020/png/501408/1600592027849-679b4cfc-cf11-466a-a467-403907bd6a3e.png#height=317&id=Hffdy&margin=%5Bobject%20Object%5D&name=image.png&originHeight=634&originWidth=1600&originalType=binary&ratio=1&size=57905&status=done&style=none&width=800)
 
 
 常见的有：
@@ -18,7 +31,7 @@
 一般来说，控制器常用于对用户的请求参数做一些校验，转换，调用复杂的业务逻辑，拿到相应的业务结果后进行数据组装，然后返回。
 
 
-在 Midway 中，控制器**也承载了路由的能力**，每个控制器可以提供多个路由，不同的路由可以执行不同的操作。
+在 Midway 中，控制器 **也承载了路由的能力**，每个控制器可以提供多个路由，不同的路由可以执行不同的操作。
 
 
 在接下去的示例中，我们将演示如何在控制器中创建路由。
@@ -191,8 +204,7 @@ Midway 提供了更多从 Query、Body 、Header 等位置获取值的装饰器�
 | @Headers(name?: string) | req.headers / req.headers[name] | ctx.headers / ctx.headers[name] |
 |  |  |  |
 
-
-:::warning
+:::caution
 **注意 **@Queries 装饰器和 @Query **有所区别**。
 
 
@@ -209,6 +221,7 @@ async updateUser(@Body('id') id: string): Promise<User> {
 }
 ```
 **示例：所有 body 参数**
+
 ```typescript
 @Post('/')
 async updateUser(@Body() user: User): Promise<User> {
@@ -407,7 +420,7 @@ export class HomeController {
   }
 }
 ```
-:::info
+::: info
 响应类型装饰器不能在响应流关闭后（response.end之后）修改。
 :::
 ## 优先级
