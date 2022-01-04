@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.14](https://github.com/midwayjs/midway/compare/v3.0.0-beta.13...v3.0.0-beta.14) (2022-01-04)
+
+
+### Bug Fixes
+
+* cos config definition & 3.x doc update ([#1515](https://github.com/midwayjs/midway/issues/1515)) ([0ac7ac5](https://github.com/midwayjs/midway/commit/0ac7ac5805b7ab8873f8792fc1712a74e3223172))
+* **deps:** update dependency @grpc/proto-loader to ^0.6.0 ([#1505](https://github.com/midwayjs/midway/issues/1505)) ([67eaee7](https://github.com/midwayjs/midway/commit/67eaee791878908ccad8a1fdaac39ac6786e889e))
+* **deps:** update dependency axios to ^0.24.0 ([#1506](https://github.com/midwayjs/midway/issues/1506)) ([d2a7dab](https://github.com/midwayjs/midway/commit/d2a7dab55e6f96528e6087ae503f6328013088fb))
+* **deps:** update dependency bull to v4 ([#1511](https://github.com/midwayjs/midway/issues/1511)) ([9100d21](https://github.com/midwayjs/midway/commit/9100d21d0cd29ff948981f1c5616dd996929f6e3))
+* **deps:** update dependency cookie-session to v2 ([#1483](https://github.com/midwayjs/midway/issues/1483)) ([ef1c1d1](https://github.com/midwayjs/midway/commit/ef1c1d1b8fd7dd297761e7ed3666c6bc0d496fc2))
+* **deps:** update dependency http-errors to v2 ([#1512](https://github.com/midwayjs/midway/issues/1512)) ([f3580e1](https://github.com/midwayjs/midway/commit/f3580e14c55cb3ddbc09c75694c2adc45765d7ad))
+* **deps:** update dependency prom-client to v14 ([#1486](https://github.com/midwayjs/midway/issues/1486)) ([87b6678](https://github.com/midwayjs/midway/commit/87b6678b179e239f8dbe5d0adb935df2c713d94b))
+* **deps:** update dependency sequelize to ~6.12.0 ([#1509](https://github.com/midwayjs/midway/issues/1509)) ([6f96bf7](https://github.com/midwayjs/midway/commit/6f96bf745761c849c94a8977436dc2955f3d9a3c))
+* **deps:** update dependency statuses to v2 ([#1487](https://github.com/midwayjs/midway/issues/1487)) ([5f99204](https://github.com/midwayjs/midway/commit/5f99204f7ca28fbf9c8048bcbba0d9d1eb49d2aa))
+* **deps:** update dependency ws to v8 ([#1488](https://github.com/midwayjs/midway/issues/1488)) ([7e71bb4](https://github.com/midwayjs/midway/commit/7e71bb4eeb731d3bf91f0caf06bc9d9acb6297ca))
+* upload support auto clean and whitelist ([#1484](https://github.com/midwayjs/midway/issues/1484)) ([7daa037](https://github.com/midwayjs/midway/commit/7daa0371f4a3e79cd4789959d8427fc5b6c91d08))
+
+
+
+
+
 # [3.0.0-beta.13](https://github.com/midwayjs/midway/compare/v3.0.0-beta.12...v3.0.0-beta.13) (2021-12-30)
 
 
