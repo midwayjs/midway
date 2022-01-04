@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "prom-client": "^14.0.0",
-    "request": "^2.88.2"
+    "request": "2.88.2"
   },
   "engines": {
     "node": ">=12"

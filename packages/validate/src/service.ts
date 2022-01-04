@@ -17,18 +17,18 @@ import { MidwayValidationError } from './error';
 @Scope(ScopeEnum.Singleton)
 export class ValidateService {
   @Config('validate')
-  validateConfig: typeof DefaultConfig.validate;
+  protected validateConfig: typeof DefaultConfig.validate;
 
   @Config('i18n')
-  i18nConfig;
+  protected i18nConfig;
 
   @Inject()
-  i18nService: MidwayI18nServiceSingleton;
+  protected i18nService: MidwayI18nServiceSingleton;
 
-  messages = {};
+  protected messages = {};
 
   @Init()
-  async init() {
+  protected async init() {
     const locales = Object.keys(DefaultConfig.i18n.localeTable);
     locales.forEach(locale => {
       this.messages[formatLocale(locale)] = Object.fromEntries(
@@ -37,15 +37,15 @@ export class ValidateService {
     });
   }
 
-  validate(
-    ClzType: new (...args) => any,
+  public validate<T extends new (...args) => any>(
+    ClzType: T,
     value: any,
     options?: {
       errorStatus?: number;
       locale?: string;
       validationOptions?: Joi.ValidationOptions;
     }
-  ) {
+  ): Joi.ValidationResult<T> {
     options.validationOptions = options.validationOptions || {};
     options.validationOptions.errors = options.validationOptions.errors || {};
     options.validationOptions.errors.language = formatLocale(

@@ -2,17 +2,17 @@
 
 适用于 `@midwayjs/faas` 、`@midwayjs/web` 、`@midwayjs/koa` 和 `@midwayjs/express` 多种框架的通用上传组件，支持 `file` (服务器临时文件)、`stream` （流）多种模式。
 
-## 使用
+# 使用
 
 1. 安装依赖
 
-```shell
-npm i @midwayjs/upload --save
+```bash
+$ npm i @midwayjs/upload@3 --save
 ```
 
 2. 在 configuration 文件中引入组件
 
-```ts
+```typescript
 import * as upload from '@midwayjs/upload';
 @Configuration({
   imports: [
@@ -26,7 +26,7 @@ export class AutoConfiguration {}
 
 3. 在代码中获取上传的文件
 
-```ts
+```typescript
 @Controller('/')
 export class HomeController {
 
@@ -63,7 +63,7 @@ export class HomeController {
 
 
 ## 配置
-```ts
+```typescript
 // src/config/config.default.ts
 import { uploadWhiteList } from '@midwayjs/upload';
 export const upload = {
@@ -80,7 +80,11 @@ export const upload = {
 }
 ```
 
+
+
 ### mode 配置上传模式
+
+
 
 #### 1. file 模式【默认值】
 
@@ -89,6 +93,8 @@ export const upload = {
 使用 file 模式时，通过 `this.ctx.files` 中获取的 `data` 为上传的文件在服务器的临时文件地址，后续可以再通过 `fs.createReadStream` 等方式来获取到此文件内容。
 
 使用 file 模式时，支持同时上传多个文件，多个文件会以数组的形式存放在 `this.ctx.files` 中。
+
+
 
 #### 2. stream 模式
 
@@ -99,10 +105,6 @@ export const upload = {
 
 
 使用 stream 模式时，仅同时上传一个文件，即 `this.ctx.files` 数组中只有一个文件数据对象。
-
-
-
-
 
 
 
@@ -140,6 +142,8 @@ export const upload = {
 
 可以通过 `@midwayjs/upload` 包中导出的 `uploadWhiteList` 获取到默认的后缀名白名单。
 
+
+
 ### 临时文件与清理
 
 
@@ -148,6 +152,8 @@ export const upload = {
 你可以通过在配置中使用 `cleanTimeout` 来控制自动的临时文件清理时间，默认值为 `5 * 60 * 1000`，即上传的文件于 `5 分钟` 后自动清理，设置为 `0` 则视为不开启自动清理功能。
 
 你也可以在代码中通过调用 `await ctx.cleanupRequestFiles()` 来主动清理当前请求上传的临时文件。
+
+
 
 ## 前端如何将文件上传到服务器？
 

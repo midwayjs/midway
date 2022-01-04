@@ -1,7 +1,9 @@
 import {
   ObjectIdentifier,
   IManagedInstance,
-  IMethodAspect, ScopeEnum, FrameworkType
+  IMethodAspect,
+  ScopeEnum,
+  FrameworkType,
 } from '@midwayjs/decorator';
 import { ILogger, LoggerOptions } from '@midwayjs/logger';
 import * as EventEmitter from 'events';
@@ -9,9 +11,7 @@ import { ContextMiddlewareManager } from './common/middlewareManager';
 import _default from './config/config.default';
 
 export type PowerPartial<T> = {
-  [U in keyof T]?: T[U] extends {}
-    ? PowerPartial<T[U]>
-    : T[U]
+  [U in keyof T]?: T[U] extends {} ? PowerPartial<T[U]> : T[U];
 };
 
 export type ServiceFactoryConfigOption<OPTIONS> = {
@@ -20,37 +20,80 @@ export type ServiceFactoryConfigOption<OPTIONS> = {
   clients?: {
     [key: string]: PowerPartial<OPTIONS>;
   };
-}
+};
 
-type ConfigType<T> = T extends (...args: any[]) => any ? PowerPartial<ReturnType<T>> : PowerPartial<T>;
-
-export type FileConfigOption<T, K = unknown> = K extends keyof ConfigType<T> ? Pick<ConfigType<T>, K> : ConfigType<T>;
+type ConfigType<T> = T extends (...args: any[]) => any
+  ? Writable<PowerPartial<ReturnType<T>>>
+  : Writable<PowerPartial<T>>;
 
 /**
+ * Get definition from config
+ */
+export type FileConfigOption<T, K = unknown> = K extends keyof ConfigType<T>
+  ? Pick<ConfigType<T>, K>
+  : ConfigType<T>;
+
+/**
+ * Make object property writeable
+ */
+export type Writable<T> = {
+  -readonly [P in keyof T]: T[P];
+};
+
+/**
+ * Lifecycle Definition
  * 生命周期定义
  */
 export interface ILifeCycle extends Partial<IObjectLifeCycle> {
-  onConfigLoad?(container: IMidwayContainer, mainApp?: IMidwayApplication): Promise<any>;
-  onReady?(container: IMidwayContainer, mainApp?: IMidwayApplication): Promise<void>;
-  onServerReady?(container: IMidwayContainer, mainApp?: IMidwayApplication): Promise<void>;
-  onStop?(container: IMidwayContainer, mainApp?: IMidwayApplication): Promise<void>;
+  onConfigLoad?(
+    container: IMidwayContainer,
+    mainApp?: IMidwayApplication
+  ): Promise<any>;
+  onReady?(
+    container: IMidwayContainer,
+    mainApp?: IMidwayApplication
+  ): Promise<void>;
+  onServerReady?(
+    container: IMidwayContainer,
+    mainApp?: IMidwayApplication
+  ): Promise<void>;
+  onStop?(
+    container: IMidwayContainer,
+    mainApp?: IMidwayApplication
+  ): Promise<void>;
   // onAppError?(err: Error, app: IMidwayApplication);
 }
 
 export type ObjectContext = {
   originName?: string;
-}
+};
 
 /**
+ * Abstract Object Factory
  * 对象容器抽象
- * 默认用Xml容器实现一个
  */
 export interface IObjectFactory {
   registry: IObjectDefinitionRegistry;
-  get<T>(identifier: new (...args) => T, args?: any[], objectContext?: ObjectContext): T;
-  get<T>(identifier: ObjectIdentifier, args?: any[], objectContext?: ObjectContext): T;
-  getAsync<T>(identifier: new (...args) => T, args?: any[], objectContext?: ObjectContext): Promise<T>;
-  getAsync<T>(identifier: ObjectIdentifier, args?: any[], objectContext?: ObjectContext): Promise<T>;
+  get<T>(
+    identifier: new (...args) => T,
+    args?: any[],
+    objectContext?: ObjectContext
+  ): T;
+  get<T>(
+    identifier: ObjectIdentifier,
+    args?: any[],
+    objectContext?: ObjectContext
+  ): T;
+  getAsync<T>(
+    identifier: new (...args) => T,
+    args?: any[],
+    objectContext?: ObjectContext
+  ): Promise<T>;
+  getAsync<T>(
+    identifier: ObjectIdentifier,
+    args?: any[],
+    objectContext?: ObjectContext
+  ): Promise<T>;
 }
 
 export enum ObjectLifeCycleEvent {
@@ -61,6 +104,10 @@ export enum ObjectLifeCycleEvent {
   BEFORE_DESTROY = 'beforeObjectDestroy',
 }
 
+/**
+ * Object Lifecycle
+ * 对象生命周期
+ */
 export interface IObjectLifeCycle {
   onBeforeBind(
     fn: (
@@ -82,31 +129,38 @@ export interface IObjectLifeCycle {
       }
     ) => void
   );
-  onObjectCreated<T>(fn: (
-    ins: T,
-    options: {
-      context: IMidwayContainer,
-      definition: IObjectDefinition,
-      replaceCallback: (ins: T) => void,
-    }
-  ) => void);
-  onObjectInit<T>(fn: (
-    ins: T,
-    options: {
-      context: IMidwayContainer,
-      definition: IObjectDefinition,
-    }
-  ) => void);
-  onBeforeObjectDestroy<T>(fn: (
-    ins: T,
-    options: {
-      context: IMidwayContainer,
-      definition: IObjectDefinition,
-    }
-  ) => void);
+  onObjectCreated<T>(
+    fn: (
+      ins: T,
+      options: {
+        context: IMidwayContainer;
+        definition: IObjectDefinition;
+        replaceCallback: (ins: T) => void;
+      }
+    ) => void
+  );
+  onObjectInit<T>(
+    fn: (
+      ins: T,
+      options: {
+        context: IMidwayContainer;
+        definition: IObjectDefinition;
+      }
+    ) => void
+  );
+  onBeforeObjectDestroy<T>(
+    fn: (
+      ins: T,
+      options: {
+        context: IMidwayContainer;
+        definition: IObjectDefinition;
+      }
+    ) => void
+  );
 }
 
 /**
+ * Object Definition
  * 对象描述定义
  */
 export interface IObjectDefinition {
@@ -164,6 +218,7 @@ export interface IObjectCreator {
   doDestroyAsync(obj: any): Promise<void>;
 }
 /**
+ * Object Definition Registry
  * 对象定义存储容器
  */
 export interface IObjectDefinitionRegistry {
@@ -223,7 +278,8 @@ export type HandlerFunction = (
    * decorator set metadata
    */
   meta: any,
-  instance: any) => any;
+  instance: any
+) => any;
 
 export type MethodHandlerFunction = (options: {
   target: new (...args) => any;
@@ -339,7 +395,8 @@ export interface Context {
   getAttr<T>(key: string): T;
 }
 
-export type IMidwayContext<FrameworkContext = unknown> = Context & FrameworkContext;
+export type IMidwayContext<FrameworkContext = unknown> = Context &
+  FrameworkContext;
 export type NextFunction = () => Promise<any>;
 
 /**
@@ -350,11 +407,25 @@ export interface IMiddleware<CTX, R, N = unknown> {
   match?: (ctx?: CTX) => boolean;
   ignore?: (ctx?: CTX) => boolean;
 }
-export type FunctionMiddleware<CTX, R, N = unknown> = N extends true ? (req: CTX, res: R, next: N) => any: (context: CTX, next: R, options?: any) => any;
-export type ClassMiddleware<CTX, R, N> = new (...args) => IMiddleware<CTX, R, N>;
-export type CommonMiddleware<CTX, R, N> = ClassMiddleware<CTX, R, N> | FunctionMiddleware<CTX, R, N>;
-export type CommonMiddlewareUnion<CTX, R, N> = CommonMiddleware<CTX, R, N> | Array<CommonMiddleware<CTX, R, N>>;
-export type MiddlewareRespond<CTX, R, N> = (context: CTX, nextOrRes?: N extends true ? R: NextFunction, next?: N) => Promise<{ result: any; error: Error | undefined }>;
+export type FunctionMiddleware<CTX, R, N = unknown> = N extends true
+  ? (req: CTX, res: R, next: N) => any
+  : (context: CTX, next: R, options?: any) => any;
+export type ClassMiddleware<CTX, R, N> = new (...args) => IMiddleware<
+  CTX,
+  R,
+  N
+>;
+export type CommonMiddleware<CTX, R, N> =
+  | ClassMiddleware<CTX, R, N>
+  | FunctionMiddleware<CTX, R, N>;
+export type CommonMiddlewareUnion<CTX, R, N> =
+  | CommonMiddleware<CTX, R, N>
+  | Array<CommonMiddleware<CTX, R, N>>;
+export type MiddlewareRespond<CTX, R, N> = (
+  context: CTX,
+  nextOrRes?: N extends true ? R : NextFunction,
+  next?: N
+) => Promise<{ result: any; error: Error | undefined }>;
 
 /**
  * Common Exception Filter definition
@@ -363,7 +434,9 @@ export interface IFilter<CTX, R, N> {
   catch?(err: Error, ctx: CTX, res?: R, next?: N): any;
   match?(result: any, ctx: CTX, res?: R, next?: N): any;
 }
-export type CommonFilterUnion<CTX, R, N> = (new (...args) => IFilter<CTX, R, N>) | Array<new (...args) => IFilter<CTX, R, N>>
+export type CommonFilterUnion<CTX, R, N> =
+  | (new (...args) => IFilter<CTX, R, N>)
+  | Array<new (...args) => IFilter<CTX, R, N>>;
 
 export interface IMidwayBaseApplication<CTX extends IMidwayContext> {
   /**
@@ -474,8 +547,10 @@ export interface IMidwayBaseApplication<CTX extends IMidwayContext> {
   useFilter<R, N>(Filter: CommonFilterUnion<CTX, R, N>): void;
 }
 
-export type IMidwayApplication<T extends IMidwayContext = IMidwayContext, FrameworkApplication = unknown> = IMidwayBaseApplication<T>
-  & FrameworkApplication;
+export type IMidwayApplication<
+  T extends IMidwayContext = IMidwayContext,
+  FrameworkApplication = unknown
+> = IMidwayBaseApplication<T> & FrameworkApplication;
 
 export interface IMidwayBootstrapOptions {
   [customPropertyKey: string]: any;
@@ -487,7 +562,9 @@ export interface IMidwayBootstrapOptions {
   moduleDetector?: 'file' | IFileDetector | false;
   logger?: boolean | ILogger;
   ignore?: string[];
-  globalConfig?: Array<{[environmentName: string]: Record<string, any>;}> | Record<string, any>;
+  globalConfig?:
+    | Array<{ [environmentName: string]: Record<string, any> }>
+    | Record<string, any>;
 }
 
 export interface IConfigurationOptions {
@@ -497,7 +574,13 @@ export interface IConfigurationOptions {
   ContextLoggerApplyLogger?: string;
 }
 
-export interface IMidwayFramework<APP extends IMidwayApplication<CTX>, CTX extends IMidwayContext, CONFIG extends IConfigurationOptions, ResOrNext = unknown, Next = unknown> {
+export interface IMidwayFramework<
+  APP extends IMidwayApplication<CTX>,
+  CTX extends IMidwayContext,
+  CONFIG extends IConfigurationOptions,
+  ResOrNext = unknown,
+  Next = unknown
+> {
   app: APP;
   configurationOptions: CONFIG;
   configure(options?: CONFIG);
@@ -520,7 +603,9 @@ export interface IMidwayFramework<APP extends IMidwayApplication<CTX>, CTX exten
   getDefaultContextLoggerClass(): any;
   useMiddleware(Middleware: CommonMiddlewareUnion<CTX, ResOrNext, Next>): void;
   getMiddleware(): ContextMiddlewareManager<CTX, ResOrNext, Next>;
-  applyMiddleware(lastMiddleware?: CommonMiddleware<CTX, ResOrNext, Next>): Promise<MiddlewareRespond<CTX, ResOrNext, Next>>;
+  applyMiddleware(
+    lastMiddleware?: CommonMiddleware<CTX, ResOrNext, Next>
+  ): Promise<MiddlewareRespond<CTX, ResOrNext, Next>>;
   useFilter(Filter: CommonFilterUnion<CTX, ResOrNext, Next>);
 }
 
