@@ -12,6 +12,7 @@ $ npm i @midwayjs/cos@3 --save
 
 
 首先，引入 组件，在 `configuration.ts` 中导入：
+
 ```typescript
 import { Configuration } from '@midwayjs/decorator';
 import * as cos from '@midwayjs/cos';	
@@ -39,24 +40,25 @@ export class ContainerLifeCycle {
 ```typescript
 export const cos = {
   client: {
-    secretId: '***********',
-    secretKey: '***********',
+    SecretId: '***********',
+    SecretKey: '***********',
   },
 };
 ```
 
 
 **多个客户端配置，需要配置多个**
+
 ```typescript
 export const cos = {
   clients: {
     instance1: {
-      secretId: '***********',
-    	secretKey: '***********',
+      SecretId: '***********',
+    	SecretKey: '***********',
     },
     instance2: {
-      secretId: '***********',
-    	secretKey: '***********',
+      SecretId: '***********',
+    	SecretKey: '***********',
     },
   },
 };

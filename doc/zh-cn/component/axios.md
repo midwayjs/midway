@@ -37,6 +37,7 @@ import { join } from 'path'
 export class ContainerLifeCycle {
 }
 ```
+
 然后在业务代码中即可注入使用。
 
 
@@ -44,6 +45,8 @@ export class ContainerLifeCycle {
 
 
 接口和 [axios](https://github.com/axios/axios) 一致。
+
+
 ```typescript
 axios.request(config)
 axios.get(url[, config])

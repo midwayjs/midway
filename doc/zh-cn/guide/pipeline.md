@@ -130,7 +130,7 @@ interface HomepageDto {
 2. 实现一个 TestService 来封装一下返回的这些数据
 ```typescript
 
-@Provide('service')
+@Provide()
 class TestService {
   // 返回当前登录用户信息
   async getAccount(args: any): Promise<AccountDto> {
@@ -228,7 +228,7 @@ class ErrorFeeds implements IValveHandler {
 ```typescript
 class StageTest {
   // 这里声明一个 pipeline
-  @Pipeline(['videoFeeds', 'accountMap', 'crowFeeds'])
+  @Pipeline([VideoFeeds, AccountMap, CrowFeeds])
   stages: IPipelineHandler;
   
   async runParallel(): Promise<any> {
@@ -282,7 +282,7 @@ class StageTest {
 ```typescript
 class StageTest {
   // 这里声明一个 pipeline
-  @Pipeline(['videoFeeds', 'accountMap', 'crowFeeds'])
+  @Pipeline([VideoFeeds, AccountMap, CrowFeeds])
   stages: IPipelineHandler;
   
   async runConcat(): Promise<any> {
@@ -336,7 +336,7 @@ class StageTest {
 ```typescript
 class StageTest {
   // 这里声明一个 pipeline
-  @Pipeline(['videoFeeds', 'accountMap', 'crowFeeds'])
+  @Pipeline([VideoFeeds, AccountMap, CrowFeeds])
   stages: IPipelineHandler;
   
   async runSeries(): Promise<any> {
@@ -358,7 +358,7 @@ class StageTest {
 ```typescript
 class StageTest {
   // 这里声明一个 pipeline
-  @Pipeline(['videoFeeds', 'accountMap', 'crowFeeds'])
+  @Pipeline([VideoFeeds, AccountMap, CrowFeeds])
   stages: IPipelineHandler;
   
   async runConcatSeries(): Promise<any> {
@@ -431,7 +431,7 @@ class StageTwo implements IValveHandler {
 
 class StageTest {
   // 这里声明一个 pipeline
-  @Pipeline(['stageOne', 'stageTwo'])
+  @Pipeline([StageOne, StageTwo])
   stages: IPipelineHandler;
   
   async runStagesWaterfall(): Promise<any> {

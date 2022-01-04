@@ -17,9 +17,9 @@ Midway 中使用了非常多的依赖注入的特性，通过装饰器的轻量�
 ├── package.json      
 ├── src
 │   ├── controller											# 控制器目录
-│   │   └── userController.ts
+│   │   └── user.controller.ts
 │   └── service			  									# 服务目录
-│       └── userService.ts
+│       └── user.service.ts
 └── tsconfig.json
 ```
 
@@ -30,9 +30,9 @@ Midway 中使用了非常多的依赖注入的特性，通过装饰器的轻量�
 ```typescript
 import { Provide, Inject, Get } from '@midwayjs/decorator';
 
-// userController.ts
+// user.controller.ts
 @Provide()
-@Controller('/')
+@Controller()
 export class UserController {
   
   @Inject()
@@ -45,7 +45,7 @@ export class UserController {
   }
 }
 
-// userService.ts
+// user.service.ts
 @Provide()
 export class UserService {
   async getUser() {
@@ -56,11 +56,13 @@ export class UserService {
 ```
 抛开所有装饰器，你可以看到这是标准的 Class 写法，没有其他多余的内容，这也是 Midway 体系的核心能力，依赖注入最迷人的地方。
 
-
 `@Provide` 的作用是告诉 **依赖注入容器**，我需要被容器所加载。 `@Inject` 装饰器告诉容器，我需要将某个实例注入到属性上。
 
-
 通过这两个装饰器的搭配，我们可以方便的在任意类中拿到实例对象，就像上面的 `this.userService` 。
+
+**注意**：实际使用中，如果有其他装饰器（比如 `@Controller` ）的情况下 `@Provide` 经常被省略。
+
+
 
 
 ## 依赖注入原理
@@ -78,7 +80,8 @@ container.bind(UserService);
 
 ```
 
-这里的依赖注入容器类似于一个 Map。Map 的 key 是**类名的驼峰形式**，Value 则是**类本身**。
+这里的依赖注入容器类似于一个 Map。Map 的 key 是类对应的标识符（比如 **类名的驼峰形式字符串**），Value 则是 **类本身**。
+
 ![image.png](https://img.alicdn.com/imgextra/i3/O1CN01qRbFaS1dETlDbbrsl_!!6000000003704-2-tps-623-269.png)
 
 
@@ -120,26 +123,59 @@ await userController.handler();  // output 'world'
 :::
 
 
+
 ## 依赖注入标识符
 
+### 默认依赖注入标识符
+
+在 Midway 的情况下，会将自动创建 uuid 关联这个 class，同时这个 uuid 我们称为 **依赖注入标识符**。
+
+
+默认情况如下：
+
+
+- 1、 `@Provide` 会自动生成一个 uuid 作为依赖注入标识符
+- 2、 `@Inject` 根据类型的 uuid 来查找
+
+```typescript
+// service
+@Provide()                          // <------ 这里 UserService 会自动生成一个 uuid
+export class UserService 
+  implements IService {
+  //...
+}
+
+// controller
+@Provide()
+export class APIController {
+
+  @Inject()            
+  userService1: UserService;				// <------ 这里会查找 UserService 的 uuid
+  
+  //...
+}
+```
+
+如果要获取这个 uuid，可以使用下面的 API。
+
+```typescript
+const uuid = getProvideUUId(UserService);
+// ...
+```
+
+
+
+### 自定义依赖注入标识符
 
 在默认情况下，Midway 会将类名变为 `驼峰` 形式作为依赖注入标识符，一般情况下，用户无需改变它。并且在使用时，直接在 Class 中使用 `@Provide` 和 `@Inject` 装饰器即可。
 
-
 `@Provide` 和 `@Inject` 装饰器是有可选参数的，并且他们是成对出现。
-
-
-默认情况下：
-
-
-- 1、 `@Provide` 取 **类名的驼峰字符串 **作为依赖注入标识符
-- 2、 `@Inject` 根据 **规则** 获取 key
 
 规则如下：
 
 
-- 1、如果装饰器包含参数，则以 **参数字符串 **作为 key
-- 2、如果没有参数，标注的 TS 类型为 Class，则将类 `@Provide` 的 key 作为 key
+- 1、如果装饰器包含参数，则以 **参数 **作为 key
+- 2、如果没有参数，标注的 TS 类型为 Class，则将类 `@Provide` 的 key 作为 key，如果没有 key，默认取 uuid
 - 3、如果没有参数，标注的 TS 类型为非 Class，则将 **属性名** 作为 key
 
 
@@ -150,7 +186,7 @@ export interface IService {
 }
 
 // service
-@Provide()                          // <------ 这里暴露的 key 是 userService
+@Provide()                          // <------ 这里暴露的 key 是 uuid
 export class UserService 
   implements IService {
   //...
@@ -165,7 +201,7 @@ export class APIController {
   userService1: UserService;
     
   @Inject()
-  userService2: UserService;        // <------ 这里的类型是 Class，注入的 key 是 userService
+  userService2: UserService;        // <------ 这里的类型是 Class，注入的 key 是 UserService 对应的 uuid
 
     
   @Inject()
@@ -195,41 +231,8 @@ export class UserController {
 }
 
 ```
-除了字符串，我们还可以使用 Class 来作为注入的标识符。
-```typescript
-@Provide()											// <------ 这里暴露的 标识符 是 userService
-export class UserService {
-  //...
-}
-
-@Provide()
-export class UserController {
-
-  @Inject()                
-  userService: UserService;			// <------ 这里注入的标识符是 UserService 类 (userService)
-	
-  //...
-}
-
-```
 
 
-注意：Midway 使用的驼峰库为 `camelcase` ，在一些情况下，可能和你预想的不同。比如，在碰到两个大写的时候，后一个字母会变成小写。
-```typescript
-ABCD => abcd
-UserMQController => userMqController
-```
-如果不确定，你可以在项目下的命令行中临时测试。
-```bash
-➜  midway_v2_demo git:(master) ✗ node
-
-> require('camelCase')('UserMQController')
-'userMqController'
-> 
-```
-
-
-## 
 ## 作用域
 
 
@@ -264,9 +267,8 @@ export class UserService {
 }
 ```
 
-
 :::info
-默认为请求作用域的目的是为了和请求上下文关联，可以更好的追踪问题。
+默认为请求作用域的目的是为了和请求上下文关联，显式传递 ctx 更为安全可靠，方便调试。
 :::
 
 
@@ -283,7 +285,8 @@ export class UserService {
 ```
 
 
-## 单例的限制
+
+### 单例的限制
 
 
 当作用域被设置为单例（Singleton）之后，整个 Class 注入的对象在第一次实例化之后就已经被固定了，这意味着，单例中注入的内容不能是其他作用域。
@@ -354,6 +357,7 @@ export class DBManager {
 简单的理解为，单例就像一个缓存，**其中依赖的所有对象都将被冻结，不再变化。**
 
 
+
 ## 异步初始化
 
 
@@ -396,10 +400,10 @@ const service = new BaseService();
 await service.init();
 ```
 
-
 :::info
 @Init 装饰器标记的方法，一定会以异步方式来调用。一般来说，异步初始化的服务较慢，请尽可能标注为单例（@Scope(ScopeEnum.Singleton))。
 :::
+
 
 
 ## 获取依赖注入容器
@@ -410,8 +414,6 @@ await service.init();
 
 - 需要动态调用服务的，比如 Web 的中间件场景，启动阶段需要调用服务的
 - 封装框架或者其他三方 SDK 中需要动态获取服务的
-
-
 
 简单来说，任意需要 **通过 API 动态获取服务** 的场景，都需要先拿到依赖注入容器。
 
@@ -493,9 +495,9 @@ export class ReportMiddleware {
 
 拿到 **依赖注入容器 **或者 **请求链路的依赖 **注入容器之后，才可以通过容器的 API 获取到对象。
 ```typescript
-import { UserService } from './service/user';
+import { UserService, Middleware } from './service/user';
 
-@Provide()
+@Middleware()
 export class ReportMiddleware {
 
 	@App()
@@ -522,9 +524,9 @@ export class ReportMiddleware {
 
 Express 的写法
 ```typescript
-import { UserService } from './service/user';
+import { UserService, Middleware } from './service/user';
 
-@Provide()
+@Middleware()
 export class ReportMiddleware {
 
 	@App()
@@ -540,6 +542,7 @@ export class ReportMiddleware {
   }
 }
 ```
+
 
 
 ## 注入已有对象
@@ -730,8 +733,6 @@ export class HomeController {
 
 Midway 会默认注入一些值，方便业务直接使用。
 
-
-
 | **标识符** | **值类型** | **作用域** | **描述** |
 | --- | --- | --- | --- |
 | baseDir | string | 全局 | 本地使用 ts-node 开发时为 src 目录，否则为 dist 目录 |
@@ -759,22 +760,6 @@ export class BaseService {
 }
 ```
 
-
-## 类名冲突检查
-
-
-在项目比较大的时候，比较容易出现类名重复，Midway 提供同名类重复检查的功能。只需要在入口 `configuration.ts` 文件的 `@Configuration` 装饰器中加入 `conflictCheck` 属性即可。
-
-
-代码如下：
-```typescript
-@Configuration({
-  conflictCheck: true  // 开启命名冲突检查
-})
-export class AutoConfiguration {
-  
-}
-```
 
 
 ## 静态 API
@@ -808,11 +793,11 @@ export const getGlobalConfig = () => {
 ```
 
 
+
 ## 面向接口编程
 
 
 Midway 也可以基于接口进行注入，但是由于 Typescirpt 编译后会移除接口类型，不如使用类作为定义好用。
-​
 
 比如，我们定义一个接口，以及它的实现类。
 ```typescript
@@ -849,12 +834,11 @@ export class PaymentService {
 }
 ```
 由于接口类型会被移除，Midway 只能通过 `@Inject` 装饰器的 **参数** 或者 **属性名** 类来匹配注入的对象信息，类似 Java Spring 中的 `Autowire by name` 。
-​
 
 上述就是 **静态 **的面向接口注入的方式。
-​
 
 如果需要动态，也和 [动态函数注入](动态函数注入) 描述的一致，注入方法来使用。
+
 
 
 ## 常见的使用错误
@@ -882,6 +866,7 @@ export class UserService {
 
 }
 ```
+
 
 
 ## 关于继承

@@ -5,6 +5,7 @@
 说明：由于底层是依赖 bull，其通过 redis 进行实现，所以配置中，需要加一个 redis 的配置。
 
 
+
 ## 安装组件
 
 首先安装 Midway 提供的任务组件：
@@ -28,6 +29,8 @@ import { join } from 'path';
 export class AutoConfiguration{
 }
 ```
+
+
 
 ## 配置
 
@@ -61,6 +64,8 @@ export const taskConfig = {
   }
 }
 ```
+
+
 
 ## 业务代码编写方式
 
@@ -101,6 +106,8 @@ export class UserService {
   }
 }
 ```
+
+
 
 ### 手动触发任务
 
@@ -144,10 +151,15 @@ export class UserTask{
 ```
 这样，就相当于是 3 秒后，触发 HelloTask 这个任务。
 
+
+
 #### 设置进度
+
 例如我们在做音视频或者发布这种比较耗时的任务的时候，我们希望能设置进度。
-![image.png](https://cdn.nlark.com/yuque/0/2021/png/187105/1620884757992-fb18a58f-9e56-4eda-92d9-68965df73e8a.png#clientId=uecb893ec-cfee-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=342&id=ubf7a3918&margin=%5Bobject%20Object%5D&name=image.png&originHeight=454&originWidth=576&originalType=binary&ratio=1&rotation=0&showTitle=false&size=29448&status=done&style=none&taskId=uffac1111-2306-44ac-bd3e-906503e1764&title=&width=434)
-相当于第二个参数，将bull的job传递给了用户。用户可以通过job.progress来设置进度。
+
+![image.png](https://img.alicdn.com/imgextra/i1/O1CN01WPYaAz21NgV3VNzjV_!!6000000006973-2-tps-576-454.png)
+
+相当于第二个参数，将 bull 的 job 传递给了用户。用户可以通过 `job.progress` 来设置进度。
 
 
 然后查询进度：
@@ -172,6 +184,7 @@ export class HelloController{
 let job = await this.queueService.getClassQueue(TestJob).getJob(id)
 ```
 然后 job 上面有类似停止的方法，或者查看进度的方法。
+
 
 
 ### 启动就触发
@@ -214,7 +227,9 @@ export class ContainerConfiguration implements ILifeCycle {
 ```
 
 
+
 ## 运维
+
 ### 日志
 在Midway Task Component上面，增加了两个日志：
 
@@ -257,31 +272,28 @@ logger.info(`queue process end.`)
 
 
 ### 排查问题链路：
-![image.png](https://cdn.nlark.com/yuque/0/2021/png/187105/1626926172431-ce41c896-fc64-4c73-8d3b-f2633a916b5f.png#clientId=u62783ce8-4645-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=504&id=viDCK&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1008&originWidth=1992&originalType=binary&ratio=1&rotation=0&showTitle=false&size=2693469&status=done&style=none&taskId=u467a4354-7dc2-49c3-9bb6-3c6dea1903e&title=&width=996)
+![image.png](https://img.alicdn.com/imgextra/i2/O1CN01xL1mQE25kMZnB5ygb_!!6000000007564-2-tps-1614-847.png)
 用户可以搜索这个相同的id，找到同一次请求的日志。
 为了方便用户在自己的业务代码中串联对应的日志，我在ctx上面挂了traceId变量。
 
+例如异常情况：当异常的时候，**本地可以在控制台和 midway-task.log 栏内看到这个错误相关的情况：**
 
-例如异常情况：
-当异常的时候，
-**本地 可以在console栏内看到这个错误相关的情况：**
-![image.png](https://cdn.nlark.com/yuque/0/2021/png/187105/1626929372403-df50b85d-c71e-4b87-b602-275d10d3dc83.png#clientId=u8f28ddc7-5bc1-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=162&id=UlGrO&margin=%5Bobject%20Object%5D&name=image.png&originHeight=324&originWidth=1964&originalType=binary&ratio=1&rotation=0&showTitle=false&size=669523&status=done&style=none&taskId=u4b77719b-978b-4a21-90f8-3ee205dbf9d&title=&width=982)
-日志： 可以在midway-task.log文件中查看完整日志：
-![image.png](https://cdn.nlark.com/yuque/0/2021/png/187105/1626929372403-df50b85d-c71e-4b87-b602-275d10d3dc83.png#clientId=u8f28ddc7-5bc1-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=162&id=binL0&margin=%5Bobject%20Object%5D&name=image.png&originHeight=324&originWidth=1964&originalType=binary&ratio=1&rotation=0&showTitle=false&size=669523&status=done&style=none&taskId=u4b77719b-978b-4a21-90f8-3ee205dbf9d&title=&width=982)
-如果调用情况比较多的时候，会出现A还没执行完成，B又进来，导致日志区分比较麻烦，所以用户可以搜索调用的traceId，也就是下图红色圈起来的地方：
-![image.png](https://cdn.nlark.com/yuque/0/2021/png/187105/1626929496543-7d79db19-622f-4f99-a2fd-60b7f00bd57d.png#clientId=u8f28ddc7-5bc1-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=163&id=DM3xz&margin=%5Bobject%20Object%5D&name=image.png&originHeight=326&originWidth=2034&originalType=binary&ratio=1&rotation=0&showTitle=false&size=691391&status=done&style=none&taskId=ucd8b1d59-b13d-4fc4-81e2-2d4f43bab7b&title=&width=1017)
-相当于ctrl + f搜索相同的traceId即可。
+![image.png](https://img.alicdn.com/imgextra/i1/O1CN01WYBjbL1lGKHmsdSnH_!!6000000004791-2-tps-1964-324.png)
+
 
 
 ### traceId
-localTask则是自己生成了一个uuid的id作为traceId。
+
+localTask 则是自己生成了一个 uuid 的 id 作为 traceId。
 
 
-task和queue则采用job的id作为traceId。
+task 和 queue 则采用 job 的 id 作为 traceId。
+
 
 
 ### 业务内部的代码
-在service内可以通过inject注入logger，或者注入ctx拿logger变量
+
+在 service 内可以通过 inject 注入 logger，或者注入 ctx 拿 logger 变量
 ```typescript
 import { App, Inject, Provide, Queue } from "@midwayjs/decorator";
 import { Application } from "@midwayjs/koa";
@@ -364,11 +376,12 @@ export class QueueTask{
 
 
 可以使用 [在线工具](https://cron.qqe2.com/) 执行确认下一次执行的时间。
-![image.png](https://cdn.nlark.com/yuque/0/2021/png/501408/1637042668291-70527b75-bb33-4ad2-adc0-5f0f5dfe8c81.png#clientId=u21d1027f-3ac8-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=340&id=gQnon&margin=%5Bobject%20Object%5D&name=image.png&originHeight=680&originWidth=1868&originalType=binary&ratio=1&rotation=0&showTitle=false&size=98959&status=done&style=none&taskId=u0adb2151-a667-4900-8bba-b13d4aac93c&title=&width=934)
+![image.png](https://img.alicdn.com/imgextra/i1/O1CN01L1RjoZ1muSbgxL27G_!!6000000005014-2-tps-860-299.png)
 
 
 ### EVALSHA错误
-![image.png](https://cdn.nlark.com/yuque/0/2021/png/187105/1633771728525-1efeb2a6-cefd-4fc3-a16d-0e9a97f371d1.png#clientId=u52b8d912-3ffa-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=51&id=u0c96f70a&margin=%5Bobject%20Object%5D&name=image.png&originHeight=102&originWidth=3540&originalType=binary&ratio=1&rotation=0&showTitle=false&size=164783&status=done&style=none&taskId=uc38084d4-e2cf-435d-a8b9-6a9bec80c9b&title=&width=1770)
+![image.png](https://img.alicdn.com/imgextra/i4/O1CN01KfjCKT1yypmNPDkIL_!!6000000006648-2-tps-3540-102.png)
+
 这个问题基本明确，问题会出现在redis的集群版本上。原因是redis会对key做hash来确定存储的slot，集群下这一步@midwayjs/task的key命中了不同的slot。临时的解决办法是taskConfig里的prefix配置用{}包括，强制redis只计算{}里的hash，例如 prefix: '{midway-task}'
 
 
@@ -399,4 +412,4 @@ export class UserService {
 }
 
 ```
-目前是否默认删除，需要跟用户沟通
+目前是否默认删除，需要跟用户沟通。

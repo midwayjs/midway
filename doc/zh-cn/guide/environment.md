@@ -3,6 +3,7 @@
 Node.js 应用一般通过 `NODE_ENV` 来获取环境变量，来满足不同环境下的不同需求。比如在 `production` 环境下，开启缓存，优化性能，而在 `development` 环境下，会打开所有的日志开关，输出详细的错误信息等等。
 
 
+
 ## 指定运行环境
 
 
@@ -22,6 +23,7 @@ cross-env NODE_ENV=local npm start									// 第二优先级
 ```
 
 
+
 ## 代码中获取环境
 
 
@@ -29,7 +31,7 @@ Midway 在 app 对象上提供了 `getEnv()` 方法获取环境，面对不同�
 
 
 ```typescript
-import { Application } from 'egg';
+import { Application } from '@midwayjs/koa';
 
 // process.env.MIDWAY_SERVER_ENV=prod
 @Provide()
@@ -53,8 +55,8 @@ export class UserService {
 :::
 
 
-## 常见的环境变量值
 
+## 常见的环境变量值
 
 一般来说，每个公司都有一些自己的环境变量值，下面是一些常见的环境变量值以及他们对应的说明。
 
@@ -67,6 +69,8 @@ export class UserService {
 | test/unittest | 单元测试环境 |
 | benchmark | 性能测试环境 |
 
+
+
 ## 依赖注入容器中获取环境
 
 
@@ -75,7 +79,7 @@ export class UserService {
 
 借助服务的 `getCurrentEnvironment` 方法，我们可以直接从上面获取环境值，而 `app.getEnv()` 方法也正是这样获取值的。
 ```typescript
-const environmentService = app.getApplicationContext().getEnvironmentService();
+const environmentService = app.getApplicationContext(EnvironmentService);
 const env = environmentService.getCurrentEnvironment();
 ```
 

@@ -2,6 +2,8 @@
 
 我们经常要在方法调用时执行一些类型检查，参数转换的操作，Midway 提供了一种简单的能力来快速检查参数的类型，这个能力来源于 [joi](https://joi.dev/api/) 。
 
+
+
 ## 背景
 
 最常用参数校验的地方是 控制器（Controller），同时你也可以在任意的 Class 中使用这个能力。
@@ -59,11 +61,14 @@ export class HomeController {
 
 注意，从 v3 开始，`@Rule` 和 `@Validate` 装饰器从 `@midwayjs/validate` 中导出。
 
+
+
 ## 安装依赖
 
 ```bash
 $ npm i @midwayjs/validate@3 --save
 ```
+
 
 
 ## 定义检查规则
@@ -119,6 +124,7 @@ export class UserDTO {
 [joi](https://joi.dev/api/) 提供了非常多的校验类型，还可以对对象和数组中的字段做校验，还有例如字符串常用的 `RuleType.string().email()` ，以及 `RuleType.string().pattern(/xxxx/)`  正则校验等，具体可以查询 [joi](https://joi.dev/api/) 的 API 文档。
 
 
+
 ## 校验参数
 
 
@@ -158,6 +164,7 @@ async updateUser(@Body() user: UserDTO ) {
 ```
 
 
+
 ## 常见的校验写法
 
 ```typescript
@@ -180,6 +187,8 @@ RuleType.array().length(10);								// 数组，长度为 10
 
 RuleType.string().allow('')									// 非必填字段传入空字符串
 ```
+
+
 
 ## 级联校验
 
@@ -222,6 +231,7 @@ export class UserDTO {
 这个时候， `@Rule` 装饰器的参数可以为需要校验的这个类型本身。
 
 
+
 ## 继承校验
 
 
@@ -254,6 +264,7 @@ export class UserDTO extends CommonUserDTO {
 :::info
 如果属性名相同，则取当前属性的规则进行校验，不会和父类合并。
 :::
+
 
 
 ## 从原有 DTO 创建新 DTO
@@ -300,6 +311,8 @@ const newUser = new NewUserDTO();
 
 
 ```
+
+
 
 ## 复用校验规则
 

@@ -5,9 +5,10 @@
 
 Midway 设计了一套通用的方法拦截器（切面），用于在不同场景中，统一编写逻辑。
 
-
 拦截器和传统的 Web 中间件和装饰器都不同，是由 Midway 框架提供的能力，在执行顺序上，处于中间的位置，这个能力能对任意的 Class 方法做拦截。
+
 ![image.png](https://img.alicdn.com/imgextra/i3/O1CN01DFfT1y1FC8xYeocrX_!!6000000000450-2-tps-823-133.png)
+
 ## 使用拦截器（切面）
 
 
@@ -31,7 +32,6 @@ Midway 设计了一套通用的方法拦截器（切面），用于在不同场�
 
 import { Controller, Get, Provide } from '@midwayjs/decorator';
 
-@Provide()
 @Controller('/')
 export class HomeController {
 
@@ -48,7 +48,6 @@ export class HomeController {
 import { Aspect, IMethodAspect, JoinPoint, Provide } from '@midwayjs/decorator';
 import { HomeController } from '../controller/home';
 
-@Provide()
 @Aspect(HomeController)
 export class ReportInfo implements IMethodAspect {
   async before(point: JoinPoint) {
@@ -121,6 +120,7 @@ try {
 我们常会在 `before` 的过程中修改入参、校验，以符合程序执行的逻辑，比如：
 ```typescript
 // src/controller/home.ts
+@Controller('/')
 export class HomeController {
 
   @Get('/')
@@ -130,7 +130,6 @@ export class HomeController {
 }
 
 // src/aspect/
-@Provide()
 @Aspect(HomeController, 'home')	 // 这里只对 home 方法做拦截
 export class ReportInfo implements IMethodAspect {
   async before(point: JoinPoint) {
@@ -159,6 +158,7 @@ export interface JoinPoint {
 `around` 是比较全能的方法，它可以包裹整个方法调用流程。
 ```typescript
 // src/controller/home.ts
+@Controller('/')
 export class HomeController {
 
   @Get('/')
@@ -168,7 +168,6 @@ export class HomeController {
 }
 
 // src/aspect/report.ts
-@Provide()
 @Aspect(HomeController, 'home')	 // 这里只对 home 方法做拦截
 export class ReportInfo implements IMethodAspect {
   async around(point: JoinPoint) {
@@ -184,6 +183,7 @@ export class ReportInfo implements IMethodAspect {
 `afterReturn` 方法会多一个返回结果参数，如果只需要修改返回结果，可以直接使用它，上面的 `around` 例子用 `afterReturn` 改写会更简单。
 ```typescript
 // src/controller/home.ts
+@Controller('/')
 export class HomeController {
 
   @Get('/')
@@ -193,7 +193,6 @@ export class HomeController {
 }
 
 // src/aspect/report.ts
-@Provide()
 @Aspect(HomeController, 'home')	 // 这里只对 home 方法做拦截
 export class ReportInfo implements IMethodAspect {
   async afterReturn(point: JoinPoint, result) {
@@ -207,6 +206,7 @@ export class ReportInfo implements IMethodAspect {
 
 ```typescript
 // src/controller/home.ts
+@Controller('/')
 export class HomeController {
 
   @Get('/')
@@ -216,7 +216,6 @@ export class HomeController {
 }
 
 // src/aspect/report.ts
-@Provide()
 @Aspect(HomeController, 'home')
 export class ReportInfo implements IMethodAspect {
   async afterThrow(point: JoinPoint, error) {
@@ -237,6 +236,7 @@ export class ReportInfo implements IMethodAspect {
 
 ```typescript
 // src/controller/home.ts
+@Controller('/')
 export class HomeController {
 
   @Get('/')
@@ -246,7 +246,6 @@ export class HomeController {
 }
 
 // src/aspect/report.ts
-@Provide()
 @Aspect(HomeController, 'home')
 export class ReportInfo implements IMethodAspect {
   async after(point: JoinPoint, result, error) {
@@ -267,6 +266,7 @@ export class ReportInfo implements IMethodAspect {
 如果被拦截的方法是异步的，则原则上我们的 `before` 等方法应该都是异步的，反之，则都是同步的。
 ```typescript
 // src/controller/home.ts
+@Controller('/')
 export class HomeController {
 
   @Get('/')
@@ -276,7 +276,6 @@ export class HomeController {
 }
 
 // src/aspect/report.ts
-@Provide()
 @Aspect(HomeController, 'home')
 export class ReportInfo implements IMethodAspect {
   async before(point: JoinPoint) {
@@ -287,6 +286,7 @@ export class ReportInfo implements IMethodAspect {
 ```
 ```typescript
 // src/controller/home.ts
+@Controller('/')
 export class HomeController {
 
   @Get('/')
@@ -296,7 +296,6 @@ export class HomeController {
 }
 
 // src/aspect/report.ts
-@Provide()
 @Aspect(HomeController, 'home')
 export class ReportInfo implements IMethodAspect {
   before(point: JoinPoint) {
@@ -312,7 +311,6 @@ export class ReportInfo implements IMethodAspect {
 
 
 ```typescript
-@Provide()
 @Aspect([HomeController, APIController])
 export class ReportInfo implements IMethodAspect {
   
@@ -337,7 +335,6 @@ export class ReportInfo implements IMethodAspect {
 
 import { Controller, Get, Provide } from "@midwayjs/decorator";
 
-@Provide()
 @Controller('/')
 export class HomeController {
 
@@ -354,7 +351,6 @@ export class HomeController {
 ```
 那么，我们如下配置时，只会匹配到 `hello2` 这个方法。
 ```typescript
-@Provide()
 @Aspect([HomeController], '*2')
 export class ReportInfo implements IMethodAspect {
 
@@ -395,7 +391,6 @@ export class ReportInfo implements IMethodAspect {
 
 代码如下。
 ```typescript
-@Provide()
 @Aspect([HomeController])
 export class MyAspect1 implements IMethodAspect {
   before(point: JoinPoint) {
@@ -403,7 +398,6 @@ export class MyAspect1 implements IMethodAspect {
   }
 }
 
-@Provide()
 @Aspect([HomeController], '*', 1)													// 这里可以设置优先级
 export class MyAspect2 implements IMethodAspect {
   before(point: JoinPoint) {

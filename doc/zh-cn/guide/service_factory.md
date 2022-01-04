@@ -36,16 +36,16 @@ const httpClient = new HTTPClient(config);
 
 ### 1、实现创建实例接口
 
-
 `ServiceFactory` 是个用于继承的抽象类，它包含一个泛型（创建的实例类型，比如下面就是创建出 HTTPClient 类型）。
 
 
-我们只需要继承它。
+我们只需要继承它，同时，一般服务工程为单例。
 ```typescript
 import { ServiceFactory } from '@midwayjs/core';
-import { Provide } from '@midwayjs/decorator';
+import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
 
 @Provide()
+@Scope(ScopeEnum.Singleton)
 export class HTTPClientServiceFactory extends ServiceFactory<HTTPClient> {
 	// ...
 }
@@ -53,9 +53,10 @@ export class HTTPClientServiceFactory extends ServiceFactory<HTTPClient> {
 由于是抽象类，我们需要实现其中的两个方法。
 ```typescript
 import { ServiceFactory } from '@midwayjs/core';
-import { Provide } from '@midwayjs/decorator';
+import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
 
 @Provide()
+@Scope(ScopeEnum.Singleton)
 export class HTTPClientServiceFactory extends ServiceFactory<HTTPClient> {
   
   // 创建单个实例
@@ -69,7 +70,7 @@ export class HTTPClientServiceFactory extends ServiceFactory<HTTPClient> {
 }
 ```
 
-`createClient` 方法用于传入一个创建服务配置（比如 httpClient 配置），返回一个具体的实例，就像示例的那样。
+`createClient` 方法用于传入一个创建服务配置（比如 httpClient 配置），返回一个具体的实例，就像示例中的那样。
 
 
 `getName` 方法用于返回这个服务工厂的名字，方便框架识别和日志输出。
@@ -88,9 +89,10 @@ export const httpClient = {
 然后注入到服务工厂中，同时，我们还需要在初始化时，调用创建多个实例的方法。
 ```typescript
 import { ServiceFactory } from '@midwayjs/core';
-import { Provide } from '@midwayjs/decorator';
+import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
 
 @Provide()
+@Scope(ScopeEnum.Singleton)
 export class HTTPClientServiceFactory extends ServiceFactory<HTTPClient> {
   
   @Config('httpClient')

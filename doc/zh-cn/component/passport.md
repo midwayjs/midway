@@ -14,7 +14,7 @@ $ npm i @midwayjs/passport@3 passport --save
 $ npm i @types/passport --save-dev
 ```
 
-2. 如果有需要的话，开启相对应框架的 bodyparser，session
+
 
 
 ## 使用
@@ -23,7 +23,7 @@ $ npm i @types/passport --save-dev
 
 
 首先
-```bash
+```typescript
 // configuration.ts
 
 import { join } from 'path';
@@ -38,7 +38,6 @@ import * as passport from '@midwayjs/passport';
     passport,
   ],
   importConfigs: [join(__dirname, './config')],
-  conflictCheck: true,
 })
 export class ContainerLifeCycle implements ILifeCycle {}
 
@@ -100,10 +99,8 @@ export class LocalPassportMiddleware extends PassportMiddleware(LocalStrategy) {
 ```
 ```typescript
 // controller.ts
-
 import { Provide, Post, Inject, Controller } from '@midwayjs/decorator';
 
-@Provide()
 @Controller('/')
 export class LocalController {
 
@@ -121,8 +118,16 @@ curl -X POST http://localhost:7001/passport/local -d '{"username": "demo", "pass
 结果 {"username": "demo", "password": "1234"}
 ```
 ### e.g. Jwt
-首先你需要安装`npm i @midwayjs/jwt`，然后在 config.ts 中配置。PS.  默认未加密，请不要吧敏感信息存放在payload中。
+首先需要 **额外安装** 依赖和策略：
+
+```bash
+$ npm i @midwayjs/jwt passport-jwt --save
+```
+
+然后在 config.ts 中配置， 默认未加密，请不要把敏感信息存放在 payload 中。
+
 ```typescript
+// src/config/config.default.ts
 export const jwt = {
 	secret: 'xxxxxxxxxxxxxx', // fs.readFileSync('xxxxx.key')
   expiresIn: '2d'   // https://github.com/vercel/ms
@@ -176,7 +181,6 @@ import { Provide, Post, Inject } from '@midwayjs/decorator';
 import { Controller, Post } from '@midwayjs/decorator';
 import { Jwt } from '@midwayjs/jwt';
 
-@Provide()
 @Controller('/')
 export class JwtController {
 
@@ -269,5 +273,4 @@ export class AuthController {
 }
 
 ```
-
 

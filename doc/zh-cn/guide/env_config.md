@@ -6,6 +6,7 @@
 本篇我们来介绍 Midway 如何加载不同环境的业务配置。
 
 
+
 ## 全局容器配置和业务配置的区别
 
 
@@ -16,6 +17,7 @@
 
 
 业务配置只跟业务本身相关，和框架不耦合，文件数量不定，内容也是自定义的。
+
 
 
 ## 业务配置文件
@@ -48,6 +50,7 @@
 配置不是必须项，请酌情添加自己需要的环境配置。
 
 
+
 ## 业务配置加载
 
 
@@ -66,6 +69,8 @@ import { join } from 'path';
 export class ContainerLifeCycle {
 }	
 ```
+
+
 ### 1、目录或者文件查找加载
 
 
@@ -154,6 +159,7 @@ export class ContainerLifeCycle {
 ```
 
 
+
 ### 2、对象形式加载
 
 
@@ -180,6 +186,7 @@ export class ContainerLifeCycle {
 }	
 ```
 `importConfigs` 中的数组中传递配置对象，每个对象的 key 为环境，值为环境对应的配置值，midway 在启动中会根据环境来加载对应的配置。
+
 
 
 ## 配置合并规则
@@ -212,7 +219,6 @@ export class ContainerLifeCycle {
 | production | *.default.ts +  *.production.ts + *.prod.ts |
 | unittest | *.default.ts + *.unittest.ts  |
 | test | *.default.ts + *.test.ts + *.unittest.ts |
-|  |  |
 
 除了上述表格外，其余都是 `*.default.ts + *.{当前环境}.ts` 的值。
 
@@ -230,6 +236,7 @@ extend(true, a, b);
 // => { arr: [ 3 ] }
 ```
 根据上面的例子，框架直接覆盖数组而不是进行合并。
+
 
 
 ## 配置格式
@@ -301,10 +308,12 @@ export default appInfo => {
 ```
 
 
+
 ## 代码中使用配置
 
 
 Midway 会将配置都保存在内部的配置服务中，整个结构是一个对象，在 Midway 业务代码使用时，使用 `@Config` 装饰器注入。
+
 
 
 ### 单个配置值
@@ -326,6 +335,7 @@ export class IndexHandler {
   }
 }
 ```
+
 
 
 ### 深层级别配置值
@@ -365,6 +375,7 @@ export class IndexHandler {
 ```
 
 
+
 ### 整个配置对象
 
 
@@ -384,6 +395,7 @@ export class IndexHandler {
 ```
 
 
+
 ## 动态添加配置
 
 
@@ -395,6 +407,7 @@ app.addConfigObject({
 });
 ```
 该 API 可以让新增的配置对象和现有的配置合并。
+
 
 
 ## 异步初始化配置
@@ -435,6 +448,7 @@ export class ContainerLifeCycle {
 老的 bootstrap 用法，请参考 [框架前异步逻辑](multi_framework_start#n5oDJ)。
 
 
+
 ## 配置的特殊 TS 写法问题
 
 ### export= 的情况
@@ -463,6 +477,7 @@ export default {
 	a: 1
 }
 ```
+
 
 
 ## 使用环境变量
@@ -576,8 +591,6 @@ export const anotherKey = '54321';
 
 
 可能性很多，排查思路如下：
-
-
 
 - 1、检查 configuration 文件中是否显式配置 `importConfigs` 相关的文件或者目录
 - 2、检查应用启动的环境，是否和配置文件一致，比如 prod 的配置肯定不会在 local 出现

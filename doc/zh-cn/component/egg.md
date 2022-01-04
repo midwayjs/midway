@@ -22,6 +22,7 @@ Midway 可以使用 EggJS 作为上层 Web 框架，EggJS 提供了非常多常�
     "@midwayjs/egg-ts-helper": "^1.0.1",
   },	
 ```
+
 | @midwayjs/web | **必须**，Midway EggJS 适配层 |
 | --- | --- |
 | @midwayjs/decorator | **必须**，Midway 系列通用的装饰器包 |

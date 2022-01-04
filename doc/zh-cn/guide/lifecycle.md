@@ -20,20 +20,22 @@ Midway 的生命周期是通过 `src/configuration.ts` 文件，实现 ILifeCycl
 ```typescript
 interface ILifeCycle {
   /**
-   * 在应用 ready 的时候执行
-   * @param container IoC 容器
-   * @param app 应用 app
-   */
-  onReady(container: IMidwayContainer, app: IMidwayApplication): Promise<void>;
-  
-  /**
   * 在应用配置加载后执行
   */
   onConfigLoad?(container: IMidwayContainer, app: IMidwayApplication): Promise<void>;
+
   /**
+   * 在依赖注入容器 ready 的时候执行
+   */
+  onReady(container: IMidwayContainer, app: IMidwayApplication): Promise<void>;
+ 
+  /**
+   * 在应用服务启动后执行
+   */
+  onServerReady?(container: IMidwayContainer, app: IMidwayApplication): Promise<void>;
+
+   /**
    * 在应用停止的时候执行
-   * @param container IoC 容器
-   * @param app 应用 app
    */
   onStop?(container: IMidwayContainer, app: IMidwayApplication): Promise<void>;
 }
