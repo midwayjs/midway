@@ -130,8 +130,8 @@ export class TaskFramework extends BaseFramework<Application, Context, any> {
               const service = await ctx.requestContext.getAsync(module);
               logger.info('local task start.');
               await wrapAsync(rule.value)(service);
-            } catch (e) {
-              logger.error(`${e.stack}`);
+            } catch (err) {
+              logger.error(err);
             }
             logger.info('local task end.');
           },
