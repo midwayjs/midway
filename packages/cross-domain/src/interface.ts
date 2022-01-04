@@ -10,4 +10,5 @@ export interface CORSOptions {
 export interface JSONPOptions {
   callback: string;
   limit: number;
+  csrf: boolean;
 }

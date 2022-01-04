@@ -1,10 +1,6 @@
-import {
-  Config,
-  Middleware,
-  MidwayFrameworkType,
-} from '@midwayjs/decorator';
+import { Config, Middleware, MidwayFrameworkType } from '@midwayjs/decorator';
 import { IMiddleware } from '@midwayjs/core';
-import { CORSOptions } from './interface';
+import { CORSOptions } from '../interface';
 import * as vary from 'vary';
 @Middleware()
 export class CorsMiddleware implements IMiddleware<any, any> {
@@ -18,15 +14,13 @@ export class CorsMiddleware implements IMiddleware<any, any> {
       };
     } else {
       return async (ctx, next) => {
-        const req = ctx.request?.req || ctx.request;
-        return this.compatibleMiddleware(req, ctx, next);
+        return this.compatibleMiddleware(ctx.request, ctx, next);
       };
     }
-
   }
 
   async compatibleMiddleware(request, response, next) {
-    const requestOrigin = request.get('Origin');
+    const requestOrigin = request.get('origin');
     // Always set Vary header
     response.vary('Origin');
 
@@ -52,7 +46,6 @@ export class CorsMiddleware implements IMiddleware<any, any> {
     }
 
     if (request.method.toUpperCase() === 'OPTIONS') {
-
       if (!request.get('Access-Control-Request-Method')) {
         return await next();
       }
@@ -78,7 +71,11 @@ export class CorsMiddleware implements IMiddleware<any, any> {
       if (allowHeaders) {
         response.set('Access-Control-Allow-Headers', allowHeaders);
       }
-      // default sattus is 204
+      if (response.sendStatus) {
+        response.sendStatus(204);
+      } else {
+        response.status = 204;
+      }
       return;
     }
     const headersSet = {};
@@ -104,7 +101,10 @@ export class CorsMiddleware implements IMiddleware<any, any> {
       return await next();
     } catch (err) {
       const errHeadersSet = err.headers || {};
-      const varyWithOrigin = vary.append(errHeadersSet.vary || errHeadersSet.Vary || '', 'Origin');
+      const varyWithOrigin = vary.append(
+        errHeadersSet.vary || errHeadersSet.Vary || '',
+        'Origin'
+      );
       delete errHeadersSet.Vary;
 
       err.headers = {
