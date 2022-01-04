@@ -24,7 +24,7 @@
     "@midwayjs/core": "^3.0.0-beta.14",
     "@midwayjs/decorator": "^3.0.0-beta.14",
     "@midwayjs/mock": "^3.0.0-beta.14",
-    "mongoose": "6.1.4"
+    "mongoose": "6.1.5"
   },
   "peerDependencies": {
     "mongoose": "*"
