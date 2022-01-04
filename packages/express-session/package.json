@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "cookie-session": "^2.0.0",
-    "express-session": "^1.17.2"
+    "express-session": "1.17.2"
   },
   "keywords": [
     "midway",

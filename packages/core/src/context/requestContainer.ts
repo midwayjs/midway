@@ -17,6 +17,8 @@ export class MidwayRequestContainer extends MidwayContainer {
     this.ctx = ctx;
     // register ctx
     this.registerObject(REQUEST_CTX_KEY, ctx);
+    // register res
+    this.registerObject('res', {});
 
     if (ctx.logger) {
       // register contextLogger
