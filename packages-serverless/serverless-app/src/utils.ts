@@ -56,6 +56,7 @@ export const analysisDecorator = async (cwd: string) => {
   const { ServerlessTriggerCollector } = require(midwayCoreMod);
   const collector = new ServerlessTriggerCollector();
   const result = await collector.getFunctionList();
+
   const allFunc = {};
   if (Array.isArray(result)) {
     result.forEach(func => {
