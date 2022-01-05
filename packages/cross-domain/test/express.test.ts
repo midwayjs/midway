@@ -45,7 +45,7 @@ describe('test/express.test.ts', function () {
       .expect(200)
   });
 
-  it.only('jsonp callback', async () => {
+  it('jsonp callback', async () => {
     const request = await createHttpRequest(app);
     await request
       .post('/jsonp?callback=fn')

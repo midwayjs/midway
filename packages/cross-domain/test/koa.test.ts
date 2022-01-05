@@ -1,7 +1,7 @@
 import { createHttpRequest, close, createApp } from '@midwayjs/mock';
 import { join } from 'path';
 import * as assert from 'assert';
-describe.skip('test/koa.test.ts', function () {
+describe('test/koa.test.ts', function () {
   let app;
   beforeAll(async () => {
     const appDir = join(__dirname, 'fixtures/koa');

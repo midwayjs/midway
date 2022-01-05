@@ -1,4 +1,9 @@
-import { Config, Middleware, MidwayFrameworkType, Match } from '@midwayjs/decorator';
+import {
+  Config,
+  Middleware,
+  MidwayFrameworkType,
+  Match,
+} from '@midwayjs/decorator';
 import { IMiddleware } from '@midwayjs/core';
 import { JSONPService } from '../jsonp';
 import { JSONPCSRFError } from '../error';
@@ -24,7 +29,7 @@ export class JSONPMiddleware implements IMiddleware<any, any> {
         return this.compatibleMiddleware(req, next);
       };
     } else {
-      return async (ctx,next) => {
+      return async (ctx, next) => {
         const result = await this.compatibleMiddleware(ctx, next);
         const jsonpService = await ctx.requestContext.getAsync(JSONPService);
         return jsonpService.jsonp(result);
