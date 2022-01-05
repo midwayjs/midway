@@ -1,9 +1,10 @@
 import * as extend from 'extend2';
 import { basename, join } from 'path';
-import { IConfigService } from '../interface';
+import { IConfigService, MidwayAppInfo } from '../interface';
 import { safelyGet } from '../util';
 import { readdirSync, statSync } from 'fs';
 import {
+  Init,
   Inject,
   isFunction,
   Provide,
@@ -27,12 +28,26 @@ export class MidwayConfigService implements IConfigService {
   protected configuration;
   protected isReady = false;
   protected externalObject: Record<string, unknown>[] = [];
+  protected appInfo: MidwayAppInfo;
 
   @Inject()
   protected environmentService: MidwayEnvironmentService;
 
   @Inject()
   protected informationService: MidwayInformationService;
+
+  @Init()
+  protected async init() {
+    this.appInfo = {
+      pkg: this.informationService.getPkg(),
+      name: this.informationService.getProjectName(),
+      baseDir: this.informationService.getBaseDir(),
+      appDir: this.informationService.getAppDir(),
+      HOME: this.informationService.getHome(),
+      root: this.informationService.getRoot(),
+      env: this.environmentService.getCurrentEnvironment(),
+    };
+  }
 
   add(configFilePaths: any[]) {
     for (const dir of configFilePaths) {
@@ -107,18 +122,7 @@ export class MidwayConfigService implements IConfigService {
       let config = await this.loadConfig(filename);
       if (isFunction(config)) {
         // eslint-disable-next-line prefer-spread
-        config = config.apply(null, [
-          {
-            pkg: this.informationService.getPkg(),
-            name: this.informationService.getProjectName(),
-            baseDir: this.informationService.getBaseDir(),
-            appDir: this.informationService.getAppDir(),
-            HOME: this.informationService.getHome(),
-            root: this.informationService.getRoot(),
-            env: this.environmentService.getCurrentEnvironment(),
-          },
-          target,
-        ]);
+        config = config.apply(null, [this.appInfo, target]);
       }
 
       if (!config) {
