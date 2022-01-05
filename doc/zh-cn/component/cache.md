@@ -3,6 +3,18 @@
 Midway Cache 是为了方便开发者进行缓存操作的组件，它有利于改善项目的性能。它为我们提供了一个数据中心以便进行高效的数据访问。
 
 
+
+相关信息：
+
+| 描述                 |      |
+| -------------------- | ---- |
+| 可作为主框架独立使用 | ❌    |
+| 包含自定义日志       | ❌    |
+| 可独立添加中间件     | ❌    |
+
+
+
+
 ## 安装
 
 首先安装相关的组件模块。
@@ -11,6 +23,7 @@ Midway Cache 是为了方便开发者进行缓存操作的组件，它有利于�
 $ npm i @midwayjs/cache@3 cache-manager --save
 $ npm i @types/cache-manager --save-dev
 ```
+
 
 
 ## 使用 Cache
@@ -91,6 +104,7 @@ export class UserService {
 ```
 
 
+
 ### 设置缓存
 
 
@@ -115,11 +129,15 @@ export const cache = {
   },
 };
 ```
+
+
 ### 获取缓存
+
 ```typescript
 const value = await this.cache.get(key);
 ```
 如果获取不到，则为 undefined。
+
 
 
 ### 移除缓存
@@ -131,6 +149,7 @@ await this.cache.del(key);
 ```
 
 
+
 ### 清空整体store数据（此处是整体清除，需要重点⚠️）
 
 
@@ -138,6 +157,7 @@ await this.cache.del(key);
 ```typescript
 await this.cache.reset(); // 这块需要注意
 ```
+
 
 
 ## 全局配置
@@ -158,6 +178,7 @@ export const cache = {
 
 ```
 例如用户可以修改默认的 TTL，也就是过期时间。
+
 
 
 ## 其他Cache
@@ -187,14 +208,20 @@ export const cache = {
 :::
 
 
+
 ## 相关文档
 
 
 由于 Midway Cache 是基于 cache-manager 封装，所以相关资料用户也可以查询：[cache-manger](https://www.npmjs.com/package/cache-manager)。
 
 
+
 ## 常见问题
+
+
+
 ### 1、set和get无法得到相同值？
+
 用户使用了cache模块，默认是内存式的，例如在本地用dev模式，由于是单进程的，那set和get最终能达到相同的值。但是用户部署到服务器上面后，由于会有多worker，相当于第一次请求，落在进程1上，然后第二次落在进程2上，这样获得到空了。
 
 

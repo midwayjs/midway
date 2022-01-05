@@ -1,6 +1,9 @@
 # 调试
 
+
+
 ## 在 VSCode 中调试
+
 
 
 ### 方法一：使用 JavaScript Debug Teminal
@@ -10,6 +13,7 @@
 
 输入任意的命令都将自动开启 Debug，比如输入 `npm run dev` 后。
 ![image.png](https://img.alicdn.com/imgextra/i2/O1CN01nnkbOQ1YN79M1svVV_!!6000000003046-2-tps-1500-570.png)
+
 
 
 ### 方法二：配置调试文件
@@ -68,6 +72,8 @@
 
 在代码上断点后执行调试即可。
 ![image.png](https://img.alicdn.com/imgextra/i1/O1CN01sGzfeH1iLPpzSIWSg_!!6000000004396-2-tps-1327-907.png)
+
+
 
 ## 在 Chrome 中调试
 

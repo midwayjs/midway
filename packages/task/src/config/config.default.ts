@@ -17,6 +17,7 @@ export const midwayLogger = {
   clients: {
     taskLog: {
       fileLogName: 'midway-task.log',
+      disableConsole: true,
       printFormat: info => {
         return `${info.timestamp} ${info.LEVEL} ${info.pid} ${info.label} ${info.message}`;
       },
