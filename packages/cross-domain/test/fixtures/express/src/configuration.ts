@@ -1,6 +1,6 @@
 import { Configuration, Controller, Get, Inject, Post } from '@midwayjs/decorator';
 import * as express from '@midwayjs/express';
-import { JSONPService } from '../../../../src/index';
+import { JSONPMiddleware, JSONPService } from '../../../../src/index';
 
 @Configuration({
   imports: [
@@ -37,8 +37,8 @@ export class HomeController {
     return { test: 123 }
   }
 
-  @Post('/jsonp')
+  @Post('/jsonp', { middleware: [JSONPMiddleware]})
   async jsonp() {
-    return this.jsonpService.jsonp({ test: 123 });
+    return { test: 123 };
   }
 }

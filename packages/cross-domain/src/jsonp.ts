@@ -8,11 +8,19 @@ export class JSONPService {
   @Config('jsonp')
   jsonpConfig;
 
+  @Inject()
+  res;
+
   jsonp(body: any, config?: JSONPOptions) {
+    console.log("res", this.res);
     this.ctx.type = 'js';
     // https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/X-Content-Type-Options
-    this.ctx.set('x-content-type-options', 'nosniff');
-
+    if (this.ctx.set) {
+      this.ctx.set('x-content-type-options', 'nosniff');
+    } else if (this.res.set) {
+      this.res.set('x-content-type-options', 'nosniff');
+    }
+  
     const { callback, limit } = Object.assign({}, this.jsonpConfig, config);
 
     // Only allow "[","]","a-zA-Z0123456789_", "$" and "." characters.

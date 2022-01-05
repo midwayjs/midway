@@ -44,4 +44,13 @@ describe('test/express.test.ts', function () {
       })
       .expect(200)
   });
+
+  it.only('jsonp callback', async () => {
+    const request = await createHttpRequest(app);
+    await request
+      .post('/jsonp?callback=fn')
+      .expect(200)
+      .expect('x-content-type-options', 'nosniff')
+      .expect(`/**/ typeof callback === 'function' && callback({"test":123});`)
+  });
 });
