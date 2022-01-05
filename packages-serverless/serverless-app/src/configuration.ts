@@ -1,16 +1,8 @@
-import { Configuration, Inject } from '@midwayjs/decorator';
-import * as FaaS from '@midwayjs/faas';
-import { ServerlessAppFramework } from './framework';
+import { Configuration } from '@midwayjs/decorator';
+import * as faas from '@midwayjs/faas';
 
 @Configuration({
   namespace: 'serverless-app',
-  imports: [FaaS],
+  imports: [faas],
 })
-export class ServerlessAppConfiguration {
-  @Inject()
-  framework: ServerlessAppFramework;
-
-  async onServerReady() {
-    await this.framework.run();
-  }
-}
+export class ServerlessAppConfiguration {}
