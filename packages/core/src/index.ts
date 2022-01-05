@@ -32,6 +32,7 @@ export { MidwayDecoratorService } from './service/decoratorService';
 export * from './service/pipelineService';
 export * from './util/contextUtil';
 export * from './common/serviceFactory';
+export * from './common/dataListener';
 export * from './common/fileDetector';
 export * from './common/webGenerator';
 export * from './common/middlewareManager';
