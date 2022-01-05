@@ -78,14 +78,20 @@ export class MidwayExpressFramework extends BaseFramework<
     debug(`[express]: use middlewares = "${this.getMiddleware().getNames()}"`);
     // restore use method
     this.app.use = (this.app as any).originUse;
+
+    debug('[express]: use user router middleware');
+    // load controller，must apply router filter here
+    const routerMiddlwares = await this.loadMidwayController();
+
     // use global middleware
     const globalMiddleware = await this.applyMiddleware();
     debug('[express]: use and apply all framework and global middleware');
     this.app.use(globalMiddleware as any);
 
-    debug('[express]: use user router middleware');
-    // load controller
-    await this.loadMidwayController();
+    // load router after global middleware
+    for (const info of routerMiddlwares) {
+      this.app.use(info.prefix, info.middleware);
+    }
 
     debug('[express]: use 404 not found middleware');
     // eslint-disable-next-line
@@ -243,12 +249,18 @@ export class MidwayExpressFramework extends BaseFramework<
     });
   }
 
-  public async loadMidwayController(): Promise<void> {
+  public async loadMidwayController(): Promise<
+    Array<{
+      prefix: string;
+      middleware: any;
+    }>
+  > {
     const collector = new WebRouterCollector('', {
       globalPrefix: this.configurationOptions.globalPrefix,
     });
     const routerTable = await collector.getRouterTable();
     const routerList = await collector.getRoutePriorityList();
+    const routerMiddlewares = [];
 
     for (const routerInfo of routerList) {
       // bind controller first
@@ -300,8 +312,12 @@ export class MidwayExpressFramework extends BaseFramework<
         );
       }
 
-      this.app.use(routerInfo.prefix, newRouter);
+      routerMiddlewares.push({
+        prefix: routerInfo.prefix,
+        middleware: newRouter,
+      });
     }
+    return routerMiddlewares;
   }
 
   /**
