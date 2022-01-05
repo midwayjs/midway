@@ -627,9 +627,3 @@ export interface MidwayAppInfo {
 export interface MidwayConfig extends FileConfigOption<typeof _default> {
   [customConfigKey: string]: unknown;
 }
-
-export interface TranslateOptions {
-  lang?: string;
-  group?: string;
-  args?: any;
-}

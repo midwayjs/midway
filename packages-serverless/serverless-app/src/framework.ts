@@ -299,7 +299,10 @@ export class ServerlessAppFramework extends BaseFramework<
   }
 
   public async run() {
-    if (this.configurationOptions.port) {
+    // set port and listen server
+    const customPort =
+      process.env.MIDWAY_HTTP_PORT ?? this.configurationOptions.port;
+    if (customPort) {
       if (this.configurationOptions.ssl) {
         this.server = require('https').createServer(
           {
@@ -313,7 +316,7 @@ export class ServerlessAppFramework extends BaseFramework<
       }
 
       await new Promise<void>(resolve => {
-        this.server.listen(this.configurationOptions.port, () => {
+        this.server.listen(customPort, () => {
           resolve();
         });
       });
