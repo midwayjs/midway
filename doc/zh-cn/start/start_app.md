@@ -1,5 +1,9 @@
 # 创建第一个应用
 
+## 关于 v3
+
+当前 v3 版本还是 beta 状态，在未发布前，我们依旧会调整 API 并且无法及时通知用户，但是相应的，可以随时使用到最新的功能。
+
 ## 快速初始化
 
 
@@ -7,27 +11,26 @@
 $ npm -v
 
 # 如果是 npm v6
-$ npm init midway --type=web my_midway_app
+$ npm init midway --type=koa-v3 my_midway_app
 
 # 如果是 npm v7
-$ npm init midway -- --type=web my_midway_app
+$ npm init midway -- --type=koa-v3 my_midway_app
 ```
-
 
 `my_midway_app`  是你即将创建的项目根目录名，CLI 会自动创建该目录，并将初始化示例代码写入其中。
 
+注意，下图的命令和上面不一样，等 v3 正式发布后我们会重录。
 
 流程示例如下（npm7 效果）：
 
-![create.svg](https://cdn.nlark.com/yuque/0/2021/svg/501408/1617863129019-55f49eaa-4507-4bd5-9481-1e59d6295103.svg#height=776&id=iYjWX&margin=%5Bobject%20Object%5D&name=create.svg&originHeight=776&originWidth=1390&originalType=binary&ratio=1&size=119483&status=done&style=none&width=1390)
-
+![create.svg](https://img.alicdn.com/imgextra/i3/O1CN01SKMFSB1Utr04ArZXJ_!!6000000002576-55-tps-1390-776.svg)
 
 :::info
 可以使用 `npm init midway` 查看完整的脚手架列表，选中某个项目后，Midway 会自动创建示例目录，代码，以及安装依赖。
 :::
 
 
-![create-with-cli.svg](https://cdn.nlark.com/yuque/0/2021/svg/501408/1619947815582-6283808a-b092-439b-b47f-f8a98852d2ed.svg#clientId=ub91e37c7-a0d3-4&from=ui&id=uc666f20c&margin=%5Bobject%20Object%5D&name=create-with-cli.svg&originHeight=928&originWidth=1770&originalType=binary&ratio=1&size=122976&status=done&style=none&taskId=uc9e17831-bc48-4ee0-a3ca-11de139c454)
+![create-with-cli.svg](https://img.alicdn.com/imgextra/i4/O1CN016efif51uI0HFO9RWh_!!6000000006013-55-tps-1770-928.svg)
 
 示例将创建一个类似下面的目录结构，其中最精简的 Midway 项目示例如下。
 
@@ -73,6 +76,7 @@ Midway 对目录没有特别的限制，但是我们会遵守一些简单的开�
 - `entity` 或 `model`  数据库实体目录
 - `config` 业务的配置目录
 - `util` 工具类存放的目录
+- `decorator` 自定义装饰器目录
 - `interface.ts`  业务的 ts 定义文件
 
 
@@ -94,10 +98,9 @@ Midway 设计之初就可以兼容多种上层框架，比如常见的 `Express`
 
 | 名称 | 描述 |
 | --- | --- |
-| @midwayjs/web | 默认，Egg.js 是国内相对常用的 Web 框架，也在阿里的双促中经过稳定性考验，包含了比较多的默认插件。 |
+| @midwayjs/koa | 默认，Koa 是一个 Express 的替代框架，它默认支持了异步中间件等能力，是第二大通用的 Node.js Web 框架。 |
+| @midwayjs/web | Egg.js 是国内相对常用的 Web 框架，包含一些默认插件。 |
 | @midwayjs/express | Express 是一个众所周知的 node.js 简约 Web 框架。 这是一个经过实战考验，适用于生产的库，拥有大量社区资源。  |
-| @midwayjs/koa | Koa 是一个 Express 的替代框架，它默认支持了异步中间件等能力，是第二大通用的 Node.js Web 框架。 |
-
 
 
 如果你希望替代默认的 Web 框架，请参考对应的框架章节。
@@ -112,7 +115,7 @@ $ open http://localhost:7001
 Midway 会启动 HTTP 服务器，打开浏览器，访问 `http://127.0.0.1:7001` ，浏览器会打印出 `Hello midwayjs!`  的信息。
 
 
-![image.png](https://cdn.nlark.com/yuque/0/2020/png/501408/1600531997433-eee21874-3f72-4ebf-bcfa-baa6c97ce4bf.png#height=384&id=JfkIS&margin=%5Bobject%20Object%5D&name=image.png&originHeight=768&originWidth=1268&originalType=binary&ratio=1&size=85918&status=done&style=none&width=634)
+![image.png](https://img.alicdn.com/imgextra/i2/O1CN01KoUxO91jydMw41Vv4_!!6000000004617-2-tps-1268-768.png)
 
 
 如果需要修改开发的启动端口，可以在 `package.json`  的 scripts 段落里修改，如修改为 6001：

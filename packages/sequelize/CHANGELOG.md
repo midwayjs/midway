@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.14](https://github.com/midwayjs/midway/compare/v3.0.0-beta.13...v3.0.0-beta.14) (2022-01-04)
+
+
+### Bug Fixes
+
+* **deps:** update dependency sequelize to ~6.12.0 ([#1509](https://github.com/midwayjs/midway/issues/1509)) ([6f96bf7](https://github.com/midwayjs/midway/commit/6f96bf745761c849c94a8977436dc2955f3d9a3c))
+
+
+
+
+
 # [3.0.0-beta.13](https://github.com/midwayjs/midway/compare/v3.0.0-beta.12...v3.0.0-beta.13) (2021-12-30)
 
 **Note:** Version bump only for package @midwayjs/sequelize

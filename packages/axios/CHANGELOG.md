@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.14](https://github.com/midwayjs/midway/compare/v3.0.0-beta.13...v3.0.0-beta.14) (2022-01-04)
+
+
+### Bug Fixes
+
+* **deps:** update dependency axios to ^0.24.0 ([#1506](https://github.com/midwayjs/midway/issues/1506)) ([d2a7dab](https://github.com/midwayjs/midway/commit/d2a7dab55e6f96528e6087ae503f6328013088fb))
+
+
+
+
+
 # [3.0.0-beta.13](https://github.com/midwayjs/midway/compare/v3.0.0-beta.12...v3.0.0-beta.13) (2021-12-30)
 
 **Note:** Version bump only for package @midwayjs/axios

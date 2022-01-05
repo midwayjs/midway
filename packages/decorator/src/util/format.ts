@@ -17,18 +17,18 @@ const MS = {
 
 // crontab pre format
 const CRONTAB = {
-  EVERY_SECOND: '* * * * * ?',
-  EVERY_MINUTE: '0 * * * * ?',
-  EVERY_HOUR: '0 0 * * * ?',
-  EVERY_DAY: '0 0 0 * * ?',
-  EVERY_DAY_ZERO_FIFTEEN: '0 15 0 * * ?',
-  EVERY_DAY_ONE_FIFTEEN: '0 15 1 * * ?',
-  EVERY_PER_5_SECOND: '/5 * * * * ?',
-  EVERY_PER_10_SECOND: '/10 * * * * ?',
-  EVERY_PER_30_SECOND: '/30 * * * * ?',
-  EVERY_PER_5_MINUTE: '0 /5 * * * ?',
-  EVERY_PER_10_MINUTE: '0 /10 * * * ?',
-  EVERY_PER_30_MINUTE: '0 /30 * * * ?',
+  EVERY_SECOND: '* * * * * *',
+  EVERY_MINUTE: '0 * * * * *',
+  EVERY_HOUR: '0 0 * * * *',
+  EVERY_DAY: '0 0 0 * * *',
+  EVERY_DAY_ZERO_FIFTEEN: '0 15 0 * * *',
+  EVERY_DAY_ONE_FIFTEEN: '0 15 1 * * *',
+  EVERY_PER_5_SECOND: '*/5 * * * * *',
+  EVERY_PER_10_SECOND: '*/10 * * * * *',
+  EVERY_PER_30_SECOND: '*/30 * * * * *',
+  EVERY_PER_5_MINUTE: '0 */5 * * * *',
+  EVERY_PER_10_MINUTE: '0 */10 * * * *',
+  EVERY_PER_30_MINUTE: '0 */30 * * * *',
 };
 
 export const FORMAT = {

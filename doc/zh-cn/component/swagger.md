@@ -1,27 +1,39 @@
 # Swagger 组件
 基于最新的 [OpenAPI 3.0.3](https://swagger.io/specification/) 实现了新版的 Swagger 组件。
 
+
+
+相关信息：
+
+| 描述                 |      |
+| -------------------- | ---- |
+| 可作为主框架独立使用 | ❌    |
+| 包含自定义日志       | ❌    |
+| 可独立添加中间件     | ❌    |
+
+
+
 ## 使用方法
 ### 安装
 
 #### 1. 安装依赖
 
-```
-npm install @midwayjs/swagger --save
-npm install swagger-ui-dist --save-dev
+```bash
+$ npm install @midwayjs/swagger@3 --save
+$ npm install swagger-ui-dist --save-dev
 ```
 
 如果想要在服务器上输出 Swagger API 页面，则需要将 swagger-ui-dist 安装到依赖中。
 
-```
-npm install swagger-ui-dist --save
+```bash
+$ npm install swagger-ui-dist --save
 ```
 
 #### 2. 代码配置
 
 在 ```configuration.ts``` 中增加组件。
 
-```TypeScript
+```typeScript
 import { Configuration } from '@midwayjs/decorator';
 import * as swagger from '@midwayjs/swagger';
 
@@ -37,10 +49,10 @@ export class ContainerConfiguration {
 
 可以配置启用的环境，比如下面的代码指的是“只在 local 环境下启用”。
 
-```TypeScript
+```typeScript
 import { Configuration } from '@midwayjs/decorator';
 import * as swagger from '@midwayjs/swagger';
-​
+
 @Configuration({
   imports: [
     {
@@ -50,17 +62,17 @@ import * as swagger from '@midwayjs/swagger';
   ]
 })
 export class ContainerConfiguration {
-​
+
 }
 ```
-​
+
 ### 参数配置
 
 Swagger 组件提供了和 [OpenAPI](https://swagger.io/specification/) 一致的参数配置能力，可以通过自定义配置来实现。
 
 #### 配置项
 
-```TypeScript
+```typeScript
 /**
  * see https://swagger.io/specification/
  */
@@ -151,7 +163,8 @@ export interface AuthOptions extends Omit<SecuritySchemeObject, 'type'> {
 Swagger 组件会识别各个 ```@Controller``` 中每个路由方法的 ```@Body()```、```@Query()```、```@Param()``` 装饰器，提取路由方法参数和类型。
 
 假设有一个方法：
-```TypeScript
+
+```typeScript
 @Post('/:id', { summary: 'test'})
 async create(@Body() createCatDto: CreateCatDto, @Param('id') id: number): Promise<Cat> {
   return this.catsService.create(createCatDto);
@@ -160,11 +173,11 @@ async create(@Body() createCatDto: CreateCatDto, @Param('id') id: number): Promi
 
 组件启动时会提取其中的两个参数：
 
-![image.png](./images/swagger1.jpg)
+![swagger1](https://img.alicdn.com/imgextra/i1/O1CN012WJPrd22H6QQZuXqJ_!!6000000007094-0-tps-1672-796.jpg)
 
 图中可以看到 id，以及 request body 参数 Schema 为 CreateCatDto。其中 CreateCatDto 字段都是空的，我们提供了 ```@ApiProperty(...)``` 装饰器可以用来声明模型定义。
 
-```TypeScript
+```typeScript
 import { ApiProperty } from "@midwayjs/swagger";
 
 export class CreateCatDto {
@@ -180,11 +193,11 @@ export class CreateCatDto {
 ```
 
 Swagger UI 中展示：
-![image.png](./images/swagger2.jpg)
+![swagger2](https://img.alicdn.com/imgextra/i3/O1CN013UI5Ha1JSrt84NApB_!!6000000001028-0-tps-1672-486.jpg)
 
 从代码中可以看到，我们对每个字段添加了 example、description，至于字段类型可以通过 ```design:type``` 来提取，当然也支持 ```@ApiProperty(...)``` 中通过 type 和 format 来定义。
 
-```TypeScript
+```typeScript
 @ApiProperty({
   type: 'integer',
   format: 'int32',
@@ -196,7 +209,7 @@ age: number;
 
 如果是数组类型，由于 ```design:type``` 不支持范型类型，我们可以配置 type 字段来定义。
 
-```TypeScript
+```typeScript
 @ApiProperty({
   type: [String],
   example: ['1'],
@@ -207,7 +220,7 @@ breeds: string[];
 
 如果是枚举类型，可以通过配置 enmu 字段来定义。
 
-```TypeScript
+```typeScript
 enum HelloWorld {
   One = 'One',
   Two = 'Two',
@@ -222,13 +235,13 @@ hello: HelloWorld;
 ```
 
 Swagger UI 中展示：
-![image.png](./images/swagger3.jpg)
+![swagger3](https://img.alicdn.com/imgextra/i1/O1CN015M37MU1KgtdNfqsgp_!!6000000001194-0-tps-1406-426.jpg)
 
 #### 文件上传定义
 
 使用 ```@ApiBody``` 设置 ```contentType```
 
-```TypeScript
+```typeScript
 @Post('/:id', { summary: 'test'})
 @ApiBody({
   description: 'this is body', 
@@ -242,7 +255,7 @@ async create(@Body() createCatDto: CreateCatDto, @Param('id') id: number): Promi
 
 在 ```CreateCatDto``` 中使用 ``` @ApiProperty ``` 添加 ```format```
 
-```TypeScript
+```typeScript
 @ApiProperty({
   type: 'string',
   format: 'binary',
@@ -252,7 +265,7 @@ file: any;
 ```
 
 Swagger UI 中展示：
-![image.png](./images/swagger4.jpg)
+![swagger4](https://img.alicdn.com/imgextra/i3/O1CN01KlDHNt24mMglN1fyH_!!6000000007433-0-tps-1598-434.jpg)
 
 ### 路由定义
 [OpenAPI](https://swagger.io/specification/) 定义的 paths 就是各个路由路径，且每个路由路径都有 HTTP 方法的定义，比如 GET、POST、DELETE、PUT 等。
@@ -260,16 +273,17 @@ Swagger UI 中展示：
 #### 路由标签
 Swagger 会对 paths 分标签，如果 Controller 未定义任何标签，则会默认归组到 default 下。可以通过 ```@ApiTags([...])``` 来自定义 Controller 标签。
 
-``` TypeScript
+```typeScript
 @ApiTags(['hello'])
 @Controller('/hello')
 export class HelloController {}
 ```
 
 #### 请求 Header
+
 通过 ```@ApiHeader({...})``` 装饰器来定义 Header 参数。
 
-```TypeScript
+```typeScript
 @ApiHeader({
   name: 'x-test-one',
   description: 'this is test one'
@@ -280,8 +294,10 @@ export class HelloController {}
 ```
 
 #### 请求 Response
+
 可以使用 ```@ApiResponse({...})``` 来自定义请求 Response。
-```TypeScript
+
+```typeScript
 @Get('/:id')
 @ApiResponse({
   status: 200,
@@ -320,7 +336,8 @@ findOne(@Param('id') id: string, @Query('test') test: any): Cat {
 * ```@ApiDefaultResponse()```
 
 HTTP 请求返回的数据模型定义也可以通过指定 type，当然这个数据模型需要通过装饰器 ```@ApiProperty``` 来描述各个字段。
-```TypeScript
+
+```typeScript
 import { ApiProperty } from '@midwayjs/swagger';
 
 export class Cat {
@@ -339,7 +356,8 @@ export class Cat {
 ```
 
 Swagger 还支持带前缀 ```x-``` 的扩展字段，可以使用 ```@ApiExtension(x-..., {...})``` 装饰器。
-```TypeScript
+
+```typeScript
 @ApiExtension('x-hello', { hello: 'world' })
 ```
 
@@ -347,8 +365,10 @@ Swagger 还支持带前缀 ```x-``` 的扩展字段，可以使用 ```@ApiExtens
 组件可以通过添加授权验证配置来设置验证方式，我们支持配置 ```basic```、```bearer```、```cookie```、```oauth2```、```apikey```、```custom```。
 
 #### basic
+
 * 启用 basic 验证
-```TypeScript
+
+```typeScript
 // config.default.ts
 export const swagger = {
   auth: {
@@ -358,15 +378,17 @@ export const swagger = {
 ```
 
 * 关联 Controller
-```TypeScript
+```typeScript
 @ApiBasicAuth()
 @Controller('/hello')
 export class HelloController {}
 ```
 
 #### bearer
+
 * 启用 bearer 验证（bearerFormat 为 JWT）
-```TypeScript
+
+```typeScript
 // config.default.ts
 export const swagger = {
   auth: {
@@ -376,15 +398,18 @@ export const swagger = {
 ```
 
 * 关联 Controller
-```TypeScript
+
+```typeScript
 @ApiBearerAuth()
 @Controller('/hello')
 export class HelloController {}
 ```
 
 #### oauth2
+
 * 启用 oauth2 验证
-```TypeScript
+
+```typeScript
 // config.default.ts
 export const swagger = {
   auth: {
@@ -411,7 +436,7 @@ export const swagger = {
 ```
 
 * 关联 Controller
-```TypeScript
+```typeScript
 @ApiOAuth2()
 @Controller('/hello')
 export class HelloController {}
@@ -419,7 +444,8 @@ export class HelloController {}
 
 #### cookie
 * 启用 cookie 验证
-```TypeScript
+
+```typeScript
 // config.default.ts
 export const swagger = {
   auth: {
@@ -431,15 +457,18 @@ export const swagger = {
 ```
 
 * 关联 Controller
-```TypeScript
+
+```typeScript
 @ApiCookieAuth('testforcookie')
 @Controller('/hello')
 export class HelloController {}
 ```
 
 #### apikey
+
 * 启用 cookie 验证
-```TypeScript
+
+```typeScript
 // config.default.ts
 export const swagger = {
   auth: {
@@ -450,16 +479,18 @@ export const swagger = {
 ```
 
 * 关联 Controller
-```TypeScript
+
+```typeScript
 @ApiSecurity('api_key')
 @Controller('/hello')
 export class HelloController {}
 ```
 
 #### custom
+
 * 自定义验证方式，需要自己设计参数配置
 
-```TypeScript
+```typeScript
 // config.default.ts
 export const swagger = {
   auth: {
@@ -471,13 +502,15 @@ export const swagger = {
 ```
 
 * 关联 Controller
-```TypeScript
+
+```typeScript
 @ApiSecurity('mycustom')
 @Controller('/hello')
 export class HelloController {}
 ```
 
 ### 装饰器列表
+
 组件所有装饰器参考了 [@nestjs/swagger](https://github.com/nestjs/swagger) 的设计，都带 ```Api``` 前缀。这里列出全部装饰器：
 
 | 装饰器                       | 支持模式           |

@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/sequelize",
-  "version": "3.0.0-beta.13",
+  "version": "3.0.0-beta.14",
   "main": "dist/index",
   "typings": "index.d.ts",
   "files": [
@@ -9,13 +9,13 @@
     "index.d.ts"
   ],
   "devDependencies": {
-    "@midwayjs/decorator": "^3.0.0-beta.13",
-    "@midwayjs/koa": "^3.0.0-beta.13",
-    "@midwayjs/mock": "^3.0.0-beta.13",
+    "@midwayjs/decorator": "^3.0.0-beta.14",
+    "@midwayjs/koa": "^3.0.0-beta.14",
+    "@midwayjs/mock": "^3.0.0-beta.14",
     "sqlite3": "5.0.2"
   },
   "dependencies": {
-    "sequelize": "~6.6.5",
+    "sequelize": "~6.12.0",
     "sequelize-typescript": "^2.1.0"
   },
   "keywords": [

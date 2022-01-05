@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.14](https://github.com/midwayjs/midway/compare/v3.0.0-beta.13...v3.0.0-beta.14) (2022-01-04)
+
+
+### Bug Fixes
+
+* cos config definition & 3.x doc update ([#1515](https://github.com/midwayjs/midway/issues/1515)) ([0ac7ac5](https://github.com/midwayjs/midway/commit/0ac7ac5805b7ab8873f8792fc1712a74e3223172))
+* **deps:** update dependency http-errors to v2 ([#1512](https://github.com/midwayjs/midway/issues/1512)) ([f3580e1](https://github.com/midwayjs/midway/commit/f3580e14c55cb3ddbc09c75694c2adc45765d7ad))
+* **deps:** update dependency statuses to v2 ([#1487](https://github.com/midwayjs/midway/issues/1487)) ([5f99204](https://github.com/midwayjs/midway/commit/5f99204f7ca28fbf9c8048bcbba0d9d1eb49d2aa))
+
+
+
+
+
 # [3.0.0-beta.13](https://github.com/midwayjs/midway/compare/v3.0.0-beta.12...v3.0.0-beta.13) (2021-12-30)
 
 **Note:** Version bump only for package @midwayjs/serverless-http-parser
