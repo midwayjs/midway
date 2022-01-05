@@ -267,6 +267,35 @@ file: any;
 Swagger UI 中展示：
 ![swagger4](https://img.alicdn.com/imgextra/i3/O1CN01KlDHNt24mMglN1fyH_!!6000000007433-0-tps-1598-434.jpg)
 
+* 兼容 Upload 组件
+
+  * 添加 ```@ApiBody()``` 装饰器描述
+  
+  ```typeScript
+  @Post('/test')
+  @ApiBody({ description: 'hello file' })
+  @ApiBody({ description: 'hello fields', type: Cat })
+  async upload(@File() f: any, @Fields() data: Cat) {
+    return null;
+  }
+  ```
+
+  Swagger UI 中展示：
+  ![swagger5](https://img.alicdn.com/imgextra/i2/O1CN01icnwZE24OY5vdkkKx_!!6000000007381-0-tps-1272-1026.jpg)
+
+  * 不添加 ```@ApiBody()``` 装饰器描述
+  
+  ```typeScript
+  @Post('/test1')
+  async upload1(@Files() f: any[], @Fields() data: Cat) {
+    return null;
+  }
+  ```
+
+  Swagger UI 中展示：
+  ![swagger6](https://img.alicdn.com/imgextra/i3/O1CN01w9dZxe1YQJv3uOycZ_!!6000000003053-0-tps-1524-1118.jpg)
+
+
 ### 路由定义
 [OpenAPI](https://swagger.io/specification/) 定义的 paths 就是各个路由路径，且每个路由路径都有 HTTP 方法的定义，比如 GET、POST、DELETE、PUT 等。
 
