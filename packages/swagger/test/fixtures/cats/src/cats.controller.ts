@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Param, Post, Query } from '@midwayjs/decorator';
+import { Body, Controller, Fields, File, Files, Get, Inject, Param, Post, Query } from '@midwayjs/decorator';
 import {
   ApiBasicAuth,
   ApiBearerAuth,
@@ -52,5 +52,17 @@ export class CatsController {
   @ApiQuery({ name: 'aa', enum: ['One', 'Two', 'Three']})
   findOne(@Param('id') id: string, @Query('test') test: any, @Query('aa') aa: any): Cat {
     return this.catsService.findOne(+id);
+  }
+
+  @Post('/test')
+  @ApiBody({ description: 'hello file' })
+  @ApiBody({ description: 'hello fields', type: Cat })
+  async upload(@File() f: any, @Fields() data: Cat) {
+    return null;
+  }
+
+  @Post('/test1')
+  async upload1(@Files() f: any[], @Fields() data: Cat) {
+    return null;
   }
 }

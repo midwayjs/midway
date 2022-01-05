@@ -96,6 +96,10 @@ export class DocumentBuilder {
     return this;
   }
 
+  public getSchema(name: string): SchemaObject {
+    return this.document.components.schemas[name] as SchemaObject;
+  }
+
   public addTag(
     name: string,
     description = '',
