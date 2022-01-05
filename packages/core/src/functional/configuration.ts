@@ -5,6 +5,7 @@ export class FunctionalConfiguration {
   private readyHandler;
   private stopHandler;
   private configLoadHandler;
+  private serverReadyHandler;
   private options: InjectionConfigurationOptions;
 
   constructor(options: InjectionConfigurationOptions) {
@@ -12,6 +13,7 @@ export class FunctionalConfiguration {
     this.readyHandler = () => {};
     this.stopHandler = () => {};
     this.configLoadHandler = () => {};
+    this.serverReadyHandler = () => {};
   }
 
   onConfigLoad(
@@ -38,6 +40,20 @@ export class FunctionalConfiguration {
       this.readyHandler = readyHandler;
     } else {
       return this.readyHandler(readyHandler, app);
+    }
+    return this;
+  }
+
+  onServerReady(
+    serverReadyHandler:
+      | ((container: IMidwayContainer, app: IMidwayApplication) => void)
+      | IMidwayContainer,
+    app?: IMidwayApplication
+  ) {
+    if (typeof serverReadyHandler === 'function') {
+      this.serverReadyHandler = serverReadyHandler;
+    } else {
+      return this.serverReadyHandler(serverReadyHandler, app);
     }
     return this;
   }
