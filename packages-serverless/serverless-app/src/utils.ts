@@ -119,17 +119,16 @@ export const analysisDecorator = async (cwd: string) => {
     });
   }
 
-
   if (Array.isArray(global['HOOKS_ROUTER'])) {
-    for(const router of global['HOOKS_ROUTER']) {
+    for (const router of global['HOOKS_ROUTER']) {
       allFunc[router.functionId] = {
         handler: router.handler,
         events: [
           {
-            [router.type]: router
-          }
-        ]
-      }
+            [router.type]: router,
+          },
+        ],
+      };
     }
   }
 
