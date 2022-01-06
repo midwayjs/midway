@@ -39,15 +39,17 @@ export async function create<
   debug(`[mock]: Create app, appDir="${appDir}"`);
   process.env.MIDWAY_TS_MODE = 'true';
 
-  // 处理测试的 fixtures
-  if (!isAbsolute(appDir)) {
-    appDir = join(process.cwd(), 'test', 'fixtures', appDir);
-  }
+  if (appDir) {
+    // 处理测试的 fixtures
+    if (!isAbsolute(appDir)) {
+      appDir = join(process.cwd(), 'test', 'fixtures', appDir);
+    }
 
-  if (!existsSync(appDir)) {
-    throw new MidwayCommonError(
-      `Path "${appDir}" not exists, please check it.`
-    );
+    if (!existsSync(appDir)) {
+      throw new MidwayCommonError(
+        `Path "${appDir}" not exists, please check it.`
+      );
+    }
   }
 
   clearAllLoggers();
@@ -55,7 +57,7 @@ export async function create<
   options = options || ({} as any);
   if (options.baseDir) {
     safeRequire(join(`${options.baseDir}`, 'interface'));
-  } else {
+  } else if (appDir) {
     options.baseDir = `${appDir}/src`;
     safeRequire(join(`${options.baseDir}`, 'interface'));
   }
@@ -106,7 +108,11 @@ export async function create<
     appDir,
     configurationModule: []
       .concat(options.configurationModule)
-      .concat(safeRequire(join(options.baseDir, 'configuration'))),
+      .concat(
+        options.baseDir
+          ? safeRequire(join(options.baseDir, 'configuration'))
+          : []
+      ),
   });
 
   if (customFramework) {
@@ -210,11 +216,27 @@ class LightFramework extends BaseFramework<any, any, any> {
   }
 }
 
+/**
+ * Create a real project but not ready or a virtual project
+ * @param baseDir
+ * @param options
+ */
 export async function createLightApp(
   baseDir = '',
   options: MockAppConfigurationOptions = {}
 ): Promise<IMidwayApplication> {
   Framework()(LightFramework);
+  options.globalConfig = Object.assign(
+    {
+      midwayLogger: {
+        default: {
+          disableFile: true,
+          disableError: true,
+        },
+      },
+    },
+    options.globalConfig ?? {}
+  );
   return createApp(baseDir, {
     ...options,
     configurationModule: [

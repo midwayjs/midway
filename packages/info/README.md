@@ -1,11 +1,12 @@
-# midwayjs info
+# Midway Information Component
 
-Document: [https://midwayjs.org/midway](https://midwayjs.org/midway)
+Show your project info in router or other way, like phpInfo.
 
-![info](./docs/info.png)
+![info](https://img.alicdn.com/imgextra/i3/O1CN01TCkSvr28x8T7gtnCl_!!6000000007998-2-tps-797-1106.png)
+
 ## Usage
 
-in Configuration.ts file
+import info component in `configuration.ts` file
 
 ```ts
 import * as info from '@midwayjs/info';
@@ -24,29 +25,7 @@ export class ContainerConfiguration {
 
 ```
 
-in your code file
-
-```ts
-// model/user.ts
-import { Provider, Controller, Get } from '@midwayjs/decorator';
-import { InfoService, InfoValueType } from '@midwayjs/info';
-
-@Provider()
-@Controller('/')
-export class Photo {
-
-  @Inject()
-  infoService: InfoService;
-
-  @Get('/info')
-  getMidwayInfo() {
-    // return json
-    return this.infoService.info();
-    // return html
-    return this.infoService.info(InfoValueType.HTML);
-  }
-}
-```
+Your can curl `/_info` to show it.
 
 ## License
 

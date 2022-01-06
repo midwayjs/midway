@@ -31,6 +31,7 @@ import {
   MidwayExpressMiddlewareService,
 } from './middlewareService';
 import { debuglog } from 'util';
+import { sendData } from './util';
 const debug = debuglog('midway:debug');
 
 @Framework()
@@ -81,7 +82,7 @@ export class MidwayExpressFramework extends BaseFramework<
 
     debug('[express]: use user router middleware');
     // load controller，must apply router filter here
-    const routerMiddlwares = await this.loadMidwayController();
+    const routerMiddlewares = await this.loadMidwayController();
 
     // use global middleware
     const globalMiddleware = await this.applyMiddleware();
@@ -89,7 +90,7 @@ export class MidwayExpressFramework extends BaseFramework<
     this.app.use(globalMiddleware as any);
 
     // load router after global middleware
-    for (const info of routerMiddlwares) {
+    for (const info of routerMiddlewares) {
       this.app.use(info.prefix, info.middleware);
     }
 
@@ -130,7 +131,7 @@ export class MidwayExpressFramework extends BaseFramework<
             res.status(status);
             next(error);
           } else {
-            this.sendData(res, result);
+            sendData(res, result);
           }
         })
         .catch(err => {
@@ -245,7 +246,7 @@ export class MidwayExpressFramework extends BaseFramework<
         throw error;
       }
 
-      this.sendData(res, returnValue);
+      sendData(res, returnValue);
     });
   }
 
@@ -354,13 +355,5 @@ export class MidwayExpressFramework extends BaseFramework<
 
   public getDefaultContextLoggerClass() {
     return MidwayExpressContextLogger;
-  }
-
-  protected sendData(res, data) {
-    if (typeof data === 'number') {
-      res.status(res.statusCode).send('' + data);
-    } else {
-      res.status(res.statusCode).send(data);
-    }
   }
 }
