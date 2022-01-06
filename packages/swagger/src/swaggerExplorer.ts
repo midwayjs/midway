@@ -27,6 +27,7 @@ import {
   AuthOptions,
   SecuritySchemeObject,
 } from './interfaces/';
+import { BodyContentType } from '.';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -315,18 +316,66 @@ export class SwaggerExplorer {
       );
 
       if (p.in === 'body') {
+        // 这里兼容一下 @File()、@Files()、@Fields() 装饰器
+        if (arg.metadata?.type === RouteParamTypes.FILESSTREAM) {
+          p.schema = {
+            properties: {
+              files: {
+                type: 'array',
+                items: {
+                  type: 'string',
+                  format: 'binary',
+                },
+                description: p.description,
+              },
+            },
+          };
+          p.contentType = BodyContentType.Multipart;
+        }
+        if (arg.metadata?.type === RouteParamTypes.FILESTREAM) {
+          p.schema = {
+            properties: {
+              file: {
+                type: 'string',
+                format: 'binary',
+                description: p.description,
+              },
+            },
+          };
+          p.contentType = BodyContentType.Multipart;
+        }
+        if (arg.metadata?.type === RouteParamTypes.FIELDS) {
+          if (p.schema['$ref']) {
+            // 展开各个字段属性
+            const name = p.schema['$ref'].replace('#/components/schemas/', '');
+            const schema = this.documentBuilder.getSchema(name);
+            delete p.schema['$ref'];
+            p.schema = JSON.parse(JSON.stringify(schema));
+          }
+          p.contentType = BodyContentType.Multipart;
+        }
+
         if (!p.content) {
           p.content = {};
           p.content[p.contentType || 'application/json'] = {
             schema: p.schema,
           };
         }
-        const requestBody = {
-          required: true,
-          description: p.description || p.name,
-          content: p.content,
-        };
-        opts[webRouter.requestMethod].requestBody = requestBody;
+        if (!opts[webRouter.requestMethod].requestBody) {
+          const requestBody = {
+            required: true,
+            description: p.description || p.name,
+            content: p.content,
+          };
+          opts[webRouter.requestMethod].requestBody = requestBody;
+        } else {
+          // 这里拼 schema properties 时肯定存在
+          Object.assign(
+            opts[webRouter.requestMethod].requestBody.content[p.contentType]
+              .schema.properties,
+            p.schema.properties
+          );
+        }
 
         delete p.contentType;
         delete p.content;
@@ -697,6 +746,9 @@ function convertTypeToString(type: RouteParamTypes) {
     case RouteParamTypes.PARAM:
       return 'path';
     case RouteParamTypes.BODY:
+    case RouteParamTypes.FIELDS:
+    case RouteParamTypes.FILESSTREAM:
+    case RouteParamTypes.FILESTREAM:
       return 'body';
     default:
       return 'header';
