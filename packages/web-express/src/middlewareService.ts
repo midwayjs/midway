@@ -18,6 +18,7 @@ import {
   Application,
 } from './interface';
 import { NextFunction, Response } from 'express';
+import { sendData } from './util';
 
 export function wrapAsyncHandler(fn): any {
   if (isAsyncFunction(fn)) {
@@ -116,7 +117,11 @@ export class MidwayExpressMiddlewareService {
         }
 
         try {
-          return handler(req, res, next);
+          Promise.resolve(handler(req, res, next)).then(result => {
+            if (result) {
+              sendData(res, result);
+            }
+          });
         } catch (err) {
           // Avoid future errors that could diverge stack execution.
           if (index > pos) throw err;

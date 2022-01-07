@@ -280,4 +280,16 @@ describe('/test/feature.test.ts', () => {
     await closeApp(app);
   });
 
+  it('should test return value in middleware', async () => {
+    const app = await creatApp('base-app-middleware-return');
+    let result = await createHttpRequest(app)
+      .get('/info');
+    expect(result.text).toEqual('hello world');
+
+    result = await createHttpRequest(app)
+      .get('/other');
+    expect(result.status).toEqual(404);
+    await closeApp(app);
+  });
+
 });

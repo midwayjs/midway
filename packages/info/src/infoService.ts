@@ -5,6 +5,7 @@ import {
   Inject,
   App,
   ApplicationContext,
+  Config,
 } from '@midwayjs/decorator';
 import { MidwayInformationService, IMidwayContainer } from '@midwayjs/core';
 import { InfoValueType, TypeInfo } from './interface';
@@ -28,6 +29,9 @@ export class InfoService {
   @App()
   app;
 
+  @Config('info.title')
+  titleConfig;
+
   @ApplicationContext()
   container: IMidwayContainer;
 
@@ -43,8 +47,8 @@ export class InfoService {
     info.push(this.envInfo());
     info.push(this.dependenciesInfo());
     info.push(this.networkInfo());
-    if (infoValueType === InfoValueType.HTML) {
-      return renderToHtml(info);
+    if (infoValueType === 'html') {
+      return renderToHtml(info, this.titleConfig);
     }
     return info;
   }
