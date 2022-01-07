@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.15](https://github.com/midwayjs/midway/compare/v3.0.0-beta.14...v3.0.0-beta.15) (2022-01-07)
+
+
+### Bug Fixes
+
+* **deps:** update socket.io packages to v4.4.1 ([#1528](https://github.com/midwayjs/midway/issues/1528)) ([14b27ea](https://github.com/midwayjs/midway/commit/14b27eaa0eeb479a80d171ede3af3ebda689ec46))
+* serverless app run ([#1523](https://github.com/midwayjs/midway/issues/1523)) ([5a25eb7](https://github.com/midwayjs/midway/commit/5a25eb7ebb17bf9b0e2ba4feee5bc1649f70d56f))
+
+
+### Features
+
+* add data listener ([#1525](https://github.com/midwayjs/midway/issues/1525)) ([0bd0db8](https://github.com/midwayjs/midway/commit/0bd0db8c7f3338c754ae852619bbbb4f2336cc16))
+* add info middleware ([#1530](https://github.com/midwayjs/midway/issues/1530)) ([7077f1d](https://github.com/midwayjs/midway/commit/7077f1d84355633a1c2fced35bfcc2152f42a7ac))
+* add secret filter ([#1531](https://github.com/midwayjs/midway/issues/1531)) ([ce77e48](https://github.com/midwayjs/midway/commit/ce77e4804aaffc18a0a091d3726e36d7ec1514b2))
+* compatible with @File/@Files/@Fields ([#1527](https://github.com/midwayjs/midway/issues/1527)) ([3fe983f](https://github.com/midwayjs/midway/commit/3fe983f2a67c366af370c41df98510adf5dab289))
+* cross domain component ([#1493](https://github.com/midwayjs/midway/issues/1493)) ([ca81b2f](https://github.com/midwayjs/midway/commit/ca81b2fa2824fbddc7870a971fa23274c86d05df))
+* support hooks 3 ([#1524](https://github.com/midwayjs/midway/issues/1524)) ([1cf446d](https://github.com/midwayjs/midway/commit/1cf446d99ac8bff252820beb7cf7dd036215a864))
+
+
+
+
+
 # [3.0.0-beta.14](https://github.com/midwayjs/midway/compare/v3.0.0-beta.13...v3.0.0-beta.14) (2022-01-04)
 
 

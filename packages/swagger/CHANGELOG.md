@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.15](https://github.com/midwayjs/midway/compare/v3.0.0-beta.14...v3.0.0-beta.15) (2022-01-07)
+
+
+### Features
+
+* compatible with @File/@Files/@Fields ([#1527](https://github.com/midwayjs/midway/issues/1527)) ([3fe983f](https://github.com/midwayjs/midway/commit/3fe983f2a67c366af370c41df98510adf5dab289))
+
+
+
+
+
 # [3.0.0-beta.14](https://github.com/midwayjs/midway/compare/v3.0.0-beta.13...v3.0.0-beta.14) (2022-01-04)
 
 **Note:** Version bump only for package @midwayjs/swagger

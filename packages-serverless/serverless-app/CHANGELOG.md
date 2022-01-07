@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.15](https://github.com/midwayjs/midway/compare/v3.0.0-beta.14...v3.0.0-beta.15) (2022-01-07)
+
+
+### Bug Fixes
+
+* serverless app run ([#1523](https://github.com/midwayjs/midway/issues/1523)) ([5a25eb7](https://github.com/midwayjs/midway/commit/5a25eb7ebb17bf9b0e2ba4feee5bc1649f70d56f))
+
+
+### Features
+
+* cross domain component ([#1493](https://github.com/midwayjs/midway/issues/1493)) ([ca81b2f](https://github.com/midwayjs/midway/commit/ca81b2fa2824fbddc7870a971fa23274c86d05df))
+* support hooks 3 ([#1524](https://github.com/midwayjs/midway/issues/1524)) ([1cf446d](https://github.com/midwayjs/midway/commit/1cf446d99ac8bff252820beb7cf7dd036215a864))
+
+
+
+
+
 # [3.0.0-beta.14](https://github.com/midwayjs/midway/compare/v3.0.0-beta.13...v3.0.0-beta.14) (2022-01-04)
 
 

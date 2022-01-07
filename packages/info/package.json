@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/info",
   "description": "midway info",
-  "version": "3.0.0-beta.14",
+  "version": "3.0.0-beta.15",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "files": [
@@ -12,13 +12,13 @@
     "picomatch": "2.3.1"
   },
   "devDependencies": {
-    "@midwayjs/core": "^3.0.0-beta.14",
-    "@midwayjs/decorator": "^3.0.0-beta.14",
-    "@midwayjs/express": "^3.0.0-beta.14",
-    "@midwayjs/koa": "^3.0.0-beta.14",
-    "@midwayjs/mock": "^3.0.0-beta.14",
-    "@midwayjs/serverless-fc-starter": "^3.0.0-beta.14",
-    "@midwayjs/serverless-scf-starter": "^3.0.0-beta.14"
+    "@midwayjs/core": "^3.0.0-beta.15",
+    "@midwayjs/decorator": "^3.0.0-beta.15",
+    "@midwayjs/express": "^3.0.0-beta.15",
+    "@midwayjs/koa": "^3.0.0-beta.15",
+    "@midwayjs/mock": "^3.0.0-beta.15",
+    "@midwayjs/serverless-fc-starter": "^3.0.0-beta.15",
+    "@midwayjs/serverless-scf-starter": "^3.0.0-beta.15"
   },
   "keywords": [
     "midway"

@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/corss-domain",
-  "version": "3.0.0-beta.13",
+  "version": "3.0.0-beta.15",
   "description": "Midway Component for Corss Domain",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -24,13 +24,13 @@
     "vary": "^1.1.2"
   },
   "devDependencies": {
-    "@midwayjs/core": "^3.0.0-beta.13",
-    "@midwayjs/decorator": "^3.0.0-beta.13",
-    "@midwayjs/express": "^3.0.0-beta.13",
-    "@midwayjs/faas": "^3.0.0-beta.13",
-    "@midwayjs/koa": "^3.0.0-beta.13",
-    "@midwayjs/mock": "^3.0.0-beta.13",
-    "@midwayjs/serverless-app": "^3.0.0-beta.13",
-    "@midwayjs/web": "^3.0.0-beta.13"
+    "@midwayjs/core": "^3.0.0-beta.15",
+    "@midwayjs/decorator": "^3.0.0-beta.15",
+    "@midwayjs/express": "^3.0.0-beta.15",
+    "@midwayjs/faas": "^3.0.0-beta.15",
+    "@midwayjs/koa": "^3.0.0-beta.15",
+    "@midwayjs/mock": "^3.0.0-beta.15",
+    "@midwayjs/serverless-app": "^3.0.0-beta.15",
+    "@midwayjs/web": "^3.0.0-beta.15"
   }
 }

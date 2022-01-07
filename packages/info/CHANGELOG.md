@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.15](https://github.com/midwayjs/midway/compare/v3.0.0-beta.14...v3.0.0-beta.15) (2022-01-07)
+
+
+### Features
+
+* add info middleware ([#1530](https://github.com/midwayjs/midway/issues/1530)) ([7077f1d](https://github.com/midwayjs/midway/commit/7077f1d84355633a1c2fced35bfcc2152f42a7ac))
+* add secret filter ([#1531](https://github.com/midwayjs/midway/issues/1531)) ([ce77e48](https://github.com/midwayjs/midway/commit/ce77e4804aaffc18a0a091d3726e36d7ec1514b2))
+
+
+
+
+
 # [3.0.0-beta.14](https://github.com/midwayjs/midway/compare/v3.0.0-beta.13...v3.0.0-beta.14) (2022-01-04)
 
 **Note:** Version bump only for package @midwayjs/info

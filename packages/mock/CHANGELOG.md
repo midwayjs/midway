@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.15](https://github.com/midwayjs/midway/compare/v3.0.0-beta.14...v3.0.0-beta.15) (2022-01-07)
+
+
+### Bug Fixes
+
+* **deps:** update socket.io packages to v4.4.1 ([#1528](https://github.com/midwayjs/midway/issues/1528)) ([14b27ea](https://github.com/midwayjs/midway/commit/14b27eaa0eeb479a80d171ede3af3ebda689ec46))
+
+
+### Features
+
+* add info middleware ([#1530](https://github.com/midwayjs/midway/issues/1530)) ([7077f1d](https://github.com/midwayjs/midway/commit/7077f1d84355633a1c2fced35bfcc2152f42a7ac))
+
+
+
+
+
 # [3.0.0-beta.14](https://github.com/midwayjs/midway/compare/v3.0.0-beta.13...v3.0.0-beta.14) (2022-01-04)
 
 
