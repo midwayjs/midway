@@ -319,6 +319,7 @@ export class SwaggerExplorer {
         // 这里兼容一下 @File()、@Files()、@Fields() 装饰器
         if (arg.metadata?.type === RouteParamTypes.FILESSTREAM) {
           p.schema = {
+            type: 'object',
             properties: {
               files: {
                 type: 'array',
@@ -334,6 +335,7 @@ export class SwaggerExplorer {
         }
         if (arg.metadata?.type === RouteParamTypes.FILESTREAM) {
           p.schema = {
+            type: 'object',
             properties: {
               file: {
                 type: 'string',

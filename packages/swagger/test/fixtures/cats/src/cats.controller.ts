@@ -65,4 +65,9 @@ export class CatsController {
   async upload1(@Files() f: any[], @Fields() data: Cat) {
     return null;
   }
+
+  @Post('/test2')
+  async upload2(@Files() f: any[]) {
+    return null;
+  }
 }
