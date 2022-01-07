@@ -257,10 +257,10 @@ export class ContainerLifeCycle implements ILifeCycle {
 `@midwayjs/koa`  框架的启动参数如下：
 
 | port     | number  | 必填，启动的端口             |
-| -------- | ------- | ---------------------------- | ------------ | ------- | --------------------- |
-| key      | string  | Buffer                       | Array<Buffer | Object> | 可选，HTTPS 证书 key  |
-| cert     | string  | Buffer                       | Array<Buffer | Object> | 可选，HTTPS 证书 cert |
-| ca       | string  | Buffer                       | Array<Buffer | Object> | 可选，HTTPS 证书 ca   |
+| -------- | ------- | ---------------------------- |
+| key      | string  | Buffer | Array<Buffer | Object> | 可选，HTTPS 证书 key  |
+| cert     | string  | Buffer | Array<Buffer | Object> | 可选，HTTPS 证书 cert |
+| ca       | string  | Buffer | Array<Buffer | Object> | 可选，HTTPS 证书 ca   |
 | hostname | string  | 监听的 hostname，默认 127.1  |
 | http2    | boolean | 可选，http2 支持，默认 false |
 
