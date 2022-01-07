@@ -141,7 +141,7 @@ export class UnsupportedMediaTypeError extends MidwayHttpError {
   }
 }
 
-export class UnprocessableError extends MidwayHttpError {
+export class UnprocessableEntityError extends MidwayHttpError {
   constructor(resOrMessage: ResOrMessage = 'Unprocessable Entity') {
     super(resOrMessage, HttpStatus.UNPROCESSABLE_ENTITY);
   }
@@ -159,7 +159,7 @@ export class InternalServerErrorError extends MidwayHttpError {
 /**
  * 501 http error, Means that the server doesn't recognize the request method or it lacks the ability to fulfill the request.
  */
-class NotImplementedError extends MidwayHttpError {
+export class NotImplementedError extends MidwayHttpError {
   constructor(resOrMessage: ResOrMessage = 'Not Implemented') {
     super(resOrMessage, HttpStatus.NOT_IMPLEMENTED);
   }
@@ -203,7 +203,7 @@ export const httpError = {
   GoneError,
   PayloadTooLargeError,
   UnsupportedMediaTypeError,
-  UnprocessableError,
+  UnprocessableEntityError,
   InternalServerErrorError,
   NotImplementedError,
   BadGatewayError,

@@ -1,13 +1,13 @@
 # Web 中间件
 
-Web 中间件是在控制器调用 **之前** 和 **之后（部分） **调用的函数。 中间件函数可以访问请求和响应对象。
+Web 中间件是在控制器调用 **之前** 和 **之后（部分）**调用的函数。 中间件函数可以访问请求和响应对象。
 ![image.png](https://img.alicdn.com/imgextra/i1/O1CN01h6hYvW1ogNexjJ3Nl_!!6000000005254-2-tps-2196-438.png)
 
 
 不同的上层 Web 框架中间件形式不同，Midway 标准的中间件基于 [洋葱圈模型](https://eggjs.org/zh-cn/intro/egg-and-koa.html#midlleware)。而 Express 则是传统的队列模型。
 
 
-Koa 和 EggJs 可以在**控制器前后都被执行**，在 Express 中，中间件 **只能在控制器之前** 调用，将在 Express 章节单独介绍。
+Koa 和 EggJs 可以在 **控制器前后都被执行**，在 Express 中，中间件 **只能在控制器之前** 调用，将在 Express 章节单独介绍。
 
 下面的代码，我们将以 @midwayjs/koa 框架举例。
 

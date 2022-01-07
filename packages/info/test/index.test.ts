@@ -1,6 +1,7 @@
 import { close, createApp, createHttpRequest, createLightApp } from '@midwayjs/mock';
 import { InfoService } from '../src';
 import { join } from 'path';
+import * as info from '../src';
 
 describe('test/index.test.ts', () => {
   it('info service', async () => {
@@ -29,5 +30,33 @@ describe('test/index.test.ts', () => {
     expect(result.type).toEqual('text/html');
     expect(result.text).toMatch('Midway Info');
     await close(app);
+  });
+
+  it('should test get config and filter secret', async () => {
+    const app = await createLightApp('', {
+      globalConfig: {
+        keys: ['123445555'],
+        oss: {
+          clients: {
+            default: {
+              accessKeyId: '123',
+              accessKeySecret: 'fjdlsaf',
+            }
+          }
+        },
+        cos: {
+          default: {
+            SecretId: 'dfdsafdsaf',
+            SecretKey: 'tewqtewqvc',
+            SecurityToken: 'fjkdlsajfdsaf'
+          }
+        }
+      },
+      configurationModule: [
+        info
+      ]
+    });
+    const infoService = await app.getApplicationContext().getAsync(InfoService);
+    expect(infoService.midwayConfig()).toMatchSnapshot();
   });
 });

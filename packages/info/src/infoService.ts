@@ -3,13 +3,18 @@ import {
   Scope,
   ScopeEnum,
   Inject,
-  App,
   ApplicationContext,
   Config,
+  Init,
 } from '@midwayjs/decorator';
-import { MidwayInformationService, IMidwayContainer } from '@midwayjs/core';
+import {
+  MidwayInformationService,
+  IMidwayContainer,
+  MidwayConfigService,
+  MidwayEnvironmentService,
+} from '@midwayjs/core';
 import { InfoValueType, TypeInfo } from './interface';
-import { bitToMB, renderToHtml, safeJson, safeRequire } from './utils';
+import { bitToMB, renderToHtml, safeContent, safeRequire } from './utils';
 import {
   hostname,
   homedir,
@@ -19,6 +24,7 @@ import {
   totalmem,
 } from 'os';
 import { join } from 'path';
+import * as pm from 'picomatch';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -26,14 +32,31 @@ export class InfoService {
   @Inject()
   midwayInformationService: MidwayInformationService;
 
-  @App()
-  app;
+  @Inject()
+  configService: MidwayConfigService;
+
+  @Inject()
+  environment: MidwayEnvironmentService;
 
   @Config('info.title')
   titleConfig;
 
+  @Config('info.hiddenKey')
+  defaultHiddenKey: string[];
+
+  secretMatchList: Array<any>;
+
   @ApplicationContext()
   container: IMidwayContainer;
+
+  @Init()
+  async init() {
+    this.secretMatchList = Array.from(new Set(this.defaultHiddenKey)).map(
+      pattern => {
+        return pm(pattern);
+      }
+    );
+  }
 
   info(infoValueType?: InfoValueType) {
     const info: TypeInfo[] = [];
@@ -47,6 +70,7 @@ export class InfoService {
     info.push(this.envInfo());
     info.push(this.dependenciesInfo());
     info.push(this.networkInfo());
+
     if (infoValueType === 'html') {
       return renderToHtml(info, this.titleConfig);
     }
@@ -61,7 +85,7 @@ export class InfoService {
         AppDir: this.midwayInformationService.getAppDir(),
         BaseDir: this.midwayInformationService.getBaseDir(),
         Root: this.midwayInformationService.getRoot(),
-        Env: this.app.getEnv(),
+        Env: this.environment.getCurrentEnvironment(),
       },
     };
   }
@@ -139,9 +163,13 @@ export class InfoService {
   }
 
   envInfo(): TypeInfo {
+    const env = {};
+    Object.keys(process.env).forEach(envName => {
+      env[envName] = this.filterSecretContent(envName, process.env[envName]);
+    });
     return {
       type: 'Environment Variable',
-      info: process.env,
+      info: env,
     };
   }
 
@@ -228,13 +256,64 @@ export class InfoService {
 
   midwayConfig() {
     const info = {};
-    const config = this.app.getConfig() || {};
+    const config = this.configService.getConfiguration() || {};
     Object.keys(config).forEach(key => {
-      info[key] = safeJson(config[key]);
+      info[key] = this.safeJson(this.filterSecretContent(key, config[key]));
     });
     return {
       type: 'Midway Config',
       info,
     };
+  }
+
+  protected filterSecretContent(key, value) {
+    if (typeof value === 'string') {
+      const find = this.secretMatchList.some(isMatch => {
+        return isMatch(key.toLowerCase());
+      });
+      if (find) {
+        return safeContent(value);
+      }
+    } else if (Array.isArray(value)) {
+      return value.map(item => {
+        return this.filterSecretContent(key, item);
+      });
+    }
+
+    return value;
+  }
+
+  protected safeJson(value: any): string {
+    switch (typeof value) {
+      case 'string':
+        return `"${value}"`;
+      case 'number':
+        return `${value}`;
+      case 'boolean':
+        return String(value);
+      case 'object':
+        if (!value) {
+          return 'null';
+        }
+        if (Array.isArray(value)) {
+          return `[${value.map(item => this.safeJson(item)).join(',')}]`;
+        }
+        if (value instanceof RegExp) {
+          return `"${value.toString()}"`;
+        }
+        // eslint-disable-next-line no-case-declarations
+        const props = [];
+        for (const key in value) {
+          props.push(
+            `"${key}":${this.safeJson(
+              this.filterSecretContent(key, value[key])
+            )}`
+          );
+        }
+        return `{${props.join(',')}}`;
+      case 'function':
+        return `function ${value.name}(${value.length} args)`;
+    }
+    return '';
   }
 }

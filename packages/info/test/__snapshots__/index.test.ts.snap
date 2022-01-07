@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`test/index.test.ts should test get config and filter secret 1`] = `
+Object {
+  "info": Object {
+    "cos": "{\\"default\\":{\\"SecretId\\":\\"df******af\\",\\"SecretKey\\":\\"te******vc\\",\\"SecurityToken\\":\\"fj*********af\\"}}",
+    "info": "{\\"title\\":\\"Midway Info\\",\\"infoPath\\":\\"/_info\\",\\"hiddenKey\\":[\\"k***\\",\\"****\\",\\"*****n\\",\\"********\\",\\"p****\\"]}",
+    "keys": "[\\"1*******5\\"]",
+    "midwayLogger": "{\\"default\\":{\\"dir\\":\\"logs\\",\\"level\\":\\"info\\",\\"consoleLevel\\":\\"info\\",\\"disableFile\\":true,\\"disableError\\":true},\\"clients\\":{\\"coreLogger\\":{\\"fileLogName\\":\\"midway-core.log\\"},\\"appLogger\\":{\\"fileLogName\\":\\"midway-app.log\\",\\"aliasName\\":\\"logger\\"}}}",
+    "oss": "{\\"clients\\":{\\"default\\":{\\"accessKeyId\\":\\"123\\",\\"accessKeySecret\\":\\"f*****f\\"}}}",
+  },
+  "type": "Midway Config",
+}
+`;

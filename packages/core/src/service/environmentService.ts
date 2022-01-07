@@ -5,20 +5,20 @@ import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
 @Provide()
 @Scope(ScopeEnum.Singleton)
 export class MidwayEnvironmentService implements IEnvironmentService {
-  environment: string;
+  protected environment: string;
 
-  getCurrentEnvironment() {
+  public getCurrentEnvironment() {
     if (!this.environment) {
       this.environment = getCurrentEnvironment();
     }
     return this.environment;
   }
 
-  setCurrentEnvironment(environment: string) {
+  public setCurrentEnvironment(environment: string) {
     this.environment = environment;
   }
 
-  isDevelopmentEnvironment() {
+  public isDevelopmentEnvironment() {
     return isDevelopmentEnvironment(this.environment);
   }
 }

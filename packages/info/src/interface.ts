@@ -1,5 +1,7 @@
 export type InfoValueType = 'html' | 'json';
 
+export const DefaultHiddenKey = ['keys', '*key', '*token', '*secret*', 'pass*'];
+
 export interface TypeInfo {
   type: string;
   info: {
@@ -10,5 +12,5 @@ export interface TypeInfo {
 export interface InfoConfigOptions {
   title: string;
   infoPath: string;
-  defaultHiddenKey: Array<string>;
+  hiddenKey: Array<string>;
 }

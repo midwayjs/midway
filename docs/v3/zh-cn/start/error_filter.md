@@ -5,19 +5,19 @@ Midway 提供了一个内置的异常处理器，负责处理应用程序中所�
 异常处理器的位置处于中间件之前，所以它能拦截所有的中间件和业务抛出的错误。
 
 ```
-                              ┌ ─ ─ ─ ─ ─ ─ ─     ┌──────────────┐                            
-                                             │    │              │                            
+                              ┌ ─ ─ ─ ─ ─ ─ ─     ┌──────────────┐
+                                             │    │              │
                               │                   │              │     ┌─────────────────────┐
                                              │    │              │     │                     │
       ───── Http Request  ────┤              ─────┤              ├────▶│    Controller A     │
                                              │    │              │     │                     │
                               │ Error Filter      │  Middleware  │     └─────────────────────┘
-                                             │    │              │                │           
-      ◀───  Http Response  ───┤              ─────┤              ├────────────────┘           
-                                             │    │              │                            
-                              │                   │              │                            
-                                             │    │              │                            
-                              └ ─ ─ ─ ─ ─ ─ ─     └──────────────┘                            
+                                             │    │              │                │
+      ◀───  Http Response  ───┤              ─────┤              ├────────────────┘
+                                             │    │              │
+                              │                   │              │
+                                             │    │              │
+                              └ ─ ─ ─ ─ ─ ─ ─     └──────────────┘
 ```
 
 
@@ -65,7 +65,7 @@ async findAll() {
 .
 ├── src
 │   └── error
-│				├── customA.error.ts
+│       ├── customA.error.ts
 │       └── customB.error.ts
 ├── test
 ├── package.json
@@ -277,18 +277,14 @@ async findAll() {
 - `RequestTimeoutError`
 - `ConflictError`
 - `GoneError`
-- `HttpVersionNotSupportedError`
 - `PayloadTooLargeError`
 - `UnsupportedMediaTypeError`
 - `UnprocessableEntityError`
 - `InternalServerError`
 - `NotImplementedError`
-- `ImATeapotError`
-- `MethodNotAllowedError`
 - `BadGatewayError`
 - `ServiceUnavailableError`
 - `GatewayTimeoutError`
-- `PreconditionFailedError`
 
 
 
@@ -326,7 +322,7 @@ import { Context } from '@midwayjs/koa';
 @Catch(InternalServerError)
 export InternalServerErrorFilter {
   async catch(err: InternalServerError, ctx: Context) {
-   
+
     // ...
     return 'got 500 error, ' + err.message;
   }
@@ -351,14 +347,14 @@ import { Context } from '@midwayjs/koa';
 @Catch()
 export HttpErrorFilter {
   async catch(err: MidwayHttpError, ctx: Context) {
-   
+
     // ...
     return {
       status: err.status ?? 500,
       message: err.message;
     }
   }
-  
+
 }
 ```
 
@@ -414,7 +410,7 @@ import { Context } from '@midwayjs/koa';
 @Catch(InternalServerError)
 export InternalServerErrorFilter {
   async catch(err: InternalServerError, ctx: Context) {
-   
+
     // ...
     ctx.logger.error(err);
     // ...
