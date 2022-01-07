@@ -32,32 +32,16 @@ export function renderToHtml(infoList: TypeInfo[], title): string {
   </style><div style="margin: 24px auto;max-width: 720px;min-width: 440px;">${html}</div>`;
 }
 
-export function safeJson(value: any): string {
-  switch (typeof value) {
-    case 'string':
-      return `"${value}"`;
-    case 'number':
-      return `${value}`;
-    case 'boolean':
-      return String(value);
-    case 'object':
-      if (!value) {
-        return 'null';
-      }
-      if (Array.isArray(value)) {
-        return `[${value.map(item => safeJson(item)).join(',')}]`;
-      }
-      if (value instanceof RegExp) {
-        return `"${value.toString()}"`;
-      }
-      // eslint-disable-next-line no-case-declarations
-      const props = [];
-      for (const key in value) {
-        props.push(`"${key}":${safeJson(value[key])}`);
-      }
-      return `{${props.join(',')}}`;
-    case 'function':
-      return `function ${value.name}(${value.length} args)`;
+export function safeContent(value = '') {
+  if (value.length < 3) {
+    return '*'.repeat(value.length);
+  } else if (value.length < 6) {
+    return value[0] + '*'.repeat(value.length - 1);
+  } else if (value.length < 10) {
+    return value[0] + '*'.repeat(value.length - 2) + value[value.length - 1];
+  } else if (value.length < 15) {
+    return value.slice(0, 2) + '*'.repeat(value.length - 4) + value.slice(-2);
+  } else {
+    return value.slice(0, 3) + '*'.repeat(value.length - 6) + value.slice(-3);
   }
-  return '';
 }

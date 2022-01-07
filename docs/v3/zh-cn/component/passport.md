@@ -28,13 +28,13 @@ $ npm i @types/passport --save-dev
 
 
 
-
 ## 使用
 
-这里我们以本地认证，和Jwt作为演示。
+这里我们以本地认证，和 Jwt 作为演示。
 
 
 首先
+
 ```typescript
 // configuration.ts
 
@@ -55,9 +55,11 @@ export class ContainerLifeCycle implements ILifeCycle {}
 
 ```
 ### e.g. 本地
-我们可以通过`@CuustomStrategy`和派生`PassportStrategy`来自启动一个策略。通过 validate 钩子来获取有效负载，并且此函数必须有返回值，其参数并不明确，可以参考对应的Strategy或者通过展开符打印查看。
+
+我们可以通过 `@CuustomStrategy` 和派生 `PassportStrategy` 来自启动一个策略。通过 validate 钩子来获取有效负载，并且此函数必须有返回值，其参数并不明确，可以参考对应的 Strategy 或者通过展开符打印查看。
+
 ```typescript
-// local-strategy.ts
+// src/strategy/local.strategy.ts
 
 import { CustomStrategy, PassportStrategy } from '@midwayjs/passport';
 import { Repository } from 'typeorm';
@@ -90,13 +92,15 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 }
 
 ```
-使用派生`PassportMiddleware`出一个中间件。
+使用派生 `PassportMiddleware`出一个中间件。
+
 ```typescript
-// local-middleware.ts
+// src/middleware/local.middleware.ts
 
 import { Inject, Provide } from '@midwayjs/decorator';
 import { PassportMiddleware } from '@midwayjs/passport';
 import { Context } from '@midwayjs/express';
+import { LocalStrategy } from './strategy/local.strategy.ts'
 
 @Provide()
 export class LocalPassportMiddleware extends PassportMiddleware(LocalStrategy) {
@@ -109,9 +113,11 @@ export class LocalPassportMiddleware extends PassportMiddleware(LocalStrategy) {
   }
 }
 ```
+
 ```typescript
-// controller.ts
+// src/controller.ts
 import { Provide, Post, Inject, Controller } from '@midwayjs/decorator';
+import { LocalPassportMiddleware } from './middleware/local.middleware.ts'
 
 @Controller('/')
 export class LocalController {
@@ -123,13 +129,17 @@ export class LocalController {
   }
 }
 ```
+
 使用curl 模拟一次请求。
+
 ```bash
 curl -X POST http://localhost:7001/passport/local -d '{"username": "demo", "password": "1234"}' -H "Content-Type: application/json"
 
 结果 {"username": "demo", "password": "1234"}
 ```
+
 ### e.g. Jwt
+
 首先需要 **额外安装** 依赖和策略：
 
 ```bash
@@ -146,7 +156,7 @@ export const jwt = {
 }
 ```
 ```typescript
-// strategy/jwt-strategy.ts
+// src/strategy/jwt.strategy.ts
 
 import { CustomStrategy, PassportStrategy } from '@midwayjs/passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
@@ -174,7 +184,7 @@ export class JwtStrategy extends PassportStrategy(
 
 ```
 ```typescript
-// jwt-middleware.ts
+// src/middleware/jwt.middleware.ts
 
 import { Provide } from '@midwayjs/decorator';
 import { PassportMiddleware } from '@midwayjs/passport';
@@ -186,12 +196,13 @@ export class JwtPassportMiddleware extends PassportMiddleware(JwtStrategy) {
     return {};
   }
 }
-
 ```
+
 ```typescript
 import { Provide, Post, Inject } from '@midwayjs/decorator';
 import { Controller, Post } from '@midwayjs/decorator';
 import { Jwt } from '@midwayjs/jwt';
+import { JwtPassportMiddleware } from './middleware/jwt.middleware';
 
 @Controller('/')
 export class JwtController {
@@ -216,7 +227,9 @@ export class JwtController {
   }
 }
 ```
+
 使用curl模拟请求
+
 ```bash
 curl -X POST http://127.0.0.1:7001/jwt
 
@@ -227,11 +240,12 @@ curl http://127.0.0.1:7001/passport/jwt -H "Authorization: Bearer xxxxxxxxxxxxxx
 结果 {"msg": "Hello Midway","iat": 1635468727,"exp": 1635468827}
 
 ```
+
 ## 自定义其他策略
 
-
-`@midwayjs/passport`支持自定义[其他策略](http://www.passportjs.org/packages/)，这里以github oauth为例。
+`@midwayjs/passport` 支持自定义[其他策略](http://www.passportjs.org/packages/)，这里以github oauth 为例。
 首先 `npm i passport-github`，之后编写如下代码：
+
 ```typescript
 // github-strategy.ts
 
@@ -256,7 +270,7 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
 
 ```
 ```typescript
-// github-middleware.ts
+// src/middleware/github.middleware.ts
 
 import { PassportMiddleware } from '@midwayjs/passport';
 
@@ -265,11 +279,11 @@ export class GithubPassportMiddleware extends PassportMiddleware {
 }
 ```
 ```typescript
-// controller.ts
+// src/controoer/auth.controller.ts
 
 import { Provide, Get, Inject } from '@midwayjs/decorator';
+import { GithubPassportMiddleware } from './github.middleware';
 
-@Provide()
 @Controller('/oauth')
 export class AuthController {
   @Inject()

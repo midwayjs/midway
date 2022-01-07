@@ -1,9 +1,7 @@
-import { InfoConfigOptions } from './interface';
-
-export const DefaultHiddenKey = ['*secret*', 'pass*'];
+import { DefaultHiddenKey, InfoConfigOptions } from './interface';
 
 export const info = {
   title: 'Midway Info',
   infoPath: '/_info',
-  defaultHiddenKey: DefaultHiddenKey,
+  hiddenKey: DefaultHiddenKey,
 } as InfoConfigOptions;
