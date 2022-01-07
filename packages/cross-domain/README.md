@@ -6,15 +6,15 @@
 
 1. 安装依赖
 ```shell
-tnpm i @midwayjs/corss-domain --save
+tnpm i @midwayjs/cross-domain --save
 ```
 2. 在 configuration 中引入组件,
 ```ts
-import * as CorssDomain from '@midwayjs/corss-domain';
+import * as crossDomain from '@midwayjs/cross-domain';
 @Configuration({
   imports: [
     // ...other components
-    CorssDomain
+    crossDomain
   ],
 })
 export class AutoConfiguration {}
