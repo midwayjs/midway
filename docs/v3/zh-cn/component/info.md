@@ -104,3 +104,46 @@ export const info = {
 };
 ```
 
+
+
+## 调用 API
+
+info 组件默认提供了 `InfoService` 用于在非 Http 或是自定义的场景来使用。
+
+比如：
+
+```typescript
+import { Provide } from '@midwayjs/decorator';
+import { InfoService } from '@midwayjs/info';
+
+@Provide()
+export class userService {
+
+  @Inject()
+  inforService: InfoService
+	
+	async getInfo() {
+    // 应用信息，应用名等
+		this.inforService.projectInfo();
+    // 系统信息
+    this.inforService.systemInfo();
+    // 堆内存，cpu 等
+    this.inforService.resourceOccupationInfo();
+    // midway 框架的信息
+    this.inforService.softwareInfo();
+    // 当前使用的环境配置
+    this.inforService.midwayConfig();
+    // 依赖注入容器中的服务
+    this.inforService.midwayService();
+    // 系统时间，时区，启动时常
+    this.inforService.timeInfo();
+    // 环境变量
+    this.inforService.envInfo();
+    // 依赖信息
+    this.inforService.dependenciesInfo();
+    // 网络信息
+    this.inforService.networkInfo();
+	}
+}
+```
+
