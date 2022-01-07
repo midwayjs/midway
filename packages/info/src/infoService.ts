@@ -163,9 +163,13 @@ export class InfoService {
   }
 
   envInfo(): TypeInfo {
+    const env = {};
+    Object.keys(process.env).forEach(envName => {
+      env[envName] = this.filterSecretContent(envName, process.env[envName]);
+    });
     return {
       type: 'Environment Variable',
-      info: process.env,
+      info: env,
     };
   }
 

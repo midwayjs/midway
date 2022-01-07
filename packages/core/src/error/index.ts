@@ -1,3 +1,3 @@
 export * from './base';
-export * from './http';
+export { HttpStatus, httpError } from './http';
 export * from './framework';

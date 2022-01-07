@@ -30,7 +30,7 @@ Midway 设计了一套通用的方法拦截器（切面），用于在不同场�
 ```typescript
 // src/controller/home.ts
 
-import { Controller, Get, Provide } from '@midwayjs/decorator';
+import { Controller, Get } from '@midwayjs/decorator';
 
 @Controller('/')
 export class HomeController {
@@ -45,7 +45,7 @@ export class HomeController {
 
 内容如下：
 ```typescript
-import { Aspect, IMethodAspect, JoinPoint, Provide } from '@midwayjs/decorator';
+import { Aspect, IMethodAspect, JoinPoint } from '@midwayjs/decorator';
 import { HomeController } from '../controller/home';
 
 @Aspect(HomeController)
@@ -333,7 +333,7 @@ export class ReportInfo implements IMethodAspect {
 ```typescript
 // src/controller/home.ts
 
-import { Controller, Get, Provide } from "@midwayjs/decorator";
+import { Controller, Get } from "@midwayjs/decorator";
 
 @Controller('/')
 export class HomeController {
