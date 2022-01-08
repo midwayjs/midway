@@ -31,7 +31,7 @@
   "dependencies": {
     "@midwayjs/core": "^3.0.0-beta.15",
     "@midwayjs/logger": "2.14.0",
-    "amqp-connection-manager": "^3.2.2",
+    "amqp-connection-manager": "^4.0.0",
     "amqplib": "*"
   },
   "peerDependencies": {
