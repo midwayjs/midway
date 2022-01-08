@@ -9,10 +9,34 @@
 
 ## 面对普通用户
 
+**midway v3 支持从 node v12 起。**
 
-:::info
-midway v3 支持从 node v12 起。
-:::
+
+
+### 包版本
+
+所有的组件包，核心包都将升级为 3.x 版本，在未正式发布之前，请使用 beta 包。
+
+```json
+{
+  "dependencies": {
+    "@midwayjs/bootstrap": "beta",
+    "@midwayjs/core": "beta",
+    "@midwayjs/decorator": "beta",
+    "@midwayjs/koa": "beta",
+    "@midwayjs/task": "beta"
+  },
+  "devDependencies": {
+    "@midwayjs/cli": "^1.2.90",
+    "@midwayjs/luckyeye": "^1.0.0",
+    "@midwayjs/mock": "beta",
+  }
+}
+
+```
+
+`@midwayjs/cli` 和 `@midwyajs/luckeye` 的版本除外。
+
 
 
 ### Query/Body/Param/Header 装饰器变更
@@ -37,6 +61,7 @@ async invoke(@Query('name') name) {
 	// ctx.query.name
 }
 ```
+
 
 
 ### Validate/Rule 装饰器
@@ -66,6 +91,7 @@ export class MainConfiguration {
 }
 
 ```
+
 
 
 ### 配置的绝对路径
@@ -198,7 +224,9 @@ const env = environmentService.getCurrentEnvironment();
 ```
 
 
+
 ## 面对组件/框架开发者
+
 
 
 ### 组件中 registerObject 不再增加 namespace

@@ -58,7 +58,7 @@ export class MidwayLoggerService extends ServiceFactory<ILogger> {
     );
   }
 
-  transformEggConfig() {
+  protected transformEggConfig() {
     if (this.configService.getConfiguration('customLogger')) {
       // use egg module
       return this.transformEggLogger(this.configService.getConfiguration());
@@ -76,7 +76,7 @@ export class MidwayLoggerService extends ServiceFactory<ILogger> {
     return 'logger';
   }
 
-  createLogger(name, config) {
+  protected createLogger(name, config) {
     return loggers.createLogger(name, config);
   }
 

@@ -309,16 +309,19 @@ export class UserDTO {
 
 const SimpleUserDTO = PickDto(UserDTO, ['firstName', 'lastName']);
 
-const simpleUser = new SimpleUserDTO();
-
+// const simpleUser = new SimpleUserDTO();
+// 只包含了 firstName 和 lastName 属性
 // simpleUser.firstName = xxx
 
-
 const NewUserDTO = OmitDto(UserDTO, ['age']);
-const newUser = new NewUserDTO();
 
+// const newUser = new NewUserDTO();
 // newUser.age 定义和属性都不存在
 
+// 使用
+async login(@Body() user: typeof NewUserDTO) {
+  // ...
+}
 
 ```
 

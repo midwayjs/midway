@@ -366,18 +366,18 @@ export class AutoConfiguration {
 
 比如，**下面的代码是错误的。**
 ```typescript
-import { Provide } from '@midwayjs/decorator';
-import { IWebMiddleware, IMidwayWebNext } from '@midwayjs/web';
-import { Context } from 'egg';
+import { IMiddleware } from '@midwayjs/core';
+import { Middleware } from '@midwayjs/decorator';
+import { NextFunction, Context } from '@midwayjs/koa';
 
-@Provide()
-export class ReportMiddleware implements IWebMiddleware {
+@Middleware()
+export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
 
   @Inject()
   userService;			// 这里注入的实例和上下文不绑定，无法获取到 ctx
 
   resolve() {
-    return async (ctx: Context, next: IMidwayWebNext) => {
+    return async (ctx: Context, next: NextFunction) => {
 			// TODO
       await next();
     };
@@ -389,15 +389,15 @@ export class ReportMiddleware implements IWebMiddleware {
 
 如果要获取请求作用域的实例，可以使用从请求作用域容器 `ctx.requestContext` 中获取，如下面的方法。
 ```typescript
-import { Provide } from '@midwayjs/decorator';
-import { IWebMiddleware, IMidwayWebNext } from '@midwayjs/web';
-import { Context } from 'egg';
+import { IMiddleware } from '@midwayjs/core';
+import { Middleware } from '@midwayjs/decorator';
+import { NextFunction, Context } from '@midwayjs/koa';
 
-@Provide()
-export class ReportMiddleware implements IWebMiddleware {
+@Middleware()
+export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
 
   resolve() {
-    return async (ctx: Context, next: IMidwayWebNext) => {
+    return async (ctx: Context, next: NextFunction) => {
       const userService = await ctx.requestContext.getAsync<UserService>('userService');
    		// TODO userService.xxxx
       await next();
