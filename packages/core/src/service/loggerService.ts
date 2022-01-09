@@ -76,11 +76,11 @@ export class MidwayLoggerService extends ServiceFactory<ILogger> {
     return 'logger';
   }
 
-  protected createLogger(name, config) {
+  public createLogger(name, config) {
     return loggers.createLogger(name, config);
   }
 
-  getLogger(name: string) {
+  public getLogger(name: string) {
     return loggers.getLogger(name);
   }
 
