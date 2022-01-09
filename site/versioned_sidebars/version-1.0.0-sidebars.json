@@ -1,0 +1,81 @@
+{
+  "common": [
+    {
+      "type": "category",
+      "label": "新手指南",
+      "collapsed": false,
+      "collapsible": false,
+      "items": [
+        "intro",
+        "quickstart",
+        "ts_guide"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "基础",
+      "collapsed": false,
+      "collapsible": false,
+      "items": [
+        "controller",
+        "middleware",
+        "debug",
+        "test",
+        "deploy"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "高级",
+      "collapsed": false,
+      "collapsible": false,
+      "items": [
+        "decorator",
+        "framework",
+        "injection",
+        "test_more"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "常见问题",
+      "collapsed": false,
+      "collapsible": false,
+      "items": [
+        "docker"
+      ]
+    }
+  ],
+  "component": [
+    {
+      "通用": [
+        "extensions/axios"
+      ]
+    }
+  ],
+  "serverless": [
+    {
+      "type": "doc",
+      "id": "serverless/serverless_intro",
+      "label": "介绍"
+    }
+  ],
+  "hooks": [
+    {
+      "type": "doc",
+      "id": "hooks/hooks_intro",
+      "label": "介绍"
+    }
+  ],
+  "other": [
+    {
+      "type": "category",
+      "label": "工具",
+      "collapsed": false,
+      "collapsible": false,
+      "items": [
+        "tool/cli"
+      ]
+    }
+  ]
+}

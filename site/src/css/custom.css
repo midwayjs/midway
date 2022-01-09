@@ -1,0 +1,74 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+  --ifm-color-primary: #2fb4ff;
+  --ifm-color-title: #111;
+  --ifm-color-text: #5b5b5b;
+  --ifm-color-background: #fff;
+  --ifm-color-background-secondary: #F9F9F9;
+  --ifm-color-component-background: #e1dfd9;
+  --ifm-color-border-color: rgba(208, 208, 208, 0.44);
+  --ifm-color-area: #fafafa;
+  --ifm-color-icon: #000000;
+  --ifm-code-font-size: 95%;
+  --ifm-container-width-xl: 1600px;
+  --ifm-footer-title-color: #fff;
+}
+
+nav input:focus-visible {
+  outline: none!important;
+}
+
+:root[data-theme='dark'] {
+  --ifm-color-title: #fff;
+  --ifm-color-text: #cccbcb;
+  --ifm-color-background: #2a2d31;
+  --ifm-color-background-secondary: #333333;
+  --ifm-color-component-background: rgb(83,83,83);
+  --ifm-color-border-color: rgba(149, 149, 149, 0.27);
+  --ifm-color-area: #242527;
+  --ifm-color-icon: #ffffff;
+  --ifm-footer-title-color: #fff;
+  --ifm-navbar-background-color: #000000;
+
+  --ice-users-fill-filter: drop-shadow(0 40px rgba(255, 255, 255, .72));
+  --ice-users-fill-transform: translateY(-40px);
+}
+
+
+.docusaurus-highlight-code-line {
+  background-color: rgba(0, 0, 0, 0.1);
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+}
+
+body {
+  font-family: Inter,-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif;
+}
+
+html[data-theme='dark'] .docusaurus-highlight-code-line {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.rc-collapse-override {
+  padding-left: 0px!important;
+}
+
+.rc-collapse-item .rc-collapse-content {
+  padding-left: 0px!important;
+  background-color: transparent!important;
+}
+
+.navbar__title {
+  text-overflow: unset!important;
+}
