@@ -158,7 +158,7 @@ export function Splash() {
         "
       </SubTitle>
       <ButtonGroup>
-        <Button type="main" href="/docs/introduction">
+        <Button type="main" href="/docs/intro">
           Documention
         </Button>
         <Button type="secondary" href="https://github.com/midwayjs/midway" target="_blank">
