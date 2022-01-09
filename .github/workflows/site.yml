@@ -3,6 +3,7 @@ name: site sync
 on:
   push:
     branches: [main]
+    paths: [site/**]
 
 jobs:
   build:
