@@ -1,6 +1,4 @@
----
-title: midwayjs/egg-ts-helper
----
+# egg:ts-helper
 
 针对 midway 支持 Egg.js 的场景，重写了原 [egg-ts-helper](https://github.com/whxaxes/egg-ts-helper) 包，移除了原有的 TS，AST 分析等大依赖。
 

@@ -1,3 +1,5 @@
+# 常见 npm 问题
+
 ## 1、不希望生成 package-lock.json
 
 
@@ -8,9 +10,6 @@
 ```bash
 $ npm config set package-lock false
 ```
-
-
-# 常见 npm 问题
 
 ## 2、Maximum call stack size exceeded 报错
 

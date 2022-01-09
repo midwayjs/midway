@@ -205,7 +205,6 @@
   ],
   "other": [
     {
-
       "type": "category",
       "label": "工具",
       "collapsed": false,
@@ -216,6 +215,30 @@
         "tool/luckyeye",
         "tool/typeorm_generator",
         "tool/egg-ts-helper"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "常见问题",
+      "collapsed": false,
+      "collapsible": false,
+      "items": [
+        "faq/framework_problem",
+        "faq/git_problem",
+        "faq/npm_problem",
+        "faq/ts_problem",
+        "how_to_install_nodejs",
+        "how_to_update_midway",
+        "midway_slow_problem"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "其他",
+      "collapsed": false,
+      "collapsible": false,
+      "items": [
+        "release_schedule"
       ]
     }
   ]

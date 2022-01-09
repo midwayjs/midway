@@ -24,15 +24,9 @@ module.exports = [
     "position": "left"
   },
   {
-    "type": "dropdown",
+    "type": "doc",
+    "docId": "tool/cli",
     "label": "其他",
-    "position": "left",
-    "items": [
-      {
-        "type": "doc",
-        "docId": "tool/cli",
-        "label": "工具"
-      },
-    ]
+    "position": "left"
   }
 ]
