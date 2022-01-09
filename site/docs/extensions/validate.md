@@ -76,7 +76,7 @@ export class HomeController {
 ## 安装依赖
 
 ```bash
-$ npm i @midwayjs/validate@3 --save
+$ npm i @midwayjs/validate@beta --save
 ```
 
 

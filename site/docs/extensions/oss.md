@@ -33,7 +33,7 @@
 `@midwayjs/oss` 是主要的功能包，`@types/ali-oss` 是 oss 的官方定义包。
 
 ```bash
-$ npm i @midwayjs/oss@3 --save
+$ npm i @midwayjs/oss@beta --save
 $ npm i @types/ali-oss --save-dev			// 安装到 dev 依赖
 ```
 如果发现 OSSService 没有方法定义，请务必检查此项。

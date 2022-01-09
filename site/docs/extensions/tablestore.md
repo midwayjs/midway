@@ -17,7 +17,7 @@
 ## 安装依赖
 
 ```bash
-$ npm i @midwayjs/tablestore@3 --save
+$ npm i @midwayjs/tablestore@beta --save
 ```
 
 ## 引入组件

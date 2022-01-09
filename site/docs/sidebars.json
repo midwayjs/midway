@@ -44,7 +44,8 @@
         "aspect",
         "pipeline",
         "router_table",
-        "service_factory"
+        "service_factory",
+        "decorator_index"
       ]
     },
     {
@@ -175,6 +176,11 @@
         "serverless/migrate_egg",
         "serverless/migrate_static"
       ]
+    },
+    {
+      "type": "doc",
+      "id": "serverless/serverless_post_difference",
+      "label": "Serverless 触发器 POST 情况差异"
     }
   ],
   "hooks": [

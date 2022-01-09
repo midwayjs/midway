@@ -20,7 +20,7 @@
 
 `@midwayjs/redis` 是主要的功能包，`@types/ioredis` 是 定义包。
 ```bash
-$ npm i @midwayjs/redis@3 --save
+$ npm i @midwayjs/redis@beta --save
 $ npm i @types/ioredis --save-dev			// 安装到 dev 依赖
 ```
 如果发现 RedisService 没有方法定义，请务必检查此项。

@@ -24,7 +24,7 @@ midway 包裹了 [axios](https://github.com/axios/axios) 包，使得在代码�
 ## 安装依赖
 
 ```bash
-$ npm i @midwayjs/axios@3 --save
+$ npm i @midwayjs/axios@beta --save
 ```
 
 

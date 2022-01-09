@@ -17,7 +17,7 @@
 ## 安装依赖
 
 ```bash
-$ npm i @midwayjs/cos@3 --save
+$ npm i @midwayjs/cos@beta --save
 ```
 
 ## 引入组件

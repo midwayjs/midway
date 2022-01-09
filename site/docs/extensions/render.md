@@ -23,7 +23,7 @@
 
 选择对应的模板安装依赖。
 ```bash
-$ npm i @midwayjs/view-ejs@3 --save
+$ npm i @midwayjs/view-ejs@beta --save
 ```
 
 
@@ -118,7 +118,7 @@ export class HomeController {
 
 1、选择对应的模板安装依赖。
 ```bash
-$ npm i @midwayjs/view-nunjucks@3 --save
+$ npm i @midwayjs/view-nunjucks@beta --save
 ```
 
 

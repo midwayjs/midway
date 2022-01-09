@@ -97,7 +97,7 @@ mongoose 和你服务器使用的 MongoDB Server 的版本也有着一定的关�
 
 **请务必注意，请查看第一小节提前编写/安装 mongoose 等相关依赖包。**
 ```bash
-$ npm i @midwayjs/typegoose@3 --save
+$ npm i @midwayjs/typegoose@beta --save
 ```
 
 

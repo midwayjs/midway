@@ -17,7 +17,7 @@
 ## 使用方法：
 
 ```bash
-$ npm i @midwayjs/sequelize@3 --save
+$ npm i @midwayjs/sequelize@beta --save
 ```
 ## 安装数据库 Driver
 

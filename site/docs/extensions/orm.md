@@ -22,7 +22,7 @@
 
 
 ```bash
-npm i @midwayjs/orm@3 typeorm --save
+npm i @midwayjs/orm@beta typeorm --save
 ```
 
 

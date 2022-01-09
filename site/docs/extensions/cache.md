@@ -20,7 +20,7 @@ Midway Cache 是为了方便开发者进行缓存操作的组件，它有利于�
 首先安装相关的组件模块。
 
 ```bash
-$ npm i @midwayjs/cache@3 cache-manager --save
+$ npm i @midwayjs/cache@beta cache-manager --save
 $ npm i @types/cache-manager --save-dev
 ```
 

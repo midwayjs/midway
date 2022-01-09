@@ -21,7 +21,7 @@
 首先安装 Midway 提供的任务组件：
 
 ```bash
-$ npm install @midwayjs/task@3 -S
+$ npm install @midwayjs/task@beta -S
 ```
 
 在 `configuration.ts` 中，引入这个组件：
