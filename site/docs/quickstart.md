@@ -16,35 +16,20 @@ Midway 有多套技术方案可以选择，我们以部署的方式来做区分�
 | Serverless 项目 | Midway 为 Serverless 场景单独开发的技术栈，以 @midwayjs/faas 为代表的的模块，使用轻量的方式接入不同的 Serverless 平台。 |
 | 一体化项目      | Midway 创新技术方案，采用前后端一体化开发方式，节省前后端连调时间，以 **函数式** 为主要编码范式。 |
 
-本栏将以 纯 Node.js 项目 作为基础示例，如需使用 Serverless 项目，请跳转到 [Serverless](#)，如需了解一体化项目，请访问 [一体化](#) 。
+本栏将以 纯 Node.js 项目 作为基础示例，如需使用 Serverless 项目，请跳转到 [Serverless](serverless/serverless_intro)，如需了解一体化项目，请访问 [一体化](hooks/hooks_intro) 。
 
 
 
 ## 快速初始化
 
 
+使用 `npm init midway` 查看完整的脚手架列表，选中某个项目后，Midway 会自动创建示例目录，代码，以及安装依赖。
+
 ```bash
-$ npm -v
-
-# 如果是 npm v6
-$ npm init midway --type=koa-v3 my_midway_app
-
-# 如果是 npm v7
-$ npm init midway -- --type=koa-v3 my_midway_app
+$ npm init midway
 ```
 
-`my_midway_app`  是你即将创建的项目根目录名，CLI 会自动创建该目录，并将初始化示例代码写入其中。
-
-注意，下图的命令和上面不一样，等 v3 正式发布后我们会重录。
-
-流程示例如下（npm7 效果）：
-
-![create.svg](https://img.alicdn.com/imgextra/i3/O1CN01SKMFSB1Utr04ArZXJ_!!6000000002576-55-tps-1390-776.svg)
-
-:::info
-可以使用 `npm init midway` 查看完整的脚手架列表，选中某个项目后，Midway 会自动创建示例目录，代码，以及安装依赖。
-:::
-
+针对 v3 项目，请选择最下方的 `koa-v3`。
 
 ![create-with-cli.svg](https://img.alicdn.com/imgextra/i4/O1CN016efif51uI0HFO9RWh_!!6000000006013-55-tps-1770-928.svg)
 
@@ -97,9 +82,7 @@ Midway 对目录没有特别的限制，但是我们会遵守一些简单的开�
 
 
 
-随着不同场景的出现，目录的习惯也会不断的增加，具体的目录内容会体现在不同的框架中。
-
-
+随着不同场景的出现，目录的习惯也会不断的增加，具体的目录内容会体现在不同的组件功能中。
 
 
 ## Web 框架选择
@@ -109,7 +92,7 @@ Midway 设计之初就可以兼容多种上层框架，比如常见的 `Express`
 
 从 v3 开始，我们使用 Koa 来做基础示例的演示。
 
-这些上层框架都可以使用 Midway 提供的装饰器能力，但是 Midway 不会对特有的能力做出封装，比如 Egg.js 的插件体系，或者 Express 的中间件能力，如果你对其中的某个框架比较熟悉，或者希望使用特定框架的能力，就可以选择它作为你的主力 Web 框架。
+这些上层框架在 Midway 中都以组件的能力提供，都可以使用 Midway 提供的装饰器能力，但是 Midway 不会对特有的能力做出封装，比如 Egg.js 的插件体系，或者 Express 的中间件能力，如果你对其中的某个框架比较熟悉，或者希望使用特定框架的能力，就可以选择它作为你的主力 Web 框架。
 
 
 | 名称 | 描述 |
@@ -119,7 +102,8 @@ Midway 设计之初就可以兼容多种上层框架，比如常见的 `Express`
 | @midwayjs/express | Express 是一个众所周知的 node.js 简约 Web 框架。 这是一个经过实战考验，适用于生产的库，拥有大量社区资源。  |
 
 
-如果你希望替代默认的 Web 框架，请参考对应的框架章节。
+如果你希望替代默认的 Web 框架，请参考对应的 [egg](extensions/egg) 或者 [express](extensions/express) 章节。
+
 
 ## 启动项目
 
@@ -168,5 +152,5 @@ Midway 会启动 HTTP 服务器，打开浏览器，访问 `http://127.0.0.1:700
 ### windows eslint 报错
 
 :::caution
-3、windows 可能会碰到 eslint 报错的问题，请关注 [windows 下换行问题](git_problem#XCAgm)。
+3、windows 可能会碰到 eslint 报错的问题，请关注 [windows 下换行问题](faq/git_problem#XCAgm)。
 :::

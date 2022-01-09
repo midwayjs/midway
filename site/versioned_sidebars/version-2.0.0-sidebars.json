@@ -1,123 +1,169 @@
 {
-  "新手指南": [
+  "common": [
     {
-      "type": "doc",
-      "id": "intro",
-      "label": "介绍"
+      "type": "category",
+      "label": "新手指南",
+      "collapsed": false,
+      "collapsible": false,
+      "items": [
+        "intro",
+        "start_app",
+        "controller",
+        "service",
+        "req_res_app",
+        "web_middleware",
+        "deployment"
+      ]
     },
-    {
-      "type": "doc",
-      "id": "start_app",
-      "label": "创建第一个应用"
-    },
-    {
-      "type": "doc",
-      "id": "controller",
-      "label": "控制器（Controller）"
-    },
-    {
-      "type": "doc",
-      "id": "service",
-      "label": "服务和注入"
-    },
-    {
-      "type": "doc",
-      "id": "req_res_app",
-      "label": "请求、响应、应用"
-    },
-    {
-      "type": "doc",
-      "id": "web_middleware",
-      "label": "Web 中间件"
-    },
-    {
-      "type": "doc",
-      "id": "deployment",
-      "label": "启动和部署"
-    }
-  ],
-  "Web": [
     {
       "type": "category",
       "label": "Web 技术",
-      "collapsed": true,
-      "collapsible": true,
+      "collapsed": false,
+      "collapsible": false,
       "items": [
-        {
-          "type": "doc",
-          "id": "cookies",
-          "label": "Cookies"
-        },
-        {
-          "type": "doc",
-          "id": "session",
-          "label": "Session"
-        },
-        {
-          "type": "doc",
-          "id": "body-parser",
-          "label": "BodyParser"
-        },
-        {
-          "type": "doc",
-          "id": "static_file",
-          "label": "静态资源（Static File）"
-        },
-        {
-          "type": "doc",
-          "id": "cors",
-          "label": "跨域 CORS"
-        },
-        {
-          "type": "doc",
-          "id": "file_upload",
-          "label": "FaaS 文件上传"
-        },
-        {
-          "type": "doc",
-          "id": "validate",
-          "label": "参数校验和转换"
-        }
+        "cookies",
+        "session",
+        "body-parser",
+        "static_file",
+        "cors",
+        "file_upload",
+        "validate"
       ]
     },
     {
       "type": "category",
       "label": "Web 框架",
-      "collapsed": true,
-      "collapsible": true,
+      "collapsed": false,
+      "collapsible": false,
       "items": [
-        {
-          "type": "doc",
-          "id": "eggjs",
-          "label": "EggJS"
-        },
-        {
-          "type": "doc",
-          "id": "koa",
-          "label": "Koa"
-        },
-        {
-          "type": "doc",
-          "id": "express",
-          "label": "Express"
-        }
+        "eggjs",
+        "koa",
+        "express"
       ]
     },
     {
       "type": "category",
       "label": "WebSocket",
+      "collapsed": false,
+      "collapsible": false,
+      "items": [
+        "socketio",
+        "ws"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "通用能力",
       "collapsed": true,
       "collapsible": true,
       "items": [
         {
           "type": "doc",
-          "id": "extensions/socketio",
-          "label": "SocketIO"
+          "id": "testing",
+          "label": "测试"
         },
         {
           "type": "doc",
-          "id": "extensions/ws",
-          "label": "WebSocket"
+          "id": "debugger",
+          "label": "本地调试"
+        },
+        {
+          "type": "doc",
+          "id": "container",
+          "label": "依赖注入"
+        },
+        {
+          "type": "doc",
+          "id": "environment",
+          "label": "运行环境"
+        },
+        {
+          "type": "doc",
+          "id": "env_config",
+          "label": "多环境配置"
+        },
+        {
+          "type": "doc",
+          "id": "midway_component",
+          "label": "使用组件"
+        },
+        {
+          "type": "doc",
+          "id": "lifecycle",
+          "label": "生命周期"
+        },
+        {
+          "type": "doc",
+          "id": "logger",
+          "label": "日志"
+        },
+        {
+          "type": "doc",
+          "id": "aspect",
+          "label": "方法拦截器（切面）"
+        },
+        {
+          "type": "doc",
+          "id": "pipeline",
+          "label": "代码流程控制"
+        },
+        {
+          "type": "doc",
+          "id": "decorator_index",
+          "label": "现有装饰器索引"
+        }
+      ]
+    },
+    {
+      "type": "category",
+      "label": "自定义",
+      "collapsed": true,
+      "collapsible": true,
+      "items": [
+        {
+          "type": "doc",
+          "id": "component_development",
+          "label": "组件开发"
+        },
+        {
+          "type": "doc",
+          "id": "multi_framework_start",
+          "label": "多框架研发"
+        },
+        {
+          "type": "doc",
+          "id": "framework_development",
+          "label": "框架扩展"
+        },
+        {
+          "type": "doc",
+          "id": "context_definition",
+          "label": "扩展上下文定义"
+        },
+        {
+          "type": "doc",
+          "id": "router_table",
+          "label": "Web 路由表"
+        },
+        {
+          "type": "doc",
+          "id": "service_factory",
+          "label": "服务工厂"
+        },
+        {
+          "type": "doc",
+          "id": "custom_eggjs",
+          "label": "自定义 EggJS 框架接入"
+        },
+        {
+          "type": "doc",
+          "id": "decorator_api",
+          "label": "高级装饰器 API"
+        },
+        {
+          "type": "doc",
+          "id": "change_start_dir",
+          "label": "修改源码目录"
         }
       ]
     },
@@ -140,7 +186,7 @@
       ]
     }
   ],
-  "函数式 & 一体化": [
+  "hooks": [
     {
       "type": "doc",
       "id": "hooks/hooks_intro",
@@ -160,7 +206,7 @@
         {
           "type": "doc",
           "id": "hooks/hooks_syntax",
-          "label": "hooks/hooks 语法"
+          "label": "Hooks 语法"
         },
         {
           "type": "doc",
@@ -228,71 +274,18 @@
       ]
     }
   ],
-  "功能": [
+  "component": [
     {
       "type": "category",
-      "label": "通用能力",
+      "label": "通用",
       "collapsed": true,
       "collapsible": true,
       "items": [
         {
           "type": "doc",
-          "id": "testing",
-          "label": "测试"
+          "id": "extensions/axios",
+          "label": "HTTP 请求（Axios）"
         },
-        {
-          "type": "doc",
-          "id": "debugger",
-          "label": "本地调试"
-        },
-        {
-          "type": "doc",
-          "id": "container",
-          "label": "依赖注入"
-        },
-        {
-          "type": "doc",
-          "id": "environment",
-          "label": "运行环境"
-        },
-        {
-          "type": "doc",
-          "id": "env_config",
-          "label": "多环境配置"
-        },
-        {
-          "type": "doc",
-          "id": "midway_component",
-          "label": "使用组件"
-        },
-        {
-          "type": "doc",
-          "id": "lifecycle",
-          "label": "生命周期"
-        },
-        {
-          "type": "doc",
-          "id": "logger",
-          "label": "日志"
-        },
-        {
-          "type": "doc",
-          "id": "aspect",
-          "label": "方法拦截器（切面）"
-        },
-        {
-          "type": "doc",
-          "id": "pipeline",
-          "label": "代码流程控制"
-        }
-      ]
-    },
-    {
-      "type": "category",
-      "label": "组件",
-      "collapsed": true,
-      "collapsible": true,
-      "items": [
         {
           "type": "doc",
           "id": "extensions/render",
@@ -327,11 +320,6 @@
           "type": "doc",
           "id": "extensions/graphql",
           "label": "GraphQL"
-        },
-        {
-          "type": "doc",
-          "id": "extensions/axios",
-          "label": "HTTP 请求（Axios）"
         },
         {
           "type": "doc",
@@ -372,6 +360,29 @@
     },
     {
       "type": "category",
+      "label": "微服务",
+      "collapsed": true,
+      "collapsible": true,
+      "items": [
+        {
+          "type": "doc",
+          "id": "extensions/grpc",
+          "label": "gRPC"
+        },
+        {
+          "type": "doc",
+          "id": "extensions/rabbitmq",
+          "label": "RabbitMQ"
+        },
+        {
+          "type": "doc",
+          "id": "extensions/consul",
+          "label": "Consul"
+        }
+      ]
+    },
+    {
+      "type": "category",
       "label": "运维",
       "collapsed": true,
       "collapsible": true,
@@ -397,104 +408,6 @@
           "label": "接入 Prometheus"
         }
       ]
-    },
-    {
-      "type": "category",
-      "label": "自定义扩展",
-      "collapsed": true,
-      "collapsible": true,
-      "items": [
-        {
-          "type": "doc",
-          "id": "component_development",
-          "label": "组件开发"
-        },
-        {
-          "type": "doc",
-          "id": "multi_framework_start",
-          "label": "多框架研发"
-        },
-        {
-          "type": "doc",
-          "id": "framework_development",
-          "label": "框架扩展"
-        },
-        {
-          "type": "doc",
-          "id": "context_definition",
-          "label": "扩展上下文定义"
-        },
-        {
-          "type": "doc",
-          "id": "router_table",
-          "label": "Web 路由表"
-        },
-        {
-          "type": "doc",
-          "id": "service_factory",
-          "label": "服务工厂"
-        },
-        {
-          "type": "doc",
-          "id": "custom_eggjs",
-          "label": "自定义 EggJS 框架接入"
-        },
-        {
-          "type": "doc",
-          "id": "decorator_api",
-          "label": "高级装饰器 API"
-        }
-      ]
-    },
-    {
-      "type": "category",
-      "label": "工具",
-      "collapsed": true,
-      "collapsible": true,
-      "items": [
-        {
-          "type": "doc",
-          "id": "tool/cli",
-          "label": "@midwayjs/cli"
-        },
-        {
-          "type": "doc",
-          "id": "tool/mwts",
-          "label": "Lint 工具、规则和格式化"
-        },
-        {
-          "type": "doc",
-          "id": "tool/luckyeye",
-          "label": "检查工具"
-        },
-        {
-          "type": "doc",
-          "id": "tool/typeorm_generator",
-          "label": "TypeORM Model Generator"
-        },
-        {
-          "type": "doc",
-          "id": "tool/egg-ts-helper",
-          "label": "@midwayjs/egg-ts-helper"
-        }
-      ]
-    }
-  ],
-  "微服务": [
-    {
-      "type": "doc",
-      "id": "extensions/grpc",
-      "label": "gRPC"
-    },
-    {
-      "type": "doc",
-      "id": "extensions/rabbitmq",
-      "label": "RabbitMQ"
-    },
-    {
-      "type": "doc",
-      "id": "extensions/consul",
-      "label": "Consul"
     }
   ],
   "Serverless": [
@@ -684,66 +597,43 @@
       ]
     }
   ],
-  "FAQ": [
+  "other": [
     {
-      "type": "doc",
-      "id": "framework_problem",
-      "label": "常见框架错误"
+      "type": "category",
+      "label": "工具",
+      "collapsed": false,
+      "collapsible": false,
+      "items": [
+        "tool/cli",
+        "tool/mwts",
+        "tool/luckyeye",
+        "tool/typeorm_generator",
+        "tool/egg-ts-helper"
+      ]
     },
     {
-      "type": "doc",
-      "id": "npm_problem",
-      "label": "常见 npm 问题"
+      "type": "category",
+      "label": "常见问题",
+      "collapsed": false,
+      "collapsible": false,
+      "items": [
+        "framework_problem",
+        "git_problem",
+        "npm_problem",
+        "ts_problem",
+        "how_to_install_nodejs",
+        "how_to_update_midway",
+        "midway_slow_problem"
+      ]
     },
     {
-      "type": "doc",
-      "id": "git_problem",
-      "label": "常见 git 问题"
-    },
-    {
-      "type": "doc",
-      "id": "ts_problem",
-      "label": "常见 TS 问题"
-    },
-    {
-      "type": "doc",
-      "id": "change_start_dir",
-      "label": "修改源码目录"
-    },
-    {
-      "type": "doc",
-      "id": "decorator_index",
-      "label": "现有装饰器索引"
-    },
-    {
-      "type": "doc",
-      "id": "how_to_install_nodejs",
-      "label": "如何安装 Node.js 环境"
-    },
-    {
-      "type": "doc",
-      "id": "serverless/migrate_faq",
-      "label": "应用迁移 FAQ"
-    },
-    {
-      "type": "doc",
-      "id": "midway_slow_problem",
-      "label": "关于 Midway 启动慢的问题"
-    },
-    {
-      "type": "doc",
-      "id": "serverless/serverless_post_difference",
-      "label": "Serverless 触发器 POST 情况差异"
-    },
-    {
-      "type": "doc",
-      "id": "how_to_update_midway",
-      "label": "如何更新 Midway"
-    },
-    {
-      "type": "doc",
-      "id": "release_schedule",
-      "label": "Midway 维护计划"
+      "type": "category",
+      "label": "其他",
+      "collapsed": false,
+      "collapsible": false,
+      "items": [
+        "release_schedule"
+      ]
     }
   ]
 }

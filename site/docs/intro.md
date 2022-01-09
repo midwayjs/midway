@@ -87,7 +87,7 @@ export default async function home () {
 
 
 
-## 准备工作
+## 环境准备工作
 
 
 Midway 运行请预先安装 Node.js 环境和 npm，在国内可以使用 cnpm。

@@ -57,7 +57,8 @@
         "context_definition",
         "component_development",
         "framework_development",
-        "custom_decorator"
+        "custom_decorator",
+        "change_start_dir"
       ]
     }
   ],
