@@ -19,9 +19,9 @@ Midway 设计了一套通用的方法拦截器（切面），用于在不同场�
 ➜  my_midway_app tree
 .
 ├── src
-│   │── aspect                 		 ## 拦截器目录
+│   │── aspect                    ## 拦截器目录
 │   │   └── report.ts
-│   └── controller                 ## Web Controller 目录
+│   └── controller                ## Web Controller 目录
 │       └── home.ts
 ├── test  
 ├── package.json  
@@ -67,8 +67,7 @@ export class ReportInfo implements IMethodAspect {
 
 拦截器 **固定为单例**。
 
-
-:::warning
+:::caution
 在继承的情况下，拦截器不会对父类的方法生效。
 :::
 
@@ -86,12 +85,13 @@ export interface IMethodAspect {
   around?(joinPoint: JoinPoint): any;
 }
 ```
-| before | 方法调用前执行 |  |
-| --- | --- | --- |
-| around | 包裹方法的前后执行 |  |
-| afterReturn | 正确返回内容时执行 |  |
-| afterThrow | 抛出异常时执行 |  |
-| after | 最后执行（不管正确还是错误） |  |
+| 方法        | 描述                         |
+| --- | --- |
+| before | 方法调用前执行 |
+| around | 包裹方法的前后执行 |
+| afterReturn | 正确返回内容时执行 |
+| afterThrow | 抛出异常时执行 |
+| after | 最后执行（不管正确还是错误） |
 
 简单理解如下；
 ```javascript
@@ -112,8 +112,6 @@ try {
 | afterReturn |  |  | √ | √ |  |  |
 | afterThrow |  |  |  |  | √ | √ |
 | after |  |  | √ |  | √ |  |
-
-
 
 
 
@@ -148,12 +146,12 @@ export interface JoinPoint {
   proceed(...args: any[]): any;
 }
 ```
-| methodName | 拦截到的方法名 |  |
-| --- | --- | --- |
-| target | 方法调用时的实例 |  |
-| args | 原方法调用的参数 |  |
-| proceed | 原方法本身 | 只会在 before 和 around 中存在 |
-|  |  |  |
+| 参数       | 描述                                       |
+| --- | --- |
+| methodName | 拦截到的方法名 |
+| target | 方法调用时的实例 |
+| args | 原方法调用的参数 |
+| proceed | 原方法本身，只会在 before 和 around 中存在 |
 
 `around` 是比较全能的方法，它可以包裹整个方法调用流程。
 ```typescript
@@ -270,7 +268,7 @@ export class ReportInfo implements IMethodAspect {
 export class HomeController {
 
   @Get('/')
-  async home() {									// 这里是异步的，则下面的 before 是异步的
+  async home() {			// 这里是异步的，则下面的 before 是异步的
     
   }
 }
@@ -290,7 +288,7 @@ export class ReportInfo implements IMethodAspect {
 export class HomeController {
 
   @Get('/')
-  home() {									// 这里是同步的，则下面的 before 也是同步的
+  home() {		// 这里是同步的，则下面的 before 也是同步的
     
   }
 }
@@ -357,9 +355,7 @@ export class ReportInfo implements IMethodAspect {
   async before(point: JoinPoint) {
     console.log('hello method with suffix 2');
   }
-
 }
-
 ```
 
 

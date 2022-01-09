@@ -13,13 +13,13 @@ Node.js 应用一般通过 `NODE_ENV` 来获取环境变量，来满足不同环
 我们可以通过启动时增加环境变量来指定。
 
 ```bash
-MIDWAY_SERVER_ENV=prod npm start					// 第一优先级
-NODE_ENV=local npm start									// 第二优先级
+MIDWAY_SERVER_ENV=prod npm start        // 第一优先级
+NODE_ENV=local npm start                // 第二优先级
 ```
 在 windows 环境，我们需要使用 [cross-env](https://www.npmjs.com/package/cross-env) 模块以达到同样的效果。
 ```bash
-cross-env MIDWAY_SERVER_ENV=prod npm start					// 第一优先级
-cross-env NODE_ENV=local npm start									// 第二优先级
+cross-env MIDWAY_SERVER_ENV=prod npm start    // 第一优先级
+cross-env NODE_ENV=local npm start            // 第二优先级
 ```
 
 
@@ -34,21 +34,21 @@ Midway 在 app 对象上提供了 `getEnv()` 方法获取环境，面对不同�
 import { Application } from '@midwayjs/koa';
 
 // process.env.MIDWAY_SERVER_ENV=prod
+
 @Provide()
 export class UserService {
   
   @App()
-  app: Application;															// 请替换为使用的上层框架
+  app: Application;
 
   async invoke() {
-    console.log(this.app.getEnv());							// prod
+    console.log(this.app.getEnv()); // prod
   }
 }
 ```
 
 
 如果 `NODE_ENV` 和 `MIDWAY_SERVER_ENV` 都没有赋值，那么默认情况下，方法的返回值为 `prod` 。
-
 
 :::info
 注意，你不能直接通过 `NODE_ENV` 和 `MIDWAY_SERVER_ENV` 来获取环境，这两个值都有可能为空，且 Midway 不会反向设置它。如需获取环境，请通过 app.getEnv() 获取其他框架提供的 API 方法获取。
@@ -79,7 +79,7 @@ export class UserService {
 
 借助服务的 `getCurrentEnvironment` 方法，我们可以直接从上面获取环境值，而 `app.getEnv()` 方法也正是这样获取值的。
 ```typescript
-const environmentService = app.getApplicationContext(EnvironmentService);
+const environmentService = app.getApplicationContext.get(EnvironmentService);
 const env = environmentService.getCurrentEnvironment();
 ```
 

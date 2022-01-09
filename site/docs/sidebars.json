@@ -33,8 +33,6 @@
       "collapsible": false,
       "items": [
         "container",
-        "cookies",
-        "session",
         "testing",
         "debugger",
         "environment",
@@ -43,6 +41,7 @@
         "logger",
         "aspect",
         "pipeline",
+        "cookie_session",
         "router_table",
         "service_factory",
         "decorator_index"

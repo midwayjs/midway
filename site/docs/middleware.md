@@ -9,7 +9,7 @@ Web 中间件是在控制器调用 **之前** 和 **之后（部分）**调用�
 
 Koa 和 EggJs 可以在 **控制器前后都被执行**，在 Express 中，中间件 **只能在控制器之前** 调用，将在 Express 章节单独介绍。
 
-下面的代码，我们将以 @midwayjs/koa 框架举例。
+下面的代码，我们将以 `@midwayjs/koa` 举例。
 
 
 
@@ -365,6 +365,7 @@ export class AutoConfiguration {
 
 
 比如，**下面的代码是错误的。**
+
 ```typescript
 import { IMiddleware } from '@midwayjs/core';
 import { Middleware } from '@midwayjs/decorator';
@@ -388,6 +389,7 @@ export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
 
 
 如果要获取请求作用域的实例，可以使用从请求作用域容器 `ctx.requestContext` 中获取，如下面的方法。
+
 ```typescript
 import { IMiddleware } from '@midwayjs/core';
 import { Middleware } from '@midwayjs/decorator';
