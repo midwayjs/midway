@@ -1,5 +1,5 @@
 {
   "dependencies": {
-    "@midwayjs/faas": "^2.8.0"
+    "@midwayjs/faas": "2.14.2"
   }
 }

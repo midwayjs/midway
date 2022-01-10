@@ -9,16 +9,16 @@
   },
   "dependencies": {
     "egg": "^2.15.1",
-    "egg-scripts": "^2.11.0"
+    "egg-scripts": "2.15.2"
   },
   "devDependencies": {
-    "autod": "^3.0.1",
-    "autod-egg": "^1.1.0",
-    "egg-bin": "^4.11.0",
-    "egg-ci": "^1.11.0",
-    "egg-mock": "^3.21.0",
-    "eslint": "^5.13.0",
-    "eslint-config-egg": "^7.1.0"
+    "autod": "3.1.2",
+    "autod-egg": "1.1.0",
+    "egg-bin": "4.16.4",
+    "egg-ci": "1.19.0",
+    "egg-mock": "3.26.0",
+    "eslint": "5.16.0",
+    "eslint-config-egg": "7.5.1"
   },
   "engines": {
     "node": ">=10.0.0"

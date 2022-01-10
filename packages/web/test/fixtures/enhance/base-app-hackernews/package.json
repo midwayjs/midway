@@ -5,17 +5,17 @@
   "private": true,
   "dependencies": {
     "egg": "^2.0.0",
-    "egg-view-nunjucks": "^2.2.0",
-    "moment": "^2.19.2"
+    "egg-view-nunjucks": "2.3.0",
+    "moment": "2.29.1"
   },
   "devDependencies": {
-    "autod": "^3.0.1",
-    "autod-egg": "^1.0.0",
-    "cheerio": "^1.0.0-rc.2",
-    "egg-bin": "^4.3.5",
-    "egg-mock": "^3.13.1",
-    "eslint": "^4.12.0",
-    "eslint-config-egg": "^5.1.1"
+    "autod": "3.1.2",
+    "autod-egg": "1.1.0",
+    "cheerio": "1.0.0-rc.10",
+    "egg-bin": "4.16.4",
+    "egg-mock": "3.26.0",
+    "eslint": "4.19.1",
+    "eslint-config-egg": "5.1.1"
   },
   "engines": {
     "node": ">=8.9.0"
