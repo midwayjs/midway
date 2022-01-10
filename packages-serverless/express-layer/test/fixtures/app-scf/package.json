@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "koa": "^2.15.1"
+    "koa": "^2.13.4"
   },
   "devDependencies": {
   },
