@@ -16,7 +16,7 @@
     "@midwayjs/egg-ts-helper": "^1.0.1",
     "@midwayjs/luckyeye": "^1.0.0",
     "@midwayjs/mock": "^2.3.0",
-    "@types/jest": "^26.0.10",
+    "@types/jest": "26.0.24",
     "@types/node": "14",
     "@types/socket.io-client": "^1.4.36",
     "cross-env": "^6.0.0",
