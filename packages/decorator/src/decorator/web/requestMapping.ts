@@ -27,10 +27,12 @@ export interface RouterOption {
   middleware?: MiddlewareParamArray;
   /**
    * router summary, for swagger
+   * @deprecated
    */
   summary?: string;
   /**
    * router description, for swagger
+   * @deprecated
    */
   description?: string;
   /**

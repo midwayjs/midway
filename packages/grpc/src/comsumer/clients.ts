@@ -5,11 +5,11 @@ import {
   Provide,
   Scope,
   ScopeEnum,
+  camelCase,
 } from '@midwayjs/decorator';
 import { credentials, loadPackageDefinition } from '@grpc/grpc-js';
 import { DefaultConfig, IClientOptions } from '../interface';
 import { finePackageProto, loadProto } from '../util';
-import * as camelCase from 'camelcase';
 import { ILogger } from '@midwayjs/logger';
 import { ClientUnaryRequest } from './type/unary-request';
 import { ClientDuplexStreamRequest } from './type/duplex-request';

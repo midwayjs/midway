@@ -1,5 +1,5 @@
 import { IFileDetector, IMidwayContainer } from '../interface';
-import { isRegExp, ResolveFilter } from '@midwayjs/decorator';
+import { TYPES, ResolveFilter } from '@midwayjs/decorator';
 import { run } from '@midwayjs/glob';
 
 export abstract class AbstractFileDetector<T> implements IFileDetector {
@@ -57,7 +57,7 @@ export class DirectoryFileDetector extends AbstractFileDetector<{
                 resolveFilter.filter(exports, file, this);
                 continue;
               }
-            } else if (isRegExp(resolveFilter.pattern)) {
+            } else if (TYPES.isRegExp(resolveFilter.pattern)) {
               if ((resolveFilter.pattern as RegExp).test(file)) {
                 const exports = resolveFilter.ignoreRequire
                   ? undefined

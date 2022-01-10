@@ -26,3 +26,12 @@ jobs:
           git-user: czy88840616
           git-password: ${{ secrets.GH_TOKEN }}
           deployment-branch: gh-pages
+      - name: upload files to OSS
+        uses: fangbinwei/aliyun-oss-website-action@v1
+        with:
+          accessKeyId: ${{ secrets.ACCESS_KEY_ID }}
+          accessKeySecret: ${{ secrets.ACCESS_KEY_SECRET }}
+          bucket: your-bucket-name
+          # use your own endpoint
+          endpoint: oss-cn-shanghai.aliyuncs.com
+          folder: site

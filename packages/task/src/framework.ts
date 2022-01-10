@@ -2,7 +2,7 @@ import { BaseFramework, IMidwayBootstrapOptions } from '@midwayjs/core';
 import {
   Framework,
   getClassMetadata,
-  isAsyncFunction,
+  TYPES,
   listModule,
   MidwayFrameworkType,
   MODULE_TASK_KEY,
@@ -20,7 +20,7 @@ import { deprecatedOutput } from '@midwayjs/core';
 
 function wrapAsync(fn) {
   return async function (...args) {
-    if (isAsyncFunction(fn)) {
+    if (TYPES.isAsyncFunction(fn)) {
       await fn.call(...args);
     } else {
       const result = fn.call(...args);

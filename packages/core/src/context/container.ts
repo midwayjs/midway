@@ -3,9 +3,7 @@ import {
   getClassMetadata,
   IComponentInfo,
   InjectionConfigurationOptions,
-  isAsyncFunction,
-  isClass,
-  isFunction,
+  TYPES,
   listModule,
   MAIN_MODULE_KEY,
   ObjectIdentifier,
@@ -190,8 +188,8 @@ class ContainerConfiguration {
   private getConfigurationExport(exports): any[] {
     const mods = [];
     if (
-      isClass(exports) ||
-      isFunction(exports) ||
+      TYPES.isClass(exports) ||
+      TYPES.isFunction(exports) ||
       exports instanceof FunctionalConfiguration
     ) {
       mods.push(exports);
@@ -199,8 +197,8 @@ class ContainerConfiguration {
       for (const m in exports) {
         const module = exports[m];
         if (
-          isClass(module) ||
-          isFunction(module) ||
+          TYPES.isClass(module) ||
+          TYPES.isFunction(module) ||
           module instanceof FunctionalConfiguration
         ) {
           mods.push(module);
@@ -302,12 +300,12 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
   }
 
   bindClass(exports, options?: Partial<IObjectDefinition>) {
-    if (isClass(exports) || isFunction(exports)) {
+    if (TYPES.isClass(exports) || TYPES.isFunction(exports)) {
       this.bindModule(exports, options);
     } else {
       for (const m in exports) {
         const module = exports[m];
-        if (isClass(module) || isFunction(module)) {
+        if (TYPES.isClass(module) || TYPES.isFunction(module)) {
           this.bindModule(module, options);
         }
       }
@@ -321,7 +319,7 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     options?: Partial<IObjectDefinition>
   ): void;
   bind<T>(identifier: any, target: any, options?: any): void {
-    if (isClass(identifier) || isFunction(identifier)) {
+    if (TYPES.isClass(identifier) || TYPES.isFunction(identifier)) {
       return this.bindModule(identifier, target);
     }
 
@@ -331,12 +329,12 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     }
 
     let definition;
-    if (isClass(target)) {
+    if (TYPES.isClass(target)) {
       definition = new ObjectDefinition();
       definition.name = getProviderName(target);
     } else {
       definition = new FunctionDefinition();
-      if (!isAsyncFunction(target)) {
+      if (!TYPES.isAsyncFunction(target)) {
         definition.asynchronous = false;
       }
       definition.name = definition.id;
@@ -418,7 +416,7 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
   }
 
   protected bindModule(module: any, options: Partial<IObjectDefinition>) {
-    if (isClass(module)) {
+    if (TYPES.isClass(module)) {
       const providerId = getProviderUUId(module);
       if (providerId) {
         this.identifierMapping.saveClassRelation(module, options?.namespace);

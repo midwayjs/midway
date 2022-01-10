@@ -6,7 +6,7 @@ import { readdirSync, statSync } from 'fs';
 import {
   Init,
   Inject,
-  isFunction,
+  TYPES,
   Provide,
   Scope,
   ScopeEnum,
@@ -120,7 +120,7 @@ export class MidwayConfigService implements IConfigService {
     const target = {};
     for (const filename of [...defaultSet, ...currentEnvSet]) {
       let config = await this.loadConfig(filename);
-      if (isFunction(config)) {
+      if (TYPES.isFunction(config)) {
         // eslint-disable-next-line prefer-spread
         config = config.apply(null, [this.appInfo, target]);
       }

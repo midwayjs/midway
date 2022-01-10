@@ -1,5 +1,4 @@
 import * as util from 'util';
-import * as camelcase from 'camelcase';
 import * as crypto from 'crypto';
 
 const ToString = Function.prototype.toString;
@@ -109,14 +108,6 @@ export function getParamNames(func): string[] {
 }
 
 /**
- * 按照框架规则返回类名字
- * @param name 类名称
- */
-export function classNamed(name: string) {
-  return camelcase(name);
-}
-
-/**
  * generate a lightweight random id, enough for ioc container
  */
 export function generateRandomId(): string {
@@ -140,3 +131,20 @@ export function merge(target: any, src: any) {
   }
   throw new Error('can not merge meta that type of ' + typeof target);
 }
+
+export const TYPES = {
+  isClass,
+  isAsyncFunction,
+  isGeneratorFunction,
+  isPromise,
+  isFunction,
+  isObject,
+  isNumber,
+  isProxy,
+  isMap,
+  isSet,
+  isRegExp,
+  isUndefined,
+  isNull,
+  isNullOrUndefined,
+};
