@@ -248,7 +248,7 @@ export class DocumentBuilder {
     this.document.tags = tags.sort((a: TagObject, b: TagObject): number => {
       const s1 = a.name;
       const s2 = b.name;
-      
+
       const len = s1.length > s2.length ? s2.length : s1.length;
       for (let i = 0; i < len; i++) {
         if (s1.charCodeAt(i) > s2.charCodeAt(i)) {
