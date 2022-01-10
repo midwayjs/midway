@@ -16,7 +16,7 @@
 ```typescript
 // 创建客户端的配置
 const config = {
-	baseUrl: '',
+  baseUrl: '',
   timeout: 1000,
 };
 

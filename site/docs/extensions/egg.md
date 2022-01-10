@@ -577,61 +577,8 @@ await helloCron.exec();
 ```
 
 
-## 日志
 
-
-默认情况下，在 Midway 中使用 @mdwayjs/logger，文档请参考[日志章节](logger)。在使用 egg-logger 的情况下，可以参考这里或者直接[访问 egg 文档](https://eggjs.org/zh-cn/core/logger.html)。
-### 自定义日志
-
-
-比如自定义一个日志 `myLogger`，这个时候，日志的 key 则为 `myLogger` 。
-
-
-```typescript
-module.exports = appInfo => {
-  return {
-    customLogger: {
-      myLogger: {
-        file: path.join(appInfo.root, 'logs/xx.log'),
-      },
-    },
-  };
-};
-```
-
-
-这个时候可以用 `@Logger` 装饰器来获取日志实例。
-
-
-```typescript
-import { Provide, Logger } from '@midwayjs/decorator';
-
-@Provide()
-export class BaseService {
-
-  @Logger('myLogger')
-  logger;
-
-}
-```
-
-
-### 日志等级
-
-
-默认情况下，EggJS 的日志等级均为 `WARN` ，我们可以修改 EggJS 默认的日志等级覆盖这一行为。
-```typescript
-// src/config/config.local.ts
-export const logger = {
-   consoleLevel: 'INFO',
-   coreLogger: {
-     consoleLevel: 'INFO'
-   }
- }
-```
-
-
-### 默认日志名
+## 默认日志名
 
 
 Midway 对 EggJS 默认的日志文件名做了修改。
@@ -655,6 +602,7 @@ exports.logrotator = {
   maxDays: 0,
 };
 ```
+
 
 
 ## 异常处理
@@ -784,19 +732,6 @@ export const middleware = [ 'notfoundHandler' ];
 
 
 
-
-## 不存在定义的问题
-
-
-一些 egg 插件未提供 ts 定义，导致使用会出现未声明方法的情况，比如 egg-mysql。
-![image.png](https://cdn.nlark.com/yuque/0/2021/png/501408/1623158462288-d55fc0ff-dcc3-4c58-b952-101a552efe12.png#clientId=u9825f56d-757f-4&from=paste&height=438&id=uec9c4ff6&margin=%5Bobject%20Object%5D&name=image.png&originHeight=876&originWidth=1478&originalType=binary&ratio=2&size=581313&status=done&style=none&taskId=ubcf947b0-1a9d-43b5-9b57-f678da05da9&width=739)
-可以使用 any 绕过。
-```typescript
-await (this.app as any).mysql.query(sql);
-```
-或者可以自行增加扩展定义。
-
-
 ## 扩展 Application/Context/Request/Response
 
 
@@ -894,27 +829,10 @@ declare module 'egg' {
 这些参数在使用 `bootstrap.js` 启动时生效。
 
 
+
+
 ## 常见问题
-
-
-### 默认的 csrf 错误
-
-
-在 post 请求，特别是第一次时用户会发现一个 csrf 报错。原因是 egg 在框架中默认内置了安全插件 [egg-security](https://github.com/eggjs/egg-security)， 默认开启了  csrf 校验。
-
-
-我们可以在配置中关闭它，但是更好的是去[**了解它**](https://eggjs.org/zh-cn/core/security.html#%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%81-csrf-%E7%9A%84%E9%98%B2%E8%8C%83)之后再做选择。
-```typescript
-export const security = {
-  csrf: false,
-};
-```
-
-
-
-
-## 其他
-### 生成 ts 定义
+### 1、生成 ts 定义
 
 
 Midway 提供了 `@midwayjs/egg-ts-hepler` 工具包，用于快速生成 EggJS 开发时所依赖的定义。
@@ -944,8 +862,47 @@ EggJS 生成的定义在 `typings` 目录中。
 ```
 
 
-### EggJS 中 Configuration 的特殊情况
+### 2、EggJS 中 Configuration 的特殊情况
 
 
 在 EggJS 下， `configuration.ts`  中的生命周期**只会在 worker 下加载执行**。如果在 Agent 有类似的需求，请直接使用 EggJS 自身的 `agent.ts` 处理。
 
+
+
+### 3、异步初始化配置无法覆盖插件配置
+
+`onConfigLoad` 生命周期会在 egg 插件（若有）初始化之后执行，所以不能用于覆盖 egg 插件所使用的配置。
+
+
+
+### 4、默认的 csrf 错误
+
+
+在 post 请求，特别是第一次时用户会发现一个 csrf 报错。原因是 egg 在框架中默认内置了安全插件 [egg-security](https://github.com/eggjs/egg-security)， 默认开启了  csrf 校验。
+
+
+我们可以在配置中关闭它，但是更好的是去[**了解它**](https://eggjs.org/zh-cn/core/security.html#%E5%AE%89%E5%85%A8%E5%A8%81%E8%83%81-csrf-%E7%9A%84%E9%98%B2%E8%8C%83)之后再做选择。
+
+```typescript
+export const security = {
+  csrf: false,
+};
+```
+
+
+
+
+### 5、不存在定义的问题
+
+一些 egg 插件未提供 ts 定义，导致使用会出现未声明方法的情况，比如 egg-mysql。
+![image.png](https://cdn.nlark.com/yuque/0/2021/png/501408/1623158462288-d55fc0ff-dcc3-4c58-b952-101a552efe12.png#clientId=u9825f56d-757f-4&from=paste&height=438&id=uec9c4ff6&margin=%5Bobject%20Object%5D&name=image.png&originHeight=876&originWidth=1478&originalType=binary&ratio=2&size=581313&status=done&style=none&taskId=ubcf947b0-1a9d-43b5-9b57-f678da05da9&width=739)
+可以使用 any 绕过。
+
+```typescript
+await (this.app as any).mysql.query(sql);
+```
+
+或者可以自行增加扩展定义。
+
+
+## 

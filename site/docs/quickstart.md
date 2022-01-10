@@ -1,10 +1,5 @@
 # 创建第一个应用
 
-:::tip
-当前 v3 版本还是 beta 状态，在未发布前，我们依旧会调整 API 并且无法及时通知用户，但是相应的，可以随时使用到最新的功能。
-:::
-
-
 
 ## 技术选型
 
@@ -12,9 +7,9 @@ Midway 有多套技术方案可以选择，我们以部署的方式来做区分�
 
 | 技术选型        | 描述                                                         |
 | --------------- | ------------------------------------------------------------ |
-| 纯 Node.js 项目 | Midway 传统项目，纯 Node.js 研发，以 @midwayjs/koa 为代表的模块，最完整的支持后端项目，采用 **依赖注入 + Class** 为技术栈。 |
-| Serverless 项目 | Midway 为 Serverless 场景单独开发的技术栈，以 @midwayjs/faas 为代表的的模块，使用轻量的方式接入不同的 Serverless 平台。 |
-| 一体化项目      | Midway 创新技术方案，采用前后端一体化开发方式，节省前后端连调时间，以 **函数式** 为主要编码范式。 |
+| 纯 Node.js 项目 | Midway 传统项目，纯 Node.js 研发，以 `@midwayjs/koa` 为代表的模块，最完整的支持后端项目，采用 **依赖注入 + Class** 为技术栈。 |
+| Serverless 项目 | Midway 为 Serverless 场景单独开发的技术栈，以 `@midwayjs/faas` 为代表的的模块，使用轻量的方式接入不同的 Serverless 平台。 |
+| 一体化项目      | Midway 创新技术方案，采用前后端一体化开发方式，节省前后端连调时间，以 `@midwayjs/hooks` 为代表的的模块，使用 **函数式** 为主要编码范式。 |
 
 :::tip
 本章节及后续的文档将以 **纯 Node.js 项目** 作为基础示例，如需使用 Serverless 项目，请跳转到 [Serverless](serverless/serverless_intro)，如需了解一体化项目，请访问 [一体化](hooks/hooks_intro) 。

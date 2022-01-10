@@ -1,4 +1,4 @@
-# Information
+# 信息查看 
 
 Midway 提供了 info 组件，用于展示应用的基本信息，方便排查问题。
 

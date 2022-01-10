@@ -3,10 +3,6 @@
 Midway 中使用了非常多的依赖注入的特性，通过装饰器的轻量特性，让依赖注入变的优雅，从而让开发过程变的便捷有趣。
 
 
-
-## 快速理解
-
-
 依赖注入是 Java Spring 体系中非常重要的核心，我们用简单的做法讲解这个能力。
 
 
@@ -27,7 +23,6 @@ Midway 中使用了非常多的依赖注入的特性，通过装饰器的轻量�
 
 在上面的示例中，提供了两个文件， `userController.ts` 和 `userService.ts` 。
 
-
 :::tip
 下面的示例，为了展示完整的功能，我们会写完整的 `@Provide` 装饰器，而在实际使用中，如果有其他装饰器（比如 `@Controller` ）的情况下， `@Provide` 可以被省略。
 :::
@@ -40,7 +35,7 @@ Midway 中使用了非常多的依赖注入的特性，通过装饰器的轻量�
 import { Provide, Inject, Get } from '@midwayjs/decorator';
 
 // user.controller.ts
-@Provide()
+@Provide()	// 实际可省略
 @Controller()
 export class UserController {
   
@@ -71,7 +66,6 @@ export class UserService {
 通过这两个装饰器的搭配，我们可以方便的在任意类中拿到实例对象，就像上面的 `this.userService` 。
 
 **注意**：实际使用中，如果有其他装饰器（比如 `@Controller` ）的情况下 `@Provide` 经常被省略。
-
 
 
 
@@ -134,133 +128,24 @@ await userController.handler();  // output 'world'
 
 
 
-## 依赖注入标识符
-
-### 默认依赖注入标识符
-
-在 Midway 的情况下，会将自动创建 uuid 关联这个 class，同时这个 uuid 我们称为 **依赖注入标识符**。
-
-
-默认情况如下：
-
-
-- 1、 `@Provide` 会自动生成一个 uuid 作为依赖注入标识符
-- 2、 `@Inject` 根据类型的 uuid 来查找
-
-```typescript
-// service
-@Provide()                          // <------ 这里 UserService 会自动生成一个 uuid
-export class UserService 
-  implements IService {
-  //...
-}
-
-// controller
-@Provide()
-export class APIController {
-
-  @Inject()            
-  userService1: UserService;				// <------ 这里会查找 UserService 的 uuid
-  
-  //...
-}
-```
-
-如果要获取这个 uuid，可以使用下面的 API。
-
-```typescript
-const uuid = getProvideUUId(UserService);
-// ...
-```
-
-
-
-### 自定义依赖注入标识符
-
-在默认情况下，Midway 会将类名变为 `驼峰` 形式作为依赖注入标识符，一般情况下，用户无需改变它。并且在使用时，直接在 Class 中使用 `@Provide` 和 `@Inject` 装饰器即可。
-
-`@Provide` 和 `@Inject` 装饰器是有可选参数的，并且他们是成对出现。
-
-规则如下：
-
-
-- 1、如果装饰器包含参数，则以 **参数 **作为 key
-- 2、如果没有参数，标注的 TS 类型为 Class，则将类 `@Provide` 的 key 作为 key，如果没有 key，默认取 uuid
-- 3、如果没有参数，标注的 TS 类型为非 Class，则将 **属性名** 作为 key
-
-
-
-两者相互一致即可关联。
-```typescript
-export interface IService {
-}
-
-// service
-@Provide()                          // <------ 这里暴露的 key 是 uuid
-export class UserService 
-  implements IService {
-  //...
-}
-
-// controller
-@Provide()
-@Controller('/api/user')
-export class APIController {
-
-  @Inject('userService')            // <------ 这里注入的 key 是 userService
-  userService1: UserService;
-    
-  @Inject()
-  userService2: UserService;        // <------ 这里的类型是 Class，注入的 key 是 UserService 对应的 uuid
-
-    
-  @Inject()
-  userService: IService;            // <------ 这里的类型是 Interface，注入的 key 是 userService
-
-  //...
-}
-```
-
-
-我们可以修改暴露给依赖注入容器的 key，同时，注入的地方也要相应修改。
-```typescript
-// service
-@Provide('bbbService')               // <------ 这里暴露的 标识符 是 bbbService
-export class UserService {
-  //...
-}
-               
-// controller
-@Provide()
-export class UserController {
-
-  @Inject('bbbService')              // <------ 这里注入的 标识符 是 bbbService
-  userService: UserService;
-	
-  //...
-}
-
-```
-
-
-## 作用域
+## 依赖注入作用域
 
 
 默认的未指定或者未声明的情况下，所有的 `@Provide` 出来的 Class 的作用域都为 **请求作用域**。这意味着这些 Class ，会在**每一次请求第一次调用时被实例化（new），请求结束后实例销毁。**我们默认情况下的控制器（Controller）和服务（Service）都是这种作用域。
 
-
 在 Midway 的依赖注入体系中，有三种作用域。
 
-
-- Singleton 单例，全局唯一（进程级别）
-- Request  **默认**，请求作用域，生命周期绑定**请求链路**，实例在请求链路上唯一，请求结束立即销毁
-   - 例如http请求进来的时候，会创建一个请求作用域ctx，我们通过@Inject()ctx可以拿到这个请求作用域。
-   - 例如定时器触发，也相当于创建了请求作用于ctx，我们可以通过@Inject()ctx可以拿到这个请求作用域。
-- Prototype 原型作用域，每次调用都会重复创建一个新的对象
-
-
+| 作用域    | 描述                                                         |
+| --------- | ------------------------------------------------------------ |
+| Singleton | 单例，全局唯一（进程级别）                                   |
+| Request   | **默认**，请求作用域，生命周期绑定 **请求链路**，实例在请求链路上唯一，请求结束立即销毁 |
+| Prototype | 原型作用域，每次调用都会重复创建一个新的对象                 |
 
 不同的作用域有不同的作用，**单例 **可以用来做进程级别的数据缓存，或者数据库连接等只需要执行一次的工作，同时单例由于全局唯一，只初始化一次，所以调用的时候速度比较快。而 **请求作用域 **则是大部分需要获取请求参数和数据的服务的选择，**原型作用域 **使用比较少，在一些特殊的场景下也有它独特的作用。
+
+
+
+### 配置作用域
 
 
 如果我们需要将一个对象定义为其他两种作用域，需要额外的配置。Midway 提供了 `@Scope` 装饰器来定义一个类的作用域。下面的代码就将我们的 user 服务变成了一个全局唯一的实例。
@@ -268,7 +153,7 @@ export class UserController {
 
 ```typescript
 // service
-import { Scope, ScopeEnum } from '@midwayjs/decorator';
+import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
 
 @Provide()	
 @Scope(ScopeEnum.Singleton)
@@ -278,11 +163,89 @@ export class UserService {
 ```
 
 :::info
-默认为请求作用域的目的是为了和请求上下文关联，显式传递 ctx 更为安全可靠，方便调试。
+
+注意，所有的入口类，比如 Controller，均为请求作用域，不支持修改。大部分情况下，只需要调整 Service 即可。
+
 :::
 
 
-我们的 `@Inject` 装饰器也是在**当前类的作用域**下去寻找对象来注入的。比如，在  `Singleton` 作用域下，由于和请求不关联 ，默认没有 `ctx` 对象，所以注入 ctx  是不对的 。
+
+### 单例作用域
+
+在显式配置后，某个类的作用域就可以变成单例作用域。。
+
+```typescript
+// service
+import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+
+@Provide()	
+@Scope(ScopeEnum.Singleton)
+export class UserService {
+  //...
+}
+
+```
+
+后续不管获取这个类的实例多少次，在 **同一个进程下**，都是同一个实例。
+
+比如基于上面的单例服务，下面两个注入的 `userService` 属性是同一个实例：
+
+```typescript
+@Provide()
+export class A {
+ 
+  @Inject()
+  userService: UserService
+  //...
+}
+
+@Provide()
+export class B {
+ 
+  @Inject()
+  userService: UserService
+  //...
+}
+```
+
+
+
+### 请求作用域
+
+默认情况下，代码中编写的类均为 **请求作用域**。
+
+在每个协议入口框架会自动创建一个请求作用域下的依赖注入容器，所有创建的实例都会绑定当前协议的上下文。
+
+比如：
+
+- http 请求进来的时候，会创建一个请求作用域，每个 Controller 都是在请求路由时动态创建
+- 定时器触发，也相当于创建了请求作用于 ctx，我们可以通过@Inject()ctx可以拿到这个请求作用域。
+
+:::info
+默认为请求作用域的目的是为了和请求上下文关联，显式传递 ctx 更为安全可靠，方便调试。
+:::
+
+所以在请求作用域中，我们可以通过 `@Inject()` 来注入当前的 ctx 对象。
+
+```typescript
+import { Controller, Provide, Inject } from '@midwayjs/decorator';
+import { Context } from '@midwayjs/koa';
+
+@Provide()	// 实际可省略
+@Controller('/user')	
+export class UserController {
+  
+  @Inject()
+  ctx: Context;
+  //...
+}
+```
+
+
+
+
+我们的 `@Inject` 装饰器也是在 **当前类的作用域** 下去寻找对象来注入的。比如，在  `Singleton` 作用域下，由于和请求不关联 ，默认没有 `ctx` 对象，所以注入 ctx  是不对的 。
+
 ```typescript
 @Provide()	
 @Scope(ScopeEnum.Singleton)
@@ -296,7 +259,7 @@ export class UserService {
 
 
 
-### 单例的限制
+### 作用域固化
 
 
 当作用域被设置为单例（Singleton）之后，整个 Class 注入的对象在第一次实例化之后就已经被固定了，这意味着，单例中注入的内容不能是其他作用域。
@@ -305,7 +268,8 @@ export class UserService {
 我们来举个例子。
 ```typescript
 // 这个类是默认的请求作用域（Request）
-@Provide()
+@Provide()		// 实际可省略
+@Controller()
 export class HomeController {
   @Inject()
   userService: UserService;
@@ -323,6 +287,7 @@ export class UserService {
 ```
 调用的情况如下。
 ![image.png](https://img.alicdn.com/imgextra/i1/O1CN01FN99rS1Xb1YydSFi0_!!6000000002941-2-tps-1110-388.png)
+
 这种情况下，不论调用 `HomeController` 多少次，每次请求的 `HomeController` 实例是不同的，而 `UserService` 都会固定的那个。
 
 
@@ -368,51 +333,214 @@ export class DBManager {
 
 
 
-## 异步初始化
+## 注入规则
+
+Midway 支持多种方式的注入。
+
+### 基于 Class 的注入
+
+导出一个 Class，注入的类型使用 Class，这是最简单的注入方式，大部分的业务和组件都是使用这样的方式。
+
+```typescript
+import { Provide, Inject } from '@midwayjs/decorator';
+
+@Provide()               // <------ 暴露一个 Class
+export class B {
+  //...
+}
+
+@Provide()
+export class A {
+
+  @Inject()            
+  b: B;                  // <------ 这里的属性使用 Class
+  
+  //...
+}
+```
+
+Midway 会自动使用 B 作为 b 这个属性的类型，在容器中实例化它。
+
+在这种情况下，Midway 会自动创建一个唯一的 uuid 关联这个 Class，同时这个 uuid 我们称为 **依赖注入标识符**。
 
 
-在某些情况下，我们需要一个实例在被其他依赖调用前需要初始化，如果这个初始化只是读取某个文件，那么可以写成同步方式，而如果这个初始化是从远端拿取数据或者连接某个服务，这个情况下，普通的同步代码就非常的难写。
+默认情况：
 
 
-Midway 提供了异步初始化的能力，通过 `@Init` 标签来管理初始化方法。
+- 1、 `@Provide` 会自动生成一个 uuid 作为依赖注入标识符
+- 2、 `@Inject` 根据类型的 uuid 来查找
+
+如果要获取这个 uuid，可以使用下面的 API。
+
+```typescript
+import { getProvideUUId } from '@midwayjs/decorator';
+
+const uuid = getProvideUUId(B);
+// ...
+```
 
 
-`@Init` 方法目前只能是一个。
+
+### 基于固定名字的注入
+
+```typescript
+import { Provide, Inject } from '@midwayjs/decorator';
+
+@Provide('bbbb')        // <------ 暴露一个 Class
+export class B {
+  //...
+}
+
+@Provide()
+export class A {
+
+  @Inject('bbbb')            
+  b: B;                  // <------ 这里的属性使用 Class
+  
+  //...
+}
+```
+
+Midway 会将 `bbbb` 作为 B 这个 Class 的依赖注入标识符，在容器中实例化它。这种情况下，即使写了类型 B，依赖注入容器依旧会查找 `bbbb` 。
+
+`@Provide` 和 `@Inject` 装饰器的参数是成对出现。
+
+规则如下：
+
+
+- 1、如果装饰器包含参数，则以 **参数 **作为依赖注入标识符
+- 2、如果没有参数，标注的 TS 类型为 Class，则将类 `@Provide` 的 key 作为 key，如果没有 key，默认取 uuid
+- 3、如果没有参数，标注的 TS 类型为非 Class，则将 **属性名** 作为 key
+
+
+
+### 基于属性名的注入
+
+Midway 也可以基于接口进行注入，但是由于 Typescirpt 编译后会移除接口类型，不如使用类作为定义好用。
+
+比如，我们定义一个接口，以及它的实现类。
+
+```typescript
+export interface IPay {
+  payMoney()
+}
+
+@Provide('APay')
+export class A implements IPay {
+  async payMoney() {
+    // ...
+  }
+}
+
+@Provide('BPay')
+export class B implements IPay {
+  async payMoney() {
+    // ...
+  }
+}
+```
+
+这个时候，如果有个服务需要注入，可以使用下面显式声明的方式。
+
+```typescript
+@Provide()
+export class PaymentService {
+  
+  @Inject('APay')
+  payService: IPay;         // 注意，这里的类型是接口，编译后类型信息会被移除
+
+  async orderGood {
+    await this.payService.payMonety();
+  }
+  
+}
+```
+
+由于接口类型会被移除，Midway 只能通过 `@Inject` 装饰器的 **参数** 或者 **属性名** 类来匹配注入的对象信息，类似 Java Spring 中的 `Autowire by name` 。
+
+### 注入已有对象
+
+
+有时候，应用已经有现有的实例，而不是类，比如引入了一个第三库，这个时候如果希望对象能够被其他 IoC 容器中的实例引用，也可以通过增加对象的方式进行处理。
+
+
+我们拿常见的工具类库 lodash 来举例。
+
+假如我们希望在不同的类中直接注入来使用，而不是通过 require 的方式。
+
+你需要在业务调用前（一般在启动的生命周期中）通过 `registerObject` 方法添加这个对象。
+
+
+在添加的时候需要给出一个 **依赖注入标识符**，方便其他类中注入。
+
+
+```typescript
+// src/configuration.ts
+import * as lodash from 'lodash';
+import { Configuration } from '@midwayjs/decorator';
+import { IMidwayContainer } from '@midwayjs/core';
+
+@Configuration()
+export class AutoConfiguration {
+  
+	async onReady(applicationContext: IMidwayContainer) {
+    // 向依赖注入容器中添加一些全局对象
+  	applicationContext.registerObject('lodash', lodash);
+  }
+}
+
+```
+
+
+这个时候就可以在任意的类中通过 `@Inject` 来使用了。
 
 
 ```typescript
 @Provide()
 export class BaseService {
 
-  @Config('hello')
-  config;
+  @Inject('lodash')
+  lodashTool;
 
-  @Plugin('plugin2')
-  plugin2;
-
-  @Init()
-  async init() {
-    await new Promise(resolve => {
-      setTimeout(() => {
-        this.config.c = 10;
-        resolve();
-      }, 100);
-    });
+  async getUser() {
+    // this.lodashTool.defaults({ 'a': 1 }, { 'a': 3, 'b': 2 });
   }
-
 }
 ```
 
 
-等价于
-```typescript
-const service = new BaseService();
-await service.init();
-```
 
-:::info
-@Init 装饰器标记的方法，一定会以异步方式来调用。一般来说，异步初始化的服务较慢，请尽可能标注为单例（@Scope(ScopeEnum.Singleton))。
-:::
+### 注入默认标识符
+
+
+Midway 会默认注入一些值，方便业务直接使用。
+
+| **标识符** | **值类型** | **作用域** | **描述**                                                     |
+| ---------- | ---------- | ---------- | ------------------------------------------------------------ |
+| baseDir    | string     | 全局       | 本地开发时为 src 目录，否则为 dist 目录                      |
+| appDir     | string     | 全局       | 应用的根路径，一般为 process.cwd()                           |
+| ctx        | object     | 请求链路   | 对应框架的上下文类型，比如 Koa 和 EggJS 的 Context，Express 的 req |
+| logger     | object     | 请求链路   | 等价于 ctx.logger                                            |
+| req        | object     | 请求链路   | Express 特有                                                 |
+| res        | object     | 请求链路   | Express 特有                                                 |
+| socket     | object     | 请求链路   | WebSocket 场景特有                                           |
+
+```typescript
+@Provide()
+export class BaseService {
+
+  @Inject()
+  baseDir;
+  
+  @Inject()
+  appDir;
+
+  async getUser() {
+    console.log(this.baseDir);
+    console.log(this.appDir);
+  }
+}
+```
 
 
 
@@ -427,22 +555,54 @@ await service.init();
 
 简单来说，任意需要 **通过 API 动态获取服务** 的场景，都需要先拿到依赖注入容器。
 
+### 从 @ApplicationContext() 装饰器中获取
+
+在新版本中，Midway 提供了一个 @ApplicationContext() 的装饰器，用来获取依赖注入容器。
+
+```typescript
+import { ApplicationContext } from '@midwayjs/decorator';
+import { IMidwayContainer } from '@midwayjs/core';
+
+@Provide() 
+export class BootApp {
+  
+  @ApplicationContext()
+  applicationContext: IMidwayContainer;				// 这里也可以换成实际的框架的 app 定义
+  
+  async invoke() {
+  
+    // this.applicationContext
+  
+  }
+
+}
+```
+
+
+
+### 从 app 中获取
+
 
 Midway 将依赖注入容器挂载在两个地方，框架的 app 以及每次请求的上下文 Context，由于不同上层框架的情况不同，我们这里列举一下常见的示例。
 
 
 对于不同的上层框架，我们统一提供了 `IMidwayApplication` 定义，所有的上层框架 app 都会实现这个接口，定义如下。
+
 ```typescript
 export interface IMidwayApplication {
   getApplicationContext(): IMidwayContainer;
   //...
 }
 ```
+
 即通过 `app.getApplicationContext()` 方法，我们都能获取到依赖注入容器。
+
 ```typescript
 const container = app.getApplicationContext();
 ```
+
 配合 `@App` 装饰器，我们可以方便的在任意地方拿到当前运行的 app 实例。
+
 ```typescript
 import { App } from '@midwayjs/decorator';
 import { IMidwayApplication } from '@midwayjs/core';
@@ -453,10 +613,10 @@ export class BootApp {
   @App()
   app: IMidwayApplication;				// 这里也可以换成实际的框架的 app 定义
   
-  async ready() {
+  async invoke() {
   
     // 获取依赖注入容器
-  	const container = this.app.getApplicationContext();
+  	const applicationContext = this.app.getApplicationContext();
   
   }
 
@@ -474,7 +634,7 @@ export class BootApp {
 
 
 ```typescript
-@Provide()
+@Middleawre()
 export class ReportMiddleware {
 
   resolve() {
@@ -486,8 +646,9 @@ export class ReportMiddleware {
 }
 ```
 Express 的请求链路依赖注入容器挂载在 req 对象上。
+
 ```typescript
-@Provide()
+@Middleawre()
 export class ReportMiddleware {
 
   resolve() {
@@ -500,7 +661,33 @@ export class ReportMiddleware {
 ```
 
 
-## 动态获取服务等实例
+
+### 在 Configuration 中获取
+
+在代码的入口 `configuration` 文件的生命周期中，我们也会额外传递依赖注入容器参数，方便用户直接使用。
+
+```typescript
+// src/configuration.ts
+import { Configuration } from '@midwayjs/decorator';
+import { IMidwayContainer } from '@midwayjs/core';
+
+@Configuration()
+export class AutoConfiguration {
+  
+	async onReady(applicationContext: IMidwayContainer) {
+    // ...
+  }
+}
+
+```
+
+
+
+## 动态 API
+
+
+
+### 动态获取服务等实例
 
 
 拿到 **依赖注入容器 **或者 **请求链路的依赖 **注入容器之后，才可以通过容器的 API 获取到对象。
@@ -555,60 +742,8 @@ export class ReportMiddleware {
 
 
 
-## 注入已有对象
 
-
-有时候，应用已经有现有的实例，而不是类，比如引入了一个第三库，这个时候如果希望对象能够被其他 IoC 容器中的实例引用，也可以通过增加对象的方式进行处理。
-
-
-我们拿常见的 http 请求库 [urllib](https://www.npmjs.com/package/urllib) 来举例。
-
-
-假如我们希望在不同的类中来使用，并且不通过 require 的方式，你需要在业务调用前（一般在启动的生命周期中）通过 `registerObject` 方法添加这个对象。
-
-
-在添加的时候需要给出一个 **标识符**，方便其他类中注入。
-
-
-```typescript
-// in global file
-import * as urllib from 'urllib';
-import { Configuration } from '@midwayjs/decorator';
-
-@Configuration()
-export class AutoConfiguration {
-  
-  @App()
-  app: IMidwayApplication;
-  
-	async onReady() {
-    // 注入一些全局对象
-  	this.app.getApplicationContext().registerObject('httpclient', urllib);
-  }
-}
-
-
-```
-
-
-这个时候就可以在任意的类中通过 `@Inject` 来使用了。
-
-
-```typescript
-@Provide()
-export class BaseService {
-
-  @Inject()
-  httpclient;
-
-  async getUser() {
-    return await this.httpclient.request('/api/getuser');
-  }
-}
-```
-
-
-## 动态函数注入
+### 动态函数注入
 
 
 在某些场景下，我们需要函数作为某个逻辑动态执行，而依赖注入容器中的对象属性则都是已经创建好的，无法满足动态的逻辑需求。
@@ -738,39 +873,6 @@ export class HomeController {
 ```
 
 
-## 依赖注入容器的默认对象
-
-
-Midway 会默认注入一些值，方便业务直接使用。
-
-| **标识符** | **值类型** | **作用域** | **描述** |
-| --- | --- | --- | --- |
-| baseDir | string | 全局 | 本地使用 ts-node 开发时为 src 目录，否则为 dist 目录 |
-| appDir | string | 全局 | 应用的根路径，一般为 process.cwd() |
-| ctx | object | 请求链路 | 对应框架的上下文类型，比如 EggJS 和 Koa 的 Context，Express 的 req |
-| logger | object | 请求链路 | 在 EggJS 下等价于 ctx.logger |
-| req | object | 请求链路 | Express 特有 |
-| res | object | 请求链路 | Express 特有 |
-| socket | object | 请求链路 | WebSocket 场景特有 |
-
-```typescript
-@Provide()
-export class BaseService {
-
-  @Inject()
-  baseDir;
-  
-  @Inject()
-  appDir;
-
-  async getUser() {
-    console.log(this.baseDir);
-    console.log(this.appDir);
-  }
-}
-```
-
-
 
 ## 静态 API
 
@@ -804,50 +906,79 @@ export const getGlobalConfig = () => {
 
 
 
-## 面向接口编程
+## 对象生命周期
+
+在依赖注入容器创建和销毁实例的时候，我们可以使用装饰器做一些自定义的操作。
 
 
-Midway 也可以基于接口进行注入，但是由于 Typescirpt 编译后会移除接口类型，不如使用类作为定义好用。
 
-比如，我们定义一个接口，以及它的实现类。
-```typescript
-export interface IPay {
-	payMoney()
-}
+### 异步初始化
 
-@Provide('WeChatPay')
-export class WeChatPay implements IPay {
-	async payMoney() {
-  	// ...
-  }
-}
 
-@Provide('AlipayPay')
-export class AlipayPay implements IPay {
-	async payMoney() {
-  	// ...
-  }
-}
-```
-这个时候，如果有个服务需要注入，可以使用下面显式声明的方式。
+在某些情况下，我们需要一个实例在被其他依赖调用前需要初始化，如果这个初始化只是读取某个文件，那么可以写成同步方式，而如果这个初始化是从远端拿取数据或者连接某个服务，这个情况下，普通的同步代码就非常的难写。
+
+
+Midway 提供了异步初始化的能力，通过 `@Init` 标签来管理初始化方法。
+
+`@Init` 方法目前只能是一个。
+
+
 ```typescript
 @Provide()
-export class PaymentService {
-  
-  @Inject('AlipayPay')
-  payService: IPay;			// 注意，这里的类型是接口，编译后类型信息会被移除
+export class BaseService {
 
-  async orderGood {
-  	await this.payService.payMonety();
+  @Config('hello')
+  config;
+
+  @Init()
+  async init() {
+    await new Promise(resolve => {
+      setTimeout(() => {
+        this.config.c = 10;
+        resolve();
+      }, 100);
+    });
   }
-  
+
 }
 ```
-由于接口类型会被移除，Midway 只能通过 `@Inject` 装饰器的 **参数** 或者 **属性名** 类来匹配注入的对象信息，类似 Java Spring 中的 `Autowire by name` 。
 
-上述就是 **静态 **的面向接口注入的方式。
 
-如果需要动态，也和 [动态函数注入](动态函数注入) 描述的一致，注入方法来使用。
+等价于
+
+```typescript
+const service = new BaseService();
+await service.init();
+```
+
+:::info
+@Init 装饰器标记的方法，一定会以异步方式来调用。一般来说，异步初始化的服务较慢，请尽可能标注为单例（@Scope(ScopeEnum.Singleton))。
+:::
+
+
+
+### 异步销毁
+
+Midway 提供了在对象销毁前执行方法的能力，通过 `@Destroy` 装饰器来管理方法。
+
+`@Destroy` 方法目前只能是一个。
+
+
+```typescript
+@Provide()
+export class BaseService {
+
+  @Config('hello')
+  config;
+
+  @Destroy()
+  async stop() {
+    // do something
+  }
+}
+```
+
+
 
 
 
@@ -879,7 +1010,7 @@ export class UserService {
 
 
 
-## 关于继承
+### 关于继承
 
 
 为了避免属性错乱，请不要在基类上使用 `@Provide` 装饰器。

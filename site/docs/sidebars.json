@@ -42,6 +42,7 @@
         "aspect",
         "pipeline",
         "cookie_session",
+        "built_in_service",
         "router_table",
         "service_factory",
         "decorator_index"
@@ -71,7 +72,11 @@
         "extensions/validate",
         "extensions/swagger",
         "extensions/process_agent",
-        "extensions/task"
+        "extensions/task",
+        "extensions/orm",
+        "extensions/sequelize",
+        "extensions/redis",
+        "extensions/mongodb"
       ],
       "http": [
         "extensions/koa",
@@ -80,28 +85,49 @@
         "extensions/render",
         "extensions/upload",
         "extensions/passport"
-      ],
-      "微服务": [
+      ]
+    },
+    {
+      "type": "category",
+      "label": "微服务",
+      "collapsed": true,
+      "items": [
         "extensions/grpc",
         "extensions/consul"
-      ],
-      "Socket": [
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Socket",
+      "collapsed": true,
+      "items": [
         "extensions/socketio",
         "extensions/ws"
-      ],
-      "消息订阅": [
+      ]
+    },
+    {
+      "type": "category",
+      "label": "消息订阅",
+      "collapsed": true,
+      "items": [
         "extensions/rabbitmq"
-      ],
-      "数据服务": [
-        "extensions/orm",
-        "extensions/sequelize",
-        "extensions/redis",
-        "extensions/mongodb",
+      ]
+    },
+    {
+      "type": "category",
+      "label": "云服务",
+      "collapsed": true,
+      "items": [
         "extensions/oss",
         "extensions/cos",
         "extensions/tablestore"
-      ],
-      "运维": [
+      ]
+    },
+    {
+      "type": "category",
+      "label": "运维",
+      "collapsed": true,
+      "items": [
         "extensions/pm2",
         "extensions/cfork",
         "extensions/alinode",

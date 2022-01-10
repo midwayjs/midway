@@ -1,4 +1,4 @@
-# Swagger 组件
+# Swagger
 基于最新的 [OpenAPI 3.0.3](https://swagger.io/specification/) 实现了新版的 Swagger 组件。
 
 
