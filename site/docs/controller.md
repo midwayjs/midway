@@ -408,7 +408,7 @@ export class HomeController {
   }
 }
 ```
-::: info
+:::info
 响应类型装饰器不能在响应流关闭后（response.end之后）修改。
 :::
 ## 优先级
@@ -439,7 +439,7 @@ midway 已经统一对路由做排序，通配的路径将自动降低优先级�
 ```typescript
 @Controller('/api')
 export class APIController {
-	@Get('/invoke/*')
+  @Get('/invoke/*')
   async invokeAll() {
   }
 

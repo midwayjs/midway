@@ -53,11 +53,11 @@ $ npm run dev
 
 服务器部署后，只会加载构建后的 `dist` 目录，而本地开发则是加载 `src` 目录。
 
-|  | **本地** | **服务器** |
+|  | 本地 | 服务器 |
 | --- | --- | --- |
 | appDir | 项目根目录 | 项目根目录 |
 | baseDir | 项目根目录下的 src 目录 | 项目根目录下的 dist 目录 |
-|  |  |  |
+
 
 **3、环境的变化**
 
@@ -92,6 +92,7 @@ $ npm run dev
   },
 }
 ```
+
 :::info
 虽然不是必须，但是推荐大家先执行测试和 lint。
 :::
@@ -101,6 +102,7 @@ $ npm run dev
 
 
 下面的代码，是一个示例脚本，你可以保存为 `build.sh` 执行。
+
 ```bash
 ## 服务器构建（已经下载好代码）
 $ npm install                                       # 安装开发期依赖
@@ -111,6 +113,7 @@ $ npm prune --production												    # 移除开发依赖
 $ npm run build
 $ npm prune --production														# 移除开发依赖
 ```
+
 :::info
 一般安装依赖会指定 `NODE_ENV=production` 或 `npm install --production` ，在构建正式包的时候只安装 dependencies 的依赖。因为 devDependencies 中的模块过大而且在生产环境不会使用，安装后也可能遇到未知问题。
 :::
@@ -143,8 +146,7 @@ $ npm prune --production														# 移除开发依赖
 有很多种方式可以上传到服务器，比如常见的 `ssh/FTP/git` 等。也可以使用 [OSS](https://www.aliyun.com/product/oss) 等在线服务进行中转。
 
 
-### 启动方式一：使用纯 Node.js 或者 pm2 等工具启动
-
+### 使用纯 Node.js 或者 pm2 等工具启动
 
 Midway 构建出来的项目是单进程的，不管是采用 `fork` 模式还是 `cluster` 模式，单进程的代码总是很容易的兼容到不同的体系中，因此非常容易被社区现有的 pm2/forever 等工具所加载，
 
@@ -165,210 +167,33 @@ Midway 构建出来的项目是单进程的，不管是采用 `fork` 模式还�
 ```
 
 
-Midway 提供了一个简单方式以满足不同场景的启动方式，只需要安装我们提供的 `@midwayjs/bootstrap` 模块。
+Midway 提供了一个简单方式以满足不同场景的启动方式，只需要安装我们提供的 `@midwayjs/bootstrap` 模块（默认已自带）。
+
 ```bash
 $ npm install @midwayjs/bootstrap --save
 ```
+
 然后在入口文件中写入代码，注意，这里的代码使用的是 `JavaScript` 。
+
 ```javascript
-// 获取框架
-const WebFramework = require('@midwayjs/web').Framework;
-// 初始化 web 框架并传入启动参数
-const web = new WebFramework().configure({
-  port: 7001
-});
-
 const { Bootstrap } = require('@midwayjs/bootstrap');
-
-// 加载框架并执行
-Bootstrap
-  .load(web)
-  .run();
+Bootstrap.run();
 ```
-我们提供的每个上层框架都将会导出一个 `Framework` 类，而 `Bootstrap` 的作用则是加载这些框架，传入启动参数，运行他们。
 
-
-:::info
-启动参数，你可以在不同的框架处查询到。
-:::
-
+虽然启动文件的代码很简单，但是我们依旧需要这个文件，在后续的链路追踪等场景中需要用到。
 
 这个时候，你已经可以直接使用 `NODE_ENV=production node bootstrap.js` 来启动代码了，也可以使用 pm2 来执行启动。
-
 
 pm2 启动可以参考 [pm2 使用文档](pm2)。
 
 
-如果你希望把 `bootstrap.js` 文件放到不同的目录，比如 `bin/bootstrap.js` ，你可以修改 Bootstrap 的参数。
-
-
-```javascript
-// bin/bootstrap.js
-const { join } = require('path');
-
-// 获取框架
-const WebFramework = require('@midwayjs/web').Framework;
-// 初始化 web 框架并传入启动参数
-const web = new WebFramework().configure({
-  port: 7001
-});
-
-const { Bootstrap } = require('@midwayjs/bootstrap');
-
-// 加载框架并执行
-Bootstrap
-	.configure({
-		appDir: join(__dirname, '../')
-	})
-  .load(web)
-  .run();
-```
-
-
-
-
-
-
-### 启动方式二：EggJS 特有的启动形式
-
-
-由于 EggJS 提供了默认的多进程部署工具 `egg-scripts` ，Midway 也继续支持这种方式，如果上层是 EggJS，推荐这种部署方式。
-
-
-首先在依赖中，确保安装 `egg-scripts` 包和 `midway` 包。
-```bash
-$ npm i egg-scripts --save
-```
-添加 `npm scripts` 到 `package.json`：
-
-
-在上面的代码构建之后，使用我们的 `start` 和 `stop` 命令即可完成启动和停止。
-```json
-"scripts": {
-	"start": "egg-scripts start --daemon --title=********* --framework=@midwayjs/web",
-	"stop": "egg-scripts stop --title=*********",
-}
-```
-:::info
-`*********` 的地方是你的项目名。
-:::
-
-
-> 注意：`egg-scripts` 对 Windows 系统的支持有限，参见 [#22](https://github.com/eggjs/egg-scripts/pull/22)。
-
-####
-**启动参数**
-
-```bash
-$ egg-scripts start --port=7001 --daemon --title=egg-server-showcase
-```
-
-
-如上示例，支持以下参数：
-
-- `--port=7001` 端口号，默认会读取环境变量 process.env.PORT，如未传递将使用框架内置端口 7001。
-- `--daemon` 是否允许在后台模式，无需 nohup。若使用 Docker 建议直接前台运行。
-- `--env=prod` 框架运行环境，默认会读取环境变量 process.env.EGG_SERVER_ENV， 如未传递将使用框架内置环境 prod。
-- `--workers=2` 框架 worker 线程数，默认会创建和 CPU 核数相当的 app worker 数，可以充分的利用 CPU 资源。
-- `--title=egg-server-showcase` 用于方便 ps 进程时 grep 用，默认为 egg-server-${appname}。
-- `--framework=yadan` 如果应用使用了[自定义框架](https://eggjs.org/zh-cn/advanced/framework.html)，可以配置 package.json 的 egg.framework 或指定该参数。
-- `--ignore-stderr` 忽略启动期的报错。
-- `--https.key` 指定 HTTPS 所需密钥文件的完整路径。
-- `--https.cert` 指定 HTTPS 所需证书文件的完整路径。
-- 所有 [egg-cluster](https://github.com/eggjs/egg-cluster) 的 Options 都支持透传，如 --port 等。
-
-
-
-更多参数可查看 [egg-scripts](https://github.com/eggjs/egg-scripts) 和 [egg-cluster](https://github.com/eggjs/egg-cluster) 文档。
-
-
-:::info
-使用 egg-scripts 部署的日志会存放在 **用户目录 **下**，**比如 `/home/xxxx/logs` 。
-:::
-
-
-## 部署为 Serverless 应用
-
-
-Midway 可以将现有的 Web 项目部署为 Serverless 应用，这里以部署到阿里云函数计算作为示例。
-
-
-### 部署到 Serverless 环境
-
-
-1、添加 `f.yml` 文件到你的项目根目录。
-```
-➜  my_midway_app tree
-.
-├── src
-├── dist
-├── f.yml  								# Midway Serverless 部署配置文件
-├── package.json
-└── tsconfig.json
-```
-```yaml
-service: my-midway-app  ## 应用发布到云平台的名字，一般指应用名
-
-provider:
-  name: aliyun        ## 发布的云平台，aliyun，tencent 等
-
-deployType: egg       ## 部署的应用类型
-```
-应用类型选项如下：
-
-|  |  |  |
-| --- | --- | --- |
-| @midwayjs/web 项目 | egg |  |
-| @midwayjs/experss 项目 | express |  |
-| @midwayjs/koa 项目 | koa |  |
-
-2、添加发布时的构建钩子
-
-
-在 `package.json` 加入下面的这段，用于在发布时自动执行 `npm run build` 。
-```json
-  "midway-integration": {
-    "lifecycle": {
-      "before:package:cleanup": "npm run build"
-    }
-  },
-	"scripts": {
-  	"deploy": "midway-bin deploy"
-  },
-  "egg":{
-    "framework": "@midwayjs/web"
-  }
-```
-:::info
-如果使用了自己的 egg 上层框架，这里的 egg.framework 可以变为自己的包名。
-:::
-
-3、执行 `npm run deploy` 即可，发布后，阿里云会输出一个临时可用的域名，打开浏览器访问即可。
-![image.png](https://img.alicdn.com/imgextra/i2/O1CN01OUELkl24p74BjScrn_!!6000000007439-2-tps-1219-193.png)
-如需更详细的发布文档，请查阅 [**Serverless 发布 FAQ**](https://www.yuque.com/midwayjs/faas/deploy_aliyun_faq)。
-
-
-### 部署到 Serverless 平台的限制
-
-
-- 1、不支持 egg-socketio 等网关**不支持的协议**
-- 2、不支持 **文件上传 **等网关无法支持的能力
-- 3、不支持 **定时任务**（可以使用组合 Timer 触发器的方式）
-- 3、还有一些，请参考 [**应用迁移 faq**](https://www.yuque.com/midwayjs/faas/migrate_faq)
-
-
-
-如需发布到腾讯云环境，请查看 [**发布到腾讯云**](deploy_to_tencent)。
-
-
-另外这里还有一些 [**常见问题**](deploy_aliyun_faq)，请查阅。
-
-
 ## 使用 Docker 部署
+
 ### 编写 Dockerfile，构建镜像
 
 
-步骤一：在当前目录下新增Dockerfile:
+步骤一：在当前目录下新增Dockerfile
+
 ```dockerfile
 FROM node:12
 
@@ -393,37 +218,38 @@ CMD ["npm", "run", "online"]
 步骤二: 新增 `.dockerignore` 文件（类似 git 的 ignore 文件），可以把 `.gitignore`  的内容拷贝到 `.dockerignore` 里面
 
 
-步骤三：package.json 文件的 scripts 里面新增 online，对比 start，把 `--daemon` 去掉。如下图
-![image.png](https://cdn.nlark.com/yuque/0/2020/png/187105/1608881958246-5b5da75e-2f60-4582-81b8-1b0645c91bd7.png#height=39&id=SeRTA&margin=%5Bobject%20Object%5D&name=image.png&originHeight=55&originWidth=904&originalType=binary&ratio=1&size=92433&status=done&style=none&width=634)
+步骤三：当使用 pm2 部署时，请将命令修改为 `pm2-runtime start` ，pm2 行为请参考 [pm2 容器部署说明](https://www.npmjs.com/package/pm2#container-support)。
 
 
-这里使用的是 egg-scripts 部署，当使用 pm2 部署时，请将命令修改为 `pm2-runtime start` ，pm2 行为请参考 [pm2 容器部署说明](https://www.npmjs.com/package/pm2#container-support)。
+步骤四：构建 docker 镜像
 
-
-步骤四：构建docker镜像
 ```bash
 $ docker build -t helloworld .
 ```
 
+步骤五：运行 docker 镜像
 
-步骤五：运行docker镜像
 ```bash
 $ docker run -itd -P helloworld
 ```
+
 运行效果如下：
 ![image.png](https://cdn.nlark.com/yuque/0/2020/png/187105/1608882492099-49160b6a-601c-4f08-ba65-b95a1335aedf.png#height=33&id=BtUCB&margin=%5Bobject%20Object%5D&name=image.png&originHeight=45&originWidth=1024&originalType=binary&ratio=1&size=33790&status=done&style=none&width=746)
+
 然后大写的 `-P` 由于给我们默认分配了一个端口，所以我们访问可以访问 `32791`  端口（这个 `-P` 是随机分配，我们也可以使用 `-p 7001:7001` 指定特定端口）
+
 ![image.png](https://cdn.nlark.com/yuque/0/2020/png/187105/1608882559686-031bcf0d-2185-42cd-a838-80f008777395.png#height=94&id=dfag9&margin=%5Bobject%20Object%5D&name=image.png&originHeight=188&originWidth=578&originalType=binary&ratio=1&size=24488&status=done&style=none&width=289)
+
 关于别的推送到 dockerhub 或者 docker 的 registry，可以大家搜索对应的方法。
 
 
 **优化**
+
 我们看到前面我们打出来的镜像有1个多G，可优化的地方：
-1、我们可以采用更精简的docker image 的基础镜像：例如node:12-alpine，
-2、其中的源码最终也打在了镜像中，其实这块我们可以不需要。
+- 1、我们可以采用更精简的 docker image 的基础镜像：例如 node:12-alpine，
+- 2、其中的源码最终也打在了镜像中，其实这块我们可以不需要。
 
-
-然后我们同时结合docker的multistage功能，这个功能请注意要在Docker 17.05版本之后才能使用。
+我们可以同时结合 docker 的 multistage 功能来做一些优化，这个功能请注意要在 `Docker 17.05` 版本之后才能使用。
 
 
 ```dockerfile
@@ -455,25 +281,23 @@ RUN npm install --production
 EXPOSE 7001
 
 CMD ["npm", "run", "start"]
-
 ```
-然后我们看到结果只有207MB。相比原有的1.26G省了很多的空间。
-### 结合 Docker-Compose 运行
 
+当前示例的结果只有 `207MB`。相比原有的 `1.26G` 省了很多的空间。
+
+### 结合 Docker-Compose 运行
 
 在 docker 部署的基础上，还可以结合 docker-compose 部署一些跟自己服务相关的服务。
 
 
 **步骤一**
-****
 
 按照 Docker 方式部署的方式新增 dockerfile
 
 
 **步骤二**
-****
 
-新增docker-compose.yml文件，内容如下：（此处我们模拟我们的midway项目需要使用redis）
+新增 `docker-compose.yml` 文件，内容如下：（此处我们模拟我们的 midway 项目需要使用redis）
 
 ```yaml
 version: "3"
@@ -492,12 +316,11 @@ services:
 
 **步骤三：构建**
 
-
 使用命令：
+
 ```bash
 $ docker-compose build
 ```
-
 
 **步骤四：运行**
 
@@ -563,8 +386,7 @@ export class HomeController {
 }
 ```
 
-这个代码比较好理解，相当于访问 `127.0.0.1:7001/update` 接口，会去调用 redisService 新增一个 key，对应的 value 为 hello world
-
+这个代码比较好理解，相当于访问 `127.0.0.1:7001/update` 接口，会去调用 redisService 新增一个 key，对应的 value 为 hello world。
 
 然后访问 `127.0.0.1:7001`  ，会调用redisService获取key为foo的值，并返回给页面。
 
