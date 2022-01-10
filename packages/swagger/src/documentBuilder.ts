@@ -6,6 +6,7 @@ import {
   ServerVariableObject,
   PathItemObject,
   SchemaObject,
+  TagObject,
 } from './interfaces';
 
 export class DocumentBuilder {
@@ -97,7 +98,10 @@ export class DocumentBuilder {
   }
 
   public getSchema(name: string): SchemaObject {
-    return this.document.components.schemas[name] as SchemaObject;
+    if (this.document.components?.schemas) {
+      return this.document.components?.schemas[name] as SchemaObject;
+    }
+    return undefined;
   }
 
   public addTag(
@@ -237,6 +241,25 @@ export class DocumentBuilder {
       ...options,
     });
     return this;
+  }
+
+  public sortTags(): void {
+    const tags = this.document.tags;
+    this.document.tags = tags.sort((a: TagObject, b: TagObject): number => {
+      const s1 = a.name;
+      const s2 = b.name;
+      
+      const len = s1.length > s2.length ? s2.length : s1.length;
+      for (let i = 0; i < len; i++) {
+        if (s1.charCodeAt(i) > s2.charCodeAt(i)) {
+          return 1;
+        } else if (s1.charCodeAt(i) < s2.charCodeAt(i)) {
+          return -1;
+        }
+      }
+
+      return 0;
+    });
   }
 
   public build(): Omit<OpenAPIObject, 'paths'> {

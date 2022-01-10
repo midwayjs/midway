@@ -392,4 +392,9 @@ export interface SwaggerOptions {
    * 访问 swagger ui 的路径
    */
   swaggerPath?: string;
+  /**
+   * 对路由 tag 进行 ascii 排序
+   * 可以使用 1-xxx、2-xxx、3-xxx 来定义 tag
+   */
+  tagSortable?: boolean;
 }

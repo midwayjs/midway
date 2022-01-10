@@ -18,8 +18,8 @@ import { CatsService } from './cats.service';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { Cat } from './entities/cat.entity';
 
-@ApiTags('2-国家测试')
-@Controller('/cats')
+@ApiTags('1-你好这里')
+@Controller('/ctest')
 @ApiHeader({
   name: 'x-test-one',
 })

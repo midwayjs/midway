@@ -38,7 +38,7 @@ describe('/test/index.test.ts', () => {
       const body = result.body;
       // console.log('--->', result.text);
 
-      expect(body.tags).toStrictEqual([{"name":"cats1","description":""}]);
+      expect(body.tags).toStrictEqual([{"name":"1-你好这里","description":""},{"name":"2-国家测试","description":""}]);
       expect(body.components.securitySchemes).toStrictEqual({"bbb":{"type":"http","scheme":"basic"},"ttt":{"type":"http","scheme":"bearer","bearerFormat":"JWT"}})
     });
   });

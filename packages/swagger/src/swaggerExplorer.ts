@@ -105,6 +105,10 @@ export class SwaggerExplorer {
     for (const route of routes) {
       this.generatePath(route);
     }
+
+    if (this.swaggerConfig?.tagSortable) {
+      this.documentBuilder.sortTags();
+    }
   }
 
   public getData() {
@@ -149,11 +153,12 @@ export class SwaggerExplorer {
         tag.description =
           controllerOption?.routerOptions.description || tag.name;
       } else {
-        tag.name = controllerOption?.routerOptions.tagName || 'default';
+        tag.name = controllerOption?.routerOptions.tagName;
         tag.description =
           controllerOption?.routerOptions.description || tag.name;
       }
       if (tag.name) {
+        strTags.push(tag.name);
         this.documentBuilder.addTag(tag.name, tag.description);
       }
     }
@@ -541,6 +546,10 @@ export class SwaggerExplorer {
    * @param clzz
    */
   private parseClzz(clzz: Type) {
+    if (this.documentBuilder.getSchema(clzz.name)) {
+      return;
+    }
+
     const props = getClassMetadata(INJECT_CUSTOM_PROPERTY, clzz);
 
     const tt: any = {
@@ -768,6 +777,6 @@ function convertSchemaType(value) {
     case 'String':
       return 'string';
     default:
-      return 'object';
+      return value;
   }
 }
