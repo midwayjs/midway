@@ -7,7 +7,8 @@ import * as swagger from '../../../../src';
     default: {
       keys: '12345',
       swagger: {
-        auth: [{authType: 'basic', name: 'bbb'}, {authType: 'bearer', name: 'ttt'}]
+        auth: [{authType: 'basic', name: 'bbb'}, {authType: 'bearer', name: 'ttt'}],
+        tagSortable: true,
       },
     }
   }],
