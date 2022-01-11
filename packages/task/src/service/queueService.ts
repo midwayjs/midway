@@ -9,7 +9,7 @@ export class QueueService {
   @Inject('queueTaskMap')
   queueTaskMap;
 
-  @Inject("localTaskMap")
+  @Inject('localTaskMap')
   localTaskMap;
 
   /**
@@ -32,7 +32,7 @@ export class QueueService {
     return this.queueTaskMap[`${queueClass}:${queueName}`] as Queue;
   }
 
-  getLocalTask(queueClass: string, queueName: string): Function{
-    return this.localTaskMap[`${queueClass}:${queueName}`] as Function;
+  getLocalTask(queueClass: string, queueName: string): any {
+    return this.localTaskMap[`${queueClass}:${queueName}`] as any;
   }
 }

@@ -7,7 +7,7 @@ import {
   listModule,
 } from '@midwayjs/decorator';
 import { join } from 'path';
-import { IMidwayApplication, IMidwayContainer } from '@midwayjs/core';
+import { IMidwayContainer } from '@midwayjs/core';
 import {
   MODULE_TASK_KEY,
   MODULE_TASK_METADATA,
@@ -52,10 +52,7 @@ export class AutoConfiguration {
   queueList: any[] = [];
   jobList: any[] = [];
 
-  async onReady(
-    container: IMidwayContainer,
-    _: IMidwayApplication
-  ): Promise<void> {
+  async onReady(container: IMidwayContainer): Promise<void> {
     this.createLogger();
     await this.loadTask(container);
     await this.loadLocalTask(container);
@@ -161,7 +158,7 @@ export class AutoConfiguration {
             logger.error(`${e.stack}`);
           }
           logger.info('local task end.');
-        }
+        };
         const job = new CronJob(
           rule.options,
           triggerFunction,
