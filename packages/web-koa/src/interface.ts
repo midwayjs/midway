@@ -10,7 +10,7 @@ export type IMidwayKoaApplication = IMidwayApplication<IMidwayKoaContext, koa<De
     routeArgsInfo?: RouterParamValue[],
     routerResponseData?: any []
   ): Middleware<DefaultState, IMidwayKoaContext>;
-  generateMiddleware(middlewareId: string): Promise<Middleware<DefaultState, IMidwayKoaContext>>;
+  generateMiddleware(middlewareId: any): Promise<Middleware<DefaultState, IMidwayKoaContext>>;
 }>;
 
 export type IMidwayKoaNext = Next;

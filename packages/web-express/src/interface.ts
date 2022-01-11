@@ -24,7 +24,7 @@ export type IMidwayExpressApplication = IMidwayApplication<IMidwayExpressContext
     routeArgsInfo?: RouterParamValue[],
     routerResponseData?: any []
   ): Middleware;
-  generateMiddleware(middlewareId: string): Promise<Middleware>;
+  generateMiddleware(middlewareId: any): Promise<Middleware>;
 }>;
 
 export interface IMidwayExpressConfigurationOptions extends IConfigurationOptions {

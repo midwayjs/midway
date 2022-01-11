@@ -15,7 +15,7 @@ export interface IMidwayWebBaseApplication {
   getLogger(name?: string): EggLogger & ILogger;
   getCoreLogger(): EggLogger & ILogger;
   generateController?(controllerMapping: string);
-  generateMiddleware?(middlewareId: string): Promise<Middleware<DefaultState, IMidwayKoaContext>>;
+  generateMiddleware?(middlewareId: any): Promise<Middleware<DefaultState, IMidwayKoaContext>>;
   createLogger(name: string, options: LoggerOptions): EggLogger & ILogger;
 }
 

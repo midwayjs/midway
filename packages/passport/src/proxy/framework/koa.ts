@@ -44,6 +44,10 @@ function initialize(passport) {
     const login = req.login;
     ctx.login = ctx.logIn = function (user, options) {
       return new Promise<void>((resolve, reject) => {
+        // fix session manager missing
+        if (!req._sessionManager) {
+          req._sessionManager = passport._sm;
+        }
         login.call(req, user, options, err => {
           if (err) reject(err);
           else resolve();

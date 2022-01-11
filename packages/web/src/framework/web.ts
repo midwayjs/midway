@@ -48,7 +48,7 @@ export class MidwayWebFramework extends MidwayKoaBaseFramework<
           return this.generateController(controllerMapping);
         },
 
-        generateMiddleware: async (middlewareId: string) => {
+        generateMiddleware: async (middlewareId: any) => {
           return this.generateMiddleware(middlewareId);
         },
 

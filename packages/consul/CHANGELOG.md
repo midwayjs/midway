@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.14.2](https://github.com/midwayjs/midway/compare/v2.14.1...v2.14.2) (2021-12-28)
+
+**Note:** Version bump only for package @midwayjs/consul
+
+
+
+
+
 # [2.14.0](https://github.com/midwayjs/midway/compare/v2.13.5...v2.14.0) (2021-12-06)
 
 
