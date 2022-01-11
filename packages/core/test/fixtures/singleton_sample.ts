@@ -30,7 +30,7 @@ export class HelloErrorSingleton {
   @Init()
   async doinit(): Promise<true> {
     this.ts = Date.now();
-    return new Promise(resolve => {
+    return new Promise<any>(resolve => {
       this.end = Date.now();
       setTimeout(resolve, 600);
     });
