@@ -6,7 +6,7 @@ import {
   ControllerOption,
   getClassMetadata,
   getMethodParamTypes,
-  TYPES,
+  Types,
   RouteParamTypes,
   RouterOption,
   WEB_ROUTER_KEY,
@@ -303,7 +303,7 @@ export class SwaggerExplorer {
         }
       }
 
-      if (TYPES.isClass(currentType)) {
+      if (Types.isClass(currentType)) {
         this.parseClzz(currentType);
 
         p.schema = {
@@ -412,7 +412,7 @@ export class SwaggerExplorer {
         // 这里是引用，赋值可以直接更改
         const tt = resp[k];
         if (tt.type) {
-          if (TYPES.isClass(tt.type)) {
+          if (Types.isClass(tt.type)) {
             this.parseClzz(tt.type);
 
             if (tt.isArray) {
@@ -510,7 +510,7 @@ export class SwaggerExplorer {
           p.schema = param.schema;
         } else {
           if (param.type) {
-            if (TYPES.isClass(param.type)) {
+            if (Types.isClass(param.type)) {
               this.parseClzz(param.type);
 
               p.schema = {
@@ -613,7 +613,7 @@ export class SwaggerExplorer {
           delete metadata.items;
         }
 
-        if (TYPES.isClass(currentType)) {
+        if (Types.isClass(currentType)) {
           this.parseClzz(currentType);
 
           if (isArray) {

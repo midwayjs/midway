@@ -1,20 +1,20 @@
-import { TYPES, sleep } from '../../src';
+import { Types, sleep } from '../../src';
 
 describe('/test/util/index.test.ts', () => {
   it('should test util method', async () => {
-    expect(TYPES.isAsyncFunction(async () => {})).toBeTruthy();
-    expect(TYPES.isClass(class A {})).toBeTruthy();
-    expect(TYPES.isFunction(() => {})).toBeTruthy();
-    expect(TYPES.isGeneratorFunction(function* () {})).toBeTruthy();
-    expect(TYPES.isMap(new Map())).toBeTruthy();
-    expect(TYPES.isPromise(new Promise(() => {}))).toBeTruthy();
+    expect(Types.isAsyncFunction(async () => {})).toBeTruthy();
+    expect(Types.isClass(class A {})).toBeTruthy();
+    expect(Types.isFunction(() => {})).toBeTruthy();
+    expect(Types.isGeneratorFunction(function* () {})).toBeTruthy();
+    expect(Types.isMap(new Map())).toBeTruthy();
+    expect(Types.isPromise(new Promise(() => {}))).toBeTruthy();
 
-    expect(TYPES.isObject({})).toBeTruthy();
+    expect(Types.isObject({})).toBeTruthy();
 
-    expect(TYPES.isNumber(2)).toBeTruthy();
-    expect(TYPES.isSet(new Set())).toBeTruthy();
-    expect(TYPES.isRegExp(/^a/)).toBeTruthy();
-    expect(TYPES.isProxy(new Proxy({}, {}))).toBeTruthy();
+    expect(Types.isNumber(2)).toBeTruthy();
+    expect(Types.isSet(new Set())).toBeTruthy();
+    expect(Types.isRegExp(/^a/)).toBeTruthy();
+    expect(Types.isProxy(new Proxy({}, {}))).toBeTruthy();
     const startTime = Date.now();
     await sleep(500);
     // 这里设置 490 是因为毫秒数有一定的偏差

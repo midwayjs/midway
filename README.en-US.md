@@ -117,12 +117,14 @@ Please make sure to read the [Issue Reporting Checklist](CONTRIBUTING.md#reporti
 
 ## Contributors
 
+<a href="https://github.com/midwayjs/midway/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=midwayjs/midway" />
+</a>
+
+
 Please let us know how can we help. Do check out [issues](http://github.com/midwayjs/midway/issues) for bug reports or suggestions first.
 
 To become a contributor, please follow our contributing guide.
-
-This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
-<a href="https://github.com/midwayjs/midway/graphs/contributors"><img src="https://opencollective.com/midway/contributors.svg?width=890&button=false" /></a>
 
 ## License
 
