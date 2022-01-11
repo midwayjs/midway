@@ -73,37 +73,37 @@ function Component(props: ComponentProps) {
 const components = [
   {
     title: 'ORM',
-    link: '/docs/orm',
+    link: '/docs/extensions/orm',
     description: 'TypeORM-based database SDK',
     icon: 'icon-database_plus_fill',
   },
   {
     title: 'Redis',
-    link: '/docs/redis',
+    link: '/docs/extensions/redis',
     description: 'In-memory database for midway.js',
     icon: 'icon-redis',
   },
   {
     title: 'Swagger',
-    link: '/docs/swagger',
+    link: '/docs/extensions/swagger',
     description: 'Generate API documentation',
     icon: 'icon-swagger',
   },
   {
     title: 'Mongodb',
-    link: '/docs/mongo',
+    link: '/docs/extensions/mongo',
     description: 'NoSQL Database',
     icon: 'icon-MongoDB',
   },
   {
     title: 'Cache',
-    link: '/docs/cache',
+    link: '/docs/extensions/cache',
     description: 'Memory cache support',
     icon: 'icon-memcacheyunshujukuMemcac',
   },
   {
     title: 'OSS',
-    link: '/docs/oss',
+    link: '/docs/extensions/oss',
     description: 'Aliyun OSS Support',
     icon: 'icon-ossduixiangcunchuOSS',
   },
