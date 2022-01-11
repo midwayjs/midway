@@ -160,6 +160,9 @@ function PreviewContainer(props: PreviewContainerProps) {
   const [index, setIndex] = React.useState(0);
 
   const handleChange = (key: string) => {
+    if (!key) {
+      return
+    }
     setIndex(Number(key));
     props.demo.files = { ...props.demo.files };
   };
