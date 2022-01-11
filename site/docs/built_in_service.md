@@ -1,94 +1,51 @@
-# 内置对象
+# 内置服务
 
 在 Midway 中，提供了众多的内置对象，方便用户使用。
 
 在本章节，我们会介绍和框架相关联的的 Application，Context 对象，Midway 默认容器上的一些服务对象，这些对象在整个业务的开发中都会经常遇到。
 
-Midway 的应用会同时对外暴露不同协议，比如 Http，WebSocket 等等，这里每个协议对 Midway 来说都是由独立的组件提供的。
-
-比如我们前面示例中的 `@midwayjs/koa` ，就是一个提供 Http 服务的组件，下面我们将以这个组件为例，来介绍内置对象。
-
-
-
-
-## Application
-
-Application 是某一个组件中的应用对象，在不同的组件中，可能有着不同的实现。Application 对象上会包含一些统一的方法，这些方法统一来自于 `IMidwayApplication` 定义。
-
-```typescript
-import { Application, Context } from '@midwayjs/koa';
-```
-
-
-
-### 获取方式
-
-在所有被依赖注入容器管理的类中，都可以使用 `@App()` 装饰器来获取当前最主要的 Application。
-
-比如：
-
-```typescript
-import { App, Controller, Get } from '@midwayjs/decorator';
-import { Application } from '@midwayjs/koa';
-
-@Controller('/')
-export class HomeController {
-
-  @App()
-  app: Application;
-
-  @Get('/')
-  async home() {
-    // this.app.getConfig()
-    // this.app.getEnv()
-  }
-}
-```
-
-
-
-## Context
-
-Context 是一个**请求级别的对象**，在每一次收到用户请求时，框架会实例化一个 Context 对象，
-
-在 Http 场景中，这个对象封装了这次用户请求的信息，或者其他获取请求参数，设置响应信息的方法。
-
-
-
-### 获取方式
-
-
-在 **默认的请求作用域 **中，也就是说在 控制器（Controller）或者普通的服务（Service）中，我们可以使用 `@Inject` 来注入对应的实例。
-
-
-比如可以这样获取到对应的 ctx 实例。
-
-```typescript
-import { Inject, Controller, Get } from '@midwayjs/decorator';
-import { Context } from '@midwayjs/koa';
-
-@Controller('/')
-export class HomeController {
-
-  @Inject()
-  ctx: Context;
-
-  @Get('/')
-  async home() {
-    // this.ctx.query
-  }
-}
-```
-
-
-
-## 容器内置服务
-
 以下是一些 Midway 依赖注入容器内置的服务，这些服务由依赖注入容器初始化，在业务中全局可用。
 
 
 
-### MidwayInformationService
+## MidwayApplicationManager
+
+Midway 内置的应用管理器，可以使用它获取到所有的 Application。
+
+可以通过注入获取，比如对不同的 Application 添加同一个中间件。
+
+```typescript
+import { Configuration } from '@midawyjs/decorator';
+import { CustomMiddleware } from './middleware/custom.middleware';
+
+@Configuration({
+  // ...
+})
+export class AutoConfiguration {
+  @Inject()
+  applicationManager: MidwayApplicationManager;
+
+  async onReady() {
+    this.applicationManager
+      .getApplications(['koa', 'faas', 'express', 'egg'])
+      .forEach(app => {
+        app.useMiddleware(CustomMiddleware);
+      });
+  }
+}
+
+```
+
+| API                                  | 返回类型             | 描述                                                   |
+| ------------------------------------ | -------------------- | ------------------------------------------------------ |
+| getFramework(namespace: string)      | IMidwayFramework     | 返回参数指定的 framework                               |
+| getApplication(namespace: string)    | IMidwayApplication   | 返回参数指定的 Application                             |
+| getApplications(namespace: string[]) | IMidwayApplication[] | 返回参数指定的多个 Application                         |
+| getWebLikeApplication()              | IMidwayApplication[] | 返回类似 Web 场景的 Application（express/koa/egg/faas) |
+
+
+
+## MidwayInformationService
 
 Midway 内置的信息服务，提供基础的项目数据。
 
@@ -123,7 +80,7 @@ export class HomeController {
 
 
 
-### MidwayEnvironmentService
+## MidwayEnvironmentService
 
 Midway 内置的环境服务，提供环境设置和判断。
 
@@ -156,7 +113,7 @@ export class HomeController {
 
 
 
-### MidwayConfigService
+## MidwayConfigService
 
 Midway 内置的多环境配置服务，提供配置的加载，获取，它也是 `@Config` 装饰器的数据源。
 
@@ -189,7 +146,7 @@ export class HomeController {
 
 
 
-### MidwayLoggerService
+## MidwayLoggerService
 
 Midway 内置的日志服务，提供日志创建，获取等 API，它也是 `@Logger` 装饰器的数据源。
 
@@ -221,7 +178,7 @@ export class HomeController {
 
 
 
-### MidwayFrameworkService
+## MidwayFrameworkService
 
 Midway 内置的自定义框架服务，配合组件中自定义的 `@Framework` 标记的 Class，提供不同协议的对外服务。
 
@@ -254,7 +211,7 @@ export class HomeController {
 
 
 
-### MidwayMiddlewareService
+## MidwayMiddlewareService
 
 Midway 内置的中间件处理服务，用于自建中间件的处理。
 
@@ -287,7 +244,7 @@ API 如下：
 
 
 
-### MidwayDecoratorService
+## MidwayDecoratorService
 
 Midway 内置的自定义装饰器服务，用于实现框架层面的自定义装饰器。
 
@@ -322,7 +279,7 @@ API 如下：
 
 
 
-### MidwayAspectService
+## MidwayAspectService
 
 Midway 内置的拦截器服务，用于加载 `@Aspect` 相关的能力，自定义装饰器也使用了该服务。
 
@@ -354,7 +311,7 @@ API 如下：
 
 
 
-### MidwayLifeCycleService
+## MidwayLifeCycleService
 
 Midway 内置的生命周期运行服务，用于运行 `configuration` 中的生命周期。
 

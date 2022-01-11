@@ -23,14 +23,14 @@ import {
   MS_GRPC_METHOD_KEY,
   MS_PROVIDER_KEY,
   MSProviderType,
+  pascalCase,
+  camelCase,
 } from '@midwayjs/decorator';
 import {
   Context,
   IMidwayGRPCApplication,
   IMidwayGRPFrameworkOptions,
 } from '../interface';
-import { pascalCase } from 'pascal-case';
-import * as camelCase from 'camelcase';
 import { loadProto } from '../util';
 import { PackageDefinition } from '@grpc/proto-loader';
 

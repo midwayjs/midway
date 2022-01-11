@@ -1,4 +1,4 @@
-# 文件上传（Upload）
+# 文件上传
 
 适用于 `@midwayjs/faas` 、`@midwayjs/web` 、`@midwayjs/koa` 和 `@midwayjs/express` 多种框架的通用上传组件，支持 `file` (服务器临时文件)、`stream` （流）多种模式。
 

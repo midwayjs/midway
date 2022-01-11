@@ -16,13 +16,8 @@ import {
   TAGGED_CLS,
 } from './constant';
 
-import {
-  isNullOrUndefined,
-  isClass,
-  generateRandomId,
-  classNamed,
-  merge,
-} from './util';
+import { isNullOrUndefined, isClass, generateRandomId, merge } from './util';
+import { camelCase } from './util/camelCase';
 
 const debug = require('util').debuglog('midway:decorator');
 
@@ -843,7 +838,7 @@ export function saveProviderId(identifier: ObjectIdentifier, target: any) {
         id: identifier,
         originName: target.name,
         uuid,
-        name: classNamed(target.name),
+        name: camelCase(target.name),
       },
       target
     );

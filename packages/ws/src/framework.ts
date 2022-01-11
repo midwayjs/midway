@@ -15,7 +15,7 @@ import {
 } from './interface';
 import * as WebSocket from 'ws';
 import {
-  isObject,
+  TYPES,
   WS_CONTROLLER_KEY,
   WS_EVENT_KEY,
   WSEventInfo,
@@ -248,5 +248,5 @@ export class MidwayWSFramework extends BaseFramework<
 }
 
 function formatResult(result) {
-  return isObject(result) ? JSON.stringify(result) : result;
+  return TYPES.isObject(result) ? JSON.stringify(result) : result;
 }

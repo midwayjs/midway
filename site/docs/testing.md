@@ -6,6 +6,7 @@
 所以，应用的 Controller、Service 等代码，都必须有对应的单元测试保证代码质量。 当然，框架和组件的每个功能改动和重构都需要有相应的单元测试，并且要求尽量做到修改的代码能被 100% 覆盖到。
 
 
+
 ## 测试目录结构
 
 
@@ -22,10 +23,11 @@
 ├── src
 ├── test
 │   └── controller
-│       └── home.test.ts
+│       └── home.controller.test.ts
 ├── package.json  
 └── tsconfig.json
 ```
+
 
 
 ## 测试运行工具
@@ -54,8 +56,8 @@ Midway 默认提供 `midway-bin` 命令来运行测试脚本。在新版本中�
 > midway-bin test
 
 Testing all *.test.ts...
- PASS  test/controller/home.test.ts
- PASS  test/controller/api.test.ts
+ PASS  test/controller/home.controller.test.ts
+ PASS  test/controller/api.controller.test.ts
 
 Test Suites: 2 passed, 2 total
 Tests:       2 passed, 2 total
@@ -63,6 +65,7 @@ Snapshots:   0 total
 Time:        3.26 s
 Ran all test suites matching /\/test\/[^.]*\.test\.ts$/i.
 ```
+
 
 
 ## 断言库
@@ -84,6 +87,9 @@ expect(['lime', 'apple']).toContain('lime');	// 判断是否在数组中
 
 
 更多断言方法，请参考文档 [https://jestjs.io/docs/en/expect](https://jestjs.io/docs/en/expect)
+
+
+
 ## 创建测试
 
 
@@ -116,6 +122,7 @@ await close(app);
 事实上， `createApp` 方法中都是封装了 `@midwayjs/bootstrap` ，有兴趣的小伙伴可以阅读源码。
 
 
+
 ## 测试 HTTP 服务
 
 
@@ -136,8 +143,7 @@ expect(result.text).toBe('Hello Midwayjs!');
 推荐在一个测试文件中复用 app 实例。完整的测试示例如下。
 ```typescript
 import { createApp, close, createHttpRequest } from '@midwayjs/mock';
-import { Framework } from '@midwayjs/web';
-import { Application } from 'egg';			// 从特定的框架获取 App 定义
+import { Framework, Application } from '@midwayjs/koa';
 import * as assert from 'assert';
 
 describe('test/controller/home.test.ts', () => {
@@ -145,17 +151,15 @@ describe('test/controller/home.test.ts', () => {
   let app: Application;
   
   beforeAll(async () => {
-  	// 只创建一次 app，可以复用
+    // 只创建一次 app，可以复用
     try {
       // 由于Jest在BeforeAll阶段的error会忽略，所以需要包一层catch
-    	// refs: https://github.com/facebook/jest/issues/8688
-
-    	app = await createApp<Framework>();
+      // refs: https://github.com/facebook/jest/issues/8688
+      app = await createApp<Framework>();
     } catch(err) {
     	console.error('test beforeAll error', err);
       throw err;
     }
-    
   });
   
   afterAll(async () => {
@@ -166,8 +170,8 @@ describe('test/controller/home.test.ts', () => {
   it('should GET /', async () => {
     // make request
     const result = await createHttpRequest(app)
-    	.get('/')
-    	.set('x-timeout', '5000');
+      .get('/')
+      .set('x-timeout', '5000');
 
     // use expect by jest
     expect(result.status).toBe(200);
@@ -207,15 +211,15 @@ const result = await createHttpRequest(app)
 创建 post 请求，传递 body 参数。
 ```typescript
 const result = await createHttpRequest(app)
-	.post('/user/catchThrowWithValidate')
-	.send({id: '1'});
+  .post('/user/catchThrowWithValidate')
+  .send({id: '1'});
 ```
 
 
 创建 post 请求，传递 form body 参数。
 ```typescript
 const result = await createHttpRequest(app)
-	.post('/param/body')
+  .post('/param/body')
   .type('form')
   .send({id: '1'})
 ```
@@ -239,7 +243,7 @@ const cookie = [
 
 const result = await createHttpRequest(app)
   .get('/set_header')
-	.set('Cookie', cookie)
+  .set('Cookie', cookie)
   .query({ name: 'harry' });
 ```
 
@@ -324,8 +328,8 @@ describe('test/controller/home.test.ts', () => {
 ```
 
 
-## createApp 选项参数
 
+## createApp 选项参数
 
 `createApp` 方法用于创建一个框架的 app 实例，通过传入泛型的框架类型，来使得我们推断出的 app 能够是该框架返回的 app。
 
@@ -342,23 +346,12 @@ const app = await createApp<Framework>();
 ```typescript
 async createApp(
   appDir = process.cwd(), 
-  options: IConfigurationOptions = {}, 
-  customFrameworkName?: string | MidwayFrameworkType | any)
+  options: IConfigurationOptions = {}
 )
 ```
 第一个参数为项目的绝对根目录路径，默认为 `process.cwd()` 。
-第二个参数为框架的启动参数，比如启动的端口等，由各个框架提供。
-第三个参数为框架本身，一般用于自定义框架的测试，默认的框架在 API 内部已经有提供和排序。
+第二个参数为 Bootstrap 的启动参数，比如一些全局行为的配置，具体可以参考 ts 定义。
 
-
-比如，上面我们的示例，完整的写法为：
-
-```typescript
-import { Framework } from '@midwayjs/grpc';
-
-// 这里的 app 能确保是 grpc 框架返回的 app
-const app = await createApp<Framework>(process.cwd(), {port: 6565}, Framework);
-```
 
 
 ## close 选项参数
@@ -458,7 +451,7 @@ module.exports = {
 };
 ```
 
-:::warning
+:::caution
 注意， `jest.setup.js` 只能使用 js 文件。
 :::
 

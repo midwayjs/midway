@@ -12,7 +12,6 @@
     "link": "npm link"
   },
   "dependencies": {
-    "camelcase": "^6.2.0",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {

@@ -1,4 +1,4 @@
-# HTTP 请求（Axios）
+# HTTP 请求
 
 midway 包裹了 [axios](https://github.com/axios/axios) 包，使得在代码中可以简单的使用 axios 接口。
 
