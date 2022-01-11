@@ -3,5 +3,5 @@
     "config:base"
   ],
   "ignoreDeps": ["egg"],
-  "ignorePaths": ["**/fixtures/**", "**/example/**"]
+  "ignorePaths": ["**/fixtures/**", "**/example/**", "**/site/**"]
 }

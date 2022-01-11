@@ -1,6 +1,5 @@
 const UPPERCASE = /[\p{Lu}]/u;
 const LOWERCASE = /[\p{Ll}]/u;
-const LEADING_CAPITAL = /^[\p{Lu}](?![\p{Lu}])/gu;
 const IDENTIFIER = /([\p{Alpha}\p{N}_]|$)/u;
 const SEPARATORS = /[_.\- ]+/;
 
@@ -48,12 +47,6 @@ const preserveCamelCase = (string, toLowerCase, toUpperCase) => {
   return string;
 };
 
-const preserveConsecutiveUppercase = (input, toLowerCase) => {
-  LEADING_CAPITAL.lastIndex = 0;
-
-  return input.replace(LEADING_CAPITAL, m1 => toLowerCase(m1));
-};
-
 const postProcess = (input, toUpperCase) => {
   SEPARATORS_AND_IDENTIFIER.lastIndex = 0;
   NUMBERS_AND_IDENTIFIER.lastIndex = 0;
@@ -69,12 +62,10 @@ function camelCaseOrigin(
   input: string,
   options?: {
     pascalCase?: boolean;
-    preserveConsecutiveUppercase?: boolean;
   }
 ): string {
   options = {
     pascalCase: false,
-    preserveConsecutiveUppercase: false,
     ...options,
   };
 
@@ -99,11 +90,7 @@ function camelCaseOrigin(
 
   input = input.replace(LEADING_SEPARATORS, '');
 
-  if (options.preserveConsecutiveUppercase) {
-    input = preserveConsecutiveUppercase(input, toLowerCase);
-  } else {
-    input = toLowerCase(input);
-  }
+  input = toLowerCase(input);
 
   if (options.pascalCase) {
     input = toUpperCase(input.charAt(0)) + input.slice(1);
@@ -115,13 +102,11 @@ function camelCaseOrigin(
 export function camelCase(input: string): string {
   return camelCaseOrigin(input, {
     pascalCase: false,
-    preserveConsecutiveUppercase: true,
   });
 }
 
 export function pascalCase(input: string): string {
   return camelCaseOrigin(input, {
     pascalCase: true,
-    preserveConsecutiveUppercase: true,
   });
 }
