@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.16](https://github.com/midwayjs/midway/compare/v3.0.0-beta.15...v3.0.0-beta.16) (2022-01-11)
+
+
+### Bug Fixes
+
+* **deps:** update dependency amqp-connection-manager to v4 ([#1534](https://github.com/midwayjs/midway/issues/1534)) ([78612e1](https://github.com/midwayjs/midway/commit/78612e13211332112f28e868404473b9fe5a7b75))
+
+
+
+
+
 # [3.0.0-beta.15](https://github.com/midwayjs/midway/compare/v3.0.0-beta.14...v3.0.0-beta.15) (2022-01-07)
 
 **Note:** Version bump only for package @midwayjs/rabbitmq

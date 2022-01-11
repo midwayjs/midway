@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.16](https://github.com/midwayjs/midway/compare/v3.0.0-beta.15...v3.0.0-beta.16) (2022-01-11)
+
+
+### Bug Fixes
+
+* **deps:** update dependency supertest to v6.2.0 ([#1555](https://github.com/midwayjs/midway/issues/1555)) ([4ff0e03](https://github.com/midwayjs/midway/commit/4ff0e03e833825b7a79c530665b4ab27b5d25294))
+
+
+
+
+
 # [3.0.0-beta.15](https://github.com/midwayjs/midway/compare/v3.0.0-beta.14...v3.0.0-beta.15) (2022-01-07)
 
 **Note:** Version bump only for package @midwayjs/serverless-fc-trigger

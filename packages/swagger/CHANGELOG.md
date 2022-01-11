@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.16](https://github.com/midwayjs/midway/compare/v3.0.0-beta.15...v3.0.0-beta.16) (2022-01-11)
+
+
+### Bug Fixes
+
+* @File/@Files schema no type bug ([#1532](https://github.com/midwayjs/midway/issues/1532)) ([a776b3d](https://github.com/midwayjs/midway/commit/a776b3d890ab1faeb3164a42e1dcc953415f8f89))
+
+
+### Features
+
+* swagger tags support ascii order ([#1548](https://github.com/midwayjs/midway/issues/1548)) ([f60438f](https://github.com/midwayjs/midway/commit/f60438f4dcf56538de0a1f0978fde8053660ec4c))
+
+
+
+
+
 # [3.0.0-beta.15](https://github.com/midwayjs/midway/compare/v3.0.0-beta.14...v3.0.0-beta.15) (2022-01-07)
 
 

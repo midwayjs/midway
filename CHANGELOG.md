@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.16](https://github.com/midwayjs/midway/compare/v3.0.0-beta.15...v3.0.0-beta.16) (2022-01-11)
+
+
+### Bug Fixes
+
+* @File/@Files schema no type bug ([#1532](https://github.com/midwayjs/midway/issues/1532)) ([a776b3d](https://github.com/midwayjs/midway/commit/a776b3d890ab1faeb3164a42e1dcc953415f8f89))
+* **deps:** update dependency amqp-connection-manager to v4 ([#1534](https://github.com/midwayjs/midway/issues/1534)) ([78612e1](https://github.com/midwayjs/midway/commit/78612e13211332112f28e868404473b9fe5a7b75))
+* **deps:** update dependency sequelize to ~6.13.0 ([#1554](https://github.com/midwayjs/midway/issues/1554)) ([0a82a2c](https://github.com/midwayjs/midway/commit/0a82a2c698f9b85debf3d09850fb9d350b27bba7))
+* **deps:** update dependency supertest to v6.2.0 ([#1555](https://github.com/midwayjs/midway/issues/1555)) ([4ff0e03](https://github.com/midwayjs/midway/commit/4ff0e03e833825b7a79c530665b4ab27b5d25294))
+* typings ([4afffe6](https://github.com/midwayjs/midway/commit/4afffe62ddfa97346863691a24065f5820bb9531))
+
+
+### Features
+
+* swagger tags support ascii order ([#1548](https://github.com/midwayjs/midway/issues/1548)) ([f60438f](https://github.com/midwayjs/midway/commit/f60438f4dcf56538de0a1f0978fde8053660ec4c))
+
+
+
+
+
 # [3.0.0-beta.15](https://github.com/midwayjs/midway/compare/v3.0.0-beta.14...v3.0.0-beta.15) (2022-01-07)
 
 
