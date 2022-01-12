@@ -7,7 +7,7 @@ import {
   listModule,
 } from '@midwayjs/decorator';
 import { join } from 'path';
-import { IMidwayApplication, IMidwayContainer } from '@midwayjs/core';
+import { IMidwayContainer } from '@midwayjs/core';
 import {
   MODULE_TASK_KEY,
   MODULE_TASK_METADATA,
@@ -52,13 +52,10 @@ export class AutoConfiguration {
   queueList: any[] = [];
   jobList: any[] = [];
 
-  async onReady(
-    container: IMidwayContainer,
-    _: IMidwayApplication
-  ): Promise<void> {
+  async onReady(container: IMidwayContainer): Promise<void> {
     this.createLogger();
     await this.loadTask(container);
-    await this.loadLocalTask();
+    await this.loadLocalTask(container);
     await this.loadQueue(container);
   }
 
@@ -139,38 +136,42 @@ export class AutoConfiguration {
     container.registerObject('queueTaskMap', queueTaskMap);
   }
 
-  async loadLocalTask() {
+  async loadLocalTask(container) {
     const modules = listModule(MODULE_TASK_TASK_LOCAL_KEY);
+    const localTaskMap = {};
     for (const module of modules) {
       const rules = getClassMetadata(MODULE_TASK_TASK_LOCAL_OPTIONS, module);
       for (const rule of rules) {
+        const triggerFunction = async () => {
+          const requestId = v4();
+          const ctx = this.getContext({
+            type: 'LocalTask',
+            id: requestId,
+            trigger: `${module.name}:${rule.propertyKey}`,
+          });
+          const { logger } = ctx;
+          try {
+            const service = await ctx.requestContext.getAsync(module);
+            logger.info('local task start.');
+            await wrapAsync(rule.value)(service);
+          } catch (e) {
+            logger.error(`${e.stack}`);
+          }
+          logger.info('local task end.');
+        };
         const job = new CronJob(
           rule.options,
-          async () => {
-            const requestId = v4();
-            const ctx = this.getContext({
-              type: 'LocalTask',
-              id: requestId,
-              trigger: `${module.name}:${rule.propertyKey}`,
-            });
-            const { logger } = ctx;
-            try {
-              const service = await ctx.requestContext.getAsync(module);
-              logger.info('local task start.');
-              await wrapAsync(rule.value)(service);
-            } catch (e) {
-              logger.error(`${e.stack}`);
-            }
-            logger.info('local task end.');
-          },
+          triggerFunction,
           null,
           true,
           this.taskConfig.defaultJobOptions.repeat.tz
         );
         job.start();
+        localTaskMap[`${module.name}:${rule.propertyKey}`] = triggerFunction;
         this.jobList.push(job);
       }
     }
+    container.registerObject('localTaskMap', localTaskMap);
   }
 
   async loadQueue(container) {
