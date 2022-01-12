@@ -22,7 +22,7 @@ describe(`midway task`, () => {
   })
 
   it('task', async () => {
-    await sleep(3 * 1000);
+    await sleep(5 * 1000);
     let res = app.getApplicationContext().get(`task`);
     expect(res).toEqual(`task`)
   })
