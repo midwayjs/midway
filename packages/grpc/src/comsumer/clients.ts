@@ -5,7 +5,7 @@ import {
   Provide,
   Scope,
   ScopeEnum,
-  camelCase,
+  Utils,
 } from '@midwayjs/decorator';
 import { credentials, loadPackageDefinition } from '@grpc/grpc-js';
 import { DefaultConfig, IClientOptions } from '../interface';
@@ -56,7 +56,7 @@ export class GRPCClients extends Map {
                 clientOptions
               );
             };
-            connectionService[camelCase(methodName)] =
+            connectionService[Utils.camelCase(methodName)] =
               connectionService[methodName];
           }
           this.set(definition, connectionService);

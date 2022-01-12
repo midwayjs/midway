@@ -23,8 +23,7 @@ import {
   MS_GRPC_METHOD_KEY,
   MS_PROVIDER_KEY,
   MSProviderType,
-  pascalCase,
-  camelCase,
+  Utils,
 } from '@midwayjs/decorator';
 import {
   Context,
@@ -104,7 +103,8 @@ export class MidwayGRPCFramework extends BaseFramework<
         module
       );
       const classMetadata = info.metadata;
-      const serviceName = classMetadata.serviceName || pascalCase(providerName);
+      const serviceName =
+        classMetadata.serviceName || Utils.pascalCase(providerName);
 
       if (serviceClassDefinition.has(classMetadata?.package)) {
         const serviceInstance = {};
@@ -133,7 +133,7 @@ export class MidwayGRPCFramework extends BaseFramework<
             } = getPropertyMetadata(
               MS_GRPC_METHOD_KEY,
               module,
-              camelCase(method)
+              Utils.camelCase(method)
             );
 
             if (
@@ -194,7 +194,7 @@ export class MidwayGRPCFramework extends BaseFramework<
     const { ctx, callback, grpcMethodData } = options;
 
     const fn = await this.applyMiddleware(async ctx => {
-      return await options.service[camelCase(ctx.method)]?.call(
+      return await options.service[Utils.camelCase(ctx.method)]?.call(
         options.service,
         options.data
       );

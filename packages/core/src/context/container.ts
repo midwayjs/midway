@@ -11,13 +11,13 @@ import {
   saveProviderId,
   ScopeEnum,
   getProviderUUId,
-  generateRandomId,
   getPropertyInject,
   getObjectDefinition,
   getClassExtendedMetadata,
   INJECT_CUSTOM_PROPERTY,
   getProviderName,
   IModuleStore,
+  Utils,
 } from '@midwayjs/decorator';
 import { FunctionalConfiguration } from '../functional/configuration';
 import * as util from 'util';
@@ -434,7 +434,7 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
         if (!info.scope) {
           info.scope = ScopeEnum.Request;
         }
-        const uuid = generateRandomId();
+        const uuid = Utils.generateRandomId();
         this.identifierMapping.saveFunctionRelation(info.id, uuid);
         this.bind(uuid, module, {
           scope: info.scope,
