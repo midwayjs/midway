@@ -8,7 +8,7 @@ import {
   getPropertyMetadata,
   getProviderName,
   getProviderUUId,
-  TYPES,
+  Types,
   listModule,
   RouterOption,
   ServerlessTriggerType,
@@ -415,7 +415,7 @@ export class WebRouterCollector {
     return urlMatchList
       .map(item => {
         const urlString = item.url.toString();
-        const weightArr = TYPES.isRegExp(item.url)
+        const weightArr = Types.isRegExp(item.url)
           ? urlString.split('\\/')
           : urlString.split('/');
         let weight = 0;

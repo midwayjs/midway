@@ -3,7 +3,7 @@ import {
   AspectMetadata,
   getClassMetadata,
   IMethodAspect,
-  TYPES,
+  Types,
   listModule,
   Provide,
   Scope,
@@ -87,7 +87,7 @@ export class MidwayAspectService {
   ) {
     const originMethod = Clz.prototype[methodName];
 
-    if (TYPES.isAsyncFunction(Clz.prototype[methodName])) {
+    if (Types.isAsyncFunction(Clz.prototype[methodName])) {
       Clz.prototype[methodName] = async function (...args) {
         let error, result;
         const newProceed = (...args) => {

@@ -1,5 +1,7 @@
 import * as util from 'util';
 import * as crypto from 'crypto';
+import { camelCase, pascalCase } from './camelCase';
+import { randomUUID } from './uuid';
 
 const ToString = Function.prototype.toString;
 
@@ -108,7 +110,7 @@ export function getParamNames(func): string[] {
 }
 
 /**
- * generate a lightweight random id, enough for ioc container
+ * generate a lightweight 32 bit random id, enough for ioc container
  */
 export function generateRandomId(): string {
   // => f9b327e70bbcf42494ccb28b2d98e00e
@@ -132,7 +134,7 @@ export function merge(target: any, src: any) {
   throw new Error('can not merge meta that type of ' + typeof target);
 }
 
-export const TYPES = {
+export const Types = {
   isClass,
   isAsyncFunction,
   isGeneratorFunction,
@@ -147,4 +149,14 @@ export const TYPES = {
   isUndefined,
   isNull,
   isNullOrUndefined,
+};
+
+export const Utils = {
+  sleep,
+  getParamNames,
+  generateRandomId,
+  merge,
+  camelCase,
+  pascalCase,
+  randomUUID,
 };

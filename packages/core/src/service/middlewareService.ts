@@ -1,4 +1,4 @@
-import { Provide, Scope, ScopeEnum, TYPES } from '@midwayjs/decorator';
+import { Provide, Scope, ScopeEnum, Types } from '@midwayjs/decorator';
 import {
   CommonMiddleware,
   IMiddleware,
@@ -26,7 +26,7 @@ export class MidwayMiddlewareService<T, R, N = unknown> {
     const newMiddlewareArr = [];
 
     for (let fn of middleware) {
-      if (TYPES.isClass(fn) || typeof fn === 'string') {
+      if (Types.isClass(fn) || typeof fn === 'string') {
         if (
           typeof fn === 'string' &&
           !this.applicationContext.hasDefinition(fn)

@@ -2,7 +2,7 @@ import { BaseFramework, IMidwayBootstrapOptions } from '@midwayjs/core';
 import {
   Framework,
   getClassMetadata,
-  TYPES,
+  Types,
   listModule,
   MidwayFrameworkType,
   MODULE_TASK_KEY,
@@ -11,16 +11,16 @@ import {
   MODULE_TASK_QUEUE_OPTIONS,
   MODULE_TASK_TASK_LOCAL_KEY,
   MODULE_TASK_TASK_LOCAL_OPTIONS,
+  Utils,
 } from '@midwayjs/decorator';
 import * as Bull from 'bull';
 import { CronJob } from 'cron';
-import { v4 } from 'uuid';
 import { Application, Context, IQueue } from './interface';
 import { deprecatedOutput } from '@midwayjs/core';
 
 function wrapAsync(fn) {
   return async function (...args) {
-    if (TYPES.isAsyncFunction(fn)) {
+    if (Types.isAsyncFunction(fn)) {
       await fn.call(...args);
     } else {
       const result = fn.call(...args);
@@ -117,7 +117,7 @@ export class TaskFramework extends BaseFramework<Application, Context, any> {
         const job = new CronJob(
           rule.options,
           async () => {
-            const requestId = v4();
+            const requestId = Utils.randomUUID();
             const ctx = this.app.createAnonymousContext({
               taskInfo: {
                 type: 'LocalTask',

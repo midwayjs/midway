@@ -4,7 +4,6 @@ import {
   DecoratorManager,
   getClassMetadata,
   getObjectDefinition,
-  getParamNames,
   getPropertyDataFromClass,
   getPropertyMetadata,
   getProviderId,
@@ -15,7 +14,9 @@ import {
   resetModule,
   savePropertyDataToClass,
   getPropertyType,
-  savePropertyMetadata, getProviderName,
+  savePropertyMetadata,
+  getProviderName,
+  Utils,
 } from '../../src';
 import * as assert from 'assert';
 import { ManagerTest } from '../fixtures/decorator/customClass';
@@ -74,22 +75,22 @@ describe('/test/common/decoratorManager.test.ts', () => {
   });
 
   it('should get function args', () => {
-    let args = getParamNames((a, b, c) => {});
+    let args = Utils.getParamNames((a, b, c) => {});
     assert(args.length === 3);
 
-    args = getParamNames(() => {});
+    args = Utils.getParamNames(() => {});
     assert(args.length === 0);
 
-    args = getParamNames((a) => {});
+    args = Utils.getParamNames((a) => {});
     assert(args.length === 1);
 
-    args = getParamNames((a,b) => {});
+    args = Utils.getParamNames((a,b) => {});
     assert(args.length === 2);
 
-    args = getParamNames((a, b=1) => {});
+    args = Utils.getParamNames((a, b=1) => {});
     assert(args.length === 2);
 
-    args = getParamNames((a = 1, b =2, c) => {});
+    args = Utils.getParamNames((a = 1, b =2, c) => {});
     assert(args.length === 3);
   });
 

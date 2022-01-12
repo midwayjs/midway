@@ -1,4 +1,4 @@
-import { TYPES, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { Types, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
 import {
   IMidwayContainer,
   MidwayCommonError,
@@ -15,7 +15,7 @@ import { NextFunction, Response } from 'express';
 import { sendData } from './util';
 
 export function wrapAsyncHandler(fn): any {
-  if (TYPES.isAsyncFunction(fn)) {
+  if (Types.isAsyncFunction(fn)) {
     return (req, res, next) => {
       return fn(req, res, next).catch(err => {
         next(err);
@@ -45,7 +45,7 @@ export class MidwayExpressMiddlewareService {
     const newMiddlewareArr = [];
 
     for (let fn of middleware) {
-      if (TYPES.isClass(fn) || typeof fn === 'string') {
+      if (Types.isClass(fn) || typeof fn === 'string') {
         if (
           typeof fn === 'string' &&
           !this.applicationContext.hasDefinition(fn)

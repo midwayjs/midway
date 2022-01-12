@@ -16,9 +16,14 @@
 
 [English](./README.en-US.md) | 简体中文
 
-🥳 欢迎观看 Midway Serverless 2.0 发布会回放： https://www.bilibili.com/video/BV17A411T7Md
 
-[《Midway Serverless 发布 2.0，一体化让前端研发再次提效》](https://zhuanlan.zhihu.com/p/355768659)
+## 资源
+
+- [3.x beta 功能预览](https://www.bilibili.com/video/BV1aL4y1p7oA?from=search&seid=8235946720906913847&spm_id_from=333.337.0.0)
+- [2021 秋季直面会](https://www.bilibili.com/video/BV1Ng411T76f?from=search&seid=8235946720906913847&spm_id_from=333.337.0.0)
+- [2021 夏季直面会](https://www.bilibili.com/video/BV1nF411a7sr?from=search&seid=8235946720906913847&spm_id_from=333.337.0.0)
+- [v2 示例教程](https://www.bilibili.com/video/BV1254y1E73m?from=search&seid=8235946720906913847&spm_id_from=333.337.0.0)
+- [2.0 发布会回放](https://www.bilibili.com/video/BV17A411T7Md)[《2.0 发布会文章》](https://zhuanlan.zhihu.com/p/355768659)
 
 ## 特性
 
@@ -98,17 +103,10 @@ $ npm init midway -- --type=web my_midway_app
 cd my_midway_app && npm run dev
 ```
 
-如何部署等更多进阶请访问 [中文文档](https://www.yuque.com/midwayjs/midway_v2)。
-
-<!--同时你也可以在阿里云官网知行实验室，学习 Midway [相关的课程](https://start.aliyun.com/handson-lab)。-->
-
 ## 文档和社区
 
-![](https://img.alicdn.com/imgextra/i2/O1CN01LCCXpo1ZXw3Ee0TDk_!!6000000003205-0-tps-3336-1390.jpg)
-
 - [官网](https://midwayjs.org)
-- 要查看 v2 中文文档, 请访问 [中文文档](https://www.yuque.com/midwayjs/midway_v2) 📚
-- 要查看 v1 中文文档, 请访问 [中文文档](https://www.yuque.com/midwayjs/midway_v1) 📚
+- [备用官网](https://beta.midwayjs.org)
 
 ## 官方示例
 
@@ -146,6 +144,10 @@ cd my_midway_app && npm run dev
 ![](https://img.alicdn.com/imgextra/i2/O1CN01ofEEAL2AEpJHbpse5_!!6000000008172-2-tps-311-401.png)
 
 ## 贡献
+
+<a href="https://github.com/midwayjs/midway/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=midwayjs/midway" />
+</a>
 
 请告知我们可以为你做些什么，不过在此之前，请检查一下是否有 [已经存在的Bug或者意见](http://github.com/midwayjs/midway/issues)。
 
