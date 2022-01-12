@@ -59,7 +59,8 @@
   ],
   "@midwayjs/process-agent": [
     "2.14.0",
-    "2.14.2"
+    "2.14.2",
+    "2.14.3"
   ],
   "@midwayjs/prometheus-socket-io": [
     "2.14.0",
@@ -73,13 +74,15 @@
   "@midwayjs/redis": "2.14.0",
   "@midwayjs/sequelize": [
     "2.14.0",
-    "2.14.2"
+    "2.14.2",
+    "2.14.3"
   ],
   "@midwayjs/socketio": "2.14.0",
   "@midwayjs/tablestore": "2.14.0",
   "@midwayjs/task": [
     "2.14.0",
-    "2.14.2"
+    "2.14.2",
+    "2.14.3"
   ],
   "@midwayjs/typegoose": [
     "2.14.0",
@@ -87,7 +90,8 @@
   ],
   "@midwayjs/version": [
     "2.14.0",
-    "2.14.2"
+    "2.14.2",
+    "2.14.3"
   ],
   "@midwayjs/view-ejs": [
     "2.14.0",
