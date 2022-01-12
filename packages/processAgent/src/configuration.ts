@@ -37,9 +37,21 @@ export class ProcessAgentConfiguration {
           .createServer((req, res) => {
             const query = qs.parse(req.url.substr('/?'.length));
             const params = JSON.parse(query.params as string);
-            handlers[`${query.path}`](...params).then(result => {
-              res.end(result);
-            });
+            handlers[`${query.path}`](...params)
+              .then(result => {
+                res.end(JSON.stringify(result));
+              })
+              .catch(e => {
+                res.statusCode = 500;
+                res.end(
+                  JSON.stringify({
+                    midwayError: true,
+                    name: e.name,
+                    message: e.message,
+                    stack: e.stack,
+                  })
+                );
+              });
           })
           .listen(sockFile);
       }
