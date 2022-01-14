@@ -311,7 +311,7 @@ export class ReportMiddleware implements IWebMiddleware {
 ```
 
 
-:::warning
+:::caution
 注意，如果要继续使用 EggJS 传统的函数式写法，必须将文件放在 `src/app/middleware` 下。
 :::
 
@@ -555,7 +555,7 @@ export class HelloCron implements CommonSchedule {
 :::
 
 
-:::warning
+:::caution
 请不要放到 src/app/schedule 中，会和 egg 本身的加载冲突。
 :::
 

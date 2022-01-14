@@ -177,7 +177,7 @@ logger.error(error);
 // 文本在前，加上 error 实例
 logger.info('text before error', new Error('error instance after text'));
 ```
-:::warning
+:::caution
 注意，错误对象只能放在最后，且有且只有一个，其后面的所有参数都会被忽略。
 :::
 

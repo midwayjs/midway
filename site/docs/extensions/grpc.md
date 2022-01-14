@@ -349,7 +349,7 @@ services 字段是数组，意味着 Midway 项目可以同时发布多个 gRPC 
 `@midwayjs/grpc` 库提供了一个 `createGRPCConsumer` 方法，用于实时调用客户端，一般我们用这个方法做测试。
 
 
-:::warning
+:::caution
 这个方法每次调用会实时连接，不建议将该方法用在生产环境。
 :::
 
