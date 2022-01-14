@@ -148,7 +148,6 @@ export function PassportMiddleware(
                 res.redirect(options.failureRedirect);
                 return;
               } else {
-                res.status(401);
                 throw new httpError.UnauthorizedError();
               }
             }
@@ -214,7 +213,6 @@ export function PassportMiddleware(
                   ctx.redirect(options.failureRedirect);
                   return;
                 } else {
-                  ctx.status = 401;
                   throw new httpError.UnauthorizedError();
                 }
               }
