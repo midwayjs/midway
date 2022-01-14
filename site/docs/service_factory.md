@@ -231,7 +231,7 @@ export class UserService {
 也可以通过基类的 `createInstance` 方法动态获取实例。
 
 
-:::warning
+:::caution
 注意，这里使用的不是子类的 createClient，createClient 不包含和默认配置的逻辑。
 :::
 

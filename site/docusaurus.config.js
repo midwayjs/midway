@@ -65,6 +65,7 @@ const config = {
           ...require('./lib/navbar'),
           {
             type: 'docsVersionDropdown',
+            dropdownActiveClassDisabled: true,
             position: 'right',
           },
           // {

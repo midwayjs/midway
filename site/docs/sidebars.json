@@ -159,8 +159,7 @@
         "serverless/serverless_context",
         "serverless/serverless_yml",
         "serverless/serverless_environment",
-        "serverless/serverless_error",
-        "serverless/serverless_to_app"
+        "serverless/serverless_error"
       ]
     },
     {

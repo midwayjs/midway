@@ -47,8 +47,8 @@ mongoose 和你服务器使用的 MongoDB Server 的版本也有着一定的关�
 
 安装包依赖版本如下：
 
-
 **支持 MongoDB Server 5.x**
+
 ```json
   "dependencies": {
     "mongoose": "^6.0.7",

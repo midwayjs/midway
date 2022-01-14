@@ -33,7 +33,7 @@ export class HomeController {
     // set cookie
     this.ctx.cookies.set('foo', 'bar', { encrypt: true });
     // get cookie
-		this.ctx.cookies.get('foo', { encrypt: true });
+    this.ctx.cookies.get('foo', { encrypt: true });
   }
 }
 ```

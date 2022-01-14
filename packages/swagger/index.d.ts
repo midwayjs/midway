@@ -3,6 +3,6 @@ export * from './dist/index';
 
 declare module '@midwayjs/core/dist/interface' {
   interface MidwayConfig {
-    swagger: Partial<SwaggerOptions>;
+    swagger?: Partial<SwaggerOptions>;
   }
 }

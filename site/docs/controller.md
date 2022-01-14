@@ -108,7 +108,7 @@ async home() {
 ```
 
 
-## 请求参数
+## 获取请求参数
 
 
 接下去，我们将创建一个关于用户的 HTTP API，同样的，创建一个 `src/controller/user.ts`  文件，这次我们会增加一个路由前缀，以及增加更多的请求类型。
@@ -130,7 +130,7 @@ async home() {
 ```typescript
 // src/interface.ts
 export interface User {
-	id: number;
+  id: number;
   name: string;
   age: number;
 }
@@ -143,13 +143,16 @@ import { Controller } from "@midwayjs/decorator";
 
 @Controller('/api/user')
 export class UserController {
-	// xxxx
+  // xxxx
 }
 
 ```
 
-
 接下去，我们要针对不同的请求类型，调用不同的处理逻辑。除了请求类型之外，请求的数据一般都是动态的，会在 HTTP 的不同位置来传递，比如常见的 Query，Body 等。
+
+
+
+### 装饰器参数约定
 
 
 Midway 添加了常见的动态取值的装饰器，我们以 `@Query` 装饰器举例， `@Query` 装饰器会获取到 URL 中的 Query 参数部分，并将它赋值给函数入参。下面的示例，id 会从路由的 Query 参数上拿，如果 URL 为 `/?id=1` ，则 id 的值为 1，同时，这个路由将会返回 `User` 类型的对象。
@@ -160,15 +163,15 @@ import { Controller, Get, Query } from "@midwayjs/decorator";
 
 @Controller('/api/user')
 export class UserController {
-	@Get('/')
+  @Get('/')
   async getUser(@Query('id') id: string): Promise<User> {
     // xxxx
   }
 }
 ```
 
-
 `@Query`  装饰器的有参数，可以传入一个指定的字符串 key，获取对应的值，赋值给入参，如果不传入，则默认返回整个 Query 对象。
+
 ```typescript
 // URL = /?id=1
 async getUser(@Query('id') id: string) // id = 1
@@ -180,9 +183,7 @@ Midway 提供了更多从 Query、Body 、Header 等位置获取值的装饰器�
 
 下面是这些装饰器，以及对应的等价框架取值方式。
 
-
-
-| **装饰器** | **Express** | **Koa/EggJS** |
+| 装饰器 | Express 对应的方法 | Koa/EggJS 对应的方法 |
 | --- | --- | --- |
 | @Session(key?: string) | req.session / req.session[key] | ctx.session / ctx.session[key] |
 | @Param(key?: string) | req.params / req.params[key] | ctx.params / ctx.params[key] |
@@ -190,32 +191,155 @@ Midway 提供了更多从 Query、Body 、Header 等位置获取值的装饰器�
 | @Query(key?: string) | req.query / req.query[key] | ctx.query / ctx.query[key] |
 | @Queries(key?: string) | 无 | 无 / ctx.queries[key] |
 | @Headers(name?: string) | req.headers / req.headers[name] | ctx.headers / ctx.headers[name] |
-|  |  |  |
 
 :::caution
 **注意 **@Queries 装饰器和 @Query **有所区别**。
-
 
 Queries 会将相同的 key 聚合到一起，变为数组。当用户访问的接口参数为 `/?name=a&name=b` 时，@Queries 会返回 {name: [a, b]}，而 Query 只会返回 {name: b}
 :::
 
 
 
-**示例：获取单个 body**
-```typescript
-@Post('/')
-async updateUser(@Body('id') id: string): Promise<User> {
-  // id 等价于 ctx.request.body.id
-}
+### Query
+
+在 URL 中 `?` 后面的部分是一个 Query String，这一部分经常用于 GET 类型的请求中传递参数。例如
+
 ```
-**示例：所有 body 参数**
+GET /user?uid=1&sex=male
+```
+
+就是用户传递过来的参数。
+
+**示例：从装饰器获取**
 
 ```typescript
-@Post('/')
-async updateUser(@Body() user: User): Promise<User> {
-  // user 等价于 ctx.request.body 整个 body 对象
+// src/controller/user.ts
+import { Controller, Get, Query } from "@midwayjs/decorator";
+
+@Controller('/user')
+export class UserController {
+  @Get('/')
+  async getUser(@Query('uid') uid: string): Promise<User> {
+    // xxxx
+  }
 }
 ```
+
+**示例：从 API 获取**
+
+```typescript
+// src/controller/user.ts
+import { Controller, Get, Inject } from "@midwayjs/decorator";
+import { Context } from '@midwayjs/koa';
+
+@Controller('/user')
+export class UserController {
+  
+  @Inject()
+  ctx: Context;
+  
+  @Get('/')
+  async getUser(): Promise<User> {
+    const query = this.ctx.query;
+    // {
+    //   uid: '1',
+    //   sex: 'male',
+    // }
+  }
+}
+```
+
+当 Query String 中的 key 重复时，`ctx.query` 只取 key 第一次出现时的值，后面再出现的都会被忽略。
+
+比如 `GET /user?uid=1&uid=2` 通过 `ctx.query` 拿到的值是 `{ uid: '1' }`。
+
+
+
+### Body
+
+虽然我们可以通过 URL 传递参数，但是还是有诸多限制：
+
+- [浏览器中会对 URL 的长度有所限制](http://stackoverflow.com/questions/417142/what-is-the-maximum-length-of-a-url-in-different-browsers)，如果需要传递的参数过多就会无法传递。
+- 服务端经常会将访问的完整 URL 记录到日志文件中，有一些敏感数据通过 URL 传递会不安全。
+
+在前面的 HTTP 请求报文示例中，我们看到在 header 之后还有一个 body 部分，我们通常会在这个部分传递 POST、PUT 和 DELETE 等方法的参数。一般请求中有 body 的时候，客户端（浏览器）会同时发送 `Content-Type` 告诉服务端这次请求的 body 是什么格式的。Web 开发中数据传递最常用的两类格式分别是 `JSON` 和 `Form`。
+
+框架内置了 [bodyParser](https://github.com/koajs/bodyparser) 中间件来对这两类格式的请求 body 解析成 object 挂载到 `ctx.request.body` 上。HTTP 协议中并不建议在通过 GET、HEAD 方法访问时传递 body，所以我们无法在 GET、HEAD 方法中按照此方法获取到内容。
+
+**示例：获取单个 body**
+
+```typescript
+// src/controller/user.ts
+// POST /user/ HTTP/1.1
+// Host: localhost:3000
+// Content-Type: application/json; charset=UTF-8
+//
+// {"uid": "1", "name": "harry"}
+import { Controller, Post, Body } from "@midwayjs/decorator";
+
+@Controller('/user')
+export class UserController {
+  @Post('/')
+  async updateUser(@Body('uid') uid: string): Promise<User> {
+    // id 等价于 ctx.request.body.uid
+  }
+}
+```
+
+**示例：获取整个 body **
+
+```typescript
+// src/controller/user.ts
+// POST /user/ HTTP/1.1
+// Host: localhost:3000
+// Content-Type: application/json; charset=UTF-8
+//
+// {"uid": "1", "name": "harry"}
+import { Controller, Post, Body } from "@midwayjs/decorator";
+
+@Controller('/user')
+export class UserController {
+  @Post('/')
+  async updateUser(@Body() user: User): Promise<User> {
+    // user 等价于 ctx.request.body 整个 body 对象
+    // => output user
+    // {
+    //   uid: '1',
+    //   name: 'harry',
+    // }
+  }
+}
+```
+
+**示例：从 API 获取**
+
+```typescript
+// src/controller/user.ts
+// POST /user/ HTTP/1.1
+// Host: localhost:3000
+// Content-Type: application/json; charset=UTF-8
+//
+// {"uid": "1", "name": "harry"}
+import { Controller, Post, Inject } from "@midwayjs/decorator";
+import { Context } from '@midwayjs/koa';
+
+@Controller('/user')
+export class UserController {
+  
+  @Inject()
+  ctx: Context;
+  
+  @Post('/')
+  async getUser(): Promise<User> {
+    const body = this.ctx.request.body;
+    // {
+    //   uid: '1',
+    //   name: 'harry',
+    // }
+  }
+}
+```
+
 **示例：获取 query 和 body 参数**
 
 
@@ -227,28 +351,202 @@ async updateUser(@Body() user: User, @Query('pageIdx') pageIdx: number): Promise
   // pageIdx 从 query 获取
 }
 ```
-**示例：获取 param 参数**
+框架对 bodyParser 设置了一些默认参数，配置好之后拥有以下特性：
+
+- 当请求的 Content-Type 为 `application/json`，`application/json-patch+json`，`application/vnd.api+json` 和 `application/csp-report` 时，会按照 json 格式对请求 body 进行解析，并限制 body 最大长度为 `1mb`。
+- 当请求的 Content-Type 为 `application/x-www-form-urlencoded` 时，会按照 form 格式对请求 body 进行解析，并限制 body 最大长度为 `1mb`。
+- 如果解析成功，body 一定会是一个 Object（可能是一个数组）。
+
+:::caution
+
+常见错误： `ctx.request.body` 和 `ctx.body` 混淆，后者其实是 `ctx.response.body` 的简写。
+
+:::
+
+
+
+### Router Params
+
+如果路由上使用 `:xxx` 的格式来声明路由，那么参数可以通过 `ctx.params` 获取到。
+
+**示例：从装饰器获取**
+
 ```typescript
-@Get('/api/user/:uid')
-async findUser(@Param('uid') uid: string): Promise<User> {
-  // uid 从路由参数中获取
+// src/controller/user.ts
+// GET /user/1
+import { Controller, Get, Param } from "@midwayjs/decorator";
+
+@Controller('/user')
+export class UserController {
+  @Get('/:uid')
+  async getUser(@Param('uid') uid: string): Promise<User> {
+    // xxxx
+  }
+}
+```
+
+**示例：从 API 获取**
+
+```typescript
+// src/controller/user.ts
+// GET /user/1
+import { Controller, Get, Inject } from "@midwayjs/decorator";
+import { Context } from '@midwayjs/koa';
+
+@Controller('/user')
+export class UserController {
+  
+  @Inject()
+  ctx: Context;
+  
+  @Get('/:uid')
+  async getUser(): Promise<User> {
+    const params = this.ctx.params;
+    // {
+    //   uid: '1',
+    // }
+  }
 }
 ```
 
 
+
+### Header
+
+除了从 URL 和请求 body 上获取参数之外，还有许多参数是通过请求 header 传递的。框架提供了一些辅助属性和方法来获取。
+
+- `ctx.headers`，`ctx.header`，`ctx.request.headers`，`ctx.request.header`：这几个方法是等价的，都是获取整个 header 对象。
+- `ctx.get(name)`，`ctx.request.get(name)`：获取请求 header 中的一个字段的值，如果这个字段不存在，会返回空字符串。
+- 我们建议用 `ctx.get(name)` 而不是 `ctx.headers['name']`，因为前者会自动处理大小写。
+
+**示例：从装饰器获取**
+
+```typescript
+// src/controller/user.ts
+// GET /user/1
+import { Controller, Get, Headers } from "@midwayjs/decorator";
+
+@Controller('/user')
+export class UserController {
+  @Get('/:uid')
+  async getUser(@Headers('cache-control') cacheSetting: string): Promise<User> {
+    // no-cache
+    // ...
+  }
+}
+```
+
+**示例：从 API 获取**
+
+```typescript
+// src/controller/user.ts
+// GET /user/1
+import { Controller, Get, Inject } from "@midwayjs/decorator";
+import { Context } from '@midwayjs/koa';
+
+@Controller('/user')
+export class UserController {
+  
+  @Inject()
+  ctx: Context;
+  
+  @Get('/:uid')
+  async getUser(): Promise<User> {
+    const cacheSetting = this.ctx.get('cache-control');
+    // no-cache
+  }
+}
+```
+
+
+
+### Cookie
+
+HTTP 请求都是无状态的，但是我们的 Web 应用通常都需要知道发起请求的人是谁。为了解决这个问题，HTTP 协议设计了一个特殊的请求头：[Cookie](https://en.wikipedia.org/wiki/HTTP_cookie)。服务端可以通过响应头（set-cookie）将少量数据响应给客户端，浏览器会遵循协议将数据保存，并在下次请求同一个服务的时候带上（浏览器也会遵循协议，只在访问符合 Cookie 指定规则的网站时带上对应的 Cookie 来保证安全性）。
+
+通过 `ctx.cookies`，我们可以在 Controller 中便捷、安全的设置和读取 Cookie。
+
+```typescript
+import { Inject, Controller, Get, Provide } from '@midwayjs/decorator';
+import { Context } from '@midwayjs/koa';
+
+@Controller('/')
+export class HomeController {
+  @Inject()
+  ctx: Context;
+
+  @Get('/')
+  async home() {
+    // set cookie
+    this.ctx.cookies.set('foo', 'bar', { encrypt: true });
+    // get cookie
+    this.ctx.cookies.get('foo', { encrypt: true });
+  }
+}
+```
+
+Cookie 虽然在 HTTP 中只是一个头，但是通过 `foo=bar;foo1=bar1;` 的格式可以设置多个键值对。
+
+Cookie 在 Web 应用中经常承担了传递客户端身份信息的作用，因此有许多安全相关的配置，不可忽视，[Cookie](cookie_session#默认的-cookies) 文档中详细介绍了 Cookie 的用法和安全相关的配置项，可以深入阅读了解。
+
+
+
+### Session
+
+通过 Cookie，我们可以给每一个用户设置一个 Session，用来存储用户身份相关的信息，这份信息会加密后存储在 Cookie 中，实现跨请求的用户身份保持。
+
+框架内置了 [Session](https://github.com/eggjs/egg-session) 插件，给我们提供了 `ctx.session` 来访问或者修改当前用户 Session 。
+
+```typescript
+import { Inject, Controller, Get, Provide } from '@midwayjs/decorator';
+import { Context } from '@midwayjs/koa';
+
+@Controller('/')
+export class HomeController {
+  @Inject()
+  ctx: Context;
+
+  @Get('/')
+  async home() {
+    // 获取 Session 上的内容
+    const userId =  this.ctx.session.userId;
+    const posts = await  this.ctx.service.post.fetch(userId);
+    // 修改 Session 的值
+    this.ctx.session.visited = ctx.session.visited ? (ctx.session.visited + 1) : 1;
+    // ...
+  }
+}
+```
+
+Session 的使用方法非常直观，直接读取它或者修改它就可以了，如果要删除它，直接将它赋值为 `null`：
+
+```typescript
+ctx.session = null;
+```
+
+和 Cookie 一样，Session 也有许多安全等选项和功能，在使用之前也最好阅读 [Session](cookie_session#默认的-session) 文档深入了解。
+
+
+
+### 上传的文件
+
+上传的文件一般使用 `multipart/form-data` 协议头，由 `@Files` 装饰器获取，由于上传功能由 upload 组件提供，具体可以参考 [upload 组件](extensions/upload)。
+
+
+
+### 其他的参数
+
 还有一些比较常见的参数装饰器，以及它们的对应方法。
 
-
-
-| **装饰器** | **Express** | **Koa/EggJS** |
+| 装饰器 | Express 对应的方法 | Koa/EggJS 对应的方法 |
 | --- | --- | --- |
 | @RequestPath | req.baseurl | ctx.path |
 | @RequestIP | req.ip | ctx.ip |
-|  |  |  |
 
 
 
 **示例：获取 body 、path 和 ip**
+
 ```typescript
 @Post('/')
 async updateUser(
@@ -258,6 +556,8 @@ async updateUser(
 
 }
 ```
+
+
 
 ## 请求参数类型转换
 
@@ -286,10 +586,95 @@ async getUser(@Query('id') id: boolean): Promise<User> {
 ```
 
 
-## 状态码
+
+## 参数校验
+
+参数校验功能由 validate 组件提供，具体可以参考 [validate 组件](extensions/validate)。
 
 
-默认情况下，响应的**状态码**总是**200**，我们可以通过在处理程序层添加 `@HttpCode` 装饰器来轻松更改此行为。
+
+## 设置 HTTP 响应
+
+### 设置返回值
+
+绝大多数的数据都是通过 body 发送给请求方的，和请求中的 body 一样，在响应中发送的 body，也需要有配套的 Content-Type 告知客户端如何对数据进行解析。
+
+- 作为一个 RESTful 的 API 接口 controller，我们通常会返回 Content-Type 为 `application/json` 格式的 body，内容是一个 JSON 字符串。
+- 作为一个 html 页面的 controller，我们通常会返回 Content-Type 为 `text/html` 格式的 body，内容是 html 代码段。
+
+在 Midway 中你可以简单的使用 `return` 来返回数据。
+
+```typescript
+import { Controller, Get, HttpCode } from "@midwayjs/decorator";
+
+@Controller('/')
+export class HomeController {
+  @Inject()
+  ctx: Context;
+
+  @Get('/')
+  async home() {
+    // 返回字符串
+    return "Hello Midwayjs!";
+    
+    // 返回 json
+    return {
+      a: 1,
+      b: 2,
+    };
+    
+    // 返回 html
+    return '<html><h1>Hello</h1></html>';
+    
+    // 返回 stream
+    return fs.createReadStream('./good.png');
+  }
+}
+```
+
+也可以使用 koa 原生的 API。
+
+```typescript
+import { Controller, Get, HttpCode } from "@midwayjs/decorator";
+
+@Controller('/')
+export class HomeController {
+
+  @Get('/')
+  async home() {
+    // 返回字符串
+    this.ctx.body = "Hello Midwayjs!";
+    
+    // 返回 json
+    this.ctx.body = {
+      a: 1,
+      b: 2,
+    };
+    
+    // 返回 html
+    this.ctx.body = '<html><h1>Hello</h1></html>';
+    
+    // 返回 stream
+    this.ctx.body = fs.createReadStream('./good.png');
+  }
+}
+```
+
+:::caution
+
+注意：`ctx.body` 是 `ctx.response.body` 的简写，不要和 `ctx.request.body` 混淆了。
+
+:::
+
+
+
+### 设置状态码
+
+默认情况下，响应的**状态码**总是**200**，我们可以通过在处理程序层添加 `@HttpCode` 装饰器或者通过 API 来轻松更改此行为。
+
+当发送错误时，如 `4xx/5xx`，可以使用 [异常处理](error_filter) 抛出错误的方式实现。
+
+**示例：使用装饰器**
 
 
 ```typescript
@@ -304,17 +689,38 @@ export class HomeController {
     return "Hello Midwayjs!";
   }
 }
-
 ```
 
+**示例：使用 API**
+
+```typescript
+import { Controller, Get, Inject } from "@midwayjs/decorator";
+
+@Controller('/')
+export class HomeController {
+  @Inject()
+  ctx: Context;
+  
+  @Get('/')
+  async home() {
+    this.ctx.status = 201;
+    // ...
+  }
+}
+```
 
 :::info
-状态码装饰器不能在响应流关闭后（response.end之后）修改。
+状态码不能在响应流关闭后（response.end之后）修改。
 :::
-## 响应头
 
 
-Midway 提供 `@SetHeader` 装饰器来简单的设置自定义响应头。
+
+### 设置响应头
+
+Midway 提供 `@SetHeader` 装饰器或者通过 API 来简单的设置自定义响应头。
+
+**示例：使用装饰器**
+
 ```typescript
 import { Controller, Get, SetHeader } from "@midwayjs/decorator";
 
@@ -349,13 +755,35 @@ export class HomeController {
 }
 
 ```
-:::info
-响应头装饰器不能在响应流关闭后（response.end之后）修改。
-:::
-## 重定向
+**示例：使用 API**
 
+```typescript
+import { Controller, Get, Inject } from "@midwayjs/decorator";
+
+@Controller('/')
+export class HomeController {
+  @Inject()
+  ctx: Context;
+  
+  @Get('/')
+  async home() {
+    this.ctx.set('x-bbb', '123');
+    // ...
+  }
+}
+```
+
+:::info
+响应头不能在响应流关闭后（response.end之后）修改。
+:::
+
+### 重定向
 
 如果需要简单的将某个路由重定向到另一个路由，可以使用 `@Redirect` 装饰器。 `@Redirect` 装饰器的参数为一个跳转的 URL，以及一个可选的状态码，默认跳转的状态码为 `302` 。
+
+此外，也可以通过 API 来跳转。
+
+**示例：使用装饰器**
 
 
 ```typescript
@@ -382,17 +810,38 @@ export class LoginController {
   }
 }
 ```
+**示例：使用 API**
+
+```typescript
+import { Controller, Get, Inject } from "@midwayjs/decorator";
+
+@Controller('/')
+export class HomeController {
+  @Inject()
+  ctx: Context;
+  
+  @Get('/')
+  async home() {
+    this.ctx.redirect('/login_check');
+    // ...
+  }
+}
+```
+
 :::info
-重定向装饰器不能在响应流关闭后（response.end之后）修改。
+重定向不能在响应流关闭后（response.end之后）修改。
 :::
 
 
 
 
-## 响应类型
-
+### 响应类型
 
 虽然浏览器会自动根据内容判断最佳的响应内容，但是我们经常会碰到需要手动设置的情况。我们也提供了 `@ContentType` 装饰器用于设置响应类型。
+
+此外，也可以通过 API 来设置。
+
+**示例：使用装饰器**
 
 
 ```typescript
@@ -408,10 +857,29 @@ export class HomeController {
   }
 }
 ```
+**示例：使用 API**
+
+```typescript
+import { Controller, Get, Inject } from "@midwayjs/decorator";
+
+@Controller('/')
+export class HomeController {
+  @Inject()
+  ctx: Context;
+  
+  @Get('/')
+  async home() {
+    this.ctx.type = 'html';
+    // ...
+  }
+}
+```
+
 :::info
-响应类型装饰器不能在响应流关闭后（response.end之后）修改。
+响应类型不能在响应流关闭后（response.end之后）修改。
 :::
-## 优先级
+
+## 路由优先级
 
 
 midway 已经统一对路由做排序，通配的路径将自动降低优先级，在最后被加载。

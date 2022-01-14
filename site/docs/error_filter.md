@@ -102,113 +102,6 @@ async findAll() {
 
 
 
-## 框架内置的错误
-
-以下是框架内置的错误，随着时间推移，我们会不断增加。
-
-| 错误码       | 错误描述                     |
-| ------------ | ---------------------------- |
-| MIDWAY_10000 | 未知错误                     |
-| MIDWAY_10001 | 未分类的错误                 |
-| MIDWAY_10002 | 参数类型错误                 |
-| MIDWAY_10003 | 依赖注入定义未找到           |
-| MIDWAY_10004 | 功能不再支持                 |
-| MIDWAY_10005 | 功能未实现                   |
-| MIDWAY_10006 | 配置项丢失                   |
-| MIDWAY_10007 | 依赖注入属性 resovler 未找到 |
-| MIDWAY_10008 | 路由重复                     |
-| MIDWAY_10009 | 使用了错误的方法             |
-|              |                              |
-
-
-
-## 注册错误码
-
-框架提供了一种通用的注册错误码的机制，错误码后期可以方便的排错，统计。
-
-在业务的错误定义，以及组件错误定义的时候非常有用。
-
-错误码一般是个枚举值，比如：
-
-```typescript
-const CustomErrorEnum = {
-  UNKNOWN: 10000,
-  COMMON: 10001,
-  PARAM_TYPE: 10002,
-  // ...
-};
-```
-
-在编码中，我们会提供固定的错误码，并且希望在 SDK 或者组件中不冲突，这就需要框架来支持。
-
-Midway 提供了 `registerErrorCode` 方法，用于向框架注册不重复的错误码，并且进行一定的格式化。
-
-比如，在框架内部，我们有如下的定义：
-
-```typescript
-import { registerErrorCode } from '@midwayjs/core';
-
-export const FrameworkErrorEnum = registerErrorCode('midway', {
-  UNKNOWN: 10000,
-  COMMON: 10001,
-  PARAM_TYPE: 10002,
-	// ...
-} as const);
-```
-
-`registerErrorCode` 包含两个参数：
-
-- 错误分组，比如上面的 `midway` ，就是框架内置错误组名，在一个应用中，这个组名不应该重复
-- 错误枚举对象，以错误名为 key，错误码为 value
-
-
-
-方法会返回一个错误枚举值，枚举值会以错误名作为 key，错误分组加错误码作为 value。
-
-比如：
-
-```typescript
-FrameworkErrorEnum.UNKNOWN
-// => output: MIDWAY_10000
-
-FrameworkErrorEnum.COMMON
-// => output: MIDWAY_10001
-```
-
-这样，当错误中出现 `MIDWAY_10000` 的错误码时，我们就知道是什么错误了，配合文档就可以沉淀所有的错误。
-
-在错误定义时，直接使用这个错误码枚举即可。
-
-```typescript
-export class MidwayParameterError extends MidwayError {
-  constructor(message?: string) {
-    super(message ?? 'Parameter type not match', FrameworkErrorEnum.PARAM_TYPE);
-  }
-}
-
-// user code
-async findAll(data) {
-  if (!data.user) {
-    throw new MidwayParameterError();
-  }
-  // ...
-}
-
-// output
-// 2022-01-02 14:02:29,124 ERROR 14259 MidwayParameterError: Parameter type not match
-//  		at APIController.findAll (....
-//      at /Users/harry/project/midway-v3/packages/core/src/common/webGenerator.ts:38:57
-//      at processTicksAndRejections (node:internal/process/task_queues:96:5) {
-// 		code: 'MIDWAY_10002',
-//		cause: undefined,
-//	}
-
-```
-
-
-
-
-
 ## Http 异常
 
 在 Http 请求中，Midway 提供了更为通用的 Http 类型的异常，相比普通的异常类型，它额外包含了一个 [status ](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status) 状态码属性。
@@ -419,3 +312,105 @@ export InternalServerErrorFilter {
 }
 ```
 
+
+## 框架内置的错误
+
+以下是框架内置的错误，随着时间推移，我们会不断增加。
+
+| 错误码       | 错误描述                     |
+| ------------ | ---------------------------- |
+| MIDWAY_10000 | 未知错误                     |
+| MIDWAY_10001 | 未分类的错误                 |
+| MIDWAY_10002 | 参数类型错误                 |
+| MIDWAY_10003 | 依赖注入定义未找到           |
+| MIDWAY_10004 | 功能不再支持                 |
+| MIDWAY_10005 | 功能未实现                   |
+| MIDWAY_10006 | 配置项丢失                   |
+| MIDWAY_10007 | 依赖注入属性 resovler 未找到 |
+| MIDWAY_10008 | 路由重复                     |
+| MIDWAY_10009 | 使用了错误的方法             |
+
+
+
+## 注册错误码
+
+框架提供了一种通用的注册错误码的机制，错误码后期可以方便的排错，统计。
+
+在业务的错误定义，以及组件错误定义的时候非常有用。
+
+错误码一般是个枚举值，比如：
+
+```typescript
+const CustomErrorEnum = {
+  UNKNOWN: 10000,
+  COMMON: 10001,
+  PARAM_TYPE: 10002,
+  // ...
+};
+```
+
+在编码中，我们会提供固定的错误码，并且希望在 SDK 或者组件中不冲突，这就需要框架来支持。
+
+Midway 提供了 `registerErrorCode` 方法，用于向框架注册不重复的错误码，并且进行一定的格式化。
+
+比如，在框架内部，我们有如下的定义：
+
+```typescript
+import { registerErrorCode } from '@midwayjs/core';
+
+export const FrameworkErrorEnum = registerErrorCode('midway', {
+  UNKNOWN: 10000,
+  COMMON: 10001,
+  PARAM_TYPE: 10002,
+	// ...
+} as const);
+```
+
+`registerErrorCode` 包含两个参数：
+
+- 错误分组，比如上面的 `midway` ，就是框架内置错误组名，在一个应用中，这个组名不应该重复
+- 错误枚举对象，以错误名为 key，错误码为 value
+
+
+
+方法会返回一个错误枚举值，枚举值会以错误名作为 key，错误分组加错误码作为 value。
+
+比如：
+
+```typescript
+FrameworkErrorEnum.UNKNOWN
+// => output: MIDWAY_10000
+
+FrameworkErrorEnum.COMMON
+// => output: MIDWAY_10001
+```
+
+这样，当错误中出现 `MIDWAY_10000` 的错误码时，我们就知道是什么错误了，配合文档就可以沉淀所有的错误。
+
+在错误定义时，直接使用这个错误码枚举即可。
+
+```typescript
+export class MidwayParameterError extends MidwayError {
+  constructor(message?: string) {
+    super(message ?? 'Parameter type not match', FrameworkErrorEnum.PARAM_TYPE);
+  }
+}
+
+// user code
+async findAll(data) {
+  if (!data.user) {
+    throw new MidwayParameterError();
+  }
+  // ...
+}
+
+// output
+// 2022-01-02 14:02:29,124 ERROR 14259 MidwayParameterError: Parameter type not match
+//  		at APIController.findAll (....
+//      at /Users/harry/project/midway-v3/packages/core/src/common/webGenerator.ts:38:57
+//      at processTicksAndRejections (node:internal/process/task_queues:96:5) {
+// 		code: 'MIDWAY_10002',
+//		cause: undefined,
+//	}
+
+```

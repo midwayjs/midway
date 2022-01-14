@@ -177,7 +177,7 @@ logger.error(error);
 // 文本在前，加上 error 实例
 logger.info('text before error', new Error('error instance after text'));
 ```
-:::warning
+:::caution
 注意，错误对象只能放在最后，且有且只有一个，其后面的所有参数都会被忽略。
 :::
 
@@ -477,9 +477,8 @@ export interface LoggerOptions {
 
 | **参数名** | **参数类型** | **默认值** | **描述** |
 | --- | --- | --- | --- |
-| dir | string | window: `process.env.USERPROFILE`
-Linux/mac: `process.env.HOME` | 文本日志的根目录，默认为当前的用户根目录 |
-| level | debug|info|warn|error |  | 全局日志等级 |
+| dir | string | window: `process.env.USERPROFILE`<br />Linux/mac: `process.env.HOME` |文本日志的根目录，默认为当前的用户根目录|
+| level | debug|info|warn|
 | fileLogName | string | midway-core.log | 文本日志写入的文件名 |
 | errorLogName | string | common-error.log | 错误日志写入的文件名 |
 | defaultLabel | string | undefined | 输出的默认标签，[] 中的值 |
@@ -530,10 +529,8 @@ info 对象的默认属性如下：
 | level | 小写的日志等级 | info |
 | LEVEL | 大写的日志等级 | INFO |
 | pid | 当前进程 pid | 3847 |
-| labelText | 标签的聚合文本 | [a:b:c] |
-| message | 普通消息 + 错误消息 + 错误堆栈的组合 | 1、普通文本，如 `123456` ， `hello world`|
-|2、错误文本（错误名+堆栈）Error: another test error at Object.anonymous (/home/runner/work/midway/midway/packages/logger/test/index.test.ts:224:18)|||
-|3、普通文本+错误文本 hello world Error: another test error at Object.anonymous (/home/runner/work/midway/midway/packages/logger/test/index.test.ts:224:18) |||
+| labelText | 标签的聚合文本 | [abcde] |
+| message | 普通消息 + 错误消息 + 错误堆栈的组合 | 1、普通文本，如 `123456` ， `hello world`<br />2、错误文本（错误名+堆栈）Error: another test error at Object.anonymous (/home/runner/work/midway/midway/packages/logger/test/index.test.ts:224:18)<br />3、普通文本+错误文本 hello world Error: another test error at Object.anonymous (/home/runner/work/midway/midway/packages/logger/test/index.test.ts:224:18) |
 | stack | 错误堆栈 |  |
 | originError | 原始错误对象 | 错误实例本身 |
 | originArgs | 原始的用户入参 | [ 'a', 'b', 'c' ] |

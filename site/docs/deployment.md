@@ -146,7 +146,7 @@ $ npm prune --production														# 移除开发依赖
 有很多种方式可以上传到服务器，比如常见的 `ssh/FTP/git` 等。也可以使用 [OSS](https://www.aliyun.com/product/oss) 等在线服务进行中转。
 
 
-### 使用纯 Node.js 或者 pm2 等工具启动
+### 启动项目
 
 Midway 构建出来的项目是单进程的，不管是采用 `fork` 模式还是 `cluster` 模式，单进程的代码总是很容易的兼容到不同的体系中，因此非常容易被社区现有的 pm2/forever 等工具所加载，
 
@@ -161,7 +161,7 @@ Midway 构建出来的项目是单进程的，不管是采用 `fork` 模式还�
 ├── src
 ├── dist                # Midway 构建产物目录
 ├── test
-├── bootstrap.js						# 部署启动文件
+├── bootstrap.js        # 部署启动文件
 ├── package.json
 └── tsconfig.json
 ```
@@ -184,7 +184,10 @@ Bootstrap.run();
 
 这个时候，你已经可以直接使用 `NODE_ENV=production node bootstrap.js` 来启动代码了，也可以使用 pm2 来执行启动。
 
-pm2 启动可以参考 [pm2 使用文档](pm2)。
+我们一般推荐使用工具使用工具来启动 Node.js 项目，下面有一些文档可以进阶阅读。
+
+- [pm2 使用文档](extensions/pm2)
+- [cfork 使用文档](extensions/cfork)
 
 
 ## 使用 Docker 部署
@@ -388,7 +391,7 @@ export class HomeController {
 
 这个代码比较好理解，相当于访问 `127.0.0.1:7001/update` 接口，会去调用 redisService 新增一个 key，对应的 value 为 hello world。
 
-然后访问 `127.0.0.1:7001`  ，会调用redisService获取key为foo的值，并返回给页面。
+然后访问 `127.0.0.1:7001`  ，会调用 redisService 获取 key 为 foo 的值，并返回给页面。
 
 如下：
 

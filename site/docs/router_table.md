@@ -74,8 +74,9 @@ export interface RouterInfo {
   responseMetadata: any[];
 }
 ```
-| prefix | string | 路由前缀，比如 / 或者 /api，用户写在 @Controller 装饰器上的部分 |
+| 属性                 | 类型     | 描述                                                         |
 | --- | --- | --- |
+| prefix | string | 路由前缀，比如 / 或者 /api，用户写在 @Controller 装饰器上的部分 |
 | routerName | string | 路由名 |
 | url | string | 路由的去除路由前缀的部分，也是用户写在 @Get 等装饰器上的部分 |
 | requestMethod | string | get/post/delete/put/all 等 |
@@ -225,17 +226,18 @@ Router 的数据相对简单。
 
 
 
-| prefix | string | 路由前缀，比如 / 或者 /api，用户写在 @Controller 装饰器上的部分 |
+| 属性          | 类型     | 描述                                                         |
 | --- | --- | --- |
+| prefix | string | 路由前缀，比如 / 或者 /api，用户写在 @Controller 装饰器上的部分 |
 | priority | number | Router 的优先级，@Priority 装饰器填写的值，/ 根 Router 默认优先级最低，为 -999 |
 | middleware | string[] | 控制器中间件字符串数组 |
 | controllerId | string | controller 的依赖注入容器的 key（providerId） |
 | routerOptions | any | @Controller 装饰器的 options |
-|  |  |  |
 
 
 
 获取路由表 API。
+
 ```typescript
 const list = await collector.getRoutePriorityList();
 ```

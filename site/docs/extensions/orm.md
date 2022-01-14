@@ -158,7 +158,7 @@ export class Photo {
   isPublished: boolean;
 }
 ```
-:::warning
+:::caution
 注意，这里的 EntityModel 是 midway 做了封装的特殊装饰器，为了和 midway 更好的结合使用。请不要直接使用 typeorm 中的 Entity。
 :::
 

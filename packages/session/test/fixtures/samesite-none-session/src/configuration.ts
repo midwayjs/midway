@@ -4,7 +4,6 @@ import * as koa from '../../../../../web-koa';
 @Configuration({
   imports: [
     koa,
-    require('../../../../src')
   ],
   importConfigs: [
     {

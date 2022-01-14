@@ -3,7 +3,6 @@ import * as koa from '../../../../../web-koa';
 
 @Configuration({
   imports: [
-    require('../../../../src'),
     koa
   ],
   importConfigs: [
