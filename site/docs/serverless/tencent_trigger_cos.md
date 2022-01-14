@@ -36,18 +36,15 @@ export class HelloTencentService {
 
 在 `npm run deploy` 后，即可。
 
-## OSS 触发器配置
+## COS 触发器配置
 
 | 属性名 | 类型   | 描述                   |
 | ------ | ------ | ---------------------- |
 | bucket | string | 对象存储的 bucket 地址 |
 | events | string | 触发函数执行的事件名   |
-| filter | {      |
+| filter | {<br />prefix: string;<br/>   suffix: string;<br/> } |对象过滤参数，满足过滤条件的 对象才可以触发函数，包含一个配置属性 key，表示过滤器支持过滤的对象键 (key)。|
 
-prefix: string;
-   suffix: string;
- } | 对象过滤参数，满足过滤条件的 对象才可以触发函数，包含一个配置属性 key，表示过滤器支持过滤的对象键 (key)。 |
-| | | |
+
 
 示例：
 
