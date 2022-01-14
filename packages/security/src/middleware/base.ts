@@ -9,14 +9,14 @@ export abstract class BaseMiddleware implements IMiddleware<any, any> {
   resolve(app) {
     if (app.getFrameworkType() === MidwayFrameworkType.WEB_EXPRESS) {
       return async (req: any, res, next) => {
-        return this.compatibleMiddleware(req, res, next);
+        return this.compatibleMiddleware(req, req, res, next);
       };
     } else {
       return async (ctx, next) => {
-        return this.compatibleMiddleware(ctx, ctx, next);
+        return this.compatibleMiddleware(ctx, ctx.request, ctx, next);
       };
     }
   }
 
-  abstract compatibleMiddleware(req, res, next);
+  abstract compatibleMiddleware(context, req, res, next);
 }

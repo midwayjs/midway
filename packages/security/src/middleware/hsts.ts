@@ -3,7 +3,7 @@ import { BaseMiddleware } from './base';
 
 @Middleware()
 export class HSTSMiddleware extends BaseMiddleware {
-  async compatibleMiddleware(req, res, next) {
+  async compatibleMiddleware(context, req, res, next) {
     const result = await next();
     let val = 'max-age=' + this.security.hsts.maxAge;
     if (this.security.hsts.includeSubdomains) {

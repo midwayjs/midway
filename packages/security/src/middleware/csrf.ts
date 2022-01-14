@@ -9,105 +9,106 @@ const NEW_CSRF_SECRET = Symbol('midway-security#NEW_CSRF_SECRET');
 const tokens = new CsrfTokens();
 @Middleware()
 export class CSRFMiddleware extends BaseMiddleware {
-  async compatibleMiddleware(req, res, next) {
-    req.assertCsrf = () => {
-      this.assertCsrf(req);
+  async compatibleMiddleware(context, req, res, next) {
+    context.assertCsrf = () => {
+      this.assertCsrf(context, req);
     };
 
     // Must call this method when user login to ensure each user has independent secret.
-    req.rotateCsrfSecret = () => {
-      if (!req[NEW_CSRF_SECRET] && this.getCSRFSecret(req)) {
-        this.ensureCsrfSecret(req, res, true);
+    context.rotateCsrfSecret = () => {
+      if (!context[NEW_CSRF_SECRET] && this.getCSRFSecret(context)) {
+        this.ensureCsrfSecret(context, req, res, true);
       }
     };
 
-    Object.defineProperty(req, 'csrf', {
+    Object.defineProperty(context, 'csrf', {
       get: () => {
-        const secret = req[NEW_CSRF_SECRET] || this.getCSRFSecret(req);
+        const secret = context[NEW_CSRF_SECRET] || this.getCSRFSecret(context);
         return secret ? tokens.create(secret) : '';
       },
     });
-
     // ensure csrf token exists
     if (['any', 'all', 'ctoken'].includes(this.security.csrf.type)) {
-      this.ensureCsrfSecret(req, res);
+      this.ensureCsrfSecret(context, req, res);
     }
 
     // ignore requests: get, head, options and trace
     const method = req.method.toUpperCase();
     const ignoreMethods = ['GET', 'HEAD', 'OPTIONS', 'TRACE'];
     if (!ignoreMethods.includes(method)) {
-      req.assertCsrf();
+      context.assertCsrf();
     }
 
     return next();
   }
 
-  assertCsrf(request) {
+  assertCsrf(context, request) {
     const { type } = this.security.csrf;
     switch (type) {
       case 'ctoken':
-        this.checkCSRFToken(request);
+        this.checkCSRFToken(context, request);
         break;
       case 'referer':
-        this.checkCSRFReferer(request);
+        this.checkCSRFReferer(context, request);
         break;
       case 'all':
       case 'any':
-        this.checkCSRFToken(request);
-        this.checkCSRFReferer(request);
+        this.checkCSRFToken(context, request);
+        this.checkCSRFReferer(context, request);
         break;
       default:
         throw new CSRFError();
     }
   }
 
-  getCSRFSecret(request) {
-    if (request[_CSRF_SECRET]) {
-      return request[_CSRF_SECRET];
+  getCSRFSecret(context) {
+    if (context[_CSRF_SECRET]) {
+      return context[_CSRF_SECRET];
     }
     const { useSession, sessionName } = this.security.csrf;
     let { cookieName } = this.security.csrf;
     // // get secret from session or cookie
     if (useSession) {
-      request[_CSRF_SECRET] = request.session[sessionName] || '';
+      context[_CSRF_SECRET] = context.session[sessionName] || '';
     } else {
       // cookieName support array. so we can change csrf cookie name smoothly
       if (!Array.isArray(cookieName)) {
         cookieName = [cookieName];
       }
       for (const name of cookieName) {
-        request[_CSRF_SECRET] =
-          request.cookies.get(name, { signed: false }) || '';
-        if (request[_CSRF_SECRET]) break;
+        context[_CSRF_SECRET] =
+          context.cookies.get(name, { signed: false }) || '';
+        if (context[_CSRF_SECRET]) {
+          break;
+        }
       }
     }
-    return request[_CSRF_SECRET];
+    return context[_CSRF_SECRET];
   }
 
-  getInputToken(request) {
+  getInputToken(context, request) {
     const { headerName, bodyName, queryName } = this.security.csrf;
     return (
-      request.query?.[queryName] ||
+      context.query?.[queryName] ||
       request.body?.[bodyName] ||
-      (headerName && request.get(headerName))
+      (headerName && context.get(headerName))
     );
   }
 
-  private checkCSRFToken(request) {
-    const tokenSecret = this.getCSRFSecret(request);
+  private checkCSRFToken(context, request) {
+    const tokenSecret = this.getCSRFSecret(context);
     if (!tokenSecret) {
       throw new CSRFError('missing csrf token');
     }
-    const token = this.getInputToken(request);
+    const token = this.getInputToken(context, request);
     if (token !== tokenSecret && !tokens.verify(tokenSecret, token)) {
       throw new CSRFError('invalid csrf token');
     }
   }
 
-  private checkCSRFReferer(request) {
+  private checkCSRFReferer(context, request) {
     const { refererWhiteList } = this.security.csrf;
-    const referer = (request.get('referer') || '').toLowerCase();
+    const referer = (context.get('referer') || '').toLowerCase();
     if (!referer) {
       throw new CSRFError('missing csrf referer');
     }
@@ -119,13 +120,13 @@ export class CSRFMiddleware extends BaseMiddleware {
     }
   }
 
-  private ensureCsrfSecret(request, response, rotate?) {
-    const tokenSecret = this.getCSRFSecret(request);
+  private ensureCsrfSecret(context, request, response, rotate?) {
+    const tokenSecret = this.getCSRFSecret(context);
     if (tokenSecret && !rotate) {
       return;
     }
     const secret = tokens.secretSync();
-    request[NEW_CSRF_SECRET] = secret;
+    context[NEW_CSRF_SECRET] = secret;
     const { useSession, sessionName, cookieDomain } = this.security.csrf;
     let { cookieName } = this.security.csrf;
 
