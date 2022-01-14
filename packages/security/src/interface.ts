@@ -16,6 +16,7 @@ export interface SecurityCSRFOptions extends SecurityEnableOptions {
   bodyName: string;
   queryName: string;
   refererWhiteList: string[];
+  cookieDomain: (context: any) => string;
   matching: (context: any) => boolean;
 }
 
