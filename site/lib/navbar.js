@@ -26,7 +26,7 @@ module.exports = [
   {
     "type": "doc",
     "docId": "tool/cli",
-    "label": "其他",
+    "label": "工具 & 其他",
     "position": "left"
   }
 ]

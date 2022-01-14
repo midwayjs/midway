@@ -3,13 +3,14 @@
 在某些场景下，需要扩展上下文 ctx 属性，比如 Web 场景下中间件，我们可以往上附加一些方法或者属性。
 
 ```typescript
-import { Context } from 'egg';   // 或者其他上层框架导出的 Context
+import { Middleware } from '@midwayjs/decorator';
+import { Context } from '@midwayjs/koa';
 
-@Provide()
+@Middleware()
 export class ReportMiddleware implements IWebMiddleware {
 
   resolve() {
-    return async (ctx: Context, next) {
+    return async (ctx: Context, next) => {
 
       ctx.abc = '123';
       await next();
@@ -39,10 +40,16 @@ declare module '@midwayjs/core' {
 
 ## 组件中扩展定义
 
-你可以在组件的 `src/index.ts` 或者其他导出的文件出，通过下面的代码，扩展 Midway 通用的 Context。
+组件中略有不同，一般来说，组件可能是只能在特定的场景使用。
+
+你可以在组件根目录的 `index.d.ts` 通过下面的代码，扩展 Midway 通用的 Context。
+
+如果你希望对所有场景的 Context 做扩展。
 
 ```typescript
-// src/interface.ts
+// index.d.ts
+
+// 下面这段可以对所有的 Context 做扩展
 declare module '@midwayjs/core/dist/interface' {
   interface Context {
     abc: string;
@@ -50,4 +57,42 @@ declare module '@midwayjs/core/dist/interface' {
 }
 ```
 
-组件中扩展和项目中略有不同（怀疑是 TS 的 bug）。
+如果你只希望对特定场景的 Context 做扩展。
+
+```typescript
+// index.d.ts
+
+// 下面这段只 @midwayjs/koa 的 Context 做扩展
+declare module '@midwayjs/koa/dist/interface' {
+  interface Context {
+    abc: string;
+  }
+}
+
+// 下面这段只 @midwayjs/web 的 Context 做扩展
+declare module '@midwayjs/web/dist/interface' {
+  interface Context {
+    abc: string;
+  }
+}
+
+// 下面这段只 @midwayjs/faas 的 Context 做扩展
+declare module '@midwayjs/faas/dist/interface' {
+  interface Context {
+    abc: string;
+  }
+}
+
+// 下面这段只 @midwayjs/express 的 Context 做扩展
+declare module '@midwayjs/express/dist/interface' {
+  interface Context {
+    abc: string;
+  }
+}
+
+```
+
+:::caution
+- 1、组件中扩展和项目中略有不同（怀疑是 TS 的 bug）。
+- 2、如果组件中使用了项目的扩展方式，那么其余组件的扩展提示会出现问题。
+:::

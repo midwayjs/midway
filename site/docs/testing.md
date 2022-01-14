@@ -78,11 +78,11 @@ jest 中自带了强大的 `expect` 断言库，可以直接在全局使用它�
 
 
 ```typescript
-expect(result.status).toBe(200);							// 值是否等于某个值，引用相等
+expect(result.status).toBe(200);              // 值是否等于某个值，引用相等
 expect(result.status).not.toBe(200);
-expect(result).toEqual('hello');							// 简单匹配，对象属性相同也为 true
-expect(result).toStrictEqual('hello');				// 严格匹配
-expect(['lime', 'apple']).toContain('lime');	// 判断是否在数组中
+expect(result).toEqual('hello');              // 简单匹配，对象属性相同也为 true
+expect(result).toStrictEqual('hello');        // 严格匹配
+expect(['lime', 'apple']).toContain('lime');  // 判断是否在数组中
 ```
 
 

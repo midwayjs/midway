@@ -98,7 +98,7 @@ export class ContainerConfiguration implements ILifeCycle {
 ```typescript
 export class IndexHandler {
 
-	@Inject()
+  @Inject()
   sequelize;
   
   async handler() {
