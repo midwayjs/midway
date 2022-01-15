@@ -7,7 +7,7 @@ title: TableStore
 ## 安装依赖
 
 ```bash
-$ npm i @midwayjs/tablestore --save
+$ npm i @midwayjs/tablestore@2 --save
 ```
 
 ​

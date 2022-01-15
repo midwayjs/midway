@@ -39,13 +39,22 @@
         "env_config",
         "lifecycle",
         "logger",
-        "aspect",
-        "pipeline",
         "cookie_session",
         "built_in_service",
         "router_table",
-        "service_factory",
         "decorator_index"
+      ]
+    },
+    {
+      "type": "category",
+      "label": "代码设计",
+      "collapsed": false,
+      "collapsible": false,
+      "items": [
+        "aspect",
+        "pipeline",
+        "service_factory",
+        "data_listener"
       ]
     },
     {
@@ -196,6 +205,7 @@
       "collapsed": true,
       "items": [
         "serverless/app_deploy_serverless",
+        "serverless/migrate_midway",
         "serverless/migrate_koa",
         "serverless/migrate_express",
         "serverless/migrate_egg",

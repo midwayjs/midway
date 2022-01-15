@@ -349,6 +349,10 @@ export class MidwayExpressFramework extends BaseFramework<
     return this.server;
   }
 
+  public getPort() {
+    return process.env.MIDWAY_HTTP_PORT;
+  }
+
   public getFrameworkName() {
     return 'midway:express';
   }

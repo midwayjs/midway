@@ -90,7 +90,7 @@ mongoose 和你服务器使用的 MongoDB Server 的版本也有着一定的关�
 **请务必注意，请查看第一小节提前编写/安装 mongoose 等相关依赖包。**
 
 ```bash
-$ npm i @midwayjs/typegoose --save
+$ npm i @midwayjs/typegoose@2 --save
 ```
 
 安装后需要手动在 `src/configuration.ts` 配置，代码如下。
@@ -298,7 +298,7 @@ mongoose 组件是 typegoose 的基础组件，有时候我们可以直接使用
 **请务必注意，请查看第一小节提前编写/安装 mongoose 等相关依赖包。**
 
 ```bash
-$ npm i @midwayjs/mongoose --save
+$ npm i @midwayjs/mongoose@2 --save
 ```
 
 ### 2、开启组件
