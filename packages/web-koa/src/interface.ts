@@ -2,7 +2,6 @@ import { IConfigurationOptions, IMidwayApplication, IMidwayContext } from '@midw
 import * as koa from 'koa';
 import { Context as KoaContext, DefaultState, Middleware, Next } from 'koa';
 import { RouterParamValue } from '@midwayjs/decorator';
-import * as bodyParser from 'koa-bodyparser';
 import { CookieSetOptions } from '@midwayjs/cookies';
 
 export type IMidwayKoaContext = IMidwayContext<KoaContext>;
@@ -70,6 +69,63 @@ export type Application = IMidwayKoaApplication;
 
 export interface Context extends IMidwayKoaContext {}
 
+interface BodyParserOptions {
+  /**
+   *  parser will only parse when request type hits enableTypes, default is ['json', 'form'].
+   */
+  enableTypes?: string[] | undefined;
+
+  /**
+   * requested encoding. Default is utf-8 by co-body
+   */
+  encode?: string | undefined;
+
+  /**
+   * limit of the urlencoded body. If the body ends up being larger than this limit
+   * a 413 error code is returned. Default is 56kb
+   */
+  formLimit?: string | undefined;
+
+  /**
+   * limit of the json body. Default is 1mb
+   */
+  jsonLimit?: string | undefined;
+
+  /**
+   * limit of the text body. Default is 1mb.
+   */
+  textLimit?: string | undefined;
+
+  /**
+   * limit of the xml body. Default is 1mb.
+   */
+  xmlLimit?: string | undefined;
+
+  /**
+   * when set to true, JSON parser will only accept arrays and objects. Default is true
+   */
+  strict?: boolean | undefined;
+
+  /**
+   * custom json request detect function. Default is null
+   */
+  detectJSON?: ((ctx: IMidwayKoaContext) => boolean) | undefined;
+
+  /**
+   * support extend types
+   */
+  extendTypes?: {
+    json?: string[] | undefined;
+    form?: string[] | undefined;
+    text?: string[] | undefined;
+  } | undefined;
+
+  /**
+   * support custom error handle
+   */
+  onerror?: ((err: Error, ctx: IMidwayKoaContext) => void) | undefined;
+}
+
 declare module '@midwayjs/core/dist/interface' {
   interface MidwayConfig {
     keys?: string | string[];
@@ -86,6 +142,14 @@ declare module '@midwayjs/core/dist/interface' {
       template?: string;
       accepts?: (...args) => any;
     },
-    bodyParser?: bodyParser.Options;
+    bodyParser?: BodyParserOptions;
   }
 }
+
+declare module 'koa' {
+  interface Request {
+    body?: any;
+    rawBody: string;
+  }
+}
+
