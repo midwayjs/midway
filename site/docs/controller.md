@@ -495,7 +495,7 @@ Cookie 在 Web 应用中经常承担了传递客户端身份信息的作用，�
 
 通过 Cookie，我们可以给每一个用户设置一个 Session，用来存储用户身份相关的信息，这份信息会加密后存储在 Cookie 中，实现跨请求的用户身份保持。
 
-框架内置了 [Session](https://github.com/eggjs/egg-session) 插件，给我们提供了 `ctx.session` 来访问或者修改当前用户 Session 。
+框架内置了 [Session](https://github.com/midwayjs/midway/tree/main/packages/session) 插件，给我们提供了 `ctx.session` 来访问或者修改当前用户 Session 。
 
 ```typescript
 import { Inject, Controller, Get, Provide } from '@midwayjs/decorator';
@@ -530,7 +530,7 @@ ctx.session = null;
 
 ### 上传的文件
 
-上传的文件一般使用 `multipart/form-data` 协议头，由 `@Files` 装饰器获取，由于上传功能由 upload 组件提供，具体可以参考 [upload 组件](extensions/upload)。
+上传的文件一般使用 `multipart/form-data` 协议头，由 `@Files` 装饰器获取，由于上传功能由 upload 组件提供，具体可以参考 [upload 组件](./extensions/upload)。
 
 
 
@@ -589,7 +589,7 @@ async getUser(@Query('id') id: boolean): Promise<User> {
 
 ## 参数校验
 
-参数校验功能由 validate 组件提供，具体可以参考 [validate 组件](extensions/validate)。
+参数校验功能由 validate 组件提供，具体可以参考 [validate 组件](./extensions/validate)。
 
 
 
