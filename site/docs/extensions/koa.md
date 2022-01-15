@@ -15,6 +15,34 @@ $ npm i @types/koa --save-dev
 
 
 
+## 开启组件
+
+
+
+```typescript
+import { Configuration, App } from '@midwayjs/decorator';
+import * as koa from '@midwayjs/koa';
+import { join } from 'path';
+
+@Configuration({
+  imports: [koa],
+  importConfigs: [join(__dirname, './config')],
+})
+export class ContainerLifeCycle {
+  @App()
+  app: koa.Application;
+
+  async onReady() {
+
+  }
+}
+
+```
+
+
+
+
+
 ## 配置
 
 `@midwayjs/koa`  的配置样例如下：
@@ -38,5 +66,4 @@ export const koa = {
 | cert | string \| Buffer \| Array<Buffer\|Object> | 可选，Https cert |
 | ca | string \| Buffer \| Array<Buffer\|Object> | 可选，Https ca |
 | http2    | boolean | 可选，http2 支持，默认 false |
-
 

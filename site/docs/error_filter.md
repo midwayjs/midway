@@ -79,7 +79,7 @@ async findAll() {
 import { HttpStatus } from '@midwayjs/core';
 
 export class CustomError extends MidwayError {
-	constructor() {
+  constructor() {
     super('my custom error', 'CUSTOM_ERROR_CODE_10000');
   }
 }
@@ -135,7 +135,7 @@ async findAll() {
 import { HttpStatus } from '@midwayjs/core';
 
 export class CustomHttpError extends MidwayHttpError {
-	constructor() {
+  constructor() {
     super('my custom error', HttpStatus.BAD_REQUEST);
   }
 }
