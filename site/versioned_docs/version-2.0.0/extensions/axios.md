@@ -3,10 +3,10 @@ title: HTTP 请求（Axios）
 ---
 
 midway 包裹了 [axios](https://github.com/axios/axios) 包，使得在代码中可以简单的使用 axios 接口。
-​
+
 
 和 axios 的一些关系如下：
-​
+
 
 - 接口完全一致
 - 适配依赖注入写法，完整的类型定义
@@ -15,12 +15,12 @@ midway 包裹了 [axios](https://github.com/axios/axios) 包，使得在代码�
 ## 安装依赖
 
 ```bash
-$ npm i @midwayjs/axios --save
+$ npm i @midwayjs/axios@2 --save
 ```
 
 ## 引入组件
 
-首先，引入 组件，在 `configuration.ts`  中导入：
+首先，引入 组件，在 `configuration.ts` 中导入：
 
 ```typescript
 import { Configuration } from '@midwayjs/decorator';
@@ -76,10 +76,10 @@ export class UserService {
 
 ## 配置 Axios
 
-​
+
 
 HttpService 实例等价于 `axios.create` ，所以可以有一些配置参数，我们可以在 `src/config.default.ts` 中配置它，配置完之后，全局的 axios 都会生效。
-​
+
 
 比如：
 

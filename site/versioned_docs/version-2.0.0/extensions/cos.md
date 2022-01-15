@@ -7,10 +7,10 @@ title: 对象存储（COS）
 ## 安装依赖
 
 ```bash
-$ npm i @midwayjs/cos --save
+$ npm i @midwayjs/cos@2 --save
 ```
 
-​
+
 
 ## 引入组件
 

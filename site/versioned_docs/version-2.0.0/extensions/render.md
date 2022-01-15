@@ -12,7 +12,7 @@ title: 模板渲染
 选择对应的模板安装依赖。
 
 ```bash
-$ npm i @midwayjs/view-ejs --save
+$ npm i @midwayjs/view-ejs@2 --save
 ```
 
 ​

@@ -12,7 +12,7 @@ Passport 是通过称为策略的可扩展插件进行身份验证请求。Passp
 1. 安装 `npm i @midwayjs/passport`
 
 ```bash
-$ npm i @midwayjs/passport passport --save
+$ npm i @midwayjs/passport@2 passport --save
 $ npm i @types/passport --save-dev
 ```
 

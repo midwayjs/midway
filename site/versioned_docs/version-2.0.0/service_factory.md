@@ -3,16 +3,16 @@ title: 服务工厂
 ---
 
 有时候编写组件或者编写服务，会碰到某个服务有多实例的情况，这个时候服务工厂（Service Factory）就适合这种场景。
-​
+
 
 比如我们的 oss 组件，由于会创建多个 oss 对象，在编写的时候就需要留好多实例的接口。为了这种场景，midway 抽象了 `ServiceFactory` 类。
-​
+
 
 `ServiceFactory` 是个抽象类，每个需要实现的服务，都需要继承他。
-​
+
 
 我们以一个 http 客户端为例，需要准备一个创建 http 客户端实例的方法，其中包含两个部分：
-​
+
 
 - 1、创建客户端实例的方法
 - 2、客户端的配置
@@ -33,11 +33,11 @@ const httpClient = new HTTPClient(config);
 我们希望实现一个上述 HTTPClient 的服务工厂，用于在 midway 体系中创建多个 httpClient 对象。
 
 服务工厂在 midway 中也是一个普通的导出类，作为服务的一员，比如我们也可以把他放到 `src/service/httpServiceFactory.ts` 中。
-​
+
 
 ### 1、实现创建实例接口
 
-​
+
 
 `ServiceFactory` 是个用于继承的抽象类，它包含一个泛型（创建的实例类型，比如下面就是创建出 HTTPClient 类型）。
 
@@ -73,10 +73,10 @@ export class HTTPClientServiceFactory extends ServiceFactory<HTTPClient> {
 ```
 
 `createClient` 方法用于传入一个创建服务配置（比如 httpClient 配置），返回一个具体的实例，就像示例的那样。
-​
+
 
 `getName` 方法用于返回这个服务工厂的名字，方便框架识别和日志输出。
-​
+
 
 ### 2、增加配置和初始化方法
 
@@ -117,24 +117,24 @@ export class HTTPClientServiceFactory extends ServiceFactory<HTTPClient> {
 ```
 
 `initClients` 方法是基类中实现的，它需要传递一个完整的用户配置，并循环调用 `createClient` 来创建对象，保存到内存中。
-​
+
 
 ## 获取实例
 
 `createClient` 方法只是定义了创建对象的方法，我们还需要定义配置的结构。
-​
+
 
 配置的结构分为几部分：
-​
+
 
 - 1、默认配置，即所有对象都能复用的配置
 - 2、单个实例需要的配置
 - 3、多个实例需要的配置
 
-​
+
 
 我们来分别说明，
-​
+
 
 **默认配置**
 **​**
@@ -235,7 +235,7 @@ export class UserService {
 ### 动态创建实例
 
 也可以通过基类的 `createInstance` 方法动态获取实例。
-​
+
 
 :::caution
 注意，这里使用的不是子类的 createClient，createClient 不包含和默认配置的逻辑。

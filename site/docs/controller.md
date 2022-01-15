@@ -879,6 +879,54 @@ export class HomeController {
 响应类型不能在响应流关闭后（response.end之后）修改。
 :::
 
+
+
+## 全局路由前缀
+
+需要在配置中设置。
+
+比如：
+
+```typescript
+// src/config/config.default.ts
+export const koa = {
+  globalPrefix: '/v1'
+}
+```
+
+配置后，所有的路由都会自动增加该前缀。
+
+如有特殊路由不需要，可以使用装饰器参数忽略。
+
+**示例：Controller 级别忽略**
+
+```typescript
+// 该 Controller 下所有路由都将忽略全局前缀
+@Controller('/api', {ignoreGlobalPrefix: true})
+export class HomeController {
+  // ,,,
+}
+```
+
+**示例：路由级别忽略**
+
+```typescript
+@Controller('/')
+export class HomeController {
+  // 该路由不会忽略
+  @Get('/', {})
+  async homeSet() {
+  }
+
+  // 该路由会忽略全局前缀
+  @Get('/bbc', {ignoreGlobalPrefix: true})
+  async homeSet2() {
+  }
+}
+```
+
+
+
 ## 路由优先级
 
 

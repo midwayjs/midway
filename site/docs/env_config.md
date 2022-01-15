@@ -445,9 +445,6 @@ export class ContainerLifeCycle {
 注意，`onConfigLoad` 生命周期会在 egg 插件（若有）初始化之后执行，所以不能用于覆盖 egg 插件所使用的配置。
 
 
-老的 bootstrap 用法，请参考 [框架前异步逻辑](multi_framework_start#n5oDJ)。
-
-
 
 ## 配置的特殊 TS 写法问题
 

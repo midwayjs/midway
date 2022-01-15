@@ -456,11 +456,6 @@
           "type": "doc",
           "id": "serverless/serverless_error",
           "label": "默认错误行为"
-        },
-        {
-          "type": "doc",
-          "id": "serverless/serverless_to_app",
-          "label": "Serverless 函数部署为应用"
         }
       ]
     },

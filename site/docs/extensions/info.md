@@ -4,18 +4,18 @@ Midway 提供了 info 组件，用于展示应用的基本信息，方便排查�
 
 相关信息：
 
-| 描述                 |      |
-| -------------------- | ---- |
-| 可作为主框架独立使用 | ❌    |
-| 包含自定义日志       | ❌    |
-| 可独立添加中间件     | ❌    |
+| 描述              |      |
+| ----------------- | ---- |
+| 可用于标准项目    | ✅    |
+| 可用于 Serverless | ✅    |
+| 可用于一体化      | ✅    |
 
 
 
 ## 安装依赖
 
 ```bash
-$ npm i @midwayjs/info --save
+$ npm i @midwayjs/info@beta --save
 ```
 
 
@@ -122,9 +122,9 @@ export class userService {
   @Inject()
   inforService: InfoService
 	
-	async getInfo() {
+  async getInfo() {
     // 应用信息，应用名等
-		this.inforService.projectInfo();
+    this.inforService.projectInfo();
     // 系统信息
     this.inforService.systemInfo();
     // 堆内存，cpu 等
@@ -143,7 +143,7 @@ export class userService {
     this.inforService.dependenciesInfo();
     // 网络信息
     this.inforService.networkInfo();
-	}
+  }
 }
 ```
 

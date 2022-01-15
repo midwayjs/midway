@@ -24,7 +24,7 @@ $ npm run dev
 安装依赖。
 
 ```bash
-npm install @midwayjs/swagger --save
+npm install @midwayjs/swagger@1 --save
 npm install swagger-ui-dist --save-dev
 ```
 

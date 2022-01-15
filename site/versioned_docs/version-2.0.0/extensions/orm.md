@@ -9,7 +9,7 @@ title: Database（TypeORM)
 安装 orm 组件，提供数据库 ORM 能力。
 
 ```bash
-npm i @midwayjs/orm typeorm --save
+npm i @midwayjs/orm@2 typeorm --save
 ```
 
 :::info

@@ -16,7 +16,7 @@ midway 封装了 `@midwayjs/process-agent` 用来解决 node 场景中，多进�
 使用方法：
 
 ```bash
-$ npm install @midwayjs/process-agent -S
+$ npm install @midwayjs/process-agent@2 -S
 ```
 
 ​
