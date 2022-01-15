@@ -2,7 +2,7 @@ import * as passport from 'passport';
 import { App, Config, Init } from '@midwayjs/decorator';
 import { getPassport, isExpressMode } from '../util';
 import { AbstractPassportMiddleware, AbstractStrategy } from '../interface';
-import { httpError } from "@midwayjs/core";
+import { httpError } from '@midwayjs/core';
 
 export function PassportStrategy(
   Strategy: new (...args) => passport.Strategy,
