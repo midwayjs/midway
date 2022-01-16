@@ -1,7 +1,7 @@
 import { MidwayContextLogger } from '@midwayjs/logger';
-import { IMidwayExpressContext } from './interface';
+import { Context } from './interface';
 
-export class MidwayExpressContextLogger extends MidwayContextLogger<IMidwayExpressContext> {
+export class MidwayExpressContextLogger extends MidwayContextLogger<Context> {
   formatContextLabel() {
     const req = this.ctx;
     // format: '[$userId/$ip/$traceId/$use_ms $method $url]'

@@ -1,6 +1,6 @@
 import { SCFBaseTrigger } from './base';
 import { SCF } from '@midwayjs/faas-typings';
-import * as extend from 'extend2';
+import { extend } from '@midwayjs/core';
 /**
  * https://cloud.tencent.com/document/product/583/9708
  */

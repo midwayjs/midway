@@ -692,26 +692,26 @@ export class AutoConfiguration {
 
 拿到 **依赖注入容器 **或者 **请求链路的依赖 **注入容器之后，才可以通过容器的 API 获取到对象。
 ```typescript
-import { UserService, Middleware } from './service/user';
+import { Middleware, ApplicationContext } from '@midwayjs/decorator';
+import { NextFunction, Context } from '@midwayjs/koa';
+import { IMiddleware } from '@midwayjs/core';
+import { UserService } from './service/user.service';
 
 @Middleware()
-export class ReportMiddleware {
+export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
 
-	@App()
-  app: IMidwayApplication;
+	@ApplicationContext()
+  applicationContext: IMidwayContainer;
   
   resolve() {
   	return async(ctx, next) => {
-      const container = app.getApplicationContext();
-      
-      // 下面的方法等价，获取的对象和请求不关联，没有 ctx 上下文
-      const userService1 = await container.getAsync<UserService>('userService');
-      const userService2 = await container.getAsync<UserService>(UserService);
-      // 如果传入 class，这么写也能推导出正确的类型
-      const userService2 = await container.getAsync(UserService);
+      // 指定泛型类型，比如某个接口
+      const userService1 = await this.applicationContext.getAsync<UserService>(UserService);
+      // 不写泛型，也能推导出正确的类型
+      const userService1 = await this.applicationContext.getAsync(UserService);
 
       // 下面的方法获取的服务和请求关联，可以注入上下文
-      const userService = await ctx.requestContext.getAsync<UserService>(UserService);
+      const userService2 = await ctx.requestContext.getAsync<UserService>(UserService);
     	await next();
     }
   }
@@ -722,19 +722,16 @@ export class ReportMiddleware {
 Express 的写法
 ```typescript
 import { UserService, Middleware } from './service/user';
+import { NextFunction, Context, Response } from '@midwayjs/express';
 
 @Middleware()
-export class ReportMiddleware {
-
-	@App()
-  app: IMidwayApplication;
+export class ReportMiddleware implements IMiddleware<Context, Response, NextFunction> {
   
   resolve() {
-  	return (req, res, next) => {
-      req.requestContext.getAsync<UserService>(UserService).then((userService) => {
-        // do something
-        next();
-      });
+  	return async (req, res, next) => {
+      const userService = await req.requestContext.getAsync<UserService>(UserService);
+      // ...
+      next();
     }
   }
 }

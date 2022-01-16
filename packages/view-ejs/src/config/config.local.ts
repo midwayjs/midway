@@ -1,1 +1,3 @@
-export default require('egg-view-ejs/config/config.local');
+export const ejs = {
+  cache: false,
+};

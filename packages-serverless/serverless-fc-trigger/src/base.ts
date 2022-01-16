@@ -1,5 +1,5 @@
 import { BaseTrigger } from '@midwayjs/runtime-mock';
-import * as extend from 'extend2';
+import { extend } from '@midwayjs/core';
 import { FC } from '@midwayjs/faas-typings';
 
 export class FCBaseTrigger extends BaseTrigger {

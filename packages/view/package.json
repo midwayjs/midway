@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/view",
   "version": "3.0.0-beta.16",
-  "description": "Midway Component for egg-view",
+  "description": "Midway Component for render view",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "scripts": {
@@ -14,8 +14,7 @@
     "midway",
     "component",
     "midway-view",
-    "view",
-    "egg-view"
+    "view"
   ],
   "author": "",
   "files": [
@@ -27,11 +26,6 @@
     "node": ">=12"
   },
   "license": "MIT",
-  "dependencies": {
-    "@midwayjs/mw-util": "^1.0.0",
-    "egg-view": "^2.1.3",
-    "extend2": "^1.0.0"
-  },
   "devDependencies": {
     "@midwayjs/core": "^3.0.0-beta.16",
     "@midwayjs/decorator": "^3.0.0-beta.16",

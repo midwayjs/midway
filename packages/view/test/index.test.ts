@@ -5,7 +5,7 @@ import { join } from 'path';
 describe('/test/index.test.ts', () => {
 
   it('should test create viewManager', async () => {
-    let app = await createApp(join(__dirname, 'fixtures', 'base-app'), {}, Framework);
+    let app = await createApp<Framework>(join(__dirname, 'fixtures', 'base-app'), {});
     let result = await createHttpRequest(app)
       .get('/render');
     expect(result.status).toEqual(200);

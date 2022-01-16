@@ -3,7 +3,6 @@ import {
   initializeAgentApplicationContext,
   parseNormalDir,
 } from './utils';
-import * as extend from 'extend2';
 import { EggAppInfo } from 'egg';
 import {
   getCurrentApplicationContext,
@@ -11,6 +10,7 @@ import {
   MidwayConfigService,
   safelyGet,
   safeRequire,
+  extend,
 } from '@midwayjs/core';
 import { join } from 'path';
 import { existsSync, readFileSync } from 'fs';

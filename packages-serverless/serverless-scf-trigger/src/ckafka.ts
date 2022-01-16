@@ -1,5 +1,5 @@
 import { SCFBaseTrigger } from './base';
-import * as extend from 'extend2';
+import { extend } from '@midwayjs/core';
 import { SCF } from '@midwayjs/faas-typings';
 
 /**

@@ -6,11 +6,7 @@ import {
   FunctionMiddleware,
   pathMatching,
 } from '@midwayjs/core';
-import {
-  IMidwayExpressContext,
-  IMidwayExpressMiddleware,
-  Application,
-} from './interface';
+import { Context, IMidwayExpressMiddleware, Application } from './interface';
 import { NextFunction, Response } from 'express';
 import { sendData } from './util';
 
@@ -33,7 +29,7 @@ export class MidwayExpressMiddlewareService {
 
   async compose(
     middleware: Array<
-      CommonMiddleware<IMidwayExpressContext, Response, NextFunction> | string
+      CommonMiddleware<Context, Response, NextFunction> | string
     >,
     app: Application,
     name?: string
@@ -91,7 +87,7 @@ export class MidwayExpressMiddlewareService {
     }
 
     const composeFn = (
-      req: IMidwayExpressContext,
+      req: Context,
       res: Response,
       nextFunction: NextFunction
     ) => {

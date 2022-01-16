@@ -1,5 +1,5 @@
 import * as assert from 'assert';
-import * as extend2 from 'extend2';
+import { extend } from '../src';
 
 describe('/test/proxy.test.ts', () => {
   it('should proxy app when set property', () => {
@@ -26,7 +26,7 @@ describe('/test/proxy.test.ts', () => {
   });
 
   it('should test merge array', () => {
-    const target = extend2(true, {
+    const target = extend(true, {
       a: [1, 2, 3, {}]
     }, {
       a: [3, 4]

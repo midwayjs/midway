@@ -1,5 +1,5 @@
 import { FCBaseTrigger } from './base';
-import * as extend from 'extend2';
+import { extend } from '@midwayjs/core';
 import { FC } from '@midwayjs/faas-typings';
 /**
  * https://help.aliyun.com/document_detail/100092.html
