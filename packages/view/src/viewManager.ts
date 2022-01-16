@@ -28,9 +28,16 @@ export class ViewManager extends Map {
   @Init()
   init() {
     this.config = this.viewConfig;
-    this.config.root = this.config.root
-      .split(/\s*,\s*/g)
-      .filter(filepath => existsSync(filepath));
+    const rootSet: Set<string> = new Set(Object.values(this.config.rootDir));
+    if (this.config.root) {
+      this.config.root.split(/\s*,\s*/g).forEach(filepath => {
+        rootSet.add(filepath);
+      });
+    }
+
+    this.config.root = Array.from(rootSet.values()).filter(filepath => {
+      return existsSync(filepath);
+    });
     this.extMap = new Map();
     this.fileMap = new Map();
     for (const ext of Object.keys(this.config.mapping)) {
@@ -71,8 +78,8 @@ export class ViewManager extends Map {
 
   /**
    * Resolve the path based on the given name,
-   * if the name is `user.html` and root is `app/view` (by default),
-   * it will return `app/view/user.html`
+   * if the name is `user.html` and root is `view` (by default),
+   * it will return `view/user.html`
    * @param {String} name - the given path name, it's relative to config.root
    * @return {String} filename - the full path
    */
