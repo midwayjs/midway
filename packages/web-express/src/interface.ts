@@ -15,9 +15,13 @@ export type NextFunction = ExpressNextFunction;
 export interface Context extends Request {}
 
 /**
- * @deprecated use Response
+ * @deprecated use Context
  */
 export type IMidwayExpressRequest = Context;
+/**
+ * @deprecated use Context
+ */
+export type IMidwayExpressContext = Context;
 export type IMidwayExpressMiddleware = IMiddleware<Context, ExpressResponse, ExpressNextFunction>;
 export interface IMidwayExpressApplication extends IMidwayApplication<Context, ExpressApplication> {
   /**
