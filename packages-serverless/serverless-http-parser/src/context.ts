@@ -178,8 +178,8 @@ export const context = {
    * @api public
    */
 
-  throw(...args) {
-    throw createError(...args);
+  throw(arg0, ...args) {
+    throw createError(arg0, ...args);
   },
 
   onerror(err) {
