@@ -233,15 +233,14 @@ describe('util/extend.test.ts', function () {
     var ori = new Date(81, 9, 20);
     var target = extend(ori, str);
 
-    expect(target).toMatchSnapshot();
+    expect(target).toEqual(ori);
   });
 
   it('merge date with number', function () {
     var ori = new Date(81, 9, 20);
     var target = extend(ori, 10);
 
-    expect(ori).toMatchSnapshot();
-    expect(target).toMatchSnapshot();
+    expect(target).toEqual(ori);
   });
 
   it('merge date with array', function () {
@@ -259,17 +258,14 @@ describe('util/extend.test.ts', function () {
     var ori = new Date(81, 9, 20);
     var target = extend(ori, date);
 
-    expect(ori).toMatchSnapshot();
-    expect(target).toMatchSnapshot();
+    expect(target).toEqual(ori);
   });
 
   it('merge date with object', function () {
     var ori = new Date(81, 9, 20);
     var target = extend(ori, obj);
 
-    expect(obj).toMatchSnapshot();
-    expect(ori).toMatchSnapshot();
-    expect(target).toMatchSnapshot();
+    expect(target).toEqual(ori);
   });
 
   it('merge object with string', function () {

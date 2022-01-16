@@ -4,7 +4,7 @@ export default appInfo => {
   return {
     /**
      * @member Config#ejs
-     * @property {String} [root=${baseDir}/app/view] - the root directory of ejs files
+     * @property {String} [root=${appDir}/view] - the root directory of ejs files
      * @property {Boolean} [cache=true] - compiled functions are cached, only work using `ctx.render`
      * @property {Boolean} [debug=false] - output generated function body
      * @property {Boolean} [compileDebug=true] - when false no debug instrumentation is compiled
