@@ -15,8 +15,7 @@ import {
 import { Application, EggLogger, Context } from 'egg';
 import { getCurrentDateString } from './utils';
 import * as os from 'os';
-import { MidwayLoggerService, safelyGet } from '@midwayjs/core';
-import * as extend from 'extend2';
+import { MidwayLoggerService, safelyGet, extend } from '@midwayjs/core';
 import { debuglog } from 'util';
 
 const debug = debuglog('midway:debug');

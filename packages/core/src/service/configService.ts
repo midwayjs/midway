@@ -1,4 +1,3 @@
-import * as extend from 'extend2';
 import { basename, join } from 'path';
 import { IConfigService, MidwayAppInfo } from '../interface';
 import { safelyGet } from '../util';
@@ -14,6 +13,7 @@ import {
 import * as util from 'util';
 import { MidwayEnvironmentService } from './environmentService';
 import { MidwayInformationService } from './informationService';
+import { extend } from '../util/extend';
 
 const debug = util.debuglog('midway:debug');
 
