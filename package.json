@@ -17,7 +17,6 @@
     "why-is-node-running": "2.2.0"
   },
   "scripts": {
-    "autod": "lerna run autod",
     "test": "lerna run test",
     "link": "lerna run link",
     "cov": "lerna run cov --concurrency 2 --stream",

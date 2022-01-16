@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`util/extend.test.ts merge date with date 1`] = `1981-10-19T16:00:00.000Z`;
+
+exports[`util/extend.test.ts merge date with date 2`] = `1981-10-19T16:00:00.000Z`;
+
+exports[`util/extend.test.ts merge date with number 1`] = `1981-10-19T16:00:00.000Z`;
+
+exports[`util/extend.test.ts merge date with number 2`] = `1981-10-19T16:00:00.000Z`;
+
+exports[`util/extend.test.ts merge date with object 1`] = `
+Object {
+  "arr": Array [
+    1,
+    "what",
+    1981-09-03T16:00:00.000Z,
+  ],
+  "constructor": "fake",
+  "date": 1981-05-12T16:00:00.000Z,
+  "foo": Foo {},
+  "integer": 10,
+  "isPrototypeOf": "not a function",
+  "str": "me a test",
+}
+`;
+
+exports[`util/extend.test.ts merge date with object 2`] = `1981-10-19T16:00:00.000Z`;
+
+exports[`util/extend.test.ts merge date with object 3`] = `1981-10-19T16:00:00.000Z`;
+
+exports[`util/extend.test.ts merge date with string 1`] = `1981-10-19T16:00:00.000Z`;

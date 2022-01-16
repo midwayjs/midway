@@ -1,8 +1,11 @@
-import { App, Configuration } from '@midwayjs/decorator';
-import { completeAssign } from '@midwayjs/mw-util';
+import { Inject, Configuration } from '@midwayjs/decorator';
 import * as DefaultConfig from './config/config.default';
 import * as LocalConfig from './config/config.local';
 import { ViewManager } from './viewManager';
+import { MidwayApplicationManager } from '@midwayjs/core';
+import { ContextView } from './contextView';
+
+const VIEW = Symbol('Context#view');
 
 @Configuration({
   namespace: 'view',
@@ -14,19 +17,61 @@ import { ViewManager } from './viewManager';
   ],
 })
 export class ViewConfiguration {
-  @App()
-  app;
+  @Inject()
+  applicationManager: MidwayApplicationManager;
 
   async onReady(container) {
-    if (!this.app.config) {
-      this.app.config = this.app.getConfig();
-    }
-    completeAssign(this.app.context, require('egg-view/app/extend/context'));
-    (this.app as any).view = await container.getAsync(ViewManager);
-    if (!(this.app as any).toAsyncFunction) {
-      (this.app as any).toAsyncFunction = method => {
-        return method;
-      };
-    }
+    this.applicationManager
+      .getApplications(['koa', 'egg', 'faas'])
+      .forEach((app: any) => {
+        Object.defineProperties(app.context, {
+          /**
+           * Render a file, then set to body, the parameter is same as {@link @ContextView#render}
+           * @return {Promise} result
+           */
+          render: {
+            value: async function (...args) {
+              return this.renderView(...args).then(body => {
+                this.body = body;
+              });
+            },
+          },
+
+          /**
+           * Render a file, same as {@link @ContextView#render}
+           * @return {Promise} result
+           */
+          renderView: {
+            value: async function (...args) {
+              return this.view.render(...args);
+            },
+          },
+
+          /**
+           * Render template string, same as {@link @ContextView#renderString}
+           * @return {Promise} result
+           */
+          renderString: {
+            value: async function (...args) {
+              return this.view.renderString(...args);
+            },
+          },
+
+          /**
+           * View instance that is created every request
+           * @member {ContextView} Context#view
+           */
+          view: {
+            get() {
+              if (!this[VIEW]) {
+                this[VIEW] = this.requestContext.get(ContextView);
+              }
+              return this[VIEW];
+            },
+          },
+        });
+      });
+
+    await container.getAsync(ViewManager);
   }
 }

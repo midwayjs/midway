@@ -10,6 +10,8 @@ export class HomeController {
 
   @Get('/renderString')
   async renderString(ctx) {
-    ctx.renderString('').then(data => (ctx.body = data));
+    await ctx.renderString('').then(data => {
+      ctx.body = data;
+    });
   }
 }
