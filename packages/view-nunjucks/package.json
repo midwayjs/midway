@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/view-nunjucks",
   "version": "3.0.0-beta.16",
-  "description": "Midway Component for egg-view-nunjucks",
+  "description": "Midway Component for nunjucks render",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "scripts": {
@@ -15,9 +15,7 @@
     "component",
     "midway-view",
     "view",
-    "nunjucks",
-    "egg-view",
-    "egg-view-nunjucks"
+    "nunjucks"
   ],
   "author": "",
   "files": [
@@ -30,7 +28,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@midwayjs/mw-util": "^1.0.0",
     "@midwayjs/view": "^3.0.0-beta.16",
     "nunjucks": "^3.2.2"
   },

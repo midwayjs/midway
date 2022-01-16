@@ -5,8 +5,6 @@ import { ViewManager } from './viewManager';
 import { MidwayApplicationManager } from '@midwayjs/core';
 import { ContextView } from './contextView';
 
-const VIEW = Symbol('Context#view');
-
 @Configuration({
   namespace: 'view',
   importConfigs: [
@@ -31,7 +29,10 @@ export class ViewConfiguration {
            */
           render: {
             value: async function (...args) {
-              return this.renderView(...args).then(body => {
+              const contextView = await this.requestContext.getAsync(
+                ContextView
+              );
+              return contextView.render(...args).then(body => {
                 this.body = body;
               });
             },
@@ -43,7 +44,10 @@ export class ViewConfiguration {
            */
           renderView: {
             value: async function (...args) {
-              return this.view.render(...args);
+              const contextView = await this.requestContext.getAsync(
+                ContextView
+              );
+              return contextView.render(...args);
             },
           },
 
@@ -53,20 +57,10 @@ export class ViewConfiguration {
            */
           renderString: {
             value: async function (...args) {
-              return this.view.renderString(...args);
-            },
-          },
-
-          /**
-           * View instance that is created every request
-           * @member {ContextView} Context#view
-           */
-          view: {
-            get() {
-              if (!this[VIEW]) {
-                this[VIEW] = this.requestContext.get(ContextView);
-              }
-              return this[VIEW];
+              const contextView = await this.requestContext.getAsync(
+                ContextView
+              );
+              return contextView.renderString(...args);
             },
           },
         });

@@ -1,8 +1,9 @@
-import { IContextView } from './dist';
+import { IViewEngine } from './dist';
 export * from './dist/index';
 
 declare module '@midwayjs/core/dist/interface' {
-  interface Context extends IContextView {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface Context extends IViewEngine {
     //...
   }
 

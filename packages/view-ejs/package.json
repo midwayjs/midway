@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/view-ejs",
   "version": "3.0.0-beta.16",
-  "description": "Midway Component for egg-view-ejs",
+  "description": "Midway Component for ejs render",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "scripts": {
@@ -15,9 +15,7 @@
     "component",
     "midway-view",
     "view",
-    "ejs",
-    "egg-view",
-    "egg-view-ejs"
+    "ejs"
   ],
   "author": "",
   "files": [
@@ -30,9 +28,8 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@midwayjs/mw-util": "^1.0.0",
     "@midwayjs/view": "^3.0.0-beta.16",
-    "egg-view-ejs": "^2.0.1"
+    "ejs": "3.1.6"
   },
   "devDependencies": {
     "@midwayjs/core": "^3.0.0-beta.16",

@@ -2,7 +2,7 @@ import { ViewManager } from './viewManager';
 import { Provide, Inject, Config, Utils } from '@midwayjs/decorator';
 import * as assert from 'assert';
 import { normalize, extname } from 'path';
-import { IContextView, RenderOptions } from './interface';
+import { IViewEngine, RenderOptions } from './interface';
 
 /**
  * View instance for each request.
@@ -11,7 +11,7 @@ import { IContextView, RenderOptions } from './interface';
  * The view engine should be registered in {@link ViewManager}.
  */
 @Provide()
-export class ContextView implements IContextView {
+export class ContextView implements IViewEngine {
   @Inject()
   viewManager: ViewManager;
 
@@ -47,7 +47,7 @@ export class ContextView implements IContextView {
     assert(viewEngineName, `Can't find viewEngine for ${filename}`);
 
     // get view engine and render
-    const view = this.getViewEngine(viewEngineName);
+    const view = await this.getViewEngine(viewEngineName);
     return await view.render(filename, this.setLocals(locals), options);
   }
 
@@ -62,17 +62,17 @@ export class ContextView implements IContextView {
     assert(viewEngineName, "Can't find viewEngine");
 
     // get view engine and render
-    const view = this.getViewEngine(viewEngineName);
+    const view = await this.getViewEngine(viewEngineName);
     return await view.renderString(tpl, this.setLocals(locals), options);
   }
 
-  private getViewEngine(name) {
+  private async getViewEngine(name) {
     // get view engine
     const ViewEngine = this.viewManager.get(name);
     assert(ViewEngine, `Can't find ViewEngine "${name}"`);
 
     // use view engine to render
-    const engine = new ViewEngine(this.ctx);
+    const engine = await this.ctx.requestContext.getAsync(ViewEngine);
     // wrap render and renderString to support both async function and generator function
     if (engine.render) {
       engine.render = Utils.toAsyncFunction(engine.render);

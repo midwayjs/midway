@@ -9,6 +9,7 @@ import {
 import * as assert from 'assert';
 import * as path from 'path';
 import { constants, existsSync, promises } from 'fs';
+import { IViewEngine } from './interface';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -51,7 +52,7 @@ export class ViewManager extends Map {
    * @param {String} name - the name of view engine
    * @param {Object} viewEngine - the class of view engine
    */
-  use(name: string, viewEngine): void {
+  use(name: string, viewEngine: new (...args) => IViewEngine): void {
     assert(name, 'name is required');
     assert(!this.has(name), `${name} has been registered`);
 

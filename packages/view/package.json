@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/view",
   "version": "3.0.0-beta.16",
-  "description": "Midway Component for egg-view",
+  "description": "Midway Component for render view",
   "main": "dist/index.js",
   "typings": "index.d.ts",
   "scripts": {
