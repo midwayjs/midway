@@ -13,7 +13,7 @@
     "@midwayjs/core": "^3.0.0-beta.16",
     "@midwayjs/decorator": "^3.0.0-beta.16",
     "@midwayjs/mock": "^3.0.0-beta.16",
-    "dotenv": "12.0.3"
+    "dotenv": "12.0.4"
   },
   "dependencies": {
     "cos-nodejs-sdk-v5": "^2.10.0"
