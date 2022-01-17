@@ -48,7 +48,7 @@ describe('/test/setup.test.ts', () => {
     );
     const container = await initializeGlobalApplicationContext({
       baseDir,
-      configurationModule: [require(join(baseDir, 'configuration'))],
+      imports: [require(join(baseDir, 'configuration'))],
       globalConfig: {
         ccc: 222
       }
@@ -85,7 +85,7 @@ describe('/test/setup.test.ts', () => {
     );
     const container = await initializeGlobalApplicationContext({
       baseDir,
-      configurationModule: [require(join(baseDir, 'configuration'))],
+      imports: [require(join(baseDir, 'configuration'))],
       globalConfig: [
         {
           default: {

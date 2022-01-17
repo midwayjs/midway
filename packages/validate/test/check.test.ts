@@ -8,7 +8,7 @@ import { Provide } from '@midwayjs/decorator';
 describe('/test/check.test.ts', () => {
   it('check with check', async () => {
     const app = await createLightApp('', {
-      configurationModule: [Valid]
+      imports: [Valid]
     });
 
     class TO {
@@ -46,7 +46,7 @@ describe('/test/check.test.ts', () => {
 
   it('check with check with extends', async () => {
     const app = await createLightApp('', {
-      configurationModule: [Valid]
+      imports: [Valid]
     });
     class TO{
 
@@ -83,7 +83,7 @@ describe('/test/check.test.ts', () => {
 
   it('check with check with options', async () => {
     const app = await createLightApp('', {
-      configurationModule: [Valid]
+      imports: [Valid]
     });
     class WorldDTO {
       @Rule(RuleType.number().max(20))
@@ -116,7 +116,7 @@ describe('/test/check.test.ts', () => {
 
   it('check with check with array', async () => {
     const app = await createLightApp('', {
-      configurationModule: [Valid]
+      imports: [Valid]
     });
 
     class WorldDTO {
@@ -156,7 +156,7 @@ describe('/test/check.test.ts', () => {
 
   it.skip('check with check and transform object', async () => {
     const app = await createLightApp('', {
-      configurationModule: [Valid]
+      imports: [Valid]
     });
     class UserDTO {
       @Rule(RuleType.number().max(10))
@@ -198,7 +198,7 @@ describe('/test/check.test.ts', () => {
 
   it('check with no check', async () => {
     const app = await createLightApp('', {
-      configurationModule: [Valid]
+      imports: [Valid]
     });
     class UserDTO {
       @Rule(RuleType.number().max(10))
@@ -222,7 +222,7 @@ describe('/test/check.test.ts', () => {
 
   it('check with check when vo have two level', async () => {
     const app = await createLightApp('', {
-      configurationModule: [Valid]
+      imports: [Valid]
     });
     class WorldDTO {
       @Rule(RuleType.number().max(20))
@@ -258,7 +258,7 @@ describe('/test/check.test.ts', () => {
 
   it('check with check when vo have two level not equal', async () => {
     const app = await createLightApp('', {
-      configurationModule: [Valid]
+      imports: [Valid]
     });
     class WorldDTO {
       @Rule(RuleType.number().max(20))
@@ -295,7 +295,7 @@ describe('/test/check.test.ts', () => {
 
   it('check with check when two level and array and not equal', async () => {
     const app = await createLightApp('', {
-      configurationModule: [Valid]
+      imports: [Valid]
     });
     class WorldDTO {
       @Rule(RuleType.number().max(20))
@@ -334,7 +334,7 @@ describe('/test/check.test.ts', () => {
 
   it.skip('should transform string to number', async () => {
     const app = await createLightApp('', {
-      configurationModule: [Valid]
+      imports: [Valid]
     });
     class UserNewDTO {
       @Rule(RuleType.number().required())
@@ -368,7 +368,7 @@ describe('/test/check.test.ts', () => {
 
   it('should test global validate config', async () => {
     const app = await createLightApp('', {
-      configurationModule: [Valid]
+      imports: [Valid]
     });
 
     class UserDTO {

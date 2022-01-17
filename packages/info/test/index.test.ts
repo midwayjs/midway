@@ -52,7 +52,7 @@ describe('test/index.test.ts', () => {
           }
         }
       },
-      configurationModule: [
+      imports: [
         info
       ]
     });

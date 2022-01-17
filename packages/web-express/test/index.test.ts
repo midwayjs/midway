@@ -104,7 +104,7 @@ describe('/test/feature.test.ts', () => {
 
     it('should test middleware', async () => {
       const app = await createLightApp('', {
-        configurationModule: require('../src'),
+        imports: require('../src'),
         globalConfig: {
           keys: '12345'
         }
@@ -135,7 +135,7 @@ describe('/test/feature.test.ts', () => {
 
     it('should catch error in middleware', async () => {
       const app = await createLightApp('', {
-        configurationModule: require('../src'),
+        imports: require('../src'),
         globalConfig: {
           keys: ['12345']
         }
