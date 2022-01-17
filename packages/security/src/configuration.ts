@@ -1,0 +1,50 @@
+import { Configuration, Inject, Config } from '@midwayjs/decorator';
+import * as DefaultConfig from './config/config.default';
+import { MidwayApplicationManager } from '@midwayjs/core';
+import { CSRFMiddleware } from './middleware/csrf';
+import { SecurityOptions } from './interface';
+import { XFrameMiddleware } from './middleware/xframe';
+import { HSTSMiddleware } from './middleware/hsts';
+import { NoOpenMiddleware } from './middleware/noopen';
+import { NoSniffMiddleware } from '.';
+import { XSSProtectionMiddleware } from './middleware/xssProtection';
+@Configuration({
+  namespace: 'security',
+  importConfigs: [
+    {
+      default: DefaultConfig,
+    },
+  ],
+})
+export class SecurityConfiguration {
+  @Inject()
+  applicationManager: MidwayApplicationManager;
+
+  @Config('security')
+  security: SecurityOptions;
+
+  async onReady() {
+    this.applicationManager
+      .getApplications(['koa', 'faas', 'express', 'egg'])
+      .forEach(app => {
+        if (this.security.csrf?.enable) {
+          app.useMiddleware(CSRFMiddleware);
+        }
+        if (this.security.xframe?.enable) {
+          app.useMiddleware(XFrameMiddleware);
+        }
+        if (this.security.hsts?.enable) {
+          app.useMiddleware(HSTSMiddleware);
+        }
+        if (this.security.noopen?.enable) {
+          app.useMiddleware(NoOpenMiddleware);
+        }
+        if (this.security.nosniff?.enable) {
+          app.useMiddleware(NoSniffMiddleware);
+        }
+        if (this.security.xssProtection?.enable) {
+          app.useMiddleware(XSSProtectionMiddleware);
+        }
+      });
+  }
+}
