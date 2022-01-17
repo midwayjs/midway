@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.14.4](https://github.com/midwayjs/midway/compare/v2.14.3...v2.14.4) (2022-01-17)
+
+
+### Bug Fixes
+
+* Interrupt executions of middleware chaining after authenticatio… ([#1571](https://github.com/midwayjs/midway/issues/1571)) ([60a662c](https://github.com/midwayjs/midway/commit/60a662c83f7d6e1ece6c243a749014de2b7e046c))
+
+
+
+
+
 ## [2.14.2](https://github.com/midwayjs/midway/compare/v2.14.1...v2.14.2) (2021-12-28)
 
 

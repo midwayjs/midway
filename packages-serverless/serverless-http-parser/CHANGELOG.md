@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.14.4](https://github.com/midwayjs/midway-faas/compare/v2.14.3...v2.14.4) (2022-01-17)
+
+
+### Bug Fixes
+
+* lint ([#1581](https://github.com/midwayjs/midway-faas/issues/1581)) ([4fc20d5](https://github.com/midwayjs/midway-faas/commit/4fc20d50032a29e6c9d8565fbca8a36b77485c59))
+
+
+
+
+
 ## [2.12.9](https://github.com/midwayjs/midway-faas/compare/v2.12.8...v2.12.9) (2021-09-01)
 
 
