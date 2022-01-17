@@ -1,11 +1,22 @@
 import { join } from 'path';
-import * as extend from 'extend2';
 
-export default appInfo => {
-  const originConfig = require('egg-view/config/config.default')(appInfo);
-  return extend(true, originConfig, {
-    view: {
-      root: join(appInfo.appDir, 'view'),
+export default appInfo => ({
+  /**
+   * view default config
+   * @member Config#view
+   * @property {String} [rootDir=${appDir}/view] - give a path to find the file, object.values() got array and find for view file
+   * @property {Boolean} [cache=true] - whether cache the file's path
+   * @property {String} [defaultExtension] - defaultExtension can be added automatically when there is no extension  when call `ctx.render`
+   * @property {String} [defaultViewEngine] - set the default view engine if you don't want specify the viewEngine every request.
+   * @property {Object} mapping - map the file extension to view engine, such as `{ '.ejs': 'ejs' }`
+   */
+  view: {
+    cache: true,
+    defaultExtension: '.html',
+    defaultViewEngine: '',
+    mapping: {},
+    rootDir: {
+      default: join(appInfo.appDir, 'view'),
     },
-  });
-};
+  },
+});

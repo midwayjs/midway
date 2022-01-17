@@ -13,6 +13,7 @@
 
 - 1、创建客户端实例的方法
 - 2、客户端的配置
+
 ```typescript
 // 创建客户端的配置
 const config = {
@@ -39,7 +40,7 @@ const httpClient = new HTTPClient(config);
 `ServiceFactory` 是个用于继承的抽象类，它包含一个泛型（创建的实例类型，比如下面就是创建出 HTTPClient 类型）。
 
 
-我们只需要继承它，同时，一般服务工程为单例。
+我们只需要继承它，同时，一般服务工厂为单例。
 ```typescript
 import { ServiceFactory } from '@midwayjs/core';
 import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
@@ -231,7 +232,7 @@ export class UserService {
 也可以通过基类的 `createInstance` 方法动态获取实例。
 
 
-:::warning
+:::caution
 注意，这里使用的不是子类的 createClient，createClient 不包含和默认配置的逻辑。
 :::
 

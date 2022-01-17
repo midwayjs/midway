@@ -5,7 +5,7 @@ title: Sequelize
 ## 使用方法：
 
 ```typescript
-$ npm install @midwayjs/sequelize -S
+$ npm install @midwayjs/sequelize@2 -S
 ```
 
 ## 安装数据库 Driver

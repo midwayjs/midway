@@ -1,27 +1,48 @@
-import * as OriginViewManager from 'egg-view/lib/view_manager';
-import { App, Init, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
-import { createMockApp } from '@midwayjs/mw-util';
+import {
+  App,
+  Config,
+  Init,
+  Provide,
+  Scope,
+  ScopeEnum,
+} from '@midwayjs/decorator';
+import * as assert from 'assert';
+import * as path from 'path';
+import { constants, existsSync, promises } from 'fs';
+import { IViewEngine } from './interface';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
-export class ViewManager {
+export class ViewManager extends Map {
   @App()
   app;
 
-  innerManager;
+  @Config('view')
+  viewConfig;
 
-  get extMap() {
-    return this.innerManager.extMap;
-  }
+  config;
 
-  get config() {
-    return this.innerManager.config;
-  }
+  extMap = new Map();
+  fileMap = new Map();
 
   @Init()
-  async init() {
-    const mockApp = createMockApp(this.app);
-    this.innerManager = new OriginViewManager(mockApp);
+  init() {
+    this.config = this.viewConfig;
+    const rootSet: Set<string> = new Set(Object.values(this.config.rootDir));
+    if (this.config.root) {
+      this.config.root.split(/\s*,\s*/g).forEach(filepath => {
+        rootSet.add(filepath);
+      });
+    }
+
+    this.config.root = Array.from(rootSet.values()).filter(filepath => {
+      return existsSync(filepath);
+    });
+    this.extMap = new Map();
+    this.fileMap = new Map();
+    for (const ext of Object.keys(this.config.mapping)) {
+      this.extMap.set(ext, this.config.mapping[ext]);
+    }
   }
 
   /**
@@ -38,22 +59,66 @@ export class ViewManager {
    * @param {String} name - the name of view engine
    * @param {Object} viewEngine - the class of view engine
    */
-  use(name: string, viewEngine): void {
-    return this.innerManager.use(name, viewEngine);
+  use(name: string, viewEngine: new (...args) => IViewEngine): void {
+    assert(name, 'name is required');
+    assert(!this.has(name), `${name} has been registered`);
+
+    assert(viewEngine, 'viewEngine is required');
+    assert(
+      viewEngine.prototype.render,
+      'viewEngine should implement `render` method'
+    );
+    assert(
+      viewEngine.prototype.renderString,
+      'viewEngine should implement `renderString` method'
+    );
+
+    this.set(name, viewEngine);
   }
 
   /**
    * Resolve the path based on the given name,
-   * if the name is `user.html` and root is `app/view` (by default),
-   * it will return `app/view/user.html`
+   * if the name is `user.html` and root is `view` (by default),
+   * it will return `view/user.html`
    * @param {String} name - the given path name, it's relative to config.root
    * @return {String} filename - the full path
    */
   async resolve(name: string): Promise<string> {
-    return this.innerManager.resolve(name);
-  }
+    const config = this.config;
 
-  get(key) {
-    return this.innerManager.get(key);
+    // check cache
+    let filename = this.fileMap.get(name);
+    if (config.cache && filename) return filename;
+
+    // try find it with default extension
+    filename = await resolvePath(
+      [name, name + config.defaultExtension],
+      config.root
+    );
+    assert(filename, `Can't find ${name} from ${config.root.join(',')}`);
+
+    // set cache
+    this.fileMap.set(name, filename);
+    return filename;
   }
+}
+
+async function resolvePath(names, root) {
+  for (const name of names) {
+    for (const dir of root) {
+      const filename = path.join(dir, name);
+      try {
+        await promises.access(filename, constants.R_OK);
+        if (inpath(dir, filename)) {
+          return filename;
+        }
+      } catch (err) {
+        // ignore
+      }
+    }
+  }
+}
+
+function inpath(parent, sub) {
+  return sub.indexOf(parent) > -1;
 }

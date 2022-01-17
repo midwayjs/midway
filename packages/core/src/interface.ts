@@ -104,58 +104,40 @@ export enum ObjectLifeCycleEvent {
   BEFORE_DESTROY = 'beforeObjectDestroy',
 }
 
+interface ObjectLifeCycleOptions {
+  context: IMidwayContainer;
+  definition: IObjectDefinition;
+}
+
+export interface ObjectBeforeBindOptions extends ObjectLifeCycleOptions {
+  replaceCallback: (newDefinition: IObjectDefinition) => void;
+}
+
+export interface ObjectBeforeCreatedOptions extends ObjectLifeCycleOptions {
+  constructorArgs: any[];
+}
+
+export interface ObjectCreatedOptions<T> extends ObjectLifeCycleOptions {
+  replaceCallback: (ins: T) => void;
+}
+
+export interface ObjectInitOptions extends ObjectLifeCycleOptions {}
+
+export interface ObjectBeforeDestroyOptions extends ObjectLifeCycleOptions {}
+
 /**
  * Object Lifecycle
  * 对象生命周期
  */
 export interface IObjectLifeCycle {
-  onBeforeBind(
-    fn: (
-      Clzz: any,
-      options: {
-        context: IMidwayContainer;
-        definition: IObjectDefinition;
-        replaceCallback: (newDefinition: IObjectDefinition) => void;
-      }
-    ) => void
-  );
+  onBeforeBind(fn: (Clzz: any, options: ObjectBeforeBindOptions) => void);
   onBeforeObjectCreated(
-    fn: (
-      Clzz: any,
-      options: {
-        context: IMidwayContainer;
-        definition: IObjectDefinition;
-        constructorArgs: any[];
-      }
-    ) => void
+    fn: (Clzz: any, options: ObjectBeforeCreatedOptions) => void
   );
-  onObjectCreated<T>(
-    fn: (
-      ins: T,
-      options: {
-        context: IMidwayContainer;
-        definition: IObjectDefinition;
-        replaceCallback: (ins: T) => void;
-      }
-    ) => void
-  );
-  onObjectInit<T>(
-    fn: (
-      ins: T,
-      options: {
-        context: IMidwayContainer;
-        definition: IObjectDefinition;
-      }
-    ) => void
-  );
+  onObjectCreated<T>(fn: (ins: T, options: ObjectCreatedOptions<T>) => void);
+  onObjectInit<T>(fn: (ins: T, options: ObjectInitOptions) => void);
   onBeforeObjectDestroy<T>(
-    fn: (
-      ins: T,
-      options: {
-        context: IMidwayContainer;
-        definition: IObjectDefinition;
-      }
-    ) => void
+    fn: (ins: T, options: ObjectBeforeDestroyOptions) => void
   );
 }
 
@@ -558,7 +540,11 @@ export interface IMidwayBootstrapOptions {
   appDir?: string;
   applicationContext?: IMidwayContainer;
   preloadModules?: any[];
+  /**
+   * @deprecated please use 'imports'
+   */
   configurationModule?: any | any[];
+  imports?: any | any[];
   moduleDetector?: 'file' | IFileDetector | false;
   logger?: boolean | ILogger;
   ignore?: string[];

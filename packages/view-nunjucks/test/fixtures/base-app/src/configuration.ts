@@ -1,9 +1,10 @@
 import { App, Configuration, Inject } from '@midwayjs/decorator';
 import * as view from '../../../../src';
+import * as koa from '@midwayjs/koa';
 import { join } from 'path'
 
 @Configuration({
-  imports: [view],
+  imports: [koa, view],
   importConfigs: [join(__dirname, 'config')]
 })
 export class AutoConfiguration {

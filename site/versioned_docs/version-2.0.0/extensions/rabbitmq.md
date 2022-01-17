@@ -45,7 +45,7 @@ AMQP 有一些概念，Queue、Exchange 和 Binding 构成了 AMQP 协议的核�
 Midway 提供了订阅 rabbitMQ 的能力，并能够独立部署和使用。安装 `@midwayjs/rabbitmq`  模块及其定义。
 
 ```bash
-$ npm i @midwayjs/rabbitmq amqplib --save
+$ npm i @midwayjs/rabbitmq@2 amqplib --save
 $ npm i @types/amqplib --save-dev
 ```
 

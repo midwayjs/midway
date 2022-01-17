@@ -9,7 +9,7 @@ title: Redis
 `@midwayjs/redis` 是主要的功能包，`@types/ioredis` 是 定义包。
 
 ```bash
-$ npm i @midwayjs/redis --save
+$ npm i @midwayjs/redis@2 --save
 $ npm i @types/ioredis --save-dev			// 安装到 dev 依赖
 ```
 

@@ -15,6 +15,7 @@ export {
   pathMatching,
   wrapMiddleware,
 } from './util/';
+export { extend } from './util/extend';
 export * from './util/pathFileUtil';
 export * from './util/webRouterParam';
 export * from './common/webRouterCollector';

@@ -1,27 +1,34 @@
-export class NunjucksView {
-  ctx;
-  app;
+import { Inject, Provide } from '@midwayjs/decorator';
+import { IViewEngine, RenderOptions } from '@midwayjs/view';
+import { NunjucksEnvironment } from './engine';
 
-  constructor(ctx) {
-    this.ctx = ctx;
-    this.app = ctx.app;
-    // this.viewHelper = new this.app.nunjucks.ViewHelper(ctx);
-  }
+@Provide()
+export class NunjucksView implements IViewEngine {
+  @Inject()
+  nunjucks: NunjucksEnvironment;
 
-  render(name, locals) {
+  async render(
+    name: string,
+    locals?: Record<string, any>,
+    options?: RenderOptions
+  ): Promise<string> {
     // locals.helper = this.viewHelper;
     return new Promise((resolve, reject) => {
-      this.app.nunjucks.render(name, locals, (err, result) => {
+      this.nunjucks.render(name, locals, (err, result) => {
         if (err) return reject(err);
         resolve(result);
       });
     });
   }
 
-  renderString(tpl, locals, opts) {
+  async renderString(
+    tpl: string,
+    locals?: Record<string, any>,
+    options?: RenderOptions
+  ): Promise<string> {
     // locals.helper = this.viewHelper;
     return new Promise((resolve, reject) => {
-      this.app.nunjucks.renderString(tpl, locals, opts, (err, result) => {
+      this.nunjucks.renderString(tpl, locals, options, (err, result) => {
         if (err) return reject(err);
         resolve(result);
       });

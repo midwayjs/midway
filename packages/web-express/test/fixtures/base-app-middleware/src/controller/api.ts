@@ -4,7 +4,7 @@ import {
   Provide,
   Inject,
 } from '@midwayjs/decorator';
-import { IMidwayExpressContext, IMidwayExpressRequest } from '../../../../../src';
+import { Context, IMidwayExpressRequest } from '../../../../../src';
 import { TestMiddleware, TestControllerMiddleware } from '../test.middleware';
 
 @Provide()
@@ -12,7 +12,7 @@ import { TestMiddleware, TestControllerMiddleware } from '../test.middleware';
 export class APIController {
 
   @Inject()
-  ctx: IMidwayExpressContext;
+  ctx: Context;
 
   @Inject()
   req: IMidwayExpressRequest;

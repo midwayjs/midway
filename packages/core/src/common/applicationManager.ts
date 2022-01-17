@@ -50,18 +50,20 @@ export class MidwayApplicationManager {
   }
 
   public getApplications(
-    namespaces: Array<string | FrameworkType>
+    namespaces?: Array<string | FrameworkType>
   ): IMidwayApplication[] {
-    return namespaces
-      .map(namespace => {
-        return this.getApplication(namespace);
-      })
-      .filter(app => {
-        return !!app;
+    if (!namespaces) {
+      return Array.from(this.globalFrameworkMap.values()).map(framework => {
+        return framework.getApplication();
       });
-  }
-
-  public getWebLikeApplication(): IMidwayApplication[] {
-    return this.getApplications(['express', 'koa', 'egg', 'faas']);
+    } else {
+      return namespaces
+        .map(namespace => {
+          return this.getApplication(namespace);
+        })
+        .filter(app => {
+          return !!app;
+        });
+    }
   }
 }

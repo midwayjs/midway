@@ -20,7 +20,7 @@ import {
 import {
   IMidwayExpressApplication,
   IMidwayExpressConfigurationOptions,
-  IMidwayExpressContext,
+  Context,
 } from './interface';
 import type { IRouter, IRouterHandler, Response, NextFunction } from 'express';
 import * as express from 'express';
@@ -37,7 +37,7 @@ const debug = debuglog('midway:debug');
 @Framework()
 export class MidwayExpressFramework extends BaseFramework<
   IMidwayExpressApplication,
-  IMidwayExpressContext,
+  Context,
   IMidwayExpressConfigurationOptions,
   Response,
   NextFunction
@@ -60,7 +60,7 @@ export class MidwayExpressFramework extends BaseFramework<
     debug('[express]: use root middleware');
     // use root middleware
     this.app.use((req, res, next) => {
-      const ctx = req as IMidwayExpressContext;
+      const ctx = req as Context;
       this.app.createAnonymousContext(ctx);
       (req as any).requestContext = ctx.requestContext;
       ctx.requestContext.registerObject('req', req);
@@ -329,7 +329,7 @@ export class MidwayExpressFramework extends BaseFramework<
   }
 
   public async applyMiddleware<Response, NextFunction>(): Promise<
-    MiddlewareRespond<IMidwayExpressContext, Response, NextFunction>
+    MiddlewareRespond<Context, Response, NextFunction>
   > {
     if (!this.composeMiddleware) {
       this.composeMiddleware = await this.expressMiddlewareService.compose(
@@ -347,6 +347,10 @@ export class MidwayExpressFramework extends BaseFramework<
 
   public getServer() {
     return this.server;
+  }
+
+  public getPort() {
+    return process.env.MIDWAY_HTTP_PORT;
   }
 
   public getFrameworkName() {

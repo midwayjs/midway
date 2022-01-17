@@ -6,26 +6,34 @@ import {
   IMidwayApplication,
   IMidwayContext
 } from '@midwayjs/core';
-import { Application as ExpressApplication, NextFunction as ExpressNextFunction, Request, Response } from 'express';
+import { Application as ExpressApplication, NextFunction as ExpressNextFunction, Request as ExpressRequest, Response as ExpressResponse } from 'express';
 import { Options, OptionsJson, OptionsText, OptionsUrlencoded } from 'body-parser';
 
-export type IMidwayExpressContext = IMidwayContext<Request>;
+type Request = IMidwayContext<ExpressRequest>;
+export type Response = ExpressResponse;
+export type NextFunction = ExpressNextFunction;
+export interface Context extends Request {}
+
 /**
- * @deprecated use IMidwayExpressContext
+ * @deprecated use Context
  */
-export type IMidwayExpressRequest = IMidwayExpressContext;
-export type IMidwayExpressMiddleware = IMiddleware<IMidwayExpressContext, Response, ExpressNextFunction>;
-export interface IMidwayExpressApplication extends IMidwayApplication<IMidwayExpressContext, ExpressApplication> {
+export type IMidwayExpressRequest = Context;
+/**
+ * @deprecated use Context
+ */
+export type IMidwayExpressContext = Context;
+export type IMidwayExpressMiddleware = IMiddleware<Context, ExpressResponse, ExpressNextFunction>;
+export interface IMidwayExpressApplication extends IMidwayApplication<Context, ExpressApplication> {
   /**
    * add global middleware to app
    * @param Middleware
    */
-  useMiddleware<Response, NextFunction>(Middleware: CommonMiddlewareUnion<IMidwayExpressContext, Response, NextFunction>): void;
+  useMiddleware<Response, NextFunction>(Middleware: CommonMiddlewareUnion<Context, Response, NextFunction>): void;
 
   /**
    * get global middleware
    */
-  getMiddleware<Response, NextFunction>(): ContextMiddlewareManager<IMidwayExpressContext, Response, NextFunction>;
+  getMiddleware<Response, NextFunction>(): ContextMiddlewareManager<Context, Response, NextFunction>;
 }
 
 export interface IMidwayExpressConfigurationOptions extends IConfigurationOptions {
@@ -64,8 +72,6 @@ export interface IMidwayExpressConfigurationOptions extends IConfigurationOption
 }
 
 export type Application = IMidwayExpressApplication;
-export type NextFunction = ExpressNextFunction;
-export interface Context extends IMidwayExpressContext {}
 
 declare module '@midwayjs/core/dist/interface' {
   interface MidwayConfig {

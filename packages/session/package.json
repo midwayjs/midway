@@ -12,11 +12,11 @@
   "devDependencies": {
     "@midwayjs/core": "^3.0.0-beta.16",
     "@midwayjs/decorator": "^3.0.0-beta.16",
-    "@midwayjs/mock": "^3.0.0-beta.16",
-    "@types/koa-session": "5.10.4"
+    "@midwayjs/mock": "^3.0.0-beta.16"
   },
   "dependencies": {
-    "koa-session": "^6.2.0"
+    "@midwayjs/cookies": "1.0.1",
+    "crc": "4.1.0"
   },
   "keywords": [
     "midway",

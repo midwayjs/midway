@@ -2,6 +2,7 @@ import * as passport from 'passport';
 import { App, Config, Init } from '@midwayjs/decorator';
 import { getPassport, isExpressMode } from '../util';
 import { AbstractPassportMiddleware, AbstractStrategy } from '../interface';
+import { httpError } from '@midwayjs/core';
 
 export function PassportStrategy(
   Strategy: new (...args) => passport.Strategy,
@@ -147,7 +148,7 @@ export function PassportMiddleware(
                 res.redirect(options.failureRedirect);
                 return;
               } else {
-                res.status(401);
+                throw new httpError.UnauthorizedError();
               }
             }
             next();
@@ -212,7 +213,7 @@ export function PassportMiddleware(
                   ctx.redirect(options.failureRedirect);
                   return;
                 } else {
-                  ctx.status = 401;
+                  throw new httpError.UnauthorizedError();
                 }
               }
               await next();

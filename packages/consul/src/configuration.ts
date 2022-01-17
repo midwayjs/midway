@@ -93,7 +93,7 @@ export class ConsulConfiguration implements ILifeCycle {
     }
   }
 
-  async onReady(
+  async onServerReady(
     container: IMidwayContainer,
     app?: IMidwayApplication
   ): Promise<void> {

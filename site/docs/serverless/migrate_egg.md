@@ -1,8 +1,6 @@
----
-title: Egg/Midway 应用迁移
----
+# Egg 应用迁移
 
-Midway Serverless 提供了一套通用的应用迁移方案，将原有应用尽可能不修改代码，就可以发布到函数平台。使用此方案，可以将原有的 egg/midway 应用尽可能快速简单的迁移到函数平台进行托管，享受云原生时代的弹性红利。
+Midway Serverless 提供了一套通用的应用迁移方案，将原有应用尽可能不修改代码，就可以发布到函数平台。使用此方案，可以将原有的 egg 应用尽可能快速简单的迁移到函数平台进行托管，享受云原生时代的弹性红利。
 
 ## 使用
 
@@ -33,39 +31,7 @@ custom:
 
 ## TS 编译
 
-如果是 midway 项目，可以使用我们提供的发布钩子，在发布时自动执行编译，在 `package.json` 配置如下。
-
-```json
-{
-  "name": "xxxxxx",
-  "version": "xxxx",
-  .....
-  "scripts": {
-		"deploy": "midway-bin deploy",
-  	....
-	},
-  "midway-integration": {
-    "lifecycle": {
-      "before:package:cleanup": "npm run build"
-    }
-  },
-	"egg": {
-  	"framework": "@midwayjs/web"
-  }
-}
-```
-
-这里的要点有两个：
-
-- 1、这里指定了 `egg` 字段，用于指定特定的 egg 上层框架
-- 2、这里配置了 `midway-integration` 字段，用于支持 midway 应用体系下原来的编译。
-- 3、增加 deploy 脚本
-
-:::info
-如果使用了自己的 egg 上层框架，这里的 egg.framework 可以变为自己的包名。
-:::
-
-如果使用了 egg-ts ，则配置如下。
+如果是  egg-ts 项目，可以使用我们提供的发布钩子，在发布时自动执行编译，在 `package.json` 配置如下。
 
 ```json
 {
@@ -79,6 +45,8 @@ custom:
   }
 }
 ```
+
+
 
 ## 部署
 
@@ -114,6 +82,8 @@ custom:
 $ npx midway-bin deploy										## deploy by npm
 $ npx midway-bin deploy --npm=cnpm				## deploy by cnpm
 ```
+
+
 
 ## 默认情况
 

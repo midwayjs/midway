@@ -2,15 +2,13 @@
 
 [TypeORM](https://github.com/typeorm/typeorm) 是 `node.js` 现有社区最成熟的对象关系映射器（`ORM` ）。Midway 和 TypeORM 搭配，使开发更简单。
 
-
-
 相关信息：
 
-| 描述                 |      |
-| -------------------- | ---- |
-| 可作为主框架独立使用 | ❌    |
-| 包含自定义日志       | ❌    |
-| 可独立添加中间件     | ❌    |
+| 描述              |      |
+| ----------------- | ---- |
+| 可用于标准项目    | ✅    |
+| 可用于 Serverless | ✅    |
+| 可用于一体化      | ✅    |
 
 
 
@@ -158,7 +156,7 @@ export class Photo {
   isPublished: boolean;
 }
 ```
-:::warning
+:::caution
 注意，这里的 EntityModel 是 midway 做了封装的特殊装饰器，为了和 midway 更好的结合使用。请不要直接使用 typeorm 中的 Entity。
 :::
 

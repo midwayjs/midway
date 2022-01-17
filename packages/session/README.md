@@ -7,7 +7,6 @@ Session component for @midwayjs/koa and @midwayjs/faas
 
 ```bash
 $ npm i @midwayjs/session --save
-$ npm i @types/koa-session --save-dev
 ```
 
 

@@ -4,6 +4,8 @@ import { camelCase, pascalCase } from './camelCase';
 import { randomUUID } from './uuid';
 
 const ToString = Function.prototype.toString;
+const hasOwn = Object.prototype.hasOwnProperty;
+const toStr = Object.prototype.toString;
 
 function fnBody(fn) {
   return ToString.call(fn)
@@ -46,6 +48,31 @@ export function isFunction(value) {
 
 export function isObject(value) {
   return value !== null && typeof value === 'object';
+}
+
+export function isPlainObject(obj) {
+  if (!obj || toStr.call(obj) !== '[object Object]') {
+    return false;
+  }
+
+  const hasOwnConstructor = hasOwn.call(obj, 'constructor');
+  const hasIsPrototypeOf =
+    obj.constructor &&
+    obj.constructor.prototype &&
+    hasOwn.call(obj.constructor.prototype, 'isPrototypeOf');
+  // Not own constructor property must be Object
+  if (obj.constructor && !hasOwnConstructor && !hasIsPrototypeOf) {
+    return false;
+  }
+
+  // Own properties are enumerated firstly, so to speed up,
+  // if last one is own, then all properties are own.
+  let key;
+  for (key in obj) {
+    /**/
+  }
+
+  return typeof key === 'undefined' || hasOwn.call(obj, key);
 }
 
 export function isNumber(value) {
@@ -134,6 +161,18 @@ export function merge(target: any, src: any) {
   throw new Error('can not merge meta that type of ' + typeof target);
 }
 
+export function toAsyncFunction<T extends (...args) => any>(
+  method: T
+): (...args: Parameters<T>) => Promise<ReturnType<T>> {
+  if (isAsyncFunction(method)) {
+    return method as any;
+  } else {
+    return async function (...args) {
+      return Promise.resolve(method.call(this, ...args));
+    } as any;
+  }
+}
+
 export const Types = {
   isClass,
   isAsyncFunction,
@@ -141,6 +180,7 @@ export const Types = {
   isPromise,
   isFunction,
   isObject,
+  isPlainObject,
   isNumber,
   isProxy,
   isMap,
@@ -159,4 +199,5 @@ export const Utils = {
   camelCase,
   pascalCase,
   randomUUID,
+  toAsyncFunction,
 };

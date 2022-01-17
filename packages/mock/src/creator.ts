@@ -62,13 +62,12 @@ export async function create<
     safeRequire(join(`${options.baseDir}`, 'interface'));
   }
 
-  if (!options.configurationModule && customFramework) {
-    options.configurationModule =
-      transformFrameworkToConfiguration(customFramework);
+  if (!options.imports && customFramework) {
+    options.imports = transformFrameworkToConfiguration(customFramework);
   }
 
   if (customFramework?.['Configuration']) {
-    options.configurationModule = customFramework;
+    options.imports = customFramework;
     customFramework = customFramework['Framework'];
   }
 
@@ -106,8 +105,8 @@ export async function create<
   await initializeGlobalApplicationContext({
     ...options,
     appDir,
-    configurationModule: []
-      .concat(options.configurationModule)
+    imports: []
+      .concat(options.imports)
       .concat(
         options.baseDir
           ? safeRequire(join(options.baseDir, 'configuration'))
@@ -188,7 +187,7 @@ export async function createFunctionApp<
     baseDir,
     {
       ...options,
-      configurationModule: transformFrameworkToConfiguration(customFramework),
+      imports: transformFrameworkToConfiguration(customFramework),
     },
     customFrameworkName as any
   );
@@ -239,8 +238,8 @@ export async function createLightApp(
   );
   return createApp(baseDir, {
     ...options,
-    configurationModule: [
-      transformFrameworkToConfiguration(LightFramework),
-    ].concat(options?.configurationModule),
+    imports: [transformFrameworkToConfiguration(LightFramework)].concat(
+      options?.imports
+    ),
   });
 }

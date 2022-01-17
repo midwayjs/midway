@@ -1,6 +1,6 @@
 import { Scope, Provide, Configuration, Controller, Get, ScopeEnum, Inject } from '@midwayjs/decorator';
 import * as koa from '../../../../../web-koa';
-import { SessionStore, SessionStoreManager } from '../../../../src';
+import { SessionStore, SessionStoreManager } from '../../../../';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -21,8 +21,8 @@ export class MemorySessionStore extends SessionStore {
 
 @Configuration({
   imports: [
-    koa,
-    require('../../../../src')
+    // require('../../../../'),
+    koa
   ],
   importConfigs: [
     {

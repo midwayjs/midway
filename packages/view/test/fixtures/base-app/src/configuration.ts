@@ -1,9 +1,21 @@
-import { Configuration, Inject } from '@midwayjs/decorator';
+import { Configuration, Inject, Provide } from '@midwayjs/decorator';
 import * as view from '../../../../src';
+import * as koa from '@midwayjs/koa';
 import { join } from 'path'
 
+@Provide()
+export class EjsView {
+  render() { return Promise.resolve('ejs'); }
+  renderString() { return Promise.resolve('ejs'); }
+}
+@Provide()
+export class NunjucksView {
+  render() { return Promise.resolve('nunjucks'); }
+  renderString() { return Promise.resolve('nunjucks'); }
+}
+
 @Configuration({
-  imports: [view],
+  imports: [koa, view],
   importConfigs: [join(__dirname, 'config')]
 })
 export class AutoConfiguration {
@@ -12,13 +24,7 @@ export class AutoConfiguration {
   viewManager: view.ViewManager;
 
   async onReady(){
-    this.viewManager.use('ejs', class EjsView {
-      render() { return Promise.resolve('ejs'); }
-      renderString() { return Promise.resolve('ejs'); }
-    });
-    this.viewManager.use('nunjucks', class EjsView {
-      render() { return Promise.resolve('nunjucks'); }
-      renderString() { return Promise.resolve('nunjucks'); }
-    });
+    this.viewManager.use('ejs', EjsView);
+    this.viewManager.use('nunjucks', NunjucksView);
   }
 }

@@ -50,7 +50,7 @@ describe('test/util.test.ts', () => {
         A,
         B
       ],
-      configurationModule: [
+      imports: [
         transformFrameworkToConfiguration(MockFramework),
         FaaS
       ]

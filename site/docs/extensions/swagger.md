@@ -1,15 +1,13 @@
 # Swagger
 基于最新的 [OpenAPI 3.0.3](https://swagger.io/specification/) 实现了新版的 Swagger 组件。
 
-
-
 相关信息：
 
-| 描述                 |      |
-| -------------------- | ---- |
-| 可作为主框架独立使用 | ❌    |
-| 包含自定义日志       | ❌    |
-| 可独立添加中间件     | ❌    |
+| 描述              |      |
+| ----------------- | ---- |
+| 可用于标准项目    | ✅    |
+| 可用于 Serverless | ❌    |
+| 可用于一体化      | ❌    |
 
 
 
@@ -250,7 +248,7 @@ Swagger UI 中展示：
 @Post('/:id', { summary: 'test'})
 @ApiBody({
   description: 'this is body', 
-  contentType: BotyContentType.Multipart
+  contentType: BodyContentType.Multipart
 })
 @ApiParam({ description: 'this is id' })
 async create(@Body() createCatDto: CreateCatDto, @Param('id') id: number): Promise<Cat> {

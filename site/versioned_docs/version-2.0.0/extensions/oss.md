@@ -25,7 +25,7 @@ title: 对象存储（OSS）
 `@midwayjs/oss` 是主要的功能包，`@types/ali-oss` 是 oss 的官方定义包。
 
 ```bash
-$ npm i @midwayjs/oss --save
+$ npm i @midwayjs/oss@2 --save
 $ npm i @types/ali-oss --save-dev			// 安装到 dev 依赖
 ```
 

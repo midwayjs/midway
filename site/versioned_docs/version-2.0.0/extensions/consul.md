@@ -19,7 +19,7 @@ consul 用于微服务下的服务治理，主要特点有：服务发现、服�
 首先安装 consul 的组件：
 
 ```bash
-npm i @midwayjs/consul -S
+npm i @midwayjs/consul@2 -S
 npm i @types/consul -D
 ```
 
