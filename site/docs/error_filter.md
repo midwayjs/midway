@@ -74,7 +74,7 @@ import { InternalServerErrorError} from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Catch(InternalServerError)
-export InternalServerErrorFilter {
+export class InternalServerErrorFilter {
   async catch(err: InternalServerError, ctx: Context) {
 
     // ...
@@ -137,7 +137,7 @@ export class NotFoundFilter {
   async catch(err: httpError.NotFoundError, ctx: Context) {
     // 404 错误会到这里
     ctx.redirect('/404.html');
-    
+
     // 或者直接返回一个内容
     return {
       message: '404, ' + ctx.path
@@ -160,7 +160,7 @@ import { MidwayHttpError } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Catch()
-export DefaultErrorFilter {
+export class DefaultErrorFilter {
   async catch(err: Error, ctx: Context) {
 
     // ...
@@ -219,7 +219,7 @@ import { InternalServerErrorError} from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Catch()
-export DefaultErrorFilter {
+export class DefaultErrorFilter {
   async catch(err: Error, ctx: Context) {
 
     // ...
