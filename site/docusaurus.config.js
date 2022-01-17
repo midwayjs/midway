@@ -80,7 +80,8 @@ const config = {
         ],
       },
       algolia: {
-        apiKey: '0e9ed4695a90cde3e016c4d5dcbc56e5',
+        appId: 'DHOMYJQQ2W',
+        apiKey: '75f3dce231a9777ae8fa6fba6b82085b',
         indexName: 'midway',
         contextualSearch: true,
       },
