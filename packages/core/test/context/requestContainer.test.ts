@@ -1,6 +1,7 @@
 import {
   MidwayContainer as Container,
   MidwayRequestContainer as RequestContainer,
+  MidwaySingletonInvokeRequestError,
   REQUEST_OBJ_CTX_KEY
 } from '../../src';
 import { Inject, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
@@ -287,7 +288,7 @@ describe('/test/context/requestContainer.test.ts', () => {
 
   it('should test singleton scope inject request scope', async () => {
     @Provide()
-    @Scope(ScopeEnum.Request)
+    @Scope(ScopeEnum.Request, { allowDowngrade: true})
     class B {
       bid = Math.random();
       @Inject()
@@ -321,5 +322,36 @@ describe('/test/context/requestContainer.test.ts', () => {
     // 是否同一单例
     expect(a1.aid).toEqual(a2.aid);
     expect(a1.b.bid).toEqual(a2.b.bid);
+  });
+
+  it('should test singleton scope inject request scope and got error', async () => {
+    @Provide()
+    @Scope(ScopeEnum.Request)
+    class B {
+      bid = Math.random();
+      @Inject()
+      ctx;
+    }
+
+    @Provide()
+    @Scope(ScopeEnum.Singleton)
+    class A {
+      aid = Math.random();
+      @Inject()
+      b: B;
+      @Inject()
+      ctx;
+    }
+
+    const appCtx = new Container();
+    appCtx.bind(A);
+    appCtx.bind(B);
+
+    // 创建请求作用域
+    const requestContainer1 = new RequestContainer({c:1}, appCtx);
+    const err = await new Promise(resolve => {
+      requestContainer1.getAsync(A).catch(resolve);
+    })
+    expect(err).toBeInstanceOf(MidwaySingletonInvokeRequestError);
   });
 });

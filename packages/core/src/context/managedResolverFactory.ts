@@ -19,6 +19,7 @@ import {
   MidwayCommonError,
   MidwayDefinitionNotFoundError,
   MidwayResolverMissingError,
+  MidwaySingletonInvokeRequestError,
 } from '../error';
 
 const debug = util.debuglog('midway:managedresolver');
@@ -279,6 +280,18 @@ export class ManagedResolverFactory {
     if (definition.properties) {
       const keys = definition.properties.propertyKeys() as string[];
       for (const key of keys) {
+        if (definition.isSingletonScope() && this.context.hasDefinition(key)) {
+          const propertyDefinition = this.context.registry.getDefinition(key);
+          if (
+            propertyDefinition.isRequestScope() &&
+            !propertyDefinition.allowDowngrade
+          ) {
+            throw new MidwaySingletonInvokeRequestError(
+              definition.path.name,
+              propertyDefinition.path.name
+            );
+          }
+        }
         try {
           inst[key] = await this.resolveManagedAsync(
             definition.properties.get(key),

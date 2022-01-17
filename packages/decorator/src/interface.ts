@@ -25,6 +25,7 @@ export interface ObjectDefinitionOptions {
   constructorArgs?: any[];
   namespace?: string;
   srcPath?: string;
+  allowDowngrade?: boolean;
 }
 
 export interface TagPropsMetadata {
