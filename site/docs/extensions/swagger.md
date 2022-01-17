@@ -248,7 +248,7 @@ Swagger UI 中展示：
 @Post('/:id', { summary: 'test'})
 @ApiBody({
   description: 'this is body', 
-  contentType: BotyContentType.Multipart
+  contentType: BodyContentType.Multipart
 })
 @ApiParam({ description: 'this is id' })
 async create(@Body() createCatDto: CreateCatDto, @Param('id') id: number): Promise<Cat> {
