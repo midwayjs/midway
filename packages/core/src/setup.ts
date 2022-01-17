@@ -93,15 +93,15 @@ export async function initializeGlobalApplicationContext(
     applicationContext,
   ]);
 
-  if (!globalOptions.configurationModule) {
-    globalOptions.configurationModule = [
+  if (!globalOptions.imports) {
+    globalOptions.imports = [
       safeRequire(join(globalOptions.baseDir, 'configuration')),
     ];
   }
 
-  for (const configurationModule of [].concat(
-    globalOptions.configurationModule
-  )) {
+  for (const configurationModule of []
+    .concat(globalOptions.imports)
+    .concat(globalOptions.configurationModule)) {
     // load configuration and component
     applicationContext.load(configurationModule);
   }

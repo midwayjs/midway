@@ -540,7 +540,11 @@ export interface IMidwayBootstrapOptions {
   appDir?: string;
   applicationContext?: IMidwayContainer;
   preloadModules?: any[];
+  /**
+   * @deprecated please use 'imports'
+   */
   configurationModule?: any | any[];
+  imports?: any | any[];
   moduleDetector?: 'file' | IFileDetector | false;
   logger?: boolean | ILogger;
   ignore?: string[];

@@ -96,12 +96,12 @@ export async function createLightFramework(baseDir: string = '', globalConfig: a
     }
   }
 
-  const configurationModule = [{
+  const imports = [{
     Configuration: EmptyConfiguration,
     EmptyFramework
   }];
   if (baseDir) {
-    configurationModule.push(safeRequire(join(baseDir, 'configuration')));
+    imports.push(safeRequire(join(baseDir, 'configuration')));
   }
 
   const container = new MidwayContainer();
@@ -126,7 +126,7 @@ export async function createLightFramework(baseDir: string = '', globalConfig: a
 
   await initializeGlobalApplicationContext({
     baseDir,
-    configurationModule,
+    imports,
     applicationContext: container,
     globalConfig,
   });

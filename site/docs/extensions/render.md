@@ -10,6 +10,12 @@
 | 可用于 Serverless | ✅    |
 | 可用于一体化      | ✅    |
 
+其他
+
+| 描述                     |      |
+| ------------------------ | ---- |
+| 可用于 @midwayjs/express | ❌    |
+
 
 
 
@@ -46,10 +52,12 @@ export class ContainerLifeCycle {
 }
 ```
 ### 配置
+
+配置后缀，映射到指定的引擎。
+
 ```typescript
 // src/config/config.default.ts
 export const view = {
-  defaultViewEngine: 'ejs',
   mapping: {
     '.ejs': 'ejs',
   },
@@ -106,6 +114,71 @@ export class HomeController {
   }
 }
 ```
+
+
+
+### 配置后缀
+
+默认后缀为 `.html` ，为了改成习惯的 `.ejs` 后缀，我们可以加一个 `defaultViewEngine` 配置。
+
+```typescript
+// src/config/config.default.ts
+export const view = {
+  defaultViewEngine: 'ejs',
+  mapping: {
+    '.ejs': 'ejs',
+  },
+};
+
+// ejs config
+export const ejs = {};
+```
+
+这样我们在渲染时不需要增加后缀。
+
+```typescript
+@Provide()
+@Controller('/')
+export class HomeController {
+  
+  @Inject()
+  ctx: Context;
+
+  @Get('/')
+  async render(){
+    await this.ctx.render('hello', {
+      data: 'world',
+    });
+  }
+}
+```
+
+
+
+### 配置多个模板目录
+
+如果我们需要将代码封装为组件提供，就需要支持不同的模板目录。
+
+默认的模板目录在 `${appDir}/view`。我们可以在 `rootDir` 字段增加其他的目录。
+
+```typescript
+// view 组件的配置
+export const view = {
+  rootDir: {
+    default: 'xxxxx',
+  }
+};
+
+// 其他组件的配置
+export const view = {
+  rootDir: {
+    anotherRoot: path.join(__dirname, './view'),
+  }
+};
+```
+
+通过对象合并的机制，使得所有的 `rootDir` 都能合并到一起，组件内部会获取 values 做匹配。
+
 
 
 ## 使用 Nunjucks
@@ -217,6 +290,87 @@ export class AutoConfiguration {
 await ctx.render('test.nj', { name: 'midway' });
 ```
 也会输出 `hi, midway` 。
+
+
+
+## 自定义模板引擎
+
+默认我们只提供了 ejs 和 nunjucks 的模板引擎，你也可以编写自己的模板引擎代码。
+
+### 实现模板引擎
+
+首先需要创建一个请求作用域的模板引擎类，它将在每个请求执行时初始化。你需需要实现其中的 `render` 和 `renderString` 方法。如果你的模板引擎不支持某个方法，可以抛出异常。
+
+```typescript
+// lib/view.ts
+import { Provide, Config } from '@midwayjs/decorator';
+import { IViewEngine } from '@midwayjs/view';
+
+@Provide()
+export class MyView implements IViewEngine {
+
+  @Config('xxxx')
+  viewConfig;
+
+  async render(name: string, locals?: Record<string, any>, options?: RenderOptions) {
+    return myengine.render(name, locals, options);
+  }
+
+  async renderString(tpl: string,
+    locals?: Record<string, any>,
+    options?: RenderOptions) { 
+    
+    throw new Error('not implement'); 
+  }
+};
+```
+
+这两个方法接受类似的三个参数，`renderString` 第一个参数需要传入待解析的模板内容本身，而 `render` 方法会解析模板文件。
+
+`render(name, locals, viewOptions)`
+
+- name: 从 `root`（默认是 `/view` ) 相对的 path
+- locals: 模板需要的数据
+- viewOptions: 每次渲染的模板参数，可覆盖的配置，可以在配置文件中重写，其中包含几个参数：
+  - root: 模板的绝对路径
+  - name: 调用 render 方法的原始 name 值
+  - locals: 调用 render 方法的原始 locals 值
+
+`renderString(tpl, locals, viewOptions)`
+
+- tpl: 模板名
+- locals: 和 `render` 一样
+- viewOptions: 和 `render` 一样
+
+### 注册模板引擎
+
+在实现自定义的模板引擎后，我们需要在启动入口注册它。
+
+通过引入 `ViewManager` ，我们可以使用 `use` 方法注册自定义模板引擎。
+
+```typescript
+// src/configuration.ts
+import { Configuration, Inject, Provide } from '@midwayjs/decorator';
+import * as koa from '@midwayjs/koa';
+import * as view from '@midwayjs/view';
+import { MyView } from './lib/my';
+
+@Configuration({
+  imports: [koa, view],
+  importConfigs: [join(__dirname, 'config')]
+})
+export class AutoConfiguration {
+
+  @Inject()
+  viewManager: view.ViewManager;
+
+  async onReady(){
+    this.viewManager.use('ejs', MyView);
+  }
+}
+
+```
+
 
 
 ## 注意事项

@@ -2,15 +2,10 @@ import { IViewEngine } from './dist';
 export * from './dist/index';
 
 declare module '@midwayjs/core/dist/interface' {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface Context extends IViewEngine {
-    //...
-  }
-
   interface MidwayConfig {
     view?: {
       /**
-       * give a path to find the file, you can specify multiple path with `,` delimiter
+       * give a path to find the file, it will be override rootDir.default
        */
       root?: string;
       /**
@@ -29,6 +24,31 @@ declare module '@midwayjs/core/dist/interface' {
        * map the file extension to view engine, such as `{ '.ejs': 'ejs' }`
        */
       mapping?: Record<string, string>;
+      /**
+       * give multi-path for root, it can be overwrite or add in different component
+       */
+      rootDir?: Record<string, string>;
     };
+  }
+}
+
+declare module '@midwayjs/koa/dist/interface' {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface Context extends IViewEngine {
+    //...
+  }
+}
+
+declare module '@midwayjs/web/dist/interface' {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface Context extends IViewEngine {
+    //...
+  }
+}
+
+declare module '@midwayjs/faas/dist/interface' {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface Context extends IViewEngine {
+    //...
   }
 }
