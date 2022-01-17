@@ -137,7 +137,7 @@ export class HomeController {
 所谓的全局中间件，就是对所有的路由生效的 Web 中间件。
 
 
-我们需要在应用启动前，加入当前框架的中间件列表中，`useMiddlware` 方法，可以把中间件加入到中间件列表中。
+我们需要在应用启动前，加入当前框架的中间件列表中，`useMiddleware` 方法，可以把中间件加入到中间件列表中。
 
 ```typescript
 // src/configuration.ts
@@ -155,7 +155,7 @@ export class AutoConfiguration {
   app: koa.Application;
 
   async onReady() {
-    this.app.useMiddlware(ReportMiddleware);
+    this.app.useMiddleware(ReportMiddleware);
   }
 }
 
@@ -164,7 +164,7 @@ export class AutoConfiguration {
 
 ```typescript
 async onReady() {
-	this.app.useMiddlware([ReportMiddleware1, ReportMiddleware2]);
+	this.app.useMiddleware([ReportMiddleware1, ReportMiddleware2]);
 }
 ```
 
@@ -172,7 +172,7 @@ async onReady() {
 
 ## 函数中间件
 
-Midway 依旧支持函数中间件的形式，并且可以使用 `useMiddlware` 来加入到中间件列表。
+Midway 依旧支持函数中间件的形式，并且可以使用 `useMiddleware` 来加入到中间件列表。
 
 ```typescript
 // src/middleware/another.middleware.ts
@@ -200,7 +200,7 @@ export class AutoConfiguration {
 
   async onReady() {
     // add middleware
-    this.app.useMiddlware([ReportMiddleware, fnMiddleware]);
+    this.app.useMiddleware([ReportMiddleware, fnMiddleware]);
   }
 }
 
@@ -221,12 +221,12 @@ const app = new Koa();
 app.use(require('koa-static')(root, opts));
 ```
 
-那么， `require('koa-static')(root, opts)` 这个，其实就是返回的中间件方法，我们直接导出，并且调用 `useMiddlware` 即可。
+那么， `require('koa-static')(root, opts)` 这个，其实就是返回的中间件方法，我们直接导出，并且调用 `useMiddleware` 即可。
 
 ```typescript
 async onReady() {
   // add middleware
-  this.app.useMiddlware(require('koa-static')(root, opts));
+  this.app.useMiddleware(require('koa-static')(root, opts));
 }
 ```
 
@@ -276,7 +276,7 @@ fn._name = 'fnMiddleware';
 
 ```
 
-我们可以使用 `getMiddlware().getNames()` 来获取当前中间件列表中的所有中间件名。
+我们可以使用 `getMiddleware().getNames()` 来获取当前中间件列表中的所有中间件名。
 
 ```typescript
 // src/configuration.ts
@@ -296,7 +296,7 @@ export class AutoConfiguration {
 
   async onReady() {
     // add middleware
-    this.app.useMiddlware([ReportMiddleware, fnMiddleware]);
+    this.app.useMiddleware([ReportMiddleware, fnMiddleware]);
 
     // output
     console.log(this.app.getMiddleware().getNames());
@@ -316,7 +316,7 @@ export class AutoConfiguration {
 
 Midway 提供了 `insert` 系列的 API，方便用户快速调整中间件。
 
-我们需要先使用 `getMiddlware()` 方法获取中间件列表，然后对其进行操作。
+我们需要先使用 `getMiddleware()` 方法获取中间件列表，然后对其进行操作。
 
 ```typescript
 // src/configuration.ts
@@ -335,14 +335,14 @@ export class AutoConfiguration {
 
   async onReady() {
     // 把中间件添加到最前面
-    this.app.getMiddlware().insertFirst(ReportMiddleware);
-    // 把中间件添加到最后面，等价于 useMiddlware
-    this.app.getMiddlware().insertLast(ReportMiddleware);
+    this.app.getMiddleware().insertFirst(ReportMiddleware);
+    // 把中间件添加到最后面，等价于 useMiddleware
+    this.app.getMiddleware().insertLast(ReportMiddleware);
 
     // 把中间件添加到名为 session 的中间件之后
-    this.app.getMiddlware().insertAfter(ReportMiddleware, 'session');
+    this.app.getMiddleware().insertAfter(ReportMiddleware, 'session');
     // 把中间件添加到名为 session 的中间件之前
-    this.app.getMiddlware().insertBefore(ReportMiddleware, 'session');
+    this.app.getMiddleware().insertBefore(ReportMiddleware, 'session');
   }
 }
 
