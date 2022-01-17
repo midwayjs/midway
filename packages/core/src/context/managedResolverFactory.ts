@@ -18,7 +18,8 @@ import * as EventEmitter from 'events';
 import {
   MidwayCommonError,
   MidwayDefinitionNotFoundError,
-  MidwayResolverMissingError, MidwaySingletonInvokeRequestError,
+  MidwayResolverMissingError,
+  MidwaySingletonInvokeRequestError,
 } from '../error';
 
 const debug = util.debuglog('midway:managedresolver');
