@@ -28,7 +28,7 @@
     "@midwayjs/koa": "^3.0.0-beta.16",
     "@midwayjs/mock": "^3.0.0-beta.16",
     "@midwayjs/web": "^3.0.0-beta.16",
-    "@types/jsonwebtoken": "8.5.7"
+    "@types/jsonwebtoken": "8.5.8"
   },
   "dependencies": {
     "jsonwebtoken": "^8.5.1"
