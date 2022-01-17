@@ -23,6 +23,7 @@ export class ObjectDefinition implements IObjectDefinition {
   namespace = '';
   handlerProps = [];
   createFrom;
+  allowDowngrade = false;
 
   constructor() {
     this.creator = new ObjectCreator(this);

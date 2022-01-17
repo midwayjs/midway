@@ -14,8 +14,11 @@ export function Destroy(): MethodDecorator {
   };
 }
 
-export function Scope(scope: ScopeEnum): ClassDecorator {
+export function Scope(
+  scope: ScopeEnum,
+  scopeOptions?: { allowDowngrade?: boolean }
+): ClassDecorator {
   return function (target: any): void {
-    saveObjectDefinition(target, { scope });
+    saveObjectDefinition(target, { scope, ...scopeOptions });
   };
 }

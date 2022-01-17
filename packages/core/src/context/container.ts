@@ -398,6 +398,11 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
       definition.scope = objDefOptions.scope;
     }
 
+    if (objDefOptions.allowDowngrade) {
+      debugBind(`  register allowDowngrade = ${objDefOptions.allowDowngrade}`);
+      definition.allowDowngrade = objDefOptions.allowDowngrade;
+    }
+
     this.objectCreateEventTarget.emit(
       ObjectLifeCycleEvent.BEFORE_BIND,
       target,

@@ -61,7 +61,6 @@ export interface ILifeCycle extends Partial<IObjectLifeCycle> {
     container: IMidwayContainer,
     mainApp?: IMidwayApplication
   ): Promise<void>;
-  // onAppError?(err: Error, app: IMidwayApplication);
 }
 
 export type ObjectContext = {
@@ -184,6 +183,7 @@ export interface IObjectDefinition {
     metadata: any;
   }>;
   createFrom: 'framework' | 'file' | 'module';
+  allowDowngrade: boolean;
 }
 
 export interface IObjectCreator {

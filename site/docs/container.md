@@ -333,6 +333,95 @@ export class DBManager {
 
 
 
+### 作用域降级
+
+当单例作用域注入请求作用域对象时，就会出现 **作用域降级** 的情况。简单来说，请求作用域的对象实例将被固化，会保存一个固定的实例在单例的缓存中。
+
+比如：
+
+```typescript
+// 这个类是请求作用域（Request）
+@Provide()
+export class A {
+  @Inject()
+  b: B;
+}
+
+// 设置了单例
+@Provide()
+@Scope(ScopeEnum.Singleton)
+export class B {
+}
+```
+
+当 `A` 注入 `B` 时，就会出现上述情况。
+
+在日常开发中，一不留神就会发生这种情况，比如中间件中调用服务。
+
+```typescript
+//下面这段是错误的示例
+
+@Provide()
+export class UserService {
+  @Inject()
+  ctx: Context;
+
+  async getUser() {
+    const id = this.ctx.xxxx;
+    // ctx not found, will throw error
+  }
+}
+
+// 中间件是单例
+@Middleware()
+export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
+
+	@Inject()
+  userService: UserService;		// 这里的用户服务是请求作用域
+  
+  resolve() {
+  	return async(ctx, next) => {
+      await this.userService.getUser();
+      // ...
+    }
+  }
+}
+```
+
+这个时候，虽然 `UserService` 可以正常注入中间件，但是实际上是以 单例 的对象注入，而不是请求作用域的对象，会导致 `ctx` 为空的情况。
+
+这个时候的内存对象图为：
+
+![](https://img.alicdn.com/imgextra/i3/O1CN01SwATKb1zUtVUCaQGj_!!6000000006718-2-tps-1292-574.png)
+
+`UserService` 的实例变成了不同的对象，一个是单例调用的实例（单例，不含 ctx），一个是正常的请求作用域调用的实例（请求作用域，含 ctx）。
+
+为了避免发生这种情况，默认在错误的注入时，框架会自动抛出名为 `MidwaySingletonInvokeRequestError` 的错误，阻止程序执行。
+
+如果用户了解其中的风险，明确需要在单例中调用请求作用域对象，可以通过作用域装饰器的参数来设置允许降级。
+
+并在其中做好 `ctx` 的空对象判断。
+
+```typescript
+import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+
+@Provide()
+@Scope(ScopeEnum.Request, { allowDowngrade: true })
+export class UserService {
+  @Inject()
+  ctx: Context;
+
+  async getUser() {
+    if (ctx && ctx.xxxx) {
+      // ...
+    }
+		// ...
+  }
+}
+```
+
+
+
 ## 注入规则
 
 Midway 支持多种方式的注入。
