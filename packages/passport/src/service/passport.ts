@@ -187,6 +187,10 @@ export class PassportService {
               return;
             } else {
               res.status(401);
+              const unAuthorizeError = new Error('UnAuthorized!');
+              unAuthorizeError.name = 'UnauthorizedError';
+              (unAuthorizeError as any).status = 401;
+              throw unAuthorizeError;
             }
           }
           next();
@@ -252,7 +256,10 @@ export class PassportService {
                 ctx.redirect(options.failureRedirect);
                 return;
               } else {
-                ctx.status = 401;
+                const unAuthorizeError = new Error('UnAuthorized!');
+                unAuthorizeError.name = 'UnauthorizedError';
+                (unAuthorizeError as any).status = 401;
+                throw unAuthorizeError;
               }
             }
             await next();
