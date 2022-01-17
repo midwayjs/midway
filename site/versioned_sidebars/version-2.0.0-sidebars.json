@@ -54,8 +54,8 @@
     {
       "type": "category",
       "label": "通用能力",
-      "collapsed": true,
-      "collapsible": true,
+      "collapsed": false,
+      "collapsible": false,
       "items": [
         {
           "type": "doc",
@@ -195,8 +195,8 @@
     {
       "type": "category",
       "label": "函数式",
-      "collapsed": true,
-      "collapsible": true,
+      "collapsed": false,
+      "collapsible": false,
       "items": [
         {
           "type": "doc",
@@ -243,8 +243,8 @@
     {
       "type": "category",
       "label": "一体化",
-      "collapsed": true,
-      "collapsible": true,
+      "collapsed": false,
+      "collapsible": false,
       "items": [
         {
           "type": "doc",
@@ -278,8 +278,8 @@
     {
       "type": "category",
       "label": "通用",
-      "collapsed": true,
-      "collapsible": true,
+      "collapsed": false,
+      "collapsible": false,
       "items": [
         {
           "type": "doc",
@@ -419,8 +419,8 @@
     {
       "type": "category",
       "label": "基础",
-      "collapsed": true,
-      "collapsible": true,
+      "collapsed": false,
+      "collapsible": false,
       "items": [
         {
           "type": "doc",

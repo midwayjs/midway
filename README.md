@@ -156,6 +156,7 @@ cd my_midway_app && npm run dev
 ## 谁在使用
 
 ![image](https://user-images.githubusercontent.com/629202/110743837-a968ce00-8273-11eb-8284-f5749335fe70.png)
+你也想加 Logo ？可以点击 [这里](https://github.com/midwayjs/midway/issues/898) 添加。
 
 ## License
 

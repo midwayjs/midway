@@ -48,8 +48,8 @@
     {
       "type": "category",
       "label": "代码设计",
-      "collapsed": false,
-      "collapsible": false,
+      "collapsed": true,
+      "collapsible": true,
       "items": [
         "aspect",
         "pipeline",
@@ -60,8 +60,8 @@
     {
       "type": "category",
       "label": "自定义",
-      "collapsed": false,
-      "collapsible": false,
+      "collapsed": true,
+      "collapsible": true,
       "items": [
         "context_definition",
         "component_development",
@@ -226,7 +226,11 @@
       "label": "介绍"
     },
     {
-      "函数式": [
+      "type": "category",
+      "label": "函数式",
+      "collapsed": false,
+      "collapsible": false,
+      "items": [
         "hooks/hooks_api",
         "hooks/hooks_syntax",
         "hooks/hooks_builtin",
@@ -235,8 +239,14 @@
         "hooks/hooks_component",
         "hooks/hooks_debug",
         "hooks/hooks_bff"
-      ],
-      "一体化": [
+      ]
+    },
+    {
+      "type": "category",
+      "label": "一体化",
+      "collapsed": false,
+      "collapsible": false,
+      "items": [
         "hooks/hooks_create",
         "hooks/hooks_custom_request",
         "hooks/oss_upload",
