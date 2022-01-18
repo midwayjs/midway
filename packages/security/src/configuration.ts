@@ -8,6 +8,7 @@ import { HSTSMiddleware } from './middleware/hsts';
 import { NoOpenMiddleware } from './middleware/noopen';
 import { NoSniffMiddleware } from '.';
 import { XSSProtectionMiddleware } from './middleware/xssProtection';
+import { CSPMiddleware } from './middleware/csp';
 @Configuration({
   namespace: 'security',
   importConfigs: [
@@ -29,6 +30,10 @@ export class SecurityConfiguration {
       .forEach(app => {
         if (this.security.csrf?.enable) {
           app.useMiddleware(CSRFMiddleware);
+        }
+
+        if (this.security.csp?.enable) {
+          app.useMiddleware(CSPMiddleware);
         }
         if (this.security.xframe?.enable) {
           app.useMiddleware(XFrameMiddleware);

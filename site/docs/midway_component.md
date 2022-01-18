@@ -49,7 +49,7 @@ import * as info from '@midwayjs/info';
   imports: [
     {
       component: info,
-      enabledEnvironment: ['info'],
+      enabledEnvironment: ['local'],
     },
   ],
 })
