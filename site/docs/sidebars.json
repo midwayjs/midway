@@ -92,6 +92,7 @@
         "extensions/koa",
         "extensions/egg",
         "extensions/express",
+        "extensions/security",
         "extensions/render",
         "extensions/upload",
         "extensions/passport",

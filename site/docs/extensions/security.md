@@ -1,20 +1,33 @@
-# Security 安全组件
+# 请求安全
 
 适用于 `@midwayjs/faas` 、`@midwayjs/web` 、`@midwayjs/koa` 和 `@midwayjs/express` 多种框架的通用安全组件，支持 `csrf` 、`xss` 等多种安全策略。
+
+相关信息：
+
+| web 支持情况      |      |
+| ----------------- | ---- |
+| @midwayjs/koa     | ✅    |
+| @midwayjs/faas    | ✅    |
+| @midwayjs/web     | ✅    |
+| @midwayjs/express | ✅    |
+
 
 ## 安装使用
 
 1. 安装依赖
-```shell
-tnpm i @midwayjs/security --save
+
+```bash
+$ npm i @midwayjs/security --save
 ```
-2. 在 configuration 中引入组件,
-```ts
-import * as Security from '@midwayjs/security';
+
+2. 在 configuration 中引入组件
+
+```typescript
+import * as security from '@midwayjs/security';
 @Configuration({
   imports: [
     // ...other components
-    Security
+    security
   ],
 })
 export class AutoConfiguration {}
@@ -23,6 +36,9 @@ export class AutoConfiguration {}
 
 
 ## 配置
+
+默认配置如下：
+
 ```ts
 // 默认配置
 export const security = {
@@ -74,7 +90,7 @@ export const security = {
 | headerName | string | token 在 header 中存放的 字段 | 'x-csrf-token' |
 | bodyName | string | token 在 body 中存放的 字段 | '_csrf' |
 | queryName | string | token 在 query 中存放的 字段 | '_csrf' |
-| refererWhiteList | Array<string> | 允许的来源白名单 | [] |
+| refererWhiteList | Array<string\> | 允许的来源白名单 | [] |
 
 
 ### xframe
