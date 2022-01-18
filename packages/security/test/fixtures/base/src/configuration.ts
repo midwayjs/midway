@@ -22,6 +22,10 @@ export class HomeController {
   @Inject()
   ctx;
 
+
+  @Inject()
+  res
+
   @Get('/csrf')
   @Post('/csrf')
   async csrf() {
@@ -37,5 +41,24 @@ export class HomeController {
   @Post('/body')
   async body() {
     return this.ctx.request?.body || this.ctx.body;
+  }
+
+  @Get('/')
+  async main() {
+    return 123;
+  }
+
+  @Get('/redirect')
+  async redirect() {
+    if (this.res?.redirect) {
+      this.res.redirect('/');
+    } else {
+      this.ctx.redirect('/');
+    }
+  }
+
+  @Get('/csp')
+  async csp() {
+    return this.ctx.nonce;
   }
 }

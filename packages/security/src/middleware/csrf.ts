@@ -133,7 +133,7 @@ export class CSRFMiddleware extends BaseMiddleware {
     let { cookieName } = this.security.csrf;
 
     if (useSession) {
-      request.session[sessionName] = secret;
+      context.session[sessionName] = secret;
     } else {
       const cookieOpts = {
         domain: cookieDomain && cookieDomain(request),

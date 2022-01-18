@@ -16,6 +16,9 @@ export const security: Partial<SecurityOptions> = {
     enable: true,
     value: 'SAMEORIGIN',
   },
+  csp: {
+    enable: false,
+  },
   hsts: {
     enable: false,
     maxAge: 365 * 24 * 3600,

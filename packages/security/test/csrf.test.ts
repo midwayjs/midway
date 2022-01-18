@@ -100,9 +100,25 @@ const return403WithIncorrectRefererWhenTypeIsReferer = async app => {
     .expect(403);
 }
 
+const postWithCsrfTokenSetToBodyUsingSession = async app => {
+  const request = await createHttpRequest(app);
+  const response = await request.get('/csrf').expect(200);
+  const csrfToken = response.text;
+  assert(response.text);
+  const body = {
+    _csrf: csrfToken,
+    test: Date.now()
+  };
+  await request.post('/body')
+    .set('Cookie', response.headers['set-cookie'])
+    .send(body)
+    .expect(200)
+    .expect(body);
+}
+
 
 describe('test/csrf.test.ts', function () {
-  const csrfBase = join(__dirname, 'fixtures/csrf');
+  const csrfBase = join(__dirname, 'fixtures/base');
   const csrfConfigurationCode = readFileSync(join(csrfBase, 'src/configuration.ts')).toString();
 
   afterAll(async () => {
@@ -358,4 +374,82 @@ describe('test/csrf.test.ts', function () {
       await return403WithIncorrectRefererWhenTypeIsReferer(app);
     });
   });
+
+
+  describe('express session', function () {
+    let app;
+    beforeAll(async () => {
+      const appDir = join(__dirname, `fixtures/csrf-tmp/express-session`);
+      const config = join(appDir, 'src/config/config.default.ts');
+      const configuration = join(appDir, 'src/configuration.ts');
+      if (existsSync(appDir)) {
+        await remove(appDir);
+      }
+      await copy(csrfBase, appDir);
+      await remove(join(appDir, 'f.yml'));
+      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/express`)); 
+      await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = { csrf: {useSession: true}};`); 
+      app = await createApp(appDir);
+    });
+  
+    afterAll(async () => {
+      await close(app);
+    });
+
+    it('post with csrf token set to query using session', async () => {
+      await postWithCsrfTokenSetToBodyUsingSession(app);
+    });
+  });
+
+  describe('koa session', function () {
+    let app;
+    beforeAll(async () => {
+      const appDir = join(__dirname, `fixtures/csrf-tmp/koa-session`);
+      const config = join(appDir, 'src/config/config.default.ts');
+      const configuration = join(appDir, 'src/configuration.ts');
+      if (existsSync(appDir)) {
+        await remove(appDir);
+      }
+      await copy(csrfBase, appDir);
+      await remove(join(appDir, 'f.yml'));
+      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/koa`)); 
+      await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = { csrf: {useSession: true}};`); 
+      app = await createApp(appDir);
+    });
+  
+    afterAll(async () => {
+      await close(app);
+    });
+
+    it('post with csrf token set to query using session', async () => {
+      await postWithCsrfTokenSetToBodyUsingSession(app);
+    });
+  });
+
+  describe('web session', function () {
+    let app;
+    beforeAll(async () => {
+      const appDir = join(__dirname, `fixtures/csrf-tmp/web-session`);
+      const config = join(appDir, 'src/config/config.default.ts');
+      const configuration = join(appDir, 'src/configuration.ts');
+      if (existsSync(appDir)) {
+        await remove(appDir);
+      }
+      await copy(csrfBase, appDir);
+      await remove(join(appDir, 'f.yml'));
+      await writeFile(configuration, csrfConfigurationCode.replace(/\$\{\s*framework\s*\}/g, `@midwayjs/web`)); 
+      await writeFile(config, readFileSync(config, 'utf-8') + `\nexport const security = { csrf: {useSession: true}};`); 
+      app = await createApp(appDir);
+    });
+  
+    afterAll(async () => {
+      await close(app);
+    });
+
+    it('post with csrf token set to query using session', async () => {
+      await postWithCsrfTokenSetToBodyUsingSession(app);
+    });
+  });
+
+
 });
