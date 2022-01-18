@@ -55,7 +55,7 @@ export class MidwayExpressMiddlewareService {
             fn as any
           );
         if (classMiddleware) {
-          fn = classMiddleware.resolve(app);
+          fn = await classMiddleware.resolve(app);
           // wrap async middleware
           fn = wrapAsyncHandler(fn);
           if (!classMiddleware.match && !classMiddleware.ignore) {

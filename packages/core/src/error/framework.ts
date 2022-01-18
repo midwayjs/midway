@@ -12,7 +12,7 @@ export const FrameworkErrorEnum = registerErrorCode('midway', {
   MISSING_RESOLVER: 10007,
   DUPLICATE_ROUTER: 10008,
   USE_WRONG_METHOD: 10009,
-  SINGLETON_INVOKE_REQUEST: 10010,
+  SINGLETON_INJECT_REQUEST: 10010,
 } as const);
 
 export class MidwayCommonError extends MidwayError {
@@ -109,9 +109,9 @@ export class MidwayUseWrongMethodError extends MidwayError {
   }
 }
 
-export class MidwaySingletonInvokeRequestError extends MidwayError {
+export class MidwaySingletonInjectRequestError extends MidwayError {
   constructor(singletonScopeName: string, requestScopeName: string) {
     const text = `${singletonScopeName} with singleton scope can't implicitly inject ${requestScopeName} with request scope directly, please add @Scope(ScopeEnum.Request, { allowDowngrade: true }) in ${requestScopeName}.`;
-    super(text, FrameworkErrorEnum.SINGLETON_INVOKE_REQUEST);
+    super(text, FrameworkErrorEnum.SINGLETON_INJECT_REQUEST);
   }
 }

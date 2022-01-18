@@ -19,7 +19,7 @@ import {
   MidwayCommonError,
   MidwayDefinitionNotFoundError,
   MidwayResolverMissingError,
-  MidwaySingletonInvokeRequestError,
+  MidwaySingletonInjectRequestError,
 } from '../error';
 
 const debug = util.debuglog('midway:managedresolver');
@@ -286,7 +286,7 @@ export class ManagedResolverFactory {
             propertyDefinition.isRequestScope() &&
             !propertyDefinition.allowDowngrade
           ) {
-            throw new MidwaySingletonInvokeRequestError(
+            throw new MidwaySingletonInjectRequestError(
               definition.path.name,
               propertyDefinition.path.name
             );

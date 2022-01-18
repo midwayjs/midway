@@ -20,6 +20,10 @@ describe('/test/util/index.test.ts', () => {
     await sleep(500);
     // 这里设置 490 是因为毫秒数有一定的偏差
     expect(Date.now() - startTime).toBeGreaterThanOrEqual(490);
+    expect(Types.isString('abc')).toBeTruthy();
+    expect(Types.isString('')).toBeTruthy();
+    expect(Types.isString(undefined)).toBeFalsy();
+    expect(Types.isString({})).toBeFalsy();
   });
 
   it('should test toAsyncFunction', async () => {

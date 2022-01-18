@@ -120,9 +120,7 @@ export class UserDTO {
 - `lastName` 一个可选的最长为 10 的字符串类型
 - `age` 一个最大不超过 60 的数字
 
-
 `@Rule` 装饰器用于 **修饰需要被校验的属性**，它的参数为 `RuleType` 对象提供的校验规则的链式方法。
-
 
 :::info
 这里的 `RuleType` 即为 joi 对象本身。
@@ -173,7 +171,11 @@ async updateUser(@Body() user: UserDTO ) {
 
 
 
-## 常见的校验写法
+## 校验规则
+
+
+
+### 常见的校验写法
 
 ```typescript
 RuleType.number().required();								// 数字，必填
@@ -198,7 +200,7 @@ RuleType.string().allow('')									// 非必填字段传入空字符串
 
 
 
-## 级联校验
+### 级联校验
 
 Midway 支持每个校验的 Class 中的属性依旧是一个对象。
 
@@ -240,7 +242,7 @@ export class UserDTO {
 
 
 
-## 继承校验
+### 继承校验
 
 
 Midway 支持校验继承方式，满足开发者抽离通用的对象属性的时候做参数校验。
@@ -275,7 +277,7 @@ export class UserDTO extends CommonUserDTO {
 
 
 
-## 从原有 DTO 创建新 DTO
+### 从原有 DTO 创建新 DTO
 
 
 有时候，我们会希望从某个 DTO 中获取一部分属性，变成一个新的 DTO 类。
@@ -305,19 +307,20 @@ export class UserDTO {
   age: number;
 }
 
-const SimpleUserDTO = PickDto(UserDTO, ['firstName', 'lastName']);
+// 继承出一个新的 DTO
+export class SimpleUserDTO extends PickDto(UserDTO, ['firstName', 'lastName']) {}
 
 // const simpleUser = new SimpleUserDTO();
 // 只包含了 firstName 和 lastName 属性
 // simpleUser.firstName = xxx
 
-const NewUserDTO = OmitDto(UserDTO, ['age']);
+export class NewUserDTO extends OmitDto(UserDTO, ['age']) {}
 
 // const newUser = new NewUserDTO();
 // newUser.age 定义和属性都不存在
 
 // 使用
-async login(@Body() user: typeof NewUserDTO) {
+async login(@Body() user: NewUserDTO) {
   // ...
 }
 
@@ -325,14 +328,15 @@ async login(@Body() user: typeof NewUserDTO) {
 
 
 
-## 复用校验规则
+### 复用校验规则
 
-有人如果我很多都是字符串必填，或者类似需求，写 `RuleType.string().required()` 有点长，有点烦，那应该怎么办？
+如果很多字段都是字符串必填，或者类似需求，写 `RuleType.string().required()` 有点长，可以将重复的部分赋值为新的规则对象，进行复用。
 
 
 ```typescript
 
-const requiredString = RuleType.string().required(); // 自己在一个文件中定义一下你们部门的规范或常用的。
+// 自己在一个文件中定义一下你们部门的规范或常用的
+const requiredString = RuleType.string().required(); 
 
 export class UserDTO{
   
@@ -346,7 +350,8 @@ export class UserDTO{
   description: string;
 }
 
-const maxString = (length)=> RuleType.string().max(length);  // 自己在一个文件中定义一下你们部门的规范或常用的。
+// 自己在一个文件中定义一下你们部门的规范或常用的
+const maxString = (length)=> RuleType.string().max(length);  
 
 export class UserDTO{
   
@@ -367,23 +372,51 @@ export class UserDTO{
 }
 ```
 
-相当于通过定义常用方法或变量。
+
+
+## 多语言
+
+在 Validate 中，同时依赖了 [i18n](./i18n) 组件来实现校验消息的国际化。
+
+默认情况下，提供了 `en_US` 和 `zh_CN` 两种校验的翻译文本，所以在请求失败时，会返回当前浏览器访问所指定的语言。
 
 
 
-## 默认配置
+### 通过装饰器指定语言
 
-我们可以对 validate 组件做一些配置。
+默认情况下，会跟着 i18n 组件的 `defaultLocale` 以及浏览器访问语言的情况来返回消息，不过，我们可以在装饰器中指定当前翻译的语言，比如：
 
-| 配置项            | 类型                          | 描述                                                         |
-| ----------------- | ----------------------------- | ------------------------------------------------------------ |
-| errorStatus       | number                        | 当校验出错时，返回的 Http 状态码，在 http 场景生效，默认 422 |
-| locale            | string                        | 校验出错文本的默认语言，当前有 `en_US` 和 `zh_CN` 两种，默认为 `en_US`，会根据 i18n 组件的规则切换 |
-| validationOptions | joi 的 ValidationOptions 选项 | 常用的有 allowUnknown 选项，如果配置，那么全局的校验都允许出现没有定义的字段 |
+```typescript
+@Controller('/user')
+export class UserController {
+  @Post('/')
+  @Validate({
+    locale: 'en_US',
+  })
+  async getUser(@Body() bodyData: UserDTO) {
+    // ...
+  }
+}
+
+```
 
 
 
-## 其他语言的翻译
+### 通过参数指定语言
+
+除了装饰器指定，我们也可以使用标准的 i18n 通过参数指定语言的方式。
+
+比如 Query 参数。
+
+```
+Get /user/get_user?locale=zh_CN
+```
+
+更多的参数用法请参考  [i18n](./i18n) 组件。
+
+
+
+### 其他语言的翻译
 
 默认情况下，Midway 提供了 `en_US` 和 `zh_CN` 两种校验的翻译文本，如果还需要额外的翻译，可以配置在 i18n 中。
 
@@ -401,6 +434,101 @@ export const i18n = {
 ```
 
 如果可以的话，我们希望你将翻译提交给 Midway 官方，让大家都能使用。
+
+
+
+## 自定义错误文本
+
+
+
+### 指定单个规则的文本
+
+如果只想定义某个 DTO 中某个规则的错误消息，可以简单指定。
+
+```typescript
+export class UserDTO {
+  @Rule(RuleType.number().required().message('my custom message'))
+  id: number;
+}
+```
+
+这个 `id` 属性上的所有规则，只要有验证失败的，都会返回你的自定义消息。
+
+
+
+### 全局指定部分文本
+
+通过配置 i18n 组件的 `validate` 多语言文本表，你可以选择性的替换大部分的校验文本，所有的规则都会应用该文本。
+
+```typescript
+export const i18n = {
+  localeTable: {
+    zh_CN: {
+      validate: {
+        'string.max': 'hello world',
+      },
+    },
+  },
+};
+```
+
+这里的 `validate` 是 `@midwayjs/validate` 组件在 i18n 组件中配置的语言表关键字。
+
+由于 [默认的语言表](https://github.com/midwayjs/midway/tree/main/packages/validate/locales) 也是对象形式，我们可以很方便的找到其中的字段，进行替换。
+
+由于这些文本区分语言，所以需要谨慎处理，比如，替换不同的语言。
+
+```typescript
+export const i18n = {
+  localeTable: {
+    zh_CN: {
+      validate: {
+        'string.max': 'string is too long',
+      },
+    },
+    en_US: {
+      validate: {
+        'string.max': '字符超长',
+      },
+    },
+  },
+};
+```
+
+
+
+### 完全自定义错误文本
+
+如果希望完全自定义错误文本，可以通过替换内置的语言翻译文本来解决。
+
+比如：
+
+```typescript
+export const i18n = {
+  localeTable: {
+    // 替换中文翻译
+    zh_CN: {
+      validate: require('../../locales/custom.json'),
+    },
+  },
+};
+```
+
+
+
+
+
+## 默认配置
+
+我们可以对 validate 组件做一些配置。
+
+| 配置项            | 类型                          | 描述                                                         |
+| ----------------- | ----------------------------- | ------------------------------------------------------------ |
+| errorStatus       | number                        | 当校验出错时，返回的 Http 状态码，在 http 场景生效，默认 422 |
+| locale            | string                        | 校验出错文本的默认语言，当前有 `en_US` 和 `zh_CN` 两种，默认为 `en_US`，会根据 i18n 组件的规则切换 |
+| validationOptions | joi 的 ValidationOptions 选项 | 常用的有 allowUnknown 选项，如果配置，那么全局的校验都允许出现没有定义的字段 |
+
+
 
 
 

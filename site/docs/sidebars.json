@@ -94,7 +94,8 @@
         "extensions/express",
         "extensions/render",
         "extensions/upload",
-        "extensions/passport"
+        "extensions/passport",
+        "extensions/static_file"
       ]
     },
     {

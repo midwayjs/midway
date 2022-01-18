@@ -11,7 +11,7 @@ Midway 中使用了非常多的依赖注入的特性，通过装饰器的轻量�
 
 ```
 .
-├── package.json      
+├── package.json
 ├── src
 │   ├── controller											# 控制器目录
 │   │   └── user.controller.ts
@@ -38,7 +38,7 @@ import { Provide, Inject, Get } from '@midwayjs/decorator';
 @Provide()	// 实际可省略
 @Controller()
 export class UserController {
-  
+
   @Inject()
   userService: UserService;
 
@@ -155,7 +155,7 @@ await userController.handler();  // output 'world'
 // service
 import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
 
-@Provide()	
+@Provide()
 @Scope(ScopeEnum.Singleton)
 export class UserService {
   //...
@@ -178,7 +178,7 @@ export class UserService {
 // service
 import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
 
-@Provide()	
+@Provide()
 @Scope(ScopeEnum.Singleton)
 export class UserService {
   //...
@@ -193,7 +193,7 @@ export class UserService {
 ```typescript
 @Provide()
 export class A {
- 
+
   @Inject()
   userService: UserService
   //...
@@ -201,7 +201,7 @@ export class A {
 
 @Provide()
 export class B {
- 
+
   @Inject()
   userService: UserService
   //...
@@ -232,9 +232,9 @@ import { Controller, Provide, Inject } from '@midwayjs/decorator';
 import { Context } from '@midwayjs/koa';
 
 @Provide()	// 实际可省略
-@Controller('/user')	
+@Controller('/user')
 export class UserController {
-  
+
   @Inject()
   ctx: Context;
   //...
@@ -247,10 +247,10 @@ export class UserController {
 我们的 `@Inject` 装饰器也是在 **当前类的作用域** 下去寻找对象来注入的。比如，在  `Singleton` 作用域下，由于和请求不关联 ，默认没有 `ctx` 对象，所以注入 ctx  是不对的 。
 
 ```typescript
-@Provide()	
+@Provide()
 @Scope(ScopeEnum.Singleton)
 export class UserService {
-  
+
   @Inject()
   ctx;								// undefined
   //...
@@ -311,10 +311,10 @@ export class HomeController {
 @Provide()
 @Scope(ScopeEnum.Singleton)
 export class UserService {
-  
+
   @Inject()
   dbManager: DBManager;
-  
+
   async getUser() {
   	// ...
   }
@@ -360,7 +360,7 @@ export class UserService {
 export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
   @Inject()
   userService: UserService;		// 这里的用户服务是请求作用域
-  
+
   resolve() {
   	return async(ctx, next) => {
       await this.userService.getUser();
@@ -378,7 +378,7 @@ export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
 
 `UserService` 的实例变成了不同的对象，一个是单例调用的实例（单例，不含 ctx），一个是正常的请求作用域调用的实例（请求作用域，含 ctx）。
 
-为了避免发生这种情况，默认在这类错误的注入时，框架会自动抛出名为 `MidwaySingletonInvokeRequestError` 的错误，阻止程序执行。
+为了避免发生这种情况，默认在这类错误的注入时，框架会自动抛出名为 `MidwaySingletonInjectRequestError` 的错误，阻止程序执行。
 
 如果用户了解其中的风险，明确需要在单例中调用请求作用域对象，可以通过作用域装饰器的参数来设置允许降级。
 
@@ -402,6 +402,25 @@ export class UserService {
 }
 ```
 
+当然，如果只是误写，那可以使用动态的获取方式，使得作用域统一。
+
+```typescript
+import { IMiddleware } from '@midwayjs/core';
+import { Middleware } from '@midwayjs/decorator';
+import { NextFunction, Context } from '@midwayjs/koa';
+
+@Middleware()
+export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
+
+  resolve() {
+    return async (ctx: Context, next: NextFunction) => {
+      const userService = await ctx.requestContext.getAsync(UserService);
+        // TODO userService.xxxx
+      await next();
+    };
+  }
+}
+```
 
 
 ## 注入规则
@@ -423,9 +442,9 @@ export class B {
 @Provide()
 export class A {
 
-  @Inject()            
+  @Inject()
   b: B;                  // <------ 这里的属性使用 Class
-  
+
   //...
 }
 ```
@@ -465,9 +484,9 @@ export class B {
 @Provide()
 export class A {
 
-  @Inject('bbbb')            
+  @Inject('bbbb')
   b: B;                  // <------ 这里的属性使用 Class
-  
+
   //...
 }
 ```
@@ -516,14 +535,14 @@ export class B implements IPay {
 ```typescript
 @Provide()
 export class PaymentService {
-  
+
   @Inject('APay')
   payService: IPay;         // 注意，这里的类型是接口，编译后类型信息会被移除
 
-  async orderGood {
+  async orderGood() {
     await this.payService.payMonety();
   }
-  
+
 }
 ```
 
@@ -553,7 +572,7 @@ import { IMidwayContainer } from '@midwayjs/core';
 
 @Configuration()
 export class AutoConfiguration {
-  
+
 	async onReady(applicationContext: IMidwayContainer) {
     // 向依赖注入容器中添加一些全局对象
   	applicationContext.registerObject('lodash', lodash);
@@ -602,7 +621,7 @@ export class BaseService {
 
   @Inject()
   baseDir;
-  
+
   @Inject()
   appDir;
 
@@ -634,16 +653,16 @@ export class BaseService {
 import { ApplicationContext } from '@midwayjs/decorator';
 import { IMidwayContainer } from '@midwayjs/core';
 
-@Provide() 
+@Provide()
 export class BootApp {
-  
+
   @ApplicationContext()
   applicationContext: IMidwayContainer;				// 这里也可以换成实际的框架的 app 定义
-  
+
   async invoke() {
-  
+
     // this.applicationContext
-  
+
   }
 
 }
@@ -678,17 +697,17 @@ const container = app.getApplicationContext();
 import { App } from '@midwayjs/decorator';
 import { IMidwayApplication } from '@midwayjs/core';
 
-@Provide() 
+@Provide()
 export class BootApp {
-  
+
   @App()
   app: IMidwayApplication;				// 这里也可以换成实际的框架的 app 定义
-  
+
   async invoke() {
-  
+
     // 获取依赖注入容器
   	const applicationContext = this.app.getApplicationContext();
-  
+
   }
 
 }
@@ -744,7 +763,7 @@ import { IMidwayContainer } from '@midwayjs/core';
 
 @Configuration()
 export class AutoConfiguration {
-  
+
 	async onReady(applicationContext: IMidwayContainer) {
     // ...
   }
@@ -773,7 +792,7 @@ export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
 
 	@ApplicationContext()
   applicationContext: IMidwayContainer;
-  
+
   resolve() {
   	return async(ctx, next) => {
       // 指定泛型类型，比如某个接口
@@ -797,7 +816,7 @@ import { NextFunction, Context, Response } from '@midwayjs/express';
 
 @Middleware()
 export class ReportMiddleware implements IMiddleware<Context, Response, NextFunction> {
-  
+
   resolve() {
   	return async (req, res, next) => {
       const userService = await req.requestContext.getAsync<UserService>(UserService);
@@ -1063,11 +1082,11 @@ export class UserService {
 
   @Config('userManager')
   userManager;
-  
+
   constructor() {
     console.log(this.userManager); // undefined
   }
-  
+
   @Init()
   async initMethod() {
     console.log(this.userManager); // has value

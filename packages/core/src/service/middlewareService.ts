@@ -39,7 +39,7 @@ export class MidwayMiddlewareService<T, R, N = unknown> {
           IMiddleware<T, R, N>
         >(fn as any);
         if (classMiddleware) {
-          fn = classMiddleware.resolve(app);
+          fn = await classMiddleware.resolve(app);
           if (!classMiddleware.match && !classMiddleware.ignore) {
             if (!fn.name) {
               (fn as any)._name = classMiddleware.constructor.name;
@@ -74,7 +74,7 @@ export class MidwayMiddlewareService<T, R, N = unknown> {
      * @return {Promise}
      * @api public
      */
-    const composeFn = (context, next?) => {
+    const composeFn = (context: T, next?) => {
       const supportBody = isIncludeProperty(context, 'body');
       // last called middleware #
       let index = -1;
@@ -97,10 +97,10 @@ export class MidwayMiddlewareService<T, R, N = unknown> {
               } as any)
             ).then(result => {
               // need to set body
-              if (context.body && !result) {
-                result = context.body;
-              } else if (result && context.body !== result) {
-                context.body = result;
+              if (context['body'] && !result) {
+                result = context['body'];
+              } else if (result && context['body'] !== result) {
+                context['body'] = result;
               }
               return result;
             });

@@ -1,0 +1,46 @@
+{
+  "name": "@midwayjs/static-file",
+  "description": "midway static file component",
+  "version": "3.0.0-beta.16",
+  "main": "dist/index",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts"
+  ],
+  "dependencies": {
+    "koa-range": "0.3.0",
+    "ylru": "1.2.1",
+    "koa-static-cache": "5.1.4"
+  },
+  "devDependencies": {
+    "@midwayjs/core": "^3.0.0-beta.16",
+    "@midwayjs/decorator": "^3.0.0-beta.16",
+    "@midwayjs/koa": "^3.0.0-beta.16",
+    "@midwayjs/faas": "^3.0.0-beta.16",
+    "@midwayjs/mock": "^3.0.0-beta.16",
+    "@midwayjs/serverless-app": "^3.0.0-beta.16"
+  },
+  "keywords": [
+    "midway",
+    "koa-static",
+    "assets",
+    "static"
+  ],
+  "author": "czy88840616 <czy88840616@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "test": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand",
+    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand --coverage --forceExit",
+    "ci": "npm run test",
+    "lint": "mwts check"
+  },
+  "engines": {
+    "node": ">=12"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/midwayjs/midway.git"
+  }
+}

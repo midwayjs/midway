@@ -5,11 +5,12 @@ Passport是通过称为策略的可扩展插件进行身份验证请求。Passpo
 
 相关信息：
 
-| 描述              |      |
+| web 支持情况      |      |
 | ----------------- | ---- |
-| 可用于标准项目    | ✅    |
-| 可用于 Serverless | ✅    |
-| 可用于一体化      | ✅    |
+| @midwayjs/koa     | ✅    |
+| @midwayjs/faas    | ✅    |
+| @midwayjs/web     | ✅    |
+| @midwayjs/express | ✅    |
 
 
 

@@ -1,7 +1,7 @@
 import {
   MidwayContainer as Container,
   MidwayRequestContainer as RequestContainer,
-  MidwaySingletonInvokeRequestError,
+  MidwaySingletonInjectRequestError,
   REQUEST_OBJ_CTX_KEY
 } from '../../src';
 import { Inject, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
@@ -352,6 +352,6 @@ describe('/test/context/requestContainer.test.ts', () => {
     const err = await new Promise(resolve => {
       requestContainer1.getAsync(A).catch(resolve);
     })
-    expect(err).toBeInstanceOf(MidwaySingletonInvokeRequestError);
+    expect(err).toBeInstanceOf(MidwaySingletonInjectRequestError);
   });
 });
