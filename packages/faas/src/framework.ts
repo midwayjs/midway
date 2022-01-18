@@ -158,7 +158,7 @@ export class MidwayFaaSFramework extends BaseFramework<
           ],
           this.app
         );
-        return await fn(ctx, next);
+        return await fn(ctx as FaaSContext, next);
       });
       const composeMiddleware = await this.middlewareService.compose(
         middlewareManager,
