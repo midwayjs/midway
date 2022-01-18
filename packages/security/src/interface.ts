@@ -1,5 +1,6 @@
 export interface SecurityOptions {
   csrf: Partial<SecurityCSRFOptions>;
+  csp: Partial<SecurityCSPOptions>;
   xframe: Partial<SecurityXFrameOptions>;
   hsts: Partial<SecurityHSTSOptions>;
   noopen: Partial<SecurityEnableOptions>;
@@ -33,8 +34,17 @@ export interface SecurityXSSProtectionOptions extends SecurityEnableOptions {
   value: string;
 }
 
+export interface SecurityCSPOptions extends SecurityEnableOptions {
+  policy: {
+    [otherPolicy: string]: string | string[] | boolean;
+  };
+  reportOnly: boolean;
+  supportIE: boolean;
+}
 export interface SecurityEnableOptions {
   enable: boolean;
 }
+
+
 
 export type SecurityCSRFType = 'all' | 'any' | 'ctoken' | 'referer';

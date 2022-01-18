@@ -77,7 +77,9 @@ export class CSRFMiddleware extends BaseMiddleware {
       }
       for (const name of cookieName) {
         context[_CSRF_SECRET] =
-          context.cookies.get(name, { signed: false }) || '';
+          context.cookies.get?.(name, { signed: false }) ||
+          context.cookies[name] ||
+          '';
         if (context[_CSRF_SECRET]) {
           break;
         }
@@ -131,7 +133,7 @@ export class CSRFMiddleware extends BaseMiddleware {
     let { cookieName } = this.security.csrf;
 
     if (useSession) {
-      request.session[sessionName] = secret;
+      context.session[sessionName] = secret;
     } else {
       const cookieOpts = {
         domain: cookieDomain && cookieDomain(request),
@@ -144,7 +146,11 @@ export class CSRFMiddleware extends BaseMiddleware {
         cookieName = [cookieName];
       }
       for (const name of cookieName) {
-        response.cookies.set(name, secret, cookieOpts);
+        if (response.cookies?.set) {
+          response.cookies.set(name, secret, cookieOpts);
+        } else {
+          response.cookie(name, secret, cookieOpts);
+        }
       }
     }
   }
