@@ -4,17 +4,12 @@
 
 相关信息：
 
-| 描述              |      |
+| web 支持情况      |      |
 | ----------------- | ---- |
-| 可用于标准项目    | ✅    |
-| 可用于 Serverless | ✅    |
-| 可用于一体化      | ✅    |
-
-其他
-
-| 描述                     |      |
-| ------------------------ | ---- |
-| 可用于 @midwayjs/express | ❌    |
+| @midwayjs/koa     | ✅    |
+| @midwayjs/faas    | ✅    |
+| @midwayjs/web     | ✅    |
+| @midwayjs/express | ❌    |
 
 
 

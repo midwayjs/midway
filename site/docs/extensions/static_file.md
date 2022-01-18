@@ -4,12 +4,6 @@ midway 提供了基于 [koa-static-cache](https://github.com/koajs/static-cache)
 
 相关信息：
 
-| 描述              |      |
-| ----------------- | ---- |
-| 可用于标准项目    | ✅    |
-| 可用于 Serverless | ✅    |
-| 可用于一体化      | ✅    |
-
 | web 支持情况      |      |
 | ----------------- | ---- |
 | @midwayjs/koa     | ✅    |
