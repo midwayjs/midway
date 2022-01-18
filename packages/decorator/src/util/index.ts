@@ -13,6 +13,10 @@ function fnBody(fn) {
     .replace(/\s*}[^}]*$/, '');
 }
 
+export function isString(value) {
+  return typeof value === 'string';
+}
+
 export function isClass(fn) {
   if (typeof fn !== 'function') {
     return false;
@@ -177,6 +181,7 @@ export const Types = {
   isClass,
   isAsyncFunction,
   isGeneratorFunction,
+  isString,
   isPromise,
   isFunction,
   isObject,
