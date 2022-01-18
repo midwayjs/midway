@@ -1,19 +1,15 @@
 import { Configuration, Controller, Inject, Post, Get } from '@midwayjs/decorator';
-import * as koa from '@midwayjs/koa';
+import * as framework from '${framework}';
+import * as defaultConcig from './config/config.default';
 
 @Configuration({
   imports: [
-    koa,
-    require('../../../../src')
+    framework,
+    require('../../../../../src')
   ],
   importConfigs: [
     {
-      default: {
-        keys: ["test"],
-        upload: {
-          mode: 'file',
-        }
-      }
+      default: defaultConcig
     }
   ]
 })
@@ -40,6 +36,6 @@ export class HomeController {
 
   @Post('/body')
   async body() {
-    return this.ctx.request.body;
+    return this.ctx.request?.body || this.ctx.body;
   }
 }
