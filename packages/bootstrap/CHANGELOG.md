@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.17](https://github.com/midwayjs/midway/compare/v3.0.0-beta.16...v3.0.0-beta.17) (2022-01-18)
+
+**Note:** Version bump only for package @midwayjs/bootstrap
+
+
+
+
+
 # [3.0.0-beta.16](https://github.com/midwayjs/midway/compare/v3.0.0-beta.15...v3.0.0-beta.16) (2022-01-11)
 
 **Note:** Version bump only for package @midwayjs/bootstrap

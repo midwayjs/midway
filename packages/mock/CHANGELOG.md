@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.17](https://github.com/midwayjs/midway/compare/v3.0.0-beta.16...v3.0.0-beta.17) (2022-01-18)
+
+
+### Bug Fixes
+
+* **deps:** update dependency supertest to v6.2.1 ([#1561](https://github.com/midwayjs/midway/issues/1561)) ([0bcde23](https://github.com/midwayjs/midway/commit/0bcde231d562d2daedcbefcdaaa8ddcf5bb9ad58))
+
+
+### Features
+
+* support multi root ([#1584](https://github.com/midwayjs/midway/issues/1584)) ([b23dda2](https://github.com/midwayjs/midway/commit/b23dda258563fba143f23c8779680df3ab8ec3d5))
+
+
+
+
+
 # [3.0.0-beta.16](https://github.com/midwayjs/midway/compare/v3.0.0-beta.15...v3.0.0-beta.16) (2022-01-11)
 
 

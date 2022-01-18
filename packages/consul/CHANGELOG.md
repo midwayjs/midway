@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.17](https://github.com/midwayjs/midway/compare/v3.0.0-beta.16...v3.0.0-beta.17) (2022-01-18)
+
+
+### Bug Fixes
+
+* move register to on server ready ([#1576](https://github.com/midwayjs/midway/issues/1576)) ([b5f8256](https://github.com/midwayjs/midway/commit/b5f8256d8cab103e3b9c7f22d5fc66bd5fa6c525))
+
+
+
+
+
 # [3.0.0-beta.16](https://github.com/midwayjs/midway/compare/v3.0.0-beta.15...v3.0.0-beta.16) (2022-01-11)
 
 **Note:** Version bump only for package @midwayjs/consul

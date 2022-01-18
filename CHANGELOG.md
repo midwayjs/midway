@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.17](https://github.com/midwayjs/midway/compare/v3.0.0-beta.16...v3.0.0-beta.17) (2022-01-18)
+
+
+### Bug Fixes
+
+* **deps:** update dependency axios to ^0.25.0 ([#1596](https://github.com/midwayjs/midway/issues/1596)) ([b30f1ae](https://github.com/midwayjs/midway/commit/b30f1aecc66755972f0572692918eb3408e22be2))
+* **deps:** update dependency supertest to v6.2.1 ([#1561](https://github.com/midwayjs/midway/issues/1561)) ([0bcde23](https://github.com/midwayjs/midway/commit/0bcde231d562d2daedcbefcdaaa8ddcf5bb9ad58))
+* move koa-session and definition ([#1572](https://github.com/midwayjs/midway/issues/1572)) ([95743c1](https://github.com/midwayjs/midway/commit/95743c11917507ccf4c218f5353e1b88917237a5))
+* move register to on server ready ([#1576](https://github.com/midwayjs/midway/issues/1576)) ([b5f8256](https://github.com/midwayjs/midway/commit/b5f8256d8cab103e3b9c7f22d5fc66bd5fa6c525))
+* remove bodyParser typings ([#1579](https://github.com/midwayjs/midway/issues/1579)) ([a967fdf](https://github.com/midwayjs/midway/commit/a967fdf2cba305804ce2355f7fcdb23db1f09ab2))
+
+
+### Features
+
+* add static file ([#1597](https://github.com/midwayjs/midway/issues/1597)) ([2e6baae](https://github.com/midwayjs/midway/commit/2e6baae852f338023e39c72801e6c89319dd2e2e))
+* Allows the user to provide the response after authentication fa… ([#1567](https://github.com/midwayjs/midway/issues/1567)) ([57efdee](https://github.com/midwayjs/midway/commit/57efdee91ba81d02be6d0e0e0c2566ba30577386))
+* security ([#1569](https://github.com/midwayjs/midway/issues/1569)) ([30762cc](https://github.com/midwayjs/midway/commit/30762cc84ed0df090086841f5470c00dfcbebe51))
+* support multi root ([#1584](https://github.com/midwayjs/midway/issues/1584)) ([b23dda2](https://github.com/midwayjs/midway/commit/b23dda258563fba143f23c8779680df3ab8ec3d5))
+* throw error when singleton invoke request scope ([#1589](https://github.com/midwayjs/midway/issues/1589)) ([e71bfa8](https://github.com/midwayjs/midway/commit/e71bfa8cc43317989adebd4a2f7b6a24a74e36be))
+
+
+
+
+
 # [3.0.0-beta.16](https://github.com/midwayjs/midway/compare/v3.0.0-beta.15...v3.0.0-beta.16) (2022-01-11)
 
 

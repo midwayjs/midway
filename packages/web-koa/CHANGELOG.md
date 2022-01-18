@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0-beta.17](https://github.com/midwayjs/midway/compare/v3.0.0-beta.16...v3.0.0-beta.17) (2022-01-18)
+
+
+### Bug Fixes
+
+* remove bodyParser typings ([#1579](https://github.com/midwayjs/midway/issues/1579)) ([a967fdf](https://github.com/midwayjs/midway/commit/a967fdf2cba305804ce2355f7fcdb23db1f09ab2))
+
+
+
+
+
 # [3.0.0-beta.16](https://github.com/midwayjs/midway/compare/v3.0.0-beta.15...v3.0.0-beta.16) (2022-01-11)
 
 **Note:** Version bump only for package @midwayjs/koa
