@@ -12,7 +12,7 @@
   },
   "devDependencies": {
     "@midwayjs/core": "^3.0.0-beta.17",
-    "supertest": "6.2.1"
+    "supertest": "6.2.2"
   },
   "engines": {
     "node": ">=12"
