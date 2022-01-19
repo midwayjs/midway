@@ -55,3 +55,8 @@ export const bodyParser = {
     throw err;
   },
 };
+
+export const siteFile = {
+  enable: true,
+  favicon: undefined,
+};

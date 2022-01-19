@@ -64,6 +64,8 @@ export class ContainerConfiguration {
 }
 ```
 
+然后启动项目，访问：http://127.0.0.1:7001/swagger-ui/index.html
+
 ### 参数配置
 
 Swagger 组件提供了和 [OpenAPI](https://swagger.io/specification/) 一致的参数配置能力，可以通过自定义配置来实现。
@@ -247,7 +249,7 @@ Swagger UI 中展示：
 ```typescript
 @Post('/:id', { summary: 'test'})
 @ApiBody({
-  description: 'this is body', 
+  description: 'this is body',
   contentType: BodyContentType.Multipart
 })
 @ApiParam({ description: 'this is id' })
@@ -273,7 +275,7 @@ Swagger UI 中展示：
 * 兼容 Upload 组件
 
   * 添加 ```@ApiBody()``` 装饰器描述
-  
+
   ```typescript
   @Post('/test')
   @ApiBody({ description: 'hello file' })
@@ -287,7 +289,7 @@ Swagger UI 中展示：
   ![swagger5](https://img.alicdn.com/imgextra/i2/O1CN01icnwZE24OY5vdkkKx_!!6000000007381-0-tps-1272-1026.jpg)
 
   * 不添加 ```@ApiBody()``` 装饰器描述
-  
+
   ```typescript
   @Post('/test1')
   async upload1(@Files() f: any[], @Fields() data: Cat) {

@@ -70,6 +70,7 @@ export type Application = IMidwayKoaApplication;
 export interface Context extends IMidwayKoaContext {}
 
 interface BodyParserOptions {
+  enable?: boolean;
   /**
    *  parser will only parse when request type hits enableTypes, default is ['json', 'form'].
    */
@@ -139,10 +140,13 @@ declare module '@midwayjs/core/dist/interface' {
       json?: (err: Error, ctx: IMidwayKoaContext) => void;
       html?: (err: Error, ctx: IMidwayKoaContext) => void;
       redirect?: string;
-      template?: string;
       accepts?: (...args) => any;
     },
     bodyParser?: BodyParserOptions;
+    siteFile?: {
+      enable?: boolean;
+      favicon?: undefined | string | Buffer
+    };
   }
 }
 
