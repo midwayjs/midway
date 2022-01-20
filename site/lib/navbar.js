@@ -7,14 +7,14 @@ module.exports = [
   },
   {
     "type": "doc",
-    "docId": "serverless/serverless_intro",
-    "label": "Serverless",
+    "docId": "hooks/intro",
+    "label": "函数式 & 一体化",
     "position": "left"
   },
   {
     "type": "doc",
-    "docId": "hooks/hooks_intro",
-    "label": "函数式 & 一体化",
+    "docId": "serverless/serverless_intro",
+    "label": "Serverless",
     "position": "left"
   },
   {

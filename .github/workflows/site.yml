@@ -4,6 +4,8 @@ on:
   push:
     branches: [main]
     paths: [site/**]
+  repository_dispatch:
+    types: [update-hooks-docs]
 
 jobs:
   build:

@@ -5,7 +5,8 @@
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
-    "build": "node ./lib/example2sandbox.js && docusaurus build",
+    "build": "node ./lib/example2sandbox.js && npm run update-hooks-docs && docusaurus build",
+    "update-hooks-docs": "degit https://github.com/midwayjs/hooks/docs ./docs/hooks --force",
     "format:docs": "prettier docs/*.md --write",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
@@ -27,6 +28,7 @@
     "axios": "^0.21.4",
     "clsx": "^1.1.1",
     "codesandbox": "^2.2.3",
+    "degit": "^2.8.4",
     "file-loader": "^6.2.0",
     "fs-extra": "^10.0.0",
     "lodash": "^4.17.21",

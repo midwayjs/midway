@@ -224,23 +224,26 @@
   "hooks": [
     {
       "type": "doc",
-      "id": "hooks/hooks_intro",
+      "id": "hooks/intro",
       "label": "介绍"
     },
     {
       "type": "category",
-      "label": "函数式",
+      "label": "基础功能",
       "collapsed": false,
       "collapsible": false,
       "items": [
-        "hooks/hooks_api",
-        "hooks/hooks_syntax",
-        "hooks/hooks_builtin",
-        "hooks/hooks_route",
-        "hooks/hooks_middleware",
-        "hooks/hooks_component",
-        "hooks/hooks_debug",
-        "hooks/hooks_bff"
+        "hooks/api",
+        "hooks/builtin-hooks",
+        "hooks/validate",
+        "hooks/middleware",
+        "hooks/cors",
+        "hooks/component",
+        "hooks/prisma",
+        "hooks/test",
+        "hooks/config",
+        "hooks/file-route",
+        "hooks/safe"
       ]
     },
     {
@@ -249,11 +252,8 @@
       "collapsed": false,
       "collapsible": false,
       "items": [
-        "hooks/hooks_create",
-        "hooks/hooks_custom_request",
-        "hooks/oss_upload",
-        "hooks/hooks_miniprogram",
-        "hooks/application_integration"
+        "hooks/fullstack",
+        "hooks/client"
       ]
     }
   ],

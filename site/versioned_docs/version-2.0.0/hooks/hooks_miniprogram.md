@@ -141,7 +141,7 @@ export default function Home() {
 ​
 
 Midway Hooks 相关的语法和文档可参考：
-[介绍](/docs/hooks_intro?view=doc_embed)​
+[介绍](/docs/hooks/intro?view=doc_embed)​
 
 ### 函数部署
 
