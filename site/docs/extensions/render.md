@@ -22,7 +22,7 @@
 
 选择对应的模板安装依赖。
 ```bash
-$ npm i @midwayjs/view-ejs@beta --save
+$ npm i @midwayjs/view-ejs@3 --save
 ```
 
 
@@ -32,7 +32,7 @@ $ npm i @midwayjs/view-ejs@beta --save
 首先，引入组件，在 `configuration.ts` 中导入：
 ```typescript
 import { Configuration } from '@midwayjs/decorator';
-import * as view from '@midwayjs/view-ejs';	
+import * as view from '@midwayjs/view-ejs';
 import { join } from 'path'
 
 @Configuration({
@@ -75,9 +75,9 @@ export const ejs = {};
 │   └── controller                 ## Controller 目录
 │       └── home.ts
 ├── view                           ## 模板目录
-│   └── hello.ejs 
+│   └── hello.ejs
 ├── test
-├── package.json  
+├── package.json
 └── tsconfig.json
 ```
 
@@ -97,7 +97,7 @@ import { Context } from '@midwayjs/koa';
 @Provide()
 @Controller('/')
 export class HomeController {
-  
+
   @Inject()
   ctx: Context;
 
@@ -135,7 +135,7 @@ export const ejs = {};
 @Provide()
 @Controller('/')
 export class HomeController {
-  
+
   @Inject()
   ctx: Context;
 
@@ -184,14 +184,14 @@ export const view = {
 
 1、选择对应的模板安装依赖。
 ```bash
-$ npm i @midwayjs/view-nunjucks@beta --save
+$ npm i @midwayjs/view-nunjucks@3 --save
 ```
 
 
 2、引入组件，在 `configuration.ts` 中导入：
 ```typescript
 import { Configuration } from '@midwayjs/decorator';
-import * as view from '@midwayjs/view-nunjucks';	
+import * as view from '@midwayjs/view-nunjucks';
 import { join } from 'path'
 
 @Configuration({
@@ -235,7 +235,7 @@ import { Context } from '@midwayjs/koa';
 @Provide()
 @Controller('/')
 export class HomeController {
-  
+
   @Inject()
   ctx: Context;
 
@@ -313,9 +313,9 @@ export class MyView implements IViewEngine {
 
   async renderString(tpl: string,
     locals?: Record<string, any>,
-    options?: RenderOptions) { 
-    
-    throw new Error('not implement'); 
+    options?: RenderOptions) {
+
+    throw new Error('not implement');
   }
 };
 ```

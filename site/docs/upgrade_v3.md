@@ -4,6 +4,9 @@
 
 从 Midway v2 升级到 Midway v3，会有一些 Breaking Change。本篇文档会详细列出这些 Breaking 的地方，让用户可以提前知道变化，做出应对。
 
+:::info
+v2 的用户请不要着急升级，我们后续将会提供自动化升级脚本。
+:::
 
 
 ## 面对普通用户
@@ -14,27 +17,27 @@
 
 ### 包版本
 
-所有的组件包，核心包都将升级为 3.x 版本，在未正式发布之前，请使用 beta 包。
+所有的组件包，核心包都将升级为 3.x 版本。
 
 ```json
 {
   "dependencies": {
-    "@midwayjs/bootstrap": "beta",
-    "@midwayjs/core": "beta",
-    "@midwayjs/decorator": "beta",
-    "@midwayjs/koa": "beta",
-    "@midwayjs/task": "beta"
+    "@midwayjs/bootstrap": "^3.0.0",
+    "@midwayjs/core": "^3.0.0",
+    "@midwayjs/decorator": "^3.0.0",
+    "@midwayjs/koa": "^3.0.0",
+    "@midwayjs/task": "^3.0.0",
   },
   "devDependencies": {
     "@midwayjs/cli": "^1.2.90",
     "@midwayjs/luckyeye": "^1.0.0",
-    "@midwayjs/mock": "beta",
+    "@midwayjs/mock": "^3.0.0",
   }
 }
 
 ```
 
-`@midwayjs/cli` 和 `@midwyajs/luckeye` 的版本除外。
+`@midwayjs/cli` 和 `@midwyajs/luckeye`, `@midwayjs/logger` 的版本除外。
 
 
 
@@ -241,7 +244,7 @@ const env = environmentService.getCurrentEnvironment();
   // ...
 })
 export class ContainerConfiguration {
-	
+
   async onReady(container) {
   	container.registerObject('aaa', 'bbb');
   }
@@ -258,7 +261,7 @@ container.getAsync('A:aaa'); // => OK
   // ...
 })
 export class ContainerConfiguration {
-	
+
   async onReady(container) {
   	container.registerObject('aaa', 'bbb');
   }
@@ -282,7 +285,7 @@ container.getAsync('aaa'); // => OK
 旧
 ```typescript
 export class CustomKoaFramework extends BaseFramework {
-	// ... 
+	// ...
 }
 ```
 新
@@ -291,7 +294,7 @@ import { Framework } from '@midwayjs/decorator';
 
 @Framework()
 export class CustomKoaFramework extends BaseFramework {
-	// ... 
+	// ...
 }
 ```
 
@@ -332,7 +335,7 @@ import { Framework } from '@midwayjs/decorator';
 
 @Framework()
 export class CustomKoaFramework extends BaseFramework {
-  
+
    configure() {
      /**
      * 这里返回你的配置
@@ -350,8 +353,8 @@ export class CustomKoaFramework extends BaseFramework {
    isEnable(): boolean {
      return this.configurationOptions.services?.length > 0;
    }
-  
-	// ... 
+
+	// ...
 }
 ```
 

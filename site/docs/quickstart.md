@@ -26,9 +26,7 @@ Midway 有多套技术方案可以选择，我们以部署的方式来做区分�
 $ npm init midway
 ```
 
-针对 v3 项目，请选择最下方的 `koa-v3`。
-
-![create-with-cli.svg](https://img.alicdn.com/imgextra/i4/O1CN016efif51uI0HFO9RWh_!!6000000006013-55-tps-1770-928.svg)
+针对 v3 项目，请选择 `koa-v3`。
 
 示例将创建一个类似下面的目录结构，其中最精简的 Midway 项目示例如下。
 
@@ -120,7 +118,7 @@ Midway 会启动 HTTP 服务器，打开浏览器，访问 `http://127.0.0.1:700
 ```typescript
 "scripts": {
   //...
-  "dev": "cross-env ets && cross-env NODE_ENV=local midway-bin dev --ts --port=6001",
+  "dev": "cross-env NODE_ENV=local midway-bin dev --ts --port=6001",
 },
 ```
 

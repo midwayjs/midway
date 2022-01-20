@@ -31,7 +31,7 @@ Midway 提供了对 [ws](https://www.npmjs.com/package/ws) 模块的支持和封
 
 在现有项目中安装 WebSocket 的依赖。
 ```bash
-$ npm i @midwayjs/ws@beta --save
+$ npm i @midwayjs/ws@3 --save
 $ npm i @types/ws --save-dev
 ```
 
@@ -124,7 +124,7 @@ export class HelloSocketController {
 
   @Inject()
   ctx: Context;
-  
+
   @OnWSMessage('message')
   @WSBroadCast()
   async gotMyMessage(data) {
@@ -149,16 +149,16 @@ export class HelloSocketController {
 import { createApp } from '@midwayjs/mock'
 import { Framework } from '@midwayjs/ws';
 
-describe('/test/index.test.ts', () => {	
-  
+describe('/test/index.test.ts', () => {
+
 	it('should test create webSocket app', async () => {
     const app = await createApp<Framework>(process.cwd(), { port: 3000});
-    
+
     //...
-    
+
     await closeApp(app);
   });
-  
+
 });
 ```
 你可以直接使用 `ws` 来测试。也可以使用 Midway 提供的基于 `ws`  模块封装的测试客户端。
@@ -203,7 +203,7 @@ it('should test create websocket app', async () => {
 
   // 关闭服务端
   await closeApp(app);
-  
+
 });
 ```
 
@@ -217,21 +217,21 @@ import { createApp, closeApp, createWebSocketClient } from '@midwayjs/mock';
 // ... 省略 describe
 
 it('should test create websocket app', async () => {
-  
+
   // 创建一个服务
   const app = await createApp<Framework>(process.cwd(), { port: 3000});
-  
+
   // 创建一个客户端
   const client = await createWebSocketClient(`ws://localhost:3000`);
 
   // 发送事件
   client.send(1);
-  
+
   // 用事件的 promise 写法监听
   let gotEvent = once(client, 'message');
   // 等待返回
   let [data] = await gotEvent;
-  
+
   // 判断结果
   expect(JSON.parse(data)).toEqual({
     name: 'harry',
@@ -239,10 +239,10 @@ it('should test create websocket app', async () => {
   });
 
   await sleep(1000);
-  
+
   // 关闭客户端
   await client.close();
-  
+
   // 关闭服务端
   await closeApp(app);
 });

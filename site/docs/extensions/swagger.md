@@ -17,7 +17,7 @@
 #### 1. 安装依赖
 
 ```bash
-$ npm install @midwayjs/swagger@beta --save
+$ npm install @midwayjs/swagger@3 --save
 $ npm install swagger-ui-dist --save-dev
 ```
 

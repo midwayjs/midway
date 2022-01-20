@@ -15,7 +15,7 @@
 ## 使用方法：
 
 ```bash
-$ npm i @midwayjs/sequelize@beta --save
+$ npm i @midwayjs/sequelize@3 --save
 ```
 ## 安装数据库 Driver
 
@@ -66,7 +66,7 @@ export class ContainerLifeCycle implements ILifeCycle {
   app: Application;
 
   async onReady() {
-    
+
   }
 }
 ```

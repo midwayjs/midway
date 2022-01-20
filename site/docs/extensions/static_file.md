@@ -16,7 +16,7 @@ midway 提供了基于 [koa-static-cache](https://github.com/koajs/static-cache)
 ## 安装依赖
 
 ```bash
-$ npm i @midwayjs/static-file@beta --save
+$ npm i @midwayjs/static-file@3 --save
 ```
 
 
@@ -60,9 +60,9 @@ export class ContainerLifeCycle {
 ├── public
 |   ├── index.html
 │   └── hello.js
-│ 
-├── test  
-├── package.json  
+│
+├── test
+├── package.json
 └── tsconfig.json
 ```
 

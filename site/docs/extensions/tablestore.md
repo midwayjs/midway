@@ -15,7 +15,7 @@
 ## 安装依赖
 
 ```bash
-$ npm i @midwayjs/tablestore@beta --save
+$ npm i @midwayjs/tablestore@3 --save
 ```
 
 ## 引入组件
@@ -24,7 +24,7 @@ $ npm i @midwayjs/tablestore@beta --save
 首先，引入组件，在 `configuration.ts` 中导入：
 ```typescript
 import { Configuration } from '@midwayjs/decorator';
-import * as tablestore from '@midwayjs/tablestore';	
+import * as tablestore from '@midwayjs/tablestore';
 import { join } from 'path'
 
 @Configuration({
@@ -94,10 +94,10 @@ import { TableStoreService } from '@midwayjs/tablestore';
 
 @Provide()
 export class UserService {
-  
+
   @Inject()
   tableStoreService: TableStoreService;
-  
+
   async invoke() {
     await this.tableStoreService.putRow(params);
   }
@@ -112,16 +112,16 @@ import { join } from 'path';
 
 @Provide()
 export class UserService {
-  
+
   @Inject()
   tableStoreServiceFactory: TableStoreServiceFactory;
-  
+
   async save() {
     const db1 = await this.tableStoreServiceFactory.get('db1');
     const db2 = await this.tableStoreServiceFactory.get('db2');
-    
+
     //...
-   
+
   }
 }
 ```
@@ -130,29 +130,29 @@ export class UserService {
 示例：getRow
 ```typescript
 import { join } from 'path';
-import { 
-  TableStoreService, 
-  Long, 
-  CompositeCondition, 
-  SingleColumnCondition, 
-  LogicalOperator, 
-  ComparatorType 
+import {
+  TableStoreService,
+  Long,
+  CompositeCondition,
+  SingleColumnCondition,
+  LogicalOperator,
+  ComparatorType
 } from '@midawyjs/tablestore';
 
 @Provide()
 export class UserService {
-  
+
   @Inject()
   tableStoreService: TableStoreService;
-  
+
   async getInfo() {
-    
+
     const data = await tableStoreService.getRow({
       tableName: "sampleTable",
       primaryKey: [{ 'gid': Long.fromNumber(20013) }, { 'uid': Long.fromNumber(20013) }],
       columnFilter: condition
     });
-    
+
     // TODO
 
   }

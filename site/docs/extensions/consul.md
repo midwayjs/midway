@@ -29,7 +29,7 @@ consul 用于微服务下的服务治理，主要特点有：服务发现、服�
 首先安装 consul 组件和类型：
 
 ```bash
-$ npm i @midwayjs/consul@beta -S
+$ npm i @midwayjs/consul@3 -S
 $ npm i @types/consul -D
 ```
 
@@ -122,10 +122,10 @@ export class HomeController {
   @Get('/')
   async home() {
     const service = await this.balancerService.getServiceBalancer().select('my-midway-project');
-    
+
     // output
     console.log(service)
-    
+
     // ...
   }
 }
@@ -181,13 +181,13 @@ export class HomeController {
 
   @Get('/')
   async home() {
-    
+
     const service = await this.balancerService
       .getServiceBalancer()
       .select('my-midway-project', false);
-    
+
     console.log(service);
-    
+
     // ...
   }
 }
@@ -289,9 +289,9 @@ consul 还能做 Key/Value 的配置中心的作用，这个后续我们考虑�
 
 下面描述了单机版本的 consul 搭建流程。
 ```bash
-docker run -itd -P consul 
+docker run -itd -P consul
 ```
-然后执行 `docker ps` 
+然后执行 `docker ps`
 ```bash
 ➜  my_consul_app docker ps
 CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                                                                                                                                                                                                    NAMES
@@ -326,7 +326,7 @@ export class HomeController {
   async home2(){
     let res = await this.consul.agent.service.deregister(`my-midway-project:30.10.72.195:7002`);
     console.log(res);
-    
+
     // ...
   }
 

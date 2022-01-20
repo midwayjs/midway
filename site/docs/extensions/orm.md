@@ -20,7 +20,7 @@
 
 
 ```bash
-npm i @midwayjs/orm@beta typeorm --save
+npm i @midwayjs/orm@3 typeorm --save
 ```
 
 
@@ -40,7 +40,7 @@ import { join } from 'path';
     orm  														// 加载 orm 组件
   ],
   importConfigs: [
-  	join(__dirname, './config')	
+  	join(__dirname, './config')
   ]
 })
 export class ContainerConfiguratin {
@@ -100,9 +100,9 @@ MyProject
 │   ├── configuration.ts     			// Midway 配置文件
 │   └── service      							// 其他的服务目录
 ├── .gitignore
-├── package.json  
-├── README.md 
-└── tsconfig.json 
+├── package.json
+├── README.md
+└── tsconfig.json
 ```
 
 
@@ -319,7 +319,7 @@ export class Photo {
 
   @Column('text')
   description: string;
-  
+
   @Column()
   filename: string;
 
@@ -470,7 +470,7 @@ export class PhotoService {
 
   // find
   async findPhotos() {
-    
+
     // find All
     let allPhotos = await this.photoModel.find();
     console.log("All photos from the db: ", allPhotos);
@@ -494,7 +494,7 @@ export class PhotoService {
     let [allPhotos, photosCount] = await this.photoModel.findAndCount();
     console.log("All photos: ", allPhotos);
     console.log("Photos count: ", photosCount);
-   
+
   }
 }
 
@@ -518,12 +518,12 @@ export class PhotoService {
 
   @InjectEntityModel(Photo)
 	photoModel: Repository<Photo>;
-  
+
   async updatePhoto() {
-    
+
 		let photoToUpdate = await this.photoModel.findOne(1);
     photoToUpdate.name = "Me, my friends and polar bears";
-    
+
     await this.photoModel.save(photoToUpdate);
   }
 }
@@ -544,7 +544,7 @@ export class PhotoService {
 
   @InjectEntityModel(Photo)
 	photoModel: Repository<Photo>;
-  
+
   async updatePhoto() {
 		/*...*/
     let photoToRemove = await this.photoModel.findOne(1);
@@ -604,7 +604,7 @@ export class PhotoMetadata {
 在这里，我们使用一个名为 `@OneToOne`  的新装饰器。它允许我们在两个实体之间创建一对一的关系。`type => Photo`是一个函数，它返回我们要与其建立关系的实体的类。
 
 
-由于语言的特殊性，我们被迫使用一个返回类的函数，而不是直接使用该类。我们也可以将其写为 `() => Photo`  ，但是我们使用 `type => Photo`作为惯例来提高代码的可读性。类型变量本身不包含任何内容。 
+由于语言的特殊性，我们被迫使用一个返回类的函数，而不是直接使用该类。我们也可以将其写为 `() => Photo`  ，但是我们使用 `type => Photo`作为惯例来提高代码的可读性。类型变量本身不包含任何内容。
 
 
 我们还添加了一个 `@JoinColumn`装饰器，它指示关系的这一侧将拥有该关系。关系可以是单向或双向的。关系只有一方可以拥有。关系的所有者端需要使用@JoinColumn装饰器。 如果您运行该应用程序，则会看到一个新生成的表，该表将包含一列，其中包含用于 Photo 关系的外键。
@@ -640,12 +640,12 @@ export class PhotoService {
 
   @InjectEntityModel(Photo)
 	photoModel: Repository<Photo>;
-  
+
   @InjectEntityModel(PhotoMetadata)
 	photoMetadataModel: Repository<PhotoMetadata>;
-  
+
   async updatePhoto() {
-    
+
   // create a photo
     let photo = new Photo();
     photo.name = "Me and Bears";
@@ -661,14 +661,14 @@ export class PhotoService {
     metadata.comment = "cybershoot";
     metadata.orientation = "portrait";
     metadata.photo = photo; // this way we connect them
-    
-    
+
+
     // first we should save a photo
     await this.photoModel.save(photo);
 
     // photo is saved. Now we need to save a photo metadata
     await this.photoMetadataModel.save(metadata);
-    
+
     // done
     console.log("Metadata is saved, and relation between metadata and photo is created in the database too");
   }
@@ -734,7 +734,7 @@ export class PhotoService {
 
   @InjectEntityModel(Photo)
 	photoModel: Repository<Photo>;
-  
+
   // find
   async findPhoto() {
 		/*...*/
@@ -760,7 +760,7 @@ export class PhotoService {
 
   @InjectEntityModel(Photo)
 	photoModel: Repository<Photo>;
-  
+
   // find
   async findPhoto() {
 		/*...*/
@@ -805,9 +805,9 @@ export class PhotoService {
 
   @InjectEntityModel(Photo)
 	photoModel: Repository<Photo>;
-  
+
   async updatePhoto() {
-    
+
    // create photo object
     let photo = new Photo();
     photo.name = "Me and Bears";
@@ -824,10 +824,10 @@ export class PhotoService {
     metadata.orientation = "portrait";
 
     photo.metadata = metadata;  // this way we connect them
-    
+
     // save a photo also save the metadata
     await this.photoModel.save(photo);
-    
+
     // done
     console.log("Photo is saved, photo metadata is saved too");
   }
@@ -978,12 +978,12 @@ export class PhotoService {
 
   @InjectEntityModel(Photo)
 	photoModel: Repository<Photo>;
-  
+
   @InjectEntityModel(Album)
   albumModel: Repository<Album>
-  
+
   async updatePhoto() {
-    
+
     // create a few albums
     let album1 = new Album();
     album1.name = "Bears";
@@ -1001,7 +1001,7 @@ export class PhotoService {
     photo.albums = [album1, album2];
     await this.photoModel.save(photo);
 
-   	
+
     // now our photo is saved and albums are attached to it
     // now lets load them:
     const loadedPhoto = await this.photoModel.findOne(1, { relations: ["albums"] });
@@ -1024,7 +1024,7 @@ export class PhotoService {
   }]
 }
 ```
-### 
+###
 ### 18、使用 QueryBuilder
 
 
@@ -1044,7 +1044,7 @@ let photos = await this.photoModel
     .setParameters({ photoName: "My", bearName: "Mishka" })
     .getMany();
 ```
-该查询选择所有带有 “My” 或 “Mishka” 名称的已发布照片。它将从位置 5 开始返回结果（分页偏移），并且将仅选择 10 个结果（分页限制）。选择结果将按 ID 降序排列。该照片的相册将 left-Joined，元数据将自动关联。 
+该查询选择所有带有 “My” 或 “Mishka” 名称的已发布照片。它将从位置 5 开始返回结果（分页偏移），并且将仅选择 10 个结果（分页限制）。选择结果将按 ID 降序排列。该照片的相册将 left-Joined，元数据将自动关联。
 
 
 您将在应用程序中大量使用查询生成器。在 [此处](https://github.com/typeorm/typeorm/blob/master/docs/zh_CN/select-query-builder.md) 了解有关QueryBuilder的更多信息。
@@ -1064,7 +1064,7 @@ import { EntitySubscriberInterface, InsertEvent, UpdateEvent, RemoveEvent } from
 @Provide()
 @EventSubscriberModel()
 export class EverythingSubscriber implements EntitySubscriberInterface {
-			
+
 	/**
 	 * Called before entity insertion.
 	 */
@@ -1166,7 +1166,7 @@ export class XXX {
 
 	@InjectEntityModel(User, 'test')
 	testUserModel: Repository<User>;
-  
+
   //...
 }
 ```
@@ -1223,7 +1223,7 @@ import { Photo } from './entity/photo';
 export async function getPhoto() {
   // get model
 	const photoModel = useEntityModel(Photo);
-  
+
   const photo = new Photo();
   // create entity
   photo.name = "Me and Bears";
@@ -1231,10 +1231,10 @@ export async function getPhoto() {
   photo.filename = "photo-with-bears.jpg";
   photo.views = 1;
   photo.isPublished = true;
-  
+
   // find
   const newPhoto = await photoModel.save(photo);
-  
+
   return 'hello world';
 }
 ```
@@ -1256,7 +1256,7 @@ export async function getPhoto() {
 ```shell
 sudo sysctl -w net.inet.tcp.sack=0
 ```
-### 
+###
 ### 关于 mysql 时间列的当前时区展示
 
 
@@ -1268,7 +1268,7 @@ sudo sysctl -w net.inet.tcp.sack=0
 // src/config/config/default
 
 config.orm = {
-	//... 
+	//...
   dateStrings: true,
 };
 

@@ -2,6 +2,9 @@
 
 Midway 可以使用 EggJS 作为上层 Web 框架，EggJS 提供了非常多常用的插件和 API，帮助用户快速构建企业级 Web 应用。本章节内容，主要介绍 EggJS 在 Midway 中如何使用自身的能力。
 
+:::tip
+Egg.js 的调整暂未完成，请等待完成后再使用。
+:::
 
 
 相关信息：
@@ -24,15 +27,14 @@ Midway 可以使用 EggJS 作为上层 Web 框架，EggJS 提供了非常多常�
 针对 EggJS 场景，这些包列举如下。
 ```json
   "dependencies": {
-    "@midwayjs/web": "^2.3.11",
-    "@midwayjs/decorator": "^2.3.11",
+    "@midwayjs/web": "^3.0.0",
+    "@midwayjs/decorator": "^3.0.0",
     "egg": "^2.0.0",
-    "egg-scripts": "^2.10.0",
-    "midway": "^2.3.11"
+    "egg-scripts": "^2.10.0"
   },
   "devDependencies": {
     "@midwayjs/egg-ts-helper": "^1.0.1",
-  },	
+  },
 ```
 
 | @midwayjs/web | **必须**，Midway EggJS 适配层 |
@@ -90,10 +92,10 @@ Midway 可以使用 EggJS 作为上层 Web 框架，EggJS 提供了非常多常�
 │   ├── controller								 				## Midway 控制器目录（推荐）
 │   ├── service								     				## Midway 服务目录（推荐）
 │   └── schedule									 				## Midway 定时器目录（推荐）
-│ 
+│
 ├── typings                        				## EggJS 定义生成目录
-├── test  
-├── package.json  
+├── test
+├── package.json
 └── tsconfig.json
 ```
 以上是 EggJS 的目录结构全貌，其中包含了很多 EggJS 特有的目录，有一些在 Midway 体系中已经有相应的能力替代，可以直接替换。整个结构，基本上等价于将 EggJS 的目录结构移动到了 `src` 目录下。
@@ -140,7 +142,7 @@ export default (appInfo: EggAppInfo) => {
   config.sequelize = {
 
   }
-  
+
   return config;
 };
 
@@ -227,13 +229,13 @@ import { Application, Context } from 'egg';
 
 @Provide()
 export class HomeController {
-  
+
   @App()
   app: Application;
-  
+
   @Inject()
   ctx: Context;
-  
+
   @Get('/')
   async home() {
   	this.app.mysql.query(sql, values);    // 调用 app 上的方法（如果有的话）
@@ -252,10 +254,10 @@ export class HomeController {
 
   @Plugin()
   mysql: any;
-  
+
   @Get('/')
   async home() {
-  	this.mysql.query(sql, values); 
+  	this.mysql.query(sql, values);
   }
 }
 ```
@@ -282,8 +284,8 @@ export class HomeController {
 │   │   └── report.ts
 │   └── service
 │       └── user.ts
-├── test  
-├── package.json  
+├── test
+├── package.json
 └── tsconfig.json
 ```
 
@@ -327,7 +329,7 @@ export default (appInfo: EggAppInfo) => {
   const config = {} as DefaultConfig;
 
   // ...
-  
+
   config.middleware = [
     'reportMiddleware'
   ];
@@ -423,7 +425,7 @@ import { Context } from 'egg';
 
 @Controller('/api')
 export class ApiController {
-  
+
   @Inject()
   ctx: Context;
 
@@ -478,7 +480,7 @@ import { Context } from 'egg';
 
 @Controller('/api')
 export class ApiController {
-  
+
   @Inject()
   ctx: Context;
 
@@ -538,7 +540,7 @@ import { Context } from 'egg';
   type: 'worker', // 指定某一个 worker 执行
 })
 export class HelloCron implements CommonSchedule {
-  
+
   @Inject()
   ctx: Context;
 
@@ -754,8 +756,8 @@ export const middleware = [ 'notfoundHandler' ];
 │   │       └── response.ts
 │   ├── config
 │   └── interface.ts
-├── test  
-├── package.json  
+├── test
+├── package.json
 └── tsconfig.json
 ```
 内容和原来的 EggJS 相同。
@@ -856,8 +858,8 @@ EggJS 生成的定义在 `typings` 目录中。
 .
 ├── src                            ## midway 项目源码
 ├── typings                        ## EggJS 定义生成目录
-├── test  
-├── package.json  
+├── test
+├── package.json
 └── tsconfig.json
 ```
 
@@ -905,4 +907,4 @@ await (this.app as any).mysql.query(sql);
 或者可以自行增加扩展定义。
 
 
-## 
+##

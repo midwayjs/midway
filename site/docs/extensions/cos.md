@@ -15,7 +15,7 @@
 ## 安装依赖
 
 ```bash
-$ npm i @midwayjs/cos@beta --save
+$ npm i @midwayjs/cos@3 --save
 ```
 
 ## 引入组件
@@ -25,7 +25,7 @@ $ npm i @midwayjs/cos@beta --save
 
 ```typescript
 import { Configuration } from '@midwayjs/decorator';
-import * as cos from '@midwayjs/cos';	
+import * as cos from '@midwayjs/cos';
 import { join } from 'path'
 
 @Configuration({
@@ -86,10 +86,10 @@ import { CosService } from '@midwayjs/cos';
 
 @Provide()
 export class UserService {
-  
+
   @Inject()
   cosService: COSService;
-  
+
   async invoke() {
     await this.cosService.sliceUploadFile({
       Bucket: 'test-1250000000',
@@ -109,16 +109,16 @@ import { join } from 'path';
 
 @Provide()
 export class UserService {
-  
+
   @Inject()
   cosServiceFactory: COSServiceFactory;
-  
+
   async save() {
     const redis1 = await this.cosServiceFactory.get('instance1');
     const redis2 = await this.cosServiceFactory.get('instance3');
-    
+
     //...
-   
+
   }
 }
 ```

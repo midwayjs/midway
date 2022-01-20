@@ -27,7 +27,7 @@
 首先安装 Midway 提供的任务组件：
 
 ```bash
-$ npm install @midwayjs/task@beta -S
+$ npm install @midwayjs/task@3 -S
 ```
 
 在 `configuration.ts` 中，引入这个组件：
@@ -132,7 +132,7 @@ import { Provide, Controller, Get } from '@midwayjs/decorator';
 export class HelloController{
   @Inject()
   queueService: QueueService;
-  
+
   @Get("/get-queue")
   async getQueue(@Query() id: string){
     return await this.queueService.getClassQueue(TestJob).getJob(id);
@@ -172,14 +172,14 @@ import { QueueService } from '@midwayjs/task';
   ]
 })
 export class ContainerConfiguration implements ILifeCycle {
-  
+
   async onReady(container: IMidwayContainer, app?: IMidwayBaseApplication<Context>): Promise<void> {
-    
+
     // Task这块的启动后立马执行
     let result: any = await container.getAsync(QueueService);
     let job: Queue = result.getQueueTask(`HelloTask`, 'task') // 此处第一个是你任务的类名，第二个任务的名字也就是装饰器Task的函数名
     job.add({}, {delay: 0}) // 表示立即执行。
-    
+
     // LocalTask的启动后立马执行
     const result = await container.getAsync(QueueService);
     let job = result.getLocalTask(`HelloTask`, 'task'); // 参数1:类名 参数2: 装饰器TaskLocal的函数名
@@ -192,7 +192,7 @@ export class ContainerConfiguration implements ILifeCycle {
 
 
 
-## 
+##
 
 ## 常用 Cron 表达式
 
@@ -426,7 +426,7 @@ export class UserService {
   helloService: HelloService;
 
   // 例如下面是每分钟执行一次
-  @TaskLocal(FORMAT.CRONTAB.EVERY_MINUTE)    
+  @TaskLocal(FORMAT.CRONTAB.EVERY_MINUTE)
   async test(){
     console.log(this.helloService.getName())
   }

@@ -1,4 +1,4 @@
-# 信息查看 
+# 信息查看
 
 Midway 提供了 info 组件，用于展示应用的基本信息，方便排查问题。
 
@@ -15,7 +15,7 @@ Midway 提供了 info 组件，用于展示应用的基本信息，方便排查�
 ## 安装依赖
 
 ```bash
-$ npm i @midwayjs/info@beta --save
+$ npm i @midwayjs/info@3 --save
 ```
 
 
@@ -121,7 +121,7 @@ export class userService {
 
   @Inject()
   inforService: InfoService
-	
+
   async getInfo() {
     // 应用信息，应用名等
     this.inforService.projectInfo();

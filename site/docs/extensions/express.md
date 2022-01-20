@@ -2,6 +2,9 @@
 
 本章节内容，主要介绍在 Midway 中如何使用 Express 作为上层框架，并使用自身的能力。
 
+:::tip
+Express 的调整暂未完成，请等待完成后再使用。
+:::
 
 
 相关信息：
@@ -54,7 +57,7 @@ $ npm run dev		// 本地运行
   },
   "devDependencies": {
     "@midwayjs/mock": "^2.3.11",
-  },	
+  },
 ```
 | @midwayjs/express | Midway 针对 express 的适配层 |
 | --- | --- |
@@ -73,8 +76,8 @@ $ npm run dev		// 本地运行
 │   ├── controller								 				# controller接口的地方
 │   ├── service									 					# service逻辑处理的地方
 |   └── configuration.ts									# 入口及生命周期配置、组件管理
-├── test  
-├── package.json  
+├── test
+├── package.json
 └── tsconfig.json
 ```
 
@@ -95,7 +98,7 @@ import { Request, Response } from 'express';
 export class HomeController {
 
   @Inject()
-  ctx: Context; 
+  ctx: Context;
 
   @Get('/')
   async home(@Query() id) {
@@ -116,10 +119,10 @@ export class HomeController {
 
   @Inject()
   ctx: Context;   // 即为 req
-  
+
   @Inject()
   req: Request;
-  
+
   @Inject()
   res: Response;
 
@@ -148,8 +151,8 @@ export class ReportMiddleware implements IWebMiddleware {
 
   resolve() {
     return async (
-      req: Request, 
-      res: Response, 
+      req: Request,
+      res: Response,
       next: NextFunction
     ) => {
       console.log('Request...');
@@ -198,10 +201,10 @@ import { ReportMiddleware } from './middleware/report.middleware.ts'
 
 @Configuration()
 export class ContainerLifeCycle implements ILifeCycle {
-  
+
   @App()
   app: Application;
-  
+
   async onReady() {
     this.app.useMiddleware(ReportMiddleware);
   }
@@ -219,10 +222,10 @@ import { join } from 'path';
 
 @Configuration()
 export class ContainerLifeCycle implements ILifeCycle {
-  
+
   @App()
   app: Application;
-  
+
   async onReady() {
     this.app.useMiddleware((req, res, next) => {
     	// xxx

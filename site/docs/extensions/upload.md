@@ -18,7 +18,7 @@
 1. 安装依赖
 
 ```bash
-$ npm i @midwayjs/upload@beta --save
+$ npm i @midwayjs/upload@3 --save
 ```
 
 2. 在 configuration 文件中引入组件

@@ -95,7 +95,7 @@ mongoose 和你服务器使用的 MongoDB Server 的版本也有着一定的关�
 
 **请务必注意，请查看第一小节提前编写/安装 mongoose 等相关依赖包。**
 ```bash
-$ npm i @midwayjs/typegoose@beta --save
+$ npm i @midwayjs/typegoose@3 --save
 ```
 
 
@@ -134,11 +134,11 @@ export class ContainerConfiguration {
 export const mongoose = {
   client: {
   	uri: 'mongodb://localhost:27017/test',
-    options: { 
-      useNewUrlParser: true, 
-      useUnifiedTopology: true, 
-      user: '***********', 
-      pass: '***********' 
+    options: {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      user: '***********',
+      pass: '***********'
     }
   }
 }
@@ -162,9 +162,9 @@ MyProject
 │   ├── configuration.ts     			// Midway 配置文件
 │   └── service      							// 其他的服务目录
 ├── .gitignore
-├── package.json  
-├── README.md 
-└── tsconfig.json 
+├── package.json
+├── README.md
+└── tsconfig.json
 ```
 
 
@@ -216,14 +216,14 @@ import { User } from '../entity/user';
 
 @Provide()
 export class TestService {
-  
+
   @InjectEntityModel(User)
   userModel: ReturnModelType<typeof User>;
-  
-  async getTest(){   
+
+  async getTest(){
     // create data
     const { _id: id } = await this.userModel.create({ name: 'JohnDoe', jobs: ['Cleaner'] } as User); // an "as" assertion, to have types for all properties
-    
+
     // find data
     const user = await this.userModel.findById(id).exec();
     console.log(user)
@@ -244,20 +244,20 @@ export const mongoose = {
   clients: {
   	default: {
     	uri: 'mongodb://localhost:27017/test',
-      options: { 
-        useNewUrlParser: true, 
-        useUnifiedTopology: true, 
-        user: '***********', 
-        pass: '***********' 
+      options: {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        user: '***********',
+        pass: '***********'
       }
     },
     db1: {
     	uri: 'mongodb://localhost:27017/test1',
-      options: { 
-        useNewUrlParser: true, 
-        useUnifiedTopology: true, 
-        user: '***********', 
-        pass: '***********' 
+      options: {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        user: '***********',
+        pass: '***********'
       }
     }
   }
@@ -368,11 +368,11 @@ export class ContainerConfiguration {
 export const mongoose = {
   client: {
   	uri: 'mongodb://localhost:27017/test',
-    options: { 
-      useNewUrlParser: true, 
-      useUnifiedTopology: true, 
-      user: '***********', 
-      pass: '**********' 
+    options: {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      user: '***********',
+      pass: '**********'
     }
   }
 }
@@ -384,20 +384,20 @@ export const mongoose = {
   clients: {
   	default: {
     	uri: 'mongodb://localhost:27017/test',
-      options: { 
-        useNewUrlParser: true, 
-        useUnifiedTopology: true, 
-        user: '***********', 
-        pass: '***********' 
+      options: {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        user: '***********',
+        pass: '***********'
       }
     },
     db1: {
     	uri: 'mongodb://localhost:27017/test1',
-      options: { 
-        useNewUrlParser: true, 
-        useUnifiedTopology: true, 
-        user: '***********', 
-        pass: '***********' 
+      options: {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        user: '***********',
+        pass: '***********'
       }
     }
   }
@@ -423,7 +423,7 @@ interface User extends Document {
 
 @Provide()
 export class TestService {
-  
+
   @Inject()
   conn: MongooseConnectionService;
 
@@ -453,14 +453,14 @@ import { Schema } from 'mongoose';
 
 @Provide()
 export class TestService {
-  
+
   @Inject()
   connFactory: MongooseConnectionServiceFactory;
 
   async invoke(){
     // get db1 connection
     const conn = this.connFactory.get('db1');
-    
+
     // get default connection
     const defaultConn = this.connFactory.get('default');
 

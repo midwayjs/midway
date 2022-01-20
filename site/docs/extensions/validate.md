@@ -29,7 +29,7 @@
 │   └── service
 │       └── user.ts
 ├── test
-├── package.json  
+├── package.json
 └── tsconfig.json
 ```
 
@@ -55,7 +55,7 @@ export class HomeController {
     if (!user.id || typeof user.id !== 'number') {
     	throw new Error('id error');
     }
-    
+
     if (user.age <= 30) {
     	throw new Error('age not match');
     }
@@ -74,7 +74,7 @@ export class HomeController {
 ## 安装依赖
 
 ```bash
-$ npm i @midwayjs/validate@beta --save
+$ npm i @midwayjs/validate@3 --save
 ```
 
 
@@ -97,13 +97,13 @@ import { Rule, RuleType } from "@midwayjs/validate";
 export class UserDTO {
   @Rule(RuleType.number().required())
   id: number;
-  
+
   @Rule(RuleType.string().required())
   firstName: string;
 
   @Rule(RuleType.string().max(10))
   lastName: string;
-  
+
   @Rule(RuleType.number().max(60))
   age: number;
 }
@@ -220,18 +220,18 @@ export class SchoolDTO {
 export class UserDTO {
   @Rule(RuleType.number().required())
   id: number;
-  
+
   @Rule(RuleType.string().required())
   firstName: string;
 
   @Rule(RuleType.string().max(10))
   lastName: string;
-  
+
   // 这里传入 SchoolDTO 作为校验参数，此时会默认是required字段，
   // 如果用户不想要required，则@Rule(SchoolDTO, {required: false})
-  @Rule(SchoolDTO)                   
+  @Rule(SchoolDTO)
   school: SchoolDTO;
-  
+
   // 如果是数组，则也只要下面这样写，这边装饰器会判断类型是否是数组，只能适用这种class类型
   @Rule(SchoolDTO)
   xxxx: SchoolDTO[];
@@ -261,8 +261,8 @@ export class CommonUserDTO {
 }
 
 export class UserDTO extends CommonUserDTO {
-  
-  @Rule(RuleType.string().required())                 
+
+  @Rule(RuleType.string().required())
   name: string;
 }
 ```
@@ -296,13 +296,13 @@ import { Rule, RuleType, PickDto } from "@midwayjs/validate";
 export class UserDTO {
   @Rule(RuleType.number().required())
   id: number;
-  
+
   @Rule(RuleType.string().required())
   firstName: string;
 
   @Rule(RuleType.string().max(10))
   lastName: string;
-  
+
   @Rule(RuleType.number().max(60))
   age: number;
 }
@@ -336,37 +336,37 @@ async login(@Body() user: NewUserDTO) {
 ```typescript
 
 // 自己在一个文件中定义一下你们部门的规范或常用的
-const requiredString = RuleType.string().required(); 
+const requiredString = RuleType.string().required();
 
 export class UserDTO{
-  
+
   @Rule(requiredString)                 // 这样就不用写上面这么长的了
   name: string;
-  
+
   @Rule(requiredString)									// 同上
   nickName: string;
-  
+
   @Rule(requiredString)								  // 同上
   description: string;
 }
 
 // 自己在一个文件中定义一下你们部门的规范或常用的
-const maxString = (length)=> RuleType.string().max(length);  
+const maxString = (length)=> RuleType.string().max(length);
 
 export class UserDTO{
-  
-  @Rule(requiredString)                // 同上  
+
+  @Rule(requiredString)                // 同上
   name: string;
-  
+
   @Rule(requiredString)                // 同上
   nickName: string;
-  
+
   @Rule(requiredString)                // 同上
   description: string;
-  
+
   @Rule(maxString(50))								// 这样通过换个参数即可
   info: string;
-  
+
   @Rule(maxString(50).required())     //这样也行
   info2: string;
 }
@@ -544,18 +544,18 @@ export const i18n = {
 import { ValidateService } from '@midwayjs/validate';
 
 export class UserService {
-  
+
   @Inject()
   validateService: ValidateService;
-  
+
   async inovke() {
-    
+
     // ...
     const result = this.validateService.validate(UserDTO, {
       name: 'harry',
       nickName: 'harry'
     });
-    
+
     // 失败返回 resut.error
     // 成功返回 resut.value
   }

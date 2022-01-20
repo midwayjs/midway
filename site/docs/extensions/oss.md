@@ -31,7 +31,7 @@
 `@midwayjs/oss` 是主要的功能包，`@types/ali-oss` 是 oss 的官方定义包。
 
 ```bash
-$ npm i @midwayjs/oss@beta --save
+$ npm i @midwayjs/oss@3 --save
 $ npm i @types/ali-oss --save-dev			// 安装到 dev 依赖
 ```
 如果发现 OSSService 没有方法定义，请务必检查此项。
@@ -44,7 +44,7 @@ $ npm i @types/ali-oss --save-dev			// 安装到 dev 依赖
 
 ```typescript
 import { Configuration } from '@midwayjs/decorator';
-import * as oss from '@midwayjs/oss';	
+import * as oss from '@midwayjs/oss';
 import { join } from 'path'
 
 @Configuration({
@@ -129,16 +129,16 @@ import { join } from 'path';
 
 @Provide()
 export class UserService {
-  
+
   @Inject()
   ossService: OSSService;
-  
+
   async saveFile() {
-    
-   
-    const localFile = join(__dirname, 'test.log'); 
+
+
+    const localFile = join(__dirname, 'test.log');
     const result = await this.ossService.put('/test/test.log', localFile);
-    
+
     // => result.url
   }
 }
@@ -152,15 +152,15 @@ import { join } from 'path';
 
 @Provide()
 export class UserService {
-  
+
   @Inject()
   stsService: OSSSTSService;
-  
+
   async saveFile() {
-    
+
     const roleArn = '******';		// 这里是阿里云角色的 arn
     const result = await this.stsService.assumeRole(roleArn);
-    
+
     // result.credentials.AccessKeyId
     // result.credentials.AccessKeySecret;
     // result.credentials.SecurityToken;
@@ -207,27 +207,27 @@ import { join } from 'path';
 
 @Provide()
 export class UserService {
-  
+
   @Inject()
   ossServiceFactory: OSSServiceFactory;
-  
+
   @Config('bucket3')
   bucket3Config;
-  
+
   async saveFile() {
-    
+
     // 默认获取的类型是 OSSService
     const bucket1 = this.ossServiceFactory.get('bucket1');
     const bucket2 = this.ossServiceFactory.get('bucket2');
-   
+
     // 如果是 STS，需要设置泛型联系
     // const bucket1 = this.ossServiceFactory.get<OSSSTSService>('bucket1');
-    
+
     // 会合并 config.bucket3 和 config.oss.default
     const bucket3 = await this.ossServiceFactory.createInstance(this.bucket3Config, 'bucket3');
     // 传了名字之后也可以从 factory 中获取
     bucket3 = this.ossServiceFactory.get('bucket3');
-   
+
   }
 }
 ```

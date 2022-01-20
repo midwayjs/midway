@@ -22,7 +22,7 @@ midway 包裹了 [axios](https://github.com/axios/axios) 包，使得在代码�
 ## 安装依赖
 
 ```bash
-$ npm i @midwayjs/axios@beta --save
+$ npm i @midwayjs/axios@3 --save
 ```
 
 
@@ -33,7 +33,7 @@ $ npm i @midwayjs/axios@beta --save
 
 ```typescript
 import { Configuration } from '@midwayjs/decorator';
-import * as axios from '@midwayjs/axios';	
+import * as axios from '@midwayjs/axios';
 import { join } from 'path'
 
 @Configuration({
@@ -75,10 +75,10 @@ import { HttpService } from '@midwayjs/axios';
 
 @Provide()
 export class UserService {
-	
+
   @Inject()
   httpService: HttpService;
-  
+
   async invoke() {
   	const url = 'http://www.weather.com.cn/data/cityinfo/101010100.html';
     const result = await this.httpService.get(url);
@@ -115,7 +115,7 @@ export const axios = {
 ## 配置全局拦截器
 ```javascript
 import { Configuration } from '@midwayjs/decorator';
-import * as axios from '@midwayjs/axios';	
+import * as axios from '@midwayjs/axios';
 import { join } from 'path';
 import { IMidwayContainer } from '@midwayjs/core';
 
@@ -128,7 +128,7 @@ import { IMidwayContainer } from '@midwayjs/core';
   ]
 })
 export class ContainerLifeCycle {
-  
+
   async onReady(container: IMidwayContainer) {
   	const httpService = await container.getAsync(axios.HttpService);
     httpService.interceptors.request.use(

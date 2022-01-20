@@ -35,7 +35,7 @@ const config = {
               label: '3.0.0 🚧',
             },
           },
-          lastVersion: '2.0.0',
+          lastVersion: 'current',
           sidebarCollapsed: false,
         },
         theme: {

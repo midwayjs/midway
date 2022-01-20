@@ -18,7 +18,7 @@
 
 `@midwayjs/redis` 是主要的功能包，`@types/ioredis` 是 定义包。
 ```bash
-$ npm i @midwayjs/redis@beta --save
+$ npm i @midwayjs/redis@3 --save
 $ npm i @types/ioredis --save-dev			// 安装到 dev 依赖
 ```
 如果发现 RedisService 没有方法定义，请务必检查此项。
@@ -30,7 +30,7 @@ $ npm i @types/ioredis --save-dev			// 安装到 dev 依赖
 首先，引入 组件，在 `src/configuration.ts` 中导入：
 ```typescript
 import { Configuration } from '@midwayjs/decorator';
-import * as redis from '@midwayjs/redis';	
+import * as redis from '@midwayjs/redis';
 import { join } from 'path'
 
 @Configuration({
@@ -136,15 +136,15 @@ import { RedisService } from '@midwayjs/redis';
 
 @Provide()
 export class UserService {
-  
+
   @Inject()
   redisService: RedisService;
-  
+
   async invoke() {
-    
+
    await this.redisService.set('foo', 'bar');
    const result = await this.redisService.get('foo');
-   
+
    // result => bar
   }
 }
@@ -158,16 +158,16 @@ import { join } from 'path';
 
 @Provide()
 export class UserService {
-  
+
   @Inject()
   redisServiceFactory: RedisServiceFactory;
-  
+
   async save() {
     const redis1 = await this.redisServiceFactory.get('instance1');
     const redis2 = await this.redisServiceFactory.get('instance3');
-    
+
     //...
-   
+
   }
 }
 ```
