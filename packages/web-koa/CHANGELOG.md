@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0](https://github.com/midwayjs/midway/compare/v3.0.0-beta.17...v3.0.0) (2022-01-20)
+
+
+### Features
+
+* add favicon middleware and remove koa-onerror ([#1601](https://github.com/midwayjs/midway/issues/1601)) ([2956174](https://github.com/midwayjs/midway/commit/295617498c099982b1c2b3f192ffefb7adbf6b38))
+
+
+
+
+
 # [3.0.0-beta.17](https://github.com/midwayjs/midway/compare/v3.0.0-beta.16...v3.0.0-beta.17) (2022-01-18)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0](https://github.com/midwayjs/midway/compare/v3.0.0-beta.17...v3.0.0) (2022-01-20)
+
+
+### Bug Fixes
+
+* **deps:** update dependency supertest to v6.2.2 ([#1599](https://github.com/midwayjs/midway/issues/1599)) ([982d888](https://github.com/midwayjs/midway/commit/982d88816e90e43785f4c429608ce8eafed4da81))
+
+
+
+
+
 # [3.0.0-beta.17](https://github.com/midwayjs/midway/compare/v3.0.0-beta.16...v3.0.0-beta.17) (2022-01-18)
 
 
