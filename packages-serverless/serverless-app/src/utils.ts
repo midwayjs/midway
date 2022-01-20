@@ -1,6 +1,19 @@
-import { join } from 'path';
+import { join, dirname } from 'path';
 import { existsSync } from 'fs';
+const findNpmModuleByResolve = (cwd, modName) => {
+  try {
+    return dirname(
+      require.resolve(`${modName}/package.json`, { paths: [cwd] })
+    );
+  } catch (e) {
+    return;
+  }
+};
+
 export const findNpmModule = (cwd, modName) => {
+  if ('pnp' in process.versions) {
+    return findNpmModuleByResolve(cwd, modName);
+  }
   const modPath = join(cwd, 'node_modules', modName);
   if (existsSync(modPath)) {
     return modPath;
