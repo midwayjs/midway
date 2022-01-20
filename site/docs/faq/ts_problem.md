@@ -47,8 +47,7 @@ error TS2564: Property 'name' has no initializer and is not definitely assigned 
 
 ```typescript
 export class HomeController {
-
-	@Inject()
+  @Inject()
   userService!: UserService;
 }
 ```

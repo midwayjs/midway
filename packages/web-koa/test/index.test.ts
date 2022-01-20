@@ -309,4 +309,28 @@ describe('/test/feature.test.ts', () => {
     expect(result.status).toEqual(404);
     await closeApp(app);
   });
+
+  it('should test set favicon undefined', async () => {
+    const app = await creatApp('base-app-favicon-undefined');
+    const result = await createHttpRequest(app)
+      .get('/favicon.ico');
+    expect(result.status).toEqual(200);
+    await closeApp(app);
+  });
+
+  it('should test set favicon string', async () => {
+    const app = await creatApp('base-app-favicon-string');
+    const result = await createHttpRequest(app)
+      .get('/favicon.ico');
+    expect(result.status).toEqual(302);
+    await closeApp(app);
+  });
+
+  it('should test set favicon buffer', async () => {
+    const app = await creatApp('base-app-favicon-buffer');
+    const result = await createHttpRequest(app)
+      .get('/favicon.ico');
+    expect(result.status).toEqual(200);
+    await closeApp(app);
+  });
 });

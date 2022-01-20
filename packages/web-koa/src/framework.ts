@@ -24,8 +24,7 @@ import * as Router from '@koa/router';
 import type { DefaultState, Middleware, Next } from 'koa';
 import * as koa from 'koa';
 import { Server } from 'net';
-import * as onerror from 'koa-onerror';
-import { detectStatus } from './utils';
+import { setupOnerror } from './onerror';
 
 const COOKIES = Symbol('context#cookies');
 
@@ -84,31 +83,7 @@ export class MidwayKoaFramework extends BaseFramework<
     });
 
     const onerrorConfig = this.configService.getConfiguration('onerror');
-
-    this.app.on('error', (err, ctx) => {
-      ctx = ctx || this.app.createAnonymousContext();
-      const status = detectStatus(err);
-      // 5xx
-      if (status >= 500) {
-        try {
-          ctx.logger.error(err);
-        } catch (ex) {
-          this.logger.error(err);
-          this.logger.error(ex);
-        }
-        return;
-      }
-
-      // 4xx
-      try {
-        ctx.logger.warn(err);
-      } catch (ex) {
-        this.logger.warn(err);
-        this.logger.error(ex);
-      }
-    });
-
-    onerror(this.app, onerrorConfig);
+    setupOnerror(this.app, onerrorConfig, this.logger);
 
     // not found middleware
     const notFound = async (ctx, next) => {
