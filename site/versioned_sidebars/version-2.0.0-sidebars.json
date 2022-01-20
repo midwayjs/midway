@@ -189,7 +189,7 @@
   "hooks": [
     {
       "type": "doc",
-      "id": "hooks/hooks_intro",
+      "id": "hooks/intro",
       "label": "介绍"
     },
     {
