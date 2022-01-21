@@ -66,16 +66,16 @@ async findAll() {
 
 通过 `@Catch` 装饰器我们可以定义某一类异常的处理程序，我们可以轻松的捕获某一类型的错误，做出处理，也可以捕获全局的错误，返回统一的格式。
 
-比如捕获抛出的 `InternalServerError` 错误。
+比如捕获抛出的 `InternalServerErrorError` 错误。
 
 ```typescript
 import { Catch } from '@midwayjs/decorator';
-import { InternalServerErrorError} from '@midwayjs/core';
+import { InternalServerErrorError } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
-@Catch(InternalServerError)
+@Catch(InternalServerErrorError)
 export class InternalServerErrorFilter {
-  async catch(err: InternalServerError, ctx: Context) {
+  async catch(err: InternalServerErrorError, ctx: Context) {
 
     // ...
     return 'got 500 error, ' + err.message;
@@ -215,7 +215,7 @@ Midway 内置了默认的异常处理行为。
 
 ```typescript
 import { Catch } from '@midwayjs/decorator';
-import { InternalServerErrorError} from '@midwayjs/core';
+import { InternalServerErrorError } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 
 @Catch()
@@ -247,7 +247,7 @@ export class DefaultErrorFilter {
 - `PayloadTooLargeError`
 - `UnsupportedMediaTypeError`
 - `UnprocessableEntityError`
-- `InternalServerError`
+- `InternalServerErrorError`
 - `NotImplementedError`
 - `BadGatewayError`
 - `ServiceUnavailableError`
@@ -262,7 +262,7 @@ import { httpError } from '@midwayjs/core';
 
 async findAll() {
   // something wrong
-  throw new httpError.InternalServerError();
+  throw new httpError.InternalServerErrorError();
 }
 
 // got status: 500
