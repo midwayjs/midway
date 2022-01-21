@@ -24,6 +24,10 @@ export interface StaticFileOption {
    */
   maxFiles?: number;
   /**
+   * cache control max age for the files, 0 by default.
+   */
+  maxAge?: number;
+  /**
    * optional cache control header. Overrides options.maxAge.
    */
   cacheControl?: string;
