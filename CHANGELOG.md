@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.14.5](https://github.com/midwayjs/midway/compare/v2.14.4...v2.14.5) (2022-01-21)
+
+
+### Bug Fixes
+
+* **serverless-app:** fix findNpmModule in pnp ([#1605](https://github.com/midwayjs/midway/issues/1605)) ([d275f64](https://github.com/midwayjs/midway/commit/d275f64da78ee3b7fde948070495c8a9eabe1dc3))
+
+
+
+
+
 ## [2.14.4](https://github.com/midwayjs/midway/compare/v2.14.3...v2.14.4) (2022-01-17)
 
 
