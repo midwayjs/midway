@@ -74,57 +74,57 @@ interface BodyParserOptions {
   /**
    *  parser will only parse when request type hits enableTypes, default is ['json', 'form'].
    */
-  enableTypes?: string[] | undefined;
+  enableTypes?: string[];
 
   /**
    * requested encoding. Default is utf-8 by co-body
    */
-  encode?: string | undefined;
+  encode?: string;
 
   /**
    * limit of the urlencoded body. If the body ends up being larger than this limit
    * a 413 error code is returned. Default is 56kb
    */
-  formLimit?: string | undefined;
+  formLimit?: string;
 
   /**
    * limit of the json body. Default is 1mb
    */
-  jsonLimit?: string | undefined;
+  jsonLimit?: string;
 
   /**
    * limit of the text body. Default is 1mb.
    */
-  textLimit?: string | undefined;
+  textLimit?: string;
 
   /**
    * limit of the xml body. Default is 1mb.
    */
-  xmlLimit?: string | undefined;
+  xmlLimit?: string;
 
   /**
    * when set to true, JSON parser will only accept arrays and objects. Default is true
    */
-  strict?: boolean | undefined;
+  strict?: boolean;
 
   /**
    * custom json request detect function. Default is null
    */
-  detectJSON?: ((ctx: IMidwayKoaContext) => boolean) | undefined;
+  detectJSON?: ((ctx: IMidwayKoaContext) => boolean);
 
   /**
    * support extend types
    */
   extendTypes?: {
-    json?: string[] | undefined;
-    form?: string[] | undefined;
-    text?: string[] | undefined;
-  } | undefined;
+    json?: string[];
+    form?: string[];
+    text?: string[];
+  };
 
   /**
    * support custom error handle
    */
-  onerror?: ((err: Error, ctx: IMidwayKoaContext) => void) | undefined;
+  onerror?: ((err: Error, ctx: IMidwayKoaContext) => void);
 }
 
 declare module '@midwayjs/core/dist/interface' {

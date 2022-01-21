@@ -125,8 +125,8 @@ import { join } from 'path';
 @Configuration({
   // ...
   importConfigs: [
--   './config'													// error
-+   join(__dirname, './config')					// ok
+-   './config'							 // error
++   join(__dirname, './config')          // ok
   ]
 })
 export class MainConfiguration {
@@ -317,7 +317,7 @@ export class KoaConfiguration {
   async onReady() {}
 
   async onServerReady() {
-    await this.framework.run();
+    // ...
   }
 }
 
@@ -325,7 +325,6 @@ export class KoaConfiguration {
 
 
 **3、框架开发时**
-
 
 **需要注意的是，由于框架初始化在用户生命周期前，所以 applicationInit 的时候，不要通过 @Config 装饰器注入配置，而是调用 configService 去获取。**
 
@@ -374,7 +373,9 @@ export class KoaConfiguration {
   async onReady() {}
 
   async onServerReady() {
-    if (this.framework.isEnable()) {
+    // 如果 isEnable 为 true，框架会默认调用 framework.run()
+    // 如果一开始 enable 为 false，也可以延后去手动 run
+    if (/* 延后执行 */) {
     	await this.framework.run();
     }
   }

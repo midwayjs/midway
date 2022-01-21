@@ -200,14 +200,14 @@ export class JwtPassportMiddleware extends PassportMiddleware(JwtStrategy) {
 ```typescript
 import { Provide, Post, Inject } from '@midwayjs/decorator';
 import { Controller, Post } from '@midwayjs/decorator';
-import { Jwt } from '@midwayjs/jwt';
+import { JwtService } from '@midwayjs/jwt';
 import { JwtPassportMiddleware } from './middleware/jwt.middleware';
 
 @Controller('/')
 export class JwtController {
 
   @Inject()
-  jwt: Jwt;
+  jwt: JwtService;
 
   @Inject()
   ctx: any;
@@ -286,7 +286,7 @@ import { GithubPassportMiddleware } from './github.middleware';
 @Controller('/oauth')
 export class AuthController {
   @Inject()
-  ctx: any;
+  ctx;
 
   @Get('/github', { middleware: [GithubPassportMiddleware] })
   async githubOAuth() {}

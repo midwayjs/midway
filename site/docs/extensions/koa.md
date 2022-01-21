@@ -17,8 +17,6 @@ $ npm i @types/koa --save-dev
 
 ## 开启组件
 
-
-
 ```typescript
 import { Configuration, App } from '@midwayjs/decorator';
 import * as koa from '@midwayjs/koa';
@@ -33,7 +31,7 @@ export class ContainerLifeCycle {
   app: koa.Application;
 
   async onReady() {
-
+		// ...
   }
 }
 
@@ -41,9 +39,75 @@ export class ContainerLifeCycle {
 
 
 
+## BodyParser
+
+`@midwayjs/koa` 自带  `bodyParser` 功能，默认会解析 `Post` 请求，自动识别 `json` 和 `form` 类型。
+
+如需 text 或者 xml，可以自行配置。
+
+默认的大小限制为 `1mb`，可以单独对每项配置大小。
+
+```typescript
+// src/config/config.default
+export const bodyParser = {
+  enableTypes: ['json', 'form', 'text', 'xml'],
+  formLimit: '1mb',
+  jsonLimit: '1mb',
+  textLimit: '1mb',
+  xmlLimit: '1mb',
+}
+```
+
+
+
+## Cookie 和 Session
+
+`@midwayjs/koa` 默认封装了 `cookies` 解析和 `Session` 的支持，可以查看 [Cookies 和 Session](./cookie_session)。
+
+
+
+## 扩展 Context
+
+在一些场景下，需要对 Context 做扩展。
+
+如果希望挂在一些临时的请求相关的对象数据，可以使用 `ctx.setAttr(key, value)` API 来实现，比如组件里自用的数据。
+
+如果实在有扩展 Context 的诉求，可以使用 koa 自带的 API。
+
+比如，我们在 `configuration.ts` 中做扩展提供了一个 `render()` 方法。
+
+```typescript
+import { App, Configuration } from '@midwayjs/decorator';
+import * as koa from '@midwayjs/koa';
+
+@Configuration({
+	// ...
+})
+export class AutoConfiguration {
+  @App()
+  app: koa.Application;
+
+  async onReady(container) {
+    Object.defineProperties(app.context, {
+      render: {
+        value: async function (...args) {
+          // ...
+        },
+      },
+    });
+  }
+}
+```
+
+但是这样做无法直接让 Context 包含 Typescript 定义，需要额外增加定义，请参考 [扩展上下文定义](./context_definition)。
+
 
 
 ## 配置
+
+
+
+### 默认配置
 
 `@midwayjs/koa`  的配置样例如下：
 
@@ -56,14 +120,68 @@ export const koa = {
 
 所有属性描述如下：
 
-| 属性     | 类型                                      | 描述                                              |
-| -------- | ------- | ---------------------------- |
-| port     | number  | 可选，启动的端口          |
-| globalPrefix | string | 可选，全局的 http 前缀 |
-| keys     | string[] | 可选，Cookies 签名，如果上层未写 keys，也可以在这里设置 |
-| hostname | string  | 可选，监听的 hostname，默认 127.1 |
-| key | string \| Buffer \| Array<Buffer\|Object> | 可选，Https key |
-| cert | string \| Buffer \| Array<Buffer\|Object> | 可选，Https cert |
-| ca | string \| Buffer \| Array<Buffer\|Object> | 可选，Https ca |
-| http2    | boolean | 可选，http2 支持，默认 false |
+| 属性         | 类型                                      | 描述                                                    |
+| ------------ | ----------------------------------------- | ------------------------------------------------------- |
+| port         | number                                    | 可选，启动的端口                                        |
+| globalPrefix | string                                    | 可选，全局的 http 前缀                                  |
+| keys         | string[]                                  | 可选，Cookies 签名，如果上层未写 keys，也可以在这里设置 |
+| hostname     | string                                    | 可选，监听的 hostname，默认 127.1                       |
+| key          | string \| Buffer \| Array<Buffer\|Object> | 可选，Https key，服务端私钥                             |
+| cert         | string \| Buffer \| Array<Buffer\|Object> | 可选，Https cert，服务端证书                            |
+| ca           | string \| Buffer \| Array<Buffer\|Object> | 可选，Https ca                                          |
+| http2        | boolean                                   | 可选，http2 支持，默认 false                            |
+
+
+
+### 修改端口
+
+默认情况下，我们在 `config.default` 提供了 `7001` 的默认端口参数，修改它就可以修改 koa http 服务的默认端口。
+
+比如我们修改为 `6001`：
+
+```typescript
+// src/config/config.default
+export const koa = {
+  port: 6001
+}
+```
+
+默认情况下，单测环境由于需要 supertest 来启动端口，我们的 port 配置为 `null`。
+
+```typescript
+// src/config/config.unittest
+export const koa = {
+  port: null
+}
+```
+
+此外，也可以通过 `midway-bin dev --ts --port=6001` 的方式来临时修改端口，此方法会覆盖配置中的端口。
+
+
+
+### 全局前缀
+
+此功能请参考 [全局前缀](./controller#全局路由前缀)。
+
+
+
+### Https 配置
+
+在大多数的情况，请尽可能使用外部代理的方式来完成 Https 的实现，比如 Nginx。
+
+在一些特殊场景下，你可以通过配置 SSL 证书（TLS 证书）的方式，来直接开启 Https。
+
+首先，你需要提前准备好证书文件，比如 `ssl.key` 和 `ssl.pem`，key 为服务端私钥，pem 为对应的证书。
+
+然后配置即可。
+
+```typescript
+// src/config/config.default
+import { readFileSync } from 'fs';
+
+export const koa = {
+  key: readFileSync(join(__dirname, '../ssl/ssl.key'), 'utf8'),
+  cert: readFileSync(join(__dirname, '../ssl/ssl.pem'), 'utf8'),
+}
+```
 

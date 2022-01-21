@@ -7,6 +7,7 @@ Egg.js 的调整暂未完成，请等待完成后再使用。
 :::
 
 
+
 相关信息：
 
 | 描述                 |      |
@@ -17,14 +18,15 @@ Egg.js 的调整暂未完成，请等待完成后再使用。
 
 
 
+## 安装依赖
 
-## 依赖包
-
-
-针对 EggJS，Midway 提供了 `@midwayjs/web` 包进行了适配，在其中提供了 Midway 特有的依赖注入、切面等能力。
-
+```bash
+$ npm i @midwayjs/web@3 egg --save
+$ npm i @midwayjs/egg-ts-helper --save-dev
+```
 
 针对 EggJS 场景，这些包列举如下。
+
 ```json
   "dependencies": {
     "@midwayjs/web": "^3.0.0",
@@ -37,21 +39,46 @@ Egg.js 的调整暂未完成，请等待完成后再使用。
   },
 ```
 
-| @midwayjs/web | **必须**，Midway EggJS 适配层 |
-| --- | --- |
-| @midwayjs/decorator | **必须**，Midway 系列通用的装饰器包 |
-| midway | **可选**，Midway 启动适配包，提供了 midway v1 兼容 |
-| egg | **必须**，EggJS 依赖包，提供定义等其他能力 |
-| egg-scripts | **可选**，EggJS 启动脚本 |
-| @midwayjs/egg-ts-helper | **可选**，EggJS 定义生成工具 |
+| @midwayjs/web           | **必须**，Midway EggJS 适配层                      |
+| ----------------------- | -------------------------------------------------- |
+| @midwayjs/decorator     | **必须**，Midway 系列通用的装饰器包                |
+| midway                  | **可选**，Midway 启动适配包，提供了 midway v1 兼容 |
+| egg                     | **必须**，EggJS 依赖包，提供定义等其他能力         |
+| egg-scripts             | **可选**，EggJS 启动脚本                           |
+| @midwayjs/egg-ts-helper | **可选**，EggJS 定义生成工具                       |
+
+
+
+## 开启组件
+
+```typescript
+import { Configuration, App } from '@midwayjs/decorator';
+import * as web from '@midwayjs/web';
+import { join } from 'path';
+
+@Configuration({
+  imports: [web],
+  importConfigs: [join(__dirname, './config')],
+})
+export class ContainerLifeCycle {
+  @App()
+  app: web.Application;
+
+  async onReady() {
+		// ...
+  }
+}
+
+```
 
 
 
 ## 和默认 EggJS 的不同之处
 
 
-- 1、默认关闭 static 插件，需要时请自行开启
+- 1、从 v3 开始，midway 提供了更多的组件，默认将 egg 内置插件全部禁用
 - 2、baseDir 默认调整为 `src` 目录，服务器上为 `dist` 目录
+- 3、禁用 egg-logger，全部替换为 @midwayjs/logger，不可切换
 
 
 
@@ -129,7 +156,6 @@ export default (appInfo: EggAppInfo) => {
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_1600001669991_8079';
 
-  // add your middleware here
   config.middleware = [
   ];
 
@@ -174,8 +200,9 @@ export default (appInfo: EggAppInfo) => {
 
 ## 插件
 
+插件是 EggJS 的特色之一，`@midwayjs/web` 也支持 EggJS 的插件体系。
 
-插件是 EggJS 的特色之一，Midway 也支持 EggJS 的插件体系。
+
 
 
 ### 开启插件
@@ -370,240 +397,27 @@ EggJS 的中间件支持在 config 中配置 `match` 和 `ignore` ，在 Midway 
 EggJS 默认的 `egg-view` 提供默认渲染的能力，他默认的模板目录为 `app/view` ，在 Midway 中目前没有对此做调整，所以相应的，view 目录需要放在 `src/app/view` 下。
 
 
-如果目录结构不是很喜欢，可以在配置中修改。
-
-
-```typescript
-// src/config/config.default.ts
-
-module.exports = appInfo => {
-  return {
-    view: {
-      root: path.join(appInfo.baseDir, 'view'),
-    },
-  };
-};
-
-
-```
-
-
 ## 文件上传
 
 
-Egg.js 使用 [egg-multipart](https://github.com/eggjs/egg-multipart) 插件进行文件上传处理。
-
-
-### File 模式
-
-
-在 config 文件中启用 file 模式：
-```typescript
-// src/config/config.default.ts
-exports.multipart = {
-	mode: 'file',
-};
-```
-
-
-1、上传 / 接收文件
-
-
-你的前端静态页面代码类似如下：
-```typescript
-<form method="POST" action="/api/upload?_csrf={{ ctx.csrf | safe }}" enctype="multipart/form-data">
-  title: <input name="title" />
-  file: <input name="file" type="file" />
-  <button type="submit">Upload</button>
-</form>
-```
-```typescript
-// controller/upload.ts
-const fs = require('mz/fs');
-import { basename } from 'path';
-import { Context } from 'egg';
-
-@Controller('/api')
-export class ApiController {
-
-  @Inject()
-  ctx: Context;
-
-  @Post('/upload')
-  async uplaodFile() {
-    const file = this.ctx.request.files[0];
-    const name = 'egg-multipart-test/' + basename(file.filename);
-    let result;
-    try {
-      // 处理文件，比如上传到云端
-      result = await this.ctx.oss.put(name, file.filepath);
-    } finally {
-      // 需要删除临时文件
-      await fs.unlink(file.filepath);
-    }
-
-    return {
-      url: result.url,
-      // 获取所有的字段值
-      requestBody: ctx.request.body,
-    };
-  }
-}
-```
-
-
-2、上传 / 接收多个文件：
-
-
-对于多个文件，我们借助 `ctx.request.files` 属性进行遍历，然后分别进行处理：
-你的前端静态页面代码应该看上去如下样子：
-
-
-```typescript
-<form method="POST" action="/api/upload?_csrf={{ ctx.csrf | safe }}" enctype="multipart/form-data">
-  title: <input name="title" />
-  file1: <input name="file1" type="file" />
-  file2: <input name="file2" type="file" />
-  <button type="submit">Upload</button>
-</form>
-```
-
-
-对应的后端代码：
-
-
-```typescript
-// controller/upload.ts
-const fs = require('mz/fs');
-import { basename } from 'path';
-import { Context } from 'egg';
-
-@Controller('/api')
-export class ApiController {
-
-  @Inject()
-  ctx: Context;
-
-  @Post('/upload')
-  async uplaodFile() {
-    console.log('got %d files', this.ctx.request.files.length);
-    for (const file of this.ctx.request.files) {
-      console.log('field: ' + file.fieldname);
-      console.log('filename: ' + file.filename);
-      console.log('encoding: ' + file.encoding);
-      console.log('mime: ' + file.mime);
-      console.log('tmp filepath: ' + file.filepath);
-      let result;
-      try {
-        // 处理文件，比如上传到云端
-        result = await this.ctx.oss.put('egg-multipart-test/' + file.filename, file.filepath);
-      } finally {
-        // 需要删除临时文件
-        await fs.unlink(file.filepath);
-      }
-      console.log(result);
-    }
-
-    return {
-      url: result.url,
-      // 获取所有的字段值
-      requestBody: ctx.request.body,
-    };
-  }
-}
-```
-
-
-除了简单的文件上传，还有更加复杂的流式上传，可以参考[ egg 文件上传](https://eggjs.org/zh-cn/basics/controller.html#%E8%8E%B7%E5%8F%96%E4%B8%8A%E4%BC%A0%E7%9A%84%E6%96%87%E4%BB%B6)。
+Egg.js 使用 [egg-multipart](https://github.com/eggjs/egg-multipart) 插件进行文件上传处理，可以参考[ egg 文件上传](https://eggjs.org/zh-cn/basics/controller.html#%E8%8E%B7%E5%8F%96%E4%B8%8A%E4%BC%A0%E7%9A%84%E6%96%87%E4%BB%B6)。
 
 
 ## 静态文件
 
+请使用 egg 自带的 [静态方案](https://eggjs.org/zh-cn/tutorials/assets.html)。
 
-请使用 egg 自带的静态方案：[https://eggjs.org/zh-cn/tutorials/assets.html](https://eggjs.org/zh-cn/tutorials/assets.html)。
+
 
 
 ## 定时任务
-midway 的定时任务是基于 [egg 定时任务](https://eggjs.org/zh-cn/basics/schedule.html) 提供了更多 TypeScript 以及装饰器方面的支持。
-### 编写代码
-
-
-定时任务一般存放在 `src/schedule`  目录下，可以配置定时任务的属性和要执行的方法。例如：
-```typescript
-// src/schedule/hello.ts
-import { Provide, Inject, Schedule, CommonSchedule } from '@midwayjs/decorator';
-import { Context } from 'egg';
-
-@Provide()
-@Schedule({
-  interval: 2333, // 2.333s 间隔
-  type: 'worker', // 指定某一个 worker 执行
-})
-export class HelloCron implements CommonSchedule {
-
-  @Inject()
-  ctx: Context;
-
-  // 定时执行的具体任务
-  async exec() {
-    this.ctx.logger.info(process.pid, 'hello');
-  }
-}
-```
-
-
-:::info
-推荐使用 `CommonSchedule` 接口来规范你的计划任务类。
-:::
-
-
-:::caution
-请不要放到 src/app/schedule 中，会和 egg 本身的加载冲突。
-:::
-
-
-### 手动调用
-
-
-EggJS 提供了 `app.runSchedule`  方法来测试计划任务，这个方法在 Midway 下做了特殊处理，参数的格式变为 `id#className` ，id 为依赖注入的标识符（类名的驼峰）。
-
-
-示例如下：
-```javascript
-app.runSchedule('helloCron#HelloCron');
-```
-当然，也可以使用 Midway 自身的动态获取实例的方式。
-```typescript
-const helloCron = await ctx.requestContext.getAsync<HelloCron>('helloCron');
-await helloCron.exec();
-```
+v3 开始请参考 [task 组件](./extesion/task) ， [egg 定时任务](https://eggjs.org/zh-cn/basics/schedule.html) 。
 
 
 
-## 默认日志名
+## 日志
 
-
-Midway 对 EggJS 默认的日志文件名做了修改。
-
-
-- `midway-core.log` 框架输入日志
-- `midway-web.log` 应用输出日志
-- `midway-agent.log` agent 中输出的日志
-- `common-error.log` 统一的错误输出日志
-
-
-
-### 服务器日志
-
-
-EggJS 默认开启了日志清理，日志文件**最多保存一个月**，要修改这一行为，可以进行配置。
-```json
-// config.default.ts
-exports.logrotator = {
-  // for clean_log
-  maxDays: 0,
-};
-```
+v3 开始无法使用 egg-logger，请参考 [日志](logger)
 
 
 
@@ -906,5 +720,3 @@ await (this.app as any).mysql.query(sql);
 
 或者可以自行增加扩展定义。
 
-
-##
