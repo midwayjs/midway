@@ -3,7 +3,7 @@ export * from './dist/index';
 
 declare module '@midwayjs/core/dist/interface' {
   interface MidwayConfig {
-    upload: Partial<UploadOptions>;
+    upload?: Partial<UploadOptions>;
   }
 }
 declare module '@midwayjs/koa/dist/interface' {
