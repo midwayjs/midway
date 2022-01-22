@@ -18,6 +18,22 @@
 $ npm i @midwayjs/tablestore@3 --save
 ```
 
+或者在 `package.json` 中增加如下依赖后，重新安装。
+
+```json
+{
+  "dependencies": {
+    "@midwayjs/tablestore": "^3.0.0",
+    // ...
+  },
+  "devDependencies": {
+    // ...
+  }
+}
+```
+
+
+
 ## 引入组件
 
 

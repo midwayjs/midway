@@ -21,7 +21,28 @@
 $ npm i @midwayjs/redis@3 --save
 $ npm i @types/ioredis --save-dev			// 安装到 dev 依赖
 ```
+或者在 `package.json` 中增加如下依赖后，重新安装。
+
+```json
+{
+  "dependencies": {
+    "@midwayjs/redis": "^3.0.0",
+    // ...
+  },
+  "devDependencies": {
+    "@types/ioredis": "^4.28.7",
+    // ...
+  }
+}
+```
+
+
+
+:::info
+
 如果发现 RedisService 没有方法定义，请务必检查此项。
+
+:::
 
 
 ## 引入组件

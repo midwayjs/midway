@@ -20,7 +20,7 @@ module.exports = [
   {
     "type": "doc",
     "docId": "extensions/axios",
-    "label": "扩展功能",
+    "label": "组件 & 扩展",
     "position": "left"
   },
   {

@@ -10,13 +10,31 @@ Grafana 是一个开源的度量分析与可视化套件。纯 Javascript 开发
 
 <img src="https://cdn.nlark.com/yuque/0/2021/png/187105/1617259935548-a2df4339-3229-4391-bd3d-4ba8e6979d4d.png#height=498&id=KoiiE&margin=%5Bobject%20Object%5D&name=image.png&originHeight=996&originWidth=1914&originalType=binary&ratio=1&size=969345&status=done&style=none&width=957" width="957" />
 
-## 安装组件
+## 安装依赖
 
 首先安装 Midway 提供的指标监控组件：
 
 ```bash
 $ npm install @midwayjs/prometheus -S
 ```
+
+或者在 `package.json` 中增加如下依赖后，重新安装。
+
+```json
+{
+  "dependencies": {
+    "@midwayjs/prometheus": "^3.0.0",
+    // ...
+  },
+  "devDependencies": {
+    // ...
+  }
+}
+```
+
+
+
+## 引入组件
 
 在 `configuration.ts`  中，引入这个组件：
 
@@ -127,7 +145,7 @@ scrape_configs:
 ]
 ```
 
-​
+
 
 然后我们启动 `docker-compose.yml`   文件，
 

@@ -20,7 +20,25 @@ Express 的调整暂未完成，请等待完成后再使用。
 ## 安装依赖
 
 ```bash
-$ npm i @midwayjs/express --save
+$ npm i @midwayjs/express@3 --save
+$ npm i @types/body-parser @types/express @types/express-session --save-dev
+```
+
+或者在 `package.json` 中增加如下依赖后，重新安装。
+
+```json
+{
+  "dependencies": {
+    "@midwayjs/express": "^3.0.0",
+    // ...
+  },
+  "devDependencies": {
+    "@types/body-parser": "^1.19.2",
+    "@types/express": "^4.17.13",
+    "@types/express-session": "^1.17.4",
+    // ...
+  }
+}
 ```
 
 
@@ -248,5 +266,4 @@ export class ContainerLifeCycle implements ILifeCycle {
 | ca | string | Buffer | Array<Buffer | Object> | 可选，HTTPS 证书 ca |
 | hostname | string | 监听的 hostname，默认 127.1 |
 | http2 | boolean | 可选，http2 支持，默认 false |
-
 

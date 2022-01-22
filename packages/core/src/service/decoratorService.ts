@@ -110,14 +110,21 @@ export class MidwayDecoratorService {
                     );
                   }
                   const paramTypes = getMethodParamTypes(Clzz, propertyName);
-                  newArgs[parameterIndex] = await parameterDecoratorHandler({
-                    metadata,
-                    propertyName,
-                    parameterIndex,
-                    target: Clzz,
-                    originArgs: joinPoint.args,
-                    originParamType: paramTypes[parameterIndex],
-                  });
+                  try {
+                    newArgs[parameterIndex] = await parameterDecoratorHandler({
+                      metadata,
+                      propertyName,
+                      parameterIndex,
+                      target: Clzz,
+                      originArgs: joinPoint.args,
+                      originParamType: paramTypes[parameterIndex],
+                    });
+                  } catch (err) {
+                    // ignore
+                    debug(
+                      `[core]: Parameter decorator throw error and use origin args, ${err.stack}`
+                    );
+                  }
                 }
                 joinPoint.args = newArgs;
               },

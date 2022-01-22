@@ -35,6 +35,22 @@ $ npm i @midwayjs/ws@3 --save
 $ npm i @types/ws --save-dev
 ```
 
+或者在 `package.json` 中增加如下依赖后，重新安装。
+
+```json
+{
+  "dependencies": {
+    "@midwayjs/ws": "^3.0.0",
+    // ...
+  },
+  "devDependencies": {
+    "@types/ws": "^8.2.2",
+    // ...
+  }
+}
+```
+
+
 
 ## 目录结构
 
@@ -293,10 +309,9 @@ Bootstrap
 
 `@midwayjs/ws` 作为框架启动时，可以传递的参数如下：
 
-| port | number | 可选，如果传递了该端口，ws 内部会创建一个该端口的 HTTP 服务。
-
-如果希望和 midway 其他的 web 框架配合使用，请不要传递该参数。 |
+| 属性   | 类型       | 描述                                                         |
 | --- | --- | --- |
+| port | number | 可选，如果传递了该端口，ws 内部会创建一个该端口的 HTTP 服务。如果希望和 midway 其他的 web 框架配合使用，请不要传递该参数。 |
 | server | httpServer | 可选，当传递 port 时，可以指定一个已经存在的 webServer |
 
 更多的启动选项，请参考 [ws 文档](https://github.com/websockets/ws)。
