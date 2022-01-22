@@ -8,7 +8,7 @@ Midway 的应用会同时对外暴露不同协议，比如 Http，WebSocket 等�
 
 
 
-## 应用和上下文定义约定
+## 定义约定
 
 为了简化使用，所有的暴露协议的组件会导出 **请求和响应**（Context）和 **应用**（Application）定义，我们都保持一致。即 `Context` 和 `Application` 。
 
@@ -66,13 +66,13 @@ export class HomeController {
 
 
 
-### 主 Application
+### Main Application
 
 Midway 应用对外暴露的协议是组件带来的，每个组件都会暴露自己协议对应的 Application 对象。
 
-这就意味着在一个应用中会包含多个 Application，我们默认约定，在 `src/configuration.ts` 中第一个引入的 Application 即为 **主 Application**。
+这就意味着在一个应用中会包含多个 Application，我们默认约定，在 `src/configuration.ts` 中第一个引入的 Application 即为  **Main Application** （**主要的 Application**）。
 
-比如，下面的 koa 中的 Application 实例即为 **主 Application**。
+比如，下面的 koa 中的 Application 实例即为 **Main Application** （**主要的 Application**）。
 
 ```typescript
 // src/configuration.ts
@@ -92,7 +92,7 @@ export class ContainerConfiguration implements ILifeCycle {
 
 事实上 Application 都实现与 `IMidwayApplication` 接口，如果使用通用的 API，没有差别。
 
-成为主 Application 稍微有一些优势：
+成为 Main Application 稍微有一些优势：
 
 - 在大部分的场景下，使用 `@App()` 即可注入获取，无需其他参数
 - 优先初始化
@@ -124,7 +124,129 @@ export class ContainerConfiguration implements ILifeCycle {
 }
 ```
 
-非主要的 Application，需要通过 `@App()` 装饰器的参数来获取。
+非主要的 Application，需要通过 `@App()` 装饰器的参数或者 [ApplicationManager](./built_in_service#midwayapplicationmanager) 来获取。
+
+### getAppDir
+
+用于获取项目根目录路径。
+
+```typescript
+this.app.getAppDir();
+// => /my_project
+```
+
+
+
+### getBaseDir
+
+用于获取项目 TypeScript 基础路径，默认开发中为 `src` 目录，编译后为 `dist` 目录。
+
+```typescript
+this.app.getBaseDir();
+// => /my_project/src
+```
+
+
+
+### getEnv
+
+获取当前项目环境。
+
+```typescript
+this.app.getEnv();
+// => production
+```
+
+
+
+### getApplicationContext
+
+获取当前全局依赖注入容器。
+
+```typescript
+this.app.getApplicationContext();
+```
+
+
+
+### getConfig
+
+获取配置。
+
+```typescript
+// 获取所有配置
+this.app.getConfig();
+// 获取特定 key 配置
+this.app.getConfig('koa');
+// 获取多级配置
+this.app.getConfig('midwayLoggers.default.dir');
+```
+
+
+
+### getLogger
+
+获取某个 Logger，不传参数，默认返回 appLogger。
+
+```typescript
+this.app.getLogger();
+// => app logger
+this.app.getLogger('custom');
+// => custom logger
+```
+
+
+
+### getCoreLogger
+
+获取 Core Logger。
+
+```typescript
+this.app.getCoreLogger();
+```
+
+
+
+### getFrameworkType
+
+获取当前框架类型。
+
+```typescript
+this.app.getFrameworkType();
+// => MidwayFrameworkType.WEB_KOA
+```
+
+
+
+### getProjectName
+
+获取项目名，一般从 `package.json` 中获取。
+
+
+
+### setAttr & getAttr
+
+直接在 Application 上挂载一个对象会导致定义和维护的困难。
+
+在大多数情况下，用户需要的是临时的全局数据存储的方式，比如在一个应用或者组件内部跨文件临时存取一个数据，从一个类保存，另一个类获取。
+
+为此 Midway 提供了一个全局数据存取的 API，解决这类需求。
+
+```typescript
+this.app.setAttr('abc', {
+  a: 1,
+  b: 2,
+});
+```
+
+在另一个地方获取即可。
+
+```typescript
+this.app.getAttr('abc', {
+  a: 1,
+  b: 2,
+});
+```
 
 
 
@@ -160,3 +282,58 @@ export class HomeController {
   }
 }
 ```
+
+
+
+### requestContext
+
+Midway 会为每个 Context 挂载一个 `requestContext` 属性，即请求作用域下的依赖注入容器，用来创建请求作用域下的对象。
+
+```typescript
+const userService = await this.ctx.requestContext.getAsync(UserService);
+// ...
+```
+
+
+
+### logger
+
+请求作用域下的 logger 对象，包含上下文数据。
+
+```typescript
+this.ctx.logger.info('xxxx');
+```
+
+
+
+### startTime
+
+请求执行开始的时间。
+
+```typescript
+this.ctx.startTime
+// 1642820640502
+```
+
+
+
+### setAttr & getAttr
+
+和 `app` 上的方法相同，这些方法的数据是保存在请求链路中，随着请求销毁，你可以在其中放一些请求的临时数据。
+
+```typescript
+this.ctx.setAttr('abc', {
+  a: 1,
+  b: 2,
+});
+```
+
+在另一个地方获取即可。
+
+```typescript
+this.ctx.getAttr('abc', {
+  a: 1,
+  b: 2,
+});
+```
+

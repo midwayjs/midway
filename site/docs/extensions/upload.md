@@ -15,13 +15,29 @@
 
 ## 使用
 
-1. 安装依赖
+1、安装依赖
 
 ```bash
 $ npm i @midwayjs/upload@3 --save
 ```
 
-2. 在 configuration 文件中引入组件
+或者在 `package.json` 中增加如下依赖后，重新安装。
+
+```json
+{
+  "dependencies": {
+    "@midwayjs/upload": "^3.0.0",
+    // ...
+  },
+  "devDependencies": {
+    // ...
+  }
+}
+```
+
+
+
+2、在 configuration 文件中引入组件
 
 ```typescript
 import * as upload from '@midwayjs/upload';
@@ -35,7 +51,7 @@ import * as upload from '@midwayjs/upload';
 export class AutoConfiguration {}
 ```
 
-3. 在代码中获取上传的文件
+3、在代码中获取上传的文件
 
 ```typescript
 @Controller('/')

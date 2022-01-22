@@ -27,6 +27,26 @@ $ npm install swagger-ui-dist --save-dev
 $ npm install swagger-ui-dist --save
 ```
 
+或者在 `package.json` 中增加如下依赖后，重新安装。
+
+```json
+{
+  "dependencies": {
+    "@midwayjs/swagger": "^3.0.0",
+    // 如果你希望在服务器上使用
+    "swagger-ui-dist": "^4.2.1",
+    // ...
+  },
+  "devDependencies": {
+    // 如果你不希望在服务器上使用
+    "swagger-ui-dist": "^4.2.1",
+    // ...
+  }
+}
+```
+
+
+
 #### 2. 代码配置
 
 在 ```configuration.ts``` 中增加组件。

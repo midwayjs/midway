@@ -26,10 +26,29 @@ midway 封装了 `@midwayjs/process-agent` 用来解决 node 场景中，多进�
 使用方法：
 
 ```bash
-$ npm install @midwayjs/process-agent@3 -S
+$ npm install @midwayjs/process-agent@3 --save
 ```
 
+或者在 `package.json` 中增加如下依赖后，重新安装。
+
+```json
+{
+  "dependencies": {
+    "@midwayjs/process-agent": "^3.0.0",
+    // ...
+  },
+  "devDependencies": {
+    // ...
+  }
+}
+```
+
+
+
+## 引入组件
+
 `configuration.ts` 使用方法：
+
 ```typescript
 import * as processAgent from '@midwayjs/process-agent';
 

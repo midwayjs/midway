@@ -98,6 +98,23 @@ mongoose 和你服务器使用的 MongoDB Server 的版本也有着一定的关�
 $ npm i @midwayjs/typegoose@3 --save
 ```
 
+或者在 `package.json` 中增加如下依赖后，重新安装。
+
+```json
+{
+  "dependencies": {
+    // 组件
+    "@midwayjs/typegoose": "^3.0.0",
+    // 上一节中的 mongoose 依赖
+  },
+  "devDependencies": {
+    // 上一节中的 mongoose 依赖
+    // ...
+  }
+}
+```
+
+
 
 安装后需要手动在 `src/configuration.ts` 配置，代码如下。
 
@@ -330,6 +347,23 @@ mongoose 组件是 typegoose 的基础组件，有时候我们可以直接使用
 ```bash
 $ npm i @midwayjs/mongoose --save
 ```
+
+或者在 `package.json` 中增加如下依赖后，重新安装。
+
+```json
+{
+  "dependencies": {
+    // 组件
+    "@midwayjs/mongoose": "^3.0.0",
+    // 上一节中的 mongoose 依赖
+  },
+  "devDependencies": {
+    // 上一节中的 mongoose 依赖
+    // ...
+  }
+}
+```
+
 
 
 ### 2、开启组件

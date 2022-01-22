@@ -25,6 +25,18 @@ midway 包裹了 [axios](https://github.com/axios/axios) 包，使得在代码�
 $ npm i @midwayjs/axios@3 --save
 ```
 
+或者在 `package.json` 中增加如下依赖后，重新安装。
+
+```json
+{
+  "dependencies": {
+    "@midwayjs/axios": "^3.0.0",
+    // ...
+  },
+}
+```
+
+
 
 ## 引入组件
 

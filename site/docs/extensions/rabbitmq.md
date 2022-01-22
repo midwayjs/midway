@@ -61,6 +61,23 @@ $ npm i @midwayjs/rabbitmq amqplib --save
 $ npm i @types/amqplib --save-dev
 ```
 
+或者在 `package.json` 中增加如下依赖后，重新安装。
+
+```json
+{
+  "dependencies": {
+    "@midwayjs/rabbitmq": "^3.0.0",
+    "amqplib": "^0.8.0",
+    // ...
+  },
+  "devDependencies": {
+    "@types/amqplib": "^0.8.2",
+    // ...
+  }
+}
+```
+
+
 
 ### 入口函数
 

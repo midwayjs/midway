@@ -36,35 +36,74 @@ Midway 当前采用了最新的 [Socket.io (v4.0.0)](https://socket.io/docs/v4) 
 ## 创建示例
 
 
-纯 socket.io 示例。
-```bash
-$ npm -v
-
-# 如果是 npm v6
-$ npm init midway --type=socketio my_midway_app
-
-# 如果是 npm v7
-$ npm init midway -- --type=socketio my_midway_app
-```
-
-
 或者在现有项目中安装 Socket.io 的依赖。
 ```bash
-$ npm i @midwayjs/socketio --save
+$ npm i @midwayjs/socketio@3 --save
+## 客户端可选
 $ npm i @types/socket.io-client socket.io-client --save-dev
 ```
 
+或者在 `package.json` 中增加如下依赖后，重新安装。
 
-Egg.js + Socket.io 示例。
-```bash
-$ npm -v
-
-# 如果是 npm v6
-$ npm init midway --type=web-socketio my_midway_app
-
-# 如果是 npm v7
-$ npm init midway -- --type=web-socketio my_midway_app
+```json
+{
+  "dependencies": {
+    "@midwayjs/socket.io": "^3.0.0",
+    // 客户端可选
+    "socket.io-client": "^4.4.1",
+    // ...
+  },
+  "devDependencies": {
+    // 客户端可选
+    "@types/socket.io-client": "^1.4.36",
+    // ...
+  }
+}
 ```
+
+
+
+## 开启组件
+
+`@midwayjs/socket.io` 可以作为独立主框架使用。
+
+```typescript
+import { Configuration } from '@midwayjs/decorator';
+import * as socketio from '@midwayjs/socket.io';
+
+@Configuration({
+  imports: [socketio],
+  // ...
+})
+export class ContainerLifeCycle {
+  async onReady() {
+		// ...
+  }
+}
+
+```
+
+也可以附加在其他的主框架下，比如 `@midwayjs/koa` 。
+
+```typescript
+import { Configuration } from '@midwayjs/decorator';
+import * as koa from '@midwayjs/koa';
+import * as socketio from '@midwayjs/socket.io';
+
+@Configuration({
+  imports: [koa, socketio],
+  // ...
+})
+export class ContainerLifeCycle {
+  async onReady() {
+		// ...
+  }
+}
+
+
+```
+
+
 
 
 ## 目录结构
@@ -556,10 +595,9 @@ Bootstrap
 
 `@midwayjs/socketio` 作为框架启动时，可以传递的参数如下：
 
-| port | number | 可选，如果传递了该端口，socket.io 内部会创建一个该端口的 HTTP 服务，并将 socket 服务 attach 在其之上。
-
-如果希望和 midway 其他的 web 框架配合使用，请不要传递该参数。 |
+| 属性           | 类型   | 描述                                                         |
 | --- | --- | --- |
+| port | number | 可选，如果传递了该端口，socket.io 内部会创建一个该端口的 HTTP 服务，并将 socket 服务 attach 在其之上。如果希望和 midway 其他的 web 框架配合使用，请不要传递该参数。 |
 | pubClient | object | 可选，当 ioredis 作为适配器时的参数 |
 | subClient | object | 可选，当 ioredis 作为适配器时的参数 |
 | path | string | 可选，服务端 path |

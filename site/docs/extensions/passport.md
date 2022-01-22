@@ -21,8 +21,46 @@ Passport是通过称为策略的可扩展插件进行身份验证请求。Passpo
 1. 安装 `npm i @midwayjs/passport` 和相关依赖
 
 ```bash
+## 必选
 $ npm i @midwayjs/passport@3 passport --save
 $ npm i @types/passport --save-dev
+
+## 可选
+## 下面安装本地策略
+$ npm i passport-local --save
+$ npm i @types/passport-local --save-dev
+## 下面安装 Github 策略
+$ npm i passport-github --save
+## 下面安装 Jwt 策略
+$ npm i passport-jwt --save
+```
+
+或者在 `package.json` 中增加如下依赖后，重新安装。
+
+```json
+{
+  "dependencies": {
+    "@midwayjs/passport": "^3.0.0",
+    "passport": "^0.5.2",
+    // 本地策略
+    "passport-local": "^1.0.0"
+    // Jwt 策略
+    "passport-jwt": "^4.0.0",
+    // Github 策略
+    "passport-github": "^1.1.0",
+    // ...
+  },
+  "devDependencies": {
+    "@types/passport": "^1.0.7",
+    // 本地策略
+    "@types/passport-local": "^1.0.34",
+    // Jwt 策略
+    "@types/passport-jwt": "^3.0.6",    
+    // Github 策略
+    "@types/passport-github": "^1.1.7",
+    // ...
+  }
+}
 ```
 
 
@@ -227,7 +265,7 @@ export class JwtController {
 }
 ```
 
-使用curl模拟请求
+使用 curl 模拟请求
 
 ```bash
 curl -X POST http://127.0.0.1:7001/jwt

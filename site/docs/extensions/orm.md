@@ -23,6 +23,24 @@
 npm i @midwayjs/orm@3 typeorm --save
 ```
 
+或者在 `package.json` 中增加如下依赖后，重新安装。
+
+```json
+{
+  "dependencies": {
+    "@midwayjs/orm": "^3.0.0",
+    "typeorm": "^0.2.41",
+    // ...
+  },
+  "devDependencies": {
+    // ...
+  }
+}
+```
+
+
+
+
 
 ## 引入组件
 

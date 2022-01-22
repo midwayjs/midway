@@ -9,8 +9,23 @@ Midway 默认的示例都是基于该包。
 ## 安装依赖
 
 ```bash
-$ npm i @midwayjs/koa --save
+$ npm i @midwayjs/koa@3 --save
 $ npm i @types/koa --save-dev
+```
+
+或者在 `package.json` 中增加如下依赖后，重新安装。
+
+```json
+{
+  "dependencies": {
+    "@midwayjs/koa": "^3.0.0",
+    // ...
+  },
+  "devDependencies": {
+    "@types/koa": "^2.13.4",
+    // ...
+  }
+}
 ```
 
 
@@ -62,7 +77,7 @@ export const bodyParser = {
 
 ## Cookie 和 Session
 
-`@midwayjs/koa` 默认封装了 `cookies` 解析和 `Session` 的支持，可以查看 [Cookies 和 Session](./cookie_session)。
+`@midwayjs/koa` 默认封装了 `cookies` 解析和 `Session` 的支持，可以查看 [Cookies 和 Session](../cookie_session)。
 
 
 
@@ -99,7 +114,7 @@ export class AutoConfiguration {
 }
 ```
 
-但是这样做无法直接让 Context 包含 Typescript 定义，需要额外增加定义，请参考 [扩展上下文定义](./context_definition)。
+但是这样做无法直接让 Context 包含 Typescript 定义，需要额外增加定义，请参考 [扩展上下文定义](../context_definition)。
 
 
 
@@ -161,7 +176,7 @@ export const koa = {
 
 ### 全局前缀
 
-此功能请参考 [全局前缀](./controller#全局路由前缀)。
+此功能请参考 [全局前缀](../controller#全局路由前缀)。
 
 
 

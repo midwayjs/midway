@@ -176,4 +176,44 @@ describe('/test/service/decoratorService.test.ts', () => {
     const a = await container.getAsync(A);
     expect(await a.invokeAsyncMethod(222)).toEqual('222111');
   });
+
+  it('fix #1610 when method invoked', async() => {
+    function CustomParam(name: string) {
+      return createCustomParamDecorator('ggg', {
+        name
+      });
+    }
+
+    @Provide()
+    class A {
+      async invokeAsyncMethod(@CustomParam('haha') name: string) {
+        return 'hello world ' + name;
+      }
+
+      async runTest() {
+        return this.invokeAsyncMethod('bbb');
+      }
+    }
+
+    const container = new MidwayContainer();
+    container.bindClass(MidwayAspectService);
+    container.bindClass(MidwayDecoratorService);
+
+    await container.getAsync(MidwayAspectService, [
+      container
+    ]);
+
+    const decoratorService = await container.getAsync(MidwayDecoratorService, [
+      container
+    ]);
+
+    container.bindClass(A);
+    const ctx = undefined;
+    decoratorService.registerParameterHandler('ggg', (options) => {
+      return ctx[options.metadata.name];
+    });
+
+    const a = await container.getAsync(A);
+    expect(await a.runTest()).toEqual('hello world bbb');
+  });
 });

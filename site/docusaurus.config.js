@@ -77,6 +77,12 @@ const config = {
             href: 'https://subway.midwayjs.org/',
             position: 'right',
           },
+          {
+            href: 'https://github.com/midwayjs/midway',
+            position: 'right',
+            className: 'header-github-link',
+            'aria-label': 'GitHub repository',
+          },
         ],
       },
       algolia: {

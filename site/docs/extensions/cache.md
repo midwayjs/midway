@@ -21,6 +21,22 @@ $ npm i @midwayjs/cache@3 cache-manager --save
 $ npm i @types/cache-manager --save-dev
 ```
 
+或者在 `package.json` 中增加如下依赖后，重新安装。
+
+```json
+{
+  "dependencies": {
+    "@midwayjs/cache": "^3.0.0",
+    "cache-manager": "^3.4.1",
+    // ...
+  },
+  "devDependencies": {
+    "@types/cache-manager": "^3.4.0",
+    // ...
+  }
+}
+```
+
 
 
 ## 使用 Cache
@@ -34,7 +50,7 @@ Midway 为不同的 cache 存储提供了统一的 API。默认内置了一个�
 import { Configuration, App } from '@midwayjs/decorator';
 import { Application } from '@midwayjs/koa';
 import * as bodyParser from 'koa-bodyparser';
-import * as cache from '@midwayjs/cache';			// 导入cacheComponent模块
+import * as cache from '@midwayjs/cache';
 import { join } from 'path'
 
 @Configuration({
@@ -60,7 +76,7 @@ import { CacheManager } from '@midwayjs/cache';
 export class UserService {
 
   @Inject()
-  cache: CacheManager;     			// 依赖注入CacheManager
+  cacheManager: CacheManager;     			// 依赖注入 CacheManager
 }
 ```
 
@@ -76,26 +92,26 @@ import { CacheManager } from '@midwayjs/cache';
 export class UserService {
 
   @Inject()
-  cache: CacheManager;
+  cacheManager: CacheManager;
 
   async getUser(options: IUserOptions) {
     // 设置缓存内容
-    await this.cache.set(`name`, 'stone-jin');
+    await this.cacheManager.set(`name`, 'stone-jin');
 
     // 获取缓存内容
-    let result = await this.cache.get(`name`);
+    let result = await this.cacheManager.get(`name`);
 
     return result;
   }
 
   async getUser2(){
     //获取缓存内容
-    let result = await this.cache.get(`name`);
+    let result = await this.cacheManager.get(`name`);
     return result;
   }
 
   async reset(){
-    await this.cache.reset(); // 清空对应 store 的内容
+    await this.cacheManager.reset(); // 清空对应 store 的内容
   }
 }
 ```
@@ -110,11 +126,11 @@ export class UserService {
 
 你也可以手动设置 TTL（过期时间），如下：
 ```typescript
-await this.cache.set(key, value, {ttl: 1000});	// ttl的单位为秒
+await this.cacheManager.set(key, value, {ttl: 1000});	// ttl的单位为秒
 ```
 如果你想要禁止 Cache 不过期，则将 TTL 设置为 null 即可。
 ```typescript
-await this.cache.set(key, value, {ttl: null});
+await this.cacheManager.set(key, value, {ttl: null});
 ```
 同时你也可以通过全局的 `config.default.ts` 中进行设置。
 ```typescript
@@ -131,7 +147,7 @@ export const cache = {
 ### 获取缓存
 
 ```typescript
-const value = await this.cache.get(key);
+const value = await this.cacheManager.get(key);
 ```
 如果获取不到，则为 undefined。
 
@@ -142,7 +158,7 @@ const value = await this.cache.get(key);
 
 移除缓存，可以通过 del 方法。
 ```typescript
-await this.cache.del(key);
+await this.cacheManager.del(key);
 ```
 
 
@@ -152,7 +168,7 @@ await this.cache.del(key);
 
 比如用户设置了某个 redis 为 store，调用的话，包括非 cache 模块设置的也会清除。
 ```typescript
-await this.cache.reset(); // 这块需要注意
+await this.cacheManager.reset(); // 这块需要注意
 ```
 
 
@@ -217,9 +233,9 @@ export const cache = {
 
 
 
-### 1、set和get无法得到相同值？
+### 1、set 和 get无法得到相同值？
 
-用户使用了cache模块，默认是内存式的，例如在本地用dev模式，由于是单进程的，那set和get最终能达到相同的值。但是用户部署到服务器上面后，由于会有多worker，相当于第一次请求，落在进程1上，然后第二次落在进程2上，这样获得到空了。
+用户使用了 cache 模块，默认是内存式的，例如在本地用 dev 模式，由于是单进程的，那 set 和 ge t最终能达到相同的值。但是用户部署到服务器上面后，由于会有多 worker，相当于第一次请求，落在进程1上，然后第二次落在进程2上，这样获得到空了。
 
 
-解决办法：参考 其他Cache的章节，配置store为分布式的，例如redis的store等方式。
+解决办法：参考 其他 Cache 的章节，配置 store 为分布式，例如 redis 的 store 等方式。

@@ -15,8 +15,25 @@
 ## 使用方法：
 
 ```bash
-$ npm i @midwayjs/sequelize@3 --save
+$ npm i @midwayjs/sequelize@3 sequelize --save
 ```
+或者在 `package.json` 中增加如下依赖后，重新安装。
+
+```json
+{
+  "dependencies": {
+    "@midwayjs/sequelize": "^3.0.0",
+    "sequelize": "^6.13.0"
+    // ...
+  },
+  "devDependencies": {
+    // ...
+  }
+}
+```
+
+
+
 ## 安装数据库 Driver
 
 

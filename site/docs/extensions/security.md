@@ -14,13 +14,29 @@
 
 ## 安装使用
 
-1. 安装依赖
+1、安装依赖
 
 ```bash
 $ npm i @midwayjs/security --save
 ```
 
-2. 在 configuration 中引入组件
+或者在 `package.json` 中增加如下依赖后，重新安装。
+
+```json
+{
+  "dependencies": {
+    "@midwayjs/security": "^3.0.0",
+    // ...
+  },
+  "devDependencies": {
+    // ...
+  }
+}
+```
+
+
+
+2、在 configuration 中引入组件
 
 ```typescript
 import * as security from '@midwayjs/security';
@@ -178,5 +194,4 @@ HTTP 响应头 `Content-Security-Policy` 允许站点管理者控制指定的页
 | --- | --- | --- | --- |
 | enable | boolean | 是否开启 | false |
 | value | string | X-XSS-Protection 配置 | `1; mode=block` |
-
 

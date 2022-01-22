@@ -37,23 +37,74 @@ Midway 当前采用了最新的 gRPC 官方推荐的 [@grpc/grpc-js](https://git
 
 
 
-
-## 创建示例
-
+## 安装依赖
 
 ```bash
-$ npm -v
-
-# 如果是 npm v6
-$ npm init midway --type=grpc my_midway_app
-
-# 如果是 npm v7
-$ npm init midway -- --type=grpc my_midway_app
+$ npm i @midwayjs/grpc@3 --save
+$ npm i @midwayjs/grpc-helper --save-dev
 ```
-此示例包含一个 gRPC 服务。
+
+或者在 `package.json` 中增加如下依赖后，重新安装。
+
+```json
+{
+  "dependencies": {
+    "@midwayjs/grpc": "^3.0.0",
+    // ...
+  },
+  "devDependencies": {
+    "@midwayjs/grpc-helper": "^1.0.0",
+    // ...
+  }
+}
+```
+
+
+
+## 开启组件
+
+`@midwayjs/grpc` 可以作为独立主框架使用。
+
+```typescript
+import { Configuration } from '@midwayjs/decorator';
+import * as grpc from '@midwayjs/grpc';
+
+@Configuration({
+  imports: [grpc],
+  // ...
+})
+export class ContainerLifeCycle {
+  async onReady() {
+		// ...
+  }
+}
+
+```
+
+也可以附加在其他的主框架下，比如 `@midwayjs/koa` 。
+
+```typescript
+import { Configuration } from '@midwayjs/decorator';
+import * as koa from '@midwayjs/koa';
+import * as grpc from '@midwayjs/grpc';
+
+@Configuration({
+  imports: [koa, grpc],
+  // ...
+})
+export class ContainerLifeCycle {
+  async onReady() {
+		// ...
+  }
+}
+
+
+```
+
 
 
 ## 目录结构
+
 ```
 .
 ├── package.json
@@ -70,6 +121,7 @@ $ npm init midway -- --type=grpc my_midway_app
 ```
 
 
+
 ## 定义服务接口
 
 
@@ -78,8 +130,8 @@ $ npm init midway -- --type=grpc my_midway_app
 
 序列化协议独立于语言和平台，提供了多种语言的实现，Java，C++，Go 等等,每一种实现都包含了相应语言的编译器和库文件。所以 gRPC 是一个提供和调用都可以跨语言的服务框架。
 
-
 一个gRPC服务的大体架构可以用官网上的一幅图表示。
+
 ![](https://img.alicdn.com/imgextra/i3/O1CN01kpIyg51k8i5DtcGpZ_!!6000000004639-2-tps-621-445.png)
 
 
@@ -167,7 +219,7 @@ message HelloReply {
 传统的 gRPC 框架，需要用户手动编写 proto 文件，以及生成 js 服务，最后再根据 js 生成的服务再编写实现，在 Midway 体系下，我们提供了一个 grpc-helper 工具包来加速这个过程。
 
 
-如果没有安装，可以先安装（脚手架示例中已带）。
+如果没有安装，可以先安装。
 ```bash
 $ npm i @midwayjs/grpc-helper --save-dev
 ```
