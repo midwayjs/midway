@@ -1,5 +1,6 @@
 // definition copy from @imhele/ots
 import { Int64LE } from 'int64-buffer';
+import * as TableStore from 'tablestore';
 
 /**
  * protocol/proto_buffer
@@ -65,9 +66,9 @@ export enum IndexType {
   IT_LOCAL_INDEX = 1,
 }
 
-export const INF_MIN = {};
-export const INF_MAX = {};
-export const PK_AUTO_INCR = {};
+export const INF_MIN = TableStore.INF_MIN;
+export const INF_MAX = TableStore.INF_MAX;
+export const PK_AUTO_INCR = TableStore.PK_AUTO_INCR;
 
 /**
  * search
