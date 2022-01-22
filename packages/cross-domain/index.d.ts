@@ -3,7 +3,7 @@ export * from './dist/index';
 
 declare module '@midwayjs/core/dist/interface' {
   interface MidwayConfig {
-    cors: Partial<CORSOptions>;
-    jsonp: Partial<JSONPOptions>;
+    cors?: Partial<CORSOptions>;
+    jsonp?: Partial<JSONPOptions>;
   }
 }
