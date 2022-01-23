@@ -14,6 +14,7 @@
     "ts-jest": "27.1.3",
     "ts-node": "10.4.0",
     "typescript": "4.5.5",
+    "typedoc": "0.22.11",
     "why-is-node-running": "2.2.0"
   },
   "scripts": {
@@ -34,7 +35,7 @@
     "version": "node ./scripts/generate_rollback.js && node ./scripts/generate_version.js && git add .",
     "lint": "lerna exec mwts check",
     "lint:fix": "lerna exec mwts fix",
-    "typedoc": "typedoc && cp ./scripts/custom.css ./docs/api-reference/assets/css"
+    "typedoc": "typedoc"
   },
   "keywords": [
     "container",
@@ -56,9 +57,5 @@
   "collective": {
     "type": "opencollective",
     "url": "https://opencollective.com/midway"
-  },
-  "dependencies": {
-    "@opentelemetry/api": "1.0.4",
-    "@opentelemetry/sdk-trace-node": "1.0.1"
   }
 }
