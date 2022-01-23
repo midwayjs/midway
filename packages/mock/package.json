@@ -33,7 +33,7 @@
     "amqplib": "0.8.0",
     "socket.io": "4.4.1",
     "socket.io-client": "4.4.1",
-    "ws": "8.4.0"
+    "ws": "8.4.2"
   },
   "dependencies": {
     "fs-extra": "10.0.0",
