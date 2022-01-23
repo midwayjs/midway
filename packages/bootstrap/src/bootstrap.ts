@@ -59,10 +59,10 @@ export class BootstrapStarter {
 }
 
 export class Bootstrap {
-  static starter: BootstrapStarter;
-  static logger: IMidwayLogger;
-  static configured = false;
-  static applicationContext: IMidwayContainer;
+  private static starter: BootstrapStarter;
+  private static logger: IMidwayLogger;
+  private static configured = false;
+  private static applicationContext: IMidwayContainer;
 
   /**
    * set global configuration for midway
@@ -152,7 +152,7 @@ export class Bootstrap {
    * on bootstrap receive a exit signal
    * @param signal
    */
-  static async onSignal(signal) {
+  private static async onSignal(signal) {
     this.logger.info('[midway:bootstrap] receive signal %s, closing', signal);
     try {
       await this.stop();
@@ -168,11 +168,11 @@ export class Bootstrap {
    * on bootstrap process exit
    * @param code
    */
-  static onExit(code) {
+  private static onExit(code) {
     this.logger.info('[midway:bootstrap] exit with code:%s', code);
   }
 
-  static uncaughtExceptionHandler(err) {
+  private static uncaughtExceptionHandler(err) {
     if (!(err instanceof Error)) {
       err = new Error(String(err));
     }
@@ -182,7 +182,7 @@ export class Bootstrap {
     this.logger.error(err);
   }
 
-  static unhandledRejectionHandler(err) {
+  private static unhandledRejectionHandler(err) {
     if (!(err instanceof Error)) {
       const newError = new Error(String(err));
       // err maybe an object, try to copy the name, message and stack to the new error instance

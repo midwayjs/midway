@@ -25,7 +25,7 @@
   "devDependencies": {
     "@midwayjs/decorator": "^3.0.0",
     "@midwayjs/mock": "^3.0.0",
-    "@types/amqplib": "*",
+    "@types/amqplib": "0.8.2",
     "fs-extra": "10.0.0",
     "amqplib": "0.8.0"
   },
