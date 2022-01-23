@@ -1,6 +1,6 @@
 import { Configuration, App } from '@midwayjs/decorator';
 import { ILifeCycle } from '@midwayjs/core';
-import { createRedisAdapter, IMidwaySocketIOApplication } from '../../../../src';
+import { createRedisAdapter, Application } from '../../../../src';
 
 @Configuration({
   importConfigs: [
@@ -17,7 +17,7 @@ import { createRedisAdapter, IMidwaySocketIOApplication } from '../../../../src'
 export class AutoConfiguration implements ILifeCycle {
 
   @App()
-  app: IMidwaySocketIOApplication;
+  app: Application;
 
   async onReady() {
     this.app.on('connection', (socket) => {
