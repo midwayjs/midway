@@ -111,7 +111,7 @@ export class MidwayUseWrongMethodError extends MidwayError {
 
 export class MidwaySingletonInjectRequestError extends MidwayError {
   constructor(singletonScopeName: string, requestScopeName: string) {
-    const text = `${singletonScopeName} with singleton scope can't implicitly inject ${requestScopeName} with request scope directly, please add @Scope(ScopeEnum.Request, { allowDowngrade: true }) in ${requestScopeName}.`;
+    const text = `${singletonScopeName} with singleton scope can't implicitly inject ${requestScopeName} with request scope directly, please add "@Scope(ScopeEnum.Request, { allowDowngrade: true })" in ${requestScopeName} or use "ctx.requestContext.getAsync(${requestScopeName})".`;
     super(text, FrameworkErrorEnum.SINGLETON_INJECT_REQUEST);
   }
 }

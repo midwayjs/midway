@@ -6,7 +6,8 @@
   "typings": "dist/index.d.ts",
   "files": [
     "dist/**/*.js",
-    "dist/**/*.d.ts"
+    "dist/**/*.d.ts",
+    "dist/**/*.js.map"
   ],
   "devDependencies": {
     "@midwayjs/core": "^3.0.1",
@@ -14,7 +15,7 @@
     "@midwayjs/mock": "^3.0.1"
   },
   "dependencies": {
-    "tablestore": "^5.0.6"
+    "tablestore": "5.0.7"
   },
   "keywords": [
     "aliyun",

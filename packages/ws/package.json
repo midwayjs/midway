@@ -18,7 +18,8 @@
   ],
   "files": [
     "dist/**/*.js",
-    "dist/**/*.d.ts"
+    "dist/**/*.d.ts",
+    "dist/**/*.js.map"
   ],
   "license": "MIT",
   "devDependencies": {

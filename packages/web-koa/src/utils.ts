@@ -85,9 +85,16 @@ export const tpl = `
     <div id="error">
       <h1>Error</h1>
       <p>Looks like something broke!</p>
+      <p><h2>Stack</h2></p>
       <pre>
         <code>
 {{stack}}
+        </code>
+      </pre>
+      <p><h2>Error Code</h2></p>
+      <pre>
+        <code>
+{{errorCode}}
         </code>
       </pre>
     </div>

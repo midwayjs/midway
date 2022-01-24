@@ -161,6 +161,7 @@ export class ManagedResolverFactory {
     if (definition.properties) {
       const keys = definition.properties.propertyKeys() as string[];
       for (const key of keys) {
+        this.checkSingletonInvokeRequest(definition, key);
         try {
           inst[key] = this.resolveManaged(definition.properties.get(key), key);
         } catch (error) {
@@ -280,18 +281,7 @@ export class ManagedResolverFactory {
     if (definition.properties) {
       const keys = definition.properties.propertyKeys() as string[];
       for (const key of keys) {
-        if (definition.isSingletonScope() && this.context.hasDefinition(key)) {
-          const propertyDefinition = this.context.registry.getDefinition(key);
-          if (
-            propertyDefinition.isRequestScope() &&
-            !propertyDefinition.allowDowngrade
-          ) {
-            throw new MidwaySingletonInjectRequestError(
-              definition.path.name,
-              propertyDefinition.path.name
-            );
-          }
-        }
+        this.checkSingletonInvokeRequest(definition, key);
         try {
           inst[key] = await this.resolveManagedAsync(
             definition.properties.get(key),
@@ -502,5 +492,26 @@ export class ManagedResolverFactory {
       return this.context.parent.objectCreateEventTarget;
     }
     return this.context.objectCreateEventTarget;
+  }
+
+  private checkSingletonInvokeRequest(definition, key) {
+    if (definition.isSingletonScope()) {
+      const managedRef = definition.properties.get(key);
+      if (this.context.hasDefinition(managedRef?.name)) {
+        const propertyDefinition = this.context.registry.getDefinition(
+          managedRef.name
+        );
+        if (
+          propertyDefinition.isRequestScope() &&
+          !propertyDefinition.allowDowngrade
+        ) {
+          throw new MidwaySingletonInjectRequestError(
+            definition.path.name,
+            propertyDefinition.path.name
+          );
+        }
+      }
+    }
+    return true;
   }
 }

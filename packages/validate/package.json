@@ -16,7 +16,8 @@
     "dist/**/*.js",
     "dist/**/*.d.ts",
     "locales",
-    "index.d.ts"
+    "index.d.ts",
+    "dist/**/*.js.map"
   ],
   "engines": {
     "node": ">=12"

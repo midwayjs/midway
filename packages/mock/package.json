@@ -19,7 +19,8 @@
   ],
   "files": [
     "dist/**/*.js",
-    "dist/**/*.d.ts"
+    "dist/**/*.d.ts",
+    "dist/**/*.js.map"
   ],
   "engines": {
     "node": ">=12"

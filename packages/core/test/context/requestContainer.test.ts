@@ -338,7 +338,7 @@ describe('/test/context/requestContainer.test.ts', () => {
     class A {
       aid = Math.random();
       @Inject()
-      b: B;
+      bbb: B;
       @Inject()
       ctx;
     }
