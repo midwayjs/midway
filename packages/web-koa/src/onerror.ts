@@ -61,6 +61,7 @@ export function setupOnerror(app, config, logger) {
 
         ctx.body = tpl
           .replace('{{status}}', escapeHtml(err.status))
+          .replace('{{errorCode}}', escapeHtml(err.code))
           .replace('{{stack}}', escapeHtml(err.stack));
         ctx.type = 'html';
       },
