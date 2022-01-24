@@ -20,4 +20,3 @@ export interface I18nOptions {
 }
 
 export const I18N_ATTR_KEY = 'i18n:locale';
-export const I18N_SAVE_KEY = 'i18n:need_save_locale';

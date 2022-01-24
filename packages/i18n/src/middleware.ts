@@ -5,7 +5,7 @@ import {
   Middleware,
   MidwayFrameworkType,
 } from '@midwayjs/decorator';
-import { I18N_ATTR_KEY, I18N_SAVE_KEY, I18nOptions } from './interface';
+import { I18N_ATTR_KEY, I18nOptions } from './interface';
 import { MidwayI18nService } from './i18nService';
 import { formatLocale } from './utils';
 
@@ -14,9 +14,12 @@ export class I18nFilter {
   @Config('i18n.resolver')
   resolverConfig: I18nOptions['resolver'];
 
+  @Config('i18n')
+  i18nConfig: I18nOptions;
+
   match(value, req, res) {
-    const saveLocale = req.getAttr(I18N_SAVE_KEY);
-    if (saveLocale) {
+    const saveLocale = req.getAttr(I18N_ATTR_KEY);
+    if (this.i18nConfig.writeCookie && saveLocale) {
       const cookieOptions = {
         // make sure browser javascript can read the cookie
         httpOnly: false,
@@ -80,13 +83,12 @@ export class I18nMiddleware implements IMiddleware<any, any> {
           }
         }
 
-        // set to current locale
-        req.setAttr(I18N_ATTR_KEY, requestLocale);
-
-        // auto write locale to cookie
-        if (this.i18nConfig.writeCookie) {
+        if (requestLocale) {
           i18nService.saveRequestLocale(requestLocale);
+        } else {
+          i18nService.saveRequestLocale();
         }
+
         return next();
       };
     } else {
@@ -125,20 +127,19 @@ export class I18nMiddleware implements IMiddleware<any, any> {
           }
         }
 
-        // set to current locale
-        ctx.setAttr(I18N_ATTR_KEY, requestLocale);
-
-        // auto write locale to cookie
-        if (this.i18nConfig.writeCookie) {
+        // save current locale
+        if (requestLocale) {
           i18nService.saveRequestLocale(requestLocale);
+        } else {
+          i18nService.saveRequestLocale();
         }
 
         // run next middleware and controller
         await next();
 
         // get need save locale
-        const saveLocale = ctx.getAttr(I18N_SAVE_KEY);
-        if (saveLocale) {
+        const saveLocale = ctx.getAttr(I18N_ATTR_KEY);
+        if (this.i18nConfig.writeCookie && saveLocale) {
           const cookieOptions = {
             // make sure browser javascript can read the cookie
             httpOnly: false,
