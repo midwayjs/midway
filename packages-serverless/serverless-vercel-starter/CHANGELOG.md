@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.2](https://github.com/midwayjs/midway/compare/v3.0.1...v3.0.2) (2022-01-24)
+
+
+### Bug Fixes
+
+* singleton invoke request scope not valid ([#1622](https://github.com/midwayjs/midway/issues/1622)) ([f97c063](https://github.com/midwayjs/midway/commit/f97c0632107b47cf357d17774a4e4bb5233bba57))
+
+
+
+
+
 ## [3.0.1](https://github.com/midwayjs/midway/compare/v3.0.0...v3.0.1) (2022-01-24)
 
 **Note:** Version bump only for package @midwayjs/serverless-vercel-starter
