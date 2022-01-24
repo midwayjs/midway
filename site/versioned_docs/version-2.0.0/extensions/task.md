@@ -2,15 +2,12 @@
 title: 任务调度（Task）
 ---
 
-@midwayjs/task 是为了解决任务系列的模块，例如分布式定时任务、延迟任务调度。例如每日定时报表邮件发送、订单 2 小时后失效等工作。
-​
+@midwayjs/task 是为了解决任务系列的模块，例如分布式定时任务、延迟任务调度。例如每日定时报表邮件发送、订单2小时后失效等工作。
 
-说明：由于底层是依赖 bull，其通过 redis 进行实现，所以配置中，需要加一个 redis 的配置。
-​
+分布式定时任务依赖 bull，其通过 redis 进行实现，所以配置中，需要配置额外的 Redis，本地定时任务基于 Cron 模块，不需要额外配置。
 
 ## 安装组件
 
-​
 
 首先安装 Midway 提供的任务组件：
 
@@ -380,7 +377,7 @@ export class QueueTask {
 ```
 
 常见表达式：
-​
+
 
 - 每隔 5 秒执行一次：_/5 _ \* \* \* ?
 - 每隔 1 分钟执行一次：0 _/1 _ \* \* ?
@@ -388,20 +385,20 @@ export class QueueTask {
 - 每天 0 点执行一次：0 0 0 \* \* ?
 - 每天的两点 35 分执行一次：0 35 2 \* \* ?
 
-​
+
 
 可以使用 [在线工具](https://cron.qqe2.com/) 执行确认下一次执行的时间。
 
 <img src="https://cdn.nlark.com/yuque/0/2021/png/501408/1637042668291-70527b75-bb33-4ad2-adc0-5f0f5dfe8c81.png#clientId=u21d1027f-3ac8-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=340&id=gQnon&margin=%5Bobject%20Object%5D&name=image.png&originHeight=680&originWidth=1868&originalType=binary&ratio=1&rotation=0&showTitle=false&size=98959&status=done&style=none&taskId=u0adb2151-a667-4900-8bba-b13d4aac93c&title=&width=934" width="934" />
 
-​
+
 
 ### EVALSHA 错误
 
 <img src="https://cdn.nlark.com/yuque/0/2021/png/187105/1633771728525-1efeb2a6-cefd-4fc3-a16d-0e9a97f371d1.png#clientId=u52b8d912-3ffa-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=51&id=u0c96f70a&margin=%5Bobject%20Object%5D&name=image.png&originHeight=102&originWidth=3540&originalType=binary&ratio=1&rotation=0&showTitle=false&size=164783&status=done&style=none&taskId=uc38084d4-e2cf-435d-a8b9-6a9bec80c9b&title=&width=1770" width="1770" />
 
 这个问题基本明确，问题会出现在 redis 的集群版本上。原因是 redis 会对 key 做 hash 来确定存储的 slot，集群下这一步@midwayjs/task 的 key 命中了不同的 slot。临时的解决办法是 taskConfig 里的 prefix 配置用{}包括，强制 redis 只计算{}里的 hash，例如 prefix: '{midway-task}'
-​
+
 
 ### 历史日志删除
 
