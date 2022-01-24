@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1](https://github.com/midwayjs/midway/compare/v3.0.0...v3.0.1) (2022-01-24)
+
+
+### Bug Fixes
+
+* **serverless-app:** fix findNpmModule in pnp ([#1605](https://github.com/midwayjs/midway/issues/1605)) ([37f46e0](https://github.com/midwayjs/midway/commit/37f46e08811ae43d983e2076a33d16f5f57c795c))
+
+
+
+
+
 # [3.0.0](https://github.com/midwayjs/midway/compare/v3.0.0-beta.17...v3.0.0) (2022-01-20)
 
 **Note:** Version bump only for package @midwayjs/serverless-app

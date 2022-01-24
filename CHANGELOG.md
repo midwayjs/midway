@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1](https://github.com/midwayjs/midway/compare/v3.0.0...v3.0.1) (2022-01-24)
+
+
+### Bug Fixes
+
+* [#1610](https://github.com/midwayjs/midway/issues/1610) use origin args when parameter decorator throw error ([#1613](https://github.com/midwayjs/midway/issues/1613)) ([797ece6](https://github.com/midwayjs/midway/commit/797ece6364b1b512d64aeb82f51ddcb97ef42c0f))
+* add missing maxAge ([#1612](https://github.com/midwayjs/midway/issues/1612)) ([5f21909](https://github.com/midwayjs/midway/commit/5f21909104db650e96f1e3445bbbfceadf536c06))
+* config key required ([#1615](https://github.com/midwayjs/midway/issues/1615)) ([fb2188e](https://github.com/midwayjs/midway/commit/fb2188eaf5c24ffc9972f73323773a5899825037))
+* **deps:** update dependency ws to v8.4.2 ([#1570](https://github.com/midwayjs/midway/issues/1570)) ([932b034](https://github.com/midwayjs/midway/commit/932b034d6fa98dc149ab876df05d081b855ce2bb))
+* **serverless-app:** fix findNpmModule in pnp ([#1605](https://github.com/midwayjs/midway/issues/1605)) ([37f46e0](https://github.com/midwayjs/midway/commit/37f46e08811ae43d983e2076a33d16f5f57c795c))
+* tablestore ref ([#1616](https://github.com/midwayjs/midway/issues/1616)) ([6b31f4f](https://github.com/midwayjs/midway/commit/6b31f4f00042bed3fb7575b1fff53161e31da243))
+
+
+### Reverts
+
+* Revert "chore: update ci yml to sync api" ([1ab4994](https://github.com/midwayjs/midway/commit/1ab4994688b55253414f6b8b1478e050ec5940b1))
+
+
+
+
+
 # [3.0.0](https://github.com/midwayjs/midway/compare/v3.0.0-beta.17...v3.0.0) (2022-01-20)
 
 

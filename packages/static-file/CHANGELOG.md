@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1](https://github.com/midwayjs/midway/compare/v3.0.0...v3.0.1) (2022-01-24)
+
+
+### Bug Fixes
+
+* add missing maxAge ([#1612](https://github.com/midwayjs/midway/issues/1612)) ([5f21909](https://github.com/midwayjs/midway/commit/5f21909104db650e96f1e3445bbbfceadf536c06))
+
+
+
+
+
 # [3.0.0](https://github.com/midwayjs/midway/compare/v3.0.0-beta.17...v3.0.0) (2022-01-20)
 
 **Note:** Version bump only for package @midwayjs/static-file

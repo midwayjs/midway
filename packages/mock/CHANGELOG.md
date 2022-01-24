@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1](https://github.com/midwayjs/midway/compare/v3.0.0...v3.0.1) (2022-01-24)
+
+
+### Bug Fixes
+
+* **deps:** update dependency ws to v8.4.2 ([#1570](https://github.com/midwayjs/midway/issues/1570)) ([932b034](https://github.com/midwayjs/midway/commit/932b034d6fa98dc149ab876df05d081b855ce2bb))
+
+
+
+
+
 # [3.0.0](https://github.com/midwayjs/midway/compare/v3.0.0-beta.17...v3.0.0) (2022-01-20)
 
 
