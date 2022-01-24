@@ -1,5 +1,6 @@
-import { providerWrapper, IMidwayContainer } from '@midwayjs/core';
+import { IMidwayContainer, providerWrapper } from '@midwayjs/core';
 import { CONNECTION_KEY, GetConnection } from '.';
+import { ScopeEnum } from '@midwayjs/decorator';
 
 export function getRepository(context: IMidwayContainer, args?: any) {
   return clzz => {
@@ -33,17 +34,21 @@ providerWrapper([
   {
     id: 'orm:getRepository',
     provider: getRepository,
+    scope: ScopeEnum.Singleton,
   },
   {
     id: 'orm:getTreeRepository',
     provider: getTreeRepository,
+    scope: ScopeEnum.Singleton,
   },
   {
     id: 'orm:getMongoRepository',
     provider: getMongoRepository,
+    scope: ScopeEnum.Singleton,
   },
   {
     id: 'orm:getCustomRepository',
     provider: getCustomRepository,
+    scope: ScopeEnum.Singleton,
   },
 ]);

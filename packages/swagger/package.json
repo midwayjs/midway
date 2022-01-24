@@ -6,7 +6,8 @@
   "files": [
     "dist/**/*.js",
     "dist/**/*.d.ts",
-    "index.d.ts"
+    "index.d.ts",
+    "dist/**/*.js.map"
   ],
   "devDependencies": {
     "@midwayjs/core": "^3.0.1",

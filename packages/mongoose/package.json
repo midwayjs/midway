@@ -14,7 +14,8 @@
   "author": "czy88840616@gmail.com",
   "files": [
     "dist/**/*.js",
-    "dist/**/*.d.ts"
+    "dist/**/*.d.ts",
+    "dist/**/*.js.map"
   ],
   "engines": {
     "node": ">=12"
