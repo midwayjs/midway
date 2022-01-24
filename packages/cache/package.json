@@ -14,7 +14,6 @@
     "dist/**/*.js",
     "dist/**/*.d.ts",
     "index.d.ts",
-    "dist/**/*.js.map",
     "dist/**/*.js.map"
   ],
   "license": "MIT",
