@@ -276,8 +276,8 @@ describe('test/index.test.ts', () => {
           username: '世界',
         });
 
-      expect(result.text).toEqual('你好 世界');
-      expect(result.headers['set-cookie'][0]).toMatch(/en-us/);
+      expect(result.text).toEqual('Hello 世界');
+      expect(result.headers['set-cookie']).toBeUndefined();
       await close(app);
     });
   });
@@ -355,8 +355,8 @@ describe('test/index.test.ts', () => {
           username: '世界',
         });
 
-      expect(result.text).toEqual('你好 世界');
-      expect(result.headers['set-cookie'][0]).toMatch(/en-us/);
+      expect(result.text).toEqual('Hello 世界');
+      expect(result.headers['set-cookie']).toBeUndefined();
       await close(app);
     });
   });

@@ -6,7 +6,7 @@ import {
   Config,
   Inject,
 } from '@midwayjs/decorator';
-import { I18N_ATTR_KEY, I18N_SAVE_KEY, TranslateOptions } from './interface';
+import { I18N_ATTR_KEY, TranslateOptions } from './interface';
 import * as pm from 'picomatch';
 import { I18nOptions } from './interface';
 import { formatLocale, formatWithArray, formatWithObject } from './utils';
@@ -246,9 +246,11 @@ export class MidwayI18nService {
    * save current context lang to flag, middleware will be set it to cookie
    */
   public saveRequestLocale(locale?: string) {
-    const currentLocale =
-      locale ?? this.ctx.getAttr(I18N_ATTR_KEY) ?? this.getDefaultLocale();
-    this.ctx?.setAttr(I18N_SAVE_KEY, formatLocale(currentLocale));
+    if (locale) {
+      this.ctx?.setAttr(I18N_ATTR_KEY, formatLocale(locale));
+    } else {
+      this.ctx?.setAttr(I18N_ATTR_KEY, formatLocale(this.getDefaultLocale()));
+    }
   }
 
   /**
