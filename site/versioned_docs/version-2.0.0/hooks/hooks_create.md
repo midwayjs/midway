@@ -4,13 +4,23 @@ title: 项目初始化
 
 ### 创建
 
+serverless 应用
+
 ```bash
-$ npm init midway
+# npm v6
+$ npm init midway --template=@midwayjs-examples/serverless-boilerplate-hooks-react
+# npm v7
+$ npm init midway -- --template=@midwayjs-examples/serverless-boilerplate-hooks-react
 ```
 
-在接下来的提示中，选择 Web 应用或者 Serverless 应用
+web 应用
 
-<img src="https://cdn.nlark.com/yuque/0/2021/png/501408/1623036493849-2583e8e9-90c5-4988-9698-c3538cd65482.png#clientId=ucf92bac9-239e-4&from=paste&height=86&id=u44983b7a&margin=%5Bobject%20Object%5D&name=image.png&originHeight=86&originWidth=807&originalType=binary&ratio=1&size=10190&status=done&style=none&taskId=u7a5d47dc-d709-4c15-9193-7afb3708a98&width=807" width="807" />
+```bash
+# npm v6
+$ npm init midway --template=@midwayjs-examples/applicaiton-hooks-koa-react
+# npm v7
+$ npm init midway -- --template=@midwayjs-examples/applicaiton-hooks-koa-react
+```
 
 ### 运行
 
