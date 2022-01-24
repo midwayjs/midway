@@ -85,6 +85,21 @@ export class InternalServerErrorFilter {
 
 `catch` 方法的参数为当前的错误，以及当前应用该异常处理器的上下文 `Context` 。我们可以简单的将响应的数据返回。
 
+如果不写参数，那么会捕获所有的错误。
+
+```typescript
+import { Catch } from '@midwayjs/decorator';
+import { InternalServerErrorError } from '@midwayjs/core';
+import { Context } from '@midwayjs/koa';
+
+@Catch()
+export class AllErrorFilter {
+  async catch(err: Error, ctx: Context) {
+    // ...
+  }
+}
+```
+
 定义的异常处理器只是一段普通的代码，我们还需要将它应用到我们某个框架的 app 中，比如 http 协议的 app。
 
 我们可以在 `src/configuration.ts` 中将错误处理过滤器应用上，由于参数可以是数组，我们可以应用多个错误处理器。
@@ -203,7 +218,7 @@ export class ContainerConfiguration {
 
 
 
-## 默认的异常处理
+## 异常日志
 
 Midway 内置了默认的异常处理行为。
 

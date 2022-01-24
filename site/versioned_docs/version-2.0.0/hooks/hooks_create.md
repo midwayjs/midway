@@ -22,6 +22,8 @@ $ npm init midway --template=@midwayjs-examples/applicaiton-hooks-koa-react
 $ npm init midway -- --template=@midwayjs-examples/applicaiton-hooks-koa-react
 ```
 
+社区用户也提供了 vue 模板，可以查看 [issue](https://github.com/midwayjs/midway/issues/1229)
+
 ### 运行
 
 ```bash
