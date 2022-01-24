@@ -1,14 +1,29 @@
 import { Configuration, App } from '@midwayjs/decorator';
 import { ILifeCycle } from '@midwayjs/core';
-import { IMidwaySocketIOApplication } from '../../../../src';
+import { Application } from '../../../../src';
+import { ConnectionMiddleware } from './middleware/conn.middleware';
 
 
-@Configuration()
+@Configuration({
+  imports: [
+    require('../../../../src')
+  ],
+  importConfigs: [
+    {
+      default: {
+        socketIO: {
+          port: 3000
+        }
+      }
+    }
+  ]
+})
 export class AutoConfiguration implements ILifeCycle {
 
   @App()
-  app: IMidwaySocketIOApplication;
+  app: Application;
 
   async onReady() {
+    this.app.useMiddleware(ConnectionMiddleware);
   }
 }

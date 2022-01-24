@@ -8,7 +8,7 @@ import {
 } from '@midwayjs/decorator';
 import { Context } from '../../../../../src';
 
-@WSController('/api', { middleware: []})
+@WSController('/', { middleware: []})
 export class APIController {
   @Inject()
   ctx: Context;
