@@ -3,6 +3,7 @@ import {
   IMidwayFramework,
   safeRequire,
 } from '@midwayjs/core';
+import { ComponentModule } from './interface';
 import { Configuration } from '@midwayjs/decorator';
 import * as os from 'os';
 import * as assert from 'assert';
@@ -20,12 +21,12 @@ export function isWin32() {
   return os.platform() === 'win32';
 }
 
-export function findFirstExistModule(moduleList): string {
+export function findFirstExistModule(moduleList, baseDir): ComponentModule {
   for (const name of moduleList) {
     if (!name) continue;
     try {
-      require.resolve(name);
-      return name;
+      const modulePath = require.resolve(name, { paths: [baseDir] });
+      return require(modulePath);
     } catch (e) {
       // ignore
     }

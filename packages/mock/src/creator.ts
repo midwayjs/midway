@@ -173,23 +173,25 @@ export async function createFunctionApp<
 >(
   baseDir: string = process.cwd(),
   options?: MockAppConfigurationOptions,
-  customFrameworkName?: { new (...args): T } | ComponentModule
+  customFrameworkModule?: { new (...args): T } | ComponentModule
 ): Promise<Y> {
   const customFramework =
-    customFrameworkName ??
-    findFirstExistModule([
-      process.env.MIDWAY_SERVERLESS_APP_NAME,
-      '@ali/serverless-app',
-      '@midwayjs/serverless-app',
-    ]);
-
+    customFrameworkModule ??
+    findFirstExistModule(
+      [
+        process.env.MIDWAY_SERVERLESS_APP_NAME,
+        '@ali/serverless-app',
+        '@midwayjs/serverless-app',
+      ],
+      baseDir
+    );
   const framework = await createApp(
     baseDir,
     {
       ...options,
       imports: transformFrameworkToConfiguration(customFramework),
     },
-    customFrameworkName as any
+    customFramework as any
   );
   framework.configurationOptions = options;
   return framework;
