@@ -242,13 +242,13 @@ export class UserDTO extends CommonUserDTO {
 ## 从原有 DTO 创建新 DTO
 
 有时候，我们会希望从某个 DTO 中获取一部分属性，变成一个新的 DTO 类。
-​
+
 
 Midway 提供了 `PickDto` 和 `OmitDto` 两个方法根据现有的的 DTO 类型创建新的 DTO。
-​
+
 
 `PickDto` 用于从现有的 DTO 中获取一些属性，变成新的 DTO，而 `OmitDto` 用于将其中某些属性剔除，比如：
-​
+
 
 ```typescript
 // src/dto/user.ts
@@ -268,16 +268,22 @@ export class UserDTO {
   age: number;
 }
 
-const SimpleUserDTO = PickDto(UserDTO, ['firstName', 'lastName']);
+// 继承出一个新的 DTO
+export class SimpleUserDTO extends PickDto(UserDTO, ['firstName', 'lastName']) {}
 
-const simpleUser = new SimpleUserDTO();
-
+// const simpleUser = new SimpleUserDTO();
+// 只包含了 firstName 和 lastName 属性
 // simpleUser.firstName = xxx
 
-const NewUserDTO = OmitDto(UserDTO, ['age']);
-const newUser = new NewUserDTO();
+export class NewUserDTO extends OmitDto(UserDTO, ['age']) {}
 
+// const newUser = new NewUserDTO();
 // newUser.age 定义和属性都不存在
+
+// 使用
+async login(@Body() user: NewUserDTO) {
+  // ...
+}
 ```
 
 ## 参数校验技巧

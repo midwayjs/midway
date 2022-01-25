@@ -192,24 +192,24 @@ async updateUser(@Body() user: UserDTO ) {
 ### 常见的校验写法
 
 ```typescript
-RuleType.number().required();								// 数字，必填
+RuleType.number().required();               // 数字，必填
 RuleType.string().empty('')                 // 字符串非必填
-RuleType.number().max(10).min(1);   				// 数字，最大值和最小值
-RuleType.number().greater(10).less(50);			// 数字，大于 10，小于 50
+RuleType.number().max(10).min(1);           // 数字，最大值和最小值
+RuleType.number().greater(10).less(50);	    // 数字，大于 10，小于 50
 
-RuleType.string().max(10).min(5);						// 字符串，长度最大 10，最小 5
-RuleType.string().length(20);								// 字符串，长度 20
-RuleType.string().pattern(/^[abc]+$/);			// 字符串，匹配正则格式
+RuleType.string().max(10).min(5);           // 字符串，长度最大 10，最小 5
+RuleType.string().length(20);               // 字符串，长度 20
+RuleType.string().pattern(/^[abc]+$/);      // 字符串，匹配正则格式
 
-RuleType.object().length(5);								// 对象，key 数量等于 5
+RuleType.object().length(5);                // 对象，key 数量等于 5
 
 
-RuleType.array().items(RuleType.string());	// 数组，每个元素是字符串
-RuleType.array().max(10);										// 数组，最大长度为 10
-RuleType.array().min(10);										// 数组，最小长度为 10
-RuleType.array().length(10);								// 数组，长度为 10
+RuleType.array().items(RuleType.string());  // 数组，每个元素是字符串
+RuleType.array().max(10);                   // 数组，最大长度为 10
+RuleType.array().min(10);                   // 数组，最小长度为 10
+RuleType.array().length(10);                // 数组，长度为 10
 
-RuleType.string().allow('')									// 非必填字段传入空字符串
+RuleType.string().allow('')	                // 非必填字段传入空字符串
 ```
 
 
@@ -226,7 +226,7 @@ import { Rule, RuleType } from "@midwayjs/validate";
 
 export class SchoolDTO {
   @Rule(RuleType.string().required())
-	name: string;
+  name: string;
   @Rule(RuleType.string())
   address: string;
 }
@@ -269,7 +269,7 @@ import { Rule, RuleType } from "@midwayjs/validate";
 
 export class CommonUserDTO {
   @Rule(RuleType.string().required())
-	token: string;
+  token: string;
   @Rule(RuleType.string())
   workId: string;
 }
@@ -352,22 +352,22 @@ async login(@Body() user: NewUserDTO) {
 // 自己在一个文件中定义一下你们部门的规范或常用的
 const requiredString = RuleType.string().required();
 
-export class UserDTO{
+export class UserDTO {
 
   @Rule(requiredString)                 // 这样就不用写上面这么长的了
   name: string;
 
-  @Rule(requiredString)									// 同上
+  @Rule(requiredString)                 // 同上
   nickName: string;
 
-  @Rule(requiredString)								  // 同上
+  @Rule(requiredString)                 // 同上
   description: string;
 }
 
 // 自己在一个文件中定义一下你们部门的规范或常用的
 const maxString = (length)=> RuleType.string().max(length);
 
-export class UserDTO{
+export class UserDTO {
 
   @Rule(requiredString)                // 同上
   name: string;
@@ -378,10 +378,10 @@ export class UserDTO{
   @Rule(requiredString)                // 同上
   description: string;
 
-  @Rule(maxString(50))								// 这样通过换个参数即可
+  @Rule(maxString(50))                 // 这样通过换个参数即可
   info: string;
 
-  @Rule(maxString(50).required())     //这样也行
+  @Rule(maxString(50).required())      // 这样也行
   info2: string;
 }
 ```
