@@ -461,7 +461,7 @@ export const i18n = {
 
 ```typescript
 export class UserDTO {
-  @Rule(RuleType.number().required().message('my custom message'))
+  @Rule(RuleType.number().required().error(new Error('my custom message')))
   id: number;
 }
 ```
