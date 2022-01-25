@@ -83,7 +83,7 @@ ctx.env; // 默认 prod
 midway faas 的 IoC 请求作用域容器，用于获取其他 IoC 容器中的对象实例。
 
 ```typescript
-const userService = await ctx.requestContext.getAsync('userService');
+const userService = await ctx.requestContext.getAsync(UserService);
 ```
 
 ## FaaSHTTPContext

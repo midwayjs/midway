@@ -400,7 +400,7 @@ export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
 
   resolve() {
     return async (ctx: Context, next: NextFunction) => {
-      const userService = await ctx.requestContext.getAsync<UserService>('userService');
+      const userService = await ctx.requestContext.getAsync<UserService>(UserService);
    		// TODO userService.xxxx
       await next();
     };

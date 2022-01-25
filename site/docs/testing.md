@@ -24,7 +24,7 @@
 ├── test
 │   └── controller
 │       └── home.controller.test.ts
-├── package.json  
+├── package.json
 └── tsconfig.json
 ```
 
@@ -147,9 +147,9 @@ import { Framework, Application } from '@midwayjs/koa';
 import * as assert from 'assert';
 
 describe('test/controller/home.test.ts', () => {
-  
+
   let app: Application;
-  
+
   beforeAll(async () => {
     // 只创建一次 app，可以复用
     try {
@@ -161,7 +161,7 @@ describe('test/controller/home.test.ts', () => {
       throw err;
     }
   });
-  
+
   afterAll(async () => {
     // close app
     await close(app);
@@ -181,7 +181,7 @@ describe('test/controller/home.test.ts', () => {
     assert.deepStrictEqual(result.status, 200);
     assert.deepStrictEqual(result.text, 'Hello Midwayjs!');
   });
-  
+
   it('should POST /', async () => {
     // make request
     const result = await createHttpRequest(app)
@@ -282,13 +282,13 @@ describe('test/controller/home.test.ts', () => {
     // create app
     const app = await createApp<Framework>();
 
+    // 根据依赖注入 class 获取实例（推荐）
+    const userService = await app.getApplicationContext().getAsync<UserService>(UserService);
     // 根据依赖注入 Id 获取实例
     const userService = await app.getApplicationContext().getAsync<UserService>('userService');
-    // 根据依赖注入 class 获取实例
-    const userService = await app.getApplicationContext().getAsync<UserService>(UserService);
     // 传入 class 忽略泛型也能正确推导
     const userService = await app.getApplicationContext().getAsync(UserService);
-    
+
     // close app
     await close(app);
   });
@@ -315,7 +315,7 @@ describe('test/controller/home.test.ts', () => {
     // 根据依赖注入 Id 获取实例
     const userService = await app.createAnonymousContext()
     					.requestContext.getAsync<UserService>('userService');
-    
+
     // 也能传入 class 获取实例
     const userService = await app.createAnonymousContext()
     					.requestContext.getAsync(UserService);
@@ -345,7 +345,7 @@ const app = await createApp<Framework>();
 `createApp` 方法其实是有参数的，它的方法签名如下。
 ```typescript
 async createApp(
-  appDir = process.cwd(), 
+  appDir = process.cwd(),
   options: IConfigurationOptions = {}
 )
 ```
@@ -367,7 +367,7 @@ await close(app);
 
 ```typescript
 export declare function close(
-  app: IMidwayApplication | IMidwayFramework<any, any>, 
+  app: IMidwayApplication | IMidwayFramework<any, any>,
   options?: {
   	cleanLogsDir?: boolean;
     cleanTempDir?: boolean;
@@ -419,8 +419,8 @@ $ node --require=ts-node/register ./node_modules/.bin/jest
 ├── test
 │   └── controller
 │       └── home.test.ts
-├── jest.config.js  
-├── package.json  
+├── jest.config.js
+├── package.json
 └── tsconfig.json
 ```
 内容如下，配置和标准的 jest 相同。
