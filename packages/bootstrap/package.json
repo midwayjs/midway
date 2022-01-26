@@ -24,7 +24,7 @@
   "devDependencies": {
     "@midwayjs/core": "^3.0.2",
     "@midwayjs/decorator": "^3.0.2",
-    "@midwayjs/logger": "^2.14.0",
+    "@midwayjs/logger": "2.14.2",
     "@midwayjs/socketio": "^3.0.2",
     "@midwayjs/web": "^3.0.2",
     "@types/socket.io-client": "1.4.36",
