@@ -81,7 +81,7 @@ export class AutoConfiguration{
 在 `config.default.ts` 文件中配置对应的模块信息：
 
 ```typescript
-export const taskConfig = {
+export const task = {
   redis: `redis://127.0.0.1:32768`, // 任务依赖redis，所以此处需要加一个redis
   prefix: 'midway-task',						// 这些任务存储的key，都是midway-task开头，以便区分用户原有redis里面的配置。
   defaultJobOptions: {
@@ -95,7 +95,7 @@ export const taskConfig = {
 有账号密码情况：
 
 ```typescript
-export const taskConfig = {
+export const task = {
   redis: {
   	port: 6379, host: '127.0.0.1', password: 'foobared'
   }, //此处相当于是ioredis的配置 https://www.npmjs.com/package/ioredis
@@ -145,7 +145,6 @@ export class UserService {
 import { QueueService } from '@midwayjs/task';
 import { Provide, Controller, Get } from '@midwayjs/decorator';
 
-@Provide()
 @Controller()
 export class HelloController{
   @Inject()
@@ -463,7 +462,7 @@ export class UserService {
 
 ![image.png](https://img.alicdn.com/imgextra/i4/O1CN01KfjCKT1yypmNPDkIL_!!6000000006648-2-tps-3540-102.png)
 
-这个问题基本明确，问题会出现在 redis 的集群版本上。原因是 redis 会对 key 做 hash 来确定存储的 slot，集群下这一步 @midwayjs/task 的 key 命中了不同的 slot。临时的解决办法是 taskConfig 里的 prefix 配置用 {} 包括，强制 redis 只计算 {} 里的hash，例如 `prefix: '{midway-task}'`。
+这个问题基本明确，问题会出现在 redis 的集群版本上。原因是 redis 会对 key 做 hash 来确定存储的 slot，集群下这一步 @midwayjs/task 的 key 命中了不同的 slot。临时的解决办法是 task 里的 prefix 配置用 {} 包括，强制 redis 只计算 {} 里的hash，例如 `prefix: '{midway-task}'`。
 
 
 
