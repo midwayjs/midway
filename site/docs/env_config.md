@@ -7,19 +7,6 @@
 
 
 
-## 全局容器配置和业务配置的区别
-
-
-`src/configuration.ts` 文件用于配置依赖注入容器的行为，是整个 Midway 最重要的文件。其中的 `@Configuration` 装饰器能控制整个 Midway 依赖注入容器的加载行为，例如组件加载，全局生命周期调整等能力。
-
-
-依赖注入容器包含多个服务，`ConfigService`  是依赖注入容器的其中一个默认服务，用于加载业务配置。我们可以通过在 `@configuration` 装饰器中配置这个服务的行为，来加载不同环境 ，自定义的业务配置文件。
-
-
-业务配置只跟业务本身相关，和框架不耦合，文件数量不定，内容也是自定义的。
-
-
-
 ## 业务配置文件
 
 
@@ -43,15 +30,14 @@
 └── tsconfig.json
 ```
 
-
 `config.default.ts` 为默认的配置文件，所有环境都会加载这个配置文件，一般也会作为开发环境的默认配置文件。
 
 
-配置不是必须项，请酌情添加自己需要的环境配置。
+配置不是 **必选项**，请酌情添加自己需要的环境配置。
 
 
 
-## 业务配置加载
+## 加载业务配置
 
 
 然后我们可以在 `src/configuration.ts` 中配置这个文件（目录），框架就知道加载它了。
@@ -70,8 +56,11 @@ export class ContainerLifeCycle {
 }	
 ```
 
+下面我们将介绍加载配置的两种方式。
 
-### 1、目录或者文件查找加载
+
+
+### 1、指定目录或者文件加载
 
 
 可以指定加载一个目录，目录里所有的 `config.*.ts` 都会被扫描加载。
@@ -162,7 +151,6 @@ export class ContainerLifeCycle {
 
 ### 2、对象形式加载
 
-
 在特殊场景下，比如希望 bundle/package 等和目录结构无关的需求，可以使用标准的模块加载方式来加载配置。
 ​
 
@@ -189,10 +177,101 @@ export class ContainerLifeCycle {
 
 
 
+## 配置格式
+
+Midway 提供了 `MidwayConfig` 定义，每当一个组件被开启（在 `configuration.ts` 中被 `imports` ），`MidwayConfig` 就会自动包含该组件的配置定义。
+
+配置可以以两种格式导出。
+
+:::tip
+
+经过我们的实践，以对象导出会更加的简单友好，可以规避许多错误用法。
+
+组件的配置我们都将以此格式编写文档。
+
+:::
+
+
+
+
+### 1、对象形式
+
+
+配置文件格式为 object，比如：
+
+```typescript
+// src/config/config.default.ts
+import { MidwayConfig } from '@midwayjs/core';
+
+export default {
+  keys: '1639994056460_8009',
+  koa: {
+    port: 7001,
+  },
+} as MidwayConfig;
+```
+
+
+
+### 2、函数形式
+
+
+配置文件为一个带有 `appInfo` 参数的函数。通过这样返回方法的形式，在运行期会被自动执行，将返回值合并进完整的配置对象。
+
+```typescript
+// src/config/config.default.ts
+import { MidwayAppInfo, MidwayConfig } from '@midwayjs/core';
+
+export default (appInfo: MidwayAppInfo): MidwayConfig => {
+  return {
+    keys: '1639994056460_8009',
+    koa: {
+      port: 7001,
+    },
+    view: {
+      root: path.join(appInfo.appDir, 'view'),
+    },
+  };
+}
+
+```
+
+这个函数的参数为 `MidwayAppInfo` 类型，值为以下内容。
+
+
+| **appInfo** | **说明**                                                     |
+| ----------- | ------------------------------------------------------------ |
+| pkg         | package.json                                                 |
+| name        | 应用名，同 pkg.name                                          |
+| baseDir     | 应用代码的 src （本地开发）或者 dist （上线后）目录          |
+| appDir      | 应用代码的目录                                               |
+| HOME        | 用户目录，如 admin 账户为 /home/admin                        |
+| root        | 应用根目录，只有在 local 和 unittest 环境下为 baseDir，其他都为 HOME。 |
+
+
+
+## 配置加载顺序
+
+
+配置存在优先级（应用代码 >  组件），相对于此运行环境的优先级会更高。
+
+
+比如在 prod 环境加载一个配置的加载顺序如下，后加载的会覆盖前面的同名配置。
+
+
+```typescript
+-> 组件 config.default.ts
+-> 应用 config.default.ts
+-> 组件 config.prod.ts
+-> 应用 config.prod.ts
+```
+
+
+
 ## 配置合并规则
 
 
-框架会加载 `**/config.defaut.ts`  的文件以及 `**/config.{环境}.ts`  文件。
+默认会加载 `**/config.defaut.ts`  的文件以及 `**/config.{环境}.ts`  文件。
 
 
 比如，下面的代码在 `local` 环境会查找 `config.default.*` 和 `config.local.*` 文件，如果在其他环境，则只会查找 `config.default.*` 和 `config.{当前环境}.*` ，如果文件不存在，则不会加载，也不会报错。
@@ -239,77 +318,7 @@ extend(true, a, b);
 
 
 
-## 配置格式
-
-
-### 对象形式
-
-
-配置文件格式为 object，比如：
-```typescript
-// src/config/config.default.ts
-
-export const userService = {
-	appname: 'test'
-}
-
-export const customKey = {
-	appname: 'abc'
-}
-```
-
-
-### 函数形式
-
-
-配置文件为一个带有 `appInfo` 参数的函数。通过这样返回方法的形式，在运行期会被自动执行，将返回值合并进完整的配置对象。
-```typescript
-// src/config/config.default.ts
-
-export default appInfo => {
-  return {
-    view: {
-      root: path.join(appInfo.baseDir, 'view'),
-    },
-  };
-};
-
-```
-这个函数的参数为 `AppInfo` 类型，值为以下内容。
-
-
-| **appInfo** | **说明** |
-| --- | --- |
-| pkg | package.json |
-| name | 应用名，同 pkg.name |
-| baseDir | 应用代码的 src （本地开发）或者 dist （上线后）目录 |
-| appDir | 应用代码的目录 |
-| HOME | 用户目录，如 admin 账户为 /home/admin |
-| root | 应用根目录，只有在 local 和 unittest 环境下为 baseDir，其他都为 HOME。 |
-
-
-
-## 配置加载顺序
-
-
-配置存在优先级（应用代码 > 框架 > 组件），相对于此运行环境的优先级会更高。
-
-
-比如在 prod 环境加载一个配置的加载顺序如下，后加载的会覆盖前面的同名配置。
-
-
-```typescript
--> 组件 config.default.ts
--> 框架 config.default.ts
--> 应用 config.default.ts
--> 组件 config.prod.ts
--> 框架 config.prod.ts
--> 应用 config.prod.ts
-```
-
-
-
-## 代码中使用配置
+## 获取配置
 
 
 Midway 会将配置都保存在内部的配置服务中，整个结构是一个对象，在 Midway 业务代码使用时，使用 `@Config` 装饰器注入。
@@ -396,21 +405,13 @@ export class IndexHandler {
 
 
 
-## 动态添加配置
+## 修改配置
 
-
-如果项目启动后，还需要修改配置，可以使用 midway 提供的 API。
-```typescript
-app.addConfigObject({
-	a: 1,
-  b: 2
-});
-```
-该 API 可以让新增的配置对象和现有的配置合并。
+在编码过程中，我们有一些可以动态修改配置的地方，用在不同的场景。
 
 
 
-## 异步初始化配置
+### 生命周期中修改
 
 
 midway 新增了一个异步配置加载的生命周期，可以在配置加载后执行。
@@ -446,34 +447,40 @@ export class ContainerLifeCycle {
 
 
 
-## 配置的特殊 TS 写法问题
+### bootstrap 中添加配置
 
-### export= 的情况
-`export=` 混用的情况，如果后面有其他配置，会忽略 `export=` 的值。
+可以在启动代码之前添加配置。
+
 ```typescript
-export = {
-	a: 1
-}
-export const b = 2;
+// bootstrap.js
+const { Bootstrap } = require('@midwayjs/bootstrap');
+Bootstrap
+  .configure({
+  	globalConfig: {
+      default: {
+        keys: 'abcde',
+        koa: {
+          port: 7001
+        }
+      },
+      unittest: {
+        koa: {
+          port: null
+        }
+      }
+    }
+  })
+  .run();
 ```
-编译后结果：
-```typescript
-export const b = 2;
-```
-### export default 的情况
-`export default` 混用的情况，虽然编译没有问题，但是框架层会只读取 `default` 的配置。
-```typescript
-export default {
-	a: 1
-}
-export const b = 2;
-```
-框架侧只会读取 `default` 的值。
-```typescript
-export default {
-	a: 1
-}
-```
+
+`configure` 方法可以传递一个 `globalConfig` 的属性，可以在应用启动前传递一个全局配置，结构和 “对象形式的配置一致”，区分环境。
+
+
+
+### 使用 API 添加配置
+
+
+其他场景的修改配置，可以使用 midway 提供的 [API](./built_in_service#midwayconfigservice)。
 
 
 
@@ -514,15 +521,22 @@ export class AutoConfiguration {
 // src/config/config.default
 
 export const oss = {
-	accessKey: process.env.OSS_ACCESSKEY,			// 54321
-  secret: process.env.OSS_SECRET						// 12345
+  accessKey: process.env.OSS_ACCESSKEY,     // 54321
+  secret: process.env.OSS_SECRET            // 12345
 }
 ```
 
 
 
-
 ## 常见错误
+
+
+配置未生效的可能性很多，排查思路如下：
+
+- 1、检查 configuration 文件中是否显式配置 `importConfigs` 相关的文件或者目录
+- 2、检查应用启动的环境，是否和配置文件一致，比如 prod 的配置肯定不会在 local 出现
+- 3、检查是否将普通导出和方法回调导出混用，比如下面的混用的情况
+
 
 
 ### 1、在构造器（constructor）中获取 @Config 注入的值
@@ -548,16 +562,15 @@ export class UserService {
 }
 ```
 
-### 2、配置写法混用
 
 
-1、比如在 egg 里的回调和导出混用。
-
+### 2、回调和导出写法混用
 
 **下面是错误用法。**
+
 ```typescript
-export default (appInfo: EggAppInfo) => {
-  const config = {} as DefaultConfig;
+export default (appInfo) => {
+  const config = {};
 
   // xxx
   return config;
@@ -566,14 +579,14 @@ export default (appInfo: EggAppInfo) => {
 export const keys = '12345';
 ```
 
-
 `export const` 定义的值会被忽略。
 
 
-2、比如 export default 和 export const 混用。
 
+### 3、export default 和 export const 混用。
 
 **下面是错误用法。**
+
 ```typescript
 export default {
 	keys: '12345',
@@ -583,12 +596,20 @@ export const anotherKey = '54321';
 ```
 位于后面的配置将会被忽略。
 
+### 4、export= 和其他混用
 
-### 3、配置没有生效
+`export=` 混用的情况，如果后面有其他配置，会忽略 `export=` 的值。
 
+```typescript
+export = {
+	a: 1
+}
+export const b = 2;
+```
 
-可能性很多，排查思路如下：
+编译后结果：
 
-- 1、检查 configuration 文件中是否显式配置 `importConfigs` 相关的文件或者目录
-- 2、检查应用启动的环境，是否和配置文件一致，比如 prod 的配置肯定不会在 local 出现
-- 3、检查是否将普通导出和方法回调导出混用，比如 "常见错误2“
+```typescript
+export const b = 2;
+```
+

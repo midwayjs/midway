@@ -1,4 +1,4 @@
-# Database（TypeORM)
+# TypeORM
 
 [TypeORM](https://github.com/typeorm/typeorm) 是 `node.js` 现有社区最成熟的对象关系映射器（`ORM` ）。Midway 和 TypeORM 搭配，使开发更简单。
 

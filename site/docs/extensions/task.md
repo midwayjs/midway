@@ -96,9 +96,12 @@ export const task = {
 
 ```typescript
 export const task = {
+  // ioredis的配置 https://www.npmjs.com/package/ioredis
   redis: {
-  	port: 6379, host: '127.0.0.1', password: 'foobared'
-  }, //此处相当于是ioredis的配置 https://www.npmjs.com/package/ioredis
+  	port: 6379, 
+    host: '127.0.0.1', 
+    password: 'foobared',
+  },
   prefix: 'midway-task',						// 这些任务存储的 key，都是 midway-task 开头，以便区分用户原有redis 里面的配置。
   defaultJobOptions: {
     repeat: {
@@ -208,8 +211,6 @@ export class ContainerConfiguration implements ILifeCycle {
 ```
 
 
-
-##
 
 ## 常用 Cron 表达式
 

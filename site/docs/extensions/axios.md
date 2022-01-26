@@ -109,7 +109,7 @@ HttpService 实例等价于 `axios.create` ，所以可以有一些配置参数�
 比如：
 ```typescript
 export const axios = {
-	baseURL: 'https://api.example.com',
+  baseURL: 'https://api.example.com',
   // `headers` are custom headers to be sent
   headers: {
     'X-Requested-With': 'XMLHttpRequest'
