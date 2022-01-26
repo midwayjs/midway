@@ -200,3 +200,20 @@ export const koa = {
 }
 ```
 
+
+
+### favicon 设置
+
+默认情况下，浏览器会发起一个 `favicon.ico` 的请求。
+
+框架提供了一个默认中间件，用来处理该请求，你可以指定一个 `favicon` 的 Buffer。
+
+```typescript
+// src/config/config.default
+import { readFileSync } from 'fs';
+export const siteFile = {
+  favicon: readFileSync(join(__dirname, '../static/fav.ico')),
+}
+```
+
+如果开启了 `@midwayjs/static-file`  组件，那么会优先使用组件的静态文件托管。
