@@ -81,33 +81,41 @@ export class AutoConfiguration{
 在 `config.default.ts` 文件中配置对应的模块信息：
 
 ```typescript
-export const task = {
-  redis: `redis://127.0.0.1:32768`, // 任务依赖redis，所以此处需要加一个redis
-  prefix: 'midway-task',						// 这些任务存储的key，都是midway-task开头，以便区分用户原有redis里面的配置。
-  defaultJobOptions: {
-    repeat: {
-      tz: "Asia/Shanghai"						// Task等参数里面设置的比如（0 0 0 * * *）本来是为了0点执行，但是由于时区不对，所以国内用户时区设置一下。
-    }
-  }
+// src/config/config.default.ts
+export default {
+  // ...
+  task: {
+    redis: `redis://127.0.0.1:32768`, // 任务依赖redis，所以此处需要加一个redis
+    prefix: 'midway-task',						// 这些任务存储的key，都是midway-task开头，以便区分用户原有redis里面的配置。
+    defaultJobOptions: {
+      repeat: {
+        tz: "Asia/Shanghai"						// Task等参数里面设置的比如（0 0 0 * * *）本来是为了0点执行，但是由于时区不对，所以国内用户时区设置一下。
+      },
+    },
+  },
 }
 ```
 
 有账号密码情况：
 
 ```typescript
-export const task = {
-  // ioredis的配置 https://www.npmjs.com/package/ioredis
-  redis: {
-  	port: 6379, 
-    host: '127.0.0.1', 
-    password: 'foobared',
+// src/config/config.default.ts
+export default {
+  // ...
+  task: {
+    // ioredis的配置 https://www.npmjs.com/package/ioredis
+    redis: {
+      port: 6379, 
+      host: '127.0.0.1', 
+      password: 'foobared',
+    },
+    prefix: 'midway-task',						// 这些任务存储的 key，都是 midway-task 开头，以便区分用户原有redis 里面的配置。
+    defaultJobOptions: {
+      repeat: {
+        tz: "Asia/Shanghai"						// Task 等参数里面设置的比如（0 0 0 * * *）本来是为了0点执行，但是由于时区不对，所以国内用户时区设置一下。
+      },
+    },
   },
-  prefix: 'midway-task',						// 这些任务存储的 key，都是 midway-task 开头，以便区分用户原有redis 里面的配置。
-  defaultJobOptions: {
-    repeat: {
-      tz: "Asia/Shanghai"						// Task 等参数里面设置的比如（0 0 0 * * *）本来是为了0点执行，但是由于时区不对，所以国内用户时区设置一下。
-    }
-  }
 }
 ```
 

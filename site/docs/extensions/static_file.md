@@ -92,15 +92,17 @@ export class ContainerLifeCycle {
 
 ```typescript
 // {app_root}/src/config/config.default.ts
-export const staticFile = {
-  dirs: {
-    default: {
-      prefix: '/',
-      dir: 'xxx',
-    },
-  }
-  //...
-};
+export default {
+  // ...
+  staticFile: {
+    dirs: {
+      default: {
+        prefix: '/',
+        dir: 'xxx',
+      },
+    }
+  },
+}
 ```
 
 `dirs` 中的对象值，会和 `staticFile` 下的值合并后，传入 `koa-static-cache` 中间件中。
@@ -111,19 +113,22 @@ export const staticFile = {
 
 ```typescript
 // {app_root}/src/config/config.default.ts
-export const staticFile = {
-  dirs: {
-    default: {
-      prefix: '/',
-      dir: 'xxx',
-    },
-    another: {
-      prefix: '/',
-      dir: 'xxx',
-    },
-  }
+export default {
   // ...
-};
+  staticFile: {
+    dirs: {
+      default: {
+        prefix: '/',
+        dir: 'xxx',
+      },
+      another: {
+        prefix: '/',
+        dir: 'xxx',
+      },
+    }
+    // ...
+  },
+}
 ```
 
 

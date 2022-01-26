@@ -75,29 +75,34 @@ export class ContainerLifeCycle {
 
 **单客户端配置**
 ```typescript
-// src/config.default
-
-// Single Redis
-export const redis = {
-  client: {
-    port: 6379, // Redis port
-    host: "127.0.0.1", // Redis host
-    password: "auth",
-    db: 0,
+// src/config/config.default.ts
+export default {
+  // ...
+  redis: {
+    client: {
+      port: 6379, // Redis port
+      host: "127.0.0.1", // Redis host
+      password: "auth",
+      db: 0,
+    },
   },
-};
+}
 ```
 **Sentinel 配置**
 ```typescript
-export const redis = {
-  client: {
-    sentinels: [{          // Sentinel instances
-      port: 26379,         // Sentinel port
-      host: '127.0.0.1',   // Sentinel host
-    }],
-    name: 'mymaster',      // Master name
-    password: 'auth',
-    db: 0
+// src/config/config.default.ts
+export default {
+  // ...
+  redis: {
+    client: {
+      sentinels: [{          // Sentinel instances
+        port: 26379,         // Sentinel port
+        host: '127.0.0.1',   // Sentinel host
+      }],
+      name: 'mymaster',      // Master name
+      password: 'auth',
+      db: 0
+    },
   },
 }
 ```
@@ -105,44 +110,52 @@ export const redis = {
 
 **Cluster 模式配置，需要配置多个**
 ```typescript
-// Cluster Redis
-export const redis = {
-  client: {
-  	cluster: true,
-    nodes: [{
-      host: 'host',
-      port: 'port',
-      password: 'password',
-      db: 'db',
-    },{
-      host: 'host',
-      port: 'port',
-      password: 'password',
-      db: 'db',
-    },
-  }
-};
+// src/config/config.default.ts
+export default {
+  // ...
+  redis: {
+    // Cluster Redis
+    client: {
+      cluster: true,
+      nodes: [{
+        host: 'host',
+        port: 'port',
+        password: 'password',
+        db: 'db',
+      },{
+        host: 'host',
+        port: 'port',
+        password: 'password',
+        db: 'db',
+      },
+    }
+  },
+}
 ```
 
 **多个客户端配置，需要配置多个**
 ```typescript
-// Multi Redis
-export const redis = {
-  clients: {
-    instance1: {
-      host: 'host',
-      port: 'port',
-      password: 'password',
-      db: 'db',
-    },
-    instance2: {
-      host: 'host',
-      port: 'port',
-      password: 'password',
-      db: 'db',
+// src/config/config.default.ts
+export default {
+  // ...
+  redis: {
+		// Multi Redis
+    clients: {
+      instance1: {
+        host: 'host',
+        port: 'port',
+        password: 'password',
+        db: 'db',
+      },
+      instance2: {
+        host: 'host',
+        port: 'port',
+        password: 'password',
+        db: 'db',
+      },
     },
   },
-};
+}
 ```
 更多参数可以查看 [ioredis 文档](https://github.com/luin/ioredis/blob/master/API.md#new_Redis_new)。
 

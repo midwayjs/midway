@@ -64,12 +64,15 @@ export class ContainerLifeCycle {
 
 ```typescript
 // src/config/config.default
-export const bodyParser = {
-  enableTypes: ['json', 'form', 'text', 'xml'],
-  formLimit: '1mb',
-  jsonLimit: '1mb',
-  textLimit: '1mb',
-  xmlLimit: '1mb',
+export default {
+  // ...
+  bodyParser: {
+    enableTypes: ['json', 'form', 'text', 'xml'],
+    formLimit: '1mb',
+    jsonLimit: '1mb',
+    textLimit: '1mb',
+    xmlLimit: '1mb',
+  },
 }
 ```
 
@@ -128,8 +131,11 @@ export class AutoConfiguration {
 
 ```typescript
 // src/config/config.default
-export const koa = {
-  port: 7001
+export default {
+  // ...
+  koa: {
+    port: 7001,
+  },
 }
 ```
 
@@ -156,17 +162,23 @@ export const koa = {
 
 ```typescript
 // src/config/config.default
-export const koa = {
-  port: 6001
+export default {
+  // ...
+  koa: {
+    port: 6001,
+  },
 }
 ```
 
 默认情况下，单测环境由于需要 supertest 来启动端口，我们的 port 配置为 `null`。
 
 ```typescript
-// src/config/config.unittest
-export const koa = {
-  port: null
+// src/config/config.default
+export default {
+  // ...
+  koa: {
+    port: null,
+  },
 }
 ```
 
@@ -194,9 +206,12 @@ export const koa = {
 // src/config/config.default
 import { readFileSync } from 'fs';
 
-export const koa = {
-  key: readFileSync(join(__dirname, '../ssl/ssl.key'), 'utf8'),
-  cert: readFileSync(join(__dirname, '../ssl/ssl.pem'), 'utf8'),
+export default {
+  // ...
+  koa: {
+    key: readFileSync(join(__dirname, '../ssl/ssl.key'), 'utf8'),
+  	cert: readFileSync(join(__dirname, '../ssl/ssl.pem'), 'utf8'),
+  },
 }
 ```
 
@@ -211,8 +226,12 @@ export const koa = {
 ```typescript
 // src/config/config.default
 import { readFileSync } from 'fs';
-export const siteFile = {
-  favicon: readFileSync(join(__dirname, '../static/fav.ico')),
+
+export default {
+  // ...
+  siteFile: {
+    favicon: readFileSync(join(__dirname, '../static/fav.ico')),
+  },
 }
 ```
 

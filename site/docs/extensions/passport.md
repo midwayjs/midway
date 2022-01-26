@@ -186,10 +186,12 @@ $ npm i @midwayjs/jwt passport-jwt --save
 然后在 config.ts 中配置， 默认未加密，请不要把敏感信息存放在 payload 中。
 
 ```typescript
-// src/config/config.default.ts
-export const jwt = {
-	secret: 'xxxxxxxxxxxxxx', // fs.readFileSync('xxxxx.key')
-  expiresIn: '2d'   // https://github.com/vercel/ms
+export default {
+  // ...
+  jwt: {
+    secret: 'xxxxxxxxxxxxxx', // fs.readFileSync('xxxxx.key')
+    expiresIn: '2d'   // https://github.com/vercel/ms
+  },
 }
 ```
 ```typescript

@@ -63,39 +63,47 @@ export class ContainerLifeCycle {
 
 **单客户端配置**
 ```typescript
-export const tableStore = {
-  client: {
-    accessKeyId: '<your access key id>',
-    secretAccessKey: '<your access key secret>',
-    stsToken: '<your stsToken>', /*When you use the STS authorization, you need to fill in. ref:https://help.aliyun.com/document_detail/27364.html*/
-    endpoint: '<your endpoint>',
-    instancename: '<your instance name>'
+// src/config/config.default
+export default {
+  // ...
+  tableStore: {
+    client: {
+      accessKeyId: '<your access key id>',
+      secretAccessKey: '<your access key secret>',
+      stsToken: '<your stsToken>', /*When you use the STS authorization, you need to fill in. ref:https://help.aliyun.com/document_detail/27364.html*/
+      endpoint: '<your endpoint>',
+      instancename: '<your instance name>'
+    },
   },
-};
+}
 ```
 
 
 **多个客户端配置，需要配置多个**
 
 ```typescript
-export const tableStore = {
-  clients: {
-    db1: {
-      accessKeyId: '<your access key id>',
-      secretAccessKey: '<your access key secret>',
-      stsToken: '<your stsToken>', /*When you use the STS authorization, you need to fill in. ref:https://help.aliyun.com/document_detail/27364.html*/
-      endpoint: '<your endpoint>',
-      instancename: '<your instance name>'
-    },
-    db2: {
-      accessKeyId: '<your access key id>',
-      secretAccessKey: '<your access key secret>',
-      stsToken: '<your stsToken>', /*When you use the STS authorization, you need to fill in. ref:https://help.aliyun.com/document_detail/27364.html*/
-      endpoint: '<your endpoint>',
-      instancename: '<your instance name>'
+// src/config/config.default
+export default {
+  // ...
+  tableStore: {
+    clients: {
+      db1: {
+        accessKeyId: '<your access key id>',
+        secretAccessKey: '<your access key secret>',
+        stsToken: '<your stsToken>', /*When you use the STS authorization, you need to fill in. ref:https://help.aliyun.com/document_detail/27364.html*/
+        endpoint: '<your endpoint>',
+        instancename: '<your instance name>'
+      },
+      db2: {
+        accessKeyId: '<your access key id>',
+        secretAccessKey: '<your access key secret>',
+        stsToken: '<your stsToken>', /*When you use the STS authorization, you need to fill in. ref:https://help.aliyun.com/document_detail/27364.html*/
+        endpoint: '<your endpoint>',
+        instancename: '<your instance name>'
+      },
     },
   },
-};
+}
 ```
 更多参数可以查看 [aliyun tablestore sdk](https://github.com/aliyun/aliyun-tablestore-nodejs-sdk) 文档。
 

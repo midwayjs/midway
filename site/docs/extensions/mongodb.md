@@ -148,18 +148,20 @@ export class ContainerConfiguration {
 在 `src/config/config.default.ts` 中加入连接的配置。
 
 ```typescript
-export const mongoose = {
-  client: {
-  	uri: 'mongodb://localhost:27017/test',
-    options: {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      user: '***********',
-      pass: '***********'
+export default {
+  // ...
+  mongoose: {
+    client: {
+      uri: 'mongodb://localhost:27017/test',
+      options: {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        user: '***********',
+        pass: '***********'
+      }
     }
-  }
+  },
 }
-
 ```
 
 
@@ -257,29 +259,31 @@ export class TestService {
 
 在 `src/config/config.default.ts` 中加入连接的配置，`default` 代表了默认的连接。
 ```typescript
-export const mongoose = {
-  clients: {
-  	default: {
-    	uri: 'mongodb://localhost:27017/test',
-      options: {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        user: '***********',
-        pass: '***********'
-      }
-    },
-    db1: {
-    	uri: 'mongodb://localhost:27017/test1',
-      options: {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        user: '***********',
-        pass: '***********'
+export default {
+  // ...
+  mongoose: {
+    clients: {
+      default: {
+        uri: 'mongodb://localhost:27017/test',
+        options: {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+          user: '***********',
+          pass: '***********'
+        }
+      },
+      db1: {
+        uri: 'mongodb://localhost:27017/test1',
+        options: {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+          user: '***********',
+          pass: '***********'
+        }
       }
     }
-  }
+  },
 }
-
 ```
 
 
@@ -399,44 +403,48 @@ export class ContainerConfiguration {
 
 单库：
 ```typescript
-export const mongoose = {
-  client: {
-  	uri: 'mongodb://localhost:27017/test',
-    options: {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      user: '***********',
-      pass: '**********'
+export default {
+  // ...
+  mongoose: {
+    client: {
+      uri: 'mongodb://localhost:27017/test',
+      options: {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        user: '***********',
+        pass: '**********'
+      }
     }
-  }
+  },
 }
-
 ```
 多库：
 ```typescript
-export const mongoose = {
-  clients: {
-  	default: {
-    	uri: 'mongodb://localhost:27017/test',
-      options: {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        user: '***********',
-        pass: '***********'
-      }
-    },
-    db1: {
-    	uri: 'mongodb://localhost:27017/test1',
-      options: {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        user: '***********',
-        pass: '***********'
+export default {
+  // ...
+  mongoose: {
+    clients: {
+      default: {
+        uri: 'mongodb://localhost:27017/test',
+        options: {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+          user: '***********',
+          pass: '***********'
+        }
+      },
+      db1: {
+        uri: 'mongodb://localhost:27017/test1',
+        options: {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+          user: '***********',
+          pass: '***********'
+        }
       }
     }
-  }
+  },
 }
-
 ```
 
 

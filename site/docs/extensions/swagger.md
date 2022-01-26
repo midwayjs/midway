@@ -423,11 +423,14 @@ Swagger 还支持带前缀 ```x-``` 的扩展字段，可以使用 ```@ApiExtens
 * 启用 basic 验证
 
 ```typescript
-// config.default.ts
-export const swagger = {
-  auth: {
-    authType: 'basic',
-  }
+// src/config/config.default.ts
+export default {
+  // ...
+  swagger: {
+    auth: {
+      authType: 'basic',
+    },
+  },
 }
 ```
 
@@ -443,11 +446,14 @@ export class HelloController {}
 * 启用 bearer 验证（bearerFormat 为 JWT）
 
 ```typescript
-// config.default.ts
-export const swagger = {
-  auth: {
-    authType: 'bearer',
-  }
+// src/config/config.default.ts
+export default {
+  // ...
+  swagger: {
+    auth: {
+      authType: 'bearer',
+    },
+  },
 }
 ```
 
@@ -464,28 +470,31 @@ export class HelloController {}
 * 启用 oauth2 验证
 
 ```typescript
-// config.default.ts
-export const swagger = {
-  auth: {
-    authType: 'oauth2',
-    flows: {
-      implicit: {
-        authorizationUrl: 'http://example.org/api/oauth/dialog',
-        scopes: {
-          'write:pets': 'modify pets in your account',
-          'read:pets': 'read your pets'
-        }
+// src/config/config.default.ts
+export default {
+  // ...
+  swagger: {
+    auth: {
+      authType: 'oauth2',
+      flows: {
+        implicit: {
+          authorizationUrl: 'http://example.org/api/oauth/dialog',
+          scopes: {
+            'write:pets': 'modify pets in your account',
+            'read:pets': 'read your pets'
+          }
+        },
+        authorizationCode: {
+          authorizationUrl: 'https://example.com/api/oauth/dialog',
+          tokenUrl: 'https://example.com/api/oauth/token',
+          scopes: {
+            'write:pets': 'modify pets in your account',
+            'read:pets': 'read your pets'
+          }
+        },
       },
-      authorizationCode: {
-        authorizationUrl: 'https://example.com/api/oauth/dialog',
-        tokenUrl: 'https://example.com/api/oauth/token',
-        scopes: {
-          'write:pets': 'modify pets in your account',
-          'read:pets': 'read your pets'
-        }
-      }
-    }
-  }
+    },
+  },
 }
 ```
 
@@ -500,13 +509,16 @@ export class HelloController {}
 * 启用 cookie 验证
 
 ```typescript
-// config.default.ts
-export const swagger = {
-  auth: {
-    authType: 'cookie',
-    securityName: 'testforcookie',
-    cookieName: 'connect.sid',
-  }
+// src/config/config.default.ts
+export default {
+  // ...
+  swagger: {
+    auth: {
+      authType: 'cookie',
+      securityName: 'testforcookie',
+      cookieName: 'connect.sid',
+    },
+  },
 }
 ```
 
@@ -523,12 +535,15 @@ export class HelloController {}
 * 启用 cookie 验证
 
 ```typescript
-// config.default.ts
-export const swagger = {
-  auth: {
-    authType: 'apikey',
-    name: 'api_key'
-  }
+// src/config/config.default.ts
+export default {
+  // ...
+  swagger: {
+    auth: {
+      authType: 'apikey',
+    	name: 'api_key'
+    },
+  },
 }
 ```
 
@@ -545,13 +560,16 @@ export class HelloController {}
 * 自定义验证方式，需要自己设计参数配置
 
 ```typescript
-// config.default.ts
-export const swagger = {
-  auth: {
-    authType: 'custom',
-    name: 'mycustom'
-    ...
-  }
+// src/config/config.default.ts
+export default {
+  // ...
+  swagger: {
+    auth: {
+      authType: 'custom',
+      name: 'mycustom'
+      // ...
+    },
+  },
 }
 ```
 

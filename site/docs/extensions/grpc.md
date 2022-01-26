@@ -506,19 +506,21 @@ export class AutoConfiguration {}
 ```typescript
 // src/config/config.default.ts
 
-import { DefaultConfig } from '@midwayjs/grpc';
 import { join } from 'path';
 
-export const grpc = {
-  services: [
-    {
-      url: 'localhost:6565',
-      protoPath: join(__dirname, '../../proto/helloworld.proto'),
-      package: 'helloworld',
-    },
-  ],
-} as DefaultConfig;
-
+// src/config/config.default
+export default {
+  // ...
+  grpc: {
+    services: [
+      {
+        url: 'localhost:6565',
+        protoPath: join(__dirname, '../../proto/helloworld.proto'),
+        package: 'helloworld',
+      },
+    ],
+  },
+}
 ```
 
 

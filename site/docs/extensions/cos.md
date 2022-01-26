@@ -61,30 +61,38 @@ export class ContainerLifeCycle {
 
 **单客户端配置**
 ```typescript
-export const cos = {
-  client: {
-    SecretId: '***********',
-    SecretKey: '***********',
+// src/config/config.default
+export default {
+  // ...
+  cos: {
+    client: {
+      SecretId: '***********',
+      SecretKey: '***********',
+    },
   },
-};
+}
 ```
 
 
 **多个客户端配置，需要配置多个**
 
 ```typescript
-export const cos = {
-  clients: {
-    instance1: {
-      SecretId: '***********',
-    	SecretKey: '***********',
-    },
-    instance2: {
-      SecretId: '***********',
-    	SecretKey: '***********',
+// src/config/config.default
+export default {
+  // ...
+  cos: {
+    clients: {
+      instance1: {
+        SecretId: '***********',
+        SecretKey: '***********',
+      },
+      instance2: {
+        SecretId: '***********',
+        SecretKey: '***********',
+      },
     },
   },
-};
+}
 ```
 更多参数可以查看 [cos-nodejs-sdk-v5](https://github.com/tencentyun/cos-nodejs-sdk-v5) 文档。
 

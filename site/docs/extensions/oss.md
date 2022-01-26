@@ -94,50 +94,62 @@ OSS 组件需要配置后才能使用。需要填写 OSS 的 bucket、accessKeyI
 
 **普通的 oss bucket 配置**
 ```typescript
-// normal oss bucket
-export const oss = {
-  client: {
-    accessKeyId: 'your access key',
-    accessKeySecret: 'your access secret',
-    bucket: 'your bucket name',
-    endpoint: 'oss-cn-hongkong.aliyuncs.com',
-    timeout: '60s',
+// src/config/config.default
+export default {
+  // ...
+  oss: {
+    // normal oss bucket
+    client: {
+      accessKeyId: 'your access key',
+      accessKeySecret: 'your access secret',
+      bucket: 'your bucket name',
+      endpoint: 'oss-cn-hongkong.aliyuncs.com',
+      timeout: '60s',
+    },
   },
-};
+}
 ```
 
 
 **集群（cluster） 模式的 oss bucket 配置，需要配置多个**
 
 ```typescript
-// need to config all bucket information under cluster
-export const oss = {
-  client: {
-    cluster: [{
-      endpoint: 'host1',
-      accessKeyId: 'id1',
-      accessKeySecret: 'secret1',
-    }, {
-      endpoint: 'host2',
-      accessKeyId: 'id2',
-      accessKeySecret: 'secret2',
-    }],
-    schedule: 'masterSlave', //default is `roundRobin`
-    timeout: '60s',
+// src/config/config.default
+export default {
+  // ...
+  oss: {
+    // need to config all bucket information under cluster
+    client: {
+      cluster: [{
+        endpoint: 'host1',
+        accessKeyId: 'id1',
+        accessKeySecret: 'secret1',
+      }, {
+        endpoint: 'host2',
+        accessKeyId: 'id2',
+        accessKeySecret: 'secret2',
+      }],
+      schedule: 'masterSlave', //default is `roundRobin`
+      timeout: '60s',
+    },
   },
-};
+}
 ```
 
 **sts 模式**
 ```typescript
-// if config.sts == true, oss will create STS client
-export const oss = {
-  client: {
-    sts: true,
-    accessKeyId: 'your access key',
-    accessKeySecret: 'your access secret',
+// src/config/config.default
+export default {
+  // ...
+  oss: {
+    // if config.sts == true, oss will create STS client
+    client: {
+      sts: true,
+      accessKeyId: 'your access key',
+      accessKeySecret: 'your access secret',
+    },
   },
-};
+}
 ```
 
 ## 使用组件
@@ -197,27 +209,33 @@ export class UserService {
 
 有些应用需要访问多个 oss bucket，那么就需要配置 `oss.clients`。
 ```typescript
-export const oss = {
-  clients: {
-    bucket1: {
-      bucket: 'bucket1',
+// src/config/config.default
+export default {
+  // ...
+  oss: {
+    clients: {
+      bucket1: {
+        bucket: 'bucket1',
+        // ...
+      },
+      bucket2: {
+        bucket: 'bucket2',
+        // ...
+      },
     },
-    bucket2: {
-      bucket: 'bucket2',
+    // client, clients，createInstance 方法共享的配置
+    default: {
+      endpoint: '',
+      accessKeyId: '',
+      accessKeySecret: '',
     },
   },
-  // shared by client, clients and createInstance
-  default: {
-    endpoint: '',
-    accessKeyId: '',
-    accessKeySecret: '',
+  // other custom config
+  bucket3: {
+    bucket: 'bucket3',
+    // ...
   },
-};
-
-export const bucket3 = {
-  bucket: 'bucket3',
-};
-
+}
 ```
 
 可以使用 `OSSServiceFactory` 获取不同的实例。

@@ -76,10 +76,4 @@ export class UserService {
 
 在依赖注入容器初始化的过程中，Midway 默认初始化了一个 `EnvironmentService` 服务用来解析环境，并在整个生命周期中，持续保持这个服务对象。
 
-
-借助服务的 `getCurrentEnvironment` 方法，我们可以直接从上面获取环境值，而 `app.getEnv()` 方法也正是这样获取值的。
-```typescript
-const environmentService = app.getApplicationContext.get(EnvironmentService);
-const env = environmentService.getCurrentEnvironment();
-```
-
+具体请查看 [环境服务](./built_in_service#midwayenvironmentservice)。

@@ -108,18 +108,21 @@ HttpService 实例等价于 `axios.create` ，所以可以有一些配置参数�
 
 比如：
 ```typescript
-export const axios = {
-  baseURL: 'https://api.example.com',
-  // `headers` are custom headers to be sent
-  headers: {
-    'X-Requested-With': 'XMLHttpRequest'
-  },
-  timeout: 1000, // default is `0` (no timeout)
+export default {
+  // ...
+  axios: {
+    baseURL: 'https://api.example.com',
+    // `headers` are custom headers to be sent
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest'
+    },
+    timeout: 1000, // default is `0` (no timeout)
 
-  // `withCredentials` indicates whether or not cross-site Access-Control requests
-  // should be made using credentials
-  withCredentials: false, // default
-};
+    // `withCredentials` indicates whether or not cross-site Access-Control requests
+    // should be made using credentials
+    withCredentials: false, // default
+  }
+}
 ```
 具体的参数可以参考 [axios global config](https://github.com/axios/axios#config-defaults)。
 

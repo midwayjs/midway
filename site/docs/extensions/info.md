@@ -92,10 +92,12 @@ export class AutoConfiguration {
 
 ```typescript
 // src/config/config.default.ts
-
-export const info = {
-  infoPath: '/_my_info',
-};
+export default {
+  // ...
+  info: {
+    infoPath: '/_my_info',
+  }
+}
 ```
 
 
@@ -110,9 +112,12 @@ export const info = {
 // src/config/config.default.ts
 import { DefaultHiddenKey } from '@midwayjs/info';
 
-export const info = {
-  hiddenKey: DefaultHiddenKey.concat(['*abc', '*def', '*bbb*']),
-};
+export default {
+  // ...
+  info: {
+    hiddenKey: DefaultHiddenKey.concat(['*abc', '*def', '*bbb*']),
+  }
+}
 ```
 
 

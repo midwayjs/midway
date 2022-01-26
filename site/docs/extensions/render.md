@@ -67,19 +67,21 @@ export class ContainerLifeCycle {
 
 ```typescript
 // src/config/config.default.ts
-export const view = {
-  mapping: {
-    '.ejs': 'ejs',
+export default {
+  // ...
+  view: {
+    mapping: {
+      '.ejs': 'ejs',
+    },
   },
-};
-
-// ejs config
-export const ejs = {};
+  // ejs config
+  ejs: {}
+}
 ```
 ### 使用
 
 
-注意，默认的 view 目录为 `${appRoot}/view` ，在其中创建一个 `hello.ejs` 文件。
+注意，默认的 view 目录为 `${appDir}/view` ，在其中创建一个 `hello.ejs` 文件。
 
 
 目录结构如下：
@@ -109,7 +111,6 @@ hello <%= data %>
 import { Inject, Provide } from '@midwayjs/decorator';
 import { Context } from '@midwayjs/koa';
 
-@Provide()
 @Controller('/')
 export class HomeController {
 
@@ -133,21 +134,22 @@ export class HomeController {
 
 ```typescript
 // src/config/config.default.ts
-export const view = {
-  defaultViewEngine: 'ejs',
-  mapping: {
-    '.ejs': 'ejs',
+export default {
+  // ...
+  view: {
+    defaultViewEngine: 'ejs',
+    mapping: {
+      '.ejs': 'ejs',
+    },
   },
-};
-
-// ejs config
-export const ejs = {};
+  // ejs config
+  ejs: {}
+}
 ```
 
 这样我们在渲染时不需要增加后缀。
 
 ```typescript
-@Provide()
 @Controller('/')
 export class HomeController {
 
@@ -172,19 +174,28 @@ export class HomeController {
 默认的模板目录在 `${appDir}/view`。我们可以在 `rootDir` 字段增加其他的目录。
 
 ```typescript
-// view 组件的配置
-export const view = {
-  rootDir: {
-    default: 'xxxxx',
-  }
-};
+// src/config/config.default.ts
 
-// 其他组件的配置
-export const view = {
-  rootDir: {
-    anotherRoot: path.join(__dirname, './view'),
-  }
-};
+// 修改默认 view 组件的 default 目录
+export default {
+  // ...
+  view: {
+    rootDir: {
+      default: path.join(__dirname, './view'),
+    }
+  },
+}
+
+// 其他组件需要增加目录的配置
+export default {
+  // ...
+  // view 组件的配置
+  view: {
+    rootDir: {
+      anotherRoot: path.join(__dirname, './view'),
+    }
+  },
+}
 ```
 
 通过对象合并的机制，使得所有的 `rootDir` 都能合并到一起，组件内部会获取 values 做匹配。
@@ -240,14 +251,15 @@ export class ContainerLifeCycle {
 
 3、增加 nunjucks 的配置，比如默认使用 nunjucks。
 ```typescript
-// src/config/config.default.ts
-export const view = {
-  defaultViewEngine: 'nunjucks',
-  mapping: {
-    '.nj': 'nunjucks',
+export default {
+  // ...
+  view: {
+    defaultViewEngine: 'nunjucks',
+    mapping: {
+      '.nj': 'nunjucks',
+    },
   },
-};
-
+}
 ```
 
 
@@ -263,7 +275,6 @@ hi, {{ user }}
 import { Inject, Provide } from '@midwayjs/decorator';
 import { Context } from '@midwayjs/koa';
 
-@Provide()
 @Controller('/')
 export class HomeController {
 

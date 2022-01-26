@@ -68,16 +68,18 @@ Prometheus 基于 HTTP 获取监控数据，请加载 web/koa/express 任一框�
 可以在 `config.default.ts`  中，修改 prometheus 的配置。
 
 ```typescript
-import { DefaultConfig } from '@midwayjs/prometheus';
-
-export const prometheus: DefaultConfig = {
-  labels: {
-    APP_NAME: 'demo_project',
+// src/config/config.default
+export default {
+  // ...
+  prometheus: {
+    labels: {
+      APP_NAME: 'demo_project',
+    },
   },
-};
+}
 ```
 
-更多的配置，我们可以查看 `DefaultConfig`  这个定义进行配置。
+更多的配置，我们可以查看定义进行配置。
 
 通过配置，我们例如可以归类哪些 node 是同一个应用，因为我们部署的时候，node 程序是分布式的。例如上面我们加了 APP_NAME，用来区分不同的应用，这样在监控指标中，我们可以区分不同的应用。
 
@@ -224,7 +226,6 @@ import * as prometheusSocketIo from '@midwayjs/prometheus-socket-io';
 @Configuration({
   imports: [prometheus, prometheusSocketIo],
   importConfigs: [join(__dirname, './config')],
-  conflictCheck: true,
 })
 export class ContainerLifeCycle {}
 ```

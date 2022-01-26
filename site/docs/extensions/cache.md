@@ -134,13 +134,16 @@ await this.cacheManager.set(key, value, {ttl: null});
 ```
 同时你也可以通过全局的 `config.default.ts` 中进行设置。
 ```typescript
-export const cache = {
-  store: 'memory',
-  options: {
-    max: 100,
-    ttl: 10,		// 修改默认的ttl配置
-  },
-};
+export default {
+  // ...
+  cache: {
+    store: 'memory',
+    options: {
+      max: 100,
+      ttl: 10,		// 修改默认的ttl配置
+    },
+  }
+}
 ```
 
 
@@ -181,14 +184,16 @@ await this.cacheManager.reset(); // 这块需要注意
 
 默认的配置：
 ```typescript
-export const cache = {
-  store: 'memory',
-  options: {
-    max: 100,
-    ttl: 10,
-  },
-};
-
+export default {
+  // ...
+  cache: {
+  	store: 'memory',
+    options: {
+      max: 100,
+      ttl: 10,
+    },
+  }
+}
 ```
 例如用户可以修改默认的 TTL，也就是过期时间。
 
@@ -201,16 +206,19 @@ export const cache = {
 ```typescript
 import * as redisStore from 'cache-manager-ioredis';
 
-export const cache = {
-  store: redisStore,
-  options: {
-    host: 'localhost', // default value
-    port: 6379, // default value
-    password: '',
-    db: 0,
-    keyPrefix: 'cache:',
-    ttl: 100
-  },
+export default {
+  // ...
+  cache: {
+  	store: redisStore,
+    options: {
+      host: 'localhost', // default value
+      port: 6379, // default value
+      password: '',
+      db: 0,
+      keyPrefix: 'cache:',
+      ttl: 100
+    },
+  }
 }
 ```
 或者修改为 mongodb 的 cache。
@@ -233,7 +241,7 @@ export const cache = {
 
 
 
-### 1、set 和 get无法得到相同值？
+### 1、set 和 get 无法得到相同值？
 
 用户使用了 cache 模块，默认是内存式的，例如在本地用 dev 模式，由于是单进程的，那 set 和 ge t最终能达到相同的值。但是用户部署到服务器上面后，由于会有多 worker，相当于第一次请求，落在进程1上，然后第二次落在进程2上，这样获得到空了。
 

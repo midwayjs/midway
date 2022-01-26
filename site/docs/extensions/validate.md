@@ -437,14 +437,16 @@ Get /user/get_user?locale=zh_CN
 比如：
 
 ```typescript
-export const i18n = {
-  localeTable: {
+// src/config/config.default.ts
+export default {
+  // ...
+  i18n: {
     // 增加翻译
     zh_TW: {
       validate: require('../../locales/zh_TW.json'),
     },
-  },
-};
+  }
+}
 ```
 
 如果可以的话，我们希望你将翻译提交给 Midway 官方，让大家都能使用。
@@ -475,15 +477,20 @@ export class UserDTO {
 通过配置 i18n 组件的 `validate` 多语言文本表，你可以选择性的替换大部分的校验文本，所有的规则都会应用该文本。
 
 ```typescript
-export const i18n = {
-  localeTable: {
-    zh_CN: {
-      validate: {
-        'string.max': 'hello world',
+// src/config/config.default.ts
+export default {
+  // ...
+  i18n: {
+    // 把你的翻译文本放到这里
+    localeTable: {
+      zh_CN: {
+        validate: {
+          'string.max': 'hello world',
+        },
       },
     },
-  },
-};
+  }
+}
 ```
 
 这里的 `validate` 是 `@midwayjs/validate` 组件在 i18n 组件中配置的语言表关键字。
@@ -493,20 +500,25 @@ export const i18n = {
 由于这些文本区分语言，所以需要谨慎处理，比如，替换不同的语言。
 
 ```typescript
-export const i18n = {
-  localeTable: {
-    zh_CN: {
-      validate: {
-        'string.max': 'string is too long',
+// src/config/config.default.ts
+export default {
+  // ...
+  i18n: {
+    // 把你的翻译文本放到这里
+    localeTable: {
+      zh_CN: {
+        validate: {
+          'string.max': 'string is too long',
+        },
+      },
+      en_US: {
+        validate: {
+          'string.max': '字符超长',
+        },
       },
     },
-    en_US: {
-      validate: {
-        'string.max': '字符超长',
-      },
-    },
-  },
-};
+  }
+}
 ```
 
 
@@ -518,14 +530,18 @@ export const i18n = {
 比如：
 
 ```typescript
-export const i18n = {
-  localeTable: {
-    // 替换中文翻译
-    zh_CN: {
-      validate: require('../../locales/custom.json'),
+// src/config/config.default.ts
+export default {
+  // ...
+  i18n: {
+    localeTable: {
+      // 替换中文翻译
+      zh_CN: {
+        validate: require('../../locales/custom.json'),
+      },
     },
-  },
-};
+  }
+}
 ```
 
 
@@ -587,12 +603,15 @@ export class UserService {
 1、由于部分用户在参数校验的时候，希望允许出现没有定义的字段，可以在全局配置，以及装饰器上分别设置，前者对全局生效，后者对单个校验生效。
 
 ```typescript
-// src/config/config.default 
-export const validate = {
-   validationOptions: {
-     allowUnknown: true,		// 全局生效
-   }
- };
+// src/config/config.default.ts
+export default {
+  // ...
+  validate: {
+    validationOptions: {
+      allowUnknown: true,		// 全局生效
+  	}
+  }
+}
 ```
 
 或者在装饰器上。

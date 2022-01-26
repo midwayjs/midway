@@ -93,20 +93,24 @@ export class ContainerLifeCycle implements ILifeCycle {
 在 config.default.ts 中配置：
 
 ```typescript
-export const sequelize = {
-  options: {
-    database: 'test4',
-    username: 'root',
-    password: '123456',
-    host: '127.0.0.1',  // 此处支持idb上面vipserver key的那种方式，也支持aliyun的地址。
-    port: 3306,
-    encrypt: false,
-    dialect: 'mysql',
-    define: { charset: 'utf8' },
-    timezone: '+08:00',
-    logging: console.log
+// src/config/config.default.ts
+export default {
+  // ...
+  sequelize: {
+    options: {
+      database: 'test4',
+      username: 'root',
+      password: '123456',
+      host: '127.0.0.1',  // 此处支持idb上面vipserver key的那种方式，也支持aliyun的地址。
+      port: 3306,
+      encrypt: false,
+      dialect: 'mysql',
+      define: { charset: 'utf8' },
+      timezone: '+08:00',
+      logging: console.log
+    },
+    sync: false // 本地的时候，可以通过sync: true直接createTable
   },
-  sync: false // 本地的时候，可以通过sync: true直接createTable
 }
 ```
 
@@ -226,9 +230,10 @@ export class HomeController {
 
   @Get('/')
   async home() {
+    // SELECT * FROM photo WHERE name = "23" OR name = "34";
     let result = await Photo.findAll({
       where: {
-        [Op.or]: [{name: "23"}, {name: "34"}] // SELECT * FROM photo WHERE name = "23" OR name = "34";
+        [Op.or]: [{name: "23"}, {name: "34"}] 
       }
     })
     console.log(result);

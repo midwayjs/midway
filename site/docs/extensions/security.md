@@ -56,42 +56,48 @@ export class AutoConfiguration {}
 默认配置如下：
 
 ```ts
-// 默认配置
-export const security = {
-  csrf: {
-    enable: true,
-    type: 'ctoken',
-    useSession: false,
-    cookieName: 'csrfToken',
-    sessionName: 'csrfToken',
-    headerName: 'x-csrf-token',
-    bodyName: '_csrf',
-    queryName: '_csrf',
-    refererWhiteList: [],
-  },
-  xframe: {
-    enable: true,
-    value: 'SAMEORIGIN',
-  },
-  csp: {
-    enable: false,
-  },
-  hsts: {
-    enable: false,
-    maxAge: 365 * 24 * 3600,
-    includeSubdomains: false,
-  },
-  noopen: {
-    enable: false,
-  },
-  nosniff: {
-    enable: false,
-  },
-  xssProtection: {
-    enable: true,
-    value: '1; mode=block',
+// src/config/config.default
+export default {
+  // ...
+  
+  // 默认配置
+  security: {
+    csrf: {
+      enable: true,
+      type: 'ctoken',
+      useSession: false,
+      cookieName: 'csrfToken',
+      sessionName: 'csrfToken',
+      headerName: 'x-csrf-token',
+      bodyName: '_csrf',
+      queryName: '_csrf',
+      refererWhiteList: [],
+    },
+    xframe: {
+      enable: true,
+      value: 'SAMEORIGIN',
+    },
+    csp: {
+      enable: false,
+    },
+    hsts: {
+      enable: false,
+      maxAge: 365 * 24 * 3600,
+      includeSubdomains: false,
+    },
+    noopen: {
+      enable: false,
+    },
+    nosniff: {
+      enable: false,
+    },
+    xssProtection: {
+      enable: true,
+      value: '1; mode=block',
+    },
   },
 }
+
 ```
 
 ### csrf

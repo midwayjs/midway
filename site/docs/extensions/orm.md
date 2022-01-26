@@ -382,29 +382,37 @@ name: string;
 
 然后在 `config.default.ts`  中配置数据库连接信息。
 ```typescript
-/**
- * 单数据库实例
- */
-export const orm = {
-  type: 'mysql',
-  host: '',
-  port: 3306,
-  username: '',
-  password: '',
-  database: undefined,
-  synchronize: false,		// 如果第一次使用，不存在表，有同步的需求可以写 true
-  logging: false,
-};
+// src/config/config.default.ts
+export default {
+  // ...
+  orm: {
+    /**
+     * 单数据库实例
+     */
+    type: 'mysql',
+    host: '',
+    port: 3306,
+    username: '',
+    password: '',
+    database: undefined,
+    synchronize: false,		// 如果第一次使用，不存在表，有同步的需求可以写 true
+    logging: false,
+  },
+}
 ```
 默认存储的是 utc 时间（推荐）。
 
 
 也可以配置时区（不建议）
 ```typescript
-export const orm = {
+// src/config/config.default.ts
+export default {
   // ...
-  timezone: '+08:00',
-};
+  orm: {
+    // ...
+  	timezone: '+08:00',
+  },
+}
 ```
 
 
@@ -415,12 +423,16 @@ export const orm = {
 
 
 ```typescript
-export const orm = {
-  type: 'sqlite',
-  database: path.join(__dirname, '../../test.sqlite'),
-  synchronize: true,
-  logging: true,
-};
+// src/config/config.default.ts
+export default {
+  // ...
+  orm: {
+    type: 'sqlite',
+    database: path.join(__dirname, '../../test.sqlite'),
+    synchronize: true,
+    logging: true,
+  },
+}
 ```
 
 
@@ -1042,7 +1054,7 @@ export class PhotoService {
   }]
 }
 ```
-###
+
 ### 18、使用 QueryBuilder
 
 
@@ -1274,7 +1286,7 @@ export async function getPhoto() {
 ```shell
 sudo sysctl -w net.inet.tcp.sack=0
 ```
-###
+
 ### 关于 mysql 时间列的当前时区展示
 
 
@@ -1283,13 +1295,14 @@ sudo sysctl -w net.inet.tcp.sack=0
 
 在配置时，开启时间转字符串的选项。
 ```typescript
-// src/config/config/default
-
-config.orm = {
-	//...
-  dateStrings: true,
-};
-
+// src/config/config.default.ts
+export default {
+  // ...
+  orm: {
+    //...
+    dateStrings: true,
+  },
+}
 ```
 
 
