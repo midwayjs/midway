@@ -348,11 +348,6 @@
         },
         {
           "type": "doc",
-          "id": "extensions/process_agent",
-          "label": "进程共享（ProcessAgent）"
-        },
-        {
-          "type": "doc",
           "id": "extensions/tablestore",
           "label": "TableStore"
         }

@@ -81,7 +81,6 @@
         "extensions/info",
         "extensions/validate",
         "extensions/swagger",
-        "extensions/process_agent",
         "extensions/task",
         "extensions/orm",
         "extensions/sequelize",
