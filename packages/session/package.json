@@ -13,11 +13,11 @@
   "devDependencies": {
     "@midwayjs/core": "^3.0.2",
     "@midwayjs/decorator": "^3.0.2",
-    "@midwayjs/mock": "^3.0.2"
+    "@midwayjs/mock": "^3.0.2",
+    "crc": "4.1.0"
   },
   "dependencies": {
-    "@midwayjs/cookies": "1.0.1",
-    "crc": "4.1.0"
+    "@midwayjs/cookies": "1.0.1"
   },
   "keywords": [
     "midway",
