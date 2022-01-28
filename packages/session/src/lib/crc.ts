@@ -1,3 +1,7 @@
+/**
+ * code from https://gist.github.com/nanha/1385106/ead7b3d7eba5401989d138322cc5e10c8962da76
+ * Thanks nanha
+ */
 const crc32tab = [
   0x00000000, 0x77073096, 0xee0e612c, 0x990951ba, 0x076dc419, 0x706af48f,
   0xe963a535, 0x9e6495a3, 0x0edb8832, 0x79dcb8a4, 0xe0d5e91e, 0x97d2d988,
@@ -51,11 +55,11 @@ const crc32tab = [
  * @return {String} checksum
  * @api public
  */
-export function crc32(str): number {
+export function crc32(str, hex = false): number | string {
   let crc = ~0;
   for (let i = 0, l = str.length; i < l; i++) {
     crc = (crc >>> 8) ^ crc32tab[(crc ^ str.charCodeAt(i)) & 0xff];
   }
-  crc = crc ^ -1;
-  return crc;
+  crc = Math.abs(crc ^ -1);
+  return hex ? crc.toString(16) : crc;
 }

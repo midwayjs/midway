@@ -26,7 +26,7 @@ export function encode(body) {
 }
 
 export function hash(sess): number {
-  return crc32(JSON.stringify(sess));
+  return crc32(JSON.stringify(sess)) as number;
 }
 
 export const COOKIE_EXP_DATE = new Date('Thu, 01 Jan 1970 00:00:00 GMT');
