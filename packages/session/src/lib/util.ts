@@ -1,4 +1,4 @@
-import { crc32 } from 'crc';
+import { crc32 } from './crc';
 
 /**
  * Decode the base64 cookie value to an object.
@@ -25,8 +25,8 @@ export function encode(body) {
   return Buffer.from(body).toString('base64');
 }
 
-export function hash(sess) {
-  return crc32(JSON.stringify(sess));
+export function hash(sess): number {
+  return crc32(JSON.stringify(sess)) as number;
 }
 
 export const COOKIE_EXP_DATE = new Date('Thu, 01 Jan 1970 00:00:00 GMT');

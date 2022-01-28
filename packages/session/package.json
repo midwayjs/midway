@@ -16,8 +16,7 @@
     "@midwayjs/mock": "^3.0.2"
   },
   "dependencies": {
-    "@midwayjs/cookies": "1.0.1",
-    "crc": "4.1.0"
+    "@midwayjs/cookies": "1.0.1"
   },
   "keywords": [
     "midway",
