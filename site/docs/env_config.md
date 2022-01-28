@@ -60,10 +60,41 @@ export class ContainerLifeCycle {
 
 
 
-### 1、指定目录或者文件加载
+### 2、对象形式加载（推荐）
+
+从 Midway v3 开始，我们将以标准的对象加载方式作为主推的配置引入形式。
+
+在一些场景下，比如单文件构建等和目录结构无关的需求，只支持这种标准的模块加载方式来加载配置。
+
+每个环境的配置文件 **必须显式指定添加**，后续框架会根据实际的环境进行合并。
+
+```typescript
+// src/configuration.ts
+import { Configuration } from '@midwayjs/decorator';
+import { join } from 'path';
+
+import * as DefaultConfig from './config/config.default';
+import * as LocalConfig from './config/config.local';
+
+@Configuration({
+  importConfigs: [
+    {
+      default: DefaultConfig,
+      local: LocalConfig
+    }
+  ]
+})
+export class ContainerLifeCycle {
+}	
+```
+`importConfigs` 中的数组中传递配置对象，每个对象的 key 为环境，值为环境对应的配置值，midway 在启动中会根据环境来加载对应的配置。
 
 
-可以指定加载一个目录，目录里所有的 `config.*.ts` 都会被扫描加载。
+
+### 2、指定目录或者文件加载
+
+
+指定加载一个目录，目录里所有的 `config.*.ts` 都会被扫描加载。
 
 
 :::info
@@ -81,6 +112,7 @@ export class ContainerLifeCycle {
 
 
 **示例：指定目录**
+
 ```typescript
 // src/configuration.ts
 import { Configuration } from '@midwayjs/decorator';
@@ -123,6 +155,7 @@ export class ContainerLifeCycle {
 
 
 比如目录结构如下（注意 `customConfig.default.js` 文件）：
+
 ```
  base-app
  ├── package.json
@@ -132,6 +165,7 @@ export class ContainerLifeCycle {
      └── config
          └── config.default.ts
 ```
+
 ```typescript
 // src/configuration.ts
 import { Configuration } from '@midwayjs/decorator';
@@ -146,34 +180,6 @@ import { join } from 'path';
 export class ContainerLifeCycle {
 }	
 ```
-
-
-
-### 2、对象形式加载
-
-在特殊场景下，比如希望 bundle/package 等和目录结构无关的需求，可以使用标准的模块加载方式来加载配置。
-​
-
-```typescript
-// src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
-import { join } from 'path';
-
-import * as DefaultConfig from './config/config.default';
-import * as LocalConfig from './config/config.local';
-
-@Configuration({
-  importConfigs: [
-    {
-      default: DefaultConfig,
-      local: LocalConfig
-    }
-  ]
-})
-export class ContainerLifeCycle {
-}	
-```
-`importConfigs` 中的数组中传递配置对象，每个对象的 key 为环境，值为环境对应的配置值，midway 在启动中会根据环境来加载对应的配置。
 
 
 

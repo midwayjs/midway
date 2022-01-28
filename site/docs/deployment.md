@@ -190,6 +190,68 @@ Bootstrap.run();
 - [cfork 使用文档](extensions/cfork)
 
 
+
+### 启动参数
+
+Bootstrap 有一些可配置的启动参数，通过 `configure` 方法传入。
+
+```typescript
+const { Bootstrap } = require('@midwayjs/bootstrap');
+Bootstrap
+  .configure({
+  	imports: [/*...*/]
+  })
+  .run();
+```
+
+
+
+| 属性           | 类型                                                         | 描述                                                         |
+| -------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| appDir         | string                                                       | 可选，项目根目录，默认为 `process.cwd()`                     |
+| baseDir        | string                                                       | 可选，项目代码目录，研发时为 `src`，部署时为 `dist`          |
+| imports        | Component[]                                                  | 可选，显式的组件引用                                         |
+| moduleDetector | 'file' \| IFileDetector \| false                             | 可选，使用的模块加载方式，默认为 `file` ，使用依赖注入本地文件扫描方式，可以显式指定一个扫描器，也可以关闭扫描 |
+| logger         | Boolean \| ILogger                                           | 可选，bootstrap 中使用的 logger，默认为 consoleLogger        |
+| ignore         | string[]                                                     | 可选，依赖注入容器扫描忽略的路径，moduleDetector 为 false 时无效 |
+| globalConfig   | Array<{ [environmentName: string]: Record<string, any> }> \| Record<string, any> | 可选，全局传入的配置，如果传入对象，则直接以对象形式合并到当前的配置中，如果希望传入不同环境的配置，那么，以数组形式传入，结构和 `importConfigs` 一致。 |
+
+
+
+**示例，传入全局配置（对象）**
+
+```typescript
+const { Bootstrap } = require('@midwayjs/bootstrap');
+Bootstrap
+  .configure({
+  	globalConfig: {
+      customKey: 'abc'
+    }
+  })
+  .run();
+```
+
+
+
+**示例，传入分环境的配置**
+
+```typescript
+const { Bootstrap } = require('@midwayjs/bootstrap');
+Bootstrap
+  .configure({
+  	globalConfig: [{
+      default: {/*...*/},
+      unittest: {/*...*/}
+    }]
+  })
+  .run();
+```
+
+
+
+
+
+
 ## 使用 Docker 部署
 
 ### 编写 Dockerfile，构建镜像
@@ -398,3 +460,144 @@ export class HomeController {
 ![image.png](https://img.alicdn.com/imgextra/i1/O1CN01Zrvj3E1p61qFBz95H_!!6000000005310-2-tps-686-184.png)
 
 关于更多关于 docker-compose 的详情，可以查看网上关于 docker-compose 的使用方法。
+
+
+
+## 单文件构建部署
+
+在某些场景，将项目构建为单文件，部署的文件可以更小，可以更容易的分发部署，在一些场景下特别的高效，如：
+
+- Serverless 场景，单文件可以更快的部署
+- 私密场景，单文件可以更容易的做加密混淆
+
+Midway 从 v3 开始支持将项目构建为单文件。
+
+不支持的情况有：
+
+- egg 项目（@midwayjs/web）
+- 入口处 `importConfigs` 使用的路径形式引入配置的应用，组件
+- 未显示依赖的包，或者包里有基于约定的文件
+
+:::info
+
+当前，还处于测试阶段。
+
+:::
+
+### 前置依赖
+
+单文件构建有一些前置依赖条件。
+
+```bash
+## 用于生成入口
+$ npm i @midwayjs/bundle-helper --save-dev
+
+## 用于构建单文件
+## 装到全局
+$ npm i @vercel/ncc -g
+## 或者装到项目
+$ npm i @vercel/ncc --save-dev
+```
+
+
+
+### 代码部分
+
+必须将项目引入的配置调整为 "对象模式"。
+
+Midway 的官方组件都已经调整为该模式，如果有自己编写的组件，也请调整为该模式才能构建为单文件。
+
+:::tip
+
+Midway v2/v3 均支持配置以 "对象模式" 加载。
+
+:::
+
+```typescript
+// src/configuration.ts
+import { Configuration } from '@midwayjs/decorator';
+import { join } from 'path';
+
+import * as DefaultConfig from './config/config.default';
+import * as LocalConfig from './config/config.local';
+
+@Configuration({
+  importConfigs: [
+    {
+      default: DefaultConfig,
+      local: LocalConfig
+    }
+  ]
+})
+export class ContainerLifeCycle {
+}   
+```
+
+
+
+### 构建流程
+
+单文件构建的编译需要几个步骤：
+
+- 1、准备单文件构建入口
+- 2、将项目 ts 文件构建为 js
+- 3、使用额外编译器，将所有的 js 文件打包成一个文件
+
+**步骤一**
+
+修改入口 `bootstrap.js`  为下列代码。
+
+```typescript
+const { Bootstrap } = require('@midwayjs/bootstrap');
+
+// 显式以组件方式引入用户代码
+Bootstrap.configure({
+  // 这里引用的是编译后的入口，本地开发不走这个文件
+  imports: require('./dist/index'),
+  // 禁用依赖注入的目录扫描
+  moduleDetector: false,
+}).run()
+
+```
+
+**步骤二**
+
+`package.json` 中增加下面的脚本。
+
+```json
+  "scripts": {
+    // ...
+    "bundle": "bundle && npm run build && ncc build bootstrap.js -o build",
+    "bundle_start": "NODE_ENV=production node ./build/index.js"
+  },
+```
+
+包含三个部分
+
+- `bundle` 是将所有的项目代码以组件的形式导出，并生成一个 `src/index.ts` 文件
+- `npm run buid` 是基础的 ts 项目构建，将 `src/**/*.ts` 构建为 `dist/**/*.js`
+- `ncc build bootstrap.js -o build` 以 `bootstrap.js` 为入口构建为一个单文件，最终生成到 `build/index.js`
+
+**步骤三**
+
+执行命令。
+
+```bash
+$ npm run bundle
+```
+
+:::tip
+
+注意，构建过程中可能有错误，比如 ts 定义错误，入口生成语法不正确等情况，需要手动修复。
+
+:::
+
+**步骤四**
+
+启动项目。
+
+```bash
+$ npm run bundle_start
+```
+
+如果启动访问没问题，那么你就可以拿着构建的 build 目录做分发了。
