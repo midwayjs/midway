@@ -19,44 +19,122 @@
   "@midwayjs/axios": "3.0.2",
   "@midwayjs/bootstrap": "3.0.2",
   "@midwayjs/cache": "3.0.2",
-  "@midwayjs/consul": "3.0.2",
+  "@midwayjs/consul": [
+    "3.0.2",
+    "3.0.3"
+  ],
   "@midwayjs/core": "3.0.2",
-  "@midwayjs/cos": "3.0.2",
-  "@midwayjs/cross-domain": "3.0.2",
+  "@midwayjs/cos": [
+    "3.0.2",
+    "3.0.3"
+  ],
+  "@midwayjs/cross-domain": [
+    "3.0.2",
+    "3.0.3"
+  ],
   "@midwayjs/decorator": "3.0.2",
   "@midwayjs/express-session": "3.0.2",
   "@midwayjs/faas": "3.0.2",
   "@midwayjs/grpc": "3.0.2",
-  "@midwayjs/i18n": "3.0.2",
-  "@midwayjs/info": "3.0.2",
-  "@midwayjs/jwt": "3.0.2",
+  "@midwayjs/i18n": [
+    "3.0.2",
+    "3.0.3"
+  ],
+  "@midwayjs/info": [
+    "3.0.2",
+    "3.0.3"
+  ],
+  "@midwayjs/jwt": [
+    "3.0.2",
+    "3.0.3"
+  ],
   "@midwayjs/mock": "3.0.2",
-  "@midwayjs/mongoose": "3.0.2",
+  "@midwayjs/mongoose": [
+    "3.0.2",
+    "3.0.3"
+  ],
   "@midwayjs/orm": "3.0.2",
-  "@midwayjs/oss": "3.0.2",
-  "@midwayjs/passport": "3.0.2",
-  "@midwayjs/process-agent": "3.0.2",
-  "@midwayjs/prometheus-socket-io": "3.0.2",
-  "@midwayjs/prometheus": "3.0.2",
+  "@midwayjs/oss": [
+    "3.0.2",
+    "3.0.3"
+  ],
+  "@midwayjs/passport": [
+    "3.0.2",
+    "3.0.3"
+  ],
+  "@midwayjs/process-agent": [
+    "3.0.2",
+    "3.0.3"
+  ],
+  "@midwayjs/prometheus-socket-io": [
+    "3.0.2",
+    "3.0.3"
+  ],
+  "@midwayjs/prometheus": [
+    "3.0.2",
+    "3.0.3"
+  ],
   "@midwayjs/rabbitmq": "3.0.2",
   "@midwayjs/redis": "3.0.2",
-  "@midwayjs/security": "3.0.2",
-  "@midwayjs/sequelize": "3.0.2",
-  "@midwayjs/session": "3.0.2",
+  "@midwayjs/security": [
+    "3.0.2",
+    "3.0.3"
+  ],
+  "@midwayjs/sequelize": [
+    "3.0.2",
+    "3.0.3"
+  ],
+  "@midwayjs/session": [
+    "3.0.2",
+    "3.0.3"
+  ],
   "@midwayjs/socketio": "3.0.2",
-  "@midwayjs/static-file": "3.0.2",
-  "@midwayjs/swagger": "3.0.2",
+  "@midwayjs/static-file": [
+    "3.0.2",
+    "3.0.3"
+  ],
+  "@midwayjs/swagger": [
+    "3.0.2",
+    "3.0.3"
+  ],
   "@midwayjs/tablestore": "3.0.2",
-  "@midwayjs/task": "3.0.2",
-  "@midwayjs/typegoose": "3.0.2",
-  "@midwayjs/upload": "3.0.2",
-  "@midwayjs/validate": "3.0.2",
-  "@midwayjs/version": "3.0.2",
-  "@midwayjs/view-ejs": "3.0.2",
-  "@midwayjs/view-nunjucks": "3.0.2",
-  "@midwayjs/view": "3.0.2",
+  "@midwayjs/task": [
+    "3.0.2",
+    "3.0.3"
+  ],
+  "@midwayjs/typegoose": [
+    "3.0.2",
+    "3.0.3"
+  ],
+  "@midwayjs/upload": [
+    "3.0.2",
+    "3.0.3"
+  ],
+  "@midwayjs/validate": [
+    "3.0.2",
+    "3.0.3"
+  ],
+  "@midwayjs/version": [
+    "3.0.2",
+    "3.0.3"
+  ],
+  "@midwayjs/view-ejs": [
+    "3.0.2",
+    "3.0.3"
+  ],
+  "@midwayjs/view-nunjucks": [
+    "3.0.2",
+    "3.0.3"
+  ],
+  "@midwayjs/view": [
+    "3.0.2",
+    "3.0.3"
+  ],
   "@midwayjs/express": "3.0.2",
-  "@midwayjs/koa": "3.0.2",
+  "@midwayjs/koa": [
+    "3.0.2",
+    "3.0.3"
+  ],
   "@midwayjs/web": "3.0.2",
   "@midwayjs/ws": "3.0.2"
 }
