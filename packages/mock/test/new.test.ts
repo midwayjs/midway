@@ -2,9 +2,11 @@ import { close, createApp, createLightApp, createHttpRequest, createFunctionApp 
 import * as Web from '../../web/src';
 import * as Koa from '../../web-koa/src';
 import * as ServerlessApp from '../../../packages-serverless/serverless-app/src';
-import { join } from 'path';
+import { join, relative } from 'path';
 import { existsSync } from 'fs';
 import { EventService } from './fixtures/base-faas/src/event';
+import { EventService as FaaS3EventService } from './fixtures/base-faas-3/src/event';
+import { ensureFile, writeFile } from 'fs-extra';
 
 describe('/test/new.test.ts', () => {
   it('should test create app', async () => {
@@ -33,6 +35,23 @@ describe('/test/new.test.ts', () => {
   it('should test with createFunctionApp', async () => {
     const app = await createFunctionApp<ServerlessApp.Framework>(join(__dirname, 'fixtures/base-faas'), {}, ServerlessApp);
     const instance: EventService = await app.getServerlessInstance(EventService);
+    const result = await instance.handleEvent();
+
+    expect(result).toEqual('hello world');
+    await close(app, { cleanLogsDir: true, cleanTempDir: true });
+  });
+
+  it('should test with createFunctionApp and not set framework', async () => {
+    const baseDir = join(__dirname, 'fixtures/base-faas-3');
+    // using current repo serverless-app
+    const serverlessAppDir = join(baseDir, 'node_modules/@midwayjs/serverless-app');
+    const serverlessAppFile = join(serverlessAppDir, 'index.js');
+    const serverlessAppModulePath = relative(serverlessAppDir, join(__dirname, '../../../packages-serverless/serverless-app'));
+    await ensureFile(serverlessAppFile);
+    await writeFile(serverlessAppFile, `module.exports = require('${serverlessAppModulePath}');`);
+    // main test
+    const app = await createFunctionApp<ServerlessApp.Framework>(baseDir);
+    const instance: EventService = await app.getServerlessInstance(FaaS3EventService);
     const result = await instance.handleEvent();
 
     expect(result).toEqual('hello world');
