@@ -87,7 +87,7 @@
         "extensions/redis",
         "extensions/mongodb"
       ],
-      "http": [
+      "Http 服务": [
         "extensions/koa",
         "extensions/egg",
         "extensions/express",
@@ -100,20 +100,19 @@
     },
     {
       "type": "category",
+      "label": "Socket",
+      "items": [
+        "extensions/socketio",
+        "extensions/ws"
+      ]
+    },
+    {
+      "type": "category",
       "label": "微服务",
       "collapsed": true,
       "items": [
         "extensions/grpc",
         "extensions/consul"
-      ]
-    },
-    {
-      "type": "category",
-      "label": "Socket",
-      "collapsed": true,
-      "items": [
-        "extensions/socketio",
-        "extensions/ws"
       ]
     },
     {

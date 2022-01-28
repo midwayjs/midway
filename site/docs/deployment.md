@@ -476,7 +476,7 @@ Midway 从 v3 开始支持将项目构建为单文件。
 
 - egg 项目（@midwayjs/web）
 - 入口处 `importConfigs` 使用的路径形式引入配置的应用，组件
-- 未显示依赖的包，或者包里有基于约定的文件
+- 未显式依赖的包，或者包里有基于约定的文件
 
 :::info
 
@@ -530,7 +530,7 @@ import * as LocalConfig from './config/config.local';
   ]
 })
 export class ContainerLifeCycle {
-}   
+}
 ```
 
 
