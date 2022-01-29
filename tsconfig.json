@@ -5,7 +5,6 @@
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "inlineSources": true,
     "noImplicitThis": false,
     "noUnusedLocals": true,
     "stripInternal": true,

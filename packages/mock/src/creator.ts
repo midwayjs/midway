@@ -173,22 +173,22 @@ export async function createFunctionApp<
 ): Promise<Y> {
   const customFramework =
     customFrameworkModule ??
-    findFirstExistModule(
-      [
-        process.env.MIDWAY_SERVERLESS_APP_NAME,
-        '@ali/serverless-app',
-        '@midwayjs/serverless-app',
-      ],
-      baseDir
-    );
-  const framework = await createApp(
-    baseDir,
-    {
-      ...options,
-      imports: transformFrameworkToConfiguration(customFramework),
-    },
-    customFramework as any
-  );
+    findFirstExistModule([
+      process.env.MIDWAY_SERVERLESS_APP_NAME,
+      '@ali/serverless-app',
+      '@midwayjs/serverless-app',
+    ]);
+  const serverlessModule = transformFrameworkToConfiguration(customFramework);
+  if (serverlessModule) {
+    if (options && options.imports) {
+      options.imports.unshift(serverlessModule);
+    } else {
+      options = {};
+      options.imports = [serverlessModule];
+    }
+  }
+
+  const framework = await createApp(baseDir, options);
   framework.configurationOptions = options;
   return framework;
 }

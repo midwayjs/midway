@@ -275,7 +275,7 @@ export type ParameterHandlerFunction = (options: {
   originArgs: Array<any>;
   originParamType: any;
   parameterIndex: number;
-}) => IMethodAspect;
+}) => any;
 
 export interface IIdentifierRelationShip {
   saveClassRelation(module: any, namespace?: string);
