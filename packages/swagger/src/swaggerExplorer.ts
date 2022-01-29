@@ -365,7 +365,7 @@ export class SwaggerExplorer {
         if (!p.content) {
           p.content = {};
           if (!p.contentType) {
-            p.contentType = 'application/json'
+            p.contentType = 'application/json';
           }
           p.content[p.contentType] = {
             schema: p.schema,
