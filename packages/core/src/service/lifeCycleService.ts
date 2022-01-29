@@ -39,7 +39,7 @@ export class MidwayLifeCycleService {
         cycle.instance = cycle.target;
       } else {
         // 普通类写法
-        debug(`[core]: run ${cycle.target.name} init`);
+        debug(`[core]: Lifecycle run ${cycle.target.name} init`);
         cycle.instance = await this.applicationContext.getAsync<ILifeCycle>(
           cycle.target
         );
@@ -108,7 +108,9 @@ export class MidwayLifeCycleService {
     if (Array.isArray(lifecycleInstanceOrList)) {
       for (const cycle of lifecycleInstanceOrList) {
         if (typeof cycle.instance[lifecycle] === 'function') {
-          debug(`[core]: run ${cycle.instance.constructor.name} ${lifecycle}`);
+          debug(
+            `[core]: Lifecycle run ${cycle.instance.constructor.name} ${lifecycle}`
+          );
           const result = await cycle.instance[lifecycle](
             this.applicationContext,
             this.frameworkService.getMainApp()
@@ -121,7 +123,7 @@ export class MidwayLifeCycleService {
     } else {
       if (typeof lifecycleInstanceOrList[lifecycle] === 'function') {
         debug(
-          `[core]: run ${lifecycleInstanceOrList.constructor.name} ${lifecycle}`
+          `[core]: Lifecycle run ${lifecycleInstanceOrList.constructor.name} ${lifecycle}`
         );
         const result = await lifecycleInstanceOrList[lifecycle](
           this.applicationContext,
@@ -137,7 +139,9 @@ export class MidwayLifeCycleService {
   private async runObjectLifeCycle(lifecycleInstanceList, lifecycle) {
     for (const cycle of lifecycleInstanceList) {
       if (typeof cycle.instance[lifecycle] === 'function') {
-        debug(`[core]: run ${cycle.instance.constructor.name} ${lifecycle}`);
+        debug(
+          `[core]: Lifecycle run ${cycle.instance.constructor.name} ${lifecycle}`
+        );
         return this.applicationContext[lifecycle](
           cycle.instance[lifecycle].bind(cycle.instance)
         );

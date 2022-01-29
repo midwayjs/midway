@@ -30,7 +30,6 @@
     "ssl",
     "dist/**/*.js",
     "dist/**/*.d.ts",
-    "dist/**/*.js.map",
     "index.d.ts"
   ],
   "scripts": {

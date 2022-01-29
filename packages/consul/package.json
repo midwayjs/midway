@@ -6,8 +6,7 @@
   "typings": "dist/index.d.ts",
   "files": [
     "dist/**/*.js",
-    "dist/**/*.d.ts",
-    "dist/**/*.js.map"
+    "dist/**/*.d.ts"
   ],
   "devDependencies": {
     "@midwayjs/core": "^3.0.2",

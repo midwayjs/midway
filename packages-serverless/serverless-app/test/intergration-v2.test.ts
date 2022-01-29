@@ -1,18 +1,15 @@
 import { join } from 'path';
 import * as assert from 'assert';
-import { createApp, close } from '@midwayjs/mock';
+import { close } from '@midwayjs/mock';
+import { createFunctionApp } from './util';
 const request = require('supertest');
 const cwd = join(__dirname, 'fixtures/integration-v2');
 describe('test/index.test.ts', () => {
-  if (/^v10/.test(process.version)) {
-    it('skip node v10 other', () => {});
-    return;
-  }
   let app;
   beforeAll(async () => {
-    app = await createApp(cwd, {
+    app = await createFunctionApp(cwd, {
       baseDir: join(cwd, 'src/apis'),
-    }, require('../src'));
+    });
   });
   afterAll(async () => {
     await close(app);

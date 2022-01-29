@@ -10,6 +10,7 @@ import {
   safeRequire,
   MidwayContainer,
   MidwayCommonError,
+  MidwayApplicationManager,
 } from '@midwayjs/core';
 import { isAbsolute, join } from 'path';
 import { remove } from 'fs-extra';
@@ -29,8 +30,7 @@ const debug = debuglog('midway:debug');
 process.setMaxListeners(0);
 
 export async function create<
-  T extends IMidwayFramework<any, any, U>,
-  U = T['configurationOptions']
+  T extends IMidwayFramework<any, any, any, any, any>
 >(
   appDir: string = process.cwd(),
   options?: MockAppConfigurationOptions,
@@ -123,20 +123,18 @@ export async function create<
 }
 
 export async function createApp<
-  T extends IMidwayFramework<any, any, U>,
-  U = T['configurationOptions'],
-  Y = ReturnType<T['getApplication']>
+  T extends IMidwayFramework<any, any, any, any, any>
 >(
   baseDir: string = process.cwd(),
-  options?: U & MockAppConfigurationOptions,
+  options?: MockAppConfigurationOptions,
   customFramework?: { new (...args): T } | ComponentModule
-): Promise<IMidwayApplication<any, any>> {
-  const framework: T = await create<T, U>(baseDir, options, customFramework);
-  return framework.getApplication() as unknown as Y;
+): Promise<ReturnType<T['getApplication']>> {
+  const framework: T = await create<T>(baseDir, options, customFramework);
+  return framework.getApplication();
 }
 
-export async function close(
-  app: IMidwayApplication,
+export async function close<T extends IMidwayApplication<any>>(
+  app: T,
   options?: {
     cleanLogsDir?: boolean;
     cleanTempDir?: boolean;
@@ -167,8 +165,7 @@ export async function close(
 }
 
 export async function createFunctionApp<
-  T extends IMidwayFramework<any, any, U>,
-  U = T['configurationOptions'],
+  T extends IMidwayFramework<any, any, any, any, any>,
   Y = ReturnType<T['getApplication']>
 >(
   baseDir: string = process.cwd(),
@@ -177,30 +174,31 @@ export async function createFunctionApp<
 ): Promise<Y> {
   const customFramework =
     customFrameworkModule ??
-    findFirstExistModule(
-      [
-        process.env.MIDWAY_SERVERLESS_APP_NAME,
-        '@ali/serverless-app',
-        '@midwayjs/serverless-app',
-      ],
-      baseDir
-    );
-  const framework = await createApp(
-    baseDir,
-    {
-      ...options,
-      imports: transformFrameworkToConfiguration(customFramework),
-    },
-    customFramework as any
-  );
-  framework.configurationOptions = options;
-  return framework;
+    findFirstExistModule([
+      process.env.MIDWAY_SERVERLESS_APP_NAME,
+      '@ali/serverless-app',
+      '@midwayjs/serverless-app',
+    ]);
+  const serverlessModule = transformFrameworkToConfiguration(customFramework);
+  if (serverlessModule) {
+    if (options && options.imports) {
+      options.imports.unshift(serverlessModule);
+    } else {
+      options = {};
+      options.imports = [serverlessModule];
+    }
+  }
+
+  const framework = await createApp(baseDir, options);
+  const appCtx = framework.getApplicationContext();
+  const appManager = appCtx.get(MidwayApplicationManager);
+  return appManager.getApplication(MidwayFrameworkType.SERVERLESS_APP);
 }
 
 /**
  * 一个全量的空框架
  */
-class LightFramework extends BaseFramework<any, any, any> {
+class LightFramework extends BaseFramework<any, any, any, any, any> {
   getFrameworkType(): MidwayFrameworkType {
     return MidwayFrameworkType.LIGHT;
   }

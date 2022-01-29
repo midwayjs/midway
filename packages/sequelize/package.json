@@ -6,8 +6,7 @@
   "files": [
     "dist/**/*.js",
     "dist/**/*.d.ts",
-    "index.d.ts",
-    "dist/**/*.js.map"
+    "index.d.ts"
   ],
   "devDependencies": {
     "@midwayjs/decorator": "^3.0.2",

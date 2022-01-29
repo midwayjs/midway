@@ -287,6 +287,7 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
       configuration.load(module);
       for (const ns of configuration.getNamespaceList()) {
         this.namespaceSet.add(ns);
+        debug(`[core]: load configuration in namespace="${ns} complete"`);
       }
     }
   }

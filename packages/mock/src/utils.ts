@@ -21,12 +21,11 @@ export function isWin32() {
   return os.platform() === 'win32';
 }
 
-export function findFirstExistModule(moduleList, baseDir): ComponentModule {
+export function findFirstExistModule(moduleList): ComponentModule {
   for (const name of moduleList) {
     if (!name) continue;
     try {
-      const modulePath = require.resolve(name, { paths: [baseDir] });
-      return require(modulePath);
+      return require(name);
     } catch (e) {
       // ignore
     }
@@ -45,6 +44,7 @@ export function transformFrameworkToConfiguration<
   [key: string]: any;
   Configuration: any;
 } {
+  if (!Framework) return null;
   let CustomFramework = Framework;
   if (typeof Framework === 'string') {
     Framework = safeRequire(Framework);

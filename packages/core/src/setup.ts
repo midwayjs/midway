@@ -26,6 +26,7 @@ export async function initializeGlobalApplicationContext(
   globalOptions: IMidwayBootstrapOptions
 ) {
   debug('[core]: start "initializeGlobalApplicationContext"');
+  debug(`[core]: bootstrap options = ${util.inspect(globalOptions)}`);
   const appDir = globalOptions.appDir ?? '';
   const baseDir = globalOptions.baseDir ?? '';
 
