@@ -10,7 +10,7 @@ process.env.NODE_LOG_DIR = logDir;
 export async function creatApp(name, options = {}) {
   return createApp(join(__dirname, 'fixtures', name), Object.assign(options, {
     imports: [Web]
-  }), Web)
+  }))
 }
 
 export async function closeApp(app, options?) {

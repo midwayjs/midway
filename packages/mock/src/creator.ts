@@ -10,6 +10,7 @@ import {
   safeRequire,
   MidwayContainer,
   MidwayCommonError,
+  MidwayApplicationManager,
 } from '@midwayjs/core';
 import { isAbsolute, join } from 'path';
 import { remove } from 'fs-extra';
@@ -189,8 +190,9 @@ export async function createFunctionApp<
   }
 
   const framework = await createApp(baseDir, options);
-  framework.configurationOptions = options;
-  return framework;
+  const appCtx = framework.getApplicationContext();
+  const appManager = appCtx.get(MidwayApplicationManager);
+  return appManager.getApplication(MidwayFrameworkType.SERVERLESS_APP);
 }
 
 /**

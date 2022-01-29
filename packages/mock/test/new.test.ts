@@ -1,23 +1,13 @@
 import { close, createApp, createLightApp, createHttpRequest, createFunctionApp } from '../src';
 import * as Web from '../../web/src';
 import * as Koa from '../../web-koa/src';
-import * as ServerlessApp from '../../../packages-serverless/serverless-app/dist';
+import * as ServerlessApp from '../../../packages-serverless/serverless-app/src';
 import { join } from 'path';
 import { existsSync } from 'fs';
 
 describe('/test/new.test.ts', () => {
-  it('should test create app with framework', async () => {
-    const app = await createApp<Web.Framework>(join(__dirname, 'fixtures/base-app-egg'), {}, Web.Framework);
-    const result = await createHttpRequest(app).get('/').query({ name: 'harry' });
-    expect(result.status).toBe(200);
-    expect(result.text).toBe('hello world, harry');
-    await close(app, { cleanLogsDir: true, cleanTempDir: true });
-    expect(existsSync(join(__dirname, 'fixtures/base-app-decorator/logs'))).toBeFalsy();
-    expect(existsSync(join(__dirname, 'fixtures/base-app-decorator/run'))).toBeFalsy();
-  });
-
   it('should test create app with framework and with new mode', async () => {
-    const app = await createApp<Web.Framework>(join(__dirname, 'fixtures/base-app-egg-1'), {
+    const app = await createApp<Web.Framework>(join(__dirname, 'fixtures/base-app-egg'), {
       imports: [
         Web
       ]
@@ -30,7 +20,7 @@ describe('/test/new.test.ts', () => {
     expect(existsSync(join(__dirname, 'fixtures/base-app-decorator/run'))).toBeFalsy();
   });
 
-  it('should test create koa app', async () => {
+  it('should test create koa app with new mode', async () => {
     const app = await createApp<Koa.Framework>(join(__dirname, 'fixtures/base-app-koa'), {
       cleanLogsDir: true,
       globalConfig: {
@@ -43,30 +33,8 @@ describe('/test/new.test.ts', () => {
     await close(app, { sleep: 200});
   });
 
-  it('should test create koa app with new mode', async () => {
-    const app = await createApp<Koa.Framework>(join(__dirname, 'fixtures/base-app-koa-1'), {
-      cleanLogsDir: true,
-      globalConfig: {
-        keys: '123'
-      }
-    }, Koa);
-    const result = await createHttpRequest(app).get('/').query({ name: 'harry' });
-    expect(result.status).toBe(200);
-    expect(result.text).toBe('hello world, harry');
-    await close(app, { sleep: 200});
-  });
-
-  it('should test with createFunctionApp', async () => {
-    const app = await createFunctionApp<ServerlessApp.Framework>(join(__dirname, 'fixtures/base-faas'), {}, ServerlessApp);
-    const instance = await app.getServerlessInstance('eventService');
-    const result = await instance.handleEvent();
-
-    expect(result).toEqual('hello world');
-    await close(app, { cleanLogsDir: true, cleanTempDir: true });
-  });
-
   it('should test with createFunctionApp with new mode', async () => {
-    const app = await createFunctionApp<ServerlessApp.Framework>(join(__dirname, 'fixtures/base-faas-1'), {
+    const app = await createFunctionApp<ServerlessApp.Framework>(join(__dirname, 'fixtures/base-faas'), {
       imports: [
         ServerlessApp
       ]

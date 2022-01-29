@@ -49,11 +49,12 @@ export class MidwayFaaSFramework extends BaseFramework<
   middlewareService: MidwayMiddlewareService<FaaSContext, any>;
 
   configure(options: IFaaSConfigurationOptions) {
-    if (options) {
+    const faasConfig = this.configService.getConfiguration('faas') ?? {};
+    if (options || faasConfig['developmentRun']) {
       this.developmentRun = true;
       this.configurationOptions = options;
     } else {
-      return this.configService.getConfiguration('faas');
+      return faasConfig;
     }
   }
 

@@ -1,8 +1,11 @@
 import { Configuration } from '@midwayjs/decorator';
 import { writeFileSync } from 'fs';
 import { join } from 'path';
+import * as faas from '@midwayjs/faas';
 
-@Configuration()
+@Configuration({
+  imports: [faas]
+})
 export class ContainerConfiguration {
   async onReady() {
     writeFileSync(join(__dirname, './ready.txt'), 'ready');

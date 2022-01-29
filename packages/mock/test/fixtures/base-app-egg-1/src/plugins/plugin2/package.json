@@ -1,7 +1,0 @@
-{
-  "name":"plugin2",
-  "eggPlugin": {
-    "name": "plugin2",
-    "dep": []
-  }
-}
