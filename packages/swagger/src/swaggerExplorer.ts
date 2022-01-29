@@ -364,7 +364,10 @@ export class SwaggerExplorer {
 
         if (!p.content) {
           p.content = {};
-          p.content[p.contentType || 'application/json'] = {
+          if (!p.contentType) {
+            p.contentType = 'application/json'
+          }
+          p.content[p.contentType] = {
             schema: p.schema,
           };
         }
@@ -379,8 +382,8 @@ export class SwaggerExplorer {
           // 这里拼 schema properties 时肯定存在
           Object.assign(
             opts[webRouter.requestMethod].requestBody.content[p.contentType]
-              .schema.properties,
-            p.schema.properties
+              .schema,
+            p.schema
           );
         }
 
