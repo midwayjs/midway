@@ -3,9 +3,38 @@ import { join } from 'path';
 import { createApp, close } from '@midwayjs/mock';
 import { existsSync, readFileSync } from 'fs';
 import { remove } from 'fs-extra';
+import axios from 'axios';
+import { fork } from 'child_process';
 
 const logDir = join(__dirname, '../logs');
 process.env.NODE_LOG_DIR = logDir;
+
+export async function createCluster(name){
+  const clusterFile = join(__dirname, 'child.ts');
+  const child = createChildProcess(clusterFile, name);
+  await new Promise<any>(resolve => {
+    child.on('message', (data) => {
+      if (data?.['action'] === 'app_ready') {
+        resolve(child);
+      }
+    });
+  });
+}
+
+export const createChildProcess = (moduleFile, name) => {
+  return fork(moduleFile, [name], {
+    execArgv: [ '--require=ts-node/register']
+  });
+}
+
+export async function closeCuster(master) {
+  master.send({ action: 'app_end' });
+  await new Promise<void>(resolve => {
+    master.on('exit', () => {
+      resolve();
+    })
+  });
+}
 
 export async function creatApp(name, options = {}) {
   return createApp(join(__dirname, 'fixtures', name), Object.assign(options, {
@@ -54,4 +83,13 @@ export const matchContentTimes = (p: string, matchString: string | RegExp) => {
 
   const result = content.match(matchString) || [];
   return result.length;
+}
+
+export async function createHttpClient(url, options = {}) {
+  const result = await axios.request({
+    url,
+    ...options
+  });
+
+  return result;
 }

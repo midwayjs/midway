@@ -87,6 +87,9 @@ export class MidwayWebFramework extends BaseFramework<
   async applicationInitialize(options: Partial<IMidwayBootstrapOptions>) {
     if (!this.isClusterMode) {
       await this.initSingleProcessEgg();
+    } else {
+      // get app in cluster mode
+      this.app = options['application'];
     }
 
     // not found middleware
