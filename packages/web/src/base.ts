@@ -147,7 +147,8 @@ export const createAppWorkerLoader = () => {
           appDir: this.appDir,
           baseDir: this.baseDir,
           ignore: ['**/app/extend/**'],
-        }).then(r => {
+          application: this.app,
+        }).then(_ => {
           debug('[egg]: global context: init complete');
         });
       }
