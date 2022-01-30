@@ -12,7 +12,7 @@ process.env.NODE_LOG_DIR = logDir;
 export async function createCluster(name){
   const clusterFile = join(__dirname, 'child.ts');
   const child = createChildProcess(clusterFile, name);
-  await new Promise<any>(resolve => {
+  return new Promise<any>(resolve => {
     child.on('message', (data) => {
       if (data?.['action'] === 'app_ready') {
         resolve(child);
@@ -28,11 +28,11 @@ export const createChildProcess = (moduleFile, name) => {
 }
 
 export async function closeCuster(master) {
-  master.send({ action: 'app_end' });
   await new Promise<void>(resolve => {
     master.on('exit', () => {
       resolve();
-    })
+    });
+    master.send({ action: 'app_end' });
   });
 }
 
