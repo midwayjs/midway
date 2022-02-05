@@ -198,12 +198,23 @@ export class SwaggerExplorer {
           continue;
         }
 
+        const routerArgs = metaForParams[webRouter.method] || [];
+        const bds = routerArgs.filter(
+          item =>
+            item.key === WEB_ROUTER_PARAM_KEY &&
+            item?.metadata?.type === RouteParamTypes.BODY
+        );
+        if (bds.length > 1) {
+          // swagger not support more than one @Body
+          continue;
+        }
+
         this.generateRouteMethod(
           url,
           webRouter,
           paths,
           metaForMethods,
-          metaForParams,
+          routerArgs,
           header,
           target
         );
@@ -249,7 +260,7 @@ export class SwaggerExplorer {
     webRouter: RouterOption,
     paths: Record<string, PathItemObject>,
     metaForMethods: any[],
-    metaForParams: any[],
+    routerArgs: any[],
     header: any,
     target: Type
   ) {
@@ -274,12 +285,10 @@ export class SwaggerExplorer {
      * [{"key":"web:router_param","parameterIndex":1,"propertyName":"create","metadata":{"type":2}},
      * {"key":"web:router_param","parameterIndex":0,"propertyName":"create","metadata":{"type":1,"propertyData":"createCatDto"}}]
      */
-    const routerArgs = metaForParams[webRouter.method] || [];
     // WEB_ROUTER_PARAM_KEY
-    let args: any[] = routerArgs.filter(
+    const args: any[] = routerArgs.filter(
       item => item.key === WEB_ROUTER_PARAM_KEY
     );
-    args = args.filter(item => (item as any).key === WEB_ROUTER_PARAM_KEY);
     const types = getMethodParamTypes(target, webRouter.method);
     const params = metaForMethods.filter(
       item =>

@@ -70,4 +70,9 @@ export class CatsController {
   async upload2(@Files() f: any[]) {
     return null;
   }
+
+  @Get('/test3')
+  async get(@Body('aa') aa: string, @Body('bb') bb: string) {
+    return null;
+  }
 }
