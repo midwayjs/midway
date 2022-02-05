@@ -61,9 +61,6 @@ export class SwaggerExplorer {
         this.swaggerConfig?.license?.url
       );
     }
-    if (this.swaggerConfig.basePath) {
-      this.documentBuilder.setBasePath(this.swaggerConfig.basePath);
-    }
     if (this.swaggerConfig.termsOfService) {
       this.documentBuilder.setTermsOfService(this.swaggerConfig.termsOfService);
     }
@@ -81,7 +78,7 @@ export class SwaggerExplorer {
       Array.isArray(this.swaggerConfig?.servers)
     ) {
       for (const serv of this.swaggerConfig?.servers) {
-        this.documentBuilder.addServer(serv?.url, serv?.description);
+        this.documentBuilder.addServer(serv?.url, serv?.description, serv?.variables);
       }
     }
     if (this.swaggerConfig?.tags && Array.isArray(this.swaggerConfig?.tags)) {

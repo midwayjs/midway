@@ -141,10 +141,6 @@ export interface SwaggerOptions {
    */
   auth?: AuthOptions | AuthOptions[];
   /**
-   * api 的 根路径
-   */
-  basePath?: string | string[];
-  /**
    * 默认值: /swagger-ui
    * 访问 swagger ui 的路径
    */
