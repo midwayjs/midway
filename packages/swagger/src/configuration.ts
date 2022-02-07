@@ -2,6 +2,7 @@ import {
   ILifeCycle,
   IMidwayContainer,
   MidwayApplicationManager,
+  MidwayConfigService,
 } from '@midwayjs/core';
 import { Inject, Configuration } from '@midwayjs/decorator';
 import { SwaggerExplorer, SwaggerMiddleware } from '.';
@@ -19,14 +20,28 @@ export class SwaggerConfiguration implements ILifeCycle {
   @Inject()
   applicationManager: MidwayApplicationManager;
 
+  @Inject()
+  configService: MidwayConfigService;
+
   async onReady(container: IMidwayContainer) {
-    this.applicationManager
-      .getApplications(['express', 'koa', 'egg', 'faas'])
-      .forEach(app => {
+    const apps = this.applicationManager.getApplications([
+      'express',
+      'koa',
+      'egg',
+      'faas',
+    ]);
+
+    if (apps.length) {
+      const globalPrefix =
+        this.configService.getConfiguration('koa.globalPrefix') ||
+        this.configService.getConfiguration('express.globalPrefix') ||
+        this.configService.getConfiguration('egg.globalPrefix');
+      const explorer = await container.getAsync(SwaggerExplorer);
+      explorer.scanApp();
+
+      apps.forEach(app => {
         app.useMiddleware(SwaggerMiddleware);
       });
-
-    const explorer = await container.getAsync(SwaggerExplorer);
-    explorer.scanApp();
+    }
   }
 }
