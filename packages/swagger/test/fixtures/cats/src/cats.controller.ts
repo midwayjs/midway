@@ -18,7 +18,7 @@ import { CatsService } from './cats.service';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { Cat } from './entities/cat.entity';
 
-@ApiTags('2-国家测试')
+@ApiTags(['2-国家测试', 'sss'])
 @Controller('/cats')
 @ApiHeader({
   name: 'x-test-one',
@@ -68,6 +68,11 @@ export class CatsController {
 
   @Post('/test2')
   async upload2(@Files() f: any[]) {
+    return null;
+  }
+
+  @Get('/test3')
+  async get(@Body('aa') aa: string, @Body('bb') bb: string) {
     return null;
   }
 }
