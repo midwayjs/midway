@@ -18,7 +18,7 @@ import { CatsService } from './cats.service';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { Cat } from './entities/cat.entity';
 
-@ApiTags('2-国家测试')
+@ApiTags(['2-国家测试', 'sss'])
 @Controller('/cats')
 @ApiHeader({
   name: 'x-test-one',
