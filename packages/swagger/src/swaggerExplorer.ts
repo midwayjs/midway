@@ -78,7 +78,11 @@ export class SwaggerExplorer {
       Array.isArray(this.swaggerConfig?.servers)
     ) {
       for (const serv of this.swaggerConfig?.servers) {
-        this.documentBuilder.addServer(serv?.url, serv?.description, serv?.variables);
+        this.documentBuilder.addServer(
+          serv?.url,
+          serv?.description,
+          serv?.variables
+        );
       }
     }
     if (this.swaggerConfig?.tags && Array.isArray(this.swaggerConfig?.tags)) {
