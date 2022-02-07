@@ -13,7 +13,7 @@
     "@midwayjs/core": "^3.0.2",
     "@midwayjs/decorator": "^3.0.2",
     "@midwayjs/mock": "^3.0.2",
-    "@types/ioredis": "4.28.7"
+    "@types/ioredis": "4.28.8"
   },
   "dependencies": {
     "ioredis": "^4.27.1"
