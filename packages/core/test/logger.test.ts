@@ -25,8 +25,6 @@ describe('/test/logger.test.ts', () => {
     contextLogger.debug('hello world');
     contextLogger.warn('hello world');
     contextLogger.error('hello world');
-    contextLogger.log('hello world');
-    contextLogger.log('info', 'hello world');
   });
 
   it('should create log in serverless environment', async () => {
