@@ -185,7 +185,7 @@ export class HomeController {
 
   @Post('/delete')
   async home() {
-    await UserModel.destroy({
+    await Photo.destroy({
       where: {
         name: '123'
       }
@@ -207,7 +207,7 @@ export class HomeController {
 
   @Post('/delete')
   async home() {
-    let result = await UserModel.findOne({
+    let result = await Photo.findOne({
       where: {
         name: '123'
       }
