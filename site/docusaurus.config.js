@@ -29,7 +29,7 @@ const config = {
         docs: {
           sidebarPath: require.resolve('./docs/sidebars.json'),
           // Please change this to your repo.
-          editUrl: 'https://github.com/midwayjs/midway/tree/main/site/docs/',
+          editUrl: 'https://github.com/midwayjs/midway/tree/main/site/',
           versions: {
             current: {
               label: '3.0.0 🚧',
