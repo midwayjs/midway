@@ -100,6 +100,13 @@ export class SwaggerExplorer {
     }
   }
 
+  public addGlobalPrefix(prefix: string) {
+    if (!prefix) {
+      return;
+    }
+    this.documentBuilder.addServer(prefix);
+  }
+
   public scanApp() {
     const routes = listModule(CONTROLLER_KEY);
 
