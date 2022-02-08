@@ -25,7 +25,6 @@ import {
 import type { IRouter, IRouterHandler, Response, NextFunction } from 'express';
 import * as express from 'express';
 import { Server } from 'net';
-import { MidwayExpressContextLogger } from './logger';
 import {
   wrapAsyncHandler,
   MidwayExpressMiddlewareService,
@@ -355,9 +354,5 @@ export class MidwayExpressFramework extends BaseFramework<
 
   public getFrameworkName() {
     return 'midway:express';
-  }
-
-  public getDefaultContextLoggerClass() {
-    return MidwayExpressContextLogger;
   }
 }

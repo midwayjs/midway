@@ -23,7 +23,6 @@ import {
   listModule,
   Framework,
 } from '@midwayjs/decorator';
-import { MidwaySocketIOContextLogger } from './logger';
 
 @Framework()
 export class MidwaySocketIOFramework extends BaseFramework<
@@ -244,9 +243,5 @@ export class MidwaySocketIOFramework extends BaseFramework<
 
   public getFrameworkName() {
     return 'midway:socketIO';
-  }
-
-  public getDefaultContextLoggerClass(): any {
-    return MidwaySocketIOContextLogger;
   }
 }

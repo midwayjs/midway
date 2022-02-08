@@ -5,7 +5,7 @@ import {
   ScopeEnum,
   FrameworkType,
 } from '@midwayjs/decorator';
-import { ILogger, LoggerOptions } from '@midwayjs/logger';
+import { ILogger, LoggerOptions, LoggerContextFormat } from '@midwayjs/logger';
 import * as EventEmitter from 'events';
 import { ContextMiddlewareManager } from './common/middlewareManager';
 import _default from './config/config.default';
@@ -556,8 +556,8 @@ export interface IMidwayBootstrapOptions {
 export interface IConfigurationOptions {
   logger?: ILogger;
   appLogger?: ILogger;
-  ContextLoggerClass?: any;
-  ContextLoggerApplyLogger?: string;
+  contextLoggerApplyLogger?: string;
+  contextLoggerFormat?: LoggerContextFormat;
 }
 
 export interface IMidwayFramework<
@@ -586,7 +586,6 @@ export interface IMidwayFramework<
   getCoreLogger(): ILogger;
   createLogger(name: string, options: LoggerOptions): ILogger;
   getProjectName(): string;
-  getDefaultContextLoggerClass(): any;
   useMiddleware(Middleware: CommonMiddlewareUnion<CTX, ResOrNext, Next>): void;
   getMiddleware(): ContextMiddlewareManager<CTX, ResOrNext, Next>;
   applyMiddleware(

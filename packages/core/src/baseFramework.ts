@@ -12,7 +12,12 @@ import {
   MiddlewareRespond,
 } from './interface';
 import { Inject, Destroy, Init, FrameworkType } from '@midwayjs/decorator';
-import { ILogger, LoggerOptions, MidwayContextLogger } from '@midwayjs/logger';
+import {
+  ILogger,
+  LoggerOptions,
+  IMidwayLogger,
+  LoggerContextFormat,
+} from '@midwayjs/logger';
 import { MidwayRequestContainer } from './context/requestContainer';
 import { MidwayEnvironmentService } from './service/environmentService';
 import { MidwayConfigService } from './service/configService';
@@ -37,8 +42,8 @@ export abstract class BaseFramework<
   protected logger: ILogger;
   protected appLogger: ILogger;
   protected defaultContext = {};
-  protected BaseContextLoggerClass: any;
-  protected ContextLoggerApplyLogger: string;
+  protected contextLoggerApplyLogger: string;
+  protected contextLoggerFormat: LoggerContextFormat;
   protected middlewareManager = this.createMiddlewareManager();
   protected filterManager = this.createFilterManager();
   protected composeMiddleware = null;
@@ -63,11 +68,9 @@ export abstract class BaseFramework<
   @Init()
   async init() {
     this.configurationOptions = this.configure() ?? ({} as OPT);
-    this.BaseContextLoggerClass =
-      this.configurationOptions.ContextLoggerClass ??
-      this.getDefaultContextLoggerClass();
-    this.ContextLoggerApplyLogger =
-      this.configurationOptions.ContextLoggerApplyLogger ?? 'appLogger';
+    this.contextLoggerApplyLogger =
+      this.configurationOptions.contextLoggerApplyLogger ?? 'appLogger';
+    this.contextLoggerFormat = this.configurationOptions.contextLoggerFormat;
     this.logger = this.loggerService.getLogger('coreLogger');
     this.appLogger = this.loggerService.getLogger('appLogger');
     return this;
@@ -133,13 +136,13 @@ export abstract class BaseFramework<
 
   public abstract run(): Promise<void>;
 
-  public setContextLoggerClass(BaseContextLogger: any) {
-    this.BaseContextLoggerClass = BaseContextLogger;
-  }
-
   protected createContextLogger(ctx: CTX, name?: string): ILogger {
-    const appLogger = this.getLogger(name ?? this.ContextLoggerApplyLogger);
-    return new this.BaseContextLoggerClass(ctx, appLogger);
+    const appLogger = this.getLogger(
+      name ?? this.contextLoggerApplyLogger
+    ) as IMidwayLogger;
+    return appLogger.createContextLogger<CTX>(ctx, {
+      contextFormat: this.contextLoggerFormat,
+    });
   }
 
   @Destroy()
@@ -231,10 +234,6 @@ export abstract class BaseFramework<
           return ctx.requestContext.getAttr(key);
         };
         return ctx;
-      },
-
-      setContextLoggerClass: (BaseContextLogger: any) => {
-        return this.setContextLoggerClass(BaseContextLogger);
       },
 
       addConfigObject: (obj: any) => {
@@ -350,10 +349,6 @@ export abstract class BaseFramework<
 
   public getFrameworkName() {
     return this.getFrameworkType().name;
-  }
-
-  public getDefaultContextLoggerClass(): any {
-    return MidwayContextLogger;
   }
 
   public useMiddleware(

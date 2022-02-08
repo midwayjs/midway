@@ -1,5 +1,4 @@
 import { APPLICATION_KEY, MidwayFrameworkType, Provide } from '@midwayjs/decorator';
-import { MidwayContextLogger } from '@midwayjs/logger';
 import * as assert from 'assert';
 import * as path from 'path';
 import * as mm from 'mm';
@@ -389,15 +388,6 @@ describe('/test/baseFramework.test.ts', () => {
     expect(framework.getApplication().getApplicationContext()).toEqual(framework.getApplicationContext());
     expect(framework.getApplication().getFrameworkType()).toEqual(framework.getFrameworkType());
     expect(framework.getApplication().getProjectName()).toEqual(framework.getProjectName());
-
-    // test context
-    class CustomContextLogger extends MidwayContextLogger<any> {
-      formatContextLabel(): string {
-        return 'bbbb';
-      }
-    }
-
-    framework.getApplication().setContextLoggerClass(CustomContextLogger);
     expect(framework.getApplication().createAnonymousContext().startTime).toBeDefined();
     const ctxLogger = framework.getApplication().createAnonymousContext().getLogger();
     ctxLogger.info('ctx logger');
