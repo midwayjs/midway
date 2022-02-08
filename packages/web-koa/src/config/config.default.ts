@@ -4,10 +4,22 @@
 export const koa = {
   contextLoggerFormat: info => {
     const ctx = info.ctx;
+    // format: '[$userId/$ip/$traceId/$use_ms $method $url]'
+    const userId = ctx.userId || '-';
     const traceId = (ctx.tracer && ctx.tracer.traceId) || '-';
     const use = Date.now() - ctx.startTime;
     const label =
-      ctx.ip + '/' + traceId + '/' + use + 'ms ' + ctx.method + ' ' + ctx.url;
+      userId +
+      '/' +
+      ctx.ip +
+      '/' +
+      traceId +
+      '/' +
+      use +
+      'ms ' +
+      ctx.method +
+      ' ' +
+      ctx.url;
     return `${info.timestamp} ${info.LEVEL} ${info.pid} [${label}] ${info.message}`;
   },
 };
