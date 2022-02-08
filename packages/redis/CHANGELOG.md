@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.14.6](https://github.com/midwayjs/midway/compare/v2.14.5...v2.14.6) (2022-02-08)
+
+**Note:** Version bump only for package @midwayjs/redis
+
+
+
+
+
 # [2.14.0](https://github.com/midwayjs/midway/compare/v2.13.5...v2.14.0) (2021-12-06)
 
 

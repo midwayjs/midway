@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.14.6](https://github.com/midwayjs/midway/compare/v2.14.5...v2.14.6) (2022-02-08)
+
+
+### Bug Fixes
+
+* tablestore ref ([#1616](https://github.com/midwayjs/midway/issues/1616)) ([7975add](https://github.com/midwayjs/midway/commit/7975adde60fb1626274d39798448add8ca2e7c0b))
+
+
+
+
+
 # [2.14.0](https://github.com/midwayjs/midway/compare/v2.13.5...v2.14.0) (2021-12-06)
 
 

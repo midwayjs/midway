@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.14.6](https://github.com/midwayjs/midway/compare/v2.14.5...v2.14.6) (2022-02-08)
+
+
+### Bug Fixes
+
+* cos config ([#1635](https://github.com/midwayjs/midway/issues/1635)) ([83877dd](https://github.com/midwayjs/midway/commit/83877ddfc065577ffe38a09807302ab249c1dd99))
+
+
+
+
+
 # [2.14.0](https://github.com/midwayjs/midway/compare/v2.13.5...v2.14.0) (2021-12-06)
 
 
