@@ -18,6 +18,7 @@ export const createMidwayLogger = (
       framework.getProjectName()
     ),
     level: isDevelopmentEnv ? 'info' : 'warn',
+    fileLogName: 'midway-core.log'
   };
   if (process.env[MIDWAY_LOGGER_WRITEABLE_DIR]) {
     loggerOptions.dir = join(
