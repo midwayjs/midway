@@ -6,6 +6,29 @@ import {
 } from 'body-parser';
 import { CookieOptions } from 'express';
 
+export const express = {
+  contextLoggerFormat: info => {
+    const req = info.ctx;
+    // format: '[$userId/$ip/$traceId/$use_ms $method $url]'
+    const userId = req?.['session']?.['userId'] || '-';
+    const traceId = '-';
+    const use = Date.now() - info.ctx.startTime;
+    const label =
+      userId +
+      '/' +
+      req.ip +
+      '/' +
+      traceId +
+      '/' +
+      use +
+      'ms ' +
+      req.method +
+      ' ' +
+      req.url;
+    return `${info.timestamp} ${info.LEVEL} ${info.pid} [${label}] ${info.message}`;
+  },
+};
+
 export const cookieParser: {
   secret?: string | string[];
   options?: CookieOptions;

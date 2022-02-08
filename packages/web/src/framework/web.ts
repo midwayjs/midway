@@ -12,11 +12,10 @@ import { Framework, Inject, MidwayFrameworkType } from '@midwayjs/decorator';
 import { IMidwayWebConfigurationOptions } from '../interface';
 import { EggRouter } from '@eggjs/router';
 import { Application, Context, EggLogger } from 'egg';
-import { loggers } from '@midwayjs/logger';
+import { loggers, MidwayContextLogger } from '@midwayjs/logger';
 import { resolve } from 'path';
 import { Server } from 'net';
 import { debuglog } from 'util';
-import { MidwayEggContextLogger } from '../logger';
 
 const debug = debuglog('midway:debug');
 
@@ -174,10 +173,7 @@ export class MidwayWebFramework extends BaseFramework<
 
     // if use midway logger will be use midway custom context logger
     debug(`[egg]: overwrite BaseContextLoggerClass to "${processType}"`);
-    this.setContextLoggerClass(
-      this.configService.getConfiguration('egg.ContextLoggerClass') ||
-        MidwayEggContextLogger
-    );
+    this.setContextLoggerClass();
   }
 
   async loadMidwayController() {
@@ -274,9 +270,17 @@ export class MidwayWebFramework extends BaseFramework<
     return this.appLogger;
   }
 
-  public setContextLoggerClass(BaseContextLogger: any) {
-    this.BaseContextLoggerClass = BaseContextLogger;
-    this.app.ContextLogger = BaseContextLogger;
+  public setContextLoggerClass() {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const self = this;
+    class MidwayEggContextLogger extends MidwayContextLogger<Context> {
+      constructor(ctx, appLogger) {
+        super(ctx, appLogger, {
+          contextFormat: self.contextLoggerFormat,
+        });
+      }
+    }
+    this.app.ContextLogger = MidwayEggContextLogger as any;
   }
 
   public async generateMiddleware(middlewareId: any) {

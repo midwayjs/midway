@@ -9,7 +9,6 @@ module.exports = appInfo => {
   const exports = {};
 
   exports.rundir = path.join(appInfo.appDir, 'run');
-
   // 修改默认的日志名
   exports.midwayLogger = {
     clients: {
