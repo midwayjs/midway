@@ -76,7 +76,7 @@ import { useContext } from '@midwayjs/hooks'
 import { Context } from '@midwayjs/koa';
 
 export default async function home () {
-	const ctx = useContext<Context>()
+  const ctx = useContext<Context>()
 
   return {
     message: 'Hello Midwayjs!',

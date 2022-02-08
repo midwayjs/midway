@@ -4,7 +4,7 @@ title: 日志
 
 ## 简介
 
-​
+
 
 Midway 为不同场景提供了一套统一的日志接入方式。通过 `@midwayjs/logger`  包导出的方法，可以方便的接入不同场景的日志系统。
 
@@ -13,7 +13,7 @@ Midway 的日志系统基于社区的 [winston](https://github.com/winstonjs/win
 
 ## 普通使用
 
-​
+
 
 首先我们学会 Midway 的日常日志使用方法。
 
@@ -50,7 +50,7 @@ export class HelloController {
 - console 栏看到输出。
 - 日志目录的 midway-app.log 文件中。
 
-​
+
 
 输出结果：
 
@@ -58,7 +58,7 @@ export class HelloController {
 2021-07-22 14:50:59,388 INFO 7739 [-/::ffff:127.0.0.1/-/0ms GET /api/get_user] hello world
 ```
 
-​
+
 
 以上是用户在项目开发的基本使用。如果有更多高阶用法，请继续阅读接下来的章节。
 
@@ -74,13 +74,13 @@ Midway 日志的默认逻辑为：
 
 Midway 默认在框架提供了三种不同的日志，对应三种不同的行为。
 
-| 框架，组件层面的日志，我们叫他 `coreLogger`
-| 默认会输出控制台日志和文本日志 `midway-core.log` ，并且默认会将错误日志发送到 `common-error.log` 。 | |
-| --- | --- | --- |
-| 业务层面的日志，我们叫他 `appLogger`
+| 日志                                | 释义                 | 描述                                                         | 常见使用                                                     |
+| ----------------------------------- | -------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| coreLogger                          | 框架，组件层面的日志 | 默认会输出控制台日志和文本日志 `midway-core.log` ，并且默认会将错误日志发送到 `common-error.log` 。 | 框架和组件的错误，一般会打印到其中。                         |
+| appLogger                           | 业务层面的日志       | 默认会输出控制台日志和文本日志 `midway-app.log` ，并且默认会将错误日志发送到 `common-error.log` 。 | 业务使用的日志，一般业务日志会打印到其中。                   |
+| 上下文日志（复用 appLogger 的配置） | 请求链路的日志       | 默认使用 `appLogger` 进行输出，除了会将错误日志发送到 `common-error.log` 之外，还增加了上下文信息。 | 修改日志输出的标记（Label），不同的框架有不同的请求标记，比如 HTTP 下就会输出路由信息。 |
 
-| 默认会输出控制台日志和文本日志 `midway-app.log` ，并且默认会将错误日志发送到 `common-error.log` 。 | |
-| 请求链路的日志，我们叫它上下文日志对象（ContextLogger） | 默认使用 `appLogger` 进行输出，除了会将错误日志发送到 `common-error.log`  之外，还增加了上下文信息。 | 修改日志输出的标记（Label），不同的框架有不同的请求标记，比如 HTTP 下就会输出路由信息。 |
+
 
 ## 日志路径和文件
 
@@ -107,7 +107,7 @@ Midway 会在日志根目录创建一些默认的文件。
 
 在任意类中，我们可以通过装饰器来获取日志对象。下面是一个通过装饰器获取各种默认日志对象的方式。
 
-**1、获取 **`**coreLogger**`
+**1、获取 `coreLogger`**
 
 ```typescript
 import { Provide, Logger } from '@midwayjs/decorator';
@@ -128,7 +128,7 @@ export class UserService {
 }
 ```
 
-**2、获取 **`**appLogger**`
+**2、获取 `appLogger`**
 
 为了使用更简单，我们将 `appLogger`  的 key 变为了最为普通的 `logger` 。
 
@@ -197,21 +197,7 @@ export class UserService {
 }
 ```
 
-### 使用全局 API 获取
 
-当上述两种方法都无法获取的时候，比如在静态方法中，我们可以从全局的 [日志容器](logger#7FRdi) 中获取日志对象。
-
-```typescript
-import { loggers } from '@midwayjs/logger';
-
-// 获取 coreLogger
-loggers.getLogger('coreLogger');
-
-// 获取 appLogger
-loggers.getLogger('logger');
-```
-
-更多的信息，可以查看 [日志容器](logger#7FRdi) 的介绍。
 
 ## 输出方法和格式
 
@@ -324,6 +310,8 @@ logger.info('%j', a);										// 直接占位符输出整个 json
 (logger as IMidwayLogger).write('hello world'); // 文件中只会有 hello world
 ```
 
+
+
 ## 日志定义
 
 默认的情况，用户应该使用最简单的 `ILogger`  定义。
@@ -365,53 +353,33 @@ export class UserService {
 }
 ```
 
-`IMidwayLogger`  现有完整定义如下，下面文档介绍的方法，都在其中。
+`IMidwayLogger`  的定义可以参考 interface 中的描述，或者查看 [代码](https://github.com/midwayjs/logger/blob/main/src/interface.ts)。
 
-```typescript
-export interface IMidwayLogger extends ILogger {
-  disableConsole();
-  enableConsole();
-  disableFile();
-  enableFile();
-  disableError();
-  enableError();
-  isEnableFile(): boolean;
-  isEnableConsole(): boolean;
-  isEnableError(): boolean;
-  updateLevel(level: LoggerLevel): void;
-  updateFileLevel(level: LoggerLevel): void;
-  updateConsoleLevel(level: LoggerLevel): void;
-  updateDefaultLabel(defaultLabel: string): void;
-  updateDefaultMeta(defaultMeta: object): void;
-  updateTransformableInfo(customInfoHandler: LoggerCustomInfoHandler): void;
-  getDefaultLabel(): string;
-  getDefaultMeta(): Record<string, unknown>;
-  write(...args): boolean;
-  add(transport: any): any;
-  remove(transport: any): any;
-  close(): any;
-}
-```
+
 
 ## 日志等级
 
 winston 的日志等级分为下面几类，日志等级依次降低（数字越大，等级越低）：
 
 ```typescript
-const levels = {
-  all: 0,
+const levels = { 
+  none: 0,
   error: 1,
-  warn: 2,
-  info: 3,
-  verbose: 4,
-  debug: 5,
-  silly: 6,
-};
+  trace: 2,
+  warn: 3,
+  info: 4,
+  verbose: 5,
+  debug: 6,
+  silly: 7,
+  all: 8,
+}
 ```
 
 在 Midway 中，为了简化，一般情况下，我们只会使用 `error` ， `warn` ， `info` ， `debug` 这四种等级。
 
 日志等级表示当前可输出日志的最低等级。比如当你的日志 level 设置为 `warn`  时，仅 `warn`  以及更高的 `error`  等级的日志能被输出。
+
+
 
 ### 框架的默认等级
 
@@ -436,6 +404,8 @@ logger.updateFileLevel('warn');
 // 动态调整控制台输出日志等级
 logger.updateConsoleLevel('error');
 ```
+
+
 
 ## 日志输出管道（Transport）
 
@@ -466,6 +436,8 @@ logger.isEnableFile();
 logger.isEnableError();
 ```
 
+
+
 ## 日志切割（轮转）
 
 默认行为下，同一个日志对象**会生成两个文件**。
@@ -477,6 +449,8 @@ logger.isEnableError();
 当凌晨 `00:00` 时，会生成一个以当天日志结尾 `midway-core.log.YYYY-MM-DD` 的形式的新文件。
 
 同时，当单个日志文件超过 200M 时，也会自动切割，产生新的日志文件。
+
+
 
 ## 日志标签（label）
 
@@ -504,6 +478,8 @@ Midway 对 `contextLogger`  做了特殊处理，默认的标签会关联上下
 ```
 2021-01-20 15:13:25,408 INFO 66376 [-/127.0.0.1/-/5ms GET /] xxxx
 ```
+
+
 
 ### 修改日志标签
 
@@ -704,59 +680,15 @@ export class UserService {
 
 创建日志，等价于在全局日志容器中调用 `loggers.createLogger()`  方法。
 
+
+
 ### 创建日志选项
 
 `createLogger`  方法的所有参数如下，用户可以自行调整。
 
-```typescript
-export interface LoggerOptions {
-  dir?: string;
-  fileLogName?: string;
-  errorLogName?: string;
-  label?: string;
-  disableConsole?: boolean;
-  disableFile?: boolean;
-  disableError?: boolean;
-  consoleLevel?: LoggerLevel;
-  fileLevel?: LoggerLevel;
-  fileMaxSize?: string;
-  fileMaxFiles?: string;
-  fileDatePattern?: string;
-  errMaxSize?: string;
-  errMaxFiles?: string;
-  errDatePattern?: string;
-  disableFileSymlink?: boolean;
-  disableErrorSymlink?: boolean;
-  printFormat?: (info) => string;
-  format?: logform.format;
-  eol?: string;
-}
-```
+更多的日志选项可以参考 interface 中 [LoggerOptions 描述](https://github.com/midwayjs/logger/blob/main/src/interface.ts)。
 
-| **参数名**                    | **参数类型**                             | **默认值**                        | **描述**                                                                       |
-| ----------------------------- | ---------------------------------------- | --------------------------------- | ------------------------------------------------------------------------------ | ----- | --- | ------------ |
-| dir                           | string                                   | window: `process.env.USERPROFILE` |
-| Linux/mac: `process.env.HOME` | 文本日志的根目录，默认为当前的用户根目录 |
-| level                         | debug                                    | info                              | warn                                                                           | error |     | 全局日志等级 |
-| fileLogName                   | string                                   | midway-core.log                   | 文本日志写入的文件名                                                           |
-| errorLogName                  | string                                   | common-error.log                  | 错误日志写入的文件名                                                           |
-| defaultLabel                  | string                                   | undefined                         | 输出的默认标签，[] 中的值                                                      |
-| disableConsole                | boolean                                  | false                             | 禁止控制台输出                                                                 |
-| disableFile                   | boolean                                  | false                             | 禁止文本日志输出                                                               |
-| disableError                  | boolean                                  | false                             | 禁止错误日志输出                                                               |
-| disableFileSymlink            | boolean                                  | false                             | 禁止生成软链，默认情况下，会生成带有时间戳的文件加上一个没有时间戳的软链文件。 |
-| disableErrorSymlink           | boolean                                  | false                             | 禁止生成软链，默认情况下，会生成带有时间戳的文件加上一个没有时间戳的软链文件。 |
-| consoleLevel                  | string                                   | silly                             | 最低的控制台日志可见等级，可覆盖全局的日志等级                                 |
-| fileLevel                     | string                                   | silly                             | 最低的文本日志可见等级，可覆盖全局的日志等级                                   |
-| fileMaxSize                   | string                                   | 200m                              | 日志切割的最大尺寸，默认 `200m`                                                |
-| fileMaxFiles                  | string                                   | 31d（31 天）                      | 最多保留的文件时间，默认  `31d`                                                |
-| fileDatePattern               | string                                   | YYYY-MM-DD                        | 文件后缀时间戳格式                                                             |
-| errMaxSize                    | string                                   | 200m                              | 日志切割的最大尺寸，默认 `200m`                                                |
-| errMaxFiles                   | string                                   | 31d（31 天）                      | 最多保留的文件时间，默认  `31d`                                                |
-| errDatePattern                | string                                   | YYYY-MM-DD                        | 错误日志文件后缀时间戳格式                                                     |
-| printFormat                   | (info: any) => string;                   | midway 默认显示格式               | 默认的日志输出显示格式，传入一个回调函数进行覆盖。                             |
-| format                        | logform.Format                           | midway 默认 format                | 默认的 winston format 格式。                                                   |
-| eol                           | string                                   | os.EOL                            | 默认是操作系统的换行符                                                         |
+
 
 ### 修改显示格式（Display）
 
@@ -781,21 +713,19 @@ export interface LoggerOptions {
 
 info 对象的默认属性如下：
 
-| **属性名** | **描述**                                         | **示例**                                  |
-| ---------- | ------------------------------------------------ | ----------------------------------------- |
-| timestamp  | 时间戳，默认为 `'YYYY-MM-DD HH:mm:ss,SSS` 格式。 | 2020-12-30 07:50:10,453                   |
-| level      | 小写的日志等级                                   | info                                      |
-| LEVEL      | 大写的日志等级                                   | INFO                                      |
-| pid        | 当前进程 pid                                     | 3847                                      |
-| labelText  | 标签的聚合文本                                   | [a:b:c]                                   |
-| message    | 普通消息 + 错误消息 + 错误堆栈的组合             | 1、普通文本，如 `123456` ， `hello world` |
+| **属性名**  | **描述**                                         | **示例**                                                     |
+| ----------- | ------------------------------------------------ | ------------------------------------------------------------ |
+| timestamp   | 时间戳，默认为 `'YYYY-MM-DD HH:mm:ss,SSS` 格式。 | 2020-12-30 07:50:10,453                                      |
+| level       | 小写的日志等级                                   | info                                                         |
+| LEVEL       | 大写的日志等级                                   | INFO                                                         |
+| pid         | 当前进程 pid                                     | 3847                                                         |
+| labelText   | 标签的聚合文本                                   | [abcde]                                                      |
+| message     | 普通消息 + 错误消息 + 错误堆栈的组合             | 1、普通文本，如 `123456` ， `hello world`<br />2、错误文本（错误名+堆栈）Error: another test error at Object.anonymous (/home/runner/work/midway/midway/packages/logger/test/index.test.ts:224:18)<br />3、普通文本+错误文本 hello world Error: another test error at Object.anonymous (/home/runner/work/midway/midway/packages/logger/test/index.test.ts:224:18) |
+| stack       | 错误堆栈                                         |                                                              |
+| originError | 原始错误对象                                     | 错误实例本身                                                 |
+| originArgs  | 原始的用户入参                                   | [ 'a', 'b', 'c' ]                                            |
 
-2、错误文本（错误名+堆栈）Error: another test error at Object.anonymous (/home/runner/work/midway/midway/packages/logger/test/index.test.ts:224:18)
-3、普通文本+错误文本 hello world Error: another test error at Object.anonymous (/home/runner/work/midway/midway/packages/logger/test/index.test.ts:224:18) |
-| stack | 错误堆栈 | Error: another test error
-   at Object.anonymous (/home/runner/work/midway/midway/packages/logger/test/index.test.ts:224:18) |
-| originError | 原始错误对象 | 错误实例本身 |
-| originArgs | 原始的用户入参 | [ 'a', 'b', 'c' ] |
+
 
 示例，创建一个自定义格式的 Logger。
 
@@ -843,104 +773,7 @@ logger.updateTransformableInfo((info) => {
 注意，该方法只能修改属性值，但是不能修改输出结构。
 :::
 
-### 完全自定义格式（Format）
 
-一般来说修改展示的效果已经足够，在 winston 中，还有另一种完全自定义输出的方式，修改 [logform](https://github.com/winstonjs/logform)。通过修改 logform，基本上可以达到任意的效果。
-
-你可以使用如下的 winston 自带的 format。
-
-[Formats](https://github.com/winstonjs/logform#formats)
-
-- [Align](https://github.com/winstonjs/logform#align)
-- [CLI](https://github.com/winstonjs/logform#cli)
-- [Colorize](https://github.com/winstonjs/logform#colorize)
-- [Combine](https://github.com/winstonjs/logform#combine)
-- [Errors](https://github.com/winstonjs/logform#errors)
-- [JSON](https://github.com/winstonjs/logform#json)
-- [Label](https://github.com/winstonjs/logform#label)
-- [Logstash](https://github.com/winstonjs/logform#logstash)
-- [Metadata](https://github.com/winstonjs/logform#metadata)
-- [PadLevels](https://github.com/winstonjs/logform#padlevels)
-- [PrettyPrint](https://github.com/winstonjs/logform#prettyprint)
-- [Printf](https://github.com/winstonjs/logform#printf)
-- [Simple](https://github.com/winstonjs/logform#simple)
-- [Splat](https://github.com/winstonjs/logform#splat)
-- [Timestamp](https://github.com/winstonjs/logform#timestamp)
-- [Uncolorize](https://github.com/winstonjs/logform#uncolorize)
-
-以及，midway 为 winston 定制的几个 format。
-
-**1、displayCommonMessage**
-
-displayCommonMessage 用于对常用输入的规则化处理，做了以下一些事情
-
-- 1、对数组，Set，Map 的输出处理
-- 2、Error 的堆栈拼装，以及增加原始的 error 对象
-- 3、增加 pid
-- 4、增加大写的 level
-
-它的 options 如下：
-
-| **属性名**     | **类型** | **描述**                              |
-| -------------- | -------- | ------------------------------------- |
-| defaultMeta    | object   | 默认输出的元信息，对象 key/value 结构 |
-| uppercaseLevel | boolean  | 是否开启大写，默认 true               |
-
-**2、displayLabels**
-
-按照一定的分隔符聚合标签（labels），它的 options 如下：
-
-| **属性名**    | **类型** | **描述**             |
-| ------------- | -------- | -------------------- |
-| defaultLabels | string[] | 标签信息数组         |
-| labelSplit    | string   | 标签分隔符，默认为 : |
-
-示例：
-
-```typescript
-import { format, displayCommonMessage, displayLabels } from '@midwayjs/logger';
-
-export class AutoConfiguration {
-  @App()
-  app: IMidwayApplication;
-
-  async onReady() {
-    this.app.createLogger('custom1', {
-      format: format.combine(
-        displayCommonMessage({
-          uppercaseLevel: true,
-          defaultMeta: {
-            group: 'defaultGroup',
-          },
-        }),
-        displayLabels({
-          defaultLabels: this.labels,
-        }),
-        format.timestamp({
-          format: 'YYYY-MM-DD HH:mm:ss,SSS',
-        }),
-        format.splat(),
-        format.printf(
-          (info) => `${info.timestamp} ${info.LEVEL} ${info.pid} ${info.labelText}- ${info.group} ${info.message}`
-        )
-      ),
-    });
-
-    this.app.getLogger('custom1').info('hello world');
-  }
-}
-```
-
-### 清理全局日志容器
-
-midway 提供了一个方法用于一次性清理所有的日志对象。
-
-```typescript
-import { clearAllLoggers } from '@midwayjs/logger';
-
-clearAllLoggers(); // 从默认日志容器中清理所有的日志对象
-loggers.getLogger('coreLogger'); // undefined
-```
 
 ## 配置框架日志
 
@@ -1028,6 +861,8 @@ export class ContainerConfiguration implements ILifeCycle {
 ctx.logger.info('hello world');
 // 2021-01-28 11:10:19,334 INFO 9223 [2ms POST] hello world
 ```
+
+
 
 ## @midwayjs/web（EggJS）下特殊情况
 
