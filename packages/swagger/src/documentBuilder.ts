@@ -68,22 +68,6 @@ export class DocumentBuilder {
     return this;
   }
 
-  public setBasePath(path: string | string[]) {
-    if ((this.document as any).basePath) {
-      if (Array.isArray((this.document as any).basePath)) {
-        (this.document as any).basePath.push(path);
-      } else {
-        (this.document as any).basePath = [
-          (this.document as any).basePath,
-          path,
-        ];
-      }
-    } else {
-      (this.document as any).basePath = path;
-    }
-    return this;
-  }
-
   public addPaths(paths: Record<string, PathItemObject>) {
     Object.assign(this.document.paths, paths);
     return this;
