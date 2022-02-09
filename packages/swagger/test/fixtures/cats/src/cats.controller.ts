@@ -1,4 +1,15 @@
-import { Body, Controller, Fields, File, Files, Get, Inject, Param, Post, Query } from '@midwayjs/decorator';
+import {
+  Body,
+  Controller,
+  Fields,
+  File,
+  Files,
+  Get,
+  Inject,
+  Param,
+  Post,
+  Query
+} from '@midwayjs/decorator';
 import {
   ApiBasicAuth,
   ApiBearerAuth,
@@ -73,6 +84,18 @@ export class CatsController {
 
   @Get('/test3')
   async get(@Body('aa') aa: string, @Body('bb') bb: string) {
+    return null;
+  }
+  @Get('/test4')
+  @ApiQuery({name: 'aa'})
+  async getfour(@Query() aa: CreateCatDto, @Body('bb') bb: string) {
+    return null;
+  }
+
+  @Post('/test5/{aa}')
+  @ApiParam({name: 'aa'})
+  @ApiBody({})
+  async getfive(@Param('aa') aa: CreateCatDto, @Body('bb') bb: string) {
     return null;
   }
 }

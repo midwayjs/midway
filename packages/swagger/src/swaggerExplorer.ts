@@ -18,6 +18,7 @@ import {
   INJECT_CUSTOM_PARAM,
   INJECT_CUSTOM_METHOD,
   getPropertyType,
+  RequestMethod,
 } from '@midwayjs/decorator';
 import { PathItemObject, Type } from './interfaces';
 import { DECORATORS } from './constants';
@@ -286,7 +287,7 @@ export class SwaggerExplorer {
     opts[webRouter.requestMethod] = {
       summary: operMeta?.metadata?.summary,
       description: operMeta?.metadata?.description,
-      operationId: operMeta?.metadata?.operationId || webRouter.method,
+      // operationId: `${webRouter.requestMethod}_${(operMeta?.metadata?.operationId || webRouter.method)}`,
       tags: operMeta?.metadata?.tags || [],
     };
     /**
@@ -338,6 +339,9 @@ export class SwaggerExplorer {
       );
 
       if (p.in === 'body') {
+        if (webRouter.requestMethod === RequestMethod.GET) {
+          continue;
+        }
         // 这里兼容一下 @File()、@Files()、@Fields() 装饰器
         if (arg.metadata?.type === RouteParamTypes.FILESSTREAM) {
           p.schema = {
@@ -369,13 +373,8 @@ export class SwaggerExplorer {
           p.contentType = BodyContentType.Multipart;
         }
         if (arg.metadata?.type === RouteParamTypes.FIELDS) {
-          if (p.schema['$ref']) {
-            // 展开各个字段属性
-            const name = p.schema['$ref'].replace('#/components/schemas/', '');
-            const schema = this.documentBuilder.getSchema(name);
-            delete p.schema['$ref'];
-            p.schema = JSON.parse(JSON.stringify(schema));
-          }
+          this.expandSchemaRef(p);
+
           p.contentType = BodyContentType.Multipart;
         }
 
@@ -483,6 +482,24 @@ export class SwaggerExplorer {
 
     paths[url] = opts;
   }
+
+  private expandSchemaRef(p: any, name?: string) {
+    let schemaName = name;
+    if (p.schema['$ref']) {
+      // 展开各个字段属性
+      schemaName = p.schema['$ref'].replace('#/components/schemas/', '');
+      delete p.schema['$ref'];
+    }
+
+    const schema = this.documentBuilder.getSchema(schemaName);
+    const ss = JSON.parse(JSON.stringify(schema));
+    if (p.schema.properties) {
+      Object.assign(p.schema.properties, ss.properties);
+    } else {
+      p.schema = JSON.parse(JSON.stringify(schema));
+    }
+    return p;
+  }
   /**
    * 提取参数
    * @param params
@@ -494,6 +511,9 @@ export class SwaggerExplorer {
 
       if (param) {
         p.description = param.description;
+        if (!p.name && param.name) {
+          p.name = param.name;
+        }
         if (param.in === 'query') {
           p.allowEmptyValue = param.allowEmptyValue || false;
         }
