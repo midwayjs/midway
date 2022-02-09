@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.4](https://github.com/midwayjs/midway/compare/v3.0.3...v3.0.4) (2022-02-09)
+
+
+### Bug Fixes
+
+* run in egg cluster mode ([#1645](https://github.com/midwayjs/midway/issues/1645)) ([d6146cc](https://github.com/midwayjs/midway/commit/d6146cccb4ffa9158d87c1f64199bce9f408b43c))
+* supertest typings and createFunctionApp ([#1642](https://github.com/midwayjs/midway/issues/1642)) ([484f4f4](https://github.com/midwayjs/midway/commit/484f4f41b3b9e889d4d285f4871a0b37fa51e73f))
+
+
+### Features
+
+* move context format to user config ([#1673](https://github.com/midwayjs/midway/issues/1673)) ([db53b8e](https://github.com/midwayjs/midway/commit/db53b8eaf22b50df61945ff11086e1eb7aec99a1))
+
+
+
+
+
 ## [3.0.2](https://github.com/midwayjs/midway/compare/v3.0.1...v3.0.2) (2022-01-24)
 
 

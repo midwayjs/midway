@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.4](https://github.com/midwayjs/midway/compare/v3.0.3...v3.0.4) (2022-02-09)
+
+
+### Bug Fixes
+
+* supertest typings and createFunctionApp ([#1642](https://github.com/midwayjs/midway/issues/1642)) ([484f4f4](https://github.com/midwayjs/midway/commit/484f4f41b3b9e889d4d285f4871a0b37fa51e73f))
+* swagger not support more than one @Body ([#1662](https://github.com/midwayjs/midway/issues/1662)) ([a13ec48](https://github.com/midwayjs/midway/commit/a13ec48fa4b3f97f013dc73be409631b4ce2e24e))
+* swagger support globalprefix ([#1670](https://github.com/midwayjs/midway/issues/1670)) ([75e83f9](https://github.com/midwayjs/midway/commit/75e83f9fbedb7acbcc20ffac15cb4afaf4513957))
+
+
+
+
+
 ## [3.0.3](https://github.com/midwayjs/midway/compare/v3.0.2...v3.0.3) (2022-01-28)
 
 **Note:** Version bump only for package @midwayjs/swagger

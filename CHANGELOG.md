@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.4](https://github.com/midwayjs/midway/compare/v3.0.3...v3.0.4) (2022-02-09)
+
+
+### Bug Fixes
+
+* createFunctionApp ([#1628](https://github.com/midwayjs/midway/issues/1628)) ([8d6f6e8](https://github.com/midwayjs/midway/commit/8d6f6e89786ece993dc3c71cb5cd2e1da69b2732))
+* **deps:** update dependency amqp-connection-manager to v4.1.0 ([#1653](https://github.com/midwayjs/midway/issues/1653)) ([9221a49](https://github.com/midwayjs/midway/commit/9221a49f086956d8fd5f8e232a8ea8cbd4cee4b9))
+* **deps:** update dependency amqp-connection-manager to v4.1.1 ([#1663](https://github.com/midwayjs/midway/issues/1663)) ([8508913](https://github.com/midwayjs/midway/commit/85089131cdace9e47ec2c46e6d99be9b3c327ecf))
+* **deps:** update dependency sequelize to ~6.15.0 ([#1644](https://github.com/midwayjs/midway/issues/1644)) ([eb241f2](https://github.com/midwayjs/midway/commit/eb241f2a3f7aea5c70d28ae1dca265ddf2a78b5a))
+* **deps:** update dependency sequelize to ~6.16.0 ([#1677](https://github.com/midwayjs/midway/issues/1677)) ([bf84760](https://github.com/midwayjs/midway/commit/bf8476078801eb34551df242b56345cd2621c6ff))
+* **deps:** update dependency ws to v8.5.0 ([#1668](https://github.com/midwayjs/midway/issues/1668)) ([5326c43](https://github.com/midwayjs/midway/commit/5326c43ebf0641a745be1e772c2a5a527dfcb688))
+* run in egg cluster mode ([#1645](https://github.com/midwayjs/midway/issues/1645)) ([d6146cc](https://github.com/midwayjs/midway/commit/d6146cccb4ffa9158d87c1f64199bce9f408b43c))
+* supertest typings and createFunctionApp ([#1642](https://github.com/midwayjs/midway/issues/1642)) ([484f4f4](https://github.com/midwayjs/midway/commit/484f4f41b3b9e889d4d285f4871a0b37fa51e73f))
+* swagger not support more than one @Body ([#1662](https://github.com/midwayjs/midway/issues/1662)) ([a13ec48](https://github.com/midwayjs/midway/commit/a13ec48fa4b3f97f013dc73be409631b4ce2e24e))
+* swagger support globalprefix ([#1670](https://github.com/midwayjs/midway/issues/1670)) ([75e83f9](https://github.com/midwayjs/midway/commit/75e83f9fbedb7acbcc20ffac15cb4afaf4513957))
+* task typings ([#1678](https://github.com/midwayjs/midway/issues/1678)) ([02aeef6](https://github.com/midwayjs/midway/commit/02aeef69a472709fba97e8250757b6136f859a84))
+
+
+### Features
+
+* move context format to user config ([#1673](https://github.com/midwayjs/midway/issues/1673)) ([db53b8e](https://github.com/midwayjs/midway/commit/db53b8eaf22b50df61945ff11086e1eb7aec99a1))
+
+
+
+
+
 ## [3.0.3](https://github.com/midwayjs/midway/compare/v3.0.2...v3.0.3) (2022-01-28)
 
 

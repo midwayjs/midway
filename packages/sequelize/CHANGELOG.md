@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.4](https://github.com/midwayjs/midway/compare/v3.0.3...v3.0.4) (2022-02-09)
+
+
+### Bug Fixes
+
+* **deps:** update dependency sequelize to ~6.15.0 ([#1644](https://github.com/midwayjs/midway/issues/1644)) ([eb241f2](https://github.com/midwayjs/midway/commit/eb241f2a3f7aea5c70d28ae1dca265ddf2a78b5a))
+* **deps:** update dependency sequelize to ~6.16.0 ([#1677](https://github.com/midwayjs/midway/issues/1677)) ([bf84760](https://github.com/midwayjs/midway/commit/bf8476078801eb34551df242b56345cd2621c6ff))
+* supertest typings and createFunctionApp ([#1642](https://github.com/midwayjs/midway/issues/1642)) ([484f4f4](https://github.com/midwayjs/midway/commit/484f4f41b3b9e889d4d285f4871a0b37fa51e73f))
+
+
+
+
+
 ## [3.0.3](https://github.com/midwayjs/midway/compare/v3.0.2...v3.0.3) (2022-01-28)
 
 

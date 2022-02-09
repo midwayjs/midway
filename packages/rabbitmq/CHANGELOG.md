@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.4](https://github.com/midwayjs/midway/compare/v3.0.3...v3.0.4) (2022-02-09)
+
+
+### Bug Fixes
+
+* **deps:** update dependency amqp-connection-manager to v4.1.0 ([#1653](https://github.com/midwayjs/midway/issues/1653)) ([9221a49](https://github.com/midwayjs/midway/commit/9221a49f086956d8fd5f8e232a8ea8cbd4cee4b9))
+* **deps:** update dependency amqp-connection-manager to v4.1.1 ([#1663](https://github.com/midwayjs/midway/issues/1663)) ([8508913](https://github.com/midwayjs/midway/commit/85089131cdace9e47ec2c46e6d99be9b3c327ecf))
+* supertest typings and createFunctionApp ([#1642](https://github.com/midwayjs/midway/issues/1642)) ([484f4f4](https://github.com/midwayjs/midway/commit/484f4f41b3b9e889d4d285f4871a0b37fa51e73f))
+
+
+
+
+
 ## [3.0.2](https://github.com/midwayjs/midway/compare/v3.0.1...v3.0.2) (2022-01-24)
 
 
