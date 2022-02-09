@@ -184,7 +184,7 @@ export async function createFunctionApp<
     if (options && options.imports) {
       options.imports.unshift(serverlessModule);
     } else {
-      options = {};
+      options = options || {};
       options.imports = [serverlessModule];
     }
   }
