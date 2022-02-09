@@ -15,27 +15,21 @@ title: 组件开发
 
 设计组件的时候尽可能的面向所有的上层框架场景，所以我们尽可能只依赖 `@midwayjs/core` 和 `@midwayjs/decorator` 。
 
-## 脚手架
+从 v3 开始，框架（Framework）也变为组件的一部分，使用方式和组件保持统一。 
 
-初始化脚手架例子：
 
-```bash
-# 如果是 npm v6
-$ npm init midway --type=component hello2
 
-# 如果是 npm v7
-$ npm init midway -- --type=component hello2
+## 开发组件
 
-$ cd hello2
-```
 
-然后组件开发，并发布。
 
-```bash
-$ npm run build && npm publish // 编译并发布对应的component
-```
+### 脚手架
 
-## 组件目录
+TODO
+
+
+
+### 组件目录
 
 组件的结构和 midway 的推荐目录结构一样，组件的目录结构没有特别明确的规范，和应用或者函数保持一致即可。简单的理解，组件就是一个 “迷你应用"。
 
@@ -50,14 +44,187 @@ $ npm run build && npm publish // 编译并发布对应的component
 │   └── service                	// 逻辑代码
 │       └── bookService.ts
 ├── test
+├── index.d.ts                  // 组件扩展定义
 └── tsconfig.json
 ```
 
 对于组件来说，唯一的规范是入口导出的 `Configuration`  属性，其必须是一个带有 `@Configuration`  装饰器的 Class。
 
-一般来说，我们的代码为 TypeScript 标准目录结构，和 Midway 体系相同。不同的是，由于是一个额外的包，需要使用 `src/index.ts`  文件作为入口导出内容。
+一般来说，我们的代码为 TypeScript 标准目录结构，和 Midway 体系相同。
 
-## 组件约定
+同时，又是一个普通的 Node.js 包，需要使用 `src/index.ts`  文件作为入口导出内容。
+
+下面，我们以一个非常简单的示例来演示如何编写一个组件。
+
+
+
+### 组件生命周期
+
+和应用相同，组件也使用 `src/configuration.ts` 作为入口启动文件（或者说，应用就是一个大组件）。
+
+其中的代码和应用完全相同。
+
+```typescript
+// src/configuration.ts
+import { Configuration } from '@midwayjs/decorator';
+
+@Configuration({
+  namespace: 'book'
+})
+export class BookConfiguration {
+  async onReady() {
+    // ...
+  }
+}
+```
+
+唯一不同的是，你需要加一个 `namespace` 作为组件的命名空间。
+
+每个组件的代码是一个独立的作用域，这样即使导出同名的类，也不会和其他组件冲突。
+
+和整个 Midway 通用的 [生命周期扩展](lifecycle) 能力相同。
+
+
+
+### 组件依赖
+
+如果组件依赖另一个组件中的类，和应用相同，需要在入口处声明，框架会按照模块顺序加载并处理重复的情况。
+
+如果明确依赖某个组件中的类，那么必然是该组件的强依赖。
+
+比如：
+
+```typescript
+// src/configuration.ts
+import { Configuration } from '@midwayjs/decorator';
+import * as axios from '@midwayjs/axios';
+
+@Configuration({
+  namespace: 'book',
+  imports: [axios]
+})
+export class BookConfiguration {
+  async onReady() {
+    // ...
+  }
+}
+```
+
+还有一种弱依赖的情况，无需显式声明，但是需要额外的判断。
+
+```typescript
+// src/configuration.ts
+import { Configuration } from '@midwayjs/decorator';
+import { IMidwayContainer } from '@midwayjs/core';
+
+@Configuration({
+  namespace: 'book',
+})
+export class BookConfiguration {
+  async onReady(container: IMidwayContainer) {
+    // ...
+    if (container.hasNamespace('axios')) {
+      // 当 axios 组件被加载时才执行
+    }
+    // ...
+  }
+}
+```
+
+
+
+### 组件逻辑代码
+
+和应用相同，编写类导出即可，由依赖注入容器负责管理和加载。
+
+```typescript
+// src/service/book.service.ts
+import { Provide } from '@midwayjs/decorator';
+
+@Provide()
+export class BookService {
+  async getBookById() {
+    return {
+      data: 'hello world',
+    }
+  }
+}
+```
+
+:::info
+一个组件不会依赖明确的上层框架，为了达到在不同场景复用的目的，只会依赖通用的 `@midwayjs/core` 和 `@midwayjs/decorator`
+:::
+
+
+
+### 组件配置
+
+配置和应用相同，参考 [多环境配置](env_config)。
+
+```typescript
+// src/configuration.ts
+import { Configuration } from '@midwayjs/decorator';
+import * as DefaultConfig from './config/config.default';
+import * as LocalConfig from './config/config.local';
+
+@Configuration({
+  namespace: 'book',
+  importConfigs: [
+    {
+      default: DefaultConfig,
+      local: LocalConfig
+    }
+  ]
+})
+export class BookConfiguration {
+  async onReady() {
+    // ...
+  }
+}
+```
+
+在 v3 有一个重要的特性，组件在加载后，`MidwayConfig` 定义中就会包含该组件配置的定义。
+
+为此，我们需要独立编写配置的定义。
+
+在根目录下的 `index.d.ts` 中增加配置定义。
+
+```typescript
+// 由于修改了默认的类型导出位置，需要额外导出 dist 下的类型
+export * from './dist/index';
+
+// 标准的扩展声明
+declare module '@midwayjs/core/dist/interface' {
+
+  // 将配置合并到 MidwayConfig 中
+  interface MidwayConfig {
+    book?: {
+      // ...
+    };
+  }
+}
+
+```
+
+同时，组件的 `package.json` 也有对应的修改。
+
+```json
+{
+  "name": "****",
+  "main": "dist/index.js",
+  "typings": "index.d.ts",			// 这里的类型导出文件使用项目根目录的
+  // ...
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "index.d.ts"								// 发布时需要额外带上这个文件
+  ],
+}
+```
+
+
+
+### 组件约定
 
 组件和应用本身略微有些不同，差异主要在以下几个方面。
 
@@ -68,61 +235,47 @@ $ npm run build && npm publish // 编译并发布对应的component
 
 ```typescript
 // src/index.ts
-export { AutoConfiguration as Configuration } from './configuration';
-export * from './controller/user';
-export * from './controller/api';
-export * from './service/user';
+export { BookConfiguration as Configuration } from './configuration';
+export * from './service/book.service';
 ```
 
 :::info
-这样项目中只有 `controller/user` ， `controller/api` ， `service/user` 这三个文件才会被依赖注入容器扫描和加载。
+这样项目中只有  `service/book.service.ts` 这个文件才会被依赖注入容器扫描和加载。
 :::
 
 以及在 `package.json`  中指定 main 路径。
 
 ```typescript
-  "main": "dist/index"
+"main": "dist/index"
 ```
 
 这样组件就可以被上层场景依赖加载了。
 
-## 开发组件的方式
 
-我们可以新建一个项目，将它改造为组件，也可以在原有项目中开发，直到组建完成后再发布到独立的仓库。
 
-### 新仓库开发组件
+### 测试组件
 
-代码结构如下：
-
-```
-.
-├── src															// 源码目录
-│   ├── service
-│   │    └── bookService.ts
-│   ├── configuration.ts						// 组件行为配置
-│   └── index.ts										// 组件导出入口
-└── package.json
-├── test
-└── tsconfig.json
-```
-
-组件行为配置。
+测试单独某个服务，可以通过启动一个空的业务，指定当前组件来执行。
 
 ```typescript
-// src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { createLightApp } from '@midwayjs/mock';
+import * as custom from '../src';
 
-@Configuration()
-export class BookConfiguration {}
+describe('/test/index.test.ts', () => {
+  it('test component', async () => {
+    const app = await createLightApp('', {
+      imports: [
+        custom
+      ]
+    });
+    const bookService = await app.getApplicationContext().getAsync(custom.BookService);
+    expect(await bookService.getBookById()).toEqual('hello world');
+  });
+});
+
 ```
 
-在组件的入口导出 `Configuration` 属性。
 
-```typescript
-// src/index.ts
-export { BookConfiguration as Configuration } from './configuration`;
-
-```
 
 ### 应用中开发组件
 
@@ -204,226 +357,9 @@ export { BookConfiguration as Configuration } from './bookConfiguration/src`;
 
 另外，在新版本可能会出现扫描冲突的问题。可以将 `configuration.ts` 中的依赖注入冲突检查功能关闭。
 
-## 开发组件
 
-举一个例子，我们现在要把一个 `BookService` 放到组件中，让其他场景的代码复用。
 
-组件的服务代码如下。
-
-```typescript
-// src/service/bookService
-import { Provide } from '@midwayjs/decorator';
-
-@Provide()
-export class BookService {
-  async getBookById(id) {}
-}
-```
-
-:::info
-一个组件不会依赖明确的上层框架，为了达到在不同场景复用的目的，只会依赖通用的 `@midwayjs/core` 和 `@midwayjs/decorator`
-:::
-
-组件的 npm 包名为 `midway-component-book` ， `package.json`  如下。
-
-```typescript
-{
-	"name": "midway-component-book",
-  "version": "1.0.0",
-  "main": "dist/index",
-  "typings": "dist/index.d.ts",
-  "files": [
-    "dist/**/*.js",
-    "dist/**/*.d.ts"
-  ],
-  "devDependencies": {
-    "@midwayjs/core": "^2.3.0",
-    "@midwayjs/decorator": "^2.3.0"
-  }
-  ...
-}
-```
-
-### 组件作用域（命名空间）
-
-为了避免组件的业务代码和其他的业务代码冲突，组件在导出的时候加入了作用域的概念。默认的作用域为 npm 包名，即 `package.json`  中的 `name`  字段。
-
-可以在 `@Configuration`  装饰器中的 `namespace`  字段修改。
-​
-
-> 后续我们将弱化作用域的概念
-
-```typescript
-// src/bookConfiguration.ts
-import { Configuration } from '@midwayjs/decorator';
-
-@Configuration({
-  namespace: 'book',
-})
-export class BookConfiguration {}
-```
-
-引用组件导出的服务时，示例如下。
-
-```typescript
-// in project
-// 这里直接引入组件包导出的类型
-import { BookService } from 'midway-component-book';
-
-@Provide()
-@Controller('/user')
-export class HomeControlelr {
-  @Inject()
-  bookService: BookService; // 这里直接注入了 book 这个作用域下的 bookService
-}
-```
-
-### 组件使用自身服务
-
-#### 1、使用组件自己 `@Provide`  的情况
-
-Midway 使用 `@Inject`  装饰器来注入其他服务，在组件中，只要是同一个组件，我们也可以直接注入，不需要增加作用域前缀。
-
-比如：
-
-```typescript
-// src/controller/user.ts
-// 这里是组件中的 user 控制器
-
-import { BookService } from './service/bookService';
-
-@Provide()
-@Controller('/user')
-export class UserController {
-  @Inject()
-  bookService: BookService; // 这里注入不需要组件前缀，会自动处理
-
-  @Inject('bookService')
-  bookService: BookService; // 这里注入不需要组件前缀，会自动处理，和上面行为一致
-}
-```
-
-所以，组件内部调用组件自己的 `@Provide`  的服务，不需要加作用域前缀。
-
-#### 2、组件使用自己 `registerObject`  的情况
-
-如果在 onReady 的时候注入了三方对象，那么该三方对象将属于组件自身。
-
-```typescript
-@Configuration({
-  namespace: 'book',
-})
-export class BookConfiguration {
-  async onReady(contanier) {
-    contanier.registerObject('aaa', 'bbb'); // 容器内部会绑定到当前的组件
-  }
-}
-```
-
-如果组件内部使用时，可以无需增加前缀。
-
-```typescript
-@Provide()
-@Controller('/user')
-export class UserController {
-  @Inject()
-  aaa: string; // 这里注入不需要组件前缀，会自动处理
-}
-```
-
-#### 3、组件使用自己 `providerWrapper`  出来的方法
-
-如果组件需要使用 `providerWrapper`  来暴露方法，请增加 **组件作用域前缀**。
-
-```typescript
-import { providerWrapper, IMidwayContainer } from '@midwayjs/core';
-
-export async function contextHandler(container: IMidwayContainer) {}
-
-providerWrapper([
-  {
-    id: 'book:contextHandler', // 这里务必增加组件前缀
-    provider: contextHandler,
-    scope: ScopeEnum.Request,
-  },
-]);
-```
-
-组件在使用自己暴露的方法时，可以不需要前缀。
-
-```typescript
-@Provide()
-@Controller('/user')
-export class UserController {
-  @Inject()
-  contextHandler; // 这里注入不需要组件前缀，会自动处理
-}
-```
-
-### 组件注入全局对象
-
-Midway 上层框架默认会注入一些 [全局对象](container#stYqU)（框架、业务注入的对象），这些全局对象在组件中使用不需要作用域前缀。
-
-比如在组件中：
-
-```typescript
-@Configuration()
-export class ContainerLifeCycle {
-  @Inject()
-  baseDir; // 注入全局对象不需要前缀
-
-  async onReady(container) {
-    container.registerObject('aaa', 'bbbb');
-  }
-}
-```
-
-组件的普通逻辑中：
-
-```typescript
-@Provide()
-export class Home {
-  @Inject()
-  baseDir: string;
-
-  @Inject()
-  aaa; // 当前组件注册的属性不需要前缀
-
-  @Inject()
-  ccc; // 全局注入的属性不需要前缀
-
-  async getData() {}
-}
-```
-
-### 组件业务配置
-
-`@Configuration` 装饰器的 `importConfigs` 属性用于指定配置，这个行为和上层框架通用的[业务配置](/docs/env_config)能力一致。
-
-```typescript
-// src/bookConfiguration.ts
-import { Configuration } from '@midwayjs/decorator';
-import { join } from 'path';
-
-@Configuration({
-  namespace: 'book',
-  importConfigs: [
-    join(__dirname, 'config'), // 可以指定整个目录
-    join(__dirname, 'anotherConfig/config.default.ts'), // 可以指定单个文件
-  ],
-})
-export class BookConfiguration {}
-```
-
-:::info
-注意： `importConfigs`  的路径都为绝对路径。
-:::
-
-### 组件生命周期
-
-和整个 Midway 通用的 [生命周期扩展](lifecycle) 能力相同。
-
-## 使用组件
+### 使用组件
 
 在任意的 midway 系列的应用中，可以通过同样的方式引入这个组件。
 
@@ -453,10 +389,6 @@ export class ContainerLifeCycle {}
 
 至此，我们的准备工作就做完了，下面开始使用。
 
-### 1、外部使用组件 `@Provide`  的类
-
-假如我们在应用（函数）中需要用组件中的类，由于组件配置了命名空间，通过下面的方式即可导入组件中的代码。
-
 直接引入组件的类注入。
 
 ```typescript
@@ -472,85 +404,179 @@ export class Library {
 }
 ```
 
-等价于 “通过作用域 + 名字” 注入
+其余如果组件有包含特定的能力，请参考组件本身的文档。
 
-```typescript
-import { Provide, Inject } from '@midwayjs/decorator';
 
-@Provide()
-export class Library {
 
-  @Inject('book:bookService');
-  bookService;
+### 组件发布
 
-}
+组件就是一个普通 Node.js 包，编译后发布到 npm 分发即可。
+
+```bash
+## 编译并发布对应的component
+$ npm run build && npm publish
 ```
 
-### 2、外部使用组件 `registerObject`  的对象
 
-如果组件中有使用 `registerObject`  将对象注入到容器，那么该实例是属于此组件的，使用时需要增加前缀。
+
+### 组件示例
+
+[这里](https://github.com/czy88840616/midway-test-component) 有一个组件示例。已经发布到 npm，可以尝试直接引入到项目中启动执行。
+
+
+
+## 开发框架（Framework）
+
+在 v3 中，组件可以包含一个 Framework，来提供不同的服务，利用生命周期，我们可以扩展提供  gRPC，Http 等协议。
+
+这里的 Framework 只是组件里的一个特殊业务逻辑文件。
+
+比如：
+
+```
+.
+├── package.json
+├── src
+│   ├── index.ts			 					// 入口导出文件
+│   ├── configuration.ts			 	// 组件行为配置
+│   └── framework.ts            // 框架代码
+│
+├── test
+├── index.d.ts                  // 组件扩展定义
+└── tsconfig.json
+```
+
+
+
+### 编写 Framework
+
+框架都遵循 `IMidwayFramewok`  的接口定义，以及如下约定。
+
+- 每个框架有要自定义独立的启停流程
+- 每个框架需要定义自己独立的 `Application` ，`Context` 
+- 每个框架可以有自己独立的中间件能力
+
+为了简化开发，Midway 提供了一个基础的 `BaseFramework` 类供继承。
 
 ```typescript
-// 组件中
-@Configuration({
-  namespace: 'book',
-})
-export class BookConfiguration {
-  async onReady(contanier) {
-    contanier.registerObject('aaa', 'bbb'); // 容器内部会绑定到当前的组件
+import { Framework } from '@midwayjs/decorator';
+import { BaseFramework, IConfigurationOptions, IMidwayApplication, IMidwayContext } from '@midwayjs/core';
+
+// 定义 Context
+export interface Context extends IMidwayContext {
+  // ...
+}
+
+// 定义 Application
+export interface Application extends IMidwayApplication<Context> {
+  // ...
+}
+
+// 框架的配置
+export interface IMidwayCustomConfigurationOptions extends IConfigurationOptions {
+	// ...
+}
+
+// 实现一个自定义框架，继承基础框架
+@Framework()
+export class MidwayCustomFramework extends BaseFramework<Application, Context, IMidwayCustomConfigurationOptions> {
+  
+  // 处理初始化配置
+  configure() {
+    // ...
+  }
+
+  // app 初始化
+  async applicationInitialize() {
+    // ...
+  }
+
+  // 框架启动，比如 listen
+  async run() {
+    // ...
+  }
+  
+  // 框架类型
+  async getFrameworkType() {
+    // ...
   }
 }
 ```
 
-应用（函数 ）代码中使用：
+
+
+### 自定义示例
+
+接下去我们会以实现一个基础的 HTTP 服务框架作为示例。
 
 ```typescript
-import { Provide, Inject } from '@midwayjs/decorator';
+import { BaseFramework, IConfigurationOptions, IMidwayApplication, IMidwayContext } from '@midwayjs/core';
+import * as http from 'http';
 
-@Provide()
-export class Library {
+// 定义一些上层业务要使用的定义
+export interface Context extends IMidwayContext {}
 
-  @Inject('book:aaa');
-  aaa: string;
+export interface Application extends IMidwayApplication<Context> {}
 
+export interface IMidwayCustomConfigurationOptions extends IConfigurationOptions {
+  port: number;
+}
+
+// 实现一个自定义框架，继承基础框架
+export class MidwayCustomHTTPFramework extends BaseFramework<Application, Context, IMidwayCustomConfigurationOptions> {
+
+  configure(): IMidwayCustomConfigurationOptions {
+    return this.configService.getConfiguration('customKey');
+  }
+
+  async applicationInitialize(options: Partial<IMidwayBootstrapOptions>) {
+    // 创建一个 app 实例
+    this.app = http.createServer((req, res) => {
+      // 创建请求上下文，自带了 logger，请求作用域等
+      const ctx = this.app.createAnonymousContext();
+      // 从请求上下文拿到注入的服务
+      ctx.requestContext
+        .getAsync('xxxx')
+        .then((ins) => {
+          // 调用服务
+          return ins.xxx();
+        })
+        .then(() => {
+          // 请求结束
+          res.end();
+        });
+    });
+
+    // 给 app 绑定上 midway 框架需要的一些方法，比如 getConfig, getLogger 等。
+    this.defineApplicationProperties();
+  }
+
+  async run() {
+    // 启动的参数，这里只定义了启动的 HTTP 端口
+    if (this.configurationOptions.port) {
+      new Promise<void>((resolve) => {
+        this.app.listen(this.configurationOptions.port, () => {
+          resolve();
+        });
+      });
+    }
+  }
 }
 ```
 
-### 3、外部使用组件 `providerWrapper` 的方法
+我们定义了一个 `MidwayCustomHTTPFramework` 类，继承了 `BaseFramework` ，同时实现了 `applicationInitialize`  和 `run`  方法。
 
-如果组件导出一个方法。
+这样，一个最基础的框架就完成了。
 
-```typescript
-// 组件导出
-import { providerWrapper, IMidwayContainer } from '@midwayjs/core';
-
-export async function contextHandler(container: IMidwayContainer) {}
-
-providerWrapper([
-  {
-    id: 'book:contextHandler', // 这里务必增加组件前缀
-    provider: contextHandler,
-    scope: ScopeEnum.Request,
-  },
-]);
-```
-
-应用（函数 ）代码中使用：
+最后，我们只要按照约定，将 Framework 导出即可。
 
 ```typescript
-import { Provide, Inject } from '@midwayjs/decorator';
-
-@Provide()
-export class Library {
-
-  @Inject('book:contextHandler');
-  contextHandler;
-
-}
+export {
+  Application,
+  Context,
+  MidwayCustomHTTPFramework as Framework,
+  IMidwayCustomConfigurationOptions,
+} from './custom';
 ```
 
-其余如果组件有包含特定的能力，请参考组件本身的文档。
-
-## 组件示例
-
-[这里](https://github.com/czy88840616/midway-test-component) 有一个组件示例。已经发布到 npm，可以尝试直接引入到项目中启动执行。
+上面是一个最简单的框架示例。事实上，Midway 所有的框架都是这么编写的。

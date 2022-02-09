@@ -8,7 +8,7 @@ gRPC 是一个高性能、通用的开源 RPC 框架，其由 Google 主要面�
 
 Midway 当前采用了最新的 gRPC 官方推荐的 [@grpc/grpc-js](https://github.com/grpc/grpc-node/tree/master/packages/grpc-js) 进行开发，并提供了一些工具包，用于快速发布服务和调用服务。
 
-我们使用的模块为 `@midwayjs/grpc` ，既是一个框架（可以独立发布服务），又是一个组件（可以接入其它框架调用 gRPC 服务）。
+我们使用的模块为 `@midwayjs/grpc` ，既可以独立发布服务，又可以接入其它框架调用 gRPC 服务。
 
 相关信息：
 
@@ -63,9 +63,16 @@ $ npm i @midwayjs/grpc-helper --save-dev
 
 ## 开启组件
 
+:::tip
+
+不管是提供服务还是调用服务，都需要开启组件。
+
+:::
+
 `@midwayjs/grpc` 可以作为独立主框架使用。
 
 ```typescript
+// src/configuration.ts
 import { Configuration } from '@midwayjs/decorator';
 import * as grpc from '@midwayjs/grpc';
 
@@ -84,6 +91,7 @@ export class ContainerLifeCycle {
 也可以附加在其他的主框架下，比如 `@midwayjs/koa` 。
 
 ```typescript
+// src/configuration.ts
 import { Configuration } from '@midwayjs/decorator';
 import * as koa from '@midwayjs/koa';
 import * as grpc from '@midwayjs/grpc';
@@ -105,18 +113,20 @@ export class ContainerLifeCycle {
 
 ## 目录结构
 
+大致的目录结构如下，`src/provider` 是提供 gRPC 服务的目录。
+
 ```
 .
 ├── package.json
-├── proto													## proto 定义文件
+├── proto                         ## proto 定义文件
 │   └── helloworld.proto
 ├── src
-│   ├── configuration.ts					## 入口配置文件
+│   ├── configuration.ts          ## 入口配置文件
 │   ├── interface.ts
-│   └── provider									## gRPC 提供服务的文件
+│   └── provider                  ## gRPC 提供服务的文件
 │       └── greeter.ts
 ├── test
-├── bootstrap.js									## 服务启动入口
+├── bootstrap.js                  ## 服务启动入口
 └── tsconfig.json
 ```
 
@@ -295,7 +305,7 @@ export namespace helloworld {
 ## 提供 gRPC 服务（Provider）
 
 
-### 编写生产者（Provider）
+### 编写服务提供方（Provider）
 
 
 在 `src/provider` 目录中，我们创建 `greeter.ts` ，内容如下。
@@ -311,7 +321,6 @@ import { helloworld } from '../domain/helloworld';
 /**
  * 实现 helloworld.Greeter 接口的服务
  */
-@Provide()
 @Provider(MSProviderType.GRPC, { package: 'helloworld' })
 export class Greeter implements helloworld.Greeter {
 
@@ -335,86 +344,52 @@ export class Greeter implements helloworld.Greeter {
 
 对于普通的 gRPC 服务接口（UnaryCall），我们只需要使用 `@GrpcMethod()` 装饰器修饰即可。修饰的方法即为服务定义本身，入参为 proto 中定义好的入参，return 值即为定义好的响应体。
 
-
 :::info
 注意，生成的 Interface 是为了更好的编写服务代码，规范结构，请务必按照定义编写。
 :::
 
 
-### 启动 gRPC 服务
+### 配置服务
 
 
 这里启动需要用到项目根目录 `bootstrap.js` 独立文件。代码和其他框架初始化类似，只是这里的框架包是 `@midwayjs/grpc` 。
 
 
-内容如下：
+内容如下（函数形式的配置）：
 ```typescript
-// 获取框架
-const{ Framework } = require('@midwayjs/grpc');
-const { join } = require('path');
+// src/config/config.default
+import { MidwayAppInfo, MidwayConfig } from '@midwayjs/core';
 
-// 初始化框架
-const grpcService = new Framework().configure({
-  services: [
-    {
-      protoPath: join(__dirname, 'proto/helloworld.proto'),
-      package: 'helloworld',
-    },
-  ],
-});
-
-// 使用 bootstrap 启动
-const { Bootstrap } = require('@midwayjs/bootstrap');
-Bootstrap.load(grpcService).run();
-
+export default (appInfo: MidwayAppInfo): MidwayConfig => {
+  return {
+    // ...
+    grpcServer: {
+      services: [
+        {
+          protoPath: join(appInfo.appDir, 'proto/hero.proto'),
+          package: 'hero',
+        },
+        {
+          protoPath: join(appInfo.appDir, 'proto/helloworld.proto'),
+          package: 'helloworld',
+        }
+      ],
+    }
+  };
+}
 ```
-我们已经将启动命令写到了 start 脚本中，执行 `npm run start` 即可。
-```json
-"scripts": {
-  "start": "NODE_ENV=production node ./bootstrap.js",
-},
-```
-:::info
-在部署前，需要执行 npm run build 将 ts 代码编译为 js。
-:::
-
-
-### 框架选项
-
-
-`@midwayjs/grpc` 作为框架启动时，可以传递的参数如下：
-
-| url | string | 可选，gRPC 服务连接字符串，默认为 localhost:6565 |
-| --- | --- | --- |
-| services | IGRPCServiceOptions[] | 必选，数组，需要暴露的 gRPC 服务信息，每个服务对应一个 proto 文件 |
-| loaderOptions | object | 可选，使用 @grpc/proto-loader 加载的选项，具体参考[这里](https://github.com/grpc/grpc-node/blob/master/packages/proto-loader/README.md)，默认为
-{
-  keepCase: true,
-  longs: String,
-  enums: String,
-  defaults: true,
-  oneofs: true,
-} |
-| credentials | ServerCredentials | 可选，服务凭证，值参考[这里](https://grpc.github.io/grpc/node/grpc.ServerCredentials.html)，默认值为 ServerCredentials.createInsecure() |
-
-
-
 services 字段是数组，意味着 Midway 项目可以同时发布多个 gRPC 服务。每个 service 的结构为：
 
-
-
-| protoPath | string | 必选，proto 文件的绝对路径 |
+| 属性      | 类型   | 描述                       |
 | --- | --- | --- |
+| protoPath | string | 必选，proto 文件的绝对路径 |
 | package | string | 必选，服务对应的 package |
-|  |  |  |
 
 
 
 ### 编写单元测试
 
-
 `@midwayjs/grpc` 库提供了一个 `createGRPCConsumer` 方法，用于实时调用客户端，一般我们用这个方法做测试。
-
 
 :::caution
 这个方法每次调用会实时连接，不建议将该方法用在生产环境。
@@ -434,14 +409,7 @@ describe('test/index.test.ts', () => {
     const baseDir = join(__dirname, '../');
     
     // 创建服务
-    const app = await createApp<Framework>(baseDir, {
-      services: [
-        {
-          protoPath: join(baseDir, 'proto', 'helloworld.proto'),
-          package: 'helloworld',
-        },
-      ],
-    });
+    const app = await createApp<Framework>();
 
     // 调用服务
     const service = await createGRPCConsumer<helloworld.GreeterClient>({
@@ -463,63 +431,41 @@ describe('test/index.test.ts', () => {
 ```
 
 
+
 ## 调用 gRPC 服务（Consumer）
 
 
 我们编写一个 gRPC 服务来调用上面的暴露的服务。
-
 
 :::info
 事实上，你可以在 Web 的 Controller，或者 Service 等其他地方来调用，这里只是做一个示例。
 :::
 
 
-### 增加组件
-
-
-`@midwayjs/grpc` 库即是 Framework，又是组件，在作为组件引入时，需要在 `src/configuration.ts` 中配置。
-```typescript
-// src/configuration.ts
-
-import { Configuration } from '@midwayjs/decorator';
-import * as grpc from '@midwayjs/grpc';
-import { join } from 'path';
-
-@Configuration({
-  imports: [
-    grpc
-  ],
-  importConfigs: [join(__dirname, './config')],
-})
-export class AutoConfiguration {}
-
-```
-
-
-### 提供调用配置
+### 调用配置
 
 
 你需要在 `src/config/config.default.ts` 中增加你需要调用的目标服务以及它的 proto 文件信息。
 
 
-比如，这里我们填写了上面暴露的服务本身，以及该服务的 proto，包名等信息。
+比如，这里我们填写了上面暴露的服务本身，以及该服务的 proto，包名等信息（函数形式）。
 ```typescript
-// src/config/config.default.ts
-
-import { join } from 'path';
-
 // src/config/config.default
-export default {
-  // ...
-  grpc: {
-    services: [
-      {
-        url: 'localhost:6565',
-        protoPath: join(__dirname, '../../proto/helloworld.proto'),
-        package: 'helloworld',
-      },
-    ],
-  },
+import { MidwayAppInfo, MidwayConfig } from '@midwayjs/core';
+
+export default (appInfo: MidwayAppInfo): MidwayConfig => {
+  return {
+    // ...
+    grpc: {
+      services: [
+        {
+          url: 'localhost:6565',
+          protoPath: join(appInfo.appDir, 'proto/helloworld.proto'),
+          package: 'helloworld',
+        },
+      ],
+    },
+  };
 }
 ```
 
@@ -544,8 +490,7 @@ import { Clients } from '@midwayjs/grpc';
 
 @Provide()
 export class UserService {
-
-	@Inject()
+  @Inject()
   grpcClients: Clients;	
 
 }
@@ -565,8 +510,7 @@ import { Clients } from '@midwayjs/grpc';
 
 @Provide()
 export class UserService {
-
-	@Inject()
+  @Inject()
   grpcClients: Clients;
   
   async invoke() {
@@ -598,14 +542,12 @@ import {
   GrpcMethod,
   MSProviderType,
   Provider,
-  Provide,
   Inject,
   Init,
 } from '@midwayjs/decorator';
 import { helloworld, hero } from '../interface';
 import { Clients } from '@midwayjs/grpc';
 
-@Provide()
 @Provider(MSProviderType.GRPC, { package: 'hero' })
 export class HeroService implements hero.HeroService {
   // 注入客户端
@@ -761,14 +703,13 @@ export namespace math {
 
 服务端示例如下：
 ```typescript
-import { GrpcMethod, GrpcStreamTypeEnum, Inject, MSProviderType, Provide, Provider } from '@midwayjs/decorator';
+import { GrpcMethod, GrpcStreamTypeEnum, Inject, MSProviderType, Provider } from '@midwayjs/decorator';
 import { Context } from '@midwayjs/grpc';
 import { math } from '../interface';
 import { Metadata } from '@grpc/grpc-js';
 
 /**
  */
-@Provide()
 @Provider(MSProviderType.GRPC, { package: 'math' })
 export class Math implements math.Math {
 
@@ -846,14 +787,13 @@ call.sendMessage({
 
 服务端示例如下：
 ```typescript
-import { GrpcMethod, GrpcStreamTypeEnum, Inject, MSProviderType, Provide, Provider } from '@midwayjs/decorator';
+import { GrpcMethod, GrpcStreamTypeEnum, Inject, MSProviderType, Provider } from '@midwayjs/decorator';
 import { Context } from '@midwayjs/grpc';
 import { math } from '../interface';
 import { Metadata } from '@grpc/grpc-js';
 
 /**
  */
-@Provide()
 @Provider(MSProviderType.GRPC, { package: 'math' })
 export class Math implements math.Math {
   
@@ -909,14 +849,13 @@ const data = await service.addMany()
 
 服务端示例如下：
 ```typescript
-import { GrpcMethod, GrpcStreamTypeEnum, Inject, MSProviderType, Provide, Provider } from '@midwayjs/decorator';
+import { GrpcMethod, GrpcStreamTypeEnum, Inject, MSProviderType, Provider } from '@midwayjs/decorator';
 import { Context } from '@midwayjs/grpc';
 import { math } from '../interface';
 import { Metadata } from '@grpc/grpc-js';
 
 /**
  */
-@Provide()
 @Provider(MSProviderType.GRPC, { package: 'math' })
 export class Math implements math.Math {
 
@@ -1061,7 +1000,6 @@ gRPC 的元数据等价于 HTTP 的上下文。
 import {
   MSProviderType,
   Provider,
-  Provide,
   GrpcMethod,
 } from '@midwayjs/decorator';
 import { helloworld } from '../domain/helloworld';
@@ -1071,7 +1009,6 @@ import { Context } from '@midwayjs/grpc';
 /**
  * 实现 helloworld.Greeter 接口的服务
  */
-@Provide()
 @Provider(MSProviderType.GRPC, { package: 'helloworld' })
 export class Greeter implements helloworld.Greeter {
   
