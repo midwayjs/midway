@@ -15,11 +15,11 @@ const tnpmArr = [];
 const diff = ['\n# Changes:\n\n'];
 
 for (const item of data) {
-
   if (item.private === false) {
     const remoteVersion = execSync(
       `npm show ${item.name} version`
-    ).toString().replace('\n', '');
+      .toString()
+      .replace('\n', '');
 
     const localVersion = item.version;
     console.log(`----> ${item.name} local=${localVersion} remote=${remoteVersion}`);

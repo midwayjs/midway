@@ -15,9 +15,16 @@ for (const info of data) {
   result[info.name] = info.version;
 }
 
-const key = result['@midwayjs/decorator'].replace(/\./g, '_') + '-' + result['@midwayjs/core'].replace(/\./g, '_');
+const key =
+  result['@midwayjs/decorator'].replace(/\./g, '_') +
+  '-' +
+  result['@midwayjs/core'].replace(/\./g, '_');
 
-const versionFile = join(__dirname, '../packages/version/versions', `${key}.json`);
+const versionFile = join(
+  __dirname,
+  '../packages/version/versions',
+  `${key}.json`
+);
 
 if (existsSync(versionFile)) {
   const originData = require(versionFile);
