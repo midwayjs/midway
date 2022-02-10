@@ -14,6 +14,7 @@
     "@midwayjs/mock": "^3.0.5"
   },
   "dependencies": {
+    "int64-buffer": "1.0.1",
     "tablestore": "5.0.7"
   },
   "keywords": [
