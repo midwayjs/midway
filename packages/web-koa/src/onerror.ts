@@ -7,6 +7,7 @@ import {
   escapeHtml,
   tpl,
 } from './utils';
+import { Utils } from '@midwayjs/decorator';
 
 export function setupOnerror(app, config, logger) {
   const errorOptions = Object.assign(
@@ -122,7 +123,14 @@ export function setupOnerror(app, config, logger) {
 
     // wrap non-error object
     if (!(err instanceof Error)) {
-      const newError = new Error('non-error thrown: ' + err);
+      let errMsg = err;
+      if (typeof err === 'object') {
+        try {
+          errMsg = Utils.safeStringify(err);
+          // eslint-disable-next-line no-empty
+        } catch (e) {}
+      }
+      const newError = new Error('non-error thrown: ' + errMsg);
       // err maybe an object, try to copy the name, message and stack to the new error instance
       if (err) {
         if (err.name) newError.name = err.name;
@@ -173,7 +181,7 @@ export function setupOnerror(app, config, logger) {
     }
 
     if (type === 'json') {
-      this.body = JSON.stringify(this.body);
+      this.body = Utils.safeStringify(this.body);
     }
     this.res.end(this.body);
   };

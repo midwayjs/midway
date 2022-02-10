@@ -2,6 +2,7 @@ import * as util from 'util';
 import * as crypto from 'crypto';
 import { camelCase, pascalCase } from './camelCase';
 import { randomUUID } from './uuid';
+import { safeStringify, safeParse } from './flatted';
 
 const ToString = Function.prototype.toString;
 const hasOwn = Object.prototype.hasOwnProperty;
@@ -205,4 +206,6 @@ export const Utils = {
   pascalCase,
   randomUUID,
   toAsyncFunction,
+  safeStringify,
+  safeParse,
 };
