@@ -134,12 +134,12 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 ```typescript
 // src/middleware/local.middleware.ts
 
-import { Inject, Provide } from '@midwayjs/decorator';
+import { Inject, Middleware } from '@midwayjs/decorator';
 import { PassportMiddleware } from '@midwayjs/passport';
 import { Context } from '@midwayjs/express';
 import { LocalStrategy } from './strategy/local.strategy.ts'
 
-@Provide()
+@Middleware()
 export class LocalPassportMiddleware extends PassportMiddleware(LocalStrategy) {
   // 设置 AuthenticateOptions
   getAuthenticateOptions(): Promise<passport.AuthenticateOptions> | passport.AuthenticateOptions {
@@ -153,7 +153,7 @@ export class LocalPassportMiddleware extends PassportMiddleware(LocalStrategy) {
 
 ```typescript
 // src/controller.ts
-import { Provide, Post, Inject, Controller } from '@midwayjs/decorator';
+import { Post, Inject, Controller } from '@midwayjs/decorator';
 import { LocalPassportMiddleware } from './middleware/local.middleware.ts'
 
 @Controller('/')
@@ -225,11 +225,11 @@ export class JwtStrategy extends PassportStrategy(
 ```typescript
 // src/middleware/jwt.middleware.ts
 
-import { Provide } from '@midwayjs/decorator';
+import { Middleware } from '@midwayjs/decorator';
 import { PassportMiddleware } from '@midwayjs/passport';
 import { JwtStrategy } from './strategy/jwt-strategy';
 
-@Provide()
+@Middleware()
 export class JwtPassportMiddleware extends PassportMiddleware(JwtStrategy) {
   getAuthenticateOptions(): Promise<passport.AuthenticateOptions> | passport.AuthenticateOptions {
     return {};
@@ -238,8 +238,8 @@ export class JwtPassportMiddleware extends PassportMiddleware(JwtStrategy) {
 ```
 
 ```typescript
-import { Provide, Post, Inject } from '@midwayjs/decorator';
-import { Controller, Post } from '@midwayjs/decorator';
+import { Post, Inject, Controller, Post } from '@midwayjs/decorator';
+import { Context } from '@midwayjs/koa'
 import { JwtService } from '@midwayjs/jwt';
 import { JwtPassportMiddleware } from './middleware/jwt.middleware';
 
@@ -250,7 +250,7 @@ export class JwtController {
   jwt: JwtService;
 
   @Inject()
-  ctx: any;
+  ctx: Context;
 
   @Post('/passport/jwt', { middleware: [JwtPassportMiddleware] })
   async jwtPassport() {
@@ -312,15 +312,16 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
 // src/middleware/github.middleware.ts
 
 import { PassportMiddleware } from '@midwayjs/passport';
+import { Middleware } from '@midwayjs/decorator';
 
-@Provide()
+@Middleware()
 export class GithubPassportMiddleware extends PassportMiddleware {
 }
 ```
 ```typescript
 // src/controoer/auth.controller.ts
 
-import { Provide, Get, Inject } from '@midwayjs/decorator';
+import { Controller, Get, Inject } from '@midwayjs/decorator';
 import { GithubPassportMiddleware } from './github.middleware';
 
 @Controller('/oauth')
@@ -338,4 +339,58 @@ export class AuthController {
 }
 
 ```
+
+
+
+## 常见问题
+
+
+
+### 1、Failed to serialize user into session
+
+由于 passport 默认会尝试将 user 数据写入session，如果无需将用户保存到 session，可以将 session 支持关闭。
+
+```typescript
+// src/config/config.default
+export default {
+  // ...
+  passport: {
+    session: false,
+  }
+}
+```
+
+如果明确需要保存数据到 Session，则需要重写 `PassportStrategy`的 User 的序列化方法，请不要保存特别大的数据。
+
+比如自己实现的本地策略。
+
+```typescript
+// src/strategy/local.strategy.ts
+
+import { CustomStrategy, PassportStrategy } from '@midwayjs/passport';
+import { Repository } from 'typeorm';
+import { InjectEntityModel } from '@midwayjs/orm';
+import { UserEntity } from './user';
+import * as bcrypt from 'bcrypt';
+
+@CustomStrategy()
+export class LocalStrategy extends PassportStrategy(Strategy) {
+  
+  // ...
+  serializeUser(user, done) {
+    // 可以只保存用户名
+    done(null, user.username);
+  }
+  
+  deserializeUser(id, done) {
+    
+    // 这里不是异步方法，你可以从其他地方根据用户名，反查用户数据。
+    const user = getUserFromDataBase(id);
+    
+    done(null, user);
+  }
+}
+```
+
+
 
