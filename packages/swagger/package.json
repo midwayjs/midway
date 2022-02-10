@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/swagger",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "main": "dist/index",
   "typings": "index.d.ts",
   "files": [
@@ -11,8 +11,8 @@
   "devDependencies": {
     "@midwayjs/core": "^3.0.4",
     "@midwayjs/decorator": "^3.0.4",
-    "@midwayjs/koa": "^3.0.4",
-    "@midwayjs/mock": "^3.0.4",
+    "@midwayjs/koa": "^3.0.5",
+    "@midwayjs/mock": "^3.0.5",
     "swagger-ui-dist": "4.5.0"
   },
   "author": "Kurten Chan <chinkurten@gmail.com>",

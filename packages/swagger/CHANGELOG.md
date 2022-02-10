@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.5](https://github.com/midwayjs/midway/compare/v3.0.4...v3.0.5) (2022-02-10)
+
+
+### Bug Fixes
+
+* swagger query/param bug ([#1682](https://github.com/midwayjs/midway/issues/1682)) ([c05df75](https://github.com/midwayjs/midway/commit/c05df757bc8fd15d893d0dcf7455fc1b6a12d171))
+
+
+
+
+
 ## [3.0.4](https://github.com/midwayjs/midway/compare/v3.0.3...v3.0.4) (2022-02-09)
 
 

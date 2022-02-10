@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/web",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "description": "Midway Web Framework for Egg.js",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -29,7 +29,7 @@
   "devDependencies": {
     "@midwayjs/decorator": "^3.0.4",
     "@midwayjs/logger": "^2.15.0",
-    "@midwayjs/mock": "^3.0.4",
+    "@midwayjs/mock": "^3.0.5",
     "axios": "^0.25.0",
     "dayjs": "1.10.7",
     "egg-logger": "2.7.1",

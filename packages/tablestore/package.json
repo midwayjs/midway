@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/tablestore",
   "description": "midway tablestore component",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "files": [
@@ -11,7 +11,7 @@
   "devDependencies": {
     "@midwayjs/core": "^3.0.4",
     "@midwayjs/decorator": "^3.0.4",
-    "@midwayjs/mock": "^3.0.4"
+    "@midwayjs/mock": "^3.0.5"
   },
   "dependencies": {
     "tablestore": "5.0.7"

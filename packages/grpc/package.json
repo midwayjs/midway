@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/grpc",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "description": "Midway Framework for gRPC",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -24,7 +24,7 @@
   "license": "MIT",
   "devDependencies": {
     "@midwayjs/decorator": "^3.0.4",
-    "@midwayjs/mock": "^3.0.4",
+    "@midwayjs/mock": "^3.0.5",
     "fs-extra": "10.0.0"
   },
   "dependencies": {
