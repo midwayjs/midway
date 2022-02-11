@@ -121,7 +121,7 @@ Midway 内置的多环境配置服务，提供配置的加载，获取，它也�
 
 ```typescript
 import { Inject, Controller, Get } from '@midwayjs/decorator';
-import { MidwayEnvironmentService } from '@midwayjs/core';
+import { MidwayConfigService } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -154,7 +154,7 @@ Midway 内置的日志服务，提供日志创建，获取等 API，它也是 `@
 
 ```typescript
 import { Inject, Controller, Get } from '@midwayjs/decorator';
-import { MidwayEnvironmentService } from '@midwayjs/core';
+import { MidwayLoggerService } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -186,7 +186,7 @@ Midway 内置的自定义框架服务，配合组件中自定义的 `@Framework`
 
 ```typescript
 import { Inject, Controller, Get } from '@midwayjs/decorator';
-import { MidwayEnvironmentService } from '@midwayjs/core';
+import { MidwayFrameworkService } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -221,7 +221,7 @@ Midway 内置的自定义装饰器服务，用于实现框架层面的自定义�
 
 ```typescript
 import { Inject, Controller, Get } from '@midwayjs/decorator';
-import { MidwayAspectService } from '@midwayjs/core';
+import { MidwayMiddlewareService } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -252,7 +252,7 @@ Midway 内置的自定义装饰器服务，用于实现框架层面的自定义�
 
 ```typescript
 import { Inject, Controller, Get } from '@midwayjs/decorator';
-import { MidwayAspectService } from '@midwayjs/core';
+import { MidwayDecoratorService } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
@@ -287,7 +287,7 @@ Midway 内置的拦截器服务，用于加载 `@Aspect` 相关的能力，自�
 
 ```typescript
 import { Inject, Controller, Get } from '@midwayjs/decorator';
-import { MidwayAspectService } from '@midwayjs/core';
+import { MidwayLifeCycleService } from '@midwayjs/core';
 
 @Controller('/')
 export class HomeController {
