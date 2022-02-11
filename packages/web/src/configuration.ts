@@ -103,7 +103,7 @@ export class EggConfiguration {
     // 去掉为了 egg-socket.io 报错扫进去的 session
     this.app.middleware =
       Array.isArray(this.app.middleware) && this.app.middleware.length
-        ? this.app.middleware.slice(0)
+        ? this.app.middleware.slice()
         : [];
   }
 
