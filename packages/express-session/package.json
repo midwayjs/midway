@@ -14,7 +14,7 @@
     "@midwayjs/decorator": "^3.0.4",
     "@midwayjs/mock": "^3.0.5",
     "@types/express-session": "1.17.4",
-    "memorystore": "1.6.6"
+    "memorystore": "1.6.7"
   },
   "dependencies": {
     "cookie-session": "^2.0.0",
