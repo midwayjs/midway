@@ -2,6 +2,9 @@
 
 Socket.io 是一个业界常用库，可用于在浏览器和服务器之间进行实时，双向和基于事件的通信。
 
+:::tip
+调整暂未完成，请等待完成后再使用。
+:::
 
 ![image.png](https://img.alicdn.com/imgextra/i2/O1CN01YTye6U22gICvarVur_!!6000000007149-2-tps-1204-352.png)
 
@@ -276,16 +279,16 @@ export class HelloSocketController {
 import { createApp, close } from '@midwayjs/mock'
 import { Framework } from '@midwayjs/socketio';
 
-describe('/test/index.test.ts', () => {	
-  
+describe('/test/index.test.ts', () => {
+
 	it('should test create socket app', async () => {
     const app = await createApp<Framework>(process.cwd(), { port: 3000});
-    
+
     //...
-    
+
     await close(app);
   });
-  
+
 });
 ```
 
@@ -313,25 +316,25 @@ import { Framework } from '@midwayjs/socketio';
 import { createSocketIOClient } from '@midwayjs/mock';
 import { once } from 'events';
 
-describe('/test/index.test.ts', () => {	
-  
+describe('/test/index.test.ts', () => {
+
 	it('should test create socket app', async () => {
-    
+
     // 创建一个服务
     const app = await createApp<Framework>(process.cwd(), { port: 3000});
-    
+
     // 创建一个对应的客户端
     const client = await createSocketIOClient({
       port: 3000,
     });
-    
+
     // 拿到结果返回
     const data = await new Promise(resolve => {
       client.on('myEventResult', resolve);
       // 发送事件
       client.send('myEvent', 1, 2, 3);
     });
-    
+
     // 判断结果
     expect(data).toEqual({
       name: 'harry',
@@ -343,7 +346,7 @@ describe('/test/index.test.ts', () => {
  		// 关闭服务端
     await close(app);
   });
-  
+
 });
 ```
 如果多个客户端，也可以使用更简单的写法，使用 node 自带的 `events` 模块的 `once` 方法来优化，就会变成下面的代码。
@@ -353,13 +356,13 @@ import { Framework } from '@midwayjs/socketio';
 import { createSocketIOClient } from '@midwayjs/mock';
 import { once } from 'events';
 
-describe('/test/index.test.ts', () => {	
-  
+describe('/test/index.test.ts', () => {
+
 	it('should test create socket app', async () => {
-    
+
     // 创建一个服务
     const app = await createApp<Framework>(process.cwd(), { port: 3000});
-    
+
     // 创建一个对应的客户端
     const client = await createSocketIOClient({
       port: 3000,
@@ -382,7 +385,7 @@ describe('/test/index.test.ts', () => {
  		// 关闭服务端
     await close(app);
   });
-  
+
 });
 ```
 两种写法效果相同，按自己理解的写就行。
@@ -415,21 +418,21 @@ import { Framework } from '@midwayjs/socketio';
 import { createSocketIOClient } from '@midwayjs/mock';
 import { once } from 'events';
 
-describe('/test/index.test.ts', () => {	
-  
+describe('/test/index.test.ts', () => {
+
 	it('should test create socket app', async () => {
-    
+
     // 创建一个服务
     const app = await createApp<Framework>(process.cwd(), { port: 3000});
-    
+
     // 创建一个对应的客户端
     const client = await createSocketIOClient({
       port: 3000,
     });
-    
+
     // 发送事件，这里使用了 await 的写法
     const data = await client.sendWithAck('myEvent', 1, 2, 3);
-    
+
     // 判断结果
     expect(data).toEqual({
       name: 'harry',
@@ -441,7 +444,7 @@ describe('/test/index.test.ts', () => {
  		// 关闭服务端
     await close(app);
   });
-  
+
 });
 ```
 
@@ -461,7 +464,7 @@ export class HelloSocketController {
 
   @Inject()
   ctx: Context;
-  
+
   @App()
   app: Application;
 
@@ -700,7 +703,7 @@ export class UserController {
 
   @App(MidwayFrameworkType.WS_IO)
   socketApp: SocketApplication;
-  
+
   @Get()
   async invoke() {
   	// 对 / 下的连接做广播

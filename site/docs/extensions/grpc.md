@@ -106,7 +106,6 @@ export class ContainerLifeCycle {
   }
 }
 
-
 ```
 
 
@@ -269,24 +268,24 @@ import * as grpc from '@midwayjs/grpc';
 
 // 生成的命名空间
 export namespace helloworld {
-  
+
   // 服务端使用的定义
   export interface Greeter {
     // Sends a greeting
     sayHello(data: HelloRequest): Promise<HelloReply>;
   }
-  
+
   // 客户端使用的定义
   export interface GreeterClient {
     // Sends a greeting
     sayHello(options?: grpc.IClientOptions): grpc.IClientUnaryService<HelloRequest, HelloReply>;
   }
-  
+
   // 请求体结构
   export interface HelloRequest {
     name?: string;
   }
-  
+
   // 响应体结构
   export interface HelloReply {
     message?: string;
@@ -407,7 +406,7 @@ describe('test/index.test.ts', () => {
 
   it('should create multiple grpc service in one server', async () => {
     const baseDir = join(__dirname, '../');
-    
+
     // 创建服务
     const app = await createApp<Framework>();
 
@@ -491,7 +490,7 @@ import { Clients } from '@midwayjs/grpc';
 @Provide()
 export class UserService {
   @Inject()
-  grpcClients: Clients;	
+  grpcClients: Clients;
 
 }
 ```
@@ -512,19 +511,19 @@ import { Clients } from '@midwayjs/grpc';
 export class UserService {
   @Inject()
   grpcClients: Clients;
-  
+
   async invoke() {
     // 获取服务
   	const greeterService = this.grpcClients.getService<helloworld.GreeterClient>(
       'helloworld.Greeter'
     );
-    
+
     // 调用服务
     const result = await greeterService.sayHello()
     	.sendMessage({
         name: 'harry'
       });
-    
+
     // 返回结果
     return result;
   }
@@ -571,7 +570,7 @@ export class HeroService implements hero.HeroService {
     	.sendMessage({
         name: 'harry'
       });
-    
+
     // 返回结果
     return result;
   }
@@ -586,7 +585,7 @@ export class HeroService implements hero.HeroService {
 gRPC 的流式服务用于减少连接，让服务端或者客户端不需要等待即可执行任务，从而提高执行效率。
 
 
-gRPC 的流式服务分为三种，以服务端角度来说，为 
+gRPC 的流式服务分为三种，以服务端角度来说，为
 
 
 - 服务端接收流（客户端推）
@@ -796,7 +795,7 @@ import { Metadata } from '@grpc/grpc-js';
  */
 @Provider(MSProviderType.GRPC, { package: 'math' })
 export class Math implements math.Math {
-  
+
   sumDataList: number[] = [];
 
   @Inject()
@@ -952,9 +951,9 @@ service Math {
 const t = service.addMore();
 
 const result4 = await new Promise<number>((resolve, reject) => {
-  
+
   let total = 0;
-  
+
   // 第一次调用和返回
   t.sendMessage({
     num: 2
@@ -964,7 +963,7 @@ const result4 = await new Promise<number>((resolve, reject) => {
       total += res.num;
   	})
     .catch(err => console.error(err));
-  
+
   // 第二次调用和返回
   t.sendMessage({
     num: 5
@@ -974,7 +973,7 @@ const result4 = await new Promise<number>((resolve, reject) => {
       resolve(total);
     })
     .catch(err => console.error(err));
-  
+
   t.end();
 });
 
@@ -1011,21 +1010,21 @@ import { Context } from '@midwayjs/grpc';
  */
 @Provider(MSProviderType.GRPC, { package: 'helloworld' })
 export class Greeter implements helloworld.Greeter {
-  
+
   @Inject()
   ctx: Context;
 
   @GrpcMethod()
   async sayHello(request: helloworld.HelloRequest) {
-    
+
     // 客户端传递的元数据
     console.log(this.ctx.metadata);
-    
+
     // 创建元数据
     const meta = new Metadata();
     this.ctx.metadata.add('xxx', 'bbb');
     this.ctx.sendMetadata(meta);
-    
+
     return { message: 'Hello ' + request.name };
   }
 }

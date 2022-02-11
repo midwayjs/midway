@@ -4,6 +4,10 @@
 ![image.png](https://img.alicdn.com/imgextra/i3/O1CN01SYMbCz1moVSVLl7S2_!!6000000005001-2-tps-646-251.png)
 在Midway中，我们提供了订阅rabbitMQ的能力，专门来满足用户的这类需求。
 
+:::tip
+调整暂未完成，请等待完成后再使用。
+:::
+
 相关信息：
 
 **订阅服务**
@@ -57,7 +61,8 @@ AMQP 有一些概念，Queue、Exchange 和 Binding 构成了 AMQP 协议的核�
 
 Midway 提供了订阅 rabbitMQ 的能力，并能够独立部署和使用。安装 `@midwayjs/rabbitmq` 模块及其定义。
 ```bash
-$ npm i @midwayjs/rabbitmq amqplib --save
+$ npm i @midwayjs/rabbitmq@3 --save
+$ npm i amqplib --save
 $ npm i @types/amqplib --save-dev
 ```
 
@@ -77,41 +82,46 @@ $ npm i @types/amqplib --save-dev
 }
 ```
 
+## 开启组件
 
-
-### 入口函数
-
-
-和 Web 一样，创建一个入口文件，指定 Framework 即可。
-```typescript
-// server.js
-const { Bootstrap } = require('@midwayjs/bootstrap');
-const RabbitMQFramework = require('@midwayjs/rabbitmq').Framework;
-
-const rabbitMQFramework = new RabbitMQFramework().configure({
-  url: 'amqp://localhost'
-});
-
-Bootstrap
-  .load(rabbitMQFramework)
-  .run();
-```
-整个启动的配置为：
-
+`@midwayjs/rabbmitmq` 可以作为独立主框架使用。
 
 ```typescript
-export type IMidwayRabbitMQConfigurationOptions = {
-  url: string | Options.Connect,								
-  socketOptions?: any;													
-  reconnectTime?: number;
+// src/configuration.ts
+import { Configuration } from '@midwayjs/decorator';
+import * as rabbitmq from '@midwayjs/rabbitmq';
+
+@Configuration({
+  imports: [rabbitmq],
+  // ...
+})
+export class ContainerLifeCycle {
+  async onReady() {
+        // ...
+  }
 }
 ```
-| url | rabbitMQ 的连接信息 |
-| --- | --- |
-| socketOptions | amqplib.connect 的第二个参数 |
-| reconnectTime | 队列断连后的重试时间，默认 10 秒 |
 
-### 订阅 rabbitMQ
+也可以附加在其他的主框架下，比如 `@midwayjs/koa` 。
+
+```typescript
+// src/configuration.ts
+import { Configuration } from '@midwayjs/decorator';
+import * as koa from '@midwayjs/koa';
+import * as rabbitmq from '@midwayjs/rabbitmq';
+
+@Configuration({
+  imports: [koa, rabbitmq],
+  // ...
+})
+export class ContainerLifeCycle {
+  async onReady() {
+        // ...
+  }
+}
+```
+
+### 目录结构
 
 
 我们一般把能力分为生产者和消费者，而订阅正是消费者的能力。
@@ -127,18 +137,17 @@ export type IMidwayRabbitMQConfigurationOptions = {
 │   ├── interface.ts
 │   └── service
 │       └── userService.ts
-├── test  
-├── package.json  
+├── test
+├── package.json
 └── tsconfig.json
 ```
 代码示例如下。
 
 ```typescript
-import { Provide, Consumer, MSListenerType, RabbitMQListener, Inject } from '@midwayjs/decorator';
+import { Consumer, MSListenerType, RabbitMQListener, Inject } from '@midwayjs/decorator';
 import { Context } from '@midwayjs/rabbitmq';
 import { ConsumeMessage } from 'amqplib';
 
-@Provide()
 @Consumer(MSListenerType.RABBITMQ)
 export class UserConsumer {
 
@@ -186,6 +195,32 @@ import { Context } from '@midwayjs/rabbitmq';
 ```
 
 
+### 配置消费者
+
+我们需要在配置中指定 rabbitmq 的地址。
+
+```typescript
+// src/config/config.default
+import { MidwayConfig } from '@midwayjs/core';
+
+export default {
+  // ...
+  rabbitmq: {
+    url: 'amqp://localhost'
+  }
+} as MidwayConfig;
+```
+
+更多配置：
+
+| 属性 | 描述 |
+| --- | --- |
+| url | rabbitMQ 的连接信息 |
+| socketOptions | amqplib.connect 的第二个参数 |
+| reconnectTime | 队列断连后的重试时间，默认 10 秒 |
+
+
+
 ### Fanout Exchange
 
 
@@ -195,11 +230,10 @@ Fanout 是一种特定的交换机，如果满足匹配（binding），就往 Ex
 
 比如，下面我们添加了两个 Queue，订阅了相同的交换机。
 ```typescript
-import { Provide, Consumer, MSListenerType, RabbitMQListener, Inject, App } from '@midwayjs/decorator';
+import { Consumer, MSListenerType, RabbitMQListener, Inject, App } from '@midwayjs/decorator';
 import { Context, Application } from '@midwayjs/rabbitmq';
 import { ConsumeMessage } from 'amqplib';
 
-@Provide()
 @Consumer(MSListenerType.RABBITMQ)
 export class UserConsumer {
 
@@ -260,11 +294,10 @@ Direct Exchange 是 RabbitMQ 默认的 Exchange，完全根据 RoutingKey 来路
 
 下面的示例代码，我们不填写 Queue Name，只添加一个 routingKey，交换机类型为 direct。
 ```typescript
-import { Provide, Consumer, MSListenerType, RabbitMQListener, Inject, App } from '@midwayjs/decorator';
+import { Consumer, MSListenerType, RabbitMQListener, Inject, App } from '@midwayjs/decorator';
 import { Context, Application } from '../../../../../src';
 import { ConsumeMessage } from 'amqplib';
 
-@Provide()
 @Consumer(MSListenerType.RABBITMQ)
 export class UserConsumer {
 
@@ -368,6 +401,7 @@ Midway 提供了一个简单的测试方法用于测试订阅某个数据。 `@m
 
 
 然后，我们启动一个 app，就可以自动监听到这个队列中的数据，并执行后续逻辑。
+
 ```typescript
 import { createRabbitMQProducer, closeApp, creatApp } from '@midwayjs/mock';
 
@@ -379,12 +413,15 @@ describe('/test/index.test.ts', () => {
       mock: false,
       url: 'amqp://localhost',
     });
-    
+
     // send data to queue
     channel.sendToQueue('tasks', Buffer.from('something to do'))
 
     // create app and got data
-    const app = await creatApp('base-app', { url: 'amqp://localhost'});
+    const app = await creatApp();
+
+    // wait a moment
+
     await closeApp(app);
   });
 });
@@ -502,14 +539,14 @@ import * as amqp from 'amqp-connection-manager'
 export class RabbitmqService {
 
   private connection: amqp.AmqpConnectionManager;
-  
+
   private channelWrapper;
 
   @Init()
   async connect() {
     // 创建连接，你可以把配置放在 Config 中，然后注入进来
     this.connection = await amqp.connect('amqp://localhost');
-    
+
     // 创建 channel
     this.channelWrapper = this.connection.createChannel({
       json: true,
@@ -521,12 +558,12 @@ export class RabbitmqService {
       }
     });
   }
-                                                    
-  // 发送消息                                                 
+
+  // 发送消息
   public async sendToQueue(queueName: string, data: any) {
   	return this.channelWrapper.sendToQueue(queueName, data);
   }
-  
+
   @Destroy()
   async close() {
   	await this.channelWrapper.close();
@@ -547,13 +584,13 @@ export class RabbitmqService {
 ```typescript
 @Provide()
 export class UserService {
-  
+
   @Inject()
   rabbitmqService: RabbitmqService;
 
 	async invoke() {
     // TODO
-    
+
     // 发送消息
   	await this.rabbitmqService.sendToQueue('tasks', {hello: 'world'});
   }

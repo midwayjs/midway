@@ -272,7 +272,7 @@ API 如下：
 | API                                             | 返回类型 | 描述                   |
 | ----------------------------------------------- | -------- | ---------------------- |
 | registerPropertyHandler(decoratorKey, handler)  |          | 添加一个属性装饰器实现 |
-| registerMethodHandlerr(decoratorKey, handler)   |          | 添加一个方法装饰器实现 |
+| registerMethodHandler(decoratorKey, handler)   |          | 添加一个方法装饰器实现 |
 | registerParameterHandler(decoratorKey, handler) |          | 添加一个参数装饰器实现 |
 
 具体示例，请参考 **自定义装饰器** 部分。
