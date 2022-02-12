@@ -213,8 +213,6 @@ class ContainerConfiguration {
   }
 }
 
-class ObjectCreateEventTarget extends EventEmitter {}
-
 export class MidwayContainer implements IMidwayContainer, IModuleStore {
   private _resolverFactory: ManagedResolverFactory = null;
   private _registry: IObjectDefinitionRegistry = null;
@@ -242,7 +240,7 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
 
   get objectCreateEventTarget() {
     if (!this._objectCreateEventTarget) {
-      this._objectCreateEventTarget = new ObjectCreateEventTarget();
+      this._objectCreateEventTarget = new EventEmitter();
     }
     return this._objectCreateEventTarget;
   }
@@ -363,6 +361,8 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
       const refManaged = new ManagedReference();
       refManaged.args = propertyMeta.args;
       refManaged.name = propertyMeta.value as any;
+      refManaged.injectMode = propertyMeta['injectMode'];
+
       definition.properties.set(propertyMeta['targetKey'], refManaged);
     }
 

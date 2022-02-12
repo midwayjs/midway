@@ -85,7 +85,9 @@ export async function createLightFramework(baseDir: string = '', globalConfig: a
     }
   }
 
-  @Configuration()
+  @Configuration({
+    namespace: 'empty'
+  })
   class EmptyConfiguration {
 
     @Inject()
@@ -97,8 +99,8 @@ export async function createLightFramework(baseDir: string = '', globalConfig: a
   }
 
   const imports = [{
+    EmptyFramework,
     Configuration: EmptyConfiguration,
-    EmptyFramework
   }];
   if (baseDir) {
     imports.push(safeRequire(join(baseDir, 'configuration')));

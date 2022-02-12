@@ -1,7 +1,11 @@
 /**
  * 管理对象解析构建
  */
-import { IManagedInstance, ObjectIdentifier } from '@midwayjs/decorator';
+import {
+  IManagedInstance,
+  InjectModeEnum,
+  ObjectIdentifier,
+} from '@midwayjs/decorator';
 import { KEYS } from '../common/constants';
 import {
   IManagedResolver,
@@ -18,6 +22,7 @@ import * as EventEmitter from 'events';
 import {
   MidwayCommonError,
   MidwayDefinitionNotFoundError,
+  MidwayMissingImportComponentError,
   MidwayResolverMissingError,
   MidwaySingletonInjectRequestError,
 } from '../error';
@@ -28,6 +33,7 @@ const debugLog = util.debuglog('midway:debug');
 export class ManagedReference implements IManagedInstance {
   type = KEYS.REF_ELEMENT;
   name: string;
+  injectMode: InjectModeEnum;
   args?: any;
 }
 
@@ -42,6 +48,12 @@ class RefResolver {
 
   resolve(managed: IManagedInstance, originName: string): any {
     const mr = managed as ManagedReference;
+    if (
+      mr.injectMode === InjectModeEnum.Class &&
+      !this.factory.context.hasDefinition(originName)
+    ) {
+      throw new MidwayMissingImportComponentError(originName);
+    }
     return this.factory.context.get(mr.name, mr.args, {
       originName,
     });
@@ -52,6 +64,12 @@ class RefResolver {
     originName: string
   ): Promise<any> {
     const mr = managed as ManagedReference;
+    if (
+      mr.injectMode === InjectModeEnum.Class &&
+      !this.factory.context.hasDefinition(mr.name)
+    ) {
+      throw new MidwayMissingImportComponentError(originName);
+    }
     return this.factory.context.getAsync(mr.name, mr.args, {
       originName,
     });

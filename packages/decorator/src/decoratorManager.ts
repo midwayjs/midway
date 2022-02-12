@@ -1,11 +1,12 @@
 import 'reflect-metadata';
 import {
+  GroupModeType,
+  IModuleStore,
+  InjectModeEnum,
   ObjectDefinitionOptions,
   ObjectIdentifier,
   TagClsMetadata,
   TagPropsMetadata,
-  IModuleStore,
-  GroupModeType,
 } from './interface';
 import {
   INJECT_CUSTOM_METHOD,
@@ -16,7 +17,7 @@ import {
   TAGGED_CLS,
 } from './constant';
 
-import { isNullOrUndefined, isClass, generateRandomId, merge } from './util';
+import { generateRandomId, isClass, isNullOrUndefined, merge } from './util';
 import { camelCase } from './util/camelCase';
 
 const debug = require('util').debuglog('midway:decorator');
@@ -753,6 +754,7 @@ export function savePropertyInject(opts: {
 }) {
   // 1、use identifier by user
   let identifier = opts.identifier;
+  let injectMode = InjectModeEnum.Identifier;
   // 2、use identifier by class uuid
   if (!identifier) {
     const type = getPropertyType(opts.target, opts.targetKey);
@@ -762,10 +764,12 @@ export function savePropertyInject(opts: {
       isProvide(type.originDesign)
     ) {
       identifier = getProviderUUId(type.originDesign);
+      injectMode = InjectModeEnum.Class;
     }
     if (!identifier) {
       // 3、use identifier by property name
       identifier = opts.targetKey;
+      injectMode = InjectModeEnum.PropertyName;
     }
   }
   attachClassMetadata(
@@ -774,6 +778,7 @@ export function savePropertyInject(opts: {
       targetKey: opts.targetKey, // 注入的属性名
       value: identifier, // 注入的 id
       args: opts.args, // 注入的其他参数
+      injectMode,
     },
     opts.target,
     opts.targetKey
