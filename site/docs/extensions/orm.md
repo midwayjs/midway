@@ -196,7 +196,7 @@ export class Photo {
 ```
 
 
-这些实体列也可以使用 [typeorm_generator](typeorm_generator) 工具生成。
+这些实体列也可以使用 [typeorm_generator](/docs/tool/typeorm_generator) 工具生成。
 
 
 ### 3、添加数据库列
