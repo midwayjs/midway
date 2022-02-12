@@ -2,6 +2,6 @@
   "extends": [
     "config:base"
   ],
-  "ignoreDeps": ["egg"],
+  "ignoreDeps": ["egg", "@midwayjs/logger"],
   "ignorePaths": ["**/fixtures/**", "**/example/**", "**/site/**"]
 }
