@@ -448,7 +448,7 @@ export default {
 
 
 - 1、创建实体对象
-- 2、执行 save()
+- 2、执行 `save()`
 
 ```typescript
 import { Provide } from '@midwayjs/decorator';
@@ -487,16 +487,16 @@ export class PhotoService {
 
 更多的查询参数，请查询 [find文档](https://github.com/typeorm/typeorm/blob/master/docs/zh_CN/find-options.md)。
 ```typescript
-import { Provide, Inject, Func } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/decorator';
 import { InjectEntityModel } from '@midwayjs/orm';
-import { Photo } from './entity/photo';
+import { Photo } from '../entity/photo';
 import { Repository } from 'typeorm';
 
 @Provide()
 export class PhotoService {
 
   @InjectEntityModel(Photo)
-	photoModel: Repository<Photo>;
+  photoModel: Repository<Photo>;
 
   // find
   async findPhotos() {
@@ -538,20 +538,20 @@ export class PhotoService {
 
 
 ```typescript
-import { Provide, Inject, Func } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/decorator';
 import { InjectEntityModel } from '@midwayjs/orm';
-import { Photo } from './entity/photo';
+import { Photo } from '../entity/photo';
 import { Repository } from 'typeorm';
 
 @Provide()
 export class PhotoService {
 
   @InjectEntityModel(Photo)
-	photoModel: Repository<Photo>;
+  photoModel: Repository<Photo>;
 
   async updatePhoto() {
 
-		let photoToUpdate = await this.photoModel.findOne(1);
+    let photoToUpdate = await this.photoModel.findOne(1);
     photoToUpdate.name = "Me, my friends and polar bears";
 
     await this.photoModel.save(photoToUpdate);
@@ -564,19 +564,19 @@ export class PhotoService {
 
 
 ```typescript
-import { Provide, Inject, Func } from '@midwayjs/decorator';
+import { Provide } from '@midwayjs/decorator';
 import { InjectEntityModel } from '@midwayjs/orm';
-import { Photo } from './entity/photo';
+import { Photo } from '../entity/photo';
 import { Repository } from 'typeorm';
 
 @Provide()
 export class PhotoService {
 
   @InjectEntityModel(Photo)
-	photoModel: Repository<Photo>;
+  photoModel: Repository<Photo>;
 
   async updatePhoto() {
-		/*...*/
+    /*...*/
     let photoToRemove = await this.photoModel.findOne(1);
     await this.photoModel.remove(photoToRemove);
   }
