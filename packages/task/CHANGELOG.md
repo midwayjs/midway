@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.6](https://github.com/midwayjs/midway/compare/v3.0.5...v3.0.6) (2022-02-13)
+
+
+### Bug Fixes
+
+* [#1692](https://github.com/midwayjs/midway/issues/1692) ([#1696](https://github.com/midwayjs/midway/issues/1696)) ([a3ac74a](https://github.com/midwayjs/midway/commit/a3ac74ab1152e8762ab6ae7d6bfa513255de4a56))
+* queue service scope ([#1699](https://github.com/midwayjs/midway/issues/1699)) ([d2e46e5](https://github.com/midwayjs/midway/commit/d2e46e5d4ef8af8016a4153bf132fed32770f06f))
+
+
+
+
+
 ## [3.0.5](https://github.com/midwayjs/midway/compare/v3.0.4...v3.0.5) (2022-02-10)
 
 **Note:** Version bump only for package @midwayjs/task

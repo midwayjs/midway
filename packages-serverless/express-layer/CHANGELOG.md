@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.6](https://github.com/midwayjs/midway/compare/v3.0.5...v3.0.6) (2022-02-13)
+
+**Note:** Version bump only for package @midwayjs/express-layer
+
+
+
+
+
 ## [3.0.4](https://github.com/midwayjs/midway/compare/v3.0.3...v3.0.4) (2022-02-09)
 
 **Note:** Version bump only for package @midwayjs/express-layer

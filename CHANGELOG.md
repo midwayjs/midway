@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.6](https://github.com/midwayjs/midway/compare/v3.0.5...v3.0.6) (2022-02-13)
+
+
+### Bug Fixes
+
+* [#1692](https://github.com/midwayjs/midway/issues/1692) ([#1696](https://github.com/midwayjs/midway/issues/1696)) ([a3ac74a](https://github.com/midwayjs/midway/commit/a3ac74ab1152e8762ab6ae7d6bfa513255de4a56))
+* add missing dep ([#1684](https://github.com/midwayjs/midway/issues/1684)) ([fbd02e2](https://github.com/midwayjs/midway/commit/fbd02e2097ba0bbd774c012ebad647608b588e28))
+* missing import component will be throw error ([#1694](https://github.com/midwayjs/midway/issues/1694)) ([c17f049](https://github.com/midwayjs/midway/commit/c17f049ef698ba55509e4ef5ea915668345dc50f))
+* not found after no router set. ([#1698](https://github.com/midwayjs/midway/issues/1698)) ([c7f466f](https://github.com/midwayjs/midway/commit/c7f466f118008bf001c17f1145deba5fbf2a7827))
+* queue service scope ([#1699](https://github.com/midwayjs/midway/issues/1699)) ([d2e46e5](https://github.com/midwayjs/midway/commit/d2e46e5d4ef8af8016a4153bf132fed32770f06f))
+* **web:** check type of variable this.app.middleware ([#1688](https://github.com/midwayjs/midway/issues/1688)) ([f69fb5a](https://github.com/midwayjs/midway/commit/f69fb5a59dac41d4457a48a591dc15df8dce36e0))
+
+
+
+
+
 ## [3.0.5](https://github.com/midwayjs/midway/compare/v3.0.4...v3.0.5) (2022-02-10)
 
 

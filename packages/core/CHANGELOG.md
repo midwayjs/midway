@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.6](https://github.com/midwayjs/midway/compare/v3.0.5...v3.0.6) (2022-02-13)
+
+
+### Bug Fixes
+
+* missing import component will be throw error ([#1694](https://github.com/midwayjs/midway/issues/1694)) ([c17f049](https://github.com/midwayjs/midway/commit/c17f049ef698ba55509e4ef5ea915668345dc50f))
+
+
+
+
+
 ## [3.0.4](https://github.com/midwayjs/midway/compare/v3.0.3...v3.0.4) (2022-02-09)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.6](https://github.com/midwayjs/midway/compare/v3.0.5...v3.0.6) (2022-02-13)
+
+
+### Bug Fixes
+
+* not found after no router set. ([#1698](https://github.com/midwayjs/midway/issues/1698)) ([c7f466f](https://github.com/midwayjs/midway/commit/c7f466f118008bf001c17f1145deba5fbf2a7827))
+
+
+
+
+
 ## [3.0.5](https://github.com/midwayjs/midway/compare/v3.0.4...v3.0.5) (2022-02-10)
 
 **Note:** Version bump only for package @midwayjs/express

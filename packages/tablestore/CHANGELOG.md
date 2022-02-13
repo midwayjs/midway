@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.6](https://github.com/midwayjs/midway/compare/v3.0.5...v3.0.6) (2022-02-13)
+
+
+### Bug Fixes
+
+* add missing dep ([#1684](https://github.com/midwayjs/midway/issues/1684)) ([fbd02e2](https://github.com/midwayjs/midway/commit/fbd02e2097ba0bbd774c012ebad647608b588e28))
+
+
+
+
+
 ## [3.0.5](https://github.com/midwayjs/midway/compare/v3.0.4...v3.0.5) (2022-02-10)
 
 **Note:** Version bump only for package @midwayjs/tablestore

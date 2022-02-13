@@ -1,12 +1,12 @@
 {
   "name": "@midwayjs/serverless-app",
-  "version": "3.0.5",
+  "version": "3.0.6",
   "main": "dist/index",
   "typings": "index.d.ts",
   "dependencies": {
-    "@midwayjs/bootstrap": "^3.0.5",
-    "@midwayjs/core": "^3.0.4",
-    "@midwayjs/faas": "^3.0.5",
+    "@midwayjs/bootstrap": "^3.0.6",
+    "@midwayjs/core": "^3.0.6",
+    "@midwayjs/faas": "^3.0.6",
     "@midwayjs/faas-typings": "^3.0.0",
     "@midwayjs/gateway-common-http": "^1.2.41",
     "@midwayjs/serverless-spec-builder": "^1.2.41",
@@ -14,13 +14,13 @@
     "express": "4.17.2"
   },
   "devDependencies": {
-    "@midwayjs/decorator": "^3.0.4",
+    "@midwayjs/decorator": "^3.0.6",
     "@midwayjs/faas-middleware-upload": "0.0.7",
-    "@midwayjs/mock": "^3.0.5",
-    "@midwayjs/serverless-fc-starter": "^3.0.4",
-    "@midwayjs/serverless-fc-trigger": "^3.0.4",
+    "@midwayjs/mock": "^3.0.6",
+    "@midwayjs/serverless-fc-starter": "^3.0.6",
+    "@midwayjs/serverless-fc-trigger": "^3.0.6",
     "@midwayjs/serverless-scf-starter": "^3.0.4",
-    "@midwayjs/serverless-scf-trigger": "^3.0.4",
+    "@midwayjs/serverless-scf-trigger": "^3.0.6",
     "fs-extra": "10.0.0"
   },
   "engines": {
