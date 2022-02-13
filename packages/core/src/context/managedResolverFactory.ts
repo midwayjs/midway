@@ -50,7 +50,9 @@ class RefResolver {
     const mr = managed as ManagedReference;
     if (
       mr.injectMode === InjectModeEnum.Class &&
-      !this.factory.context.hasDefinition(originName)
+      !(this.factory.context.parent ?? this.factory.context).hasDefinition(
+        mr.name
+      )
     ) {
       throw new MidwayMissingImportComponentError(originName);
     }
@@ -66,7 +68,9 @@ class RefResolver {
     const mr = managed as ManagedReference;
     if (
       mr.injectMode === InjectModeEnum.Class &&
-      !this.factory.context.hasDefinition(mr.name)
+      !(this.factory.context.parent ?? this.factory.context).hasDefinition(
+        mr.name
+      )
     ) {
       throw new MidwayMissingImportComponentError(originName);
     }
