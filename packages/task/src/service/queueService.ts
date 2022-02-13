@@ -1,7 +1,8 @@
-import { Inject, Provide } from '@midwayjs/decorator';
+import { Inject, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
 import { JobOptions, Queue } from 'bull';
 
 @Provide()
+@Scope(ScopeEnum.Singleton)
 export class QueueService {
   @Inject('queueMap')
   queueMap;
