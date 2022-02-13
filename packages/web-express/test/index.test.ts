@@ -201,7 +201,7 @@ describe('/test/feature.test.ts', () => {
       .get('/11');
     expect(result.status).toEqual(200);
     expect(result.body).toEqual({
-      'message': 'Not Found',
+      'message': '/11 Not Found',
       'status': 404
     });
 
@@ -221,7 +221,7 @@ describe('/test/feature.test.ts', () => {
       .get('/11');
     expect(result.status).toEqual(200);
     expect(result.body).toEqual({
-      'message': 'Not Found',
+      'message': '/11 Not Found',
       'status': 404
     });
 
