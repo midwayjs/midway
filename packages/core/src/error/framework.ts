@@ -13,6 +13,7 @@ export const FrameworkErrorEnum = registerErrorCode('midway', {
   DUPLICATE_ROUTER: 10008,
   USE_WRONG_METHOD: 10009,
   SINGLETON_INJECT_REQUEST: 10010,
+  MISSING_IMPORTS: 10011,
 } as const);
 
 export class MidwayCommonError extends MidwayError {
@@ -113,5 +114,12 @@ export class MidwaySingletonInjectRequestError extends MidwayError {
   constructor(singletonScopeName: string, requestScopeName: string) {
     const text = `${singletonScopeName} with singleton scope can't implicitly inject ${requestScopeName} with request scope directly, please add "@Scope(ScopeEnum.Request, { allowDowngrade: true })" in ${requestScopeName} or use "ctx.requestContext.getAsync(${requestScopeName})".`;
     super(text, FrameworkErrorEnum.SINGLETON_INJECT_REQUEST);
+  }
+}
+
+export class MidwayMissingImportComponentError extends MidwayError {
+  constructor(originName: string) {
+    const text = `"${originName}" can't inject and maybe forgot add "{imports: [***]}" in @Configuration.`;
+    super(text, FrameworkErrorEnum.MISSING_IMPORTS);
   }
 }

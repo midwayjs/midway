@@ -8,6 +8,12 @@ export enum ScopeEnum {
   Prototype = 'Prototype',
 }
 
+export enum InjectModeEnum {
+  Identifier = 'Identifier',
+  Class = 'Class',
+  PropertyName = 'PropertyName',
+}
+
 /**
  * 内部管理的属性、json、ref等解析实例存储
  */

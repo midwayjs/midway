@@ -34,6 +34,7 @@ describe('/test/common/util.test.ts', () => {
     let p = getPropertyInject(Test);
     expect(p['hello']).toEqual({
       args: undefined,
+      injectMode: 'Identifier',
       targetKey: 'hello',
       value: '@testpackage',
     });
@@ -51,6 +52,7 @@ describe('/test/common/util.test.ts', () => {
     p = getPropertyInject(Test, false);
     expect(p['hello']).toEqual({
       args: undefined,
+      injectMode: 'Identifier',
       targetKey: 'hello',
       value: '@testpackage2',
     });

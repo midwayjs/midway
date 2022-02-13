@@ -62,14 +62,14 @@ export async function initializeGlobalApplicationContext(
   // bind inner service
   applicationContext.bindClass(MidwayEnvironmentService);
   applicationContext.bindClass(MidwayInformationService);
+  applicationContext.bindClass(MidwayAspectService);
   applicationContext.bindClass(MidwayDecoratorService);
   applicationContext.bindClass(MidwayConfigService);
-  applicationContext.bindClass(MidwayAspectService);
   applicationContext.bindClass(MidwayLoggerService);
+  applicationContext.bindClass(MidwayApplicationManager);
   applicationContext.bindClass(MidwayFrameworkService);
   applicationContext.bindClass(MidwayMiddlewareService);
   applicationContext.bindClass(MidwayLifeCycleService);
-  applicationContext.bindClass(MidwayApplicationManager);
 
   // bind preload module
   if (globalOptions.preloadModules && globalOptions.preloadModules.length) {
