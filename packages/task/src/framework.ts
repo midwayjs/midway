@@ -2,7 +2,6 @@ import { BaseFramework, IMidwayBootstrapOptions } from '@midwayjs/core';
 import {
   Framework,
   getClassMetadata,
-  Types,
   listModule,
   MidwayFrameworkType,
   MODULE_TASK_KEY,
@@ -17,19 +16,6 @@ import * as Bull from 'bull';
 import { CronJob } from 'cron';
 import { Application, Context, IQueue } from './interface';
 import { deprecatedOutput } from '@midwayjs/core';
-
-function wrapAsync(fn) {
-  return async function (...args) {
-    if (Types.isAsyncFunction(fn)) {
-      await fn.call(...args);
-    } else {
-      const result = fn.call(...args);
-      if (result && result.then) {
-        await result;
-      }
-    }
-  };
-}
 
 @Framework()
 export class TaskFramework extends BaseFramework<Application, Context, any> {
@@ -48,11 +34,7 @@ export class TaskFramework extends BaseFramework<Application, Context, any> {
     return MidwayFrameworkType.TASK;
   }
 
-  async run() {
-    await this.loadTask();
-    await this.loadLocalTask();
-    await this.loadQueue();
-  }
+  async run() {}
 
   async loadTask() {
     const legacyConfig = this.configService.getConfiguration('taskConfig');
@@ -81,7 +63,7 @@ export class TaskFramework extends BaseFramework<Application, Context, any> {
           try {
             logger.info('task start.');
             const service = await ctx.requestContext.getAsync(module);
-            await wrapAsync(rule.value)(service, job.data);
+            await Utils.toAsyncFunction(rule.value.bind(service))(job.data);
           } catch (e) {
             logger.error(`${e.stack}`);
           }
@@ -129,7 +111,7 @@ export class TaskFramework extends BaseFramework<Application, Context, any> {
             try {
               const service = await ctx.requestContext.getAsync(module);
               logger.info('local task start.');
-              await wrapAsync(rule.value)(service);
+              await Utils.toAsyncFunction(rule.value.bind(service))();
             } catch (err) {
               logger.error(err);
             }
@@ -167,7 +149,10 @@ export class TaskFramework extends BaseFramework<Application, Context, any> {
         try {
           logger.info('queue process start.');
           const service = await ctx.requestContext.getAsync<IQueue>(module);
-          await wrapAsync(service.execute)(service, job.data, job);
+          await Utils.toAsyncFunction(service.execute.bind(service))(
+            job.data,
+            job
+          );
         } catch (e) {
           logger.error(`${e.stack}`);
         }

@@ -1,6 +1,7 @@
-import { Configuration } from '@midwayjs/decorator';
+import { Configuration, Inject } from '@midwayjs/decorator';
 import { ILifeCycle } from '@midwayjs/core';
 import * as DefaultConfig from './config/config.default';
+import { TaskFramework } from './framework';
 
 @Configuration({
   namespace: 'task',
@@ -10,4 +11,13 @@ import * as DefaultConfig from './config/config.default';
     },
   ],
 })
-export class TaskConfiguration implements ILifeCycle {}
+export class TaskConfiguration implements ILifeCycle {
+  @Inject()
+  framework: TaskFramework;
+
+  async onReady() {
+    await this.framework.loadTask();
+    await this.framework.loadLocalTask();
+    await this.framework.loadQueue();
+  }
+}
