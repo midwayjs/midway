@@ -11,10 +11,7 @@
 
 
 
-## 使用方法
-### 安装
-
-#### 1. 安装依赖
+## 安装依赖
 
 ```bash
 $ npm install @midwayjs/swagger@3 --save
@@ -47,7 +44,7 @@ $ npm install swagger-ui-dist --save
 
 
 
-#### 2. 代码配置
+## 开启组件
 
 在 ```configuration.ts``` 中增加组件。
 
@@ -86,101 +83,12 @@ export class ContainerConfiguration {
 
 然后启动项目，访问：http://127.0.0.1:7001/swagger-ui/index.html
 
-### 参数配置
 
-Swagger 组件提供了和 [OpenAPI](https://swagger.io/specification/) 一致的参数配置能力，可以通过自定义配置来实现。
 
-#### 配置项
+## 基本使用
 
-```typescript
-/**
- * see https://swagger.io/specification/
- */
-export interface SwaggerOptions {
-  /**
-   * 默认值: My Project
-   * https://swagger.io/specification/#info-object title 字段
-   */
-  title?: string;
-  /**
-   * 默认值: This is a swagger-ui for midwayjs project
-   * https://swagger.io/specification/#info-object description 字段
-   */
-  description?: string;
-  /**
-   * 默认值: 1.0.0
-   * https://swagger.io/specification/#info-object version 字段
-   */
-  version?: string;
-  /**
-   * https://swagger.io/specification/#info-object contact 字段
-   */
-  contact?: ContactObject;
-  /**
-   * https://swagger.io/specification/#info-object license 字段
-   */
-  license?: LicenseObject;
-  /**
-   * https://swagger.io/specification/#info-object termsOfService 字段
-   */
-  termsOfService?: string;
-  /**
-   * https://swagger.io/specification/#openapi-object externalDocs 字段
-   */
-  externalDocs?: ExternalDocumentationObject;
-  /**
-   * https://swagger.io/specification/#openapi-object servers 字段
-   */
-  servers?: Array<ServerObject>;
-  /**
-   * https://swagger.io/specification/#openapi-object tags 字段
-   */
-  tags?: Array<TagObject>;
-  /**
-   * 可以参考 https://swagger.io/specification/#security-scheme-object
-   */
-  auth?: AuthOptions | AuthOptions[];
-  /**
-   * 默认值: /swagger-ui
-   * 访问 swagger ui 的路径
-   */
-  swaggerPath?: string;
-  /**
-   * 对路由 tag 进行 ascii 排序
-   * 可以使用 1-xxx、2-xxx、3-xxx 来定义 tag
-   */
-  tagSortable?: boolean;
-}
-/**
- * 继承自 https://swagger.io/specification/#security-scheme-object
- */
-export interface AuthOptions extends Omit<SecuritySchemeObject, 'type'> {
-  /**
-   * 验权类型
-   * basic  => http basic 验证
-   * bearer => http jwt 验证
-   * cookie => cookie 方式验证
-   * oauth2 => 使用 oauth2
-   * apikey => apiKey
-   * custom => 自定义方式
-   */
-  authType: AuthType;
-  /**
-   * https://swagger.io/specification/#security-scheme-object type 字段
-   */
-  type?: SecuritySchemeType;
-  /**
-   * authType = cookie 时可以修改，通过 ApiCookie 装饰器关联的名称
-   */
-  securityName?: string;
-  /**
-   * authType = cookie 时可以修改，cookie 的名称
-   */
-  cookieName?: string;
-}
-```
+### 类型和参数
 
-### 类型和参数提取
 Swagger 组件会识别各个 ```@Controller``` 中每个路由方法的 ```@Body()```、```@Query()```、```@Param()``` 装饰器，提取路由方法参数和类型。
 
 假设有一个方法：
@@ -258,69 +166,65 @@ hello: HelloWorld;
 Swagger UI 中展示：
 ![swagger3](https://img.alicdn.com/imgextra/i1/O1CN015M37MU1KgtdNfqsgp_!!6000000001194-0-tps-1406-426.jpg)
 
-#### 文件上传定义
-
-使用 ```@ApiBody``` 设置 ```contentType```
-
-```typescript
-@Post('/:id', { summary: 'test'})
-@ApiBody({
-  description: 'this is body',
-  contentType: BodyContentType.Multipart
-})
-@ApiParam({ description: 'this is id' })
-async create(@Body() createCatDto: CreateCatDto, @Param('id') id: number): Promise<Cat> {
-  return this.catsService.create(createCatDto);
-}
-```
-
-在 ```CreateCatDto``` 中使用 ``` @ApiProperty ``` 添加 ```format```
-
-```typescript
-@ApiProperty({
-  type: 'string',
-  format: 'binary',
-  description: 'this is file test'
-})
-file: any;
-```
-
-Swagger UI 中展示：
-![swagger4](https://img.alicdn.com/imgextra/i3/O1CN01KlDHNt24mMglN1fyH_!!6000000007433-0-tps-1598-434.jpg)
-
-* 兼容 Upload 组件
-
-  * 添加 ```@ApiBody()``` 装饰器描述
-
-  ```typescript
-  @Post('/test')
-  @ApiBody({ description: 'hello file' })
-  @ApiBody({ description: 'hello fields', type: Cat })
-  async upload(@File() f: any, @Fields() data: Cat) {
-    return null;
-  }
-  ```
-
-  Swagger UI 中展示：
-  ![swagger5](https://img.alicdn.com/imgextra/i2/O1CN01icnwZE24OY5vdkkKx_!!6000000007381-0-tps-1272-1026.jpg)
-
-  * 不添加 ```@ApiBody()``` 装饰器描述
-
-  ```typescript
-  @Post('/test1')
-  async upload1(@Files() f: any[], @Fields() data: Cat) {
-    return null;
-  }
-  ```
-
-  Swagger UI 中展示：
-  ![swagger6](https://img.alicdn.com/imgextra/i3/O1CN01w9dZxe1YQJv3uOycZ_!!6000000003053-0-tps-1524-1118.jpg)
-
 
 ### 路由定义
 [OpenAPI](https://swagger.io/specification/) 定义的 paths 就是各个路由路径，且每个路由路径都有 HTTP 方法的定义，比如 GET、POST、DELETE、PUT 等。
 
-#### 路由标签
+#### Query 定义
+
+使用 `@ApiQuery` 来定义 Query 数据。
+
+基础使用，会自动识别 `@Query` 装饰器。
+
+```typescript
+@Get('/get_user')
+async getUser(@Query('name') name: string) {
+  return 'hello';
+}
+```
+
+如果 `@Query`  以对象形式，需要在 `@ApiQuery` 指定一个 name 参数，对象类型需要配合 `@ApiProperty` 使用，否则表单会变为只读形式。
+
+```typescript
+export class UserDTO {
+  @ApiProperty()
+  name: string;
+}
+
+@Get('/get_user')
+@ApiQuery({
+  name: 'query'
+})
+async getUser(@Query() dto: UserDTO) {
+  // ...
+}
+```
+
+
+
+#### Body 定义
+
+使用 `@ApiBody` 来定义 Body 数据。
+
+ `@Body`  对象类型需要配合 `@ApiProperty` 使用。
+
+```typescript
+export class UserDTO {
+  @ApiProperty()
+  name: string;
+}
+
+@Post('/update_user')
+async upateUser(@Body() dto: UserDTO) {
+  // ...
+}
+```
+
+如需其他细节，请使用 `@ApiBody` 增强。
+
+
+
+### 路由标签
 Swagger 会对 paths 分标签，如果 Controller 未定义任何标签，则会默认归组到 default 下。可以通过 ```@ApiTags([...])``` 来自定义 Controller 标签。
 
 ```typescript
@@ -329,7 +233,7 @@ Swagger 会对 paths 分标签，如果 Controller 未定义任何标签，则�
 export class HelloController {}
 ```
 
-#### 请求 Header
+### 请求 Header
 
 通过 ```@ApiHeader({...})``` 装饰器来定义 Header 参数。
 
@@ -343,7 +247,7 @@ export class HelloController {}
 export class HelloController {}
 ```
 
-#### 请求 Response
+### 请求 Response
 
 可以使用 ```@ApiResponse({...})``` 来自定义请求 Response。
 
@@ -411,7 +315,68 @@ Swagger 还支持带前缀 ```x-``` 的扩展字段，可以使用 ```@ApiExtens
 @ApiExtension('x-hello', { hello: 'world' })
 ```
 
+
+
+### 文件上传
+
+使用 ```@ApiBody``` 设置 ```contentType```
+
+```typescript
+@Post('/:id', { summary: 'test'})
+@ApiBody({
+  description: 'this is body',
+  contentType: BodyContentType.Multipart
+})
+@ApiParam({ description: 'this is id' })
+async create(@Body() createCatDto: CreateCatDto, @Param('id') id: number): Promise<Cat> {
+  return this.catsService.create(createCatDto);
+}
+```
+
+在 ```CreateCatDto``` 中使用 ``` @ApiProperty ``` 添加 ```format```
+
+```typescript
+@ApiProperty({
+  type: 'string',
+  format: 'binary',
+  description: 'this is file test'
+})
+file: any;
+```
+
+Swagger UI 中展示：
+![swagger4](https://img.alicdn.com/imgextra/i3/O1CN01KlDHNt24mMglN1fyH_!!6000000007433-0-tps-1598-434.jpg)
+
+兼容 Upload 组件，添加 ```@ApiBody()``` 装饰器描述
+
+```typescript
+@Post('/test')
+@ApiBody({ description: 'hello file' })
+@ApiBody({ description: 'hello fields', type: Cat })
+async upload(@File() f: any, @Fields() data: Cat) {
+  return null;
+}
+```
+
+Swagger UI 中展示：
+![swagger5](https://img.alicdn.com/imgextra/i2/O1CN01icnwZE24OY5vdkkKx_!!6000000007381-0-tps-1272-1026.jpg)
+
+不添加 ```@ApiBody()``` 装饰器描述
+
+```typescript
+@Post('/test1')
+async upload1(@Files() f: any[], @Fields() data: Cat) {
+  return null;
+}
+```
+
+Swagger UI 中展示：
+![swagger6](https://img.alicdn.com/imgextra/i3/O1CN01w9dZxe1YQJv3uOycZ_!!6000000003053-0-tps-1524-1118.jpg)
+
+
+
 ### 授权验证
+
 组件可以通过添加授权验证配置来设置验证方式，我们支持配置 ```basic```、```bearer```、```cookie```、```oauth2```、```apikey```、```custom```。
 
 #### basic
@@ -577,11 +542,109 @@ export default {
 export class HelloController {}
 ```
 
-### 装饰器列表
+
+
+## 参数配置
+
+Swagger 组件提供了和 [OpenAPI](https://swagger.io/specification/) 一致的参数配置能力，可以通过自定义配置来实现。
+
+配置项如下：
+
+```typescript
+/**
+ * see https://swagger.io/specification/
+ */
+export interface SwaggerOptions {
+  /**
+   * 默认值: My Project
+   * https://swagger.io/specification/#info-object title 字段
+   */
+  title?: string;
+  /**
+   * 默认值: This is a swagger-ui for midwayjs project
+   * https://swagger.io/specification/#info-object description 字段
+   */
+  description?: string;
+  /**
+   * 默认值: 1.0.0
+   * https://swagger.io/specification/#info-object version 字段
+   */
+  version?: string;
+  /**
+   * https://swagger.io/specification/#info-object contact 字段
+   */
+  contact?: ContactObject;
+  /**
+   * https://swagger.io/specification/#info-object license 字段
+   */
+  license?: LicenseObject;
+  /**
+   * https://swagger.io/specification/#info-object termsOfService 字段
+   */
+  termsOfService?: string;
+  /**
+   * https://swagger.io/specification/#openapi-object externalDocs 字段
+   */
+  externalDocs?: ExternalDocumentationObject;
+  /**
+   * https://swagger.io/specification/#openapi-object servers 字段
+   */
+  servers?: Array<ServerObject>;
+  /**
+   * https://swagger.io/specification/#openapi-object tags 字段
+   */
+  tags?: Array<TagObject>;
+  /**
+   * 可以参考 https://swagger.io/specification/#security-scheme-object
+   */
+  auth?: AuthOptions | AuthOptions[];
+  /**
+   * 默认值: /swagger-ui
+   * 访问 swagger ui 的路径
+   */
+  swaggerPath?: string;
+  /**
+   * 对路由 tag 进行 ascii 排序
+   * 可以使用 1-xxx、2-xxx、3-xxx 来定义 tag
+   */
+  tagSortable?: boolean;
+}
+/**
+ * 继承自 https://swagger.io/specification/#security-scheme-object
+ */
+export interface AuthOptions extends Omit<SecuritySchemeObject, 'type'> {
+  /**
+   * 验权类型
+   * basic  => http basic 验证
+   * bearer => http jwt 验证
+   * cookie => cookie 方式验证
+   * oauth2 => 使用 oauth2
+   * apikey => apiKey
+   * custom => 自定义方式
+   */
+  authType: AuthType;
+  /**
+   * https://swagger.io/specification/#security-scheme-object type 字段
+   */
+  type?: SecuritySchemeType;
+  /**
+   * authType = cookie 时可以修改，通过 ApiCookie 装饰器关联的名称
+   */
+  securityName?: string;
+  /**
+   * authType = cookie 时可以修改，cookie 的名称
+   */
+  cookieName?: string;
+}
+```
+
+
+
+## 装饰器列表
 
 组件所有装饰器参考了 [@nestjs/swagger](https://github.com/nestjs/swagger) 的设计，都带 ```Api``` 前缀。这里列出全部装饰器：
 
-| 装饰器                       | 支持模式           |
+| 装饰器                      | 支持模式          |
 | --------------------------- | ----------------- |
 | ```@ApiBody```              | Method            |
 | ```@ApiExcludeEndpoint```   | Method            |
@@ -603,3 +666,4 @@ export class HelloController {}
 | ```@ApiSecurity```          | Controller        |
 | ```@ApiParam```             | Method            |
 | ```@ApiParam```             | Method            |
+
