@@ -96,7 +96,7 @@ export class MidwayExpressFramework extends BaseFramework<
     debug('[express]: use 404 not found middleware');
     // eslint-disable-next-line
     this.app.use(function notFound(req, res, next) {
-      next(new httpError.NotFoundError());
+      next(new httpError.NotFoundError(`${req.path} Not Found`));
     });
 
     debug('[express]: use global error handler middleware');

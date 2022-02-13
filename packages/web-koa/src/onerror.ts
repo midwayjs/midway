@@ -9,7 +9,7 @@ import {
 } from './utils';
 import { Utils } from '@midwayjs/decorator';
 
-export function setupOnerror(app, config, logger) {
+export function setupOnError(app, config, logger) {
   const errorOptions = Object.assign(
     {
       // support customize accepts function

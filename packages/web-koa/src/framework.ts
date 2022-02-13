@@ -24,7 +24,7 @@ import * as Router from '@koa/router';
 import type { DefaultState, Middleware, Next } from 'koa';
 import * as koa from 'koa';
 import { Server } from 'net';
-import { setupOnerror } from './onerror';
+import { setupOnError } from './onerror';
 
 const COOKIES = Symbol('context#cookies');
 
@@ -83,13 +83,13 @@ export class MidwayKoaFramework extends BaseFramework<
     });
 
     const onerrorConfig = this.configService.getConfiguration('onerror');
-    setupOnerror(this.app, onerrorConfig, this.logger);
+    setupOnError(this.app, onerrorConfig, this.logger);
 
     // not found middleware
     const notFound = async (ctx, next) => {
       await next();
-      if (!ctx._matchedRoute) {
-        throw new httpError.NotFoundError();
+      if (!ctx._matchedRoute && ctx.body === undefined) {
+        throw new httpError.NotFoundError(`${ctx.path} Not Found`);
       }
     };
 

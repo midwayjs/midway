@@ -94,8 +94,8 @@ export class MidwayWebFramework extends BaseFramework<
     // not found middleware
     const notFound = async (ctx, next) => {
       await next();
-      if (!ctx._matchedRoute) {
-        throw new httpError.NotFoundError();
+      if (!ctx._matchedRoute && ctx.body === undefined) {
+        throw new httpError.NotFoundError(`${ctx.path} Not Found`);
       }
     };
     // insert error handler
