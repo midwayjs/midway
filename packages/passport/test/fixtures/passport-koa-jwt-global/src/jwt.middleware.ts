@@ -8,4 +8,8 @@ export class JwtPassportMiddleware extends PassportMiddleware(JwtStrategy) {
   getAuthenticateOptions(): Promise<passport.AuthenticateOptions> | passport.AuthenticateOptions {
     return {};
   }
+
+  ignore(ctx) {
+    return ctx.path === '/gen-jwt';
+  }
 }

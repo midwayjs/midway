@@ -171,5 +171,26 @@ describe('/test/index.test.ts', () => {
 
       await close(app);
     });
+
+    it('jwt passport with koa and global middleware', async () => {
+      let token;
+      const app = await createApp(
+        join(__dirname, 'fixtures', 'passport-koa-jwt-global'),
+        {},
+      );
+      let result = await createHttpRequest(app).get('/gen-jwt');
+      token = result.text;
+      expect(result.status).toEqual(200);
+      expect(typeof result.text).toEqual('string');
+
+      result = await createHttpRequest(app)
+        .get('/jwt-passport')
+        .set({ Authorization: `Bearer ${token}` });
+
+      expect(result.status).toEqual(200);
+      expect(result.text).toEqual('success');
+
+      await close(app);
+    });
   });
 });
