@@ -1,4 +1,5 @@
 import * as passport from 'passport';
+import { IMiddleware } from '@midwayjs/core';
 
 export interface IPassportStrategy {
   validate(...args): any;
@@ -13,11 +14,12 @@ export abstract class AbstractStrategy implements IPassportStrategy {
   abstract getStrategyOptions(): any;
 }
 
-export interface IPassportMiddleware {
+export interface IPassportMiddleware extends IMiddleware<any, any>{
   authenticate?(options: passport.AuthenticateOptions, callback: Function);
 }
 
-export abstract class AbstractPassportMiddleware implements IPassportMiddleware {
+export abstract class AbstractPassportMiddleware implements Pick<IPassportMiddleware, 'authenticate'> {
   abstract getAuthenticateOptions(): Promise<passport.AuthenticateOptions> | passport.AuthenticateOptions;
   authenticate?(options: passport.AuthenticateOptions, callback?: Function);
+  resolve(): any {}
 }

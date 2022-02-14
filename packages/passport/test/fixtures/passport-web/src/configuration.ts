@@ -2,6 +2,7 @@ import { Configuration, App } from '@midwayjs/decorator';
 import * as passport from '../../../../src';
 import * as path from 'path';
 import * as egg from '@midwayjs/web';
+import { AuthMiddleware } from './local.middleware';
 
 @Configuration({
   imports: [egg, passport],
@@ -14,6 +15,6 @@ export class ContainerLifeCycle {
   app;
 
   onReady() {
-    this.app.useMiddleware('local');
+    this.app.useMiddleware(AuthMiddleware);
   }
 }
