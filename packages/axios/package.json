@@ -14,7 +14,7 @@
     "@midwayjs/mock": "^3.0.6"
   },
   "dependencies": {
-    "axios": "^0.25.0"
+    "axios": "^0.26.0"
   },
   "keywords": [
     "http client",
