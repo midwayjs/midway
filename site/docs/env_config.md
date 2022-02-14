@@ -25,8 +25,8 @@
 │   │   └── config.local.ts
 │   ├── interface.ts
 │   └── service
-├── test  
-├── package.json  
+├── test
+├── package.json
 └── tsconfig.json
 ```
 
@@ -53,7 +53,7 @@ import { join } from 'path';
   ]
 })
 export class ContainerLifeCycle {
-}	
+}
 ```
 
 下面我们将介绍加载配置的两种方式。
@@ -85,7 +85,7 @@ import * as LocalConfig from './config/config.local';
   ]
 })
 export class ContainerLifeCycle {
-}	
+}
 ```
 `importConfigs` 中的数组中传递配置对象，每个对象的 key 为环境，值为环境对应的配置值，midway 在启动中会根据环境来加载对应的配置。
 
@@ -124,7 +124,7 @@ import { join } from 'path';
   ]
 })
 export class ContainerLifeCycle {
-}	
+}
 ```
 
 
@@ -178,7 +178,7 @@ import { join } from 'path';
   ]
 })
 export class ContainerLifeCycle {
-}	
+}
 ```
 
 
@@ -292,7 +292,7 @@ import { join } from 'path';
   ]
 })
 export class ContainerLifeCycle {
-}	
+}
 ```
 
 
@@ -344,7 +344,7 @@ export class IndexHandler {
 
   @Config('userService')
   userConfig;
-  
+
   async handler() {
   	console.log(this.userConfig);  // { appname: 'test'}
   }
@@ -362,11 +362,11 @@ export class IndexHandler {
 比如数据源为：
 
 
-```typescript
+```json
 {
-	"userService": {
+  "userService": {
   	"appname": {
-    	"test": {
+      "test": {
       	"data": "xxx"
       }
     }
@@ -381,7 +381,7 @@ export class IndexHandler {
 
   @Config('userService.appname.test.data')
   data;
-  
+
   async handler() {
   	console.log(this.data);  // xxx
   }
@@ -402,7 +402,7 @@ export class IndexHandler {
 
   @Config(ALL)
   allConfig;
-  
+
   async handler() {
   	console.log(this.allConfig);  // { userService: { appname: 'test'}}
   }
@@ -435,18 +435,18 @@ import { RemoteConfigService } from '../service/remote'; // 自定义的获取�
   ]
 })
 export class ContainerLifeCycle {
-  
+
   async onConfigLoad(container: IMidwayContainer) {
     // 这里你可以修改全局配置
   	const remoteConfigService = await container.getAsync(RemoteConfigService);
     const remoteConfig = await remoteConfigService.getData();
-    
+
     // 这里的返回值会和全局的 config 做合并
     return {
     	data: remoteConfig
     };
   }
-}	
+}
 ```
 
 注意，`onConfigLoad` 生命周期会在 egg 插件（若有）初始化之后执行，所以不能用于覆盖 egg 插件所使用的配置。
@@ -515,7 +515,7 @@ dotenv.config();
 })
 export class AutoConfiguration {
   async onReady(container) {
-    
+
   }
 }
 
@@ -555,11 +555,11 @@ export class UserService {
 
   @Config('redisConfig')
   redisConfig;
-  
+
   constructor() {
   	console.log(this.redisConfig); // undefined
   }
-  
+
   @Init()
   async initMethod() {
   	console.log(this.redisConfig); // has value
@@ -589,13 +589,13 @@ export const keys = '12345';
 
 
 
-### 3、export default 和 export const 混用。
+### 3、export default 和 export const 混用
 
 **下面是错误用法。**
 
 ```typescript
 export default {
-	keys: '12345',
+  keys: '12345',
 }
 
 export const anotherKey = '54321';
@@ -608,7 +608,7 @@ export const anotherKey = '54321';
 
 ```typescript
 export = {
-	a: 1
+  a: 1
 }
 export const b = 2;
 ```

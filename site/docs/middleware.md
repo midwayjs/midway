@@ -164,10 +164,69 @@ export class AutoConfiguration {
 
 ```typescript
 async onReady() {
-	this.app.useMiddleware([ReportMiddleware1, ReportMiddleware2]);
+  this.app.useMiddleware([ReportMiddleware1, ReportMiddleware2]);
 }
 ```
 
+## 忽略和匹配路由
+
+在中间件执行时，我们可以添加路由忽略的逻辑。
+
+```typescript
+import { IMiddleware } from '@midwayjs/core';
+import { Middleware } from '@midwayjs/decorator';
+import { NextFunction, Context } from '@midwayjs/koa';
+
+@Middleware()
+export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
+
+  resolve() {
+    return async (ctx: Context, next: NextFunction) => {
+      // ...
+    };
+  }
+
+  ignore(ctx: Context): boolean {
+    // 下面的路由将忽略此中间件
+    return ctx.path === '/'
+      || ctx.path === '/api/auth'
+      || ctx.path === '/api/login';
+  }
+
+  static getName(): string {
+    return 'report';
+  }
+}
+```
+
+同理，也可以添加匹配的路由，只有匹配到的路由才会执行该中间件。`ignore` 和 `match` 同时只有一个会生效。
+
+```typescript
+import { IMiddleware } from '@midwayjs/core';
+import { Middleware } from '@midwayjs/decorator';
+import { NextFunction, Context } from '@midwayjs/koa';
+
+@Middleware()
+export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
+
+  resolve() {
+    return async (ctx: Context, next: NextFunction) => {
+      // ...
+    };
+  }
+
+  match(ctx: Context): boolean {
+    // 下面的匹配到的路由会执行此中间件
+    if (ctx.path === '/api/index') {
+      return true;
+    }
+  }
+
+  static getName(): string {
+    return 'report';
+  }
+}
+```
 
 
 ## 函数中间件
@@ -379,7 +438,7 @@ export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
 
   resolve() {
     return async (ctx: Context, next: NextFunction) => {
-			// TODO
+      // TODO
       await next();
     };
   }
@@ -401,13 +460,10 @@ export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
   resolve() {
     return async (ctx: Context, next: NextFunction) => {
       const userService = await ctx.requestContext.getAsync<UserService>(UserService);
-   		// TODO userService.xxxx
+      // TODO userService.xxxx
       await next();
     };
   }
 
 }
 ```
-
-
-

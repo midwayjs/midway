@@ -24,7 +24,8 @@ Midway 提供了一个轻量的启动器，用于启动你的应用。我们为�
 
 
 - 1、使用 `--ts` 指定 TypeScript（ts-node）环境启动
-- 2、使用内置的（@midwayjs/mock 的 createApp）创建一个服务，并返回主框架的 app
+- 2、使用内置的 API（@midwayjs/core 的 `initializeGlobalApplicationContext`）创建一个服务，不经过 `bootstrap.js`
+- 3、单进程运行
 
 
 
@@ -68,7 +69,7 @@ $ npm run dev
 **4、日志文件**
 
 
-一般服务器环境，日志不再打印到项目的 logs 目录下，而是其他不会受到项目更新影响的目录，比如 `home/admin/logs` 等等，这样固定的目录，也方便其他工具采集日志。
+一般服务器环境，日志不会打印到项目的 logs 目录，而是其他不会受到项目更新影响的目录，比如 `home/admin/logs` ，这样固定的目录，也方便其他工具采集日志。
 
 
 ### 部署的流程
@@ -394,70 +395,7 @@ $ docker-compose up -d
 ```
 
 ![image.png](https://cdn.nlark.com/yuque/0/2020/png/187105/1608884158660-02bd2d3c-08b4-4ecc-a4dd-a18d4b9d2c12.png#height=44&id=jWw4i&margin=%5Bobject%20Object%5D&name=image.png&originHeight=62&originWidth=1054&originalType=binary&ratio=1&size=47727&status=done&style=none&width=746)
-那么redis比如怎么用，因为 docker-compose 里面加了一个 redis，并且 link 了，所以我们代码里面如下写：
-
-
-在 service 目录下添加 `redis.service.ts` 文件，代码如下：
-
-```typescript
-import { Provide, Scope, ScopeEnum, Init } from "@midwayjs/decorator";
-import * as Redis from 'ioredis'
-
-@Provide()
-@Scope(ScopeEnum.Singleton)
-export class RedisService{
-  redis: Redis.Redis = null;
-
-  @Init()
-  async init(){
-    this.redis = new Redis({
-      host: 'redis'
-    });
-  }
-
-  async setValue(key, value){
-    return await this.redis.set(key, value);
-  }
-
-  async getValue(key){
-    return await this.redis.get(key);
-  }
-}
-```
-
-然后在 `controller/home.ts` 里面添加一个接口如下：
-
-```typescript
-import { Controller, Get, Inject } from '@midwayjs/decorator';
-import { RedisService } from '../service/redis.service';
-
-@Controller('/')
-export class HomeController {
-
-  @Inject()
-  redisService: RedisService;
-
-  @Get('/')
-  async home() {
-    let res = await this.redisService.getValue("foo")
-    return 'Hello Midwayjs!' + res;
-  }
-
-  @Get("/update")
-  async update(){
-    let res = await this.redisService.setValue("foo", "hello world");
-    return res;
-  }
-}
-```
-
-这个代码比较好理解，相当于访问 `127.0.0.1:7001/update` 接口，会去调用 redisService 新增一个 key，对应的 value 为 hello world。
-
-然后访问 `127.0.0.1:7001`  ，会调用 redisService 获取 key 为 foo 的值，并返回给页面。
-
-如下：
-
-![image.png](https://img.alicdn.com/imgextra/i1/O1CN01Zrvj3E1p61qFBz95H_!!6000000005310-2-tps-686-184.png)
+那么redis比如怎么用，因为 docker-compose 里面加了一个 redis，并且 link 了。
 
 关于更多关于 docker-compose 的详情，可以查看网上关于 docker-compose 的使用方法。
 

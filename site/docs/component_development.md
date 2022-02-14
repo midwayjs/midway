@@ -1,32 +1,32 @@
----
-title: 组件开发
----
-
-:::caution
-本文档来源于 v2，还在重新编写中。
-:::
+# 组件开发
 
 组件（Component）是一个可复用与多框架的模块包，一般用于几种场景：
 
 - 1、包装往下游调用的代码，包裹三方模块简化使用，比如 orm（数据库调用），swagger（简化使用） 等
 - 2、可复用的业务逻辑，比如抽象出来的公共 Controller，Service 等
 
-组件可以本地加载，也可以打包到一起发布成一个  npm 包。组件可以在 midway v2/Serverless 中使用。你可以将复用的业务代码，或者功能模块都放到组件中进行维护。几乎所有的 Midway 通用能力都可以在组件中使用，包括但不限于配置，生命周期，控制器，拦截器等。
+组件可以本地加载，也可以打包到一起发布成一个 npm 包。组件可以在 midway v3/Serverless 中使用。你可以将复用的业务代码，或者功能模块都放到组件中进行维护。几乎所有的 Midway 通用能力都可以在组件中使用，包括但不限于配置，生命周期，控制器，拦截器等。
 
 设计组件的时候尽可能的面向所有的上层框架场景，所以我们尽可能只依赖 `@midwayjs/core` 和 `@midwayjs/decorator` 。
 
-从 v3 开始，框架（Framework）也变为组件的一部分，使用方式和组件保持统一。 
+从 v3 开始，框架（Framework）也变为组件的一部分，使用方式和组件保持统一。
 
 
 
 ## 开发组件
 
 
-
 ### 脚手架
 
-TODO
+```bash
+# npm v6
+$ npm init midway --type=component-v3 my_custom_component
 
+# npm v7
+$ npm init midway -- --type=component-v3 my_custom_component
+```
+
+或者 `npm init midway`，选择 `component-v3` 模板。
 
 
 ### 组件目录
@@ -453,7 +453,7 @@ $ npm run build && npm publish
 框架都遵循 `IMidwayFramewok`  的接口定义，以及如下约定。
 
 - 每个框架有要自定义独立的启停流程
-- 每个框架需要定义自己独立的 `Application` ，`Context` 
+- 每个框架需要定义自己独立的 `Application` ，`Context`
 - 每个框架可以有自己独立的中间件能力
 
 为了简化开发，Midway 提供了一个基础的 `BaseFramework` 类供继承。
@@ -480,7 +480,7 @@ export interface IMidwayCustomConfigurationOptions extends IConfigurationOptions
 // 实现一个自定义框架，继承基础框架
 @Framework()
 export class MidwayCustomFramework extends BaseFramework<Application, Context, IMidwayCustomConfigurationOptions> {
-  
+
   // 处理初始化配置
   configure() {
     // ...
@@ -495,7 +495,7 @@ export class MidwayCustomFramework extends BaseFramework<Application, Context, I
   async run() {
     // ...
   }
-  
+
   // 框架类型
   async getFrameworkType() {
     // ...

@@ -573,7 +573,7 @@ import { IMidwayContainer } from '@midwayjs/core';
 @Configuration()
 export class AutoConfiguration {
 
-	async onReady(applicationContext: IMidwayContainer) {
+  async onReady(applicationContext: IMidwayContainer) {
     // 向依赖注入容器中添加一些全局对象
   	applicationContext.registerObject('lodash', lodash);
   }
@@ -724,13 +724,13 @@ export class BootApp {
 
 
 ```typescript
-@Middleawre()
+@Middleware()
 export class ReportMiddleware {
 
   resolve() {
   	return async(ctx, next) => {
       // ctx.requestContext  请求链路的依赖注入容器
-    	await next();
+      await next();
     }
   }
 }
@@ -738,13 +738,13 @@ export class ReportMiddleware {
 Express 的请求链路依赖注入容器挂载在 req 对象上。
 
 ```typescript
-@Middleawre()
+@Middleware()
 export class ReportMiddleware {
 
   resolve() {
   	return (req, res, next) => {
       // req.requestContext  请求链路的依赖注入容器
-    	next();
+      next();
     }
   }
 }
@@ -763,8 +763,7 @@ import { IMidwayContainer } from '@midwayjs/core';
 
 @Configuration()
 export class AutoConfiguration {
-
-	async onReady(applicationContext: IMidwayContainer) {
+  async onReady(applicationContext: IMidwayContainer) {
     // ...
   }
 }
@@ -789,8 +788,7 @@ import { UserService } from './service/user.service';
 
 @Middleware()
 export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
-
-	@ApplicationContext()
+  @ApplicationContext()
   applicationContext: IMidwayContainer;
 
   resolve() {
@@ -802,7 +800,7 @@ export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
 
       // 下面的方法获取的服务和请求关联，可以注入上下文
       const userService2 = await ctx.requestContext.getAsync<UserService>(UserService);
-    	await next();
+      await next();
     }
   }
 }
@@ -845,7 +843,7 @@ export class ReportMiddleware implements IMiddleware<Context, Response, NextFunc
 一般工厂方法用于返回相同接口的实现，比如我们有两个 `ICacheService` 接口的实现：
 ```typescript
 export interface  ICacheService {
-	getData(): any;
+  getData(): any;
 }
 
 @Provide()
@@ -964,30 +962,30 @@ export class HomeController {
 ## 静态 API
 
 
-在有些工具类中，我们可以不需要创建 class 实例就能获取到全局的依赖注入容器（**在使用 bootstrap.js 启动之后**）。
+在有些工具类中，我们可以不需要创建 class 实例就能获取到全局的依赖注入容器（**在启动之后**）。
 ```typescript
 import { getCurrentApplicationContext } from '@midwayjs/core';
 
 export const getService = async (serviceName) => {
-	return getCurrentApplicationContext().getAsync(serviceName);
+  return getCurrentApplicationContext().getAsync(serviceName);
 }
 ```
 
 
-获取主框架（**在使用 bootstrap.js 启动之后**）。
+获取主框架（**在启动之后**）。
 ```typescript
 import { getCurrentMainFramework } from '@midwayjs/core';
 
 export const framework = () => {
-	return getCurrentMainFramework();
+  return getCurrentMainFramework();
 }
 ```
-获取主框架的 app 对象（**在使用 bootstrap.js 启动之后**）。
+获取主框架的 app 对象（**在启动之后**）。
 ```typescript
 import { getCurrentMainApp } from '@midwayjs/core';
 
 export const getGlobalConfig = () => {
-	return getCurrentMainApp().getConfig();
+  return getCurrentMainApp().getConfig();
 }
 ```
 

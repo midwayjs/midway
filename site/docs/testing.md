@@ -17,7 +17,7 @@
 
 
 一个应用的测试目录示例：
-```bash
+```text
 ➜  my_midway_app tree
 .
 ├── src
@@ -110,7 +110,7 @@ Midway 提供了一套基础的 `@midwayjs/mock`  工具集，可以帮助上层
 // create app
 const app = await createApp<Framework>();
 ```
-这里传入的 `Framework` 是用来给 TypeScript 推导类型的。这样就可以返回对应的框架 app 实例了。
+这里传入的 `Framework` 是用来给 TypeScript 推导类型的。这样就可以返回主框架 app 实例了。
 
 
 当 app 运行完成后，可以使用 `close` 方法关闭。

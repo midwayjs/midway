@@ -142,7 +142,9 @@ ctx.cookies.get('frontend-cookie', {
 
 ```typescript
 // src/config/config.default
-export const keys = ['key1','key2'];
+export default {
+  keys:  ['key1','key2'],
+}
 ```
 
 keys 默认是一个字符串，可以分隔配置多个 key。Cookie 在使用这个配置进行加解密时：
@@ -202,11 +204,14 @@ ctx.session.visited = 1;    //   -->  此处没有问题
 Session 的实现是基于 Cookie 的，默认配置下，用户 Session 的内容加密后直接存储在 Cookie 中的一个字段中，用户每次请求我们网站的时候都会带上这个 Cookie，我们在服务端解密后使用。Session 的默认配置如下：
 
 ```typescript
-export const session = {
-  maxAge: 24 * 3600 * 1000, // 1天
-  key: 'MW_SESS',
-  httpOnly: true,
-};
+export default {
+  session: {
+    maxAge: 24 * 3600 * 1000, // 1天
+    key: 'MW_SESS',
+    httpOnly: true,
+  },
+  // ...
+}
 ```
 
 可以看到这些参数除了 `key` 都是 Cookie 的参数，`key` 代表了存储 Session 的 Cookie 键值对的 key 是什么。在默认的配置下，存放 Session 的 Cookie 将会加密存储、不可被前端 js 访问，这样可以保证用户的 Session 是安全的。
@@ -228,7 +233,7 @@ import { UserSerivce } from './service/user.service';
 export class UserController {
   @Inject()
   ctx: Context;
-  
+
   @Inject()
   userSerivce: UserSerivce;
 
@@ -236,7 +241,7 @@ export class UserController {
   async login(@Body() data) {
    	const { username, password, rememberMe } = data;
     const user = await this.userSerivce.loginAndGetUser(username, password);
-    
+
     // 设置 Session
     this.ctx.session.user = user;
     // 如果用户勾选了 `记住我`，设置 30 天的过期时间
@@ -255,8 +260,12 @@ export class UserController {
 
 ```typescript
 // src/config/config.default.ts
-export const session = {
-  renew: true,
-};
+export default {
+  session: {
+    renew: true,
+    // ...
+  },
+  // ...
+}
 ```
 

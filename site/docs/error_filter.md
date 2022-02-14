@@ -14,7 +14,7 @@ Midway 提供了一个内置的异常处理器，负责处理应用程序中所�
 
 ```typescript
 export class MidwayHttpError extends MidwayError {
-	// ...
+  // ...
 }
 ```
 
@@ -55,7 +55,6 @@ import { CustomHttpError } from './error/custom.error';
 async findAll() {
   throw new CustomHttpError();
 }
-
 ```
 
 

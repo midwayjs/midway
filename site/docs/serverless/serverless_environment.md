@@ -1,6 +1,4 @@
----
-title: 部署环境
----
+# 部署环境
 
 在 Serverless 场景，由于环境和传统的容器不同（平台提供，无法修改），我们在启动时，使用传统的命令透传环境变量，函数是无法正确的读取到的。
 
@@ -30,14 +28,14 @@ $ UDEV_NODE_ENV=prod midway-bin deploy
 
 ```yaml
 provider:
-	runtime: ${env.RUNTIME}
+  runtime: ${env.RUNTIME}
 ```
 
 那么，如果 `midway-bin deploy` 时增加的环境变量为 `RUNTIME=nodejs10 midway-bin deploy` ，则会被填充为：
 
 ```yaml
 provider:
-	runtime: nodejs10
+  runtime: nodejs10
 ```
 
 ## 错误堆栈输出

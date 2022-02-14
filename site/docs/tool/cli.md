@@ -18,7 +18,7 @@ title: midwayjs/cli
 
 ```bash
 $ mw new [name]
-	--template    	指定远端的符合 light-generator 标准的脚手架包
+  --template    	指定远端的符合 light-generator 标准的脚手架包
   --target        新建的项目目标位置
   --type          新的项目类型，默认为 web，可选的为faas等
   --npm           npm client，默认为自动识别添加registry
@@ -154,15 +154,15 @@ $ midway-bin test --ts
 ```
 
 使用 mocha 进行单测时，需要手动安装 `mocha` 和 `@types/mocha` 两个依赖到 `devDependencies` 中：`npm i mocha @types/mocha -D` 。
-​
+
 
 :::info
 如果项目中使用了 TypeScript 的 path alias，请参考：[midway_v2/testing](/docs/testing#BKmhH)
 :::
-​
+
 
 单测编写文档请参阅：[Serverless 函数的单测](/docs/serverless_testing)
-​
+
 
 ### cov 单测覆盖率
 
@@ -173,7 +173,7 @@ $ midway-bin cov --ts
 ```
 
 使用 mocha 进行单测覆盖率时，除 `mocha` 和 `@types/mocha` 两个依赖外，还需要安装 `nyc` 到 `devDependencies` 中：`npm i nyc -D` 。
-​
+
 
 ### check 问题检测
 
@@ -271,7 +271,7 @@ midway-bin deploy --function=a,b,c
 #### 函数构建打包时文件拷贝逻辑
 
 默认拷贝的内容包含 `后端代码文件夹` （一般为 `src` 、faas 前后端一体化一般为 `src/apis`）内的所有非 `.ts` 后缀的文件，以及 `项目根目录` 下的以 `.js`、`.json`、`.yml` 为扩展名的所有文件和 `config` 、`app` 文件夹内的所有文件。
-​
+
 
 如果要拷贝额外的文件，可以通过在 `f.yml` 文件中添加 `package`字段 中的 `include` 来指定，可以配置文件名，也可以通过 `fast-glob` [语法 ↗](https://github.com/mrmlnc/fast-glob#pattern-syntax) 匹配，使用示例如下：
 
@@ -287,7 +287,7 @@ package:
     - xxx/**/*.js	# 项目根目录下的 xxx 目录下的所有 js 文件
 ```
 
-​
+
 
 ## 实验性功能
 
@@ -299,7 +299,7 @@ package:
 
 ```
 experimentalFeatures:
-    ignoreTsError: true
+  ignoreTsError: true
 ```
 
 ### 2. removeUselessFiles
@@ -308,7 +308,7 @@ experimentalFeatures:
 
 ```
 experimentalFeatures:
-    removeUselessFiles: true
+  removeUselessFiles: true
 ```
 
 ### 3. fastInstallNodeModules
@@ -317,7 +317,7 @@ experimentalFeatures:
 
 ```shell
 experimentalFeatures:
-    fastInstallNodeModules: true
+  fastInstallNodeModules: true
 ```
 
 ##
@@ -327,10 +327,10 @@ experimentalFeatures:
 ### 1. 生命周期扩展
 
 用户可以在 `package.json` 中添加 `midway-integration` 字段来根据各个命令的生命周期扩展 cli 的行为。
-​
+
 
 比如，在 package 命令 `installDevDep` 的后面添加自定义逻辑：
-​
+
 
 ```bash
 {
@@ -343,7 +343,7 @@ experimentalFeatures:
 ```
 
 其中 `lifecycle` 的格式为 `${ 'before' | 'after' | '' }:${ 命令 }:${ 命令生命周期 }` 。
-​
+
 
 package 命令的声明周期列表：
 
@@ -364,7 +364,6 @@ package 命令的声明周期列表：
  'finalize', // 完成
 ```
 
-###
 
 ### 2. 通过插件进行扩展
 
@@ -373,18 +372,17 @@ package 命令的声明周期列表：
 
 - npm 插件，插件是一个 npm 包
 - local 插件，插件在本地位置
-- ​
+
 
 通过在 f.yml 文件中配置 `plugins` 字段使 cli 加载插件：
 
 ```yaml
 plugins:
-	- npm::test-plugin-model
+  - npm::test-plugin-model
   - local::./test/plugin
 ```
 
 plugin 配置格式为： `${ 'npm' | 'local' }:${ provider || '' }:${ pluginName || path }`
-​
 
 插件的代码参考：
 
