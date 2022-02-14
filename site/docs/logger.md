@@ -67,7 +67,7 @@ export class HelloController {
     // 为了保证异常可追踪，必须保证所有抛出的异常都是 Error 类型，因为只有 Error 类型才会带上堆栈信息，定位到问题。
     this.logger.error(new Error('custom error'));
     // ...
-    
+
     // this.logger === ctx.logger
   }
 }
@@ -80,7 +80,7 @@ export class HelloController {
 
 
 输出结果：
-```typescript
+```text
 2021-07-22 14:50:59,388 INFO 7739 [-/::ffff:127.0.0.1/-/0ms GET /api/get_user] hello world
 ```
 
@@ -96,7 +96,7 @@ import { ILogger } from '@midwayjs/logger';
 
 @Configuration()
 export class ContainerConfiguration implements ILifeCycle {
-  
+
   @Logger()
   logger: ILogger;
 
@@ -107,7 +107,7 @@ export class ContainerConfiguration implements ILifeCycle {
 
     this.logger.error(someErrorObj);
   }
-  
+
 }
 ```
 
@@ -123,7 +123,7 @@ export class ContainerConfiguration implements ILifeCycle {
 
 @Configuration()
 export class ContainerConfiguration implements ILifeCycle {
-  
+
   @Logger()
   logger: ILogger;
 
@@ -134,7 +134,7 @@ export class ContainerConfiguration implements ILifeCycle {
 
     this.logger.error(someErrorObj);
   }
-  
+
 }
 ```
 
@@ -235,7 +235,7 @@ logger.info(obj);					// 默认情况下，输出 [object Object]
 ```typescript
 const obj = {a: 1};
 logger.info(JSON.stringify(obj));				// 可以输出格式化文本
-logger.info(a.1);												// 直接输出属性值
+logger.info(obj.a);												// 直接输出属性值
 logger.info('%j', a);										// 直接占位符输出整个 json
 ```
 
@@ -266,10 +266,10 @@ import { ILogger } from '@midwayjs/logger';
 
 @Provide()
 export class UserService {
-  
+
   @Inject()
   logger: ILogger;						// 获取上下文日志
-  
+
   async getUser() {
   	this.logger.info('hello user');
   }
@@ -290,10 +290,10 @@ import { IMidwayLogger } from '@midwayjs/logger';
 
 @Provide()
 export class UserService {
-  
+
   @Inject()
   logger: IMidwayLogger;						// 获取上下文日志
-  
+
   async getUser() {
     this.logger.disableConsole();		// 禁止控制台输出
   	this.logger.info('hello user');	// 这句话在控制台看不到
@@ -343,7 +343,7 @@ export default {
 
 winston 的日志等级分为下面几类，日志等级依次降低（数字越大，等级越低）：
 ```typescript
-const levels = { 
+const levels = {
   none: 0,
   error: 1,
   trace: 2,
@@ -551,6 +551,7 @@ export default {
     clients: {
       appLogger: {
         contextFormat: info => {
+          const ctx = info.ctx;
           return `${info.timestamp} ${info.LEVEL} ${info.pid} [${Date.now() - ctx.startTime}ms ${ctx.method}] ${info.message}`;
         }
         // ...
@@ -564,10 +565,15 @@ export default {
 则你在使用 `ctx.logger` 输出时，会默认变成你 format 的样子。
 
 ```typescript
-ctx.logger.info('hello world');  
+ctx.logger.info('hello world');
 // 2021-01-28 11:10:19,334 INFO 9223 [2ms POST] hello world
 ```
 
+:::tip
+注意，由于 app logger 是所有框架通用的，这一修改会影响所有类型的 context logger。
+:::
+
+未避免影响过大，你也可以单独修改某一框架的上下文日志格式，比如 [修改 koa 的上下文日志格式](./extensions/koa)。
 
 
 ## 自定义日志
@@ -582,14 +588,17 @@ ctx.logger.info('hello world');
 可以如下配置：
 
 ```typescript
-export const midwayLogger = {
-  clients: {
-    abcLogger: {
-      fileLogName: 'abc.log'
-      // ...
+export default {
+  midwayLogger: {
+    clients: {
+      abcLogger: {
+        fileLogName: 'abc.log'
+        // ...
+      }
     }
-  }
-} as MidwayConfig['midwayLogger'];
+    // ...
+  },
+} as MidwayConfig;
 ```
 
 自定义的日志可以通过 `@Logger('abcLogger')` 获取。
@@ -614,44 +623,53 @@ export const midwayLogger = {
 **示例：只开启控制台输出**
 
 ```typescript
-export const midwayLogger = {
-  clients: {
-    abcLogger: {
-      enableFile: false,
-      enableError: false,
-      // ...
+export default {
+  midwayLogger: {
+    clients: {
+      abcLogger: {
+        enableFile: false,
+        enableError: false,
+        // ...
+      }
     }
-  }
-} as MidwayConfig['midwayLogger'];
+    // ...
+  },
+} as MidwayConfig;
 ```
 
 **示例：关闭控制台输出**
 
 ```typescript
-export const midwayLogger = {
-  clients: {
-    abcLogger: {
-      enableConsole: false,
-      // ...
+export default {
+  midwayLogger: {
+    clients: {
+      abcLogger: {
+        enableConsole: false,
+        // ...
+      }
     }
-  }
-} as MidwayConfig['midwayLogger'];
+    // ...
+  },
+} as MidwayConfig;
 ```
 
 **示例：开启文本和 JSON 同步输出，关闭错误输出**
 
 ```typescript
-export const midwayLogger = {
-  clients: {
-    abcLogger: {
-      enableConsole: false,
-      enableFile: true,
-      enableError: false,
-      enableJSON: true,
-      // ...
+export default {
+  midwayLogger: {
+    clients: {
+      abcLogger: {
+        enableConsole: false,
+        enableFile: true,
+        enableError: false,
+        enableJSON: true,
+        // ...
+      }
     }
-  }
-} as MidwayConfig['midwayLogger'];
+    // ...
+  },
+} as MidwayConfig;
 ```
 
 
@@ -686,4 +704,54 @@ const customTransport = new CustomTransport({
 logger.add(customTransport);
 ```
 
-这样，原有的 logger 打印日志时，会自动执行该 Tranposrt。
+这样，原有的 logger 打印日志时，会自动执行该 Transport。
+
+所有的 Transport 是附加在原有的 logger 实例之上（非 context logger），如需 ctx 数据，可以从 info 获取，注意判空。
+
+
+```typescript
+class CustomTransport extends EmptyTransport {
+  log(info, callback) {
+    if (info.ctx) {
+      // ...
+    } else {
+      // ...
+    }
+    callback();
+  }
+}
+```
+
+
+我们也可以使用依赖注入的方式来定义 Transport。
+
+```typescript
+import { EmptyTransport } from '@midwayjs/logger';
+import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { MidwayLoggerService } from '@midwayjs/core';
+
+@Provide()
+@Scope(ScopeEnum)
+export class CustomTransport extends EmptyTransport {
+  log(info, callback) {
+    // ...
+    callback();
+  }
+}
+
+// src/configuration.ts
+@Configuration(/*...*/)
+export class AutoConfiguration {
+
+  @Inject()
+  loggerService: MidwayLoggerService;
+
+  @Inject()
+  customTransport: CustomTransport;
+
+  async onReady() {
+    const appLogger = this.loggerService.getLogger('customLogger');
+    appLogger.add(this.customTransport);
+  }
+}
+```

@@ -76,6 +76,9 @@ export default {
 }
 ```
 
+注意，使用 Postman 做 Post 请求时的类型选择：
+
+![postman](https://img.alicdn.com/imgextra/i4/O1CN01QCdTsN1S347SuzZU5_!!6000000002190-2-tps-1017-690.png)
 
 
 ## Cookie 和 Session
@@ -236,3 +239,19 @@ export default {
 ```
 
 如果开启了 `@midwayjs/static-file`  组件，那么会优先使用组件的静态文件托管。
+
+### 修改上下文日志
+
+可以单独修改 koa 框架的上下文日志。
+
+```typescript
+export default {
+  koa: {
+    contextLoggerFormat: info => {
+      const ctx = info.ctx;
+      return `${info.timestamp} ${info.LEVEL} ${info.pid} [${ctx.userId} - ${Date.now() - ctx.startTime}ms ${ctx.method}] ${info.message}`;
+    }
+    // ...
+  },
+};
+```
