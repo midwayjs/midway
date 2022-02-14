@@ -55,7 +55,7 @@ $ npm i passport-jwt --save
     // 本地策略
     "@types/passport-local": "^1.0.34",
     // Jwt 策略
-    "@types/passport-jwt": "^3.0.6",    
+    "@types/passport-jwt": "^3.0.6",
     // Github 策略
     "@types/passport-github": "^1.1.7",
     // ...
@@ -91,7 +91,7 @@ import * as passport from '@midwayjs/passport';
 export class ContainerLifeCycle implements ILifeCycle {}
 
 ```
-### e.g. 本地
+## 示例：本地策略
 
 我们可以通过 `@CuustomStrategy` 和派生 `PassportStrategy` 来自启动一个策略。通过 validate 钩子来获取有效负载，并且此函数必须有返回值，其参数并不明确，可以参考对应的 Strategy 或者通过展开符打印查看。
 
@@ -99,6 +99,7 @@ export class ContainerLifeCycle implements ILifeCycle {}
 // src/strategy/local.strategy.ts
 
 import { CustomStrategy, PassportStrategy } from '@midwayjs/passport';
+import { Strategy } from 'passport-local';
 import { Repository } from 'typeorm';
 import { InjectEntityModel } from '@midwayjs/orm';
 import { UserEntity } from './user';
@@ -175,7 +176,7 @@ curl -X POST http://localhost:7001/passport/local -d '{"username": "demo", "pass
 结果 {"username": "demo", "password": "1234"}
 ```
 
-### e.g. Jwt
+## 示例：Jwt 策略
 
 首先需要 **额外安装** 依赖和策略：
 
@@ -375,18 +376,18 @@ import * as bcrypt from 'bcrypt';
 
 @CustomStrategy()
 export class LocalStrategy extends PassportStrategy(Strategy) {
-  
+
   // ...
   serializeUser(user, done) {
     // 可以只保存用户名
     done(null, user.username);
   }
-  
+
   deserializeUser(id, done) {
-    
+
     // 这里不是异步方法，你可以从其他地方根据用户名，反查用户数据。
     const user = getUserFromDataBase(id);
-    
+
     done(null, user);
   }
 }
