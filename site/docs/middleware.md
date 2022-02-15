@@ -141,7 +141,7 @@ export class HomeController {
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { App, Configuration } from '@midwayjs/decorator';
 import * as koa from '@midwayjs/koa';
 import { ReportMiddleware } from './middleware/user.middleware';
 
@@ -243,7 +243,7 @@ export async function fnMiddleware(ctx, next) {
 
 
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { App, Configuration } from '@midwayjs/decorator';
 import * as koa from '@midwayjs/koa';
 import { ReportMiddleware } from './middleware/user.middleware';
 import { fnMiddleware } from './middleware/another.middleware';
@@ -339,7 +339,7 @@ fn._name = 'fnMiddleware';
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { App, Configuration } from '@midwayjs/decorator';
 import * as koa from '@midwayjs/koa';
 import { ReportMiddleware } from './middleware/user.middleware';
 import { fnMiddleware } from './middleware/another.middleware';
@@ -379,7 +379,7 @@ Midway 提供了 `insert` 系列的 API，方便用户快速调整中间件。
 
 ```typescript
 // src/configuration.ts
-import { Configuration } from '@midwayjs/decorator';
+import { App, Configuration } from '@midwayjs/decorator';
 import * as koa from '@midwayjs/koa';
 import { ReportMiddleware } from './middleware/user.middleware';
 
