@@ -94,13 +94,13 @@ export interface IMidwayWebConfigurationOptions extends IConfigurationOptions {
 
 /**
  * @deprecated since version 3.0.0
- * Please use IMiddleware from @midwayjs/core
+ * Please use IMiddleware from '@midwayjs/core'
  */
 export type MidwayWebMiddleware = Middleware<DefaultState, Context>;
 
 /**
  * @deprecated since version 3.0.0
- * Please use IMiddleware from @midwayjs/core
+ * Please use IMiddleware from '@midwayjs/core'
  */
 export interface IWebMiddleware {
   resolve(): MidwayWebMiddleware;
