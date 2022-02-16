@@ -33,7 +33,7 @@
   "dependencies": {
     "@midwayjs/core": "^3.0.6",
     "@midwayjs/express-session": "^3.0.6",
-    "body-parser": "1.19.1",
+    "body-parser": "1.19.2",
     "cookie-parser": "^1.4.6",
     "express": "4.17.2"
   },
