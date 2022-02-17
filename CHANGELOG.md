@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.7](https://github.com/midwayjs/midway/compare/v3.0.6...v3.0.7) (2022-02-17)
+
+
+### Bug Fixes
+
+* benchmark ([#1719](https://github.com/midwayjs/midway/issues/1719)) ([088e306](https://github.com/midwayjs/midway/commit/088e3066962b5ad9c5ecae3ba602a3ca5b215f5d))
+* **deps:** update dependency body-parser to v1.19.2 ([#1708](https://github.com/midwayjs/midway/issues/1708)) ([01626e8](https://github.com/midwayjs/midway/commit/01626e882710108cc9bede8c6f2adcfd142f72f0))
+* **deps:** update dependency express to v4.17.3 ([#1713](https://github.com/midwayjs/midway/issues/1713)) ([c781eca](https://github.com/midwayjs/midway/commit/c781eca27586b1d07cf672e71776ad9a521e149f))
+* **deps:** update dependency nanoid to v3.3.1 ([#1704](https://github.com/midwayjs/midway/issues/1704)) ([7e31d41](https://github.com/midwayjs/midway/commit/7e31d41d9d66a3667b21c5c6aa7fedc675ed38aa))
+* **deps:** update dependency raw-body to v2.4.3 ([#1705](https://github.com/midwayjs/midway/issues/1705)) ([d4a6b8c](https://github.com/midwayjs/midway/commit/d4a6b8c0a17d5187ac21afd72e8dbf86424fb14f))
+* export asyncWrapper from runtime-engine ([#1717](https://github.com/midwayjs/midway/issues/1717)) ([f40d0b9](https://github.com/midwayjs/midway/commit/f40d0b9bbd05025f0472ae0a0e62fd9accb84937))
+* passport middleware definition ([#1701](https://github.com/midwayjs/midway/issues/1701)) ([bca3860](https://github.com/midwayjs/midway/commit/bca38603437f7645603feba3cd47ad9b696f8db7))
+
+
+
+
+
 ## [3.0.6](https://github.com/midwayjs/midway/compare/v3.0.5...v3.0.6) (2022-02-13)
 
 

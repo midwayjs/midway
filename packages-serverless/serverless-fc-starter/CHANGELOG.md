@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.7](https://github.com/midwayjs/midway/compare/v3.0.6...v3.0.7) (2022-02-17)
+
+
+### Bug Fixes
+
+* **deps:** update dependency raw-body to v2.4.3 ([#1705](https://github.com/midwayjs/midway/issues/1705)) ([d4a6b8c](https://github.com/midwayjs/midway/commit/d4a6b8c0a17d5187ac21afd72e8dbf86424fb14f))
+
+
+
+
+
 ## [3.0.6](https://github.com/midwayjs/midway/compare/v3.0.5...v3.0.6) (2022-02-13)
 
 **Note:** Version bump only for package @midwayjs/serverless-fc-starter

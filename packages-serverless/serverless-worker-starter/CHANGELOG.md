@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.7](https://github.com/midwayjs/midway/compare/v3.0.6...v3.0.7) (2022-02-17)
+
+
+### Bug Fixes
+
+* export asyncWrapper from runtime-engine ([#1717](https://github.com/midwayjs/midway/issues/1717)) ([f40d0b9](https://github.com/midwayjs/midway/commit/f40d0b9bbd05025f0472ae0a0e62fd9accb84937))
+
+
+
+
+
 ## [3.0.6](https://github.com/midwayjs/midway/compare/v3.0.5...v3.0.6) (2022-02-13)
 
 **Note:** Version bump only for package @midwayjs/serverless-worker-starter

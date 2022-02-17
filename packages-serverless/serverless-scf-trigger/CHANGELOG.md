@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.7](https://github.com/midwayjs/midway/compare/v3.0.6...v3.0.7) (2022-02-17)
+
+
+### Bug Fixes
+
+* **deps:** update dependency body-parser to v1.19.2 ([#1708](https://github.com/midwayjs/midway/issues/1708)) ([01626e8](https://github.com/midwayjs/midway/commit/01626e882710108cc9bede8c6f2adcfd142f72f0))
+* **deps:** update dependency express to v4.17.3 ([#1713](https://github.com/midwayjs/midway/issues/1713)) ([c781eca](https://github.com/midwayjs/midway/commit/c781eca27586b1d07cf672e71776ad9a521e149f))
+
+
+
+
+
 ## [3.0.6](https://github.com/midwayjs/midway/compare/v3.0.5...v3.0.6) (2022-02-13)
 
 **Note:** Version bump only for package @midwayjs/serverless-scf-trigger

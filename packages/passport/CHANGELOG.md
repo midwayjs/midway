@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.7](https://github.com/midwayjs/midway/compare/v3.0.6...v3.0.7) (2022-02-17)
+
+
+### Bug Fixes
+
+* passport middleware definition ([#1701](https://github.com/midwayjs/midway/issues/1701)) ([bca3860](https://github.com/midwayjs/midway/commit/bca38603437f7645603feba3cd47ad9b696f8db7))
+
+
+
+
+
 ## [3.0.6](https://github.com/midwayjs/midway/compare/v3.0.5...v3.0.6) (2022-02-13)
 
 **Note:** Version bump only for package @midwayjs/passport

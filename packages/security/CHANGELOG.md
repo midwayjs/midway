@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.7](https://github.com/midwayjs/midway/compare/v3.0.6...v3.0.7) (2022-02-17)
+
+
+### Bug Fixes
+
+* **deps:** update dependency nanoid to v3.3.1 ([#1704](https://github.com/midwayjs/midway/issues/1704)) ([7e31d41](https://github.com/midwayjs/midway/commit/7e31d41d9d66a3667b21c5c6aa7fedc675ed38aa))
+
+
+
+
+
 ## [3.0.6](https://github.com/midwayjs/midway/compare/v3.0.5...v3.0.6) (2022-02-13)
 
 **Note:** Version bump only for package @midwayjs/security
