@@ -126,18 +126,16 @@ export class HomeController {
 }
 ```
 
-
-
 ### 配置后缀
 
-默认后缀为 `.html` ，为了改成习惯的 `.ejs` 后缀，我们可以加一个 `defaultViewEngine` 配置。
+默认后缀为 `.html` ，为了改成习惯的 `.ejs` 后缀，我们可以加一个 `defaultExtension` 配置。
 
 ```typescript
 // src/config/config.default.ts
 export default {
   // ...
   view: {
-    defaultViewEngine: 'ejs',
+    defaultExtension: '.ejs',
     mapping: {
       '.ejs': 'ejs',
     },
@@ -166,6 +164,28 @@ export class HomeController {
 ```
 
 
+### 默认渲染引擎
+
+我们可以通过 `defaultViewEngine` 来设置默认的渲染引擎。
+
+其作用是，当遇到的模板后缀，比如 `.html` 未在配置的 `mapping` 字段中找到时，使用该 `defaultViewEngine` 字段指定的引擎来渲染。
+
+```typescript
+// src/config/config.default.ts
+export default {
+  // ...
+  view: {
+    defaultViewEngine: 'ejs',
+    mapping: {
+      '.ejs': 'ejs',
+    },
+  },
+  // ejs config
+  ejs: {}
+}
+```
+
+这样，如果模板是 `.html` 后缀，由于 `mapping` 中未指定，依旧会使用 `ejs` 来渲染。
 
 ### 配置多个模板目录
 
