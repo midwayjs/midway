@@ -2,7 +2,7 @@ import { IConfigurationOptions, IMidwayApplication, IMidwayContext } from '@midw
 import * as koa from 'koa';
 import { Context as KoaContext, DefaultState, Middleware, Next } from 'koa';
 import { RouterParamValue } from '@midwayjs/decorator';
-import { CookieSetOptions } from '@midwayjs/cookies';
+import { Cookies, CookieSetOptions } from '@midwayjs/cookies';
 
 export type IMidwayKoaContext = IMidwayContext<KoaContext>;
 export type IMidwayKoaApplication = IMidwayApplication<IMidwayKoaContext, koa<DefaultState, IMidwayKoaContext> & {
@@ -155,5 +155,7 @@ declare module 'koa' {
     body?: any;
     rawBody: string;
   }
+  interface Context {
+    cookies: Cookies;
+  }
 }
-
