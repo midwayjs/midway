@@ -16,4 +16,13 @@ describe('/test/index.test.ts', () => {
     expect(result.text).toEqual('ejs');
     await close(app);
   });
+
+  it('should test defaultExtension', async () => {
+    let app = await createApp<Framework>(join(__dirname, 'fixtures', 'base-app-default'), {});
+    let result = await createHttpRequest(app)
+      .get('/render');
+    expect(result.status).toEqual(200);
+    expect(result.text).toEqual(join(__dirname, 'fixtures', 'base-app-default/view/a.html'));
+    await close(app);
+  });
 });
