@@ -1,6 +1,7 @@
 import { BaseBootstrap, BootstrapOptions } from '@midwayjs/runtime-engine';
 import { WorkerRuntime } from './runtime';
 
+export { asyncWrapper } from '@midwayjs/runtime-engine';
 export * from './runtime';
 
 let bootstrap;
