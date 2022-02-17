@@ -15,7 +15,8 @@ Midway 内置的应用管理器，可以使用它获取到所有的 Application�
 可以通过注入获取，比如对不同的 Application 添加同一个中间件。
 
 ```typescript
-import { Configuration } from '@midawyjs/decorator';
+import { MidwayApplicationManager } from '@midwayjs/core'
+import { Configuration, Inject } from '@midawyjs/decorator';
 import { CustomMiddleware } from './middleware/custom.middleware';
 
 @Configuration({
@@ -272,7 +273,7 @@ API 如下：
 | API                                             | 返回类型 | 描述                   |
 | ----------------------------------------------- | -------- | ---------------------- |
 | registerPropertyHandler(decoratorKey, handler)  |          | 添加一个属性装饰器实现 |
-| registerMethodHandler(decoratorKey, handler)   |          | 添加一个方法装饰器实现 |
+| registerMethodHandler(decoratorKey, handler)    |          | 添加一个方法装饰器实现 |
 | registerParameterHandler(decoratorKey, handler) |          | 添加一个参数装饰器实现 |
 
 具体示例，请参考 **自定义装饰器** 部分。
@@ -304,9 +305,9 @@ export class HomeController {
 
 API 如下：
 
-| API                                                          | 返回类型 | 描述                                     |
-| ------------------------------------------------------------ | -------- | ---------------------------------------- |
-| addAspect(aspectInstance, aspectData)                        |          | 添加一个拦截器实现                       |
+| API                                                                      | 返回类型 | 描述                                     |
+| ------------------------------------------------------------------------ | -------- | ---------------------------------------- |
+| addAspect(aspectInstance, aspectData)                                    |          | 添加一个拦截器实现                       |
 | interceptPrototypeMethod(Clazz, methodName, aspectObject: IMethodAspect) |          | 拦截原型上的方法，将拦截器的实现添加上去 |
 
 
