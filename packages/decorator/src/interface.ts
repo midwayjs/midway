@@ -192,6 +192,7 @@ export namespace FaaSMetadata {
     type: 'cron' | 'every' | 'interval';
     value: string;
     payload?: string;
+    enable?: boolean;
   }
 
   export interface MQTriggerOptions extends TriggerCommonOptions  {
