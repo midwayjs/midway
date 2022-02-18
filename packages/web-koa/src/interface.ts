@@ -157,5 +157,6 @@ declare module 'koa' {
   }
   interface Context {
     cookies: Cookies;
+    app: Application;
   }
 }
