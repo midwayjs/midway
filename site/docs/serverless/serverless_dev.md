@@ -10,13 +10,13 @@ title: 开发函数
 $ npm -v
 
 # 如果是 npm v6
-$ npm init midway --type=faas my_midway_app
+$ npm init midway --type=faas-v3 my_midway_app
 
 # 如果是 npm v7
-$ npm init midway -- --type=faas my_midway_app
+$ npm init midway -- --type=faas-v3 my_midway_app
 ```
 
-也可以执行 `npm init midway` ，选择 `faas`  脚手架。
+也可以执行 `npm init midway`，选择 `faas` 脚手架。
 
 ## 目录结构
 
@@ -34,7 +34,7 @@ $ npm init midway -- --type=faas my_midway_app
 
 我们来简单了解一下文件内容。
 
-- `f.yml`   函数定义文件
+- `f.yml`  函数定义文件
 - `tsconfig.json` TypeScript 配置文件
 - `src` 函数源码目录
 - `src/function/hello.ts` 示例函数文件
@@ -45,7 +45,7 @@ $ npm init midway -- --type=faas my_midway_app
 
 我们首先来看看函数文件，传统的函数是一个 `function` ，为了更符合 midway 体系，以及使用我们的依赖注入，这里将它变成了 Class。
 
-通过 `@ServerlessTrigger`  装饰器，我们将方法标注为一个 HTTP 接口，并且标示 `path`  和 `method`  属性。
+通过 `@ServerlessTrigger` 装饰器，我们将方法标注为一个 HTTP 接口，并且标示 `path` 和 `method` 属性。
 
 ```typescript
 import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType, Query } from '@midwayjs/decorator';
@@ -164,7 +164,7 @@ $ npm run dev
 $ open http://localhost:7001
 ```
 
-Midway 会启动 HTTP 服务器，打开浏览器，访问 [http://127.0.0.1:7001](http://127.0.0.1:7001) ，浏览器会打印出 `Hello midwayjs`   的信息。
+Midway 会启动 HTTP 服务器，打开浏览器，访问 [http://127.0.0.1:7001](http://127.0.0.1:7001) ，浏览器会打印出 `Hello midwayjs`  的信息。
 
 <img src="https://cdn.nlark.com/yuque/0/2021/png/501408/1615045887650-73a90be7-1d49-4024-82c4-fd6b5192e75e.png#height=384&id=X8Jmz&margin=%5Bobject%20Object%5D&name=image.png&originHeight=768&originWidth=1268&originalType=binary&ratio=1&size=85174&status=done&style=none&width=634" width="634" />
 
