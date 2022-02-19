@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.8](https://github.com/midwayjs/midway/compare/v3.0.7...v3.0.8) (2022-02-19)
+
+
+### Bug Fixes
+
+* cookies definition in koa ([#1720](https://github.com/midwayjs/midway/issues/1720)) ([91adc35](https://github.com/midwayjs/midway/commit/91adc35f1dbcc1b362419b501ffa86be2f1050bc))
+
+
+
+
+
 ## [3.0.7](https://github.com/midwayjs/midway/compare/v3.0.6...v3.0.7) (2022-02-17)
 
 **Note:** Version bump only for package @midwayjs/view

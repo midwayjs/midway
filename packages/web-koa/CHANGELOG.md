@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.8](https://github.com/midwayjs/midway/compare/v3.0.7...v3.0.8) (2022-02-19)
+
+
+### Bug Fixes
+
+* cookies definition in koa ([#1720](https://github.com/midwayjs/midway/issues/1720)) ([91adc35](https://github.com/midwayjs/midway/commit/91adc35f1dbcc1b362419b501ffa86be2f1050bc))
+* update koa ctx.app definition ([#1721](https://github.com/midwayjs/midway/issues/1721)) ([2b3aced](https://github.com/midwayjs/midway/commit/2b3aced49bb3ca6dfc7652f4df668f6fa171238b))
+
+
+
+
+
 ## [3.0.7](https://github.com/midwayjs/midway/compare/v3.0.6...v3.0.7) (2022-02-17)
 
 **Note:** Version bump only for package @midwayjs/koa

@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/ws",
-  "version": "3.0.7",
+  "version": "3.0.8",
   "description": "Midway Web Framework for ws",
   "main": "dist/index",
   "typings": "dist/index.d.ts",

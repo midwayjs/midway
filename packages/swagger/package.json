@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/swagger",
-  "version": "3.0.7",
+  "version": "3.0.8",
   "main": "dist/index",
   "typings": "index.d.ts",
   "files": [
@@ -11,7 +11,7 @@
   "devDependencies": {
     "@midwayjs/core": "^3.0.7",
     "@midwayjs/decorator": "^3.0.7",
-    "@midwayjs/koa": "^3.0.7",
+    "@midwayjs/koa": "^3.0.8",
     "@midwayjs/mock": "^3.0.7",
     "swagger-ui-dist": "4.5.0"
   },

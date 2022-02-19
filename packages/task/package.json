@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/task",
-  "version": "3.0.7",
+  "version": "3.0.8",
   "description": "midway component for task and schedule",
   "main": "dist/index.js",
   "typings": "index.d.ts",
@@ -25,7 +25,7 @@
   "devDependencies": {
     "@midwayjs/core": "^3.0.7",
     "@midwayjs/decorator": "^3.0.7",
-    "@midwayjs/koa": "^3.0.7",
+    "@midwayjs/koa": "^3.0.8",
     "@midwayjs/logger": "^2.15.0",
     "@midwayjs/mock": "^3.0.7",
     "@types/bull": "3.15.8",
