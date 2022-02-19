@@ -2,11 +2,11 @@
 
 ## 使用场景
 
-一般来说，直接从 [Node.js 官网](https://link.zhihu.com/?target=https%3A//nodejs.org/)下载对应的安装包，即可完成环境配置。
+一般来说，直接从 [Node.js 官网](https://nodejs.org/)下载对应的安装包，即可完成环境配置。
 
 但在**本地开发**的时候，经常需要快速更新或切换版本。
 
-社区有 [nvm](https://link.zhihu.com/?target=https%3A//github.com/creationix/nvm)、[n](https://link.zhihu.com/?target=https%3A//github.com/tj/n) 等方案，我们推荐跨平台的 [nvs](https://link.zhihu.com/?target=https%3A//github.com/jasongin/nvs)。
+社区有 [nvm](https://github.com/creationix/nvm)、[n](https://github.com/tj/n) 等方案，我们推荐跨平台的 [nvs](https://github.com/jasongin/nvs)。
 
 - nvs 是跨平台的。
 - nvs 是基于 Node 编写的，我们可以参与维护。
@@ -14,7 +14,7 @@
 
 
 > 友情提示：Node 6.x 和 8.x 都将在今年结束 LTS 的支持，请尽快升级到 10.x 。
-> [https://github.com/nodejs/Release](https://link.zhihu.com/?target=https%3A//github.com/nodejs/Release)
+> [https://github.com/nodejs/Release](https://github.com/nodejs/Release)
 
 
 
@@ -37,7 +37,7 @@ $ . "$NVS_HOME/nvs.sh" install
 ### Windows 环境
 
 由于 Windows 环境配置比较复杂，所以还是推荐使用 `msi` 文件完成初始化工作。
-访问 [nvs/releases](https://link.zhihu.com/?target=https%3A//github.com/jasongin/nvs/releases) 下载最新版本的 `nvs.msi`，然后双击安装即可。
+访问 [nvs/releases](https://github.com/jasongin/nvs/releases) 下载最新版本的 `nvs.msi`，然后双击安装即可。
 
 ---
 
