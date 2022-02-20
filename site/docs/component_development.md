@@ -1,4 +1,4 @@
-# 组件开发
+# 自定义组件
 
 组件（Component）是一个可复用与多框架的模块包，一般用于几种场景：
 
@@ -275,6 +275,32 @@ describe('/test/index.test.ts', () => {
 
 ```
 
+如果组件是 Http 协议流程中的一部分，强依赖 context，必须依赖某个 Http 框架，那么，请使用一个完整的项目示例，使用 `createApp` 来测试。
+
+```typescript
+import { createApp, createHttpRequest } from '@midwayjs/mock';
+import * as custom from '../src';
+
+describe('/test/index.test.ts', () => {
+  it('test component', async () => {
+    // 在示例项目中，需要自行依赖 @midwayjs/koa 或其他对等框架
+    const app = await createApp(join(__dirname, 'fixtures/base-app'), {
+      imports: [
+        custom
+      ]
+    });
+    
+    const result = await createHttpRequest(app).get('/');
+    // ...
+    
+  });
+});
+
+
+```
+
+
+
 
 
 ### 应用中开发组件
@@ -445,6 +471,100 @@ $ npm run build && npm publish
 ├── index.d.ts                  // 组件扩展定义
 └── tsconfig.json
 ```
+
+
+
+
+
+### 扩展现有 Framework
+
+上面提到，Framework 是组件的一部分，同时也遵循组件规范，是可以注入以及扩展的。
+
+我们以扩展 `@midwayjs/koa` 举例。
+
+首先创建一个自定义组件，和普通应用相同，由于需要扩展 `@midwayjs/koa` ，那么在组件中，我们需要依赖 `@midwayjs/koa` 。
+
+```typescript
+// src/configuration.ts
+import { Configuration } from '@midwayjs/decorator';
+import * as koa from '@midwayjs/koa';
+
+@Configuration({
+  namespace: 'myKoa'
+  imports: [koa]
+})
+export class MyKoaConfiguration {
+  async onReady() {
+    // ...
+  }
+}
+```
+
+随后，我们就可以注入 `@midwayjs/koa` 导出的 Framework，来做扩展了。
+
+```typescript
+// src/configuration.ts
+import { Configuration } from '@midwayjs/decorator';
+import * as koa from '@midwayjs/koa';
+
+@Configuration({
+  namespace: 'myKoa'
+  imports: [koa]
+})
+export class MyKoaConfiguration {
+  @Inject()
+  framework: koa.Framework;
+
+  async onReady() {
+    // 添加中间件，koa 中的 app.useMiddleware 其实代理了 framework 上的方法
+    this.framework.useMiddleware(/* ... */);
+    
+    // 添加过滤器，koa 中的 app.useFilter 其实代理了 framework 上的方法
+    this.framework.useFilter(/* ... */);
+    
+    // koa 自身的扩展能力，比如扩展 context
+    const app = this.framework.getApplication();
+    Object.defineProperty(app.context, 'user', {
+      get() {
+        // ...
+        return 'xxx';
+      },
+      enumerable: true,
+    });
+    // ...
+  }
+  
+  async onServerReady() {
+    const server = this.framework.getServer();
+    // server.xxxx
+  }
+}
+```
+
+这是一种基于现有 Framework 去扩展的一种方法。
+
+- 如果组件中扩展了 context，那么请参考 [扩展上下文定义](./context_definition)
+- 如果组件中扩展了配置，那么请参考 [组件配置](#组件配置)
+
+等组件发布后，比如叫 `@midwayjs/my-koa`，业务可以直接使用你的组件，而无需引入 `@midwayjs/koa` 。
+
+```typescript
+// src/configuration.ts
+import { Configuration } from '@midwayjs/decorator';
+// 你自己的组件
+import * as myKoa from '@midwayjs/my-koa';
+
+@Configuration({
+  imports: [myKoa],
+})
+export class MyConfiguration {
+  async onReady() {
+    // ...
+  }
+}
+```
+
+如果希望完全定义自己的组件，比如不同的协议，就需要完整自定义 Framework。
 
 
 
