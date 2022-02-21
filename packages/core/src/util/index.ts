@@ -119,7 +119,8 @@ export function joinURLPath(...strArray) {
  */
 export function delegateTargetPrototypeMethod(
   derivedCtor: any,
-  constructors: any[]
+  constructors: any[],
+  otherMethods?: string[]
 ) {
   constructors.forEach(baseCtor => {
     Object.getOwnPropertyNames(baseCtor.prototype).forEach(name => {
@@ -130,6 +131,9 @@ export function delegateTargetPrototypeMethod(
       }
     });
   });
+  if (otherMethods) {
+    delegateTargetMethod(derivedCtor, otherMethods);
+  }
 }
 
 /**
