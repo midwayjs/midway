@@ -7,6 +7,10 @@ describe('/test/index.test.ts', () => {
   it('test single client', async () => {
     const app = await createLightApp(join(__dirname, './fixtures/base-app-single-client'));
     const redisService = await app.getApplicationContext().getAsync(RedisService);
+    // test event
+    redisService.on('connect', () => {
+      console.log('redis connect');
+    });
     await redisService.set('foo', 'bar');
     const result = await redisService.get('foo');
     expect(result).toEqual('bar');

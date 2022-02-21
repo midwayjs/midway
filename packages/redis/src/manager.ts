@@ -115,4 +115,4 @@ export interface RedisService extends Redis.Redis {
   // empty
 }
 
-delegateTargetPrototypeMethod(RedisService, [Redis]);
+delegateTargetPrototypeMethod(RedisService, [Redis], ['on']);
