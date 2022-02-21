@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.9](https://github.com/midwayjs/midway/compare/v3.0.8...v3.0.9) (2022-02-21)
+
+
+### Bug Fixes
+
+* missing getLocalTask method ([#1728](https://github.com/midwayjs/midway/issues/1728)) ([1c916e9](https://github.com/midwayjs/midway/commit/1c916e9f6bb8de6ea8b64f45f8043ca315396d62))
+
+
+
+
+
 ## [3.0.8](https://github.com/midwayjs/midway/compare/v3.0.7...v3.0.8) (2022-02-19)
 
 **Note:** Version bump only for package @midwayjs/task

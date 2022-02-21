@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.9](https://github.com/midwayjs/midway/compare/v3.0.8...v3.0.9) (2022-02-21)
+
+
+### Bug Fixes
+
+* egg missing setAttr and getAttr ([#1730](https://github.com/midwayjs/midway/issues/1730)) ([7c6de3f](https://github.com/midwayjs/midway/commit/7c6de3ffa437e23f717efa0065ba60e482b3d225))
+
+
+
+
+
 ## [3.0.7](https://github.com/midwayjs/midway/compare/v3.0.6...v3.0.7) (2022-02-17)
 
 **Note:** Version bump only for package @midwayjs/web

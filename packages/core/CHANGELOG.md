@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.9](https://github.com/midwayjs/midway/compare/v3.0.8...v3.0.9) (2022-02-21)
+
+
+### Bug Fixes
+
+* redis on method missing ([#1729](https://github.com/midwayjs/midway/issues/1729)) ([61fde02](https://github.com/midwayjs/midway/commit/61fde024324b9774d51dd9ebd805883207f783b5))
+
+
+
+
+
 ## [3.0.7](https://github.com/midwayjs/midway/compare/v3.0.6...v3.0.7) (2022-02-17)
 
 **Note:** Version bump only for package @midwayjs/core
