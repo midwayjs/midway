@@ -10,7 +10,9 @@ import {
   MidwayContainer,
 } from '../src';
 import { join } from 'path';
-import { Configuration, CONFIGURATION_KEY, Framework, Inject } from '@midwayjs/decorator';
+import { Configuration, CONFIGURATION_KEY, Framework, Inject, sleep } from '@midwayjs/decorator';
+import * as http from 'http';
+import * as getRawBody from 'raw-body';
 
 /**
  * 任意一个数组中的对象，和预期的对象属性一致即可
@@ -134,4 +136,56 @@ export async function createLightFramework(baseDir: string = '', globalConfig: a
   });
 
   return container.get(EmptyFramework);
+}
+
+export async function createHttpServer(options?: {
+  timeout?: number;
+}): Promise<{
+  getPort(): number;
+  close();
+}> {
+  options = options || {};
+  return new Promise((resolve, reject) => {
+    const server = http.createServer(async (req, response) => {
+      if (options.timeout) {
+        await sleep(options.timeout);
+      }
+      response.statusCode = 200;
+      let body;
+      if (req.method === 'POST') {
+        body = await getRawBody(req, {
+          encoding: true,
+        });
+        body = JSON.parse(body);
+      }
+      if (/javascript/.test(req.headers['content-type'])) {
+        response.setHeader('content-type', 'text/javascript');
+        response.end(JSON.stringify({
+          headers: req.headers,
+          url: req.url,
+          method: req.method,
+          message: body ?? 'hello world',
+        }));
+      } else {
+        response.setHeader('content-type', 'text/plain');
+        response.end(JSON.stringify({
+          headers: req.headers,
+          url: req.url,
+          method: req.method,
+          message: body ??'hello world',
+        }));
+      }
+    });
+
+    server.listen(0, () => {
+      resolve({
+        getPort() {
+          return server.address()['port'];
+        },
+        close() {
+          server.close();
+        }
+      });
+    })
+  })
 }
