@@ -87,5 +87,14 @@ describe('/test/issue.test.ts', () => {
     expect(result.text).toMatch('来自 ClientCheckerMiddleware 的值');
     await closeApp(app);
   });
+
+  it('test #1727 issue add setAttr and getAttr', async () => {
+    const app = await creatApp('issue/base-app-setAttr');
+    let result = await createHttpRequest(app).get('/api/user');
+    expect(result.status).toEqual(200);
+    expect(result.text).toMatch('hello worldbcd');
+
+    await closeApp(app);
+  });
 });
 

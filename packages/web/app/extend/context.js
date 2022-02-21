@@ -25,4 +25,12 @@ module.exports = {
   set logger(customLogger) {
     this[ctxLogger] = customLogger;
   },
+
+  setAttr(key, value) {
+    this.requestContext.setAttr(key, value);
+  },
+
+  getAttr(key) {
+    return this.requestContext.getAttr(key);
+  },
 };

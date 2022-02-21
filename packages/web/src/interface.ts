@@ -35,12 +35,6 @@ declare module 'egg' {
   interface Context <ResponseBodyT = any> extends IMidwayBaseContext {
     getLogger(name?: string): ILogger;
   }
-
-  interface EggAppConfig {
-    midwayFeature: {
-      replaceEggLogger: boolean;
-    }
-  }
 }
 
 export type IMidwayWebApplication = IMidwayApplication<Context, EggApplication & IMidwayWebBaseApplication>;
