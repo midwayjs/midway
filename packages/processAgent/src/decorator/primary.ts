@@ -29,7 +29,16 @@ export function RunInPrimary() {
                 reject(err);
                 return;
               }
-              resolve(body);
+              const res2 = JSON.parse(body);
+              if (res2.midwayError) {
+                const error = new Error();
+                error.name = res2.name;
+                error.message = res2.message;
+                error.stack = res2.stack;
+                reject(error);
+                return;
+              }
+              resolve(res2);
             }
           );
         });

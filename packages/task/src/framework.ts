@@ -2,6 +2,7 @@ import { BaseFramework, IMidwayBootstrapOptions } from '@midwayjs/core';
 import {
   Framework,
   getClassMetadata,
+  Inject,
   listModule,
   MidwayFrameworkType,
   MODULE_TASK_KEY,
@@ -16,11 +17,15 @@ import * as Bull from 'bull';
 import { CronJob } from 'cron';
 import { Application, Context, IQueue } from './interface';
 import { deprecatedOutput } from '@midwayjs/core';
+import { QueueService } from './service/queueService';
 
 @Framework()
 export class TaskFramework extends BaseFramework<Application, Context, any> {
   queueList: any[] = [];
   jobList: any[] = [];
+
+  @Inject()
+  queueService: QueueService;
 
   applicationInitialize(options: IMidwayBootstrapOptions) {
     this.app = {} as any;
@@ -46,7 +51,7 @@ export class TaskFramework extends BaseFramework<Application, Context, any> {
     }
     const taskConfig = this.configService.getConfiguration('task');
     const modules = listModule(MODULE_TASK_KEY);
-    const queueTaskMap = {};
+
     for (const module of modules) {
       const rules = getClassMetadata(MODULE_TASK_METADATA, module);
       for (const rule of rules) {
@@ -69,7 +74,10 @@ export class TaskFramework extends BaseFramework<Application, Context, any> {
           }
           logger.info('task end.');
         });
-        queueTaskMap[`${rule.name}:${rule.propertyKey}`] = queue;
+        this.queueService.saveQueueTask(
+          `${rule.name}:${rule.propertyKey}`,
+          queue
+        );
         const allJobs = await queue.getRepeatableJobs();
         if (allJobs.length > 0) {
           if (
@@ -87,7 +95,6 @@ export class TaskFramework extends BaseFramework<Application, Context, any> {
         this.queueList.push(queue);
       }
     }
-    this.applicationContext.registerObject('queueTaskMap', queueTaskMap);
   }
 
   async loadLocalTask() {
@@ -96,32 +103,37 @@ export class TaskFramework extends BaseFramework<Application, Context, any> {
     for (const module of modules) {
       const rules = getClassMetadata(MODULE_TASK_TASK_LOCAL_OPTIONS, module);
       for (const rule of rules) {
+        const triggerFunction = async () => {
+          const requestId = Utils.randomUUID();
+          const ctx = this.app.createAnonymousContext({
+            taskInfo: {
+              type: 'LocalTask',
+              id: requestId,
+              trigger: `${module.name}:${rule.propertyKey}`,
+            },
+          });
+          const { logger } = ctx;
+          try {
+            const service = await ctx.requestContext.getAsync(module);
+            logger.info('local task start.');
+            await Utils.toAsyncFunction(rule.value.bind(service))();
+          } catch (err) {
+            logger.error(err);
+          }
+          logger.info('local task end.');
+        };
         const job = new CronJob(
           rule.options,
-          async () => {
-            const requestId = Utils.randomUUID();
-            const ctx = this.app.createAnonymousContext({
-              taskInfo: {
-                type: 'LocalTask',
-                id: requestId,
-                trigger: `${module.name}:${rule.propertyKey}`,
-              },
-            });
-            const { logger } = ctx;
-            try {
-              const service = await ctx.requestContext.getAsync(module);
-              logger.info('local task start.');
-              await Utils.toAsyncFunction(rule.value.bind(service))();
-            } catch (err) {
-              logger.error(err);
-            }
-            logger.info('local task end.');
-          },
+          triggerFunction,
           null,
           true,
           taskConfig.defaultJobOptions.repeat.tz
         );
         job.start();
+        this.queueService.saveLocalTask(
+          `${module.name}:${rule.propertyKey}`,
+          triggerFunction
+        );
         this.jobList.push(job);
       }
     }
@@ -129,7 +141,6 @@ export class TaskFramework extends BaseFramework<Application, Context, any> {
 
   async loadQueue() {
     const modules = listModule(MODULE_TASK_QUEUE_KEY);
-    const queueMap = {};
     const taskConfig = this.configService.getConfiguration('task');
     const config = JSON.parse(JSON.stringify(taskConfig));
     const concurrency = config.concurrency || 1;
@@ -158,10 +169,9 @@ export class TaskFramework extends BaseFramework<Application, Context, any> {
         }
         logger.info('queue process end.');
       });
-      queueMap[`${rule.name}:execute`] = queue;
+      this.queueService.saveQueue(`${rule.name}:execute`, queue);
       this.queueList.push(queue);
     }
-    this.applicationContext.registerObject('queueMap', queueMap);
   }
 
   protected async beforeStop() {
