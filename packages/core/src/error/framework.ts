@@ -14,6 +14,7 @@ export const FrameworkErrorEnum = registerErrorCode('midway', {
   USE_WRONG_METHOD: 10009,
   SINGLETON_INJECT_REQUEST: 10010,
   MISSING_IMPORTS: 10011,
+  UTIL_HTTP_TIMEOUT: 10012,
 } as const);
 
 export class MidwayCommonError extends MidwayError {
@@ -121,5 +122,11 @@ export class MidwayMissingImportComponentError extends MidwayError {
   constructor(originName: string) {
     const text = `"${originName}" can't inject and maybe forgot add "{imports: [***]}" in @Configuration.`;
     super(text, FrameworkErrorEnum.MISSING_IMPORTS);
+  }
+}
+
+export class MidwayUtilHttpClientTimeoutError extends MidwayError {
+  constructor(message: string) {
+    super(message, FrameworkErrorEnum.UTIL_HTTP_TIMEOUT);
   }
 }

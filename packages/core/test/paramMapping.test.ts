@@ -1,10 +1,13 @@
-import {  RouteParamTypes } from '@midwayjs/decorator';
+import { ALL, RouteParamTypes } from '@midwayjs/decorator';
 import { extractKoaLikeValue, extractExpressLikeValue } from '../src';
 
 describe('/test/web/paramMapping.test.ts', () => {
   it('extract koa value should be ok', async () => {
     let fn = extractKoaLikeValue(RouteParamTypes.NEXT, {});
     expect(await fn({}, 'next')).toEqual('next');
+
+    fn = extractKoaLikeValue(RouteParamTypes.BODY, ALL);
+    expect(await fn({request: { body : {aaa: 111}}}, 'next')).toStrictEqual({aaa: 111});
 
     fn = extractKoaLikeValue(RouteParamTypes.BODY, 'aaa');
     expect(await fn({request: { body : {aaa: 111}}}, 'next')).toEqual(111);
@@ -53,6 +56,7 @@ describe('/test/web/paramMapping.test.ts', () => {
     expect(await fn({ip: '127.0.0.1'}, 'next')).toStrictEqual('127.0.0.1');
 
     fn = extractKoaLikeValue(RouteParamTypes.FILESTREAM, {});
+    expect(await fn({query: {}}, 'next')).toEqual(undefined);
     expect(await fn({
       files: [
         {
@@ -87,11 +91,18 @@ describe('/test/web/paramMapping.test.ts', () => {
         "mimeType": "application/pdf"
       }
     ]);
+    expect(await fn({query: {}}, 'next')).toEqual(undefined);
+
+    fn = extractKoaLikeValue(RouteParamTypes.FIELDS, undefined);
+    expect(await fn({fields: {a: 1}}, 'next')).toEqual({a: 1});
   });
 
   it('extract express value should be ok', async () => {
     let fn = extractExpressLikeValue(RouteParamTypes.NEXT, {});
     expect(await fn({}, {}, 'next')).toEqual('next');
+
+    fn = extractExpressLikeValue(RouteParamTypes.BODY, ALL);
+    expect(await fn({ body : {aaa: 111}}, {}, 'next')).toEqual({aaa: 111});
 
     fn = extractExpressLikeValue(RouteParamTypes.BODY, 'aaa');
     expect(await fn({ body : {aaa: 111}}, {}, 'next')).toEqual(111);
@@ -162,5 +173,8 @@ describe('/test/web/paramMapping.test.ts', () => {
 
     fn = extractExpressLikeValue(RouteParamTypes.REQUEST_IP, null);
     expect(await fn({ip: '127.0.0.1'}, {}, 'next')).toStrictEqual('127.0.0.1');
+
+    fn = extractExpressLikeValue(RouteParamTypes.FIELDS, undefined);
+    expect(await fn({fields: {a: 1}}, {}, 'next')).toEqual({a: 1});
   });
 });
