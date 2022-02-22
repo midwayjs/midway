@@ -28,6 +28,16 @@ $ npm i @types/koa --save-dev
 }
 ```
 
+也可以直接使用脚手架创建示例。
+
+```bash
+# npm v6
+$ npm init midway --type=koa-v3 my_project
+
+# npm v7
+$ npm init midway -- --type=koa-v3 my_project
+```
+
 
 
 ## 开启组件

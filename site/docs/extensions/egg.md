@@ -47,6 +47,16 @@ $ npm i @midwayjs/egg-ts-helper --save-dev
 | egg-scripts             | **可选**，EggJS 启动脚本                           |
 | @midwayjs/egg-ts-helper | **可选**，EggJS 定义生成工具                       |
 
+也可以直接使用脚手架创建示例。
+
+```bash
+# npm v6
+$ npm init midway --type=egg-v3 my_project
+
+# npm v7
+$ npm init midway -- --type=egg-v3 my_project
+```
+
 
 
 ## 开启组件
