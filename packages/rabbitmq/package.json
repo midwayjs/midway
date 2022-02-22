@@ -27,7 +27,7 @@
     "@midwayjs/mock": "^3.0.9",
     "@types/amqplib": "0.8.2",
     "amqplib": "0.8.0",
-    "fs-extra": "10.0.0"
+    "fs-extra": "10.0.1"
   },
   "dependencies": {
     "@midwayjs/core": "^3.0.9",

@@ -21,7 +21,7 @@
     "@midwayjs/serverless-fc-trigger": "^3.0.9",
     "@midwayjs/serverless-scf-starter": "^3.0.4",
     "@midwayjs/serverless-scf-trigger": "^3.0.9",
-    "fs-extra": "10.0.0"
+    "fs-extra": "10.0.1"
   },
   "engines": {
     "node": ">=12"

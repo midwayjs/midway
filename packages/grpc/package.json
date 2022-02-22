@@ -25,7 +25,7 @@
   "devDependencies": {
     "@midwayjs/decorator": "^3.0.7",
     "@midwayjs/mock": "^3.0.9",
-    "fs-extra": "10.0.0"
+    "fs-extra": "10.0.1"
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.2.1",
