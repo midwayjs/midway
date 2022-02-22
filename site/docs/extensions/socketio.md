@@ -722,7 +722,7 @@ export class UserController {
 ### 获取连接数
 ```typescript
 const count = app.engine.clientsCount;		// 获取所有的连接数
-const count app.of('/').sockets.size;			// 获取单个 namespace 里的连接数
+const count = app.of('/').sockets.size;			// 获取单个 namespace 里的连接数
 ```
 
 
