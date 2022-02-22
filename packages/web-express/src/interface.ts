@@ -6,7 +6,13 @@ import {
   IMidwayApplication,
   IMidwayContext
 } from '@midwayjs/core';
-import { Application as ExpressApplication, NextFunction as ExpressNextFunction, Request as ExpressRequest, Response as ExpressResponse } from 'express';
+import {
+  Application as ExpressApplication,
+  CookieOptions,
+  NextFunction as ExpressNextFunction,
+  Request as ExpressRequest,
+  Response as ExpressResponse
+} from 'express';
 import { Options, OptionsJson, OptionsText, OptionsUrlencoded } from 'body-parser';
 
 type Request = IMidwayContext<ExpressRequest>;
@@ -76,6 +82,10 @@ export type Application = IMidwayExpressApplication;
 declare module '@midwayjs/core/dist/interface' {
   interface MidwayConfig {
     express?: IMidwayExpressConfigurationOptions;
+    cookieParser?: {
+      secret?: string | string[];
+      options?: CookieOptions;
+    };
     bodyParser?: {
       enable?: boolean;
       json?: OptionsJson & {
@@ -90,6 +100,6 @@ declare module '@midwayjs/core/dist/interface' {
       urlencoded?: OptionsUrlencoded & {
         enable?: boolean;
       };
-    }
+    };
   }
 }
