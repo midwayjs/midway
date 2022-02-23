@@ -324,7 +324,8 @@ export interface IMidwayContainer extends IObjectFactory, IObjectLifeCycle {
 export type IApplicationContext = IMidwayContainer;
 
 export interface IFileDetector {
-  run(container: IMidwayContainer);
+  run(container: IMidwayContainer, fileDetectorOptions?: Record<string, any>);
+  setExtraDetectorOptions(detectorOptions: Record<string, any>);
 }
 
 export interface IConfigService {

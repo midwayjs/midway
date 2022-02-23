@@ -43,6 +43,7 @@ import { MidwayEnvironmentService } from '../service/environmentService';
 import { MidwayConfigService } from '../service/configService';
 import * as EventEmitter from 'events';
 import { MidwayDefinitionNotFoundError } from '../error';
+import { extend } from '../util/extend';
 
 const debug = util.debuglog('midway:debug');
 const debugBind = util.debuglog('midway:bind');
@@ -50,6 +51,7 @@ const debugBind = util.debuglog('midway:bind');
 class ContainerConfiguration {
   private loadedMap = new WeakMap();
   private namespaceList = [];
+  private detectorOptionsList = [];
   constructor(readonly container: IMidwayContainer) {}
 
   load(module) {
@@ -85,6 +87,9 @@ class ContainerConfiguration {
         if (configurationOptions.namespace !== undefined) {
           namespace = configurationOptions.namespace;
           this.namespaceList.push(namespace);
+        }
+        if (configurationOptions.detectorOptions) {
+          this.detectorOptionsList.push(configurationOptions.detectorOptions);
         }
         debug(`[core]: load configuration in namespace="${namespace}"`);
         this.addImports(configurationOptions.imports);
@@ -211,6 +216,10 @@ class ContainerConfiguration {
   public getNamespaceList() {
     return this.namespaceList;
   }
+
+  public getDetectorOptionsList() {
+    return this.detectorOptionsList;
+  }
 }
 
 export class MidwayContainer implements IMidwayContainer, IModuleStore {
@@ -287,6 +296,12 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
         this.namespaceSet.add(ns);
         debug(`[core]: load configuration in namespace="${ns}" complete`);
       }
+
+      const detectorOptionsMerged = {};
+      for (const detectorOptions of configuration.getDetectorOptionsList()) {
+        extend(true, detectorOptionsMerged, detectorOptions);
+      }
+      this.fileDetector?.setExtraDetectorOptions(detectorOptionsMerged);
     }
   }
 

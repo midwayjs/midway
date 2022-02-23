@@ -18,7 +18,10 @@ export interface InjectionConfigurationOptions {
     | Array<{ [environmentName: string]: Record<string, any> }>
     | Record<string, any>;
   namespace?: string;
-  directoryResolveFilter?: ResolveFilter[];
+  detectorOptions?: Record<string, any>;
+  /**
+   * @deprecated
+   */
   conflictCheck?: boolean;
 }
 
