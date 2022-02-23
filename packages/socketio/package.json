@@ -26,7 +26,7 @@
     "@midwayjs/decorator": "^3.0.7",
     "@midwayjs/mock": "^3.0.9",
     "@types/socket.io-client": "1.4.36",
-    "fs-extra": "10.0.0",
+    "fs-extra": "10.0.1",
     "socket.io-client": "4.4.1"
   },
   "dependencies": {

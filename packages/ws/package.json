@@ -25,7 +25,7 @@
     "@midwayjs/decorator": "^3.0.7",
     "@midwayjs/mock": "^3.0.9",
     "@types/ws": "8.2.3",
-    "fs-extra": "10.0.0"
+    "fs-extra": "10.0.1"
   },
   "dependencies": {
     "@midwayjs/core": "^3.0.9",
