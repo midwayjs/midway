@@ -4,17 +4,26 @@
 
 从 Midway v2 升级到 Midway v3，会有一些 Breaking Change。本篇文档会详细列出这些 Breaking 的地方，让用户可以提前知道变化，做出应对。
 
-:::info
-v2 的用户请不要着急升级，我们后续将会提供自动化升级脚本。
-:::
 
 
-## 面对普通用户
+## 自动升级工具
+
+**在升级前，请切出一个新的分支，避免升级失败导致无法恢复！！！**
+
+拷贝以下脚本，在项目根目录执行：
+
+```bash
+$ npx --ignore-existing midway-upgrade
+```
+
+
+
+## 手动升级
 
 **midway v3 支持从 node v12 起。**
 
 
-### 包版本
+### 包版本更新
 
 所有的组件包，核心包都将升级为 3.x 版本。
 
@@ -240,7 +249,26 @@ const env = environmentService.getCurrentEnvironment();
 
 
 
-## 面对组件/框架开发者
+## @midwayjs/web（egg）部分调整
+
+
+
+### 添加 egg-mock
+
+由于框架移除了 egg-mock 包，在新版本 `package.json` 需要手动引用。
+
+```json
+{
+  "devDependencies": {
+    "egg/mock": "^3.0.0",
+    // ...
+  }
+}
+```
+
+
+
+## 其他面对组件/框架开发者的调整
 
 
 
