@@ -118,6 +118,7 @@ export const task = {};
 ```
 
 
+
 ### 配置的绝对路径
 
 
@@ -265,6 +266,42 @@ const env = environmentService.getCurrentEnvironment();
   }
 }
 ```
+
+
+
+## 日志配置
+
+新版本，统一使用 @midwayjs/logger，不管是不是启用 egg logger。
+
+为了和 egg 日志不冲突，我们使用了新的 key。
+
+旧
+
+```typescript
+export const logger = {
+  level: 'warn',
+  consoleLevel: 'info'
+}
+```
+
+新
+
+```typescript
+export const midwayLogger = {
+  default: {
+    level: 'warn',
+    consoleLevel: 'info'
+  }
+}
+```
+
+其余的更具体配置，请参考 [日志章节](logger)。
+
+
+
+## egg 插件
+
+默认的 egg 日志切割插件，我们在框架中直接关闭了（midway logger 自带了切割）。
 
 
 
