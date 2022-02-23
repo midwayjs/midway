@@ -77,7 +77,6 @@ export class ContainerLifeCycle {
 
   async onReady() {}
 }
-
 ```
 
 
@@ -277,7 +276,7 @@ export class APIMatchFilter {
     // ...
     return {
       data: {
-        message: 
+        message:
         data: value,
       },
     };
@@ -323,7 +322,7 @@ import { Context, Response } from '@midwayjs/express';
 
 @Catch()
 export class GlobalError {
-  catch(err: Error, req,: Context res: Response) {
+  catch(err: Error, req: Context, res: Response) {
     if (err) {
       return {
         status: err.status ?? 500,
@@ -422,7 +421,7 @@ export default {
 ```typescript
 @Controller('/')
 export class HomeController {
-  
+
   @Inject()
   req;
 
@@ -430,19 +429,19 @@ export class HomeController {
   async get() {
     // set all
     this.req.session = req.query;
-    
+
     // set value
     this.req.session.key = 'abc';
-    
+
     // get
     const key = this.req.session.key;
-    
+
     // remove
     this.req.session = null;
-    
+
     // set max age
     this.req.session.maxAge = Number(req.query.maxAge);
-    
+
     // ...
   }
 }

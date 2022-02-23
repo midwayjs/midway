@@ -91,7 +91,29 @@ $ npm i @midwayjs/validate@3 --save
 }
 ```
 
+## 开启组件
 
+在 `configuration.ts` 中增加组件。
+
+```typescript
+import { Configuration, App } from '@midwayjs/decorator';
+import * as koa from '@midwayjs/koa';
+import * as validate from '@midwayjs/validate';
+import { join } from 'path';
+
+@Configuration({
+  imports: [koa, validate],
+  importConfigs: [join(__dirname, './config')],
+})
+export class ContainerLifeCycle {
+  @App()
+  app: koa.Application;
+
+  async onReady() {
+    // ...
+  }
+}
+```
 
 ## 定义检查规则
 
