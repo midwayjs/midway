@@ -250,7 +250,7 @@ const env = environmentService.getCurrentEnvironment();
 
 
 
-## @midwayjs/web（egg）部分调整
+## @midwayjs/web（egg）部分
 
 
 
@@ -269,11 +269,11 @@ const env = environmentService.getCurrentEnvironment();
 
 
 
-## 日志配置
+### 日志配置
 
 新版本，统一使用 @midwayjs/logger，不管是不是启用 egg logger。
 
-为了和 egg 日志不冲突，我们使用了新的 key。
+为了和 egg 日志不冲突，我们使用了新的 key，原有的 `midwayFeature` 字段不再使用。
 
 旧
 
@@ -295,11 +295,11 @@ export const midwayLogger = {
 }
 ```
 
-其余的更具体配置，请参考 [日志章节](logger)。
+其余的更具体配置，请参考 [日志章节 ](logger) 中的自定义部分。
 
 
 
-## egg 插件
+### egg 插件
 
 默认的 egg 日志切割插件，我们在框架中直接关闭了（midway logger 自带了切割）。
 
