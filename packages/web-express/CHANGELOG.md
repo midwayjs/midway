@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.10](https://github.com/midwayjs/midway/compare/v3.0.9...v3.0.10) (2022-02-24)
+
+
+### Bug Fixes
+
+* missing express cookie parser typings ([#1735](https://github.com/midwayjs/midway/issues/1735)) ([965e850](https://github.com/midwayjs/midway/commit/965e850e004f39870e8d371be573ecfc754e4627))
+
+
+
+
+
 ## [3.0.9](https://github.com/midwayjs/midway/compare/v3.0.8...v3.0.9) (2022-02-21)
 
 **Note:** Version bump only for package @midwayjs/express

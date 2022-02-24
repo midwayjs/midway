@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.10](https://github.com/midwayjs/midway/compare/v3.0.9...v3.0.10) (2022-02-24)
+
+
+### Bug Fixes
+
+* **deps:** update dependency raw-body to v2.5.0 ([#1731](https://github.com/midwayjs/midway/issues/1731)) ([6caec96](https://github.com/midwayjs/midway/commit/6caec96b976b9dce1a8cda4d3f809efd346ceaf5))
+* missing express cookie parser typings ([#1735](https://github.com/midwayjs/midway/issues/1735)) ([965e850](https://github.com/midwayjs/midway/commit/965e850e004f39870e8d371be573ecfc754e4627))
+* remove configuration resolve handler and add detectorOptions ([#1740](https://github.com/midwayjs/midway/issues/1740)) ([7af24e8](https://github.com/midwayjs/midway/commit/7af24e8cc55f0ba798b4d774084ace4069a8a54c))
+
+
+
+
+
 ## [3.0.9](https://github.com/midwayjs/midway/compare/v3.0.8...v3.0.9) (2022-02-21)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.10](https://github.com/midwayjs/midway/compare/v3.0.9...v3.0.10) (2022-02-24)
+
+
+### Bug Fixes
+
+* remove configuration resolve handler and add detectorOptions ([#1740](https://github.com/midwayjs/midway/issues/1740)) ([7af24e8](https://github.com/midwayjs/midway/commit/7af24e8cc55f0ba798b4d774084ace4069a8a54c))
+
+
+
+
+
 ## [3.0.7](https://github.com/midwayjs/midway/compare/v3.0.6...v3.0.7) (2022-02-17)
 
 **Note:** Version bump only for package @midwayjs/decorator
