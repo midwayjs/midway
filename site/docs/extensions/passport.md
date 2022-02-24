@@ -139,6 +139,7 @@ import { Inject, Middleware } from '@midwayjs/decorator';
 import { PassportMiddleware } from '@midwayjs/passport';
 import { Context } from '@midwayjs/express';
 import { LocalStrategy } from './strategy/local.strategy.ts'
+import * as passport from 'passport';
 
 @Middleware()
 export class LocalPassportMiddleware extends PassportMiddleware(LocalStrategy) {
@@ -229,6 +230,7 @@ export class JwtStrategy extends PassportStrategy(
 import { Middleware } from '@midwayjs/decorator';
 import { PassportMiddleware } from '@midwayjs/passport';
 import { JwtStrategy } from './strategy/jwt-strategy';
+import * as passport from 'passport';
 
 @Middleware()
 export class JwtPassportMiddleware extends PassportMiddleware(JwtStrategy) {
@@ -283,7 +285,7 @@ curl http://127.0.0.1:7001/passport/jwt -H "Authorization: Bearer xxxxxxxxxxxxxx
 
 ## 自定义其他策略
 
-`@midwayjs/passport` 支持自定义[其他策略](http://www.passportjs.org/packages/)，这里以github oauth 为例。
+`@midwayjs/passport` 支持自定义[其他策略](http://www.passportjs.org/packages/)，这里以 Github OAuth 为例。
 首先 `npm i passport-github`，之后编写如下代码：
 
 ```typescript
