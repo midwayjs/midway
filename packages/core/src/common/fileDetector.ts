@@ -7,6 +7,7 @@ export abstract class AbstractFileDetector<T> implements IFileDetector {
   extraDetectorOptions: T;
   constructor(options) {
     this.options = options;
+    this.extraDetectorOptions = {} as T;
   }
 
   abstract run(container: IMidwayContainer);
