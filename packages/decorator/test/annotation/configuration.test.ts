@@ -5,6 +5,9 @@ import { Configuration, getClassMetadata, CONFIGURATION_KEY } from '../../src';
   importObjects: { aa: { bb: 1 } },
   imports: ['./nodes'],
   namespace: 'hello',
+  detectorOptions: {
+    a: 1
+  }
 })
 class Test {}
 
@@ -19,6 +22,9 @@ describe('/test/annotation/configuration.test.ts', () => {
       importObjects: { aa: { bb: 1 } },
       imports: ['./nodes'],
       namespace: 'hello',
+      detectorOptions: {
+        a: 1
+      },
     });
 
     const metaone = getClassMetadata(CONFIGURATION_KEY, TestOne);

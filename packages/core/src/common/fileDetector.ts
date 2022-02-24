@@ -4,11 +4,17 @@ import { run } from '@midwayjs/glob';
 
 export abstract class AbstractFileDetector<T> implements IFileDetector {
   options: T;
+  extraDetectorOptions: T;
   constructor(options) {
     this.options = options;
+    this.extraDetectorOptions = {} as T;
   }
 
   abstract run(container: IMidwayContainer);
+
+  setExtraDetectorOptions(detectorOptions: T) {
+    this.extraDetectorOptions = detectorOptions;
+  }
 }
 
 const DEFAULT_PATTERN = ['**/**.ts', '**/**.tsx', '**/**.js'];
@@ -35,14 +41,20 @@ export class DirectoryFileDetector extends AbstractFileDetector<{
   private directoryFilterArray: ResolveFilter[] = [];
 
   run(container) {
-    const loadDirs = [].concat(this.options.loadDir || []);
+    const loadDirs = []
+      .concat(this.options.loadDir || [])
+      .concat(this.extraDetectorOptions.loadDir || []);
 
     for (const dir of loadDirs) {
       const fileResults = run(
-        DEFAULT_PATTERN.concat(this.options.pattern || []),
+        DEFAULT_PATTERN.concat(this.options.pattern || []).concat(
+          this.extraDetectorOptions.pattern || []
+        ),
         {
           cwd: dir,
-          ignore: DEFAULT_IGNORE_PATTERN.concat(this.options.ignore || []),
+          ignore: DEFAULT_IGNORE_PATTERN.concat(
+            this.options.ignore || []
+          ).concat(this.extraDetectorOptions.ignore || []),
         }
       );
 
