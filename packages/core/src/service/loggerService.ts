@@ -11,7 +11,7 @@ const levelTransform = level => {
   switch (level) {
     case 'NONE':
     case Infinity: // egg logger 的 none 是这个等级
-      return null;
+      return 'none';
     case 0:
     case 'DEBUG':
     case 'debug':
