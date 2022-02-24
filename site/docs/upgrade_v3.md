@@ -269,7 +269,7 @@ const env = environmentService.getCurrentEnvironment();
 
 
 
-### 日志配置
+### 日志
 
 新版本，统一使用 @midwayjs/logger，不管是不是启用 egg logger。
 
@@ -295,13 +295,51 @@ export const midwayLogger = {
 }
 ```
 
+Egg 的 `customLogger` 字段，针对无法修改的 egg 插件，我们做了兼容，对于业务代码，最好做修改。
+
+```typescript
+export const midwayLogger = {
+  default: {
+    level: 'warn',
+    consoleLevel: 'info'
+  },
+  clients: {
+    // 自定义日志
+  	customLoggerA: {
+  		// ...
+  	}
+  }
+}
+```
+
 其余的更具体配置，请参考 [日志章节 ](logger) 中的自定义部分。
 
 
 
 ### egg 插件
 
-默认的 egg 日志切割插件，我们在框架中直接关闭了（midway logger 自带了切割）。
+在 Midway3 中，为了文档和行为统一，我们关闭了大部分 egg 默认插件。
+
+新版本默认插件如下：
+
+```javascript
+module.exports = {
+  onerror: true,
+  security: true,
+  static: false,
+  development: false,
+  watcher: false,
+  multipart: false,
+  logrotator: false,
+  view: false,
+  schedule: false,
+  i18n: false,
+}
+```
+
+请酌情开启（可能会和 midway 能力冲突）。
+
+默认的 egg 日志切割插件（logrotator），由于日志不再支持 egg logger，我们在框架中直接关闭了（midway logger 自带了切割）。
 
 
 

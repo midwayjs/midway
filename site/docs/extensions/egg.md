@@ -3,18 +3,8 @@
 Midway 可以使用 EggJS 作为上层 Web 框架，EggJS 提供了非常多常用的插件和 API，帮助用户快速构建企业级 Web 应用。本章节内容，主要介绍 EggJS 在 Midway 中如何使用自身的能力。
 
 :::tip
-Egg.js 的调整暂未完成，请等待完成后再使用。
+Egg.js 的文档调整进行中，请等待完成后再使用。
 :::
-
-
-
-相关信息：
-
-| 描述                 |      |
-| -------------------- | ---- |
-| 可作为主框架独立使用 | ✅    |
-| 包含自定义日志       | ✅    |
-| 可独立添加中间件     | ✅    |
 
 
 
@@ -86,7 +76,7 @@ export class ContainerLifeCycle {
 ## 和默认 EggJS 的不同之处
 
 
-- 1、从 v3 开始，midway 提供了更多的组件，默认将 egg 内置插件全部禁用
+- 1、从 v3 开始，midway 提供了更多的组件，大部分 egg 内置插件默认禁用
 - 2、baseDir 默认调整为 `src` 目录，服务器上为 `dist` 目录
 - 3、禁用 egg-logger，全部替换为 @midwayjs/logger，不可切换
 
@@ -156,39 +146,29 @@ Midway 在脚手架中提供了标准的 EggJS 的 TS 配置写法，其中包�
 ```typescript
 // src/config/config.default.ts
 
-import { EggAppConfig, EggAppInfo, PowerPartial } from 'egg';
+import { EggAppConfig, PowerPartial } from 'egg';
+import { MidwayConfig, MidwayAppInfo } from '@midwayjs/core';
 
-export type DefaultConfig = PowerPartial<EggAppConfig>
+export type DefaultConfig = PowerPartial<EggAppConfig>;
 
-export default (appInfo: EggAppInfo) => {
-  const config = {} as DefaultConfig;
-
-  // use for cookie sign key, should change to your own and keep security
-  config.keys = appInfo.name + '_1600001669991_8079';
-
-  config.middleware = [
-  ];
-
-  config.security = {
-    csrf: {
-      enable: false
-    }
-  }
-
-  config.sequelize = {
-
-  }
-
-  return config;
+export default (appInfo: MidwayAppInfo) => {
+  return {
+    // use for cookie sign key, should change to your own and keep security
+    keys: appInfo.name + '_xxxx',
+    egg: {
+      port: 7001,
+    },
+    // security: {
+    //   csrf: false,
+    // },
+  } as MidwayConfig & DefaultConfig;
 };
 
 ```
 通过这样返回方法的形式，在运行期会被自动执行，合并进完整的配置对象。
 
 
-这个函数的参数为 `EggAppInfo` 类型，值为以下内容。
-
-
+这个函数的参数为 `MidwayAppConfig` 类型，值为以下内容。
 
 | **appInfo** | **说明** |
 | --- | --- |
@@ -208,14 +188,9 @@ export default (appInfo: EggAppInfo) => {
 
 
 
-## 插件
+## 使用 Egg 插件
 
-插件是 EggJS 的特色之一，`@midwayjs/web` 也支持 EggJS 的插件体系。
-
-
-
-
-### 开启插件
+插件是 EggJS 的特色之一，`@midwayjs/web` 也支持 EggJS 的插件体系，但是在有 Midway 组件的情况下，尽可能优先使用 Midway 组件。
 
 
 插件一般通过 npm 模块的方式进行复用。
@@ -246,9 +221,6 @@ export const mysql = {
   package: 'egg-mysql',
 };
 ```
-
-
-### 使用插件
 
 
 在开启插件之后，我们就可以在业务代码中使用插件提供的功能了。一般来说，插件会将对象挂载到 EggJS 的 `app` 和 `ctx` 之上，然后直接使用。
@@ -306,40 +278,19 @@ export class HomeController {
 ## Web 中间件
 
 
-一般情况下，我们会在 `src/middleware` 文件夹中编写 Web 中间件，比如创建一个 `src/middleware/report.ts` 。我们在这个 Web 中间件中打印了控制器（Controller）执行的时间。
-
-
-```
-➜  my_midway_app tree
-.
-├── src
-│   ├── controller
-│   │   ├── user.ts
-│   │   └── home.ts
-│   ├── interface.ts
-│   ├── middleware                   ## 中间件目录
-│   │   └── report.ts
-│   └── service
-│       └── user.ts
-├── test
-├── package.json
-└── tsconfig.json
-```
-
-
-简单来说， `await next()` 则代表了下一个要执行的逻辑，这里一般代表控制器执行，在执行的前后，我们可以进行一些打印和赋值操作，这也是洋葱圈模型最大的优势。
+中间件样例如下：
 
 
 ```typescript
-import { Provide } from '@midwayjs/decorator';
-import { IWebMiddleware, IMidwayWebNext } from '@midwayjs/web';
-import { Context } from 'egg';
+import { Middleware } from '@midwayjs/decorator';
+import { IMiddleware } from '@midwayjs/core';
+import { Context, NextFunction } from '@midwayjs/web';
 
-@Provide()
-export class ReportMiddleware implements IWebMiddleware {
+@Middleware()
+export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
 
   resolve() {
-    return async (ctx: Context, next: IMidwayWebNext) => {
+    return async (ctx: Context, next: NextFunction) => {
       const startTime = Date.now();
       await next();
       console.log(Date.now() - startTime);
@@ -349,73 +300,40 @@ export class ReportMiddleware implements IWebMiddleware {
 }
 ```
 
-
 :::caution
-注意，如果要继续使用 EggJS 传统的函数式写法，必须将文件放在 `src/app/middleware` 下。
+注意
+
+1、如果要继续使用 EggJS 传统的函数式写法，必须将文件放在 `src/app/middleware` 下
+
+2、egg 自带的内置中间件已经集成
+
 :::
 
+应用中间件。
 
-### 配置全局中间件
-
-
-在 EggJS 中，除了上面提到的全局中间件使用方法外，其提供了一个更为配置性的加载全局中间件的用法。在 `src/config/config.default.ts` 中配置 `middleware` 属性即可定义全局中间件，同样的，指定全局中间件的 key 即可。
 ```typescript
-// src/config/config.default.ts
+// src/configuration.ts
+import { App, Configuration } from '@midwayjs/decorator';
+import * as egg from '@midwayjs/web';
+import { ReportMiddleware } from './middleware/user.middleware';
 
-export default (appInfo: EggAppInfo) => {
-  const config = {} as DefaultConfig;
-
+@Configuration({
+  imports: [egg]
   // ...
+})
+export class AutoConfiguration {
 
-  config.middleware = [
-    'reportMiddleware'
-  ];
+  @App()
+  app: egg.Application;
 
-  return config;
-};
-
-```
-
-
-### 配置路由中间件
-
-
-按照 Midway 的通用的配置在路由装饰器即可。
-```typescript
-import { Controller, Get, Provide } from '@midwayjs/decorator';
-
-@Provide()
-@Controller('/', { middleware: ['reportMiddleware']})			// controller 级别的中间件
-export class HomeController {
-
-  @Get('/', { middleware: [ 'reportMiddleware' ]})				// 路由级别的中间件
-  async home() {
+  async onReady() {
+    this.app.useMiddleware(ReportMiddleware);
   }
 }
+
 ```
 
-
-### 关于 Match 和 Ignore
-
-
-EggJS 的中间件支持在 config 中配置 `match` 和 `ignore` ，在 Midway 中，这一特性只会对 EggJS 自己的中间件生效，即只对 `src/app/middleware`  里的函数写法生效。
-
-
-## 模板渲染
-
-
-EggJS 默认的 `egg-view` 提供默认渲染的能力，他默认的模板目录为 `app/view` ，在 Midway 中目前没有对此做调整，所以相应的，view 目录需要放在 `src/app/view` 下。
-
-
-## 文件上传
-
-
-Egg.js 使用 [egg-multipart](https://github.com/eggjs/egg-multipart) 插件进行文件上传处理，可以参考[ egg 文件上传](https://eggjs.org/zh-cn/basics/controller.html#%E8%8E%B7%E5%8F%96%E4%B8%8A%E4%BC%A0%E7%9A%84%E6%96%87%E4%BB%B6)。
-
-
-## 静态文件
-
-请使用 egg 自带的 [静态方案](https://eggjs.org/zh-cn/tutorials/assets.html)。
+更多用法请参考 [Web 中间件](../middleware)
 
 
 
@@ -448,8 +366,6 @@ EggJS 框架通过 [onerror](https://github.com/eggjs/egg-onerror) 插件提供�
 
 
 
-### errorPageUrl
-
 
 onerror 插件的配置中支持 errorPageUrl 属性，当配置了 errorPageUrl 时，一旦用户请求线上应用的 HTML 页面异常，就会重定向到这个地址。
 
@@ -463,97 +379,6 @@ module.exports = {
     errorPageUrl: '/50x.html',
   },
 };
-```
-
-
-### 自定义统一异常处理
-
-
-尽管框架提供了默认的统一异常处理机制，但是应用开发中经常需要对异常时的响应做自定义，特别是在做一些接口开发的时候。框架自带的 onerror 插件支持自定义配置错误处理方法，可以覆盖默认的错误处理方法。
-
-
-```typescript
-// src/config/config.default.ts
-export const onerror = {
-  all(err, ctx) {
-    // 在此处定义针对所有响应类型的错误处理方法
-    // 注意，定义了 config.all 之后，其他错误处理方法不会再生效
-    ctx.body = 'error';
-    ctx.status = 500;
-  },
-  html(err, ctx) {
-    // html hander
-    ctx.body = '<h3>error</h3>';
-    ctx.status = 500;
-  },
-  json(err, ctx) {
-    // json hander
-    ctx.body = { message: 'error' };
-    ctx.status = 500;
-  },
-  jsonp(err, ctx) {
-    // 一般来说，不需要特殊针对 jsonp 进行错误定义，jsonp 的错误处理会自动调用 json 错误处理，并包装成 jsonp 的响应格式
-  },
-};
-```
-
-
-### 404
-
-
-框架并不会将服务端返回的 404 状态当做异常来处理，但是框架提供了当响应为 404 且没有返回 body 时的默认响应。
-
-
-当请求被框架判定为需要 JSON 格式的响应时，会返回一段 JSON：
-```json
-{ "message": "Not Found" }
-```
-当请求被框架判定为需要 HTML 格式的响应时，会返回一段 HTML：
-```html
-<h1>404 Not Found</h1>
-```
-框架支持通过配置，将默认的 HTML 请求的 404 响应重定向到指定的页面。
-```typescript
-// src/config/config.default.ts
-export const notfound = {
-  pageUrl: '/404.html',
-};
-```
-### 自定义 404 响应
-
-
-在一些场景下，我们需要自定义服务器 404 时的响应，和自定义异常处理一样，我们也只需要加入一个中间件即可对 404 做统一处理。
-
-
-```typescript
-// src/middleware/notfound_handler.ts
-
-import { Provide } from '@midwayjs/decorator';
-
-@Provide('notfoundHandler')
-export class NotFoundHandlerMiddleware {
-	resolve() {
-    return async function notFoundHandler(ctx, next) {
-      await next();
-      if (ctx.status === 404 && !ctx.body) {
-        if (ctx.acceptJSON) {
-          ctx.body = { error: 'Not Found' };
-        } else {
-          ctx.body = '<h1>Page Not Found</h1>';
-        }
-      }
-    };
-  }
-}
-```
-
-
-然后在配置中引入中间件。
-
-
-```typescript
-// src/config/config.default.ts
-export const middleware = [ 'notfoundHandler' ];
 ```
 
 
@@ -613,9 +438,6 @@ declare module 'egg' {
 除此之外，还可以扩展其他的定义，MidwayJS 的相关方法也是如此支持的。
 ```typescript
 declare module 'egg' {
-  interface EggAppInfo {										// 扩展 eggInfo
-    appDir: string;
-  }
 
   interface Application {										// 扩展 Application
     applicationContext: IMidwayContainer;
@@ -637,22 +459,122 @@ declare module 'egg' {
 ```
 
 
-## 框架启动参数
+## 
 
-
-`@midwayjs/web`  框架的启动参数如下：
-
-| port | number | 必填，启动的端口 |
-| --- | --- | --- |
-| key | string | Buffer | Array<Buffer | Object> | 可选，HTTPS 证书 key |
-| cert | string | Buffer | Array<Buffer | Object> | 可选，HTTPS 证书 cert |
-| ca | string | Buffer | Array<Buffer | Object> | 可选，HTTPS 证书 ca |
-| hostname | string | 监听的 hostname，默认 127.1 |
-| http2 | boolean | 可选，http2 支持，默认 false |
+## 配置
 
 
 
-这些参数在使用 `bootstrap.js` 启动时生效。
+### 默认配置
+
+```typescript
+// src/config/config.default
+export default {
+  // ...
+  egg: {
+    port: 7001,
+  },
+}
+```
+
+`@midwayjs/web`  所有参数如下：
+
+| port     | number  | 必填，启动的端口             |
+| -------- | ------- | ---------------------------- |
+| key      | string  | Buffer                       |
+| cert     | string  | Buffer                       |
+| ca       | string  | Buffer                       |
+| hostname | string  | 监听的 hostname，默认 127.1  |
+| http2    | boolean | 可选，http2 支持，默认 false |
+
+以上的属性，对本地和使用 `bootstrap.js` 部署的应用生效。
+
+
+
+### 修改端口
+
+:::tip
+
+注意，这个方式只会对本地研发，以及使用 bootstrap.js 文件部署的项目生效。
+
+:::
+
+默认情况下，我们在 `config.default` 提供了 `7001` 的默认端口参数，修改它就可以修改 egg http 服务的默认端口。
+
+比如我们修改为 `6001`：
+
+```typescript
+// src/config/config.default
+export default {
+  // ...
+  egg: {
+    port: 6001,
+  },
+}
+```
+
+默认情况下，单测环境由于需要 supertest 来启动端口，我们的 port 配置为 `null`。
+
+```typescript
+// src/config/config.default
+export default {
+  // ...
+  egg: {
+    port: null,
+  },
+}
+```
+
+此外，也可以通过 `midway-bin dev --ts --port=6001` 的方式来临时修改端口，此方法会覆盖配置中的端口。
+
+
+
+### 全局前缀
+
+此功能请参考 [全局前缀](../controller#全局路由前缀)。
+
+
+
+### Https 配置
+
+在大多数的情况，请尽可能使用外部代理的方式来完成 Https 的实现，比如 Nginx。
+
+在一些特殊场景下，你可以通过配置 SSL 证书（TLS 证书）的方式，来直接开启 Https。
+
+首先，你需要提前准备好证书文件，比如 `ssl.key` 和 `ssl.pem`，key 为服务端私钥，pem 为对应的证书。
+
+然后配置即可。
+
+```typescript
+// src/config/config.default
+import { readFileSync } from 'fs';
+
+export default {
+  // ...
+  egg: {
+    key: readFileSync(join(__dirname, '../ssl/ssl.key'), 'utf8'),
+  	cert: readFileSync(join(__dirname, '../ssl/ssl.pem'), 'utf8'),
+  },
+}
+```
+
+
+
+### 修改上下文日志
+
+可以单独修改 koa 框架的上下文日志。
+
+```typescript
+export default {
+  egg: {
+    contextLoggerFormat: info => {
+      const ctx = info.ctx;
+      return `${info.timestamp} ${info.LEVEL} ${info.pid} [${ctx.userId} - ${Date.now() - ctx.startTime}ms ${ctx.method}] ${info.message}`;
+    }
+    // ...
+  },
+};
+```
 
 
 
@@ -663,7 +585,7 @@ declare module 'egg' {
 
 Midway 提供了 `@midwayjs/egg-ts-hepler` 工具包，用于快速生成 EggJS 开发时所依赖的定义。
 ```bash
-npm install @midwayjs/egg-ts-helper --save-dev
+$ npm install @midwayjs/egg-ts-helper --save-dev
 ```
 在 `package.json` 中加入对应的 `ets` 命令即可，一般来说，我们会在 dev 命令前加入，以保证代码的正确性。
 ```json
