@@ -7,10 +7,6 @@ import { types } from 'util';
 import { HTTPRequest } from './http-request';
 import { loggers } from '@midwayjs/logger';
 
-loggers.addLogger('coreLogger', console);
-loggers.addLogger('appLogger', console);
-loggers.addLogger('logger', console);
-
 const { isAnyArrayBuffer, isArrayBufferView } = types;
 
 const isOutputError = () => {
