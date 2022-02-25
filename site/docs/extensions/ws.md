@@ -19,14 +19,6 @@ Midway 提供了对 [ws](https://www.npmjs.com/package/ws) 模块的支持和封
 | 可用于 Serverless | ❌    |
 | 可用于一体化      | ✅    |
 
-**其他**
-
-| 描述                 |      |
-| -------------------- | ---- |
-| 可作为主框架独立使用 | ✅    |
-| 包含自定义日志       | ❌    |
-| 可独立添加中间件     | ✅    |
-
 
 
 
@@ -54,6 +46,47 @@ $ npm i @types/ws --save-dev
 }
 ```
 
+## 开启组件
+
+`@midwayjs/ws` 可以作为独立主框架使用。
+
+```typescript
+// src/configuration.ts
+import { Configuration } from '@midwayjs/decorator';
+import * as ws from '@midwayjs/ws';
+
+@Configuration({
+  imports: [ws],
+  // ...
+})
+export class ContainerLifeCycle {
+  async onReady() {
+		// ...
+  }
+}
+
+```
+
+也可以附加在其他的主框架下，比如 `@midwayjs/koa` 。
+
+```typescript
+// src/configuration.ts
+import { Configuration } from '@midwayjs/decorator';
+import * as koa from '@midwayjs/koa';
+import * as ws from '@midwayjs/ws';
+
+@Configuration({
+  imports: [koa, ws],
+  // ...
+})
+export class ContainerLifeCycle {
+  async onReady() {
+		// ...
+  }
+}
+
+```
+
 
 
 ## 目录结构
@@ -72,23 +105,25 @@ $ npm i @types/ws --save-dev
 ├── bootstrap.js                  ## 服务启动入口
 └── tsconfig.json
 ```
+
+
 ## 提供 Socket 服务
 
 
 Midway 通过 `@WSController` 装饰器定义 WebSocket 服务。
 ```typescript
-@Provide()
+import { WSController } from '@midwayjs/decorator';
+
 @WSController()
 export class HelloSocketController {
 }
 ```
 当有客户端连接时，会触发 `connection` 事件，我们在代码中可以使用 `@OnWSConnection()` 装饰器来修饰一个方法，当每个客户端第一次连接服务时，将自动调用该方法。
 ```typescript
-import { WSController, Provide, OnWSConnection, Inject } from '@midwayjs/decorator';
+import { WSController, OnWSConnection, Inject } from '@midwayjs/decorator';
 import { Context } from '@midwayjs/ws';
 import * as http from 'http';
 
-@Provide()
 @WSController()
 export class HelloSocketController {
 
@@ -114,10 +149,9 @@ export class HelloSocketController {
 
 WebSocket 是通过事件的监听方式来获取数据。Midway 提供了 `@OnWSMessage()` 装饰器来格式化接收到的事件，每次客户端发送事件，被修饰的方法都将被执行。
 ```typescript
-import { WSController, Provide, OnWSConnection, Inject } from '@midwayjs/decorator';
+import { WSController, OnWSConnection, Inject } from '@midwayjs/decorator';
 import { Context } from '@midwayjs/ws';
 
-@Provide()
 @WSController()
 export class HelloSocketController {
 
@@ -135,10 +169,9 @@ export class HelloSocketController {
 
 我们可以通过 `@WSBroadCast` 装饰器将消息发送到所有连接的客户端上。
 ```typescript
-import { WSController, Provide, OnWSConnection, Inject } from '@midwayjs/decorator';
+import { WSController, OnWSConnection, Inject } from '@midwayjs/decorator';
 import { Context } from '@midwayjs/ws';
 
-@Provide()
 @WSController()
 export class HelloSocketController {
 
@@ -161,39 +194,86 @@ export class HelloSocketController {
 通过 `@OnWSDisConnection` 装饰器，在客户端断连时，做一些额外处理。
 
 
+
 ## 本地测试
 
+### 配置测试端口
 
-和传统 web 的 midway 测试方法一样，我们使用 `createApp` 创建我们的服务端，唯一不同的是，我们要启动一个 WebSocket 服务，比如传递一个端口。
+由于 ws 框架可以独立启动（依附于默认的 http 服务，也可以和其他 midway  框架一起启动）。
+
+当作为独立框架启动时，需要指定端口。
+
 ```typescript
-import { createApp } from '@midwayjs/mock'
+// src/config/config.default
+export default {
+  // ...
+  ws: {
+    port: 3000,
+  },
+}
+```
+
+当作为副框架启动时（比如和 http ，由于 http 在单测时未指定端口（使用 supertest 自动生成），无法很好的测试，可以仅在测试环境显式指定一个端口。
+
+```typescript
+// src/config/config.unittest
+export default {
+  // ...
+  koa: {
+    port: null,
+  },
+  ws: {
+    port: 3000,
+  },
+}
+```
+
+:::tip
+
+- 1、这里的端口仅为 WebSocket 服务在测试时启动的端口。
+- 2、koa 中的端口为 null，在测试环境下由于未配置端口会不启动服务
+
+:::
+
+
+
+### 测试代码
+
+和其他 Midway 测试方法一样，我们使用 `createApp` 创建我们的服务端，唯一不同的是，我们要启动一个 WebSocket 服务。
+
+```typescript
+import { createApp, close } from '@midwayjs/mock'
 import { Framework } from '@midwayjs/ws';
 
 describe('/test/index.test.ts', () => {
 
 	it('should test create webSocket app', async () => {
-    const app = await createApp<Framework>(process.cwd(), { port: 3000});
+    const app = await createApp<Framework>(process.cwd());
 
     //...
 
-    await closeApp(app);
+    await close(app);
   });
 
 });
 ```
+
+
+### 测试客户端
+
 你可以直接使用 `ws` 来测试。也可以使用 Midway 提供的基于 `ws`  模块封装的测试客户端。
 
 
 比如：
 ```typescript
-import { createApp, closeApp, createWebSocketClient } from '@midwayjs/mock';
+import { createApp, close, createWebSocketClient } from '@midwayjs/mock';
 
-/ ... 省略 describe
+// ... 省略 describe
 
 it('should test create websocket app', async () => {
 
   // 创建一个服务
-  const app = await createApp<Framework>(process.cwd(), { port: 3000});
+  const app = await createApp<Framework>(process.cwd());
 
   // 创建一个客户端
   const client = await createWebSocketClient(`ws://localhost:3000`);
@@ -222,7 +302,7 @@ it('should test create websocket app', async () => {
   await client.close();
 
   // 关闭服务端
-  await closeApp(app);
+  await close(app);
 
 });
 ```
@@ -232,14 +312,14 @@ it('should test create websocket app', async () => {
 ```typescript
 import { sleep } from '@midwayjs/decorator';
 import { once } from 'events';
-import { createApp, closeApp, createWebSocketClient } from '@midwayjs/mock';
+import { createApp, close, createWebSocketClient } from '@midwayjs/mock';
 
 // ... 省略 describe
 
 it('should test create websocket app', async () => {
 
   // 创建一个服务
-  const app = await createApp<Framework>(process.cwd(), { port: 3000});
+  const app = await createApp<Framework>(process.cwd());
 
   // 创建一个客户端
   const client = await createWebSocketClient(`ws://localhost:3000`);
@@ -271,47 +351,39 @@ it('should test create websocket app', async () => {
 两种写法效果相同，按自己理解的写就行。
 
 
-## 启动服务
 
+## 配置
 
-ws 框架可以独立启动（依附于默认的 http 服务，也可以和其他 midway  框架一起启动）。通过编写 `bootstrap.js` 即可。
+## 默认配置
 
+`@midwayjs/ws` 的配置样例如下：
 
-和其他框架类似，示例如下：
 ```typescript
-// bootstrap.js
-const WebSocketFramework = require('@midwayjs/ws').Framework;
-const { Bootstrap } = require('@midwayjs/bootstrap');
-
-// 初始化 socket.io 框架
-const webSocketFramework = new WebSocketFramework().configure({
-  port: 3000
-});
-
-Bootstrap
-  .load(webSocketFramework)
-  .run();
+// src/config/config.default
+export default {
+  // ...
+  ws: {
+    port: 7001,
+  },
+}
 ```
-我们在本地开发时可以直接使用这个文件进行开发，我们的脚手架示例已经将其添加到 `npm run dev` 命令中。
 
+当 `@midwayjs/ws` 和其他 `@midwayjs/web` ， `@midwayjs/koa` ， `@midwayjs/express` 同时启用时，可以复用端口。
 
-而在线上部署时，也可以使用 `npm run start` 命令。
-
-```json
-"scripts": {
-  "start": "NODE_ENV=production node ./bootstrap.js",
-  "dev": "cross-env NODE_ENV=local midway-bin dev --ts --entryFile=bootstrap.js",
-  "test": "midway-bin test --ts",
-  "cov": "midway-bin cov --ts",
-  ...
-},
+```typescript
+// src/config/config.default
+export default {
+  // ...
+  koa: {
+    port: 7001,
+  }
+  ws: {
+  // 这里不配置即可
+  },
+}
 ```
 
 
-## 框架选项
-
-
-`@midwayjs/ws` 作为框架启动时，可以传递的参数如下：
 
 | 属性   | 类型       | 描述                                                         |
 | --- | --- | --- |
@@ -319,35 +391,3 @@ Bootstrap
 | server | httpServer | 可选，当传递 port 时，可以指定一个已经存在的 webServer |
 
 更多的启动选项，请参考 [ws 文档](https://github.com/websockets/ws)。
-
-
-## 接入已有的 HTTP 服务
-
-
-`@midwayjs/ws` 默认支持和 `@midwayjs/web` ， `@midwayjs/koa` ， `@midwayjs/express` 的多框架部署。
-
-
-当多个框架部署时，请把 HTTP 类型的框架作为主框架，ws 将作为副框架加载，同时会自动找到当前的 HTTP 服务接入。
-
-
-示例如下：
-```typescript
-// bootstrap.js
-
-const WebFramework = require('@midwayjs/koa').Framework;
-const SocketFramework = require('@midwayjs/ws').Framework;
-const { Bootstrap } = require('@midwayjs/bootstrap');
-
-// 加载主 web 框架
-const webFramework = new WebFramework().configure({
-  port: 7001
-});
-
-// 加载副 ws 框架，自动适配主框架，这里不需要配置 port
-const socketFramework = new SocketFramework().configure({});
-
-Bootstrap
-  .load(webFramework)
-  .load(socketFramework)
-  .run();
-```
