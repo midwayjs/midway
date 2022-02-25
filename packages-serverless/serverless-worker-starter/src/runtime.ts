@@ -5,7 +5,6 @@ import {
 import { Application, HTTPResponse } from '@midwayjs/serverless-http-parser';
 import { types } from 'util';
 import { HTTPRequest } from './http-request';
-import { loggers } from '@midwayjs/logger';
 
 const { isAnyArrayBuffer, isArrayBufferView } = types;
 
