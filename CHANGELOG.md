@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.12](https://github.com/midwayjs/midway/compare/v3.0.11...v3.0.12) (2022-02-25)
+
+
+### Bug Fixes
+
+* remove winston logger compatibility code ([#1749](https://github.com/midwayjs/midway/issues/1749)) ([3b4c67c](https://github.com/midwayjs/midway/commit/3b4c67cc11ead3923ba060aa9369406fbb16c187))
+
+
+
+
+
 ## [3.0.11](https://github.com/midwayjs/midway/compare/v3.0.10...v3.0.11) (2022-02-25)
 
 
