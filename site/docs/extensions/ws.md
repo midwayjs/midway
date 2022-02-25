@@ -344,7 +344,7 @@ it('should test create websocket app', async () => {
   await client.close();
 
   // 关闭服务端
-  await closeApp(app);
+  await close(app);
 });
 
 ```
