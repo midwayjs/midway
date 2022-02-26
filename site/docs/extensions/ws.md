@@ -99,8 +99,8 @@ export class ContainerLifeCycle {
 ├── src
 │   ├── configuration.ts          ## 入口配置文件
 │   ├── interface.ts
-│   └── socket                  	## ws 服务的文件
-│       └── hello.ts
+│   └── socket                    ## ws 服务的文件
+│       └── hello.controller.ts
 ├── test
 ├── bootstrap.js                  ## 服务启动入口
 └── tsconfig.json
@@ -116,6 +116,7 @@ import { WSController } from '@midwayjs/decorator';
 
 @WSController()
 export class HelloSocketController {
+  // ...
 }
 ```
 当有客户端连接时，会触发 `connection` 事件，我们在代码中可以使用 `@OnWSConnection()` 装饰器来修饰一个方法，当每个客户端第一次连接服务时，将自动调用该方法。
@@ -149,7 +150,7 @@ export class HelloSocketController {
 
 WebSocket 是通过事件的监听方式来获取数据。Midway 提供了 `@OnWSMessage()` 装饰器来格式化接收到的事件，每次客户端发送事件，被修饰的方法都将被执行。
 ```typescript
-import { WSController, OnWSConnection, Inject } from '@midwayjs/decorator';
+import { WSController, OnWSMessage, Inject } from '@midwayjs/decorator';
 import { Context } from '@midwayjs/ws';
 
 @WSController()
@@ -207,7 +208,7 @@ export class HelloSocketController {
 // src/config/config.default
 export default {
   // ...
-  ws: {
+  webSocket: {
     port: 3000,
   },
 }
@@ -222,7 +223,7 @@ export default {
   koa: {
     port: null,
   },
-  ws: {
+  webSocket: {
     port: 3000,
   },
 }
@@ -230,25 +231,24 @@ export default {
 
 :::tip
 
-- 1、这里的端口仅为 WebSocket 服务在测试时启动的端口。
-- 2、koa 中的端口为 null，在测试环境下由于未配置端口会不启动服务
+- 1、这里的端口仅为 WebSocket 服务在测试时启动的端口
+- 2、koa 中的端口为 null，即意味着在测试环境下，不配置端口，不会启动 http 服务
 
 :::
 
-
-
 ### 测试代码
 
-和其他 Midway 测试方法一样，我们使用 `createApp` 创建我们的服务端，唯一不同的是，我们要启动一个 WebSocket 服务。
+和其他 Midway 测试方法一样，我们使用 `createApp` 启动项目。
 
 ```typescript
 import { createApp, close } from '@midwayjs/mock'
-import { Framework } from '@midwayjs/ws';
+// 这里使用的 Framework 定义，以主框架为准
+import { Framework } from '@midwayjs/koa';
 
 describe('/test/index.test.ts', () => {
 
-	it('should test create webSocket app', async () => {
-    const app = await createApp<Framework>(process.cwd());
+	it('should create app and test webSocket', async () => {
+    const app = await createApp<Framework>();
 
     //...
 
@@ -267,13 +267,14 @@ describe('/test/index.test.ts', () => {
 比如：
 ```typescript
 import { createApp, close, createWebSocketClient } from '@midwayjs/mock';
+import { sleep } from '@midwayjs/decorator';
 
 // ... 省略 describe
 
 it('should test create websocket app', async () => {
 
   // 创建一个服务
-  const app = await createApp<Framework>(process.cwd());
+  const app = await createApp<Framework>();
 
   // 创建一个客户端
   const client = await createWebSocketClient(`ws://localhost:3000`);
@@ -362,7 +363,7 @@ it('should test create websocket app', async () => {
 // src/config/config.default
 export default {
   // ...
-  ws: {
+  webSocket: {
     port: 7001,
   },
 }
@@ -377,8 +378,8 @@ export default {
   koa: {
     port: 7001,
   }
-  ws: {
-  // 这里不配置即可
+  webSocket: {
+  	// 这里不配置即可
   },
 }
 ```

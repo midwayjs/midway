@@ -18,14 +18,6 @@
 | 可用于 Serverless | ❌    |
 | 可用于一体化      | ✅    |
 
-**其他**
-
-| 描述                 |      |
-| -------------------- | ---- |
-| 可作为主框架独立使用 | ✅    |
-| 包含自定义日志       | ❌    |
-| 可独立添加中间件     | ✅    |
-
 
 
 
@@ -133,10 +125,10 @@ export class ContainerLifeCycle {
 .
 ├── src
 │   ├── consumer
-│   │   └── userConsumer.ts
+│   │   └── user.consumer.ts
 │   ├── interface.ts
 │   └── service
-│       └── userService.ts
+│       └── user.service.ts
 ├── test
 ├── package.json
 └── tsconfig.json
@@ -403,7 +395,7 @@ Midway 提供了一个简单的测试方法用于测试订阅某个数据。 `@m
 然后，我们启动一个 app，就可以自动监听到这个队列中的数据，并执行后续逻辑。
 
 ```typescript
-import { createRabbitMQProducer, closeApp, creatApp } from '@midwayjs/mock';
+import { createRabbitMQProducer, close, creatApp } from '@midwayjs/mock';
 
 describe('/test/index.test.ts', () => {
   it('should test create message and get from app', async () => {
@@ -422,7 +414,7 @@ describe('/test/index.test.ts', () => {
 
     // wait a moment
 
-    await closeApp(app);
+    await close(app);
   });
 });
 
@@ -466,7 +458,7 @@ await sleep(5000);
 await manager.close();
 
 // 关闭 app
-await closeApp(app);
+await close(app);
 ```
 
 
@@ -503,7 +495,7 @@ manager.sendToExchange(ex, 'direct_key', Buffer.from(msg))
 // 校验结果
 
 await manager.close();
-await closeApp(app);
+await close(app);
 ```
 
 

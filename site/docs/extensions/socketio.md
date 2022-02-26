@@ -25,14 +25,6 @@ Midway 当前采用了最新的 [Socket.io (v4.0.0)](https://socket.io/docs/v4) 
 | 可用于 Serverless | ❌    |
 | 可用于一体化      | ✅    |
 
-**其他**
-
-| 描述                 |      |
-| -------------------- | ---- |
-| 可作为主框架独立使用 | ✅    |
-| 包含自定义日志       | ❌    |
-| 可独立添加中间件     | ✅    |
-
 
 
 
@@ -120,7 +112,7 @@ export class ContainerLifeCycle {
 │   ├── configuration.ts          ## 入口配置文件
 │   ├── interface.ts
 │   └── socket                  	## socket.io 服务的文件
-│       └── hello.ts
+│       └── hello.controller.ts
 ├── test
 ├── bootstrap.js                  ## 服务启动入口
 └── tsconfig.json
@@ -176,13 +168,12 @@ Socket.io（Engine.io）实现了两种 Transports（传输方式）。
 
 Midway 通过 `@WSController` 装饰器定义 Socket 服务。
 ```typescript
-@Provide()
 @WSController('/')
 export class HelloController {
+  // ...
 }
 ```
 `@WSController` 的入参，指代了每个 Socket 的 Namespace（非 path）。如果不提供 Namespace，每个 Socket.io 会自动创建一个 `/` 的 Namespace，并且将客户端连接都归到其中。
-
 
 :::info
 这里的 namespace 支持字符串和正则。
@@ -191,10 +182,9 @@ export class HelloController {
 
 当 Namespace 有客户端连接时，会触发 `connection` 事件，我们在代码中可以使用 `@OnWSConnection()` 装饰器来修饰一个方法，当每个客户端第一次连接到该 Namespace 时，将自动调用该方法。
 ```typescript
-import { WSController, Provide, OnWSConnection, Inject } from '@midwayjs/decorator';
+import { WSController, OnWSConnection, Inject } from '@midwayjs/decorator';
 import { Context } from '@midwayjs/socketio';
 
-@Provide()
 @WSController('/')
 export class HelloSocketController {
 
@@ -220,10 +210,9 @@ export class HelloSocketController {
 
 Socket.io 是通过事件的监听方式来获取数据。Midway 提供了 `@OnWSMessage()` 装饰器来格式化接收到的事件，每次客户端发送事件，被修饰的方法都将被执行。
 ```typescript
-import { WSController, Provide, OnWSConnection, Inject } from '@midwayjs/decorator';
+import { WSController, Provide, OnWSMessage, Inject } from '@midwayjs/decorator';
 import { Context } from '@midwayjs/socketio';
 
-@Provide()
 @WSController('/')
 export class HelloSocketController {
 
@@ -249,10 +238,9 @@ export class HelloSocketController {
 
 通过 `@WSEmit` 装饰器来将方法的返回值返回给客户端。
 ```typescript
-import { WSController, Provide, OnWSConnection, Inject } from '@midwayjs/decorator';
+import { WSController, OnWSConnection, Inject } from '@midwayjs/decorator';
 import { Context } from '@midwayjs/socketio';
 
-@Provide()
 @WSController('/')
 export class HelloSocketController {
 
@@ -268,21 +256,59 @@ export class HelloSocketController {
 ```
 上面的代码，我们的方法返回值 hello world，将自动发送给客户端监听的 `myEventResult` 事件。
 
-
 ## 本地测试
 
+### 配置测试端口
 
-和传统 web 的 midway 测试方法一样，我们使用 `createApp` 创建我们的服务端，唯一不同的是，我们要启动一个 Socket.io 服务，比如传递一个端口。
+由于 socket.io 框架可以独立启动（依附于默认的 http 服务，也可以和其他 midway 框架一起启动）。
+
+当作为独立框架启动时，需要指定端口。
+
+```typescript
+// src/config/config.default
+export default {
+  // ...
+  socketIO: {
+    port: 3000,
+  },
+}
+```
+
+当作为副框架启动时（比如和 http ，由于 http 在单测时未指定端口（使用 supertest 自动生成），无法很好的测试，可以仅在测试环境显式指定一个端口。
+
+```typescript
+// src/config/config.unittest
+export default {
+  // ...
+  koa: {
+    port: null,
+  },
+  socketIO: {
+    port: 3000,
+  },
+}
+```
+
+:::tip
+
+- 1、这里的端口仅为 WebSocket 服务在测试时启动的端口
+- 2、koa 中的端口为 null，即意味着在测试环境下，不配置端口，不会启动 http 服务
+
+:::
+
+
+和其他 Midway 测试方法一样，我们使用 `createApp` 启动项目。
 
 
 ```typescript
 import { createApp, close } from '@midwayjs/mock'
-import { Framework } from '@midwayjs/socketio';
+// 这里使用的 Framework 定义，以主框架为准
+import { Framework } from '@midwayjs/koa';
 
 describe('/test/index.test.ts', () => {
 
-	it('should test create socket app', async () => {
-    const app = await createApp<Framework>(process.cwd(), { port: 3000});
+	it('should create app and test socket.io', async () => {
+    const app = await createApp<Framework>();
 
     //...
 
@@ -312,7 +338,7 @@ async gotMessage(data1, data2, data3) {
 测试代码如下：
 ```typescript
 import { createApp, close } from '@midwayjs/mock'
-import { Framework } from '@midwayjs/socketio';
+import { Framework } from '@midwayjs/koa';
 import { createSocketIOClient } from '@midwayjs/mock';
 import { once } from 'events';
 
@@ -321,7 +347,7 @@ describe('/test/index.test.ts', () => {
 	it('should test create socket app', async () => {
 
     // 创建一个服务
-    const app = await createApp<Framework>(process.cwd(), { port: 3000});
+    const app = await createApp<Framework>();
 
     // 创建一个对应的客户端
     const client = await createSocketIOClient({
@@ -352,7 +378,7 @@ describe('/test/index.test.ts', () => {
 如果多个客户端，也可以使用更简单的写法，使用 node 自带的 `events` 模块的 `once` 方法来优化，就会变成下面的代码。
 ```typescript
 import { createApp, close } from '@midwayjs/mock'
-import { Framework } from '@midwayjs/socketio';
+import { Framework } from '@midwayjs/koa';
 import { createSocketIOClient } from '@midwayjs/mock';
 import { once } from 'events';
 
@@ -361,7 +387,7 @@ describe('/test/index.test.ts', () => {
 	it('should test create socket app', async () => {
 
     // 创建一个服务
-    const app = await createApp<Framework>(process.cwd(), { port: 3000});
+    const app = await createApp<Framework>();
 
     // 创建一个对应的客户端
     const client = await createSocketIOClient({
@@ -414,7 +440,7 @@ async gotMessage(data1, data2, data3) {
 客户端测试代码：
 ```typescript
 import { createApp, close } from '@midwayjs/mock'
-import { Framework } from '@midwayjs/socketio';
+import { Framework } from '@midwayjs/koa';
 import { createSocketIOClient } from '@midwayjs/mock';
 import { once } from 'events';
 
@@ -423,7 +449,7 @@ describe('/test/index.test.ts', () => {
 	it('should test create socket app', async () => {
 
     // 创建一个服务
-    const app = await createApp<Framework>(process.cwd(), { port: 3000});
+    const app = await createApp<Framework>();
 
     // 创建一个对应的客户端
     const client = await createSocketIOClient({
@@ -457,8 +483,8 @@ describe('/test/index.test.ts', () => {
 
 ```typescript
 import { Context, Application } from '@midwayjs/socketio';
+import { WSController, OnWSMessage, WSEmit, App, Inject } from '@midwayjs/decorator';
 
-@Provide()
 @WSController('/')
 export class HelloSocketController {
 
@@ -516,134 +542,11 @@ this.ctx.nsp.emit("bigger-announcement", "the tournament will start soon");
 this.app.local.emit("hi", "my lovely babies");
 ```
 
-
-## 启动服务
-
-
-Socket.io 框架可以独立启动（依附于默认的 http 服务，也可以和其他 midway  框架一起启动）。通过编写 `bootstrap.js` 即可。
-
-
-和其他框架类似，示例如下：
-```typescript
-// bootstrap.js
-const SocketFramework = require('@midwayjs/socketio').Framework;
-const { Bootstrap } = require('@midwayjs/bootstrap');
-
-// 初始化 socket.io 框架
-const socketFramework = new SocketFramework().configure({
-  port: 3000
-});
-
-Bootstrap
-  .load(socketFramework)
-  .run();
-```
-我们在本地开发时可以直接使用这个文件进行开发，我们的脚手架示例已经将其添加到 `npm run dev` 命令中。
-
-
-而在线上部署时，也可以使用 `npm run start` 命令。
-```json
-"scripts": {
-  "start": "NODE_ENV=production node ./bootstrap.js",
-  "dev": "cross-env NODE_ENV=local midway-bin dev --ts --entryFile=bootstrap.js",
-  "test": "midway-bin test --ts",
-  "cov": "midway-bin cov --ts",
-  ...
-},
-```
-
-
-## 多进程
-
-
-在多进程（pm2）场景下，我们需要注意两件事。
-
-
-- 1、如果启用了HTTP长轮询（默认设置），则需要启用粘性会话（sticky session）
-- 2、配置一个 redis 适配器
-
-
-
-### 配置粘性会话
-
-
-### 配置 redis 适配器
-
-
-`@midwayjs/socketio` 提供了一个生成 redis 适配器的工具类，只需要传入 redis 的 host 和 port 即可。
-
-
-示例如下：
-```typescript
-// bootstrap.js
-const { Framework, createRedisAdapter} = require('@midwayjs/socketio');
-const { Bootstrap } = require('@midwayjs/bootstrap');
-
-// 初始化 socket.io 框架
-const socketFramework = new Framework().configure({
-  port: 3000,
-  adapter: createRedisAdapter({ host: '127.0.0.1', port: 6379}),
-});
-
-Bootstrap
-  .load(socketFramework)
-  .run();
-```
-
-
-
-
-## 框架选项
-
-
-`@midwayjs/socketio` 作为框架启动时，可以传递的参数如下：
-
-| 属性           | 类型   | 描述                                                         |
-| --- | --- | --- |
-| port | number | 可选，如果传递了该端口，socket.io 内部会创建一个该端口的 HTTP 服务，并将 socket 服务 attach 在其之上。如果希望和 midway 其他的 web 框架配合使用，请不要传递该参数。 |
-| pubClient | object | 可选，当 ioredis 作为适配器时的参数 |
-| subClient | object | 可选，当 ioredis 作为适配器时的参数 |
-| path | string | 可选，服务端 path |
-| adapter | object | socket.io-redis 适配器 |
-| connectTimeout | number | 客户端超时时间，单位 ms，默认值 _45000_ |
-
-更多的启动选项，请参考 [Socket.io 文档](https://socket.io/docs/v4/server-api/#new-Server-httpServer-options)。
-
-
-## 接入已有的 HTTP 服务
-
-
-`@midwayjs/socketio` 默认支持和 `@midwayjs/web` ， `@midwayjs/koa` ， `@midwayjs/express` 的多框架部署。
-
-
-当多个框架部署时，请把 HTTP 类型的框架作为主框架，Socket.io 将作为副框架加载，同时会自动找到当前的 HTTP 服务接入。
-
-
-示例如下：
-```typescript
-// bootstrap.js
-
-const WebFramework = require('@midwayjs/koa').Framework;
-const SocketFramework = require('@midwayjs/socketio').Framework;
-const { Bootstrap } = require('@midwayjs/bootstrap');
-
-// 加载主 web 框架
-const webFramework = new WebFramework().configure({
-  port: 7001
-});
-
-// 加载副 socket.io 框架，自动适配主框架，这里不需要配置 port
-const socketFramework = new SocketFramework().configure({});
-
-Bootstrap
-  .load(webFramework)
-  .load(socketFramework)
-  .run();
-```
 ## Appliation（io 对象）
 
 
 传统的 Socket.io 服务端创建代码如下：
+
 ```typescript
 const io = require("socket.io")(3000);
 
@@ -651,6 +554,7 @@ io.on("connection", socket => {
   // ...
 });
 ```
+
 在 `@midwayjs/socketio` 框架中，Application 实例即为该 io 实例，类型和能力保持一致。即通过 `@App` 装饰器注入的 app 实例，即为 io 对象。
 
 
@@ -658,6 +562,7 @@ io.on("connection", socket => {
 
 
 比如获取所有的 socket 实例。
+
 ```typescript
 // 返回所有的 socket 实例
 const sockets = await app.fetchSockets();
@@ -668,18 +573,13 @@ const sockets = await app.in("room1").fetchSockets();
 // 返回特定 socketId 的实例
 const sockets = await app.in(theSocketId).fetchSockets();
 ```
-更多的 io API，请参考 [Socket.io Server instance 文档](https://socket.io/docs/v4/server-instance/)。
-
-
-## 多框架场景
-
 
 多框架下，主框架一般为 Web 框架，我们可以通过指定 key 获取 Socket.io 的 app。
+
 ```typescript
 import { Application as SocketApplication } from '@midwayjs/socketio';
-import { Provide, Controller, App, MidwayFrameworkType } from '@midwayjs/decorator';
+import { Controller, App, MidwayFrameworkType } from '@midwayjs/decorator';
 
-@Provide()
 @Controller()
 export class UserController {
 
@@ -693,11 +593,11 @@ export class UserController {
 
 
 比如，HTTP 请求调用进来对特定 namespace 下的所有客户端广播：
+
 ```typescript
 import { Application as SocketApplication } from '@midwayjs/socketio';
 import { Provide, Controller, App, Get, MidwayFrameworkType } from '@midwayjs/decorator';
 
-@Provide()
 @Controller()
 export class UserController {
 
@@ -712,8 +612,78 @@ export class UserController {
 }
 ```
 
+更多的 io API，请参考 [Socket.io Server instance 文档](https://socket.io/docs/v4/server-instance/)。
 
-多框架场景下，测试和启动都有一定变化，请参考 [多框架研发](multi_framework_start#4r5Xm) 。
+
+
+## 配置
+
+### 默认配置
+
+`@midwayjs/socketio` 的配置样例如下：
+
+```typescript
+// src/config/config.default
+export default {
+  // ...
+  socketIO: {
+    port: 7001,
+  },
+}
+```
+
+当 `@midwayjs/socketio` 和其他 `@midwayjs/web` ， `@midwayjs/koa` ， `@midwayjs/express` 同时启用时，可以复用端口。
+
+```typescript
+// src/config/config.default
+export default {
+  // ...
+  koa: {
+    port: 7001,
+  },
+  socketIO: {
+    // 这里不配置即可
+  },
+}
+```
+
+其余属性描述如下：
+
+| 属性           | 类型   | 描述                                                         |
+| --- | --- | --- |
+| port | number | 可选，如果传递了该端口，socket.io 内部会创建一个该端口的 HTTP 服务，并将 socket 服务 attach 在其之上。如果希望和 midway 其他的 web 框架配合使用，请不要传递该参数。 |
+| pubClient | object | 可选，当 ioredis 作为适配器时的参数 |
+| subClient | object | 可选，当 ioredis 作为适配器时的参数 |
+| path | string | 可选，服务端 path |
+| adapter | object | socket.io-redis 适配器 |
+| connectTimeout | number | 客户端超时时间，单位 ms，默认值 _45000_ |
+
+更多的启动选项，请参考 [Socket.io 文档](https://socket.io/docs/v4/server-api/#new-Server-httpServer-options)。
+
+
+
+
+### 配置 redis 适配器
+
+
+`@midwayjs/socketio` 提供了一个生成 redis 适配器的工具类，只需要传入 redis 的 host 和 port 即可。
+
+
+示例如下：
+
+```typescript
+// src/config/config.default
+import { createRedisAdapter } from '@midwayjs/socketio';
+
+export default {
+  // ...
+  socketIO: {
+    adapter: createRedisAdapter({ host: '127.0.0.1', port: 6379}),
+  },
+}
+```
+
+
 
 
 ## 常见 API
@@ -736,6 +706,7 @@ app.engine.generateId = (req) => {
 ```
 
 
+
 ## 常见问题
 
 
@@ -746,71 +717,80 @@ app.engine.generateId = (req) => {
 ​
 
 ```typescript
-const { Framework } = require('@midwayjs/socketio');
-const io = require("socket.io-client");
+export default {
+  koa: {
+    port: 7001,				 // 这里的端口
+  }
+}
 
-// server
-const socketFramework = new Framework().configure({
-  port: 7001,				 // 这里的端口
-});
+// 或者
+
+export default {
+  socketIO: {
+    port: 7001,				 // 这里的端口
+  }
+}
 ```
 
 
 和下面的端口要一致。
 ```typescript
-// client
+// socket.io client
 const socket = io('************:7001', {
   //...
 });
 
-// midway 的测试客户端
+// midway 的 socket.io 测试客户端
 const client = await createSocketIOClient({
   port: 7001
 });
 ```
 
-
 2、服务端的 path 和客户端的 path 要保持一致。path 指的是启动参数的部分。
+
 ```typescript
-// bootstrap.js
+// config.default
+export default {
+  socketIO: {
+    path: '/testPath'		// 这里是服务端 path
+  }
+}
+```
+和下面的 path 要一致
 
-const { Framework } = require('@midwayjs/socketio');
-const io = require("socket.io-client");
-
-// server
-const socketFramework = new Framework().configure({
-  port: 7001,
-  path: '/testPath'		// 这里是服务端 path
-});
-
-// client
+```typescript
+// socket.io client
 const socket = io('************:7001', {
   path: '/testPath'    // 这里是客户端的 path
 });
 
-// midway 的测试客户端
+// midway 的 socket.io 测试客户端
 const client = await createSocketIOClient({
   path: '/testPath'
 });
 ```
+
+
+
 3、服务端的 namespace 和客户端的 namespace 要保持一致。
+
 ```typescript
 // server
-@Provide()
 @WSController('/test')				// 这里是服务端的 namespace
 export class HelloController {
 }
 
-// client
+// socket.io client
 const io = require("socket.io-client")
 io('*****:3000/test', {});		// 这里是客户端的 namespace
 
 
-// midway 的测试客户端
+// midway 的 socket.io 测试客户端
 const client = await createSocketIOClient({
   namespace: '/test',
 });
 ```
+
 
 
 ### 配置 CORS
@@ -818,15 +798,14 @@ const client = await createSocketIOClient({
 
 如果出现跨域错误，需要在启动的时候配置 cors 信息。
 ```typescript
-// bootstrap.js
-
-const { Framework } = require('@midwayjs/socketio');
-const socketFramework = new Framework().configure({
-  port: 7001,
-  cors: {
-    origin: "http://localhost:8080",
-    methods: ["GET", "POST"]
+// config.default
+export default {
+  socketIO: {
+    cors: {
+      origin: "http://localhost:8080",
+      methods: ["GET", "POST"]
+    }
   }
-});
+}
 ```
 具体参数可以参考 [Socket.io Handling CORS](https://socket.io/docs/v4/handling-cors/)。
