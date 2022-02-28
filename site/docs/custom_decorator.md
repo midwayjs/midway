@@ -104,7 +104,7 @@ export function Model(): ClassDecorator {
     );
     // 指定 IoC 容器创建实例的作用域，这里注册为请求作用域，这样能取到 ctx
     Scope(ScopeEnum.Request)(target);
-    
+
     // 调用一下 Provide 装饰器，这样用户的 class 可以省略写 @Provide() 装饰器了
     Provide()(target);
   };
@@ -135,7 +135,7 @@ export class ContainerConfiguration {
 
   async onReady() {
     // ...
-    
+
     // 可以获取到所有装饰了 @Model() 装饰器的 class
     const modules = listModule(MODEL_KEY);
     for (let mod of modules) {
@@ -181,11 +181,11 @@ import { Configuration, Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
 @Provide()
 @Scope(ScopeEnum.Singleton)
 export class MemoryStore extends Map {
-  
+
   save(key, value) {
     this.set(key, value);
   }
-  
+
   get(key) {
     return this.get(key);
   }
@@ -207,13 +207,13 @@ export class ContainerConfiguration {
 
   @App()
   app: koa.Application;
-  
+
   @Inject()
   store: MemoryStore;
 
   async onReady() {
     // ...
-    
+
     // 初始化一些数据
     store.save('aaa', 1);
     store.save('bbb', 1);
@@ -265,16 +265,16 @@ export class ContainerConfiguration {
 
   @App()
   app: koa.Application;
-  
+
   @Inject()
   store: MemoryStore;
-  
+
   @Inject()
   decoratorService: MidwayDecoratorService;
 
   async onReady() {
     // ...
-    
+
     // 实现装饰器
     this.decoratorService.registerPropertyHandler(
       MEMORY_CACHE_KEY,
@@ -300,9 +300,9 @@ export class UserService {
 
   @MemoryCache('aaa')
   cacheValue;
-  
+
   async invoke() {
-    
+
     console.log(this.cacheValue);
     // => 1
   }
@@ -332,9 +332,9 @@ import { createCustomMethodDecorator } from '@midwayjs/decorator';
 // 装饰器内部的唯一 id
 export const LOGGING_KEY = 'decorator:logging_key';
 
-export function LoggingTime(): MethodDecorator {
-  // 由于这个装饰器没有参数，第二个参数我们就没有传递
-  return createCustomMethodDecorator(LOGGING_KEY, {});
+export function LoggingTime(formatUnit = 'ms'): MethodDecorator {
+  // 我们传递了一个可以修改展示格式的参数
+  return createCustomMethodDecorator(LOGGING_KEY, { formatUnit });
 }
 ```
 
@@ -345,6 +345,15 @@ export function LoggingTime(): MethodDecorator {
 ```typescript
 //...
 
+function formatDuring(value, formatUnit: string) {
+  // 这里返回时间格式化
+  if (formatUnit === 'ms') {
+    return `${value} ms`;
+  } else if (formatUnit === 'min' ) {
+    // return xxx
+  }
+}
+
 @Configuration({
   imports: [
     koa
@@ -354,31 +363,37 @@ export class ContainerConfiguration {
 
   @App()
   app: koa.Application;
-  
+
   @Inject()
   decoratorService: MidwayDecoratorService;
-  
+
   @Logger()
   logger;
 
   async onReady() {
     // ...
-    
+
     // 实现方法装饰器
     this.decoratorService.registerMethodHandler(
       LOGGING_KEY,
       (options) => {
         return {
           around: async (joinPoint: JoinPoint) => {
+
+            // 拿到格式化参数
+            const format = options.metadata.formatUnit || 'ms';
+
             // 记录开始时间
             const startTime = Date.now();
-            
+
             // 执行原方法
             const result = await joinPoint.proceed(...joinPoint.args);
-            
+
+            const during = formatDuring(Date.now() - startTime, format);
+
             // 打印执行时间
-            this.logger.info(`Method ${joinPoint.methodName} invoke during ${Date.now() - startTime}ms`);
-            
+            this.logger.info(`Method ${joinPoint.methodName} invoke during ${during}`);
+
             // 返回执行结果
             return result;
           },
@@ -480,16 +495,16 @@ export class ContainerConfiguration {
 
   @App()
   app: koa.Application;
-  
+
   @Inject()
   decoratorService: MidwayDecoratorService;
-  
+
   @Logger()
   logger;
 
   async onReady() {
     // ...
-    
+
     // 实现参数装饰器
     this.decoratorService.registerParameterHandler(
       USER_KEY,
