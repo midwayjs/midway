@@ -151,7 +151,7 @@ module.exports = async () => {
 
 ## @midwayjs/web
 
-在代码根目录新增加文件 `f.yml` ，最为精简的内容如下。
+1、在代码根目录新增加文件 `f.yml` ，最为精简的内容如下。
 
 ```yaml
 service: my-egg-demo ## 应用发布到云平台的名字
@@ -176,7 +176,35 @@ custom:
 有时候 package-lock.json 文件会造成部署包过大（将 dev 依赖打入）。
 :::
 
-为了在发布时自动执行编译，在 `package.json` 配置如下。
+
+
+2、修改代码根目录 `bootstrap.js` 为下面的代码
+
+```typescript
+const { Bootstrap } = require('@midwayjs/bootstrap');
+const { MidwayFrameworkService } = require('@midwayjs/core');
+const { join } = require('path');
+
+module.exports = async (options) => {
+  // 加载框架并执行
+  await Bootstrap
+    .configure({
+      appDir: __dirname,
+      baseDir: join(__dirname, './dist'),
+      ...options
+    })
+    .run();
+  const applicationContext = Bootstrap.getApplicationContext();
+  const frameworkService = applicationContext.get(MidwayFrameworkService);
+  // 返回 app 对象
+  return frameworkService.getMainApp();
+};
+
+```
+
+
+
+3、为了在发布时自动执行编译，在 `package.json` 配置如下。
 
 ```json
 {
@@ -208,20 +236,7 @@ custom:
 如果使用了自己的 egg 上层框架，这里的 egg.framework 可以变为自己的包名。
 :::
 
-如果使用了 egg-ts ，则配置如下。
 
-```json
-{
-  "name": "xxxxxx",
-  "version": "xxxx",
-  .....
-  "midway-integration": {
-    "lifecycle": {
-      "before:package:cleanup": "npm run tsc"
-    }
-  }
-}
-```
 
 ### 迁移方案的 Egg 默认配置
 
