@@ -6,7 +6,7 @@ title: 事件触发器（Event）
 
 ## 使用方式
 
-通过直接在代码中的 `@ServerlessTrigger`  装饰器绑定事件触发器。
+通过直接在代码中的 `@ServerlessTrigger` 装饰器绑定事件触发器。
 
 ```typescript
 import { Provide, Inject, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/decorator';
@@ -26,7 +26,7 @@ export class HelloAliyunService {
 
 ## 本地测试
 
-通过 `createFunctionApp`  创建函数 app，通过 `getServerlessInstance`  获取类实例，然后通过实例的方法直接调用，传入参数进行测试。
+通过 `createFunctionApp` 创建函数 app，通过 `getServerlessInstance` 获取类实例，然后通过实例的方法直接调用，传入参数进行测试。
 
 ```typescript
 describe('test/hello_aliyun.test.ts', () => {

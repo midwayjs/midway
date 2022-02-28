@@ -36,7 +36,7 @@ $ npm install @midwayjs/prometheus -S
 
 ## 引入组件
 
-在 `configuration.ts`  中，引入这个组件：
+在 `configuration.ts` 中，引入这个组件：
 
 ```typescript
 // src/configuration.ts
@@ -51,7 +51,7 @@ import { join } from 'path';
 export class AutoConfiguration {}
 ```
 
-启动我们的应用，此时访问的时候多了一个 `${host}:${port}/metrics`  。
+启动我们的应用，此时访问的时候多了一个 `${host}:${port}/metrics` 。
 
 :::info
 Prometheus 基于 HTTP 获取监控数据，请加载 web/koa/express 任一框架，并使用多框架模式启动。
@@ -65,7 +65,7 @@ Prometheus 基于 HTTP 获取监控数据，请加载 web/koa/express 任一框�
 
 指标组件也提供了相关的配置，方便开发者进行配置。
 
-可以在 `config.default.ts`  中，修改 prometheus 的配置。
+可以在 `config.default.ts` 中，修改 prometheus 的配置。
 
 ```typescript
 // src/config/config.default
@@ -91,7 +91,7 @@ export default {
 
 ## 搭建 Prometheus
 
-此处我们通过 docker-compose 来搭建 Prometheus， docker-compose.yml  文件如下：
+此处我们通过 docker-compose 来搭建 Prometheus， docker-compose.yml 文件如下：
 
 ```yaml
 version: '2.2'
@@ -116,7 +116,7 @@ services:
       - '9090:9090'
 ```
 
-`prometheus.yml`   文件如下：
+`prometheus.yml` 文件如下：
 
 ```yaml
 global:
@@ -133,7 +133,7 @@ scrape_configs:
       - targets: ['localhost:9090']
 ```
 
-然后采集的 `targets.json`   如下：下面文件里面 `${ip}`   替换为 Node.js 应用所在服务器的 ip 地址。
+然后采集的 `targets.json` 如下：下面文件里面 `${ip}` 替换为 Node.js 应用所在服务器的 ip 地址。
 
 ```json
 [
@@ -149,7 +149,7 @@ scrape_configs:
 
 
 
-然后我们启动 `docker-compose.yml`   文件，
+然后我们启动 `docker-compose.yml` 文件，
 
 ```bash
 $ docker-compose up

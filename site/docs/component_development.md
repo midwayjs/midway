@@ -48,11 +48,11 @@ $ npm init midway -- --type=component-v3 my_custom_component
 └── tsconfig.json
 ```
 
-对于组件来说，唯一的规范是入口导出的 `Configuration`  属性，其必须是一个带有 `@Configuration`  装饰器的 Class。
+对于组件来说，唯一的规范是入口导出的 `Configuration` 属性，其必须是一个带有 `@Configuration` 装饰器的 Class。
 
 一般来说，我们的代码为 TypeScript 标准目录结构，和 Midway 体系相同。
 
-同时，又是一个普通的 Node.js 包，需要使用 `src/index.ts`  文件作为入口导出内容。
+同时，又是一个普通的 Node.js 包，需要使用 `src/index.ts` 文件作为入口导出内容。
 
 下面，我们以一个非常简单的示例来演示如何编写一个组件。
 
@@ -243,7 +243,7 @@ export * from './service/book.service';
 这样项目中只有  `service/book.service.ts` 这个文件才会被依赖注入容器扫描和加载。
 :::
 
-以及在 `package.json`  中指定 main 路径。
+以及在 `package.json` 中指定 main 路径。
 
 ```typescript
 "main": "dist/index"
@@ -289,10 +289,10 @@ describe('/test/index.test.ts', () => {
         custom
       ]
     });
-    
+
     const result = await createHttpRequest(app).get('/');
     // ...
-    
+
   });
 });
 
@@ -305,7 +305,7 @@ describe('/test/index.test.ts', () => {
 
 ### 应用中开发组件
 
-推荐使用 [lerna](https://github.com/lerna/lerna)，以及开启 lerna 的 hoist 模式来编写组件。如果想在非 lerna 的场景场景下开发组件，请保证组件在 `src`  目录下，否则会出现加载失败的情况。
+推荐使用 [lerna](https://github.com/lerna/lerna)，以及开启 lerna 的 hoist 模式来编写组件。如果想在非 lerna 的场景场景下开发组件，请保证组件在 `src` 目录下，否则会出现加载失败的情况。
 
 #### 使用 lerna
 
@@ -518,10 +518,10 @@ export class MyKoaConfiguration {
   async onReady() {
     // 添加中间件，koa 中的 app.useMiddleware 其实代理了 framework 上的方法
     this.framework.useMiddleware(/* ... */);
-    
+
     // 添加过滤器，koa 中的 app.useFilter 其实代理了 framework 上的方法
     this.framework.useFilter(/* ... */);
-    
+
     // koa 自身的扩展能力，比如扩展 context
     const app = this.framework.getApplication();
     Object.defineProperty(app.context, 'user', {
@@ -533,7 +533,7 @@ export class MyKoaConfiguration {
     });
     // ...
   }
-  
+
   async onServerReady() {
     const server = this.framework.getServer();
     // server.xxxx
@@ -570,7 +570,7 @@ export class MyConfiguration {
 
 ### 编写 Framework
 
-框架都遵循 `IMidwayFramewok`  的接口定义，以及如下约定。
+框架都遵循 `IMidwayFramewok` 的接口定义，以及如下约定。
 
 - 每个框架有要自定义独立的启停流程
 - 每个框架需要定义自己独立的 `Application` ，`Context`
@@ -684,7 +684,7 @@ export class MidwayCustomHTTPFramework extends BaseFramework<Application, Contex
 }
 ```
 
-我们定义了一个 `MidwayCustomHTTPFramework` 类，继承了 `BaseFramework` ，同时实现了 `applicationInitialize`  和 `run`  方法。
+我们定义了一个 `MidwayCustomHTTPFramework` 类，继承了 `BaseFramework` ，同时实现了 `applicationInitialize` 和 `run` 方法。
 
 这样，一个最基础的框架就完成了。
 

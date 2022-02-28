@@ -20,7 +20,7 @@ title: Serverless 触发器 POST 情况差异
 
 #### 示例一 (text/html)
 
-下面的 event，是一个最简单的透传示例，因为其中的 `content-type`  为 `text/html` ，所以 body 传递过来 base64 解码的结果也同样是字符串。
+下面的 event，是一个最简单的透传示例，因为其中的 `content-type` 为 `text/html`，所以 body 传递过来 base64 解码的结果也同样是字符串。
 
 ```json
 {
@@ -53,7 +53,7 @@ ctx.request.body; // '{"c":"b"}'   => string
 
 #### 示例二（application/json)
 
-使用 `content-type`  为 `application/json` ，这样框架认为是一个 JSON，会自动被 JSON.parse。
+使用 `content-type` 为 `application/json` ，这样框架认为是一个 JSON，会自动被 JSON.parse。
 
 ```json
 {
@@ -86,7 +86,7 @@ ctx.request.body; // {"c":"b"}   => object
 
 #### 示例三 (application/x-www-form-urlencoded)
 
-使用 `content-type`  为 `application/x-www-form-urlencoded` ，这个时候网关不会以 base64 格式透传，这也是前端原生表单的默认提交类型。
+使用 `content-type` 为 `application/x-www-form-urlencoded`，这个时候网关不会以 base64 格式透传，这也是前端原生表单的默认提交类型。
 
 :::info
 在 API 网关侧测试，保持“入参透传”下，似乎没有效果，于是我换到了 Postman 进行测试。

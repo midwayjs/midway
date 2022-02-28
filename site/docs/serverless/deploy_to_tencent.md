@@ -4,7 +4,7 @@ title: 发布到腾讯云 SCF
 
 ## 配置
 
-在项目根目录的 `f.yml`  的 `provider`  段落处确保为 `tencent` 。
+在项目根目录的 `f.yml` 的 `provider` 段落处确保为 `tencent`。
 
 ```yaml
 service:
@@ -53,7 +53,7 @@ provider:
 
 ## 部署
 
-执行 `npm run deploy`  即可，Deploy 命令会自动打包，并调用腾讯云官方部署工具发布。
+执行 `npm run deploy` 即可，Deploy 命令会自动打包，并调用腾讯云官方部署工具发布。
 
 视频流程如下：
 

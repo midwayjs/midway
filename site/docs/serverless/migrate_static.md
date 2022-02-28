@@ -31,7 +31,7 @@ custom:
 有时候 package-lock.json 文件会造成部署包过大（将 dev 依赖打入）。
 :::
 
-加入 dev 依赖 `@midwayjs/cli` 。
+加入 dev 依赖 `@midwayjs/cli`。
 
 ```json
 {
@@ -45,7 +45,7 @@ custom:
 }
 ```
 
-执行 `npm run deploy`  即可。
+执行 `npm run deploy` 即可。
 
 或者使用不同的 npm 包加速。
 
@@ -59,14 +59,14 @@ custom:
 ```
 
 :::info
-这里使用 --skipBuild 参数是为了跳过函数的构建。 `npm run build`  对接前端的构建命令。
+这里使用 --skipBuild 参数是为了跳过函数的构建。 `npm run build` 对接前端的构建命令。
 :::
 
-默认情况下，会使用 `build`  目录作为托管根目录，访问 `/`  路由时，会自动查找 `/index.html` 。
+默认情况下，会使用 `build` 目录作为托管根目录，访问 `/` 路由时，会自动查找 `/index.html`。
 
 比如：
 
-- / => /index.html
+- /=> /index.html
 - /api/ => /api/index.html
 
 ## 可选配置
@@ -92,7 +92,7 @@ package:
 
 ### 修改托管前缀
 
-有时候部署需要统一的路由前缀，比如 `/api/*`  这样的形式。
+有时候部署需要统一的路由前缀，比如 `/api/*` 这样的形式。
 
 ```yaml
 service: my-static-demo  			## 应用发布到云平台的名字
@@ -134,7 +134,7 @@ package:
 
 
 
-有时候，我们希望将一些特定的路由，都访问到特定的文件上，比如将所有的路由请求，都转向到 `/index.html` ，然后让前端路由处理。
+有时候，我们希望将一些特定的路由，都访问到特定的文件上，比如将所有的路由请求，都转向到 `/index.html`，然后让前端路由处理。
 
 ```yaml
 service: my-static-demo  			## 应用发布到云平台的名字

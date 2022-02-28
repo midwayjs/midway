@@ -14,7 +14,7 @@ Midway 在本地开发时会使用 ts-node 实时扫描并 require 模块，如�
 
 1、先清理下 ts-node 缓存。
 
-在临时目录中有一个 `ts-node-*`  的目录，删除即可（不知道临时目录的可以在命令行执行 `require('os').tmpdir()`  输出查看）。
+在临时目录中有一个 `ts-node-*` 的目录，删除即可（不知道临时目录的可以在命令行执行 `require('os').tmpdir()` 输出查看）。
 
 <img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1601523402032-7e9c162a-762e-4cba-82b4-8ae63fe37280.png#height=121&id=EOZnh&margin=%5Bobject%20Object%5D&name=image.png&originHeight=242&originWidth=960&originalType=binary&size=45718&status=done&style=none&width=480" width="480" />
 
@@ -40,7 +40,7 @@ cross-env NODE_DEBUG=midway* NODE_ENV=local midway-bin dev --ts
 
 ## 解决问题
 
-由于 `TS_NODE_TYPE_CHECK`  内部会启动一个 Server，在文件特别的多的情况下，每次 require 都会做类型检查，如果造成严重启动影响，建议关闭。**代价是启动运行时不会做类型校验，由于一般在编辑器里已经有提示，运行时不再做检查也可以。**
+由于 `TS_NODE_TYPE_CHECK` 内部会启动一个 Server，在文件特别的多的情况下，每次 require 都会做类型检查，如果造成严重启动影响，建议关闭。**代价是启动运行时不会做类型校验，由于一般在编辑器里已经有提示，运行时不再做检查也可以。**
 
 在执行命令前增加下面两个环境变量。
 

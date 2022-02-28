@@ -140,4 +140,4 @@ describe('test/hello_aliyun.test.ts', () => {
 
 ## 注意
 
-- 1、一个 bucket 的一个前缀下只能支持配置一个触发器，如果配置多个会出现 `message: event source 'oss' returned error: Cannot specify overlapping prefix and suffix with same event type.`  的报错
+- 1、一个 bucket 的一个前缀下只能支持配置一个触发器，如果配置多个会出现 `message: event source 'oss' returned error: Cannot specify overlapping prefix and suffix with same event type.` 的报错

@@ -62,7 +62,7 @@ describe('test/hello_aliyun.test.ts', () => {
 
 ## 部署
 
-使用 `npm run deploy`  部署代码。
+使用 `npm run deploy` 部署代码。
 
 发布完成后，平台状态如下。
 

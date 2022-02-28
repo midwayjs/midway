@@ -2,13 +2,13 @@
 title: midwayjs/cli
 ---
 
-`@midwayjs/cli`  是新版本的 Midway 体系工具链，和 Serverless，以及原应用的工具链进行了整合。
+`@midwayjs/cli` 是新版本的 Midway 体系工具链，和 Serverless，以及原应用的工具链进行了整合。
 
 ## 基础入口
 
-`@midwayjs/cli` 提供了两个入口命令。 `midway-bin`  和 `mw`  命令。
+`@midwayjs/cli` 提供了两个入口命令。 `midway-bin` 和 `mw` 命令。
 
-当 `@midwayjs/cli` 安装到全局时，一般使用 `mw`  命令，比如 `mw new xxx` 。当安装到项目中，做 cli 工具时，我们一般使用 `midway-bin`  命令，但是请记住，这两个命令是相同的。
+当 `@midwayjs/cli` 安装到全局时，一般使用 `mw` 命令，比如 `mw new xxx`。当安装到项目中，做 cli 工具时，我们一般使用 `midway-bin` 命令，但是请记住，这两个命令是相同的。
 
 ## 命令
 
@@ -24,7 +24,7 @@ $ mw new [name]
   --npm           npm client，默认为自动识别添加registry
 ```
 
-可用 `--template`  指定远端的符合 [light-generator](https://github.com/midwayjs/light-generator) 标准的脚手架包。
+可用 `--template` 指定远端的符合 [light-generator](https://github.com/midwayjs/light-generator) 标准的脚手架包。
 比如：
 
 ```bash
@@ -198,7 +198,7 @@ $ midway-bin build -c
   --buildCache	 保留构建缓存
 ```
 
-- `c`  `clean`  清理构建目录
+- `c` `clean` 清理构建目录
 
 ### deploy 函数发布
 

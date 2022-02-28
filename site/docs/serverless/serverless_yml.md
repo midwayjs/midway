@@ -18,14 +18,14 @@ title: f.yml 定义
 
 目前第一层字段包括：
 
-- **service**   当前的服务（函数分组），对标应用
+- **service**  当前的服务（函数分组），对标应用
 - **provider** 当前的服务提供商，比如 aliyun，tencent 等。
 - **functions** 函数的具体信息
 - **layers** 具体的 layer 层配置
-- **resources**   引用的资源
-- **plugins**   引用的插件，serverless 预留
+- **resources**  引用的资源
+- **plugins**  引用的插件，serverless 预留
 - **aggregation** 聚合部署字段
-- **package**   构建的配置信息
+- **package**  构建的配置信息
 
 大体如下：
 
@@ -274,7 +274,7 @@ export interface ProviderStructure {
 
 | **ProviderStructure** |        |                                                                         |
 | --------------------- | ------ | ----------------------------------------------------------------------- |
-| name                  | string | 必选，可以发布的平台信息，可选的有 `aliyun` ， `tencent` ，后续还会增加 |
+| name                  | string | 必选，可以发布的平台信息，可选的有 `aliyun`， `tencent`，后续还会增加 |
 | runtime               | string | 必选，函数的运行时                                                      |
 
 默认值
@@ -284,7 +284,7 @@ export interface ProviderStructure {
 
 |
 | stage | string | 全局发布的环境 |
-| region | string | 部署的区域，腾讯云特有，比如  
+| region | string | 部署的区域，腾讯云特有，比如
 ap-shanghai |
 | timeout | number | 超时时间，单位 秒
 默认值
@@ -302,7 +302,7 @@ ap-shanghai |
   | role | string | 角色，事件源会使用该角色触发函数执行，请确保该角色有调用函数的权限。 |
   | environment | object | 全局环境变量 |
   | serviceId | string | 网关服务 Id，目前只有腾讯云用到 |
-  | vpcConfig | object | 阿里云字段，vpcConfig 包含的属性包括： `vpcId` 、 `vSwitchIds`  以及 `securityGroupId`  属性 |
+  | vpcConfig | object | 阿里云字段，vpcConfig 包含的属性包括： `vpcId`、 `vSwitchIds` 以及 `securityGroupId` 属性 |
   | internetAccess | boolean | 阿里云字段，表示此服务是否可以访问公网。 |
   | policies | string | string[] | 阿里云字段，函数需要的阿里云管理的 RAM policies 或 RAM policy 文档的名称，将会被附加到该函数的默认角色上。如果设置了 Role 属性，则该属性会被忽略。 |
   | logConfig | object | 阿里云字段，函数执行的日志存储服务配置。 |
@@ -365,7 +365,7 @@ functions 中的字段和结构，在 midway v2 开始已经变为 `@ServerlessF
 
 ### functions/function 结构
 
-`functions`   和 `function`   结构是包含的关系，定义如下。
+`functions`  和 `function`  结构是包含的关系，定义如下。
 
 ```typescript
 export interface FunctionsStructure {
@@ -496,7 +496,7 @@ events 是一个由不同事件（触发器）组成的**对象数组**。这个
 | **EventStructureType** |           |                                         |
 | ---------------------- | --------- | --------------------------------------- | ------------------------------------------------------------------------- | ------------ |
 | key: eventName         | string    | 事件类型名                              |
-| value: Event           | HTTPEvent |  MQEvent                                | TimerEvent ...                                                            | 事件描述结构 |
+| value: Event           | HTTPEvent | MQEvent                                | TimerEvent ...                                                            | 事件描述结构 |
 |                        |           |                                         |
 | **HTTPEvent**          |           |                                         |
 | name                   | string    | 触发器的名字                            |
@@ -515,7 +515,7 @@ events 是一个由不同事件（触发器）组成的**对象数组**。这个
 |                        |           |                                         |
 | **TimerEvent**         |           |                                         |
 | name                   | string    | 触发器的名字                            |
-| type                   | 'cron'    | 'every'                                 | 必填，触发类型，分别代表 cron 表达式，固定时间间隔。腾讯云只支持  `cron`  |
+| type                   | 'cron'    | 'every'                                 | 必填，触发类型，分别代表 cron 表达式，固定时间间隔。腾讯云只支持 `cron` |
 | value                  | string    | 必填，对应触发的值。                    |
 
 如果是 cron 类型，则填写 cron 表达式。
@@ -530,9 +530,9 @@ events 是一个由不同事件（触发器）组成的**对象数组**。这个
 | bucket | string | 对象存储的 bucket 名 |
 | events | string | 触发函数执行的事件名 |
 | filter | {
-   prefix: string;
-   suffix: string;
- } | 对象过滤参数，满足过滤条件的 对象才可以触发函数，包含一个配置属性 key，表示过滤器支持过滤的对象键 (key)。 |
+ prefix: string;
+ suffix: string;
+} | 对象过滤参数，满足过滤条件的 对象才可以触发函数，包含一个配置属性 key，表示过滤器支持过滤的对象键 (key)。 |
 | enable | boolean | 是否默认开启，默认 true |
 | role | string | 此角色用来可以触发函数执行 |
 | version | string | 阿里云云字段，服务版本，默认 "LATEST"。 |
@@ -542,7 +542,7 @@ events 是一个由不同事件（触发器）组成的**对象数组**。这个
 | topic | string | 接收消息的 topic |
 | tags | string | 阿里云云字段，描述了该订阅中消息过滤的标签（标签一致的消息才会被推送） |
 | region | string | 阿里云云字段，topic 所在的 region，如果不填，默认为和函数一样的 region |
-| strategy | string | 阿里云云字段，调用函数的重试策略，可选值：BACKOFF_RETRY, EXPONENTIAL_DECAY_RETRY, 默认值为: BACKOFF_RETRY,  |
+| strategy | string | 阿里云云字段，调用函数的重试策略，可选值：BACKOFF_RETRY, EXPONENTIAL_DECAY_RETRY, 默认值为: BACKOFF_RETRY, |
 | role | string | 此角色用来可以触发函数执行 |
 | version | string | 阿里云云字段，服务版本，默认 "LATEST"。 |
 | enable | boolean | 是否默认开启，默认 true |

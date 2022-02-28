@@ -21,7 +21,7 @@ $ pm2 delete		# 删除某个服务
 $ pm2 logs			# 查看服务的输出日志
 ```
 
-比如， `pm2 list` ，就会以表格显示。
+比如， `pm2 list`，就会以表格显示。
 
 <img src="https://cdn.nlark.com/yuque/0/2021/png/501408/1616560437389-b193a0d0-b463-49f1-a347-8dec20e7504d.png#align=left&display=inline&height=310&margin=%5Bobject%20Object%5D&name=image.png&originHeight=310&originWidth=1065&size=165090&status=done&style=none&width=1065" width="1065" />
 
@@ -34,7 +34,7 @@ $ pm2 stop 1			# 停止编号为 1 的服务
 $ pm2 delete 1		# 删除编号为 1 的服务
 ```
 
-使用 `--name`  参数添加一个应用名。
+使用 `--name` 参数添加一个应用名。
 
 ```bash
 $ pm2 start ./bootstrap.js --name test_app
@@ -49,7 +49,7 @@ $ pm2 restart test_app
 
 ## 启动应用
 
-Midway 应用一般使用 `npm run start`  做线上部署。其对应的命令为 `NODE_ENV=production node bootstrap.js` 。
+Midway 应用一般使用 `npm run start` 做线上部署。其对应的命令为 `NODE_ENV=production node bootstrap.js`。
 
 :::info
 部署前需要执行编译 npm run build

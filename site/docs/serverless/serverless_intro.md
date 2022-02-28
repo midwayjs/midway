@@ -11,11 +11,11 @@ Midway Serverless 是用于构建 Node.js 云函数的 Serverless 框架。帮�
 - **代码复用：**通过框架的依赖注入能力，让每一部分逻辑单元都天然可复用，可以快速方便地组合以生成复杂的应用。
 - **传统迁移：**通过框架的运行时扩展能力，让 Egg.js 、Koa、Express.js 等传统应用无缝迁移至各云厂商的云函数
 
-你可以使用  Midway 来构建你的**全栈应用**，也可以发布的**函数服务** ，Restful 接口等，也可以加上前端（react，vue）代码**构建中后台项目**，也可以使用 Midway 提供的方案**迁移传统**的 Egg/Koa/Express 应用上弹性容器。
+你可以使用 Midway 来构建你的**全栈应用**，也可以发布的**函数服务** ，Restful 接口等，也可以加上前端（react，vue）代码**构建中后台项目**，也可以使用 Midway 提供的方案**迁移传统**的 Egg/Koa/Express 应用上弹性容器。
 
 ## Midway Serverless 和 Midway 的关系
 
-Midway Serverless 是 Midway 产出的一套面向 Serverless 云平台的开发方案。其内容主要包括函数框架 `@midwayjs/faas` ，以及一系列跟平台配套的工具链，启动器等。
+Midway Serverless 是 Midway 产出的一套面向 Serverless 云平台的开发方案。其内容主要包括函数框架 `@midwayjs/faas`，以及一系列跟平台配套的工具链，启动器等。
 
 在 Midway Serverless 2.0 之后，Midway Serverless 和 Midway 的能力复用，有着相同的 CLI 工具链，编译器，装饰器等等。
 

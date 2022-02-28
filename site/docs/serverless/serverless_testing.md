@@ -13,7 +13,7 @@ title: 测试函数
 `createFunctionApp` 方法是 `createApp` 方法在函数场景下的定制（其中指定了函数的 `@midwayjs/serverless-app` 框架）。
 
 :::info
-这里不直接使用 `@midwayjs/faas` 框架，而是使用 `@midwayjs/serverless-app`  框架，因为后者包含了网关模拟到函数调用的系列步骤。
+这里不直接使用 `@midwayjs/faas` 框架，而是使用 `@midwayjs/serverless-app` 框架，因为后者包含了网关模拟到函数调用的系列步骤。
 :::
 
 HTTP 测试代码如下：

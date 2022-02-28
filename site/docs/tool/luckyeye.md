@@ -2,13 +2,13 @@
 title: 检查工具
 ---
 
-Midway 为常见的错误提供了一些检查工具，以方便用户快速排错。`@midwayjs/luckyeye`  包提供了一些基础的检查规则，配合 Midway 新版本可以快速排查问题。
+Midway 为常见的错误提供了一些检查工具，以方便用户快速排错。`@midwayjs/luckyeye` 包提供了一些基础的检查规则，配合 Midway 新版本可以快速排查问题。
 
 > luckyeye，寓意为幸运眼，能快速发现和定位问题。
 
 ## 使用
 
-首先安装 `@midwayjs/luckyeye`  包。
+首先安装 `@midwayjs/luckyeye` 包。
 
 ```bash
 npm i @midwayjs/luckyeye --save-dev
@@ -23,9 +23,9 @@ npm i @midwayjs/luckyeye --save-dev
 },
 ```
 
-接下去，我们需要配置“规则包”，比如 `midway_v2`  就是针对 midway v2 版本的规则检查包。
+接下去，我们需要配置“规则包”，比如 `midway_v2` 就是针对 midway v2 版本的规则检查包。
 
-在 `package.json`  中加入下面的段落。
+在 `package.json` 中加入下面的段落。
 
 ```json
 "midway-luckyeye": {

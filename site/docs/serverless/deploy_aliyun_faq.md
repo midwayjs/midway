@@ -10,9 +10,9 @@ title: 阿里云发布 FAQ
 
 ## 容器时区问题
 
-> 大部分 Docker  镜像都是基于 Alpine，Ubuntu，Debian，CentOS 等基础镜像制作而成。 基本上都采用 UTC 时间，默认时区为零时区。
+> 大部分 Docker 镜像都是基于 Alpine，Ubuntu，Debian，CentOS 等基础镜像制作而成。 基本上都采用 UTC 时间，默认时区为零时区。
 
-阿里云容器环境的时区默认是 `GMT +0000` ，直接使用 `new Date()`  等前端获取的时候，国内的用户可能未作时区处理，会相差 8 个小时。
+阿里云容器环境的时区默认是 `GMT +0000`，直接使用 `new Date()` 等前端获取的时候，国内的用户可能未作时区处理，会相差 8 个小时。
 
 国内用户使用，默认可能习惯 `GMT +0800` 。可以通过环境变量调整（配置在平台或者 f.yml）。
 
@@ -40,7 +40,7 @@ provider:
 midway-bin deploy --resetConfig
 ```
 
-如果只希望调整特定字段，可以进入 `~/.fcli/config.yaml`  文件中，直接修改保存。
+如果只希望调整特定字段，可以进入 `~/.fcli/config.yaml` 文件中，直接修改保存。
 
 ## CLI 发布红色提示
 
@@ -71,11 +71,11 @@ export ACCESS_KEY_SECRET=xxx
 
 ## 发布时超时问题
 
-有时候包比较大， `midway-bin deploy`  上传可能会碰到超时的问题，这个超时时间是 funcraft 工具内部控制的。
+有时候包比较大， `midway-bin deploy` 上传可能会碰到超时的问题，这个超时时间是 funcraft 工具内部控制的。
 
 <img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1598423950078-15838cbb-95f3-41f9-94ac-a31741b111d3.png#height=179&id=EOCLm&margin=%5Bobject%20Object%5D&name=image.png&originHeight=358&originWidth=2784&originalType=binary&ratio=1&size=310195&status=done&style=none&width=1392" width="1392" />
 
-解决方案： `~/.fcli/config.yaml`  里面配置 timeout，单位是 s（秒）。
+解决方案： `~/.fcli/config.yaml` 里面配置 timeout，单位是 s（秒）。
 
 一般来说，midway 默认脚手架（eggjs）构建完在 9M 左右，其他框架会更小，请尝试先删除 `package-lock.json` 后再尝试。
 

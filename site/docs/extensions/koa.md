@@ -140,7 +140,7 @@ export class AutoConfiguration {
 
 ### 默认配置
 
-`@midwayjs/koa`  的配置样例如下：
+`@midwayjs/koa` 的配置样例如下：
 
 ```typescript
 // src/config/config.default

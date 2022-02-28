@@ -6,7 +6,7 @@ title: 腾讯云发布 FAQ
 
 腾讯云在部署时，如果是首次部署，则控制台会展示相应二维码，扫码即可完成认证，单项目后续会默认复用该配置。
 
-鉴权文件保存在部署的根目录下的 `.env`   文件，如果要修改，可以删除该文件重新扫码。
+鉴权文件保存在部署的根目录下的 `.env`  文件，如果要修改，可以删除该文件重新扫码。
 
 也可以修改其中的内容，格式如下：
 
@@ -72,7 +72,7 @@ provider:
 
 ## 绑定域名
 
-腾讯云发布后会自动给一个网关地址来访问云函数，比如 `http://service-xxxxx-xxxxxxxx.gz.apigw.tencentcs.com:80` ，同时针对环境，会自动映射三套环境名，加载 path 上。
+腾讯云发布后会自动给一个网关地址来访问云函数，比如 `http://service-xxxxx-xxxxxxxx.gz.apigw.tencentcs.com:80`，同时针对环境，会自动映射三套环境名，加载 path 上。
 
 - 测试环境 /test
 - 预发 /prepub
@@ -92,7 +92,7 @@ provider:
 
 <img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1588753063041-496d876f-3457-47cb-8156-c9e8364e91db.png#height=338&id=mIiB5&margin=%5Bobject%20Object%5D&name=image.png&originHeight=338&originWidth=1096&originalType=binary&size=26777&status=done&style=none&width=1096" width="1096" />
 
-配置自定义路径映射，比如将 `/`  映射到正式的发布环境，这样在用域名访问的时候，就不会带有环境后缀了。
+配置自定义路径映射，比如将 `/` 映射到正式的发布环境，这样在用域名访问的时候，就不会带有环境后缀了。
 
 <img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1588753124170-9e6a2b01-dad8-47df-9d81-294d8397137b.png#height=607&id=FAbTy&margin=%5Bobject%20Object%5D&name=image.png&originHeight=607&originWidth=904&originalType=binary&size=49449&status=done&style=none&width=904" width="904" />
 

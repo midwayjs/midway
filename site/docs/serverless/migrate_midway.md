@@ -36,7 +36,7 @@ deployType: koa ## 部署的应用类型
 
 2、代码修改
 
-将 `bootstrap.js`  重命名为 `app.js` ，并返回一个 app。
+将 `bootstrap.js` 重命名为 `app.js`，并返回一个 app。
 
 修改后的代码如下：
 
@@ -78,7 +78,7 @@ module.exports = async () => {
 
 如需更详细的发布文档，请查阅 [**Serverless 发布 FAQ**](./serverless/deploy_aliyun_faq)。
 
-## 
+##
 
 ## @midway/express
 
@@ -105,7 +105,7 @@ deployType: express ## 部署的应用类型
 
 2、代码修改
 
-将 `bootstrap.js`  重命名为 `app.js` ，并返回一个 app。
+将 `bootstrap.js` 重命名为 `app.js`，并返回一个 app。
 
 修改后的代码如下：
 
@@ -147,11 +147,11 @@ module.exports = async () => {
 
 如需更详细的发布文档，请查阅 [**Serverless 发布 FAQ**](./serverless/deploy_aliyun_faq)。
 
-## 
+##
 
 ## @midwayjs/web
 
-1、在代码根目录新增加文件 `f.yml` ，最为精简的内容如下。
+1、在代码根目录新增加文件 `f.yml`，最为精简的内容如下。
 
 ```yaml
 service: my-egg-demo ## 应用发布到云平台的名字
@@ -271,11 +271,11 @@ exports.schedule = false;
 exports.static = false;
 ```
 
-和默认 egg 不同的是，这里默认关闭了 static 插件，原因是，如果默认没有 `app/public`  目录，插件启动时会创建一个，由于服务器磁盘不可写，就会报错。
+和默认 egg 不同的是，这里默认关闭了 static 插件，原因是，如果默认没有 `app/public` 目录，插件启动时会创建一个，由于服务器磁盘不可写，就会报错。
 
-如果有 static 插件的需求，请**手动打开**，并**务必保证存在** `app/public`  或者相应的目录。
+如果有 static 插件的需求，请**手动打开**，并**务必保证存在** `app/public` 或者相应的目录。
 
-如果 `public`  目录在根目录，请配置 `f.yml`  中的 `package.include`  字段。
+如果 `public` 目录在根目录，请配置 `f.yml` 中的 `package.include` 字段。
 
 ```yaml
 service: my-egg-demo ## 应用发布到云平台的名字
@@ -356,7 +356,7 @@ deployType:
 
 ### 阿里云
 
-默认发布为 http 触发器，如果需要 API 网关，可以自行按照 f.yml 的格式进行 functions 结构的修改配置，同时，在 API 网关处配置路由 `/*`  中转到该函数即可。
+默认发布为 http 触发器，如果需要 API 网关，可以自行按照 f.yml 的格式进行 functions 结构的修改配置，同时，在 API 网关处配置路由 `/*` 中转到该函数即可。
 
 ### 腾讯云
 

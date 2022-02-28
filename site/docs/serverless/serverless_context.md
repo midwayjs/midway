@@ -88,9 +88,9 @@ const userService = await ctx.requestContext.getAsync(UserService);
 
 ## FaaSHTTPContext
 
-`Context`  定义继承于 `FaaSHTTPContext` ，前者保留了后者，大部分场景下可以直接使用前者，后者是在   apigw（API 网关）和 http （阿里云）触发器下才有的能力。
+`Context` 定义继承于 `FaaSHTTPContext`，前者保留了后者，大部分场景下可以直接使用前者，后者是在  apigw（API 网关）和 http （阿里云）触发器下才有的能力。
 
-对于普通用户，直接使用 `Context`  定义即可。
+对于普通用户，直接使用 `Context` 定义即可。
 
 ```typescript
 import { Context } from '@midwayjs/faas';
@@ -117,7 +117,7 @@ FaaS 模拟的 HTTP Response 对象。
 
 ### ctx.params
 
-代理自 `request.pathParameters` ，在 http 触发器（阿里云）和 API 网关触发器下可用。
+代理自 `request.pathParameters`，在 http 触发器（阿里云）和 API 网关触发器下可用。
 
 ```typescript
 // /api/user/[id]   /api/user/faas
@@ -144,7 +144,7 @@ ctx.status = 404;
 
 ### Request aliases
 
-以下列出的属性是从  [Request](#k6AZp)  对象代理过来
+以下列出的属性是从 [Request](#k6AZp) 对象代理过来
 
 - `ctx.headers`
 - `ctx.method`
@@ -159,15 +159,15 @@ ctx.status = 404;
 以下列出的属性是从 [Response](#kfTOD) 对象代理过来
 
 - `ctx.body=`
-- `ctx.status=` alias to `response.statusCode`
+- `ctx.status=`alias to `response.statusCode`
 - `ctx.type=`
-- `ctx.set()` alias to `response.setHeader`
+- `ctx.set()`alias to `response.setHeader`
 
 ##
 
 ## FaaSHTTPRequest
 
-此对象是通过将函数的 `event`  和 `context`  入参进行转换得来。
+此对象是通过将函数的 `event` 和 `context` 入参进行转换得来。
 
 ### request.headers
 
@@ -211,4 +211,4 @@ POST 请求的 body，已经解析为 JSON。
 
 ### response.body
 
-设置返回响应体内容， `string`  或者 `buffer` 。
+设置返回响应体内容， `string` 或者 `buffer`。

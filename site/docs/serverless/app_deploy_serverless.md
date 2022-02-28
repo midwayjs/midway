@@ -12,7 +12,7 @@ title: 应用迁移方案说明
 
 ## 这套方案和平台的迁移方案有什么区别？
 
-Midway Serverless 从 v1.1 版本开始提供了一套应用迁移到  Serverless 容器的方案，而各个平台也已经有自己的方案，比如阿里云的 customRuntime 接入方案，以及腾讯云的各种 Component 组件。
+Midway Serverless 从 v1.1 版本开始提供了一套应用迁移到 Serverless 容器的方案，而各个平台也已经有自己的方案，比如阿里云的 customRuntime 接入方案，以及腾讯云的各种 Component 组件。
 
 这其中的区别有几个：
 

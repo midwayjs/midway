@@ -41,7 +41,7 @@ $ npm init midway -- --type=faas-aggr my_midway_app
 
 我们来简单了解一下文件内容。
 
-- `f.yml`   函数定义文件
+- `f.yml`  函数定义文件
 - `tsconfig.json` tsc 配置文件（没有 IDE 会报错）
 - `src` 函数源码目录
 - `src/index.ts` 示例函数文件
@@ -107,7 +107,7 @@ $ npm run dev
 $ open http://localhost:7001
 ```
 
-Midway 会启动 HTTP 服务器，打开浏览器，访问 `[http://127.0.0.1:7001](http://127.0.0.1:7001)` ，浏览器会打印出 `Hello midwayjs`   的信息。
+Midway 会启动 HTTP 服务器，打开浏览器，访问 `[http://127.0.0.1:7001](http://127.0.0.1:7001)` ，浏览器会打印出 `Hello midwayjs`  的信息。
 
 <img src="https://cdn.nlark.com/yuque/0/2021/png/501408/1615045887650-73a90be7-1d49-4024-82c4-fd6b5192e75e.png#height=384&id=JCH29&margin=%5Bobject%20Object%5D&name=image.png&originHeight=768&originWidth=1268&originalType=binary&ratio=1&size=85174&status=done&style=none&width=634" width="634" />
 
@@ -120,7 +120,7 @@ Midway 会启动 HTTP 服务器，打开浏览器，访问 `[http://127.0.0.1:70
 `createFunctionApp` 方法是 `createApp` 方法在函数场景下的定制（其中指定了函数的 `@midwayjs/serverless-app` 框架）。
 
 :::info
-这里不直接使用 `@midwayjs/faas` 框架，而是使用 `@midwayjs/serverless-app`   框架，因为后者包含了网关模拟到函数调用的系列步骤。
+这里不直接使用 `@midwayjs/faas` 框架，而是使用 `@midwayjs/serverless-app`  框架，因为后者包含了网关模拟到函数调用的系列步骤。
 :::
 
 HTTP 测试代码如下：
@@ -161,17 +161,17 @@ describe('test/index.test.ts', () => {
 
 <img src="https://cdn.nlark.com/yuque/0/2021/png/501408/1618156727582-20f0df7c-9f91-430b-87a6-1796b1ee35e1.png#height=494&id=Rdl50&margin=%5Bobject%20Object%5D&name=image.png&originHeight=988&originWidth=1912&originalType=binary&ratio=1&size=85218&status=done&style=none&width=956" width="956" />
 
-而聚合部署，会将所有的路由都注册到 `/*`  路由上，由框架内部的路由代码进行分发，所有的函数共享同一个容器，任意的请求都会让这个容器保活，使得冷启动的可能性大大减少。同时，由于代码是复用的，容器的复用率大大增加，比较适合于中后台这类请求均衡且接口的调用量相对均衡的场景。
+而聚合部署，会将所有的路由都注册到 `/*` 路由上，由框架内部的路由代码进行分发，所有的函数共享同一个容器，任意的请求都会让这个容器保活，使得冷启动的可能性大大减少。同时，由于代码是复用的，容器的复用率大大增加，比较适合于中后台这类请求均衡且接口的调用量相对均衡的场景。
 
 <img src="https://cdn.nlark.com/yuque/0/2021/png/501408/1618156735858-4ddb1d49-357d-4cec-8201-b2e49bde4b5f.png#height=456&id=I9ZeD&margin=%5Bobject%20Object%5D&name=image.png&originHeight=912&originWidth=1770&originalType=binary&ratio=1&size=59657&status=done&style=none&width=885" width="885" />
 
 ## 函数名规则
 
-使用聚合模式部署的函数，我们一般使用 `@Controller`  装饰器或者一体化方式进行开发，和传统 Web 开发、测试保持一致。
+使用聚合模式部署的函数，我们一般使用 `@Controller` 装饰器或者一体化方式进行开发，和传统 Web 开发、测试保持一致。
 
-在构建时，我们会生成 `f.yml`  中的 `functions`  字段，一般情况下用户不需要关心函数名，接口等信息。
+在构建时，我们会生成 `f.yml` 中的 `functions` 字段，一般情况下用户不需要关心函数名，接口等信息。
 
-在使用 `@Controller`  装饰器的情况下，生成的函数名规则为 `providerId_methodName` ，即依赖注入的 key 和方法名的组合。
+在使用 `@Controller` 装饰器的情况下，生成的函数名规则为 `providerId_methodName`，即依赖注入的 key 和方法名的组合。
 
 比如：
 
@@ -187,7 +187,7 @@ export class UserService {
 }
 ```
 
-构建时会自动生成 `userService_getUser`  和 `userService_createUser`  两个函数并做内部路由处理。
+构建时会自动生成 `userService_getUser` 和 `userService_createUser` 两个函数并做内部路由处理。
 
 下面是生成的 YAML 伪代码（实际由于是聚合部署，变为内部路由，并不会创建这段代码）。
 

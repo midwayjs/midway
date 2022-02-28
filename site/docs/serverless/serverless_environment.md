@@ -12,7 +12,7 @@ $ NODE_ENV midway-bin deploy			// 错误写法，只在本地生效
 
 ## 发布环境变量
 
-为了和普通的环境变量区分，部署到平台的环境变量使用 `UDEV_` （User Defined Environment Variable）前缀，并且**会在发布后写入到发布的 yml 文件对应的 environment 字段中。**
+为了和普通的环境变量区分，部署到平台的环境变量使用 `UDEV_`（User Defined Environment Variable）前缀，并且**会在发布后写入到发布的 yml 文件对应的 environment 字段中。**
 
 例如：
 
@@ -20,7 +20,7 @@ $ NODE_ENV midway-bin deploy			// 错误写法，只在本地生效
 $ UDEV_NODE_ENV=prod midway-bin deploy
 ```
 
-这个时候在平台将会接收到名为 `NODE_ENV` ，值为 `prod`  的环境变量。
+这个时候在平台将会接收到名为 `NODE_ENV`，值为 `prod` 的环境变量。
 
 ## YML 变量填充
 
