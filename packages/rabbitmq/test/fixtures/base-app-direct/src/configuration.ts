@@ -6,7 +6,7 @@ import { IMidwayRabbitMQApplication } from '../../../../src';
   importConfigs: [
     {
       default: {
-        rabbitMQServer: {
+        rabbitmq: {
           url: process.env.RABBITMQ_URL || 'amqp://localhost',
           reconnectTime: 2000
         }

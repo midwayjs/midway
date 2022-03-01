@@ -6,7 +6,7 @@ import { MidwayRabbitMQFramework } from './framework';
   importConfigs: [
     {
       default: {
-        rabbitMQServer: {},
+        rabbitmq: {},
       },
     },
   ],
