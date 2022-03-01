@@ -28,7 +28,7 @@ export class MidwayRabbitMQFramework extends BaseFramework<
   public consumerHandlerList = [];
 
   configure() {
-    return this.configService.getConfiguration('rabbitMQServer');
+    return this.configService.getConfiguration('rabbitmq');
   }
 
   async applicationInitialize(options) {

@@ -44,7 +44,7 @@ export type DefaultConfig = string | AmqpOptions.Connect;
 
 declare module '@midwayjs/core/dist/interface' {
   interface MidwayConfig {
-    rabbitMQServer?: PowerPartial<IMidwayRabbitMQConfigurationOptions>;
+    rabbitmq?: PowerPartial<IMidwayRabbitMQConfigurationOptions>;
   }
 }
 
