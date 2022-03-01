@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.13](https://github.com/midwayjs/midway/compare/v3.0.12...v3.0.13) (2022-03-01)
+
+
+### Bug Fixes
+
+* rabbitmq config key ([#1758](https://github.com/midwayjs/midway/issues/1758)) ([b667011](https://github.com/midwayjs/midway/commit/b667011df4c2604a8eaccc40bce7ae75e0330514))
+
+
+
+
+
 ## [3.0.11](https://github.com/midwayjs/midway/compare/v3.0.10...v3.0.11) (2022-02-25)
 
 **Note:** Version bump only for package @midwayjs/rabbitmq

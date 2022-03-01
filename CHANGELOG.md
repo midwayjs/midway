@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.13](https://github.com/midwayjs/midway/compare/v3.0.12...v3.0.13) (2022-03-01)
+
+
+### Bug Fixes
+
+* **deps:** update dependency raw-body to v2.5.1 ([#1754](https://github.com/midwayjs/midway/issues/1754)) ([6d9d819](https://github.com/midwayjs/midway/commit/6d9d819a3628ac8ecf91e75120a73f0533ba4bc9))
+* **deps:** update dependency sequelize to ~6.17.0 ([#1750](https://github.com/midwayjs/midway/issues/1750)) ([5176df9](https://github.com/midwayjs/midway/commit/5176df979528fd41e648771847c32236f19e2baf))
+* rabbitmq config key ([#1758](https://github.com/midwayjs/midway/issues/1758)) ([b667011](https://github.com/midwayjs/midway/commit/b667011df4c2604a8eaccc40bce7ae75e0330514))
+
+
+
+
+
 ## [3.0.12](https://github.com/midwayjs/midway/compare/v3.0.11...v3.0.12) (2022-02-25)
 
 

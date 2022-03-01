@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/koa",
-  "version": "3.0.11",
+  "version": "3.0.13",
   "description": "Midway Web Framework for KOA",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -25,7 +25,7 @@
   "devDependencies": {
     "@midwayjs/decorator": "^3.0.10",
     "@midwayjs/logger": "^2.15.0",
-    "@midwayjs/mock": "^3.0.11",
+    "@midwayjs/mock": "^3.0.13",
     "@types/koa": "2.13.4",
     "@types/koa-router": "7.4.4",
     "fs-extra": "10.0.1"
@@ -33,8 +33,8 @@
   "dependencies": {
     "@koa/router": "^10.0.0",
     "@midwayjs/cookies": "1.0.1",
-    "@midwayjs/core": "^3.0.11",
-    "@midwayjs/session": "^3.0.11",
+    "@midwayjs/core": "^3.0.13",
+    "@midwayjs/session": "^3.0.13",
     "koa": "2.13.4",
     "koa-bodyparser": "4.3.0"
   },

@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/serverless-aws-starter",
-  "version": "3.0.10",
+  "version": "3.0.13",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
   "dependencies": {

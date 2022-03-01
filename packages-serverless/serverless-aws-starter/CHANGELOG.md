@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.13](https://github.com/midwayjs/midway/compare/v3.0.12...v3.0.13) (2022-03-01)
+
+
+### Bug Fixes
+
+* **deps:** update dependency raw-body to v2.5.1 ([#1754](https://github.com/midwayjs/midway/issues/1754)) ([6d9d819](https://github.com/midwayjs/midway/commit/6d9d819a3628ac8ecf91e75120a73f0533ba4bc9))
+
+
+
+
+
 ## [3.0.10](https://github.com/midwayjs/midway/compare/v3.0.9...v3.0.10) (2022-02-24)
 
 
