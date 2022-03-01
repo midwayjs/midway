@@ -93,7 +93,7 @@ export class ContainerLifeCycle implements ILifeCycle {}
 ```
 ## 示例：本地策略
 
-我们可以通过 `@CuustomStrategy` 和派生 `PassportStrategy` 来自启动一个策略。通过 validate 钩子来获取有效负载，并且此函数必须有返回值，其参数并不明确，可以参考对应的 Strategy 或者通过展开符打印查看。
+我们可以通过 `@CustomStrategy` 和派生 `PassportStrategy` 来自启动一个策略。通过 validate 钩子来获取有效负载，并且此函数必须有返回值，其参数并不明确，可以参考对应的 Strategy 或者通过展开符打印查看。
 
 ```typescript
 // src/strategy/local.strategy.ts
