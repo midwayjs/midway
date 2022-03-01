@@ -167,6 +167,10 @@ export class MidwayWebFramework extends BaseFramework<
             return MidwayProcessTypeEnum.AGENT;
           }
         },
+
+        createContextLogger: (ctx, name) => {
+          return this.createContextLogger(ctx, name);
+        },
       },
       ['createAnonymousContext']
     );

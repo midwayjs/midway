@@ -19,7 +19,7 @@ module.exports = {
     if (this[ctxLogger]) {
       return this[ctxLogger];
     }
-    return this.getLogger('logger');
+    return this.app.createContextLogger(this, 'logger');
   },
 
   set logger(customLogger) {

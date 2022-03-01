@@ -13,16 +13,14 @@ export default (
   midwayLogger?: ServiceFactoryConfigOption<LoggerOptions>;
 } => {
   const isDevelopment = isDevelopmentEnvironment(getCurrentEnvironment());
+  const logRoot = process.env[MIDWAY_LOGGER_WRITEABLE_DIR] ?? appInfo.root;
   return {
     midwayLogger: {
       default: {
-        dir: join(
-          process.env[MIDWAY_LOGGER_WRITEABLE_DIR] ?? appInfo.root,
-          'logs',
-          appInfo.name
-        ),
+        dir: join(logRoot, 'logs', appInfo.name),
         level: isDevelopment ? 'info' : 'warn',
         consoleLevel: isDevelopment ? 'info' : 'warn',
+        auditFileDir: join(logRoot, 'logs', '.audit'),
       },
       clients: {
         coreLogger: {
