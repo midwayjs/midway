@@ -22,7 +22,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "raw-body": "2.5.0"
+    "raw-body": "2.5.1"
   },
   "devDependencies": {
     "@midwayjs/core": "^3.0.11",
