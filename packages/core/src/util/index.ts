@@ -205,13 +205,13 @@ export const transformRequestObjectByType = (originValue: any, targetType?) => {
   ) {
     return originValue;
   }
-  if (!originValue) {
-    return originValue;
-  }
   switch (targetType) {
     case Number:
       return Number(originValue);
     case String:
+      if (!originValue) {
+        return;
+      }
       return String(originValue);
     case Boolean:
       if (originValue === '0' || originValue === 'false') {
