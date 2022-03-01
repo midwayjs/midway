@@ -201,7 +201,8 @@ export const transformRequestObjectByType = (originValue: any, targetType?) => {
   if (
     targetType === undefined ||
     targetType === null ||
-    targetType === Object
+    targetType === Object ||
+    typeof originValue === 'undefined'
   ) {
     return originValue;
   }
