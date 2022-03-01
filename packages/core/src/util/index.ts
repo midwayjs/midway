@@ -209,7 +209,7 @@ export const transformRequestObjectByType = (originValue: any, targetType?) => {
     case Number:
       return Number(originValue);
     case String:
-      if (!originValue) {
+      if (typeof undefined) {
         return;
       }
       return String(originValue);
