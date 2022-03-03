@@ -11,9 +11,7 @@ import { Environment, FileSystemLoader, runtime } from 'nunjucks';
 
 class MidwayNunjucksEnvironment extends Environment {
   constructor(fileLoader, config) {
-    super(fileLoader, {
-      noCache: config.noCache,
-    });
+    super(fileLoader, config);
 
     // http://disse.cting.org/2016/08/02/2016-08-02-sandbox-break-out-nunjucks-template-engine
     const originMemberLookup = runtime.memberLookup;
@@ -49,10 +47,20 @@ export class NunjucksEnvironment {
     config.noCache = !config.cache;
     delete config.cache;
 
-    const fileLoader = new FileSystemLoader(this.globalConfig.view.root);
+    const nunjucksConfig = {
+      noCache: config.noCache,
+      throwOnUndefined: config.throwOnUndefined,
+      trimBlocks: config.trimBlocks,
+      lstripBlocks: config.lstripBlocks,
+      tags: config.tags,
+    };
+
+    const fileLoader = new FileSystemLoader(this.globalConfig.view.root, {
+      noCache: nunjucksConfig.noCache,
+    });
     this.nunjucksEnvironment = new MidwayNunjucksEnvironment(
       fileLoader,
-      config
+      nunjucksConfig
     );
   }
 
