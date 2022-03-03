@@ -1,6 +1,7 @@
 import {
   CommonMiddlewareUnion,
-  ContextMiddlewareManager, FunctionMiddleware,
+  ContextMiddlewareManager,
+  FunctionMiddleware,
   IConfigurationOptions,
   IMiddleware,
   IMidwayApplication,
