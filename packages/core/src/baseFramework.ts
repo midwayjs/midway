@@ -352,9 +352,9 @@ export abstract class BaseFramework<
   }
 
   public useMiddleware(
-    Middleware: CommonMiddlewareUnion<CTX, ResOrNext, Next>
+    middleware: CommonMiddlewareUnion<CTX, ResOrNext, Next>
   ) {
-    this.middlewareManager.insertLast(Middleware);
+    this.middlewareManager.insertLast(middleware);
   }
 
   public getMiddleware(): ContextMiddlewareManager<CTX, ResOrNext, Next> {
