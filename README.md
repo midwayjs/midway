@@ -112,7 +112,7 @@ cd my_midway_app && npm run dev
 
 ![midway-examples](https://img.alicdn.com/imgextra/i1/O1CN01Q0M4Ma27FnIgiXE4a_!!6000000007768-0-tps-3802-1996.jpg)
 
-请访问 [midway-examples](http://demo.midwayjs.org/).
+请访问 [midway-examples](http://demo.midwayjs.org/)
 
 
 ## 社区优秀示例展示
