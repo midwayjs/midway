@@ -242,10 +242,9 @@ this.app.setAttr('abc', {
 在另一个地方获取即可。
 
 ```typescript
-this.app.getAttr('abc', {
-  a: 1,
-  b: 2,
-});
+const value = this.app.getAttr('abc');
+// { a: 1, b: 2 }
+console.log(value);
 ```
 
 
