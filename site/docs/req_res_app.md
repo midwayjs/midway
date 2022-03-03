@@ -113,10 +113,10 @@ import * as ws from '@midwayjs/ws';
 export class ContainerConfiguration implements ILifeCycle {
   @App()
   koaApp: koa.Application;
-  
+
   @App(MidwayFrameworkType.WS)
   wsApp: ws.Application;
-  
+
   async onReady() {
     this.koaApp.useMiddleweare(...);
     this.wsApp.useMiddleweare(...);
@@ -331,9 +331,8 @@ this.ctx.setAttr('abc', {
 在另一个地方获取即可。
 
 ```typescript
-this.ctx.getAttr('abc', {
-  a: 1,
-  b: 2,
-});
+const value = this.ctx.getAttr('abc');
+// { a: 1, b: 2 }
+console.log(value);
 ```
 
