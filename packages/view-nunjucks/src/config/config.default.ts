@@ -28,5 +28,16 @@ export default {
      * use a cache and recompile templates each time. false in local env.
      */
     cache: boolean;
+    /**
+     * defines the syntax for nunjucks tags.
+     */
+    tags?: {
+      blockStart?: string;
+      blockEnd?: string;
+      variableStart?: string;
+      variableEnd?: string;
+      commentStart?: string;
+      commentEnd?: string;
+    };
   };
 };
