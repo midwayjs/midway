@@ -13,7 +13,7 @@ export function accepts(ctx) {
   return 'html';
 }
 
-function acceptJSON (ctx) {
+function acceptJSON(ctx) {
   if (ctx.path.endsWith('.json')) return true;
   if (ctx.response.type && this.response.type.indexOf('json') >= 0) return true;
   if (ctx.accepts('html', 'text', 'json') === 'json') return true;
