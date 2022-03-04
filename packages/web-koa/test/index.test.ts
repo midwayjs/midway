@@ -282,6 +282,17 @@ describe('/test/feature.test.ts', () => {
     await closeApp(app);
   });
 
+  it('default onerror should return json', async () => {
+    const app = await creatApp('base-app-default-onerror');
+    const result = await createHttpRequest(app)
+      .get('/')
+      .set('Accept', 'application/json');
+    const error = JSON.parse(result.text)
+    expect(error[1]).toEqual('400');
+    expect(error[2]).toEqual('my error');
+    await closeApp(app);
+  });
+
   it('should test global filter', async () => {
     const app = await creatApp('base-app-error-filter');
     const result = await createHttpRequest(app)
