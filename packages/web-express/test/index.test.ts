@@ -292,4 +292,13 @@ describe('/test/feature.test.ts', () => {
     await closeApp(app);
   });
 
+  it('should test app.use router aath ands middleware', async () => {
+    const app = await creatApp('base-app-router-path-middleware');
+    let result = await createHttpRequest(app)
+      .get('/user/123');
+    expect(result.text).toEqual('USER');
+    await closeApp(app);
+  });
+
+
 });
