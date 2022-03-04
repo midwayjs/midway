@@ -1,6 +1,7 @@
 import {
   CommonMiddlewareUnion,
   ContextMiddlewareManager,
+  FunctionMiddleware,
   IConfigurationOptions,
   IMiddleware,
   IMidwayApplication,
@@ -31,16 +32,23 @@ export type IMidwayExpressContext = Context;
 export type IMidwayExpressMiddleware = IMiddleware<Context, ExpressResponse, ExpressNextFunction>;
 export interface IMidwayExpressApplication extends IMidwayApplication<Context, ExpressApplication> {
   /**
-   * add global middleware to app
-   * @param Middleware
+   * mount router and middleware
+   * @param routerPath
+   * @param middleware
    */
-  useMiddleware<Response, NextFunction>(Middleware: CommonMiddlewareUnion<Context, Response, NextFunction>): void;
+  useMiddleware<Response, NextFunction>(routerPath: string, ...middleware: FunctionMiddleware<Context, Response, NextFunction>[]): void;
+  /**
+   * add global middleware to app
+   * @param middleware
+   */
+  useMiddleware<Response, NextFunction>(middleware: CommonMiddlewareUnion<Context, Response, NextFunction>): void;
 
   /**
    * get global middleware
    */
   getMiddleware<Response, NextFunction>(): ContextMiddlewareManager<Context, Response, NextFunction>;
 }
+
 
 export interface IMidwayExpressConfigurationOptions extends IConfigurationOptions {
   /**

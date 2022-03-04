@@ -8,6 +8,8 @@ import {
   WebRouterCollector,
   RouterInfo,
   httpError,
+  CommonMiddlewareUnion,
+  FunctionMiddleware,
 } from '@midwayjs/core';
 
 import {
@@ -67,7 +69,20 @@ export class MidwayExpressFramework extends BaseFramework<
       next();
     });
 
-    this.defineApplicationProperties();
+    this.defineApplicationProperties({
+      useMiddleware: (
+        routerPath:
+          | string
+          | CommonMiddlewareUnion<Context, Response, NextFunction>,
+        ...middleware: FunctionMiddleware<Context, Response, NextFunction>[]
+      ) => {
+        if (typeof routerPath === 'string' && middleware) {
+          return this.useRouterMiddleware(routerPath, middleware);
+        } else {
+          return this.useMiddleware(routerPath as any);
+        }
+      },
+    });
 
     // hack use method
     (this.app as any).originUse = this.app.use;
@@ -325,6 +340,10 @@ export class MidwayExpressFramework extends BaseFramework<
    */
   protected createRouter(routerOptions: { sensitive }): IRouter {
     return express.Router({ caseSensitive: routerOptions.sensitive });
+  }
+
+  public useRouterMiddleware(routerPath: string, middleware) {
+    (this.app as any).originUse(routerPath, ...middleware);
   }
 
   public async applyMiddleware<Response, NextFunction>(): Promise<
