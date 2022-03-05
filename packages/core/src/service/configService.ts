@@ -37,7 +37,7 @@ export class MidwayConfigService implements IConfigService {
   protected informationService: MidwayInformationService;
 
   @Init()
-  protected async init() {
+  protected init() {
     this.appInfo = {
       pkg: this.informationService.getPkg(),
       name: this.informationService.getProjectName(),
@@ -108,7 +108,7 @@ export class MidwayConfigService implements IConfigService {
     return splits.pop();
   }
 
-  async load() {
+  load() {
     if (this.isReady) return;
     // get default
     const defaultSet = this.getEnvSet('default');
@@ -119,7 +119,7 @@ export class MidwayConfigService implements IConfigService {
     // merge set
     const target = {};
     for (const filename of [...defaultSet, ...currentEnvSet]) {
-      let config = await this.loadConfig(filename);
+      let config = this.loadConfig(filename);
       if (Types.isFunction(config)) {
         // eslint-disable-next-line prefer-spread
         config = config.apply(null, [this.appInfo, target]);
@@ -156,9 +156,9 @@ export class MidwayConfigService implements IConfigService {
     return this.configuration;
   }
 
-  private async loadConfig(
+  private loadConfig(
     configFilename
-  ): Promise<(...args) => any | Record<string, unknown>> {
+  ): (...args) => any | Record<string, unknown> {
     let exports =
       typeof configFilename === 'string'
         ? require(configFilename)

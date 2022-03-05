@@ -88,7 +88,7 @@ export class MidwayRequestContainer extends MidwayContainer {
     }
   }
 
-  async ready() {
+  ready() {
     // ignore other things
   }
 

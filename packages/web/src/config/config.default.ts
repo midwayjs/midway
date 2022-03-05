@@ -1,20 +1,16 @@
-'use strict';
+import * as path from 'path';
+import * as mkdirp from 'mkdirp';
+import * as os from 'os';
+import * as fs from 'fs';
 
-const path = require('path');
-const mkdirp = require('mkdirp');
-const os = require('os');
-const fs = require('fs');
-
-module.exports = appInfo => {
-  const exports = {};
+export default appInfo => {
+  const exports = {} as any;
 
   exports.rundir = path.join(appInfo.appDir, 'run');
+
   // 修改默认的日志名
   exports.midwayLogger = {
     clients: {
-      coreLogger: {
-        fileLogName: 'midway-core.log',
-      },
       appLogger: {
         fileLogName: 'midway-web.log',
         aliasName: 'logger',
@@ -22,6 +18,30 @@ module.exports = appInfo => {
       agentLogger: {
         fileLogName: 'midway-agent.log',
       },
+    },
+  };
+
+  exports.egg = {
+    dumpConfig: true,
+    contextLoggerFormat: info => {
+      const ctx = info.ctx;
+      // format: '[$userId/$ip/$traceId/$use_ms $method $url]'
+      const userId = ctx.userId || '-';
+      const traceId = (ctx.tracer && ctx.tracer.traceId) || '-';
+      const use = Date.now() - ctx.startTime;
+      const label =
+        userId +
+        '/' +
+        ctx.ip +
+        '/' +
+        traceId +
+        '/' +
+        use +
+        'ms ' +
+        ctx.method +
+        ' ' +
+        ctx.url;
+      return `${info.timestamp} ${info.LEVEL} ${info.pid} [${label}] ${info.message}`;
     },
   };
 

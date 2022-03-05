@@ -552,6 +552,7 @@ export interface IMidwayBootstrapOptions {
   globalConfig?:
     | Array<{ [environmentName: string]: Record<string, any> }>
     | Record<string, any>;
+  lazyInitializeFramework?: boolean;
 }
 
 export interface IConfigurationOptions {

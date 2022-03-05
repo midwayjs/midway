@@ -48,6 +48,7 @@
     "@eggjs/router": "^2.0.0",
     "@midwayjs/core": "^3.0.13",
     "egg": "^2.28.0",
+    "egg-cluster": "1.27.1",
     "find-up": "5.0.0",
     "mkdirp": "^1.0.4"
   },

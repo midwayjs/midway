@@ -6,11 +6,12 @@ import {
 import { EggAppInfo } from 'egg';
 import {
   getCurrentApplicationContext,
-  initializeGlobalApplicationContext,
   MidwayConfigService,
   safelyGet,
   safeRequire,
   extend,
+  MidwayFrameworkService,
+  MidwayLifeCycleService,
 } from '@midwayjs/core';
 import { join } from 'path';
 import { existsSync, readFileSync } from 'fs';
@@ -51,13 +52,8 @@ export const createAppWorkerLoader = () => {
     bootstrap;
     useEggSocketIO = false;
     applicationContext;
-    // 是否是单进程模式
-    singleProcessMode;
 
     getEggPaths() {
-      if (getCurrentApplicationContext()) {
-        this.singleProcessMode = true;
-      }
       if (!this.appDir) {
         // 这里的逻辑是为了兼容老 cluster 模式
         if (this.app.options.typescript || this.app.options.isTsMode) {
@@ -137,19 +133,34 @@ export const createAppWorkerLoader = () => {
     }
 
     load() {
-      if (!this.singleProcessMode) {
-        // 多进程模式，从 egg-scripts 启动的
-        process.env['EGG_CLUSTER_MODE'] = 'true';
-        debug('[egg]: run with egg-scripts in cluster mode');
-        // 如果不走 bootstrap，就得在这里初始化 applicationContext
-        initializeGlobalApplicationContext({
-          ...this.globalOptions,
-          appDir: this.appDir,
-          baseDir: this.baseDir,
-          ignore: ['**/app/extend/**'],
-          application: this.app,
-        }).then(_ => {
-          debug('[egg]: global context: init complete');
+      /**
+       * 由于使用了新的 hook 方式，这个时候 midway 已经初始化了一部分
+       * 但是我们把初始化分为了两个部分，framework 相关的留到这里初始化
+       * 避免 app 不存在，也能尽可能和单进程模式执行一样的逻辑
+       */
+
+      // lazy initialize framework
+      if (process.env['EGG_CLUSTER_MODE'] === 'true') {
+        this.app.beforeStart(async () => {
+          debug(
+            '[egg]: start "initialize framework service with lazy in app.load"'
+          );
+          const applicationContext = getCurrentApplicationContext();
+          /**
+           * 这里 logger service 已经被 get loggers() 初始化过了，就不需要在这里初始化了
+           */
+          // framework/config/plugin/logger/app decorator support
+          await applicationContext.getAsync(MidwayFrameworkService, [
+            applicationContext,
+            {
+              application: this.app,
+            },
+          ]);
+
+          // lifecycle support
+          await applicationContext.getAsync(MidwayLifeCycleService, [
+            applicationContext,
+          ]);
         });
       }
     }
@@ -161,16 +172,14 @@ export const createAppWorkerLoader = () => {
 
     loadConfig() {
       super.loadConfig();
-      if (this.singleProcessMode) {
-        const configService =
-          getCurrentApplicationContext().get(MidwayConfigService);
-        configService.addObject(this.config);
-        Object.defineProperty(this, 'config', {
-          get() {
-            return configService.getConfiguration();
-          },
-        });
-      }
+      const configService =
+        getCurrentApplicationContext().get(MidwayConfigService);
+      configService.addObject(this.config);
+      Object.defineProperty(this, 'config', {
+        get() {
+          return configService.getConfiguration();
+        },
+      });
     }
 
     loadMiddleware() {
@@ -195,13 +204,7 @@ export const createAgentWorkerLoader = () => {
     require(getFramework())?.AgentWorkerLoader ||
     require('egg').AgentWorkerLoader;
   class EggAgentWorkerLoader extends (AppWorkerLoader as any) {
-    // 是否是单进程模式
-    singleProcessMode;
-
     getEggPaths() {
-      if (getCurrentApplicationContext()) {
-        this.singleProcessMode = true;
-      }
       if (!this.appDir) {
         if (this.app.options.typescript || this.app.options.isTsMode) {
           process.env.EGG_TYPESCRIPT = 'true';
@@ -282,12 +285,7 @@ export const createAgentWorkerLoader = () => {
     load() {
       this.app.beforeStart(async () => {
         debug('[egg]: start "initializeAgentApplicationContext"');
-        await initializeAgentApplicationContext(this.app, {
-          ...this.globalOptions,
-          appDir: this.appDir,
-          baseDir: this.baseDir,
-          ignore: ['**/app/extend/**'],
-        });
+        await initializeAgentApplicationContext(this.app);
         super.load();
         debug('[egg]: agent load run complete');
       });
@@ -295,7 +293,7 @@ export const createAgentWorkerLoader = () => {
 
     loadConfig() {
       super.loadConfig();
-      if (this.singleProcessMode) {
+      if (getCurrentApplicationContext()) {
         const configService =
           getCurrentApplicationContext().get(MidwayConfigService);
         configService.addObject(this.config);

@@ -10,7 +10,11 @@ import {
 import { Application, EggLogger } from 'egg';
 import { getCurrentDateString } from './utils';
 import * as os from 'os';
-import { MidwayLoggerService, safelyGet, extend } from '@midwayjs/core';
+import {
+  MidwayLoggerService,
+  getCurrentApplicationContext,
+  MidwayConfigService,
+} from '@midwayjs/core';
 import { debuglog } from 'util';
 
 const debug = debuglog('midway:debug');
@@ -22,6 +26,35 @@ function isEmptyFile(p: string) {
   });
   return content === null || content === undefined || content === '';
 }
+
+const levelTransform = level => {
+  if (!level) {
+    return undefined;
+  }
+  switch (level) {
+    case 'NONE':
+    case Infinity: // egg logger 的 none 是这个等级
+      return 'none';
+    case 0:
+    case 'DEBUG':
+    case 'debug':
+      return 'debug';
+    case 1:
+    case 'INFO':
+    case 'info':
+      return 'info';
+    case 2:
+    case 'WARN':
+    case 'warn':
+      return 'warn';
+    case 3:
+    case 'ERROR':
+    case 'error':
+      return 'error';
+    default:
+      return 'silly';
+  }
+};
 
 function checkEggLoggerExistsAndBackup(dir, fileName) {
   const file = isAbsolute(fileName) ? fileName : join(dir, fileName);
@@ -39,8 +72,17 @@ function checkEggLoggerExistsAndBackup(dir, fileName) {
   }
 }
 
+function cleanUndefinedProperty(obj) {
+  Object.keys(obj).forEach(key => {
+    if (obj[key] === undefined) {
+      delete obj[key];
+    }
+  });
+}
+
 class MidwayLoggers extends Map<string, ILogger> {
-  app: Application;
+  protected app: Application;
+  protected loggerService: MidwayLoggerService;
 
   /**
    * @constructor
@@ -60,17 +102,12 @@ class MidwayLoggers extends Map<string, ILogger> {
    *   - {String} eol - end of line char
    *   - {String} [concentrateError = duplicate] - whether write error logger to common-error.log, `duplicate` / `redirect` / `ignore`
    * - customLogger
-   * @param options
    * @param app
    */
-  constructor(options, app: Application, processType: 'agent' | 'app') {
+  constructor(app: Application) {
     super();
     /**
-     * 日志创建的几种场景，主要考虑 2，4
-     * 1、单进程，使用 egg logger
-     * 2、单进程，使用 midway logger
-     * 3、egg-scripts 多进程，使用 egg-logger
-     * 4、egg-scripts 多进程，使用 midway logger
+     * 在 egg 这里创建 loggers，并初始化 loggerService
      */
     // 这么改是为了防止 egg 日志切割时遍历属性，导致报错
     Object.defineProperty(this, 'app', {
@@ -78,48 +115,27 @@ class MidwayLoggers extends Map<string, ILogger> {
       enumerable: false,
     });
 
-    /**
-     * 提前备份 egg 日志
-     */
-    for (const name of [
-      options.logger.appLogName,
-      options.logger.coreLogName,
-      options.logger.agentLogName,
-      options.logger.errorLogName,
-    ]) {
-      checkEggLoggerExistsAndBackup(options.logger.dir, name);
+    const configService =
+      getCurrentApplicationContext().get(MidwayConfigService);
+
+    // 先把 egg 的日志配置转为 midway logger 配置
+    if (configService.getConfiguration('customLogger')) {
+      const eggLoggerConfig = this.transformEggLogger(
+        configService.getConfiguration('customLogger')
+      ) as any;
+      if (eggLoggerConfig) {
+        configService.addObject(eggLoggerConfig);
+      }
     }
 
-    /**
-     * 走到这里，有几种情况
-     * 1、egg-scripts 启动，并使用了 midway logger，egg 先启动了
-     * 2、单进程启动，但是没有 configuration，midway 没读到配置，日志服务没初始化
-     * 3、再走一遍日志创建，把 egg 插件配置的日志再初始化一遍
-     */
-    const loggerService = new MidwayLoggerService(null);
-    loggerService.configService = {
-      getConfiguration(configKey?: string) {
-        if (configKey) {
-          return safelyGet(configKey, options);
-        }
-        return this.configuration;
-      },
-    } as any;
+    const loggerConfig = configService.getConfiguration('midwayLogger');
 
-    const midwayLoggerConfig = loggerService.transformEggLogger(options) as any;
-    extend(true, options, midwayLoggerConfig);
-
-    if (options?.midwayLogger?.clients) {
-      // 从 egg 过来，这里有可能没有 dir
-      if (!options.midwayLogger['default']?.dir) {
-        options.midwayLogger.default['dir'] = options.logger.dir;
-      }
-
-      for (const id of Object.keys(options.midwayLogger.clients)) {
+    if (loggerConfig) {
+      for (const id of Object.keys(loggerConfig.clients)) {
         const config = Object.assign(
           {},
-          options.midwayLogger['default'],
-          options.midwayLogger.clients[id]
+          loggerConfig['default'],
+          loggerConfig.clients[id]
         );
         this.createLogger(config, id);
       }
@@ -130,16 +146,23 @@ class MidwayLoggers extends Map<string, ILogger> {
       this.set('logger', loggers.getLogger('appLogger'));
     }
 
-    if (loggers.has('coreLogger')) {
-      this.createLogger({}, 'coreLogger');
-      this.createLogger({}, 'appLogger');
-      this.createLogger({}, 'agentLogger');
-    } else {
-      console.log('-----请在 logger 里配置 clients');
-    }
+    // 初始化日志服务
+    this.loggerService = getCurrentApplicationContext().get(
+      MidwayLoggerService,
+      [getCurrentApplicationContext()]
+    );
+    // 防止循环枚举报错
+    Object.defineProperty(this, 'loggerService', {
+      enumerable: false,
+    });
   }
 
   createLogger(options, loggerKey: string) {
+    /**
+     * 提前备份 egg 日志
+     */
+    checkEggLoggerExistsAndBackup(options.dir, options.fileLogName);
+
     const logger: ILogger = loggers.createLogger(loggerKey, options);
 
     // overwrite values for pandora collect
@@ -170,35 +193,42 @@ class MidwayLoggers extends Map<string, ILogger> {
       }
     }
   }
+
+  transformEggLogger(eggCustomLogger) {
+    const transformLoggerConfig = {
+      midwayLogger: {
+        clients: {},
+      },
+    };
+
+    for (const name in eggCustomLogger) {
+      transformLoggerConfig.midwayLogger.clients[name] = {
+        fileLogName: eggCustomLogger[name]?.file,
+        level: levelTransform(eggCustomLogger[name]?.level),
+        consoleLevel: levelTransform(eggCustomLogger[name]?.consoleLevel),
+      };
+      cleanUndefinedProperty(transformLoggerConfig.midwayLogger.clients[name]);
+    }
+    return transformLoggerConfig;
+  }
 }
 
 export const createLoggers = (
   app: Application,
   processType: 'agent' | 'app'
 ) => {
-  const loggerConfig = app.config.logger as any;
-  loggerConfig.type = app.type;
-
-  if (
-    app.config.env === 'prod' &&
-    loggerConfig.level === 'DEBUG' &&
-    !loggerConfig.allowDebugAtProd
-  ) {
-    loggerConfig.level = 'INFO';
-  }
-
   // 现在只走 midway logger
-  const loggers = new MidwayLoggers(app.config, app, processType);
+  const loggers = new MidwayLoggers(app);
   // won't print to console after started, except for local and unittest
   app.ready(() => {
-    if (loggerConfig.disableConsoleAfterReady) {
+    if (app.config.logger?.disableConsoleAfterReady) {
       loggers.disableConsole();
     }
   });
   debug(`[egg]: create loggers in ${processType}`);
   loggers['coreLogger'].info(
     '[egg:logger] init all loggers with options: %j',
-    loggerConfig
+    app.config.midwayLogger
   );
 
   return loggers;

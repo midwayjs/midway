@@ -111,18 +111,20 @@ export class MidwayWebFramework extends BaseFramework<
 
     this.overwriteApplication('app');
 
-    await new Promise<void>(resolve => {
-      this.app.once('application-ready', () => {
-        debug('[egg]: web framework: init egg end');
-        resolve();
-      });
-      (this.app.loader as any).loadOrigin();
-      // 这里拦截 app.use 方法，让他可以加到 midway 的 middlewareManager 中
-      (this.app as any).originUse = this.app.use;
-      this.app.use = this.app.useMiddleware as any;
+    (this.app.loader as any).loadOrigin();
+    // 这里拦截 app.use 方法，让他可以加到 midway 的 middlewareManager 中
+    (this.app as any).originUse = this.app.use;
+    this.app.use = this.app.useMiddleware as any;
 
-      this.app.ready();
-    });
+    if (!this.isClusterMode) {
+      await new Promise<void>(resolve => {
+        this.app.once('application-ready', () => {
+          debug('[egg]: web framework: init egg end');
+          resolve();
+        });
+        this.app.ready();
+      });
+    }
   }
 
   overwriteApplication(processType) {

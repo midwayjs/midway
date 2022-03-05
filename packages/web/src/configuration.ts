@@ -7,69 +7,11 @@ import {
 } from '@midwayjs/decorator';
 import { IMidwayWebApplication } from './interface';
 import { extractKoaLikeValue, MidwayDecoratorService } from '@midwayjs/core';
+import { join } from 'path';
 
 @Configuration({
   namespace: 'egg',
-  importConfigs: [
-    {
-      default: {
-        midwayLogger: {
-          clients: {
-            appLogger: {
-              fileLogName: 'midway-web.log',
-              aliasName: 'logger',
-            },
-            agentLogger: {
-              fileLogName: 'midway-agent.log',
-            },
-          },
-        },
-        egg: {
-          dumpConfig: true,
-          contextLoggerFormat: info => {
-            const ctx = info.ctx;
-            // format: '[$userId/$ip/$traceId/$use_ms $method $url]'
-            const userId = ctx.userId || '-';
-            const traceId = (ctx.tracer && ctx.tracer.traceId) || '-';
-            const use = Date.now() - ctx.startTime;
-            const label =
-              userId +
-              '/' +
-              ctx.ip +
-              '/' +
-              traceId +
-              '/' +
-              use +
-              'ms ' +
-              ctx.method +
-              ' ' +
-              ctx.url;
-            return `${info.timestamp} ${info.LEVEL} ${info.pid} [${label}] ${info.message}`;
-          },
-        },
-      },
-      test: {
-        egg: {
-          plugins: {
-            'egg-mock': {
-              enable: true,
-              package: 'egg-mock',
-            },
-          },
-        },
-      },
-      unittest: {
-        egg: {
-          plugins: {
-            'egg-mock': {
-              enable: true,
-              package: 'egg-mock',
-            },
-          },
-        },
-      },
-    },
-  ],
+  importConfigs: [join(__dirname, 'config')],
 })
 export class EggConfiguration {
   @Inject()

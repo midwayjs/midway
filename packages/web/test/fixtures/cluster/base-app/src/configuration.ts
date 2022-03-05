@@ -3,7 +3,7 @@ import { join } from 'path';
 
 @Configuration({
   imports: [
-    require('../../../../../')
+    require('../../../../../src')
   ],
   importConfigs: [
     join(__dirname, './config')
