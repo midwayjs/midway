@@ -153,6 +153,8 @@ export async function initializeAgentApplicationContext(agent) {
   const applicationContext = getCurrentApplicationContext();
 
   const agentFramework = new MidwayWebFramework(applicationContext);
+  agentFramework['logger'] = agent.logger;
+  agentFramework['appLogger'] = agent.coreLogger;
   agentFramework.app = agent;
   agentFramework.configService = applicationContext.get(MidwayConfigService);
   agentFramework.overwriteApplication('agent');
