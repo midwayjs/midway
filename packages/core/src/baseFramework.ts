@@ -10,6 +10,7 @@ import {
   CommonFilterUnion,
   CommonMiddleware,
   MiddlewareRespond,
+  REQUEST_CTX_LOGGER_CACHE_KEY,
 } from './interface';
 import { Inject, Destroy, Init } from '@midwayjs/decorator';
 import {
@@ -138,9 +139,39 @@ export abstract class BaseFramework<
     const appLogger = this.getLogger(
       name ?? this.contextLoggerApplyLogger
     ) as IMidwayLogger;
-    return appLogger.createContextLogger<CTX>(ctx, {
-      contextFormat: this.contextLoggerFormat,
-    });
+    if (name) {
+      let ctxLoggerCache = ctx.getAttr(REQUEST_CTX_LOGGER_CACHE_KEY) as Map<
+        string,
+        ILogger
+      >;
+      if (!ctxLoggerCache) {
+        ctxLoggerCache = new Map();
+        ctx.setAttr(REQUEST_CTX_LOGGER_CACHE_KEY, ctxLoggerCache);
+      }
+
+      if (!name) {
+        name = 'appLogger';
+      }
+
+      // if logger exists
+      if (ctxLoggerCache.has(name)) {
+        return ctxLoggerCache.get(name);
+      }
+
+      // create new context logger
+      const ctxLogger = appLogger.createContextLogger<CTX>(ctx, {
+        contextFormat: this.contextLoggerFormat,
+      });
+      ctxLoggerCache.set(name, ctxLogger);
+      return ctxLogger;
+    } else {
+      if (ctx.logger) {
+        return ctx.logger;
+      }
+      return appLogger.createContextLogger<CTX>(ctx, {
+        contextFormat: this.contextLoggerFormat,
+      });
+    }
   }
 
   @Destroy()
