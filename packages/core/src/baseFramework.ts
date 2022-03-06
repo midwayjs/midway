@@ -165,12 +165,14 @@ export abstract class BaseFramework<
       ctxLoggerCache.set(name, ctxLogger);
       return ctxLogger;
     } else {
-      if (ctx.logger) {
-        return ctx.logger;
+      // avoid maximum call stack size exceeded
+      if (ctx['_logger']) {
+        return ctx['_logger'];
       }
-      return appLogger.createContextLogger<CTX>(ctx, {
+      ctx['_logger'] = appLogger.createContextLogger<CTX>(ctx, {
         contextFormat: this.contextLoggerFormat,
       });
+      return ctx['_logger'];
     }
   }
 
