@@ -44,7 +44,7 @@ export class TaskFramework extends BaseFramework<Application, Context, any> {
   async loadTask() {
     const legacyConfig = this.configService.getConfiguration('taskConfig');
     if (legacyConfig) {
-      deprecatedOutput('[task]: Please use "task" replace "taskConfig"');
+      deprecatedOutput('[midway:task] Please use "task" replace "taskConfig"');
       this.configService.addObject({
         task: legacyConfig,
       });

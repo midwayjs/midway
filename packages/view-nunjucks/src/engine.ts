@@ -39,7 +39,7 @@ export class NunjucksEnvironment {
     const coreLogger = this.app.getCoreLogger();
     const viewPaths = this.globalConfig.view.root;
     coreLogger.info(
-      '[@midwayjs/view-nunjucks] loading templates from %j',
+      '[midway:view-nunjucks] loading templates from %j',
       viewPaths
     );
 

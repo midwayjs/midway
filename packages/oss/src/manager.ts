@@ -13,11 +13,11 @@ import { ServiceFactory, delegateTargetPrototypeMethod } from '@midwayjs/core';
 function checkBucketConfig(config) {
   assert(
     config.endpoint || config.region,
-    "[@midwayjs/oss] Must set `endpoint` or `region` in oss's config"
+    "[midway:oss] Must set `endpoint` or `region` in oss's config"
   );
   assert(
     config.accessKeySecret && config.accessKeyId,
-    "[@midwayjs/oss] Must set `accessKeyId` and `accessKeySecret` in oss's config"
+    "[midway:oss] Must set `accessKeyId` and `accessKeySecret` in oss's config"
   );
 }
 
