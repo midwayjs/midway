@@ -10,8 +10,9 @@ import {
   CommonFilterUnion,
   CommonMiddleware,
   MiddlewareRespond,
+  REQUEST_CTX_LOGGER_CACHE_KEY,
 } from './interface';
-import { Inject, Destroy, Init, FrameworkType } from '@midwayjs/decorator';
+import { Inject, Destroy, Init } from '@midwayjs/decorator';
 import {
   ILogger,
   LoggerOptions,
@@ -132,17 +133,47 @@ export abstract class BaseFramework<
 
   public abstract applicationInitialize(options: IMidwayBootstrapOptions);
 
-  public abstract getFrameworkType(): FrameworkType;
-
   public abstract run(): Promise<void>;
 
   protected createContextLogger(ctx: CTX, name?: string): ILogger {
     const appLogger = this.getLogger(
       name ?? this.contextLoggerApplyLogger
     ) as IMidwayLogger;
-    return appLogger.createContextLogger<CTX>(ctx, {
-      contextFormat: this.contextLoggerFormat,
-    });
+    if (name) {
+      let ctxLoggerCache = ctx.getAttr(REQUEST_CTX_LOGGER_CACHE_KEY) as Map<
+        string,
+        ILogger
+      >;
+      if (!ctxLoggerCache) {
+        ctxLoggerCache = new Map();
+        ctx.setAttr(REQUEST_CTX_LOGGER_CACHE_KEY, ctxLoggerCache);
+      }
+
+      if (!name) {
+        name = 'appLogger';
+      }
+
+      // if logger exists
+      if (ctxLoggerCache.has(name)) {
+        return ctxLoggerCache.get(name);
+      }
+
+      // create new context logger
+      const ctxLogger = appLogger.createContextLogger<CTX>(ctx, {
+        contextFormat: this.contextLoggerFormat,
+      });
+      ctxLoggerCache.set(name, ctxLogger);
+      return ctxLogger;
+    } else {
+      // avoid maximum call stack size exceeded
+      if (ctx['_logger']) {
+        return ctx['_logger'];
+      }
+      ctx['_logger'] = appLogger.createContextLogger<CTX>(ctx, {
+        contextFormat: this.contextLoggerFormat,
+      });
+      return ctx['_logger'];
+    }
   }
 
   @Destroy()
@@ -184,7 +215,9 @@ export abstract class BaseFramework<
       },
 
       getFrameworkType: () => {
-        return this.getFrameworkType();
+        if (this['getFrameworkType']) {
+          return this['getFrameworkType']();
+        }
       },
 
       getProcessType: () => {
@@ -348,7 +381,7 @@ export abstract class BaseFramework<
   }
 
   public getFrameworkName() {
-    return this.getFrameworkType().name;
+    return '';
   }
 
   public useMiddleware(

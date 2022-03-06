@@ -111,18 +111,20 @@ export class MidwayWebFramework extends BaseFramework<
 
     this.overwriteApplication('app');
 
-    await new Promise<void>(resolve => {
-      this.app.once('application-ready', () => {
-        debug('[egg]: web framework: init egg end');
-        resolve();
-      });
-      (this.app.loader as any).loadOrigin();
-      // 这里拦截 app.use 方法，让他可以加到 midway 的 middlewareManager 中
-      (this.app as any).originUse = this.app.use;
-      this.app.use = this.app.useMiddleware as any;
+    (this.app.loader as any).loadOrigin();
+    // 这里拦截 app.use 方法，让他可以加到 midway 的 middlewareManager 中
+    (this.app as any).originUse = this.app.use;
+    this.app.use = this.app.useMiddleware as any;
 
-      this.app.ready();
-    });
+    if (!this.isClusterMode) {
+      await new Promise<void>(resolve => {
+        this.app.once('application-ready', () => {
+          debug('[egg]: web framework: init egg end');
+          resolve();
+        });
+        this.app.ready();
+      });
+    }
   }
 
   overwriteApplication(processType) {
@@ -181,6 +183,8 @@ export class MidwayWebFramework extends BaseFramework<
   }
 
   async loadMidwayController() {
+    // move egg router to last
+    this.app.getMiddleware().findAndInsertLast('eggRouterMiddleware');
     await this.generator.loadMidwayController(
       this.configurationOptions.globalPrefix,
       newRouter => {
@@ -191,6 +195,11 @@ export class MidwayWebFramework extends BaseFramework<
         this.app.useMiddleware(dispatchFn);
       }
     );
+
+    // restore use method
+    this.app.use = (this.app as any).originUse;
+
+    debug(`[egg]: current middleware = ${this.middlewareManager.getNames()}`);
   }
 
   getFrameworkType(): MidwayFrameworkType {
@@ -198,16 +207,10 @@ export class MidwayWebFramework extends BaseFramework<
   }
 
   async run(): Promise<void> {
-    // move egg router to last
-    this.app.getMiddleware().findAndInsertLast('eggRouterMiddleware');
-    // load controller
-    await this.loadMidwayController();
-    // restore use method
-    this.app.use = (this.app as any).originUse;
-
-    debug(`[egg]: current middleware = ${this.middlewareManager.getNames()}`);
-
+    // cluster 模式加载路由需在 run 之前，因为 run 需要在拿到 server 之后执行
     if (!this.isClusterMode) {
+      // load controller
+      await this.loadMidwayController();
       // https config
       if (this.configurationOptions.key && this.configurationOptions.cert) {
         this.configurationOptions.key = PathFileUtil.getFileContentSync(
@@ -302,5 +305,9 @@ export class MidwayWebFramework extends BaseFramework<
       await this.app.close();
       await this.agent.close();
     }
+  }
+
+  public setServer(server) {
+    this.server = server;
   }
 }

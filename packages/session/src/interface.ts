@@ -24,6 +24,11 @@ export interface ISession {
   maxAge: opts["maxAge"];
 
   /**
+   * commit this session's headers if autoCommit is set to false.
+   */
+  manuallyCommit(): Promise<void>;
+
+  /**
    * save this session no matter whether it is populated
    */
   save(): void;
@@ -113,7 +118,10 @@ export interface SessionOptions extends Omit<CookieSetOptions, 'maxAge'> {
    */
   beforeSave?(ctx: any, session: ISession): void;
 
-  autoCommit: boolean;
+  /**
+   * (boolean) automatically commit headers (default true).
+   */
+  autoCommit?: boolean;
 }
 
 export abstract class SessionStore {

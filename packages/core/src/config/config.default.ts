@@ -11,6 +11,9 @@ export default (
   appInfo: MidwayAppInfo
 ): {
   midwayLogger?: ServiceFactoryConfigOption<LoggerOptions>;
+  debug?: {
+    recordConfigMergeOrder?: boolean;
+  };
 } => {
   const isDevelopment = isDevelopmentEnvironment(getCurrentEnvironment());
   const logRoot = process.env[MIDWAY_LOGGER_WRITEABLE_DIR] ?? appInfo.root;
@@ -20,7 +23,8 @@ export default (
         dir: join(logRoot, 'logs', appInfo.name),
         level: isDevelopment ? 'info' : 'warn',
         consoleLevel: isDevelopment ? 'info' : 'warn',
-        auditFileDir: join(logRoot, 'logs', '.audit'),
+        auditFileDir: join(logRoot, 'logs', appInfo.name, '.audit'),
+        errorDir: join(logRoot, 'logs', appInfo.name),
       },
       clients: {
         coreLogger: {
@@ -31,6 +35,9 @@ export default (
           aliasName: 'logger',
         },
       },
+    },
+    debug: {
+      recordConfigMergeOrder: isDevelopment,
     },
   };
 };

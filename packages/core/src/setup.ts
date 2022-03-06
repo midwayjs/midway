@@ -79,7 +79,7 @@ export async function initializeGlobalApplicationContext(
   }
 
   // init default config
-  const configService = await applicationContext.getAsync(MidwayConfigService);
+  const configService = applicationContext.get(MidwayConfigService);
   configService.add([
     {
       default: defaultConfig,
@@ -87,12 +87,10 @@ export async function initializeGlobalApplicationContext(
   ]);
 
   // init aop support
-  await applicationContext.getAsync(MidwayAspectService, [applicationContext]);
+  applicationContext.get(MidwayAspectService, [applicationContext]);
 
   // init decorator service
-  await applicationContext.getAsync(MidwayDecoratorService, [
-    applicationContext,
-  ]);
+  applicationContext.get(MidwayDecoratorService, [applicationContext]);
 
   if (!globalOptions.imports) {
     globalOptions.imports = [
@@ -108,7 +106,7 @@ export async function initializeGlobalApplicationContext(
   }
 
   // bind user code module
-  await applicationContext.ready();
+  applicationContext.ready();
 
   if (globalOptions.globalConfig) {
     if (Array.isArray(globalOptions.globalConfig)) {
@@ -119,27 +117,30 @@ export async function initializeGlobalApplicationContext(
   }
 
   // merge config
-  await configService.load();
+  configService.load();
   debug('[core]: Current config = %j', configService.getConfiguration());
 
-  // init logger
-  await applicationContext.getAsync(MidwayLoggerService, [applicationContext]);
-
   // middleware support
-  await applicationContext.getAsync(MidwayMiddlewareService, [
-    applicationContext,
-  ]);
+  applicationContext.get(MidwayMiddlewareService, [applicationContext]);
 
-  // framework/config/plugin/logger/app decorator support
-  await applicationContext.getAsync(MidwayFrameworkService, [
-    applicationContext,
-    globalOptions,
-  ]);
+  // it will be delay framework initialize in egg cluster mode
+  if (!globalOptions.lazyInitializeFramework) {
+    // init logger
+    await applicationContext.getAsync(MidwayLoggerService, [
+      applicationContext,
+    ]);
 
-  // lifecycle support
-  await applicationContext.getAsync(MidwayLifeCycleService, [
-    applicationContext,
-  ]);
+    // framework/config/plugin/logger/app decorator support
+    await applicationContext.getAsync(MidwayFrameworkService, [
+      applicationContext,
+      globalOptions,
+    ]);
+
+    // lifecycle support
+    await applicationContext.getAsync(MidwayLifeCycleService, [
+      applicationContext,
+    ]);
+  }
 
   return applicationContext;
 }

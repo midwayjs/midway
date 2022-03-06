@@ -362,9 +362,11 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     definition.createFrom = options?.createFrom;
 
     if (definition.srcPath) {
-      debug(`[core]: bind id "${definition.name} (${definition.srcPath})"`);
+      debug(
+        `[core]: bind id "${definition.name} (${definition.srcPath}) ${identifier}"`
+      );
     } else {
-      debug(`[core]: bind id "${definition.name}"`);
+      debug(`[core]: bind id "${definition.name}" ${identifier}`);
     }
 
     // inject properties
@@ -499,8 +501,8 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
     this.registry.clearAll();
   }
 
-  async ready(): Promise<void> {
-    await this.loadDefinitions();
+  ready(): void {
+    this.loadDefinitions();
   }
 
   get<T>(

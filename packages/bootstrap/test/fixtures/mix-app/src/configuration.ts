@@ -34,6 +34,6 @@ export class AutoConfiguration implements ILifeCycle {
     assert(this.prepareConfig['prepare'] === 'remote data');
     assert(this.prepareConfig['id'] === this.configService.innerData);
     assert(getCurrentApplicationContext() === this.app.getApplicationContext());
-    assert(getCurrentMainFramework().getFrameworkType() === MidwayFrameworkType.WEB);
+    assert((getCurrentMainFramework() as any).getFrameworkType() === MidwayFrameworkType.WEB);
   }
 }

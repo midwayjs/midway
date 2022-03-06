@@ -79,7 +79,7 @@ interface BodyParserOptions {
   /**
    * requested encoding. Default is utf-8 by co-body
    */
-  encode?: string;
+  encoding?: string;
 
   /**
    * limit of the urlencoded body. If the body ends up being larger than this limit
