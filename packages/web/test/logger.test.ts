@@ -145,7 +145,7 @@ describe('test/logger.test.js', () => {
 
     // 自定义日志，打印一遍 error，会在自定义日志本身，以及 common-error 中出现
     expect(matchContentTimes(join(app.getAppDir(), 'logs/middleware.log'), 'xxxxx')).toEqual(1);
-    expect(matchContentTimes(join(app.getAppDir(), 'logs/common-error.log'), 'xxxxx')).toEqual(1);
+    expect(matchContentTimes(join(app.getAppDir(), 'logs/ali-demo/common-error.log'), 'xxxxx')).toEqual(1);
     expect(matchContentTimes(join(app.getAppDir(), 'logs/ali-demo/common-error.log'), 'just show once')).toEqual(0);
     expect(matchContentTimes(join(app.getAppDir(), 'logs/ali-demo/common-error.log'), 'this is a test error')).toEqual(1);
     expect(matchContentTimes(join(app.getAppDir(), 'logs/ali-demo/midway-web.log'), 'just show once')).toEqual(1);

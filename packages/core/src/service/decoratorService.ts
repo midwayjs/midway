@@ -36,7 +36,7 @@ export class MidwayDecoratorService {
   constructor(readonly applicationContext: IMidwayContainer) {}
 
   @Init()
-  protected async init() {
+  protected init() {
     // add custom method decorator listener
     this.applicationContext.onBeforeBind(Clzz => {
       // find custom method decorator metadata, include method decorator information array

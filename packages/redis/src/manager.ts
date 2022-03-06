@@ -31,40 +31,40 @@ export class RedisServiceFactory extends ServiceFactory<Redis.Redis> {
     if (config.cluster === true) {
       assert(
         config.nodes && config.nodes.length !== 0,
-        '[@midwayjs/redis] cluster nodes configuration is required when use cluster redis'
+        '[midway:redis] cluster nodes configuration is required when use cluster redis'
       );
 
       config.nodes.forEach(client => {
         assert(
           client.host &&
             client.port &&
-            `[@midwayjs/redis] 'host: ${client.host}', 'port: ${client.port}' are required on config`
+            `[midway:redis] 'host: ${client.host}', 'port: ${client.port}' are required on config`
         );
       });
-      this.logger.info('[@midwayjs/redis] cluster connecting');
+      this.logger.info('[midway:redis] cluster connecting');
       client = new Redis.Cluster(config.nodes, config);
     } else if (config.sentinels) {
       assert(
         config.sentinels && config.sentinels.length !== 0,
-        '[@midwayjs/redis] sentinels configuration is required when use redis sentinel'
+        '[midway:redis] sentinels configuration is required when use redis sentinel'
       );
 
       config.sentinels.forEach(sentinel => {
         assert(
           sentinel.host && sentinel.port,
-          `[@midwayjs/redis] 'host: ${sentinel.host}', 'port: ${sentinel.port}' are required on config`
+          `[midway:redis] 'host: ${sentinel.host}', 'port: ${sentinel.port}' are required on config`
         );
       });
 
-      this.logger.info('[@midwayjs/redis] sentinel connecting start');
+      this.logger.info('[midway:redis] sentinel connecting start');
       client = new Redis(config);
     } else {
       assert(
         config.host && config.port,
-        `[@midwayjs/redis] 'host: ${config.host}', 'port: ${config.port}' are required on config`
+        `[midway:redis] 'host: ${config.host}', 'port: ${config.port}' are required on config`
       );
       this.logger.info(
-        '[@midwayjs/redis] server connecting redis://:***@%s:%s/%s',
+        '[midway:redis] server connecting redis://:***@%s:%s/%s',
         config.host,
         config.port
       );
@@ -72,10 +72,10 @@ export class RedisServiceFactory extends ServiceFactory<Redis.Redis> {
     }
 
     client.on('connect', () => {
-      this.logger.info('[@midwayjs/redis] client connect success');
+      this.logger.info('[midway:redis] client connect success');
     });
     client.on('error', err => {
-      this.logger.error('[@midwayjs/redis] client error: %s', err);
+      this.logger.error('[midway:redis] client error: %s', err);
       this.logger.error(err);
     });
 
@@ -90,7 +90,7 @@ export class RedisServiceFactory extends ServiceFactory<Redis.Redis> {
     try {
       await (redisInstance && redisInstance.quit());
     } catch (error) {
-      this.logger.error('[@midwayjs/redis] Redis quit failed.', error);
+      this.logger.error('[midway:redis] Redis quit failed.', error);
     }
   }
 }

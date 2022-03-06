@@ -45,7 +45,10 @@ export abstract class ServiceFactory<T> {
   }
 
   public abstract getName(): string;
-  protected abstract createClient(config, clientName): Promise<T | void>;
+  protected abstract createClient(
+    config,
+    clientName
+  ): Promise<T | void> | (T | void);
   protected async destroyClient(client: T): Promise<void> {}
 
   public async stop(): Promise<void> {

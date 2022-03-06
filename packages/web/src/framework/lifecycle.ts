@@ -1,4 +1,9 @@
-import { ILifeCycle, IMidwayContainer } from '../interface';
+import {
+  ILifeCycle,
+  IMidwayContainer,
+  MidwayConfigService,
+  MidwayFrameworkService,
+} from '@midwayjs/core';
 import {
   CONFIGURATION_KEY,
   Init,
@@ -8,20 +13,20 @@ import {
   Scope,
   ScopeEnum,
 } from '@midwayjs/decorator';
-import { FunctionalConfiguration } from '../functional/configuration';
-import { MidwayFrameworkService } from './frameworkService';
-import { MidwayConfigService } from './configService';
+import { FunctionalConfiguration } from '@midwayjs/core/dist/functional/configuration';
 import { debuglog } from 'util';
 const debug = debuglog('midway:debug');
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
-export class MidwayLifeCycleService {
+export class MidwayWebLifeCycleService {
   @Inject()
   protected frameworkService: MidwayFrameworkService;
 
   @Inject()
   protected configService: MidwayConfigService;
+
+  private lifecycleInstanceList = [];
 
   constructor(readonly applicationContext: IMidwayContainer) {}
 
@@ -32,7 +37,6 @@ export class MidwayLifeCycleService {
 
     debug(`[core]: Found Configuration length = ${cycles.length}`);
 
-    const lifecycleInstanceList = [];
     for (const cycle of cycles) {
       if (cycle.target instanceof FunctionalConfiguration) {
         // 函数式写法
@@ -45,15 +49,23 @@ export class MidwayLifeCycleService {
         );
       }
 
-      cycle.instance && lifecycleInstanceList.push(cycle);
+      if (cycle.instance) {
+        this.lifecycleInstanceList.push(cycle);
+      }
     }
 
     // bind object lifecycle
     await Promise.all([
-      this.runObjectLifeCycle(lifecycleInstanceList, 'onBeforeObjectCreated'),
-      this.runObjectLifeCycle(lifecycleInstanceList, 'onObjectCreated'),
-      this.runObjectLifeCycle(lifecycleInstanceList, 'onObjectInit'),
-      this.runObjectLifeCycle(lifecycleInstanceList, 'onBeforeObjectDestroy'),
+      this.runObjectLifeCycle(
+        this.lifecycleInstanceList,
+        'onBeforeObjectCreated'
+      ),
+      this.runObjectLifeCycle(this.lifecycleInstanceList, 'onObjectCreated'),
+      this.runObjectLifeCycle(this.lifecycleInstanceList, 'onObjectInit'),
+      this.runObjectLifeCycle(
+        this.lifecycleInstanceList,
+        'onBeforeObjectDestroy'
+      ),
     ]);
 
     // bind framework lifecycle
@@ -61,7 +73,7 @@ export class MidwayLifeCycleService {
 
     // exec onConfigLoad()
     await this.runContainerLifeCycle(
-      lifecycleInstanceList,
+      this.lifecycleInstanceList,
       'onConfigLoad',
       configData => {
         if (configData) {
@@ -71,13 +83,18 @@ export class MidwayLifeCycleService {
     );
 
     // exec onReady()
-    await this.runContainerLifeCycle(lifecycleInstanceList, 'onReady');
+    await this.runContainerLifeCycle(this.lifecycleInstanceList, 'onReady');
+  }
 
+  public async afterInit() {
     // exec framework.run()
     await this.frameworkService.runFramework();
 
     // exec onServerReady()
-    await this.runContainerLifeCycle(lifecycleInstanceList, 'onServerReady');
+    await this.runContainerLifeCycle(
+      this.lifecycleInstanceList,
+      'onServerReady'
+    );
 
     // clear config merge cache
     if (!this.configService.getConfiguration('debug.recordConfigMergeOrder')) {

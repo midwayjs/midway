@@ -44,7 +44,7 @@ export class JwtService {
       secretOrPrivateKey = this.jwtConfig?.secret;
     }
     if (!secretOrPrivateKey) {
-      throw new Error('[midway-jwt]: jwt secret should be set');
+      throw new Error('[midway:jwt] jwt secret should be set');
     }
     options = options ?? {};
     options.expiresIn = options.expiresIn ?? this.jwtConfig.expiresIn;
@@ -78,7 +78,7 @@ export class JwtService {
       secretOrPrivateKey = this.jwtConfig?.secret;
     }
     if (!secretOrPrivateKey) {
-      throw new Error('[midway-jwt]: provide the jwt secret please');
+      throw new Error('[midway:jwt] provide the jwt secret please');
     }
     options = options ?? {};
     options.expiresIn = options.expiresIn ?? this.jwtConfig.expiresIn;
@@ -123,7 +123,7 @@ export class JwtService {
     }
 
     if (!secretOrPublicKey) {
-      throw new Error('[midway-jwt]: provide the jwt secret please');
+      throw new Error('[midway:jwt] provide the jwt secret please');
     }
 
     return jwt.verify(token, secretOrPublicKey, options);
@@ -165,7 +165,7 @@ export class JwtService {
     }
 
     if (!secretOrPublicKey) {
-      throw new Error('[midway-jwt]: provide the jwt secret please');
+      throw new Error('[midway:jwt] provide the jwt secret please');
     }
 
     return new Promise((resolve, reject) => {

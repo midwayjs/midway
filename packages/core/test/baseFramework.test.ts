@@ -14,6 +14,7 @@ import {
 } from '../src';
 import { createLightFramework } from './util';
 import sinon = require('sinon');
+import { IMidwayApplication } from '../dist';
 
 @Provide()
 class TestModule {
@@ -386,7 +387,6 @@ describe('/test/baseFramework.test.ts', () => {
     expect(framework.getApplication().getAppDir()).toEqual(framework.getAppDir());
     expect(framework.getApplication().getBaseDir()).toEqual(framework.getBaseDir());
     expect(framework.getApplication().getApplicationContext()).toEqual(framework.getApplicationContext());
-    expect(framework.getApplication().getFrameworkType()).toEqual(framework.getFrameworkType());
     expect(framework.getApplication().getProjectName()).toEqual(framework.getProjectName());
     expect(framework.getApplication().createAnonymousContext().startTime).toBeDefined();
     const ctxLogger = framework.getApplication().createAnonymousContext().getLogger();
@@ -670,5 +670,26 @@ describe('/test/baseFramework.test.ts', () => {
 
     expect(framework.getConfiguration('bbb')).toEqual(222);
     expect(framework.getConfiguration('ccc')).toEqual(333);
+  });
+
+  it('should test create context logger', async () => {
+    const framework = await createLightFramework(path.join(
+      __dirname,
+      './fixtures/base-app-ctx-logger/src'
+    ));
+
+    const app = framework.getApplication() as IMidwayApplication;
+    const ctx = app.createAnonymousContext();
+    const defaultLogger1 = ctx.getLogger();
+    const defaultLogger2 = ctx.getLogger();
+
+    expect(defaultLogger1).toBeDefined();
+    expect(defaultLogger1 === defaultLogger2).toBeTruthy();
+
+    const ctxLogger1 = ctx.getLogger('customLogger');
+    const ctxLogger2 = ctx.getLogger('customLogger');
+
+    expect(ctxLogger1).toBeDefined();
+    expect(ctxLogger1 === ctxLogger2).toBeTruthy();
   });
 });

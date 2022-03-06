@@ -30,7 +30,7 @@ export class ValidateConfiguration {
   validateService: ValidateService;
 
   async onReady() {
-    debug(`[validate]: Register @validate "${VALIDATE_KEY}" handler"`);
+    debug(`[midway:validate] Register @validate "${VALIDATE_KEY}" handler"`);
     this.decoratorService.registerMethodHandler(VALIDATE_KEY, options => {
       // get param types from method
       const paramTypes = getMethodParamTypes(

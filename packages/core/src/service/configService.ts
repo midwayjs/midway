@@ -17,6 +17,12 @@ import { extend } from '../util/extend';
 
 const debug = util.debuglog('midway:debug');
 
+interface ConfigMergeInfo {
+  value: any;
+  env: string;
+  extraPath?: string;
+}
+
 @Provide()
 @Scope(ScopeEnum.Singleton)
 export class MidwayConfigService implements IConfigService {
@@ -25,6 +31,7 @@ export class MidwayConfigService implements IConfigService {
     prod: 'production',
     unittest: 'test',
   };
+  private configMergeOrder: Array<ConfigMergeInfo> = [];
   protected configuration;
   protected isReady = false;
   protected externalObject: Record<string, unknown>[] = [];
@@ -37,7 +44,7 @@ export class MidwayConfigService implements IConfigService {
   protected informationService: MidwayInformationService;
 
   @Init()
-  protected async init() {
+  protected init() {
     this.appInfo = {
       pkg: this.informationService.getPkg(),
       name: this.informationService.getProjectName(),
@@ -82,9 +89,18 @@ export class MidwayConfigService implements IConfigService {
     }
   }
 
-  addObject(obj: Record<string, unknown>) {
+  addObject(obj: Record<string, unknown>, reverse = false) {
     if (this.isReady) {
-      extend(true, this.configuration, obj);
+      this.configMergeOrder.push({
+        env: 'default',
+        extraPath: '',
+        value: obj,
+      });
+      if (reverse) {
+        this.configuration = extend(true, obj, this.configuration);
+      } else {
+        extend(true, this.configuration, obj);
+      }
     } else {
       this.externalObject.push(obj);
     }
@@ -108,7 +124,7 @@ export class MidwayConfigService implements IConfigService {
     return splits.pop();
   }
 
-  async load() {
+  load() {
     if (this.isReady) return;
     // get default
     const defaultSet = this.getEnvSet('default');
@@ -118,8 +134,9 @@ export class MidwayConfigService implements IConfigService {
     );
     // merge set
     const target = {};
-    for (const filename of [...defaultSet, ...currentEnvSet]) {
-      let config = await this.loadConfig(filename);
+    const defaultSetLength = defaultSet.size;
+    for (const [idx, filename] of [...defaultSet, ...currentEnvSet].entries()) {
+      let config = this.loadConfig(filename);
       if (Types.isFunction(config)) {
         // eslint-disable-next-line prefer-spread
         config = config.apply(null, [this.appInfo, target]);
@@ -134,6 +151,14 @@ export class MidwayConfigService implements IConfigService {
       } else {
         debug('[config]: Loaded config %j', config);
       }
+      this.configMergeOrder.push({
+        env:
+          idx < defaultSetLength
+            ? 'default'
+            : this.environmentService.getCurrentEnvironment(),
+        extraPath: filename,
+        value: config,
+      });
 
       extend(true, target, config);
     }
@@ -142,6 +167,11 @@ export class MidwayConfigService implements IConfigService {
         if (externalObject) {
           debug('[config]: Loaded external object %j', externalObject);
           extend(true, target, externalObject);
+          this.configMergeOrder.push({
+            env: 'default',
+            extraPath: '',
+            value: externalObject,
+          });
         }
       }
     }
@@ -156,9 +186,13 @@ export class MidwayConfigService implements IConfigService {
     return this.configuration;
   }
 
-  private async loadConfig(
+  getConfigMergeOrder(): Array<ConfigMergeInfo> {
+    return this.configMergeOrder;
+  }
+
+  private loadConfig(
     configFilename
-  ): Promise<(...args) => any | Record<string, unknown>> {
+  ): (...args) => any | Record<string, unknown> {
     let exports =
       typeof configFilename === 'string'
         ? require(configFilename)
@@ -171,5 +205,9 @@ export class MidwayConfigService implements IConfigService {
 
   clearAllConfig() {
     this.configuration.clear();
+  }
+
+  clearConfigMergeOrder() {
+    this.configMergeOrder.length = 0;
   }
 }

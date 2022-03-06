@@ -64,7 +64,7 @@ export class StaticMiddleware {
       }
 
       this.logger.info(
-        '[@midwayjs/static] starting static serve %s -> %s',
+        '[midway:static] starting static serve %s -> %s',
         newOptions.prefix,
         newOptions.dir
       );

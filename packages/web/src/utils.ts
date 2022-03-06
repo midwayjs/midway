@@ -2,24 +2,16 @@ import { basename, join } from 'path';
 import { sync as findUpSync, stop } from 'find-up';
 import { existsSync } from 'fs';
 import {
-  DirectoryFileDetector,
   getCurrentApplicationContext,
-  IMidwayBootstrapOptions,
   MidwayAspectService,
   MidwayConfigService,
-  MidwayContainer,
   MidwayDecoratorService,
-  MidwayEnvironmentService,
-  MidwayInformationService,
-  MidwayLoggerService,
   MidwayPipelineService,
   REQUEST_OBJ_CTX_KEY,
-  safeRequire,
 } from '@midwayjs/core';
 import {
   ALL,
   APPLICATION_KEY,
-  bindContainer,
   CONFIG_KEY,
   LOGGER_KEY,
   PIPELINE_IDENTIFIER,
@@ -90,101 +82,16 @@ export const getCurrentDateString = (timestamp: number = Date.now()) => {
     .padStart(2, '0')}-${d.getDate().toString().padStart(2, '0')}`;
 };
 
-export async function initializeAgentApplicationContext(
-  agent,
-  globalOptions: Omit<IMidwayBootstrapOptions, 'applicationContext'>
-) {
-  if (!getCurrentApplicationContext()) {
-    debug('[egg]: start "initializeGlobalApplicationContext"');
-    const appDir = globalOptions.appDir ?? '';
-    const baseDir = globalOptions.baseDir ?? '';
-    // new container
-    const applicationContext = new MidwayContainer();
-    debug('[egg]: delegate module map from decoratorManager');
-    bindContainer(applicationContext);
-
-    global['MIDWAY_APPLICATION_CONTEXT'] = applicationContext;
-
-    // register baseDir and appDir
-    applicationContext.registerObject('baseDir', baseDir);
-    applicationContext.registerObject('appDir', appDir);
-
-    if (globalOptions.moduleDirector !== false) {
-      if (
-        globalOptions.moduleDetector === undefined ||
-        globalOptions.moduleDetector === 'file'
-      ) {
-        applicationContext.setFileDetector(
-          new DirectoryFileDetector({
-            loadDir: baseDir,
-            ignore: globalOptions.ignore ?? [],
-          })
-        );
-      } else if (globalOptions.moduleDetector) {
-        applicationContext.setFileDetector(globalOptions.moduleDetector);
-      }
-    }
-
-    // bind inner service
-    applicationContext.bindClass(MidwayEnvironmentService);
-    applicationContext.bindClass(MidwayInformationService);
-    applicationContext.bindClass(MidwayDecoratorService);
-    applicationContext.bindClass(MidwayConfigService);
-    applicationContext.bindClass(MidwayAspectService);
-    applicationContext.bindClass(MidwayLoggerService);
-
-    // bind preload module
-    if (globalOptions.preloadModules && globalOptions.preloadModules.length) {
-      for (const preloadModule of globalOptions.preloadModules) {
-        applicationContext.bindClass(preloadModule);
-      }
-    }
-
-    // init default config
-    const configService = await applicationContext.getAsync(
-      MidwayConfigService
-    );
-    // add egg config here, it will be ignore midway and component config
-    configService.add([
-      {
-        default: agent.config,
-      },
-    ]);
-
+export async function initializeAgentApplicationContext(agent) {
+  if (process.env['EGG_CLUSTER_MODE'] === 'true') {
     // init aop support
-    const aspectService = await applicationContext.getAsync(
-      MidwayAspectService,
-      [applicationContext]
-    );
+    const aspectService =
+      getCurrentApplicationContext().get(MidwayAspectService);
 
     // init decorator service
-    const decoratorService = await applicationContext.getAsync(
-      MidwayDecoratorService,
-      [applicationContext]
+    const decoratorService = getCurrentApplicationContext().get(
+      MidwayDecoratorService
     );
-
-    if (!globalOptions.imports) {
-      globalOptions.imports = [
-        safeRequire(join(globalOptions.baseDir, 'configuration')),
-      ];
-    }
-
-    for (const configurationModule of [].concat(globalOptions.imports)) {
-      // load configuration and component
-      applicationContext.load(configurationModule);
-    }
-
-    // bind user code module
-    await applicationContext.ready();
-
-    // merge config
-    await configService.load();
-    debug('[core]: Current config = %j', configService.getConfiguration());
-
-    // init logger
-    await applicationContext.getAsync(MidwayLoggerService, [
-      applicationContext,
-    ]);
 
     // framework/config/plugin/logger/app decorator support
     // register base config hook
@@ -234,6 +141,9 @@ export async function initializeAgentApplicationContext(
 
     // init aspect module
     await aspectService.loadAspect();
+    debug(
+      '[egg]: added extra for "initializeAgentApplicationContext" in cluster mode'
+    );
   } else {
     debug(
       '[egg]: "initializeAgentApplicationContext" ignore re-init in single process'
@@ -243,6 +153,8 @@ export async function initializeAgentApplicationContext(
   const applicationContext = getCurrentApplicationContext();
 
   const agentFramework = new MidwayWebFramework(applicationContext);
+  agentFramework['logger'] = agent.logger;
+  agentFramework['appLogger'] = agent.coreLogger;
   agentFramework.app = agent;
   agentFramework.configService = applicationContext.get(MidwayConfigService);
   agentFramework.overwriteApplication('agent');

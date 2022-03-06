@@ -26,7 +26,7 @@ describe('/test/index.test.ts', () => {
     try {
       app = await createLightApp(join(__dirname, './fixtures/base-app-missing-config'));
     } catch (err) {
-      expect(err.message).toEqual('[@midwayjs/oss] Must set `accessKeyId` and `accessKeySecret` in oss\'s config');
+      expect(err.message).toEqual('[midway:oss] Must set `accessKeyId` and `accessKeySecret` in oss\'s config');
     }
     await close(app);
   });

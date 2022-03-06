@@ -16,7 +16,12 @@ export class MidwayApplicationManager {
 
   public addFramework(namespace, framework: IMidwayFramework<any, any, any>) {
     this.globalFrameworkMap.set(namespace, framework);
-    this.globalFrameworkTypeMap.set(framework.getFrameworkType(), framework);
+    if (framework['getFrameworkType']) {
+      this.globalFrameworkTypeMap.set(
+        framework['getFrameworkType'](),
+        framework
+      );
+    }
   }
 
   public getFramework(namespaceOrFrameworkType: string | FrameworkType) {

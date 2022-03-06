@@ -250,6 +250,7 @@ export interface IManagedResolverFactoryCreateOptions {
 export const REQUEST_CTX_KEY = 'ctx';
 export const REQUEST_OBJ_CTX_KEY = '_req_ctx';
 export const HTTP_SERVER_KEY = '_midway_http_server';
+export const REQUEST_CTX_LOGGER_CACHE_KEY = '_midway_ctx_logger_cache';
 
 export type HandlerFunction = (
   /**
@@ -330,7 +331,7 @@ export interface IFileDetector {
 
 export interface IConfigService {
   add(configFilePaths: any[]);
-  addObject(obj: object);
+  addObject(obj: object, reverse?: boolean);
   load();
   getConfiguration(configKey?: string);
   clearAllConfig();
@@ -438,6 +439,7 @@ export interface IMidwayBaseApplication<CTX extends IMidwayContext> {
   getEnv(): string;
 
   /**
+   * @deprecated
    * Get current framework type in MidwayFrameworkType enum
    */
   getFrameworkType(): FrameworkType;
@@ -552,6 +554,7 @@ export interface IMidwayBootstrapOptions {
   globalConfig?:
     | Array<{ [environmentName: string]: Record<string, any> }>
     | Record<string, any>;
+  lazyInitializeFramework?: boolean;
 }
 
 export interface IConfigurationOptions {
@@ -579,7 +582,6 @@ export interface IMidwayFramework<
   getApplicationContext(): IMidwayContainer;
   getConfiguration(key?: string): any;
   getCurrentEnvironment(): string;
-  getFrameworkType(): FrameworkType;
   getFrameworkName(): string;
   getAppDir(): string;
   getBaseDir(): string;
