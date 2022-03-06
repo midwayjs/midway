@@ -163,8 +163,8 @@ export class LocalController {
 
   @Post('/passport/local', { middleware: [LocalPassportMiddleware] })
   async localPassport() {
-    console.log('local user: ', this.ctx.req.user);
-    return this.ctx.req.user;
+    console.log('local user: ', this.ctx.state.user);
+    return this.ctx.state.user;
   }
 }
 ```
@@ -258,8 +258,8 @@ export class JwtController {
 
   @Post('/passport/jwt', { middleware: [JwtPassportMiddleware] })
   async jwtPassport() {
-    console.log('jwt user: ', this.ctx.req.user);
-    return this.ctx.req.user;
+    console.log('jwt user: ', this.ctx.state.user);
+    return this.ctx.state.user;
   }
 
   @Post('/jwt')
@@ -338,7 +338,7 @@ export class AuthController {
 
   @Get('/github/cb', { middleware: [GithubPassportMiddleware] })
   async githubOAuthCallback() {
-    return this.ctx.req.user;
+    return this.ctx.state.user;
   }
 }
 
