@@ -438,6 +438,7 @@ export interface IMidwayBaseApplication<CTX extends IMidwayContext> {
   getEnv(): string;
 
   /**
+   * @deprecated
    * Get current framework type in MidwayFrameworkType enum
    */
   getFrameworkType(): FrameworkType;
@@ -580,7 +581,6 @@ export interface IMidwayFramework<
   getApplicationContext(): IMidwayContainer;
   getConfiguration(key?: string): any;
   getCurrentEnvironment(): string;
-  getFrameworkType(): FrameworkType;
   getFrameworkName(): string;
   getAppDir(): string;
   getBaseDir(): string;

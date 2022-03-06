@@ -386,7 +386,6 @@ describe('/test/baseFramework.test.ts', () => {
     expect(framework.getApplication().getAppDir()).toEqual(framework.getAppDir());
     expect(framework.getApplication().getBaseDir()).toEqual(framework.getBaseDir());
     expect(framework.getApplication().getApplicationContext()).toEqual(framework.getApplicationContext());
-    expect(framework.getApplication().getFrameworkType()).toEqual(framework.getFrameworkType());
     expect(framework.getApplication().getProjectName()).toEqual(framework.getProjectName());
     expect(framework.getApplication().createAnonymousContext().startTime).toBeDefined();
     const ctxLogger = framework.getApplication().createAnonymousContext().getLogger();

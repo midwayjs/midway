@@ -11,7 +11,7 @@ import {
   CommonMiddleware,
   MiddlewareRespond,
 } from './interface';
-import { Inject, Destroy, Init, FrameworkType } from '@midwayjs/decorator';
+import { Inject, Destroy, Init } from '@midwayjs/decorator';
 import {
   ILogger,
   LoggerOptions,
@@ -132,8 +132,6 @@ export abstract class BaseFramework<
 
   public abstract applicationInitialize(options: IMidwayBootstrapOptions);
 
-  public abstract getFrameworkType(): FrameworkType;
-
   public abstract run(): Promise<void>;
 
   protected createContextLogger(ctx: CTX, name?: string): ILogger {
@@ -184,7 +182,9 @@ export abstract class BaseFramework<
       },
 
       getFrameworkType: () => {
-        return this.getFrameworkType();
+        if (this['getFrameworkType']) {
+          return this['getFrameworkType']();
+        }
       },
 
       getProcessType: () => {
@@ -348,7 +348,7 @@ export abstract class BaseFramework<
   }
 
   public getFrameworkName() {
-    return this.getFrameworkType().name;
+    return '';
   }
 
   public useMiddleware(
