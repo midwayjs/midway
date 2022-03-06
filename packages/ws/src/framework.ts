@@ -54,6 +54,9 @@ export class MidwayWSFramework extends BaseFramework<
     let server: http.Server;
     if (!this.configurationOptions.port) {
       server = this.applicationContext.get(HTTP_SERVER_KEY);
+      this.logger.info(
+        '[@midwayjs/ws]: WebSocket server find shared http server and will be attach.'
+      );
     } else {
       server = this.configurationOptions.server ?? http.createServer();
     }
@@ -70,7 +73,7 @@ export class MidwayWSFramework extends BaseFramework<
       await new Promise<void>(resolve => {
         server.listen(this.configurationOptions.port, () => {
           this.logger.info(
-            `WebSocket server port = ${this.configurationOptions.port} start success`
+            `[@midwayjs/ws]: WebSocket server port = ${this.configurationOptions.port} start success.`
           );
           resolve();
         });
@@ -203,7 +206,7 @@ export class MidwayWSFramework extends BaseFramework<
     );
 
     this.app.on('error', err => {
-      this.logger.error('socket server close');
+      this.logger.error('socket server close', err);
     });
 
     this.app.on('close', () => {

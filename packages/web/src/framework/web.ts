@@ -183,6 +183,8 @@ export class MidwayWebFramework extends BaseFramework<
   }
 
   async loadMidwayController() {
+    // move egg router to last
+    this.app.getMiddleware().findAndInsertLast('eggRouterMiddleware');
     await this.generator.loadMidwayController(
       this.configurationOptions.globalPrefix,
       newRouter => {
@@ -193,6 +195,11 @@ export class MidwayWebFramework extends BaseFramework<
         this.app.useMiddleware(dispatchFn);
       }
     );
+
+    // restore use method
+    this.app.use = (this.app as any).originUse;
+
+    debug(`[egg]: current middleware = ${this.middlewareManager.getNames()}`);
   }
 
   getFrameworkType(): MidwayFrameworkType {
@@ -200,16 +207,10 @@ export class MidwayWebFramework extends BaseFramework<
   }
 
   async run(): Promise<void> {
-    // move egg router to last
-    this.app.getMiddleware().findAndInsertLast('eggRouterMiddleware');
-    // load controller
-    await this.loadMidwayController();
-    // restore use method
-    this.app.use = (this.app as any).originUse;
-
-    debug(`[egg]: current middleware = ${this.middlewareManager.getNames()}`);
-
+    // cluster 模式加载路由需在 run 之前，因为 run 需要在拿到 server 之后执行
     if (!this.isClusterMode) {
+      // load controller
+      await this.loadMidwayController();
       // https config
       if (this.configurationOptions.key && this.configurationOptions.cert) {
         this.configurationOptions.key = PathFileUtil.getFileContentSync(

@@ -11,13 +11,15 @@ import {
   safeRequire,
   extend,
   MidwayFrameworkService,
-  MidwayLifeCycleService,
+  HTTP_SERVER_KEY,
 } from '@midwayjs/core';
 import { join } from 'path';
 import { existsSync, readFileSync } from 'fs';
 import { createLoggers } from './logger';
 import { EggRouter as Router } from '@eggjs/router';
 import { debuglog } from 'util';
+import { MidwayWebLifeCycleService } from './framework/lifecycle';
+import { MidwayWebFramework } from './framework/web';
 const ROUTER = Symbol('EggCore#router');
 const EGG_LOADER = Symbol.for('egg#loader');
 const EGG_PATH = Symbol.for('egg#eggPath');
@@ -48,10 +50,11 @@ export const createAppWorkerLoader = () => {
     require(getFramework())?.AppWorkerLoader || require('egg').AppWorkerLoader;
   class EggAppWorkerLoader extends (AppWorkerLoader as any) {
     app: any;
-    framework;
+    framework: MidwayWebFramework;
     bootstrap;
     useEggSocketIO = false;
     applicationContext;
+    lifecycleService: MidwayWebLifeCycleService;
 
     getEggPaths() {
       if (!this.appDir) {
@@ -146,6 +149,7 @@ export const createAppWorkerLoader = () => {
             '[egg]: start "initialize framework service with lazy in app.load"'
           );
           const applicationContext = getCurrentApplicationContext();
+          applicationContext.bind(MidwayWebLifeCycleService);
           /**
            * 这里 logger service 已经被 get loggers() 初始化过了，就不需要在这里初始化了
            */
@@ -157,10 +161,24 @@ export const createAppWorkerLoader = () => {
             },
           ]);
 
-          // lifecycle support
-          await applicationContext.getAsync(MidwayLifeCycleService, [
-            applicationContext,
-          ]);
+          this.app.once('server', async server => {
+            this.framework.setServer(server);
+            // register httpServer to applicationContext
+            applicationContext.registerObject(HTTP_SERVER_KEY, server);
+            await this.lifecycleService.afterInit();
+          });
+
+          // 这里生命周期走到 onReady
+          this.lifecycleService = await applicationContext.getAsync(
+            MidwayWebLifeCycleService,
+            [applicationContext]
+          );
+
+          // 执行加载路由
+          this.framework = await applicationContext.getAsync(
+            MidwayWebFramework
+          );
+          await this.framework.loadMidwayController();
         });
       }
     }
