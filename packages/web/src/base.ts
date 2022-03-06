@@ -174,7 +174,7 @@ export const createAppWorkerLoader = () => {
       super.loadConfig();
       const configService =
         getCurrentApplicationContext().get(MidwayConfigService);
-      configService.addObject(this.config);
+      configService.addObject(this.config, true);
       Object.defineProperty(this, 'config', {
         get() {
           return configService.getConfiguration();
@@ -296,7 +296,7 @@ export const createAgentWorkerLoader = () => {
       if (getCurrentApplicationContext()) {
         const configService =
           getCurrentApplicationContext().get(MidwayConfigService);
-        configService.addObject(this.config);
+        configService.addObject(this.config, true);
         Object.defineProperty(this, 'config', {
           get() {
             return configService.getConfiguration();

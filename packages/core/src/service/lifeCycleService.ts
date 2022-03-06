@@ -78,6 +78,11 @@ export class MidwayLifeCycleService {
 
     // exec onServerReady()
     await this.runContainerLifeCycle(lifecycleInstanceList, 'onServerReady');
+
+    // clear config merge cache
+    if (!this.configService.getConfiguration('debug.recordConfigMergeOrder')) {
+      this.configService.clearConfigMergeOrder();
+    }
   }
 
   public async stop() {

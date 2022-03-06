@@ -145,4 +145,36 @@ describe('/test/service/configService.test.ts', () => {
     })
     mm.restore()
   });
+
+  it('should test config merge order', async () => {
+    mm(process.env, 'MIDWAY_SERVER_ENV', 'test');
+    const cfg = await createConfigService();
+
+    cfg.add([
+      join(__dirname, './fixtures/compatible_production'),
+    ]);
+
+    await cfg.load();
+
+    expect(cfg.getConfigMergeOrder().length).toEqual(2)
+
+    cfg.clearConfigMergeOrder();
+
+    expect(cfg.getConfigMergeOrder().length).toEqual(0);
+    mm.restore()
+  });
+
+  it('should test config add with reverse', async () => {
+    const cfg = await createConfigService();
+
+    cfg.addObject({bb: 222});
+
+    await cfg.load();
+
+    cfg.addObject({bb: 111, cc: 222}, true);
+
+    assert.ok(Object.keys(cfg.getConfiguration()).length === 2);
+    assert.ok(cfg.getConfiguration().bb === 222);
+    assert.ok(cfg.getConfiguration().cc === 222);
+  });
 });

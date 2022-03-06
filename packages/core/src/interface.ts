@@ -330,7 +330,7 @@ export interface IFileDetector {
 
 export interface IConfigService {
   add(configFilePaths: any[]);
-  addObject(obj: object);
+  addObject(obj: object, reverse?: boolean);
   load();
   getConfiguration(configKey?: string);
   clearAllConfig();

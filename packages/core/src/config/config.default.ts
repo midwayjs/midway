@@ -11,6 +11,9 @@ export default (
   appInfo: MidwayAppInfo
 ): {
   midwayLogger?: ServiceFactoryConfigOption<LoggerOptions>;
+  debug?: {
+    recordConfigMergeOrder?: boolean;
+  };
 } => {
   const isDevelopment = isDevelopmentEnvironment(getCurrentEnvironment());
   const logRoot = process.env[MIDWAY_LOGGER_WRITEABLE_DIR] ?? appInfo.root;
@@ -32,6 +35,9 @@ export default (
           aliasName: 'logger',
         },
       },
+    },
+    debug: {
+      recordConfigMergeOrder: isDevelopment,
     },
   };
 };
