@@ -305,4 +305,8 @@ export class MidwayWebFramework extends BaseFramework<
       await this.agent.close();
     }
   }
+
+  public setServer(server) {
+    this.server = server;
+  }
 }

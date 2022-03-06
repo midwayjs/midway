@@ -6,8 +6,13 @@ import {
   WEB_ROUTER_PARAM_KEY,
 } from '@midwayjs/decorator';
 import { IMidwayWebApplication } from './interface';
-import { extractKoaLikeValue, MidwayDecoratorService } from '@midwayjs/core';
+import {
+  extractKoaLikeValue,
+  HTTP_SERVER_KEY,
+  MidwayDecoratorService,
+} from '@midwayjs/core';
 import { join } from 'path';
+import { MidwayWebFramework } from './framework/web';
 
 @Configuration({
   namespace: 'egg',
@@ -25,6 +30,9 @@ export class EggConfiguration {
 
   @Inject()
   decoratorService: MidwayDecoratorService;
+
+  @Inject()
+  framework: MidwayWebFramework;
 
   @Init()
   init() {
@@ -49,9 +57,17 @@ export class EggConfiguration {
         : [];
   }
 
-  async onServerReady() {
+  async onServerReady(container) {
     // trigger server didReady
     this.app.messenger.emit('egg-ready');
+
+    if (process.env['EGG_CLUSTER_MODE'] === 'true') {
+      this.app.once('server', server => {
+        this.framework.setServer(server);
+        // register httpServer to applicationContext
+        container.registerObject(HTTP_SERVER_KEY, server);
+      });
+    }
   }
 
   async onStop() {
