@@ -726,7 +726,7 @@ class CustomTransport extends EmptyTransport {
 我们也可以使用依赖注入的方式来定义 Transport。
 
 ```typescript
-import { EmptyTransport } from '@midwayjs/logger';
+import { EmptyTransport, IMidwayLogger } from '@midwayjs/logger';
 import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
 import { MidwayLoggerService } from '@midwayjs/core';
 
@@ -750,7 +750,7 @@ export class AutoConfiguration {
   customTransport: CustomTransport;
 
   async onReady() {
-    const appLogger = this.loggerService.getLogger('customLogger');
+    const appLogger = this.loggerService.getLogger('customLogger') as IMidwayLogger;
     appLogger.add(this.customTransport);
   }
 }
