@@ -467,3 +467,36 @@ export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
 
 }
 ```
+
+### 统一返回数据结构
+
+比如在 `/api` 返回的所有数据都是用统一的结构，减少 Controller 中的重复代码。
+
+我们可以增加一个类似下面的中间件代码。
+
+```typescript
+import { IMiddleware } from '@midwayjs/core';
+import { Middleware } from '@midwayjs/decorator';
+import { NextFunction, Context } from '@midwayjs/koa';
+
+@Middleware()
+export class FormatMiddleware implements IMiddleware<Context, NextFunction> {
+
+  resolve() {
+    return async (ctx: Context, next: NextFunction) => {
+      const result = await next();
+      return {
+        code: 0,
+        msg: 'OK',
+        data: result,
+      }
+    };
+  }
+
+  match(ctx) {
+    return ctx.path.indexOf('/api') !== -1;
+  }
+}
+```
+
+上面的仅是正确逻辑返回的代码，如需错误的返回包裹，可以使用 [过滤器](./error_filter)
