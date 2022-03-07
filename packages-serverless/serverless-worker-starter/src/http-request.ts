@@ -6,6 +6,10 @@ const kHeaders = Symbol.for('ctx#headers');
 const kQuery = Symbol.for('ctx#query');
 const kPath = Symbol.for('ctx#path');
 
+const isWorkerEnvironment =
+  typeof ServiceWorkerGlobalScope === 'function' &&
+  globalThis instanceof ServiceWorkerGlobalScope;
+
 export class HTTPRequest {
   private readonly originEvent: Request;
   public bodyParsed;
@@ -22,7 +26,9 @@ export class HTTPRequest {
 
   get headers() {
     if (this[kHeaders] == null) {
-      this[kHeaders] = Object.fromEntries(this.originEvent.headers.entries());
+      this[kHeaders] = isWorkerEnvironment
+        ? Object.fromEntries(this.originEvent.headers.entries())
+        : this.originEvent.headers;
     }
     return this[kHeaders];
   }
@@ -61,6 +67,7 @@ export class HTTPRequest {
     }
 
     const body = this[kBody];
+
     switch (typeis(this.getHeader('content-type'), ['urlencoded', 'json'])) {
       case 'json':
         try {

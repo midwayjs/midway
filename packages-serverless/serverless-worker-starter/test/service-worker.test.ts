@@ -6,7 +6,7 @@ import type { JSWorkerExtendableEvent, JSWorkerFetchEvent } from '@midwayjs/jsdo
 declare class ExtendableEvent extends Event implements ExtendableEvent  {}
 declare class FetchEvent extends Event implements ExtendableEvent { constructor(type, init: FetchEventInit); }
 
-describe('test/index.test.ts', () => {
+describe('test/service-worker.test.ts', () => {
   afterEach(() => {
     jest.restoreAllMocks()
   });
@@ -203,6 +203,25 @@ describe('test/index.test.ts', () => {
             },
             body: 'foobar',
           }),
+        },
+      },
+      {
+        name: 'event request',
+        handler: async (ctx) => {
+          return 'test';
+        },
+        input: {
+          url: 'event://alice-event-invoke/',
+          requestInit: {
+            method: 'alice-event-invoke',
+            headers: {},
+            body: 'foobar',
+          },
+        },
+        expect: {
+          status: 200,
+          headers: {},
+          body: 'test',
         },
       },
     ];
