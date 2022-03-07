@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.1.0](https://github.com/midwayjs/midway/compare/v3.0.13...v3.1.0) (2022-03-07)
+
+
+### Bug Fixes
+
+* koa default onerrror now returns json correctly ([#1779](https://github.com/midwayjs/midway/issues/1779)) ([0b2be53](https://github.com/midwayjs/midway/commit/0b2be5329e11b3ea30fb6b748b23ed310b620394))
+* use hook to load egg application ([#1782](https://github.com/midwayjs/midway/issues/1782)) ([b47f27b](https://github.com/midwayjs/midway/commit/b47f27bf441431ddb1d0d35d5ee0ae80ae56fce8))
+
+
+
+
+
 ## [3.0.13](https://github.com/midwayjs/midway/compare/v3.0.12...v3.0.13) (2022-03-01)
 
 **Note:** Version bump only for package @midwayjs/koa

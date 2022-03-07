@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.1.0](https://github.com/midwayjs/midway/compare/v3.0.13...v3.1.0) (2022-03-07)
+
+
+### Features
+
+* starter for node.js and serverless-worker environment ([#1768](https://github.com/midwayjs/midway/issues/1768)) ([0c48b73](https://github.com/midwayjs/midway/commit/0c48b739e54be4e18aeff4c989fd3b96e955805c))
+* support event for worker starter ([#1788](https://github.com/midwayjs/midway/issues/1788)) ([2d97dc7](https://github.com/midwayjs/midway/commit/2d97dc7908b0a76245d8a8e3089b9756fb579394))
+
+
+
+
+
 ## [3.0.13](https://github.com/midwayjs/midway/compare/v3.0.12...v3.0.13) (2022-03-01)
 
 **Note:** Version bump only for package @midwayjs/serverless-worker-starter

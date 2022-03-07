@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.1.0](https://github.com/midwayjs/midway/compare/v3.0.13...v3.1.0) (2022-03-07)
+
+
+### Bug Fixes
+
+* egg logger create context logger case ([#1760](https://github.com/midwayjs/midway/issues/1760)) ([f9bebf1](https://github.com/midwayjs/midway/commit/f9bebf18cffbced4bd596d1ab39b585ea4d6a229))
+* express use router and middleware ([#1777](https://github.com/midwayjs/midway/issues/1777)) ([21a69bb](https://github.com/midwayjs/midway/commit/21a69bbfc5535aaafcb3751f4c0c54ffcf109e9d))
+* koa default onerrror now returns json correctly ([#1779](https://github.com/midwayjs/midway/issues/1779)) ([0b2be53](https://github.com/midwayjs/midway/commit/0b2be5329e11b3ea30fb6b748b23ed310b620394))
+* not transform when RouteParam got undefined ([#1762](https://github.com/midwayjs/midway/issues/1762)) ([d714e31](https://github.com/midwayjs/midway/commit/d714e317aec771c8971bf6093c767eba9bccc976))
+* nunjucks local cache ([#1774](https://github.com/midwayjs/midway/issues/1774)) ([413ec44](https://github.com/midwayjs/midway/commit/413ec44ea309077ce482fe55db3819aaab45894a))
+* use hook to load egg application ([#1782](https://github.com/midwayjs/midway/issues/1782)) ([b47f27b](https://github.com/midwayjs/midway/commit/b47f27bf441431ddb1d0d35d5ee0ae80ae56fce8))
+
+
+### Features
+
+* starter for node.js and serverless-worker environment ([#1768](https://github.com/midwayjs/midway/issues/1768)) ([0c48b73](https://github.com/midwayjs/midway/commit/0c48b739e54be4e18aeff4c989fd3b96e955805c))
+* support event for worker starter ([#1788](https://github.com/midwayjs/midway/issues/1788)) ([2d97dc7](https://github.com/midwayjs/midway/commit/2d97dc7908b0a76245d8a8e3089b9756fb579394))
+
+
+
+
+
 ## [3.0.13](https://github.com/midwayjs/midway/compare/v3.0.12...v3.0.13) (2022-03-01)
 
 

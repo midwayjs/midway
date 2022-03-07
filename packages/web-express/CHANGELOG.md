@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.1.0](https://github.com/midwayjs/midway/compare/v3.0.13...v3.1.0) (2022-03-07)
+
+
+### Bug Fixes
+
+* express use router and middleware ([#1777](https://github.com/midwayjs/midway/issues/1777)) ([21a69bb](https://github.com/midwayjs/midway/commit/21a69bbfc5535aaafcb3751f4c0c54ffcf109e9d))
+
+
+
+
+
 ## [3.0.13](https://github.com/midwayjs/midway/compare/v3.0.12...v3.0.13) (2022-03-01)
 
 **Note:** Version bump only for package @midwayjs/express

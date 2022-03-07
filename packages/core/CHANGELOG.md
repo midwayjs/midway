@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.1.0](https://github.com/midwayjs/midway/compare/v3.0.13...v3.1.0) (2022-03-07)
+
+
+### Bug Fixes
+
+* egg logger create context logger case ([#1760](https://github.com/midwayjs/midway/issues/1760)) ([f9bebf1](https://github.com/midwayjs/midway/commit/f9bebf18cffbced4bd596d1ab39b585ea4d6a229))
+* express use router and middleware ([#1777](https://github.com/midwayjs/midway/issues/1777)) ([21a69bb](https://github.com/midwayjs/midway/commit/21a69bbfc5535aaafcb3751f4c0c54ffcf109e9d))
+* not transform when RouteParam got undefined ([#1762](https://github.com/midwayjs/midway/issues/1762)) ([d714e31](https://github.com/midwayjs/midway/commit/d714e317aec771c8971bf6093c767eba9bccc976))
+* use hook to load egg application ([#1782](https://github.com/midwayjs/midway/issues/1782)) ([b47f27b](https://github.com/midwayjs/midway/commit/b47f27bf441431ddb1d0d35d5ee0ae80ae56fce8))
+
+
+
+
+
 ## [3.0.13](https://github.com/midwayjs/midway/compare/v3.0.12...v3.0.13) (2022-03-01)
 
 
