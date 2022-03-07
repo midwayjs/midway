@@ -94,16 +94,16 @@ export class WorkerRuntime extends ServerlessLightRuntime {
     return context;
   }
 
-  private responseEventSuccess(data: unknown, response: OutgoingMessage) {
+  private responseEventSuccess(data: unknown, response: ServerResponse) {
     if (isWorkerEnvironment) {
       return data;
     } else {
       response.statusCode = 200;
-      response.end(data);
+      return response.end(data);
     }
   }
 
-  private responseEventError(error: Error, response: OutgoingMessage) {
+  private responseEventError(error: Error, response: ServerResponse) {
     const errorMsg = isOutputError() ? error.stack : 'Internal Server Error';
 
     if (isWorkerEnvironment) {
@@ -141,7 +141,7 @@ export class WorkerRuntime extends ServerlessLightRuntime {
           if (!handler) {
             return await this.defaultInvokeHandler(newCtx);
           } else {
-            return await handler.apply(handler, newCtx);
+            return await handler.apply(handler, [newCtx]);
           }
         } catch (err) {
           newCtx.logger.error(err);
@@ -162,7 +162,7 @@ export class WorkerRuntime extends ServerlessLightRuntime {
   private responseWebSuccess(
     data: Buffer | string,
     initOpts: ResponseInit,
-    response: OutgoingMessage
+    response: ServerResponse
   ) {
     if (isWorkerEnvironment) {
       return new Response(data, initOpts);
@@ -173,7 +173,7 @@ export class WorkerRuntime extends ServerlessLightRuntime {
         response.setHeader(key, headers[key]);
       });
 
-      response.statusCode = initOpts.status;
+      response.statusCode = initOpts.status ?? 200;
       response.end(data);
     }
   }
@@ -181,7 +181,7 @@ export class WorkerRuntime extends ServerlessLightRuntime {
   private responseWebError(
     error: Error,
     initOpts: ResponseInit,
-    response: OutgoingMessage
+    response: ServerResponse
   ) {
     const errorMsg = isOutputError() ? error.stack : 'Internal Server Error';
 
@@ -307,7 +307,7 @@ export class WorkerRuntime extends ServerlessLightRuntime {
 // Node.js environment: WorkerContext, IncomingMessage, OutgoingMessage
 // Serverless worker environment: FetchEvent
 type WorkerEntryRequest = FetchEvent[];
-type NodeEntryRequest = [WorkerContext, IncomingMessage, OutgoingMessage];
+type NodeEntryRequest = [WorkerContext, IncomingMessage, ServerResponse];
 type EntryRequest = WorkerEntryRequest | NodeEntryRequest;
 
 export const EVENT_INVOKE_METHOD = 'alice-event-invoke';
@@ -348,7 +348,7 @@ export interface IncomingMessage extends Readable {
   readonly rawHeaders: string[];
 }
 
-export interface OutgoingMessage extends Writable {
+export interface ServerResponse extends Writable {
   readonly headerSent: boolean;
   statusCode: number;
   readonly statusMessage: string;
