@@ -279,11 +279,7 @@ describe('/test/feature.test.ts', () => {
     const result1 = await createHttpRequest(app)
       .get('/');
     expect(result1.status).toEqual(400);
-    await closeApp(app);
-  });
 
-  it('default onerror should return json', async () => {
-    const app = await creatApp('base-app-default-onerror');
     const result = await createHttpRequest(app)
       .get('/')
       .set('Accept', 'application/json');
