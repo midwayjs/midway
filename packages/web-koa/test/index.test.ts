@@ -279,6 +279,12 @@ describe('/test/feature.test.ts', () => {
     const result1 = await createHttpRequest(app)
       .get('/');
     expect(result1.status).toEqual(400);
+
+    const result = await createHttpRequest(app)
+      .get('/')
+      .set('Accept', 'application/json');
+    expect(result.body.code).toEqual('400');
+    expect(result.body.message).toEqual('my error');
     await closeApp(app);
   });
 

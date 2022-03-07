@@ -181,7 +181,7 @@ export function setupOnError(app, config, logger) {
     }
 
     if (type === 'json') {
-      this.body = Utils.safeStringify(this.body);
+      this.body = JSON.stringify(this.body);
     }
     this.res.end(this.body);
   };

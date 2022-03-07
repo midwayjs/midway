@@ -9,9 +9,15 @@ export function detectStatus(err) {
 }
 
 export function accepts(ctx) {
-  if (ctx.acceptJSON) return 'json';
-  if (ctx.acceptJSONP) return 'js';
+  if (acceptJSON(ctx)) return 'json';
   return 'html';
+}
+
+function acceptJSON(ctx) {
+  if (ctx.path.endsWith('.json')) return true;
+  if (ctx.response.type && this.response.type.indexOf('json') >= 0) return true;
+  if (ctx.accepts('html', 'text', 'json') === 'json') return true;
+  return false;
 }
 
 export function sendToWormhole(stream): Promise<void> {
