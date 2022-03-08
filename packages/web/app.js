@@ -65,6 +65,13 @@ class AppBootHook {
     const eggRouterMiddleware = this.app.router.middleware();
     eggRouterMiddleware._name = 'eggRouterMiddleware';
     this.app.useMiddleware(eggRouterMiddleware);
+
+    if (process.env['EGG_CLUSTER_MODE'] === 'true') {
+      // 多进程时的路由加载必须放在这里，中间件加载之后
+      const framework = this.app.applicationContext.get('midwayWebFramework');
+      await framework.loadMidwayController();
+    }
+
     this.app.emit('application-ready');
   }
 

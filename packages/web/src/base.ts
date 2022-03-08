@@ -178,7 +178,6 @@ export const createAppWorkerLoader = () => {
           this.framework = await applicationContext.getAsync(
             MidwayWebFramework
           );
-          await this.framework.loadMidwayController();
         });
       }
     }
