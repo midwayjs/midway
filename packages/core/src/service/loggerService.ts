@@ -3,7 +3,6 @@ import { MidwayConfigService } from './configService';
 import { ServiceFactory } from '../common/serviceFactory';
 import { ILogger, loggers, LoggerOptions } from '@midwayjs/logger';
 import { IMidwayContainer } from '../interface';
-import { join } from 'path';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
