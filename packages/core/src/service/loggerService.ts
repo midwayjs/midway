@@ -1,8 +1,9 @@
 import { Provide, Scope, ScopeEnum, Inject, Init } from '@midwayjs/decorator';
 import { MidwayConfigService } from './configService';
 import { ServiceFactory } from '../common/serviceFactory';
-import { ILogger, loggers } from '@midwayjs/logger';
+import { ILogger, loggers, LoggerOptions } from '@midwayjs/logger';
 import { IMidwayContainer } from '../interface';
+import { join } from 'path';
 
 @Provide()
 @Scope(ScopeEnum.Singleton)
@@ -24,7 +25,13 @@ export class MidwayLoggerService extends ServiceFactory<ILogger> {
     );
   }
 
-  protected createClient(config, name?: string) {
+  protected createClient(config: LoggerOptions, name?: string) {
+    if (!config.errorDir) {
+      config.errorDir = config.dir;
+    }
+    if (!config.auditFileDir) {
+      config.errorDir = join(config.dir, '.audit');
+    }
     loggers.createLogger(name, config);
   }
 
