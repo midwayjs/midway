@@ -23,6 +23,8 @@ export default (
         dir: join(logRoot, 'logs', appInfo.name),
         level: isDevelopment ? 'info' : 'warn',
         consoleLevel: isDevelopment ? 'info' : 'warn',
+        auditFileDir: join(logRoot, 'logs', appInfo.name, '.audit'),
+        errorDir: join(logRoot, 'logs', appInfo.name),
       },
       clients: {
         coreLogger: {

@@ -174,7 +174,7 @@ export const createAppWorkerLoader = () => {
             [applicationContext]
           );
 
-          // 执行加载路由
+          // 执行加载框架初始化
           this.framework = await applicationContext.getAsync(
             MidwayWebFramework
           );

@@ -162,12 +162,6 @@ class MidwayLoggers extends Map<string, ILogger> {
      * 提前备份 egg 日志
      */
     checkEggLoggerExistsAndBackup(options.dir, options.fileLogName);
-    if (!options.errorDir) {
-      options.errorDir = options.dir;
-    }
-    if (!options.auditFileDir) {
-      options.errorDir = join(options.dir, '.audit');
-    }
     const logger: ILogger = loggers.createLogger(loggerKey, options);
 
     // overwrite values for pandora collect

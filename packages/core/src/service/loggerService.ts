@@ -26,12 +26,6 @@ export class MidwayLoggerService extends ServiceFactory<ILogger> {
   }
 
   protected createClient(config: LoggerOptions, name?: string) {
-    if (!config.errorDir) {
-      config.errorDir = config.dir;
-    }
-    if (!config.auditFileDir) {
-      config.errorDir = join(config.dir, '.audit');
-    }
     loggers.createLogger(name, config);
   }
 
