@@ -16,7 +16,11 @@ import {
   safeRequire,
 } from './';
 import defaultConfig from './config/config.default';
-import { bindContainer, clearBindContainer } from '@midwayjs/decorator';
+import {
+  bindContainer,
+  clearBindContainer,
+  listPreloadModule,
+} from '@midwayjs/decorator';
 import * as util from 'util';
 import { join } from 'path';
 import { loggers } from '@midwayjs/logger';
@@ -140,6 +144,13 @@ export async function initializeGlobalApplicationContext(
     await applicationContext.getAsync(MidwayLifeCycleService, [
       applicationContext,
     ]);
+
+    // some preload module init
+    const modules = listPreloadModule();
+    for (const module of modules) {
+      // preload init context
+      await applicationContext.getAsync(module);
+    }
   }
 
   return applicationContext;

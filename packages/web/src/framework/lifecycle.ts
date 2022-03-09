@@ -9,6 +9,7 @@ import {
   Init,
   Inject,
   listModule,
+  listPreloadModule,
   Provide,
   Scope,
   ScopeEnum,
@@ -99,6 +100,13 @@ export class MidwayWebLifeCycleService {
     // clear config merge cache
     if (!this.configService.getConfiguration('debug.recordConfigMergeOrder')) {
       this.configService.clearConfigMergeOrder();
+    }
+
+    // some preload module init
+    const modules = listPreloadModule();
+    for (const module of modules) {
+      // preload init context
+      await this.applicationContext.getAsync(module);
     }
   }
 
