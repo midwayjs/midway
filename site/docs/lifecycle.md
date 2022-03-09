@@ -236,10 +236,10 @@ export interface IObjectLifeCycle {
 ```typescript
 // src/configuration.ts
 import { Configuration } from '@midwayjs/decorator';
-import { ILifeCycle, IMidwayContainer, ObjectBeforeCreatedOptions } from '@midwayjs/core';
+import { IObjectLifeCycle, IMidwayContainer, ObjectBeforeCreatedOptions } from '@midwayjs/core';
 
 @Configuration()
-export class ContainerConfiguration implements ILifeCycle {
+export class ContainerConfiguration implements IObjectLifeCycle {
 
   async onBeforeObjectCreated(Clzz: new (...args), options: ObjectBeforeCreatedOptions): Promise<void> {
     // ...
