@@ -127,7 +127,7 @@ export class WorkerRuntime extends ServerlessLightRuntime {
       requestData = requestData.toString('utf8');
     }
 
-    requestData = safeJSONParse(requestData);
+    const requestDataParsed = safeJSONParse(requestData);
 
     const newCtx = {
       logger: console,
@@ -143,7 +143,7 @@ export class WorkerRuntime extends ServerlessLightRuntime {
           if (!handler) {
             return await this.defaultInvokeHandler(newCtx);
           } else {
-            return await handler.apply(handler, [newCtx]);
+            return await handler.apply(handler, [newCtx, requestDataParsed]);
           }
         } catch (err) {
           newCtx.logger.error(err);
