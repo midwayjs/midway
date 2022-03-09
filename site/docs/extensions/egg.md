@@ -345,7 +345,7 @@ v3 开始请参考 [task 组件](./extesion/task) ， [egg 定时任务](https:/
 
 ## 日志
 
-v3 开始无法使用 egg-logger，请参考 [日志](logger)
+v3 开始无法使用 egg-logger，请参考 [日志](../logger)
 
 
 
