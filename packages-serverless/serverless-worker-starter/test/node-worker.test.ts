@@ -62,8 +62,8 @@ describe('test/node-worker.test.ts', () => {
       ];
 
       const handle = asyncWrapper(async (...args) => {
-        return runtime.asyncEvent((ctx) => {
-          return ctx.originEvent + ctx.traceid;
+        return runtime.asyncEvent((ctx, event) => {
+          return event + ctx.traceid;
         })(...args);
       });
 
