@@ -7,3 +7,4 @@ export * from './middleware/noopen';
 export * from './middleware/nosniff';
 export * from './middleware/xssProtection';
 export * from './middleware/csp';
+export * from './middleware/helper';
