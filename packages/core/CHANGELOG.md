@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.1](https://github.com/midwayjs/midway/compare/v3.1.0...v3.1.1) (2022-03-09)
+
+
+### Bug Fixes
+
+* default error dir and loadMidwayController ([#1791](https://github.com/midwayjs/midway/issues/1791)) ([4fd6b64](https://github.com/midwayjs/midway/commit/4fd6b643d683b85335f4bd314a9574ef8501a3f6))
+* preload module position ([#1794](https://github.com/midwayjs/midway/issues/1794)) ([1456a83](https://github.com/midwayjs/midway/commit/1456a83fd2bd2afc1b3d92b4d1315ad6af7650df))
+
+
+
+
+
 # [3.1.0](https://github.com/midwayjs/midway/compare/v3.0.13...v3.1.0) (2022-03-07)
 
 
