@@ -1,5 +1,10 @@
-import { loggers, ILogger, IMidwayLogger } from '@midwayjs/logger';
-import { join, isAbsolute } from 'path';
+import {
+  loggers,
+  ILogger,
+  IMidwayLogger,
+  LoggerOptions,
+} from '@midwayjs/logger';
+import { join, isAbsolute, dirname, basename } from 'path';
 import {
   existsSync,
   lstatSync,
@@ -121,7 +126,8 @@ class MidwayLoggers extends Map<string, ILogger> {
     // 先把 egg 的日志配置转为 midway logger 配置
     if (configService.getConfiguration('customLogger')) {
       const eggLoggerConfig = this.transformEggLogger(
-        configService.getConfiguration('customLogger')
+        configService.getConfiguration('customLogger'),
+        configService.getConfiguration('midwayLogger.default')
       ) as any;
       if (eggLoggerConfig) {
         configService.addObject(eggLoggerConfig);
@@ -162,7 +168,6 @@ class MidwayLoggers extends Map<string, ILogger> {
      * 提前备份 egg 日志
      */
     checkEggLoggerExistsAndBackup(options.dir, options.fileLogName);
-
     const logger: ILogger = loggers.createLogger(loggerKey, options);
 
     // overwrite values for pandora collect
@@ -194,7 +199,7 @@ class MidwayLoggers extends Map<string, ILogger> {
     }
   }
 
-  transformEggLogger(eggCustomLogger) {
+  transformEggLogger(eggCustomLogger, midwayLoggerConfig: LoggerOptions) {
     const transformLoggerConfig = {
       midwayLogger: {
         clients: {},
@@ -202,10 +207,29 @@ class MidwayLoggers extends Map<string, ILogger> {
     };
 
     for (const name in eggCustomLogger) {
+      const file = eggCustomLogger[name]?.file;
+      if (!file) {
+        continue;
+      }
+      const options = {} as any;
+      if (isAbsolute(file)) {
+        // 绝对路径，单独处理
+        options.dir = dirname(file);
+        options.fileLogName = basename(file);
+        options.auditFileDir =
+          midwayLoggerConfig.auditFileDir === '.audit'
+            ? join(midwayLoggerConfig.dir, '.audit')
+            : midwayLoggerConfig.auditFileDir;
+        options.errorDir =
+          midwayLoggerConfig.errorDir ?? midwayLoggerConfig.dir;
+      } else {
+        // 相对路径，使用默认的 dir 即可
+        options.fileLogName = file;
+      }
       transformLoggerConfig.midwayLogger.clients[name] = {
-        fileLogName: eggCustomLogger[name]?.file,
         level: levelTransform(eggCustomLogger[name]?.level),
         consoleLevel: levelTransform(eggCustomLogger[name]?.consoleLevel),
+        ...options,
       };
       cleanUndefinedProperty(transformLoggerConfig.midwayLogger.clients[name]);
     }

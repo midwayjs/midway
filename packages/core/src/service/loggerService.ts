@@ -1,7 +1,7 @@
 import { Provide, Scope, ScopeEnum, Inject, Init } from '@midwayjs/decorator';
 import { MidwayConfigService } from './configService';
 import { ServiceFactory } from '../common/serviceFactory';
-import { ILogger, loggers } from '@midwayjs/logger';
+import { ILogger, loggers, LoggerOptions } from '@midwayjs/logger';
 import { IMidwayContainer } from '../interface';
 
 @Provide()
@@ -24,7 +24,7 @@ export class MidwayLoggerService extends ServiceFactory<ILogger> {
     );
   }
 
-  protected createClient(config, name?: string) {
+  protected createClient(config: LoggerOptions, name?: string) {
     loggers.createLogger(name, config);
   }
 
