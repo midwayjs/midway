@@ -7,7 +7,6 @@ import {
   Init,
   Inject,
   listModule,
-  listPreloadModule,
   LOGGER_KEY,
   MidwayFrameworkType,
   PIPELINE_IDENTIFIER,
@@ -162,13 +161,6 @@ export class MidwayFrameworkService {
 
     // init aspect module
     await this.aspectService.loadAspect();
-
-    // some preload module init
-    const modules = listPreloadModule();
-    for (const module of modules) {
-      // preload init context
-      await this.applicationContext.getAsync(module);
-    }
   }
 
   public getMainApp() {

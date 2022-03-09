@@ -51,7 +51,9 @@ export class EggConfiguration {
 
   async onServerReady() {
     // trigger server didReady
-    this.app.messenger.emit('egg-ready');
+    if (this.app.messenger) {
+      this.app.messenger.emit('egg-ready');
+    }
   }
 
   async onStop() {
