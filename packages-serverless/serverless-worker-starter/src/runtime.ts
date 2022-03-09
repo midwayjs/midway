@@ -4,9 +4,20 @@ import {
 } from '@midwayjs/runtime-engine';
 import { Application, HTTPResponse } from '@midwayjs/serverless-http-parser';
 import { types } from 'util';
-import { Readable, Writable } from 'stream';
 import { HTTPRequest } from './http-request';
-import { bufferFromStream, safeJSONParse } from './util';
+import {
+  EntryRequest,
+  EVENT_INVOKE_METHOD,
+  IncomingMessage,
+  NodeEntryRequest,
+  ServerResponse,
+} from './interface';
+import {
+  bufferFromStream,
+  safeJSONParse,
+  isWorkerEnvironment,
+  getWorkerContext,
+} from './util';
 
 const { isAnyArrayBuffer, isArrayBufferView } = types;
 
@@ -17,10 +28,6 @@ const isOutputError = () => {
     ['local', 'development'].includes(process.env.NODE_ENV)
   );
 };
-
-const isWorkerEnvironment =
-  typeof ServiceWorkerGlobalScope === 'function' &&
-  globalThis instanceof ServiceWorkerGlobalScope;
 
 export class WorkerRuntime extends ServerlessLightRuntime {
   app: Application;
@@ -81,17 +88,12 @@ export class WorkerRuntime extends ServerlessLightRuntime {
     }
   }
 
-  private normalizeContext(
-    request: Request | IncomingMessage
-  ): Record<string, string> {
-    const context: Record<string, string> = {};
+  private normalizeContext(targetContext, request: Request | IncomingMessage) {
     const headers = request.headers;
 
     Object.keys(headers).forEach(key => {
-      context[key] = headers[key];
+      targetContext[key] = headers[key];
     });
-
-    return context;
   }
 
   private responseEventSuccess(data: unknown, response: ServerResponse) {
@@ -127,13 +129,13 @@ export class WorkerRuntime extends ServerlessLightRuntime {
 
     requestData = safeJSONParse(requestData);
 
-    const context = this.normalizeContext(request);
-
     const newCtx = {
       logger: console,
       originEvent: requestData,
-      originContext: context,
+      originContext: getWorkerContext(entryReq),
     };
+
+    this.normalizeContext(newCtx, request);
 
     try {
       const result = await this.invokeHandlerWrapper(newCtx, async () => {
@@ -216,7 +218,7 @@ export class WorkerRuntime extends ServerlessLightRuntime {
       bodyParsed = true;
     }
 
-    const koaReq = new HTTPRequest(request, body, bodyParsed);
+    const koaReq = new HTTPRequest(request, body, bodyParsed, entryReq);
     const koaRes = new HTTPResponse();
 
     return this.respond.apply(this.respond, [
@@ -302,61 +304,4 @@ export class WorkerRuntime extends ServerlessLightRuntime {
       },
     ]);
   }
-}
-
-// Node.js environment: WorkerContext, IncomingMessage, OutgoingMessage
-// Serverless worker environment: FetchEvent
-type WorkerEntryRequest = FetchEvent[];
-type NodeEntryRequest = [WorkerContext, IncomingMessage, ServerResponse];
-type EntryRequest = WorkerEntryRequest | NodeEntryRequest;
-
-export const EVENT_INVOKE_METHOD = 'alice-event-invoke';
-
-export interface DaprResponse {
-  status: number;
-  json(): Promise<object>;
-  text(): Promise<string>;
-  buffer(): Promise<Buffer>;
-}
-
-export interface DaprInvokeOptions {
-  app: string;
-  methodName: string;
-  data: Buffer;
-}
-
-export interface DaprBindingOptions {
-  name: string;
-  metadata: Record<string, string>;
-  operation: string;
-  data: Buffer;
-}
-
-export interface WorkerContext {
-  Dapr: {
-    ['1.0']: {
-      invoke: (req: DaprInvokeOptions) => Promise<DaprResponse>;
-      binding: (req: DaprBindingOptions) => Promise<DaprResponse>;
-    };
-  };
-}
-
-export interface IncomingMessage extends Readable {
-  readonly url: string;
-  readonly method: string;
-  readonly headers: Record<string, string>;
-  readonly rawHeaders: string[];
-}
-
-export interface ServerResponse extends Writable {
-  readonly headerSent: boolean;
-  statusCode: number;
-  readonly statusMessage: string;
-  flushHeaders(): void;
-  getHeader(name: string): string | string[];
-  getHeaderNames(): string[];
-  hasHeader(name: string): boolean;
-  removeHeader(name: string): void;
-  setHeader(name: string, value: string): void;
-  writeHead(status: number, headers: Record<string, string> | string[]): void;
 }

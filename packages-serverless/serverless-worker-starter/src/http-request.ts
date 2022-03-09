@@ -1,27 +1,31 @@
 import { is as typeis } from 'type-is';
 import * as qs from 'querystring';
+import { getWorkerContext, isWorkerEnvironment } from './util';
+import { WorkerContext, EntryRequest } from './interface';
 
 const kBody = Symbol.for('ctx#body');
 const kHeaders = Symbol.for('ctx#headers');
 const kQuery = Symbol.for('ctx#query');
 const kPath = Symbol.for('ctx#path');
 
-const isWorkerEnvironment =
-  typeof ServiceWorkerGlobalScope === 'function' &&
-  globalThis instanceof ServiceWorkerGlobalScope;
-
 export class HTTPRequest {
   private readonly originEvent: Request;
   public bodyParsed;
+  private readonly originContext: WorkerContext;
 
-  constructor(request, bodyText, bodyParsed = false) {
+  constructor(request, bodyText, bodyParsed = false, entryReq: EntryRequest) {
     this.originEvent = request;
     this[kBody] = bodyText;
     this.bodyParsed = bodyParsed;
+    this.originContext = getWorkerContext(entryReq);
   }
 
   getOriginEvent() {
     return this.originEvent;
+  }
+
+  getOriginContext() {
+    return this.originContext;
   }
 
   get headers() {
