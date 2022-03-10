@@ -463,9 +463,9 @@ Midway 会自动使用 B 作为 b 这个属性的类型，在容器中实例化�
 如果要获取这个 uuid，可以使用下面的 API。
 
 ```typescript
-import { getProvideUUId } from '@midwayjs/decorator';
+import { getProviderUUId } from '@midwayjs/decorator';
 
-const uuid = getProvideUUId(B);
+const uuid = getProviderUUId(B);
 // ...
 ```
 
