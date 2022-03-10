@@ -30,7 +30,7 @@
     "@midwayjs/decorator": "^3.0.10",
     "@midwayjs/logger": "^2.15.0",
     "@midwayjs/mock": "^3.1.1",
-    "axios": "0.26.0",
+    "axios": "0.26.1",
     "dayjs": "1.10.8",
     "egg-logger": "2.7.1",
     "egg-mock": "4.2.0",
