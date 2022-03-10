@@ -20,6 +20,7 @@ export interface IPassportMiddleware extends IMiddleware<any, any>{
 
 export abstract class AbstractPassportMiddleware implements Pick<IPassportMiddleware, 'authenticate'> {
   abstract getAuthenticateOptions(): Promise<passport.AuthenticateOptions> | passport.AuthenticateOptions;
+  abstract authz(...args: any[]): Promise<Record<string, any>> ;
   authenticate?(options: passport.AuthenticateOptions, callback?: Function);
   resolve(): any {}
 }

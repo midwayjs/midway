@@ -3,6 +3,7 @@ import { App, Config, Init } from '@midwayjs/decorator';
 import { getPassport, isExpressMode } from '../util';
 import { AbstractPassportMiddleware, AbstractStrategy } from '../interface';
 import { httpError } from '@midwayjs/core';
+import * as assert from 'assert';
 
 export function PassportStrategy(
   Strategy: new (...args) => passport.Strategy,
@@ -68,6 +69,11 @@ export function PassportMiddleware(
     app;
 
     resolve() {
+      assert(
+        this.getAuthenticateOptions && this.authz,
+        'getAuthenticateOptions and authz are needed'
+      );
+
       if (isExpressMode()) {
         return async function passportMiddleware(req, res, next) {
           return this.authenticate(await this.getAuthenticateOptions())(
@@ -123,20 +129,23 @@ export function PassportMiddleware(
               strategyList.push(strategyInstance.getStrategy());
             }
 
-            const user = await new Promise<any>((resolve, reject) => {
+            const params = await new Promise<any>((resolve, reject) => {
               // authenticate
               passport.authenticate(
                 strategyList,
                 authOptions,
-                (err, user, info, status) => {
+                (err, ...rest) => {
                   if (err) {
                     reject(err);
                   } else {
-                    resolve(user);
+                    resolve(rest);
                   }
                 }
               )(req, res, err => (err ? reject(err) : resolve(0)));
             });
+
+            const user = await this.authz(...params);
+
             if (user) {
               req[authOptions.userProperty] = user;
               if (authOptions.session) {
@@ -155,7 +164,7 @@ export function PassportMiddleware(
           }
         };
       } else {
-        return async function bbb(ctx, next) {
+        return async function (ctx, next) {
           // merge options with default options
           const authOptions = {
             ...this.passportConfig,
@@ -184,20 +193,23 @@ export function PassportMiddleware(
               strategyList.push(strategyInstance.getStrategy());
             }
             try {
-              const user = await new Promise<any>((resolve, reject) => {
+              const params = await new Promise<any>((resolve, reject) => {
                 // authenticate
                 passport.authenticate(
                   strategyList,
                   authOptions,
-                  (err, user, info, status) => {
+                  (err, ...rest) => {
                     if (err) {
                       reject(err);
                     } else {
-                      resolve(user);
+                      resolve(rest);
                     }
                   }
                 )(ctx, err => (err ? reject(err) : resolve(0)));
               });
+
+              const user = await this.authz(...params);
+
               if (user) {
                 ctx.state[authOptions.userProperty] = user;
                 if (authOptions.session) {

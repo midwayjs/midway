@@ -8,4 +8,8 @@ export class JwtPassportMiddleware extends PassportMiddleware(JwtStrategy) {
   getAuthenticateOptions(): Promise<passport.AuthenticateOptions> | passport.AuthenticateOptions {
     return {};
   }
+
+  async authz(user, info, status): Promise<Record<string, any>> {
+    return user
+  }
 }

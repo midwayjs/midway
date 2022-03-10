@@ -5,10 +5,16 @@ import { CustomStrategy } from './local.strategy';
 
 @Middleware()
 export class AuthMiddleware extends PassportMiddleware(CustomStrategy) {
-  getAuthenticateOptions(): Promise<passport.AuthenticateOptions> | passport.AuthenticateOptions {
+  async authz(user, info, status): Promise<Record<string, any>> {
+    return user;
+  }
+
+  getAuthenticateOptions():
+    | Promise<passport.AuthenticateOptions>
+    | passport.AuthenticateOptions {
     return {
       successRedirect: '/',
-      failureRedirect: '/login'
-    }
+      failureRedirect: '/login',
+    };
   }
 }

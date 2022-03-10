@@ -1,11 +1,7 @@
 import { Inject, Configuration } from '@midwayjs/decorator';
 import * as DefaultConfig from './config/config.default';
 import { getPassport } from './util';
-import {
-  IMidwayContainer,
-  MidwayApplicationManager,
-  MidwayConfigService,
-} from '@midwayjs/core';
+import { MidwayApplicationManager, MidwayConfigService } from '@midwayjs/core';
 
 @Configuration({
   namespace: 'passport',
@@ -22,7 +18,7 @@ export class PassportConfiguration {
   @Inject()
   configService: MidwayConfigService;
 
-  async onReady(container: IMidwayContainer) {
+  async onReady() {
     const passportConfig = this.configService.getConfiguration('passport');
     const passport = getPassport();
     this.applicationManager

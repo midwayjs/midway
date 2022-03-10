@@ -20,6 +20,10 @@ export class MyStrategy extends PassportStrategy(LocalStrategy.Strategy) {
 @Provide('local')
 export class AuthMiddleware extends PassportMiddleware(MyStrategy) {
 
+  async authz(user, info, status): Promise<Record<string, any>> {
+    return user
+  }
+
   getAuthenticateOptions(): Promise<passport.AuthenticateOptions> | passport.AuthenticateOptions {
     return {
       successRedirect: '/',

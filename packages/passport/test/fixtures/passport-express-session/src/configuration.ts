@@ -30,12 +30,18 @@ export class CustomStrategy extends PassportStrategy(LocalStrategy.Strategy) {
 
 @Middleware()
 export class AuthMiddleware extends PassportMiddleware(CustomStrategy) {
+  
+  async authz(user, info, status): Promise<Record<string, any>> {
+    return user;
+  }
 
-  getAuthenticateOptions(): Promise<passport.AuthenticateOptions> | passport.AuthenticateOptions {
+  getAuthenticateOptions():
+    | Promise<passport.AuthenticateOptions>
+    | passport.AuthenticateOptions {
     return {
       successRedirect: '/',
       failureRedirect: '/login',
-    }
+    };
   }
 }
 

@@ -5,18 +5,14 @@ Passport是通过称为策略的可扩展插件进行身份验证请求。Passpo
 
 相关信息：
 
-| web 支持情况      |      |
-| ----------------- | ---- |
-| @midwayjs/koa     | ✅    |
-| @midwayjs/faas    | ✅    |
-| @midwayjs/web     | ✅    |
-| @midwayjs/express | ✅    |
-
-
-
+| web 支持情况      |    |
+| ----------------- | -- |
+| @midwayjs/koa     | ✅ |
+| @midwayjs/faas    | ✅ |
+| @midwayjs/web     | ✅ |
+| @midwayjs/express | ✅ |
 
 ## 准备
-
 
 1. 安装 `npm i @midwayjs/passport` 和相关依赖
 
@@ -63,12 +59,9 @@ $ npm i passport-jwt --save
 }
 ```
 
-
-
 ## 使用
 
 这里我们以本地认证，和 Jwt 作为演示。
-
 
 首先
 
@@ -91,6 +84,7 @@ import * as passport from '@midwayjs/passport';
 export class ContainerLifeCycle implements ILifeCycle {}
 
 ```
+
 ## 示例：本地策略
 
 我们可以通过 `@CustomStrategy` 和派生 `PassportStrategy` 来自启动一个策略。通过 validate 钩子来获取有效负载，并且此函数必须有返回值，其参数并不明确，可以参考对应的 Strategy 或者通过展开符打印查看。
@@ -130,6 +124,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 }
 
 ```
+
 使用派生 `PassportMiddleware`出一个中间件。
 
 ```typescript
@@ -149,6 +144,10 @@ export class LocalPassportMiddleware extends PassportMiddleware(LocalStrategy) {
       failureRedirect: '/login',
       presetProperty: 'user'
     };
+  }
+
+  async authz(user, ...rest): Promise<Record<string, any>> {
+    return user
   }
 }
 ```
@@ -196,6 +195,7 @@ export default {
   },
 }
 ```
+
 ```typescript
 // src/strategy/jwt.strategy.ts
 
@@ -225,6 +225,7 @@ export class JwtStrategy extends PassportStrategy(
 
 
 ```
+
 ```typescript
 // src/middleware/jwt.middleware.ts
 
@@ -235,9 +236,15 @@ import * as passport from 'passport';
 
 @Middleware()
 export class JwtPassportMiddleware extends PassportMiddleware(JwtStrategy) {
+
   getAuthenticateOptions(): Promise<passport.AuthenticateOptions> | passport.AuthenticateOptions {
     return {};
   }
+
+  async authz(user, ...rest): Promise<Record<string, any>> {
+    return user
+  }
+
 }
 ```
 
@@ -312,6 +319,7 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
 }
 
 ```
+
 ```typescript
 // src/middleware/github.middleware.ts
 
@@ -322,6 +330,7 @@ import { Middleware } from '@midwayjs/decorator';
 export class GithubPassportMiddleware extends PassportMiddleware {
 }
 ```
+
 ```typescript
 // src/controoer/auth.controller.ts
 
@@ -344,11 +353,7 @@ export class AuthController {
 
 ```
 
-
-
 ## 常见问题
-
-
 
 ### 1、Failed to serialize user into session
 
@@ -395,6 +400,3 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
   }
 }
 ```
-
-
-

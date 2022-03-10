@@ -4,22 +4,22 @@ import { join } from 'path';
 describe('/test/index.test.ts', () => {
   describe('Express passport', () => {
     it('basic local auth', async () => {
-      process.env['MIDWAY_PASSPORT_MODE'] = 'express'
+      process.env['MIDWAY_PASSPORT_MODE'] = 'express';
       const app = await createApp(
         join(__dirname, 'fixtures', 'passport-express'),
-        {},
+        {}
       );
 
       const request = createHttpRequest(app);
 
-      let result = await request.get('/local-passport')
+      let result = await request.get('/local-passport');
 
       expect(result.status).toEqual(302);
       expect(result.text).toEqual('Found. Redirecting to /login');
 
       result = await request
         .get('/local-passport')
-        .query({ username: 'admin', password: '123' })
+        .query({ username: 'admin', password: '123' });
 
       expect(result.status).toEqual(200);
       expect(result.text).toEqual('success');
@@ -29,31 +29,29 @@ describe('/test/index.test.ts', () => {
     });
 
     it('passport with session', async () => {
-      process.env['MIDWAY_PASSPORT_MODE'] = 'express'
+      process.env['MIDWAY_PASSPORT_MODE'] = 'express';
       const app = await createApp(
         join(__dirname, 'fixtures', 'passport-express-session'),
-        {},
+        {}
       );
 
       const request = createHttpRequest(app);
 
-      let result = await request.get('/local-passport')
+      let result = await request.get('/local-passport');
 
       expect(result.status).toEqual(302);
       expect(result.text).toEqual('Found. Redirecting to /login');
 
       result = await request
         .get('/local-passport')
-        .query({ username: 'admin', password: '123' })
+        .query({ username: 'admin', password: '123' });
 
       expect(result.text).toEqual('success');
       expect(result.status).toEqual(200);
 
-      result = await request
-        .get('/local-passport')
-        .set({
-          cookie: result.headers['set-cookie']
-        })
+      result = await request.get('/local-passport').set({
+        cookie: result.headers['set-cookie'],
+      });
 
       expect(result.status).toEqual(200);
       expect(result.text).toEqual('success');
@@ -63,11 +61,11 @@ describe('/test/index.test.ts', () => {
     });
 
     it('jwt passport with express', async () => {
-      process.env['MIDWAY_PASSPORT_MODE'] = 'express'
+      process.env['MIDWAY_PASSPORT_MODE'] = 'express';
       let token;
       const app = await createApp(
         join(__dirname, 'fixtures', 'passport-express-jwt'),
-        {},
+        {}
       );
       let result = await createHttpRequest(app).get('/gen-jwt');
       token = result.text;
@@ -90,28 +88,28 @@ describe('/test/index.test.ts', () => {
     it('test passport with egg', async () => {
       const app = await createApp(
         join(__dirname, 'fixtures', 'passport-web'),
-        {},
+        {}
       );
 
       const request = createHttpRequest(app);
 
-      let result = await request.get('/')
+      let result = await request.get('/');
 
       expect(result.status).toEqual(302);
-      expect(result.text).toEqual('Redirecting to <a href=\"/login\">/login</a>.');
+      expect(result.text).toEqual(
+        'Redirecting to <a href="/login">/login</a>.'
+      );
 
       result = await request
         .get('/')
-        .query({ username: 'admin', password: '123' })
+        .query({ username: 'admin', password: '123' });
 
       expect(result.status).toEqual(302);
-      expect(result.text).toEqual('Redirecting to <a href=\"/\">/</a>.');
+      expect(result.text).toEqual('Redirecting to <a href="/">/</a>.');
 
-      result = await request
-        .get('/')
-        .set({
-          cookie: result.headers['set-cookie']
-        })
+      result = await request.get('/').set({
+        cookie: result.headers['set-cookie'],
+      });
 
       expect(result.status).toEqual(200);
 
@@ -123,28 +121,28 @@ describe('/test/index.test.ts', () => {
     it('should start koa app and session with passport', async () => {
       const app = await createApp(
         join(__dirname, 'fixtures', 'passport-koa-session'),
-        {},
+        {}
       );
 
       const request = createHttpRequest(app);
 
-      let result = await request.get('/')
+      let result = await request.get('/');
 
       expect(result.status).toEqual(302);
-      expect(result.text).toEqual('Redirecting to <a href=\"/login\">/login</a>.');
+      expect(result.text).toEqual(
+        'Redirecting to <a href="/login">/login</a>.'
+      );
 
       result = await request
         .get('/')
-        .query({ username: 'admin', password: '123' })
+        .query({ username: 'admin', password: '123' });
 
       expect(result.status).toEqual(302);
-      expect(result.text).toEqual('Redirecting to <a href=\"/\">/</a>.');
+      expect(result.text).toEqual('Redirecting to <a href="/">/</a>.');
 
-      result = await request
-        .get('/')
-        .set({
-          cookie: result.headers['set-cookie']
-        })
+      result = await request.get('/').set({
+        cookie: result.headers['set-cookie'],
+      });
 
       expect(result.status).toEqual(200);
 
@@ -155,7 +153,7 @@ describe('/test/index.test.ts', () => {
       let token;
       const app = await createApp(
         join(__dirname, 'fixtures', 'passport-koa-jwt'),
-        {},
+        {}
       );
       let result = await createHttpRequest(app).get('/gen-jwt');
       token = result.text;
@@ -176,7 +174,7 @@ describe('/test/index.test.ts', () => {
       let token;
       const app = await createApp(
         join(__dirname, 'fixtures', 'passport-koa-jwt-global'),
-        {},
+        {}
       );
       let result = await createHttpRequest(app).get('/gen-jwt');
       token = result.text;

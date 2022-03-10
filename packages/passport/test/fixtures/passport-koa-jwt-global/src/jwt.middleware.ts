@@ -5,7 +5,13 @@ import * as passport from 'passport';
 
 @Middleware()
 export class JwtPassportMiddleware extends PassportMiddleware(JwtStrategy) {
-  getAuthenticateOptions(): Promise<passport.AuthenticateOptions> | passport.AuthenticateOptions {
+  async authz(user, info, status): Promise<Record<string, any>> {
+    return user;
+  }
+
+  getAuthenticateOptions():
+    | Promise<passport.AuthenticateOptions>
+    | passport.AuthenticateOptions {
     return {};
   }
 

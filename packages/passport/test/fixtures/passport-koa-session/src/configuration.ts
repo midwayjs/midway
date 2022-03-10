@@ -38,6 +38,10 @@ export class CustomStrategy extends PassportStrategy(
 
 @Provide()
 export class AuthMiddleware extends PassportMiddleware(CustomStrategy) {
+  async authz(user, info, status): Promise<Record<string, any>> {
+    return user;
+  }
+
   getAuthenticateOptions():
     | Promise<passport.AuthenticateOptions>
     | passport.AuthenticateOptions {
