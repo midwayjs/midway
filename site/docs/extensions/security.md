@@ -1,4 +1,4 @@
-# 请求安全
+# 安全
 
 适用于 `@midwayjs/faas` 、`@midwayjs/web` 、`@midwayjs/koa` 和 `@midwayjs/express` 多种框架的通用安全组件，支持 `csrf` 、`xss` 等多种安全策略。
 
@@ -49,6 +49,160 @@ import * as security from '@midwayjs/security';
 export class AutoConfiguration {}
 ```
 
+---
+
+## 防范常见的安全威胁
+
+
+### 一、CSRF
+
+CSRF（Cross-site request forgery 跨站请求伪造），是一种挟制用户在当前已登录的Web应用程序上执行非本意的操作的攻击方法。
+
+
+#### 1. 令牌同步模式
+通过响应页面时将 token 渲染到页面上，在开启 `csrf` 配置后，通过 `ctx.csrf` 可以获取到 `csrf token`，可以再返回页面 html 时同步输出
+
+```ts
+@Controller('/')
+export class HomeController {
+  @Inject()
+  ctx;
+
+  @Get('/home')
+  async home() {
+    return `<form method="POST" action="/upload?_csrf=${ this.ctx.csrf }" >
+      title: <input name="title" />
+      <button type="submit">upload</button>
+    </form>`;
+  }
+}
+```
+
+传递 CSRF token 的字段（上述示例中的 `_csrf`）可以在配置中改变，请查看下述 `配置 -> csrf`。
+
+
+
+#### 2. Cookies 模式
+
+在 CSRF 默认配置下，token 会被设置在 Cookie 中，可以再前端页面中通过 JS 从 Cookies 中获取，然后再 ajax/fetch 等请求中添加到 `header`、`query` 或 `body` 中。
+
+```js
+const csrftoken = Cookies.get('csrfToken');
+fetch('/api/post', {
+  method: 'POST',
+  headers: {
+    'x-csrf-token': csrftoken
+  },
+  ...
+});
+```
+
+默认配置下，框架会将 `CSRF token` 存在 `Cookie` 中，以方便前端 JS 发起请求时获取到。但是所有的子域名都可以设置 Cookie，因此当我们的应用处于无法保证所有的子域名都受控的情况下，存放在 `Cookie` 中可能有被 `CSRF` 攻击的风险。框架提供了一个配置项 `useSession`，可以将 token 存放到 Session 中。
+
+
+当 `CSRF token` 存储在 `Cookie` 中时，一旦在同一个浏览器上发生用户切换，新登陆的用户将会依旧使用旧的 token（之前用户使用的），这会带来一定的安全风险，因此在每次用户登陆的时候都必须调用 `ctx.rotateCsrfSecret()` 刷新 `CSRF token`，例如：
+
+
+```js
+@Controller('/')
+export class HomeController {
+  @Inject()
+  ctx;
+
+  @Inject()
+  userService;
+
+  @Get('/login')
+  async login(@Body('username') username: string, @Body('password') password: string) {
+    const user = await userService.login({ username, password });
+    this.ctx.session = { user };
+    this.ctx.rotateCsrfSecret();
+    return { success: true };
+  }
+}
+```
+
+### 二、XSS
+
+`XSS`（cross-site scripting 跨站脚本攻击）攻击是最常见的 Web 攻击，是代码注入的一种。它允许恶意用户将代码注入到网页上，其他用户在观看网页时就会受到影响。
+
+`XSS` 攻击通常指的是通过利用网页开发时留下的漏洞，通过巧妙的方法注入恶意指令代码到网页，使用户加载并执行攻击者恶意制造的网页程序。攻击成功后，攻击者可能得到更高的权限（如执行一些操作）、私密网页内容、会话和cookie等各种内容。
+
+
+#### 1. 反射型的 XSS 攻击
+
+主要是由于服务端接收到客户端的不安全输入，在客户端触发代码执行从而发起 `Web` 攻击。
+
+例如：在某搜索网站搜索时，搜索结果会显示搜索的关键词。搜索关键词填入 `<script>alert('xss')</script>`, 点击搜索后，若页面程序没有对关键词进行处理，这段代码就会直接在页面上执行，弹出 alert。
+
+框架提供了 `ctx.security.escape()` 方法对字符串进行 XSS 过滤。
+
+```ts
+@Controller('/')
+export class HomeController {
+  @Inject()
+  ctx;
+
+  @Get('/home')
+  async home() {
+    const str = `<script>alert('xss')</script>`;
+    const escapedStr = this.ctx.security.escape(str);
+    // &lt;script&gt;alert(&quot;xss&quot;) &lt;/script&gt;
+    return escapedStr;
+  }
+}
+```
+
+另外当网站输出的内容是作为 js 脚本的。这个时候需要使用 `ctx.security.js()` 来进行过滤。
+
+还有一种情况，有时候我们需要在 `js` 中输出 `json` ，若未做转义，易被利用为 `XSS` 漏洞。框架提供了 `ctx.security.json(变量)` 来提供 json encode，防止 XSS 攻击。
+
+
+```ts
+@Controller('/')
+export class HomeController {
+  @Inject()
+  ctx;
+
+  @Get('/home')
+  async home() {
+    return `<script>windows.config = ${this.ctx.security.json( ...variable )};</script>`;
+  }
+}
+```
+
+#### 2. 存储型的 XSS 攻击
+
+通过提交带有恶意脚本的内容存储在服务器上，当其他人看到这些内容时发起 Web 攻击，比如一些网站的评论框中，用户恶意将一些代码作为评论内容，若没有过滤，其他用户看到这个评论时恶意代码就会执行。
+
+
+框架提供了 `ctx.security.html()` 来进行过滤。
+
+
+#### 3. 其他 XSS 的防范方式
+
+浏览器自身具有一定针对各种攻击的防范能力，他们一般是通过开启 Web 安全头生效的。框架内置了一些常见的 Web 安全头的支持。
+
+**CSP**
+
+`Content Security Policy`，简称 `CSP`，主要是用来定义页面可以加载哪些资源，减少 `XSS` 的发生。
+
+默认关闭（可通过 `csp: {enable: true}` 配置开启），开启后可以有效的防止 `XSS` 攻击的发生。要配置 `CSP` , 需要对 `CSP` 的 `policy` 策略有了解，具体细节可以参考 [阿里聚安全 - CSP是什么？](https://www.zhihu.com/question/21979782/answer/122682029)
+
+
+**X-Download-Options:noopen**
+
+默认开启（可通过 `noopen: {enable: false}` 配置关闭），禁用 IE 下下载框 Open 按钮，防止 IE 下下载文件默认被打开 XSS。
+
+**X-Content-Type-Options:nosniff**
+禁用 IE8 自动嗅探 mime 功能，默认关闭（可通过 `nosniff: {enable: true}` 配置开启），例如 text/plain 却当成 text/html 渲染，特别当本站点 serve 的内容未必可信的时候。
+
+**X-XSS-Protection**
+IE 提供的一些 XSS 检测与防范，默认开启（可通过 `xssProtection: {enable: false}` 配置关闭）
+
+close 默认值 false，即设置为 1; mode=block
+
+---
 
 
 ## 配置
