@@ -343,6 +343,27 @@ module.exports = {
 
 
 
+### 定时任务
+
+如果希望使用老的 `@Schedule` 装饰器，需要额外安装 `midway-schedule` 包，并以 egg 插件的形式引入。
+
+```typescript
+// src/config/plugin.ts
+
+export default {
+  schedule: true,
+  schedulePlus: {
+    enable: true,
+    package: 'midway-schedule',
+  }
+  // ...
+}
+```
+
+
+
+
+
 ## 其他面对组件/框架开发者的调整
 
 
