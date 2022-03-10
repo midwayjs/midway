@@ -17,6 +17,7 @@ import {
   safeJSONParse,
   isWorkerEnvironment,
   getWorkerContext,
+  isString
 } from './util';
 
 const { isAnyArrayBuffer, isArrayBufferView } = types;
@@ -101,7 +102,12 @@ export class WorkerRuntime extends ServerlessLightRuntime {
       return data;
     } else {
       response.statusCode = 200;
-      return response.end(data);
+
+      if (Buffer.isBuffer(data) || isString(data)) {
+        return response.end(data);
+      } else {
+        return response.end(JSON.stringify(data));
+      }
     }
   }
 
