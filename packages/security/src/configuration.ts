@@ -9,6 +9,7 @@ import { NoOpenMiddleware } from './middleware/noopen';
 import { NoSniffMiddleware } from '.';
 import { XSSProtectionMiddleware } from './middleware/xssProtection';
 import { CSPMiddleware } from './middleware/csp';
+import { SecurityHelper } from './middleware/helper';
 @Configuration({
   namespace: 'security',
   importConfigs: [
@@ -28,6 +29,7 @@ export class SecurityConfiguration {
     this.applicationManager
       .getApplications(['koa', 'faas', 'express', 'egg'])
       .forEach(app => {
+        app.useMiddleware(SecurityHelper);
         if (this.security.csrf?.enable) {
           app.useMiddleware(CSRFMiddleware);
         }

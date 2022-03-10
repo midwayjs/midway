@@ -1,6 +1,9 @@
 {
   "extends": "./node_modules/mwts/",
   "ignorePatterns": ["node_modules", "dist", "test", "jest.config.js", "interface.ts", "app.js", "agent.js", "site"],
+  "rules": {
+    "no-control-regex": "off"
+  },
   "env": {
     "jest": true
   }
