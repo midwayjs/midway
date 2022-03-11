@@ -4,11 +4,11 @@
 
 相关信息：
 
-| 描述              |      |
-| ----------------- | ---- |
-| 可用于标准项目    | ✅    |
-| 可用于 Serverless | ✅    |
-| 可用于一体化      | ✅    |
+| 描述              |     |
+| ----------------- | --- |
+| 可用于标准项目    | ✅   |
+| 可用于 Serverless | ✅   |
+| 可用于一体化      | ✅   |
 
 
 
@@ -103,7 +103,7 @@ export default {
 我们可以在任意的代码中注入使用。
 ```typescript
 import { Provide, Controller, Inject, Get } from '@midwayjs/decorator';
-import { CosService } from '@midwayjs/cos';
+import { COSService } from '@midwayjs/cos';
 
 @Provide()
 export class UserService {
