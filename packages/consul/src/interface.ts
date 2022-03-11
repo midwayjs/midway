@@ -34,7 +34,7 @@ export interface IConsulProviderInfoOptions extends ConsulOptions {
   /**
    * 调用服务负载均衡的策略(default、random)，默认是 random 随机
    */
-  strategy?: string
+  strategy?: string;
 }
 
 export interface IConsulRegisterInfoOptions extends RegisterOptions {
@@ -74,12 +74,16 @@ export interface IConsulRegisterInfoOptions extends RegisterOptions {
     ttl?: string;
     notes?: string;
     status?: string;
-  }
+  };
+}
+
+export interface ConsulConfig {
+  provider?: IConsulProviderInfoOptions;
+  service?: IConsulRegisterInfoOptions;
 }
 
 declare module '@midwayjs/core/dist/interface' {
   interface MidwayConfig {
-    consul?: IConsulProviderInfoOptions;
-    service?: IConsulRegisterInfoOptions;
+    consul?: ConsulConfig;
   }
 }
