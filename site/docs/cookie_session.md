@@ -227,7 +227,7 @@ export default {
 ```typescript
 import { Inject, Controller, Post, Body, Provide, FORMAT } from '@midwayjs/decorator';
 import { Context } from '@midwayjs/koa';
-import { UserSerivce } from './service/user.service';
+import { UserService } from './service/user.service';
 
 @Controller('/')
 export class UserController {
@@ -235,12 +235,12 @@ export class UserController {
   ctx: Context;
 
   @Inject()
-  userSerivce: UserSerivce;
+  userService: UserService;
 
   @Post('/')
   async login(@Body() data) {
    	const { username, password, rememberMe } = data;
-    const user = await this.userSerivce.loginAndGetUser(username, password);
+    const user = await this.userService.loginAndGetUser(username, password);
 
     // 设置 Session
     this.ctx.session.user = user;
