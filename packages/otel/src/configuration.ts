@@ -28,14 +28,15 @@ export class OtelConfiguration {
                 span.setStatus({
                   code: SpanStatusCode.OK,
                 });
-                span.end(Date.now());
+                span.end();
                 // 返回执行结果
                 return result;
               } catch (err) {
                 span.setStatus({
                   code: SpanStatusCode.ERROR,
                 });
-                span.end(Date.now());
+                span.recordException(err);
+                span.end();
                 throw err;
               }
             }
