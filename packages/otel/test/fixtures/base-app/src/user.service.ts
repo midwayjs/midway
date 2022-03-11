@@ -10,11 +10,14 @@ export class UserService {
   @Trace('user.get')
   async invoke() {
     await sleep();
-
-    this.traceService.getTraceId()
-
     return {
       test: 1
     };
+  }
+
+  @Trace('user.get_error')
+  async invokeError() {
+    await sleep();
+    throw new Error('custom error');
   }
 }
