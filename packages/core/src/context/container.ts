@@ -287,7 +287,6 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
   }
 
   load(module?) {
-    this.isLoad = true;
     if (module) {
       // load configuration
       const configuration = new ContainerConfiguration(this);
@@ -302,6 +301,7 @@ export class MidwayContainer implements IMidwayContainer, IModuleStore {
         extend(true, detectorOptionsMerged, detectorOptions);
       }
       this.fileDetector?.setExtraDetectorOptions(detectorOptionsMerged);
+      this.isLoad = true;
     }
   }
 
