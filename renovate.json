@@ -3,5 +3,6 @@
     "config:base"
   ],
   "ignoreDeps": ["egg", "@midwayjs/logger"],
-  "ignorePaths": ["**/fixtures/**", "**/example/**", "**/site/**"]
+  "ignorePaths": ["**/fixtures/**", "**/example/**", "**/site/**"],
+  "schedule": ["before 3am on Friday"]
 }
