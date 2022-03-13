@@ -64,7 +64,7 @@ $ npm i @types/socket.io-client socket.io-client --save-dev
 
 ```typescript
 import { Configuration } from '@midwayjs/decorator';
-import * as socketio from '@midwayjs/socket.io';
+import * as socketio from '@midwayjs/socketio';
 
 @Configuration({
   imports: [socketio],
@@ -83,7 +83,7 @@ export class ContainerLifeCycle {
 ```typescript
 import { Configuration } from '@midwayjs/decorator';
 import * as koa from '@midwayjs/koa';
-import * as socketio from '@midwayjs/socket.io';
+import * as socketio from '@midwayjs/socketio';
 
 @Configuration({
   imports: [koa, socketio],
