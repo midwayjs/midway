@@ -17,7 +17,7 @@ import {
   safeJSONParse,
   isWorkerEnvironment,
   getWorkerContext,
-  isString
+  isString,
 } from './util';
 
 const { isAnyArrayBuffer, isArrayBufferView } = types;
