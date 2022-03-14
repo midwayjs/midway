@@ -106,7 +106,9 @@ export async function initializeGlobalApplicationContext(
     .concat(globalOptions.imports)
     .concat(globalOptions.configurationModule)) {
     // load configuration and component
-    applicationContext.load(configurationModule);
+    if (configurationModule) {
+      applicationContext.load(configurationModule);
+    }
   }
 
   // bind user code module

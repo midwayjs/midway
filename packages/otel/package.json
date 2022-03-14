@@ -1,0 +1,45 @@
+{
+  "name": "@midwayjs/otel",
+  "description": "midway open telemetry component",
+  "version": "3.0.0",
+  "main": "dist/index",
+  "typings": "index.d.ts",
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "index.d.ts"
+  ],
+  "devDependencies": {
+    "@midwayjs/core": "^3.1.1",
+    "@midwayjs/decorator": "^3.0.10",
+    "@midwayjs/mock": "^3.1.1",
+    "@midwayjs/koa": "^3.1.1",
+    "@opentelemetry/core": "^1.0.1",
+    "@opentelemetry/sdk-trace-node": "^1.0.1",
+    "@opentelemetry/sdk-trace-base": "^1.0.1"
+  },
+  "dependencies": {
+    "@opentelemetry/api": "^1.0.3"
+  },
+  "keywords": [
+    "tracing",
+    "open-tracing",
+    "open-telemetry"
+  ],
+  "author": "czy88840616 <czy88840616@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "test": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand",
+    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand --coverage --forceExit",
+    "ci": "npm run test",
+    "lint": "mwts check"
+  },
+  "engines": {
+    "node": ">=12"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/midwayjs/midway.git"
+  }
+}

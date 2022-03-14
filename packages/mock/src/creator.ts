@@ -213,6 +213,10 @@ class LightFramework extends BaseFramework<any, any, any, any, any> {
   configure(): any {
     return {};
   }
+
+  getFrameworkName(): string {
+    return 'lightFramework';
+  }
 }
 
 /**
