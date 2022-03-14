@@ -1,5 +1,13 @@
 import { Readable } from 'stream';
 
+export const isWorkerEnvironment =
+  typeof ServiceWorkerGlobalScope === 'function' &&
+  globalThis instanceof ServiceWorkerGlobalScope;
+
+export function getWorkerContext(entryReq) {
+  return isWorkerEnvironment ? globalThis.Alinode : entryReq[0];
+}
+
 export async function bufferFromStream(stream: Readable): Promise<Buffer> {
   const chunks = [];
 
@@ -16,4 +24,8 @@ export function safeJSONParse(text: string) {
   } catch (error) {
     return text;
   }
+}
+
+export function isString(value) {
+  return typeof value === 'string' || value instanceof String;
 }

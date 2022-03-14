@@ -3,6 +3,7 @@ import { WorkerRuntime } from './runtime';
 
 export { asyncWrapper } from '@midwayjs/runtime-engine';
 export * from './runtime';
+export * from './interface';
 
 let bootstrap;
 
