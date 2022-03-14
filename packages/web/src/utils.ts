@@ -7,6 +7,7 @@ import {
   MidwayConfigService,
   MidwayDecoratorService,
   MidwayPipelineService,
+  MidwayLoggerService,
   REQUEST_OBJ_CTX_KEY,
 } from '@midwayjs/core';
 import {
@@ -93,15 +94,21 @@ export async function initializeAgentApplicationContext(agent) {
       MidwayDecoratorService
     );
 
+    const configService =
+      getCurrentApplicationContext().get(MidwayConfigService);
+
+    const loggerService =
+      getCurrentApplicationContext().get(MidwayLoggerService);
+
     // framework/config/plugin/logger/app decorator support
     // register base config hook
     decoratorService.registerPropertyHandler(
       CONFIG_KEY,
       (propertyName, meta) => {
         if (meta.identifier === ALL) {
-          return this.configService.getConfiguration();
+          return configService.getConfiguration();
         } else {
-          return this.configService.getConfiguration(
+          return configService.getConfiguration(
             meta.identifier ?? propertyName
           );
         }
@@ -112,7 +119,7 @@ export async function initializeAgentApplicationContext(agent) {
     decoratorService.registerPropertyHandler(
       LOGGER_KEY,
       (propertyName, meta) => {
-        return this.loggerService.getLogger(meta.identifier ?? propertyName);
+        return loggerService.getLogger(meta.identifier ?? propertyName);
       }
     );
 
@@ -136,7 +143,7 @@ export async function initializeAgentApplicationContext(agent) {
     );
 
     decoratorService.registerPropertyHandler(PLUGIN_KEY, (key, target) => {
-      return this.agent[key];
+      return agent[key];
     });
 
     // init aspect module
