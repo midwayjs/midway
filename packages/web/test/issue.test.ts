@@ -1,4 +1,4 @@
-import { creatApp, closeApp, createHttpRequest } from './utils';
+import { creatApp, closeApp, createHttpRequest, sleep } from './utils';
 
 describe('/test/issue.test.ts', () => {
 
@@ -94,6 +94,13 @@ describe('/test/issue.test.ts', () => {
     expect(result.status).toEqual(200);
     expect(result.text).toMatch('hello worldbcd');
 
+    await closeApp(app);
+  });
+
+  it('test #1807 issue add test getConfig in agent', async () => {
+    const app = await creatApp('issue/base-app-agent-config');
+
+    await sleep();
     await closeApp(app);
   });
 });
