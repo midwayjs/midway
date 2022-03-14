@@ -132,9 +132,18 @@ export async function initializeGlobalApplicationContext(
   // it will be delay framework initialize in egg cluster mode
   if (!globalOptions.lazyInitializeFramework) {
     // init logger
-    await applicationContext.getAsync(MidwayLoggerService, [
-      applicationContext,
-    ]);
+    const loggerService = await applicationContext.getAsync(
+      MidwayLoggerService,
+      [applicationContext]
+    );
+
+    if (loggerService.getLogger('appLogger')) {
+      // register global logger
+      applicationContext.registerObject(
+        'logger',
+        loggerService.getLogger('appLogger')
+      );
+    }
 
     // framework/config/plugin/logger/app decorator support
     await applicationContext.getAsync(MidwayFrameworkService, [
