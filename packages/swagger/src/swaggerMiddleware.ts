@@ -63,10 +63,7 @@ export class SwaggerMiddleware
           encoding: 'utf-8',
         });
         if (lastName === 'index.html') {
-          content = content.replace(
-            '"https://petstore.swagger.io/v2/swagger.json"',
-            `location.href.replace('${this.swaggerConfig.swaggerPath}/index.html', '${this.swaggerConfig.swaggerPath}/index.json')`
-          );
+          content = this.replaceInfo(content);
         }
         const ext = extname(lastName);
         if (ext === '.js') {
@@ -104,10 +101,7 @@ export class SwaggerMiddleware
           encoding: 'utf-8',
         });
         if (lastName === 'index.html') {
-          content = content.replace(
-            '"https://petstore.swagger.io/v2/swagger.json"',
-            `location.href.replace('${this.swaggerConfig.swaggerPath}/index.html', '${this.swaggerConfig.swaggerPath}/index.json')`
-          );
+          content = this.replaceInfo(content);
         }
         const ext = extname(lastName);
         if (ext === '.js') {
@@ -123,6 +117,13 @@ export class SwaggerMiddleware
         (ctx as any).body = content;
       };
     }
+  }
+
+  replaceInfo(content: string): string {
+    return content.replace(
+      '"https://petstore.swagger.io/v2/swagger.json",',
+      `location.href.replace('${this.swaggerConfig.swaggerPath}/index.html', '${this.swaggerConfig.swaggerPath}/index.json'),\n validatorUrl: null,`
+    );
   }
 
   static getName() {
