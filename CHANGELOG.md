@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.3](https://github.com/midwayjs/midway/compare/v3.1.2...v3.1.3) (2022-03-15)
+
+
+### Bug Fixes
+
+* add midway method to agent ([#1819](https://github.com/midwayjs/midway/issues/1819)) ([e9fa48b](https://github.com/midwayjs/midway/commit/e9fa48bf4d5347dc38f9190228820c8169270f89))
+* EggAppConfig with PowerPartial ([#1818](https://github.com/midwayjs/midway/issues/1818)) ([6e2d1dd](https://github.com/midwayjs/midway/commit/6e2d1ddbbf67e7d77d6e316c76b535d5cbedabec))
+
+
+
+
+
 ## [3.1.2](https://github.com/midwayjs/midway/compare/v3.1.1...v3.1.2) (2022-03-15)
 
 
