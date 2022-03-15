@@ -82,7 +82,10 @@ export class MidwayWebLifeCycleService {
         }
       }
     );
+    // cluster 下，onReady 放到 egg willReady 中执行
+  }
 
+  public async runReady() {
     // exec onReady()
     await this.runContainerLifeCycle(this.lifecycleInstanceList, 'onReady');
   }
