@@ -6,7 +6,7 @@ import {
   IMidwayApplication,
   IMidwayBaseApplication,
   IConfigurationOptions,
-  NextFunction as BaseNextFunction,
+  NextFunction as BaseNextFunction, PowerPartial,
 } from '@midwayjs/core';
 import { DefaultState, Middleware } from 'koa';
 import { ILogger, LoggerOptions } from '@midwayjs/logger';
@@ -101,7 +101,7 @@ export interface IWebMiddleware {
 }
 
 declare module '@midwayjs/core/dist/interface' {
-  interface MidwayConfig extends Partial<EggAppConfig> {
+  interface MidwayConfig extends PowerPartial<EggAppConfig> {
     egg?: IMidwayWebConfigurationOptions;
   }
 }
