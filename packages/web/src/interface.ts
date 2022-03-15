@@ -6,7 +6,7 @@ import {
   IMidwayApplication,
   IMidwayBaseApplication,
   IConfigurationOptions,
-  NextFunction as BaseNextFunction, PowerPartial,
+  NextFunction as BaseNextFunction,
 } from '@midwayjs/core';
 import { DefaultState, Middleware } from 'koa';
 import { ILogger, LoggerOptions } from '@midwayjs/logger';
