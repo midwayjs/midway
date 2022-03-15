@@ -9,6 +9,8 @@ import {
   MidwayPipelineService,
   MidwayLoggerService,
   REQUEST_OBJ_CTX_KEY,
+  MidwayEnvironmentService,
+  MidwayInformationService,
 } from '@midwayjs/core';
 import {
   ALL,
@@ -164,6 +166,13 @@ export async function initializeAgentApplicationContext(agent) {
   agentFramework['appLogger'] = agent.coreLogger;
   agentFramework.app = agent;
   agentFramework.configService = applicationContext.get(MidwayConfigService);
+  agentFramework.environmentService = applicationContext.get(
+    MidwayEnvironmentService
+  );
+  agentFramework.loggerService = applicationContext.get(MidwayLoggerService);
+  agentFramework.informationService = applicationContext.get(
+    MidwayInformationService
+  );
   agentFramework.overwriteApplication('agent');
 
   return applicationContext;
