@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.2](https://github.com/midwayjs/midway/compare/v3.1.1...v3.1.2) (2022-03-15)
+
+
+### Bug Fixes
+
+* add a inject for [@inject](https://github.com/inject) logger in singleton scope ([#1816](https://github.com/midwayjs/midway/issues/1816)) ([4e9cf96](https://github.com/midwayjs/midway/commit/4e9cf96793acff829a2a8ca6598081cc331d6d25))
+
+
+### Features
+
+* add otel component ([#1808](https://github.com/midwayjs/midway/issues/1808)) ([8fda71e](https://github.com/midwayjs/midway/commit/8fda71e82cedfcf05e590780c55fbff10c4132cb))
+
+
+
+
+
 ## [3.1.1](https://github.com/midwayjs/midway/compare/v3.1.0...v3.1.1) (2022-03-09)
 
 

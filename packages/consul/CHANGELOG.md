@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.2](https://github.com/midwayjs/midway/compare/v3.1.1...v3.1.2) (2022-03-15)
+
+
+### Bug Fixes
+
+* consule config definition ([#1804](https://github.com/midwayjs/midway/issues/1804)) ([2a0d57c](https://github.com/midwayjs/midway/commit/2a0d57c183f3fad22fe878f538a26182291b7b44))
+
+
+
+
+
 ## [3.1.1](https://github.com/midwayjs/midway/compare/v3.1.0...v3.1.1) (2022-03-09)
 
 **Note:** Version bump only for package @midwayjs/consul

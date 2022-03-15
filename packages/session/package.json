@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/session",
   "description": "midway session component for koa and faas",
-  "version": "3.1.1",
+  "version": "3.1.2",
   "main": "dist/index",
   "typings": "index.d.ts",
   "files": [
@@ -10,9 +10,9 @@
     "index.d.ts"
   ],
   "devDependencies": {
-    "@midwayjs/core": "^3.1.1",
+    "@midwayjs/core": "^3.1.2",
     "@midwayjs/decorator": "^3.0.10",
-    "@midwayjs/mock": "^3.1.1"
+    "@midwayjs/mock": "^3.1.2"
   },
   "dependencies": {
     "@midwayjs/cookies": "1.0.1"

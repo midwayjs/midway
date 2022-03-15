@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.2](https://github.com/midwayjs/midway/compare/v3.1.1...v3.1.2) (2022-03-15)
+
+
+### Bug Fixes
+
+* add a inject for [@inject](https://github.com/inject) logger in singleton scope ([#1816](https://github.com/midwayjs/midway/issues/1816)) ([4e9cf96](https://github.com/midwayjs/midway/commit/4e9cf96793acff829a2a8ca6598081cc331d6d25))
+* agent load config ([#1815](https://github.com/midwayjs/midway/issues/1815)) ([95a6505](https://github.com/midwayjs/midway/commit/95a650544b921d6285c1beb97c7df7a0917ea4fb))
+* consule config definition ([#1804](https://github.com/midwayjs/midway/issues/1804)) ([2a0d57c](https://github.com/midwayjs/midway/commit/2a0d57c183f3fad22fe878f538a26182291b7b44))
+* remove swagger validator url ([#1813](https://github.com/midwayjs/midway/issues/1813)) ([ded291a](https://github.com/midwayjs/midway/commit/ded291a308f81961f9f3c2a9c21b5862d7d73ca6))
+* worker starter origin context ([#1814](https://github.com/midwayjs/midway/issues/1814)) ([0168bcc](https://github.com/midwayjs/midway/commit/0168bcceef0f7cf39a8f0d903c24496f5f4f056f))
+
+
+### Features
+
+* add otel component ([#1808](https://github.com/midwayjs/midway/issues/1808)) ([8fda71e](https://github.com/midwayjs/midway/commit/8fda71e82cedfcf05e590780c55fbff10c4132cb))
+* security helper ([#1795](https://github.com/midwayjs/midway/issues/1795)) ([cc8a148](https://github.com/midwayjs/midway/commit/cc8a148bf7a2ea1351d3912084de2ad755c465e7))
+
+
+
+
+
 ## [3.1.1](https://github.com/midwayjs/midway/compare/v3.1.0...v3.1.1) (2022-03-09)
 
 
