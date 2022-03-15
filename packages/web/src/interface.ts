@@ -101,7 +101,7 @@ export interface IWebMiddleware {
 }
 
 declare module '@midwayjs/core/dist/interface' {
-  interface MidwayConfig extends Partial<EggAppConfig> {
+  interface MidwayConfig extends PowerPartial<EggAppConfig> {
     egg?: IMidwayWebConfigurationOptions;
   }
 }
