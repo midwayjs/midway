@@ -86,6 +86,21 @@ export const getCurrentDateString = (timestamp: number = Date.now()) => {
 };
 
 export async function initializeAgentApplicationContext(agent) {
+  const applicationContext = getCurrentApplicationContext();
+  const agentFramework = new MidwayWebFramework(applicationContext);
+  agentFramework['logger'] = agent.logger;
+  agentFramework['appLogger'] = agent.coreLogger;
+  agentFramework.app = agent;
+  agentFramework.configService = applicationContext.get(MidwayConfigService);
+  agentFramework.environmentService = applicationContext.get(
+    MidwayEnvironmentService
+  );
+  agentFramework.loggerService = applicationContext.get(MidwayLoggerService);
+  agentFramework.informationService = applicationContext.get(
+    MidwayInformationService
+  );
+  agentFramework.overwriteApplication('agent');
+
   if (process.env['EGG_CLUSTER_MODE'] === 'true') {
     // init aop support
     const aspectService =
@@ -158,22 +173,6 @@ export async function initializeAgentApplicationContext(agent) {
       '[egg]: "initializeAgentApplicationContext" ignore re-init in single process'
     );
   }
-
-  const applicationContext = getCurrentApplicationContext();
-
-  const agentFramework = new MidwayWebFramework(applicationContext);
-  agentFramework['logger'] = agent.logger;
-  agentFramework['appLogger'] = agent.coreLogger;
-  agentFramework.app = agent;
-  agentFramework.configService = applicationContext.get(MidwayConfigService);
-  agentFramework.environmentService = applicationContext.get(
-    MidwayEnvironmentService
-  );
-  agentFramework.loggerService = applicationContext.get(MidwayLoggerService);
-  agentFramework.informationService = applicationContext.get(
-    MidwayInformationService
-  );
-  agentFramework.overwriteApplication('agent');
 
   return applicationContext;
 }
