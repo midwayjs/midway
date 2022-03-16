@@ -1,7 +1,8 @@
 {
   "@midwayjs/egg-layer": [
     "3.1.2",
-    "3.1.3"
+    "3.1.3",
+    "3.1.4"
   ],
   "@midwayjs/express-layer": "3.1.2",
   "@midwayjs/faas-typings": "3.0.0",
@@ -10,7 +11,8 @@
   "@midwayjs/runtime-mock": "3.0.4",
   "@midwayjs/serverless-app": [
     "3.1.2",
-    "3.1.3"
+    "3.1.3",
+    "3.1.4"
   ],
   "@midwayjs/serverless-aws-starter": "3.0.13",
   "@midwayjs/serverless-fc-starter": "3.1.2",
@@ -25,7 +27,8 @@
   "@midwayjs/axios": "3.1.2",
   "@midwayjs/bootstrap": [
     "3.1.2",
-    "3.1.3"
+    "3.1.3",
+    "3.1.4"
   ],
   "@midwayjs/cache": "3.1.2",
   "@midwayjs/consul": "3.1.2",
@@ -33,7 +36,8 @@
   "@midwayjs/cos": "3.1.2",
   "@midwayjs/cross-domain": [
     "3.1.2",
-    "3.1.3"
+    "3.1.3",
+    "3.1.4"
   ],
   "@midwayjs/decorator": "3.0.10",
   "@midwayjs/express-session": "3.1.2",
@@ -43,7 +47,8 @@
   "@midwayjs/info": "3.1.2",
   "@midwayjs/jwt": [
     "3.1.2",
-    "3.1.3"
+    "3.1.3",
+    "3.1.4"
   ],
   "@midwayjs/mock": "3.1.2",
   "@midwayjs/mongoose": "3.1.2",
@@ -52,26 +57,30 @@
   "@midwayjs/otel": "3.1.2",
   "@midwayjs/passport": [
     "3.1.2",
-    "3.1.3"
+    "3.1.3",
+    "3.1.4"
   ],
   "@midwayjs/process-agent": "3.1.2",
   "@midwayjs/prometheus-socket-io": [
     "3.1.2",
-    "3.1.3"
+    "3.1.3",
+    "3.1.4"
   ],
   "@midwayjs/prometheus": "3.1.2",
   "@midwayjs/rabbitmq": "3.1.2",
   "@midwayjs/redis": "3.1.2",
   "@midwayjs/security": [
     "3.1.2",
-    "3.1.3"
+    "3.1.3",
+    "3.1.4"
   ],
   "@midwayjs/sequelize": "3.1.2",
   "@midwayjs/session": "3.1.2",
   "@midwayjs/socketio": "3.1.2",
   "@midwayjs/static-file": [
     "3.1.2",
-    "3.1.3"
+    "3.1.3",
+    "3.1.4"
   ],
   "@midwayjs/swagger": "3.1.2",
   "@midwayjs/tablestore": "3.1.2",
@@ -79,12 +88,14 @@
   "@midwayjs/typegoose": "3.1.2",
   "@midwayjs/upload": [
     "3.1.2",
-    "3.1.3"
+    "3.1.3",
+    "3.1.4"
   ],
   "@midwayjs/validate": "3.1.2",
   "@midwayjs/version": [
     "3.1.2",
-    "3.1.3"
+    "3.1.3",
+    "3.1.4"
   ],
   "@midwayjs/view-ejs": "3.1.2",
   "@midwayjs/view-nunjucks": "3.1.2",
@@ -93,7 +104,8 @@
   "@midwayjs/koa": "3.1.2",
   "@midwayjs/web": [
     "3.1.2",
-    "3.1.3"
+    "3.1.3",
+    "3.1.4"
   ],
   "@midwayjs/ws": "3.1.2"
 }
