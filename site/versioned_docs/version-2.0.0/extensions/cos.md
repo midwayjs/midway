@@ -40,8 +40,8 @@ export class ContainerLifeCycle {}
 ```typescript
 export const cos = {
   client: {
-    secretId: '***********',
-    secretKey: '***********',
+    SecretId: '***********',
+    SecretKey: '***********',
   },
 };
 ```
@@ -52,12 +52,12 @@ export const cos = {
 export const cos = {
   clients: {
     instance1: {
-      secretId: '***********',
-      secretKey: '***********',
+      SecretId: '***********',
+      SecretKey: '***********',
     },
     instance2: {
-      secretId: '***********',
-      secretKey: '***********',
+      SecretId: '***********',
+      SecretKey: '***********',
     },
   },
 };
