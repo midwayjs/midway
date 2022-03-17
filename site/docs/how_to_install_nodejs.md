@@ -44,7 +44,7 @@ $ . "$NVS_HOME/nvs.sh" install
 ## 配置镜像地址
 在国内由于大家都懂的原因，需要把对应的镜像地址修改下：
 ```
-$ nvs remote node https://npm.taobao.org/mirrors/node/
+$ nvs remote node https://npmmirror.com/mirrors/node/
 $ nvs remote
 default             node
 chakracore          https://github.com/nodejs/node-chakracore/releases/
