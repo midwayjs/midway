@@ -319,7 +319,7 @@ import { MidwayConfig } from '@midwayjs/core';
 
 export default {
   midwayLogger: {
-    defaulit: {
+    default: {
       // ...
     },
     clients: {
