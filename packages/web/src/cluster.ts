@@ -18,7 +18,7 @@ const isAgent = runInAgent();
 debug(
   '[egg]: run with egg-scripts in worker and init midway container in cluster mode'
 );
-const appDir = process.cwd();
+const appDir = JSON.parse(process.argv[2])?.baseDir ?? process.cwd();
 let baseDir;
 
 if (isTypeScriptEnvironment()) {
