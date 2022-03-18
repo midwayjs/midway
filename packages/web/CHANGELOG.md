@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.5](https://github.com/midwayjs/midway/compare/v3.1.4...v3.1.5) (2022-03-18)
+
+
+### Bug Fixes
+
+* missing appDir value with egg-scripts cluster mode ([#1828](https://github.com/midwayjs/midway/issues/1828)) ([dc333ef](https://github.com/midwayjs/midway/commit/dc333ef4928d34c2c4ca061ce9331e676467c52e))
+
+
+
+
+
 ## [3.1.4](https://github.com/midwayjs/midway/compare/v3.1.3...v3.1.4) (2022-03-16)
 
 

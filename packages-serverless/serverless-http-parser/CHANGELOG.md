@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.5](https://github.com/midwayjs/midway/compare/v3.1.4...v3.1.5) (2022-03-18)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @midwayjs/cookies to v1.0.2 ([#1834](https://github.com/midwayjs/midway/issues/1834)) ([e99a5fa](https://github.com/midwayjs/midway/commit/e99a5fad0b9e0a7021d3b0158eafe7809e90b652))
+
+
+
+
+
 ## [3.0.4](https://github.com/midwayjs/midway/compare/v3.0.3...v3.0.4) (2022-02-09)
 
 
