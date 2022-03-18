@@ -1,4 +1,4 @@
-import { Connection, ConnectionOptions } from 'typeorm';
+import { Connection, DataSourceOptions } from 'typeorm';
 import { OrmConnectionHook, OrmHook } from '../../../../src';
 import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
 
@@ -12,12 +12,12 @@ export class BaseFnMultipleHook implements OrmConnectionHook {
   public acreate = 0;
   public aclose = 0;
 
-  async beforeCreate?(opts?: ConnectionOptions): Promise<ConnectionOptions> {
+  async beforeCreate?(opts?: DataSourceOptions): Promise<DataSourceOptions> {
     this.bcreate = 1;
     return opts;
   }
 
-  async afterCreate?(conn?: Connection, opts?: ConnectionOptions): Promise<Connection>{
+  async afterCreate?(conn?: Connection, opts?: DataSourceOptions): Promise<Connection>{
     this.acreate = 1;
     return conn;
   }
