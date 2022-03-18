@@ -32,6 +32,10 @@ export abstract class ServiceFactory<T> {
     return this.clients.get(id) as unknown as U;
   }
 
+  public has(id: string): boolean {
+    return this.clients.has(id);
+  }
+
   public async createInstance(config, clientName?): Promise<T | void> {
     // options.default will be merge in to options.clients[id]
     config = Object.assign({}, this.options['default'], config);

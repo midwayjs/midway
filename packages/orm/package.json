@@ -16,7 +16,7 @@
     "@midwayjs/decorator": "^3.0.10",
     "@midwayjs/mock": "^3.1.2",
     "sqlite3": "5.0.2",
-    "typeorm": "*"
+    "typeorm": "0.3.0"
   },
   "author": {
     "name": "Kurten Chan",

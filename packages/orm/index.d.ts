@@ -1,4 +1,4 @@
-import { ConnectionOptions } from 'typeorm';
+import { ConnectionOptions } from './dist/index';
 
 export * from './dist/index';
 

@@ -36,6 +36,7 @@ describe('test/common/serviceFactory.test.ts', () => {
       aaa: 123
     });
     expect(instance.get('fff')).toBeDefined();
+    expect(instance.has('fff')).toBeTruthy();
   });
 
   it('should test multi-clients', async () => {
