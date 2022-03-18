@@ -15,7 +15,6 @@ import {
 } from '@midwayjs/decorator';
 import {
   Connection,
-  ConnectionOptions,
   createConnection,
   getConnection,
   getRepository,
@@ -27,6 +26,7 @@ import {
   ORM_MODEL_KEY,
 } from '.';
 import { OrmConnectionHook, ORM_HOOK_KEY } from './hook';
+import { ConnectionOptions } from './interface';
 
 @Configuration({
   importConfigs: [
