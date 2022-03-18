@@ -115,6 +115,7 @@ export function joinURLPath(...strArray) {
  * 代理目标所有的原型方法，不包括构造器和内部隐藏方法
  * @param derivedCtor
  * @param constructors
+ * @param otherMethods
  * @since 2.0.0
  */
 export function delegateTargetPrototypeMethod(
