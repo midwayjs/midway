@@ -2,10 +2,6 @@
 
 Midway 可以使用 EggJS 作为上层 Web 框架，EggJS 提供了非常多常用的插件和 API，帮助用户快速构建企业级 Web 应用。本章节内容，主要介绍 EggJS 在 Midway 中如何使用自身的能力。
 
-:::tip
-Egg.js 的文档调整进行中，请等待完成后再使用。
-:::
-
 
 
 ## 安装依赖
@@ -29,13 +25,12 @@ $ npm i @midwayjs/egg-ts-helper --save-dev
   },
 ```
 
-| @midwayjs/web           | **必须**，Midway EggJS 适配层                      |
-| ----------------------- | -------------------------------------------------- |
-| @midwayjs/decorator     | **必须**，Midway 系列通用的装饰器包                |
-| midway                  | **可选**，Midway 启动适配包，提供了 midway v1 兼容 |
-| egg                     | **必须**，EggJS 依赖包，提供定义等其他能力         |
-| egg-scripts             | **可选**，EggJS 启动脚本                           |
-| @midwayjs/egg-ts-helper | **可选**，EggJS 定义生成工具                       |
+| @midwayjs/web           | **必须**，Midway EggJS 适配层              |
+| ----------------------- | ------------------------------------------ |
+| @midwayjs/decorator     | **必须**，Midway 系列通用的装饰器包        |
+| egg                     | **必须**，EggJS 依赖包，提供定义等其他能力 |
+| egg-scripts             | **可选**，EggJS 启动脚本                   |
+| @midwayjs/egg-ts-helper | **可选**，EggJS 定义生成工具               |
 
 也可以直接使用脚手架创建示例。
 
@@ -142,14 +137,10 @@ export class ContainerLifeCycle {
 ## 配置定义
 
 
-Midway 在脚手架中提供了标准的 EggJS 的 TS 配置写法，其中包括了完整的定义和属性提示，结构如下。
+Midway 在脚手架中提供了标准的 EggJS 的 TS 配置写法，MidwayConfig 中包括了 egg 中配置的定义和属性提示，结构如下。
 ```typescript
 // src/config/config.default.ts
-
-import { EggAppConfig, PowerPartial } from 'egg';
 import { MidwayConfig, MidwayAppInfo } from '@midwayjs/core';
-
-export type DefaultConfig = PowerPartial<EggAppConfig>;
 
 export default (appInfo: MidwayAppInfo) => {
   return {
@@ -161,7 +152,7 @@ export default (appInfo: MidwayAppInfo) => {
     // security: {
     //   csrf: false,
     // },
-  } as MidwayConfig & DefaultConfig;
+  } as MidwayConfig;
 };
 
 ```
@@ -337,22 +328,59 @@ export class AutoConfiguration {
 
 
 
+## 中间件顺序
+
+由于 egg 也有自己的中间件逻辑，在新版本中，我们将中间件加载顺序做了一定的处理，执行顺序如下：
+
+- 1、egg 框架中的中间件
+- 2、egg 插件通过 config.coreMiddleware 添加的顺序
+- 3、业务代码配置在 config.middleware 中配置的顺序
+- 4、app.useMiddleware 添加的顺序
+
+因为 midway 的中间件会后置加载，所以我们可以在 onReady 中进行自定义排序。
+
+
+
 
 ## 定时任务
-v3 开始请参考 [task 组件](./extesion/task) ， [egg 定时任务](https://eggjs.org/zh-cn/basics/schedule.html) 。
+v3 开始请参考 [task 组件](./extesion/task) 。
+
+如需兼容之前的 [egg 定时任务](https://eggjs.org/zh-cn/basics/schedule.html) ，请照下列方法。
+
+首先安装 `midway-schedule` 依赖。
+
+```bash
+$ npm i midway-schedule --save
+```
+
+添加到插件中即可。
+
+```typescript
+// src/config/plugin.ts
+export default {
+  schedule: true,
+  schedulePlus: {
+    enable: true,
+    package: midway-schedule,
+  }
+}
+```
+
+使用请参考上一版本文档。
 
 
 
 ## 日志
 
-v3 开始无法使用 egg-logger，请参考 [日志](../logger)
+v3 开始无法使用 egg-logger，请参考 [日志](../logger) 章节。
 
 
 
 ## 异常处理
 
+EggJS 框架通过 [onerror](https://github.com/eggjs/egg-onerror) 插件提供了统一的错误处理机制，会作为 Midway 的兜底错误逻辑，和 [错误过滤器](../error_filter) 不冲突。
 
-EggJS 框架通过 [onerror](https://github.com/eggjs/egg-onerror) 插件提供了统一的错误处理机制。对一个请求的所有处理方法（Middleware、Controller、Service）中抛出的任何异常都会被它捕获，并自动根据请求想要获取的类型返回不同类型的错误（基于 [Content Negotiation](https://tools.ietf.org/html/rfc7231#section-5.3.2)）。
+对一个请求的所有处理方法（Middleware、Controller、Service）中抛出的任何异常都会被它捕获，并自动根据请求想要获取的类型返回不同类型的错误（基于 [Content Negotiation](https://tools.ietf.org/html/rfc7231#section-5.3.2)）。
 
 
 
@@ -459,11 +487,79 @@ declare module 'egg' {
 ```
 
 
-## 
+
+## 使用 egg-scripts 部署
+
+由于 EggJS 提供了默认的多进程部署工具 `egg-scripts` ，Midway 也继续支持这种方式，如果上层是 EggJS，推荐这种部署方式。
+
+首先在依赖中，确保安装 `egg-scripts` 包。
+
+```bash
+$ npm i egg-scripts --save
+```
+
+
+
+添加 `npm scripts` 到 `package.json`：
+
+在上面的代码构建之后，使用我们的 `start` 和 `stop` 命令即可完成启动和停止。
+
+```json
+"scripts": {
+    "start": "egg-scripts start --daemon --title=********* --framework=@midwayjs/web",
+    "stop": "egg-scripts stop --title=*********",
+}
+```
+
+
+
+:::info
+
+`*********` 的地方是你的项目名。
+:::
+
+> 注意：`egg-scripts` 对 Windows 系统的支持有限，参见 [#22](https://github.com/eggjs/egg-scripts/pull/22)。
+
+#### 
+
+**启动参数**
+
+```bash
+$ egg-scripts start --port=7001 --daemon --title=egg-server-showcase
+```
+
+Copy
+
+如上示例，支持以下参数：
+
+- `--port=7001` 端口号，默认会读取环境变量 process.env.PORT，如未传递将使用框架内置端口 7001。
+- `--daemon` 是否允许在后台模式，无需 nohup。若使用 Docker 建议直接前台运行。
+- `--env=prod` 框架运行环境，默认会读取环境变量 process.env.EGG_SERVER_ENV， 如未传递将使用框架内置环境 prod。
+- `--workers=2` 框架 worker 线程数，默认会创建和 CPU 核数相当的 app worker 数，可以充分的利用 CPU 资源。
+- `--title=egg-server-showcase` 用于方便 ps 进程时 grep 用，默认为 egg-server-${appname}。
+- `--framework=yadan` 如果应用使用了[自定义框架](https://eggjs.org/zh-cn/advanced/framework.html)，可以配置 package.json 的 egg.framework 或指定该参数。
+- `--ignore-stderr` 忽略启动期的报错。
+- `--https.key` 指定 HTTPS 所需密钥文件的完整路径。
+- `--https.cert` 指定 HTTPS 所需证书文件的完整路径。
+- 所有 [egg-cluster](https://github.com/eggjs/egg-cluster) 的 Options 都支持透传，如 --port 等。
+
+更多参数可查看 [egg-scripts](https://github.com/eggjs/egg-scripts) 和 [egg-cluster](https://github.com/eggjs/egg-cluster) 文档。
+
+:::info
+
+使用 egg-scripts 部署的日志会存放在 **用户目录** 下**，**比如 `/home/xxxx/logs` 。
+
+:::
+
+
+
+## 启动环境
+
+原有 egg 使用 `EGG_SERVER_ENV` 中作为环境标志，在 Midway 中请使用 `MIDWAY_SERVER_ENV`。
+
+
 
 ## 配置
-
-
 
 ### 默认配置
 
@@ -562,7 +658,7 @@ export default {
 
 ### 修改上下文日志
 
-可以单独修改 koa 框架的上下文日志。
+可以单独修改 egg 框架的上下文日志。
 
 ```typescript
 export default {

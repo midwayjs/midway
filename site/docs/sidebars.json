@@ -47,9 +47,7 @@
     },
     {
       "type": "category",
-      "label": "代码设计",
-      "collapsed": true,
-      "collapsible": true,
+      "label": "设计模式",
       "items": [
         "aspect",
         "pipeline",
@@ -60,8 +58,6 @@
     {
       "type": "category",
       "label": "自定义",
-      "collapsed": true,
-      "collapsible": true,
       "items": [
         "context_definition",
         "component_development",
@@ -73,7 +69,11 @@
   ],
   "component": [
     {
-      "通用": [
+      "type": "category",
+      "label": "通用",
+      "collapsed": false,
+      "collapsible": false,
+      "items": [
         "extensions/axios",
         "extensions/cache",
         "extensions/i18n",
@@ -85,8 +85,14 @@
         "extensions/sequelize",
         "extensions/redis",
         "extensions/mongodb"
-      ],
-      "Http 服务": [
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Http 服务",
+      "collapsed": false,
+      "collapsible": false,
+      "items": [
         "extensions/koa",
         "extensions/egg",
         "extensions/express",
@@ -101,6 +107,8 @@
     {
       "type": "category",
       "label": "Socket",
+      "collapsed": false,
+      "collapsible": false,
       "items": [
         "extensions/socketio",
         "extensions/ws"
@@ -109,7 +117,8 @@
     {
       "type": "category",
       "label": "微服务",
-      "collapsed": true,
+      "collapsed": false,
+      "collapsible": false,
       "items": [
         "extensions/grpc",
         "extensions/consul"
@@ -117,8 +126,9 @@
     },
     {
       "type": "category",
-      "label": "消息订阅",
-      "collapsed": true,
+      "label": "消息",
+      "collapsed": false,
+      "collapsible": false,
       "items": [
         "extensions/rabbitmq"
       ]
@@ -126,7 +136,8 @@
     {
       "type": "category",
       "label": "云服务",
-      "collapsed": true,
+      "collapsed": false,
+      "collapsible": false,
       "items": [
         "extensions/oss",
         "extensions/cos",
@@ -136,8 +147,10 @@
     {
       "type": "category",
       "label": "运维",
-      "collapsed": true,
+      "collapsed": false,
+      "collapsible": false,
       "items": [
+        "extensions/otel",
         "extensions/pm2",
         "extensions/cfork",
         "extensions/alinode",
