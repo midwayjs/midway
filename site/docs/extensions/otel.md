@@ -39,7 +39,11 @@ $ npm install --save @opentelemetry/auto-instrumentations-node
 
 ## 启用 open-telemetry
 
- [open-telemetry](https://opentelemetry.io/) 的模块请尽可能加在代码的最开始（比框架还要早）。
+ [open-telemetry](https://opentelemetry.io/) 的模块请尽可能加在代码的最开始（比框架还要早），所以在不同场景中，我们有不同的添加方式。
+
+
+
+### 使用 bootstrap 部署
 
 如果使用 `bootstrap.js` 部署，你可以加在 `bootstrap.js` 的最顶部，示例代码如下。
 
@@ -75,6 +79,53 @@ process.on('SIGTERM', () => {
     .catch((error) => console.log('Error terminating tracing', error))
     .finally(() => process.exit(0));
 });
+```
+
+
+
+### 使用 egg-scripts 部署
+
+egg-scripts 由于未提供入口部署，必须采用 `--require` 的形式加载额外的文件。
+
+我们在根目录添加一个 `otel.js` （注意是 js 文件），内容如下。
+
+```javascript
+const process = require('process');
+const opentelemetry = require('@opentelemetry/sdk-node');
+const { ConsoleSpanExporter } = require('@opentelemetry/sdk-trace-base');
+const { getNodeAutoInstrumentations } = require('@opentelemetry/auto-instrumentations-node');
+
+// 初始化一个 open-telemetry 的 SDK
+const sdk = new opentelemetry.NodeSDK({
+  // 配置当前的导出方式，比如这里配置了一个输出到控制台的，也可以配置其他的 Exporter，比如 Jaeger
+  traceExporter: new ConsoleSpanExporter(),
+  // 这里配置了默认自带的一些监控模块，比如 http 模块等
+  instrumentations: [getNodeAutoInstrumentations()]
+});
+
+// 初始化 SDK
+sdk.start()
+  .then(() => console.log('Tracing initialized'))
+  .catch((error) => console.log('Error initializing tracing', error));
+
+// 在进程关闭时，同时关闭数据采集
+process.on('SIGTERM', () => {
+  sdk.shutdown()
+    .then(() => console.log('Tracing terminated'))
+    .catch((error) => console.log('Error terminating tracing', error))
+    .finally(() => process.exit(0));
+});
+```
+
+修改 `package.json` 中的启动命令。
+
+```json
+{
+  // ...
+  "scripts": {
+    "start": "egg-scripts start --daemon --title=**** --framework=@midwayjs/web --require=./otel.js",
+  },
+}
 ```
 
 
