@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.14.7](https://github.com/midwayjs/midway/compare/v2.14.6...v2.14.7) (2022-03-20)
+
+
+### Bug Fixes
+
+* find uuid for v3 ([#1836](https://github.com/midwayjs/midway/issues/1836)) ([9b1dd10](https://github.com/midwayjs/midway/commit/9b1dd1081553ca29d1dfbce3d24303dc7bad9ca3))
+
+
+
+
+
 ## [2.14.6](https://github.com/midwayjs/midway/compare/v2.14.5...v2.14.6) (2022-02-08)
 
 
