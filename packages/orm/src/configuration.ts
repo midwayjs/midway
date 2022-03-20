@@ -14,7 +14,6 @@ import {
 import { join } from 'path';
 import {
   Connection,
-  ConnectionOptions,
   createConnection,
   getConnection,
   getRepository,
@@ -26,6 +25,7 @@ import {
   ORM_MODEL_KEY,
 } from '.';
 import { OrmConnectionHook, ORM_HOOK_KEY } from './hook';
+import { ConnectionOptions } from './interface';
 
 @Configuration({
   importConfigs: [join(__dirname, './config')],
