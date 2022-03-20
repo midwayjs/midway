@@ -10,7 +10,9 @@ import * as is from 'is-type-of';
 import * as decorator from '@midwayjs/decorator';
 
 function findProvideId(module) {
-  return decorator['getProviderName'] ? decorator?.getProviderUUId(module) : getProviderId(module);
+  return decorator['getProviderName']
+    ? decorator?.getProviderUUId(module)
+    : getProviderId(module);
 }
 
 export = app => {

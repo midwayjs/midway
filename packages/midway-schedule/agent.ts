@@ -8,7 +8,9 @@ import {
 import * as decorator from '@midwayjs/decorator';
 
 function findProvideId(module) {
-  return decorator['getProviderName'] ? decorator?.getProviderUUId(module) : getProviderId(module);
+  return decorator['getProviderName']
+    ? decorator?.getProviderUUId(module)
+    : getProviderId(module);
 }
 
 export = agent => {
