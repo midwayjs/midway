@@ -7,6 +7,11 @@ import {
   isClass,
 } from '@midwayjs/decorator';
 import * as is from 'is-type-of';
+import * as decorator from '@midwayjs/decorator';
+
+function findProvideId(module) {
+  return decorator?.getProviderUUId ? decorator?.getProviderUUId(module) : getProviderId(module);
+}
 
 export = app => {
   // egg-schedule 的 app 里没有 schedule
@@ -17,14 +22,14 @@ export = app => {
   const originMethod = app.runSchedule;
   app.runSchedule = (...args) => {
     if (isClass(args[0])) {
-      args[0] = getProviderId(args[0]) + '#' + args[0].name;
+      args[0] = findProvideId(args[0]) + '#' + args[0].name;
     }
     return originMethod.call(app, ...args);
   };
 
   const schedules: any[] = listModule(SCHEDULE_KEY);
   for (const scheduleModule of schedules) {
-    const providerId = getProviderId(scheduleModule);
+    const providerId = findProvideId(scheduleModule);
     if (providerId) {
       const key = providerId + '#' + scheduleModule.name;
       const opts: ScheduleOpts = getClassMetadata(SCHEDULE_KEY, scheduleModule);
