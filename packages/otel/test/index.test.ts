@@ -30,12 +30,12 @@ describe('/test/index.test.ts', () => {
     expect(error).toBeDefined();
 
     await close(app);
-    provider.shutdown();
-
     const spans = inMemorySpanExporter.getFinishedSpans();
     expect(spans.length).toEqual(2);
     expect(spans[0].spanContext()).toBeDefined();
 
     expect(spans[1].events.length).toEqual(1);
+
+    provider.shutdown();
   });
 });
