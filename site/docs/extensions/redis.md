@@ -175,9 +175,15 @@ export class UserService {
   redisService: RedisService;
 
   async invoke() {
-
-   await this.redisService.set('foo', 'bar');
-   const result = await this.redisService.get('foo');
+    
+    // 简单设置
+    await this.redisService.set('foo', 'bar');
+    
+    // 设置过期时间，单位秒
+    await redisService.set('foo', 'bar', 'ex', 10);
+    
+    // 获取数据
+    const result = await this.redisService.get('foo');
 
    // result => bar
   }
