@@ -5,6 +5,13 @@ import {
   getProviderId,
   listModule,
 } from '@midwayjs/decorator';
+import * as decorator from '@midwayjs/decorator';
+
+function findProvideId(module) {
+  return decorator['getProviderName']
+    ? decorator?.getProviderUUId(module)
+    : getProviderId(module);
+}
 
 export = agent => {
   if (!agent.schedule) {
@@ -58,7 +65,7 @@ export = agent => {
   agent.messenger.once('egg-ready', () => {
     const schedules: any[] = listModule(SCHEDULE_KEY);
     for (const scheduleModule of schedules) {
-      const provideId = getProviderId(scheduleModule);
+      const provideId = findProvideId(scheduleModule);
       const opts: ScheduleOpts = getClassMetadata(SCHEDULE_KEY, scheduleModule);
       const type = opts.type;
       if (opts.disable) {

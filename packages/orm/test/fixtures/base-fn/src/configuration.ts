@@ -10,7 +10,7 @@ import { IMidwayApplication } from '@midwayjs/core';
 @EntityRepository(User)
 class UserRepository extends Repository<User> {
   findMyPost() {
-    return this.findOne();
+    return this.findOne({});
   }
 
   createSave(u: any) {
@@ -49,18 +49,24 @@ export class ContainerConfiguration {
     const user = new User();
     user.id = 1;
 
-    const users = await this.userModel.findAndCount(user);
+    const users = await this.userModel.findAndCount({
+      where: user
+    });
 
     const userModel = useEntityModel(User);
-    const newUsers = await userModel.findAndCount(user);
+    const newUsers = await userModel.findAndCount({
+      where: user
+    });
 
     assert.deepStrictEqual(users, newUsers);
 
     const newUser = this.getCustomRepo(UserRepository);
-    const ttu = (newUser as any).create(); 
+    const ttu = (newUser as any).create();
     ttu.name = 'ttt' + Date.now();
     await (newUser as any).createSave(ttu);
-    const ret = await newUser.find({ name: ttu.name});
+    const ret = await newUser.find({
+      where: { name: ttu.name}
+    });
     assert.ok(ret.length > 0);
 
     const aa = await container.getAsync('baseFnHook');

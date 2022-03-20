@@ -4,7 +4,7 @@ import { createApp, close } from '@midwayjs/mock';
 import { IMidwayApplication, LightFramework } from '@midwayjs/core';
 
 describe('/test/index.test.ts', () => {
-  it('should use one db', async () => {
+  it.skip('should use one db', async () => {
     cleanFile(join(__dirname, 'fixtures/base-fn', 'default.sqlite'));
 
     const app: IMidwayApplication = await createApp(join(__dirname, 'fixtures/base-fn'), {}, LightFramework);
