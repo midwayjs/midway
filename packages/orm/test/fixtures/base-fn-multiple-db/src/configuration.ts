@@ -35,10 +35,14 @@ export class ContainerConfiguration {
     const user = new User();
     user.id = 1;
 
-    const users = await this.defaultUserModel.findAndCount(user);
+    const users = await this.defaultUserModel.findAndCount({
+      where: user
+    });
     assert(users[0][0]['name'] === 'oneuser1');
 
-    const result = await this.testUserModel.findOne(user);
+    const result = await this.testUserModel.findOne({
+      where: user
+    });
     assert(!result);
 
     const aa = await container.getAsync('baseFnMultipleHook');
@@ -48,8 +52,8 @@ export class ContainerConfiguration {
     const defaultConn = getConnection('default');
     const testConn = getConnection('test');
 
-    assert(defaultConn.options.entities.includes(OnlyTestLoadLog) === false);
-    assert(testConn.options.entities.includes(OnlyTestLoadLog) === true);
+    assert((defaultConn.options.entities as any).includes(OnlyTestLoadLog) === false);
+    assert((testConn.options.entities as any).includes(OnlyTestLoadLog) === true);
 
     this.app.setAttr('result', 'hello world' + JSON.stringify(users));
   }

@@ -1,6 +1,7 @@
-import { Connection, ConnectionOptions } from 'typeorm';
+import { Connection } from 'typeorm';
 import { OrmConnectionHook, OrmHook } from '../../../../src';
 import { Provide, Scope, ScopeEnum } from '@midwayjs/decorator';
+import { ConnectionOptions } from '../../../../src/interface';
 
 
 @OrmHook()
