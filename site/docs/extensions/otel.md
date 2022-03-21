@@ -144,17 +144,17 @@ process.on('SIGTERM', () => {
 
 ### SDK
 
-API 的特定语言实现，比如 Node.js 的实现（`@opentelemetry/sdk-node`），python 的实现等等。
+API 的特定语言实现，比如 Node.js 的实现（`@opentelemetry/sdk-node`），其他监控平台的采集  SDK 实现等等。
 
 ### Instrumentations
 
-[open-telemetry](https://opentelemetry.io/) 提供了一些常见库的 shim 代码，使用 hooks 或者 monkey-patching 的方法来拦截方法，自动在特定方法调用时保存链路数据，支持 http，grapc ， redis，mysql 等模块，用户直接配置即可使用。
+[open-telemetry](https://opentelemetry.io/) 提供了一些常见库的 shim 代码，使用 hooks 或者 monkey-patching 的方法来拦截方法，自动在特定方法调用时保存链路数据，支持 http，gRPC ， redis，mysql 等模块，用户直接配置即可使用。
 
 比如上面示例引入的 `@opentelemetry/auto-instrumentations-node` 就是一个已经默认封装好常用库的 instrumentations 集合包，里面包括了大部分会用到的库，具体的依赖请参考 [Github](https://github.com/open-telemetry/opentelemetry-js-contrib/blob/main/metapackages/auto-instrumentations-node/package.json)。
 
 ### Exporter
 
-将接收到的链路数据发送到特定端的实现，比如 jaeger，zipkin 等。
+将接收到的链路数据发送到特定端的实现，比如  Jaeger，zipkin 等。
 
 
 

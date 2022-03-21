@@ -7,22 +7,24 @@ Midway Serverless 提供了一套通用的应用迁移方案，将原有应用�
 在代码根目录新增加文件 `f.yml`，最为精简的内容如下。
 
 ```yaml
-service: my-egg-demo ## 应用发布到云平台的名字
+service: my-egg-demo       ## 应用发布到云平台的名字
 
 provider:
-  name: aliyun ## 发布的云平台，aliyun，tencent 等
+  name: aliyun             ## 发布的云平台，aliyun，tencent 等
 
-deployType: egg ## 部署的应用类型
+deployType: 
+  type: egg                ## 部署的应用类型
+  version: 3.0.0
 
 package:
   include:
-    - public ## 如果有静态文件目录，写在这里会被自动拷贝
+    - public               ## 如果有静态文件目录，写在这里会被自动拷贝
   exclude:
-    - package-lock.json ## 忽略 package-lock.json 文件
+    - package-lock.json    ## 忽略 package-lock.json 文件
 
 custom:
   customDomain:
-    domainName: auto ## 自动生成域名
+    domainName: auto       ## 自动生成域名
 ```
 
 :::info
@@ -98,7 +100,8 @@ provider:
   name: aliyun       					## 发布的云平台，aliyun，tencent 等
 
 deployType:
-	type: egg
+  type: egg
+  version: 3.0.0
   name: app_idx								## 函数名
 ```
 
@@ -146,18 +149,11 @@ exports.static = false;
 如果 `public` 目录在根目录，请配置 `f.yml` 中的 `package.include` 字段。
 
 ```yaml
-service: my-egg-demo ## 应用发布到云平台的名字
-
-provider:
-  name: aliyun ## 发布的云平台，aliyun，tencent 等
-
-deployType: egg ## 部署的应用类型
-
 package:
   include:
-    - public ## 如果有静态文件目录，写在这里会被自动拷贝
+    - public                ## 如果有静态文件目录，写在这里会被自动拷贝
   exclude:
-    - package-lock.json ## 忽略 package-lock.json 文件
+    - package-lock.json     ## 忽略 package-lock.json 文件
 ```
 
 ### 阿里云

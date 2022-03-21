@@ -9,20 +9,22 @@ Midway Serverless 提供了一套通用的应用迁移方案，将原有应用�
 在代码根目录新增加文件 `f.yml` ，内容如下。
 
 ```yaml
-service: my-express-demo ## 发布到云平台的应用名
+service: my-express-demo     ## 发布到云平台的应用名
 
 provider:
-  name: aliyun ## 发布的云平台，aliyun，tencent 等
+  name: aliyun               ## 发布的云平台，aliyun，tencent 等
 
-deployType: express ## 部署的应用类型
+deployType: 
+  type: express              ## 部署的应用类型
+  version: 3.0.0
 
 package:
   exclude:
-    - package-lock.json ## 忽略 package-lock.json 文件
+    - package-lock.json      ## 忽略 package-lock.json 文件
 
 custom:
   customDomain:
-    domainName: auto ## 自动生成域名
+    domainName: auto         ## 自动生成域名
 ```
 
 :::info
@@ -75,18 +77,20 @@ module.exports = async () => {
 如果在项目根目录有希望构建拷贝的目录，比如静态文件 `public` 目录，请配置 `f.yml` 中的 `package.include` 字段。
 
 ```yaml
-service: my-egg-demo ## 应用发布到云平台的名字
+service: my-egg-demo         ## 应用发布到云平台的名字
 
 provider:
-  name: aliyun ## 发布的云平台，aliyun，tencent 等
+  name: aliyun               ## 发布的云平台，aliyun，tencent 等
 
-deployType: express ## 部署的应用类型
+deployType: 
+  type: express              ## 部署的应用类型
+  version: 3.0.0
 
 package:
   include:
-    - public ## 写在这里会被自动打包
+    - public                 ## 写在这里会被自动打包
   exclude:
-    - package-lock.json ## 忽略 package-lock.json 文件
+    - package-lock.json      ## 忽略 package-lock.json 文件
 ```
 
 ## 部署
@@ -120,21 +124,17 @@ package:
 也可以单独执行命令。
 
 ```bash
-$ npx midway-bin deploy										## deploy by npm
-$ npx midway-bin deploy --npm=cnpm				## deploy by cnpm
+$ npx midway-bin deploy                   ## deploy by npm
+$ npx midway-bin deploy --npm=cnpm        ## deploy by cnpm
 ```
 
 ## 默认情况
 
 ### 阿里云
 
-**​**
-
 默认发布为 http 触发器，如果需要 API 网关，可以自行按照 f.yml 的格式进行 functions 结构的修改配置，同时，需要在平台配置路由。
 
 ### 腾讯云
-
-**​**
 
 默认发布为 API 网关触发器，同时会自动配置网关路由。
 ​
@@ -144,14 +144,15 @@ $ npx midway-bin deploy --npm=cnpm				## deploy by cnpm
 可以通过 name 字段。
 
 ```yaml
-service: my-demo  						## 应用发布到云平台的名字
+service: my-demo              ## 应用发布到云平台的名字
 
 provider:
-  name: aliyun       					## 发布的云平台，aliyun，tencent 等
+  name: aliyun                ## 发布的云平台，aliyun，tencent 等
 
 deployType:
-	type: express
-  name: app_idx								## 函数名
+  type: express
+  version: 3.0.0
+  name: app_idx               ## 函数名
 ```
 
 ## 一些限制

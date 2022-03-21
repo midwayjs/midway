@@ -7,20 +7,20 @@ Midway Serverless 提供了一套通用的应用迁移方案，将原有应用�
 在代码根目录新增加文件 `f.yml` ，内容如下。
 
 ```yaml
-service: my-koa-demo ## 发布到云平台的应用名
+service: my-koa-demo       ## 发布到云平台的应用名
 
 provider:
-  name: aliyun ## 发布的云平台，aliyun，tencent 等
+  name: aliyun             ## 发布的云平台，aliyun，tencent 等
 
-deployType: koa ## 部署的应用类型
+deployType: koa            ## 部署的应用类型
 
 package:
   exclude:
-    - package-lock.json ## 忽略 package-lock.json 文件
+    - package-lock.json    ## 忽略 package-lock.json 文件
 
 custom:
   customDomain:
-    domainName: auto ## 自动生成域名
+    domainName: auto       ## 自动生成域名
 ```
 
 :::info
@@ -75,18 +75,20 @@ module.exports = async () => {
 如果在项目根目录有希望构建拷贝的目录，比如静态文件 `public` 目录，请配置 `f.yml` 中的 `package.include` 字段。
 
 ```yaml
-service: my-egg-demo ## 应用发布到云平台的名字
+service: my-egg-demo      ## 应用发布到云平台的名字
 
 provider:
-  name: aliyun ## 发布的云平台，aliyun，tencent 等
+  name: aliyun            ## 发布的云平台，aliyun，tencent 等
 
-deployType: koa ## 部署的应用类型
+deployType: 
+  type: koa               ## 部署的应用类型
+  version: 3.0.0
 
 package:
   include:
-    - public ## 写在这里会被自动打包
+    - public              ## 写在这里会被自动打包
   exclude:
-    - package-lock.json ## 忽略 package-lock.json 文件
+    - package-lock.json   ## 忽略 package-lock.json 文件
 ```
 
 ## 部署
@@ -144,14 +146,15 @@ $ npx midway-bin deploy --npm=cnpm				## deploy by cnpm
 可以通过 name 字段。
 
 ```yaml
-service: my-demo ## 应用发布到云平台的名字
+service: my-demo     ## 应用发布到云平台的名字
 
 provider:
-  name: aliyun ## 发布的云平台，aliyun，tencent 等
+  name: aliyun       ## 发布的云平台，aliyun，tencent 等
 
 deployType:
   type: koa
-  name: app_idx ## 函数名
+  version: 3.0.0
+  name: app_idx      ## 函数名
 ```
 
 ## 一些限制

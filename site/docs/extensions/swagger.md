@@ -370,6 +370,12 @@ async upload1(@Files() f: any[], @Fields() data: Cat) {
 }
 ```
 
+:::tip
+
+如需要 swagger 展示了，请务必添加类型（装饰器对应的类型，以及 @ApiBody 中的 type），否则会报错。
+
+:::
+
 Swagger UI 中展示：
 ![swagger6](https://img.alicdn.com/imgextra/i3/O1CN01w9dZxe1YQJv3uOycZ_!!6000000003053-0-tps-1524-1118.jpg)
 

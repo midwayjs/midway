@@ -9,22 +9,24 @@
 在任意的静态项目下加入下面的 `f.yml` ，内容如下：
 
 ```yaml
-service: my-static-demo  			## 应用发布到云平台的名字
+service: my-static-demo       ## 应用发布到云平台的名字
 
 provider:
-  name: aliyun       					## 发布的云平台，aliyun，tencent 等
+  name: aliyun                ## 发布的云平台，aliyun，tencent 等
 
-deployType: static
+deployType: 
+  type: static
+  version: 3.0.0
 
 package:
   include:
-  	- build										## 需要拷贝的目录
+  	- build                   ## 需要拷贝的目录
   exclude:
-    - package-lock.json				## 忽略 package-lock.json 文件
+    - package-lock.json       ## 忽略 package-lock.json 文件
 
 custom:
   customDomain:
-    domainName: auto					## 自动生成域名
+    domainName: auto          ## 自动生成域名
 ```
 
 :::info
@@ -76,18 +78,19 @@ custom:
 ### 修改托管目录
 
 ```yaml
-service: my-static-demo  			## 应用发布到云平台的名字
+service: my-static-demo      ## 应用发布到云平台的名字
 
 provider:
-  name: aliyun       					## 发布的云平台，aliyun，tencent 等
+  name: aliyun               ## 发布的云平台，aliyun，tencent 等
 
 deployType:
-	type: static
+  type: static
+  version: 3.0.0
   config:
-  	rootDir: public						## 托管目录变为 public
+  	rootDir: public          ## 托管目录变为 public
 
 package:
-  include: public							## 需要拷贝的目录，随着配置的托管目录为变
+  include: public            ## 需要拷贝的目录，随着配置的托管目录为变
 ```
 
 ### 修改托管前缀
@@ -95,13 +98,14 @@ package:
 有时候部署需要统一的路由前缀，比如 `/api/*` 这样的形式。
 
 ```yaml
-service: my-static-demo  			## 应用发布到云平台的名字
+service: my-static-demo      ## 应用发布到云平台的名字
 
 provider:
-  name: aliyun       					## 发布的云平台，aliyun，tencent 等
+  name: aliyun               ## 发布的云平台，aliyun，tencent 等
 
 deployType:
-	type: static
+  type: static
+  version: 3.0.0
   config:
   	prefix: /api
 
@@ -116,13 +120,14 @@ package:
 普通的路由是根据托管的目录结构和文件来的。如果访问到不存在的文件，则会返回 404。我们可以指定一个 404 页面。
 
 ```yaml
-service: my-static-demo  			## 应用发布到云平台的名字
+service: my-static-demo      ## 应用发布到云平台的名字
 
 provider:
-  name: aliyun       					## 发布的云平台，aliyun，tencent 等
+  name: aliyun               ## 发布的云平台，aliyun，tencent 等
 
 deployType:
-	type: static
+  type: static
+  version: 3.0.0
   config:
   	notFoundUrl: /404.html
 
@@ -137,13 +142,14 @@ package:
 有时候，我们希望将一些特定的路由，都访问到特定的文件上，比如将所有的路由请求，都转向到 `/index.html`，然后让前端路由处理。
 
 ```yaml
-service: my-static-demo  			## 应用发布到云平台的名字
+service: my-static-demo       ## 应用发布到云平台的名字
 
 provider:
-  name: aliyun       					## 发布的云平台，aliyun，tencent 等
+  name: aliyun                ## 发布的云平台，aliyun，tencent 等
 
 deployType:
-	type: static
+  type: static
+  version: 3.0.0
   config:
   	rewrite:
     	/(.*): /index.html
@@ -163,15 +169,12 @@ package:
 ```yaml
 deployType:
   type: static
+  version: 3.0.0
   config:
     rootDir: build
     rewrite:
       '@not /static/(.*)': /index.html
 ```
-
-
-
-
 
 
 
@@ -181,15 +184,16 @@ deployType:
 ​
 
 ```yaml
-service: my-static-demo  			## 应用发布到云平台的名字
+service: my-static-demo      ## 应用发布到云平台的名字
 
 provider:
-  name: aliyun       					## 发布的云平台，aliyun，tencent 等
+  name: aliyun               ## 发布的云平台，aliyun，tencent 等
 
 deployType:
 	type: static
-  name: app_idx								## 函数名
+  version: 3.0.0
+  name: app_idx              ## 函数名
 
 package:
-  include: public							## 需要拷贝的目录，随着配置的托管目录为变
+  include: public            ## 需要拷贝的目录，随着配置的托管目录为变
 ```

@@ -26,12 +26,14 @@ Serverless 环境指的是阿里云 FC，腾讯云等函数环境。Midway 可�
 ```
 
 ```yaml
-service: my-midway-app ## 应用发布到云平台的名字，一般指应用名
+service: my-midway-app         ## 应用发布到云平台的名字，一般指应用名
 
 provider:
-  name: aliyun ## 发布的云平台，aliyun，tencent 等
+  name: aliyun                 ## 发布的云平台，aliyun，tencent 等
 
-deployType: koa ## 部署的应用类型
+deployType: 
+  type: koa                    ## 部署的应用类型
+  version: 3.0.0
 ```
 
 2、代码修改
@@ -78,7 +80,7 @@ module.exports = async () => {
 
 如需更详细的发布文档，请查阅 [**Serverless 发布 FAQ**](./serverless/deploy_aliyun_faq)。
 
-##
+
 
 ## @midway/express
 
@@ -95,12 +97,14 @@ module.exports = async () => {
 ```
 
 ```yaml
-service: my-midway-app ## 应用发布到云平台的名字，一般指应用名
+service: my-midway-app             ## 应用发布到云平台的名字，一般指应用名
 
 provider:
-  name: aliyun ## 发布的云平台，aliyun，tencent 等
+  name: aliyun                     ## 发布的云平台，aliyun，tencent 等
 
-deployType: express ## 部署的应用类型
+deployType:
+  type: express                    ## 部署的应用类型
+  version: 3.0.0
 ```
 
 2、代码修改
@@ -131,6 +135,7 @@ module.exports = async () => {
 在 `package.json` 加入下面的这段，用于在发布时自动执行 `npm run build` 。
 
 ```json
+{
   "midway-integration": {
     "lifecycle": {
       "before:package:cleanup": "npm run build"
@@ -139,37 +144,40 @@ module.exports = async () => {
 	"scripts": {
   	"deploy": "midway-bin deploy"
   }
+}
 ```
 
 3、执行 `npm run deploy` 即可，发布后，阿里云会输出一个临时可用的域名，打开浏览器访问即可。
 
-<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1600835297676-1753de7a-fb0d-46ca-98f0-944eba5b2f2b.png#height=193&id=XpZAN&margin=%5Bobject%20Object%5D&name=image.png&originHeight=193&originWidth=1219&originalType=binary&ratio=1&size=35152&status=done&style=none&width=1219" width="1219" />
+<img src="https://cdn.nlark.com/yuque/0/2020/png/501408/1600835297676-1753de7a-fb0d-46ca-98f0-944eba5b2f2b.png"/>
 
 如需更详细的发布文档，请查阅 [**Serverless 发布 FAQ**](./serverless/deploy_aliyun_faq)。
 
-##
+
 
 ## @midwayjs/web
 
 1、在代码根目录新增加文件 `f.yml`，最为精简的内容如下。
 
 ```yaml
-service: my-egg-demo ## 应用发布到云平台的名字
+service: my-egg-demo          ## 应用发布到云平台的名字
 
 provider:
-  name: aliyun ## 发布的云平台，aliyun，tencent 等
+  name: aliyun                ## 发布的云平台，aliyun，tencent 等
 
-deployType: egg ## 部署的应用类型
+deployType: 
+  type: egg                   ## 部署的应用类型
+  version: 3.0.0
 
 package:
   include:
-    - public ## 如果有静态文件目录，写在这里会被自动拷贝
+    - public                  ## 如果有静态文件目录，写在这里会被自动拷贝
   exclude:
-    - package-lock.json ## 忽略 package-lock.json 文件
+    - package-lock.json       ## 忽略 package-lock.json 文件
 
 custom:
   customDomain:
-    domainName: auto ## 自动生成域名
+    domainName: auto          ## 自动生成域名
 ```
 
 :::info
@@ -278,18 +286,18 @@ exports.static = false;
 如果 `public` 目录在根目录，请配置 `f.yml` 中的 `package.include` 字段。
 
 ```yaml
-service: my-egg-demo ## 应用发布到云平台的名字
+service: my-egg-demo         ## 应用发布到云平台的名字
 
 provider:
-  name: aliyun ## 发布的云平台，aliyun，tencent 等
+  name: aliyun               ## 发布的云平台，aliyun，tencent 等
 
-deployType: egg ## 部署的应用类型
+deployType: egg              ## 部署的应用类型
 
 package:
   include:
-    - public ## 如果有静态文件目录，写在这里会被自动拷贝
+    - public                 ## 如果有静态文件目录，写在这里会被自动拷贝
   exclude:
-    - package-lock.json ## 忽略 package-lock.json 文件
+    - package-lock.json      ## 忽略 package-lock.json 文件
 ```
 
 
@@ -325,8 +333,8 @@ package:
 也可以单独执行命令。
 
 ```bash
-$ npx midway-bin deploy										## deploy by npm
-$ npx midway-bin deploy --npm=cnpm				## deploy by cnpm
+$ npx midway-bin deploy                   ## deploy by npm
+$ npx midway-bin deploy --npm=cnpm        ## deploy by cnpm
 ```
 
 
@@ -338,14 +346,14 @@ $ npx midway-bin deploy --npm=cnpm				## deploy by cnpm
 可以通过 name 字段。
 
 ```yaml
-service: my-demo  						## 应用发布到云平台的名字
+service: my-demo              ## 应用发布到云平台的名字
 
 provider:
-  name: aliyun       					## 发布的云平台，aliyun，tencent 等
+  name: aliyun                ## 发布的云平台，aliyun，tencent 等
 
 deployType:
-	type: egg
-  name: app_idx								## 函数名
+  type: egg
+  name: app_idx               ## 函数名
 ```
 
 :::info

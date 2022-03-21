@@ -20,7 +20,7 @@
 
 
 ```bash
-npm i @midwayjs/orm@3 typeorm --save
+$ npm i @midwayjs/orm@3 typeorm --save
 ```
 
 或者在 `package.json` 中增加如下依赖后，重新安装。
@@ -213,7 +213,7 @@ import { Column } from 'typeorm';
 @EntityModel()
 export class Photo {
 
-	@Column()
+  @Column()
   id: number;
 
   @Column()
@@ -259,7 +259,7 @@ import { Column, PrimaryColumn } from 'typeorm';
 @EntityModel()
 export class Photo {
 
-	@PrimaryColumn()
+  @PrimaryColumn()
   id: number;
 
   @Column()
@@ -484,8 +484,10 @@ export class PhotoService {
 
 ### 9、查询数据
 
-
 更多的查询参数，请查询 [find文档](https://github.com/typeorm/typeorm/blob/master/docs/zh_CN/find-options.md)。
+
+自 typeorm@0.3.0 起，查询 API 有所变化。
+
 ```typescript
 import { Provide } from '@midwayjs/decorator';
 import { InjectEntityModel } from '@midwayjs/orm';
@@ -502,26 +504,50 @@ export class PhotoService {
   async findPhotos() {
 
     // find All
-    let allPhotos = await this.photoModel.find();
+    let allPhotos = await this.photoModel.find();         //  v0.2.x
+    let allPhotos = await this.photoModel.find({});       //  v0.3.x
     console.log("All photos from the db: ", allPhotos);
 
     // find first
-    let firstPhoto = await this.photoModel.findOne(1);
+    let firstPhoto = await this.photoModel.findOne(1);   
+    let firstPhoto = await this.photoModel.findOne({     //  v0.3.x
+      where: {
+        id: 1
+      }
+    });   
     console.log("First photo from the db: ", firstPhoto);
 
     // find one by name
+    //  v0.2.x
     let meAndBearsPhoto = await this.photoModel.findOne({ name: "Me and Bears" });
+    //  v0.3.x
+    let meAndBearsPhoto = await this.photoModel.findOne({
+      where: { name: "Me and Bears" }
+    });
     console.log("Me and Bears photo from the db: ", meAndBearsPhoto);
 
     // find by views
+    //  v0.2.x
     let allViewedPhotos = await this.photoModel.find({ views: 1 });
+    //  v0.3.x
+    let allViewedPhotos = await this.photoModel.find({
+      where: { views: 1 }
+    });
     console.log("All viewed photos: ", allViewedPhotos);
 
+    //  v0.2.x
     let allPublishedPhotos = await this.photoModel.find({ isPublished: true });
+    //  v0.3.x
+    let allPublishedPhotos = await this.photoModel.find({
+      where: { isPublished: true }
+    });
     console.log("All published photos: ", allPublishedPhotos);
 
   	// find and get count
+    //  v0.2.x
     let [allPhotos, photosCount] = await this.photoModel.findAndCount();
+    //  v0.3.x
+    let [allPhotos, photosCount] = await this.photoModel.findAndCount({});
     console.log("All photos: ", allPhotos);
     console.log("Photos count: ", photosCount);
 
@@ -577,7 +603,7 @@ export class PhotoService {
 
   async updatePhoto() {
     /*...*/
-    let photoToRemove = await this.photoModel.findOne(1);
+    let photoToRemove = await this.photoModel.findOne(1);  // typeorm@0.2.x
     await this.photoModel.remove(photoToRemove);
   }
 }
@@ -669,10 +695,10 @@ import { Repository } from 'typeorm';
 export class PhotoService {
 
   @InjectEntityModel(Photo)
-	photoModel: Repository<Photo>;
+  photoModel: Repository<Photo>;
 
   @InjectEntityModel(PhotoMetadata)
-	photoMetadataModel: Repository<PhotoMetadata>;
+  photoMetadataModel: Repository<PhotoMetadata>;
 
   async updatePhoto() {
 
@@ -763,12 +789,12 @@ import { Repository } from 'typeorm';
 export class PhotoService {
 
   @InjectEntityModel(Photo)
-	photoModel: Repository<Photo>;
+  photoModel: Repository<Photo>;
 
   // find
   async findPhoto() {
 		/*...*/
-    let photos = await this.photoModel.find({ relations: [ 'metadata' ] });
+    let photos = await this.photoModel.find({ relations: [ 'metadata' ] }); // typeorm@0.2.x
   }
 }
 
@@ -789,13 +815,13 @@ import { Repository } from 'typeorm';
 export class PhotoService {
 
   @InjectEntityModel(Photo)
-	photoModel: Repository<Photo>;
+  photoModel: Repository<Photo>;
 
   // find
   async findPhoto() {
 		/*...*/
     let photos = await this.photoModel
-    				.createQueryBuilder('photo')
+            .createQueryBuilder('photo')
             .innerJoinAndSelect('photo.metadata', 'metadata')
             .getMany();
   }
@@ -834,7 +860,7 @@ import { Repository } from 'typeorm';
 export class PhotoService {
 
   @InjectEntityModel(Photo)
-	photoModel: Repository<Photo>;
+  photoModel: Repository<Photo>;
 
   async updatePhoto() {
 
@@ -903,10 +929,10 @@ import { Author } from "./author";
 @Entity()
 export class Photo {
 
-    /* ... other columns */
+  /* ... other columns */
 
-    @ManyToOne(type => Author, author => author.photos)
-    author: Author;
+  @ManyToOne(type => Author, author => author.photos)
+  author: Author;
 }
 ```
 
@@ -1007,7 +1033,7 @@ import { Repository } from 'typeorm';
 export class PhotoService {
 
   @InjectEntityModel(Photo)
-	photoModel: Repository<Photo>;
+  photoModel: Repository<Photo>;
 
   @InjectEntityModel(Album)
   albumModel: Repository<Album>
@@ -1034,7 +1060,7 @@ export class PhotoService {
 
     // now our photo is saved and albums are attached to it
     // now lets load them:
-    const loadedPhoto = await this.photoModel.findOne(1, { relations: ["albums"] });
+    const loadedPhoto = await this.photoModel.findOne(1, { relations: ["albums"] });  // typeorm@0.2.x
   }
 }
 ```
@@ -1095,54 +1121,54 @@ import { EntitySubscriberInterface, InsertEvent, UpdateEvent, RemoveEvent } from
 @EventSubscriberModel()
 export class EverythingSubscriber implements EntitySubscriberInterface {
 
-	/**
-	 * Called before entity insertion.
-	 */
-	beforeInsert(event: InsertEvent<any>) {
-			console.log(`BEFORE ENTITY INSERTED: `, event.entity);
-	}
+  /**
+   * Called before entity insertion.
+   */
+  beforeInsert(event: InsertEvent<any>) {
+    console.log(`BEFORE ENTITY INSERTED: `, event.entity);
+  }
 
-	/**
-	 * Called before entity insertion.
-	 */
-	beforeUpdate(event: UpdateEvent<any>) {
-			console.log(`BEFORE ENTITY UPDATED: `, event.entity);
-	}
+  /**
+   * Called before entity insertion.
+   */
+  beforeUpdate(event: UpdateEvent<any>) {
+    console.log(`BEFORE ENTITY UPDATED: `, event.entity);
+  }
 
-	/**
-	 * Called before entity insertion.
-	 */
-	beforeRemove(event: RemoveEvent<any>) {
-			console.log(`BEFORE ENTITY WITH ID ${event.entityId} REMOVED: `, event.entity);
-	}
+  /**
+   * Called before entity insertion.
+   */
+  beforeRemove(event: RemoveEvent<any>) {
+    console.log(`BEFORE ENTITY WITH ID ${event.entityId} REMOVED: `, event.entity);
+  }
 
-	/**
+  /**
+   * Called after entity insertion.
+   */
+  afterInsert(event: InsertEvent<any>) {
+    console.log(`AFTER ENTITY INSERTED: `, event.entity);
+  }
+
+  /**
 	 * Called after entity insertion.
 	 */
-	afterInsert(event: InsertEvent<any>) {
-			console.log(`AFTER ENTITY INSERTED: `, event.entity);
-	}
+  afterUpdate(event: UpdateEvent<any>) {
+    console.log(`AFTER ENTITY UPDATED: `, event.entity);
+  }
 
-	/**
-	 * Called after entity insertion.
-	 */
-	afterUpdate(event: UpdateEvent<any>) {
-			console.log(`AFTER ENTITY UPDATED: `, event.entity);
-	}
+  /**
+   * Called after entity insertion.
+   */
+  afterRemove(event: RemoveEvent<any>) {
+    console.log(`AFTER ENTITY WITH ID ${event.entityId} REMOVED: `, event.entity);
+  }
 
-	/**
-	 * Called after entity insertion.
-	 */
-	afterRemove(event: RemoveEvent<any>) {
-			console.log(`AFTER ENTITY WITH ID ${event.entityId} REMOVED: `, event.entity);
-	}
-
-	/**
-	 * Called after entity is loaded.
-	 */
-	afterLoad(entity: any) {
-			console.log(`AFTER ENTITY LOADED: `, entity);
-	}
+  /**
+   * Called after entity is loaded.
+   */
+  afterLoad(entity: any) {
+    console.log(`AFTER ENTITY LOADED: `, entity);
+  }
 
 }
 ```
@@ -1194,8 +1220,8 @@ import { User } from './model/user';
 
 export class XXX {
 
-	@InjectEntityModel(User, 'test')
-	testUserModel: Repository<User>;
+  @InjectEntityModel(User, 'test')
+  testUserModel: Repository<User>;
 
   //...
 }
@@ -1232,9 +1258,9 @@ import { getConnection } from 'typeorm';
 
 @Configuration()
 export class AutoConfiguration {
-	async onReady() {
+  async onReady() {
   	const conn = getConnection('default');
-		console.log(conn.isConnected);
+    console.log(conn.isConnected);
   }
 }
 ```
@@ -1252,7 +1278,7 @@ import { Photo } from './entity/photo';
 
 export async function getPhoto() {
   // get model
-	const photoModel = useEntityModel(Photo);
+  const photoModel = useEntityModel(Photo);
 
   const photo = new Photo();
   // create entity
