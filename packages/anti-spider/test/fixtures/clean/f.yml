@@ -1,0 +1,5 @@
+service: serverless-midway-test
+
+provider:
+  name: aliyun
+  runtime: nodejs12
