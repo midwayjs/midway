@@ -48,7 +48,7 @@ export class PrometheusConfiguration {
         }
         this.http_server = http
           .createServer((req, res) => {
-            const query = qs.parse(req.url.substr('/?'.length));
+            const query = qs.parse(req.url.slice('/?'.length));
             const params = JSON.parse(query.params as string);
             handlers[`${query.path}`](...params).then(result => {
               res.end(result);

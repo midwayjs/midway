@@ -89,7 +89,7 @@ export function safelyGet(
  */
 export function parsePrefix(provideId: string) {
   if (provideId.includes('@')) {
-    return provideId.substr(1);
+    return provideId.slice(1);
   }
   return provideId;
 }
