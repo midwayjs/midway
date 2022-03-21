@@ -357,8 +357,12 @@ const levels = {
 ```
 在 Midway 中，为了简化，一般情况下，我们只会使用 `error` ， `warn` ， `info` ， `debug` 这四种等级。
 
-
 日志等级表示当前可输出日志的最低等级。比如当你的日志 level 设置为 `warn`  时，仅 `warn` 以及更高的 `error` 等级的日志能被输出。
+
+在 Midway 中，针对不同的输出行为，可以配置不同的日志等级。
+
+- `level` 写入文本的日志等级
+- `consoleLevel` 控制台输出的日志等级
 
 
 
@@ -368,8 +372,8 @@ const levels = {
 在 Midway 中，有着自己的默认日志等级。
 
 
-- 在开发环境下（local，test，unittest），日志等级统一为 `info` 。
-- 在服务器环境（除开发环境外），为减少日志数量，日志等级统一为 `warn` 。
+- 在开发环境下（local，test，unittest），文本和控制台日志等级统一为 `info` 。
+- 在服务器环境（除开发环境外），为减少日志数量，日志等级统一为 `warn` 。 
 
 
 
