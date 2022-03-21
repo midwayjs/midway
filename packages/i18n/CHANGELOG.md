@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.6](https://github.com/midwayjs/midway/compare/v3.1.5...v3.1.6) (2022-03-21)
+
+**Note:** Version bump only for package @midwayjs/i18n
+
+
+
+
+
 ## [3.1.5](https://github.com/midwayjs/midway/compare/v3.1.4...v3.1.5) (2022-03-18)
 
 **Note:** Version bump only for package @midwayjs/i18n
