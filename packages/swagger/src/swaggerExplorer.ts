@@ -767,7 +767,7 @@ function parseParamsInPath(url: string) {
   const names: string[] = [];
   url.split('/').forEach(item => {
     if (item.startsWith(':')) {
-      const paramName = item.substr(1);
+      const paramName = item.slice(1);
       names.push(paramName);
     }
   });

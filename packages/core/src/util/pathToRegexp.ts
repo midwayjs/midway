@@ -89,7 +89,7 @@ function parse(str, options) {
 
   // Match any characters still remaining.
   if (index < str.length) {
-    path += str.substr(index);
+    path += str.slice(index);
   }
 
   // If the path exists, push it onto the end.
