@@ -51,23 +51,41 @@ export class HttpProxyMiddleware implements IMiddleware<any, any> {
 
     const method = req.method.toUpperCase();
 
-    const reqOptions = {
+    const targetRes = res.res || res;
+    const isStream = targetRes.on && targetRes.writable;
+
+    const reqOptions: any = {
       method,
       url: url.href,
       headers: reqHeaders,
-      responseType: 'arrayBuffer',
+      responseType: isStream ? 'stream': 'arrayBuffer',
     };
-
-    // if (method === 'POST' || method === 'PUT') {
-    // } else {
-    // }
-    const proxyResponse = await axios(reqOptions as any);
+    if (method === 'POST' || method === 'PUT') {
+      reqOptions.data = req.body ?? ctx.request?.body;
+      if (req.headers['content-type'] === 'application/x-www-form-urlencoded' && typeof reqOptions.data !== 'string') {
+        reqOptions.data = Object.keys(reqOptions.data).map(key => `${encodeURIComponent(key)}=${encodeURIComponent(reqOptions.data[key])}`).join('&');
+      }
+    }
+    
+    const proxyResponse = await axios(reqOptions).catch(err => {
+      if (!err || !err.response) {
+        throw err || new Error('proxy unknown error');
+      }
+      return err.response;
+    });
     res.type = proxyResponse.headers['content-type'];
     Object.keys(proxyResponse.headers).forEach(key => {
       res.set(key, proxyResponse.headers[key]);
     });
     res.status = proxyResponse.status;
-    res.body = proxyResponse.data;
+    if (isStream) {
+      await new Promise(async resolve => {
+        proxyResponse.data.on('finish', resolve);
+        proxyResponse.data.pipe(targetRes);
+      });
+    } else {
+      res.body = proxyResponse.data;
+    }
   }
 
   getProxyList(url): undefined | { proxy: HttpProxyConfig; url: URL } {

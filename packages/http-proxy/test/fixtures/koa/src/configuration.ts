@@ -1,15 +1,16 @@
 import { Configuration, Provide, ServerlessTrigger, ServerlessTriggerType } from '@midwayjs/decorator';
-import * as faas from '@midwayjs/faas';
+import * as koa from '@midwayjs/koa';
 import * as proxy from '../../../../src';
 
 @Configuration({
   imports: [
-    faas,
+    koa,
     proxy
   ],
   importConfigs: [
     {
       default: {
+        keys: ["test"],
         httpProxy: [
           {
             // https://gw.alicdn.com/tfs/TB1.1EzoBBh1e4jSZFhXXcC9VXa-48-48.png
@@ -18,8 +19,8 @@ import * as proxy from '../../../../src';
           },
           {
             // https://g.alicdn.com/mtb/lib-mtop/2.6.1/mtop.js
-            match: /\/gcdn\/(.*)$/,
-            target: 'https://g.alicdn.com/$1',
+            match: /\/bdimg\/(.*)$/,
+            target: 'https://sm.bdimg.com/$1',
           },
           {
             // https://httpbin.org/
