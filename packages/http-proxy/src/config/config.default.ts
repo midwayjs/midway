@@ -1,2 +1,2 @@
 import { HttpProxyConfig } from '..';
-export const httpProxy: HttpProxyConfig = null
+export const httpProxy: HttpProxyConfig = null;
