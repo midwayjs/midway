@@ -129,7 +129,10 @@ export class UploadMiddleware implements IMiddleware<any, any> {
 
   getUploadBoundary(request): false | string {
     const method = (request.method || request.httpMethod || '').toUpperCase();
-    if (!request.headers?.['content-type'] || method !== 'POST') {
+    if (method !== 'POST' && method !== 'PUT' && method !== 'DELETE' && method !== 'PATCH') {
+      return false;
+    }
+    if (!request.headers?.['content-type']) {
       return false;
     }
     const contentType: string = request.headers['content-type'];
