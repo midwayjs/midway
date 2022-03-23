@@ -1,0 +1,37 @@
+{
+  "name": "@midwayjs/http-proxy",
+  "version": "3.1.1",
+  "description": "Midway Component for http proxy",
+  "main": "dist/index.js",
+  "typings": "index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand",
+    "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand --coverage --forceExit",
+    "ci": "npm run test"
+  },
+  "keywords": [],
+  "author": "",
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "index.d.ts"
+  ],
+  "engines": {
+    "node": ">=12"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.26.0"
+  },
+  "devDependencies": {
+    "@midwayjs/core": "^3.1.1",
+    "@midwayjs/decorator": "^3.0.10",
+    "@midwayjs/express": "^3.1.1",
+    "@midwayjs/faas": "^3.1.1",
+    "@midwayjs/koa": "^3.1.1",
+    "@midwayjs/mock": "^3.1.1",
+    "@midwayjs/serverless-app": "^3.1.1",
+    "@midwayjs/web": "^3.1.1"
+  }
+}
