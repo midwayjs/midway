@@ -36,7 +36,7 @@ describe('/test/index.test.ts', () => {
       const result = await createHttpRequest(app).get('/swagger-ui/index.json');
       expect(result.type).toEqual('application/json');
       const body = result.body;
-      // console.log('--->', result.text);
+      console.log('--->', result.text);
 
       expect(body.tags.length).toBeGreaterThanOrEqual(2);
       expect(body.tags).toStrictEqual([{"name":"1-你好这里","description":""},{"name":"2-国家测试","description":""},{"description":"","name":"sss"}]);
