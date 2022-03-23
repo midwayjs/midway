@@ -26,7 +26,70 @@ import { join } from 'path';
 import { loggers } from '@midwayjs/logger';
 const debug = util.debuglog('midway:debug');
 
+/**
+ * midway framework main entry, this method bootstrap all service and framework.
+ * @param globalOptions
+ */
 export async function initializeGlobalApplicationContext(
+  globalOptions: IMidwayBootstrapOptions
+) {
+  const applicationContext = prepareGlobalApplicationContext(globalOptions);
+
+  // init logger
+  const loggerService = await applicationContext.getAsync(MidwayLoggerService, [
+    applicationContext,
+  ]);
+
+  if (loggerService.getLogger('appLogger')) {
+    // register global logger
+    applicationContext.registerObject(
+      'logger',
+      loggerService.getLogger('appLogger')
+    );
+  }
+
+  // framework/config/plugin/logger/app decorator support
+  await applicationContext.getAsync(MidwayFrameworkService, [
+    applicationContext,
+    globalOptions,
+  ]);
+
+  // lifecycle support
+  await applicationContext.getAsync(MidwayLifeCycleService, [
+    applicationContext,
+  ]);
+
+  // some preload module init
+  const modules = listPreloadModule();
+  for (const module of modules) {
+    // preload init context
+    await applicationContext.getAsync(module);
+  }
+
+  return applicationContext;
+}
+
+export async function destroyGlobalApplicationContext(
+  applicationContext: IMidwayContainer
+) {
+  // stop lifecycle
+  const lifecycleService = await applicationContext.getAsync(
+    MidwayLifeCycleService
+  );
+  await lifecycleService.stop();
+  // stop container
+  await applicationContext.stop();
+  clearBindContainer();
+  loggers.close();
+  global['MIDWAY_APPLICATION_CONTEXT'] = undefined;
+  global['MIDWAY_MAIN_FRAMEWORK'] = undefined;
+}
+
+/**
+ * prepare applicationContext, it use in egg framework.
+ * @param globalOptions
+ */
+export function prepareGlobalApplicationContext(
   globalOptions: IMidwayBootstrapOptions
 ) {
   debug('[core]: start "initializeGlobalApplicationContext"');
@@ -128,57 +191,5 @@ export async function initializeGlobalApplicationContext(
 
   // middleware support
   applicationContext.get(MidwayMiddlewareService, [applicationContext]);
-
-  // it will be delay framework initialize in egg cluster mode
-  if (!globalOptions.lazyInitializeFramework) {
-    // init logger
-    const loggerService = await applicationContext.getAsync(
-      MidwayLoggerService,
-      [applicationContext]
-    );
-
-    if (loggerService.getLogger('appLogger')) {
-      // register global logger
-      applicationContext.registerObject(
-        'logger',
-        loggerService.getLogger('appLogger')
-      );
-    }
-
-    // framework/config/plugin/logger/app decorator support
-    await applicationContext.getAsync(MidwayFrameworkService, [
-      applicationContext,
-      globalOptions,
-    ]);
-
-    // lifecycle support
-    await applicationContext.getAsync(MidwayLifeCycleService, [
-      applicationContext,
-    ]);
-
-    // some preload module init
-    const modules = listPreloadModule();
-    for (const module of modules) {
-      // preload init context
-      await applicationContext.getAsync(module);
-    }
-  }
-
   return applicationContext;
-}
-
-export async function destroyGlobalApplicationContext(
-  applicationContext: IMidwayContainer
-) {
-  // stop lifecycle
-  const lifecycleService = await applicationContext.getAsync(
-    MidwayLifeCycleService
-  );
-  await lifecycleService.stop();
-  // stop container
-  await applicationContext.stop();
-  clearBindContainer();
-  loggers.close();
-  global['MIDWAY_APPLICATION_CONTEXT'] = undefined;
-  global['MIDWAY_MAIN_FRAMEWORK'] = undefined;
 }
