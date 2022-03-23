@@ -13,7 +13,7 @@ package-lock.json
 .nyc*
 !**/fixtures/app/node_modules/hello/*
 run/
-package-lock.json
+!site/package-lock.json
 .nodejs-cache
 .tmp
 packages/midway/_package.json
