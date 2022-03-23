@@ -50,7 +50,7 @@ export function getTypeIsArrayTuple(
 
 export function getSchemaPath(clzz: Type | string) {
   let str = clzz;
-  if (typeof clzz === 'object') {
+  if (typeof clzz !== 'string') {
     str = clzz ? (clzz as any).name : clzz;
   }
   return `#/components/schemas/${str}`;

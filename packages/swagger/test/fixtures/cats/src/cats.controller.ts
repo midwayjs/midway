@@ -24,6 +24,7 @@ import {
   ApiParam,
   ApiResponse,
   ApiTags,
+  getSchemaPath,
 } from '../../../../src';
 import { CatsService } from './cats.service';
 import { CreateCatDto } from './dto/create-cat.dto';
@@ -73,6 +74,18 @@ export class CatsController {
   }
 
   @Post('/test1')
+  @ApiResponse({
+    status: 200,
+    content: {
+      'application/json': {
+        schema: {
+          properties: {
+            data: { '$ref': getSchemaPath(Cat)}
+          }
+        }
+      }
+    }
+  })
   async upload1(@Files() f: any[], @Fields() data: Cat) {
     return null;
   }
