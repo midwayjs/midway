@@ -1,5 +1,5 @@
 import { createHttpServer } from '../util';
-import { HttpClient } from '../../src';
+import { HttpClient, makeHttpRequest } from '../../src';
 
 describe('/test/util/httpclient.test.ts', function () {
 
@@ -80,6 +80,27 @@ describe('/test/util/httpclient.test.ts', function () {
     }
 
     expect(err).toBeDefined();
+    manager.close();
+  });
+
+  it('should test make http request', async () => {
+    const manager = await createHttpServer();
+    const result = await makeHttpRequest(`http://127.1:${manager.getPort()}/`);
+    expect(Buffer.isBuffer(result.data)).toBeTruthy();
+    manager.close();
+  });
+
+  it('should test default value ', async () => {
+    const manager = await createHttpServer();
+    const httpclient = new HttpClient({
+      headers: {
+        'x-power-by': 'midway',
+      },
+    });
+    const result = await httpclient.request(`http://127.1:${manager.getPort()}/`, {
+      dataType: 'json'
+    });
+    expect(result.data['headers']['x-power-by']).toEqual('midway');
     manager.close();
   });
 });
