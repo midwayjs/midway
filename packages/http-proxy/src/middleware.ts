@@ -58,15 +58,25 @@ export class HttpProxyMiddleware implements IMiddleware<any, any> {
       method,
       url: url.href,
       headers: reqHeaders,
-      responseType: isStream ? 'stream': 'arrayBuffer',
+      responseType: isStream ? 'stream' : 'arrayBuffer',
     };
     if (method === 'POST' || method === 'PUT') {
       reqOptions.data = req.body ?? ctx.request?.body;
-      if (req.headers['content-type'] === 'application/x-www-form-urlencoded' && typeof reqOptions.data !== 'string') {
-        reqOptions.data = Object.keys(reqOptions.data).map(key => `${encodeURIComponent(key)}=${encodeURIComponent(reqOptions.data[key])}`).join('&');
+      if (
+        req.headers['content-type'] === 'application/x-www-form-urlencoded' &&
+        typeof reqOptions.data !== 'string'
+      ) {
+        reqOptions.data = Object.keys(reqOptions.data)
+          .map(
+            key =>
+              `${encodeURIComponent(key)}=${encodeURIComponent(
+                reqOptions.data[key]
+              )}`
+          )
+          .join('&');
       }
     }
-    
+
     const proxyResponse = await axios(reqOptions).catch(err => {
       if (!err || !err.response) {
         throw err || new Error('proxy unknown error');
@@ -79,7 +89,7 @@ export class HttpProxyMiddleware implements IMiddleware<any, any> {
     });
     res.status = proxyResponse.status;
     if (isStream) {
-      await new Promise(async resolve => {
+      await new Promise(resolve => {
         proxyResponse.data.on('finish', resolve);
         proxyResponse.data.pipe(targetRes);
       });
