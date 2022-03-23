@@ -1,10 +1,10 @@
-import { Configuration } from '@midwayjs/decorator';
-import * as koa from '@midwayjs/koa';
+import { All, Configuration, Controller, Inject } from '@midwayjs/decorator';
+import * as express from '@midwayjs/express';
 import * as proxy from '../../../../src';
 
 @Configuration({
   imports: [
-    koa,
+    express,
     proxy
   ],
   importConfigs: [
@@ -33,3 +33,16 @@ import * as proxy from '../../../../src';
   ]
 })
 export class AutoConfiguration {}
+
+@Controller('/')
+export class HomeController {
+
+  @Inject()
+  ctx;
+
+  @All('/*')
+  async all() {
+    return 'hello'
+  }
+}
+

@@ -37,7 +37,7 @@ export class HttpProxyMiddleware implements IMiddleware<any, any> {
     const { proxy, url } = proxyInfo;
     const reqHeaders = {};
     for (const key of Object.keys(req.headers)) {
-      if (proxy.ignoreHeaders?.[key]) {
+      if (proxy.ignoreHeaders?.[key] || ctx.header[key] === undefined) {
         continue;
       }
       reqHeaders[key.toLowerCase()] = ctx.header[key];

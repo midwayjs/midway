@@ -2,7 +2,7 @@
 
 HTTP 代理组件
 
-适用于 `@midwayjs/faas` 、`@midwayjs/web` 、`@midwayjs/koa` 和 `@midwayjs/express` 多种框架的 HTTP 代理组件。
+适用于 `@midwayjs/faas` 、`@midwayjs/web` 、`@midwayjs/koa` 和 `@midwayjs/express` 多种框架的 HTTP 代理组件，支持GET、POST等多种请求方法。
 
 ### Usage
 
