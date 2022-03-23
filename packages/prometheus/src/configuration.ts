@@ -14,6 +14,7 @@ import * as http from 'http';
 import * as qs from 'querystring';
 import { DataService } from './service/dataService';
 import * as DefaultConfig from './config/config.default';
+import { PrometheusConfig } from './config/types';
 
 @Configuration({
   namespace: 'prometheus',
@@ -25,7 +26,7 @@ import * as DefaultConfig from './config/config.default';
 })
 export class PrometheusConfiguration {
   @Config('prometheus')
-  prometheusConfig: any;
+  prometheusConfig: PrometheusConfig;
 
   @App()
   app;
