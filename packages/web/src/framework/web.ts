@@ -9,9 +9,13 @@ import {
   WebControllerGenerator,
 } from '@midwayjs/core';
 import { Framework, Inject, MidwayFrameworkType } from '@midwayjs/decorator';
-import { IMidwayWebConfigurationOptions } from '../interface';
+import {
+  IMidwayWebConfigurationOptions,
+  Application,
+  Context,
+} from '../interface';
 import { EggRouter } from '@eggjs/router';
-import { Application, Context, EggLogger } from 'egg';
+import { EggLogger } from 'egg';
 import { loggers, MidwayContextLogger } from '@midwayjs/logger';
 import { resolve } from 'path';
 import { Server } from 'net';
