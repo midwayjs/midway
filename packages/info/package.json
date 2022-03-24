@@ -6,7 +6,8 @@
   "typings": "dist/index.d.ts",
   "files": [
     "dist/**/*.js",
-    "dist/**/*.d.ts"
+    "dist/**/*.d.ts",
+    "index.d.ts"
   ],
   "dependencies": {
     "picomatch": "2.3.1"
