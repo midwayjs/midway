@@ -66,26 +66,46 @@ export class HomeController {
 > src/apis/lambda/index.ts
 
 ```typescript
-import { useContext } from '@midwayjs/hooks'
+import {
+  Api,
+  Get,
+  Query,
+  useContext,
+} from '@midwayjs/hooks';
 
-export async function getPath() {
-  // 获取请求 HTTP Context
-  const ctx = useContext()
-  return ctx.path
-}
+export default Api(
+  Get(),
+  Query<{
+    page: string;
+    limit: string;
+  }>(),
+  async () => {
+    const ctx = useContext();
+    return {
+      page: ctx.query.page,
+      limit: ctx.query.limit,
+    };
+  }
+);
 ```
 
 > 前端调用
 > src/page/index.tsx
 
 ```typescript
-import { getPath } from './apis/lambda'
+import getArticles from './api';
+const response = await getArticles({
+  query: { page: '0', limit: '10' },
+});
+console.log(response); // { page: '0', limit: '10' }
+```
 
-getPath().then((path) => {
-  // 发送 GET 请求到 /api/getPath
-  // 返回值: /api/getPath
-  console.log(path)
-})
+> 手动调用
+
+```typescript
+fetch('/api/articles?page=0&limit=10')
+  .then((res) => res.json())
+  .then((res) => console.log(res)); // { page: '0', limit: '10' }
 ```
 
 ## 快速上手
