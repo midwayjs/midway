@@ -116,5 +116,5 @@ Midway 运行请预先安装 Node.js 环境和 npm，在国内可以使用 cnpm�
 - 钉钉（左图）：扫码加入答疑群（申请加入，自动通过）
 - 微信（右图）：由于微信群限制，可以先加拉群小助手（备注 midway 加群），然后拉到微信群。
 
-![image.png](https://img.alicdn.com/imgextra/i3/O1CN01RWV5Fn1OCRlUcIjGT_!!6000000001669-2-tps-1658-1010.png)
+![image.png](https://img.alicdn.com/imgextra/i1/O1CN01HzABY61yIExPh8acx_!!6000000006555-0-tps-1658-1010.jpg)
 
