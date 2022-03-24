@@ -5,13 +5,7 @@ import {
   LoggerOptions,
 } from '@midwayjs/logger';
 import { join, isAbsolute, dirname, basename } from 'path';
-import {
-  existsSync,
-  lstatSync,
-  statSync,
-  renameSync,
-  unlinkSync,
-} from 'fs';
+import { existsSync, lstatSync, statSync, renameSync, unlinkSync } from 'fs';
 import { Application, EggLogger } from 'egg';
 import { getCurrentDateString } from './utils';
 import * as os from 'os';
