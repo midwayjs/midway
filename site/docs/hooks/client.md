@@ -83,7 +83,7 @@ setupHttpClient({
 ```ts
 import axios from 'axios';
 import { setupHttpClient } from '@midwayjs/rpc';
-import type { Fetcher } from './@midwayjs/rpc';
+import type { Fetcher } from '@midwayjs/rpc';
 
 const fetcher: Fetcher = async (
   req,
@@ -113,7 +113,7 @@ setupHttpClient({ fetcher });
 
 ```ts
 import { setupHttpClient } from '@midwayjs/rpc';
-import type { Middleware } from './@midwayjs/rpc';
+import type { Middleware } from '@midwayjs/rpc';
 
 const logger: Middleware = async (
   ctx,
@@ -137,7 +137,7 @@ setupHttpClient({
 
 ```ts
 import { setupHttpClient } from '@midwayjs/rpc';
-import type { Middleware } from './@midwayjs/rpc';
+import type { Middleware } from '@midwayjs/rpc';
 
 const ErrorHandler: Middleware = async (
   ctx,

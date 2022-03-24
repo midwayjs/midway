@@ -2,14 +2,16 @@
 title: 接口开发
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 ## 路由
 
 在 Midway Hooks 中，你可以通过 `@midwayjs/hooks` 提供的 `Api()` 函数来快速创建接口。
 
 Hello World 示例：
 
-```ts
-// src/hello.ts
+```ts title="/src/hello.ts"
 import {
   Api,
   Get,
@@ -26,13 +28,12 @@ export default Api(
 一个 API 接口由以下部分组成：
 
 - `Api()`：定义接口函数
-- `Get(path?: string)`：指定 Http 触发器，指定请求方法为 GET，可选参数 `path` 为接口路径，不指定路径的情况下会根据`函数名 + 文件名`生成路径
+- `Get(path?: string)`：指定 Http 触发器，指定请求方法为 GET，可选参数 `path` 为接口路径，不指定路径的情况下会根据`函数名 + 文件名`生成路径，默认带有 `/api` 前缀
 - `Handler: async (...args: any[]) => { ... }`：用户逻辑，处理请求并返回结果
 
 你也可以指定路径，例子如下。
 
-```ts
-// src/hello.ts
+```ts title="/src/hello.ts"
 import {
   Api,
   Get,
@@ -89,7 +90,7 @@ export default Api(Get(), async () => {
 });
 ```
 
-同时我们也可以通过 SetHeader() 来设置 Header。
+同时我们也可以通过 `SetHeader()` 来设置 Header。
 
 ## Http 触发器
 
@@ -128,7 +129,11 @@ export default Api(
 
 你可以用两种方式来调用接口。
 
-1. 全栈项目：导入接口并调用
+1. 全栈项目：基于零 Api，导入接口并调用
+2. 手动调用：使用 fetch 在 Http 下，`Handler(...args: any[])` 的入参，可以在手动请求时通过设置 Http Body 的 args 参数来传递参数。
+
+<Tabs>
+<TabItem value="fullstack" label="全栈应用（零 Api）">
 
 ```ts
 import say from './api';
@@ -137,11 +142,9 @@ const response = await say('Midway');
 console.log(response); // Hello Midway!
 ```
 
-2. 手动调用
+</TabItem>
 
-在 Http 下，`Handler(...args: any[])` 的入参，可以在手动请求时通过设置 Http Body 的 args 参数来传递参数。
-
-如下所示：
+<TabItem value="mannual" label="手动调用">
 
 ```ts
 fetch('/api/say', {
@@ -156,6 +159,9 @@ fetch('/api/say', {
   .then((res) => res.text())
   .then((res) => console.log(res)); // Hello Midway!
 ```
+
+</TabItem>
+</Tabs>
 
 ### 查询参数 Query
 
@@ -187,7 +193,10 @@ export default Api(
 );
 ```
 
-一体化调用：
+前端调用
+
+<Tabs>
+<TabItem value="fullstack" label="全栈应用">
 
 ```ts
 import getArticles from './api';
@@ -197,13 +206,18 @@ const response = await getArticles({
 console.log(response); // { page: '0', limit: '10' }
 ```
 
-手动调用：
+</TabItem>
+
+<TabItem value="mannual" label="手动调用">
 
 ```ts
 fetch('/api/articles?page=0&limit=10')
   .then((res) => res.json())
   .then((res) => console.log(res)); // { page: '0', limit: '10' }
 ```
+
+</TabItem>
+</Tabs>
 
 ### 路径参数 Params
 
@@ -212,21 +226,29 @@ fetch('/api/articles?page=0&limit=10')
 如果希望接口路径是 `/article/100`，并获取 id 为 `100` 的值，可以这样写：
 
 ```ts
-import { Api, Get, Params, useContext } from '@midwayjs/hooks'
+import {
+  Api,
+  Get,
+  Params,
+  useContext,
+} from '@midwayjs/hooks';
 
 export default Api(
   Get('/article/:id'),
-  Params<{ id: string }>(,
+  Params<{ id: string }>(),
   async () => {
-    const ctx = useContext()
+    const ctx = useContext();
     return {
-      article: ctx.params.id
-    }
+      article: ctx.params.id,
+    };
   }
-)
+);
 ```
 
-一体化调用：
+前端调用
+
+<Tabs>
+<TabItem value="fullstack" label="全栈应用">
 
 ```ts
 import getArticle from './api/article';
@@ -236,13 +258,18 @@ const response = await getArticle({
 console.log(response); // { article: '100' }
 ```
 
-手动调用：
+</TabItem>
+
+<TabItem value="mannual" label="手动调用">
 
 ```ts
 fetch('/article/100')
   .then((res) => res.json())
   .then((res) => console.log(res)); // { article: '100' }
 ```
+
+</TabItem>
+</Tabs>
 
 ### 请求头 Headers
 
@@ -270,7 +297,10 @@ export default Api(
 );
 ```
 
-一体化调用：
+前端调用
+
+<Tabs>
+<TabItem value="fullstack" label="全栈应用">
 
 ```ts
 import getAuth from './api/auth';
@@ -280,7 +310,9 @@ const response = await getAuth({
 console.log(response); // { token: '123456' }
 ```
 
-前端调用：
+</TabItem>
+
+<TabItem value="mannual" label="手动调用">
 
 ```ts
 fetch('/auth', {
@@ -292,11 +324,17 @@ fetch('/auth', {
   .then((res) => console.log(res)); // { token: '123456' }
 ```
 
+</TabItem>
+</Tabs>
+
 ## 响应 Response
 
 ### 状态码 HttpCode
 
-使用 `HttpCode(status: number)`：
+支持 `HttpCode(status: number)`
+
+<Tabs>
+<TabItem value="operator" label="SetHeader">
 
 ```ts
 import {
@@ -314,7 +352,9 @@ export default Api(
 );
 ```
 
-手动设置：
+</TabItem>
+
+<TabItem value="mannual" label="手动设置">
 
 ```ts
 import {
@@ -330,9 +370,15 @@ export default Api(Get(), async () => {
 });
 ```
 
+</TabItem>
+</Tabs>
+
 ### 响应头 SetHeader
 
-使用：`SetHeader(key: string, value: string)`
+支持 `SetHeader(key: string, value: string)`
+
+<Tabs>
+<TabItem value="operator" label="SetHeader">
 
 ```ts
 import {
@@ -350,7 +396,9 @@ export default Api(
 );
 ```
 
-手动设置：
+</TabItem>
+
+<TabItem value="mannual" label="手动设置">
 
 ```ts
 import {
@@ -366,9 +414,15 @@ export default Api(Get(), async () => {
 });
 ```
 
+</TabItem>
+</Tabs>
+
 ### 重定向 Redirect
 
-使用 `Redirect(url: string, code?: number = 302)`：
+支持： `Redirect(url: string, code?: number = 302)`
+
+<Tabs>
+<TabItem value="operator" label="Redirect">
 
 ```ts
 import {
@@ -384,7 +438,9 @@ export default Api(
 );
 ```
 
-手动设置：
+</TabItem>
+
+<TabItem value="mannual" label="手动设置">
 
 ```ts
 import {
@@ -402,9 +458,15 @@ export default Api(
 );
 ```
 
+</TabItem>
+</Tabs>
+
 ### 返回值类型 ContentType
 
-使用 `ContentType(type: string)`：
+支持： `ContentType(type: string)`。
+
+<Tabs>
+<TabItem value="operator" label="ContentType">
 
 ```ts
 import {
@@ -422,18 +484,25 @@ export default Api(
 );
 ```
 
-手动设置：
+</TabItem>
+
+<TabItem value="mannual" label="手动设置">
 
 ```ts
 import {
   Api,
   Get,
-  useContext,
+  ContentType,
 } from '@midwayjs/hooks';
 
-export default Api(Get(), async () => {
-  const ctx = useContext<Context>();
-  ctx.type = 'text/html';
-  return '<h1>Hello World!</h1>';
-});
+export default Api(
+  Get(),
+  ContentType('text/html'),
+  async () => {
+    return '<h1>Hello World!</h1>';
+  }
+);
 ```
+
+</TabItem>
+</Tabs>

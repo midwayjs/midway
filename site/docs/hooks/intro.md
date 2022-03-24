@@ -97,16 +97,14 @@ Midway 是一个有着 8 年历史的 Node.js 框架，具有强大的后端功�
 
 ## 创建应用
 
-Midway Hooks 目前提供了如下模版：
+Midway Hooks 目前提供了如下模板：
 
 - 全栈应用
-  - [react](https://github.com/midwayjs/hooks/blob/v3/examples/react)
-  - [react-faas](https://github.com/midwayjs/hooks/blob/v3/examples/react-faas)
-  - [vue](https://github.com/midwayjs/hooks/blob/v3/examples/vue)
-  - [vue](https://github.com/midwayjs/hooks/blob/v3/examples/vue-faas)
-  - [prisma](https://github.com/midwayjs/hooks/blob/v3/examples/prisma)
+  - [react](https://github.com/midwayjs/hooks/blob/main/examples/react)
+  - [vue](https://github.com/midwayjs/hooks/blob/main/examples/vue)
+  - [prisma](https://github.com/midwayjs/hooks/blob/main/examples/prisma)
 - Api Server
-  - [api](https://github.com/midwayjs/hooks/blob/v3/examples/api)
+  - [api](https://github.com/midwayjs/hooks/blob/main/examples/api)
 
 基于指定创建应用命令如下：
 
@@ -129,5 +127,5 @@ npx degit https://github.com/midwayjs/hooks/examples/api ./hooks-app
 ## 下一步
 
 - 了解如何开发接口并提供给前端调用：[接口开发](./api.md)
-- 如何使用和创建可复用的 Hooks：[Hooks](./hooks.md)
+- 如何使用和创建可复用的 Hooks：[Hooks](./builtin-hooks.md)
 - 如何在运行时校验用户参数：[校验器](./validate.md)

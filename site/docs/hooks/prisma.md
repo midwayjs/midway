@@ -8,7 +8,7 @@ title: Prisma ORM
 
 ## Example
 
-我们提供了一个简单的例子 [hooks-prisma-starter](https://github.com/midwayjs/hooks/blob/v3/examples/prisma/README.md)，来演示在 Midway Hooks 如何使用 Prisma。
+我们提供了一个简单的例子 [hooks-prisma-starter](https://github.com/midwayjs/hooks/blob/main/examples/prisma/README.md)，来演示在 Midway Hooks 如何使用 Prisma。
 
 下面我也会简单介绍，Midway Hooks 配合 Prisma 开发应用会有多么的简单。
 
@@ -37,7 +37,7 @@ model Post {
 }
 ```
 
-具体的数据库设置 & 初始数据填充工作，参考 [hooks-prisma-starter](https://github.com/midwayjs/hooks/blob/v3/examples/prisma/README.md) 文档即可。
+具体的数据库设置 & 初始数据填充工作，参考 [hooks-prisma-starter](https://github.com/midwayjs/hooks/blob/main/examples/prisma/README.md) 文档即可。
 
 ### 初始化 Prisma
 
@@ -49,6 +49,16 @@ import { PrismaClient } from '@prisma/client';
 export const prisma =
   new PrismaClient();
 ```
+
+#### 使用代理镜像
+
+Prisma 在安装时会根据平台动态下载可执行文件，如果你的网络环境不好，可以通过环境变量来设置镜像。
+
+```bash
+PRISMA_BINARIES_MIRROR=https://registry.npmmirror.com/-/binary/prisma/
+```
+
+相关 Issue: [mirror prisma](https://github.com/cnpm/mirrors/issues/248)
 
 ### 查询数据
 

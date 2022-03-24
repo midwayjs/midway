@@ -26,9 +26,11 @@ export default createConfiguration({
   imports: [
     Koa,
     hooks({
+      // highlight-start
       middleware: [
         cors({ origin: '*' }),
       ],
+      // highlight-end
     }),
   ],
 });

@@ -43,7 +43,9 @@ import hello from './api';
 try {
   await hello(null, null);
 } catch (error) {
-  console.log(error.message); // 'name must be a string'
+  console.log(
+    JSON.parse(error.data.message)
+  );
   console.log(error.status); // 422
 }
 ```
@@ -56,10 +58,49 @@ fetcher
     args: [null, null],
   })
   .catch((error) => {
-    console.log(error.message); // 'name must be a string'
+    console.log(
+      JSON.parse(error.data.message)
+    );
     console.log(error.status); // 422
   });
 ```
+
+### 错误处理
+
+通过 Try/Catch 可以捕捉到校验失败的错误。
+
+```ts
+try {
+  // 调用接口
+} catch (error) {
+  console.log(error.data.code); // VALIDATION_FAILED
+  console.log(
+    JSON.parse(error.data.message)
+  );
+}
+```
+
+`error.data.message` 包含完整的[错误信息](https://zod.js.org/docs/errors/)，你需要使用 `JSON.parse` 解析，解析后的示例如下：
+
+```ts
+[
+  {
+    code: 'invalid_type',
+    expected: 'string',
+    received: 'number',
+    path: [0, 'name'],
+    message:
+      'Expected string, received number',
+  },
+];
+```
+
+其中：
+
+- `message`: 错误信息
+- `path` 参数代表错误路径，如 `0` 代表第一个参数校验出错，`name` 代表是 `name` 字段校验出错。
+
+你可以手动解析错误消息，并展示给用户。
 
 ### ValidateHttp
 
@@ -113,7 +154,9 @@ try {
     query: { searchString: '' },
   });
 } catch (error) {
-  console.log(error.message); // 'searchString must be at least 5 characters long'
+  console.log(
+    JSON.parse(error.data.message)
+  );
   console.log(error.status); // 422
 }
 ```
@@ -126,7 +169,9 @@ fetcher
     '/api/filterPosts?searchString=1'
   )
   .catch((error) => {
-    console.log(error.message); // 'searchString must be at least 5 characters long'
+    console.log(
+      JSON.parse(error.data.message)
+    );
     console.log(error.status); // 422
   });
 ```
@@ -177,7 +222,7 @@ try {
     members: ['test'],
   });
 } catch (error) {
-  console.log(error.message); // 'name must be a string'
+  console.log(error.message);
   console.log(error.status); // 422
 }
 ```
@@ -197,7 +242,9 @@ fetcher
     ],
   })
   .catch((error) => {
-    console.log(error.message); // 'name must be a string'
+    console.log(
+      JSON.parse(error.data.message)
+    );
     console.log(error.status); // 422
   });
 ```

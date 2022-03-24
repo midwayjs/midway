@@ -47,9 +47,11 @@ import logger from './logger';
 // Global Middleware
 export default createConfiguration({
   imports: [
+    // highlight-start
     hooks({
       middleware: [logger],
     }),
+    // highlight-end
   ],
 });
 ```
@@ -67,9 +69,11 @@ import {
 import logger from './logger';
 
 // File Level Middleware
+// highlight-start
 export const config: ApiConfig = {
   middleware: [logger],
 };
+// highlight-end
 
 export default Api(Get(), async () => {
   return 'Hello World!';
@@ -90,7 +94,9 @@ import logger from './logger';
 
 export default Api(
   Get(),
+  // highlight-start
   Middleware(logger),
+  // highlight-end
   async () => {
     return 'Hello World!';
   }
@@ -117,7 +123,9 @@ import cors from '@koa/cors';
 export default createConfiguration({
   imports: [
     hooks({
+      // highlight-start
       middleware: [logger, cors()],
+      // highlight-end
     }),
   ],
 });
@@ -135,9 +143,11 @@ import logger from './logger';
 import cors from '@koa/cors';
 
 // File Level Middleware
+// highlight-start
 export const config: ApiConfig = {
   middleware: [logger, cors],
 };
+// highlight-end
 
 export default Api(Get(), async () => {
   return 'Hello World!';
@@ -157,7 +167,9 @@ import cors from '@koa/cors';
 
 export default Api(
   Get(),
+  // highlight-start
   Middleware(logger, cors),
+  // highlight-end
   async () => {
     return 'Hello World!';
   }

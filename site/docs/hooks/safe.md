@@ -4,7 +4,7 @@ title: 静态类型安全 + 运行时安全
 
 使用 [Prisma](./prisma.md) 和 `@midwayjs/hooks` 提供的 [Validate](./validate.md) 校验器，可以实现从前端到后端再到数据库的类型安全 + 运行时安全链路。
 
-以 [hooks-prisma-starter](https://github.com/midwayjs/hooks/blob/v3/examples/fullstack/prisma/README.md) 中的 `POST /api/post` 接口为例，代码如下：
+以 [hooks-prisma-starter](https://github.com/midwayjs/hooks/blob/main/examples/fullstack/prisma/README.md) 中的 `POST /api/post` 接口为例，代码如下：
 
 ```ts
 import {

@@ -2,7 +2,7 @@
 title: 测试
 ---
 
-在 Midway Hooks 中，我们可以快速的对接口进行测试。
+在 Midway Hooks 中，我们可以快速的对 Http 接口进行测试。
 
 ## 接口测试
 
@@ -18,9 +18,9 @@ export default Api(Get('/hello'), async () => {
 
 在测试中，你可以通过 `@midwayjs/mock` 去启动应用，并调用接口完成测试。
 
-### 通过 `@midwayjs/hooks/test` 调用
+### 通过 `@midwayjs/hooks` 调用
 
-`@midwayjs/hooks/test` 提供了 `getApiTrigger(api: ApiFunction)` 方法，可以用于获取触发器。
+`@midwayjs/hooks` 提供了 `getApiTrigger(api: ApiFunction)` 方法，可以用于获取触发器。
 
 以上面的 `hello` 接口为例，`getApiTrigger(hello)` 将返回：
 
@@ -45,10 +45,7 @@ import {
   Framework,
   IMidwayKoaApplication,
 } from '@midwayjs/koa';
-import {
-  getApiTrigger,
-  HttpTriger,
-} from '@midwayjs/hooks/test';
+import { getApiTrigger, HttpTriger } from '@midwayjs/hooks';
 import hello from './hello';
 
 describe('test koa with api router', () => {
