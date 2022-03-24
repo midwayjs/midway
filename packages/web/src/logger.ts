@@ -8,7 +8,7 @@ import { join, isAbsolute, dirname, basename } from 'path';
 import {
   existsSync,
   lstatSync,
-  readFileSync,
+  statSync,
   renameSync,
   unlinkSync,
 } from 'fs';
@@ -26,10 +26,7 @@ const debug = debuglog('midway:debug');
 const isWindows = os.platform() === 'win32';
 
 function isEmptyFile(p: string) {
-  const content = readFileSync(p, {
-    encoding: 'utf8',
-  });
-  return content === null || content === undefined || content === '';
+  return statSync(p).size === 0;
 }
 
 const levelTransform = level => {
