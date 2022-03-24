@@ -5,13 +5,7 @@ import {
   LoggerOptions,
 } from '@midwayjs/logger';
 import { join, isAbsolute, dirname, basename } from 'path';
-import {
-  existsSync,
-  lstatSync,
-  readFileSync,
-  renameSync,
-  unlinkSync,
-} from 'fs';
+import { existsSync, lstatSync, statSync, renameSync, unlinkSync } from 'fs';
 import { Application, EggLogger } from 'egg';
 import { getCurrentDateString } from './utils';
 import * as os from 'os';
@@ -26,10 +20,7 @@ const debug = debuglog('midway:debug');
 const isWindows = os.platform() === 'win32';
 
 function isEmptyFile(p: string) {
-  const content = readFileSync(p, {
-    encoding: 'utf8',
-  });
-  return content === null || content === undefined || content === '';
+  return statSync(p).size === 0;
 }
 
 const levelTransform = level => {
