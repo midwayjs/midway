@@ -41,10 +41,3 @@ export type Application = IMidwayRabbitMQApplication;
 export interface Context extends IMidwayRabbitMQContext {}
 export type NextFunction = BaseNextFunction;
 export type DefaultConfig = string | AmqpOptions.Connect;
-
-declare module '@midwayjs/core/dist/interface' {
-  interface MidwayConfig {
-    rabbitmq?: PowerPartial<IMidwayRabbitMQConfigurationOptions>;
-  }
-}
-

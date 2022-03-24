@@ -2,7 +2,6 @@ import { IConfigurationOptions, IMidwayApplication, IMidwayContext } from '@midw
 import * as koa from 'koa';
 import { Context as KoaContext, DefaultState, Middleware, Next } from 'koa';
 import { RouterParamValue } from '@midwayjs/decorator';
-import { Cookies, CookieSetOptions } from '@midwayjs/cookies';
 
 export type IMidwayKoaContext = IMidwayContext<KoaContext>;
 export type IMidwayKoaApplication = IMidwayApplication<IMidwayKoaContext, koa<DefaultState, IMidwayKoaContext> & {
@@ -69,7 +68,7 @@ export type Application = IMidwayKoaApplication;
 
 export interface Context extends IMidwayKoaContext {}
 
-interface BodyParserOptions {
+export interface BodyParserOptions {
   enable?: boolean;
   /**
    *  parser will only parse when request type hits enableTypes, default is ['json', 'form'].
@@ -125,38 +124,4 @@ interface BodyParserOptions {
    * support custom error handle
    */
   onerror?: ((err: Error, ctx: IMidwayKoaContext) => void);
-}
-
-declare module '@midwayjs/core/dist/interface' {
-  interface MidwayConfig {
-    keys?: string | string[];
-    koa?: IMidwayKoaConfigurationOptions;
-    cookies?: CookieSetOptions;
-    /**
-     * onerror middleware options
-     */
-    onerror?: {
-      text?: (err: Error, ctx: IMidwayKoaContext) => void;
-      json?: (err: Error, ctx: IMidwayKoaContext) => void;
-      html?: (err: Error, ctx: IMidwayKoaContext) => void;
-      redirect?: string;
-      accepts?: (...args) => any;
-    },
-    bodyParser?: BodyParserOptions;
-    siteFile?: {
-      enable?: boolean;
-      favicon?: undefined | string | Buffer
-    };
-  }
-}
-
-declare module 'koa' {
-  interface Request {
-    body?: any;
-    rawBody: string;
-  }
-  interface Context {
-    cookies: Cookies;
-    app: Application;
-  }
 }

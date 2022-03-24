@@ -49,7 +49,7 @@ import * as Redis from 'ioredis';
 //   },
 // },
 
-declare module '@midwayjs/core/dist/interface' {
+declare module '@midwayjs/core' {
   interface MidwayConfig {
     redis?: ServiceFactoryConfigOption<
       | Redis.RedisOptions
