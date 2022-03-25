@@ -9,12 +9,10 @@ import {
 } from '@midwayjs/core';
 import {
   Application as ExpressApplication,
-  CookieOptions,
   NextFunction as ExpressNextFunction,
   Request as ExpressRequest,
   Response as ExpressResponse
 } from 'express';
-import { Options, OptionsJson, OptionsText, OptionsUrlencoded } from 'body-parser';
 
 type Request = IMidwayContext<ExpressRequest>;
 export type Response = ExpressResponse;
@@ -86,28 +84,3 @@ export interface IMidwayExpressConfigurationOptions extends IConfigurationOption
 }
 
 export type Application = IMidwayExpressApplication;
-
-declare module '@midwayjs/core/dist/interface' {
-  interface MidwayConfig {
-    express?: IMidwayExpressConfigurationOptions;
-    cookieParser?: {
-      secret?: string | string[];
-      options?: CookieOptions;
-    };
-    bodyParser?: {
-      enable?: boolean;
-      json?: OptionsJson & {
-        enable?: boolean;
-      };
-      raw?: Options & {
-        enable?: boolean;
-      };
-      text?: OptionsText & {
-        enable?: boolean;
-      };
-      urlencoded?: OptionsUrlencoded & {
-        enable?: boolean;
-      };
-    };
-  }
-}

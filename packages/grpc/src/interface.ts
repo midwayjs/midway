@@ -91,10 +91,3 @@ export interface IClientOptions {
   timeoutMessage?: number;
   messageKey?: string;
 }
-
-declare module '@midwayjs/core/dist/interface' {
-  interface MidwayConfig {
-    grpcServer?: IMidwayGRPFrameworkOptions;
-    grpc?: PowerPartial<DefaultConfig>;
-  }
-}

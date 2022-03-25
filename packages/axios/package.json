@@ -3,10 +3,11 @@
   "description": "midway http client with axios",
   "version": "3.1.6",
   "main": "dist/index",
-  "typings": "dist/index.d.ts",
+  "typings": "index.d.ts",
   "files": [
     "dist/**/*.js",
-    "dist/**/*.d.ts"
+    "dist/**/*.d.ts",
+    "index.d.ts"
   ],
   "devDependencies": {
     "@midwayjs/core": "^3.1.6",

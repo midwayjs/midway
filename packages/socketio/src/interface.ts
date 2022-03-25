@@ -24,9 +24,3 @@ export type Application = IMidwaySocketIOApplication;
 
 export interface Context extends IMidwaySocketIOContext {}
 export type NextFunction = BaseNextFunction;
-
-declare module '@midwayjs/core/dist/interface' {
-  interface MidwayConfig {
-    socketIO?: IMidwaySocketIOConfigurationOptions;
-  }
-}

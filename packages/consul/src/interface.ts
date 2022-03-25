@@ -81,9 +81,3 @@ export interface ConsulConfig {
   provider?: IConsulProviderInfoOptions;
   service?: IConsulRegisterInfoOptions;
 }
-
-declare module '@midwayjs/core/dist/interface' {
-  interface MidwayConfig {
-    consul?: ConsulConfig;
-  }
-}

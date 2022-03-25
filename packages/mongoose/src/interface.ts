@@ -18,13 +18,4 @@ declare type ExtractConnectionOptions<T> =
     T extends M6 ? T['ConnectOptions'] :
       T extends Plus ? ExtractConnectionOptionsFromConnection<T['Connection']['prototype']['openUri']> :
         never;
-type ConnectionOptions = ExtractConnectionOptions<typeof mongoose>;
-
-declare module '@midwayjs/core/dist/interface' {
-  interface MidwayConfig {
-    mongoose?: ServiceFactoryConfigOption<{
-      uri: string;
-      options: ConnectionOptions;
-    }>;
-  }
-}
+export type ConnectionOptions = ExtractConnectionOptions<typeof mongoose>;
