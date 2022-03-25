@@ -2,13 +2,13 @@ import * as passport from 'passport';
 
 export * from './dist/index';
 
-declare module '@midwayjs/core' {
+declare module '@midwayjs/core/dist/interface' {
   interface MidwayConfig {
     passport?: passport.AuthenticateOptions;
   }
 }
 
-declare module '@midwayjs/koa' {
+declare module '@midwayjs/koa/dist/interface' {
   interface Context {
     state: {
       user?: any;
@@ -20,7 +20,7 @@ declare module '@midwayjs/koa' {
   }
 }
 
-declare module '@midwayjs/web' {
+declare module '@midwayjs/web/dist/interface' {
   interface Context {
     state: {
       user?: any;
@@ -32,7 +32,7 @@ declare module '@midwayjs/web' {
   }
 }
 
-declare module '@midwayjs/faas' {
+declare module '@midwayjs/faas/dist/interface' {
   interface Context {
     state: {
       user?: any;
@@ -44,7 +44,7 @@ declare module '@midwayjs/faas' {
   }
 }
 
-declare module '@midwayjs/express' {
+declare module '@midwayjs/express/dist/interface' {
   interface Context {
     user?: any;
     // These declarations are merged into express's Request type

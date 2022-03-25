@@ -29,7 +29,7 @@ declare module 'egg' {
   }
 }
 
-declare module '@midwayjs/core' {
+declare module '@midwayjs/core/dist/interface' {
   interface MidwayConfig extends PowerPartial<EggAppConfig> {
     egg?: IMidwayWebConfigurationOptions;
   }

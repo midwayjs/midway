@@ -1,7 +1,7 @@
 import { IViewEngine } from './dist';
 export * from './dist/index';
 
-declare module '@midwayjs/core' {
+declare module '@midwayjs/core/dist/interface' {
   interface MidwayConfig {
     view?: {
       /**
@@ -32,21 +32,21 @@ declare module '@midwayjs/core' {
   }
 }
 
-declare module '@midwayjs/koa' {
+declare module '@midwayjs/koa/dist/interface' {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface Context extends IViewEngine {
     //...
   }
 }
 
-declare module '@midwayjs/web' {
+declare module '@midwayjs/web/dist/interface' {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface Context extends IViewEngine {
     //...
   }
 }
 
-declare module '@midwayjs/faas' {
+declare module '@midwayjs/faas/dist/interface' {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface Context extends IViewEngine {
     //...
