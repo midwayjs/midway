@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.2.0](https://github.com/midwayjs/midway/compare/v3.1.6...v3.2.0) (2022-03-25)
+
+
+### Bug Fixes
+
+* fix ts build error (orm) ([#1859](https://github.com/midwayjs/midway/issues/1859)) ([c44e18d](https://github.com/midwayjs/midway/commit/c44e18d00f966792e46238c7d8807d5b3c543873))
+
+
+
+
+
 ## [3.1.6](https://github.com/midwayjs/midway/compare/v3.1.5...v3.1.6) (2022-03-21)
 
 **Note:** Version bump only for package @midwayjs/orm

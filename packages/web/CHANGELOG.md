@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.2.0](https://github.com/midwayjs/midway/compare/v3.1.6...v3.2.0) (2022-03-25)
+
+
+### Bug Fixes
+
+* logger create failed cause file size too large to create V8 string ([#1854](https://github.com/midwayjs/midway/issues/1854)) ([8a10d03](https://github.com/midwayjs/midway/commit/8a10d033063ef46bb80f1252bfb6815281a940d8))
+* throw error when cluster exec ([#1848](https://github.com/midwayjs/midway/issues/1848)) ([bf0e209](https://github.com/midwayjs/midway/commit/bf0e209ec724ab41b5bc9b43b08d7c44d3b77e3b))
+
+
+
+
+
 ## [3.1.6](https://github.com/midwayjs/midway/compare/v3.1.5...v3.1.6) (2022-03-21)
 
 **Note:** Version bump only for package @midwayjs/web

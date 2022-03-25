@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.2.0](https://github.com/midwayjs/midway/compare/v3.1.6...v3.2.0) (2022-03-25)
+
+
+### Bug Fixes
+
+* add lock file for site ([ef2bd57](https://github.com/midwayjs/midway/commit/ef2bd5772d49efb4d0b6865670303a5be776d383))
+* fix ts build error (orm) ([#1859](https://github.com/midwayjs/midway/issues/1859)) ([c44e18d](https://github.com/midwayjs/midway/commit/c44e18d00f966792e46238c7d8807d5b3c543873))
+* logger create failed cause file size too large to create V8 string ([#1854](https://github.com/midwayjs/midway/issues/1854)) ([8a10d03](https://github.com/midwayjs/midway/commit/8a10d033063ef46bb80f1252bfb6815281a940d8))
+* swagger getSchemaPath bug ([#1850](https://github.com/midwayjs/midway/issues/1850)) ([e3adda0](https://github.com/midwayjs/midway/commit/e3adda0e4f5c470d44d66b11e2e5b39a7ecc6bea))
+* throw error when cluster exec ([#1848](https://github.com/midwayjs/midway/issues/1848)) ([bf0e209](https://github.com/midwayjs/midway/commit/bf0e209ec724ab41b5bc9b43b08d7c44d3b77e3b))
+* upload file support more http method ([#1846](https://github.com/midwayjs/midway/issues/1846)) ([7587898](https://github.com/midwayjs/midway/commit/75878986ba69c41f58de1165d07938f094ce9ab2))
+
+
+### Features
+
+* add http proxy component ([#1843](https://github.com/midwayjs/midway/issues/1843)) ([5281e31](https://github.com/midwayjs/midway/commit/5281e316220591b84a0200c6cdf1572680f6e2f6))
+
+
+
+
+
 ## [3.1.6](https://github.com/midwayjs/midway/compare/v3.1.5...v3.1.6) (2022-03-21)
 
 
