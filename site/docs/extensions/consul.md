@@ -58,12 +58,15 @@ $ npm i @types/consul --save-dev
 - 暴露原始的 consul 对象
 
 
-## 使用方法：
+
+## 启用组件
+
 ```typescript
 import * as consul from '@midwayjs/consul'
 
 @Configuration({
   imports: [
+    // ..
     consul
   ],
   importConfigs: [join(__dirname, 'config')]
@@ -72,28 +75,36 @@ export class ContainerConfiguration {}
 ```
 
 
+
+## 配置
+
 配置 `config.default.ts` 文件：
+
 ```typescript
-config.consul =  {
-  provider: {
-    // 注册本服务
-    register: true,
-    // 应用正常下线反注册
-    deregister: true,
-    // consul server 主机
-    host: '192.168.0.10',				// 此处修改 consul server 的地址
-    // consul server 端口
-    port: 8500,									// 端口也需要进行修改
-    // 调用服务的策略(默认选取 random 具有随机性)
-    strategy: 'random',
+// src/config/config.default
+export default {
+  // ...
+  consul: {
+    provider: {
+      // 注册本服务
+      register: true,
+      // 应用正常下线反注册
+      deregister: true,
+      // consul server 主机
+      host: '192.168.0.10',				// 此处修改 consul server 的地址
+      // consul server 端口
+      port: 8500,									// 端口也需要进行修改
+      // 调用服务的策略(默认选取 random 具有随机性)
+      strategy: 'random',
+    },
+    service: {
+      address: '127.0.0.1',				// 此处是当前这个 midway 应用的地址
+      port: 7001,									// midway应用的端口
+      tags: ['tag1', 'tag2'],			// 做泳道隔离等使用
+      name: 'my-midway-project'
+      // others consul service definition
+    }
   },
-  service: {
-    address: '127.0.0.1',				// 此处是当前这个 midway 应用的地址
-    port: 7001,									// midway应用的端口
-    tags: ['tag1', 'tag2'],			// 做泳道隔离等使用
-    name: 'my-midway-project'
-    // others consul service definition
-  }
 }
 ```
 

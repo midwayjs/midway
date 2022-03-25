@@ -55,6 +55,7 @@ import { join } from 'path';
 
 @Configuration({
   imports: [
+    // ...
     orm  														// 加载 orm 组件
   ],
   importConfigs: [

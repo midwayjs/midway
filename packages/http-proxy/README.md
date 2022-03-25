@@ -7,8 +7,8 @@ HTTP 代理组件
 ### Usage
 
 1. 安装依赖
-```shell
-tnpm i @midwayjs/http-proxy --save
+```bash
+$ npm i @midwayjs/http-proxy --save
 ```
 2. 在 configuration 中引入组件,
 ```ts

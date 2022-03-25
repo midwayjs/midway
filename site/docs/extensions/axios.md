@@ -8,11 +8,14 @@ Midway 内置了一个简单的 HTTP 请求客户端，无需引入三方包即�
 
 默认 Get 请求，返回数据为 Buffer。
 
-```typescript
-import { HttpClient } from '@midwayjs/core';
 
-const httpclient = new HttpClient();
-const result = await httpclient.request('http://127.1:7001/');
+
+### 简单方法形式
+
+```typescript
+import { makeHttpRequest } from '@midwayjs/core';
+
+const result = await makeHttpRequest('http://127.1:7001/');
 
 // Buffer.isBuffer(result.data)  => true
 ```
@@ -20,10 +23,9 @@ const result = await httpclient.request('http://127.1:7001/');
 Get 请求，带上 Query，返回类型为 JSON。
 
 ```typescript
-import { HttpClient } from '@midwayjs/core';
+import { makeHttpRequest } from '@midwayjs/core';
 
-const httpclient = new HttpClient();
-const result = await httpclient.request('http://127.1:7001/', {
+const result = await makeHttpRequest('http://127.1:7001/', {
   data: {
     a: 1,
     b: 2
@@ -38,10 +40,9 @@ const result = await httpclient.request('http://127.1:7001/', {
 可以可以指定类型
 
 ```typescript
-import { HttpClient } from '@midwayjs/core';
+import { makeHttpRequest } from '@midwayjs/core';
 
-const httpclient = new HttpClient();
-const result = await httpclient.request('http://127.1:7001/', {
+const result = await makeHttpRequest('http://127.1:7001/', {
   method: 'GET',
   dataType: 'json',
 });
@@ -50,16 +51,69 @@ const result = await httpclient.request('http://127.1:7001/', {
 返回 text 格式。
 
 ```typescript
-import { HttpClient } from '@midwayjs/core';
+import { makeHttpRequest } from '@midwayjs/core';
 
-const httpclient = new HttpClient();
-const result = await httpclient.request('http://127.1:7001/', {
+const result = await makeHttpRequest('http://127.1:7001/', {
   method: 'GET',
   dataType: 'text',
 });
 ```
 
 POST 请求并返回 JSON。
+
+```typescript
+import { makeHttpRequest } from '@midwayjs/core';
+
+const result = await makeHttpRequest('http://127.1:7001/', {
+  method: 'POST',
+  data: {
+    a: 1,
+    b: 2
+  },
+  dataType: 'json',
+});
+
+// result.data ...
+```
+
+设置请求超时时间。
+
+```typescript
+import { makeHttpRequest } from '@midwayjs/core';
+
+let err;
+// 超时会报错，注意 catch
+try {
+  const result = await makeHttpRequest('http://127.1:7001/', {
+    method: 'GET',
+    dataType: 'text',
+    timeout: 500,
+  });
+} catch (e) {
+  err = e;
+}
+```
+
+:::tip
+
+内置的 Http 客户端只提供最简单的能力，如需复杂的功能（前后拦截或是其他额外的配置），请使用 axios。
+
+:::
+
+
+
+### 实例形式
+
+```typescript
+import { HttpClient } from '@midwayjs/core';
+
+const httpclient = new HttpClient();
+const result = await httpclient.request('http://127.1:7001/');
+
+// Buffer.isBuffer(result.data)  => true
+```
+
+和方法形式参数相同。
 
 ```typescript
 import { HttpClient } from '@midwayjs/core';
@@ -77,31 +131,25 @@ const result = await httpclient.request('http://127.1:7001/', {
 // result.data ...
 ```
 
-设置请求超时时间。
+示例形式，可以复用创建出的对象，并且每次请求，都可以带上一些固定的参数，比如 header。
 
 ```typescript
 import { HttpClient } from '@midwayjs/core';
 
-const httpclient = new HttpClient();
+const httpclient = new HttpClient({
+  headers: {
+    'x-timeout': '5'
+  },
+  method: 'POST',
+  timeout: 2000
+});
 
-let err;
-// 超时会报错，注意 catch
-try {
-  const result = await httpclient.request('http://127.1:7001/', {
-    method: 'GET',
-    dataType: 'text',
-    timeout: 500,
-  });
-} catch (e) {
-  err = e;
-}
+// 每次都会带上 headers
+const result = await httpclient.request('http://127.1:7001/');
+
 ```
 
-:::tip
 
-内置的 Http 客户端只提供最简单的能力，如需复杂的功能（前后拦截或是其他额外的配置），请使用 axios。
-
-:::
 
 
 

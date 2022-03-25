@@ -54,6 +54,7 @@ import * as swagger from '@midwayjs/swagger';
 
 @Configuration({
   imports: [
+    // ...
     swagger
   ]
 })
@@ -70,6 +71,7 @@ import * as swagger from '@midwayjs/swagger';
 
 @Configuration({
   imports: [
+    // ...
     {
       component: swagger,
       enabledEnvironment: ['local']

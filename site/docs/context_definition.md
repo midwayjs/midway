@@ -50,7 +50,7 @@ declare module '@midwayjs/core' {
 // index.d.ts
 
 // 下面这段可以对所有的 Context 做扩展
-declare module '@midwayjs/core/dist/interface' {
+declare module '@midwayjs/core' {
   interface Context {
     abc: string;
   }
@@ -63,28 +63,28 @@ declare module '@midwayjs/core/dist/interface' {
 // index.d.ts
 
 // 下面这段只 @midwayjs/koa 的 Context 做扩展
-declare module '@midwayjs/koa/dist/interface' {
+declare module '@midwayjs/koa' {
   interface Context {
     abc: string;
   }
 }
 
 // 下面这段只 @midwayjs/web 的 Context 做扩展
-declare module '@midwayjs/web/dist/interface' {
+declare module '@midwayjs/web' {
   interface Context {
     abc: string;
   }
 }
 
 // 下面这段只 @midwayjs/faas 的 Context 做扩展
-declare module '@midwayjs/faas/dist/interface' {
+declare module '@midwayjs/faas' {
   interface Context {
     abc: string;
   }
 }
 
 // 下面这段只 @midwayjs/express 的 Context 做扩展
-declare module '@midwayjs/express/dist/interface' {
+declare module '@midwayjs/express' {
   interface Context {
     abc: string;
   }
@@ -92,7 +92,3 @@ declare module '@midwayjs/express/dist/interface' {
 
 ```
 
-:::caution
-- 1、组件中扩展和项目中略有不同（怀疑是 TS 的 bug）。
-- 2、如果组件中使用了项目的扩展方式，那么其余组件的扩展提示会出现问题。
-:::

@@ -48,13 +48,12 @@ Midway 为不同的 cache 存储提供了统一的 API。默认内置了一个�
 
 ```typescript
 import { Configuration, App } from '@midwayjs/decorator';
-import { Application } from '@midwayjs/koa';
-import * as bodyParser from 'koa-bodyparser';
 import * as cache from '@midwayjs/cache';
 import { join } from 'path'
 
 @Configuration({
   imports: [
+    // ...
     cache		// 导入 cache 组件
   ],
   importConfigs: [

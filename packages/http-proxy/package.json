@@ -10,7 +10,11 @@
     "cov": "node --require=ts-node/register ../../node_modules/.bin/jest --runInBand --coverage --forceExit",
     "ci": "npm run test"
   },
-  "keywords": [],
+  "keywords": [
+    "midway",
+    "http",
+    "proxy"
+  ],
   "author": "",
   "files": [
     "dist/**/*.js",

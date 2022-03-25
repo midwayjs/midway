@@ -1,6 +1,4 @@
-## HTTP 代理组件
-
-HTTP 代理组件
+# HTTP 代理组件
 
 适用于 `@midwayjs/faas` 、`@midwayjs/web` 、`@midwayjs/koa` 和 `@midwayjs/express` 多种框架的 HTTP 请求代理组件，支持 GET、POST 等多种请求方法。
 
@@ -12,6 +10,7 @@ HTTP 代理组件
 | @midwayjs/faas    | ✅    |
 | @midwayjs/web     | ✅    |
 | @midwayjs/express | ✅    |
+
 
 
 ## 安装使用
@@ -51,9 +50,9 @@ import * as proxy from '@midwayjs/http-proxy';
 export class AutoConfiguration {}
 ```
 
----
 
-### 配置
+
+## 配置
 
 ```ts
 // config/config.default.ts
@@ -77,7 +76,9 @@ export interface HttpProxyConfig {
 }
 ```
 
-#### 示例：使用 host 配置代理
+
+
+## 示例：使用 host 配置代理
 
 ```ts
 export const httpProxy = {
@@ -88,7 +89,7 @@ export const httpProxy = {
 
 当请求您的站点路径为： `https://yourdomain.com/tfs/test.png` 时，`match` 字段配置的正则表达式成功匹配，那么就将原始请求路径中的 `host` 部分 `https://yourdomain.com` 替换为配置的 `https://gw.alicdn.com`，从而发起代理请求到 `https://gw.alicdn.com/tfs/test.png`，并把响应结果返回给请求您站点的用户。
 
-#### 示例：使用 target 配置代理
+## 示例：使用 target 配置代理
 
 ```ts
 export const httpProxy =  {

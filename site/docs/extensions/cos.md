@@ -43,6 +43,7 @@ import { join } from 'path'
 
 @Configuration({
   imports: [
+    // ...
     cos		// 导入 cos 组件
   ],
   importConfigs: [
