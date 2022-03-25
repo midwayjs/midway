@@ -55,3 +55,5 @@ export function useEntityModel<Entity>(
 ): Repository<Entity> {
   return getRepository<Entity>(clz, connectionName);
 }
+
+export * from './interface';
