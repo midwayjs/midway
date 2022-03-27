@@ -37,12 +37,11 @@ $ npm i @midwayjs/info@3 --save
 
 ```typescript
 import { Configuration } from '@midwayjs/decorator';
-import * as koa from '@midwayjs/koa';
 import * as info from '@midwayjs/info';
 
 @Configuration({
   imports: [
-    koa,
+    // ...
     info
   ]
 })

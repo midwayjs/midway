@@ -16,6 +16,12 @@
 $ npx --ignore-existing midway-upgrade
 ```
 
+:::tip
+
+由于业务情况各异，请在脚本升级之后，再进行手动升级的核对。
+
+:::
+
 
 
 ## 手动升级

@@ -70,6 +70,7 @@ import { join } from 'path'
 
 @Configuration({
   imports: [
+    // ...
     oss		// 导入 oss 组件
   ],
   importConfigs: [

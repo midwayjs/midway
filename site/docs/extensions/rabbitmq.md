@@ -84,7 +84,9 @@ import { Configuration } from '@midwayjs/decorator';
 import * as rabbitmq from '@midwayjs/rabbitmq';
 
 @Configuration({
-  imports: [rabbitmq],
+  imports: [
+    rabbitmq
+  ],
   // ...
 })
 export class ContainerLifeCycle {
@@ -103,7 +105,10 @@ import * as koa from '@midwayjs/koa';
 import * as rabbitmq from '@midwayjs/rabbitmq';
 
 @Configuration({
-  imports: [koa, rabbitmq],
+  imports: [
+    koa, 
+    rabbitmq
+  ],
   // ...
 })
 export class ContainerLifeCycle {

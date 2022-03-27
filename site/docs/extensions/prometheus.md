@@ -45,7 +45,10 @@ import * as prometheus from '@midwayjs/prometheus'; // 导入模块
 import { join } from 'path';
 
 @Configuration({
-  imports: [prometheus], // 引入模块
+  imports: [
+    // ...
+    prometheus
+  ],
   importConfigs: [join(__dirname, 'config')],
 })
 export class AutoConfiguration {}

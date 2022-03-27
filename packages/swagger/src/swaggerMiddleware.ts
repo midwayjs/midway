@@ -62,7 +62,10 @@ export class SwaggerMiddleware
         let content = readFileSync(join(this.swaggerUiAssetPath, lastName), {
           encoding: 'utf-8',
         });
-        if (lastName === 'index.html') {
+        if (
+          lastName === 'index.html' ||
+          lastName === 'swagger-initializer.js'
+        ) {
           content = this.replaceInfo(content);
         }
         const ext = extname(lastName);
@@ -100,7 +103,10 @@ export class SwaggerMiddleware
         let content = readFileSync(join(this.swaggerUiAssetPath, lastName), {
           encoding: 'utf-8',
         });
-        if (lastName === 'index.html') {
+        if (
+          lastName === 'index.html' ||
+          lastName === 'swagger-initializer.js'
+        ) {
           content = this.replaceInfo(content);
         }
         const ext = extname(lastName);

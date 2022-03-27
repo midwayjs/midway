@@ -56,6 +56,7 @@ import { join } from 'path'
 
 @Configuration({
   imports: [
+    // ...
     redis		// 导入 redis 组件
   ],
   importConfigs: [

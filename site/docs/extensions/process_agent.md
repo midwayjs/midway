@@ -53,7 +53,10 @@ $ npm install @midwayjs/process-agent@3 --save
 import * as processAgent from '@midwayjs/process-agent';
 
 @Configuration({
-  imports: [processAgent],
+  imports: [
+    // ...
+    processAgent
+  ],
 })
 export class ContainerLifeCycle {
 }

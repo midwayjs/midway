@@ -70,7 +70,7 @@ $ npm i passport-jwt --save
 这里我们以本地认证，和 Jwt 作为演示。
 
 
-首先
+首先启用组件。
 
 ```typescript
 // configuration.ts
@@ -83,6 +83,7 @@ import * as passport from '@midwayjs/passport';
 
 @Configuration({
   imports: [
+    // ...
     jwt,
     passport,
   ],

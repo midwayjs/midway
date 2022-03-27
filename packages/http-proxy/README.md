@@ -7,9 +7,11 @@ HTTP 代理组件
 ### Usage
 
 1. 安装依赖
-```shell
-tnpm i @midwayjs/http-proxy --save
+
+```bash
+$ npm i @midwayjs/http-proxy --save
 ```
+
 2. 在 configuration 中引入组件,
 ```ts
 import * as proxy from '@midwayjs/http-proxy';
@@ -25,11 +27,9 @@ export class AutoConfiguration {}
 ### 配置
 
 ```ts
-export const httpProxy = [
-  {
-    host: 'http://127.0.0.1',
-    match: /\/assets\/(.*)/,
-    target: 'http://127.0.0.1/$1',
-  }
-]
+export const httpProxy = {
+  host: 'http://127.0.0.1',
+  match: /\/assets\/(.*)/,
+  target: 'http://127.0.0.1/$1',
+}
 ```
