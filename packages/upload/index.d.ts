@@ -6,7 +6,7 @@ declare module '@midwayjs/core' {
     upload?: Partial<UploadOptions>;
   }
 }
-declare module '@midwayjs/koa/dist/interface' {
+declare module '@midwayjs/koa' {
   interface Context {
     files?: UploadFileInfo<any>[];
     fields?: { [fieldName: string]: any };
@@ -14,7 +14,7 @@ declare module '@midwayjs/koa/dist/interface' {
   }
 }
 
-declare module '@midwayjs/web/dist/interface' {
+declare module '@midwayjs/web' {
   interface Context {
     files?: UploadFileInfo<any>[];
     fields?: { [fieldName: string]: any };
@@ -22,7 +22,7 @@ declare module '@midwayjs/web/dist/interface' {
   }
 }
 
-declare module '@midwayjs/faas/dist/interface' {
+declare module '@midwayjs/faas' {
   interface Context {
     files?: UploadFileInfo<any>[];
     fields?: { [fieldName: string]: any };
@@ -30,7 +30,7 @@ declare module '@midwayjs/faas/dist/interface' {
   }
 }
 
-declare module '@midwayjs/express/dist/interface' {
+declare module '@midwayjs/express' {
   interface Context {
     files?: UploadFileInfo<any>[];
     fields?: { [fieldName: string]: any };

@@ -7,13 +7,13 @@ declare module '@midwayjs/core' {
   }
 }
 
-declare module '@midwayjs/koa/dist/interface' {
+declare module '@midwayjs/koa' {
   interface Context {
     session?: ISession;
   }
 }
 
-declare module '@midwayjs/faas/dist/interface' {
+declare module '@midwayjs/faas' {
   interface Context {
     session?: ISession;
   }

@@ -5,13 +5,13 @@ import {
   MidwayFrameworkType,
 } from '@midwayjs/decorator';
 import { IMiddleware, IMidwayLogger } from '@midwayjs/core';
-import { HttpProxyConfig } from './interface';
+import { HttpProxyConfig, HttpProxyStrategy } from './interface';
 import axios from 'axios';
 
 @Middleware()
 export class HttpProxyMiddleware implements IMiddleware<any, any> {
   @Config('httpProxy')
-  httpProxy: HttpProxyConfig | HttpProxyConfig[];
+  httpProxy: HttpProxyConfig;
 
   @Logger()
   logger: IMidwayLogger;
@@ -102,7 +102,12 @@ export class HttpProxyMiddleware implements IMiddleware<any, any> {
     if (!this.httpProxy) {
       return;
     }
-    const proxyList = [].concat(this.httpProxy);
+    const proxyList: HttpProxyStrategy[] = this.httpProxy.match
+      ? [this.httpProxy]
+      : this.httpProxy.strategy
+      ? Object.values(this.httpProxy.strategy)
+      : [];
+
     for (const proxy of proxyList) {
       if (!proxy.match) {
         continue;

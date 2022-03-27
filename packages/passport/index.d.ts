@@ -8,7 +8,7 @@ declare module '@midwayjs/core' {
   }
 }
 
-declare module '@midwayjs/koa/dist/interface' {
+declare module '@midwayjs/koa' {
   interface Context {
     state: {
       user?: any;
@@ -20,7 +20,7 @@ declare module '@midwayjs/koa/dist/interface' {
   }
 }
 
-declare module '@midwayjs/web/dist/interface' {
+declare module '@midwayjs/web' {
   interface Context {
     state: {
       user?: any;
@@ -32,7 +32,7 @@ declare module '@midwayjs/web/dist/interface' {
   }
 }
 
-declare module '@midwayjs/faas/dist/interface' {
+declare module '@midwayjs/faas' {
   interface Context {
     state: {
       user?: any;
@@ -44,7 +44,7 @@ declare module '@midwayjs/faas/dist/interface' {
   }
 }
 
-declare module '@midwayjs/express/dist/interface' {
+declare module '@midwayjs/express' {
   interface Context {
     user?: any;
     // These declarations are merged into express's Request type
