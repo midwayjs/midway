@@ -8,6 +8,7 @@ export interface HttpProxyStrategy {
 }
 
 export interface HttpProxyConfig extends HttpProxyStrategy {
+  default?: HttpProxyStrategy;
   strategy?: {
     [strategyName: string]: HttpProxyStrategy;
   }

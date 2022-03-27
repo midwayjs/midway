@@ -13,9 +13,7 @@
 
 
 
-## 安装使用
-
-1、安装依赖
+## 安装依赖
 
 ```bash
 $ npm i @midwayjs/http-proxy --save
@@ -37,10 +35,14 @@ $ npm i @midwayjs/http-proxy --save
 
 
 
-2、在 configuration 中引入组件
+## 启用组件
+
+在 `src/configuration.ts` 中引入组件
 
 ```typescript
+// ...
 import * as proxy from '@midwayjs/http-proxy';
+
 @Configuration({
   imports: [
     // ...other components
@@ -54,13 +56,9 @@ export class AutoConfiguration {}
 
 ## 配置
 
-```ts
-// config/config.default.ts
-// 支持配置 单个代理 和 多个代理，每个代理的配置都是一个 HttpProxyConfig 类型的 Object
-export const httpProxy: HttpProxyConfig | HttpProxyConfig[] = {
+代理配置定义如下：
 
-};
-
+```typescript
 // 代理配置类型
 export interface HttpProxyConfig {
   // 匹配要代理的 URL 正则表达式
@@ -76,25 +74,78 @@ export interface HttpProxyConfig {
 }
 ```
 
+代理支持单个代理和多个代理。
+
+单个代理配置
+
+```typescript
+// src/config/config.default.ts
+
+export default {
+  httpProxy: {
+    match: /\/tfs\//,
+  	host: 'https://gw.alicdn.com',
+  }
+}
+```
+
+
+
+多个代理配置
+
+```typescript
+// src/config/config.default.ts
+
+// 代理配置类型
+export default {
+  default: {
+    // 一些每个策略复用的值，会和底下的策略进行合并
+  },
+  strategy: {
+    gw: {
+      // https://gw.alicdn.com/tfs/TB1.1EzoBBh1e4jSZFhXXcC9VXa-48-48.png
+      match: /\/tfs\//,
+      host: 'https://gw.alicdn.com',
+    },
+    g: {
+      // https://g.alicdn.com/mtb/lib-mtop/2.6.1/mtop.js
+      match: /\/bdimg\/(.*)$/,
+      target: 'https://sm.bdimg.com/$1',
+    },
+    httpBin: {
+      // https://httpbin.org/
+      match: /\/httpbin\/(.*)$/,
+      target: 'https://httpbin.org/$1',
+    }
+  }
+}
+```
+
+
+
 
 
 ## 示例：使用 host 配置代理
 
-```ts
-export const httpProxy = {
-  match: /\/tfs\//,
-  host: 'https://gw.alicdn.com',
-};
+```typescript
+export default {
+   httpProxy: {
+    match: /\/tfs\//,
+    host: 'https://gw.alicdn.com',
+  }
+}
 ```
 
 当请求您的站点路径为： `https://yourdomain.com/tfs/test.png` 时，`match` 字段配置的正则表达式成功匹配，那么就将原始请求路径中的 `host` 部分 `https://yourdomain.com` 替换为配置的 `https://gw.alicdn.com`，从而发起代理请求到 `https://gw.alicdn.com/tfs/test.png`，并把响应结果返回给请求您站点的用户。
 
 ## 示例：使用 target 配置代理
 
-```ts
-export const httpProxy =  {
-  match: /\/httpbin\/(.*)$/,
-  target: 'https://httpbin.org/$1',
+```typescript
+export default {
+  httpProxy: {
+    match: /\/httpbin\/(.*)$/,
+    target: 'https://httpbin.org/$1',
+  }
 }
 ```
 
