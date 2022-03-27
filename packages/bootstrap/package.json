@@ -1,6 +1,6 @@
 {
   "name": "@midwayjs/bootstrap",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "description": "midwayjs bootstrap",
   "main": "dist/index",
   "typings": "dist/index.d.ts",
@@ -24,8 +24,8 @@
     "@midwayjs/core": "^3.2.0",
     "@midwayjs/decorator": "^3.1.6",
     "@midwayjs/logger": "^2.15.0",
-    "@midwayjs/socketio": "^3.2.0",
-    "@midwayjs/web": "^3.2.0",
+    "@midwayjs/socketio": "^3.2.1",
+    "@midwayjs/web": "^3.2.1",
     "@types/socket.io-client": "1.4.36",
     "request": "2.88.2",
     "socket.io-client": "4.4.1"

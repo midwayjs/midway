@@ -1,7 +1,7 @@
 {
   "name": "@midwayjs/axios",
   "description": "midway http client with axios",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "main": "dist/index",
   "typings": "index.d.ts",
   "files": [
