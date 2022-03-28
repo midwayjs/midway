@@ -3,7 +3,7 @@
   "description": "midway info",
   "version": "3.2.1",
   "main": "dist/index",
-  "typings": "dist/index.d.ts",
+  "typings": "index.d.ts",
   "files": [
     "dist/**/*.js",
     "dist/**/*.d.ts",
