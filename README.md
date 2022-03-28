@@ -156,7 +156,7 @@ cd my_midway_app && npm run dev
 
 二群
 
-![](https://img.alicdn.com/imgextra/i2/O1CN01SRJO0P1YaqxhtPU2X_!!6000000003076-2-tps-305-391.png)
+![image](https://user-images.githubusercontent.com/418820/160375495-cbb0369f-7b86-458f-9051-40b6ecab98b9.png)
 
 
 一群（已满）
