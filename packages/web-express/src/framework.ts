@@ -98,6 +98,14 @@ export class MidwayExpressFramework extends BaseFramework<
     // load controller，must apply router filter here
     const routerMiddlewares = await this.loadMidwayController();
 
+    if (this.mockService.getContextMocksSize() > 0) {
+      const mockMiddleware = (req, res, next) => {
+        this.mockService.applyContextMocks(this.app, req);
+        next();
+      };
+      this.app.use(mockMiddleware);
+      debug('[express]: use and apply mock framework');
+    }
     // use global middleware
     const globalMiddleware = await this.applyMiddleware();
     debug('[express]: use and apply all framework and global middleware');

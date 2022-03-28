@@ -27,6 +27,8 @@ import { MidwayLoggerService } from './service/loggerService';
 import { ContextMiddlewareManager } from './common/middlewareManager';
 import { MidwayMiddlewareService } from './service/middlewareService';
 import { FilterManager } from './common/filterManager';
+import { MidwayMockService } from './service/mockService';
+
 import * as util from 'util';
 const debug = util.debuglog('midway:debug');
 
@@ -63,6 +65,9 @@ export abstract class BaseFramework<
 
   @Inject()
   middlewareService: MidwayMiddlewareService<CTX, ResOrNext, Next>;
+
+  @Inject()
+  mockService: MidwayMockService;
 
   constructor(readonly applicationContext: IMidwayContainer) {}
 
@@ -333,6 +338,7 @@ export abstract class BaseFramework<
   ): Promise<MiddlewareRespond<CTX, R, N>> {
     if (!this.composeMiddleware) {
       this.middlewareManager.insertFirst((async (ctx: any, next: any) => {
+        this.mockService.applyContextMocks(this.app, ctx);
         let returnResult = undefined;
         try {
           const result = await next();
