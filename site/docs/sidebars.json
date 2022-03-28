@@ -254,7 +254,8 @@
         "hooks/test",
         "hooks/config",
         "hooks/file-route",
-        "hooks/safe"
+        "hooks/safe",
+        "hooks/upload"
       ]
     },
     {
