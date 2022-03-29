@@ -30,7 +30,7 @@ if (isTypeScriptEnvironment()) {
 prepareGlobalApplicationContext({
   appDir,
   baseDir,
-  ignore: ['**/app/extend/**'],
+  ignore: ['**/app/extend/**', '**/app/public/**'],
 });
 
 if (!isAgent) {

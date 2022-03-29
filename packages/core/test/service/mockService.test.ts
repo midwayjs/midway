@@ -14,6 +14,9 @@ describe('/service/mockService.test.ts', () => {
     const app = framework.getApplication() as IMidwayApplication;
     const mockService = framework.getApplicationContext().get(MidwayMockService);
     mockService.mockContext(app, 'user', 'zhangting');
+    mockService.mockContext(app, (ctx) => {
+      ctx['bbbb'] = 'cccc';
+    });
 
     let data = 'abc';
     mockService.mockContext(app, 'abc', {
@@ -30,6 +33,7 @@ describe('/service/mockService.test.ts', () => {
     await fn(ctx);
 
     expect(ctx['user']).toEqual('zhangting');
+    expect(ctx['bbbb']).toEqual('cccc');
     expect(ctx['abc']).toEqual('abc');
     ctx['abc'] = 'abc';
     expect(ctx['abc']).toEqual('abcc');

@@ -11,7 +11,7 @@ export class MidwayMockService {
   protected mocks = [];
   protected contextMocks: Array<{
     app: IMidwayApplication;
-    key: string;
+    key: string | ((ctx: IMidwayContext) => void);
     value: any;
   }> = [];
   protected cache = new Map();
@@ -20,7 +20,7 @@ export class MidwayMockService {
   mockClassProperty(
     clzz: new (...args) => any,
     propertyName: string,
-    value: (...args) => any
+    value: any
   ) {
     return this.mockProperty(clzz.prototype, propertyName, value);
   }
@@ -55,8 +55,8 @@ export class MidwayMockService {
 
   mockContext(
     app: IMidwayApplication,
-    key: string,
-    value: PropertyDescriptor | any
+    key: string | ((ctx: IMidwayContext) => void),
+    value?: PropertyDescriptor | any
   ) {
     this.contextMocks.push({
       app,
@@ -92,7 +92,11 @@ export class MidwayMockService {
       for (const mockItem of this.contextMocks) {
         if (mockItem.app === app) {
           const descriptor = this.overridePropertyDescriptor(mockItem.value);
-          Object.defineProperty(ctx, mockItem.key, descriptor);
+          if (typeof mockItem.key === 'string') {
+            Object.defineProperty(ctx, mockItem.key, descriptor);
+          } else {
+            mockItem.key(ctx);
+          }
         }
       }
     }

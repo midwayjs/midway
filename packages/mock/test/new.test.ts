@@ -1,4 +1,16 @@
-import { close, createApp, createLightApp, createHttpRequest, createFunctionApp } from '../src';
+import {
+  close,
+  createApp,
+  createLightApp,
+  createHttpRequest,
+  createFunctionApp,
+  mockContext,
+  mockHeader,
+  mockSession,
+  mockProperty,
+  mockClassProperty,
+  restoreAllMocks
+} from '../src';
 import * as Web from '../../web/src';
 import * as Koa from '../../web-koa/src';
 import * as ServerlessApp from '../../../packages-serverless/serverless-app/src';
@@ -20,7 +32,7 @@ describe('/test/new.test.ts', () => {
     expect(existsSync(join(__dirname, 'fixtures/base-app-decorator/run'))).toBeFalsy();
   });
 
-  it('should test create koa app with new mode', async () => {
+  it('should test create koa app with new mode with mock', async () => {
     const app = await createApp<Koa.Framework>(join(__dirname, 'fixtures/base-app-koa'), {
       cleanLogsDir: true,
       globalConfig: {
@@ -30,6 +42,32 @@ describe('/test/new.test.ts', () => {
     const result = await createHttpRequest(app).get('/').query({ name: 'harry' });
     expect(result.status).toBe(200);
     expect(result.text).toBe('hello world, harry');
+
+    mockContext(app, 'abc', 'ddd');
+    mockHeader(app, 'x-bbb', 'midway');
+    mockSession(app, 'ccc', 'ddd');
+    const result1 = await createHttpRequest(app).get('/mock');
+    expect(result1.status).toBe(200);
+    expect(result1.body).toEqual({
+      'abc': 'ddd',
+      'header': 'midway',
+      'session': 'ddd'
+    });
+
+    mockProperty(app, 'ccc', 'bbb');
+    expect(app['ccc']).toEqual('bbb');
+
+    class BBB {
+      invoke() {
+        return 'hello';
+      }
+    }
+    mockClassProperty(BBB, 'invoke', 'midway');
+    expect(new BBB().invoke).toEqual('midway');
+
+    restoreAllMocks();
+    expect(new BBB().invoke()).toEqual('hello');
+
     await close(app, { sleep: 200});
   });
 
