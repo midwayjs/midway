@@ -186,9 +186,10 @@ curl -X POST http://localhost:7001/passport/local -d '{"username": "demo", "pass
 $ npm i @midwayjs/jwt passport-jwt --save
 ```
 
-然后在 config.ts 中配置， 默认未加密，请不要把敏感信息存放在 payload 中。
+然后在配置中设置，默认未加密，请不要把敏感信息存放在 payload 中。
 
 ```typescript
+// src/config/config.default.ts
 export default {
   // ...
   jwt: {
@@ -197,6 +198,7 @@ export default {
   },
 }
 ```
+
 ```typescript
 // src/strategy/jwt.strategy.ts
 
