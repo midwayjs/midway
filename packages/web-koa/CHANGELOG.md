@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.2.2](https://github.com/midwayjs/midway/compare/v3.2.1...v3.2.2) (2022-03-30)
+
+
+### Bug Fixes
+
+* match and ignore method missing this ([#1868](https://github.com/midwayjs/midway/issues/1868)) ([4a3800a](https://github.com/midwayjs/midway/commit/4a3800a05a827b2beebc2e22d12ca8b16ffe0548))
+
+
+
+
+
 ## [3.2.1](https://github.com/midwayjs/midway/compare/v3.2.0...v3.2.1) (2022-03-27)
 
 
