@@ -115,9 +115,9 @@ export interface BodyParserOptions {
    * support extend types
    */
   extendTypes?: {
-    json?: string[];
-    form?: string[];
-    text?: string[];
+    json?: string[] | string | undefined;
+    form?: string[] | string | undefined;
+    text?: string[] | string | undefined;
   };
 
   /**
